@@ -1,0 +1,8 @@
+export const CLIPPATH_SAMPLE_LIST = 'clip-path/sample/list'
+export const CLIPPATH_SAMPLE_GET = 'clip-path/sample/get'
+export const CLIPPATH_MAKE_CIRCLE = 'clip-path/make/circle'
+export const CLIPPATH_MAKE_ELLIPSE = 'clip-path/make/ellipse'
+export const CLIPPATH_MAKE_INSET = 'clip-path/make/inset'
+export const CLIPPATH_MAKE_POLYGON = 'clip-path/make/polygon'
+export const CLIPPATH_MAKE_SVG = 'clip-path/make/svg'
+export const CLIPPATH_TO_CSS = 'clip-path/toCSS'

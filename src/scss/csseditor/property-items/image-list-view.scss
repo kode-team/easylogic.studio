@@ -1,0 +1,13 @@
+&.image-list-view {
+    .items {
+        height: 200px;
+        overflow: auto;
+        padding: 0px !important;
+        position: relative;
+
+        .images {
+            top: 0px;
+            bottom: 0px;
+        }
+    }
+}

@@ -1,0 +1,84 @@
+&.display-manager {
+  grid-template-columns: 1fr;
+  .display {
+    display: block;
+    flex: 1 1 auto;
+    box-sizing: border-box;
+    padding: 5px;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  label {
+    width: 80px;
+    box-sizing: border-box;
+    padding: 5px 2px;
+  }
+
+  button {
+    appearance: none;
+  }
+
+  .property-item-label[data-display="grid"] button {
+    display: inline-block;
+  }
+
+  .display-list {
+    display: grid;
+    box-sizing: border-box;
+    grid-template-columns: repeat(5, 20%);
+
+    @each $display-type in inline, inline-block, block, flex, grid {
+      &[selected-type="#{$display-type}"] {
+        .display[display-type="#{$display-type}"] {
+          border: 1px solid $border-color;
+          background-color: rgba($border-color, 0.3);
+        }
+      }
+    }
+  }
+
+  .flex-direction {
+    display: grid;
+    box-sizing: border-box;
+    grid-template-columns: repeat(5, 20%);
+
+    @each $flex-direction in row, row-reverse, column, column-reverse {
+      &[selected-type="#{$flex-direction}"] {
+        .display[display-type="#{$flex-direction}"] {
+          background-color: #ececec;
+        }
+      }
+    }
+  }
+
+  .flex-wrap {
+    display: grid;
+    box-sizing: border-box;
+    grid-template-columns: repeat(5, 20%);
+
+    @each $flex-wrap in nowrap, wrap, wrap-reverse {
+      &[selected-type="#{$flex-wrap}"] {
+        .display[display-type="#{$flex-wrap}"] {
+          background-color: #ececec;
+        }
+      }
+    }
+  }
+
+  .justify-content {
+    display: grid;
+    box-sizing: border-box;
+    grid-template-columns: repeat(5, 20%);
+
+    @each $justify-content in flex-start, flex-end, center, space-between,
+      space-around
+    {
+      &[selected-type="#{$justify-content}"] {
+        .display[display-type="#{$justify-content}"] {
+          background-color: #ececec;
+        }
+      }
+    }
+  }
+}

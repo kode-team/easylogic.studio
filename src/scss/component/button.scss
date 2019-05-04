@@ -1,0 +1,32 @@
+.arrow-button {
+  position: relative;
+  width: 10px;
+  height: 12px;
+  padding: 0px;
+  
+  &:before {
+    content: "";
+    display:inline-block;
+    position:absolute;
+    left:0px;
+    right:0px;
+    top:0px;
+    height:50%;    
+    @include arrow_top(3px, black);
+    margin: 2px;
+    box-sizing:border-box;
+  }
+
+  &:after {
+    content: "";
+    display:inline-block;
+    position:absolute;
+    left:0px;
+    right:0px;
+    bottom:0px;
+    top:50%;
+    @include arrow_bottom(3px, black);
+    margin: 2px;
+    box-sizing:border-box;    
+  }
+}

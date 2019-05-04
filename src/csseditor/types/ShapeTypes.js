@@ -1,0 +1,5 @@
+export const SHAPE_LIST = 'shape/list'
+export const SHAPE_GET = 'shape/get'
+export const SHAPE_MAKE = 'shape/make'
+export const SHAPE_TO_CSS = 'shape/toCSS'
+export const SHAPE_TO_CSS_TEXT = 'shape/toCSSText'

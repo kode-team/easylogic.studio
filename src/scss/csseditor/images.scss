@@ -1,0 +1,96 @@
+$image-item-height: 30px;
+$image-item-width: 30px;
+
+.image-list {
+    display: inline-block;
+    text-align: center;
+    border-left: 1px solid #ececec;
+    
+    .tree-item {
+        display: inline-block;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        border: 2px solid #dedede;  
+        vertical-align: middle;
+        height: $image-item-height;
+        width: $image-item-width;
+        margin-right: 1px;
+
+        &.selected {
+            border-color: #333;
+        }
+
+        &:hover {
+            .item-tools {
+                display: inline-block;
+            }
+        }
+
+        .item-view-container {
+            position: relative; 
+            pointer-events: none;
+            display: inline-block;
+            vertical-align: middle;
+            height: $image-item-height *2;
+            width: $image-item-width *2;
+            transform: scale(0.5);
+            transform-origin: 0 0;
+
+            .item-view {
+                position: absolute;
+                top: 0px;
+                left: 0px;
+                right: 0px;
+                bottom: 0px;
+            }
+        }
+
+        .item-tools {
+            position: absolute;
+            right: 0px;
+            top: 0px;
+            bottom: 0px;
+            left: 0px;
+            display: none;
+            padding: 5px;     
+            pointer-events: none;
+
+            button {
+                height: 20px;
+                width: 20px;
+                position: absolute;
+                display:inline-block;
+                border: 0px solid #dedede;
+                cursor: pointer;
+                pointer-events: all;
+                border-radius: 50%;
+                background-color: rgba(255, 255, 255, 0.5);                    
+                
+                &.copy-item {
+                    right: 1px;
+                    top: 50%;
+                    transform: translateY(-50%) rotate(45deg);
+                }
+
+                &.left-item {
+                    left: 1px;
+                    bottom: 1px;
+                }
+
+                &.right-item {
+                    right: 1px;
+                    bottom: 1px;
+                }              
+                
+                &.delete-item {
+                    top: 1px;
+                    right: 1px;
+                }
+            }
+
+        }
+
+    }
+
+}

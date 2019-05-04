@@ -1,0 +1,25 @@
+&.background-code {
+    .key-value-view {
+        display: block; 
+        user-select: text;
+
+        .key-value-item {
+            display: block;
+
+            .key {
+                display: block;
+                font-weight: bold;
+                padding: 2px 5px;
+            }
+
+            .value {
+                white-space: pre-wrap;                
+                margin:0px;
+                padding: 0px 5px;
+                padding-left: 20px;
+                font-size: 12px;
+                display: block; 
+            }
+        }
+    }
+}

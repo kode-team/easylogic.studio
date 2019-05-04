@@ -1,0 +1,94 @@
+
+  .control {
+    position: relative;
+    padding: 10px 0px 10px 0px;
+    user-select: none;
+
+    > .color, > .empty {
+      position: absolute;
+      left: 12px;
+      top: 14px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      box-sizing: border-box;
+    }
+
+    > .color {
+      border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    > .hue {
+      position: relative;
+      padding: 6px 16px;
+      margin: 0px 0px 0px 42px;
+      box-sizing: border-box;
+      cursor: pointer;
+
+      > .hue-container {
+        position: relative;
+        width: 100%;
+        height: 10px;
+        border-radius: 3px;
+      }
+    }
+
+
+    > .opacity {
+      position: relative;
+      padding: 3px 16px;
+      margin: 0px 0px 0px 42px;
+      box-sizing: border-box;
+      cursor: pointer;
+
+      > .opacity-container {
+        position: relative;
+        width: 100%;
+        height: 10px;
+        border-radius: 3px;
+      }
+    }
+
+    .drag-bar, .drag-bar2 {
+      position: absolute;
+      cursor: pointer;
+      top: 50%;
+      left: 0px;
+      transform: translateX(-50%) translateY(-50%);
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }  
+    
+    > .hue > .hue-container {
+        background: linear-gradient(to right, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
+    }
+
+    > .opacity > .opacity-container {
+        @include transparent-background();
+    
+        > .color-bar {
+            position:absolute;
+            display:block;
+            content:"";
+            left:0px;
+            right:0px;
+            bottom:0px;
+            top:0px;
+        }
+    }
+
+    > .empty {
+      @include transparent-background();
+    }
+
+    .drag-bar,
+    .drag-bar2 {
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.2);
+        background-color: #fefefe;
+    
+    }
+    
+}
+

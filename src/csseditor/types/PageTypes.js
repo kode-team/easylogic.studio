@@ -1,0 +1,5 @@
+export const PAGE_TO_STRING = 'page/toString'
+export const PAGE_TO_CSS = 'page/toCSS'
+export const PAGE_COLORVIEW_TO_CSS = 'page/colorview/toCSS'
+export const PAGE_CACHE_TO_CSS = 'page/cache/toCSS'
+export const PAGE_CACHE_TO_STRING = 'page/cache/toString'

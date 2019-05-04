@@ -1,0 +1,4599 @@
+/* codemirror colorview */
+.codemirror-colorview {
+  border: 1px solid #cecece;
+  position: relative;
+  display: inline-block;
+  box-sizing: border-box;
+  margin: 0px 2px;
+  width: 10px;
+  height: 10px;
+  cursor: pointer;
+  vertical-align: middle;
+  background-color: transparent;
+  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-size: 10px 10px;
+  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+}
+.codemirror-colorview .codemirror-colorview-background {
+  content: "";
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  top: 0px;
+}
+.codemirror-colorview:hover {
+  border-color: #494949;
+}
+
+/* codemirror-colorpicker */
+.codemirror-colorpicker {
+  position: relative;
+  width: 224px;
+  z-index: 1000;
+  display: inline-block;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  background-color: #fff;
+  border-radius: 3px;
+  box-shadow: 0 0px 10px 2px rgba(0, 0, 0, 0.12);
+  /* theme */
+}
+.codemirror-colorpicker > .arrow {
+  position: absolute;
+  top: -10px;
+  left: 7px;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  display: none;
+  border-bottom: 10px solid rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+}
+.codemirror-colorpicker > .arrow:after {
+  position: absolute;
+  content: "";
+  top: 1px;
+  left: -9px;
+  width: 0;
+  height: 0;
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
+  border-bottom: 9px solid white;
+}
+.codemirror-colorpicker .colorpicker-body .arrow-button {
+  position: relative;
+  width: 10px;
+  height: 12px;
+  padding: 0px;
+}
+.codemirror-colorpicker .colorpicker-body .arrow-button:before {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  height: 50%;
+  width: 0;
+  height: 0;
+  border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
+  border-bottom: 3px solid black;
+  pointer-events: none;
+  margin: 2px;
+  box-sizing: border-box;
+}
+.codemirror-colorpicker .colorpicker-body .arrow-button:after {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  top: 50%;
+  width: 0;
+  height: 0;
+  border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
+  border-top: 3px solid black;
+  pointer-events: none;
+  margin: 2px;
+  box-sizing: border-box;
+}
+.codemirror-colorpicker .colorpicker-body .color-tab {
+  display: flex;
+  flex-direction: column;
+  height: 350px;
+  box-sizing: border-box;
+  border: 1px solid #ececec;
+}
+.codemirror-colorpicker .colorpicker-body .color-tab.xd {
+  height: 200px;
+}
+.codemirror-colorpicker .colorpicker-body .color-tab .color-tab-header {
+  flex: none;
+  display: flex;
+  flex-direction: row;
+  height: 20px;
+}
+.codemirror-colorpicker .colorpicker-body .color-tab .color-tab-header .color-tab-item {
+  flex: 1 1 auto;
+  cursor: pointer;
+  background-color: #ececec;
+  text-align: center;
+  height: 100%;
+  padding: 4px 10px;
+  box-sizing: border-box;
+}
+.codemirror-colorpicker .colorpicker-body .color-tab .color-tab-header .color-tab-item.active {
+  background-color: white;
+  border-bottom-color: white;
+}
+.codemirror-colorpicker .colorpicker-body .color-tab .color-tab-body {
+  flex: 1 1 auto;
+  position: relative;
+}
+.codemirror-colorpicker .colorpicker-body .color-tab .color-tab-body .color-tab-content {
+  display: none;
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+}
+.codemirror-colorpicker .colorpicker-body .color-tab .color-tab-body .color-tab-content.active {
+  display: block;
+}
+.codemirror-colorpicker .colorpicker-body .color-panel {
+  position: relative;
+  height: 120px;
+  overflow: hidden;
+  cursor: pointer;
+}
+.codemirror-colorpicker .colorpicker-body .color-panel > .saturation {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.codemirror-colorpicker .colorpicker-body .color-panel > .saturation > .value {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.codemirror-colorpicker .colorpicker-body .color-panel > .saturation > .value > .drag-pointer {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+}
+.codemirror-colorpicker .colorpicker-body .color-panel > .saturation {
+  background-color: rgba(204, 154, 129, 0);
+  background-image: linear-gradient(to right, #FFF, rgba(204, 154, 129, 0));
+  background-repeat: repeat-x;
+}
+.codemirror-colorpicker .colorpicker-body .color-panel > .saturation > .value {
+  background-image: linear-gradient(to top, #000000, rgba(204, 154, 129, 0));
+}
+.codemirror-colorpicker .colorpicker-body .color-panel > .saturation > .value > .drag-pointer {
+  border: 1px solid #fff;
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.05);
+}
+.codemirror-colorpicker .colorpicker-body .control {
+  position: relative;
+  padding: 10px 0px 10px 0px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+.codemirror-colorpicker .colorpicker-body .control > .color, .codemirror-colorpicker .colorpicker-body .control > .empty {
+  position: absolute;
+  left: 12px;
+  top: 14px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+.codemirror-colorpicker .colorpicker-body .control > .color {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+.codemirror-colorpicker .colorpicker-body .control > .hue {
+  position: relative;
+  padding: 6px 16px;
+  margin: 0px 0px 0px 42px;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+.codemirror-colorpicker .colorpicker-body .control > .hue > .hue-container {
+  position: relative;
+  width: 100%;
+  height: 10px;
+  border-radius: 3px;
+}
+.codemirror-colorpicker .colorpicker-body .control > .opacity {
+  position: relative;
+  padding: 3px 16px;
+  margin: 0px 0px 0px 42px;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+.codemirror-colorpicker .colorpicker-body .control > .opacity > .opacity-container {
+  position: relative;
+  width: 100%;
+  height: 10px;
+  border-radius: 3px;
+}
+.codemirror-colorpicker .colorpicker-body .control .drag-bar, .codemirror-colorpicker .colorpicker-body .control .drag-bar2 {
+  position: absolute;
+  cursor: pointer;
+  top: 50%;
+  left: 0px;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+.codemirror-colorpicker .colorpicker-body .control > .hue > .hue-container {
+  background: linear-gradient(to right, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
+}
+.codemirror-colorpicker .colorpicker-body .control > .opacity > .opacity-container {
+  background-color: transparent;
+  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-size: 10px 10px;
+  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+}
+.codemirror-colorpicker .colorpicker-body .control > .opacity > .opacity-container > .color-bar {
+  position: absolute;
+  display: block;
+  content: "";
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  top: 0px;
+}
+.codemirror-colorpicker .colorpicker-body .control > .empty {
+  background-color: transparent;
+  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-size: 10px 10px;
+  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+}
+.codemirror-colorpicker .colorpicker-body .control .drag-bar,
+.codemirror-colorpicker .colorpicker-body .control .drag-bar2 {
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.2);
+  background-color: #fefefe;
+}
+.codemirror-colorpicker .colorpicker-body .information {
+  /*border-top: 1px solid #e8e8e8;*/
+  position: relative;
+  box-sizing: border-box;
+}
+.codemirror-colorpicker .colorpicker-body .information > input {
+  position: absolute;
+  font-size: 10px;
+  height: 20px;
+  bottom: 20px;
+  padding: 0 0 0 2px;
+  box-sizing: border-box;
+  -webkit-user-select: text;
+     -moz-user-select: text;
+      -ms-user-select: text;
+          user-select: text;
+}
+.codemirror-colorpicker .colorpicker-body .information > input[type=number] {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+}
+.codemirror-colorpicker .colorpicker-body .information > input[type=number]::-webkit-inner-spin-button, .codemirror-colorpicker .colorpicker-body .information > input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+          appearance: none;
+  margin: 0;
+}
+.codemirror-colorpicker .colorpicker-body .information.hex > .information-item.hex {
+  display: flex;
+}
+.codemirror-colorpicker .colorpicker-body .information.rgb > .information-item.rgb {
+  display: flex;
+}
+.codemirror-colorpicker .colorpicker-body .information.hsl > .information-item.hsl {
+  display: flex;
+}
+.codemirror-colorpicker .colorpicker-body .information > .information-item {
+  display: none;
+  position: relative;
+  padding: 0px 5px;
+  padding-left: 9px;
+  box-sizing: border-box;
+  margin-right: 40px;
+}
+.codemirror-colorpicker .colorpicker-body .information > .information-item > .input-field {
+  display: block;
+  flex: 1;
+  padding: 3px;
+  box-sizing: border-box;
+  position: relative;
+}
+.codemirror-colorpicker .colorpicker-body .information > .information-item > .input-field > .title {
+  text-align: center;
+  font-size: 12px;
+  color: #a9a9a9;
+  padding-top: 2px;
+}
+.codemirror-colorpicker .colorpicker-body .information > .information-item > .input-field input {
+  text-align: center;
+  width: 100%;
+  padding: 3px;
+  height: 21px;
+  font-size: 11px;
+  color: #333;
+  box-sizing: border-box;
+  -webkit-user-select: text;
+     -moz-user-select: text;
+      -ms-user-select: text;
+          user-select: text;
+  border: 1px solid #cbcbcb;
+  border-radius: 2px;
+}
+.codemirror-colorpicker .colorpicker-body .information > .information-item > .input-field input[type=number] {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+}
+.codemirror-colorpicker .colorpicker-body .information > .information-item > .input-field input[type=number]::-webkit-inner-spin-button, .codemirror-colorpicker .colorpicker-body .information > .information-item > .input-field input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+          appearance: none;
+  margin: 0;
+}
+.codemirror-colorpicker .colorpicker-body .information > .information-item > .input-field.hsl-l input[type=number], .codemirror-colorpicker .colorpicker-body .information > .information-item > .input-field.hsl-s input[type=number] {
+  padding-left: 1px;
+  padding-right: 10px;
+}
+.codemirror-colorpicker .colorpicker-body .information > .information-item > .input-field .postfix {
+  display: inline-block;
+  position: absolute;
+  right: 4px;
+  top: 2px;
+  height: 21px;
+  line-height: 2;
+  padding: 2px;
+  box-sizing: border-box;
+  text-align: center;
+  font-size: 11px;
+}
+.codemirror-colorpicker .colorpicker-body .information > .information-change {
+  position: absolute;
+  display: block;
+  width: 40px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  text-align: center;
+  box-sizing: border-box;
+  padding-top: 5px;
+}
+.codemirror-colorpicker .colorpicker-body .information > .information-change > .format-change-button {
+  box-sizing: border-box;
+  background: transparent;
+  border: 0px;
+  cursor: pointer;
+  outline: none;
+}
+.codemirror-colorpicker .colorpicker-body .information > .title {
+  color: #a3a3a3;
+}
+.codemirror-colorpicker .colorpicker-body .information > .input {
+  color: #333;
+}
+.codemirror-colorpicker .colorpicker-body .colorsets {
+  border-top: 1px solid #e2e2e2;
+}
+.codemirror-colorpicker .colorpicker-body .colorsets > .menu {
+  float: right;
+  padding: 10px 5px;
+  padding-right: 15px;
+}
+.codemirror-colorpicker .colorpicker-body .colorsets > .menu button {
+  border: 0px;
+  font-size: 14px;
+  font-weight: 300;
+  font-family: serif, sans-serif;
+  outline: none;
+  cursor: pointer;
+}
+.codemirror-colorpicker .colorpicker-body .colorsets > .color-list {
+  margin-right: 30px;
+  display: block;
+  padding: 10px 0px 0px 10px;
+  box-sizing: border-box;
+  line-height: 0;
+}
+.codemirror-colorpicker .colorpicker-body .colorsets > .color-list .color-item {
+  width: 13px;
+  height: 13px;
+  border-radius: 2px;
+  display: inline-block;
+  margin-right: 12px;
+  margin-bottom: 12px;
+  position: relative;
+  background-size: contain;
+  overflow: hidden;
+  box-sizing: border-box;
+  cursor: pointer;
+  vertical-align: middle;
+}
+.codemirror-colorpicker .colorpicker-body .colorsets > .color-list .color-item:hover {
+  -webkit-transform: scale(1.2);
+          transform: scale(1.2);
+}
+.codemirror-colorpicker .colorpicker-body .colorsets > .color-list .color-item .empty {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  background-color: transparent;
+  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-size: 10px 10px;
+  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+  width: 100%;
+  height: 100%;
+  padding: 0px;
+  margin: 0px;
+  pointer-events: none;
+}
+.codemirror-colorpicker .colorpicker-body .colorsets > .color-list .color-item .color-view {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  padding: 0px;
+  margin: 0px;
+  pointer-events: none;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+}
+.codemirror-colorpicker .colorpicker-body .colorsets > .color-list .add-color-item {
+  width: 13px;
+  height: 13px;
+  display: inline-block;
+  margin-right: 12px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  line-height: 1;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 400;
+  font-family: serif, sans-serif;
+  color: #8e8e8e;
+  vertical-align: middle;
+}
+.codemirror-colorpicker .colorpicker-body .color-chooser {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  top: 0px;
+  opacity: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  transition: opacity 0.05s ease-out;
+  pointer-events: none;
+}
+.codemirror-colorpicker .colorpicker-body .color-chooser.open {
+  opacity: 1;
+  pointer-events: all;
+}
+.codemirror-colorpicker .colorpicker-body .color-chooser .color-chooser-container {
+  position: absolute;
+  top: 120px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  background-color: white;
+}
+.codemirror-colorpicker .colorpicker-body .color-chooser .color-chooser-container .colorsets-item-header {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  height: 34px;
+  display: flex;
+  padding: 3px 0px;
+  box-sizing: border-box;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+.codemirror-colorpicker .colorpicker-body .color-chooser .color-chooser-container .colorsets-item-header .title {
+  flex: 2;
+  font-weight: bold;
+  font-size: 15px;
+  box-sizing: border-box;
+  margin-right: 30px;
+  vertical-align: middle;
+  margin: 0px;
+  padding: 5px;
+  padding-left: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #000;
+  text-align: left;
+}
+.codemirror-colorpicker .colorpicker-body .color-chooser .color-chooser-container .colorsets-item-header .items {
+  flex: 1;
+  text-align: right;
+  padding-right: 10px;
+  display: block;
+  height: 100%;
+  line-height: 2;
+  cursor: pointer;
+}
+.codemirror-colorpicker .colorpicker-body .color-chooser .color-chooser-container .colorsets-list {
+  position: absolute;
+  top: 34px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  overflow: auto;
+}
+.codemirror-colorpicker .colorpicker-body .color-chooser .color-chooser-container .colorsets-list .colorsets-item {
+  cursor: pointer;
+  display: flex;
+  padding: 3px 0px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+.codemirror-colorpicker .colorpicker-body .color-chooser .color-chooser-container .colorsets-list .colorsets-item:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+.codemirror-colorpicker .colorpicker-body .color-chooser .color-chooser-container .colorsets-list .colorsets-item .title {
+  flex: 2;
+  font-size: 14px;
+  box-sizing: border-box;
+  margin-right: 30px;
+  vertical-align: middle;
+  pointer-events: none;
+  margin: 0px;
+  padding: 5px;
+  padding-left: 14px;
+  font-weight: normal;
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #000;
+  text-align: left;
+}
+.codemirror-colorpicker .colorpicker-body .color-chooser .color-chooser-container .colorsets-list .colorsets-item .items {
+  flex: 3;
+  display: block;
+  height: 100%;
+  line-height: 1.6;
+  cursor: pointer;
+  pointer-events: none;
+}
+.codemirror-colorpicker .colorpicker-body .color-chooser .color-chooser-container .colorsets-list .colorsets-item .items .color-item {
+  width: 13px;
+  height: 13px;
+  border-radius: 3px;
+  display: inline-block;
+  margin-right: 10px;
+  background-color: transparent;
+  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-size: 10px 10px;
+  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+  background-size: contain;
+  border: 1px solid #dddddd;
+  overflow: hidden;
+  box-sizing: border-box;
+  cursor: pointer;
+  vertical-align: middle;
+}
+.codemirror-colorpicker .colorpicker-body .color-chooser .color-chooser-container .colorsets-list .colorsets-item .items .color-item .color-view {
+  width: 100%;
+  height: 100%;
+  padding: 0px;
+  margin: 0px;
+  pointer-events: none;
+}
+.codemirror-colorpicker.sketch {
+  border-radius: 5px;
+}
+.codemirror-colorpicker.sketch > .colorpicker-body .color-panel {
+  margin: 10px 10px 2px 10px;
+  box-sizing: border-box;
+  height: 150px;
+}
+.codemirror-colorpicker.sketch > .colorpicker-body > .control {
+  padding: 0px;
+}
+.codemirror-colorpicker.sketch > .colorpicker-body > .control > .color,
+.codemirror-colorpicker.sketch > .colorpicker-body > .control > .empty {
+  position: absolute;
+  right: 10px;
+  left: auto;
+  top: 1px;
+  width: 26px;
+  height: 26px;
+  border-radius: 2px;
+  box-sizing: border-box;
+}
+.codemirror-colorpicker.sketch > .colorpicker-body > .control > .color {
+  box-shadow: inset 0px 0px 1px 0px rgba(0, 0, 0, 0.5);
+}
+.codemirror-colorpicker.sketch > .colorpicker-body > .control > .hue {
+  position: relative;
+  padding: 2px 2px 2px 10px;
+  margin: 0px 38px 0px 0px;
+}
+.codemirror-colorpicker.sketch > .colorpicker-body > .control > .hue > .hue-container {
+  border-radius: 0px;
+}
+.codemirror-colorpicker.sketch > .colorpicker-body > .control > .opacity {
+  position: relative;
+  padding: 2px 2px 2px 10px;
+  margin: 0px 38px 0px 0px;
+}
+.codemirror-colorpicker.sketch > .colorpicker-body > .control > .opacity > .opacity-container {
+  border-radius: 0px;
+}
+.codemirror-colorpicker.sketch > .colorpicker-body > .control .drag-bar,
+.codemirror-colorpicker.sketch > .colorpicker-body > .control .drag-bar2 {
+  border-radius: 0px;
+  top: 50%;
+  left: 0px;
+  width: 2px;
+  height: 80%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+  border-radius: 1px;
+  bottom: 1px !important;
+}
+.codemirror-colorpicker.sketch > .colorpicker-body > .control .drag-bar.first,
+.codemirror-colorpicker.sketch > .colorpicker-body > .control .drag-bar2.first {
+  left: 0px;
+  -webkit-transform: translateX(50%) translateY(-50%) !important;
+          transform: translateX(50%) translateY(-50%) !important;
+}
+.codemirror-colorpicker.sketch > .colorpicker-body > .control .drag-bar.last,
+.codemirror-colorpicker.sketch > .colorpicker-body > .control .drag-bar2.last {
+  -webkit-transform: translateX(-150%) translateY(-50%) !important;
+          transform: translateX(-150%) translateY(-50%) !important;
+}
+.codemirror-colorpicker.sketch > .colorpicker-body > .information .information-change {
+  display: none;
+}
+.codemirror-colorpicker.sketch > .colorpicker-body > .information.rgb .information-item.rgb {
+  display: inherit;
+}
+.codemirror-colorpicker.sketch > .colorpicker-body > .information.hex .information-item.hex {
+  display: inherit;
+}
+.codemirror-colorpicker.sketch > .colorpicker-body > .information .information-item {
+  display: inline-flex !important;
+  margin-right: 0px;
+}
+.codemirror-colorpicker.sketch > .colorpicker-body > .information .information-item > .input-field > .title {
+  color: black;
+  font-size: 11px;
+}
+.codemirror-colorpicker.sketch > .colorpicker-body > .information .information-item > .input-field:last-child:not(:first-child) {
+  padding-right: 0px;
+}
+.codemirror-colorpicker.sketch > .colorpicker-body > .information .information-item.hsl {
+  display: none !important;
+}
+.codemirror-colorpicker.sketch > .colorpicker-body > .information .information-item.hex {
+  width: 70px;
+  padding-right: 0px;
+  padding-left: 5px;
+}
+.codemirror-colorpicker.sketch > .colorpicker-body > .information .information-item.rgb {
+  width: 144px;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+.codemirror-colorpicker.sketch > .colorpicker-body > .colorsets > .menu {
+  display: none;
+}
+.codemirror-colorpicker.sketch > .colorpicker-body > .colorsets > .color-list {
+  margin-right: 0px;
+  padding-right: 12px;
+}
+.codemirror-colorpicker.sketch > .colorpicker-body > .colorsets > .color-list .color-item {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  margin-right: 9px;
+  margin-bottom: 10px;
+}
+.codemirror-colorpicker.palette {
+  border-radius: 3px;
+  box-shadow: none;
+}
+.codemirror-colorpicker.palette > .colorpicker-body .color-panel {
+  display: none;
+}
+.codemirror-colorpicker.palette > .colorpicker-body > .control {
+  display: none;
+}
+.codemirror-colorpicker.palette > .colorpicker-body > .information {
+  display: none;
+}
+.codemirror-colorpicker.palette > .colorpicker-body > .colorsets {
+  box-sizing: border-box;
+  border-top: 0px;
+}
+.codemirror-colorpicker.palette > .colorpicker-body > .colorsets > .color-list .color-item {
+  width: 15px;
+  height: 15px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+.codemirror-colorpicker.palette > .colorpicker-body > .color-chooser {
+  display: none;
+  box-sizing: border-box;
+}
+.codemirror-colorpicker.palette > .colorpicker-body > .color-chooser.open {
+  display: block;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  bottom: auto;
+  border-radius: 3px;
+  border: 1px solid #d8d8d8;
+  box-shadow: 0 0px 10px 2px rgba(0, 0, 0, 0.12);
+}
+.codemirror-colorpicker.palette > .colorpicker-body > .color-chooser.open .color-chooser-container {
+  position: relative;
+  top: auto;
+  left: auto;
+  right: auto;
+  bottom: auto;
+  background-color: white;
+  box-sizing: border-box;
+  border-radius: 2px;
+}
+.codemirror-colorpicker.palette > .colorpicker-body > .color-chooser.open .color-chooser-container .colorsets-item-header {
+  position: relative;
+  left: auto;
+  top: auto;
+  right: auto;
+  bottom: auto;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}
+.codemirror-colorpicker.palette > .colorpicker-body > .color-chooser.open .color-chooser-container .colorsets-list {
+  position: relative;
+  top: auto;
+  left: auto;
+  right: auto;
+  bottom: auto;
+  overflow: auto;
+}
+.codemirror-colorpicker.palette > .colorpicker-body > .color-chooser.open .color-chooser-container .colorsets-list .colorsets-item:last-child {
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+.codemirror-colorpicker.macos .colorpicker-body .wheel {
+  width: 224px;
+  height: 224px;
+  position: relative;
+  box-sizing: border-box;
+}
+.codemirror-colorpicker.macos .colorpicker-body .wheel .wheel-canvas {
+  width: 214px;
+  height: 214px;
+  border-radius: 50%;
+  position: absolute;
+  left: 5px;
+  top: 5px;
+}
+.codemirror-colorpicker.macos .colorpicker-body .wheel .drag-pointer {
+  display: inline-block;
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  left: 50%;
+  top: 50%;
+  border: 1px solid white;
+  border-radius: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+  z-index: 2;
+}
+.codemirror-colorpicker.macos .control {
+  padding-top: 0px;
+}
+.codemirror-colorpicker.macos .control > .color, .codemirror-colorpicker.macos .control > .empty {
+  top: 4px;
+}
+.codemirror-colorpicker.macos .value {
+  position: relative;
+  padding: 6px 16px;
+  margin: 0px 0px 0px 42px;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+.codemirror-colorpicker.macos .value > .value-container {
+  position: relative;
+  width: 100%;
+  height: 10px;
+  border-radius: 3px;
+  background-image: linear-gradient(to right, #000000 0%, rgba(255, 255, 255, 0) 100%);
+  box-sizing: border-box;
+}
+.codemirror-colorpicker.macos .value > .value-container .drag-bar {
+  position: absolute;
+  cursor: pointer;
+  top: 50%;
+  left: 0px;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+.codemirror-colorpicker.mini {
+  width: 180px;
+  display: inline-block;
+}
+.codemirror-colorpicker.mini .control {
+  padding: 0px;
+}
+.codemirror-colorpicker.mini .control .hue, .codemirror-colorpicker.mini .control .opacity {
+  margin: 0px;
+  padding: 0px;
+}
+.codemirror-colorpicker.mini .control .hue > .hue-container {
+  border-radius: 0px;
+  overflow: hidden;
+  height: 20px;
+}
+.codemirror-colorpicker.mini .control .opacity > .opacity-container {
+  border-radius: 0px;
+  overflow: hidden;
+  height: 20px;
+}
+.codemirror-colorpicker.mini .control .drag-bar, .codemirror-colorpicker.mini .control .drag-bar2 {
+  border: 0px;
+  background-color: transparent;
+  height: 100%;
+  width: 5px;
+  box-sizing: border-box;
+  box-shadow: none;
+}
+.codemirror-colorpicker.mini .control .drag-bar.last:before, .codemirror-colorpicker.mini .control .drag-bar.lastafter, .codemirror-colorpicker.mini .control .drag-bar2.last:before, .codemirror-colorpicker.mini .control .drag-bar2.lastafter {
+  left: 1px;
+}
+.codemirror-colorpicker.mini .control .drag-bar.first:before, .codemirror-colorpicker.mini .control .drag-bar.first:after, .codemirror-colorpicker.mini .control .drag-bar2.first:before, .codemirror-colorpicker.mini .control .drag-bar2.first:after {
+  left: 3px;
+}
+.codemirror-colorpicker.mini .control .drag-bar:before, .codemirror-colorpicker.mini .control .drag-bar2:before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 0px;
+  width: 0;
+  height: 0;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid black;
+}
+.codemirror-colorpicker.mini .control .drag-bar:after, .codemirror-colorpicker.mini .control .drag-bar2:after {
+  content: "";
+  position: absolute;
+  left: 2px;
+  bottom: 0px;
+  width: 0;
+  height: 0;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-bottom: 4px solid black;
+}
+.codemirror-colorpicker.mini-vertical {
+  width: 180px;
+  display: inline-block;
+}
+.codemirror-colorpicker.mini-vertical .color-panel {
+  display: inline-block;
+  width: 140px;
+  height: 160px;
+  vertical-align: middle;
+}
+.codemirror-colorpicker.mini-vertical .control {
+  height: 160px;
+  padding: 0px;
+  vertical-align: middle;
+  display: inline-block;
+}
+.codemirror-colorpicker.mini-vertical .control .hue, .codemirror-colorpicker.mini-vertical .control .opacity {
+  margin: 0px;
+  padding: 0px;
+  width: 20px;
+  display: inline-block;
+  vertical-align: middle;
+  height: 100%;
+  position: relative;
+}
+.codemirror-colorpicker.mini-vertical .control .hue > .hue-container {
+  border-radius: 0px;
+  overflow: hidden;
+  height: 100%;
+  background: linear-gradient(to top, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
+}
+.codemirror-colorpicker.mini-vertical .control .opacity > .opacity-container {
+  border-radius: 0px;
+  overflow: hidden;
+  height: 100%;
+  width: 20px;
+}
+.codemirror-colorpicker.mini-vertical .control .drag-bar, .codemirror-colorpicker.mini-vertical .control .drag-bar2 {
+  border: 0px;
+  background-color: transparent;
+  height: 2px;
+  width: 100%;
+  box-sizing: border-box;
+  box-shadow: none;
+  -webkit-transform: none;
+          transform: none;
+}
+.codemirror-colorpicker.mini-vertical .control .drag-bar.last:before, .codemirror-colorpicker.mini-vertical .control .drag-bar.last:after, .codemirror-colorpicker.mini-vertical .control .drag-bar2.last:before, .codemirror-colorpicker.mini-vertical .control .drag-bar2.last:after {
+  top: 2px;
+}
+.codemirror-colorpicker.mini-vertical .control .drag-bar.first:before, .codemirror-colorpicker.mini-vertical .control .drag-bar.first:after, .codemirror-colorpicker.mini-vertical .control .drag-bar2.first:before, .codemirror-colorpicker.mini-vertical .control .drag-bar2.first:after {
+  top: -1px;
+}
+.codemirror-colorpicker.mini-vertical .control .drag-bar:before, .codemirror-colorpicker.mini-vertical .control .drag-bar2:before {
+  content: "";
+  position: absolute;
+  left: 0px;
+  top: 2px;
+  width: 0;
+  height: 0;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-left: 4px solid black;
+}
+.codemirror-colorpicker.mini-vertical .control .drag-bar:after, .codemirror-colorpicker.mini-vertical .control .drag-bar2:after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  right: 0px;
+  width: 0;
+  height: 0;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-right: 4px solid black;
+}
+.codemirror-colorpicker.ring .colorpicker-body .color-panel {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  left: 52px;
+  top: 52px;
+}
+.codemirror-colorpicker.ring .colorpicker-body .wheel {
+  width: 224px;
+  height: 224px;
+  position: relative;
+  box-sizing: border-box;
+}
+.codemirror-colorpicker.ring .colorpicker-body .wheel .wheel-canvas {
+  width: 214px;
+  height: 214px;
+  border-radius: 50%;
+  position: absolute;
+  left: 5px;
+  top: 5px;
+}
+.codemirror-colorpicker.ring .colorpicker-body .wheel .drag-pointer {
+  display: inline-block;
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  left: 50%;
+  top: 50%;
+  border: 1px solid white;
+  border-radius: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+  z-index: 2;
+}
+.codemirror-colorpicker.ring .control {
+  padding-top: 0px;
+}
+.codemirror-colorpicker.ring .control .value {
+  display: none;
+}
+.codemirror-colorpicker.ring .control > .color, .codemirror-colorpicker.ring .control > .empty {
+  top: -17px;
+  width: 30px;
+  height: 30px;
+  border-radius: 2px;
+}
+.codemirror-colorpicker.ring-tab .colorpicker-body .color-panel {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  left: 52px;
+  top: 52px;
+}
+.codemirror-colorpicker.ring-tab .colorpicker-body .wheel {
+  width: 224px;
+  height: 224px;
+  margin: 0 auto;
+  position: relative;
+  box-sizing: border-box;
+}
+.codemirror-colorpicker.ring-tab .colorpicker-body .wheel .wheel-canvas {
+  width: 214px;
+  height: 214px;
+  border-radius: 50%;
+  position: absolute;
+  left: 5px;
+  top: 5px;
+}
+.codemirror-colorpicker.ring-tab .colorpicker-body .wheel .drag-pointer {
+  display: inline-block;
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  left: 50%;
+  top: 50%;
+  border: 1px solid white;
+  border-radius: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+  z-index: 2;
+}
+.codemirror-colorpicker.ring-tab .colorpicker-body .color-chooser {
+  opacity: 1;
+  pointer-events: all;
+}
+.codemirror-colorpicker.ring-tab .colorpicker-body .color-chooser .color-chooser-container {
+  top: 0px;
+  opacity: 1;
+}
+.codemirror-colorpicker.ring-tab .colorpicker-body .color-chooser .color-chooser-container .colorsets-item-header {
+  display: none;
+}
+.codemirror-colorpicker.ring-tab .colorpicker-body .color-chooser .color-chooser-container .colorsets-list {
+  top: 4px;
+}
+.codemirror-colorpicker.ring-tab .colorpicker-body .color-chooser .color-chooser-container .colorsets-list .color-item {
+  -webkit-transform: scale(1.2);
+          transform: scale(1.2);
+}
+.codemirror-colorpicker.ring-tab .colorpicker-body .colorsets {
+  border-top: 0px;
+}
+.codemirror-colorpicker.ring-tab .colorpicker-body .colorsets .menu {
+  display: none;
+}
+.codemirror-colorpicker.ring-tab .colorpicker-body .colorsets .color-list {
+  margin-right: 0px;
+  padding-top: 5px;
+  padding-left: 13px;
+}
+.codemirror-colorpicker.ring-tab .control {
+  padding-top: 0px;
+}
+.codemirror-colorpicker.ring-tab .control .value {
+  display: none;
+}
+.codemirror-colorpicker.ring-tab .control > .color, .codemirror-colorpicker.ring-tab .control > .empty {
+  top: -17px;
+  width: 30px;
+  height: 30px;
+  border-radius: 2px;
+}
+.codemirror-colorpicker.xd {
+  display: inline-block;
+  padding-top: 12px;
+  width: 245px;
+}
+.codemirror-colorpicker.xd .color-panel {
+  display: inline-block;
+  margin-left: 6px;
+  margin-bottom: 12px;
+  width: 170px;
+  height: 170px;
+  vertical-align: middle;
+  border-radius: 3px;
+  overflow: hidden;
+  box-sizing: border-box;
+  border: 1px solid #cecece;
+}
+.codemirror-colorpicker.xd .color-panel > .saturation > .value > .drag-pointer {
+  border: 2px solid white;
+  width: 10px;
+  height: 10px;
+  box-shadow: 0 0 1px 0px black, inset 0 0 1px 0px black;
+}
+.codemirror-colorpicker.xd .control {
+  height: 170px;
+  padding: 0px;
+  vertical-align: middle;
+  display: inline-block;
+  margin-right: 12px;
+  margin-bottom: 12px;
+}
+.codemirror-colorpicker.xd .control .hue, .codemirror-colorpicker.xd .control .opacity {
+  margin: 0px;
+  padding: 0px;
+  width: 13px;
+  display: inline-block;
+  vertical-align: middle;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  border-radius: 3px;
+  margin-left: 8px;
+}
+.codemirror-colorpicker.xd .control .hue > .hue-container {
+  border-radius: 0px;
+  overflow: hidden;
+  height: 100%;
+  background: linear-gradient(to top, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
+}
+.codemirror-colorpicker.xd .control .opacity > .opacity-container {
+  border-radius: 0px;
+  overflow: hidden;
+  height: 100%;
+}
+.codemirror-colorpicker.xd .control .drag-bar, .codemirror-colorpicker.xd .control .drag-bar2 {
+  border: 0px;
+  background-color: transparent;
+  border: 2px solid white;
+  box-shadow: 0 0 1px 0px black, inset 0 0 1px 0px black;
+  width: 10px;
+  height: 10px;
+  box-sizing: border-box;
+  -webkit-transform: none;
+          transform: none;
+  overflow: hidden;
+  left: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+}
+.codemirror-colorpicker.xd .information {
+  margin-top: 5px;
+}
+.codemirror-colorpicker.xd-tab .color-panel {
+  display: inline-block;
+  margin-top: 10px;
+  margin-left: 6px;
+  width: 170px;
+  height: 120px;
+  vertical-align: middle;
+  border-radius: 3px;
+  overflow: hidden;
+  box-sizing: border-box;
+  border: 1px solid #cecece;
+}
+.codemirror-colorpicker.xd-tab .color-panel > .saturation > .value > .drag-pointer {
+  border: 2px solid white;
+  width: 10px;
+  height: 10px;
+  box-shadow: 0 0 1px 0px black, inset 0 0 1px 0px black;
+}
+.codemirror-colorpicker.xd-tab .control {
+  height: 120px;
+  padding: 0px;
+  vertical-align: middle;
+  display: inline-block;
+  margin-right: 12px;
+  margin-top: 10px;
+}
+.codemirror-colorpicker.xd-tab .control .hue, .codemirror-colorpicker.xd-tab .control .opacity {
+  margin: 0px;
+  padding: 0px;
+  width: 13px;
+  display: inline-block;
+  vertical-align: middle;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  border-radius: 3px;
+  margin-left: 8px;
+}
+.codemirror-colorpicker.xd-tab .control .hue > .hue-container {
+  border-radius: 0px;
+  overflow: hidden;
+  height: 100%;
+  background: linear-gradient(to top, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
+}
+.codemirror-colorpicker.xd-tab .control .opacity > .opacity-container {
+  border-radius: 0px;
+  overflow: hidden;
+  height: 100%;
+}
+.codemirror-colorpicker.xd-tab .control .drag-bar, .codemirror-colorpicker.xd-tab .control .drag-bar2 {
+  border: 0px;
+  background-color: transparent;
+  border: 2px solid white;
+  box-shadow: 0 0 1px 0px black, inset 0 0 1px 0px black;
+  width: 10px;
+  height: 10px;
+  box-sizing: border-box;
+  -webkit-transform: none;
+          transform: none;
+  overflow: hidden;
+  left: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+}
+.codemirror-colorpicker.xd-tab .color-chooser {
+  opacity: 1;
+  pointer-events: all;
+}
+.codemirror-colorpicker.xd-tab .color-chooser .color-chooser-container {
+  top: 0px;
+  opacity: 1;
+}
+.codemirror-colorpicker.xd-tab .color-chooser .color-chooser-container .colorsets-item-header {
+  display: none;
+}
+.codemirror-colorpicker.xd-tab .color-chooser .color-chooser-container .colorsets-list {
+  top: 4px;
+}
+.codemirror-colorpicker.xd-tab .color-chooser .color-chooser-container .colorsets-list .color-item {
+  -webkit-transform: scale(1.2);
+          transform: scale(1.2);
+}
+.codemirror-colorpicker.xd-tab .colorsets {
+  border-top: 0px;
+}
+.codemirror-colorpicker.xd-tab .colorsets .menu {
+  display: none;
+}
+.codemirror-colorpicker.xd-tab .colorsets .color-list {
+  margin-right: 0px;
+  padding-top: 5px;
+  padding-left: 13px;
+}
+.codemirror-colorpicker.xd-tab .information {
+  margin-top: 5px;
+}
+
+.colorsets-contextmenu {
+  position: fixed;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-radius: 6px;
+  background-color: #ececec;
+  border: 1px solid #cccccc;
+  display: none;
+  list-style: none;
+  font-size: 13px;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+.colorsets-contextmenu.show {
+  display: inline-block;
+}
+.colorsets-contextmenu .menu-item {
+  padding: 2px 20px;
+  cursor: default;
+}
+.colorsets-contextmenu .menu-item:hover {
+  background-color: #5ea3fb;
+  color: white;
+}
+.colorsets-contextmenu.small .menu-item.small-hide {
+  display: none;
+}
+
+html, body {
+  font-size: 13px;
+  padding: 0px;
+  margin: 0px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+.csseditor {
+  width: 100%;
+  height: 100%;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  position: fixed;
+  left: 0px;
+  top: 0px;
+}
+.csseditor .layout-main {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  display: flex;
+  flex-direction: column;
+}
+.csseditor .layout-main.show-timeline .layout-footer {
+  height: 299px;
+}
+.csseditor .layout-main:not(.show-timeline) .layout-footer {
+  height: -1px !important;
+}
+.csseditor .layout-main .layout-header {
+  flex: none;
+  height: 100px;
+  overflow: hidden;
+  display: flex;
+  position: relative;
+  background-color: black;
+}
+.csseditor .layout-main .layout-header .page-tab-menu {
+  flex: 1 1 auto;
+  display: block;
+  position: relative;
+}
+.csseditor .layout-main .layout-footer {
+  flex: none;
+  height: -1px;
+  overflow: hidden;
+  border-top: 1px solid #cccccc;
+  transition: all 0.15s linear;
+  position: relative;
+  pointer-events: all;
+}
+.csseditor .layout-main .layout-middle {
+  flex: 1 1 auto;
+  display: flex;
+  height: 100%;
+  position: relative;
+}
+.csseditor .layout-main .layout-middle .layout-right {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  width: 240px;
+  display: inline-block;
+  border-left: 1px solid #cccccc;
+  border-right: 1px solid #cccccc;
+  background-color: rgba(255, 255, 255, 0.5);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+}
+.csseditor .layout-main .layout-middle .layout-left {
+  flex: none;
+  width: 0px;
+  border-right: 1px solid #cccccc;
+  z-index: 100;
+  height: 100%;
+  position: relative;
+  display: none;
+}
+.csseditor .layout-main .layout-middle .layout-body {
+  flex: 1 1 auto;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.csseditor .tab {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  top: 0px;
+}
+.csseditor .tab.inner {
+  top: 5px;
+  left: 5px;
+  right: 5px;
+  bottom: 5px;
+}
+.csseditor .tab.inner > .tab-header > .tab-item {
+  border: 0px;
+}
+.csseditor .tab.inner > .tab-body {
+  border: 0px;
+}
+.csseditor .tab > .tab-header {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  height: 30px;
+  z-index: 1;
+  display: flex;
+}
+.csseditor .tab > .tab-header.no-border > .tab-item {
+  border: 0px !important;
+}
+.csseditor .tab > .tab-header > .tab-item {
+  flex: 1;
+  display: inline-block;
+  font-size: 12px;
+  text-align: left;
+  height: 100%;
+  padding: 6px 4px;
+  cursor: pointer;
+  color: black;
+  border: 1px solid #cccccc;
+  min-width: 50px;
+}
+.csseditor .tab > .tab-header > .tab-item:not(.selected) {
+  background-color: white;
+  color: black;
+}
+.csseditor .tab > .tab-header > .tab-item.selected {
+  background-color: #cccccc;
+}
+.csseditor .tab > .tab-header > .tab-item.small-font {
+  font-size: 11px;
+}
+.csseditor .tab > .tab-header > .tab-item.select-reverse:not(.selected) {
+  background-color: rgba(204, 204, 204, 0.5);
+  color: black;
+}
+.csseditor .tab > .tab-header > .tab-item.select-reverse.selected {
+  background-color: white;
+}
+.csseditor .tab > .tab-body {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 30px;
+  bottom: 0px;
+  border: 1px solid #cccccc;
+}
+.csseditor .tab > .tab-body.no-border {
+  border: 0px;
+}
+.csseditor .tab > .tab-body > .tab-content {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+  display: none;
+  overflow: auto;
+}
+.csseditor .tab > .tab-body > .tab-content.selected {
+  display: block;
+}
+.csseditor .tab > .tab-body > .tab-content.selected.flex {
+  display: flex;
+  flex-direction: column;
+}
+.csseditor .tab > .tab-body > .tab-content .fixed {
+  flex: none;
+}
+.csseditor .tab > .tab-body > .tab-content .scroll {
+  flex: 1 1 auto;
+  overflow: auto;
+  position: relative;
+}
+.csseditor .tab > .tab-body > .tab-content .scroll .tab-element-title {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  height: 30px;
+  display: none;
+  background-color: #f3f3f3;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 8px 5px !important;
+  height: 30px;
+  background-color: #f3f3f3;
+  color: #333;
+}
+.csseditor .tab.bottom > .tab-header {
+  top: auto;
+  bottom: 1px;
+}
+.csseditor .tab.bottom > .tab-header > .tab-item.selected {
+  border-top: 1px solid #ffffff;
+  border-bottom: 1px solid #cccccc;
+}
+.csseditor .tab.bottom > .tab-body {
+  top: 0px;
+  bottom: 30px;
+}
+.csseditor .tab.horizontal.left > .tab-header {
+  left: 0px;
+  width: 50px;
+  display: inline-block;
+}
+.csseditor .tab.horizontal.left > .tab-header > .tab-item {
+  height: 50px;
+  overflow: auto;
+  line-height: 3;
+  min-width: 50px;
+}
+.csseditor .tab.horizontal.left > .tab-body {
+  left: 50px;
+  right: 0px;
+  border-left: 1px solid #cccccc;
+  border-right: 0px;
+}
+.csseditor .tab.horizontal > .tab-header {
+  left: auto;
+  top: 0px;
+  bottom: 0px;
+  width: 60px;
+  height: auto;
+  display: inline-block;
+}
+.csseditor .tab.horizontal > .tab-header > .tab-item {
+  border: 0px;
+  border-bottom: 1px solid #cccccc;
+  text-align: center;
+  line-height: 3;
+  height: 50px;
+  min-width: 60px;
+}
+.csseditor .tab.horizontal > .tab-header > .tab-item.selected {
+  background-color: rgba(204, 204, 204, 0.5);
+}
+.csseditor .tab.horizontal > .tab-body {
+  top: 0px;
+  right: 60px;
+  border: 0px;
+  border-right: 1px solid #cccccc;
+}
+.csseditor .unit-range {
+  pointer-events: all;
+  display: block !important;
+}
+.csseditor .unit-range.show .multi-value {
+  display: flex;
+}
+.csseditor .unit-range .base-value {
+  display: flex;
+}
+.csseditor .unit-range .base-value > * {
+  flex: 1 1 auto;
+}
+.csseditor .unit-range .base-value .number {
+  flex: none;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border: 0px;
+  background-color: transparent;
+  margin-left: 5px;
+  width: 50px;
+}
+.csseditor .unit-range .base-value .unit {
+  flex: none;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border: 0px;
+  background-color: transparent;
+  width: 30px;
+}
+.csseditor .unit-range .multi-value {
+  display: none;
+  height: 26px;
+}
+.csseditor .unit-range .multi-value > * {
+  flex: 1 1 auto;
+  margin: 2px;
+  border: 1px solid #cccccc;
+  background-color: transparent;
+  cursor: pointer;
+  padding: 3px;
+  border-radius: 5px;
+}
+.csseditor .colorpicker-layer .codemirror-colorpicker {
+  background-color: transparent;
+  width: 100%;
+  border: 0px;
+  box-shadow: none;
+}
+.csseditor .colorpicker-layer .codemirror-colorpicker .colorpicker-body {
+  width: 240px;
+}
+.csseditor .colorpicker-layer .codemirror-colorpicker .colorpicker-body .color-list .current-color-sets .color-item {
+  width: 20px;
+  height: 20px;
+  margin: 2px !important;
+}
+.csseditor .colorpicker-layer .codemirror-colorpicker .colorpicker-body .color-list .current-color-sets .add-color-item {
+  width: 20px;
+  height: 20px;
+  margin: 0px !important;
+  padding: 3px;
+}
+.csseditor .colorpicker-layer .codemirror-colorpicker .colorpicker-body .wheel {
+  border: 0px;
+  background-color: transparent;
+}
+.csseditor .tool-menu {
+  height: 100%;
+  display: flex;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.csseditor .tool-menu .logo {
+  color: white;
+  padding: 20px 10px;
+}
+.csseditor .tool-menu .logo .text {
+  font-size: 30px;
+  display: inline-block;
+  font-weight: bold;
+  text-transform: uppercase;
+  background: linear-gradient(to right, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
+  -webkit-background-clip: text;
+          background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+.csseditor .tool-menu .logo .site {
+  font-size: 14px;
+  color: #cccccc;
+}
+.csseditor .tool-menu .items {
+  flex: 1 1 auto;
+  text-align: center;
+  height: 100%;
+  padding: 0px 5px;
+}
+.csseditor .tool-menu .items.flex-2 {
+  flex: 5;
+}
+.csseditor .tool-menu .items.left {
+  text-align: left;
+}
+.csseditor .tool-menu .items.right {
+  text-align: right;
+}
+.csseditor .tool-menu .items form {
+  display: inline-block;
+  vertical-align: middle;
+}
+.csseditor .tool-menu .items button {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  vertical-align: middle;
+  border: 0px;
+  display: inline-block;
+  padding: 10px 2px;
+  text-decoration: none;
+  color: white;
+  line-height: 1.6;
+  outline: none;
+  cursor: pointer;
+  text-align: center;
+  margin-right: 5px;
+  background-color: transparent;
+}
+.csseditor .tool-menu .items button[checked=checked] .icon {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.csseditor .tool-menu .items .icon {
+  margin: 0 auto;
+  width: 30px;
+  height: 30px;
+}
+.csseditor .tool-menu .items .icon svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor .tool-menu .items .icon svg path {
+  fill: white;
+}
+.csseditor .tool-menu .items .icon.rect {
+  background-color: transparent;
+  border: 1px solid #cccccc;
+}
+.csseditor .tool-menu .items .icon.circle {
+  background-color: transparent;
+  border: 1px solid #cccccc;
+  border-radius: 100%;
+}
+.csseditor .tool-menu .items .icon.show-grid {
+  background-color: transparent;
+  background-image: linear-gradient(to right, black, black), linear-gradient(to right, black, black), linear-gradient(to right, black, black), linear-gradient(to right, black, black), linear-gradient(to right, black, black), linear-gradient(to right, black, black), linear-gradient(to right, black, black), linear-gradient(to right, black, black);
+  background-size: 1px 100%, 1px 100%, 1px 100%, 1px 100%, 100% 1px, 100% 1px, 100% 1px, 100% 1px;
+  background-position: 3px 0px, 27px 0px, 11px 0px, 19px 0px, 0px 3px, 0px 11px, 0px 19px, 0px 27px;
+  background-repeat: no-repeat;
+}
+.csseditor .tool-menu .items .icon.show-clip-path {
+  background-color: transparent;
+  background-image: radial-gradient(circle at center, red, red 3px, transparent 3px, transparent), radial-gradient(circle at center, blue, blue 3px, transparent 3px, transparent), radial-gradient(circle at center, blue, blue 3px, transparent 3px, transparent), radial-gradient(circle at center, green, green 3px, transparent 3px, transparent), linear-gradient(to right, black, black), linear-gradient(to right, black, black), linear-gradient(to right, black, black), linear-gradient(to right, black, black);
+  background-size: 7px 7px, 7px 7px, 7px 7px, 7px 7px, 1px 20px, 1px 20px, 20px 1px, 20px 1px;
+  background-position: 1.5px 1.5px, 1.5px 21.5px, 21.5px 21.5px, 21.5px 1.5px, 5px 5px, 25px 5px, 5px 5px, 5px 25px;
+  background-repeat: no-repeat;
+}
+.csseditor .tool-menu .items .icon.save {
+  background-color: transparent;
+  background-image: linear-gradient(to right, black, black), linear-gradient(to right, black, black), linear-gradient(to right, black, black), linear-gradient(to right, black, black);
+  background-size: 26px 2px, 20px 2px, 10px 2px, 15px 2px;
+  background-position: 2px 4px, 2px 12px, 2px 18px, 2px 25px;
+  background-repeat: no-repeat;
+}
+.csseditor .tool-menu .items .icon.jsfiddle, .csseditor .tool-menu .items .icon.export, .csseditor .tool-menu .items .icon.codepen, .csseditor .tool-menu .items .icon.github {
+  background-color: transparent;
+  box-shadow: inset 0 0 0 1px white;
+  text-align: right;
+  padding-right: 2px;
+  border-radius: 3px;
+}
+.csseditor .tool-menu .items .icon.jsfiddle:before, .csseditor .tool-menu .items .icon.export:before, .csseditor .tool-menu .items .icon.codepen:before, .csseditor .tool-menu .items .icon.github:before {
+  display: inline-block;
+  font-size: 30px;
+  font-weight: bold;
+  vertical-align: middle;
+  line-height: 30px;
+}
+.csseditor .tool-menu .items .icon.codepen:before {
+  content: "C";
+}
+.csseditor .tool-menu .items .icon.jsfiddle:before {
+  content: "J";
+}
+.csseditor .tool-menu .items .icon.github:before {
+  content: "G";
+}
+.csseditor .vertical-colorstep-container {
+  position: absolute;
+  top: -80px;
+  left: 0px;
+  right: 0px;
+  height: 70px;
+  display: none;
+  z-index: 1000;
+  pointer-events: none;
+}
+.csseditor .vertical-colorstep-container .gradient-editor {
+  position: absolute;
+  display: inline-block;
+  left: 50%;
+  -webkit-transform: translateX(200px);
+          transform: translateX(200px);
+  min-width: 100px;
+  top: -20px;
+  pointer-events: all;
+}
+.csseditor .vertical-colorstep-container .gradient-editor .angle-editor,
+.csseditor .vertical-colorstep-container .gradient-editor .position-editor {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  box-sizing: border-box;
+  width: 100px;
+  height: 100px;
+  margin-right: 4px;
+}
+.csseditor .vertical-colorstep-container .gradient-tools {
+  position: absolute;
+  display: inline-block;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  top: 0px;
+  pointer-events: all;
+}
+.csseditor .vertical-colorstep-container .gradient-tools .guide-button {
+  width: 14px;
+  height: 14px;
+  padding: 0px;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  border: 1px solid #cccccc;
+  cursor: pointer;
+  background-color: white;
+  background-image: linear-gradient(to top, black 0%, black 100%);
+  background-size: 2px 2px;
+  background-position: center center;
+  background-repeat: repeat-y;
+  box-sizing: border-box;
+  outline: none;
+  vertical-align: middle;
+}
+.csseditor .vertical-colorstep-container .gradient-tools .guide-button.cut {
+  background-repeat: repeat-x;
+}
+.csseditor .vertical-colorstep-container .gradient-tools .radial-gradient-shape {
+  width: 14px;
+  height: 14px;
+  padding: 0px;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border: 1px solid #cccccc;
+  cursor: pointer;
+  background-color: white;
+  box-sizing: border-box;
+  outline: none;
+  position: relative;
+  vertical-align: middle;
+}
+.csseditor .vertical-colorstep-container .gradient-tools .radial-gradient-shape.circle:before {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+  content: "";
+  display: inline-block;
+  border-radius: 100%;
+  background-color: #cccccc;
+}
+.csseditor .vertical-colorstep-container .gradient-tools .radial-gradient-shape.ellipse:before {
+  position: absolute;
+  width: 100%;
+  height: 50%;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+  content: "";
+  display: inline-block;
+  border-radius: 100%;
+  background-color: #cccccc;
+}
+.csseditor .vertical-colorstep-container .gradient-tools .radial-gradient-shape.selected:before {
+  background-color: #333;
+}
+.csseditor .vertical-colorstep {
+  position: absolute;
+  left: 50%;
+  top: 20px;
+  width: 400px;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  display: inline-block;
+  z-index: 100;
+  padding-left: 20px;
+  padding-right: 20px;
+  pointer-events: all;
+}
+.csseditor .vertical-colorstep .gradient-steps {
+  position: relative;
+  display: block;
+}
+.csseditor .vertical-colorstep .gradient-steps .hue-container {
+  width: 100%;
+  height: 14px;
+  margin-top: 0px;
+  left: 0px;
+  right: 0px;
+  position: absolute;
+  border-radius: 14px;
+  z-index: 0;
+  cursor: copy;
+  background-color: transparent;
+  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-size: 10px 10px;
+  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+}
+.csseditor .vertical-colorstep .gradient-steps .hue {
+  position: relative;
+  padding: 0px;
+  margin: 0px;
+  border-radius: 14px;
+  cursor: pointer;
+  pointer-events: none;
+}
+.csseditor .vertical-colorstep .gradient-steps .hue > .step-list {
+  position: relative;
+  width: 100%;
+  cursor: copy;
+  height: 14px;
+  z-index: 1;
+  border-radius: 14px;
+}
+.csseditor .vertical-colorstep .gradient-steps .hue > .step-list.mode-drag {
+  cursor: pointer;
+}
+.csseditor .vertical-colorstep .gradient-steps .hue .drag-bar {
+  -webkit-transform: none;
+          transform: none;
+  border-radius: 50%;
+  display: inline-block;
+  left: 0px;
+  top: 13px;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  position: absolute;
+  cursor: pointer;
+  transition: top 0.3s ease-out;
+  pointer-events: all;
+}
+.csseditor .vertical-colorstep .gradient-steps .hue .drag-bar .guide-line {
+  pointer-events: none;
+  position: absolute;
+  width: 1px;
+  height: 0px;
+  bottom: 8px;
+  left: 4px;
+  transition: all 0.3s ease-out;
+}
+.csseditor .vertical-colorstep .gradient-steps .hue .drag-bar .guide-change {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  top: 50%;
+  left: -15px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  opacity: 0;
+  transition: all 0.3s ease-out;
+  border: 1px solid #cccccc;
+  pointer-events: none;
+  background-color: white;
+  background-image: linear-gradient(to top, black 0%, black 100%);
+  background-size: 2px 2px;
+  background-position: 2.5px center;
+  background-repeat: repeat-y;
+}
+.csseditor .vertical-colorstep .gradient-steps .hue .drag-bar .guide-change.cut {
+  background-position: center 2.5px;
+  background-repeat: repeat-x;
+}
+.csseditor .vertical-colorstep .gradient-steps .hue .drag-bar .guide-change.easing {
+  background-repeat: no-repeat;
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAB3SURBVChTY9iefGyO+gasCCjFgCaEhrBLf33x/f6uZ0AGuvRc7Y37i8/8////3JQbQC5CekPwgRsrH/z48Aso9+bah8VmW6HSQBaQDxQFygFVANXB9YCkgeYA5YBmAk2GS0AQSBroCqBbkEXhCN1paAhvsCQfAwDynahhkocJpQAAAABJRU5ErkJggg==);
+  border: 0px;
+}
+.csseditor .vertical-colorstep .gradient-steps .hue .drag-bar .guide-step {
+  background-color: transparent;
+  border: 2px solid white;
+  box-shadow: 0 0 2px 0px rgba(0, 0, 0, 0.6);
+  width: 10px;
+  height: 10px;
+  -webkit-transform: none;
+          transform: none;
+  border-radius: 50%;
+  display: inline-block;
+  top: 0px;
+  -webkit-transform: translateX(-0.5px);
+          transform: translateX(-0.5px);
+  cursor: pointer;
+  transition: top 0.3s ease-out;
+  pointer-events: all;
+  border: 1px solid #cccccc;
+  box-sizing: border-box;
+}
+.csseditor .vertical-colorstep .gradient-steps .hue .drag-bar .guide-unit {
+  position: absolute;
+  width: 80px;
+  top: 50%;
+  left: 15px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  opacity: 0;
+  transition: all 0.3s ease-out;
+  pointer-events: none;
+}
+.csseditor .vertical-colorstep .gradient-steps .hue .drag-bar .guide-unit > input[type=number] {
+  display: none;
+  outline: none;
+  flex: 3;
+  width: 40px;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border: 1px solid #cccccc;
+  background-color: white;
+}
+.csseditor .vertical-colorstep .gradient-steps .hue .drag-bar .guide-unit.percent > .percent {
+  display: inline-block;
+}
+.csseditor .vertical-colorstep .gradient-steps .hue .drag-bar .guide-unit.px > .px {
+  display: inline-block;
+}
+.csseditor .vertical-colorstep .gradient-steps .hue .drag-bar .guide-unit.em > .em {
+  display: inline-block;
+}
+.csseditor .vertical-colorstep .gradient-steps .hue .drag-bar .guide-unit select {
+  flex: 1;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border: 1px solid #cccccc;
+  background-color: white;
+  border-radius: 0px;
+  display: inline-block;
+  vertical-align: middle;
+  height: 18px;
+  outline: none;
+  margin-top: -2px;
+  padding-left: 2px;
+  box-sizing: border-box;
+}
+.csseditor .vertical-colorstep .gradient-steps .hue .drag-bar.selected {
+  z-index: 1;
+  top: 30px;
+}
+.csseditor .vertical-colorstep .gradient-steps .hue .drag-bar.selected .guide-step {
+  box-shadow: 0 0 20px 8px rgba(228, 255, 0, 0.8);
+}
+.csseditor .vertical-colorstep .gradient-steps .hue .drag-bar.selected .guide-line {
+  height: 32px;
+}
+.csseditor .vertical-colorstep .gradient-steps .hue .drag-bar.selected .guide-change,
+.csseditor .vertical-colorstep .gradient-steps .hue .drag-bar.selected .guide-unit {
+  pointer-events: all;
+}
+.csseditor .vertical-colorstep .gradient-steps .hue .drag-bar.selected .guide-change,
+.csseditor .vertical-colorstep .gradient-steps .hue .drag-bar.selected .guide-step,
+.csseditor .vertical-colorstep .gradient-steps .hue .drag-bar.selected .guide-unit {
+  opacity: 1;
+}
+.csseditor .vertical-colorstep .gradient-steps .current-percent {
+  position: absolute;
+  display: none;
+  font-size: 12px;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+}
+.csseditor .page-view {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  top: 0px;
+  background-color: #cccccc;
+}
+.csseditor .page-view .page-canvas {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+  background-color: white;
+}
+.csseditor .drag-angle-rect {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  pointer-events: none;
+}
+.csseditor .drag-angle-rect .drag-angle {
+  display: inline-block;
+  width: 70px;
+  height: 70px;
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid rgba(236, 236, 236, 0.5);
+  border-style: dashed;
+  overflow: hidden;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+  pointer-events: all;
+}
+.csseditor .drag-angle-rect .drag-angle .drag-pointer {
+  position: absolute;
+  width: 12px;
+  cursor: pointer;
+  height: 12px;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+  border-radius: 50%;
+  background-color: rgba(236, 236, 236, 0.8);
+  box-shadow: 0 0 4px 0px rgba(0, 0, 0, 0.32), inset 0 0 4px 0px rgba(0, 0, 0, 0.32);
+}
+.csseditor .drag-angle-rect .drag-angle .angle-text {
+  position: absolute;
+  display: inline-block;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+  color: rgba(236, 236, 236, 0.9);
+  text-shadow: 1px 1px #a7a7a7;
+}
+.csseditor .drag-position {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+}
+.csseditor .drag-position .drag-pointer {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  cursor: pointer;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 2px 0px rgba(0, 0, 0, 0.32);
+}
+.csseditor .perspective-drag-position {
+  position: absolute;
+  display: none;
+  bottom: 0px;
+  width: 100%;
+  top: 0px;
+  right: 0px;
+  overflow: hidden;
+  pointer-events: none;
+}
+.csseditor .perspective-drag-position .drag-pointer {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  cursor: pointer;
+  pointer-events: all;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 2px 0px rgba(0, 0, 0, 0.32);
+}
+.csseditor .predefined-angluar-group {
+  text-align: center;
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+.csseditor .predefined-angluar-group.radial-position {
+  right: auto;
+}
+.csseditor .predefined-angluar-group button {
+  padding: 0px;
+  margin: 1px;
+  background-color: transparent;
+  border: 0px;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  outline: none;
+  cursor: pointer;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  position: absolute;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  pointer-events: all;
+  /* linear */
+  /* radial */
+}
+.csseditor .predefined-angluar-group button:hover {
+  border-color: rgba(0, 0, 0, 0.2);
+}
+.csseditor .predefined-angluar-group button:hover:after {
+  border-color: rgba(0, 0, 0, 0.2);
+}
+.csseditor .predefined-angluar-group button:after {
+  content: "";
+  position: absolute;
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+}
+.csseditor .predefined-angluar-group button[data-value="to top"] {
+  top: 10px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  border-top: 2px solid rgba(15, 114, 207, 0.8);
+}
+.csseditor .predefined-angluar-group button[data-value="to top"]:after {
+  border-top: 2px solid rgba(15, 114, 207, 0.8);
+  top: -8px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+}
+.csseditor .predefined-angluar-group button[data-value="to top right"] {
+  top: 10px;
+  right: 10px;
+  border-top: 2px solid rgba(15, 114, 207, 0.8);
+  border-right: 2px solid rgba(15, 114, 207, 0.8);
+}
+.csseditor .predefined-angluar-group button[data-value="to top right"]:after {
+  border-top: 2px solid rgba(15, 114, 207, 0.8);
+  border-right: 2px solid rgba(15, 114, 207, 0.8);
+  top: -8px;
+  right: -8px;
+}
+.csseditor .predefined-angluar-group button[data-value="to right"] {
+  top: 50%;
+  right: 10px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  border-right: 2px solid rgba(15, 114, 207, 0.8);
+}
+.csseditor .predefined-angluar-group button[data-value="to right"]:after {
+  border-right: 2px solid rgba(15, 114, 207, 0.8);
+  top: 50%;
+  right: -8px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+.csseditor .predefined-angluar-group button[data-value="to bottom right"] {
+  bottom: 10px;
+  right: 10px;
+  border-right: 2px solid rgba(15, 114, 207, 0.8);
+  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
+}
+.csseditor .predefined-angluar-group button[data-value="to bottom right"]:after {
+  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
+  border-right: 2px solid rgba(15, 114, 207, 0.8);
+  bottom: -8px;
+  right: -8px;
+}
+.csseditor .predefined-angluar-group button[data-value="to bottom"] {
+  bottom: 10px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
+}
+.csseditor .predefined-angluar-group button[data-value="to bottom"]:after {
+  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
+  left: 50%;
+  bottom: -8px;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+}
+.csseditor .predefined-angluar-group button[data-value="to bottom left"] {
+  left: 10px;
+  bottom: 10px;
+  border-left: 2px solid rgba(15, 114, 207, 0.8);
+  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
+}
+.csseditor .predefined-angluar-group button[data-value="to bottom left"]:after {
+  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
+  border-left: 2px solid rgba(15, 114, 207, 0.8);
+  bottom: -8px;
+  left: -8px;
+}
+.csseditor .predefined-angluar-group button[data-value="to left"] {
+  top: 50%;
+  left: 10px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  border-left: 2px solid rgba(15, 114, 207, 0.8);
+}
+.csseditor .predefined-angluar-group button[data-value="to left"]:after {
+  border-left: 2px solid rgba(15, 114, 207, 0.8);
+  top: 50%;
+  left: -8px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+.csseditor .predefined-angluar-group button[data-value="to top left"] {
+  top: 10px;
+  left: 10px;
+  border-left: 2px solid rgba(15, 114, 207, 0.8);
+  border-top: 2px solid rgba(15, 114, 207, 0.8);
+}
+.csseditor .predefined-angluar-group button[data-value="to top left"]:after {
+  border-top: 2px solid rgba(15, 114, 207, 0.8);
+  border-left: 2px solid rgba(15, 114, 207, 0.8);
+  top: -8px;
+  left: -8px;
+}
+.csseditor .predefined-angluar-group button[data-value=top] {
+  top: 10px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  border-top: 2px solid rgba(15, 114, 207, 0.8);
+}
+.csseditor .predefined-angluar-group button[data-value=top]:after {
+  border-top: 2px solid rgba(15, 114, 207, 0.8);
+  top: -8px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+}
+.csseditor .predefined-angluar-group button[data-value=right] {
+  top: 50%;
+  right: 10px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  border-right: 2px solid rgba(15, 114, 207, 0.8);
+}
+.csseditor .predefined-angluar-group button[data-value=right]:after {
+  border-right: 2px solid rgba(15, 114, 207, 0.8);
+  top: 50%;
+  right: -8px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+.csseditor .predefined-angluar-group button[data-value=bottom] {
+  bottom: 10px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
+}
+.csseditor .predefined-angluar-group button[data-value=bottom]:after {
+  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
+  left: 50%;
+  bottom: -8px;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+}
+.csseditor .predefined-angluar-group button[data-value=left] {
+  top: 50%;
+  left: 10px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  border-left: 2px solid rgba(15, 114, 207, 0.8);
+}
+.csseditor .predefined-angluar-group button[data-value=left]:after {
+  border-left: 2px solid rgba(15, 114, 207, 0.8);
+  top: 50%;
+  left: -8px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+.csseditor .predefined-radial-gradient-angle {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  height: 30px;
+}
+.csseditor .predefined-radial-gradient-angle select,
+.csseditor .predefined-radial-gradient-angle button {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  border: 0px;
+  vertical-align: middle;
+  display: inline-block;
+  outline: none;
+}
+.csseditor .predefined-radial-gradient-angle button {
+  width: 30px;
+  height: 30px;
+  position: relative;
+  outline: none;
+  cursor: pointer;
+}
+.csseditor .predefined-radial-gradient-angle button .circle {
+  display: inline-block;
+  border-radius: 50px;
+  background-color: rgba(51, 51, 51, 0.753);
+  border: 0px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  height: 10px;
+  width: 10px;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+}
+.csseditor .background-resizer {
+  position: absolute;
+  display: none;
+  bottom: 24px;
+  top: 24px;
+  right: 24px;
+  left: 24px;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.csseditor .background-resizer .drag-pointer {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  cursor: pointer;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 2px 0px rgba(0, 0, 0, 0.32);
+}
+.csseditor .background-resizer .background-rect {
+  position: absolute;
+  cursor: pointer;
+}
+.csseditor .predefined-background-position {
+  display: none;
+  text-align: center;
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  height: 100%;
+  right: 0px;
+  background-color: rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+.csseditor .predefined-background-position.radial-position {
+  top: 30px;
+  height: auto;
+}
+.csseditor .predefined-background-position button {
+  padding: 0px;
+  margin: 1px;
+  background-color: transparent;
+  border: 0px;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  outline: none;
+  cursor: pointer;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  position: absolute;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  pointer-events: all;
+  /* linear */
+  /* radial */
+}
+.csseditor .predefined-background-position button:hover {
+  border-color: rgba(0, 0, 0, 0.2);
+}
+.csseditor .predefined-background-position button:hover:after {
+  border-color: rgba(0, 0, 0, 0.2);
+}
+.csseditor .predefined-background-position button:after {
+  content: "";
+  position: absolute;
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+}
+.csseditor .predefined-background-position button[data-value="to top"] {
+  top: 10px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  border-top: 2px solid rgba(15, 114, 207, 0.8);
+}
+.csseditor .predefined-background-position button[data-value="to top"]:after {
+  border-top: 2px solid rgba(15, 114, 207, 0.8);
+  top: -8px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+}
+.csseditor .predefined-background-position button[data-value="to top right"] {
+  top: 10px;
+  right: 10px;
+  border-top: 2px solid rgba(15, 114, 207, 0.8);
+  border-right: 2px solid rgba(15, 114, 207, 0.8);
+}
+.csseditor .predefined-background-position button[data-value="to top right"]:after {
+  border-top: 2px solid rgba(15, 114, 207, 0.8);
+  border-right: 2px solid rgba(15, 114, 207, 0.8);
+  top: -8px;
+  right: -8px;
+}
+.csseditor .predefined-background-position button[data-value="to right"] {
+  top: 50%;
+  right: 10px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  border-right: 2px solid rgba(15, 114, 207, 0.8);
+}
+.csseditor .predefined-background-position button[data-value="to right"]:after {
+  border-right: 2px solid rgba(15, 114, 207, 0.8);
+  top: 50%;
+  right: -8px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+.csseditor .predefined-background-position button[data-value="to bottom right"] {
+  bottom: 10px;
+  right: 10px;
+  border-right: 2px solid rgba(15, 114, 207, 0.8);
+  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
+}
+.csseditor .predefined-background-position button[data-value="to bottom right"]:after {
+  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
+  border-right: 2px solid rgba(15, 114, 207, 0.8);
+  bottom: -8px;
+  right: -8px;
+}
+.csseditor .predefined-background-position button[data-value="to bottom"] {
+  bottom: 10px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
+}
+.csseditor .predefined-background-position button[data-value="to bottom"]:after {
+  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
+  left: 50%;
+  bottom: -8px;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+}
+.csseditor .predefined-background-position button[data-value="to bottom left"] {
+  left: 10px;
+  bottom: 10px;
+  border-left: 2px solid rgba(15, 114, 207, 0.8);
+  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
+}
+.csseditor .predefined-background-position button[data-value="to bottom left"]:after {
+  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
+  border-left: 2px solid rgba(15, 114, 207, 0.8);
+  bottom: -8px;
+  left: -8px;
+}
+.csseditor .predefined-background-position button[data-value="to left"] {
+  top: 50%;
+  left: 10px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  border-left: 2px solid rgba(15, 114, 207, 0.8);
+}
+.csseditor .predefined-background-position button[data-value="to left"]:after {
+  border-left: 2px solid rgba(15, 114, 207, 0.8);
+  top: 50%;
+  left: -8px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+.csseditor .predefined-background-position button[data-value="to top left"] {
+  top: 10px;
+  left: 10px;
+  border-left: 2px solid rgba(15, 114, 207, 0.8);
+  border-top: 2px solid rgba(15, 114, 207, 0.8);
+}
+.csseditor .predefined-background-position button[data-value="to top left"]:after {
+  border-top: 2px solid rgba(15, 114, 207, 0.8);
+  border-left: 2px solid rgba(15, 114, 207, 0.8);
+  top: -8px;
+  left: -8px;
+}
+.csseditor .predefined-background-position button[data-value=top] {
+  top: 10px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  border-top: 2px solid rgba(15, 114, 207, 0.8);
+}
+.csseditor .predefined-background-position button[data-value=top]:after {
+  border-top: 2px solid rgba(15, 114, 207, 0.8);
+  top: -8px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+}
+.csseditor .predefined-background-position button[data-value=right] {
+  top: 50%;
+  right: 10px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  border-right: 2px solid rgba(15, 114, 207, 0.8);
+}
+.csseditor .predefined-background-position button[data-value=right]:after {
+  border-right: 2px solid rgba(15, 114, 207, 0.8);
+  top: 50%;
+  right: -8px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+.csseditor .predefined-background-position button[data-value=bottom] {
+  bottom: 10px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
+}
+.csseditor .predefined-background-position button[data-value=bottom]:after {
+  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
+  left: 50%;
+  bottom: -8px;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+}
+.csseditor .predefined-background-position button[data-value=left] {
+  top: 50%;
+  left: 10px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  border-left: 2px solid rgba(15, 114, 207, 0.8);
+}
+.csseditor .predefined-background-position button[data-value=left]:after {
+  border-left: 2px solid rgba(15, 114, 207, 0.8);
+  top: 50%;
+  left: -8px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+.csseditor .predefined-radial-gradient-angle {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  height: 30px;
+}
+.csseditor .predefined-radial-gradient-angle select, .csseditor .predefined-radial-gradient-angle button {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  border: 0px;
+  vertical-align: middle;
+  display: inline-block;
+  outline: none;
+}
+.csseditor .predefined-radial-gradient-angle button {
+  width: 30px;
+  height: 30px;
+  position: relative;
+  outline: none;
+  cursor: pointer;
+}
+.csseditor .predefined-radial-gradient-angle button .circle {
+  display: inline-block;
+  border-radius: 50px;
+  background-color: rgba(51, 51, 51, 0.753);
+  border: 0px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  height: 10px;
+  width: 10px;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+}
+.csseditor .predefined-perspective-origin-position {
+  display: none;
+  text-align: center;
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  height: 100%;
+  right: 0px;
+  background-color: rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+.csseditor .predefined-perspective-origin-position button {
+  padding: 0px;
+  margin: 1px;
+  background-color: transparent;
+  border: 0px;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  outline: none;
+  cursor: pointer;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  position: absolute;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  pointer-events: all;
+  /* linear */
+  /* radial */
+}
+.csseditor .predefined-perspective-origin-position button:hover {
+  border-color: rgba(0, 0, 0, 0.2);
+}
+.csseditor .predefined-perspective-origin-position button:hover:after {
+  border-color: rgba(0, 0, 0, 0.2);
+}
+.csseditor .predefined-perspective-origin-position button:after {
+  content: "";
+  position: absolute;
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+}
+.csseditor .predefined-perspective-origin-position button[data-value="to top"] {
+  top: 10px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  border-top: 2px solid rgba(15, 114, 207, 0.8);
+}
+.csseditor .predefined-perspective-origin-position button[data-value="to top"]:after {
+  border-top: 2px solid rgba(15, 114, 207, 0.8);
+  top: -8px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+}
+.csseditor .predefined-perspective-origin-position button[data-value="to top right"] {
+  top: 10px;
+  right: 10px;
+  border-top: 2px solid rgba(15, 114, 207, 0.8);
+  border-right: 2px solid rgba(15, 114, 207, 0.8);
+}
+.csseditor .predefined-perspective-origin-position button[data-value="to top right"]:after {
+  border-top: 2px solid rgba(15, 114, 207, 0.8);
+  border-right: 2px solid rgba(15, 114, 207, 0.8);
+  top: -8px;
+  right: -8px;
+}
+.csseditor .predefined-perspective-origin-position button[data-value="to right"] {
+  top: 50%;
+  right: 10px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  border-right: 2px solid rgba(15, 114, 207, 0.8);
+}
+.csseditor .predefined-perspective-origin-position button[data-value="to right"]:after {
+  border-right: 2px solid rgba(15, 114, 207, 0.8);
+  top: 50%;
+  right: -8px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+.csseditor .predefined-perspective-origin-position button[data-value="to bottom right"] {
+  bottom: 10px;
+  right: 10px;
+  border-right: 2px solid rgba(15, 114, 207, 0.8);
+  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
+}
+.csseditor .predefined-perspective-origin-position button[data-value="to bottom right"]:after {
+  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
+  border-right: 2px solid rgba(15, 114, 207, 0.8);
+  bottom: -8px;
+  right: -8px;
+}
+.csseditor .predefined-perspective-origin-position button[data-value="to bottom"] {
+  bottom: 10px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
+}
+.csseditor .predefined-perspective-origin-position button[data-value="to bottom"]:after {
+  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
+  left: 50%;
+  bottom: -8px;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+}
+.csseditor .predefined-perspective-origin-position button[data-value="to bottom left"] {
+  left: 10px;
+  bottom: 10px;
+  border-left: 2px solid rgba(15, 114, 207, 0.8);
+  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
+}
+.csseditor .predefined-perspective-origin-position button[data-value="to bottom left"]:after {
+  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
+  border-left: 2px solid rgba(15, 114, 207, 0.8);
+  bottom: -8px;
+  left: -8px;
+}
+.csseditor .predefined-perspective-origin-position button[data-value="to left"] {
+  top: 50%;
+  left: 10px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  border-left: 2px solid rgba(15, 114, 207, 0.8);
+}
+.csseditor .predefined-perspective-origin-position button[data-value="to left"]:after {
+  border-left: 2px solid rgba(15, 114, 207, 0.8);
+  top: 50%;
+  left: -8px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+.csseditor .predefined-perspective-origin-position button[data-value="to top left"] {
+  top: 10px;
+  left: 10px;
+  border-left: 2px solid rgba(15, 114, 207, 0.8);
+  border-top: 2px solid rgba(15, 114, 207, 0.8);
+}
+.csseditor .predefined-perspective-origin-position button[data-value="to top left"]:after {
+  border-top: 2px solid rgba(15, 114, 207, 0.8);
+  border-left: 2px solid rgba(15, 114, 207, 0.8);
+  top: -8px;
+  left: -8px;
+}
+.csseditor .predefined-perspective-origin-position button[data-value=top] {
+  top: 10px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  border-top: 2px solid rgba(15, 114, 207, 0.8);
+}
+.csseditor .predefined-perspective-origin-position button[data-value=top]:after {
+  border-top: 2px solid rgba(15, 114, 207, 0.8);
+  top: -8px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+}
+.csseditor .predefined-perspective-origin-position button[data-value=right] {
+  top: 50%;
+  right: 10px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  border-right: 2px solid rgba(15, 114, 207, 0.8);
+}
+.csseditor .predefined-perspective-origin-position button[data-value=right]:after {
+  border-right: 2px solid rgba(15, 114, 207, 0.8);
+  top: 50%;
+  right: -8px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+.csseditor .predefined-perspective-origin-position button[data-value=bottom] {
+  bottom: 10px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
+}
+.csseditor .predefined-perspective-origin-position button[data-value=bottom]:after {
+  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
+  left: 50%;
+  bottom: -8px;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+}
+.csseditor .predefined-perspective-origin-position button[data-value=left] {
+  top: 50%;
+  left: 10px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  border-left: 2px solid rgba(15, 114, 207, 0.8);
+}
+.csseditor .predefined-perspective-origin-position button[data-value=left]:after {
+  border-left: 2px solid rgba(15, 114, 207, 0.8);
+  top: 50%;
+  left: -8px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+.csseditor .property {
+  padding: 0px;
+  border-bottom: 1px solid rgba(204, 204, 204, 0.5);
+}
+.csseditor .property.show > .property-body {
+  display: block;
+}
+.csseditor .property > .property-title {
+  padding: 2px 5px;
+  padding-left: 10px;
+  height: 24px;
+  line-height: 2;
+  color: #686868;
+  cursor: pointer;
+  position: relative;
+  font-size: 13px;
+  font-weight: bold;
+  text-shadow: 2px 2px 5px #cccccc;
+}
+.csseditor .property > .property-title > .tools {
+  display: inline-block;
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  right: 10px;
+}
+.csseditor .property > .property-title > .tools button {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  display: inline-block;
+  box-sizing: border-box;
+  width: 16px;
+  height: 16px;
+  background-color: transparent;
+  border: 0px;
+  padding: 0px;
+  cursor: pointer;
+  outline: none;
+}
+.csseditor .property > .property-title > .tools button svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor .property > .property-body {
+  display: none;
+  padding: 2px 5px;
+}
+.csseditor .property > .property-body .property-item {
+  padding: 0px;
+  font-size: 11px;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  margin-bottom: 2px;
+}
+.csseditor .property > .property-body .property-item .property-item-label,
+.csseditor .property > .property-body .property-item .property-item-input-field {
+  vertical-align: middle;
+}
+.csseditor .property > .property-body .property-item .property-item-label .tools,
+.csseditor .property > .property-body .property-item .property-item-input-field .tools {
+  padding: 2px;
+  text-align: right;
+}
+.csseditor .property > .property-body .property-item .property-item-label button,
+.csseditor .property > .property-body .property-item .property-item-input-field button {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  border: 0px;
+  cursor: pointer;
+  padding: 0px 3px;
+  outline: none;
+  vertical-align: middle;
+}
+.csseditor .property > .property-body .property-item .property-item-label button svg,
+.csseditor .property > .property-body .property-item .property-item-input-field button svg {
+  width: 16px;
+  height: 16px;
+}
+.csseditor .property > .property-body .property-item .property-item-label.grid-1-3,
+.csseditor .property > .property-body .property-item .property-item-input-field.grid-1-3 {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+}
+.csseditor .property > .property-body .property-item .property-item-label {
+  box-sizing: border-box;
+  padding: 5px;
+}
+.csseditor .property > .property-body .property-item.grid-0 {
+  grid-template-columns: 1fr;
+}
+.csseditor .property > .property-body .property-item.grid-2 {
+  grid-template-columns: 1fr 3fr;
+}
+.csseditor .property > .property-body .property-item.grid-4 {
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+.csseditor .property > .property-body .property-item.grid-4 .property-item-input-field input {
+  width: 40px;
+}
+.csseditor .property > .property-body .property-item.background-color {
+  grid-template-columns: 1fr;
+}
+.csseditor .property > .property-body .property-item.background-color .fill-item {
+  display: grid;
+  height: 24px;
+  grid-template-columns: 30px auto;
+  grid-column-gap: 5px;
+  margin-bottom: 5px;
+  text-align: center;
+}
+.csseditor .property > .property-body .property-item.background-color .fill-item .preview {
+  display: inline-block;
+  height: 100%;
+  box-sizing: border-box;
+  border: 1px solid #cccccc;
+  cursor: pointer;
+}
+.csseditor .property > .property-body .property-item.background-color .fill-item .preview .mini-view {
+  width: 100%;
+  height: 100%;
+}
+.csseditor .property > .property-body .property-item.background-color .fill-item .color-code input {
+  width: 100%;
+  height: 100%;
+}
+.csseditor .property > .property-body .property-item.background-color .fill-item .opacity-code {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+}
+.csseditor .property > .property-body .property-item.background-color .fill-item .opacity-code input {
+  width: 100%;
+}
+.csseditor .property > .property-body .property-item.fill-list {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+.csseditor .property > .property-body .property-item.fill-list .fill-item {
+  display: grid;
+  height: 24px;
+  grid-template-columns: 30px 50px 1fr 28px;
+  grid-column-gap: 5px;
+  margin-bottom: 5px;
+  text-align: center;
+}
+.csseditor .property > .property-body .property-item.fill-list .fill-item[data-fill-type=gradient] .colorcode,
+.csseditor .property > .property-body .property-item.fill-list .fill-item[data-fill-type=gradient] .opacity {
+  display: none;
+}
+.csseditor .property > .property-body .property-item.fill-list .fill-item[data-fill-type=gradient] .colorsteps {
+  display: block;
+}
+.csseditor .property > .property-body .property-item.fill-list .fill-item .preview {
+  display: grid;
+  cursor: pointer;
+}
+.csseditor .property > .property-body .property-item.fill-list .fill-item .preview .mini-view {
+  display: block;
+  height: 100%;
+  border: 1px solid #cccccc;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+.csseditor .property > .property-body .property-item.fill-list .fill-item .fill-title {
+  pointer-events: none;
+  display: inline-block;
+  vertical-align: middle;
+  text-align: left;
+  padding: 4px 0px;
+  box-sizing: border-box;
+}
+.csseditor .property > .property-body .property-item.fill-list .fill-item .fill-title svg {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+.csseditor .property > .property-body .property-item.fill-list .fill-item .colorcode input {
+  width: 100%;
+}
+.csseditor .property > .property-body .property-item.fill-list .fill-item .colorsteps {
+  display: none;
+  text-align: left;
+}
+.csseditor .property > .property-body .property-item.fill-list .fill-item .colorsteps .step {
+  border: 1px solid #333;
+  display: inline-block;
+  margin-left: -5px;
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
+  border-radius: 100%;
+  cursor: pointer;
+}
+.csseditor .property > .property-body .property-item.fill-list .fill-item .colorsteps .step:first-child {
+  margin-left: 0px;
+}
+.csseditor .property > .property-body .property-item.fill-list .fill-item .tools {
+  line-height: 2;
+}
+.csseditor .property > .property-body .property-item.fill-list .fill-item .tools button {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  height: 16px;
+  width: 16px;
+  border: 0px;
+  padding: 0px;
+  font-size: 16px;
+  vertical-align: middle;
+  cursor: pointer;
+  outline: none;
+}
+.csseditor .property > .property-body .property-item.fill-list .fill-item .tools button svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor .property > .property-body .property-item.display-manager {
+  grid-template-columns: 1fr;
+}
+.csseditor .property > .property-body .property-item.display-manager .display {
+  display: block;
+  flex: 1 1 auto;
+  box-sizing: border-box;
+  padding: 5px;
+  text-align: center;
+  cursor: pointer;
+}
+.csseditor .property > .property-body .property-item.display-manager label {
+  width: 80px;
+  box-sizing: border-box;
+  padding: 5px 2px;
+}
+.csseditor .property > .property-body .property-item.display-manager button {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+}
+.csseditor .property > .property-body .property-item.display-manager .property-item-label[data-display=grid] button {
+  display: inline-block;
+}
+.csseditor .property > .property-body .property-item.display-manager .display-list {
+  display: grid;
+  box-sizing: border-box;
+  grid-template-columns: repeat(5, 20%);
+}
+.csseditor .property > .property-body .property-item.display-manager .display-list[selected-type=inline] .display[display-type=inline] {
+  border: 1px solid #cccccc;
+  background-color: rgba(204, 204, 204, 0.3);
+}
+.csseditor .property > .property-body .property-item.display-manager .display-list[selected-type=inline-block] .display[display-type=inline-block] {
+  border: 1px solid #cccccc;
+  background-color: rgba(204, 204, 204, 0.3);
+}
+.csseditor .property > .property-body .property-item.display-manager .display-list[selected-type=block] .display[display-type=block] {
+  border: 1px solid #cccccc;
+  background-color: rgba(204, 204, 204, 0.3);
+}
+.csseditor .property > .property-body .property-item.display-manager .display-list[selected-type=flex] .display[display-type=flex] {
+  border: 1px solid #cccccc;
+  background-color: rgba(204, 204, 204, 0.3);
+}
+.csseditor .property > .property-body .property-item.display-manager .display-list[selected-type=grid] .display[display-type=grid] {
+  border: 1px solid #cccccc;
+  background-color: rgba(204, 204, 204, 0.3);
+}
+.csseditor .property > .property-body .property-item.display-manager .flex-direction {
+  display: grid;
+  box-sizing: border-box;
+  grid-template-columns: repeat(5, 20%);
+}
+.csseditor .property > .property-body .property-item.display-manager .flex-direction[selected-type=row] .display[display-type=row] {
+  background-color: #ececec;
+}
+.csseditor .property > .property-body .property-item.display-manager .flex-direction[selected-type=row-reverse] .display[display-type=row-reverse] {
+  background-color: #ececec;
+}
+.csseditor .property > .property-body .property-item.display-manager .flex-direction[selected-type=column] .display[display-type=column] {
+  background-color: #ececec;
+}
+.csseditor .property > .property-body .property-item.display-manager .flex-direction[selected-type=column-reverse] .display[display-type=column-reverse] {
+  background-color: #ececec;
+}
+.csseditor .property > .property-body .property-item.display-manager .flex-wrap {
+  display: grid;
+  box-sizing: border-box;
+  grid-template-columns: repeat(5, 20%);
+}
+.csseditor .property > .property-body .property-item.display-manager .flex-wrap[selected-type=nowrap] .display[display-type=nowrap] {
+  background-color: #ececec;
+}
+.csseditor .property > .property-body .property-item.display-manager .flex-wrap[selected-type=wrap] .display[display-type=wrap] {
+  background-color: #ececec;
+}
+.csseditor .property > .property-body .property-item.display-manager .flex-wrap[selected-type=wrap-reverse] .display[display-type=wrap-reverse] {
+  background-color: #ececec;
+}
+.csseditor .property > .property-body .property-item.display-manager .justify-content {
+  display: grid;
+  box-sizing: border-box;
+  grid-template-columns: repeat(5, 20%);
+}
+.csseditor .property > .property-body .property-item.display-manager .justify-content[selected-type=flex-start] .display[display-type=flex-start] {
+  background-color: #ececec;
+}
+.csseditor .property > .property-body .property-item.display-manager .justify-content[selected-type=flex-end] .display[display-type=flex-end] {
+  background-color: #ececec;
+}
+.csseditor .property > .property-body .property-item.display-manager .justify-content[selected-type=center] .display[display-type=center] {
+  background-color: #ececec;
+}
+.csseditor .property > .property-body .property-item.display-manager .justify-content[selected-type=space-between] .display[display-type=space-between] {
+  background-color: #ececec;
+}
+.csseditor .property > .property-body .property-item.display-manager .justify-content[selected-type=space-around] .display[display-type=space-around] {
+  background-color: #ececec;
+}
+.csseditor .property > .property-body .property-item.gradient-steps {
+  height: 90px;
+  padding: 0px;
+}
+.csseditor .property > .property-body .property-item.gradient-steps > .items {
+  padding: 10px !important;
+}
+.csseditor .property > .property-body .property-item.gradient-steps .gradient-steps {
+  position: relative;
+  display: block;
+}
+.csseditor .property > .property-body .property-item.gradient-steps .gradient-steps .hue-container {
+  width: 100%;
+  height: 16px;
+  margin-top: -1px;
+  left: -1px;
+  right: -1px;
+  position: absolute;
+  z-index: 0;
+  background-color: transparent;
+  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-size: 10px 10px;
+  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+}
+.csseditor .property > .property-body .property-item.gradient-steps .gradient-steps .hue {
+  position: relative;
+  padding: 0px;
+  margin: 0px;
+  cursor: pointer;
+}
+.csseditor .property > .property-body .property-item.gradient-steps .gradient-steps .hue > .step-list {
+  position: relative;
+  width: 100%;
+  cursor: copy;
+  height: 14px;
+  z-index: 1;
+}
+.csseditor .property > .property-body .property-item.gradient-steps .gradient-steps .hue > .step-list.mode-drag {
+  cursor: pointer;
+}
+.csseditor .property > .property-body .property-item.gradient-steps .gradient-steps .hue .drag-bar {
+  border: 0px;
+  background-color: transparent;
+  border: 2px solid white;
+  box-shadow: 0 0 2px 0px rgba(0, 0, 0, 0.6);
+  width: 10px;
+  height: 10px;
+  -webkit-transform: none;
+          transform: none;
+  border-radius: 50%;
+  display: inline-block;
+  left: 0px;
+  top: 17px;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  z-index: 0;
+  transition: top 0.3s ease-out;
+}
+.csseditor .property > .property-body .property-item.gradient-steps .gradient-steps .hue .drag-bar .guide-line {
+  pointer-events: none;
+  position: absolute;
+  width: 1px;
+  height: 0px;
+  bottom: 8px;
+  left: 3px;
+  -webkit-transform: translateX(-1px);
+          transform: translateX(-1px);
+  transition: all 0.3s ease-out;
+}
+.csseditor .property > .property-body .property-item.gradient-steps .gradient-steps .hue .drag-bar.selected {
+  z-index: 1;
+  top: 30px;
+}
+.csseditor .property > .property-body .property-item.gradient-steps .gradient-steps .hue .drag-bar.selected .guide-line {
+  height: 17px;
+}
+.csseditor .property > .property-body .property-item.gradient-steps .gradient-steps .hue .drag-bar.selected .guide-change {
+  opacity: 1;
+}
+.csseditor .property > .property-body .property-item.gradient-steps .gradient-list-layout {
+  position: absolute;
+  top: 50px !important;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+}
+.csseditor .property > .property-body .property-item.gradient-steps .color-list {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  top: 0px;
+}
+.csseditor .property > .property-body .property-item.gradient-steps .color-list .color-type {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  height: 40px;
+}
+.csseditor .property > .property-body .property-item.gradient-steps .color-list .color-type > div {
+  position: absolute;
+  left: 5px;
+  right: 5px;
+  bottom: 5px;
+  top: 5px;
+}
+.csseditor .property > .property-body .property-item.gradient-steps .color-list .color-type > div select {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  top: 0px;
+  padding: 5px;
+  display: inline-block;
+  border: 0px;
+  background-color: white;
+  width: 100%;
+  outline: none;
+}
+.csseditor .property > .property-body .property-item.gradient-steps .color-list .color-sample-list {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 45px;
+  bottom: 0px;
+  padding: 5px;
+}
+.csseditor .property > .property-body .property-item.gradient-steps .color-list .color-sample-list .color-item {
+  display: inline-block;
+  vertical-align: middle;
+  width: 34px;
+  height: 34px;
+  cursor: pointer;
+  position: relative;
+  margin: 2px;
+}
+.csseditor .property > .property-body .property-item.sample-list .gradient-sample-list {
+  min-height: 50px;
+  max-height: 200px;
+  overflow: auto;
+  text-align: left;
+  display: inline-block;
+}
+.csseditor .property > .property-body .property-item.sample-list .gradient-sample-list .gradient-sample-item,
+.csseditor .property > .property-body .property-item.sample-list .gradient-sample-list .gradient-cached-item {
+  display: inline-block;
+  vertical-align: middle;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  position: relative;
+  margin: 2px;
+}
+.csseditor .property > .property-body .property-item.sample-list .gradient-sample-list .gradient-sample-item:hover,
+.csseditor .property > .property-body .property-item.sample-list .gradient-sample-list .gradient-cached-item:hover {
+  -webkit-transform: scale(1.2);
+          transform: scale(1.2);
+}
+.csseditor .property > .property-body .property-item.sample-list .gradient-sample-list .gradient-cached-item:first-child {
+  margin-left: 0px;
+}
+.csseditor .property > .property-body .property-item.sample-list .gradient-sample-list .cached-list {
+  margin-top: 10px;
+  display: inline-block;
+  vertical-align: middle;
+}
+.csseditor .property > .property-body .property-item.sample-list .gradient-sample-list .tools {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: -3px;
+}
+.csseditor .property > .property-body .property-item.sample-list .gradient-sample-list .tools button {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border: 1px solid #cccccc;
+  background-color: #ffffff;
+  display: inline-block;
+  vertical-align: middle;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  position: relative;
+  margin: 2px;
+  padding: 2px;
+  line-height: 0;
+}
+.csseditor .property > .property-body .property-item.gradient-steps-info .gradient-info {
+  overflow: auto;
+}
+.csseditor .property > .property-body .property-item.gradient-steps-info .gradient-info .form-item {
+  font-size: 12px;
+  margin: 2px 0px;
+  width: 100%;
+}
+.csseditor .property > .property-body .property-item.gradient-steps-info .gradient-info .form-item .step-list {
+  width: 100%;
+}
+.csseditor .property > .property-body .property-item.gradient-steps-info .gradient-info .form-item .color-step {
+  display: flex;
+  padding: 1px;
+  color: #333;
+}
+.csseditor .property > .property-body .property-item.gradient-steps-info .gradient-info .form-item .color-step.selected .color-view {
+  border: 1px solid black;
+}
+.csseditor .property > .property-body .property-item.gradient-steps-info .gradient-info .form-item .color-step > * {
+  flex: 1 1 auto;
+  display: inline-block;
+  vertical-align: middle;
+}
+.csseditor .property > .property-body .property-item.gradient-steps-info .gradient-info .form-item .color-step input {
+  width: 40px;
+  display: inline-block;
+}
+.csseditor .property > .property-body .property-item.gradient-steps-info .gradient-info .form-item .color-step .tools {
+  text-align: right;
+}
+.csseditor .property > .property-body .property-item.gradient-steps-info .gradient-info .form-item .color-step .tools button {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  -webkit-transform: scale(1.2);
+          transform: scale(1.2);
+  border: 0px;
+  background-color: transparent;
+  padding: 2px 2px;
+  font-size: 14px;
+  vertical-align: middle;
+  line-height: 0;
+  cursor: pointer;
+  outline: none;
+}
+.csseditor .property > .property-body .property-item.gradient-steps-info .gradient-info .form-item .color-step input[type=text] {
+  width: 100px;
+}
+.csseditor .property > .property-body .property-item.gradient-steps-info .gradient-info .form-item .color-step input[type=number] {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border: 1px solid #ececec;
+}
+.csseditor .property > .property-body .property-item.gradient-steps-info .gradient-info .form-item .color-step .color-view {
+  width: 16px;
+  flex: none;
+  height: 16px;
+  margin-top: 2px;
+  margin-right: 2px;
+  position: relative;
+  background-color: transparent;
+  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-size: 5px 5px;
+  background-position: 0 0, 0 2.5px, 2.5px -2.5px, -2.5px 0px;
+  border: 1px solid #ececec;
+  vertical-align: middle;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.csseditor .property > .property-body .property-item.gradient-steps-info .gradient-info .form-item .color-step .color-view .color-view-item {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  top: 0px;
+  cursor: pointer;
+}
+.csseditor .property > .property-body .property-item.gradient-steps-info .gradient-info .form-item .color-step .color-cut {
+  width: 16px;
+  flex: none;
+  height: 20px;
+  margin-right: 2px;
+  position: relative;
+  vertical-align: middle;
+}
+.csseditor .property > .property-body .property-item.gradient-steps-info .gradient-info .form-item .color-step .color-cut .guide-change {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  top: 50%;
+  left: 0px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  border: 1px solid #cccccc;
+  cursor: pointer;
+  background-image: linear-gradient(to top, black 0%, black 100%);
+  background-size: 3px 3px;
+  background-position: 3.5px center;
+  background-repeat: repeat-y;
+}
+.csseditor .property > .property-body .property-item.gradient-steps-info .gradient-info .form-item .color-step .color-cut .guide-change.cut {
+  background-position: center 3px;
+  background-repeat: repeat-x;
+}
+.csseditor .property > .property-body .property-item.gradient-steps-info .gradient-info .form-item .color-step .color-unit > input[type=number] {
+  display: none;
+  outline: none;
+  width: 50px;
+}
+.csseditor .property > .property-body .property-item.gradient-steps-info .gradient-info .form-item .color-step .color-unit.percent > .percent {
+  display: inline-block;
+}
+.csseditor .property > .property-body .property-item.gradient-steps-info .gradient-info .form-item .color-step .color-unit.px > .px {
+  display: inline-block;
+}
+.csseditor .property > .property-body .property-item.gradient-steps-info .gradient-info .form-item .color-step .color-unit.em > .em {
+  display: inline-block;
+}
+.csseditor .property > .property-body .property-item.gradient-steps-info .gradient-info .form-item .color-step .color-unit select {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border: 0px;
+  background-color: transparent;
+  display: inline-block;
+  outline: none;
+}
+.csseditor .property > .property-body .property-item.gradient-tools {
+  display: block;
+  width: 100%;
+}
+.csseditor .property > .property-body .property-item.gradient-tools .menu-buttons {
+  display: inline-block;
+  vertical-align: middle;
+  padding: 4px 0px;
+  font-size: 12px;
+}
+.csseditor .property > .property-body .property-item.gradient-tools .menu-buttons button {
+  display: inline-block;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  width: 100px;
+  height: 100%;
+  border: 1px solid #dedede;
+  vertical-align: middle;
+  font-size: 12px;
+  cursor: pointer;
+  outline: none;
+  position: relative;
+  pointer-events: all;
+}
+.csseditor .property > .property-body .property-item.gradient-tools > .title {
+  vertical-align: middle;
+  padding: 10px 0px;
+  font-size: 12px;
+}
+.csseditor .property > .property-body .property-item .gradient-type .gradient-item {
+  margin-right: 3px;
+}
+.csseditor .property > .property-body .property-item.clip-path-svg .clip-path-container {
+  cursor: pointer;
+  width: 50px;
+  height: 50px;
+  border: 1px solid #cccccc;
+}
+.csseditor .property > .property-body .property-item.clip-path-svg .clip-path-container svg {
+  width: 100%;
+}
+.csseditor .property > .property-body .property-item.clip-path-svg .image-resource {
+  position: relative;
+  left: auto;
+  bottom: auto;
+  top: auto;
+  width: 100%;
+  margin-top: 10px;
+  max-height: 300px;
+  flex-wrap: wrap;
+  overflow: auto;
+}
+.csseditor .property > .property-body .property-item.clip-path-svg .items {
+  position: relative;
+}
+.csseditor .property > .property-body .property-item.clip-path-svg .items .svg-item {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  vertical-align: middle;
+  border: 1px solid #cccccc;
+  cursor: pointer;
+  margin: 2px;
+}
+.csseditor .property > .property-body .property-item.clip-path-svg .items .svg-item svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor .property > .property-body .property-item.clip-path-svg .items .svg-item img {
+  max-width: 100%;
+  max-height: 100%;
+}
+.csseditor .property > .property-body .property-item.image-list-view .items {
+  height: 200px;
+  overflow: auto;
+  padding: 0px !important;
+  position: relative;
+}
+.csseditor .property > .property-body .property-item.image-list-view .items .images {
+  top: 0px;
+  bottom: 0px;
+}
+.csseditor .property > .property-body .property-item.clip-path .clip-path-container {
+  cursor: pointer;
+  width: 50px;
+  height: 50px;
+  border: 1px solid #cccccc;
+}
+.csseditor .property > .property-body .property-item.clip-path .clip-path-container svg {
+  width: 100%;
+}
+.csseditor .property > .property-body .property-item.clip-path-polygon .items label {
+  width: 20px;
+  text-align: center;
+}
+.csseditor .property > .property-body .property-item.clip-path-polygon .items > div > div input[type=number] {
+  width: 50px;
+  margin-right: 2px;
+}
+.csseditor .property > .property-body .property-item.clip-path-polygon .items > div .tools {
+  display: flex;
+  margin-left: 10px;
+}
+.csseditor .property > .property-body .property-item.clip-path-polygon .items > div .tools button {
+  flex: 1 1 auto;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  border: 1px solid #cccccc;
+}
+.csseditor .property > .property-body .property-item.clip-path-polygon .items > div .tools button:not(:first-child) {
+  margin-left: -1px;
+}
+.csseditor .property > .property-body .property-item.clip-path-polygon .items .clip-path-item {
+  display: inline-block;
+  vertical-align: middle;
+  width: 45px;
+  height: 45px;
+  margin: 5px;
+  background-color: red;
+  cursor: pointer;
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(128, 128, 128, 0.5));
+}
+.csseditor .property > .property-body .property-item .group-align {
+  text-align: center;
+}
+.csseditor .property > .property-body .property-item .group-align button {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+  border: 0px;
+  outline: none;
+  cursor: pointer;
+  -webkit-transform: scale(0.6);
+          transform: scale(0.6);
+  background-color: white;
+}
+.csseditor .property > .property-body .property-item .group-align button[data-value=left] {
+  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, black, black);
+  background-repeat: no-repeat;
+  background-size: 20px 8px, 16px 8px, 2px 24px;
+  background-position: 6px 6px, 6px 16px, 2px 3px;
+}
+.csseditor .property > .property-body .property-item .group-align button[data-value=right] {
+  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, black, black);
+  background-repeat: no-repeat;
+  background-size: 20px 8px, 16px 8px, 2px 24px;
+  background-position: 5px 6px, 9px 16px, 27px 3px;
+}
+.csseditor .property > .property-body .property-item .group-align button[data-value=center] {
+  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, black, black);
+  background-repeat: no-repeat;
+  background-size: 20px 8px, 16px 8px, 2px 24px;
+  background-position: 5px 6px, 7px 16px, 14px 3px;
+}
+.csseditor .property > .property-body .property-item .group-align button[data-value=middle] {
+  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, black, black);
+  background-repeat: no-repeat;
+  background-size: 8px 20px, 8px 16px, 24px 2px;
+  background-position: 6px 5px, 16px 7px, 3px 14px;
+}
+.csseditor .property > .property-body .property-item .group-align button[data-value=top] {
+  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, black, black);
+  background-repeat: no-repeat;
+  background-size: 8px 20px, 8px 16px, 24px 2px;
+  background-position: 6px 8px, 16px 8px, 3px 4px;
+}
+.csseditor .property > .property-body .property-item .group-align button[data-value=bottom] {
+  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, black, black);
+  background-repeat: no-repeat;
+  background-size: 8px 20px, 8px 16px, 24px 2px;
+  background-position: 6px 4px, 16px 8px, 3px 26px;
+}
+.csseditor .property > .property-body .property-item .group-align button[data-value=vertical] {
+  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, black, black), linear-gradient(to right, #ccc, #ccc);
+  background-repeat: no-repeat;
+  background-size: 24px 2px, 18px 10px, 24px 2px;
+  background-position: 3px 6px, 6px 11px, 3px 24px;
+}
+.csseditor .property > .property-body .property-item .group-align button[data-value=horizontal] {
+  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, black, black), linear-gradient(to right, #ccc, #ccc);
+  background-repeat: no-repeat;
+  background-size: 2px 24px, 10px 18px, 2px 24px;
+  background-position: 6px 3px, 11px 6px, 24px 3px;
+}
+.csseditor .property > .property-body .property-item .group-order {
+  text-align: center;
+}
+.csseditor .property > .property-body .property-item .group-order button {
+  margin-right: 10px;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+  border: 0px;
+  outline: none;
+  cursor: pointer;
+  -webkit-transform: scale(0.7);
+          transform: scale(0.7);
+  background-color: white;
+}
+.csseditor .property > .property-body .property-item .group-order button[data-value=forward] {
+  background-image: linear-gradient(to right, yellow, yellow), linear-gradient(to right, black, black), linear-gradient(to right, white, white), linear-gradient(to right, gray, gray);
+  background-repeat: no-repeat;
+  background-size: 18px 18px, 20px 20px, 16px 16px, 18px 18px;
+  background-position: 1px 3px, 0px 2px, 10px 9px, 9px 8px;
+}
+.csseditor .property > .property-body .property-item .group-order button[data-value=backward] {
+  background-image: linear-gradient(to right, white, white), linear-gradient(to right, gray, gray), linear-gradient(to right, yellow, yellow), linear-gradient(to right, black, black);
+  background-repeat: no-repeat;
+  background-size: 16px 16px, 18px 18px, 18px 18px, 20px 20px;
+  background-position: 1px 3px, 0px 2px, 10px 9px, 9px 8px;
+}
+.csseditor .property > .property-body .property-item .group-order button[data-value=front] {
+  background-image: linear-gradient(to right, yellow, yellow), linear-gradient(to right, black, black), linear-gradient(to right, white, white), linear-gradient(to right, gray, gray), linear-gradient(to right, white, white), linear-gradient(to right, gray, gray);
+  background-repeat: no-repeat;
+  background-size: 16px 16px, 18px 18px, 16px 16px, 18px 18px, 16px 16px, 18px 18px;
+  background-position: 6px 6px, 5px 5px, 1px 1px, 0px 0px, 11px 11px, 10px 10px;
+}
+.csseditor .property > .property-body .property-item .group-order button[data-value=back] {
+  background-image: linear-gradient(to right, white, white), linear-gradient(to right, gray, gray), linear-gradient(to right, white, white), linear-gradient(to right, gray, gray), linear-gradient(to right, yellow, yellow), linear-gradient(to right, black, black);
+  background-repeat: no-repeat;
+  background-size: 12px 12px, 14px 14px, 12px 12px, 14px 14px, 18px 18px, 20px 20px;
+  background-position: 1px 1px, 0px 0px, 15px 15px, 14px 14px, 5px 5px, 4px 4px;
+}
+.csseditor .property > .property-body .property-item.fixed-radius {
+  border-bottom: 0px;
+}
+.csseditor .property > .property-body .property-item.layer-colorpicker .codemirror-colorpicker.xd {
+  padding-top: 0px;
+}
+.csseditor .property > .property-body .property-item.layer-colorpicker .codemirror-colorpicker.xd .color {
+  margin-left: 6px;
+}
+.csseditor .property > .property-body .property-item.layer-colorpicker .codemirror-colorpicker.xd > .colorpicker-body > .color-panel,
+.csseditor .property > .property-body .property-item.layer-colorpicker .codemirror-colorpicker.xd > .colorpicker-body > .control {
+  margin-bottom: 0px;
+}
+.csseditor .property > .property-body .property-item.layer-colorpicker .codemirror-colorpicker.xd > .colorpicker-body > .colorsets {
+  display: none;
+}
+.csseditor .property > .property-body .property-item.box-shadow .items {
+  padding: 2px;
+}
+.csseditor .property > .property-body .property-item.box-shadow .box-shadow-list {
+  display: block;
+}
+.csseditor .property > .property-body .property-item.box-shadow .box-shadow-list .box-shadow-item {
+  position: relative;
+  display: block;
+  margin-top: 2px;
+  padding: 2px 2px;
+  border: 1px solid rgba(204, 204, 204, 0.5);
+}
+.csseditor .property > .property-body .property-item.box-shadow .box-shadow-list .box-shadow-item > div {
+  height: 28px;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+}
+.csseditor .property > .property-body .property-item.box-shadow .box-shadow-list .box-shadow-item > div .input {
+  display: inline-block;
+}
+.csseditor .property > .property-body .property-item.box-shadow .box-shadow-list .box-shadow-item > div .input input[type=number] {
+  display: inline-block;
+  width: 40px;
+}
+.csseditor .property > .property-body .property-item.box-shadow .box-shadow-list .box-shadow-item > div.drag-area {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  right: 30px;
+  top: 58px;
+  border: 1px solid #ececec;
+  display: block;
+  background-image: linear-gradient(to right, #ececec, #ececec), linear-gradient(to right, #ececec, #ececec);
+  background-size: 1px 100%, 100% 1px;
+  background-position: center 0px, 0px center;
+  background-repeat: no-repeat, no-repeat;
+}
+.csseditor .property > .property-body .property-item.box-shadow .box-shadow-list .box-shadow-item > div.drag-area .drag-pointer {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 100%;
+  background-color: #00aafb;
+  -webkit-transform-origin: center center;
+          transform-origin: center center;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+  pointer-events: none;
+}
+.csseditor .property > .property-body .property-item.box-shadow .box-shadow-list .box-shadow-item.checked {
+  background-color: #f1f1f1;
+}
+.csseditor .property > .property-body .property-item.box-shadow .box-shadow-list .box-shadow-item .color {
+  width: 20px;
+  height: 20px;
+  border: 1px solid black;
+  cursor: pointer;
+  display: inline-block;
+  vertical-align: middle;
+}
+.csseditor .property > .property-body .property-item.box-shadow .box-shadow-list .box-shadow-item .select {
+  vertical-align: middle;
+}
+.csseditor .property > .property-body .property-item.box-shadow .box-shadow-list .box-shadow-item button {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  border: 0px;
+  text-align: center;
+  font-weight: 500;
+}
+.csseditor .property > .property-body .property-item.text-shadow .text-shadow-list {
+  display: block;
+}
+.csseditor .property > .property-body .property-item.text-shadow .text-shadow-list .text-shadow-item {
+  position: relative;
+  display: block;
+  margin-top: 2px;
+  padding: 2px 4px;
+  box-shadow: inset 0px 0px 0px 1px #cccccc;
+}
+.csseditor .property > .property-body .property-item.text-shadow .text-shadow-list .text-shadow-item > div {
+  height: 28px;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  line-height: 2.4;
+}
+.csseditor .property > .property-body .property-item.text-shadow .text-shadow-list .text-shadow-item > div label {
+  text-align: right;
+  padding-right: 10px;
+}
+.csseditor .property > .property-body .property-item.text-shadow .text-shadow-list .text-shadow-item > div .input {
+  display: inline-block;
+}
+.csseditor .property > .property-body .property-item.text-shadow .text-shadow-list .text-shadow-item > div .input input[type=number] {
+  display: inline-block;
+  width: 40px;
+}
+.csseditor .property > .property-body .property-item.text-shadow .text-shadow-list .text-shadow-item > div.drag-area {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  right: 30px;
+  top: 28px;
+  border: 1px solid #ececec;
+  display: block;
+  background-image: linear-gradient(to right, #ececec, #ececec), linear-gradient(to right, #ececec, #ececec);
+  background-size: 1px 100%, 100% 1px;
+  background-position: center 0px, 0px center;
+  background-repeat: no-repeat, no-repeat;
+}
+.csseditor .property > .property-body .property-item.text-shadow .text-shadow-list .text-shadow-item > div.drag-area .drag-pointer {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 100%;
+  background-color: #00aafb;
+  -webkit-transform-origin: center center;
+          transform-origin: center center;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+  pointer-events: none;
+}
+.csseditor .property > .property-body .property-item.text-shadow .text-shadow-list .text-shadow-item.checked {
+  background-color: #f1f1f1;
+}
+.csseditor .property > .property-body .property-item.text-shadow .text-shadow-list .text-shadow-item .color {
+  width: 20px;
+  height: 20px;
+  border: 1px solid black;
+  cursor: pointer;
+  display: inline-block;
+  vertical-align: middle;
+}
+.csseditor .property > .property-body .property-item.text-shadow .text-shadow-list .text-shadow-item .select {
+  vertical-align: middle;
+}
+.csseditor .property > .property-body .property-item.text-shadow .text-shadow-list .text-shadow-item button {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  border: 0px;
+  text-align: center;
+  font-weight: 500;
+}
+.csseditor .property > .property-body .property-item.background-info .gradient {
+  display: inline-block;
+  vertical-align: middle;
+  height: 20px;
+  width: 20px;
+}
+.csseditor .property > .property-body .property-item.background-info .gradient[data-type=static] {
+  background-image: linear-gradient(to right, #333, #333);
+}
+.csseditor .property > .property-body .property-item.background-info .gradient[data-type=linear] {
+  background-image: linear-gradient(to right, black, gray);
+}
+.csseditor .property > .property-body .property-item.background-info .gradient[data-type=radial] {
+  background-image: radial-gradient(closest-side, black, #ebf8e1, gray);
+}
+.csseditor .property > .property-body .property-item.background-info .gradient[data-type=conic] {
+  background-image: conic-gradient(black, #ebf8e1);
+}
+.csseditor .property > .property-body .property-item.background-info .gradient[data-type=repeating-linear] {
+  background-image: repeating-linear-gradient(45deg, #3f87a6, #ebf8e1 15%, #f69d3c 20%);
+}
+.csseditor .property > .property-body .property-item.background-info .gradient[data-type=repeating-radial] {
+  background-image: repeating-radial-gradient(circle, #3f87a6, #ebf8e1 15%, #f69d3c 20%);
+}
+.csseditor .property > .property-body .property-item.background-info .gradient[data-type=repeating-conic] {
+  background-image: repeating-conic-gradient(#3f87a6, #ebf8e1 5%, #f69d3c 10%);
+}
+.csseditor .property > .property-body .property-item.background-info .gradient + label {
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 16px;
+  margin-left: 10px;
+}
+.csseditor .property > .property-body .property-item.fill-colorpicker .items {
+  padding: 0px;
+}
+.csseditor .property > .property-body .property-item.fill-colorpicker .items .colorpicker-body {
+  width: 100%;
+}
+.csseditor .property > .property-body .property-item.fill-colorpicker .items .colorpicker-body .color-tab {
+  border: 0px;
+}
+.csseditor .property > .property-body .property-item.fill-colorpicker .items .colorpicker-body .color-panel {
+  margin-left: 12px;
+}
+.csseditor .property > .property-body .property-item.fill-colorpicker .items .colorpicker-body .color-tab-body {
+  border: 0px;
+}
+.csseditor .property > .property-body .property-item.text-colorpicker .items {
+  padding: 0px;
+}
+.csseditor .property > .property-body .property-item.text-colorpicker .items .colorpicker-body {
+  width: 100%;
+}
+.csseditor .property > .property-body .property-item.text-colorpicker .items .colorpicker-body .color-tab {
+  border: 0px;
+}
+.csseditor .property > .property-body .property-item.text-colorpicker .items .colorpicker-body .color-panel {
+  margin-left: 12px;
+}
+.csseditor .property > .property-body .property-item.text-colorpicker .items .colorpicker-body .color-tab-body {
+  border: 0px;
+}
+.csseditor .property > .property-body .property-item.colorpicker .items {
+  padding: 0px;
+}
+.csseditor .property > .property-body .property-item.colorpicker .items .colorpicker-body {
+  width: 100%;
+}
+.csseditor .property > .property-body .property-item.colorpicker .items .colorpicker-body .color-tab {
+  border: 0px;
+}
+.csseditor .property > .property-body .property-item.colorpicker .items .colorpicker-body .color-panel {
+  margin-left: 12px;
+}
+.csseditor .property > .property-body .property-item.colorpicker .items .colorpicker-body .color-tab-body {
+  border: 0px;
+}
+.csseditor .property > .property-body .property-item.layer-code .key-value-view {
+  display: block;
+  -webkit-user-select: text;
+     -moz-user-select: text;
+      -ms-user-select: text;
+          user-select: text;
+}
+.csseditor .property > .property-body .property-item.layer-code .key-value-view .key-value-item {
+  display: block;
+}
+.csseditor .property > .property-body .property-item.layer-code .key-value-view .key-value-item.short .key {
+  display: inline-block;
+  vertical-align: middle;
+  width: 100px;
+  padding-left: 2px;
+  padding-right: 0px;
+}
+.csseditor .property > .property-body .property-item.layer-code .key-value-view .key-value-item.short .value {
+  display: inline-block;
+  vertical-align: middle;
+  padding-left: 0px;
+}
+.csseditor .property > .property-body .property-item.layer-code .key-value-view .key-value-item .key {
+  display: block;
+  font-weight: bold;
+  padding: 2px 5px;
+}
+.csseditor .property > .property-body .property-item.layer-code .key-value-view .key-value-item .value {
+  white-space: pre-wrap;
+  margin: 0px;
+  padding: 0px 5px;
+  padding-left: 20px;
+  font-size: 12px;
+  display: block;
+}
+.csseditor .property > .property-body .property-item.background-code .key-value-view {
+  display: block;
+  -webkit-user-select: text;
+     -moz-user-select: text;
+      -ms-user-select: text;
+          user-select: text;
+}
+.csseditor .property > .property-body .property-item.background-code .key-value-view .key-value-item {
+  display: block;
+}
+.csseditor .property > .property-body .property-item.background-code .key-value-view .key-value-item .key {
+  display: block;
+  font-weight: bold;
+  padding: 2px 5px;
+}
+.csseditor .property > .property-body .property-item.background-code .key-value-view .key-value-item .value {
+  white-space: pre-wrap;
+  margin: 0px;
+  padding: 0px 5px;
+  padding-left: 20px;
+  font-size: 12px;
+  display: block;
+}
+.csseditor .property > .property-body .property-item.text.has-clip-text .no-clip {
+  pointer-events: none;
+}
+.csseditor .property > .property-body .property-item.text .color {
+  width: 20px !important;
+  height: 20px !important;
+  cursor: pointer !important;
+  border: 1px solid #333 !important;
+  display: inline-block !important;
+  vertical-align: middle !important;
+}
+.csseditor .property > .property-body .property-item.text .color-text {
+  width: 100px !important;
+  -webkit-appearance: none !important;
+     -moz-appearance: none !important;
+          appearance: none !important;
+  border: 0px !important;
+  background-color: transparent !important;
+  pointer-events: none;
+  margin-left: 5px;
+}
+.csseditor .property > .property-body .property-item.text .content {
+  width: 100%;
+  height: 70px;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border: 1px solid #cccccc;
+  font-size: 20px;
+}
+.csseditor .property > .property-body .property-item.image-sorting .items > div > label {
+  display: inline-block;
+  line-height: 2;
+  padding: 2px 5px;
+  height: 100%;
+  vertical-align: middle;
+  width: 50px;
+}
+.csseditor .property > .property-body .property-item.image-sorting .button-group {
+  display: inline-block;
+  vertical-align: middle;
+  padding: 2px 0px;
+}
+.csseditor .property > .property-body .property-item.image-sorting .button-group button {
+  flex: 1 1 auto;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border: 1px solid #cccccc;
+  outline: none;
+  vertical-align: middle;
+  display: inline-block;
+}
+.csseditor .property > .property-body .property-item.image-sorting .button-group button:not(:first-child) {
+  margin-left: -1px;
+}
+.csseditor .property > .property-body .property-item.image-sorting .button-group button.cut {
+  width: 18px;
+  height: 18px;
+  border: 1px solid #cccccc;
+  cursor: pointer;
+  background-image: linear-gradient(to top, black 0%, black 100%);
+  background-size: 4px 4px;
+  background-position: 6px center;
+  background-repeat: repeat-y;
+}
+.csseditor .property > .property-body .property-item.image-sorting .button-group button.cut.on {
+  background-position: center 6px;
+  background-repeat: repeat-x;
+}
+.csseditor .property > .property-body .property-item.image-sorting .step-align {
+  display: inline-block;
+  vertical-align: middle;
+}
+.csseditor .filter-list {
+  display: flex !important;
+  flex-direction: column;
+}
+.csseditor .filter-list .filter-item {
+  flex: none;
+  padding: 5px 0px;
+}
+.csseditor .filter-list .filter-item .filter-item-input {
+  display: block;
+  font-size: 12px;
+  flex: 1 1 auto;
+}
+.csseditor .filter-list .filter-item .filter-item-input > .filter {
+  display: block;
+}
+.csseditor .filter-list .filter-item .filter-item-input > .filter > * {
+  display: inline-block;
+  vertical-align: middle;
+  text-align: middle;
+}
+.csseditor .filter-list .filter-item .filter-item-input > .filter .area {
+  width: 2px;
+  margin-left: 1px;
+  height: 20px;
+  vertical-align: middle;
+  display: inline-block;
+  background-color: transparent;
+}
+.csseditor .filter-list .filter-item .filter-item-input > .filter .title {
+  width: 60px;
+  text-align: left;
+  font-size: 11px;
+}
+.csseditor .filter-list .filter-item .filter-item-input > .filter .title.long {
+  width: 120px;
+}
+.csseditor .filter-list .filter-item .filter-item-input > .filter .input-value {
+  width: 40px;
+}
+.csseditor .filter-list .filter-item .filter-item-input > .filter .input-value input[type=number] {
+  width: 100%;
+}
+.csseditor .filter-list .filter-item .filter-item-input > .filter .range {
+  width: 70px;
+}
+.csseditor .filter-list .filter-item .filter-item-input > .filter .range input[type=range] {
+  width: 100%;
+}
+.csseditor .filter-list .filter-item .filter-item-input > .filter .unit {
+  width: 24px;
+  padding: 2px;
+}
+.csseditor .filter-list .filter-item .filter-item-input > .items {
+  padding-left: 20px;
+}
+.csseditor .filter-list .filter-item .filter-item-input > .items > div {
+  padding-bottom: 3px;
+}
+.csseditor .filter-list .filter-item .filter-item-input > .items > div > * {
+  display: inline-block;
+  vertical-align: middle;
+  text-align: middle;
+}
+.csseditor .filter-list .filter-item .filter-item-input > .items .title {
+  width: 60px;
+  text-align: left;
+}
+.csseditor .filter-list .filter-item .filter-item-input > .items .title.long {
+  width: 120px;
+}
+.csseditor .filter-list .filter-item .filter-item-input > .items .input-value {
+  width: 40px;
+}
+.csseditor .filter-list .filter-item .filter-item-input > .items .input-value input[type=number] {
+  width: 100%;
+}
+.csseditor .filter-list .filter-item .filter-item-input > .items .range {
+  width: 70px;
+}
+.csseditor .filter-list .filter-item .filter-item-input > .items .range input[type=range] {
+  width: 100%;
+}
+.csseditor .filter-list .filter-item .filter-item-input > .items .unit {
+  width: 24px;
+  padding: 2px;
+}
+.csseditor .filter-list .filter-item .filter-item-input > .items .color .color-view {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  pointer-events: all;
+  cursor: pointer;
+}
+.csseditor .filter-list .filter-item .filter-item-input > .items .color .color-text {
+  vertical-align: middle;
+}
+.csseditor .export-view {
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  width: 50%;
+  height: 100px;
+  z-index: 100000;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+}
+.csseditor .export-view .codeview {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.csseditor .export-view .codeview textarea {
+  width: 100%;
+  height: 100%;
+  display: block;
+  padding: 10px;
+  margin: 0px;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.csseditor .fill-picker {
+  position: fixed;
+  width: 224px;
+  display: none;
+  background-color: rgba(255, 255, 255, 0.5);
+  padding-top: 5px;
+  z-index: 100;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1);
+  border: 1px solid #cccccc;
+}
+.csseditor .fill-picker .picker-tab .picker-tab-list {
+  text-align: center;
+  padding: 2px 5px;
+}
+.csseditor .fill-picker .picker-tab .picker-tab-list .picker-tab-item {
+  display: inline-block;
+  vertical-align: middle;
+  height: 20px;
+  width: 20px;
+  box-sizing: border-box;
+  border: 1px solid #cccccc;
+  cursor: pointer;
+}
+.csseditor .fill-picker .picker-tab .picker-tab-list .picker-tab-item .icon {
+  pointer-events: none;
+  border-radius: 100%;
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+}
+.csseditor .fill-picker .picker-tab .picker-tab-list .picker-tab-item .icon svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor .fill-picker .picker-tab .picker-tab-list .picker-tab-item.selected {
+  background-color: blue;
+}
+.csseditor .fill-picker .picker-tab .picker-tab-list .picker-tab-item.selected .icon svg path {
+  fill: white;
+}
+.csseditor .fill-picker .picker-tab .picker-tab-list .picker-tab-item[data-select-type=static-gradient] .icon {
+  background-image: linear-gradient(to right, red, red);
+}
+.csseditor .fill-picker .picker-tab .picker-tab-list .picker-tab-item[data-select-type=linear-gradient] .icon {
+  background-image: linear-gradient(to right, black, gray);
+}
+.csseditor .fill-picker .picker-tab .picker-tab-list .picker-tab-item[data-select-type=radial-gradient] .icon {
+  background-image: radial-gradient(closest-side, black, #ebf8e1, gray);
+}
+.csseditor .fill-picker .picker-tab .picker-tab-list .picker-tab-item[data-select-type=conic-gradient] .icon {
+  background-image: conic-gradient(black, #ebf8e1);
+}
+.csseditor .fill-picker .picker-tab .picker-tab-list .picker-tab-item[data-select-type=repeating-linear-gradient] .icon {
+  background-image: repeating-linear-gradient(45deg, #3f87a6, #ebf8e1 15%, #f69d3c 20%);
+}
+.csseditor .fill-picker .picker-tab .picker-tab-list .picker-tab-item[data-select-type=repeating-radial-gradient] .icon {
+  background-image: repeating-radial-gradient(circle, #3f87a6, #ebf8e1 15%, #f69d3c 20%);
+}
+.csseditor .fill-picker .picker-tab .picker-tab-list .picker-tab-item[data-select-type=repeating-conic-gradient] .icon {
+  background-image: repeating-conic-gradient(#3f87a6, #ebf8e1 5%, #f69d3c 10%);
+}
+.csseditor .fill-picker .picker-tab .picker-gradient-selector {
+  padding: 2px 10px;
+}
+.csseditor .fill-picker .picker-tab .picker-gradient-selector .gradient-steps {
+  position: relative;
+  display: block;
+  height: 30px;
+}
+.csseditor .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue-container {
+  width: 100%;
+  height: 14px;
+  position: absolute;
+  z-index: 0;
+  background-color: transparent;
+  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-size: 10px 10px;
+  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+  box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.1);
+}
+.csseditor .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue {
+  position: relative;
+  padding: 0px;
+  margin: 0px;
+  cursor: pointer;
+}
+.csseditor .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue > .step-list {
+  position: relative;
+  width: 100%;
+  cursor: copy;
+  height: 14px;
+  z-index: 1;
+}
+.csseditor .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue > .step-list.mode-drag {
+  cursor: pointer;
+}
+.csseditor .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue .drag-bar {
+  border: 0px;
+  background-color: transparent;
+  border: 2px solid white;
+  box-shadow: 0 0 2px 0px rgba(0, 0, 0, 0.6);
+  width: 10px;
+  height: 10px;
+  -webkit-transform: none;
+          transform: none;
+  border-radius: 50%;
+  display: inline-block;
+  left: 0px;
+  top: 17px;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: top 0.3s ease-out;
+}
+.csseditor .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue .drag-bar .guide-line {
+  pointer-events: none;
+  position: absolute;
+  width: 1px;
+  height: 0px;
+  bottom: 8px;
+  left: 3px;
+  -webkit-transform: translateX(-1px);
+          transform: translateX(-1px);
+  transition: all 0.3s ease-out;
+}
+.csseditor .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue .drag-bar.selected {
+  z-index: 1;
+  top: 30px;
+}
+.csseditor .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue .drag-bar.selected .guide-line {
+  height: 17px;
+}
+.csseditor .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue .drag-bar.selected .guide-change {
+  opacity: 1;
+}
+.csseditor .fill-picker .picker-tab-container .picker-tab-content {
+  display: none;
+  position: relative;
+}
+.csseditor .fill-picker .picker-tab-container .picker-tab-content.selected {
+  display: block;
+}
+.csseditor .fill-picker .picker-tab-container .picker-tab-content .codemirror-colorpicker.sketch {
+  background-color: transparent;
+}
+.csseditor .fill-picker .picker-tab-container .picker-tab-content[data-content-type=color] .codemirror-colorpicker {
+  width: 222px;
+  border: 0px;
+  box-shadow: none;
+}
+.csseditor .fill-picker .picker-tab-container .picker-tab-content[data-content-type=image] .image-preview {
+  width: 100%;
+  height: 140px;
+  position: relative;
+  display: block;
+}
+.csseditor .fill-picker .picker-tab-container .picker-tab-content[data-content-type=image] .image-preview figure {
+  width: 100%;
+  height: 100%;
+  padding: 10px 20px;
+  margin: 0px;
+  box-sizing: border-box;
+  position: relative;
+}
+.csseditor .fill-picker .picker-tab-container .picker-tab-content[data-content-type=image] .image-preview figure .select-text {
+  display: inline-block;
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+  font-size: 20px;
+  padding: 10px 20px;
+}
+.csseditor .fill-picker .picker-tab-container .picker-tab-content[data-content-type=image] .image-preview figure img {
+  width: 100%;
+  height: 100%;
+}
+.csseditor .fill-picker .picker-tab-container .picker-tab-content[data-content-type=image] .image-preview figure img[src=""] {
+  display: none;
+}
+.csseditor .fill-picker .picker-tab-container .picker-tab-content[data-content-type=image] .image-preview figure img:not([src=""]) + .select-text {
+  display: none;
+}
+.csseditor .fill-picker .picker-tab-container .picker-tab-content[data-content-type=image] .image-preview input[type=file] {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 220px;
+  height: 140px;
+  padding: 10px 20px;
+  opacity: 0;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+.csseditor .popup {
+  position: absolute;
+  display: none;
+  right: 10px;
+  bottom: 10px;
+  box-sizing: border-box;
+  z-index: 1000;
+  background-color: rgba(255, 255, 255, 0.5);
+  border: 1px solid #cccccc;
+  box-shadow: 0 0 1px 0px #cccccc;
+  padding: 1px 0px;
+}
+.csseditor .popup .popup-title {
+  font-size: 12px;
+  padding: 10px 5px;
+  font-weight: bold;
+}
+.csseditor .popup .popup-content .popup-item {
+  display: grid;
+  grid-template-columns: 45px 1fr;
+  height: 24px;
+}
+.csseditor .popup .popup-content .popup-item label {
+  font-size: 11px;
+  vertical-align: middle;
+  text-align: right;
+  line-height: 1.6;
+  padding-right: 2px;
+  box-sizing: border-box;
+}
+.csseditor .popup .popup-content .popup-item label + div {
+  vertical-align: middle;
+}
+.csseditor .popup .popup-content .popup-item input[type=range] {
+  width: 100px;
+  flex: none;
+}
+.csseditor .popup .popup-content .popup-item input[type=number] {
+  width: 50px;
+  flex: none;
+  border: 1px solid #cccccc;
+}
+.csseditor .popup .popup-content .popup-item select {
+  width: 20px;
+  flex: none;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border: 0px;
+  background-color: transparent;
+  border-radius: 0px;
+  margin-left: 5px;
+  outline: none;
+}
+.csseditor .popup.background-property-popup {
+  width: 225px;
+}
+.csseditor .popup.background-property-popup .size-list button {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  border: 0px;
+  padding: 2px 5px;
+  cursor: pointer;
+  outline: none;
+  box-sizing: border-box;
+  width: 50px;
+  background-color: rgba(204, 204, 204, 0.5);
+}
+.csseditor .popup.background-property-popup .size-list[data-value=contain] button[value=contain], .csseditor .popup.background-property-popup .size-list[data-value=cover] button[value=cover], .csseditor .popup.background-property-popup .size-list[data-value=auto] button[value=auto] {
+  background-color: #cccccc;
+  font-weight: bold;
+}
+.csseditor .popup.background-property-popup .repeat-list button {
+  width: 24px;
+  height: 24px;
+  margin-right: 1px;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border: 1px solid #cccccc;
+  background-color: white;
+  outline: none;
+  cursor: pointer;
+}
+.csseditor .popup.background-property-popup .repeat-list button[value=no-repeat] {
+  background-image: linear-gradient(to top right, rgba(0, 0, 255, 0.5), black);
+  background-position: center center;
+  background-size: 8px 8px;
+  background-repeat: no-repeat;
+}
+.csseditor .popup.background-property-popup .repeat-list button[value=repeat] {
+  background-image: linear-gradient(to top right, rgba(0, 0, 255, 0.5), black);
+  background-position: 10px 10px;
+  background-size: 8px 8px;
+  background-repeat: repeat;
+}
+.csseditor .popup.background-property-popup .repeat-list button[value=repeat-x] {
+  background-image: linear-gradient(to top right, rgba(0, 0, 255, 0.5), black);
+  background-position: 10px 8px;
+  background-size: 8px 8px;
+  background-repeat: repeat-x;
+}
+.csseditor .popup.background-property-popup .repeat-list button[value=repeat-y] {
+  background-image: linear-gradient(to top right, rgba(0, 0, 255, 0.5), black);
+  background-position: 8px 10px;
+  background-size: 8px 8px;
+  background-repeat: repeat-y;
+}
+.csseditor .popup.background-property-popup .repeat-list button[value=space] {
+  background-image: linear-gradient(to top right, rgba(0, 0, 255, 0.5), black);
+  background-position: 10px 10px;
+  background-size: 8px 8px;
+  background-repeat: space;
+}
+.csseditor .popup.background-property-popup .repeat-list button[value=round] {
+  background-image: linear-gradient(to top right, rgba(0, 0, 255, 0.5), black);
+  background-position: 0px 0px;
+  background-size: 8px 8px;
+  background-repeat: round;
+}
+.csseditor .popup.background-property-popup .repeat-list[data-value=repeat] button[value=repeat], .csseditor .popup.background-property-popup .repeat-list[data-value=no-repeat] button[value=no-repeat], .csseditor .popup.background-property-popup .repeat-list[data-value=repeat-x] button[value=repeat-x], .csseditor .popup.background-property-popup .repeat-list[data-value=repeat-y] button[value=repeat-y], .csseditor .popup.background-property-popup .repeat-list[data-value=space] button[value=space], .csseditor .popup.background-property-popup .repeat-list[data-value=round] button[value=round] {
+  background-color: #cccccc;
+  box-shadow: 0 0 1px 0px black;
+}
+.csseditor .popup.background-property-popup .blend-list select.full-size {
+  width: 100px;
+}
+.csseditor .popup.display-property-popup .popup-item {
+  height: auto;
+  margin-bottom: 2px;
+}
+.csseditor .popup.display-property-popup .grid-5 {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-column-gap: 2px;
+}
+.csseditor .popup.display-property-popup button {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  border: 0px;
+  padding: 2px 5px;
+  cursor: pointer;
+  outline: none;
+  box-sizing: border-box;
+  width: 50px;
+  background-color: rgba(204, 204, 204, 0.5);
+}
+.csseditor .popup.display-property-popup .flex-direction[data-value=row] button[value=row], .csseditor .popup.display-property-popup .flex-direction[data-value=row-reverse] button[value=row-reverse], .csseditor .popup.display-property-popup .flex-direction[data-value=column] button[value=column], .csseditor .popup.display-property-popup .flex-direction[data-value=column-reverse] button[value=column-reverse] {
+  background-color: #cccccc;
+  font-weight: bold;
+}
+.csseditor .popup.display-property-popup .flex-wrap[data-value=nowrap] button[value=nowrap], .csseditor .popup.display-property-popup .flex-wrap[data-value=wrap] button[value=wrap], .csseditor .popup.display-property-popup .flex-wrap[data-value=wrap-reverse] button[value=wrap-reverse] {
+  background-color: #cccccc;
+  font-weight: bold;
+}
+.csseditor .popup.display-property-popup .justify-content[data-value=flex-start] button[value=flex-start], .csseditor .popup.display-property-popup .justify-content[data-value=flex-end] button[value=flex-end], .csseditor .popup.display-property-popup .justify-content[data-value=center] button[value=center], .csseditor .popup.display-property-popup .justify-content[data-value=space-between] button[value=space-between], .csseditor .popup.display-property-popup .justify-content[data-value=space-around] button[value=space-around] {
+  background-color: #cccccc;
+  font-weight: bold;
+}

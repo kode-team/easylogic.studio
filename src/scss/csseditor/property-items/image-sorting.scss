@@ -1,0 +1,51 @@
+&.image-sorting {
+    .items > div > label {
+        display: inline-block;
+        line-height: 2;
+        padding: 2px 5px;
+        height: 100%;
+        vertical-align: middle;
+        width: 50px;
+    }
+
+    .button-group {
+        display: inline-block;
+        vertical-align: middle;   
+        padding: 2px 0px;     
+
+        button {
+            flex: 1 1 auto;
+            appearance: none;
+            border:1px solid $border-color;
+            outline:none;
+            vertical-align: middle;
+            display: inline-block;
+
+            &:not(:first-child) {
+                margin-left: -1px;
+            }
+
+            &.cut {
+                width: 18px;
+                height: 18px;
+                border: 1px solid $border-color;
+                cursor: pointer;
+                background-image: linear-gradient(to top, black 0%,black 100%);
+                background-size: 4px 4px;
+                background-position: 6px center;
+                background-repeat: repeat-y;
+    
+                &.on {
+                    background-position: center 6px;                            
+                    background-repeat: repeat-x;
+                }      
+            }
+      
+        }
+    }
+
+    .step-align {
+        display: inline-block;
+        vertical-align: middle;
+    }
+}

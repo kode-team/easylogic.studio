@@ -1,0 +1,88 @@
+&.xd {
+    display: inline-block;
+    // padding: 12px;
+    padding-top: 12px;
+    width: 245px;
+
+    .color-panel {
+        display:inline-block;
+        margin-left: 6px;
+        margin-bottom: 12px;        
+        width: 170px;
+        height: 170px;
+        vertical-align: middle;
+        border-radius: 3px;
+        overflow: hidden;
+        box-sizing: border-box;
+        border: 1px solid #cecece;
+
+        > .saturation {
+            > .value  {
+                > .drag-pointer {
+                    border: 2px solid white;
+                    width: 10px;
+                    height: 10px;        
+                    box-shadow: 0 0 1px 0px rgba(0, 0, 0, 1), inset 0 0 1px 0px rgba(0, 0, 0, 1);            
+                }
+            }
+        }
+        
+    }
+
+    .control {
+        height: 170px;
+        padding: 0px;
+        vertical-align: middle;
+        display:inline-block;
+        margin-right: 12px;
+        margin-bottom: 12px;
+
+        .hue, .opacity {
+            margin: 0px;
+            padding:0px;
+            width: 13px;
+            display:inline-block;
+            vertical-align: middle;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+            border-radius: 3px;
+            margin-left: 8px;
+        }
+
+        .hue > .hue-container {
+            border-radius:0px;
+            overflow:hidden;
+            height: 100%;
+            background: linear-gradient(to top, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);            
+        }
+      
+
+        .opacity > .opacity-container {
+            border-radius: 0px;
+            overflow: hidden;
+            height: 100%;       
+        }
+        
+
+        .drag-bar, .drag-bar2 {
+            border:0px;
+            background-color: transparent;
+            border: 2px solid white;
+            box-shadow: 0 0 1px 0px rgba(0, 0, 0, 1), inset 0 0 1px 0px rgba(0, 0, 0, 1);            
+            width: 10px;
+            height: 10px;                    
+            box-sizing: border-box;
+            transform: none;
+            overflow: hidden;
+            left: 50%;
+            transform: translateX(-50%) translateY(-50%); 
+        }
+
+    }
+
+    .information {
+        margin-top: 5px;
+    }
+
+}

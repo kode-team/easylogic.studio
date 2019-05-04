@@ -1,0 +1,76 @@
+&.mini {
+    width: 180px;
+    display: inline-block;
+
+    .control {
+        padding: 0px;
+
+
+        .hue, .opacity {
+            margin: 0px;
+            padding:0px;
+        }
+
+        .hue > .hue-container {
+            border-radius:0px;
+            overflow:hidden;
+            height: 20px;
+        }
+
+        .opacity > .opacity-container {
+            border-radius: 0px;
+            overflow: hidden;
+            height: 20px;            
+        }
+        
+
+        .drag-bar, .drag-bar2 {
+            border:0px;
+            background-color: transparent;
+            height:100%;
+            width:5px;
+            box-sizing: border-box;
+            box-shadow: none;
+
+            &.last {
+                &:before, &after {
+                    left: 1px;
+                }
+            }
+
+            &.first {
+                &:before, &:after {
+                    left: 3px;
+                }
+            }
+
+            &:before {
+                content: "";
+                position: absolute;
+                left: 2px;
+                top: 0px;
+                width: 0; 
+                height: 0;
+                transform: translateX(-50%); 
+                border-left: 4px solid transparent;
+                border-right: 4px solid transparent;
+                border-top: 4px solid black;
+            }
+
+            &:after {
+                content: "";
+                position: absolute;
+                left: 2px;
+                bottom: 0px;
+                width: 0; 
+                height: 0; 
+                transform: translateX(-50%);                
+                border-left: 4px solid transparent;
+                border-right: 4px solid transparent;
+                border-bottom: 4px solid black;
+            }            
+        }
+
+    }
+
+}

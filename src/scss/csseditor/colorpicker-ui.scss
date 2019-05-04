@@ -1,0 +1,35 @@
+.colorpicker-layer {
+    .codemirror-colorpicker {
+        background-color: transparent;
+        width: 100%;
+        border:0px;
+        box-shadow: none;
+        .colorpicker-body {
+            width: 240px;
+
+            .color-list {
+                .current-color-sets {
+                    .color-item {
+                        width: 20px;
+                        height: 20px;
+                        margin: 2px !important;
+                    }
+
+                    .add-color-item {
+                        width: 20px;
+                        height: 20px;
+                        margin: 0px !important;                        
+                        padding: 3px;
+                    }
+                }
+            }
+    
+            .wheel {
+                border: 0px;
+                background-color: transparent;
+            }
+        }
+
+    }
+
+}

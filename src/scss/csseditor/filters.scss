@@ -1,0 +1,127 @@
+.filter-list {
+    display: flex !important;
+    flex-direction: column;
+
+    .filter-item {
+        flex: none; 
+        padding:5px 0px;
+
+        .filter-item-input {
+            display: block; 
+            font-size: 12px;
+            flex: 1 1 auto;
+
+            > .filter {
+                display: block; 
+
+                > * {
+                    display: inline-block;
+                    vertical-align: middle;
+                    text-align: middle;
+                }
+
+                .area {
+                    width: 2px;
+                    margin-left: 1px;
+                    height: 20px;
+                    vertical-align: middle;
+                    display: inline-block;
+                    background-color: transparent;
+                }
+
+                .title {
+                    width: 60px;
+                    text-align: left;
+                    font-size: 11px;
+
+                    &.long {
+                        width: 120px;
+                    }
+                }
+
+
+                .input-value {
+                    width: 40px;
+
+                    input[type=number] {
+                        width: 100%;
+                    }
+                }
+
+                .range {
+                    width: 70px;
+
+                    input[type=range] {
+                        width: 100%;
+                    }
+                }
+
+                .unit {
+                    width: 24px;
+                    padding: 2px;
+                }
+            }
+
+            > .items {
+                padding-left: 20px;
+
+                > div {
+                    padding-bottom: 3px;
+                }
+
+                > div > * {
+                    display: inline-block;
+                    vertical-align: middle;
+                    text-align: middle;
+                }
+
+                .title {
+                    width: 60px;
+                    text-align: left;
+
+                    &.long {
+                        width: 120px;
+                    }
+                }
+
+
+                .input-value {
+                    width: 40px;
+
+                    input[type=number] {
+                        width: 100%;
+                    }
+                }
+
+                .range {
+                    width: 70px;
+
+                    input[type=range] {
+                        width: 100%;
+                    }
+                }
+
+                .unit {
+                    width: 24px;
+                    padding: 2px;
+                }
+
+                .color {
+                    .color-view {
+                        display: inline-block;
+                        width: 20px;
+                        height: 20px;
+                        vertical-align: middle;
+                        pointer-events: all;
+                        cursor: pointer;
+                    }
+
+                    .color-text {
+                        vertical-align: middle;
+                    }
+                }
+            }
+        }
+    }
+
+}

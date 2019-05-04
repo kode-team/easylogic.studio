@@ -1,0 +1,42 @@
+$pointer-color: rgba(#ececec, 0.8);
+
+.drag-position {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+
+  .drag-pointer {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    cursor: pointer;
+    transform: translateX(-50%) translateY(-50%);
+    border-radius: 50%;
+    background-color: rgba(white, 0.8);
+    box-shadow: 0 0 2px 0px rgba(0, 0, 0, 0.32);
+  }
+}
+
+.perspective-drag-position {
+  position: absolute;
+  display: none;
+  bottom: 0px;
+  width: 100%;
+  top: 0px;
+  right: 0px;
+  overflow: hidden;
+  pointer-events: none;
+
+  .drag-pointer {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    cursor: pointer;
+    pointer-events: all;
+    transform: translateX(-50%) translateY(-50%);
+    border-radius: 50%;
+    background-color: rgba(white, 0.8);
+    box-shadow: 0 0 2px 0px rgba(0, 0, 0, 0.32);
+  }
+}

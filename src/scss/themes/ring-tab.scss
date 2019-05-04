@@ -1,0 +1,94 @@
+&.ring-tab {
+    .colorpicker-body {
+
+        .color-panel {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            left: 52px;
+            top: 52px;
+        }
+
+        .wheel {
+            width: 224px;
+            height: 224px;
+            margin: 0 auto;
+            position: relative;
+            box-sizing: border-box;
+
+            .wheel-canvas {
+                width: 214px;
+                height: 214px;
+                border-radius: 50%;
+                position: absolute;
+                left:5px;
+                top:5px;
+            }
+
+            .drag-pointer {
+                display:inline-block;
+                position: absolute;
+                width: 10px;
+                height: 10px;
+                left:50%;
+                top:50%;
+                border:1px solid white;
+                border-radius: 50%;
+                transform: translateX(-50%) translateY(-50%);
+                z-index:2;
+            }
+        }
+        .color-chooser {
+            opacity: 1;
+            pointer-events: all;
+
+            .color-chooser-container {
+                top: 0px;
+                opacity: 1;
+    
+                .colorsets-item-header {
+                    display: none;
+                }
+    
+                .colorsets-list {
+                    top: 4px;
+
+                    .color-item {
+                        transform: scale(1.2);
+                    }
+                }
+            }
+        }
+
+        .colorsets {
+            border-top: 0px;
+            .menu {
+                display: none;
+            }
+
+            .color-list {
+                margin-right: 0px;
+                padding-top: 5px;
+                padding-left: 13px;
+            }
+        }
+
+        
+
+    }
+
+    .control {
+        padding-top: 0px;
+
+        .value {
+            display: none;
+        }
+
+        > .color, > .empty {
+            top: -17px;
+            width: 30px;
+            height: 30px;
+            border-radius: 2px;
+        }
+    }
+}

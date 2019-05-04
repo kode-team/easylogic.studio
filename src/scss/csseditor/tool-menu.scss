@@ -1,0 +1,212 @@
+.tool-menu {
+  height: 100%;
+  display: flex;
+  padding-left: 10px;
+  padding-right: 10px;
+
+  .logo {
+    color: white;
+    padding: 20px 10px;
+
+    .text {
+      font-size: 30px;
+      display: inline-block;
+      font-weight: bold;
+      text-transform: uppercase;
+      background: linear-gradient(
+        to right,
+        #ff0000 0%,
+        #ffff00 17%,
+        #00ff00 33%,
+        #00ffff 50%,
+        #0000ff 67%,
+        #ff00ff 83%,
+        #ff0000 100%
+      );
+      background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .site {
+      font-size: 14px;
+      color: $border-color;
+    }
+  }
+
+  .items {
+    flex: 1 1 auto;
+    text-align: center;
+    height: 100%;
+    padding: 0px 5px;
+
+    &.flex-2 {
+      flex: 5;
+    }
+
+    &.left {
+      text-align: left;
+    }
+
+    &.right {
+      text-align: right;
+    }
+
+    form {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    button {
+      appearance: none;
+      vertical-align: middle;
+      border: 0px;
+      display: inline-block;
+      padding: 10px 2px;
+      text-decoration: none;
+      color: white;
+      line-height: 1.6;
+      outline: none;
+      cursor: pointer;
+      text-align: center;
+      margin-right: 5px;
+      background-color: transparent;
+
+      &[checked="checked"] {
+        .icon {
+          background-color: rgba(255, 255, 255, 0.1);
+        }
+      }
+    }
+
+    .icon {
+      margin: 0 auto;
+      width: 30px;
+      height: 30px;
+      // background-color: rgba(206, 206, 206, 0.5);
+
+      svg {
+        width: 100%;
+        height: 100%;
+
+        path {
+          fill: white;
+        }
+      }
+
+      &.rect {
+        background-color: transparent;
+        border: 1px solid $border-color;
+      }
+
+      &.circle {
+        background-color: transparent;
+        border: 1px solid $border-color;
+        border-radius: 100%;
+      }
+
+      &.show-grid {
+        background-color: transparent;
+        background-image: linear-gradient(to right, black, black),
+          linear-gradient(to right, black, black),
+          linear-gradient(to right, black, black),
+          linear-gradient(to right, black, black),
+          linear-gradient(to right, black, black),
+          linear-gradient(to right, black, black),
+          linear-gradient(to right, black, black),
+          linear-gradient(to right, black, black);
+        background-size: 1px 100%, 1px 100%, 1px 100%, 1px 100%, 100% 1px,
+          100% 1px, 100% 1px, 100% 1px;
+        background-position: 3px 0px, 27px 0px, 11px 0px, 19px 0px, 0px 3px,
+          0px 11px, 0px 19px, 0px 27px;
+        background-repeat: no-repeat;
+      }
+
+      &.show-clip-path {
+        background-color: transparent;
+        background-image: radial-gradient(
+            circle at center,
+            red,
+            red 3px,
+            transparent 3px,
+            transparent
+          ),
+          radial-gradient(
+            circle at center,
+            blue,
+            blue 3px,
+            transparent 3px,
+            transparent
+          ),
+          radial-gradient(
+            circle at center,
+            blue,
+            blue 3px,
+            transparent 3px,
+            transparent
+          ),
+          radial-gradient(
+            circle at center,
+            green,
+            green 3px,
+            transparent 3px,
+            transparent
+          ),
+          linear-gradient(to right, black, black),
+          linear-gradient(to right, black, black),
+          linear-gradient(to right, black, black),
+          linear-gradient(to right, black, black);
+        background-size: 7px 7px, 7px 7px, 7px 7px, 7px 7px, 1px 20px, 1px 20px,
+          20px 1px, 20px 1px;
+        background-position: 1.5px 1.5px, 1.5px 21.5px, 21.5px 21.5px,
+          21.5px 1.5px, 5px 5px, 25px 5px, 5px 5px, 5px 25px;
+        background-repeat: no-repeat;
+      }
+
+      &.save {
+        background-color: transparent;
+        background-image: linear-gradient(to right, black, black),
+          linear-gradient(to right, black, black),
+          linear-gradient(to right, black, black),
+          linear-gradient(to right, black, black);
+        background-size: 26px 2px, 20px 2px, 10px 2px, 15px 2px;
+        background-position: 2px 4px, 2px 12px, 2px 18px, 2px 25px;
+        background-repeat: no-repeat;
+      }
+
+      &.jsfiddle,
+      &.export,
+      &.codepen,
+      &.github {
+        background-color: transparent;
+        box-shadow: inset 0 0 0 1px white;
+        text-align: right;
+        padding-right: 2px;
+        border-radius: 3px;
+        &:before {
+          display: inline-block;
+          font-size: 30px;
+          font-weight: bold;
+          vertical-align: middle;
+          line-height: 30px;
+        }
+      }
+
+      &.codepen {
+        &:before {
+          content: "C";
+        }
+      }
+      &.jsfiddle {
+        &:before {
+          content: "J";
+        }
+      }
+      &.github {
+        &:before {
+          content: "G";
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,20 @@
+&.layer-colorpicker {
+    .codemirror-colorpicker.xd {
+        padding-top: 0px;
+        .color {
+            margin-left: 6px;
+        }
+
+        > .colorpicker-body {
+            > .color-panel,
+            > .control {
+                margin-bottom: 0px;
+            }
+
+            > .colorsets {
+                display: none;
+            }
+        }
+
+    }
+}

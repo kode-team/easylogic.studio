@@ -1,0 +1,146 @@
+.property {
+  padding: 0px;
+  border-bottom: 1px solid rgba($border-color, 0.5);
+  //   padding-bottom: 5px;
+
+  &.show {
+    > .property-body {
+      display: block;
+    }
+  }
+
+  > .property-title {
+    padding: 2px 5px;
+    padding-left: 10px;
+    height: 24px;
+    line-height: 2;
+    color: rgb(104, 104, 104);
+    cursor: pointer;
+    position: relative;
+    font-size: 13px;
+    font-weight: bold;
+    text-shadow: 2px 2px 5px $border-color;
+
+    > .tools {
+      display: inline-block;
+      position: absolute;
+      top: 3px;
+      bottom: 3px;
+      right: 10px;
+
+      button {
+        appearance: none;
+        // border: 1px solid #ececec;
+        display: inline-block;
+        // height: 100%;
+        box-sizing: border-box;
+        width: 16px;
+        height: 16px;
+        background-color: transparent;
+        border: 0px;
+        padding: 0px;
+        cursor: pointer;
+        outline: none;
+
+        svg {
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+  }
+
+  > .property-body {
+    display: none;
+    padding: 2px 5px;
+
+    .property-item {
+      padding: 0px;
+      font-size: 11px;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr 3fr;
+      margin-bottom: 2px;
+
+      .property-item-label,
+      .property-item-input-field {
+        vertical-align: middle;
+
+        .tools {
+          padding: 2px;
+          text-align: right;
+        }
+
+        button {
+          appearance: none;
+          background-color: transparent;
+          border: 0px;
+          cursor: pointer;
+          padding: 0px 3px;
+          outline: none;
+          vertical-align: middle;
+
+          svg {
+            width: 16px;
+            height: 16px;
+          }
+        }
+
+        &.grid-1-3 {
+          display: grid;
+          grid-template-columns: 1fr 3fr;
+        }
+      }
+
+      .property-item-label {
+        box-sizing: border-box;
+        padding: 5px;
+        // text-align: right;
+      }
+
+      &.grid-0 {
+        grid-template-columns: 1fr;
+      }
+
+      &.grid-2 {
+        grid-template-columns: 1fr 3fr;
+      }
+
+      &.grid-4 {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+
+        .property-item-input-field {
+          input {
+            width: 40px;
+          }
+        }
+      }
+
+      @import "./property-items/background-color.scss";
+      @import "./property-items/fill.scss";
+      @import "./property-items/display-manager.scss";
+      @import "./property-items/gradient-steps.scss";
+      @import "./property-items/gradient-sample-list.scss";
+      @import "./property-items/gradient-steps-info.scss";
+      @import "./property-items/gradient-tools.scss";
+      @import "./property-items/image-resource.scss";
+      @import "./property-items/image-list-view.scss";
+      @import "./property-items/layout.scss";
+      @import "./property-items/clip-path.scss";
+      @import "./property-items/clip-path-polygon.scss";
+      @import "./property-items/group-align.scss";
+      @import "./property-items/radius.scss";
+      @import "./property-items/layer-colorpicker.scss";
+      @import "./property-items/box-shadow.scss";
+      @import "./property-items/text-shadow.scss";
+      @import "./property-items/background-info.scss";
+      @import "./property-items/fill-colorpicker.scss";
+      @import "./property-items/text-colorpicker.scss";
+      @import "./property-items/colorpicker.scss";
+      @import "./property-items/layer-code.scss";
+      @import "./property-items/background-code.scss";
+      @import "./property-items/text.scss";
+      @import "./property-items/image-sorting.scss";
+    }
+  }
+}

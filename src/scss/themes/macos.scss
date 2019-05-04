@@ -1,0 +1,71 @@
+&.macos {
+    .colorpicker-body {
+        .wheel {
+            width: 224px;
+            height: 224px;
+            position: relative;
+            box-sizing: border-box;
+
+            .wheel-canvas {
+                width: 214px;
+                height: 214px;
+                border-radius: 50%;
+                position: absolute;
+                left:5px;
+                top:5px;
+            }
+
+            .drag-pointer {
+                display:inline-block;
+                position: absolute;
+                width: 10px;
+                height: 10px;
+                left:50%;
+                top:50%;
+                border:1px solid white;
+                border-radius: 50%;
+                transform: translateX(-50%) translateY(-50%);
+                z-index:2;
+            }
+        }
+
+    }
+
+    .control {
+        padding-top: 0px;
+
+        > .color, > .empty {
+            top: 4px;
+        }
+    }
+
+
+    .value {
+        position: relative;
+        padding: 6px 16px;
+        margin: 0px 0px 0px 42px;
+        box-sizing: border-box;
+        cursor: pointer;
+
+        > .value-container {
+            position: relative;
+            width: 100%;
+            height: 10px;
+            border-radius: 3px;
+            background-image: linear-gradient(to right, #000000 0%, rgba(255, 255, 255, 0) 100%);    
+            box-sizing: border-box;
+            
+            .drag-bar {
+                position: absolute;
+                cursor: pointer;
+                top: 50%;
+                left: 0px;
+                transform: translateX(-50%) translateY(-50%);
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+            }  
+              
+        }
+    }
+}

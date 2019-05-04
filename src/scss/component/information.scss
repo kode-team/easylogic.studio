@@ -1,0 +1,139 @@
+.information {
+    /*border-top: 1px solid #e8e8e8;*/
+    position: relative;
+    box-sizing: border-box;
+
+    > input {
+      position: absolute;
+      font-size: 10px;
+      height: 20px;
+      bottom: 20px;
+      padding: 0 0 0 2px;
+      box-sizing: border-box;
+      user-select: text;
+
+      &[type=number] {
+        appearance: none;
+      }
+
+      &[type=number]::-webkit-inner-spin-button,
+      &[type=number]::-webkit-outer-spin-button
+      {
+        appearance: none;
+        margin: 0;
+      }
+    }
+
+    &.hex > .information-item.hex {
+      display: flex;
+    }
+    
+    &.rgb > .information-item.rgb {
+      display: flex;
+    }
+    
+    &.hsl > .information-item.hsl {
+      display: flex;
+    }
+    
+    > .information-item {
+      display:none;
+      position: relative;
+      padding: 0px 5px;
+      padding-left: 9px;
+      box-sizing: border-box;
+      margin-right:40px;
+
+      > .input-field {
+        display:block;
+        flex:1;
+        padding: 3px;
+        box-sizing: border-box;
+        position: relative;
+
+        > .title {
+          text-align:center;
+          font-size:12px;
+          color:#a9a9a9;
+          padding-top:2px;
+        }
+
+        input {
+          text-align: center;
+          width:100%;
+          padding:3px;
+          height: 21px;
+          font-size:11px;
+          color: #333;
+          box-sizing: border-box;
+          user-select: text;
+          border: 1px solid #cbcbcb;
+          border-radius:2px;
+
+          &[type=number] {
+            appearance: none;
+          }
+
+          &[type=number]::-webkit-inner-spin-button,
+          &[type=number]::-webkit-outer-spin-button
+          {
+            appearance: none;
+            margin: 0;
+          }
+        }
+
+        &.hsl-l,
+        &.hsl-s {
+          
+          input[type=number] {
+            padding-left: 1px;
+            padding-right: 10px;
+
+          }
+          
+        }
+
+        .postfix {
+          display:inline-block;
+          position: absolute;
+          right:4px;
+          top:2px;
+          height: 21px;
+          line-height: 2;
+          padding: 2px;
+          box-sizing: border-box;
+          text-align:center;
+          font-size: 11px;
+        }
+      }
+    }
+    
+    > .information-change {
+      position:absolute;
+      display:block;
+      width:40px;
+      top:0px;
+      right:0px;
+      bottom:0px;
+      text-align: center;
+      box-sizing: border-box;
+      padding-top:5px;
+
+      > .format-change-button {
+        box-sizing: border-box;
+        background:transparent;
+        border:0px;
+        cursor:pointer;
+        outline:none;
+      }
+    }
+
+    > .title {
+        color: #a3a3a3;
+    }
+
+    > .input {
+        color: #333;
+    }
+    
+}

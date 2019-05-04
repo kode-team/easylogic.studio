@@ -1,0 +1,67 @@
+
+/* codemirror-colorpicker */
+
+.codemirror-colorpicker {
+  position: relative;
+  width: 224px;
+  z-index: 1000;
+  display:inline-block;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  background-color: #fff;
+  border-radius: 3px; 
+  box-shadow: 0 0px 10px 2px rgba(0, 0, 0, 0.12);
+   
+  > .arrow {
+    position: absolute;
+    top: -10px;   
+    left: 7px; 
+    width: 0; 
+    height: 0; 
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    display:none;
+    
+    border-bottom: 10px solid rgba(0, 0, 0, 0.2);
+    pointer-events: none;
+    &:after {
+      position: absolute;      
+      content: ""; 
+      top: 1px;  
+      left: -9px;
+      width: 0;  
+      height: 0; 
+      border-left: 9px solid transparent;
+      border-right: 9px solid transparent; 
+      
+      border-bottom: 9px solid white;
+    }   
+  }
+
+  .colorpicker-body {
+    @import './component/button';
+    @import './component/color-tab';
+    @import './component/palette';
+    @import './component/control';
+    @import './component/information';
+    @import './component/colorsets'; 
+    @import './component/colorchooser'; 
+  
+  }
+
+  &.chromedevtool {
+
+  }
+
+  /* theme */
+  @import './themes/sketch'; 
+  @import './themes/palette'; 
+  @import './themes/macos'; 
+  @import './themes/mini';   
+  @import './themes/mini-vertical';   
+  @import './themes/ring';   
+  @import './themes/ring-tab';   
+  @import './themes/xd';
+  @import './themes/xd-tab';
+}    
+
+@import './component/colorsets-contextmenu'; 

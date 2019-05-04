@@ -1,0 +1,39 @@
+$typetool-size: 34px;
+&.gradient-tools {
+    display:block;
+    width: 100%;
+
+    .menu-buttons {
+        display: inline-block;
+        vertical-align: middle;
+        padding: 4px 0px;
+        font-size: 12px;
+
+        button {
+            display: inline-block;
+            appearance: none;
+            width: 100px;
+            height: 100%;
+            border: 1px solid #dedede;
+            vertical-align: middle;
+            font-size: 12px;
+            cursor: pointer;
+            outline: none;
+            position: relative;
+            pointer-events: all;
+        }
+    }
+
+    > .title {
+        // display: inline-block;
+        vertical-align: middle;
+        padding: 10px 0px;
+        font-size: 12px;
+    }
+}
+
+.gradient-type {
+    .gradient-item {
+        margin-right: 3px;
+    }
+}

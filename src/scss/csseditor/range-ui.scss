@@ -1,0 +1,162 @@
+// Styling Cross-Browser Compatible Range Inputs with Sass
+// Github: https://github.com/darlanrod/input-range-sass
+// Author: Darlan Rod https://github.com/darlanrod
+// Version 1.5.1
+// MIT License
+
+$track-color: #eceff1 !default;
+$thumb-color: #03A9F4 !default;
+
+$thumb-radius: 10px !default;
+$thumb-height: 10px !default;
+$thumb-width: 10px !default;
+$thumb-shadow-size: 0px !default;
+$thumb-shadow-blur: 0px !default;
+$thumb-shadow-color: rgba(0, 0, 0, 0) !default;
+$thumb-border-width: 0px !default;
+$thumb-border-color: #eceff1 !default;
+
+$track-width: 95% !default;
+$track-height: 2px !default;
+$track-shadow-size: 0px !default;
+$track-shadow-blur: 0px !default;
+$track-shadow-color: rgba(0, 0, 0, 1) !default;
+$track-border-width: 1px !default;
+$track-border-color: #cfd8dc !default;
+
+$track-radius: 0px !default;
+$contrast: 5% !default;
+
+$ie-bottom-track-color: darken($track-color, $contrast) !default;
+
+@mixin shadow($shadow-size, $shadow-blur, $shadow-color) {
+  box-shadow: $shadow-size $shadow-size $shadow-blur $shadow-color, 0 0 $shadow-size lighten($shadow-color, 5%);
+}
+
+@mixin track {
+  cursor: default;
+  height: $track-height;
+  transition: all .2s ease;
+  width: $track-width;
+}
+
+@mixin thumb($adjustment: 0) {
+  @include shadow($thumb-shadow-size, $thumb-shadow-blur, $thumb-shadow-color);
+  background: $thumb-color;
+  border: $thumb-border-width solid $thumb-border-color;
+  border-radius: $thumb-radius;
+  cursor: default;
+  height: $thumb-height + $adjustment;
+  width: $thumb-width + $adjustment;
+}
+
+@mixin disabled {
+  cursor: not-allowed;
+}
+
+// [type='range'] {
+//   appearance: none;
+//   background: transparent;
+//   margin: $thumb-height / 2 0;
+//   width: $track-width;
+
+//   &::-moz-focus-outer {
+//     border: 0;
+//   }
+
+//   &:focus {
+//     outline: 0;
+
+//     &::-webkit-slider-runnable-track {
+//       background: lighten($track-color, $contrast);
+//     }
+
+//     &::-ms-fill-lower {
+//       background: $track-color;
+//     }
+
+//     &::-ms-fill-upper {
+//       background: lighten($track-color, $contrast);
+//     }
+//   }
+
+//   &::-webkit-slider-runnable-track {
+//     @include track;
+//     @include shadow($track-shadow-size, $track-shadow-blur, $track-shadow-color);
+//     background: $track-color;
+//     border: $track-border-width solid $track-border-color;
+//     border-radius: $track-radius;
+//   }
+
+//   &::-webkit-slider-thumb {
+//     @include thumb;
+//     -webkit-appearance: none;
+//     margin-top: ((-$track-border-width * 2 + $track-height) / 2 - $thumb-height / 2);
+//   }
+
+//   &::-moz-range-track {
+//     @include shadow($track-shadow-size, $track-shadow-blur, $track-shadow-color);
+//     @include track;
+//     background: $track-color;
+//     border: $track-border-width solid $track-border-color;
+//     border-radius: $track-radius;
+//     height: $track-height / 2;
+//   }
+
+//   &::-moz-range-thumb {
+//     @include thumb(-4);
+//   }
+
+//   &::-ms-track {
+//     @include track;
+//     background: transparent;
+//     border-color: transparent;
+//     border-width: ($thumb-height / 2) 0;
+//     color: transparent;
+//   }
+
+//   &::-ms-fill-lower {
+//     @include shadow($track-shadow-size, $track-shadow-blur, $track-shadow-color);
+//     background: $ie-bottom-track-color;
+//     border: $track-border-width solid $track-border-color;
+//     border-radius: ($track-radius * 2);
+//   }
+
+//   &::-ms-fill-upper {
+//     @include shadow($track-shadow-size, $track-shadow-blur, $track-shadow-color);
+//     background: $track-color;
+//     border: $track-border-width solid $track-border-color;
+//     border-radius: ($track-radius * 2);
+//   }
+
+//   &::-ms-thumb {
+//     @include thumb(-4);
+//     margin-top: $track-height / 4;
+//   }
+
+//   &:disabled {
+//     &::-webkit-slider-thumb {
+//       @include disabled;
+//     }
+
+//     &::-moz-range-thumb {
+//       @include disabled;
+//     }
+
+//     &::-ms-thumb {
+//       @include disabled;
+//     }
+
+//     &::-webkit-slider-runnable-track {
+//       @include disabled;
+//     }
+
+//     &::-ms-fill-lower {
+//       @include disabled;
+//     }
+
+//     &::-ms-fill-upper {
+//       @include disabled;
+//     }
+//   }
+// }

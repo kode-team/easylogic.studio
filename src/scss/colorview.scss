@@ -1,0 +1,29 @@
+/* codemirror colorview */
+
+.codemirror-colorview {
+	border : 1px solid #cecece;
+    position: relative;
+	display : inline-block;
+	box-sizing : border-box; 
+	margin : 0px 2px;
+	width : 10px;
+	height : 10px;
+    cursor: pointer;
+    vertical-align: middle;
+    @include transparent-background();
+
+    .codemirror-colorview-background {
+        content: "";
+        position: absolute;
+        left:0px;
+        right:0px;
+        bottom:0px;
+        top:0px;
+    }
+
+    &:hover {
+        border-color: #494949;
+    }
+}
+
+

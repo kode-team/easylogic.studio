@@ -1,0 +1,33 @@
+
+.colorsets-contextmenu {
+    position:fixed;
+    padding-top:4px;
+    padding-bottom:4px;
+    border-radius: 6px; 
+    background-color: #ececec;
+    border: 1px solid rgba(204, 204, 204, 1);
+    display: none;
+    list-style: none;
+    font-size: 13px;
+    padding-left: 0px;
+    padding-right: 0px;
+    &.show {
+        display:inline-block;
+    }
+
+    .menu-item {
+        padding: 2px 20px;
+        cursor: default;
+
+        &:hover {
+            background-color: #5ea3fb;
+            color: white;
+        }
+    }    
+
+    &.small {
+        .menu-item.small-hide {
+            display: none;
+        }
+    }
+}

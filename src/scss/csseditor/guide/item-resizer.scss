@@ -1,0 +1,137 @@
+
+
+.item-resizer{
+    position: absolute;
+    left: -10000px;
+    top: -10000px;
+    width: 0px;
+    height: 0px;
+    // box-shadow: 0 0 0 1px rgba(#000000, 0.1);
+    box-sizing: border-box;
+
+    &[data-mode='artboard'] {
+        button {
+            &[data-value='move'] {
+                display: none;
+            }   
+        }
+    }
+
+    &[data-mode='layer'][data-rect="true"] {
+        background-color: rgba(0, 0, 0, 0.1);            
+    }        
+
+
+
+    &[data-layout='flex'] {
+        box-shadow: 0 0 0 1px rgba($display-flex-color, 0.5) !important;            
+        button {
+            background-color: $display-flex-color;
+            border-color: $display-flex-color;
+        }
+    }
+
+    &[data-layout='grid'] {
+        box-shadow: 0 0 0 1px rgba($display-grid-color, 0.5) !important;
+        button {
+            background-color: $display-grid-color;
+            border-color: $display-grid-color;
+
+            &[data-value='to top'],
+            &[data-value='to top right'],
+            &[data-value='to top left'],
+            &[data-value='to left'],
+            &[data-value='to bottom left']          
+             {
+                // display: none;
+            }
+            
+        }
+
+
+    }        
+
+    button {
+        pointer-events: all;
+        padding: 0px;
+        background-color: rgba(white, 1);
+        border: 1px solid $editor-button-color;
+        appearance: none;
+        outline: none;
+        cursor: pointer;
+        position: absolute;
+        display: inline-block;
+        width: $editor-resizer-width;
+        height: $editor-resizer-width;     
+        box-shadow: 0px 0px 0.1px 0px rgba(#000000, 0.3);
+
+        &[data-value='move'] {
+            top: 0px;
+            left: 0px;
+            background-color: transparent;
+            border:0px;
+            width: 100%;
+            height: 100%;
+            cursor: move;
+            box-shadow: none;
+        }
+
+        /* linear */
+        &[data-value='to top'] {
+            top: 0px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100%);
+            cursor: ns-resize;
+        }
+
+        &[data-value='to top right'] {
+            top: 0px;
+            right: 0px;
+            transform: translateX(100%) translateY(-100%);
+            cursor: nesw-resize;                
+        }
+
+        &[data-value='to right'] {
+            top: 50%;
+            right: 0px;
+            transform: translateX(100%) translateY(-50%);
+            cursor: ew-resize;                
+        }
+
+        &[data-value='to bottom right'] {
+            bottom: 0px;
+            right: 0px;
+            transform: translateX(100%) translateY(100%);                        
+            cursor: nwse-resize;                
+        }
+
+        &[data-value='to bottom'] {
+            bottom: 0px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100%);
+            cursor: ns-resize;                
+        }
+
+        &[data-value='to bottom left'] {
+            left: 0px;
+            bottom: 0px;
+            transform: translateX(-100%) translateY(100%);
+            cursor: nesw-resize;                
+        }
+
+        &[data-value='to left'] {
+            top: 50%;
+            left: 0px;
+            transform: translateX(-100%) translateY(-50%);
+            cursor: ew-resize;                
+        }
+
+        &[data-value='to top left'] {
+            top: 0px;
+            left: 0px;
+            transform: translateX(-100%) translateY(-100%);
+            cursor: nwse-resize;                
+        }
+
+    }
+}

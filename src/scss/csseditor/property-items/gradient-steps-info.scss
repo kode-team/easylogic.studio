@@ -1,0 +1,142 @@
+&.gradient-steps-info {
+    
+
+    .gradient-info {
+        // background-color:#ececec;
+        overflow: auto;
+
+        .form-item {
+            font-size: 12px;
+            margin: 2px 0px;
+            width: 100%;
+
+            .step-list {
+                width: 100%;
+            }
+
+            .color-step {
+                display: flex;
+                padding: 1px;
+                color: #333; 
+
+                &.selected {
+
+                    .color-view {
+                        border: 1px solid black;
+                    }
+
+                }
+
+                > * {
+                    flex: 1 1 auto; 
+                    display:inline-block; 
+                    vertical-align: middle;
+                }
+
+                input {
+                    width: 40px;
+                    display: inline-block;
+                }
+
+                .tools {
+                    text-align: right;
+                    button {
+                        appearance: none;
+                        transform: scale(1.2);
+                        border:0px;
+                        background-color: transparent;
+                        padding: 2px 2px;
+                        font-size: 14px;
+                        vertical-align: middle;
+                        line-height: 0;
+                        cursor: pointer;
+                        outline: none;
+                    }
+                }
+
+                input[type=text] {
+                    width: 100px;
+                }
+
+                input[type=number] {
+                    appearance: none;
+                    border: 1px solid #ececec;
+                }
+
+                .color-view {
+                    width: 16px;
+                    flex: none;
+                    height: 16px;
+                    margin-top: 2px;
+                    margin-right: 2px;
+                    position: relative;
+                    @include transparent-background(5px);
+                    border: 1px solid #ececec;
+                    vertical-align: middle;
+                    border-radius: 3px;
+                    overflow: hidden;
+                    .color-view-item {
+                        position: absolute; 
+                        left: 0px;
+                        right: 0px;
+                        bottom: 0px;
+                        top: 0px;
+                        cursor: pointer;
+                    }
+                }
+
+                .color-cut {
+                    width: 16px;
+                    flex: none;
+                    height: 20px;
+                    margin-right: 2px;
+                    position: relative;
+                    vertical-align: middle;
+
+                    .guide-change {
+                        position: absolute;
+                        width: 12px;
+                        height: 12px;
+                        top: 50%;
+                        left: 0px;
+                        transform: translateY(-50%);
+                        border: 1px solid $border-color;
+                        cursor: pointer;
+                        background-image: linear-gradient(to top, black 0%,black 100%);
+                        background-size: 3px 3px;
+                        background-position: 3.5px center;
+                        background-repeat: repeat-y;
+    
+                        &.cut {
+                            background-position: center 3px;                            
+                            background-repeat: repeat-x;
+                        }
+    
+                    } 
+                }
+
+                .color-unit {
+                    > input[type=number] {
+                        display:none;
+                        outline: none;
+                        width: 50px;
+                    }
+                    &.percent > .percent { display: inline-block; }
+                    &.px > .px { display: inline-block; }
+                    &.em > .em { display: inline-block; }
+
+                    select {
+                        appearance: none;
+                        border:0px;
+                        background-color: transparent;
+                        display: inline-block;
+                        outline: none;
+                    }
+                }
+
+
+            }
+        }
+    }
+
+}

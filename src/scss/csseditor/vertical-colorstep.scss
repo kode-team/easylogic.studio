@@ -1,0 +1,311 @@
+.vertical-colorstep-container {
+  position: absolute;
+  top: -80px;
+  left: 0px;
+  right: 0px;
+  height: 70px;
+  display: none;
+  z-index: 1000;
+  pointer-events: none;
+
+  .gradient-editor {
+    position: absolute;
+    display: inline-block;
+    left: 50%;
+    transform: translateX(200px);
+    min-width: 100px;
+    top: -20px;
+    pointer-events: all;
+
+    .angle-editor,
+    .position-editor {
+      position: relative;
+      display: inline-block;
+      vertical-align: middle;
+      box-sizing: border-box;
+      width: 100px;
+      height: 100px;
+      margin-right: 4px;
+    }
+  }
+
+  .gradient-tools {
+    position: absolute;
+    display: inline-block;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 0px;
+    pointer-events: all;
+
+    .guide-button {
+      width: 14px;
+      height: 14px;
+      padding: 0px;
+      appearance: none;
+      background-color: transparent;
+      border: 1px solid $border-color;
+      cursor: pointer;
+      background-color: white;
+      background-image: linear-gradient(to top, black 0%, black 100%);
+      background-size: 2px 2px;
+      background-position: center center;
+      background-repeat: repeat-y;
+      box-sizing: border-box;
+      outline: none;
+      vertical-align: middle;
+
+      &.cut {
+        background-repeat: repeat-x;
+      }
+    }
+
+    .radial-gradient-shape {
+      width: 14px;
+      height: 14px;
+      padding: 0px;
+      appearance: none;
+      border: 1px solid $border-color;
+      cursor: pointer;
+      background-color: white;
+      box-sizing: border-box;
+      outline: none;
+      position: relative;
+      vertical-align: middle;
+
+      &.circle {
+        &:before {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          top: 50%;
+          left: 50%;
+          transform: translateX(-50%) translateY(-50%);
+          content: "";
+          display: inline-block;
+          border-radius: 100%;
+          background-color: $border-color;
+        }
+      }
+
+      &.ellipse {
+        &:before {
+          position: absolute;
+          width: 100%;
+          height: 50%;
+          top: 50%;
+          left: 50%;
+          transform: translateX(-50%) translateY(-50%);
+          content: "";
+          display: inline-block;
+          border-radius: 100%;
+          background-color: $border-color;
+        }
+      }
+
+      &.selected {
+        &:before {
+          background-color: #333;
+        }
+      }
+    }
+  }
+}
+
+.vertical-colorstep {
+  position: absolute;
+  left: 50%;
+  top: 20px;
+  width: 400px;
+  transform: translateX(-50%);
+  display: inline-block;
+  z-index: 100;
+  padding-left: 20px;
+  padding-right: 20px;
+  pointer-events: all;
+
+  .gradient-steps {
+    position: relative;
+    display: block;
+
+    .hue-container {
+      width: 100%;
+      height: 14px;
+      margin-top: 0px;
+      left: 0px;
+      right: 0px;
+      position: absolute;
+      border-radius: 14px;
+      z-index: 0;
+      cursor: copy;
+      @include transparent-background();
+    }
+
+    .hue {
+      position: relative;
+      padding: 0px;
+      margin: 0px;
+      border-radius: 14px;
+      cursor: pointer;
+      pointer-events: none;
+
+      > .step-list {
+        position: relative;
+        width: 100%;
+        cursor: copy;
+        height: 14px;
+        z-index: 1;
+        border-radius: 14px;
+
+        &.mode-drag {
+          cursor: pointer;
+        }
+      }
+
+      .drag-bar {
+        transform: none;
+        border-radius: 50%;
+        display: inline-block;
+        left: 0px;
+        top: 13px;
+        transform: translateX(-50%);
+        position: absolute;
+        cursor: pointer;
+        transition: top 0.3s ease-out;
+        pointer-events: all;
+
+        .guide-line {
+          pointer-events: none;
+          position: absolute;
+          width: 1px;
+          height: 0px;
+          bottom: 8px;
+          left: 4px;
+          transition: all 0.3s ease-out;
+        }
+
+        .guide-change {
+          position: absolute;
+          width: 10px;
+          height: 10px;
+          top: 50%;
+          left: -15px;
+          transform: translateY(-50%);
+          opacity: 0;
+          transition: all 0.3s ease-out;
+          border: 1px solid $border-color;
+          pointer-events: none;
+          background-color: white;
+          background-image: linear-gradient(to top, black 0%, black 100%);
+          background-size: 2px 2px;
+          background-position: 2.5px center;
+          background-repeat: repeat-y;
+
+          &.cut {
+            background-position: center 2.5px;
+            background-repeat: repeat-x;
+          }
+
+          &.easing {
+            background-repeat: no-repeat;
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAB3SURBVChTY9iefGyO+gasCCjFgCaEhrBLf33x/f6uZ0AGuvRc7Y37i8/8////3JQbQC5CekPwgRsrH/z48Aso9+bah8VmW6HSQBaQDxQFygFVANXB9YCkgeYA5YBmAk2GS0AQSBroCqBbkEXhCN1paAhvsCQfAwDynahhkocJpQAAAABJRU5ErkJggg==);
+            border: 0px;
+          }
+        }
+
+        .guide-step {
+          background-color: transparent;
+          border: 2px solid white;
+          box-shadow: 0 0 2px 0px rgba(0, 0, 0, 0.6);
+          width: 10px;
+          height: 10px;
+          transform: none;
+          border-radius: 50%;
+          display: inline-block;
+          top: 0px;
+          transform: translateX(-0.5px);
+          cursor: pointer;
+          transition: top 0.3s ease-out;
+          pointer-events: all;
+          border: 1px solid $border-color;
+          box-sizing: border-box;
+        }
+
+        .guide-unit {
+          position: absolute;
+          width: 80px;
+          top: 50%;
+          left: 15px;
+          transform: translateY(-50%);
+          opacity: 0;
+          transition: all 0.3s ease-out;
+          pointer-events: none;
+
+          > input[type="number"] {
+            display: none;
+            outline: none;
+            flex: 3;
+            width: 40px;
+            appearance: none;
+            border: 1px solid $border-color;
+            background-color: white;
+          }
+          &.percent > .percent {
+            display: inline-block;
+          }
+          &.px > .px {
+            display: inline-block;
+          }
+          &.em > .em {
+            display: inline-block;
+          }
+
+          select {
+            flex: 1;
+            appearance: none;
+            border: 1px solid $border-color;
+            background-color: white;
+            border-radius: 0px;
+            display: inline-block;
+            vertical-align: middle;
+            height: 18px;
+            outline: none;
+            margin-top: -2px;
+            padding-left: 2px;
+            box-sizing: border-box;
+          }
+        }
+
+        &.selected {
+          z-index: 1;
+          top: 30px;
+
+          .guide-step {
+            box-shadow: 0 0 20px 8px rgba(228, 255, 0, 0.8);
+          }
+
+          .guide-line {
+            height: 32px;
+          }
+
+          .guide-change,
+          .guide-unit {
+            pointer-events: all;
+          }
+
+          .guide-change,
+          .guide-step,
+          .guide-unit {
+            opacity: 1;
+          }
+        }
+      }
+    }
+
+    .current-percent {
+      position: absolute;
+      display: none;
+      font-size: 12px;
+      transform: translateX(-50%);
+    }
+  }
+}
