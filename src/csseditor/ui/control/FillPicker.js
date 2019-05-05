@@ -129,6 +129,7 @@ export default class FillPicker extends UIElement {
       default:
         // gradient
         let sample = {
+          refresh: data.refresh || false,
           type: data.type || "static-gradient",
           selectColorStepId: data.selectColorStepId,
           angle: data.angle || 0,
@@ -138,6 +139,7 @@ export default class FillPicker extends UIElement {
         if (data.colorsteps) {
           sample.colorsteps = data.colorsteps;
         }
+
         this.emit("showGradientEditor", sample, data.selectTab);
 
         break;

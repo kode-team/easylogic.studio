@@ -1,6 +1,15 @@
 import BaseProperty from "./BaseProperty";
 import { html } from "../../../../../util/functions/func";
-import { LOAD, CLICK, IF } from "../../../../../util/Event";
+import {
+  LOAD,
+  CLICK,
+  IF,
+  DROP,
+  DRAGSTART,
+  PREVENT,
+  SELF,
+  DRAGOVER
+} from "../../../../../util/Event";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
 import {
@@ -206,6 +215,41 @@ export default class FillProperty extends BaseProperty {
     this.viewFillPicker($preview, selectColorStepId);
   }
 
+  [DRAGSTART("$fillList .fill-item")](e) {
+    this.startIndex = +e.$delegateTarget.attr("data-index");
+    console.log(this.startIndex);
+  }
+
+  // drop 이벤트를 걸 때 dragover 가 같이 선언되어 있어야 한다.
+  [DRAGOVER("$fillList .fill-item") + PREVENT](e) {}
+
+  [DROP("$fillList .fill-item") + PREVENT](e) {
+    var targetIndex = +e.$delegateTarget.attr("data-index");
+    var current = editor.selection.current;
+    if (!current) return;
+
+    current.sortBackgroundImage(this.startIndex, targetIndex);
+
+    this.emit("refreshCanvas");
+
+    this.refresh();
+  }
+
+  [CLICK("$fillList .tools .remove")](e) {
+    var removeIndex = e.$delegateTarget.attr("data-index");
+    var current = editor.selection.current;
+    if (!current) return;
+    var currentBackgroundImage = current.backgroundImages[removeIndex];
+
+    if (currentBackgroundImage) {
+      current.removeBackgroundImage(removeIndex);
+
+      this.emit("refreshCanvas");
+
+      this.refresh();
+    }
+  }
+
   viewFillPicker($preview, selectColorStepId) {
     this.selectedIndex = +$preview.attr("data-index");
     this.current = editor.selection.current;
@@ -219,7 +263,8 @@ export default class FillProperty extends BaseProperty {
 
     this.emit("showFillPicker", {
       ...this.getFillData(this.currentBackgroundImage),
-      selectColorStepId
+      selectColorStepId,
+      refresh: true
     });
     this.viewBackgroundPropertyPopup();
   }
@@ -243,8 +288,10 @@ export default class FillProperty extends BaseProperty {
     const repeat = back.repeat;
     const size = back.size;
     const blendMode = back.blendMode;
+    const image = back.image;
 
     this.emit("showBackgroundPropertyPopup", {
+      image,
       position,
       x,
       y,

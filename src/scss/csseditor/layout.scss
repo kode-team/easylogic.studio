@@ -79,6 +79,7 @@ $display-grid-color: red;
       width: 240px;
       display: inline-block;
       border-left: 1px solid $border-color;
+      border-top: 1px solid $border-color;
       border-right: 1px solid $border-color;
       background-color: rgba(255, 255, 255, 0.5);
       z-index: 100;

@@ -97,6 +97,27 @@ export class ArtBoard extends GroupItem {
     return item;
   }
 
+  removeBackgroundImage(removeIndex) {
+    this.json.backgroundImages.splice(removeIndex, 1);
+  }
+
+  sortBackgroundImage(startIndex, targetIndex) {
+    console.log(startIndex, targetIndex);
+    var results = [];
+    var images = this.json.backgroundImages;
+    images.forEach((it, index) => {
+      if (targetIndex === index) {
+        results.push(images[startIndex]);
+        results.push(images[targetIndex]);
+      } else if (startIndex === index) {
+        // noop
+      } else {
+        results.push(images[index]);
+      }
+    });
+    this.json.backgroundImages = results;
+  }
+
   addFilter(item) {
     this.json.filters.push(item);
     return item;

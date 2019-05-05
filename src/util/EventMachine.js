@@ -68,7 +68,6 @@ const makeDefaultCallback = (context, eventObject, callback) => {
 const makeDelegateCallback = (context, eventObject, callback) => {
   return e => {
     const delegateTarget = hasDelegate(e, eventObject);
-
     if (delegateTarget) {
       // delegate target 이 있는 경우만 callback 실행
       e.$delegateTarget = new Dom(delegateTarget);
