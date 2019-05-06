@@ -58,6 +58,9 @@
     .colorsteps {
       display: none;
       text-align: left;
+      padding: 3px 0px;
+      height: 100%;
+      box-sizing: border-box;
 
       .step {
         border: 1px solid #333;

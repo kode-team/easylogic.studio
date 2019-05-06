@@ -3049,6 +3049,9 @@ html, body {
 .csseditor .property > .property-body .property-item.fill-list .fill-item .colorsteps {
   display: none;
   text-align: left;
+  padding: 3px 0px;
+  height: 100%;
+  box-sizing: border-box;
 }
 .csseditor .property > .property-body .property-item.fill-list .fill-item .colorsteps .step {
   border: 1px solid #333;
