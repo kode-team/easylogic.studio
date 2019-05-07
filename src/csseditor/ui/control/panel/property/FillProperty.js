@@ -477,6 +477,29 @@ export default class FillProperty extends BaseProperty {
     return this.refs[args.join("")];
   }
 
+  refreshBackgroundPropertyInfo(image, data) {
+    if (data.blendMode) {
+      var $element = this.getRef(`blendMode`, this.selectedIndex);
+      $element.text(data.blendMode);
+    } else if (data.width || data.height || data.size) {
+      var $element = this.getRef(`size`, this.selectedIndex);
+
+      switch (image.size) {
+        case "contain":
+        case "cover":
+          var text = image.size;
+          break;
+        default:
+          var text = `${image.width}/${image.height}`;
+          break;
+      }
+      $element.text(text);
+    } else if (data.repeat) {
+      var $element = this.getRef(`repeat`, this.selectedIndex);
+      $element.text(data.repeat);
+    }
+  }
+
   [EVENT("changeBackgroundPropertyPopup")](data) {
     if (this.currentBackgroundImage) {
       var image = this.currentBackgroundImage;
@@ -484,27 +507,7 @@ export default class FillProperty extends BaseProperty {
 
       if (this.current) {
         this.emit("refreshCanvas", this.current);
-
-        if (data.blendMode) {
-          var $element = this.getRef(`blendMode`, this.selectedIndex);
-          $element.text(data.blendMode);
-        } else if (data.width || data.height || data.size) {
-          var $element = this.getRef(`size`, this.selectedIndex);
-
-          switch (image.size) {
-            case "contain":
-            case "cover":
-              var text = image.size;
-              break;
-            default:
-              var text = `${image.width}/${image.height}`;
-              break;
-          }
-          $element.text(text);
-        } else if (data.repeat) {
-          var $element = this.getRef(`repeat`, this.selectedIndex);
-          $element.text(data.repeat);
-        }
+        this.refreshBackgroundPropertyInfo(image, data);
       }
     }
   }
