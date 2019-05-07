@@ -1,5 +1,5 @@
 import Github from "./Github";
-import ExportCodePen from "./ExportCodPen";
+import ExportCodePen from "./ExportCodePen";
 import ExportJSFiddle from "./ExportJSFiddle";
 
 export default {

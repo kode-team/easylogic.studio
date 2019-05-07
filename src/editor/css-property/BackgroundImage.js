@@ -2,6 +2,14 @@ import { Length, Position } from "../unit/Length";
 import { keyMap } from "../../util/functions/func";
 import { Property } from "../items/Property";
 import { StaticGradient } from "../image-resource/StaticGradient";
+import { URLImageResource } from "../image-resource/URLImageResource";
+import { LinearGradient } from "../image-resource/LinearGradient";
+import { RepeatingLinearGradient } from "../image-resource/RepeatingLinearGradient";
+import { RadialGradient } from "../image-resource/RadialGradient";
+import { RepeatingRadialGradient } from "../image-resource/RepeatingRadialGradient";
+import { ConicGradient } from "../image-resource/ConicGradient";
+import { RepeatingConicGradient } from "../image-resource/RepeatingConicGradient";
+import { Gradient } from "../image-resource/Gradient";
 
 const RepeatList = ["repeat", "no-repeat", "repeat-x", "repeat-y"];
 
@@ -17,6 +25,78 @@ export class BackgroundImage extends Property {
 
   addGradient(gradient) {
     return this.addImageResource(gradient);
+  }
+
+  setImageUrl(data) {
+    if (!data.images) return;
+    if (!data.images.length) return;
+    this.reset({ type: "image", image: this.createImage(data.images[0]) });
+  }
+
+  createImage(url) {
+    return new URLImageResource({ url });
+  }
+
+  setGradient(data) {
+    this.reset({
+      type: data.type,
+      image: this.createGradient(data, this.json.image)
+    });
+  }
+
+  createGradient(data, gradient) {
+    const colorsteps = data.colorsteps;
+
+    // linear, conic 은 angle 도 같이 설정한다.
+    const angle = data.angle;
+
+    // radial 은  radialType 도 같이 설정한다.
+    const radialType = data.radialType;
+    const radialPosition = data.radialPosition;
+
+    let json = gradient.toJSON();
+    delete json.itemType;
+    delete json.type;
+
+    switch (data.type) {
+      case "static-gradient":
+        return new StaticGradient({ ...json, colorsteps });
+        break;
+      case "linear-gradient":
+        return new LinearGradient({ ...json, colorsteps, angle });
+      case "repeating-linear-gradient":
+        return new RepeatingLinearGradient({ ...json, colorsteps, angle });
+      case "radial-gradient":
+        return new RadialGradient({
+          ...json,
+          colorsteps,
+          radialType,
+          radialPosition
+        });
+      case "repeating-radial-gradient":
+        return new RepeatingRadialGradient({
+          ...json,
+          colorsteps,
+          radialType,
+          radialPosition
+        });
+      case "conic-gradient":
+        return new ConicGradient({
+          ...json,
+          colorsteps,
+          angle,
+          radialPosition
+        });
+      case "repeating-conic-gradient":
+        return new RepeatingConicGradient({
+          ...json,
+          colorsteps,
+          angle,
+          radialPosition
+        });
+    }
+
+    return new Gradient();
   }
 
   getDefaultObject() {
@@ -60,10 +140,10 @@ export class BackgroundImage extends Property {
     return super.checkField(key, value);
   }
 
-  toBackgroundImageCSS() {
+  toBackgroundImageCSS(isExport = false) {
     if (!this.json.image) return {};
     return {
-      "background-image": this.json.image + ""
+      "background-image": this.json.image.toString(isExport)
     };
   }
 
@@ -109,9 +189,9 @@ export class BackgroundImage extends Property {
     };
   }
 
-  toCSS() {
+  toCSS(isExport = false) {
     var results = {
-      ...this.toBackgroundImageCSS(),
+      ...this.toBackgroundImageCSS(isExport),
       ...this.toBackgroundPositionCSS(),
       ...this.toBackgroundSizeCSS(),
       ...this.toBackgroundRepeatCSS(),

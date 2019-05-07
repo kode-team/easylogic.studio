@@ -22,10 +22,7 @@ export default class ExportCodePen extends UIElement {
       this.refs.$codepen.val(
         JSON.stringify({
           html: '<div id="sample"></div>',
-          css: `#sample { 
-              width: 300px;
-              height:300px; 
-              ${current.toString().replace(/;/gi, ";\n")}; } `
+          css: `#sample { width: 300px; height:300px; ${current.toExport()}; } `
         })
       );
     }

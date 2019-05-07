@@ -14,8 +14,8 @@ const tabs = [
   { type: "radial-gradient", title: "Radial Gradient" },
   { type: "repeating-radial-gradient", title: "Repeating Radial Gradient" },
   { type: "conic-gradient", title: "Conic Gradient" },
-  { type: "repeating-conic-gradient", title: "Repeating Conic Gradient" }
-  // { type: "image", title: "Image", icon: icon.image }
+  { type: "repeating-conic-gradient", title: "Repeating Conic Gradient" },
+  { type: "image", title: "Image", icon: icon.image }
 ];
 
 export default class FillPicker extends UIElement {
@@ -66,7 +66,7 @@ export default class FillPicker extends UIElement {
         </div>
         <div class="picker-tab-container" ref="$tabContainer">
           <div
-            class="picker-tab-content selected"
+            class="picker-tab-content"
             data-content-type="color"
             ref="$color"
           ></div>
@@ -109,8 +109,6 @@ export default class FillPicker extends UIElement {
   [CLICK("$tab .picker-tab-item")](e) {
     const type = e.$delegateTarget.attr("data-select-type");
 
-    e.$delegateTarget.onlyOneClass("selected");
-
     //TODO: picker 타입이 바뀌면 내부 속성도 같이 바뀌어야 한다.
     this.selectTabContent(type, {
       type,
@@ -121,9 +119,15 @@ export default class FillPicker extends UIElement {
   selectTabContent(type, data = {}) {
     this.selectedTab = type;
     this.refs.$tab.attr("data-value", type);
+    this.refs.$tabContainer.attr(
+      "data-value",
+      type === "image" ? "image" : "color"
+    );
     switch (type) {
       case "image": // image
-        this.refs.$imagePreview.attr("src", data.url);
+        if (data.url) {
+          this.refs.$imagePreview.attr("src", data.url);
+        }
         this.emit("hideGradientEditor");
         break;
       default:

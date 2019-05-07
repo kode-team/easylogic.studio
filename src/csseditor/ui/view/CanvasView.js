@@ -17,9 +17,7 @@ export default class CanvasView extends UIElement {
   template() {
     return `
             <div class='page-view'>
-                <div class="page-canvas" ref="$canvas">
-
-                </div>          
+                <div class="page-canvas" ref="$canvas"></div>          
             </div>
         `;
   }

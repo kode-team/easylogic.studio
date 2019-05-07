@@ -97,6 +97,15 @@ export class ArtBoard extends GroupItem {
     return item;
   }
 
+  createBackgroundImage(data = {}) {
+    return this.addBackgroundImage(
+      new BackgroundImage({
+        checked: true,
+        ...data
+      })
+    );
+  }
+
   removeBackgroundImage(removeIndex) {
     this.json.backgroundImages.splice(removeIndex, 1);
   }
@@ -151,10 +160,10 @@ export class ArtBoard extends GroupItem {
     return results;
   }
 
-  toPropertyCSS(list) {
+  toPropertyCSS(list, isExport = false) {
     var results = {};
     list.forEach(item => {
-      keyEach(item.toCSS(), (key, value) => {
+      keyEach(item.toCSS(isExport), (key, value) => {
         if (!results[key]) results[key] = [];
         results[key].push(value);
       });
@@ -163,8 +172,8 @@ export class ArtBoard extends GroupItem {
     return combineKeyArray(results);
   }
 
-  toBackgroundImageCSS() {
-    return this.toPropertyCSS(this.backgroundImages);
+  toBackgroundImageCSS(isExport = false) {
+    return this.toPropertyCSS(this.backgroundImages, isExport);
   }
 
   toFilterCSS() {
@@ -178,7 +187,11 @@ export class ArtBoard extends GroupItem {
     return CSS_TO_STRING(this.toCSS());
   }
 
-  toCSS() {
+  toExport() {
+    return CSS_TO_STRING(this.toCSS(true));
+  }
+
+  toCSS(isExport = false) {
     var json = this.json;
     var css = {
       "background-color": json.backgroundColor
@@ -187,7 +200,7 @@ export class ArtBoard extends GroupItem {
     return CSS_SORTING({
       ...css,
       ...this.toFilterCSS(),
-      ...this.toBackgroundImageCSS()
+      ...this.toBackgroundImageCSS(isExport)
     });
   }
 

@@ -26,10 +26,7 @@ export default class ExportJSFiddle extends MenuItem {
       this.refs.$description.val("https://gradient.easylogic.studio");
       this.refs.$html.val('<div id="sample"></div>');
       this.refs.$css.val(
-        `#sample { 
-            width:300px;
-            height:300px; 
-            ${current.toString().replace(/;/gi, ";\n")}; } `
+        `#sample { width:300px;height:300px; ${current.toExport()}; } `
       );
     }
 

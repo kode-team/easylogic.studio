@@ -6,6 +6,18 @@ const items = new Map();
 const linkedItems = new Map();
 const urlList = new Map();
 
+function blobToDataURL(blob) {
+  return new Promise(function(resolve) {
+    var fileReader = new FileReader();
+    fileReader.onload = function(e) {
+      // ATTENTION: to have the same result than the Flash object we need to split
+      // our result to keep only the Base64 part
+      resolve(e.target.result);
+    };
+    fileReader.readAsDataURL(blob);
+  });
+}
+
 function traverse(item, results, parentId) {
   var newItem = item.clone(true);
   editor.set(newItem.id, newItem);
@@ -269,21 +281,25 @@ export const editor = new class {
     return results;
   }
 
-  hasFile (url) {
+  hasFile(url) {
     return urlList.has(url);
   }
 
-  getFile (url) {
-    return urlList.get(url);
+  getFile(url) {
+    return urlList.get(url) || url;
   }
 
-  createUrl (file) {
+  createUrl(file) {
     var url = URL.createObjectURL(file);
-    urlList.set(url, file); 
-    return url; 
+
+    blobToDataURL(file).then(datauri => {
+      urlList.set(url, datauri);
+    });
+
+    return url;
   }
 
-  revokeUrl (url) {
+  revokeUrl(url) {
     if (urlList.delete(url)) {
       URL.revokeObjectURL(url);
     }

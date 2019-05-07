@@ -1962,7 +1962,7 @@ html, body {
 .csseditor .vertical-colorstep .gradient-steps .hue .drag-bar .guide-step {
   background-color: transparent;
   border: 2px solid white;
-  box-shadow: 0 0 2px 0px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0 2px 0px rgba(255, 255, 255, 0.6);
   width: 10px;
   height: 10px;
   -webkit-transform: none;
@@ -4263,31 +4263,79 @@ html, body {
   text-align: center;
   padding: 2px 5px;
 }
+.csseditor .fill-picker .picker-tab .picker-tab-list[data-value=static-gradient] .picker-tab-item[data-select-type=static-gradient] {
+  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
+}
+.csseditor .fill-picker .picker-tab .picker-tab-list[data-value=static-gradient] .picker-tab-item[data-select-type=static-gradient] .icon svg path {
+  fill: rgba(0, 0, 255, 0.5);
+}
+.csseditor .fill-picker .picker-tab .picker-tab-list[data-value=linear-gradient] .picker-tab-item[data-select-type=linear-gradient] {
+  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
+}
+.csseditor .fill-picker .picker-tab .picker-tab-list[data-value=linear-gradient] .picker-tab-item[data-select-type=linear-gradient] .icon svg path {
+  fill: rgba(0, 0, 255, 0.5);
+}
+.csseditor .fill-picker .picker-tab .picker-tab-list[data-value=repeating-linear-gradient] .picker-tab-item[data-select-type=repeating-linear-gradient] {
+  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
+}
+.csseditor .fill-picker .picker-tab .picker-tab-list[data-value=repeating-linear-gradient] .picker-tab-item[data-select-type=repeating-linear-gradient] .icon svg path {
+  fill: rgba(0, 0, 255, 0.5);
+}
+.csseditor .fill-picker .picker-tab .picker-tab-list[data-value=radial-gradient] .picker-tab-item[data-select-type=radial-gradient] {
+  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
+}
+.csseditor .fill-picker .picker-tab .picker-tab-list[data-value=radial-gradient] .picker-tab-item[data-select-type=radial-gradient] .icon svg path {
+  fill: rgba(0, 0, 255, 0.5);
+}
+.csseditor .fill-picker .picker-tab .picker-tab-list[data-value=repeating-radial-gradient] .picker-tab-item[data-select-type=repeating-radial-gradient] {
+  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
+}
+.csseditor .fill-picker .picker-tab .picker-tab-list[data-value=repeating-radial-gradient] .picker-tab-item[data-select-type=repeating-radial-gradient] .icon svg path {
+  fill: rgba(0, 0, 255, 0.5);
+}
+.csseditor .fill-picker .picker-tab .picker-tab-list[data-value=conic-gradient] .picker-tab-item[data-select-type=conic-gradient] {
+  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
+}
+.csseditor .fill-picker .picker-tab .picker-tab-list[data-value=conic-gradient] .picker-tab-item[data-select-type=conic-gradient] .icon svg path {
+  fill: rgba(0, 0, 255, 0.5);
+}
+.csseditor .fill-picker .picker-tab .picker-tab-list[data-value=repeating-conic-gradient] .picker-tab-item[data-select-type=repeating-conic-gradient] {
+  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
+}
+.csseditor .fill-picker .picker-tab .picker-tab-list[data-value=repeating-conic-gradient] .picker-tab-item[data-select-type=repeating-conic-gradient] .icon svg path {
+  fill: rgba(0, 0, 255, 0.5);
+}
+.csseditor .fill-picker .picker-tab .picker-tab-list[data-value=image] .picker-tab-item[data-select-type=image] {
+  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
+}
+.csseditor .fill-picker .picker-tab .picker-tab-list[data-value=image] .picker-tab-item[data-select-type=image] .icon svg path {
+  fill: rgba(0, 0, 255, 0.5);
+}
 .csseditor .fill-picker .picker-tab .picker-tab-list .picker-tab-item {
   display: inline-block;
   vertical-align: middle;
   height: 20px;
   width: 20px;
   box-sizing: border-box;
-  border: 1px solid #cccccc;
   cursor: pointer;
+  position: relative;
+  border-radius: 20%;
 }
 .csseditor .fill-picker .picker-tab .picker-tab-list .picker-tab-item .icon {
   pointer-events: none;
   border-radius: 100%;
   display: inline-block;
-  width: 100%;
-  height: 100%;
+  width: 90%;
+  height: 90%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
 }
 .csseditor .fill-picker .picker-tab .picker-tab-list .picker-tab-item .icon svg {
   width: 100%;
   height: 100%;
-}
-.csseditor .fill-picker .picker-tab .picker-tab-list .picker-tab-item.selected {
-  background-color: blue;
-}
-.csseditor .fill-picker .picker-tab .picker-tab-list .picker-tab-item.selected .icon svg path {
-  fill: white;
 }
 .csseditor .fill-picker .picker-tab .picker-tab-list .picker-tab-item[data-select-type=static-gradient] .icon {
   background-image: linear-gradient(to right, red, red);
@@ -4385,6 +4433,12 @@ html, body {
 }
 .csseditor .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue .drag-bar.selected .guide-change {
   opacity: 1;
+}
+.csseditor .fill-picker .picker-tab-container[data-value=color] .picker-tab-content[data-content-type=color] {
+  display: block;
+}
+.csseditor .fill-picker .picker-tab-container[data-value=image] .picker-tab-content[data-content-type=image] {
+  display: block;
 }
 .csseditor .fill-picker .picker-tab-container .picker-tab-content {
   display: none;

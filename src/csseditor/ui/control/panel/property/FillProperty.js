@@ -7,7 +7,6 @@ import {
   DROP,
   DRAGSTART,
   PREVENT,
-  SELF,
   DRAGOVER
 } from "../../../../../util/Event";
 import { editor } from "../../../../../editor/editor";
@@ -21,18 +20,8 @@ import {
 } from "../../../../types/event";
 import { EMPTY_STRING } from "../../../../../util/css/types";
 import icon from "../../../icon/icon";
-import { BackgroundImage } from "../../../../../editor/css-property/BackgroundImage";
-import { LinearGradient } from "../../../../../editor/image-resource/LinearGradient";
-import { RepeatingLinearGradient } from "../../../../../editor/image-resource/RepeatingLinearGradient";
-import { RadialGradient } from "../../../../../editor/image-resource/RadialGradient";
-import { RepeatingRadialGradient } from "../../../../../editor/image-resource/RepeatingRadialGradient";
-import { ConicGradient } from "../../../../../editor/image-resource/ConicGradient";
-import { RepeatingConicGradient } from "../../../../../editor/image-resource/RepeatingConicGradient";
-import { Gradient } from "../../../../../editor/image-resource/Gradient";
 import Dom from "../../../../../util/Dom";
 import { Position } from "../../../../../editor/unit/Length";
-import { URLImageResource } from "../../../../../editor/image-resource/URLImageResource";
-import { StaticGradient } from "../../../../../editor/image-resource/StaticGradient";
 
 const names = {
   image: "Image",
@@ -72,7 +61,7 @@ const types = {
 
 export default class FillProperty extends BaseProperty {
   getTitle() {
-    return "Gradients";
+    return "Background Images";
   }
   getBody() {
     return `<div class='property-item fill-list' ref='$fillList'></div>`;
@@ -163,11 +152,8 @@ export default class FillProperty extends BaseProperty {
     var current = editor.selection.current;
 
     if (current) {
-      current.addBackgroundImage(
-        new BackgroundImage({
-          checked: true
-        })
-      );
+      // ArtBoard, Layer 에 새로운 BackgroundImage 객체를 만들어보자.
+      current.createBackgroundImage();
       this.emit("refreshCanvas");
     }
 
@@ -226,7 +212,6 @@ export default class FillProperty extends BaseProperty {
 
   [DRAGSTART("$fillList .fill-item")](e) {
     this.startIndex = +e.$delegateTarget.attr("data-index");
-    console.log(this.startIndex);
   }
 
   // drop 이벤트를 걸 때 dragover 가 같이 선언되어 있어야 한다.
@@ -322,7 +307,7 @@ export default class FillProperty extends BaseProperty {
   viewChangeImage(data) {
     var backgroundImage = this.currentBackgroundImage;
     if (!backgroundImage) return;
-    var $el = this.refs[`miniView${this.selectedIndex}`];
+    var $el = this.getRef("miniView", this.selectedIndex);
     if ($el) {
       $el.css({
         ...backgroundImage.toCSS(),
@@ -330,22 +315,20 @@ export default class FillProperty extends BaseProperty {
       });
     }
 
-    var $el = this.refs[`fillTitle${this.selectedIndex}`];
+    var $el = this.getRef("fillTitle", this.selectedIndex);
     if ($el) {
       $el.html(names["image"]);
+    }
+
+    var $el = this.getRef("colorsteps", this.selectedIndex);
+    if ($el) {
+      $el.empty();
     }
   }
 
   setImage(data) {
-    if (!data.images) return;
-    if (!data.images.length) return;
     if (this.currentBackgroundImage) {
-      this.currentBackgroundImage.reset({
-        type: "image",
-        image: new URLImageResource({
-          url: data.images[0]
-        })
-      });
+      this.currentBackgroundImage.setImageUrl(data);
 
       this.viewChangeImage(data);
 
@@ -353,72 +336,6 @@ export default class FillProperty extends BaseProperty {
         this.emit("refreshCanvas", this.current);
       }
     }
-  }
-
-  createGradient(data, gradient) {
-    const colorsteps = data.colorsteps;
-
-    // linear, conic 은 angle 도 같이 설정한다.
-    const angle = data.angle;
-
-    // radial 은  radialType 도 같이 설정한다.
-    const radialType = data.radialType;
-    const radialPosition = data.radialPosition;
-
-    let json = gradient.toJSON();
-    delete json.itemType;
-    delete json.type;
-
-    switch (data.type) {
-      case "static-gradient":
-        return new StaticGradient({
-          ...json,
-          colorsteps
-        });
-        break;
-      case "linear-gradient":
-        return new LinearGradient({
-          ...json,
-          colorsteps,
-          angle
-        });
-      case "repeating-linear-gradient":
-        return new RepeatingLinearGradient({
-          ...json,
-          colorsteps,
-          angle
-        });
-      case "radial-gradient":
-        return new RadialGradient({
-          ...json,
-          colorsteps,
-          radialType,
-          radialPosition
-        });
-      case "repeating-radial-gradient":
-        return new RepeatingRadialGradient({
-          ...json,
-          colorsteps,
-          radialType,
-          radialPosition
-        });
-      case "conic-gradient":
-        return new ConicGradient({
-          ...json,
-          colorsteps,
-          angle,
-          radialPosition
-        });
-      case "repeating-conic-gradient":
-        return new RepeatingConicGradient({
-          ...json,
-          colorsteps,
-          angle,
-          radialPosition
-        });
-    }
-
-    return new Gradient();
   }
 
   [EVENT("selectFillPickerTab")](type, data) {
@@ -431,17 +348,17 @@ export default class FillProperty extends BaseProperty {
     var backgroundImage = this.currentBackgroundImage;
 
     if (!backgroundImage) return;
-    var $el = this.refs[`miniView${this.selectedIndex}`];
+    var $el = this.getRef("miniView", this.selectedIndex);
     if ($el) {
       $el.cssText(backgroundImage.toString());
     }
 
-    var $el = this.refs[`fillTitle${this.selectedIndex}`];
+    var $el = this.getRef("fillTitle", this.selectedIndex);
     if ($el) {
       $el.html(names[data.type]);
     }
 
-    var $el = this.refs[`colorsteps${this.selectedIndex}`];
+    var $el = this.getRef("colorsteps", this.selectedIndex);
     if ($el) {
       $el.html(this.getColorStepString(data.colorsteps));
     }
@@ -449,11 +366,7 @@ export default class FillProperty extends BaseProperty {
 
   setGradient(data) {
     if (this.currentBackgroundImage) {
-      this.currentBackgroundImage.reset({
-        type: data.type,
-        image: this.createGradient(data, this.currentBackgroundImage.image)
-      });
-
+      this.currentBackgroundImage.setGradient(data);
       this.viewChangeGradient(data);
 
       if (this.current) {
@@ -502,12 +415,11 @@ export default class FillProperty extends BaseProperty {
 
   [EVENT("changeBackgroundPropertyPopup")](data) {
     if (this.currentBackgroundImage) {
-      var image = this.currentBackgroundImage;
-      image.reset({ ...data });
+      this.currentBackgroundImage.reset({ ...data });
 
       if (this.current) {
         this.emit("refreshCanvas", this.current);
-        this.refreshBackgroundPropertyInfo(image, data);
+        this.refreshBackgroundPropertyInfo(this.currentBackgroundImage, data);
       }
     }
   }
