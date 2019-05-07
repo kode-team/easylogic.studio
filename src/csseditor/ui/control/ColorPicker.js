@@ -40,10 +40,10 @@ export default class ColorPicker extends UIElement {
   }
 
   changeColor(color) {
-    this.emit(this.changeEvent, color);
+    this.emit(this.changeEvent, color, this.changeData);
   }
 
-  [EVENT("showColorPicker")](data) {
+  [EVENT("showColorPicker")](config, data) {
     this.$el
       .css({
         top: Length.px(120),
@@ -51,8 +51,9 @@ export default class ColorPicker extends UIElement {
       })
       .show();
 
-    this.changeEvent = data.changeEvent;
-    this.colorPicker.initColorWithoutChangeEvent(data.color);
+    this.changeEvent = config.changeEvent;
+    this.changeData = data;
+    this.colorPicker.initColorWithoutChangeEvent(config.color);
 
     this.emit("hidePropertyPopup");
     this.emit("hidePicker");

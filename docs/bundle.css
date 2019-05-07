@@ -2061,8 +2061,8 @@ html, body {
 }
 .csseditor .page-view .page-canvas {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  width: 500px;
+  height: 400px;
   left: 50%;
   top: 50%;
   -webkit-transform: translateX(-50%) translateY(-50%);
@@ -4129,102 +4129,78 @@ html, body {
   vertical-align: middle;
 }
 .csseditor .filter-list {
-  display: flex !important;
-  flex-direction: column;
+  display: grid !important;
+  grid-template-columns: 1fr !important;
 }
 .csseditor .filter-list .filter-item {
-  flex: none;
-  padding: 5px 0px;
-}
-.csseditor .filter-list .filter-item .filter-item-input {
   display: block;
+}
+.csseditor .filter-list .filter-item .title {
+  display: grid;
+  grid-template-columns: 1fr 30px;
+}
+.csseditor .filter-list .filter-item .title label {
   font-size: 12px;
-  flex: 1 1 auto;
+  font-weight: bold;
+  padding: 2px 5px;
+  box-sizing: border-box;
 }
-.csseditor .filter-list .filter-item .filter-item-input > .filter {
-  display: block;
+.csseditor .filter-list .filter-item .title .filter-menu {
+  text-align: center;
 }
-.csseditor .filter-list .filter-item .filter-item-input > .filter > * {
-  display: inline-block;
-  vertical-align: middle;
-  text-align: middle;
-}
-.csseditor .filter-list .filter-item .filter-item-input > .filter .area {
-  width: 2px;
-  margin-left: 1px;
-  height: 20px;
-  vertical-align: middle;
-  display: inline-block;
+.csseditor .filter-list .filter-item .title .filter-menu button {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border: 0px;
   background-color: transparent;
-}
-.csseditor .filter-list .filter-item .filter-item-input > .filter .title {
-  width: 60px;
-  text-align: left;
-  font-size: 11px;
-}
-.csseditor .filter-list .filter-item .filter-item-input > .filter .title.long {
-  width: 120px;
-}
-.csseditor .filter-list .filter-item .filter-item-input > .filter .input-value {
-  width: 40px;
-}
-.csseditor .filter-list .filter-item .filter-item-input > .filter .input-value input[type=number] {
-  width: 100%;
-}
-.csseditor .filter-list .filter-item .filter-item-input > .filter .range {
-  width: 70px;
-}
-.csseditor .filter-list .filter-item .filter-item-input > .filter .range input[type=range] {
-  width: 100%;
-}
-.csseditor .filter-list .filter-item .filter-item-input > .filter .unit {
-  width: 24px;
-  padding: 2px;
-}
-.csseditor .filter-list .filter-item .filter-item-input > .items {
-  padding-left: 20px;
-}
-.csseditor .filter-list .filter-item .filter-item-input > .items > div {
-  padding-bottom: 3px;
-}
-.csseditor .filter-list .filter-item .filter-item-input > .items > div > * {
-  display: inline-block;
-  vertical-align: middle;
-  text-align: middle;
-}
-.csseditor .filter-list .filter-item .filter-item-input > .items .title {
-  width: 60px;
-  text-align: left;
-}
-.csseditor .filter-list .filter-item .filter-item-input > .items .title.long {
-  width: 120px;
-}
-.csseditor .filter-list .filter-item .filter-item-input > .items .input-value {
-  width: 40px;
-}
-.csseditor .filter-list .filter-item .filter-item-input > .items .input-value input[type=number] {
-  width: 100%;
-}
-.csseditor .filter-list .filter-item .filter-item-input > .items .range {
-  width: 70px;
-}
-.csseditor .filter-list .filter-item .filter-item-input > .items .range input[type=range] {
-  width: 100%;
-}
-.csseditor .filter-list .filter-item .filter-item-input > .items .unit {
-  width: 24px;
-  padding: 2px;
-}
-.csseditor .filter-list .filter-item .filter-item-input > .items .color .color-view {
-  display: inline-block;
   width: 20px;
   height: 20px;
-  vertical-align: middle;
-  pointer-events: all;
+  display: inline-block;
+  box-sizing: border-box;
+  padding: 0px;
   cursor: pointer;
 }
-.csseditor .filter-list .filter-item .filter-item-input > .items .color .color-text {
-  vertical-align: middle;
+.csseditor .filter-list .filter-item .title .filter-menu button svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor .filter-list .filter-item .filter-ui {
+  display: grid;
+  grid-template-columns: 3fr 1fr 1fr;
+  grid-column-gap: 1px;
+  height: 24px;
+}
+.csseditor .filter-list .filter-item .filter-ui.drop-shadow {
+  grid-template-columns: 50px 2fr 1fr 1fr;
+  grid-column-gap: 1px;
+}
+.csseditor .filter-list .filter-item .filter-ui.drop-shadow label {
+  font-size: 10px;
+}
+.csseditor .filter-list .filter-item .filter-ui.drop-shadow-color {
+  grid-template-columns: 50px 30px 1fr;
+  grid-column-gap: 2px;
+}
+.csseditor .filter-list .filter-item .filter-ui.drop-shadow-color label {
+  font-size: 10px;
+}
+.csseditor .filter-list .filter-item .filter-ui.drop-shadow-color .preview .mini-view {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+.csseditor .filter-list .filter-item .filter-ui input[type=number] {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border: 1px solid #cccccc;
+  box-sizing: border-box;
+  width: 100%;
+}
+.csseditor .filter-list .filter-item .filter-ui input[type=range] {
+  width: 90%;
 }
 .csseditor .export-view {
   position: absolute;

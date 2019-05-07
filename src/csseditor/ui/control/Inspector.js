@@ -8,6 +8,7 @@ export default class Inspector extends UIElement {
       <div class="feature-control">
         <BackgroundColorProperty />
         <FillProperty />
+        <FilterProperty />
       </div>
     `;
   }

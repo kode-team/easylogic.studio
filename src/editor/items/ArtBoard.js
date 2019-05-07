@@ -1,9 +1,9 @@
-import { EMPTY_STRING } from "../../util/css/types";
+import { EMPTY_STRING, WHITE_STRING } from "../../util/css/types";
 import { CSS_TO_STRING, CSS_SORTING } from "../../util/css/make";
 import { Length } from "../unit/Length";
 import { Display } from "../css-property/Display";
 import { GroupItem } from "./GroupItem";
-import { Filter } from "../css-property/Filter";
+import { Filter, BlurFilter } from "../css-property/Filter";
 import { BackdropFilter } from "../css-property/BackdropFilter";
 import { BackgroundImage } from "../css-property/BackgroundImage";
 import { keyEach, combineKeyArray } from "../../util/functions/func";
@@ -132,6 +132,22 @@ export class ArtBoard extends GroupItem {
     return item;
   }
 
+  makeFilter(type, opt = {}) {
+    return Filter.parse({ ...opt, type });
+  }
+
+  createFilter(type, opt = {}) {
+    return this.addFilter(this.makeFilter(type, opt));
+  }
+
+  removeFilter(removeIndex) {
+    this.json.filters.splice(removeIndex, 1);
+  }
+
+  updateFilter(index, data = {}) {
+    this.json.filters[+index].reset(data);
+  }
+
   addBackdropFilter(item) {
     this.json.backdropFilters.push(item);
     return item;
@@ -177,7 +193,9 @@ export class ArtBoard extends GroupItem {
   }
 
   toFilterCSS() {
-    return this.toPropertyCSS(this.filters);
+    return {
+      filter: this.json.filters.join(WHITE_STRING)
+    };
   }
   toBackdropFilterCSS() {
     return this.toPropertyCSS(this.backdropFilters);

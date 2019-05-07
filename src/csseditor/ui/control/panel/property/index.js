@@ -22,10 +22,12 @@
 // import LayoutProperty from "./LayoutProperty";
 import FillProperty from "./FillProperty";
 import BackgroundColorProperty from "./BackgroundColorProperty";
+import FilterProperty from "./FilterProperty";
 // import PositionProperty from "./PositionProperty";
 
 export default {
   // PositionProperty,
+  FilterProperty,
   BackgroundColorProperty,
   FillProperty
   // LayoutProperty,
