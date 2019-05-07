@@ -3006,11 +3006,23 @@ html, body {
 }
 .csseditor .property > .property-body .property-item.fill-list .fill-item {
   display: grid;
-  height: 24px;
-  grid-template-columns: 30px 50px 1fr 28px;
+  height: 35px;
+  grid-template-columns: 40px 1fr;
   grid-column-gap: 5px;
   margin-bottom: 5px;
   text-align: center;
+}
+.csseditor .property > .property-body .property-item.fill-list .fill-item .gradient-info {
+  display: grid;
+  grid-template-columns: 50px 1fr 28px;
+}
+.csseditor .property > .property-body .property-item.fill-list .fill-item .background-image-info {
+  display: grid;
+  grid-template-columns: 64px repeat(2, 1fr);
+  grid-column-gap: 0px;
+}
+.csseditor .property > .property-body .property-item.fill-list .fill-item .background-image-info > div {
+  overflow: hidden;
 }
 .csseditor .property > .property-body .property-item.fill-list .fill-item[data-fill-type=gradient] .colorcode,
 .csseditor .property > .property-body .property-item.fill-list .fill-item[data-fill-type=gradient] .opacity {

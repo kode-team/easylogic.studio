@@ -122,21 +122,30 @@ export default class FillProperty extends BaseProperty {
       const imageCSS = `background-image: ${image.toString()}; background-size: cover;`;
 
       return `
-            <div class='fill-item' data-index='${index}' ref="fillIndex${index}" draggable='true' data-fill-type="${backgroundType}" >
-                <div class='preview' data-index="${index}">
-                    <div class='mini-view' style="${imageCSS}" ref="miniView${index}"></div>
-                </div>
-                <div class='fill-title' ref="fillTitle${index}">${backgroundTypeName}</div>
-                <div class='colorsteps' ref="colorsteps${index}">
-                  ${this.getColorStepList(image)}
-                </div>
-                <div class='tools'>
-                  <button type="button" class='remove' data-index='${index}'>${
+      <div class='fill-item' data-index='${index}' ref="fillIndex${index}" draggable='true' data-fill-type="${backgroundType}" >
+          <div class='preview' data-index="${index}">
+              <div class='mini-view' style="${imageCSS}" ref="miniView${index}"></div>
+          </div>
+          <div class='fill-info'>
+            <div class='gradient-info'>
+              <div class='fill-title' ref="fillTitle${index}">${backgroundTypeName}</div>
+              <div class='colorsteps' ref="colorsteps${index}">
+                ${this.getColorStepList(image)}
+              </div>
+              <div class='tools'>
+                <button type="button" class='remove' data-index='${index}'>${
         icon.remove2
       }</button>
-                </div>
+              </div>
             </div>
-        `;
+            <div class='background-image-info'>
+              <div ref="size${index}">${it.width} / ${it.height}</div>
+              <div ref="repeat${index}">${it.repeat}</div>
+              <div ref="blendMode${index}">${it.blendMode}</div>
+            </div>
+          </div>
+      </div>
+      `;
     });
   }
 
@@ -416,22 +425,6 @@ export default class FillProperty extends BaseProperty {
     var typeName = types[type];
     var $fillItem = this.refs[`fillIndex${this.selectedIndex}`];
     $fillItem.attr("data-fill-type", typeName);
-
-    // TODO: 탭만 바뀌어도 현재 상태에서 Preview 가 바뀌어야 한다.
-
-    // switch(type) {
-    //   case'color':
-    //     this.currentBackgroundImage.type = 'color'
-    //     this.viewChangeColor(data);
-    //     break;
-    //   case 'image':
-    //     this.currentBackgroundImage.type = 'image'
-    //     this.viewChangeImage(data);
-    //     break;
-    //   default:
-    //     this.viewChangeGradient(data);
-    //     break;
-    // }
   }
 
   viewChangeGradient(data) {
@@ -480,12 +473,38 @@ export default class FillProperty extends BaseProperty {
     }
   }
 
+  getRef(...args) {
+    return this.refs[args.join("")];
+  }
+
   [EVENT("changeBackgroundPropertyPopup")](data) {
     if (this.currentBackgroundImage) {
-      this.currentBackgroundImage.reset({ ...data });
+      var image = this.currentBackgroundImage;
+      image.reset({ ...data });
 
       if (this.current) {
         this.emit("refreshCanvas", this.current);
+
+        if (data.blendMode) {
+          var $element = this.getRef(`blendMode`, this.selectedIndex);
+          $element.text(data.blendMode);
+        } else if (data.width || data.height || data.size) {
+          var $element = this.getRef(`size`, this.selectedIndex);
+
+          switch (image.size) {
+            case "contain":
+            case "cover":
+              var text = image.size;
+              break;
+            default:
+              var text = `${image.width}/${image.height}`;
+              break;
+          }
+          $element.text(text);
+        } else if (data.repeat) {
+          var $element = this.getRef(`repeat`, this.selectedIndex);
+          $element.text(data.repeat);
+        }
       }
     }
   }
