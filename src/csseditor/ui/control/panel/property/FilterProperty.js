@@ -79,8 +79,8 @@ export default class FilterProperty extends BaseProperty {
 
   makeDropShadowFilterTemplate(spec, filter, index) {
     return html`
-      <div class="filter-item" draggable="true">
-        <div class="title">
+      <div class="filter-item">
+        <div class="title" draggable="true" data-index="${index}">
           <label>Drop Shadow</label>
           <div class="filter-menu">
             <button type="button" class="del" data-index="${index}">
@@ -121,7 +121,7 @@ export default class FilterProperty extends BaseProperty {
                     min="${spec[key].min}"
                     max="${spec[key].max}"
                     step="${spec[key].step}"
-                    value="${filter[key].value}"
+                    value="${filter[key].value.toString()}"
                     ref="$range${key}"
                     data-key="${key}"
                     data-index="${index}"
@@ -134,7 +134,7 @@ export default class FilterProperty extends BaseProperty {
                     min="${spec[key].min}"
                     max="${spec[key].max}"
                     step="${spec[key].step}"
-                    value="${filter[key].value}"
+                    value="${filter[key].value.toString()}"
                     data-index="${index}"
                     ref="$number${key}"
                     data-key="${key}"
@@ -157,8 +157,8 @@ export default class FilterProperty extends BaseProperty {
 
   makeOneFilterTemplate(spec, filter, index) {
     return html`
-      <div class="filter-item" draggable="true" data-index="${index}">
-        <div class="title">
+      <div class="filter-item" data-index="${index}">
+        <div class="title" draggable="true" data-index="${index}">
           <label>${spec.title}</label>
           <div class="filter-menu">
             <button type="button" class="del" data-index="${index}">
@@ -173,7 +173,7 @@ export default class FilterProperty extends BaseProperty {
               min="${spec.min}"
               max="${spec.max}"
               step="${spec.step}"
-              value="${filter.value.value}"
+              value="${filter.value.value.toString()}"
               ref="$range${index}"
               data-index="${index}"
             />
@@ -185,7 +185,7 @@ export default class FilterProperty extends BaseProperty {
               min="${spec.min}"
               max="${spec.max}"
               step="${spec.step}"
-              value="${filter.value.value}"
+              value="${filter.value.value.toString()}"
               data-index="${index}"
               ref="$number${index}"
             />
@@ -230,7 +230,10 @@ export default class FilterProperty extends BaseProperty {
     });
   }
 
-  [DRAGSTART("$filterList .filter-item")](e) {
+  // filter-item 을 통째로  dragstart 를 걸어버리니깐
+  // 다른 ui 를 핸들링 할 수가 없어서
+  // title  에만 dragstart 거는 걸로 ok ?
+  [DRAGSTART("$filterList .filter-item .title")](e) {
     this.startIndex = +e.$delegateTarget.attr("data-index");
   }
 
