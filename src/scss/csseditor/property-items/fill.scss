@@ -17,6 +17,10 @@
     .gradient-info {
       display: grid;
       grid-template-columns: 50px 1fr 28px;
+
+      .tools {
+        text-align: right;
+      }
     }
 
     .background-image-info {

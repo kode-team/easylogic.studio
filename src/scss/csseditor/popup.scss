@@ -36,24 +36,19 @@
       }
 
       input[type="range"] {
-        width: 100px;
+        width: 80px;
         flex: none;
       }
 
       input[type="number"] {
-        width: 50px;
+        width: 40px;
         flex: none;
         border: 1px solid $border-color;
       }
 
       select {
-        width: 20px;
+        width: 40px;
         flex: none;
-        appearance: none;
-        border: 0px;
-        background-color: transparent;
-        border-radius: 0px;
-        margin-left: 5px;
         outline: none;
       }
     }
@@ -172,8 +167,11 @@
       }
     }
 
-    .blend-list select.full-size {
-      width: 100px;
+    .blend-list {
+      padding: 2px 0px;
+      select.full-size {
+        width: 100px;
+      }
     }
   }
 

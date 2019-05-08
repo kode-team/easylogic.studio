@@ -15,7 +15,7 @@ export default class BaseProperty extends UIElement {
                 ? EMPTY_STRING
                 : `
             <div class='property-title' ref="$title">
-                ${this.getTitle()}
+                <label>${this.getTitle()}</label>
                 <span class="tools">${this.getTools()}</span>
             </div>`
             }

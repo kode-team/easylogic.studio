@@ -1367,7 +1367,7 @@ html, body {
   position: absolute;
   left: 10px;
   top: 10px;
-  width: 240px;
+  width: 260px;
   display: inline-block;
   border-left: 1px solid #cccccc;
   border-top: 1px solid #cccccc;
@@ -2885,13 +2885,14 @@ html, body {
   font-size: 13px;
   font-weight: bold;
   text-shadow: 2px 2px 5px #cccccc;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
 .csseditor .property > .property-title > .tools {
-  display: inline-block;
-  position: absolute;
-  top: 3px;
-  bottom: 3px;
-  right: 10px;
+  text-align: right;
+}
+.csseditor .property > .property-title > .tools > * {
+  flex: none;
 }
 .csseditor .property > .property-title > .tools button {
   -webkit-appearance: none;
@@ -2906,6 +2907,7 @@ html, body {
   padding: 0px;
   cursor: pointer;
   outline: none;
+  vertical-align: middle;
 }
 .csseditor .property > .property-title > .tools button svg {
   width: 100%;
@@ -3022,6 +3024,9 @@ html, body {
 .csseditor .property > .property-body .property-item.fill-list .fill-item .gradient-info {
   display: grid;
   grid-template-columns: 50px 1fr 28px;
+}
+.csseditor .property > .property-body .property-item.fill-list .fill-item .gradient-info .tools {
+  text-align: right;
 }
 .csseditor .property > .property-body .property-item.fill-list .fill-item .background-image-info {
   display: grid;
@@ -4159,7 +4164,7 @@ html, body {
   box-sizing: border-box;
 }
 .csseditor .filter-list .filter-item .title .filter-menu {
-  text-align: center;
+  text-align: right;
 }
 .csseditor .filter-list .filter-item .title .filter-menu button {
   -webkit-appearance: none;
@@ -4167,8 +4172,8 @@ html, body {
           appearance: none;
   border: 0px;
   background-color: transparent;
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   display: inline-block;
   box-sizing: border-box;
   padding: 0px;
@@ -4527,24 +4532,17 @@ html, body {
   vertical-align: middle;
 }
 .csseditor .popup .popup-content .popup-item input[type=range] {
-  width: 100px;
+  width: 80px;
   flex: none;
 }
 .csseditor .popup .popup-content .popup-item input[type=number] {
-  width: 50px;
+  width: 40px;
   flex: none;
   border: 1px solid #cccccc;
 }
 .csseditor .popup .popup-content .popup-item select {
-  width: 20px;
+  width: 40px;
   flex: none;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  border: 0px;
-  background-color: transparent;
-  border-radius: 0px;
-  margin-left: 5px;
   outline: none;
 }
 .csseditor .popup.background-property-popup {
@@ -4618,6 +4616,9 @@ html, body {
 .csseditor .popup.background-property-popup .repeat-list[data-value=repeat] button[value=repeat], .csseditor .popup.background-property-popup .repeat-list[data-value=no-repeat] button[value=no-repeat], .csseditor .popup.background-property-popup .repeat-list[data-value=repeat-x] button[value=repeat-x], .csseditor .popup.background-property-popup .repeat-list[data-value=repeat-y] button[value=repeat-y], .csseditor .popup.background-property-popup .repeat-list[data-value=space] button[value=space], .csseditor .popup.background-property-popup .repeat-list[data-value=round] button[value=round] {
   background-color: #cccccc;
   box-shadow: 0 0 1px 0px black;
+}
+.csseditor .popup.background-property-popup .blend-list {
+  padding: 2px 0px;
 }
 .csseditor .popup.background-property-popup .blend-list select.full-size {
   width: 100px;

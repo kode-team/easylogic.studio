@@ -20,13 +20,16 @@
     font-size: 13px;
     font-weight: bold;
     text-shadow: 2px 2px 5px $border-color;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
 
     > .tools {
-      display: inline-block;
-      position: absolute;
-      top: 3px;
-      bottom: 3px;
-      right: 10px;
+      // display: flex;
+      text-align: right;
+
+      > * {
+        flex: none;
+      }
 
       button {
         appearance: none;
@@ -41,6 +44,7 @@
         padding: 0px;
         cursor: pointer;
         outline: none;
+        vertical-align: middle;
 
         svg {
           width: 100%;
