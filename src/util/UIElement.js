@@ -1,5 +1,4 @@
 import { uuid } from "./functions/math";
-import { ITEM_SET } from "../csseditor/types/ItemTypes";
 import { TOOL_SET } from "../csseditor/types/ToolTypes";
 import { keyEach } from "./functions/func";
 import EventMachine from "./EventMachine";
@@ -131,12 +130,6 @@ class UIElement extends EventMachine {
   trigger($1, $2, $3, $4, $5) {
     this.$store.source = this.source;
     this.$store.trigger($1, $2, $3, $4, $5);
-  }
-
-  commit(eventType, $1, $2, $3, $4, $5) {
-    console.warn("deprecated", this, "commit");
-    this.run(ITEM_SET, $1, $2, $3, $4, $5);
-    this.emit(eventType, $1, $2, $3, $4, $5);
   }
 }
 

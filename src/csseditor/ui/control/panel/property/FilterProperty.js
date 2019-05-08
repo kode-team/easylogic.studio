@@ -1,7 +1,16 @@
 import BaseProperty from "./BaseProperty";
 import { html } from "../../../../../util/functions/func";
 import icon from "../../../icon/icon";
-import { LOAD, CLICK, CHANGE, INPUT } from "../../../../../util/Event";
+import {
+  LOAD,
+  CLICK,
+  CHANGE,
+  INPUT,
+  DRAGSTART,
+  DRAGOVER,
+  DROP,
+  PREVENT
+} from "../../../../../util/Event";
 import { EMPTY_STRING } from "../../../../../util/css/types";
 import {
   BlurFilter,
@@ -70,7 +79,7 @@ export default class FilterProperty extends BaseProperty {
 
   makeDropShadowFilterTemplate(spec, filter, index) {
     return html`
-      <div class="filter-item">
+      <div class="filter-item" draggable="true">
         <div class="title">
           <label>Drop Shadow</label>
           <div class="filter-menu">
@@ -148,7 +157,7 @@ export default class FilterProperty extends BaseProperty {
 
   makeOneFilterTemplate(spec, filter, index) {
     return html`
-      <div class="filter-item">
+      <div class="filter-item" draggable="true" data-index="${index}">
         <div class="title">
           <label>${spec.title}</label>
           <div class="filter-menu">
@@ -221,6 +230,25 @@ export default class FilterProperty extends BaseProperty {
     });
   }
 
+  [DRAGSTART("$filterList .filter-item")](e) {
+    this.startIndex = +e.$delegateTarget.attr("data-index");
+  }
+
+  // drop 이벤트를 걸 때 dragover 가 같이 선언되어 있어야 한다.
+  [DRAGOVER("$filterList .filter-item") + PREVENT](e) {}
+
+  [DROP("$filterList .filter-item") + PREVENT](e) {
+    var targetIndex = +e.$delegateTarget.attr("data-index");
+    var current = editor.selection.current;
+    if (!current) return;
+
+    current.sortFilter(this.startIndex, targetIndex);
+
+    this.emit("refreshCanvas");
+
+    this.refresh();
+  }
+
   [CLICK("$add")]() {
     var filterType = this.refs.$filterSelect.value;
 
@@ -276,8 +304,6 @@ export default class FilterProperty extends BaseProperty {
       current.updateFilter(index, {
         [key]: color
       });
-
-      console.log(data);
 
       this.getRef("$miniView", index).css("background-color", color);
       this.getRef("$colorCode", index).val(color);

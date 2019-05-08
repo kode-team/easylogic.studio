@@ -1,5 +1,4 @@
 import BaseProperty from "./BaseProperty";
-import { html } from "../../../../../util/functions/func";
 import {
   LOAD,
   CLICK,
@@ -109,9 +108,14 @@ export default class FillProperty extends BaseProperty {
       var backgroundTypeName = names[image.type];
 
       const imageCSS = `background-image: ${image.toString()}; background-size: cover;`;
+      const selectedClass = it.selected ? "selected" : "";
+
+      if (it.selected) {
+        this.selectedIndex = index;
+      }
 
       return `
-      <div class='fill-item' data-index='${index}' ref="fillIndex${index}" draggable='true' data-fill-type="${backgroundType}" >
+      <div class='fill-item ${selectedClass}' data-index='${index}' ref="fillIndex${index}" draggable='true' data-fill-type="${backgroundType}" >
           <div class='preview' data-index="${index}">
               <div class='mini-view' style="${imageCSS}" ref="miniView${index}"></div>
           </div>
@@ -130,7 +134,9 @@ export default class FillProperty extends BaseProperty {
             <div class='background-image-info'>
               <div ref="size${index}">${it.width} / ${it.height}</div>
               <div ref="repeat${index}">${it.repeat}</div>
-              <div ref="blendMode${index}">${it.blendMode}</div>
+              <div class='blend-mode' ref="blendMode${index}">${
+        it.blendMode
+      }</div>
             </div>
           </div>
       </div>
@@ -244,16 +250,33 @@ export default class FillProperty extends BaseProperty {
     }
   }
 
+  // 객체를 선택하는 괜찮은 패턴이 어딘가에 있을 텐데......
+  // 언제까지 selected 를 설정해야하는가?
+  selectItem(selectedIndex, isSelected = true) {
+    if (isSelected) {
+      this.refs[`fillIndex${selectedIndex}`].addClass("selected");
+    } else {
+      this.refs[`fillIndex${selectedIndex}`].removeClass("selected");
+    }
+
+    if (this.current) {
+      this.current.backgroundImages[selectedIndex].selected = isSelected;
+    }
+  }
+
   viewFillPicker($preview, selectColorStepId) {
+    if (typeof this.selectedIndex === "number") {
+      this.selectItem(this.selectedIndex, false);
+    }
+
     this.selectedIndex = +$preview.attr("data-index");
+    this.selectItem(this.selectedIndex, true);
     this.current = editor.selection.current;
 
     if (!this.current) return;
     this.currentBackgroundImage = this.current.backgroundImages[
       this.selectedIndex
     ];
-
-    var rect = $preview.rect();
 
     this.emit("showFillPicker", {
       ...this.getFillData(this.currentBackgroundImage),

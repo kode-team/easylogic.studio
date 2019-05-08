@@ -1885,6 +1885,7 @@ html, body {
   border-radius: 14px;
   z-index: 0;
   cursor: copy;
+  box-sizing: border-box;
   background-color: transparent;
   background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
   background-size: 10px 10px;
@@ -1897,6 +1898,8 @@ html, body {
   border-radius: 14px;
   cursor: pointer;
   pointer-events: none;
+  box-sizing: border-box;
+  box-shadow: 0 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 .csseditor .vertical-colorstep .gradient-steps .hue > .step-list {
   position: relative;
@@ -1915,7 +1918,7 @@ html, body {
   border-radius: 50%;
   display: inline-block;
   left: 0px;
-  top: 13px;
+  top: 14px;
   -webkit-transform: translateX(-50%);
           transform: translateX(-50%);
   position: absolute;
@@ -3006,11 +3009,15 @@ html, body {
 }
 .csseditor .property > .property-body .property-item.fill-list .fill-item {
   display: grid;
-  height: 35px;
+  height: 40px;
   grid-template-columns: 40px 1fr;
   grid-column-gap: 5px;
   margin-bottom: 5px;
   text-align: center;
+  box-sizing: border-box;
+}
+.csseditor .property > .property-body .property-item.fill-list .fill-item.selected {
+  background-color: rgba(204, 204, 204, 0.5);
 }
 .csseditor .property > .property-body .property-item.fill-list .fill-item .gradient-info {
   display: grid;
@@ -3024,6 +3031,12 @@ html, body {
 .csseditor .property > .property-body .property-item.fill-list .fill-item .background-image-info > div {
   overflow: hidden;
 }
+.csseditor .property > .property-body .property-item.fill-list .fill-item .background-image-info .blend-mode {
+  border-radius: 3px;
+  background-color: green;
+  color: white;
+  font-weight: bold;
+}
 .csseditor .property > .property-body .property-item.fill-list .fill-item[data-fill-type=gradient] .colorcode,
 .csseditor .property > .property-body .property-item.fill-list .fill-item[data-fill-type=gradient] .opacity {
   display: none;
@@ -3034,6 +3047,7 @@ html, body {
 .csseditor .property > .property-body .property-item.fill-list .fill-item .preview {
   display: grid;
   cursor: pointer;
+  padding: 2px;
 }
 .csseditor .property > .property-body .property-item.fill-list .fill-item .preview .mini-view {
   display: block;

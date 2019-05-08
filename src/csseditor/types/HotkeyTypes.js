@@ -1,5 +1,0 @@
-export const HOTKEY_EXISTS = 'hotkey/exists'
-export const HOTKEY_RUN = 'hotkey/run'
-export const HOTKEY_GET = 'hotkey/get'
-export const HOTKEY_EXECUTE = 'hotkey/execute'
-export const HOTKEY_EXCLUDE = 'hotkey/exclude'

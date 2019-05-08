@@ -137,6 +137,7 @@
       border-radius: 14px;
       z-index: 0;
       cursor: copy;
+      box-sizing: border-box;
       @include transparent-background();
     }
 
@@ -147,6 +148,8 @@
       border-radius: 14px;
       cursor: pointer;
       pointer-events: none;
+      box-sizing: border-box;
+      box-shadow: 0 0 1px 0 rgba(255, 255, 255, 0.5);
 
       > .step-list {
         position: relative;
@@ -166,7 +169,7 @@
         border-radius: 50%;
         display: inline-block;
         left: 0px;
-        top: 13px;
+        top: 14px;
         transform: translateX(-50%);
         position: absolute;
         cursor: pointer;

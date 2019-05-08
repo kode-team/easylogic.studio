@@ -40,14 +40,14 @@ export default class BaseProperty extends UIElement {
     return EMPTY_STRING;
   }
 
-  [CLICK("$title")](e) {
-    var $dom = new Dom(e.target);
+  // [CLICK("$title")](e) {
+  //   var $dom = new Dom(e.target);
 
-    if ($dom.hasClass("property-title")) {
-      this.$el.toggleClass("show");
-      this.onToggleShow();
-    }
-  }
+  //   if ($dom.hasClass("property-title")) {
+  //     this.$el.toggleClass("show");
+  //     this.onToggleShow();
+  //   }
+  // }
 
   isPropertyShow() {
     return this.$el.hasClass("show");

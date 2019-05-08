@@ -4,11 +4,15 @@
 
   .fill-item {
     display: grid;
-    height: 35px;
+    height: 40px;
     grid-template-columns: 40px 1fr;
     grid-column-gap: 5px;
     margin-bottom: 5px;
     text-align: center;
+    box-sizing: border-box;
+    &.selected {
+      background-color: rgba($border-color, 0.5);
+    }
 
     .gradient-info {
       display: grid;
@@ -22,6 +26,13 @@
 
       > div {
         overflow: hidden;
+      }
+
+      .blend-mode {
+        border-radius: 3px;
+        background-color: green;
+        color: white;
+        font-weight: bold;
       }
     }
 
@@ -39,6 +50,7 @@
     .preview {
       display: grid;
       cursor: pointer;
+      padding: 2px;
 
       .mini-view {
         display: block;
