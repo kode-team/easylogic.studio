@@ -116,7 +116,7 @@ export default class FillProperty extends BaseProperty {
 
       return `
       <div class='fill-item ${selectedClass}' data-index='${index}' ref="fillIndex${index}" draggable='true' data-fill-type="${backgroundType}" >
-          <div class='preview' data-index="${index}">
+          <div class='preview' data-index="${index}" ref="preview${index}">
               <div class='mini-view' style="${imageCSS}" ref="miniView${index}"></div>
           </div>
           <div class='fill-info'>
@@ -228,11 +228,18 @@ export default class FillProperty extends BaseProperty {
     var current = editor.selection.current;
     if (!current) return;
 
+    this.selectItem(this.startIndex, true);
     current.sortBackgroundImage(this.startIndex, targetIndex);
 
     this.emit("refreshCanvas");
 
     this.refresh();
+
+    // startIndex 가 target 이랑 바뀌면
+    // startIndex 객체는 selected 르 true 로 설정하고
+    // refresh 될 때 selectedIndex 가 설정 되고
+    // viewFillPicker 를 호출할 $preview 가 필요하네 ?
+    this.viewFillPicker(this.getRef("preview", this.selectedIndex));
   }
 
   [CLICK("$fillList .tools .remove")](e) {
@@ -260,7 +267,9 @@ export default class FillProperty extends BaseProperty {
     }
 
     if (this.current) {
-      this.current.backgroundImages[selectedIndex].selected = isSelected;
+      this.current.backgroundImages.forEach((it, index) => {
+        it.selected = index === selectedIndex;
+      });
     }
   }
 

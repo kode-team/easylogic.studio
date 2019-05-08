@@ -110,20 +110,20 @@ export class ArtBoard extends GroupItem {
     this.json.backgroundImages.splice(removeIndex, 1);
   }
 
+  sortItem(arr, startIndex, targetIndex) {
+    arr.splice(
+      targetIndex + (startIndex < targetIndex ? -1 : 0),
+      0,
+      ...arr.splice(startIndex, 1)
+    );
+  }
+
   sortBackgroundImage(startIndex, targetIndex) {
-    var images = this.json.backgroundImages;
-    var source = images[startIndex];
-    images[startIndex] = null;
-    images.splice(targetIndex, 0, source);
-    this.json.backgroundImages = images.filter(it => !!it);
+    this.sortItem(this.json.backgroundImages, startIndex, targetIndex);
   }
 
   sortFilter(startIndex, targetIndex) {
-    var filters = this.json.filters;
-    var source = filters[startIndex];
-    filters[startIndex] = null;
-    filters.splice(targetIndex, 0, source);
-    this.json.filters = filters.filter(it => !!it);
+    this.sortItem(this.json.filters, startIndex, targetIndex);
   }
 
   addFilter(item) {
