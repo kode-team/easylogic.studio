@@ -22,6 +22,13 @@ export default class CanvasView extends UIElement {
         `;
   }
 
+  [EVENT("caculateSize")](targetEvent) {
+    var rect = this.refs.$canvas.rect();
+
+    var data = { width: Length.px(rect.width), height: Length.px(rect.height) };
+    this.emit(targetEvent, data);
+  }
+
   [EVENT("refreshCanvas")]() {
     var current = editor.selection.current;
     if (current) {

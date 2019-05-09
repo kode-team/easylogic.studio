@@ -1,6 +1,7 @@
 import { Item } from "../items/Item";
 import { Length } from "../unit/Length";
 import Color from "../../util/Color";
+import { EMPTY_STRING } from "../../util/css/types";
 export class ColorStep extends Item {
   getDefaultObject() {
     return super.getDefaultObject({
@@ -9,7 +10,8 @@ export class ColorStep extends Item {
       unit: "%",
       px: 0,
       em: 0,
-      color: "rgba(0, 0, 0, 0)"
+      color: "rgba(0, 0, 0, 0)",
+      prevColorStep: null
     });
   }
 
@@ -111,13 +113,21 @@ export class ColorStep extends Item {
     return Length.parse(this.json);
   }
 
+  getPrevLength() {
+    if (!this.json.prevColorStep) return EMPTY_STRING;
+
+    return this.json.prevColorStep.toLength();
+  }
+
   /**
    * get color string
    *
    * return {string}
    */
   toString() {
-    return `${this.json.color} ${this.toLength()}`;
+    return `${this.json.color} ${
+      this.json.cut ? this.getPrevLength() : EMPTY_STRING
+    } ${this.toLength()}`;
   }
 
   reset(json) {
@@ -192,13 +202,12 @@ export class ColorStep extends Item {
   }
 
   static select(colorsteps, selectedId = undefined) {
-
     if (selectedId) {
       colorsteps.forEach(step => {
         step.selected = step.id === selectedId;
       });
-    } 
-    
+    }
+
     const selected = colorsteps.filter(step => step.selected);
 
     if (!selected.length) {

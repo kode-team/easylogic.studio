@@ -18,7 +18,7 @@
         conic-gradient, repeating-conic-gradient, image
       {
         &[data-value="#{$imageType}"]
-          .picker-tab-item[data-select-type="#{$imageType}"] {
+          .picker-tab-item[data-selected-value="#{$imageType}"] {
           // background-color: rgba(0, 0, 255, 0.8);
           box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
           .icon {
@@ -59,23 +59,23 @@
           }
         }
 
-        &[data-select-type="static-gradient"] .icon {
+        &[data-selected-value="static-gradient"] .icon {
           background-image: linear-gradient(to right, red, red);
         }
 
-        &[data-select-type="linear-gradient"] .icon {
+        &[data-selected-value="linear-gradient"] .icon {
           background-image: linear-gradient(to right, black, gray);
         }
 
-        &[data-select-type="radial-gradient"] .icon {
+        &[data-selected-value="radial-gradient"] .icon {
           background-image: radial-gradient(closest-side, black, #ebf8e1, gray);
         }
 
-        &[data-select-type="conic-gradient"] .icon {
+        &[data-selected-value="conic-gradient"] .icon {
           background-image: conic-gradient(black, #ebf8e1);
         }
 
-        &[data-select-type="repeating-linear-gradient"] .icon {
+        &[data-selected-value="repeating-linear-gradient"] .icon {
           background-image: repeating-linear-gradient(
             45deg,
             #3f87a6,
@@ -84,7 +84,7 @@
           );
         }
 
-        &[data-select-type="repeating-radial-gradient"] .icon {
+        &[data-selected-value="repeating-radial-gradient"] .icon {
           background-image: repeating-radial-gradient(
             circle,
             #3f87a6,
@@ -93,7 +93,7 @@
           );
         }
 
-        &[data-select-type="repeating-conic-gradient"] .icon {
+        &[data-selected-value="repeating-conic-gradient"] .icon {
           background-image: repeating-conic-gradient(
             #3f87a6,
             #ebf8e1 5%,

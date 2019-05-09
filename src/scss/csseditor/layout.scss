@@ -48,6 +48,7 @@ $display-grid-color: red;
     display: flex;
     position: relative;
     background-color: rgba(0, 0, 0, 1);
+    z-index: 1;
 
     .page-tab-menu {
       flex: 1 1 auto;
@@ -106,7 +107,7 @@ $display-grid-color: red;
   }
 }
 
-@import "./range-ui.scss";
+// @import "./range-ui.scss";
 @import "./tab-ui.scss";
 
 @import "./element/unit-range.scss";
@@ -125,6 +126,8 @@ $display-grid-color: red;
 
 @import "./property-view.scss";
 @import "./filters.scss";
+@import "./border.scss";
+@import "./size.scss";
 @import "./export-view.scss";
 
 @import "./fill-picker.scss";

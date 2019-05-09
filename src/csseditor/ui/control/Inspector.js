@@ -6,6 +6,9 @@ export default class Inspector extends UIElement {
   template() {
     return html`
       <div class="feature-control">
+        <SizeProperty />
+        <BorderProperty />
+        <BorderRadiusProperty />
         <BackgroundColorProperty />
         <FillProperty />
         <FilterProperty />

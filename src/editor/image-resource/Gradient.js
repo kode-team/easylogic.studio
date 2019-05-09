@@ -185,22 +185,9 @@ export class Gradient extends ImageResource {
     var colorsteps = this.colorsteps;
     if (!colorsteps.length) return EMPTY_STRING;
 
-    var newColors = [];
-    colorsteps.forEach((c, index) => {
-      if (c.cut && index > 0) {
-        var prevItem = colorsteps[index - 1];
-        newColors.push(
-          new ColorStep({
-            color: c.color,
-            unit: prevItem.unit,
-            percent: prevItem.percent,
-            px: prevItem.px,
-            em: prevItem.em
-          })
-        );
-      }
-
-      newColors.push(c);
+    var newColors = colorsteps.map((c, index) => {
+      c.prevColorStep = c.cut && index > 0 ? colorsteps[index - 1] : null;
+      return c;
     });
 
     return newColors.map(f => `${f}`).join(",");

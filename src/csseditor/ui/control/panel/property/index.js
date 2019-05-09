@@ -23,10 +23,16 @@
 import FillProperty from "./FillProperty";
 import BackgroundColorProperty from "./BackgroundColorProperty";
 import FilterProperty from "./FilterProperty";
+import BorderProperty from "./BorderProperty";
+import BorderRadiusProperty from "./BorderRadiusProperty";
+import SizeProperty from "./SizeProperty";
 // import PositionProperty from "./PositionProperty";
 
 export default {
   // PositionProperty,
+  SizeProperty,
+  BorderRadiusProperty,
+  BorderProperty,
   FilterProperty,
   BackgroundColorProperty,
   FillProperty

@@ -16,10 +16,14 @@ Position.RIGHT = "right";
 Position.LEFT = "left";
 Position.BOTTOM = "bottom";
 
-const CSS_UNIT_REG = /([\d.]+)(px|pt|fr|em|deg|vh|vw|%)/gi;
+const CSS_UNIT_REG = /([\d.]+)(px|pt|fr|r?em|deg|vh|vw|%)/gi;
 
 export class Length {
   constructor(value = "", unit = "") {
+    if (unit !== "") {
+      value = +value;
+    }
+
     this.value = value;
     this.unit = unit;
   }

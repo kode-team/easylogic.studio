@@ -341,6 +341,16 @@ export default class EventMachine {
     return {};
   }
 
+  // ref 에 있는 객체를 좀 더 편하게 가지고 오고자 만들었다.
+  // 예를 들어 ref='$xxxRadius' 라고 했을 때
+  // this.refs[`$${type}Radius`] 처럼 이름을 재 구성하는 방식을 써야 하는데
+  // this.getRef('$', type, 'Radius') 형태로 끝낼 수 있다.
+  // 변수적용하기 좀 더 편해진다.
+  // 사용은 각자가 알아서 ㅋ
+  getRef(...args) {
+    return this.refs[args.join(EMPTY_STRING)];
+  }
+
   parseTemplate(html, isLoad) {
     if (isArray(html)) {
       html = html.join(EMPTY_STRING);

@@ -1,0 +1,235 @@
+@mixin cross {
+  &:before {
+    content: "";
+    display: inline-block;
+    position: absolute;
+    left: -2px;
+    right: -2px;
+    top: 50%;
+    height: 4px;
+    transform: translateY(-50%);
+    background-color: #e6e6e6;
+  }
+
+  &:after {
+    content: "";
+    display: inline-block;
+    position: absolute;
+    top: -2px;
+    bottom: -2px;
+    left: 50%;
+    width: 4px;
+    transform: translateX(-50%);
+    background-color: #e6e6e6;
+  }
+}
+
+.border-item {
+  grid-template-columns: 1fr 3fr;
+  grid-column-gap: 10px;
+  height: 70px;
+
+  .border-direction {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    grid-column-gap: 2px;
+    grid-row-gap: 2px;
+    place-self: top;
+    width: 60px;
+    height: 60px;
+
+    @each $borderType in all, top, right, bottom, left {
+      &[data-selected-value="#{$borderType}"] {
+        button[data-value="#{$borderType}"] {
+          opacity: 1;
+        }
+      }
+    }
+
+    button {
+      padding: 0px;
+      appearance: none;
+      border: 2px solid $border-color;
+      box-sizing: border-box;
+      cursor: pointer;
+      opacity: 0.4;
+      outline: none;
+
+      &[has-value="true"] {
+        border-color: rgb(0, 162, 255);
+      }
+    }
+
+    button[data-value="all"] {
+      grid-column: 2 / 3;
+      grid-row: 2 / 3;
+
+      border: 2px solid black;
+    }
+
+    button[data-value="top"] {
+      grid-column: 2 / 3;
+      grid-row: 1 / 2;
+
+      border-top: 2px solid black;
+    }
+
+    button[data-value="right"] {
+      grid-column: 3 / 4;
+      grid-row: 2 / 3;
+
+      border-right: 2px solid black;
+    }
+
+    button[data-value="bottom"] {
+      grid-column: 2 / 3;
+      grid-row: 3 / 4;
+
+      border-bottom: 2px solid black;
+    }
+
+    button[data-value="left"] {
+      grid-column: 1 / 2;
+      grid-row: 2 / 3;
+
+      border-left: 2px solid black;
+    }
+  }
+  .input-group {
+    display: grid;
+    grid-template-rows: repeat(3, 1fr);
+  }
+  .input-field {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    grid-column-gap: 4px;
+    vertical-align: middle;
+
+    input {
+      width: 100%;
+      vertical-align: middle;
+    }
+
+    .input-ui {
+      vertical-align: middle;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+
+      input {
+        width: 100%;
+      }
+
+      .color {
+        background-color: white;
+        height: 20px;
+        width: 40px;
+      }
+    }
+  }
+}
+
+.border-radius-item {
+  grid-template-columns: 0.6fr 3fr !important;
+  .radius-selector {
+    display: flex;
+    grid-template-columns: 1fr;
+
+    @each $borderRadiusType in all, partitial {
+      &[data-selected-value="#{$borderRadiusType}"] {
+        button[data-value="#{$borderRadiusType}"] {
+          //   background-color: white;
+          border-color: black;
+        }
+      }
+    }
+
+    button {
+      flex: none;
+      appearance: none;
+      background-color: transparent;
+      box-sizing: border-box;
+      width: 16px;
+      height: 18px;
+      display: inline-block;
+      vertical-align: middle;
+      border-radius: 5px;
+      border: 2px solid $border-color;
+      margin-right: 2px;
+      cursor: pointer;
+      outline: none;
+
+      &[data-value="partitial"] {
+        position: relative;
+
+        @include cross;
+      }
+    }
+  }
+
+  .radius-value {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-column-gap: 3px;
+
+    input,
+    select {
+      width: 100%;
+      outline: none;
+    }
+  }
+
+  .radius-setting-box {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    grid-column-gap: 4px;
+    grid-row-gap: 2px;
+
+    > div {
+      display: grid;
+      grid-template-columns: 20px 1fr 1.4fr;
+      text-align: center;
+
+      > * {
+        vertical-align: middle;
+      }
+
+      input,
+      select {
+        width: 100%;
+        outline: none;
+      }
+
+      label {
+        width: 16px;
+        height: 16px;
+        display: inline-block;
+        vertical-align: middle;
+        border: 2px solid #333;
+        margin-right: 2px;
+        cursor: pointer;
+        outline: none;
+        @include cross;
+        position: relative;
+      }
+
+      label.topLeft {
+        border-top-left-radius: 5px;
+      }
+
+      label.topRight {
+        border-top-right-radius: 5px;
+      }
+
+      label.bottomLeft {
+        border-bottom-left-radius: 5px;
+      }
+
+      label.bottomRight {
+        border-bottom-right-radius: 5px;
+      }
+    }
+  }
+}

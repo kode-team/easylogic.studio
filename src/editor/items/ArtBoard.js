@@ -6,7 +6,18 @@ import { GroupItem } from "./GroupItem";
 import { Filter, BlurFilter } from "../css-property/Filter";
 import { BackdropFilter } from "../css-property/BackdropFilter";
 import { BackgroundImage } from "../css-property/BackgroundImage";
-import { keyEach, combineKeyArray } from "../../util/functions/func";
+import {
+  keyEach,
+  combineKeyArray,
+  isUndefined
+} from "../../util/functions/func";
+
+const borderRadiusCssKey = {
+  topLeft: "top-left",
+  topRight: "top-right",
+  bottomLeft: "bottom-left",
+  bottomRight: "bottom-right"
+};
 
 export class ArtBoard extends GroupItem {
   getDefaultObject(obj = {}) {
@@ -19,6 +30,8 @@ export class ArtBoard extends GroupItem {
       x: Length.px(100),
       y: Length.px(100),
       filters: [],
+      border: {},
+      borderRadius: {},
       backdropFilters: [],
       backgroundImages: [],
       perspectiveOriginPositionX: Length.percent(0),
@@ -152,6 +165,47 @@ export class ArtBoard extends GroupItem {
     return item;
   }
 
+  setSize(data) {
+    this.reset(data);
+  }
+
+  // 현재 선택된 border 의 속성을 지정한다.
+  // type 에 따라 다른데
+  // type is all 일 때, 나머지 속성 필드 값은 모두 지운다.
+  // type is not all 일 때는 해당 속성만 설정하고 all 값이 존재하면 지운다.
+  setBorder(type, data = undefined) {
+    var border = this.json.border;
+    if (type === "all") {
+      if (data) {
+        this.json.border = { all: data };
+      } else {
+        ["top", "right", "bottom", "left"].forEach(type => {
+          delete this.json.border[type];
+        });
+      }
+    } else {
+      if (border.all && isUndefined(data)) {
+        var newObject = { ...border.all };
+        border.top = { ...newObject };
+        border.bottom = { ...newObject };
+        border.left = { ...newObject };
+        border.right = { ...newObject };
+      }
+
+      if (border.all) {
+        delete border.all;
+      }
+
+      if (data) {
+        this.json.border[type] = data;
+      }
+    }
+  }
+
+  setBorderRadius(type, data) {
+    this.json.borderRadius = data;
+  }
+
   traverse(item, results, hasLayoutItem) {
     // var parentItemType = item.parent().itemType;
     if (item.isAttribute()) return;
@@ -191,6 +245,60 @@ export class ArtBoard extends GroupItem {
     return this.toPropertyCSS(this.backgroundImages, isExport);
   }
 
+  getBorderString(data) {
+    return `${data.width} ${data.style} ${data.color}`;
+  }
+
+  toSizeCSS() {
+    return {
+      width: this.json.width,
+      height: this.json.height
+    };
+  }
+
+  toBorderCSS() {
+    var results = {};
+    var border = this.json.border;
+
+    if (border.all) {
+      results = {
+        border: this.getBorderString(border.all)
+      };
+    } else {
+      keyEach(border, (type, data) => {
+        results[`border-${type}`] = this.getBorderString(data);
+      });
+    }
+
+    return results;
+  }
+
+  // 0 데이타는 화면에 표시하지 않는다.
+  toBorderRadiusCSS() {
+    var results = {};
+    var borderRadius = this.json.borderRadius;
+
+    if (borderRadius.all) {
+      if (borderRadius.all.value === 0) {
+        // noop
+      } else {
+        results = {
+          "border-radius": borderRadius.all
+        };
+      }
+    } else {
+      keyEach(borderRadius, (type, data) => {
+        if (data.value === 0) {
+          // noop
+        } else {
+          results[`border-${borderRadiusCssKey[type]}-radius`] = data;
+        }
+      });
+    }
+
+    return results;
+  }
+
   toFilterCSS() {
     return {
       filter: this.json.filters.join(WHITE_STRING)
@@ -216,6 +324,9 @@ export class ArtBoard extends GroupItem {
 
     return CSS_SORTING({
       ...css,
+      ...this.toSizeCSS(),
+      ...this.toBorderCSS(),
+      ...this.toBorderRadiusCSS(),
       ...this.toFilterCSS(),
       ...this.toBackgroundImageCSS(isExport)
     });

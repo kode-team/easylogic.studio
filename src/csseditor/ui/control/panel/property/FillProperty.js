@@ -397,6 +397,7 @@ export default class FillProperty extends BaseProperty {
   }
 
   setGradient(data) {
+    // console.log(this.currentBackgroundImage, data);
     if (this.currentBackgroundImage) {
       this.currentBackgroundImage.setGradient(data);
       this.viewChangeGradient(data);

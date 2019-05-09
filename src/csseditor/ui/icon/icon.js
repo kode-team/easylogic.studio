@@ -19,9 +19,10 @@ import setting from "./setting";
 import remove2 from "./remove2";
 import repeat from "./repeat";
 import screen from "./screen";
-
+import arrowRight from "./arrowRight";
 
 export default {
+  arrowRight,
   screen,
   repeat,
   remove2,

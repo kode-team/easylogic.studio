@@ -56,7 +56,7 @@ export default class FillPicker extends UIElement {
                     class='picker-tab-item ${
                       it.selected ? "selected" : EMPTY_STRING
                     }' 
-                    data-select-type='${it.type}'
+                    data-selected-value='${it.type}'
                     title='${it.title}'
                 >
                     <div class='icon'>${it.icon || EMPTY_STRING}</div>
@@ -107,7 +107,7 @@ export default class FillPicker extends UIElement {
   }
 
   [CLICK("$tab .picker-tab-item")](e) {
-    const type = e.$delegateTarget.attr("data-select-type");
+    const type = e.$delegateTarget.attr("data-selected-value");
 
     //TODO: picker 타입이 바뀌면 내부 속성도 같이 바뀌어야 한다.
     this.selectTabContent(type, {

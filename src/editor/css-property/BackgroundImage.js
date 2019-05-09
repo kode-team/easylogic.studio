@@ -42,6 +42,8 @@ export class BackgroundImage extends Property {
       type: data.type,
       image: this.createGradient(data, this.json.image)
     });
+
+    // console.log(this.toCSS());
   }
 
   createGradient(data, gradient) {

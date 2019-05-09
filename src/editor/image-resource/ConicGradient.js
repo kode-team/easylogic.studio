@@ -53,28 +53,21 @@ export class ConicGradient extends Gradient {
       return a.percent > b.percent ? 1 : -1;
     });
 
-    var newColors = [];
-    colorsteps.forEach((c, index) => {
-      if (c.cut && index > 0) {
-        var prevItem = colorsteps[index - 1];
-        newColors.push(
-          new ColorStep({
-            color: c.color,
-            unit: prevItem.unit,
-            percent: prevItem.percent,
-            px: prevItem.px,
-            em: prevItem.em
-          })
-        );
-      }
-
-      newColors.push(c);
+    var newColors = colorsteps.map((c, index) => {
+      c.prevColorStep = c.cut && index > 0 ? colorsteps[index - 1] : null;
+      return c;
     });
 
     return newColors
       .map(f => {
         var deg = Math.floor(f.percent * 3.6);
-        return `${f.color} ${deg}deg`;
+        var prev = EMPTY_STRING;
+
+        if (f.cut && f.prevColorStep) {
+          var prevDeg = Math.floor(f.prevColorStep.percent * 3.6);
+          prev = `${prevDeg}deg`;
+        }
+        return `${f.color} ${prev} ${deg}deg`;
       })
       .join(",");
   }

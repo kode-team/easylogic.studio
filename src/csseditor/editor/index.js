@@ -20,14 +20,15 @@ export default class CSSEditor extends UIElement {
                     <div class="page-tab-menu"><ToolMenu /></div>
                 </div>
                 <div class="layout-middle">
+                          
+                    <div class="layout-right">
+                        <Inspector />
+                    </div>
                     <div class="layout-body">
                         <!-- LayerToolbar /-->
                         <CanvasView />
                         <VerticalColorStep />
-                    </div>                
-                    <div class="layout-right">
-                        <Inspector />
-                    </div>
+                    </div>                              
                 </div>
                 <FillPicker />
                 <ColorPicker  />
