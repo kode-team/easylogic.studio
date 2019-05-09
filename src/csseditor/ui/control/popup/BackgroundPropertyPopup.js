@@ -1,9 +1,9 @@
-import UIElement, { EVENT } from "../../../util/UIElement";
-import UnitRange from "./panel/items/element/UnitRange";
-import { CLICK, CHANGE } from "../../../util/Event";
-import { Length } from "../../../editor/unit/Length";
-import { html } from "../../../util/functions/func";
-import { CHANGE_EDITOR, CHANGE_SELECTION } from "../../types/event";
+import UIElement, { EVENT } from "../../../../util/UIElement";
+import UnitRange from "../panel/items/element/UnitRange";
+import { CLICK, CHANGE } from "../../../../util/Event";
+import { Length } from "../../../../editor/unit/Length";
+import { html } from "../../../../util/functions/func";
+import { CHANGE_EDITOR, CHANGE_SELECTION } from "../../../types/event";
 
 const blend_list = [
   "normal",

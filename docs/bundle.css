@@ -2979,7 +2979,7 @@ html, body {
 .csseditor .property > .property-body .property-item.background-color .fill-item {
   display: grid;
   height: 24px;
-  grid-template-columns: 30px auto;
+  grid-template-columns: 24px auto;
   grid-column-gap: 5px;
   margin-bottom: 5px;
   text-align: center;
@@ -2988,12 +2988,12 @@ html, body {
   display: inline-block;
   height: 100%;
   box-sizing: border-box;
-  border: 1px solid #cccccc;
   cursor: pointer;
 }
 .csseditor .property > .property-body .property-item.background-color .fill-item .preview .mini-view {
   width: 100%;
   height: 100%;
+  border-radius: 100%;
 }
 .csseditor .property > .property-body .property-item.background-color .fill-item .color-code input {
   width: 100%;
@@ -3061,6 +3061,7 @@ html, body {
   border: 1px solid #cccccc;
   box-sizing: border-box;
   pointer-events: none;
+  border-radius: 100%;
 }
 .csseditor .property > .property-body .property-item.fill-list .fill-item .fill-title {
   pointer-events: none;
@@ -4209,6 +4210,7 @@ html, body {
   width: 100%;
   height: 100%;
   cursor: pointer;
+  border-radius: 100%;
 }
 .csseditor .filter-list .filter-item .filter-ui input[type=number] {
   -webkit-appearance: none;
@@ -4316,7 +4318,9 @@ html, body {
 .csseditor .border-item .input-field .input-ui .color {
   background-color: white;
   height: 20px;
-  width: 40px;
+  width: 20px;
+  border-radius: 100%;
+  cursor: pointer;
 }
 .csseditor .border-radius-item {
   grid-template-columns: 0.6fr 3fr !important;
@@ -4485,6 +4489,67 @@ html, body {
   vertical-align: middle;
   width: 16px;
   height: 16px;
+}
+.csseditor .box-shadow-item {
+  grid-template-columns: 1fr !important;
+}
+.csseditor .box-shadow-item .shadow-item {
+  height: 20px;
+  display: grid;
+  grid-template-columns: 20px 20px 1fr 1fr 1fr 1fr 20px;
+  grid-column-gap: 5px;
+  text-align: center;
+  margin-bottom: 5px;
+}
+.csseditor .box-shadow-item .shadow-item.desc {
+  color: #333333;
+}
+.csseditor .box-shadow-item .shadow-item.desc .color {
+  visibility: hidden;
+}
+.csseditor .box-shadow-item .shadow-item .color {
+  cursor: pointer;
+  height: 20px;
+  border: 1px solid #cccccc;
+  border-radius: 100%;
+}
+.csseditor .box-shadow-item .shadow-item .inset svg {
+  width: 16px;
+  height: 16px;
+}
+.csseditor .box-shadow-item .shadow-item .inset svg path {
+  fill: #cccccc;
+}
+.csseditor .box-shadow-item .shadow-item .inset[data-value=true] svg path {
+  fill: black;
+}
+.csseditor .box-shadow-item .shadow-item .offset-x,
+.csseditor .box-shadow-item .shadow-item .offset-y,
+.csseditor .box-shadow-item .shadow-item .blur-radius,
+.csseditor .box-shadow-item .shadow-item .spread-radius,
+.csseditor .box-shadow-item .shadow-item .inset {
+  box-sizing: border-box;
+  padding: 4px 0px;
+}
+.csseditor .box-shadow-item .shadow-item .tools {
+  text-align: right;
+}
+.csseditor .box-shadow-item .shadow-item .tools button {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  border: 0px;
+  padding: 0px;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  cursor: pointer;
+  outline: none;
+}
+.csseditor .box-shadow-item .shadow-item .tools button svg {
+  width: 100%;
+  height: 100%;
 }
 .csseditor .export-view {
   position: absolute;
@@ -4922,4 +4987,116 @@ html, body {
 .csseditor .popup.display-property-popup .justify-content[data-value=flex-start] button[value=flex-start], .csseditor .popup.display-property-popup .justify-content[data-value=flex-end] button[value=flex-end], .csseditor .popup.display-property-popup .justify-content[data-value=center] button[value=center], .csseditor .popup.display-property-popup .justify-content[data-value=space-between] button[value=space-between], .csseditor .popup.display-property-popup .justify-content[data-value=space-around] button[value=space-around] {
   background-color: #cccccc;
   font-weight: bold;
+}
+.csseditor .popup.box-shadow-property-popup {
+  padding: 10px;
+  width: 300px;
+  height: 200px;
+}
+.csseditor .popup.box-shadow-property-popup .box {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  grid-row-gap: 10px;
+  grid-column-gap: 2px;
+}
+.csseditor .popup.box-shadow-property-popup .box > * {
+  height: 20px;
+}
+.csseditor .popup.box-shadow-property-popup .box input,
+.csseditor .popup.box-shadow-property-popup .box select {
+  width: 100%;
+  vertical-align: middle;
+}
+.csseditor .popup.box-shadow-property-popup .box .input {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+.csseditor .popup.box-shadow-property-popup .box .type {
+  grid-column: 1/6;
+  grid-row: 1/2;
+  display: grid;
+  grid-template-columns: 50px 1fr;
+  grid-column-gap: 10px;
+}
+.csseditor .popup.box-shadow-property-popup .box .type .select {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  height: 20px;
+}
+.csseditor .popup.box-shadow-property-popup .box .type .select[data-selected-value=inset] button[data-value=inset] {
+  box-shadow: inset 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
+  background-color: #cccccc;
+}
+.csseditor .popup.box-shadow-property-popup .box .type .select[data-selected-value=outset] button[data-value=outset] {
+  box-shadow: inset 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
+  background-color: #cccccc;
+}
+.csseditor .popup.box-shadow-property-popup .box .type .select button {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border: 0px;
+  background-color: white;
+  outline: none;
+  cursor: pointer;
+}
+.csseditor .popup.box-shadow-property-popup .box .offset-x {
+  grid-column: 1/4;
+  grid-row: 2/3;
+  display: grid;
+  grid-template-columns: 50px 1fr;
+  grid-column-gap: 10px;
+}
+.csseditor .popup.box-shadow-property-popup .box .offset-y {
+  grid-column: 1/4;
+  grid-row: 3/4;
+  display: grid;
+  grid-template-columns: 50px 1fr;
+  grid-column-gap: 10px;
+}
+.csseditor .popup.box-shadow-property-popup .box .blur-radius {
+  grid-column: 1/6;
+  grid-row: 5/6;
+  display: grid;
+  grid-template-columns: 50px 1fr;
+  grid-column-gap: 10px;
+}
+.csseditor .popup.box-shadow-property-popup .box .blur-radius .input {
+  grid-template-columns: 2fr 1fr 1fr;
+  grid-column-gap: 2px;
+}
+.csseditor .popup.box-shadow-property-popup .box .spread-radius {
+  grid-column: 1/6;
+  grid-row: 6/7;
+  display: grid;
+  grid-template-columns: 50px 1fr;
+  grid-column-gap: 10px;
+}
+.csseditor .popup.box-shadow-property-popup .box .spread-radius .input {
+  grid-template-columns: 2fr 1fr 1fr;
+  grid-column-gap: 2px;
+}
+.csseditor .popup.box-shadow-property-popup .box .drag-board {
+  grid-column: 4/6;
+  grid-row: 2/5;
+  background-color: white;
+  box-sizing: border-box;
+  border: 1px solid #cccccc;
+  height: 84px;
+  position: relative;
+  background-image: linear-gradient(to right, #cccccc, #cccccc), linear-gradient(to right, #cccccc, #cccccc);
+  background-size: 100% 1px, 1px 100%;
+  background-position: 0px center, center 0px;
+  background-repeat: no-repeat;
+}
+.csseditor .popup.box-shadow-property-popup .box .drag-board .pointer {
+  pointer-events: none;
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  -webkit-transform: translateX(calc(55px - 5px)) translateY(calc(42px - 5px));
+          transform: translateX(calc(55px - 5px)) translateY(calc(42px - 5px));
+  background-color: #cccccc;
+  border-radius: 100%;
 }

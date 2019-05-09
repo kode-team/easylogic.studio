@@ -34,6 +34,7 @@ export class ArtBoard extends GroupItem {
       borderRadius: {},
       backdropFilters: [],
       backgroundImages: [],
+      boxShadows: [],
       perspectiveOriginPositionX: Length.percent(0),
       perspectiveOriginPositionY: Length.percent(0),
       display: Display.parse({ display: "block" }),
@@ -105,6 +106,11 @@ export class ArtBoard extends GroupItem {
     return this.json.backgroundImages || [];
   }
 
+  addBoxShadow(boxShadow) {
+    this.json.boxShadows.push(boxShadow);
+    return boxShadow;
+  }
+
   addBackgroundImage(item) {
     this.json.backgroundImages.push(item);
     return item;
@@ -121,6 +127,10 @@ export class ArtBoard extends GroupItem {
 
   removeBackgroundImage(removeIndex) {
     this.json.backgroundImages.splice(removeIndex, 1);
+  }
+
+  removeBoxShadow(removeIndex) {
+    this.json.boxShadows.splice(removeIndex, 1);
   }
 
   sortItem(arr, startIndex, targetIndex) {
@@ -158,6 +168,10 @@ export class ArtBoard extends GroupItem {
 
   updateFilter(index, data = {}) {
     this.json.filters[+index].reset(data);
+  }
+
+  updateBoxShadow(index, data = {}) {
+    this.json.boxShadows[+index].reset(data);
   }
 
   addBackdropFilter(item) {
@@ -305,7 +319,11 @@ export class ArtBoard extends GroupItem {
     };
   }
   toBackdropFilterCSS() {
-    return this.toPropertyCSS(this.backdropFilters);
+    return this.toPropertyCSS(this.json.backdropFilters);
+  }
+
+  toBoxShadowCSS() {
+    return this.toPropertyCSS(this.json.boxShadows);
   }
 
   toString() {
@@ -328,7 +346,8 @@ export class ArtBoard extends GroupItem {
       ...this.toBorderCSS(),
       ...this.toBorderRadiusCSS(),
       ...this.toFilterCSS(),
-      ...this.toBackgroundImageCSS(isExport)
+      ...this.toBackgroundImageCSS(isExport),
+      ...this.toBoxShadowCSS()
     });
   }
 

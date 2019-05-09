@@ -311,10 +311,12 @@ export default class EventMachine {
     return {};
   }
 
-  setState(state = {}) {
+  setState(state = {}, isLoad = true) {
     this.prevState = this.state;
     this.state = { ...this.state, ...state };
-    this.load();
+    if (isLoad) {
+      this.load();
+    }
   }
 
   render($container) {

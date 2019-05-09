@@ -4,7 +4,7 @@
   .fill-item {
     display: grid;
     height: 24px;
-    grid-template-columns: 30px auto;
+    grid-template-columns: 24px auto;
     grid-column-gap: 5px;
     margin-bottom: 5px;
     text-align: center;
@@ -13,12 +13,13 @@
       display: inline-block;
       height: 100%;
       box-sizing: border-box;
-      border: 1px solid $border-color;
+      // border: 1px solid $border-color;
       cursor: pointer;
 
       .mini-view {
         width: 100%;
         height: 100%;
+        border-radius: 100%;
       }
     }
 

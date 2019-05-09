@@ -13,6 +13,8 @@ export default class CanvasView extends UIElement {
     var artboard = project.add(new ArtBoard());
 
     editor.selection.select(artboard);
+
+    this[EVENT("refreshCanvas")]();
   }
   template() {
     return `
@@ -38,17 +40,5 @@ export default class CanvasView extends UIElement {
 
   [CLICK("$el")]() {
     this.emit(CHANGE_SELECTION);
-  }
-  refresh() {
-    this.setBackgroundColor();
-  }
-
-  setBackgroundColor() {
-    var canvasCSS = {
-      width: Length.px(editor.config.get("canvas.width")),
-      height: Length.px(editor.config.get("canvas.height"))
-    };
-
-    this.refs.$canvas.css(canvasCSS);
   }
 }

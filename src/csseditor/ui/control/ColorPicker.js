@@ -55,8 +55,10 @@ export default class ColorPicker extends UIElement {
     this.changeData = data;
     this.colorPicker.initColorWithoutChangeEvent(config.color);
 
-    this.emit("hidePropertyPopup");
-    this.emit("hidePicker");
+    if (!config.hasNotHide) {
+      this.emit("hidePropertyPopup");
+      this.emit("hidePicker");
+    }
   }
 
   [EVENT(

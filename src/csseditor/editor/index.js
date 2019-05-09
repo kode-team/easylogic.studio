@@ -8,9 +8,10 @@ import { RESIZE, DEBOUNCE, IN, OUT, BIND } from "../../util/Event";
 import { RESIZE_WINDOW } from "../types/ToolTypes";
 import Inspector from "../ui/control/Inspector";
 import FillPicker from "../ui/control/FillPicker";
-import BackgroundPropertyPopup from "../ui/control/BackgroundPropertyPopup";
+
 import ColorPicker from "../ui/control/ColorPicker";
 import ExportWindow from "../ui/window/ExportWindow";
+import popup from "../ui/control/popup";
 
 export default class CSSEditor extends UIElement {
   template() {
@@ -33,6 +34,7 @@ export default class CSSEditor extends UIElement {
                 <FillPicker />
                 <ColorPicker  />
                 <BackgroundPropertyPopup />
+                <BoxShadowPropertyPopup />
                 <ExportWindow />
 
             </div>
@@ -42,7 +44,7 @@ export default class CSSEditor extends UIElement {
 
   components() {
     return {
-      BackgroundPropertyPopup,
+      ...popup,
       FillPicker,
       ColorPicker,
       Inspector,

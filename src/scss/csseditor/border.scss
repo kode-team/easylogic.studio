@@ -124,7 +124,9 @@
       .color {
         background-color: white;
         height: 20px;
-        width: 40px;
+        width: 20px;
+        border-radius: 100%;
+        cursor: pointer;
       }
     }
   }

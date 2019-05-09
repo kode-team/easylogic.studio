@@ -26,10 +26,12 @@ import FilterProperty from "./FilterProperty";
 import BorderProperty from "./BorderProperty";
 import BorderRadiusProperty from "./BorderRadiusProperty";
 import SizeProperty from "./SizeProperty";
+import BoxShadowProperty from "./BoxShadowProperty";
 // import PositionProperty from "./PositionProperty";
 
 export default {
   // PositionProperty,
+  BoxShadowProperty,
   SizeProperty,
   BorderRadiusProperty,
   BorderProperty,

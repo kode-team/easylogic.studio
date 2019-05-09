@@ -11,6 +11,7 @@ export default class Inspector extends UIElement {
         <BorderRadiusProperty />
         <BackgroundColorProperty />
         <FillProperty />
+        <BoxShadowProperty />
         <FilterProperty />
       </div>
     `;
