@@ -132,7 +132,7 @@ export default class FillProperty extends BaseProperty {
               </div>
             </div>
             <div class='background-image-info'>
-              <div ref="size${index}">${it.width} / ${it.height}</div>
+              <div ref="size${index}">${it.width}/${it.height}</div>
               <div ref="repeat${index}">${it.repeat}</div>
               <div class='blend-mode' ref="blendMode${index}">${
         it.blendMode

@@ -1,13 +1,14 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   // Entry files for our popup and background pages
   entry: {
-    main: "./src/index.js"
+    popup: "./src/popup.js"
   },
   output: {
-    path: __dirname + "/docs"
+    path: __dirname + "/chrome-extension"
   },
   module: {
     rules: [
@@ -96,6 +97,15 @@ module.exports = {
       template: "./src/index.html",
       filename: "./index.html"
     }),
+
+    new HtmlWebPackPlugin({
+      inject: true,
+      chunks: ["popup"],
+      template: "./src/popup.html",
+      filename: "./popup.html"
+    }),
+    // copy extension manifest and icons
+    new CopyWebpackPlugin([{ from: "./src/assets/chrome-extension/" }]),
     new MiniCssExtractPlugin({
       filename: "bundle.css"
     })
