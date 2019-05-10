@@ -234,6 +234,7 @@ export default class BackgroundPropertyPopup extends UIElement {
         bottom: Length.auto
       })
       .show("inline-block");
+    this.emit("hidePropertyPopup");
   }
 
   [EVENT(

@@ -6,6 +6,7 @@ import { EMPTY_STRING } from "../../../util/css/types";
 import { html } from "../../../util/functions/func";
 import { Length, Position } from "../../../editor/unit/Length";
 import { editor } from "../../../editor/editor";
+import { CHANGE_SELECTION } from "../../types/event";
 
 const tabs = [
   { type: "static-gradient", title: "Static Gradient" },
@@ -163,14 +164,11 @@ export default class FillPicker extends UIElement {
       .show();
 
     this.selectTabContent(data.type, data);
-    // this.emit('hidePropertyPopup')
     this.emit("hidePicker");
   }
 
-  [EVENT("hideFillPicker", "hidePicker", "hidePropertyPopup")]() {
+  [EVENT("hideFillPicker", "hidePicker", CHANGE_SELECTION)]() {
     this.$el.hide();
-
-    this.emit("hideGradientEditor");
   }
 
   [EVENT("selectColorStep")](color) {

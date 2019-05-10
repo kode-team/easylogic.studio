@@ -246,7 +246,7 @@ export default class VerticalColorStep extends UIElement {
     this.updateColorStep();
   }
 
-  [EVENT("hideGradientEditor")]() {
+  [EVENT("hideGradientEditor", CHANGE_EDITOR, CHANGE_SELECTION)]() {
     this.$el.hide();
   }
 

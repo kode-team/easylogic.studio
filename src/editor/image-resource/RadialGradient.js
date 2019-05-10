@@ -37,6 +37,6 @@ export class RadialGradient extends Gradient {
 
     opt = radialPosition ? `${radialType} at ${radialPosition}` : radialType;
 
-    return `${json.type}(${opt}, ${colorString})`;
+    return `${json.type || "radial-gradient"}(${opt}, ${colorString})`;
   }
 }
