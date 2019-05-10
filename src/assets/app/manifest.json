@@ -1,0 +1,20 @@
+{
+  "manifest_version": 2,
+  "version": "0.1.0",
+  "name": "Gradient Editor",
+  "description": "CSS Gradient Editor - EasyLogic Studio",
+  "author": "easylogic",
+  "app": {
+    "background": {
+      "scripts": ["background.js"],
+      "persistent": false
+    }
+  },
+  "icons": {
+    "16": "images/icon32.png",
+    "24": "images/icon32.png",
+    "32": "images/icon32.png"
+  },
+  "offline_enabled": true,
+  "permissions": ["storage"]
+}
