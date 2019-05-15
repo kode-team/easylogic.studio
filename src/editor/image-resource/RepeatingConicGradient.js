@@ -9,4 +9,14 @@ export class RepeatingConicGradient extends ConicGradient {
       radialPosition: [Position.CENTER, Position.CENTER]
     });
   }
+
+  static parse(str) {
+    var conic = ConicGradient.parse(str);
+
+    return new RepeatingConicGradient({
+      angle: conic.angle,
+      radialPosition: conic.radialPosition,
+      colorsteps: conic.colorsteps
+    });
+  }
 }

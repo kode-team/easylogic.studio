@@ -21,8 +21,16 @@ import repeat from "./repeat";
 import screen from "./screen";
 import arrowRight from "./arrowRight";
 import check from "./check";
+import border_all from "./border_all";
+import border_inner from "./border_inner";
+import paint from "./paint";
+import title from "./title";
 
 export default {
+  title,
+  paint,
+  border_all,
+  border_inner,
   check,
   arrowRight,
   screen,

@@ -53,6 +53,22 @@ export default class BorderProperty extends BaseProperty {
             </div>
             <div class="input-ui">
               <div class="input">
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value="0"
+                  ref="$widthRange"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="input-field">
+            <div class="slider">
+              <label>&nbsp;</label>
+            </div>
+            <div class="input-ui">
+              <div class="input">
                 <input type="number" min="0" max="100" value="0" ref="$width" />
               </div>
               <div class="select">
@@ -71,7 +87,9 @@ export default class BorderProperty extends BaseProperty {
               <div class="style">
                 <select ref="$style">
                   ${borderStyleLit.map(it => {
-                    return `<option value="${it}">${it}</option>`;
+                    return `<option value="${it}" ${
+                      it === "solid" ? "selected" : ""
+                    }>${it}</option>`;
                   })}
                 </select>
               </div>
@@ -83,7 +101,11 @@ export default class BorderProperty extends BaseProperty {
               <label>Color</label>
             </div>
             <div class="input-ui">
-              <div class="color" ref="$color"></div>
+              <div
+                class="color"
+                ref="$color"
+                style="background-color: black"
+              ></div>
             </div>
           </div>
         </div>
@@ -106,7 +128,13 @@ export default class BorderProperty extends BaseProperty {
     this.refreshBorderInfo();
   }
 
+  [INPUT("$widthRange")](e) {
+    this.refs.$width.val(this.refs.$widthRange.value);
+    this.refreshBorderInfo();
+  }
+
   [INPUT("$width")](e) {
+    this.refs.$widthRange.val(this.refs.$width.value);
     this.refreshBorderInfo();
   }
 
@@ -154,6 +182,8 @@ export default class BorderProperty extends BaseProperty {
       changeEvent: "changeBorderColor",
       color: this.refs.$color.css("background-color")
     });
+    this.emit("hidePropertyPopup");
+    this.emit("hideGradientEditor");
   }
 
   [EVENT("changeBorderColor")](color) {

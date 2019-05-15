@@ -10,5 +10,7 @@ const CSS = {
   ...CSSEditor
 };
 
-var picker = new CSS.createCSSEditor();
+var picker = new CSS.createCSSEditor({
+  embed: true
+});
 picker.emit("load/start", true);

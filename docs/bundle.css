@@ -1320,6 +1320,9 @@ html, body {
   left: 0px;
   top: 0px;
 }
+.csseditor [data-embed-editor-target] {
+  border: 1px dashed black;
+}
 .csseditor .layout-main {
   position: absolute;
   left: 0px;
@@ -1329,11 +1332,24 @@ html, body {
   display: flex;
   flex-direction: column;
 }
-.csseditor .layout-main.show-timeline .layout-footer {
-  height: 299px;
+.csseditor .layout-main.embed-editor {
+  position: fixed;
+  width: 300px;
+  border-left: 1px solid #cccccc;
+  right: 0px;
+  left: auto;
 }
-.csseditor .layout-main:not(.show-timeline) .layout-footer {
-  height: -1px !important;
+.csseditor .layout-main.embed-editor .fill-picker,
+.csseditor .layout-main.embed-editor .popup {
+  right: 310px !important;
+  pointer-events: all;
+}
+.csseditor .layout-main.embed-editor .vertical-colorstep-container {
+  left: auto !important;
+  left: auto !important;
+  top: 24px !important;
+  width: 814px !important;
+  right: 310px !important;
 }
 .csseditor .layout-main .layout-header {
   flex: none;
@@ -1343,11 +1359,15 @@ html, body {
   position: relative;
   background-color: black;
   z-index: 1;
+  pointer-events: all;
 }
 .csseditor .layout-main .layout-header .page-tab-menu {
   flex: 1 1 auto;
   display: block;
   position: relative;
+}
+.csseditor .layout-main .layout-header .layout-body {
+  display: none;
 }
 .csseditor .layout-main .layout-footer {
   flex: none;
@@ -1366,32 +1386,24 @@ html, body {
 }
 .csseditor .layout-main .layout-middle .layout-right {
   position: absolute;
-  left: 10px;
-  top: 10px;
-  width: 260px;
+  left: 0px;
+  top: 0px;
+  bottom: 0px;
+  width: 310px;
   display: inline-block;
-  border-left: 1px solid #cccccc;
-  border-top: 1px solid #cccccc;
-  border-right: 1px solid #cccccc;
-  background-color: rgba(255, 255, 255, 0.5);
+  border-right: 1px solid rgba(51, 51, 51, 0.5);
+  background-color: white;
   z-index: 100;
   display: flex;
   flex-direction: column;
-}
-.csseditor .layout-main .layout-middle .layout-left {
-  flex: none;
-  width: 0px;
-  border-right: 1px solid #cccccc;
-  z-index: 100;
-  height: 100%;
-  position: relative;
-  display: none;
+  overflow: auto;
 }
 .csseditor .layout-main .layout-middle .layout-body {
-  flex: 1 1 auto;
-  width: 100%;
-  height: 100%;
-  position: relative;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 310px;
+  position: absolute;
 }
 .csseditor .tab {
   position: absolute;
@@ -1399,6 +1411,116 @@ html, body {
   right: 0px;
   bottom: 0px;
   top: 0px;
+}
+.csseditor .tab.number-tab .tab-header {
+  height: 50px;
+}
+.csseditor .tab.number-tab .tab-content {
+  display: none;
+}
+.csseditor .tab.number-tab .tab-body {
+  top: 50px;
+}
+.csseditor .tab.number-tab > .tab-header {
+  border-bottom: 1px solid #cccccc;
+}
+.csseditor .tab.number-tab > .tab-header > .tab-item {
+  border-right: 1px solid #cccccc;
+  text-align: center;
+  background-color: white;
+}
+.csseditor .tab.number-tab > .tab-header > .tab-item:last-child {
+  border-right: 0px;
+}
+.csseditor .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"] {
+  background-color: #444444;
+  color: white;
+}
+.csseditor .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"] svg path {
+  fill: white;
+}
+.csseditor .tab.number-tab[data-selected-value="1"] .tab-content[data-value="1"] {
+  display: block;
+}
+.csseditor .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"] {
+  background-color: #444444;
+  color: white;
+}
+.csseditor .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"] svg path {
+  fill: white;
+}
+.csseditor .tab.number-tab[data-selected-value="2"] .tab-content[data-value="2"] {
+  display: block;
+}
+.csseditor .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"] {
+  background-color: #444444;
+  color: white;
+}
+.csseditor .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"] svg path {
+  fill: white;
+}
+.csseditor .tab.number-tab[data-selected-value="3"] .tab-content[data-value="3"] {
+  display: block;
+}
+.csseditor .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"] {
+  background-color: #444444;
+  color: white;
+}
+.csseditor .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"] svg path {
+  fill: white;
+}
+.csseditor .tab.number-tab[data-selected-value="4"] .tab-content[data-value="4"] {
+  display: block;
+}
+.csseditor .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"] {
+  background-color: #444444;
+  color: white;
+}
+.csseditor .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"] svg path {
+  fill: white;
+}
+.csseditor .tab.number-tab[data-selected-value="5"] .tab-content[data-value="5"] {
+  display: block;
+}
+.csseditor .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"] {
+  background-color: #444444;
+  color: white;
+}
+.csseditor .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"] svg path {
+  fill: white;
+}
+.csseditor .tab.number-tab[data-selected-value="6"] .tab-content[data-value="6"] {
+  display: block;
+}
+.csseditor .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"] {
+  background-color: #444444;
+  color: white;
+}
+.csseditor .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"] svg path {
+  fill: white;
+}
+.csseditor .tab.number-tab[data-selected-value="7"] .tab-content[data-value="7"] {
+  display: block;
+}
+.csseditor .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"] {
+  background-color: #444444;
+  color: white;
+}
+.csseditor .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"] svg path {
+  fill: white;
+}
+.csseditor .tab.number-tab[data-selected-value="8"] .tab-content[data-value="8"] {
+  display: block;
+}
+.csseditor .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"] {
+  background-color: #444444;
+  color: white;
+}
+.csseditor .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"] svg path {
+  fill: white;
+}
+.csseditor .tab.number-tab[data-selected-value="9"] .tab-content[data-value="9"] {
+  display: block;
 }
 .csseditor .tab.inner {
   top: 5px;
@@ -1416,7 +1538,7 @@ html, body {
   position: absolute;
   left: 0px;
   right: 0px;
-  height: 30px;
+  height: 50px;
   z-index: 1;
   display: flex;
 }
@@ -1432,7 +1554,6 @@ html, body {
   padding: 6px 4px;
   cursor: pointer;
   color: black;
-  border: 1px solid #cccccc;
   min-width: 50px;
 }
 .csseditor .tab > .tab-header > .tab-item:not(.selected) {
@@ -1456,9 +1577,8 @@ html, body {
   position: absolute;
   left: 0px;
   right: 0px;
-  top: 30px;
+  top: 50px;
   bottom: 0px;
-  border: 1px solid #cccccc;
 }
 .csseditor .tab > .tab-body.no-border {
   border: 0px;
@@ -1512,7 +1632,7 @@ html, body {
 }
 .csseditor .tab.bottom > .tab-body {
   top: 0px;
-  bottom: 30px;
+  bottom: 50px;
 }
 .csseditor .tab.horizontal.left > .tab-header {
   left: 0px;
@@ -1634,9 +1754,10 @@ html, body {
 .csseditor .tool-menu .logo {
   color: white;
   padding: 20px 10px;
+  width: 260px;
 }
 .csseditor .tool-menu .logo .text {
-  font-size: 30px;
+  font-size: 24px;
   display: inline-block;
   font-weight: bold;
   text-transform: uppercase;
@@ -1654,7 +1775,7 @@ html, body {
   flex: 1 1 auto;
   text-align: center;
   height: 100%;
-  padding: 0px 5px;
+  padding: 0px;
 }
 .csseditor .tool-menu .items.flex-2 {
   flex: 5;
@@ -2880,7 +3001,7 @@ html, body {
   padding-left: 10px;
   height: 24px;
   line-height: 2;
-  color: #686868;
+  color: black;
   cursor: pointer;
   position: relative;
   font-size: 12px;
@@ -2888,6 +3009,7 @@ html, body {
   text-shadow: 2px 2px 5px #cccccc;
   display: grid;
   grid-template-columns: 1fr 1fr;
+  cursor: pointer;
 }
 .csseditor .property > .property-title > .tools {
   text-align: right;
@@ -2973,10 +3095,10 @@ html, body {
 .csseditor .property > .property-body .property-item.grid-4 .property-item-input-field input {
   width: 40px;
 }
-.csseditor .property > .property-body .property-item.background-color {
+.csseditor .property > .property-body .property-item.background-color, .csseditor .property > .property-body .property-item.font-color {
   grid-template-columns: 1fr;
 }
-.csseditor .property > .property-body .property-item.background-color .fill-item {
+.csseditor .property > .property-body .property-item.background-color .fill-item, .csseditor .property > .property-body .property-item.font-color .fill-item {
   display: grid;
   height: 24px;
   grid-template-columns: 24px auto;
@@ -2984,26 +3106,27 @@ html, body {
   margin-bottom: 5px;
   text-align: center;
 }
-.csseditor .property > .property-body .property-item.background-color .fill-item .preview {
+.csseditor .property > .property-body .property-item.background-color .fill-item .preview, .csseditor .property > .property-body .property-item.font-color .fill-item .preview {
   display: inline-block;
   height: 100%;
   box-sizing: border-box;
   cursor: pointer;
 }
-.csseditor .property > .property-body .property-item.background-color .fill-item .preview .mini-view {
+.csseditor .property > .property-body .property-item.background-color .fill-item .preview .mini-view, .csseditor .property > .property-body .property-item.font-color .fill-item .preview .mini-view {
   width: 100%;
   height: 100%;
   border-radius: 100%;
+  border: 1px solid #cccccc;
 }
-.csseditor .property > .property-body .property-item.background-color .fill-item .color-code input {
+.csseditor .property > .property-body .property-item.background-color .fill-item .color-code input, .csseditor .property > .property-body .property-item.font-color .fill-item .color-code input {
   width: 100%;
   height: 100%;
 }
-.csseditor .property > .property-body .property-item.background-color .fill-item .opacity-code {
+.csseditor .property > .property-body .property-item.background-color .fill-item .opacity-code, .csseditor .property > .property-body .property-item.font-color .fill-item .opacity-code {
   display: grid;
   grid-template-columns: 1fr 3fr;
 }
-.csseditor .property > .property-body .property-item.background-color .fill-item .opacity-code input {
+.csseditor .property > .property-body .property-item.background-color .fill-item .opacity-code input, .csseditor .property > .property-body .property-item.font-color .fill-item .opacity-code input {
   width: 100%;
 }
 .csseditor .property > .property-body .property-item.fill-list {
@@ -3220,362 +3343,6 @@ html, body {
 .csseditor .property > .property-body .property-item.display-manager .justify-content[selected-type=space-around] .display[display-type=space-around] {
   background-color: #ececec;
 }
-.csseditor .property > .property-body .property-item.gradient-steps {
-  height: 90px;
-  padding: 0px;
-}
-.csseditor .property > .property-body .property-item.gradient-steps > .items {
-  padding: 10px !important;
-}
-.csseditor .property > .property-body .property-item.gradient-steps .gradient-steps {
-  position: relative;
-  display: block;
-}
-.csseditor .property > .property-body .property-item.gradient-steps .gradient-steps .hue-container {
-  width: 100%;
-  height: 16px;
-  margin-top: -1px;
-  left: -1px;
-  right: -1px;
-  position: absolute;
-  z-index: 0;
-  background-color: transparent;
-  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
-  background-size: 10px 10px;
-  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
-}
-.csseditor .property > .property-body .property-item.gradient-steps .gradient-steps .hue {
-  position: relative;
-  padding: 0px;
-  margin: 0px;
-  cursor: pointer;
-}
-.csseditor .property > .property-body .property-item.gradient-steps .gradient-steps .hue > .step-list {
-  position: relative;
-  width: 100%;
-  cursor: copy;
-  height: 14px;
-  z-index: 1;
-}
-.csseditor .property > .property-body .property-item.gradient-steps .gradient-steps .hue > .step-list.mode-drag {
-  cursor: pointer;
-}
-.csseditor .property > .property-body .property-item.gradient-steps .gradient-steps .hue .drag-bar {
-  border: 0px;
-  background-color: transparent;
-  border: 2px solid white;
-  box-shadow: 0 0 2px 0px rgba(0, 0, 0, 0.6);
-  width: 10px;
-  height: 10px;
-  -webkit-transform: none;
-          transform: none;
-  border-radius: 50%;
-  display: inline-block;
-  left: 0px;
-  top: 17px;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
-  position: absolute;
-  background-color: rgba(255, 255, 255, 0.8);
-  cursor: pointer;
-  z-index: 0;
-  transition: top 0.3s ease-out;
-}
-.csseditor .property > .property-body .property-item.gradient-steps .gradient-steps .hue .drag-bar .guide-line {
-  pointer-events: none;
-  position: absolute;
-  width: 1px;
-  height: 0px;
-  bottom: 8px;
-  left: 3px;
-  -webkit-transform: translateX(-1px);
-          transform: translateX(-1px);
-  transition: all 0.3s ease-out;
-}
-.csseditor .property > .property-body .property-item.gradient-steps .gradient-steps .hue .drag-bar.selected {
-  z-index: 1;
-  top: 30px;
-}
-.csseditor .property > .property-body .property-item.gradient-steps .gradient-steps .hue .drag-bar.selected .guide-line {
-  height: 17px;
-}
-.csseditor .property > .property-body .property-item.gradient-steps .gradient-steps .hue .drag-bar.selected .guide-change {
-  opacity: 1;
-}
-.csseditor .property > .property-body .property-item.gradient-steps .gradient-list-layout {
-  position: absolute;
-  top: 50px !important;
-  left: 0px;
-  right: 0px;
-  bottom: 0px;
-}
-.csseditor .property > .property-body .property-item.gradient-steps .color-list {
-  position: absolute;
-  left: 0px;
-  right: 0px;
-  bottom: 0px;
-  top: 0px;
-}
-.csseditor .property > .property-body .property-item.gradient-steps .color-list .color-type {
-  position: absolute;
-  left: 0px;
-  right: 0px;
-  top: 0px;
-  height: 40px;
-}
-.csseditor .property > .property-body .property-item.gradient-steps .color-list .color-type > div {
-  position: absolute;
-  left: 5px;
-  right: 5px;
-  bottom: 5px;
-  top: 5px;
-}
-.csseditor .property > .property-body .property-item.gradient-steps .color-list .color-type > div select {
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  position: absolute;
-  left: 0px;
-  right: 0px;
-  bottom: 0px;
-  top: 0px;
-  padding: 5px;
-  display: inline-block;
-  border: 0px;
-  background-color: white;
-  width: 100%;
-  outline: none;
-}
-.csseditor .property > .property-body .property-item.gradient-steps .color-list .color-sample-list {
-  position: absolute;
-  left: 0px;
-  right: 0px;
-  top: 45px;
-  bottom: 0px;
-  padding: 5px;
-}
-.csseditor .property > .property-body .property-item.gradient-steps .color-list .color-sample-list .color-item {
-  display: inline-block;
-  vertical-align: middle;
-  width: 34px;
-  height: 34px;
-  cursor: pointer;
-  position: relative;
-  margin: 2px;
-}
-.csseditor .property > .property-body .property-item.sample-list .gradient-sample-list {
-  min-height: 50px;
-  max-height: 200px;
-  overflow: auto;
-  text-align: left;
-  display: inline-block;
-}
-.csseditor .property > .property-body .property-item.sample-list .gradient-sample-list .gradient-sample-item,
-.csseditor .property > .property-body .property-item.sample-list .gradient-sample-list .gradient-cached-item {
-  display: inline-block;
-  vertical-align: middle;
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-  position: relative;
-  margin: 2px;
-}
-.csseditor .property > .property-body .property-item.sample-list .gradient-sample-list .gradient-sample-item:hover,
-.csseditor .property > .property-body .property-item.sample-list .gradient-sample-list .gradient-cached-item:hover {
-  -webkit-transform: scale(1.2);
-          transform: scale(1.2);
-}
-.csseditor .property > .property-body .property-item.sample-list .gradient-sample-list .gradient-cached-item:first-child {
-  margin-left: 0px;
-}
-.csseditor .property > .property-body .property-item.sample-list .gradient-sample-list .cached-list {
-  margin-top: 10px;
-  display: inline-block;
-  vertical-align: middle;
-}
-.csseditor .property > .property-body .property-item.sample-list .gradient-sample-list .tools {
-  display: inline-block;
-  vertical-align: middle;
-  margin-left: -3px;
-}
-.csseditor .property > .property-body .property-item.sample-list .gradient-sample-list .tools button {
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  border: 1px solid #cccccc;
-  background-color: #ffffff;
-  display: inline-block;
-  vertical-align: middle;
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-  position: relative;
-  margin: 2px;
-  padding: 2px;
-  line-height: 0;
-}
-.csseditor .property > .property-body .property-item.gradient-steps-info .gradient-info {
-  overflow: auto;
-}
-.csseditor .property > .property-body .property-item.gradient-steps-info .gradient-info .form-item {
-  font-size: 12px;
-  margin: 2px 0px;
-  width: 100%;
-}
-.csseditor .property > .property-body .property-item.gradient-steps-info .gradient-info .form-item .step-list {
-  width: 100%;
-}
-.csseditor .property > .property-body .property-item.gradient-steps-info .gradient-info .form-item .color-step {
-  display: flex;
-  padding: 1px;
-  color: #333;
-}
-.csseditor .property > .property-body .property-item.gradient-steps-info .gradient-info .form-item .color-step.selected .color-view {
-  border: 1px solid black;
-}
-.csseditor .property > .property-body .property-item.gradient-steps-info .gradient-info .form-item .color-step > * {
-  flex: 1 1 auto;
-  display: inline-block;
-  vertical-align: middle;
-}
-.csseditor .property > .property-body .property-item.gradient-steps-info .gradient-info .form-item .color-step input {
-  width: 40px;
-  display: inline-block;
-}
-.csseditor .property > .property-body .property-item.gradient-steps-info .gradient-info .form-item .color-step .tools {
-  text-align: right;
-}
-.csseditor .property > .property-body .property-item.gradient-steps-info .gradient-info .form-item .color-step .tools button {
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  -webkit-transform: scale(1.2);
-          transform: scale(1.2);
-  border: 0px;
-  background-color: transparent;
-  padding: 2px 2px;
-  font-size: 14px;
-  vertical-align: middle;
-  line-height: 0;
-  cursor: pointer;
-  outline: none;
-}
-.csseditor .property > .property-body .property-item.gradient-steps-info .gradient-info .form-item .color-step input[type=text] {
-  width: 100px;
-}
-.csseditor .property > .property-body .property-item.gradient-steps-info .gradient-info .form-item .color-step input[type=number] {
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  border: 1px solid #ececec;
-}
-.csseditor .property > .property-body .property-item.gradient-steps-info .gradient-info .form-item .color-step .color-view {
-  width: 16px;
-  flex: none;
-  height: 16px;
-  margin-top: 2px;
-  margin-right: 2px;
-  position: relative;
-  background-color: transparent;
-  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
-  background-size: 5px 5px;
-  background-position: 0 0, 0 2.5px, 2.5px -2.5px, -2.5px 0px;
-  border: 1px solid #ececec;
-  vertical-align: middle;
-  border-radius: 3px;
-  overflow: hidden;
-}
-.csseditor .property > .property-body .property-item.gradient-steps-info .gradient-info .form-item .color-step .color-view .color-view-item {
-  position: absolute;
-  left: 0px;
-  right: 0px;
-  bottom: 0px;
-  top: 0px;
-  cursor: pointer;
-}
-.csseditor .property > .property-body .property-item.gradient-steps-info .gradient-info .form-item .color-step .color-cut {
-  width: 16px;
-  flex: none;
-  height: 20px;
-  margin-right: 2px;
-  position: relative;
-  vertical-align: middle;
-}
-.csseditor .property > .property-body .property-item.gradient-steps-info .gradient-info .form-item .color-step .color-cut .guide-change {
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  top: 50%;
-  left: 0px;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
-  border: 1px solid #cccccc;
-  cursor: pointer;
-  background-image: linear-gradient(to top, black 0%, black 100%);
-  background-size: 3px 3px;
-  background-position: 3.5px center;
-  background-repeat: repeat-y;
-}
-.csseditor .property > .property-body .property-item.gradient-steps-info .gradient-info .form-item .color-step .color-cut .guide-change.cut {
-  background-position: center 3px;
-  background-repeat: repeat-x;
-}
-.csseditor .property > .property-body .property-item.gradient-steps-info .gradient-info .form-item .color-step .color-unit > input[type=number] {
-  display: none;
-  outline: none;
-  width: 50px;
-}
-.csseditor .property > .property-body .property-item.gradient-steps-info .gradient-info .form-item .color-step .color-unit.percent > .percent {
-  display: inline-block;
-}
-.csseditor .property > .property-body .property-item.gradient-steps-info .gradient-info .form-item .color-step .color-unit.px > .px {
-  display: inline-block;
-}
-.csseditor .property > .property-body .property-item.gradient-steps-info .gradient-info .form-item .color-step .color-unit.em > .em {
-  display: inline-block;
-}
-.csseditor .property > .property-body .property-item.gradient-steps-info .gradient-info .form-item .color-step .color-unit select {
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  border: 0px;
-  background-color: transparent;
-  display: inline-block;
-  outline: none;
-}
-.csseditor .property > .property-body .property-item.gradient-tools {
-  display: block;
-  width: 100%;
-}
-.csseditor .property > .property-body .property-item.gradient-tools .menu-buttons {
-  display: inline-block;
-  vertical-align: middle;
-  padding: 4px 0px;
-  font-size: 12px;
-}
-.csseditor .property > .property-body .property-item.gradient-tools .menu-buttons button {
-  display: inline-block;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  width: 100px;
-  height: 100%;
-  border: 1px solid #dedede;
-  vertical-align: middle;
-  font-size: 12px;
-  cursor: pointer;
-  outline: none;
-  position: relative;
-  pointer-events: all;
-}
-.csseditor .property > .property-body .property-item.gradient-tools > .title {
-  vertical-align: middle;
-  padding: 10px 0px;
-  font-size: 12px;
-}
-.csseditor .property > .property-body .property-item .gradient-type .gradient-item {
-  margin-right: 3px;
-}
 .csseditor .property > .property-body .property-item.clip-path-svg .clip-path-container {
   cursor: pointer;
   width: 50px;
@@ -3625,48 +3392,6 @@ html, body {
 .csseditor .property > .property-body .property-item.image-list-view .items .images {
   top: 0px;
   bottom: 0px;
-}
-.csseditor .property > .property-body .property-item.clip-path .clip-path-container {
-  cursor: pointer;
-  width: 50px;
-  height: 50px;
-  border: 1px solid #cccccc;
-}
-.csseditor .property > .property-body .property-item.clip-path .clip-path-container svg {
-  width: 100%;
-}
-.csseditor .property > .property-body .property-item.clip-path-polygon .items label {
-  width: 20px;
-  text-align: center;
-}
-.csseditor .property > .property-body .property-item.clip-path-polygon .items > div > div input[type=number] {
-  width: 50px;
-  margin-right: 2px;
-}
-.csseditor .property > .property-body .property-item.clip-path-polygon .items > div .tools {
-  display: flex;
-  margin-left: 10px;
-}
-.csseditor .property > .property-body .property-item.clip-path-polygon .items > div .tools button {
-  flex: 1 1 auto;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  border: 1px solid #cccccc;
-}
-.csseditor .property > .property-body .property-item.clip-path-polygon .items > div .tools button:not(:first-child) {
-  margin-left: -1px;
-}
-.csseditor .property > .property-body .property-item.clip-path-polygon .items .clip-path-item {
-  display: inline-block;
-  vertical-align: middle;
-  width: 45px;
-  height: 45px;
-  margin: 5px;
-  background-color: red;
-  cursor: pointer;
-  background-image: linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(128, 128, 128, 0.5));
 }
 .csseditor .property > .property-body .property-item .group-align {
   text-align: center;
@@ -3777,19 +3502,6 @@ html, body {
 }
 .csseditor .property > .property-body .property-item.fixed-radius {
   border-bottom: 0px;
-}
-.csseditor .property > .property-body .property-item.layer-colorpicker .codemirror-colorpicker.xd {
-  padding-top: 0px;
-}
-.csseditor .property > .property-body .property-item.layer-colorpicker .codemirror-colorpicker.xd .color {
-  margin-left: 6px;
-}
-.csseditor .property > .property-body .property-item.layer-colorpicker .codemirror-colorpicker.xd > .colorpicker-body > .color-panel,
-.csseditor .property > .property-body .property-item.layer-colorpicker .codemirror-colorpicker.xd > .colorpicker-body > .control {
-  margin-bottom: 0px;
-}
-.csseditor .property > .property-body .property-item.layer-colorpicker .codemirror-colorpicker.xd > .colorpicker-body > .colorsets {
-  display: none;
 }
 .csseditor .property > .property-body .property-item.box-shadow .items {
   padding: 2px;
@@ -3972,36 +3684,6 @@ html, body {
   font-size: 16px;
   margin-left: 10px;
 }
-.csseditor .property > .property-body .property-item.fill-colorpicker .items {
-  padding: 0px;
-}
-.csseditor .property > .property-body .property-item.fill-colorpicker .items .colorpicker-body {
-  width: 100%;
-}
-.csseditor .property > .property-body .property-item.fill-colorpicker .items .colorpicker-body .color-tab {
-  border: 0px;
-}
-.csseditor .property > .property-body .property-item.fill-colorpicker .items .colorpicker-body .color-panel {
-  margin-left: 12px;
-}
-.csseditor .property > .property-body .property-item.fill-colorpicker .items .colorpicker-body .color-tab-body {
-  border: 0px;
-}
-.csseditor .property > .property-body .property-item.text-colorpicker .items {
-  padding: 0px;
-}
-.csseditor .property > .property-body .property-item.text-colorpicker .items .colorpicker-body {
-  width: 100%;
-}
-.csseditor .property > .property-body .property-item.text-colorpicker .items .colorpicker-body .color-tab {
-  border: 0px;
-}
-.csseditor .property > .property-body .property-item.text-colorpicker .items .colorpicker-body .color-panel {
-  margin-left: 12px;
-}
-.csseditor .property > .property-body .property-item.text-colorpicker .items .colorpicker-body .color-tab-body {
-  border: 0px;
-}
 .csseditor .property > .property-body .property-item.colorpicker .items {
   padding: 0px;
 }
@@ -4045,29 +3727,6 @@ html, body {
   padding: 2px 5px;
 }
 .csseditor .property > .property-body .property-item.layer-code .key-value-view .key-value-item .value {
-  white-space: pre-wrap;
-  margin: 0px;
-  padding: 0px 5px;
-  padding-left: 20px;
-  font-size: 12px;
-  display: block;
-}
-.csseditor .property > .property-body .property-item.background-code .key-value-view {
-  display: block;
-  -webkit-user-select: text;
-     -moz-user-select: text;
-      -ms-user-select: text;
-          user-select: text;
-}
-.csseditor .property > .property-body .property-item.background-code .key-value-view .key-value-item {
-  display: block;
-}
-.csseditor .property > .property-body .property-item.background-code .key-value-view .key-value-item .key {
-  display: block;
-  font-weight: bold;
-  padding: 2px 5px;
-}
-.csseditor .property > .property-body .property-item.background-code .key-value-view .key-value-item .value {
   white-space: pre-wrap;
   margin: 0px;
   padding: 0px 5px;
@@ -4226,7 +3885,7 @@ html, body {
 .csseditor .border-item {
   grid-template-columns: 1fr 3fr;
   grid-column-gap: 10px;
-  height: 70px;
+  height: 85px;
 }
 .csseditor .border-item .border-direction {
   position: relative;
@@ -4321,6 +3980,8 @@ html, body {
   width: 20px;
   border-radius: 100%;
   cursor: pointer;
+  border: 1px solid #cccccc;
+  box-sizing: border-box;
 }
 .csseditor .border-radius-item {
   grid-template-columns: 0.6fr 3fr !important;
@@ -4330,10 +3991,16 @@ html, body {
   grid-template-columns: 1fr;
 }
 .csseditor .border-radius-item .radius-selector[data-selected-value=all] button[data-value=all] {
-  border-color: black;
+  background-color: black;
+}
+.csseditor .border-radius-item .radius-selector[data-selected-value=all] button[data-value=all] svg path {
+  fill: white;
 }
 .csseditor .border-radius-item .radius-selector[data-selected-value=partitial] button[data-value=partitial] {
-  border-color: black;
+  background-color: black;
+}
+.csseditor .border-radius-item .radius-selector[data-selected-value=partitial] button[data-value=partitial] svg path {
+  fill: white;
 }
 .csseditor .border-radius-item .radius-selector button {
   flex: none;
@@ -4342,42 +4009,23 @@ html, body {
           appearance: none;
   background-color: transparent;
   box-sizing: border-box;
-  width: 16px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   display: inline-block;
   vertical-align: middle;
-  border-radius: 5px;
-  border: 2px solid #cccccc;
   margin-right: 2px;
+  border-radius: 3px;
   cursor: pointer;
   outline: none;
+  padding: 0px;
+  border: 0px;
 }
-.csseditor .border-radius-item .radius-selector button[data-value=partitial] {
-  position: relative;
+.csseditor .border-radius-item .radius-selector button svg {
+  width: 100%;
+  height: 100%;
 }
-.csseditor .border-radius-item .radius-selector button[data-value=partitial]:before {
-  content: "";
-  display: inline-block;
-  position: absolute;
-  left: -2px;
-  right: -2px;
-  top: 50%;
-  height: 4px;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
-  background-color: #e6e6e6;
-}
-.csseditor .border-radius-item .radius-selector button[data-value=partitial]:after {
-  content: "";
-  display: inline-block;
-  position: absolute;
-  top: -2px;
-  bottom: -2px;
-  left: 50%;
-  width: 4px;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
-  background-color: #e6e6e6;
+.csseditor .border-radius-item .radius-selector button svg path {
+  fill: #cccccc;
 }
 .csseditor .border-radius-item .radius-value {
   display: grid;
@@ -4419,42 +4067,162 @@ html, body {
   cursor: pointer;
   outline: none;
   position: relative;
-}
-.csseditor .border-radius-item .radius-setting-box > div label:before {
-  content: "";
-  display: inline-block;
-  position: absolute;
-  left: -2px;
-  right: -2px;
-  top: 50%;
-  height: 4px;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
-  background-color: #e6e6e6;
-}
-.csseditor .border-radius-item .radius-setting-box > div label:after {
-  content: "";
-  display: inline-block;
-  position: absolute;
-  top: -2px;
-  bottom: -2px;
-  left: 50%;
-  width: 4px;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
-  background-color: #e6e6e6;
+  margin-top: 2px;
 }
 .csseditor .border-radius-item .radius-setting-box > div label.topLeft {
-  border-top-left-radius: 5px;
+  border-top-left-radius: 10px;
 }
 .csseditor .border-radius-item .radius-setting-box > div label.topRight {
-  border-top-right-radius: 5px;
+  border-top-right-radius: 10px;
 }
 .csseditor .border-radius-item .radius-setting-box > div label.bottomLeft {
-  border-bottom-left-radius: 5px;
+  border-bottom-left-radius: 10px;
 }
 .csseditor .border-radius-item .radius-setting-box > div label.bottomRight {
-  border-bottom-right-radius: 5px;
+  border-bottom-right-radius: 10px;
+}
+.csseditor .box-model-item {
+  grid-template-columns: 1fr !important;
+}
+.csseditor .box-model-item > div {
+  position: relative;
+  width: 100%;
+  height: 150px;
+}
+.csseditor .box-model-item > div .margin {
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  right: 5px;
+  bottom: 5px;
+  padding: 10px;
+  border: 1px dashed #cccccc;
+}
+.csseditor .box-model-item > div .margin:before {
+  content: "margin";
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  display: inline-block;
+  color: #333;
+}
+.csseditor .box-model-item > div .margin input {
+  width: 100%;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border: 1px solid #cccccc;
+}
+.csseditor .box-model-item > div .margin [data-value=top] {
+  display: inline-block;
+  position: absolute;
+  top: 2px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  width: 30px;
+}
+.csseditor .box-model-item > div .margin [data-value=bottom] {
+  display: inline-block;
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  width: 30px;
+}
+.csseditor .box-model-item > div .margin [data-value=left] {
+  display: inline-block;
+  position: absolute;
+  top: 50%;
+  left: 2px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  width: 30px;
+}
+.csseditor .box-model-item > div .margin [data-value=right] {
+  display: inline-block;
+  position: absolute;
+  top: 50%;
+  right: 2px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  width: 30px;
+}
+.csseditor .box-model-item > div .padding {
+  position: absolute;
+  left: 40px;
+  top: 30px;
+  right: 40px;
+  bottom: 30px;
+  padding: 10px;
+  border: 1px dashed #cccccc;
+}
+.csseditor .box-model-item > div .padding::before {
+  content: "padding";
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  display: inline-block;
+  color: #333;
+}
+.csseditor .box-model-item > div .padding input {
+  width: 100%;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border: 1px solid #cccccc;
+}
+.csseditor .box-model-item > div .padding [data-value=top] {
+  display: inline-block;
+  position: absolute;
+  top: 2px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  width: 30px;
+}
+.csseditor .box-model-item > div .padding [data-value=bottom] {
+  display: inline-block;
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  width: 30px;
+}
+.csseditor .box-model-item > div .padding [data-value=left] {
+  display: inline-block;
+  position: absolute;
+  top: 50%;
+  left: 2px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  width: 30px;
+}
+.csseditor .box-model-item > div .padding [data-value=right] {
+  display: inline-block;
+  position: absolute;
+  top: 50%;
+  right: 2px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  width: 30px;
+}
+.csseditor .box-model-item > div .content {
+  position: absolute;
+  left: 75px;
+  top: 54px;
+  right: 75px;
+  bottom: 54px;
+  padding: 10px 0px;
+  border: 1px dashed #cccccc;
+}
+.csseditor .box-model-item > div .content:before {
+  content: attr(title);
+  padding: 5px 0px;
+  text-align: center;
+  display: block;
 }
 .csseditor .size-item {
   display: grid !important;
@@ -4489,6 +4257,35 @@ html, body {
   vertical-align: middle;
   width: 16px;
   height: 16px;
+}
+.csseditor .content-item {
+  grid-template-columns: 1fr !important;
+  padding: 0px 4px !important;
+}
+.csseditor .content-item textarea {
+  width: 100%;
+  height: 140px;
+  box-sizing: border-box;
+}
+.csseditor .font-item {
+  margin-bottom: 2px;
+}
+.csseditor .font-item label {
+  text-align: right;
+  vertical-align: middle;
+  font-size: 13px;
+  padding-right: 4px;
+}
+.csseditor .font-item .input {
+  vertical-align: middle;
+  display: grid;
+  grid-template-columns: 1fr 40px 70px;
+  grid-column-gap: 4px;
+}
+.csseditor .font-item .input .input-field input,
+.csseditor .font-item .input .input-field select {
+  width: 100%;
+  outline: none;
 }
 .csseditor .box-shadow-item {
   grid-template-columns: 1fr !important;
@@ -4551,6 +4348,66 @@ html, body {
   width: 100%;
   height: 100%;
 }
+.csseditor .text-shadow-item {
+  grid-template-columns: 1fr !important;
+}
+.csseditor .text-shadow-item .shadow-item {
+  height: 20px;
+  display: grid;
+  grid-template-columns: 20px 1fr 1fr 1fr 20px;
+  grid-column-gap: 5px;
+  text-align: center;
+  margin-bottom: 5px;
+}
+.csseditor .text-shadow-item .shadow-item.desc {
+  color: #333333;
+}
+.csseditor .text-shadow-item .shadow-item.desc .color {
+  visibility: hidden;
+}
+.csseditor .text-shadow-item .shadow-item .color {
+  cursor: pointer;
+  height: 20px;
+  border: 1px solid #cccccc;
+  border-radius: 100%;
+}
+.csseditor .text-shadow-item .shadow-item .inset svg {
+  width: 16px;
+  height: 16px;
+}
+.csseditor .text-shadow-item .shadow-item .inset svg path {
+  fill: #cccccc;
+}
+.csseditor .text-shadow-item .shadow-item .inset[data-value=true] svg path {
+  fill: black;
+}
+.csseditor .text-shadow-item .shadow-item .offset-x,
+.csseditor .text-shadow-item .shadow-item .offset-y,
+.csseditor .text-shadow-item .shadow-item .blur-radius,
+.csseditor .text-shadow-item .shadow-item .inset {
+  box-sizing: border-box;
+  padding: 4px 0px;
+}
+.csseditor .text-shadow-item .shadow-item .tools {
+  text-align: right;
+}
+.csseditor .text-shadow-item .shadow-item .tools button {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  border: 0px;
+  padding: 0px;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  cursor: pointer;
+  outline: none;
+}
+.csseditor .text-shadow-item .shadow-item .tools button svg {
+  width: 100%;
+  height: 100%;
+}
 .csseditor .export-view {
   position: absolute;
   left: 50%;
@@ -4558,8 +4415,8 @@ html, body {
   width: 50%;
   height: 100px;
   z-index: 100000;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
+  -webkit-transform: translateX(-30%);
+          transform: translateX(-30%);
 }
 .csseditor .export-view .codeview {
   position: relative;
@@ -4990,7 +4847,7 @@ html, body {
 }
 .csseditor .popup.box-shadow-property-popup {
   padding: 10px;
-  width: 300px;
+  width: 224px;
   height: 200px;
 }
 .csseditor .popup.box-shadow-property-popup .box {
@@ -5008,6 +4865,16 @@ html, body {
   width: 100%;
   vertical-align: middle;
 }
+.csseditor .popup.box-shadow-property-popup .box select {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  padding: 0px;
+  text-align: center;
+  border: 0px;
+  background-color: white;
+  border: 1px solid #cccccc;
+}
 .csseditor .popup.box-shadow-property-popup .box .input {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -5017,7 +4884,7 @@ html, body {
   grid-row: 1/2;
   display: grid;
   grid-template-columns: 50px 1fr;
-  grid-column-gap: 10px;
+  grid-column-gap: 4px;
 }
 .csseditor .popup.box-shadow-property-popup .box .type .select {
   display: grid;
@@ -5046,21 +4913,21 @@ html, body {
   grid-row: 2/3;
   display: grid;
   grid-template-columns: 50px 1fr;
-  grid-column-gap: 10px;
+  grid-column-gap: 4px;
 }
 .csseditor .popup.box-shadow-property-popup .box .offset-y {
   grid-column: 1/4;
   grid-row: 3/4;
   display: grid;
   grid-template-columns: 50px 1fr;
-  grid-column-gap: 10px;
+  grid-column-gap: 4px;
 }
 .csseditor .popup.box-shadow-property-popup .box .blur-radius {
   grid-column: 1/6;
   grid-row: 5/6;
   display: grid;
   grid-template-columns: 50px 1fr;
-  grid-column-gap: 10px;
+  grid-column-gap: 4px;
 }
 .csseditor .popup.box-shadow-property-popup .box .blur-radius .input {
   grid-template-columns: 2fr 1fr 1fr;
@@ -5071,7 +4938,7 @@ html, body {
   grid-row: 6/7;
   display: grid;
   grid-template-columns: 50px 1fr;
-  grid-column-gap: 10px;
+  grid-column-gap: 4px;
 }
 .csseditor .popup.box-shadow-property-popup .box .spread-radius .input {
   grid-template-columns: 2fr 1fr 1fr;
@@ -5095,8 +4962,90 @@ html, body {
   position: absolute;
   width: 10px;
   height: 10px;
-  -webkit-transform: translateX(calc(55px - 5px)) translateY(calc(42px - 5px));
-          transform: translateX(calc(55px - 5px)) translateY(calc(42px - 5px));
+  -webkit-transform: translateX(calc(40px - 5px)) translateY(calc(42px - 5px));
+          transform: translateX(calc(40px - 5px)) translateY(calc(42px - 5px));
+  background-color: #cccccc;
+  border-radius: 100%;
+}
+.csseditor .popup.text-shadow-property-popup {
+  padding: 10px;
+  width: 224px;
+  height: 140px;
+}
+.csseditor .popup.text-shadow-property-popup .box {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  grid-row-gap: 10px;
+  grid-column-gap: 2px;
+}
+.csseditor .popup.text-shadow-property-popup .box > * {
+  height: 20px;
+}
+.csseditor .popup.text-shadow-property-popup .box input,
+.csseditor .popup.text-shadow-property-popup .box select {
+  width: 100%;
+  vertical-align: middle;
+}
+.csseditor .popup.text-shadow-property-popup .box select {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  padding: 0px;
+  text-align: center;
+  border: 0px;
+  background-color: white;
+  border: 1px solid #cccccc;
+}
+.csseditor .popup.text-shadow-property-popup .box .input {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+.csseditor .popup.text-shadow-property-popup .box .offset-x {
+  grid-column: 1/4;
+  grid-row: 1/2;
+  display: grid;
+  grid-template-columns: 50px 1fr;
+  grid-column-gap: 4px;
+}
+.csseditor .popup.text-shadow-property-popup .box .offset-y {
+  grid-column: 1/4;
+  grid-row: 2/3;
+  display: grid;
+  grid-template-columns: 50px 1fr;
+  grid-column-gap: 4px;
+}
+.csseditor .popup.text-shadow-property-popup .box .blur-radius {
+  grid-column: 1/6;
+  grid-row: 4/5;
+  display: grid;
+  grid-template-columns: 50px 1fr;
+  grid-column-gap: 4px;
+}
+.csseditor .popup.text-shadow-property-popup .box .blur-radius .input {
+  grid-template-columns: 2fr 1fr 1fr;
+  grid-column-gap: 2px;
+}
+.csseditor .popup.text-shadow-property-popup .box .drag-board {
+  grid-column: 4/6;
+  grid-row: 1/4;
+  background-color: white;
+  box-sizing: border-box;
+  border: 1px solid #cccccc;
+  height: 84px;
+  position: relative;
+  background-image: linear-gradient(to right, #cccccc, #cccccc), linear-gradient(to right, #cccccc, #cccccc);
+  background-size: 100% 1px, 1px 100%;
+  background-position: 0px center, center 0px;
+  background-repeat: no-repeat;
+}
+.csseditor .popup.text-shadow-property-popup .box .drag-board .pointer {
+  pointer-events: none;
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  -webkit-transform: translateX(calc(40px - 5px)) translateY(calc(42px - 5px));
+          transform: translateX(calc(40px - 5px)) translateY(calc(42px - 5px));
   background-color: #cccccc;
   border-radius: 100%;
 }

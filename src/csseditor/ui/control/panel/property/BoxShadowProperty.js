@@ -1,8 +1,7 @@
 import BaseProperty from "./BaseProperty";
-import { INPUT, CLICK, LOAD } from "../../../../../util/Event";
+import { CLICK, LOAD } from "../../../../../util/Event";
 import { html } from "../../../../../util/functions/func";
 import { editor } from "../../../../../editor/editor";
-import { Length } from "../../../../../editor/unit/Length";
 import { EVENT } from "../../../../../util/UIElement";
 import icon from "../../../icon/icon";
 import { BoxShadow } from "../../../../../editor/css-property/BoxShadow";
@@ -130,7 +129,13 @@ export default class BoxShadowProperty extends BaseProperty {
   }
 
   viewBoxShadowPropertyPopup(shadow) {
-    this.emit("showBoxShadowPropertyPopup", shadow.clone());
+    this.emit("showBoxShadowPropertyPopup", {
+      inset: shadow.inset,
+      offsetX: shadow.offsetX,
+      offsetY: shadow.offsetY,
+      blurRadius: shadow.blurRadius,
+      spreadRadius: shadow.spreadRadius
+    });
   }
 
   [EVENT("changeBoxShadowColor")](color) {

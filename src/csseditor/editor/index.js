@@ -14,32 +14,57 @@ import ExportWindow from "../ui/window/ExportWindow";
 import popup from "../ui/control/popup";
 
 export default class CSSEditor extends UIElement {
+  afterRender() {
+    this.emit("setTargetElement", this.parent.opt.targetElement);
+  }
   template() {
-    return `
-            <div class="layout-main -show-timeline" ref="$layoutMain">
-                <div class="layout-header">
-                    <div class="page-tab-menu"><ToolMenu /></div>
-                </div>
-                <div class="layout-middle">
-                          
-                    <div class="layout-right">
-                        <Inspector />
-                    </div>
-                    <div class="layout-body">
-                        <!-- LayerToolbar /-->
-                        <CanvasView />
-                        <VerticalColorStep />
-                    </div>                              
-                </div>
-                <FillPicker />
-                <ColorPicker  />
-                <BackgroundPropertyPopup />
-                <BoxShadowPropertyPopup />
-                <ExportWindow />
+    if (this.props.embed) {
+      return this.templateForEmbed();
+    } else {
+      return this.templateForEditor();
+    }
+  }
 
-            </div>
-  
-        `;
+  templateForEmbed() {
+    return `
+      <div class="embed-editor layout-main" ref="$layoutMain">
+        <CanvasView embed="true" />
+        <VerticalColorStep />
+        <Inspector />
+        <FillPicker />
+        <ColorPicker  />
+        <BackgroundPropertyPopup />
+        <BoxShadowPropertyPopup />   
+        <TextShadowPropertyPopup />             
+      </div>
+    `;
+  }
+
+  templateForEditor() {
+    return `
+      <div class="layout-main" ref="$layoutMain">
+        <div class="layout-header">
+            <div class="page-tab-menu"><ToolMenu /></div>
+        </div>
+        <div class="layout-middle">
+                  
+          <div class="layout-right">
+            <Inspector />
+          </div>
+          <div class="layout-body">
+            <CanvasView />
+            <VerticalColorStep />
+          </div>                              
+        </div>
+        <FillPicker />
+        <ColorPicker  />
+        <BackgroundPropertyPopup />
+        <BoxShadowPropertyPopup />
+        <TextShadowPropertyPopup />
+        <ExportWindow />
+
+      </div>
+    `;
   }
 
   components() {

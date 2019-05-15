@@ -124,7 +124,7 @@ export default class BackgroundPropertyPopup extends UIElement {
       <label>Width</label>
       <UnitRange 
           ref="$width" 
-          min="-1000" max="1000" step="1" value="0" unit="px"
+          min="0" max="1000" step="1" value="0" unit="px"
           maxValueFunction="getMaxWidth"
           updateFunction="updateWidth"
       />
@@ -138,7 +138,7 @@ export default class BackgroundPropertyPopup extends UIElement {
       <label>Height</label>
       <UnitRange 
           ref="$height" 
-          min="-1000" max="1000" step="1" value="0" unit="px"
+          min="0" max="1000" step="1" value="0" unit="px"
           maxValueFunction="getMaxHeight"
           updateFunction="updateHeight"
       />

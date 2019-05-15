@@ -1,4 +1,4 @@
-$tab-header-height: 30px;
+$tab-header-height: 50px;
 $tab-background-color: rgb(255, 255, 255);
 $tab-border-color: $border-color;
 $tab-selected-color: $selected-color;
@@ -6,216 +6,252 @@ $tab-selected-color: $selected-color;
 $tab-horizontal-header-width: 50px;
 $tab-horizontal-header-right-width: 60px;
 .tab {
-    position: absolute;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
-    top: 0px;
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  top: 0px;
 
-    &.inner {
-        top: 5px;
-        left: 5px;
-        right: 5px;
-        bottom: 5px;
+  &.number-tab {
+    .tab-header {
+      height: $tab-header-height;
+    }
+    .tab-content {
+      display: none;
+    }
 
-        > .tab-header {
-            > .tab-item {
-                border:0px;
-            }
-        }
-
-        > .tab-body {
-            border:0px;
-        }
+    .tab-body {
+      top: $tab-header-height;
     }
 
     > .tab-header {
-        position: absolute;
-        left: 0px;
-        right: 0px;
-        height: $tab-header-height;
-
-        z-index: 1;
-        display: flex;
-
-        &.no-border {
-
-            > .tab-item {
-                border:0px !important;
-            }
+      border-bottom: 1px solid $border-color;
+      > .tab-item {
+        border-right: 1px solid $border-color;
+        text-align: center;
+        background-color: white;
+        &:last-child {
+          border-right: 0px;
         }
+      }
+    }
 
-        > .tab-item {
-            flex:1;
-            display: inline-block;
-            font-size: 12px;
-            text-align: left;
-            height: 100%;
-            padding: 6px 4px;
-            cursor: pointer;
-            color: black; 
-            border: 1px solid $tab-border-color;
-            min-width: 50px;
-
-            &:not(.selected) {
-                background-color: $tab-background-color; 
-                color: black;
-            }
-
-            &.selected {
-                background-color: $tab-selected-color;
-            }
-
-            &.small-font {
-                font-size: 11px;
-            }
-
-            &.select-reverse {
-
-                &:not(.selected) {
-                    background-color: rgba($tab-selected-color, 0.5); 
-                    color: black;
-                }
-
-                &.selected {
-                    background-color: $tab-background-color;
-                }
-
-            }
-            
+    @for $selectValue from 1 to 10 {
+      &[data-selected-value="#{$selectValue}"]
+        .tab-item[data-value="#{$selectValue}"] {
+        background-color: rgb(68, 68, 68);
+        color: white;
+        svg {
+          path {
+            fill: white;
+          }
         }
+      }
+
+      &[data-selected-value="#{$selectValue}"]
+        .tab-content[data-value="#{$selectValue}"] {
+        display: block;
+      }
+    }
+  }
+
+  &.inner {
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+
+    > .tab-header {
+      > .tab-item {
+        border: 0px;
+      }
     }
 
     > .tab-body {
-        position: absolute;
+      border: 0px;
+    }
+  }
+
+  > .tab-header {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    height: $tab-header-height;
+
+    z-index: 1;
+    display: flex;
+
+    &.no-border {
+      > .tab-item {
+        border: 0px !important;
+      }
+    }
+
+    > .tab-item {
+      flex: 1;
+      display: inline-block;
+      font-size: 12px;
+      text-align: left;
+      height: 100%;
+      padding: 6px 4px;
+      cursor: pointer;
+      color: black;
+      //   border: 1px solid $tab-border-color;
+      min-width: 50px;
+
+      &:not(.selected) {
+        background-color: $tab-background-color;
+        color: black;
+      }
+
+      &.selected {
+        background-color: $tab-selected-color;
+      }
+
+      &.small-font {
+        font-size: 11px;
+      }
+
+      &.select-reverse {
+        &:not(.selected) {
+          background-color: rgba($tab-selected-color, 0.5);
+          color: black;
+        }
+
+        &.selected {
+          background-color: $tab-background-color;
+        }
+      }
+    }
+  }
+
+  > .tab-body {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: $tab-header-height;
+    bottom: 0px;
+    // border: 1px solid $tab-border-color;
+
+    &.no-border {
+      border: 0px;
+    }
+
+    > .tab-content {
+      position: absolute;
+      left: 0px;
+      right: 0px;
+      top: 0px;
+      bottom: 0px;
+      display: none;
+      overflow: auto;
+
+      &.selected {
+        display: block;
+
+        &.flex {
+          display: flex;
+          flex-direction: column;
+        }
+      }
+
+      .fixed {
+        flex: none;
+      }
+
+      .scroll {
+        flex: 1 1 auto;
+        overflow: auto;
+        position: relative;
+
+        .tab-element-title {
+          position: absolute;
+          top: 0px;
+          left: 0px;
+          right: 0px;
+          height: 30px;
+          display: none;
+          background-color: $background-color;
+          font-size: 12px;
+          font-weight: bold;
+          padding: 8px 5px !important;
+          height: 30px;
+          background-color: #f3f3f3;
+          color: #333;
+        }
+      }
+    }
+  }
+
+  &.bottom {
+    > .tab-header {
+      top: auto;
+      bottom: 1px;
+
+      > .tab-item {
+        &.selected {
+          border-top: 1px solid #ffffff;
+          border-bottom: 1px solid $tab-border-color;
+        }
+      }
+    }
+
+    > .tab-body {
+      top: 0px;
+      bottom: $tab-header-height;
+    }
+  }
+
+  &.horizontal {
+    &.left {
+      > .tab-header {
         left: 0px;
+        width: $tab-horizontal-header-width;
+        display: inline-block;
+
+        > .tab-item {
+          height: $tab-horizontal-header-width;
+          overflow: auto;
+          line-height: 3;
+          min-width: $tab-horizontal-header-width;
+        }
+      }
+
+      > .tab-body {
+        left: $tab-horizontal-header-width;
         right: 0px;
-        top: $tab-header-height;
-        bottom: 0px;
-        border: 1px solid $tab-border-color;
-
-        &.no-border {
-            border:0px;
-        }
-
-        > .tab-content {
-            position: absolute;
-            left: 0px;
-            right: 0px;
-            top: 0px;
-            bottom: 0px;
-            display: none;
-            overflow: auto; 
-
-            &.selected {
-                display: block;
-
-                &.flex {
-                    display: flex;
-                    flex-direction: column;
-                }                
-            }
-
-            .fixed {
-                flex: none;
-            }
-
-            .scroll {
-                flex: 1 1 auto;
-                overflow: auto;
-                position: relative;
-
-                .tab-element-title {
-                    position :absolute;
-                    top: 0px;
-                    left: 0px;
-                    right: 0px;
-                    height: 30px;
-                    display: none;
-                    background-color: $background-color;
-                    font-size: 12px;
-                    font-weight: bold;
-                    padding: 8px 5px !important;
-                    height: 30px;
-                    background-color: #f3f3f3;
-                    color: #333;
-                }                
-            }
-
-        }
+        border-left: 1px solid $border-color;
+        border-right: 0px;
+      }
     }
 
-    &.bottom {
-        > .tab-header {
-            top: auto;
-            bottom: 1px;
+    > .tab-header {
+      left: auto;
+      top: 0px;
+      bottom: 0px;
+      width: $tab-horizontal-header-right-width;
+      height: auto;
+      display: inline-block;
 
-            > .tab-item {
-                &.selected {
-                    border-top: 1px solid #ffffff;
-                    border-bottom: 1px solid $tab-border-color;                    
-                }
-            }
+      > .tab-item {
+        border: 0px;
+        border-bottom: 1px solid $border-color;
+        text-align: center;
+        line-height: 3;
+        height: $tab-horizontal-header-right-width - 10px;
+        min-width: $tab-horizontal-header-right-width;
 
+        &.selected {
+          background-color: rgba($tab-selected-color, 0.5);
         }
-
-        > .tab-body {
-            top: 0px;
-            bottom: $tab-header-height;
-        }
+      }
     }
 
-    &.horizontal {
-
-        &.left {
-            > .tab-header {    
-                left: 0px;
-                width: $tab-horizontal-header-width; 
-                display: inline-block;
-
-                > .tab-item {
-                    height: $tab-horizontal-header-width; 
-                    overflow: auto;
-                    line-height: 3;
-                    min-width: $tab-horizontal-header-width;
-                }
-            }
-
-            > .tab-body {
-                left: $tab-horizontal-header-width;
-                right: 0px;
-                border-left: 1px solid $border-color;
-                border-right: 0px;
-            }
-        }
-
-        > .tab-header {
-            left: auto;
-            top: 0px;
-            bottom: 0px;
-            width: $tab-horizontal-header-right-width;
-            height: auto;
-            display: inline-block;
-
-            > .tab-item {
-                border: 0px;
-                border-bottom: 1px solid $border-color;
-                text-align: center;
-                line-height: 3;   
-                height: $tab-horizontal-header-right-width - 10px;   
-                min-width: $tab-horizontal-header-right-width;
-                
-                &.selected {
-                    background-color: rgba($tab-selected-color, 0.5);
-                }
-            }
-        }
-
-        > .tab-body {
-            top: 0px;
-            right: $tab-horizontal-header-right-width;
-            border:0px;
-            border-right: 1px solid $border-color;
-        }
+    > .tab-body {
+      top: 0px;
+      right: $tab-horizontal-header-right-width;
+      border: 0px;
+      border-right: 1px solid $border-color;
     }
+  }
 }

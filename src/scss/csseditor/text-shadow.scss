@@ -1,0 +1,73 @@
+.text-shadow-item {
+  grid-template-columns: 1fr !important;
+
+  .shadow-item {
+    height: 20px;
+    display: grid;
+    grid-template-columns: 20px 1fr 1fr 1fr 20px;
+    grid-column-gap: 5px;
+    text-align: center;
+    margin-bottom: 5px;
+
+    &.desc {
+      color: #333333;
+      .color {
+        visibility: hidden;
+      }
+    }
+    .color {
+      //   background-color: white;
+      cursor: pointer;
+      height: 20px;
+      border: 1px solid $border-color;
+      border-radius: 100%;
+    }
+
+    .inset {
+      svg {
+        width: 16px;
+        height: 16px;
+
+        path {
+          fill: $border-color;
+        }
+      }
+
+      &[data-value="true"] {
+        svg {
+          path {
+            fill: black;
+          }
+        }
+      }
+    }
+
+    .offset-x,
+    .offset-y,
+    .blur-radius,
+    .inset {
+      box-sizing: border-box;
+      padding: 4px 0px;
+    }
+
+    .tools {
+      text-align: right;
+      button {
+        appearance: none;
+        background-color: transparent;
+        border: 0px;
+        padding: 0px;
+        width: 16px;
+        height: 16px;
+        display: inline-block;
+        cursor: pointer;
+        outline: none;
+
+        svg {
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+  }
+}

@@ -8,7 +8,7 @@
     top: 50%;
     height: 4px;
     transform: translateY(-50%);
-    background-color: #e6e6e6;
+    background-color: white;
   }
 
   &:after {
@@ -20,14 +20,14 @@
     left: 50%;
     width: 4px;
     transform: translateX(-50%);
-    background-color: #e6e6e6;
+    background-color: white;
   }
 }
 
 .border-item {
   grid-template-columns: 1fr 3fr;
   grid-column-gap: 10px;
-  height: 70px;
+  height: 85px;
 
   .border-direction {
     position: relative;
@@ -127,6 +127,8 @@
         width: 20px;
         border-radius: 100%;
         cursor: pointer;
+        border: 1px solid $border-color;
+        box-sizing: border-box;
       }
     }
   }
@@ -142,7 +144,13 @@
       &[data-selected-value="#{$borderRadiusType}"] {
         button[data-value="#{$borderRadiusType}"] {
           //   background-color: white;
-          border-color: black;
+          // border-color: black;
+          background-color: black;
+          svg {
+            path {
+              fill: white;
+            }
+          }
         }
       }
     }
@@ -152,20 +160,24 @@
       appearance: none;
       background-color: transparent;
       box-sizing: border-box;
-      width: 16px;
-      height: 18px;
+      width: 20px;
+      height: 20px;
       display: inline-block;
       vertical-align: middle;
-      border-radius: 5px;
-      border: 2px solid $border-color;
       margin-right: 2px;
+      border-radius: 3px;
       cursor: pointer;
       outline: none;
+      padding: 0px;
+      border: 0px;
 
-      &[data-value="partitial"] {
-        position: relative;
+      svg {
+        width: 100%;
+        height: 100%;
 
-        @include cross;
+        path {
+          fill: $border-color;
+        }
       }
     }
   }
@@ -213,24 +225,25 @@
         margin-right: 2px;
         cursor: pointer;
         outline: none;
-        @include cross;
+        // @include cross;
         position: relative;
+        margin-top: 2px;
       }
 
       label.topLeft {
-        border-top-left-radius: 5px;
+        border-top-left-radius: 10px;
       }
 
       label.topRight {
-        border-top-right-radius: 5px;
+        border-top-right-radius: 10px;
       }
 
       label.bottomLeft {
-        border-bottom-left-radius: 5px;
+        border-bottom-left-radius: 10px;
       }
 
       label.bottomRight {
-        border-bottom-right-radius: 5px;
+        border-bottom-right-radius: 10px;
       }
     }
   }

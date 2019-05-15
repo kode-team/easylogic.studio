@@ -282,6 +282,19 @@ export const FilterClassName = {
   "drop-shadow": DropshadowFilter
 };
 
+export const FilterClass = {
+  BlurFilter,
+  GrayscaleFilter,
+  HueRotateFilter,
+  InvertFilter,
+  BrightnessFilter,
+  ContrastFilter,
+  OpacityFilter,
+  SaturateFilter,
+  SepiaFilter,
+  DropshadowFilter
+};
+
 Filter.parse = obj => {
   var FilterClass = FilterClassName[obj.type];
 

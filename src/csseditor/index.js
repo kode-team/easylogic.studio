@@ -1,14 +1,19 @@
 import CSSEditor from "./editor/index";
 import * as App from "../util/App";
+import cssProperty from "../editor/css-property";
+import imageResource from "../editor/image-resource";
+import parse from "../editor/parse";
+
 export default {
   createCSSEditor(opts = { type: "white" }) {
-    switch (opts.type) {
-      default:
-        return App.start({
-          components: { CSSEditor },
-          template: `<CSSEditor />`
-        });
-    }
+    return App.start({
+      components: { CSSEditor },
+      template: `<CSSEditor ${opts.embed ? 'embed="true"' : ""} />`,
+      ...opts
+    });
   },
-  CSSEditor
+  CSSEditor,
+  ...cssProperty,
+  ...imageResource,
+  ...parse
 };

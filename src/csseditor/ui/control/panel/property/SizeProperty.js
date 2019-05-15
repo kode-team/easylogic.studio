@@ -1,60 +1,81 @@
 import BaseProperty from "./BaseProperty";
-import { INPUT, CLICK } from "../../../../../util/Event";
+import { INPUT, CLICK, LOAD } from "../../../../../util/Event";
 import { html } from "../../../../../util/functions/func";
 import { editor } from "../../../../../editor/editor";
 import { Length } from "../../../../../editor/unit/Length";
 import { EVENT } from "../../../../../util/UIElement";
 import icon from "../../../icon/icon";
+import {
+  CHANGE_SELECTION,
+  CHANGE_EDITOR,
+  CHANGE_ARTBOARD
+} from "../../../../types/event";
+import { EMPTY_STRING } from "../../../../../util/css/types";
 
 export default class SizeProperty extends BaseProperty {
-  isHideHeader() {
-    return true;
+  getTitle() {
+    return "Size";
   }
 
-  afterRender() {
-    setTimeout(() => {
-      this.emit("caculateSize", "caculateSizeProperty");
-    }, 1000);
+  [EVENT(CHANGE_EDITOR, CHANGE_ARTBOARD, CHANGE_SELECTION)]() {
+    this.refresh();
   }
 
-  [EVENT("caculateSizeProperty")](data) {
-    this.refs.$width.val(data.width.value);
-    this.refs.$height.val(data.height.value);
+  refresh() {
+    this.load();
   }
 
   getBody() {
     return html`
-      <div class="property-item size-item">
-        <div class="width">
-          <input type="number" ref="$width" min="1" />
-          <label>Width</label>
-        </div>
-        <div class="tool">
-          <button type="button" data-value="fixed" ref="$fixSize">
-            ${icon.arrowRight}
-          </button>
-        </div>
-        <div class="height">
-          <input type="number" ref="$height" min="1" />
-          <label>Height</label>
-        </div>
+      <div class="property-item size-item" ref="$sizeItem"></div>
+    `;
+  }
+
+  [LOAD("$sizeItem")]() {
+    var current = editor.selection.current;
+
+    if (!current) return EMPTY_STRING;
+
+    return html`
+      <div class="width">
+        <input
+          type="number"
+          ref="$width"
+          min="1"
+          value="${current.width.value.toString()}"
+        />
+        <label>Width</label>
+      </div>
+      <div class="tool">
+        <button type="button" data-value="fixed" ref="$fixSize">
+          ${icon.arrowRight}
+        </button>
+      </div>
+      <div class="height">
+        <input
+          type="number"
+          ref="$height"
+          min="1"
+          value="${current.height.value.toString()}"
+        />
+        <label>Height</label>
       </div>
     `;
   }
 
-  [INPUT("$width")]() {
+  [INPUT("$sizeItem .width input")](e) {
     this.setSize({
       width: Length.px(+this.getRef("$width").value)
     });
   }
 
-  [INPUT("$height")]() {
+  [INPUT("$sizeItem .height input")](e) {
     this.setSize({
       height: Length.px(+this.getRef("$height").value)
     });
   }
 
-  [CLICK("$fixSize")]() {
+  [CLICK("$sizeItem .tool button")]() {
     var width = Length.px(+this.getRef("$width").value);
     this.getRef("$height").val(+width);
 
@@ -69,6 +90,7 @@ export default class SizeProperty extends BaseProperty {
     if (current) {
       current.setSize(data);
 
+      this.emit("setSize");
       this.emit("refreshCanvas");
     }
   }

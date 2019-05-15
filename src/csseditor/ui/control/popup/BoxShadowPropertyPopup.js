@@ -1,16 +1,7 @@
 import UIElement, { EVENT } from "../../../../util/UIElement";
 import { Length } from "../../../../editor/unit/Length";
 import { CHANGE_EDITOR, CHANGE_SELECTION } from "../../../types/event";
-import {
-  LOAD,
-  CLICK,
-  MOUSEDOWN,
-  PREVENT,
-  POINTERSTART,
-  MOVE,
-  END,
-  INPUT
-} from "../../../../util/Event";
+import { LOAD, CLICK, POINTERSTART, MOVE, INPUT } from "../../../../util/Event";
 import { html } from "../../../../util/functions/func";
 
 export default class BoxShadowPropertyPopup extends UIElement {
@@ -238,6 +229,9 @@ export default class BoxShadowPropertyPopup extends UIElement {
       y = halfHeight;
     }
 
+    x = Math.floor(x);
+    y = Math.floor(y);
+
     this.getRef("$offsetX").val(x);
     this.getRef("$offsetY").val(y);
 
@@ -256,7 +250,7 @@ export default class BoxShadowPropertyPopup extends UIElement {
 
     this.$el
       .css({
-        top: Length.px(450),
+        top: Length.px(460),
         right: Length.px(10),
         bottom: Length.auto
       })

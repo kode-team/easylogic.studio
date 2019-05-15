@@ -1,44 +1,87 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
 
 import { editor } from "../../../editor/editor";
-import { Length } from "../../../editor/unit/Length";
 import { Project } from "../../../editor/items/Project";
 import { ArtBoard } from "../../../editor/items/ArtBoard";
 import { CLICK } from "../../../util/Event";
 import { CHANGE_SELECTION } from "../../types/event";
+import { StyleParser } from "../../../editor/parse/StyleParser";
 
 export default class CanvasView extends UIElement {
+  initialize() {
+    super.initialize();
+
+    this.styleParser = new StyleParser();
+  }
+
   afterRender() {
     var project = editor.addProject(new Project());
     var artboard = project.add(new ArtBoard());
 
     editor.selection.select(artboard);
 
-    this[EVENT("refreshCanvas")]();
+    this.parser = this;
+
+    if (this.props.embed) {
+      this.$el.hide();
+    } else {
+      this[EVENT("refreshCanvas")]();
+    }
   }
   template() {
     return `
-            <div class='page-view'>
-                <div class="page-canvas" ref="$canvas"></div>          
-            </div>
-        `;
+      <div class='page-view'>
+        <div class="page-canvas" ref="$canvas"></div>          
+      </div>
+    `;
   }
 
-  [EVENT("caculateSize")](targetEvent) {
-    var rect = this.refs.$canvas.rect();
+  [EVENT("setParser")](callback) {
+    this.parser = callback(this);
+  }
 
-    var data = { width: Length.px(rect.width), height: Length.px(rect.height) };
-    this.emit(targetEvent, data);
+  parseEnd(data) {
+    const newStyles = this.styleParser.parse(data);
+
+    this.modifyArtBoard(newStyles);
+
+    this.emit(CHANGE_SELECTION);
+  }
+
+  modifyArtBoard(data) {
+    var current = editor.selection.current;
+    if (current) {
+      current.reset(data);
+    }
+  }
+
+  // [EVENT("caculateSize")](targetEvent) {
+  //   var $el = this.refs.$canvas;
+  //   var rect = $el.rect();
+
+  //   var data = { width: Length.px(rect.width), height: Length.px(rect.height) };
+  //   this.emit(targetEvent, data);
+  // }
+
+  generate(css) {
+    this.refs.$canvas.css(css);
+    if (this.refs.$canvas.text() != css.content) {
+      this.refs.$canvas.text(css.content);
+    }
   }
 
   [EVENT("refreshCanvas")]() {
     var current = editor.selection.current;
     if (current) {
-      this.refs.$canvas.cssText(current.toString());
+      if (this.props.embed) {
+        this.parser.generate(current.toEmbedCSS());
+      } else {
+        this.generate(current.toCSS());
+      }
     }
   }
 
-  [CLICK("$el")]() {
+  [CLICK()]() {
     this.emit(CHANGE_SELECTION);
   }
 }

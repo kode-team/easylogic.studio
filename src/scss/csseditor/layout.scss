@@ -7,7 +7,7 @@ $pointer-color: rgba(#ececec, 0.8);
 $gutter: 8px;
 $tool-size: 100px;
 $top-size: 100px;
-$left-size: 0px;
+$left-size: 310px;
 $left-layer-panel: 70px;
 $left-page-size: 70px;
 $toggle-left-size: 80px;
@@ -20,6 +20,10 @@ $layer-toolbar-height: 0px;
 $display-flex-color: #01a270;
 $display-grid-color: red;
 
+[data-embed-editor-target] {
+  border: 1px dashed black;
+}
+
 .layout-main {
   position: absolute;
   left: 0px;
@@ -29,15 +33,26 @@ $display-grid-color: red;
   display: flex;
   flex-direction: column;
 
-  &.show-timeline {
-    .layout-footer {
-      height: $timeline-size - 1px;
-    }
-  }
+  &.embed-editor {
+    position: fixed;
 
-  &:not(.show-timeline) {
-    .layout-footer {
-      height: $timeline-header-size - 1px !important;
+    width: 300px;
+    border-left: 1px solid $border-color;
+    right: 0px;
+    left: auto;
+
+    .fill-picker,
+    .popup {
+      right: 310px !important;
+      pointer-events: all;
+    }
+
+    .vertical-colorstep-container {
+      left: auto !important;
+      left: auto !important;
+      top: 24px !important;
+      width: 814px !important;
+      right: 310px !important;
     }
   }
 
@@ -49,11 +64,16 @@ $display-grid-color: red;
     position: relative;
     background-color: rgba(0, 0, 0, 1);
     z-index: 1;
+    pointer-events: all;
 
     .page-tab-menu {
       flex: 1 1 auto;
       display: block;
       position: relative;
+    }
+
+    .layout-body {
+      display: none;
     }
   }
 
@@ -75,34 +95,37 @@ $display-grid-color: red;
 
     .layout-right {
       position: absolute;
-      left: 10px;
-      top: 10px;
-      width: 260px;
+      left: 0px;
+      top: 0px;
+      bottom: 0px;
+      width: $left-size;
       display: inline-block;
-      border-left: 1px solid $border-color;
-      border-top: 1px solid $border-color;
-      border-right: 1px solid $border-color;
-      background-color: rgba(255, 255, 255, 0.5);
+      // border-left: 1px solid $border-color;
+      // border-top: 1px solid $border-color;
+      border-right: 1px solid rgba(#333, 0.5);
+      background-color: rgba(255, 255, 255, 1);
       z-index: 100;
       display: flex;
       flex-direction: column;
+      overflow: auto;
     }
 
-    .layout-left {
-      flex: none;
-      width: $left-size;
-      border-right: 1px solid $border-color;
-      z-index: 100;
-      height: 100%;
-      position: relative;
-      display: none;
-    }
+    // .layout-left {
+    //   flex: none;
+    //   width: $left-size;
+    //   border-right: 1px solid $border-color;
+    //   z-index: 100;
+    //   height: 100%;
+    //   position: relative;
+    //   display: none;
+    // }
 
     .layout-body {
-      flex: 1 1 auto;
-      width: 100%;
-      height: 100%;
-      position: relative;
+      top: 0px;
+      right: 0px;
+      bottom: 0px;
+      left: $left-size;
+      position: absolute;
     }
   }
 }
@@ -127,8 +150,12 @@ $display-grid-color: red;
 @import "./property-view.scss";
 @import "./filters.scss";
 @import "./border.scss";
+@import "./box-model.scss";
 @import "./size.scss";
+@import "./content.scss";
+@import "./font.scss";
 @import "./box-shadow.scss";
+@import "./text-shadow.scss";
 @import "./export-view.scss";
 
 @import "./fill-picker.scss";

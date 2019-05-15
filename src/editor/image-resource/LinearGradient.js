@@ -1,6 +1,9 @@
 import { Gradient } from "./Gradient";
 import { EMPTY_STRING } from "../../util/css/types";
-import { isNumber } from "../../util/functions/func";
+import { isNumber, isUndefined } from "../../util/functions/func";
+import { convertMatches, reverseMatches } from "../../util/functions/parser";
+import { Length } from "../unit/Length";
+import { ColorStep } from "./ColorStep";
 
 const DEFINED_DIRECTIONS = {
   "0": "to top",
@@ -11,6 +14,17 @@ const DEFINED_DIRECTIONS = {
   "225": "to bottom left",
   "270": "to left",
   "315": "to top left"
+};
+
+const DEFINED_ANGLES = {
+  "to top": "0",
+  "to top right": "45",
+  "to right": "90",
+  "to bottom right": "135",
+  "to bottom": "180",
+  "to bottom left": "225",
+  "to left": "270",
+  "to top left": "315"
 };
 
 export class LinearGradient extends Gradient {
@@ -63,5 +77,33 @@ export class LinearGradient extends Gradient {
     });
 
     return gradient + "";
+  }
+
+  static parse(str) {
+    var results = convertMatches(str);
+    var angle = 0;
+    var colorsteps = [];
+    results.str
+      .split("(")[1]
+      .split(")")[0]
+      .split(",")
+      .map(it => it.trim())
+      .forEach((newValue, index) => {
+        if (newValue.includes("@")) {
+          // color 복원
+          newValue = reverseMatches(newValue, results.matches);
+
+          // 나머지는 ColorStep 이 파싱하는걸로
+          // ColorStep 은 파싱이후 colorsteps 를 리턴해줌... 배열임, 명심 명심
+          colorsteps.push(...ColorStep.parse(newValue));
+        } else {
+          // direction
+          angle = isUndefined(DEFINED_ANGLES[newValue])
+            ? Length.parse(newValue)
+            : Length.deg(+DEFINED_ANGLES[newValue]);
+        }
+      });
+
+    return new LinearGradient({ angle, colorsteps });
   }
 }

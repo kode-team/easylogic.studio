@@ -293,7 +293,11 @@ const applyElementAttribute = ($element, key, value) => {
   if (isUndefined(value)) {
     $element.removeAttr(key);
   } else {
-    $element.attr(key, value);
+    if ($element.el.nodeName === "TEXTAREA" && key === "value") {
+      $element.text(value);
+    } else {
+      $element.attr(key, value);
+    }
   }
 };
 
@@ -327,7 +331,7 @@ export default class EventMachine {
     );
     this.refs.$el = this.$el;
 
-    if ($container) $container.html(this.$el);
+    if ($container) $container.append(this.$el);
 
     // this.load();
     this.parseComponent();

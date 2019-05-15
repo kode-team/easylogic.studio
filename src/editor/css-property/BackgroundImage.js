@@ -10,14 +10,12 @@ import { RepeatingRadialGradient } from "../image-resource/RepeatingRadialGradie
 import { ConicGradient } from "../image-resource/ConicGradient";
 import { RepeatingConicGradient } from "../image-resource/RepeatingConicGradient";
 import { Gradient } from "../image-resource/Gradient";
+import { convertMatches, reverseMatches } from "../../util/functions/parser";
+import { WHITE_STRING } from "../../util/css/types";
 
 const RepeatList = ["repeat", "no-repeat", "repeat-x", "repeat-y"];
 
 export class BackgroundImage extends Property {
-  static parse(obj) {
-    return new BackgroundImage(obj);
-  }
-
   addImageResource(imageResource) {
     this.clear("image-resource");
     return this.addItem("image-resource", imageResource);
@@ -207,5 +205,88 @@ export class BackgroundImage extends Property {
     return keyMap(this.toCSS(), (key, value) => {
       return `${key}: ${value}`;
     }).join(";");
+  }
+
+  static parse(obj) {
+    return new BackgroundImage(obj);
+  }
+
+  static parseStyle(style) {
+    var backgroundImages = [];
+    var reg = /((linear\-gradient|repeating\-linear\-gradient|radial\-gradient|repeating\-radial\-gradient|conic\-gradient|repeating\-conic\-gradient|url)\(([^\)]*)\))/gi;
+
+    if (style["background-image"]) {
+      var results = convertMatches(style["background-image"]);
+
+      results.str.match(reg).forEach((value, index) => {
+        let image = null;
+        value = reverseMatches(value, results.matches);
+        if (value.includes("repeating-linear-gradient")) {
+          // 반복을 먼저 파싱하고
+          image = RepeatingLinearGradient.parse(value);
+        } else if (value.includes("linear-gradient")) {
+          // 그 다음에 파싱 하자.
+          image = LinearGradient.parse(value);
+        } else if (value.includes("repeating-radial-gradient")) {
+          image = RepeatingRadialGradient.parse(value);
+        } else if (value.includes("radial")) {
+          image = RadialGradient.parse(value);
+        } else if (value.includes("repeating-conic-gradient")) {
+          image = RepeatingConicGradient.parse(value);
+        } else if (value.includes("conic")) {
+          image = ConicGradient.parse(value);
+        } else if (value.includes("url")) {
+          image = URLImageResource.parse(value);
+        }
+
+        backgroundImages[index] = new BackgroundImage({
+          type: image.type,
+          image
+        });
+      });
+    }
+
+    if (style["background-repeat"]) {
+      style["background-repeat"].split(",").forEach((it, index) => {
+        if (backgroundImages[index]) {
+          backgroundImages[index].repeat = it;
+        }
+      });
+    }
+
+    if (style["background-blend-mode"]) {
+      style["background-blend-mode"].split(",").forEach((it, index) => {
+        if (backgroundImages[index]) {
+          backgroundImages[index].blendMode = it;
+        }
+      });
+    }
+
+    if (style["background-size"]) {
+      style["background-size"].split(",").forEach((it, index) => {
+        if (backgroundImages[index]) {
+          if (it == "cover" || it === "contain" || it === "auto") {
+            backgroundImages[index].size = it;
+          } else {
+            backgroundImages[index].size = "auto";
+            let [width, height] = it.split(WHITE_STRING);
+            backgroundImages[index].width = Length.parse(width);
+            backgroundImages[index].height = Length.parse(height);
+          }
+        }
+      });
+    }
+
+    if (style["background-position"]) {
+      style["background-position"].split(",").forEach((it, index) => {
+        if (backgroundImages[index]) {
+          let [x, y] = it.split(WHITE_STRING);
+          backgroundImages[index].x = Length.parse(x);
+          backgroundImages[index].y = Length.parse(y);
+        }
+      });
+    }
+
+    return backgroundImages;
   }
 }

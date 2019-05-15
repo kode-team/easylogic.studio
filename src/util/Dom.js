@@ -112,21 +112,6 @@ export default class Dom {
 
   removeClass(...args) {
     this.el.classList.remove(...args);
-
-    /*
-        if (this.el.className) {
-            var className = this.el.className;
-
-            if ($1) { className = ((` ${className} `).replace(` ${$1} `, WHITE_STRING)).trim();    }
-            if ($2) { className = ((` ${className} `).replace(` ${$2} `, WHITE_STRING)).trim();    }
-            if ($3) { className = ((` ${className} `).replace(` ${$3} `, WHITE_STRING)).trim();    }
-            if ($4) { className = ((` ${className} `).replace(` ${$4} `, WHITE_STRING)).trim();    }
-            if ($5) { className = ((` ${className} `).replace(` ${$5} `, WHITE_STRING)).trim();    }
-
-            this.el.className = className;
-        }
-        */
-
     return this;
   }
 
@@ -285,6 +270,23 @@ export default class Dom {
     }
 
     return this;
+  }
+
+  getStyleList(...list) {
+    var style = {};
+
+    var len = this.el.style.length;
+    for (var i = 0; i < len; i++) {
+      var key = this.el.style[i];
+
+      style[key] = this.el.style[key];
+    }
+
+    list.forEach(key => {
+      style[key] = this.css(key);
+    });
+
+    return style;
   }
 
   cssText(value) {

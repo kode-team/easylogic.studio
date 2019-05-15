@@ -27,9 +27,24 @@ import BorderProperty from "./BorderProperty";
 import BorderRadiusProperty from "./BorderRadiusProperty";
 import SizeProperty from "./SizeProperty";
 import BoxShadowProperty from "./BoxShadowProperty";
+import BoxModelProperty from "./BoxModelProperty";
+import ContentProperty from "./ContentProperty";
+import FontProperty from "./FontProperty";
+import FontColorProperty from "./FontColorProperty";
+import TextShadowProperty from "./TextShadowProperty";
+import TextProperty from "./TextProperty";
+import FontSpacingProperty from "./FontSpacingProperty";
+
 // import PositionProperty from "./PositionProperty";
 
 export default {
+  FontSpacingProperty,
+  TextProperty,
+  TextShadowProperty,
+  FontColorProperty,
+  FontProperty,
+  ContentProperty,
+  BoxModelProperty,
   // PositionProperty,
   BoxShadowProperty,
   SizeProperty,

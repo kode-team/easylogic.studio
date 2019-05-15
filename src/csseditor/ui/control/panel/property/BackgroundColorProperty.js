@@ -33,7 +33,9 @@ export default class BackgroundColorProperty extends BaseProperty {
                     <div class='mini-view' style="${imageCSS}" ref='$miniView'></div>
                 </div>
                 <div class='color-code'>
-                    <input type="text" ref='$colorCode' />
+                    <input type="text" ref='$colorCode' value='${
+                      it.backgroundColor
+                    }' />
                 </div>
             </div>
         `;

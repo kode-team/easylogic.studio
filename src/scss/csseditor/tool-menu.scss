@@ -7,9 +7,10 @@
   .logo {
     color: white;
     padding: 20px 10px;
+    width: 260px;
 
     .text {
-      font-size: 30px;
+      font-size: 24px;
       display: inline-block;
       font-weight: bold;
       text-transform: uppercase;
@@ -38,7 +39,7 @@
     flex: 1 1 auto;
     text-align: center;
     height: 100%;
-    padding: 0px 5px;
+    padding: 0px;
 
     &.flex-2 {
       flex: 5;

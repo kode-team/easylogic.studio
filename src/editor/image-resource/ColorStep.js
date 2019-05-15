@@ -1,7 +1,8 @@
 import { Item } from "../items/Item";
 import { Length } from "../unit/Length";
 import Color from "../../util/Color";
-import { EMPTY_STRING } from "../../util/css/types";
+import { EMPTY_STRING, WHITE_STRING } from "../../util/css/types";
+import { convertMatches } from "../../util/functions/parser";
 export class ColorStep extends Item {
   getDefaultObject() {
     return super.getDefaultObject({
@@ -215,5 +216,57 @@ export class ColorStep extends Item {
         colorsteps[0].selected = true;
       }
     }
+  }
+
+  static parse(colorStepString) {
+    let colorsteps = [];
+
+    const results = convertMatches(colorStepString);
+
+    var arr = results.str.split(WHITE_STRING);
+    const colorIndex = +arr[0].replace("@", "");
+    const color = results.matches[colorIndex].color;
+
+    if (arr.length === 1) {
+      colorsteps.push(
+        new ColorStep({
+          color,
+          unit: "%",
+          percent: 0
+        })
+      );
+    } else if (arr.length === 2) {
+      const len = Length.parse(arr[1]);
+
+      let data = { unit: len.unit };
+
+      if (len.isPercent()) {
+        data.percent = len.value;
+      } else if (len.isPx()) {
+        data.px = len.value;
+      } else if (len.isEm()) {
+        data.em = len.value;
+      }
+
+      colorsteps.push(new ColorStep({ color, ...data }));
+    } else if (arr.length === 3) {
+      [1, 2].forEach(index => {
+        const len = Length.parse(arr[index]);
+
+        let data = { unit: len.unit };
+
+        if (len.isPercent()) {
+          data.percent = len.value;
+        } else if (len.isPx()) {
+          data.px = len.value;
+        } else if (len.isEm()) {
+          data.em = len.value;
+        }
+
+        colorsteps.push(new ColorStep({ color, ...data }));
+      });
+    }
+
+    return colorsteps;
   }
 }

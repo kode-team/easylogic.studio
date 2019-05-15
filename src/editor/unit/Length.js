@@ -262,6 +262,8 @@ export class Length {
       return Length.percent((this.value * fontSize * 100) / maxValue);
     } else if (this.isString()) {
       return this.stringToPercent(maxValue);
+    } else if (this.isDeg()) {
+      return Length.percent((this.value / 360) * 100);
     }
   }
 

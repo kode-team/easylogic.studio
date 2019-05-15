@@ -3,6 +3,7 @@ import { CLICK, INPUT, CHANGE } from "../../../../../util/Event";
 import { html } from "../../../../../util/functions/func";
 import { editor } from "../../../../../editor/editor";
 import { Length } from "../../../../../editor/unit/Length";
+import icon from "../../../icon/icon";
 
 const typeList = [
   { key: "topLeft", title: "Top Left" },
@@ -22,8 +23,10 @@ export default class BorderRadiusProperty extends BaseProperty {
     return html`
       <div class="property-item border-radius-item">
         <div class="radius-selector" data-selected-value="all" ref="$selector">
-          <button type="button" data-value="all"></button>
-          <button type="button" data-value="partitial"></button>
+          <button type="button" data-value="all">${icon.border_all}</button>
+          <button type="button" data-value="partitial">
+            ${icon.border_inner}
+          </button>
         </div>
         <div class="radius-value">
           <input type="range" min="0" max="100" ref="$range" value="0" />

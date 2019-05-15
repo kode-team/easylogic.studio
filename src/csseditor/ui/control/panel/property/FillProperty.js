@@ -242,11 +242,15 @@ export default class FillProperty extends BaseProperty {
     this.viewFillPicker(this.getRef("preview", this.selectedIndex));
   }
 
+  getCurrentBackgroundImage() {
+    return this.current.backgroundImages[this.selectedIndex];
+  }
+
   [CLICK("$fillList .tools .remove")](e) {
     var removeIndex = e.$delegateTarget.attr("data-index");
     var current = editor.selection.current;
     if (!current) return;
-    var currentBackgroundImage = current.backgroundImages[removeIndex];
+    var currentBackgroundImage = this.getCurrentBackgroundImage();
 
     if (currentBackgroundImage) {
       current.removeBackgroundImage(removeIndex);

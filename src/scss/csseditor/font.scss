@@ -1,0 +1,24 @@
+.font-item {
+  margin-bottom: 2px;
+  label {
+    text-align: right;
+    vertical-align: middle;
+    font-size: 13px;
+    padding-right: 4px;
+  }
+
+  .input {
+    vertical-align: middle;
+    display: grid;
+    grid-template-columns: 1fr 40px 70px;
+    grid-column-gap: 4px;
+
+    .input-field {
+      input,
+      select {
+        width: 100%;
+        outline: none;
+      }
+    }
+  }
+}

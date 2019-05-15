@@ -1,4 +1,5 @@
-&.background-color {
+&.background-color,
+&.font-color {
   grid-template-columns: 1fr;
 
   .fill-item {
@@ -13,13 +14,14 @@
       display: inline-block;
       height: 100%;
       box-sizing: border-box;
-      // border: 1px solid $border-color;
+
       cursor: pointer;
 
       .mini-view {
         width: 100%;
         height: 100%;
         border-radius: 100%;
+        border: 1px solid $border-color;
       }
     }
 

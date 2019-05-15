@@ -19,6 +19,9 @@ const borderRadiusCssKey = {
   bottomRight: "bottom-right"
 };
 
+const fontStyleList = ["size", "weight", "lineHeight", "family", "style"];
+const textStyleList = ["decoration", "transform"];
+
 export class ArtBoard extends GroupItem {
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
@@ -26,6 +29,7 @@ export class ArtBoard extends GroupItem {
       width: Length.px(300),
       height: Length.px(400),
       backgroundColor: "white",
+      color: "black",
       name: "New ArtBoard",
       x: Length.px(100),
       y: Length.px(100),
@@ -35,9 +39,22 @@ export class ArtBoard extends GroupItem {
       backdropFilters: [],
       backgroundImages: [],
       boxShadows: [],
+      textShadows: [],
       perspectiveOriginPositionX: Length.percent(0),
       perspectiveOriginPositionY: Length.percent(0),
       display: Display.parse({ display: "block" }),
+      marginTop: Length.px(0),
+      marginBottom: Length.px(0),
+      marginRight: Length.px(0),
+      marginLeft: Length.px(0),
+      paddingTop: Length.px(0),
+      paddingBottom: Length.px(0),
+      paddingRight: Length.px(0),
+      paddingLeft: Length.px(0),
+      content: "",
+      font: {},
+      text: {},
+      spacing: {},
       ...obj
     });
   }
@@ -111,6 +128,11 @@ export class ArtBoard extends GroupItem {
     return boxShadow;
   }
 
+  addTextShadow(textShadow) {
+    this.json.textShadows.push(textShadow);
+    return textShadow;
+  }
+
   addBackgroundImage(item) {
     this.json.backgroundImages.push(item);
     return item;
@@ -131,6 +153,10 @@ export class ArtBoard extends GroupItem {
 
   removeBoxShadow(removeIndex) {
     this.json.boxShadows.splice(removeIndex, 1);
+  }
+
+  removeTextShadow(removeIndex) {
+    this.json.textShadows.splice(removeIndex, 1);
   }
 
   sortItem(arr, startIndex, targetIndex) {
@@ -172,6 +198,10 @@ export class ArtBoard extends GroupItem {
 
   updateBoxShadow(index, data = {}) {
     this.json.boxShadows[+index].reset(data);
+  }
+
+  updateTextShadow(index, data = {}) {
+    this.json.textShadows[+index].reset(data);
   }
 
   addBackdropFilter(item) {
@@ -326,6 +356,10 @@ export class ArtBoard extends GroupItem {
     return this.toPropertyCSS(this.json.boxShadows);
   }
 
+  toTextShadowCSS() {
+    return this.toPropertyCSS(this.json.textShadows);
+  }
+
   toString() {
     return CSS_TO_STRING(this.toCSS());
   }
@@ -334,20 +368,131 @@ export class ArtBoard extends GroupItem {
     return CSS_TO_STRING(this.toCSS(true));
   }
 
+  toBoxModelCSS() {
+    var json = this.json;
+    var obj = {};
+    if (
+      json.marginTop.value === json.marginBottom.value &&
+      json.marginLeft.value === json.marginRight.value &&
+      json.marginTop.value === json.marginRight.value
+    ) {
+      obj.margin = json.marginTop;
+    } else {
+      obj["margin-top"] = json.marginTop;
+      obj["margin-bottom"] = json.marginBottom;
+      obj["margin-left"] = json.marginLeft;
+      obj["margin-right"] = json.marginRight;
+    }
+
+    if (
+      json.paddingTop.value === json.paddingBottom.value &&
+      json.paddingLeft.value === json.paddingRight.value &&
+      json.paddingTop.value === json.paddingRight.value
+    ) {
+      obj.padding = json.paddingTop;
+    } else {
+      obj["padding-top"] = json.paddingTop;
+      obj["padding-bottom"] = json.paddingBottom;
+      obj["padding-left"] = json.paddingLeft;
+      obj["padding-right"] = json.paddingRight;
+    }
+
+    return obj;
+  }
+
+  toFontCSS() {
+    var font = this.json.font;
+    var obj = {};
+
+    fontStyleList.forEach(key => {
+      if (font[key]) {
+        var styleKey = `font-${key}`;
+        if (key === "lineHeight") {
+          styleKey = "line-height";
+        }
+
+        obj[styleKey] = font[key];
+      }
+    });
+
+    return obj;
+  }
+
+  toTextCSS() {
+    var text = this.json.text;
+    var obj = {};
+
+    textStyleList.forEach(key => {
+      if (text[key]) {
+        var styleKey = `text-${key}`;
+
+        obj[styleKey] = text[key];
+      }
+    });
+
+    return obj;
+  }
+
+  toSpacingCSS() {
+    var spacing = this.json.spacing;
+    var obj = {};
+
+    if (spacing.letter) {
+      obj["letter-spacing"] = spacing.letter;
+    }
+
+    if (spacing.word) {
+      obj["word-spacing"] = spacing.word;
+    }
+
+    return obj;
+  }
+
   toCSS(isExport = false) {
     var json = this.json;
     var css = {
-      "background-color": json.backgroundColor
+      "background-color": json.backgroundColor,
+      color: json.color,
+      content: json.content
     };
 
     return CSS_SORTING({
       ...css,
+      ...this.toFontCSS(),
+      ...this.toTextCSS(),
+      ...this.toSpacingCSS(),
+      ...this.toBoxModelCSS(),
       ...this.toSizeCSS(),
       ...this.toBorderCSS(),
       ...this.toBorderRadiusCSS(),
       ...this.toFilterCSS(),
       ...this.toBackgroundImageCSS(isExport),
-      ...this.toBoxShadowCSS()
+      ...this.toBoxShadowCSS(),
+      ...this.toTextShadowCSS()
+    });
+  }
+
+  toEmbedCSS(isExport = false) {
+    var json = this.json;
+    var css = {
+      "background-color": json.backgroundColor,
+      color: json.color,
+      content: json.content
+    };
+
+    return CSS_SORTING({
+      ...css,
+      ...this.toFontCSS(),
+      ...this.toTextCSS(),
+      ...this.toSpacingCSS(),
+      ...this.toBoxModelCSS(),
+      ...this.toSizeCSS(),
+      ...this.toBorderCSS(),
+      ...this.toBorderRadiusCSS(),
+      ...this.toFilterCSS(),
+      ...this.toBackgroundImageCSS(isExport),
+      ...this.toBoxShadowCSS(),
+      ...this.toTextShadowCSS()
     });
   }
 

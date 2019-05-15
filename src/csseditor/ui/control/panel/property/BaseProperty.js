@@ -1,7 +1,5 @@
 import { CLICK } from "../../../../../util/Event";
 import UIElement from "../../../../../util/UIElement";
-// import items from "../items/index";
-import Dom from "../../../../../util/Dom";
 import { EMPTY_STRING } from "../../../../../util/css/types";
 
 export default class BaseProperty extends UIElement {
@@ -41,6 +39,15 @@ export default class BaseProperty extends UIElement {
   }
 
   [CLICK("$title label")](e) {
+    var $dom = e.$delegateTarget.parent();
+
+    if ($dom.hasClass("property-title")) {
+      this.$el.toggleClass("show");
+      this.onToggleShow();
+    }
+  }
+
+  [CLICK("$title .icon")](e) {
     var $dom = e.$delegateTarget.parent();
 
     if ($dom.hasClass("property-title")) {
