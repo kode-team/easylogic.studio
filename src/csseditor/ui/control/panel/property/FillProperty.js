@@ -406,9 +406,7 @@ export default class FillProperty extends BaseProperty {
       this.currentBackgroundImage.setGradient(data);
       this.viewChangeGradient(data);
 
-      if (this.current) {
-        this.emit("refreshCanvas", this.current);
-      }
+      this.emit("refreshCanvas");
     }
   }
 

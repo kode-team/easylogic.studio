@@ -7,6 +7,8 @@ module.exports = {
     main: "./src/index.js"
   },
   output: {
+    library: "EasylogicStudio",
+    libraryTarget: "umd",
     path: __dirname + "/docs"
   },
   module: {
