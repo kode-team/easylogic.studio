@@ -34,10 +34,13 @@ import FontColorProperty from "./FontColorProperty";
 import TextShadowProperty from "./TextShadowProperty";
 import TextProperty from "./TextProperty";
 import FontSpacingProperty from "./FontSpacingProperty";
+import BorderImageProperty from "./BorderImageProperty";
+import OutlineProperty from "./OutlineProperty";
 
 // import PositionProperty from "./PositionProperty";
-
 export default {
+  OutlineProperty,
+  BorderImageProperty,
   FontSpacingProperty,
   TextProperty,
   TextShadowProperty,

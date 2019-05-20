@@ -92,7 +92,7 @@ export default class FillProperty extends BaseProperty {
       .map(step => {
         return `<div class='step' data-colorstep-id="${
           step.id
-        }" style='background-color:${step.color};'></div>`;
+        }" data-selected='${step.selected}' style='background-color:${step.color};'></div>`;
       })
       .join(EMPTY_STRING);
   }
@@ -117,7 +117,9 @@ export default class FillProperty extends BaseProperty {
       return `
       <div class='fill-item ${selectedClass}' data-index='${index}' ref="fillIndex${index}" draggable='true' data-fill-type="${backgroundType}" >
           <div class='preview' data-index="${index}" ref="preview${index}">
-              <div class='mini-view' style="${imageCSS}" ref="miniView${index}"></div>
+              <div class='mini-view' >
+                <div class='color-view' style="${imageCSS}" ref="miniView${index}"></div>
+              </div>
           </div>
           <div class='fill-info'>
             <div class='gradient-info'>
@@ -211,6 +213,10 @@ export default class FillProperty extends BaseProperty {
   }
 
   [CLICK("$fillList .colorsteps .step")](e) {
+    this.getRef('colorsteps', this.selectedIndex).$(`[data-selected="true"]`).removeAttr('data-selected')
+    var selectColorStepId = e.$delegateTarget.attr("data-colorstep-id");
+    e.$delegateTarget.attr('data-selected', true);
+
     var selectColorStepId = e.$delegateTarget.attr("data-colorstep-id");
     var $preview = e.$delegateTarget.closest("fill-item").$(".preview");
     this.viewFillPicker($preview, selectColorStepId);
@@ -292,6 +298,7 @@ export default class FillProperty extends BaseProperty {
     ];
 
     this.emit("showFillPicker", {
+      changeEvent: 'changeFillPropertyFillPicker',
       ...this.getFillData(this.currentBackgroundImage),
       selectColorStepId,
       refresh: true
@@ -410,7 +417,7 @@ export default class FillProperty extends BaseProperty {
     }
   }
 
-  [EVENT("changeFillPicker")](data) {
+  [EVENT("changeFillPropertyFillPicker")](data) {
     switch (data.type) {
       case "image":
         this.setImage(data);

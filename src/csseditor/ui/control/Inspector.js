@@ -25,6 +25,8 @@ export default class Inspector extends UIElement {
               <BoxModelProperty />
               <BorderProperty />
               <BorderRadiusProperty />
+              <BorderImageProperty />
+              <OutlineProperty />              
               <BackgroundColorProperty />
               <FillProperty />
               <BoxShadowProperty />

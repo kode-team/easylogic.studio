@@ -12,6 +12,14 @@ export class StaticGradient extends Gradient {
         }) 
     }
 
+    static create (color = 'transparent') {
+        return new StaticGradient({
+            colorsteps: [
+                new ColorStep({color, percent: 0, index: 0})
+            ]
+        })
+    }
+
     toString () {
         var color = this.json.colorsteps[0].color;
         return `linear-gradient(to right, ${color}, ${color})`

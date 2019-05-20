@@ -46,6 +46,8 @@
     }
 
     &.left {
+      flex: none; 
+      width: 300px;
       text-align: left;
     }
 

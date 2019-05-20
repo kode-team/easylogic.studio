@@ -15,9 +15,7 @@ export default class BackgroundColorProperty extends BaseProperty {
     return "Background Color";
   }
   getBody() {
-    return `
-            <div class='property-item background-color' ref='$backgroundColor'></div>
-        `;
+    return `<div class='property-item background-color' ref='$backgroundColor'></div>`;
   }
 
   [LOAD("$backgroundColor")]() {
@@ -30,7 +28,9 @@ export default class BackgroundColorProperty extends BaseProperty {
     return `
             <div class='fill-item'>
                 <div class='preview'>
-                    <div class='mini-view' style="${imageCSS}" ref='$miniView'></div>
+                    <div class='mini-view'>
+                      <div class='color-view' style="${imageCSS}" ref='$miniView'></div>
+                    </div>
                 </div>
                 <div class='color-code'>
                     <input type="text" ref='$colorCode' value='${

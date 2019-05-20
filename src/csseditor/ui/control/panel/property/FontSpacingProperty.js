@@ -84,6 +84,29 @@ export default class FontSpacingProperty extends BaseProperty {
           </select>
         </div>
       </div>
+
+      <div class="property-item font-item">
+        <label>Indent</label>
+        <div class="input">
+          <div class="input-field">
+            <input type="range" max="100" min="-100" value="0" ref="$indent" />
+          </div>
+          <div class="input-field">
+            <input
+              type="number"
+              max="100"
+              min="-100"
+              value="0"
+              ref="$indentNumber"
+            />
+          </div>
+          <select ref="$indentUnit">
+            <option value="px">px</option>
+            <option value="em">em</option>
+            <option value="rem">rem</option>
+          </select>
+        </div>
+      </div>
     `;
   }
 
@@ -115,6 +138,21 @@ export default class FontSpacingProperty extends BaseProperty {
     this.setContent();
   }
 
+
+  [INPUT("$indent")](e) {
+    this.refs.$indentNumber.val(this.refs.$indent.value);
+    this.setContent();
+  }
+
+  [INPUT("$indentNumber")](e) {
+    this.refs.$indent.val(this.refs.$indentNumber.value);
+    this.setContent();
+  }
+
+  [CHANGE("$indentUnit")]() {
+    this.setContent();
+  }
+
   setContent() {
     var current = editor.selection.current;
     if (current) {
@@ -128,8 +166,13 @@ export default class FontSpacingProperty extends BaseProperty {
         this.getRef("$wordUnit").value
       );
 
+      var indent = new Length(
+        this.getRef("$indentNumber").value,
+        this.getRef("$indentUnit").value
+      );      
+
       current.reset({
-        spacing: { letter, word }
+        spacing: { letter, word, indent }
       });
 
       this.emit("refreshCanvas");

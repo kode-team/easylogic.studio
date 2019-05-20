@@ -1,0 +1,91 @@
+.outline-item {
+  grid-template-columns: 1fr 3fr;
+  grid-column-gap: 10px;
+  height: 85px;
+
+  .outline-direction {
+    position: relative;
+    display: grid;
+    grid-template-columns: 10px 1fr 10px;
+    grid-template-rows: 10px 1fr 10px;
+    grid-column-gap: 2px;
+    grid-row-gap: 2px;
+    place-self: top;
+    width: 60px;
+    height: 60px;
+
+    @each $borderType in all {
+      &[data-selected-value="#{$borderType}"] {
+        button[data-value="#{$borderType}"] {
+          opacity: 1;
+        }
+      }
+    }
+
+    button {
+      padding: 0px;
+      appearance: none;
+      border: 2px solid $border-color;
+      box-sizing: border-box;
+      cursor: pointer;
+      opacity: 0.4;
+      outline: rgba(54, 54, 247, 0.5)  medium solid;
+
+      &[has-value="true"] {
+        border-color: rgb(0, 162, 255);
+      }
+    }
+
+    button[data-value="all"] {
+      grid-column: 2 / 3;
+      grid-row: 2 / 3;
+
+      border: 2px solid black;
+    }
+  }
+  .input-group {
+    display: grid;
+    grid-template-rows: repeat(3, 1fr);
+  }
+  .input-field {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    grid-column-gap: 4px;
+    vertical-align: middle;
+
+    input {
+      width: 100%;
+      vertical-align: middle;
+    }
+
+    .input-ui {
+      vertical-align: middle;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+
+      input {
+        width: 100%;
+      }
+
+      .color {
+        background-color: white;
+        height: 20px;
+        width: 20px;
+        border-radius: 100%;
+        cursor: pointer;
+        border: 1px solid $border-color;
+        box-sizing: border-box;
+        position: relative;
+        @include transparent-background();        
+        .color-view {
+          position: absolute;
+          left: 0px;
+          top: 0px;
+          right: 0px;
+          bottom: 0px;
+          border-radius: 100%;
+        } 
+      }
+    }
+  }
+}

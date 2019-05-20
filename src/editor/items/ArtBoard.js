@@ -11,6 +11,7 @@ import {
   combineKeyArray,
   isUndefined
 } from "../../util/functions/func";
+import { BorderImage } from "../css-property/BorderImage";
 
 const borderRadiusCssKey = {
   topLeft: "top-left",
@@ -35,7 +36,14 @@ export class ArtBoard extends GroupItem {
       y: Length.px(100),
       filters: [],
       border: {},
+      outline: {
+        color: 'currentcolor',
+        style: 'none',
+        width: Length.px(3)  /* medium */
+      },
       borderRadius: {},
+      borderImage: new BorderImage(),
+      applyBorderImage: false,
       backdropFilters: [],
       backgroundImages: [],
       boxShadows: [],
@@ -246,9 +254,24 @@ export class ArtBoard extends GroupItem {
     }
   }
 
+  setOutline (obj) {
+    this.json.outline = { 
+      ...this.json.outline, 
+      ...obj 
+    }
+  }
+
   setBorderRadius(type, data) {
     this.json.borderRadius = data;
   }
+
+  setBorderImageOffset(type, data) {
+    this.json.borderImageOffset = data;
+  }  
+
+  setBorderImage(data) {
+    this.json.borderImage = data;
+  }    
 
   traverse(item, results, hasLayoutItem) {
     // var parentItemType = item.parent().itemType;
@@ -317,6 +340,17 @@ export class ArtBoard extends GroupItem {
     return results;
   }
 
+  toOutlineCSS () {
+    var results = {};
+    var outline = this.json.outline;
+
+    if (!outline) return {} ;
+
+    return {
+      outline: `${outline.width} ${outline.style} ${outline.color}`
+    }
+  }
+
   // 0 데이타는 화면에 표시하지 않는다.
   toBorderRadiusCSS() {
     var results = {};
@@ -342,6 +376,15 @@ export class ArtBoard extends GroupItem {
 
     return results;
   }
+
+  toBorderImageCSS() {
+
+    if (!this.json.borderImage) return {} 
+    if (!this.json.applyBorderImage) return {} 
+
+    return this.json.borderImage.toCSS();
+  }
+
 
   toFilterCSS() {
     return {
@@ -445,6 +488,10 @@ export class ArtBoard extends GroupItem {
       obj["word-spacing"] = spacing.word;
     }
 
+    if (spacing.indent) {
+      obj["text-indent"] = spacing.indent;
+    }    
+
     return obj;
   }
 
@@ -452,9 +499,12 @@ export class ArtBoard extends GroupItem {
     var json = this.json;
     var css = {
       "background-color": json.backgroundColor,
-      color: json.color,
-      content: json.content
+      color: json.color
     };
+
+    if (!isExport) {
+      css.content = json.content;
+    }
 
     return CSS_SORTING({
       ...css,
@@ -464,7 +514,9 @@ export class ArtBoard extends GroupItem {
       ...this.toBoxModelCSS(),
       ...this.toSizeCSS(),
       ...this.toBorderCSS(),
+      ...this.toOutlineCSS(),      
       ...this.toBorderRadiusCSS(),
+      ...this.toBorderImageCSS(),
       ...this.toFilterCSS(),
       ...this.toBackgroundImageCSS(isExport),
       ...this.toBoxShadowCSS(),
@@ -488,7 +540,9 @@ export class ArtBoard extends GroupItem {
       ...this.toBoxModelCSS(),
       ...this.toSizeCSS(),
       ...this.toBorderCSS(),
+      ...this.toOutlineCSS(),
       ...this.toBorderRadiusCSS(),
+      ...this.toBorderImageCSS(),      
       ...this.toFilterCSS(),
       ...this.toBackgroundImageCSS(isExport),
       ...this.toBoxShadowCSS(),

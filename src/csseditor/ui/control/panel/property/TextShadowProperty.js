@@ -40,11 +40,9 @@ export default class TextShadowProperty extends BaseProperty {
     var arr = current.textShadows.map((shadow, index) => {
       return html`
         <div class="shadow-item real" data-index="${index}">
-          <div
-            class="color"
-            style="background-color: ${shadow.color}"
-            data-index="${index}"
-          ></div>
+          <div class="color">
+            <div class='color-view' style="background-color: ${shadow.color}" data-index="${index}"></div>
+          </div>
           <div class="offset-x">${shadow.offsetX.toString()}</div>
           <div class="offset-y">${shadow.offsetY.toString()}</div>
           <div class="blur-radius">${shadow.blurRadius.toString()}</div>
@@ -57,17 +55,18 @@ export default class TextShadowProperty extends BaseProperty {
       `;
     });
 
-    arr.push(`
-    <div class="shadow-item desc">
-          <div class="color"></div>
-          <div class="offset-x">X</div>
-          <div class="offset-y">Y</div>
-          <div class="blur-radius">Blur</div>
-          <div class="tools">
+    if (arr.length) {
+      arr.push(`
+      <div class="shadow-item desc">
+            <div class="color"></div>
+            <div class="offset-x">X</div>
+            <div class="offset-y">Y</div>
+            <div class="blur-radius">Blur</div>
+            <div class="tools">
+            </div>
           </div>
-        </div>
-    `);
-
+      `);
+    }
     return arr;
   }
 

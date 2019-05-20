@@ -92,13 +92,14 @@ export default class FilterProperty extends BaseProperty {
         <div class="filter-ui drop-shadow-color">
           <label>${spec.color.title}</label>
           <div class="preview">
-            <div
-              class="mini-view"
-              style="background-color: ${filter.color}"
-              ref="$miniView${index}"
-              data-index="${index}"
-              data-key="color"
-            ></div>
+            <div class="mini-view" >
+              <div class='color-view'
+                style="background-color: ${filter.color}"
+                ref="$miniView${index}"
+                data-index="${index}"
+                data-key="color"
+              ></div>
+            </div>
           </div>
           <div class="color-code">
             <input

@@ -1781,6 +1781,8 @@ html, body {
   flex: 5;
 }
 .csseditor .tool-menu .items.left {
+  flex: none;
+  width: 300px;
   text-align: left;
 }
 .csseditor .tool-menu .items.right {
@@ -1884,6 +1886,8 @@ html, body {
   display: none;
   z-index: 1000;
   pointer-events: none;
+  -webkit-transform: translateX(-100px);
+          transform: translateX(-100px);
 }
 .csseditor .vertical-colorstep-container .gradient-editor {
   position: absolute;
@@ -3005,7 +3009,7 @@ html, body {
   cursor: pointer;
   position: relative;
   font-size: 12px;
-  font-weight: bold;
+  font-weight: 400;
   text-shadow: 2px 2px 5px #cccccc;
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -3115,8 +3119,21 @@ html, body {
 .csseditor .property > .property-body .property-item.background-color .fill-item .preview .mini-view, .csseditor .property > .property-body .property-item.font-color .fill-item .preview .mini-view {
   width: 100%;
   height: 100%;
-  border-radius: 100%;
   border: 1px solid #cccccc;
+  position: relative;
+  border-radius: 100%;
+  background-color: transparent;
+  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-size: 10px 10px;
+  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+}
+.csseditor .property > .property-body .property-item.background-color .fill-item .preview .mini-view .color-view, .csseditor .property > .property-body .property-item.font-color .fill-item .preview .mini-view .color-view {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  border-radius: 100%;
 }
 .csseditor .property > .property-body .property-item.background-color .fill-item .color-code input, .csseditor .property > .property-body .property-item.font-color .fill-item .color-code input {
   width: 100%;
@@ -3185,6 +3202,19 @@ html, body {
   box-sizing: border-box;
   pointer-events: none;
   border-radius: 100%;
+  position: relative;
+  background-color: transparent;
+  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-size: 10px 10px;
+  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+}
+.csseditor .property > .property-body .property-item.fill-list .fill-item .preview .mini-view .color-view {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  border-radius: 100%;
 }
 .csseditor .property > .property-body .property-item.fill-list .fill-item .fill-title {
   pointer-events: none;
@@ -3205,7 +3235,7 @@ html, body {
 .csseditor .property > .property-body .property-item.fill-list .fill-item .colorsteps {
   display: none;
   text-align: left;
-  padding: 3px 0px;
+  padding: 5px 0px;
   height: 100%;
   box-sizing: border-box;
 }
@@ -3218,9 +3248,22 @@ html, body {
   box-sizing: border-box;
   border-radius: 100%;
   cursor: pointer;
+  position: relative;
 }
 .csseditor .property > .property-body .property-item.fill-list .fill-item .colorsteps .step:first-child {
   margin-left: 0px;
+}
+.csseditor .property > .property-body .property-item.fill-list .fill-item .colorsteps .step[data-selected=true]:before {
+  content: "";
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  display: inline-block;
+  left: 50%;
+  -webkit-transform: translateX(-50%) translateY(-5px);
+          transform: translateX(-50%) translateY(-5px);
+  border-radius: 100%;
+  background-color: black;
 }
 .csseditor .property > .property-body .property-item.fill-list .fill-item .tools {
   line-height: 2;
@@ -3864,11 +3907,29 @@ html, body {
 .csseditor .filter-list .filter-item .filter-ui.drop-shadow-color label {
   font-size: 10px;
 }
+.csseditor .filter-list .filter-item .filter-ui.drop-shadow-color .preview {
+  width: 24px;
+}
 .csseditor .filter-list .filter-item .filter-ui.drop-shadow-color .preview .mini-view {
   display: inline-block;
   width: 100%;
   height: 100%;
   cursor: pointer;
+  border-radius: 100%;
+  position: relative;
+  box-sizing: border-box;
+  border: 1px solid #cccccc;
+  background-color: transparent;
+  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-size: 10px 10px;
+  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+}
+.csseditor .filter-list .filter-item .filter-ui.drop-shadow-color .preview .mini-view .color-view {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
   border-radius: 100%;
 }
 .csseditor .filter-list .filter-item .filter-ui input[type=number] {
@@ -3982,6 +4043,19 @@ html, body {
   cursor: pointer;
   border: 1px solid #cccccc;
   box-sizing: border-box;
+  position: relative;
+  background-color: transparent;
+  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-size: 10px 10px;
+  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+}
+.csseditor .border-item .input-field .input-ui .color .color-view {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  border-radius: 100%;
 }
 .csseditor .border-radius-item {
   grid-template-columns: 0.6fr 3fr !important;
@@ -4080,6 +4154,287 @@ html, body {
 }
 .csseditor .border-radius-item .radius-setting-box > div label.bottomRight {
   border-bottom-right-radius: 10px;
+}
+.csseditor .border-slice-item {
+  grid-template-columns: 0.6fr 3fr !important;
+}
+.csseditor .border-slice-item.has-list {
+  grid-template-columns: 1fr !important;
+}
+.csseditor .border-slice-item .slice-selector {
+  display: flex;
+  grid-template-columns: 1fr;
+}
+.csseditor .border-slice-item .slice-selector[data-selected-value=all] button[data-value=all] {
+  background-color: black;
+}
+.csseditor .border-slice-item .slice-selector[data-selected-value=all] button[data-value=all] svg path {
+  fill: white;
+}
+.csseditor .border-slice-item .slice-selector[data-selected-value=partitial] button[data-value=partitial] {
+  background-color: black;
+}
+.csseditor .border-slice-item .slice-selector[data-selected-value=partitial] button[data-value=partitial] svg path {
+  fill: white;
+}
+.csseditor .border-slice-item .slice-selector button {
+  flex: none;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  box-sizing: border-box;
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 2px;
+  border-radius: 3px;
+  cursor: pointer;
+  outline: none;
+  padding: 0px;
+  border: 0px;
+}
+.csseditor .border-slice-item .slice-selector button svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor .border-slice-item .slice-selector button svg path {
+  fill: #cccccc;
+}
+.csseditor .border-slice-item .slice-value {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  grid-column-gap: 3px;
+}
+.csseditor .border-slice-item .slice-value input,
+.csseditor .border-slice-item .slice-value select {
+  width: 100%;
+  outline: none;
+}
+.csseditor .border-slice-item .slice-setting-box {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-column-gap: 4px;
+  grid-row-gap: 2px;
+}
+.csseditor .border-slice-item .slice-setting-box > div {
+  display: grid;
+  grid-template-columns: 46px 1fr 60px 60px;
+  grid-column-gap: 4px;
+  text-align: center;
+}
+.csseditor .border-slice-item .slice-setting-box > div > * {
+  vertical-align: middle;
+}
+.csseditor .border-slice-item .slice-setting-box > div input,
+.csseditor .border-slice-item .slice-setting-box > div select {
+  width: 100%;
+  outline: none;
+}
+.csseditor .border-slice-item .slice-setting-box > div label {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 2px;
+  cursor: pointer;
+  outline: none;
+  position: relative;
+  margin-top: 2px;
+  text-align: right;
+}
+.csseditor .border-slice-item .slice-setting-box > div label.title {
+  font-weight: bold;
+  text-align: left;
+}
+.csseditor .border-image-item {
+  display: grid;
+  height: 30px;
+  grid-template-columns: 30px 1fr !important;
+  grid-column-gap: 5px;
+  margin-bottom: 5px;
+  text-align: center;
+  box-sizing: border-box;
+}
+.csseditor .border-image-item .gradient-info {
+  display: grid;
+  grid-template-columns: 50px 1fr 28px;
+}
+.csseditor .border-image-item .gradient-info .tools {
+  text-align: right;
+}
+.csseditor .border-image-item .preview {
+  display: grid;
+  cursor: pointer;
+  padding: 2px;
+}
+.csseditor .border-image-item .preview .mini-view {
+  display: block;
+  height: 100%;
+  border: 1px solid #cccccc;
+  box-sizing: border-box;
+  pointer-events: none;
+  border-radius: 100%;
+  position: relative;
+  background-color: transparent;
+  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-size: 10px 10px;
+  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+}
+.csseditor .border-image-item .preview .mini-view .color-view {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  border-radius: 100%;
+}
+.csseditor .border-image-item .fill-title {
+  pointer-events: none;
+  display: inline-block;
+  vertical-align: middle;
+  text-align: left;
+  padding: 4px 0px;
+  box-sizing: border-box;
+}
+.csseditor .border-image-item .fill-title svg {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+.csseditor .border-image-item .colorsteps {
+  text-align: left;
+  padding: 5px 0px;
+  height: 100%;
+  box-sizing: border-box;
+}
+.csseditor .border-image-item .colorsteps .step {
+  border: 1px solid #333;
+  display: inline-block;
+  margin-left: -5px;
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
+  border-radius: 100%;
+  cursor: pointer;
+  position: relative;
+}
+.csseditor .border-image-item .colorsteps .step:first-child {
+  margin-left: 0px;
+}
+.csseditor .border-image-item .colorsteps .step[data-selected=true]:before {
+  content: "";
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  display: inline-block;
+  left: 50%;
+  -webkit-transform: translateX(-50%) translateY(-5px);
+          transform: translateX(-50%) translateY(-5px);
+  border-radius: 100%;
+  background-color: black;
+}
+.csseditor .border-image-item .tools {
+  line-height: 2;
+}
+.csseditor .border-image-item .tools button {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  height: 16px;
+  width: 16px;
+  border: 0px;
+  padding: 0px;
+  font-size: 16px;
+  vertical-align: middle;
+  cursor: pointer;
+  outline: none;
+}
+.csseditor .border-image-item .tools button svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor .outline-item {
+  grid-template-columns: 1fr 3fr;
+  grid-column-gap: 10px;
+  height: 85px;
+}
+.csseditor .outline-item .outline-direction {
+  position: relative;
+  display: grid;
+  grid-template-columns: 10px 1fr 10px;
+  grid-template-rows: 10px 1fr 10px;
+  grid-column-gap: 2px;
+  grid-row-gap: 2px;
+  place-self: top;
+  width: 60px;
+  height: 60px;
+}
+.csseditor .outline-item .outline-direction[data-selected-value=all] button[data-value=all] {
+  opacity: 1;
+}
+.csseditor .outline-item .outline-direction button {
+  padding: 0px;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border: 2px solid #cccccc;
+  box-sizing: border-box;
+  cursor: pointer;
+  opacity: 0.4;
+  outline: rgba(54, 54, 247, 0.5) medium solid;
+}
+.csseditor .outline-item .outline-direction button[has-value=true] {
+  border-color: #00a2ff;
+}
+.csseditor .outline-item .outline-direction button[data-value=all] {
+  grid-column: 2/3;
+  grid-row: 2/3;
+  border: 2px solid black;
+}
+.csseditor .outline-item .input-group {
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
+}
+.csseditor .outline-item .input-field {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  grid-column-gap: 4px;
+  vertical-align: middle;
+}
+.csseditor .outline-item .input-field input {
+  width: 100%;
+  vertical-align: middle;
+}
+.csseditor .outline-item .input-field .input-ui {
+  vertical-align: middle;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+.csseditor .outline-item .input-field .input-ui input {
+  width: 100%;
+}
+.csseditor .outline-item .input-field .input-ui .color {
+  background-color: white;
+  height: 20px;
+  width: 20px;
+  border-radius: 100%;
+  cursor: pointer;
+  border: 1px solid #cccccc;
+  box-sizing: border-box;
+  position: relative;
+  background-color: transparent;
+  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-size: 10px 10px;
+  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+}
+.csseditor .outline-item .input-field .input-ui .color .color-view {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  border-radius: 100%;
 }
 .csseditor .box-model-item {
   grid-template-columns: 1fr !important;
@@ -4309,6 +4664,20 @@ html, body {
   height: 20px;
   border: 1px solid #cccccc;
   border-radius: 100%;
+  position: relative;
+  background-color: transparent;
+  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-size: 10px 10px;
+  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+  box-sizing: border-box;
+}
+.csseditor .box-shadow-item .shadow-item .color .color-view {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  border-radius: 100%;
 }
 .csseditor .box-shadow-item .shadow-item .inset svg {
   width: 16px;
@@ -4369,6 +4738,20 @@ html, body {
   cursor: pointer;
   height: 20px;
   border: 1px solid #cccccc;
+  border-radius: 100%;
+  position: relative;
+  background-color: transparent;
+  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-size: 10px 10px;
+  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+  box-sizing: border-box;
+}
+.csseditor .text-shadow-item .shadow-item .color .color-view {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
   border-radius: 100%;
 }
 .csseditor .text-shadow-item .shadow-item .inset svg {

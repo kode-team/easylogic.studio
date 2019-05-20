@@ -15,7 +15,7 @@ export default class ExportWindow extends UIElement {
   loadCode() {
     var current = editor.selection.current;
     if (current) {
-      this.refs.$preview.text(current.toString().replace(/;/gi, ";\n") + ";");
+      this.refs.$preview.text(current.toExport().replace(/;/gi, ";\n") + ";");
     }
   }
 

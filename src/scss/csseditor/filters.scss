@@ -59,12 +59,25 @@
         }
 
         .preview {
+          width: 24px;
           .mini-view {
             display: inline-block;
             width: 100%;
             height: 100%;
             cursor: pointer;
             border-radius: 100%;
+            position: relative;
+            box-sizing: border-box;
+            border: 1px solid $border-color;
+            @include transparent-background();            
+            .color-view {
+              position: absolute;
+              left: 0px;
+              top: 0px;
+              right: 0px;
+              bottom: 0px;
+              border-radius: 100%;
+            } 
           }
         }
       }

@@ -47,7 +47,8 @@ export class DomParserGenerator extends ParserGenerator {
       "line-height",
       "font-size",
       "letter-spacing",
-      "word-spacing"
+      "word-spacing",
+      'text-indent'
     );
     data.content = this.source.text();
 

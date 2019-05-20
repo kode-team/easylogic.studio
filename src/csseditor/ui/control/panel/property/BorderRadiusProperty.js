@@ -13,10 +13,14 @@ const typeList = [
 ];
 
 const keyList = typeList.map(it => it.key);
-// TODO: current 객체와 데이타 연동이 필요하다.
+
 export default class BorderRadiusProperty extends BaseProperty {
   getTitle() {
     return "Radius";
+  }
+
+  isFirstShow () {
+    return false
   }
 
   getBody() {

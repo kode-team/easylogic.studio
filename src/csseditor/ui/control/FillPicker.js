@@ -103,7 +103,7 @@ export default class FillPicker extends UIElement {
 
     if (images) {
       this.refs.$imagePreview.attr("src", images[0]);
-      this.emit("changeFillPicker", { type: "image", images });
+      this.emit(this.changeEvent, { type: "image", images });
     }
   }
 
@@ -163,6 +163,7 @@ export default class FillPicker extends UIElement {
       })
       .show();
 
+    this.changeEvent = data.changeEvent || 'changeFillPicker'
     this.selectTabContent(data.type, data);
     this.emit("hidePicker");
   }
@@ -176,7 +177,7 @@ export default class FillPicker extends UIElement {
   }
 
   [EVENT("changeColorStep")](data = {}) {
-    this.emit("changeFillPicker", {
+    this.emit(this.changeEvent, {
       type: this.selectedTab,
       ...data
     });

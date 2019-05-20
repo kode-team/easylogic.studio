@@ -21,6 +21,17 @@
       height: 20px;
       border: 1px solid $border-color;
       border-radius: 100%;
+      position: relative;
+      @include transparent-background();
+      box-sizing: border-box;
+      .color-view {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        right: 0px;
+        bottom: 0px;
+        border-radius: 100%;
+      }     
     }
 
     .inset {

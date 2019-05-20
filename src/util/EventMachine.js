@@ -354,7 +354,8 @@ export default class EventMachine {
   // 변수적용하기 좀 더 편해진다.
   // 사용은 각자가 알아서 ㅋ
   getRef(...args) {
-    return this.refs[args.join(EMPTY_STRING)];
+    const key = args.join(EMPTY_STRING)
+    return this.refs[key];
   }
 
   parseTemplate(html, isLoad) {

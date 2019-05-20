@@ -63,6 +63,16 @@
         box-sizing: border-box;
         pointer-events: none;
         border-radius: 100%;
+        position: relative;
+        @include transparent-background();
+        .color-view {
+          position: absolute;
+          left: 0px;
+          top: 0px;
+          right: 0px;
+          bottom: 0px;
+          border-radius: 100%;
+        } 
       }
     }
 
@@ -90,7 +100,7 @@
     .colorsteps {
       display: none;
       text-align: left;
-      padding: 3px 0px;
+      padding: 5px 0px;
       height: 100%;
       box-sizing: border-box;
 
@@ -103,9 +113,25 @@
         box-sizing: border-box;
         border-radius: 100%;
         cursor: pointer;
+        position: relative;
 
         &:first-child {
           margin-left: 0px;
+        }
+
+
+        &[data-selected='true'] {
+          &:before {
+            content: '';
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%) translateY(-5px);
+            border-radius: 100%;
+            background-color: black; 
+          }
         }
       }
     }

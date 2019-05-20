@@ -1,12 +1,14 @@
 import { keyEach } from "../../util/functions/func";
 import { Length } from "../unit/Length";
-import { convertMatches } from "../../util/functions/parser";
+import { convertMatches, reverseMatches } from "../../util/functions/parser";
 import { BoxShadow } from "../css-property/BoxShadow";
 import { BackgroundImage } from "../css-property/BackgroundImage";
 import { Filter } from "../css-property/Filter";
 import { WHITE_STRING } from "../../util/css/types";
 import { TextShadow } from "../css-property/TextShadow";
+import { BorderImage } from "../css-property/BorderImage";
 const FILTER_REG = /((blur|drop\-shadow|hue\-rotate|invert|brightness|contrast|opacity|saturate|sepia)\(([^\)]*)\))/gi;
+const OUTLINE_REG = /(auto|none|dotted|dashed|solid|double|groove|ridge|inset|outset)/gi;
 export class StyleParser {
   constructor() {
     this.style = {};
@@ -90,6 +92,52 @@ export class StyleParser {
     return results;
   }
 
+  parseOutline() {
+    // style 속성을 기반으로 border 속성 파싱
+
+    var style = this.getStyle();
+
+    var obj = {};
+    if (style.outline) {
+
+      var results = convertMatches(style.outline);
+      var color = null;
+      var style = ''; 
+      var width = ''; 
+      results.str.split(WHITE_STRING).forEach(str => {
+        if (str.indexOf('@') > -1) {  // check color 
+          color = reverseMatches(str, results.matches)
+        } else if (OUTLINE_REG.test(str)) { // check style 
+          style = str; 
+        } else {
+          width = Length.parse(str);
+
+          if (width.includes('thick', 'thin', 'medium')) {
+            if (width.value === 'thick') width = Length.px(5);
+            else if (width.value === 'thin') width = Length.px(1);
+            else if (width.value === 'medium') width = Length.px(3);
+          }
+        }
+      })
+
+      if (width)  obj.width = width; 
+      if (style)  obj.style = style; 
+      if (color)  obj.color = color; 
+
+      return obj; 
+
+    } 
+
+    var results = {};
+    keyEach(obj, (key, value) => {
+      if (value) {
+        results[key] = value;
+      }
+    });
+
+    return results;
+  }
+
   filterStyle(...args) {
     var style = this.getStyle();
 
@@ -143,6 +191,18 @@ export class StyleParser {
     }
 
     return obj;
+  }
+
+  parseBorderImage () {
+    var obj = {} 
+
+    var style = this.getStyle();
+
+    if (style['border-image']) {
+      obj.borderImage =  BorderImage.parseStyle(style['border-image'])
+    }
+
+    return obj; 
   }
 
   parseFilter() {
@@ -391,6 +451,14 @@ export class StyleParser {
       }
     }
 
+    if (style["text-indent"]) {
+      if (style["text-indent"] === "normal") {
+        spacing.indent = Length.px(0);
+      } else {
+        spacing.indent = Length.parse(style["text-indent"]);
+      }
+    }
+
     return { spacing };
   }
 
@@ -407,7 +475,9 @@ export class StyleParser {
       ...this.parseBoxModel(),
       ...this.parseColor(),
       ...this.parseBorder(),
+      ...this.parseOutline(),
       ...this.parseBorderRadius(),
+      ...this.parseBorderImage(),
       ...this.parseFilter(),
       ...this.parseBoxShadow(),
       ...this.parseTextShadow(),

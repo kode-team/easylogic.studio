@@ -7,7 +7,7 @@ export default class BaseProperty extends UIElement {
 
   template() {
     return `
-        <div class='property ${this.getClassName()} show'>
+        <div class='property ${this.getClassName()} ${this.isFirstShow() ?  'show' : '' }'>
             ${
               this.isHideHeader()
                 ? EMPTY_STRING
@@ -25,6 +25,11 @@ export default class BaseProperty extends UIElement {
   isHideHeader() {
     return false;
   }
+
+  isFirstShow () {
+    return true
+  }
+
   getClassName() {
     return EMPTY_STRING;
   }

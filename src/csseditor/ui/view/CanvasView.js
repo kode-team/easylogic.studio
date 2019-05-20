@@ -65,6 +65,9 @@ export default class CanvasView extends UIElement {
 
   generate(css) {
     this.refs.$canvas.css(css);
+
+    // content 가 있으면 content 를 업데이트 해주자. 
+    // 여기서는 따로 옵션이 없어서 text 로만 입력가능하다. 
     if (this.refs.$canvas.text() != css.content) {
       this.refs.$canvas.text(css.content);
     }

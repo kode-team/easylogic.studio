@@ -310,6 +310,10 @@ export class Length {
 
     return this;
   }
+
+  includes (...arr) {
+    return arr.includes(this.value);
+  }
 }
 
 Length.auto = Length.string("auto");

@@ -42,9 +42,12 @@ export default class BoxShadowProperty extends BaseProperty {
           <div class="inset" data-value="${shadow.inset}">${icon.check}</div>
           <div
             class="color"
-            style="background-color: ${shadow.color}"
-            data-index="${index}"
-          ></div>
+          >
+            <div class='color-view'
+                  style="background-color: ${shadow.color}"
+                  data-index="${index}"
+              ></div>
+          </div>
           <div class="offset-x">${shadow.offsetX.toString()}</div>
           <div class="offset-y">${shadow.offsetY.toString()}</div>
           <div class="blur-radius">${shadow.blurRadius.toString()}</div>
@@ -58,18 +61,21 @@ export default class BoxShadowProperty extends BaseProperty {
       `;
     });
 
-    arr.push(`
-    <div class="shadow-item desc">
-          <div class="inset" >Inset</div>
-          <div class="color"></div>
-          <div class="offset-x">X</div>
-          <div class="offset-y">Y</div>
-          <div class="blur-radius">Blur</div>
-          <div class="spread-radius">Spread</div>
-          <div class="tools">
+    if (arr.length) {
+      arr.push(`
+      <div class="shadow-item desc">
+            <div class="inset" >Inset</div>
+            <div class="color"></div>
+            <div class="offset-x">X</div>
+            <div class="offset-y">Y</div>
+            <div class="blur-radius">Blur</div>
+            <div class="spread-radius">Spread</div>
+            <div class="tools">
+            </div>
           </div>
-        </div>
-    `);
+      `);
+    }
+
 
     return arr;
   }

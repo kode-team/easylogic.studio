@@ -5,9 +5,9 @@ import { editor } from "../../../../../editor/editor";
 import { html } from "../../../../../util/functions/func";
 import { EVENT } from "../../../../../util/UIElement";
 
-const borderStyleLit = [
+const outlineStyleLit = [
+  'auto',
   "none",
-  "hidden",
   "dotted",
   "dashed",
   "solid",
@@ -18,11 +18,11 @@ const borderStyleLit = [
   "outset"
 ];
 
-const borderTypeList = ["all", "top", "right", "bottom", "left"];
+const outlineTypeList = ["all"];
 
-export default class BorderProperty extends BaseProperty {
+export default class OutlineProperty extends BaseProperty {
   getTitle() {
-    return "Border";
+    return "Outline";
   }
 
   isFirstShow () {
@@ -33,21 +33,21 @@ export default class BorderProperty extends BaseProperty {
     this.refresh();
   }
 
-  [LOAD("$borderDirection")]() {
-    var current = editor.selection.current || { border: {} };
+  [LOAD("$outlineDirection")]() {
+    var current = editor.selection.current || { outline: {} };
 
-    return borderTypeList.map(type => {
+    return outlineTypeList.map(type => {
       return `<button type="button" data-value="${type}" ref="$${type}" has-value='${!!current
-        .border[type]}'></button>`;
+        .outline[type]}'></button>`;
     });
   }
 
-  getTemplateForBorderProperty() {
+  getTemplateForOutlineProperty() {
     return html`
-      <div class="property-item border-item">
+      <div class="property-item outline-item">
         <div
-          class="border-direction"
-          ref="$borderDirection"
+          class="outline-direction"
+          ref="$outlineDirection"
           data-selected-value="all"
         ></div>
         <div class="input-group">
@@ -90,7 +90,7 @@ export default class BorderProperty extends BaseProperty {
             <div class="input-ui">
               <div class="style">
                 <select ref="$style">
-                  ${borderStyleLit.map(it => {
+                  ${outlineStyleLit.map(it => {
                     return `<option value="${it}" ${
                       it === "solid" ? "selected" : ""
                     }>${it}</option>`;
@@ -122,7 +122,7 @@ export default class BorderProperty extends BaseProperty {
 
   getBody() {
     return `
-        ${this.getTemplateForBorderProperty()}
+        ${this.getTemplateForOutlineProperty()}
     `;
   }
 
@@ -132,26 +132,26 @@ export default class BorderProperty extends BaseProperty {
   }
 
   [CHANGE("$unit")](e) {
-    this.refreshBorderInfo();
+    this.refreshOutlineInfo();
   }
 
   [INPUT("$widthRange")](e) {
     this.refs.$width.val(this.refs.$widthRange.value);
-    this.refreshBorderInfo();
+    this.refreshOutlineInfo();
   }
 
   [INPUT("$width")](e) {
     this.refs.$widthRange.val(this.refs.$width.value);
-    this.refreshBorderInfo();
+    this.refreshOutlineInfo();
   }
 
   [CHANGE("$style")](e) {
-    this.refreshBorderInfo();
+    this.refreshOutlineInfo();
   }
 
-  refreshBorderInfo() {
+  refreshOutlineInfo() {
     var value = this.refs.$width.value;
-    var type = this.refs.$borderDirection.attr("data-selected-value");
+    var type = this.refs.$outlineDirection.attr("data-selected-value");
     var unit = this.refs.$unit.value;
     var style = this.refs.$style.value;
     var color = this.refs.$color.css("background-color");
@@ -160,7 +160,7 @@ export default class BorderProperty extends BaseProperty {
 
     if (current) {
       // ArtBoard, Layer 에 새로운 BackgroundImage 객체를 만들어보자.
-      current.setBorder(type, {
+      current.setOutline({
         width: new Length(value, unit),
         style,
         color
@@ -172,29 +172,17 @@ export default class BorderProperty extends BaseProperty {
     }
   }
 
-  [CLICK("$borderDirection button")](e) {
-    var type = e.$delegateTarget.attr("data-value");
-    this.refs.$borderDirection.attr("data-selected-value", type);
-
-    var current = editor.selection.current;
-    if (current) {
-      current.setBorder(type);
-    }
-
-    this.refresh();
-  }
-
   [CLICK("$color")](e) {
     this.emit("showColorPicker", {
-      changeEvent: "changeBorderColor",
+      changeEvent: "changeOutlineColor",
       color: this.refs.$color.css("background-color")
     });
     this.emit("hidePropertyPopup");
     this.emit("hideGradientEditor");
   }
 
-  [EVENT("changeBorderColor")](color) {
+  [EVENT("changeOutlineColor")](color) {
     this.refs.$color.css("background-color", color);
-    this.refreshBorderInfo();
+    this.refreshOutlineInfo();
   }
 }
