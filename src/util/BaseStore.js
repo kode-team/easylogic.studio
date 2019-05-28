@@ -29,6 +29,12 @@ export default class BaseStore {
     });
   }
 
+  removeAction(context) {
+    this.callbacks = this.callbacks.filter(it => {
+      return it.context != context; 
+    })
+  }
+
   makeActionCallback(context, action, actionName) {
     var func = ($1, $2, $3, $4, $5) => {
       return context[action].call(context, this, $1, $2, $3, $4, $5);
@@ -158,9 +164,12 @@ export default class BaseStore {
     setTimeout(() => {
       var list = this.cachedCallback[event];
 
-      list
+      if (list) {
+        list
         .filter(f => f.originalCallback.source !== source)
         .forEach(f => f.callback($2, $3, $4, $5));
+      }
+
     }, 0);
   }
 
@@ -168,9 +177,15 @@ export default class BaseStore {
     setTimeout(() => {
       var list = this.cachedCallback[event];
 
-      list
+      if (list) {
+        list
         .filter(f => f.originalCallback.source === source)
         .forEach(f => f.callback($2, $3, $4, $5));
+      } else {
+        console.warn(event, ' is not valid event');
+      }
+
+
     }, 0);
   }
 

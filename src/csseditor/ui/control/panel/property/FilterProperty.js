@@ -1,383 +1,45 @@
 import BaseProperty from "./BaseProperty";
-import { html } from "../../../../../util/functions/func";
-import icon from "../../../icon/icon";
 import {
   LOAD,
-  CLICK,
-  CHANGE,
-  INPUT,
-  DRAGSTART,
-  DRAGOVER,
-  DROP,
-  PREVENT
 } from "../../../../../util/Event";
-import { EMPTY_STRING } from "../../../../../util/css/types";
-import {
-  BlurFilter,
-  GrayscaleFilter,
-  HueRotateFilter,
-  InvertFilter,
-  BrightnessFilter,
-  ContrastFilter,
-  DropshadowFilter,
-  OpacityFilter,
-  SaturateFilter,
-  SepiaFilter
-} from "../../../../../editor/css-property/Filter";
+
 import { editor } from "../../../../../editor/editor";
-import { Length } from "../../../../../editor/unit/Length";
 import { EVENT } from "../../../../../util/UIElement";
-
-var filterList = [
-  "blur",
-  "grayscale",
-  "hue-rotate",
-  "invert",
-  "brightness",
-  "contrast",
-  "drop-shadow",
-  "opacity",
-  "saturate",
-  "sepia"
-];
-
-var specList = {
-  blur: BlurFilter.spec,
-  grayscale: GrayscaleFilter.spec,
-  "hue-rotate": HueRotateFilter.spec,
-  invert: InvertFilter.spec,
-  brightness: BrightnessFilter.spec,
-  contrast: ContrastFilter.spec,
-  "drop-shadow": DropshadowFilter.spec,
-  opacity: OpacityFilter.spec,
-  saturate: SaturateFilter.spec,
-  sepia: SepiaFilter.spec
-};
+import FilterEditor from "../../shape/property-editor/FilterEditor";
 
 export default class FilterProperty extends BaseProperty {
+
+  components () {
+    return { FilterEditor } 
+  }
+
   getTitle() {
-    return "Filters";
+    return "Filter";
   }
+
   getBody() {
-    return `<div class='property-item filter-list' ref='$filterList'></div>`;
+    return `<div class='property-item full filter-property' ref='$body'>
+      ${this.loadTemplate('$body')}
+    </div>`;
   }
 
-  getTools() {
-    return html`
-      <select ref="$filterSelect">
-        ${filterList.map(filter => {
-          return `<option value='${filter}'>${filter}</option>`;
-        })}
-      </select>
-      <button type="button" ref="$add" title="add Filter">${icon.add}</button>
-    `;
-  }
+  [LOAD('$body')] () {
+    var current = editor.selection.current || {} 
+    var value = current.filter;
 
-  getSpec(filterType) {
-    return specList[filterType];
-  }
-
-  makeDropShadowFilterTemplate(spec, filter, index) {
-    return html`
-      <div class="filter-item">
-        <div class="title" draggable="true" data-index="${index}">
-          <label>Drop Shadow</label>
-          <div class="filter-menu">
-            <button type="button" class="del" data-index="${index}">
-              ${icon.remove2}
-            </button>
-          </div>
-        </div>
-
-        <div class="filter-ui drop-shadow-color">
-          <label>${spec.color.title}</label>
-          <div class="preview">
-            <div class="mini-view" >
-              <div class='color-view'
-                style="background-color: ${filter.color}"
-                ref="$miniView${index}"
-                data-index="${index}"
-                data-key="color"
-              ></div>
-            </div>
-          </div>
-          <div class="color-code">
-            <input
-              type="text"
-              ref="$colorCode${index}"
-              value="${filter.color}"
-              data-index="${index}"
-              data-key="color"
-            />
-          </div>
-        </div>
-
-        ${["offsetX", "offsetY", "blurRadius"].map(key => {
-          return `        
-            <div class="filter-ui drop-shadow">
-                <label>${spec[key].title}</label>
-                <div class="slider">
-                <input
-                    type="range"
-                    min="${spec[key].min}"
-                    max="${spec[key].max}"
-                    step="${spec[key].step}"
-                    value="${filter[key].value.toString()}"
-                    ref="$range${key}"
-                    data-key="${key}"
-                    data-index="${index}"
-                />
-                </div>
-                <div class="input">
-                <input
-                    class="unit-value"
-                    type="number"
-                    min="${spec[key].min}"
-                    max="${spec[key].max}"
-                    step="${spec[key].step}"
-                    value="${filter[key].value.toString()}"
-                    data-index="${index}"
-                    ref="$number${key}"
-                    data-key="${key}"
-                />
-                </div>
-                <div class="select">
-                <select class="unit" ref="$unit${key}" data-key="${key}" data-index="${index}">
-                    ${spec.offsetX.units.map(unit => {
-                      return `<option value='${unit}' ${
-                        filter.offsetX.unit === unit ? "selected" : ""
-                      }>${unit}</option>`;
-                    })}
-                </select>
-                </div>
-            </div>`;
-        })}
-      </div>
-    `;
-  }
-
-  makeOneFilterTemplate(spec, filter, index) {
-    return html`
-      <div class="filter-item" data-index="${index}">
-        <div class="title" draggable="true" data-index="${index}">
-          <label>${spec.title}</label>
-          <div class="filter-menu">
-            <button type="button" class="del" data-index="${index}">
-              ${icon.remove2}
-            </button>
-          </div>
-        </div>
-        <div class="filter-ui">
-          <div class="slider">
-            <input
-              type="range"
-              min="${spec.min}"
-              max="${spec.max}"
-              step="${spec.step}"
-              value="${filter.value.value.toString()}"
-              ref="$range${index}"
-              data-index="${index}"
-            />
-          </div>
-          <div class="input">
-            <input
-              class="unit-value"
-              type="number"
-              min="${spec.min}"
-              max="${spec.max}"
-              step="${spec.step}"
-              value="${filter.value.value.toString()}"
-              data-index="${index}"
-              ref="$number${index}"
-            />
-          </div>
-          <div class="select">
-            <select class="unit" ref="$unit${index}" data-index="${index}">
-              ${spec.units.map(unit => {
-                return `<option value='${unit}' ${
-                  filter.value.unit === unit ? "selected" : ""
-                }>${unit}</option>`;
-              })}
-            </select>
-          </div>
-        </div>
-      </div>
-    `;
-  }
-
-  makeFilterTemplate(filter, index) {
-    if (filter.type === "drop-shadow") {
-      return this.makeDropShadowFilterTemplate(
-        this.getSpec(filter.type),
-        filter,
-        index
-      );
-    } else {
-      return this.makeOneFilterTemplate(
-        this.getSpec(filter.type),
-        filter,
-        index
-      );
-    }
-  }
-
-  [LOAD("$filterList")]() {
-    var current = editor.selection.current;
-
-    if (!current) return EMPTY_STRING;
-
-    return current.filters.map((filter, index) => {
-      return this.makeFilterTemplate(filter, index.toString());
-    });
-  }
-
-  // filter-item 을 통째로  dragstart 를 걸어버리니깐
-  // 다른 ui 를 핸들링 할 수가 없어서
-  // title  에만 dragstart 거는 걸로 ok ?
-  [DRAGSTART("$filterList .filter-item .title")](e) {
-    this.startIndex = +e.$delegateTarget.attr("data-index");
-  }
-
-  // drop 이벤트를 걸 때 dragover 가 같이 선언되어 있어야 한다.
-  [DRAGOVER("$filterList .filter-item") + PREVENT](e) {}
-
-  [DROP("$filterList .filter-item") + PREVENT](e) {
-    var targetIndex = +e.$delegateTarget.attr("data-index");
-    var current = editor.selection.current;
-    if (!current) return;
-
-    current.sortFilter(this.startIndex, targetIndex);
-
-    this.emit("refreshCanvas");
-
-    this.refresh();
-  }
-
-  [CLICK("$add")]() {
-    var filterType = this.refs.$filterSelect.value;
-
-    var current = editor.selection.current;
-    if (current) {
-      current.createFilter(filterType);
-
-      this.emit("refreshCanvas");
-    }
-
-    this.refresh();
-  }
-
-  [CLICK("$filterList .filter-menu .del")](e) {
-    var index = +e.$delegateTarget.attr("data-index");
-    var current = editor.selection.current;
-    if (current) {
-      current.removeFilter(index);
-
-      this.emit("refreshCanvas");
-    }
-
-    this.refresh();
-  }
-
-  [CLICK("$filterList .filter-ui .mini-view")](e) {
-    var index = +e.$delegateTarget.attr("data-index");
-    var key = e.$delegateTarget.attr("data-key");
-    var current = editor.selection.current;
-    if (current) {
-      var color = e.$delegateTarget.css("background-color");
-
-      var rect = e.$delegateTarget.rect();
-
-      this.emit(
-        "showColorPicker",
-        {
-          changeEvent: "changeDropShadowColor",
-          color,
-          left: rect.left + 90,
-          top: rect.top
-        },
-        { index, key }
-      );
-    }
-  }
-
-  [EVENT("changeDropShadowColor")](color, data) {
-    var { index, key } = data;
-    var current = editor.selection.current;
-    if (current) {
-      index = index.toString();
-      current.updateFilter(index, {
-        [key]: color
-      });
-
-      this.getRef("$miniView", index).css("background-color", color);
-      this.getRef("$colorCode", index).val(color);
-
-      this.emit("refreshCanvas");
-    }
-  }
-
-  getRef(...args) {
-    return this.refs[args.join(EMPTY_STRING)];
-  }
-
-  modifyInputRange(index, key, $source, $target, $unit) {
-    $target.val($source);
-
-    var current = editor.selection.current;
-    if (current) {
-      key = key || "value";
-
-      current.updateFilter(index, {
-        [key]: new Length($source.value, $unit.value)
-      });
-
-      this.emit("refreshCanvas");
-    }
-  }
-
-  [INPUT('$filterList .filter-item input[type="range"]')](e) {
-    var $el = e.$delegateTarget;
-    var index = $el.attr("data-index");
-    var key = $el.attr("data-key");
-
-    this.modifyInputRange(
-      index,
-      key,
-      $el,
-      this.getRef("$number", key || index),
-      this.getRef("$unit", key || index)
-    );
-  }
-
-  [INPUT('$filterList .filter-item input[type="number"]')](e) {
-    var $el = e.$delegateTarget;
-    var index = $el.attr("data-index");
-    var key = $el.attr("data-key");
-
-    this.modifyInputRange(
-      index,
-      key,
-      $el,
-      this.getRef("$range", key || index),
-      this.getRef("$unit", key || index)
-    );
-  }
-
-  [CHANGE("$filterList .filter-item select")](e) {
-    var $el = e.$delegateTarget;
-    var index = $el.attr("data-index");
-    var key = $el.attr("data-key");
-
-    this.modifyInputRange(
-      index,
-      key,
-      this.getRef("$number", key || index),
-      this.getRef("$range", key || index),
-      $el
-    );
+    return `<FilterEditor ref='$1' value='${value}' onchange='changeFilterEditor' />`
   }
 
   refresh() {
     this.load();
+  }
+
+  [EVENT('changeFilterEditor')] (filter) {
+    var current = editor.selection.current; 
+
+    if (current) {
+      current.reset({ filter })
+      this.emit('refreshCanvas');
+    }
   }
 }

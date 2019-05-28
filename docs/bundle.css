@@ -1405,6 +1405,21 @@ html, body {
   left: 310px;
   position: absolute;
 }
+.csseditor .flex-row {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.csseditor .flex-row > div {
+  flex: 1 1 auto;
+}
+.csseditor .flex-row .fixed {
+  flex: none;
+  height: 240px;
+  overflow: auto;
+  box-sizing: border-box;
+  border-bottom: 1px solid #cccccc;
+}
 .csseditor .tab {
   position: absolute;
   left: 0px;
@@ -1414,6 +1429,7 @@ html, body {
 }
 .csseditor .tab.number-tab .tab-header {
   height: 50px;
+  cursor: pointer;
 }
 .csseditor .tab.number-tab .tab-content {
   display: none;
@@ -1744,6 +1760,147 @@ html, body {
 .csseditor .colorpicker-layer .codemirror-colorpicker .colorpicker-body .wheel {
   border: 0px;
   background-color: transparent;
+}
+.csseditor .cubic-bezier-editor {
+  width: 228px;
+  height: 210px;
+  position: relative;
+}
+.csseditor .cubic-bezier-editor .bezier {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  top: 30px;
+  left: 60px;
+  border: 1px solid #333;
+}
+.csseditor .cubic-bezier-editor .bezier .bezier-canvas {
+  position: absolute;
+  left: -25px;
+  top: -25px;
+  pointer-events: none;
+}
+.csseditor .cubic-bezier-editor .bezier .control {
+  position: absolute;
+  left: 5px;
+  right: 5px;
+  bottom: 5px;
+  top: 5px;
+}
+.csseditor .cubic-bezier-editor .bezier .control .pointer1, .csseditor .cubic-bezier-editor .bezier .control .pointer2 {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+  border-radius: 100%;
+  cursor: pointer;
+  background-color: #ac48ff;
+  border: 1px solid #ac48ff;
+  box-sizing: border-box;
+}
+.csseditor .cubic-bezier-editor .animation {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  height: 20px;
+  text-align: center;
+}
+.csseditor .cubic-bezier-editor .animation .animation-canvas {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+.csseditor .cubic-bezier-editor .item-list {
+  position: absolute;
+  top: 30px;
+  bottom: 20px;
+  left: 0px;
+  width: 50px;
+  padding-right: 0px;
+  box-sizing: border-box;
+}
+.csseditor .cubic-bezier-editor .item-list[data-selected-value=ease] .item[data-bezier=ease] {
+  background-color: #cccccc;
+}
+.csseditor .cubic-bezier-editor .item-list[data-selected-value=ease-in] .item[data-bezier=ease-in] {
+  background-color: #cccccc;
+}
+.csseditor .cubic-bezier-editor .item-list[data-selected-value=ease-out] .item[data-bezier=ease-out] {
+  background-color: #cccccc;
+}
+.csseditor .cubic-bezier-editor .item-list .item {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border: 1px solid gray;
+  cursor: pointer;
+}
+.csseditor .cubic-bezier-editor .item-list .item:not(:first-child) {
+  border-top: 0px;
+}
+.csseditor .cubic-bezier-editor .item-list .item.selected {
+  background-color: #0ab;
+}
+.csseditor .cubic-bezier-editor .item-list .item .item-canvas {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 30px;
+  height: 30px;
+}
+.csseditor .cubic-bezier-editor .predefined {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  height: 20px;
+  text-align: center;
+  display: grid;
+  grid-template-columns: 30px 1fr 30px;
+}
+.csseditor .cubic-bezier-editor .predefined .left, .csseditor .cubic-bezier-editor .predefined .right {
+  box-sizing: border-box;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  vertical-align: middle;
+}
+.csseditor .cubic-bezier-editor .predefined .predefined-text {
+  vertical-align: middle;
+  padding: 4px;
+}
+.csseditor .editor {
+  height: auto !important;
+}
+.csseditor .editor.offset-editor {
+  display: block !important;
+}
+.csseditor .editor.offset-editor .offset {
+  display: block;
+  height: 30px;
+  position: relative;
+  background-image: linear-gradient(to right, #cccccc, black);
+  background-size: 100% 2px;
+  background-position: 0px center;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+.csseditor .editor.offset-editor .offset .offset-item {
+  position: absolute;
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  top: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+  box-sizing: border-box;
+  border: 1px solid #cccccc;
+  background-color: black;
+  border-radius: 100%;
+  cursor: pointer;
 }
 .csseditor .tool-menu {
   height: 100%;
@@ -2188,7 +2345,7 @@ html, body {
   top: 0px;
   background-color: #cccccc;
 }
-.csseditor .page-view .page-canvas {
+.csseditor .page-canvas {
   position: absolute;
   width: 500px;
   height: 400px;
@@ -3015,6 +3172,9 @@ html, body {
   grid-template-columns: 1fr 1fr;
   cursor: pointer;
 }
+.csseditor .property > .property-title label {
+  cursor: pointer;
+}
 .csseditor .property > .property-title > .tools {
   text-align: right;
 }
@@ -3051,6 +3211,9 @@ html, body {
   display: grid;
   grid-template-columns: 1fr 3fr;
   margin-bottom: 2px;
+}
+.csseditor .property > .property-body .property-item.full {
+  grid-template-columns: 1fr;
 }
 .csseditor .property > .property-body .property-item .property-item-label,
 .csseditor .property > .property-body .property-item .property-item-input-field {
@@ -3145,803 +3308,6 @@ html, body {
 }
 .csseditor .property > .property-body .property-item.background-color .fill-item .opacity-code input, .csseditor .property > .property-body .property-item.font-color .fill-item .opacity-code input {
   width: 100%;
-}
-.csseditor .property > .property-body .property-item.fill-list {
-  display: grid;
-  grid-template-columns: 1fr;
-}
-.csseditor .property > .property-body .property-item.fill-list .fill-item {
-  display: grid;
-  height: 40px;
-  grid-template-columns: 40px 1fr;
-  grid-column-gap: 5px;
-  margin-bottom: 5px;
-  text-align: center;
-  box-sizing: border-box;
-}
-.csseditor .property > .property-body .property-item.fill-list .fill-item.selected {
-  background-color: rgba(204, 204, 204, 0.5);
-}
-.csseditor .property > .property-body .property-item.fill-list .fill-item .gradient-info {
-  display: grid;
-  grid-template-columns: 50px 1fr 28px;
-}
-.csseditor .property > .property-body .property-item.fill-list .fill-item .gradient-info .tools {
-  text-align: right;
-}
-.csseditor .property > .property-body .property-item.fill-list .fill-item .background-image-info {
-  display: grid;
-  grid-template-columns: 64px repeat(2, 1fr);
-  grid-column-gap: 0px;
-}
-.csseditor .property > .property-body .property-item.fill-list .fill-item .background-image-info > div {
-  overflow: hidden;
-}
-.csseditor .property > .property-body .property-item.fill-list .fill-item .background-image-info .blend-mode {
-  border-radius: 3px;
-  background-color: green;
-  color: white;
-  font-weight: bold;
-}
-.csseditor .property > .property-body .property-item.fill-list .fill-item[data-fill-type=gradient] .colorcode,
-.csseditor .property > .property-body .property-item.fill-list .fill-item[data-fill-type=gradient] .opacity {
-  display: none;
-}
-.csseditor .property > .property-body .property-item.fill-list .fill-item[data-fill-type=gradient] .colorsteps {
-  display: block;
-}
-.csseditor .property > .property-body .property-item.fill-list .fill-item .preview {
-  display: grid;
-  cursor: pointer;
-  padding: 2px;
-}
-.csseditor .property > .property-body .property-item.fill-list .fill-item .preview .mini-view {
-  display: block;
-  height: 100%;
-  border: 1px solid #cccccc;
-  box-sizing: border-box;
-  pointer-events: none;
-  border-radius: 100%;
-  position: relative;
-  background-color: transparent;
-  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
-  background-size: 10px 10px;
-  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
-}
-.csseditor .property > .property-body .property-item.fill-list .fill-item .preview .mini-view .color-view {
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-  border-radius: 100%;
-}
-.csseditor .property > .property-body .property-item.fill-list .fill-item .fill-title {
-  pointer-events: none;
-  display: inline-block;
-  vertical-align: middle;
-  text-align: left;
-  padding: 4px 0px;
-  box-sizing: border-box;
-}
-.csseditor .property > .property-body .property-item.fill-list .fill-item .fill-title svg {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-}
-.csseditor .property > .property-body .property-item.fill-list .fill-item .colorcode input {
-  width: 100%;
-}
-.csseditor .property > .property-body .property-item.fill-list .fill-item .colorsteps {
-  display: none;
-  text-align: left;
-  padding: 5px 0px;
-  height: 100%;
-  box-sizing: border-box;
-}
-.csseditor .property > .property-body .property-item.fill-list .fill-item .colorsteps .step {
-  border: 1px solid #333;
-  display: inline-block;
-  margin-left: -5px;
-  width: 16px;
-  height: 16px;
-  box-sizing: border-box;
-  border-radius: 100%;
-  cursor: pointer;
-  position: relative;
-}
-.csseditor .property > .property-body .property-item.fill-list .fill-item .colorsteps .step:first-child {
-  margin-left: 0px;
-}
-.csseditor .property > .property-body .property-item.fill-list .fill-item .colorsteps .step[data-selected=true]:before {
-  content: "";
-  position: absolute;
-  width: 3px;
-  height: 3px;
-  display: inline-block;
-  left: 50%;
-  -webkit-transform: translateX(-50%) translateY(-5px);
-          transform: translateX(-50%) translateY(-5px);
-  border-radius: 100%;
-  background-color: black;
-}
-.csseditor .property > .property-body .property-item.fill-list .fill-item .tools {
-  line-height: 2;
-}
-.csseditor .property > .property-body .property-item.fill-list .fill-item .tools button {
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  height: 16px;
-  width: 16px;
-  border: 0px;
-  padding: 0px;
-  font-size: 16px;
-  vertical-align: middle;
-  cursor: pointer;
-  outline: none;
-}
-.csseditor .property > .property-body .property-item.fill-list .fill-item .tools button svg {
-  width: 100%;
-  height: 100%;
-}
-.csseditor .property > .property-body .property-item.display-manager {
-  grid-template-columns: 1fr;
-}
-.csseditor .property > .property-body .property-item.display-manager .display {
-  display: block;
-  flex: 1 1 auto;
-  box-sizing: border-box;
-  padding: 5px;
-  text-align: center;
-  cursor: pointer;
-}
-.csseditor .property > .property-body .property-item.display-manager label {
-  width: 80px;
-  box-sizing: border-box;
-  padding: 5px 2px;
-}
-.csseditor .property > .property-body .property-item.display-manager button {
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-}
-.csseditor .property > .property-body .property-item.display-manager .property-item-label[data-display=grid] button {
-  display: inline-block;
-}
-.csseditor .property > .property-body .property-item.display-manager .display-list {
-  display: grid;
-  box-sizing: border-box;
-  grid-template-columns: repeat(5, 20%);
-}
-.csseditor .property > .property-body .property-item.display-manager .display-list[selected-type=inline] .display[display-type=inline] {
-  border: 1px solid #cccccc;
-  background-color: rgba(204, 204, 204, 0.3);
-}
-.csseditor .property > .property-body .property-item.display-manager .display-list[selected-type=inline-block] .display[display-type=inline-block] {
-  border: 1px solid #cccccc;
-  background-color: rgba(204, 204, 204, 0.3);
-}
-.csseditor .property > .property-body .property-item.display-manager .display-list[selected-type=block] .display[display-type=block] {
-  border: 1px solid #cccccc;
-  background-color: rgba(204, 204, 204, 0.3);
-}
-.csseditor .property > .property-body .property-item.display-manager .display-list[selected-type=flex] .display[display-type=flex] {
-  border: 1px solid #cccccc;
-  background-color: rgba(204, 204, 204, 0.3);
-}
-.csseditor .property > .property-body .property-item.display-manager .display-list[selected-type=grid] .display[display-type=grid] {
-  border: 1px solid #cccccc;
-  background-color: rgba(204, 204, 204, 0.3);
-}
-.csseditor .property > .property-body .property-item.display-manager .flex-direction {
-  display: grid;
-  box-sizing: border-box;
-  grid-template-columns: repeat(5, 20%);
-}
-.csseditor .property > .property-body .property-item.display-manager .flex-direction[selected-type=row] .display[display-type=row] {
-  background-color: #ececec;
-}
-.csseditor .property > .property-body .property-item.display-manager .flex-direction[selected-type=row-reverse] .display[display-type=row-reverse] {
-  background-color: #ececec;
-}
-.csseditor .property > .property-body .property-item.display-manager .flex-direction[selected-type=column] .display[display-type=column] {
-  background-color: #ececec;
-}
-.csseditor .property > .property-body .property-item.display-manager .flex-direction[selected-type=column-reverse] .display[display-type=column-reverse] {
-  background-color: #ececec;
-}
-.csseditor .property > .property-body .property-item.display-manager .flex-wrap {
-  display: grid;
-  box-sizing: border-box;
-  grid-template-columns: repeat(5, 20%);
-}
-.csseditor .property > .property-body .property-item.display-manager .flex-wrap[selected-type=nowrap] .display[display-type=nowrap] {
-  background-color: #ececec;
-}
-.csseditor .property > .property-body .property-item.display-manager .flex-wrap[selected-type=wrap] .display[display-type=wrap] {
-  background-color: #ececec;
-}
-.csseditor .property > .property-body .property-item.display-manager .flex-wrap[selected-type=wrap-reverse] .display[display-type=wrap-reverse] {
-  background-color: #ececec;
-}
-.csseditor .property > .property-body .property-item.display-manager .justify-content {
-  display: grid;
-  box-sizing: border-box;
-  grid-template-columns: repeat(5, 20%);
-}
-.csseditor .property > .property-body .property-item.display-manager .justify-content[selected-type=flex-start] .display[display-type=flex-start] {
-  background-color: #ececec;
-}
-.csseditor .property > .property-body .property-item.display-manager .justify-content[selected-type=flex-end] .display[display-type=flex-end] {
-  background-color: #ececec;
-}
-.csseditor .property > .property-body .property-item.display-manager .justify-content[selected-type=center] .display[display-type=center] {
-  background-color: #ececec;
-}
-.csseditor .property > .property-body .property-item.display-manager .justify-content[selected-type=space-between] .display[display-type=space-between] {
-  background-color: #ececec;
-}
-.csseditor .property > .property-body .property-item.display-manager .justify-content[selected-type=space-around] .display[display-type=space-around] {
-  background-color: #ececec;
-}
-.csseditor .property > .property-body .property-item.clip-path-svg .clip-path-container {
-  cursor: pointer;
-  width: 50px;
-  height: 50px;
-  border: 1px solid #cccccc;
-}
-.csseditor .property > .property-body .property-item.clip-path-svg .clip-path-container svg {
-  width: 100%;
-}
-.csseditor .property > .property-body .property-item.clip-path-svg .image-resource {
-  position: relative;
-  left: auto;
-  bottom: auto;
-  top: auto;
-  width: 100%;
-  margin-top: 10px;
-  max-height: 300px;
-  flex-wrap: wrap;
-  overflow: auto;
-}
-.csseditor .property > .property-body .property-item.clip-path-svg .items {
-  position: relative;
-}
-.csseditor .property > .property-body .property-item.clip-path-svg .items .svg-item {
-  display: inline-block;
-  width: 50px;
-  height: 50px;
-  vertical-align: middle;
-  border: 1px solid #cccccc;
-  cursor: pointer;
-  margin: 2px;
-}
-.csseditor .property > .property-body .property-item.clip-path-svg .items .svg-item svg {
-  width: 100%;
-  height: 100%;
-}
-.csseditor .property > .property-body .property-item.clip-path-svg .items .svg-item img {
-  max-width: 100%;
-  max-height: 100%;
-}
-.csseditor .property > .property-body .property-item.image-list-view .items {
-  height: 200px;
-  overflow: auto;
-  padding: 0px !important;
-  position: relative;
-}
-.csseditor .property > .property-body .property-item.image-list-view .items .images {
-  top: 0px;
-  bottom: 0px;
-}
-.csseditor .property > .property-body .property-item .group-align {
-  text-align: center;
-}
-.csseditor .property > .property-body .property-item .group-align button {
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  width: 30px;
-  height: 30px;
-  display: inline-block;
-  border: 0px;
-  outline: none;
-  cursor: pointer;
-  -webkit-transform: scale(0.6);
-          transform: scale(0.6);
-  background-color: white;
-}
-.csseditor .property > .property-body .property-item .group-align button[data-value=left] {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, black, black);
-  background-repeat: no-repeat;
-  background-size: 20px 8px, 16px 8px, 2px 24px;
-  background-position: 6px 6px, 6px 16px, 2px 3px;
-}
-.csseditor .property > .property-body .property-item .group-align button[data-value=right] {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, black, black);
-  background-repeat: no-repeat;
-  background-size: 20px 8px, 16px 8px, 2px 24px;
-  background-position: 5px 6px, 9px 16px, 27px 3px;
-}
-.csseditor .property > .property-body .property-item .group-align button[data-value=center] {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, black, black);
-  background-repeat: no-repeat;
-  background-size: 20px 8px, 16px 8px, 2px 24px;
-  background-position: 5px 6px, 7px 16px, 14px 3px;
-}
-.csseditor .property > .property-body .property-item .group-align button[data-value=middle] {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, black, black);
-  background-repeat: no-repeat;
-  background-size: 8px 20px, 8px 16px, 24px 2px;
-  background-position: 6px 5px, 16px 7px, 3px 14px;
-}
-.csseditor .property > .property-body .property-item .group-align button[data-value=top] {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, black, black);
-  background-repeat: no-repeat;
-  background-size: 8px 20px, 8px 16px, 24px 2px;
-  background-position: 6px 8px, 16px 8px, 3px 4px;
-}
-.csseditor .property > .property-body .property-item .group-align button[data-value=bottom] {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, black, black);
-  background-repeat: no-repeat;
-  background-size: 8px 20px, 8px 16px, 24px 2px;
-  background-position: 6px 4px, 16px 8px, 3px 26px;
-}
-.csseditor .property > .property-body .property-item .group-align button[data-value=vertical] {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, black, black), linear-gradient(to right, #ccc, #ccc);
-  background-repeat: no-repeat;
-  background-size: 24px 2px, 18px 10px, 24px 2px;
-  background-position: 3px 6px, 6px 11px, 3px 24px;
-}
-.csseditor .property > .property-body .property-item .group-align button[data-value=horizontal] {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, black, black), linear-gradient(to right, #ccc, #ccc);
-  background-repeat: no-repeat;
-  background-size: 2px 24px, 10px 18px, 2px 24px;
-  background-position: 6px 3px, 11px 6px, 24px 3px;
-}
-.csseditor .property > .property-body .property-item .group-order {
-  text-align: center;
-}
-.csseditor .property > .property-body .property-item .group-order button {
-  margin-right: 10px;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  width: 30px;
-  height: 30px;
-  display: inline-block;
-  border: 0px;
-  outline: none;
-  cursor: pointer;
-  -webkit-transform: scale(0.7);
-          transform: scale(0.7);
-  background-color: white;
-}
-.csseditor .property > .property-body .property-item .group-order button[data-value=forward] {
-  background-image: linear-gradient(to right, yellow, yellow), linear-gradient(to right, black, black), linear-gradient(to right, white, white), linear-gradient(to right, gray, gray);
-  background-repeat: no-repeat;
-  background-size: 18px 18px, 20px 20px, 16px 16px, 18px 18px;
-  background-position: 1px 3px, 0px 2px, 10px 9px, 9px 8px;
-}
-.csseditor .property > .property-body .property-item .group-order button[data-value=backward] {
-  background-image: linear-gradient(to right, white, white), linear-gradient(to right, gray, gray), linear-gradient(to right, yellow, yellow), linear-gradient(to right, black, black);
-  background-repeat: no-repeat;
-  background-size: 16px 16px, 18px 18px, 18px 18px, 20px 20px;
-  background-position: 1px 3px, 0px 2px, 10px 9px, 9px 8px;
-}
-.csseditor .property > .property-body .property-item .group-order button[data-value=front] {
-  background-image: linear-gradient(to right, yellow, yellow), linear-gradient(to right, black, black), linear-gradient(to right, white, white), linear-gradient(to right, gray, gray), linear-gradient(to right, white, white), linear-gradient(to right, gray, gray);
-  background-repeat: no-repeat;
-  background-size: 16px 16px, 18px 18px, 16px 16px, 18px 18px, 16px 16px, 18px 18px;
-  background-position: 6px 6px, 5px 5px, 1px 1px, 0px 0px, 11px 11px, 10px 10px;
-}
-.csseditor .property > .property-body .property-item .group-order button[data-value=back] {
-  background-image: linear-gradient(to right, white, white), linear-gradient(to right, gray, gray), linear-gradient(to right, white, white), linear-gradient(to right, gray, gray), linear-gradient(to right, yellow, yellow), linear-gradient(to right, black, black);
-  background-repeat: no-repeat;
-  background-size: 12px 12px, 14px 14px, 12px 12px, 14px 14px, 18px 18px, 20px 20px;
-  background-position: 1px 1px, 0px 0px, 15px 15px, 14px 14px, 5px 5px, 4px 4px;
-}
-.csseditor .property > .property-body .property-item.fixed-radius {
-  border-bottom: 0px;
-}
-.csseditor .property > .property-body .property-item.box-shadow .items {
-  padding: 2px;
-}
-.csseditor .property > .property-body .property-item.box-shadow .box-shadow-list {
-  display: block;
-}
-.csseditor .property > .property-body .property-item.box-shadow .box-shadow-list .box-shadow-item {
-  position: relative;
-  display: block;
-  margin-top: 2px;
-  padding: 2px 2px;
-  border: 1px solid rgba(204, 204, 204, 0.5);
-}
-.csseditor .property > .property-body .property-item.box-shadow .box-shadow-list .box-shadow-item > div {
-  height: 28px;
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-}
-.csseditor .property > .property-body .property-item.box-shadow .box-shadow-list .box-shadow-item > div .input {
-  display: inline-block;
-}
-.csseditor .property > .property-body .property-item.box-shadow .box-shadow-list .box-shadow-item > div .input input[type=number] {
-  display: inline-block;
-  width: 40px;
-}
-.csseditor .property > .property-body .property-item.box-shadow .box-shadow-list .box-shadow-item > div.drag-area {
-  position: absolute;
-  width: 80px;
-  height: 80px;
-  right: 30px;
-  top: 58px;
-  border: 1px solid #ececec;
-  display: block;
-  background-image: linear-gradient(to right, #ececec, #ececec), linear-gradient(to right, #ececec, #ececec);
-  background-size: 1px 100%, 100% 1px;
-  background-position: center 0px, 0px center;
-  background-repeat: no-repeat, no-repeat;
-}
-.csseditor .property > .property-body .property-item.box-shadow .box-shadow-list .box-shadow-item > div.drag-area .drag-pointer {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  border-radius: 100%;
-  background-color: #00aafb;
-  -webkit-transform-origin: center center;
-          transform-origin: center center;
-  -webkit-transform: translateX(-50%) translateY(-50%);
-          transform: translateX(-50%) translateY(-50%);
-  pointer-events: none;
-}
-.csseditor .property > .property-body .property-item.box-shadow .box-shadow-list .box-shadow-item.checked {
-  background-color: #f1f1f1;
-}
-.csseditor .property > .property-body .property-item.box-shadow .box-shadow-list .box-shadow-item .color {
-  width: 20px;
-  height: 20px;
-  border: 1px solid black;
-  cursor: pointer;
-  display: inline-block;
-  vertical-align: middle;
-}
-.csseditor .property > .property-body .property-item.box-shadow .box-shadow-list .box-shadow-item .select {
-  vertical-align: middle;
-}
-.csseditor .property > .property-body .property-item.box-shadow .box-shadow-list .box-shadow-item button {
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  border: 0px;
-  text-align: center;
-  font-weight: 500;
-}
-.csseditor .property > .property-body .property-item.text-shadow .text-shadow-list {
-  display: block;
-}
-.csseditor .property > .property-body .property-item.text-shadow .text-shadow-list .text-shadow-item {
-  position: relative;
-  display: block;
-  margin-top: 2px;
-  padding: 2px 4px;
-  box-shadow: inset 0px 0px 0px 1px #cccccc;
-}
-.csseditor .property > .property-body .property-item.text-shadow .text-shadow-list .text-shadow-item > div {
-  height: 28px;
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  line-height: 2.4;
-}
-.csseditor .property > .property-body .property-item.text-shadow .text-shadow-list .text-shadow-item > div label {
-  text-align: right;
-  padding-right: 10px;
-}
-.csseditor .property > .property-body .property-item.text-shadow .text-shadow-list .text-shadow-item > div .input {
-  display: inline-block;
-}
-.csseditor .property > .property-body .property-item.text-shadow .text-shadow-list .text-shadow-item > div .input input[type=number] {
-  display: inline-block;
-  width: 40px;
-}
-.csseditor .property > .property-body .property-item.text-shadow .text-shadow-list .text-shadow-item > div.drag-area {
-  position: absolute;
-  width: 80px;
-  height: 80px;
-  right: 30px;
-  top: 28px;
-  border: 1px solid #ececec;
-  display: block;
-  background-image: linear-gradient(to right, #ececec, #ececec), linear-gradient(to right, #ececec, #ececec);
-  background-size: 1px 100%, 100% 1px;
-  background-position: center 0px, 0px center;
-  background-repeat: no-repeat, no-repeat;
-}
-.csseditor .property > .property-body .property-item.text-shadow .text-shadow-list .text-shadow-item > div.drag-area .drag-pointer {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  border-radius: 100%;
-  background-color: #00aafb;
-  -webkit-transform-origin: center center;
-          transform-origin: center center;
-  -webkit-transform: translateX(-50%) translateY(-50%);
-          transform: translateX(-50%) translateY(-50%);
-  pointer-events: none;
-}
-.csseditor .property > .property-body .property-item.text-shadow .text-shadow-list .text-shadow-item.checked {
-  background-color: #f1f1f1;
-}
-.csseditor .property > .property-body .property-item.text-shadow .text-shadow-list .text-shadow-item .color {
-  width: 20px;
-  height: 20px;
-  border: 1px solid black;
-  cursor: pointer;
-  display: inline-block;
-  vertical-align: middle;
-}
-.csseditor .property > .property-body .property-item.text-shadow .text-shadow-list .text-shadow-item .select {
-  vertical-align: middle;
-}
-.csseditor .property > .property-body .property-item.text-shadow .text-shadow-list .text-shadow-item button {
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  border: 0px;
-  text-align: center;
-  font-weight: 500;
-}
-.csseditor .property > .property-body .property-item.background-info .gradient {
-  display: inline-block;
-  vertical-align: middle;
-  height: 20px;
-  width: 20px;
-}
-.csseditor .property > .property-body .property-item.background-info .gradient[data-type=static] {
-  background-image: linear-gradient(to right, #333, #333);
-}
-.csseditor .property > .property-body .property-item.background-info .gradient[data-type=linear] {
-  background-image: linear-gradient(to right, black, gray);
-}
-.csseditor .property > .property-body .property-item.background-info .gradient[data-type=radial] {
-  background-image: radial-gradient(closest-side, black, #ebf8e1, gray);
-}
-.csseditor .property > .property-body .property-item.background-info .gradient[data-type=conic] {
-  background-image: conic-gradient(black, #ebf8e1);
-}
-.csseditor .property > .property-body .property-item.background-info .gradient[data-type=repeating-linear] {
-  background-image: repeating-linear-gradient(45deg, #3f87a6, #ebf8e1 15%, #f69d3c 20%);
-}
-.csseditor .property > .property-body .property-item.background-info .gradient[data-type=repeating-radial] {
-  background-image: repeating-radial-gradient(circle, #3f87a6, #ebf8e1 15%, #f69d3c 20%);
-}
-.csseditor .property > .property-body .property-item.background-info .gradient[data-type=repeating-conic] {
-  background-image: repeating-conic-gradient(#3f87a6, #ebf8e1 5%, #f69d3c 10%);
-}
-.csseditor .property > .property-body .property-item.background-info .gradient + label {
-  display: inline-block;
-  vertical-align: middle;
-  font-size: 16px;
-  margin-left: 10px;
-}
-.csseditor .property > .property-body .property-item.colorpicker .items {
-  padding: 0px;
-}
-.csseditor .property > .property-body .property-item.colorpicker .items .colorpicker-body {
-  width: 100%;
-}
-.csseditor .property > .property-body .property-item.colorpicker .items .colorpicker-body .color-tab {
-  border: 0px;
-}
-.csseditor .property > .property-body .property-item.colorpicker .items .colorpicker-body .color-panel {
-  margin-left: 12px;
-}
-.csseditor .property > .property-body .property-item.colorpicker .items .colorpicker-body .color-tab-body {
-  border: 0px;
-}
-.csseditor .property > .property-body .property-item.layer-code .key-value-view {
-  display: block;
-  -webkit-user-select: text;
-     -moz-user-select: text;
-      -ms-user-select: text;
-          user-select: text;
-}
-.csseditor .property > .property-body .property-item.layer-code .key-value-view .key-value-item {
-  display: block;
-}
-.csseditor .property > .property-body .property-item.layer-code .key-value-view .key-value-item.short .key {
-  display: inline-block;
-  vertical-align: middle;
-  width: 100px;
-  padding-left: 2px;
-  padding-right: 0px;
-}
-.csseditor .property > .property-body .property-item.layer-code .key-value-view .key-value-item.short .value {
-  display: inline-block;
-  vertical-align: middle;
-  padding-left: 0px;
-}
-.csseditor .property > .property-body .property-item.layer-code .key-value-view .key-value-item .key {
-  display: block;
-  font-weight: bold;
-  padding: 2px 5px;
-}
-.csseditor .property > .property-body .property-item.layer-code .key-value-view .key-value-item .value {
-  white-space: pre-wrap;
-  margin: 0px;
-  padding: 0px 5px;
-  padding-left: 20px;
-  font-size: 12px;
-  display: block;
-}
-.csseditor .property > .property-body .property-item.text.has-clip-text .no-clip {
-  pointer-events: none;
-}
-.csseditor .property > .property-body .property-item.text .color {
-  width: 20px !important;
-  height: 20px !important;
-  cursor: pointer !important;
-  border: 1px solid #333 !important;
-  display: inline-block !important;
-  vertical-align: middle !important;
-}
-.csseditor .property > .property-body .property-item.text .color-text {
-  width: 100px !important;
-  -webkit-appearance: none !important;
-     -moz-appearance: none !important;
-          appearance: none !important;
-  border: 0px !important;
-  background-color: transparent !important;
-  pointer-events: none;
-  margin-left: 5px;
-}
-.csseditor .property > .property-body .property-item.text .content {
-  width: 100%;
-  height: 70px;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  border: 1px solid #cccccc;
-  font-size: 20px;
-}
-.csseditor .property > .property-body .property-item.image-sorting .items > div > label {
-  display: inline-block;
-  line-height: 2;
-  padding: 2px 5px;
-  height: 100%;
-  vertical-align: middle;
-  width: 50px;
-}
-.csseditor .property > .property-body .property-item.image-sorting .button-group {
-  display: inline-block;
-  vertical-align: middle;
-  padding: 2px 0px;
-}
-.csseditor .property > .property-body .property-item.image-sorting .button-group button {
-  flex: 1 1 auto;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  border: 1px solid #cccccc;
-  outline: none;
-  vertical-align: middle;
-  display: inline-block;
-}
-.csseditor .property > .property-body .property-item.image-sorting .button-group button:not(:first-child) {
-  margin-left: -1px;
-}
-.csseditor .property > .property-body .property-item.image-sorting .button-group button.cut {
-  width: 18px;
-  height: 18px;
-  border: 1px solid #cccccc;
-  cursor: pointer;
-  background-image: linear-gradient(to top, black 0%, black 100%);
-  background-size: 4px 4px;
-  background-position: 6px center;
-  background-repeat: repeat-y;
-}
-.csseditor .property > .property-body .property-item.image-sorting .button-group button.cut.on {
-  background-position: center 6px;
-  background-repeat: repeat-x;
-}
-.csseditor .property > .property-body .property-item.image-sorting .step-align {
-  display: inline-block;
-  vertical-align: middle;
-}
-.csseditor .filter-list {
-  display: grid !important;
-  grid-template-columns: 1fr !important;
-}
-.csseditor .filter-list .filter-item {
-  display: block;
-}
-.csseditor .filter-list .filter-item .title {
-  display: grid;
-  grid-template-columns: 1fr 30px;
-}
-.csseditor .filter-list .filter-item .title label {
-  font-size: 12px;
-  padding: 2px 5px;
-  box-sizing: border-box;
-}
-.csseditor .filter-list .filter-item .title .filter-menu {
-  text-align: right;
-}
-.csseditor .filter-list .filter-item .title .filter-menu button {
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  border: 0px;
-  background-color: transparent;
-  width: 16px;
-  height: 16px;
-  display: inline-block;
-  box-sizing: border-box;
-  padding: 0px;
-  cursor: pointer;
-}
-.csseditor .filter-list .filter-item .title .filter-menu button svg {
-  width: 100%;
-  height: 100%;
-}
-.csseditor .filter-list .filter-item .filter-ui {
-  display: grid;
-  grid-template-columns: 3fr 1fr 1fr;
-  grid-column-gap: 1px;
-  height: 24px;
-}
-.csseditor .filter-list .filter-item .filter-ui.drop-shadow {
-  grid-template-columns: 50px 2fr 1fr 1fr;
-  grid-column-gap: 1px;
-}
-.csseditor .filter-list .filter-item .filter-ui.drop-shadow label {
-  font-size: 10px;
-}
-.csseditor .filter-list .filter-item .filter-ui.drop-shadow-color {
-  grid-template-columns: 50px 30px 1fr;
-  grid-column-gap: 2px;
-}
-.csseditor .filter-list .filter-item .filter-ui.drop-shadow-color label {
-  font-size: 10px;
-}
-.csseditor .filter-list .filter-item .filter-ui.drop-shadow-color .preview {
-  width: 24px;
-}
-.csseditor .filter-list .filter-item .filter-ui.drop-shadow-color .preview .mini-view {
-  display: inline-block;
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
-  border-radius: 100%;
-  position: relative;
-  box-sizing: border-box;
-  border: 1px solid #cccccc;
-  background-color: transparent;
-  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
-  background-size: 10px 10px;
-  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
-}
-.csseditor .filter-list .filter-item .filter-ui.drop-shadow-color .preview .mini-view .color-view {
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-  border-radius: 100%;
-}
-.csseditor .filter-list .filter-item .filter-ui input[type=number] {
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  border: 1px solid #cccccc;
-  box-sizing: border-box;
-  width: 100%;
-}
-.csseditor .filter-list .filter-item .filter-ui input[type=range] {
-  width: 90%;
 }
 .csseditor .border-item {
   grid-template-columns: 1fr 3fr;
@@ -4056,104 +3422,6 @@ html, body {
   right: 0px;
   bottom: 0px;
   border-radius: 100%;
-}
-.csseditor .border-radius-item {
-  grid-template-columns: 0.6fr 3fr !important;
-}
-.csseditor .border-radius-item .radius-selector {
-  display: flex;
-  grid-template-columns: 1fr;
-}
-.csseditor .border-radius-item .radius-selector[data-selected-value=all] button[data-value=all] {
-  background-color: black;
-}
-.csseditor .border-radius-item .radius-selector[data-selected-value=all] button[data-value=all] svg path {
-  fill: white;
-}
-.csseditor .border-radius-item .radius-selector[data-selected-value=partitial] button[data-value=partitial] {
-  background-color: black;
-}
-.csseditor .border-radius-item .radius-selector[data-selected-value=partitial] button[data-value=partitial] svg path {
-  fill: white;
-}
-.csseditor .border-radius-item .radius-selector button {
-  flex: none;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  box-sizing: border-box;
-  width: 20px;
-  height: 20px;
-  display: inline-block;
-  vertical-align: middle;
-  margin-right: 2px;
-  border-radius: 3px;
-  cursor: pointer;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-}
-.csseditor .border-radius-item .radius-selector button svg {
-  width: 100%;
-  height: 100%;
-}
-.csseditor .border-radius-item .radius-selector button svg path {
-  fill: #cccccc;
-}
-.csseditor .border-radius-item .radius-value {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
-  grid-column-gap: 3px;
-}
-.csseditor .border-radius-item .radius-value input,
-.csseditor .border-radius-item .radius-value select {
-  width: 100%;
-  outline: none;
-}
-.csseditor .border-radius-item .radius-setting-box {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(2, 1fr);
-  grid-column-gap: 4px;
-  grid-row-gap: 2px;
-}
-.csseditor .border-radius-item .radius-setting-box > div {
-  display: grid;
-  grid-template-columns: 20px 1fr 1.4fr;
-  text-align: center;
-}
-.csseditor .border-radius-item .radius-setting-box > div > * {
-  vertical-align: middle;
-}
-.csseditor .border-radius-item .radius-setting-box > div input,
-.csseditor .border-radius-item .radius-setting-box > div select {
-  width: 100%;
-  outline: none;
-}
-.csseditor .border-radius-item .radius-setting-box > div label {
-  width: 16px;
-  height: 16px;
-  display: inline-block;
-  vertical-align: middle;
-  border: 2px solid #333;
-  margin-right: 2px;
-  cursor: pointer;
-  outline: none;
-  position: relative;
-  margin-top: 2px;
-}
-.csseditor .border-radius-item .radius-setting-box > div label.topLeft {
-  border-top-left-radius: 10px;
-}
-.csseditor .border-radius-item .radius-setting-box > div label.topRight {
-  border-top-right-radius: 10px;
-}
-.csseditor .border-radius-item .radius-setting-box > div label.bottomLeft {
-  border-bottom-left-radius: 10px;
-}
-.csseditor .border-radius-item .radius-setting-box > div label.bottomRight {
-  border-bottom-right-radius: 10px;
 }
 .csseditor .border-slice-item {
   grid-template-columns: 0.6fr 3fr !important;
@@ -4814,6 +4082,544 @@ html, body {
   margin: 0px;
   background-color: rgba(255, 255, 255, 0.1);
 }
+.csseditor .animation-list {
+  grid-template-columns: 1fr !important;
+}
+.csseditor .animation-list .animation-item {
+  display: grid;
+  grid-template-columns: 20px 30px 1fr;
+  grid-column-gap: 4px;
+  box-sizing: border-box;
+  border: 1px solid #cccccc;
+  margin-bottom: 5px;
+  text-align: center;
+  padding: 5px;
+}
+.csseditor .animation-list .animation-item.selected {
+  background-color: rgba(204, 204, 204, 0.5);
+}
+.csseditor .animation-list .animation-item .checkbox {
+  vertical-align: middle;
+  padding: 6px 0px;
+}
+.csseditor .animation-list .animation-item .name {
+  padding: 2px 0px;
+  text-align: left;
+  vertical-align: middle;
+}
+.csseditor .animation-list .animation-item .timing {
+  border-radius: 3px;
+  background-color: #ac48ff;
+  width: 100%;
+  height: 30px;
+  vertical-align: middle;
+  cursor: pointer;
+  margin-top: 3px;
+}
+.csseditor .animation-list .animation-item .timing canvas {
+  border-radius: 3px;
+}
+.csseditor .animation-list .animation-item .labels {
+  margin-top: 4px;
+}
+.csseditor .animation-list .animation-item .labels label {
+  background-color: #cccccc;
+  padding: 1px 3px;
+  border-radius: 2px;
+  color: #cccccc;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+.csseditor .animation-list .animation-item .labels label small {
+  color: white;
+  text-transform: lowercase;
+}
+.csseditor .animation-list .animation-item .labels label.delay {
+  background-color: red;
+}
+.csseditor .animation-list .animation-item .labels label.duration {
+  background-color: green;
+}
+.csseditor .animation-list .animation-item .labels label.count {
+  background-color: blue;
+}
+.csseditor .animation-list .animation-item .labels label.direction small, .csseditor .animation-list .animation-item .labels label.fill-mode small, .csseditor .animation-list .animation-item .labels label.play-state small {
+  color: black;
+}
+.csseditor .keyframe-list {
+  grid-template-columns: 1fr !important;
+}
+.csseditor .keyframe-list .keyframe-item {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-column-gap: 4px;
+  border: 1px solid #cccccc;
+  margin-bottom: 5px;
+  padding: 5px;
+  cursor: pointer;
+  height: 40px;
+}
+.csseditor .keyframe-list .keyframe-item.selected {
+  background-color: rgba(204, 204, 204, 0.5);
+}
+.csseditor .keyframe-list .keyframe-item .name {
+  padding: 2px 0px;
+}
+.csseditor .keyframe-list .keyframe-item .offset-list {
+  padding: 0px 10px;
+}
+.csseditor .keyframe-list .keyframe-item .offset-list .container {
+  position: relative;
+  background-image: linear-gradient(to right, #cccccc, black);
+  background-size: 100% 2px;
+  background-repeat: no-repeat;
+  background-position: 0px center;
+  height: 100%;
+}
+.csseditor .keyframe-list .keyframe-item .offset-list .container .offset {
+  width: 10px;
+  height: 10px;
+  background-color: black;
+  border-radius: 100%;
+  position: absolute;
+  top: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+  vertical-align: middle;
+}
+.csseditor .keyframe-list .keyframe-item .offset-list .container .offset:hover:before {
+  display: inline-block;
+  content: attr(data-title);
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  padding: 1px 3px;
+  text-align: center;
+  background-color: #4e3b3b;
+  border-radius: 3px;
+  color: white;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  white-space: nowrap;
+}
+.csseditor .color-view-editor {
+  display: grid;
+  height: 24px;
+  grid-template-columns: 20px auto;
+  grid-column-gap: 5px;
+  margin-bottom: 5px;
+  text-align: center;
+}
+.csseditor .color-view-editor .preview {
+  display: inline-block;
+  height: 20px;
+  box-sizing: border-box;
+  margin-top: 2px;
+  cursor: pointer;
+}
+.csseditor .color-view-editor .preview .mini-view {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #cccccc;
+  position: relative;
+  border-radius: 100%;
+  background-color: transparent;
+  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-size: 10px 10px;
+  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+}
+.csseditor .color-view-editor .preview .mini-view .color-view {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  border-radius: 100%;
+}
+.csseditor .color-view-editor .color-code input {
+  width: 100%;
+  height: 100%;
+}
+.csseditor .range-editor {
+  display: grid;
+  grid-template-columns: 1fr 50px 50px;
+  grid-column-gap: 4px;
+}
+.csseditor .offset-property-editor {
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+.csseditor .offset-property-editor .title {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-column-gap: 2px;
+}
+.csseditor .offset-property-editor .title .tools {
+  text-align: right;
+}
+.csseditor .offset-property-editor .title .tools select {
+  width: 130px !important;
+  display: inline-block;
+}
+.csseditor .offset-property-editor .title .tools button {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  outline: none;
+  cursor: pointer;
+  border: 0px;
+  padding: 0px;
+  vertical-align: middle;
+}
+.csseditor .offset-property-editor .title .tools button svg {
+  width: 16px;
+  height: 16px;
+}
+.csseditor .background-image-editor .tools {
+  vertical-align: middle;
+  text-align: right;
+}
+.csseditor .background-image-editor .tools button {
+  vertical-align: middle;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  border: 0px;
+  padding: 0px;
+  font-size: 16px;
+  vertical-align: middle;
+  cursor: pointer;
+  outline: none;
+  font-size: 12px;
+}
+.csseditor .background-image-editor .tools button svg {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+.csseditor .background-image-editor .fill-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  font-size: 12px;
+}
+.csseditor .background-image-editor .fill-list .fill-item {
+  display: grid;
+  height: 50px;
+  grid-template-columns: 40px 1fr;
+  grid-column-gap: 5px;
+  margin-bottom: 5px;
+  text-align: center;
+  box-sizing: border-box;
+}
+.csseditor .background-image-editor .fill-list .fill-item.selected {
+  background-color: rgba(204, 204, 204, 0.5);
+}
+.csseditor .background-image-editor .fill-list .fill-item .gradient-info {
+  display: grid;
+  grid-template-columns: 60px 1fr 20px;
+}
+.csseditor .background-image-editor .fill-list .fill-item .gradient-info .tools {
+  text-align: right;
+}
+.csseditor .background-image-editor .fill-list .fill-item .background-image-info {
+  display: grid;
+  grid-template-columns: 64px repeat(2, 1fr);
+  grid-column-gap: 0px;
+}
+.csseditor .background-image-editor .fill-list .fill-item .background-image-info > div {
+  overflow: hidden;
+}
+.csseditor .background-image-editor .fill-list .fill-item .background-image-info .blend-mode {
+  border-radius: 3px;
+  background-color: green;
+  color: white;
+  font-weight: bold;
+}
+.csseditor .background-image-editor .fill-list .fill-item[data-fill-type=gradient] .colorcode,
+.csseditor .background-image-editor .fill-list .fill-item[data-fill-type=gradient] .opacity {
+  display: none;
+}
+.csseditor .background-image-editor .fill-list .fill-item[data-fill-type=gradient] .colorsteps {
+  display: block;
+}
+.csseditor .background-image-editor .fill-list .fill-item .preview {
+  display: grid;
+  cursor: pointer;
+  padding: 2px;
+}
+.csseditor .background-image-editor .fill-list .fill-item .preview .mini-view {
+  display: block;
+  height: 36px;
+  border: 1px solid #cccccc;
+  box-sizing: border-box;
+  pointer-events: none;
+  border-radius: 3px;
+  position: relative;
+  background-color: transparent;
+  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-size: 10px 10px;
+  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+}
+.csseditor .background-image-editor .fill-list .fill-item .preview .mini-view .color-view {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  border-radius: 3px;
+}
+.csseditor .background-image-editor .fill-list .fill-item .fill-title {
+  pointer-events: none;
+  display: inline-block;
+  vertical-align: middle;
+  text-align: left;
+  padding: 4px 0px;
+  box-sizing: border-box;
+}
+.csseditor .background-image-editor .fill-list .fill-item .fill-title svg {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+.csseditor .background-image-editor .fill-list .fill-item .colorcode input {
+  width: 100%;
+}
+.csseditor .background-image-editor .fill-list .fill-item .colorsteps {
+  display: none;
+  text-align: left;
+  padding: 5px 0px;
+  height: 100%;
+  box-sizing: border-box;
+}
+.csseditor .background-image-editor .fill-list .fill-item .colorsteps .step {
+  border: 1px solid #333;
+  display: inline-block;
+  margin-left: -5px;
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
+  border-radius: 100%;
+  cursor: pointer;
+  position: relative;
+}
+.csseditor .background-image-editor .fill-list .fill-item .colorsteps .step:first-child {
+  margin-left: 0px;
+}
+.csseditor .background-image-editor .fill-list .fill-item .colorsteps .step[data-selected=true]:before {
+  content: "";
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  display: inline-block;
+  left: 50%;
+  -webkit-transform: translateX(-50%) translateY(-5px);
+          transform: translateX(-50%) translateY(-5px);
+  border-radius: 100%;
+  background-color: black;
+}
+.csseditor .background-image-editor .fill-list .fill-item .tools {
+  line-height: 2;
+}
+.csseditor .background-image-editor .fill-list .fill-item .tools button {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  height: 16px;
+  width: 16px;
+  border: 0px;
+  padding: 0px;
+  font-size: 16px;
+  vertical-align: middle;
+  cursor: pointer;
+  outline: none;
+}
+.csseditor .background-image-editor .fill-list .fill-item .tools button svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor .border-radius-editor {
+  grid-template-columns: 1fr;
+}
+.csseditor .border-radius-editor .radius-selector {
+  display: flex;
+  grid-template-columns: 1fr;
+}
+.csseditor .border-radius-editor .radius-selector[data-selected-value=all] button[data-value=all] {
+  background-color: black;
+}
+.csseditor .border-radius-editor .radius-selector[data-selected-value=all] button[data-value=all] svg path {
+  fill: white;
+}
+.csseditor .border-radius-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] {
+  background-color: black;
+}
+.csseditor .border-radius-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] svg path {
+  fill: white;
+}
+.csseditor .border-radius-editor .radius-selector button {
+  flex: none;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  box-sizing: border-box;
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 2px;
+  border-radius: 3px;
+  cursor: pointer;
+  outline: none;
+  padding: 0px;
+  border: 0px;
+}
+.csseditor .border-radius-editor .radius-selector button svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor .border-radius-editor .radius-selector button svg path {
+  fill: #cccccc;
+}
+.csseditor .border-radius-editor .radius-value {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  grid-column-gap: 3px;
+}
+.csseditor .border-radius-editor .radius-value input,
+.csseditor .border-radius-editor .radius-value select {
+  width: 100%;
+  outline: none;
+}
+.csseditor .border-radius-editor .radius-setting-box {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  grid-column-gap: 4px;
+  grid-row-gap: 2px;
+}
+.csseditor .border-radius-editor .radius-setting-box > div {
+  display: grid;
+  grid-template-columns: 20px 1fr 1.4fr;
+  text-align: center;
+}
+.csseditor .border-radius-editor .radius-setting-box > div > * {
+  vertical-align: middle;
+}
+.csseditor .border-radius-editor .radius-setting-box > div input,
+.csseditor .border-radius-editor .radius-setting-box > div select {
+  width: 100%;
+  outline: none;
+}
+.csseditor .border-radius-editor .radius-setting-box > div label {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  vertical-align: middle;
+  border: 2px solid #333;
+  margin-right: 2px;
+  cursor: pointer;
+  outline: none;
+  position: relative;
+  margin-top: 2px;
+}
+.csseditor .border-radius-editor .radius-setting-box > div label.border-top-left-radius {
+  border-top-left-radius: 10px;
+}
+.csseditor .border-radius-editor .radius-setting-box > div label.border-top-right-radius {
+  border-top-right-radius: 10px;
+}
+.csseditor .border-radius-editor .radius-setting-box > div label.border-bottom-left-radius {
+  border-bottom-left-radius: 10px;
+}
+.csseditor .border-radius-editor .radius-setting-box > div label.border-bottom-right-radius {
+  border-bottom-right-radius: 10px;
+}
+.csseditor .filter-editor .tools {
+  vertical-align: middle;
+  text-align: right;
+}
+.csseditor .filter-editor .tools button {
+  vertical-align: middle;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  border: 0px;
+  padding: 0px;
+  font-size: 16px;
+  vertical-align: middle;
+  cursor: pointer;
+  outline: none;
+  font-size: 12px;
+}
+.csseditor .filter-editor .tools button svg {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+.csseditor .filter-editor .filter-list {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+}
+.csseditor .filter-editor .filter-list .filter-item {
+  display: block;
+}
+.csseditor .filter-editor .filter-list .filter-item .title {
+  display: grid;
+  grid-template-columns: 1fr 30px;
+}
+.csseditor .filter-editor .filter-list .filter-item .title label {
+  font-size: 12px;
+  padding: 2px 5px;
+  box-sizing: border-box;
+}
+.csseditor .filter-editor .filter-list .filter-item .title .filter-menu {
+  text-align: right;
+}
+.csseditor .filter-editor .filter-list .filter-item .title .filter-menu button {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border: 0px;
+  background-color: transparent;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  box-sizing: border-box;
+  padding: 0px;
+  cursor: pointer;
+}
+.csseditor .filter-editor .filter-list .filter-item .title .filter-menu button svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor .filter-editor .filter-list .filter-item .filter-ui {
+  display: grid;
+  grid-template-columns: 1fr;
+  height: 20px;
+  margin-bottom: 2px;
+}
+.csseditor .filter-editor .filter-list .filter-item .filter-ui.drop-shadow {
+  grid-template-columns: 50px 1fr;
+  grid-column-gap: 1px;
+}
+.csseditor .filter-editor .filter-list .filter-item .filter-ui.drop-shadow label {
+  font-size: 10px;
+}
+.csseditor .filter-editor .filter-list .filter-item .filter-ui.drop-shadow-color {
+  grid-template-columns: 50px 1fr;
+  grid-column-gap: 2px;
+}
+.csseditor .filter-editor .filter-list .filter-item .filter-ui.drop-shadow-color label {
+  font-size: 12px;
+}
+.csseditor .filter-editor .filter-list .filter-item .filter-ui input[type=range] {
+  width: 90%;
+}
 .csseditor .fill-picker {
   position: fixed;
   width: 224px;
@@ -4875,6 +4681,9 @@ html, body {
 }
 .csseditor .fill-picker .picker-tab .picker-tab-list[data-value=image] .picker-tab-item[data-selected-value=image] .icon svg path {
   fill: rgba(0, 0, 255, 0.5);
+}
+.csseditor .fill-picker .picker-tab .picker-tab-list[data-is-image-hidden=true] .picker-tab-item[data-selected-value=image] {
+  display: none;
 }
 .csseditor .fill-picker .picker-tab .picker-tab-list .picker-tab-item {
   display: inline-block;
@@ -5350,9 +5159,46 @@ html, body {
   background-color: #cccccc;
   border-radius: 100%;
 }
+.csseditor .popup.animation-property-popup {
+  padding: 10px;
+  width: 250px;
+}
+.csseditor .popup.animation-property-popup .box > div {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  grid-column-gap: 4px;
+  margin-bottom: 5px;
+}
+.csseditor .popup.animation-property-popup .box > div.timing-function, .csseditor .popup.animation-property-popup .box > div.delay, .csseditor .popup.animation-property-popup .box > div.duration, .csseditor .popup.animation-property-popup .box > div.iteration-count {
+  grid-template-columns: 1fr;
+}
+.csseditor .popup.animation-property-popup .box > div.timing-function label, .csseditor .popup.animation-property-popup .box > div.delay label, .csseditor .popup.animation-property-popup .box > div.duration label, .csseditor .popup.animation-property-popup .box > div.iteration-count label {
+  text-align: left;
+}
+.csseditor .popup.animation-property-popup .box label {
+  font-size: 12px;
+  text-align: left;
+  vertical-align: middle;
+}
+.csseditor .popup.animation-property-popup .box input,
+.csseditor .popup.animation-property-popup .box select {
+  width: 100%;
+  vertical-align: middle;
+}
+.csseditor .popup.animation-property-popup .box .input {
+  vertical-align: middle;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+}
+.csseditor .popup.animation-property-popup .box .input.grid-1 {
+  grid-template-columns: 1fr;
+}
+.csseditor .popup.animation-property-popup .box .input.grid-2 {
+  grid-template-columns: 3fr 1fr;
+}
 .csseditor .popup.text-shadow-property-popup {
   padding: 10px;
-  width: 224px;
+  width: 250px;
   height: 140px;
 }
 .csseditor .popup.text-shadow-property-popup .box {
@@ -5431,4 +5277,96 @@ html, body {
           transform: translateX(calc(40px - 5px)) translateY(calc(42px - 5px));
   background-color: #cccccc;
   border-radius: 100%;
+}
+.csseditor .popup.keyframe-popup {
+  padding: 7px;
+  width: 250px;
+  height: auto;
+}
+.csseditor .popup.keyframe-popup .box > div {
+  height: 20px;
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  grid-column-gap: 4px;
+  margin-bottom: 5px;
+}
+.csseditor .popup.keyframe-popup .box .property .title {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-column-gap: 2px;
+}
+.csseditor .popup.keyframe-popup .box .property .title .tools {
+  text-align: right;
+}
+.csseditor .popup.keyframe-popup .box .property .title .tools select {
+  width: 100px;
+  display: inline-block;
+}
+.csseditor .popup.keyframe-popup .box .property .title .tools button {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  outline: none;
+  cursor: pointer;
+  border: 0px;
+  padding: 0px;
+  vertical-align: middle;
+}
+.csseditor .popup.keyframe-popup .box .property .title .tools button svg {
+  width: 16px;
+  height: 16px;
+}
+.csseditor .popup.keyframe-popup .box .offset-input {
+  padding: 5px 0px;
+}
+.csseditor .popup.keyframe-popup .box .offset-input input {
+  width: 104px;
+}
+.csseditor .popup.keyframe-popup .box .keyframe-property-list {
+  max-height: 300px;
+  overflow: auto;
+}
+.csseditor .popup.keyframe-popup .box .keyframe-property-item {
+  box-sizing: border-box;
+  padding: 4px 0px;
+  margin-top: 2px;
+}
+.csseditor .popup.keyframe-popup .box .keyframe-property-item .title {
+  grid-template-columns: 1fr 30px;
+}
+.csseditor .popup.keyframe-popup .box .keyframe-property-item .tools button {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  outline: none;
+  cursor: pointer;
+  border: 0px;
+}
+.csseditor .popup.keyframe-popup .box .keyframe-property-item .tools button svg {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+.csseditor .popup.keyframe-popup .box label {
+  font-size: 12px;
+  text-align: left;
+  vertical-align: middle;
+}
+.csseditor .popup.keyframe-popup .box input,
+.csseditor .popup.keyframe-popup .box select {
+  width: 100%;
+  vertical-align: middle;
+}
+.csseditor .popup.keyframe-popup .box .input {
+  vertical-align: middle;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+}
+.csseditor .popup.keyframe-popup .box .input.grid-1 {
+  grid-template-columns: 1fr;
+}
+.csseditor .popup.keyframe-popup .box .input.grid-2 {
+  grid-template-columns: 3fr 1fr;
 }

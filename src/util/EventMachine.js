@@ -9,7 +9,8 @@ import Event, {
   CHECK_BIND_PATTERN,
   getRef,
   BIND_CHECK_DEFAULT_FUNCTION,
-  BIND_CHECK_FUNCTION
+  BIND_CHECK_FUNCTION,
+  LOAD
 } from "./Event";
 import Dom from "./Dom";
 import State from "./State";
@@ -29,10 +30,12 @@ import {
   ADD_BODY_MOUSEMOVE,
   ADD_BODY_MOUSEUP
 } from "../csseditor/types/ToolTypes";
+import { uuid } from "./functions/math";
 
 const REFERENCE_PROPERTY = "ref";
 const TEMP_DIV = new Dom("div");
 const QUERY_PROPERTY = `[${REFERENCE_PROPERTY}]`;
+const ATTR_lIST = [REFERENCE_PROPERTY]
 
 const matchPath = (el, selector) => {
   if (el) {
@@ -308,6 +311,7 @@ export default class EventMachine {
     this.refs = {};
     this.children = {};
     this._bindings = [];
+    this.id = uuid();    
     this.childComponents = this.components();
   }
 
@@ -334,7 +338,7 @@ export default class EventMachine {
     if ($container) $container.append(this.$el);
 
     // this.load();
-    this.parseComponent();
+    this.parseComponent(false);
 
     this.afterRender();
   }
@@ -374,8 +378,10 @@ export default class EventMachine {
       var refs = $el.$$(QUERY_PROPERTY);
       refs.forEach($dom => {
         const name = $dom.attr(REFERENCE_PROPERTY);
-        this.refs[name] = $dom;
+        this.refs[name] = $dom;        
       });
+
+
     });
 
     if (!isLoad) {
@@ -385,7 +391,7 @@ export default class EventMachine {
     return TEMP_DIV.createChildrenFragment();
   }
 
-  parseComponent() {
+  parseComponent(isLoadFunction = false ) {
     const $el = this.$el;
     keyEach(this.childComponents, (ComponentName, Component) => {
       const targets = $el.$$(`${ComponentName.toLowerCase()}`);
@@ -394,7 +400,7 @@ export default class EventMachine {
 
         [...$dom.el.attributes]
           .filter(t => {
-            return [REFERENCE_PROPERTY].indexOf(t.nodeName) < 0;
+            return ATTR_lIST.indexOf(t.nodeName) < 0;
           })
           .forEach(t => {
             props[t.nodeName] = t.nodeValue;
@@ -402,13 +408,38 @@ export default class EventMachine {
 
         let refName = $dom.attr(REFERENCE_PROPERTY) || ComponentName;
 
+        // 로드 하게 되서 parseComponent 를 수행하면 
+        // 기존의 객체를 지워야 하는데 
+        // 어떻게 지울 수 있을까? 
+
         if (refName) {
           if (Component) {
             var instance = new Component(this, props);
-
             if (this.children[refName]) {
-              refName = instance.id;
+              // ref 이름이 겹치는 경우 
+              // 1. LOAD 시점에 내부 객체에 ref 를 똑같이 줬다. 
+              if (isLoadFunction) {
+                // 로드 시점에는 이름이 중복 된다는 것은 
+                // 이렇게 해도 ref 를 안주고 생성하는 것은 못 막는군  
+                // 무조건 ref 를 주도록 하자. 
+                // 로드 시점에 ref 가 같으면 이전 객체는 지워준다. 
+                var prevComponent = this.children[refName];
+                prevComponent.destroy();  
+              } else {
+                // 최초 생성시에 생성된 객체는 중복이 있으면 (즉, ref 가 없이 여러개를 나열해서 사용할 때)
+                refName = instance.id; // ref 이름을 바꿔서 저장해준다. 
+
+                // 그러면 이 객체가 다시 리로드 됐을 때는 어떻게 처리할 것인가?  
+              }
+              // 2. 이름을 주지 않고 같은 객체를 여러개 생성했다. 
+              // 2가지를 어떻게 구분하지 ? 
+              // 즉, 살아있는 놈이랑 아닌 놈이랑 구별을 할려면 ?  
+
+              // console.log(prevComponent.id, 'is deleted', prevComponent);
+              // this.children[prevComponent.id] = null; 
+
             }
+
 
             this.children[refName] = instance;
             this.refs[refName] = instance.$el;
@@ -417,11 +448,44 @@ export default class EventMachine {
               instance.render();
 
               $dom.replace(instance.$el);
+  
+              instance.initializeEvent();  
             }
+          
           }
         }
       });
     });
+
+    // DOM 에서 빠지 애들  ( this.$el.parent() 가 null  인 경우 )
+    // destroy () 시킨다. 
+
+    keyEach(this.children, (key, obj) => {
+      if (obj && obj.clean()) {
+        delete this.children[key]
+        delete this.refs[key]
+      }
+    })
+  }
+
+  clean () {
+    if (!this.$el.parent()) {
+
+      keyEach(this.children, (key, child) => {
+        child.clean();
+      })
+
+      this.destroy();  
+      return true; 
+    }
+  }
+
+  loadTemplate (...args) {
+    return this[LOAD(args.join(EMPTY_STRING))].call(this)
+  }
+
+  loadOne(selector) {
+    
   }
 
   load(...args) {
@@ -433,7 +497,7 @@ export default class EventMachine {
     this._loadMethods.forEach(callbackName => {
       const elName = callbackName.split(LOAD_SAPARATOR)[1];
       if (this.refs[elName]) {
-        var oldTemplate = this[callbackName].t || EMPTY_STRING;
+        // var oldTemplate = this[callbackName].t || EMPTY_STRING;
         var newTemplate = this[callbackName].call(this, ...args);
 
         if (isArray(newTemplate)) {
@@ -451,6 +515,11 @@ export default class EventMachine {
 
         // ref 를 중복해서 로드 하게 되면 이전 객체가 그대로 살아 있을 확률이 커지기 때문에 정상적으로 싱크가 맞지 않음
         // }
+
+        // 새로운 html 이 로드가 되었으니 
+        // 이벤트를 재설정 하자. 
+        // 그래야 refs 에 있던 객체를 다시 사용할 수 있다. 
+        this.initializeEventMachin()
       }
     });
 
@@ -488,7 +557,8 @@ export default class EventMachine {
       }
     });
 
-    this.parseComponent();
+    this.parseComponent(true);
+    
   }
 
   // 기본 템플릿 지정
@@ -530,7 +600,6 @@ export default class EventMachine {
    */
   destroy() {
     this.destroyEventMachin();
-    // this.refs = {}
 
     this.eachChildren(Component => {
       Component.destroy();
@@ -542,6 +611,7 @@ export default class EventMachine {
   }
 
   initializeEventMachin() {
+    this.destroyEventMachin();
     this.filterProps(CHECK_PATTERN).forEach(key => parseEvent(this, key));
   }
 
@@ -550,27 +620,24 @@ export default class EventMachine {
    * 상위 클래스의 모든 property 를 수집해서 리턴한다.
    */
   collectProps() {
-    if (!this.collapsedProps) {
-      var p = this.__proto__;
-      var results = [];
-      do {
-        var isObject = p instanceof Object;
 
-        if (isObject === false) {
-          break;
-        }
-        const names = Object.getOwnPropertyNames(p).filter(name => {
-          return isFunction(this[name]);
-        });
+    var p = this.__proto__;
+    var results = [];
+    do {
+      var isObject = p instanceof Object;
 
-        results.push(...names);
-        p = p.__proto__;
-      } while (p);
+      if (isObject === false) {
+        break;
+      }
+      const names = Object.getOwnPropertyNames(p).filter(name => {
+        return isFunction(this[name]);
+      });
 
-      this.collapsedProps = results;
-    }
+      results.push(...names);
+      p = p.__proto__;
+    } while (p);
 
-    return this.collapsedProps;
+    return results;
   }
 
   filterProps(pattern) {

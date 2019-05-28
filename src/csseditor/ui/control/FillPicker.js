@@ -50,7 +50,7 @@ export default class FillPicker extends UIElement {
     return html`
       <div class="fill-picker">
         <div class="picker-tab">
-          <div class="picker-tab-list" ref="$tab" data-value="static-gradient">
+          <div class="picker-tab-list" ref="$tab" data-value="static-gradient" data-is-image-hidden="false">
             ${tabs.map(it => {
               return `
                 <span 
@@ -165,6 +165,7 @@ export default class FillPicker extends UIElement {
 
     this.changeEvent = data.changeEvent || 'changeFillPicker'
     this.selectTabContent(data.type, data);
+    this.refs.$tab.attr('data-is-image-hidden', data.isImageHidden || false)
     this.emit("hidePicker");
   }
 

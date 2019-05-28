@@ -647,7 +647,7 @@ export default class Dom {
 
   update(callback) {
     this.clear();
-    callback.call(this);
+    callback.call(this, this);
   }
 
   drawOption(option = {}) {

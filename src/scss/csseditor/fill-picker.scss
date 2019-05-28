@@ -31,6 +31,12 @@
         }
       }
 
+      &[data-is-image-hidden="true"] {
+        .picker-tab-item[data-selected-value='image'] {
+          display: none;
+        }
+      }
+
       .picker-tab-item {
         display: inline-block;
         vertical-align: middle;

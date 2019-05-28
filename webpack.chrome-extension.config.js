@@ -93,13 +93,6 @@ module.exports = {
   plugins: [
     new HtmlWebPackPlugin({
       inject: true,
-      chunks: ["main"],
-      template: "./src/index.html",
-      filename: "./index.html"
-    }),
-
-    new HtmlWebPackPlugin({
-      inject: true,
       chunks: ["popup"],
       template: "./src/popup.html",
       filename: "./popup.html"

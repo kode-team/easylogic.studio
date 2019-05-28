@@ -11,6 +11,7 @@ import {
 } from "../../../../types/event";
 
 export default class FontProperty extends BaseProperty {
+
   getTitle() {
     return "Font";
   }

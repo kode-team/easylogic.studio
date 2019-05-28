@@ -1,4 +1,5 @@
 import { isNotUndefined, isString } from "../../util/functions/func";
+import { round } from "../../util/functions/math";
 
 const stringToPercent = {
   center: 50,
@@ -16,7 +17,7 @@ Position.RIGHT = "right";
 Position.LEFT = "left";
 Position.BOTTOM = "bottom";
 
-const CSS_UNIT_REG = /([\d.]+)(px|pt|fr|r?em|deg|vh|vw|%)/gi;
+const CSS_UNIT_REG = /([\d.]+)(px|pt|fr|r?em|deg|vh|vw|m?s|%)/gi;
 
 export class Length {
   constructor(value = "", unit = "") {
@@ -63,6 +64,11 @@ export class Length {
   static string(value) {
     return new Length(value + "", "");
   }
+
+  static number (value) {
+    return new Length(+value, 'number')
+  }
+
   static px(value) {
     return new Length(+value, "px");
   }
@@ -78,6 +84,14 @@ export class Length {
   static fr(value) {
     return new Length(+value, "fr");
   }
+
+  static second (value) {
+    return new Length(+value, 's')
+  }
+
+  static ms (value) {
+    return new Length(+value, 'ms')
+  }  
 
   /**
    * return calc()  css fuction string
@@ -148,6 +162,35 @@ export class Length {
         }
 
         return Length.deg(value);
+      } else if (obj.unit == "s") {
+        var value = 0;
+
+        if (isNotUndefined(obj.second)) {
+          value = obj.second;
+        } else if (isNotUndefined(obj.value)) {
+          value = obj.value;
+        }
+
+        return Length.second(value);
+      } else if (obj.unit == "ms") {
+        var value = 0;
+
+        if (isNotUndefined(obj.ms)) {
+          value = obj.ms;
+        } else if (isNotUndefined(obj.value)) {
+          value = obj.value;
+        }
+
+        return Length.ms(value);       
+        
+      } else if (obj.unit == "number") {
+        var value = 0;
+
+        if (isNotUndefined(obj.value)) {
+          value = obj.value;
+        }
+
+        return Length.number(value);               
       } else if (obj.unit === "" || obj.unit === "string") {
         var value = "";
 
@@ -164,34 +207,32 @@ export class Length {
     return Length.string(obj);
   }
   toString() {
-    if (this.isCalc()) {
+
+    switch(this.unit) {
+    case 'string':
+    case 'number':
+      return this.value + '' 
+    case 'calc':
       return `calc(${this.value})`;
+    default:
+      return this.value + this.unit; 
     }
-
-    return this.value + this.unit;
   }
 
-  isCalc() {
-    return this.unit == "calc";
+  isUnitType(unit) {
+    return this.unit === unit; 
   }
-  isFr() {
-    return this.unit == "fr";
-  }
-  isPercent() {
-    return this.unit == "%";
-  }
-  isPx() {
-    return this.unit == "px";
-  }
-  isEm() {
-    return this.unit == "em";
-  }
-  isDeg() {
-    return this.unit == "deg";
-  }
-  isString() {
-    return this.unit === "";
-  }
+
+  isCalc() { return this.isUnitType('calc'); }
+  isFr() {return this.isUnitType('fr'); }
+  isPercent() {return this.isUnitType('%'); }
+  isPx() {return this.isUnitType('px'); }
+  isEm() {return this.isUnitType('em'); }
+  isDeg() {return this.isUnitType('deg'); }
+  isSecond() {return this.isUnitType('s'); }
+  isMs () {return this.isUnitType('ms'); }
+  isNumber () {return this.isUnitType('number'); }
+  isString() {return this.isUnitType(''); }
 
   set(value) {
     this.value = value;
@@ -291,6 +332,22 @@ export class Length {
     }
   }
 
+  toSecond () {
+    if (this.isSecond()) {
+      return this; 
+    } else if (this.isMs()) {
+      return Length.second(this.value/1000);
+    }
+  }
+
+  toMs () {
+    if (this.isSecond()) {
+      return Length.ms(this.value * 1000);
+    } else if (this.isMs()) {
+      return this; 
+    }
+  }
+
   to(unit, maxValue, fontSize = 16) {
     if (unit === "px") {
       return this.toPx(maxValue, fontSize);
@@ -299,6 +356,10 @@ export class Length {
     } else if (unit === "em") {
       return this.toEm(maxValue, fontSize);
     }
+  }
+
+  toUnit (unit) {
+    return new Length(this.value, unit);
   }
 
   calculate(type, dist) {
@@ -313,6 +374,10 @@ export class Length {
 
   includes (...arr) {
     return arr.includes(this.value);
+  }
+
+  round (k) {
+    return new Length(round(this.value, k), this.unit)
   }
 }
 

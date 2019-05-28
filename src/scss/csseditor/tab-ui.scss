@@ -15,6 +15,7 @@ $tab-horizontal-header-right-width: 60px;
   &.number-tab {
     .tab-header {
       height: $tab-header-height;
+      cursor: pointer;
     }
     .tab-content {
       display: none;

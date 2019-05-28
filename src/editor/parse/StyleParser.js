@@ -209,41 +209,9 @@ export class StyleParser {
     var filters = [];
     var style = this.getStyle();
 
-    if (style.filter) {
-      var results = convertMatches(style.filter);
+    filters = Filter.parseStyle(style.filter);
 
-      results.str.match(FILTER_REG).forEach((value, index) => {
-        var [filterName, filterValue] = value.split("(");
-        filterValue = filterValue.split(")")[0];
-
-        if (filterName === "drop-shadow") {
-          var arr = filterValue.split(" ");
-          var colors = arr
-            .filter(it => it.includes("@"))
-            .map(it => {
-              return results.matches[+it.replace("@", "")].color;
-            });
-          var values = arr.filter(it => !it.includes("@"));
-
-          // drop-shadow 값 설정
-          filters[index] = Filter.parse({
-            type: filterName,
-            offsetX: Length.parse(values[0]),
-            offsetY: Length.parse(values[1]),
-            blurRadius: Length.parse(values[2]),
-            color: colors[0] || "rgba(0, 0, 0, 1)"
-          });
-        } else {
-          // drop shadow 제외한 나머지 값 지정
-          filters[index] = Filter.parse({
-            type: filterName,
-            value: Length.parse(filterValue)
-          });
-        }
-      });
-    }
-
-    return { filters };
+    return { filters }
   }
 
   parseBoxShadow() {

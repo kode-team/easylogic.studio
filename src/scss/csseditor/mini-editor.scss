@@ -1,0 +1,35 @@
+.editor { 
+    height: auto !important;
+    &.offset-editor {
+        display: block !important;
+        .offset {
+            display: block; 
+    
+            height: 30px;
+            position: relative;
+            background-image: linear-gradient(to right, $border-color , black);
+            background-size: 100% 2px;
+            background-position: 0px center;
+            background-repeat: no-repeat;
+            cursor: pointer;
+
+
+    
+            .offset-item {
+                position: absolute;
+                display: inline-block;
+                width: 14px;
+                height: 14px;
+                top: 50%;
+                transform: translateX(-50%) translateY(-50%);
+                box-sizing: border-box;
+                border:1px solid $border-color;
+                background-color: black; 
+                border-radius: 100%;
+                cursor: pointer;
+
+            }
+    
+        }
+    }
+}

@@ -22,7 +22,7 @@ const borderTypeList = ["all", "top", "right", "bottom", "left"];
 
 export default class BorderProperty extends BaseProperty {
   getTitle() {
-    return "Border";
+    return "Border Width & Style";
   }
 
   isFirstShow () {

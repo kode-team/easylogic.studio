@@ -25,8 +25,14 @@ import border_all from "./border_all";
 import border_inner from "./border_inner";
 import paint from "./paint";
 import title from "./title";
+import timer from "./timer";
+import chevron_left from "./chevron_left";
+import input from "./input";
+
 
 export default {
+  input,
+  timer,
   title,
   paint,
   border_all,
@@ -53,5 +59,6 @@ export default {
   visible,
   add_box,
   create_folder,
-  chevron_right
+  chevron_right,
+  chevron_left
 };

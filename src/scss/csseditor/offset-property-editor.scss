@@ -1,0 +1,33 @@
+.offset-property-editor {
+    margin-top: 10px;
+    margin-bottom: 5px;
+
+    .title {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        grid-column-gap: 2px;
+
+        .tools {
+          text-align: right; 
+          select {
+            width: 130px !important;
+            display: inline-block;
+          }
+
+          button {
+            appearance: none;
+            background-color: transparent;
+            outline: none;
+            cursor: pointer;
+            border:0px;
+            padding:0px;
+            vertical-align: middle;
+
+            svg {
+              width: 16px;
+              height: 16px;
+            }
+          }
+        }
+      }
+}

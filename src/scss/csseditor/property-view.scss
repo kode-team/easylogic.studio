@@ -24,6 +24,10 @@
     grid-template-columns: 1fr 1fr;
     cursor: pointer;
 
+    label {
+      cursor: pointer;
+    }
+
     > .tools {
       // display: flex;
       text-align: right;
@@ -66,6 +70,10 @@
       display: grid;
       grid-template-columns: 1fr 3fr;
       margin-bottom: 2px;
+
+      &.full {
+        grid-template-columns: 1fr;
+      }
 
       .property-item-label,
       .property-item-input-field {
@@ -122,30 +130,18 @@
       }
 
       @import "./property-items/background-color.scss";
-      @import "./property-items/fill.scss";
-      @import "./property-items/display-manager.scss";
-      // @import "./property-items/gradient-steps.scss";
-      // @import "./property-items/gradient-sample-list.scss";
-      // @import "./property-items/gradient-steps-info.scss";
-      // @import "./property-items/gradient-tools.scss";
-      @import "./property-items/image-resource.scss";
-      @import "./property-items/image-list-view.scss";
-      @import "./property-items/layout.scss";
-      // @import "./property-items/clip-path.scss";
-      // @import "./property-items/clip-path-polygon.scss";
-      @import "./property-items/group-align.scss";
-      @import "./property-items/radius.scss";
-      // @import "./property-items/layer-colorpicker.scss";
-      @import "./property-items/box-shadow.scss";
-      @import "./property-items/text-shadow.scss";
-      @import "./property-items/background-info.scss";
-      // @import "./property-items/fill-colorpicker.scss";
-      // @import "./property-items/text-colorpicker.scss";
-      @import "./property-items/colorpicker.scss";
-      @import "./property-items/layer-code.scss";
-      // @import "./property-items/background-code.scss";
-      @import "./property-items/text.scss";
-      @import "./property-items/image-sorting.scss";
+      // @import "./property-items/display-manager.scss";
+      // @import "./property-items/image-resource.scss";
+      // @import "./property-items/image-list-view.scss";
+      // @import "./property-items/layout.scss";
+      // @import "./property-items/group-align.scss";
+      // @import "./property-items/radius.scss";
+      // @import "./property-items/box-shadow.scss";
+      // @import "./property-items/text-shadow.scss";
+      // @import "./property-items/background-info.scss";
+      // @import "./property-items/colorpicker.scss";
+      // @import "./property-items/text.scss";
+      // @import "./property-items/image-sorting.scss";
     }
   }
 }

@@ -1,0 +1,80 @@
+.animation-list {
+  grid-template-columns: 1fr !important;
+
+  .animation-item {
+    display: grid;
+    grid-template-columns: 20px 30px 1fr; 
+    grid-column-gap: 4px;
+    box-sizing: border-box;
+    border: 1px solid $border-color;
+    margin-bottom: 5px;
+    text-align: center;
+    padding: 5px;    
+    &.selected {
+      background-color: rgba($border-color, 0.5);
+    }
+
+    .checkbox {
+      vertical-align: middle;
+      padding: 6px 0px;      
+    }
+
+    .name {
+      padding: 2px 0px;
+      text-align: left;
+      vertical-align: middle;
+    }
+
+    .timing {
+      border-radius: 3px;
+      background-color: #ac48ff;
+      width: 100%;
+      height: 30px;
+      vertical-align: middle;
+      cursor: pointer;
+      margin-top: 3px;
+     
+      canvas {
+        border-radius: 3px;
+      }
+    }
+
+    .labels {
+      margin-top: 4px;
+
+      label {
+        // border: 1px solid $border-color;
+        background-color: $border-color;
+        padding: 1px 3px;
+        border-radius: 2px;
+        color: $border-color;
+        text-transform: uppercase;
+        font-weight: bold;        
+        small {
+          color: white;
+          text-transform: lowercase;
+        }
+
+        &.delay {
+          background-color: red;
+        }
+
+        &.duration {
+          background-color: green;
+        }       
+
+        &.count {
+          background-color: blue;
+        }               
+        
+        &.direction,
+        &.fill-mode,
+        &.play-state {
+          small {
+            color: black;
+          }
+        }
+      }
+    }
+  }
+}

@@ -67,7 +67,7 @@ export function isNotString (value) {
 }
 
 export function isObject (value) {
-    return typeof value == 'object' && !isArray(value) && value !== null; 
+    return typeof value == 'object' && !isArray(value) && !isNumber(value) && !isString(value)  && value !== null; 
 }
 
 export function isFunction (value) {

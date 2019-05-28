@@ -53,6 +53,7 @@ export default class CSSEditor extends UIElement {
           </div>
           <div class="layout-body">
             <CanvasView />
+            <DrawingView />            
             <VerticalColorStep />
           </div>                              
         </div>
@@ -61,8 +62,9 @@ export default class CSSEditor extends UIElement {
         <BackgroundPropertyPopup />
         <BoxShadowPropertyPopup />
         <TextShadowPropertyPopup />
+        <AnimationPropertyPopup />
+        <KeyframePopup />
         <ExportWindow />
-
       </div>
     `;
   }

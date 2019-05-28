@@ -58,6 +58,9 @@ const types = {
   "repeating-conic-gradient": "gradient"
 };
 
+/**
+ * @deprecated Property 객체에서는 편집 도구를 제공하지 않는다. 여긴 편집기로 속성만 넘기는 역할로 대체한다. 
+ */
 export default class FillProperty extends BaseProperty {
   getTitle() {
     return "Background Images";

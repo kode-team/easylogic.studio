@@ -20,9 +20,9 @@
 // import LayerBorderRadiusProperty from "./LayerBorderRadiusProperty";
 // import SizeProperty from "./SizeProperty";
 // import LayoutProperty from "./LayoutProperty";
-import FillProperty from "./FillProperty";
+// import FillProperty from "./FillProperty";
 import BackgroundColorProperty from "./BackgroundColorProperty";
-import FilterProperty from "./FilterProperty";
+// import FilterProperty from "./FilterProperty";
 import BorderProperty from "./BorderProperty";
 import BorderRadiusProperty from "./BorderRadiusProperty";
 import SizeProperty from "./SizeProperty";
@@ -36,9 +36,19 @@ import TextProperty from "./TextProperty";
 import FontSpacingProperty from "./FontSpacingProperty";
 import BorderImageProperty from "./BorderImageProperty";
 import OutlineProperty from "./OutlineProperty";
-
+import AnimationProperty from "./AnimationProperty";
+import KeyframeProperty from "./KeyframeProperty";
+import BackgroundImageProperty from "./BackgroundImageProperty";
+import FilterProperty from "./FilterProperty";
 // import PositionProperty from "./PositionProperty";
+
+ 
 export default {
+  FilterProperty,
+  BorderRadiusProperty,
+  BackgroundImageProperty,
+  KeyframeProperty,
+  AnimationProperty,
   OutlineProperty,
   BorderImageProperty,
   FontSpacingProperty,
@@ -53,9 +63,9 @@ export default {
   SizeProperty,
   BorderRadiusProperty,
   BorderProperty,
-  FilterProperty,
+  // FilterProperty,
   BackgroundColorProperty,
-  FillProperty
+  // FillProperty
   // LayoutProperty,
   // SizeProperty
   // BackgroundPositionProperty,

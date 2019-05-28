@@ -1,0 +1,43 @@
+.color-view-editor {
+    display: grid;
+    height: 24px;
+    grid-template-columns: 20px auto;
+    grid-column-gap: 5px;
+    margin-bottom: 5px;
+    text-align: center;
+
+    .preview {
+        display: inline-block;
+        height: 20px;
+        box-sizing: border-box;
+        margin-top: 2px;
+
+        cursor: pointer;
+
+        .mini-view {
+        width: 100%;
+        height: 100%;
+        border: 1px solid $border-color;
+        position: relative;
+        border-radius: 100%;       
+        @include transparent-background();  
+
+        .color-view {
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            right: 0px;
+            bottom: 0px;
+            border-radius: 100%;
+        } 
+
+        }
+    }
+
+    .color-code {
+        input {
+        width: 100%;
+        height: 100%;
+        }
+    }
+}

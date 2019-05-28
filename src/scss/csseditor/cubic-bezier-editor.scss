@@ -1,0 +1,131 @@
+.cubic-bezier-editor {
+    width: 228px;
+    height: 210px;
+    position: relative;
+
+    .bezier {
+        position: absolute;
+        width:150px;
+        height:150px;
+        top:30px;
+        left:60px;
+        border:1px solid #333;
+
+        .bezier-canvas {
+            position: absolute;
+            left:-25px;
+            top:-25px;
+            pointer-events: none;
+        }
+
+        .control {
+            position: absolute;
+            left:5px;
+            right:5px;
+            bottom:5px;
+            top:5px;
+
+            .pointer1, .pointer2
+            {
+                position: absolute;
+                width: 10px;
+                height:10px;
+                transform: translateX(-50%) translateY(-50%);
+                border-radius:100%;
+                cursor: pointer;
+                background-color: #ac48ff;
+                border:1px solid #ac48ff;
+                box-sizing:border-box;
+            }
+        
+        }
+    }
+    
+    
+    
+    .animation {
+        position:absolute;
+        top:0px;
+        left:0px;
+        right:0px;
+        height: 20px;
+        text-align: center;
+
+        .animation-canvas {
+            position:relative;
+            width:100%;
+            height:100%;
+            cursor: pointer;
+        }
+    }
+   
+    .item-list {
+        position:absolute;
+        top: 30px;
+        bottom:20px;
+        left:0px;
+        width:50px;
+        padding-right:0px;
+        box-sizing: border-box;
+
+        @each $selectType in ease, ease-in, ease-out {
+            &[data-selected-value="#{$selectType}"] .item[data-bezier="#{$selectType}"] {
+                background-color: $border-color;
+            }
+        }        
+
+        .item {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            border:1px solid gray;
+            cursor:pointer;
+            // background-color: white;             
+            
+            &:not(:first-child) {
+                border-top: 0px;
+            }
+            
+
+            &.selected {
+                background-color: #0ab;
+            }
+
+            .item-canvas {
+                position: absolute;
+                top:5px;
+                left:5px;
+                width:30px;
+                height:30px;
+            }
+        }
+    }
+    
+    .predefined {
+        position:absolute;
+        bottom:0px;
+        left:0px;
+        right:0px;
+        height: 20px;
+        text-align: center;   
+        display: grid;
+        grid-template-columns: 30px 1fr 30px;
+
+        .left,.right
+        {
+            box-sizing: border-box;
+            font-size: 14px;
+            font-weight:bold;
+            cursor: pointer;
+            vertical-align: middle;            
+        }
+
+        .predefined-text {
+            vertical-align: middle;
+            padding:4px;
+        }
+    
+    }
+
+    
+}

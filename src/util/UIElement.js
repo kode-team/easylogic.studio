@@ -77,6 +77,14 @@ class UIElement extends EventMachine {
     });
   }
 
+  destroy () {
+    super.destroy()
+
+    // 객체가 남아있지 않도록 store 에 저장된 이벤트를 지운다. 
+    // context 변수로 참조가 남아 있어서 이벤트를 그대로 받아들이기 때문 
+    this.destoryStoreEvent();
+  }
+
   get(id) {
     return this.$store.items[id] || {};
   }
@@ -95,10 +103,6 @@ class UIElement extends EventMachine {
 
   mapDispatches(...args) {
     return this.$store.mapDispatches(...args);
-  }
-
-  i18n($1, $2, $3, $4, $5) {
-    return this.read("i18n/get", $1, $2, $3, $4, $5);
   }
 
   config($1, $2, $3, $4, $5) {
@@ -130,6 +134,14 @@ class UIElement extends EventMachine {
   trigger($1, $2, $3, $4, $5) {
     this.$store.source = this.source;
     this.$store.trigger($1, $2, $3, $4, $5);
+  }
+
+  on (message, callback) {
+    this.$store.on(message, callback);
+  }
+
+  off (message, callback) {
+    this.$store.off(message, callback);
   }
 }
 

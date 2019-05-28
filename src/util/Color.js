@@ -1,4 +1,5 @@
 import * as formatter from "./functions/formatter";
+import * as create from "./functions/create";
 import * as math from './functions/math'
 import * as fromRGB from './functions/fromRGB'
 import * as fromCMYK from './functions/fromCMYK'
@@ -12,6 +13,7 @@ import * as image from "./functions/image";
 import * as func from './functions/func';
 
 export default {
+    ...create,
     ...formatter, 
     ...math, 
     ...mixin,

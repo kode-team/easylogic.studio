@@ -9,75 +9,42 @@ import {
   CHANGE_SELECTION,
   CHANGE_ARTBOARD
 } from "../../../../types/event";
+import ColorViewEditor from "../../shape/property-editor/ColorViewEditor";
+
+
 
 export default class FontColorProperty extends BaseProperty {
+  components() {
+    return {
+      ColorViewEditor
+    }
+  }
   getTitle() {
     return "Font Color";
   }
   getBody() {
-    return `<div class='property-item font-color' ref='$color'></div>`;
+    return `<div class='property-item font-color' ref='$color'>
+      ${this.loadTemplate('$color')}
+    </div>`;
   }
 
   [LOAD("$color")]() {
-    var current = editor.selection.current;
+    var current = editor.selection.current || {};
 
-    if (!current) return EMPTY_STRING;
-
-    var it = current;
-    var imageCSS = `background-color: ${it.color}`;
-    return `
-            <div class='fill-item'>
-                <div class='preview'>
-                  <div class='mini-view'>
-                    <div class='color-view' style="${imageCSS}" ref='$miniView'></div>
-                  </div>
-                </div>
-                <div class='color-code'>
-                    <input type="text" ref='$colorCode' value='${it.color}' />
-                </div>
-            </div>
-        `;
+    var color = current.color || 'rgba(0, 0, 0, 1)'
+    
+    return `<ColorViewEditor ref='$1' color="${color}" onchange="changeColor" />`;
   }
 
-  [CLICK("$el .preview")](e) {
-    this.viewColorPicker(e.$delegateTarget);
-  }
-
-  viewColorPicker($preview) {
+  [EVENT('changeColor')] (color) {
     var current = editor.selection.current;
 
-    if (!current) return;
-
-    var rect = $preview.rect();
-
-    this.emit("hidePropertyPopup");
-    this.emit("showColorPicker", {
-      changeEvent: "changeFontColor",
-      color: current.backgroundColor,
-      left: rect.left + 90,
-      top: rect.top
-    });
-  }
-
-  [INPUT("$color .color-code input")](e) {
-    var color = e.$delegateTarget.value;
-    this.refs.$miniView.cssText(`background-color: ${color}`);
-
-    var current = editor.selection.current;
     if (current) {
-      current.color = color;
-      this.emit("refreshCanvas", current);
-    }
-  }
+      current.reset({
+        'color': color
+      })
 
-  [EVENT("changeFontColor")](color) {
-    this.refs.$miniView.cssText(`background-color: ${color}`);
-    this.refs.$colorCode.val(color);
-
-    var current = editor.selection.current;
-    if (current) {
-      current.color = color;
-      this.emit("refreshCanvas", current);
+      this.emit('refreshCanvas')
     }
   }
 

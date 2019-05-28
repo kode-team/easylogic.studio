@@ -69,7 +69,7 @@ export default class BackgroundPropertyPopup extends UIElement {
 
   updateData(opt) {
     this.setState(opt);
-    this.emit("changeBackgroundPropertyPopup", opt);
+    this.emit(this.data.changeEvent, opt);
   }
 
   templateForSize() {
@@ -215,6 +215,7 @@ export default class BackgroundPropertyPopup extends UIElement {
   }
 
   [EVENT("showBackgroundPropertyPopup")](data) {
+    data.changeEvent = data.changeEvent || 'changeBackgroundPropertyPopup'
     this.data = { ...this.data, ...data };
 
     if (this.data.x.isString()) {
@@ -234,7 +235,8 @@ export default class BackgroundPropertyPopup extends UIElement {
         bottom: Length.auto
       })
       .show("inline-block");
-    this.emit("hidePropertyPopup");
+
+    // this.emit("hidePropertyPopup");
   }
 
   [EVENT(

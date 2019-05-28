@@ -6,6 +6,7 @@ import { ArtBoard } from "../../../editor/items/ArtBoard";
 import { CLICK } from "../../../util/Event";
 import { CHANGE_SELECTION } from "../../types/event";
 import { StyleParser } from "../../../editor/parse/StyleParser";
+import { CSS_TO_STRING } from "../../../util/css/make";
 
 export default class CanvasView extends UIElement {
   initialize() {
@@ -31,7 +32,8 @@ export default class CanvasView extends UIElement {
   template() {
     return `
       <div class='page-view'>
-        <div class="page-canvas" ref="$canvas"></div>          
+        <div class="page-canvas" ref="$canvas"></div>     
+        <style type='text/css' ref='$style'></style>     
       </div>
     `;
   }
@@ -55,16 +57,13 @@ export default class CanvasView extends UIElement {
     }
   }
 
-  // [EVENT("caculateSize")](targetEvent) {
-  //   var $el = this.refs.$canvas;
-  //   var rect = $el.rect();
-
-  //   var data = { width: Length.px(rect.width), height: Length.px(rect.height) };
-  //   this.emit(targetEvent, data);
-  // }
-
   generate(css) {
-    this.refs.$canvas.css(css);
+
+    this.refs.$style.html(`
+      .csseditor .page-canvas { ${CSS_TO_STRING(css)}; }  
+    `)
+
+    // this.refs.$canvas.css(css);
 
     // content 가 있으면 content 를 업데이트 해주자. 
     // 여기서는 따로 옵션이 없어서 text 로만 입력가능하다. 

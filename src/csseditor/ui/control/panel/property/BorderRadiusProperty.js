@@ -1,22 +1,21 @@
 import BaseProperty from "./BaseProperty";
-import { CLICK, INPUT, CHANGE } from "../../../../../util/Event";
+import { LOAD } from "../../../../../util/Event";
 import { html } from "../../../../../util/functions/func";
 import { editor } from "../../../../../editor/editor";
-import { Length } from "../../../../../editor/unit/Length";
-import icon from "../../../icon/icon";
-
-const typeList = [
-  { key: "topLeft", title: "Top Left" },
-  { key: "topRight", title: "Top Right" },
-  { key: "bottomLeft", title: "Bottom Left" },
-  { key: "bottomRight", title: "Bottom Right" }
-];
-
-const keyList = typeList.map(it => it.key);
+import { EVENT } from "../../../../../util/UIElement";
+import { CHANGE_LAYER, CHANGE_ARTBOARD, CHANGE_SELECTION } from "../../../../types/event";
+import BorderRadiusEditor from "../../shape/property-editor/BorderRadiusEditor";
 
 export default class BorderRadiusProperty extends BaseProperty {
+
+  components() {
+    return {
+      BorderRadiusEditor
+    }
+  }
+
   getTitle() {
-    return "Radius";
+    return "Border Radius";  
   }
 
   isFirstShow () {
@@ -25,121 +24,41 @@ export default class BorderRadiusProperty extends BaseProperty {
 
   getBody() {
     return html`
-      <div class="property-item border-radius-item">
-        <div class="radius-selector" data-selected-value="all" ref="$selector">
-          <button type="button" data-value="all">${icon.border_all}</button>
-          <button type="button" data-value="partitial">
-            ${icon.border_inner}
-          </button>
-        </div>
-        <div class="radius-value">
-          <input type="range" min="0" max="100" ref="$range" value="0" />
-          <input type="number" min="0" max="100" ref="$number" value="0" />
-          <select ref="$unit">
-            <option value="px">px</option>
-            <option value="%">%</option>
-            <option value="em">em</option>
-          </select>
-        </div>
-      </div>
-      <div
-        class="property-item border-radius-item"
-        ref="$partitialSetting"
-        style="display: none;"
-      >
-        <label></label>
-        <div class="radius-setting-box" ref="$radiusSettingBox">
-          ${typeList.map(it => {
-            return `
-              <div>
-                <label class='${it.key}'></label>
-                <input type="number" ref="$${
-                  it.key
-                }Radius" min="0" value="0" data-key="${it.key}" /> 
-                <select ref="$${it.key}Unit" data-key="${it.key}">
-                  <option value='px'>px</option>
-                  <option value='%'>%</option>
-                  <option value='em'>em</option>
-                </select>
-              </div>  
-            `;
-          })}
-        </div>
+      <div class="property-item full border-radius-item" ref='$body'>
+        ${this.loadTemplate('$body')}
       </div>
     `;
   }
 
-  [INPUT("$range")](e) {
-    var value = this.getRef("$range").value;
-    this.getRef("$number").val(value);
+  [LOAD('$body')] () {
+    var current = editor.selection.current || {}; 
+    var value = current['border-radius']
 
-    keyList.forEach(type => {
-      this.getRef("$", type, "Radius").val(value);
-    });
-
-    this.setBorderRadius();
+    return `<BorderRadiusEditor 
+              ref='$1' 
+              value='${value}' 
+              onchange='changeBorderRadius' 
+            />`
   }
 
-  [INPUT("$number")](e) {
-    var value = this.getRef("$number").value;
-    this.getRef("$range").val(value);
 
-    keyList.forEach(type => {
-      this.getRef("$", type, "Radius").val(value);
-    });
-    this.setBorderRadius();
+  [EVENT(CHANGE_LAYER, CHANGE_ARTBOARD, CHANGE_SELECTION)]() {
+    this.refresh();
   }
 
-  [CHANGE("$unit")](e) {
-    var unit = this.getRef("$unit").value;
-    keyList.forEach(type => {
-      this.getRef("$", type, "Unit").val(unit);
-    });
-    this.setBorderRadius();
+  refresh() {
+    this.load();
   }
 
-  [INPUT("$radiusSettingBox input")](e) {
-    this.setBorderRadius();
-  }
-
-  [CHANGE("$radiusSettingBox select")](e) {
-    this.setBorderRadius();
-  }
-
-  setBorderRadius() {
+  [EVENT('changeBorderRadius')] (value) {
     var current = editor.selection.current;
-    if (!current) return;
+    if (current) {
+      current.reset({
+        'border-radius': value 
+      })
 
-    var type = this.refs.$selector.attr("data-selected-value");
-
-    if (type === "all") {
-      current.setBorderRadius(type, {
-        all: new Length(this.getRef("$range").value, this.getRef("$unit").value)
-      });
-    } else {
-      var obj = {};
-      keyList.forEach(type => {
-        obj[type] = new Length(
-          this.getRef("$", type, "Radius").value,
-          this.getRef("$", type, "Unit").value
-        );
-      });
-      current.setBorderRadius(type, obj);
+      this.emit('refreshCanvas')
     }
-
-    this.emit("refreshCanvas");
   }
 
-  [CLICK("$selector button")](e) {
-    var type = e.$delegateTarget.attr("data-value");
-    this.refs.$selector.attr("data-selected-value", type);
-
-    if (type === "all") {
-      this.refs.$partitialSetting.hide();
-    } else {
-      this.refs.$partitialSetting.show("grid");
-    }
-
-    this.setBorderRadius();
-  }
 }
