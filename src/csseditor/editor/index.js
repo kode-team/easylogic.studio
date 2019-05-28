@@ -64,7 +64,6 @@ export default class CSSEditor extends UIElement {
         <TextShadowPropertyPopup />
         <AnimationPropertyPopup />
         <KeyframePopup />
-        <ExportWindow />
       </div>
     `;
   }
