@@ -460,12 +460,12 @@ export default class EventMachine {
     // DOM 에서 빠지 애들  ( this.$el.parent() 가 null  인 경우 )
     // destroy () 시킨다. 
 
-    keyEach(this.children, (key, obj) => {
-      if (obj && obj.clean()) {
-        delete this.children[key]
-        delete this.refs[key]
-      }
-    })
+    // keyEach(this.children, (key, obj) => {
+    //   if (obj && obj.clean()) {
+    //     delete this.children[key]
+    //     delete this.refs[key]
+    //   }
+    // })
   }
 
   clean () {
@@ -485,7 +485,7 @@ export default class EventMachine {
   }
 
   loadOne(selector) {
-    
+
   }
 
   load(...args) {

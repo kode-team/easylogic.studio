@@ -6,12 +6,14 @@ import icon from "../../icon/icon";
 import ColorViewEditor from "./property-editor/ColorViewEditor";
 import RangeEditor from "./property-editor/RangeEditor";
 import BackgroundImageEditor from "./property-editor/BackgroundImageEditor";
+import FilterEditor from "./property-editor/FilterEditor";
 
 
 export default class OffsetPropertyEditor extends UIElement {
 
   components() {
     return {
+      FilterEditor,
       ColorViewEditor,
       RangeEditor,
       BackgroundImageEditor
@@ -85,6 +87,12 @@ export default class OffsetPropertyEditor extends UIElement {
           <BackgroundImageEditor ref='$backgroundImage' value="${property.value}" onChange="changeBackgroundImageProperty" />
         </div>
       `
+    } else if (property.key === 'filter') {
+      return `
+        <div class='property-editor'>
+          <FilterEditor ref='$filter' value="${property.value}" onChange="changeFilterProperty" />
+        </div>
+      `
     }
 
     return `
@@ -104,8 +112,12 @@ export default class OffsetPropertyEditor extends UIElement {
     this.modifyPropertyValue('background-image', backgroundImage);
   }  
 
+  [EVENT('changeFilterProperty')] (filter) {
+    this.modifyPropertyValue('filter', filter);
+  }    
 
-  makePropertyEditor (property) {
+
+  makePropertyEditor (property, index) {
     var min = null;
     var max = null; 
 
@@ -116,6 +128,7 @@ export default class OffsetPropertyEditor extends UIElement {
       case 'text-shadow':
       case 'background-image':
       case 'background-color':
+      case 'filter':
         return this.makeIndivisualPropertyEditor(property);
       case 'left': 
       case 'margin-top': 
@@ -134,7 +147,7 @@ export default class OffsetPropertyEditor extends UIElement {
       default: 
         return `
           <div class='property-editor'>
-            <RangeEditor key='${property.key}' value='${property.value}' onChange="changeRangeEditor" />
+            <RangeEditor ref='rangeEditor${index}' key='${property.key}' value='${property.value}' onChange="changeRangeEditor" />
           </div>
         `
     }
@@ -210,11 +223,11 @@ export default class OffsetPropertyEditor extends UIElement {
           <div class='title'>
             <label>${it.key}</label>
             <div class='tools'>
-              <button type="button">${icon.remove2}</button>
+              <button type="button" class='remove' data-index="${index}">${icon.remove2}</button>
             </div>
           </div>
           <div class='value-editor'>
-            ${this.makePropertyEditor(it)}
+            ${this.makePropertyEditor(it, index)}
           </div>
         </div>
       `
@@ -231,5 +244,13 @@ export default class OffsetPropertyEditor extends UIElement {
     this.setState({ properties });
     this.refresh();
 
+  }
+
+  [CLICK('$property .remove')] (e) {
+    var index = +e.$delegateTarget.attr('data-index')
+
+    this.state.properties.splice(index, 1);
+    this.refresh();
+    this.modifyProperty();
   }
 }

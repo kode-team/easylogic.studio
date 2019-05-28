@@ -16,6 +16,7 @@ export default class ExportWindow extends UIElement {
     var current = editor.selection.current;
     if (current) {
       this.refs.$preview.text(current.toExport().replace(/;/gi, ";\n") + ";");
+      // console.log(current.toKeyframeString())
     }
   }
 

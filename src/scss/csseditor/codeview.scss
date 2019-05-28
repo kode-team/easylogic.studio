@@ -1,0 +1,18 @@
+.code-view-item {
+    grid-template-columns: 1fr !important;
+    width: 100%;
+    > div {
+        width: 100%;
+        max-width: 100%;
+
+        label {
+            padding-left: 10px;
+        }
+
+        pre {
+            white-space: pre-wrap;
+            padding:10px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+    }
+}

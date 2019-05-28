@@ -40,10 +40,12 @@ import AnimationProperty from "./AnimationProperty";
 import KeyframeProperty from "./KeyframeProperty";
 import BackgroundImageProperty from "./BackgroundImageProperty";
 import FilterProperty from "./FilterProperty";
+import CodeViewProperty from "./CodeViewProperty";
 // import PositionProperty from "./PositionProperty";
 
  
 export default {
+  CodeViewProperty,  
   FilterProperty,
   BorderRadiusProperty,
   BackgroundImageProperty,

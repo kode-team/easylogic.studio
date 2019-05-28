@@ -165,7 +165,7 @@ export default class OffsetEditor extends UIElement {
     return ! (new Dom (e.target).hasClass('offset-item')) && !this.currentOffset
   }
 
-  [CLICK('$offset') + IF('isNotOffsetItem') + PREVENT + STOP] (e) {
+  [CLICK('$offset') + IF('isNotOffsetItem') + PREVENT] (e) {
     this.baseOffsetWidth = this.refs.$offset.width();
     this.baseOffsetArea = this.refs.$offset.offset();
     var currentX = e.xy.x;  
@@ -180,6 +180,10 @@ export default class OffsetEditor extends UIElement {
     this.refresh();    
     this.modifyOffset();
 
+  }
+
+  refreshOffsetProperty() {
+    this.emit('showOffsetPropertyEditor', this.selectedOffsetItem.properties)
   }
   
   [POINTERSTART('$offset .offset-item') + MOVE('moveOffset') + END('endOffset')] (e) {
@@ -221,9 +225,10 @@ export default class OffsetEditor extends UIElement {
   endOffset (dx, dy) {
     setTimeout(() => {
       this.currentOffset = null;       
-      // this.refreshOffsetInput();
+      this.refreshOffsetInput();
+      this.refreshOffsetProperty();
       this.modifyOffset();
-    }, 100);
+    }, 10);
 
   }
 
@@ -231,8 +236,8 @@ export default class OffsetEditor extends UIElement {
 
   refresh() {
     this.load();
+    this.refreshOffsetProperty();
 
-    this.emit('showOffsetPropertyEditor', this.selectedOffsetItem.properties)
   }
 
   [EVENT("showOffsetEditor")](data) {
@@ -244,9 +249,8 @@ export default class OffsetEditor extends UIElement {
 
   [EVENT('changeOffsetPropertyEditor')] (properties = []) {
     var offset = this.state.offsets[this.selectedIndex];
-
     if (offset) {
-      offset.properties = properties;
+      offset.properties = [...properties];
     }
     this.modifyOffset()
   }

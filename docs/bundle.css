@@ -4202,6 +4202,22 @@ html, body {
           transform: translateX(-50%);
   white-space: nowrap;
 }
+.csseditor .code-view-item {
+  grid-template-columns: 1fr !important;
+  width: 100%;
+}
+.csseditor .code-view-item > div {
+  width: 100%;
+  max-width: 100%;
+}
+.csseditor .code-view-item > div label {
+  padding-left: 10px;
+}
+.csseditor .code-view-item > div pre {
+  white-space: pre-wrap;
+  padding: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
 .csseditor .color-view-editor {
   display: grid;
   height: 24px;
@@ -4541,6 +4557,10 @@ html, body {
 .csseditor .filter-editor .tools {
   vertical-align: middle;
   text-align: right;
+}
+.csseditor .filter-editor .tools select {
+  width: 100px !important;
+  display: inline-block;
 }
 .csseditor .filter-editor .tools button {
   vertical-align: middle;

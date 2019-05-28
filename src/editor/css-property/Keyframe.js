@@ -1,7 +1,7 @@
 import { Property } from "../items/Property";
 import { html } from "../../util/functions/func";
 import { Offset } from "./Offset";
-import { NEW_LINE, EMPTY_STRING } from "../../util/css/types";
+import { NEW_LINE, EMPTY_STRING, NEW_LINE_2 } from "../../util/css/types";
 
 export class Keyframe extends Property {
   static parse(obj) {
@@ -36,26 +36,23 @@ export class Keyframe extends Property {
     })
 
     return html`
-    @keyframes ${this.json.name} {
+@keyframes ${this.json.name} {
 
-      ${offsets.map(it => {
-        if (it.properties.length === 0) return EMPTY_STRING
-        return html`${it.offset.toString()} {
-          ${it.properties.map(p => {
-            if (this.isMultiStyle(p.key)) {
-              return p.value.toString() + ';'
-            } else {
-              return `${p.key}: ${p.value.toString()};`
-            }
+  ${offsets.map(it => {
+    if (it.properties.length === 0) return EMPTY_STRING
+    return html`${it.offset.toString()} {
+    ${it.properties.map(p => {
+      if (this.isMultiStyle(p.key)) {
+        return p.value.toString() + ';'
+      } else {
+        return `${p.key}: ${p.value.toString()};`
+      }
+    }).join(EMPTY_STRING)}
+  }${NEW_LINE_2}`
+  })}
 
-          }).join(EMPTY_STRING)}
-        }
-        
-        `
-      })}
-
-    }
-    `
+}
+`
   }
 
   
