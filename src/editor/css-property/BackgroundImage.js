@@ -207,6 +207,18 @@ export class BackgroundImage extends Property {
     }).join(";");
   }
 
+  toBackgroundCSS () {
+    var obj = this.toCSS();
+
+    return {
+      // 'background-blend-mode': obj['background-blend-mode'],
+      // 'background-size': obj['background-size'],
+      // 'background-position': obj['background-position'],
+      // 'background-repeat': obj['background-repeat'],
+      'background': `${obj['background-image']} `
+    }
+  }
+
   static parse(obj) {
     return new BackgroundImage(obj);
   }
@@ -247,7 +259,7 @@ export class BackgroundImage extends Property {
     }
 
     if (style["background-repeat"]) {
-      style["background-repeat"].split(",").forEach((it, index) => {
+      style["background-repeat"].split(",").map(it => it.trim()).forEach((it, index) => {
         if (backgroundImages[index]) {
           backgroundImages[index].repeat = it;
         }
@@ -255,7 +267,7 @@ export class BackgroundImage extends Property {
     }
 
     if (style["background-blend-mode"]) {
-      style["background-blend-mode"].split(",").forEach((it, index) => {
+      style["background-blend-mode"].split(",").map(it => it.trim()).forEach((it, index) => {
         if (backgroundImages[index]) {
           backgroundImages[index].blendMode = it;
         }
@@ -263,7 +275,7 @@ export class BackgroundImage extends Property {
     }
 
     if (style["background-size"]) {
-      style["background-size"].split(",").forEach((it, index) => {
+      style["background-size"].split(",").map(it => it.trim()).forEach((it, index) => {
         if (backgroundImages[index]) {
           if (it == "cover" || it === "contain" || it === "auto") {
             backgroundImages[index].size = it;
@@ -278,7 +290,7 @@ export class BackgroundImage extends Property {
     }
 
     if (style["background-position"]) {
-      style["background-position"].split(",").forEach((it, index) => {
+      style["background-position"].split(",").map(it => it.trim()).forEach((it, index) => {
         if (backgroundImages[index]) {
           let [x, y] = it.split(WHITE_STRING);
           backgroundImages[index].x = Length.parse(x);

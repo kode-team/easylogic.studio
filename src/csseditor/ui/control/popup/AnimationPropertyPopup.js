@@ -6,6 +6,7 @@ import CubicBezierEditor from "../shape/CubicBezierEditor";
 import { editor } from "../../../../editor/editor";
 import { html } from "../../../../util/functions/func";
 import RangeEditor from "../shape/property-editor/RangeEditor";
+import IterationCountEditor from "../shape/property-editor/IterationCountEditor";
 
 
 export default class AnimationPropertyPopup extends UIElement {
@@ -13,7 +14,8 @@ export default class AnimationPropertyPopup extends UIElement {
   components() {
     return {
       CubicBezierEditor,
-      RangeEditor
+      RangeEditor,
+      IterationCountEditor
     }
   }
 
@@ -195,7 +197,7 @@ export default class AnimationPropertyPopup extends UIElement {
     return `
       <div class='iteration-count grid-1'>
         <label>Iteration</label>
-        <RangeEditor ref='$iterationCount' key='iterationCount' value='${this.state.iterationCount}' units='normal,infinite' onChange="changeRangeEditor" />
+        <IterationCountEditor ref='$iterationCount' key='iterationCount' value='${this.state.iterationCount}' units='normal,infinite' onChange="changeRangeEditor" />
       </div>
     `
   }

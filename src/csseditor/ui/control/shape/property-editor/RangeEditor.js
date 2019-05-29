@@ -76,10 +76,4 @@ export default class RangeEditor extends UIElement {
         })
 
     }
-
-    [EVENT('showRangeEditor')] (data) {
-        this.setState(data);
-        this.refresh();
-    }
-
 }

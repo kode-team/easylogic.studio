@@ -112,7 +112,7 @@ export default class BackgroundImageEditor extends UIElement {
             var image = it.image;
             var backgroundType = types[image.type];
             var backgroundTypeName = names[image.type];
-      
+
             const imageCSS = `background-image: ${image.toString()}; background-size: cover;`;
             const selectedClass = it.selected ? "selected" : "";
       

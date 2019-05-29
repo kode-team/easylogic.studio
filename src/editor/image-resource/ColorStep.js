@@ -223,7 +223,7 @@ export class ColorStep extends Item {
 
     const results = convertMatches(colorStepString);
 
-    var arr = results.str.split(WHITE_STRING);
+    var arr = results.str.split(WHITE_STRING).filter(it => it.trim());
     const colorIndex = +arr[0].replace("@", "");
     const color = results.matches[colorIndex].color;
 

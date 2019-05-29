@@ -16,7 +16,7 @@ export class Animation extends Property {
       duration: Length.second(0),
       timingFunction: 'linear',
       delay: Length.second(0),
-      iterationCount: new Length('0', 'infinite'),
+      iterationCount: Length.string('infinite'),
       playState: 'paused',
       fillMode: 'none'
     });

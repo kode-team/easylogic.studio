@@ -560,8 +560,8 @@ export class DomItem extends GroupItem {
   /**
    * `@keyframes` 문자열만 따로 생성 
    */
-  toKeyframeString () {
-    return this.json.keyframes.map(keyframe => keyframe.toString()).join(NEW_LINE_2)
+  toKeyframeString (isAnimate = false) {
+    return this.json.keyframes.map(keyframe => keyframe.toString(isAnimate)).join(NEW_LINE_2)
   }
 
   toGridString() {

@@ -1,7 +1,8 @@
 import { Property } from "../items/Property";
-import { html } from "../../util/functions/func";
+import { html, keyEach, keyMap } from "../../util/functions/func";
 import { Offset } from "./Offset";
 import { NEW_LINE, EMPTY_STRING, NEW_LINE_2 } from "../../util/css/types";
+import { BackgroundImage } from "./BackgroundImage";
 
 export class Keyframe extends Property {
   static parse(obj) {
@@ -25,6 +26,46 @@ export class Keyframe extends Property {
     return false;
   }
 
+  getMultiStyleString (p) {
+    switch(p.key) {
+      case 'background-image': 
+
+        return p.value.toString() + ';';
+
+        // var obj = {}
+
+        // p.value.toString().split(';').filter(it => it.trim()).forEach(it => {
+        //   var [property, value] = it.split(':')
+        //   obj[property] = value 
+        // })
+
+        // var backgroundImages = BackgroundImage.parseStyle(obj)
+
+        // var results = {
+
+        // }
+
+        // backgroundImages.forEach(it => {
+        //   var temp = it.toBackgroundCSS()
+
+        //   keyEach(temp, (k, v) => {
+        //     if (!results[k]) {
+        //       results[k] = []
+        //     }
+
+        //     results[k].push(v);
+        //   })
+        // })
+
+        // return  keyMap(results, (k, v) => {
+        //   return `${k}: ${v.join(',')};`
+        // }).join(EMPTY_STRING)
+    }
+
+
+    return p.value.toString() + ';'; 
+  }
+
   toCSSText () {
 
     var offsets = this.json.offsets.map(it => {
@@ -43,7 +84,7 @@ export class Keyframe extends Property {
     return html`${it.offset.toString()} {
     ${it.properties.map(p => {
       if (this.isMultiStyle(p.key)) {
-        return p.value.toString() + ';'
+        return this.getMultiStyleString(p)
       } else {
         var value = p.value.toString();
 
