@@ -29,9 +29,13 @@ import timer from "./timer";
 import chevron_left from "./chevron_left";
 import input from "./input";
 import filter from "./filter";
+import play from "./play";
+import pause from "./pause";
 
 
 export default {
+  play,
+  pause,
   filter,
   input,
   timer,

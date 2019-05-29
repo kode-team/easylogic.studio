@@ -63,7 +63,10 @@ export default class AnimationProperty extends BaseProperty {
                 <label class='duration' title='Duration'><small>${it.duration}</small></label>
                 <label class='direction' title='Direction'><small>${it.direction}</small></label>
                 <label class='fill-mode' title='Fill Mode'><small>${it.fillMode}</small></label>
-                <label class='play-state' title='Play State'><small>${it.playState}</small></label>
+                <label class='play-state' title='Play State' data-index='${index}' data-play-state-selected-value="${it.playState}">
+                  <small data-play-state-value='running'>${icon.pause}</small>
+                  <small data-play-state-value='paused'>${icon.play}</small>
+                </label>
               </div>
             </div>
             <div class='tools'>
@@ -181,6 +184,21 @@ export default class AnimationProperty extends BaseProperty {
 
     this.refresh();
   
+  }
+
+  [CLICK('$animationList .play-state')] (e) {
+    var index = +e.$delegateTarget.attr("data-index");
+    var current = editor.selection.current;
+    if (!current) return; 
+
+    var animation = current.animations[index]
+    if (animation) {
+      animation.togglePlayState();
+
+      e.$delegateTarget.attr('data-play-state-selected-value', animation.playState)
+
+      this.emit('refreshCanvas')
+    }
   }
 
   // 객체를 선택하는 괜찮은 패턴이 어딘가에 있을 텐데......

@@ -69,6 +69,42 @@
             color: black;
           }
         }
+
+        &.play-state {
+          background-color: transparent;
+          cursor: pointer;
+          [data-play-state-value] {
+            vertical-align: middle;
+            display: none; 
+
+            svg {
+              width: 16px;
+              height: 16px;
+              vertical-align: middle;
+
+              path {
+                fill: blue;
+              }
+            }
+          }
+
+          [data-play-state-value=pause] {
+            svg {
+              path {
+                fill: red; 
+              }
+            }
+          }
+
+          @each $play-state in paused, running {
+            &[data-play-state-selected-value="#{$play-state}"] {
+              [data-play-state-value="#{$play-state}"] {
+                display: inline-block;
+              }
+            }
+          }
+
+        }
       }
     }
 

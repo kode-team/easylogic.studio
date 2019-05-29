@@ -16,10 +16,24 @@ export class Animation extends Property {
       duration: Length.second(0),
       timingFunction: 'linear',
       delay: Length.second(0),
-      iterationCount: 0,
+      iterationCount: new Length('0', 'infinite'),
       playState: 'paused',
       fillMode: 'none'
     });
+  }
+
+  togglePlayState (forcedValue) {
+
+    if (forcedValue) {
+      this.reset({ playState: forcedValue === 'running' ? 'running' : 'paused' })
+    } else {
+      if (this.json.playState === 'paused') {
+        this.reset({ playState: 'running' })
+      } else {
+        this.reset({ playState: 'paused' })
+      }
+    }
+
   }
 
   toCSS() {

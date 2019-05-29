@@ -57,16 +57,18 @@ export default class CanvasView extends UIElement {
     }
   }
 
-  generate(css) {
+  generate(css, keyframeString) {
 
     this.refs.$style.html(`
-      .csseditor .page-canvas { ${CSS_TO_STRING(css)}; }  
+      /* element */
+      .csseditor .page-canvas { 
+        ${CSS_TO_STRING(css)}; 
+      }  
+
+      /* keyframe */
+      ${keyframeString}
     `)
 
-    // this.refs.$canvas.css(css);
-
-    // content 가 있으면 content 를 업데이트 해주자. 
-    // 여기서는 따로 옵션이 없어서 text 로만 입력가능하다. 
     if (this.refs.$canvas.text() != css.content) {
       this.refs.$canvas.text(css.content);
     }
@@ -76,9 +78,9 @@ export default class CanvasView extends UIElement {
     var current = editor.selection.current;
     if (current) {
       if (this.props.embed) {
-        this.parser.generate(current.toEmbedCSS());
+        this.parser.generate(current.toEmbedCSS(), current.toKeyframeString());
       } else {
-        this.generate(current.toCSS());
+        this.generate(current.toCSS(), current.toKeyframeString());
       }
     }
   }

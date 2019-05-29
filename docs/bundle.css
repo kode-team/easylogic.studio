@@ -4053,6 +4053,31 @@ html, body {
 .csseditor .animation-list .animation-item .labels label.direction small, .csseditor .animation-list .animation-item .labels label.fill-mode small, .csseditor .animation-list .animation-item .labels label.play-state small {
   color: black;
 }
+.csseditor .animation-list .animation-item .labels label.play-state {
+  background-color: transparent;
+  cursor: pointer;
+}
+.csseditor .animation-list .animation-item .labels label.play-state [data-play-state-value] {
+  vertical-align: middle;
+  display: none;
+}
+.csseditor .animation-list .animation-item .labels label.play-state [data-play-state-value] svg {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+.csseditor .animation-list .animation-item .labels label.play-state [data-play-state-value] svg path {
+  fill: blue;
+}
+.csseditor .animation-list .animation-item .labels label.play-state [data-play-state-value=pause] svg path {
+  fill: red;
+}
+.csseditor .animation-list .animation-item .labels label.play-state[data-play-state-selected-value=paused] [data-play-state-value=paused] {
+  display: inline-block;
+}
+.csseditor .animation-list .animation-item .labels label.play-state[data-play-state-selected-value=running] [data-play-state-value=running] {
+  display: inline-block;
+}
 .csseditor .animation-list .animation-item .tools {
   vertical-align: middle;
   text-align: right;
