@@ -7,7 +7,6 @@ import { html } from "../../../../util/functions/func";
 export default class TextShadowPropertyPopup extends UIElement {
   initState() {
     return {
-      inset: false,
       offsetX: Length.px(0),
       offsetY: Length.px(0),
       blurRadius: Length.px(0)
@@ -16,7 +15,7 @@ export default class TextShadowPropertyPopup extends UIElement {
 
   updateData(opt) {
     this.setState(opt, false); // 자동 로드를 하지 않음, state 만 업데이트
-    this.emit("changeTextShadowPropertyPopup", opt);
+    this.emit(this.changeEvent, opt);
   }
 
   template() {
@@ -185,6 +184,9 @@ export default class TextShadowPropertyPopup extends UIElement {
   }
 
   [EVENT("showTextShadowPropertyPopup")](data) {
+
+    this.changeEvent = data.changeEvent || "changeTextShadowPropertyPopup"
+
     this.setState(data);
     this.refresh();
 
@@ -196,7 +198,7 @@ export default class TextShadowPropertyPopup extends UIElement {
       })
       .show("inline-block");
 
-    this.emit("hidePropertyPopup");
+    // this.emit("hidePropertyPopup");
   }
 
   [EVENT(

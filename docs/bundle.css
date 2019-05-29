@@ -1428,14 +1428,14 @@ html, body {
   top: 0px;
 }
 .csseditor .tab.number-tab .tab-header {
-  height: 50px;
+  height: 54px;
   cursor: pointer;
 }
 .csseditor .tab.number-tab .tab-content {
   display: none;
 }
 .csseditor .tab.number-tab .tab-body {
-  top: 50px;
+  top: 54px;
 }
 .csseditor .tab.number-tab > .tab-header {
   border-bottom: 1px solid #cccccc;
@@ -1554,7 +1554,7 @@ html, body {
   position: absolute;
   left: 0px;
   right: 0px;
-  height: 50px;
+  height: 54px;
   z-index: 1;
   display: flex;
 }
@@ -1593,7 +1593,7 @@ html, body {
   position: absolute;
   left: 0px;
   right: 0px;
-  top: 50px;
+  top: 54px;
   bottom: 0px;
 }
 .csseditor .tab > .tab-body.no-border {
@@ -1648,7 +1648,7 @@ html, body {
 }
 .csseditor .tab.bottom > .tab-body {
   top: 0px;
-  bottom: 50px;
+  bottom: 54px;
 }
 .csseditor .tab.horizontal.left > .tab-header {
   left: 0px;
@@ -1888,11 +1888,71 @@ html, body {
   background-repeat: no-repeat;
   cursor: pointer;
 }
+.csseditor .editor.offset-editor .offset[data-selected-value="0"] .offset-item[data-offset-index="0"] {
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+}
+.csseditor .editor.offset-editor .offset[data-selected-value="1"] .offset-item[data-offset-index="1"] {
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+}
+.csseditor .editor.offset-editor .offset[data-selected-value="2"] .offset-item[data-offset-index="2"] {
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+}
+.csseditor .editor.offset-editor .offset[data-selected-value="3"] .offset-item[data-offset-index="3"] {
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+}
+.csseditor .editor.offset-editor .offset[data-selected-value="4"] .offset-item[data-offset-index="4"] {
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+}
+.csseditor .editor.offset-editor .offset[data-selected-value="5"] .offset-item[data-offset-index="5"] {
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+}
+.csseditor .editor.offset-editor .offset[data-selected-value="6"] .offset-item[data-offset-index="6"] {
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+}
+.csseditor .editor.offset-editor .offset[data-selected-value="7"] .offset-item[data-offset-index="7"] {
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+}
+.csseditor .editor.offset-editor .offset[data-selected-value="8"] .offset-item[data-offset-index="8"] {
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+}
+.csseditor .editor.offset-editor .offset[data-selected-value="9"] .offset-item[data-offset-index="9"] {
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+}
+.csseditor .editor.offset-editor .offset[data-selected-value="10"] .offset-item[data-offset-index="10"] {
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+}
+.csseditor .editor.offset-editor .offset[data-selected-value="11"] .offset-item[data-offset-index="11"] {
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+}
+.csseditor .editor.offset-editor .offset[data-selected-value="12"] .offset-item[data-offset-index="12"] {
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+}
+.csseditor .editor.offset-editor .offset[data-selected-value="13"] .offset-item[data-offset-index="13"] {
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+}
+.csseditor .editor.offset-editor .offset[data-selected-value="14"] .offset-item[data-offset-index="14"] {
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+}
+.csseditor .editor.offset-editor .offset[data-selected-value="15"] .offset-item[data-offset-index="15"] {
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+}
+.csseditor .editor.offset-editor .offset[data-selected-value="16"] .offset-item[data-offset-index="16"] {
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+}
+.csseditor .editor.offset-editor .offset[data-selected-value="17"] .offset-item[data-offset-index="17"] {
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+}
+.csseditor .editor.offset-editor .offset[data-selected-value="18"] .offset-item[data-offset-index="18"] {
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+}
+.csseditor .editor.offset-editor .offset[data-selected-value="19"] .offset-item[data-offset-index="19"] {
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+}
 .csseditor .editor.offset-editor .offset .offset-item {
   position: absolute;
   display: inline-block;
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
   top: 50%;
   -webkit-transform: translateX(-50%) translateY(-50%);
           transform: translateX(-50%) translateY(-50%);
@@ -3910,155 +3970,6 @@ html, body {
   width: 100%;
   outline: none;
 }
-.csseditor .box-shadow-item {
-  grid-template-columns: 1fr !important;
-}
-.csseditor .box-shadow-item .shadow-item {
-  height: 20px;
-  display: grid;
-  grid-template-columns: 20px 20px 1fr 1fr 1fr 1fr 20px;
-  grid-column-gap: 5px;
-  text-align: center;
-  margin-bottom: 5px;
-}
-.csseditor .box-shadow-item .shadow-item.desc {
-  color: #333333;
-}
-.csseditor .box-shadow-item .shadow-item.desc .color {
-  visibility: hidden;
-}
-.csseditor .box-shadow-item .shadow-item .color {
-  cursor: pointer;
-  height: 20px;
-  border: 1px solid #cccccc;
-  border-radius: 100%;
-  position: relative;
-  background-color: transparent;
-  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
-  background-size: 10px 10px;
-  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
-  box-sizing: border-box;
-}
-.csseditor .box-shadow-item .shadow-item .color .color-view {
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-  border-radius: 100%;
-}
-.csseditor .box-shadow-item .shadow-item .inset svg {
-  width: 16px;
-  height: 16px;
-}
-.csseditor .box-shadow-item .shadow-item .inset svg path {
-  fill: #cccccc;
-}
-.csseditor .box-shadow-item .shadow-item .inset[data-value=true] svg path {
-  fill: black;
-}
-.csseditor .box-shadow-item .shadow-item .offset-x,
-.csseditor .box-shadow-item .shadow-item .offset-y,
-.csseditor .box-shadow-item .shadow-item .blur-radius,
-.csseditor .box-shadow-item .shadow-item .spread-radius,
-.csseditor .box-shadow-item .shadow-item .inset {
-  box-sizing: border-box;
-  padding: 4px 0px;
-}
-.csseditor .box-shadow-item .shadow-item .tools {
-  text-align: right;
-}
-.csseditor .box-shadow-item .shadow-item .tools button {
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  border: 0px;
-  padding: 0px;
-  width: 16px;
-  height: 16px;
-  display: inline-block;
-  cursor: pointer;
-  outline: none;
-}
-.csseditor .box-shadow-item .shadow-item .tools button svg {
-  width: 100%;
-  height: 100%;
-}
-.csseditor .text-shadow-item {
-  grid-template-columns: 1fr !important;
-}
-.csseditor .text-shadow-item .shadow-item {
-  height: 20px;
-  display: grid;
-  grid-template-columns: 20px 1fr 1fr 1fr 20px;
-  grid-column-gap: 5px;
-  text-align: center;
-  margin-bottom: 5px;
-}
-.csseditor .text-shadow-item .shadow-item.desc {
-  color: #333333;
-}
-.csseditor .text-shadow-item .shadow-item.desc .color {
-  visibility: hidden;
-}
-.csseditor .text-shadow-item .shadow-item .color {
-  cursor: pointer;
-  height: 20px;
-  border: 1px solid #cccccc;
-  border-radius: 100%;
-  position: relative;
-  background-color: transparent;
-  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
-  background-size: 10px 10px;
-  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
-  box-sizing: border-box;
-}
-.csseditor .text-shadow-item .shadow-item .color .color-view {
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-  border-radius: 100%;
-}
-.csseditor .text-shadow-item .shadow-item .inset svg {
-  width: 16px;
-  height: 16px;
-}
-.csseditor .text-shadow-item .shadow-item .inset svg path {
-  fill: #cccccc;
-}
-.csseditor .text-shadow-item .shadow-item .inset[data-value=true] svg path {
-  fill: black;
-}
-.csseditor .text-shadow-item .shadow-item .offset-x,
-.csseditor .text-shadow-item .shadow-item .offset-y,
-.csseditor .text-shadow-item .shadow-item .blur-radius,
-.csseditor .text-shadow-item .shadow-item .inset {
-  box-sizing: border-box;
-  padding: 4px 0px;
-}
-.csseditor .text-shadow-item .shadow-item .tools {
-  text-align: right;
-}
-.csseditor .text-shadow-item .shadow-item .tools button {
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  border: 0px;
-  padding: 0px;
-  width: 16px;
-  height: 16px;
-  display: inline-block;
-  cursor: pointer;
-  outline: none;
-}
-.csseditor .text-shadow-item .shadow-item .tools button svg {
-  width: 100%;
-  height: 100%;
-}
 .csseditor .export-view {
   position: absolute;
   left: 50%;
@@ -4639,6 +4550,199 @@ html, body {
 }
 .csseditor .filter-editor .filter-list .filter-item .filter-ui input[type=range] {
   width: 90%;
+}
+.csseditor .box-shadow-editor {
+  grid-template-columns: 1fr !important;
+}
+.csseditor .box-shadow-editor .tools {
+  vertical-align: middle;
+  text-align: right;
+}
+.csseditor .box-shadow-editor .tools select {
+  width: 100px !important;
+  display: inline-block;
+}
+.csseditor .box-shadow-editor .tools button {
+  vertical-align: middle;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  border: 0px;
+  padding: 0px;
+  font-size: 16px;
+  vertical-align: middle;
+  cursor: pointer;
+  outline: none;
+  font-size: 12px;
+}
+.csseditor .box-shadow-editor .tools button svg {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+.csseditor .box-shadow-editor .shadow-item {
+  height: 20px;
+  display: grid;
+  grid-template-columns: 20px 20px 1fr 1fr 1fr 1fr 20px;
+  grid-column-gap: 5px;
+  text-align: center;
+  margin-bottom: 5px;
+}
+.csseditor .box-shadow-editor .shadow-item.desc {
+  color: #333333;
+}
+.csseditor .box-shadow-editor .shadow-item.desc .color {
+  visibility: hidden;
+}
+.csseditor .box-shadow-editor .shadow-item .color {
+  cursor: pointer;
+  height: 20px;
+  border: 1px solid #cccccc;
+  border-radius: 100%;
+  position: relative;
+  background-color: transparent;
+  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-size: 10px 10px;
+  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+  box-sizing: border-box;
+}
+.csseditor .box-shadow-editor .shadow-item .color .color-view {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  border-radius: 100%;
+}
+.csseditor .box-shadow-editor .shadow-item .inset svg {
+  width: 16px;
+  height: 16px;
+}
+.csseditor .box-shadow-editor .shadow-item .inset svg path {
+  fill: #cccccc;
+}
+.csseditor .box-shadow-editor .shadow-item .inset[data-value=true] svg path {
+  fill: black;
+}
+.csseditor .box-shadow-editor .shadow-item .offset-x,
+.csseditor .box-shadow-editor .shadow-item .offset-y,
+.csseditor .box-shadow-editor .shadow-item .blur-radius,
+.csseditor .box-shadow-editor .shadow-item .spread-radius,
+.csseditor .box-shadow-editor .shadow-item .inset {
+  box-sizing: border-box;
+  padding: 4px 0px;
+}
+.csseditor .box-shadow-editor .shadow-item .tools {
+  text-align: right;
+}
+.csseditor .box-shadow-editor .shadow-item .tools button {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  border: 0px;
+  padding: 0px;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  cursor: pointer;
+  outline: none;
+}
+.csseditor .box-shadow-editor .shadow-item .tools button svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor .text-shadow-editor {
+  grid-template-columns: 1fr !important;
+}
+.csseditor .text-shadow-editor .tools {
+  vertical-align: middle;
+  text-align: right;
+}
+.csseditor .text-shadow-editor .tools select {
+  width: 100px !important;
+  display: inline-block;
+}
+.csseditor .text-shadow-editor .tools button {
+  vertical-align: middle;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  border: 0px;
+  padding: 0px;
+  font-size: 16px;
+  vertical-align: middle;
+  cursor: pointer;
+  outline: none;
+  font-size: 12px;
+}
+.csseditor .text-shadow-editor .tools button svg {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+.csseditor .text-shadow-editor .shadow-item {
+  height: 20px;
+  display: grid;
+  grid-template-columns: 20px 1fr 1fr 1fr 20px;
+  grid-column-gap: 5px;
+  text-align: center;
+  margin-bottom: 5px;
+}
+.csseditor .text-shadow-editor .shadow-item.desc {
+  color: #333333;
+}
+.csseditor .text-shadow-editor .shadow-item.desc .color {
+  visibility: hidden;
+}
+.csseditor .text-shadow-editor .shadow-item .color {
+  cursor: pointer;
+  height: 20px;
+  border: 1px solid #cccccc;
+  border-radius: 100%;
+  position: relative;
+  background-color: transparent;
+  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-size: 10px 10px;
+  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+  box-sizing: border-box;
+}
+.csseditor .text-shadow-editor .shadow-item .color .color-view {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  border-radius: 100%;
+}
+.csseditor .text-shadow-editor .shadow-item .offset-x,
+.csseditor .text-shadow-editor .shadow-item .offset-y,
+.csseditor .text-shadow-editor .shadow-item .blur-radius,
+.csseditor .text-shadow-editor .shadow-item .inset {
+  box-sizing: border-box;
+  padding: 4px 0px;
+}
+.csseditor .text-shadow-editor .shadow-item .tools {
+  text-align: right;
+}
+.csseditor .text-shadow-editor .shadow-item .tools button {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  border: 0px;
+  padding: 0px;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  cursor: pointer;
+  outline: none;
+}
+.csseditor .text-shadow-editor .shadow-item .tools button svg {
+  width: 100%;
+  height: 100%;
 }
 .csseditor .fill-picker {
   position: fixed;

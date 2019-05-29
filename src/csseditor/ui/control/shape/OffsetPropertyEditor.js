@@ -1,18 +1,20 @@
 import UIElement, { EVENT } from "../../../../util/UIElement";
 import { Length } from "../../../../editor/unit/Length";
-import { LOAD, CLICK, INPUT } from "../../../../util/Event";
+import { LOAD, CLICK } from "../../../../util/Event";
 import { html } from "../../../../util/functions/func";
 import icon from "../../icon/icon";
 import ColorViewEditor from "./property-editor/ColorViewEditor";
 import RangeEditor from "./property-editor/RangeEditor";
 import BackgroundImageEditor from "./property-editor/BackgroundImageEditor";
 import FilterEditor from "./property-editor/FilterEditor";
+import BoxShadowEditor from "./property-editor/BoxShadowEditor";
 
 
 export default class OffsetPropertyEditor extends UIElement {
 
   components() {
     return {
+      BoxShadowEditor,
       FilterEditor,
       ColorViewEditor,
       RangeEditor,
@@ -51,6 +53,22 @@ export default class OffsetPropertyEditor extends UIElement {
     `
   }  
 
+  getPropertyDefaultValue (key) {
+
+      switch(key) {
+        case 'animation-timing-function':
+        case 'box-shadow':
+        case 'text-shadow':
+        case 'background-image':
+        case 'background-color':
+        case 'filter':      
+        case 'backdrop-filter':      
+          return Length.string('');
+        default: 
+          return Length.px(0);
+      }
+  }
+
   [CLICK('$addProperty')] (e) {
     var key = this.getRef('$propertySelect').value;
 
@@ -65,7 +83,7 @@ export default class OffsetPropertyEditor extends UIElement {
     }
 
     this.state.properties.push({
-      key, value: Length.string('')
+      key, value: this.getPropertyDefaultValue(key)
     })
 
     this.refresh();
@@ -93,6 +111,18 @@ export default class OffsetPropertyEditor extends UIElement {
           <FilterEditor ref='$filter' value="${property.value}" onChange="changeFilterProperty" />
         </div>
       `
+    } else if (property.key === 'backdrop-filter') {
+      return `
+        <div class='property-editor'>
+          <FilterEditor ref='$backdropFilter' value="${property.value}" onChange="changeBackdropFilterProperty" />
+        </div>
+      `      
+    } else if (property.key === 'box-shadow') {
+      return `
+        <div class='property-editor'>
+          <BoxShadowEditor ref='$boxshadow' value="${property.value}" onChange="changeBoxShadowProperty" />
+        </div>
+      `      
     }
 
     return `
@@ -116,6 +146,14 @@ export default class OffsetPropertyEditor extends UIElement {
     this.modifyPropertyValue('filter', filter);
   }    
 
+  [EVENT('changeBackdropFilterProperty')] (filter) {
+    this.modifyPropertyValue('backdrop-filter', filter);
+  }      
+
+  [EVENT('changeBoxShadowProperty')] (boxshadow) {
+    this.modifyPropertyValue('box-shadow', boxshadow);
+  }      
+
 
   makePropertyEditor (property, index) {
     var min = null;
@@ -129,6 +167,7 @@ export default class OffsetPropertyEditor extends UIElement {
       case 'background-image':
       case 'background-color':
       case 'filter':
+      case 'backdrop-filter':
         return this.makeIndivisualPropertyEditor(property);
       case 'left': 
       case 'margin-top': 
@@ -204,7 +243,8 @@ export default class OffsetPropertyEditor extends UIElement {
           <option value='background-image'>background-image</option>
           <option value='box-shadow'>box-shadow</option>
           <option value='text-shadow'>text-shadow</option>
-          <option value='filter'>filter</option>          
+          <option value='filter'>filter</option>      
+          <option value='backdrop-filter'>backdrop-filter</option>          
         </optgroup>                
         <optgroup label='Font'>
           <option value='font-size'>font-size</option>

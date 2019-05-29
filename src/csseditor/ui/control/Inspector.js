@@ -16,25 +16,27 @@ export default class Inspector extends UIElement {
             </div>
             <div class="tab-item" data-value="2">
               <div class='icon'>${icon.title}</div>
-              <lable>Content</label>
+              <lable>Text & Font</label>
             </div>
             <div class="tab-item" data-value="3">
+              <div class='icon'>${icon.filter}</div>
+              <lable>Effect</label>
+            </div>            
+
+            <div class="tab-item" data-value="4">
               <div class='icon'>${icon.timer}</div>
               <lable>Animation</label>
-            </div>            
+            </div>                        
           </div>
           <div class="tab-body" ref="$body">
             <div class="tab-content" data-value="1">
               <SizeProperty />
               <BoxModelProperty />
               <BackgroundColorProperty />
-              <BackgroundImageProperty />                   
-              <FilterProperty />              
+              <BackgroundImageProperty />     
               <BorderProperty />
               <BorderRadiusProperty />
               <BorderImageProperty />
-              <OutlineProperty />              
-              <BoxShadowProperty />
 
             </div>
             <div class="tab-content" data-value="2">
@@ -47,10 +49,16 @@ export default class Inspector extends UIElement {
               <FontSpacingProperty />
             </div>
             <div class='tab-content' data-value="3">
+              <BoxShadowProperty />                            
+              <FilterProperty />   
+              <BackdropFilterProperty />           
+              <OutlineProperty />
+            </div>
+            <div class='tab-content' data-value="4">
               <KeyframeProperty />
               <AnimationProperty />
               <CodeViewProperty />
-            </div>
+            </div>            
           </div>
         </div>
       </div>

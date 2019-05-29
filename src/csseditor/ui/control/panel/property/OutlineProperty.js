@@ -25,10 +25,6 @@ export default class OutlineProperty extends BaseProperty {
     return "Outline";
   }
 
-  isFirstShow () {
-    return false
-  }
-
   afterRender() {
     this.refresh();
   }

@@ -45,13 +45,19 @@ export class Keyframe extends Property {
       if (this.isMultiStyle(p.key)) {
         return p.value.toString() + ';'
       } else {
-        return `${p.key}: ${p.value.toString()};`
+        var value = p.value.toString();
+
+        if (value) {
+          return `${p.key}: ${value};`
+        } else {
+          return EMPTY_STRING;
+        }
       }
     }).join(EMPTY_STRING)}
   }${NEW_LINE_2}`
   })}
 
-}
+}${NEW_LINE_2}
 `
   }
 

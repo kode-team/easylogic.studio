@@ -17,7 +17,7 @@ export default class BoxShadowPropertyPopup extends UIElement {
 
   updateData(opt) {
     this.setState(opt, false); // 자동 로드를 하지 않음, state 만 업데이트
-    this.emit("changeBoxShadowPropertyPopup", opt);
+    this.emit(this.changeEvent, opt);
   }
 
   template() {
@@ -245,6 +245,9 @@ export default class BoxShadowPropertyPopup extends UIElement {
   }
 
   [EVENT("showBoxShadowPropertyPopup")](data) {
+
+    this.changeEvent = data.changeEvent || "changeBoxShadowPropertyPopup"
+
     this.setState(data);
     this.refresh();
 
@@ -256,7 +259,7 @@ export default class BoxShadowPropertyPopup extends UIElement {
       })
       .show("inline-block");
 
-    this.emit("hidePropertyPopup");
+    // this.emit("hidePropertyPopup");
   }
 
   [EVENT(

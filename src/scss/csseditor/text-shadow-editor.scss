@@ -1,10 +1,42 @@
-.box-shadow-item {
+
+.text-shadow-editor {
   grid-template-columns: 1fr !important;
+
+
+  .tools {
+    vertical-align: middle;
+    text-align: right; 
+
+    select {
+      width: 100px !important;
+      display: inline-block ;
+    }
+    button {
+        vertical-align: middle;
+        appearance: none;
+        background-color: transparent;
+        border: 0px;
+        padding: 0px;
+        font-size: 16px;
+        vertical-align: middle;
+        cursor: pointer;
+        outline: none;
+        font-size: 12px;
+        
+
+        svg {
+            width: 16px;
+            height: 16px;
+            vertical-align: middle;
+        }
+      }
+  }
+
 
   .shadow-item {
     height: 20px;
     display: grid;
-    grid-template-columns: 20px 20px 1fr 1fr 1fr 1fr 20px;
+    grid-template-columns: 20px 1fr 1fr 1fr 20px;
     grid-column-gap: 5px;
     text-align: center;
     margin-bottom: 5px;
@@ -33,29 +65,9 @@
       }       
     }
 
-    .inset {
-      svg {
-        width: 16px;
-        height: 16px;
-
-        path {
-          fill: $border-color;
-        }
-      }
-
-      &[data-value="true"] {
-        svg {
-          path {
-            fill: black;
-          }
-        }
-      }
-    }
-
     .offset-x,
     .offset-y,
     .blur-radius,
-    .spread-radius,
     .inset {
       box-sizing: border-box;
       padding: 4px 0px;

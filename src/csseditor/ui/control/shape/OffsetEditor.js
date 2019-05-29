@@ -87,30 +87,20 @@ export default class OffsetEditor extends UIElement {
   }  
 
   templateForOffset () {
-    return `<div class='offset' ref='$offset'></div>`
+    return `<div class='offset' ref='$offset' data-selected-value="-1"></div>`
   }
 
   makeOffset (offset, index) {
     var css = `left: ${offset.offset}; background-color: ${offset.color};`
     
-    if (offset.selected) {
-      css += `box-shadow: 0px 0px 10px 3px ${offset.color};`
-    }
-    return `<div class='offset-item' ref='$offsetIndex${index.toString()}' style='${css}' data-selected='${offset.selected}' data-offset-index='${index.toString()}'></div>`
+    return `<div class='offset-item' ref='$offsetIndex${index.toString()}' style='${css}' data-offset-index='${index.toString()}'></div>`
   }
 
 
   // 객체를 선택하는 괜찮은 패턴이 어딘가에 있을 텐데......
   // 언제까지 selected 를 설정해야하는가?
   selectItem(selectedIndex, isSelected = true) {
-    if (isNotUndefined(this.selectedIndex)) {
-      var $el = this.getRef(`$offsetIndex`, this.selectedIndex)
-      if ($el) {
-        $el.removeAttr('data-selected');  
-        $el.css('box-shadow', 'none')
-      }
-    }
-
+    
     if (isUndefined(selectedIndex)) {
       selectedIndex = -1; 
       for(var i = 0, len = this.state.offsets.length; i < len; i++) {
@@ -125,10 +115,7 @@ export default class OffsetEditor extends UIElement {
       }  
     }
 
-    var selectedItem = this.getRef(`$offsetIndex`, selectedIndex)
-    if (selectedItem) {
-      selectedItem.attr('data-selected', isSelected);
-    }
+    this.getRef('$offset').attr('data-selected-value', selectedIndex);
     this.selectedIndex = selectedIndex;
 
     this.state.offsets.forEach( (it, index) => {
@@ -137,11 +124,6 @@ export default class OffsetEditor extends UIElement {
 
     var selectedList = this.state.offsets.filter(it => it.selected);
     this.selectedOffsetItem = (selectedList.length) ? selectedList[0] : {} 
-
-    if (selectedItem) {
-      selectedItem.css('box-shadow', `0px 0px 10px 3px ${this.selectedOffsetItem.color};`)  
-    }
-    
 
     this.refreshOffsetInput()
   }  

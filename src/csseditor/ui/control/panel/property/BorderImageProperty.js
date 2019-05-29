@@ -46,12 +46,6 @@ export default class BorderImageProperty extends BaseProperty {
     return "Border Image";
   }
 
-
-  isFirstShow () {
-    return false
-  }
-
-
   [EVENT(CHANGE_SELECTION, CHANGE_ARTBOARD, CHANGE_EDITOR)] () {
     this.refresh()
   }

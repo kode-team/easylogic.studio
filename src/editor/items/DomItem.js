@@ -1,11 +1,8 @@
-import { EMPTY_STRING, WHITE_STRING, NEW_LINE_2 } from "../../util/css/types";
+import { NEW_LINE_2 } from "../../util/css/types";
 import { CSS_TO_STRING, CSS_SORTING } from "../../util/css/make";
 import { Length } from "../unit/Length";
 import { Display } from "../css-property/Display";
 import { GroupItem } from "./GroupItem";
-import { Filter } from "../css-property/Filter";
-import { BackdropFilter } from "../css-property/BackdropFilter";
-import { BackgroundImage } from "../css-property/BackgroundImage";
 import {
   keyEach,
   combineKeyArray,
@@ -15,14 +12,6 @@ import { BorderImage } from "../css-property/BorderImage";
 import { Animation } from "../css-property/Animation";
 import { Transition } from "../css-property/Transition";
 import { Keyframe } from "../css-property/Keyframe";
-import { Offset } from "../css-property/Offset";
-
-const borderRadiusCssKey = {
-  topLeft: "top-left",
-  topRight: "top-right",
-  bottomLeft: "bottom-left",
-  bottomRight: "bottom-right"
-};
 
 const fontStyleList = ["size", "weight", "lineHeight", "family", "style"];
 const textStyleList = ["decoration", "transform"];
@@ -33,13 +22,16 @@ export class DomItem extends GroupItem {
       width: Length.px(300),
       height: Length.px(400),
       'filter': '',
+      'backdrop-filter': '',
       'background-color': 'white',      
       'background-image': '',      
       'border-radius': '',      
+      'box-shadow': '',
+      'text-shadow': '',
       color: "black",
       x: Length.px(100),
       y: Length.px(100),
-      filters: [],
+      // filters: [],      // deprecated 
       border: {},
       outline: {
         color: 'currentcolor',
@@ -50,9 +42,9 @@ export class DomItem extends GroupItem {
       borderRadius: {},
       borderImage: new BorderImage(),
       applyBorderImage: false,
-      backdropFilters: [],
-      backgroundImages: [],
-      boxShadows: [],
+      // backdropFilters: [],
+      // backgroundImages: [],
+      // boxShadows: [],
       textShadows: [],
       animations: [],
       transitions: [],
@@ -89,27 +81,17 @@ export class DomItem extends GroupItem {
     json.perspectiveOriginPositionY = Length.parse(
       json.perspectiveOriginPositionY
     );
-    json.filters = json.filters.map(f => Filter.parse(f));
-    json.backdropFilters = json.backdropFilters.map(f =>
-      BackdropFilter.parse(f)
-    );
-    json.backgroundImages = json.backgroundImages.map(f =>
-      BackgroundImage.parse(f)
-    );
+    // json.filters = json.filters.map(f => Filter.parse(f));
+    // json.backdropFilters = json.backdropFilters.map(f =>
+    //   BackdropFilter.parse(f)
+    // );
+    // json.backgroundImages = json.backgroundImages.map(f =>
+    //   BackgroundImage.parse(f)
+    // );
 
     if (json.display) json.display = Display.parse(json.display);
 
     return json;
-  }
-
-  addBoxShadow(boxShadow) {
-    this.json.boxShadows.push(boxShadow);
-    return boxShadow;
-  }
-
-  addTextShadow(textShadow) {
-    this.json.textShadows.push(textShadow);
-    return textShadow;
   }
 
   addAnimation(animation) {
@@ -127,19 +109,6 @@ export class DomItem extends GroupItem {
     return keyframe;
   }      
 
-  addBackgroundImage(item) {
-    this.json.backgroundImages.push(item);
-    return item;
-  }
-
-  createBackgroundImage(data = {}) {
-    return this.addBackgroundImage(
-      new BackgroundImage({
-        checked: true,
-        ...data
-      })
-    );
-  }
 
   createAnimation(data = {}) {
     return this.addAnimation(
@@ -172,18 +141,6 @@ export class DomItem extends GroupItem {
     arr.splice(removeIndex, 1);
   }
 
-  removeBackgroundImage(removeIndex) {
-    this.removePropertyList(this.json.backgroundImages, removeIndex);
-  }
-
-  removeBoxShadow(removeIndex) {
-    this.removePropertyList(this.json.boxShadows, removeIndex);
-  }
-
-  removeTextShadow(removeIndex) {
-    this.removePropertyList(this.json.textShadows, removeIndex);
-  }
-
   removeAnimation(removeIndex) {
     this.removePropertyList(this.json.animations, removeIndex);
   }  
@@ -205,10 +162,7 @@ export class DomItem extends GroupItem {
     );
   }
 
-  sortBackgroundImage(startIndex, targetIndex) {
-    this.sortItem(this.json.backgroundImages, startIndex, targetIndex);
-  }
-
+  
   sortAnimation(startIndex, targetIndex) {
     this.sortItem(this.json.animations, startIndex, targetIndex);
   }  
@@ -220,39 +174,6 @@ export class DomItem extends GroupItem {
   sortKeyframe(startIndex, targetIndex) {
     this.sortItem(this.json.keyframes, startIndex, targetIndex);
   }    
-
-  sortFilter(startIndex, targetIndex) {
-    this.sortItem(this.json.filters, startIndex, targetIndex);
-  }
-
-  addFilter(item) {
-    this.json.filters.push(item);
-    return item;
-  }
-
-  makeFilter(type, opt = {}) {
-    return Filter.parse({ ...opt, type });
-  }
-
-  createFilter(type, opt = {}) {
-    return this.addFilter(this.makeFilter(type, opt));
-  }
-
-  removeFilter(removeIndex) {
-    this.removePropertyList(this.json.filters, removeIndex)
-  }
-
-  updateFilter(index, data = {}) {
-    this.json.filters[+index].reset(data);
-  }
-
-  updateBoxShadow(index, data = {}) {
-    this.json.boxShadows[+index].reset(data);
-  }
-
-  updateTextShadow(index, data = {}) {
-    this.json.textShadows[+index].reset(data);
-  }
 
   updateAnimation(index, data = {}) {
     this.json.animations[+index].reset(data);
@@ -266,11 +187,6 @@ export class DomItem extends GroupItem {
   updateKeyframe(index, data = {}) {
     this.json.keyframes[+index].reset(data);
   }      
-
-  addBackdropFilter(item) {
-    this.json.backdropFilters.push(item);
-    return item;
-  }
 
   setSize(data) {
     this.reset(data);
@@ -430,23 +346,28 @@ export class DomItem extends GroupItem {
     return this.json.borderImage.toCSS();
   }
 
-
-  toFilterCSS() {
-    if (!this.json.filter) return {} 
+  toKeyCSS (key) {
+    if (!this.json[key]) return {} 
     return {
-      filter: this.json.filter 
+      [key] : this.json[key]
     };
   }
+  
+
+  toFilterCSS() {
+    return this.toKeyCSS('filter');
+  }
+
   toBackdropFilterCSS() {
-    return this.toPropertyCSS(this.json.backdropFilters);
+    return this.toKeyCSS('backdrop-filter');
   }
 
   toBoxShadowCSS() {
-    return this.toPropertyCSS(this.json.boxShadows);
+    return this.toKeyCSS('box-shadow');
   }
 
   toTextShadowCSS() {
-    return this.toPropertyCSS(this.json.textShadows);
+    return this.toKeyCSS('text-shadow');
   }
 
   toAnimationCSS() {
@@ -571,7 +492,10 @@ export class DomItem extends GroupItem {
       ...this.toOutlineCSS(),      
       ...this.toBorderRadiusCSS(),
       ...this.toBorderImageCSS(),
+      ...this.toAnimationCSS(),
+      
       ...this.toFilterCSS(),
+      ...this.toBackdropFilterCSS(),      
       ...this.toBackgroundImageCSS(isExport),
       ...this.toBoxShadowCSS(),
       ...this.toTextShadowCSS(),
@@ -597,12 +521,14 @@ export class DomItem extends GroupItem {
       ...this.toBorderCSS(),
       ...this.toOutlineCSS(),
       ...this.toBorderRadiusCSS(),
-      ...this.toBorderImageCSS(),      
+      ...this.toBorderImageCSS(),
+      ...this.toAnimationCSS(),      
+
       ...this.toFilterCSS(),
+      ...this.toBackdropFilterCSS(),
       ...this.toBackgroundImageCSS(isExport),
       ...this.toBoxShadowCSS(),
-      ...this.toTextShadowCSS(),
-      ...this.toAnimationCSS()
+      ...this.toTextShadowCSS()
     });
   }
 
@@ -624,6 +550,7 @@ export class DomItem extends GroupItem {
       ...this.toBorderRadiusCSS(),
       ...this.toBorderImageCSS(),      
       ...this.toFilterCSS(),
+      ...this.toBackdropFilterCSS(),      
       ...this.toBackgroundImageCSS(),
       ...this.toBoxShadowCSS(),
       ...this.toTextShadowCSS()

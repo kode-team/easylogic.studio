@@ -81,7 +81,7 @@ export default class FilterEditor extends UIElement {
                     return `<option value='${filter}'>${filter}</option>`;
                   })}
                 </select>
-                <button type="button" ref="$add" title="add Filter">${icon.add} Add Filter</button>
+                <button type="button" ref="$add" title="add Filter">${icon.add} Add</button>
               </div>
           </div>
           <div class='filter-list' ref='$filterList'>

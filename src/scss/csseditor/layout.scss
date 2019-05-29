@@ -175,8 +175,6 @@ $display-grid-color: red;
 @import "./size.scss";
 @import "./content.scss";
 @import "./font.scss";
-@import "./box-shadow.scss";
-@import "./text-shadow.scss";
 @import "./export-view.scss";
 @import './animation.scss';  
 @import './keyframe.scss'; 
@@ -189,6 +187,11 @@ $display-grid-color: red;
 @import './background-image-editor.scss'; 
 @import './border-radius-editor.scss'; 
 @import './filter-editor.scss';
+@import './box-shadow-editor.scss'; 
+@import './text-shadow-editor.scss'; 
 
+// picker
 @import "./fill-picker.scss";
+
+// popup
 @import "./popup.scss";

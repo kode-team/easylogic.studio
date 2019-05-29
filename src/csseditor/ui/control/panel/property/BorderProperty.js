@@ -25,10 +25,6 @@ export default class BorderProperty extends BaseProperty {
     return "Border Width & Style";
   }
 
-  isFirstShow () {
-    return false
-  }
-
   afterRender() {
     this.refresh();
   }

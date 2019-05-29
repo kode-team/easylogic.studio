@@ -18,10 +18,6 @@ export default class BorderRadiusProperty extends BaseProperty {
     return "Border Radius";  
   }
 
-  isFirstShow () {
-    return false
-  }
-
   getBody() {
     return html`
       <div class="property-item full border-radius-item" ref='$body'>

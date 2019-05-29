@@ -28,9 +28,11 @@ import title from "./title";
 import timer from "./timer";
 import chevron_left from "./chevron_left";
 import input from "./input";
+import filter from "./filter";
 
 
 export default {
+  filter,
   input,
   timer,
   title,

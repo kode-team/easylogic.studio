@@ -7,7 +7,6 @@ import { Filter } from "../css-property/Filter";
 import { WHITE_STRING } from "../../util/css/types";
 import { TextShadow } from "../css-property/TextShadow";
 import { BorderImage } from "../css-property/BorderImage";
-const FILTER_REG = /((blur|drop\-shadow|hue\-rotate|invert|brightness|contrast|opacity|saturate|sepia)\(([^\)]*)\))/gi;
 const OUTLINE_REG = /(auto|none|dotted|dashed|solid|double|groove|ridge|inset|outset)/gi;
 export class StyleParser {
   constructor() {
@@ -216,66 +215,14 @@ export class StyleParser {
 
   parseBoxShadow() {
     var style = this.getStyle();
-    var boxShadows = [];
-    if (style["box-shadow"]) {
-      var results = convertMatches(style["box-shadow"]);
-
-      boxShadows = results.str.split(",").map(shadow => {
-        var values = shadow.split(" ");
-
-        var insets = values.filter(it => it === "inset");
-        var colors = values
-          .filter(it => it.includes("@"))
-          .map(it => {
-            return results.matches[+it.replace("@", "")].color;
-          });
-
-        var numbers = values.filter(it => {
-          return it !== "inset" && !it.includes("@");
-        });
-
-        return BoxShadow.parse({
-          inset: !!insets.length,
-          color: colors[0] || "rgba(0, 0, 0, 1)",
-          offsetX: Length.parse(numbers[0] || "0px"),
-          offsetY: Length.parse(numbers[1] || "0px"),
-          blurRadius: Length.parse(numbers[2] || "0px"),
-          spreadRadius: Length.parse(numbers[3] || "0px")
-        });
-      });
-    }
+    var boxShadows = BoxShadow.parseStyle(style['box-shadow']);
 
     return { boxShadows };
   }
 
   parseTextShadow() {
     var style = this.getStyle();
-    var textShadows = [];
-
-    if (style["text-shadow"]) {
-      var results = convertMatches(style["text-shadow"]);
-
-      textShadows = results.str.split(",").map(shadow => {
-        var values = shadow.split(" ");
-
-        var colors = values
-          .filter(it => it.includes("@"))
-          .map(it => {
-            return results.matches[+it.replace("@", "")].color;
-          });
-
-        var numbers = values.filter(it => {
-          return it !== "inset" && !it.includes("@");
-        });
-
-        return TextShadow.parse({
-          color: colors[0] || "rgba(0, 0, 0, 1)",
-          offsetX: Length.parse(numbers[0] || "0px"),
-          offsetY: Length.parse(numbers[1] || "0px"),
-          blurRadius: Length.parse(numbers[2] || "0px")
-        });
-      });
-    }
+    var textShadows = TextShadow.parseStyle(style['text-shadow']);
 
     return { textShadows };
   }

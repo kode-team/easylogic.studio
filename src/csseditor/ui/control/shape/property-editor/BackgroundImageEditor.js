@@ -69,9 +69,7 @@ export default class BackgroundImageEditor extends UIElement {
         return `
             <div class='background-image-editor' >
                 <div class='label'>
-
                     <div class='tools'>
-                        <button type="button" ref='$add'>${icon.input} Load</button>
                         <button type="button" ref='$add'>${icon.add} Add</button>
                     </div>
                 </div>

@@ -4,8 +4,6 @@ import icon from "../../../icon/icon";
 import {
   LOAD,
   CLICK,
-  CHANGE,
-  INPUT,
   DRAGSTART,
   DRAGOVER,
   DROP,
@@ -13,7 +11,6 @@ import {
 } from "../../../../../util/Event";
 import { EMPTY_STRING } from "../../../../../util/css/types";
 import { editor } from "../../../../../editor/editor";
-import { Length } from "../../../../../editor/unit/Length";
 import { EVENT } from "../../../../../util/UIElement";
 import { CHANGE_ARTBOARD, CHANGE_SELECTION, CHANGE_EDITOR } from "../../../../types/event";
 

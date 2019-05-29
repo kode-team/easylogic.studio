@@ -46,13 +46,13 @@ export default class CodeViewProperty extends BaseProperty {
     return `
       <div class=''>
         <div>
+          <label>Keyframe</label>
+          <pre>${keyframeCode}</pre>
+        </div>              
+        <div>
           <label>CSS</label>
           <pre>${cssCode}</pre>
         </div>
-        <div>
-          <label>Keyframe</label>
-          <pre>${keyframeCode}</pre>
-        </div>        
       </div>
     `
 
