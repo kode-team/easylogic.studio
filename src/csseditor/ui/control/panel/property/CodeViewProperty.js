@@ -38,10 +38,19 @@ export default class CodeViewProperty extends BaseProperty {
     `;
   }
 
+  filterKeyName (str) {
+    return str.split(';').map(it => {
+      it = it.trim();
+      var [key, value] = it.split(':')
+
+      return `<strong>${key}</strong>:${value};${NEW_LINE}` 
+    }).join(EMPTY_STRING)
+  }
+
   [LOAD('$body')] () {
     var current = editor.selection.current;
 
-    var cssCode = current ? current.toExport().replace(/;/gi, ";" + NEW_LINE) + ";" : EMPTY_STRING
+    var cssCode = current ? this.filterKeyName(current.toExport().replace(/;/gi, ";" + NEW_LINE)) : EMPTY_STRING
     var keyframeCode = current ? current.toKeyframeString() : EMPTY_STRING
     return `
       <div class=''>

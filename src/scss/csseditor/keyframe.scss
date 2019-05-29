@@ -3,23 +3,55 @@
   
     .keyframe-item {
       display: grid; 
-      grid-template-columns: 1fr 2fr; 
+      grid-template-columns: 1fr; 
       grid-column-gap: 4px;
       border: 1px solid $border-color;
       margin-bottom: 5px;
       padding: 5px;  
       cursor: pointer;
-      height: 40px;
+      height: 50px;
       &.selected {
         background-color: rgba($border-color, 0.5);
       }
 
-      .name {
-          padding: 2px 0px;
+      .title {
+          display: grid;
+          grid-template-columns: 1fr 20px;
+          height: 20px;
+
+        .name {
+            padding: 2px 0px;
+        }
+
+        .tools {
+            vertical-align: middle;
+            text-align: right;
+            button {
+                vertical-align: middle;
+                appearance: none;
+                background-color: transparent;
+                border: 0px;
+                padding: 0px;
+                vertical-align: middle;
+                cursor: pointer;
+                outline: none;
+                font-size: 12px;
+                line-height: 0;
+      
+                svg {
+                    width: 16px;
+                    height: 16px;
+                    vertical-align: middle;
+                }
+             }
+        } 
       }
+
 
       .offset-list {
           padding: 0px 10px;
+          height: 30px;
+          box-sizing: border-box;
         .container {
             position: relative;
             background-image: linear-gradient(to right, $border-color, black);

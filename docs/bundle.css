@@ -3998,7 +3998,7 @@ html, body {
 }
 .csseditor .animation-list .animation-item {
   display: grid;
-  grid-template-columns: 20px 30px 1fr;
+  grid-template-columns: 30px 1fr 20px;
   grid-column-gap: 4px;
   box-sizing: border-box;
   border: 1px solid #cccccc;
@@ -4008,10 +4008,6 @@ html, body {
 }
 .csseditor .animation-list .animation-item.selected {
   background-color: rgba(204, 204, 204, 0.5);
-}
-.csseditor .animation-list .animation-item .checkbox {
-  vertical-align: middle;
-  padding: 6px 0px;
 }
 .csseditor .animation-list .animation-item .name {
   padding: 2px 0px;
@@ -4057,27 +4053,80 @@ html, body {
 .csseditor .animation-list .animation-item .labels label.direction small, .csseditor .animation-list .animation-item .labels label.fill-mode small, .csseditor .animation-list .animation-item .labels label.play-state small {
   color: black;
 }
+.csseditor .animation-list .animation-item .tools {
+  vertical-align: middle;
+  text-align: right;
+}
+.csseditor .animation-list .animation-item .tools button {
+  vertical-align: middle;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  border: 0px;
+  padding: 0px;
+  font-size: 16px;
+  vertical-align: middle;
+  cursor: pointer;
+  outline: none;
+  font-size: 12px;
+}
+.csseditor .animation-list .animation-item .tools button svg {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
 .csseditor .keyframe-list {
   grid-template-columns: 1fr !important;
 }
 .csseditor .keyframe-list .keyframe-item {
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 1fr;
   grid-column-gap: 4px;
   border: 1px solid #cccccc;
   margin-bottom: 5px;
   padding: 5px;
   cursor: pointer;
-  height: 40px;
+  height: 50px;
 }
 .csseditor .keyframe-list .keyframe-item.selected {
   background-color: rgba(204, 204, 204, 0.5);
 }
-.csseditor .keyframe-list .keyframe-item .name {
+.csseditor .keyframe-list .keyframe-item .title {
+  display: grid;
+  grid-template-columns: 1fr 20px;
+  height: 20px;
+}
+.csseditor .keyframe-list .keyframe-item .title .name {
   padding: 2px 0px;
+}
+.csseditor .keyframe-list .keyframe-item .title .tools {
+  vertical-align: middle;
+  text-align: right;
+}
+.csseditor .keyframe-list .keyframe-item .title .tools button {
+  vertical-align: middle;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  border: 0px;
+  padding: 0px;
+  vertical-align: middle;
+  cursor: pointer;
+  outline: none;
+  font-size: 12px;
+  line-height: 0;
+}
+.csseditor .keyframe-list .keyframe-item .title .tools button svg {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
 }
 .csseditor .keyframe-list .keyframe-item .offset-list {
   padding: 0px 10px;
+  height: 30px;
+  box-sizing: border-box;
 }
 .csseditor .keyframe-list .keyframe-item .offset-list .container {
   position: relative;

@@ -50,9 +50,6 @@ export default class AnimationProperty extends BaseProperty {
       return `
       <div class='animation-group-item'>
         <div class='animation-item ${selectedClass}' data-index='${index}' ref="animationIndex${index}" draggable='true' >
-            <div class='checkbox'>
-              <input type="checkbox" ${it.checked ? 'checked' : ''} />
-            </div>
             <div class='timing preview' data-index='${index}' ref='$preview${index}'>
               <canvas class='item-canvas' ref='$itemCanvas${index}' width="30px" height="30px"></canvas>
             </div>
@@ -68,6 +65,11 @@ export default class AnimationProperty extends BaseProperty {
                 <label class='fill-mode' title='Fill Mode'><small>${it.fillMode}</small></label>
                 <label class='play-state' title='Play State'><small>${it.playState}</small></label>
               </div>
+            </div>
+            <div class='tools'>
+                <button type="button" class="del" data-index="${index}">
+                  ${icon.remove2}
+                </button>
             </div>
         </div>
       </div>        
@@ -168,19 +170,17 @@ export default class AnimationProperty extends BaseProperty {
     return this.current.animations[this.selectedIndex];
   }
 
-  [CLICK("$animationList .tools .remove")](e) {
+  [CLICK("$animationList .tools .del")](e) {
     var removeIndex = e.$delegateTarget.attr("data-index");
     var current = editor.selection.current;
     if (!current) return;
-    var currentAnimation = this.getCurrentAnimation();
 
-    if (currentAnimation) {
-      current.removeAnimation(removeIndex);
+    current.removeAnimation(removeIndex);
 
-      this.emit("refreshCanvas");
+    this.emit("refreshCanvas");
 
-      this.refresh();
-    }
+    this.refresh();
+  
   }
 
   // 객체를 선택하는 괜찮은 패턴이 어딘가에 있을 텐데......

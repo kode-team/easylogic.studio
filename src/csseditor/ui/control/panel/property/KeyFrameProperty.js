@@ -19,7 +19,9 @@ export default class KeyFrameProperty extends BaseProperty {
     return "Keyframes";
   }
   getBody() {
-    return `<div class='property-item keyframe-list' ref='$keyframeList'></div>`;
+    return `<div class='property-item keyframe-list' ref='$keyframeList'>
+      ${this.loadTemplate('$keyframeList')}
+    </div>`;
   }
 
   getTools() {
@@ -145,7 +147,14 @@ export default class KeyFrameProperty extends BaseProperty {
     index = index.toString()
     return html`
       <div class='keyframe-item' draggable='true' ref='$keyframeIndex${index}' data-index='${index}'>
-        <div class='name'>${keyframe.name}</div>
+        <div class='title'>
+          <div class='name'>${keyframe.name}</div>
+          <div class='tools'>
+              <button type="button" class="del" data-index="${index}">
+                ${icon.remove2}
+              </button>
+          </div>
+        </div>
         <div class='offset-list'>
           <div class='container'>
             ${keyframe.offsets.map(o => {
@@ -167,6 +176,18 @@ export default class KeyFrameProperty extends BaseProperty {
 
     this.viewKeyframePicker(index);
 
+  }
+
+  [CLICK('$keyframeList .del')] (e) {
+    var removeIndex = e.$delegateTarget.attr("data-index");
+    var current = editor.selection.current;
+    if (!current) return;
+
+    current.removeKeyframe(removeIndex);
+
+    this.emit("refreshCanvas");
+
+    this.refresh();
   }
 
   [EVENT(CHANGE_ARTBOARD, CHANGE_SELECTION, CHANGE_EDITOR)] () {
