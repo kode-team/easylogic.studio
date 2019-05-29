@@ -42,10 +42,12 @@ import BackgroundImageProperty from "./BackgroundImageProperty";
 import FilterProperty from "./FilterProperty";
 import CodeViewProperty from "./CodeViewProperty";
 import BackdropFilterProperty from "./BackdropFilterProperty";
+import VariableProperty from "./VariableProperty";
 // import PositionProperty from "./PositionProperty";
 
  
 export default {
+  VariableProperty,
   BackdropFilterProperty,
   CodeViewProperty,  
   FilterProperty,

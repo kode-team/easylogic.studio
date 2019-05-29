@@ -245,7 +245,7 @@ export default class AnimationProperty extends BaseProperty {
     const back = this.currentAnimation;
 
    
-    
+    const name = back.name
     const direction = back.direction
     const duration = back.duration
     const timingFunction = back.timingFunction
@@ -255,6 +255,7 @@ export default class AnimationProperty extends BaseProperty {
     const fillMode = back.fillMode
 
     this.emit("showAnimationPropertyPopup", {
+      name,
       position,
       direction,
       duration,

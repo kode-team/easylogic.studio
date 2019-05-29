@@ -21,6 +21,7 @@ export class DomItem extends GroupItem {
     return super.getDefaultObject({
       width: Length.px(300),
       height: Length.px(400),
+      'variable': '',
       'filter': '',
       'backdrop-filter': '',
       'background-color': 'white',      
@@ -284,7 +285,10 @@ export class DomItem extends GroupItem {
     this.json[field].split(';').forEach(it => {
       var [key, value]  = it.split(':').map(it => it.trim())
 
-      obj[key] = value; 
+      // if (value) {
+      //   value = value.replace('to top', 'var(--ang)'); 
+      // }
+      obj[key] = value
     })
 
     return obj;
@@ -470,6 +474,16 @@ export class DomItem extends GroupItem {
     return obj;
   }
 
+  toVariableCSS () {
+    var obj = {}
+    this.json.variable.split(';').filter(it => it.trim()).forEach(it => {
+      var [key, value] = it.split(':')
+
+      obj[key] = value; 
+    })
+    return obj;
+  }
+
   toCSS(isExport = false) {
     var json = this.json;
     var css = {
@@ -482,6 +496,7 @@ export class DomItem extends GroupItem {
     }
 
     return CSS_SORTING({
+      ...this.toVariableCSS(),
       ...css,
       ...this.toFontCSS(),
       ...this.toTextCSS(),
@@ -512,6 +527,7 @@ export class DomItem extends GroupItem {
     };
 
     return CSS_SORTING({
+      ...this.toVariableCSS(),      
       ...css,
       ...this.toFontCSS(),
       ...this.toTextCSS(),

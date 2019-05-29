@@ -117,7 +117,7 @@ export default class AnimationPropertyPopup extends UIElement {
 
   [LOAD('$direction')] () {
     return ['normal', 'reverse', 'alternate', 'alternate-reverse'].map(it => {
-      var selected = it === this.state.direction;
+      var selected = it === this.state.direction ? 'selected' : '';
       return `<option value='${it}' ${selected} >${it}</option>`
     })
   }
@@ -142,7 +142,7 @@ export default class AnimationPropertyPopup extends UIElement {
 
   [LOAD('$playState')] () {
     return ['paused', 'running'].map(it => {
-      var selected = it === this.state.playState;
+      var selected = it === this.state.playState ? 'selected' : '';
       return `<option value='${it}' ${selected} >${it}</option>`
     })
   }
@@ -166,7 +166,7 @@ export default class AnimationPropertyPopup extends UIElement {
 
   [LOAD('$fillMode')] () {
     return ['none', 'forwards', 'backwards', 'both'].map(it => {
-      var selected = it === this.state.fillMode;
+      var selected = it === this.state.fillMode ? 'selected' : '';
       return `<option value='${it}' ${selected} >${it}</option>`
     })
   }

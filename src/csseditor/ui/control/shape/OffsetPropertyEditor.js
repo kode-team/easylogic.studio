@@ -8,6 +8,7 @@ import RangeEditor from "./property-editor/RangeEditor";
 import BackgroundImageEditor from "./property-editor/BackgroundImageEditor";
 import FilterEditor from "./property-editor/FilterEditor";
 import BoxShadowEditor from "./property-editor/BoxShadowEditor";
+import VarEditor from "./property-editor/VarEditor";
 
 
 export default class OffsetPropertyEditor extends UIElement {
@@ -18,7 +19,8 @@ export default class OffsetPropertyEditor extends UIElement {
       FilterEditor,
       ColorViewEditor,
       RangeEditor,
-      BackgroundImageEditor
+      BackgroundImageEditor,
+      VarEditor
     }
   }
 
@@ -63,6 +65,7 @@ export default class OffsetPropertyEditor extends UIElement {
         case 'background-color':
         case 'filter':      
         case 'backdrop-filter':      
+        case 'var':
           return Length.string('');
         default: 
           return Length.px(0);
@@ -91,7 +94,7 @@ export default class OffsetPropertyEditor extends UIElement {
 
   }
 
-  makeIndivisualPropertyEditor (property) {
+  makeIndivisualPropertyEditor (property, index) {
 
     if (property.key === 'background-color') {
       return `
@@ -123,6 +126,12 @@ export default class OffsetPropertyEditor extends UIElement {
           <BoxShadowEditor ref='$boxshadow' value="${property.value}" onChange="changeBoxShadowProperty" />
         </div>
       `      
+    } else if (property.key === 'var') {
+      return `
+        <div class='property-editor'>
+          <VarEditor ref='$var' value="${property.value}" onChange="changeVar" />
+        </div>
+      `            
     }
 
     return `
@@ -152,7 +161,11 @@ export default class OffsetPropertyEditor extends UIElement {
 
   [EVENT('changeBoxShadowProperty')] (boxshadow) {
     this.modifyPropertyValue('box-shadow', boxshadow);
-  }      
+  }   
+  
+  [EVENT('changeVar')] (value) {
+    this.modifyPropertyValue('var', value);
+  }     
 
 
   makePropertyEditor (property, index) {
@@ -168,7 +181,8 @@ export default class OffsetPropertyEditor extends UIElement {
       case 'background-color':
       case 'filter':
       case 'backdrop-filter':
-        return this.makeIndivisualPropertyEditor(property);
+      case 'var':
+        return this.makeIndivisualPropertyEditor(property, index);
       case 'left': 
       case 'margin-top': 
       case 'margin-bottom': 
@@ -214,6 +228,9 @@ export default class OffsetPropertyEditor extends UIElement {
   makePropertySelect() {
     return `
       <select class='property-select' ref='$propertySelect'>
+        <optgroup label='--'>
+          <option value='var'>var</option>
+        </optgroup>            
         <optgroup label='Size'>
           <option value='width'>width</option>
           <option value='height'>height</option>

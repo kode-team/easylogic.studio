@@ -20,6 +20,7 @@ export class Keyframe extends Property {
   isMultiStyle (key) {
     switch (key) {
     case 'background-image': 
+    case 'var':
       return true;
     }
 

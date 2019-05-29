@@ -55,6 +55,7 @@ export default class Inspector extends UIElement {
               <OutlineProperty />
             </div>
             <div class='tab-content' data-value="4">
+              <VariableProperty />
               <KeyframeProperty />
               <AnimationProperty />
               <CodeViewProperty />

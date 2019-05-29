@@ -414,8 +414,15 @@ var ordering = {
 };
 
 const CSS_SORTING_FUNCTION = (a, b) => {
+
+  if (a.includes('--') && !b.includes('--')) {
+    return -1; 
+  } else if (b.includes('--') && !a.includes('--')) {
+    return 1; 
+  }
+
   var aN = ordering[a] || Number.MAX_SAFE_INTEGER;
-  var bN = ordering[b] || Number.MAX_SAFE_INTEGER;
+  var bN = ordering[b] || Number.MAX_SAFE_INTEGER;  
 
   if (aN == bN) return 0;
 

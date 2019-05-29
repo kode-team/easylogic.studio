@@ -34,6 +34,14 @@ export default class CanvasView extends UIElement {
       <div class='page-view'>
         <div class="page-canvas" ref="$canvas"></div>     
         <style type='text/css' ref='$style'></style>     
+        <script type="text/javascript">
+          CSS.registerProperty({
+            name: '--ang',
+            syntax: '<angle>',
+            inherits: false,
+            initialValue: '0deg'
+          })
+        </script>
       </div>
     `;
   }

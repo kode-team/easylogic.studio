@@ -1,0 +1,60 @@
+
+.var-editor {
+  grid-template-columns: 1fr !important;
+
+
+  .tools {
+    vertical-align: middle;
+    text-align: right; 
+    button {
+        vertical-align: middle;
+        appearance: none;
+        background-color: transparent;
+        border: 0px;
+        padding: 0px;
+        font-size: 16px;
+        vertical-align: middle;
+        cursor: pointer;
+        outline: none;
+        font-size: 12px;
+        
+
+        svg {
+            width: 16px;
+            height: 16px;
+            vertical-align: middle;
+        }
+      }
+  }
+
+
+  .var-item {
+    height: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 30px;
+    grid-column-gap: 5px;
+    text-align: center;
+    margin-bottom: 5px;
+
+
+    .tools {
+      text-align: right;
+      button {
+        appearance: none;
+        background-color: transparent;
+        border: 0px;
+        padding: 0px;
+        width: 16px;
+        height: 16px;
+        display: inline-block;
+        cursor: pointer;
+        outline: none;
+
+        svg {
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+  }
+}
