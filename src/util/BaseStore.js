@@ -194,6 +194,7 @@ export default class BaseStore {
       this.cachedCallback[event] = this.callbacks.filter(
         f => f.event === event
       );
+
     }
   }
 

@@ -3,7 +3,6 @@ import { TOOL_SET } from "../csseditor/types/ToolTypes";
 import { keyEach } from "./functions/func";
 import EventMachine from "./EventMachine";
 
-// const CHECK_STORE_PATTERN = /^@/
 const REG_STORE_MULTI_PATTERN = /^ME@/;
 
 const MULTI_PREFIX = "ME@";

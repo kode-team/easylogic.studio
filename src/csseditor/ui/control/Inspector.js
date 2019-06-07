@@ -49,13 +49,14 @@ export default class Inspector extends UIElement {
               <FontSpacingProperty />
             </div>
             <div class='tab-content' data-value="3">
-              <BoxShadowProperty />                            
-              <FilterProperty />   
-              <BackdropFilterProperty />           
+              <BoxShadowProperty />
+              <TransformProperty />
+              <FilterProperty />
+              <BackdropFilterProperty />
               <OutlineProperty />
             </div>
             <div class='tab-content' data-value="4">
-              <RootVariableProperty />            
+              <RootVariableProperty />
               <VariableProperty />
               <KeyframeProperty />
               <AnimationProperty />

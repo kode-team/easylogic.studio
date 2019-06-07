@@ -26,13 +26,15 @@ export default class CanvasView extends UIElement {
     if (this.props.embed) {
       this.$el.hide();
     } else {
-      this.trigger("refreshCanvas");
+      this[EVENT("refreshCanvas")]();
     }
   }
   template() {
     return `
       <div class='page-view'>
-        <div class="page-canvas" ref="$canvas"></div>     
+        <div class='page-lock'>
+          <div class="page-canvas" ref="$canvas"></div>             
+        </div>
         <style type='text/css' ref='$style'></style>     
       </div>
     `;

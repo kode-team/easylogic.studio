@@ -10,51 +10,36 @@ import {
 } from "../../../../../util/Event";
 import { WHITE_STRING } from "../../../../../util/css/types";
 import {
-  BlurFilter,
-  GrayscaleFilter,
-  HueRotateFilter,
-  InvertFilter,
-  BrightnessFilter,
-  ContrastFilter,
-  DropshadowFilter,
-  OpacityFilter,
-  SaturateFilter,
-  SepiaFilter,
-  Filter
-} from "../../../../../editor/css-property/Filter";
+  Transform
+} from "../../../../../editor/css-property/Transform";
 import { editor } from "../../../../../editor/editor";
 import UIElement, { EVENT } from "../../../../../util/UIElement";
 import RangeEditor from "./RangeEditor";
-import ColorViewEditor from "./ColorViewEditor";
+import { Length } from "../../../../../editor/unit/Length";
 
 
-var filterList = [
-  "blur",
-  "grayscale",
-  "hue-rotate",
-  "invert",
-  "brightness",
-  "contrast",
-  "drop-shadow",
-  "opacity",
-  "saturate",
-  "sepia"
+var transformList = [
+  'matrix',
+  'matrix3d',
+  'translate',
+  'translateX',  
+  'translateY',
+  'translateZ',
+  'translate3d',
+  'scale',
+  'scaleX',
+  'scaleY',
+  'scaleZ',
+  'scale3d',
+  'rotate',
+  'rotateX',
+  'rotateY',
+  'rotateZ',
+  'rotate3d',  
+  'skewX',    
+  'skewY',   
+  'perspective'
 ];
-
-var specList = {
-  blur: BlurFilter.spec,
-  grayscale: GrayscaleFilter.spec,
-  "hue-rotate": HueRotateFilter.spec,
-  invert: InvertFilter.spec,
-  brightness: BrightnessFilter.spec,
-  contrast: ContrastFilter.spec,
-  "drop-shadow": DropshadowFilter.spec,
-  opacity: OpacityFilter.spec,
-  saturate: SaturateFilter.spec,
-  sepia: SepiaFilter.spec
-};
-
-
 
 export default class TransformEditor extends UIElement {
 
@@ -72,107 +57,126 @@ export default class TransformEditor extends UIElement {
 
   template() {
     return html`
-      <div class='filter-editor filter-list' ref='$filterList'>
+      <div class='transform-editor transform-list' ref='$transformList'>
           <div class='label' >
+              <label>Transform</label>
               <div class='tools'>
-                <select ref="$filterSelect">
-                  ${filterList.map(filter => {
-                    return `<option value='${filter}'>${filter}</option>`;
+                <select ref="$transformSelect">
+                  ${transformList.map(transform => {
+                    return `<option value='${transform}'>${transform}</option>`;
                   })}
                 </select>
-                <button type="button" ref="$add" title="add Filter">${icon.add} Add</button>
+                <button type="button" ref="$add" title="add Transform">${icon.add}</button>
               </div>
           </div>
-          <div class='filter-list' ref='$filterList'></div>
+          <div class='transform-list' ref='$transformList'></div>
       </div>`;
   }
 
-  getSpec(filterType) {
-    return specList[filterType];
+  getLabel(type, index) {
+    switch(type) {
+      case 'scale':
+      case 'translate':
+        if (index === 0) return 'X';
+        else if (index === 1) return 'Y';
+      case 'matrix':
+        if (index === 0) return 'a'
+        else if (index === 1) return 'c'
+        else if (index === 2) return 'b'
+        else if (index === 3) return 'd'
+        else if (index === 4) return 'tx'
+        else if (index === 5) return 'ty'
+      }
+    return ''
   }
 
-  makeDropShadowFilterTemplate(spec, filter, index) {
-    return html`
-      <div class="filter-item">
-        <div class="title" draggable="true" data-index="${index}">
-          <label>Drop Shadow</label>
-          <div class="filter-menu">
-            <button type="button" class="del" data-index="${index}">
-              ${icon.remove2}
-            </button>
-          </div>
-        </div>
+  getRange(type) {
 
-        <div class="filter-ui drop-shadow-color">
-          <label>${spec.color.title}</label>
-          <ColorViewEditor ref='$dropShadowColorView${index}' params="${index}" color="${filter.color}" onChange="changeDropShadowColor" />
-        </div>
-
-        ${["offsetX", "offsetY", "blurRadius"].map(key => {
-          return `        
-            <div class="filter-ui drop-shadow">
-                <label>${spec[key].title}</label>
-
-                <RangeEditor 
-                  ref='$${key}${index}' 
-                  key="${index}" 
-                  params="${key}" 
-                  value="${filter[key].value.toString()}" units="${spec[key].units.join(',')}" onchange="changeRangeEditor" />
-            </div>`;
-        })}
-      </div>
-    `;
-  }
-
-  makeOneFilterTemplate(spec, filter, index) {
-    return `
-      <div class="filter-item" data-index="${index}">
-        <div class="title" draggable="true" data-index="${index}">
-          <label>${spec.title}</label>
-          <div class="filter-menu">
-            <button type="button" class="del" data-index="${index}">
-              ${icon.remove2}
-            </button>
-          </div>
-        </div>
-        <div class="filter-ui">
-          <RangeEditor ref='$range${index}' key="${index}" value="${filter.value}" units="${spec.units.join(',')}" onchange="changeRangeEditor" />
-        </div>
-      </div>
-    `;
-  }
-
-  makeFilterTemplate(filter, index) {
-    if (filter.type === "drop-shadow") {
-      return this.makeDropShadowFilterTemplate(
-        this.getSpec(filter.type),
-        filter,
-        index
-      );
-    } else {
-      return this.makeOneFilterTemplate(
-        this.getSpec(filter.type),
-        filter,
-        index
-      );
+    switch(type) {
+      case 'translateX': 
+      case 'translateY': 
+      case 'translateZ': 
+      case 'translate':      
+      case 'skewY':
+      case 'skewX':      
+        return { min: -1000, max : 1000, step: 1, units: 'px,%,em'}
+      case 'matrix':
+      case 'matrix3d':     
+        return { min: -1000, max : 1000, step: 0.1,units: 'number'}                           
+      case 'rotateX': 
+      case 'rotateY': 
+      case 'rotateZ': 
+      case 'rotate':  
+      return { min: -360, max : 360, step: 0.1, units: 'deg,turn,rad'}              
+      case 'perspective':
+          return { min: 0, max : 10000, step: 1, units: 'px,%,em'}
+      case 'scale': 
+      case 'scaleX': 
+      case 'scaleY': 
+        return { min: 0, max : 10, step: 0.1,units: 'number'}           
     }
+
+
+    return { min: 0, max : 100, step : 1,units: 'px,%,em' }
   }
 
-  [LOAD("$filterList")]() {
-    return this.state.filters.map((filter, index) => {
-      return this.makeFilterTemplate(filter, index.toString());
+  makeOneTransformTemplate(type, transform, index) {
+    return html`
+      <div class="transform-item" data-index="${index}">
+        <div class="title" draggable="true" data-index="${index}">
+          <label><span>${(+index)+1}</span> ${type}</label>
+          <div class="transform-menu">
+            <button type="button" class="del" data-index="${index}">
+              ${icon.remove2}
+            </button>
+          </div>
+        </div>
+        <div class="transform-ui">
+          ${transform.value.map( (it, tindex) => {
+
+            var label = this.getLabel(type, tindex);
+            var {min, max, step, units} = this.getRange(type);
+
+            return `<RangeEditor 
+                      ref='$range${index}_${tindex}' 
+                      min="${min}" 
+                      max="${max}" 
+                      step="${step}" 
+                      label="${label}" 
+                      key="${index}" 
+                      params='${tindex}' 
+                      value="${it}" 
+                      units="${units}" 
+                      onchange="changeRangeEditor" />`
+          }).join(WHITE_STRING)}          
+        </div>
+      </div>
+    `;
+  }
+
+  makeTransformTemplate(transform, index) {
+    return this.makeOneTransformTemplate(
+      transform.type,
+      transform,
+      index
+    );
+  }
+
+  [LOAD("$transformList")]() {
+    return this.state.transforms.map((transform, index) => {
+      return this.makeTransformTemplate(transform, index.toString());
     });
   }
 
-  // filter-item 을 통째로  dragstart 를 걸어버리니깐
+  // transform-item 을 통째로  dragstart 를 걸어버리니깐
   // 다른 ui 를 핸들링 할 수가 없어서
   // title  에만 dragstart 거는 걸로 ok ?
-  [DRAGSTART("$filterList .filter-item .title")](e) {
+  [DRAGSTART("$transformList .transform-item .title")](e) {
     this.startIndex = +e.$delegateTarget.attr("data-index");
   }
 
   // drop 이벤트를 걸 때 dragover 가 같이 선언되어 있어야 한다.
-  [DRAGOVER("$filterList .filter-item") + PREVENT](e) {}
+  [DRAGOVER("$transformList .transform-item") + PREVENT](e) {}
 
 
 
@@ -184,74 +188,113 @@ export default class TransformEditor extends UIElement {
     );
   }
 
-  sortFilter(startIndex, targetIndex) {
-      this.sortItem(this.state.filters, startIndex, targetIndex);
+  sortTransform(startIndex, targetIndex) {
+      this.sortItem(this.state.transforms, startIndex, targetIndex);
   }
 
-  [DROP("$filterList .filter-item") + PREVENT](e) {
+  [DROP("$transformList .transform-item") + PREVENT](e) {
     var targetIndex = +e.$delegateTarget.attr("data-index");
     var current = editor.selection.current;
     if (!current) return;
 
-    this.sortFilter(this.startIndex, targetIndex);
+    this.sortTransform(this.startIndex, targetIndex);
 
     this.refresh();
 
-    this.modifyFilter()
+    this.modifyTransform()
   }
 
-  modifyFilter () {
-    var value = this.state.filters.join(WHITE_STRING);
+  modifyTransform () {
+    var value = this.state.transforms.join(WHITE_STRING);
 
     this.parent.trigger(this.props.onchange, value)
   }
 
-  makeFilter(type, opt = {}) {
-    return Filter.parse({ ...opt, type });
+  getDefaultValue (type) {
+
+    switch(type) {
+      case 'translateX': 
+      case 'translateY': 
+      case 'translateZ': 
+        return [Length.px(0)]            
+      case 'rotateX': 
+      case 'rotateY': 
+      case 'rotateZ': 
+      case 'rotate':  
+      case 'skewY':
+      case 'skewX':
+      case 'perspective':
+        return [Length.deg(0)]            
+      case 'translate': 
+        return [Length.px(0),Length.px(0)]
+      case 'scale': 
+        return [Length.number(1),Length.number(1)]
+      case 'scaleX': 
+      case 'scaleY': 
+        return [Length.number(1)]
+      case 'matrix':
+        return [
+          Length.number(1),
+          Length.number(1),
+          Length.number(1),
+          Length.number(1),
+          Length.number(1),
+          Length.number(1)          
+        ]
+      case 'matrix3d':
+        return [
+          Length.number(1),
+          Length.number(1),
+          Length.number(1),
+          Length.number(1),
+          Length.number(1),
+          Length.number(1),
+          Length.number(1),
+          Length.number(1),
+          Length.number(1)          
+        ]        
+    }
+
+
+    return [Length.number(0)]
+  }
+
+  makeTransform(type, opt = {}) {
+
+    var value = this.getDefaultValue(type)
+
+    return Transform.parse({ ...opt, type, value });
   }
 
   [CLICK("$add")]() {
-    var filterType = this.refs.$filterSelect.value;
+    var transformType = this.refs.$transformSelect.value;
 
-    this.state.filters.push(this.makeFilter(filterType))
+    this.state.transforms.push(this.makeTransform(transformType))
 
     this.refresh();
 
-    this.modifyFilter()
+    this.modifyTransform()
   }
 
-  [CLICK("$filterList .filter-menu .del")](e) {
+  [CLICK("$transformList .transform-menu .del")](e) {
     var index = +e.$delegateTarget.attr("data-index");
-    this.state.filters.splice(index, 1);
+    this.state.transforms.splice(index, 1);
 
     this.refresh();
 
-    this.modifyFilter()
+    this.modifyTransform()
   }
 
-  [EVENT("changeDropShadowColor")](color, params) {
-    var index = +params;
-
-    this.state.filters[index].reset({
-      color
-    });
-
-    this.modifyFilter();
-
-  }
-  
   [EVENT('changeRangeEditor')] (key, value, params) {
     if (params) {
-      this.state.filters[+key].reset({ 
-        [params]: value 
-      });
+      this.state.transforms[+key].value[+params] = value; 
     } else {
-      this.state.filters[+key].reset({ 
+      this.state.transforms[+key].reset({ 
         value 
       });
     }
     
 
-    this.modifyFilter();
+    this.modifyTransform();
   }
 }

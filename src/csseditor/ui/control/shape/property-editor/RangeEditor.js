@@ -2,12 +2,17 @@ import UIElement, { EVENT } from "../../../../../util/UIElement";
 import { Length } from "../../../../../editor/unit/Length";
 import { LOAD, CHANGE, INPUT } from "../../../../../util/Event";
 import { html } from "../../../../../util/functions/func";
+import { EMPTY_STRING } from "../../../../../util/css/types";
 
 export default class RangeEditor extends UIElement {
 
     initState() {
         var units = this.props.units || 'px,em,%';
         return {
+            label: this.props.label || '',
+            min: +this.props.min || 0,
+            max: +this.props.max || 100,
+            step: +this.props.step || 1,
             key: this.props.key,
             params: this.props.params || '',
             units: units.split(','),
@@ -16,12 +21,16 @@ export default class RangeEditor extends UIElement {
     }
 
     template() {
-        var value = this.state.value.value.toString()
 
+        var { min, max, step, label } = this.state
+
+        var value = this.state.value.value.toString()
+        var hasLabel = !!label ? 'has-label' : ''
         return `
-        <div class='range-editor'>
-            <input type='range' ref='$property' value="${value}" />
-            <input type='number' ref='$propertyNumber' value="${value}" />
+        <div class='range-editor ${hasLabel}'>
+            ${label ? `<label>${label}</label>` : EMPTY_STRING }
+            <input type='range' ref='$property' value="${value}" min="${min}" max="${max}" step="${step}" />
+            <input type='number' ref='$propertyNumber' value="${value}" min="${min}" max="${max}" step="${step}" />
             <select  ref='$propertyUnit'></select>
         </div>
     `

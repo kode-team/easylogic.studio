@@ -7,6 +7,7 @@ import { Filter } from "../css-property/Filter";
 import { WHITE_STRING } from "../../util/css/types";
 import { TextShadow } from "../css-property/TextShadow";
 import { BorderImage } from "../css-property/BorderImage";
+import { Transform } from "../css-property/Transform";
 const OUTLINE_REG = /(auto|none|dotted|dashed|solid|double|groove|ridge|inset|outset)/gi;
 export class StyleParser {
   constructor() {
@@ -213,6 +214,15 @@ export class StyleParser {
     return { filters }
   }
 
+  parseTransform() {
+    var transforms = [];
+    var style = this.getStyle();
+
+    transforms = Transform.parseTransform(style.transform);
+
+    return { transforms }
+  }
+
   parseBoxShadow() {
     var style = this.getStyle();
     var boxShadows = BoxShadow.parseStyle(style['box-shadow']);
@@ -393,6 +403,7 @@ export class StyleParser {
       ...this.parseOutline(),
       ...this.parseBorderRadius(),
       ...this.parseBorderImage(),
+      ...this.parseTransform(),
       ...this.parseFilter(),
       ...this.parseBoxShadow(),
       ...this.parseTextShadow(),

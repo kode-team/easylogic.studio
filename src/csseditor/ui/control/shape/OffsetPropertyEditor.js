@@ -9,6 +9,7 @@ import BackgroundImageEditor from "./property-editor/BackgroundImageEditor";
 import FilterEditor from "./property-editor/FilterEditor";
 import BoxShadowEditor from "./property-editor/BoxShadowEditor";
 import VarEditor from "./property-editor/VarEditor";
+import TransformEditor from "./property-editor/TransformEditor";
 
 
 export default class OffsetPropertyEditor extends UIElement {
@@ -20,6 +21,7 @@ export default class OffsetPropertyEditor extends UIElement {
       ColorViewEditor,
       RangeEditor,
       BackgroundImageEditor,
+      TransformEditor,
       VarEditor
     }
   }

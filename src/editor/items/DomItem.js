@@ -23,6 +23,7 @@ export class DomItem extends GroupItem {
       height: Length.px(400),
       'rootVariable': '',
       'variable': '',
+      'transform': '',
       'filter': '',
       'backdrop-filter': '',
       'background-color': 'white',      
@@ -83,13 +84,6 @@ export class DomItem extends GroupItem {
     json.perspectiveOriginPositionY = Length.parse(
       json.perspectiveOriginPositionY
     );
-    // json.filters = json.filters.map(f => Filter.parse(f));
-    // json.backdropFilters = json.backdropFilters.map(f =>
-    //   BackdropFilter.parse(f)
-    // );
-    // json.backgroundImages = json.backgroundImages.map(f =>
-    //   BackgroundImage.parse(f)
-    // );
 
     if (json.display) json.display = Display.parse(json.display);
 
@@ -363,6 +357,10 @@ export class DomItem extends GroupItem {
     return this.toKeyCSS('filter');
   }
 
+  toTransformCSS() {
+    return this.toKeyCSS('transform');
+  }
+
   toBackdropFilterCSS() {
     return this.toKeyCSS('backdrop-filter');
   }
@@ -526,6 +524,7 @@ export class DomItem extends GroupItem {
       ...this.toAnimationCSS(),
       
       ...this.toFilterCSS(),
+      ...this.toTransformCSS(),
       ...this.toBackdropFilterCSS(),      
       ...this.toBackgroundImageCSS(isExport),
       ...this.toBoxShadowCSS(),
@@ -557,6 +556,7 @@ export class DomItem extends GroupItem {
       ...this.toAnimationCSS(),      
 
       ...this.toFilterCSS(),
+      ...this.toTransformCSS(),      
       ...this.toBackdropFilterCSS(),
       ...this.toBackgroundImageCSS(isExport),
       ...this.toBoxShadowCSS(),
@@ -582,6 +582,7 @@ export class DomItem extends GroupItem {
       ...this.toBorderRadiusCSS(),
       ...this.toBorderImageCSS(),      
       ...this.toFilterCSS(),
+      ...this.toTransformCSS(),      
       ...this.toBackdropFilterCSS(),      
       ...this.toBackgroundImageCSS(),
       ...this.toBoxShadowCSS(),

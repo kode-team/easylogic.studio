@@ -1,4 +1,4 @@
-.filter-editor {
+.transform-editor {
 
   .label {
     height: 20px;
@@ -40,11 +40,11 @@
       }
   }
 
-  .filter-list {
+  .transform-list {
     display: grid !important;
     grid-template-columns: 1fr !important;
   
-    .filter-item {
+    .transform-item {
       display: block;
   
       .title {
@@ -55,9 +55,22 @@
           font-size: 12px;
           padding: 2px 5px;
           box-sizing: border-box;
+
+            span {
+              font-weight: bold;
+              background-color: blue;
+              color: white;
+              border-radius: 3px;
+              padding: 0px;
+              display: inline-block;
+              min-width: 20px;
+              text-align: center;
+              vertical-align: middle;
+              
+            }
         }
   
-        .filter-menu {
+        .transform-menu {
           text-align: right;
           button {
             appearance: none;
@@ -77,30 +90,11 @@
         }
       }
   
-      .filter-ui {
+      .transform-ui {
         display: grid;
         grid-template-columns: 1fr;
         margin-bottom: 2px;
   
-        &.drop-shadow {
-          grid-template-columns: 50px  1fr;
-          grid-column-gap: 1px;
-  
-          label {
-            font-size: 10px;
-          }
-        }
-  
-        &.drop-shadow-color {
-          grid-template-columns: 50px 1fr;
-          grid-column-gap: 2px;
-  
-          label {
-            font-size: 12px;
-          }
-
-        }
-
         input[type="range"] {
           width: 90%;
         }

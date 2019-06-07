@@ -12,6 +12,14 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
   top: 0px;
   background-color: $border-color;
 
+  .page-lock {
+    position: absolute;
+    left: 100px;
+    top: 100px;
+    width: 0px;
+    height: 0px;
+  }
+
 }
 
 
@@ -19,8 +27,5 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
   position: absolute;
   width: 500px;
   height: 400px;
-  left: 50%;
-  top: 50%;
-  transform: translateX(-50%) translateY(-50%);
   background-color: white;
 }

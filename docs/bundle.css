@@ -2405,14 +2405,17 @@ html, body {
   top: 0px;
   background-color: #cccccc;
 }
+.csseditor .page-view .page-lock {
+  position: absolute;
+  left: 100px;
+  top: 100px;
+  width: 0px;
+  height: 0px;
+}
 .csseditor .page-canvas {
   position: absolute;
   width: 500px;
   height: 400px;
-  left: 50%;
-  top: 50%;
-  -webkit-transform: translateX(-50%) translateY(-50%);
-          transform: translateX(-50%) translateY(-50%);
   background-color: white;
 }
 .csseditor .drag-angle-rect {
@@ -4246,6 +4249,16 @@ html, body {
   grid-template-columns: 1fr 50px 50px;
   grid-column-gap: 4px;
 }
+.csseditor .range-editor.has-label {
+  grid-template-columns: 60px 1fr 50px 50px;
+  grid-column-gap: 2px;
+}
+.csseditor .range-editor.has-label label {
+  text-align: right;
+  vertical-align: middle;
+  padding: 2px 4px;
+  box-sizing: border-box;
+}
 .csseditor .offset-property-editor {
   margin-top: 10px;
   margin-bottom: 5px;
@@ -4549,6 +4562,98 @@ html, body {
 .csseditor .border-radius-editor .radius-setting-box > div label.border-bottom-right-radius {
   border-bottom-right-radius: 10px;
 }
+.csseditor .transform-editor .label {
+  height: 20px;
+  margin-top: 2px;
+}
+.csseditor .transform-editor .label label {
+  font-size: 13px;
+  vertical-align: middle;
+  text-shadow: 2px 2px 5px #cccccc;
+}
+.csseditor .transform-editor .tools {
+  vertical-align: middle;
+  text-align: right;
+  float: right;
+}
+.csseditor .transform-editor .tools select {
+  width: 100px !important;
+  display: inline-block;
+}
+.csseditor .transform-editor .tools button {
+  vertical-align: middle;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  border: 0px;
+  padding: 0px;
+  font-size: 16px;
+  vertical-align: middle;
+  cursor: pointer;
+  outline: none;
+  font-size: 12px;
+}
+.csseditor .transform-editor .tools button svg {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+.csseditor .transform-editor .transform-list {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+}
+.csseditor .transform-editor .transform-list .transform-item {
+  display: block;
+}
+.csseditor .transform-editor .transform-list .transform-item .title {
+  display: grid;
+  grid-template-columns: 1fr 30px;
+}
+.csseditor .transform-editor .transform-list .transform-item .title label {
+  font-size: 12px;
+  padding: 2px 5px;
+  box-sizing: border-box;
+}
+.csseditor .transform-editor .transform-list .transform-item .title label span {
+  font-weight: bold;
+  background-color: blue;
+  color: white;
+  border-radius: 3px;
+  padding: 0px;
+  display: inline-block;
+  min-width: 20px;
+  text-align: center;
+  vertical-align: middle;
+}
+.csseditor .transform-editor .transform-list .transform-item .title .transform-menu {
+  text-align: right;
+}
+.csseditor .transform-editor .transform-list .transform-item .title .transform-menu button {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border: 0px;
+  background-color: transparent;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  box-sizing: border-box;
+  padding: 0px;
+  cursor: pointer;
+}
+.csseditor .transform-editor .transform-list .transform-item .title .transform-menu button svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor .transform-editor .transform-list .transform-item .transform-ui {
+  display: grid;
+  grid-template-columns: 1fr;
+  margin-bottom: 2px;
+}
+.csseditor .transform-editor .transform-list .transform-item .transform-ui input[type=range] {
+  width: 90%;
+}
 .csseditor .filter-editor .label {
   height: 20px;
   margin-top: 2px;
@@ -4625,7 +4730,6 @@ html, body {
 .csseditor .filter-editor .filter-list .filter-item .filter-ui {
   display: grid;
   grid-template-columns: 1fr;
-  height: 20px;
   margin-bottom: 2px;
 }
 .csseditor .filter-editor .filter-list .filter-item .filter-ui.drop-shadow {
