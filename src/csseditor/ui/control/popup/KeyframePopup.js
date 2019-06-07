@@ -82,6 +82,8 @@ export default class KeyframePopup extends UIElement {
     this.setState(data);
     this.refresh();
 
+    console.log(this.state, data);
+
     this.$el
       .css({
         top: Length.px(150),

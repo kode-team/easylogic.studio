@@ -30,11 +30,7 @@ export default class BorderRadiusEditor extends UIElement {
   }
 
   template() {
-    return `
-      <div class='border-radius-editor' ref='$body'>
-        ${this.loadTemplate('$body')}
-      </div>
-    `
+    return `<div class='border-radius-editor' ref='$body'></div>`
   }
 
   [LOAD('$body')] () {

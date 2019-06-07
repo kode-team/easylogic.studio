@@ -19,9 +19,7 @@ export default class KeyFrameProperty extends BaseProperty {
     return "Keyframes";
   }
   getBody() {
-    return `<div class='property-item keyframe-list' ref='$keyframeList'>
-      ${this.loadTemplate('$keyframeList')}
-    </div>`;
+    return `<div class='property-item keyframe-list' ref='$keyframeList'></div>`;
   }
 
   getTools() {
@@ -178,7 +176,7 @@ export default class KeyFrameProperty extends BaseProperty {
 
   }
 
-  [CLICK('$keyframeList .del')] (e) {
+  [CLICK('$keyframeList .del') + PREVENT] (e) {
     var removeIndex = e.$delegateTarget.attr("data-index");
     var current = editor.selection.current;
     if (!current) return;
@@ -238,11 +236,6 @@ export default class KeyFrameProperty extends BaseProperty {
 
     this.refresh();
   }
-
-  refresh() {
-    this.load();
-  }
-
 
   viewKeyframePicker(index) {
     if (typeof this.selectedIndex === "number") {

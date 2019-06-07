@@ -21,6 +21,7 @@ export class DomItem extends GroupItem {
     return super.getDefaultObject({
       width: Length.px(300),
       height: Length.px(400),
+      'rootVariable': '',
       'variable': '',
       'filter': '',
       'backdrop-filter': '',
@@ -46,7 +47,7 @@ export class DomItem extends GroupItem {
       // backdropFilters: [],
       // backgroundImages: [],
       // boxShadows: [],
-      textShadows: [],
+      // textShadows: [],
       animations: [],
       transitions: [],
       keyframes: [],
@@ -482,6 +483,21 @@ export class DomItem extends GroupItem {
       obj[key] = value; 
     })
     return obj;
+  }
+
+  toRootVariableCSS () {
+    var obj = {}
+    this.json.rootVariable.split(';').filter(it => it.trim()).forEach(it => {
+      var [key, value] = it.split(':')
+
+      obj[key] = value; 
+    })
+
+    return obj;
+  }
+
+  toRootVariableString () {
+    return CSS_TO_STRING(this.toRootVariableCSS())
   }
 
   toCSS(isExport = false) {

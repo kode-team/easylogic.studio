@@ -21,10 +21,6 @@ export default class ContentProperty extends BaseProperty {
     this.refresh();
   }
 
-  refresh() {
-    this.load();
-  }
-
   getBody() {
     return html`
       <div class="property-item content-item">

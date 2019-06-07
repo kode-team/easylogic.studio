@@ -4,9 +4,8 @@ import { keyEach } from "./functions/func";
 import EventMachine from "./EventMachine";
 
 // const CHECK_STORE_PATTERN = /^@/
-const CHECK_STORE_MULTI_PATTERN = /^ME@/;
+const REG_STORE_MULTI_PATTERN = /^ME@/;
 
-const PREFIX = "@";
 const MULTI_PREFIX = "ME@";
 const SPLITTER = "|";
 
@@ -19,19 +18,10 @@ export const EVENT = (...args) => {
 };
 
 class UIElement extends EventMachine {
-  constructor(opt, props) {
+  constructor(opt, props = {}) {
     super(opt);
 
-    this.opt = opt || {};
-    this.parent = this.opt;
-    this.props = props || {};
-    this.source = uuid();
-    this.sourceName = this.constructor.name;
-    // window[this.source] = this;
-
-    if (opt && opt.$store) {
-      this.$store = opt.$store;
-    }
+    this.initializeProperty(opt, props)
 
     this.created();
 
@@ -40,11 +30,27 @@ class UIElement extends EventMachine {
     this.initializeStoreEvent();
   }
 
+  /**
+   * UIElement instance 에 필요한 기본 속성 설정 
+   */
+  initializeProperty (opt, props = {}) {
+
+    this.opt = opt || {};
+    this.parent = this.opt;
+    this.props = props;
+    this.source = uuid();
+    this.sourceName = this.constructor.name;
+
+    if (opt && opt.$store) {
+      this.$store = opt.$store;
+    }
+  }
+
   created() {}
 
-  getRealEventName(e, s = PREFIX) {
+  getRealEventName(e, s = MULTI_PREFIX) {
     var startIndex = e.indexOf(s);
-    return e.substr(startIndex == 0 ? 0 : startIndex + s.length);
+    return e.substr(startIndex < 0 ? 0 : startIndex + s.length);
   }
 
   /**
@@ -57,7 +63,7 @@ class UIElement extends EventMachine {
   initializeStoreEvent() {
     this.storeEvents = {};
 
-    this.filterProps(CHECK_STORE_MULTI_PATTERN).forEach(key => {
+    this.filterProps(REG_STORE_MULTI_PATTERN).forEach(key => {
       const events = this.getRealEventName(key, MULTI_PREFIX);
 
       events.split(SPLITTER).forEach(e => {

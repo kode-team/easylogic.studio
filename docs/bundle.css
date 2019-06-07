@@ -4277,9 +4277,19 @@ html, body {
   width: 16px;
   height: 16px;
 }
+.csseditor .background-image-editor .label {
+  height: 20px;
+  margin-top: 2px;
+}
+.csseditor .background-image-editor .label label {
+  font-size: 13px;
+  vertical-align: middle;
+  text-shadow: 2px 2px 5px #cccccc;
+}
 .csseditor .background-image-editor .tools {
   vertical-align: middle;
   text-align: right;
+  float: right;
 }
 .csseditor .background-image-editor .tools button {
   vertical-align: middle;
@@ -4539,9 +4549,19 @@ html, body {
 .csseditor .border-radius-editor .radius-setting-box > div label.border-bottom-right-radius {
   border-bottom-right-radius: 10px;
 }
+.csseditor .filter-editor .label {
+  height: 20px;
+  margin-top: 2px;
+}
+.csseditor .filter-editor .label label {
+  font-size: 13px;
+  vertical-align: middle;
+  text-shadow: 2px 2px 5px #cccccc;
+}
 .csseditor .filter-editor .tools {
   vertical-align: middle;
   text-align: right;
+  float: right;
 }
 .csseditor .filter-editor .tools select {
   width: 100px !important;
@@ -4628,9 +4648,19 @@ html, body {
 .csseditor .box-shadow-editor {
   grid-template-columns: 1fr !important;
 }
+.csseditor .box-shadow-editor .label {
+  height: 20px;
+  margin-top: 2px;
+}
+.csseditor .box-shadow-editor .label label {
+  font-size: 13px;
+  vertical-align: middle;
+  text-shadow: 2px 2px 5px #cccccc;
+}
 .csseditor .box-shadow-editor .tools {
   vertical-align: middle;
   text-align: right;
+  float: right;
 }
 .csseditor .box-shadow-editor .tools select {
   width: 100px !important;
@@ -4730,9 +4760,19 @@ html, body {
 .csseditor .text-shadow-editor {
   grid-template-columns: 1fr !important;
 }
+.csseditor .text-shadow-editor .label {
+  height: 20px;
+  margin-top: 2px;
+}
+.csseditor .text-shadow-editor .label label {
+  font-size: 13px;
+  vertical-align: middle;
+  text-shadow: 2px 2px 5px #cccccc;
+}
 .csseditor .text-shadow-editor .tools {
   vertical-align: middle;
   text-align: right;
+  float: right;
 }
 .csseditor .text-shadow-editor .tools select {
   width: 100px !important;
@@ -4821,9 +4861,19 @@ html, body {
 .csseditor .var-editor {
   grid-template-columns: 1fr !important;
 }
+.csseditor .var-editor .label {
+  height: 20px;
+  margin-top: 2px;
+}
+.csseditor .var-editor .label label {
+  font-size: 13px;
+  vertical-align: middle;
+  text-shadow: 2px 2px 5px #cccccc;
+}
 .csseditor .var-editor .tools {
   vertical-align: middle;
   text-align: right;
+  float: right;
 }
 .csseditor .var-editor .tools button {
   vertical-align: middle;
@@ -4848,7 +4898,7 @@ html, body {
   height: 20px;
   display: grid;
   grid-template-columns: 1fr 1fr 30px;
-  grid-column-gap: 5px;
+  grid-column-gap: 2px;
   text-align: center;
   margin-bottom: 5px;
 }

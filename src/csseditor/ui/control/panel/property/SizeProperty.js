@@ -21,10 +21,6 @@ export default class SizeProperty extends BaseProperty {
     this.refresh();
   }
 
-  refresh() {
-    this.load();
-  }
-
   getBody() {
     return html`
       <div class="property-item size-item" ref="$sizeItem"></div>

@@ -19,20 +19,15 @@ export default class VarEditor extends UIElement {
 
     template() {
         return `
-            <div class='var-editor var-list' ref='$varList'>
-                <div class='label' >
-                    <div class='tools'>
-                        <button type="button" ref="$add" title="add Var">${icon.add} Add</button>
-                    </div>
+        <div class='var-editor var-list' ref='$varList'>
+            <div class='label' >
+                <label>${this.props.title}</label>
+                <div class='tools'>
+                    <button type="button" ref="$add" title="add Var">${icon.add}</button>
                 </div>
-                <div class='var-list' ref='$varList'>
-                    ${this.loadTemplate('$varList')}
-                </div>
+            </div>
+            <div class='var-list' ref='$varList'></div>
         </div>`;
-    }
-
-    refresh() {
-        this.load();
     }
 
     [CLICK('$add')] () {

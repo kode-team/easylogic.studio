@@ -187,10 +187,6 @@ export default class BoxShadowPropertyPopup extends UIElement {
     });
   }
 
-  refresh() {
-    this.load();
-  }
-
   [POINTERSTART("$popup .drag-board") + MOVE("movePointer")](e) {
     this.offsetX = e.offsetX;
     this.offsetY = e.offsetY;

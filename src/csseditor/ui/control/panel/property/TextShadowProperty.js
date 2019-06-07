@@ -17,31 +17,26 @@ export default class TextShadowProperty extends BaseProperty {
       TextShadowEditor
     }
   }
-  getTitle() {
-    return "Text Shadows";
+
+  isHideHeader() {
+    return true;
   }
 
   getBody() {
     return html`
-      <div class="property-item full text-shadow-item" ref="$shadowList">
-        ${this.loadTemplate('$shadowList')}
-      </div>
+      <div class="property-item full text-shadow-item" ref="$shadowList"></div>
     `;
   }
 
   [LOAD("$shadowList")]() {
     var current = editor.selection.current || {};
     return `
-      <TextShadowEditor ref='$textshadow' value="${current['text-shadow']}" onChange="changeTextShadow" />
+      <TextShadowEditor ref='$textshadow' value="${current['text-shadow']}" title='Text Shadows' onChange="changeTextShadow" />
     `
   }
 
   [EVENT(CHANGE_RECT, CHANGE_LAYER, CHANGE_ARTBOARD, CHANGE_SELECTION)]() {
     this.refresh();
-  }
-
-  refresh() {
-    this.load();
   }
 
   [EVENT("changeTextShadow")](textshadow) {

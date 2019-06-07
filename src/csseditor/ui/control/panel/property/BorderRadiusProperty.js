@@ -20,9 +20,7 @@ export default class BorderRadiusProperty extends BaseProperty {
 
   getBody() {
     return html`
-      <div class="property-item full border-radius-item" ref='$body'>
-        ${this.loadTemplate('$body')}
-      </div>
+      <div class="property-item full border-radius-item" ref='$body'></div>
     `;
   }
 
@@ -40,10 +38,6 @@ export default class BorderRadiusProperty extends BaseProperty {
 
   [EVENT(CHANGE_LAYER, CHANGE_ARTBOARD, CHANGE_SELECTION)]() {
     this.refresh();
-  }
-
-  refresh() {
-    this.load();
   }
 
   [EVENT('changeBorderRadius')] (value) {

@@ -10,14 +10,7 @@ import { Position } from "../../../../../editor/unit/Length";
 
 const names = {
     image: "Image",
-    static: "Static",
     "static-gradient": "Static",
-    linear: "Linear",
-    "repeating-linear": `${icon.repeat} Linear`,
-    radial: "Radial",
-    "repeating-radial": `${icon.repeat} Radial`,
-    conic: "Conic",
-    "repeating-conic": `${icon.repeat} Conic`,
     "linear-gradient": "Linear",
     "repeating-linear-gradient": `${icon.repeat} Linear`,
     "radial-gradient": "Radial",
@@ -28,14 +21,7 @@ const names = {
   
   const types = {
     image: "image",
-    static: "gradient",
     "static-gradient": "gradient",
-    linear: "gradient",
-    "repeating-linear": "gradient",
-    radial: "gradient",
-    "repeating-radial": "gradient",
-    conic: "gradient",
-    "repeating-conic": "gradient",
     "linear-gradient": "gradient",
     "repeating-linear-gradient": "gradient",
     "radial-gradient": "gradient",
@@ -69,13 +55,12 @@ export default class BackgroundImageEditor extends UIElement {
         return `
             <div class='background-image-editor' >
                 <div class='label'>
+                    <label>${this.props.title}</label>
                     <div class='tools'>
-                        <button type="button" ref='$add'>${icon.add} Add</button>
+                        <button type="button" ref='$add'>${icon.add}</button>
                     </div>
                 </div>
-                <div class='fill-list' ref='$fillList'>
-                    ${this.loadTemplate('$fillList')}
-                </div>
+                <div class='fill-list' ref='$fillList'></div>
             </div>
         `
     }
@@ -94,17 +79,15 @@ export default class BackgroundImageEditor extends UIElement {
         }
     
         return EMPTY_STRING;
-      }
-    
-      getColorStepString(colorsteps) {
+    }
+
+    getColorStepString(colorsteps) {
         return colorsteps
-          .map(step => {
-            return `<div class='step' data-colorstep-id="${
-              step.id
-            }" data-selected='${step.selected}' style='background-color:${step.color};'></div>`;
-          })
-          .join(EMPTY_STRING);
-      }
+            .map(step => {
+                return `<div class='step' data-colorstep-id="${step.id}" data-selected='${step.selected}' style='background-color:${step.color};'></div>`;
+            })
+            .join(EMPTY_STRING);
+    }
     
 
     [LOAD('$fillList')] () {
@@ -175,11 +158,6 @@ export default class BackgroundImageEditor extends UIElement {
 
         this.modifyBackgroundImage();
     }
-
-    refresh() {
-        this.load();
-    }
-
 
     getFillData(backgroundImage) {
         let data = {

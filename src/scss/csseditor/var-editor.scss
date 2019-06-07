@@ -2,10 +2,20 @@
 .var-editor {
   grid-template-columns: 1fr !important;
 
+  .label {
+    height: 20px;
+    margin-top: 2px;
+    label {
+      font-size: 13px;
+      vertical-align: middle;
+      text-shadow: 2px 2px 5px #cccccc;      
+    }
+  }
 
   .tools {
-    vertical-align: middle;
-    text-align: right; 
+      vertical-align: middle;
+      text-align: right;
+      float:right;
     button {
         vertical-align: middle;
         appearance: none;
@@ -32,7 +42,7 @@
     height: 20px;
     display: grid;
     grid-template-columns: 1fr 1fr 30px;
-    grid-column-gap: 5px;
+    grid-column-gap: 2px;
     text-align: center;
     margin-bottom: 5px;
 

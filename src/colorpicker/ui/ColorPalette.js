@@ -73,11 +73,7 @@ export default class ColorPalette extends UIElement {
     this.calculateSV();
   }
 
-  [EVENT("changeColor")]() {
-    this.refresh();
-  }
-
-  [EVENT("initColor")]() {
+  [EVENT("changeColor", 'initColor')]() {
     this.refresh();
   }
 

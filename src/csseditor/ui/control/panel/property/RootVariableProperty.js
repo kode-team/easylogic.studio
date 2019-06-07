@@ -7,14 +7,14 @@ import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
 import VarEditor from "../../shape/property-editor/VarEditor";
 
-export default class VariableProperty extends BaseProperty {
+export default class RootVariableProperty extends BaseProperty {
 
   components () {
     return { VarEditor } 
   }
 
   isHideHeader() {
-    return true; 
+    return true;
   }
 
   getBody() {
@@ -23,16 +23,20 @@ export default class VariableProperty extends BaseProperty {
 
   [LOAD('$body')] () {
     var current = editor.selection.current || {} 
-    var value = current.variable || '';
+    var value = current.rootVariable || '';
 
-    return `<VarEditor ref='$1' value='${value}' title='Variables' onchange='changeVarEditor' />`
+    return `<VarEditor ref='$1' value='${value}' title='Root Variables' onchange='changeVarEditor' />`
   }
 
-  [EVENT('changeVarEditor')] (variable) {
+  refresh() {
+    this.load();
+  }
+
+  [EVENT('changeVarEditor')] (rootVariable) {
     var current = editor.selection.current; 
 
     if (current) {
-      current.reset({ variable })
+      current.reset({ rootVariable })
       this.emit('refreshCanvas');
     }
   }

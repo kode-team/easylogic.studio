@@ -122,11 +122,6 @@ export default class BorderProperty extends BaseProperty {
     `;
   }
 
-  // TODO: current 객체와 데이타 연동이 필요하다.
-  refresh() {
-    this.load();
-  }
-
   [CHANGE("$unit")](e) {
     this.refreshBorderInfo();
   }

@@ -18,10 +18,6 @@ export default class ColorSetsChooser extends UIElement {
         </div>`
     }
 
-    refresh () {
-        this.load();
-    }
-
     [EVENT('changeCurrentColorSets')] () {
         this.refresh()
     }

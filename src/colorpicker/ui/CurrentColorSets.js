@@ -32,11 +32,6 @@ export default class CurrentColorSets extends UIElement {
             </div>`
     }    
 
-    refresh () {
-        this.load();
-    }
-
-
     addColor (color) {
         this.dispatch('addCurrentColor', color);
         this.refresh();

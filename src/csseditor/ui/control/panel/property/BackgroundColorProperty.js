@@ -23,12 +23,10 @@ export default class BackgroundColorProperty extends BaseProperty {
   getTitle() {
     return "Background Color";
   }
+
   getBody() {
-    return `
-    <div class='property-item background-color' ref='$backgroundColor'>
-      ${this.loadTemplate('$backgroundColor')}
-    </div>`;
-  }
+    return `<div class='property-item background-color' ref='$backgroundColor'></div>`;
+  }  
 
   [LOAD("$backgroundColor")]() {
     var current = editor.selection.current || {};
@@ -51,9 +49,5 @@ export default class BackgroundColorProperty extends BaseProperty {
 
   [EVENT(CHANGE_EDITOR, CHANGE_LAYER, CHANGE_ARTBOARD, CHANGE_SELECTION)]() {
     this.refresh();
-  }
-
-  refresh() {
-    this.load();
   }
 }

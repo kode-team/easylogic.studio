@@ -13,11 +13,8 @@ export default class ColorView extends UIElement {
         this.setBackgroundColor()
     }
     
-    [EVENT('changeColor')] () { 
+    [EVENT('changeColor', 'initColor')] () { 
         this.refresh()
     } 
-
-    [EVENT('initColor')] () { this.refresh() }    
-
 }
  

@@ -20,14 +20,12 @@ export default class BackgroundImageProperty extends BaseProperty {
     }
   }
 
-  getTitle() {
-    return "Background Images";
+  isHideHeader() {
+    return true; 
   }
   getBody() {
     return `
-      <div class='property-item full background-image' ref='$property'>
-        ${this.loadTemplate('$property')}
-      </div>
+      <div class='property-item full background-image' ref='$property'></div>
     `;
   }
 
@@ -38,16 +36,13 @@ export default class BackgroundImageProperty extends BaseProperty {
     return `<BackgroundImageEditor 
               ref='$backgroundImageEditor' 
               value='${value}' 
+              title='Background Images'
               onchange='changeBackgroundImage' 
             />`
   }
 
   [EVENT(CHANGE_RECT, CHANGE_LAYER, CHANGE_ARTBOARD, CHANGE_SELECTION)]() {
     this.refresh();
-  }
-
-  refresh() {
-    this.load();
   }
 
   [EVENT('changeBackgroundImage')] (value) {

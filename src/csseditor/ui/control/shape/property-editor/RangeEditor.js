@@ -22,9 +22,7 @@ export default class RangeEditor extends UIElement {
         <div class='range-editor'>
             <input type='range' ref='$property' value="${value}" />
             <input type='number' ref='$propertyNumber' value="${value}" />
-            <select  ref='$propertyUnit'>
-                ${this.loadTemplate('$propertyUnit')}
-            </select>
+            <select  ref='$propertyUnit'></select>
         </div>
     `
     }

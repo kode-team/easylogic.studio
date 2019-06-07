@@ -1,8 +1,20 @@
 .background-image-editor {
 
-    .tools {
-        vertical-align: middle;
-        text-align: right;
+
+  .label {
+    height: 20px;
+    margin-top: 2px;
+    label {
+      font-size: 13px;
+      vertical-align: middle;
+      text-shadow: 2px 2px 5px #cccccc;      
+    }
+  }
+
+  .tools {
+      vertical-align: middle;
+      text-align: right;
+      float:right;
         button {
             vertical-align: middle;
             appearance: none;

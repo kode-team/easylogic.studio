@@ -22,13 +22,12 @@ export default class TextShadowEditor extends UIElement {
     return `
       <div class="text-shadow-editor" >
         <div class='label' >
+            <label>${this.props.title}</label>        
             <div class='tools'>
-              <button type="button" ref="$add" title="add Text Shadow">${icon.add} Add</button>
+              <button type="button" ref="$add" title="add Text Shadow">${icon.add}</button>
             </div>
         </div>
-        <div class='text-shadow-list' ref='$shadowList'>
-          ${this.loadTemplate('$shadowList')}
-        </div>
+        <div class='text-shadow-list' ref='$shadowList'></div>
       </div>
     `;
   }
@@ -74,11 +73,6 @@ export default class TextShadowEditor extends UIElement {
   [EVENT(CHANGE_RECT, CHANGE_LAYER, CHANGE_ARTBOARD, CHANGE_SELECTION)]() {
     this.refresh();
   }
-
-  refresh() {
-    this.load();
-  }
-
 
   modifyTextShadow () {
     var value = this.state.textShadows.join(', ');

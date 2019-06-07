@@ -46,11 +46,8 @@ export default class BaseBox extends UIElement {
     this.isDown = false;
   }
 
-  [EVENT("changeColor")]() {
+  [EVENT("changeColor", 'initColor')]() {
     this.refresh();
   }
 
-  [EVENT("initColor")]() {
-    this.refresh();
-  }
 }

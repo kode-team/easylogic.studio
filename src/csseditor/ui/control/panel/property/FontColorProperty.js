@@ -23,9 +23,7 @@ export default class FontColorProperty extends BaseProperty {
     return "Font Color";
   }
   getBody() {
-    return `<div class='property-item font-color' ref='$color'>
-      ${this.loadTemplate('$color')}
-    </div>`;
+    return `<div class='property-item font-color' ref='$color'></div>`;
   }
 
   [LOAD("$color")]() {
@@ -52,7 +50,4 @@ export default class FontColorProperty extends BaseProperty {
     this.refresh();
   }
 
-  refresh() {
-    this.load();
-  }
 }

@@ -26,7 +26,7 @@ export default class CanvasView extends UIElement {
     if (this.props.embed) {
       this.$el.hide();
     } else {
-      this[EVENT("refreshCanvas")]();
+      this.trigger("refreshCanvas");
     }
   }
   template() {
@@ -34,14 +34,6 @@ export default class CanvasView extends UIElement {
       <div class='page-view'>
         <div class="page-canvas" ref="$canvas"></div>     
         <style type='text/css' ref='$style'></style>     
-        <script type="text/javascript">
-          CSS.registerProperty({
-            name: '--ang',
-            syntax: '<angle>',
-            inherits: false,
-            initialValue: '0deg'
-          })
-        </script>
       </div>
     `;
   }
@@ -65,9 +57,13 @@ export default class CanvasView extends UIElement {
     }
   }
 
-  generate(css, keyframeString) {
+  generate(css, keyframeString, rootVariable) {
 
     this.refs.$style.html(`
+      :root {
+        ${CSS_TO_STRING(rootVariable)}
+      }
+
       /* element */
       .csseditor .page-canvas { 
         ${CSS_TO_STRING(css)}; 
@@ -86,9 +82,9 @@ export default class CanvasView extends UIElement {
     var current = editor.selection.current;
     if (current) {
       if (this.props.embed) {
-        this.parser.generate(current.toEmbedCSS(), current.toKeyframeString());
+        this.parser.generate(current.toEmbedCSS(), current.toKeyframeString(), current.toRootVariableCSS());
       } else {
-        this.generate(current.toCSS(), current.toKeyframeString());
+        this.generate(current.toCSS(), current.toKeyframeString(), current.toRootVariableCSS());
       }
     }
   }

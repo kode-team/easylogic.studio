@@ -3,9 +3,20 @@
   grid-template-columns: 1fr !important;
 
 
+  .label {
+    height: 20px;
+    margin-top: 2px;
+    label {
+      font-size: 13px;
+      vertical-align: middle;
+      text-shadow: 2px 2px 5px #cccccc;      
+    }
+  }
+
   .tools {
-    vertical-align: middle;
-    text-align: right; 
+      vertical-align: middle;
+      text-align: right;
+      float:right;
 
     select {
       width: 100px !important;

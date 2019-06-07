@@ -56,18 +56,17 @@ var specList = {
 
 
 
-export default class FilterEditor extends UIElement {
+export default class TransformEditor extends UIElement {
 
   components() {
     return {
-      RangeEditor,
-      ColorViewEditor
+      RangeEditor
     }
   }
 
   initState() {
     return {
-      filters: Filter.parseStyle(this.props.value)
+      transforms: Transform.parseStyle(this.props.value)
     }
   }
 
@@ -75,14 +74,13 @@ export default class FilterEditor extends UIElement {
     return html`
       <div class='filter-editor filter-list' ref='$filterList'>
           <div class='label' >
-              <label>${this.props.title}</label>
               <div class='tools'>
                 <select ref="$filterSelect">
                   ${filterList.map(filter => {
                     return `<option value='${filter}'>${filter}</option>`;
                   })}
                 </select>
-                <button type="button" ref="$add" title="add Filter">${icon.add}</button>
+                <button type="button" ref="$add" title="add Filter">${icon.add} Add</button>
               </div>
           </div>
           <div class='filter-list' ref='$filterList'></div>
@@ -241,7 +239,7 @@ export default class FilterEditor extends UIElement {
     this.modifyFilter();
 
   }
-
+  
   [EVENT('changeRangeEditor')] (key, value, params) {
     if (params) {
       this.state.filters[+key].reset({ 

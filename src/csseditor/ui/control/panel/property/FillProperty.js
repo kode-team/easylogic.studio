@@ -155,10 +155,6 @@ export default class FillProperty extends BaseProperty {
     this.emit("hideBackgroundPropertyPopup");
   }
 
-  refresh() {
-    this.load();
-  }
-
   [CLICK("$add")](e) {
     var current = editor.selection.current;
 

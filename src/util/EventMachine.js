@@ -337,7 +337,7 @@ export default class EventMachine {
 
     if ($container) $container.append(this.$el);
 
-    // this.load();
+    this.load();
     this.parseComponent(false);
 
     this.afterRender();
@@ -480,12 +480,12 @@ export default class EventMachine {
     }
   }
 
-  loadTemplate (...args) {
-    return this[LOAD(args.join(EMPTY_STRING))].call(this)
+  refresh() {
+    this.load()
   }
 
-  loadOne(selector) {
-
+  loadTemplate (...args) {
+    return this[LOAD(args.join(EMPTY_STRING))].call(this)
   }
 
   load(...args) {
@@ -519,7 +519,7 @@ export default class EventMachine {
         // 새로운 html 이 로드가 되었으니 
         // 이벤트를 재설정 하자. 
         // 그래야 refs 에 있던 객체를 다시 사용할 수 있다. 
-        this.initializeEventMachin()
+        this.initializeDomEvent()
       }
     });
 
@@ -585,7 +585,7 @@ export default class EventMachine {
    * 이벤트를 초기화한다.
    */
   initializeEvent() {
-    this.initializeEventMachin();
+    this.initializeDomEvent();
 
     // 자식 이벤트도 같이 초기화 한다.
     // 그래서 이 메소드는 부모에서 한번만 불려도 된다.
@@ -599,19 +599,19 @@ export default class EventMachine {
    * 이것도 역시 자식 컴포넌트까지 제어하기 때문에 가장 최상위 부모에서 한번만 호출되도 된다.
    */
   destroy() {
-    this.destroyEventMachin();
+    this.destroyDomEvent();
 
     this.eachChildren(Component => {
       Component.destroy();
     });
   }
 
-  destroyEventMachin() {
+  destroyDomEvent() {
     this.removeEventAll();
   }
 
-  initializeEventMachin() {
-    this.destroyEventMachin();
+  initializeDomEvent() {
+    this.destroyDomEvent();
     this.filterProps(CHECK_PATTERN).forEach(key => parseEvent(this, key));
   }
 

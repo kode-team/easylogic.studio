@@ -38,10 +38,7 @@ export default class AnimationPropertyPopup extends UIElement {
   }
 
   template() {
-    return `
-    <div class='popup animation-property-popup' ref='$popup'>
-      ${this.loadTemplate('$popup')}
-    </div>`;
+    return `<div class='popup animation-property-popup' ref='$popup'></div>`;
   }
 
   [LOAD('$popup')] () {
@@ -74,7 +71,7 @@ export default class AnimationPropertyPopup extends UIElement {
       <div class='name'>
         <label>Keyframe</label>
         <div class='input grid-1'>
-          <select ref='$name'>${this.loadTemplate('$name')}</select>
+          <select ref='$name'></select>
         </div>
       </div>
     `
@@ -106,9 +103,7 @@ export default class AnimationPropertyPopup extends UIElement {
       <div class='direction'>
         <label>Direction</label>
         <div class='input grid-1'>
-          <select ref='$direction'>
-            ${this.loadTemplate('$direction')}
-          </select>
+          <select ref='$direction'></select>
         </div>
       </div>
     `
@@ -132,9 +127,7 @@ export default class AnimationPropertyPopup extends UIElement {
       <div class='direction'>
         <label>Play State</label>
         <div class='input grid-1'>
-          <select ref='$playState'>
-            ${this.loadTemplate('$playState')}
-          </select>
+          <select ref='$playState'></select>
         </div>
       </div>
     `
@@ -156,9 +149,7 @@ export default class AnimationPropertyPopup extends UIElement {
       <div class='fill-mode'>
         <label>Fill Mode</label>
         <div class='input grid-1'>
-          <select ref='$fillMode'>
-            ${this.loadTemplate('$fillMode')}
-          </select>
+          <select ref='$fillMode'></select>
         </div>
       </div>
     `
@@ -203,10 +194,6 @@ export default class AnimationPropertyPopup extends UIElement {
   }
 
   // 개별 속성을 변경할 때  state 로 저장 하기 
-
-  refresh() {
-    this.load();
-  }
 
   [EVENT('changeRangeEditor')] (key, value) {
 

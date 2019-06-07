@@ -25,7 +25,7 @@ export default class DrawingView extends UIElement {
     if (this.props.embed) {
       this.$el.hide();
     } else {
-      this[EVENT("refreshCanvas")]();
+      this.trigger("refreshCanvas");
     }
   }
   template() {

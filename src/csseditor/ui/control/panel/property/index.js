@@ -43,10 +43,12 @@ import FilterProperty from "./FilterProperty";
 import CodeViewProperty from "./CodeViewProperty";
 import BackdropFilterProperty from "./BackdropFilterProperty";
 import VariableProperty from "./VariableProperty";
+import RootVariableProperty from "./RootVariableProperty";
 // import PositionProperty from "./PositionProperty";
 
  
 export default {
+  RootVariableProperty,
   VariableProperty,
   BackdropFilterProperty,
   CodeViewProperty,  

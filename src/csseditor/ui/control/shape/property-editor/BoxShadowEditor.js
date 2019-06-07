@@ -24,13 +24,12 @@ export default class BoxShadowEditor extends UIElement {
     return `
       <div class="box-shadow-editor" >
         <div class='label' >
+            <label>${this.props.title}</label>
             <div class='tools'>
-              <button type="button" ref="$add" title="add Box Shadow">${icon.add} Add</button>
+              <button type="button" ref="$add" title="add Box Shadow">${icon.add}</button>
             </div>
         </div>
-        <div class='box-shadow-list' ref='$shadowList'>
-          ${this.loadTemplate('$shadowList')}
-        </div>
+        <div class='box-shadow-list' ref='$shadowList'></div>
       </div>
     `;
   }
@@ -81,11 +80,6 @@ export default class BoxShadowEditor extends UIElement {
   [EVENT(CHANGE_RECT, CHANGE_LAYER, CHANGE_ARTBOARD, CHANGE_SELECTION)]() {
     this.refresh();
   }
-
-  refresh() {
-    this.load();
-  }
-
 
   modifyBoxShadow () {
     var value = this.state.boxShadows.join(', ');

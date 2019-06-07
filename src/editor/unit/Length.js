@@ -93,6 +93,10 @@ export class Length {
     return new Length(+value, 'ms')
   }  
 
+  static var (value) {
+    return new Length(value+'', '--')
+  }
+
   /**
    * return calc()  css fuction string
    *
@@ -190,7 +194,16 @@ export class Length {
           value = obj.value;
         }
 
-        return Length.number(value);               
+        return Length.number(value);
+        
+      } else if (obj.unit == "--") {
+        var value = 0;
+
+        if (isNotUndefined(obj.value)) {
+          value = obj.value;
+        }
+
+        return Length.var(value);        
       } else if (obj.unit === "" || obj.unit === "string") {
         var value = "";
 
@@ -199,6 +212,8 @@ export class Length {
         } else if (isNotUndefined(obj.value)) {
           value = obj.value;
         }
+
+
 
         return Length.string(value);
       }
@@ -212,6 +227,8 @@ export class Length {
     case 'string':
     case 'number':
       return this.value + '' 
+    case 'var':
+        return `var(--${this.value})`
     case 'calc':
       return `calc(${this.value})`;
     default:
@@ -233,6 +250,7 @@ export class Length {
   isMs () {return this.isUnitType('ms'); }
   isNumber () {return this.isUnitType('number'); }
   isString() {return this.isUnitType(''); }
+  isVar() {return this.isUnitType('--'); }
 
   set(value) {
     this.value = value;

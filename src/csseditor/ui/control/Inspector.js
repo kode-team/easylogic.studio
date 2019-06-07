@@ -55,6 +55,7 @@ export default class Inspector extends UIElement {
               <OutlineProperty />
             </div>
             <div class='tab-content' data-value="4">
+              <RootVariableProperty />            
               <VariableProperty />
               <KeyframeProperty />
               <AnimationProperty />
@@ -68,10 +69,6 @@ export default class Inspector extends UIElement {
 
   components() {
     return property;
-  }
-
-  refresh() {
-    this.load();
   }
 
   [CLICK("$header .tab-item")](e) {

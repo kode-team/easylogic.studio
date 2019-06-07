@@ -191,10 +191,6 @@ export default class BorderImageProperty extends BaseProperty {
     `;
   }
 
-  refresh() {
-    this.load()
-  }
-
   [INPUT("$range")](e) {
     var value = this.getRef("$range").value;
     this.getRef("$number").val(value);

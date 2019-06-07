@@ -17,31 +17,26 @@ export default class BoxShadowProperty extends BaseProperty {
       BoxShadowEditor
     }
   }
-  getTitle() {
-    return "Box Shadows";
+  
+  isHideHeader() {
+    return true;
   }
 
   getBody() {
     return html`
-      <div class="property-item full box-shadow-item" ref="$shadowList">
-        ${this.loadTemplate('$shadowList')}
-      </div>
+      <div class="property-item full box-shadow-item" ref="$shadowList"></div>
     `;
   }
 
   [LOAD("$shadowList")]() {
     var current = editor.selection.current || {};
     return `
-      <BoxShadowEditor ref='$boxshadow' value="${current['box-shadow']}" onChange="changeBoxShadow" />
+      <BoxShadowEditor ref='$boxshadow' value="${current['box-shadow']}" title='Box Shadows' onChange="changeBoxShadow" />
     `
   }
 
   [EVENT(CHANGE_RECT, CHANGE_LAYER, CHANGE_ARTBOARD, CHANGE_SELECTION)]() {
     this.refresh();
-  }
-
-  refresh() {
-    this.load();
   }
 
   [EVENT("changeBoxShadow")](boxshadow) {

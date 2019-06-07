@@ -66,6 +66,7 @@ export default class OffsetPropertyEditor extends UIElement {
         case 'filter':      
         case 'backdrop-filter':      
         case 'var':
+        case 'transform':          
           return Length.string('');
         default: 
           return Length.px(0);
@@ -131,7 +132,13 @@ export default class OffsetPropertyEditor extends UIElement {
         <div class='property-editor'>
           <VarEditor ref='$var' value="${property.value}" onChange="changeVar" />
         </div>
-      `            
+      `       
+    } else if (property.key === 'transform') {
+      return `
+        <div class='property-editor'>
+          <TransformEditor ref='$transform' value="${property.value}" onChange="changeTransform" />
+        </div>
+      `                  
     }
 
     return `
@@ -167,6 +174,10 @@ export default class OffsetPropertyEditor extends UIElement {
     this.modifyPropertyValue('var', value);
   }     
 
+  [EVENT('changeTransform')] (value) {
+    this.modifyPropertyValue('transform', value);
+  }       
+
 
   makePropertyEditor (property, index) {
     var min = null;
@@ -182,6 +193,7 @@ export default class OffsetPropertyEditor extends UIElement {
       case 'filter':
       case 'backdrop-filter':
       case 'var':
+      case 'transform':
         return this.makeIndivisualPropertyEditor(property, index);
       case 'left': 
       case 'margin-top': 
@@ -292,10 +304,6 @@ export default class OffsetPropertyEditor extends UIElement {
   }
 
   // 개별 속성을 변경할 때  state 로 저장 하기 
-
-  refresh() {
-    this.load();
-  }
 
   [EVENT("showOffsetPropertyEditor")](properties = []) {
     this.setState({ properties });

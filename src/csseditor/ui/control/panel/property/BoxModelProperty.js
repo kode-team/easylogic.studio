@@ -26,10 +26,6 @@ export default class BoxModelProperty extends BaseProperty {
     this.refresh();
   }
 
-  refresh() {
-    this.load();
-  }
-
   getBody() {
     return html`
       <div class="property-item box-model-item" ref="$boxModelItem"></div>
