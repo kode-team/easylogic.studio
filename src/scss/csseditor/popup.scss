@@ -406,96 +406,34 @@
 
   &.text-shadow-property-popup {
     padding: 10px;
-    width: 250px;
-    height: 140px;
-    .box {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      grid-template-rows: repeat(5, 1fr);
-      grid-row-gap: 10px;
-      grid-column-gap: 2px;
+    width: 224px;
 
-      > * {
-        height: 20px;
-      }
+    .drag-board {
 
-      input,
-      select {
-        width: 100%;
-        vertical-align: middle;
-      }
+      background-color: white;
+      box-sizing: border-box;
+      border: 1px solid $border-color;
+      height: 202px;
+      position: relative;
+      // pointer-events: none;
+      background-image: linear-gradient(
+          to right,
+          $border-color,
+          $border-color
+        ),
+        linear-gradient(to right, $border-color, $border-color);
+      background-size: 100% 1px, 1px 100%;
+      background-position: 0px center, center 0px;
+      background-repeat: no-repeat;
 
-      select {
-        appearance: none;
-        padding: 0px;
-        text-align: center;
-        border: 0px;
-        background-color: white;
-        border: 1px solid $border-color;
-      }
-
-      .input {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .offset-x {
-        grid-column: 1/4;
-        grid-row: 1/2;
-        display: grid;
-        grid-template-columns: 50px 1fr;
-        grid-column-gap: 4px;
-      }
-
-      .offset-y {
-        grid-column: 1/4;
-        grid-row: 2/3;
-        display: grid;
-        grid-template-columns: 50px 1fr;
-        grid-column-gap: 4px;
-      }
-
-      .blur-radius {
-        grid-column: 1 / 6;
-        grid-row: 4/5;
-        display: grid;
-        grid-template-columns: 50px 1fr;
-        grid-column-gap: 4px;
-
-        .input {
-          grid-template-columns: 2fr 1fr 1fr;
-          grid-column-gap: 2px;
-        }
-      }
-
-      .drag-board {
-        grid-column: 4/6;
-        grid-row: 1/4;
-        background-color: white;
-        box-sizing: border-box;
-        border: 1px solid $border-color;
-        height: 84px;
-        position: relative;
-        // pointer-events: none;
-        background-image: linear-gradient(
-            to right,
-            $border-color,
-            $border-color
-          ),
-          linear-gradient(to right, $border-color, $border-color);
-        background-size: 100% 1px, 1px 100%;
-        background-position: 0px center, center 0px;
-        background-repeat: no-repeat;
-
-        .pointer {
-          pointer-events: none;
-          position: absolute;
-          width: 10px;
-          height: 10px;
-          transform: translateX(calc(40px - 5px)) translateY(calc(42px - 5px));
-          background-color: $border-color;
-          border-radius: 100%;
-        }
+      .pointer {
+        pointer-events: none;
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
+        background-color: $border-color;
+        border-radius: 100%;
       }
     }
   }

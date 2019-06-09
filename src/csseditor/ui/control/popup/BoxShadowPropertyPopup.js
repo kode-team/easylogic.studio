@@ -255,7 +255,7 @@ export default class BoxShadowPropertyPopup extends UIElement {
       })
       .show("inline-block");
 
-    // this.emit("hidePropertyPopup");
+    this.emit("hidePropertyPopup");
   }
 
   [EVENT(

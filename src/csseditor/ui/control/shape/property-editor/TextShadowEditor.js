@@ -14,6 +14,7 @@ export default class TextShadowEditor extends UIElement {
 
   initState() {
     return {
+      selectedIndex: -1,
       textShadows: TextShadow.parseStyle(this.props.value)
     }
   }
@@ -108,7 +109,9 @@ export default class TextShadowEditor extends UIElement {
   }
 
   viewShadowPopup(shadow, index) {
-    this.selectedIndex = index;
+    this.setState({
+      selectedIndex: index
+    }, false)
 
     this.emit("showColorPicker", {
       changeEvent: "changeTextShadowEditorColor",
@@ -126,11 +129,12 @@ export default class TextShadowEditor extends UIElement {
       offsetY: shadow.offsetY,
       blurRadius: shadow.blurRadius
     });
+    // this.emit('hidePropertyPopup')
   }
 
   [EVENT("changeTextShadowEditorColor")](color) {
 
-    var shadow = this.state.textShadows[this.selectedIndex]
+    var shadow = this.state.textShadows[this.state.selectedIndex]
     shadow.reset({ color })
 
     this.refresh();
@@ -140,10 +144,13 @@ export default class TextShadowEditor extends UIElement {
 
   [EVENT("changeTextShadowEditorPopup")](data) {
 
-    var shadow = this.state.textShadows[this.selectedIndex]
+    var shadow = this.state.textShadows[this.state.selectedIndex]
+
     shadow.reset(data)
 
     this.refresh();
+
+
 
     this.modifyTextShadow();
   }

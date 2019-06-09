@@ -412,7 +412,17 @@ export default class EventMachine {
 
         var instance = new Component(this, props);
         if (this.children[refName]) {
-          refName = instance.id; // ref 이름을 바꿔서 저장해준다. 
+
+          if (isLoadFunction) {
+            // ref 이름이 동일 할 때는 기존 것을 destroy 시켜 줘야 한다. 
+            // 그렇지 않으면 $store 이벤트 시스템에 등록된 애들이 오동작을 한다. 
+            var prevComponent = this.children[refName]
+            prevComponent.destroy()
+          } else if (refName === ComponentName) {
+            refName = instance.id; // ref 이름을 바꿔서 저장해준다. 
+          }
+
+
         }
 
         this.children[refName] = instance;

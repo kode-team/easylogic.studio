@@ -3,8 +3,17 @@ import { Length } from "../../../../editor/unit/Length";
 import { CHANGE_EDITOR, CHANGE_SELECTION } from "../../../types/event";
 import { LOAD, POINTERSTART, MOVE, INPUT } from "../../../../util/Event";
 import { html } from "../../../../util/functions/func";
+import RangeEditor from "../shape/property-editor/RangeEditor";
+
+
 
 export default class TextShadowPropertyPopup extends UIElement {
+
+  components() {
+    return {
+      RangeEditor
+    }
+  }
   initState() {
     return {
       offsetX: Length.px(0),
@@ -24,106 +33,33 @@ export default class TextShadowPropertyPopup extends UIElement {
 
   [LOAD("$popup")]() {
     return html`
-      <div class="box">
-        <div class="offset-x">
-          <label>Offset X</label>
-          <div class="input">
-            <input
-              type="number"
-              ref="$offsetX"
-              data-type="offsetX"
-              value="${this.state.offsetX.value.toString()}"
-            />
-            <select ref="$offsetXUnit">
-              <option value="px">px</option>
-              <option value="em">em</option>
-              <option value="%">%</option>
-            </select>
-          </div>
-        </div>
-        <div class="offset-y">
-          <label>Offset Y</label>
-          <div class="input">
-            <input
-              type="number"
-              ref="$offsetY"
-              data-type="offsetY"
-              value="${this.state.offsetY.value.toString()}"
-            />
-            <select ref="$offsetYUnit">
-              <option value="px">px</option>
-              <option value="em">em</option>
-              <option value="%">%</option>
-            </select>
-          </div>
-        </div>
-        <div class="blur-radius">
-          <label>Blur</label>
-          <div class="input">
-            <input
-              type="range"
-              ref="$blurRadiusRange"
-              data-type="blurRadius"
-              value="${this.state.blurRadius.value.toString()}"
-            />
-            <input
-              type="number"
-              ref="$blurRadiusNumber"
-              data-type="blurRadius"
-              value="${this.state.blurRadius.value.toString()}"
-            />
-            <select ref="$blurRadiusUnit">
-              <option value="px">px</option>
-              <option value="em">em</option>
-              <option value="%">%</option>
-            </select>
-          </div>
-        </div>
-        <div class="drag-board" ref="$dragBoard">
-          <div
-            class="pointer"
-            ref="$pointer"
-            style="left: ${this.state.offsetX.toString()};top: ${this.state.offsetY.toString()}"
-          ></div>
-        </div>
+      <div class="drag-board" ref="$dragBoard">
+        <div
+          class="pointer"
+          ref="$pointer"
+          style="left: ${this.state.offsetX.toString()};top: ${this.state.offsetY.toString()}"
+        ></div>
+      </div>
+      <div>
+        <label>Offset X</label>
+        <RangeEditor ref='$offsetX' calc='false' key='offsetX' min="-100" max='100' value='${this.state.offsetX.toString()}' onchange='changeShadow' />
+      </div>
+      <div>
+        <label>Offset Y</label>      
+        <RangeEditor ref='$offsetY' calc='false' key='offsetY' min="-100" max='100' value='${this.state.offsetY.toString()}' onchange='changeShadow' />
+      </div>
+      <div>
+        <label>Blur Radius</label>
+        <RangeEditor ref='$blurRadius' calc='false' key='blurRadius' value='${this.state.blurRadius.toString()}' onchange='changeShadow' />
       </div>
     `;
   }
 
-  [INPUT('$popup input[data-type="offsetX"]')](e) {
+  [EVENT('changeShadow')] (key, value) {
     this.updateData({
-      offsetX: new Length(
-        +e.$delegateTarget.value,
-        this.getRef("$offsetXUnit").value
-      )
+      [key]: value
     });
     this.refreshPointer();
-  }
-
-  [INPUT('$popup input[data-type="offsetY"]')](e) {
-    this.updateData({
-      offsetY: new Length(
-        +e.$delegateTarget.value,
-        this.getRef("$offsetYUnit").value
-      )
-    });
-
-    this.refreshPointer();
-  }
-
-  [INPUT('$popup input[data-type="blurRadius"]')](e) {
-    var type = e.$delegateTarget.attr("type");
-    if (type === "range") {
-      this.getRef("$blurRadiusNumber").val(e.$delegateTarget.value);
-    } else {
-      this.getRef("$blurRadiusRange").val(e.$delegateTarget.value);
-    }
-    this.updateData({
-      blurRadius: new Length(
-        +e.$delegateTarget.value,
-        this.getRef("$blurRadiusUnit").value
-      )
-    });
   }
 
   [POINTERSTART("$popup .drag-board") + MOVE("movePointer")](e) {
@@ -167,14 +103,14 @@ export default class TextShadowPropertyPopup extends UIElement {
     x = Math.floor(x);
     y = Math.floor(y);
 
-    this.getRef("$offsetX").val(x);
-    this.getRef("$offsetY").val(y);
-
     // 다른 곳의 숫자르 바로 업데이트 할 수 있어야 한다.
     this.updateData({
       offsetX: Length.px(x),
       offsetY: Length.px(y)
     });
+
+    this.children.$offsetX.setValue(this.state.offsetX);
+    this.children.$offsetY.setValue(this.state.offsetY);
 
     this.refreshPointer();
   }
@@ -194,7 +130,7 @@ export default class TextShadowPropertyPopup extends UIElement {
       })
       .show("inline-block");
 
-    // this.emit("hidePropertyPopup");
+    this.emit("hidePropertyPopup");
   }
 
   [EVENT(

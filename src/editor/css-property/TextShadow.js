@@ -40,7 +40,7 @@ export class TextShadow extends Property {
       offsetX: Length.px(0),
       offsetY: Length.px(0),
       blurRadius: Length.px(0),
-      color: "rgba(0, 0, 0, 0)"
+      color: "rgba(0, 0, 0, 1)"
     });
   }
 
