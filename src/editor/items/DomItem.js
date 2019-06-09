@@ -13,8 +13,6 @@ import { Animation } from "../css-property/Animation";
 import { Transition } from "../css-property/Transition";
 import { Keyframe } from "../css-property/Keyframe";
 
-const fontStyleList = ["size", "weight", "lineHeight", "family", "style"];
-const textStyleList = ["decoration", "transform"];
 
 export class DomItem extends GroupItem {
   getDefaultObject(obj = {}) {
@@ -38,6 +36,9 @@ export class DomItem extends GroupItem {
       'text-align': '',
       'text-transform': '',
       'text-decoration': '',
+      'letter-spacing': '', 
+      'word-spacing': '', 
+      'text-indent': '',      
       x: Length.px(100),
       y: Length.px(100),
       // filters: [],      // deprecated 
@@ -51,10 +52,6 @@ export class DomItem extends GroupItem {
       borderRadius: {},
       borderImage: new BorderImage(),
       applyBorderImage: false,
-      // backdropFilters: [],
-      // backgroundImages: [],
-      // boxShadows: [],
-      // textShadows: [],
       animations: [],
       transitions: [],
       keyframes: [],
@@ -70,9 +67,6 @@ export class DomItem extends GroupItem {
       paddingRight: Length.px(0),
       paddingLeft: Length.px(0),
       content: "",
-      // font: {},
-      // text: {},
-      spacing: {},
       ...obj
     });
   }
@@ -458,20 +452,15 @@ export class DomItem extends GroupItem {
   }
 
   toSpacingCSS() {
-    var spacing = this.json.spacing;
+
+    var json = this.json;
     var obj = {};
 
-    if (spacing.letter) {
-      obj["letter-spacing"] = spacing.letter;
-    }
-
-    if (spacing.word) {
-      obj["word-spacing"] = spacing.word;
-    }
-
-    if (spacing.indent) {
-      obj["text-indent"] = spacing.indent;
-    }    
+    ['letter-spacing', 'word-spacing', 'text-indent'].forEach( it => {
+      if (json[it]) {
+        obj[it] = json[it]
+      }
+    })
 
     return obj;
   }
