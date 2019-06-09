@@ -1,10 +1,8 @@
-import { px, EMPTY_STRING, WHITE_STRING } from "./css/types";
+import { EMPTY_STRING } from "./css/types";
 import {
   isString,
   isUndefined,
   isNotString,
-  isFunction,
-  keyEach,
   isNotUndefined
 } from "./functions/func";
 import { DomDiff } from "./DomDiff";
@@ -108,6 +106,10 @@ export default class Dom {
 
   parent() {
     return new Dom(this.el.parentNode);
+  }
+
+  hasParent () {
+    return !!this.el.parentNode
   }
 
   removeClass(...args) {

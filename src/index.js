@@ -15,7 +15,7 @@ function startEditor($target) {
   //   );
   // });
 
-  editor.emit("load/start", true);
+  // editor.emit("load/start", true);
 
   return editor;
 }

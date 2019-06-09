@@ -41,6 +41,14 @@ var transformList = [
   'perspective'
 ];
 
+const labels = {
+  'scale': [ 'X', 'Y'] ,
+  'translate' : ['X', 'Y'], 
+  'translate3d': ['tx','ty', 'tz'],
+  'matrix': ['a','b','c','d','tx','ty'],
+  'matrix3d': ['a1', 'b1', 'c1', 'd1', 'a2', 'b2', 'c2', 'd2', 'a3', 'b3', 'c3', 'd3', 'a4', 'b4', 'c4', 'd4']
+}
+
 export default class TransformEditor extends UIElement {
 
   components() {
@@ -77,15 +85,10 @@ export default class TransformEditor extends UIElement {
     switch(type) {
       case 'scale':
       case 'translate':
-        if (index === 0) return 'X';
-        else if (index === 1) return 'Y';
+      case 'translate3d':        
       case 'matrix':
-        if (index === 0) return 'a'
-        else if (index === 1) return 'c'
-        else if (index === 2) return 'b'
-        else if (index === 3) return 'd'
-        else if (index === 4) return 'tx'
-        else if (index === 5) return 'ty'
+      case 'matrix3d': 
+        return labels[type][index];
       }
     return ''
   }
@@ -97,12 +100,13 @@ export default class TransformEditor extends UIElement {
       case 'translateY': 
       case 'translateZ': 
       case 'translate':      
+      case 'translate3d':            
       case 'skewY':
       case 'skewX':      
         return { min: -1000, max : 1000, step: 1, units: 'px,%,em'}
       case 'matrix':
       case 'matrix3d':     
-        return { min: -1000, max : 1000, step: 0.1,units: 'number'}                           
+        return { min: -100, max : 100, step: 0.01,units: 'number'}
       case 'rotateX': 
       case 'rotateY': 
       case 'rotateZ': 
@@ -132,6 +136,33 @@ export default class TransformEditor extends UIElement {
           </div>
         </div>
         <div class="transform-ui">
+
+          ${type === 'translate3d' ? `
+            <pre>
+            1 | 0 | 0 | tx
+            0 | 1 | 0 | ty	
+            0 | 0 | 1 | tz	
+            0 | 0 | 0 | 1
+            </pre>
+          `: ''}
+
+          ${type === 'matrix' ? `
+            <pre>
+            a | c | tx	
+            b | d | ty	
+            0 | 0 | 1
+            </pre>
+          `: ''}          
+
+          ${type === 'matrix3d' ? `
+            <pre>
+            a1 | a2 | a3 | a4	
+            b1 | b2 | b3 | b4	
+            c1 | c2 | c3 | c4	
+            d1 | d2 | d3 | d4
+            </pre>
+          `: ''}          
+
           ${transform.value.map( (it, tindex) => {
 
             var label = this.getLabel(type, tindex);
@@ -227,6 +258,8 @@ export default class TransformEditor extends UIElement {
         return [Length.deg(0)]            
       case 'translate': 
         return [Length.px(0),Length.px(0)]
+      case 'translate3d': 
+        return [Length.px(0),Length.px(0), Length.px(0)]        
       case 'scale': 
         return [Length.number(1),Length.number(1)]
       case 'scaleX': 
@@ -235,23 +268,33 @@ export default class TransformEditor extends UIElement {
       case 'matrix':
         return [
           Length.number(1),
+          Length.number(0),
+          Length.number(0),
           Length.number(1),
-          Length.number(1),
-          Length.number(1),
-          Length.number(1),
-          Length.number(1)          
+          Length.number(0),
+          Length.number(0)          
         ]
       case 'matrix3d':
         return [
           Length.number(1),
+          Length.number(0),
+          Length.number(0),
+          Length.number(0),
+
+          Length.number(0),
           Length.number(1),
+          Length.number(0),
+          Length.number(0),
+
+          Length.number(0),
+          Length.number(0),
           Length.number(1),
-          Length.number(1),
-          Length.number(1),
-          Length.number(1),
-          Length.number(1),
-          Length.number(1),
-          Length.number(1)          
+          Length.number(0),
+          
+          Length.number(0),
+          Length.number(0),
+          Length.number(0), 
+          Length.number(1)                   
         ]        
     }
 

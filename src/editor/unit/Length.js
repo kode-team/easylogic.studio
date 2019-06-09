@@ -397,6 +397,10 @@ export class Length {
   round (k) {
     return new Length(round(this.value, k), this.unit)
   }
+
+  equals (t) {
+    return this.value === t.value && this.unit === t.unit; 
+  }
 }
 
 Length.auto = Length.string("auto");

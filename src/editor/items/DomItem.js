@@ -31,6 +31,7 @@ export class DomItem extends GroupItem {
       'border-radius': '',      
       'box-shadow': '',
       'text-shadow': '',
+      'clip-path': '',
       color: "black",
       x: Length.px(100),
       y: Length.px(100),
@@ -357,6 +358,10 @@ export class DomItem extends GroupItem {
     return this.toKeyCSS('filter');
   }
 
+  toClipPathCSS() {
+    return this.toKeyCSS('clip-path');
+  }  
+
   toTransformCSS() {
     return this.toKeyCSS('transform');
   }
@@ -522,7 +527,7 @@ export class DomItem extends GroupItem {
       ...this.toBorderRadiusCSS(),
       ...this.toBorderImageCSS(),
       ...this.toAnimationCSS(),
-      
+      ...this.toClipPathCSS(),
       ...this.toFilterCSS(),
       ...this.toTransformCSS(),
       ...this.toBackdropFilterCSS(),      
@@ -554,7 +559,7 @@ export class DomItem extends GroupItem {
       ...this.toBorderRadiusCSS(),
       ...this.toBorderImageCSS(),
       ...this.toAnimationCSS(),      
-
+      ...this.toClipPathCSS(),
       ...this.toFilterCSS(),
       ...this.toTransformCSS(),      
       ...this.toBackdropFilterCSS(),
@@ -580,7 +585,8 @@ export class DomItem extends GroupItem {
       ...this.toBorderCSS(),
       ...this.toOutlineCSS(),
       ...this.toBorderRadiusCSS(),
-      ...this.toBorderImageCSS(),      
+      ...this.toBorderImageCSS(),   
+      ...this.toClipPathCSS(),         
       ...this.toFilterCSS(),
       ...this.toTransformCSS(),      
       ...this.toBackdropFilterCSS(),      

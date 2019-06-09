@@ -44,7 +44,6 @@ export default class Inspector extends UIElement {
               <FontColorProperty />
               <TextShadowProperty />              
               <FontProperty />
-
               <TextProperty />
               <FontSpacingProperty />
             </div>
@@ -54,6 +53,7 @@ export default class Inspector extends UIElement {
               <FilterProperty />
               <BackdropFilterProperty />
               <OutlineProperty />
+              <ClipPathProperty />
             </div>
             <div class='tab-content' data-value="4">
               <RootVariableProperty />

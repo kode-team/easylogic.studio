@@ -45,10 +45,12 @@ import BackdropFilterProperty from "./BackdropFilterProperty";
 import VariableProperty from "./VariableProperty";
 import RootVariableProperty from "./RootVariableProperty";
 import TransformProperty from "./TransformProperty";
+import ClipPathProperty from "./ClipPathProperty";
 // import PositionProperty from "./PositionProperty";
 
  
 export default {
+  ClipPathProperty,
   TransformProperty,
   RootVariableProperty,
   VariableProperty,

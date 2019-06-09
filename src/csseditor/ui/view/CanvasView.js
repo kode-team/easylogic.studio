@@ -32,7 +32,7 @@ export default class CanvasView extends UIElement {
   template() {
     return `
       <div class='page-view'>
-        <div class='page-lock'>
+        <div class='page-lock' ref='$lock'>
           <div class="page-canvas" ref="$canvas"></div>             
         </div>
         <style type='text/css' ref='$style'></style>     
@@ -78,6 +78,11 @@ export default class CanvasView extends UIElement {
     if (this.refs.$canvas.text() != css.content) {
       this.refs.$canvas.text(css.content);
     }
+
+    this.refs.$lock.css({
+      width: css.width,
+      height: css.height
+    })
   }
 
   [EVENT("refreshCanvas")]() {

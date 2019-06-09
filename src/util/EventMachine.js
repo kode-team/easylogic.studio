@@ -408,69 +408,45 @@ export default class EventMachine {
 
         let refName = $dom.attr(REFERENCE_PROPERTY) || ComponentName;
 
-        // 로드 하게 되서 parseComponent 를 수행하면 
-        // 기존의 객체를 지워야 하는데 
-        // 어떻게 지울 수 있을까? 
-
-        if (refName) {
-          if (Component) {
-            var instance = new Component(this, props);
-            if (this.children[refName]) {
-              // ref 이름이 겹치는 경우 
-              // 1. LOAD 시점에 내부 객체에 ref 를 똑같이 줬다. 
-              if (isLoadFunction) {
-                // 로드 시점에는 이름이 중복 된다는 것은 
-                // 이렇게 해도 ref 를 안주고 생성하는 것은 못 막는군  
-                // 무조건 ref 를 주도록 하자. 
-                // 로드 시점에 ref 가 같으면 이전 객체는 지워준다. 
-                var prevComponent = this.children[refName];
-                prevComponent.destroy();  
-              } else {
-                // 최초 생성시에 생성된 객체는 중복이 있으면 (즉, ref 가 없이 여러개를 나열해서 사용할 때)
-                refName = instance.id; // ref 이름을 바꿔서 저장해준다. 
-
-                // 그러면 이 객체가 다시 리로드 됐을 때는 어떻게 처리할 것인가?  
-              }
-              // 2. 이름을 주지 않고 같은 객체를 여러개 생성했다. 
-              // 2가지를 어떻게 구분하지 ? 
-              // 즉, 살아있는 놈이랑 아닌 놈이랑 구별을 할려면 ?  
-
-              // console.log(prevComponent.id, 'is deleted', prevComponent);
-              // this.children[prevComponent.id] = null; 
-
-            }
 
 
-            this.children[refName] = instance;
-            this.refs[refName] = instance.$el;
-
-            if (instance) {
-              instance.render();
-
-              $dom.replace(instance.$el);
-  
-              instance.initializeEvent();  
-            }
-          
+        var instance = new Component(this, props);
+        if (this.children[refName]) {
+          if (isLoadFunction) { // load 할 때 같은 객체가 있으면 destroy 시킨다. 
+            var prevComponent = this.children[refName];
+            prevComponent.destroy();  
+          } else {
+            refName = instance.id; // ref 이름을 바꿔서 저장해준다. 
           }
         }
+
+        this.children[refName] = instance;
+        // this.refs[refName] = instance.$el;
+
+        if (instance) {
+          instance.render();
+
+          $dom.replace(instance.$el);
+
+          instance.initializeEvent();  
+        }
+
       });
     });
 
     // DOM 에서 빠지 애들  ( this.$el.parent() 가 null  인 경우 )
     // destroy () 시킨다. 
 
-    // keyEach(this.children, (key, obj) => {
-    //   if (obj && obj.clean()) {
-    //     delete this.children[key]
-    //     delete this.refs[key]
-    //   }
-    // })
+    keyEach(this.children, (key, obj) => {
+      if (obj && obj.clean()) {
+        delete this.children[key]
+      }
+    })
   }
 
   clean () {
-    if (!this.$el.parent()) {
 
+    if (!this.$el.hasParent()) {
       keyEach(this.children, (key, child) => {
         child.clean();
       })
@@ -480,10 +456,17 @@ export default class EventMachine {
     }
   }
 
+  /**
+   * refresh 는 load 함수들을 실행한다. 
+   */
   refresh() {
     this.load()
   }
 
+  /**
+   * 특정 load 함수를 실행한다.  문자열을 그대로 return 한다. 
+   * @param  {...any} args 
+   */
   loadTemplate (...args) {
     return this[LOAD(args.join(EMPTY_STRING))].call(this)
   }
@@ -532,7 +515,7 @@ export default class EventMachine {
       const bindMethod = this[callbackName];
       var [callbackName, id] = callbackName.split(CHECK_SAPARATOR);
 
-      const refObject = getRef(id);
+      const refObject = this.getRef(id);
       let refCallback = BIND_CHECK_DEFAULT_FUNCTION;
 
       if (refObject != EMPTY_STRING && isString(refObject)) {

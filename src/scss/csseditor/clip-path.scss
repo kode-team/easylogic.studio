@@ -1,0 +1,96 @@
+.clip-path-list {
+    grid-template-columns: 1fr !important;
+  
+    .clippath-item {
+      display: grid; 
+      grid-template-columns: 1fr; 
+      grid-column-gap: 4px;
+      border: 1px solid $border-color;
+      margin-bottom: 5px;
+      padding: 5px;  
+      cursor: pointer;
+      &.selected {
+        background-color: rgba($border-color, 0.5);
+      }
+
+      .title {
+          display: grid;
+          grid-template-columns: 1fr 20px;
+          height: 20px;
+
+        .name {
+            padding: 2px 0px;
+        }
+
+        .tools {
+            vertical-align: middle;
+            text-align: right;
+            button {
+                vertical-align: middle;
+                appearance: none;
+                background-color: transparent;
+                border: 0px;
+                padding: 0px;
+                vertical-align: middle;
+                cursor: pointer;
+                outline: none;
+                font-size: 12px;
+                line-height: 0;
+      
+                svg {
+                    width: 16px;
+                    height: 16px;
+                    vertical-align: middle;
+                }
+             }
+        } 
+      }
+
+
+      .offset-list {
+          padding: 0px 10px;
+          height: 30px;
+          box-sizing: border-box;
+        .container {
+            position: relative;
+            background-image: linear-gradient(to right, $border-color, black);
+            background-size: 100% 2px;
+            background-repeat: no-repeat;
+            background-position: 0px center;
+            height: 100%;
+
+            .offset {
+                width: 10px;
+                height: 10px;
+                background-color: black;
+                border-radius: 100%;
+                position: absolute;
+                top: 50%;
+                transform: translateX(-50%) translateY(-50%);
+                vertical-align: middle;
+
+                &:hover {
+                    &:before {
+                        display: inline-block;
+                        content: attr(data-title);
+                        position: absolute;
+                        left: 50%;
+                        bottom: 100%;
+                        // min-width: 100px;
+                        padding: 1px 3px;
+                        text-align: center;
+                        background-color: rgb(78, 59, 59);
+                        border-radius: 3px;
+                        color: white;
+                        transform: translateX(-50%);
+                        white-space: nowrap;
+                    }
+                }
+
+            }
+
+        }
+      }
+    }
+  }
+  

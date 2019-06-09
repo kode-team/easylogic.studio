@@ -2404,13 +2404,14 @@ html, body {
   bottom: 0px;
   top: 0px;
   background-color: #cccccc;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  justify-items: center;
+  align-items: center;
 }
 .csseditor .page-view .page-lock {
-  position: absolute;
-  left: 100px;
-  top: 100px;
-  width: 0px;
-  height: 0px;
+  box-shadow: 0 0 3px 0px rgba(0, 0, 0, 0.2);
 }
 .csseditor .page-canvas {
   position: absolute;
@@ -4206,6 +4207,91 @@ html, body {
   padding: 10px;
   border: 1px solid rgba(0, 0, 0, 0.1);
 }
+.csseditor .clip-path-list {
+  grid-template-columns: 1fr !important;
+}
+.csseditor .clip-path-list .clippath-item {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-column-gap: 4px;
+  border: 1px solid #cccccc;
+  margin-bottom: 5px;
+  padding: 5px;
+  cursor: pointer;
+}
+.csseditor .clip-path-list .clippath-item.selected {
+  background-color: rgba(204, 204, 204, 0.5);
+}
+.csseditor .clip-path-list .clippath-item .title {
+  display: grid;
+  grid-template-columns: 1fr 20px;
+  height: 20px;
+}
+.csseditor .clip-path-list .clippath-item .title .name {
+  padding: 2px 0px;
+}
+.csseditor .clip-path-list .clippath-item .title .tools {
+  vertical-align: middle;
+  text-align: right;
+}
+.csseditor .clip-path-list .clippath-item .title .tools button {
+  vertical-align: middle;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  border: 0px;
+  padding: 0px;
+  vertical-align: middle;
+  cursor: pointer;
+  outline: none;
+  font-size: 12px;
+  line-height: 0;
+}
+.csseditor .clip-path-list .clippath-item .title .tools button svg {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+.csseditor .clip-path-list .clippath-item .offset-list {
+  padding: 0px 10px;
+  height: 30px;
+  box-sizing: border-box;
+}
+.csseditor .clip-path-list .clippath-item .offset-list .container {
+  position: relative;
+  background-image: linear-gradient(to right, #cccccc, black);
+  background-size: 100% 2px;
+  background-repeat: no-repeat;
+  background-position: 0px center;
+  height: 100%;
+}
+.csseditor .clip-path-list .clippath-item .offset-list .container .offset {
+  width: 10px;
+  height: 10px;
+  background-color: black;
+  border-radius: 100%;
+  position: absolute;
+  top: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+  vertical-align: middle;
+}
+.csseditor .clip-path-list .clippath-item .offset-list .container .offset:hover:before {
+  display: inline-block;
+  content: attr(data-title);
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  padding: 1px 3px;
+  text-align: center;
+  background-color: #4e3b3b;
+  border-radius: 3px;
+  color: white;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  white-space: nowrap;
+}
 .csseditor .color-view-editor {
   display: grid;
   height: 24px;
@@ -4295,7 +4381,8 @@ html, body {
   margin-top: 2px;
 }
 .csseditor .background-image-editor .label label {
-  font-size: 13px;
+  font-size: 12px;
+  padding-left: 5px;
   vertical-align: middle;
   text-shadow: 2px 2px 5px #cccccc;
 }
@@ -4567,7 +4654,8 @@ html, body {
   margin-top: 2px;
 }
 .csseditor .transform-editor .label label {
-  font-size: 13px;
+  font-size: 12px;
+  padding-left: 5px;
   vertical-align: middle;
   text-shadow: 2px 2px 5px #cccccc;
 }
@@ -4659,7 +4747,8 @@ html, body {
   margin-top: 2px;
 }
 .csseditor .filter-editor .label label {
-  font-size: 13px;
+  font-size: 12px;
+  padding-left: 5px;
   vertical-align: middle;
   text-shadow: 2px 2px 5px #cccccc;
 }
@@ -4757,7 +4846,8 @@ html, body {
   margin-top: 2px;
 }
 .csseditor .box-shadow-editor .label label {
-  font-size: 13px;
+  font-size: 12px;
+  padding-left: 5px;
   vertical-align: middle;
   text-shadow: 2px 2px 5px #cccccc;
 }
@@ -4869,7 +4959,8 @@ html, body {
   margin-top: 2px;
 }
 .csseditor .text-shadow-editor .label label {
-  font-size: 13px;
+  font-size: 12px;
+  padding-left: 5px;
   vertical-align: middle;
   text-shadow: 2px 2px 5px #cccccc;
 }
@@ -4970,7 +5061,8 @@ html, body {
   margin-top: 2px;
 }
 .csseditor .var-editor .label label {
-  font-size: 13px;
+  font-size: 12px;
+  padding-left: 5px;
   vertical-align: middle;
   text-shadow: 2px 2px 5px #cccccc;
 }
@@ -5774,5 +5866,120 @@ html, body {
   grid-template-columns: 1fr;
 }
 .csseditor .popup.keyframe-popup .box .input.grid-2 {
+  grid-template-columns: 3fr 1fr;
+}
+.csseditor .popup.clippath-popup {
+  padding: 7px;
+  width: 250px;
+  height: auto;
+}
+.csseditor .popup.clippath-popup .box > div {
+  height: 20px;
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  grid-column-gap: 4px;
+  margin-bottom: 5px;
+}
+.csseditor .popup.clippath-popup .box > .clip-path-editor {
+  grid-template-columns: 1fr;
+  height: auto;
+}
+.csseditor .popup.clippath-popup .box > .clip-path-editor .range-editor {
+  margin-bottom: 5px;
+}
+.csseditor .popup.clippath-popup .box > .clip-path-editor .drag-area {
+  height: 234px;
+  position: relative;
+  box-sizing: border-box;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
+}
+.csseditor .popup.clippath-popup .box > .clip-path-editor .drag-area .drag-pointer {
+  position: absolute;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 100%;
+  display: inline-block;
+}
+.csseditor .popup.clippath-popup .box .property .title {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-column-gap: 2px;
+}
+.csseditor .popup.clippath-popup .box .property .title .tools {
+  text-align: right;
+}
+.csseditor .popup.clippath-popup .box .property .title .tools select {
+  width: 100px;
+  display: inline-block;
+}
+.csseditor .popup.clippath-popup .box .property .title .tools button {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  outline: none;
+  cursor: pointer;
+  border: 0px;
+  padding: 0px;
+  vertical-align: middle;
+}
+.csseditor .popup.clippath-popup .box .property .title .tools button svg {
+  width: 16px;
+  height: 16px;
+}
+.csseditor .popup.clippath-popup .box .offset-input {
+  padding: 5px 0px;
+}
+.csseditor .popup.clippath-popup .box .offset-input input {
+  width: 104px;
+}
+.csseditor .popup.clippath-popup .box .keyframe-property-list {
+  max-height: 300px;
+  overflow: auto;
+}
+.csseditor .popup.clippath-popup .box .keyframe-property-item {
+  box-sizing: border-box;
+  padding: 4px 0px;
+  margin-top: 2px;
+}
+.csseditor .popup.clippath-popup .box .keyframe-property-item .title {
+  grid-template-columns: 1fr 30px;
+}
+.csseditor .popup.clippath-popup .box .keyframe-property-item .tools button {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  outline: none;
+  cursor: pointer;
+  border: 0px;
+}
+.csseditor .popup.clippath-popup .box .keyframe-property-item .tools button svg {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+.csseditor .popup.clippath-popup .box label {
+  font-size: 12px;
+  text-align: left;
+  vertical-align: middle;
+}
+.csseditor .popup.clippath-popup .box input,
+.csseditor .popup.clippath-popup .box select {
+  width: 100%;
+  vertical-align: middle;
+}
+.csseditor .popup.clippath-popup .box .input {
+  vertical-align: middle;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+}
+.csseditor .popup.clippath-popup .box .input.grid-1 {
+  grid-template-columns: 1fr;
+}
+.csseditor .popup.clippath-popup .box .input.grid-2 {
   grid-template-columns: 3fr 1fr;
 }

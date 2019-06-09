@@ -13,4 +13,4 @@ const CSS = {
 var picker = new CSS.createCSSEditor({
   // embed: true
 });
-picker.emit("load/start", true);
+// picker.emit("load/start", true);

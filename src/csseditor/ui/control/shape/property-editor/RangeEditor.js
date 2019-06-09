@@ -24,13 +24,18 @@ export default class RangeEditor extends UIElement {
 
         var { min, max, step, label } = this.state
 
-        var value = this.state.value.value.toString()
+        var value = +this.state.value.value.toString()
+
+        if (isNaN(value)) {
+            value = 0
+        }
+
         var hasLabel = !!label ? 'has-label' : ''
         return `
         <div class='range-editor ${hasLabel}'>
             ${label ? `<label>${label}</label>` : EMPTY_STRING }
-            <input type='range' ref='$property' value="${value}" min="${min}" max="${max}" step="${step}" />
-            <input type='number' ref='$propertyNumber' value="${value}" min="${min}" max="${max}" step="${step}" />
+            <input type='range' ref='$property' value="${+value}" min="${min}" max="${max}" step="${step}" />
+            <input type='number' ref='$propertyNumber' value="${+value}" min="${min}" max="${max}" step="${step}" />
             <select  ref='$propertyUnit'></select>
         </div>
     `
@@ -38,7 +43,10 @@ export default class RangeEditor extends UIElement {
 
     [LOAD('$propertyUnit')] () {
         return this.state.units.map(it => {
-            var selected = it === this.state.value.unit ? 'selected' : '' 
+
+            var selectedUnit = this.props.selectedUnit || this.state.value.unit;
+
+            var selected = it === selectedUnit ? 'selected' : '' 
             return `<option ${selected} value="${it}">${it}</option>`
         })
     }
