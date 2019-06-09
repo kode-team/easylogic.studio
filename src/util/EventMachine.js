@@ -412,16 +412,10 @@ export default class EventMachine {
 
         var instance = new Component(this, props);
         if (this.children[refName]) {
-          if (isLoadFunction) { // load 할 때 같은 객체가 있으면 destroy 시킨다. 
-            var prevComponent = this.children[refName];
-            prevComponent.destroy();  
-          } else {
-            refName = instance.id; // ref 이름을 바꿔서 저장해준다. 
-          }
+          refName = instance.id; // ref 이름을 바꿔서 저장해준다. 
         }
 
         this.children[refName] = instance;
-        // this.refs[refName] = instance.$el;
 
         if (instance) {
           instance.render();

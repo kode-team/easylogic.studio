@@ -21,10 +21,6 @@ const CSS_UNIT_REG = /([\d.]+)(px|pt|fr|r?em|deg|vh|vw|m?s|%)/gi;
 
 export class Length {
   constructor(value = "", unit = "") {
-    if (unit !== "") {
-      value = +value;
-    }
-
     this.value = value;
     this.unit = unit;
   }
@@ -254,6 +250,8 @@ export class Length {
 
   set(value) {
     this.value = value;
+
+    return this;
   }
 
   add(obj) {

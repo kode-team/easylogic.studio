@@ -66,14 +66,7 @@
     .property-item {
       padding: 0px;
       font-size: 11px;
-      overflow: hidden;
-      display: grid;
-      grid-template-columns: 1fr 3fr;
       margin-bottom: 2px;
-
-      &.full {
-        grid-template-columns: 1fr;
-      }
 
       .property-item-label,
       .property-item-input-field {

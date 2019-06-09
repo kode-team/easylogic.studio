@@ -55,9 +55,9 @@ export default class BackgroundImageEditor extends UIElement {
         return `
             <div class='background-image-editor' >
                 <div class='label'>
-                    <label>${this.props.title}</label>
+                    <label>${this.props.title||''}</label>
                     <div class='tools'>
-                        <button type="button" ref='$add'>${icon.add}</button>
+                        <button type="button" ref='$add'>${icon.add} ${this.props.title ? '' : 'Add'}</button>
                     </div>
                 </div>
                 <div class='fill-list' ref='$fillList'></div>

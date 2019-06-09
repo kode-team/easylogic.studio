@@ -52,8 +52,9 @@ export default class Inspector extends UIElement {
               <TransformProperty />
               <FilterProperty />
               <BackdropFilterProperty />
+              <ClipPathProperty />              
               <OutlineProperty />
-              <ClipPathProperty />
+
             </div>
             <div class='tab-content' data-value="4">
               <RootVariableProperty />

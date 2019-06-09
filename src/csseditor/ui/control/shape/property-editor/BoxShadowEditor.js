@@ -24,9 +24,9 @@ export default class BoxShadowEditor extends UIElement {
     return `
       <div class="box-shadow-editor" >
         <div class='label' >
-            <label>${this.props.title}</label>
+            <label>${this.props.title||''}</label>
             <div class='tools'>
-              <button type="button" ref="$add" title="add Box Shadow">${icon.add}</button>
+              <button type="button" ref="$add" title="add Box Shadow">${icon.add} ${this.props.title ? '': 'Add'}</button>
             </div>
         </div>
         <div class='box-shadow-list' ref='$shadowList'></div>

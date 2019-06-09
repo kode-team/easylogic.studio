@@ -1,10 +1,10 @@
 .range-editor {
     display: grid;
-    grid-template-columns: 1fr 50px 50px;
+    grid-template-columns: 1fr;
     grid-column-gap: 4px;
 
     &.has-label {
-        grid-template-columns: 60px 1fr 50px 50px;
+        grid-template-columns: 60px 1fr;
         grid-column-gap: 2px;
 
         label {
@@ -14,4 +14,68 @@
             box-sizing: border-box;
         }
     }
+
+    &.has-calc {
+        grid-template-columns: 20px 1fr;
+        grid-column-gap: 2px;
+
+        .type-button {
+            display: inline-block;
+        }
+    }
+
+    &.has-calc.has-label {
+        grid-template-columns: 60px 20px 1fr;
+        grid-column-gap: 2px;
+    }
+
+
+    .type-button {
+        vertical-align: middle;
+        appearance: none;
+        background-color: transparent;
+        width: 16px;
+        height: 16px;
+        outline: none;
+        padding: 0px;
+        display: none;
+
+        svg {
+            width: 100%;
+            height: 100%;
+
+            path {
+                fill: $border-color;
+            }
+        }
+    }
+
+    .range-editor-type {
+        display: none;
+        vertical-align: middle;
+
+        .area {
+            display: grid; 
+            grid-template-columns: 1fr 50px 50px;
+            grid-column-gap: 2px;
+
+            input,select {
+                width: 100%;
+            }
+        }
+
+        &[data-type='calc'] {
+            .area {
+                grid-template-columns: 50px 1fr;    
+            }
+        }
+    }
+
+    @each $display-type in calc, range {
+        &[data-selected-type="#{$display-type}"] {
+          .range-editor-type[data-type="#{$display-type}"] {
+            display: inline-block;
+          }
+        }
+      }
 }

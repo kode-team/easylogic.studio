@@ -19,8 +19,8 @@ const textStyleList = ["decoration", "transform"];
 export class DomItem extends GroupItem {
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
-      width: Length.px(300),
-      height: Length.px(400),
+      'width': Length.px(300),
+      'height': Length.px(400),
       'rootVariable': '',
       'variable': '',
       'transform': '',
@@ -32,7 +32,12 @@ export class DomItem extends GroupItem {
       'box-shadow': '',
       'text-shadow': '',
       'clip-path': '',
-      color: "black",
+      'color': "black",
+      'font-size': '',
+      'line-height': '',
+      'text-align': '',
+      'text-transform': '',
+      'text-decoration': '',
       x: Length.px(100),
       y: Length.px(100),
       // filters: [],      // deprecated 
@@ -65,8 +70,8 @@ export class DomItem extends GroupItem {
       paddingRight: Length.px(0),
       paddingLeft: Length.px(0),
       content: "",
-      font: {},
-      text: {},
+      // font: {},
+      // text: {},
       spacing: {},
       ...obj
     });
@@ -427,34 +432,27 @@ export class DomItem extends GroupItem {
   }
 
   toFontCSS() {
-    var font = this.json.font;
+    var json = this.json;
     var obj = {};
 
-    fontStyleList.forEach(key => {
-      if (font[key]) {
-        var styleKey = `font-${key}`;
-        if (key === "lineHeight") {
-          styleKey = "line-height";
-        }
-
-        obj[styleKey] = font[key];
+    ['font-size', 'line-height', 'font-weight', 'font-family', 'font-style'].forEach( it => {
+      if (json[it]) {
+        obj[it] = json[it]
       }
-    });
+    })
 
     return obj;
   }
 
   toTextCSS() {
-    var text = this.json.text;
+    var json = this.json;
     var obj = {};
 
-    textStyleList.forEach(key => {
-      if (text[key]) {
-        var styleKey = `text-${key}`;
-
-        obj[styleKey] = text[key];
+    ['text-align', 'text-transform', 'text-decoration'].forEach( it => {
+      if (json[it]) {
+        obj[it] = json[it]
       }
-    });
+    })
 
     return obj;
   }

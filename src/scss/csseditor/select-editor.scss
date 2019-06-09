@@ -1,0 +1,17 @@
+.select-editor {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-column-gap: 4px;
+
+    &.has-label {
+        grid-template-columns: 60px 1fr;
+        grid-column-gap: 2px;
+
+        label {
+            text-align: right;
+            vertical-align: middle;
+            padding:2px 4px;
+            box-sizing: border-box;
+        }
+    }
+}

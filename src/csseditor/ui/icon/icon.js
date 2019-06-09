@@ -31,9 +31,12 @@ import input from "./input";
 import filter from "./filter";
 import play from "./play";
 import pause from "./pause";
+import autorenew from "./autorenew";
+
 
 
 export default {
+  autorenew,
   play,
   pause,
   filter,
