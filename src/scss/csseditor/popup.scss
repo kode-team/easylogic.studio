@@ -372,22 +372,7 @@
     width: 250px;
     .box {
       > div {
-        display: grid;
-        grid-template-columns: 60px 1fr;
-        grid-column-gap: 4px;
         margin-bottom: 5px;
-
-
-        &.timing-function,
-        &.delay,
-        &.duration,
-        &.iteration-count {
-          grid-template-columns: 1fr;
-
-          label {
-            text-align: left;
-          }
-        }
       }
 
       label {
@@ -639,17 +624,8 @@
     width: 250px;
     height: auto;
     .box {
-      > div {
-        height: 20px;
-        display: grid;
-        grid-template-columns: 60px 1fr;
-        grid-column-gap: 4px;
-        margin-bottom: 5px;
-      }
 
       > .clip-path-editor {
-        grid-template-columns: 1fr;
-        height: auto;
 
         .range-editor {
           margin-bottom: 5px;

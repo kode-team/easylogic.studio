@@ -6,8 +6,6 @@ import RangeEditor from "./RangeEditor";
 
 export default class IterationCountEditor extends RangeEditor {
 
-     
-
     initState() {
         var value = this.props.value
 
@@ -17,11 +15,15 @@ export default class IterationCountEditor extends RangeEditor {
             value = Length.number(value.split('normal')[0])
         }
         var units = this.props.units || 'px,em,%';
+        
         return {
-            key: this.props.key,
-            params: this.props.params || '',
-            units: units.split(','),
-            value
+            ...super.initState(), 
+            ...{
+                key: this.props.key,
+                params: this.props.params || '',
+                units: units.split(','),
+                value
+            }
         }
     }
 

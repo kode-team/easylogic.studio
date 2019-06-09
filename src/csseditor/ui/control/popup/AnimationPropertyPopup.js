@@ -7,12 +7,14 @@ import { editor } from "../../../../editor/editor";
 import { html } from "../../../../util/functions/func";
 import RangeEditor from "../shape/property-editor/RangeEditor";
 import IterationCountEditor from "../shape/property-editor/IterationCountEditor";
+import SelectEditor from "../shape/property-editor/SelectEditor";
 
 
 export default class AnimationPropertyPopup extends UIElement {
 
   components() {
     return {
+      SelectEditor,
       CubicBezierEditor,
       RangeEditor,
       IterationCountEditor
@@ -101,76 +103,57 @@ export default class AnimationPropertyPopup extends UIElement {
   templateForDirection() {
     return `
       <div class='direction'>
-        <label>Direction</label>
-        <div class='input grid-1'>
-          <select ref='$direction'></select>
-        </div>
+        <SelectEditor 
+            label='Direction'
+            ref='$direction' 
+            key='direction' 
+            value="${this.state.direction}"
+            options='${['normal', 'reverse', 'alternate', 'alternate-reverse']}'
+            onChange='changeSelect'
+        /> 
       </div>
     `
   }
 
-
-  [LOAD('$direction')] () {
-    return ['normal', 'reverse', 'alternate', 'alternate-reverse'].map(it => {
-      var selected = it === this.state.direction ? 'selected' : '';
-      return `<option value='${it}' ${selected} >${it}</option>`
-    })
+  [EVENT('changeSelect')] (key, value) {
+    this.updateData({ [key]: value })
   }
-
-  [CHANGE('$direction')] (e) {
-    this.updateData({ direction: this.refs.$direction.value })
-  }    
-
 
   templateForPlayState() {
     return `
-      <div class='direction'>
-        <label>Play State</label>
-        <div class='input grid-1'>
-          <select ref='$playState'></select>
-        </div>
-      </div>
-    `
-  }
-
-  [LOAD('$playState')] () {
-    return ['paused', 'running'].map(it => {
-      var selected = it === this.state.playState ? 'selected' : '';
-      return `<option value='${it}' ${selected} >${it}</option>`
-    })
-  }
-
-  [CHANGE('$playState')] (e) {
-    this.updateData({ playState: this.refs.$playState.value })
+    <div class='play-state'>
+      <SelectEditor 
+          label='Play State'
+          ref='$playState' 
+          key='playState' 
+          value="${this.state.playState}"
+          options='${['paused', 'running']}'
+          onChange='changeSelect'
+      /> 
+    </div>
+  `
   }  
 
   templateForFillMode() {
     return `
-      <div class='fill-mode'>
-        <label>Fill Mode</label>
-        <div class='input grid-1'>
-          <select ref='$fillMode'></select>
-        </div>
-      </div>
-    `
-  }
-
-  [LOAD('$fillMode')] () {
-    return ['none', 'forwards', 'backwards', 'both'].map(it => {
-      var selected = it === this.state.fillMode ? 'selected' : '';
-      return `<option value='${it}' ${selected} >${it}</option>`
-    })
-  }
-
-  [CHANGE('$fillMode')] (e) {
-    this.updateData({ fillMode: this.refs.$fillMode.value })
+    <div class='fill-mode'>
+      <SelectEditor 
+          label='Fill Mode'
+          ref='$fillMode' 
+          key='fillMode' 
+          value="${this.state.fillMode}"
+          options='${['none', 'forwards', 'backwards', 'both']}'
+          onChange='changeSelect'
+      /> 
+    </div>
+  `
   }
 
   templateForDelay () {
     return `
     <div class='delay grid-1'>
       <label>Delay</label>
-      <RangeEditor ref='$delay' key='delay' value='${this.state.delay}' units='s,ms' onChange="changeRangeEditor" />
+      <RangeEditor ref='$delay' calc='false' key='delay' value='${this.state.delay}' units='s,ms' onChange="changeRangeEditor" />
     </div>
     `
   }
@@ -179,7 +162,7 @@ export default class AnimationPropertyPopup extends UIElement {
     return `
     <div class='duration grid-1'>
       <label>Duration</label>
-      <RangeEditor ref='$duration' key='duration' value='${this.state.duration}' units='s,ms' onChange="changeRangeEditor" />
+      <RangeEditor ref='$duration'  calc='false' key='duration' value='${this.state.duration}' units='s,ms' onChange="changeRangeEditor" />
     </div>
     `
   }
@@ -188,7 +171,7 @@ export default class AnimationPropertyPopup extends UIElement {
     return `
       <div class='iteration-count grid-1'>
         <label>Iteration</label>
-        <IterationCountEditor ref='$iterationCount' key='iterationCount' value='${this.state.iterationCount}' units='normal,infinite' onChange="changeRangeEditor" />
+        <IterationCountEditor ref='$iterationCount' calc='false' key='iterationCount' value='${this.state.iterationCount}' units='normal,infinite' onChange="changeRangeEditor" />
       </div>
     `
   }

@@ -5,8 +5,6 @@ import { Length } from "../../../../../../editor/unit/Length";
 import { POINTERSTART, MOVE, END } from "../../../../../../util/Event";
 import RangeEditor from "../RangeEditor";
 
-
-
 export default class CircleEditor extends UIElement {
 
     components () {

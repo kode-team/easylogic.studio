@@ -3271,13 +3271,7 @@ html, body {
 .csseditor .property > .property-body .property-item {
   padding: 0px;
   font-size: 11px;
-  overflow: hidden;
-  display: grid;
-  grid-template-columns: 1fr 3fr;
   margin-bottom: 2px;
-}
-.csseditor .property > .property-body .property-item.full {
-  grid-template-columns: 1fr;
 }
 .csseditor .property > .property-body .property-item .property-item-label,
 .csseditor .property > .property-body .property-item .property-item-input-field {
@@ -3689,40 +3683,6 @@ html, body {
 .csseditor .outline-item {
   grid-template-columns: 1fr 3fr;
   grid-column-gap: 10px;
-  height: 85px;
-}
-.csseditor .outline-item .outline-direction {
-  position: relative;
-  display: grid;
-  grid-template-columns: 10px 1fr 10px;
-  grid-template-rows: 10px 1fr 10px;
-  grid-column-gap: 2px;
-  grid-row-gap: 2px;
-  place-self: top;
-  width: 60px;
-  height: 60px;
-}
-.csseditor .outline-item .outline-direction[data-selected-value=all] button[data-value=all] {
-  opacity: 1;
-}
-.csseditor .outline-item .outline-direction button {
-  padding: 0px;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  border: 2px solid #cccccc;
-  box-sizing: border-box;
-  cursor: pointer;
-  opacity: 0.4;
-  outline: rgba(54, 54, 247, 0.5) medium solid;
-}
-.csseditor .outline-item .outline-direction button[has-value=true] {
-  border-color: #00a2ff;
-}
-.csseditor .outline-item .outline-direction button[data-value=all] {
-  grid-column: 2/3;
-  grid-row: 2/3;
-  border: 2px solid black;
 }
 .csseditor .outline-item .input-group {
   display: grid;
@@ -4332,14 +4292,78 @@ html, body {
 }
 .csseditor .range-editor {
   display: grid;
-  grid-template-columns: 1fr 50px 50px;
+  grid-template-columns: 1fr;
   grid-column-gap: 4px;
 }
 .csseditor .range-editor.has-label {
-  grid-template-columns: 60px 1fr 50px 50px;
+  grid-template-columns: 60px 1fr;
   grid-column-gap: 2px;
 }
 .csseditor .range-editor.has-label label {
+  text-align: right;
+  vertical-align: middle;
+  padding: 2px 4px;
+  box-sizing: border-box;
+}
+.csseditor .range-editor.has-calc {
+  grid-template-columns: 20px 1fr;
+  grid-column-gap: 2px;
+}
+.csseditor .range-editor.has-calc .type-button {
+  display: inline-block;
+}
+.csseditor .range-editor.has-calc.has-label {
+  grid-template-columns: 60px 20px 1fr;
+  grid-column-gap: 2px;
+}
+.csseditor .range-editor .type-button {
+  vertical-align: middle;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  width: 16px;
+  height: 16px;
+  outline: none;
+  padding: 0px;
+  display: none;
+  border: 0px;
+}
+.csseditor .range-editor .type-button svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor .range-editor .range-editor-type {
+  display: none;
+  vertical-align: middle;
+}
+.csseditor .range-editor .range-editor-type .area {
+  display: grid;
+  grid-template-columns: 1fr 50px 50px;
+  grid-column-gap: 2px;
+}
+.csseditor .range-editor .range-editor-type .area input, .csseditor .range-editor .range-editor-type .area select {
+  width: 100%;
+}
+.csseditor .range-editor .range-editor-type[data-type=calc] .area {
+  grid-template-columns: 50px 1fr;
+}
+.csseditor .range-editor[data-selected-type=calc] .range-editor-type[data-type=calc] {
+  display: inline-block;
+}
+.csseditor .range-editor[data-selected-type=range] .range-editor-type[data-type=range] {
+  display: inline-block;
+}
+.csseditor .select-editor {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-column-gap: 4px;
+}
+.csseditor .select-editor.has-label {
+  grid-template-columns: 60px 1fr;
+  grid-column-gap: 2px;
+}
+.csseditor .select-editor.has-label label {
   text-align: right;
   vertical-align: middle;
   padding: 2px 4px;
@@ -5662,16 +5686,7 @@ html, body {
   width: 250px;
 }
 .csseditor .popup.animation-property-popup .box > div {
-  display: grid;
-  grid-template-columns: 60px 1fr;
-  grid-column-gap: 4px;
   margin-bottom: 5px;
-}
-.csseditor .popup.animation-property-popup .box > div.timing-function, .csseditor .popup.animation-property-popup .box > div.delay, .csseditor .popup.animation-property-popup .box > div.duration, .csseditor .popup.animation-property-popup .box > div.iteration-count {
-  grid-template-columns: 1fr;
-}
-.csseditor .popup.animation-property-popup .box > div.timing-function label, .csseditor .popup.animation-property-popup .box > div.delay label, .csseditor .popup.animation-property-popup .box > div.duration label, .csseditor .popup.animation-property-popup .box > div.iteration-count label {
-  text-align: left;
 }
 .csseditor .popup.animation-property-popup .box label {
   font-size: 12px;
@@ -5833,6 +5848,10 @@ html, body {
 .csseditor .popup.keyframe-popup .box .keyframe-property-item .title {
   grid-template-columns: 1fr 30px;
 }
+.csseditor .popup.keyframe-popup .box .keyframe-property-item .value-editor {
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  padding: 2px;
+}
 .csseditor .popup.keyframe-popup .box .keyframe-property-item .tools button {
   -webkit-appearance: none;
      -moz-appearance: none;
@@ -5871,17 +5890,6 @@ html, body {
 .csseditor .popup.clippath-popup {
   padding: 7px;
   width: 250px;
-  height: auto;
-}
-.csseditor .popup.clippath-popup .box > div {
-  height: 20px;
-  display: grid;
-  grid-template-columns: 60px 1fr;
-  grid-column-gap: 4px;
-  margin-bottom: 5px;
-}
-.csseditor .popup.clippath-popup .box > .clip-path-editor {
-  grid-template-columns: 1fr;
   height: auto;
 }
 .csseditor .popup.clippath-popup .box > .clip-path-editor .range-editor {
@@ -5929,38 +5937,6 @@ html, body {
 .csseditor .popup.clippath-popup .box .property .title .tools button svg {
   width: 16px;
   height: 16px;
-}
-.csseditor .popup.clippath-popup .box .offset-input {
-  padding: 5px 0px;
-}
-.csseditor .popup.clippath-popup .box .offset-input input {
-  width: 104px;
-}
-.csseditor .popup.clippath-popup .box .keyframe-property-list {
-  max-height: 300px;
-  overflow: auto;
-}
-.csseditor .popup.clippath-popup .box .keyframe-property-item {
-  box-sizing: border-box;
-  padding: 4px 0px;
-  margin-top: 2px;
-}
-.csseditor .popup.clippath-popup .box .keyframe-property-item .title {
-  grid-template-columns: 1fr 30px;
-}
-.csseditor .popup.clippath-popup .box .keyframe-property-item .tools button {
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  cursor: pointer;
-  border: 0px;
-}
-.csseditor .popup.clippath-popup .box .keyframe-property-item .tools button svg {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
 }
 .csseditor .popup.clippath-popup .box label {
   font-size: 12px;

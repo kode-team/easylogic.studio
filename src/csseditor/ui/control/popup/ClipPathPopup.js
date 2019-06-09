@@ -1,14 +1,16 @@
 import UIElement, { EVENT } from "../../../../util/UIElement";
 import { Length } from "../../../../editor/unit/Length";
 import { CHANGE_EDITOR, CHANGE_SELECTION } from "../../../types/event";
-import { CHANGE, LOAD } from "../../../../util/Event";
+import { LOAD } from "../../../../util/Event";
 import { ClipPath } from "../../../../editor/css-property/ClipPath";
 import CircleEditor from "../shape/property-editor/clip-path/CircleEditor";
+import SelectEditor from "../shape/property-editor/SelectEditor";
 
 export default class ClipPathPopup extends UIElement {
 
   components() {
     return {
+      SelectEditor,
       CircleEditor
     }
   }
@@ -33,10 +35,16 @@ export default class ClipPathPopup extends UIElement {
     return `
     <div class='popup clippath-popup' ref='$popup'>
       <div class="box">
-        ${this.templateForType()}
+        <div class='clip-path-editor' ref='$clippathType'></div>
         <div class='clip-path-editor' ref='$clippath'></div>
       </div>
     </div>`;
+  }
+
+  [LOAD('$clippathType')] () {
+    return `
+      <SelectEditor ref='$type' label="Type" key='type' value="${this.state.type}" options="none,circle,ellipse,inset,polygon,path,svg" onchange="changeClipPathType" />
+    `
   }
 
   [LOAD('$clippath')] () {
@@ -59,29 +67,11 @@ export default class ClipPathPopup extends UIElement {
     
   }
 
-  templateForType() {
-    return `
-      <div class='type'>
-        <label>Type</label>
-        <div class='input grid-1'>
-          <select ref='$type'>
-            <option value='none' ${this.state.type === 'none' ? 'selected': ''}>none</option>
-            <option value='circle' ${this.state.type === 'circle' ? 'selected': ''}>circle</option>
-            <option value='ellipse' ${this.state.type === 'ellipse' ? 'selected': ''}>ellipse</option>
-            <option value='inset' ${this.state.type === 'inset' ? 'selected': ''}>inset</option>
-            <option value='polygon' ${this.state.type === 'polygon' ? 'selected': ''}>polygon</option>
-            <option value='path' ${this.state.type === 'path' ? 'selected': ''}>path</option>
-            <option value='svg' ${this.state.type === 'svg' ? 'selected': ''}>svg</option>
-          </select>
-        </div>
-      </div>
-    `
-  }
 
-  [CHANGE('$type')] (e) {
+  [EVENT('changeClipPathType')] (key, type) {
 
     this.setState({
-      type : this.refs.$type.value,
+      type,
       value: ''
     })
     this.refresh();    

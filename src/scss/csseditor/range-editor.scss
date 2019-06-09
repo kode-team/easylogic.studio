@@ -39,14 +39,12 @@
         outline: none;
         padding: 0px;
         display: none;
+        border:0px;
 
         svg {
             width: 100%;
             height: 100%;
 
-            path {
-                fill: $border-color;
-            }
         }
     }
 
