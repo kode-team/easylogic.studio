@@ -160,12 +160,10 @@ $display-grid-color: red;
 // property 
 @import "./property-view.scss";
 @import "./border.scss";
-// @import "./outline.scss";
 @import "./box-model.scss";
 @import "./size.scss";
 @import "./content.scss";
-// @import "./font.scss";
-// @import "./export-view.scss";
+@import './transition.scss';  
 @import './animation.scss';  
 @import './keyframe.scss'; 
 @import './codeview.scss'; 

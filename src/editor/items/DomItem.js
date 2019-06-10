@@ -496,7 +496,8 @@ export class DomItem extends GroupItem {
       ...this.toBackgroundImageCSS(isExport),
       ...this.toBoxShadowCSS(),
       ...this.toTextShadowCSS(),
-      ...this.toAnimationCSS()
+      ...this.toAnimationCSS(),
+      ...this.toTransitionCSS()
     });
   }
 
@@ -518,7 +519,8 @@ export class DomItem extends GroupItem {
       ...this.toOutlineCSS(),
       ...this.toBorderRadiusCSS(),
       ...this.toBorderImageCSS(),
-      ...this.toAnimationCSS(),      
+      ...this.toAnimationCSS(),
+      ...this.toTransitionCSS(),      
       ...this.toClipPathCSS(),
       ...this.toFilterCSS(),
       ...this.toTransformCSS(),      
@@ -528,42 +530,10 @@ export class DomItem extends GroupItem {
       ...this.toTextShadowCSS()
     });
   }
-
-  // transition 을 위한 css 리스트 얻어오기 
-  // 새로운 class 를 만들어서 입력해야할 듯 
-  toAnimationSnapCSS() {
-    var json = this.json;
-    var css = {
-      "background-color": json['background-color'],
-      color: json.color
-    };
-
-    return CSS_SORTING({
-      ...css,
-      ...this.toBoxModelCSS(),
-      ...this.toSizeCSS(),
-      ...this.toBorderCSS(),
-      ...this.toOutlineCSS(),
-      ...this.toBorderRadiusCSS(),
-      ...this.toBorderImageCSS(),   
-      ...this.toClipPathCSS(),         
-      ...this.toFilterCSS(),
-      ...this.toTransformCSS(),      
-      ...this.toBackdropFilterCSS(),      
-      ...this.toBackgroundImageCSS(),
-      ...this.toBoxShadowCSS(),
-      ...this.toTextShadowCSS()
-    });
-  }
-
   /**
    * `@keyframes` 문자열만 따로 생성 
    */
   toKeyframeString (isAnimate = false) {
     return this.json.keyframes.map(keyframe => keyframe.toString(isAnimate)).join(NEW_LINE_2)
-  }
-
-  toGridString() {
-    return "";
   }
 }

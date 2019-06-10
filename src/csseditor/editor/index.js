@@ -2,7 +2,6 @@ import VerticalColorStep from "../ui/control/VerticalColorStep";
 import CanvasView from "../ui/view/CanvasView";
 import ToolMenu from "../ui/view/ToolMenu";
 
-// import { LOAD_START } from "../types/LoadTypes";
 import UIElement from "../../util/UIElement";
 import { RESIZE, DEBOUNCE, BIND } from "../../util/Event";
 import { RESIZE_WINDOW } from "../types/ToolTypes";
@@ -63,6 +62,7 @@ export default class CSSEditor extends UIElement {
         <BoxShadowPropertyPopup />
         <TextShadowPropertyPopup />
         <AnimationPropertyPopup />
+        <TransitionPropertyPopup />
         <KeyframePopup />
         <ClipPathPopup />
       </div>
@@ -81,18 +81,6 @@ export default class CSSEditor extends UIElement {
       ExportWindow
     };
   }
-
-  // [EVENT(LOAD_START)](isAdd) {
-  //   console.log("최초 로딩은 어디서 할까요?");
-  //   // this.dispatch(STORAGE_LOAD, (isLoaded) => {
-  //   //     if (!isLoaded && isAdd) {
-  //   //         this.dispatch(ITEM_ADD_PAGE, true)
-  //   //     } else {
-  //   //         this.dispatch(ITEM_LOAD);
-  //   //     }
-  //   //     this.emit(CHANGE_ARTBOARD)
-  //   // });
-  // }
 
   [BIND("$layoutMain")]() {
     return {

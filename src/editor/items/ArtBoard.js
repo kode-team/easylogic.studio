@@ -89,7 +89,4 @@ export class ArtBoard extends DomItem {
     this.sort();
   }
 
-  toGridString() {
-    return "";
-  }
 }

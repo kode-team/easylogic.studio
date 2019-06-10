@@ -3750,6 +3750,82 @@ html, body {
   height: 140px;
   box-sizing: border-box;
 }
+.csseditor .transition-list {
+  grid-template-columns: 1fr !important;
+}
+.csseditor .transition-list .transition-item {
+  display: grid;
+  grid-template-columns: 30px 1fr 20px;
+  grid-column-gap: 4px;
+  box-sizing: border-box;
+  border: 1px solid #cccccc;
+  margin-bottom: 5px;
+  padding: 5px;
+}
+.csseditor .transition-list .transition-item.selected {
+  background-color: rgba(204, 204, 204, 0.5);
+}
+.csseditor .transition-list .transition-item .timing {
+  border-radius: 3px;
+  background-color: #ac48ff;
+  width: 100%;
+  height: 30px;
+  vertical-align: middle;
+  cursor: pointer;
+  margin-top: 3px;
+}
+.csseditor .transition-list .transition-item .timing canvas {
+  border-radius: 3px;
+}
+.csseditor .transition-list .transition-item .labels {
+  margin-top: 4px;
+  text-align: left;
+  vertical-align: middle;
+  padding: 5px;
+}
+.csseditor .transition-list .transition-item .labels label {
+  padding: 1px 3px;
+  border-radius: 2px;
+  font-weight: bold;
+}
+.csseditor .transition-list .transition-item .labels label small {
+  color: white;
+}
+.csseditor .transition-list .transition-item .labels label.property {
+  font-size: 11px;
+  font-weight: normal;
+  border-bottom: 0px;
+}
+.csseditor .transition-list .transition-item .labels label.delay {
+  background-color: red;
+}
+.csseditor .transition-list .transition-item .labels label.duration {
+  background-color: green;
+}
+.csseditor .transition-list .transition-item .tools {
+  vertical-align: middle;
+  text-align: right;
+  padding-top: 8px;
+}
+.csseditor .transition-list .transition-item .tools button {
+  vertical-align: middle;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  border: 0px;
+  padding: 0px;
+  font-size: 16px;
+  vertical-align: middle;
+  cursor: pointer;
+  outline: none;
+  font-size: 12px;
+}
+.csseditor .transition-list .transition-item .tools button svg {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
 .csseditor .animation-list {
   grid-template-columns: 1fr !important;
 }
@@ -5443,6 +5519,29 @@ html, body {
   grid-template-columns: 1fr;
 }
 .csseditor .popup.animation-property-popup .box .input.grid-2 {
+  grid-template-columns: 3fr 1fr;
+}
+.csseditor .popup.transition-property-popup {
+  padding: 10px;
+  width: 250px;
+}
+.csseditor .popup.transition-property-popup .box > div {
+  margin-bottom: 5px;
+}
+.csseditor .popup.transition-property-popup .box label {
+  font-size: 12px;
+  text-align: left;
+  vertical-align: middle;
+}
+.csseditor .popup.transition-property-popup .box .input {
+  vertical-align: middle;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+}
+.csseditor .popup.transition-property-popup .box .input.grid-1 {
+  grid-template-columns: 1fr;
+}
+.csseditor .popup.transition-property-popup .box .input.grid-2 {
   grid-template-columns: 3fr 1fr;
 }
 .csseditor .popup.text-shadow-property-popup {

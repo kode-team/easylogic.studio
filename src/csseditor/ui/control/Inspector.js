@@ -9,7 +9,7 @@ export default class Inspector extends UIElement {
     return html`
       <div class="feature-control">
         <div>
-          <div class="tab number-tab" data-selected-value="3" ref="$tab">
+          <div class="tab number-tab" data-selected-value="4" ref="$tab">
             <div class="tab-header" ref="$header">
               <div class="tab-item" data-value="1">
                 <div class='icon'>${icon.paint}</div>
@@ -58,6 +58,7 @@ export default class Inspector extends UIElement {
 
               </div>
               <div class='tab-content' data-value="4">
+                <TransitionProperty />
                 <KeyframeProperty />
                 <AnimationProperty />
               </div>            
