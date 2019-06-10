@@ -15,7 +15,9 @@ const MOVE_CHECK_MS = 10;
 
 export const start = opt => {
   class App extends UIElement {
+
     initialize(modules = []) {
+
       this.$store = new BaseStore({
         modules: [...this.getModuleList(), ...modules]
       });

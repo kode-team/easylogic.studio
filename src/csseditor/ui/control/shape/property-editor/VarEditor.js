@@ -21,7 +21,7 @@ export default class VarEditor extends UIElement {
         return `
         <div class='var-editor var-list'>
             <div class='label' >
-                <label>${this.props.title}</label>
+                <label>${this.props.title || ''}</label>
                 <div class='tools'>
                     <button type="button" ref="$add" title="add Var">${icon.add}</button>
                 </div>
@@ -78,7 +78,7 @@ export default class VarEditor extends UIElement {
 
     updateData (data) {
         var value = this.state.values.map(it => {
-            return `${it.key}:${it.value}`
+            return `--${it.key}:${it.value}`
         }).join(';')
 
         this.parent.trigger(this.props.onchange, value, this.props.params)

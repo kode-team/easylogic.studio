@@ -73,10 +73,14 @@ export default class Inspector extends UIElement {
                 <lable>Code</label>
               </div>    
               <div class="tab-item" data-value="2">
+                <div class='icon'>${icon.code}</div>
+                <lable>Computed</label>
+              </div>                  
+              <div class="tab-item" data-value="3">
                 <div class='icon'>${icon.build}</div>
                 <lable>Var</label>
               </div>    
-              <div class="tab-item" data-value="3">
+              <div class="tab-item" data-value="4">
                 <div class='icon'>${icon.build}</div>
                 <lable>Root Var</label>
               </div>                                
@@ -86,9 +90,12 @@ export default class Inspector extends UIElement {
                 <CodeViewProperty />
               </div>
               <div class="tab-content" data-value="2">
+                <ComputedCodeViewProperty />
+              </div>              
+              <div class="tab-content" data-value="3">
                 <VariableProperty />
               </div>
-              <div class="tab-content" data-value="3">
+              <div class="tab-content" data-value="4">
                 <RootVariableProperty />
               </div>                            
             </div>

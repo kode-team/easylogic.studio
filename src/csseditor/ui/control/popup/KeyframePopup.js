@@ -80,9 +80,6 @@ export default class KeyframePopup extends UIElement {
 
   [EVENT("showKeyframePopup")](data) {
     this.setState(data);
-    this.refresh();
-
-    console.log(this.state, data);
 
     this.$el
       .css({

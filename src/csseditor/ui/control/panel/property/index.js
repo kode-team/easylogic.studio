@@ -23,10 +23,12 @@ import RootVariableProperty from "./RootVariableProperty";
 import TransformProperty from "./TransformProperty";
 import ClipPathProperty from "./ClipPathProperty";
 import TransitionProperty from "./TransitionProperty";
+import ComputedCodeViewProperty from "./ComputedCodeViewProperty";
 
 
  
 export default {
+  ComputedCodeViewProperty,
   TransitionProperty,
   ClipPathProperty,
   TransformProperty,

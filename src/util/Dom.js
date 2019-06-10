@@ -274,6 +274,17 @@ export default class Dom {
     return this;
   }
 
+  getComputedStyle (...list) {
+    var css = getComputedStyle(this.el);
+
+    var obj = {}
+    list.forEach(it => {
+      obj[it] = css[it]
+    })
+
+    return obj; 
+  }
+
   getStyleList(...list) {
     var style = {};
 

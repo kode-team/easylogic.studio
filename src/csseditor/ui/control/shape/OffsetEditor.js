@@ -1,20 +1,17 @@
 import UIElement, { EVENT } from "../../../../util/UIElement";
 import { Length } from "../../../../editor/unit/Length";
-import { LOAD, POINTERSTART, MOVE, END, CLICK, IF, INPUT, PREVENT, STOP } from "../../../../util/Event";
-import Color from "../../../../util/Color";
+import { LOAD, POINTERSTART, MOVE, END, CLICK, IF, INPUT, PREVENT } from "../../../../util/Event";
 import { Offset } from "../../../../editor/css-property/Offset";
 import Dom from "../../../../util/Dom";
-import { repeat, isNotUndefined, html, isUndefined } from "../../../../util/functions/func";
+import { isUndefined } from "../../../../util/functions/func";
 import OffsetPropertyEditor from "./OffsetPropertyEditor";
-import ColorViewEditor from "./property-editor/ColorViewEditor";
 
 
 export default class OffsetEditor extends UIElement {
 
   components() {
     return {
-      OffsetPropertyEditor,
-      ColorViewEditor
+      OffsetPropertyEditor
     }
   }
 
@@ -38,7 +35,6 @@ export default class OffsetEditor extends UIElement {
     <div class='editor offset-editor' ref='$editor'>
         ${this.templateForOffset()}
         ${this.templateForOffsetInput()}
-        ${this.templateForOffsetColor()}
         ${this.templateForProperty()}        
     </div>`;
   }
@@ -66,20 +62,6 @@ export default class OffsetEditor extends UIElement {
       this.refresh();
       this.modifyOffset();
     }
-  }
-
-
-  templateForOffsetColor () {
-    return `
-      <div class='offset-color property' >
-        <div class='title'>
-          <label>Color</label>
-          <div class='tools'>
-            <ColorViewEditor ref='$offsetColor' onChange="changeOffsetColor" />
-          </div>
-        </div>
-      </div>
-    `
   }
 
   templateForProperty() {
@@ -133,7 +115,6 @@ export default class OffsetEditor extends UIElement {
 
     if (offset) {
       this.getRef('$offsetInput').val(offset.offset.value);
-      this.children.$offsetColor.changeColor(offset.color)
     }
   }
 
@@ -235,15 +216,5 @@ export default class OffsetEditor extends UIElement {
       offset.properties = [...properties];
     }
     this.modifyOffset()
-  }
-
-  [EVENT('changeOffsetColor')] (color) {
-    var offset = this.state.offsets[this.selectedIndex];
-
-    if (offset) {
-      offset.color = color;
-    }
-    this.modifyOffset()
-    this.load();
   }
 }

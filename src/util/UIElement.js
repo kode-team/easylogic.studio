@@ -27,6 +27,7 @@ class UIElement extends EventMachine {
     this.initialize();
 
     this.initializeStoreEvent();
+
   }
 
   /**

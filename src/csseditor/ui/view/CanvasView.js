@@ -27,6 +27,7 @@ export default class CanvasView extends UIElement {
       this.$el.hide();
     } else {
       this[EVENT("refreshCanvas")]();
+      // this.refresh();
     }
   }
   template() {
@@ -83,6 +84,18 @@ export default class CanvasView extends UIElement {
       width: css.width,
       height: css.height
     })
+
+    var last = Object.keys(css).filter(it => !it.includes('--'))
+
+    this.trigger('refreshComputedStyle', last)
+
+    
+  }
+
+  [EVENT('refreshComputedStyle')] (last) {
+    var computedCSS = this.refs.$canvas.getComputedStyle(...last)
+    
+    this.emit('refreshComputedStyleCode', computedCSS)
   }
 
   [EVENT("refreshCanvas")]() {

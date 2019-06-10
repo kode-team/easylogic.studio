@@ -328,7 +328,7 @@ export class DomItem extends GroupItem {
     if (!outline) return {} ;
 
     return {
-      outline: `${outline.width} ${outline.style} ${outline.color}`
+      outline: `${outline.color} ${outline.style} ${outline.width}`
     }
   }
 
