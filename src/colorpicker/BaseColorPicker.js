@@ -3,9 +3,9 @@ import ColorSetsList from './module/ColorSetsList'
 import ColorManager from './module/ColorManager';
 import { MOUSEUP } from '../util/Event';
 import { defaultValue, isFunction } from '../util/functions/func';
-import { px } from '../util/css/types';
 import UIElement from '../util/UIElement';
 import BaseStore from '../util/BaseStore';
+import { Length } from '../editor/unit/Length';
 
 export default class BaseColorPicker extends UIElement {
 
@@ -213,8 +213,8 @@ export default class BaseColorPicker extends UIElement {
 
         // set position
         this.$root.css({
-            left: px(elementScreenLeft),
-            top: px(elementScreenTop)
+            left: Length.px(elementScreenLeft),
+            top: Length.px(elementScreenTop)
         });
 
         // this.definePositionForArrow(opt, elementScreenLeft, elementScreenTop);
@@ -232,8 +232,8 @@ export default class BaseColorPicker extends UIElement {
             var position = this.opt.position == 'absolute' ? 'absolute' : 'fixed'
             return {
                 position,  // color picker has fixed position
-                left: '-10000px',
-                top: '-10000px'
+                left: Length.px(-10000),
+                top: Length.px(-10000)
             }
         }
     }

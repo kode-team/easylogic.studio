@@ -420,11 +420,11 @@ export default class BackgroundImageEditor extends UIElement {
             switch (image.size) {
                 case "contain":
                 case "cover":
-                var text = image.size;
-                break;
+                    var text = image.size;
+                    break;
                 default:
-                var text = `${image.width}/${image.height}`;
-                break;
+                    var text = `${image.width}/${image.height}`;
+                    break;
             }
             $element.text(text);
         } else if (data.repeat) {

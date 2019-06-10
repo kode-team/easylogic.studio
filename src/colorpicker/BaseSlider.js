@@ -1,7 +1,7 @@
 
 import Event from '../util/Event'
 import BaseBox from './BaseBox';
-import { px } from '../util/css/types';
+import { Length } from '../editor/unit/Length';
 
 export default class BaseSlider extends BaseBox {
 
@@ -65,7 +65,7 @@ export default class BaseSlider extends BaseBox {
 
     /** set mosue position */
     setMousePosition (x) {
-        this.refs.$bar.css({ left : px(x) });
+        this.refs.$bar.css({ left : Length.px(x) });
     }
 
     /** set mouse position in page */

@@ -1,6 +1,6 @@
 {
   "name": "gradient-easylogic-studio",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "Fantastic Free Open Source CSS Editor ",
   "main": "index.js",
   "directories": {
@@ -13,6 +13,7 @@
     "autoprefixer": "^9.5.1",
     "babel-loader": "^8.0.5",
     "babel-plugin-external-helpers": "^6.22.0",
+    "compression-webpack-plugin": "^3.0.0",
     "copy-webpack-plugin": "^5.0.3",
     "css-loader": "^2.1.1",
     "cssnano": "^4.1.10",

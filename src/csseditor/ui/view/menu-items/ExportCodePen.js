@@ -2,6 +2,9 @@ import { SUBMIT } from "../../../../util/Event";
 import MenuItem from "./MenuItem";
 import { editor } from "../../../../editor/editor";
 import UIElement from "../../../../util/UIElement";
+import { CSS_TO_STRING } from "../../../../util/css/make";
+import { keyEach, keyMap } from "../../../../util/functions/func";
+import { NEW_LINE, EMPTY_STRING } from "../../../../util/css/types";
 
 export default class ExportCodePen extends UIElement {
   template() {
@@ -22,11 +25,32 @@ export default class ExportCodePen extends UIElement {
       this.refs.$codepen.val(
         JSON.stringify({
           html: '<div id="sample"></div>',
-          css: `#sample { width: 300px; height:300px; ${current.toExport()}; } `
+          css: this.generate(current)
         })
       );
     }
 
     return false;
+  }
+
+
+
+  generate(current) {
+    var css = current.toCSS(), keyframeString = current.toKeyframeString(), rootVariable = current.toRootVariableCSS()
+    var results = `:root {
+  ${CSS_TO_STRING(rootVariable)}
+}
+
+/* element */
+#sample { 
+${keyMap(css, (key, value) => {
+  return `  ${key}: ${value}; ${NEW_LINE}`
+}).join(EMPTY_STRING)}
+}  
+
+/* keyframe */
+${keyframeString}`
+
+    return results
   }
 }

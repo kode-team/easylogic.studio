@@ -1,6 +1,9 @@
 import { SUBMIT } from "../../../../util/Event";
 import MenuItem from "./MenuItem";
 import { editor } from "../../../../editor/editor";
+import { CSS_TO_STRING } from "../../../../util/css/make";
+import { keyEach, keyMap } from "../../../../util/functions/func";
+import { NEW_LINE, EMPTY_STRING } from "../../../../util/css/types";
 
 export default class ExportJSFiddle extends MenuItem {
   template() {
@@ -25,11 +28,29 @@ export default class ExportJSFiddle extends MenuItem {
       this.refs.$title.val("Gradient - easylogic.studio");
       this.refs.$description.val("https://gradient.easylogic.studio");
       this.refs.$html.val('<div id="sample"></div>');
-      this.refs.$css.val(
-        `#sample { width:300px;height:300px; ${current.toExport()}; } `
-      );
+      this.refs.$css.val(this.generate(current));
     }
 
     return false;
+  }
+
+
+  generate(current) {
+    var css = current.toCSS(), keyframeString = current.toKeyframeString(), rootVariable = current.toRootVariableCSS()
+    var results = `:root {
+  ${CSS_TO_STRING(rootVariable)}
+}
+
+/* element */
+#sample { 
+${keyMap(css, (key, value) => {
+  return `  ${key}: ${value}; ${NEW_LINE}`
+}).join(EMPTY_STRING)}
+}  
+
+/* keyframe */
+${keyframeString}
+    `
+    return results
   }
 }

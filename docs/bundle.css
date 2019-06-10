@@ -1405,20 +1405,20 @@ html, body {
   left: 310px;
   position: absolute;
 }
-.csseditor .flex-row {
+.csseditor .feature-control {
   display: flex;
   flex-direction: column;
   height: 100%;
 }
-.csseditor .flex-row > div {
+.csseditor .feature-control > div {
   flex: 1 1 auto;
+  position: relative;
 }
-.csseditor .flex-row .fixed {
+.csseditor .feature-control > div:last-child {
   flex: none;
-  height: 240px;
-  overflow: auto;
+  height: 40%;
+  border-top: 1px solid #cccccc;
   box-sizing: border-box;
-  border-bottom: 1px solid #cccccc;
 }
 .csseditor .tab {
   position: absolute;
@@ -3273,100 +3273,6 @@ html, body {
   font-size: 11px;
   margin-bottom: 2px;
 }
-.csseditor .property > .property-body .property-item .property-item-label,
-.csseditor .property > .property-body .property-item .property-item-input-field {
-  vertical-align: middle;
-}
-.csseditor .property > .property-body .property-item .property-item-label .tools,
-.csseditor .property > .property-body .property-item .property-item-input-field .tools {
-  padding: 2px;
-  text-align: right;
-}
-.csseditor .property > .property-body .property-item .property-item-label button,
-.csseditor .property > .property-body .property-item .property-item-input-field button {
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  border: 0px;
-  cursor: pointer;
-  padding: 0px 3px;
-  outline: none;
-  vertical-align: middle;
-}
-.csseditor .property > .property-body .property-item .property-item-label button svg,
-.csseditor .property > .property-body .property-item .property-item-input-field button svg {
-  width: 16px;
-  height: 16px;
-}
-.csseditor .property > .property-body .property-item .property-item-label.grid-1-3,
-.csseditor .property > .property-body .property-item .property-item-input-field.grid-1-3 {
-  display: grid;
-  grid-template-columns: 1fr 3fr;
-}
-.csseditor .property > .property-body .property-item .property-item-label {
-  box-sizing: border-box;
-  padding: 5px;
-}
-.csseditor .property > .property-body .property-item.grid-0 {
-  grid-template-columns: 1fr;
-}
-.csseditor .property > .property-body .property-item.grid-2 {
-  grid-template-columns: 1fr 3fr;
-}
-.csseditor .property > .property-body .property-item.grid-4 {
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-}
-.csseditor .property > .property-body .property-item.grid-4 .property-item-input-field input {
-  width: 40px;
-}
-.csseditor .property > .property-body .property-item.background-color, .csseditor .property > .property-body .property-item.font-color {
-  grid-template-columns: 1fr;
-}
-.csseditor .property > .property-body .property-item.background-color .fill-item, .csseditor .property > .property-body .property-item.font-color .fill-item {
-  display: grid;
-  height: 24px;
-  grid-template-columns: 24px auto;
-  grid-column-gap: 5px;
-  margin-bottom: 5px;
-  text-align: center;
-}
-.csseditor .property > .property-body .property-item.background-color .fill-item .preview, .csseditor .property > .property-body .property-item.font-color .fill-item .preview {
-  display: inline-block;
-  height: 100%;
-  box-sizing: border-box;
-  cursor: pointer;
-}
-.csseditor .property > .property-body .property-item.background-color .fill-item .preview .mini-view, .csseditor .property > .property-body .property-item.font-color .fill-item .preview .mini-view {
-  width: 100%;
-  height: 100%;
-  border: 1px solid #cccccc;
-  position: relative;
-  border-radius: 100%;
-  background-color: transparent;
-  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
-  background-size: 10px 10px;
-  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
-}
-.csseditor .property > .property-body .property-item.background-color .fill-item .preview .mini-view .color-view, .csseditor .property > .property-body .property-item.font-color .fill-item .preview .mini-view .color-view {
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-  border-radius: 100%;
-}
-.csseditor .property > .property-body .property-item.background-color .fill-item .color-code input, .csseditor .property > .property-body .property-item.font-color .fill-item .color-code input {
-  width: 100%;
-  height: 100%;
-}
-.csseditor .property > .property-body .property-item.background-color .fill-item .opacity-code, .csseditor .property > .property-body .property-item.font-color .fill-item .opacity-code {
-  display: grid;
-  grid-template-columns: 1fr 3fr;
-}
-.csseditor .property > .property-body .property-item.background-color .fill-item .opacity-code input, .csseditor .property > .property-body .property-item.font-color .fill-item .opacity-code input {
-  width: 100%;
-}
 .csseditor .border-item {
   display: grid;
   grid-template-columns: 1fr 3fr;
@@ -3658,54 +3564,6 @@ html, body {
   width: 100%;
   height: 100%;
 }
-.csseditor .outline-item {
-  grid-template-columns: 1fr 3fr;
-  grid-column-gap: 10px;
-}
-.csseditor .outline-item .input-group {
-  display: grid;
-  grid-template-rows: repeat(3, 1fr);
-}
-.csseditor .outline-item .input-field {
-  display: grid;
-  grid-template-columns: 1fr 3fr;
-  grid-column-gap: 4px;
-  vertical-align: middle;
-}
-.csseditor .outline-item .input-field input {
-  width: 100%;
-  vertical-align: middle;
-}
-.csseditor .outline-item .input-field .input-ui {
-  vertical-align: middle;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-}
-.csseditor .outline-item .input-field .input-ui input {
-  width: 100%;
-}
-.csseditor .outline-item .input-field .input-ui .color {
-  background-color: white;
-  height: 20px;
-  width: 20px;
-  border-radius: 100%;
-  cursor: pointer;
-  border: 1px solid #cccccc;
-  box-sizing: border-box;
-  position: relative;
-  background-color: transparent;
-  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
-  background-size: 10px 10px;
-  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
-}
-.csseditor .outline-item .input-field .input-ui .color .color-view {
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-  border-radius: 100%;
-}
 .csseditor .box-model-item {
   grid-template-columns: 1fr !important;
 }
@@ -3891,49 +3749,6 @@ html, body {
   width: 100%;
   height: 140px;
   box-sizing: border-box;
-}
-.csseditor .font-item {
-  margin-bottom: 2px;
-}
-.csseditor .font-item label {
-  text-align: right;
-  vertical-align: middle;
-  font-size: 13px;
-  padding-right: 4px;
-}
-.csseditor .font-item .input {
-  vertical-align: middle;
-  display: grid;
-  grid-template-columns: 1fr 40px 70px;
-  grid-column-gap: 4px;
-}
-.csseditor .font-item .input .input-field input,
-.csseditor .font-item .input .input-field select {
-  width: 100%;
-  outline: none;
-}
-.csseditor .export-view {
-  position: absolute;
-  left: 50%;
-  bottom: 10px;
-  width: 50%;
-  height: 100px;
-  z-index: 100000;
-  -webkit-transform: translateX(-30%);
-          transform: translateX(-30%);
-}
-.csseditor .export-view .codeview {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-.csseditor .export-view .codeview textarea {
-  width: 100%;
-  height: 100%;
-  display: block;
-  padding: 10px;
-  margin: 0px;
-  background-color: rgba(255, 255, 255, 0.1);
 }
 .csseditor .animation-list {
   grid-template-columns: 1fr !important;
@@ -4319,12 +4134,18 @@ html, body {
   display: grid;
   grid-template-columns: 1fr 50px 50px;
   grid-column-gap: 2px;
+  font-size: 13px;
+}
+.csseditor .range-editor .range-editor-type .area span {
+  padding: 1px;
+  box-sizing: border-box;
+  vertical-align: middle;
 }
 .csseditor .range-editor .range-editor-type .area input, .csseditor .range-editor .range-editor-type .area select {
   width: 100%;
 }
 .csseditor .range-editor .range-editor-type[data-type=calc] .area {
-  grid-template-columns: 50px 1fr;
+  grid-template-columns: 60px 1fr;
 }
 .csseditor .range-editor[data-selected-type=calc] .range-editor-type[data-type=calc] {
   display: inline-block;
@@ -5345,11 +5166,6 @@ html, body {
   padding: 10px 5px;
   font-weight: bold;
 }
-.csseditor .popup .popup-content .popup-item {
-  display: grid;
-  grid-template-columns: 45px 1fr;
-  height: 24px;
-}
 .csseditor .popup .popup-content .popup-item label {
   font-size: 11px;
   vertical-align: middle;
@@ -5361,22 +5177,14 @@ html, body {
 .csseditor .popup .popup-content .popup-item label + div {
   vertical-align: middle;
 }
-.csseditor .popup .popup-content .popup-item input[type=range] {
-  width: 80px;
-  flex: none;
-}
-.csseditor .popup .popup-content .popup-item input[type=number] {
-  width: 40px;
-  flex: none;
-  border: 1px solid #cccccc;
-}
-.csseditor .popup .popup-content .popup-item select {
-  width: 40px;
-  flex: none;
-  outline: none;
-}
 .csseditor .popup.background-property-popup {
-  width: 225px;
+  width: 260px;
+}
+.csseditor .popup.background-property-popup .popup-content {
+  padding: 5px;
+}
+.csseditor .popup.background-property-popup .popup-content .popup-item {
+  margin-bottom: 2px;
 }
 .csseditor .popup.background-property-popup .size-list button {
   -webkit-appearance: none;
@@ -5394,6 +5202,11 @@ html, body {
 .csseditor .popup.background-property-popup .size-list[data-value=contain] button[value=contain], .csseditor .popup.background-property-popup .size-list[data-value=cover] button[value=cover], .csseditor .popup.background-property-popup .size-list[data-value=auto] button[value=auto] {
   background-color: #cccccc;
   font-weight: bold;
+}
+.csseditor .popup.background-property-popup .popup-item.grid-2 {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  grid-column-gap: 2px;
 }
 .csseditor .popup.background-property-popup .repeat-list button {
   width: 24px;
@@ -5619,11 +5432,6 @@ html, body {
 .csseditor .popup.animation-property-popup .box label {
   font-size: 12px;
   text-align: left;
-  vertical-align: middle;
-}
-.csseditor .popup.animation-property-popup .box input,
-.csseditor .popup.animation-property-popup .box select {
-  width: 100%;
   vertical-align: middle;
 }
 .csseditor .popup.animation-property-popup .box .input {

@@ -1,5 +1,7 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CompressionPlugin = require('compression-webpack-plugin');
+
 
 module.exports = {
   // Entry files for our popup and background pages
@@ -100,6 +102,7 @@ module.exports = {
     }),
     new MiniCssExtractPlugin({
       filename: "bundle.css"
-    })
+    }),
+    new CompressionPlugin()
   ]
 };

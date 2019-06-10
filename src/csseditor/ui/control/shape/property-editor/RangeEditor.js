@@ -1,9 +1,10 @@
 import UIElement, { EVENT } from "../../../../../util/UIElement";
 import { Length } from "../../../../../editor/unit/Length";
-import { LOAD, CHANGE, INPUT, CLICK, CHANGEINPUT } from "../../../../../util/Event";
+import { LOAD, INPUT, CLICK } from "../../../../../util/Event";
 import { EMPTY_STRING } from "../../../../../util/css/types";
 import icon from "../../../icon/icon";
 import SelectEditor from "./SelectEditor";
+import { html } from "../../../../../util/functions/func";
 
 
 
@@ -19,15 +20,15 @@ export default class RangeEditor extends UIElement {
         var units = this.props.units || 'px,em,%';
         var value = Length.parse(this.props.value || Length.px(0));
         return {
-            calc: this.props.calc === 'false' ? false : true,
+            calc:  this.props.calc === 'false'  ? false : true,
             label: this.props.label || '',
             min: +this.props.min || 0,
             max: +this.props.max || 100,
             step: +this.props.step || 1,
             key: this.props.key,
             params: this.props.params || '',
-            units: units.split(','),
-            type: value.unit === 'calc' ? 'calc' : 'range',
+            units,
+            type: (value.unit === 'calc' || value.unit === 'var') ? 'calc' : 'range',
             value
         }
     }
@@ -48,8 +49,8 @@ export default class RangeEditor extends UIElement {
 
         var hasLabel = !!label ? 'has-label' : ''
         var hasCalc = calc ? 'has-calc' : '';
-
-        return `
+        
+        return html`
         <div class='range-editor ${hasLabel} ${hasCalc}' data-selected-type='${type}' ref='$range'>
             ${label ? `<label>${label}</label>` : EMPTY_STRING }
             <button type='button' class='type-button' ref='$toggleType'>${icon.autorenew}</button>
@@ -64,8 +65,8 @@ export default class RangeEditor extends UIElement {
             </div>
             <div class='range-editor-type' data-type='calc'>
                 <div class='area'>
-                    <span>calc</span>
-                    <input type='text' ref='$calc' value='${this.state.value}' />
+                    <SelectEditor ref='$varType' key='varType' value="${this.state.value.unit}" options="calc,var" onchange='changeVarType' />
+                    <input type='text' ref='$calc' value='${this.state.value.toString()}' />
                 </div>
             </div>
         </div>
@@ -103,7 +104,7 @@ export default class RangeEditor extends UIElement {
 
     [INPUT('$calc')] () {
         this.updateData({ 
-            value: Length.calc(this.refs.$calc.value) 
+            value: new Length(this.refs.$calc.value, this.children.$varType.getValue()) 
         });
     }
 
@@ -147,5 +148,11 @@ export default class RangeEditor extends UIElement {
         })
 
         this.updateCalc()
+    }
+
+    [EVENT('changeVarType')] (key, unit) {
+        this.updateData({
+            value: new Length(this.refs.$calc.value, unit)
+        })
     }
 }

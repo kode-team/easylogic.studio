@@ -1,8 +1,5 @@
 import BaseProperty from "./BaseProperty";
-import { CLICK, CHANGE, INPUT, LOAD } from "../../../../../util/Event";
-import { Length } from "../../../../../editor/unit/Length";
 import { editor } from "../../../../../editor/editor";
-import { html } from "../../../../../util/functions/func";
 import { EVENT } from "../../../../../util/UIElement";
 import RangeEditor from "../../shape/property-editor/RangeEditor";
 import SelectEditor from "../../shape/property-editor/SelectEditor";

@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "version": "0.3.0",
+  "version": "0.4.0",
   "name": "Gradient Editor",
-  "description": "CSS Gradient Editor - EasyLogic Studio",
+  "description": "Super CSS Gradient Editor - EasyLogic Studio",
   "author": "easylogic",
   "app": {
     "background": {

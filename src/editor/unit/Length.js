@@ -17,7 +17,7 @@ Position.RIGHT = "right";
 Position.LEFT = "left";
 Position.BOTTOM = "bottom";
 
-const CSS_UNIT_REG = /([\d.]+)(px|pt|fr|r?em|deg|vh|vw|m?s|%)/gi;
+const REG_CSS_UNIT = /([\d.]+)(px|pt|fr|r?em|deg|vh|vw|m?s|%|g?rad|turn)/gi;
 
 export class Length {
   constructor(value = "", unit = "") {
@@ -109,7 +109,7 @@ export class Length {
       if (obj.indexOf("calc(") > -1) {
         return new Length(obj.split("calc(")[1].split(")")[0], "calc");
       } else {
-        var arr = obj.replace(CSS_UNIT_REG, "$1 $2").split(" ");
+        var arr = obj.replace(REG_CSS_UNIT, "$1 $2").split(" ");
         var isNumberString = +arr[0] == arr[0];
         if (isNumberString) {
           return new Length(+arr[0], arr[1]);

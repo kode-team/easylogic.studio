@@ -451,7 +451,7 @@ export class DomItem extends GroupItem {
     this.json.variable.split(';').filter(it => it.trim()).forEach(it => {
       var [key, value] = it.split(':')
 
-      obj[key] = value; 
+      obj[`--${key}`] = value; 
     })
     return obj;
   }
@@ -461,7 +461,7 @@ export class DomItem extends GroupItem {
     this.json.rootVariable.split(';').filter(it => it.trim()).forEach(it => {
       var [key, value] = it.split(':')
 
-      obj[key] = value; 
+      obj[`--${key}`] = value; 
     })
 
     return obj;
@@ -477,10 +477,6 @@ export class DomItem extends GroupItem {
       "background-color": json['background-color'],
       color: json.color
     };
-
-    if (!isExport) {
-      css.content = json.content;
-    }
 
     return CSS_SORTING({
       ...this.toVariableCSS(),

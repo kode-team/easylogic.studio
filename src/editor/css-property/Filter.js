@@ -1,9 +1,3 @@
-import {
-  UNIT_DEG,
-  UNIT_PERCENT,
-  UNIT_COLOR,
-  UNIT_PX
-} from "../../util/css/types";
 import { Length } from "../unit/Length";
 import { Property } from "../items/Property";
 import { convertMatches } from "../../util/functions/parser";
@@ -80,7 +74,7 @@ BlurFilter.spec = {
   min: 0,
   max: 100,
   step: 1,
-  unit: UNIT_PX,
+  unit: 'px',
   units: ["px", "em"],
   defaultValue: Length.px(0)
 };
@@ -100,7 +94,7 @@ GrayscaleFilter.spec = {
   min: 0,
   max: 100,
   step: 1,
-  unit: UNIT_PERCENT,
+  unit: '%',
   units: ["%"],
   defaultValue: Length.percent(0)
 };
@@ -120,7 +114,7 @@ HueRotateFilter.spec = {
   min: 0,
   max: 360,
   step: 1,
-  unit: UNIT_DEG,
+  unit: 'deg',
   units: ["deg"],
   defaultValue: Length.deg(0)
 };
@@ -140,7 +134,7 @@ InvertFilter.spec = {
   min: 0,
   max: 100,
   step: 1,
-  unit: UNIT_PERCENT,
+  unit: '%',
   units: ["%"],
   defaultValue: Length.percent(0)
 };
@@ -160,7 +154,7 @@ BrightnessFilter.spec = {
   min: 0,
   max: 200,
   step: 1,
-  unit: UNIT_PERCENT,
+  unit: '%',
   units: ["%"],
   defaultValue: Length.percent(100)
 };
@@ -180,7 +174,7 @@ ContrastFilter.spec = {
   min: 0,
   max: 200,
   step: 1,
-  unit: UNIT_PERCENT,
+  unit: '%',
   units: ["%"],
   defaultValue: Length.percent(100)
 };
@@ -200,7 +194,7 @@ OpacityFilter.spec = {
   min: 0,
   max: 100,
   step: 1,
-  unit: UNIT_PERCENT,
+  unit: '%',
   units: ["%"],
   defaultValue: Length.percent(100)
 };
@@ -220,7 +214,7 @@ SaturateFilter.spec = {
   min: 0,
   max: 100,
   step: 1,
-  unit: UNIT_PERCENT,
+  unit: '%',
   units: ["%"],
   defaultValue: Length.percent(100)
 };
@@ -240,7 +234,7 @@ SepiaFilter.spec = {
   min: 0,
   max: 100,
   step: 1,
-  unit: UNIT_PERCENT,
+  unit: '%',
   units: ["%"],
   defaultValue: Length.percent(0)
 };
@@ -273,7 +267,7 @@ DropshadowFilter.spec = {
     max: 100,
     step: 1,
     defaultValue: Length.px(0),
-    unit: UNIT_PX,
+    unit: 'px',
     units: ["px", "em"]
   },
   offsetY: {
@@ -283,7 +277,7 @@ DropshadowFilter.spec = {
     max: 100,
     step: 1,
     defaultValue: Length.px(0),
-    unit: UNIT_PX,
+    unit: 'px',
     units: ["px", "em"]
   },
   blurRadius: {
@@ -293,14 +287,14 @@ DropshadowFilter.spec = {
     max: 100,
     step: 1,
     defaultValue: Length.px(0),
-    unit: UNIT_PX,
+    unit: 'px',
     units: ["px", "em", "%"]
   },
   color: {
     title: "Color",
     inputType: "color",
     defaultValue: "rgba(0, 0, 0, 1)",
-    unit: UNIT_COLOR
+    unit: 'color'
   }
 };
 

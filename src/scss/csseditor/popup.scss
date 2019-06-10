@@ -18,9 +18,9 @@
 
   .popup-content {
     .popup-item {
-      display: grid;
-      grid-template-columns: 45px 1fr;
-      height: 24px;
+      // display: grid;
+      // grid-template-columns: 45px 1fr;
+      // height: 24px;
 
       label {
         font-size: 11px;
@@ -35,27 +35,19 @@
         vertical-align: middle;
       }
 
-      input[type="range"] {
-        width: 80px;
-        flex: none;
-      }
-
-      input[type="number"] {
-        width: 40px;
-        flex: none;
-        border: 1px solid $border-color;
-      }
-
-      select {
-        width: 40px;
-        flex: none;
-        outline: none;
-      }
     }
   }
 
   &.background-property-popup {
-    width: 225px;
+    width: 260px;
+
+    .popup-content {
+      padding: 5px;
+
+      .popup-item {
+        margin-bottom: 2px;
+      }
+    }
 
     .size-list {
       button {
@@ -76,6 +68,12 @@
         background-color: $border-color;
         font-weight: bold;
       }
+    }
+
+    .popup-item.grid-2 {
+      display: grid;
+      grid-template-columns: 60px 1fr; 
+      grid-column-gap: 2px;
     }
 
     .repeat-list {
@@ -378,12 +376,6 @@
       label {
         font-size: 12px;
         text-align: left;
-        vertical-align: middle;
-      }
-
-      input,
-      select {
-        width: 100%;
         vertical-align: middle;
       }
 

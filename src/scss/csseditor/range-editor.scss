@@ -56,6 +56,13 @@
             display: grid; 
             grid-template-columns: 1fr 50px 50px;
             grid-column-gap: 2px;
+            font-size: 13px;
+            
+            span {
+                padding: 1px;
+                box-sizing: border-box;
+                vertical-align: middle;
+            }
 
             input,select {
                 width: 100%;
@@ -64,7 +71,7 @@
 
         &[data-type='calc'] {
             .area {
-                grid-template-columns: 50px 1fr;    
+                grid-template-columns: 60px 1fr;    
             }
         }
     }

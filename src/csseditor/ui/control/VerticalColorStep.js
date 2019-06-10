@@ -14,9 +14,6 @@ import {
   PREVENT
 } from "../../../util/Event";
 import {
-  UNIT_PERCENT,
-  UNIT_EM,
-  UNIT_PX,
   EMPTY_STRING
 } from "../../../util/css/types";
 import { LinearGradient } from "../../../editor/image-resource/LinearGradient";
@@ -266,13 +263,13 @@ export default class VerticalColorStep extends UIElement {
   }
 
   getUnitName(step) {
-    var unit = step.unit || UNIT_PERCENT;
+    var unit = step.unit || '%';
 
-    if ([UNIT_PX, UNIT_EM].includes(unit)) {
+    if (['px', 'em'].includes(unit)) {
       return unit;
     }
 
-    return UNIT_PERCENT;
+    return '%';
   }
 
   getUnitSelect(step) {
@@ -529,7 +526,7 @@ export default class VerticalColorStep extends UIElement {
 
       var $parent = e.$delegateTarget.parent();
       $parent
-        .removeClass(UNIT_PERCENT, UNIT_PX, UNIT_EM)
+        .removeClass('%', 'px', 'em')
         .addClass(step.getUnit());
     }
   }

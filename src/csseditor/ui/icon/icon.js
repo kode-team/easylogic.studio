@@ -32,10 +32,15 @@ import filter from "./filter";
 import play from "./play";
 import pause from "./pause";
 import autorenew from "./autorenew";
+import code from "./code";
+import build from "./build";
+
 
 
 
 export default {
+  build,
+  code,
   autorenew,
   play,
   pause,

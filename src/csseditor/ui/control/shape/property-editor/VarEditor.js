@@ -45,7 +45,7 @@ export default class VarEditor extends UIElement {
         return this.state.values.map( (it, index) => {
             return `
                 <div class='var-item' >
-                    <input type="text" data-type="key" value="${it.key}" data-index="${index}"  placeholder="--var" />
+                    <input type="text" data-type="key" value="${it.key}" data-index="${index}"  placeholder="variable" />
                     <input type="text" data-type="value" value="${it.value}" data-index="${index}"  placeholder="value" />
                     <div class="tools">
                         <button type="button" class="del" data-index="${index}">
