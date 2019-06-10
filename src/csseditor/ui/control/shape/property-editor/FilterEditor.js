@@ -73,7 +73,7 @@ export default class FilterEditor extends UIElement {
 
   template() {
     return html`
-      <div class='filter-editor filter-list' ref='$filterList'>
+      <div class='filter-editor filter-list'>
           <div class='label' >
               <label>${this.props.title || ''}</label>
               <div class='tools'>

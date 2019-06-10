@@ -25,9 +25,9 @@
 }
 
 .border-item {
+  display: grid;
   grid-template-columns: 1fr 3fr;
   grid-column-gap: 10px;
-  height: 85px;
 
   .border-direction {
     position: relative;
@@ -145,15 +145,18 @@
 }
 
 .border-slice-item {
-  grid-template-columns: 0.6fr 3fr !important;
+  display: grid;
+  grid-template-columns: 50px 1fr;
+  grid-column-gap: 2px;
 
-  &.has-list {
-    grid-template-columns: 1fr !important;
+  &.full {
+    grid-template-columns: 1fr;
   }
 
+
   .slice-selector {
-    display: flex;
-    grid-template-columns: 1fr;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
 
     @each $borderRadiusType in all, partitial {
       &[data-selected-value="#{$borderRadiusType}"] {
@@ -198,15 +201,7 @@
   }
 
   .slice-value {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
-    grid-column-gap: 3px;
 
-    input,
-    select {
-      width: 100%;
-      outline: none;
-    }
   }
 
   .slice-setting-box {
@@ -216,22 +211,8 @@
     grid-row-gap: 2px;
 
     > div {
-      display: grid;
-      grid-template-columns: 46px 1fr 60px 60px;
-      grid-column-gap: 4px;
-      text-align: center;
 
-      > * {
-        vertical-align: middle;
-      }
-
-      input,
-      select {
-        width: 100%;
-        outline: none;
-      }
-
-      label {
+      > label {
         display: inline-block;
         vertical-align: middle;
         margin-right: 2px;

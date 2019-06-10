@@ -53,7 +53,7 @@ export default class FontProperty extends BaseProperty {
         />
       </div>      
       <div class='property-item'>
-        <RangeEditor ref='$size' label='line-height' key="font-size" onchange="changeRangeEditor" />
+        <RangeEditor ref='$lineHeight' label='line-height' key="font-size" onchange="changeRangeEditor" />
       </div>
       <div class='property-item'>
         <SelectEditor 

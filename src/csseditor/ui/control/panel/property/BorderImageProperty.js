@@ -7,6 +7,7 @@ import icon from "../../../icon/icon";
 import { EMPTY_STRING } from "../../../../../util/css/types";
 import { EVENT } from "../../../../../util/UIElement";
 import { CHANGE_SELECTION, CHANGE_ARTBOARD, CHANGE_EDITOR } from "../../../../types/event";
+import RangeEditor from "../../shape/property-editor/RangeEditor";
 
 const typeList = [
   { key: "top", title: "Top" },
@@ -20,7 +21,6 @@ const keyList = typeList.map(it => it.key);
 
 const names = {
   image: "Image",
-  static: "Static",
   "static-gradient": "Static",
   "linear-gradient": "Linear",
   "repeating-linear-gradient": `${icon.repeat} Linear`,
@@ -41,7 +41,14 @@ const types = {
   "repeating-conic-gradient": "gradient"
 };
 
+
+
 export default class BorderImageProperty extends BaseProperty {
+  components() {
+    return {
+      RangeEditor
+    }
+  }
   getTitle() {
     return "Border Image";
   }
@@ -122,6 +129,17 @@ export default class BorderImageProperty extends BaseProperty {
     `
   }
 
+  [EVENT('changeBorderImage')] (key, value) {
+
+    if (key === 'border-image-slice') {
+      keyList.forEach(type => {
+        this.children[`$${type}Slice`].setValue(value)
+      });
+    }
+
+    this.setBorderImageProperty()
+  }
+
   getBody() {
 
     var current  = editor.selection.current || {borderImage: { image: {}}} ;
@@ -137,21 +155,14 @@ export default class BorderImageProperty extends BaseProperty {
           </button>
         </div>
         <div class="slice-value">
-          <input type="range" min="0" max="100" ref="$range" value="0" />
-          <input type="number" min="0" max="100" ref="$number" value="0" />
-          <select ref="$unit">
-            <option value="px">px</option>
-            <option value="%">%</option>
-            <option value="em">em</option>
-          </select>
+          <RangeEditor ref='$allSlice' key='border-image-slice' onchange='changeBorderImage' />
         </div>
       </div>
       <div
-        class="property-item border-slice-item has-list"
+        class="property-item border-slice-item full has-list"
         ref="$partitialSetting"
         style="display: none;"
       >
-        <label></label>
         <div class="slice-setting-box" ref="$sliceSettingBox">
           ${typeList.map(it => {
             return `
@@ -159,30 +170,10 @@ export default class BorderImageProperty extends BaseProperty {
                 <label class='title'>${it.title}</label>
               </div>
               <div>
-                <label>Slice</label>
-                <input type="range" ref="$${
-                  it.key
-                }SliceRange" min="0" value="0" data-key="${it.key}" data-type='Slice' /> 
-                <input type="number" ref="$${
-                  it.key
-                }Slice" min="0" value="0" data-key="${it.key}" data-type='Slice' />                 
-                <select ref="$${it.key}SliceUnit" data-key="${it.key}">
-                  <option value='px'>px</option>
-                  <option value='%'>%</option>
-                </select>
+                <RangeEditor ref='$${it.key}Slice' label='Slice' key='border-image-slice-${it.key}' onchange='changeBorderImage' /> 
               </div>  
               <div>
-                <label>Width</label>
-                <input type="range" ref="$${
-                  it.key
-                }WidthRange" min="0" value="0" data-key="${it.key}"  data-type='Width'/> 
-                <input type="number" ref="$${
-                  it.key
-                }Width" min="0" value="0" data-key="${it.key}" data-type='Width' />                 
-                <select ref="$${it.key}WidthUnit" data-key="${it.key}">
-                  <option value='px'>px</option>
-                  <option value='%'>%</option>
-                </select>
+                <RangeEditor ref='$${it.key}Width' label='Width' key='border-image-width-${it.key}' onchange='changeBorderImage' /> 
               </div>                
             `;
           })}
@@ -191,48 +182,6 @@ export default class BorderImageProperty extends BaseProperty {
     `;
   }
 
-  [INPUT("$range")](e) {
-    var value = this.getRef("$range").value;
-    this.getRef("$number").val(value);
-
-    keyList.forEach(type => {
-      this.getRef("$", type, "Slice").val(value);
-      this.getRef("$", type, "SliceRange").val(value);
-    });
-
-    this.setBorderImageProperty();
-  }
-
-  [INPUT("$number")](e) {
-    var value = this.getRef("$number").value;
-    this.getRef("$range").val(value);
-
-    keyList.forEach(type => {
-      this.getRef("$", type, "Slice").val(value);
-      this.getRef("$", type, "SliceRange").val(value);
-    });
-    this.setBorderImageProperty();
-  }
-
-  [CHANGE("$unit")](e) {
-    var unit = this.getRef("$unit").value;
-    keyList.forEach(type => {
-      this.getRef("$", type, "SliceUnit").val(unit);
-    });
-    this.setBorderImageProperty();
-  }
-
-  [INPUT("$el input[type=range][data-key]")](e) {
-    var [key, type] = e.$delegateTarget.attrs('data-key', 'data-type');
-    this.getRef('$', key, `${type}`).val(e.$delegateTarget.value);    
-    this.setBorderImageProperty();
-  }
-
-  [INPUT("$el input[type=number][data-key]")](e) {
-    var [key, type] = e.$delegateTarget.attrs('data-key', 'data-type');
-    this.getRef('$', key, `${type}Range`).val(e.$delegateTarget.value);    
-    this.setBorderImageProperty();    
-  }  
 
   [CHANGE("$sliceSettingBox select")](e) {
     this.setBorderImageProperty();
@@ -396,7 +345,7 @@ export default class BorderImageProperty extends BaseProperty {
     var type = this.refs.$selector.attr("data-selected-value");
 
     if (type === "all") {
-      var len = new Length(this.getRef("$range").value, this.getRef("$unit").value)
+      var len = this.children.$allSlice.getValue()
       borderImage.reset({
         slice: {
           top: len.clone(),
@@ -408,15 +357,8 @@ export default class BorderImageProperty extends BaseProperty {
 
     } else {
       keyList.forEach(type => {
-        borderImage.slice[type] = new Length(
-          this.getRef("$", type, "Slice").value,
-          this.getRef("$", type, "SliceUnit").value
-        );
-
-        borderImage.width[type] = new Length(
-          this.getRef("$", type, "Width").value,
-          this.getRef("$", type, "WidthUnit").value
-        );        
+        borderImage.slice[type] = this.children[`$${type}Slice`].getValue()
+        borderImage.width[type] = this.children[`$${type}Width`].getValue()
       });
     }
 

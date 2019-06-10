@@ -425,44 +425,25 @@ export class DomItem extends GroupItem {
     return obj;
   }
 
+  toKeyListCSS (...args) {
+    var json = this.json;
+    var obj = {};
+
+    args.forEach( it => {
+      if (json[it]) {
+        obj[it] = json[it]
+      }
+    })
+
+    return obj;
+  }
+
   toFontCSS() {
-    var json = this.json;
-    var obj = {};
-
-    ['font-size', 'line-height', 'font-weight', 'font-family', 'font-style'].forEach( it => {
-      if (json[it]) {
-        obj[it] = json[it]
-      }
-    })
-
-    return obj;
-  }
-
-  toTextCSS() {
-    var json = this.json;
-    var obj = {};
-
-    ['text-align', 'text-transform', 'text-decoration'].forEach( it => {
-      if (json[it]) {
-        obj[it] = json[it]
-      }
-    })
-
-    return obj;
-  }
-
-  toSpacingCSS() {
-
-    var json = this.json;
-    var obj = {};
-
-    ['letter-spacing', 'word-spacing', 'text-indent'].forEach( it => {
-      if (json[it]) {
-        obj[it] = json[it]
-      }
-    })
-
-    return obj;
+    return this.toKeyListCSS(
+      'font-size', 'line-height', 'font-weight', 'font-family', 'font-style',
+      'text-align', 'text-transform', 'text-decoration',
+      'letter-spacing', 'word-spacing', 'text-indent'
+    )
   }
 
   toVariableCSS () {
@@ -505,8 +486,6 @@ export class DomItem extends GroupItem {
       ...this.toVariableCSS(),
       ...css,
       ...this.toFontCSS(),
-      ...this.toTextCSS(),
-      ...this.toSpacingCSS(),
       ...this.toBoxModelCSS(),
       ...this.toSizeCSS(),
       ...this.toBorderCSS(),
@@ -537,8 +516,6 @@ export class DomItem extends GroupItem {
       ...this.toVariableCSS(),      
       ...css,
       ...this.toFontCSS(),
-      ...this.toTextCSS(),
-      ...this.toSpacingCSS(),
       ...this.toBoxModelCSS(),
       ...this.toSizeCSS(),
       ...this.toBorderCSS(),

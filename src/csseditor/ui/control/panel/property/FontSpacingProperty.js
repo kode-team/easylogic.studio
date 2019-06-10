@@ -31,15 +31,15 @@ export default class FontSpacingProperty extends BaseProperty {
   getBody() {
     return `
       <div class="property-item font-item">
-        <RangeEditor ref='$size' label='Letter' key="letter-spacing" onchange="changeRangeEditor" />
+        <RangeEditor ref='$letter' label='Letter' key="letter-spacing" onchange="changeRangeEditor" />
       </div>
 
       <div class="property-item font-item">
-        <RangeEditor ref='$size' label='Word' key="word-spacing" onchange="changeRangeEditor" />
+        <RangeEditor ref='$word' label='Word' key="word-spacing" onchange="changeRangeEditor" />
       </div>
 
       <div class="property-item font-item">
-        <RangeEditor ref='$size' label='Indent' key="text-indent" onchange="changeRangeEditor" />
+        <RangeEditor ref='$indent' label='Indent' key="text-indent" onchange="changeRangeEditor" />
       </div>      
     `;
   }

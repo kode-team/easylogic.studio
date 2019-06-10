@@ -65,7 +65,7 @@ export default class TransformEditor extends UIElement {
 
   template() {
     return html`
-      <div class='transform-editor transform-list' ref='$transformList'>
+      <div class='transform-editor transform-list'>
           <div class='label' >
               <label>Transform</label>
               <div class='tools'>

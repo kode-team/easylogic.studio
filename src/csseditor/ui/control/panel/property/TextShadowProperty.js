@@ -27,7 +27,7 @@ export default class TextShadowProperty extends BaseProperty {
       <div class="property-item full text-shadow-item" ref="$shadowList"></div>
     `;
   }
-
+  
   [LOAD("$shadowList")]() {
     var current = editor.selection.current || {};
     return `

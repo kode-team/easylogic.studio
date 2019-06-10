@@ -3368,9 +3368,9 @@ html, body {
   width: 100%;
 }
 .csseditor .border-item {
+  display: grid;
   grid-template-columns: 1fr 3fr;
   grid-column-gap: 10px;
-  height: 85px;
 }
 .csseditor .border-item .border-direction {
   position: relative;
@@ -3482,14 +3482,16 @@ html, body {
   border-radius: 100%;
 }
 .csseditor .border-slice-item {
-  grid-template-columns: 0.6fr 3fr !important;
+  display: grid;
+  grid-template-columns: 50px 1fr;
+  grid-column-gap: 2px;
 }
-.csseditor .border-slice-item.has-list {
-  grid-template-columns: 1fr !important;
+.csseditor .border-slice-item.full {
+  grid-template-columns: 1fr;
 }
 .csseditor .border-slice-item .slice-selector {
-  display: flex;
-  grid-template-columns: 1fr;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
 .csseditor .border-slice-item .slice-selector[data-selected-value=all] button[data-value=all] {
   background-color: black;
@@ -3528,37 +3530,13 @@ html, body {
 .csseditor .border-slice-item .slice-selector button svg path {
   fill: #cccccc;
 }
-.csseditor .border-slice-item .slice-value {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
-  grid-column-gap: 3px;
-}
-.csseditor .border-slice-item .slice-value input,
-.csseditor .border-slice-item .slice-value select {
-  width: 100%;
-  outline: none;
-}
 .csseditor .border-slice-item .slice-setting-box {
   display: grid;
   grid-template-columns: repeat(1, 1fr);
   grid-column-gap: 4px;
   grid-row-gap: 2px;
 }
-.csseditor .border-slice-item .slice-setting-box > div {
-  display: grid;
-  grid-template-columns: 46px 1fr 60px 60px;
-  grid-column-gap: 4px;
-  text-align: center;
-}
-.csseditor .border-slice-item .slice-setting-box > div > * {
-  vertical-align: middle;
-}
-.csseditor .border-slice-item .slice-setting-box > div input,
-.csseditor .border-slice-item .slice-setting-box > div select {
-  width: 100%;
-  outline: none;
-}
-.csseditor .border-slice-item .slice-setting-box > div label {
+.csseditor .border-slice-item .slice-setting-box > div > label {
   display: inline-block;
   vertical-align: middle;
   margin-right: 2px;
@@ -3568,7 +3546,7 @@ html, body {
   margin-top: 2px;
   text-align: right;
 }
-.csseditor .border-slice-item .slice-setting-box > div label.title {
+.csseditor .border-slice-item .slice-setting-box > div > label.title {
   font-weight: bold;
   text-align: left;
 }
@@ -4575,12 +4553,16 @@ html, body {
   width: 100%;
   height: 100%;
 }
-.csseditor .border-radius-editor {
+.csseditor .border-radius-editor .border-radius-item {
+  display: grid;
+  grid-template-columns: 50px 1fr;
+}
+.csseditor .border-radius-editor .border-radius-item.full {
   grid-template-columns: 1fr;
 }
 .csseditor .border-radius-editor .radius-selector {
-  display: flex;
-  grid-template-columns: 1fr;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
 .csseditor .border-radius-editor .radius-selector[data-selected-value=all] button[data-value=all] {
   background-color: black;
@@ -4618,60 +4600,6 @@ html, body {
 }
 .csseditor .border-radius-editor .radius-selector button svg path {
   fill: #cccccc;
-}
-.csseditor .border-radius-editor .radius-value {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
-  grid-column-gap: 3px;
-}
-.csseditor .border-radius-editor .radius-value input,
-.csseditor .border-radius-editor .radius-value select {
-  width: 100%;
-  outline: none;
-}
-.csseditor .border-radius-editor .radius-setting-box {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(2, 1fr);
-  grid-column-gap: 4px;
-  grid-row-gap: 2px;
-}
-.csseditor .border-radius-editor .radius-setting-box > div {
-  display: grid;
-  grid-template-columns: 20px 1fr 1.4fr;
-  text-align: center;
-}
-.csseditor .border-radius-editor .radius-setting-box > div > * {
-  vertical-align: middle;
-}
-.csseditor .border-radius-editor .radius-setting-box > div input,
-.csseditor .border-radius-editor .radius-setting-box > div select {
-  width: 100%;
-  outline: none;
-}
-.csseditor .border-radius-editor .radius-setting-box > div label {
-  width: 16px;
-  height: 16px;
-  display: inline-block;
-  vertical-align: middle;
-  border: 2px solid #333;
-  margin-right: 2px;
-  cursor: pointer;
-  outline: none;
-  position: relative;
-  margin-top: 2px;
-}
-.csseditor .border-radius-editor .radius-setting-box > div label.border-top-left-radius {
-  border-top-left-radius: 10px;
-}
-.csseditor .border-radius-editor .radius-setting-box > div label.border-top-right-radius {
-  border-top-right-radius: 10px;
-}
-.csseditor .border-radius-editor .radius-setting-box > div label.border-bottom-left-radius {
-  border-bottom-left-radius: 10px;
-}
-.csseditor .border-radius-editor .radius-setting-box > div label.border-bottom-right-radius {
-  border-bottom-right-radius: 10px;
 }
 .csseditor .transform-editor .label {
   height: 20px;

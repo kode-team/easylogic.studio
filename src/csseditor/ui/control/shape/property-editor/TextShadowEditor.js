@@ -142,6 +142,7 @@ export default class TextShadowEditor extends UIElement {
     this.modifyTextShadow();
   }
 
+
   [EVENT("changeTextShadowEditorPopup")](data) {
 
     var shadow = this.state.textShadows[this.state.selectedIndex]

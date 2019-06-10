@@ -2,7 +2,7 @@ import { CLICK, INPUT, CHANGE, LOAD } from "../../../../../util/Event";
 import { html } from "../../../../../util/functions/func";
 import { Length } from "../../../../../editor/unit/Length";
 import icon from "../../../icon/icon";
-import UIElement from "../../../../../util/UIElement";
+import UIElement, { EVENT } from "../../../../../util/UIElement";
 import RangeEditor from "./RangeEditor";
 
 const typeList = [
@@ -14,10 +14,12 @@ const typeList = [
 
 const keyList = typeList.map(it => it.key);
 
-
-
 export default class BorderRadiusEditor extends UIElement {
-
+  components() {
+    return {
+      RangeEditor
+    }
+  }
   initState() {
     return {
       isAll: true,
@@ -31,6 +33,17 @@ export default class BorderRadiusEditor extends UIElement {
 
   template() {
     return `<div class='border-radius-editor' ref='$body'></div>`
+  }
+
+  [EVENT('changeBorderRadius')] (key, value) {
+
+    if (key === 'border-radius') {
+      keyList.forEach(type => {
+        this.children[`$${type}`].setValue(value)
+      });
+    }
+
+    this.setBorderRadius()
   }
 
   [LOAD('$body')] () {
@@ -47,69 +60,25 @@ export default class BorderRadiusEditor extends UIElement {
           </button>
         </div>
         <div class="radius-value">
-          <input type="range" min="0" max="100" ref="$range" value="${borderRadius.value.toString()}" />
-          <input type="number" min="0" max="100" ref="$number" value="${borderRadius.value.toString()}" />
-          <select ref="$unit">
-            <option value="px">px</option>
-            <option value="%">%</option>
-            <option value="em">em</option>
-          </select>
+          <RangeEditor ref='$all' key='border-radius' value="${borderRadius.toString()}" onchange='changeBorderRadius' />
         </div>
       </div>
       <div
-        class="property-item border-radius-item"
+        class="property-item full border-radius-item"
         ref="$partitialSetting"
         style="display: none;"
       >
-        <label></label>
         <div class="radius-setting-box" ref="$radiusSettingBox">
           ${typeList.map(it => {
             return `
               <div>
-                <label class='${it.key}'></label>
-                <input type="number" ref="$${
-                  it.key
-                }Radius" min="0" value="0" data-key="${it.key}" /> 
-                <select ref="$${it.key}Unit" data-key="${it.key}">
-                  <option value='px'>px</option>
-                  <option value='%'>%</option>
-                  <option value='em'>em</option>
-                </select>
+                  <RangeEditor ref='$${it.key}' label='${it.title}' key='border-${it.key}-radius' onchange='changeBorderRadius' />
               </div>  
             `;
           })}
         </div>
       </div>
     `;
-  }
-
-  [INPUT("$range")](e) {
-    var value = this.getRef("$range").value;
-    this.getRef("$number").val(value);
-
-    keyList.forEach(type => {
-      this.getRef("$", type, "Radius").val(value);
-    });
-
-    this.setBorderRadius();
-  }
-
-  [INPUT("$number")](e) {
-    var value = this.getRef("$number").value;
-    this.getRef("$range").val(value);
-
-    keyList.forEach(type => {
-      this.getRef("$", type, "Radius").val(value);
-    });
-    this.setBorderRadius();
-  }
-
-  [CHANGE("$unit")](e) {
-    var unit = this.getRef("$unit").value;
-    keyList.forEach(type => {
-      this.getRef("$", type, "Unit").val(unit);
-    });
-    this.setBorderRadius();
   }
 
   [INPUT("$radiusSettingBox input")](e) {
@@ -124,18 +93,13 @@ export default class BorderRadiusEditor extends UIElement {
     var type = this.refs.$selector.attr("data-selected-value");
 
     if (type === "all") {
-      var value = new Length(this.getRef("$range").value, this.getRef("$unit").value)
-
       this.state.isAll = true; 
-      this.state['border-radius'] = value; 
+      this.state['border-radius'] = this.children[`$all`].getValue();
     } else {
 
       this.state.isAll = false; 
       keyList.forEach(key => {
-        this.state[key] = new Length(
-          this.getRef("$", key, "Radius").value,
-          this.getRef("$", key, "Unit").value
-        );
+        this.state[key] = this.children[`$${key}`].getValue();
       });
     }
 

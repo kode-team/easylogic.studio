@@ -1,9 +1,18 @@
 
 .border-radius-editor {
-    grid-template-columns: 1fr;
+
+    .border-radius-item {
+      display: grid; 
+      grid-template-columns: 50px 1fr;
+
+      &.full {
+        grid-template-columns: 1fr;
+      }
+    }
+
     .radius-selector {
-      display: flex;
-      grid-template-columns: 1fr;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
   
       @each $borderRadiusType in all, partitial {
         &[data-selected-value="#{$borderRadiusType}"] {
@@ -46,71 +55,9 @@
         }
       }
     }
-  
-    .radius-value {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr;
-      grid-column-gap: 3px;
-  
-      input,
-      select {
-        width: 100%;
-        outline: none;
-      }
-    }
-  
+    
     .radius-setting-box {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      grid-template-rows: repeat(2, 1fr);
-      grid-column-gap: 4px;
-      grid-row-gap: 2px;
   
-      > div {
-        display: grid;
-        grid-template-columns: 20px 1fr 1.4fr;
-        text-align: center;
-  
-        > * {
-          vertical-align: middle;
-        }
-  
-        input,
-        select {
-          width: 100%;
-          outline: none;
-        }
-  
-        label {
-          width: 16px;
-          height: 16px;
-          display: inline-block;
-          vertical-align: middle;
-          border: 2px solid #333;
-          margin-right: 2px;
-          cursor: pointer;
-          outline: none;
-          // @include cross;
-          position: relative;
-          margin-top: 2px;
-        }
-  
-        label.border-top-left-radius {
-          border-top-left-radius: 10px;
-        }
-  
-        label.border-top-right-radius {
-          border-top-right-radius: 10px;
-        }
-  
-        label.border-bottom-left-radius {
-          border-bottom-left-radius: 10px;
-        }
-  
-        label.border-bottom-right-radius {
-          border-bottom-right-radius: 10px;
-        }
-      }
     }
   }
   

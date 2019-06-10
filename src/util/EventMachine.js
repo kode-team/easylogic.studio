@@ -7,13 +7,11 @@ import Event, {
   LOAD_SAPARATOR,
   BIND_SAPARATOR,
   CHECK_BIND_PATTERN,
-  getRef,
   BIND_CHECK_DEFAULT_FUNCTION,
   BIND_CHECK_FUNCTION,
   LOAD
 } from "./Event";
 import Dom from "./Dom";
-import State from "./State";
 import {
   debounce,
   isFunction,
@@ -25,7 +23,7 @@ import {
   isString,
   isObject
 } from "./functions/func";
-import { EMPTY_STRING, WHITE_STRING } from "./css/types";
+import { EMPTY_STRING } from "./css/types";
 import {
   ADD_BODY_MOUSEMOVE,
   ADD_BODY_MOUSEUP
@@ -313,6 +311,7 @@ export default class EventMachine {
     this._bindings = [];
     this.id = uuid();    
     this.childComponents = this.components();
+    this.counters = {} 
   }
 
   initState() {
@@ -372,12 +371,21 @@ export default class EventMachine {
 
     list.forEach($el => {
       // ref element 정리
-      if ($el.attr(REFERENCE_PROPERTY)) {
-        this.refs[$el.attr(REFERENCE_PROPERTY)] = $el;
+      var ref = $el.attr(REFERENCE_PROPERTY)
+      if (ref) {
+        this.refs[ref] = $el;
       }
+
       var refs = $el.$$(QUERY_PROPERTY);
+      var temp = {} 
       refs.forEach($dom => {
         const name = $dom.attr(REFERENCE_PROPERTY);
+        if (temp[name]) {
+          console.warn(`${ref} is duplicated. - ${this.sourceName}`)
+        } else {
+          temp[name] = true; 
+        }
+
         this.refs[name] = $dom;        
       });
 
@@ -391,8 +399,9 @@ export default class EventMachine {
     return TEMP_DIV.createChildrenFragment();
   }
 
-  parseComponent(isLoadFunction = false ) {
+  parseComponent() {
     const $el = this.$el;
+
     keyEach(this.childComponents, (ComponentName, Component) => {
       const targets = $el.$$(`${ComponentName.toLowerCase()}`);
       targets.forEach($dom => {
@@ -406,23 +415,12 @@ export default class EventMachine {
             props[t.nodeName] = t.nodeValue;
           });
 
-        let refName = $dom.attr(REFERENCE_PROPERTY) || ComponentName;
-
-
-
         var instance = new Component(this, props);
+        let refName = $dom.attr(REFERENCE_PROPERTY) || instance.id;
+
         if (this.children[refName]) {
-
-          if (isLoadFunction) {
-            // ref 이름이 동일 할 때는 기존 것을 destroy 시켜 줘야 한다. 
-            // 그렇지 않으면 $store 이벤트 시스템에 등록된 애들이 오동작을 한다. 
-            var prevComponent = this.children[refName]
-            prevComponent.destroy()
-          } else if (refName === ComponentName) {
-            refName = instance.id; // ref 이름을 바꿔서 저장해준다. 
-          }
-
-
+          // ref 가 동일한게 있으면 event 를 모두 해제한다. 
+          this.children[refName].destroy()
         }
 
         this.children[refName] = instance;
@@ -449,7 +447,6 @@ export default class EventMachine {
   }
 
   clean () {
-
     if (!this.$el.hasParent()) {
       keyEach(this.children, (key, child) => {
         child.clean();
@@ -484,24 +481,18 @@ export default class EventMachine {
     this._loadMethods.forEach(callbackName => {
       const elName = callbackName.split(LOAD_SAPARATOR)[1];
       if (this.refs[elName]) {
-        // var oldTemplate = this[callbackName].t || EMPTY_STRING;
+
+        this.counters[elName]++
+        
         var newTemplate = this[callbackName].call(this, ...args);
 
         if (isArray(newTemplate)) {
           newTemplate = newTemplate.join(EMPTY_STRING);
         }
 
-        // LOAD 로 생성한 html 문자열에 변화가 없으면 업데이트 하지 않는다.
-        // if (oldTemplate != newTemplate) {
-        // this[callbackName].t = newTemplate;
         const fragment = this.parseTemplate(newTemplate, true);
 
-        // fragment 와 이전 el children 을 비교해서 필요한 것만 갱신한다.
-        // 이건 비교 알고리즘을 넣어도 괜찮을 듯
         this.refs[elName].html(fragment);
-
-        // ref 를 중복해서 로드 하게 되면 이전 객체가 그대로 살아 있을 확률이 커지기 때문에 정상적으로 싱크가 맞지 않음
-        // }
 
         // 새로운 html 이 로드가 되었으니 
         // 이벤트를 재설정 하자. 
@@ -544,7 +535,7 @@ export default class EventMachine {
       }
     });
 
-    this.parseComponent(true);
+    this.parseComponent();
     
   }
 

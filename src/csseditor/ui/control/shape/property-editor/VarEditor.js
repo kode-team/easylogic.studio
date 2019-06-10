@@ -19,7 +19,7 @@ export default class VarEditor extends UIElement {
 
     template() {
         return `
-        <div class='var-editor var-list' ref='$varList'>
+        <div class='var-editor var-list'>
             <div class='label' >
                 <label>${this.props.title}</label>
                 <div class='tools'>
