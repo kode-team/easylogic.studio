@@ -40,6 +40,7 @@ export class DomItem extends GroupItem {
       'word-spacing': '', 
       'text-indent': '',      
       'perspective-origin': '',
+      'transform-origin': '',
       'perspective': '',
       'mix-blend-mode': '',
       border: {},
@@ -422,6 +423,7 @@ export class DomItem extends GroupItem {
     return this.toKeyListCSS(
       'background-color', 'color', 
       'mix-blend-mode', 
+      'transform-origin',
       'perspective', 'perspective-origin'
     )
   }

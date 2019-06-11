@@ -54,6 +54,7 @@ export default class Inspector extends UIElement {
       
                 <PerspectiveProperty />
                 <PerspectiveOriginProperty />
+                <TransformOriginProperty /> 
                 <TransformProperty />
               </div>
               <div class='tab-content' data-value="4">

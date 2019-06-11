@@ -27,9 +27,11 @@ import ComputedCodeViewProperty from "./ComputedCodeViewProperty";
 import PerspectiveOriginProperty from "./PerspectiveOriginProperty";
 import MixBlendModeProperty from "./MixBlendModeProperty";
 import PerspectiveProperty from "./PerspectiveProperty";
+import TransformOriginProperty from "./TransformOriginProperty";
 
  
 export default {
+  TransformOriginProperty,
   PerspectiveProperty,
   MixBlendModeProperty,
   PerspectiveOriginProperty,
