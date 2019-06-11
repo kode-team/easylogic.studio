@@ -419,13 +419,14 @@ export class DomItem extends GroupItem {
     )
   }
 
-  toDefaultCSS() {
+  toDefaultCSS(isExport = false) {
     return this.toKeyListCSS(
       'background-color', 'color', 
       'mix-blend-mode', 
       'transform-origin',
       'perspective', 'perspective-origin'
     )
+
   }
 
   toVariableCSS () {
@@ -457,7 +458,7 @@ export class DomItem extends GroupItem {
 
     return CSS_SORTING({
       ...this.toVariableCSS(),
-      ...this.toDefaultCSS(),
+      ...this.toDefaultCSS(isExport),
       ...this.toFontCSS(),
       ...this.toBoxModelCSS(),
       ...this.toSizeCSS(),

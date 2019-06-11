@@ -51,6 +51,8 @@ export default class RangeEditor extends UIElement {
         var hasLabel = !!label ? 'has-label' : ''
         var hasCalc = calc ? 'has-calc' : '';
         var isRemovable = removable ? 'is-removable' : '';
+
+        var realValue = (+value).toString();
         
         return html`
         <div class='range-editor ${hasLabel} ${hasCalc} ${isRemovable}' data-selected-type='${type}' ref='$range'>
@@ -58,8 +60,8 @@ export default class RangeEditor extends UIElement {
             <button type='button' class='type-button' ref='$toggleType'>${icon.autorenew}</button>
             <div class='range-editor-type' data-type='range'>
                 <div class='area'>
-                    <input type='range' ref='$property' value="${+value}" min="${min}" max="${max}" step="${step}" />
-                    <input type='number' ref='$propertyNumber' value="${+value}" min="${min}" max="${max}" step="${step}" />
+                    <input type='range' ref='$property' value="${realValue}" min="${min}" max="${max}" step="${step}" />
+                    <input type='number' ref='$propertyNumber' value="${realValue}" min="${min}" max="${max}" step="${step}" />
                     
                     <SelectEditor ref='$unit' key='unit' value="${this.state.selectedUnit || this.state.value.unit}" options="${this.state.units}" onchange='changeUnit' />
                     

@@ -60,7 +60,11 @@ export default class CanvasView extends UIElement {
     }
   }
 
-  generate(css, keyframeString, rootVariable) {
+  generate(css, keyframeString, rootVariable, content) {
+
+    if (this.refs.$canvas.text() != content) {
+      this.refs.$canvas.text(content);
+    }
 
     this.refs.$style.html(`
       :root {
@@ -76,9 +80,6 @@ export default class CanvasView extends UIElement {
       ${keyframeString}
     `)
 
-    if (this.refs.$canvas.text() != css.content) {
-      this.refs.$canvas.text(css.content);
-    }
 
     this.refs.$lock.css({
       width: css.width,
@@ -102,9 +103,9 @@ export default class CanvasView extends UIElement {
     var current = editor.selection.current;
     if (current) {
       if (this.props.embed) {
-        this.parser.generate(current.toEmbedCSS(), current.toKeyframeString(), current.toRootVariableCSS());
+        this.parser.generate(current.toEmbedCSS(), current.toKeyframeString(), current.toRootVariableCSS(), current.content);
       } else {
-        this.generate(current.toCSS(), current.toKeyframeString(), current.toRootVariableCSS());
+        this.generate(current.toCSS(), current.toKeyframeString(), current.toRootVariableCSS(), current.content);
       }
     }
   }

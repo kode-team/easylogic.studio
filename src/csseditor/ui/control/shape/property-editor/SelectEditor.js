@@ -34,7 +34,14 @@ export default class SelectEditor extends UIElement {
         return this.state.options.map(it => {
 
             var selected = it === this.state.value ? 'selected' : '' 
-            return `<option ${selected} value="${it}">${it}</option>`
+            var value = it; 
+            var label = it; 
+
+            if (label === '') {
+                label = '< none-value >'
+            }
+
+            return `<option ${selected} value="${value}">${label}</option>`
         })
     }
 

@@ -58,7 +58,7 @@ export default class FontProperty extends BaseProperty {
         />
       </div>      
       <div class='property-item'>
-        <RangeEditor ref='$lineHeight' label='line-height' removable="true" key="font-size" onchange="changeRangeEditor" />
+        <RangeEditor ref='$lineHeight' label='line-height' removable="true" key="line-height" onchange="changeRangeEditor" />
       </div>
       <div class='property-item'>
         <SelectEditor 
