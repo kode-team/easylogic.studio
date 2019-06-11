@@ -288,17 +288,17 @@ export class StyleParser {
 
     this.parseBoxModelPropertyOne("margin", obj);
 
-    this.parseBoxModelProperty("margin-top", "marginTop", obj);
-    this.parseBoxModelProperty("margin-bottom", "marginBottom", obj);
-    this.parseBoxModelProperty("margin-left", "marginLeft", obj);
-    this.parseBoxModelProperty("margin-right", "marginRight", obj);
+    this.parseBoxModelProperty("margin-top", "margin-top", obj);
+    this.parseBoxModelProperty("margin-bottom", "margin-bottom", obj);
+    this.parseBoxModelProperty("margin-left", "margin-left", obj);
+    this.parseBoxModelProperty("margin-right", "margin-right", obj);
 
     this.parseBoxModelPropertyOne("padding", obj);
 
-    this.parseBoxModelProperty("padding-top", "paddingTop", obj);
-    this.parseBoxModelProperty("padding-bottom", "paddingBottom", obj);
-    this.parseBoxModelProperty("padding-left", "paddingLeft", obj);
-    this.parseBoxModelProperty("padding-right", "paddingRight", obj);
+    this.parseBoxModelProperty("padding-top", "padding-top", obj);
+    this.parseBoxModelProperty("padding-bottom", "padding-bottom", obj);
+    this.parseBoxModelProperty("padding-left", "padding-left", obj);
+    this.parseBoxModelProperty("padding-right", "padding-right", obj);
 
     return obj;
   }

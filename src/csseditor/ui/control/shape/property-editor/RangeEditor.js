@@ -79,7 +79,7 @@ export default class RangeEditor extends UIElement {
 
     setValue (value) {
         this.setState({
-            value
+            value: Length.parse(value)
         })
     }
 

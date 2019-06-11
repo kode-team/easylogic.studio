@@ -24,10 +24,15 @@ import TransformProperty from "./TransformProperty";
 import ClipPathProperty from "./ClipPathProperty";
 import TransitionProperty from "./TransitionProperty";
 import ComputedCodeViewProperty from "./ComputedCodeViewProperty";
-
+import PerspectiveOriginProperty from "./PerspectiveOriginProperty";
+import MixBlendModeProperty from "./MixBlendModeProperty";
+import PerspectiveProperty from "./PerspectiveProperty";
 
  
 export default {
+  PerspectiveProperty,
+  MixBlendModeProperty,
+  PerspectiveOriginProperty,
   ComputedCodeViewProperty,
   TransitionProperty,
   ClipPathProperty,
@@ -50,34 +55,9 @@ export default {
   FontProperty,
   ContentProperty,
   BoxModelProperty,
-  // PositionProperty,
   BoxShadowProperty,
   SizeProperty,
   BorderRadiusProperty,
   BorderProperty,
-  // FilterProperty,
   BackgroundColorProperty,
-  // FillProperty
-  // LayoutProperty,
-  // SizeProperty
-  // BackgroundPositionProperty,
-  // Transform2DControlProperty,
-  // LayerBorderRadiusProperty,
-  // LayerBorderProperty,
-  // BackgroundProperty,
-  // BackgroundCodeProperty,
-  // ColorStepProperty,
-  // ImageSortingProperty,
-  // LayerCodeProperty,
-  // Transform2DProperty,
-  // Transform3DProperty,
-  // ClipPathProperty,
-  // FilterProperty,
-  // BackdropProperty,
-  // BoxShadowProperty,
-  // ArtboardProperty,
-  // LayerProperty,
-  // LayerFontProperty,
-  // LayerTextProperty,
-  // TextShadowProperty
 };

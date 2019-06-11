@@ -311,7 +311,6 @@ export default class EventMachine {
     this._bindings = [];
     this.id = uuid();    
     this.childComponents = this.components();
-    this.counters = {} 
   }
 
   initState() {
@@ -481,8 +480,6 @@ export default class EventMachine {
     this._loadMethods.forEach(callbackName => {
       const elName = callbackName.split(LOAD_SAPARATOR)[1];
       if (this.refs[elName]) {
-
-        this.counters[elName]++
         
         var newTemplate = this[callbackName].call(this, ...args);
 

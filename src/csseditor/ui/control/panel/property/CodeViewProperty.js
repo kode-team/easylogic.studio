@@ -27,6 +27,10 @@ export default class CodeViewProperty extends BaseProperty {
     this.refresh();
   }
 
+  isHideHeader() {
+    return true;
+  }
+
   getBody() {
     return html`
       <div class="property-item code-view-item" ref='$body'></div>
@@ -39,11 +43,11 @@ export default class CodeViewProperty extends BaseProperty {
       var [key, value] = it.split(':')
 
       return `<strong>${key}</strong>:${value};${NEW_LINE}` 
-    }).join(EMPTY_STRING)
+    }).join(EMPTY_STRING).trim()
   }
 
   modifyNewLine (str) {
-    return str.replace(/;/gi, ";" + NEW_LINE)
+    return str.replace(/;/gi, ";" + NEW_LINE).trim()
   }
 
   [LOAD('$body')] () {
@@ -53,16 +57,15 @@ export default class CodeViewProperty extends BaseProperty {
     var keyframeCode = current ? current.toKeyframeString() : EMPTY_STRING
     var rootVariable = current ? CSS_TO_STRING(current.toRootVariableCSS()) : EMPTY_STRING
 
-    cssCode = this.filterKeyName(cssCode)
-    rootVariable = this.filterKeyName(rootVariable);
-    keyframeCode = this.modifyNewLine(keyframeCode);
+    cssCode = this.filterKeyName(cssCode.trim())
+    rootVariable = this.filterKeyName(rootVariable.trim());
+    keyframeCode = this.modifyNewLine(keyframeCode.trim());
 
     return `
       <div class=''>
         ${keyframeCode ?         
           `<div>
-          <label>Keyframe</label>
-          <pre>${keyframeCode}</pre>
+          <pre title='Keyframe'>${keyframeCode}</pre>
         </div>` : EMPTY_STRING}
         ${rootVariable ? 
           `<div>
@@ -73,8 +76,7 @@ export default class CodeViewProperty extends BaseProperty {
 
         ${cssCode ? 
           `<div>
-          <label>CSS</label>
-          <pre>${cssCode}</pre>
+          <pre title='CSS'>${cssCode}</pre>
           </div>` : EMPTY_STRING
         }
 

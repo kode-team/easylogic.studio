@@ -10,9 +10,25 @@
         }
 
         pre {
+            &::before {
+                content: attr(title);
+                position: absolute;
+                display: inline-block;
+                @include title-background();
+                color: white;
+                left:0px;
+                top:0px;
+                border-top-left-radius: 5px;
+                border-bottom-right-radius: 5px;
+                padding: 2px 4px;
+            }
+
             white-space: pre-wrap;
-            padding:10px;
+            padding:20px 10px;
+            user-select: text;
             border: 1px solid rgba(0, 0, 0, 0.1);
+            position: relative;
+            border-radius: 5px;
         }
     }
 }

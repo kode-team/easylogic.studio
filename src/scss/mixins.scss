@@ -12,6 +12,29 @@
     background-position: 0 0, 0 $half, $half (-1 * $half), (-1 * $half) 0px;
 }
 
+@mixin hue-background () {
+    background-image: linear-gradient(
+        to right,
+        #ff0000 0%,
+        #ffff00 17%,
+        #00ff00 33%,
+        #00ffff 50%,
+        #0000ff 67%,
+        #ff00ff 83%,
+        #ff0000 100%
+      );
+
+}
+
+@mixin title-background () {
+    background-image: linear-gradient(
+        to right,
+        #0000ff,
+        #ff00ff
+      );
+
+}
+
 @mixin arrow_top ($pixel, $color) {
     width: 0; 
     height: 0; 

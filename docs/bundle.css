@@ -1448,6 +1448,9 @@ html, body {
 .csseditor .tab.number-tab > .tab-header > .tab-item:last-child {
   border-right: 0px;
 }
+.csseditor .tab.number-tab > .tab-header > .tab-item label {
+  font-size: 11px;
+}
 .csseditor .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"] {
   background-color: #444444;
   color: white;
@@ -1978,7 +1981,7 @@ html, body {
   display: inline-block;
   font-weight: bold;
   text-transform: uppercase;
-  background: linear-gradient(to right, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
+  background-image: linear-gradient(to right, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
   -webkit-background-clip: text;
           background-clip: text;
   color: transparent;
@@ -3241,6 +3244,7 @@ html, body {
 }
 .csseditor .property > .property-title > .tools {
   text-align: right;
+  padding-top: 3px;
 }
 .csseditor .property > .property-title > .tools > * {
   flex: none;
@@ -3747,7 +3751,7 @@ html, body {
 }
 .csseditor .content-item textarea {
   width: 100%;
-  height: 140px;
+  height: 100px;
   box-sizing: border-box;
 }
 .csseditor .transition-list {
@@ -4033,8 +4037,26 @@ html, body {
 }
 .csseditor .code-view-item > div pre {
   white-space: pre-wrap;
-  padding: 10px;
+  padding: 20px 10px;
+  -webkit-user-select: text;
+     -moz-user-select: text;
+      -ms-user-select: text;
+          user-select: text;
   border: 1px solid rgba(0, 0, 0, 0.1);
+  position: relative;
+  border-radius: 5px;
+}
+.csseditor .code-view-item > div pre::before {
+  content: attr(title);
+  position: absolute;
+  display: inline-block;
+  background-image: linear-gradient(to right, #0000ff, #ff00ff);
+  color: white;
+  left: 0px;
+  top: 0px;
+  border-top-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  padding: 2px 4px;
 }
 .csseditor .clip-path-list {
   grid-template-columns: 1fr !important;
@@ -4139,9 +4161,8 @@ html, body {
 .csseditor .color-view-editor .preview .mini-view {
   width: 100%;
   height: 100%;
-  border: 1px solid #cccccc;
   position: relative;
-  border-radius: 100%;
+  border-radius: 5px;
   background-color: transparent;
   background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
   background-size: 10px 10px;
@@ -4153,7 +4174,7 @@ html, body {
   top: 0px;
   right: 0px;
   bottom: 0px;
-  border-radius: 100%;
+  border-radius: 5px;
 }
 .csseditor .color-view-editor .color-code input {
   width: 100%;
@@ -4966,6 +4987,55 @@ html, body {
 .csseditor .var-editor .var-item .tools button svg {
   width: 100%;
   height: 100%;
+}
+.csseditor .perspective-origin-editor .perspective-origin-item {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+}
+.csseditor .perspective-origin-editor .perspective-origin-item.full {
+  grid-template-columns: 1fr;
+}
+.csseditor .perspective-origin-editor .radius-selector {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-items: center;
+}
+.csseditor .perspective-origin-editor .radius-selector[data-selected-value=all] button[data-value=all] {
+  background-color: black;
+}
+.csseditor .perspective-origin-editor .radius-selector[data-selected-value=all] button[data-value=all] svg path {
+  fill: white;
+}
+.csseditor .perspective-origin-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] {
+  background-color: black;
+}
+.csseditor .perspective-origin-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] svg path {
+  fill: white;
+}
+.csseditor .perspective-origin-editor .radius-selector button {
+  flex: none;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  box-sizing: border-box;
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 2px;
+  border-radius: 3px;
+  cursor: pointer;
+  outline: none;
+  padding: 0px;
+  border: 0px;
+}
+.csseditor .perspective-origin-editor .radius-selector button svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor .perspective-origin-editor .radius-selector button svg path {
+  fill: #cccccc;
 }
 .csseditor .fill-picker {
   position: fixed;

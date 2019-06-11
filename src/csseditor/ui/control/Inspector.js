@@ -13,20 +13,24 @@ export default class Inspector extends UIElement {
             <div class="tab-header" ref="$header">
               <div class="tab-item" data-value="1">
                 <div class='icon'>${icon.paint}</div>
-                <lable>Style</label>
+                <label>Style</label>
               </div>
               <div class="tab-item" data-value="2">
                 <div class='icon'>${icon.title}</div>
-                <lable>Text & Font</label>
+                <label>Text</label>
               </div>
               <div class="tab-item" data-value="3">
                 <div class='icon'>${icon.filter}</div>
-                <lable>Effect</label>
+                <label>Transform</label>
               </div>            
-
               <div class="tab-item" data-value="4">
+                <div class='icon'>${icon.filter}</div>
+                <label>Effect</label>
+              </div>                          
+
+              <div class="tab-item" data-value="5">
                 <div class='icon'>${icon.timer}</div>
-                <lable>Animation</label>
+                <label>Animation</label>
               </div>                        
             </div>
             <div class="tab-body" ref="$body">
@@ -37,7 +41,7 @@ export default class Inspector extends UIElement {
                 <BorderProperty />
                 <BorderRadiusProperty />
                 <BorderImageProperty />
-
+                <OutlineProperty />
               </div>
               <div class="tab-content" data-value="2">
                 <ContentProperty />
@@ -47,17 +51,21 @@ export default class Inspector extends UIElement {
                 <FontSpacingProperty />
               </div>
               <div class='tab-content' data-value="3">
+      
+                <PerspectiveProperty />
+                <PerspectiveOriginProperty />
+                <TransformProperty />
+              </div>
+              <div class='tab-content' data-value="4">
+                <MixBlendModeProperty />
                 <BackgroundImageProperty />                 
                 <BoxShadowProperty />
                 <TextShadowProperty />                   
-                <TransformProperty />
                 <FilterProperty />
                 <BackdropFilterProperty />
                 <ClipPathProperty />              
-                <OutlineProperty />
-
               </div>
-              <div class='tab-content' data-value="4">
+              <div class='tab-content' data-value="5">
                 <TransitionProperty />
                 <KeyframeProperty />
                 <AnimationProperty />
@@ -70,19 +78,19 @@ export default class Inspector extends UIElement {
             <div class="tab-header" ref="$extraHeader">
               <div class="tab-item" data-value="1">
                 <div class='icon'>${icon.code}</div>
-                <lable>Code</label>
+                <label>Code</label>
               </div>    
               <div class="tab-item" data-value="2">
                 <div class='icon'>${icon.code}</div>
-                <lable>Computed</label>
+                <label>Computed</label>
               </div>                  
               <div class="tab-item" data-value="3">
                 <div class='icon'>${icon.build}</div>
-                <lable>Var</label>
+                <label>Var</label>
               </div>    
               <div class="tab-item" data-value="4">
                 <div class='icon'>${icon.build}</div>
-                <lable>Root Var</label>
+                <label>Root Var</label>
               </div>                                
             </div>
             <div class="tab-body" ref="$extraBody">

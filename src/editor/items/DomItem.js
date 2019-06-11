@@ -24,13 +24,13 @@ export class DomItem extends GroupItem {
       'transform': '',
       'filter': '',
       'backdrop-filter': '',
-      'background-color': 'white',      
+      'background-color': '',      
       'background-image': '',      
       'border-radius': '',      
       'box-shadow': '',
       'text-shadow': '',
       'clip-path': '',
-      'color': "black",
+      'color': "",
       'font-size': '',
       'line-height': '',
       'text-align': '',
@@ -39,33 +39,19 @@ export class DomItem extends GroupItem {
       'letter-spacing': '', 
       'word-spacing': '', 
       'text-indent': '',      
-      x: Length.px(100),
-      y: Length.px(100),
-      // filters: [],      // deprecated 
+      'perspective-origin': '',
+      'perspective': '',
+      'mix-blend-mode': '',
       border: {},
-      outline: {
-        color: 'currentcolor',
-        style: 'none',
-        width: Length.px(3)  /* medium */
-      },
-      
+      outline: {},
+    
       borderRadius: {},
       borderImage: new BorderImage(),
       applyBorderImage: false,
       animations: [],
       transitions: [],
       keyframes: [],
-      perspectiveOriginPositionX: Length.percent(0),
-      perspectiveOriginPositionY: Length.percent(0),
-      display: Display.parse({ display: "block" }),
-      marginTop: Length.px(0),
-      marginBottom: Length.px(0),
-      marginRight: Length.px(0),
-      marginLeft: Length.px(0),
-      paddingTop: Length.px(0),
-      paddingBottom: Length.px(0),
-      paddingRight: Length.px(0),
-      paddingLeft: Length.px(0),
+      display: Display.parse({ display: "block" }),      
       content: "",
       ...obj
     });
@@ -76,14 +62,6 @@ export class DomItem extends GroupItem {
 
     json.width = Length.parse(json.width);
     json.height = Length.parse(json.height);
-    json.x = Length.parse(json.x);
-    json.y = Length.parse(json.y);
-    json.perspectiveOriginPositionX = Length.parse(
-      json.perspectiveOriginPositionX
-    );
-    json.perspectiveOriginPositionY = Length.parse(
-      json.perspectiveOriginPositionY
-    );
 
     if (json.display) json.display = Display.parse(json.display);
 
@@ -322,10 +300,13 @@ export class DomItem extends GroupItem {
   }
 
   toOutlineCSS () {
-    var results = {};
     var outline = this.json.outline;
 
     if (!outline) return {} ;
+
+    if (Object.keys(outline).length === 0) {
+      return {}
+    }
 
     return {
       outline: `${outline.color} ${outline.style} ${outline.width}`
@@ -355,6 +336,10 @@ export class DomItem extends GroupItem {
 
   toFilterCSS() {
     return this.toKeyCSS('filter');
+  }
+
+  toPerspectiveOriginCSS() {
+    return this.toKeyCSS('perspective-origin')
   }
 
   toClipPathCSS() {
@@ -396,31 +381,18 @@ export class DomItem extends GroupItem {
   toBoxModelCSS() {
     var json = this.json;
     var obj = {};
-    if (
-      json.marginTop.value === json.marginBottom.value &&
-      json.marginLeft.value === json.marginRight.value &&
-      json.marginTop.value === json.marginRight.value
-    ) {
-      obj.margin = json.marginTop;
-    } else {
-      obj["margin-top"] = json.marginTop;
-      obj["margin-bottom"] = json.marginBottom;
-      obj["margin-left"] = json.marginLeft;
-      obj["margin-right"] = json.marginRight;
-    }
 
-    if (
-      json.paddingTop.value === json.paddingBottom.value &&
-      json.paddingLeft.value === json.paddingRight.value &&
-      json.paddingTop.value === json.paddingRight.value
-    ) {
-      obj.padding = json.paddingTop;
-    } else {
-      obj["padding-top"] = json.paddingTop;
-      obj["padding-bottom"] = json.paddingBottom;
-      obj["padding-left"] = json.paddingLeft;
-      obj["padding-right"] = json.paddingRight;
-    }
+    if (json['margin-top']) obj["margin-top"] = json['margin-top'];
+    if (json['margin-bottom']) obj["margin-bottom"] = json['margin-bottom'];
+    if (json['margin-left']) obj["margin-left"] = json['margin-left'];
+    if (json['margin-right']) obj["margin-right"] = json['margin-right'];
+
+
+    if (json['padding-top']) obj["padding-top"] = json['padding-top'];
+    if (json['padding-bottom']) obj["padding-bottom"] = json['padding-bottom'];
+    if (json['padding-left']) obj["padding-left"] = json['padding-left'];
+    if (json['padding-right']) obj["padding-right"] = json['padding-right'];
+
 
     return obj;
   }
@@ -443,6 +415,14 @@ export class DomItem extends GroupItem {
       'font-size', 'line-height', 'font-weight', 'font-family', 'font-style',
       'text-align', 'text-transform', 'text-decoration',
       'letter-spacing', 'word-spacing', 'text-indent'
+    )
+  }
+
+  toDefaultCSS() {
+    return this.toKeyListCSS(
+      'background-color', 'color', 
+      'mix-blend-mode', 
+      'perspective', 'perspective-origin'
     )
   }
 
@@ -472,15 +452,10 @@ export class DomItem extends GroupItem {
   }
 
   toCSS(isExport = false) {
-    var json = this.json;
-    var css = {
-      "background-color": json['background-color'],
-      color: json.color
-    };
 
     return CSS_SORTING({
       ...this.toVariableCSS(),
-      ...css,
+      ...this.toDefaultCSS(),
       ...this.toFontCSS(),
       ...this.toBoxModelCSS(),
       ...this.toSizeCSS(),
@@ -491,6 +466,7 @@ export class DomItem extends GroupItem {
       ...this.toAnimationCSS(),
       ...this.toClipPathCSS(),
       ...this.toFilterCSS(),
+      // ...this.toPerspectiveOriginCSS(),      
       ...this.toTransformCSS(),
       ...this.toBackdropFilterCSS(),      
       ...this.toBackgroundImageCSS(isExport),
@@ -504,14 +480,13 @@ export class DomItem extends GroupItem {
   toEmbedCSS(isExport = false) {
     var json = this.json;
     var css = {
-      "background-color": json['background-color'],
-      color: json.color,
       content: json.content
     };
 
     return CSS_SORTING({
       ...this.toVariableCSS(),      
       ...css,
+      ...this.toDefaultCSS(),
       ...this.toFontCSS(),
       ...this.toBoxModelCSS(),
       ...this.toSizeCSS(),
@@ -523,6 +498,7 @@ export class DomItem extends GroupItem {
       ...this.toTransitionCSS(),      
       ...this.toClipPathCSS(),
       ...this.toFilterCSS(),
+      // ...this.toPerspectiveOriginCSS(),
       ...this.toTransformCSS(),      
       ...this.toBackdropFilterCSS(),
       ...this.toBackgroundImageCSS(isExport),

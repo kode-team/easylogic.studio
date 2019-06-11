@@ -14,7 +14,7 @@ import { EMPTY_STRING } from "../../../../../util/css/types";
 const fields = ["margin", "padding"];
 let styleKeys = [];
 fields.forEach(field => {
-  styleKeys.push(...["Top", "Bottom", "Left", "Right"].map(it => field + it));
+  styleKeys.push(...["-top", "-bottom", "-left", "-right"].map(it => field + it));
 });
 
 export default class BoxModelProperty extends BaseProperty {
@@ -33,9 +33,10 @@ export default class BoxModelProperty extends BaseProperty {
   }
 
   templateInput(key, current) {
-    return `<input type="number" ref="$${key}" value="${current[
-      key
-    ].value.toString()}" />`;
+
+    var value = current[key] || Length.px(0)
+
+    return `<input type="number" ref="$${key}" value="${value.value.toString()}" />`;
   }
 
   [LOAD("$boxModelItem")]() {
@@ -47,30 +48,30 @@ export default class BoxModelProperty extends BaseProperty {
       <div>
         <div class="margin">
           <div data-value="top">
-            ${this.templateInput("marginTop", current)}
+            ${this.templateInput("margin-top", current)}
           </div>
           <div data-value="bottom">
-            ${this.templateInput("marginBottom", current)}
+            ${this.templateInput("margin-bottom", current)}
           </div>
           <div data-value="left">
-            ${this.templateInput("marginLeft", current)}
+            ${this.templateInput("margin-left", current)}
           </div>
           <div data-value="right">
-            ${this.templateInput("marginRight", current)}
+            ${this.templateInput("margin-right", current)}
           </div>
         </div>
         <div class="padding">
           <div data-value="top">
-            ${this.templateInput("paddingTop", current)}
+            ${this.templateInput("padding-top", current)}
           </div>
           <div data-value="bottom">
-            ${this.templateInput("paddingBottom", current)}
+            ${this.templateInput("padding-bottom", current)}
           </div>
           <div data-value="left">
-            ${this.templateInput("paddingLeft", current)}
+            ${this.templateInput("padding-left", current)}
           </div>
           <div data-value="right">
-            ${this.templateInput("paddingRight", current)}
+            ${this.templateInput("padding-right", current)}
           </div>
         </div>
         <div

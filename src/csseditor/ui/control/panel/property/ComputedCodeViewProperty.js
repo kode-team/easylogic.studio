@@ -26,6 +26,11 @@ export default class ComputedCodeViewProperty extends BaseProperty {
     this.refresh();
   }
 
+
+  isHideHeader() {
+    return true;
+  }  
+
   [EVENT('refreshComputedStyleCode')] (css) {
     this.setState({ css })
   }
@@ -42,7 +47,7 @@ export default class ComputedCodeViewProperty extends BaseProperty {
       var [key, value] = it.split(':')
 
       return `<strong>${key}</strong>:${value};${NEW_LINE}` 
-    }).join(EMPTY_STRING)
+    }).join(EMPTY_STRING).trim()
   }
 
   modifyNewLine (str) {
@@ -57,20 +62,19 @@ export default class ComputedCodeViewProperty extends BaseProperty {
     var cssCode = this.state.css ? CSS_TO_STRING(this.state.css) : currentExport
     var keyframeCode = current ? current.toKeyframeString() : EMPTY_STRING
 
-    cssCode = this.filterKeyName(cssCode)
+    cssCode = this.filterKeyName(cssCode.trim())
+    keyframeCode = this.modifyNewLine(keyframeCode.trim());
 
     return `
       <div class=''>
         ${keyframeCode ?         
           `<div>
-          <label>Keyframe</label>
-          <pre>${keyframeCode}</pre>
+          <pre title="Keyframe">${keyframeCode}</pre>
         </div>` : EMPTY_STRING}
 
         ${cssCode ? 
           `<div>
-          <label>CSS</label>
-          <pre>${cssCode}</pre>
+          <pre title="CSS">${cssCode}</pre>
           </div>` : EMPTY_STRING
         }
 
