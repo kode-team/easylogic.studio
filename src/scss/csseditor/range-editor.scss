@@ -1,11 +1,14 @@
 .range-editor {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 20px;
     grid-column-gap: 4px;
 
     &.has-label {
         grid-template-columns: 60px 1fr;
         grid-column-gap: 2px;
+        &.is-removable {
+            grid-template-columns: 20px 1fr 16px;
+        }
 
         label {
             text-align: right;
@@ -17,6 +20,11 @@
 
     &.has-calc {
         grid-template-columns: 20px 1fr;
+
+        &.is-removable {
+            grid-template-columns: 20px 1fr 16px;
+        }
+
         grid-column-gap: 2px;
 
         .type-button {
@@ -24,13 +32,24 @@
         }
     }
 
+    &.is-removable {
+        .remove {
+            display: inline-block;
+        }
+    }
+
     &.has-calc.has-label {
         grid-template-columns: 60px 20px 1fr;
         grid-column-gap: 2px;
+
+        &.is-removable {
+            grid-template-columns: 60px 20px 1fr 16px;
+        }
+
     }
 
 
-    .type-button {
+    button {
         vertical-align: middle;
         appearance: none;
         background-color: transparent;
@@ -38,9 +57,9 @@
         height: 16px;
         outline: none;
         padding: 0px;
-        display: none;
         border:0px;
-
+        display: none;
+        cursor: pointer;
         svg {
             width: 100%;
             height: 100%;

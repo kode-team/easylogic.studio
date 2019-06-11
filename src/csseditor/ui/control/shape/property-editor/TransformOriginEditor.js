@@ -24,7 +24,7 @@ export default class TransformOriginEditor extends UIElement {
     var arr = this.props.value.split(WHITE_STRING);
 
     var obj = {
-      isAll: true,
+      isAll: false,
       'transform-origin': Length.px(0),
       'transform-origin-x': Length.px(0),
       'transform-origin-y': Length.px(0) 
@@ -87,7 +87,6 @@ export default class TransformOriginEditor extends UIElement {
       <div
         class="property-item full transform-origin-item"
         ref="$partitialSetting"
-        style="display: none;"
       >
         <div class="radius-setting-box" ref="$radiusSettingBox">
           ${typeList.map(it => {

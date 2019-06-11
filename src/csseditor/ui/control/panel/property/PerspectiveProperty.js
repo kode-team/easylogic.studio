@@ -1,7 +1,6 @@
 import BaseProperty from "./BaseProperty";
 import { editor } from "../../../../../editor/editor";
-import { EMPTY_STRING } from "../../../../../util/css/types";
-import { LOAD, CLICK, INPUT } from "../../../../../util/Event";
+import { LOAD, CLICK } from "../../../../../util/Event";
 import { EVENT } from "../../../../../util/UIElement";
 import {
   CHANGE_EDITOR,
@@ -10,6 +9,7 @@ import {
   CHANGE_ARTBOARD
 } from "../../../../types/event";
 import RangeEditor from "../../shape/property-editor/RangeEditor";
+import icon from "../../../icon/icon";
 
 export default class PerspectiveProperty extends BaseProperty {
   components() {
@@ -22,6 +22,16 @@ export default class PerspectiveProperty extends BaseProperty {
     return "Perspective";
   }
 
+  getTools() {
+    return `
+        <button type="button" class="remove" ref='$remove'>${icon.close}</button>
+    `
+  }
+
+  [CLICK('$remove')] () {
+    this.trigger('changePerspective', 'perspective', '');
+  }    
+
   getBody() {
     return `<div ref='$perspective'></div>`;
   }  
@@ -30,10 +40,10 @@ export default class PerspectiveProperty extends BaseProperty {
     var current = editor.selection.current || {};
 
     var perspective = current['perspective'] || ''
-    return `<RangeEditor ref='$1' key='perspective' value="${perspective}" onchange="changeRangeEdtior" />`;
+    return `<RangeEditor ref='$1' key='perspective' value="${perspective}" onchange="changePerspective" />`;
   }
 
-  [EVENT('changeRangeEdtior')] (key, value) {
+  [EVENT('changePerspective')] (key, value) {
     var current = editor.selection.current;
 
     if (current) {

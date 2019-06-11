@@ -34,11 +34,10 @@ import pause from "./pause";
 import autorenew from "./autorenew";
 import code from "./code";
 import build from "./build";
-
-
-
+import close from "./close";
 
 export default {
+  close,
   build,
   code,
   autorenew,

@@ -1,10 +1,11 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD } from "../../../../../util/Event";
+import { LOAD, CLICK } from "../../../../../util/Event";
 import { html } from "../../../../../util/functions/func";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
 import { CHANGE_LAYER, CHANGE_ARTBOARD, CHANGE_SELECTION } from "../../../../types/event";
 import TransformOriginEditor from "../../shape/property-editor/TransformOriginEditor";
+import icon from "../../../icon/icon";
 
 
 export default class TransformOriginProperty extends BaseProperty {
@@ -17,6 +18,16 @@ export default class TransformOriginProperty extends BaseProperty {
 
   getTitle() {
     return "Transform Origin";  
+  }
+
+  getTools() {
+    return `
+        <button type="button" class="remove" ref='$remove'>${icon.close}</button>
+    `
+  }
+
+  [CLICK('$remove')] () {
+    this.trigger('changeTransformOrigin', '');
   }
 
   getBody() {

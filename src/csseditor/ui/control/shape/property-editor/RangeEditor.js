@@ -20,6 +20,7 @@ export default class RangeEditor extends UIElement {
         var units = this.props.units || 'px,em,%';
         var value = Length.parse(this.props.value || Length.px(0));
         return {
+            removable: this.props.removable === 'true',
             calc:  this.props.calc === 'false'  ? false : true,
             label: this.props.label || '',
             min: +this.props.min || 0,
@@ -39,7 +40,7 @@ export default class RangeEditor extends UIElement {
 
     [LOAD('$body')] () {
 
-        var { min, max, step, label, calc, type } = this.state
+        var { min, max, step, label, calc, type, removable } = this.state
 
         var value = +this.state.value.value.toString()
 
@@ -49,9 +50,10 @@ export default class RangeEditor extends UIElement {
 
         var hasLabel = !!label ? 'has-label' : ''
         var hasCalc = calc ? 'has-calc' : '';
+        var isRemovable = removable ? 'is-removable' : '';
         
         return html`
-        <div class='range-editor ${hasLabel} ${hasCalc}' data-selected-type='${type}' ref='$range'>
+        <div class='range-editor ${hasLabel} ${hasCalc} ${isRemovable}' data-selected-type='${type}' ref='$range'>
             ${label ? `<label>${label}</label>` : EMPTY_STRING }
             <button type='button' class='type-button' ref='$toggleType'>${icon.autorenew}</button>
             <div class='range-editor-type' data-type='range'>
@@ -69,6 +71,7 @@ export default class RangeEditor extends UIElement {
                     <input type='text' ref='$calc' value='${this.state.value.toString()}' />
                 </div>
             </div>
+            <button type='button' class='remove' ref='$remove'>${icon.close}</button>
         </div>
     `
     }
@@ -100,6 +103,12 @@ export default class RangeEditor extends UIElement {
         }) 
 
         this.refs.$range.attr('data-selected-type', type);
+    }
+
+    [CLICK('$remove')] (e) {
+        this.updateData({
+            value: ''
+        })
     }
 
     [INPUT('$calc')] () {
@@ -134,6 +143,10 @@ export default class RangeEditor extends UIElement {
     [INPUT('$property')] (e) {
         var value = +this.getRef('$property').value; 
         this.getRef('$propertyNumber').val(value);
+
+        if (this.state.value === '') {
+            this.state.value = new Length(0, this.children.$unit.getValue())
+        }
 
         this.updateData({ 
             value: this.state.value.set(value)

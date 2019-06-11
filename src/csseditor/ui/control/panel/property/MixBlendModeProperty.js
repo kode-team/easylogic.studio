@@ -47,7 +47,7 @@ export default class MixBlendModeProperty extends BaseProperty {
   }
 
   getTools() {
-    return `<div ref='$mixBlend'></div>`;
+    return `<div ref='$mixBlend' style='padding-top: 3px;'></div>`;
   }  
 
   [LOAD("$mixBlend")]() {
