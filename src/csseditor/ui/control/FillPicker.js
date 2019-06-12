@@ -261,7 +261,7 @@ export default class FillPicker extends UIElement {
     // this.emit("hidePicker");
   }
 
-  [EVENT("hideFillPicker", "hidePicker", CHANGE_SELECTION)]() {
+  [EVENT("hideFillPicker", "hidePicker", 'hidePropertyPopup', CHANGE_SELECTION)]() {
     this.$el.hide();
   }
 

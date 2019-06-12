@@ -201,7 +201,7 @@ export default class BackgroundPropertyPopup extends UIElement {
 
   [EVENT(
     "hideBackgroundPropertyPopup",
-    // "hidePropertyPopup",
+    "hidePropertyPopup",
     CHANGE_EDITOR,
     CHANGE_SELECTION
   )]() {
