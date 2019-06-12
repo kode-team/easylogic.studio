@@ -26,10 +26,10 @@ export default class AnimationPropertyPopup extends UIElement {
       name: 'none',
       direction: 'normal',
       duration: Length.second(0),
-      timingFunction: 'linear',
+      timingFunction: 'ease',
       delay: Length.second(0),
       iterationCount: 0,
-      playState: 'paused',
+      playState: 'running',
       fillMode: 'none'
     };
   }
@@ -196,7 +196,6 @@ export default class AnimationPropertyPopup extends UIElement {
 
   [EVENT("showAnimationPropertyPopup")](data) {
     this.setState(data);
-    this.refresh();
 
     this.$el
       .css({

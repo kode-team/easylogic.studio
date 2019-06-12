@@ -83,8 +83,8 @@ export default class BackgroundImageEditor extends UIElement {
 
     getColorStepString(colorsteps) {
         return colorsteps
-            .map(step => {
-                return `<div class='step' data-colorstep-id="${step.id}" data-selected='${step.selected}' style='background-color:${step.color};'></div>`;
+            .map((step, index) => {
+                return `<div class='step' data-index="${index}" data-cut="${step.cut}" data-selected='${step.selected}' style='background-color:${step.color};'></div>`;
             })
             .join(EMPTY_STRING);
     }
@@ -193,12 +193,11 @@ export default class BackgroundImageEditor extends UIElement {
 
     [CLICK("$fillList .colorsteps .step")](e) {
         this.getRef('colorsteps', this.selectedIndex).$(`[data-selected="true"]`).removeAttr('data-selected')
-        var selectColorStepId = e.$delegateTarget.attr("data-colorstep-id");
         e.$delegateTarget.attr('data-selected', true);
 
-        var selectColorStepId = e.$delegateTarget.attr("data-colorstep-id");
+        var selectColorStepIndex = e.$delegateTarget.attr("data-index");
         var $preview = e.$delegateTarget.closest("fill-item").$(".preview");
-        this.viewFillPicker($preview, selectColorStepId);
+        this.viewFillPicker($preview, selectColorStepIndex);
     }
 
 
@@ -247,16 +246,13 @@ export default class BackgroundImageEditor extends UIElement {
 
 
     [CLICK("$fillList .tools .remove")](e) {
-        var removeIndex = e.$delegateTarget.attr("data-index");
-        var currentBackgroundImage = this.getCurrentBackgroundImage();
+        var removeIndex = +e.$delegateTarget.attr("data-index");
 
-        if (currentBackgroundImage) {
-            this.state.images.splice(removeIndex, 1);
+        this.state.images.splice(removeIndex, 1);
 
-            this.refresh();
+        this.refresh();
 
-            this.modifyBackgroundImage()
-        }
+        this.modifyBackgroundImage()
     }
 
       // 객체를 선택하는 괜찮은 패턴이 어딘가에 있을 텐데......
@@ -275,7 +271,7 @@ export default class BackgroundImageEditor extends UIElement {
         
     }
 
-    viewFillPicker($preview, selectColorStepId) {
+    viewFillPicker($preview, selectColorStepIndex) {
         if (typeof this.selectedIndex === "number") {
             this.selectItem(this.selectedIndex, false);
         }
@@ -287,8 +283,8 @@ export default class BackgroundImageEditor extends UIElement {
 
         this.emit("showFillPicker", {
             changeEvent: 'changeBackgroundImageEditor',
-            ...this.getFillData(this.currentBackgroundImage),
-            selectColorStepId,
+            image: this.currentBackgroundImage.image,
+            selectColorStepIndex,
             refresh: true,
             isImageHidden: true
         });
@@ -296,7 +292,6 @@ export default class BackgroundImageEditor extends UIElement {
     }
 
     viewBackgroundPropertyPopup(position) {
-
         this.currentBackgroundImage =  this.getCurrentBackgroundImage()
 
         const back = this.currentBackgroundImage;
@@ -308,13 +303,10 @@ export default class BackgroundImageEditor extends UIElement {
         const repeat = back.repeat;
         const size = back.size;
         const blendMode = back.blendMode;
-        const image = back.image;
 
         const changeEvent = 'changeBackgroundImageEditorProperty'
-
         this.emit("showBackgroundPropertyPopup", {
             changeEvent,
-            image,
             position,
             x,
             y,

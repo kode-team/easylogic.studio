@@ -1,12 +1,88 @@
 import { Property } from "../items/Property";
-import { html, keyEach, keyMap } from "../../util/functions/func";
+import { html } from "../../util/functions/func";
 import { Offset } from "./Offset";
-import { NEW_LINE, EMPTY_STRING, NEW_LINE_2 } from "../../util/css/types";
-import { BackgroundImage } from "./BackgroundImage";
+import { EMPTY_STRING, NEW_LINE_2, WHITE_STRING } from "../../util/css/types";
+import { reverseMatches, convertMatches } from "../../util/functions/parser";
+import { Length } from "../unit/Length";
 
 export class Keyframe extends Property {
   static parse(obj) {
     return new Keyframe(obj);
+  }
+
+
+  /**
+   * 
+   * keyframe: {keyframeName} {offset} {property} {value} | ......
+   * 
+   * @param {} style 
+   */
+  static parseStyle (style) {
+    var keyframes = []
+    var keyframeKeys = {} 
+
+    if (style['keyframe']) {
+      var results = convertMatches(style["keyframe"]);
+
+      results.str.split('|').map(it => it.trim()).forEach( (frameInfo, index) => {
+        var [ name, offset, property, ...values ] = frameInfo.split(WHITE_STRING)
+        var propertyValue = values.join(WHITE_STRING);
+
+        if (!keyframeKeys[name]) {
+          keyframeKeys[name] = new Keyframe({
+            name
+          })
+          
+          keyframes[index] = name; 
+        }
+
+        var filteredOffset = keyframeKeys[name].offsets.filter(it => {
+          return it.offset.equals(Length.parse(offset))
+        })
+
+        var offsetObj = null;
+        if (filteredOffset.length) {
+          offsetObj = filteredOffset[0]
+        } else {
+          offsetObj = new Offset({
+            offset: Length.parse(offset)
+          })
+
+          keyframeKeys[name].offsets.push(offsetObj)
+        }
+
+        offsetObj.addProperty({ 
+          key: property, 
+          value: reverseMatches(propertyValue, results.matches)
+        })
+
+      })
+    }
+
+    return keyframes.map(name => {
+
+      keyframeKeys[name].offsets.forEach(offset => {
+        var vars = [] 
+        var properties = [] 
+        offset.properties.forEach(p => {
+          if (p.key.includes('--')) {
+            vars.push(p);
+          } else {
+            properties.push(p);
+          }
+        })
+
+        let varValue = vars.map(it => `${it.key}:${it.value}`).join(';')
+
+        if (vars.length) {
+          properties.push({ key: 'var', value: varValue })
+        }
+
+        offset.properties = properties
+      })
+
+      return keyframeKeys[name]
+    });
   }
 
   getDefaultObject() {

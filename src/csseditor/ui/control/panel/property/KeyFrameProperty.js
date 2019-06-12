@@ -13,6 +13,7 @@ import { EMPTY_STRING } from "../../../../../util/css/types";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
 import { CHANGE_ARTBOARD, CHANGE_SELECTION, CHANGE_EDITOR } from "../../../../types/event";
+import { Keyframe } from "../../../../../editor/css-property/Keyframe";
 
 export default class KeyFrameProperty extends BaseProperty {
   getTitle() {
@@ -198,7 +199,12 @@ export default class KeyFrameProperty extends BaseProperty {
 
     if (!current) return EMPTY_STRING;
 
-    return current.keyframes.map((keyframe, index) => {
+    var keyframes = current.keyframe ? Keyframe.parseStyle(current) : current.keyframes;
+
+    current.keyframe = ''
+    current.keyframes = keyframes;
+
+    return keyframes.map((keyframe, index) => {
       return this.makeKeyframeTemplate(keyframe, index);
     });
   }

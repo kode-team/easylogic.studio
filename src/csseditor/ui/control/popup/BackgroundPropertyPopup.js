@@ -159,7 +159,6 @@ export default class BackgroundPropertyPopup extends UIElement {
   template() {
     return `
       <div class='popup background-property-popup'>
-        <div class='popup-title'>Background Image</div>
         <div class='popup-content' ref='$body'>
         </div>
       </div>
@@ -188,7 +187,7 @@ export default class BackgroundPropertyPopup extends UIElement {
     this.$el
       .css({
         top: Length.px(110),
-        right: Length.px(10),
+        left: Length.px(320),
         bottom: Length.auto
       })
       .show("inline-block");
@@ -198,7 +197,7 @@ export default class BackgroundPropertyPopup extends UIElement {
 
   [EVENT(
     "hideBackgroundPropertyPopup",
-    "hidePropertyPopup",
+    // "hidePropertyPopup",
     CHANGE_EDITOR,
     CHANGE_SELECTION
   )]() {

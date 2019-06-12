@@ -160,14 +160,27 @@ export default class BaseStore {
     }
   }
 
+  getCachedCallbacks (event) {
+    if (!this.cachedCallback[event]) {
+      this.cachedCallback[event] = this.callbacks.filter(
+        f => f.event === event
+      );
+    }
+
+    return this.cachedCallback[event]
+  }
+
   sendMessage(source, event, $2, $3, $4, $5) {
     setTimeout(() => {
-      var list = this.cachedCallback[event];
-
+      var list = this.getCachedCallbacks(event);
+      // console.log(list, this.cachedCallback, source, event);
       if (list) {
         list
         .filter(f => f.originalCallback.source !== source)
-        .forEach(f => f.callback($2, $3, $4, $5));
+        .forEach(f => {
+          // console.log(f);
+          f.callback($2, $3, $4, $5)
+        });
       }
 
     }, 0);
@@ -175,8 +188,7 @@ export default class BaseStore {
 
   triggerMessage(source, event, $2, $3, $4, $5) {
     setTimeout(() => {
-      var list = this.cachedCallback[event];
-
+      var list = this.getCachedCallbacks(event);
       if (list) {
         list
         .filter(f => f.originalCallback.source === source)
@@ -189,26 +201,26 @@ export default class BaseStore {
     }, 0);
   }
 
-  makeCachedCallback(event) {
-    if (!this.cachedCallback[event]) {
-      this.cachedCallback[event] = this.callbacks.filter(
-        f => f.event === event
-      );
+  // makeCachedCallback(event) {
 
-    }
-  }
+  //   this.cachedCallback[event] = this.callbacks.filter(
+  //     f => f.event === event
+  //   );
+
+  //   console.log(this.cachedCallback, event);
+  // }
 
   emit($1, $2, $3, $4, $5) {
-    var event = $1;
-
-    this.makeCachedCallback(event);
+    // var event = $1;
+    // console.log('emit', event, this.source);
+    // this.makeCachedCallback(event);
     this.sendMessage(this.source, $1, $2, $3, $4, $5);
   }
 
   trigger($1, $2, $3, $4, $5) {
-    var event = $1;
+    // var event = $1;
 
-    this.makeCachedCallback(event);
+    // this.makeCachedCallback(event);
     this.triggerMessage(this.source, $1, $2, $3, $4, $5);
   }
 }

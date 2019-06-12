@@ -1,5 +1,5 @@
 import UIElement from "../../../../../util/UIElement";
-import { LOAD, CHANGE } from "../../../../../util/Event";
+import { LOAD, CHANGE, BIND } from "../../../../../util/Event";
 import { EMPTY_STRING } from "../../../../../util/css/types";
 
 export default class SelectEditor extends UIElement {
@@ -27,7 +27,14 @@ export default class SelectEditor extends UIElement {
     }
 
     getValue () {
-        return this.state.value; 
+        return this.refs.$options.value; 
+    }
+
+    [BIND('$options')] () {
+        return {
+            // 'disabled': this.state.options.length === 1,
+            'data-count': this.state.options.length.toString()
+        }
     }
 
     [LOAD('$options')] () {

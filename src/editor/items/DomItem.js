@@ -6,7 +6,8 @@ import { GroupItem } from "./GroupItem";
 import {
   keyEach,
   combineKeyArray,
-  isUndefined
+  isUndefined,
+  isNotUndefined
 } from "../../util/functions/func";
 import { BorderImage } from "../css-property/BorderImage";
 import { Animation } from "../css-property/Animation";
@@ -43,6 +44,7 @@ export class DomItem extends GroupItem {
       'transform-origin': '',
       'perspective': '',
       'mix-blend-mode': '',
+      'opacity': '',
       border: {},
       outline: {},
     
@@ -51,6 +53,7 @@ export class DomItem extends GroupItem {
       applyBorderImage: false,
       animations: [],
       transitions: [],
+      'keyframe': 'sample 0% --aaa 100px | sample 100% width 200px | sample2 0.5% background-image background-image:linear-gradient(to right, black, yellow 100%)',
       keyframes: [],
       display: Display.parse({ display: "block" }),      
       content: "",
@@ -403,8 +406,8 @@ export class DomItem extends GroupItem {
     var obj = {};
 
     args.forEach( it => {
-      if (json[it]) {
-        obj[it] = json[it]
+      if (isNotUndefined(json[it]) && json[it] !== '') {
+        obj[it] = json[it] + ''
       }
     })
 
@@ -422,7 +425,7 @@ export class DomItem extends GroupItem {
   toDefaultCSS(isExport = false) {
     return this.toKeyListCSS(
       'background-color', 'color', 
-      'mix-blend-mode', 
+      'opacity', 'mix-blend-mode', 
       'transform-origin',
       'perspective', 'perspective-origin'
     )
@@ -469,7 +472,6 @@ export class DomItem extends GroupItem {
       ...this.toAnimationCSS(),
       ...this.toClipPathCSS(),
       ...this.toFilterCSS(),
-      // ...this.toPerspectiveOriginCSS(),      
       ...this.toTransformCSS(),
       ...this.toBackdropFilterCSS(),      
       ...this.toBackgroundImageCSS(isExport),
@@ -501,7 +503,6 @@ export class DomItem extends GroupItem {
       ...this.toTransitionCSS(),      
       ...this.toClipPathCSS(),
       ...this.toFilterCSS(),
-      // ...this.toPerspectiveOriginCSS(),
       ...this.toTransformCSS(),      
       ...this.toBackdropFilterCSS(),
       ...this.toBackgroundImageCSS(isExport),

@@ -39,7 +39,7 @@
   }
 
   &.background-property-popup {
-    width: 260px;
+    width: 224px;
 
     .popup-content {
       padding: 5px;
@@ -78,8 +78,8 @@
 
     .repeat-list {
       button {
-        width: 24px;
-        height: 24px;
+        width: 22px;
+        height: 22px;
         margin-right: 1px;
         appearance: none;
         border: 1px solid $border-color;
@@ -161,7 +161,7 @@
       &[data-value="space"] button[value="space"],
       &[data-value="round"] button[value="round"] {
         background-color: $border-color;
-        box-shadow: 0 0 1px 0px black;
+        box-shadow: 0 0 1px 1px black;
       }
     }
 

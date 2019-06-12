@@ -4181,7 +4181,7 @@ html, body {
 }
 .csseditor .range-editor {
   display: grid;
-  grid-template-columns: 1fr 20px;
+  grid-template-columns: 1fr;
   grid-column-gap: 4px;
 }
 .csseditor .range-editor.has-label {
@@ -4198,11 +4198,11 @@ html, body {
   box-sizing: border-box;
 }
 .csseditor .range-editor.has-calc {
-  grid-template-columns: 20px 1fr;
+  grid-template-columns: 16px 1fr;
   grid-column-gap: 2px;
 }
 .csseditor .range-editor.has-calc.is-removable {
-  grid-template-columns: 20px 1fr 16px;
+  grid-template-columns: 16px 1fr 16px;
 }
 .csseditor .range-editor.has-calc .type-button {
   display: inline-block;
@@ -4276,6 +4276,14 @@ html, body {
   vertical-align: middle;
   padding: 2px 4px;
   box-sizing: border-box;
+}
+.csseditor .select-editor select[data-count="1"], .csseditor .select-editor select[data-count="0"] {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border: 0px;
+  border-radius: 0px;
+  background-color: transparent;
 }
 .csseditor .offset-property-editor {
   margin-top: 10px;
@@ -4437,7 +4445,7 @@ html, body {
   box-sizing: border-box;
 }
 .csseditor .background-image-editor .fill-list .fill-item .colorsteps .step {
-  border: 1px solid #333;
+  border: 1px solid white;
   display: inline-block;
   margin-left: -5px;
   width: 16px;
@@ -4446,6 +4454,9 @@ html, body {
   border-radius: 100%;
   cursor: pointer;
   position: relative;
+}
+.csseditor .background-image-editor .fill-list .fill-item .colorsteps .step[data-cut=true] {
+  border-radius: 0%;
 }
 .csseditor .background-image-editor .fill-list .fill-item .colorsteps .step:first-child {
   margin-left: 0px;
@@ -4461,9 +4472,6 @@ html, body {
           transform: translateX(-50%) translateY(-5px);
   border-radius: 100%;
   background-color: black;
-}
-.csseditor .background-image-editor .fill-list .fill-item .tools {
-  line-height: 2;
 }
 .csseditor .background-image-editor .fill-list .fill-item .tools button {
   -webkit-appearance: none;
@@ -5098,6 +5106,277 @@ html, body {
 .csseditor .transform-origin-editor .radius-selector button svg path {
   fill: #cccccc;
 }
+.csseditor .gradient-editor {
+  position: relative;
+}
+.csseditor .gradient-editor .tools {
+  padding: 4px 6px;
+}
+.csseditor .gradient-editor [data-editor] {
+  display: none;
+  margin-top: 2px;
+}
+.csseditor .gradient-editor [data-editor] > label {
+  font-size: 11px;
+}
+.csseditor .gradient-editor:not([data-selected-editor*=static-gradient]) [data-editor=gradient],
+.csseditor .gradient-editor:not([data-selected-editor*=static-gradient]) [data-editor=tools] {
+  display: block;
+}
+.csseditor .gradient-editor[data-selected-editor=linear-gradient] [data-editor=angle], .csseditor .gradient-editor[data-selected-editor=repeating-linear-gradient] [data-editor=angle], .csseditor .gradient-editor[data-selected-editor=conic-gradient] [data-editor=angle], .csseditor .gradient-editor[data-selected-editor=repeating-conic-gradient] [data-editor=angle] {
+  display: block;
+}
+.csseditor .gradient-editor[data-selected-editor=radial-gradient] [data-editor=centerX],
+.csseditor .gradient-editor[data-selected-editor=radial-gradient] [data-editor=centerY], .csseditor .gradient-editor[data-selected-editor=repeating-radial-gradient] [data-editor=centerX],
+.csseditor .gradient-editor[data-selected-editor=repeating-radial-gradient] [data-editor=centerY], .csseditor .gradient-editor[data-selected-editor=conic-gradient] [data-editor=centerX],
+.csseditor .gradient-editor[data-selected-editor=conic-gradient] [data-editor=centerY], .csseditor .gradient-editor[data-selected-editor=repeating-conic-gradient] [data-editor=centerX],
+.csseditor .gradient-editor[data-selected-editor=repeating-conic-gradient] [data-editor=centerY] {
+  display: block;
+}
+.csseditor .gradient-editor[data-selected-editor=radial-gradient] [data-editor=radialType], .csseditor .gradient-editor[data-selected-editor=repeating-radial-gradient] [data-editor=radialType] {
+  display: block;
+}
+.csseditor .gradient-editor .sub-editor {
+  padding: 4px 8px;
+}
+.csseditor .gradient-editor .gradient-steps {
+  position: relative;
+  height: 30px;
+}
+.csseditor .gradient-editor .hue-container,
+.csseditor .gradient-editor .hue {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  top: 4px;
+  height: 14px;
+  border-radius: 10px;
+  border: 1px solid #cccccc;
+  box-sizing: border-box;
+  background-color: transparent;
+  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-size: 10px 10px;
+  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+  pointer-events: all;
+}
+.csseditor .gradient-editor .hue {
+  pointer-events: none;
+}
+.csseditor .gradient-editor .hue .step-list {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0px;
+  left: 0px;
+  border-radius: 10px;
+  pointer-events: none;
+}
+.csseditor .gradient-editor .hue .step-list[data-selected-index="0"] [data-index="0"] {
+  border: 0px;
+  -webkit-transform: translateX(-50%) translateY(calc(100%));
+          transform: translateX(-50%) translateY(calc(100%));
+}
+.csseditor .gradient-editor .hue .step-list[data-selected-index="0"] [data-index="0"] .arrow {
+  display: block;
+}
+.csseditor .gradient-editor .hue .step-list[data-selected-index="1"] [data-index="1"] {
+  border: 0px;
+  -webkit-transform: translateX(-50%) translateY(calc(100%));
+          transform: translateX(-50%) translateY(calc(100%));
+}
+.csseditor .gradient-editor .hue .step-list[data-selected-index="1"] [data-index="1"] .arrow {
+  display: block;
+}
+.csseditor .gradient-editor .hue .step-list[data-selected-index="2"] [data-index="2"] {
+  border: 0px;
+  -webkit-transform: translateX(-50%) translateY(calc(100%));
+          transform: translateX(-50%) translateY(calc(100%));
+}
+.csseditor .gradient-editor .hue .step-list[data-selected-index="2"] [data-index="2"] .arrow {
+  display: block;
+}
+.csseditor .gradient-editor .hue .step-list[data-selected-index="3"] [data-index="3"] {
+  border: 0px;
+  -webkit-transform: translateX(-50%) translateY(calc(100%));
+          transform: translateX(-50%) translateY(calc(100%));
+}
+.csseditor .gradient-editor .hue .step-list[data-selected-index="3"] [data-index="3"] .arrow {
+  display: block;
+}
+.csseditor .gradient-editor .hue .step-list[data-selected-index="4"] [data-index="4"] {
+  border: 0px;
+  -webkit-transform: translateX(-50%) translateY(calc(100%));
+          transform: translateX(-50%) translateY(calc(100%));
+}
+.csseditor .gradient-editor .hue .step-list[data-selected-index="4"] [data-index="4"] .arrow {
+  display: block;
+}
+.csseditor .gradient-editor .hue .step-list[data-selected-index="5"] [data-index="5"] {
+  border: 0px;
+  -webkit-transform: translateX(-50%) translateY(calc(100%));
+          transform: translateX(-50%) translateY(calc(100%));
+}
+.csseditor .gradient-editor .hue .step-list[data-selected-index="5"] [data-index="5"] .arrow {
+  display: block;
+}
+.csseditor .gradient-editor .hue .step-list[data-selected-index="6"] [data-index="6"] {
+  border: 0px;
+  -webkit-transform: translateX(-50%) translateY(calc(100%));
+          transform: translateX(-50%) translateY(calc(100%));
+}
+.csseditor .gradient-editor .hue .step-list[data-selected-index="6"] [data-index="6"] .arrow {
+  display: block;
+}
+.csseditor .gradient-editor .hue .step-list[data-selected-index="7"] [data-index="7"] {
+  border: 0px;
+  -webkit-transform: translateX(-50%) translateY(calc(100%));
+          transform: translateX(-50%) translateY(calc(100%));
+}
+.csseditor .gradient-editor .hue .step-list[data-selected-index="7"] [data-index="7"] .arrow {
+  display: block;
+}
+.csseditor .gradient-editor .hue .step-list[data-selected-index="8"] [data-index="8"] {
+  border: 0px;
+  -webkit-transform: translateX(-50%) translateY(calc(100%));
+          transform: translateX(-50%) translateY(calc(100%));
+}
+.csseditor .gradient-editor .hue .step-list[data-selected-index="8"] [data-index="8"] .arrow {
+  display: block;
+}
+.csseditor .gradient-editor .hue .step-list[data-selected-index="9"] [data-index="9"] {
+  border: 0px;
+  -webkit-transform: translateX(-50%) translateY(calc(100%));
+          transform: translateX(-50%) translateY(calc(100%));
+}
+.csseditor .gradient-editor .hue .step-list[data-selected-index="9"] [data-index="9"] .arrow {
+  display: block;
+}
+.csseditor .gradient-editor .hue .step-list[data-selected-index="10"] [data-index="10"] {
+  border: 0px;
+  -webkit-transform: translateX(-50%) translateY(calc(100%));
+          transform: translateX(-50%) translateY(calc(100%));
+}
+.csseditor .gradient-editor .hue .step-list[data-selected-index="10"] [data-index="10"] .arrow {
+  display: block;
+}
+.csseditor .gradient-editor .hue .step-list[data-selected-index="11"] [data-index="11"] {
+  border: 0px;
+  -webkit-transform: translateX(-50%) translateY(calc(100%));
+          transform: translateX(-50%) translateY(calc(100%));
+}
+.csseditor .gradient-editor .hue .step-list[data-selected-index="11"] [data-index="11"] .arrow {
+  display: block;
+}
+.csseditor .gradient-editor .hue .step-list[data-selected-index="12"] [data-index="12"] {
+  border: 0px;
+  -webkit-transform: translateX(-50%) translateY(calc(100%));
+          transform: translateX(-50%) translateY(calc(100%));
+}
+.csseditor .gradient-editor .hue .step-list[data-selected-index="12"] [data-index="12"] .arrow {
+  display: block;
+}
+.csseditor .gradient-editor .hue .step-list[data-selected-index="13"] [data-index="13"] {
+  border: 0px;
+  -webkit-transform: translateX(-50%) translateY(calc(100%));
+          transform: translateX(-50%) translateY(calc(100%));
+}
+.csseditor .gradient-editor .hue .step-list[data-selected-index="13"] [data-index="13"] .arrow {
+  display: block;
+}
+.csseditor .gradient-editor .hue .step-list[data-selected-index="14"] [data-index="14"] {
+  border: 0px;
+  -webkit-transform: translateX(-50%) translateY(calc(100%));
+          transform: translateX(-50%) translateY(calc(100%));
+}
+.csseditor .gradient-editor .hue .step-list[data-selected-index="14"] [data-index="14"] .arrow {
+  display: block;
+}
+.csseditor .gradient-editor .hue .step-list[data-selected-index="15"] [data-index="15"] {
+  border: 0px;
+  -webkit-transform: translateX(-50%) translateY(calc(100%));
+          transform: translateX(-50%) translateY(calc(100%));
+}
+.csseditor .gradient-editor .hue .step-list[data-selected-index="15"] [data-index="15"] .arrow {
+  display: block;
+}
+.csseditor .gradient-editor .hue .step-list[data-selected-index="16"] [data-index="16"] {
+  border: 0px;
+  -webkit-transform: translateX(-50%) translateY(calc(100%));
+          transform: translateX(-50%) translateY(calc(100%));
+}
+.csseditor .gradient-editor .hue .step-list[data-selected-index="16"] [data-index="16"] .arrow {
+  display: block;
+}
+.csseditor .gradient-editor .hue .step-list[data-selected-index="17"] [data-index="17"] {
+  border: 0px;
+  -webkit-transform: translateX(-50%) translateY(calc(100%));
+          transform: translateX(-50%) translateY(calc(100%));
+}
+.csseditor .gradient-editor .hue .step-list[data-selected-index="17"] [data-index="17"] .arrow {
+  display: block;
+}
+.csseditor .gradient-editor .hue .step-list[data-selected-index="18"] [data-index="18"] {
+  border: 0px;
+  -webkit-transform: translateX(-50%) translateY(calc(100%));
+          transform: translateX(-50%) translateY(calc(100%));
+}
+.csseditor .gradient-editor .hue .step-list[data-selected-index="18"] [data-index="18"] .arrow {
+  display: block;
+}
+.csseditor .gradient-editor .hue .step-list[data-selected-index="19"] [data-index="19"] {
+  border: 0px;
+  -webkit-transform: translateX(-50%) translateY(calc(100%));
+          transform: translateX(-50%) translateY(calc(100%));
+}
+.csseditor .gradient-editor .hue .step-list[data-selected-index="19"] [data-index="19"] .arrow {
+  display: block;
+}
+.csseditor .gradient-editor .hue .step-list .step {
+  pointer-events: all;
+  width: 11px;
+  height: 11px;
+  border: 1px solid white;
+  box-sizing: border-box;
+  display: inline-block;
+  position: absolute;
+  top: 50%;
+  border-radius: 100%;
+  box-shadow: 0 0 2px 0px rgba(0, 0, 0, 0.5);
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+  background-color: transparent;
+  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-size: 10px 10px;
+  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+}
+.csseditor .gradient-editor .hue .step-list .step[data-cut=true] {
+  border-radius: 0%;
+}
+.csseditor .gradient-editor .hue .step-list .step[data-cut=true] .color-view {
+  border-radius: 0%;
+}
+.csseditor .gradient-editor .hue .step-list .step .color-view {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  bottom: 0px;
+  right: 0px;
+  border-radius: 100%;
+  pointer-events: none;
+}
+.csseditor .gradient-editor .hue .step-list .step .arrow {
+  position: absolute;
+  left: 50%;
+  display: none;
+  top: 0%;
+  width: 5px;
+  height: 5px;
+  -webkit-transform: translateX(-50%) translateY(-120%);
+          transform: translateX(-50%) translateY(-120%);
+  pointer-events: none;
+  -webkit-clip-path: polygon(40% 0%, 60% 0%, 60% 100%, 40% 100%);
+          clip-path: polygon(40% 0%, 60% 0%, 60% 100%, 40% 100%);
+}
 .csseditor .fill-picker {
   position: fixed;
   width: 224px;
@@ -5385,7 +5664,7 @@ html, body {
   vertical-align: middle;
 }
 .csseditor .popup.background-property-popup {
-  width: 260px;
+  width: 224px;
 }
 .csseditor .popup.background-property-popup .popup-content {
   padding: 5px;
@@ -5416,8 +5695,8 @@ html, body {
   grid-column-gap: 2px;
 }
 .csseditor .popup.background-property-popup .repeat-list button {
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   margin-right: 1px;
   -webkit-appearance: none;
      -moz-appearance: none;
@@ -5465,7 +5744,7 @@ html, body {
 }
 .csseditor .popup.background-property-popup .repeat-list[data-value=repeat] button[value=repeat], .csseditor .popup.background-property-popup .repeat-list[data-value=no-repeat] button[value=no-repeat], .csseditor .popup.background-property-popup .repeat-list[data-value=repeat-x] button[value=repeat-x], .csseditor .popup.background-property-popup .repeat-list[data-value=repeat-y] button[value=repeat-y], .csseditor .popup.background-property-popup .repeat-list[data-value=space] button[value=space], .csseditor .popup.background-property-popup .repeat-list[data-value=round] button[value=round] {
   background-color: #cccccc;
-  box-shadow: 0 0 1px 0px black;
+  box-shadow: 0 0 1px 1px black;
 }
 .csseditor .popup.background-property-popup .blend-list {
   padding: 2px 0px;

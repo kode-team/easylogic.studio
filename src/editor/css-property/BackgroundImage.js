@@ -28,31 +28,34 @@ export class BackgroundImage extends Property {
   setImageUrl(data) {
     if (!data.images) return;
     if (!data.images.length) return;
-    this.reset({ type: "image", image: this.createImage(data.images[0]) });
+    this.reset({ 
+      type: "image", 
+      image: BackgroundImage.createImage(data.images[0]) 
+    });
   }
 
-  createImage(url) {
+  static createImage(url) {
     return new URLImageResource({ url });
   }
 
   setGradient(data) {
     this.reset({
       type: data.type,
-      image: this.createGradient(data, this.json.image)
+      image: BackgroundImage.createGradient(data, this.json.image)
     });
 
     // console.log(this.toCSS());
   }
 
-  createGradient(data, gradient) {
-    const colorsteps = data.colorsteps;
+  static createGradient(data, gradient) {
+    const colorsteps = data.colorsteps || gradient.colorsteps;
 
     // linear, conic 은 angle 도 같이 설정한다.
-    const angle = data.angle;
+    const angle = data.angle || gradient.angle;
 
     // radial 은  radialType 도 같이 설정한다.
-    const radialType = data.radialType;
-    const radialPosition = data.radialPosition;
+    const radialType = data.radialType || gradient.radialType;
+    const radialPosition = data.radialPosition || gradient.radialPosition;
 
     let json = gradient.toJSON();
     delete json.itemType;

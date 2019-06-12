@@ -50,11 +50,7 @@ export class ConicGradient extends Gradient {
     if (!colorsteps) return EMPTY_STRING;
 
     colorsteps.sort((a, b) => {
-      if (a.percent == b.percent) {
-        if (a.index > b.index) return 1;
-        if (a.index < b.index) return 0;
-        return 0;
-      }
+      if (a.percent == b.percent) return 0;
       return a.percent > b.percent ? 1 : -1;
     });
 

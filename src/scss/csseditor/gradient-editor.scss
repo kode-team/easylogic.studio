@@ -1,0 +1,155 @@
+.gradient-editor {
+    position: relative;
+
+    .tools {
+        padding: 4px 6px;
+    }
+
+    [data-editor] {
+        display: none;
+        margin-top: 2px;
+
+        > label {
+            font-size: 11px;
+        }
+
+    }
+
+    &:not([data-selected-editor*='static-gradient']) {
+        [data-editor='gradient'],
+        [data-editor='tools'] {
+            display: block;
+        }
+    }
+
+    &[data-selected-editor='linear-gradient'], 
+    &[data-selected-editor='repeating-linear-gradient'], 
+    &[data-selected-editor='conic-gradient'], 
+    &[data-selected-editor='repeating-conic-gradient']
+    {
+        [data-editor='angle']
+        {
+            display: block;
+        }
+    }        
+
+    &[data-selected-editor='radial-gradient'], 
+    &[data-selected-editor='repeating-radial-gradient'], 
+    &[data-selected-editor='conic-gradient'], 
+    &[data-selected-editor='repeating-conic-gradient']
+    {
+        [data-editor='centerX'],
+        [data-editor='centerY']
+        {
+            display: block;
+        }
+    }             
+    
+    
+    &[data-selected-editor='radial-gradient'], 
+    &[data-selected-editor='repeating-radial-gradient']
+    {
+        [data-editor='radialType']
+        {
+            display: block;
+        }
+    }          
+
+    .sub-editor {
+        padding: 4px 8px;
+
+              
+    }
+
+    .gradient-steps {
+        position: relative;
+        height: 30px;
+    }
+
+    .hue-container,
+    .hue {
+        position: absolute;
+        left: 10px;
+        right: 10px;
+        top: 4px;
+        height: 14px;
+        border-radius: 10px;
+        border:1px solid $border-color;
+        box-sizing: border-box;
+        @include transparent-background();
+        pointer-events: all;
+    }
+
+    .hue {
+        pointer-events: none;
+        .step-list {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0px;
+            left:0px;
+            border-radius: 10px;
+            pointer-events: none;   
+            
+            @for $selectValue from 0 to 20 {
+                &[data-selected-index="#{$selectValue}"] {
+                    [data-index="#{$selectValue}"] {
+                        border:0px;
+                        transform: translateX(-50%) translateY(calc(100%));
+
+                        .arrow {
+                            display: block; 
+                        }
+                    }
+                }
+            }
+
+
+            .step {
+                pointer-events: all;
+                width: 11px;
+                height: 11px; 
+                border: 1px solid white;
+                box-sizing: border-box;
+                display: inline-block;
+                position: absolute;
+                top: 50%;
+                border-radius: 100%;
+                box-shadow: 0 0 2px 0px rgba(0, 0, 0, 0.5);                
+
+                &[data-cut='true'] {
+                    border-radius: 0%;
+
+                    .color-view {
+                        border-radius: 0%;
+                    }
+                }
+
+                transform: translateX(-50%) translateY(-50%);
+                @include transparent-background();
+
+                .color-view {
+                    position: absolute;
+                    left: 0px;
+                    top:0px;
+                    bottom:0px;
+                    right:0px;
+                    border-radius: 100%;
+                    pointer-events: none;                    
+                }
+
+                .arrow {
+                    position: absolute;
+                    left: 50%;
+                    display: none;
+                    top:0%;
+                    width:5px;
+                    height:5px;
+                    transform: translateX(-50%) translateY(-120%);
+                    pointer-events: none;        
+                    clip-path: polygon(40% 0%, 60% 0%, 60% 100%, 40% 100%);                    
+                }
+            }      
+        }
+    }
+}

@@ -131,17 +131,13 @@ export default class FillProperty extends BaseProperty {
                 ${this.getColorStepList(image)}
               </div>
               <div class='tools'>
-                <button type="button" class='remove' data-index='${index}'>${
-        icon.remove2
-      }</button>
+                <button type="button" class='remove' data-index='${index}'>${icon.remove2}</button>
               </div>
             </div>
             <div class='background-image-info'>
               <div ref="size${index}">${it.width}/${it.height}</div>
               <div ref="repeat${index}">${it.repeat}</div>
-              <div class='blend-mode' ref="blendMode${index}">${
-        it.blendMode
-      }</div>
+              <div class='blend-mode' ref="blendMode${index}">${it.blendMode}</div>
             </div>
           </div>
       </div>
@@ -211,15 +207,15 @@ export default class FillProperty extends BaseProperty {
     this.emit("hideFillPicker");
   }
 
-  [CLICK("$fillList .colorsteps .step")](e) {
-    this.getRef('colorsteps', this.selectedIndex).$(`[data-selected="true"]`).removeAttr('data-selected')
-    var selectColorStepId = e.$delegateTarget.attr("data-colorstep-id");
-    e.$delegateTarget.attr('data-selected', true);
+  // [CLICK("$fillList .colorsteps .step")](e) {
+  //   this.getRef('colorsteps', this.selectedIndex).$(`[data-selected="true"]`).removeAttr('data-selected')
+  //   var selectColorStepId = e.$delegateTarget.attr("data-colorstep-id");
+  //   e.$delegateTarget.attr('data-selected', true);
 
-    var selectColorStepId = e.$delegateTarget.attr("data-colorstep-id");
-    var $preview = e.$delegateTarget.closest("fill-item").$(".preview");
-    this.viewFillPicker($preview, selectColorStepId);
-  }
+  //   var selectColorStepId = e.$delegateTarget.attr("data-colorstep-id");
+  //   var $preview = e.$delegateTarget.closest("fill-item").$(".preview");
+  //   this.viewFillPicker($preview, selectColorStepId);
+  // }
 
   [DRAGSTART("$fillList .fill-item")](e) {
     this.startIndex = +e.$delegateTarget.attr("data-index");
@@ -302,11 +298,16 @@ export default class FillProperty extends BaseProperty {
       selectColorStepId,
       refresh: true
     });
+
+    console.log('fdsafdsadsf') 
+
     this.viewBackgroundPropertyPopup();
   }
 
   viewBackgroundPropertyPopup(position) {
     this.current = editor.selection.current;
+
+    console.log(this.current);
 
     if (!this.current) return;
     this.currentBackgroundImage = this.current.backgroundImages[
@@ -326,6 +327,8 @@ export default class FillProperty extends BaseProperty {
     const blendMode = back.blendMode;
     const image = back.image;
 
+    console.log(size); 
+
     this.emit("showBackgroundPropertyPopup", {
       image,
       position,
@@ -343,7 +346,8 @@ export default class FillProperty extends BaseProperty {
   }
 
   [CLICK("$fillList .preview")](e) {
-    this.viewFillPicker(e.$delegateTarget);
+    console.log('afdsafdsf')
+    this.viewFillPicker(e.$delegateTarget); 
   }
 
   viewChangeImage(data) {
@@ -425,10 +429,6 @@ export default class FillProperty extends BaseProperty {
         this.setGradient(data);
         break;
     }
-  }
-
-  getRef(...args) {
-    return this.refs[args.join("")];
   }
 
   refreshBackgroundPropertyInfo(image, data) {

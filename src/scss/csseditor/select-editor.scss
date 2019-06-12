@@ -14,4 +14,14 @@
             box-sizing: border-box;
         }
     }
+
+    select {
+        &[data-count="1"],
+        &[data-count="0"] {
+            appearance: none;
+            border:0px;
+            border-radius: 0px;
+            background-color: transparent;
+        }
+    }
 }

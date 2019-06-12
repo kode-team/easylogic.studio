@@ -6,8 +6,8 @@ export default class VarEditor extends UIElement {
 
     initState() {
         var values = this.props.value.split(';').filter(it => it.trim()).map(it => {
-            const [key, value] = it.split(':')
-
+            let [key, value] = it.split(':')
+            key = key.replace('--', '')
             return {key, value}
         });
 

@@ -14,10 +14,10 @@ export class Animation extends Property {
       name: 'none',
       direction: 'normal',
       duration: Length.second(0),
-      timingFunction: 'linear',
+      timingFunction: 'ease',
       delay: Length.second(0),
       iterationCount: Length.string('infinite'),
-      playState: 'paused',
+      playState: 'running',
       fillMode: 'none'
     });
   }

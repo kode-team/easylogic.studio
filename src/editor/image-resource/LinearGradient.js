@@ -47,7 +47,7 @@ export class LinearGradient extends Gradient {
     var colorString = this.getColorString();
 
     var opt = EMPTY_STRING;
-    var angle = this.json.angle;
+    var angle = this.json.angle || 0;
 
     opt = angle;
 

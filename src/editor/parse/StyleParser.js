@@ -8,6 +8,7 @@ import { WHITE_STRING } from "../../util/css/types";
 import { TextShadow } from "../css-property/TextShadow";
 import { BorderImage } from "../css-property/BorderImage";
 import { Transform } from "../css-property/Transform";
+import { Keyframe } from "../css-property/Keyframe";
 const OUTLINE_REG = /(auto|none|dotted|dashed|solid|double|groove|ridge|inset|outset)/gi;
 export class StyleParser {
   constructor() {
@@ -387,6 +388,19 @@ export class StyleParser {
     return { spacing };
   }
 
+  /**
+   * 
+   * name offset property value, name offset property value, name offset property value,
+   * 
+   */
+  parseKeyframe () {
+    var style = this.getStyle();
+
+    var keyframes = Keyframe.parseStyle(style);
+
+    return { keyframes };
+  }
+
   parse(style) {
     this.setStyle(style);
 
@@ -407,7 +421,8 @@ export class StyleParser {
       ...this.parseFilter(),
       ...this.parseBoxShadow(),
       ...this.parseTextShadow(),
-      ...this.parseBackgroundImages()
+      ...this.parseBackgroundImages(),
+      ...this.parseKeyframe()
     };
 
     return data;

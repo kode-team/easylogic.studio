@@ -8,7 +8,7 @@ import { html } from "../../../../../util/functions/func";
 
 
 
-export default class RangeEditor extends UIElement {
+export default class SingleRangeEditor extends UIElement {
 
     components() {
         return {
@@ -62,9 +62,7 @@ export default class RangeEditor extends UIElement {
                 <div class='area'>
                     <input type='range' ref='$property' value="${realValue}" min="${min}" max="${max}" step="${step}" />
                     <input type='number' ref='$propertyNumber' value="${realValue}" min="${min}" max="${max}" step="${step}" />
-                    
-                    <SelectEditor ref='$unit' key='unit' value="${this.state.selectedUnit || this.state.value.unit}" options="${this.state.units}" onchange='changeUnit' />
-                    
+                    <label>${this.props['selected-unit'] || this.state.units[0] || this.state.value.unit}</label>
                 </div>
             </div>
             <div class='range-editor-type' data-type='calc'>

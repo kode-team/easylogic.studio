@@ -58,6 +58,7 @@ export default class Inspector extends UIElement {
                 <TransformProperty />
               </div>
               <div class='tab-content' data-value="4">
+                <OpacityProperty />              
                 <MixBlendModeProperty />
                 <BackgroundImageProperty />                 
                 <BoxShadowProperty />

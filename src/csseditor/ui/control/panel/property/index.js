@@ -28,9 +28,10 @@ import PerspectiveOriginProperty from "./PerspectiveOriginProperty";
 import MixBlendModeProperty from "./MixBlendModeProperty";
 import PerspectiveProperty from "./PerspectiveProperty";
 import TransformOriginProperty from "./TransformOriginProperty";
-
+import OpacityProperty from "./OpacityProperty";
  
 export default {
+  OpacityProperty,
   TransformOriginProperty,
   PerspectiveProperty,
   MixBlendModeProperty,

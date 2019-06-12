@@ -1,6 +1,6 @@
 .range-editor {
     display: grid;
-    grid-template-columns: 1fr 20px;
+    grid-template-columns: 1fr;
     grid-column-gap: 4px;
 
     &.has-label {
@@ -19,10 +19,10 @@
     }
 
     &.has-calc {
-        grid-template-columns: 20px 1fr;
+        grid-template-columns: 16px 1fr;
 
         &.is-removable {
-            grid-template-columns: 20px 1fr 16px;
+            grid-template-columns: 16px 1fr 16px;
         }
 
         grid-column-gap: 2px;

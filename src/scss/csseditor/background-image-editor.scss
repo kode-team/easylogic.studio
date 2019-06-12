@@ -145,7 +145,7 @@
             box-sizing: border-box;
       
             .step {
-              border: 1px solid #333;
+              border: 1px solid white;
               display: inline-block;
               margin-left: -5px;
               width: 16px;
@@ -154,6 +154,10 @@
               border-radius: 100%;
               cursor: pointer;
               position: relative;
+
+              &[data-cut='true'] {
+                border-radius: 0%;
+              }
       
               &:first-child {
                 margin-left: 0px;
@@ -177,7 +181,6 @@
           }
       
           .tools {
-            line-height: 2;
             button {
               appearance: none;
               background-color: transparent;
