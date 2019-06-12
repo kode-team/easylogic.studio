@@ -4185,7 +4185,7 @@ html, body {
   grid-column-gap: 4px;
 }
 .csseditor .range-editor.has-label {
-  grid-template-columns: 60px 1fr;
+  grid-template-columns: 40px 1fr;
   grid-column-gap: 2px;
 }
 .csseditor .range-editor.has-label.is-removable {
@@ -4211,11 +4211,11 @@ html, body {
   display: inline-block;
 }
 .csseditor .range-editor.has-calc.has-label {
-  grid-template-columns: 60px 20px 1fr;
+  grid-template-columns: 40px 20px 1fr;
   grid-column-gap: 2px;
 }
 .csseditor .range-editor.has-calc.has-label.is-removable {
-  grid-template-columns: 60px 20px 1fr 16px;
+  grid-template-columns: 40px 20px 1fr 16px;
 }
 .csseditor .range-editor button {
   vertical-align: middle;
@@ -4241,7 +4241,7 @@ html, body {
 }
 .csseditor .range-editor .range-editor-type .area {
   display: grid;
-  grid-template-columns: 1fr 50px 50px;
+  grid-template-columns: 1fr 40px 50px;
   grid-column-gap: 2px;
   font-size: 13px;
 }
@@ -5333,8 +5333,8 @@ html, body {
 }
 .csseditor .gradient-editor .hue .step-list .step {
   pointer-events: all;
-  width: 11px;
-  height: 11px;
+  width: 10px;
+  height: 10px;
   border: 1px solid white;
   box-sizing: border-box;
   display: inline-block;
@@ -5695,9 +5695,8 @@ html, body {
   grid-column-gap: 2px;
 }
 .csseditor .popup.background-property-popup .repeat-list button {
-  width: 22px;
-  height: 22px;
-  margin-right: 1px;
+  width: 20px;
+  height: 20px;
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;

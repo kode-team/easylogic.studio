@@ -97,20 +97,17 @@ export default class GradientEditor extends UIElement  {
             </div>
             <div class='tools' data-editor='tools'>
               <label>Offset <input type='checkbox' ref='$cut' checked />  connected</label>
-              <RangeEditor ref='$range' key='length' onchange='changeColorStepOffset' />
+              <RangeEditor ref='$range' calc="false" key='length' onchange='changeColorStepOffset' />
             </div>
             <div class='sub-editor' ref='$subEditor'> 
               <div data-editor='angle'>
-                <label>Angle</label>
-                <RangeEditor ref='$angle' units="deg" min="-720" max="720" key='angle' onchange='changeKeyValue' />
+                <RangeEditor ref='$angle' label='Angle' calc="false" units="deg" min="-720" max="720" key='angle' onchange='changeKeyValue' />
               </div>
               <div data-editor='centerX'>
-                <label>Center X</label>              
-                <RangeEditor ref='$radialPositionX' key='radialPositionX' onchange='changeKeyValue' />
+                <RangeEditor ref='$radialPositionX' label='X' calc="false"  key='radialPositionX' onchange='changeKeyValue' />
               </div>                
-              <div data-editor='centerY'>
-                <label>Center Y</label>                
-                <RangeEditor ref='$radialPositionY' key='radialPositionY' onchange='changeKeyValue' />
+              <div data-editor='centerY'>              
+                <RangeEditor ref='$radialPositionY' label='Y' calc="false" key='radialPositionY' onchange='changeKeyValue' />
               </div>                
               <div data-editor='radialType'>
                 <label>Radial Type</label>                                

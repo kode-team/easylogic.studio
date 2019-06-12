@@ -1,4 +1,3 @@
-import VerticalColorStep from "../ui/control/VerticalColorStep";
 import CanvasView from "../ui/view/CanvasView";
 import ToolMenu from "../ui/view/ToolMenu";
 
@@ -28,7 +27,6 @@ export default class CSSEditor extends UIElement {
     return `
       <div class="embed-editor layout-main" ref="$layoutMain">
         <CanvasView embed="true" />
-        <VerticalColorStep />
         <Inspector />
         <FillPicker />
         <ColorPicker  />
@@ -53,7 +51,6 @@ export default class CSSEditor extends UIElement {
           <div class="layout-body">
             <CanvasView />
             <DrawingView />            
-            <VerticalColorStep />
           </div>                              
         </div>
         <FillPicker />
@@ -76,7 +73,6 @@ export default class CSSEditor extends UIElement {
       ColorPicker,
       Inspector,
       ToolMenu,
-      VerticalColorStep,
       CanvasView,
       ExportWindow
     };

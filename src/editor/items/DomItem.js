@@ -53,7 +53,7 @@ export class DomItem extends GroupItem {
       applyBorderImage: false,
       animations: [],
       transitions: [],
-      'keyframe': 'sample 0% --aaa 100px | sample 100% width 200px | sample2 0.5% background-image background-image:linear-gradient(to right, black, yellow 100%)',
+      // 'keyframe': 'sample 0% --aaa 100px | sample 100% width 200px | sample2 0.5% background-image background-image:linear-gradient(to right, black, yellow 100%)',
       keyframes: [],
       display: Display.parse({ display: "block" }),      
       content: "",

@@ -73,6 +73,7 @@ export default class BackgroundPropertyPopup extends UIElement {
       <div class='popup-item'>
         <RangeEditor 
             label="X"
+            calc="false"            
             ref="$x" 
             key="x"
             value="${this.state.x}"
@@ -87,7 +88,8 @@ export default class BackgroundPropertyPopup extends UIElement {
     return `
       <div class='popup-item'>
         <RangeEditor 
-            label="Y"        
+            label="Y" 
+            calc="false"       
             ref="$y" 
             key="y"
             value="${this.state.y}"            
@@ -102,7 +104,8 @@ export default class BackgroundPropertyPopup extends UIElement {
     return `
     <div class='popup-item'>
       <RangeEditor 
-          label="Width"      
+          label="Width"   
+          calc="false"             
           ref="$width" 
           key="width"
           value="${this.state.width}"          
@@ -118,6 +121,7 @@ export default class BackgroundPropertyPopup extends UIElement {
     <div class='popup-item'>
       <RangeEditor 
           label="Height"
+          calc="false"          
           ref="$height" 
           key="height"
           value="${this.state.height}"          
