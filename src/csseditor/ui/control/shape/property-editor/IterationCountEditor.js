@@ -21,7 +21,7 @@ export default class IterationCountEditor extends RangeEditor {
             ...{
                 key: this.props.key,
                 params: this.props.params || '',
-                units: units.split(','),
+                units,
                 value
             }
         }

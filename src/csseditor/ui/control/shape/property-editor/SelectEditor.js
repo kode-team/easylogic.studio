@@ -7,6 +7,7 @@ export default class SelectEditor extends UIElement {
     initState() {
         var splitChar = this.props.split || ',';
         var options = (this.props.options || '').split(splitChar);
+
         var value = this.props.value;
 
         return {
