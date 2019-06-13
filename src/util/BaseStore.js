@@ -138,8 +138,7 @@ export default class BaseStore {
   }
 
   on(event, originalCallback, context, delay = 0) {
-    var callback =
-      delay > 0 ? debounce(originalCallback, delay) : originalCallback;
+    var callback = delay > 0 ? debounce(originalCallback, delay) : originalCallback;
     this.callbacks.push({ event, callback, context, originalCallback });
   }
 
@@ -173,7 +172,6 @@ export default class BaseStore {
   sendMessage(source, event, $2, $3, $4, $5) {
     setTimeout(() => {
       var list = this.getCachedCallbacks(event);
-      // console.log(list, this.cachedCallback, source, event);
       if (list) {
         list
         .filter(f => f.originalCallback.source !== source)

@@ -1,7 +1,7 @@
 import { uuid } from "./functions/math";
 import { TOOL_SET } from "../csseditor/types/ToolTypes";
 import { keyEach } from "./functions/func";
-import EventMachine from "./EventMachine";
+import EventMachine, { splitMethodByKeyword } from "./EventMachine";
 
 const REG_STORE_MULTI_PATTERN = /^ME@/;
 
@@ -66,13 +66,25 @@ class UIElement extends EventMachine {
     this.filterProps(REG_STORE_MULTI_PATTERN).forEach(key => {
       const events = this.getRealEventName(key, MULTI_PREFIX);
 
-      events.split(SPLITTER).forEach(e => {
-        e = this.getRealEventName(e);
-        var callback = this[key].bind(this);
-        callback.displayName = e;
-        callback.source = this.source;
-        this.storeEvents[e] = callback;
-        this.$store.on(e, this.storeEvents[e], this);
+      var [methods, params] = splitMethodByKeyword(events.split(SPLITTER), 'debounce');
+
+      var debounceSecond = 0 
+      if (methods.length) {
+        debounceSecond = +params[0].target || 0 
+      }
+
+      events
+        .split(SPLITTER)
+        .filter(it => {
+          return methods.includes(it) === false
+        })
+        .map(it => it.trim())
+        .forEach(e => {
+          var callback = this[key].bind(this);
+          callback.displayName = e;
+          callback.source = this.source;
+          this.storeEvents[e] = callback;
+          this.$store.on(e, this.storeEvents[e], this, debounceSecond);
       });
     });
   }

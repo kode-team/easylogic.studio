@@ -3,7 +3,7 @@ import UIElement, { EVENT } from "../../../util/UIElement";
 import { editor } from "../../../editor/editor";
 import { Project } from "../../../editor/items/Project";
 import { ArtBoard } from "../../../editor/items/ArtBoard";
-import { CLICK } from "../../../util/Event";
+import { CLICK, DEBOUNCE } from "../../../util/Event";
 import { CHANGE_SELECTION } from "../../types/event";
 import { StyleParser } from "../../../editor/parse/StyleParser";
 import { CSS_TO_STRING } from "../../../util/css/make";
@@ -26,8 +26,7 @@ export default class CanvasView extends UIElement {
     if (this.props.embed) {
       this.$el.hide();
     } else {
-      this[EVENT("refreshCanvas")]();
-      // this.refresh();
+      this.generateStyle()
     }
   }
   template() {
@@ -99,7 +98,7 @@ export default class CanvasView extends UIElement {
     this.emit('refreshComputedStyleCode', computedCSS)
   }
 
-  [EVENT("refreshCanvas")]() {
+  generateStyle () {
     var current = editor.selection.current;
     if (current) {
       if (this.props.embed) {
@@ -108,6 +107,10 @@ export default class CanvasView extends UIElement {
         this.generate(current.toCSS(), current.toKeyframeString(), current.toRootVariableCSS(), current.content);
       }
     }
+  }
+
+  [EVENT("refreshCanvas") + DEBOUNCE(10)]() {
+    this.generateStyle()
   }
 
   [CLICK()]() {

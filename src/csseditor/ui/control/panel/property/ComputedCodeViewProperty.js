@@ -1,5 +1,5 @@
 import BaseProperty from "./BaseProperty";
-import { INPUT, BIND, LOAD } from "../../../../../util/Event";
+import { INPUT, BIND, LOAD, DEBOUNCE } from "../../../../../util/Event";
 import { html } from "../../../../../util/functions/func";
 import { editor } from "../../../../../editor/editor";
 
@@ -21,8 +21,8 @@ export default class ComputedCodeViewProperty extends BaseProperty {
   [EVENT(
     CHANGE_EDITOR, 
     CHANGE_ARTBOARD, 
-    CHANGE_SELECTION
-  )]() {
+    CHANGE_SELECTION,
+  ) + DEBOUNCE(100)]() {
     this.refresh();
   }
 

@@ -1,5 +1,5 @@
 import BaseProperty from "./BaseProperty";
-import { INPUT, BIND, LOAD } from "../../../../../util/Event";
+import { INPUT, BIND, LOAD, DEBOUNCE } from "../../../../../util/Event";
 import { html } from "../../../../../util/functions/func";
 import { editor } from "../../../../../editor/editor";
 
@@ -23,7 +23,7 @@ export default class CodeViewProperty extends BaseProperty {
     CHANGE_ARTBOARD, 
     CHANGE_SELECTION,
     'refreshCanvas'
-  )]() {
+  ) + DEBOUNCE(100) ]() {
     this.refresh();
   }
 

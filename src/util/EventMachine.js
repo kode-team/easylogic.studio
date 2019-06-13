@@ -147,7 +147,7 @@ const getDefaultDomElement = (context, dom) => {
   return el;
 };
 
-const splitMethodByKeyword = (arr, keyword) => {
+export const splitMethodByKeyword = (arr, keyword) => {
   var filterKeys = arr.filter(code => code.indexOf(`${keyword}(`) > -1);
   var filterMaps = filterKeys.map(code => {
     var [target, param] = code
