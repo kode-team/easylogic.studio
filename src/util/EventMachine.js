@@ -27,7 +27,7 @@ import { EMPTY_STRING } from "./css/types";
 import {
   ADD_BODY_MOUSEMOVE,
   ADD_BODY_MOUSEUP
-} from "../csseditor/types/ToolTypes";
+} from "../csseditor/types/event";
 import { uuid } from "./functions/math";
 
 const REFERENCE_PROPERTY = "ref";

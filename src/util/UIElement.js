@@ -1,5 +1,5 @@
 import { uuid } from "./functions/math";
-import { TOOL_SET } from "../csseditor/types/ToolTypes";
+import { TOOL_SET } from "../csseditor/types/event";
 import { keyEach } from "./functions/func";
 import EventMachine, { splitMethodByKeyword } from "./EventMachine";
 
@@ -66,6 +66,7 @@ class UIElement extends EventMachine {
     this.filterProps(REG_STORE_MULTI_PATTERN).forEach(key => {
       const events = this.getRealEventName(key, MULTI_PREFIX);
 
+      // support deboounce for store event 
       var [methods, params] = splitMethodByKeyword(events.split(SPLITTER), 'debounce');
 
       var debounceSecond = 0 

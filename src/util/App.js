@@ -3,7 +3,7 @@ import { POINTERMOVE, POINTEREND } from "./Event";
 import {
   ADD_BODY_MOUSEMOVE,
   ADD_BODY_MOUSEUP
-} from "../csseditor/types/ToolTypes";
+} from "../csseditor/types/event";
 import BaseStore from "./BaseStore";
 import UIElement, { EVENT } from "./UIElement";
 

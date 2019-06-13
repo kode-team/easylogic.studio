@@ -3,7 +3,7 @@ import ToolMenu from "../ui/view/ToolMenu";
 
 import UIElement from "../../util/UIElement";
 import { RESIZE, DEBOUNCE, BIND } from "../../util/Event";
-import { RESIZE_WINDOW } from "../types/ToolTypes";
+import { RESIZE_WINDOW } from "../types/event";
 import Inspector from "../ui/control/Inspector";
 import FillPicker from "../ui/control/panel/property-editor/FillPicker";
 

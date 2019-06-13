@@ -4,7 +4,6 @@ import icon from "../../../icon/icon";
 import { TextShadow } from "../../../../../editor/css-property/TextShadow";
 import { EMPTY_STRING } from "../../../../../util/css/types";
 import {
-  CHANGE_RECT,
   CHANGE_LAYER,
   CHANGE_ARTBOARD,
   CHANGE_SELECTION
@@ -71,7 +70,7 @@ export default class TextShadowEditor extends UIElement {
     return arr.join(EMPTY_STRING);
   }
 
-  [EVENT(CHANGE_RECT, CHANGE_LAYER, CHANGE_ARTBOARD, CHANGE_SELECTION)]() {
+  [EVENT(CHANGE_LAYER, CHANGE_ARTBOARD, CHANGE_SELECTION)]() {
     this.refresh();
   }
 

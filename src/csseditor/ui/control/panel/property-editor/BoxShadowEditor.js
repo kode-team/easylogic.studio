@@ -1,12 +1,9 @@
 import { CLICK, LOAD } from "../../../../../util/Event";
-import { html } from "../../../../../util/functions/func";
-import { editor } from "../../../../../editor/editor";
 import UIElement, { EVENT } from "../../../../../util/UIElement";
 import icon from "../../../icon/icon";
 import { BoxShadow } from "../../../../../editor/css-property/BoxShadow";
-import { EMPTY_STRING, WHITE_STRING } from "../../../../../util/css/types";
+import { EMPTY_STRING } from "../../../../../util/css/types";
 import {
-  CHANGE_RECT,
   CHANGE_LAYER,
   CHANGE_ARTBOARD,
   CHANGE_SELECTION
@@ -77,7 +74,7 @@ export default class BoxShadowEditor extends UIElement {
     return arr.join(EMPTY_STRING);
   }
 
-  [EVENT(CHANGE_RECT, CHANGE_LAYER, CHANGE_ARTBOARD, CHANGE_SELECTION)]() {
+  [EVENT(CHANGE_LAYER, CHANGE_ARTBOARD, CHANGE_SELECTION)]() {
     this.refresh();
   }
 

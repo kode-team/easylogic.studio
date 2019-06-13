@@ -5,7 +5,6 @@ import {
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
 import {
-  CHANGE_RECT,
   CHANGE_LAYER,
   CHANGE_ARTBOARD,
   CHANGE_SELECTION
@@ -41,7 +40,7 @@ export default class BackgroundImageProperty extends BaseProperty {
             />`
   }
 
-  [EVENT(CHANGE_RECT, CHANGE_LAYER, CHANGE_ARTBOARD, CHANGE_SELECTION)]() {
+  [EVENT(CHANGE_LAYER, CHANGE_ARTBOARD, CHANGE_SELECTION)]() {
     this.refresh();
   }
 
