@@ -1,15 +1,15 @@
-import UIElement, { EVENT } from "../../../../util/UIElement";
-import { Length } from "../../../../editor/unit/Length";
-import { LOAD, CLICK } from "../../../../util/Event";
-import { html } from "../../../../util/functions/func";
-import icon from "../../icon/icon";
-import ColorViewEditor from "./property-editor/ColorViewEditor";
-import RangeEditor from "./property-editor/RangeEditor";
-import BackgroundImageEditor from "./property-editor/BackgroundImageEditor";
-import FilterEditor from "./property-editor/FilterEditor";
-import BoxShadowEditor from "./property-editor/BoxShadowEditor";
-import VarEditor from "./property-editor/VarEditor";
-import TransformEditor from "./property-editor/TransformEditor";
+import UIElement, { EVENT } from "../../../../../util/UIElement";
+import { Length } from "../../../../../editor/unit/Length";
+import { LOAD, CLICK } from "../../../../../util/Event";
+import { html } from "../../../../../util/functions/func";
+import icon from "../../../icon/icon";
+import ColorViewEditor from "./ColorViewEditor";
+import RangeEditor from "./RangeEditor";
+import BackgroundImageEditor from "./BackgroundImageEditor";
+import FilterEditor from "./FilterEditor";
+import BoxShadowEditor from "./BoxShadowEditor";
+import VarEditor from "./VarEditor";
+import TransformEditor from "./TransformEditor";
 
 
 export default class OffsetPropertyEditor extends UIElement {

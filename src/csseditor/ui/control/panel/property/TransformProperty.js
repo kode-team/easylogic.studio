@@ -5,7 +5,7 @@ import {
 
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
-import TransformEditor from "../../shape/property-editor/TransformEditor";
+import TransformEditor from "../property-editor/TransformEditor";
 
 export default class TransformProperty extends BaseProperty {
 

@@ -1,7 +1,7 @@
 import UIElement, { EVENT } from "../../../../util/UIElement";
 import { Length } from "../../../../editor/unit/Length";
 import { CHANGE_EDITOR, CHANGE_SELECTION } from "../../../types/event";
-import OffsetEditor from "../shape/OffsetEditor";
+import OffsetEditor from "../panel/property-editor/OffsetEditor";
 import { INPUT } from "../../../../util/Event";
 
 export default class KeyframePopup extends UIElement {

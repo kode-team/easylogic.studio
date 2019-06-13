@@ -8,7 +8,7 @@ import {
   CHANGE_SELECTION,
   CHANGE_ARTBOARD
 } from "../../../../types/event";
-import SingleRangeEditor from "../../shape/property-editor/SingleRangeEditor";
+import SingleRangeEditor from "../property-editor/SingleRangeEditor";
 
 
 export default class OpacityProperty extends BaseProperty {

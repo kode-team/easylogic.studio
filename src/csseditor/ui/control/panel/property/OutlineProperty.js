@@ -1,9 +1,9 @@
 import BaseProperty from "./BaseProperty";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
-import RangeEditor from "../../shape/property-editor/RangeEditor";
-import SelectEditor from "../../shape/property-editor/SelectEditor";
-import ColorViewEditor from "../../shape/property-editor/ColorViewEditor";
+import RangeEditor from "../property-editor/RangeEditor";
+import SelectEditor from "../property-editor/SelectEditor";
+import ColorViewEditor from "../property-editor/ColorViewEditor";
 
 const outlineStyleLit = [
   'auto',

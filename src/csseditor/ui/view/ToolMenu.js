@@ -1,5 +1,5 @@
 import UIElement from "../../../util/UIElement";
-import menuItems from "./menu-items/index";
+import menuItems from "../control/menu-items/index";
 
 export default class ToolMenu extends UIElement {
   components() {

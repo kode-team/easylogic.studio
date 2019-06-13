@@ -7,7 +7,7 @@ import icon from "../../../icon/icon";
 import { EMPTY_STRING } from "../../../../../util/css/types";
 import { EVENT } from "../../../../../util/UIElement";
 import { CHANGE_SELECTION, CHANGE_ARTBOARD, CHANGE_EDITOR } from "../../../../types/event";
-import RangeEditor from "../../shape/property-editor/RangeEditor";
+import RangeEditor from "../property-editor/RangeEditor";
 
 const typeList = [
   { key: "top", title: "Top" },

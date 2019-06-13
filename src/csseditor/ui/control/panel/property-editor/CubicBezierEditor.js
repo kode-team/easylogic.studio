@@ -1,8 +1,8 @@
-import UIElement, { EVENT } from "../../../../util/UIElement";
-import icon from "../../icon/icon";
-import { CLICK, POINTERSTART, MOVE, END } from "../../../../util/Event";
-import { Length } from "../../../../editor/unit/Length";
-import { formatCubicBezier, createBezierForPattern, bezierList, getPredefinedCubicBezier } from "../../../../util/functions/bezier";
+import UIElement, { EVENT } from "../../../../../util/UIElement";
+import icon from "../../../icon/icon";
+import { CLICK, POINTERSTART, MOVE, END } from "../../../../../util/Event";
+import { Length } from "../../../../../editor/unit/Length";
+import { formatCubicBezier, createBezierForPattern, bezierList, getPredefinedCubicBezier } from "../../../../../util/functions/bezier";
 
 
 export default class CubicBezierEditor extends UIElement {

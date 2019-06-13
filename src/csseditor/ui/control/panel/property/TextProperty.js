@@ -8,7 +8,7 @@ import {
   CHANGE_EDITOR,
   CHANGE_ARTBOARD
 } from "../../../../types/event";
-import SelectEditor from "../../shape/property-editor/SelectEditor";
+import SelectEditor from "../property-editor/SelectEditor";
 
 
 

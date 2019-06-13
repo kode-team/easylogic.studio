@@ -3,8 +3,8 @@ import { CLICK, LOAD } from "../../../../util/Event";
 import { Length } from "../../../../editor/unit/Length";
 import { html } from "../../../../util/functions/func";
 import { CHANGE_EDITOR, CHANGE_SELECTION } from "../../../types/event";
-import RangeEditor from "../shape/property-editor/RangeEditor";
-import SelectEditor from "../shape/property-editor/SelectEditor";
+import RangeEditor from "../panel/property-editor/RangeEditor";
+import SelectEditor from "../panel/property-editor/SelectEditor";
 
 const blend_list = [
   "normal",

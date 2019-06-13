@@ -5,7 +5,7 @@ import {
 
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
-import FilterEditor from "../../shape/property-editor/FilterEditor";
+import FilterEditor from "../property-editor/FilterEditor";
 
 export default class BackdropFilterProperty extends BaseProperty {
 

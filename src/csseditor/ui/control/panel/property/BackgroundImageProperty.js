@@ -10,7 +10,7 @@ import {
   CHANGE_ARTBOARD,
   CHANGE_SELECTION
 } from "../../../../types/event";
-import BackgroundImageEditor from "../../shape/property-editor/BackgroundImageEditor";
+import BackgroundImageEditor from "../property-editor/BackgroundImageEditor";
 
 export default class BackgroundImageProperty extends BaseProperty {
 

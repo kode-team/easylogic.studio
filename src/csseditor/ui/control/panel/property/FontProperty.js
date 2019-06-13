@@ -9,8 +9,8 @@ import {
   CHANGE_EDITOR,
   CHANGE_ARTBOARD
 } from "../../../../types/event";
-import SelectEditor from "../../shape/property-editor/SelectEditor";
-import RangeEditor from "../../shape/property-editor/RangeEditor";
+import SelectEditor from "../property-editor/SelectEditor";
+import RangeEditor from "../property-editor/RangeEditor";
 
 
 export default class FontProperty extends BaseProperty {

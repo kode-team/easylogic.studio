@@ -4,7 +4,7 @@ import { html } from "../../../../../util/functions/func";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
 import { CHANGE_LAYER, CHANGE_ARTBOARD, CHANGE_SELECTION } from "../../../../types/event";
-import TransformOriginEditor from "../../shape/property-editor/TransformOriginEditor";
+import TransformOriginEditor from "../property-editor/TransformOriginEditor";
 import icon from "../../../icon/icon";
 
 

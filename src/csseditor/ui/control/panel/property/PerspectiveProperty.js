@@ -8,7 +8,7 @@ import {
   CHANGE_SELECTION,
   CHANGE_ARTBOARD
 } from "../../../../types/event";
-import RangeEditor from "../../shape/property-editor/RangeEditor";
+import RangeEditor from "../property-editor/RangeEditor";
 import icon from "../../../icon/icon";
 
 export default class PerspectiveProperty extends BaseProperty {

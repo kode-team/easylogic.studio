@@ -6,7 +6,7 @@ import {
   CHANGE_EDITOR,
   CHANGE_ARTBOARD
 } from "../../../../types/event";
-import RangeEditor from "../../shape/property-editor/RangeEditor";
+import RangeEditor from "../property-editor/RangeEditor";
 
 
 

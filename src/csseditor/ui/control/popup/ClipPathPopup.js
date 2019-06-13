@@ -3,8 +3,8 @@ import { Length } from "../../../../editor/unit/Length";
 import { CHANGE_EDITOR, CHANGE_SELECTION } from "../../../types/event";
 import { LOAD } from "../../../../util/Event";
 import { ClipPath } from "../../../../editor/css-property/ClipPath";
-import CircleEditor from "../shape/property-editor/clip-path/CircleEditor";
-import SelectEditor from "../shape/property-editor/SelectEditor";
+import CircleEditor from "../panel/property-editor/clip-path/CircleEditor";
+import SelectEditor from "../panel/property-editor/SelectEditor";
 
 export default class ClipPathPopup extends UIElement {
 

@@ -2,10 +2,10 @@ import UIElement, { EVENT } from "../../../../util/UIElement";
 import { Length } from "../../../../editor/unit/Length";
 import { CHANGE_EDITOR, CHANGE_SELECTION } from "../../../types/event";
 import { LOAD} from "../../../../util/Event";
-import CubicBezierEditor from "../shape/CubicBezierEditor";
+import CubicBezierEditor from "../panel/property-editor/CubicBezierEditor";
 import { html } from "../../../../util/functions/func";
-import RangeEditor from "../shape/property-editor/RangeEditor";
-import SelectEditor from "../shape/property-editor/SelectEditor";
+import RangeEditor from "../panel/property-editor/RangeEditor";
+import SelectEditor from "../panel/property-editor/SelectEditor";
 
 const property_list = [
   'none',

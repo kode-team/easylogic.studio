@@ -5,7 +5,7 @@ import {
 
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
-import VarEditor from "../../shape/property-editor/VarEditor";
+import VarEditor from "../property-editor/VarEditor";
 
 export default class RootVariableProperty extends BaseProperty {
 

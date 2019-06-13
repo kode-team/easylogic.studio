@@ -1,8 +1,8 @@
-import UIElement, { EVENT } from "../../../util/UIElement";
-import ColorPickerUI from "../../../colorpicker/index";
-import { html } from "../../../util/functions/func";
-import { Length, Position } from "../../../editor/unit/Length";
-import { CHANGE_EDITOR, CHANGE_SELECTION } from "../../types/event";
+import UIElement, { EVENT } from "../../../../../util/UIElement";
+import ColorPickerUI from "../../../../../colorpicker/index";
+import { html } from "../../../../../util/functions/func";
+import { Length, Position } from "../../../../../editor/unit/Length";
+import { CHANGE_EDITOR, CHANGE_SELECTION } from "../../../../types/event";
 
 export default class ColorPicker extends UIElement {
   afterRender() {

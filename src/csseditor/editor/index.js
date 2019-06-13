@@ -5,10 +5,9 @@ import UIElement from "../../util/UIElement";
 import { RESIZE, DEBOUNCE, BIND } from "../../util/Event";
 import { RESIZE_WINDOW } from "../types/ToolTypes";
 import Inspector from "../ui/control/Inspector";
-import FillPicker from "../ui/control/FillPicker";
+import FillPicker from "../ui/control/panel/property-editor/FillPicker";
 
-import ColorPicker from "../ui/control/ColorPicker";
-import ExportWindow from "../ui/window/ExportWindow";
+import ColorPicker from "../ui/control/panel/property-editor/ColorPicker";
 import popup from "../ui/control/popup";
 
 export default class CSSEditor extends UIElement {
@@ -73,8 +72,7 @@ export default class CSSEditor extends UIElement {
       ColorPicker,
       Inspector,
       ToolMenu,
-      CanvasView,
-      ExportWindow
+      CanvasView
     };
   }
 

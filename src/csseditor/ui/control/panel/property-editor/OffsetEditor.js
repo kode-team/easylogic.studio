@@ -1,9 +1,9 @@
-import UIElement, { EVENT } from "../../../../util/UIElement";
-import { Length } from "../../../../editor/unit/Length";
-import { LOAD, POINTERSTART, MOVE, END, CLICK, IF, INPUT, PREVENT } from "../../../../util/Event";
-import { Offset } from "../../../../editor/css-property/Offset";
-import Dom from "../../../../util/Dom";
-import { isUndefined } from "../../../../util/functions/func";
+import UIElement, { EVENT } from "../../../../../util/UIElement";
+import { Length } from "../../../../../editor/unit/Length";
+import { LOAD, POINTERSTART, MOVE, END, CLICK, IF, INPUT, PREVENT } from "../../../../../util/Event";
+import { Offset } from "../../../../../editor/css-property/Offset";
+import Dom from "../../../../../util/Dom";
+import { isUndefined } from "../../../../../util/functions/func";
 import OffsetPropertyEditor from "./OffsetPropertyEditor";
 
 

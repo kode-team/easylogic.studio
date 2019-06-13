@@ -1,16 +1,16 @@
-import UIElement, { EVENT } from "../../../util/UIElement";
-import ColorPicker from "../../../colorpicker/index";
-import icon from "../icon/icon";
-import { CLICK, CHANGE, LOAD } from "../../../util/Event";
-import { EMPTY_STRING } from "../../../util/css/types";
-import { html } from "../../../util/functions/func";
-import { Length, Position } from "../../../editor/unit/Length";
-import { editor } from "../../../editor/editor";
-import { CHANGE_SELECTION } from "../../types/event";
-import GradientEditor from "./shape/property-editor/GradientEditor";
-import { Gradient } from "../../../editor/image-resource/Gradient";
-import { ColorStep } from "../../../editor/image-resource/ColorStep";
-import { BackgroundImage } from "../../../editor/css-property/BackgroundImage";
+import UIElement, { EVENT } from "../../../../../util/UIElement";
+import ColorPicker from "../../../../../colorpicker/index";
+import icon from "../../../icon/icon";
+import { CLICK, CHANGE, LOAD } from "../../../../../util/Event";
+import { EMPTY_STRING } from "../../../../../util/css/types";
+import { html } from "../../../../../util/functions/func";
+import { Length, Position } from "../../../../../editor/unit/Length";
+import { editor } from "../../../../../editor/editor";
+import { CHANGE_SELECTION } from "../../../../types/event";
+import GradientEditor from "./GradientEditor";
+import { Gradient } from "../../../../../editor/image-resource/Gradient";
+import { ColorStep } from "../../../../../editor/image-resource/ColorStep";
+import { BackgroundImage } from "../../../../../editor/css-property/BackgroundImage";
 
 const tabs = [
   { type: "static-gradient", title: "Static Gradient" },

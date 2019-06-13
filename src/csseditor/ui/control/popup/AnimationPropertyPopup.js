@@ -2,12 +2,12 @@ import UIElement, { EVENT } from "../../../../util/UIElement";
 import { Length } from "../../../../editor/unit/Length";
 import { CHANGE_EDITOR, CHANGE_SELECTION } from "../../../types/event";
 import { LOAD, CHANGE } from "../../../../util/Event";
-import CubicBezierEditor from "../shape/CubicBezierEditor";
+import CubicBezierEditor from "../panel/property-editor/CubicBezierEditor";
 import { editor } from "../../../../editor/editor";
 import { html } from "../../../../util/functions/func";
-import RangeEditor from "../shape/property-editor/RangeEditor";
-import IterationCountEditor from "../shape/property-editor/IterationCountEditor";
-import SelectEditor from "../shape/property-editor/SelectEditor";
+import RangeEditor from "../panel/property-editor/RangeEditor";
+import IterationCountEditor from "../panel/property-editor/IterationCountEditor";
+import SelectEditor from "../panel/property-editor/SelectEditor";
 
 
 export default class AnimationPropertyPopup extends UIElement {

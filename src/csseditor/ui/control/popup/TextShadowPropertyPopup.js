@@ -3,7 +3,7 @@ import { Length } from "../../../../editor/unit/Length";
 import { CHANGE_EDITOR, CHANGE_SELECTION } from "../../../types/event";
 import { LOAD, POINTERSTART, MOVE, INPUT } from "../../../../util/Event";
 import { html } from "../../../../util/functions/func";
-import RangeEditor from "../shape/property-editor/RangeEditor";
+import RangeEditor from "../panel/property-editor/RangeEditor";
 
 
 

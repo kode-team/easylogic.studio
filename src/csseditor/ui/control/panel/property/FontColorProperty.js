@@ -9,7 +9,7 @@ import {
   CHANGE_SELECTION,
   CHANGE_ARTBOARD
 } from "../../../../types/event";
-import ColorViewEditor from "../../shape/property-editor/ColorViewEditor";
+import ColorViewEditor from "../property-editor/ColorViewEditor";
 
 
 

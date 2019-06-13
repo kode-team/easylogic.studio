@@ -4,7 +4,7 @@ import { html } from "../../../../../util/functions/func";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
 import { CHANGE_LAYER, CHANGE_ARTBOARD, CHANGE_SELECTION } from "../../../../types/event";
-import BorderRadiusEditor from "../../shape/property-editor/BorderRadiusEditor";
+import BorderRadiusEditor from "../property-editor/BorderRadiusEditor";
 
 export default class BorderRadiusProperty extends BaseProperty {
 
