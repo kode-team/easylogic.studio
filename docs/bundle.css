@@ -2413,9 +2413,6 @@ html, body {
   justify-items: center;
   align-items: center;
 }
-.csseditor .page-view .page-lock {
-  box-shadow: 0 0 3px 0px rgba(0, 0, 0, 0.2);
-}
 .csseditor .page-canvas {
   position: absolute;
   width: 500px;
@@ -4197,6 +4194,13 @@ html, body {
   padding: 2px 4px;
   box-sizing: border-box;
 }
+.csseditor .range-editor.has-label.block {
+  display: block;
+}
+.csseditor .range-editor.has-label.block label {
+  display: block;
+  color: rgba(0, 0, 0, 0.7);
+}
 .csseditor .range-editor.has-calc {
   grid-template-columns: 16px 1fr;
   grid-column-gap: 2px;
@@ -5377,6 +5381,88 @@ html, body {
   -webkit-clip-path: polygon(40% 0%, 60% 0%, 60% 100%, 40% 100%);
           clip-path: polygon(40% 0%, 60% 0%, 60% 100%, 40% 100%);
 }
+.csseditor .svg-property-editor .label {
+  height: 20px;
+  margin-top: 2px;
+}
+.csseditor .svg-property-editor .label label {
+  font-size: 12px;
+  padding-left: 5px;
+  vertical-align: middle;
+  text-shadow: 2px 2px 5px #cccccc;
+}
+.csseditor .svg-property-editor .tools {
+  vertical-align: middle;
+  text-align: right;
+  float: right;
+}
+.csseditor .svg-property-editor .tools select {
+  width: 100px !important;
+  display: inline-block;
+}
+.csseditor .svg-property-editor .tools button {
+  vertical-align: middle;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  border: 0px;
+  padding: 0px;
+  font-size: 16px;
+  vertical-align: middle;
+  cursor: pointer;
+  outline: none;
+  font-size: 12px;
+}
+.csseditor .svg-property-editor .tools button svg {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+.csseditor .svg-property-editor .svg-property-list {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+}
+.csseditor .svg-property-editor .svg-property-list .svg-property-item {
+  display: block;
+}
+.csseditor .svg-property-editor .svg-property-list .svg-property-item .title {
+  padding: 5px 2px;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 50px 1fr 30px;
+  border: 1px solid #cccccc;
+  cursor: pointer;
+}
+.csseditor .svg-property-editor .svg-property-list .svg-property-item .title .type {
+  padding: 2px 5px;
+}
+.csseditor .svg-property-editor .svg-property-list .svg-property-item .title label {
+  font-size: 12px;
+  padding: 2px 5px;
+  box-sizing: border-box;
+}
+.csseditor .svg-property-editor .svg-property-list .svg-property-item .title .menu {
+  text-align: right;
+}
+.csseditor .svg-property-editor .svg-property-list .svg-property-item .title .menu button {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border: 0px;
+  background-color: transparent;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  box-sizing: border-box;
+  padding: 0px;
+  cursor: pointer;
+  outline: none;
+}
+.csseditor .svg-property-editor .svg-property-list .svg-property-item .title .menu button svg {
+  width: 100%;
+  height: 100%;
+}
 .csseditor .fill-picker {
   position: fixed;
   width: 224px;
@@ -6144,5 +6230,101 @@ html, body {
   grid-template-columns: 1fr;
 }
 .csseditor .popup.clippath-popup .box .input.grid-2 {
+  grid-template-columns: 3fr 1fr;
+}
+.csseditor .popup.svg-property-editor-popup {
+  padding: 7px;
+  width: 250px;
+  height: auto;
+}
+.csseditor .popup.svg-property-editor-popup .box > .name {
+  height: 20px;
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  grid-column-gap: 4px;
+  margin-bottom: 5px;
+}
+.csseditor .popup.svg-property-editor-popup .box .property .title {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-column-gap: 2px;
+}
+.csseditor .popup.svg-property-editor-popup .box .property .title .tools {
+  text-align: right;
+}
+.csseditor .popup.svg-property-editor-popup .box .property .title .tools select {
+  width: 100px;
+  display: inline-block;
+}
+.csseditor .popup.svg-property-editor-popup .box .property .title .tools button {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  outline: none;
+  cursor: pointer;
+  border: 0px;
+  padding: 0px;
+  vertical-align: middle;
+}
+.csseditor .popup.svg-property-editor-popup .box .property .title .tools button svg {
+  width: 16px;
+  height: 16px;
+}
+.csseditor .popup.svg-property-editor-popup .box .offset-input {
+  padding: 5px 0px;
+}
+.csseditor .popup.svg-property-editor-popup .box .offset-input input {
+  width: 104px;
+}
+.csseditor .popup.svg-property-editor-popup .box .keyframe-property-list {
+  max-height: 300px;
+  overflow: auto;
+}
+.csseditor .popup.svg-property-editor-popup .box .keyframe-property-item {
+  box-sizing: border-box;
+  padding: 4px 0px;
+  margin-top: 2px;
+}
+.csseditor .popup.svg-property-editor-popup .box .keyframe-property-item .title {
+  grid-template-columns: 1fr 30px;
+}
+.csseditor .popup.svg-property-editor-popup .box .keyframe-property-item .value-editor {
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  padding: 2px;
+}
+.csseditor .popup.svg-property-editor-popup .box .keyframe-property-item .tools button {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  outline: none;
+  cursor: pointer;
+  border: 0px;
+}
+.csseditor .popup.svg-property-editor-popup .box .keyframe-property-item .tools button svg {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+.csseditor .popup.svg-property-editor-popup .box label {
+  font-size: 12px;
+  text-align: left;
+  vertical-align: middle;
+}
+.csseditor .popup.svg-property-editor-popup .box input,
+.csseditor .popup.svg-property-editor-popup .box select {
+  width: 100%;
+  vertical-align: middle;
+}
+.csseditor .popup.svg-property-editor-popup .box .input {
+  vertical-align: middle;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+}
+.csseditor .popup.svg-property-editor-popup .box .input.grid-1 {
+  grid-template-columns: 1fr;
+}
+.csseditor .popup.svg-property-editor-popup .box .input.grid-2 {
   grid-template-columns: 3fr 1fr;
 }

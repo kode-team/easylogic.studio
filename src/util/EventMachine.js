@@ -406,6 +406,7 @@ export default class EventMachine {
       targets.forEach($dom => {
         let props = {};
 
+        // parse properties 
         [...$dom.el.attributes]
           .filter(t => {
             return ATTR_lIST.indexOf(t.nodeName) < 0;
@@ -414,6 +415,19 @@ export default class EventMachine {
             props[t.nodeName] = t.nodeValue;
           });
 
+        $dom.$$('property').forEach($p => {
+          const [name, value, type] = $p.attrs('name', 'value', 'type')
+
+          let realValue = value || $p.text();
+
+          if (type === 'json') {
+            realValue = JSON.parse(realValue);
+          }
+          
+          props[name] = realValue; 
+        })
+
+        // create component 
         var instance = new Component(this, props);
         let refName = $dom.attr(REFERENCE_PROPERTY) || instance.id;
 

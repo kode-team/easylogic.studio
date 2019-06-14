@@ -35,7 +35,8 @@ export default class CanvasView extends UIElement {
         <div class='page-lock' ref='$lock'>
           <div class="page-canvas" ref="$canvas"></div>             
         </div>
-        <style type='text/css' ref='$style'></style>     
+        <style type='text/css' ref='$style'></style>  
+        <svg width="0" height="0" ref='$svg'></svg>   
       </div>
     `;
   }
@@ -59,7 +60,7 @@ export default class CanvasView extends UIElement {
     }
   }
 
-  generate(css, keyframeString, rootVariable, content) {
+  generate(css, keyframeString, rootVariable, content, svgString) {
 
     if (this.refs.$canvas.text() != content) {
       this.refs.$canvas.text(content);
@@ -78,6 +79,8 @@ export default class CanvasView extends UIElement {
       /* keyframe */
       ${keyframeString}
     `)
+
+    this.refs.$svg.html(svgString)
 
 
     this.refs.$lock.css({
@@ -102,9 +105,21 @@ export default class CanvasView extends UIElement {
     var current = editor.selection.current;
     if (current) {
       if (this.props.embed) {
-        this.parser.generate(current.toEmbedCSS(), current.toKeyframeString(), current.toRootVariableCSS(), current.content);
+        this.parser.generate(
+          current.toEmbedCSS(), 
+          current.toKeyframeString(), 
+          current.toRootVariableCSS(), 
+          current.content,
+          current.toSVGString()
+        );
       } else {
-        this.generate(current.toCSS(), current.toKeyframeString(), current.toRootVariableCSS(), current.content);
+        this.generate(
+          current.toCSS(), 
+          current.toKeyframeString(), 
+          current.toRootVariableCSS(), 
+          current.content,
+          current.toSVGString()
+        );
       }
     }
   }

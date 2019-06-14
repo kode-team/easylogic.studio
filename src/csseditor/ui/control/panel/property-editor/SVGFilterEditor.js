@@ -9,60 +9,25 @@ import {
   PREVENT
 } from "../../../../../util/Event";
 import { WHITE_STRING } from "../../../../../util/css/types";
-import {
-  BlurFilter,
-  GrayscaleFilter,
-  HueRotateFilter,
-  InvertFilter,
-  BrightnessFilter,
-  ContrastFilter,
-  DropshadowFilter,
-  OpacityFilter,
-  SaturateFilter,
-  SepiaFilter,
-  Filter,
-  URLSvgFilter
-} from "../../../../../editor/css-property/Filter";
 import { editor } from "../../../../../editor/editor";
 import UIElement, { EVENT } from "../../../../../util/UIElement";
 import RangeEditor from "./RangeEditor";
 import ColorViewEditor from "./ColorViewEditor";
-import SelectEditor from "./SelectEditor";
+import { GaussianBlurSVGFilter, SVGFilter } from "../../../../../editor/css-property/SVGFilter";
 
 
 var filterList = [
-  "blur",
-  "grayscale",
-  "hue-rotate",
-  "invert",
-  "brightness",
-  "contrast",
-  "drop-shadow",
-  "opacity",
-  "saturate",
-  "sepia",
-  'svg',
+  "GaussianBlur",
 ];
 
 var specList = {
-  blur: BlurFilter.spec,
-  grayscale: GrayscaleFilter.spec,
-  "hue-rotate": HueRotateFilter.spec,
-  invert: InvertFilter.spec,
-  brightness: BrightnessFilter.spec,
-  contrast: ContrastFilter.spec,
-  "drop-shadow": DropshadowFilter.spec,
-  opacity: OpacityFilter.spec,
-  saturate: SaturateFilter.spec,
-  sepia: SepiaFilter.spec,
-  svg: URLSvgFilter.spec
+  GaussianBlur: GaussianBlurSVGFilter.spec
 };
 
-export default class FilterEditor extends UIElement {
+export default class SVGFilterEditor extends UIElement {
 
   components() {
     return {
-      SelectEditor,
       RangeEditor,
       ColorViewEditor
     }
@@ -70,7 +35,7 @@ export default class FilterEditor extends UIElement {
 
   initState() {
     return {
-      filters: Filter.parseStyle(this.props.value)
+      filters: this.props.value || []
     }
   }
 
@@ -129,53 +94,35 @@ export default class FilterEditor extends UIElement {
     `;
   }
 
-  makeOneFilterEditor (index, filter, spec) {
-
-    if (filter.type === 'svg') {
-
-      var options = ''
-      
-      var current = editor.selection.current;
-
-      if (current) {
-        options = current.svg
-                    .filter(it => it.type === 'filter')
-                    .map(it => it.name)
-
-        options = ',' + options.join(',')
-      }
-
-      return `<SelectEditor 
-                ref='$select${index}' 
-                key="${index}" 
-                label="SVG Filter"
-                value="${filter.value}" 
-                options="${options}"
-                onchange="changeRangeEditor"  />`
-    }
-
-    return `<RangeEditor 
-                ref='$range${index}' 
-                key="${index}" 
-                value="${filter.value}" 
-                units="${spec.units.join(',')}" 
-                onchange="changeRangeEditor" />`
-  }
-
   makeOneFilterTemplate(spec, filter, index) {
     return `
       <div class="filter-item" data-index="${index}">
         <div class="title" draggable="true" data-index="${index}">
-          <label>${spec.title}</label>
+          <label>${filter.type}</label>
           <div class="filter-menu">
-            <button type="button" class="del" data-index="${index}">
-              ${icon.remove2}
-            </button>
+            <button type="button" class="del" data-index="${index}">${icon.remove2}</button>
           </div>
         </div>
         <div class="filter-ui">
 
-          ${this.makeOneFilterEditor(index, filter, spec)}
+          ${Object.keys(spec).map(key => {
+            var s = spec[key]
+            return `
+              <RangeEditor 
+                ref='$range${key}${index}' 
+                layout='block' 
+                calc='false' 
+                label="${s.title}" 
+                min="${s.min}"
+                max="${s.max}"
+                step="${s.step}"
+                key="${key}" 
+                params="${index}" 
+                value="${filter[key]}" 
+                units="${s.units.join(',')}" 
+                onchange="changeRangeEditor" 
+              />`
+          }).join(WHITE_STRING)}
 
         </div>
       </div>
@@ -183,19 +130,11 @@ export default class FilterEditor extends UIElement {
   }
 
   makeFilterTemplate(filter, index) {
-    if (filter.type === "drop-shadow") {
-      return this.makeDropShadowFilterTemplate(
-        this.getSpec(filter.type),
-        filter,
-        index
-      );
-    } else {
-      return this.makeOneFilterTemplate(
-        this.getSpec(filter.type),
-        filter,
-        index
-      );
-    }
+    return this.makeOneFilterTemplate(
+      this.getSpec(filter.type),
+      filter,
+      index
+    );
   }
 
   [LOAD("$filterList")]() {
@@ -241,13 +180,11 @@ export default class FilterEditor extends UIElement {
   }
 
   modifyFilter () {
-    var value = this.state.filters.join(WHITE_STRING);
-
-    this.parent.trigger(this.props.onchange, value)
+    this.parent.trigger(this.props.onchange, this.props.key, this.state.filters)
   }
 
   makeFilter(type, opt = {}) {
-    return Filter.parse({ ...opt, type });
+    return SVGFilter.parse({ ...opt, type });
   }
 
   [CLICK("$add")]() {
@@ -281,17 +218,13 @@ export default class FilterEditor extends UIElement {
   }
 
   [EVENT('changeRangeEditor')] (key, value, params) {
-    if (params) {
-      this.state.filters[+key].reset({ 
-        [params]: value 
-      });
-    } else {
-      this.state.filters[+key].reset({ 
-        value 
-      });
+    var filter =  this.state.filters[+params];
+    if (filter) {
+      filter.reset({
+        [key]: value
+      })
     }
-    
-
+  
     this.modifyFilter();
   }
 }

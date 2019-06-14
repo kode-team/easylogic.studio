@@ -1,4 +1,4 @@
-import { NEW_LINE_2 } from "../../util/css/types";
+import { NEW_LINE_2, WHITE_STRING } from "../../util/css/types";
 import { CSS_TO_STRING, CSS_SORTING } from "../../util/css/make";
 import { Length } from "../unit/Length";
 import { Display } from "../css-property/Display";
@@ -55,7 +55,8 @@ export class DomItem extends GroupItem {
       transitions: [],
       // 'keyframe': 'sample 0% --aaa 100px | sample 100% width 200px | sample2 0.5% background-image background-image:linear-gradient(to right, black, yellow 100%)',
       keyframes: [],
-      display: Display.parse({ display: "block" }),      
+      svg: [],
+      // display: Display.parse({ display: "block" }),      
       content: "",
       ...obj
     });
@@ -514,6 +515,14 @@ export class DomItem extends GroupItem {
    * `@keyframes` 문자열만 따로 생성 
    */
   toKeyframeString (isAnimate = false) {
-    return this.json.keyframes.map(keyframe => keyframe.toString(isAnimate)).join(NEW_LINE_2)
+    return this.json.keyframes
+                      .map(keyframe => keyframe.toString(isAnimate))
+                      .join(NEW_LINE_2)
+  }
+ 
+  toSVGString () {
+    return this.json.svg.map(s => {
+      return `<${s.type} id='${s.name}'>${s.value.join(WHITE_STRING)}</${s.type}>`
+    }).join(NEW_LINE_2)
   }
 }

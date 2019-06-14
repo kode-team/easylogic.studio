@@ -28,6 +28,7 @@ export default class RangeEditor extends UIElement {
             step: +this.props.step || 1,
             key: this.props.key,
             params: this.props.params || '',
+            layout: this.props.layout || '',
             units,
             type: (value.unit === 'calc' || value.unit === 'var') ? 'calc' : 'range',
             value
@@ -40,7 +41,7 @@ export default class RangeEditor extends UIElement {
 
     [LOAD('$body')] () {
 
-        var { min, max, step, label, calc, type, removable } = this.state
+        var { min, max, step, label, calc, type, removable, layout } = this.state
 
         var value = +this.state.value.value.toString()
 
@@ -48,14 +49,15 @@ export default class RangeEditor extends UIElement {
             value = 0
         }
 
-        var hasLabel = !!label ? 'has-label' : ''
-        var hasCalc = calc ? 'has-calc' : '';
-        var isRemovable = removable ? 'is-removable' : '';
+        var hasLabel = !!label ? 'has-label' : EMPTY_STRING
+        var hasCalc = calc ? 'has-calc' : EMPTY_STRING;
+        var isRemovable = removable ? 'is-removable' : EMPTY_STRING;
+        var layoutClass = layout;
 
         var realValue = (+value).toString();
         
         return html`
-        <div class='range-editor ${hasLabel} ${hasCalc} ${isRemovable}' data-selected-type='${type}' ref='$range'>
+        <div class='range-editor ${hasLabel} ${hasCalc} ${isRemovable} ${layoutClass}' data-selected-type='${type}' ref='$range'>
             ${label ? `<label>${label}</label>` : EMPTY_STRING }
             <button type='button' class='type-button' ref='$toggleType'>${icon.autorenew}</button>
             <div class='range-editor-type' data-type='range'>

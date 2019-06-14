@@ -79,6 +79,24 @@ BlurFilter.spec = {
   defaultValue: Length.px(0)
 };
 
+export class URLSvgFilter extends Filter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "svg",
+      value: BlurFilter.spec.defaultValue
+    });
+  }
+
+  toString() {
+    return `url(#${this.json.value || ""})`;
+  }
+}
+
+URLSvgFilter.spec = {
+  title: "SVG",
+  inputType: "select"
+};
+
 export class GrayscaleFilter extends Filter {
   getDefaultObject() {
     return super.getDefaultObject({
@@ -86,6 +104,7 @@ export class GrayscaleFilter extends Filter {
       value: GrayscaleFilter.spec.defaultValue
     });
   }
+
 }
 
 GrayscaleFilter.spec = {
@@ -308,7 +327,8 @@ export const FilterClassList = [
   OpacityFilter,
   SaturateFilter,
   SepiaFilter,
-  DropshadowFilter
+  DropshadowFilter,
+  URLSvgFilter
 ];
 
 export const FilterClassName = {
@@ -321,7 +341,8 @@ export const FilterClassName = {
   opacity: OpacityFilter,
   saturate: SaturateFilter,
   sepia: SepiaFilter,
-  "drop-shadow": DropshadowFilter
+  "drop-shadow": DropshadowFilter,
+  svg: URLSvgFilter
 };
 
 export const FilterClass = {
@@ -334,5 +355,6 @@ export const FilterClass = {
   OpacityFilter,
   SaturateFilter,
   SepiaFilter,
-  DropshadowFilter
+  DropshadowFilter,
+  URLSvgFilter
 };

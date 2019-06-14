@@ -16,6 +16,15 @@
             padding:2px 4px;
             box-sizing: border-box;
         }
+
+        &.block {
+            display: block;
+
+            label {
+                display: block; 
+                color: rgba(0, 0, 0, 0.7);
+            }
+        }
     }
 
     &.has-calc {

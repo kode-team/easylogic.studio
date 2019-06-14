@@ -20,9 +20,12 @@ import TransformEditor from "./TransformEditor";
 import TransformOriginEditor from "./TransformOriginEditor";
 import VarEditor from "./VarEditor";
 import CircleEditor from "./clip-path/CircleEditor";
+import SVGPropertyEditor from "./SVGPropertyEditor";
+import SVGFilterEditor from "./SVGFilterEditor";
 
 export default {
-
+    SVGFilterEditor,
+    SVGPropertyEditor,
     CircleEditor,
     BackgroundImageEditor,
     BoxShadowEditor,

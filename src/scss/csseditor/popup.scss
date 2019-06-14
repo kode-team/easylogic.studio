@@ -668,4 +668,124 @@
       }
     }
   }
+
+
+  &.svg-property-editor-popup {
+    padding: 7px;
+    width: 250px;
+    height: auto;
+    .box {
+      > .name {
+        height: 20px;
+        display: grid;
+        grid-template-columns: 60px 1fr;
+        grid-column-gap: 4px;
+        margin-bottom: 5px;
+      }
+
+      .property {
+        .title {
+          display: grid;
+          grid-template-columns: 1fr 2fr;
+          grid-column-gap: 2px;
+
+          .tools {
+            text-align: right; 
+            select {
+              width: 100px;
+              display: inline-block;
+            }
+
+            button {
+              appearance: none;
+              background-color: transparent;
+              outline: none;
+              cursor: pointer;
+              border:0px;
+              padding:0px;
+              vertical-align: middle;
+  
+              svg {
+                width: 16px;
+                height: 16px;
+              }
+            }
+          }
+        }
+
+
+      }
+
+      .offset-input {
+        padding: 5px 0px;
+        input {
+          width: 104px;
+        }
+      }
+
+      .keyframe-property-list {
+        max-height: 300px;
+        overflow: auto;
+      }
+
+      .keyframe-property-item {
+        box-sizing: border-box;
+        // border:1px solid $border-color;
+        padding: 4px 0px;
+        margin-top: 2px;
+
+        .title {
+          grid-template-columns: 1fr 30px;
+        }
+
+        .value-editor {
+          border: 1px solid rgba(0, 0, 0, 0.3);
+          padding:2px;
+        }
+
+        .tools {
+          button {
+            appearance: none;
+            background-color: transparent;
+            outline: none;
+            cursor: pointer;
+            border:0px;
+
+            svg {
+              width: 16px;
+              height: 16px;
+              vertical-align: middle;
+            }
+          }
+        }
+      }
+
+      label {
+        font-size: 12px;
+        text-align: left;
+        vertical-align: middle;
+      }
+
+      input,
+      select {
+        width: 100%;
+        vertical-align: middle;
+      }
+
+      .input {
+        vertical-align: middle;
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr;
+
+        &.grid-1 {
+          grid-template-columns: 1fr;
+        }
+
+        &.grid-2 {
+          grid-template-columns: 3fr 1fr;
+        }        
+      }
+    }
+  }
+
 }

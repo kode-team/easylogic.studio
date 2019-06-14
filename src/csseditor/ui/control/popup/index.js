@@ -5,8 +5,10 @@ import AnimationPropertyPopup from "./AnimationPropertyPopup";
 import KeyframePopup from "./KeyframePopup";
 import ClipPathPopup from "./ClipPathPopup";
 import TransitionPropertyPopup from "./TransitionPropertyPopup";
+import SVGPropertyPopup from "./SVGPropertyPopup";
 
 export default {
+  SVGPropertyPopup,
   ClipPathPopup,
   KeyframePopup,
   AnimationPropertyPopup,
