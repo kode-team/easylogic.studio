@@ -29,8 +29,11 @@ import MixBlendModeProperty from "./MixBlendModeProperty";
 import PerspectiveProperty from "./PerspectiveProperty";
 import TransformOriginProperty from "./TransformOriginProperty";
 import OpacityProperty from "./OpacityProperty";
+import BackgroundClipProperty from "./BackgroundClipProperty";
+
  
 export default {
+  BackgroundClipProperty,
   OpacityProperty,
   TransformOriginProperty,
   PerspectiveProperty,

@@ -92,7 +92,7 @@ export default class CanvasView extends UIElement {
     
   }
 
-  [EVENT('refreshComputedStyle')] (last) {
+  [EVENT('refreshComputedStyle') + DEBOUNCE(100)] (last) {
     var computedCSS = this.refs.$canvas.getComputedStyle(...last)
     
     this.emit('refreshComputedStyleCode', computedCSS)

@@ -5,13 +5,8 @@ import {
 
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
-import TransformEditor from "../property-editor/TransformEditor";
 
 export default class TransformProperty extends BaseProperty {
-
-  components () {
-    return { TransformEditor } 
-  }
 
   isHideHeader() {
     return true; 

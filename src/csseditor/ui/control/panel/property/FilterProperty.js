@@ -5,13 +5,8 @@ import {
 
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
-import FilterEditor from "../property-editor/FilterEditor";
 
 export default class FilterProperty extends BaseProperty {
-
-  components () {
-    return { FilterEditor } 
-  }
 
   isHideHeader() {
     return true; 

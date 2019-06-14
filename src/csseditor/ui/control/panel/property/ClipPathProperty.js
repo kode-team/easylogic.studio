@@ -4,9 +4,6 @@ import icon from "../../../icon/icon";
 import {
   LOAD,
   CLICK,
-  DRAGSTART,
-  DRAGOVER,
-  DROP,
   PREVENT
 } from "../../../../../util/Event";
 import { EMPTY_STRING } from "../../../../../util/css/types";

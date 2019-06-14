@@ -73,6 +73,8 @@ export default class GradientEditor extends UIElement  {
       })
     }
 
+    this.cachedStepListRect = null;
+
     this.setState({
       colorsteps,
       index,
@@ -242,9 +244,18 @@ export default class GradientEditor extends UIElement  {
     
   }
 
+  getStepListRect () {
+
+    if (!this.cachedStepListRect) {
+      this.cachedStepListRect = this.refs.$stepList.rect();
+    }
+
+    return this.cachedStepListRect;
+  }
+
   move (dx, dy) {
 
-    var rect = this.refs.$stepList.rect();
+    var rect = this.getStepListRect()
     
     var minX = rect.x;
     var maxX = rect.right;

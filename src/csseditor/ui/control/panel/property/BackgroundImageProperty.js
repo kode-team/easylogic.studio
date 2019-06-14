@@ -1,6 +1,6 @@
 import BaseProperty from "./BaseProperty";
 import {
-  LOAD
+  LOAD, DEBOUNCE
 } from "../../../../../util/Event";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
@@ -9,15 +9,8 @@ import {
   CHANGE_ARTBOARD,
   CHANGE_SELECTION
 } from "../../../../types/event";
-import BackgroundImageEditor from "../property-editor/BackgroundImageEditor";
 
 export default class BackgroundImageProperty extends BaseProperty {
-
-  components () {
-    return {
-      BackgroundImageEditor
-    }
-  }
 
   isHideHeader() {
     return true; 
@@ -44,7 +37,7 @@ export default class BackgroundImageProperty extends BaseProperty {
     this.refresh();
   }
 
-  [EVENT('changeBackgroundImage')] (value) {
+  [EVENT('changeBackgroundImage') + DEBOUNCE(10)] (value) {
     var current = editor.selection.current;
     if (current) {
       current.reset({

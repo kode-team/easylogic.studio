@@ -6,16 +6,9 @@ import {
   CHANGE_EDITOR,
   CHANGE_ARTBOARD
 } from "../../../../types/event";
-import RangeEditor from "../property-editor/RangeEditor";
-
-
 
 export default class FontSpacingProperty extends BaseProperty {
-  components () {
-    return {
-      RangeEditor
-    }
-  }
+
   getTitle() {
     return "Spacing";
   }

@@ -1,9 +1,6 @@
 import BaseProperty from "./BaseProperty";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
-import RangeEditor from "../property-editor/RangeEditor";
-import SelectEditor from "../property-editor/SelectEditor";
-import ColorViewEditor from "../property-editor/ColorViewEditor";
 
 const outlineStyleLit = [
   'auto',
@@ -20,13 +17,7 @@ const outlineStyleLit = [
 
 
 export default class OutlineProperty extends BaseProperty {
-  components() {
-    return {
-      RangeEditor,
-      SelectEditor,
-      ColorViewEditor      
-    }
-  }
+
   getTitle() {
     return "Outline";
   }

@@ -2,25 +2,14 @@ import BaseProperty from "./BaseProperty";
 import { INPUT, CHANGE } from "../../../../../util/Event";
 import { html } from "../../../../../util/functions/func";
 import { editor } from "../../../../../editor/editor";
-import { Length } from "../../../../../editor/unit/Length";
 import { EVENT } from "../../../../../util/UIElement";
 import {
   CHANGE_SELECTION,
   CHANGE_EDITOR,
   CHANGE_ARTBOARD
 } from "../../../../types/event";
-import SelectEditor from "../property-editor/SelectEditor";
-import RangeEditor from "../property-editor/RangeEditor";
-
 
 export default class FontProperty extends BaseProperty {
-
-  components() {
-    return {
-      SelectEditor,
-      RangeEditor
-    }
-  }
 
   getTitle() {
     return "Font";

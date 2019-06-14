@@ -4,17 +4,10 @@ import { html } from "../../../../../util/functions/func";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
 import { CHANGE_LAYER, CHANGE_ARTBOARD, CHANGE_SELECTION } from "../../../../types/event";
-import PerspectiveOriginEditor from "../property-editor/PerspectiveOriginEditor";
 import icon from "../../../icon/icon";
 
 
 export default class PerspectiveOriginProperty extends BaseProperty {
-
-  components() {
-    return {
-      PerspectiveOriginEditor
-    }
-  }
 
   getTitle() {
     return "Perspective Origin";  

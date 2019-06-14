@@ -8,14 +8,8 @@ import {
   CHANGE_ARTBOARD,
   CHANGE_SELECTION
 } from "../../../../types/event";
-import BoxShadowEditor from "../property-editor/BoxShadowEditor";
 
 export default class BoxShadowProperty extends BaseProperty {
-  components() {
-    return {
-      BoxShadowEditor
-    }
-  }
   
   isHideHeader() {
     return true;

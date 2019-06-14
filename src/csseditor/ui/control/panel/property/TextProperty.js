@@ -8,16 +8,9 @@ import {
   CHANGE_EDITOR,
   CHANGE_ARTBOARD
 } from "../../../../types/event";
-import SelectEditor from "../property-editor/SelectEditor";
-
-
 
 export default class TextProperty extends BaseProperty {
-  components() {
-    return {
-      SelectEditor
-    }
-  }
+
   getTitle() {
     return "Text";
   }

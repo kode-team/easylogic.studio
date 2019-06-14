@@ -1,5 +1,5 @@
 import BaseProperty from "./BaseProperty";
-import { INPUT, BIND, LOAD, DEBOUNCE } from "../../../../../util/Event";
+import { LOAD, DEBOUNCE } from "../../../../../util/Event";
 import { html } from "../../../../../util/functions/func";
 import { editor } from "../../../../../editor/editor";
 

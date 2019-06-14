@@ -7,8 +7,8 @@ import RangeEditor from "./RangeEditor";
 import { WHITE_STRING } from "../../../../../util/css/types";
 
 const typeList = [
-  { key: "transform-origin-x", title: "Origin X" },
-  { key: "transform-origin-y", title: "Origin Y" },
+  { key: "transform-origin-x", title: "X" },
+  { key: "transform-origin-y", title: "Y" },
 ];
 
 const keyList = typeList.map(it => it.key);
@@ -98,7 +98,7 @@ export default class TransformOriginEditor extends UIElement {
           })}
 
           <div>
-            <RangeEditor ref='$transform-origin-z' label='Offset Z' key='transform-origin-z' value="${(this.state['transform-origin-z'] || "").toString()}" onchange='changeTransformOrigin' />
+            <RangeEditor ref='$transform-origin-z' label='Z' key='transform-origin-z' value="${(this.state['transform-origin-z'] || "").toString()}" onchange='changeTransformOrigin' />
           </div>  
         </div>
       </div>

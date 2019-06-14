@@ -1,8 +1,15 @@
 import { CLICK } from "../../../../../util/Event";
 import UIElement from "../../../../../util/UIElement";
 import { EMPTY_STRING } from "../../../../../util/css/types";
+import propertyEditor from "../property-editor";
+
 
 export default class BaseProperty extends UIElement {
+
+  components() {
+    return propertyEditor
+  }
+
   onToggleShow() {}
 
   template() {

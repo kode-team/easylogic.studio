@@ -8,14 +8,8 @@ import {
   CHANGE_ARTBOARD,
   CHANGE_SELECTION
 } from "../../../../types/event";
-import TextShadowEditor from "../property-editor/TextShadowEditor";
 
 export default class TextShadowProperty extends BaseProperty {
-  components() {
-    return {
-      TextShadowEditor
-    }
-  }
 
   isHideHeader() {
     return true;

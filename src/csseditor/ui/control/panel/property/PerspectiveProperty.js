@@ -8,15 +8,9 @@ import {
   CHANGE_SELECTION,
   CHANGE_ARTBOARD
 } from "../../../../types/event";
-import RangeEditor from "../property-editor/RangeEditor";
 import icon from "../../../icon/icon";
 
 export default class PerspectiveProperty extends BaseProperty {
-  components() {
-    return {
-      RangeEditor
-    }
-  }
 
   getTitle() {
     return "Perspective";

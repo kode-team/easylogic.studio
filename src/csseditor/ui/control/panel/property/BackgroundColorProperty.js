@@ -9,16 +9,8 @@ import {
   CHANGE_SELECTION,
   CHANGE_ARTBOARD
 } from "../../../../types/event";
-import ColorViewEditor from "../property-editor/ColorViewEditor";
-
-
 
 export default class BackgroundColorProperty extends BaseProperty {
-  components() {
-    return {
-      ColorViewEditor
-    }
-  }
 
   getTitle() {
     return "Background Color";

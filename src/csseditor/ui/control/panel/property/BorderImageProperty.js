@@ -1,13 +1,12 @@
 import BaseProperty from "./BaseProperty";
-import { CLICK, INPUT, CHANGE, LOAD } from "../../../../../util/Event";
+import { CLICK, CHANGE, LOAD } from "../../../../../util/Event";
 import { html } from "../../../../../util/functions/func";
 import { editor } from "../../../../../editor/editor";
-import { Length, Position } from "../../../../../editor/unit/Length";
+import { Position } from "../../../../../editor/unit/Length";
 import icon from "../../../icon/icon";
 import { EMPTY_STRING } from "../../../../../util/css/types";
 import { EVENT } from "../../../../../util/UIElement";
 import { CHANGE_SELECTION, CHANGE_ARTBOARD, CHANGE_EDITOR } from "../../../../types/event";
-import RangeEditor from "../property-editor/RangeEditor";
 
 const typeList = [
   { key: "top", title: "Top" },
@@ -44,11 +43,7 @@ const types = {
 
 
 export default class BorderImageProperty extends BaseProperty {
-  components() {
-    return {
-      RangeEditor
-    }
-  }
+
   getTitle() {
     return "Border Image";
   }

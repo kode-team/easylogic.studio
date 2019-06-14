@@ -1,6 +1,6 @@
 import UIElement, { EVENT } from "../../../../../util/UIElement";
 import { BackgroundImage } from "../../../../../editor/css-property/BackgroundImage";
-import { LOAD, CLICK, DRAGSTART, DRAGOVER, DROP, PREVENT } from "../../../../../util/Event";
+import { LOAD, CLICK, DRAGSTART, DRAGOVER, DROP, PREVENT, DEBOUNCE } from "../../../../../util/Event";
 import icon from "../../../icon/icon";
 import { EMPTY_STRING } from "../../../../../util/css/types";
 import { keyEach, combineKeyArray } from "../../../../../util/functions/func";
@@ -425,7 +425,7 @@ export default class BackgroundImageEditor extends UIElement {
         }
     }
 
-    [EVENT("changeBackgroundImageEditorProperty")](data) {
+    [EVENT("changeBackgroundImageEditorProperty") + DEBOUNCE(10)](data) {
         if (this.currentBackgroundImage) {
             this.currentBackgroundImage.reset(data);
 

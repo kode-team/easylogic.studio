@@ -1,17 +1,12 @@
 import BaseProperty from "./BaseProperty";
 import {
-  LOAD,
+  LOAD
 } from "../../../../../util/Event";
 
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
-import VarEditor from "../property-editor/VarEditor";
 
 export default class VariableProperty extends BaseProperty {
-
-  components () {
-    return { VarEditor } 
-  }
 
   isHideHeader() {
     return true; 

@@ -9,31 +9,29 @@ import {
   CHANGE_ARTBOARD
 } from "../../../../types/event";
 
+const clip_list = [
+  '',
+  "padding-box",
+  "border-box",
+  "content-box",
+  "text"
+];
 
-export default class OpacityProperty extends BaseProperty {
-
+export default class BackgroundClipProperty extends BaseProperty {
+  
   getTitle() {
-    return 'Opacity'
+    return "Mix Blend";
   }
 
-  getBody() {
-    return `<div ref='$body' style='padding-top: 3px;'></div>`;
+  getTools() {
+    return `<div ref='$backgroundClip' style='padding-top: 3px;'></div>`;
   }  
 
-  [LOAD("$body")]() {
+  [LOAD("$backgroundClip")]() {
     var current = editor.selection.current || {};
 
-    var opacity = current['opacity'] || ''
-    return `<SingleRangeEditor 
-              ref='$1' 
-              key='opacity' 
-              value="${opacity}" 
-              min="0"
-              max="1"
-              step="0.01"
-              selected-unit=' '
-              removable="true"
-              onchange="changeSelect" />`;
+    var clip = current['background-clip'] || ''
+    return `<SelectEditor ref='$1' key='background-clip' value="${clip}" options="${clip_list.join(',')}" onchange="changeSelect" />`;
   }
 
   [EVENT('changeSelect')] (key, value) {
@@ -41,7 +39,7 @@ export default class OpacityProperty extends BaseProperty {
 
     if (current) {
       current.reset({
-        [key]: value.value
+        [key]: value
       })
 
       this.emit('refreshCanvas')

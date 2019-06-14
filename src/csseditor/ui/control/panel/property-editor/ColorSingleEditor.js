@@ -3,7 +3,7 @@ import { CLICK } from "../../../../../util/Event";
 
 export default class ColorSingleEditor extends UIElement {
 
-    initState() {
+    initState() { 
         return {
             params: this.props.params,
             color: this.props.color || 'rgba(0, 0, 0, 1)'

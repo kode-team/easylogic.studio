@@ -9,9 +9,6 @@ import {
   CHANGE_SELECTION,
   CHANGE_ARTBOARD
 } from "../../../../types/event";
-import SelectEditor from "../property-editor/SelectEditor";
-
-
 
 const blend_list = [
   '',
@@ -36,11 +33,6 @@ const blend_list = [
 
 
 export default class MixBlendModeProperty extends BaseProperty {
-  components() {
-    return {
-      SelectEditor
-    }
-  }
 
   getTitle() {
     return "Mix Blend";
