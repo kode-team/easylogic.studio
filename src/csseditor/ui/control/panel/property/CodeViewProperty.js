@@ -56,10 +56,12 @@ export default class CodeViewProperty extends BaseProperty {
     var cssCode = current ? current.toExport().replace(/;/gi, ";" + NEW_LINE) : EMPTY_STRING
     var keyframeCode = current ? current.toKeyframeString() : EMPTY_STRING
     var rootVariable = current ? CSS_TO_STRING(current.toRootVariableCSS()) : EMPTY_STRING
+    var svgCode = current ? current.toSVGString() : EMPTY_STRING;
 
     cssCode = this.filterKeyName(cssCode.trim())
     rootVariable = this.filterKeyName(rootVariable.trim());
     keyframeCode = this.modifyNewLine(keyframeCode.trim());
+    svgCode = svgCode.replace(/\</g, '&lt;').replace(/\>/g, '&gt;')
 
     return `
       <div class=''>
@@ -77,6 +79,12 @@ export default class CodeViewProperty extends BaseProperty {
         ${cssCode ? 
           `<div>
           <pre title='CSS'>${cssCode}</pre>
+          </div>` : EMPTY_STRING
+        }
+
+        ${svgCode ? 
+          `<div>
+          <pre title='SVG'>${svgCode}</pre>
           </div>` : EMPTY_STRING
         }
 

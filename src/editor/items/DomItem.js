@@ -1,4 +1,4 @@
-import { NEW_LINE_2, WHITE_STRING } from "../../util/css/types";
+import { NEW_LINE_2, WHITE_STRING, NEW_LINE } from "../../util/css/types";
 import { CSS_TO_STRING, CSS_SORTING } from "../../util/css/make";
 import { Length } from "../unit/Length";
 import { Display } from "../css-property/Display";
@@ -522,7 +522,10 @@ export class DomItem extends GroupItem {
  
   toSVGString () {
     return this.json.svg.map(s => {
-      return `<${s.type} id='${s.name}'>${s.value.join(WHITE_STRING)}</${s.type}>`
+      return `
+<${s.type} id='${s.name}'>
+  ${s.value.join(NEW_LINE)}
+</${s.type}>`
     }).join(NEW_LINE_2)
   }
 }

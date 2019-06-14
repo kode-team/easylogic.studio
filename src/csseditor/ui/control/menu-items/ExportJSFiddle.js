@@ -27,7 +27,12 @@ export default class ExportJSFiddle extends MenuItem {
     if (current) {
       this.refs.$title.val("Gradient - easylogic.studio");
       this.refs.$description.val("https://gradient.easylogic.studio");
-      this.refs.$html.val('<div id="sample"></div>');
+      this.refs.$html.val(`
+        <div id="sample"></div>
+        <svg width="0" height="0">
+          ${current.toSVGString()}
+        </svg>
+      `);
       this.refs.$css.val(this.generate(current));
     }
 

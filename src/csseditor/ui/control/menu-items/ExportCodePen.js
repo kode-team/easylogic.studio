@@ -24,7 +24,12 @@ export default class ExportCodePen extends UIElement {
     if (current) {
       this.refs.$codepen.val(
         JSON.stringify({
-          html: '<div id="sample"></div>',
+          html: `
+            <div id="sample"></div>
+            <svg width="0" height="0">
+              ${current.toSVGString()}
+            </svg>
+          `,
           css: this.generate(current)
         })
       );
