@@ -57,7 +57,7 @@ export default class SVGPropertyEditor extends UIElement {
     return `
       <div class='svg-property-item' data-type='${property.type}' data-index='${index}' draggable="true">
         <div class='title'>
-          <div class='type'>${property.type}</div>
+          <div class='type' data-type="${property.type}">${property.type}</div>
           <label>${property.name}</label>
           <div class='menu'>
             <button type="button" class='del'>${icon.remove2}</button>

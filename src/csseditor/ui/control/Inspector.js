@@ -9,7 +9,7 @@ export default class Inspector extends UIElement {
     return html`
       <div class="feature-control">
         <div>
-          <div class="tab number-tab" data-selected-value="4" ref="$tab">
+          <div class="tab number-tab" data-selected-value="5" ref="$tab">
             <div class="tab-header" ref="$header">
               <div class="tab-item" data-value="1">
                 <div class='icon'>${icon.paint}</div>
@@ -20,15 +20,18 @@ export default class Inspector extends UIElement {
                 <label>Text</label>
               </div>
               <div class="tab-item" data-value="3">
-                <div class='icon'>${icon.filter}</div>
+                <div class='icon'>${icon.transform}</div>
                 <label>Transform</label>
               </div>            
               <div class="tab-item" data-value="4">
                 <div class='icon'>${icon.filter}</div>
                 <label>Effect</label>
               </div>                          
-
               <div class="tab-item" data-value="5">
+                <div class='icon'>${icon.scatter}</div>
+                <label>Selector</label>
+              </div>                          
+              <div class="tab-item" data-value="6">
                 <div class='icon'>${icon.timer}</div>
                 <label>Animation</label>
               </div>                        
@@ -67,9 +70,11 @@ export default class Inspector extends UIElement {
                 <FilterProperty />
                 <BackdropFilterProperty />
                 <ClipPathProperty />
-                <SVGProperty />
               </div>
-              <div class='tab-content' data-value="5">
+              <div class='tab-content' data-value='5'>
+                <SelectorProperty />
+              </div>
+              <div class='tab-content' data-value="6">
                 <TransitionProperty />
                 <KeyframeProperty />
                 <AnimationProperty />
@@ -95,7 +100,11 @@ export default class Inspector extends UIElement {
               <div class="tab-item" data-value="4">
                 <div class='icon'>${icon.build}</div>
                 <label>Root Var</label>
-              </div>                                
+              </div>  
+              <div class="tab-item" data-value="5">
+                <div class='icon'>${icon.gradient}</div>
+                <label>SVG</label>
+              </div>                                              
             </div>
             <div class="tab-body" ref="$extraBody">
               <div class="tab-content" data-value="1">
@@ -109,7 +118,10 @@ export default class Inspector extends UIElement {
               </div>
               <div class="tab-content" data-value="4">
                 <RootVariableProperty />
-              </div>                            
+              </div>                 
+              <div class='tab-content' data-value='5'>
+                <SVGProperty />
+              </div>
             </div>
           </div>
         </div>

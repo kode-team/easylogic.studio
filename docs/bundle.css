@@ -1455,7 +1455,7 @@ html, body {
   background-color: #444444;
   color: white;
 }
-.csseditor .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"] svg path {
+.csseditor .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"] svg path, .csseditor .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"] svg g {
   fill: white;
 }
 .csseditor .tab.number-tab[data-selected-value="1"] .tab-content[data-value="1"] {
@@ -1465,7 +1465,7 @@ html, body {
   background-color: #444444;
   color: white;
 }
-.csseditor .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"] svg path {
+.csseditor .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"] svg path, .csseditor .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"] svg g {
   fill: white;
 }
 .csseditor .tab.number-tab[data-selected-value="2"] .tab-content[data-value="2"] {
@@ -1475,7 +1475,7 @@ html, body {
   background-color: #444444;
   color: white;
 }
-.csseditor .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"] svg path {
+.csseditor .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"] svg path, .csseditor .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"] svg g {
   fill: white;
 }
 .csseditor .tab.number-tab[data-selected-value="3"] .tab-content[data-value="3"] {
@@ -1485,7 +1485,7 @@ html, body {
   background-color: #444444;
   color: white;
 }
-.csseditor .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"] svg path {
+.csseditor .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"] svg path, .csseditor .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"] svg g {
   fill: white;
 }
 .csseditor .tab.number-tab[data-selected-value="4"] .tab-content[data-value="4"] {
@@ -1495,7 +1495,7 @@ html, body {
   background-color: #444444;
   color: white;
 }
-.csseditor .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"] svg path {
+.csseditor .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"] svg path, .csseditor .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"] svg g {
   fill: white;
 }
 .csseditor .tab.number-tab[data-selected-value="5"] .tab-content[data-value="5"] {
@@ -1505,7 +1505,7 @@ html, body {
   background-color: #444444;
   color: white;
 }
-.csseditor .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"] svg path {
+.csseditor .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"] svg path, .csseditor .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"] svg g {
   fill: white;
 }
 .csseditor .tab.number-tab[data-selected-value="6"] .tab-content[data-value="6"] {
@@ -1515,7 +1515,7 @@ html, body {
   background-color: #444444;
   color: white;
 }
-.csseditor .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"] svg path {
+.csseditor .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"] svg path, .csseditor .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"] svg g {
   fill: white;
 }
 .csseditor .tab.number-tab[data-selected-value="7"] .tab-content[data-value="7"] {
@@ -1525,7 +1525,7 @@ html, body {
   background-color: #444444;
   color: white;
 }
-.csseditor .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"] svg path {
+.csseditor .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"] svg path, .csseditor .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"] svg g {
   fill: white;
 }
 .csseditor .tab.number-tab[data-selected-value="8"] .tab-content[data-value="8"] {
@@ -1535,7 +1535,7 @@ html, body {
   background-color: #444444;
   color: white;
 }
-.csseditor .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"] svg path {
+.csseditor .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"] svg path, .csseditor .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"] svg g {
   fill: white;
 }
 .csseditor .tab.number-tab[data-selected-value="9"] .tab-content[data-value="9"] {
@@ -1565,7 +1565,7 @@ html, body {
   border: 0px !important;
 }
 .csseditor .tab > .tab-header > .tab-item {
-  flex: 1;
+  flex: 1 1 auto;
   display: inline-block;
   font-size: 12px;
   text-align: left;
@@ -2097,309 +2097,6 @@ html, body {
 .csseditor .tool-menu .items .icon.github:before {
   content: "G";
 }
-.csseditor .vertical-colorstep-container {
-  position: absolute;
-  top: -80px;
-  left: 0px;
-  right: 0px;
-  height: 70px;
-  display: none;
-  z-index: 1000;
-  pointer-events: none;
-  -webkit-transform: translateX(-100px);
-          transform: translateX(-100px);
-}
-.csseditor .vertical-colorstep-container .gradient-editor {
-  position: absolute;
-  display: inline-block;
-  left: 50%;
-  -webkit-transform: translateX(200px);
-          transform: translateX(200px);
-  min-width: 100px;
-  top: -20px;
-  pointer-events: all;
-}
-.csseditor .vertical-colorstep-container .gradient-editor .angle-editor,
-.csseditor .vertical-colorstep-container .gradient-editor .position-editor {
-  position: relative;
-  display: inline-block;
-  vertical-align: middle;
-  box-sizing: border-box;
-  width: 100px;
-  height: 100px;
-  margin-right: 4px;
-}
-.csseditor .vertical-colorstep-container .gradient-tools {
-  position: absolute;
-  display: inline-block;
-  left: 50%;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
-  top: 0px;
-  pointer-events: all;
-}
-.csseditor .vertical-colorstep-container .gradient-tools .guide-button {
-  width: 14px;
-  height: 14px;
-  padding: 0px;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  border: 1px solid #cccccc;
-  cursor: pointer;
-  background-color: white;
-  background-image: linear-gradient(to top, black 0%, black 100%);
-  background-size: 2px 2px;
-  background-position: center center;
-  background-repeat: repeat-y;
-  box-sizing: border-box;
-  outline: none;
-  vertical-align: middle;
-}
-.csseditor .vertical-colorstep-container .gradient-tools .guide-button.cut {
-  background-repeat: repeat-x;
-}
-.csseditor .vertical-colorstep-container .gradient-tools .radial-gradient-shape {
-  width: 14px;
-  height: 14px;
-  padding: 0px;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  border: 1px solid #cccccc;
-  cursor: pointer;
-  background-color: white;
-  box-sizing: border-box;
-  outline: none;
-  position: relative;
-  vertical-align: middle;
-}
-.csseditor .vertical-colorstep-container .gradient-tools .radial-gradient-shape.circle:before {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 50%;
-  left: 50%;
-  -webkit-transform: translateX(-50%) translateY(-50%);
-          transform: translateX(-50%) translateY(-50%);
-  content: "";
-  display: inline-block;
-  border-radius: 100%;
-  background-color: #cccccc;
-}
-.csseditor .vertical-colorstep-container .gradient-tools .radial-gradient-shape.ellipse:before {
-  position: absolute;
-  width: 100%;
-  height: 50%;
-  top: 50%;
-  left: 50%;
-  -webkit-transform: translateX(-50%) translateY(-50%);
-          transform: translateX(-50%) translateY(-50%);
-  content: "";
-  display: inline-block;
-  border-radius: 100%;
-  background-color: #cccccc;
-}
-.csseditor .vertical-colorstep-container .gradient-tools .radial-gradient-shape.selected:before {
-  background-color: #333;
-}
-.csseditor .vertical-colorstep {
-  position: absolute;
-  left: 50%;
-  top: 20px;
-  width: 400px;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
-  display: inline-block;
-  z-index: 100;
-  padding-left: 20px;
-  padding-right: 20px;
-  pointer-events: all;
-}
-.csseditor .vertical-colorstep .gradient-steps {
-  position: relative;
-  display: block;
-}
-.csseditor .vertical-colorstep .gradient-steps .hue-container {
-  width: 100%;
-  height: 14px;
-  margin-top: 0px;
-  left: 0px;
-  right: 0px;
-  position: absolute;
-  border-radius: 14px;
-  z-index: 0;
-  cursor: copy;
-  box-sizing: border-box;
-  background-color: transparent;
-  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
-  background-size: 10px 10px;
-  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
-}
-.csseditor .vertical-colorstep .gradient-steps .hue {
-  position: relative;
-  padding: 0px;
-  margin: 0px;
-  border-radius: 14px;
-  cursor: pointer;
-  pointer-events: none;
-  box-sizing: border-box;
-  box-shadow: 0 0 1px 0 rgba(255, 255, 255, 0.5);
-}
-.csseditor .vertical-colorstep .gradient-steps .hue > .step-list {
-  position: relative;
-  width: 100%;
-  cursor: copy;
-  height: 14px;
-  z-index: 1;
-  border-radius: 14px;
-}
-.csseditor .vertical-colorstep .gradient-steps .hue > .step-list.mode-drag {
-  cursor: pointer;
-}
-.csseditor .vertical-colorstep .gradient-steps .hue .drag-bar {
-  -webkit-transform: none;
-          transform: none;
-  border-radius: 50%;
-  display: inline-block;
-  left: 0px;
-  top: 14px;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
-  position: absolute;
-  cursor: pointer;
-  transition: top 0.3s ease-out;
-  pointer-events: all;
-}
-.csseditor .vertical-colorstep .gradient-steps .hue .drag-bar .guide-line {
-  pointer-events: none;
-  position: absolute;
-  width: 1px;
-  height: 0px;
-  bottom: 8px;
-  left: 4px;
-  transition: all 0.3s ease-out;
-}
-.csseditor .vertical-colorstep .gradient-steps .hue .drag-bar .guide-change {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  top: 50%;
-  left: -15px;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
-  opacity: 0;
-  transition: all 0.3s ease-out;
-  border: 1px solid #cccccc;
-  pointer-events: none;
-  background-color: white;
-  background-image: linear-gradient(to top, black 0%, black 100%);
-  background-size: 2px 2px;
-  background-position: 2.5px center;
-  background-repeat: repeat-y;
-}
-.csseditor .vertical-colorstep .gradient-steps .hue .drag-bar .guide-change.cut {
-  background-position: center 2.5px;
-  background-repeat: repeat-x;
-}
-.csseditor .vertical-colorstep .gradient-steps .hue .drag-bar .guide-change.easing {
-  background-repeat: no-repeat;
-  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAB3SURBVChTY9iefGyO+gasCCjFgCaEhrBLf33x/f6uZ0AGuvRc7Y37i8/8////3JQbQC5CekPwgRsrH/z48Aso9+bah8VmW6HSQBaQDxQFygFVANXB9YCkgeYA5YBmAk2GS0AQSBroCqBbkEXhCN1paAhvsCQfAwDynahhkocJpQAAAABJRU5ErkJggg==);
-  border: 0px;
-}
-.csseditor .vertical-colorstep .gradient-steps .hue .drag-bar .guide-step {
-  background-color: transparent;
-  border: 2px solid white;
-  box-shadow: 0 0 2px 0px rgba(255, 255, 255, 0.6);
-  width: 10px;
-  height: 10px;
-  -webkit-transform: none;
-          transform: none;
-  border-radius: 50%;
-  display: inline-block;
-  top: 0px;
-  -webkit-transform: translateX(-0.5px);
-          transform: translateX(-0.5px);
-  cursor: pointer;
-  transition: top 0.3s ease-out;
-  pointer-events: all;
-  border: 1px solid #cccccc;
-  box-sizing: border-box;
-}
-.csseditor .vertical-colorstep .gradient-steps .hue .drag-bar .guide-unit {
-  position: absolute;
-  width: 80px;
-  top: 50%;
-  left: 15px;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
-  opacity: 0;
-  transition: all 0.3s ease-out;
-  pointer-events: none;
-}
-.csseditor .vertical-colorstep .gradient-steps .hue .drag-bar .guide-unit > input[type=number] {
-  display: none;
-  outline: none;
-  flex: 3;
-  width: 40px;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  border: 1px solid #cccccc;
-  background-color: white;
-}
-.csseditor .vertical-colorstep .gradient-steps .hue .drag-bar .guide-unit.percent > .percent {
-  display: inline-block;
-}
-.csseditor .vertical-colorstep .gradient-steps .hue .drag-bar .guide-unit.px > .px {
-  display: inline-block;
-}
-.csseditor .vertical-colorstep .gradient-steps .hue .drag-bar .guide-unit.em > .em {
-  display: inline-block;
-}
-.csseditor .vertical-colorstep .gradient-steps .hue .drag-bar .guide-unit select {
-  flex: 1;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  border: 1px solid #cccccc;
-  background-color: white;
-  border-radius: 0px;
-  display: inline-block;
-  vertical-align: middle;
-  height: 18px;
-  outline: none;
-  margin-top: -2px;
-  padding-left: 2px;
-  box-sizing: border-box;
-}
-.csseditor .vertical-colorstep .gradient-steps .hue .drag-bar.selected {
-  z-index: 1;
-  top: 30px;
-}
-.csseditor .vertical-colorstep .gradient-steps .hue .drag-bar.selected .guide-step {
-  box-shadow: 0 0 20px 8px rgba(228, 255, 0, 0.8);
-}
-.csseditor .vertical-colorstep .gradient-steps .hue .drag-bar.selected .guide-line {
-  height: 32px;
-}
-.csseditor .vertical-colorstep .gradient-steps .hue .drag-bar.selected .guide-change,
-.csseditor .vertical-colorstep .gradient-steps .hue .drag-bar.selected .guide-unit {
-  pointer-events: all;
-}
-.csseditor .vertical-colorstep .gradient-steps .hue .drag-bar.selected .guide-change,
-.csseditor .vertical-colorstep .gradient-steps .hue .drag-bar.selected .guide-step,
-.csseditor .vertical-colorstep .gradient-steps .hue .drag-bar.selected .guide-unit {
-  opacity: 1;
-}
-.csseditor .vertical-colorstep .gradient-steps .current-percent {
-  position: absolute;
-  display: none;
-  font-size: 12px;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
-}
 .csseditor .page-view {
   position: absolute;
   left: 0px;
@@ -2418,801 +2115,6 @@ html, body {
   width: 500px;
   height: 400px;
   background-color: white;
-}
-.csseditor .drag-angle-rect {
-  position: absolute;
-  width: 100px;
-  height: 100px;
-  pointer-events: none;
-}
-.csseditor .drag-angle-rect .drag-angle {
-  display: inline-block;
-  width: 70px;
-  height: 70px;
-  position: absolute;
-  border-radius: 50%;
-  border: 2px solid rgba(236, 236, 236, 0.5);
-  border-style: dashed;
-  overflow: hidden;
-  left: 50%;
-  top: 50%;
-  -webkit-transform: translateX(-50%) translateY(-50%);
-          transform: translateX(-50%) translateY(-50%);
-  pointer-events: all;
-}
-.csseditor .drag-angle-rect .drag-angle .drag-pointer {
-  position: absolute;
-  width: 12px;
-  cursor: pointer;
-  height: 12px;
-  -webkit-transform: translateX(-50%) translateY(-50%);
-          transform: translateX(-50%) translateY(-50%);
-  border-radius: 50%;
-  background-color: rgba(236, 236, 236, 0.8);
-  box-shadow: 0 0 4px 0px rgba(0, 0, 0, 0.32), inset 0 0 4px 0px rgba(0, 0, 0, 0.32);
-}
-.csseditor .drag-angle-rect .drag-angle .angle-text {
-  position: absolute;
-  display: inline-block;
-  left: 50%;
-  top: 50%;
-  -webkit-transform: translateX(-50%) translateY(-50%);
-          transform: translateX(-50%) translateY(-50%);
-  color: rgba(236, 236, 236, 0.9);
-  text-shadow: 1px 1px #a7a7a7;
-}
-.csseditor .drag-position {
-  position: absolute;
-  width: 100px;
-  height: 100px;
-  overflow: hidden;
-}
-.csseditor .drag-position .drag-pointer {
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  cursor: pointer;
-  -webkit-transform: translateX(-50%) translateY(-50%);
-          transform: translateX(-50%) translateY(-50%);
-  border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.8);
-  box-shadow: 0 0 2px 0px rgba(0, 0, 0, 0.32);
-}
-.csseditor .perspective-drag-position {
-  position: absolute;
-  display: none;
-  bottom: 0px;
-  width: 100%;
-  top: 0px;
-  right: 0px;
-  overflow: hidden;
-  pointer-events: none;
-}
-.csseditor .perspective-drag-position .drag-pointer {
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  cursor: pointer;
-  pointer-events: all;
-  -webkit-transform: translateX(-50%) translateY(-50%);
-          transform: translateX(-50%) translateY(-50%);
-  border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.8);
-  box-shadow: 0 0 2px 0px rgba(0, 0, 0, 0.32);
-}
-.csseditor .predefined-angluar-group {
-  text-align: center;
-  position: absolute;
-  width: 100px;
-  height: 100px;
-  background-color: rgba(0, 0, 0, 0.7);
-}
-.csseditor .predefined-angluar-group.radial-position {
-  right: auto;
-}
-.csseditor .predefined-angluar-group button {
-  padding: 0px;
-  margin: 1px;
-  background-color: transparent;
-  border: 0px;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  outline: none;
-  cursor: pointer;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  position: absolute;
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  pointer-events: all;
-  /* linear */
-  /* radial */
-}
-.csseditor .predefined-angluar-group button:hover {
-  border-color: rgba(0, 0, 0, 0.2);
-}
-.csseditor .predefined-angluar-group button:hover:after {
-  border-color: rgba(0, 0, 0, 0.2);
-}
-.csseditor .predefined-angluar-group button:after {
-  content: "";
-  position: absolute;
-  display: inline-block;
-  width: 15px;
-  height: 15px;
-}
-.csseditor .predefined-angluar-group button[data-value="to top"] {
-  top: 10px;
-  left: 50%;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
-  border-top: 2px solid rgba(15, 114, 207, 0.8);
-}
-.csseditor .predefined-angluar-group button[data-value="to top"]:after {
-  border-top: 2px solid rgba(15, 114, 207, 0.8);
-  top: -8px;
-  left: 50%;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
-}
-.csseditor .predefined-angluar-group button[data-value="to top right"] {
-  top: 10px;
-  right: 10px;
-  border-top: 2px solid rgba(15, 114, 207, 0.8);
-  border-right: 2px solid rgba(15, 114, 207, 0.8);
-}
-.csseditor .predefined-angluar-group button[data-value="to top right"]:after {
-  border-top: 2px solid rgba(15, 114, 207, 0.8);
-  border-right: 2px solid rgba(15, 114, 207, 0.8);
-  top: -8px;
-  right: -8px;
-}
-.csseditor .predefined-angluar-group button[data-value="to right"] {
-  top: 50%;
-  right: 10px;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
-  border-right: 2px solid rgba(15, 114, 207, 0.8);
-}
-.csseditor .predefined-angluar-group button[data-value="to right"]:after {
-  border-right: 2px solid rgba(15, 114, 207, 0.8);
-  top: 50%;
-  right: -8px;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
-}
-.csseditor .predefined-angluar-group button[data-value="to bottom right"] {
-  bottom: 10px;
-  right: 10px;
-  border-right: 2px solid rgba(15, 114, 207, 0.8);
-  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
-}
-.csseditor .predefined-angluar-group button[data-value="to bottom right"]:after {
-  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
-  border-right: 2px solid rgba(15, 114, 207, 0.8);
-  bottom: -8px;
-  right: -8px;
-}
-.csseditor .predefined-angluar-group button[data-value="to bottom"] {
-  bottom: 10px;
-  left: 50%;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
-  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
-}
-.csseditor .predefined-angluar-group button[data-value="to bottom"]:after {
-  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
-  left: 50%;
-  bottom: -8px;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
-}
-.csseditor .predefined-angluar-group button[data-value="to bottom left"] {
-  left: 10px;
-  bottom: 10px;
-  border-left: 2px solid rgba(15, 114, 207, 0.8);
-  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
-}
-.csseditor .predefined-angluar-group button[data-value="to bottom left"]:after {
-  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
-  border-left: 2px solid rgba(15, 114, 207, 0.8);
-  bottom: -8px;
-  left: -8px;
-}
-.csseditor .predefined-angluar-group button[data-value="to left"] {
-  top: 50%;
-  left: 10px;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
-  border-left: 2px solid rgba(15, 114, 207, 0.8);
-}
-.csseditor .predefined-angluar-group button[data-value="to left"]:after {
-  border-left: 2px solid rgba(15, 114, 207, 0.8);
-  top: 50%;
-  left: -8px;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
-}
-.csseditor .predefined-angluar-group button[data-value="to top left"] {
-  top: 10px;
-  left: 10px;
-  border-left: 2px solid rgba(15, 114, 207, 0.8);
-  border-top: 2px solid rgba(15, 114, 207, 0.8);
-}
-.csseditor .predefined-angluar-group button[data-value="to top left"]:after {
-  border-top: 2px solid rgba(15, 114, 207, 0.8);
-  border-left: 2px solid rgba(15, 114, 207, 0.8);
-  top: -8px;
-  left: -8px;
-}
-.csseditor .predefined-angluar-group button[data-value=top] {
-  top: 10px;
-  left: 50%;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
-  border-top: 2px solid rgba(15, 114, 207, 0.8);
-}
-.csseditor .predefined-angluar-group button[data-value=top]:after {
-  border-top: 2px solid rgba(15, 114, 207, 0.8);
-  top: -8px;
-  left: 50%;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
-}
-.csseditor .predefined-angluar-group button[data-value=right] {
-  top: 50%;
-  right: 10px;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
-  border-right: 2px solid rgba(15, 114, 207, 0.8);
-}
-.csseditor .predefined-angluar-group button[data-value=right]:after {
-  border-right: 2px solid rgba(15, 114, 207, 0.8);
-  top: 50%;
-  right: -8px;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
-}
-.csseditor .predefined-angluar-group button[data-value=bottom] {
-  bottom: 10px;
-  left: 50%;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
-  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
-}
-.csseditor .predefined-angluar-group button[data-value=bottom]:after {
-  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
-  left: 50%;
-  bottom: -8px;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
-}
-.csseditor .predefined-angluar-group button[data-value=left] {
-  top: 50%;
-  left: 10px;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
-  border-left: 2px solid rgba(15, 114, 207, 0.8);
-}
-.csseditor .predefined-angluar-group button[data-value=left]:after {
-  border-left: 2px solid rgba(15, 114, 207, 0.8);
-  top: 50%;
-  left: -8px;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
-}
-.csseditor .predefined-radial-gradient-angle {
-  position: absolute;
-  left: 0px;
-  right: 0px;
-  top: 0px;
-  height: 30px;
-}
-.csseditor .predefined-radial-gradient-angle select,
-.csseditor .predefined-radial-gradient-angle button {
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  border: 0px;
-  vertical-align: middle;
-  display: inline-block;
-  outline: none;
-}
-.csseditor .predefined-radial-gradient-angle button {
-  width: 30px;
-  height: 30px;
-  position: relative;
-  outline: none;
-  cursor: pointer;
-}
-.csseditor .predefined-radial-gradient-angle button .circle {
-  display: inline-block;
-  border-radius: 50px;
-  background-color: rgba(51, 51, 51, 0.753);
-  border: 0px;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  height: 10px;
-  width: 10px;
-  -webkit-transform: translateX(-50%) translateY(-50%);
-          transform: translateX(-50%) translateY(-50%);
-}
-.csseditor .background-resizer {
-  position: absolute;
-  display: none;
-  bottom: 24px;
-  top: 24px;
-  right: 24px;
-  left: 24px;
-  background-color: rgba(255, 255, 255, 0.1);
-}
-.csseditor .background-resizer .drag-pointer {
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  cursor: pointer;
-  -webkit-transform: translateX(-50%) translateY(-50%);
-          transform: translateX(-50%) translateY(-50%);
-  border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.8);
-  box-shadow: 0 0 2px 0px rgba(0, 0, 0, 0.32);
-}
-.csseditor .background-resizer .background-rect {
-  position: absolute;
-  cursor: pointer;
-}
-.csseditor .predefined-background-position {
-  display: none;
-  text-align: center;
-  position: absolute;
-  bottom: 0px;
-  width: 100%;
-  height: 100%;
-  right: 0px;
-  background-color: rgba(0, 0, 0, 0.2);
-  overflow: hidden;
-}
-.csseditor .predefined-background-position.radial-position {
-  top: 30px;
-  height: auto;
-}
-.csseditor .predefined-background-position button {
-  padding: 0px;
-  margin: 1px;
-  background-color: transparent;
-  border: 0px;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  outline: none;
-  cursor: pointer;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  position: absolute;
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  pointer-events: all;
-  /* linear */
-  /* radial */
-}
-.csseditor .predefined-background-position button:hover {
-  border-color: rgba(0, 0, 0, 0.2);
-}
-.csseditor .predefined-background-position button:hover:after {
-  border-color: rgba(0, 0, 0, 0.2);
-}
-.csseditor .predefined-background-position button:after {
-  content: "";
-  position: absolute;
-  display: inline-block;
-  width: 15px;
-  height: 15px;
-}
-.csseditor .predefined-background-position button[data-value="to top"] {
-  top: 10px;
-  left: 50%;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
-  border-top: 2px solid rgba(15, 114, 207, 0.8);
-}
-.csseditor .predefined-background-position button[data-value="to top"]:after {
-  border-top: 2px solid rgba(15, 114, 207, 0.8);
-  top: -8px;
-  left: 50%;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
-}
-.csseditor .predefined-background-position button[data-value="to top right"] {
-  top: 10px;
-  right: 10px;
-  border-top: 2px solid rgba(15, 114, 207, 0.8);
-  border-right: 2px solid rgba(15, 114, 207, 0.8);
-}
-.csseditor .predefined-background-position button[data-value="to top right"]:after {
-  border-top: 2px solid rgba(15, 114, 207, 0.8);
-  border-right: 2px solid rgba(15, 114, 207, 0.8);
-  top: -8px;
-  right: -8px;
-}
-.csseditor .predefined-background-position button[data-value="to right"] {
-  top: 50%;
-  right: 10px;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
-  border-right: 2px solid rgba(15, 114, 207, 0.8);
-}
-.csseditor .predefined-background-position button[data-value="to right"]:after {
-  border-right: 2px solid rgba(15, 114, 207, 0.8);
-  top: 50%;
-  right: -8px;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
-}
-.csseditor .predefined-background-position button[data-value="to bottom right"] {
-  bottom: 10px;
-  right: 10px;
-  border-right: 2px solid rgba(15, 114, 207, 0.8);
-  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
-}
-.csseditor .predefined-background-position button[data-value="to bottom right"]:after {
-  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
-  border-right: 2px solid rgba(15, 114, 207, 0.8);
-  bottom: -8px;
-  right: -8px;
-}
-.csseditor .predefined-background-position button[data-value="to bottom"] {
-  bottom: 10px;
-  left: 50%;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
-  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
-}
-.csseditor .predefined-background-position button[data-value="to bottom"]:after {
-  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
-  left: 50%;
-  bottom: -8px;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
-}
-.csseditor .predefined-background-position button[data-value="to bottom left"] {
-  left: 10px;
-  bottom: 10px;
-  border-left: 2px solid rgba(15, 114, 207, 0.8);
-  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
-}
-.csseditor .predefined-background-position button[data-value="to bottom left"]:after {
-  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
-  border-left: 2px solid rgba(15, 114, 207, 0.8);
-  bottom: -8px;
-  left: -8px;
-}
-.csseditor .predefined-background-position button[data-value="to left"] {
-  top: 50%;
-  left: 10px;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
-  border-left: 2px solid rgba(15, 114, 207, 0.8);
-}
-.csseditor .predefined-background-position button[data-value="to left"]:after {
-  border-left: 2px solid rgba(15, 114, 207, 0.8);
-  top: 50%;
-  left: -8px;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
-}
-.csseditor .predefined-background-position button[data-value="to top left"] {
-  top: 10px;
-  left: 10px;
-  border-left: 2px solid rgba(15, 114, 207, 0.8);
-  border-top: 2px solid rgba(15, 114, 207, 0.8);
-}
-.csseditor .predefined-background-position button[data-value="to top left"]:after {
-  border-top: 2px solid rgba(15, 114, 207, 0.8);
-  border-left: 2px solid rgba(15, 114, 207, 0.8);
-  top: -8px;
-  left: -8px;
-}
-.csseditor .predefined-background-position button[data-value=top] {
-  top: 10px;
-  left: 50%;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
-  border-top: 2px solid rgba(15, 114, 207, 0.8);
-}
-.csseditor .predefined-background-position button[data-value=top]:after {
-  border-top: 2px solid rgba(15, 114, 207, 0.8);
-  top: -8px;
-  left: 50%;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
-}
-.csseditor .predefined-background-position button[data-value=right] {
-  top: 50%;
-  right: 10px;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
-  border-right: 2px solid rgba(15, 114, 207, 0.8);
-}
-.csseditor .predefined-background-position button[data-value=right]:after {
-  border-right: 2px solid rgba(15, 114, 207, 0.8);
-  top: 50%;
-  right: -8px;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
-}
-.csseditor .predefined-background-position button[data-value=bottom] {
-  bottom: 10px;
-  left: 50%;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
-  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
-}
-.csseditor .predefined-background-position button[data-value=bottom]:after {
-  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
-  left: 50%;
-  bottom: -8px;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
-}
-.csseditor .predefined-background-position button[data-value=left] {
-  top: 50%;
-  left: 10px;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
-  border-left: 2px solid rgba(15, 114, 207, 0.8);
-}
-.csseditor .predefined-background-position button[data-value=left]:after {
-  border-left: 2px solid rgba(15, 114, 207, 0.8);
-  top: 50%;
-  left: -8px;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
-}
-.csseditor .predefined-radial-gradient-angle {
-  position: absolute;
-  left: 0px;
-  right: 0px;
-  top: 0px;
-  height: 30px;
-}
-.csseditor .predefined-radial-gradient-angle select, .csseditor .predefined-radial-gradient-angle button {
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  border: 0px;
-  vertical-align: middle;
-  display: inline-block;
-  outline: none;
-}
-.csseditor .predefined-radial-gradient-angle button {
-  width: 30px;
-  height: 30px;
-  position: relative;
-  outline: none;
-  cursor: pointer;
-}
-.csseditor .predefined-radial-gradient-angle button .circle {
-  display: inline-block;
-  border-radius: 50px;
-  background-color: rgba(51, 51, 51, 0.753);
-  border: 0px;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  height: 10px;
-  width: 10px;
-  -webkit-transform: translateX(-50%) translateY(-50%);
-          transform: translateX(-50%) translateY(-50%);
-}
-.csseditor .predefined-perspective-origin-position {
-  display: none;
-  text-align: center;
-  position: absolute;
-  bottom: 0px;
-  width: 100%;
-  height: 100%;
-  right: 0px;
-  background-color: rgba(0, 0, 0, 0.2);
-  overflow: hidden;
-}
-.csseditor .predefined-perspective-origin-position button {
-  padding: 0px;
-  margin: 1px;
-  background-color: transparent;
-  border: 0px;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  outline: none;
-  cursor: pointer;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  position: absolute;
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  pointer-events: all;
-  /* linear */
-  /* radial */
-}
-.csseditor .predefined-perspective-origin-position button:hover {
-  border-color: rgba(0, 0, 0, 0.2);
-}
-.csseditor .predefined-perspective-origin-position button:hover:after {
-  border-color: rgba(0, 0, 0, 0.2);
-}
-.csseditor .predefined-perspective-origin-position button:after {
-  content: "";
-  position: absolute;
-  display: inline-block;
-  width: 15px;
-  height: 15px;
-}
-.csseditor .predefined-perspective-origin-position button[data-value="to top"] {
-  top: 10px;
-  left: 50%;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
-  border-top: 2px solid rgba(15, 114, 207, 0.8);
-}
-.csseditor .predefined-perspective-origin-position button[data-value="to top"]:after {
-  border-top: 2px solid rgba(15, 114, 207, 0.8);
-  top: -8px;
-  left: 50%;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
-}
-.csseditor .predefined-perspective-origin-position button[data-value="to top right"] {
-  top: 10px;
-  right: 10px;
-  border-top: 2px solid rgba(15, 114, 207, 0.8);
-  border-right: 2px solid rgba(15, 114, 207, 0.8);
-}
-.csseditor .predefined-perspective-origin-position button[data-value="to top right"]:after {
-  border-top: 2px solid rgba(15, 114, 207, 0.8);
-  border-right: 2px solid rgba(15, 114, 207, 0.8);
-  top: -8px;
-  right: -8px;
-}
-.csseditor .predefined-perspective-origin-position button[data-value="to right"] {
-  top: 50%;
-  right: 10px;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
-  border-right: 2px solid rgba(15, 114, 207, 0.8);
-}
-.csseditor .predefined-perspective-origin-position button[data-value="to right"]:after {
-  border-right: 2px solid rgba(15, 114, 207, 0.8);
-  top: 50%;
-  right: -8px;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
-}
-.csseditor .predefined-perspective-origin-position button[data-value="to bottom right"] {
-  bottom: 10px;
-  right: 10px;
-  border-right: 2px solid rgba(15, 114, 207, 0.8);
-  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
-}
-.csseditor .predefined-perspective-origin-position button[data-value="to bottom right"]:after {
-  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
-  border-right: 2px solid rgba(15, 114, 207, 0.8);
-  bottom: -8px;
-  right: -8px;
-}
-.csseditor .predefined-perspective-origin-position button[data-value="to bottom"] {
-  bottom: 10px;
-  left: 50%;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
-  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
-}
-.csseditor .predefined-perspective-origin-position button[data-value="to bottom"]:after {
-  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
-  left: 50%;
-  bottom: -8px;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
-}
-.csseditor .predefined-perspective-origin-position button[data-value="to bottom left"] {
-  left: 10px;
-  bottom: 10px;
-  border-left: 2px solid rgba(15, 114, 207, 0.8);
-  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
-}
-.csseditor .predefined-perspective-origin-position button[data-value="to bottom left"]:after {
-  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
-  border-left: 2px solid rgba(15, 114, 207, 0.8);
-  bottom: -8px;
-  left: -8px;
-}
-.csseditor .predefined-perspective-origin-position button[data-value="to left"] {
-  top: 50%;
-  left: 10px;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
-  border-left: 2px solid rgba(15, 114, 207, 0.8);
-}
-.csseditor .predefined-perspective-origin-position button[data-value="to left"]:after {
-  border-left: 2px solid rgba(15, 114, 207, 0.8);
-  top: 50%;
-  left: -8px;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
-}
-.csseditor .predefined-perspective-origin-position button[data-value="to top left"] {
-  top: 10px;
-  left: 10px;
-  border-left: 2px solid rgba(15, 114, 207, 0.8);
-  border-top: 2px solid rgba(15, 114, 207, 0.8);
-}
-.csseditor .predefined-perspective-origin-position button[data-value="to top left"]:after {
-  border-top: 2px solid rgba(15, 114, 207, 0.8);
-  border-left: 2px solid rgba(15, 114, 207, 0.8);
-  top: -8px;
-  left: -8px;
-}
-.csseditor .predefined-perspective-origin-position button[data-value=top] {
-  top: 10px;
-  left: 50%;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
-  border-top: 2px solid rgba(15, 114, 207, 0.8);
-}
-.csseditor .predefined-perspective-origin-position button[data-value=top]:after {
-  border-top: 2px solid rgba(15, 114, 207, 0.8);
-  top: -8px;
-  left: 50%;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
-}
-.csseditor .predefined-perspective-origin-position button[data-value=right] {
-  top: 50%;
-  right: 10px;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
-  border-right: 2px solid rgba(15, 114, 207, 0.8);
-}
-.csseditor .predefined-perspective-origin-position button[data-value=right]:after {
-  border-right: 2px solid rgba(15, 114, 207, 0.8);
-  top: 50%;
-  right: -8px;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
-}
-.csseditor .predefined-perspective-origin-position button[data-value=bottom] {
-  bottom: 10px;
-  left: 50%;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
-  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
-}
-.csseditor .predefined-perspective-origin-position button[data-value=bottom]:after {
-  border-bottom: 2px solid rgba(15, 114, 207, 0.8);
-  left: 50%;
-  bottom: -8px;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
-}
-.csseditor .predefined-perspective-origin-position button[data-value=left] {
-  top: 50%;
-  left: 10px;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
-  border-left: 2px solid rgba(15, 114, 207, 0.8);
-}
-.csseditor .predefined-perspective-origin-position button[data-value=left]:after {
-  border-left: 2px solid rgba(15, 114, 207, 0.8);
-  top: 50%;
-  left: -8px;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
 }
 .csseditor .property {
   padding: 0px;
@@ -4139,6 +3041,53 @@ html, body {
           transform: translateX(-50%);
   white-space: nowrap;
 }
+.csseditor .selector-list {
+  grid-template-columns: 1fr !important;
+}
+.csseditor .selector-list .selector-item {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-column-gap: 4px;
+  border: 1px solid #cccccc;
+  margin-bottom: 5px;
+  padding: 5px;
+  cursor: pointer;
+  height: 30px;
+}
+.csseditor .selector-list .selector-item.selected {
+  background-color: rgba(204, 204, 204, 0.5);
+}
+.csseditor .selector-list .selector-item .title {
+  display: grid;
+  grid-template-columns: 1fr 20px;
+  height: 20px;
+}
+.csseditor .selector-list .selector-item .title .name {
+  padding: 2px 0px;
+}
+.csseditor .selector-list .selector-item .title .tools {
+  vertical-align: middle;
+  text-align: right;
+}
+.csseditor .selector-list .selector-item .title .tools button {
+  vertical-align: middle;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  border: 0px;
+  padding: 0px;
+  vertical-align: middle;
+  cursor: pointer;
+  outline: none;
+  font-size: 12px;
+  line-height: 0;
+}
+.csseditor .selector-list .selector-item .title .tools button svg {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
 .csseditor .color-view-editor {
   display: grid;
   height: 24px;
@@ -4266,6 +3215,87 @@ html, body {
 .csseditor .range-editor[data-selected-type=range] .range-editor-type[data-type=range] {
   display: inline-block;
 }
+.csseditor .number-range-editor {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-column-gap: 4px;
+}
+.csseditor .number-range-editor.has-label {
+  grid-template-columns: 40px 1fr;
+  grid-column-gap: 2px;
+}
+.csseditor .number-range-editor.has-label.is-removable {
+  grid-template-columns: 20px 1fr 16px;
+}
+.csseditor .number-range-editor.has-label label {
+  text-align: right;
+  vertical-align: middle;
+  padding: 2px 4px;
+  box-sizing: border-box;
+}
+.csseditor .number-range-editor.has-label.block {
+  display: block;
+}
+.csseditor .number-range-editor.has-label.block label {
+  display: block;
+  color: rgba(0, 0, 0, 0.7);
+}
+.csseditor .number-range-editor.is-removable .remove {
+  display: inline-block;
+}
+.csseditor .number-range-editor button {
+  vertical-align: middle;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  width: 16px;
+  height: 16px;
+  outline: none;
+  padding: 0px;
+  border: 0px;
+  display: none;
+  cursor: pointer;
+}
+.csseditor .number-range-editor button svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor .number-range-editor .range-editor-type {
+  vertical-align: middle;
+}
+.csseditor .number-range-editor .range-editor-type .area {
+  display: grid;
+  grid-template-columns: 1fr 40px;
+  grid-column-gap: 2px;
+  font-size: 13px;
+}
+.csseditor .number-range-editor .range-editor-type .area span {
+  padding: 1px;
+  box-sizing: border-box;
+  vertical-align: middle;
+}
+.csseditor .number-range-editor .range-editor-type .area input, .csseditor .number-range-editor .range-editor-type .area select {
+  width: 100%;
+}
+.csseditor .text-editor {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-column-gap: 4px;
+}
+.csseditor .text-editor.has-label {
+  grid-template-columns: 60px 1fr;
+  grid-column-gap: 2px;
+}
+.csseditor .text-editor.has-label label {
+  text-align: right;
+  vertical-align: middle;
+  padding: 2px 4px;
+  box-sizing: border-box;
+}
+.csseditor .text-editor input[type=text] {
+  border: 1px solid #cccccc;
+}
 .csseditor .select-editor {
   display: grid;
   grid-template-columns: 1fr;
@@ -4289,23 +3319,25 @@ html, body {
   border-radius: 0px;
   background-color: transparent;
 }
-.csseditor .offset-property-editor {
+.csseditor .css-property-editor {
   margin-top: 10px;
   margin-bottom: 5px;
+  display: grid;
+  grid-template-columns: 1fr !important;
 }
-.csseditor .offset-property-editor .title {
+.csseditor .css-property-editor .title {
   display: grid;
   grid-template-columns: 1fr 2fr;
   grid-column-gap: 2px;
 }
-.csseditor .offset-property-editor .title .tools {
+.csseditor .css-property-editor .title .tools {
   text-align: right;
 }
-.csseditor .offset-property-editor .title .tools select {
+.csseditor .css-property-editor .title .tools select {
   width: 130px !important;
   display: inline-block;
 }
-.csseditor .offset-property-editor .title .tools button {
+.csseditor .css-property-editor .title .tools button {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
@@ -4316,9 +3348,50 @@ html, body {
   padding: 0px;
   vertical-align: middle;
 }
-.csseditor .offset-property-editor .title .tools button svg {
+.csseditor .css-property-editor .title .tools button svg {
   width: 16px;
   height: 16px;
+}
+.csseditor .css-property-editor .css-property-list {
+  max-height: 300px;
+  overflow: auto;
+}
+.csseditor .css-property-editor .css-property-item {
+  box-sizing: border-box;
+  padding: 4px 0px;
+  margin-top: 2px;
+}
+.csseditor .css-property-editor .css-property-item .title {
+  grid-template-columns: 1fr 30px;
+}
+.csseditor .css-property-editor .css-property-item .value-editor {
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  padding: 2px;
+}
+.csseditor .css-property-editor .css-property-item .tools button {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  outline: none;
+  cursor: pointer;
+  border: 0px;
+}
+.csseditor .css-property-editor .css-property-item .tools button svg {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+.csseditor .css-property-editor .input {
+  vertical-align: middle;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+}
+.csseditor .css-property-editor .input.grid-1 {
+  grid-template-columns: 1fr;
+}
+.csseditor .css-property-editor .input.grid-2 {
+  grid-template-columns: 3fr 1fr;
 }
 .csseditor .background-image-editor .label {
   height: 20px;
@@ -5435,7 +4508,15 @@ html, body {
   cursor: pointer;
 }
 .csseditor .svg-property-editor .svg-property-list .svg-property-item .title .type {
-  padding: 2px 5px;
+  padding: 3px 5px;
+  text-align: center;
+  box-sizing: border-box;
+  text-transform: uppercase;
+}
+.csseditor .svg-property-editor .svg-property-list .svg-property-item .title .type[data-type=filter] {
+  border-radius: 5px;
+  background-color: blue;
+  color: white;
 }
 .csseditor .svg-property-editor .svg-property-list .svg-property-item .title label {
   font-size: 12px;
@@ -5462,6 +4543,108 @@ html, body {
 .csseditor .svg-property-editor .svg-property-list .svg-property-item .title .menu button svg {
   width: 100%;
   height: 100%;
+}
+.csseditor .svg-filter-editor .label {
+  height: 20px;
+  margin-top: 2px;
+}
+.csseditor .svg-filter-editor .label label {
+  font-size: 12px;
+  padding-left: 5px;
+  vertical-align: middle;
+  text-shadow: 2px 2px 5px #cccccc;
+}
+.csseditor .svg-filter-editor .tools {
+  vertical-align: middle;
+  text-align: right;
+  float: right;
+}
+.csseditor .svg-filter-editor .tools select {
+  width: 100px !important;
+  display: inline-block;
+}
+.csseditor .svg-filter-editor .tools button {
+  vertical-align: middle;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  border: 0px;
+  padding: 0px;
+  font-size: 16px;
+  vertical-align: middle;
+  cursor: pointer;
+  outline: none;
+  font-size: 12px;
+}
+.csseditor .svg-filter-editor .tools button svg {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+.csseditor .svg-filter-editor .filter-list {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+}
+.csseditor .svg-filter-editor .filter-list .filter-item {
+  display: block;
+  border: 1px solid #cccccc;
+  border-bottom: 0px;
+  box-sizing: border-box;
+}
+.csseditor .svg-filter-editor .filter-list .filter-item:last-child {
+  border-bottom: 1px solid #cccccc;
+}
+.csseditor .svg-filter-editor .filter-list .filter-item .title {
+  display: grid;
+  grid-template-columns: 1fr 30px;
+}
+.csseditor .svg-filter-editor .filter-list .filter-item .title label {
+  font-size: 12px;
+  padding: 2px 5px;
+  box-sizing: border-box;
+}
+.csseditor .svg-filter-editor .filter-list .filter-item .title .filter-menu {
+  text-align: right;
+}
+.csseditor .svg-filter-editor .filter-list .filter-item .title .filter-menu button {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border: 0px;
+  background-color: transparent;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  box-sizing: border-box;
+  padding: 0px;
+  cursor: pointer;
+}
+.csseditor .svg-filter-editor .filter-list .filter-item .title .filter-menu button svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor .svg-filter-editor .filter-list .filter-item .filter-ui {
+  display: grid;
+  grid-template-columns: 1fr;
+  margin-bottom: 2px;
+}
+.csseditor .svg-filter-editor .filter-list .filter-item .filter-ui.drop-shadow {
+  grid-template-columns: 50px 1fr;
+  grid-column-gap: 1px;
+}
+.csseditor .svg-filter-editor .filter-list .filter-item .filter-ui.drop-shadow label {
+  font-size: 10px;
+}
+.csseditor .svg-filter-editor .filter-list .filter-item .filter-ui.drop-shadow-color {
+  grid-template-columns: 50px 1fr;
+  grid-column-gap: 2px;
+}
+.csseditor .svg-filter-editor .filter-list .filter-item .filter-ui.drop-shadow-color label {
+  font-size: 12px;
+}
+.csseditor .svg-filter-editor .filter-list .filter-item .filter-ui input[type=range] {
+  width: 90%;
 }
 .csseditor .fill-picker {
   position: fixed;
@@ -6159,6 +5342,16 @@ html, body {
 }
 .csseditor .popup.keyframe-popup .box .input.grid-2 {
   grid-template-columns: 3fr 1fr;
+}
+.csseditor .popup.selector-popup {
+  padding: 7px;
+  width: 250px;
+  height: auto;
+}
+.csseditor .popup.selector-popup .box .name {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  grid-column-gap: 2px;
 }
 .csseditor .popup.clippath-popup {
   padding: 7px;

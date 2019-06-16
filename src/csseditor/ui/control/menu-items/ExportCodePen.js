@@ -26,9 +26,11 @@ export default class ExportCodePen extends UIElement {
         JSON.stringify({
           html: `
             <div id="sample"></div>
+            ${current.toSVGString() ? `
             <svg width="0" height="0">
               ${current.toSVGString()}
-            </svg>
+            </svg>            
+            `: ''}
           `,
           css: this.generate(current)
         })
@@ -41,21 +43,26 @@ export default class ExportCodePen extends UIElement {
 
 
   generate(current) {
-    var css = current.toCSS(), keyframeString = current.toKeyframeString(), rootVariable = current.toRootVariableCSS()
-    var results = `:root {
+    var css = current.toCSS(), keyframeString = current.toKeyframeString(), rootVariable = current.toRootVariableCSS();
+    var selectorString = current.toSelectorString('#sample')
+    var results = `
+:root {
   ${CSS_TO_STRING(rootVariable)}
 }
 
 /* element */
 #sample { 
 ${keyMap(css, (key, value) => {
+  if (!key) return '';
   return `  ${key}: ${value}; ${NEW_LINE}`
 }).join(EMPTY_STRING)}
 }  
 
-/* keyframe */
-${keyframeString}`
+${selectorString}
 
+${keyframeString ? 
+`/* keyframe */
+${keyframeString}` : ''}`
     return results
   }
 }

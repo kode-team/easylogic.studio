@@ -62,6 +62,7 @@ export default class CSSEditor extends UIElement {
         <KeyframePopup />
         <ClipPathPopup />
         <SVGPropertyPopup />
+        <SelectorPopup />
       </div>
     `;
   }

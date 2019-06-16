@@ -6,7 +6,7 @@ export default class SelectEditor extends UIElement {
 
     initState() {
         var splitChar = this.props.split || ',';
-        var options = (this.props.options || '').split(splitChar);
+        var options = (this.props.options || '').split(splitChar).map(it => it.trim());
 
         var value = this.props.value;
 
@@ -47,6 +47,9 @@ export default class SelectEditor extends UIElement {
 
             if (label === '') {
                 label = '< none-value >'
+            } else if (label === '-') {
+                label = '----------'
+                value = ''; 
             }
 
             return `<option ${selected} value="${value}">${label}</option>`

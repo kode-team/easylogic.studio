@@ -258,7 +258,8 @@ export default class FillPicker extends UIElement {
       .show();
 
     this.selectTabContent(this.state.image.type, this.state);
-    // this.emit("hidePicker");
+    this.emit("hidePicker");
+    this.emit('hidePropertyPopup');
   }
 
   [EVENT("hideFillPicker", "hidePicker", 'hidePropertyPopup', CHANGE_SELECTION)]() {

@@ -6,8 +6,10 @@ import KeyframePopup from "./KeyframePopup";
 import ClipPathPopup from "./ClipPathPopup";
 import TransitionPropertyPopup from "./TransitionPropertyPopup";
 import SVGPropertyPopup from "./SVGPropertyPopup";
+import SelectorPopup from "./SelectorPopup";
 
 export default {
+  SelectorPopup,
   SVGPropertyPopup,
   ClipPathPopup,
   KeyframePopup,

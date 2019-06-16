@@ -42,6 +42,7 @@ export default class ExportJSFiddle extends MenuItem {
 
   generate(current) {
     var css = current.toCSS(), keyframeString = current.toKeyframeString(), rootVariable = current.toRootVariableCSS()
+    var selectorString = current.toSelectorString('#sample')
     var results = `:root {
   ${CSS_TO_STRING(rootVariable)}
 }
@@ -52,6 +53,8 @@ ${keyMap(css, (key, value) => {
   return `  ${key}: ${value}; ${NEW_LINE}`
 }).join(EMPTY_STRING)}
 }  
+
+${selectorString}
 
 /* keyframe */
 ${keyframeString}

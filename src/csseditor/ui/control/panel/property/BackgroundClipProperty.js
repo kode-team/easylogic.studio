@@ -20,7 +20,7 @@ const clip_list = [
 export default class BackgroundClipProperty extends BaseProperty {
   
   getTitle() {
-    return "Mix Blend";
+    return "Background Clip";
   }
 
   getTools() {

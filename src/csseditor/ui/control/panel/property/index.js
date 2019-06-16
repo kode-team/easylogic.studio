@@ -31,9 +31,11 @@ import TransformOriginProperty from "./TransformOriginProperty";
 import OpacityProperty from "./OpacityProperty";
 import BackgroundClipProperty from "./BackgroundClipProperty";
 import SVGProperty from "./SVGProperty";
+import SelectorProperty from "./SelectorProperty";
 
  
 export default {
+  SelectorProperty,
   SVGProperty,
   BackgroundClipProperty,
   OpacityProperty,

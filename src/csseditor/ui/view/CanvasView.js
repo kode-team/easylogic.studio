@@ -60,7 +60,7 @@ export default class CanvasView extends UIElement {
     }
   }
 
-  generate(css, keyframeString, rootVariable, content, svgString) {
+  generate({css, keyframeString, rootVariable, content, SVGString, selectorString}) {
 
     if (this.refs.$canvas.text() != content) {
       this.refs.$canvas.text(content);
@@ -76,11 +76,13 @@ export default class CanvasView extends UIElement {
         ${CSS_TO_STRING(css)}; 
       }  
 
+      ${selectorString}
+
       /* keyframe */
       ${keyframeString}
     `)
 
-    this.refs.$svg.html(svgString)
+    this.refs.$svg.html(SVGString)
 
 
     this.refs.$lock.css({
@@ -105,21 +107,9 @@ export default class CanvasView extends UIElement {
     var current = editor.selection.current;
     if (current) {
       if (this.props.embed) {
-        this.parser.generate(
-          current.toEmbedCSS(), 
-          current.toKeyframeString(), 
-          current.toRootVariableCSS(), 
-          current.content,
-          current.toSVGString()
-        );
+        this.parser.generate(current.generateEmbed());
       } else {
-        this.generate(
-          current.toCSS(), 
-          current.toKeyframeString(), 
-          current.toRootVariableCSS(), 
-          current.content,
-          current.toSVGString()
-        );
+        this.generate(current.generateView('.csseditor .page-canvas'));
       }
     }
   }

@@ -12,7 +12,7 @@ import VarEditor from "./VarEditor";
 import TransformEditor from "./TransformEditor";
 
 
-export default class OffsetPropertyEditor extends UIElement {
+export default class CSSPropertyEditor extends UIElement {
 
   components() {
     return {
@@ -38,13 +38,15 @@ export default class OffsetPropertyEditor extends UIElement {
   }
 
   modifyProperty () {
-    this.emit("changeOffsetPropertyEditor", this.state.properties);  
+
+    this.parent.trigger(this.props.onchange, this.state.properties);
+    // this.emit("changeCSSPropertyEditor", this.state.properties);  
   }
 
 
   template() {
     return html`
-      <div class='offset-property-editor'>
+      <div class='css-property-editor'>
         <div class='title' >
           <label>Properties</label>
           <div class='tools'>
@@ -52,7 +54,7 @@ export default class OffsetPropertyEditor extends UIElement {
             <button type="button" ref='$addProperty'>${icon.add}</button>
           </div>
         </div>
-        <div class='input grid-1 keyframe-property-list' ref='$property'></div>
+        <div class='input grid-1 css-property-list' ref='$property'></div>
       </div>
     `
   }  
@@ -290,7 +292,7 @@ export default class OffsetPropertyEditor extends UIElement {
   [LOAD('$property')] () {
     return this.state.properties.map( (it, index) => {
       return `
-        <div class='keyframe-property-item'>
+        <div class='css-property-item'>
           <div class='title'>
             <label>${it.key}</label>
             <div class='tools'>
@@ -307,10 +309,9 @@ export default class OffsetPropertyEditor extends UIElement {
 
   // 개별 속성을 변경할 때  state 로 저장 하기 
 
-  [EVENT("showOffsetPropertyEditor")](properties = []) {
+  [EVENT("showCSSPropertyEditor")](properties = []) {
     this.setState({ properties });
     this.refresh();
-
   }
 
   [CLICK('$property .remove')] (e) {

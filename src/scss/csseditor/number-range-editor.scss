@@ -1,0 +1,74 @@
+.number-range-editor {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-column-gap: 4px;
+
+    &.has-label {
+        grid-template-columns: 40px 1fr;
+        grid-column-gap: 2px;
+        &.is-removable {
+            grid-template-columns: 20px 1fr 16px;
+        }
+
+        label {
+            text-align: right;
+            vertical-align: middle;
+            padding:2px 4px;
+            box-sizing: border-box;
+        }
+
+        &.block {
+            display: block;
+
+            label {
+                display: block; 
+                color: rgba(0, 0, 0, 0.7);
+            }
+        }
+    }
+
+    &.is-removable {
+        .remove {
+            display: inline-block;
+        }
+    }
+
+    button {
+        vertical-align: middle;
+        appearance: none;
+        background-color: transparent;
+        width: 16px;
+        height: 16px;
+        outline: none;
+        padding: 0px;
+        border:0px;
+        display: none;
+        cursor: pointer;
+        svg {
+            width: 100%;
+            height: 100%;
+
+        }
+    }
+
+    .range-editor-type {
+        vertical-align: middle;
+
+        .area {
+            display: grid; 
+            grid-template-columns: 1fr 40px;
+            grid-column-gap: 2px;
+            font-size: 13px;
+            
+            span {
+                padding: 1px;
+                box-sizing: border-box;
+                vertical-align: middle;
+            }
+
+            input,select {
+                width: 100%;
+            }
+        }
+    }
+}

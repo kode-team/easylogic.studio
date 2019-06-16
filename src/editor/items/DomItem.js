@@ -1,4 +1,4 @@
-import { NEW_LINE_2, WHITE_STRING, NEW_LINE } from "../../util/css/types";
+import { NEW_LINE_2, NEW_LINE } from "../../util/css/types";
 import { CSS_TO_STRING, CSS_SORTING } from "../../util/css/make";
 import { Length } from "../unit/Length";
 import { Display } from "../css-property/Display";
@@ -13,7 +13,7 @@ import { BorderImage } from "../css-property/BorderImage";
 import { Animation } from "../css-property/Animation";
 import { Transition } from "../css-property/Transition";
 import { Keyframe } from "../css-property/Keyframe";
-
+import { Selector } from "../css-property/Selector";
 
 export class DomItem extends GroupItem {
   getDefaultObject(obj = {}) {
@@ -55,6 +55,7 @@ export class DomItem extends GroupItem {
       transitions: [],
       // 'keyframe': 'sample 0% --aaa 100px | sample 100% width 200px | sample2 0.5% background-image background-image:linear-gradient(to right, black, yellow 100%)',
       keyframes: [],
+      selectors: [],
       svg: [],
       // display: Display.parse({ display: "block" }),      
       content: "",
@@ -88,6 +89,10 @@ export class DomItem extends GroupItem {
     return keyframe;
   }      
 
+  addSelector(selector) {
+    this.json.selectors.push(selector);
+    return selector;
+  }      
 
   createAnimation(data = {}) {
     return this.addAnimation(
@@ -101,6 +106,16 @@ export class DomItem extends GroupItem {
   createKeyframe(data = {}) {
     return this.addKeyframe(
       new Keyframe({
+        checked: true,
+        ...data
+      })
+    );
+  }  
+  
+
+  createSelector(data = {}) {
+    return this.addSelector(
+      new Selector({
         checked: true,
         ...data
       })
@@ -126,6 +141,10 @@ export class DomItem extends GroupItem {
 
   removeKeyframe(removeIndex) {
     this.removePropertyList(this.json.keyframes, removeIndex);
+  }  
+  
+  removeSelector(removeIndex) {
+    this.removePropertyList(this.json.selectors, removeIndex);
   }    
 
   removeTransition(removeIndex) {
@@ -152,8 +171,8 @@ export class DomItem extends GroupItem {
 
   sortKeyframe(startIndex, targetIndex) {
     this.sortItem(this.json.keyframes, startIndex, targetIndex);
-  }    
-
+  }  
+  
   updateAnimation(index, data = {}) {
     this.json.animations[+index].reset(data);
   }  
@@ -166,6 +185,10 @@ export class DomItem extends GroupItem {
   updateKeyframe(index, data = {}) {
     this.json.keyframes[+index].reset(data);
   }      
+
+  updateSelector(index, data = {}) {
+    this.json.selectors[+index].reset(data);
+  }        
 
   setSize(data) {
     this.reset(data);
@@ -516,8 +539,14 @@ export class DomItem extends GroupItem {
    */
   toKeyframeString (isAnimate = false) {
     return this.json.keyframes
-                      .map(keyframe => keyframe.toString(isAnimate))
-                      .join(NEW_LINE_2)
+              .map(keyframe => keyframe.toString(isAnimate))
+              .join(NEW_LINE_2)
+  }
+
+  toSelectorString (prefix = '') {
+    return this.json.selectors
+              .map(selector => selector.toString(prefix))
+              .join(NEW_LINE_2)
   }
  
   toSVGString () {
@@ -527,5 +556,30 @@ export class DomItem extends GroupItem {
   ${s.value.join(NEW_LINE)}
 </${s.type}>`
     }).join(NEW_LINE_2)
+  }
+
+
+
+
+  generateEmbed () {
+    return {
+      css: this.toEmbedCSS(), 
+      keyframeString: this.toKeyframeString(), 
+      rootVariable: this.toRootVariableCSS(), 
+      content: this.json.content,
+      SVGString: this.toSVGString(),
+      selectorString: this.toSelectorString()
+    }
+  }
+
+  generateView (prefix = '') {
+    return {
+      css: this.toCSS(), 
+      keyframeString: this.toKeyframeString(), 
+      rootVariable: this.toRootVariableCSS(), 
+      content: this.json.content,
+      SVGString: this.toSVGString(),
+      selectorString: this.toSelectorString(prefix)
+    }
   }
 }

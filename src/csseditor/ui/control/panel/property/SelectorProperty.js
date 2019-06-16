@@ -13,63 +13,53 @@ import { EMPTY_STRING } from "../../../../../util/css/types";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
 import { CHANGE_ARTBOARD, CHANGE_SELECTION, CHANGE_EDITOR } from "../../../../types/event";
-import { Keyframe } from "../../../../../editor/css-property/Keyframe";
+import { Selector } from "../../../../../editor/css-property/Selector";
 
-export default class KeyFrameProperty extends BaseProperty {
+export default class SelectorProperty extends BaseProperty {
   getTitle() {
-    return "Keyframes";
+    return "Selector";
   }
   getBody() {
-    return `<div class='property-item keyframe-list' ref='$keyframeList'></div>`;
+    return `<div class='property-item selector-list' ref='$selectorList'></div>`;
   }
 
   getTools() {
     return html`
-      <button type="button" ref="$add" title="add Filter">${icon.add}</button>
+      <button type="button" ref="$add" title="add Selector">${icon.add}</button>
     `;
   }
 
-  makeKeyframeTemplate (keyframe, index) {
+  makeSelectorTemplate (selector, index) {
     index = index.toString()
     return html`
-      <div class='keyframe-item' draggable='true' ref='$keyframeIndex${index}' data-index='${index}'>
+      <div class='selector-item' draggable='true' ref='$selectorIndex${index}' data-index='${index}'>
         <div class='title'>
-          <div class='name'>${keyframe.name}</div>
+          <div class='name'>${selector.selector || '&lt;none selector&gt;'}</div>
           <div class='tools'>
-              <button type="button" class="del" data-index="${index}">
-                ${icon.remove2}
-              </button>
-          </div>
-        </div>
-        <div class='offset-list'>
-          <div class='container'>
-            ${keyframe.offsets.map(o => {
-              var title = `${o.offset} ${o.properties.map(p => p.key).join(',')}`
-              return `<div data-title='${title}' class='offset' style='left: ${o.offset}; background-color: ${o.color}'></div>`
-            })}
+              <button type="button" class="del" data-index="${index}">${icon.remove2}</button>
           </div>
         </div>
       </div>
     `
   }
 
-  [CLICK('$keyframeList .keyframe-item')] (e) {
+  [CLICK('$selectorList .selector-item')] (e) {
     var index  = +e.$delegateTarget.attr('data-index');
 
     var current = editor.selection.current;
     if (!current) return;
 
 
-    this.viewKeyframePicker(index);
+    this.viewSelectorPicker(index);
 
   }
 
-  [CLICK('$keyframeList .del') + PREVENT] (e) {
+  [CLICK('$selectorList .del') + PREVENT] (e) {
     var removeIndex = e.$delegateTarget.attr("data-index");
     var current = editor.selection.current;
     if (!current) return;
 
-    current.removeKeyframe(removeIndex);
+    current.removeSelector(removeIndex);
 
     this.emit("refreshCanvas");
 
@@ -81,37 +71,37 @@ export default class KeyFrameProperty extends BaseProperty {
   }
 
 
-  [LOAD("$keyframeList")]() {
+  [LOAD("$selectorList")]() {
     var current = editor.selection.current;
 
     if (!current) return EMPTY_STRING;
 
-    var keyframes = current.keyframe ? Keyframe.parseStyle(current) : current.keyframes;
+    var selectors = current.selector ? Selector.parseStyle(current) : current.selectors;
 
-    current.keyframe = ''
-    current.keyframes = keyframes;
+    current.selector = ''
+    current.selectors = selectors;
 
-    return keyframes.map((keyframe, index) => {
-      return this.makeKeyframeTemplate(keyframe, index);
+    return selectors.map((selector, index) => {
+      return this.makeSelectorTemplate(selector, index);
     });
   }
 
-  // keyframe-item 을 통째로  dragstart 를 걸어버리니깐
+  // selector-item 을 통째로  dragstart 를 걸어버리니깐
   // 다른 ui 를 핸들링 할 수가 없어서
   // title  에만 dragstart 거는 걸로 ok ?
-  [DRAGSTART("$keyframeList .keyframe-item .title")](e) {
+  [DRAGSTART("$selectorList .selector-item .title")](e) {
     this.startIndex = +e.$delegateTarget.attr("data-index");
   }
 
   // drop 이벤트를 걸 때 dragover 가 같이 선언되어 있어야 한다.
-  [DRAGOVER("$keyframeList .keyframe-item") + PREVENT](e) {}
+  [DRAGOVER("$selectorList .selector-item") + PREVENT](e) {}
 
-  [DROP("$keyframeList .keyframe-item") + PREVENT](e) {
+  [DROP("$selectorList .selector-item") + PREVENT](e) {
     var targetIndex = +e.$delegateTarget.attr("data-index");
     var current = editor.selection.current;
     if (!current) return;
 
-    current.sortKeyframe(this.startIndex, targetIndex);
+    current.sortSelector(this.startIndex, targetIndex);
 
     this.emit("refreshCanvas");
 
@@ -122,7 +112,7 @@ export default class KeyFrameProperty extends BaseProperty {
 
     var current = editor.selection.current;
     if (current) {
-      current.createKeyframe();
+      current.createSelector();
 
       this.emit("refreshCanvas");
     }
@@ -130,7 +120,7 @@ export default class KeyFrameProperty extends BaseProperty {
     this.refresh();
   }
 
-  viewKeyframePicker(index) {
+  viewSelectorPicker(index) {
     if (typeof this.selectedIndex === "number") {
       this.selectItem(this.selectedIndex, false);
     }
@@ -140,11 +130,11 @@ export default class KeyFrameProperty extends BaseProperty {
     this.current = editor.selection.current;
 
     if (!this.current) return;
-    this.currentKeyframe = this.current.keyframes[
+    this.currentSelector = this.current.selectors[
       this.selectedIndex
     ];
 
-    this.viewKeyframePropertyPopup();
+    this.viewSelectorPropertyPopup();
   }
 
 
@@ -152,48 +142,48 @@ export default class KeyFrameProperty extends BaseProperty {
   // 언제까지 selected 를 설정해야하는가?
   selectItem(selectedIndex, isSelected = true) {
     if (isSelected) {
-      this.getRef('$keyframeIndex', selectedIndex).addClass("selected");
+      this.getRef('$selectorIndex', selectedIndex).addClass("selected");
     } else {
-      this.getRef('$keyframeIndex', selectedIndex).removeClass("selected");
+      this.getRef('$selectorIndex', selectedIndex).removeClass("selected");
     }
 
     if (this.current) {
-      this.current.keyframes.forEach((it, index) => {
+      this.current.selectors.forEach((it, index) => {
         it.selected = index === selectedIndex;
       });
     }
   }  
 
-  viewKeyframePropertyPopup(position) {
+  viewSelectorPropertyPopup(position) {
     this.current = editor.selection.current;
 
     if (!this.current) return;
-    this.currentKeyframe = this.current.keyframes[
+    this.currentSelector = this.current.selectors[
       this.selectedIndex
     ];
 
-    const back = this.currentKeyframe;
+    const back = this.currentSelector;
 
-    const name = back.name
-    const offsets = back.offsets
+    const selector = back.selector
+    const properties = back.properties
 
-    this.emit("showKeyframePopup", {
+    this.emit("showSelectorPopup", {
       position,
-      name, 
-      offsets
+      selector, 
+      properties
     });
   }
 
-  [EVENT('changeKeyframePopup')] (data) {
+  [EVENT('changeSelectorPopup')] (data) {
     this.current = editor.selection.current;
 
     if (!this.current) return;
-    this.currentKeyframe = this.current.keyframes[
+    this.currentselector = this.current.selectors[
       this.selectedIndex
     ];
 
-    if (this.currentKeyframe) {
-      this.currentKeyframe.reset(data);
+    if (this.currentSelector) {
+      this.currentSelector.reset(data);
     }
 
     this.refresh();

@@ -4,14 +4,14 @@ import { LOAD, POINTERSTART, MOVE, END, CLICK, IF, INPUT, PREVENT } from "../../
 import { Offset } from "../../../../../editor/css-property/Offset";
 import Dom from "../../../../../util/Dom";
 import { isUndefined } from "../../../../../util/functions/func";
-import OffsetPropertyEditor from "./OffsetPropertyEditor";
+import CSSPropertyEditor from "./CSSPropertyEditor";
 
 
 export default class OffsetEditor extends UIElement {
 
   components() {
     return {
-      OffsetPropertyEditor
+      CSSPropertyEditor
     }
   }
 
@@ -65,7 +65,7 @@ export default class OffsetEditor extends UIElement {
   }
 
   templateForProperty() {
-    return `<OffsetPropertyEditor ref='$offsetPropertyEditor' />`
+    return `<CSSPropertyEditor ref='$offsetPropertyEditor' onchange='changeCSSPropertyEditor' />`
   }  
 
   templateForOffset () {
@@ -146,7 +146,7 @@ export default class OffsetEditor extends UIElement {
   }
 
   refreshOffsetProperty() {
-    this.emit('showOffsetPropertyEditor', this.selectedOffsetItem.properties)
+    this.emit('showCSSPropertyEditor', this.selectedOffsetItem.properties)
   }
   
   [POINTERSTART('$offset .offset-item') + MOVE('moveOffset') + END('endOffset')] (e) {
@@ -210,7 +210,7 @@ export default class OffsetEditor extends UIElement {
 
   }
 
-  [EVENT('changeOffsetPropertyEditor')] (properties = []) {
+  [EVENT('changeCSSPropertyEditor')] (properties = []) {
     var offset = this.state.offsets[this.selectedIndex];
     if (offset) {
       offset.properties = [...properties];

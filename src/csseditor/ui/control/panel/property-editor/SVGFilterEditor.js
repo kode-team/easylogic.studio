@@ -1,4 +1,4 @@
-import { html } from "../../../../../util/functions/func";
+import { html, isFunction } from "../../../../../util/functions/func";
 import icon from "../../../icon/icon";
 import {
   LOAD,
@@ -8,28 +8,39 @@ import {
   DROP,
   PREVENT
 } from "../../../../../util/Event";
-import { WHITE_STRING } from "../../../../../util/css/types";
+import { WHITE_STRING, NEW_LINE_2, NEW_LINE } from "../../../../../util/css/types";
 import { editor } from "../../../../../editor/editor";
 import UIElement, { EVENT } from "../../../../../util/UIElement";
 import RangeEditor from "./RangeEditor";
 import ColorViewEditor from "./ColorViewEditor";
-import { GaussianBlurSVGFilter, SVGFilter } from "../../../../../editor/css-property/SVGFilter";
+import { GaussianBlurSVGFilter, SVGFilter, TurbulenceSVGFilter, DisplacementMapSVGFilter } from "../../../../../editor/css-property/SVGFilter";
+import SelectEditor from "./SelectEditor";
+import TextEditor from "./TextEditor";
+import NumberRangeEditor from "./NumberRangeEditor";
 
 
 var filterList = [
   "GaussianBlur",
+  "Turbulence",
+  "DisplacementMap"
 ];
 
 var specList = {
-  GaussianBlur: GaussianBlurSVGFilter.spec
+  GaussianBlur: GaussianBlurSVGFilter.spec,
+  Turbulence: TurbulenceSVGFilter.spec,
+  DisplacementMap: DisplacementMapSVGFilter.spec
 };
+
 
 export default class SVGFilterEditor extends UIElement {
 
   components() {
     return {
+      NumberRangeEditor,
       RangeEditor,
-      ColorViewEditor
+      ColorViewEditor,
+      SelectEditor,
+      TextEditor
     }
   }
 
@@ -41,7 +52,7 @@ export default class SVGFilterEditor extends UIElement {
 
   template() {
     return html`
-      <div class='filter-editor filter-list'>
+      <div class='svg-filter-editor filter-list'>
           <div class='label' >
               <label>${this.props.title || ''}</label>
               <div class='tools'>
@@ -61,72 +72,100 @@ export default class SVGFilterEditor extends UIElement {
     return specList[filterType];
   }
 
-  makeDropShadowFilterTemplate(spec, filter, index) {
-    return html`
-      <div class="filter-item">
-        <div class="title" draggable="true" data-index="${index}">
-          <label>Drop Shadow</label>
-          <div class="filter-menu">
-            <button type="button" class="del" data-index="${index}">
-              ${icon.remove2}
-            </button>
-          </div>
+  makeFilterEditorTemplate (s, filter, key, index) {
+
+    if (s.inputType === 'select') {
+
+      var options = s.options
+
+      if (isFunction(s.options)){
+        options = s.options(this.state.filters)
+      }
+
+      return `
+        <div>
+          <SelectEditor 
+            ref='$select${key}${index}' 
+            label="${s.title}"
+            options='${options}' 
+            key="${key}"
+            params="${index}"
+            value='${filter[key]}' 
+            onchange="changeRangeEditor"             
+          />
         </div>
-
-        <div class="filter-ui drop-shadow-color">
-          <label>${spec.color.title}</label>
-          <ColorViewEditor ref='$dropShadowColorView${index}' params="${index}" color="${filter.color}" onChange="changeDropShadowColor" />
+        `
+    } else if (s.inputType === 'text') {
+      return `
+        <div>
+          <TextEditor 
+            ref='$text${key}${index}' 
+            label="${s.title}"
+            key="${key}"
+            params="${index}"
+            value='${filter[key]}' 
+            onchange="changeRangeEditor"
+          />
         </div>
+        `
+    } else if (s.inputType === 'number-range') {
+      return `
+        <div>
+          <NumberRangeEditor 
+            ref='$numberrange${key}${index}' 
+            layout='block' 
+            label="${s.title}" 
+            min="${s.min}"
+            max="${s.max}"
+            step="${s.step}"
+            key="${key}" 
+            params="${index}" 
+            value="${filter[key]}" 
+            onchange="changeRangeEditor" 
+          />
+        </div>
+      `
+    }
 
-        ${["offsetX", "offsetY", "blurRadius"].map(key => {
-          return `        
-            <div class="filter-ui drop-shadow">
-                <label>${spec[key].title}</label>
-
-                <RangeEditor 
-                  ref='$${key}${index}' 
-                  key="${index}" 
-                  params="${key}" 
-                  value="${filter[key].value.toString()}" units="${spec[key].units.join(',')}" onchange="changeRangeEditor" />
-            </div>`;
-        })}
+    return `
+      <div>
+        <RangeEditor 
+          ref='$range${key}${index}' 
+          layout='block' 
+          calc='false' 
+          label="${s.title}" 
+          min="${s.min}"
+          max="${s.max}"
+          step="${s.step}"
+          key="${key}" 
+          params="${index}" 
+          value="${filter[key]}" 
+          units="${s.units.join(',')}" 
+          onchange="changeRangeEditor" 
+        />
       </div>
-    `;
+    `
   }
 
   makeOneFilterTemplate(spec, filter, index) {
+
     return `
-      <div class="filter-item" data-index="${index}">
-        <div class="title" draggable="true" data-index="${index}">
-          <label>${filter.type}</label>
-          <div class="filter-menu">
-            <button type="button" class="del" data-index="${index}">${icon.remove2}</button>
-          </div>
-        </div>
-        <div class="filter-ui">
-
-          ${Object.keys(spec).map(key => {
-            var s = spec[key]
-            return `
-              <RangeEditor 
-                ref='$range${key}${index}' 
-                layout='block' 
-                calc='false' 
-                label="${s.title}" 
-                min="${s.min}"
-                max="${s.max}"
-                step="${s.step}"
-                key="${key}" 
-                params="${index}" 
-                value="${filter[key]}" 
-                units="${s.units.join(',')}" 
-                onchange="changeRangeEditor" 
-              />`
-          }).join(WHITE_STRING)}
-
+    <div class="filter-item" data-index="${index}">
+      <div class="title" draggable="true" data-index="${index}">
+        <label>${filter.type}</label>
+        <div class="filter-menu">
+          <button type="button" class="del" data-index="${index}">${icon.remove2}</button>
         </div>
       </div>
-    `;
+      <div class="filter-ui">
+
+        ${Object.keys(spec).map(key => {
+          return this.makeFilterEditorTemplate(spec[key], filter, key, index);
+        }).join(WHITE_STRING)}
+
+      </div>
+    </div>
+  `;
   }
 
   makeFilterTemplate(filter, index) {
@@ -217,8 +256,8 @@ export default class SVGFilterEditor extends UIElement {
 
   }
 
-  [EVENT('changeRangeEditor')] (key, value, params) {
-    var filter =  this.state.filters[+params];
+  [EVENT('changeRangeEditor')] (key, value, index) {
+    var filter =  this.state.filters[+index];
     if (filter) {
       filter.reset({
         [key]: value

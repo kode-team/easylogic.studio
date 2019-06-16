@@ -147,15 +147,15 @@ $display-grid-color: red;
 @import './cubic-bezier-editor.scss'; 
 @import './mini-editor.scss'; 
 @import "./tool-menu.scss";
-@import "./vertical-colorstep.scss";
+// @import "./vertical-colorstep.scss";
 @import "./view.scss";
 
-@import "./drag-angle.scss";
-@import "./drag-position.scss";
-@import "./guide/angluar-group.scss";
-@import "./guide/background-resizer.scss";
-@import "./guide/background-position.scss";
-@import "./guide/perspective-origin-position.scss";
+// @import "./drag-angle.scss";
+// @import "./drag-position.scss";
+// @import "./guide/angluar-group.scss";
+// @import "./guide/background-resizer.scss";
+// @import "./guide/background-position.scss";
+// @import "./guide/perspective-origin-position.scss";
 
 // property 
 @import "./property-view.scss";
@@ -168,12 +168,15 @@ $display-grid-color: red;
 @import './keyframe.scss'; 
 @import './codeview.scss'; 
 @import './clip-path.scss';
+@import './selector.scss';
 
 // editor 
 @import './color-view-editor.scss';
 @import './range-editor.scss';
+@import './number-range-editor.scss';
+@import './text-editor.scss';
 @import './select-editor.scss';
-@import './offset-property-editor.scss';
+@import './css-property-editor.scss';
 @import './background-image-editor.scss'; 
 @import './border-radius-editor.scss'; 
 @import './transform-editor.scss';
@@ -185,6 +188,8 @@ $display-grid-color: red;
 @import './transform-origin-editor.scss';
 @import './gradient-editor.scss';
 @import './svg-property-editor.scss';
+@import './svg-filter-editor.scss';
+
 
 // picker
 @import "./fill-picker.scss";

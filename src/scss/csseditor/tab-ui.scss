@@ -47,7 +47,7 @@ $tab-horizontal-header-right-width: 60px;
         background-color: rgb(68, 68, 68);
         color: white;
         svg {
-          path {
+          path,g {
             fill: white;
           }
         }
@@ -93,7 +93,7 @@ $tab-horizontal-header-right-width: 60px;
     }
 
     > .tab-item {
-      flex: 1;
+      flex: 1 1 auto;
       display: inline-block;
       font-size: 12px;
       text-align: left;

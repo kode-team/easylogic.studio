@@ -28,8 +28,6 @@ export default class SVGProperty extends BaseProperty {
   [EVENT('changeEditor')] (svg) {
     var current = editor.selection.current; 
 
-    console.log(svg);
-
     if (current) {
       // 받을 때는 배열로 
       current.reset({ svg })

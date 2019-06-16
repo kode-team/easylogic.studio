@@ -1,0 +1,51 @@
+.selector-list {
+    grid-template-columns: 1fr !important;
+  
+    .selector-item {
+      display: grid; 
+      grid-template-columns: 1fr; 
+      grid-column-gap: 4px;
+      border: 1px solid $border-color;
+      margin-bottom: 5px;
+      padding: 5px;  
+      cursor: pointer;
+      height: 30px;
+      &.selected {
+        background-color: rgba($border-color, 0.5);
+      }
+
+      .title {
+          display: grid;
+          grid-template-columns: 1fr 20px;
+          height: 20px;
+
+        .name {
+            padding: 2px 0px;
+        }
+
+        .tools {
+            vertical-align: middle;
+            text-align: right;
+            button {
+                vertical-align: middle;
+                appearance: none;
+                background-color: transparent;
+                border: 0px;
+                padding: 0px;
+                vertical-align: middle;
+                cursor: pointer;
+                outline: none;
+                font-size: 12px;
+                line-height: 0;
+      
+                svg {
+                    width: 16px;
+                    height: 16px;
+                    vertical-align: middle;
+                }
+             }
+        } 
+      }
+    }
+  }
+  

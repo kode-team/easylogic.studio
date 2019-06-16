@@ -10,7 +10,7 @@ import FilterEditor from "./FilterEditor";
 import GradientEditor from "./GradientEditor";
 import IterationCountEditor from "./IterationCountEditor";
 import OffsetEditor from "./OffsetEditor";
-import OffsetPropertyEditor from "./OffsetPropertyEditor";
+import CSSPropertyEditor from "./CSSPropertyEditor";
 import PerspectiveOriginEditor from "./PerspectiveOriginEditor";
 import RangeEditor from "./RangeEditor";
 import SelectEditor from "./SelectEditor";
@@ -22,8 +22,12 @@ import VarEditor from "./VarEditor";
 import CircleEditor from "./clip-path/CircleEditor";
 import SVGPropertyEditor from "./SVGPropertyEditor";
 import SVGFilterEditor from "./SVGFilterEditor";
+import TextEditor from "./TextEditor";
+import NumberRangeEditor from "./NumberRangeEditor";
 
 export default {
+    NumberRangeEditor,
+    TextEditor,
     SVGFilterEditor,
     SVGPropertyEditor,
     CircleEditor,
@@ -39,7 +43,7 @@ export default {
     GradientEditor,
     IterationCountEditor,
     OffsetEditor,
-    OffsetPropertyEditor,
+    CSSPropertyEditor,
     PerspectiveOriginEditor,
     RangeEditor,
     SelectEditor,

@@ -35,8 +35,15 @@ import autorenew from "./autorenew";
 import code from "./code";
 import build from "./build";
 import close from "./close";
+import gradient from "./gradient";
+import transform from "./transform";
+import scatter from "./scatter";
+
 
 export default {
+  scatter,
+  transform,
+  gradient,
   close,
   build,
   code,
