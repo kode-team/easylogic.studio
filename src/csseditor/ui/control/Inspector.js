@@ -9,7 +9,7 @@ export default class Inspector extends UIElement {
     return html`
       <div class="feature-control">
         <div>
-          <div class="tab number-tab" data-selected-value="5" ref="$tab">
+          <div class="tab number-tab" data-selected-value="1" ref="$tab">
             <div class="tab-header" ref="$header">
               <div class="tab-item" data-value="1">
                 <div class='icon'>${icon.paint}</div>
@@ -41,6 +41,7 @@ export default class Inspector extends UIElement {
                 <SizeProperty />
                 <BoxModelProperty />
                 <BackgroundColorProperty />
+                <OpacityProperty />                     
                 <BorderProperty />
                 <BorderRadiusProperty />
                 <BorderImageProperty />
@@ -61,7 +62,7 @@ export default class Inspector extends UIElement {
                 <TransformProperty />
               </div>
               <div class='tab-content' data-value="4">
-                <OpacityProperty />     
+
                 <BackgroundClipProperty />                         
                 <MixBlendModeProperty />
                 <BackgroundImageProperty />                 

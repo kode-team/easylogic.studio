@@ -14,15 +14,16 @@ $tab-horizontal-header-right-width: 60px;
 
   &.number-tab {
     .tab-header {
-      height: $tab-header-height;
+      height: 40px;
       cursor: pointer;
     }
     .tab-content {
       display: none;
+      background-color: rgb(240, 240, 240);
     }
 
     .tab-body {
-      top: $tab-header-height;
+      top: 40px;
     }
 
     > .tab-header {
@@ -31,12 +32,46 @@ $tab-horizontal-header-right-width: 60px;
         border-right: 1px solid $border-color;
         text-align: center;
         background-color: white;
+        position: relative;
+
+        &:first-child {
+          &:hover {
+            label {
+              left: 10px;
+            }
+          }
+        }
+
         &:last-child {
           border-right: 0px;
+
+          &:hover {
+            label {
+              left: auto;
+              right: 10px;
+            }
+          }
+        }
+
+        &:hover {
+          label {
+            opacity: 1;            
+
+          }
         }
 
         label {
+          display: inline-block;
+          position: absolute;
+          left: 0px;
+          top: 110%;          
           font-size: 11px;
+          opacity: 0;
+          background-color: #333;
+          border-radius: 3px;
+          color: white;
+          padding: 5px 10px;
+          transition: all 0.2s ease;
         }
       }
     }

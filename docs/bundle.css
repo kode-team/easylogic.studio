@@ -1428,14 +1428,15 @@ html, body {
   top: 0px;
 }
 .csseditor .tab.number-tab .tab-header {
-  height: 54px;
+  height: 40px;
   cursor: pointer;
 }
 .csseditor .tab.number-tab .tab-content {
   display: none;
+  background-color: #f0f0f0;
 }
 .csseditor .tab.number-tab .tab-body {
-  top: 54px;
+  top: 40px;
 }
 .csseditor .tab.number-tab > .tab-header {
   border-bottom: 1px solid #cccccc;
@@ -1444,12 +1445,33 @@ html, body {
   border-right: 1px solid #cccccc;
   text-align: center;
   background-color: white;
+  position: relative;
+}
+.csseditor .tab.number-tab > .tab-header > .tab-item:first-child:hover label {
+  left: 10px;
 }
 .csseditor .tab.number-tab > .tab-header > .tab-item:last-child {
   border-right: 0px;
 }
+.csseditor .tab.number-tab > .tab-header > .tab-item:last-child:hover label {
+  left: auto;
+  right: 10px;
+}
+.csseditor .tab.number-tab > .tab-header > .tab-item:hover label {
+  opacity: 1;
+}
 .csseditor .tab.number-tab > .tab-header > .tab-item label {
+  display: inline-block;
+  position: absolute;
+  left: 0px;
+  top: 110%;
   font-size: 11px;
+  opacity: 0;
+  background-color: #333;
+  border-radius: 3px;
+  color: white;
+  padding: 5px 10px;
+  transition: all 0.2s ease;
 }
 .csseditor .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"] {
   background-color: #444444;
@@ -2117,14 +2139,21 @@ html, body {
   background-color: white;
 }
 .csseditor .property {
-  padding: 0px;
-  border-bottom: 1px solid rgba(204, 204, 204, 0.5);
+  padding: 5px;
+  border: 1px solid rgba(204, 204, 204, 0.8);
+  margin: 10px 5px;
+  background-color: white;
+  border-radius: 3px;
 }
 .csseditor .property.show > .property-body {
   display: block;
 }
+.csseditor .property.show > .property-title:before {
+  -webkit-transform: rotate(180deg);
+          transform: rotate(180deg);
+}
 .csseditor .property > .property-title {
-  padding: 2px 5px;
+  padding: 2px 6px;
   padding-left: 10px;
   height: 24px;
   line-height: 2;
@@ -2138,8 +2167,27 @@ html, body {
   grid-template-columns: 1fr 1fr;
   cursor: pointer;
 }
+.csseditor .property > .property-title:before {
+  position: absolute;
+  left: 2px;
+  top: 40%;
+  content: "";
+  display: inline-block;
+  vertical-align: middle;
+  width: 6px;
+  height: 6px;
+  background-color: rgba(0, 0, 0, 0.5);
+  -webkit-transform: rotate(90deg);
+          transform: rotate(90deg);
+  transition: all 0.3s linear;
+  -webkit-transform-origin: center center;
+          transform-origin: center center;
+  -webkit-clip-path: polygon(50% 30%, 100% 100%, 0% 100%);
+          clip-path: polygon(50% 30%, 100% 100%, 0% 100%);
+}
 .csseditor .property > .property-title label {
   cursor: pointer;
+  padding-left: 2px;
 }
 .csseditor .property > .property-title > .tools {
   text-align: right;
