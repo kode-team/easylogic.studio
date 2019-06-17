@@ -1,6 +1,6 @@
 .number-range-editor {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 16px;
     grid-column-gap: 4px;
 
     &.has-label {
@@ -57,7 +57,7 @@
         .area {
             display: grid; 
             grid-template-columns: 1fr 40px;
-            grid-column-gap: 2px;
+            grid-column-gap: 4px;
             font-size: 13px;
             
             span {
@@ -68,6 +68,11 @@
 
             input,select {
                 width: 100%;
+            }
+
+            input[type='number'] {
+                border-radius: 3px;
+                border:1px solid $border-color;
             }
         }
     }

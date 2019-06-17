@@ -82,8 +82,8 @@
 
         .area {
             display: grid; 
-            grid-template-columns: 1fr 40px 50px;
-            grid-column-gap: 2px;
+            grid-template-columns: 1fr 40px 30px;
+            grid-column-gap: 4px;
             font-size: 13px;
             
             span {
@@ -94,6 +94,31 @@
 
             input,select {
                 width: 100%;
+            }
+
+            input[type=number] {
+                appearance: none;
+                border:1px solid $border-color;
+                border-right: 0px;
+                border-top-left-radius: 3px;
+                border-bottom-left-radius: 3px;
+                background-color: transparent;
+            }
+
+            .select-editor {
+                select {
+                    margin-left: -4px;
+                    appearance: none;
+                    border:1px solid $border-color;
+                    border-radius: 0px;
+                    background-color: rgba(231, 231, 231, 0.3);
+                    border-left:0px;
+                    text-align: center;
+                    box-sizing: border-box;
+                    padding: 0px 4px;
+                    border-top-right-radius: 3px;
+                    border-bottom-right-radius: 3px;
+                }
             }
         }
 

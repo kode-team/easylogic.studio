@@ -433,7 +433,9 @@ export default class EventMachine {
 
         if (this.children[refName]) {
           // ref 가 동일한게 있으면 event 를 모두 해제한다. 
-          this.children[refName].destroy()
+          this.children[refName].clean()
+          delete this.children[refName] 
+          
         }
 
         this.children[refName] = instance;

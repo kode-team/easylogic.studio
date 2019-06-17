@@ -159,37 +159,6 @@ export default class BackgroundImageEditor extends UIElement {
         this.modifyBackgroundImage();
     }
 
-    getFillData(backgroundImage) {
-        let data = {
-            type: backgroundImage.type
-        };
-
-        switch (data.type) {
-        case "image":
-            data.url = backgroundImage.image ? backgroundImage.image.url : "";
-            break;
-        default:
-            if (backgroundImage.image) {
-                const image = backgroundImage.image;
-
-                data.type = image.type;
-                data.colorsteps = [...image.colorsteps];
-                data.angle = image.angle;
-                data.radialType = image.radialType || "ellipse";
-                data.radialPosition = image.radialPosition || Position.CENTER;
-            } else {
-                data.colorsteps = [];
-                data.angle = 0;
-                data.radialType = "ellipse";
-                data.radialPosition = Position.CENTER;
-            }
-
-            break;
-        }
-
-        return data;
-    }
-
 
     [CLICK("$fillList .colorsteps .step")](e) {
         this.getRef('colorsteps', this.selectedIndex).$(`[data-selected="true"]`).removeAttr('data-selected')
@@ -283,11 +252,13 @@ export default class BackgroundImageEditor extends UIElement {
 
         this.emit("showFillPicker", {
             changeEvent: 'changeBackgroundImageEditor',
-            image: this.currentBackgroundImage.image,
+            // 왜 그런지는 모르겠지만 image 를 객체 그대로 넘기니 뭔가 맞지 않아서  문자열로 변환해서 넘긴다. 
+            image: this.currentBackgroundImage.image + '',  
             selectColorStepIndex,
             refresh: true,
             isImageHidden: true
         });
+
         this.viewBackgroundPropertyPopup();
     }
 
@@ -382,7 +353,6 @@ export default class BackgroundImageEditor extends UIElement {
     }
 
     setGradient(data) {
-        // console.log(this.currentBackgroundImage, data);
         if (this.currentBackgroundImage) {
             this.currentBackgroundImage.setGradient(data);
             this.viewChangeGradient(data);

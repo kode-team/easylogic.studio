@@ -1,7 +1,7 @@
 import { Property } from "../items/Property";
 import { html } from "../../util/functions/func";
 import { Offset } from "./Offset";
-import { EMPTY_STRING, NEW_LINE_2, WHITE_STRING } from "../../util/css/types";
+import { EMPTY_STRING, NEW_LINE_2, WHITE_STRING, NEW_LINE } from "../../util/css/types";
 import { reverseMatches, convertMatches } from "../../util/functions/parser";
 import { Length } from "../unit/Length";
 
@@ -143,6 +143,43 @@ export class Keyframe extends Property {
     return p.value.toString() + ';'; 
   }
 
+
+  toOffsetString (it) {
+    return html`${it.offset.toString()} {
+      ${it.properties.map(p => {
+        if (this.isMultiStyle(p.key)) {
+          return this.getMultiStyleString(p)
+        } else {
+          var value = p.value.toString();
+  
+          if (value) {
+            return `${p.key}: ${value};`
+          } else {
+            return EMPTY_STRING;
+          }
+        }
+      }).join(EMPTY_STRING)}
+    }`
+  }  
+
+
+  toOffsetText () {
+
+    var offsets = this.json.offsets.map(it => {
+      return it
+    });
+    
+    offsets.sort((a, b) => {
+      return a.offset.value > b.offset.value ? 1 : -1; 
+    })
+
+
+    return  offsets.map(it => {
+      if (it.properties.length === 0) return EMPTY_STRING
+      return this.toOffsetString(it);
+    }).join(NEW_LINE)
+  }  
+
   toCSSText () {
 
     var offsets = this.json.offsets.map(it => {
@@ -153,27 +190,11 @@ export class Keyframe extends Property {
       return a.offset.value > b.offset.value ? 1 : -1; 
     })
 
+
     return html`
 @keyframes ${this.json.name} {
 
-  ${offsets.map(it => {
-    if (it.properties.length === 0) return EMPTY_STRING
-    return html`${it.offset.toString()} {
-    ${it.properties.map(p => {
-      if (this.isMultiStyle(p.key)) {
-        return this.getMultiStyleString(p)
-      } else {
-        var value = p.value.toString();
-
-        if (value) {
-          return `${p.key}: ${value};`
-        } else {
-          return EMPTY_STRING;
-        }
-      }
-    }).join(EMPTY_STRING)}
-  }${NEW_LINE_2}`
-  })}
+  ${this.toOffsetText()}
 
 }${NEW_LINE_2}
 `

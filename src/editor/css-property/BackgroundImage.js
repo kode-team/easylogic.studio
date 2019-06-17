@@ -14,6 +14,7 @@ import { convertMatches, reverseMatches } from "../../util/functions/parser";
 import { WHITE_STRING } from "../../util/css/types";
 
 const RepeatList = ["repeat", "no-repeat", "repeat-x", "repeat-y"];
+const reg = /((linear\-gradient|repeating\-linear\-gradient|radial\-gradient|repeating\-radial\-gradient|conic\-gradient|repeating\-conic\-gradient|url)\(([^\)]*)\))/gi;
 
 export class BackgroundImage extends Property {
   addImageResource(imageResource) {
@@ -226,9 +227,38 @@ export class BackgroundImage extends Property {
     return new BackgroundImage(obj);
   }
 
+  static parseImage (str) {
+    var results = convertMatches(str);
+    let image = null;
+
+    results.str.match(reg).forEach((value, index) => {
+
+      value = reverseMatches(value, results.matches);
+      if (value.includes("repeating-linear-gradient")) {
+        // 반복을 먼저 파싱하고
+        image = RepeatingLinearGradient.parse(value);
+      } else if (value.includes("linear-gradient")) {
+        // 그 다음에 파싱 하자.
+        image = LinearGradient.parse(value);
+      } else if (value.includes("repeating-radial-gradient")) {
+        image = RepeatingRadialGradient.parse(value);
+      } else if (value.includes("radial")) {
+        image = RadialGradient.parse(value);
+      } else if (value.includes("repeating-conic-gradient")) {
+        image = RepeatingConicGradient.parse(value);
+      } else if (value.includes("conic")) {
+        image = ConicGradient.parse(value);
+      } else if (value.includes("url")) {
+        image = URLImageResource.parse(value);
+      }
+    });
+
+    return image
+  }
+
   static parseStyle(style) {
     var backgroundImages = [];
-    var reg = /((linear\-gradient|repeating\-linear\-gradient|radial\-gradient|repeating\-radial\-gradient|conic\-gradient|repeating\-conic\-gradient|url)\(([^\)]*)\))/gi;
+
 
     if (style["background-image"]) {
       var results = convertMatches(style["background-image"]);

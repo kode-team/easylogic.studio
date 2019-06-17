@@ -1472,6 +1472,7 @@ html, body {
   color: white;
   padding: 5px 10px;
   transition: all 0.2s ease;
+  pointer-events: none;
 }
 .csseditor .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"] {
   background-color: #444444;
@@ -3242,8 +3243,8 @@ html, body {
 }
 .csseditor .range-editor .range-editor-type .area {
   display: grid;
-  grid-template-columns: 1fr 40px 50px;
-  grid-column-gap: 2px;
+  grid-template-columns: 1fr 40px 30px;
+  grid-column-gap: 4px;
   font-size: 13px;
 }
 .csseditor .range-editor .range-editor-type .area span {
@@ -3253,6 +3254,31 @@ html, body {
 }
 .csseditor .range-editor .range-editor-type .area input, .csseditor .range-editor .range-editor-type .area select {
   width: 100%;
+}
+.csseditor .range-editor .range-editor-type .area input[type=number] {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border: 1px solid #cccccc;
+  border-right: 0px;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+  background-color: transparent;
+}
+.csseditor .range-editor .range-editor-type .area .select-editor select {
+  margin-left: -4px;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border: 1px solid #cccccc;
+  border-radius: 0px;
+  background-color: rgba(231, 231, 231, 0.3);
+  border-left: 0px;
+  text-align: center;
+  box-sizing: border-box;
+  padding: 0px 4px;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
 }
 .csseditor .range-editor .range-editor-type[data-type=calc] .area {
   grid-template-columns: 60px 1fr;
@@ -3265,7 +3291,7 @@ html, body {
 }
 .csseditor .number-range-editor {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr 16px;
   grid-column-gap: 4px;
 }
 .csseditor .number-range-editor.has-label {
@@ -3315,7 +3341,7 @@ html, body {
 .csseditor .number-range-editor .range-editor-type .area {
   display: grid;
   grid-template-columns: 1fr 40px;
-  grid-column-gap: 2px;
+  grid-column-gap: 4px;
   font-size: 13px;
 }
 .csseditor .number-range-editor .range-editor-type .area span {
@@ -3325,6 +3351,10 @@ html, body {
 }
 .csseditor .number-range-editor .range-editor-type .area input, .csseditor .number-range-editor .range-editor-type .area select {
   width: 100%;
+}
+.csseditor .number-range-editor .range-editor-type .area input[type=number] {
+  border-radius: 3px;
+  border: 1px solid #cccccc;
 }
 .csseditor .text-editor {
   display: grid;

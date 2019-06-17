@@ -72,6 +72,7 @@ $tab-horizontal-header-right-width: 60px;
           color: white;
           padding: 5px 10px;
           transition: all 0.2s ease;
+          pointer-events: none;
         }
       }
     }

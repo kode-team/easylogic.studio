@@ -121,6 +121,7 @@ export default class FillPicker extends UIElement {
       value = this.state.image.getColorString()
     }
 
+
     return value; 
   }
 
@@ -247,6 +248,7 @@ export default class FillPicker extends UIElement {
 
   [EVENT("showFillPicker")](data) {
     data.changeEvent = data.changeEvent || 'changeFillPicker'
+    data.image = BackgroundImage.parseImage(data.image)
     this.setState(data);
 
     this.$el
