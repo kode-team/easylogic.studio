@@ -1,4 +1,4 @@
-import { NEW_LINE_2, NEW_LINE } from "../../util/css/types";
+import { NEW_LINE_2, NEW_LINE, EMPTY_STRING } from "../../util/css/types";
 import { CSS_TO_STRING, CSS_SORTING } from "../../util/css/make";
 import { Length } from "../unit/Length";
 import { Display } from "../css-property/Display";
@@ -14,6 +14,34 @@ import { Animation } from "../css-property/Animation";
 import { Transition } from "../css-property/Transition";
 import { Keyframe } from "../css-property/Keyframe";
 import { Selector } from "../css-property/Selector";
+import icon from "../../csseditor/ui/icon/icon";
+import Dom from "../../util/Dom";
+
+function filterSVGClipPath (str = '', isFit = false, maxWidth, maxHeight) {
+  var $div = new Dom('div');
+  var $svg = $div.html(str).$('svg');
+
+  if (!$svg) { 
+    return {
+      paths: '',
+      transform: ''
+    } 
+  }
+
+  var paths = $svg.html();
+  var width = Length.parse($svg.attr('width'))
+  var height = Length.parse($svg.attr('height'))
+
+  var transform = '' 
+  if (isFit) {
+    var scaleX = maxWidth.value / width.value 
+    var scaleY = maxHeight.value / height.value 
+
+    transform = `transform="scale(${scaleX} ${scaleY})"`
+  }
+
+  return { paths, transform };
+}
 
 export class DomItem extends GroupItem {
   getDefaultObject(obj = {}) {
@@ -551,10 +579,19 @@ export class DomItem extends GroupItem {
  
   toSVGString () {
     return this.json.svg.map(s => {
-      return `
-<${s.type} id='${s.name}'>
-  ${s.value.join(NEW_LINE)}
-</${s.type}>`
+
+      if (s.type === 'filter') {
+        return `
+        <${s.type} id='${s.name}'>
+          ${s.value.join(NEW_LINE)}
+        </${s.type}>`
+      } else if (s.type === 'clip-path') {
+        var obj = filterSVGClipPath(icon[s.value.icon], s.value.fit, this.json.width, this.json.height)
+        return `
+        <clipPath id='${s.name}' ${obj.transform}>
+          ${obj.paths}
+        </clipPath>`
+      }
     }).join(NEW_LINE_2)
   }
 

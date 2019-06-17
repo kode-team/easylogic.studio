@@ -4499,12 +4499,16 @@ html, body {
 .csseditor .svg-property-editor .svg-property-list .svg-property-item {
   display: block;
 }
+.csseditor .svg-property-editor .svg-property-list .svg-property-item:last-child .title {
+  border-bottom: 1px solid #cccccc;
+}
 .csseditor .svg-property-editor .svg-property-list .svg-property-item .title {
   padding: 5px 2px;
   box-sizing: border-box;
   display: grid;
-  grid-template-columns: 50px 1fr 30px;
+  grid-template-columns: 70px 1fr 30px;
   border: 1px solid #cccccc;
+  border-bottom: 0px;
   cursor: pointer;
 }
 .csseditor .svg-property-editor .svg-property-list .svg-property-item .title .type {
@@ -4516,6 +4520,11 @@ html, body {
 .csseditor .svg-property-editor .svg-property-list .svg-property-item .title .type[data-type=filter] {
   border-radius: 5px;
   background-color: blue;
+  color: white;
+}
+.csseditor .svg-property-editor .svg-property-list .svg-property-item .title .type[data-type=clip-path] {
+  border-radius: 5px;
+  background-color: red;
   color: white;
 }
 .csseditor .svg-property-editor .svg-property-list .svg-property-item .title label {
@@ -5464,48 +5473,14 @@ html, body {
   width: 16px;
   height: 16px;
 }
-.csseditor .popup.svg-property-editor-popup .box .offset-input {
-  padding: 5px 0px;
-}
-.csseditor .popup.svg-property-editor-popup .box .offset-input input {
-  width: 104px;
-}
-.csseditor .popup.svg-property-editor-popup .box .keyframe-property-list {
-  max-height: 300px;
-  overflow: auto;
-}
-.csseditor .popup.svg-property-editor-popup .box .keyframe-property-item {
-  box-sizing: border-box;
-  padding: 4px 0px;
-  margin-top: 2px;
-}
-.csseditor .popup.svg-property-editor-popup .box .keyframe-property-item .title {
-  grid-template-columns: 1fr 30px;
-}
-.csseditor .popup.svg-property-editor-popup .box .keyframe-property-item .value-editor {
-  border: 1px solid rgba(0, 0, 0, 0.3);
-  padding: 2px;
-}
-.csseditor .popup.svg-property-editor-popup .box .keyframe-property-item .tools button {
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  cursor: pointer;
-  border: 0px;
-}
-.csseditor .popup.svg-property-editor-popup .box .keyframe-property-item .tools button svg {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-}
 .csseditor .popup.svg-property-editor-popup .box label {
   font-size: 12px;
   text-align: left;
   vertical-align: middle;
 }
-.csseditor .popup.svg-property-editor-popup .box input,
+.csseditor .popup.svg-property-editor-popup .box input[type=range],
+.csseditor .popup.svg-property-editor-popup .box input[type=number],
+.csseditor .popup.svg-property-editor-popup .box input[type=text],
 .csseditor .popup.svg-property-editor-popup .box select {
   width: 100%;
   vertical-align: middle;

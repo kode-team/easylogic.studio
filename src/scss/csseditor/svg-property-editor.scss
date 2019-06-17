@@ -48,12 +48,19 @@
     .svg-property-item {
       display: block;
   
+      &:last-child {
+        .title {
+          border-bottom: 1px solid $border-color;
+        }
+      }
+
       .title {
         padding: 5px 2px;
         box-sizing: border-box;
         display: grid;
-        grid-template-columns: 50px 1fr 30px;
+        grid-template-columns: 70px 1fr 30px;
         border: 1px solid $border-color; 
+        border-bottom: 0px;
         cursor: pointer;
 
         .type {
@@ -66,8 +73,13 @@
             border-radius: 5px;
             background-color: blue; 
             color: white;
-
           }
+
+          &[data-type="clip-path"] {
+            border-radius: 5px;
+            background-color: red; 
+            color: white;
+          }          
         }
   
         label {

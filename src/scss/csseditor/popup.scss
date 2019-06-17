@@ -733,57 +733,15 @@
 
       }
 
-      .offset-input {
-        padding: 5px 0px;
-        input {
-          width: 104px;
-        }
-      }
-
-      .keyframe-property-list {
-        max-height: 300px;
-        overflow: auto;
-      }
-
-      .keyframe-property-item {
-        box-sizing: border-box;
-        // border:1px solid $border-color;
-        padding: 4px 0px;
-        margin-top: 2px;
-
-        .title {
-          grid-template-columns: 1fr 30px;
-        }
-
-        .value-editor {
-          border: 1px solid rgba(0, 0, 0, 0.3);
-          padding:2px;
-        }
-
-        .tools {
-          button {
-            appearance: none;
-            background-color: transparent;
-            outline: none;
-            cursor: pointer;
-            border:0px;
-
-            svg {
-              width: 16px;
-              height: 16px;
-              vertical-align: middle;
-            }
-          }
-        }
-      }
-
       label {
         font-size: 12px;
         text-align: left;
         vertical-align: middle;
       }
 
-      input,
+      input[type='range'],
+      input[type='number'],
+      input[type='text'],
       select {
         width: 100%;
         vertical-align: middle;

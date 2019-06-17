@@ -24,11 +24,11 @@ export class ClipPath extends Property {
             case 'inset':
             case 'ellipse':
             case 'polygon':
-            case 'svg':
-                results = `${type}(${value})`;
-                break;
             case 'path':
-                results = `${type}('${value}')`
+                results = `${type}(${value})`;
+                break;                
+            case 'svg':
+                results = `url(#${value})`;
                 break;
             default: 
                 results = 'none';

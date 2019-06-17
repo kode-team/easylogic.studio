@@ -24,8 +24,10 @@ import SVGPropertyEditor from "./SVGPropertyEditor";
 import SVGFilterEditor from "./SVGFilterEditor";
 import TextEditor from "./TextEditor";
 import NumberRangeEditor from "./NumberRangeEditor";
+import SVGClipPathEditor from "./SVGClipPathEditor";
 
 export default {
+    SVGClipPathEditor,
     NumberRangeEditor,
     TextEditor,
     SVGFilterEditor,

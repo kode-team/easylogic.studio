@@ -3,12 +3,14 @@ import { Length } from "../../../../editor/unit/Length";
 import { CHANGE_EDITOR, CHANGE_SELECTION } from "../../../types/event";
 import { INPUT, LOAD } from "../../../../util/Event";
 import SVGFilterEditor from "../panel/property-editor/SVGFilterEditor";
+import SVGClipPathEditor from "../panel/property-editor/SVGClipPathEditor";
 
 export default class SVGPropertyPopup extends UIElement {
 
   components() {
     return {
-      SVGFilterEditor
+      SVGFilterEditor,
+      SVGClipPathEditor
     }
   }
 
@@ -45,6 +47,12 @@ export default class SVGPropertyPopup extends UIElement {
             <property name="value" type="json">${JSON.stringify(this.state.value)}</property>
           </SVGFilterEditor>
         `
+      case 'clip-path':
+        return `
+          <SVGClipPathEditor ref='$clippath' title="SVG Clip Path" key="clip-path" onchange='changeClipPathEditor'>
+            <property name="value" type='json'>${JSON.stringify(this.state.value)}</property>
+          </SVGClipPathEditor>
+        `
     }
 
     return ``
@@ -55,6 +63,12 @@ export default class SVGPropertyPopup extends UIElement {
       value
     })
   }
+
+  [EVENT('changeClipPathEditor')] (key, value) {
+    this.updateData({
+      value
+    })
+  }  
 
   templateForName() {
     return `
@@ -84,6 +98,7 @@ export default class SVGPropertyPopup extends UIElement {
   }
 
   [EVENT("showSVGPropertyPopup")](data) {
+    console.log(data);
     this.setState(data);
     this.refresh()
 

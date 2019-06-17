@@ -13,12 +13,18 @@ import UIElement, { EVENT } from "../../../../../util/UIElement";
 import RangeEditor from "./RangeEditor";
 import ColorViewEditor from "./ColorViewEditor";
 import { uuidShort } from "../../../../../util/functions/math";
+import { EMPTY_STRING } from "../../../../../util/css/types";
 
 
 var propertyList = [
-  "filter",
-  "clippath"
+  {type: "filter", title: 'FILTER' },
+  {type: "clip-path", title: 'CLIP-PATH' }
 ];
+
+var propertyTitle = {
+  'filter': 'FILTER',
+  'clip-path': 'CLIP-PATH'
+}
 
 export default class SVGPropertyEditor extends UIElement {
 
@@ -43,7 +49,7 @@ export default class SVGPropertyEditor extends UIElement {
               <div class='tools'>
                 <select ref="$propertySelect">
                   ${propertyList.map(property => {
-                    return `<option value='${property}'>${property}</option>`;
+                    return `<option value='${property.type}'>${property.title}</option>`;
                   })}
                 </select>
                 <button type="button" ref="$add" title="add Property">${icon.add} ${this.props.title ? '' : 'Add'}</button>
@@ -57,8 +63,10 @@ export default class SVGPropertyEditor extends UIElement {
     return `
       <div class='svg-property-item' data-type='${property.type}' data-index='${index}' draggable="true">
         <div class='title'>
-          <div class='type' data-type="${property.type}">${property.type}</div>
-          <label>${property.name}</label>
+          <div class='type' data-type="${property.type}">${propertyTitle[property.type]}</div>
+          <label>${property.name}
+            ${property.type === 'clip-path' ? ' - ' + property.value : EMPTY_STRING}
+          </label>
           <div class='menu'>
             <button type="button" class='del'>${icon.remove2}</button>
           </div>
@@ -142,7 +150,9 @@ export default class SVGPropertyEditor extends UIElement {
 
     this.emit('showSVGPropertyPopup', {
       changeEvent: 'changeSVGPropertyPopup',
-      ...current
+      name: current.name, 
+      type: current.type,
+      value: current.value
     })
   }
 

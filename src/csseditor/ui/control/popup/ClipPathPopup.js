@@ -5,6 +5,7 @@ import { LOAD } from "../../../../util/Event";
 import { ClipPath } from "../../../../editor/css-property/ClipPath";
 import CircleEditor from "../panel/property-editor/clip-path/CircleEditor";
 import SelectEditor from "../panel/property-editor/SelectEditor";
+import { editor } from "../../../../editor/editor";
 
 export default class ClipPathPopup extends UIElement {
 
@@ -60,7 +61,16 @@ export default class ClipPathPopup extends UIElement {
     case 'path':
       return `<PathEditor ref='$path' key='path' value='${this.state.value}' onchange='changeClipPath' />`
     case 'svg':
-        return `<SvgEditor ref='$svg' key='svg' value='${this.state.value}' onchange='changeClipPath' />`
+
+        var current = editor.selection.current || {svg: []} 
+
+        var options = current.svg.filter(it => it.type === 'clip-path').map(it => it.name).join(',')
+        
+        if (options.length) {
+          options = ',' + options
+        }
+
+        return `<SelectEditor ref='$svg' key='svg' value='${this.state.value}' options='${options}' onchange='changeClipPath' />`
     default: 
       return `<div class='type none'></div>`
     }
