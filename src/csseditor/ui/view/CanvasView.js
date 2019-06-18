@@ -109,7 +109,7 @@ export default class CanvasView extends UIElement {
       css, 
       selectorString, 
       keyframeString 
-    } = item.generateView('.csseditor .page-canvas')
+    } = item.generateView('#' + item.id)
     return `<style type='text/css'>
       :root {
         ${CSS_TO_STRING(rootVariable)}

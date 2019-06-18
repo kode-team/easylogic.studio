@@ -10,6 +10,9 @@ import FilterEditor from "./FilterEditor";
 import BoxShadowEditor from "./BoxShadowEditor";
 import VarEditor from "./VarEditor";
 import TransformEditor from "./TransformEditor";
+import TransformOriginEditor from "./TransformOriginEditor";
+import PerspectiveOriginEditor from "./PerspectiveOriginEditor";
+
 
 
 export default class CSSPropertyEditor extends UIElement {
@@ -22,6 +25,8 @@ export default class CSSPropertyEditor extends UIElement {
       RangeEditor,
       BackgroundImageEditor,
       TransformEditor,
+      TransformOriginEditor,
+      PerspectiveOriginEditor,
       VarEditor
     }
   }
@@ -71,6 +76,8 @@ export default class CSSPropertyEditor extends UIElement {
         case 'backdrop-filter':      
         case 'var':
         case 'transform':          
+        case 'transform-origin':
+        case 'perspective-origin':
           return Length.string('');
         default: 
           return Length.px(0);
@@ -143,6 +150,18 @@ export default class CSSPropertyEditor extends UIElement {
           <TransformEditor ref='$transform' value="${property.value}" onChange="changeTransform" />
         </div>
       `                  
+    } else if (property.key === 'transform-origin') {
+      return `
+        <div class='property-editor'>
+          <TransformOriginEditor ref='$transformOrigin' value="${property.value}" onChange="changeTransformOrigin" />
+        </div>
+      `                  
+    } else if (property.key === 'perspective-origin') {
+      return `
+        <div class='property-editor'>
+          <PerspectiveOriginEditor ref='$perspectiveOrigin' value="${property.value}" onChange="changePerspectiveOrigin" />
+        </div>
+      `                  
     }
 
     return `
@@ -182,6 +201,14 @@ export default class CSSPropertyEditor extends UIElement {
     this.modifyPropertyValue('transform', value);
   }       
 
+  [EVENT('changeTransformOrigin')] (value) {
+    this.modifyPropertyValue('transform-origin', value);
+  }         
+
+  [EVENT('changePerspectiveOrigin')] (value) {
+    this.modifyPropertyValue('perspective-origin', value);
+  }         
+
 
   makePropertyEditor (property, index) {
     var min = null;
@@ -198,6 +225,8 @@ export default class CSSPropertyEditor extends UIElement {
       case 'backdrop-filter':
       case 'var':
       case 'transform':
+      case 'transform-origin':
+      case 'perspective-origin':
         return this.makeIndivisualPropertyEditor(property, index);
       case 'left': 
       case 'margin-top': 
@@ -212,7 +241,8 @@ export default class CSSPropertyEditor extends UIElement {
       case 'border-radius': 
       case 'font-size': 
       case 'width': 
-      case 'height':       
+      case 'height':   
+      case 'perspective':  
       default: 
         return `
           <div class='property-editor'>
@@ -278,7 +308,13 @@ export default class CSSPropertyEditor extends UIElement {
           <option value='text-shadow'>text-shadow</option>
           <option value='filter'>filter</option>      
           <option value='backdrop-filter'>backdrop-filter</option>          
-        </optgroup>                
+        </optgroup>            
+        <optgroup label='Transform'>
+          <option value='transform'>transform</option>
+          <option value='transform-origin'>transform-origin</option>
+          <option value='perspective'>perspective</option>
+          <option value='perspective-origin'>perspective-origin</option>
+        </optgroup>
         <optgroup label='Font'>
           <option value='font-size'>font-size</option>
         </optgroup>

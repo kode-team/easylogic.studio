@@ -47,7 +47,7 @@ export class DomItem extends GroupItem {
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
       'width': Length.px(300),
-      'height': Length.px(400),
+      'height': Length.px(300),
       'rootVariable': '',
       'variable': '',
       'transform': '',
