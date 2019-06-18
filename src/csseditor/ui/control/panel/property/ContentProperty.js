@@ -46,11 +46,14 @@ export default class ContentProperty extends BaseProperty {
   setContent() {
     var current = editor.selection.current;
     if (current) {
-      current.reset({
+      var data = {
         content: this.refs.$contentItem.value
-      });
+      }
+      current.reset(data);
 
-      this.emit("refreshCanvas");
+      this.emit("refreshCanvas", {
+        update: 'tag'
+      });
     }
   }
 }

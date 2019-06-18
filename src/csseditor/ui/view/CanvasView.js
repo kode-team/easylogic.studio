@@ -183,19 +183,24 @@ export default class CanvasView extends UIElement {
     this.emit('refreshComputedStyleCode', computedCSS)
   }
 
-  generateStyle () {
+  generateStyle (data = {}) {
     var current = editor.selection.current;
     if (current) {
       if (this.props.embed) {
         this.parser.generate(current.generateEmbed());
       } else {
-        this.load('$styleArea', '$svgArea');
+        if (data.update === 'tag') {
+          this.refresh();
+        } else {
+          this.load('$styleArea','$svgArea')
+        }
+
       }
     }
   }
 
-  [EVENT("refreshCanvas") + DEBOUNCE(10)]() {
-    this.generateStyle()
+  [EVENT("refreshCanvas") + DEBOUNCE(10)](data) { 
+    this.generateStyle(data)
   }
 
   [CLICK()]() {
