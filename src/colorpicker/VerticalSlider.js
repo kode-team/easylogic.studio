@@ -25,7 +25,7 @@ export default class VerticalSlider extends BaseSlider {
 
     /** get calculated dist for domain value   */
     getCalculatedDist (e) {
-        var current = e ? this.getMousePosition(e) : this.getCurrent(this.getDefaultValue() / this.maxValue);
+        var current = e ? this.getMousePosition(e) : this.getCurrent(this.getDefaultValue() / this.state.maxValue);
         var dist =  100 - this.getDist(current);
         
         return dist; 
@@ -44,7 +44,7 @@ export default class VerticalSlider extends BaseSlider {
             this.refs.$bar.removeClass('last').removeClass('first')
         }
 
-        var per = 1 - ( (v || 0) / this.maxValue);
+        var per = 1 - ( (v || 0) / this.state.maxValue);
 
         this.setMousePosition(this.getMaxDist() * per );
     }        

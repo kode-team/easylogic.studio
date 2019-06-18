@@ -2,10 +2,11 @@ import BaseSlider from '../../BaseSlider';
 
 export default class Hue extends BaseSlider {
 
-    initialize () {
-        super.initialize()
-        this.minValue = 0
-        this.maxValue = 360
+    initState() {
+        return {
+            minValue: 0,
+            maxValue: 360
+        }
     }
 
     template () {
@@ -26,10 +27,10 @@ export default class Hue extends BaseSlider {
 
         var dist = this.getCalculatedDist(e);
      
-        this.setColorUI(dist/100 * this.maxValue);
+        this.setColorUI(dist/100 * this.state.maxValue);
 
         this.changeColor({
-            h: (dist/100) * this.maxValue,
+            h: (dist/100) * this.state.maxValue,
             type: 'hsv'
         })
     }     

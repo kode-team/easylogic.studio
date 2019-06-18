@@ -1,13 +1,7 @@
 import BaseSlider from '../../BaseSlider';
+import { BIND } from '../../../util/Event';
 
 export default class Value extends BaseSlider {
-
-    initialize () {
-        super.initialize()
-
-        this.minValue = 0;
-        this.maxValue = 1; 
-    }
 
     template () {
         return `
@@ -19,14 +13,12 @@ export default class Value extends BaseSlider {
         `
     }
 
-    setBackgroundColor () {
-        this.refs.$container.css("background-color", this.read('toRGB'));
-    }
-
-
-    refresh () {
-        super.refresh()
-        this.setBackgroundColor();
+    [BIND('$container')] () {
+        return {
+            style : {
+                'background-color': this.read('toRGB')
+            }
+        }
     }
 
     getDefaultValue () {
@@ -36,11 +28,11 @@ export default class Value extends BaseSlider {
     refreshColorUI(e) {
         var dist = this.getCalculatedDist(e);
 
-        this.setColorUI(dist/100 * this.maxValue)
+        this.setColorUI(dist/100 * this.state.maxValue)
 
         this.changeColor({
             type: 'hsv',
-            v: dist/100 * this.maxValue
+            v: dist/100 * this.state.maxValue
         })
     }    
     

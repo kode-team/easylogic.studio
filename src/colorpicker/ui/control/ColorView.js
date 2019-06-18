@@ -1,18 +1,20 @@
 import UIElement, { EVENT } from '../../../util/UIElement';
+import { BIND } from '../../../util/Event';
 
 export default class ColorView extends UIElement {
-    template () {
-        return `<div class="color"></div>`
+
+    templateClass() {
+        return 'color'
     }
 
-    setBackgroundColor () {
-        this.refs.$el.css("background-color", this.read('toRGB'));
+    [BIND('$el')] () {
+        return {
+            style: {
+                'background-color': this.read('toRGB')
+            }
+        }
     }
 
-    refresh () {
-        this.setBackgroundColor()
-    }
-    
     [EVENT('changeColor', 'initColor')] () { 
         this.refresh()
     } 

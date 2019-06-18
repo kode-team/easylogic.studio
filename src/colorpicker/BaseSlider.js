@@ -5,10 +5,13 @@ import { Length } from '../editor/unit/Length';
 
 export default class BaseSlider extends BaseBox {
 
-    initialize () {
-        super.initialize()
-        this.minValue = 0   // min domain value 
-        this.maxValue = 1   // max domain value 
+    initState() {
+        return {
+            minValue: 0,
+            maxValue: 1,
+            maxDist: null,
+            minPosition: null
+        }
     }
 
     /* slider container's min and max position */
@@ -27,11 +30,17 @@ export default class BaseSlider extends BaseBox {
 
     /** get min position on slider container  */
     getMinPosition () {
-        return this.refs.$container.offset().left;
+        if (!this.state.minPosition) {
+            this.state.minPosition = this.refs.$container.offset().left
+        }
+        return this.state.minPosition;        
     }    
 
     getMaxDist () {
-        return this.refs.$container.width();
+        if (!this.state.maxDist) {
+            this.state.maxDist = this.refs.$container.width()
+        }
+        return this.state.maxDist;
     }
 
     /** get dist for position value */
@@ -52,7 +61,7 @@ export default class BaseSlider extends BaseBox {
 
     /** get calculated dist for domain value   */
     getCalculatedDist (e) {
-        var current = e ? this.getMousePosition(e) : this.getCurrent(this.getDefaultValue() / this.maxValue);
+        var current = e ? this.getMousePosition(e) : this.getCurrent(this.getDefaultValue() / this.state.maxValue);
         var dist = this.getDist(current);
         
         return dist; 
@@ -82,7 +91,7 @@ export default class BaseSlider extends BaseBox {
     
         v = v || this.getDefaultValue(); 
 
-        if (v <= this.minValue) {
+        if (v <= this.state.minValue) {
             this.refs.$bar.addClass('first').removeClass('last')
         } else if (v >= this.maxValue) {
             this.refs.$bar.addClass('last').removeClass('first')
@@ -90,7 +99,7 @@ export default class BaseSlider extends BaseBox {
             this.refs.$bar.removeClass('last').removeClass('first')
         }
 
-        this.setMousePosition(this.getMaxDist() * ( (v || 0) / this.maxValue));
+        this.setMousePosition(this.getMaxDist() * ( (v || 0) / this.state.maxValue));
     }    
     
 }

@@ -132,15 +132,8 @@ export default class TextShadowEditor extends UIElement {
   }
 
   [EVENT("changeTextShadowEditorColor")](color) {
-
-    var shadow = this.state.textShadows[this.state.selectedIndex]
-    shadow.reset({ color })
-
-    this.refresh();
-
-    this.modifyTextShadow();
+    this.trigger('changeTextShadowEditorPopup', { color })
   }
-
 
   [EVENT("changeTextShadowEditorPopup")](data) {
 
@@ -149,8 +142,6 @@ export default class TextShadowEditor extends UIElement {
     shadow.reset(data)
 
     this.refresh();
-
-
 
     this.modifyTextShadow();
   }

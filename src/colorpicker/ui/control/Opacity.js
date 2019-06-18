@@ -4,13 +4,6 @@ import BaseSlider from '../../BaseSlider';
 
 export default class Opacity extends BaseSlider {
 
-    initialize () {
-        super.initialize()
-
-        this.minValue = 0;
-        this.maxValue = 1;         
-    }
-
     template () {
         return `
         <div class="opacity">
@@ -46,10 +39,10 @@ export default class Opacity extends BaseSlider {
     refreshColorUI(e) {
         var dist = this.getCalculatedDist(e);
 
-        this.setColorUI( (dist/100) * this.maxValue);
+        this.setColorUI( (dist/100) * this.state.maxValue);
 
         this.changeColor({
-            a: (Math.floor(dist) / 100) * this.maxValue
+            a: (Math.floor(dist) / 100) * this.state.maxValue
         })
 
     }

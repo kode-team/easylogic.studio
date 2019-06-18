@@ -38,6 +38,8 @@ export default class CanvasView extends UIElement {
       this.refresh()
       this.generateStyle()
     }
+
+    this.emit(CHANGE_SELECTION)
   }
   template() {
     return `

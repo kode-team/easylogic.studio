@@ -135,13 +135,7 @@ export default class BoxShadowEditor extends UIElement {
   }
 
   [EVENT("changeBoxShadowEditorColor")](color) {
-
-    var shadow = this.state.boxShadows[this.selectedIndex]
-    shadow.reset({ color })
-
-    this.refresh();
-
-    this.modifyBoxShadow();
+    this.trigger('changeBoxShadowEditorPopup', { color })
   }
 
   [EVENT("changeBoxShadowEditorPopup")](data) {
