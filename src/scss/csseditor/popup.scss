@@ -228,17 +228,7 @@
   &.box-shadow-property-popup {
     padding: 10px;
     width: 224px;
-    height: 200px;
     .box {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      grid-template-rows: repeat(6, 1fr);
-      grid-row-gap: 10px;
-      grid-column-gap: 2px;
-
-      > * {
-        height: 20px;
-      }
 
       input,
       select {
@@ -261,11 +251,10 @@
       }
 
       .type {
-        grid-column: 1/6;
-        grid-row: 1/2;
         display: grid;
         grid-template-columns: 50px 1fr;
         grid-column-gap: 4px;
+        margin-bottom: 2px;
 
         .select {
           display: grid;
@@ -290,55 +279,16 @@
         }
       }
 
-      .offset-x {
-        grid-column: 1/4;
-        grid-row: 2/3;
-        display: grid;
-        grid-template-columns: 50px 1fr;
-        grid-column-gap: 4px;
-      }
-
-      .offset-y {
-        grid-column: 1/4;
-        grid-row: 3/4;
-        display: grid;
-        grid-template-columns: 50px 1fr;
-        grid-column-gap: 4px;
-      }
-
-      .blur-radius {
-        grid-column: 1 / 6;
-        grid-row: 5/6;
-        display: grid;
-        grid-template-columns: 50px 1fr;
-        grid-column-gap: 4px;
-
-        .input {
-          grid-template-columns: 2fr 1fr 1fr;
-          grid-column-gap: 2px;
-        }
-      }
-
-      .spread-radius {
-        grid-column: 1 / 6;
-        grid-row: 6/7;
-        display: grid;
-        grid-template-columns: 50px 1fr;
-        grid-column-gap: 4px;
-
-        .input {
-          grid-template-columns: 2fr 1fr 1fr;
-          grid-column-gap: 2px;
-        }
+      label {
+        font-size: 11px;
       }
 
       .drag-board {
-        grid-column: 4/6;
-        grid-row: 2/5;
         background-color: white;
         box-sizing: border-box;
         border: 1px solid $border-color;
-        height: 84px;
+        margin-bottom: 2px;        
+        height: 204px;
         position: relative;
         // pointer-events: none;
         background-image: linear-gradient(
@@ -356,7 +306,7 @@
           position: absolute;
           width: 10px;
           height: 10px;
-          transform: translateX(calc(40px - 5px)) translateY(calc(42px - 5px));
+          transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
           background-color: $border-color;
           border-radius: 100%;
         }

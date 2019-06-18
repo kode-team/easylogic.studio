@@ -3,8 +3,16 @@ import { Length } from "../../../../editor/unit/Length";
 import { CHANGE_EDITOR, CHANGE_SELECTION } from "../../../types/event";
 import { LOAD, CLICK, POINTERSTART, MOVE, INPUT } from "../../../../util/Event";
 import { html } from "../../../../util/functions/func";
+import RangeEditor from "../panel/property-editor/RangeEditor";
+
+
 
 export default class BoxShadowPropertyPopup extends UIElement {
+  components() {
+    return {
+      RangeEditor
+    }
+  }
   initState() {
     return {
       inset: false,
@@ -38,144 +46,30 @@ export default class BoxShadowPropertyPopup extends UIElement {
             <button type="button" data-value="inset">Inset</button>
           </div>
         </div>
-        <div class="offset-x">
-          <label>Offset X</label>
-          <div class="input">
-            <input
-              type="number"
-              ref="$offsetX"
-              data-type="offsetX"
-              value="${this.state.offsetX.value.toString()}"
-            />
-            <select ref="$offsetXUnit">
-              <option value="px">px</option>
-              <option value="em">em</option>
-              <option value="%">%</option>
-            </select>
-          </div>
-        </div>
-        <div class="offset-y">
-          <label>Offset Y</label>
-          <div class="input">
-            <input
-              type="number"
-              ref="$offsetY"
-              data-type="offsetY"
-              value="${this.state.offsetY.value.toString()}"
-            />
-            <select ref="$offsetYUnit">
-              <option value="px">px</option>
-              <option value="em">em</option>
-              <option value="%">%</option>
-            </select>
-          </div>
-        </div>
-        <div class="blur-radius">
-          <label>Blur</label>
-          <div class="input">
-            <input
-              type="range"
-              ref="$blurRadiusRange"
-              data-type="blurRadius"
-              value="${this.state.blurRadius.value.toString()}"
-            />
-            <input
-              type="number"
-              ref="$blurRadiusNumber"
-              data-type="blurRadius"
-              value="${this.state.blurRadius.value.toString()}"
-            />
-            <select ref="$blurRadiusUnit">
-              <option value="px">px</option>
-              <option value="em">em</option>
-              <option value="%">%</option>
-            </select>
-          </div>
-        </div>
-        <div class="spread-radius">
-          <label>Spread</label>
-          <div class="input">
-            <input
-              type="range"
-              ref="$spreadRadiusRange"
-              data-type="spreadRadius"
-              value="${this.state.spreadRadius.value.toString()}"
-            />
-            <input
-              type="number"
-              ref="$spreadRadiusNumber"
-              data-type="spreadRadius"
-              value="${this.state.spreadRadius.value.toString()}"
-            />
-            <select ref="$spreadRadiusUnit">
-              <option value="px">px</option>
-              <option value="em">em</option>
-              <option value="%">%</option>
-            </select>
-          </div>
-        </div>
         <div class="drag-board" ref="$dragBoard">
           <div
             class="pointer"
             ref="$pointer"
             style="left: ${this.state.offsetX.toString()};top: ${this.state.offsetY.toString()}"
           ></div>
+        </div>        
+        <div class="offset-x">
+          <RangeEditor ref='$offsetX' label='X' key='offsetX' value="${this.state.offsetX.toString()}" onchange='changeRangeEditor' />
         </div>
+        <div class="offset-y">
+          <RangeEditor ref='$offsetY' label='Y' key='offsetY' value="${this.state.offsetY.toString()}" onchange='changeRangeEditor' />        
+        </div>
+        <div class="blur-radius">
+          <RangeEditor ref='$blurRadius' label='Blur' key='blurRadius' value="${this.state.blurRadius.toString()}" onchange='changeRangeEditor' />        
+        </div>
+        <div class="spread-radius">
+          <RangeEditor ref='$spreadRadius' label='Spread' key='spreadRadius' value="${this.state.spreadRadius.toString()}" onchange='changeRangeEditor' />        
+        </div>
+
       </div>
     `;
   }
 
-  [INPUT('$popup input[data-type="offsetX"]')](e) {
-    this.updateData({
-      offsetX: new Length(
-        +e.$delegateTarget.value,
-        this.getRef("$offsetXUnit").value
-      )
-    });
-    this.refreshPointer();
-  }
-
-  [INPUT('$popup input[data-type="offsetY"]')](e) {
-    this.updateData({
-      offsetY: new Length(
-        +e.$delegateTarget.value,
-        this.getRef("$offsetYUnit").value
-      )
-    });
-
-    this.refreshPointer();
-  }
-
-  [INPUT('$popup input[data-type="blurRadius"]')](e) {
-    var type = e.$delegateTarget.attr("type");
-    if (type === "range") {
-      this.getRef("$blurRadiusNumber").val(e.$delegateTarget.value);
-    } else {
-      this.getRef("$blurRadiusRange").val(e.$delegateTarget.value);
-    }
-    this.updateData({
-      blurRadius: new Length(
-        +e.$delegateTarget.value,
-        this.getRef("$blurRadiusUnit").value
-      )
-    });
-  }
-
-  [INPUT('$popup input[data-type="spreadRadius"]')](e) {
-    var type = e.$delegateTarget.attr("type");
-    if (type === "range") {
-      this.getRef("$spreadRadiusNumber").val(e.$delegateTarget.value);
-    } else {
-      this.getRef("$spreadRadiusRange").val(e.$delegateTarget.value);
-    }
-
-    this.updateData({
-      spreadRadius: new Length(
-        +e.$delegateTarget.value,
-        this.getRef("$spreadRadiusUnit").value
-      )
-    });
-  }
 
   [CLICK("$popup .select button")](e) {
     var type = e.$delegateTarget.attr("data-value");
@@ -201,6 +95,10 @@ export default class BoxShadowPropertyPopup extends UIElement {
       left: this.state.offsetX,
       top: this.state.offsetY
     });
+
+    this.children.$offsetX.setValue(this.state.offsetX)
+    this.children.$offsetY.setValue(this.state.offsetY)
+
   }
 
   movePointer(dx, dy) {
@@ -240,6 +138,16 @@ export default class BoxShadowPropertyPopup extends UIElement {
     this.refreshPointer();
   }
 
+  [EVENT('changeRangeEditor')] (key, value) {
+    this.updateData({
+      [key]: value
+    })
+
+    if (key === 'offsetX' || key === 'offsetY') {
+      this.refreshPointer()
+    }
+  }
+
   [EVENT("showBoxShadowPropertyPopup")](data) {
 
     this.changeEvent = data.changeEvent || "changeBoxShadowPropertyPopup"
@@ -249,8 +157,8 @@ export default class BoxShadowPropertyPopup extends UIElement {
 
     this.$el
       .css({
-        top: Length.px(460),
-        right: Length.px(10),
+        top: Length.px(440),
+        right: Length.px(320),
         bottom: Length.auto
       })
       .show("inline-block");

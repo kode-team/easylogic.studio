@@ -36,8 +36,8 @@ export default class BoxShadowEditor extends UIElement {
       return `
         <div class="shadow-item real" data-index="${index}">
           <div class="inset" data-value="${shadow.inset}">${icon.check}</div>
-          <div class="color">
-            <div class='color-view' style="background-color: ${shadow.color}" data-index="${index}">
+          <div class="color" data-index="${index}">
+            <div class='color-view' style="background-color: ${shadow.color}">
             </div>
           </div>
           <div class="offset-x">${shadow.offsetX.toString()}</div>

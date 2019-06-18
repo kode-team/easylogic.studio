@@ -125,7 +125,7 @@ export default class TextShadowPropertyPopup extends UIElement {
     this.$el
       .css({
         top: Length.px(460),
-        right: Length.px(10),
+        right: Length.px(320),
         bottom: Length.auto
       })
       .show("inline-block");

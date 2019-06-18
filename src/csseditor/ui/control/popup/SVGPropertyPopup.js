@@ -105,7 +105,7 @@ export default class SVGPropertyPopup extends UIElement {
     this.$el
       .css({
         top: Length.px(150),
-        left: Length.px(320),
+        right: Length.px(320),
         bottom: Length.auto,
         'z-index': 1000000
       })

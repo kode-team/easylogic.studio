@@ -46,8 +46,8 @@ export default class ColorPicker extends UIElement {
   [EVENT("showColorPicker")](config, data) {
     this.$el
       .css({
-        top: Length.px(120),
-        right: Length.px(10)
+        top: Length.px(110),
+        right: Length.px(320)
       })
       .show();
 

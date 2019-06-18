@@ -37,8 +37,8 @@ export default class TextShadowEditor extends UIElement {
     var arr = this.state.textShadows.map((shadow, index) => {
       return `
         <div class="shadow-item real" data-index="${index}">
-          <div class="color">
-            <div class='color-view' style="background-color: ${shadow.color}" data-index="${index}">
+          <div class="color" data-index="${index}">
+            <div class='color-view' style="background-color: ${shadow.color}">
             </div>
           </div>
           <div class="offset-x">${shadow.offsetX.toString()}</div>

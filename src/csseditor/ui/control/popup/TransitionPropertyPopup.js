@@ -182,7 +182,7 @@ export default class TransitionPropertyPopup extends UIElement {
     this.$el
       .css({
         top: Length.px(150),
-        left: Length.px(320),
+        right: Length.px(320),
         bottom: Length.auto
       })
       .show("inline-block");

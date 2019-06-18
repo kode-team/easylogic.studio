@@ -1,3 +1,4 @@
+$border-radius: 3px;
 .range-editor {
     display: grid;
     grid-template-columns: 1fr;
@@ -80,6 +81,8 @@
         display: none;
         vertical-align: middle;
 
+
+
         .area {
             display: grid; 
             grid-template-columns: 1fr 40px 30px;
@@ -100,9 +103,9 @@
                 appearance: none;
                 border:1px solid $border-color;
                 border-right: 0px;
-                border-top-left-radius: 3px;
-                border-bottom-left-radius: 3px;
-                background-color: transparent;
+                border-top-left-radius: $border-radius;
+                border-bottom-left-radius: $border-radius;
+                background-color: white;
             }
 
             .select-editor {
@@ -116,8 +119,8 @@
                     text-align: center;
                     box-sizing: border-box;
                     padding: 0px 4px;
-                    border-top-right-radius: 3px;
-                    border-bottom-right-radius: 3px;
+                    border-top-right-radius: $border-radius;
+                    border-bottom-right-radius: $border-radius;
                 }
             }
         }
@@ -136,4 +139,4 @@
           }
         }
       }
-}
+} 
