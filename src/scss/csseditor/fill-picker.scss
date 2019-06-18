@@ -8,6 +8,105 @@
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1);
   border: 1px solid $border-color;
 
+  .popup-item {
+    padding: 2px 4px;
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+  }
+
+
+  .repeat-list {
+    button {
+      width: 20px;
+      height: 20px;
+      appearance: none;
+      border: 1px solid $border-color;
+      background-color: white;
+      outline: none;
+      cursor: pointer;
+
+      &[value="no-repeat"] {
+        background-image: linear-gradient(
+          to top right,
+          rgba(blue, 0.5),
+          black
+        );
+        background-position: center center;
+        background-size: 8px 8px;
+        background-repeat: no-repeat;
+      }
+
+      &[value="repeat"] {
+        background-image: linear-gradient(
+          to top right,
+          rgba(blue, 0.5),
+          black
+        );
+        background-position: 10px 10px;
+        background-size: 8px 8px;
+        background-repeat: repeat;
+      }
+
+      &[value="repeat-x"] {
+        background-image: linear-gradient(
+          to top right,
+          rgba(blue, 0.5),
+          black
+        );
+        background-position: 10px 8px;
+        background-size: 8px 8px;
+        background-repeat: repeat-x;
+      }
+
+      &[value="repeat-y"] {
+        background-image: linear-gradient(
+          to top right,
+          rgba(blue, 0.5),
+          black
+        );
+        background-position: 8px 10px;
+        background-size: 8px 8px;
+        background-repeat: repeat-y;
+      }
+
+      &[value="space"] {
+        background-image: linear-gradient(
+          to top right,
+          rgba(blue, 0.5),
+          black
+        );
+        background-position: 10px 10px;
+        background-size: 8px 8px;
+        background-repeat: space;
+      }
+
+      &[value="round"] {
+        background-image: linear-gradient(
+          to top right,
+          rgba(blue, 0.5),
+          black
+        );
+        background-position: 0px 0px;
+        background-size: 8px 8px;
+        background-repeat: round;
+      }
+    }
+
+    &[data-value="repeat"] button[value="repeat"],
+    &[data-value="no-repeat"] button[value="no-repeat"],
+    &[data-value="repeat-x"] button[value="repeat-x"],
+    &[data-value="repeat-y"] button[value="repeat-y"],
+    &[data-value="space"] button[value="space"],
+    &[data-value="round"] button[value="round"] {
+      background-color: $border-color;
+      box-shadow: 0 0 1px 1px black;
+    }
+  }
+
+
   .picker-tab {
     .picker-tab-list {
       text-align: center;

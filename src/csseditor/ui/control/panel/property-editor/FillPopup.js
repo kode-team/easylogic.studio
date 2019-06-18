@@ -1,7 +1,7 @@
 import UIElement, { EVENT } from "../../../../../util/UIElement";
 import ColorPicker from "../../../../../colorpicker/index";
 import icon from "../../../icon/icon";
-import { CLICK, CHANGE, LOAD } from "../../../../../util/Event";
+import { CLICK, CHANGE, LOAD, BIND } from "../../../../../util/Event";
 import { EMPTY_STRING } from "../../../../../util/css/types";
 import { html } from "../../../../../util/functions/func";
 import { Length, Position } from "../../../../../editor/unit/Length";
@@ -11,6 +11,8 @@ import GradientEditor from "./GradientEditor";
 import { Gradient } from "../../../../../editor/image-resource/Gradient";
 import { ColorStep } from "../../../../../editor/image-resource/ColorStep";
 import { BackgroundImage } from "../../../../../editor/css-property/BackgroundImage";
+import RangeEditor from "./RangeEditor";
+import SelectEditor from "./SelectEditor";
 
 const tabs = [
   { type: "static-gradient", title: "Static Gradient" },
@@ -24,11 +26,32 @@ const tabs = [
 ];
 
 
+const blend_list = [
+  "normal",
+  "multiply",
+  "screen",
+  "overlay",
+  "darken",
+  "lighten",
+  "color-dodge",
+  "color-burn",
+  "hard-light",
+  "soft-light",
+  "difference",
+  "exclusion",
+  "hue",
+  "saturation",
+  "color",
+  "luminosity"
+];
 
-export default class FillPicker extends UIElement {
+
+export default class FillPopup extends UIElement {
 
   components() {
     return {
+      RangeEditor,
+      SelectEditor,
       GradientEditor
     }
   }
@@ -42,6 +65,14 @@ export default class FillPicker extends UIElement {
     // 5. gradient 에디터가 제일 어려운 듯 하다. 
 
     return {
+      hideBackgroundProperty: true,
+      size: "auto",
+      repeat: "repeat",
+      x: Length.px(0),
+      y: Length.px(0),
+      width: Length.px(0),
+      height: Length.px(0),
+      blendMode: 'normal',
       image: {},
     }
   }
@@ -72,9 +103,138 @@ export default class FillPicker extends UIElement {
     this.selectedTab = "static-gradient";
   }
 
+  updateData(opt = {}) {
+    this.setState(opt, false);
+
+    this.emit("changeBackgroundProperty", opt);
+  }
+
+ 
+  templateForSize() {
+    return `
+      <div class='popup-item'>
+        <SelectEditor label="Size" ref='$size' key='size' value="${this.state.size}" options="contain,cover,auto" onchange="changeRangeEditor" />      
+      </div>
+    `;
+  }
+
+  [EVENT('changeRangeEditor')] (key, value) {
+    this.updateData({ [key]: value });
+  }
+
+  templateForX() {
+    return `
+      <div class='popup-item'>
+        <RangeEditor 
+            label="X"
+            calc="false"            
+            ref="$x" 
+            key="x"
+            value="${this.state.x}"
+            min="-1000" max="1000" step="1"
+            onchange="changeRangeEditor"
+        />
+      </div>
+    `;
+  }
+
+  templateForY() {
+    return `
+      <div class='popup-item'>
+        <RangeEditor 
+            label="Y" 
+            calc="false"       
+            ref="$y" 
+            key="y"
+            value="${this.state.y}"            
+            min="-1000" max="1000" step="1"
+            onchange="changeRangeEditor"
+        />
+      </div>
+    `;
+  }
+
+  templateForWidth() {
+    return `
+    <div class='popup-item'>
+      <RangeEditor 
+          label="Width"   
+          calc="false"             
+          ref="$width" 
+          key="width"
+          value="${this.state.width}"          
+          min="0" max="500" step="1" 
+          onchange="changeRangeEditor"
+      />
+    </div>
+    `;
+  }
+
+  templateForHeight() {
+    return `
+    <div class='popup-item'>
+      <RangeEditor 
+          label="Height"
+          calc="false"          
+          ref="$height" 
+          key="height"
+          value="${this.state.height}"          
+          min="0" max="500" step="1" onchange="changeRangeEditor"
+      />
+    </div>
+    `;
+  }
+
+  templateForRepeat() {
+    return `
+    <div class='popup-item grid-2'>
+      <label>Repeat</label>
+      <div class='repeat-list' ref="$repeat" data-value='${this.state.repeat}'>
+          <button type="button" value='no-repeat' title="no-repeat"></button>
+          <button type="button" value='repeat' title="repeat"></button>
+          <button type="button" value='repeat-x' title="repeat-x"></button>
+          <button type="button" value='repeat-y' title="repeat-y"></button>
+          <button type="button" value='space' title="space"></button>
+          <button type="button" value='round' title="round"></button>
+      </div>
+    </div>
+    `;
+  }
+
+  [CLICK("$repeat button")]({ $delegateTarget: $t }) {
+    this.refs.$repeat.attr("data-value", $t.value);
+    this.updateData({ repeat: $t.value });
+  }
+
+  templateForBlendMode() {
+    return html`
+    <div class='popup-item'>
+      <SelectEditor label="Blend" ref='$blend' key='blendMode' value="${this.state.blendMode}" options="${blend_list.join(',')}" onchange="changeRangeEditor" />
+    </div>
+    `;
+  }
+
+  [BIND('$backgroundProperty')] () {
+    return {
+      style: {
+        display: this.state.hideBackgroundProperty ? 'none': 'block'
+      }
+    }
+  }
+
   template() {
     return html`
       <div class="fill-picker">
+        <div class='background-property' ref='$backgroundProperty'>
+          ${this.templateForSize()}        
+          ${this.templateForX()}
+          ${this.templateForY()}
+          ${this.templateForWidth()}
+          ${this.templateForHeight()}
+          ${this.templateForRepeat()}
+          ${this.templateForBlendMode()}
+        </div>
+
         <div class="picker-tab">
           <div class="picker-tab-list" ref="$tab" data-value="static-gradient" data-is-image-hidden="false">
             ${tabs.map(it => {
@@ -168,7 +328,7 @@ export default class FillPicker extends UIElement {
     //화면 표시 하기
     // files.length 따라 Preview 에 표시 하기
     // URL.createObjectUrl 로 임시 url 생성 (임시 URL 은 어디서 관리하나)
-    // emit('changeFillPicker', { images: [........] })
+    // emit('changeFillPopup', { images: [........] })
 
     var images = files.map(file => {
       return editor.createUrl(file);
@@ -246,14 +406,14 @@ export default class FillPicker extends UIElement {
     }
   }
 
-  [EVENT("showFillPicker")](data) {
-    data.changeEvent = data.changeEvent || 'changeFillPicker'
+  [EVENT("showFillPopup")](data) {
+    data.changeEvent = data.changeEvent || 'changeFillPopup'
     data.image = BackgroundImage.parseImage(data.image)
     this.setState(data);
 
     this.$el
       .css({
-        top: Length.px(290),
+        top: Length.px(110),
         left: Length.px(320),
         bottom: Length.auto
       })
@@ -264,7 +424,7 @@ export default class FillPicker extends UIElement {
     this.emit('hidePropertyPopup');
   }
 
-  [EVENT("hideFillPicker", "hidePicker", 'hidePropertyPopup', CHANGE_SELECTION)]() {
+  [EVENT("hideFillPopup", "hidePicker", 'hidePropertyPopup', CHANGE_SELECTION)]() {
     this.$el.hide();
   }
 

@@ -5,7 +5,7 @@ import ColorPicker from "./ColorPicker";
 import ColorSingleEditor from "./ColorSingleEditor";
 import ColorViewEditor from "./ColorViewEditor";
 import CubicBezierEditor from "./CubicBezierEditor";
-import FillPicker from "./FillPicker";
+import FillPopup from "./FillPopup";
 import FilterEditor from "./FilterEditor";
 import GradientEditor from "./GradientEditor";
 import IterationCountEditor from "./IterationCountEditor";
@@ -40,7 +40,7 @@ export default {
     ColorSingleEditor,
     ColorViewEditor,
     CubicBezierEditor,
-    FillPicker,
+    FillPopup,
     FilterEditor,
     GradientEditor,
     IterationCountEditor,

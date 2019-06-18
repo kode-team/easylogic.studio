@@ -137,61 +137,19 @@ $display-grid-color: red;
 
 }
 
-
-// @import "./range-ui.scss";
 @import "./tab-ui.scss";
-
-@import "./element/unit-range.scss";
-
 @import "./colorpicker-ui.scss";
-@import './cubic-bezier-editor.scss'; 
 @import './mini-editor.scss'; 
 @import "./tool-menu.scss";
-// @import "./vertical-colorstep.scss";
 @import "./view.scss";
 
-// @import "./drag-angle.scss";
-// @import "./drag-position.scss";
-// @import "./guide/angluar-group.scss";
-// @import "./guide/background-resizer.scss";
-// @import "./guide/background-position.scss";
-// @import "./guide/perspective-origin-position.scss";
-
 // property 
-@import "./property-view.scss";
-@import "./border.scss";
-@import "./box-model.scss";
-@import "./size.scss";
-@import "./content.scss";
-@import './transition.scss';  
-@import './animation.scss';  
-@import './keyframe.scss'; 
-@import './codeview.scss'; 
-@import './clip-path.scss';
-@import './selector.scss';
+@import './property/index.scss'; 
 
 // editor 
-@import './color-view-editor.scss';
-@import './range-editor.scss';
-@import './number-range-editor.scss';
-@import './text-editor.scss';
-@import './select-editor.scss';
-@import './css-property-editor.scss';
-@import './background-image-editor.scss'; 
-@import './border-radius-editor.scss'; 
-@import './transform-editor.scss';
-@import './filter-editor.scss';
-@import './box-shadow-editor.scss'; 
-@import './text-shadow-editor.scss'; 
-@import './var-editor.scss'; 
-@import './perspective-origin-editor.scss';
-@import './transform-origin-editor.scss';
-@import './gradient-editor.scss';
-@import './svg-property-editor.scss';
-@import './svg-filter-editor.scss';
+@import './editor/index.scss';
 
-
-// picker
+// picker 
 @import "./fill-picker.scss";
 
 // popup

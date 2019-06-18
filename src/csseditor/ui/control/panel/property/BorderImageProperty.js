@@ -183,7 +183,7 @@ export default class BorderImageProperty extends BaseProperty {
   }
 
   [CLICK('$borderImageView .preview')] () {
-    this.viewFillPicker(this.refs.$preview, '');
+    this.viewFillPopup(this.refs.$preview, '');
   }
 
   [CLICK("$borderImageView .colorsteps .step")](e) {
@@ -192,7 +192,7 @@ export default class BorderImageProperty extends BaseProperty {
     var selectColorStepId = e.$delegateTarget.attr("data-colorstep-id");
     e.$delegateTarget.attr('data-selected', true);
     var $preview = e.$delegateTarget.closest("border-image-item").$(".preview");
-    this.viewFillPicker($preview, selectColorStepId);
+    this.viewFillPopup($preview, selectColorStepId);
   }
 
 
@@ -228,14 +228,14 @@ export default class BorderImageProperty extends BaseProperty {
   }
 
 
-  viewFillPicker($preview, selectColorStepId) {
+  viewFillPopup($preview, selectColorStepId) {
 
     var current = editor.selection.current;
 
     if (!current) return;
 
-    this.emit("showFillPicker", {
-      changeEvent: 'changeBorderImageFillPicker',
+    this.emit("showFillPopup", {
+      changeEvent: 'changeBorderImageFillPopup',
       ...this.getFillData(current.borderImage),
       selectColorStepId,
       refresh: true
@@ -321,7 +321,7 @@ export default class BorderImageProperty extends BaseProperty {
 
   }
 
-  [EVENT("changeBorderImageFillPicker")](data) {
+  [EVENT("changeBorderImageFillPopup")](data) {
     switch (data.type) {
       case "image":
         this.setImage(data);

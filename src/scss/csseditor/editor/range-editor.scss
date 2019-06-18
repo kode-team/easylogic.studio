@@ -4,7 +4,7 @@
     grid-column-gap: 4px;
 
     &.has-label {
-        grid-template-columns: 40px 1fr;
+        grid-template-columns: 60px 1fr;
         grid-column-gap: 2px;
         &.is-removable {
             grid-template-columns: 20px 1fr 16px;

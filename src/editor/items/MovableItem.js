@@ -55,16 +55,6 @@ export class MovableItem extends Item {
         return Length.px(this.screenY.value + half) 
     }    
 
-    /**
-     * check selection status for item  
-     */
-    get selected () { 
-        return editor.selection.check(this.id); 
-    }
-
-    get selectedOne () {
-        return editor.selection.checkOne(this.id);
-    }
 
     checkInArea (area) {
 

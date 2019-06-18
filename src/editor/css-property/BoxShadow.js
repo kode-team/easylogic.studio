@@ -12,6 +12,8 @@ export class BoxShadow extends Property {
 
       var boxShadows = [];
 
+      if (!str) return boxShadows;
+
       var results = convertMatches(str);
 
       boxShadows = results.str.split(",").filter(it => it.trim()).map(shadow => {

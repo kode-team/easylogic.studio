@@ -29,7 +29,6 @@ export default class SizeProperty extends BaseProperty {
 
   [LOAD("$sizeItem")]() {
     var current = editor.selection.current;
-
     if (!current) return EMPTY_STRING;
 
     return html`

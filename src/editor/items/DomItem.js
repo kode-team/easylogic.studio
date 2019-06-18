@@ -570,7 +570,7 @@ export class DomItem extends GroupItem {
               .map(keyframe => keyframe.toString(isAnimate))
               .join(NEW_LINE_2)
   }
-
+ 
   toSelectorString (prefix = '') {
     return this.json.selectors
               .map(selector => selector.toString(prefix))

@@ -166,7 +166,7 @@ export default class BackgroundImageEditor extends UIElement {
 
         var selectColorStepIndex = e.$delegateTarget.attr("data-index");
         var $preview = e.$delegateTarget.closest("fill-item").$(".preview");
-        this.viewFillPicker($preview, selectColorStepIndex);
+        this.viewFillPopup($preview, selectColorStepIndex);
     }
 
 
@@ -201,7 +201,7 @@ export default class BackgroundImageEditor extends UIElement {
 
         this.refresh();
 
-        this.viewFillPicker(this.getRef("preview", this.selectedIndex));
+        this.viewFillPopup(this.getRef("preview", this.selectedIndex));
 
         this.modifyBackgroundImage()
 
@@ -240,7 +240,7 @@ export default class BackgroundImageEditor extends UIElement {
         
     }
 
-    viewFillPicker($preview, selectColorStepIndex) {
+    viewFillPopup($preview, selectColorStepIndex) {
         if (typeof this.selectedIndex === "number") {
             this.selectItem(this.selectedIndex, false);
         }
@@ -250,20 +250,6 @@ export default class BackgroundImageEditor extends UIElement {
 
         this.currentBackgroundImage =  this.getCurrentBackgroundImage()
 
-        this.emit("showFillPicker", {
-            changeEvent: 'changeBackgroundImageEditor',
-            // 왜 그런지는 모르겠지만 image 를 객체 그대로 넘기니 뭔가 맞지 않아서  문자열로 변환해서 넘긴다. 
-            image: this.currentBackgroundImage.image + '',  
-            selectColorStepIndex,
-            refresh: true,
-            isImageHidden: true
-        });
-
-        this.viewBackgroundPropertyPopup();
-    }
-
-    viewBackgroundPropertyPopup(position) {
-        this.currentBackgroundImage =  this.getCurrentBackgroundImage()
 
         const back = this.currentBackgroundImage;
 
@@ -275,23 +261,26 @@ export default class BackgroundImageEditor extends UIElement {
         const size = back.size;
         const blendMode = back.blendMode;
 
-        const changeEvent = 'changeBackgroundImageEditorProperty'
-        this.emit("showBackgroundPropertyPopup", {
-            changeEvent,
-            position,
+        this.emit("showFillPopup", {
+            hideBackgroundProperty: false,
+            changeEvent: 'changeBackgroundImageEditor',
             x,
             y,
             width,
             height,
             repeat,
             size,
-            blendMode
+            blendMode,            
+            // 왜 그런지는 모르겠지만 image 를 객체 그대로 넘기니 뭔가 맞지 않아서  문자열로 변환해서 넘긴다. 
+            image: this.currentBackgroundImage.image + '',  
+            selectColorStepIndex,
+            refresh: true,
+            isImageHidden: true
         });
-        // this.emit("hideFillPicker");
     }
 
     [CLICK("$fillList .preview")](e) {
-        this.viewFillPicker(e.$delegateTarget);
+        this.viewFillPopup(e.$delegateTarget);
     }
 
     viewChangeImage(data) {
@@ -326,7 +315,7 @@ export default class BackgroundImageEditor extends UIElement {
         }
     }
 
-    [EVENT("selectFillPickerTab")](type, data) {
+    [EVENT("selectFillPopupTab")](type, data) {
         var typeName = types[type];
         var $fillItem = this.refs[`fillIndex${this.selectedIndex}`];
         $fillItem.attr("data-fill-type", typeName);
@@ -362,6 +351,7 @@ export default class BackgroundImageEditor extends UIElement {
     }
 
     [EVENT("changeBackgroundImageEditor")](data) {
+
         switch (data.type) {
         case "image":
             this.setImage(data);
@@ -395,7 +385,7 @@ export default class BackgroundImageEditor extends UIElement {
         }
     }
 
-    [EVENT("changeBackgroundImageEditorProperty") + DEBOUNCE(10)](data) {
+    [EVENT("changeBackgroundProperty") + DEBOUNCE(10)](data) {
         if (this.currentBackgroundImage) {
             this.currentBackgroundImage.reset(data);
 

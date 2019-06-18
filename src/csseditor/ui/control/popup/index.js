@@ -1,4 +1,3 @@
-import BackgroundPropertyPopup from "./BackgroundPropertyPopup";
 import BoxShadowPropertyPopup from "./BoxShadowPropertyPopup";
 import TextShadowPropertyPopup from "./TextShadowPropertyPopup";
 import AnimationPropertyPopup from "./AnimationPropertyPopup";
@@ -17,5 +16,4 @@ export default {
   TransitionPropertyPopup,
   TextShadowPropertyPopup,
   BoxShadowPropertyPopup,
-  BackgroundPropertyPopup,
 };

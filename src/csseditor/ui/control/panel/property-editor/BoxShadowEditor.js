@@ -13,7 +13,7 @@ export default class BoxShadowEditor extends UIElement {
 
   initState() {
     return {
-      boxShadows: BoxShadow.parseStyle(this.props.value)
+      boxShadows: BoxShadow.parseStyle(this.props.value || '')
     }
   }
 
@@ -32,8 +32,6 @@ export default class BoxShadowEditor extends UIElement {
   }
 
   [LOAD("$shadowList")]() {
-    
-
     var arr = this.state.boxShadows.map((shadow, index) => {
       return `
         <div class="shadow-item real" data-index="${index}">

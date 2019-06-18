@@ -493,7 +493,13 @@ export default class EventMachine {
       this._bindMethods = this.filterProps(CHECK_BIND_PATTERN);
     }
 
-    this._loadMethods.forEach(callbackName => {
+    this._loadMethods
+    .filter(callbackName => {
+      const elName = callbackName.split(LOAD_SAPARATOR)[1];
+      if (!args.length) return true; 
+      return args.includes(elName)
+    })
+    .forEach(callbackName => {
       const elName = callbackName.split(LOAD_SAPARATOR)[1];
       if (this.refs[elName]) {
         

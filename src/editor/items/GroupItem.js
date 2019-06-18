@@ -4,11 +4,7 @@ const isLayout = (type) => {
     return type == 'flex' || type == 'grid'
 }
 
-export class GroupItem extends MovableItem {
-
-    get layers () {
-        return this.search({itemType: 'layer'})
-    }         
+export class GroupItem extends MovableItem {   
 
     isLayoutItem () {
         return false;

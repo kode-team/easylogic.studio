@@ -1718,51 +1718,6 @@ html, body {
   border: 0px;
   border-right: 1px solid #cccccc;
 }
-.csseditor .unit-range {
-  pointer-events: all;
-  display: block !important;
-}
-.csseditor .unit-range.show .multi-value {
-  display: flex;
-}
-.csseditor .unit-range .base-value {
-  display: flex;
-}
-.csseditor .unit-range .base-value > * {
-  flex: 1 1 auto;
-}
-.csseditor .unit-range .base-value .number {
-  flex: none;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  border: 0px;
-  background-color: transparent;
-  margin-left: 5px;
-  width: 50px;
-}
-.csseditor .unit-range .base-value .unit {
-  flex: none;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  border: 0px;
-  background-color: transparent;
-  width: 30px;
-}
-.csseditor .unit-range .multi-value {
-  display: none;
-  height: 26px;
-}
-.csseditor .unit-range .multi-value > * {
-  flex: 1 1 auto;
-  margin: 2px;
-  border: 1px solid #cccccc;
-  background-color: transparent;
-  cursor: pointer;
-  padding: 3px;
-  border-radius: 5px;
-}
 .csseditor .colorpicker-layer .codemirror-colorpicker {
   background-color: transparent;
   width: 100%;
@@ -1786,117 +1741,6 @@ html, body {
 .csseditor .colorpicker-layer .codemirror-colorpicker .colorpicker-body .wheel {
   border: 0px;
   background-color: transparent;
-}
-.csseditor .cubic-bezier-editor {
-  width: 228px;
-  height: 210px;
-  position: relative;
-}
-.csseditor .cubic-bezier-editor .bezier {
-  position: absolute;
-  width: 150px;
-  height: 150px;
-  top: 30px;
-  left: 60px;
-  border: 1px solid #333;
-}
-.csseditor .cubic-bezier-editor .bezier .bezier-canvas {
-  position: absolute;
-  left: -25px;
-  top: -25px;
-  pointer-events: none;
-}
-.csseditor .cubic-bezier-editor .bezier .control {
-  position: absolute;
-  left: 5px;
-  right: 5px;
-  bottom: 5px;
-  top: 5px;
-}
-.csseditor .cubic-bezier-editor .bezier .control .pointer1, .csseditor .cubic-bezier-editor .bezier .control .pointer2 {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  -webkit-transform: translateX(-50%) translateY(-50%);
-          transform: translateX(-50%) translateY(-50%);
-  border-radius: 100%;
-  cursor: pointer;
-  background-color: #ac48ff;
-  border: 1px solid #ac48ff;
-  box-sizing: border-box;
-}
-.csseditor .cubic-bezier-editor .animation {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  right: 0px;
-  height: 20px;
-  text-align: center;
-}
-.csseditor .cubic-bezier-editor .animation .animation-canvas {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
-}
-.csseditor .cubic-bezier-editor .item-list {
-  position: absolute;
-  top: 30px;
-  bottom: 20px;
-  left: 0px;
-  width: 50px;
-  padding-right: 0px;
-  box-sizing: border-box;
-}
-.csseditor .cubic-bezier-editor .item-list[data-selected-value=ease] .item[data-bezier=ease] {
-  background-color: #cccccc;
-}
-.csseditor .cubic-bezier-editor .item-list[data-selected-value=ease-in] .item[data-bezier=ease-in] {
-  background-color: #cccccc;
-}
-.csseditor .cubic-bezier-editor .item-list[data-selected-value=ease-out] .item[data-bezier=ease-out] {
-  background-color: #cccccc;
-}
-.csseditor .cubic-bezier-editor .item-list .item {
-  position: relative;
-  width: 40px;
-  height: 40px;
-  border: 1px solid gray;
-  cursor: pointer;
-}
-.csseditor .cubic-bezier-editor .item-list .item:not(:first-child) {
-  border-top: 0px;
-}
-.csseditor .cubic-bezier-editor .item-list .item.selected {
-  background-color: #0ab;
-}
-.csseditor .cubic-bezier-editor .item-list .item .item-canvas {
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  width: 30px;
-  height: 30px;
-}
-.csseditor .cubic-bezier-editor .predefined {
-  position: absolute;
-  bottom: 0px;
-  left: 0px;
-  right: 0px;
-  height: 20px;
-  text-align: center;
-  display: grid;
-  grid-template-columns: 30px 1fr 30px;
-}
-.csseditor .cubic-bezier-editor .predefined .left, .csseditor .cubic-bezier-editor .predefined .right {
-  box-sizing: border-box;
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-  vertical-align: middle;
-}
-.csseditor .cubic-bezier-editor .predefined .predefined-text {
-  vertical-align: middle;
-  padding: 4px;
 }
 .csseditor .editor {
   height: auto !important;
@@ -3137,6 +2981,117 @@ html, body {
   height: 16px;
   vertical-align: middle;
 }
+.csseditor .cubic-bezier-editor {
+  width: 228px;
+  height: 210px;
+  position: relative;
+}
+.csseditor .cubic-bezier-editor .bezier {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  top: 30px;
+  left: 60px;
+  border: 1px solid #333;
+}
+.csseditor .cubic-bezier-editor .bezier .bezier-canvas {
+  position: absolute;
+  left: -25px;
+  top: -25px;
+  pointer-events: none;
+}
+.csseditor .cubic-bezier-editor .bezier .control {
+  position: absolute;
+  left: 5px;
+  right: 5px;
+  bottom: 5px;
+  top: 5px;
+}
+.csseditor .cubic-bezier-editor .bezier .control .pointer1, .csseditor .cubic-bezier-editor .bezier .control .pointer2 {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+  border-radius: 100%;
+  cursor: pointer;
+  background-color: #ac48ff;
+  border: 1px solid #ac48ff;
+  box-sizing: border-box;
+}
+.csseditor .cubic-bezier-editor .animation {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  height: 20px;
+  text-align: center;
+}
+.csseditor .cubic-bezier-editor .animation .animation-canvas {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+.csseditor .cubic-bezier-editor .item-list {
+  position: absolute;
+  top: 30px;
+  bottom: 20px;
+  left: 0px;
+  width: 50px;
+  padding-right: 0px;
+  box-sizing: border-box;
+}
+.csseditor .cubic-bezier-editor .item-list[data-selected-value=ease] .item[data-bezier=ease] {
+  background-color: #cccccc;
+}
+.csseditor .cubic-bezier-editor .item-list[data-selected-value=ease-in] .item[data-bezier=ease-in] {
+  background-color: #cccccc;
+}
+.csseditor .cubic-bezier-editor .item-list[data-selected-value=ease-out] .item[data-bezier=ease-out] {
+  background-color: #cccccc;
+}
+.csseditor .cubic-bezier-editor .item-list .item {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border: 1px solid gray;
+  cursor: pointer;
+}
+.csseditor .cubic-bezier-editor .item-list .item:not(:first-child) {
+  border-top: 0px;
+}
+.csseditor .cubic-bezier-editor .item-list .item.selected {
+  background-color: #0ab;
+}
+.csseditor .cubic-bezier-editor .item-list .item .item-canvas {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 30px;
+  height: 30px;
+}
+.csseditor .cubic-bezier-editor .predefined {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  height: 20px;
+  text-align: center;
+  display: grid;
+  grid-template-columns: 30px 1fr 30px;
+}
+.csseditor .cubic-bezier-editor .predefined .left, .csseditor .cubic-bezier-editor .predefined .right {
+  box-sizing: border-box;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  vertical-align: middle;
+}
+.csseditor .cubic-bezier-editor .predefined .predefined-text {
+  vertical-align: middle;
+  padding: 4px;
+}
 .csseditor .color-view-editor {
   display: grid;
   height: 24px;
@@ -3180,7 +3135,7 @@ html, body {
   grid-column-gap: 4px;
 }
 .csseditor .range-editor.has-label {
-  grid-template-columns: 40px 1fr;
+  grid-template-columns: 60px 1fr;
   grid-column-gap: 2px;
 }
 .csseditor .range-editor.has-label.is-removable {
@@ -4742,6 +4697,64 @@ html, body {
   z-index: 100;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1);
   border: 1px solid #cccccc;
+}
+.csseditor .fill-picker .popup-item {
+  padding: 2px 4px;
+}
+.csseditor .fill-picker .grid-2 {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+}
+.csseditor .fill-picker .repeat-list button {
+  width: 20px;
+  height: 20px;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border: 1px solid #cccccc;
+  background-color: white;
+  outline: none;
+  cursor: pointer;
+}
+.csseditor .fill-picker .repeat-list button[value=no-repeat] {
+  background-image: linear-gradient(to top right, rgba(0, 0, 255, 0.5), black);
+  background-position: center center;
+  background-size: 8px 8px;
+  background-repeat: no-repeat;
+}
+.csseditor .fill-picker .repeat-list button[value=repeat] {
+  background-image: linear-gradient(to top right, rgba(0, 0, 255, 0.5), black);
+  background-position: 10px 10px;
+  background-size: 8px 8px;
+  background-repeat: repeat;
+}
+.csseditor .fill-picker .repeat-list button[value=repeat-x] {
+  background-image: linear-gradient(to top right, rgba(0, 0, 255, 0.5), black);
+  background-position: 10px 8px;
+  background-size: 8px 8px;
+  background-repeat: repeat-x;
+}
+.csseditor .fill-picker .repeat-list button[value=repeat-y] {
+  background-image: linear-gradient(to top right, rgba(0, 0, 255, 0.5), black);
+  background-position: 8px 10px;
+  background-size: 8px 8px;
+  background-repeat: repeat-y;
+}
+.csseditor .fill-picker .repeat-list button[value=space] {
+  background-image: linear-gradient(to top right, rgba(0, 0, 255, 0.5), black);
+  background-position: 10px 10px;
+  background-size: 8px 8px;
+  background-repeat: space;
+}
+.csseditor .fill-picker .repeat-list button[value=round] {
+  background-image: linear-gradient(to top right, rgba(0, 0, 255, 0.5), black);
+  background-position: 0px 0px;
+  background-size: 8px 8px;
+  background-repeat: round;
+}
+.csseditor .fill-picker .repeat-list[data-value=repeat] button[value=repeat], .csseditor .fill-picker .repeat-list[data-value=no-repeat] button[value=no-repeat], .csseditor .fill-picker .repeat-list[data-value=repeat-x] button[value=repeat-x], .csseditor .fill-picker .repeat-list[data-value=repeat-y] button[value=repeat-y], .csseditor .fill-picker .repeat-list[data-value=space] button[value=space], .csseditor .fill-picker .repeat-list[data-value=round] button[value=round] {
+  background-color: #cccccc;
+  box-shadow: 0 0 1px 1px black;
 }
 .csseditor .fill-picker .picker-tab .picker-tab-list {
   text-align: center;
