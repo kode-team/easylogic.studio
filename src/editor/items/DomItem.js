@@ -53,7 +53,7 @@ export class DomItem extends GroupItem {
       'transform': '',
       'filter': '',
       'backdrop-filter': '',
-      'background-color': '',      
+      'background-color': 'rgba(255, 255, 255, 1)',      
       'background-image': '',      
       'border-radius': '',      
       'box-shadow': '',

@@ -1977,6 +1977,32 @@ html, body {
   justify-items: center;
   align-items: center;
 }
+.csseditor .page-view .tools {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  display: inline-block;
+}
+.csseditor .page-view .tools button {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 0px;
+  border-radius: 0px;
+  background-color: white;
+  padding: 0px;
+  cursor: pointer;
+  outline: none;
+}
+.csseditor .page-view .tools button svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor .page-view .tools button svg path {
+  fill: black;
+}
 .csseditor .page-canvas {
   position: absolute;
   width: 500px;

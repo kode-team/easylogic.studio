@@ -490,7 +490,6 @@ export default class EventMachine {
   load(...args) {
     if (!this._loadMethods) {
       this._loadMethods = this.filterProps(CHECK_LOAD_PATTERN);
-      this._bindMethods = this.filterProps(CHECK_BIND_PATTERN);
     }
 
     this._loadMethods
@@ -520,42 +519,55 @@ export default class EventMachine {
       }
     });
 
+    this.bindData();
+
+    this.parseComponent();
+    
+  }
+
+  bindData (...args) {
+    if (!this._bindMethods) {
+      this._bindMethods = this.filterProps(CHECK_BIND_PATTERN);
+    }
     /**
      * BIND 를 해보자.
      * 이시점에 하는게 맞는지는 모르겠지만 일단은 해보자.
      * BIND 는 특정 element 에 html 이 아닌 데이타를 업데이트하기 위한 간단한 로직이다.
      */
-    this._bindMethods.forEach(callbackName => {
-      const bindMethod = this[callbackName];
-      var [callbackName, id] = callbackName.split(CHECK_SAPARATOR);
+    this._bindMethods
+      .filter(callbackName => {
+        if (!args.length) return true; 
+        var [callbackName, id] = callbackName.split(CHECK_SAPARATOR);        
+        return args.includes(id)
+      })
+      .forEach(callbackName => {
+        const bindMethod = this[callbackName];
+        var [callbackName, id] = callbackName.split(CHECK_SAPARATOR);
 
-      const refObject = this.getRef(id);
-      let refCallback = BIND_CHECK_DEFAULT_FUNCTION;
+        const refObject = this.getRef(id);
+        let refCallback = BIND_CHECK_DEFAULT_FUNCTION;
 
-      if (refObject != EMPTY_STRING && isString(refObject)) {
-        refCallback = BIND_CHECK_FUNCTION(refObject);
-      } else if (isFunction(refObject)) {
-        refCallback = refObject;
-      }
+        if (refObject != EMPTY_STRING && isString(refObject)) {
+          refCallback = BIND_CHECK_FUNCTION(refObject);
+        } else if (isFunction(refObject)) {
+          refCallback = refObject;
+        }
 
-      const elName = callbackName.split(BIND_SAPARATOR)[1];
-      let $element = this.refs[elName];
+        const elName = callbackName.split(BIND_SAPARATOR)[1];
+        let $element = this.refs[elName];
 
-      // isBindCheck 는 binding 하기 전에 변화된 지점을 찾아서 업데이트를 제한한다.
-      const isBindCheck = isFunction(refCallback) && refCallback.call(this);
-      if ($element && isBindCheck) {
-        const results = bindMethod.call(this, ...args);
+        // isBindCheck 는 binding 하기 전에 변화된 지점을 찾아서 업데이트를 제한한다.
+        const isBindCheck = isFunction(refCallback) && refCallback.call(this);
+        if ($element && isBindCheck) {
+          const results = bindMethod.call(this, ...args);
 
-        if (!results) return;
+          if (!results) return;
 
-        keyEach(results, (key, value) => {
-          applyElementAttribute($element, key, value);
-        });
-      }
-    });
-
-    this.parseComponent();
-    
+          keyEach(results, (key, value) => {
+            applyElementAttribute($element, key, value);
+          });
+        }
+      });
   }
 
   // 기본 템플릿 지정

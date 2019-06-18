@@ -3,13 +3,21 @@ import UIElement, { EVENT } from "../../../util/UIElement";
 import { editor } from "../../../editor/editor";
 import { Project } from "../../../editor/items/Project";
 import { ArtBoard } from "../../../editor/items/ArtBoard";
-import { CLICK, DEBOUNCE, LOAD } from "../../../util/Event";
+import { CLICK, DEBOUNCE, LOAD, BIND } from "../../../util/Event";
 import { CHANGE_SELECTION } from "../../types/event";
 import { StyleParser } from "../../../editor/parse/StyleParser";
 import { CSS_TO_STRING } from "../../../util/css/make";
 import { NEW_LINE, EMPTY_STRING } from "../../../util/css/types";
+import icon from "../icon/icon";
 
 export default class CanvasView extends UIElement {
+
+  initState () {
+    return {
+      zoom : 1 
+    }
+  }
+
   initialize() {
     super.initialize();
 
@@ -43,9 +51,29 @@ export default class CanvasView extends UIElement {
         <div ref='$svgArea'>
           <svg width="0" height="0" ref='$svg'></svg>   
         </div>
+        <div class='tools'>
+          <button type='button' ref='$plus'>${icon.add}</button>
+          <button type='button' ref='$minus'>${icon.remove2}</button>
+        </div>
       </div>
     `;
   }
+
+  [CLICK('$plus')] () {
+    this.setState({
+      zoom :  this.state.zoom * 1.1
+    })
+
+    this.bindData('$lock')    //  .... 는 아무런 의미가 없다.  
+  }
+  [CLICK('$minus')] () {
+    this.setState({
+      zoom :  this.state.zoom * 0.9
+    })
+
+    this.bindData('$lock')
+  }
+
 
   makeElement (item) {
     return `<div id='${item.id}'>${item.content ? item.content : EMPTY_STRING}
@@ -53,6 +81,15 @@ export default class CanvasView extends UIElement {
         return this.makeElement(it)
       }).join(NEW_LINE)}
     </div>`
+  }
+
+  [BIND('$lock')] () {
+    var zoom = this.state.zoom;
+    return {
+      style: {
+        transform: `scale(${zoom})`
+      }
+    }
   }
 
   [LOAD('$lock')] () {

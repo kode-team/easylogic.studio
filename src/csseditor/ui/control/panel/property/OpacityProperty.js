@@ -23,7 +23,7 @@ export default class OpacityProperty extends BaseProperty {
   [LOAD("$body")]() {
     var current = editor.selection.current || {};
 
-    var opacity = current['opacity'] || ''
+    var opacity = current['opacity'] || '1'
     return `<NumberRangeEditor 
               ref='$1' 
               key='opacity' 
