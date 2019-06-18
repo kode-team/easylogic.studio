@@ -553,6 +553,10 @@
 
       > .clip-path-editor {
 
+        &.clip-path-type {
+          margin-bottom: 5px;
+        }
+
         .range-editor {
           margin-bottom: 5px;
         }
@@ -563,7 +567,15 @@
           box-sizing: border-box;
           box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
 
+          .clip-area {
+            display: inline-block;
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.1);
+            z-index: 0;
+          }
+
           .drag-pointer {
+            z-index: 1;
             position: absolute;
             transform: translateX(-50%) translateY(-50%);
             width: 10px;
@@ -571,6 +583,22 @@
             background-color: red; 
             border-radius: 100%;
             display:inline-block;
+
+            &[data-type='top'] {
+              background-color: red;
+            }
+
+            &[data-type='right'] {
+              background-color: green;
+            }
+            
+            &[data-type='bottom'] {
+              background-color: orange;
+            }
+            
+            &[data-type='left'] {
+              background-color: blue;
+            }            
           }
         }
       }

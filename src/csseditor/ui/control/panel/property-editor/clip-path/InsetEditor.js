@@ -1,13 +1,14 @@
 import UIElement, { EVENT } from "../../../../../../util/UIElement";
-import { WHITE_STRING } from "../../../../../../util/css/types";
+import { WHITE_STRING, EMPTY_STRING } from "../../../../../../util/css/types";
 import { isUndefined } from "../../../../../../util/functions/func";
 import { Length } from "../../../../../../editor/unit/Length";
 import { POINTERSTART, MOVE, END } from "../../../../../../util/Event";
 import RangeEditor from "../RangeEditor";
+import { DirectionLength } from "../../../../../../editor/unit/DirectionLength";
 
 
 
-export default class CircleEditor extends UIElement {
+export default class InsetEditor extends UIElement {
 
     components () {
         return {
@@ -15,26 +16,28 @@ export default class CircleEditor extends UIElement {
         }
     }
 
-    parseValue (str = '50%') {
-        var radius = new Length('', 'closest-side'), position = ''; 
-        str = str || '50%'
-        if (str.includes('at')) {
-            [ radius, position ] = str.split('at').map(it => it.trim());
-        }  else {
-            position = str.trim(); 
+    parseValue (str = '') {
+        var [inset, radius] = str.split('round')
+
+        var [ top, right, bottom, left] = DirectionLength.parse(inset);
+
+        if (radius) {
+
+            var [ topRadius, rightRadius, bottomRadius, leftRadius] = DirectionLength.parse(radius);
+
         }
-
-        var [x, y] = position.split(WHITE_STRING)
-
-        if (isUndefined(y)) {
-            y = x; 
-        }
-
-        x = Length.parse(x)
-        y = Length.parse(y)
 
         return {
-            radius, x, y
+            isAll: false,
+            top, 
+            right, 
+            bottom, 
+            left ,
+            isAllRadius: false,
+            topRadius,
+            rightRadius,
+            bottomRadius,
+            leftRadius
         }
     }
 
@@ -43,29 +46,129 @@ export default class CircleEditor extends UIElement {
     }
 
     template() {
+
+        var { top, right, bottom, left} = this.state; 
+
+        var maxWidth = 234;
+        var maxHeight = 234; 
+
+        var topX =  Length.percent( Math.abs((left.value - (100 - right.value))/2) ).toPx(maxWidth)
+        var topY = top.toPx(maxHeight);
+
+        var bottomX = topX.clone()
+        var bottomY = Length.percent(100 - bottom.value).toPx(maxHeight);
+
+        var rightX = Length.percent(100 - right.value).toPx(maxWidth);
+        var rightY = Length.percent( Math.abs((top.value - (100 - bottom.value))/2) ).toPx(maxHeight)
+
+        var leftX = left.toPx(maxWidth)
+        var leftY = Length.percent( Math.abs((top.value - (100 - bottom.value))/2) ).toPx(maxHeight)
+
         return `
-        <div class='clip-path-editor circle-editor'>
-            <RangeEditor 
-                ref='$range' 
-                label='Radius' 
-                key='radius' 
-                value='${this.state.radius}' 
-                selectedUnit='${this.state.radius.unit}' 
-                min="0" 
-                max="100" 
-                step="0.1" 
-                units="%,closest-side,farthest-side" 
-                onchange='changeRangeEditor' 
-            />
+        <div class='clip-path-editor inset-editor'>
             <div class='drag-area' ref='$area'>
-                <div class='drag-pointer' ref='$pointer' style='left: ${this.state.x};top: ${this.state.y};'></div>
+                <div class='drag-pointer' data-type='top' ref='$top' style='left: ${topX};top: ${topY};'></div>
+                <div class='drag-pointer' data-type='right' ref='$right' style='left: ${rightX};top: ${rightY};'></div>
+                <div class='drag-pointer' data-type='bottom' ref='$bottom' style='left: ${bottomX};top: ${bottomY};'></div>
+                <div class='drag-pointer' data-type='left' ref='$left' style='left: ${leftX};top: ${leftY};'></div>
+                <div class='clip-area' ref='$clipArea' style='left: ${leftX};top: ${topY};width: ${Length.px(rightX.value - left.value)};height: ${Length.px(bottomY.value - topY.value)};'></div>
             </div>
         </div>
     `
     }
 
-    [POINTERSTART('$area') + MOVE() + END()] (e) {
+    // 버그가 많다. 
+    // 몇가지를 더 해야한다. 
 
+    // 1. top, bottom, 또는 right, left 는 서로의 경계를 넘어갈 수가 없다. 
+    // 2. clipRect 를 드래그 할 때 width, height 안 맞는 문제 해결해야함 
+    refreshPointer () {
+        var { top, right, bottom, left} = this.state; 
+
+        var maxWidth = 234;
+        var maxHeight = 234; 
+
+        var topX =  Length.percent( Math.abs((left.value + (100 - right.value))/2) ).toPx(maxWidth)
+        var topY = top.toPx(maxHeight);
+
+        var bottomX = topX.clone()
+        var bottomY = Length.percent(100 - bottom.value).toPx(maxHeight);
+
+        var rightX = Length.percent(100 - right.value).toPx(maxWidth);
+        var rightY = Length.percent( Math.abs((top.value + (100 - bottom.value))/2) ).toPx(maxHeight)
+
+        var leftX = left.toPx(maxWidth)
+        var leftY = Length.percent( Math.abs((top.value + (100 - bottom.value))/2) ).toPx(maxHeight)
+
+        this.refs.$top.css({ left: topX, top: topY })
+        this.refs.$right.css({ left: rightX, top: rightY })
+        this.refs.$bottom.css({ left: bottomX, top: bottomY })
+        this.refs.$left.css({ left: leftX, top: leftY })
+
+        this.refs.$clipArea.css({
+            left: leftX,
+            top: topY,
+            width: Length.px(rightX.value - leftX.value),
+            height: Length.px(bottomY.value - topY.value)
+        })
+    }
+
+    [POINTERSTART('$area .clip-area') + MOVE('moveClipArea')] (e) {
+
+        this.type = e.$delegateTarget.attr('data-type');
+        this.$target = e.$delegateTarget;
+        this.areaRect = this.refs.$area.rect(); 
+        this.startXY = e.xy; 
+
+        this.clipRect = {
+            left: Length.parse(this.$target.css('left')),
+            top: Length.parse(this.$target.css('top')),
+            width: Length.parse(this.$target.css('width')),
+            height: Length.parse(this.$target.css('height')),
+        }
+
+    }
+
+   
+    moveClipArea (dx, dy) {
+
+        var clipWidth = this.clipRect.width.value;
+        var clipHeight = this.clipRect.width.value;
+        var x = this.clipRect.left.value + dx;
+        var y = this.clipRect.top.value + dy;
+
+        if (0 > x) {
+            x = 0; 
+        } else if (this.areaRect.width < x + clipWidth) {
+            x = this.areaRect.width - clipWidth; 
+        }
+
+        if (0 > y) {
+            y = 0; 
+        } else if (this.areaRect.height < y + clipHeight) {
+            y = this.areaRect.height - clipHeight; 
+        }        
+
+        var left = Length.px(x)
+        var top = Length.px(y)
+
+        this.updateData({ 
+            top : top.toPercent(this.areaRect.height).round(100),
+            bottom : Length.px(this.areaRect.height -  (y + clipHeight) ).toPercent(this.areaRect.height).round(100),
+            right : Length.px(this.areaRect.width - (x + clipWidth)).toPercent(this.areaRect.width).round(100),
+            left : left.toPercent(this.areaRect.width).round(100) 
+        })
+
+
+        this.refreshPointer();
+
+    } 
+
+
+    [POINTERSTART('$area .drag-pointer') + MOVE()] (e) {
+
+        this.type = e.$delegateTarget.attr('data-type');
+        this.$target = e.$delegateTarget;
         this.areaRect = this.refs.$area.rect(); 
         this.startXY = e.xy; 
     }
@@ -86,34 +189,41 @@ export default class CircleEditor extends UIElement {
             y = this.areaRect.bottom; 
         }        
 
-        var left = Length.percent((x - this.areaRect.x) / this.areaRect.width * 100).round(1)
-        var top = Length.percent((y - this.areaRect.y) / this.areaRect.height * 100).round(1)
+        var left = Length.px(x - this.areaRect.x)
+        var top = Length.px(y - this.areaRect.y)
 
-        this.refs.$pointer.css({
-            left, top 
-        })
+        if (this.type === 'top') {
+            this.updateData({ 
+                top : top.toPercent(this.areaRect.height) 
+            })            
+        } else if (this.type === 'bottom') {
+            this.updateData({ 
+                bottom : Length.px(this.areaRect.height -  top.value).toPercent(this.areaRect.height) 
+            })
+        } else if (this.type === 'right') {
+            this.updateData({ 
+                right : Length.px(this.areaRect.width - left.value).toPercent(this.areaRect.width) 
+            })                                    
+        } else if (this.type === 'left') {
+            this.updateData({ 
+                left : left.toPercent(this.areaRect.width) 
+            })
+        }
 
-        this.updateData({
-            x: left,
-            y: top
-        })
+        this.refreshPointer();
+
     }
 
     toClipPathValueString () {
 
-        var {x,y,radius} = this.state;
+        var {top, right, left, bottom, topRadius, leftRadius, bottomRadius, rightRadius} = this.state;
 
-        var results = `${x} ${y}`
+        var position = [top, right, bottom, left].filter(it => it).join(WHITE_STRING)
+        var round = [topRadius, rightRadius, bottomRadius, leftRadius].filter(it => it).join(WHITE_STRING).trim()
 
-        var radiusString = radius + '';
+        var results = `${position} ${round ? `round ${round}` : EMPTY_STRING}`
 
-        if (radiusString.includes('closest-side')) {
-            radiusString = 'closest-side'
-        } else if (radiusString.includes('farthest-side')) {
-            radiusString = 'farthest-side'
-        }
-
-        return radius ? `${radiusString} at ${results}` :  results;
+        return results;
     }
 
     updateData (data) {
@@ -122,21 +232,4 @@ export default class CircleEditor extends UIElement {
         this.parent.trigger(this.props.onchange, this.props.key, this.toClipPathValueString(), this.props.params)
     }
 
-    [EVENT('changeRangeEditor')] (key, value) {
-
-        if (key === 'radius') {
-            var radius = value; 
-            var tempValue = value + '';
-
-            if (tempValue.includes('closest-side')) {
-                radius = new Length('', 'closest-side')
-            }  else if (tempValue.includes('farthest-side')) {
-                radius = new Length('', 'farthest-side')
-            }
-
-            this.updateData({
-                radius
-            })
-        }
-    }
 }

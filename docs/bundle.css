@@ -5419,6 +5419,9 @@ html, body {
   width: 250px;
   height: auto;
 }
+.csseditor .popup.clippath-popup .box > .clip-path-editor.clip-path-type {
+  margin-bottom: 5px;
+}
 .csseditor .popup.clippath-popup .box > .clip-path-editor .range-editor {
   margin-bottom: 5px;
 }
@@ -5428,7 +5431,14 @@ html, body {
   box-sizing: border-box;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
 }
+.csseditor .popup.clippath-popup .box > .clip-path-editor .drag-area .clip-area {
+  display: inline-block;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.1);
+  z-index: 0;
+}
 .csseditor .popup.clippath-popup .box > .clip-path-editor .drag-area .drag-pointer {
+  z-index: 1;
   position: absolute;
   -webkit-transform: translateX(-50%) translateY(-50%);
           transform: translateX(-50%) translateY(-50%);
@@ -5437,6 +5447,18 @@ html, body {
   background-color: red;
   border-radius: 100%;
   display: inline-block;
+}
+.csseditor .popup.clippath-popup .box > .clip-path-editor .drag-area .drag-pointer[data-type=top] {
+  background-color: red;
+}
+.csseditor .popup.clippath-popup .box > .clip-path-editor .drag-area .drag-pointer[data-type=right] {
+  background-color: green;
+}
+.csseditor .popup.clippath-popup .box > .clip-path-editor .drag-area .drag-pointer[data-type=bottom] {
+  background-color: orange;
+}
+.csseditor .popup.clippath-popup .box > .clip-path-editor .drag-area .drag-pointer[data-type=left] {
+  background-color: blue;
 }
 .csseditor .popup.clippath-popup .box .property .title {
   display: grid;

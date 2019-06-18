@@ -6,11 +6,14 @@ import { ClipPath } from "../../../../editor/css-property/ClipPath";
 import CircleEditor from "../panel/property-editor/clip-path/CircleEditor";
 import SelectEditor from "../panel/property-editor/SelectEditor";
 import { editor } from "../../../../editor/editor";
+import InsetEditor from "../panel/property-editor/clip-path/InsetEditor";
+
 
 export default class ClipPathPopup extends UIElement {
 
   components() {
     return {
+      InsetEditor,
       SelectEditor,
       CircleEditor
     }
@@ -36,7 +39,7 @@ export default class ClipPathPopup extends UIElement {
     return `
     <div class='popup clippath-popup' ref='$popup'>
       <div class="box">
-        <div class='clip-path-editor' ref='$clippathType'></div>
+        <div class='clip-path-editor clip-path-type' ref='$clippathType'></div>
         <div class='clip-path-editor' ref='$clippath'></div>
       </div>
     </div>`;
