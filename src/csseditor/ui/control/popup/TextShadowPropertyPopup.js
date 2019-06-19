@@ -1,7 +1,7 @@
 import UIElement, { EVENT } from "../../../../util/UIElement";
 import { Length } from "../../../../editor/unit/Length";
-import { CHANGE_EDITOR, CHANGE_SELECTION } from "../../../types/event";
-import { LOAD, POINTERSTART, MOVE, INPUT } from "../../../../util/Event";
+import { CHANGE_SELECTION } from "../../../types/event";
+import { LOAD, POINTERSTART, MOVE } from "../../../../util/Event";
 import { html } from "../../../../util/functions/func";
 import RangeEditor from "../panel/property-editor/RangeEditor";
 
@@ -136,7 +136,6 @@ export default class TextShadowPropertyPopup extends UIElement {
   [EVENT(
     "hideTextShadowPropertyPopup",
     "hidePropertyPopup",
-    CHANGE_EDITOR,
     CHANGE_SELECTION
   )]() {
     this.$el.hide();

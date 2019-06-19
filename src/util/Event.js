@@ -220,7 +220,9 @@ export const BIND_CHECK_DEFAULT_FUNCTION = () => {
 
 export const BIND = (value = "$el", checkFieldOrCallback = EMPTY_STRING) => {
   return (
-    BIND_SAPARATOR + value + CHECK_SAPARATOR + createRef(checkFieldOrCallback)
+    BIND_SAPARATOR + value + ( 
+      checkFieldOrCallback ?  CHECK_SAPARATOR + createRef(checkFieldOrCallback) : EMPTY_STRING 
+    ) 
   );
 };
 

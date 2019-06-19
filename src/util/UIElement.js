@@ -91,9 +91,8 @@ class UIElement extends EventMachine {
   }
 
   destoryStoreEvent() {
-    keyEach(this.storeEvents, (event, eventValue) => {
-      this.$store.off(event, eventValue);
-    });
+    this.$store.offAll(this);
+    this.storeEvents = {} 
   }
 
   destroy () {

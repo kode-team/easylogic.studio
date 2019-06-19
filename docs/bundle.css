@@ -1436,13 +1436,12 @@ html, body {
   background-color: #f0f0f0;
 }
 .csseditor .tab.number-tab .tab-body {
-  top: 40px;
+  top: 30px;
 }
 .csseditor .tab.number-tab > .tab-header {
   border-bottom: 1px solid #cccccc;
 }
 .csseditor .tab.number-tab > .tab-header > .tab-item {
-  border-right: 1px solid #cccccc;
   text-align: center;
   background-color: white;
   position: relative;
@@ -1969,6 +1968,13 @@ html, body {
 .csseditor .tool-menu .items .icon.github:before {
   content: "G";
 }
+.csseditor .page-container {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  top: 0px;
+}
 .csseditor .page-view {
   position: absolute;
   left: 0px;
@@ -1981,14 +1987,15 @@ html, body {
   grid-template-rows: 1fr;
   justify-items: center;
   align-items: center;
+  overflow: auto;
 }
-.csseditor .page-view .tools {
+.csseditor .page-tools {
   position: absolute;
   left: 10px;
   bottom: 10px;
   display: inline-block;
 }
-.csseditor .page-view .tools button {
+.csseditor .page-tools button {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
@@ -2001,11 +2008,11 @@ html, body {
   cursor: pointer;
   outline: none;
 }
-.csseditor .page-view .tools button svg {
+.csseditor .page-tools button svg {
   width: 100%;
   height: 100%;
 }
-.csseditor .page-view .tools button svg path {
+.csseditor .page-tools button svg path {
   fill: black;
 }
 .csseditor .page-canvas {
@@ -2837,7 +2844,6 @@ html, body {
 .csseditor .clip-path-list .clippath-item .title {
   display: grid;
   grid-template-columns: 1fr 20px;
-  height: 20px;
 }
 .csseditor .clip-path-list .clippath-item .title .name {
   padding: 2px 0px;
@@ -2927,6 +2933,13 @@ html, body {
 }
 .csseditor .selector-list .selector-item .title .name {
   padding: 2px 0px;
+}
+.csseditor .selector-list .selector-item .title .name span {
+  padding: 4px 6px;
+  font-weight: bold;
+  color: white;
+  border-radius: 5px;
+  background-image: linear-gradient(to right, #0000ff, #ff00ff);
 }
 .csseditor .selector-list .selector-item .title .tools {
   vertical-align: middle;
@@ -5443,33 +5456,96 @@ html, body {
 .csseditor .popup.clippath-popup .box > .clip-path-editor .round-area {
   margin-top: 5px;
 }
+.csseditor .popup.clippath-popup .box > .clip-path-editor .clip-area {
+  display: inline-block;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.1);
+  z-index: 0;
+}
+.csseditor .popup.clippath-popup .box > .clip-path-editor .clip-area.polygon {
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 220px;
+  pointer-events: none;
+  z-index: 1;
+}
+.csseditor .popup.clippath-popup .box > .clip-path-editor .clip-area.circle {
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 220px;
+  pointer-events: none;
+  z-index: 1;
+}
+.csseditor .popup.clippath-popup .box > .clip-path-editor .pointer-input {
+  margin-top: 10px;
+}
+.csseditor .popup.clippath-popup .box > .clip-path-editor .pointer-input .pointer-item {
+  display: grid;
+  grid-template-columns: 1fr 1fr 0.5fr;
+  grid-column-gap: 2px;
+}
+.csseditor .popup.clippath-popup .box > .clip-path-editor .pointer-input .pointer-item > .input-item {
+  display: grid;
+  grid-template-columns: 20px 1fr 20px;
+  grid-column-gap: 2px;
+}
+.csseditor .popup.clippath-popup .box > .clip-path-editor .pointer-input .pointer-item > .input-item label {
+  text-align: right;
+  padding-right: 2px;
+  vertical-align: middle;
+}
+.csseditor .popup.clippath-popup .box > .clip-path-editor .pointer-input .pointer-item > .input-item input, .csseditor .popup.clippath-popup .box > .clip-path-editor .pointer-input .pointer-item > .input-item span {
+  vertical-align: middle;
+}
+.csseditor .popup.clippath-popup .box > .clip-path-editor .pointer-input .pointer-item .tools button {
+  background-color: transparent;
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+  display: inline-block;
+  padding: 0px;
+  border: 0px;
+  border-radius: 0px;
+  box-sizing: border-box;
+}
+.csseditor .popup.clippath-popup .box > .clip-path-editor .pointer-input .pointer-item .tools button svg {
+  width: 100%;
+  height: 100%;
+}
 .csseditor .popup.clippath-popup .box > .clip-path-editor .drag-area {
   height: 220px;
   position: relative;
   box-sizing: border-box;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
 }
-.csseditor .popup.clippath-popup .box > .clip-path-editor .drag-area .clip-area {
+.csseditor .popup.clippath-popup .box > .clip-path-editor .drag-area .pointer-list {
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
   display: inline-block;
   position: absolute;
-  background-color: rgba(0, 0, 0, 0.1);
   z-index: 0;
+  pointer-events: none;
 }
 .csseditor .popup.clippath-popup .box > .clip-path-editor .drag-area .drag-pointer {
-  z-index: 1;
+  z-index: 2;
   position: absolute;
   -webkit-transform: translateX(-50%) translateY(-50%);
           transform: translateX(-50%) translateY(-50%);
   width: 10px;
   height: 10px;
-  background-color: red;
   border-radius: 100%;
   display: inline-block;
+  background-color: blue;
+  pointer-events: all;
 }
-.csseditor .popup.clippath-popup .box > .clip-path-editor .drag-area .drag-pointer[data-type=top] {
+.csseditor .popup.clippath-popup .box > .clip-path-editor .drag-area .drag-pointer[data-type=top], .csseditor .popup.clippath-popup .box > .clip-path-editor .drag-area .drag-pointer.first {
   background-color: red;
 }
-.csseditor .popup.clippath-popup .box > .clip-path-editor .drag-area .drag-pointer[data-type=right] {
+.csseditor .popup.clippath-popup .box > .clip-path-editor .drag-area .drag-pointer[data-type=right], .csseditor .popup.clippath-popup .box > .clip-path-editor .drag-area .drag-pointer.last:not(.first) {
   background-color: green;
 }
 .csseditor .popup.clippath-popup .box > .clip-path-editor .drag-area .drag-pointer[data-type=bottom] {

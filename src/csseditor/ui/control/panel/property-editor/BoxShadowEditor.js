@@ -4,7 +4,6 @@ import icon from "../../../icon/icon";
 import { BoxShadow } from "../../../../../editor/css-property/BoxShadow";
 import { EMPTY_STRING } from "../../../../../util/css/types";
 import {
-  CHANGE_LAYER,
   CHANGE_ARTBOARD,
   CHANGE_SELECTION
 } from "../../../../types/event";
@@ -72,7 +71,7 @@ export default class BoxShadowEditor extends UIElement {
     return arr.join(EMPTY_STRING);
   }
 
-  [EVENT(CHANGE_LAYER, CHANGE_ARTBOARD, CHANGE_SELECTION)]() {
+  [EVENT(CHANGE_ARTBOARD, CHANGE_SELECTION)]() {
     this.refresh();
   }
 

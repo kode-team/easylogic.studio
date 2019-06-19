@@ -23,13 +23,13 @@ $tab-horizontal-header-right-width: 60px;
     }
 
     .tab-body {
-      top: 40px;
+      top: 30px;
     }
 
     > .tab-header {
       border-bottom: 1px solid $border-color;
       > .tab-item {
-        border-right: 1px solid $border-color;
+        // border-right: 1px solid $border-color;
         text-align: center;
         background-color: white;
         position: relative;

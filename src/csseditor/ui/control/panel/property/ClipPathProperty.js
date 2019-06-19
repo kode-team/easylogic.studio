@@ -9,7 +9,7 @@ import {
 import { EMPTY_STRING } from "../../../../../util/css/types";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
-import { CHANGE_ARTBOARD, CHANGE_SELECTION, CHANGE_EDITOR } from "../../../../types/event";
+import { CHANGE_ARTBOARD, CHANGE_SELECTION } from "../../../../types/event";
 
 export default class ClipPathProperty extends BaseProperty {
   getTitle() {
@@ -61,7 +61,7 @@ export default class ClipPathProperty extends BaseProperty {
     this.emit('hideClipPathPopup');    
   }
 
-  [EVENT(CHANGE_ARTBOARD, CHANGE_SELECTION, CHANGE_EDITOR)] () {
+  [EVENT(CHANGE_ARTBOARD, CHANGE_SELECTION)] () {
     this.refresh();
   }
 

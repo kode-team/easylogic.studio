@@ -159,12 +159,18 @@ export default class BaseStore {
     }
   }
 
+  offAll (context) {
+     this.callbacks = this.callbacks.filter(f => {
+      return f.context !== context;
+    });
+
+    this.cachedCallback = {};
+  }
+
   getCachedCallbacks (event) {
-    if (!this.cachedCallback[event]) {
       this.cachedCallback[event] = this.callbacks.filter(
         f => f.event === event
       );
-    }
 
     return this.cachedCallback[event]
   }
@@ -189,8 +195,8 @@ export default class BaseStore {
       var list = this.getCachedCallbacks(event);
       if (list) {
         list
-        .filter(f => f.originalCallback.source === source)
-        .forEach(f => f.callback($2, $3, $4, $5));
+          .filter(f => f.originalCallback.source === source)
+          .forEach(f => f.callback($2, $3, $4, $5));
       } else {
         console.warn(event, ' is not valid event');
       }

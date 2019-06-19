@@ -1,6 +1,6 @@
 import UIElement, { EVENT } from "../../../../util/UIElement";
 import { Length } from "../../../../editor/unit/Length";
-import { CHANGE_EDITOR, CHANGE_SELECTION } from "../../../types/event";
+import { CHANGE_SELECTION } from "../../../types/event";
 import { INPUT, LOAD } from "../../../../util/Event";
 import SVGFilterEditor from "../panel/property-editor/SVGFilterEditor";
 import SVGClipPathEditor from "../panel/property-editor/SVGClipPathEditor";
@@ -117,7 +117,6 @@ export default class SVGPropertyPopup extends UIElement {
   [EVENT(
     "hideSVGPropertyPopup",
     "hidePropertyPopup",
-    CHANGE_EDITOR,
     CHANGE_SELECTION
   )]() {
     this.$el.hide();

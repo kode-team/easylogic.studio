@@ -1,6 +1,6 @@
 import UIElement, { EVENT } from "../../../../util/UIElement";
 import { Length } from "../../../../editor/unit/Length";
-import { CHANGE_EDITOR, CHANGE_SELECTION } from "../../../types/event";
+import { CHANGE_SELECTION } from "../../../types/event";
 import { LOAD} from "../../../../util/Event";
 import CubicBezierEditor from "../panel/property-editor/CubicBezierEditor";
 import { html } from "../../../../util/functions/func";
@@ -196,7 +196,6 @@ export default class TransitionPropertyPopup extends UIElement {
   [EVENT(
     "hideTransitionPropertyPopup",
     "hidePropertyPopup",
-    CHANGE_EDITOR,
     CHANGE_SELECTION
   )]() {
     this.$el.hide();

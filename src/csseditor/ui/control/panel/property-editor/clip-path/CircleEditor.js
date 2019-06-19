@@ -2,7 +2,7 @@ import UIElement, { EVENT } from "../../../../../../util/UIElement";
 import { WHITE_STRING } from "../../../../../../util/css/types";
 import { isUndefined } from "../../../../../../util/functions/func";
 import { Length } from "../../../../../../editor/unit/Length";
-import { POINTERSTART, MOVE, END } from "../../../../../../util/Event";
+import { POINTERSTART, MOVE, END, BIND } from "../../../../../../util/Event";
 import RangeEditor from "../RangeEditor";
 
 export default class CircleEditor extends UIElement {
@@ -57,10 +57,20 @@ export default class CircleEditor extends UIElement {
             />
             <div class='drag-area' ref='$area'>
                 <div class='drag-pointer' ref='$pointer' style='left: ${this.state.x};top: ${this.state.y};'></div>
+                <div class='clip-area circle' ref='$clipArea'></div>
             </div>
         </div>
     `
     }
+
+
+    [BIND('$clipArea')] () {
+        return {
+            style : {
+                'clip-path' : `${this.props.key}(${this.toClipPathValueString()})`
+            }
+        }
+    }    
 
     [POINTERSTART('$area') + MOVE() + END()] (e) {
 
@@ -95,6 +105,9 @@ export default class CircleEditor extends UIElement {
             x: left,
             y: top
         })
+
+
+        this.bindData('$clipArea')
     }
 
     toClipPathValueString () {
@@ -124,13 +137,15 @@ export default class CircleEditor extends UIElement {
 
         if (key === 'radius') {
             var radius = value; 
-            var tempValue = value + '';
+            var tempValue = value.unit + '';
 
             if (tempValue.includes('closest-side')) {
                 radius = new Length('', 'closest-side')
             }  else if (tempValue.includes('farthest-side')) {
                 radius = new Length('', 'farthest-side')
             }
+
+            console.log(radius)
 
             this.updateData({
                 radius

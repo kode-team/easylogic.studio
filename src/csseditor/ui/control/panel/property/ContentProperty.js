@@ -7,7 +7,6 @@ import { EVENT } from "../../../../../util/UIElement";
 
 import {
   CHANGE_SELECTION,
-  CHANGE_EDITOR,
   CHANGE_ARTBOARD
 } from "../../../../types/event";
 import { EMPTY_STRING } from "../../../../../util/css/types";
@@ -17,7 +16,7 @@ export default class ContentProperty extends BaseProperty {
     return "Content";
   }
 
-  [EVENT(CHANGE_EDITOR, CHANGE_ARTBOARD, CHANGE_SELECTION)]() {
+  [EVENT(CHANGE_ARTBOARD, CHANGE_SELECTION)]() {
     this.refresh();
   }
 

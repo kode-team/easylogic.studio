@@ -4,6 +4,15 @@ $editor-button-color: #5f80de;
 $editor-line-color: rgba($editor-button-color, 0.3);
 $editor-resizer-width: 8px;
 $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
+
+.page-container {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  top: 0px;  
+}
+
 .page-view {
   position: absolute;
   left: 0px;
@@ -16,40 +25,44 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
   grid-template-rows: 1fr;
   justify-items: center;
   align-items: center;
+  overflow: auto;
 
   .page-lock {
     // box-shadow: 0 0 3px 0px rgba(0, 0, 0, 0.2);
   }
 
-  .tools {
-    position: absolute;
-    left: 10px;
-    bottom: 10px;
-    display: inline-block;
+}
 
 
-    button {
-      appearance: none;
-      width: 16px;
-      height: 16px;
-      border:0px;
-      border-radius: 0px;
-      background-color: white;
-      padding:0px;
-      cursor: pointer;
-      outline: none;
 
-      svg {
-        width: 100%;
-        height: 100%;
-        path {
-          fill: black; 
-        }
+.page-tools {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  display: inline-block;
+
+
+  button {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border:0px;
+    border-radius: 0px;
+    background-color: white;
+    padding:0px;
+    cursor: pointer;
+    outline: none;
+
+    svg {
+      width: 100%;
+      height: 100%;
+      path {
+        fill: black; 
       }
     }
   }
-
 }
+
 
 
 .page-canvas {

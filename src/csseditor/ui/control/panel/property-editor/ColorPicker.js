@@ -1,8 +1,8 @@
 import UIElement, { EVENT } from "../../../../../util/UIElement";
 import ColorPickerUI from "../../../../../colorpicker/index";
 import { html } from "../../../../../util/functions/func";
-import { Length, Position } from "../../../../../editor/unit/Length";
-import { CHANGE_EDITOR, CHANGE_SELECTION } from "../../../../types/event";
+import { Length } from "../../../../../editor/unit/Length";
+import { CHANGE_SELECTION } from "../../../../types/event";
 import { CLICK } from "../../../../../util/Event";
 import Dom from "../../../../../util/Dom";
 
@@ -67,7 +67,7 @@ export default class ColorPicker extends UIElement {
     this.emit("hidePicker");
   }
 
-  [EVENT("hidePicker", "hideColorPicker", CHANGE_EDITOR, CHANGE_SELECTION)]() {
+  [EVENT("hidePicker", CHANGE_SELECTION)]() {
     this.$el.hide();
   }
 
@@ -75,7 +75,7 @@ export default class ColorPicker extends UIElement {
     var isShow = !!new Dom(e.target).closest('fill-picker')
 
     if (this.$el.css('display') != 'none' && !isShow) {
-      this.trigger('hideColorPicker')
+      this.trigger('hidePicker')
     }
   }
 }

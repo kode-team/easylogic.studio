@@ -1,6 +1,6 @@
 import UIElement, { EVENT } from "../../../../util/UIElement";
 import { Length } from "../../../../editor/unit/Length";
-import { CHANGE_EDITOR, CHANGE_SELECTION } from "../../../types/event";
+import { CHANGE_SELECTION } from "../../../types/event";
 import { LOAD, CHANGE } from "../../../../util/Event";
 import CubicBezierEditor from "../panel/property-editor/CubicBezierEditor";
 import { editor } from "../../../../editor/editor";
@@ -214,7 +214,6 @@ export default class AnimationPropertyPopup extends UIElement {
   [EVENT(
     "hideAnimationPropertyPopup",
     "hidePropertyPopup",
-    CHANGE_EDITOR,
     CHANGE_SELECTION
   )]() {
     this.$el.hide();

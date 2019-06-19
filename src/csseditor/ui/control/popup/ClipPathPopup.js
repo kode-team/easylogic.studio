@@ -1,18 +1,20 @@
 import UIElement, { EVENT } from "../../../../util/UIElement";
 import { Length } from "../../../../editor/unit/Length";
-import { CHANGE_EDITOR, CHANGE_SELECTION } from "../../../types/event";
+import { CHANGE_SELECTION } from "../../../types/event";
 import { LOAD } from "../../../../util/Event";
 import { ClipPath } from "../../../../editor/css-property/ClipPath";
 import CircleEditor from "../panel/property-editor/clip-path/CircleEditor";
 import SelectEditor from "../panel/property-editor/SelectEditor";
 import { editor } from "../../../../editor/editor";
 import InsetEditor from "../panel/property-editor/clip-path/InsetEditor";
+import PolygonEditor from "../panel/property-editor/clip-path/PolygonEditor";
 
 
 export default class ClipPathPopup extends UIElement {
 
   components() {
     return {
+      PolygonEditor,
       InsetEditor,
       SelectEditor,
       CircleEditor
@@ -119,7 +121,6 @@ export default class ClipPathPopup extends UIElement {
   [EVENT(
     "hideClipPathPopup",
     "hidePropertyPopup",
-    CHANGE_EDITOR,
     CHANGE_SELECTION
   )]() {
     this.$el.hide();

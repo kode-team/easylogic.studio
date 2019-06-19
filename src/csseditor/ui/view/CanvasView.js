@@ -3,7 +3,7 @@ import UIElement, { EVENT } from "../../../util/UIElement";
 import { editor } from "../../../editor/editor";
 import { Project } from "../../../editor/items/Project";
 import { ArtBoard } from "../../../editor/items/ArtBoard";
-import { CLICK, DEBOUNCE, LOAD, BIND } from "../../../util/Event";
+import { CLICK, DEBOUNCE, LOAD, BIND, PREVENT, SELF, STOP } from "../../../util/Event";
 import { CHANGE_SELECTION } from "../../types/event";
 import { StyleParser } from "../../../editor/parse/StyleParser";
 import { CSS_TO_STRING } from "../../../util/css/make";
@@ -43,17 +43,19 @@ export default class CanvasView extends UIElement {
   }
   template() {
     return `
-      <div class='page-view'>
-        <div class='page-lock' ref='$lock'>
-          <div class="page-canvas" ref="$canvas"></div>             
+      <div class='page-container'>
+        <div class='page-view'>
+          <div class='page-lock' ref='$lock'>
+            <div class="page-canvas" ref="$canvas"></div>             
+          </div>
+          <div ref='$styleArea'>
+            <style type='text/css' ref='$style'></style>  
+          </div>
+          <div ref='$svgArea'>
+            <svg width="0" height="0" ref='$svg'></svg>   
+          </div>
         </div>
-        <div ref='$styleArea'>
-          <style type='text/css' ref='$style'></style>  
-        </div>
-        <div ref='$svgArea'>
-          <svg width="0" height="0" ref='$svg'></svg>   
-        </div>
-        <div class='tools'>
+        <div class='page-tools'>
           <button type='button' ref='$plus'>${icon.add}</button>
           <button type='button' ref='$minus'>${icon.remove2}</button>
         </div>
@@ -61,14 +63,14 @@ export default class CanvasView extends UIElement {
     `;
   }
 
-  [CLICK('$plus')] () {
+  [CLICK('$plus') + PREVENT + STOP] () {
     this.setState({
       zoom :  this.state.zoom * 1.1
     })
 
-    this.bindData('$lock')    //  .... 는 아무런 의미가 없다.  
+    this.bindData('$lock') 
   }
-  [CLICK('$minus')] () {
+  [CLICK('$minus') + PREVENT + STOP] () {
     this.setState({
       zoom :  this.state.zoom * 0.9
     })
@@ -205,7 +207,7 @@ export default class CanvasView extends UIElement {
     this.generateStyle(data)
   }
 
-  [CLICK()]() {
+  [CLICK() + SELF](e) {
     this.emit(CHANGE_SELECTION);
   }
 }

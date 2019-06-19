@@ -1,7 +1,7 @@
 import UIElement, { EVENT } from "../../../../util/UIElement";
 import { Length } from "../../../../editor/unit/Length";
-import { CHANGE_EDITOR, CHANGE_SELECTION } from "../../../types/event";
-import { INPUT, LOAD } from "../../../../util/Event";
+import { CHANGE_SELECTION } from "../../../types/event";
+import { INPUT } from "../../../../util/Event";
 import CSSPropertyEditor from "../panel/property-editor/CSSPropertyEditor";
 
 export default class SelectorPopup extends UIElement {
@@ -80,7 +80,7 @@ export default class SelectorPopup extends UIElement {
 
     this.$el
       .css({
-        top: Length.px(150),
+        top: Length.px(110),
         right: Length.px(320),
         bottom: Length.auto,
         'z-index': 1000000
@@ -91,9 +91,7 @@ export default class SelectorPopup extends UIElement {
   }
 
   [EVENT(
-    "hideSelectorPopup",
     "hidePropertyPopup",
-    CHANGE_EDITOR,
     CHANGE_SELECTION
   )]() {
     this.$el.hide();

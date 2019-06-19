@@ -7,11 +7,12 @@ export class Selector extends Property {
   }
 
 
-  getDefaultObject() {
+  getDefaultObject(obj) {
     return super.getDefaultObject({
       itemType: "selector",
       selector: '',
-      properties: []
+      properties: [],
+      ...obj
     });
   }
 

@@ -28,5 +28,5 @@ export default {
 };
 
 // if (window.startEditor) {
-startEditor(document.getElementById("target"));
+window.editor = startEditor(document.getElementById("target"));
 // }

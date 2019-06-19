@@ -6,7 +6,6 @@ import { Length } from "../../../../../editor/unit/Length";
 import { EVENT } from "../../../../../util/UIElement";
 import {
   CHANGE_SELECTION,
-  CHANGE_EDITOR,
   CHANGE_ARTBOARD
 } from "../../../../types/event";
 import { EMPTY_STRING } from "../../../../../util/css/types";
@@ -22,7 +21,7 @@ export default class BoxModelProperty extends BaseProperty {
     return "Box Model";
   }
 
-  [EVENT(CHANGE_EDITOR, CHANGE_ARTBOARD, CHANGE_SELECTION)]() {
+  [EVENT(CHANGE_ARTBOARD, CHANGE_SELECTION)]() {
     this.refresh();
   }
 

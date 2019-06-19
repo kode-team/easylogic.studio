@@ -21,9 +21,10 @@ import {
   isNotUndefined,
   isUndefined,
   isString,
-  isObject
+  isObject,
+  keyMap
 } from "./functions/func";
-import { EMPTY_STRING } from "./css/types";
+import { EMPTY_STRING, WHITE_STRING } from "./css/types";
 import {
   ADD_BODY_MOUSEMOVE,
   ADD_BODY_MOUSEUP
@@ -398,6 +399,23 @@ export default class EventMachine {
     return TEMP_DIV.createChildrenFragment();
   }
 
+  childrenIds() {
+    return  keyMap(this.children, (key, obj) => {
+      return obj.id;
+    })
+  }
+
+  exists () {
+
+    if (this.parent) {
+      if (this.parent.childrenIds) {
+        return this.parent.childrenIds().includes(this.id)
+      }
+    }
+
+    return true  
+  }
+
   parseComponent() {
     const $el = this.$el;
 
@@ -433,12 +451,13 @@ export default class EventMachine {
 
         if (this.children[refName]) {
           // ref 가 동일한게 있으면 event 를 모두 해제한다. 
-          this.children[refName].clean()
+          this.children[refName].destroy()
           delete this.children[refName] 
-          
+          // console.log(refName, this.children[refName])
         }
 
         this.children[refName] = instance;
+
 
         if (instance) {
           instance.render();
@@ -463,11 +482,15 @@ export default class EventMachine {
 
   clean () {
     if (!this.$el.hasParent()) {
+
       keyEach(this.children, (key, child) => {
         child.clean();
       })
 
       this.destroy();  
+
+      this.$el = null;
+      // console.log('removed', 'el', this.sourceName)
       return true; 
     }
   }
@@ -535,10 +558,13 @@ export default class EventMachine {
      * BIND 는 특정 element 에 html 이 아닌 데이타를 업데이트하기 위한 간단한 로직이다.
      */
     this._bindMethods
-      .filter(callbackName => {
+      .filter(originalCallbackName => {
         if (!args.length) return true; 
-        var [callbackName, id] = callbackName.split(CHECK_SAPARATOR);        
-        return args.includes(id)
+        var [callbackName, id] = originalCallbackName.split(CHECK_SAPARATOR);        
+
+        var [_, $bind] = callbackName.split(WHITE_STRING)
+
+        return args.includes($bind)
       })
       .forEach(callbackName => {
         const bindMethod = this[callbackName];

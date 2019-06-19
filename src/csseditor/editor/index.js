@@ -2,7 +2,7 @@ import CanvasView from "../ui/view/CanvasView";
 import ToolMenu from "../ui/view/ToolMenu";
 
 import UIElement from "../../util/UIElement";
-import { RESIZE, DEBOUNCE, BIND } from "../../util/Event";
+import { RESIZE, DEBOUNCE } from "../../util/Event";
 import { RESIZE_WINDOW } from "../types/event";
 import Inspector from "../ui/control/Inspector";
 import FillPopup from "../ui/control/panel/property-editor/FillPopup";
@@ -74,14 +74,6 @@ export default class CSSEditor extends UIElement {
       Inspector,
       ToolMenu,
       CanvasView
-    };
-  }
-
-  [BIND("$layoutMain")]() {
-    return {
-      value: this.state.xxx,
-      style: `${this.state.xxx}`,
-      class: `${this.state.class}`
     };
   }
 

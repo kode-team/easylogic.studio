@@ -1,6 +1,6 @@
 import UIElement, { EVENT } from "../../../../util/UIElement";
 import { Length } from "../../../../editor/unit/Length";
-import { CHANGE_EDITOR, CHANGE_SELECTION } from "../../../types/event";
+import { CHANGE_SELECTION } from "../../../types/event";
 import OffsetEditor from "../panel/property-editor/OffsetEditor";
 import { INPUT } from "../../../../util/Event";
 
@@ -97,7 +97,6 @@ export default class KeyframePopup extends UIElement {
   [EVENT(
     "hideKeyframePopup",
     "hidePropertyPopup",
-    CHANGE_EDITOR,
     CHANGE_SELECTION
   )]() {
     this.$el.hide();

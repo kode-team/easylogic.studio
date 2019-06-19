@@ -111,55 +111,55 @@ export default class CSSPropertyEditor extends UIElement {
     if (property.key === 'background-color') {
       return `
         <div class='property-editor'>
-          <ColorViewEditor ref='$backgroundColor' color="${property.value}" onChange="changeBackgroundColorProperty" />
+          <ColorViewEditor ref='$backgroundColor${index}' color="${property.value}" onChange="changeBackgroundColorProperty" />
         </div>
       `
     } else if (property.key === 'background-image') {
       return `
         <div class='property-editor'>
-          <BackgroundImageEditor ref='$backgroundImage' value="${property.value}" onChange="changeBackgroundImageProperty" />
+          <BackgroundImageEditor ref='$backgroundImage${index}' value="${property.value}" onChange="changeBackgroundImageProperty" />
         </div>
       `
     } else if (property.key === 'filter') {
       return `
         <div class='property-editor'>
-          <FilterEditor ref='$filter' value="${property.value}" onChange="changeFilterProperty" />
+          <FilterEditor ref='$filter${index}' value="${property.value}" onChange="changeFilterProperty" />
         </div>
       `
     } else if (property.key === 'backdrop-filter') {
       return `
         <div class='property-editor'>
-          <FilterEditor ref='$backdropFilter' value="${property.value}" onChange="changeBackdropFilterProperty" />
+          <FilterEditor ref='$backdropFilter${index}' value="${property.value}" onChange="changeBackdropFilterProperty" />
         </div>
       `      
     } else if (property.key === 'box-shadow') {
       return `
         <div class='property-editor'>
-          <BoxShadowEditor ref='$boxshadow' value="${property.value}" onChange="changeBoxShadowProperty" />
+          <BoxShadowEditor ref='$boxshadow${index}' value="${property.value}" onChange="changeBoxShadowProperty" />
         </div>
       `      
     } else if (property.key === 'var') {
       return `
         <div class='property-editor'>
-          <VarEditor ref='$var' value="${property.value}" onChange="changeVar" />
+          <VarEditor ref='$var${index}' value="${property.value}" onChange="changeVar" />
         </div>
       `       
     } else if (property.key === 'transform') {
       return `
         <div class='property-editor'>
-          <TransformEditor ref='$transform' value="${property.value}" onChange="changeTransform" />
+          <TransformEditor ref='$transform${index}' value="${property.value}" onChange="changeTransform" />
         </div>
       `                  
     } else if (property.key === 'transform-origin') {
       return `
         <div class='property-editor'>
-          <TransformOriginEditor ref='$transformOrigin' value="${property.value}" onChange="changeTransformOrigin" />
+          <TransformOriginEditor ref='$transformOrigin${index}' value="${property.value}" onChange="changeTransformOrigin" />
         </div>
       `                  
     } else if (property.key === 'perspective-origin') {
       return `
         <div class='property-editor'>
-          <PerspectiveOriginEditor ref='$perspectiveOrigin' value="${property.value}" onChange="changePerspectiveOrigin" />
+          <PerspectiveOriginEditor ref='$perspectiveOrigin${index}' value="${property.value}" onChange="changePerspectiveOrigin" />
         </div>
       `                  
     }

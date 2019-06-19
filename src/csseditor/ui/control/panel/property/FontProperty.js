@@ -1,11 +1,9 @@
 import BaseProperty from "./BaseProperty";
-import { INPUT, CHANGE } from "../../../../../util/Event";
 import { html } from "../../../../../util/functions/func";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
 import {
   CHANGE_SELECTION,
-  CHANGE_EDITOR,
   CHANGE_ARTBOARD
 } from "../../../../types/event";
 
@@ -15,7 +13,7 @@ export default class FontProperty extends BaseProperty {
     return "Font";
   }
 
-  [EVENT(CHANGE_EDITOR, CHANGE_ARTBOARD, CHANGE_SELECTION)]() {
+  [EVENT(CHANGE_ARTBOARD, CHANGE_SELECTION)]() {
     this.refresh();
   }
 

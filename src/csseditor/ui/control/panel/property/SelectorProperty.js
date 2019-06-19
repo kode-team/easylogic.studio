@@ -12,10 +12,22 @@ import {
 import { EMPTY_STRING } from "../../../../../util/css/types";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
-import { CHANGE_ARTBOARD, CHANGE_SELECTION, CHANGE_EDITOR } from "../../../../types/event";
+import { CHANGE_ARTBOARD, CHANGE_SELECTION } from "../../../../types/event";
 import { Selector } from "../../../../../editor/css-property/Selector";
 
+
+const selectorList = [
+  '',   // custom 
+  ':hover',
+  ':active',
+  ':before',
+  ':after',
+  ':first-child',
+  ':last-child'
+].join(',')
+
 export default class SelectorProperty extends BaseProperty {
+
   getTitle() {
     return "Selector";
   }
@@ -24,17 +36,22 @@ export default class SelectorProperty extends BaseProperty {
   }
 
   getTools() {
-    return html`
+    return `
+      <div style='display:inline-block;'>
+        <SelectEditor ref='$select' key='selector' options="${selectorList}" />
+      </div>
       <button type="button" ref="$add" title="add Selector">${icon.add}</button>
     `;
   }
 
   makeSelectorTemplate (selector, index) {
     index = index.toString()
-    return html`
+    return `
       <div class='selector-item' draggable='true' ref='$selectorIndex${index}' data-index='${index}'>
         <div class='title'>
-          <div class='name'>${selector.selector || '&lt;none selector&gt;'}</div>
+          <div class='name'>
+            <span>${selector.selector || '&lt;none selector&gt;'}</span>
+          </div>
           <div class='tools'>
               <button type="button" class="del" data-index="${index}">${icon.remove2}</button>
           </div>
@@ -66,7 +83,7 @@ export default class SelectorProperty extends BaseProperty {
     this.refresh();
   }
 
-  [EVENT(CHANGE_ARTBOARD, CHANGE_SELECTION, CHANGE_EDITOR)] () {
+  [EVENT(CHANGE_ARTBOARD, CHANGE_SELECTION)] () {
     this.refresh();
   }
 
@@ -112,7 +129,10 @@ export default class SelectorProperty extends BaseProperty {
 
     var current = editor.selection.current;
     if (current) {
-      current.createSelector();
+
+      current.createSelector({
+        selector: this.children.$select.getValue()
+      });
 
       this.emit("refreshCanvas");
     }

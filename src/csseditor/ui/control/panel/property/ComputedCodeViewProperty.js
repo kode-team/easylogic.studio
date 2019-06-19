@@ -7,7 +7,6 @@ import { EVENT } from "../../../../../util/UIElement";
 
 import {
   CHANGE_SELECTION,
-  CHANGE_EDITOR,
   CHANGE_ARTBOARD
 } from "../../../../types/event";
 import { EMPTY_STRING, NEW_LINE } from "../../../../../util/css/types";
@@ -19,7 +18,6 @@ export default class ComputedCodeViewProperty extends BaseProperty {
   }
 
   [EVENT(
-    CHANGE_EDITOR, 
     CHANGE_ARTBOARD, 
     CHANGE_SELECTION,
   ) + DEBOUNCE(100)]() {

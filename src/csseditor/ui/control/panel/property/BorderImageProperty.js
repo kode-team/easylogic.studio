@@ -6,7 +6,7 @@ import { Position } from "../../../../../editor/unit/Length";
 import icon from "../../../icon/icon";
 import { EMPTY_STRING } from "../../../../../util/css/types";
 import { EVENT } from "../../../../../util/UIElement";
-import { CHANGE_SELECTION, CHANGE_ARTBOARD, CHANGE_EDITOR } from "../../../../types/event";
+import { CHANGE_SELECTION, CHANGE_ARTBOARD } from "../../../../types/event";
 
 const typeList = [
   { key: "top", title: "Top" },
@@ -48,7 +48,7 @@ export default class BorderImageProperty extends BaseProperty {
     return "Border Image";
   }
 
-  [EVENT(CHANGE_SELECTION, CHANGE_ARTBOARD, CHANGE_EDITOR)] () {
+  [EVENT(CHANGE_SELECTION, CHANGE_ARTBOARD)] () {
     this.refresh()
   }
 
