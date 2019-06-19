@@ -1,39 +1,40 @@
 import UIElement, { EVENT } from "../../../../../../util/UIElement";
 import { WHITE_STRING, EMPTY_STRING } from "../../../../../../util/css/types";
-import { isUndefined } from "../../../../../../util/functions/func";
 import { Length } from "../../../../../../editor/unit/Length";
-import { POINTERSTART, MOVE, END } from "../../../../../../util/Event";
+import { POINTERSTART, MOVE, LOAD, CLICK } from "../../../../../../util/Event";
 import RangeEditor from "../RangeEditor";
 import { DirectionLength } from "../../../../../../editor/unit/DirectionLength";
-
+import DirectionEditor from "../DirectionEditor";
 
 
 export default class InsetEditor extends UIElement {
 
     components () {
         return {
+            DirectionEditor,
             RangeEditor
         }
     }
 
     parseValue (str = '') {
-        var [inset, radius] = str.split('round')
+        var [inset, round] = str.split('round')
 
-        var [ top, right, bottom, left] = DirectionLength.parse(inset);
+        var [_count, top, right, bottom, left] = DirectionLength.parse(inset);
 
-        if (radius) {
+        if (round) {
 
-            var [ topRadius, rightRadius, bottomRadius, leftRadius] = DirectionLength.parse(radius);
+            var [_roundCount, topRadius, rightRadius, bottomRadius, leftRadius] = DirectionLength.parse(round);
 
         }
 
         return {
-            isAll: false,
+            isAll: _count === 1,
             top, 
             right, 
             bottom, 
             left ,
-            isAllRadius: false,
+            round,
+            isAllRadius: _roundCount === 1,
             topRadius,
             rightRadius,
             bottomRadius,
@@ -47,7 +48,7 @@ export default class InsetEditor extends UIElement {
 
     template() {
 
-        var { top, right, bottom, left} = this.state; 
+        var { top, right, bottom, left, round} = this.state; 
 
         var maxWidth = 234;
         var maxHeight = 234; 
@@ -64,6 +65,8 @@ export default class InsetEditor extends UIElement {
         var leftX = left.toPx(maxWidth)
         var leftY = Length.percent( Math.abs((top.value - (100 - bottom.value))/2) ).toPx(maxHeight)
 
+        var roundCheckStatus = round ? 'checked' : '';
+
         return `
         <div class='clip-path-editor inset-editor'>
             <div class='drag-area' ref='$area'>
@@ -73,9 +76,45 @@ export default class InsetEditor extends UIElement {
                 <div class='drag-pointer' data-type='left' ref='$left' style='left: ${leftX};top: ${leftY};'></div>
                 <div class='clip-area' ref='$clipArea' style='left: ${leftX};top: ${topY};width: ${Length.px(rightX.value - left.value)};height: ${Length.px(bottomY.value - topY.value)};'></div>
             </div>
+            <div class='round-area'>
+                <label><input type="checkbox" ${roundCheckStatus} ref='$hasRound' /> Round </label>
+                <div ref='$round'></div>
+            </div>
         </div>
     `
     }
+
+    [CLICK('$hasRound')] (e) {
+       this.updateData({
+           round: this.refs.$hasRound.checked()
+       }) 
+    }
+
+
+    [LOAD('$round')] () {
+        var {topRadius, rightRadius, bottomRadius, leftRadius} = this.state
+
+        var value = [topRadius, rightRadius, bottomRadius, leftRadius].join(WHITE_STRING)
+
+        return `<DirectionEditor 
+                ref='$borderRadius' 
+                value='${value}' 
+                onchange='changeBorderRadius' 
+                />`
+    }
+
+    [EVENT('changeBorderRadius')] ([_count, topRadius, rightRadius, bottomRadius, leftRadius]) {
+
+        this.updateData({ 
+            isAllRadius: _count === 1,
+            topRadius, 
+            rightRadius, 
+            bottomRadius, 
+            leftRadius
+        })
+
+    }
+
 
     // 버그가 많다. 
     // 몇가지를 더 해야한다. 
@@ -88,17 +127,20 @@ export default class InsetEditor extends UIElement {
         var maxWidth = 234;
         var maxHeight = 234; 
 
-        var topX =  Length.percent( Math.abs((left.value + (100 - right.value))/2) ).toPx(maxWidth)
+        var halfWidth = Math.abs((left.value + (100 - right.value))/2);
+        var halfHeight = Math.abs((top.value + (100 - bottom.value))/2);
+
+        var topX =  Length.percent( halfWidth ).toPx(maxWidth)
         var topY = top.toPx(maxHeight);
 
-        var bottomX = topX.clone()
+        var bottomX = Length.percent( halfWidth ).toPx(maxWidth)
         var bottomY = Length.percent(100 - bottom.value).toPx(maxHeight);
 
         var rightX = Length.percent(100 - right.value).toPx(maxWidth);
-        var rightY = Length.percent( Math.abs((top.value + (100 - bottom.value))/2) ).toPx(maxHeight)
+        var rightY = Length.percent( halfHeight ).toPx(maxHeight)
 
         var leftX = left.toPx(maxWidth)
-        var leftY = Length.percent( Math.abs((top.value + (100 - bottom.value))/2) ).toPx(maxHeight)
+        var leftY = Length.percent( halfHeight ).toPx(maxHeight)
 
         this.refs.$top.css({ left: topX, top: topY })
         this.refs.$right.css({ left: rightX, top: rightY })
@@ -133,7 +175,7 @@ export default class InsetEditor extends UIElement {
     moveClipArea (dx, dy) {
 
         var clipWidth = this.clipRect.width.value;
-        var clipHeight = this.clipRect.width.value;
+        var clipHeight = this.clipRect.height.value;
         var x = this.clipRect.left.value + dx;
         var y = this.clipRect.top.value + dy;
 
@@ -216,18 +258,18 @@ export default class InsetEditor extends UIElement {
 
     toClipPathValueString () {
 
-        var {top, right, left, bottom, topRadius, leftRadius, bottomRadius, rightRadius} = this.state;
+        var {top, right, left, bottom, round, topRadius, leftRadius, bottomRadius, rightRadius} = this.state;
 
-        var position = [top, right, bottom, left].filter(it => it).join(WHITE_STRING)
-        var round = [topRadius, rightRadius, bottomRadius, leftRadius].filter(it => it).join(WHITE_STRING).trim()
+        var position = [top, right, bottom, left].join(WHITE_STRING)
+        var radius = [topRadius, rightRadius, bottomRadius, leftRadius].join(WHITE_STRING)
 
-        var results = `${position} ${round ? `round ${round}` : EMPTY_STRING}`
+        var results = `${position} ${round ? `round ${radius}` : EMPTY_STRING}`
 
         return results;
     }
 
     updateData (data) {
-        this.setState(data)
+        this.setState(data, false)
 
         this.parent.trigger(this.props.onchange, this.props.key, this.toClipPathValueString(), this.props.params)
     }

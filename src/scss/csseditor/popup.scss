@@ -561,6 +561,10 @@
           margin-bottom: 5px;
         }
 
+        .round-area {
+          margin-top: 5px;
+        }
+
         .drag-area {
           height: 234px;
           position: relative;
@@ -640,6 +644,12 @@
         font-size: 12px;
         text-align: left;
         vertical-align: middle;
+
+        input,select {
+          width: auto;
+          display: inline-block;
+          vertical-align: middle;
+        }
       }
 
       input,

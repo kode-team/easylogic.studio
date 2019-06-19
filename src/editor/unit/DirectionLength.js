@@ -29,6 +29,6 @@ export class DirectionLength {
             left = temp[3].clone()
         }
 
-        return [top, right, bottom, left]
+        return [temp.length, top, right, bottom, left]
     }
 }

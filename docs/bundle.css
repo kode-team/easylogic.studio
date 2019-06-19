@@ -4695,6 +4695,54 @@ html, body {
 .csseditor .svg-filter-editor .filter-list .filter-item .filter-ui input[type=range] {
   width: 90%;
 }
+.csseditor .direction-editor .direction-item {
+  display: grid;
+  grid-template-columns: 50px 1fr;
+}
+.csseditor .direction-editor .direction-item.full {
+  grid-template-columns: 1fr;
+}
+.csseditor .direction-editor .radius-selector {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.csseditor .direction-editor .radius-selector[data-selected-value=all] button[data-value=all] {
+  background-color: black;
+}
+.csseditor .direction-editor .radius-selector[data-selected-value=all] button[data-value=all] svg path {
+  fill: white;
+}
+.csseditor .direction-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] {
+  background-color: black;
+}
+.csseditor .direction-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] svg path {
+  fill: white;
+}
+.csseditor .direction-editor .radius-selector button {
+  flex: none;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  box-sizing: border-box;
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 2px;
+  border-radius: 3px;
+  cursor: pointer;
+  outline: none;
+  padding: 0px;
+  border: 0px;
+}
+.csseditor .direction-editor .radius-selector button svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor .direction-editor .radius-selector button svg path {
+  fill: #cccccc;
+}
 .csseditor .fill-picker {
   position: fixed;
   width: 224px;
@@ -5425,6 +5473,9 @@ html, body {
 .csseditor .popup.clippath-popup .box > .clip-path-editor .range-editor {
   margin-bottom: 5px;
 }
+.csseditor .popup.clippath-popup .box > .clip-path-editor .round-area {
+  margin-top: 5px;
+}
 .csseditor .popup.clippath-popup .box > .clip-path-editor .drag-area {
   height: 234px;
   position: relative;
@@ -5490,6 +5541,11 @@ html, body {
 .csseditor .popup.clippath-popup .box label {
   font-size: 12px;
   text-align: left;
+  vertical-align: middle;
+}
+.csseditor .popup.clippath-popup .box label input, .csseditor .popup.clippath-popup .box label select {
+  width: auto;
+  display: inline-block;
   vertical-align: middle;
 }
 .csseditor .popup.clippath-popup .box input,

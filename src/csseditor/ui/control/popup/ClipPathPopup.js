@@ -106,7 +106,7 @@ export default class ClipPathPopup extends UIElement {
 
     this.$el
       .css({
-        top: Length.px(150),
+        top: Length.px(110),
         right: Length.px(320),
         bottom: Length.auto,
         'z-index': 1000000

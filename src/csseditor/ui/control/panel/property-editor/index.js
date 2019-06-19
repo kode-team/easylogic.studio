@@ -25,8 +25,11 @@ import SVGFilterEditor from "./SVGFilterEditor";
 import TextEditor from "./TextEditor";
 import NumberRangeEditor from "./NumberRangeEditor";
 import SVGClipPathEditor from "./SVGClipPathEditor";
+import DirectionEditor from "./DirectionEditor";
+
 
 export default {
+    DirectionEditor,
     SVGClipPathEditor,
     NumberRangeEditor,
     TextEditor,
