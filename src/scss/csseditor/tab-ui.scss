@@ -1,4 +1,4 @@
-$tab-header-height: 54px;
+$tab-header-height: 40px;
 $tab-background-color: rgb(255, 255, 255);
 $tab-border-color: $border-color;
 $tab-selected-color: $selected-color;
@@ -14,7 +14,7 @@ $tab-horizontal-header-right-width: 60px;
 
   &.number-tab {
     .tab-header {
-      height: 40px;
+      height: 30px;
       cursor: pointer;
     }
     .tab-content {
@@ -33,6 +33,7 @@ $tab-horizontal-header-right-width: 60px;
         text-align: center;
         background-color: white;
         position: relative;
+        padding: 4px;
 
         &:first-child {
           &:hover {
@@ -139,6 +140,11 @@ $tab-horizontal-header-right-width: 60px;
       color: black;
       //   border: 1px solid $tab-border-color;
       min-width: 50px;
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
 
       &:not(.selected) {
         background-color: $tab-background-color;

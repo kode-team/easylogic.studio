@@ -27,8 +27,21 @@ export default class FontProperty extends BaseProperty {
     return html`
 
       <div class='property-item'>
-        <RangeEditor ref='$size' label='Size' key="font-size" removable="true" onchange="changeRangeEditor" />
+        <RangeEditor 
+          ref='$size' 
+          label='Size' 
+          key="font-size" 
+          removable="true" 
+          onchange="changeRangeEditor" />
       </div>
+      <div class='property-item'>
+        <RangeEditor 
+          ref='$lineHeight' 
+          label='line-height' 
+          removable="true" 
+          key="line-height" 
+          onchange="changeRangeEditor" />
+      </div>      
       <div class='property-item'>
         <SelectEditor 
           ref='$style' 
@@ -46,9 +59,7 @@ export default class FontProperty extends BaseProperty {
           onchange="changeRangeEditor" 
         />
       </div>      
-      <div class='property-item'>
-        <RangeEditor ref='$lineHeight' label='line-height' removable="true" key="line-height" onchange="changeRangeEditor" />
-      </div>
+
       <div class='property-item'>
         <SelectEditor 
           ref='$family' 

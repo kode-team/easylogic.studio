@@ -255,6 +255,10 @@ export class DomItem extends GroupItem {
     }
   }
 
+  getBorder (type) {
+    return this.json.border[type] || {}
+  }
+
   setOutline (obj) {
     this.json.outline = { 
       ...this.json.outline, 

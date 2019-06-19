@@ -81,7 +81,7 @@ export default class RangeEditor extends UIElement {
     }
 
     getValue() {
-        return this.state.value; 
+        return this.state.value.clone(); 
     }
 
     setValue (value) {

@@ -8,7 +8,8 @@
   background-color: rgba(255, 255, 255, 0.5);
   border: 1px solid $border-color;
   box-shadow: 0 0 1px 0px $border-color;
-  padding: 1px 0px;
+  padding: 14px;
+
 
   .popup-title {
     font-size: 12px;
@@ -546,7 +547,6 @@
 
 
   &.clippath-popup {
-    padding: 7px;
     width: 250px;
     height: auto;
     .box {
@@ -566,7 +566,7 @@
         }
 
         .drag-area {
-          height: 234px;
+          height: 220px;
           position: relative;
           box-sizing: border-box;
           box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);

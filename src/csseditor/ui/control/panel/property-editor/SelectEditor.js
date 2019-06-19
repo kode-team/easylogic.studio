@@ -31,6 +31,11 @@ export default class SelectEditor extends UIElement {
         return this.refs.$options.value; 
     }
 
+    setValue (value) {
+        this.state.value = value + ''; 
+        this.refresh()
+    }
+
     [BIND('$options')] () {
         return {
             // 'disabled': this.state.options.length === 1,
@@ -64,7 +69,7 @@ export default class SelectEditor extends UIElement {
 
 
     updateData (data) {
-        this.setState(data)
+        this.setState(data, false)
 
         this.parent.trigger(this.props.onchange, this.props.key, this.state.value, this.props.params)
     }

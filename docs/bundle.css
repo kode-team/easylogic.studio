@@ -1428,7 +1428,7 @@ html, body {
   top: 0px;
 }
 .csseditor .tab.number-tab .tab-header {
-  height: 40px;
+  height: 30px;
   cursor: pointer;
 }
 .csseditor .tab.number-tab .tab-content {
@@ -1446,6 +1446,7 @@ html, body {
   text-align: center;
   background-color: white;
   position: relative;
+  padding: 4px;
 }
 .csseditor .tab.number-tab > .tab-header > .tab-item:first-child:hover label {
   left: 10px;
@@ -1580,7 +1581,7 @@ html, body {
   position: absolute;
   left: 0px;
   right: 0px;
-  height: 54px;
+  height: 40px;
   z-index: 1;
   display: flex;
 }
@@ -1597,6 +1598,10 @@ html, body {
   cursor: pointer;
   color: black;
   min-width: 50px;
+}
+.csseditor .tab > .tab-header > .tab-item svg {
+  width: 20px;
+  height: 20px;
 }
 .csseditor .tab > .tab-header > .tab-item:not(.selected) {
   background-color: white;
@@ -1619,7 +1624,7 @@ html, body {
   position: absolute;
   left: 0px;
   right: 0px;
-  top: 54px;
+  top: 40px;
   bottom: 0px;
 }
 .csseditor .tab > .tab-body.no-border {
@@ -1674,7 +1679,7 @@ html, body {
 }
 .csseditor .tab.bottom > .tab-body {
   top: 0px;
-  bottom: 54px;
+  bottom: 40px;
 }
 .csseditor .tab.horizontal.left > .tab-header {
   left: 0px;
@@ -2069,23 +2074,12 @@ html, body {
 .csseditor .property > .property-body .property-item {
   padding: 0px;
   font-size: 11px;
-  margin-bottom: 2px;
-}
-.csseditor .border-item {
-  display: grid;
-  grid-template-columns: 1fr 3fr;
-  grid-column-gap: 10px;
+  margin-bottom: 5px;
 }
 .csseditor .border-item .border-direction {
   position: relative;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  grid-column-gap: 2px;
-  grid-row-gap: 2px;
-  place-self: top;
-  width: 60px;
-  height: 60px;
+  display: block;
+  padding: 2px 10px;
 }
 .csseditor .border-item .border-direction[data-selected-value=all] button[data-value=all] {
   opacity: 1;
@@ -2107,39 +2101,37 @@ html, body {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
-  border: 2px solid #cccccc;
+  border: 3px solid #cccccc;
   box-sizing: border-box;
   cursor: pointer;
   opacity: 0.4;
   outline: none;
+  display: inline-block;
+  vertical-align: middle;
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
 }
 .csseditor .border-item .border-direction button[has-value=true] {
   border-color: #00a2ff;
 }
 .csseditor .border-item .border-direction button[data-value=all] {
-  grid-column: 2/3;
-  grid-row: 2/3;
-  border: 2px solid black;
+  border: 3px solid black;
 }
 .csseditor .border-item .border-direction button[data-value=top] {
-  grid-column: 2/3;
-  grid-row: 1/2;
-  border-top: 2px solid black;
+  border-top: 3px solid black;
 }
 .csseditor .border-item .border-direction button[data-value=right] {
-  grid-column: 3/4;
-  grid-row: 2/3;
-  border-right: 2px solid black;
+  border-right: 3px solid black;
 }
 .csseditor .border-item .border-direction button[data-value=bottom] {
-  grid-column: 2/3;
-  grid-row: 3/4;
-  border-bottom: 2px solid black;
+  border-bottom: 3px solid black;
 }
 .csseditor .border-item .border-direction button[data-value=left] {
-  grid-column: 1/2;
-  grid-row: 2/3;
-  border-left: 2px solid black;
+  border-left: 3px solid black;
+}
+.csseditor .border-item .editor-area {
+  padding: 5px 0px;
 }
 .csseditor .border-item .input-group {
   display: grid;
@@ -2157,33 +2149,6 @@ html, body {
 }
 .csseditor .border-item .input-field .input-ui {
   vertical-align: middle;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-}
-.csseditor .border-item .input-field .input-ui input {
-  width: 100%;
-}
-.csseditor .border-item .input-field .input-ui .color {
-  background-color: white;
-  height: 20px;
-  width: 20px;
-  border-radius: 100%;
-  cursor: pointer;
-  border: 1px solid #cccccc;
-  box-sizing: border-box;
-  position: relative;
-  background-color: transparent;
-  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
-  background-size: 10px 10px;
-  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
-}
-.csseditor .border-item .input-field .input-ui .color .color-view {
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-  border-radius: 100%;
 }
 .csseditor .border-slice-item {
   display: grid;
@@ -3100,25 +3065,24 @@ html, body {
 .csseditor .color-view-editor {
   display: grid;
   height: 24px;
-  grid-template-columns: 20px auto;
-  grid-column-gap: 5px;
+  grid-template-columns: 24px auto;
+  grid-column-gap: 2px;
   margin-bottom: 5px;
   text-align: center;
 }
 .csseditor .color-view-editor .preview {
   display: inline-block;
-  height: 20px;
   box-sizing: border-box;
-  margin-top: 2px;
+  vertical-align: middle;
   cursor: pointer;
 }
 .csseditor .color-view-editor .preview .mini-view {
   width: 100%;
   height: 100%;
   position: relative;
-  border-radius: 5px;
   box-sizing: border-box;
   border: 1px solid #cccccc;
+  border-radius: 4px;
   background-color: transparent;
   background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
   background-size: 10px 10px;
@@ -3130,11 +3094,15 @@ html, body {
   top: 0px;
   right: 0px;
   bottom: 0px;
-  border-radius: 5px;
+  border-radius: 3px;
 }
 .csseditor .color-view-editor .color-code input {
   width: 100%;
   height: 100%;
+  border-radius: 3px;
+  border: 1px solid #cccccc;
+  padding: 0px 5px;
+  vertical-align: middle;
 }
 .csseditor .range-editor {
   display: grid;
@@ -5069,7 +5037,7 @@ html, body {
   background-color: rgba(255, 255, 255, 0.5);
   border: 1px solid #cccccc;
   box-shadow: 0 0 1px 0px #cccccc;
-  padding: 1px 0px;
+  padding: 14px;
 }
 .csseditor .popup .popup-title {
   font-size: 12px;
@@ -5463,7 +5431,6 @@ html, body {
   grid-column-gap: 2px;
 }
 .csseditor .popup.clippath-popup {
-  padding: 7px;
   width: 250px;
   height: auto;
 }
@@ -5477,7 +5444,7 @@ html, body {
   margin-top: 5px;
 }
 .csseditor .popup.clippath-popup .box > .clip-path-editor .drag-area {
-  height: 234px;
+  height: 220px;
   position: relative;
   box-sizing: border-box;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);

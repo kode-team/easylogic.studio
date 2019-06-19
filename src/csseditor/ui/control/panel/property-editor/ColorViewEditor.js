@@ -16,6 +16,14 @@ export default class ColorViewEditor extends UIElement {
         this.modifyColor();
     }
 
+    getValue () {
+        return this.state.color; 
+    }
+
+    setValue (color) {
+        this.changeColor(color)
+    }
+
     modifyColor() {
         this.parent.trigger(this.props.onchange, this.state.color, this.state.params);
     }

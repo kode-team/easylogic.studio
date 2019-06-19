@@ -50,8 +50,8 @@ export default class InsetEditor extends UIElement {
 
         var { top, right, bottom, left, round} = this.state; 
 
-        var maxWidth = 234;
-        var maxHeight = 234; 
+        var maxWidth = 220;
+        var maxHeight = 220; 
 
         var topX =  Length.percent( Math.abs((left.value - (100 - right.value))/2) ).toPx(maxWidth)
         var topY = top.toPx(maxHeight);
@@ -124,8 +124,8 @@ export default class InsetEditor extends UIElement {
     refreshPointer () {
         var { top, right, bottom, left} = this.state; 
 
-        var maxWidth = 234;
-        var maxHeight = 234; 
+        var maxWidth = 220;
+        var maxHeight = 220; 
 
         var halfWidth = Math.abs((left.value + (100 - right.value))/2);
         var halfHeight = Math.abs((top.value + (100 - bottom.value))/2);
@@ -263,7 +263,7 @@ export default class InsetEditor extends UIElement {
         var position = [top, right, bottom, left].join(WHITE_STRING)
         var radius = [topRadius, rightRadius, bottomRadius, leftRadius].join(WHITE_STRING)
 
-        var results = `${position} ${round ? `round ${radius}` : EMPTY_STRING}`
+        var results = `${position} ${(round && radius.trim()) ? `round ${radius}` : EMPTY_STRING}`
 
         return results;
     }

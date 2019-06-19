@@ -25,20 +25,11 @@
 }
 
 .border-item {
-  display: grid;
-  grid-template-columns: 1fr 3fr;
-  grid-column-gap: 10px;
 
   .border-direction {
     position: relative;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
-    grid-column-gap: 2px;
-    grid-row-gap: 2px;
-    place-self: top;
-    width: 60px;
-    height: 60px;
+    display: block;
+    padding: 2px 10px;
 
     @each $borderType in all, top, right, bottom, left {
       &[data-selected-value="#{$borderType}"] {
@@ -51,11 +42,16 @@
     button {
       padding: 0px;
       appearance: none;
-      border: 2px solid $border-color;
+      border: 3px solid $border-color;
       box-sizing: border-box;
       cursor: pointer;
       opacity: 0.4;
       outline: none;
+      display: inline-block;
+      vertical-align: middle;
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
 
       &[has-value="true"] {
         border-color: rgb(0, 162, 255);
@@ -63,40 +59,30 @@
     }
 
     button[data-value="all"] {
-      grid-column: 2 / 3;
-      grid-row: 2 / 3;
-
-      border: 2px solid black;
+      border: 3px solid black;
     }
 
     button[data-value="top"] {
-      grid-column: 2 / 3;
-      grid-row: 1 / 2;
-
-      border-top: 2px solid black;
+      border-top: 3px solid black;
     }
 
     button[data-value="right"] {
-      grid-column: 3 / 4;
-      grid-row: 2 / 3;
-
-      border-right: 2px solid black;
+      border-right: 3px solid black;
     }
 
     button[data-value="bottom"] {
-      grid-column: 2 / 3;
-      grid-row: 3 / 4;
-
-      border-bottom: 2px solid black;
+      border-bottom: 3px solid black;
     }
 
     button[data-value="left"] {
-      grid-column: 1 / 2;
-      grid-row: 2 / 3;
-
-      border-left: 2px solid black;
+      border-left: 3px solid black;
     }
   }
+
+  .editor-area {
+    padding: 5px 0px;
+  }
+
   .input-group {
     display: grid;
     grid-template-rows: repeat(3, 1fr);
@@ -114,32 +100,6 @@
 
     .input-ui {
       vertical-align: middle;
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-
-      input {
-        width: 100%;
-      }
-
-      .color {
-        background-color: white;
-        height: 20px;
-        width: 20px;
-        border-radius: 100%;
-        cursor: pointer;
-        border: 1px solid $border-color;
-        box-sizing: border-box;
-        position: relative;
-        @include transparent-background();        
-        .color-view {
-          position: absolute;
-          left: 0px;
-          top: 0px;
-          right: 0px;
-          bottom: 0px;
-          border-radius: 100%;
-        } 
-      }
     }
   }
 }
