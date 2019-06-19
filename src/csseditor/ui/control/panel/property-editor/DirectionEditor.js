@@ -41,7 +41,7 @@ export default class DirectionEditor extends UIElement {
 
     if (key === 'all') {
       typeList.forEach(it => {
-        this.state[key] = value.clone();
+        this.state[it.key] = value.clone();
         this.children[`$${it.key}`].setValue(value.clone())
       })
     }
