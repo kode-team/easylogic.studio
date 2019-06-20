@@ -38,9 +38,11 @@ import close from "./close";
 import gradient from "./gradient";
 import transform from "./transform";
 import scatter from "./scatter";
+import shape from "./shape";
 
 
 export default {
+  shape,
   scatter,
   transform,
   gradient,

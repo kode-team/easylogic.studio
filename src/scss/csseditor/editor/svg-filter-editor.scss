@@ -91,6 +91,7 @@
         display: grid;
         grid-template-columns: 1fr;
         margin-bottom: 2px;
+        padding: 2px;
   
         &.drop-shadow {
           grid-template-columns: 50px  1fr;

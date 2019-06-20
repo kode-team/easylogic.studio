@@ -9,8 +9,12 @@ export default class Inspector extends UIElement {
     return html`
       <div class="feature-control">
         <div>
-          <div class="tab number-tab" data-selected-value="1" ref="$tab">
+          <div class="tab number-tab" data-selected-value="7" ref="$tab">
             <div class="tab-header" ref="$header">
+              <div class="tab-item" data-value="7">
+                <div class='icon'>${icon.shape}</div>
+                <label>Element</label>
+              </div>            
               <div class="tab-item" data-value="1">
                 <div class='icon'>${icon.paint}</div>
                 <label>Style</label>
@@ -37,6 +41,8 @@ export default class Inspector extends UIElement {
               </div>                        
             </div>
             <div class="tab-body" ref="$body">
+              <div class="tab-content" data-value="7">
+              </div>
               <div class="tab-content" data-value="1">
                 <SizeProperty />
                 <BoxModelProperty />

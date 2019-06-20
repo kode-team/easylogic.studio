@@ -49,6 +49,10 @@ GaussianBlurSVGFilter.spec = {
     max: 100,
     step: 1,
     defaultValue: Length.number(0)
+  },
+  result: {
+    title: 'result',
+    inputType: 'text'
   }
 };
 
@@ -162,6 +166,10 @@ DisplacementMapSVGFilter.spec = {
     max: 5000,
     step: 1,
     defaultValue: Length.number(0)
+  },
+  result: {
+    title: 'result',
+    inputType: 'text'
   }
 };
 
@@ -214,6 +222,10 @@ ColorMatrixSVGFilter.spec = {
       0, 0, 1, 0, 0,
       0, 0, 0, 1, 0
     ]
+  },
+  result: {
+    title: 'result',
+    inputType: 'text'
   }
 };
 
@@ -258,6 +270,10 @@ ConvolveMatrixSVGFilter.spec = {
       0, 1, 0,
       0, 0, 1
     ]
+  },
+  result: {
+    title: 'result',
+    inputType: 'text'
   }
 };
 
