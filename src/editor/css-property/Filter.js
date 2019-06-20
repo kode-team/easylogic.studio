@@ -13,8 +13,14 @@ export class Filter extends Property {
 
   static parse (obj) {
     var FilterClass = FilterClassName[obj.type];
-  
-    return new FilterClass(obj);
+
+    if (FilterClass) {
+      return new FilterClass(obj);
+    } else {
+      return new URLSvgFilter({
+        value: obj.type 
+      });
+    }
   }  
 
   static parseStyle (filter) {
@@ -83,7 +89,7 @@ export class URLSvgFilter extends Filter {
   getDefaultObject() {
     return super.getDefaultObject({
       type: "svg",
-      value: BlurFilter.spec.defaultValue
+      value: URLSvgFilter.spec.defaultValue
     });
   }
 
@@ -94,7 +100,8 @@ export class URLSvgFilter extends Filter {
 
 URLSvgFilter.spec = {
   title: "SVG",
-  inputType: "select"
+  inputType: "select",
+  defaultValue: ''
 };
 
 export class GrayscaleFilter extends Filter {

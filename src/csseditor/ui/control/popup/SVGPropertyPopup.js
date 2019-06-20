@@ -98,7 +98,6 @@ export default class SVGPropertyPopup extends UIElement {
   }
 
   [EVENT("showSVGPropertyPopup")](data) {
-    console.log(data);
     this.setState(data);
     this.refresh()
 

@@ -8,27 +8,33 @@ import {
   DROP,
   PREVENT
 } from "../../../../../util/Event";
-import { WHITE_STRING, NEW_LINE_2, NEW_LINE } from "../../../../../util/css/types";
+import { WHITE_STRING } from "../../../../../util/css/types";
 import { editor } from "../../../../../editor/editor";
 import UIElement, { EVENT } from "../../../../../util/UIElement";
 import RangeEditor from "./RangeEditor";
 import ColorViewEditor from "./ColorViewEditor";
-import { GaussianBlurSVGFilter, SVGFilter, TurbulenceSVGFilter, DisplacementMapSVGFilter } from "../../../../../editor/css-property/SVGFilter";
+import { GaussianBlurSVGFilter, SVGFilter, TurbulenceSVGFilter, DisplacementMapSVGFilter, ColorMatrixSVGFilter, ConvolveMatrixSVGFilter } from "../../../../../editor/css-property/SVGFilter";
 import SelectEditor from "./SelectEditor";
 import TextEditor from "./TextEditor";
 import NumberRangeEditor from "./NumberRangeEditor";
+import InputArrayEditor from "./InputArrayEditor";
+
 
 
 var filterList = [
   "GaussianBlur",
   "Turbulence",
-  "DisplacementMap"
+  "DisplacementMap",
+  'ColorMatrix',
+  'ConvolveMatrix'
 ];
 
 var specList = {
   GaussianBlur: GaussianBlurSVGFilter.spec,
   Turbulence: TurbulenceSVGFilter.spec,
-  DisplacementMap: DisplacementMapSVGFilter.spec
+  DisplacementMap: DisplacementMapSVGFilter.spec,
+  ColorMatrix: ColorMatrixSVGFilter.spec,
+  ConvolveMatrix: ConvolveMatrixSVGFilter.spec
 };
 
 
@@ -36,6 +42,7 @@ export default class SVGFilterEditor extends UIElement {
 
   components() {
     return {
+      InputArrayEditor,
       NumberRangeEditor,
       RangeEditor,
       ColorViewEditor,
@@ -74,7 +81,22 @@ export default class SVGFilterEditor extends UIElement {
 
   makeFilterEditorTemplate (s, filter, key, index) {
 
-    if (s.inputType === 'select') {
+    if (s.inputType === 'input-array') {
+      return `
+        <div>
+          <InputArrayEditor 
+            ref='$inputArray${key}${index}' 
+            label="${s.title}"
+            key="${key}"
+            params="${index}"            
+            column='${s.column}' 
+            values='${filter[key].join(WHITE_STRING)}' 
+            onchange="changeRangeEditor"
+          />
+        </div>
+        `
+
+    } else if (s.inputType === 'select') {
 
       var options = s.options
 

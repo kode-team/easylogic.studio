@@ -586,15 +586,15 @@ export class DomItem extends GroupItem {
 
       if (s.type === 'filter') {
         return `
-        <${s.type} id='${s.name}'>
-          ${s.value.join(NEW_LINE)}
-        </${s.type}>`
+<${s.type} id='${s.name}'>
+  ${s.value.join(NEW_LINE)}
+</${s.type}>`
       } else if (s.type === 'clip-path') {
         var obj = filterSVGClipPath(icon[s.value.icon], s.value.fit, this.json.width, this.json.height)
         return `
-        <clipPath id='${s.name}' ${obj.transform}>
-          ${obj.paths}
-        </clipPath>`
+<clipPath id='${s.name}' ${obj.transform}>
+  ${obj.paths}
+</clipPath>`
       }
     }).join(NEW_LINE_2)
   }

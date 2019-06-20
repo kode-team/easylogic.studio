@@ -441,7 +441,7 @@ export default class EventMachine {
           if (type === 'json') {
             realValue = JSON.parse(realValue);
           }
-          
+        
           props[name] = realValue; 
         })
 

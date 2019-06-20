@@ -6,7 +6,8 @@ import {
   DRAGSTART,
   DRAGOVER,
   DROP,
-  PREVENT
+  PREVENT,
+  DEBOUNCE
 } from "../../../../../util/Event";
 import { WHITE_STRING } from "../../../../../util/css/types";
 import {
@@ -80,16 +81,40 @@ export default class FilterEditor extends UIElement {
           <div class='label' >
               <label>${this.props.title || ''}</label>
               <div class='tools'>
-                <select ref="$filterSelect">
-                  ${filterList.map(filter => {
-                    return `<option value='${filter}'>${filter}</option>`;
-                  })}
-                </select>
+                <select ref="$filterSelect"></select>
                 <button type="button" ref="$add" title="add Filter">${icon.add} ${this.props.title ? '' : 'Add'}</button>
               </div>
           </div>
           <div class='filter-list' ref='$filterList'></div>
       </div>`;
+  }
+
+  [LOAD('$filterSelect')] () {
+    var list = filterList.map(it => { 
+      return {title: it, value: it}
+    })
+
+    var svgFilterList = this.getSVGFilterList()
+
+    var totalList = []
+
+    if (svgFilterList.length) {
+      totalList = [
+        ...list,
+        { title: '-------' , value: ''},
+        ...svgFilterList
+      ]
+    } else {
+      totalList = [
+        ...list
+      ]
+    }
+
+    return totalList.map(it => {
+      var {title, value} = it;
+      
+      return `<option value='${value}'>${title}</option>`
+    })
   }
 
   getSpec(filterType) {
@@ -127,6 +152,25 @@ export default class FilterEditor extends UIElement {
         })}
       </div>
     `;
+  }
+
+  getSVGFilterList () {
+     
+    var current = editor.selection.current;
+    var arr = [] 
+
+    if (current) {
+      arr = current.svg
+        .filter(it => it.type === 'filter')
+        .map(it => {
+          return {
+            title : `svg - #${it.name}`,
+            value: it.name
+          }
+        })
+    }
+
+    return arr
   }
 
   makeOneFilterEditor (index, filter, spec) {
@@ -293,5 +337,10 @@ export default class FilterEditor extends UIElement {
     
 
     this.modifyFilter();
+  }
+
+  [EVENT('refreshCanvas') + DEBOUNCE(1000) ] () {
+    // svg 필터 옵션만 변경한다. 
+    this.load('$filterSelect')
   }
 }

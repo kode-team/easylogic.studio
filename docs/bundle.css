@@ -4541,11 +4541,13 @@ html, body {
 .csseditor .svg-property-editor .svg-property-list .svg-property-item .title .type[data-type=filter] {
   border-radius: 5px;
   background-color: blue;
+  background-image: linear-gradient(to right, #0000ff, #ff00ff);
   color: white;
 }
 .csseditor .svg-property-editor .svg-property-list .svg-property-item .title .type[data-type=clip-path] {
   border-radius: 5px;
   background-color: red;
+  background-image: linear-gradient(to right, #0000ff, #ff00ff);
   color: white;
 }
 .csseditor .svg-property-editor .svg-property-list .svg-property-item .title label {
@@ -4723,6 +4725,54 @@ html, body {
 }
 .csseditor .direction-editor .radius-selector button svg path {
   fill: #cccccc;
+}
+.csseditor .list-view-editor {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  max-height: 500px;
+  margin-top: 10px;
+  background-color: #cccccc;
+}
+.csseditor .list-view-editor[data-column="0"] {
+  grid-template-columns: repeat(0, 1fr);
+}
+.csseditor .list-view-editor[data-column="1"] {
+  grid-template-columns: repeat(1, 1fr);
+}
+.csseditor .list-view-editor[data-column="2"] {
+  grid-template-columns: repeat(2, 1fr);
+}
+.csseditor .list-view-editor[data-column="3"] {
+  grid-template-columns: repeat(3, 1fr);
+}
+.csseditor .list-view-editor[data-column="4"] {
+  grid-template-columns: repeat(4, 1fr);
+}
+.csseditor .list-view-editor[data-column="5"] {
+  grid-template-columns: repeat(5, 1fr);
+}
+.csseditor .list-view-editor[data-column="6"] {
+  grid-template-columns: repeat(6, 1fr);
+}
+.csseditor .list-view-editor[data-column="7"] {
+  grid-template-columns: repeat(7, 1fr);
+}
+.csseditor .list-view-editor[data-column="8"] {
+  grid-template-columns: repeat(8, 1fr);
+}
+.csseditor .list-view-editor[data-column="9"] {
+  grid-template-columns: repeat(9, 1fr);
+}
+.csseditor .list-view-editor .list-view-item.selected {
+  background-color: black;
+  color: white;
+}
+.csseditor .list-view-editor .list-view-item.selected svg path, .csseditor .list-view-editor .list-view-item.selected svg circle, .csseditor .list-view-editor .list-view-item.selected svg rect {
+  fill: white;
+}
+.csseditor .list-view-editor .list-view-item svg {
+  width: 100%;
 }
 .csseditor .fill-picker {
   position: fixed;

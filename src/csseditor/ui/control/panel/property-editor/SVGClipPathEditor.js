@@ -1,11 +1,17 @@
-import { html } from "../../../../../util/functions/func";
+import { html, keyMap } from "../../../../../util/functions/func";
 import icon from "../../../icon/icon";
 import { EMPTY_STRING } from "../../../../../util/css/types";
-import UIElement from "../../../../../util/UIElement";
+import UIElement, { EVENT } from "../../../../../util/UIElement";
 import { CHANGE, CLICK } from "../../../../../util/Event";
-
+import IconListViewEditor from "./IconListViewEditor";
 
 export default class SVGClipPathEditor extends UIElement {
+
+  components() {
+    return {
+      IconListViewEditor
+    }
+  }
 
   initState() {
     return {
@@ -18,6 +24,10 @@ export default class SVGClipPathEditor extends UIElement {
 
     var checked = this.state.fit ? 'checked="checked"' : EMPTY_STRING
 
+    var values = Object.keys(icon).map(key => {
+      return { key, html: icon[key] }
+    })
+
     return html`
       <div class='svg-clip-path-editor clippath-list'>
           <div class='label' >
@@ -29,12 +39,7 @@ export default class SVGClipPathEditor extends UIElement {
             <label>Fit to size <input type='checkbox' ref='$fit' ${checked}  /> </label>
           </div>
           <div>
-            <select ref="$clippathSelect">
-            ${Object.keys(icon).map(iconName => {
-              var selected = this.state.icon === iconName ? 'selected' : ''; 
-              return `<option value='${iconName}' ${selected}>${iconName}</option>`;
-            }).join(EMPTY_STRING)}
-          </select>
+            <IconListViewEditor ref='$svg' key='svg' value="${this.state.icon}" column="6" onchange='changeClipPath' />
           </div>
       </div>`;
   }
@@ -52,10 +57,8 @@ export default class SVGClipPathEditor extends UIElement {
     })
   }
 
-  [CHANGE('$clippathSelect')] () {
-    this.updateData({ 
-      icon : this.refs.$clippathSelect.value
-    })
+  [EVENT('changeClipPath')] (key, icon) {
+    this.updateData({ icon })
   }
   
   modifyClipPath () {

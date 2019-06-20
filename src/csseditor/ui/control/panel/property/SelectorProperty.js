@@ -1,5 +1,4 @@
 import BaseProperty from "./BaseProperty";
-import { html } from "../../../../../util/functions/func";
 import icon from "../../../icon/icon";
 import {
   LOAD,
@@ -23,7 +22,10 @@ const selectorList = [
   ':before',
   ':after',
   ':first-child',
-  ':last-child'
+  ':last-child',
+  ':link',
+  ':active',
+  ':focus'
 ].join(',')
 
 export default class SelectorProperty extends BaseProperty {

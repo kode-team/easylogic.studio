@@ -26,9 +26,13 @@ import TextEditor from "./TextEditor";
 import NumberRangeEditor from "./NumberRangeEditor";
 import SVGClipPathEditor from "./SVGClipPathEditor";
 import DirectionEditor from "./DirectionEditor";
+import InputArrayEditor from "./InputArrayEditor";
+import IconListViewEditor from "./IconListViewEditor";
 
-
+ 
 export default {
+    IconListViewEditor,
+    InputArrayEditor,
     DirectionEditor,
     SVGClipPathEditor,
     NumberRangeEditor,

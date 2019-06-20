@@ -1,5 +1,6 @@
 import { Length } from "../unit/Length";
 import { Property } from "../items/Property";
+import { WHITE_STRING } from "../../util/css/types";
 
 export class SVGFilter extends Property {
 
@@ -164,20 +165,122 @@ DisplacementMapSVGFilter.spec = {
   }
 };
 
+
+
+export class ColorMatrixSVGFilter extends SVGFilter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "ColorMatrix",
+      filterType: ColorMatrixSVGFilter.spec.filterType.defaultValue,
+      sourceIn: ColorMatrixSVGFilter.spec.sourceIn.defaultValue,
+      values: ColorMatrixSVGFilter.spec.values.defaultValue,
+    });
+  }
+
+
+  toString() {
+    var { sourceIn, filterType, values } = this.json; 
+
+    var valueString = values.join(WHITE_STRING)
+
+    return `<feColorMatrix in="${sourceIn}" type="${filterType}" values="${valueString}" />`;
+  }
+}
+
+ColorMatrixSVGFilter.spec = {
+  sourceIn: {
+    title: "in",
+    inputType: "select",
+    options: function (list) {
+      var reference = list.filter(it => it.result).map(it => it.result).join(',')
+
+      return `${reference},-,SourceGraphic,SourceAlpha,BackgroundImage,BackgroundAlpha,FillPaint,StrokePaint`
+    },
+    defaultValue: "SourceGraphic"
+  },
+  filterType: {
+    title: "type",
+    inputType: "select",
+    options: 'matrix,saturate,hueRotate,luminanceToAlpha',
+    defaultValue: "matrix"
+  },
+  values: {
+    title: 'values',
+    inputType: 'input-array',
+    column: 5,
+    defaultValue: [
+      1, 0, 0, 0, 0,
+      0, 1, 0, 0, 0,
+      0, 0, 1, 0, 0,
+      0, 0, 0, 1, 0
+    ]
+  }
+};
+
+
+
+export class ConvolveMatrixSVGFilter extends SVGFilter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "ConvolveMatrix",
+      sourceIn: ConvolveMatrixSVGFilter.spec.sourceIn.defaultValue,      
+      kernelMatrix: ConvolveMatrixSVGFilter.spec.kernelMatrix.defaultValue,
+    });
+  }
+
+
+  toString() {
+    var { sourceIn, kernelMatrix } = this.json; 
+
+    var valueString = kernelMatrix.join(WHITE_STRING)
+
+    return `<feConvolveMatrix in="${sourceIn}" kernelMatrix="${valueString}" />`;
+  }
+}
+
+ConvolveMatrixSVGFilter.spec = {
+  sourceIn: {
+    title: "in",
+    inputType: "select",
+    options: function (list) {
+      var reference = list.filter(it => it.result).map(it => it.result).join(',')
+
+      return `${reference},-,SourceGraphic,SourceAlpha,BackgroundImage,BackgroundAlpha,FillPaint,StrokePaint`
+    },
+    defaultValue: "SourceGraphic"
+  },
+  kernelMatrix: {
+    title: 'kernelMatrix',
+    inputType: 'input-array',
+    column: 3,
+    defaultValue: [
+      1, 0, 0,
+      0, 1, 0,
+      0, 0, 1
+    ]
+  }
+};
+
 export const SVGFilterClassList = [
   GaussianBlurSVGFilter,
   TurbulenceSVGFilter,
-  DisplacementMapSVGFilter
+  DisplacementMapSVGFilter,
+  ColorMatrixSVGFilter,
+  ConvolveMatrixSVGFilter,
 ];
 
 export const SVGFilterClassName = {
   GaussianBlur: GaussianBlurSVGFilter,
   Turbulence: TurbulenceSVGFilter,
-  DisplacementMap: DisplacementMapSVGFilter
+  DisplacementMap: DisplacementMapSVGFilter,
+  ColorMatrix: ColorMatrixSVGFilter,
+  ConvolveMatrix: ConvolveMatrixSVGFilter,
 };
 
 export const SVGFilterClass = {
   GaussianBlurSVGFilter,
   TurbulenceSVGFilter,
-  DisplacementMapSVGFilter
+  DisplacementMapSVGFilter,
+  ColorMatrixSVGFilter,
+  ConvolveMatrixSVGFilter
 };

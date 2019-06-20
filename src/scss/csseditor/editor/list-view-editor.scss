@@ -1,0 +1,32 @@
+.list-view-editor {
+    position: relative;
+    display: grid; 
+    grid-template-columns: repeat(1, 1fr);
+    max-height: 500px;
+    margin-top: 10px;
+    background-color: $border-color;
+    
+    @for $selectValue from 0 to 10 {
+        &[data-column="#{$selectValue}"] {
+            grid-template-columns: repeat(#{$selectValue}, 1fr);
+        }
+    }
+
+    .list-view-item {
+        &.selected {
+            background-color: black; 
+            color: white;
+
+            svg {
+                path,circle,rect {
+                    fill: white; 
+                }
+            }
+        }
+
+        svg {
+            width: 100%;
+        }
+    }
+
+}

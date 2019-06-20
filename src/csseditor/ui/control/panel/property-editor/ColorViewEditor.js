@@ -66,6 +66,8 @@ export default class ColorViewEditor extends UIElement {
         }, {
             id: this.id
         });
+
+        this.emit('hidePopup')
     }
 
     [INPUT("$el .color-code input")](e) {

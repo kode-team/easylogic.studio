@@ -72,12 +72,14 @@
           &[data-type="filter"] {
             border-radius: 5px;
             background-color: blue; 
+            @include title-background();
             color: white;
           }
 
           &[data-type="clip-path"] {
             border-radius: 5px;
             background-color: red; 
+            @include title-background();            
             color: white;
           }          
         }
