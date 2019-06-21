@@ -1,8 +1,10 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD } from "../../../../../util/Event";
+import { INPUT, CLICK, LOAD } from "../../../../../util/Event";
 import { html } from "../../../../../util/functions/func";
 import { editor } from "../../../../../editor/editor";
+import { Length } from "../../../../../editor/unit/Length";
 import { EVENT } from "../../../../../util/UIElement";
+import icon from "../../../icon/icon";
 import {
   CHANGE_SELECTION,
   CHANGE_ARTBOARD
@@ -12,7 +14,8 @@ import RangeEditor from "../property-editor/RangeEditor";
 import SelectEditor from "../property-editor/SelectEditor";
 
 
-export default class SizeProperty extends BaseProperty {
+
+export default class PositionProperty extends BaseProperty {
   components() {
     return {
       RangeEditor,
@@ -34,23 +37,20 @@ export default class SizeProperty extends BaseProperty {
 
   getBody() {
     return html`
-      <div class="property-item size-item" ref="$sizeItem"></div>
+      <div class="property-item position-item" ref="$positionItem"></div>
     `;
   }
 
-  [LOAD("$sizeItem")]() {
+  [LOAD("$positionItem")]() {
     var current = editor.selection.current;
     if (!current) return EMPTY_STRING;
 
     return `
-      <div class='property-item'>
-        <SelectEditor ref='$position' label='position' key='position' value='${current.position}' options=',absolute,relative,fixed,static' onchange="changRangeEditor" />
+      <div>
+        <RangeEditor ref='$x' label='X' key='x' removable="true" value='${current.x}' min="-1000" max='1000' onchange='changRangeEditor' />
       </div>
-      <div class='property-item'>
-        <RangeEditor ref='$width' label='Width' removable="true" key='width' value='${current.width}' min="0" max='3000' onchange='changRangeEditor' />
-      </div>
-      <div class='property-item'>
-        <RangeEditor ref='$height' label='Height' removable="true" key='height' value='${current.height}' min="0" max='3000' onchange='changRangeEditor' />
+      <div>
+        <RangeEditor ref='$y' label='Y' key='y' removable="true" value='${current.y}' min="-1000" max='1000' onchange='changRangeEditor' />
       </div>
     `;
   }

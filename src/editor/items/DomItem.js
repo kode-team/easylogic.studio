@@ -1,5 +1,5 @@
-import { NEW_LINE_2, NEW_LINE, EMPTY_STRING } from "../../util/css/types";
-import { CSS_TO_STRING, CSS_SORTING } from "../../util/css/make";
+import { NEW_LINE_2, NEW_LINE } from "../../util/css/types";
+import { CSS_TO_STRING } from "../../util/css/make";
 import { Length } from "../unit/Length";
 import { Display } from "../css-property/Display";
 import { GroupItem } from "./GroupItem";
@@ -46,6 +46,11 @@ function filterSVGClipPath (str = '', isFit = false, maxWidth, maxHeight) {
 export class DomItem extends GroupItem {
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
+      'position': 'absolute',
+      'x': '',
+      'y': '',
+      'right': '',
+      'bottom': '',
       'width': Length.px(300),
       'height': Length.px(300),
       'rootVariable': '',
@@ -315,14 +320,14 @@ export class DomItem extends GroupItem {
 
   toStringPropertyCSS (field) {
     var obj = {}
-    this.json[field].split(';').forEach(it => {
-      var [key, value]  = it.split(':').map(it => it.trim())
 
-      // if (value) {
-      //   value = value.replace('to top', 'var(--ang)'); 
-      // }
+    var list = this.json[field].split(';')
+
+    for(var i = 0, len = list.length; i < len; i++) {
+      var [key, value]  = list[i].split(':').map(it => it.trim())
+
       obj[key] = value
-    })
+    }
 
     return obj;
   }
@@ -333,13 +338,6 @@ export class DomItem extends GroupItem {
 
   getBorderString(data) {
     return `${data.width} ${data.style} ${data.color}`;
-  }
-
-  toSizeCSS() {
-    return {
-      width: this.json.width,
-      height: this.json.height
-    };
   }
 
   toBorderCSS() {
@@ -394,34 +392,6 @@ export class DomItem extends GroupItem {
   }
   
 
-  toFilterCSS() {
-    return this.toKeyCSS('filter');
-  }
-
-  toPerspectiveOriginCSS() {
-    return this.toKeyCSS('perspective-origin')
-  }
-
-  toClipPathCSS() {
-    return this.toKeyCSS('clip-path');
-  }  
-
-  toTransformCSS() {
-    return this.toKeyCSS('transform');
-  }
-
-  toBackdropFilterCSS() {
-    return this.toKeyCSS('backdrop-filter');
-  }
-
-  toBoxShadowCSS() {
-    return this.toKeyCSS('box-shadow');
-  }
-
-  toTextShadowCSS() {
-    return this.toKeyCSS('text-shadow');
-  }
-
   toAnimationCSS() {
     return this.toPropertyCSS(this.json.animations);
   }
@@ -472,19 +442,34 @@ export class DomItem extends GroupItem {
 
   toFontCSS() {
     return this.toKeyListCSS(
-      'font-size', 'line-height', 'font-weight', 'font-family', 'font-style',
-      'text-align', 'text-transform', 'text-decoration',
-      'letter-spacing', 'word-spacing', 'text-indent'
+    
     )
   }
 
   toDefaultCSS(isExport = false) {
-    return this.toKeyListCSS(
-      'background-color', 'color', 
-      'opacity', 'mix-blend-mode', 
-      'transform-origin',
-      'perspective', 'perspective-origin'
-    )
+
+    var obj = {}
+
+    if (this.json.x)  obj.left = this.json.x ;
+    if (this.json.y)  obj.top = this.json.y ;
+
+    return {
+      ...obj,
+      ...this.toKeyListCSS(
+        
+        'position', 'right','bottom', 'width','height',
+
+        'background-color', 'color',  'opacity', 'mix-blend-mode', 
+
+        'transform-origin', 'perspective', 'perspective-origin',
+
+        'font-size', 'line-height', 'font-weight', 'font-family', 'font-style',
+        'text-align', 'text-transform', 'text-decoration',
+        'letter-spacing', 'word-spacing', 'text-indent',
+
+        'filter', 'clip-path', 'transform', 'backdrop-filter', 'box-shadow', 'text-shadow'
+      )
+    }
 
   }
 
@@ -515,27 +500,19 @@ export class DomItem extends GroupItem {
 
   toCSS(isExport = false) {
 
-    return CSS_SORTING({
+    return {
       ...this.toVariableCSS(),
       ...this.toDefaultCSS(isExport),
-      ...this.toFontCSS(),
       ...this.toBoxModelCSS(),
-      ...this.toSizeCSS(),
       ...this.toBorderCSS(),
       ...this.toOutlineCSS(),      
       ...this.toBorderRadiusCSS(),
       ...this.toBorderImageCSS(),
       ...this.toAnimationCSS(),
-      ...this.toClipPathCSS(),
-      ...this.toFilterCSS(),
-      ...this.toTransformCSS(),
-      ...this.toBackdropFilterCSS(),      
       ...this.toBackgroundImageCSS(isExport),
-      ...this.toBoxShadowCSS(),
-      ...this.toTextShadowCSS(),
       ...this.toAnimationCSS(),
       ...this.toTransitionCSS()
-    });
+    };
   }
 
   toEmbedCSS(isExport = false) {
@@ -544,27 +521,19 @@ export class DomItem extends GroupItem {
       content: json.content
     };
 
-    return CSS_SORTING({
+    return {
       ...this.toVariableCSS(),      
       ...css,
       ...this.toDefaultCSS(),
-      ...this.toFontCSS(),
       ...this.toBoxModelCSS(),
-      ...this.toSizeCSS(),
       ...this.toBorderCSS(),
       ...this.toOutlineCSS(),
       ...this.toBorderRadiusCSS(),
       ...this.toBorderImageCSS(),
       ...this.toAnimationCSS(),
       ...this.toTransitionCSS(),      
-      ...this.toClipPathCSS(),
-      ...this.toFilterCSS(),
-      ...this.toTransformCSS(),      
-      ...this.toBackdropFilterCSS(),
-      ...this.toBackgroundImageCSS(isExport),
-      ...this.toBoxShadowCSS(),
-      ...this.toTextShadowCSS()
-    });
+      ...this.toBackgroundImageCSS(isExport)
+    };
   }
   /**
    * `@keyframes` 문자열만 따로 생성 

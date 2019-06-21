@@ -32,9 +32,11 @@ import OpacityProperty from "./OpacityProperty";
 import BackgroundClipProperty from "./BackgroundClipProperty";
 import SVGProperty from "./SVGProperty";
 import SelectorProperty from "./SelectorProperty";
+import PositionProperty from "./PositionProperty";
 
  
 export default {
+  PositionProperty,
   SelectorProperty,
   SVGProperty,
   BackgroundClipProperty,

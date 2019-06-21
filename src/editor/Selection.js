@@ -6,6 +6,8 @@ export class Selection {
   constructor(editor) {
     this.editor = editor;
 
+    this.project = null;
+    this.artboard = null;
     this.items = [];
     this.currentRect = null;
   }
@@ -19,6 +21,22 @@ export class Selection {
    */
   get current() {
     return this.items[0]
+  }
+
+  get currentProject () {
+    return this.project;
+  }
+
+  get currentArtboard () {
+    return this.artboard;
+  }
+
+  selectProject (project) {
+    this.project = project;
+  }
+
+  selectArtboard (artboard) {
+    this.artboard = artboard;
   }
 
 

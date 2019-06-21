@@ -174,4 +174,16 @@ export class Item {
   toJSON() {
     return this.json;
   }
+
+  get html () {
+    var {tagName, id, layers} = this.json;
+
+    tagName = tagName || 'div'
+
+    return `
+    <${tagName} class='item' data-id="${id}">
+      ${layers.map(it => it.html)}
+    </${tagName}>
+    `
+  }
 }

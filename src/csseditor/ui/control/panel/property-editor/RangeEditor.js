@@ -130,10 +130,19 @@ export default class RangeEditor extends UIElement {
         this.refs.$calc.val(this.state.value);
     }
 
+    initValue () {
+        if (this.state.value == '') {
+            this.state.value = new Length(0, this.children.$unit.getValue())
+        }
+        
+    }
+
     [INPUT('$propertyNumber')] (e) {
 
         var value = +this.getRef('$propertyNumber').value; 
         this.getRef('$property').val(value);
+        
+        this.initValue()
 
         this.updateData({ 
             value: this.state.value.set(value)
@@ -147,9 +156,7 @@ export default class RangeEditor extends UIElement {
         var value = +this.getRef('$property').value; 
         this.getRef('$propertyNumber').val(value);
 
-        if (this.state.value === '') {
-            this.state.value = new Length(0, this.children.$unit.getValue())
-        }
+        this.initValue();
 
         this.updateData({ 
             value: this.state.value.set(value)
@@ -159,6 +166,9 @@ export default class RangeEditor extends UIElement {
     }
 
     [EVENT('changeUnit')] (key, value) {
+
+        this.initValue();
+
         this.updateData({
             value: this.state.value.toUnit(value)
         })

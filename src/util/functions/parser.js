@@ -76,8 +76,9 @@ export function reverseMatches (str, matches) {
     return str;
 }
 
+const REG_TRIM = /^\s+|\s+$/g
 export function trim (str) {
-    return str.replace(/^\s+|\s+$/g, '');
+    return str.replace(REG_TRIM, '');
 }
 
 /**

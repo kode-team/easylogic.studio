@@ -9,6 +9,7 @@ import FillPopup from "../ui/control/panel/property-editor/FillPopup";
 
 import ColorPicker from "../ui/control/panel/property-editor/ColorPicker";
 import popup from "../ui/control/popup";
+import StyleView from "../ui/view/StyleView";
 
 export default class CSSEditor extends UIElement {
   afterRender() {
@@ -31,7 +32,8 @@ export default class CSSEditor extends UIElement {
         <ColorPicker  />
         <BackgroundPropertyPopup />
         <BoxShadowPropertyPopup />   
-        <TextShadowPropertyPopup />             
+        <TextShadowPropertyPopup />        
+        <StyleView />     
       </div>
     `;
   }
@@ -62,6 +64,7 @@ export default class CSSEditor extends UIElement {
         <ClipPathPopup />
         <SVGPropertyPopup />
         <SelectorPopup />
+        <StyleView />        
       </div>
     `;
   }
@@ -73,7 +76,8 @@ export default class CSSEditor extends UIElement {
       ColorPicker,
       Inspector,
       ToolMenu,
-      CanvasView
+      CanvasView,
+      StyleView
     };
   }
 

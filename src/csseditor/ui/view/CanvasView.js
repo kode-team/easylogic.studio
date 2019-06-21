@@ -3,14 +3,20 @@ import UIElement, { EVENT } from "../../../util/UIElement";
 import { editor } from "../../../editor/editor";
 import { Project } from "../../../editor/items/Project";
 import { ArtBoard } from "../../../editor/items/ArtBoard";
-import { CLICK, DEBOUNCE, LOAD, BIND, PREVENT, SELF, STOP } from "../../../util/Event";
+import { CLICK, DEBOUNCE, BIND, PREVENT, STOP } from "../../../util/Event";
 import { CHANGE_SELECTION } from "../../types/event";
 import { StyleParser } from "../../../editor/parse/StyleParser";
-import { CSS_TO_STRING } from "../../../util/css/make";
-import { NEW_LINE, EMPTY_STRING } from "../../../util/css/types";
 import icon from "../icon/icon";
+import ElementView from "./ElementView";
+import { Layer } from "../../../editor/items/Layer";
 
 export default class CanvasView extends UIElement {
+
+  components() {
+    return {
+      ElementView
+    }
+  }
 
   initState () {
     return {
@@ -26,18 +32,23 @@ export default class CanvasView extends UIElement {
 
   afterRender() {
     var project = editor.add(new Project());
-    var artboard = project.add(new ArtBoard());
 
-    editor.selection.select(artboard);
+    editor.selection.selectProject(project);
+
+    var artboard = project.add(new ArtBoard());
+    editor.selection.selectArtboard(artboard);
+
+    var layer = artboard.add(new Layer());
+    editor.selection.select(layer);
 
     this.parser = this;
 
     if (this.props.embed) {
       this.$el.hide();
-    } else {
-      this.refresh()
-      this.generateStyle()
+
     }
+
+    this.refresh()
 
     this.emit(CHANGE_SELECTION)
   }
@@ -46,13 +57,7 @@ export default class CanvasView extends UIElement {
       <div class='page-container'>
         <div class='page-view'>
           <div class='page-lock' ref='$lock'>
-            <div class="page-canvas" ref="$canvas"></div>             
-          </div>
-          <div ref='$styleArea'>
-            <style type='text/css' ref='$style'></style>  
-          </div>
-          <div ref='$svgArea'>
-            <svg width="0" height="0" ref='$svg'></svg>   
+            <ElementView ref='$elementView' />
           </div>
         </div>
         <div class='page-tools'>
@@ -79,13 +84,6 @@ export default class CanvasView extends UIElement {
   }
 
 
-  makeElement (item) {
-    return `<div id='${item.id}'>${item.content ? item.content : EMPTY_STRING}
-      ${item.layers.map(it => {
-        return this.makeElement(it)
-      }).join(NEW_LINE)}
-    </div>`
-  }
 
   [BIND('$lock')] () {
     var zoom = this.state.zoom;
@@ -95,72 +93,6 @@ export default class CanvasView extends UIElement {
       }
     }
   }
-
-  [LOAD('$lock')] () {
-
-    var project = editor.projects[0] || { layers : [] }
-
-    return project.layers.map(item => {
-      return this.makeElement(item)
-    })
-  }
-
-  makeStyle (item) {
-    const {
-      rootVariable, 
-      css, 
-      selectorString, 
-      keyframeString 
-    } = item.generateView('#' + item.id)
-    return `<style type='text/css'>
-      :root {
-        ${CSS_TO_STRING(rootVariable)}
-      }
-
-      /* element */
-      #${item.id} { 
-        ${CSS_TO_STRING(css)}; 
-      }  
-
-      ${selectorString}
-
-      /* keyframe */
-      ${keyframeString}
-    </style>
-    ` + item.layers.map(it => {
-      return this.makeStyle(it);
-    })
-  }
- 
-  [LOAD('$styleArea')] () {
-
-    var project = editor.projects[0] || { layers : [] }
-
-    return project.layers.map(item => {
-      return this.makeStyle(item)
-    })
-  } 
-
-
-  makeSvg (item) {
-    const {
-      SVGString
-    } = item.generateView('.csseditor .page-canvas')
-    return `
-      <svg width="0" height="0">${SVGString}</svg>
-    ` + item.layers.map(it => {
-      return this.makeSvg(it);
-    })
-  }
-
-  [LOAD('$svgArea')] () {
-
-    var project = editor.projects[0] || { layers : [] }
-
-    return project.layers.map(item => {
-      return this.makeSvg(item)
-    })
-  }   
 
   [EVENT("setParser")](callback) {
     this.parser = callback(this);
@@ -187,27 +119,4 @@ export default class CanvasView extends UIElement {
     this.emit('refreshComputedStyleCode', computedCSS)
   }
 
-  generateStyle (data = {}) {
-    var current = editor.selection.current;
-    if (current) {
-      if (this.props.embed) {
-        this.parser.generate(current.generateEmbed());
-      } else {
-        if (data.update === 'tag') {
-          this.refresh();
-        } else {
-          this.load('$styleArea','$svgArea')
-        }
-
-      }
-    }
-  }
-
-  [EVENT("refreshCanvas") + DEBOUNCE(10)](data) { 
-    this.generateStyle(data)
-  }
-
-  [CLICK() + SELF](e) {
-    this.emit(CHANGE_SELECTION);
-  }
 }

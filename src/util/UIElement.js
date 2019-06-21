@@ -1,6 +1,4 @@
 import { uuid } from "./functions/math";
-import { TOOL_SET } from "../csseditor/types/event";
-import { keyEach } from "./functions/func";
 import EventMachine, { splitMethodByKeyword } from "./EventMachine";
 
 const REG_STORE_MULTI_PATTERN = /^ME@/;
@@ -15,6 +13,10 @@ export const PIPE = (...args) => {
 export const EVENT = (...args) => {
   return MULTI_PREFIX + PIPE(...args);
 };
+
+export const COMMAND = (...args) => {
+  return COMMAND_PREFIX + PIPE(...args);
+}
 
 class UIElement extends EventMachine {
   constructor(opt, props = {}) {
@@ -109,30 +111,6 @@ class UIElement extends EventMachine {
 
   read($1, $2, $3, $4, $5) {
     return this.$store.read($1, $2, $3, $4, $5);
-  }
-
-  mapGetters(...args) {
-    return this.$store.mapGetters(...args);
-  }
-
-  mapActions(...args) {
-    return this.$store.mapActions(...args);
-  }
-
-  mapDispatches(...args) {
-    return this.$store.mapDispatches(...args);
-  }
-
-  config($1, $2, $3, $4, $5) {
-    if (arguments.length == 1) {
-      return this.$store.tool[$1];
-    }
-
-    this.dispatch(TOOL_SET, $1, $2, $3, $4, $5);
-  }
-
-  initConfig($1, $2) {
-    this.$store.tool[$1] = $2;
   }
 
   run($1, $2, $3, $4, $5) {

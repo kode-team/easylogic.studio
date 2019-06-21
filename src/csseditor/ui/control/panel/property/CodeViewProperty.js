@@ -17,11 +17,7 @@ export default class CodeViewProperty extends BaseProperty {
     return "CodeView";
   }
 
-  [EVENT(
-    CHANGE_ARTBOARD, 
-    CHANGE_SELECTION,
-    'refreshCanvas'
-  ) + DEBOUNCE(50) ]() {
+  [EVENT(CHANGE_ARTBOARD, CHANGE_SELECTION,'refreshCanvas' ) + DEBOUNCE(10) ]() {
     this.refresh();
   }
 

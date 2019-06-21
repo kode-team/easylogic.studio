@@ -11,8 +11,8 @@ export default class ToolMenu extends UIElement {
       <div class='tool-menu'>
         <div class='items left'>
           <div class='logo'>
-            <div class='text'>Gradient Editor</div>
-            <div class='site'>easylogic.studio</div>
+            <div class='text'>Easylogic</div>
+            <div class='site'>Studio</div>
           </div>
         </div>
         <div class='items  right'>

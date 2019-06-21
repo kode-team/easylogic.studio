@@ -6,7 +6,8 @@ export const PREVENT = "PREVENT";
 export default class BaseStore {
   constructor(opt) {
     this.cachedCallback = {};
-    this.callbacks = [];
+    this.callbacks = {};
+    this.commandes = [];
     this.actions = [];
     this.getters = [];
     this.modules = opt.modules || [];
@@ -27,12 +28,6 @@ export default class BaseStore {
     this.modules.forEach(ModuleClass => {
       this.addModule(ModuleClass);
     });
-  }
-
-  removeAction(context) {
-    this.callbacks = this.callbacks.filter(it => {
-      return it.context != context; 
-    })
   }
 
   makeActionCallback(context, action, actionName) {
@@ -81,24 +76,6 @@ export default class BaseStore {
     };
   }
 
-  mapGetters(...args) {
-    return args.map(actionName => {
-      return this.standalone.getters[actionName];
-    });
-  }
-
-  mapActions(...args) {
-    return args.map(actionName => {
-      return this.standalone.actions[actionName];
-    });
-  }
-
-  mapDispatches(...args) {
-    return args.map(actionName => {
-      return this.standalone.dispatches[actionName];
-    });
-  }
-
   dispatch(action, $1, $2, $3, $4, $5) {
     var actionCallback = this.actions[action];
 
@@ -137,42 +114,46 @@ export default class BaseStore {
     return new ModuleClass(this);
   }
 
+  getCallbacks(event) {
+    if (!this.callbacks[event]) {
+      this.callbacks[event] = []
+    }
+
+    return this.callbacks[event]
+  }
+
+  setCallbacks(event, list = []) {
+    this.callbacks[event] = list; 
+  }
+
   on(event, originalCallback, context, delay = 0) {
     var callback = delay > 0 ? debounce(originalCallback, delay) : originalCallback;
-    this.callbacks.push({ event, callback, context, originalCallback });
+
+    this.getCallbacks(event).push({ event, callback, context, originalCallback });
   }
 
   off(event, originalCallback) {
-    if (arguments.length == 0) {
-      this.callbacks = [];
-      this.cachedCallback = {};
-    } else if (arguments.length == 1) {
-      this.callbacks = this.callbacks.filter(f => {
-        return f.event != event;
-      });
-      this.cachedCallback = {};
-    } else if (arguments.length == 2) {
-      this.callbacks = this.callbacks.filter(f => {
-        return !(f.event == event && f.originalCallback == originalCallback);
-      });
-      this.cachedCallback = {};
+
+    if (arguments.length == 1) {
+      this.setCallbacks(event);
+    } else if (arguments.length == 2) {      
+      this.setCallbacks(event, this.getCallbacks(event).filter(f => {
+        return f.originalCallback !== originalCallback
+      }));
     }
   }
 
   offAll (context) {
-     this.callbacks = this.callbacks.filter(f => {
-      return f.context !== context;
-    });
 
-    this.cachedCallback = {};
+    Object.keys(this.callbacks).forEach(event => {
+      this.setCallbacks(event, this.getCallbacks(event).filter(f => {
+        return f.context !== context;  
+      }))
+    })
   }
 
   getCachedCallbacks (event) {
-      this.cachedCallback[event] = this.callbacks.filter(
-        f => f.event === event
-      );
-
-    return this.cachedCallback[event]
+    return this.getCallbacks(event);
   }
 
   sendMessage(source, event, $2, $3, $4, $5) {
@@ -182,7 +163,6 @@ export default class BaseStore {
         list
         .filter(f => f.originalCallback.source !== source)
         .forEach(f => {
-          // console.log(f);
           f.callback($2, $3, $4, $5)
         });
       }
@@ -205,26 +185,31 @@ export default class BaseStore {
     }, 0);
   }
 
-  // makeCachedCallback(event) {
 
-  //   this.cachedCallback[event] = this.callbacks.filter(
-  //     f => f.event === event
-  //   );
+  runCommand(source, event, $2, $3, $4, $5) {
 
-  //   console.log(this.cachedCallback, event);
-  // }
+      var list = this.getCachedCallbacks(event);
+      var results = []
+      if (list) {
+        results = list
+          .filter(f => f.originalCallback.source === source)
+          .filter((i, index) => index === 0)
+          .map(f => f.callback($2, $3, $4, $5));
+      } 
+
+      return results[0]
+  }
+
 
   emit($1, $2, $3, $4, $5) {
-    // var event = $1;
-    // console.log('emit', event, this.source);
-    // this.makeCachedCallback(event);
     this.sendMessage(this.source, $1, $2, $3, $4, $5);
   }
 
   trigger($1, $2, $3, $4, $5) {
-    // var event = $1;
-
-    // this.makeCachedCallback(event);
     this.triggerMessage(this.source, $1, $2, $3, $4, $5);
+  }
+
+  execute($1, $2, $3, $4, $5){
+    this.runCommand(this.source, $1, $2, $3, $4, $5);
   }
 }

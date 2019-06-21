@@ -297,6 +297,8 @@ const applyElementAttribute = ($element, key, value) => {
   } else {
     if ($element.el.nodeName === "TEXTAREA" && key === "value") {
       $element.text(value);
+    } else if (key === 'innerHTML') {
+      $element.html(value);
     } else {
       $element.attr(key, value);
     }
@@ -433,12 +435,14 @@ export default class EventMachine {
             props[t.nodeName] = t.nodeValue;
           });
 
+        // property 태그는 속성으로 대체 
         $dom.$$('property').forEach($p => {
           const [name, value, type] = $p.attrs('name', 'value', 'type')
 
           let realValue = value || $p.text();
 
-          if (type === 'json') {
+          // JSON 타입이면 JSON.parse 로 객체를 복원해서 넘겨준다. 
+          if (type === 'json') {            
             realValue = JSON.parse(realValue);
           }
         

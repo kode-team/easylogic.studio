@@ -38,8 +38,5 @@ export default class BaseModule {
         return isUndefined(this.$store.tool[key]) ? defaultValue : this.$store.tool[key]
     }   
     
-    initConfig (key, value) {
-        this.$store.tool[key] = value;
-    }
 
 }

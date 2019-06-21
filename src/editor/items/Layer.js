@@ -6,13 +6,13 @@ export class Layer extends DomItem {
     return super.getDefaultObject({
       itemType: "layer",
       name: "New Layer",
-      elementType: 'div',
+      tagName: 'div',
       ...obj
     });
   }
 
   getDefaultTitle() {
     return "Layer";
-  }
+  } 
 
 }
