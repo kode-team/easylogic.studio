@@ -53,3 +53,11 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
   height: 400px;
   background-color: white;
 }
+
+.element-view {
+  .item {
+    &.selected {
+      outline: 1px solid #0f72cf;
+    }
+  }
+}

@@ -5,6 +5,7 @@ import UIElement, { EVENT } from "../../../../util/UIElement";
 import { EMPTY_STRING } from "../../../../util/css/types";
 import icon from "../../icon/icon";
 import { CHANGE_SELECTION } from "../../../types/event";
+import { editor } from "../../../../editor/editor";
 
 
 export default class BasePopup extends UIElement {
@@ -68,11 +69,15 @@ export default class BasePopup extends UIElement {
     this.$el
       .css({
         top: realTop,
-        left: realLeft
+        left: realLeft,
+        'z-index': editor.zIndex
       })
       .show("inline-block");
 
-    this.emit("hidePropertyPopup");
+    // 이걸 삭제 하는 이유는 각각의 컴포넌트가 나 이외의 상태를 제어하게 되면 
+    // 예상치 못한 상황에 대처 할 수가 없다. 
+    // 컴포넌트는 최대한 간략하게 만들자. 
+    // this.emit("hidePropertyPopup");
   }
 
   hide () {

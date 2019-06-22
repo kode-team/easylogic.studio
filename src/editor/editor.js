@@ -13,13 +13,19 @@ function blobToDataURL(blob) {
   });
 }
 
-
 export const EDITOR_ID = "";
 export const editor = new class {
   constructor() {
     this.config = new Config(this);
     this.selection = new Selection(this);
-    this.projects = [] 
+    this.projects = []     
+    this.popupZIndex = 10000;
+  }
+
+  // 팝업의 zindex 를 계속 높여 주어 
+  // 최근에 열린 팝업이 밑으로 가지 않게 한다. 
+  get zIndex () {
+    return this.popupZIndex++
   }
 
   setStore($store) {
