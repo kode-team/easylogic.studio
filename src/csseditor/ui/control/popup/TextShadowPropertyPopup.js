@@ -1,10 +1,10 @@
 import { EVENT } from "../../../../util/UIElement";
 import { Length } from "../../../../editor/unit/Length";
-import { CHANGE_SELECTION } from "../../../types/event";
 import { LOAD, POINTERSTART, MOVE } from "../../../../util/Event";
 import { html } from "../../../../util/functions/func";
 import RangeEditor from "../panel/property-editor/RangeEditor";
 import BasePopup from "./BasePopup";
+import EmbedColorPicker from "../panel/property-editor/EmbedColorPicker";
 
 export default class TextShadowPropertyPopup extends BasePopup {
 
@@ -14,11 +14,13 @@ export default class TextShadowPropertyPopup extends BasePopup {
 
   components() {
     return {
+      EmbedColorPicker,
       RangeEditor
     }
   }
   initState() {
     return {
+      color: 'rgba(0, 0, 0, 1)',  
       offsetX: Length.px(0),
       offsetY: Length.px(0),
       blurRadius: Length.px(0)
@@ -36,24 +38,29 @@ export default class TextShadowPropertyPopup extends BasePopup {
 
   [LOAD("$popup")]() {
     return html`
-      <div class="drag-board" ref="$dragBoard">
-        <div
-          class="pointer"
-          ref="$pointer"
-          style="left: ${this.state.offsetX.toString()};top: ${this.state.offsetY.toString()}"
-        ></div>
+      <div class='box'>
+        <EmbedColorPicker ref='$colorpicker' value='${this.state.color}' onchange='changeColor' />
       </div>
-      <div>
-        <label>Offset X</label>
-        <RangeEditor ref='$offsetX' calc='false' key='offsetX' min="-100" max='100' value='${this.state.offsetX.toString()}' onchange='changeShadow' />
-      </div>
-      <div>
-        <label>Offset Y</label>      
-        <RangeEditor ref='$offsetY' calc='false' key='offsetY' min="-100" max='100' value='${this.state.offsetY.toString()}' onchange='changeShadow' />
-      </div>
-      <div>
-        <label>Blur Radius</label>
-        <RangeEditor ref='$blurRadius' calc='false' key='blurRadius' value='${this.state.blurRadius.toString()}' onchange='changeShadow' />
+      <div class='box'>
+        <div class="drag-board" ref="$dragBoard">
+          <div
+            class="pointer"
+            ref="$pointer"
+            style="left: ${this.state.offsetX.toString()};top: ${this.state.offsetY.toString()}"
+          ></div>
+        </div>
+        <div>
+          <label>Offset X</label>
+          <RangeEditor ref='$offsetX' calc='false' key='offsetX' min="-100" max='100' value='${this.state.offsetX.toString()}' onchange='changeShadow' />
+        </div>
+        <div>
+          <label>Offset Y</label>      
+          <RangeEditor ref='$offsetY' calc='false' key='offsetY' min="-100" max='100' value='${this.state.offsetY.toString()}' onchange='changeShadow' />
+        </div>
+        <div>
+          <label>Blur Radius</label>
+          <RangeEditor ref='$blurRadius' calc='false' key='blurRadius' value='${this.state.blurRadius.toString()}' onchange='changeShadow' />
+        </div>
       </div>
     `;
   }
@@ -62,7 +69,15 @@ export default class TextShadowPropertyPopup extends BasePopup {
     this.updateData({
       [key]: value
     });
-    this.refreshPointer();
+
+    if (key === 'offsetX' || key === 'offsetY') {
+      this.refreshPointer();
+    }
+
+  }
+
+  [EVENT('changeColor')] (value) {
+    this.trigger('changeShadow', 'color', value);
   }
 
   [POINTERSTART("$popup .drag-board") + MOVE("movePointer")](e) {
@@ -125,7 +140,7 @@ export default class TextShadowPropertyPopup extends BasePopup {
     this.setState(data);
     this.refresh();
 
-    this.show(204);
+    this.show(432);
   }
 
   [EVENT("hideTextShadowPropertyPopup")]() {

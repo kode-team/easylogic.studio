@@ -79,7 +79,7 @@
           height: 220px;
           position: relative;
           box-sizing: border-box;
-          box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
+          box-shadow: 0 0 0 1px $border-color;
 
           .pointer-list {
             top: 0px;

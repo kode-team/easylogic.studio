@@ -1,0 +1,13 @@
+.color-picker-popup {
+  
+  width: 224px;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 1fr; 
+
+  .codemirror-colorpicker {
+    box-shadow: none;
+    border-radius: 0px;
+    border:0px;
+  }
+}

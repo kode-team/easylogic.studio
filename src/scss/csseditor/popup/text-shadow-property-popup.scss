@@ -1,34 +1,50 @@
 
   .text-shadow-property-popup {
-    width: 204px;
+    width: 432px;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: 224px 1fr; 
+    grid-column-gap: 4px;
 
-    .drag-board {
+    .codemirror-colorpicker {
+      box-shadow: none;
+      border-radius: 0px;
+    }
 
-      background-color: white;
-      box-sizing: border-box;
-      border: 1px solid $border-color;
-      height: 202px;
-      position: relative;
-      margin-bottom :10px;
-      // pointer-events: none;
-      background-image: linear-gradient(
-          to right,
-          $border-color,
-          $border-color
-        ),
-        linear-gradient(to right, $border-color, $border-color);
-      background-size: 100% 1px, 1px 100%;
-      background-position: 0px center, center 0px;
-      background-repeat: no-repeat;
+    .box {
 
-      .pointer {
-        pointer-events: none;
-        position: absolute;
-        width: 10px;
-        height: 10px;
-        transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
-        background-color: $border-color;
-        border-radius: 100%;
+      label {
+        font-size: 11px;
+      }
+
+      .drag-board {
+
+        background-color: white;
+        box-sizing: border-box;
+        border: 1px solid $border-color;
+        height: 202px;
+        position: relative;
+        margin-bottom :10px;
+        // pointer-events: none;
+        background-image: linear-gradient(
+            to right,
+            $border-color,
+            $border-color
+          ),
+          linear-gradient(to right, $border-color, $border-color);
+        background-size: 100% 1px, 1px 100%;
+        background-position: 0px center, center 0px;
+        background-repeat: no-repeat;
+  
+        .pointer {
+          pointer-events: none;
+          position: absolute;
+          width: 10px;
+          height: 10px;
+          transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
+          background-color: $border-color;
+          border-radius: 100%;
+        }
       }
     }
   }

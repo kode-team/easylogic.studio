@@ -1,29 +1,17 @@
 
 
   .box-shadow-property-popup {
-    width: 204px;
+    width: 432px;
     box-sizing: border-box;
+    display: grid;
+    grid-template-columns: 224px 1fr; 
+    grid-column-gap: 4px;
+
+    .codemirror-colorpicker {
+      box-shadow: none;
+      border-radius: 0px;
+    }
     .box {
-
-      input,
-      select {
-        width: 100%;
-        vertical-align: middle;
-      }
-
-      select {
-        appearance: none;
-        padding: 0px;
-        text-align: center;
-        border: 0px;
-        background-color: white;
-        border: 1px solid $border-color;
-      }
-
-      .input {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-      }
 
       .type {
         display: grid;

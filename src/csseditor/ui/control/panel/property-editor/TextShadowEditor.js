@@ -98,23 +98,7 @@ export default class TextShadowEditor extends UIElement {
     this.modifyTextShadow()
   }
 
-  [CLICK("$shadowList .shadow-item.real .color")](e) {
-    var index = +e.$delegateTarget.closest('shadow-item').attr("data-index");
-
-    var shadow = this.state.textShadows[index]
-
-    this.setState({
-      selectedIndex: index
-    }, false)
-
-    this.emit("showColorPicker", {
-      changeEvent: "changeTextShadowEditorColor",
-      color: shadow.color,
-      hasNotHide: true
-    });
-  }
-
-  [CLICK("$shadowList .shadow-item.real > div:not(.color):not(.tools)")](e) {
+  [CLICK("$shadowList .shadow-item.real > div:not(.tools)")](e) {
     var index = +e.$delegateTarget.closest('shadow-item').attr("data-index");
 
     var shadow = this.state.textShadows[index]
@@ -133,6 +117,7 @@ export default class TextShadowEditor extends UIElement {
   viewTextShadowPropertyPopup(shadow) {
     this.emit("showTextShadowPropertyPopup", {
       changeEvent: 'changeTextShadowEditorPopup',
+      color: shadow.color,
       offsetX: shadow.offsetX,
       offsetY: shadow.offsetY,
       blurRadius: shadow.blurRadius

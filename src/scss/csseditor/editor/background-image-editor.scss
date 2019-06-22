@@ -27,12 +27,12 @@
       
         .fill-item {
           display: grid;
-          height: 50px;
-          grid-template-columns: 40px 1fr;
+          grid-template-columns: 30px 1fr;
           grid-column-gap: 5px;
           margin-bottom: 5px;
           text-align: center;
           box-sizing: border-box;
+          padding: 5px 2px;
           &.selected {
             background-color: rgba($border-color, 0.5);
           }
@@ -43,23 +43,6 @@
       
             .tools {
               text-align: right;
-            }
-          }
-      
-          .background-image-info {
-            display: grid;
-            grid-template-columns: 64px repeat(2, 1fr);
-            grid-column-gap: 0px;
-      
-            > div {
-              overflow: hidden;
-            }
-      
-            .blend-mode {
-              border-radius: 3px;
-              background-color: green;
-              color: white;
-              font-weight: bold;
             }
           }
       
@@ -77,12 +60,10 @@
           .preview {
             display: grid;
             cursor: pointer;
-            padding: 2px;
       
             .mini-view {
               display: block;
-              height: 36px;
-              // border: 1px solid $border-color;
+              height: 20px;
               box-sizing: border-box;
               pointer-events: none;
               border-radius: 3px;
@@ -104,7 +85,6 @@
             display: inline-block;
             vertical-align: middle;
             text-align: left;
-            padding: 4px 0px;
             box-sizing: border-box;
       
             svg {
@@ -123,7 +103,6 @@
           .colorsteps {
             display: none;
             text-align: left;
-            padding: 5px 0px;
             height: 100%;
             box-sizing: border-box;
       

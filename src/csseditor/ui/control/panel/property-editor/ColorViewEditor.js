@@ -1,6 +1,5 @@
 import UIElement, { EVENT } from "../../../../../util/UIElement";
 import { CLICK, INPUT } from "../../../../../util/Event";
-import { Length } from "../../../../../editor/unit/Length";
 
 export default class ColorViewEditor extends UIElement {
 
@@ -52,22 +51,16 @@ export default class ColorViewEditor extends UIElement {
 
 
     [CLICK("$preview")](e) {
-        this.viewColorPicker(e.xy);
+        this.viewColorPicker();
     }
 
-    viewColorPicker(xy) {
-        var rect = this.refs.$preview.rect();
-
-        this.emit("showColorPicker", {
+    viewColorPicker() {
+        this.emit("showColorPickerPopup", {
             changeEvent: 'changeColorViewEditor',
-            color: this.state.color,
-            left: Length.px(rect.left - 320) ,
-            top: rect.top
+            color: this.state.color
         }, {
             id: this.id
         });
-
-        this.emit('hidePopup')
     }
 
     [INPUT("$el .color-code input")](e) {

@@ -1,11 +1,10 @@
 import BackgroundImageEditor from "./BackgroundImageEditor";
 import BoxShadowEditor from "./BoxShadowEditor";
 import BorderRadiusEditor from "./BorderRadiusEditor";
-import ColorPicker from "./ColorPicker";
 import ColorSingleEditor from "./ColorSingleEditor";
 import ColorViewEditor from "./ColorViewEditor";
 import CubicBezierEditor from "./CubicBezierEditor";
-import FillPopup from "./FillPopup";
+import FillPopup from "../../popup/FillPopup";
 import FilterEditor from "./FilterEditor";
 import GradientEditor from "./GradientEditor";
 import IterationCountEditor from "./IterationCountEditor";
@@ -28,9 +27,12 @@ import SVGClipPathEditor from "./SVGClipPathEditor";
 import DirectionEditor from "./DirectionEditor";
 import InputArrayEditor from "./InputArrayEditor";
 import IconListViewEditor from "./IconListViewEditor";
+import EmbedColorPicker from "./EmbedColorPicker";
+
 
  
 export default {
+    EmbedColorPicker,
     IconListViewEditor,
     InputArrayEditor,
     DirectionEditor,
@@ -43,7 +45,6 @@ export default {
     BackgroundImageEditor,
     BoxShadowEditor,
     BorderRadiusEditor,
-    ColorPicker,
     ColorSingleEditor,
     ColorViewEditor,
     CubicBezierEditor,

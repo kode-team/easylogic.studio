@@ -103,16 +103,19 @@ export default class GradientEditor extends UIElement  {
             </div>
             <div class='sub-editor' ref='$subEditor'> 
               <div data-editor='angle'>
-                <RangeEditor ref='$angle' label='Angle' calc="false" units="deg" min="-720" max="720" key='angle' onchange='changeKeyValue' />
+                <label>Angle</label>
+                <RangeEditor ref='$angle' calc="false" units="deg" min="-720" max="720" key='angle' onchange='changeKeyValue' />
               </div>
               <div data-editor='centerX'>
-                <RangeEditor ref='$radialPositionX' label='X' calc="false"  key='radialPositionX' onchange='changeKeyValue' />
+                <label>Center X</label>
+                <RangeEditor ref='$radialPositionX' calc="false"  key='radialPositionX' onchange='changeKeyValue' />
               </div>                
-              <div data-editor='centerY'>              
-                <RangeEditor ref='$radialPositionY' label='Y' calc="false" key='radialPositionY' onchange='changeKeyValue' />
+              <div data-editor='centerY'>           
+                <label>Center Y</label>                 
+                <RangeEditor ref='$radialPositionY' calc="false" key='radialPositionY' onchange='changeKeyValue' />
               </div>                
-              <div data-editor='radialType'>
-                <label>Radial Type</label>                                
+              <div data-editor='radialType'>       
+                <label>Radial Type</label>              
                 <SelectEditor ref='$radialType' value="${this.state.radialType}" options="${radialTypeList.join(',')}" key='radialType' onchange='changeKeyValue' />
               </div>
             </div>            
@@ -241,15 +244,10 @@ export default class GradientEditor extends UIElement  {
     this.refs.$cut.checked(this.currentStep.cut);
     this.children.$range.setValue(this.currentStep.offset);
     this.refs.$stepList.attr('data-selected-index', index);
-    
+    this.cachedStepListRect = this.refs.$stepList.rect();
   }
 
   getStepListRect () {
-
-    if (!this.cachedStepListRect) {
-      this.cachedStepListRect = this.refs.$stepList.rect();
-    }
-
     return this.cachedStepListRect;
   }
 

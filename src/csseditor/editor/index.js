@@ -5,9 +5,7 @@ import UIElement from "../../util/UIElement";
 import { RESIZE, DEBOUNCE } from "../../util/Event";
 import { RESIZE_WINDOW } from "../types/event";
 import Inspector from "../ui/control/Inspector";
-import FillPopup from "../ui/control/panel/property-editor/FillPopup";
 
-import ColorPicker from "../ui/control/panel/property-editor/ColorPicker";
 import popup from "../ui/control/popup";
 import StyleView from "../ui/view/StyleView";
 import ObjectList from "../ui/control/ObjectList";
@@ -32,7 +30,6 @@ export default class CSSEditor extends UIElement {
         <CanvasView embed="true" />
         <Inspector />
         <FillPopup />
-        <ColorPicker  />
         <BackgroundPropertyPopup />
         <BoxShadowPropertyPopup />   
         <TextShadowPropertyPopup />        
@@ -62,7 +59,7 @@ export default class CSSEditor extends UIElement {
           </div>                              
         </div>
         <FillPopup />
-        <ColorPicker  />
+        <ColorPickerPopup  />
         <BoxShadowPropertyPopup />
         <TextShadowPropertyPopup />
         <AnimationPropertyPopup />
@@ -80,8 +77,6 @@ export default class CSSEditor extends UIElement {
     return {
       ...popup,
       ObjectList,
-      FillPopup,
-      ColorPicker,
       Inspector,
       ToolMenu,
       CanvasView,

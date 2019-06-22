@@ -2068,6 +2068,7 @@ html, body {
   padding: 0px;
   border: 0px;
   display: inline-block;
+  font-size: 11px;
   cursor: pointer;
 }
 .csseditor .page-tools button svg {
@@ -2083,7 +2084,7 @@ html, body {
 .csseditor .property {
   padding: 5px;
   border: 1px solid rgba(204, 204, 204, 0.8);
-  margin: 10px 5px;
+  margin: 5px;
   background-color: white;
   border-radius: 3px;
 }
@@ -2140,6 +2141,7 @@ html, body {
   padding: 0px;
   border: 0px;
   display: inline-block;
+  font-size: 11px;
   cursor: pointer;
 }
 .csseditor .property > .property-title > .tools button svg {
@@ -2398,6 +2400,7 @@ html, body {
   padding: 0px;
   border: 0px;
   display: inline-block;
+  font-size: 11px;
   cursor: pointer;
 }
 .csseditor .border-image-item .tools button svg {
@@ -2627,6 +2630,7 @@ html, body {
   padding: 0px;
   border: 0px;
   display: inline-block;
+  font-size: 11px;
   cursor: pointer;
 }
 .csseditor .transition-list .transition-item .tools button svg {
@@ -2734,6 +2738,7 @@ html, body {
   padding: 0px;
   border: 0px;
   display: inline-block;
+  font-size: 11px;
   cursor: pointer;
 }
 .csseditor .animation-list .animation-item .tools button svg {
@@ -2780,6 +2785,7 @@ html, body {
   padding: 0px;
   border: 0px;
   display: inline-block;
+  font-size: 11px;
   cursor: pointer;
 }
 .csseditor .keyframe-list .keyframe-item .title .tools button svg {
@@ -2897,6 +2903,7 @@ html, body {
   padding: 0px;
   border: 0px;
   display: inline-block;
+  font-size: 11px;
   cursor: pointer;
 }
 .csseditor .clip-path-list .clippath-item .title .tools button svg {
@@ -2989,6 +2996,7 @@ html, body {
   padding: 0px;
   border: 0px;
   display: inline-block;
+  font-size: 11px;
   cursor: pointer;
 }
 .csseditor .selector-list .selector-item .title .tools button svg {
@@ -3025,6 +3033,7 @@ html, body {
   padding: 0px;
   border: 0px;
   display: inline-block;
+  font-size: 11px;
   cursor: pointer;
 }
 .csseditor .project-list .project-item .tools button svg {
@@ -3068,6 +3077,7 @@ html, body {
   padding: 0px;
   border: 0px;
   display: inline-block;
+  font-size: 11px;
   cursor: pointer;
 }
 .csseditor .artboard-list .artboard-item .detail .tools button svg {
@@ -3245,10 +3255,11 @@ html, body {
   grid-template-columns: 20px 1fr 16px;
 }
 .csseditor .range-editor.has-label label {
-  text-align: right;
+  text-align: left;
   vertical-align: middle;
   padding: 2px 4px;
   box-sizing: border-box;
+  font-size: 11px;
 }
 .csseditor .range-editor.has-label.block {
   display: block;
@@ -3271,11 +3282,15 @@ html, body {
   display: inline-block;
 }
 .csseditor .range-editor.has-calc.has-label {
-  grid-template-columns: 40px 20px 1fr;
+  grid-template-columns: 60px 20px 1fr;
   grid-column-gap: 2px;
 }
 .csseditor .range-editor.has-calc.has-label.is-removable {
-  grid-template-columns: 40px 20px 1fr 16px;
+  grid-template-columns: 60px 20px 1fr 16px;
+}
+.csseditor .range-editor .type-button,
+.csseditor .range-editor .remove {
+  display: none;
 }
 .csseditor .range-editor button {
   width: 16px;
@@ -3289,6 +3304,7 @@ html, body {
   padding: 0px;
   border: 0px;
   display: inline-block;
+  font-size: 11px;
   cursor: pointer;
 }
 .csseditor .range-editor button svg {
@@ -3387,6 +3403,7 @@ html, body {
   padding: 0px;
   border: 0px;
   display: inline-block;
+  font-size: 11px;
   cursor: pointer;
 }
 .csseditor .number-range-editor button svg {
@@ -3442,9 +3459,10 @@ html, body {
   grid-column-gap: 2px;
 }
 .csseditor .select-editor.has-label label {
-  text-align: right;
+  text-align: left;
   vertical-align: middle;
-  padding: 2px 4px;
+  padding: 2px 3px;
+  font-size: 11px;
   box-sizing: border-box;
 }
 .csseditor .select-editor select[data-count="1"], .csseditor .select-editor select[data-count="0"] {
@@ -3485,6 +3503,7 @@ html, body {
   padding: 0px;
   border: 0px;
   display: inline-block;
+  font-size: 11px;
   cursor: pointer;
 }
 .csseditor .css-property-editor .title .tools button svg {
@@ -3519,6 +3538,7 @@ html, body {
   padding: 0px;
   border: 0px;
   display: inline-block;
+  font-size: 11px;
   cursor: pointer;
 }
 .csseditor .css-property-editor .css-property-item .tools button svg {
@@ -3563,6 +3583,7 @@ html, body {
   padding: 0px;
   border: 0px;
   display: inline-block;
+  font-size: 11px;
   cursor: pointer;
 }
 .csseditor .background-image-editor .tools button svg {
@@ -3576,12 +3597,12 @@ html, body {
 }
 .csseditor .background-image-editor .fill-list .fill-item {
   display: grid;
-  height: 50px;
-  grid-template-columns: 40px 1fr;
+  grid-template-columns: 30px 1fr;
   grid-column-gap: 5px;
   margin-bottom: 5px;
   text-align: center;
   box-sizing: border-box;
+  padding: 5px 2px;
 }
 .csseditor .background-image-editor .fill-list .fill-item.selected {
   background-color: rgba(204, 204, 204, 0.5);
@@ -3593,20 +3614,6 @@ html, body {
 .csseditor .background-image-editor .fill-list .fill-item .gradient-info .tools {
   text-align: right;
 }
-.csseditor .background-image-editor .fill-list .fill-item .background-image-info {
-  display: grid;
-  grid-template-columns: 64px repeat(2, 1fr);
-  grid-column-gap: 0px;
-}
-.csseditor .background-image-editor .fill-list .fill-item .background-image-info > div {
-  overflow: hidden;
-}
-.csseditor .background-image-editor .fill-list .fill-item .background-image-info .blend-mode {
-  border-radius: 3px;
-  background-color: green;
-  color: white;
-  font-weight: bold;
-}
 .csseditor .background-image-editor .fill-list .fill-item[data-fill-type=gradient] .colorcode,
 .csseditor .background-image-editor .fill-list .fill-item[data-fill-type=gradient] .opacity {
   display: none;
@@ -3617,11 +3624,10 @@ html, body {
 .csseditor .background-image-editor .fill-list .fill-item .preview {
   display: grid;
   cursor: pointer;
-  padding: 2px;
 }
 .csseditor .background-image-editor .fill-list .fill-item .preview .mini-view {
   display: block;
-  height: 36px;
+  height: 20px;
   box-sizing: border-box;
   pointer-events: none;
   border-radius: 3px;
@@ -3644,7 +3650,6 @@ html, body {
   display: inline-block;
   vertical-align: middle;
   text-align: left;
-  padding: 4px 0px;
   box-sizing: border-box;
 }
 .csseditor .background-image-editor .fill-list .fill-item .fill-title svg {
@@ -3658,7 +3663,6 @@ html, body {
 .csseditor .background-image-editor .fill-list .fill-item .colorsteps {
   display: none;
   text-align: left;
-  padding: 5px 0px;
   height: 100%;
   box-sizing: border-box;
 }
@@ -3703,6 +3707,7 @@ html, body {
   padding: 0px;
   border: 0px;
   display: inline-block;
+  font-size: 11px;
   cursor: pointer;
 }
 .csseditor .background-image-editor .fill-list .fill-item .tools button svg {
@@ -3788,6 +3793,7 @@ html, body {
   padding: 0px;
   border: 0px;
   display: inline-block;
+  font-size: 11px;
   cursor: pointer;
 }
 .csseditor .transform-editor .tools button svg {
@@ -3836,6 +3842,7 @@ html, body {
   padding: 0px;
   border: 0px;
   display: inline-block;
+  font-size: 11px;
   cursor: pointer;
 }
 .csseditor .transform-editor .transform-list .transform-item .title .transform-menu button svg {
@@ -3980,6 +3987,7 @@ html, body {
   padding: 0px;
   border: 0px;
   display: inline-block;
+  font-size: 11px;
   cursor: pointer;
 }
 .csseditor .box-shadow-editor .tools button svg {
@@ -4053,6 +4061,7 @@ html, body {
   padding: 0px;
   border: 0px;
   display: inline-block;
+  font-size: 11px;
   cursor: pointer;
 }
 .csseditor .box-shadow-editor .shadow-item .tools button svg {
@@ -4093,6 +4102,7 @@ html, body {
   padding: 0px;
   border: 0px;
   display: inline-block;
+  font-size: 11px;
   cursor: pointer;
 }
 .csseditor .text-shadow-editor .tools button svg {
@@ -4155,6 +4165,7 @@ html, body {
   padding: 0px;
   border: 0px;
   display: inline-block;
+  font-size: 11px;
   cursor: pointer;
 }
 .csseditor .text-shadow-editor .shadow-item .tools button svg {
@@ -4191,6 +4202,7 @@ html, body {
   padding: 0px;
   border: 0px;
   display: inline-block;
+  font-size: 11px;
   cursor: pointer;
 }
 .csseditor .var-editor .tools button svg {
@@ -4220,6 +4232,7 @@ html, body {
   padding: 0px;
   border: 0px;
   display: inline-block;
+  font-size: 11px;
   cursor: pointer;
 }
 .csseditor .var-editor .var-item .tools button svg {
@@ -4355,7 +4368,7 @@ html, body {
   display: block;
 }
 .csseditor .gradient-editor .sub-editor {
-  padding: 4px 8px;
+  padding: 0px 8px;
 }
 .csseditor .gradient-editor .gradient-steps {
   position: relative;
@@ -4626,6 +4639,7 @@ html, body {
   padding: 0px;
   border: 0px;
   display: inline-block;
+  font-size: 11px;
   cursor: pointer;
 }
 .csseditor .svg-property-editor .tools button svg {
@@ -4689,6 +4703,7 @@ html, body {
   padding: 0px;
   border: 0px;
   display: inline-block;
+  font-size: 11px;
   cursor: pointer;
 }
 .csseditor .svg-property-editor .svg-property-list .svg-property-item .title .menu button svg {
@@ -4726,6 +4741,7 @@ html, body {
   padding: 0px;
   border: 0px;
   display: inline-block;
+  font-size: 11px;
   cursor: pointer;
 }
 .csseditor .svg-filter-editor .tools button svg {
@@ -4769,6 +4785,7 @@ html, body {
   padding: 0px;
   border: 0px;
   display: inline-block;
+  font-size: 11px;
   cursor: pointer;
 }
 .csseditor .svg-filter-editor .filter-list .filter-item .title .filter-menu button svg {
@@ -4894,331 +4911,22 @@ html, body {
 .csseditor .list-view-editor .list-view-item svg {
   width: 100%;
 }
-.csseditor .fill-picker {
-  position: fixed;
-  width: 224px;
-  display: none;
-  background-color: rgba(255, 255, 255, 0.5);
-  padding-top: 5px;
-  z-index: 100;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1);
-  border: 1px solid #cccccc;
-}
-.csseditor .fill-picker .popup-item {
-  padding: 2px 4px;
-}
-.csseditor .fill-picker .grid-2 {
-  display: grid;
-  grid-template-columns: 60px 1fr;
-}
-.csseditor .fill-picker .repeat-list button {
-  width: 20px;
-  height: 20px;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  border: 1px solid #cccccc;
-  background-color: white;
-  outline: none;
-  cursor: pointer;
-}
-.csseditor .fill-picker .repeat-list button[value=no-repeat] {
-  background-image: linear-gradient(to top right, rgba(0, 0, 255, 0.5), black);
-  background-position: center center;
-  background-size: 8px 8px;
-  background-repeat: no-repeat;
-}
-.csseditor .fill-picker .repeat-list button[value=repeat] {
-  background-image: linear-gradient(to top right, rgba(0, 0, 255, 0.5), black);
-  background-position: 10px 10px;
-  background-size: 8px 8px;
-  background-repeat: repeat;
-}
-.csseditor .fill-picker .repeat-list button[value=repeat-x] {
-  background-image: linear-gradient(to top right, rgba(0, 0, 255, 0.5), black);
-  background-position: 10px 8px;
-  background-size: 8px 8px;
-  background-repeat: repeat-x;
-}
-.csseditor .fill-picker .repeat-list button[value=repeat-y] {
-  background-image: linear-gradient(to top right, rgba(0, 0, 255, 0.5), black);
-  background-position: 8px 10px;
-  background-size: 8px 8px;
-  background-repeat: repeat-y;
-}
-.csseditor .fill-picker .repeat-list button[value=space] {
-  background-image: linear-gradient(to top right, rgba(0, 0, 255, 0.5), black);
-  background-position: 10px 10px;
-  background-size: 8px 8px;
-  background-repeat: space;
-}
-.csseditor .fill-picker .repeat-list button[value=round] {
-  background-image: linear-gradient(to top right, rgba(0, 0, 255, 0.5), black);
-  background-position: 0px 0px;
-  background-size: 8px 8px;
-  background-repeat: round;
-}
-.csseditor .fill-picker .repeat-list[data-value=repeat] button[value=repeat], .csseditor .fill-picker .repeat-list[data-value=no-repeat] button[value=no-repeat], .csseditor .fill-picker .repeat-list[data-value=repeat-x] button[value=repeat-x], .csseditor .fill-picker .repeat-list[data-value=repeat-y] button[value=repeat-y], .csseditor .fill-picker .repeat-list[data-value=space] button[value=space], .csseditor .fill-picker .repeat-list[data-value=round] button[value=round] {
-  background-color: #cccccc;
-  box-shadow: 0 0 1px 1px black;
-}
-.csseditor .fill-picker .picker-tab .picker-tab-list {
-  text-align: center;
-  padding: 2px 5px;
-}
-.csseditor .fill-picker .picker-tab .picker-tab-list[data-value=static-gradient] .picker-tab-item[data-selected-value=static-gradient] {
-  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
-}
-.csseditor .fill-picker .picker-tab .picker-tab-list[data-value=static-gradient] .picker-tab-item[data-selected-value=static-gradient] .icon svg path {
-  fill: rgba(0, 0, 255, 0.5);
-}
-.csseditor .fill-picker .picker-tab .picker-tab-list[data-value=linear-gradient] .picker-tab-item[data-selected-value=linear-gradient] {
-  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
-}
-.csseditor .fill-picker .picker-tab .picker-tab-list[data-value=linear-gradient] .picker-tab-item[data-selected-value=linear-gradient] .icon svg path {
-  fill: rgba(0, 0, 255, 0.5);
-}
-.csseditor .fill-picker .picker-tab .picker-tab-list[data-value=repeating-linear-gradient] .picker-tab-item[data-selected-value=repeating-linear-gradient] {
-  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
-}
-.csseditor .fill-picker .picker-tab .picker-tab-list[data-value=repeating-linear-gradient] .picker-tab-item[data-selected-value=repeating-linear-gradient] .icon svg path {
-  fill: rgba(0, 0, 255, 0.5);
-}
-.csseditor .fill-picker .picker-tab .picker-tab-list[data-value=radial-gradient] .picker-tab-item[data-selected-value=radial-gradient] {
-  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
-}
-.csseditor .fill-picker .picker-tab .picker-tab-list[data-value=radial-gradient] .picker-tab-item[data-selected-value=radial-gradient] .icon svg path {
-  fill: rgba(0, 0, 255, 0.5);
-}
-.csseditor .fill-picker .picker-tab .picker-tab-list[data-value=repeating-radial-gradient] .picker-tab-item[data-selected-value=repeating-radial-gradient] {
-  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
-}
-.csseditor .fill-picker .picker-tab .picker-tab-list[data-value=repeating-radial-gradient] .picker-tab-item[data-selected-value=repeating-radial-gradient] .icon svg path {
-  fill: rgba(0, 0, 255, 0.5);
-}
-.csseditor .fill-picker .picker-tab .picker-tab-list[data-value=conic-gradient] .picker-tab-item[data-selected-value=conic-gradient] {
-  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
-}
-.csseditor .fill-picker .picker-tab .picker-tab-list[data-value=conic-gradient] .picker-tab-item[data-selected-value=conic-gradient] .icon svg path {
-  fill: rgba(0, 0, 255, 0.5);
-}
-.csseditor .fill-picker .picker-tab .picker-tab-list[data-value=repeating-conic-gradient] .picker-tab-item[data-selected-value=repeating-conic-gradient] {
-  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
-}
-.csseditor .fill-picker .picker-tab .picker-tab-list[data-value=repeating-conic-gradient] .picker-tab-item[data-selected-value=repeating-conic-gradient] .icon svg path {
-  fill: rgba(0, 0, 255, 0.5);
-}
-.csseditor .fill-picker .picker-tab .picker-tab-list[data-value=image] .picker-tab-item[data-selected-value=image] {
-  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
-}
-.csseditor .fill-picker .picker-tab .picker-tab-list[data-value=image] .picker-tab-item[data-selected-value=image] .icon svg path {
-  fill: rgba(0, 0, 255, 0.5);
-}
-.csseditor .fill-picker .picker-tab .picker-tab-list[data-is-image-hidden=true] .picker-tab-item[data-selected-value=image] {
-  display: none;
-}
-.csseditor .fill-picker .picker-tab .picker-tab-list .picker-tab-item {
-  display: inline-block;
-  vertical-align: middle;
-  height: 20px;
-  width: 20px;
-  box-sizing: border-box;
-  cursor: pointer;
-  position: relative;
-  border-radius: 20%;
-}
-.csseditor .fill-picker .picker-tab .picker-tab-list .picker-tab-item .icon {
-  pointer-events: none;
-  border-radius: 100%;
-  display: inline-block;
-  width: 90%;
-  height: 90%;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  -webkit-transform: translateX(-50%) translateY(-50%);
-          transform: translateX(-50%) translateY(-50%);
-}
-.csseditor .fill-picker .picker-tab .picker-tab-list .picker-tab-item .icon svg {
-  width: 100%;
-  height: 100%;
-}
-.csseditor .fill-picker .picker-tab .picker-tab-list .picker-tab-item[data-selected-value=static-gradient] .icon {
-  background-image: linear-gradient(to right, red, red);
-}
-.csseditor .fill-picker .picker-tab .picker-tab-list .picker-tab-item[data-selected-value=linear-gradient] .icon {
-  background-image: linear-gradient(to right, black, gray);
-}
-.csseditor .fill-picker .picker-tab .picker-tab-list .picker-tab-item[data-selected-value=radial-gradient] .icon {
-  background-image: radial-gradient(closest-side, black, #ebf8e1, gray);
-}
-.csseditor .fill-picker .picker-tab .picker-tab-list .picker-tab-item[data-selected-value=conic-gradient] .icon {
-  background-image: conic-gradient(black, #ebf8e1);
-}
-.csseditor .fill-picker .picker-tab .picker-tab-list .picker-tab-item[data-selected-value=repeating-linear-gradient] .icon {
-  background-image: repeating-linear-gradient(45deg, #3f87a6, #ebf8e1 15%, #f69d3c 20%);
-}
-.csseditor .fill-picker .picker-tab .picker-tab-list .picker-tab-item[data-selected-value=repeating-radial-gradient] .icon {
-  background-image: repeating-radial-gradient(circle, #3f87a6, #ebf8e1 15%, #f69d3c 20%);
-}
-.csseditor .fill-picker .picker-tab .picker-tab-list .picker-tab-item[data-selected-value=repeating-conic-gradient] .icon {
-  background-image: repeating-conic-gradient(#3f87a6, #ebf8e1 5%, #f69d3c 10%);
-}
-.csseditor .fill-picker .picker-tab .picker-gradient-selector {
-  padding: 2px 10px;
-}
-.csseditor .fill-picker .picker-tab .picker-gradient-selector .gradient-steps {
-  position: relative;
-  display: block;
-  height: 30px;
-}
-.csseditor .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue-container {
-  width: 100%;
-  height: 14px;
-  position: absolute;
-  z-index: 0;
-  background-color: transparent;
-  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
-  background-size: 10px 10px;
-  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
-  box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.1);
-}
-.csseditor .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue {
-  position: relative;
-  padding: 0px;
-  margin: 0px;
-  cursor: pointer;
-}
-.csseditor .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue > .step-list {
-  position: relative;
-  width: 100%;
-  cursor: copy;
-  height: 14px;
-  z-index: 1;
-}
-.csseditor .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue > .step-list.mode-drag {
-  cursor: pointer;
-}
-.csseditor .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue .drag-bar {
-  border: 0px;
-  background-color: transparent;
-  border: 2px solid white;
-  box-shadow: 0 0 2px 0px rgba(0, 0, 0, 0.6);
-  width: 10px;
-  height: 10px;
-  -webkit-transform: none;
-          transform: none;
-  border-radius: 50%;
-  display: inline-block;
-  left: 0px;
-  top: 17px;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
-  position: absolute;
-  background-color: rgba(255, 255, 255, 0.8);
-  cursor: pointer;
-  transition: top 0.3s ease-out;
-}
-.csseditor .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue .drag-bar .guide-line {
-  pointer-events: none;
-  position: absolute;
-  width: 1px;
-  height: 0px;
-  bottom: 8px;
-  left: 3px;
-  -webkit-transform: translateX(-1px);
-          transform: translateX(-1px);
-  transition: all 0.3s ease-out;
-}
-.csseditor .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue .drag-bar.selected {
-  z-index: 1;
-  top: 30px;
-}
-.csseditor .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue .drag-bar.selected .guide-line {
-  height: 17px;
-}
-.csseditor .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue .drag-bar.selected .guide-change {
-  opacity: 1;
-}
-.csseditor .fill-picker .picker-tab-container[data-value=color] .picker-tab-content[data-content-type=color] {
-  display: block;
-}
-.csseditor .fill-picker .picker-tab-container[data-value=image] .picker-tab-content[data-content-type=image] {
-  display: block;
-}
-.csseditor .fill-picker .picker-tab-container .picker-tab-content {
-  display: none;
-  position: relative;
-}
-.csseditor .fill-picker .picker-tab-container .picker-tab-content.selected {
-  display: block;
-}
-.csseditor .fill-picker .picker-tab-container .picker-tab-content .codemirror-colorpicker.sketch {
-  background-color: transparent;
-}
-.csseditor .fill-picker .picker-tab-container .picker-tab-content[data-content-type=color] .codemirror-colorpicker {
-  width: 222px;
-  border: 0px;
-  box-shadow: none;
-}
-.csseditor .fill-picker .picker-tab-container .picker-tab-content[data-content-type=image] .image-preview {
-  width: 100%;
-  height: 140px;
-  position: relative;
-  display: block;
-}
-.csseditor .fill-picker .picker-tab-container .picker-tab-content[data-content-type=image] .image-preview figure {
-  width: 100%;
-  height: 100%;
-  padding: 10px 20px;
-  margin: 0px;
-  box-sizing: border-box;
-  position: relative;
-}
-.csseditor .fill-picker .picker-tab-container .picker-tab-content[data-content-type=image] .image-preview figure .select-text {
-  display: inline-block;
-  position: absolute;
-  left: 0px;
-  right: 0px;
-  top: 0px;
-  bottom: 0px;
-  font-size: 20px;
-  padding: 10px 20px;
-}
-.csseditor .fill-picker .picker-tab-container .picker-tab-content[data-content-type=image] .image-preview figure img {
-  width: 100%;
-  height: 100%;
-}
-.csseditor .fill-picker .picker-tab-container .picker-tab-content[data-content-type=image] .image-preview figure img[src=""] {
-  display: none;
-}
-.csseditor .fill-picker .picker-tab-container .picker-tab-content[data-content-type=image] .image-preview figure img:not([src=""]) + .select-text {
-  display: none;
-}
-.csseditor .fill-picker .picker-tab-container .picker-tab-content[data-content-type=image] .image-preview input[type=file] {
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  width: 220px;
-  height: 140px;
-  padding: 10px 20px;
-  opacity: 0;
-  box-sizing: border-box;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  cursor: pointer;
-}
 .csseditor .popup {
   position: absolute;
   display: none;
   box-sizing: border-box;
   z-index: 1000;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 255, 255, 0.9);
   border: 1px solid #cccccc;
   box-shadow: 0 0 1px 0px #cccccc;
   padding: 14px;
+}
+.csseditor .popup.compact {
+  padding: 0px;
+}
+.csseditor .popup.compact .popup-title {
+  padding: 10px 14px 0px 14px;
+  margin-bottom: 0px;
 }
 .csseditor .popup .popup-title {
   font-size: 12px;
@@ -5245,6 +4953,7 @@ html, body {
   padding: 0px;
   border: 0px;
   display: inline-block;
+  font-size: 11px;
   cursor: pointer;
 }
 .csseditor .popup .popup-title .tools button svg {
@@ -5385,27 +5094,15 @@ html, body {
   font-weight: bold;
 }
 .csseditor .popup .box-shadow-property-popup {
-  width: 204px;
+  width: 432px;
   box-sizing: border-box;
-}
-.csseditor .popup .box-shadow-property-popup .box input,
-.csseditor .popup .box-shadow-property-popup .box select {
-  width: 100%;
-  vertical-align: middle;
-}
-.csseditor .popup .box-shadow-property-popup .box select {
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  padding: 0px;
-  text-align: center;
-  border: 0px;
-  background-color: white;
-  border: 1px solid #cccccc;
-}
-.csseditor .popup .box-shadow-property-popup .box .input {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 224px 1fr;
+  grid-column-gap: 4px;
+}
+.csseditor .popup .box-shadow-property-popup .codemirror-colorpicker {
+  box-shadow: none;
+  border-radius: 0px;
 }
 .csseditor .popup .box-shadow-property-popup .box .type {
   display: grid;
@@ -5507,9 +5204,20 @@ html, body {
   grid-template-columns: 3fr 1fr;
 }
 .csseditor .popup .text-shadow-property-popup {
-  width: 204px;
+  width: 432px;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 224px 1fr;
+  grid-column-gap: 4px;
 }
-.csseditor .popup .text-shadow-property-popup .drag-board {
+.csseditor .popup .text-shadow-property-popup .codemirror-colorpicker {
+  box-shadow: none;
+  border-radius: 0px;
+}
+.csseditor .popup .text-shadow-property-popup .box label {
+  font-size: 11px;
+}
+.csseditor .popup .text-shadow-property-popup .box .drag-board {
   background-color: white;
   box-sizing: border-box;
   border: 1px solid #cccccc;
@@ -5521,7 +5229,7 @@ html, body {
   background-position: 0px center, center 0px;
   background-repeat: no-repeat;
 }
-.csseditor .popup .text-shadow-property-popup .drag-board .pointer {
+.csseditor .popup .text-shadow-property-popup .box .drag-board .pointer {
   pointer-events: none;
   position: absolute;
   width: 10px;
@@ -5567,6 +5275,7 @@ html, body {
   padding: 0px;
   border: 0px;
   display: inline-block;
+  font-size: 11px;
   cursor: pointer;
 }
 .csseditor .popup .keyframe-popup .box .property .title .tools button svg {
@@ -5607,6 +5316,7 @@ html, body {
   padding: 0px;
   border: 0px;
   display: inline-block;
+  font-size: 11px;
   cursor: pointer;
 }
 .csseditor .popup .keyframe-popup .box .keyframe-property-item .tools button svg {
@@ -5712,6 +5422,7 @@ html, body {
   padding: 0px;
   border: 0px;
   display: inline-block;
+  font-size: 11px;
   cursor: pointer;
 }
 .csseditor .popup .clippath-popup .box > .clip-path-editor .pointer-input .pointer-item .tools button svg {
@@ -5722,7 +5433,7 @@ html, body {
   height: 220px;
   position: relative;
   box-sizing: border-box;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 0 1px #cccccc;
 }
 .csseditor .popup .clippath-popup .box > .clip-path-editor .drag-area .pointer-list {
   top: 0px;
@@ -5782,6 +5493,7 @@ html, body {
   padding: 0px;
   border: 0px;
   display: inline-block;
+  font-size: 11px;
   cursor: pointer;
 }
 .csseditor .popup .clippath-popup .box .property .title .tools button svg {
@@ -5850,6 +5562,7 @@ html, body {
   padding: 0px;
   border: 0px;
   display: inline-block;
+  font-size: 11px;
   cursor: pointer;
 }
 .csseditor .popup .svg-property-editor-popup .box .property .title .tools button svg {
@@ -5878,4 +5591,332 @@ html, body {
 }
 .csseditor .popup .svg-property-editor-popup .box .input.grid-2 {
   grid-template-columns: 3fr 1fr;
+}
+.csseditor .popup .fill-picker {
+  width: 432px;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 1fr 224px;
+  grid-column-gap: 4px;
+}
+.csseditor .popup .fill-picker .popup-item {
+  margin-bottom: 5px;
+}
+.csseditor .popup .fill-picker .grid-2 {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+}
+.csseditor .popup .fill-picker .grid-2 label {
+  font-size: 11px;
+  padding-right: 2px;
+  text-align: left;
+}
+.csseditor .popup .fill-picker label {
+  font-size: 11px;
+}
+.csseditor .popup .fill-picker .repeat-list button {
+  width: 20px;
+  height: 20px;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border: 1px solid #cccccc;
+  background-color: white;
+  outline: none;
+  cursor: pointer;
+}
+.csseditor .popup .fill-picker .repeat-list button[value=no-repeat] {
+  background-image: linear-gradient(to top right, rgba(0, 0, 255, 0.5), black);
+  background-position: center center;
+  background-size: 8px 8px;
+  background-repeat: no-repeat;
+}
+.csseditor .popup .fill-picker .repeat-list button[value=repeat] {
+  background-image: linear-gradient(to top right, rgba(0, 0, 255, 0.5), black);
+  background-position: 10px 10px;
+  background-size: 8px 8px;
+  background-repeat: repeat;
+}
+.csseditor .popup .fill-picker .repeat-list button[value=repeat-x] {
+  background-image: linear-gradient(to top right, rgba(0, 0, 255, 0.5), black);
+  background-position: 10px 8px;
+  background-size: 8px 8px;
+  background-repeat: repeat-x;
+}
+.csseditor .popup .fill-picker .repeat-list button[value=repeat-y] {
+  background-image: linear-gradient(to top right, rgba(0, 0, 255, 0.5), black);
+  background-position: 8px 10px;
+  background-size: 8px 8px;
+  background-repeat: repeat-y;
+}
+.csseditor .popup .fill-picker .repeat-list button[value=space] {
+  background-image: linear-gradient(to top right, rgba(0, 0, 255, 0.5), black);
+  background-position: 10px 10px;
+  background-size: 8px 8px;
+  background-repeat: space;
+}
+.csseditor .popup .fill-picker .repeat-list button[value=round] {
+  background-image: linear-gradient(to top right, rgba(0, 0, 255, 0.5), black);
+  background-position: 0px 0px;
+  background-size: 8px 8px;
+  background-repeat: round;
+}
+.csseditor .popup .fill-picker .repeat-list[data-value=repeat] button[value=repeat], .csseditor .popup .fill-picker .repeat-list[data-value=no-repeat] button[value=no-repeat], .csseditor .popup .fill-picker .repeat-list[data-value=repeat-x] button[value=repeat-x], .csseditor .popup .fill-picker .repeat-list[data-value=repeat-y] button[value=repeat-y], .csseditor .popup .fill-picker .repeat-list[data-value=space] button[value=space], .csseditor .popup .fill-picker .repeat-list[data-value=round] button[value=round] {
+  background-color: #cccccc;
+  box-shadow: 0 0 1px 1px black;
+}
+.csseditor .popup .fill-picker .picker-tab .picker-tab-list {
+  text-align: center;
+  padding: 2px 5px;
+}
+.csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=static-gradient] .picker-tab-item[data-selected-value=static-gradient] {
+  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
+}
+.csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=static-gradient] .picker-tab-item[data-selected-value=static-gradient] .icon svg path {
+  fill: rgba(0, 0, 255, 0.5);
+}
+.csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=linear-gradient] .picker-tab-item[data-selected-value=linear-gradient] {
+  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
+}
+.csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=linear-gradient] .picker-tab-item[data-selected-value=linear-gradient] .icon svg path {
+  fill: rgba(0, 0, 255, 0.5);
+}
+.csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-linear-gradient] .picker-tab-item[data-selected-value=repeating-linear-gradient] {
+  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
+}
+.csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-linear-gradient] .picker-tab-item[data-selected-value=repeating-linear-gradient] .icon svg path {
+  fill: rgba(0, 0, 255, 0.5);
+}
+.csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=radial-gradient] .picker-tab-item[data-selected-value=radial-gradient] {
+  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
+}
+.csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=radial-gradient] .picker-tab-item[data-selected-value=radial-gradient] .icon svg path {
+  fill: rgba(0, 0, 255, 0.5);
+}
+.csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-radial-gradient] .picker-tab-item[data-selected-value=repeating-radial-gradient] {
+  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
+}
+.csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-radial-gradient] .picker-tab-item[data-selected-value=repeating-radial-gradient] .icon svg path {
+  fill: rgba(0, 0, 255, 0.5);
+}
+.csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=conic-gradient] .picker-tab-item[data-selected-value=conic-gradient] {
+  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
+}
+.csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=conic-gradient] .picker-tab-item[data-selected-value=conic-gradient] .icon svg path {
+  fill: rgba(0, 0, 255, 0.5);
+}
+.csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-conic-gradient] .picker-tab-item[data-selected-value=repeating-conic-gradient] {
+  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
+}
+.csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-conic-gradient] .picker-tab-item[data-selected-value=repeating-conic-gradient] .icon svg path {
+  fill: rgba(0, 0, 255, 0.5);
+}
+.csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=image] .picker-tab-item[data-selected-value=image] {
+  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
+}
+.csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=image] .picker-tab-item[data-selected-value=image] .icon svg path {
+  fill: rgba(0, 0, 255, 0.5);
+}
+.csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-is-image-hidden=true] .picker-tab-item[data-selected-value=image] {
+  display: none;
+}
+.csseditor .popup .fill-picker .picker-tab .picker-tab-list .picker-tab-item {
+  display: inline-block;
+  vertical-align: middle;
+  height: 20px;
+  width: 20px;
+  box-sizing: border-box;
+  cursor: pointer;
+  position: relative;
+  border-radius: 20%;
+}
+.csseditor .popup .fill-picker .picker-tab .picker-tab-list .picker-tab-item .icon {
+  pointer-events: none;
+  border-radius: 100%;
+  display: inline-block;
+  width: 90%;
+  height: 90%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+}
+.csseditor .popup .fill-picker .picker-tab .picker-tab-list .picker-tab-item .icon svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor .popup .fill-picker .picker-tab .picker-tab-list .picker-tab-item[data-selected-value=static-gradient] .icon {
+  background-image: linear-gradient(to right, red, red);
+}
+.csseditor .popup .fill-picker .picker-tab .picker-tab-list .picker-tab-item[data-selected-value=linear-gradient] .icon {
+  background-image: linear-gradient(to right, black, gray);
+}
+.csseditor .popup .fill-picker .picker-tab .picker-tab-list .picker-tab-item[data-selected-value=radial-gradient] .icon {
+  background-image: radial-gradient(closest-side, black, #ebf8e1, gray);
+}
+.csseditor .popup .fill-picker .picker-tab .picker-tab-list .picker-tab-item[data-selected-value=conic-gradient] .icon {
+  background-image: conic-gradient(black, #ebf8e1);
+}
+.csseditor .popup .fill-picker .picker-tab .picker-tab-list .picker-tab-item[data-selected-value=repeating-linear-gradient] .icon {
+  background-image: repeating-linear-gradient(45deg, #3f87a6, #ebf8e1 15%, #f69d3c 20%);
+}
+.csseditor .popup .fill-picker .picker-tab .picker-tab-list .picker-tab-item[data-selected-value=repeating-radial-gradient] .icon {
+  background-image: repeating-radial-gradient(circle, #3f87a6, #ebf8e1 15%, #f69d3c 20%);
+}
+.csseditor .popup .fill-picker .picker-tab .picker-tab-list .picker-tab-item[data-selected-value=repeating-conic-gradient] .icon {
+  background-image: repeating-conic-gradient(#3f87a6, #ebf8e1 5%, #f69d3c 10%);
+}
+.csseditor .popup .fill-picker .picker-tab .picker-gradient-selector {
+  padding: 2px 10px;
+}
+.csseditor .popup .fill-picker .picker-tab .picker-gradient-selector .gradient-steps {
+  position: relative;
+  display: block;
+  height: 30px;
+}
+.csseditor .popup .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue-container {
+  width: 100%;
+  height: 14px;
+  position: absolute;
+  z-index: 0;
+  background-color: transparent;
+  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-size: 10px 10px;
+  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+  box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.1);
+}
+.csseditor .popup .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue {
+  position: relative;
+  padding: 0px;
+  margin: 0px;
+  cursor: pointer;
+}
+.csseditor .popup .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue > .step-list {
+  position: relative;
+  width: 100%;
+  cursor: copy;
+  height: 14px;
+  z-index: 1;
+}
+.csseditor .popup .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue > .step-list.mode-drag {
+  cursor: pointer;
+}
+.csseditor .popup .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue .drag-bar {
+  border: 0px;
+  background-color: transparent;
+  border: 2px solid white;
+  box-shadow: 0 0 2px 0px rgba(0, 0, 0, 0.6);
+  width: 10px;
+  height: 10px;
+  -webkit-transform: none;
+          transform: none;
+  border-radius: 50%;
+  display: inline-block;
+  left: 0px;
+  top: 17px;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: top 0.3s ease-out;
+}
+.csseditor .popup .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue .drag-bar .guide-line {
+  pointer-events: none;
+  position: absolute;
+  width: 1px;
+  height: 0px;
+  bottom: 8px;
+  left: 3px;
+  -webkit-transform: translateX(-1px);
+          transform: translateX(-1px);
+  transition: all 0.3s ease-out;
+}
+.csseditor .popup .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue .drag-bar.selected {
+  z-index: 1;
+  top: 30px;
+}
+.csseditor .popup .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue .drag-bar.selected .guide-line {
+  height: 17px;
+}
+.csseditor .popup .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue .drag-bar.selected .guide-change {
+  opacity: 1;
+}
+.csseditor .popup .fill-picker .picker-tab-container[data-value=color] .picker-tab-content[data-content-type=color] {
+  display: block;
+}
+.csseditor .popup .fill-picker .picker-tab-container[data-value=image] .picker-tab-content[data-content-type=image] {
+  display: block;
+}
+.csseditor .popup .fill-picker .picker-tab-container .picker-tab-content {
+  display: none;
+  position: relative;
+}
+.csseditor .popup .fill-picker .picker-tab-container .picker-tab-content.selected {
+  display: block;
+}
+.csseditor .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=color] .codemirror-colorpicker {
+  box-shadow: none;
+  border-radius: 0px;
+}
+.csseditor .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=image] .image-preview {
+  width: 100%;
+  height: 140px;
+  position: relative;
+  display: block;
+}
+.csseditor .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=image] .image-preview figure {
+  width: 100%;
+  height: 100%;
+  padding: 10px 20px;
+  margin: 0px;
+  box-sizing: border-box;
+  position: relative;
+}
+.csseditor .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=image] .image-preview figure .select-text {
+  display: inline-block;
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+  font-size: 20px;
+  padding: 10px 20px;
+}
+.csseditor .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=image] .image-preview figure img {
+  width: 100%;
+  height: 100%;
+}
+.csseditor .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=image] .image-preview figure img[src=""] {
+  display: none;
+}
+.csseditor .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=image] .image-preview figure img:not([src=""]) + .select-text {
+  display: none;
+}
+.csseditor .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=image] .image-preview input[type=file] {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 220px;
+  height: 140px;
+  padding: 10px 20px;
+  opacity: 0;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+.csseditor .popup .color-picker-popup {
+  width: 224px;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 1fr;
+}
+.csseditor .popup .color-picker-popup .codemirror-colorpicker {
+  box-shadow: none;
+  border-radius: 0px;
+  border: 0px;
 }

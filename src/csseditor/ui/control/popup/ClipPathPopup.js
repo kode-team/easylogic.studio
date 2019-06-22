@@ -1,4 +1,4 @@
-import UIElement, { EVENT } from "../../../../util/UIElement";
+import { EVENT } from "../../../../util/UIElement";
 import { Length } from "../../../../editor/unit/Length";
 import { CHANGE_SELECTION } from "../../../types/event";
 import { LOAD } from "../../../../util/Event";
@@ -8,9 +8,14 @@ import SelectEditor from "../panel/property-editor/SelectEditor";
 import { editor } from "../../../../editor/editor";
 import InsetEditor from "../panel/property-editor/clip-path/InsetEditor";
 import PolygonEditor from "../panel/property-editor/clip-path/PolygonEditor";
+import BasePopup from "./BasePopup";
 
 
-export default class ClipPathPopup extends UIElement {
+export default class ClipPathPopup extends BasePopup {
+
+  getTitle() {
+    return 'ClipPath'
+  }
 
   components() {
     return {
@@ -37,9 +42,9 @@ export default class ClipPathPopup extends UIElement {
     this.emit("changeClipPathPopup", this.toClipPathCSS());
   }
 
-  template() {
+  getBody() {
     return `
-    <div class='popup clippath-popup' ref='$popup'>
+    <div class='clippath-popup' ref='$popup'>
       <div class="box">
         <div class='clip-path-editor clip-path-type' ref='$clippathType'></div>
         <div class='clip-path-editor' ref='$clippath'></div>
@@ -106,23 +111,10 @@ export default class ClipPathPopup extends UIElement {
 
     this.refresh();
 
-    this.$el
-      .css({
-        top: Length.px(110),
-        right: Length.px(320),
-        bottom: Length.auto,
-        'z-index': 1000000
-      })
-      .show("inline-block");
-
-    this.emit("hidePropertyPopup");
+    this.show(204);
   }
 
-  [EVENT(
-    "hideClipPathPopup",
-    "hidePropertyPopup",
-    CHANGE_SELECTION
-  )]() {
-    this.$el.hide();
+  [EVENT("hideClipPathPopup")]() {
+    this.hide();
   }
 }

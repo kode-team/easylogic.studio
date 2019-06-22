@@ -4,6 +4,8 @@ import { LOAD, CLICK, POINTERSTART, MOVE } from "../../../../util/Event";
 import { html } from "../../../../util/functions/func";
 import RangeEditor from "../panel/property-editor/RangeEditor";
 import BasePopup from "./BasePopup";
+import EmbedColorPicker from "../panel/property-editor/EmbedColorPicker";
+
 
 export default class BoxShadowPropertyPopup extends BasePopup {
 
@@ -13,11 +15,13 @@ export default class BoxShadowPropertyPopup extends BasePopup {
 
   components() {
     return {
+      EmbedColorPicker,
       RangeEditor
     }
   }
   initState() {
     return {
+      color: 'rgba(0, 0, 0, 1)',
       inset: false,
       offsetX: Length.px(0),
       offsetY: Length.px(0),
@@ -37,6 +41,9 @@ export default class BoxShadowPropertyPopup extends BasePopup {
 
   [LOAD("$popup")]() {
     return html`
+      <div class='box'>
+        <EmbedColorPicker ref='$colorpicker' value='${this.state.color}' onchange='changeColor' />
+      </div>
       <div class="box">
         <div class="type">
           <label>Type</label>
@@ -151,6 +158,10 @@ export default class BoxShadowPropertyPopup extends BasePopup {
     }
   }
 
+  [EVENT('changeColor')] (value) {
+    this.trigger('changeRangeEditor', 'color', value);
+  }
+
   [EVENT("showBoxShadowPropertyPopup")](data) {
 
     this.changeEvent = data.changeEvent || "changeBoxShadowPropertyPopup"
@@ -158,7 +169,7 @@ export default class BoxShadowPropertyPopup extends BasePopup {
     this.setState(data);
     this.refresh();
 
-    this.show(204);
+    this.show(432);
 
   }
 

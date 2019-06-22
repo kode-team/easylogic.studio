@@ -14,16 +14,6 @@ export default class PerspectiveProperty extends BaseProperty {
     return "Perspective";
   }
 
-  getTools() {
-    return `
-        <button type="button" class="remove" ref='$remove'>${icon.close}</button>
-    `
-  }
-
-  [CLICK('$remove')] () {
-    this.trigger('changePerspective', 'perspective', '');
-  }    
-
   getBody() {
     return `<div ref='$perspective'></div>`;
   }  
@@ -32,7 +22,7 @@ export default class PerspectiveProperty extends BaseProperty {
     var current = editor.selection.current || {};
 
     var perspective = current['perspective'] || ''
-    return `<RangeEditor ref='$1' key='perspective' value="${perspective}" onchange="changePerspective" />`;
+    return `<RangeEditor ref='$1' key='perspective' removable="true" value="${perspective}" onchange="changePerspective" />`;
   }
 
   [EVENT('changePerspective')] (key, value) {

@@ -1,22 +1,29 @@
 .fill-picker {
-  position: fixed;
-  width: 224px;
-  display: none;
-  background-color: rgba(white, 0.5);
-  padding-top: 5px;
-  z-index: 100;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1);
-  border: 1px solid $border-color;
+  
+  width: 432px;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 1fr 224px; 
+  grid-column-gap: 4px;
 
   .popup-item {
-    padding: 2px 4px;
+    margin-bottom: 5px;
   }
 
   .grid-2 {
     display: grid;
     grid-template-columns: 60px 1fr;
+
+    label {
+      font-size: 11px;
+      padding-right: 2px;
+      text-align: left;
+    }
   }
 
+  label {
+    font-size: 11px;
+  }
 
   .repeat-list {
     button {
@@ -289,6 +296,7 @@
   }
 
   .picker-tab-container {
+    // border:solid 1px $border-color;
     @each $imageType in color, image {
       &[data-value="#{$imageType}"]
         .picker-tab-content[data-content-type="#{$imageType}"] {
@@ -304,15 +312,10 @@
         display: block;
       }
 
-      .codemirror-colorpicker.sketch {
-        background-color: transparent;
-      }
-
-      &[data-content-type="color"] {
+      &[data-content-type='color'] {
         .codemirror-colorpicker {
-          width: 222px;
-          border: 0px;
           box-shadow: none;
+          border-radius: 0px;
         }
       }
 

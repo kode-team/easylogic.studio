@@ -12,10 +12,11 @@ $border-radius: 3px;
         }
 
         label {
-            text-align: right;
+            text-align: left;
             vertical-align: middle;
             padding:2px 4px;
             box-sizing: border-box;
+            font-size: 11px;
         }
 
         &.block {
@@ -49,24 +50,25 @@ $border-radius: 3px;
     }
 
     &.has-calc.has-label {
-        grid-template-columns: 40px 20px 1fr;
+        grid-template-columns: 60px 20px 1fr;
         grid-column-gap: 2px;
 
         &.is-removable {
-            grid-template-columns: 40px 20px 1fr 16px;
+            grid-template-columns: 60px 20px 1fr 16px;
         }
 
     }
 
-
+    .type-button,
+    .remove {
+        display: none;
+    }
     
     @include svg-button();
 
     .range-editor-type {
         display: none;
         vertical-align: middle;
-
-
 
         .area {
             display: grid; 

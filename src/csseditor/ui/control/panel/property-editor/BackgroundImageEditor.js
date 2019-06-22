@@ -120,11 +120,6 @@ export default class BackgroundImageEditor extends UIElement {
                       <button type="button" class='remove' data-index='${index}'>${icon.remove2}</button>
                     </div>
                   </div>
-                  <div class='background-image-info'>
-                    <div ref="size${index}">${it.width}/${it.height}</div>
-                    <div ref="repeat${index}">${it.repeat}</div>
-                    <div class='blend-mode' ref="blendMode${index}">${it.blendMode}</div>
-                  </div>
                 </div>
             </div>
             `;
@@ -362,35 +357,11 @@ export default class BackgroundImageEditor extends UIElement {
         }
     }
 
-    refreshBackgroundPropertyInfo(image, data) {
-        if (data.blendMode) {
-            var $element = this.getRef(`blendMode`, this.selectedIndex);
-            $element.text(data.blendMode);
-        } else if (data.width || data.height || data.size) {
-            var $element = this.getRef(`size`, this.selectedIndex);
-
-            switch (image.size) {
-                case "contain":
-                case "cover":
-                    var text = image.size;
-                    break;
-                default:
-                    var text = `${image.width}/${image.height}`;
-                    break;
-            }
-            $element.text(text);
-        } else if (data.repeat) {
-            var $element = this.getRef(`repeat`, this.selectedIndex);
-            $element.text(data.repeat);
-        }
-    }
-
     [EVENT("changeBackgroundProperty") + DEBOUNCE(10)](data) {
         if (this.currentBackgroundImage) {
             this.currentBackgroundImage.reset(data);
 
             this.modifyBackgroundImage();
-            this.refreshBackgroundPropertyInfo(this.currentBackgroundImage, data);
         }
     }
 }

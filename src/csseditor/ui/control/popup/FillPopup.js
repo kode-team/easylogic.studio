@@ -1,18 +1,21 @@
-import UIElement, { EVENT } from "../../../../../util/UIElement";
-import ColorPicker from "../../../../../colorpicker/index";
-import icon from "../../../icon/icon";
-import { CLICK, CHANGE, LOAD, BIND } from "../../../../../util/Event";
-import { EMPTY_STRING } from "../../../../../util/css/types";
-import { html } from "../../../../../util/functions/func";
-import { Length, Position } from "../../../../../editor/unit/Length";
-import { editor } from "../../../../../editor/editor";
-import { CHANGE_SELECTION } from "../../../../types/event";
-import GradientEditor from "./GradientEditor";
-import { Gradient } from "../../../../../editor/image-resource/Gradient";
-import { ColorStep } from "../../../../../editor/image-resource/ColorStep";
-import { BackgroundImage } from "../../../../../editor/css-property/BackgroundImage";
-import RangeEditor from "./RangeEditor";
-import SelectEditor from "./SelectEditor";
+import { EVENT } from "../../../../util/UIElement";
+import ColorPicker from "../../../../colorpicker/index";
+import icon from "../../icon/icon";
+import { CLICK, CHANGE, LOAD, BIND } from "../../../../util/Event";
+import { EMPTY_STRING } from "../../../../util/css/types";
+import { html } from "../../../../util/functions/func";
+import { Length } from "../../../../editor/unit/Length";
+import { editor } from "../../../../editor/editor";
+import { CHANGE_SELECTION } from "../../../types/event";
+import GradientEditor from "../panel/property-editor/GradientEditor";
+import { Gradient } from "../../../../editor/image-resource/Gradient";
+import { ColorStep } from "../../../../editor/image-resource/ColorStep";
+import { BackgroundImage } from "../../../../editor/css-property/BackgroundImage";
+import RangeEditor from "../panel/property-editor/RangeEditor";
+import SelectEditor from "../panel/property-editor/SelectEditor";
+import BasePopup from "./BasePopup";
+import EmbedColorPicker from "../panel/property-editor/EmbedColorPicker";
+
 
 const tabs = [
   { type: "static-gradient", title: "Static Gradient" },
@@ -46,10 +49,15 @@ const blend_list = [
 ];
 
 
-export default class FillPopup extends UIElement {
+export default class FillPopup extends BasePopup {
+
+  getTitle() {
+    return 'Background Image Editor'
+  }
 
   components() {
     return {
+      EmbedColorPicker,
       RangeEditor,
       SelectEditor,
       GradientEditor
@@ -75,26 +83,6 @@ export default class FillPopup extends UIElement {
       blendMode: 'normal',
       image: {},
     }
-  }
-
-  afterRender() {
-    // this.$el.hide();
-
-    var defaultColor = "rgba(0, 0, 0, 0)";
-
-    this.colorPicker = ColorPicker.create({
-      type: "sketch",
-      position: "inline",
-      container: this.refs.$color.el,
-      color: defaultColor,
-      onChange: c => {
-        this.changeColor(c);
-      }
-    });
-
-    setTimeout(() => {
-      this.colorPicker.dispatch("initColor", defaultColor);
-    }, 100);
   }
 
   initialize() {
@@ -222,56 +210,65 @@ export default class FillPopup extends UIElement {
     }
   }
 
-  template() {
+  getBody() {
     return html`
       <div class="fill-picker">
-        <div class='background-property' ref='$backgroundProperty'>
-          ${this.templateForSize()}        
-          ${this.templateForX()}
-          ${this.templateForY()}
-          ${this.templateForWidth()}
-          ${this.templateForHeight()}
-          ${this.templateForRepeat()}
-          ${this.templateForBlendMode()}
-        </div>
 
-        <div class="picker-tab">
-          <div class="picker-tab-list" ref="$tab" data-value="static-gradient" data-is-image-hidden="false">
-            ${tabs.map(it => {
-              return `
-                <span 
-                    class='picker-tab-item ${it.selected ? "selected" : EMPTY_STRING}' 
-                    data-selected-value='${it.type}'
-                    title='${it.title}'
-                >
-                    <div class='icon'>${it.icon || EMPTY_STRING}</div>
-                </span>`;
-            })}
+        <div class='box'>
+
+          <div class='background-property' ref='$backgroundProperty'>
+            ${this.templateForSize()}        
+            ${this.templateForX()}
+            ${this.templateForY()}
+            ${this.templateForWidth()}
+            ${this.templateForHeight()}
+            ${this.templateForRepeat()}
+            ${this.templateForBlendMode()}
+          </div>
+
+          <div class="picker-tab">
+            <label>Image</label>
+            <div class="picker-tab-list" ref="$tab" data-value="static-gradient" data-is-image-hidden="false">
+              ${tabs.map(it => {
+                return `
+                  <span 
+                      class='picker-tab-item ${it.selected ? "selected" : EMPTY_STRING}' 
+                      data-selected-value='${it.type}'
+                      title='${it.title}'
+                  >
+                      <div class='icon'>${it.icon || EMPTY_STRING}</div>
+                  </span>`;
+              })}
+            </div>
+          </div>
+          <div ref='$gradientEditor'>
           </div>
         </div>
-        <div ref='$gradientEditor'>
-        </div>
-        <div class="picker-tab-container" ref="$tabContainer">
-          <div
-            class="picker-tab-content"
-            data-content-type="color"
-            ref="$color"
-          ></div>
-          <div
-            class="picker-tab-content"
-            data-content-type="image"
-            ref="$image"
-          >
-            <div class="image-preview">
-              <figure>
-                <img src="" ref="$imagePreview" />
-                <div class="select-text">Select a image</div>
-              </figure>
-              <input type="file" ref="$imageFile" accept="image/*" />
+        <div class='box'>
+          <div class="picker-tab-container" ref="$tabContainer">
+            <div
+              class="picker-tab-content"
+              data-content-type="color"
+            >
+              <EmbedColorPicker ref='$color' onchange='changeColor' />
+            </div>
+            <div
+              class="picker-tab-content"
+              data-content-type="image"
+              ref="$image"
+            >
+              <div class="image-preview">
+                <figure>
+                  <img src="" ref="$imagePreview" />
+                  <div class="select-text">Select a image</div>
+                </figure>
+                <input type="file" ref="$imageFile" accept="image/*" />
+              </div>
             </div>
           </div>
         </div>
       </div>
+      
     `;
   }
 
@@ -391,7 +388,7 @@ export default class FillPopup extends UIElement {
     }
   }
 
-  changeColor(color) {
+  [EVENT('changeColor')] (color) {
 
     if (this.selectedTab === 'static-gradient') {
       
@@ -411,25 +408,17 @@ export default class FillPopup extends UIElement {
     data.image = BackgroundImage.parseImage(data.image)
     this.setState(data);
 
-    this.$el
-      .css({
-        top: Length.px(110),
-        right: Length.px(320),
-        bottom: Length.auto
-      })
-      .show();
+    this.show(432);
 
     this.selectTabContent(this.state.image.type, this.state);
-    this.emit("hidePicker");
-    this.emit('hidePropertyPopup');
   }
 
-  [EVENT("hideFillPopup", "hidePicker", 'hidePropertyPopup', CHANGE_SELECTION)]() {
-    this.$el.hide();
+  [EVENT("hideFillPopup")]() {
+    this.hide();
   }
 
   [EVENT("selectColorStep")](color) {
-    this.colorPicker.initColorWithoutChangeEvent(color);
+    this.children.$color.setValue(color);
   }
 
   [EVENT("changeColorStep")](data = {}) {
