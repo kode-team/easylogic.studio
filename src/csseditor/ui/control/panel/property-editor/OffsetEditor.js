@@ -43,7 +43,7 @@ export default class OffsetEditor extends UIElement {
 
   templateForOffsetInput () {
     return `
-      <div class='offset-input property' >
+      <div class='offset-input' >
         <div class='title'>
           <label>Offset</label>
           <div class='tools'>

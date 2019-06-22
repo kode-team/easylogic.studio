@@ -109,6 +109,10 @@ export default class CSSPropertyEditor extends UIElement {
   makeIndivisualPropertyEditor (property, index) {
 
     if (property.key === 'background-color') {
+      // colorview 를 열면 다른 팝업도 같이 닫혀 버린다. 
+      // 여기서는 다른 열린 팝업이 변경되지 않아야 하긴 한데... 
+      // 속성이 한두개도 아니고 이거 어떻게 처리하지? 
+      // 컬러만 그런게 아니라 팝업 뜨는 애들 다그렇다. 
       return `
         <div class='property-editor'>
           <ColorViewEditor ref='$backgroundColor${index}' color="${property.value}" onChange="changeBackgroundColorProperty" />

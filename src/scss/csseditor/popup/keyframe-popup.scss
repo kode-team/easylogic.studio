@@ -1,10 +1,9 @@
 
   .keyframe-popup {
-    padding: 7px;
     width: 250px;
-    height: auto;
+ 
     .box {
-      > div {
+      .name {
         height: 20px;
         display: grid;
         grid-template-columns: 60px 1fr;

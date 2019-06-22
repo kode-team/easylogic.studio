@@ -1,10 +1,13 @@
-import UIElement, { EVENT } from "../../../../util/UIElement";
-import { Length } from "../../../../editor/unit/Length";
-import { CHANGE_SELECTION } from "../../../types/event";
+import { EVENT } from "../../../../util/UIElement";
 import OffsetEditor from "../panel/property-editor/OffsetEditor";
 import { INPUT } from "../../../../util/Event";
+import BasePopup from "./BasePopup";
 
-export default class KeyframePopup extends UIElement {
+export default class KeyframePopup extends BasePopup {
+
+  getTitle () {
+    return 'Keyframe'
+  }
 
   components() {
     return {
@@ -24,9 +27,9 @@ export default class KeyframePopup extends UIElement {
     this.emit("changeKeyframePopup", this.state);
   }
 
-  template() {
+  getBody() {
     return `
-    <div class='popup keyframe-popup' ref='$popup'>
+    <div class='keyframe-popup' ref='$popup'>
       <div class="box">
         ${this.templateForName()}
         ${this.templateForOffset()}
@@ -35,7 +38,11 @@ export default class KeyframePopup extends UIElement {
   }
 
   templateForOffset () {
-    return `<OffsetEditor />`
+    return `
+      <div>
+        <OffsetEditor />
+      </div>
+    `
   }
 
   templateForName() {
@@ -68,7 +75,6 @@ export default class KeyframePopup extends UIElement {
   }
 
   refresh() {
-    this.load();
 
     this.refs.$name.val(this.state.name);
     this.emit('showOffsetEditor', this.getOffsetData())
@@ -82,23 +88,11 @@ export default class KeyframePopup extends UIElement {
     this.setState(data);
     this.refresh()
 
-    this.$el
-      .css({
-        top: Length.px(150),
-        right: Length.px(320),
-        bottom: Length.auto,
-        'z-index': 1000000
-      })
-      .show("inline-block");
+    this.show(240);
 
-    this.emit("hidePropertyPopup");
   }
 
-  [EVENT(
-    "hideKeyframePopup",
-    "hidePropertyPopup",
-    CHANGE_SELECTION
-  )]() {
+  [EVENT("hideKeyframePopup")]() {
     this.$el.hide();
   }
 }

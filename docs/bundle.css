@@ -3523,7 +3523,6 @@ html, body {
   grid-template-columns: 1fr 30px;
 }
 .csseditor .css-property-editor .css-property-item .value-editor {
-  border: 1px solid rgba(0, 0, 0, 0.3);
   padding: 2px;
 }
 .csseditor .css-property-editor .css-property-item .tools button {
@@ -5240,11 +5239,9 @@ html, body {
   border-radius: 100%;
 }
 .csseditor .popup .keyframe-popup {
-  padding: 7px;
   width: 250px;
-  height: auto;
 }
-.csseditor .popup .keyframe-popup .box > div {
+.csseditor .popup .keyframe-popup .box .name {
   height: 20px;
   display: grid;
   grid-template-columns: 60px 1fr;
