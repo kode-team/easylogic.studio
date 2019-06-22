@@ -1,0 +1,247 @@
+.popup {
+  position: absolute;
+  display: none;
+  box-sizing: border-box;
+  z-index: 1000;
+  background-color: rgba(255, 255, 255, 0.5);
+  border: 1px solid $border-color;
+  box-shadow: 0 0 1px 0px $border-color;
+  padding: 14px;
+
+
+  .popup-title {
+    font-size: 12px;
+    font-weight: bold;
+    cursor: move;
+    margin-bottom: 10px;
+    display: flex;
+
+    > * {
+      flex: 1 1 auto;
+    }
+
+    .tools {
+      text-align: right;
+      @include svg-button();
+    }
+  }
+
+  .popup-content {
+    .popup-item {
+      // display: grid;
+      // grid-template-columns: 45px 1fr;
+      // height: 24px;
+
+      label {
+        font-size: 11px;
+        vertical-align: middle;
+        text-align: right;
+        line-height: 1.6;
+        padding-right: 2px;
+        box-sizing: border-box;
+      }
+
+      label + div {
+        vertical-align: middle;
+      }
+
+    }
+  }
+
+  &.background-property-popup {
+    width: 224px;
+
+    .popup-content {
+      padding: 5px;
+
+      .popup-item {
+        margin-bottom: 2px;
+      }
+    }
+
+    .size-list {
+      button {
+        appearance: none;
+        background-color: transparent;
+        border: 0px;
+        padding: 2px 5px;
+        cursor: pointer;
+        outline: none;
+        box-sizing: border-box;
+        width: 50px;
+        background-color: rgba($border-color, 0.5);
+      }
+
+      &[data-value="contain"] button[value="contain"],
+      &[data-value="cover"] button[value="cover"],
+      &[data-value="auto"] button[value="auto"] {
+        background-color: $border-color;
+        font-weight: bold;
+      }
+    }
+
+    .popup-item.grid-2 {
+      display: grid;
+      grid-template-columns: 60px 1fr; 
+      grid-column-gap: 2px;
+    }
+
+    .repeat-list {
+      button {
+        width: 20px;
+        height: 20px;
+        appearance: none;
+        border: 1px solid $border-color;
+        background-color: white;
+        outline: none;
+        cursor: pointer;
+
+        &[value="no-repeat"] {
+          background-image: linear-gradient(
+            to top right,
+            rgba(blue, 0.5),
+            black
+          );
+          background-position: center center;
+          background-size: 8px 8px;
+          background-repeat: no-repeat;
+        }
+
+        &[value="repeat"] {
+          background-image: linear-gradient(
+            to top right,
+            rgba(blue, 0.5),
+            black
+          );
+          background-position: 10px 10px;
+          background-size: 8px 8px;
+          background-repeat: repeat;
+        }
+
+        &[value="repeat-x"] {
+          background-image: linear-gradient(
+            to top right,
+            rgba(blue, 0.5),
+            black
+          );
+          background-position: 10px 8px;
+          background-size: 8px 8px;
+          background-repeat: repeat-x;
+        }
+
+        &[value="repeat-y"] {
+          background-image: linear-gradient(
+            to top right,
+            rgba(blue, 0.5),
+            black
+          );
+          background-position: 8px 10px;
+          background-size: 8px 8px;
+          background-repeat: repeat-y;
+        }
+
+        &[value="space"] {
+          background-image: linear-gradient(
+            to top right,
+            rgba(blue, 0.5),
+            black
+          );
+          background-position: 10px 10px;
+          background-size: 8px 8px;
+          background-repeat: space;
+        }
+
+        &[value="round"] {
+          background-image: linear-gradient(
+            to top right,
+            rgba(blue, 0.5),
+            black
+          );
+          background-position: 0px 0px;
+          background-size: 8px 8px;
+          background-repeat: round;
+        }
+      }
+
+      &[data-value="repeat"] button[value="repeat"],
+      &[data-value="no-repeat"] button[value="no-repeat"],
+      &[data-value="repeat-x"] button[value="repeat-x"],
+      &[data-value="repeat-y"] button[value="repeat-y"],
+      &[data-value="space"] button[value="space"],
+      &[data-value="round"] button[value="round"] {
+        background-color: $border-color;
+        box-shadow: 0 0 1px 1px black;
+      }
+    }
+
+    .blend-list {
+      padding: 2px 0px;
+      select.full-size {
+        width: 100px;
+      }
+    }
+  }
+
+  &.display-property-popup {
+    .popup-item {
+      height: auto;
+      margin-bottom: 2px;
+    }
+    .grid-5 {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      grid-column-gap: 2px;
+    }
+
+    button {
+      appearance: none;
+      background-color: transparent;
+      border: 0px;
+      padding: 2px 5px;
+      cursor: pointer;
+      outline: none;
+      box-sizing: border-box;
+      width: 50px;
+      background-color: rgba($border-color, 0.5);
+    }
+    .flex-direction {
+      &[data-value="row"] button[value="row"],
+      &[data-value="row-reverse"] button[value="row-reverse"],
+      &[data-value="column"] button[value="column"],
+      &[data-value="column-reverse"] button[value="column-reverse"] {
+        background-color: $border-color;
+        font-weight: bold;
+      }
+    }
+
+    .flex-wrap {
+      &[data-value="nowrap"] button[value="nowrap"],
+      &[data-value="wrap"] button[value="wrap"],
+      &[data-value="wrap-reverse"] button[value="wrap-reverse"] {
+        background-color: $border-color;
+        font-weight: bold;
+      }
+    }
+
+    .justify-content {
+      &[data-value="flex-start"] button[value="flex-start"],
+      &[data-value="flex-end"] button[value="flex-end"],
+      &[data-value="center"] button[value="center"],
+      &[data-value="space-between"] button[value="space-between"],
+      &[data-value="space-around"] button[value="space-around"] {
+        background-color: $border-color;
+        font-weight: bold;
+      }
+    }
+  }
+
+  @import './box-shadow-property-popup.scss';
+  @import './animation-property-popup.scss';
+  @import './transition-property-popup.scss';
+  @import './text-shadow-property-popup.scss';
+  @import './keyframe-popup.scss';
+  @import './selector-popup.scss';
+  @import './clippath-popup.scss';
+  @import './svg-property-editor-popup.scss';
+
+}

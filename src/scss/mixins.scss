@@ -12,6 +12,27 @@
     background-position: 0 0, 0 $half, $half (-1 * $half), (-1 * $half) 0px;
 }
 
+@mixin svg-button ($pixel: 16px, $display: inline-block) {
+    button {
+        width: $pixel;
+        height: $pixel;
+        vertical-align: middle;
+        appearance: none;
+        background-color: transparent;
+        outline: none;
+        padding: 0px;
+        border:0px;
+        display: $display;
+        cursor: pointer;
+
+        svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+    }
+}
+
 @mixin hue-background () {
     background-image: linear-gradient(
         to right,

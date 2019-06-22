@@ -10,6 +10,9 @@ import FillPopup from "../ui/control/panel/property-editor/FillPopup";
 import ColorPicker from "../ui/control/panel/property-editor/ColorPicker";
 import popup from "../ui/control/popup";
 import StyleView from "../ui/view/StyleView";
+import ObjectList from "../ui/control/ObjectList";
+import LogoView from "../ui/view/LogoView";
+import ExternalToolMenu from "../ui/view/ExternalToolMenu";
 
 export default class CSSEditor extends UIElement {
   afterRender() {
@@ -42,10 +45,14 @@ export default class CSSEditor extends UIElement {
     return `
       <div class="layout-main" ref="$layoutMain">
         <div class="layout-header">
-            <div class="page-tab-menu"><ToolMenu /></div>
+            <LogoView />
+            <ToolMenu />
+            <ExternalToolMenu />
         </div>
         <div class="layout-middle">
-                  
+          <div class='layout-left'>
+            <ObjectList />
+          </div>
           <div class="layout-right">
             <Inspector />
           </div>
@@ -72,12 +79,15 @@ export default class CSSEditor extends UIElement {
   components() {
     return {
       ...popup,
+      ObjectList,
       FillPopup,
       ColorPicker,
       Inspector,
       ToolMenu,
       CanvasView,
-      StyleView
+      StyleView,
+      LogoView,
+      ExternalToolMenu
     };
   }
 

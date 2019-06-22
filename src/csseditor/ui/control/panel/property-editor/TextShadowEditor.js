@@ -36,7 +36,7 @@ export default class TextShadowEditor extends UIElement {
     var arr = this.state.textShadows.map((shadow, index) => {
       return `
         <div class="shadow-item real" data-index="${index}">
-          <div class="color" data-index="${index}">
+          <div class="color">
             <div class='color-view' style="background-color: ${shadow.color}">
             </div>
           </div>
@@ -99,14 +99,10 @@ export default class TextShadowEditor extends UIElement {
   }
 
   [CLICK("$shadowList .shadow-item.real .color")](e) {
-    var index = +e.$delegateTarget.attr("data-index");
+    var index = +e.$delegateTarget.closest('shadow-item').attr("data-index");
 
     var shadow = this.state.textShadows[index]
 
-    this.viewShadowPopup(shadow, index);
-  }
-
-  viewShadowPopup(shadow, index) {
     this.setState({
       selectedIndex: index
     }, false)
@@ -116,6 +112,20 @@ export default class TextShadowEditor extends UIElement {
       color: shadow.color,
       hasNotHide: true
     });
+  }
+
+  [CLICK("$shadowList .shadow-item.real > div:not(.color):not(.tools)")](e) {
+    var index = +e.$delegateTarget.closest('shadow-item').attr("data-index");
+
+    var shadow = this.state.textShadows[index]
+
+   this.viewShadowPopup(shadow, index)
+  }
+
+  viewShadowPopup(shadow, index) {
+    this.setState({
+      selectedIndex: index
+    }, false)
 
     this.viewTextShadowPropertyPopup(shadow);
   }

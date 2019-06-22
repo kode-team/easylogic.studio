@@ -46,6 +46,9 @@ export default class PositionProperty extends BaseProperty {
     if (!current) return EMPTY_STRING;
 
     return `
+      <div class='property-item'>
+        <SelectEditor ref='$position' label='position' key='position' value='${current.position}' options=',absolute,relative,fixed,static' onchange="changRangeEditor" />
+      </div>    
       <div>
         <RangeEditor ref='$x' label='X' key='x' removable="true" value='${current.x}' min="-1000" max='1000' onchange='changRangeEditor' />
       </div>

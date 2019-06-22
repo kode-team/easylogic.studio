@@ -1,13 +1,16 @@
-import UIElement, { EVENT } from "../../../../util/UIElement";
+import { EVENT } from "../../../../util/UIElement";
 import { Length } from "../../../../editor/unit/Length";
 import { CHANGE_SELECTION } from "../../../types/event";
 import { LOAD, POINTERSTART, MOVE } from "../../../../util/Event";
 import { html } from "../../../../util/functions/func";
 import RangeEditor from "../panel/property-editor/RangeEditor";
+import BasePopup from "./BasePopup";
 
+export default class TextShadowPropertyPopup extends BasePopup {
 
-
-export default class TextShadowPropertyPopup extends UIElement {
+  getTitle() {
+    return 'Text Shadow Editor'
+  }
 
   components() {
     return {
@@ -27,8 +30,8 @@ export default class TextShadowPropertyPopup extends UIElement {
     this.emit(this.changeEvent, opt);
   }
 
-  template() {
-    return `<div class='popup text-shadow-property-popup' ref='$popup'></div>`;
+  getBody() {
+    return `<div class='text-shadow-property-popup' ref='$popup'></div>`;
   }
 
   [LOAD("$popup")]() {
@@ -122,22 +125,10 @@ export default class TextShadowPropertyPopup extends UIElement {
     this.setState(data);
     this.refresh();
 
-    this.$el
-      .css({
-        top: Length.px(460),
-        right: Length.px(320),
-        bottom: Length.auto
-      })
-      .show("inline-block");
-
-    this.emit("hidePropertyPopup");
+    this.show(204);
   }
 
-  [EVENT(
-    "hideTextShadowPropertyPopup",
-    "hidePropertyPopup",
-    CHANGE_SELECTION
-  )]() {
-    this.$el.hide();
+  [EVENT("hideTextShadowPropertyPopup")]() {
+    this.hide()
   }
 }

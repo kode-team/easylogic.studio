@@ -33,10 +33,19 @@ export class Selection {
 
   selectProject (project) {
     this.project = project;
+    this.artboard = null;
+    if (this.project.artboards.length) {
+      this.selectArtboard(this.project.artboards[0]);
+    }
   }
 
   selectArtboard (artboard) {
     this.artboard = artboard;
+    this.items = [];
+    if (this.artboard.layers.length) {
+      this.select(this.artboard.layers[0]);
+    }
+
   }
 
 

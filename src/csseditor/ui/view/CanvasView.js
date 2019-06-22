@@ -3,7 +3,7 @@ import UIElement, { EVENT } from "../../../util/UIElement";
 import { editor } from "../../../editor/editor";
 import { Project } from "../../../editor/items/Project";
 import { ArtBoard } from "../../../editor/items/ArtBoard";
-import { CLICK, DEBOUNCE, BIND, PREVENT, STOP } from "../../../util/Event";
+import { CLICK, DEBOUNCE, BIND, PREVENT, STOP, SCROLL } from "../../../util/Event";
 import { CHANGE_SELECTION } from "../../types/event";
 import { StyleParser } from "../../../editor/parse/StyleParser";
 import icon from "../icon/icon";
@@ -69,30 +69,31 @@ export default class CanvasView extends UIElement {
   }
 
   [CLICK('$plus') + PREVENT + STOP] () {
-    this.setState({
-      zoom :  this.state.zoom * 1.1
-    })
+    this.emit('refreshScale', 'plus')
 
-    this.bindData('$lock') 
+    setTimeout(() => {
+      this.modifyTransformOrigin()
+    }, 10)    
   }
   [CLICK('$minus') + PREVENT + STOP] () {
-    this.setState({
-      zoom :  this.state.zoom * 0.9
-    })
+    this.emit('refreshScale', 'minus')   
 
-    this.bindData('$lock')
+    setTimeout(() => {
+      this.modifyTransformOrigin()
+    }, 1000)
   }
 
-
-
-  [BIND('$lock')] () {
-    var zoom = this.state.zoom;
-    return {
-      style: {
-        transform: `scale(${zoom})`
-      }
-    }
+  modifyTransformOrigin () {
+    this.emit('scrollLock', 
+      this.refs.$lock.scrollLeft(), 
+      this.refs.$lock.scrollTop()
+    )
   }
+
+  [SCROLL('$lock') + DEBOUNCE(100)] () {
+    this.modifyTransformOrigin()
+  }
+
 
   [EVENT("setParser")](callback) {
     this.parser = callback(this);

@@ -1,0 +1,42 @@
+.artboard-list {
+    height: 100%;
+    overflow: auto;
+    .artboard-item {
+
+        padding: 5px !important; 
+
+
+
+        .preview {
+            height: 110px;
+            background-color: $border-color;
+            border-radius: 3px;
+            border:1px solid $border-color;            
+            cursor: pointer;            
+        }
+
+
+        .detail {
+            display: grid;
+            grid-template-columns: 1fr 20px;
+            grid-column-gap: 3px;
+
+            label {
+                padding: 2px 0px;                
+            }
+
+
+            .tools {
+                text-align: right;
+
+                @include svg-button();
+            }
+    
+        }
+
+        &.selected {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+    }
+}

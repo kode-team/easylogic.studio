@@ -44,9 +44,6 @@ export default class SizeProperty extends BaseProperty {
 
     return `
       <div class='property-item'>
-        <SelectEditor ref='$position' label='position' key='position' value='${current.position}' options=',absolute,relative,fixed,static' onchange="changRangeEditor" />
-      </div>
-      <div class='property-item'>
         <RangeEditor ref='$width' label='Width' removable="true" key='width' value='${current.width}' min="0" max='3000' onchange='changRangeEditor' />
       </div>
       <div class='property-item'>
@@ -63,6 +60,7 @@ export default class SizeProperty extends BaseProperty {
       });
 
       this.emit("refreshCanvas");
+      this.emit('setSize')
     }
   }
 }

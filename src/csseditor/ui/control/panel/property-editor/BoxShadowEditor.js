@@ -34,11 +34,11 @@ export default class BoxShadowEditor extends UIElement {
     var arr = this.state.boxShadows.map((shadow, index) => {
       return `
         <div class="shadow-item real" data-index="${index}">
-          <div class="inset" data-value="${shadow.inset}">${icon.check}</div>
-          <div class="color" data-index="${index}">
+          <div class="color">
             <div class='color-view' style="background-color: ${shadow.color}">
             </div>
           </div>
+          <div class="inset" data-value="${shadow.inset}">${icon.check}</div>
           <div class="offset-x">${shadow.offsetX.toString()}</div>
           <div class="offset-y">${shadow.offsetY.toString()}</div>
           <div class="blur-radius">${shadow.blurRadius.toString()}</div>
@@ -55,15 +55,16 @@ export default class BoxShadowEditor extends UIElement {
     if (arr.length) {
       arr.push(`
       <div class="shadow-item desc">
-            <div class="inset" >Inset</div>
-            <div class="color"></div>
-            <div class="offset-x">X</div>
-            <div class="offset-y">Y</div>
-            <div class="blur-radius">Blur</div>
-            <div class="spread-radius">Spread</div>
-            <div class="tools">
-            </div>
-          </div>
+        <div class="color"></div>      
+        <div class="inset" >Inset</div>
+
+        <div class="offset-x">X</div>
+        <div class="offset-y">Y</div>
+        <div class="blur-radius">Blur</div>
+        <div class="spread-radius">Spread</div>
+        <div class="tools">
+        </div>
+      </div>
       `);
     }
 
@@ -101,7 +102,20 @@ export default class BoxShadowEditor extends UIElement {
   }
 
   [CLICK("$shadowList .shadow-item.real .color")](e) {
-    var index = +e.$delegateTarget.attr("data-index");
+    var index = +e.$delegateTarget.closest('shadow-item').attr("data-index");
+
+    var shadow = this.state.boxShadows[index]
+
+    this.emit("showColorPicker", {
+      changeEvent: "changeBoxShadowEditorColor",
+      color: shadow.color,
+      hasNotHide: true
+    });
+
+  }
+
+  [CLICK("$shadowList .shadow-item.real > div:not(.color):not(.tools)")](e) {
+    var index = +e.$delegateTarget.closest('shadow-item').attr("data-index");
 
     var shadow = this.state.boxShadows[index]
 
@@ -110,12 +124,6 @@ export default class BoxShadowEditor extends UIElement {
 
   viewShadowPopup(shadow, index) {
     this.selectedIndex = index;
-
-    this.emit("showColorPicker", {
-      changeEvent: "changeBoxShadowEditorColor",
-      color: shadow.color,
-      hasNotHide: true
-    });
 
     this.viewBoxShadowPropertyPopup(shadow);
   }

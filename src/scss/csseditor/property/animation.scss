@@ -112,25 +112,8 @@
     .tools {
       vertical-align: middle;
       text-align: right;
-      button {
-          vertical-align: middle;
-          appearance: none;
-          background-color: transparent;
-          border: 0px;
-          padding: 0px;
-          font-size: 16px;
-          vertical-align: middle;
-          cursor: pointer;
-          outline: none;
-          font-size: 12px;
-          
-
-          svg {
-              width: 16px;
-              height: 16px;
-              vertical-align: middle;
-          }
-       }
+      
+      @include svg-button();
      }  
   }
 }

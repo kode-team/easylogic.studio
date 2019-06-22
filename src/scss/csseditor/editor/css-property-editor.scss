@@ -17,20 +17,7 @@
             display: inline-block;
           }
 
-          button {
-            appearance: none;
-            background-color: transparent;
-            outline: none;
-            cursor: pointer;
-            border:0px;
-            padding:0px;
-            vertical-align: middle;
-
-            svg {
-              width: 16px;
-              height: 16px;
-            }
-          }
+          @include svg-button();
         }
     }
 
@@ -57,19 +44,8 @@
       }
 
       .tools {
-        button {
-          appearance: none;
-          background-color: transparent;
-          outline: none;
-          cursor: pointer;
-          border:0px;
 
-          svg {
-            width: 16px;
-            height: 16px;
-            vertical-align: middle;
-          }
-        }
+        @include svg-button();
       }
     }    
 

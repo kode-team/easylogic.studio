@@ -9,17 +9,7 @@ export default class ToolMenu extends UIElement {
   template() {
     return `
       <div class='tool-menu'>
-        <div class='items left'>
-          <div class='logo'>
-            <div class='text'>Easylogic</div>
-            <div class='site'>Studio</div>
-          </div>
-        </div>
-        <div class='items  right'>
-          <ExportCodePen />
-          <ExportJSFiddle />
-          <Github />
-        </div>                
+              
       </div>
     `;
   }

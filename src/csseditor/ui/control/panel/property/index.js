@@ -33,9 +33,13 @@ import BackgroundClipProperty from "./BackgroundClipProperty";
 import SVGProperty from "./SVGProperty";
 import SelectorProperty from "./SelectorProperty";
 import PositionProperty from "./PositionProperty";
+import ProjectProperty from "./ProjectProperty";
+import ArtBoardProperty from "./ArtBoardProperty";
 
  
 export default {
+  ProjectProperty,
+  ArtBoardProperty,
   PositionProperty,
   SelectorProperty,
   SVGProperty,

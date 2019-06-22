@@ -7,11 +7,11 @@ $pointer-color: rgba(#ececec, 0.8);
 $gutter: 8px;
 $tool-size: 70px;
 $top-size: 100px;
-$left-size: 310px;
+$left-size: 200px;
 $left-layer-panel: 70px;
 $left-page-size: 70px;
 $toggle-left-size: 80px;
-$right-size: 240px;
+$right-size: 310px;
 $timeline-header-size: 0px;
 $timeline-size: 300px;
 $show-timeline-animation: all 0.15s linear;
@@ -60,21 +60,35 @@ $display-grid-color: red;
     flex: none;
     height: $tool-size;
     overflow: hidden;
-    display: flex;
     position: relative;
     background-color: rgba(0, 0, 0, 1);
     z-index: 1;
     pointer-events: all;
 
-    .page-tab-menu {
-      flex: 1 1 auto;
-      display: block;
-      position: relative;
+    .logo {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      bottom: 0px;
+      width: $left-size;
     }
 
-    .layout-body {
-      display: none;
+    .tool-menu {
+      position: absolute;
+      top: 0px;
+      bottom: 0px;
+      left: $left-size;
+      right: $right-size;
     }
+
+    .external-tool-menu {
+      position: absolute;
+      top: 0px;
+      bottom: 0px;
+      right: 0px;
+      width: $right-size;
+    }    
+
   }
 
   .layout-footer {
@@ -93,14 +107,28 @@ $display-grid-color: red;
     height: 100%;
     position: relative;
 
+    .layout-left {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      bottom: 0px;
+      width: $left-size;
+      border-right: 1px solid $border-color;
+      background-color: white;
+      display: inline-block;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+    }
+
     .layout-right {
       position: absolute;
       right: 0px;
       top: 0px;
       bottom: 0px;
-      width: $left-size;
+      width: $right-size;
       display: inline-block;
-      border-right: 1px solid rgba(#333, 0.5);
+      border-left: 1px solid $border-color;
       background-color: rgba(255, 255, 255, 1);
       z-index: 100;
       display: flex;
@@ -110,9 +138,9 @@ $display-grid-color: red;
 
     .layout-body {
       top: 0px;
+      left: $left-size;
       right: $left-size;
       bottom: 0px;
-      left: 0px;
       position: absolute;
     }
   }
@@ -122,6 +150,20 @@ $display-grid-color: red;
   display: flex; 
   flex-direction: column;
   height: 100%;
+
+  &.object-list {
+    > div {
+      &:last-child {
+        height: 70%;
+      }
+    }
+
+    .property {
+      margin: 0px;
+      height: 100%;
+      border:0px;
+    }
+  }
 
   > div {
     flex: 1 1 auto; 
@@ -153,4 +195,4 @@ $display-grid-color: red;
 @import "./fill-picker.scss";
 
 // popup
-@import "./popup.scss";
+@import "./popup/popup.scss";

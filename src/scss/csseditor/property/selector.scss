@@ -34,24 +34,8 @@
         .tools {
             vertical-align: middle;
             text-align: right;
-            button {
-                vertical-align: middle;
-                appearance: none;
-                background-color: transparent;
-                border: 0px;
-                padding: 0px;
-                vertical-align: middle;
-                cursor: pointer;
-                outline: none;
-                font-size: 12px;
-                line-height: 0;
-      
-                svg {
-                    width: 16px;
-                    height: 16px;
-                    vertical-align: middle;
-                }
-             }
+
+            @include svg-button();
         } 
       }
     }

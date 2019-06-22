@@ -1,0 +1,90 @@
+
+
+  .box-shadow-property-popup {
+    width: 204px;
+    box-sizing: border-box;
+    .box {
+
+      input,
+      select {
+        width: 100%;
+        vertical-align: middle;
+      }
+
+      select {
+        appearance: none;
+        padding: 0px;
+        text-align: center;
+        border: 0px;
+        background-color: white;
+        border: 1px solid $border-color;
+      }
+
+      .input {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .type {
+        display: grid;
+        grid-template-columns: 50px 1fr;
+        grid-column-gap: 4px;
+        margin-bottom: 2px;
+
+        .select {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          height: 20px;
+
+          @each $selectType in inset, outset {
+            &[data-selected-value="#{$selectType}"]
+              button[data-value="#{$selectType}"] {
+              box-shadow: inset 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
+              background-color: $border-color;
+            }
+          }
+
+          button {
+            appearance: none;
+            border: 0px;
+            background-color: white;
+            outline: none;
+            cursor: pointer;
+          }
+        }
+      }
+
+      label {
+        font-size: 11px;
+      }
+
+      .drag-board {
+        background-color: white;
+        box-sizing: border-box;
+        border: 1px solid $border-color;
+        margin-bottom: 2px;        
+        height: 204px;
+        position: relative;
+        // pointer-events: none;
+        background-image: linear-gradient(
+            to right,
+            $border-color,
+            $border-color
+          ),
+          linear-gradient(to right, $border-color, $border-color);
+        background-size: 100% 1px, 1px 100%;
+        background-position: 0px center, center 0px;
+        background-repeat: no-repeat;
+
+        .pointer {
+          pointer-events: none;
+          position: absolute;
+          width: 10px;
+          height: 10px;
+          transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
+          background-color: $border-color;
+          border-radius: 100%;
+        }
+      }
+    }
+  }

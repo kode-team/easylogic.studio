@@ -21,6 +21,10 @@ export default class BoxModelProperty extends BaseProperty {
     return "Box Model";
   }
 
+  isFirstShow () {
+    return false; 
+  }
+
   [EVENT(CHANGE_ARTBOARD, CHANGE_SELECTION)]() {
     this.refresh();
   }

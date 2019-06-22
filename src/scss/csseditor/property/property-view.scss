@@ -5,17 +5,27 @@
   background-color: white;
   border-radius: 3px;
 
+  &.full {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .property-title {
+      flex: none; 
+      height: 30px;
+    }
+
+    .property-body {
+      flex: 1 1 auto; 
+      overflow: auto;
+    }
+  }
 
   &.show {
     > .property-body {
       display: block;
+      padding: 2px 5px;      
     }
-
-    // > .property-title {
-    //   &:before {
-    //     transform: rotate(180deg);
-    //   }
-    // }
   }
 
   > .property-title {
@@ -33,22 +43,6 @@
     grid-template-columns: 1fr 1fr;
     cursor: pointer;
 
-    // &:before {
-    //   position: absolute;
-    //   left: 2px;
-    //   top: 40%;
-    //   content: '';
-    //   display: inline-block;
-    //   vertical-align: middle;
-    //   width: 6px;
-    //   height: 6px;
-    //   background-color: rgba(0, 0, 0, 0.5); 
-    //   transform: rotate(90deg);
-    //   transition: all 0.3s linear;
-    //   transform-origin: center center;
-    //   clip-path: polygon(50% 30%, 100% 100%, 0% 100%);
-    // }
-
     label {
       cursor: pointer;
       padding-left: 2px;
@@ -61,30 +55,13 @@
         flex: none;
       }
 
-      button {
-        appearance: none;
-        display: inline-block;
-        box-sizing: border-box;
-        width: 16px;
-        height: 16px;
-        background-color: transparent;
-        border: 0px;
-        padding: 0px;
-        cursor: pointer;
-        outline: none;
-        vertical-align: middle;
-
-        svg {
-          width: 100%;
-          height: 100%;
-        }
-      }
+      @include svg-button();
     }
   }
 
   > .property-body {
     display: none;
-    padding: 2px 5px;
+
 
     .property-item {
       padding: 0px;

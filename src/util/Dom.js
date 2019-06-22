@@ -510,6 +510,10 @@ export default class Dom {
     }
   }
 
+  scrollIntoView () {
+    this.el.scrollIntoView()
+  }
+
   setScrollTop(scrollTop) {
     this.el.scrollTop = scrollTop;
     return this;
@@ -539,6 +543,10 @@ export default class Dom {
   scrollHeight() {
     return this.el.scrollHeight;
   }
+
+  scrollWidth() {
+    return this.el.scrollWidth;
+  }  
 
   on(eventName, callback, opt1, opt2) {
     this.el.addEventListener(eventName, callback, opt1, opt2);

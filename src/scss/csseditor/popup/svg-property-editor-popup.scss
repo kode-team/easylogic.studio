@@ -1,0 +1,64 @@
+
+  .svg-property-editor-popup {
+    padding: 7px;
+    width: 250px;
+    height: auto;
+    .box {
+      > .name {
+        height: 20px;
+        display: grid;
+        grid-template-columns: 60px 1fr;
+        grid-column-gap: 4px;
+        margin-bottom: 5px;
+      }
+
+      .property {
+        .title {
+          display: grid;
+          grid-template-columns: 1fr 2fr;
+          grid-column-gap: 2px;
+
+          .tools {
+            text-align: right; 
+            select {
+              width: 100px;
+              display: inline-block;
+            }
+
+            
+            @include svg-button();
+          }
+        }
+
+
+      }
+
+      label {
+        font-size: 12px;
+        text-align: left;
+        vertical-align: middle;
+      }
+
+      input[type='range'],
+      input[type='number'],
+      input[type='text'],
+      select {
+        width: 100%;
+        vertical-align: middle;
+      }
+
+      .input {
+        vertical-align: middle;
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr;
+
+        &.grid-1 {
+          grid-template-columns: 1fr;
+        }
+
+        &.grid-2 {
+          grid-template-columns: 3fr 1fr;
+        }        
+      }
+    }
+  }

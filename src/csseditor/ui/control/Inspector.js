@@ -9,44 +9,48 @@ export default class Inspector extends UIElement {
     return html`
       <div class="feature-control">
         <div>
-          <div class="tab number-tab" data-selected-value="7" ref="$tab">
+          <div class="tab number-tab" data-selected-value="1" ref="$tab">
             <div class="tab-header" ref="$header">
-              <div class="tab-item" data-value="7">
+              <div class="tab-item" data-value="1">
                 <div class='icon'>${icon.shape}</div>
                 <label>Element</label>
-              </div>            
-              <div class="tab-item" data-value="1">
+              </div>                  
+              <div class="tab-item" data-value="2">
                 <div class='icon'>${icon.paint}</div>
                 <label>Style</label>
               </div>
-              <div class="tab-item" data-value="2">
+              <div class="tab-item" data-value="3">
                 <div class='icon'>${icon.title}</div>
                 <label>Text</label>
               </div>
-              <div class="tab-item" data-value="3">
+              <div class="tab-item" data-value="4">
                 <div class='icon'>${icon.transform}</div>
                 <label>Transform</label>
               </div>            
-              <div class="tab-item" data-value="4">
+              <div class="tab-item" data-value="5">
                 <div class='icon'>${icon.filter}</div>
                 <label>Effect</label>
               </div>                          
-              <div class="tab-item" data-value="5">
+              <div class="tab-item" data-value="6">
                 <div class='icon'>${icon.scatter}</div>
                 <label>Selector</label>
               </div>                          
-              <div class="tab-item" data-value="6">
+              <div class="tab-item" data-value="7">
                 <div class='icon'>${icon.timer}</div>
                 <label>Animation</label>
-              </div>                        
+              </div>
+              <div class="tab-item" data-value="8">
+                <div class='icon'>${icon.ballot}</div>
+                <label>Information</label>
+              </div>                                      
             </div>
             <div class="tab-body" ref="$body">
-              <div class="tab-content" data-value="7">
-                <SizeProperty />              
-                <PositionProperty />
-              </div>
               <div class="tab-content" data-value="1">
+                <PositionProperty />              
+                <SizeProperty />              
                 <BoxModelProperty />
+              </div>
+              <div class="tab-content" data-value="2">
                 <BackgroundColorProperty />
                 <OpacityProperty />                     
                 <BorderProperty />
@@ -54,21 +58,21 @@ export default class Inspector extends UIElement {
                 <BorderImageProperty />
                 <OutlineProperty />
               </div>
-              <div class="tab-content" data-value="2">
+              <div class="tab-content" data-value="3">
                 <ContentProperty />
                 <FontColorProperty />         
                 <FontProperty />
                 <TextProperty />
                 <FontSpacingProperty />
               </div>
-              <div class='tab-content' data-value="3">
+              <div class='tab-content' data-value="4">
       
                 <PerspectiveProperty />
                 <PerspectiveOriginProperty />
                 <TransformOriginProperty /> 
                 <TransformProperty />
               </div>
-              <div class='tab-content' data-value="4">
+              <div class='tab-content' data-value="5">
 
                 <BackgroundClipProperty />                         
                 <MixBlendModeProperty />
@@ -77,16 +81,20 @@ export default class Inspector extends UIElement {
                 <TextShadowProperty />                   
                 <FilterProperty />
                 <BackdropFilterProperty />
-                <ClipPathProperty />
+                <ClipPathProperty /> 
               </div>
-              <div class='tab-content' data-value='5'>
+              <div class='tab-content' data-value='6'>
                 <SelectorProperty />
               </div>
-              <div class='tab-content' data-value="6">
+              <div class='tab-content' data-value="7">
                 <TransitionProperty />
                 <KeyframeProperty />
                 <AnimationProperty />
-              </div>            
+              </div>         
+              <div class='tab-content' data-value="8">
+                <ProjectInformationProperty />
+                <ArtBoardInformationProperty />
+              </div>                          
             </div>
           </div>
         </div>

@@ -4,6 +4,7 @@ import {
   isUndefined
 } from "../../util/functions/func";
 import { editor } from "../editor";
+import { EMPTY_STRING } from "../../util/css/types";
 
 export class Item {
   constructor(json = {}) {
@@ -144,6 +145,7 @@ export class Item {
       id: uuidShort(),
       visible: true,  // 보이기 여부 설정 
       lock: false,    // 편집을 막고 
+      selected: false,  // 선택 여부 체크 
       layers: [],   // 하위 객체를 저장한다. 
       ...obj
     };
@@ -180,8 +182,10 @@ export class Item {
 
     tagName = tagName || 'div'
 
+    var selected = this.json.selected ? 'selected' : EMPTY_STRING
+
     return `
-    <${tagName} class='item' data-id="${id}">
+    <${tagName} class='item ${selected}' data-id="${id}">
       ${layers.map(it => it.html)}
     </${tagName}>
     `

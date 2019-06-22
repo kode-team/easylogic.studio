@@ -39,9 +39,11 @@ import gradient from "./gradient";
 import transform from "./transform";
 import scatter from "./scatter";
 import shape from "./shape";
+import ballot from "./ballot";
 
 
 export default {
+  ballot,
   shape,
   scatter,
   transform,

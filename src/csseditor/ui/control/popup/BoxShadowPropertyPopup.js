@@ -1,13 +1,16 @@
-import UIElement, { EVENT } from "../../../../util/UIElement";
+import { EVENT } from "../../../../util/UIElement";
 import { Length } from "../../../../editor/unit/Length";
-import { CHANGE_SELECTION } from "../../../types/event";
-import { LOAD, CLICK, POINTERSTART, MOVE, INPUT } from "../../../../util/Event";
+import { LOAD, CLICK, POINTERSTART, MOVE } from "../../../../util/Event";
 import { html } from "../../../../util/functions/func";
 import RangeEditor from "../panel/property-editor/RangeEditor";
+import BasePopup from "./BasePopup";
 
+export default class BoxShadowPropertyPopup extends BasePopup {
 
+  getTitle() {
+    return 'Box Shadow Editor'
+  }
 
-export default class BoxShadowPropertyPopup extends UIElement {
   components() {
     return {
       RangeEditor
@@ -28,8 +31,8 @@ export default class BoxShadowPropertyPopup extends UIElement {
     this.emit(this.changeEvent, opt);
   }
 
-  template() {
-    return `<div class='popup box-shadow-property-popup' ref='$popup'></div>`;
+  getBody() {
+    return `<div class='box-shadow-property-popup' ref='$popup'></div>`;
   }
 
   [LOAD("$popup")]() {
@@ -96,9 +99,6 @@ export default class BoxShadowPropertyPopup extends UIElement {
       top: this.state.offsetY
     });
 
-    this.children.$offsetX.setValue(this.state.offsetX)
-    this.children.$offsetY.setValue(this.state.offsetY)
-
   }
 
   movePointer(dx, dy) {
@@ -136,6 +136,9 @@ export default class BoxShadowPropertyPopup extends UIElement {
     });
 
     this.refreshPointer();
+
+    this.children.$offsetX.setValue(this.state.offsetX)
+    this.children.$offsetY.setValue(this.state.offsetY)    
   }
 
   [EVENT('changeRangeEditor')] (key, value) {
@@ -155,22 +158,11 @@ export default class BoxShadowPropertyPopup extends UIElement {
     this.setState(data);
     this.refresh();
 
-    this.$el
-      .css({
-        top: Length.px(440),
-        right: Length.px(320),
-        bottom: Length.auto
-      })
-      .show("inline-block");
+    this.show(204);
 
-    this.emit("hidePropertyPopup");
   }
 
-  [EVENT(
-    "hideBoxShadowPropertyPopup",
-    "hidePropertyPopup",
-    CHANGE_SELECTION
-  )]() {
-    this.$el.hide();
+  [EVENT( "hideBoxShadowPropertyPopup" )]() {
+    this.hide();
   }
 }

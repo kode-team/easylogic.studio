@@ -1,0 +1,26 @@
+.project-list {
+
+    .project-item {
+        display: grid;
+        grid-template-columns: 1fr 20px;
+        grid-column-gap: 3px;
+        border:1px solid $border-color;
+        padding: 5px !important; 
+        cursor: pointer;
+        border-radius: 3px;
+
+        label {
+            padding: 2px 0px;
+        }
+
+        &.selected {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .tools {
+            text-align: right;
+
+            @include svg-button();
+        }
+    }
+}
