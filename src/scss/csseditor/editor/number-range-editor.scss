@@ -33,6 +33,10 @@
         }
     }
 
+    .remove {
+        display: none;
+    }
+
 
     @include svg-button();
 

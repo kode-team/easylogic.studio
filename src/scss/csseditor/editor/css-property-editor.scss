@@ -24,18 +24,29 @@
 
 
     .css-property-list {
-      max-height: 300px;
-      overflow: auto;
+      // max-height: 300px;
     }
 
     .css-property-item {
       box-sizing: border-box;
-      // border:1px solid $border-color;
       padding: 4px 0px;
       margin-top: 2px;
 
-      .title {
+      > .title {
         grid-template-columns: 1fr 30px;
+        background-color: #2b8cf3;
+        color: white;
+        border-radius: 3px;
+        padding: 3px 5px;
+
+
+        button {
+          svg {
+            path {
+              fill: white; 
+            }
+          }
+        }
       }
 
       .value-editor {
@@ -46,6 +57,8 @@
       .tools {
 
         @include svg-button();
+
+
       }
     }    
 

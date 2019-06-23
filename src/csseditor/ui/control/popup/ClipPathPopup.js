@@ -1,6 +1,4 @@
 import { EVENT } from "../../../../util/UIElement";
-import { Length } from "../../../../editor/unit/Length";
-import { CHANGE_SELECTION } from "../../../types/event";
 import { LOAD } from "../../../../util/Event";
 import { ClipPath } from "../../../../editor/css-property/ClipPath";
 import CircleEditor from "../panel/property-editor/clip-path/CircleEditor";
@@ -111,7 +109,7 @@ export default class ClipPathPopup extends BasePopup {
 
     this.refresh();
 
-    this.show(204);
+    this.show(220);
   }
 
   [EVENT("hideClipPathPopup")]() {

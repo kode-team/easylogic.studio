@@ -55,6 +55,12 @@ export class Selection {
     this.initRect();
   }
 
+  selectById(id) {
+    this.items = this.artboard.layers.filter(layer => layer.id === id)
+
+    this.initRect();
+  }
+
 
   initRect() {
     this.currentRect = this.rect();

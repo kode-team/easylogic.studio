@@ -82,7 +82,7 @@ export default class FilterEditor extends UIElement {
               <label>${this.props.title || ''}</label>
               <div class='tools'>
                 <select ref="$filterSelect"></select>
-                <button type="button" ref="$add" title="add Filter">${icon.add} ${this.props.title ? '' : 'Add'}</button>
+                <button type="button" ref="$add" title="add Filter">${icon.add}</button>
               </div>
           </div>
           <div class='filter-list' ref='$filterList'></div>

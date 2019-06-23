@@ -1,6 +1,5 @@
-import UIElement, { EVENT } from "../../../../util/UIElement";
+import { EVENT } from "../../../../util/UIElement";
 import { Length } from "../../../../editor/unit/Length";
-import { CHANGE_SELECTION } from "../../../types/event";
 import { LOAD, CHANGE } from "../../../../util/Event";
 import CubicBezierEditor from "../panel/property-editor/CubicBezierEditor";
 import { editor } from "../../../../editor/editor";
@@ -8,9 +7,14 @@ import { html } from "../../../../util/functions/func";
 import RangeEditor from "../panel/property-editor/RangeEditor";
 import IterationCountEditor from "../panel/property-editor/IterationCountEditor";
 import SelectEditor from "../panel/property-editor/SelectEditor";
+import BasePopup from "./BasePopup";
 
 
-export default class AnimationPropertyPopup extends UIElement {
+export default class AnimationPropertyPopup extends BasePopup {
+
+  getTitle() {
+    return 'Animation Property'
+  }
 
   components() {
     return {
@@ -39,8 +43,8 @@ export default class AnimationPropertyPopup extends UIElement {
     this.emit("changeAnimationPropertyPopup", opt);
   }
 
-  template() {
-    return `<div class='popup animation-property-popup' ref='$popup'></div>`;
+  getBody() {
+    return `<div class='animation-property-popup' ref='$popup'></div>`;
   }
 
   [LOAD('$popup')] () {
@@ -151,27 +155,24 @@ export default class AnimationPropertyPopup extends UIElement {
 
   templateForDelay () {
     return `
-    <div class='delay grid-1'>
-      <label>Delay</label>
-      <RangeEditor ref='$delay' calc='false' key='delay' value='${this.state.delay}' units='s,ms' onChange="changeRangeEditor" />
+    <div class='delay'>
+      <RangeEditor ref='$delay' label='Delay' calc='false' key='delay' value='${this.state.delay}' units='s,ms' onChange="changeRangeEditor" />
     </div>
     `
   }
 
   templateForDuration () {
     return `
-    <div class='duration grid-1'>
-      <label>Duration</label>
-      <RangeEditor ref='$duration'  calc='false' key='duration' value='${this.state.duration}' units='s,ms' onChange="changeRangeEditor" />
+    <div class='duration'>
+      <RangeEditor ref='$duration' label='Duration'  calc='false' key='duration' value='${this.state.duration}' units='s,ms' onChange="changeRangeEditor" />
     </div>
     `
   }
 
   templateForIterationCount () {
     return `
-      <div class='iteration-count grid-1'>
-        <label>Iteration</label>
-        <IterationCountEditor ref='$iterationCount' calc='false' key='iterationCount' value='${this.state.iterationCount}' units='normal,infinite' onChange="changeRangeEditor" />
+      <div class='iteration-count'>
+        <IterationCountEditor ref='$iterationCount' label='Iteration' calc='false' key='iterationCount' value='${this.state.iterationCount}' units='normal,infinite' onChange="changeRangeEditor" />
       </div>
     `
   }
@@ -197,25 +198,13 @@ export default class AnimationPropertyPopup extends UIElement {
   [EVENT("showAnimationPropertyPopup")](data) {
     this.setState(data);
 
-    this.$el
-      .css({
-        top: Length.px(150),
-        right: Length.px(320),
-        bottom: Length.auto
-      })
-      .show("inline-block");
-
-    this.emit("hidePropertyPopup");
+    this.show(250)
 
     // 화면에 보이고 난 후에 업데이트 할까? 
     this.emit('showCubicBezierEditor', data)    
   }
 
-  [EVENT(
-    "hideAnimationPropertyPopup",
-    "hidePropertyPopup",
-    CHANGE_SELECTION
-  )]() {
+  [EVENT("hideAnimationPropertyPopup")]() {
     this.$el.hide();
   }
 }

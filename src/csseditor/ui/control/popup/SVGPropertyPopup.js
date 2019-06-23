@@ -1,11 +1,14 @@
-import UIElement, { EVENT } from "../../../../util/UIElement";
-import { Length } from "../../../../editor/unit/Length";
-import { CHANGE_SELECTION } from "../../../types/event";
+import { EVENT } from "../../../../util/UIElement";
 import { INPUT, LOAD } from "../../../../util/Event";
 import SVGFilterEditor from "../panel/property-editor/SVGFilterEditor";
 import SVGClipPathEditor from "../panel/property-editor/SVGClipPathEditor";
+import BasePopup from "./BasePopup";
 
-export default class SVGPropertyPopup extends UIElement {
+export default class SVGPropertyPopup extends BasePopup {
+
+  getTitle() {
+    return 'SVG Property';
+  }
 
   components() {
     return {
@@ -28,9 +31,9 @@ export default class SVGPropertyPopup extends UIElement {
     this.emit(this.state.changeEvent, this.state);
   }
 
-  template() {
+  getBody() {
     return `
-    <div class='popup svg-property-editor-popup' ref='$popup'>
+    <div class='svg-property-editor-popup' ref='$popup'>
       <div class="box">
         ${this.templateForName()}
         <div class='editor' ref='$editor'></div>
@@ -101,23 +104,10 @@ export default class SVGPropertyPopup extends UIElement {
     this.setState(data);
     this.refresh()
 
-    this.$el
-      .css({
-        top: Length.px(150),
-        right: Length.px(320),
-        bottom: Length.auto,
-        'z-index': 1000000
-      })
-      .show("inline-block");
-
-    this.emit("hidePropertyPopup");
+    this.show(250);
   }
 
-  [EVENT(
-    "hideSVGPropertyPopup",
-    "hidePropertyPopup",
-    CHANGE_SELECTION
-  )]() {
+  [EVENT("hideSVGPropertyPopup")]() {
     this.$el.hide();
   }
 }

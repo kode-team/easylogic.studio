@@ -3394,6 +3394,9 @@ html, body {
 .csseditor .number-range-editor.is-removable .remove {
   display: inline-block;
 }
+.csseditor .number-range-editor .remove {
+  display: none;
+}
 .csseditor .number-range-editor button {
   width: 16px;
   height: 16px;
@@ -3468,6 +3471,9 @@ html, body {
   font-size: 11px;
   box-sizing: border-box;
 }
+.csseditor .select-editor.has-label select {
+  width: 100%;
+}
 .csseditor .select-editor select[data-count="1"], .csseditor .select-editor select[data-count="0"] {
   -webkit-appearance: none;
      -moz-appearance: none;
@@ -3513,17 +3519,20 @@ html, body {
   width: 100%;
   height: 100%;
 }
-.csseditor .css-property-editor .css-property-list {
-  max-height: 300px;
-  overflow: auto;
-}
 .csseditor .css-property-editor .css-property-item {
   box-sizing: border-box;
   padding: 4px 0px;
   margin-top: 2px;
 }
-.csseditor .css-property-editor .css-property-item .title {
+.csseditor .css-property-editor .css-property-item > .title {
   grid-template-columns: 1fr 30px;
+  background-color: #2b8cf3;
+  color: white;
+  border-radius: 3px;
+  padding: 3px 5px;
+}
+.csseditor .css-property-editor .css-property-item > .title button svg path {
+  fill: white;
 }
 .csseditor .css-property-editor .css-property-item .value-editor {
   padding: 2px;
@@ -4756,16 +4765,14 @@ html, body {
 }
 .csseditor .svg-filter-editor .filter-list .filter-item {
   display: block;
-  border: 1px solid #cccccc;
-  border-bottom: 0px;
   box-sizing: border-box;
-}
-.csseditor .svg-filter-editor .filter-list .filter-item:last-child {
-  border-bottom: 1px solid #cccccc;
 }
 .csseditor .svg-filter-editor .filter-list .filter-item .title {
   display: grid;
   grid-template-columns: 1fr 30px;
+  background-color: #2b8cf3;
+  color: white;
+  border-radius: 3px;
 }
 .csseditor .svg-filter-editor .filter-list .filter-item .title label {
   font-size: 12px;
@@ -4794,11 +4801,16 @@ html, body {
   width: 100%;
   height: 100%;
 }
+.csseditor .svg-filter-editor .filter-list .filter-item .title .filter-menu button svg path {
+  fill: white;
+}
 .csseditor .svg-filter-editor .filter-list .filter-item .filter-ui {
   display: grid;
   grid-template-columns: 1fr;
   margin-bottom: 2px;
-  padding: 2px;
+}
+.csseditor .svg-filter-editor .filter-list .filter-item .filter-ui > div {
+  margin-bottom: 5px;
 }
 .csseditor .svg-filter-editor .filter-list .filter-item .filter-ui.drop-shadow {
   grid-template-columns: 50px 1fr;
@@ -4871,7 +4883,6 @@ html, body {
   grid-template-columns: repeat(1, 1fr);
   max-height: 500px;
   margin-top: 10px;
-  background-color: #cccccc;
 }
 .csseditor .list-view-editor[data-column="0"] {
   grid-template-columns: repeat(0, 1fr);
@@ -5160,7 +5171,6 @@ html, body {
   border-radius: 100%;
 }
 .csseditor .popup .animation-property-popup {
-  padding: 10px;
   width: 250px;
 }
 .csseditor .popup .animation-property-popup .box > div {
@@ -5183,8 +5193,7 @@ html, body {
   grid-template-columns: 3fr 1fr;
 }
 .csseditor .popup .transition-property-popup {
-  padding: 10px;
-  width: 250px;
+  width: 220px;
 }
 .csseditor .popup .transition-property-popup .box > div {
   margin-bottom: 5px;
@@ -5355,7 +5364,7 @@ html, body {
   grid-column-gap: 2px;
 }
 .csseditor .popup .clippath-popup {
-  width: 250px;
+  width: 220px;
   height: auto;
 }
 .csseditor .popup .clippath-popup .box > .clip-path-editor.clip-path-type {
@@ -5527,9 +5536,7 @@ html, body {
   grid-template-columns: 3fr 1fr;
 }
 .csseditor .popup .svg-property-editor-popup {
-  padding: 7px;
   width: 250px;
-  height: auto;
 }
 .csseditor .popup .svg-property-editor-popup .box > .name {
   height: 20px;

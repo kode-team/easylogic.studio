@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
-import { BIND, LOAD } from "../../../util/Event";
+import { BIND, LOAD, POINTERSTART, MOVE, END } from "../../../util/Event";
 import { Length } from "../../../editor/unit/Length";
 import { NEW_LINE, EMPTY_STRING } from "../../../util/css/types";
 import { CHANGE_SELECTION } from "../../types/event";
@@ -26,6 +26,28 @@ export default class ElementView extends UIElement {
                 <div ref='$view'></div>
             </div>
         `
+    }
+
+    [POINTERSTART('$view .item') + MOVE('moveElement') + END('moveEndElement')] (e) {
+        this.startXY = e.xy ; 
+        this.$element = e.$delegateTarget;
+        var id = this.$element.attr('data-id')
+        editor.selection.selectById(id);
+
+        this.current = editor.selection.current;
+
+        this.currentX = this.current.x || Length.px(0);
+        this.currentY = this.current.y || Length.px(0);
+    }
+
+    moveElement (dx, dy) {
+
+        this.current.reset({
+            x: Length.px(this.currentX.value + dx),
+            y: Length.px(this.currentY.value + dy),
+        })
+        
+        this.emit('refreshCanvas');
     }
 
     [BIND('$body')] () {

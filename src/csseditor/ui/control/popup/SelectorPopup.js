@@ -1,10 +1,13 @@
-import UIElement, { EVENT } from "../../../../util/UIElement";
-import { Length } from "../../../../editor/unit/Length";
-import { CHANGE_SELECTION } from "../../../types/event";
+import { EVENT } from "../../../../util/UIElement";
 import { INPUT } from "../../../../util/Event";
 import CSSPropertyEditor from "../panel/property-editor/CSSPropertyEditor";
+import BasePopup from "./BasePopup";
 
-export default class SelectorPopup extends UIElement {
+export default class SelectorPopup extends BasePopup {
+
+  getTitle() {
+    return 'Selector Property'
+  }
 
   components() {
     return {
@@ -24,9 +27,9 @@ export default class SelectorPopup extends UIElement {
     this.emit("changeSelectorPopup", this.state);
   }
 
-  template() {
+  getBody() {
     return `
-    <div class='popup selector-popup' ref='$popup'>
+    <div class='selector-popup' ref='$popup'>
       <div class="box">
         ${this.templateForSelector()}
         ${this.templateForProperty()}        
@@ -45,7 +48,7 @@ export default class SelectorPopup extends UIElement {
       <div class='name'>
         <label>Selector</label>
         <div class='input grid-1'>
-          <input type='text' value='${this.state.name}' ref='$selector'/>
+          <input type='text' value='${this.state.selector}' ref='$selector'/>
         </div>
       </div>
     `
@@ -62,7 +65,7 @@ export default class SelectorPopup extends UIElement {
   }
   
   refresh() {
-    this.load();
+    super.refresh()
 
     this.refs.$selector.val(this.state.selector);
     this.children.$propertyEditor.trigger('showCSSPropertyEditor', this.state.properties);
@@ -78,22 +81,6 @@ export default class SelectorPopup extends UIElement {
     this.setState(data);
     this.refresh()
 
-    this.$el
-      .css({
-        top: Length.px(110),
-        right: Length.px(320),
-        bottom: Length.auto,
-        'z-index': 1000000
-      })
-      .show("inline-block");
-
-    this.emit("hidePropertyPopup");
-  }
-
-  [EVENT(
-    "hidePropertyPopup",
-    CHANGE_SELECTION
-  )]() {
-    this.$el.hide();
+    this.show(250)
   }
 }

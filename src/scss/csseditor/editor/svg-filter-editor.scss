@@ -30,19 +30,15 @@
   
     .filter-item {
       display: block;
-      border: 1px solid $border-color;
-      border-bottom: 0px;
       box-sizing: border-box;
 
-      &:last-child {
-        border-bottom: 1px solid $border-color;
-      }
-
-      
   
       .title {
         display: grid;
         grid-template-columns: 1fr 30px;
+        background-color: #2b8cf3;
+        color: white;
+        border-radius: 3px;
   
         label {
           font-size: 12px;
@@ -54,6 +50,14 @@
           text-align: right;
 
           @include svg-button();
+
+          button {
+            svg {
+              path {
+                fill: white; 
+              }
+            }
+          }
         }
       }
   
@@ -61,7 +65,10 @@
         display: grid;
         grid-template-columns: 1fr;
         margin-bottom: 2px;
-        padding: 2px;
+
+        > div {
+          margin-bottom: 5px;
+        }
   
         &.drop-shadow {
           grid-template-columns: 50px  1fr;

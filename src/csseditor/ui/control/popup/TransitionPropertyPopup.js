@@ -1,11 +1,11 @@
-import UIElement, { EVENT } from "../../../../util/UIElement";
+import { EVENT } from "../../../../util/UIElement";
 import { Length } from "../../../../editor/unit/Length";
-import { CHANGE_SELECTION } from "../../../types/event";
 import { LOAD} from "../../../../util/Event";
 import CubicBezierEditor from "../panel/property-editor/CubicBezierEditor";
 import { html } from "../../../../util/functions/func";
 import RangeEditor from "../panel/property-editor/RangeEditor";
 import SelectEditor from "../panel/property-editor/SelectEditor";
+import BasePopup from "./BasePopup";
 
 const property_list = [
   'none',
@@ -83,7 +83,11 @@ const property_list = [
 
 
 
-export default class TransitionPropertyPopup extends UIElement {
+export default class TransitionPropertyPopup extends BasePopup {
+
+  getTitle() {
+    return 'Transition'
+  }
 
   components() {
     return {
@@ -107,8 +111,8 @@ export default class TransitionPropertyPopup extends UIElement {
     this.emit("changeTransitionPropertyPopup", opt);
   }
 
-  template() {
-    return `<div class='popup transition-property-popup' ref='$popup'></div>`;
+  getBody() {
+    return `<div class='transition-property-popup' ref='$popup'></div>`;
   }
 
   [LOAD('$popup')] () {
@@ -149,18 +153,16 @@ export default class TransitionPropertyPopup extends UIElement {
 
   templateForDelay () {
     return `
-    <div class='delay grid-1'>
-      <label>Delay</label>
-      <RangeEditor ref='$delay' calc='false' key='delay' value='${this.state.delay}' units='s,ms' onChange="changeRangeEditor" />
+    <div class='delay'>
+      <RangeEditor ref='$delay' label='Delay' calc='false' key='delay' value='${this.state.delay}' units='s,ms' onChange="changeRangeEditor" />
     </div>
     `
   }
 
   templateForDuration () {
     return `
-    <div class='duration grid-1'>
-      <label>Duration</label>
-      <RangeEditor ref='$duration'  calc='false' key='duration' value='${this.state.duration}' units='s,ms' onChange="changeRangeEditor" />
+    <div class='duration'>
+      <RangeEditor ref='$duration' label='Duration'  calc='false' key='duration' value='${this.state.duration}' units='s,ms' onChange="changeRangeEditor" />
     </div>
     `
   }
@@ -179,25 +181,13 @@ export default class TransitionPropertyPopup extends UIElement {
     this.setState(data);
     this.refresh();
 
-    this.$el
-      .css({
-        top: Length.px(150),
-        right: Length.px(320),
-        bottom: Length.auto
-      })
-      .show("inline-block");
-
-    this.emit("hidePropertyPopup");
+    this.show(250)
 
     // 화면에 보이고 난 후에 업데이트 할까? 
     this.emit('showCubicBezierEditor', data)    
   }
 
-  [EVENT(
-    "hideTransitionPropertyPopup",
-    "hidePropertyPopup",
-    CHANGE_SELECTION
-  )]() {
+  [EVENT("hideTransitionPropertyPopup")]() {
     this.$el.hide();
   }
 }
