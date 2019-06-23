@@ -15,6 +15,16 @@
 
         &.selected {
             background-color: rgba(0, 0, 0, 0.1);
+            @include title-background();
+            color: white;
+            
+            button {
+                svg {
+                    path {
+                        fill: white;
+                    }
+                }
+            }
         }
 
         .tools {

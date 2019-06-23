@@ -14,6 +14,10 @@ export default class OpacityProperty extends BaseProperty {
     return 'Opacity'
   }
 
+  isHideHeader() {
+    return true;
+  }
+
   getBody() {
     return `<div ref='$body' style='padding-top: 3px;'></div>`;
   }  
@@ -24,6 +28,7 @@ export default class OpacityProperty extends BaseProperty {
     var opacity = current['opacity'] || '1'
     return `<NumberRangeEditor 
               ref='$1' 
+              label='Opacity'
               key='opacity' 
               value="${opacity}" 
               min="0"

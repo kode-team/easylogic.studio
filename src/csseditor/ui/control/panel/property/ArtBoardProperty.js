@@ -62,7 +62,7 @@ export default class ArtBoardProperty extends BaseProperty {
     }
 
     this.refresh()
-
+    this.emit('addElement')
     this.emit(CHANGE_SELECTION);
   }
 

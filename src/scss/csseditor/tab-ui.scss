@@ -83,6 +83,7 @@ $tab-horizontal-header-right-width: 60px;
         .tab-item[data-value="#{$selectValue}"] {
         background-color: rgb(68, 68, 68);
         color: white;
+        @include title-background();
         svg {
           path,g {
             fill: white;

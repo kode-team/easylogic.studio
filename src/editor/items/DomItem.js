@@ -592,4 +592,18 @@ export class DomItem extends GroupItem {
       selectorString: this.toSelectorString(prefix)
     }
   }
+
+  toBound () {
+    var obj = {
+      x: this.json.x ? this.json.x.clone() : Length.px(0),
+      y: this.json.y ? this.json.y.clone() : Length.px(0),
+      width: this.json.width.clone(),
+      height: this.json.height.clone(),
+    }
+
+    obj.x2 = Length.px(obj.x.value + obj.width.value);
+    obj.y2 = Length.px(obj.y.value + obj.height.value);
+
+    return obj
+  }
 }

@@ -1,10 +1,9 @@
 import BaseProperty from "./BaseProperty";
-import { INPUT, CLICK, LOAD } from "../../../../../util/Event";
+import { LOAD } from "../../../../../util/Event";
 import { html } from "../../../../../util/functions/func";
 import { editor } from "../../../../../editor/editor";
-import { Length } from "../../../../../editor/unit/Length";
 import { EVENT } from "../../../../../util/UIElement";
-import icon from "../../../icon/icon";
+
 import {
   CHANGE_SELECTION,
   CHANGE_ARTBOARD

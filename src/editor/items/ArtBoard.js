@@ -20,5 +20,10 @@ export class ArtBoard extends DomItem {
     return "ArtBoard";
   }
 
+  checkInAreaForLayers(area) {
+    return this.layers.filter(layer => {
+      return layer.checkInArea(area);
+    })
+  }
 
 }

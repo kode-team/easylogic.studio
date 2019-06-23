@@ -3,6 +3,7 @@ import UIElement, { EVENT } from "../../../util/UIElement";
 import { editor } from "../../../editor/editor";
 import { DEBOUNCE, LOAD, } from "../../../util/Event";
 import { CSS_TO_STRING } from "../../../util/css/make";
+import { EMPTY_STRING } from "../../../util/css/types";
 
 export default class StyleView extends UIElement {
 
@@ -50,7 +51,7 @@ export default class StyleView extends UIElement {
 
     var project = editor.projects[0] || { layers : [] }
 
-    return project.layers.map(item => {
+    return project.artboards.map(item => {
       return this.makeStyle(item)
     })
   } 
@@ -59,7 +60,7 @@ export default class StyleView extends UIElement {
   makeSvg (item) {
     const SVGString = item.toSVGString()
     return `
-      <svg width="0" height="0">${SVGString}</svg>
+      ${SVGString ? `<svg width="0" height="0">${SVGString}</svg>` : EMPTY_STRING}
     ` + item.layers.map(it => {
       return this.makeSvg(it);
     })

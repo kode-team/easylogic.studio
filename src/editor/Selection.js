@@ -1,5 +1,4 @@
 import { Length } from "./unit/Length";
-import { CHANGE_SELECTION } from "../csseditor/types/event";
 import { RectItem } from "./items/RectItem";
 
 export class Selection {
@@ -55,12 +54,27 @@ export class Selection {
     this.initRect();
   }
 
+  empty () {
+    this.select()
+  }
+
   selectById(id) {
     this.items = this.artboard.layers.filter(layer => layer.id === id)
 
-    this.initRect();
+    // this.initRect();
   }
 
+  setRectCache () {
+    this.cachedRect = this.items.map(it => {
+      return it.toBound()
+    })
+  }
+
+  each (callback) {
+    this.items.forEach( (item, index) => {
+      callback && callback (item, this.cachedRect[index]);
+    })
+  }
 
   initRect() {
     this.currentRect = this.rect();

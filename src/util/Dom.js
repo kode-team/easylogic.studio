@@ -70,6 +70,12 @@ export default class Dom {
     });
   }
 
+  styles(...args) {
+    return args.map(key => {
+      return this.el.style[key];
+    });
+  }  
+
   removeAttr(key) {
     this.el.removeAttribute(key);
 

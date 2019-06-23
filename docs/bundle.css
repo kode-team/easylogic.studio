@@ -1353,12 +1353,14 @@ html, body {
 }
 .csseditor .layout-main .layout-header {
   flex: none;
-  height: 70px;
+  height: 50px;
   overflow: hidden;
   position: relative;
-  background-color: black;
+  background-color: white;
   z-index: 1;
   pointer-events: all;
+  box-sizing: border-box;
+  border-bottom: 1px solid #cccccc;
 }
 .csseditor .layout-main .layout-header .logo {
   position: absolute;
@@ -1372,14 +1374,14 @@ html, body {
   top: 0px;
   bottom: 0px;
   left: 200px;
-  right: 310px;
+  right: 280px;
 }
 .csseditor .layout-main .layout-header .external-tool-menu {
   position: absolute;
   top: 0px;
   bottom: 0px;
   right: 0px;
-  width: 310px;
+  width: 280px;
 }
 .csseditor .layout-main .layout-footer {
   flex: none;
@@ -1414,7 +1416,7 @@ html, body {
   right: 0px;
   top: 0px;
   bottom: 0px;
-  width: 310px;
+  width: 280px;
   display: inline-block;
   border-left: 1px solid #cccccc;
   background-color: white;
@@ -1452,6 +1454,85 @@ html, body {
   height: 40%;
   border-top: 1px solid #cccccc;
   box-sizing: border-box;
+}
+.csseditor input[type=range] {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  width: 100%;
+  margin: 6.2px 0;
+}
+.csseditor input[type=range]:focus {
+  outline: none;
+}
+.csseditor input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 1px;
+  cursor: pointer;
+  background: #556375;
+  border-radius: 0px;
+  border: 0px solid #010101;
+}
+.csseditor input[type=range]::-webkit-slider-thumb {
+  height: 10px;
+  width: 10px;
+  border-radius: 10px;
+  background: #556375;
+  cursor: pointer;
+  -webkit-appearance: none;
+          appearance: none;
+  margin-top: -5px;
+}
+.csseditor input[type=range]:focus::-webkit-slider-runnable-track {
+  background: #3174ad;
+}
+.csseditor input[type=range]::-moz-range-track {
+  width: 100%;
+  height: 1px;
+  cursor: pointer;
+  background: #556375;
+  border-radius: 0px;
+  border: 0px solid #010101;
+}
+.csseditor input[type=range]::-moz-range-thumb {
+  border: 1px solid #000000;
+  height: 10px;
+  width: 10px;
+  border-radius: 9px;
+  background: #556375;
+  cursor: pointer;
+}
+.csseditor input[type=range]::-ms-track {
+  width: 100%;
+  height: 1px;
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+.csseditor input[type=range]::-ms-fill-lower {
+  background: #556375;
+  border: 0px solid #010101;
+  border-radius: 0px;
+  box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+}
+.csseditor input[type=range]::-ms-fill-upper {
+  background: #556375;
+  border: 0px solid #010101;
+  border-radius: 0px;
+}
+.csseditor input[type=range]::-ms-thumb {
+  height: 10px;
+  width: 10px;
+  border-radius: 9px;
+  background: #556375;
+  cursor: pointer;
+}
+.csseditor input[type=range]:focus::-ms-fill-lower {
+  background: #556375;
+}
+.csseditor input[type=range]:focus::-ms-fill-upper {
+  background: #556375;
 }
 .csseditor .tab {
   position: absolute;
@@ -1510,6 +1591,7 @@ html, body {
 .csseditor .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"] {
   background-color: #444444;
   color: white;
+  background-image: linear-gradient(to right, #0000ff, #ff00ff);
 }
 .csseditor .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"] svg path, .csseditor .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"] svg g {
   fill: white;
@@ -1520,6 +1602,7 @@ html, body {
 .csseditor .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"] {
   background-color: #444444;
   color: white;
+  background-image: linear-gradient(to right, #0000ff, #ff00ff);
 }
 .csseditor .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"] svg path, .csseditor .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"] svg g {
   fill: white;
@@ -1530,6 +1613,7 @@ html, body {
 .csseditor .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"] {
   background-color: #444444;
   color: white;
+  background-image: linear-gradient(to right, #0000ff, #ff00ff);
 }
 .csseditor .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"] svg path, .csseditor .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"] svg g {
   fill: white;
@@ -1540,6 +1624,7 @@ html, body {
 .csseditor .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"] {
   background-color: #444444;
   color: white;
+  background-image: linear-gradient(to right, #0000ff, #ff00ff);
 }
 .csseditor .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"] svg path, .csseditor .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"] svg g {
   fill: white;
@@ -1550,6 +1635,7 @@ html, body {
 .csseditor .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"] {
   background-color: #444444;
   color: white;
+  background-image: linear-gradient(to right, #0000ff, #ff00ff);
 }
 .csseditor .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"] svg path, .csseditor .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"] svg g {
   fill: white;
@@ -1560,6 +1646,7 @@ html, body {
 .csseditor .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"] {
   background-color: #444444;
   color: white;
+  background-image: linear-gradient(to right, #0000ff, #ff00ff);
 }
 .csseditor .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"] svg path, .csseditor .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"] svg g {
   fill: white;
@@ -1570,6 +1657,7 @@ html, body {
 .csseditor .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"] {
   background-color: #444444;
   color: white;
+  background-image: linear-gradient(to right, #0000ff, #ff00ff);
 }
 .csseditor .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"] svg path, .csseditor .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"] svg g {
   fill: white;
@@ -1580,6 +1668,7 @@ html, body {
 .csseditor .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"] {
   background-color: #444444;
   color: white;
+  background-image: linear-gradient(to right, #0000ff, #ff00ff);
 }
 .csseditor .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"] svg path, .csseditor .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"] svg g {
   fill: white;
@@ -1590,6 +1679,7 @@ html, body {
 .csseditor .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"] {
   background-color: #444444;
   color: white;
+  background-image: linear-gradient(to right, #0000ff, #ff00ff);
 }
 .csseditor .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"] svg path, .csseditor .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"] svg g {
   fill: white;
@@ -1888,17 +1978,18 @@ html, body {
   font-size: 14px;
   color: #cccccc;
 }
+.csseditor .external-tool-menu {
+  padding-left: 10px;
+  padding-right: 10px;
+}
 .csseditor .tool-menu,
 .csseditor .external-tool-menu {
   height: 100%;
   display: flex;
-  padding-left: 10px;
-  padding-right: 10px;
 }
 .csseditor .tool-menu .items,
 .csseditor .external-tool-menu .items {
   flex: 1 1 auto;
-  text-align: center;
   height: 100%;
   padding: 0px;
 }
@@ -1929,9 +2020,9 @@ html, body {
   vertical-align: middle;
   border: 0px;
   display: inline-block;
-  padding: 10px 2px;
+  padding: 5px 2px;
   text-decoration: none;
-  color: white;
+  color: #333;
   line-height: 1.6;
   outline: none;
   cursor: pointer;
@@ -1943,55 +2034,20 @@ html, body {
 .csseditor .external-tool-menu .items button[checked=checked] .icon {
   background-color: rgba(255, 255, 255, 0.1);
 }
+.csseditor .tool-menu .items .title,
+.csseditor .external-tool-menu .items .title {
+  font-size: 11px;
+}
 .csseditor .tool-menu .items .icon,
 .csseditor .external-tool-menu .items .icon {
   margin: 0 auto;
-  width: 30px;
-  height: 30px;
+  width: 24px;
+  height: 24px;
 }
 .csseditor .tool-menu .items .icon svg,
 .csseditor .external-tool-menu .items .icon svg {
   width: 100%;
   height: 100%;
-}
-.csseditor .tool-menu .items .icon svg path,
-.csseditor .external-tool-menu .items .icon svg path {
-  fill: white;
-}
-.csseditor .tool-menu .items .icon.rect,
-.csseditor .external-tool-menu .items .icon.rect {
-  background-color: transparent;
-  border: 1px solid #cccccc;
-}
-.csseditor .tool-menu .items .icon.circle,
-.csseditor .external-tool-menu .items .icon.circle {
-  background-color: transparent;
-  border: 1px solid #cccccc;
-  border-radius: 100%;
-}
-.csseditor .tool-menu .items .icon.show-grid,
-.csseditor .external-tool-menu .items .icon.show-grid {
-  background-color: transparent;
-  background-image: linear-gradient(to right, black, black), linear-gradient(to right, black, black), linear-gradient(to right, black, black), linear-gradient(to right, black, black), linear-gradient(to right, black, black), linear-gradient(to right, black, black), linear-gradient(to right, black, black), linear-gradient(to right, black, black);
-  background-size: 1px 100%, 1px 100%, 1px 100%, 1px 100%, 100% 1px, 100% 1px, 100% 1px, 100% 1px;
-  background-position: 3px 0px, 27px 0px, 11px 0px, 19px 0px, 0px 3px, 0px 11px, 0px 19px, 0px 27px;
-  background-repeat: no-repeat;
-}
-.csseditor .tool-menu .items .icon.show-clip-path,
-.csseditor .external-tool-menu .items .icon.show-clip-path {
-  background-color: transparent;
-  background-image: radial-gradient(circle at center, red, red 3px, transparent 3px, transparent), radial-gradient(circle at center, blue, blue 3px, transparent 3px, transparent), radial-gradient(circle at center, blue, blue 3px, transparent 3px, transparent), radial-gradient(circle at center, green, green 3px, transparent 3px, transparent), linear-gradient(to right, black, black), linear-gradient(to right, black, black), linear-gradient(to right, black, black), linear-gradient(to right, black, black);
-  background-size: 7px 7px, 7px 7px, 7px 7px, 7px 7px, 1px 20px, 1px 20px, 20px 1px, 20px 1px;
-  background-position: 1.5px 1.5px, 1.5px 21.5px, 21.5px 21.5px, 21.5px 1.5px, 5px 5px, 25px 5px, 5px 5px, 5px 25px;
-  background-repeat: no-repeat;
-}
-.csseditor .tool-menu .items .icon.save,
-.csseditor .external-tool-menu .items .icon.save {
-  background-color: transparent;
-  background-image: linear-gradient(to right, black, black), linear-gradient(to right, black, black), linear-gradient(to right, black, black), linear-gradient(to right, black, black);
-  background-size: 26px 2px, 20px 2px, 10px 2px, 15px 2px;
-  background-position: 2px 4px, 2px 12px, 2px 18px, 2px 25px;
-  background-repeat: no-repeat;
 }
 .csseditor .tool-menu .items .icon.jsfiddle, .csseditor .tool-menu .items .icon.export, .csseditor .tool-menu .items .icon.codepen, .csseditor .tool-menu .items .icon.github,
 .csseditor .external-tool-menu .items .icon.jsfiddle,
@@ -1999,7 +2055,7 @@ html, body {
 .csseditor .external-tool-menu .items .icon.codepen,
 .csseditor .external-tool-menu .items .icon.github {
   background-color: transparent;
-  box-shadow: inset 0 0 0 1px white;
+  box-shadow: inset 0 0 0 1px #cccccc;
   text-align: right;
   padding-right: 2px;
   border-radius: 3px;
@@ -2010,10 +2066,10 @@ html, body {
 .csseditor .external-tool-menu .items .icon.codepen:before,
 .csseditor .external-tool-menu .items .icon.github:before {
   display: inline-block;
-  font-size: 30px;
+  font-size: 20px;
   font-weight: bold;
   vertical-align: middle;
-  line-height: 30px;
+  line-height: 24px;
 }
 .csseditor .tool-menu .items .icon.codepen:before,
 .csseditor .external-tool-menu .items .icon.codepen:before {
@@ -2119,7 +2175,7 @@ html, body {
   font-weight: 400;
   text-shadow: 2px 2px 5px #cccccc;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 0.8fr 1fr;
   cursor: pointer;
 }
 .csseditor .property > .property-title label {
@@ -3020,6 +3076,11 @@ html, body {
 }
 .csseditor .project-list .project-item.selected {
   background-color: rgba(0, 0, 0, 0.1);
+  background-image: linear-gradient(to right, #0000ff, #ff00ff);
+  color: white;
+}
+.csseditor .project-list .project-item.selected button svg path {
+  fill: white;
 }
 .csseditor .project-list .project-item .tools {
   text-align: right;
@@ -3089,6 +3150,12 @@ html, body {
 }
 .csseditor .artboard-list .artboard-item.selected {
   background-color: rgba(0, 0, 0, 0.1);
+  background-image: linear-gradient(to right, #0000ff, #ff00ff);
+  color: white;
+  border-radius: 3px;
+}
+.csseditor .artboard-list .artboard-item.selected .tools button svg path {
+  fill: white;
 }
 .csseditor .cubic-bezier-editor {
   width: 228px;
@@ -3372,11 +3439,11 @@ html, body {
   grid-column-gap: 4px;
 }
 .csseditor .number-range-editor.has-label {
-  grid-template-columns: 40px 1fr;
+  grid-template-columns: 60px 1fr;
   grid-column-gap: 2px;
 }
 .csseditor .number-range-editor.has-label.is-removable {
-  grid-template-columns: 20px 1fr 16px;
+  grid-template-columns: 60px 1fr 16px;
 }
 .csseditor .number-range-editor.has-label label {
   text-align: right;

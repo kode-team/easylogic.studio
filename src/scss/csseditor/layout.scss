@@ -5,13 +5,13 @@ $item-selected-color: #dbf3ff;
 $font-color: black;
 $pointer-color: rgba(#ececec, 0.8);
 $gutter: 8px;
-$tool-size: 70px;
+$tool-size: 50px;
 $top-size: 100px;
 $left-size: 200px;
 $left-layer-panel: 70px;
 $left-page-size: 70px;
 $toggle-left-size: 80px;
-$right-size: 310px;
+$right-size: 280px;
 $timeline-header-size: 0px;
 $timeline-size: 300px;
 $show-timeline-animation: all 0.15s linear;
@@ -61,9 +61,11 @@ $display-grid-color: red;
     height: $tool-size;
     overflow: hidden;
     position: relative;
-    background-color: rgba(0, 0, 0, 1);
+    background-color: white;
     z-index: 1;
     pointer-events: all;
+    box-sizing: border-box;
+    border-bottom: 1px solid $border-color;
 
     .logo {
       position: absolute;
@@ -179,6 +181,7 @@ $display-grid-color: red;
 
 }
 
+@import './range-ui.scss';
 @import "./tab-ui.scss";
 @import "./colorpicker-ui.scss";
 @import './mini-editor.scss'; 

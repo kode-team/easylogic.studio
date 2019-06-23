@@ -5,7 +5,6 @@ export default class LogoView extends UIElement {
     return `
       <div class='logo'>
         <div class='text'>Easylogic</div>
-        <div class='site'>Studio</div>
       </div>    
     `;
   }

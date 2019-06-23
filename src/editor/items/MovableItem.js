@@ -12,8 +12,8 @@ export class MovableItem extends Item {
     ///////////////////////
 
 
-    get screenX () { return this.json.x }
-    get screenY () { return this.json.y }
+    get screenX () { return this.json.x || Length.px(0) }
+    get screenY () { return this.json.y || Length.px(0) }
     get screenX2 () { return Length.px(this.screenX.value + this.json.width.value) }
     get screenY2 () { 
         return Length.px(this.screenY.value + this.json.height.value) 
@@ -64,7 +64,7 @@ export class MovableItem extends Item {
         if (area.y2.value < this.screenY.value) { return false; }
         if (area.x.value > this.screenX2.value) { return false; }
         if (area.y.value > this.screenY2.value) { return false; }
-
+        
         return true;
     }
 

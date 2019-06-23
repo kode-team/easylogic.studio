@@ -40,6 +40,7 @@ import transform from "./transform";
 import scatter from "./scatter";
 import shape from "./shape";
 import ballot from "./ballot";
+import add_circle from "./add_circle";
 
 
 export default {
@@ -82,6 +83,7 @@ export default {
   copy,
   visible,
   add_box,
+  add_circle,
   create_folder,
   chevron_right,
   chevron_left

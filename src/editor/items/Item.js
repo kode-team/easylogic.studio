@@ -77,6 +77,10 @@ export class Item {
     return this.json.id;
   }
 
+  get layers () {
+    return this.json.layers; 
+  }
+
   /***********************************
    *
    * action
@@ -178,14 +182,14 @@ export class Item {
   }
 
   get html () {
-    var {tagName, id, layers} = this.json;
+    var {tagName, id, layers, content} = this.json;
 
     tagName = tagName || 'div'
 
     var selected = this.json.selected ? 'selected' : EMPTY_STRING
 
     return `
-    <${tagName} class='item ${selected}' data-id="${id}">
+    <${tagName} class='item ${selected}' data-id="${id}">${content ? content : EMPTY_STRING}
       ${layers.map(it => it.html)}
     </${tagName}>
     `

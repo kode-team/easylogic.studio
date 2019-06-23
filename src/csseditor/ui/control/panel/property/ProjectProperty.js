@@ -61,7 +61,7 @@ export default class ProjectProperty extends BaseProperty {
     }
 
     this.refresh()
-
+    this.emit('addElement')
     this.emit(CHANGE_SELECTION)    
   }
 
