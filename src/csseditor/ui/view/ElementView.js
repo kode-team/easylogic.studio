@@ -141,11 +141,13 @@ export default class ElementView extends UIElement {
 
             var id = this.$element.attr('data-id')
             editor.selection.selectById(id);    
-
-            this.selectCurrent(...editor.selection.items)
         }
 
+        this.selectCurrent(...editor.selection.items)
+
         editor.selection.setRectCache()
+
+        this.initSelectionTool();
     }
 
     moveElement (dx, dy) {
@@ -159,7 +161,7 @@ export default class ElementView extends UIElement {
                 y: Length.px(cachedItem.y.value + dy).round(1)
             })
         })
-
+        this.makeSelectionTool()
         this.emit('refreshCanvas');
         this.emit('refreshRect');
     }
@@ -218,6 +220,9 @@ export default class ElementView extends UIElement {
         }
 
         this.setState({ html })
+
+        this.initSelectionTool();
+        this.makeSelectionTool();        
     }
 
     selectCurrent (...args) {
@@ -227,24 +232,73 @@ export default class ElementView extends UIElement {
             $selectedElement.forEach(it => it.removeClass('selected'))
         }
 
-
         if(args.length) {
 
             var selector = args.map(it => `[data-id='${it.id}']`).join(',')
 
-            this.$el.$$(selector).forEach(it => it.addClass('selected'))
+            var list = this.$el.$$(selector);
+            
+            list.forEach(it => {
+                it.addClass('selected')
+            })
 
             this.emit(CHANGE_SELECTION)   
             
         }
 
 
-        this.makeSelectionTool();
+        // this.makeSelectionTool();
 
     }
 
-    makeSelectionTool() {
 
+    initSelectionTool() {
+        var originalRect = this.refs.$body.rect();
+        var html = editor.selection.items.map(it => {
+
+            var $el = this.$el.$(`[data-id='${it.id}']`);
+
+            if ($el) {
+                var r = $el.rect();
+
+                r.x -= originalRect.x;
+                r.y -= originalRect.y;
+
+                var temp = [
+                    `left:${Length.px(r.x)};`,
+                    `top:${Length.px(r.y)};`,
+                    `width:${Length.px(r.width)};`,
+                    `height:${Length.px(r.height)};`
+                ].join(EMPTY_STRING)
+                return `<div class='selection-tool' style='position:absolute;${temp};outline:1px solid blue;'></div>`
+            }
+
+            return EMPTY_STRING;
+        }).join(EMPTY_STRING)
+
+        this.refs.$selectionView.html(html);
+
+        this.cachedSelectionItems = this.refs.$view.$$('.selected');
+        this.cachedSelectionTools = this.refs.$selectionView.$$('.selection-tool');
+    }    
+
+    makeSelectionTool() {
+        // 딜레이가 너무 심하다.
+        // 왜 그런지 알아보자. 
+        var originalRect = this.refs.$body.rect();
+        editor.selection.items.forEach( (it, index) => {
+            var r = this.cachedSelectionItems[index].rect();
+            
+            r.x -= originalRect.x;
+            r.y -= originalRect.y;
+
+            this.cachedSelectionTools[index].css({
+                left: Length.px(r.x),
+                top: Length.px(r.y),
+                width: Length.px(r.width),
+                bottom: Length.px(r.height)
+            })
+        })
     }
 
     [EVENT(CHANGE_SELECTION)] () {
@@ -273,6 +327,11 @@ export default class ElementView extends UIElement {
         this.refs.$view.css({
             transform: `translate(-50%, -50%) scale(${this.state.scale})`
         })
+
+        setTimeout( () => {
+            this.makeSelectionTool()
+        }, 1000);
+
     }
 
     [EVENT('refreshCanvas')] (obj = {}) {

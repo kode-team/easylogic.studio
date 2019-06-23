@@ -2137,9 +2137,6 @@ html, body {
   height: 400px;
   background-color: white;
 }
-.csseditor .element-view .item.selected {
-  outline: 1px solid #0f72cf;
-}
 .csseditor .property {
   padding: 5px;
   border: 1px solid rgba(204, 204, 204, 0.8);
