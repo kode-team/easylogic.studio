@@ -35,9 +35,11 @@ import SelectorProperty from "./SelectorProperty";
 import PositionProperty from "./PositionProperty";
 import ProjectProperty from "./ProjectProperty";
 import ArtBoardProperty from "./ArtBoardProperty";
+import LayerTreeProperty from "./LayerTreeProperty";
 
  
 export default {
+  LayerTreeProperty,
   ProjectProperty,
   ArtBoardProperty,
   PositionProperty,

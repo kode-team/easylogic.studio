@@ -69,7 +69,6 @@ export const editor = new class {
     this.projects = [];
   }
 
-
   /**
    * get item
    *

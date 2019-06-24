@@ -103,29 +103,36 @@ export default class Inspector extends UIElement {
             <div class="tab-header" ref="$extraHeader">
               <div class="tab-item" data-value="1">
                 <div class='icon'>${icon.code}</div>
+                <label>Layers</label>
+              </div>                
+              <div class="tab-item" data-value="2">
+                <div class='icon'>${icon.code}</div>
                 <label>Code</label>
               </div>    
-              <div class="tab-item" data-value="2">
+              <div class="tab-item" data-value="3">
                 <div class='icon'>${icon.code}</div>
                 <label>Computed</label>
               </div>                  
-              <div class="tab-item" data-value="3">
+              <div class="tab-item" data-value="4">
                 <div class='icon'>${icon.build}</div>
                 <label>Var</label>
               </div>    
-              <div class="tab-item" data-value="4">
+              <div class="tab-item" data-value="5">
                 <div class='icon'>${icon.build}</div>
                 <label>Root Var</label>
               </div>  
-              <div class="tab-item" data-value="5">
+              <div class="tab-item" data-value="6">
                 <div class='icon'>${icon.gradient}</div>
                 <label>SVG</label>
               </div>                                              
             </div>
             <div class="tab-body" ref="$extraBody">
               <div class="tab-content" data-value="1">
-                <CodeViewProperty />
+                <LayerTreeProperty />
               </div>
+              <div class="tab-content" data-value="1">
+                <CodeViewProperty />
+              </div>              
               <div class="tab-content" data-value="2">
                 <ComputedCodeViewProperty />
               </div>              

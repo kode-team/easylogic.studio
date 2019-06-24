@@ -13,6 +13,10 @@ export default class ProjectProperty extends BaseProperty {
     return "Projects";
   }
 
+  getClassName() {
+    return 'full';
+  }
+
   getTools() {
     return `
       <button type='button' ref='$add' title="Add a project">${icon.add}</button>

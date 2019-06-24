@@ -33,14 +33,11 @@ export default class ArtBoardProperty extends BaseProperty {
 
     var project = editor.selection.currentProject;
     if (!project) return ''
-
     
     return project.artboards.map( (artboard, index) => {
       var selected = artboard === editor.selection.currentArtboard ? 'selected' : ''
       return `
         <div class='property-item artboard-item ${selected}'>
-          <div class='preview' data-index='${index}'>
-          </div>
           <div class='detail'>
             <label data-index='${index}'>${artboard.name}</label>
             <div class="tools">
@@ -87,7 +84,7 @@ export default class ArtBoardProperty extends BaseProperty {
     }
   }
 
-  [CLICK('$artboardList .artboard-item .preview')] (e) {
+  [CLICK('$artboardList .artboard-item label')] (e) {
     var project = editor.selection.currentProject
     if (project) {
 

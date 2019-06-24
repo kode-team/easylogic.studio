@@ -41,6 +41,7 @@ import scatter from "./scatter";
 import shape from "./shape";
 import ballot from "./ballot";
 import add_circle from "./add_circle";
+import lock_open from "./lock_open";
 
 
 export default {
@@ -79,6 +80,7 @@ export default {
   redo,
   undo,
   lock,
+  lock_open,  
   remove,
   copy,
   visible,

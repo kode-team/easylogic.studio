@@ -1367,13 +1367,13 @@ html, body {
   left: 0px;
   top: 0px;
   bottom: 0px;
-  width: 200px;
+  width: 260px;
 }
 .csseditor .layout-main .layout-header .tool-menu {
   position: absolute;
   top: 0px;
   bottom: 0px;
-  left: 200px;
+  left: 260px;
   right: 280px;
 }
 .csseditor .layout-main .layout-header .external-tool-menu {
@@ -1403,7 +1403,7 @@ html, body {
   left: 0px;
   top: 0px;
   bottom: 0px;
-  width: 200px;
+  width: 260px;
   border-right: 1px solid #cccccc;
   background-color: white;
   display: inline-block;
@@ -1427,8 +1427,8 @@ html, body {
 }
 .csseditor .layout-main .layout-middle .layout-body {
   top: 0px;
-  left: 200px;
-  right: 200px;
+  left: 260px;
+  right: 260px;
   bottom: 0px;
   position: absolute;
 }
@@ -1436,6 +1436,12 @@ html, body {
   display: flex;
   flex-direction: column;
   height: 100%;
+}
+.csseditor .feature-control.object-list > div:first-child {
+  height: 15%;
+}
+.csseditor .feature-control.object-list > div:nth-child(2) {
+  height: 15%;
 }
 .csseditor .feature-control.object-list > div:last-child {
   height: 70%;
@@ -1449,11 +1455,13 @@ html, body {
   flex: 1 1 auto;
   position: relative;
 }
+.csseditor .feature-control > div:not(:first-child) {
+  border-top: 1px solid #cccccc;
+  box-sizing: border-box;
+}
 .csseditor .feature-control > div:last-child {
   flex: none;
   height: 40%;
-  border-top: 1px solid #cccccc;
-  box-sizing: border-box;
 }
 .csseditor input[type=range] {
   -webkit-appearance: none;
@@ -3188,10 +3196,11 @@ html, body {
   border-radius: 3px;
   border: 1px solid #cccccc;
   cursor: pointer;
+  display: none;
 }
 .csseditor .artboard-list .artboard-item .detail {
   display: grid;
-  grid-template-columns: 1fr 20px;
+  grid-template-columns: 1fr 60px;
   grid-column-gap: 3px;
 }
 .csseditor .artboard-list .artboard-item .detail label {
@@ -3226,6 +3235,76 @@ html, body {
   border-radius: 3px;
 }
 .csseditor .artboard-list .artboard-item.selected .tools button svg path {
+  fill: white;
+}
+.csseditor .layer-list {
+  height: 100%;
+  overflow: auto;
+}
+.csseditor .layer-list .layer-item {
+  padding: 5px !important;
+}
+.csseditor .layer-list .layer-item .detail {
+  display: grid;
+  grid-template-columns: 1fr 60px;
+  grid-column-gap: 3px;
+}
+.csseditor .layer-list .layer-item .detail label {
+  padding: 2px 0px;
+}
+.csseditor .layer-list .layer-item .detail .tools {
+  text-align: right;
+}
+.csseditor .layer-list .layer-item .detail .tools button {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  outline: none;
+  padding: 0px;
+  border: 0px;
+  display: inline-block;
+  font-size: 11px;
+  cursor: pointer;
+}
+.csseditor .layer-list .layer-item .detail .tools button svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor .layer-list .layer-item .detail .tools .visible svg path {
+  fill: #cccccc;
+}
+.csseditor .layer-list .layer-item .detail .tools .visible[data-visible=true] svg path {
+  fill: #333;
+}
+.csseditor .layer-list .layer-item .detail .tools .lock svg path {
+  fill: #cccccc;
+}
+.csseditor .layer-list .layer-item .detail .tools .lock[data-lock=true] svg path {
+  fill: #333;
+}
+.csseditor .layer-list .layer-item.selected {
+  background-color: rgba(0, 0, 0, 0.1);
+  background-image: linear-gradient(to right, #0000ff, #ff00ff);
+  color: white;
+  border-radius: 3px;
+}
+.csseditor .layer-list .layer-item.selected .tools button svg path {
+  fill: white;
+}
+.csseditor .layer-list .layer-item.selected .tools button.visible svg path {
+  fill: #cccccc;
+}
+.csseditor .layer-list .layer-item.selected .tools button.visible[data-visible=true] svg path {
+  fill: white;
+}
+.csseditor .layer-list .layer-item.selected .tools button.lock svg path {
+  fill: #cccccc;
+}
+.csseditor .layer-list .layer-item.selected .tools button.lock[data-lock=true] svg path {
   fill: white;
 }
 .csseditor .cubic-bezier-editor {

@@ -452,6 +452,8 @@ export class DomItem extends GroupItem {
     if (this.json.x)  obj.left = this.json.x ;
     if (this.json.y)  obj.top = this.json.y ;
 
+    obj.visibility = (this.json.visible) ? 'visible' : 'hidden';
+
     return {
       ...obj,
       ...this.toKeyListCSS(

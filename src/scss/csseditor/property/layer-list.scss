@@ -1,0 +1,109 @@
+.layer-list {
+    height: 100%;
+    overflow: auto;
+    .layer-item {
+
+        padding: 5px !important; 
+
+
+        .detail {
+            display: grid;
+            grid-template-columns: 1fr 60px;
+            grid-column-gap: 3px;
+
+            label {
+                padding: 2px 0px;                
+            }
+
+
+            .tools {
+                text-align: right;
+
+                @include svg-button();
+
+                .visible {
+                    svg {
+                        path {
+                            fill: $border-color;
+                        }
+                    }
+
+                    &[data-visible='true'] {
+                        svg {
+                            path {
+                                fill: #333;
+                            }
+                        }   
+                    }
+                }
+
+                .lock {
+                    svg {
+                        path {
+                            fill: $border-color;
+                        }
+                    }
+
+                    &[data-lock='true'] {
+                        svg {
+                            path {
+                                fill: #333;
+                            }
+                        }   
+                    }
+                }
+            }
+    
+        }
+
+        &.selected {
+            background-color: rgba(0, 0, 0, 0.1);
+            @include title-background();
+            color: white;
+            border-radius: 3px;
+
+            .tools {
+                button {
+                    svg {
+                        path {
+                            fill: white;
+                        }
+                    }
+
+                    &.visible {
+                        svg {
+                            path {
+                                fill: $border-color;
+                            }
+                        }   
+
+                        &[data-visible='true'] {
+                            svg {
+                                path {
+                                    fill: white;
+                                }
+                            }   
+                        }                        
+                    }
+
+                    &.lock {
+                        svg {
+                            path {
+                                fill: $border-color;
+                            }
+                        }   
+
+                        &[data-lock='true'] {
+                            svg {
+                                path {
+                                    fill: white;
+                                }
+                            }   
+                        }                        
+                    }                    
+                }
+            }
+        }
+
+    }
+}

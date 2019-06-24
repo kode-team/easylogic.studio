@@ -3,12 +3,15 @@ import { html } from "../../../util/functions/func";
 import property from "./panel/property/index";
 import ProjectProperty from "./panel/property/ProjectProperty";
 import ArtBoardProperty from "./panel/property/ArtBoardProperty";
+import LayerTreeProperty from "./panel/property/LayerTreeProperty";
+
 
 export default class ObjectList extends UIElement {
   components() {
     return {
       ProjectProperty,
-      ArtBoardProperty
+      ArtBoardProperty,
+      LayerTreeProperty
     }
   }
   template() {
@@ -19,6 +22,9 @@ export default class ObjectList extends UIElement {
         </div>
         <div>
           <ArtBoardProperty />
+        </div>
+        <div>
+          <LayerTreeProperty />
         </div>
       </div>
     `;

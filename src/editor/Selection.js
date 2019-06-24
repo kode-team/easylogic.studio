@@ -49,9 +49,13 @@ export class Selection {
 
 
   select(...args) {
-    this.items = args || []; 
+    this.items = (args || []).filter(it => !it.lock); 
 
     this.initRect();
+  }
+
+  check (item) {
+    return this.items.includes(item);
   }
 
   empty () {

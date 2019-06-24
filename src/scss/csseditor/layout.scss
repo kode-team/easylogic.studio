@@ -7,7 +7,7 @@ $pointer-color: rgba(#ececec, 0.8);
 $gutter: 8px;
 $tool-size: 50px;
 $top-size: 100px;
-$left-size: 200px;
+$left-size: 260px;
 $left-layer-panel: 70px;
 $left-page-size: 70px;
 $toggle-left-size: 80px;
@@ -155,6 +155,14 @@ $display-grid-color: red;
 
   &.object-list {
     > div {
+      &:first-child {
+        height: 15%;
+      }
+
+      &:nth-child(2) {
+        height: 15%;
+      }      
+
       &:last-child {
         height: 70%;
       }
@@ -171,11 +179,15 @@ $display-grid-color: red;
     flex: 1 1 auto; 
     position: relative;
 
+    &:not(:first-child) {
+      border-top: 1px solid $border-color;
+      box-sizing: border-box;
+    }
+
     &:last-child {
       flex: none;
       height: 40%;
-      border-top: 1px solid $border-color;
-      box-sizing: border-box;
+
     }
   }
 
