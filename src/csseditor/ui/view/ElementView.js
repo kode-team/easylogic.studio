@@ -4,6 +4,9 @@ import { Length } from "../../../editor/unit/Length";
 import { CHANGE_SELECTION, SCALE_DIRECTION_IN } from "../../types/event";
 import { editor } from "../../../editor/editor";
 import Dom from "../../../util/Dom";
+import SelectionToolView from "./SelectionToolView";
+
+
 
 // 그리드 선 그려주는 함수 
 // background-image 로 그린다. 
@@ -25,6 +28,11 @@ const createGridLine = (width) => {
 
 export default class ElementView extends UIElement {
 
+    components() {
+        return {
+            SelectionToolView
+        }
+    }
 
     initState() {
         return {
@@ -42,7 +50,7 @@ export default class ElementView extends UIElement {
             <div class='element-view' ref='$body'>
                 <div class='canvas-view' ref='$view'></div>
                 <div ref='$dragAreaRect' style='pointer-events:none;position: absolute;border:0.5px dashed #556375;box-sizing:border-box;left:-10000px;'></div>
-                <div class='selection-view' ref='$selectionView' style='pointer-events:none;position:absolute;left:0px;top:0px;right:0px;bottom:0px;'></div>
+                <SelectionToolView ref='$selectionTool' />
             </div>
         `
     }
@@ -128,7 +136,7 @@ export default class ElementView extends UIElement {
         this.selectCurrent(...items)
     }
 
-    [POINTERSTART('$view .item') + MOVE('moveElement') + END('moveEndElement')] (e) {
+    [POINTERSTART('$view .item') + MOVE('caculateMovedElement') + END('caculateMovedElement')] (e) {
         this.startXY = e.xy ; 
         this.$element = e.$delegateTarget;
 
@@ -146,42 +154,7 @@ export default class ElementView extends UIElement {
     }
 
     caculateMovedElement (dx, dy) {
-        var scaledDx = dx / editor.scale
-        var scaledDy = dy / editor.scale
-
-        editor.selection.each ((item, cachedItem, ) => {
-            item.reset({
-                x: Length.px(cachedItem.x.value + scaledDx).round(1),
-                y: Length.px(cachedItem.y.value + scaledDy).round(1)
-            })
-
-            var tempRect = this.originalItemRect[item.id];
-            
-            //변화량만 따로 관리 한다. 
-            this.scaledItemRect[item.id] = {
-                x: Length.px(tempRect.x + dx).round(1).value, 
-                y: Length.px(tempRect.y + dy).round(1).value,
-                width: tempRect.width,
-                height: tempRect.height 
-            }
-        })
-
-
-
-        this.emit('refreshCanvas');
-        this.emit('refreshRect');
-
-        this.makeSelectionTool()        
-
-    }
-
-    moveElement (dx, dy) {
-        this.caculateMovedElement(dx, dy);
-       
-    }
-
-    moveEndElement (dx, dy) {
-        this.caculateMovedElement(dx, dy);
+        this.children.$selectionTool.refreshSelectionToolView(dx, dy, 'move');
     }
 
     [BIND('$body')] () {
@@ -240,8 +213,7 @@ export default class ElementView extends UIElement {
         this.setState({ html })
 
         setTimeout(() => {
-            this.initSelectionTool();
-            this.makeSelectionTool();        
+            this.emit('refreshSelectionTool')
         }, 100)
 
     }
@@ -267,71 +239,10 @@ export default class ElementView extends UIElement {
             
         }
 
-        this.initSelectionTool();
+        this.emit('initSelectionTool')
 
     }
-
-
-    initSelectionTool() {
-
-        // selection tool 을 관리하기 위해 
-        // 원본 originalItemRect 와 
-        // 변화량을 가지고 있는 scaledItemRect 를 정의한다. 
-        //  scaledItemRect.x ===  originalItemRect.x + dx  형태로 되어 있다. 
-        // 최종 결과물은 scaledItemRect 를 통해서 표현한다. 
-        this.originalRect = this.refs.$body.rect();
-        this.originalItemRect = {}
-        this.scaledItemRect = {} 
-
-        var html = editor.selection.items.map(it => {
-
-            var $el = this.$el.$(`[data-id='${it.id}']`);
-
-            if ($el) {
-                var r = $el.rect();
-
-                this.originalItemRect[it.id] = r;
-
-                r.x -= this.originalRect.x;
-                r.y -= this.originalRect.y;
-
-                var temp = [
-                    `left:${Length.px(r.x)};`,
-                    `top:${Length.px(r.y)};`,
-                    `width:${Length.px(r.width)};`,
-                    `height:${Length.px(r.height)};`
-                ].join('')
-                return `<div class='selection-tool' style='position:absolute;${temp};outline:1px solid blue;'></div>`
-            }
-
-            return '';
-        }).join('')
-
-        this.refs.$selectionView.html(html);
-
-        this.cachedSelectionItems = this.refs.$view.$$('.selected');
-        this.cachedSelectionTools = this.refs.$selectionView.$$('.selection-tool');
-    }    
-
-    makeSelectionTool() {
-        // 딜레이가 너무 심하다.
-        // 왜 그런지 알아보자. 
-
-        editor.selection.items.filter(it => {
-            return this.scaledItemRect[it.id] 
-        }).forEach( (it, index) => {
-            var r = this.scaledItemRect[it.id];
-
-            this.cachedSelectionTools[index].css({
-                left: Length.px(r.x),
-                top: Length.px(r.y),
-                width: Length.px(r.width),
-                height: Length.px(r.height)
-            })
-        })
-        
-    }
-
+    
     [EVENT(CHANGE_SELECTION)] () {
 
         if (!this.state.html) {
@@ -347,7 +258,7 @@ export default class ElementView extends UIElement {
             transform: `translate(-50%, -50%) scale(${editor.scale})`
         })
 
-        this.initSelectionTool();
+        this.emit('initSelectionTool');
     }
 
     [EVENT('changeScale')] () {

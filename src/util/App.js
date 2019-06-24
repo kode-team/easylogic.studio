@@ -65,7 +65,7 @@ export const start = opt => {
           var dy = pos.y - v.xy.y;
           if (dx != 0 || dy != 0) {
             //  변화가 있을 때만 호출 한다.
-            v.func.call(v.context, dx, dy);
+            v.func.call(v.context, dx, dy, 'move');
           }
         });
       }
@@ -75,7 +75,7 @@ export const start = opt => {
     removeBodyMoves() {
       var pos = editor.config.get("pos");
       this.ends.forEach(v => {
-        v.func.call(v.context, pos.x - v.xy.x, pos.y - v.xy.y);
+        v.func.call(v.context, pos.x - v.xy.x, pos.y - v.xy.y, 'end');
       });
 
       this.moves.clear();

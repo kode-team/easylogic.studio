@@ -70,3 +70,70 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
   height: 400px;
   background-color: white;
 }
+
+.selection-tool {
+  outline: $pointer-color 1px solid;
+  position:absolute;
+  .item { 
+    position: absolute;
+    transform: translate(-50%, -50%);
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: white;
+    box-sizing: border-box;
+    border:1px solid $pointer-color;
+    border-radius: 100%;
+    pointer-events: all;
+    cursor: pointer;
+
+    &[data-position="top-left"] {
+      left: 0px;
+      top: 0px;
+      cursor: nwse-resize;
+    }
+
+    &[data-position="top-right"] {
+      left: 100%;
+      top: 0px;
+      cursor: nesw-resize;      
+    }    
+
+    &[data-position="top"] {
+      left: 50%;
+      top: 0px;
+      cursor: ns-resize;
+    }        
+
+    &[data-position="left"] {
+      left: 0px;
+      top: 50%;
+      cursor: ew-resize;
+    }
+
+    &[data-position="right"] {
+      left: 100%;
+      top: 50%;
+      cursor: ew-resize;
+    }    
+
+    &[data-position="bottom"] {
+      left: 50%;
+      top: 100%;
+      cursor: ns-resize;      
+    }          
+    
+    
+    &[data-position="bottom-left"] {
+      left: 0px;
+      top: 100%;
+      cursor: nesw-resize;            
+    }
+
+    &[data-position="bottom-right"] {
+      left: 100%;
+      top: 100%;
+      cursor: nwse-resize;      
+    }    
+  }
+}

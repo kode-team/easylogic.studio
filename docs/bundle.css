@@ -2153,6 +2153,64 @@ html, body {
   height: 400px;
   background-color: white;
 }
+.csseditor .selection-tool {
+  outline: rgba(15, 114, 207, 0.8) 1px solid;
+  position: absolute;
+}
+.csseditor .selection-tool .item {
+  position: absolute;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background-color: white;
+  box-sizing: border-box;
+  border: 1px solid rgba(15, 114, 207, 0.8);
+  border-radius: 100%;
+  pointer-events: all;
+  cursor: pointer;
+}
+.csseditor .selection-tool .item[data-position=top-left] {
+  left: 0px;
+  top: 0px;
+  cursor: nwse-resize;
+}
+.csseditor .selection-tool .item[data-position=top-right] {
+  left: 100%;
+  top: 0px;
+  cursor: nesw-resize;
+}
+.csseditor .selection-tool .item[data-position=top] {
+  left: 50%;
+  top: 0px;
+  cursor: ns-resize;
+}
+.csseditor .selection-tool .item[data-position=left] {
+  left: 0px;
+  top: 50%;
+  cursor: ew-resize;
+}
+.csseditor .selection-tool .item[data-position=right] {
+  left: 100%;
+  top: 50%;
+  cursor: ew-resize;
+}
+.csseditor .selection-tool .item[data-position=bottom] {
+  left: 50%;
+  top: 100%;
+  cursor: ns-resize;
+}
+.csseditor .selection-tool .item[data-position=bottom-left] {
+  left: 0px;
+  top: 100%;
+  cursor: nesw-resize;
+}
+.csseditor .selection-tool .item[data-position=bottom-right] {
+  left: 100%;
+  top: 100%;
+  cursor: nwse-resize;
+}
 .csseditor .property {
   padding: 5px;
   border: 1px solid rgba(204, 204, 204, 0.8);
