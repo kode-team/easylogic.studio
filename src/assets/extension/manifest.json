@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "version": "0.6.0",
-  "name": "Gradient Editor",
-  "description": "Super CSS Gradient Editor - EasyLogic Studio",
+  "version": "0.7.0",
+  "name": "EasyLogic Studio",
+  "description": "Fantastic Free Open Source CSS Editor ",
   "author": "easylogic",
   "background": {
     "scripts": ["background.js"],
