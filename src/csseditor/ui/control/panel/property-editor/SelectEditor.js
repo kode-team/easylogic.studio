@@ -1,6 +1,5 @@
 import UIElement from "../../../../../util/UIElement";
 import { LOAD, CHANGE, BIND } from "../../../../../util/Event";
-import { EMPTY_STRING } from "../../../../../util/css/types";
 
 export default class SelectEditor extends UIElement {
 
@@ -21,7 +20,7 @@ export default class SelectEditor extends UIElement {
         var hasLabel = !!label ? 'has-label' : ''
         return `
             <div class='select-editor ${hasLabel}'>
-                ${label ? `<label>${label}</label>` : EMPTY_STRING }
+                ${label ? `<label>${label}</label>` : '' }
                 <select ref='$options'></select>
             </div>
         `

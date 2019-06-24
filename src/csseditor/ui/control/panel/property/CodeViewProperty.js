@@ -9,7 +9,6 @@ import {
   CHANGE_SELECTION,
   CHANGE_ARTBOARD
 } from "../../../../types/event";
-import { EMPTY_STRING, NEW_LINE } from "../../../../../util/css/types";
 import { CSS_TO_STRING } from "../../../../../util/css/make";
 
 export default class CodeViewProperty extends BaseProperty {
@@ -36,21 +35,21 @@ export default class CodeViewProperty extends BaseProperty {
       it = it.trim();
       var [key, value] = it.split(':')
 
-      return `<strong>${key}</strong>:${value};${NEW_LINE}` 
-    }).join(EMPTY_STRING).trim()
+      return `<strong>${key}</strong>:${value};\n` 
+    }).join('').trim()
   }
 
   modifyNewLine (str) {
-    return str.replace(/;/gi, ";" + NEW_LINE).trim()
+    return str.replace(/;/gi, ";\n").trim()
   }
 
   [LOAD('$body')] () {
     var current = editor.selection.current;
 
-    var cssCode = current ? current.toExport().replace(/;/gi, ";" + NEW_LINE) : EMPTY_STRING
-    var keyframeCode = current ? current.toKeyframeString() : EMPTY_STRING
-    var rootVariable = current ? CSS_TO_STRING(current.toRootVariableCSS()) : EMPTY_STRING
-    var svgCode = current ? current.toSVGString() : EMPTY_STRING;
+    var cssCode = current ? current.toExport().replace(/;/gi, ";\n") : ''
+    var keyframeCode = current ? current.toKeyframeString() : ''
+    var rootVariable = current ? CSS_TO_STRING(current.toRootVariableCSS()) : ''
+    var svgCode = current ? current.toSVGString() : '';
     var selectorCode = current ? current.selectors : [];
 
     cssCode = this.filterKeyName(cssCode.trim())
@@ -63,18 +62,18 @@ export default class CodeViewProperty extends BaseProperty {
         ${keyframeCode ?         
           `<div>
           <pre title='Keyframe'>${keyframeCode}</pre>
-        </div>` : EMPTY_STRING}
+        </div>` : ''}
         ${rootVariable ? 
           `<div>
           <label>:root</label>
           <pre>${rootVariable}</pre>
-          </div>` : EMPTY_STRING
+          </div>` : ''
         }
 
         ${cssCode ? 
           `<div>
           <pre title='CSS'>${cssCode}</pre>
-          </div>` : EMPTY_STRING
+          </div>` : ''
         }
 
         ${selectorCode.length ? 
@@ -83,13 +82,13 @@ export default class CodeViewProperty extends BaseProperty {
               return `<pre title='${selector.selector}'>${selector.toPropertyString()}</pre>`
             })}
             
-          </div>` : EMPTY_STRING
+          </div>` : ''
         }
 
         ${svgCode ? 
           `<div>
           <pre title='SVG'>${svgCode}</pre>
-          </div>` : EMPTY_STRING
+          </div>` : ''
         }
 
       </div>

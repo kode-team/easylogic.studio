@@ -13,7 +13,7 @@ import UIElement, { EVENT } from "../../../../../util/UIElement";
 import RangeEditor from "./RangeEditor";
 import ColorViewEditor from "./ColorViewEditor";
 import { uuidShort } from "../../../../../util/functions/math";
-import { EMPTY_STRING } from "../../../../../util/css/types";
+
 
 
 var propertyList = [
@@ -65,7 +65,7 @@ export default class SVGPropertyEditor extends UIElement {
         <div class='title'>
           <div class='type' data-type="${property.type}">${propertyTitle[property.type]}</div>
           <label>${property.name}
-            ${property.type === 'clip-path' ? ' - ' + property.value : EMPTY_STRING}
+            ${property.type === 'clip-path' ? ' - ' + property.value : ''}
           </label>
           <div class='menu'>
             <button type="button" class='del'>${icon.remove2}</button>

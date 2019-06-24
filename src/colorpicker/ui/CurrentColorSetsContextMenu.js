@@ -37,13 +37,13 @@ export default class CurrentColorSetsContextMenu extends UIElement {
     runCommand (command) {
         switch(command) {
         case 'remove-color': 
-            this.dispatch('removeCurrentColor', this.selectedColorIndex);        
+            this.parent.manager.removeCurrentColor(this.selectedColorIndex);        
             break;
         case 'remove-all-to-the-right': 
-            this.dispatch('removeCurrentColorToTheRight', this.selectedColorIndex);        
+            this.parent.manager.removeCurrentColorToTheRight(this.selectedColorIndex);        
             break;
         case 'clear-palette': 
-            this.dispatch('clearPalette');
+            this.parent.manager.clearPalette();
             break;
         }
     }

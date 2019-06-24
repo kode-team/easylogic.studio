@@ -21,7 +21,7 @@ export default class VerticalOpacity extends VerticalSlider {
     }
 
     setOpacityColorBar() {
-        var rgb = {...this.$store.rgb};
+        var rgb = {...this.parent.rgb};
     
         rgb.a = 0;
         var start = Color.format(rgb, 'rgb');
@@ -33,7 +33,7 @@ export default class VerticalOpacity extends VerticalSlider {
     }
 
     getDefaultValue () {
-        return this.$store.alpha
+        return this.parent.alpha
     }
 
     refreshColorUI(e) {

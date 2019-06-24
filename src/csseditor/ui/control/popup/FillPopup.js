@@ -1,12 +1,10 @@
 import { EVENT } from "../../../../util/UIElement";
-import ColorPicker from "../../../../colorpicker/index";
 import icon from "../../icon/icon";
 import { CLICK, CHANGE, LOAD, BIND } from "../../../../util/Event";
-import { EMPTY_STRING } from "../../../../util/css/types";
+
 import { html } from "../../../../util/functions/func";
 import { Length } from "../../../../editor/unit/Length";
 import { editor } from "../../../../editor/editor";
-import { CHANGE_SELECTION } from "../../../types/event";
 import GradientEditor from "../panel/property-editor/GradientEditor";
 import { Gradient } from "../../../../editor/image-resource/Gradient";
 import { ColorStep } from "../../../../editor/image-resource/ColorStep";
@@ -232,11 +230,11 @@ export default class FillPopup extends BasePopup {
               ${tabs.map(it => {
                 return `
                   <span 
-                      class='picker-tab-item ${it.selected ? "selected" : EMPTY_STRING}' 
+                      class='picker-tab-item ${it.selected ? "selected" : ''}' 
                       data-selected-value='${it.type}'
                       title='${it.title}'
                   >
-                      <div class='icon'>${it.icon || EMPTY_STRING}</div>
+                      <div class='icon'>${it.icon || ''}</div>
                   </span>`;
               })}
             </div>

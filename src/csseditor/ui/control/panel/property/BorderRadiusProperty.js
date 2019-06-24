@@ -1,5 +1,5 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD } from "../../../../../util/Event";
+import { LOAD, DEBOUNCE } from "../../../../../util/Event";
 import { html } from "../../../../../util/functions/func";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
@@ -29,7 +29,7 @@ export default class BorderRadiusProperty extends BaseProperty {
   }
 
 
-  [EVENT(CHANGE_ARTBOARD, CHANGE_SELECTION)]() {
+  [EVENT(CHANGE_ARTBOARD, CHANGE_SELECTION) + DEBOUNCE(100)]() {
     this.refresh();
   }
 

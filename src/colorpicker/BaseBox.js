@@ -8,7 +8,8 @@ export default class BaseBox extends UIElement {
 
   /** push change event  */
   changeColor(opt) {
-    this.dispatch("changeColor", opt || {});
+    this.parent.changeColor(opt || {})
+    this.emit('changeColor');
   }
 
   // Event Bindings

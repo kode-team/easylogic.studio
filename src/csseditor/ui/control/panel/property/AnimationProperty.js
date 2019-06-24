@@ -14,7 +14,6 @@ import {
   CHANGE_SELECTION,
   CHANGE_INSPECTOR
 } from "../../../../types/event";
-import { EMPTY_STRING } from "../../../../../util/css/types";
 import icon from "../../../icon/icon";
 import { getPredefinedCubicBezier } from "../../../../../util/functions/bezier";
 
@@ -35,7 +34,7 @@ export default class AnimationProperty extends BaseProperty {
   [LOAD("$animationList")]() {
     var current = editor.selection.current;
 
-    if (!current) return EMPTY_STRING;
+    if (!current) return '';
 
     return current.animations.map((it, index) => {
 

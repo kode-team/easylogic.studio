@@ -6,9 +6,6 @@ import { isString, isNumber } from './func';
 import { WHITE_STRING } from '../css/types';
 
 const color_regexp = /(#(?:[\da-f]{3}){1,2}|rgb\((?:\s*\d{1,3},\s*){2}\d{1,3}\s*\)|rgba\((?:\s*\d{1,3},\s*){3}\d*\.?\d+\s*\)|hsl\(\s*\d{1,3}(?:,\s*\d{1,3}%){2}\s*\)|hsla\(\s*\d{1,3}(?:,\s*\d{1,3}%){2},\s*\d*\.?\d+\s*\)|([\w_\-]+))/gi;
-const color_split = ','
-
-
 
 export function matches (str) {
     const matches = str.match(color_regexp);

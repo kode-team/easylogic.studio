@@ -16,13 +16,13 @@ export default class Value extends BaseSlider {
     [BIND('$container')] () {
         return {
             style : {
-                'background-color': this.read('toRGB')
+                'background-color': this.parent.manager.toString('rgb')
             }
         }
     }
 
     getDefaultValue () {
-        return this.$store.hsv.v 
+        return this.parent.hsv.v 
     }
          
     refreshColorUI(e) {

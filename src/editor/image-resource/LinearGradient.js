@@ -1,5 +1,4 @@
 import { Gradient } from "./Gradient";
-import { EMPTY_STRING } from "../../util/css/types";
 import { isNumber, isUndefined } from "../../util/functions/func";
 import { convertMatches, reverseMatches } from "../../util/functions/parser";
 import { Length } from "../unit/Length";
@@ -46,7 +45,7 @@ export class LinearGradient extends Gradient {
   toString() {
     var colorString = this.getColorString();
 
-    var opt = EMPTY_STRING;
+    var opt = '';
     var angle = this.json.angle || 0;
 
     opt = angle;

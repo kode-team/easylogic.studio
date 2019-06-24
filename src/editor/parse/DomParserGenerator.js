@@ -14,7 +14,7 @@ export class DomParserGenerator extends ParserGenerator {
           this.source.removeAttr("data-embed-editor-target");
         }
 
-        var $target = new Dom(e.target);
+        var $target = Dom.create(e.target);
         $target.attr("data-embed-editor-target", "true");
 
         this.setSource($target);

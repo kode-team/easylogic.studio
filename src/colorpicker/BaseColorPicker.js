@@ -1,15 +1,15 @@
 import Dom from '../util/Dom'
-import ColorSetsList from './module/ColorSetsList'
-import ColorManager from './module/ColorManager';
 import { MOUSEUP } from '../util/Event';
 import { defaultValue, isFunction } from '../util/functions/func';
 import UIElement from '../util/UIElement';
 import BaseStore from '../util/BaseStore';
 import { Length } from '../editor/unit/Length';
+import ColorManager from '../util/ColorManager';
 
 export default class BaseColorPicker extends UIElement {
 
     created () {
+        this.manager = new ColorManager(this);
         this.isColorPickerShow = false;
         this.isShortCut = false;
         this.hideDelay = +defaultValue(this.opt.hideDeplay, 2000);
@@ -19,17 +19,23 @@ export default class BaseColorPicker extends UIElement {
         this.$checkColorPickerClass = this.checkColorPickerClass.bind(this);
     }
 
+    get hsv () {return this.manager.hsv; }
+
+    get rgb () {return this.manager.rgb; }
+    
+    get hsl () {return this.manager.hsl; }
+    
+    get hex () {return this.manager.hex; }    
+
+    get alpha () { return this.manager.alpha; }   
+    
+    get format () { return this.manager.format; }
+
     initialize (modules = []) {
         this.$body = null;
         this.$root = null; 
         
-        this.$store = new BaseStore({
-            modules: [
-                ColorManager,
-                ColorSetsList,
-                ...modules
-            ]
-        });
+        this.$store = new BaseStore();
 
         this.callbackChange = () => {
             this.callbackChangeValue()
@@ -39,8 +45,8 @@ export default class BaseColorPicker extends UIElement {
         this.colorpickerHideCallback = function () { };           
 
 
-        this.$body = new Dom(this.getContainer());
-        this.$root = new Dom('div', 'codemirror-colorpicker');
+        this.$body = Dom.create(this.getContainer());
+        this.$root = Dom.create('div', 'codemirror-colorpicker');
 
         //  append colorpicker to container (ex : body)
         if (this.opt.position == 'inline') {
@@ -63,11 +69,11 @@ export default class BaseColorPicker extends UIElement {
             this.$root.css('width', this.opt.width)
         }
 
-        this.$arrow = new Dom('div', 'arrow');
+        this.$arrow = Dom.create('div', 'arrow');
         
         this.$root.append(this.$arrow);
 
-        this.dispatch('setUserPalette', this.opt.colorSets);
+        this.manager.setUserPalette(this.opt.colorSets);
 
         this.render(this.$root)
 
@@ -79,7 +85,8 @@ export default class BaseColorPicker extends UIElement {
     }
 
     initColorWithoutChangeEvent (color) {
-        this.dispatch('initColor', color);
+        this.manager.initColor(color);
+        this.emit('initColor');
     }
 
     /** 
@@ -131,9 +138,13 @@ export default class BaseColorPicker extends UIElement {
      * @param {String} format  hex, rgb, hsl
      */
     initColor(newColor, format) {
-        this.dispatch('changeColor', newColor, format);
+        this.manager.changeColor(newColor, format);
+        this.emit('changeColor');
     }
 
+    changeColor(newColor, format) {
+        this.manager.changeColor(newColor, format);
+    }
 
     /**
      * hide colorpicker 
@@ -155,7 +166,7 @@ export default class BaseColorPicker extends UIElement {
      * @param {Array} colors 
      */
     setColorsInPalette (colors = []) {
-        this.dispatch('setCurrentColorAll', colors);
+        this.manager.setCurrentColorAll(colors);
     }    
 
     /**
@@ -164,7 +175,7 @@ export default class BaseColorPicker extends UIElement {
      * @param {*} list 
      */
     setUserPalette (list = []) {
-        this.dispatch('setUserPalette', list);
+        this.manager.setUserPalette(list);
     }
 
 
@@ -185,7 +196,7 @@ export default class BaseColorPicker extends UIElement {
     }
 
     getColor(type) {
-        return this.read('toColor', type);
+        return this.manager.toColor(type);
     }
 
     definePositionForArrow(opt, elementScreenLeft, elementScreenTop) {
@@ -285,12 +296,12 @@ export default class BaseColorPicker extends UIElement {
     }    
 
     getCurrentColor() {
-        return this.read('toColor', this.outputFormat);
+        return this.manager.toColor(this.outputFormat);
     }
 
 
     checkColorPickerClass(el) {
-        var $el = new Dom(el);
+        var $el = Dom.create(el);
         var hasColorView = $el.closest('codemirror-colorview');
         var hasColorPicker = $el.closest('codemirror-colorpicker');
         var hasCodeMirror = $el.closest('CodeMirror');

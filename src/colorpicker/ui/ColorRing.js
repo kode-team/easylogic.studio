@@ -24,7 +24,7 @@ export default class ColorRing extends ColorWheel {
   }
 
   getDefaultValue() {
-    return this.$store.hsv.h;
+    return this.parent.hsv.h;
   }
 
   setHueColor(e, isEvent) {

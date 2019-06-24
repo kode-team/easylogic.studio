@@ -3,7 +3,7 @@ import UIElement, { EVENT } from "../../../util/UIElement";
 import { editor } from "../../../editor/editor";
 import { DEBOUNCE, LOAD, } from "../../../util/Event";
 import { CSS_TO_STRING } from "../../../util/css/make";
-import { EMPTY_STRING } from "../../../util/css/types";
+
 
 export default class StyleView extends UIElement {
 
@@ -60,7 +60,7 @@ export default class StyleView extends UIElement {
   makeSvg (item) {
     const SVGString = item.toSVGString()
     return `
-      ${SVGString ? `<svg width="0" height="0">${SVGString}</svg>` : EMPTY_STRING}
+      ${SVGString ? `<svg width="0" height="0">${SVGString}</svg>` : ''}
     ` + item.layers.map(it => {
       return this.makeSvg(it);
     })

@@ -3,24 +3,23 @@ import UIElement, { EVENT } from "../../../util/UIElement";
 import { editor } from "../../../editor/editor";
 import { Project } from "../../../editor/items/Project";
 import { ArtBoard } from "../../../editor/items/ArtBoard";
-import { CLICK, DEBOUNCE, BIND, PREVENT, STOP, SCROLL } from "../../../util/Event";
-import { CHANGE_SELECTION } from "../../types/event";
+import { CLICK, DEBOUNCE, BIND, PREVENT, STOP, SCROLL, WHEEL, ALT } from "../../../util/Event";
+import { CHANGE_SELECTION, SCALE_DIRECTION_OUT, SCALE_DIRECTION_IN } from "../../types/event";
 import { StyleParser } from "../../../editor/parse/StyleParser";
 import icon from "../icon/icon";
 import ElementView from "./ElementView";
 import { Layer } from "../../../editor/items/Layer";
+import NumberRangeEditor from "../control/panel/property-editor/NumberRangeEditor";
+
+
+
 
 export default class CanvasView extends UIElement {
 
   components() {
     return {
+      NumberRangeEditor,
       ElementView
-    }
-  }
-
-  initState () {
-    return {
-      zoom : 1 
     }
   }
 
@@ -61,37 +60,41 @@ export default class CanvasView extends UIElement {
           </div>
         </div>
         <div class='page-tools'>
+          <label>Scale</label>        
           <button type='button' ref='$plus'>${icon.add}</button>
           <button type='button' ref='$minus'>${icon.remove2}</button>
+          <div class='select'>
+            <NumberRangeEditor  ref='$scale' min='10' max='240' step="1" key="scale" value="${editor.scale*100}" onchange="changeScale" />
+          </div>
+          <label>%</label>
         </div>
       </div>
     `;
   }
 
+  [EVENT('changeScale')] (key, scale) {
+    editor.scale = scale/100; 
+    this.emit('changeScale');
+  }
+
   [CLICK('$plus') + PREVENT + STOP] () {
-    this.emit('refreshScale', 'plus')
 
-    setTimeout(() => {
-      this.modifyTransformOrigin()
-    }, 10)    
+    editor.scale *= 1.1; 
+    this.children.$scale.setValue(editor.scale * 100);
+    this.emit('changeScale')
   }
+
   [CLICK('$minus') + PREVENT + STOP] () {
-    this.emit('refreshScale', 'minus')   
-
-    setTimeout(() => {
-      this.modifyTransformOrigin()
-    }, 1000)
+    editor.scale *= 0.9; 
+    this.children.$scale.setValue(editor.scale * 100);    
+    this.emit('changeScale')
   }
 
-  modifyTransformOrigin () {
-    this.emit('scrollLock', 
-      this.refs.$lock.scrollLeft(), 
-      this.refs.$lock.scrollTop()
-    )
-  }
+  [WHEEL('$lock') + ALT + PREVENT] (e) {
 
-  [SCROLL('$lock') + DEBOUNCE(100)] () {
-    this.modifyTransformOrigin()
+    var dt = e.deltaY < 0 ? 0.9 : 1.1;
+    editor.scale *= dt; 
+    this.emit('changeScale')
   }
 
 

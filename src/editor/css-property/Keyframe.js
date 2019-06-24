@@ -1,7 +1,7 @@
 import { Property } from "../items/Property";
 import { html } from "../../util/functions/func";
 import { Offset } from "./Offset";
-import { EMPTY_STRING, NEW_LINE_2, WHITE_STRING, NEW_LINE } from "../../util/css/types";
+import { WHITE_STRING } from "../../util/css/types";
 import { reverseMatches, convertMatches } from "../../util/functions/parser";
 import { Length } from "../unit/Length";
 
@@ -136,7 +136,7 @@ export class Keyframe extends Property {
 
         // return  keyMap(results, (k, v) => {
         //   return `${k}: ${v.join(',')};`
-        // }).join(EMPTY_STRING)
+        // }).join('')
     }
 
 
@@ -155,10 +155,10 @@ export class Keyframe extends Property {
           if (value) {
             return `${p.key}: ${value};`
           } else {
-            return EMPTY_STRING;
+            return '';
           }
         }
-      }).join(EMPTY_STRING)}
+      }).join('')}
     }`
   }  
 
@@ -175,9 +175,9 @@ export class Keyframe extends Property {
 
 
     return  offsets.map(it => {
-      if (it.properties.length === 0) return EMPTY_STRING
+      if (it.properties.length === 0) return ''
       return this.toOffsetString(it);
-    }).join(NEW_LINE)
+    }).join('\n')
   }  
 
   toCSSText () {
@@ -196,7 +196,9 @@ export class Keyframe extends Property {
 
   ${this.toOffsetText()}
 
-}${NEW_LINE_2}
+}
+
+
 `
   }
 

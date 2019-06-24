@@ -1,4 +1,4 @@
-import { WHITE_STRING, EMPTY_STRING } from "./css/types";
+import { WHITE_STRING } from "./css/types";
 import { uuid } from "./functions/math";
 
 export class EventChecker {
@@ -196,7 +196,7 @@ export const LOAD = (value = "$el") => {
 };
 
 export const createRef = value => {
-  if (value === EMPTY_STRING) return EMPTY_STRING;
+  if (value === '') return '';
 
   var id = uuid();
   refManager[id] = value;
@@ -205,7 +205,7 @@ export const createRef = value => {
 };
 
 export const getRef = id => {
-  return refManager[id] || EMPTY_STRING;
+  return refManager[id] || '';
 };
 
 export const BIND_CHECK_FUNCTION = field => {
@@ -218,10 +218,10 @@ export const BIND_CHECK_DEFAULT_FUNCTION = () => {
   return true;
 };
 
-export const BIND = (value = "$el", checkFieldOrCallback = EMPTY_STRING) => {
+export const BIND = (value = "$el", checkFieldOrCallback = '') => {
   return (
     BIND_SAPARATOR + value + ( 
-      checkFieldOrCallback ?  CHECK_SAPARATOR + createRef(checkFieldOrCallback) : EMPTY_STRING 
+      checkFieldOrCallback ?  CHECK_SAPARATOR + createRef(checkFieldOrCallback) : '' 
     ) 
   );
 };

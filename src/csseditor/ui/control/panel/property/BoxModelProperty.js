@@ -8,7 +8,7 @@ import {
   CHANGE_SELECTION,
   CHANGE_ARTBOARD
 } from "../../../../types/event";
-import { EMPTY_STRING } from "../../../../../util/css/types";
+
 
 const fields = ["margin", "padding"];
 let styleKeys = [];
@@ -45,7 +45,7 @@ export default class BoxModelProperty extends BaseProperty {
   [LOAD("$boxModelItem")]() {
     var current = editor.selection.current;
 
-    if (!current) return EMPTY_STRING;
+    if (!current) return '';
 
     return html`
       <div>

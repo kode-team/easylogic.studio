@@ -1,5 +1,5 @@
 import { Gradient } from "./Gradient";
-import { EMPTY_STRING, WHITE_STRING } from "../../util/css/types";
+import { WHITE_STRING } from "../../util/css/types";
 import { Length, Position } from "../unit/Length";
 import { isString } from "../../util/functions/func";
 import { convertMatches, reverseMatches } from "../../util/functions/parser";
@@ -30,7 +30,7 @@ export class RadialGradient extends Gradient {
   toString() {
     var colorString = this.getColorString();
     var json = this.json;
-    var opt = EMPTY_STRING;
+    var opt = '';
     var radialType = json.radialType;
     var radialPosition = json.radialPosition || ["center", "center"];
 

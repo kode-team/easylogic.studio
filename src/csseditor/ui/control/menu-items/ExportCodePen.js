@@ -1,10 +1,8 @@
 import { SUBMIT } from "../../../../util/Event";
-import MenuItem from "./MenuItem";
 import { editor } from "../../../../editor/editor";
 import UIElement from "../../../../util/UIElement";
 import { CSS_TO_STRING } from "../../../../util/css/make";
-import { keyEach, keyMap } from "../../../../util/functions/func";
-import { NEW_LINE, EMPTY_STRING } from "../../../../util/css/types";
+import { keyMap } from "../../../../util/functions/func";
 
 export default class ExportCodePen extends UIElement {
   template() {
@@ -54,8 +52,8 @@ export default class ExportCodePen extends UIElement {
 #sample { 
 ${keyMap(css, (key, value) => {
   if (!key) return '';
-  return `  ${key}: ${value}; ${NEW_LINE}`
-}).join(EMPTY_STRING)}
+  return `  ${key}: ${value};\n`
+}).join('')}
 }  
 
 ${selectorString}

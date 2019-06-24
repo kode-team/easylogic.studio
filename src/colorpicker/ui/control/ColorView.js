@@ -10,10 +10,10 @@ export default class ColorView extends UIElement {
     [BIND('$el')] () {
         return {
             style: {
-                'background-color': this.read('toRGB')
+                'background-color': this.parent.manager.toString('rgb')
             }
         }
-    }
+    } 
 
     [EVENT('changeColor', 'initColor')] () { 
         this.refresh()

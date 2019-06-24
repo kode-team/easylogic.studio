@@ -1,6 +1,5 @@
 import UIElement from "../../../../../util/UIElement";
 import { LOAD, BIND, CLICK } from "../../../../../util/Event";
-import { EMPTY_STRING } from "../../../../../util/css/types";
 import icon from "../../../icon/icon";
 
 export default class IconListViewEditor extends UIElement {
@@ -24,7 +23,7 @@ export default class IconListViewEditor extends UIElement {
     [LOAD('$body')] () {
         return Object.keys(icon).map(key => {
             var html = icon[key]
-            var selected = key === this.state.value ? 'selected' : EMPTY_STRING
+            var selected = key === this.state.value ? 'selected' : ''
 
             return `<div class='list-view-item ${selected}'  data-key='${key}'>${html}</div>`
         })

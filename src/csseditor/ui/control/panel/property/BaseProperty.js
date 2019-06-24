@@ -1,6 +1,6 @@
 import { CLICK } from "../../../../../util/Event";
 import UIElement from "../../../../../util/UIElement";
-import { EMPTY_STRING } from "../../../../../util/css/types";
+
 import propertyEditor from "../property-editor";
 
 
@@ -17,7 +17,7 @@ export default class BaseProperty extends UIElement {
         <div class='property ${this.getClassName()} ${this.isFirstShow() ?  'show' : '' }'>
             ${
               this.isHideHeader()
-                ? EMPTY_STRING
+                ? ''
                 : `
             <div class='property-title' ref="$title">
                 <label>${this.getTitle()}</label>
@@ -38,16 +38,16 @@ export default class BaseProperty extends UIElement {
   }
 
   getClassName() {
-    return EMPTY_STRING;
+    return '';
   }
   getTitle() {
-    return EMPTY_STRING;
+    return '';
   }
   getTools() {
-    return EMPTY_STRING;
+    return '';
   }
   getBody() {
-    return EMPTY_STRING;
+    return '';
   }
 
   [CLICK("$title label")](e) {

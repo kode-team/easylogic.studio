@@ -20,6 +20,7 @@ export const editor = new class {
     this.selection = new Selection(this);
     this.projects = []     
     this.popupZIndex = 10000;
+    this.scale = 1 
   }
 
   // 팝업의 zindex 를 계속 높여 주어 

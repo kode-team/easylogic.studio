@@ -3,7 +3,6 @@ import { LOAD, CLICK } from "../../../../../util/Event";
 import { html } from "../../../../../util/functions/func";
 import { editor } from "../../../../../editor/editor";
 import icon from "../../../icon/icon";
-import { EMPTY_STRING } from "../../../../../util/css/types";
 import { EVENT } from "../../../../../util/UIElement";
 import { CHANGE_SELECTION } from "../../../../types/event";
 import { ArtBoard } from "../../../../../editor/items/ArtBoard";
@@ -33,11 +32,11 @@ export default class ArtBoardProperty extends BaseProperty {
   [LOAD("$artboardList")]() {
 
     var project = editor.selection.currentProject;
-    if (!project) return EMPTY_STRING
+    if (!project) return ''
 
     
     return project.artboards.map( (artboard, index) => {
-      var selected = artboard === editor.selection.currentArtboard ? 'selected' : EMPTY_STRING
+      var selected = artboard === editor.selection.currentArtboard ? 'selected' : ''
       return `
         <div class='property-item artboard-item ${selected}'>
           <div class='preview' data-index='${index}'>

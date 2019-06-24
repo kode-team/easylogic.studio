@@ -2,7 +2,7 @@ import { CLICK, LOAD } from "../../../../../util/Event";
 import UIElement, { EVENT } from "../../../../../util/UIElement";
 import icon from "../../../icon/icon";
 import { TextShadow } from "../../../../../editor/css-property/TextShadow";
-import { EMPTY_STRING } from "../../../../../util/css/types";
+
 import {
   CHANGE_ARTBOARD,
   CHANGE_SELECTION
@@ -66,7 +66,7 @@ export default class TextShadowEditor extends UIElement {
     }
 
 
-    return arr.join(EMPTY_STRING);
+    return arr.join('');
   }
 
   [EVENT(CHANGE_ARTBOARD, CHANGE_SELECTION)]() {

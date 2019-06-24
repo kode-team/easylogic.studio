@@ -1,5 +1,4 @@
 import { Property } from "../items/Property";
-import { EMPTY_STRING, NEW_LINE } from "../../util/css/types";
 
 export class Selector extends Property {
   static parse(obj) {
@@ -45,10 +44,10 @@ export class Selector extends Property {
         if (value) {
           return `${p.key}: ${value};`
         } else {
-          return EMPTY_STRING;
+          return '';
         }
       }
-    }).join(NEW_LINE)
+    }).join('\n')
   }
 
   toCSSText (prefix = '') {

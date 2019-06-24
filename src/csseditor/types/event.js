@@ -9,3 +9,6 @@ export const RESIZE_WINDOW = 'resize/window'
 
 export const ADD_BODY_MOUSEMOVE = 'add/body/mousemove'
 export const ADD_BODY_MOUSEUP = 'add/body/mouseup'
+
+export const SCALE_DIRECTION_IN = 1; 
+export const SCALE_DIRECTION_OUT = 2; 

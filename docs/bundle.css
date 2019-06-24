@@ -1461,6 +1461,7 @@ html, body {
           appearance: none;
   width: 100%;
   margin: 6.2px 0;
+  background-color: transparent;
 }
 .csseditor input[type=range]:focus {
   outline: none;
@@ -2111,6 +2112,13 @@ html, body {
   left: 10px;
   bottom: 10px;
   display: inline-block;
+  padding: 5px 10px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 3px;
+  border: 1px solid #cccccc;
+}
+.csseditor .page-tools > label {
+  vertical-align: middle;
 }
 .csseditor .page-tools button {
   width: 16px;
@@ -2130,6 +2138,14 @@ html, body {
 .csseditor .page-tools button svg {
   width: 100%;
   height: 100%;
+}
+.csseditor .page-tools button {
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 3px;
+}
+.csseditor .page-tools > .select {
+  display: inline-block;
+  width: 200px;
 }
 .csseditor .page-canvas {
   position: absolute;
@@ -3445,7 +3461,7 @@ html, body {
 .csseditor .number-range-editor.has-label label {
   text-align: right;
   vertical-align: middle;
-  padding: 2px 4px;
+  padding: 0px 4px;
   box-sizing: border-box;
 }
 .csseditor .number-range-editor.has-label.block {

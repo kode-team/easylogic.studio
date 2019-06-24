@@ -125,7 +125,7 @@ export default class OffsetEditor extends UIElement {
   }
 
   isNotOffsetItem (e) {
-    return ! (new Dom (e.target).hasClass('offset-item')) && !this.currentOffset
+    return ! (Dom.create (e.target).hasClass('offset-item')) && !this.currentOffset
   }
 
   [CLICK('$offset') + IF('isNotOffsetItem') + PREVENT] (e) {

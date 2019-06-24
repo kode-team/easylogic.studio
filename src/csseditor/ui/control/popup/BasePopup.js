@@ -2,7 +2,6 @@
 import { POINTERSTART, MOVE, END, CLICK } from "../../../../util/Event";
 import { Length } from "../../../../editor/unit/Length";
 import UIElement, { EVENT } from "../../../../util/UIElement";
-import { EMPTY_STRING } from "../../../../util/css/types";
 import icon from "../../icon/icon";
 import { CHANGE_SELECTION } from "../../../types/event";
 import { editor } from "../../../../editor/editor";
@@ -26,16 +25,16 @@ export default class BasePopup extends UIElement {
   }
 
   getClassName() {
-    return EMPTY_STRING;
+    return '';
   }
   getTitle() {
-    return EMPTY_STRING;
+    return '';
   }
   getTools() {
-    return EMPTY_STRING;
+    return '';
   }
   getBody() {
-    return EMPTY_STRING;
+    return '';
   }
 
   [CLICK('$close')] () {

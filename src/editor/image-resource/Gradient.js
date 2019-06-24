@@ -1,6 +1,6 @@
 import { ImageResource } from "./ImageResource";
 import { ColorStep } from "./ColorStep";
-import { EMPTY_STRING } from "../../util/css/types";
+
 import { isUndefined } from "../../util/functions/func";
 import Color from "../../util/Color";
 
@@ -183,7 +183,7 @@ export class Gradient extends ImageResource {
    */
   getColorString() {
     var colorsteps = this.colorsteps;
-    if (!colorsteps.length) return EMPTY_STRING;
+    if (!colorsteps.length) return '';
 
     var newColors = colorsteps.map((c, index) => {
       c.prevColorStep = c.cut && index > 0 ? colorsteps[index - 1] : null;

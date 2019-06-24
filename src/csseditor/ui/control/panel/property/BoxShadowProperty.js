@@ -7,7 +7,6 @@ import {
   CHANGE_ARTBOARD,
   CHANGE_SELECTION
 } from "../../../../types/event";
-import { EMPTY_STRING } from "../../../../../util/css/types";
 
 export default class BoxShadowProperty extends BaseProperty {
   
@@ -24,7 +23,7 @@ export default class BoxShadowProperty extends BaseProperty {
   [LOAD("$shadowList")]() {
     var current = editor.selection.current || {};
     return `
-      <BoxShadowEditor ref='$boxshadow' value="${current['box-shadow'] || EMPTY_STRING}" title='Box Shadows' onChange="changeBoxShadow" />
+      <BoxShadowEditor ref='$boxshadow' value="${current['box-shadow'] || ''}" title='Box Shadows' onChange="changeBoxShadow" />
     `
   }
 

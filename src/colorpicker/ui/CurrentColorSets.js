@@ -1,7 +1,6 @@
 import Dom from '../../util/Dom'
 import UIElement, { EVENT } from '../../util/UIElement';
 import { CLICK, CONTEXTMENU, LOAD } from '../../util/Event';
-import { EMPTY_STRING } from '../../util/css/types';
 import { html } from '../../util/functions/func';
 
 export default class CurrentColorSets extends UIElement {
@@ -18,8 +17,8 @@ export default class CurrentColorSets extends UIElement {
     }    
     
     [LOAD('$colorSetsColorList')] () {
-        const currentColorSets  = this.read('getCurrentColorSets')
-        const colors  = this.read('getCurrentColors')
+        const currentColorSets  = this.parent.manager.getCurrentColorSets()
+        const colors  = this.parent.manager.getCurrentColors()
 
         return html`<div class="current-color-sets">
             ${colors.map( (color, i) => {
@@ -28,12 +27,12 @@ export default class CurrentColorSets extends UIElement {
                     <div class="color-view" style="background-color: ${color}"></div>
                 </div>`
             })}   
-            ${currentColorSets.edit ? `<div class="add-color-item">+</div>` : EMPTY_STRING}         
+            ${currentColorSets.edit ? `<div class="add-color-item">+</div>` : ''}         
             </div>`
     }    
 
     addColor (color) {
-        this.dispatch('addCurrentColor', color);
+        this.parent.manager.addCurrentColor(color);
         this.refresh();
     }
 
@@ -51,13 +50,13 @@ export default class CurrentColorSets extends UIElement {
 
     [CONTEXTMENU('$colorSetsColorList')] (e) {
         e.preventDefault();
-        const currentColorSets  = this.read('getCurrentColorSets')
+        const currentColorSets  = this.parent.manager.getCurrentColorSets()
 
         if (!currentColorSets.edit) {
             return; 
         }
 
-        const $target = new Dom(e.target);
+        const $target = Dom.create(e.target);
         
         const $item = $target.closest('color-item');
 
@@ -71,11 +70,11 @@ export default class CurrentColorSets extends UIElement {
     }
 
     [CLICK('$colorSetsColorList .add-color-item')] (e) {
-        this.addColor(this.read('toColor'));
+        this.addColor(this.parent.getColor());
     }
 
     [CLICK('$colorSetsColorList .color-item')] (e, $dt) {
-        this.dispatch('changeColor', $dt.attr('data-color'));
+        this.parent.initColor($dt.attr('data-color'));
     }
 
 }

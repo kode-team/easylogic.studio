@@ -1,4 +1,4 @@
-import { EMPTY_STRING } from "../../util/css/types";
+
 import { Length } from "../unit/Length";
 import { Property } from "../items/Property";
 import { convertMatches } from "../../util/functions/parser";
@@ -64,7 +64,7 @@ export class BoxShadow extends Property {
   toString() {
     var json = this.json;
 
-    return `${json.inset ? "inset " : EMPTY_STRING}${json.offsetX} ${
+    return `${json.inset ? "inset " : ''}${json.offsetX} ${
       json.offsetY
     } ${json.blurRadius} ${json.spreadRadius} ${json.color}`;
   }

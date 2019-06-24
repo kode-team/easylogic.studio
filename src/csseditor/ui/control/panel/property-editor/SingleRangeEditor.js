@@ -1,7 +1,7 @@
 import UIElement, { EVENT } from "../../../../../util/UIElement";
 import { Length } from "../../../../../editor/unit/Length";
 import { LOAD, INPUT, CLICK } from "../../../../../util/Event";
-import { EMPTY_STRING } from "../../../../../util/css/types";
+
 import icon from "../../../icon/icon";
 import SelectEditor from "./SelectEditor";
 import { html } from "../../../../../util/functions/func";
@@ -56,7 +56,7 @@ export default class SingleRangeEditor extends UIElement {
         
         return html`
         <div class='range-editor ${hasLabel} ${hasCalc} ${isRemovable}' data-selected-type='${type}' ref='$range'>
-            ${label ? `<label>${label}</label>` : EMPTY_STRING }
+            ${label ? `<label>${label}</label>` : '' }
             <button type='button' class='type-button' ref='$toggleType'>${icon.autorenew}</button>
             <div class='range-editor-type' data-type='range'>
                 <div class='area'>

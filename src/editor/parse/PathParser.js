@@ -1,4 +1,4 @@
-import { EMPTY_STRING, WHITE_STRING } from "../../util/css/types";
+import { WHITE_STRING } from "../../util/css/types";
 import { isNotUndefined } from "../../util/functions/func";
 
 const parseRegForPath = /([mMlLvVhHcCsSqQtTaAzZ]([^mMlLvVhHcCsSqQtTaAzZ]*))/g;
@@ -94,14 +94,14 @@ export default class PathParser {
     }
 	
     trim (str)  {
-        return str.split(splitReg).filter(it => it != EMPTY_STRING);
+        return str.split(splitReg).filter(it => it != '');
     }
 
     parse () {
         var arr = this.pathString.match(parseRegForPath);
         this.segments = arr.map(s => {
             var command = s[0]
-            var values = this.trim(s.replace(command, EMPTY_STRING));
+            var values = this.trim(s.replace(command, ''));
             
             return { command, values }
         });
@@ -126,7 +126,7 @@ export default class PathParser {
 
         return this.segments.map(it => {
             return (it.command === 'Z' || it.command === 'z') ? it.command : `${it.command} ${it.values.join(WHITE_STRING)}`
-        }).join(EMPTY_STRING)
+        }).join('')
     }
 
     each (callback) {

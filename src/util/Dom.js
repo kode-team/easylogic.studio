@@ -1,4 +1,4 @@
-import { EMPTY_STRING } from "./css/types";
+
 import {
   isString,
   isUndefined,
@@ -31,6 +31,10 @@ export default class Dom {
 
       this.el = el;
     }
+  }
+
+  static create (tag, className, attr) {
+    return new Dom(tag, className, attr);
   }
 
   static getScrollTop() {
@@ -97,7 +101,7 @@ export default class Dom {
 
     while (!(checkCls = temp.hasClass(cls))) {
       if (temp.el.parentNode) {
-        temp = new Dom(temp.el.parentNode);
+        temp = Dom.create(temp.el.parentNode);
       } else {
         return null;
       }
@@ -111,7 +115,7 @@ export default class Dom {
   }
 
   parent() {
-    return new Dom(this.el.parentNode);
+    return Dom.create(this.el.parentNode);
   }
 
   hasParent () {
@@ -175,7 +179,7 @@ export default class Dom {
 
   $(selector) {
     var node = this.find(selector);
-    return node ? new Dom(node) : null;
+    return node ? Dom.create(node) : null;
   }
 
   findAll(selector) {
@@ -184,12 +188,12 @@ export default class Dom {
 
   $$(selector) {
     return [...this.findAll(selector)].map(node => {
-      return new Dom(node);
+      return Dom.create(node);
     });
   }
 
   empty() {
-    return this.html(EMPTY_STRING);
+    return this.html('');
   }
 
   append(el) {
@@ -203,7 +207,7 @@ export default class Dom {
   }
 
   appendHTML(html) {
-    var $dom = new Dom("div").html(html);
+    var $dom = Dom.create("div").html(html);
 
     this.append($dom.createChildrenFragment());
   }
@@ -570,8 +574,8 @@ export default class Dom {
     return this.el;
   }
 
-  createChild(tag, className = EMPTY_STRING, attrs = {}, css = {}) {
-    let $element = new Dom(tag, className, attrs);
+  createChild(tag, className = '', attrs = {}, css = {}) {
+    let $element = Dom.create(tag, className, attrs);
     $element.css(css);
 
     this.append($element);
@@ -580,7 +584,7 @@ export default class Dom {
   }
 
   firstChild() {
-    return new Dom(this.el.firstElementChild);
+    return Dom.create(this.el.firstElementChild);
   }
 
   children() {
@@ -593,7 +597,7 @@ export default class Dom {
     var results = [];
 
     do {
-      results.push(new Dom(element));
+      results.push(Dom.create(element));
       element = element.nextElementSibling;
     } while (element);
 

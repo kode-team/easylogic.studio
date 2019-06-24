@@ -19,7 +19,7 @@ export default class VerticalHue extends VerticalSlider {
     }
 
     getDefaultValue () {
-        return this.$store.hsv.h 
+        return this.parent.hsv.h 
     }
 
     refreshColorUI(e) {

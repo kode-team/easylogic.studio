@@ -13,8 +13,6 @@ import { Gradient } from "../image-resource/Gradient";
 import { convertMatches, reverseMatches } from "../../util/functions/parser";
 import { WHITE_STRING } from "../../util/css/types";
 
-const repeatList = ["repeat", "no-repeat", "repeat-x", "repeat-y"];
-
 export class BorderImage extends Property {
   addImageResource(imageResource) {
     this.clear("image-resource");

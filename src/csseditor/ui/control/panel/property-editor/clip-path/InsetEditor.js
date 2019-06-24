@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "../../../../../../util/UIElement";
-import { WHITE_STRING, EMPTY_STRING } from "../../../../../../util/css/types";
+import { WHITE_STRING } from "../../../../../../util/css/types";
 import { Length } from "../../../../../../editor/unit/Length";
 import { POINTERSTART, MOVE, LOAD, CLICK } from "../../../../../../util/Event";
 import RangeEditor from "../RangeEditor";
@@ -263,7 +263,7 @@ export default class InsetEditor extends UIElement {
         var position = [top, right, bottom, left].join(WHITE_STRING)
         var radius = [topRadius, rightRadius, bottomRadius, leftRadius].join(WHITE_STRING)
 
-        var results = `${position} ${(round && radius.trim()) ? `round ${radius}` : EMPTY_STRING}`
+        var results = `${position} ${(round && radius.trim()) ? `round ${radius}` : ''}`
 
         return results;
     }

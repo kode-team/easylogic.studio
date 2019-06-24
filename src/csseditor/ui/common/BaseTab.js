@@ -1,7 +1,7 @@
 import UIElement from "../../../util/UIElement";
 import Dom from "../../../util/Dom";
 import { CLICK, IF } from "../../../util/Event";
-import { EMPTY_STRING } from "../../../util/css/types";
+
 
 export default class BaseTab extends UIElement {
 
@@ -51,7 +51,7 @@ export default class BaseTab extends UIElement {
         var $tabElementTitle = $scrollPanel.$(".tab-element-title") ;
 
         if (!$tabElementTitle) {
-            $scrollPanel.append(new Dom('div', 'tab-element-title'))
+            $scrollPanel.append(Dom.create('div', 'tab-element-title'))
             $tabElementTitle = $scrollPanel.$(".tab-element-title") ;
         }
 
@@ -63,7 +63,7 @@ export default class BaseTab extends UIElement {
             return { $dom, isElementInViewport: false}
         })
 
-        var title = EMPTY_STRING;
+        var title = '';
         if (elementsInViewport.length) {
 
             var viewElement = elementsInViewport.filter(it => {

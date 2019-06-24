@@ -1,4 +1,4 @@
-import { CLICK, INPUT, CHANGE, LOAD } from "../../../../../util/Event";
+import { CLICK, LOAD } from "../../../../../util/Event";
 import { html } from "../../../../../util/functions/func";
 import { Length } from "../../../../../editor/unit/Length";
 import icon from "../../../icon/icon";

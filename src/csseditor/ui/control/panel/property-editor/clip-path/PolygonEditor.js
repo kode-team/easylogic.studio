@@ -1,7 +1,7 @@
-import UIElement, { EVENT } from "../../../../../../util/UIElement";
-import { WHITE_STRING, EMPTY_STRING } from "../../../../../../util/css/types";
+import UIElement from "../../../../../../util/UIElement";
+import { WHITE_STRING } from "../../../../../../util/css/types";
 import { Length } from "../../../../../../editor/unit/Length";
-import { POINTERSTART, MOVE, LOAD, CLICK, SELF, BIND, PREVENT, ALT } from "../../../../../../util/Event";
+import { POINTERSTART, MOVE, LOAD, CLICK, BIND, PREVENT, ALT } from "../../../../../../util/Event";
 import RangeEditor from "../RangeEditor";
 import Dom from "../../../../../../util/Dom";
 import icon from "../../../../icon/icon";
@@ -73,7 +73,7 @@ export default class PolygonEditor extends UIElement {
 
     [CLICK('$area') + PREVENT] (e) {
 
-        if (new Dom(e.target).is(this.refs.$area)) {
+        if (Dom.create(e.target).is(this.refs.$area)) {
 
             this.areaRect = this.refs.$area.rect(); 
             var {x, y}  = e.xy; 
@@ -117,8 +117,8 @@ export default class PolygonEditor extends UIElement {
 
         return this.state.value.map( (it, index) => {
             var className = [
-                index === 0? 'first' : EMPTY_STRING,
-                index === this.state.value.length-1 ? 'last' : EMPTY_STRING
+                index === 0? 'first' : '',
+                index === this.state.value.length-1 ? 'last' : ''
             ].filter(it => it).join(WHITE_STRING)
             return `<div class='drag-pointer ${className}' data-index="${index.toString()}" style='left: ${it.x.toString()};top: ${it.y.toString()};'></div>`
         })

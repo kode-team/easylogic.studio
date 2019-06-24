@@ -1,7 +1,6 @@
 import UIElement, { EVENT } from "../../../../../util/UIElement";
 import { Length } from "../../../../../editor/unit/Length";
 import { LOAD, INPUT, CLICK } from "../../../../../util/Event";
-import { EMPTY_STRING } from "../../../../../util/css/types";
 import icon from "../../../icon/icon";
 import SelectEditor from "./SelectEditor";
 import { html } from "../../../../../util/functions/func";
@@ -49,16 +48,16 @@ export default class RangeEditor extends UIElement {
             value = 0
         }
 
-        var hasLabel = !!label ? 'has-label' : EMPTY_STRING
-        var hasCalc = calc ? 'has-calc' : EMPTY_STRING;
-        var isRemovable = removable ? 'is-removable' : EMPTY_STRING;
+        var hasLabel = !!label ? 'has-label' : ''
+        var hasCalc = calc ? 'has-calc' : '';
+        var isRemovable = removable ? 'is-removable' : '';
         var layoutClass = layout;
 
         var realValue = (+value).toString();
         
         return html`
         <div class='range-editor ${hasLabel} ${hasCalc} ${isRemovable} ${layoutClass}' data-selected-type='${type}' ref='$range'>
-            ${label ? `<label>${label}</label>` : EMPTY_STRING }
+            ${label ? `<label>${label}</label>` : '' }
             <button type='button' class='type-button' ref='$toggleType'>${icon.autorenew}</button>
             <div class='range-editor-type' data-type='range'>
                 <div class='area'>

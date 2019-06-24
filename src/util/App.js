@@ -24,7 +24,7 @@ export const start = opt => {
 
       editor.setStore(this.$store);
 
-      this.$container = new Dom(this.getContainer());
+      this.$container = Dom.create(this.getContainer());
       this.$container.addClass(this.getClassName());
 
       this.render(this.$container);

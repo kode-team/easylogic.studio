@@ -1,7 +1,6 @@
-import UIElement, { EVENT } from "../../../../../util/UIElement";
+import UIElement from "../../../../../util/UIElement";
 import { Length } from "../../../../../editor/unit/Length";
 import { LOAD, INPUT, CLICK } from "../../../../../util/Event";
-import { EMPTY_STRING } from "../../../../../util/css/types";
 import icon from "../../../icon/icon";
 import { html } from "../../../../../util/functions/func";
 
@@ -38,15 +37,15 @@ export default class NumberRangeEditor extends UIElement {
             value = 0
         }
 
-        var hasLabel = !!label ? 'has-label' : EMPTY_STRING
-        var isRemovable = removable ? 'is-removable' : EMPTY_STRING;
+        var hasLabel = !!label ? 'has-label' : ''
+        var isRemovable = removable ? 'is-removable' : '';
         var layoutClass = layout;
 
         var realValue = (+value).toString();
         
         return html`
         <div class='number-range-editor ${hasLabel} ${isRemovable} ${layoutClass}' data-selected-type='${type}' ref='$range'>
-            ${label ? `<label>${label}</label>` : EMPTY_STRING }
+            ${label ? `<label>${label}</label>` : '' }
             <div class='range-editor-type' data-type='range'>
                 <div class='area'>
                     <input type='range' ref='$property' value="${realValue}" min="${min}" max="${max}" step="${step}" />

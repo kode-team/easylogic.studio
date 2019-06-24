@@ -8,7 +8,6 @@ import {
   DROP,
   PREVENT
 } from "../../../../../util/Event";
-import { EMPTY_STRING } from "../../../../../util/css/types";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
 import { CHANGE_ARTBOARD, CHANGE_SELECTION } from "../../../../types/event";
@@ -93,7 +92,7 @@ export default class SelectorProperty extends BaseProperty {
   [LOAD("$selectorList")]() {
     var current = editor.selection.current;
 
-    if (!current) return EMPTY_STRING;
+    if (!current) return '';
 
     var selectors = current.selector ? Selector.parseStyle(current) : current.selectors;
 

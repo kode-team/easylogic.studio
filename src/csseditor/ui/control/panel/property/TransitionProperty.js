@@ -13,7 +13,7 @@ import {
   CHANGE_ARTBOARD,
   CHANGE_SELECTION
 } from "../../../../types/event";
-import { EMPTY_STRING } from "../../../../../util/css/types";
+
 import icon from "../../../icon/icon";
 import { getPredefinedCubicBezier } from "../../../../../util/functions/bezier";
 
@@ -34,7 +34,7 @@ export default class TransitionProperty extends BaseProperty {
   [LOAD("$transitionList")]() {
     var current = editor.selection.current;
 
-    if (!current) return EMPTY_STRING;
+    if (!current) return '';
 
     return current.transitions.map((it, index) => {
 

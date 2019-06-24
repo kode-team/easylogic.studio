@@ -4,7 +4,7 @@ import { html } from "../../../../../util/functions/func";
 import { editor } from "../../../../../editor/editor";
 import { Position } from "../../../../../editor/unit/Length";
 import icon from "../../../icon/icon";
-import { EMPTY_STRING } from "../../../../../util/css/types";
+
 import { EVENT } from "../../../../../util/UIElement";
 import { CHANGE_SELECTION, CHANGE_ARTBOARD } from "../../../../types/event";
 
@@ -87,7 +87,7 @@ export default class BorderImageProperty extends BaseProperty {
         return this.getColorStepString(image.colorsteps);
     }
 
-    return EMPTY_STRING;
+    return '';
   }
 
   getColorStepString(colorsteps) {
@@ -97,7 +97,7 @@ export default class BorderImageProperty extends BaseProperty {
           step.id
         }" data-selected='${step.selected}' style='background-color:${step.color};'></div>`;
       })
-      .join(EMPTY_STRING);
+      .join('');
   }
 
   [LOAD('$borderImageView')] () {

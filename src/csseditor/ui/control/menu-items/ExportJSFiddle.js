@@ -2,8 +2,7 @@ import { SUBMIT } from "../../../../util/Event";
 import MenuItem from "./MenuItem";
 import { editor } from "../../../../editor/editor";
 import { CSS_TO_STRING } from "../../../../util/css/make";
-import { keyEach, keyMap } from "../../../../util/functions/func";
-import { NEW_LINE, EMPTY_STRING } from "../../../../util/css/types";
+import { keyMap } from "../../../../util/functions/func";
 
 export default class ExportJSFiddle extends MenuItem {
   template() {
@@ -50,8 +49,8 @@ export default class ExportJSFiddle extends MenuItem {
 /* element */
 #sample { 
 ${keyMap(css, (key, value) => {
-  return `  ${key}: ${value}; ${NEW_LINE}`
-}).join(EMPTY_STRING)}
+  return `  ${key}: ${value};\n`
+}).join('')}
 }  
 
 ${selectorString}

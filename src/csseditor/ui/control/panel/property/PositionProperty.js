@@ -1,5 +1,5 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD } from "../../../../../util/Event";
+import { LOAD, DEBOUNCE } from "../../../../../util/Event";
 import { html } from "../../../../../util/functions/func";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
@@ -8,7 +8,6 @@ import {
   CHANGE_SELECTION,
   CHANGE_ARTBOARD
 } from "../../../../types/event";
-import { EMPTY_STRING } from "../../../../../util/css/types";
 import RangeEditor from "../property-editor/RangeEditor";
 import SelectEditor from "../property-editor/SelectEditor";
 
@@ -30,7 +29,7 @@ export default class PositionProperty extends BaseProperty {
     return true; 
   }
 
-  [EVENT(CHANGE_ARTBOARD, CHANGE_SELECTION, 'refreshRect')]() {
+  [EVENT(CHANGE_ARTBOARD, CHANGE_SELECTION, 'refreshRect') + DEBOUNCE(100)]() {
     this.refresh();
   }
 
@@ -42,7 +41,7 @@ export default class PositionProperty extends BaseProperty {
 
   [LOAD("$positionItem")]() {
     var current = editor.selection.current;
-    if (!current) return EMPTY_STRING;
+    if (!current) return '';
 
     return `
       <div class='property-item'>

@@ -1,4 +1,3 @@
-import { NEW_LINE_2, NEW_LINE } from "../../util/css/types";
 import { CSS_TO_STRING } from "../../util/css/make";
 import { Length } from "../unit/Length";
 import { Display } from "../css-property/Display";
@@ -18,7 +17,7 @@ import icon from "../../csseditor/ui/icon/icon";
 import Dom from "../../util/Dom";
 
 function filterSVGClipPath (str = '', isFit = false, maxWidth, maxHeight) {
-  var $div = new Dom('div');
+  var $div = Dom.create('div');
   var $svg = $div.html(str).$('svg');
 
   if (!$svg) { 
@@ -541,13 +540,13 @@ export class DomItem extends GroupItem {
   toKeyframeString (isAnimate = false) {
     return this.json.keyframes
               .map(keyframe => keyframe.toString(isAnimate))
-              .join(NEW_LINE_2)
+              .join('\n\n')
   }
  
   toSelectorString (prefix = '') {
     return this.json.selectors
               .map(selector => selector.toString(prefix))
-              .join(NEW_LINE_2)
+              .join('\n\n')
   }
  
   toSVGString () {
@@ -556,7 +555,7 @@ export class DomItem extends GroupItem {
       if (s.type === 'filter') {
         return `
 <${s.type} id='${s.name}'>
-  ${s.value.join(NEW_LINE)}
+  ${s.value.join('\n')}
 </${s.type}>`
       } else if (s.type === 'clip-path') {
         var obj = filterSVGClipPath(icon[s.value.icon], s.value.fit, this.json.width, this.json.height)
@@ -565,7 +564,7 @@ export class DomItem extends GroupItem {
   ${obj.paths}
 </clipPath>`
       }
-    }).join(NEW_LINE_2)
+    }).join('\n\n')
   }
 
 

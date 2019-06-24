@@ -1,8 +1,7 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
 import { BIND, LOAD, POINTERSTART, MOVE, END, IF } from "../../../util/Event";
 import { Length } from "../../../editor/unit/Length";
-import { NEW_LINE, EMPTY_STRING } from "../../../util/css/types";
-import { CHANGE_SELECTION } from "../../types/event";
+import { CHANGE_SELECTION, SCALE_DIRECTION_IN } from "../../types/event";
 import { editor } from "../../../editor/editor";
 import Dom from "../../../util/Dom";
 
@@ -29,7 +28,6 @@ export default class ElementView extends UIElement {
 
     initState() {
         return {
-            scale: 1, 
             left: Length.px(0),
             top: Length.px(0),
             width: Length.px(10000),
@@ -43,20 +41,19 @@ export default class ElementView extends UIElement {
         return `
             <div class='element-view' ref='$body'>
                 <div class='canvas-view' ref='$view'></div>
-                <div ref='$dragAreaRect' style='pointer-events:none;position: absolute;border:0.5px dashed #556375;box-sizing:border-box;'></div>
+                <div ref='$dragAreaRect' style='pointer-events:none;position: absolute;border:0.5px dashed #556375;box-sizing:border-box;left:-10000px;'></div>
                 <div class='selection-view' ref='$selectionView' style='pointer-events:none;position:absolute;left:0px;top:0px;right:0px;bottom:0px;'></div>
             </div>
         `
     }
 
     checkEmptyElement (e) {
-        var isItem = new Dom(e.target).hasClass('item')
-        return isItem === false;
+        return Dom.create(e.target).hasClass('item') === false;
     }
 
     [POINTERSTART('$el') + IF('checkEmptyElement') + MOVE('movePointer') + END('moveEndPointer')] (e) {
 
-        this.$target = new Dom(e.target);
+        this.$target = Dom.create(e.target);
         this.dragXY = {x: e.xy.x, y: e.xy.y}; 
         this.rect = this.refs.$body.rect();            
         this.canvasOffset = this.refs.$view.rect();
@@ -113,7 +110,7 @@ export default class ElementView extends UIElement {
 
         if (artboard) {
             Object.keys(rect).forEach(key => {
-                rect[key].div(this.state.scale)
+                rect[key].div(editor.scale)
             })
 
             var items = artboard.checkInAreaForLayers(rect);
@@ -122,7 +119,7 @@ export default class ElementView extends UIElement {
         }
 
         this.refs.$dragAreaRect.css({
-            left: Length.px(0),
+            left: Length.px(-10000),
             top: Length.px(0),
             width: Length.px(0),
             height: Length.px(0)
@@ -146,24 +143,45 @@ export default class ElementView extends UIElement {
         this.selectCurrent(...editor.selection.items)
 
         editor.selection.setRectCache()
-
-        this.initSelectionTool();
     }
 
-    moveElement (dx, dy) {
-
-        dx /= this.state.scale
-        dy /= this.state.scale
+    caculateMovedElement (dx, dy) {
+        var scaledDx = dx / editor.scale
+        var scaledDy = dy / editor.scale
 
         editor.selection.each ((item, cachedItem, ) => {
             item.reset({
-                x: Length.px(cachedItem.x.value + dx).round(1),
-                y: Length.px(cachedItem.y.value + dy).round(1)
+                x: Length.px(cachedItem.x.value + scaledDx).round(1),
+                y: Length.px(cachedItem.y.value + scaledDy).round(1)
             })
+
+            var tempRect = this.originalItemRect[item.id];
+            
+            //변화량만 따로 관리 한다. 
+            this.scaledItemRect[item.id] = {
+                x: Length.px(tempRect.x + dx).round(1).value, 
+                y: Length.px(tempRect.y + dy).round(1).value,
+                width: tempRect.width,
+                height: tempRect.height 
+            }
         })
-        this.makeSelectionTool()
+
+
+
         this.emit('refreshCanvas');
         this.emit('refreshRect');
+
+        this.makeSelectionTool()        
+
+    }
+
+    moveElement (dx, dy) {
+        this.caculateMovedElement(dx, dy);
+       
+    }
+
+    moveEndElement (dx, dy) {
+        this.caculateMovedElement(dx, dy);
     }
 
     [BIND('$body')] () {
@@ -198,7 +216,7 @@ export default class ElementView extends UIElement {
                 'position': 'absolute',
                 'left': Length.percent(50),
                 'top': Length.percent(50),
-                transform: `translate(-50%, -50%) scale(${this.state.scale})`,
+                transform: `translate(-50%, -50%) scale(${editor.scale})`,
                 width,
                 height
             }
@@ -216,13 +234,16 @@ export default class ElementView extends UIElement {
             html = artboard.layers.map(it => {
                 it.selected = editor.selection.current === it;
                 return it.html
-            }).join(NEW_LINE)
+            }).join('\n')
         }
 
         this.setState({ html })
 
-        this.initSelectionTool();
-        this.makeSelectionTool();        
+        setTimeout(() => {
+            this.initSelectionTool();
+            this.makeSelectionTool();        
+        }, 100)
+
     }
 
     selectCurrent (...args) {
@@ -246,14 +267,22 @@ export default class ElementView extends UIElement {
             
         }
 
-
-        // this.makeSelectionTool();
+        this.initSelectionTool();
 
     }
 
 
     initSelectionTool() {
-        var originalRect = this.refs.$body.rect();
+
+        // selection tool 을 관리하기 위해 
+        // 원본 originalItemRect 와 
+        // 변화량을 가지고 있는 scaledItemRect 를 정의한다. 
+        //  scaledItemRect.x ===  originalItemRect.x + dx  형태로 되어 있다. 
+        // 최종 결과물은 scaledItemRect 를 통해서 표현한다. 
+        this.originalRect = this.refs.$body.rect();
+        this.originalItemRect = {}
+        this.scaledItemRect = {} 
+
         var html = editor.selection.items.map(it => {
 
             var $el = this.$el.$(`[data-id='${it.id}']`);
@@ -261,20 +290,22 @@ export default class ElementView extends UIElement {
             if ($el) {
                 var r = $el.rect();
 
-                r.x -= originalRect.x;
-                r.y -= originalRect.y;
+                this.originalItemRect[it.id] = r;
+
+                r.x -= this.originalRect.x;
+                r.y -= this.originalRect.y;
 
                 var temp = [
                     `left:${Length.px(r.x)};`,
                     `top:${Length.px(r.y)};`,
                     `width:${Length.px(r.width)};`,
                     `height:${Length.px(r.height)};`
-                ].join(EMPTY_STRING)
+                ].join('')
                 return `<div class='selection-tool' style='position:absolute;${temp};outline:1px solid blue;'></div>`
             }
 
-            return EMPTY_STRING;
-        }).join(EMPTY_STRING)
+            return '';
+        }).join('')
 
         this.refs.$selectionView.html(html);
 
@@ -285,20 +316,20 @@ export default class ElementView extends UIElement {
     makeSelectionTool() {
         // 딜레이가 너무 심하다.
         // 왜 그런지 알아보자. 
-        var originalRect = this.refs.$body.rect();
-        editor.selection.items.forEach( (it, index) => {
-            var r = this.cachedSelectionItems[index].rect();
-            
-            r.x -= originalRect.x;
-            r.y -= originalRect.y;
+
+        editor.selection.items.filter(it => {
+            return this.scaledItemRect[it.id] 
+        }).forEach( (it, index) => {
+            var r = this.scaledItemRect[it.id];
 
             this.cachedSelectionTools[index].css({
                 left: Length.px(r.x),
                 top: Length.px(r.y),
                 width: Length.px(r.width),
-                bottom: Length.px(r.height)
+                height: Length.px(r.height)
             })
         })
+        
     }
 
     [EVENT(CHANGE_SELECTION)] () {
@@ -307,31 +338,20 @@ export default class ElementView extends UIElement {
             this.trigger('addElement');
         }
 
-        var current = editor.selection.current || { id : EMPTY_STRING} 
+        var current = editor.selection.current || { id : ''} 
         this.selectCurrent(current);
     }
 
-    [EVENT('refreshScale')] (type) {
-
-        if (type == 'plus') {
-            this.setState({
-                scale :  this.state.scale * 1.1
-            }, false)
-
-        } else {
-            this.setState({
-                scale :  this.state.scale * 0.9
-            }, false)
-        }
-
+    modifyScale () {
         this.refs.$view.css({
-            transform: `translate(-50%, -50%) scale(${this.state.scale})`
+            transform: `translate(-50%, -50%) scale(${editor.scale})`
         })
 
-        setTimeout( () => {
-            this.makeSelectionTool()
-        }, 1000);
+        this.initSelectionTool();
+    }
 
+    [EVENT('changeScale')] () {
+       this.modifyScale();
     }
 
     [EVENT('refreshCanvas')] (obj = {}) {

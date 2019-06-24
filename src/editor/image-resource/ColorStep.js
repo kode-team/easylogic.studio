@@ -1,6 +1,6 @@
 import { Item } from "../items/Item";
 import { Length } from "../unit/Length";
-import { EMPTY_STRING, WHITE_STRING } from "../../util/css/types";
+import { WHITE_STRING } from "../../util/css/types";
 import { convertMatches } from "../../util/functions/parser";
 export class ColorStep extends Item {
   getDefaultObject() {
@@ -86,7 +86,7 @@ export class ColorStep extends Item {
   }
 
   getPrevLength() {
-    if (!this.json.prevColorStep) return EMPTY_STRING;
+    if (!this.json.prevColorStep) return '';
 
     return this.json.prevColorStep.toLength();
   }
@@ -97,7 +97,7 @@ export class ColorStep extends Item {
    * return {string}
    */
   toString() {
-    var prev = this.json.cut ? this.getPrevLength() : EMPTY_STRING
+    var prev = this.json.cut ? this.getPrevLength() : ''
     return `${this.json.color} ${prev} ${this.toLength()}`;
   }
 

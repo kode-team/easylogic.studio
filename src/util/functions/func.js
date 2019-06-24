@@ -1,4 +1,4 @@
-import { EMPTY_STRING, WHITE_STRING } from "../css/types";
+import { WHITE_STRING } from "../css/types";
 
 export function debounce (callback, delay) {
 
@@ -103,12 +103,12 @@ export function combineKeyArray (obj) {
     return obj;
 }
 
-export function flatKeyValue (obj, rootKey = EMPTY_STRING) {
+export function flatKeyValue (obj, rootKey = '') {
     var values = {};
 
     Object.keys(obj).forEach(key => {
         var realKey = key; 
-        if (rootKey !== EMPTY_STRING) {
+        if (rootKey !== '') {
             realKey = `${rootKey}.${key}`
         }
 
@@ -141,7 +141,7 @@ export const html = (strings, ...args) => {
 
     var results =  strings.map((it, index) => {
         
-        var results = args[index] || EMPTY_STRING
+        var results = args[index] || ''
 
         if (isFunction(results)) {
             results = results()
@@ -159,10 +159,10 @@ export const html = (strings, ...args) => {
             }
 
             return r
-        }).join(EMPTY_STRING)
+        }).join('')
 
         return it + results;
-    }).join(EMPTY_STRING);
+    }).join('');
 
     results = results.replace(short_tag_regexp, function (match, p1) {
         if (HTML_TAG[p1.toLowerCase()]) {

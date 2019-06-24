@@ -1,8 +1,7 @@
-import { html, keyMap } from "../../../../../util/functions/func";
+import { html } from "../../../../../util/functions/func";
 import icon from "../../../icon/icon";
-import { EMPTY_STRING } from "../../../../../util/css/types";
 import UIElement, { EVENT } from "../../../../../util/UIElement";
-import { CHANGE, CLICK } from "../../../../../util/Event";
+import { CLICK } from "../../../../../util/Event";
 import IconListViewEditor from "./IconListViewEditor";
 
 export default class SVGClipPathEditor extends UIElement {
@@ -22,7 +21,7 @@ export default class SVGClipPathEditor extends UIElement {
 
   template() {
 
-    var checked = this.state.fit ? 'checked="checked"' : EMPTY_STRING
+    var checked = this.state.fit ? 'checked="checked"' : ''
 
     var values = Object.keys(icon).map(key => {
       return { key, html: icon[key] }

@@ -1,5 +1,5 @@
 import BaseProperty from "./BaseProperty";
-import { INPUT, BIND, LOAD, DEBOUNCE } from "../../../../../util/Event";
+import { LOAD, DEBOUNCE } from "../../../../../util/Event";
 import { html } from "../../../../../util/functions/func";
 import { editor } from "../../../../../editor/editor";
 
@@ -9,13 +9,12 @@ import {
   CHANGE_SELECTION,
   CHANGE_ARTBOARD
 } from "../../../../types/event";
-import { EMPTY_STRING, NEW_LINE } from "../../../../../util/css/types";
 import { CSS_TO_STRING } from "../../../../../util/css/make";
 
 export default class ComputedCodeViewProperty extends BaseProperty {
   getTitle() {
     return "Computed CodeView";
-  }
+  } 
 
   [EVENT(
     CHANGE_ARTBOARD, 
@@ -44,21 +43,21 @@ export default class ComputedCodeViewProperty extends BaseProperty {
       it = it.trim();
       var [key, value] = it.split(':')
 
-      return `<strong>${key}</strong>:${value};${NEW_LINE}` 
-    }).join(EMPTY_STRING).trim()
+      return `<strong>${key}</strong>:${value};\n` 
+    }).join('').trim()
   }
 
   modifyNewLine (str) {
-    return str.replace(/;/gi, ";" + NEW_LINE)
+    return str.replace(/;/gi, ";\n")
   }
 
   [LOAD('$body')] () {
     var current = editor.selection.current;
 
-    var currentExport = (current) ? current.toExport().replace(/;/gi, ";" + NEW_LINE) : EMPTY_STRING
+    var currentExport = (current) ? current.toExport().replace(/;/gi, ";\n") : ''
 
     var cssCode = this.state.css ? CSS_TO_STRING(this.state.css) : currentExport
-    var keyframeCode = current ? current.toKeyframeString() : EMPTY_STRING
+    var keyframeCode = current ? current.toKeyframeString() : ''
 
     cssCode = this.filterKeyName(cssCode.trim())
     keyframeCode = this.modifyNewLine(keyframeCode.trim());
@@ -68,12 +67,12 @@ export default class ComputedCodeViewProperty extends BaseProperty {
         ${keyframeCode ?         
           `<div>
           <pre title="Keyframe">${keyframeCode}</pre>
-        </div>` : EMPTY_STRING}
+        </div>` : ''}
 
         ${cssCode ? 
           `<div>
           <pre title="CSS">${cssCode}</pre>
-          </div>` : EMPTY_STRING
+          </div>` : ''
         }
 
       </div>

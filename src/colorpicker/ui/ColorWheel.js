@@ -34,7 +34,7 @@ export default class ColorWheel extends UIElement {
   }
 
   renderValue() {
-    var value = 1 - this.$store.hsv.v;
+    var value = 1 - this.parent.hsv.v;
     this.refs.$valuewheel.css("background-color", `rgba(0, 0, 0, ${value})`);
   }
 
@@ -42,7 +42,7 @@ export default class ColorWheel extends UIElement {
     if (this.width && !width) width = this.width;
     if (this.height && !height) height = this.height;
 
-    const $canvas = new Dom("canvas");
+    const $canvas = Dom.create("canvas");
     const context = $canvas.el.getContext("2d");
     $canvas.el.width = width;
     $canvas.el.height = height;
@@ -95,7 +95,7 @@ export default class ColorWheel extends UIElement {
 
   renderCanvas() {
     // only once rendering
-    if (this.$store.createdWheelCanvas) return;
+    if (this.parent.createdWheelCanvas) return;
 
     const $canvas = this.refs.$colorwheel;
     // console.log($canvas);
@@ -115,15 +115,15 @@ export default class ColorWheel extends UIElement {
 
     context.drawImage($wheelCanvas.el, 0, 0);
 
-    this.$store.createdWheelCanvas = true;
+    this.parent.createdWheelCanvas = true;
   }
 
   getDefaultValue() {
-    return this.$store.hsv.h;
+    return this.parent.hsv.h;
   }
 
   getDefaultSaturation() {
-    return this.$store.hsv.s;
+    return this.parent.hsv.s;
   }
 
   getCurrentXY(e, angle, radius, centerX, centerY) {
@@ -181,7 +181,7 @@ export default class ColorWheel extends UIElement {
   }
 
   changeColor(opt) {
-    this.dispatch("changeColor", opt || {});
+    this.parent.manager.changeColor(opt || {});
   }
 
   [EVENT("changeColor")]() {

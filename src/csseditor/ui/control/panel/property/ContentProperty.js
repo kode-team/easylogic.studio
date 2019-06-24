@@ -9,7 +9,6 @@ import {
   CHANGE_SELECTION,
   CHANGE_ARTBOARD
 } from "../../../../types/event";
-import { EMPTY_STRING } from "../../../../../util/css/types";
 
 export default class ContentProperty extends BaseProperty {
   getTitle() {
@@ -31,7 +30,7 @@ export default class ContentProperty extends BaseProperty {
   [BIND("$contentItem")]() {
     var current = editor.selection.current;
 
-    if (!current) return EMPTY_STRING;
+    if (!current) return '';
 
     return {
       value: current.content || ""

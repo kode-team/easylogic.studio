@@ -29,7 +29,7 @@ export default class ColorSetsChooser extends UIElement {
     // loadable 
     [LOAD('$colorsetsList')] () {
         // colorsets 
-        const colorSets = this.read('getColorSetsList');
+        const colorSets = this.parent.manager.getColorSetsList();
 
         return html`
             <div>
@@ -75,7 +75,7 @@ export default class ColorSetsChooser extends UIElement {
 
             const index = parseInt($dt.attr(DATA_COLORSETS_INDEX));
 
-            this.dispatch('setCurrentColorSets', index);
+            this.parent.manager.setCurrentColorSets(index);
 
             this.hide();
         }

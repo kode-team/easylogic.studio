@@ -20,7 +20,7 @@ export default class Hue extends BaseSlider {
     }
 
     getDefaultValue () {
-        return this.$store.hsv.h
+        return this.parent.hsv.h
     }
 
     refreshColorUI(e) {

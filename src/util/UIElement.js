@@ -109,18 +109,18 @@ class UIElement extends EventMachine {
     return this.$store.items[id] || {};
   }
 
-  read($1, $2, $3, $4, $5) {
-    return this.$store.read($1, $2, $3, $4, $5);
-  }
+  // read($1, $2, $3, $4, $5) {
+  //   return this.$store.read($1, $2, $3, $4, $5);
+  // }
 
-  run($1, $2, $3, $4, $5) {
-    return this.$store.run($1, $2, $3, $4, $5);
-  }
+  // run($1, $2, $3, $4, $5) {
+  //   return this.$store.run($1, $2, $3, $4, $5);
+  // }
 
-  dispatch($1, $2, $3, $4, $5) {
-    this.$store.source = this.source;
-    return this.$store.dispatch($1, $2, $3, $4, $5);
-  }
+  // dispatch($1, $2, $3, $4, $5) {
+  //   this.$store.source = this.source;
+  //   return this.$store.dispatch($1, $2, $3, $4, $5);
+  // }
 
   emit($1, $2, $3, $4, $5) {
     this.$store.source = this.source;

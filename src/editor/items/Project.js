@@ -1,5 +1,4 @@
 import { MovableItem } from "./MovableItem";
-import { NEW_LINE_2 } from "../../util/css/types";
 import { uuidShort } from "../../util/functions/math";
 
 export class Project extends MovableItem {
@@ -21,6 +20,6 @@ export class Project extends MovableItem {
   }
 
   get html () {
-    return this.artboards.map(it => it.html).join(NEW_LINE_2);
+    return this.artboards.map(it => it.html).join('\n\n');
   }
 }

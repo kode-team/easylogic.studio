@@ -6,7 +6,7 @@ import {
   CLICK,
   PREVENT
 } from "../../../../../util/Event";
-import { EMPTY_STRING } from "../../../../../util/css/types";
+
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
 import { CHANGE_ARTBOARD, CHANGE_SELECTION } from "../../../../types/event";
@@ -68,8 +68,8 @@ export default class ClipPathProperty extends BaseProperty {
 
   [LOAD("$clippathList")]() {
     var current = editor.selection.current;
-    if (!current) return EMPTY_STRING;
-    if (!current['clip-path']) return EMPTY_STRING
+    if (!current) return '';
+    if (!current['clip-path']) return ''
 
     return this.makeClipPathTemplate(current['clip-path']);
   }

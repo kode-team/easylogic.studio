@@ -1,5 +1,5 @@
 import { Gradient } from "./Gradient";
-import { EMPTY_STRING, WHITE_STRING } from "../../util/css/types";
+import { WHITE_STRING } from "../../util/css/types";
 import {
   isNotUndefined,
   isString,
@@ -47,7 +47,7 @@ export class ConicGradient extends Gradient {
 
   getColorString() {
     var colorsteps = this.colorsteps;
-    if (!colorsteps) return EMPTY_STRING;
+    if (!colorsteps) return '';
 
     colorsteps.sort((a, b) => {
       if (a.percent == b.percent) return 0;
@@ -62,7 +62,7 @@ export class ConicGradient extends Gradient {
     return newColors
       .map(f => {
         var deg = Math.floor(f.percent * 3.6);
-        var prev = EMPTY_STRING;
+        var prev = '';
 
         if (f.cut && f.prevColorStep) {
           var prevDeg = Math.floor(f.prevColorStep.percent * 3.6);
@@ -95,7 +95,7 @@ export class ConicGradient extends Gradient {
       opt.push(`at ${conicPosition}`);
     }
 
-    var optString = opt.length ? opt.join(WHITE_STRING) + "," : EMPTY_STRING;
+    var optString = opt.length ? opt.join(WHITE_STRING) + "," : '';
 
     return `${json.type}(${optString} ${colorString})`;
   }

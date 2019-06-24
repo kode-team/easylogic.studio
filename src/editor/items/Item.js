@@ -4,7 +4,6 @@ import {
   isUndefined
 } from "../../util/functions/func";
 import { editor } from "../editor";
-import { EMPTY_STRING } from "../../util/css/types";
 
 export class Item {
   constructor(json = {}) {
@@ -186,10 +185,10 @@ export class Item {
 
     tagName = tagName || 'div'
 
-    var selected = this.json.selected ? 'selected' : EMPTY_STRING
+    var selected = this.json.selected ? 'selected' : ''
 
     return `
-    <${tagName} class='item ${selected}' data-id="${id}">${content ? content : EMPTY_STRING}
+    <${tagName} class='item ${selected}' data-id="${id}">${content ? content : ''}
       ${layers.map(it => it.html)}
     </${tagName}>
     `

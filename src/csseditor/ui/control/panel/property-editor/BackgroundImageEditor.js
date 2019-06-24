@@ -2,10 +2,8 @@ import UIElement, { EVENT } from "../../../../../util/UIElement";
 import { BackgroundImage } from "../../../../../editor/css-property/BackgroundImage";
 import { LOAD, CLICK, DRAGSTART, DRAGOVER, DROP, PREVENT, DEBOUNCE } from "../../../../../util/Event";
 import icon from "../../../icon/icon";
-import { EMPTY_STRING } from "../../../../../util/css/types";
 import { keyEach, combineKeyArray } from "../../../../../util/functions/func";
 import { CSS_TO_STRING } from "../../../../../util/css/make";
-import { Position } from "../../../../../editor/unit/Length";
 
 
 const names = {
@@ -43,7 +41,7 @@ export default class BackgroundImageEditor extends UIElement {
         var style = {}
         str.split(';').forEach(it => {
            var [key, value] = it.split(':').map(it => it.trim())
-           if (key != EMPTY_STRING) {
+           if (key != '') {
             style[key] = value; 
            }
         })
@@ -78,7 +76,7 @@ export default class BackgroundImageEditor extends UIElement {
             return this.getColorStepString(image.colorsteps);
         }
     
-        return EMPTY_STRING;
+        return '';
     }
 
     getColorStepString(colorsteps) {
@@ -86,7 +84,7 @@ export default class BackgroundImageEditor extends UIElement {
             .map((step, index) => {
                 return `<div class='step' data-index="${index}" data-cut="${step.cut}" data-selected='${step.selected}' style='background-color:${step.color};'></div>`;
             })
-            .join(EMPTY_STRING);
+            .join('');
     }
     
 

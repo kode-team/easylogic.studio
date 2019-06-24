@@ -24,7 +24,7 @@ import {
   isObject,
   keyMap
 } from "./functions/func";
-import { EMPTY_STRING, WHITE_STRING } from "./css/types";
+import { WHITE_STRING } from "./css/types";
 import {
   ADD_BODY_MOUSEMOVE,
   ADD_BODY_MOUSEUP
@@ -32,7 +32,7 @@ import {
 import { uuid } from "./functions/math";
 
 const REFERENCE_PROPERTY = "ref";
-const TEMP_DIV = new Dom("div");
+const TEMP_DIV = Dom.create("div");
 const QUERY_PROPERTY = `[${REFERENCE_PROPERTY}]`;
 const ATTR_lIST = [REFERENCE_PROPERTY]
 
@@ -72,7 +72,7 @@ const makeDelegateCallback = (context, eventObject, callback) => {
     const delegateTarget = hasDelegate(e, eventObject);
     if (delegateTarget) {
       // delegate target 이 있는 경우만 callback 실행
-      e.$delegateTarget = new Dom(delegateTarget);
+      e.$delegateTarget = Dom.create(delegateTarget);
 
       var returnValue = runEventCallback(context, e, eventObject, callback);
       if (isNotUndefined(returnValue)) {
@@ -359,13 +359,13 @@ export default class EventMachine {
   // 변수적용하기 좀 더 편해진다.
   // 사용은 각자가 알아서 ㅋ
   getRef(...args) {
-    const key = args.join(EMPTY_STRING)
+    const key = args.join('')
     return this.refs[key];
   }
 
   parseTemplate(html, isLoad) {
     if (isArray(html)) {
-      html = html.join(EMPTY_STRING);
+      html = html.join('');
     }
 
     html = html.trim();
@@ -511,7 +511,7 @@ export default class EventMachine {
    * @param  {...any} args 
    */
   loadTemplate (...args) {
-    return this[LOAD(args.join(EMPTY_STRING))].call(this)
+    return this[LOAD(args.join(''))].call(this)
   }
 
   load(...args) {
@@ -532,7 +532,7 @@ export default class EventMachine {
         var newTemplate = this[callbackName].call(this, ...args);
 
         if (isArray(newTemplate)) {
-          newTemplate = newTemplate.join(EMPTY_STRING);
+          newTemplate = newTemplate.join('');
         }
 
         const fragment = this.parseTemplate(newTemplate, true);
@@ -577,7 +577,7 @@ export default class EventMachine {
         const refObject = this.getRef(id);
         let refCallback = BIND_CHECK_DEFAULT_FUNCTION;
 
-        if (refObject != EMPTY_STRING && isString(refObject)) {
+        if (refObject != '' && isString(refObject)) {
           refCallback = BIND_CHECK_FUNCTION(refObject);
         } else if (isFunction(refObject)) {
           refCallback = refObject;
@@ -603,7 +603,7 @@ export default class EventMachine {
   // 기본 템플릿 지정
   template() {
     var className = this.templateClass();
-    var classString = className ? `class="${className}"` : EMPTY_STRING;
+    var classString = className ? `class="${className}"` : '';
 
     return `<div ${classString}></div>`;
   }

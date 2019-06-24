@@ -31,7 +31,7 @@ export default class ColorPalette extends UIElement {
     var s = pos.x / width;
     var v = (height - pos.y) / height;
 
-    this.dispatch("changeColor", {
+    this.parent.initColor({
       type: "hsv",
       s,
       v
@@ -39,15 +39,15 @@ export default class ColorPalette extends UIElement {
   }
 
   setColorUI() {
-    var x = this.$el.width() * this.$store.hsv.s,
-      y = this.$el.height() * (1 - this.$store.hsv.v);
+    var x = this.$el.width() * this.parent.hsv.s,
+      y = this.$el.height() * (1 - this.parent.hsv.v);
 
     this.refs.$drag_pointer.px("left", x);
     this.refs.$drag_pointer.px("top", y);
 
     this.drag_pointer_pos = { x, y };
 
-    this.setBackgroundColor(this.read("getHueColor"));
+    this.setBackgroundColor(this.parent.manager.getHueColor());
   }
 
   setMainColor(e) {

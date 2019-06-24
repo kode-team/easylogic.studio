@@ -1,6 +1,5 @@
 import UIElement from "../../../../../util/UIElement";
 import { BIND, INPUT } from "../../../../../util/Event";
-import { EMPTY_STRING } from "../../../../../util/css/types";
 
 export default class TextEditor extends UIElement {
 
@@ -18,7 +17,7 @@ export default class TextEditor extends UIElement {
         var hasLabel = !!label ? 'has-label' : ''
         return `
             <div class='text-editor ${hasLabel}'>
-                ${label ? `<label>${label}</label>` : EMPTY_STRING }
+                ${label ? `<label>${label}</label>` : '' }
                 <input type='text' ref='$text' />
             </div>
         `
