@@ -28,7 +28,7 @@ export default class TransformProperty extends BaseProperty {
 
     if (current) {
       current.reset({ transform })
-      this.emit('refreshCanvas');
+      this.emit('refreshCanvas', { transform });
     }
   }
 }

@@ -1,5 +1,19 @@
-import { Length } from "./unit/Length";
-import { RectItem } from "./items/RectItem";
+import { isFunction } from "../util/functions/func";
+
+
+function _traverse(obj, id) {
+  var results = [] 
+
+  obj.layers.length && obj.layers.forEach(it => {
+    results.push(..._traverse(it, id));
+  })
+
+  if (obj.id === id) {
+    results.push(obj);
+  }
+
+  return results; 
+}
 
 export class Selection {
   constructor(editor) {
@@ -8,7 +22,6 @@ export class Selection {
     this.project = null;
     this.artboard = null;
     this.items = [];
-    this.currentRect = null;
   }
 
   initialize() {
@@ -51,7 +64,7 @@ export class Selection {
   select(...args) {
     this.items = (args || []).filter(it => !it.lock); 
 
-    this.initRect();
+    this.setRectCache();
   }
 
   check (item) {
@@ -63,67 +76,22 @@ export class Selection {
   }
 
   selectById(id) {
-    this.items = this.artboard.layers.filter(layer => layer.id === id)
 
-    // this.initRect();
+
+    this.select(... _traverse(this.artboard, id))
   }
 
   setRectCache () {
-    this.cachedRect = this.items.map(it => {
-      return it.toBound()
-    })
+    this.cachedItems = this.items.map(it => it.toBound())
   }
 
   each (callback) {
-    this.items.forEach( (item, index) => {
-      callback && callback (item, this.cachedRect[index]);
-    })
-  }
 
-  initRect() {
-    this.currentRect = this.rect();
-  }
-
-  rect() {
-    var minX = Number.MAX_SAFE_INTEGER;
-    var minY = Number.MAX_SAFE_INTEGER;
-    var maxX = Number.MIN_SAFE_INTEGER;
-    var maxY = Number.MIN_SAFE_INTEGER;
-
-    this.items.forEach(item => {
-      if (!item.screenX) return;
-
-      var x = item.screenX.value;
-      var y = item.screenY.value;
-      var x2 = item.screenX2.value;
-      var y2 = item.screenY2.value;
-
-      if (minX > x) minX = x;
-      if (minY > y) minY = y;
-      if (maxX < x2) maxX = x2;
-      if (maxY < y2) maxY = y2;
-    });
-
-    if (!this.items.length) {
-      minX = 0;
-      minY = 0;
-      maxX = 0;
-      maxY = 0;
+    if ( isFunction(callback)) {
+      this.items.forEach( (item, index) => {
+        callback (item, this.cachedItems[index]);
+      })
     }
 
-    var x = minX;
-    var y = minY;
-    var x2 = maxX;
-    var y2 = maxY;
-
-    var width = x2 - x;
-    var height = y2 - y;
-
-    x = Length.px(x);
-    y = Length.px(y);
-    width = Length.px(width);
-    height = Length.px(height);
-
-    return new RectItem({ x, y, width, height });
   }
 }

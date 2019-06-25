@@ -1,5 +1,4 @@
 import { Item } from "./Item";
-import { editor } from "../editor";
 import { Length } from "../unit/Length";
 
 export class MovableItem extends Item {
@@ -75,5 +74,45 @@ export class MovableItem extends Item {
             width: `${this.json.width}`,
             height: `${this.json.height}`
         }
+    }
+
+    move (x, y) {
+        this.reset({ x, y })
+        return this;         
+    }
+
+    moveX (x) {
+        this.reset ( { x })
+        return this;         
+    }
+
+    moveY (y) {
+        this.reset ( { y })
+
+        return this; 
+    }
+
+    resize (width, height) {
+        if (width.value >= 0 && height.value >= 0) {
+            this.reset ({ width, height })
+        }
+
+        return this; 
+    }
+
+    resizeWidth (width) {
+        if (width.value >= 0) {
+            this.reset ({ width })
+        }
+
+        return this; 
+    }
+
+    resizeHeight ( height ) {
+        if (height.value >= 0) {
+            this.reset ({ height })
+        }
+
+        return this;
     }
 }

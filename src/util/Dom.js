@@ -524,6 +524,16 @@ export default class Dom {
     this.el.scrollIntoView()
   }
 
+  addScrollLeft (dt) {
+    this.el.scrollLeft += dt; 
+    return this; 
+  }
+
+  addScrollTop (dt) {
+    this.el.scrollTop += dt; 
+    return this; 
+  }  
+
   setScrollTop(scrollTop) {
     this.el.scrollTop = scrollTop;
     return this;

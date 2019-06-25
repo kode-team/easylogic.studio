@@ -2292,7 +2292,6 @@ html, body {
 .csseditor .property > .property-body .property-item {
   padding: 0px;
   font-size: 11px;
-  margin-bottom: 5px;
 }
 .csseditor .border-item .border-direction {
   position: relative;
@@ -3243,6 +3242,7 @@ html, body {
 }
 .csseditor .layer-list .layer-item {
   padding: 5px !important;
+  margin-bottom: 5px;
 }
 .csseditor .layer-list .layer-item .detail {
   display: grid;

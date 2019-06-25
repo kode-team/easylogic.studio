@@ -55,7 +55,7 @@ export default class Inspector extends UIElement {
                 <OpacityProperty />                     
                 <BorderProperty />
                 <BorderRadiusProperty />
-                <BorderImageProperty />
+                <!--BorderImageProperty /-->
                 <OutlineProperty />
               </div>
               <div class="tab-content" data-value="3">

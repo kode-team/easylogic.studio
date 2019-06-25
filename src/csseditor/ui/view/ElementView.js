@@ -45,6 +45,18 @@ export default class ElementView extends UIElement {
     }
 
 
+    afterRender() {
+        setTimeout( () => {
+            this.refs.$view.scrollIntoView();
+
+            var $lock = this.parent.refs.$lock
+
+            $lock.addScrollLeft(-100);
+            $lock.addScrollTop(-100);
+
+        }, 100);
+    }
+
     template() {
         return `
             <div class='element-view' ref='$body'>
@@ -160,8 +172,8 @@ export default class ElementView extends UIElement {
     [BIND('$body')] () {
         var artboard = editor.selection.currentArtboard || { width: Length.px(1000), height: Length.px(1000)}
         
-        var width = Length.px(artboard.width.value + 400);
-        var height = Length.px(artboard.height.value + 400);
+        var width = Length.px(artboard.width.value + 5000);
+        var height = Length.px(artboard.height.value + 5000);
 
         return {
             style: {
@@ -174,12 +186,10 @@ export default class ElementView extends UIElement {
 
 
     [BIND('$view')] () {
-        var tempScale = 1;
-
         var artboard = editor.selection.currentArtboard || { width: Length.px(1000), height: Length.px(1000)}
 
-        var width = Length.px(artboard.width.value  * tempScale)
-        var height = Length.px(artboard.height.value  * tempScale)
+        var width = Length.px(artboard.width.value)
+        var height = Length.px(artboard.height.value)
 
         return {
             style: {

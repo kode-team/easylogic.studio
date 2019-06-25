@@ -3,6 +3,13 @@ import { POINTERSTART, MOVE, END } from "../../../util/Event";
 import { Length } from "../../../editor/unit/Length";
 import { editor } from "../../../editor/editor";
 
+const roundedLength = (px, fixedRound = 1) => {
+    return Length.px(px).round(fixedRound);
+}
+
+/**
+ * 원보 아이템의 크기를 가지고 scale 이랑 조합해서 world 의 크기를 구하는게 기본 컨셉 
+ */
 export default class SelectionToolView extends UIElement {
 
 
@@ -16,8 +23,9 @@ export default class SelectionToolView extends UIElement {
     [POINTERSTART('$selectionView .item') + MOVE() + END()] (e) {
         this.pointerType = e.$delegateTarget.attr('data-position')
 
+        editor.selection.setRectCache();        
         this.initSelectionTool();
-        editor.selection.setRectCache();
+
     }
 
     move (dx, dy) {
@@ -26,20 +34,7 @@ export default class SelectionToolView extends UIElement {
 
     end (dx, dy) {
         this.refreshSelectionToolView(dx, dy);
-    }    
-
-    modifyScaledItemRect(id, obj) {
-        
-        var tempRect = this.originalItemRect[id];
-
-        // selection 영역에 대한 크기 재정의 하는 곳 
-        if(!this.scaledItemRect[id]) {
-            this.scaledItemRect[id] = {}
-        }
-
-        //변화량만 따로 관리 한다. 
-        this.scaledItemRect[id] = Object.assign({},tempRect,this.scaledItemRect[id], obj)
-    }
+    }   
 
     refreshSelectionToolView (dx, dy, type) {
         var scaledDx = dx / editor.scale
@@ -49,75 +44,48 @@ export default class SelectionToolView extends UIElement {
         if (type === 'move') {
 
             editor.selection.each ((item, cachedItem, ) => {
-                item.reset({
-                    x: Length.px(cachedItem.x.value + scaledDx).round(1),
-                    y: Length.px(cachedItem.y.value + scaledDy).round(1)
-                })
 
-                var tempRect = this.originalItemRect[item.id];
-                    
-                this.modifyScaledItemRect(item.id, { 
-                    x: Length.px(tempRect.x + dx).round(1).value, 
-                    y: Length.px(tempRect.y + dy).round(1).value
-                })
+                item.move( 
+                    roundedLength(cachedItem.x.value + scaledDx),
+                    roundedLength(cachedItem.y.value + scaledDy)
+                )
             })
     
         } else {
 
             if (this.pointerType.includes('right')) {
                 editor.selection.each ((item, cachedItem, ) => {
-                    item.reset({ width: Length.px(cachedItem.width.value + scaledDx).round(1) })
-        
-                    var tempRect = this.originalItemRect[item.id];
-                    
-                    this.modifyScaledItemRect(item.id, { 
-                        width: Length.px(tempRect.width + dx).round(1).value
-                    })                    
+
+                    item.resizeWidth(
+                        roundedLength(cachedItem.width.value + scaledDx)
+                    )
 
                 })
             } else if (this.pointerType.includes('left')) {
                 editor.selection.each ((item, cachedItem, ) => {
-    
-                    item.reset({ 
-                        x: Length.px(cachedItem.x.value + scaledDx).round(1),
-                        width: Length.px(cachedItem.width.value - scaledDx).round(1) 
-                    })
-        
-                    var tempRect = this.originalItemRect[item.id];
 
-                    this.modifyScaledItemRect(item.id, { 
-                        x: Length.px(tempRect.x + dx).round(1).value,
-                        width: Length.px(tempRect.width - dx).round(1).value,
-                    })                 
+                    if (cachedItem.width.value - scaledDx >= 0) {
+                        item.moveX( roundedLength(cachedItem.x.value + scaledDx) )
+                        item.resizeWidth( roundedLength(cachedItem.width.value - scaledDx) )
+                    }
 
                 })
             } 
     
             if (this.pointerType.includes('bottom')) {      // 밑으로 향하는 애들 
                 editor.selection.each ((item, cachedItem, ) => {
-                    item.reset({ height: Length.px(cachedItem.height.value + scaledDy).round(1) })
-        
-                    var tempRect = this.originalItemRect[item.id];
 
-                    this.modifyScaledItemRect(item.id, { 
-                        height: Length.px(tempRect.height + dy).round(1).value
-                    })                 
+                    item.resizeHeight( roundedLength(cachedItem.height.value + scaledDy) )
 
                 })
             } else if (this.pointerType.includes('top')) {
                 editor.selection.each ((item, cachedItem, ) => {
-    
-                    item.reset({ 
-                        y: Length.px(cachedItem.y.value + scaledDy).round(1),
-                        height: Length.px(cachedItem.height.value - scaledDy).round(1) 
-                    })
-        
-                    var tempRect = this.originalItemRect[item.id];
 
-                    this.modifyScaledItemRect(item.id, { 
-                        y: Length.px(tempRect.y + dy).round(1).value,
-                        height: Length.px(tempRect.height - dy).round(1).value,
-                    })
+                    if ( cachedItem.height.value - scaledDy >= 0 ) {
+                        item.moveY( roundedLength(cachedItem.y.value + scaledDy) )                                
+                        item.resizeHeight( roundedLength(cachedItem.height.value - scaledDy) )    
+                    }
+
                 })
             }          
         }
@@ -136,9 +104,16 @@ export default class SelectionToolView extends UIElement {
         return this.originalRect;
     }
 
+    getOriginalArtboardRect () {
+        if (!this.originalArtboardRect) {
+            this.originalArtboardRect = this.parent.refs.$view.rect();
+        }
+
+        return this.originalArtboardRect;
+    }    
+
     [EVENT('refreshSelectionTool')] () {
         this.initSelectionTool();
-        this.makeSelectionTool();
     }
 
     [EVENT('initSelectionTool')] () {
@@ -151,35 +126,12 @@ export default class SelectionToolView extends UIElement {
 
     initSelectionTool() {
 
-        // selection tool 을 관리하기 위해 
-        // 원본 originalItemRect 와 
-        // 변화량을 가지고 있는 scaledItemRect 를 정의한다. 
-        //  scaledItemRect.x ===  originalItemRect.x + dx  형태로 되어 있다. 
-        // 최종 결과물은 scaledItemRect 를 통해서 표현한다. 
-        this.originalItemRect = {}
-        this.scaledItemRect = {} 
-        var originalRect = this.getOriginalRect()
+        this.originalArtboardRect = null
+        this.originalRect = null
 
         var html = editor.selection.items.map(it => {
-
-            var $el = this.parent.refs.$view.$(`[data-id='${it.id}']`);
-
-            if ($el) {
-                var r = $el.rect();
-
-                this.originalItemRect[it.id] = r;
-
-                r.x -= originalRect.x;
-                r.y -= originalRect.y;
-
-                var temp = [
-                    `left:${Length.px(r.x)};`,
-                    `top:${Length.px(r.y)};`,
-                    `width:${Length.px(r.width)};`,
-                    `height:${Length.px(r.height)};`
-                ].join('')
                 return `
-                <div class='selection-tool' style='${temp};'>
+                <div class='selection-tool'>
                     <div class='item' data-position='top'></div>
                     <div class='item' data-position='right'></div>
                     <div class='item' data-position='bottom'></div>
@@ -190,33 +142,51 @@ export default class SelectionToolView extends UIElement {
                     <div class='item' data-position='bottom-left'></div>
                 </div>
                 `
-            }
-
-            return '';
         }).join('')
 
         this.refs.$selectionView.html(html);
 
         this.cachedSelectionTools = this.refs.$selectionView.$$('.selection-tool');
+
+        this.makeSelectionTool();
     }    
 
+    getWorldPosition () {
+        var originalRect = this.getOriginalRect();
+        var originalArtboardRect = this.getOriginalArtboardRect();
+
+        return {
+            left: originalArtboardRect.left - originalRect.left,
+            top: originalArtboardRect.top - originalRect.top
+        }
+    }
+
     makeSelectionTool() {
-        // 딜레이가 너무 심하다.
-        // 왜 그런지 알아보자. 
-
-        editor.selection.items.filter(it => {
-            return this.scaledItemRect[it.id] 
-        }).forEach( (it, index) => {
-            var r = this.scaledItemRect[it.id];
-
-            this.cachedSelectionTools[index].css({
-                left: Length.px(r.x),
-                top: Length.px(r.y),
-                width: Length.px(r.width),
-                height: Length.px(r.height)
-            })
+        editor.selection.items.forEach( (item, index) => {
+            this.cachedSelectionTools[index].css( this.calculateWorldPosition(item) )
         })
         
+    }
+
+    calculateWorldPosition (item) {
+        var world = this.getWorldPosition();
+
+        var x = (item.x || Length.px(0));
+        var y = (item.y || Length.px(0));
+
+        return {
+            left: Length.px(x.value * editor.scale + world.left),
+            top: Length.px(y.value * editor.scale + world.top),
+            width: Length.px(item.width.value  *  editor.scale),
+            height: Length.px(item.height.value  * editor.scale),
+            transform: item.transform
+        }
+    }
+
+    [EVENT('refreshCanvas')] (obj = {}) {
+        if (obj.transform) {
+            this.makeSelectionTool(obj);
+        }
     }
 
     
