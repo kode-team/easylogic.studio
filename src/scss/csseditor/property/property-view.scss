@@ -5,6 +5,10 @@
   background-color: white;
   border-radius: 3px;
 
+  &.compact {
+    padding:0px;
+  }
+
   &.full {
     height: 100%;
     display: flex;

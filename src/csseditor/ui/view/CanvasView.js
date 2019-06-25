@@ -3,8 +3,8 @@ import UIElement, { EVENT } from "../../../util/UIElement";
 import { editor } from "../../../editor/editor";
 import { Project } from "../../../editor/items/Project";
 import { ArtBoard } from "../../../editor/items/ArtBoard";
-import { CLICK, DEBOUNCE, BIND, PREVENT, STOP, SCROLL, WHEEL, ALT } from "../../../util/Event";
-import { CHANGE_SELECTION, SCALE_DIRECTION_OUT, SCALE_DIRECTION_IN } from "../../types/event";
+import { CLICK, DEBOUNCE, PREVENT, STOP, WHEEL, ALT, THROTTLE } from "../../../util/Event";
+import { CHANGE_SELECTION } from "../../types/event";
 import { StyleParser } from "../../../editor/parse/StyleParser";
 import icon from "../icon/icon";
 import ElementView from "./ElementView";
@@ -90,7 +90,7 @@ export default class CanvasView extends UIElement {
     this.emit('changeScale')
   }
 
-  [WHEEL('$lock') + ALT + PREVENT] (e) {
+  [WHEEL('$lock') + ALT + PREVENT + THROTTLE(10)] (e) {
 
     var dt = e.deltaY < 0 ? 0.9 : 1.1;
     editor.scale *= dt; 

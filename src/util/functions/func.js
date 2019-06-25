@@ -14,6 +14,22 @@ export function debounce (callback, delay) {
         }, delay || 300);
     }
 }
+  
+
+export function throttle (callback, delay) {
+
+    var t = undefined;
+
+    return function ($1, $2, $3, $4, $5) {
+        if (!t) {
+            t = setTimeout(function () {
+                callback($1, $2, $3, $4, $5);
+                t = null; 
+            }, delay || 300);
+        }
+
+    }
+}
 
 export function keyEach (obj, callback) {
     Object.keys(obj).forEach( (key, index) => {

@@ -2226,6 +2226,9 @@ html, body {
   background-color: white;
   border-radius: 3px;
 }
+.csseditor .property.compact {
+  padding: 0px;
+}
 .csseditor .property.full {
   height: 100%;
   display: flex;
@@ -2931,7 +2934,7 @@ html, body {
 }
 .csseditor .keyframe-list .keyframe-item .offset-list {
   padding: 0px 10px;
-  height: 30px;
+  height: 20px;
   box-sizing: border-box;
 }
 .csseditor .keyframe-list .keyframe-item .offset-list .container {
@@ -2989,6 +2992,7 @@ html, body {
   border: 1px solid rgba(0, 0, 0, 0.1);
   position: relative;
   border-radius: 5px;
+  margin-top: 0px;
 }
 .csseditor .code-view-item > div pre::before {
   content: attr(title);
@@ -3743,13 +3747,10 @@ html, body {
 }
 .csseditor .css-property-editor .css-property-item > .title {
   grid-template-columns: 1fr 30px;
-  background-color: #2b8cf3;
-  color: white;
+  background-image: linear-gradient(to right, #d1d1ff, rgba(255, 255, 255, 0.282));
   border-radius: 3px;
   padding: 3px 5px;
-}
-.csseditor .css-property-editor .css-property-item > .title button svg path {
-  fill: white;
+  margin-bottom: 2px;
 }
 .csseditor .css-property-editor .css-property-item .value-editor {
   padding: 2px;
@@ -5511,8 +5512,10 @@ html, body {
 .csseditor .popup .keyframe-popup .box .offset-input {
   padding: 5px 0px;
 }
-.csseditor .popup .keyframe-popup .box .offset-input input {
-  width: 104px;
+.csseditor .popup .keyframe-popup .box .offset-input .title {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  grid-column-gap: 2px;
 }
 .csseditor .popup .keyframe-popup .box .keyframe-property-list {
   max-height: 300px;

@@ -6,7 +6,6 @@ import RangeEditor from "../RangeEditor";
 import { DirectionLength } from "../../../../../../editor/unit/DirectionLength";
 import DirectionEditor from "../DirectionEditor";
 
-
 export default class InsetEditor extends UIElement {
 
     components () {

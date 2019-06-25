@@ -32,9 +32,12 @@
 
       .offset-input {
         padding: 5px 0px;
-        input {
-          width: 104px;
+        .title {
+          display: grid;
+          grid-template-columns: 100px 1fr;
+          grid-column-gap: 2px;
         }
+
       }
 
       .keyframe-property-list {

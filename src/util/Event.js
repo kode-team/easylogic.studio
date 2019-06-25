@@ -170,8 +170,12 @@ export const FIT = CHECKER("fit");
 export const PASSIVE = CHECKER("passive");
 
 // event config method
-export const DEBOUNCE = (debounce = 100) => {
-  return CHECKER(`debounce(${debounce})`);
+export const DEBOUNCE = (t = 100) => {
+  return CHECKER(`debounce(${t})`);
+};
+
+export const THROTTLE = (t = 100) => {
+  return CHECKER(`throttle(${t})`);
 };
 
 export const CAPTURE = CHECKER("capture()");

@@ -5,12 +5,14 @@ import { Offset } from "../../../../../editor/css-property/Offset";
 import Dom from "../../../../../util/Dom";
 import { isUndefined } from "../../../../../util/functions/func";
 import CSSPropertyEditor from "./CSSPropertyEditor";
+import RangeEditor from "./RangeEditor";
 
 
 export default class OffsetEditor extends UIElement {
 
   components() {
     return {
+      RangeEditor,
       CSSPropertyEditor
     }
   }
@@ -47,20 +49,19 @@ export default class OffsetEditor extends UIElement {
         <div class='title'>
           <label>Offset</label>
           <div class='tools'>
-            <input type='number' min='0' max='100' step="0.01" ref='$offsetInput' /> %
+            <RangeEditor key='offset' calc='false' min='0' max='100' step="0.01" ref='$offsetInput' options="%" onchange='changeRangeEditor' />
           </div>
         </div>
       </div>
     `
   }
 
-  [INPUT('$offsetInput')] () {
+  [EVENT('changeRangeEditor')] (key, value) {
     var offset = this.state.offsets[this.selectedIndex];
-
     if (offset) {
-      offset.offset = Length.percent(this.refs.$offsetInput.value)
-      this.refresh();
-      this.modifyOffset();
+      offset.offset = value.clone()
+      this.refresh();      
+      this.modifyOffset();      
     }
   }
 
@@ -114,7 +115,7 @@ export default class OffsetEditor extends UIElement {
     var offset = this.state.offsets[this.selectedIndex];
 
     if (offset) {
-      this.getRef('$offsetInput').val(offset.offset.value);
+      this.children.$offsetInput.setValue(offset.offset);
     }
   }
 

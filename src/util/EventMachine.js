@@ -22,7 +22,8 @@ import {
   isUndefined,
   isString,
   isObject,
-  keyMap
+  keyMap,
+  throttle
 } from "./functions/func";
 import { WHITE_STRING } from "./css/types";
 import {
@@ -173,6 +174,7 @@ const getDefaultEventObject = (context, eventName, checkMethodFilters) => {
   const [afters, afterMethods] = splitMethodByKeyword(arr, "after");
   const [befores, beforeMethods] = splitMethodByKeyword(arr, "before");
   const [debounces, debounceMethods] = splitMethodByKeyword(arr, "debounce");
+  const [throttles, throttleMethods] = splitMethodByKeyword(arr, "throttle");
   const [captures] = splitMethodByKeyword(arr, "capture");
 
   // 위의 5개 필터 이외에 있는 코드들은 keycode 로 인식한다.
@@ -181,6 +183,7 @@ const getDefaultEventObject = (context, eventName, checkMethodFilters) => {
     ...afters,
     ...befores,
     ...debounces,
+    ...throttles,
     ...captures
   ];
 
@@ -195,6 +198,7 @@ const getDefaultEventObject = (context, eventName, checkMethodFilters) => {
     afterMethods,
     beforeMethods,
     debounceMethods,
+    throttleMethods,
     checkMethodList
   };
 };
@@ -228,6 +232,9 @@ const bindingEvent = (
   if (eventObject.debounceMethods.length) {
     var debounceTime = +eventObject.debounceMethods[0].target;
     callback = debounce(callback, debounceTime);
+  } else if (eventObject.throttleMethods.length) {
+    var throttleTime = +eventObject.throttleMethods[0].target;
+    callback = throttle(callback, throttleTime);
   }
 
   addEvent(context, eventObject, callback);

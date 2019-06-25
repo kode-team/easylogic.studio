@@ -1,7 +1,7 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
 import { BIND, LOAD, POINTERSTART, MOVE, END, IF } from "../../../util/Event";
 import { Length } from "../../../editor/unit/Length";
-import { CHANGE_SELECTION, SCALE_DIRECTION_IN } from "../../types/event";
+import { CHANGE_SELECTION } from "../../types/event";
 import { editor } from "../../../editor/editor";
 import Dom from "../../../util/Dom";
 import SelectionToolView from "./SelectionToolView";
