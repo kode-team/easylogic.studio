@@ -94,6 +94,7 @@ export default class CanvasView extends UIElement {
 
     var dt = e.deltaY < 0 ? 0.9 : 1.1;
     editor.scale *= dt; 
+    this.children.$scale.setValue(editor.scale * 100)
     this.emit('changeScale')
   }
 
