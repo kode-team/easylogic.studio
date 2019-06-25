@@ -1,8 +1,8 @@
 # EasyLogic Studio - Enjoyable CSS Gradient Editor
 
-This project is CSS Gradient editor.
+This project is Free OpenSource CSS editor.
 
-https://gradient.easylogic.studio/
+https://editor.easylogic.studio/
 
 You can use it as you see it.
 
