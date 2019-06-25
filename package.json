@@ -36,7 +36,7 @@
     "zip:app": "zip -r chrome-app/chrome-app.zip chrome-app",
     "zip:ext": "zip -r chrome-extension/chrome-extension.zip chrome-extension",
     "zip": "npm run zip:app && npm run zip:ext",
-    "dev": "webpack-dev-server --progress --open",
+    "dev": "webpack-dev-server --config=webpack.dev.config.js --progress --open",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
