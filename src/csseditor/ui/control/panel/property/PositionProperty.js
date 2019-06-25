@@ -35,7 +35,7 @@ export default class PositionProperty extends BaseProperty {
 
   getBody() {
     return html`
-      <div class="property-item position-item" ref="$positionItem"></div>
+      <div class="position-item" ref="$positionItem"></div>
     `;
   }
 
@@ -47,10 +47,10 @@ export default class PositionProperty extends BaseProperty {
       <div class='property-item'>
         <SelectEditor ref='$position' label='position' key='position' value='${current.position}' options=',absolute,relative,fixed,static' onchange="changRangeEditor" />
       </div>    
-      <div>
+      <div class='property-item'>
         <RangeEditor ref='$x' label='X' key='x' removable="true" value='${current.x}' min="-1000" max='1000' onchange='changRangeEditor' />
       </div>
-      <div>
+      <div class='property-item'>
         <RangeEditor ref='$y' label='Y' key='y' removable="true" value='${current.y}' min="-1000" max='1000' onchange='changRangeEditor' />
       </div>
     `;

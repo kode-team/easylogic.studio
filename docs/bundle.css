@@ -2295,6 +2295,7 @@ html, body {
 .csseditor .property > .property-body .property-item {
   padding: 0px;
   font-size: 11px;
+  margin-bottom: 5px;
 }
 .csseditor .border-item .border-direction {
   position: relative;
