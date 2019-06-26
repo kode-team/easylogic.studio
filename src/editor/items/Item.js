@@ -188,7 +188,7 @@ export class Item {
     var selected = this.json.selected ? 'selected' : ''
 
     return `
-    <${tagName} class='item ${selected}' data-id="${id}">${content ? content : ''}
+    <${tagName} class='element-item ${selected}' data-id="${id}">${content ? content : ''}
       ${layers.map(it => it.html)}
     </${tagName}>
     `

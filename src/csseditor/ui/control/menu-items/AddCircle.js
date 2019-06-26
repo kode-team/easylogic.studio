@@ -28,7 +28,7 @@ export default class AddCircle extends MenuItem {
       editor.selection.select(layer);
 
       this.emit('addElement');
-      this.emit('refreshCanvas');
+      // this.emit('refreshCanvas');
       this.emit(CHANGE_SELECTION)
     }
   }

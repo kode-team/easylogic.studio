@@ -3,6 +3,7 @@ import UIElement, { EVENT } from "../../../util/UIElement";
 import { editor } from "../../../editor/editor";
 import { DEBOUNCE, LOAD, } from "../../../util/Event";
 import { CSS_TO_STRING } from "../../../util/css/make";
+import Dom from "../../../util/Dom";
 
 
 export default class StyleView extends UIElement {
@@ -10,14 +11,17 @@ export default class StyleView extends UIElement {
   template() {
     return `
     <div class='style-view' style='display:none'>
-      <div ref='$styleArea'>
-        <style type='text/css' ref='$style'></style>  
-      </div>
       <div ref='$svgArea'>
         <svg width="0" height="0" ref='$svg'></svg>   
       </div>
     </div>
     `;
+  }
+
+  initialize() {
+    super.initialize()
+
+    this.refs.$head = Dom.create(document.head)
   }
 
   makeStyle (item) {
@@ -27,7 +31,7 @@ export default class StyleView extends UIElement {
       selectorString, 
       keyframeString 
     } = item.generateView(`[data-id='${item.id}']`)
-    return `<style type='text/css'>
+    return `<style type='text/css' data-id='${item.id}'>
       :root {
         ${CSS_TO_STRING(rootVariable)}
       }
@@ -46,15 +50,17 @@ export default class StyleView extends UIElement {
       return this.makeStyle(it);
     })
   }
- 
-  [LOAD('$styleArea')] () {
 
+  refreshStyleHead () {
+    var $temp = Dom.create('div')
     var project = editor.projects[0] || { layers : [] }
 
-    return project.artboards.map(item => {
-      return this.makeStyle(item)
+    project.artboards.forEach(item => {
+      $temp.html(this.makeStyle(item)).children().forEach($item => {
+        this.refs.$head.append($item);
+      })
     })
-  } 
+  }
 
 
   makeSvg (item) {
@@ -79,6 +85,26 @@ export default class StyleView extends UIElement {
     var computedCSS = this.refs.$canvas.getComputedStyle(...last)
     
     this.emit('refreshComputedStyleCode', computedCSS)
+  }
+
+  [EVENT('addElement')] () {
+    var item = editor.selection.current;
+
+    if (item) {
+      var $el = this.refs.$head.$(`[data-id="${item.id}"]`);
+      if ($el) {
+        $el.remove();
+      }
+
+      Dom.create('div').html(this.makeStyle(item)).children().forEach($item => {
+        this.refs.$head.append($item);
+      })
+    }
+  }
+
+  refresh() {
+    this.load();
+    this.refreshStyleHead();
   }
 
   [EVENT("refreshCanvas")]() { 

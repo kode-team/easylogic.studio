@@ -12,34 +12,50 @@ const roundedLength = (px, fixedRound = 1) => {
  */
 export default class SelectionToolView extends UIElement {
 
-
     template() {
         return `<div class='selection-view' 
                      ref='$selectionView' 
-                     style='pointer-events:none;position:absolute;left:0px;top:0px;right:0px;bottom:0px;'
+                     style='pointer-events:none;position:absolute;left:0px;top:0px;right:0px;bottom:0px;display:none;'
                 ></div>`
     }
 
     [POINTERSTART('$selectionView .item') + MOVE() + END()] (e) {
         this.pointerType = e.$delegateTarget.attr('data-position')
 
-        editor.selection.setRectCache();        
-        this.initSelectionTool();
+        this.parent.selectCurrent(...editor.selection.items)
 
+        editor.selection.setRectCache();        
+
+        this.isFirst = false; 
+    }
+
+    show () {
+        this.refs.$selectionView.show('inline-block')
+    }
+
+    hide () {
+        this.refs.$selectionView.hide()
     }
 
     move (dx, dy) {
+        if (!this.isFirst) {
+            this.isFirst = true; 
+            this.hide();
+        }
         this.refreshSelectionToolView(dx, dy);
+        this.parent.updateRealPosition();                
     }
 
     end (dx, dy) {
         this.refreshSelectionToolView(dx, dy);
+        this.parent.updateRealPosition();                
+        this.initSelectionTool();
+        this.emit('refreshCanvas', { transform  : true });
     }   
 
     refreshSelectionToolView (dx, dy, type) {
         var scaledDx = dx / editor.scale
         var scaledDy = dy / editor.scale
-
 
         if (type === 'move') {
 
@@ -50,7 +66,7 @@ export default class SelectionToolView extends UIElement {
                     roundedLength(cachedItem.y.value + scaledDy)
                 )
             })
-    
+
         } else {
 
             if (this.pointerType.includes('right')) {
@@ -87,13 +103,8 @@ export default class SelectionToolView extends UIElement {
                     }
 
                 })
-            }          
+            }                      
         }
-
-        this.emit('refreshCanvas');
-        this.emit('refreshRect');
-
-        this.makeSelectionTool();
     }
 
     getOriginalRect () {
@@ -125,7 +136,7 @@ export default class SelectionToolView extends UIElement {
     }
 
     initSelectionTool() {
-
+        this.show();
         this.originalArtboardRect = null
         this.originalRect = null
 

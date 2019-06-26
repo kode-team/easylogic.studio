@@ -27,7 +27,7 @@ export default class AddRect extends MenuItem {
       editor.selection.select(layer);
 
       this.emit('addElement');
-      this.emit('refreshCanvas');
+      // this.emit('refreshCanvas');
     }
   }
 }

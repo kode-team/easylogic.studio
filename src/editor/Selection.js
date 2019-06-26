@@ -1,4 +1,5 @@
 import { isFunction } from "../util/functions/func";
+import { Length } from "./unit/Length";
 
 
 function _traverse(obj, id) {
@@ -83,6 +84,33 @@ export class Selection {
 
   setRectCache () {
     this.cachedItems = this.items.map(it => it.toBound())
+
+    this.setAllRectCache();
+  }
+
+  setAllRectCache () {
+
+    var minX = Number.MAX_SAFE_INTEGER;
+    var minY = Number.MAX_SAFE_INTEGER;
+
+    var maxX = Number.MIN_SAFE_INTEGER;    
+    var maxY = Number.MIN_SAFE_INTEGER;
+
+    this.cachedItems.forEach(it => {
+      if (it.x.value < minX) { minX = it.x.value; }
+      if (it.y.value < minY) { minY = it.y.value; }
+      if (it.x2.value > maxX) { maxX = it.x2.value; }
+      if (it.y2.value > maxY) { maxY = it.y2.value; }
+    })
+
+    this.allRect = {
+      x: Length.px(minX),
+      y: Length.px(minY),
+      width: Length.px(maxX - minX),
+      height: Length.px(maxY - minY),
+      x2: Length.px(maxX),
+      y2: Length.px(maxY)
+    }
   }
 
   each (callback) {

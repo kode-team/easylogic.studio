@@ -53,7 +53,6 @@ export default class ElementView extends UIElement {
 
             $lock.addScrollLeft(-100);
             $lock.addScrollTop(-100);
-
         }, 100);
     }
 
@@ -68,7 +67,10 @@ export default class ElementView extends UIElement {
     }
 
     checkEmptyElement (e) {
-        return Dom.create(e.target).hasClass('item') === false;
+        var $el = Dom.create(e.target)
+        return $el.hasClass('element-item') === false && 
+                $el.hasClass('item') === false 
+        ;
     }
 
     [POINTERSTART('$el') + IF('checkEmptyElement') + MOVE('movePointer') + END('moveEndPointer')] (e) {
@@ -148,7 +150,7 @@ export default class ElementView extends UIElement {
         this.selectCurrent(...items)
     }
 
-    [POINTERSTART('$view .item') + MOVE('caculateMovedElement') + END('caculateMovedElement')] (e) {
+    [POINTERSTART('$view .element-item') + MOVE('calculateMovedElement') + END('calculateEndedElement')] (e) {
         this.startXY = e.xy ; 
         this.$element = e.$delegateTarget;
 
@@ -163,10 +165,46 @@ export default class ElementView extends UIElement {
         this.selectCurrent(...editor.selection.items)
 
         editor.selection.setRectCache()
+
+        this.first = false;
     }
 
-    caculateMovedElement (dx, dy) {
+    calculateMovedElement (dx, dy) {
+        if (!this.first) {
+            this.first = true; 
+            this.children.$selectionTool.hide();
+        }
+
         this.children.$selectionTool.refreshSelectionToolView(dx, dy, 'move');
+        this.updateRealPosition();          
+    }
+
+    updateRealPosition() {
+
+        editor.selection.items.forEach(item => {
+            var {x, y, width, height} = item.toBound();
+            if (this.cachedCurrentElement[item.id]) {
+                this.cachedCurrentElement[item.id].cssText(`left: ${x};top:${y};width:${width};height:${height}`)
+            }
+        })
+        this.emit('refreshRect');        
+    }
+
+    removeRealPosition() {
+
+        editor.selection.items.forEach(item => {
+            if (this.cachedCurrentElement[item.id]) {
+                this.cachedCurrentElement[item.id].cssText(``)
+            }
+        })
+    }
+
+    calculateEndedElement (dx, dy) {
+
+        this.children.$selectionTool.refreshSelectionToolView(dx, dy, 'move');
+        this.children.$selectionTool.initSelectionTool();
+        this.updateRealPosition();                
+        this.emit('refreshCanvas', { transform  : true });        
     }
 
     [BIND('$body')] () {
@@ -229,6 +267,7 @@ export default class ElementView extends UIElement {
     }
 
     selectCurrent (...args) {
+        this.cachedCurrentElement = {}
         var $selectedElement = this.$el.$$('.selected');
 
         if ($selectedElement) {
@@ -242,6 +281,7 @@ export default class ElementView extends UIElement {
             var list = this.$el.$$(selector);
             
             list.forEach(it => {
+                this.cachedCurrentElement[it.attr('data-id')] = it; 
                 it.addClass('selected')
             })
 
@@ -260,7 +300,7 @@ export default class ElementView extends UIElement {
         }
 
         var current = editor.selection.current || { id : ''} 
-        this.selectCurrent(current);
+        this.selectCurrent(current);        
     }
 
     modifyScale () {
