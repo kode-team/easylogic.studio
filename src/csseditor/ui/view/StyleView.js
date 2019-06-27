@@ -1,7 +1,7 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
 
 import { editor } from "../../../editor/editor";
-import { DEBOUNCE, LOAD, } from "../../../util/Event";
+import { DEBOUNCE, LOAD } from "../../../util/Event";
 import { CSS_TO_STRING } from "../../../util/css/make";
 import Dom from "../../../util/Dom";
 
@@ -54,6 +54,8 @@ export default class StyleView extends UIElement {
   refreshStyleHead () {
     var $temp = Dom.create('div')
     var project = editor.projects[0] || { layers : [] }
+
+    this.refs.$head.$$(`style`).forEach($style => $style.remove())
 
     project.artboards.forEach(item => {
       $temp.html(this.makeStyle(item)).children().forEach($item => {

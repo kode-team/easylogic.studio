@@ -26,7 +26,7 @@ export default class SelectionToolView extends UIElement {
                 ></div>`
     }
 
-    [POINTERSTART('$selectionView .selection-tool-item') + MOVE()] (e) {
+    [POINTERSTART('$selectionView .selection-tool-item') + MOVE() + END()] (e) {
         this.pointerType = e.$delegateTarget.attr('data-position')
 
         this.parent.selectCurrent(...editor.selection.items)
@@ -43,7 +43,7 @@ export default class SelectionToolView extends UIElement {
 
     end (dx, dy) {
         this.refreshSelectionToolView(dx, dy);
-        this.parent.updateRealPosition();                
+        this.parent.trigger('removeRealPosition');                
         // this.initSelectionTool();
         this.emit('refreshCanvas', { transform  : true });
     }   
@@ -80,7 +80,12 @@ export default class SelectionToolView extends UIElement {
         this.initSelectionTool();
     }
 
-    [EVENT('makeSelectionTool')] () {
+    [EVENT('makeSelectionTool')] (isScale) {
+        if (isScale) {
+            this.originalArtboardRect = null
+            this.originalRect = null    
+        }
+
         this.makeSelectionTool();
     }
 

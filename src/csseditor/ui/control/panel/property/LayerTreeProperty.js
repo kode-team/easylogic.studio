@@ -41,7 +41,7 @@ export default class LayerTreeProperty extends BaseProperty {
     return artboard.layers.map( (layer, index) => {
       var selected = editor.selection.check(layer) ? 'selected' : ''
       return ` 
-        <div class='property-item layer-item ${selected}'>
+        <div class='property-item layer-item ${selected}' data-layer-id='${layer.id}'>
           <div class='detail'>
             <label data-index='${index}'>${layer.name}</label>
             <div class="tools">
@@ -142,7 +142,25 @@ export default class LayerTreeProperty extends BaseProperty {
     }
   }
 
+  [EVENT('emptySelection')] () {
+    this.refs.$layerList.$$('.selected').forEach(it => {
+      it.removeClass('selected')
+    })
+  }
 
+  [EVENT('changeSelection')] () {
+    this.refs.$layerList.$$('.selected').forEach(it => {
+      it.removeClass('selected')
+    })
+
+    var selector = editor.selection.items.map(it => {
+      return `[data-layer-id="${it.id}"]`
+    }).join(',')
+
+    this.refs.$layerList.$$(selector).forEach(it => {
+      it.addClass('selected')
+    })
+  }  
 
   [EVENT(CHANGE_SELECTION, 'addElement')] () {
     this.refresh();

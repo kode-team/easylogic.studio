@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
-import { BIND, LOAD, POINTERSTART, MOVE, END, IF } from "../../../util/Event";
+import { BIND, LOAD, POINTERSTART, MOVE, END, IF, DEBOUNCE } from "../../../util/Event";
 import { Length } from "../../../editor/unit/Length";
 import { CHANGE_SELECTION } from "../../types/event";
 import { editor } from "../../../editor/editor";
@@ -148,6 +148,13 @@ export default class ElementView extends UIElement {
         })
 
         this.selectCurrent(...items)
+
+        if (items.length) {
+            this.emit('changeSelection')
+        } else {
+            this.emit('emptySelection')
+        }
+
     }
 
     [POINTERSTART('$view .element-item') + MOVE('calculateMovedElement') + END('calculateEndedElement')] (e) {
@@ -169,7 +176,8 @@ export default class ElementView extends UIElement {
 
     calculateMovedElement (dx, dy) {
         this.children.$selectionTool.refreshSelectionToolView(dx, dy, 'move');
-        this.updateRealPosition();          
+        this.updateRealPosition();     
+        // this.emit('refreshCanvas', { transform: true })     
     }
 
     updateRealPosition() {
@@ -183,7 +191,7 @@ export default class ElementView extends UIElement {
         this.emit('refreshRect');        
     }
 
-    removeRealPosition() {
+    [EVENT('removeRealPosition')] () {
 
         editor.selection.items.forEach(item => {
             if (this.cachedCurrentElement[item.id]) {
@@ -195,8 +203,8 @@ export default class ElementView extends UIElement {
     calculateEndedElement (dx, dy) {
 
         this.children.$selectionTool.refreshSelectionToolView(dx, dy, 'move');
-        this.updateRealPosition();                        
-        this.emit('refreshCanvas', { transform  : true });        
+        this.trigger('removeRealPosition');                        
+        this.emit('refreshCanvas');        
     }
 
     [BIND('$body')] () {
@@ -300,7 +308,7 @@ export default class ElementView extends UIElement {
             transform: `translate(-50%, -50%) scale(${editor.scale})`
         })
 
-        this.emit('initSelectionTool');
+        this.emit('makeSelectionTool', true);
     }
 
     [EVENT('changeScale')] () {
