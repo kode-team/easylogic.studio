@@ -74,7 +74,7 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
 .selection-tool {
   outline: $pointer-color 1px solid;
   position:absolute;
-  .item { 
+  .selection-tool-item { 
     position: absolute;
     transform: translate(-50%, -50%);
     display: inline-block;
@@ -87,50 +87,50 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
     pointer-events: all;
     cursor: pointer;
 
-    &[data-position="top-left"] {
+    &[data-position="to top left"] {
       left: 0px;
       top: 0px;
       cursor: nwse-resize;
     }
 
-    &[data-position="top-right"] {
+    &[data-position="to top right"] {
       left: 100%;
       top: 0px;
       cursor: nesw-resize;      
     }    
 
-    &[data-position="top"] {
+    &[data-position="to top"] {
       left: 50%;
       top: 0px;
       cursor: ns-resize;
     }        
 
-    &[data-position="left"] {
+    &[data-position="to left"] {
       left: 0px;
       top: 50%;
       cursor: ew-resize;
     }
 
-    &[data-position="right"] {
+    &[data-position="to right"] {
       left: 100%;
       top: 50%;
       cursor: ew-resize;
     }    
 
-    &[data-position="bottom"] {
+    &[data-position="to bottom"] {
       left: 50%;
       top: 100%;
       cursor: ns-resize;      
     }          
     
     
-    &[data-position="bottom-left"] {
+    &[data-position="to bottom left"] {
       left: 0px;
       top: 100%;
       cursor: nesw-resize;            
     }
 
-    &[data-position="bottom-right"] {
+    &[data-position="to bottom right"] {
       left: 100%;
       top: 100%;
       cursor: nwse-resize;      

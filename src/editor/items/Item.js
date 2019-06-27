@@ -5,6 +5,19 @@ import {
 } from "../../util/functions/func";
 import { editor } from "../editor";
 
+
+function _traverse(obj) {
+  var results = [] 
+
+  obj.layers.length && obj.layers.forEach(it => {
+    results.push(..._traverse(it));
+  })
+
+  results.push(obj);
+
+  return results; 
+}
+
 export class Item {
   constructor(json = {}) {
     if (json instanceof Item) {
@@ -192,5 +205,9 @@ export class Item {
       ${layers.map(it => it.html)}
     </${tagName}>
     `
+  }
+
+  get allLayers () {
+    return [..._traverse(this)]
   }
 }

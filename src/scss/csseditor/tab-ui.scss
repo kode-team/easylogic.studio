@@ -27,6 +27,7 @@ $tab-horizontal-header-right-width: 60px;
     }
 
     > .tab-header {
+      display: inline-block;
       border-bottom: 1px solid $border-color;
       > .tab-item {
         // border-right: 1px solid $border-color;
@@ -34,6 +35,7 @@ $tab-horizontal-header-right-width: 60px;
         background-color: white;
         position: relative;
         padding: 4px;
+        width: 31px;
 
         &:first-child {
           &:hover {

@@ -1320,9 +1320,6 @@ html, body {
   left: 0px;
   top: 0px;
 }
-.csseditor [data-embed-editor-target] {
-  border: 1px dashed black;
-}
 .csseditor .layout-main {
   position: absolute;
   left: 0px;
@@ -1562,6 +1559,7 @@ html, body {
   top: 30px;
 }
 .csseditor .tab.number-tab > .tab-header {
+  display: inline-block;
   border-bottom: 1px solid #cccccc;
 }
 .csseditor .tab.number-tab > .tab-header > .tab-item {
@@ -1569,6 +1567,7 @@ html, body {
   background-color: white;
   position: relative;
   padding: 4px;
+  width: 31px;
 }
 .csseditor .tab.number-tab > .tab-header > .tab-item:first-child:hover label {
   left: 10px;
@@ -2165,7 +2164,7 @@ html, body {
   outline: rgba(15, 114, 207, 0.8) 1px solid;
   position: absolute;
 }
-.csseditor .selection-tool .item {
+.csseditor .selection-tool .selection-tool-item {
   position: absolute;
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
@@ -2179,42 +2178,42 @@ html, body {
   pointer-events: all;
   cursor: pointer;
 }
-.csseditor .selection-tool .item[data-position=top-left] {
+.csseditor .selection-tool .selection-tool-item[data-position="to top left"] {
   left: 0px;
   top: 0px;
   cursor: nwse-resize;
 }
-.csseditor .selection-tool .item[data-position=top-right] {
+.csseditor .selection-tool .selection-tool-item[data-position="to top right"] {
   left: 100%;
   top: 0px;
   cursor: nesw-resize;
 }
-.csseditor .selection-tool .item[data-position=top] {
+.csseditor .selection-tool .selection-tool-item[data-position="to top"] {
   left: 50%;
   top: 0px;
   cursor: ns-resize;
 }
-.csseditor .selection-tool .item[data-position=left] {
+.csseditor .selection-tool .selection-tool-item[data-position="to left"] {
   left: 0px;
   top: 50%;
   cursor: ew-resize;
 }
-.csseditor .selection-tool .item[data-position=right] {
+.csseditor .selection-tool .selection-tool-item[data-position="to right"] {
   left: 100%;
   top: 50%;
   cursor: ew-resize;
 }
-.csseditor .selection-tool .item[data-position=bottom] {
+.csseditor .selection-tool .selection-tool-item[data-position="to bottom"] {
   left: 50%;
   top: 100%;
   cursor: ns-resize;
 }
-.csseditor .selection-tool .item[data-position=bottom-left] {
+.csseditor .selection-tool .selection-tool-item[data-position="to bottom left"] {
   left: 0px;
   top: 100%;
   cursor: nesw-resize;
 }
-.csseditor .selection-tool .item[data-position=bottom-right] {
+.csseditor .selection-tool .selection-tool-item[data-position="to bottom right"] {
   left: 100%;
   top: 100%;
   cursor: nwse-resize;

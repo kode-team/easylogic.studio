@@ -69,7 +69,7 @@ export default class ElementView extends UIElement {
     checkEmptyElement (e) {
         var $el = Dom.create(e.target)
         return $el.hasClass('element-item') === false && 
-                $el.hasClass('item') === false 
+                $el.hasClass('selection-tool-item') === false 
         ;
     }
 
@@ -165,16 +165,9 @@ export default class ElementView extends UIElement {
         this.selectCurrent(...editor.selection.items)
 
         editor.selection.setRectCache()
-
-        this.first = false;
     }
 
     calculateMovedElement (dx, dy) {
-        if (!this.first) {
-            this.first = true; 
-            this.children.$selectionTool.hide();
-        }
-
         this.children.$selectionTool.refreshSelectionToolView(dx, dy, 'move');
         this.updateRealPosition();          
     }
@@ -202,8 +195,7 @@ export default class ElementView extends UIElement {
     calculateEndedElement (dx, dy) {
 
         this.children.$selectionTool.refreshSelectionToolView(dx, dy, 'move');
-        this.children.$selectionTool.initSelectionTool();
-        this.updateRealPosition();                
+        this.updateRealPosition();                        
         this.emit('refreshCanvas', { transform  : true });        
     }
 

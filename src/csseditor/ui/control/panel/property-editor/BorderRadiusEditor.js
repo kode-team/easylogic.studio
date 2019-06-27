@@ -4,6 +4,7 @@ import { Length } from "../../../../../editor/unit/Length";
 import icon from "../../../icon/icon";
 import UIElement, { EVENT } from "../../../../../util/UIElement";
 import RangeEditor from "./RangeEditor";
+import BorderRadius from "../../../../../editor/css-property/BorderRadius";
 
 const typeList = [
   { key: "border-top-left-radius", title: "Top Left" },
@@ -21,14 +22,8 @@ export default class BorderRadiusEditor extends UIElement {
     }
   }
   initState() {
-    return {
-      isAll: true,
-      'border-radius': Length.px(0),
-      'border-top-left-radius': Length.px(0),
-      'border-top-right-radius': Length.px(0),
-      'border-bottom-left-radius': Length.px(0),
-      'border-bottom-right-radius': Length.px(0)
-    }
+
+    return BorderRadius.parseStyle(this.props.value)
   }
 
   template() {

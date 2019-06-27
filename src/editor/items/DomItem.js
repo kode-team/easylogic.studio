@@ -46,8 +46,8 @@ export class DomItem extends GroupItem {
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
       'position': 'absolute',
-      'x': '',
-      'y': '',
+      'x': Length.px(0),
+      'y': Length.px(0),
       'right': '',
       'bottom': '',
       'width': Length.px(300),
@@ -370,7 +370,6 @@ export class DomItem extends GroupItem {
     }
   }
 
-  // 0 데이타는 화면에 표시하지 않는다.
   toBorderRadiusCSS() {
     return this.toStringPropertyCSS('border-radius')
   }

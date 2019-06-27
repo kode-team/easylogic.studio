@@ -161,34 +161,8 @@ export class StyleParser {
   parseBorderRadius() {
     var style = this.getStyle();
 
-    var obj = {};
-
-    if (style["border-radius"]) {
-      obj = {
-        borderRadius: {
-          all: Length.parse(style.borderRadius)
-        }
-      };
-    } else {
-      var borderRadius = {};
-
-      if (style.borderTopLeftRadius) {
-        borderRadius.topLeft = Length.parse(style.borderTopLeftRadius);
-      }
-
-      if (style.borderTopRightRadius) {
-        borderRadius.topRight = Length.parse(style.borderTopRightRadius);
-      }
-
-      if (style.borderBottomLeftRadius) {
-        borderRadius.bottomLeft = Length.parse(style.borderBottomLeftRadius);
-      }
-
-      if (style.borderBottomRightRadius) {
-        borderRadius.bottomRight = Length.parse(style.borderBottomRightRadius);
-      }
-
-      obj = { borderRadius };
+    var obj = { 
+        'border-radius': style['border-radius'] || ''
     }
 
     return obj;

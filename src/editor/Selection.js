@@ -1,6 +1,12 @@
 import { isFunction } from "../util/functions/func";
 import { Length } from "./unit/Length";
+import { MovableItem } from "./items/MovableItem";
 
+
+
+const roundedLength = (px, fixedRound = 1) => {
+  return Length.px(px).round(fixedRound);
+}
 
 function _traverse(obj, id) {
   var results = [] 
@@ -61,15 +67,19 @@ export class Selection {
 
   }
 
-
   select(...args) {
     this.items = (args || []).filter(it => !it.lock); 
+
+    this.itemKeys = {}
+    this.items.forEach(it => {
+      this.itemKeys[it.id] = true; 
+    })
 
     this.setRectCache();
   }
 
   check (item) {
-    return this.items.includes(item);
+    return this.itemKeys[item.id]
   }
 
   empty () {
@@ -103,14 +113,14 @@ export class Selection {
       if (it.y2.value > maxY) { maxY = it.y2.value; }
     })
 
-    this.allRect = {
+    this.allRect = new MovableItem({
       x: Length.px(minX),
       y: Length.px(minY),
       width: Length.px(maxX - minX),
       height: Length.px(maxY - minY),
       x2: Length.px(maxX),
       y2: Length.px(maxY)
-    }
+    })
   }
 
   each (callback) {
@@ -121,5 +131,44 @@ export class Selection {
       })
     }
 
+  }
+
+  move (dx, dy) {
+    this.each ((item, cachedItem, ) => {
+      item.move( 
+        roundedLength(cachedItem.x.value + dx),
+        roundedLength(cachedItem.y.value + dy)
+      )
+    })
+  }
+
+  moveRight (dx) {
+    this.each ((item, cachedItem, ) => {
+      item.resizeWidth(roundedLength(cachedItem.width.value + dx))
+    })
+  }
+
+  moveLeft (dx) {
+    this.each ((item, cachedItem, ) => {
+      if (cachedItem.width.value - dx >= 0) {
+          item.moveX( roundedLength(cachedItem.x.value + dx) )
+          item.resizeWidth( roundedLength(cachedItem.width.value - dx) )
+      }
+    })    
+  }
+
+  moveBottom (dy) {
+    this.each ((item, cachedItem, ) => {
+      item.resizeHeight( roundedLength(cachedItem.height.value + dy) )
+    })    
+  }
+
+  moveTop (dy) {
+    this.each ((item, cachedItem, ) => {
+      if ( cachedItem.height.value - dy >= 0 ) {
+          item.moveY( roundedLength(cachedItem.y.value + dy) )                                
+          item.resizeHeight( roundedLength(cachedItem.height.value - dy) )    
+      }
+    })
   }
 }
