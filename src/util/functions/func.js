@@ -1,5 +1,34 @@
 import { WHITE_STRING } from "../css/types";
 
+// export function debounceFrame (callback, delay) {
+//     var t = { delay, start: -1, end : Number.MAX_SAFE_INTEGER } 
+
+//     return function next($1, $2, $3, $4, $5) {
+
+//         if (t.start == -1 ) {
+//             t.start = Date.now(); 
+//             t.end = t.start + t.delay; 
+//         } else {
+//             if (t.end > Date.now()) {
+//                 t.start = t.end
+//                 t.end = t.start + t.delay 
+//             }
+//         }
+
+//         // console.log(t.start, t.end, t.delay)
+
+//         if (t.end < Date.now()) {
+//             // console.log('cancel', t.start, t.end, t.delay)
+//             callback ($1, $2, $3, $4, $5);
+//             if (t.timer) cancelAnimationFrame(t.timer);
+//             t = { delay, start: -1, end : Number.MAX_SAFE_INTEGER } ; 
+//         } else {
+//             t.timer = requestAnimationFrame(next);
+//         }
+
+//     }
+// }
+
 export function debounce (callback, delay) {
 
     var t = undefined;
@@ -168,7 +197,7 @@ export const html = (strings, ...args) => {
         }
 
         results = results.map(r => {
-            if (isObject(r)) {
+            if (isObject(r) && !isArray(r)) {
                 return Object.keys(r).map(key => {
                     return `${key}="${r[key]}"`
                 }).join(WHITE_STRING)

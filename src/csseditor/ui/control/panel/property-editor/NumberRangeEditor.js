@@ -2,7 +2,6 @@ import UIElement from "../../../../../util/UIElement";
 import { Length } from "../../../../../editor/unit/Length";
 import { LOAD, INPUT, CLICK } from "../../../../../util/Event";
 import icon from "../../../icon/icon";
-import { html } from "../../../../../util/functions/func";
 
 export default class NumberRangeEditor extends UIElement {
 
@@ -43,8 +42,8 @@ export default class NumberRangeEditor extends UIElement {
 
         var realValue = (+value).toString();
         
-        return html`
-        <div class='number-range-editor ${hasLabel} ${isRemovable} ${layoutClass}' data-selected-type='${type}' ref='$range'>
+        return `
+        <div class='number-range-editor ${hasLabel} ${isRemovable} ${layoutClass}' data-selected-type='${type}'>
             ${label ? `<label>${label}</label>` : '' }
             <div class='range-editor-type' data-type='range'>
                 <div class='area'>

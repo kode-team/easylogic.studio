@@ -1,7 +1,6 @@
 import { EVENT } from "../../../../util/UIElement";
 import { Length } from "../../../../editor/unit/Length";
 import { LOAD, CLICK, POINTERSTART, MOVE } from "../../../../util/Event";
-import { html } from "../../../../util/functions/func";
 import RangeEditor from "../panel/property-editor/RangeEditor";
 import BasePopup from "./BasePopup";
 import EmbedColorPicker from "../panel/property-editor/EmbedColorPicker";
@@ -40,7 +39,7 @@ export default class BoxShadowPropertyPopup extends BasePopup {
   }
 
   [LOAD("$popup")]() {
-    return html`
+    return `
       <div class='box'>
         <EmbedColorPicker ref='$colorpicker' value='${this.state.color}' onchange='changeColor' />
       </div>
@@ -60,20 +59,20 @@ export default class BoxShadowPropertyPopup extends BasePopup {
           <div
             class="pointer"
             ref="$pointer"
-            style="left: ${this.state.offsetX.toString()};top: ${this.state.offsetY.toString()}"
+            style="left: ${this.state.offsetX};top: ${this.state.offsetY}"
           ></div>
         </div>        
         <div class="offset-x">
-          <RangeEditor ref='$offsetX' label='X' key='offsetX' value="${this.state.offsetX.toString()}" onchange='changeRangeEditor' />
+          <RangeEditor ref='$offsetX' label='X' key='offsetX' value="${this.state.offsetX}" onchange='changeRangeEditor' />
         </div>
         <div class="offset-y">
-          <RangeEditor ref='$offsetY' label='Y' key='offsetY' value="${this.state.offsetY.toString()}" onchange='changeRangeEditor' />        
+          <RangeEditor ref='$offsetY' label='Y' key='offsetY' value="${this.state.offsetY}" onchange='changeRangeEditor' />        
         </div>
         <div class="blur-radius">
-          <RangeEditor ref='$blurRadius' label='Blur' key='blurRadius' value="${this.state.blurRadius.toString()}" onchange='changeRangeEditor' />        
+          <RangeEditor ref='$blurRadius' label='Blur' key='blurRadius' value="${this.state.blurRadius}" onchange='changeRangeEditor' />        
         </div>
         <div class="spread-radius">
-          <RangeEditor ref='$spreadRadius' label='Spread' key='spreadRadius' value="${this.state.spreadRadius.toString()}" onchange='changeRangeEditor' />        
+          <RangeEditor ref='$spreadRadius' label='Spread' key='spreadRadius' value="${this.state.spreadRadius}" onchange='changeRangeEditor' />        
         </div>
 
       </div>

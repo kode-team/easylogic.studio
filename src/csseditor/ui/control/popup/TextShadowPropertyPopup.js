@@ -1,7 +1,6 @@
 import { EVENT } from "../../../../util/UIElement";
 import { Length } from "../../../../editor/unit/Length";
 import { LOAD, POINTERSTART, MOVE } from "../../../../util/Event";
-import { html } from "../../../../util/functions/func";
 import RangeEditor from "../panel/property-editor/RangeEditor";
 import BasePopup from "./BasePopup";
 import EmbedColorPicker from "../panel/property-editor/EmbedColorPicker";
@@ -37,7 +36,7 @@ export default class TextShadowPropertyPopup extends BasePopup {
   }
 
   [LOAD("$popup")]() {
-    return html`
+    return `
       <div class='box'>
         <EmbedColorPicker ref='$colorpicker' value='${this.state.color}' onchange='changeColor' />
       </div>
@@ -46,20 +45,20 @@ export default class TextShadowPropertyPopup extends BasePopup {
           <div
             class="pointer"
             ref="$pointer"
-            style="left: ${this.state.offsetX.toString()};top: ${this.state.offsetY.toString()}"
+            style="left: ${this.state.offsetX};top: ${this.state.offsetY}"
           ></div>
         </div>
         <div>
           <label>Offset X</label>
-          <RangeEditor ref='$offsetX' calc='false' key='offsetX' min="-100" max='100' value='${this.state.offsetX.toString()}' onchange='changeShadow' />
+          <RangeEditor ref='$offsetX' calc='false' key='offsetX' min="-100" max='100' value='${this.state.offsetX}' onchange='changeShadow' />
         </div>
         <div>
           <label>Offset Y</label>      
-          <RangeEditor ref='$offsetY' calc='false' key='offsetY' min="-100" max='100' value='${this.state.offsetY.toString()}' onchange='changeShadow' />
+          <RangeEditor ref='$offsetY' calc='false' key='offsetY' min="-100" max='100' value='${this.state.offsetY}' onchange='changeShadow' />
         </div>
         <div>
           <label>Blur Radius</label>
-          <RangeEditor ref='$blurRadius' calc='false' key='blurRadius' value='${this.state.blurRadius.toString()}' onchange='changeShadow' />
+          <RangeEditor ref='$blurRadius' calc='false' key='blurRadius' value='${this.state.blurRadius}' onchange='changeShadow' />
         </div>
       </div>
     `;

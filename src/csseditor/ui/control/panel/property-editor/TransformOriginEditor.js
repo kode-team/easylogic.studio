@@ -1,5 +1,4 @@
 import { CLICK, LOAD } from "../../../../../util/Event";
-import { html } from "../../../../../util/functions/func";
 import { Length } from "../../../../../editor/unit/Length";
 import icon from "../../../icon/icon";
 import UIElement, { EVENT } from "../../../../../util/UIElement";
@@ -72,7 +71,7 @@ export default class TransformOriginEditor extends UIElement {
     var selectedValue = this.state.isAll ? 'all' : 'partitial'
     var transformOrigin = this.state['transform-origin'];
 
-    return html`
+    return `
       <div class="property-item transform-origin-item">
         <div class="radius-selector" data-selected-value="${selectedValue}" ref="$selector">
           <button type="button" data-value="all">${icon.border_all}</button>
@@ -81,7 +80,7 @@ export default class TransformOriginEditor extends UIElement {
           </button>
         </div>
         <div class="radius-value">
-          <RangeEditor ref='$all' key='transform-origin' value="${transformOrigin.toString()}" onchange='changeTransformOrigin' />
+          <RangeEditor ref='$all' key='transform-origin' value="${transformOrigin}" onchange='changeTransformOrigin' />
         </div>
       </div>
       <div
@@ -92,13 +91,13 @@ export default class TransformOriginEditor extends UIElement {
           ${typeList.map(it => {
             return `
               <div>
-                  <RangeEditor ref='$${it.key}' label='${it.title}' key='${it.key}' value="${this.state[it.key].toString()}" onchange='changeTransformOrigin' />
+                  <RangeEditor ref='$${it.key}' label='${it.title}' key='${it.key}' value="${this.state[it.key]}" onchange='changeTransformOrigin' />
               </div>  
             `;
-          })}
+          }).join('')}
 
           <div>
-            <RangeEditor ref='$transform-origin-z' label='Z' key='transform-origin-z' value="${(this.state['transform-origin-z'] || "").toString()}" onchange='changeTransformOrigin' />
+            <RangeEditor ref='$transform-origin-z' label='Z' key='transform-origin-z' value="${(this.state['transform-origin-z'] || "")}" onchange='changeTransformOrigin' />
           </div>  
         </div>
       </div>

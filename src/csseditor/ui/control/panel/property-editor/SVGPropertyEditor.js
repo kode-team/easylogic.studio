@@ -1,4 +1,4 @@
-import { html } from "../../../../../util/functions/func";
+
 import icon from "../../../icon/icon";
 import {
   LOAD,
@@ -42,7 +42,7 @@ export default class SVGPropertyEditor extends UIElement {
   }
 
   template() {
-    return html`
+    return `
       <div class='svg-property-editor'>
           <div class='label' >
               <label>${this.props.title || ''}</label>
@@ -50,7 +50,7 @@ export default class SVGPropertyEditor extends UIElement {
                 <select ref="$propertySelect">
                   ${propertyList.map(property => {
                     return `<option value='${property.type}'>${property.title}</option>`;
-                  })}
+                  }).join('')}
                 </select>
                 <button type="button" ref="$add" title="add Property">${icon.add} ${this.props.title ? '' : 'Add'}</button>
               </div>

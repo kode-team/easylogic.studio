@@ -1,6 +1,5 @@
 import BaseProperty from "./BaseProperty";
 import { LOAD, DEBOUNCE } from "../../../../../util/Event";
-import { html } from "../../../../../util/functions/func";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
 
@@ -34,7 +33,7 @@ export default class PositionProperty extends BaseProperty {
   }
 
   getBody() {
-    return html`
+    return `
       <div class="position-item" ref="$positionItem"></div>
     `;
   }

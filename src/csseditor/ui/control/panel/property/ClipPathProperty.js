@@ -1,5 +1,4 @@
 import BaseProperty from "./BaseProperty";
-import { html } from "../../../../../util/functions/func";
 import icon from "../../../icon/icon";
 import {
   LOAD,
@@ -20,13 +19,13 @@ export default class ClipPathProperty extends BaseProperty {
   }
 
   getTools() {
-    return html`
+    return `
       <button type="button" ref="$add" title="add Clip Path">${icon.add}</button>
     `;
   }
 
   makeClipPathTemplate (clippath) {
-    return html`
+    return `
       <div class='clippath-item'>
         <div class='title'>
           <div class='name'>${clippath}</div>

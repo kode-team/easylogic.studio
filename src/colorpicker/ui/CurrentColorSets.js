@@ -20,13 +20,13 @@ export default class CurrentColorSets extends UIElement {
         const currentColorSets  = this.parent.manager.getCurrentColorSets()
         const colors  = this.parent.manager.getCurrentColors()
 
-        return html`<div class="current-color-sets">
+        return `<div class="current-color-sets">
             ${colors.map( (color, i) => {
                 return `<div class="color-item" title="${color}" data-index="${i}" data-color="${color}">
                     <div class="empty"></div>
                     <div class="color-view" style="background-color: ${color}"></div>
                 </div>`
-            })}   
+            }).join('')}   
             ${currentColorSets.edit ? `<div class="add-color-item">+</div>` : ''}         
             </div>`
     }    

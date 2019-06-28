@@ -5,6 +5,8 @@ import { CHANGE_SELECTION } from "../../types/event";
 import { editor } from "../../../editor/editor";
 import Dom from "../../../util/Dom";
 import SelectionToolView from "./SelectionToolView";
+import GuideLineView from "./GuideLineView";
+
 
 
 
@@ -30,7 +32,8 @@ export default class ElementView extends UIElement {
 
     components() {
         return {
-            SelectionToolView
+            SelectionToolView,
+            GuideLineView
         }
     }
 
@@ -61,7 +64,9 @@ export default class ElementView extends UIElement {
             <div class='element-view' ref='$body'>
                 <div class='canvas-view' ref='$view'></div>
                 <div ref='$dragAreaRect' style='pointer-events:none;position: absolute;border:0.5px dashed #556375;box-sizing:border-box;left:-10000px;'></div>
+                <GuideLineView ref='$guideLineView' />                
                 <SelectionToolView ref='$selectionTool' />
+
             </div>
         `
     }
@@ -203,8 +208,8 @@ export default class ElementView extends UIElement {
     calculateEndedElement (dx, dy) {
 
         this.children.$selectionTool.refreshSelectionToolView(dx, dy, 'move');
-        this.trigger('removeRealPosition');                        
-        this.emit('refreshCanvas');        
+        this.emit('refreshCanvas');               
+        this.trigger('removeRealPosition');
     }
 
     [BIND('$body')] () {

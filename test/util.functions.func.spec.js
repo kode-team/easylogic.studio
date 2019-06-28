@@ -12,7 +12,7 @@ test('func - html 2', () => {
 });
 
 test('func - html short tag ', () => {
-    var str = html`<b a='1' /> <b b='2' />`
+    var str = html`<b a='1' /><b b='2' />`
     expect(str).toEqual(`<b a='1' ></b> <b b='2' ></b>`);
 });
 

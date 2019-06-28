@@ -33,6 +33,10 @@ export class GaussianBlurSVGFilter extends SVGFilter {
     });
   }
 
+  convert (obj) {
+    obj.stdDeviation = Length.parse(obj.stdDeviation)
+    return obj; 
+  }
 
   toString() {
     var { stdDeviation } = this.json; 
@@ -68,6 +72,12 @@ export class TurbulenceSVGFilter extends SVGFilter {
     });
   }
 
+  convert (obj) {
+    obj.baseFrequency = Length.parse(obj.baseFrequency)
+    obj.numOctaves = Length.parse(obj.numOctaves)
+    obj.seed = Length.parse(obj.seed)
+    return obj; 
+  }
 
   toString() {
     var { filterType, baseFrequency, numOctaves, seed, result } = this.json; 
@@ -128,6 +138,10 @@ export class DisplacementMapSVGFilter extends SVGFilter {
     });
   }
 
+  convert (obj) {
+    obj.scale = Length.parse(obj.scale)
+    return obj; 
+  }  
 
   toString() {
     var { sourceIn, sourceIn2, scale } = this.json; 
@@ -184,7 +198,6 @@ export class ColorMatrixSVGFilter extends SVGFilter {
       values: ColorMatrixSVGFilter.spec.values.defaultValue,
     });
   }
-
 
   toString() {
     var { sourceIn, filterType, values } = this.json; 

@@ -1,6 +1,5 @@
 import BaseProperty from "./BaseProperty";
 import { INPUT, BIND } from "../../../../../util/Event";
-import { html } from "../../../../../util/functions/func";
 import { editor } from "../../../../../editor/editor";
 
 import { EVENT } from "../../../../../util/UIElement";
@@ -20,7 +19,7 @@ export default class ContentProperty extends BaseProperty {
   }
 
   getBody() {
-    return html`
+    return `
       <div class="property-item content-item">
         <textarea ref="$contentItem"></textarea>
       </div>

@@ -40,9 +40,9 @@ export default class TextShadowEditor extends UIElement {
             <div class='color-view' style="background-color: ${shadow.color}">
             </div>
           </div>
-          <div class="offset-x">${shadow.offsetX.toString()}</div>
-          <div class="offset-y">${shadow.offsetY.toString()}</div>
-          <div class="blur-radius">${shadow.blurRadius.toString()}</div>
+          <div class="offset-x">${shadow.offsetX}</div>
+          <div class="offset-y">${shadow.offsetY}</div>
+          <div class="blur-radius">${shadow.blurRadius}</div>
           <div class="tools">
             <button type="button" class="remove" data-index="${index}">
               ${icon.remove2}

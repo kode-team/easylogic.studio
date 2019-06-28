@@ -1,6 +1,5 @@
 import BaseProperty from "./BaseProperty";
 import { LOAD } from "../../../../../util/Event";
-import { html } from "../../../../../util/functions/func";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
 import {
@@ -15,7 +14,7 @@ export default class TextShadowProperty extends BaseProperty {
   }
 
   getBody() {
-    return html`
+    return `
       <div class="property-item full text-shadow-item" ref="$shadowList"></div>
     `;
   }

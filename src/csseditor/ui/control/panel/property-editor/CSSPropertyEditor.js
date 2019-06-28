@@ -50,7 +50,7 @@ export default class CSSPropertyEditor extends UIElement {
 
 
   template() {
-    return html`
+    return `
       <div class='css-property-editor'>
         <div class='title' >
           <label>Properties</label>

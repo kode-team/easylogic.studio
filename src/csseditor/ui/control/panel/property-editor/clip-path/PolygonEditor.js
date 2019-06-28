@@ -120,7 +120,7 @@ export default class PolygonEditor extends UIElement {
                 index === 0? 'first' : '',
                 index === this.state.value.length-1 ? 'last' : ''
             ].filter(it => it).join(WHITE_STRING)
-            return `<div class='drag-pointer ${className}' data-index="${index.toString()}" style='left: ${it.x.toString()};top: ${it.y.toString()};'></div>`
+            return `<div class='drag-pointer ${className}' data-index="${index.toString()}" style='left: ${it.x};top: ${it.y};'></div>`
         })
     }
 

@@ -1,5 +1,3 @@
-import { html } from "../../../../../util/functions/func";
-import icon from "../../../icon/icon";
 import UIElement, { EVENT } from "../../../../../util/UIElement";
 import { CLICK } from "../../../../../util/Event";
 import IconListViewEditor from "./IconListViewEditor";
@@ -23,11 +21,7 @@ export default class SVGClipPathEditor extends UIElement {
 
     var checked = this.state.fit ? 'checked="checked"' : ''
 
-    var values = Object.keys(icon).map(key => {
-      return { key, html: icon[key] }
-    })
-
-    return html`
+    return `
       <div class='svg-clip-path-editor clippath-list'>
           <div class='label' >
               <label>${this.props.title || ''}</label>

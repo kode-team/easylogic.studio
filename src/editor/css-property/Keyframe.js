@@ -1,5 +1,4 @@
 import { Property } from "../items/Property";
-import { html } from "../../util/functions/func";
 import { Offset } from "./Offset";
 import { WHITE_STRING } from "../../util/css/types";
 import { reverseMatches, convertMatches } from "../../util/functions/parser";
@@ -145,7 +144,7 @@ export class Keyframe extends Property {
 
 
   toOffsetString (it) {
-    return html`${it.offset.toString()} {
+    return `${it.offset.toString()} {
       ${it.properties.map(p => {
         if (this.isMultiStyle(p.key)) {
           return this.getMultiStyleString(p)
@@ -191,14 +190,12 @@ export class Keyframe extends Property {
     })
 
 
-    return html`
+    return `
 @keyframes ${this.json.name} {
 
   ${this.toOffsetText()}
 
 }
-
-
 `
   }
 

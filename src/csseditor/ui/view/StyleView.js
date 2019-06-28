@@ -10,7 +10,7 @@ export default class StyleView extends UIElement {
 
   template() {
     return `
-    <div class='style-view' style='display:none'>
+    <div class='style-view' style='position: absolute;display:inline-block;left:-1000px;'>
       <div ref='$svgArea'>
         <svg width="0" height="0" ref='$svg'></svg>   
       </div>

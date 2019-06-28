@@ -21,6 +21,7 @@ export default class GuideView {
         this.cachedExtraItems = [] 
         if (artboard) {
             this.cachedExtraItems = artboard.allLayers.filter(it => editor.selection.check(it) === false);
+            this.cachedExtraItems.push(artboard);
             this.rect = editor.selection.allRect.clone()
         }
         

@@ -1,6 +1,5 @@
 import BaseProperty from "./BaseProperty";
 import { INPUT, LOAD } from "../../../../../util/Event";
-import { html } from "../../../../../util/functions/func";
 import { editor } from "../../../../../editor/editor";
 import { Length } from "../../../../../editor/unit/Length";
 import { EVENT } from "../../../../../util/UIElement";
@@ -30,16 +29,14 @@ export default class BoxModelProperty extends BaseProperty {
   }
 
   getBody() {
-    return html`
-      <div class="property-item box-model-item" ref="$boxModelItem"></div>
-    `;
+    return `<div class="property-item box-model-item" ref="$boxModelItem"></div>`;
   }
 
   templateInput(key, current) {
 
     var value = current[key] || Length.px(0)
 
-    return `<input type="number" ref="$${key}" value="${value.value.toString()}" />`;
+    return `<input type="number" ref="$${key}" value="${value.value}" />`;
   }
 
   [LOAD("$boxModelItem")]() {
@@ -47,7 +44,7 @@ export default class BoxModelProperty extends BaseProperty {
 
     if (!current) return '';
 
-    return html`
+    return `
       <div>
         <div class="margin">
           <div data-value="top">
@@ -80,7 +77,7 @@ export default class BoxModelProperty extends BaseProperty {
         <div
           class="content"
           ref="$content"
-          title="${current.width.toString()} x ${current.height.toString()}"
+          title="${current.width} x ${current.height}"
         ></div>
       </div>
     `;
@@ -112,7 +109,7 @@ export default class BoxModelProperty extends BaseProperty {
     if (current) {
       this.refs.$content.attr(
         "title",
-        `${current.width.toString()} x ${current.height.toString()}`
+        `${current.width} x ${current.height}`
       );
     }
   }

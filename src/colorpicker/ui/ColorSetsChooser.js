@@ -31,10 +31,10 @@ export default class ColorSetsChooser extends UIElement {
         // colorsets 
         const colorSets = this.parent.manager.getColorSetsList();
 
-        return html`
+        return `
             <div>
                 ${colorSets.map( (element, index) => {
-                    return html`
+                    return `
                         <div class="colorsets-item" data-colorsets-index="${index}" >
                             <h1 class="title">${element.name}</h1>
                             <div class="items">
@@ -44,11 +44,11 @@ export default class ColorSetsChooser extends UIElement {
                                         return  `<div class="color-item" title="${color}">
                                                 <div class="color-view" style="background-color: ${color}"></div>
                                             </div>`
-                                    })}
+                                    }).join('')}
                                 </div>
                             </div>
                         </div>`
-                })}
+                }).join('')}
             </div>
         `
     }

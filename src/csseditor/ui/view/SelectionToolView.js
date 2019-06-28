@@ -3,8 +3,8 @@ import { POINTERSTART, MOVE, END } from "../../../util/Event";
 import { Length } from "../../../editor/unit/Length";
 import { editor } from "../../../editor/editor";
 import { isNotUndefined } from "../../../util/functions/func";
-import { Segment } from "../../../editor/util/Segment";
 import GuideView from "./GuideView";
+import { MovableItem } from "../../../editor/items/MovableItem";
 
 
 
@@ -52,7 +52,9 @@ export default class SelectionToolView extends UIElement {
         this.guideView.move(type || this.pointerType, dx / editor.scale,  dy / editor.scale )
 
         var drawList = this.guideView.calculate();
+
         this.makeSelectionTool();
+        this.emit('refreshGuideLine', this.calculateWorldPositionForGuideLine(drawList));        
     }
 
     getOriginalRect () {
@@ -135,6 +137,32 @@ export default class SelectionToolView extends UIElement {
 
         this.cachedSelectionTools.cssText(`left: ${x};top:${y};width:${width};height:${height}`)
         
+    }
+
+    calculateWorldPositionForGuideLine (list = []) {
+        var world = this.getWorldPosition();
+
+        return list.map(it => {
+
+            var A = new MovableItem(this.calculateWorldPosition(it.A))
+            var B = new MovableItem(this.calculateWorldPosition(it.B))
+
+            var ax, bx, ay, by; 
+
+            if (isNotUndefined(it.ax)) { ax = it.ax * editor.scale + world.left }
+            if (isNotUndefined(it.bx)) { bx = it.bx * editor.scale + world.left }
+            if (isNotUndefined(it.ay)) { ay = it.ay * editor.scale + world.top }
+            if (isNotUndefined(it.by)) { by = it.by * editor.scale + world.top }
+
+            return {
+                A, 
+                B,
+                ax, 
+                bx,
+                ay,
+                by
+            }
+        })
     }
 
     calculateWorldPosition (item) {

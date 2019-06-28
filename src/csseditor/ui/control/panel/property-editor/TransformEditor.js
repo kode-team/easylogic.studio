@@ -1,4 +1,3 @@
-import { html } from "../../../../../util/functions/func";
 import icon from "../../../icon/icon";
 import {
   LOAD,
@@ -64,7 +63,7 @@ export default class TransformEditor extends UIElement {
   }
 
   template() {
-    return html`
+    return `
       <div class='transform-editor transform-list'>
           <div class='label' >
               <label>Transform</label>
@@ -72,7 +71,7 @@ export default class TransformEditor extends UIElement {
                 <select ref="$transformSelect">
                   ${transformList.map(transform => {
                     return `<option value='${transform}'>${transform}</option>`;
-                  })}
+                  }).join('')}
                 </select>
                 <button type="button" ref="$add" title="add Transform">${icon.add}</button>
               </div>
@@ -125,7 +124,7 @@ export default class TransformEditor extends UIElement {
   }
 
   makeOneTransformTemplate(type, transform, index) {
-    return html`
+    return `
       <div class="transform-item" data-index="${index}">
         <div class="title" draggable="true" data-index="${index}">
           <label><span>${(+index)+1}</span> ${type}</label>
@@ -168,7 +167,9 @@ export default class TransformEditor extends UIElement {
             var label = this.getLabel(type, tindex);
             var {min, max, step, units} = this.getRange(type);
 
-            return `<RangeEditor 
+            return `
+              <div>
+                <RangeEditor 
                       ref='$range${index}_${tindex}' 
                       min="${min}" 
                       max="${max}" 
@@ -178,8 +179,9 @@ export default class TransformEditor extends UIElement {
                       params='${tindex}' 
                       value="${it}" 
                       units="${units}" 
-                      onchange="changeRangeEditor" />`
-          }).join(WHITE_STRING)}          
+                      onchange="changeRangeEditor" />
+              </div>`
+          }).join('')}          
         </div>
       </div>
     `;

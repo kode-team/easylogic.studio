@@ -1,6 +1,4 @@
-import { CLICK, INPUT, CHANGE, LOAD } from "../../../../../util/Event";
-import { html } from "../../../../../util/functions/func";
-import { Length } from "../../../../../editor/unit/Length";
+import { CLICK, LOAD } from "../../../../../util/Event";
 import icon from "../../../icon/icon";
 import UIElement, { EVENT } from "../../../../../util/UIElement";
 import RangeEditor from "./RangeEditor";
@@ -57,7 +55,7 @@ export default class DirectionEditor extends UIElement {
     var direction = this.state.all;
     var display = selectedValue === 'all' ? 'display:none' : 'display:block';
 
-    return html`
+    return `
       <div class="property-item direction-item">
         <div class="radius-selector" data-selected-value="${selectedValue}" ref="$selector">
           <button type="button" data-value="all">${icon.border_all}</button>
@@ -66,7 +64,7 @@ export default class DirectionEditor extends UIElement {
           </button>
         </div>
         <div class="radius-value">
-          <RangeEditor ref='$all' key='all' value="${direction.toString()}" onchange='changeBorderRadius' />
+          <RangeEditor ref='$all' key='all' value="${direction}" onchange='changeBorderRadius' />
         </div>
       </div>
       <div
@@ -76,12 +74,13 @@ export default class DirectionEditor extends UIElement {
       >
         <div class="radius-setting-box">
           ${typeList.map(it => {
+            var value = this.state[it.key]
             return `
               <div>
-                  <RangeEditor ref='$${it.key}' label='${it.title}' key='${it.key}' onchange='changeBorderRadius' />
+                  <RangeEditor ref='$${it.key}' label='${it.title}' key='${it.key}' valule="${value}" onchange='changeBorderRadius' />
               </div>  
             `;
-          })}
+          }).join('')}
         </div>
       </div>
     `;

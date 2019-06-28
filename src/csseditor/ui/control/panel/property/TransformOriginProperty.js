@@ -1,6 +1,5 @@
 import BaseProperty from "./BaseProperty";
 import { LOAD, CLICK } from "../../../../../util/Event";
-import { html } from "../../../../../util/functions/func";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
 import { CHANGE_ARTBOARD, CHANGE_SELECTION } from "../../../../types/event";
@@ -24,7 +23,7 @@ export default class TransformOriginProperty extends BaseProperty {
   }
 
   getBody() {
-    return html`
+    return `
       <div class="property-item full transform-origin-item" ref='$body'></div>
     `;
   }

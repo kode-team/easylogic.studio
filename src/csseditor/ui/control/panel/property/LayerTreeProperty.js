@@ -1,11 +1,9 @@
 import BaseProperty from "./BaseProperty";
 import { LOAD, CLICK } from "../../../../../util/Event";
-import { html } from "../../../../../util/functions/func";
 import { editor } from "../../../../../editor/editor";
 import icon from "../../../icon/icon";
 import { EVENT } from "../../../../../util/UIElement";
 import { CHANGE_SELECTION } from "../../../../types/event";
-import { ArtBoard } from "../../../../../editor/items/ArtBoard";
 import { Layer } from "../../../../../editor/items/Layer";
 import Color from "../../../../../util/Color";
 import { Length } from "../../../../../editor/unit/Length";
@@ -27,7 +25,7 @@ export default class LayerTreeProperty extends BaseProperty {
   }
 
   getBody() {
-    return html`
+    return `
       <div class="property-item layer-list" ref="$layerList"></div>
     `;
   }

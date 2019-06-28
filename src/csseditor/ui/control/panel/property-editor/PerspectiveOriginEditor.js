@@ -1,5 +1,4 @@
 import { CLICK, LOAD } from "../../../../../util/Event";
-import { html } from "../../../../../util/functions/func";
 import { Length } from "../../../../../editor/unit/Length";
 import icon from "../../../icon/icon";
 import UIElement, { EVENT } from "../../../../../util/UIElement";
@@ -68,7 +67,7 @@ export default class PerspectiveOriginEditor extends UIElement {
     var selectedValue = this.state.isAll ? 'all' : 'partitial'
     var perspectiveOrigin = this.state['perspective-origin'];
 
-    return html`
+    return `
       <div class="property-item perspective-origin-item">
         <div class="radius-selector" data-selected-value="${selectedValue}" ref="$selector">
           <button type="button" data-value="all">${icon.border_all}</button>
@@ -77,7 +76,7 @@ export default class PerspectiveOriginEditor extends UIElement {
           </button>
         </div>
         <div class="radius-value">
-          <RangeEditor ref='$all' key='perspective-origin' value="${perspectiveOrigin.toString()}" onchange='changePerspectiveOrigin' />
+          <RangeEditor ref='$all' key='perspective-origin' value="${perspectiveOrigin}" onchange='changePerspectiveOrigin' />
         </div>
       </div>
       <div
@@ -89,10 +88,10 @@ export default class PerspectiveOriginEditor extends UIElement {
           ${typeList.map(it => {
             return `
               <div>
-                  <RangeEditor ref='$${it.key}' label='${it.title}' key='${it.key}' value="${this.state[it.key].toString()}" onchange='changePerspectiveOrigin' />
+                  <RangeEditor ref='$${it.key}' label='${it.title}' key='${it.key}' value="${this.state[it.key]}" onchange='changePerspectiveOrigin' />
               </div>  
             `;
-          })}
+          }).join('')}
         </div>
       </div>
     `;

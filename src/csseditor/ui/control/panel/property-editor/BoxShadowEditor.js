@@ -38,10 +38,10 @@ export default class BoxShadowEditor extends UIElement {
             </div>
           </div>
           <div class="inset" data-value="${shadow.inset}">${icon.check}</div>
-          <div class="offset-x">${shadow.offsetX.toString()}</div>
-          <div class="offset-y">${shadow.offsetY.toString()}</div>
-          <div class="blur-radius">${shadow.blurRadius.toString()}</div>
-          <div class="spread-radius">${shadow.spreadRadius.toString()}</div>
+          <div class="offset-x">${shadow.offsetX}</div>
+          <div class="offset-y">${shadow.offsetY}</div>
+          <div class="blur-radius">${shadow.blurRadius}</div>
+          <div class="spread-radius">${shadow.spreadRadius}</div>
           <div class="tools">
             <button type="button" class="remove" data-index="${index}">
               ${icon.remove2}

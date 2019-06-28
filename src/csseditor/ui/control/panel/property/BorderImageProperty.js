@@ -1,6 +1,5 @@
 import BaseProperty from "./BaseProperty";
 import { CLICK, CHANGE, LOAD } from "../../../../../util/Event";
-import { html } from "../../../../../util/functions/func";
 import { editor } from "../../../../../editor/editor";
 import { Position } from "../../../../../editor/unit/Length";
 import icon from "../../../icon/icon";
@@ -138,9 +137,9 @@ export default class BorderImageProperty extends BaseProperty {
   getBody() {
 
     var current  = editor.selection.current || {borderImage: { image: {}}} ;
-    var borderImage = current.borderImage;
+  
 
-    return html`
+    return `
       <div class="property-item border-image-item" ref='$borderImageView'></div>    
       <div class="property-item border-slice-item">
         <div class="slice-selector" data-selected-value="all" ref="$selector">
@@ -171,7 +170,7 @@ export default class BorderImageProperty extends BaseProperty {
                 <RangeEditor ref='$${it.key}Width' label='Width' key='border-image-width-${it.key}' onchange='changeBorderImage' /> 
               </div>                
             `;
-          })}
+          }).join('')}
         </div>
       </div>
     `;

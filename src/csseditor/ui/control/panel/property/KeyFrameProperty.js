@@ -1,5 +1,4 @@
 import BaseProperty from "./BaseProperty";
-import { html } from "../../../../../util/functions/func";
 import icon from "../../../icon/icon";
 import {
   LOAD,
@@ -24,14 +23,14 @@ export default class KeyFrameProperty extends BaseProperty {
   }
 
   getTools() {
-    return html`
+    return `
       <button type="button" ref="$add" title="add Filter">${icon.add}</button>
     `;
   }
 
   makeKeyframeTemplate (keyframe, index) {
     index = index.toString()
-    return html`
+    return `
       <div class='keyframe-item' draggable='true' ref='$keyframeIndex${index}' data-index='${index}'>
         <div class='title'>
           <div class='name'>${keyframe.name}</div>
@@ -46,7 +45,7 @@ export default class KeyFrameProperty extends BaseProperty {
             ${keyframe.offsets.map(o => {
               var title = `${o.offset} ${o.properties.map(p => p.key).join(',')}`
               return `<div data-title='${title}' class='offset' style='left: ${o.offset}; background-color: ${o.color}'></div>`
-            })}
+            }).join('')}
           </div>
         </div>
       </div>

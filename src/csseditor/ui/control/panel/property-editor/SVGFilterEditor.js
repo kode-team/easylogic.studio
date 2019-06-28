@@ -1,4 +1,4 @@
-import { html, isFunction } from "../../../../../util/functions/func";
+import { isFunction } from "../../../../../util/functions/func";
 import icon from "../../../icon/icon";
 import {
   LOAD,
@@ -52,13 +52,15 @@ export default class SVGFilterEditor extends UIElement {
   }
 
   initState() {
+    var filters = (this.props.value || []).map(it => SVGFilter.parse(it))
+
     return {
-      filters: this.props.value || []
+      filters
     }
   }
 
   template() {
-    return html`
+    return `
       <div class='svg-filter-editor filter-list'>
           <div class='label' >
               <label>${this.props.title || ''}</label>
@@ -66,7 +68,7 @@ export default class SVGFilterEditor extends UIElement {
                 <select ref="$filterSelect">
                   ${filterList.map(filter => {
                     return `<option value='${filter}'>${filter}</option>`;
-                  })}
+                  }).join('')}
                 </select>
                 <button type="button" ref="$add" title="add Filter">${icon.add} ${this.props.title ? '' : 'Add'}</button>
               </div>
@@ -112,7 +114,7 @@ export default class SVGFilterEditor extends UIElement {
             options='${options}' 
             key="${key}"
             params="${index}"
-            value='${filter[key]}' 
+            value='${filter[key].toString()}' 
             onchange="changeRangeEditor"             
           />
         </div>
@@ -125,12 +127,12 @@ export default class SVGFilterEditor extends UIElement {
             label="${s.title}"
             key="${key}"
             params="${index}"
-            value='${filter[key]}' 
+            value='${filter[key].toString()}' 
             onchange="changeRangeEditor"
           />
         </div>
         `
-    } else if (s.inputType === 'number-range') {
+    } else if (s.inputType === 'number-range') {  
       return `
         <div>
           <NumberRangeEditor 
@@ -142,7 +144,7 @@ export default class SVGFilterEditor extends UIElement {
             step="${s.step}"
             key="${key}" 
             params="${index}" 
-            value="${filter[key]}" 
+            value="${filter[key].toString()}" 
             onchange="changeRangeEditor" 
           />
         </div>
@@ -161,7 +163,7 @@ export default class SVGFilterEditor extends UIElement {
           step="${s.step}"
           key="${key}" 
           params="${index}" 
-          value="${filter[key]}" 
+          value="${filter[key].toString()}" 
           units="${s.units.join(',')}" 
           onchange="changeRangeEditor" 
         />
@@ -170,8 +172,7 @@ export default class SVGFilterEditor extends UIElement {
   }
 
   makeOneFilterTemplate(spec, filter, index) {
-
-    return `
+  return `
     <div class="filter-item" data-index="${index}">
       <div class="title" draggable="true" data-index="${index}">
         <label>${filter.type}</label>

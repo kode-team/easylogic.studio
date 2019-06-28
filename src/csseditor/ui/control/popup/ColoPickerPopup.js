@@ -1,6 +1,4 @@
 import { EVENT } from "../../../../util/UIElement";
-import icon from "../../icon/icon";
-import { html } from "../../../../util/functions/func";
 import BasePopup from "./BasePopup";
 import EmbedColorPicker from "../panel/property-editor/EmbedColorPicker";
 
@@ -43,7 +41,7 @@ export default class ColorPickerPopup extends BasePopup {
  
 
   getBody() {
-    return html`
+    return `
       <div class="color-picker-popup">
         <div class='box'>
           <EmbedColorPicker ref='$color' value='${this.state.color}' onchange='changeColor' />

@@ -3,7 +3,6 @@ import { Length } from "../../../../editor/unit/Length";
 import { LOAD, CHANGE } from "../../../../util/Event";
 import CubicBezierEditor from "../panel/property-editor/CubicBezierEditor";
 import { editor } from "../../../../editor/editor";
-import { html } from "../../../../util/functions/func";
 import RangeEditor from "../panel/property-editor/RangeEditor";
 import IterationCountEditor from "../panel/property-editor/IterationCountEditor";
 import SelectEditor from "../panel/property-editor/SelectEditor";
@@ -73,7 +72,7 @@ export default class AnimationPropertyPopup extends BasePopup {
 
   templateForKeyframe() {
    
-    return html`
+    return `
       <div class='name'>
         <label>Keyframe</label>
         <div class='input grid-1'>

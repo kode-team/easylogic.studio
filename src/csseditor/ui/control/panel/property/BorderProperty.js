@@ -1,8 +1,7 @@
 import BaseProperty from "./BaseProperty";
-import { CLICK, CHANGE, INPUT, LOAD } from "../../../../../util/Event";
+import { CLICK, LOAD } from "../../../../../util/Event";
 import { Length } from "../../../../../editor/unit/Length";
 import { editor } from "../../../../../editor/editor";
-import { html } from "../../../../../util/functions/func";
 import { EVENT } from "../../../../../util/UIElement";
 
 const borderStyleLit = [
@@ -39,7 +38,7 @@ export default class BorderProperty extends BaseProperty {
   }
 
   getTemplateForBorderProperty() {
-    return html`
+    return `
       <div class="property-item border-item">
         <div
           class="border-direction"

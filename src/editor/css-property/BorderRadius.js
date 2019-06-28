@@ -14,9 +14,8 @@ export default class BorderRadius {
 
         var temp = {} 
         str.split(';').filter(it => it.includes(':')).forEach(borderValue => {
-            var [key, value] = borderValue.split(':')
-
-            key = key.trim()
+            var [key, value] = borderValue.split(':').map(it => it.trim())
+            
             value = Length.parse(value);
 
             if (obj[key]) {

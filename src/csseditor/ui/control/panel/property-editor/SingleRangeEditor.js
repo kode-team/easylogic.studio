@@ -4,9 +4,6 @@ import { LOAD, INPUT, CLICK } from "../../../../../util/Event";
 
 import icon from "../../../icon/icon";
 import SelectEditor from "./SelectEditor";
-import { html } from "../../../../../util/functions/func";
-
-
 
 export default class SingleRangeEditor extends UIElement {
 
@@ -54,7 +51,7 @@ export default class SingleRangeEditor extends UIElement {
 
         var realValue = (+value).toString();
         
-        return html`
+        return `
         <div class='range-editor ${hasLabel} ${hasCalc} ${isRemovable}' data-selected-type='${type}' ref='$range'>
             ${label ? `<label>${label}</label>` : '' }
             <button type='button' class='type-button' ref='$toggleType'>${icon.autorenew}</button>
@@ -68,7 +65,7 @@ export default class SingleRangeEditor extends UIElement {
             <div class='range-editor-type' data-type='calc'>
                 <div class='area'>
                     <SelectEditor ref='$varType' key='varType' value="${this.state.value.unit}" options="calc,var" onchange='changeVarType' />
-                    <input type='text' ref='$calc' value='${this.state.value.toString()}' />
+                    <input type='text' ref='$calc' value='${this.state.value}' />
                 </div>
             </div>
             <button type='button' class='remove' ref='$remove'>${icon.close}</button>

@@ -1,6 +1,5 @@
 import BaseProperty from "./BaseProperty";
 import { LOAD, CLICK } from "../../../../../util/Event";
-import { html } from "../../../../../util/functions/func";
 import { editor } from "../../../../../editor/editor";
 import icon from "../../../icon/icon";
 import { Project } from "../../../../../editor/items/Project";
@@ -34,7 +33,7 @@ export default class ProjectProperty extends BaseProperty {
   }
 
   getBody() {
-    return html`
+    return `
       <div class="property-item project-list" ref="$projectList"></div>
     `;
   }

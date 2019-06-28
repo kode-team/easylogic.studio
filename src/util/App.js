@@ -8,7 +8,7 @@ import BaseStore from "./BaseStore";
 import UIElement, { EVENT } from "./UIElement";
 
 import { editor } from "../editor/editor";
-import { debounce } from "./functions/func";
+import { debounce, debounceFrame, throttle } from "./functions/func";
 
 const EMPTY_POS = { x: 0, y: 0 };
 const MOVE_CHECK_MS = 10;
@@ -44,14 +44,7 @@ export const start = opt => {
 
     modifyBodyMoveSecond(ms = MOVE_CHECK_MS) {
       editor.config.set("body.move.ms", ms);
-      this.funcBodyMoves = debounce(
-        this.loopBodyMoves.bind(this),
-        editor.config.get("body.move.ms")
-      );
-    }
-
-    [EVENT("modifyBodyMoveSeconds")](ms) {
-      this.modifyBodyMoveSecond(ms);
+      this.funcBodyMoves = debounce(this.loopBodyMoves.bind(this), editor.config.get("body.move.ms"));
     }
 
     loopBodyMoves() {

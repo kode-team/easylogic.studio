@@ -6,7 +6,7 @@ import icon from "../icon/icon";
 
 export default class Inspector extends UIElement {
   template() {
-    return html`
+    return `
       <div class="feature-control">
         <div>
           <div class="tab number-tab" data-selected-value="1" ref="$tab">

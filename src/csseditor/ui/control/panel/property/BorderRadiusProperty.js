@@ -1,6 +1,5 @@
 import BaseProperty from "./BaseProperty";
 import { LOAD, DEBOUNCE } from "../../../../../util/Event";
-import { html } from "../../../../../util/functions/func";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
 import { CHANGE_ARTBOARD, CHANGE_SELECTION } from "../../../../types/event";
@@ -12,20 +11,20 @@ export default class BorderRadiusProperty extends BaseProperty {
   }
 
   getBody() {
-    return html`
-      <div class="property-item full border-radius-item" ref='$body'></div>
-    `;
+    return `<div class="property-item full border-radius-item" ref='$body'></div>`;
   }
 
   [LOAD('$body')] () {
     var current = editor.selection.current || {}; 
     var value = current['border-radius']
 
-    return `<BorderRadiusEditor 
+    return `
+      <BorderRadiusEditor 
               ref='$1' 
               value='${value}' 
               onchange='changeBorderRadius' 
-            />`
+            />
+    `
   }
 
 

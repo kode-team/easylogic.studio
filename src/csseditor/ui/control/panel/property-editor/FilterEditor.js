@@ -1,4 +1,3 @@
-import { html } from "../../../../../util/functions/func";
 import icon from "../../../icon/icon";
 import {
   LOAD,
@@ -76,7 +75,7 @@ export default class FilterEditor extends UIElement {
   }
 
   template() {
-    return html`
+    return `
       <div class='filter-editor filter-list'>
           <div class='label' >
               <label>${this.props.title || ''}</label>
@@ -122,7 +121,7 @@ export default class FilterEditor extends UIElement {
   }
 
   makeDropShadowFilterTemplate(spec, filter, index) {
-    return html`
+    return `
       <div class="filter-item">
         <div class="title" draggable="true" data-index="${index}">
           <label>Drop Shadow</label>
@@ -147,9 +146,9 @@ export default class FilterEditor extends UIElement {
                   ref='$${key}${index}' 
                   key="${index}" 
                   params="${key}" 
-                  value="${filter[key].value.toString()}" units="${spec[key].units.join(',')}" onchange="changeRangeEditor" />
+                  value="${filter[key].value}" units="${spec[key].units.join(',')}" onchange="changeRangeEditor" />
             </div>`;
-        })}
+        }).join('')}
       </div>
     `;
   }

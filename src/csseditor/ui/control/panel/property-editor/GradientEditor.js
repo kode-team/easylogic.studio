@@ -205,7 +205,7 @@ export default class GradientEditor extends UIElement  {
 
   [LOAD('$stepList')] () {
     return this.state.colorsteps.map( (it, index) => {
-      return `<div class='step' data-index='${index}' data-cut='${it.cut}' style='left: ${it.offset.toString()};'>
+      return `<div class='step' data-index='${index}' data-cut='${it.cut}' style='left: ${it.offset};'>
         <div class='color-view' style="background-color: ${it.color}"></div>
         <div class='arrow' style="background-color: ${it.color}"></div>
       </div>`

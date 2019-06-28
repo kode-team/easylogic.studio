@@ -2,7 +2,6 @@ import { EVENT } from "../../../../util/UIElement";
 import { Length } from "../../../../editor/unit/Length";
 import { LOAD} from "../../../../util/Event";
 import CubicBezierEditor from "../panel/property-editor/CubicBezierEditor";
-import { html } from "../../../../util/functions/func";
 import RangeEditor from "../panel/property-editor/RangeEditor";
 import SelectEditor from "../panel/property-editor/SelectEditor";
 import BasePopup from "./BasePopup";
@@ -143,7 +142,7 @@ export default class TransitionPropertyPopup extends BasePopup {
 
   templateForProperty() {
    
-    return html`
+    return `
       <div class='name'>
         <SelectEditor ref='$property' label="Property" key='property' value="${this.state.property}" options="${property_list.join(',')}" onChange='changeTransition' /> 
       </div>

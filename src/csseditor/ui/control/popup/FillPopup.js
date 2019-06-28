@@ -2,7 +2,6 @@ import { EVENT } from "../../../../util/UIElement";
 import icon from "../../icon/icon";
 import { CLICK, CHANGE, LOAD, BIND } from "../../../../util/Event";
 
-import { html } from "../../../../util/functions/func";
 import { Length } from "../../../../editor/unit/Length";
 import { editor } from "../../../../editor/editor";
 import GradientEditor from "../panel/property-editor/GradientEditor";
@@ -193,7 +192,7 @@ export default class FillPopup extends BasePopup {
   }
 
   templateForBlendMode() {
-    return html`
+    return `
     <div class='popup-item'>
       <SelectEditor label="Blend" ref='$blend' key='blendMode' value="${this.state.blendMode}" options="${blend_list.join(',')}" onchange="changeRangeEditor" />
     </div>
@@ -209,7 +208,7 @@ export default class FillPopup extends BasePopup {
   }
 
   getBody() {
-    return html`
+    return `
       <div class="fill-picker">
 
         <div class='box'>
@@ -236,7 +235,7 @@ export default class FillPopup extends BasePopup {
                   >
                       <div class='icon'>${it.icon || ''}</div>
                   </span>`;
-              })}
+              }).join('')}
             </div>
           </div>
           <div ref='$gradientEditor'>

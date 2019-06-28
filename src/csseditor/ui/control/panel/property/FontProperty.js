@@ -1,5 +1,4 @@
 import BaseProperty from "./BaseProperty";
-import { html } from "../../../../../util/functions/func";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
 import {
@@ -22,7 +21,7 @@ export default class FontProperty extends BaseProperty {
   }
 
   getBody() {
-    return html`
+    return `
 
       <div class='property-item'>
         <RangeEditor 

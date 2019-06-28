@@ -1,6 +1,5 @@
 import BaseProperty from "./BaseProperty";
 import { LOAD, DEBOUNCE } from "../../../../../util/Event";
-import { html } from "../../../../../util/functions/func";
 import { editor } from "../../../../../editor/editor";
 
 import { EVENT } from "../../../../../util/UIElement";
@@ -25,7 +24,7 @@ export default class CodeViewProperty extends BaseProperty {
   }
 
   getBody() {
-    return html`
+    return `
       <div class="property-item code-view-item" ref='$body'></div>
     `;
   }

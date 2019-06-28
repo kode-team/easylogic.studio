@@ -3,7 +3,6 @@ import { POINTERSTART, MOVE, END, CLICK } from "../../../../util/Event";
 import { Length } from "../../../../editor/unit/Length";
 import UIElement, { EVENT } from "../../../../util/UIElement";
 import icon from "../../icon/icon";
-import { CHANGE_SELECTION } from "../../../types/event";
 import { editor } from "../../../../editor/editor";
 
 
@@ -83,7 +82,7 @@ export default class BasePopup extends UIElement {
     this.$el.hide();
   }
 
-  [EVENT( "hidePropertyPopup", CHANGE_SELECTION)]() {
+  [EVENT( "hidePropertyPopup")]() {
     this.hide();
   }
 

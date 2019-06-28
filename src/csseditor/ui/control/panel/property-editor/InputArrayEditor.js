@@ -33,7 +33,7 @@ export default class InputArrayEditor extends UIElement {
         return values.map( (value, index) => {
             return `
                 <div class='number-editor'>
-                    <input type="number" value="${value.toString()}" step="0.01" data-index="${index}" />
+                    <input type="number" value="${value}" step="0.01" data-index="${index}" />
                 </div>
             `
         })
