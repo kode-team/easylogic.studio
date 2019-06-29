@@ -20,8 +20,9 @@ export default class GuideView {
         var artboard = editor.selection.currentArtboard;
         this.cachedExtraItems = [] 
         if (artboard) {
-            this.cachedExtraItems = artboard.allLayers.filter(it => editor.selection.check(it) === false);
-            this.cachedExtraItems.push(artboard);
+            this.cachedExtraItems = artboard.allLayers.filter(it => {
+                return !editor.selection.check(it)
+            });
             this.rect = editor.selection.allRect.clone()
         }
         
@@ -204,7 +205,6 @@ export default class GuideView {
     }    
 
     compare (A, B, dist = MAX_DIST) {
-
         //체크 항목중 하나만 , 결국 x,y 축 하나씩만 
         var xCheckList = this.compareX(A, B, dist);    
         var yCheckList = this.compareY(A, B, dist);

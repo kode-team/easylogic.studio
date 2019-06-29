@@ -208,6 +208,6 @@ export class Item {
   }
 
   get allLayers () {
-    return [..._traverse(this)]
+    return [..._traverse(this.clone())]
   }
 }

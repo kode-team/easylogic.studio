@@ -60,6 +60,7 @@ export class Selection {
 
   selectArtboard (artboard) {
     this.artboard = artboard;
+
     this.items = [];
     if (this.artboard.layers.length) {
       this.select(this.artboard.layers[0]);

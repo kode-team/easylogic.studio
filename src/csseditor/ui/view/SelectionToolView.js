@@ -87,8 +87,10 @@ export default class SelectionToolView extends UIElement {
             this.originalArtboardRect = null
             this.originalRect = null    
         }
+        var drawList = this.guideView.calculate();
 
         this.makeSelectionTool();
+        this.emit('refreshGuideLine', this.calculateWorldPositionForGuideLine(drawList));                
     }
 
     initSelectionTool() {

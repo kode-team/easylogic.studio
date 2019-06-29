@@ -12,10 +12,6 @@ export class ArtBoard extends DomItem {
     });
   }
 
-  getArtBoard() {
-    return this;
-  }
-
   getDefaultTitle() {
     return "ArtBoard";
   }

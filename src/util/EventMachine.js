@@ -335,6 +335,12 @@ export default class EventMachine {
     }
   }
 
+  _reload(props) {
+    this.props = props;
+    this.setState(this.initState(), false);
+    this.refresh();
+  }
+
   render($container) {
     this.$el = this.parseTemplate(
       html`
@@ -425,58 +431,82 @@ export default class EventMachine {
     return true  
   }
 
+  parseProperty ($dom) {
+    let props = {};
+
+    // parse properties 
+    [...$dom.el.attributes]
+      .filter(t => {
+        return ATTR_lIST.indexOf(t.nodeName) < 0;
+      })
+      .forEach(t => {
+        props[t.nodeName] = t.nodeValue;
+      });
+
+    // property 태그는 속성으로 대체 
+    $dom.$$('property').forEach($p => {
+      const [name, value, type] = $p.attrs('name', 'value', 'type')
+
+      let realValue = value || $p.text();
+
+      // JSON 타입이면 JSON.parse 로 객체를 복원해서 넘겨준다. 
+      if (type === 'json') {            
+        realValue = JSON.parse(realValue);
+      }
+    
+      props[name] = realValue; 
+    })
+
+    return props;
+  }
+
+  parseSourceName(obj) {
+
+    if (obj.parent) {
+      return [obj.sourceName, ...this.parseSourceName(obj.parent)]
+    }
+
+    return [obj.sourceName]
+  }
+
   parseComponent() {
     const $el = this.$el;
 
+    // var str = Object.keys(this.childComponents).map(key => key).join(',')
+
+    // $el.$$(str).forEach(e => console.log(e))
+
     keyEach(this.childComponents, (ComponentName, Component) => {
-      const targets = $el.$$(`${ComponentName.toLowerCase()}`);
+      const targets = $el.$$(ComponentName.toLowerCase());
       targets.forEach($dom => {
-        let props = {};
-
-        // parse properties 
-        [...$dom.el.attributes]
-          .filter(t => {
-            return ATTR_lIST.indexOf(t.nodeName) < 0;
-          })
-          .forEach(t => {
-            props[t.nodeName] = t.nodeValue;
-          });
-
-        // property 태그는 속성으로 대체 
-        $dom.$$('property').forEach($p => {
-          const [name, value, type] = $p.attrs('name', 'value', 'type')
-
-          let realValue = value || $p.text();
-
-          // JSON 타입이면 JSON.parse 로 객체를 복원해서 넘겨준다. 
-          if (type === 'json') {            
-            realValue = JSON.parse(realValue);
-          }
-        
-          props[name] = realValue; 
-        })
+        let props = this.parseProperty($dom);
 
         // create component 
-        var instance = new Component(this, props);
-        let refName = $dom.attr(REFERENCE_PROPERTY) || instance.id;
 
+        let refName = $dom.attr(REFERENCE_PROPERTY);
+        var instance = null; 
         if (this.children[refName]) {
-          // ref 가 동일한게 있으면 event 를 모두 해제한다. 
-          this.children[refName].destroy()
-          delete this.children[refName] 
-          // console.log(refName, this.children[refName])
-        }
+          //  기존의 같은 객체가 있으면 객체를 새로 생성하지 않고 재활용한다. 
+          instance = this.children[refName] 
+          instance._reload(props);
 
-        this.children[refName] = instance;
+          // console.log(this.parseSourceName(this).join(' < '), 'updated')
 
+          // 이것을 하면 좋은 것들 
+          // 1. 객체 생성을 다시 하지 않는다. 
+          // 2. DOM 이벤트를 재정의 하지 않는다. 
+          // 3. Store 이벤트를 유지할 수 있다. 
+          // 전체적으로 재생성 비용을 아낄 수 있다. 
+        } else {
+          instance = new Component(this, props);
 
-        if (instance) {
+          this.children[refName || instance.id] = instance;
+
           instance.render();
-
-          $dom.replace(instance.$el);
-
           instance.initializeEvent();  
         }
+
+        $dom.replace(instance.$el);        
 
       });
     });
