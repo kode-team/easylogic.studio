@@ -3,7 +3,7 @@ import { Length } from "../../../../../editor/unit/Length";
 import icon from "../../../icon/icon";
 import UIElement, { EVENT } from "../../../../../util/UIElement";
 import RangeEditor from "./RangeEditor";
-import { WHITE_STRING } from "../../../../../util/css/types";
+
 
 const typeList = [
   { key: "transform-origin-x", title: "X" },
@@ -20,7 +20,7 @@ export default class TransformOriginEditor extends UIElement {
   }
   initState() {
 
-    var arr = this.props.value.split(WHITE_STRING);
+    var arr = this.props.value.split(' ');
 
     var obj = {
       isAll: false,

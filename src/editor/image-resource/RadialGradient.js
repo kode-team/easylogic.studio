@@ -1,5 +1,5 @@
 import { Gradient } from "./Gradient";
-import { WHITE_STRING } from "../../util/css/types";
+
 import { Length, Position } from "../unit/Length";
 import { isString } from "../../util/functions/func";
 import { convertMatches, reverseMatches } from "../../util/functions/parser";
@@ -36,7 +36,7 @@ export class RadialGradient extends Gradient {
 
     radialPosition = DEFINED_POSITIONS[radialPosition]
       ? radialPosition
-      : radialPosition.join(WHITE_STRING);
+      : radialPosition.join(' ');
 
     opt = radialPosition ? `${radialType} at ${radialPosition}` : radialType;
 
@@ -74,7 +74,7 @@ export class RadialGradient extends Gradient {
           }
 
           if (isString(radialPosition)) {
-            var arr = radialPosition.split(WHITE_STRING);
+            var arr = radialPosition.split(' ');
             if (arr.length === 1) {
               var len = Length.parse(arr[0]);
 

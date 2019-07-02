@@ -1,5 +1,5 @@
 import { Gradient } from "./Gradient";
-import { WHITE_STRING } from "../../util/css/types";
+
 import {
   isNotUndefined,
   isString,
@@ -84,7 +84,7 @@ export class ConicGradient extends Gradient {
 
     conicPosition = DEFINED_POSITIONS[conicPosition]
       ? conicPosition
-      : conicPosition.join(WHITE_STRING);
+      : conicPosition.join(' ');
 
     if (isNotUndefined(conicAngle)) {
       conicAngle = +(DEFINED_ANGLES[conicAngle] || conicAngle);
@@ -95,7 +95,7 @@ export class ConicGradient extends Gradient {
       opt.push(`at ${conicPosition}`);
     }
 
-    var optString = opt.length ? opt.join(WHITE_STRING) + "," : '';
+    var optString = opt.length ? opt.join(' ') + "," : '';
 
     return `${json.type}(${optString} ${colorString})`;
   }
@@ -115,7 +115,7 @@ export class ConicGradient extends Gradient {
           // conic 은 최종 값이 deg 라  gradient 의 공통 영역을 위해서
           // deg 르 % 로 미리 바꾸는 작업이 필요하다.
           newValue = newValue
-            .split(WHITE_STRING)
+            .split(' ')
             .map(it => it.trim())
             .map(it => {
               if (it.includes("deg")) {
@@ -124,7 +124,7 @@ export class ConicGradient extends Gradient {
                 return it;
               }
             })
-            .join(WHITE_STRING);
+            .join(' ');
 
           // color 복원
           newValue = reverseMatches(newValue, results.matches);
@@ -143,7 +143,7 @@ export class ConicGradient extends Gradient {
           }
 
           if (isString(radialPosition)) {
-            var arr = radialPosition.split(WHITE_STRING);
+            var arr = radialPosition.split(' ');
             if (arr.length === 1) {
               var len = Length.parse(arr[0]);
 

@@ -3,7 +3,7 @@ import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
 import {
   CHANGE_SELECTION,
-  CHANGE_ARTBOARD
+  
 } from "../../../../types/event";
 
 export default class FontSpacingProperty extends BaseProperty {
@@ -12,7 +12,7 @@ export default class FontSpacingProperty extends BaseProperty {
     return "Spacing";
   }
 
-  [EVENT(CHANGE_ARTBOARD, CHANGE_SELECTION)]() {
+  [EVENT(CHANGE_SELECTION)]() {
     this.refresh();
   }
 

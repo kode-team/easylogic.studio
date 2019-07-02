@@ -1,4 +1,5 @@
 import { DomItem } from "./DomItem";
+import { Length } from "../unit/Length";
 
 
 export class Layer extends DomItem {
@@ -14,5 +15,23 @@ export class Layer extends DomItem {
   getDefaultTitle() {
     return "Layer";
   } 
+
+
+  get screenX () { 
+
+    if (this.json.parent) {
+        return Length.px( this.json.parent.screenX.value + (this.json.x || zero).value )
+    }
+
+    return this.json.x || Length.px(0) 
+  }
+  get screenY () { 
+
+      if (this.json.parent) {
+          return Length.px( this.json.parent.screenY.value + (this.json.y || zero).value )
+      }
+
+      return this.json.y || Length.px(0) 
+  }  
 
 }

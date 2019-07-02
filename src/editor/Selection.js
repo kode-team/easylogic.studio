@@ -94,7 +94,7 @@ export class Selection {
   }
 
   setRectCache () {
-    this.cachedItems = this.items.map(it => it.toBound())
+    this.cachedItems = this.items.map(it => it.clone())
 
     this.setAllRectCache();
   }
@@ -108,19 +108,17 @@ export class Selection {
     var maxY = Number.MIN_SAFE_INTEGER;
 
     this.cachedItems.forEach(it => {
-      if (it.x.value < minX) { minX = it.x.value; }
-      if (it.y.value < minY) { minY = it.y.value; }
-      if (it.x2.value > maxX) { maxX = it.x2.value; }
-      if (it.y2.value > maxY) { maxY = it.y2.value; }
+      minX = Math.min(it.screenX.value, minX);
+      maxX = Math.max(it.screenX2.value, maxX);
+      minY = Math.min(it.screenY.value, minY);
+      maxY = Math.max(it.screenY2.value, maxY);      
     })
 
     this.allRect = new MovableItem({
       x: Length.px(minX),
       y: Length.px(minY),
       width: Length.px(maxX - minX),
-      height: Length.px(maxY - minY),
-      x2: Length.px(maxX),
-      y2: Length.px(maxY)
+      height: Length.px(maxY - minY)
     })
   }
 

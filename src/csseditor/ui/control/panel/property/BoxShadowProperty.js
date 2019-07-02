@@ -1,9 +1,8 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD } from "../../../../../util/Event";
+import { LOAD, DEBOUNCE } from "../../../../../util/Event";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
 import {
-  CHANGE_ARTBOARD,
   CHANGE_SELECTION
 } from "../../../../types/event";
 
@@ -26,9 +25,21 @@ export default class BoxShadowProperty extends BaseProperty {
     `
   }
 
-  [EVENT(CHANGE_ARTBOARD, CHANGE_SELECTION)]() {
-    this.refresh();
-  }
+  [EVENT(CHANGE_SELECTION) + DEBOUNCE(100)]() {
+
+    var current = editor.selection.current;
+    if (current) {
+      if (current.is('artboard')) {
+        this.hide();
+      } else {
+        this.show();
+        this.refresh();
+      }
+    } else {
+      this.hide();
+    }
+
+  }  
 
   [EVENT("changeBoxShadow")](boxshadow) {
     var current = editor.selection.current;

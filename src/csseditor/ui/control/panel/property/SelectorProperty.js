@@ -10,7 +10,7 @@ import {
 } from "../../../../../util/Event";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
-import { CHANGE_ARTBOARD, CHANGE_SELECTION } from "../../../../types/event";
+import { CHANGE_SELECTION } from "../../../../types/event";
 import { Selector } from "../../../../../editor/css-property/Selector";
 
 
@@ -39,7 +39,7 @@ export default class SelectorProperty extends BaseProperty {
   getTools() {
     return `
       <div style='display:inline-block;'>
-        <SelectEditor ref='$select' key='selector' options="${selectorList}" />
+        <SelectEditor ref='$select' key='selector' none-value="selector" options="${selectorList}" />
       </div>
       <button type="button" ref="$add" title="add Selector">${icon.add}</button>
     `;
@@ -84,7 +84,7 @@ export default class SelectorProperty extends BaseProperty {
     this.refresh();
   }
 
-  [EVENT(CHANGE_ARTBOARD, CHANGE_SELECTION)] () {
+  [EVENT(CHANGE_SELECTION)] () {
     this.refresh();
   }
 

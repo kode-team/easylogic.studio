@@ -1,6 +1,6 @@
 import { Length } from "../unit/Length";
 import { Property } from "../items/Property";
-import { WHITE_STRING } from "../../util/css/types";
+
 
 export class Transition extends Property {
   static parse(obj) {
@@ -32,6 +32,6 @@ export class Transition extends Property {
       json.duration,
       json.timingFunction,
       json.delay
-    ].join(WHITE_STRING)
+    ].join(' ')
   }
 }

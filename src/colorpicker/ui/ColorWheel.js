@@ -98,7 +98,6 @@ export default class ColorWheel extends UIElement {
     if (this.parent.createdWheelCanvas) return;
 
     const $canvas = this.refs.$colorwheel;
-    // console.log($canvas);
     const context = $canvas.el.getContext("2d");
 
     let [width, height] = $canvas.size();

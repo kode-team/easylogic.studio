@@ -5,7 +5,7 @@ import { Position } from "../../../../../editor/unit/Length";
 import icon from "../../../icon/icon";
 
 import { EVENT } from "../../../../../util/UIElement";
-import { CHANGE_SELECTION, CHANGE_ARTBOARD } from "../../../../types/event";
+import { CHANGE_SELECTION,  } from "../../../../types/event";
 
 const typeList = [
   { key: "top", title: "Top" },
@@ -47,7 +47,7 @@ export default class BorderImageProperty extends BaseProperty {
     return "Border Image";
   }
 
-  [EVENT(CHANGE_SELECTION, CHANGE_ARTBOARD)] () {
+  [EVENT(CHANGE_SELECTION, )] () {
     this.refresh()
   }
 
@@ -310,7 +310,7 @@ export default class BorderImageProperty extends BaseProperty {
 
     var current = editor.selection.current;
     if (!current) return; 
-    // console.log(this.currentBackgroundImage, data);
+  
 
     current.borderImage.setGradient(data);   
 

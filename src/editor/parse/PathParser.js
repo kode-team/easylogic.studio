@@ -1,4 +1,4 @@
-import { WHITE_STRING } from "../../util/css/types";
+
 import { isNotUndefined } from "../../util/functions/func";
 
 const parseRegForPath = /([mMlLvVhHcCsSqQtTaAzZ]([^mMlLvVhHcCsSqQtTaAzZ]*))/g;
@@ -125,7 +125,7 @@ export default class PathParser {
 	joinPath () {
 
         return this.segments.map(it => {
-            return (it.command === 'Z' || it.command === 'z') ? it.command : `${it.command} ${it.values.join(WHITE_STRING)}`
+            return (it.command === 'Z' || it.command === 'z') ? it.command : `${it.command} ${it.values.join(' ')}`
         }).join('')
     }
 

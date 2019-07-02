@@ -4,7 +4,7 @@ import { Length } from "../../../../../editor/unit/Length";
 import Color from "../../../../../util/Color";
 import RangeEditor from "./RangeEditor";
 import { convertMatches, reverseMatches } from "../../../../../util/functions/parser";
-import { WHITE_STRING } from "../../../../../util/css/types";
+
 import SelectEditor from "./SelectEditor";
 
 var radialTypeList = [
@@ -47,7 +47,7 @@ export default class GradientEditor extends UIElement  {
   setValue (str, index = 0, type = 'static-gradient') {
     var results = convertMatches(str);
     var colorsteps = results.str.split(',').map(it => it.trim()).map(it => {
-      var [color, offset1, offset2 ] = it.split(WHITE_STRING).filter(str => str.length);
+      var [color, offset1, offset2 ] = it.split(' ').filter(str => str.length);
 
        color = reverseMatches(color, results.matches);
       var cut = false; 

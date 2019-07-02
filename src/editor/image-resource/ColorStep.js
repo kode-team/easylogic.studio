@@ -1,6 +1,6 @@
 import { Item } from "../items/Item";
 import { Length } from "../unit/Length";
-import { WHITE_STRING } from "../../util/css/types";
+
 import { convertMatches } from "../../util/functions/parser";
 export class ColorStep extends Item {
   getDefaultObject() {
@@ -113,7 +113,7 @@ export class ColorStep extends Item {
 
     const results = convertMatches(colorStepString);
 
-    var arr = results.str.split(WHITE_STRING).filter(it => it.trim());
+    var arr = results.str.split(' ').filter(it => it.trim());
     const colorIndex = +arr[0].replace("@", "");
     const color = results.matches[colorIndex].color;
 

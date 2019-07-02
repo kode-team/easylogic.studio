@@ -7,7 +7,7 @@
       font-size: 12px;
       padding-left: 5px;
       vertical-align: middle;
-      text-shadow: 2px 2px 5px #cccccc;      
+
     }
   }
 
@@ -54,16 +54,12 @@
 
           &[data-type="filter"] {
             border-radius: 5px;
-            background-color: blue; 
-            @include title-background();
-            color: white;
+            background-color: rgba(0, 0, 0, 0.1);
           }
 
           &[data-type="clip-path"] {
             border-radius: 5px;
-            background-color: red; 
-            @include title-background();            
-            color: white;
+            background-color: rgba(0, 0, 0, 0.1);            
           }          
         }
   

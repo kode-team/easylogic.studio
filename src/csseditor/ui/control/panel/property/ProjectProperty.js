@@ -46,7 +46,7 @@ export default class ProjectProperty extends BaseProperty {
       var selected = project === editor.selection.currentProject ? 'selected' : '';
       return `
         <div class='property-item project-item ${selected}'>
-          <label data-index='${index}'>${project.name}</label>
+          <label data-index='${index}'>${project.name || 'New Project'}</label>
           <div class="tools">
             <button type="button" class="remove" data-index="${index}">
               ${icon.remove2}

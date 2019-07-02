@@ -103,7 +103,7 @@ export default class GuideView {
         var distY2 = Math.round(y2rate);
         var height = distY2 - distY;
 
-        item.y.set(distY + minY) 
+        item.setScreenY(distY + minY)
         item.height.set(height )
     }
 
@@ -112,8 +112,8 @@ export default class GuideView {
         var distX = Math.round(xrate);
         var distX2 = Math.round(x2rate);
         var width = distX2 - distX;
-
-        item.x.set(distX + minX) 
+        
+        item.setScreenX(distX + minX) 
         item.width.set(width )
     }    
 

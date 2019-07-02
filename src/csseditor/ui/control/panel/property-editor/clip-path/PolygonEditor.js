@@ -1,5 +1,5 @@
 import UIElement from "../../../../../../util/UIElement";
-import { WHITE_STRING } from "../../../../../../util/css/types";
+
 import { Length } from "../../../../../../editor/unit/Length";
 import { POINTERSTART, MOVE, LOAD, CLICK, BIND, PREVENT, ALT } from "../../../../../../util/Event";
 import RangeEditor from "../RangeEditor";
@@ -21,7 +21,7 @@ export default class PolygonEditor extends UIElement {
         var maxHeight = 220;
 
         return str.split(',').filter(it => it.trim()).map(it => {
-           var [x, y] = it.trim().split(WHITE_STRING)
+           var [x, y] = it.trim().split(' ')
 
            return { 
                x: Length.parse(x).toPx(maxWidth), 
@@ -119,7 +119,7 @@ export default class PolygonEditor extends UIElement {
             var className = [
                 index === 0? 'first' : '',
                 index === this.state.value.length-1 ? 'last' : ''
-            ].filter(it => it).join(WHITE_STRING)
+            ].filter(it => it).join(' ')
             return `<div class='drag-pointer ${className}' data-index="${index.toString()}" style='left: ${it.x};top: ${it.y};'></div>`
         })
     }

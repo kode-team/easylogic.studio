@@ -2,8 +2,7 @@ import UIElement, { EVENT } from "../../../../../util/UIElement";
 import { BackgroundImage } from "../../../../../editor/css-property/BackgroundImage";
 import { LOAD, CLICK, DRAGSTART, DRAGOVER, DROP, PREVENT, DEBOUNCE } from "../../../../../util/Event";
 import icon from "../../../icon/icon";
-import { keyEach, combineKeyArray } from "../../../../../util/functions/func";
-import { CSS_TO_STRING } from "../../../../../util/css/make";
+import { keyEach, combineKeyArray, CSS_TO_STRING } from "../../../../../util/functions/func";
 
 
 const names = {

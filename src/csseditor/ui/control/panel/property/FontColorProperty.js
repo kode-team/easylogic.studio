@@ -4,7 +4,7 @@ import { LOAD } from "../../../../../util/Event";
 import { EVENT } from "../../../../../util/UIElement";
 import {
   CHANGE_SELECTION,
-  CHANGE_ARTBOARD
+  
 } from "../../../../types/event";
 
 export default class FontColorProperty extends BaseProperty {
@@ -36,7 +36,7 @@ export default class FontColorProperty extends BaseProperty {
     }
   }
 
-  [EVENT(CHANGE_ARTBOARD, CHANGE_SELECTION)]() {
+  [EVENT(CHANGE_SELECTION)]() {
     this.refresh();
   }
 

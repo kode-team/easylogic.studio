@@ -1,12 +1,11 @@
 import BaseProperty from "./BaseProperty";
-import { INPUT, BIND } from "../../../../../util/Event";
+import { INPUT, BIND, DEBOUNCE } from "../../../../../util/Event";
 import { editor } from "../../../../../editor/editor";
 
 import { EVENT } from "../../../../../util/UIElement";
 
 import {
-  CHANGE_SELECTION,
-  CHANGE_ARTBOARD
+  CHANGE_SELECTION
 } from "../../../../types/event";
 
 export default class ContentProperty extends BaseProperty {
@@ -14,9 +13,22 @@ export default class ContentProperty extends BaseProperty {
     return "Content";
   }
 
-  [EVENT(CHANGE_ARTBOARD, CHANGE_SELECTION)]() {
-    this.refresh();
-  }
+
+  [EVENT(CHANGE_SELECTION) + DEBOUNCE(100)]() {
+
+    var current = editor.selection.current;
+    if (current) {
+      if (current.is('artboard')) {
+        this.hide();
+      } else {
+        this.show();
+        this.refresh();
+      }
+    } else {
+      this.hide();
+    }
+
+  }  
 
   getBody() {
     return `

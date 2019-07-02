@@ -4,7 +4,7 @@ import { convertMatches, reverseMatches } from "../../util/functions/parser";
 import { BoxShadow } from "../css-property/BoxShadow";
 import { BackgroundImage } from "../css-property/BackgroundImage";
 import { Filter } from "../css-property/Filter";
-import { WHITE_STRING } from "../../util/css/types";
+
 import { TextShadow } from "../css-property/TextShadow";
 import { BorderImage } from "../css-property/BorderImage";
 import { Transform } from "../css-property/Transform";
@@ -105,7 +105,7 @@ export class StyleParser {
       var color = null;
       var style = ''; 
       var width = ''; 
-      results.str.split(WHITE_STRING).forEach(str => {
+      results.str.split(' ').forEach(str => {
         if (str.indexOf('@') > -1) {  // check color 
           color = reverseMatches(str, results.matches)
         } else if (OUTLINE_REG.test(str)) { // check style 
@@ -217,8 +217,6 @@ export class StyleParser {
 
     var backgroundImages = BackgroundImage.parseStyle(style);
 
-    // console.log(backgroundImages);
-
     return { backgroundImages };
   }
 
@@ -232,7 +230,7 @@ export class StyleParser {
   parseBoxModelPropertyOne(styleKey, obj) {
     var style = this.getStyle();
     if (style[styleKey]) {
-      var arr = style[styleKey].split(WHITE_STRING);
+      var arr = style[styleKey].split(' ');
       var len = arr.length;
 
       switch (len) {

@@ -10,6 +10,7 @@ import icon from "../icon/icon";
 import ElementView from "./ElementView";
 import { Layer } from "../../../editor/items/Layer";
 import NumberRangeEditor from "../control/panel/property-editor/NumberRangeEditor";
+import { Length } from "../../../editor/unit/Length";
 
 
 
@@ -30,14 +31,22 @@ export default class CanvasView extends UIElement {
   }
 
   afterRender() {
-    var project = editor.add(new Project());
+    var project = editor.add(new Project({
+      name: 'New project'
+    }));
 
     editor.selection.selectProject(project);
 
-    var artboard = project.add(new ArtBoard());
+    var artboard = project.add(new ArtBoard({
+      name: 'New ArtBoard',
+      x: Length.px(300),
+      y: Length.px(300)
+    }));
     editor.selection.selectArtboard(artboard);
 
-    var layer = artboard.add(new Layer());
+    var layer = artboard.add(new Layer({
+      name: 'New layer'
+    }));
     editor.selection.select(layer);
 
     this.parser = this;

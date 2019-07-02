@@ -47,7 +47,5 @@ test('Porject - remove all artboard', () => {
 
     project.clear();
 
-    // console.log(project.artboards)s
-
     expect(project.artboards.length).toEqual(0)
 })

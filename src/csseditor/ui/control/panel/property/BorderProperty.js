@@ -1,8 +1,9 @@
 import BaseProperty from "./BaseProperty";
-import { CLICK, LOAD } from "../../../../../util/Event";
+import { CLICK, LOAD, DEBOUNCE } from "../../../../../util/Event";
 import { Length } from "../../../../../editor/unit/Length";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
+import { CHANGE_SELECTION } from "../../../../types/event";
 
 const borderStyleLit = [
   "none",
@@ -46,7 +47,7 @@ export default class BorderProperty extends BaseProperty {
           data-selected-value="all"
         ></div>
         <div class='editor-area'>
-          <RangeEditor label='width' ref='$width' min="0" max="1000" step="1" key='width' onchange='changeRangeEditor' />
+          <RangeEditor label='width' ref='$width' min="0" max="100" step="1" key='width' onchange='changeRangeEditor' />
         </div>
         <div class='editor-area'>
           <SelectEditor label='Style' ref='$style' key='style' options='${borderStyleLit}' onchange="changeRangeEditor" />
@@ -91,6 +92,23 @@ export default class BorderProperty extends BaseProperty {
       this.emit("refreshCanvas");
     }
   }
+
+
+  [EVENT(CHANGE_SELECTION) + DEBOUNCE(100)]() {
+
+    var current = editor.selection.current;
+    if (current) {
+      if (current.is('artboard')) {
+        this.hide();
+      } else {
+        this.show();
+        this.refresh();
+      }
+    } else {
+      this.hide();
+    }
+
+  }  
 
 
   [CLICK("$borderDirection button")](e) {

@@ -8,7 +8,6 @@ import {
   DROP,
   PREVENT
 } from "../../../../../util/Event";
-import { WHITE_STRING } from "../../../../../util/css/types";
 import { editor } from "../../../../../editor/editor";
 import UIElement, { EVENT } from "../../../../../util/UIElement";
 import RangeEditor from "./RangeEditor";
@@ -92,7 +91,7 @@ export default class SVGFilterEditor extends UIElement {
             key="${key}"
             params="${index}"            
             column='${s.column}' 
-            values='${filter[key].join(WHITE_STRING)}' 
+            values='${filter[key].join(' ')}' 
             onchange="changeRangeEditor"
           />
         </div>
@@ -184,7 +183,7 @@ export default class SVGFilterEditor extends UIElement {
 
         ${Object.keys(spec).map(key => {
           return this.makeFilterEditorTemplate(spec[key], filter, key, index);
-        }).join(WHITE_STRING)}
+        }).join(' ')}
 
       </div>
     </div>

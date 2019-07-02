@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "../../../../../../util/UIElement";
-import { WHITE_STRING } from "../../../../../../util/css/types";
+
 import { isUndefined } from "../../../../../../util/functions/func";
 import { Length } from "../../../../../../editor/unit/Length";
 import { POINTERSTART, MOVE, END, BIND } from "../../../../../../util/Event";
@@ -22,7 +22,7 @@ export default class CircleEditor extends UIElement {
             position = str.trim(); 
         }
 
-        var [x, y] = position.split(WHITE_STRING)
+        var [x, y] = position.split(' ')
 
         if (isUndefined(y)) {
             y = x; 

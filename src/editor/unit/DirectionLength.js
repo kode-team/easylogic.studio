@@ -1,9 +1,8 @@
 import { Length } from "./Length";
-import { WHITE_STRING } from "../../util/css/types";
 
 export class DirectionLength {
     static parse (str) {
-        var temp = str.split(WHITE_STRING).filter(it => it.trim()).map(it => Length.parse(it))
+        var temp = str.split(' ').filter(it => it.trim()).map(it => Length.parse(it))
 
         var top = Length.percent(0), right = Length.percent(0), bottom = Length.percent(0), left = Length.percent(0);
 

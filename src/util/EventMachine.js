@@ -25,7 +25,6 @@ import {
   keyMap,
   throttle
 } from "./functions/func";
-import { WHITE_STRING } from "./css/types";
 import {
   ADD_BODY_MOUSEMOVE,
   ADD_BODY_MOUSEUP
@@ -489,14 +488,6 @@ export default class EventMachine {
           //  기존의 같은 객체가 있으면 객체를 새로 생성하지 않고 재활용한다. 
           instance = this.children[refName] 
           instance._reload(props);
-
-          // console.log(this.parseSourceName(this).join(' < '), 'updated')
-
-          // 이것을 하면 좋은 것들 
-          // 1. 객체 생성을 다시 하지 않는다. 
-          // 2. DOM 이벤트를 재정의 하지 않는다. 
-          // 3. Store 이벤트를 유지할 수 있다. 
-          // 전체적으로 재생성 비용을 아낄 수 있다. 
         } else {
           instance = new Component(this, props);
 
@@ -531,7 +522,6 @@ export default class EventMachine {
       this.destroy();  
 
       this.$el = null;
-      // console.log('removed', 'el', this.sourceName)
       return true; 
     }
   }
@@ -603,7 +593,7 @@ export default class EventMachine {
         if (!args.length) return true; 
         var [callbackName, id] = originalCallbackName.split(CHECK_SAPARATOR);        
 
-        var [_, $bind] = callbackName.split(WHITE_STRING)
+        var [_, $bind] = callbackName.split(' ')
 
         return args.includes($bind)
       })

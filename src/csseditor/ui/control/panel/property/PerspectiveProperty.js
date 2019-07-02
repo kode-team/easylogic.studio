@@ -4,7 +4,7 @@ import { LOAD, CLICK } from "../../../../../util/Event";
 import { EVENT } from "../../../../../util/UIElement";
 import {
   CHANGE_SELECTION,
-  CHANGE_ARTBOARD
+  
 } from "../../../../types/event";
 import icon from "../../../icon/icon";
 
@@ -37,7 +37,7 @@ export default class PerspectiveProperty extends BaseProperty {
     }
   }
 
-  [EVENT(CHANGE_ARTBOARD, CHANGE_SELECTION)]() {
+  [EVENT(CHANGE_SELECTION)]() {
     this.refresh();
   }
 }

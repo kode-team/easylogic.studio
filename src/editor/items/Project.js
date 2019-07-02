@@ -9,7 +9,7 @@ export class Project extends MovableItem {
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
       itemType: "project",
-      name: 'Project ' + uuidShort(),
+      name: 'Project',
       ...obj,
       children: []
     });

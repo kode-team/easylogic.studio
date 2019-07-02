@@ -72,8 +72,10 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
 }
 
 .selection-tool {
-  outline: $pointer-color 1px solid;
+  border: $pointer-color 1px solid;
   position:absolute;
+  box-sizing: border-box;
+
   .selection-tool-item { 
     position: absolute;
     transform: translate(-50%, -50%);
@@ -86,6 +88,7 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
     border-radius: 100%;
     pointer-events: all;
     cursor: pointer;
+
 
     &[data-position="to top left"] {
       left: 0px;

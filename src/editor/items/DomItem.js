@@ -1,4 +1,4 @@
-import { CSS_TO_STRING } from "../../util/css/make";
+
 import { Length } from "../unit/Length";
 import { Display } from "../css-property/Display";
 import { GroupItem } from "./GroupItem";
@@ -6,7 +6,8 @@ import {
   keyEach,
   combineKeyArray,
   isUndefined,
-  isNotUndefined
+  isNotUndefined,
+  CSS_TO_STRING
 } from "../../util/functions/func";
 import { BorderImage } from "../css-property/BorderImage";
 import { Animation } from "../css-property/Animation";

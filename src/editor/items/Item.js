@@ -25,7 +25,7 @@ export class Item {
     }
     this.json = this.convert({ ...this.getDefaultObject(), ...json });
 
-    return new Proxy(this, {
+    this.ref = new Proxy(this, {
       get: (target, key) => {
         var originMethod = target[key];
         if (isFunction(originMethod)) {
@@ -53,6 +53,8 @@ export class Item {
         return true;
       }
     });
+
+    return this.ref; 
   }
 
   /***********************************
@@ -79,7 +81,7 @@ export class Item {
    **********************************/
 
   get title() {
-    return `${this.json.name || this.getDefaultTitle()}`;
+    return this.json.name || this.getDefaultTitle();
   }
 
   /**
@@ -91,6 +93,15 @@ export class Item {
 
   get layers () {
     return this.json.layers; 
+  }
+
+  get parent () {
+    return this.json.parent;
+  }
+
+  is (itemType) {
+    if (!this.json) return false;
+    return this.json.itemType === itemType;
   }
 
   /***********************************
@@ -169,6 +180,7 @@ export class Item {
 
   add (layer) {
     this.json.layers.push(layer);
+    layer.parent = this.ref; 
     return layer;
   }
 
@@ -194,20 +206,20 @@ export class Item {
   }
 
   get html () {
-    var {tagName, id, layers, content} = this.json;
+    var {tagName, id, layers, content, itemType} = this.json;
 
     tagName = tagName || 'div'
 
     var selected = this.json.selected ? 'selected' : ''
 
     return `
-    <${tagName} class='element-item ${selected}' data-id="${id}">${content ? content : ''}
+    <${tagName} class='element-item ${selected} ${itemType}' data-id="${id}">${content ? content : ''}
       ${layers.map(it => it.html)}
     </${tagName}>
     `
   }
 
   get allLayers () {
-    return [..._traverse(this.clone())]
+    return [..._traverse(this.ref)]
   }
 }

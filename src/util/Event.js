@@ -1,4 +1,4 @@
-import { WHITE_STRING } from "./css/types";
+
 import { uuid } from "./functions/math";
 
 export class EventChecker {
@@ -43,8 +43,7 @@ const CHECK_MOUSE_PATTERN = "mouse(down|up|move|over|out|enter|leave)";
 const CHECK_POINTER_PATTERN = "pointer(start|move|end)";
 const CHECK_TOUCH_PATTERN = "touch(start|move|end)";
 const CHECK_KEY_PATTERN = "key(down|up|press)";
-const CHECK_DRAGDROP_PATTERN =
-  "drag|drop|drag(start|over|enter|leave|exit|end)";
+const CHECK_DRAGDROP_PATTERN = "drag|drop|drag(start|over|enter|leave|exit|end)";
 const CHECK_CONTEXT_PATTERN = "contextmenu";
 const CHECK_INPUT_PATTERN = "change|input|focus|blur|focus(in|out)";
 const CHECK_CLIPBOARD_PATTERN = "paste";
@@ -65,13 +64,13 @@ const CHECK_PATTERN_LIST = [
   CHECK_FORM_PATTERN
 ].join("|");
 
-export const CHECK_PATTERN = new RegExp(`^(${CHECK_PATTERN_LIST})`, "ig");
+export const CHECK_PATTERN = new RegExp(`^(${CHECK_PATTERN_LIST}\s)`, "ig");
 
 export const NAME_SAPARATOR = ":";
 export const CHECK_SAPARATOR = "|";
 export const LOAD_SAPARATOR = "load ";
 export const BIND_SAPARATOR = "bind ";
-export const SAPARATOR = WHITE_STRING;
+export const SAPARATOR = ' ';
 
 // 임의의 값을 저장하기 위한 구조
 // 임의의 값은 하나의 id 로 만들어지고 id 를 조회 할 때  값으로 다시 치환

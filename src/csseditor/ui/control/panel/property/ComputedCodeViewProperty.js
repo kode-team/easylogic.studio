@@ -6,9 +6,9 @@ import { EVENT } from "../../../../../util/UIElement";
 
 import {
   CHANGE_SELECTION,
-  CHANGE_ARTBOARD
+  
 } from "../../../../types/event";
-import { CSS_TO_STRING } from "../../../../../util/css/make";
+import { CSS_TO_STRING } from "../../../../../util/functions/func";
 
 export default class ComputedCodeViewProperty extends BaseProperty {
   getTitle() {
@@ -16,7 +16,7 @@ export default class ComputedCodeViewProperty extends BaseProperty {
   } 
 
   [EVENT(
-    CHANGE_ARTBOARD, 
+    
     CHANGE_SELECTION,
   ) + DEBOUNCE(100)]() {
     this.refresh();

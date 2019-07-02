@@ -1,6 +1,8 @@
 import { Item } from "./Item";
 import { Length } from "../unit/Length";
 
+const zero = Length.px(0)
+
 export class MovableItem extends Item {
 
 
@@ -10,9 +12,30 @@ export class MovableItem extends Item {
     //
     ///////////////////////
 
+    setScreenX(value) {
+        var absoluteX = 0;
+        if (this.json.parent) {
+            absoluteX = this.json.parent.screenX.value; 
+        }
 
-    get screenX () { return this.json.x || Length.px(0) }
-    get screenY () { return this.json.y || Length.px(0) }
+        this.json.x.set(value - absoluteX);
+    }
+
+
+    setScreenY(value) {
+        var absoluteY = 0;
+        if (this.json.parent) {
+            absoluteY = this.json.parent.screenY.value; 
+        }
+        this.json.y.set(value - absoluteY);
+    }    
+
+    get screenX () { 
+        return this.json.x || Length.px(0) 
+    }
+    get screenY () { 
+        return this.json.y || Length.px(0) 
+    }
     get screenX2 () { return Length.px(this.screenX.value + this.json.width.value) }
     get screenY2 () { 
         return Length.px(this.screenY.value + this.json.height.value) 

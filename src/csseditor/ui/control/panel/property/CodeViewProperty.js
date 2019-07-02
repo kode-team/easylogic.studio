@@ -6,16 +6,16 @@ import { EVENT } from "../../../../../util/UIElement";
 
 import {
   CHANGE_SELECTION,
-  CHANGE_ARTBOARD
+  
 } from "../../../../types/event";
-import { CSS_TO_STRING } from "../../../../../util/css/make";
+import { CSS_TO_STRING } from "../../../../../util/functions/func";
 
 export default class CodeViewProperty extends BaseProperty {
   getTitle() {
     return "CodeView";
   }
 
-  [EVENT(CHANGE_ARTBOARD, CHANGE_SELECTION,'refreshCanvas' ) + DEBOUNCE(10) ]() {
+  [EVENT(CHANGE_SELECTION,'refreshCanvas' ) + DEBOUNCE(10) ]() {
     this.refresh();
   }
 

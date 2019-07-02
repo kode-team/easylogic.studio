@@ -11,7 +11,7 @@ import { ConicGradient } from "../image-resource/ConicGradient";
 import { RepeatingConicGradient } from "../image-resource/RepeatingConicGradient";
 import { Gradient } from "../image-resource/Gradient";
 import { convertMatches, reverseMatches } from "../../util/functions/parser";
-import { WHITE_STRING } from "../../util/css/types";
+
 
 const RepeatList = ["repeat", "no-repeat", "repeat-x", "repeat-y"];
 const reg = /((linear\-gradient|repeating\-linear\-gradient|radial\-gradient|repeating\-radial\-gradient|conic\-gradient|repeating\-conic\-gradient|url)\(([^\)]*)\))/gi;
@@ -44,8 +44,6 @@ export class BackgroundImage extends Property {
       type: data.type,
       image: BackgroundImage.createGradient(data, this.json.image)
     });
-
-    // console.log(this.toCSS());
   }
 
   static createGradient(data, gradient) {
@@ -314,7 +312,7 @@ export class BackgroundImage extends Property {
             backgroundImages[index].size = it;
           } else {
             backgroundImages[index].size = "auto";
-            let [width, height] = it.split(WHITE_STRING);
+            let [width, height] = it.split(' ');
             backgroundImages[index].width = Length.parse(width);
             backgroundImages[index].height = Length.parse(height);
           }
@@ -325,7 +323,7 @@ export class BackgroundImage extends Property {
     if (style["background-position"]) {
       style["background-position"].split(",").map(it => it.trim()).forEach((it, index) => {
         if (backgroundImages[index]) {
-          let [x, y] = it.split(WHITE_STRING);
+          let [x, y] = it.split(' ');
           backgroundImages[index].x = Length.parse(x);
           backgroundImages[index].y = Length.parse(y);
         }

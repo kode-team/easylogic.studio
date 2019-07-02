@@ -1,6 +1,6 @@
 import { Property } from "../items/Property";
 import { Length } from "../unit/Length";
-import { WHITE_STRING } from "../../util/css/types";
+
 
 export class Display extends Property {
   getDefaultObject(obj = {}) {
@@ -77,17 +77,17 @@ export class Display extends Property {
       }
 
       if (json.columns.length) {
-        css["grid-template-columns"] = json.columns.join(WHITE_STRING);
+        css["grid-template-columns"] = json.columns.join(' ');
       }
 
       if (json.rows.length) {
-        css["grid-template-rows"] = json.rows.join(WHITE_STRING);
+        css["grid-template-rows"] = json.rows.join(' ');
       }
 
       if (json.areas.length) {
         css["grid-template-areas"] = json.areas
-          .map(it => `"${it.join(WHITE_STRING)}"`)
-          .join(WHITE_STRING);
+          .map(it => `"${it.join(' ')}"`)
+          .join(' ');
       }
       if (json.alignItems != "normal") {
         css["align-items"] = json.alignItems;

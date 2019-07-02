@@ -132,7 +132,6 @@ export default class ElementView extends UIElement {
         rect.x2 = Length.px(rect.x.value + rect.width.value);
         rect.y2 = Length.px(rect.y.value + rect.height.value);
 
-
         var artboard = editor.selection.currentArtboard;
 
         if (artboard) {
@@ -152,13 +151,15 @@ export default class ElementView extends UIElement {
             height: Length.px(0)
         })
 
-        this.selectCurrent(...items)
+        this.selectCurrentForBackgroundView(...items)
 
         if (items.length) {
             this.emit('changeSelection')
         } else {
+            editor.selection.select();            
             this.emit('emptySelection')
         }
+
 
     }
 
@@ -193,6 +194,7 @@ export default class ElementView extends UIElement {
                 this.cachedCurrentElement[item.id].cssText(`left: ${x};top:${y};width:${width};height:${height}`)
             }
         })
+
         this.emit('refreshRect');        
     }
 
@@ -213,10 +215,8 @@ export default class ElementView extends UIElement {
     }
 
     [BIND('$body')] () {
-        var artboard = editor.selection.currentArtboard || { width: Length.px(1000), height: Length.px(1000)}
-        
-        var width = Length.px(artboard.width.value + 5000);
-        var height = Length.px(artboard.height.value + 5000);
+        var width = Length.px(10000);
+        var height = Length.px(10000);
 
         return {
             style: {
@@ -229,22 +229,18 @@ export default class ElementView extends UIElement {
 
 
     [BIND('$view')] () {
-        var artboard = editor.selection.currentArtboard || { width: Length.px(1000), height: Length.px(1000)}
-
-        var width = Length.px(artboard.width.value)
-        var height = Length.px(artboard.height.value)
-
         return {
             style: {
-                "background-color": 'white',
-                'background-image': createGridLine(100),
-                'box-shadow': '0px 0px 5px 0px rgba(0, 0, 0, .5)',
+                // 'background-image': createGridLine(100),
+                // 'box-shadow': '0px 0px 5px 0px rgba(0, 0, 0, .5)',
                 'position': 'absolute',
                 'left': Length.percent(50),
                 'top': Length.percent(50),
                 transform: `translate(-50%, -50%) scale(${editor.scale})`,
-                width,
-                height
+                'transform-origin': `left top`,
+                width: Length.percent(100),
+                height: Length.percent(100),
+                
             }
         }
     }    
@@ -257,10 +253,7 @@ export default class ElementView extends UIElement {
         var artboard = editor.selection.currentArtboard
         var html = '' 
         if (artboard) {
-            html = artboard.layers.map(it => {
-                it.selected = editor.selection.current === it;
-                return it.html
-            }).join('\n')
+            html = artboard.html
         }
 
         this.setState({ html })
@@ -289,14 +282,44 @@ export default class ElementView extends UIElement {
                 this.cachedCurrentElement[it.attr('data-id')] = it; 
                 it.addClass('selected')
             })
-
-            this.emit(CHANGE_SELECTION)   
             
+        } else {
+            editor.selection.select(editor.selection.currentArtboard)
         }
+        this.emit(CHANGE_SELECTION)           
 
         this.emit('initSelectionTool')
 
     }
+
+
+    selectCurrentForBackgroundView (...args) {
+        this.cachedCurrentElement = {}
+        var $selectedElement = this.$el.$$('.selected');
+
+        if ($selectedElement) {
+            $selectedElement.forEach(it => it.removeClass('selected'))
+        }
+
+        if(args.length) {
+
+            var selector = args.map(it => `[data-id='${it.id}']`).join(',')
+
+            var list = this.$el.$$(selector);
+            
+            list.forEach(it => {
+                this.cachedCurrentElement[it.attr('data-id')] = it; 
+                it.addClass('selected')
+            })
+            
+        } else {
+            editor.selection.select()
+        }
+        this.emit(CHANGE_SELECTION)           
+
+        this.emit('initSelectionTool')
+
+    }    
     
     [EVENT(CHANGE_SELECTION)] () {
 
@@ -323,7 +346,7 @@ export default class ElementView extends UIElement {
     [EVENT('refreshCanvas')] (obj = {}) {
         if (obj.update === 'tag') {
             this.trigger('addElement');
-        }
+        } 
     }
     
 } 

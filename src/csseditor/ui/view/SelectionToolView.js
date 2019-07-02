@@ -23,7 +23,18 @@ export default class SelectionToolView extends UIElement {
         return `<div class='selection-view' 
                      ref='$selectionView' 
                      style='pointer-events:none;position:absolute;left:0px;top:0px;right:0px;bottom:0px;'
-                ></div>`
+                >
+                    <div class='selection-tool' ref='$selectionTool'>
+                        <div class='selection-tool-item' data-position='to top'></div>
+                        <div class='selection-tool-item' data-position='to right'></div>
+                        <div class='selection-tool-item' data-position='to bottom'></div>
+                        <div class='selection-tool-item' data-position='to left'></div>
+                        <div class='selection-tool-item' data-position='to top right'></div>
+                        <div class='selection-tool-item' data-position='to bottom right'></div>
+                        <div class='selection-tool-item' data-position='to top left'></div>
+                        <div class='selection-tool-item' data-position='to bottom left'></div>
+                    </div>
+                </div>`
     }
 
     [POINTERSTART('$selectionView .selection-tool-item') + MOVE() + END()] (e) {
@@ -84,8 +95,7 @@ export default class SelectionToolView extends UIElement {
 
     [EVENT('makeSelectionTool')] (isScale) {
         if (isScale) {
-            this.originalArtboardRect = null
-            this.originalRect = null    
+            this.removeOriginalRect()   
         }
         var drawList = this.guideView.calculate();
 
@@ -93,26 +103,13 @@ export default class SelectionToolView extends UIElement {
         this.emit('refreshGuideLine', this.calculateWorldPositionForGuideLine(drawList));                
     }
 
-    initSelectionTool() {
+    removeOriginalRect () {
         this.originalArtboardRect = null
         this.originalRect = null
+    }
 
-        var html = `
-            <div class='selection-tool'>
-                <div class='selection-tool-item' data-position='to top'></div>
-                <div class='selection-tool-item' data-position='to right'></div>
-                <div class='selection-tool-item' data-position='to bottom'></div>
-                <div class='selection-tool-item' data-position='to left'></div>
-                <div class='selection-tool-item' data-position='to top right'></div>
-                <div class='selection-tool-item' data-position='to bottom right'></div>
-                <div class='selection-tool-item' data-position='to top left'></div>
-                <div class='selection-tool-item' data-position='to bottom left'></div>
-            </div>
-        `
-
-        this.refs.$selectionView.html(html);
-
-        this.cachedSelectionTools = this.refs.$selectionView.$('.selection-tool');
+    initSelectionTool() {
+        this.removeOriginalRect();
 
         this.guideView.makeGuideCache();        
         this.makeSelectionTool();
@@ -137,13 +134,10 @@ export default class SelectionToolView extends UIElement {
 
         var {x, y, width, height} = this.calculateWorldPosition(this.guideView.rect) ;
 
-        this.cachedSelectionTools.cssText(`left: ${x};top:${y};width:${width};height:${height}`)
-        
+        this.refs.$selectionTool.cssText(`left: ${x};top:${y};width:${width};height:${height}`)
     }
 
     calculateWorldPositionForGuideLine (list = []) {
-        var world = this.getWorldPosition();
-
         return list.map(it => {
 
             var A = new MovableItem(this.calculateWorldPosition(it.A))
@@ -151,10 +145,10 @@ export default class SelectionToolView extends UIElement {
 
             var ax, bx, ay, by; 
 
-            if (isNotUndefined(it.ax)) { ax = it.ax * editor.scale + world.left }
-            if (isNotUndefined(it.bx)) { bx = it.bx * editor.scale + world.left }
-            if (isNotUndefined(it.ay)) { ay = it.ay * editor.scale + world.top }
-            if (isNotUndefined(it.by)) { by = it.by * editor.scale + world.top }
+            if (isNotUndefined(it.ax)) { ax = it.ax * editor.scale }
+            if (isNotUndefined(it.bx)) { bx = it.bx * editor.scale }
+            if (isNotUndefined(it.ay)) { ay = it.ay * editor.scale }
+            if (isNotUndefined(it.by)) { by = it.by * editor.scale }
 
             return {
                 A, 
@@ -168,14 +162,12 @@ export default class SelectionToolView extends UIElement {
     }
 
     calculateWorldPosition (item) {
-        var world = this.getWorldPosition();
-
         var x = (item.x || Length.px(0));
         var y = (item.y || Length.px(0));
 
         return {
-            x: Length.px(x.value * editor.scale + world.left),
-            y: Length.px(y.value * editor.scale + world.top),
+            x: Length.px(x.value * editor.scale),
+            y: Length.px(y.value * editor.scale),
             width: Length.px(item.width.value  *  editor.scale),
             height: Length.px(item.height.value  * editor.scale),
             transform: item.transform
@@ -185,6 +177,11 @@ export default class SelectionToolView extends UIElement {
     [EVENT('refreshCanvas')] (obj = {}) {
         if (obj.transform) {
             this.makeSelectionTool(obj);
+        } else if (obj.init) {
+
+            editor.selection.setRectCache();        
+
+            this.initSelectionTool();
         }
     }
 

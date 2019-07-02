@@ -1,7 +1,6 @@
 import { Property } from "../items/Property";
-import { html } from "../../util/functions/func";
+import { html, CSS_TO_STRING } from "../../util/functions/func";
 import { Length } from "../unit/Length";
-import { CSS_TO_STRING } from "../../util/css/make";
 
 export class Offset extends Property {
   static parse(obj) {

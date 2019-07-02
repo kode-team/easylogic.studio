@@ -2,8 +2,8 @@ import UIElement, { EVENT } from "../../../util/UIElement";
 
 import { editor } from "../../../editor/editor";
 import { DEBOUNCE, LOAD } from "../../../util/Event";
-import { CSS_TO_STRING } from "../../../util/css/make";
 import Dom from "../../../util/Dom";
+import { CSS_TO_STRING } from "../../../util/functions/func";
 
 
 export default class StyleView extends UIElement {

@@ -11,7 +11,7 @@ import { ConicGradient } from "../image-resource/ConicGradient";
 import { RepeatingConicGradient } from "../image-resource/RepeatingConicGradient";
 import { Gradient } from "../image-resource/Gradient";
 import { convertMatches, reverseMatches } from "../../util/functions/parser";
-import { WHITE_STRING } from "../../util/css/types";
+
 
 export class BorderImage extends Property {
   addImageResource(imageResource) {
@@ -38,8 +38,6 @@ export class BorderImage extends Property {
       type: data.type,
       image: this.createGradient(data, this.json.image)
     });
-
-    // console.log(this.toCSS());
   }
 
   createGradient(data, gradient) {
@@ -127,7 +125,7 @@ export class BorderImage extends Property {
   toBorderImageOffsetCSS() {
     return Object.keys(this.json.offset).map(key => {
       return this.json.offset[key].toString()
-    }).join(WHITE_STRING)
+    }).join(' ')
   }
 
   toBorderImageCSS(isExport = false) {
@@ -159,7 +157,7 @@ export class BorderImage extends Property {
 
     var cssText = Object.keys(this.json.width).map(key => {
       return this.json.width[key].toString()
-    }).join(WHITE_STRING)
+    }).join(' ')
 
     return {
       'border-image-width': `${cssText}`
@@ -171,7 +169,7 @@ export class BorderImage extends Property {
     var cssText = Object.keys(this.json.slice).map(key => {
       var len = this.json.slice[key];
       return len.isPercent() ? len.toString() : len.value;
-    }).join(WHITE_STRING)
+    }).join(' ')
 
     return {
       'border-image-slice': `${cssText}`
@@ -210,7 +208,7 @@ export class BorderImage extends Property {
         let image = null;
         value = reverseMatches(value, results.matches);
 
-        const arr = style['border-image'].replace(value, '').split(WHITE_STRING).map(str => Length.parse(str))
+        const arr = style['border-image'].replace(value, '').split(' ').map(str => Length.parse(str))
 
         if (value.includes("repeating-linear-gradient")) {
           // 반복을 먼저 파싱하고

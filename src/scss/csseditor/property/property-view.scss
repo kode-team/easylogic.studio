@@ -1,7 +1,6 @@
 .property {
-  padding: 5px;
-  border: 1px solid rgba($border-color, 0.8);
-  margin: 5px;
+  padding: 10px 5px;
+  border-bottom: 1px solid rgba($border-color, 0.8);
   background-color: white;
   border-radius: 3px;
 
@@ -41,7 +40,6 @@
     position: relative;
     font-size: 12px;
     font-weight: 400;
-    text-shadow: 2px 2px 5px $border-color;
     display: grid;
     grid-template-columns: 0.8fr 1fr;
     cursor: pointer;

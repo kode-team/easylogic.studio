@@ -1,5 +1,4 @@
 import UIElement from "../../../util/UIElement";
-import { html } from "../../../util/functions/func";
 import property from "./panel/property/index";
 import { CLICK } from "../../../util/Event";
 import icon from "../icon/icon";
@@ -15,10 +14,6 @@ export default class Inspector extends UIElement {
                 <div class='icon'>${icon.shape}</div>
                 <label>Element</label>
               </div>                  
-              <div class="tab-item" data-value="2">
-                <div class='icon'>${icon.paint}</div>
-                <label>Style</label>
-              </div>
               <div class="tab-item" data-value="3">
                 <div class='icon'>${icon.title}</div>
                 <label>Text</label>
@@ -33,11 +28,7 @@ export default class Inspector extends UIElement {
               </div>                          
               <div class="tab-item" data-value="6">
                 <div class='icon'>${icon.scatter}</div>
-                <label>Selector</label>
-              </div>                          
-              <div class="tab-item" data-value="7">
-                <div class='icon'>${icon.timer}</div>
-                <label>Animation</label>
+                <label>Selector & Animation</label>
               </div>
               <div class="tab-item" data-value="8">
                 <div class='icon'>${icon.ballot}</div>
@@ -49,14 +40,13 @@ export default class Inspector extends UIElement {
                 <PositionProperty />              
                 <SizeProperty />              
                 <BoxModelProperty />
-              </div>
-              <div class="tab-content" data-value="2">
                 <BackgroundColorProperty />
                 <OpacityProperty />                     
                 <BorderProperty />
                 <BorderRadiusProperty />
                 <!--BorderImageProperty /-->
                 <OutlineProperty />
+                <ArtBoardSizeProperty />
               </div>
               <div class="tab-content" data-value="3">
                 <ContentProperty />
@@ -85,8 +75,6 @@ export default class Inspector extends UIElement {
               </div>
               <div class='tab-content' data-value='6'>
                 <SelectorProperty />
-              </div>
-              <div class='tab-content' data-value="7">
                 <TransitionProperty />
                 <KeyframeProperty />
                 <AnimationProperty />
@@ -106,20 +94,8 @@ export default class Inspector extends UIElement {
                 <label>Code</label>
               </div>    
               <div class="tab-item" data-value="2">
-                <div class='icon'>${icon.code}</div>
-                <label>Computed</label>
-              </div>                  
-              <div class="tab-item" data-value="3">
-                <div class='icon'>${icon.build}</div>
-                <label>Var</label>
-              </div>    
-              <div class="tab-item" data-value="4">
-                <div class='icon'>${icon.build}</div>
-                <label>Root Var</label>
-              </div>  
-              <div class="tab-item" data-value="5">
                 <div class='icon'>${icon.gradient}</div>
-                <label>SVG</label>
+                <label>GLOBAL</label>
               </div>                                              
             </div>
             <div class="tab-body" ref="$extraBody">
@@ -127,15 +103,8 @@ export default class Inspector extends UIElement {
                 <CodeViewProperty />
               </div>              
               <div class="tab-content" data-value="2">
-                <ComputedCodeViewProperty />
-              </div>              
-              <div class="tab-content" data-value="3">
                 <VariableProperty />
-              </div>
-              <div class="tab-content" data-value="4">
                 <RootVariableProperty />
-              </div>                 
-              <div class='tab-content' data-value='5'>
                 <SVGProperty />
               </div>
             </div>

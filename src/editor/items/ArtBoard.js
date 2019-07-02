@@ -8,6 +8,7 @@ export class ArtBoard extends DomItem {
       name: "New ArtBoard",
       width: Length.px(1000),
       height: Length.px(1000),
+      'background-color': 'white',
       ...obj
     });
   }

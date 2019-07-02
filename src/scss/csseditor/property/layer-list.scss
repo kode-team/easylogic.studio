@@ -60,50 +60,8 @@
         &.selected {
             background-color: rgba(0, 0, 0, 0.1);
             @include title-background();
-            color: white;
             border-radius: 3px;
-
-            .tools {
-                button {
-                    svg {
-                        path {
-                            fill: white;
-                        }
-                    }
-
-                    &.visible {
-                        svg {
-                            path {
-                                fill: $border-color;
-                            }
-                        }   
-
-                        &[data-visible='true'] {
-                            svg {
-                                path {
-                                    fill: white;
-                                }
-                            }   
-                        }                        
-                    }
-
-                    &.lock {
-                        svg {
-                            path {
-                                fill: $border-color;
-                            }
-                        }   
-
-                        &[data-lock='true'] {
-                            svg {
-                                path {
-                                    fill: white;
-                                }
-                            }   
-                        }                        
-                    }                    
-                }
-            }
+            border:1px solid $border-color;                        
         }
 
     }

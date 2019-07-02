@@ -2,8 +2,6 @@
 export const CHANGE_SELECTION = 'CHANGE_SELECTION'
 
 export const CHANGE_INSPECTOR = 'CHANGE_INSPECTOR'
-export const CHANGE_PROJECT = 'CHANGE_PROJECT'
-export const CHANGE_ARTBOARD = 'CHANGE_ARTBOARD'
 
 export const RESIZE_WINDOW = 'resize/window'
 

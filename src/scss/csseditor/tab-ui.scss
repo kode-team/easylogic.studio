@@ -83,14 +83,8 @@ $tab-horizontal-header-right-width: 60px;
     @for $selectValue from 1 to 10 {
       &[data-selected-value="#{$selectValue}"]
         .tab-item[data-value="#{$selectValue}"] {
-        background-color: rgb(68, 68, 68);
-        color: white;
+        background-color: rgb(201, 201, 201);
         @include title-background();
-        svg {
-          path,g {
-            fill: white;
-          }
-        }
       }
 
       &[data-selected-value="#{$selectValue}"]

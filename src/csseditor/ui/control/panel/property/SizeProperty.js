@@ -4,7 +4,7 @@ import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
 import {
   CHANGE_SELECTION,
-  CHANGE_ARTBOARD
+  
 } from "../../../../types/event";
 
 import RangeEditor from "../property-editor/RangeEditor";
@@ -27,7 +27,7 @@ export default class SizeProperty extends BaseProperty {
     return true; 
   }
 
-  [EVENT(CHANGE_ARTBOARD, CHANGE_SELECTION, 'refreshRect') + DEBOUNCE(100)]() {
+  [EVENT(CHANGE_SELECTION, 'refreshRect') + DEBOUNCE(100)]() {
     this.refresh();
   }
 

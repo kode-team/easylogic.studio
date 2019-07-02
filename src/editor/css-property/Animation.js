@@ -1,6 +1,6 @@
 import { Length } from "../unit/Length";
 import { Property } from "../items/Property";
-import { WHITE_STRING } from "../../util/css/types";
+
 
 export class Animation extends Property {
   static parse(obj) {
@@ -55,6 +55,6 @@ export class Animation extends Property {
       json.direction,
       json.fillMode,
       json.playState
-    ].join(WHITE_STRING)
+    ].join(' ')
   }
 }

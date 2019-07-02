@@ -1,9 +1,3 @@
-import {
-  UNIT_DEG,
-  UNIT_PERCENT,
-  UNIT_COLOR,
-  UNIT_PX
-} from "../../util/css/types";
 import { Length } from "../unit/Length";
 import { Property } from "../items/Property";
 

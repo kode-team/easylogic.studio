@@ -5,7 +5,7 @@ import { Length } from "../../../../../editor/unit/Length";
 import { EVENT } from "../../../../../util/UIElement";
 import {
   CHANGE_SELECTION,
-  CHANGE_ARTBOARD
+  
 } from "../../../../types/event";
 
 
@@ -24,7 +24,7 @@ export default class BoxModelProperty extends BaseProperty {
     return false; 
   }
 
-  [EVENT(CHANGE_ARTBOARD, CHANGE_SELECTION)]() {
+  [EVENT(CHANGE_SELECTION)]() {
     this.refresh();
   }
 

@@ -1,6 +1,6 @@
 import { Property } from "../items/Property";
 import { Offset } from "./Offset";
-import { WHITE_STRING } from "../../util/css/types";
+
 import { reverseMatches, convertMatches } from "../../util/functions/parser";
 import { Length } from "../unit/Length";
 
@@ -24,8 +24,8 @@ export class Keyframe extends Property {
       var results = convertMatches(style["keyframe"]);
 
       results.str.split('|').map(it => it.trim()).forEach( (frameInfo, index) => {
-        var [ name, offset, property, ...values ] = frameInfo.split(WHITE_STRING)
-        var propertyValue = values.join(WHITE_STRING);
+        var [ name, offset, property, ...values ] = frameInfo.split(' ')
+        var propertyValue = values.join(' ');
 
         if (!keyframeKeys[name]) {
           keyframeKeys[name] = new Keyframe({

@@ -1,8 +1,8 @@
 import { SUBMIT } from "../../../../util/Event";
 import MenuItem from "./MenuItem";
 import { editor } from "../../../../editor/editor";
-import { CSS_TO_STRING } from "../../../../util/css/make";
-import { keyMap } from "../../../../util/functions/func";
+
+import { keyMap, CSS_TO_STRING } from "../../../../util/functions/func";
 
 export default class ExportJSFiddle extends MenuItem {
   template() {

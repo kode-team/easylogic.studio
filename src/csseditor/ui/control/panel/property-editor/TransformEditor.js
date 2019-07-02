@@ -7,7 +7,7 @@ import {
   DROP,
   PREVENT
 } from "../../../../../util/Event";
-import { WHITE_STRING } from "../../../../../util/css/types";
+
 import {
   Transform
 } from "../../../../../editor/css-property/Transform";
@@ -238,7 +238,7 @@ export default class TransformEditor extends UIElement {
   }
 
   modifyTransform () {
-    var value = this.state.transforms.join(WHITE_STRING);
+    var value = this.state.transforms.join(' ');
 
     this.parent.trigger(this.props.onchange, value)
   }

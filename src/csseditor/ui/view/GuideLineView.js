@@ -1,7 +1,6 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
-import { combineKeyArray, isNotUndefined, keyEach } from "../../../util/functions/func";
+import { combineKeyArray, isNotUndefined, keyEach, CSS_TO_STRING } from "../../../util/functions/func";
 import { Length } from "../../../editor/unit/Length";
-import { CSS_TO_STRING } from "../../../util/css/make";
 import { Layer } from "../../../editor/items/Layer";
 
 /**
@@ -24,7 +23,9 @@ export default class GuideLineView extends UIElement {
     
     createGuideLine (list) {
     
-        const lineWidth = Length.px(1.5); 
+        const lineWidth = Length.px(1); 
+        const baseLineColor = 'rgb(180, 199, 254)'
+        const baseRectColor = 'rgb(244, 140, 255)'
     
         var images = []
     
@@ -34,25 +35,25 @@ export default class GuideLineView extends UIElement {
     
             if (isNotUndefined(it.ax)) {
     
-                images.push(this.createBackgroundImage('#e600ff', Length.px(it.bx-1), it.A.screenY, lineWidth, it.A.height))
+                images.push(this.createBackgroundImage(baseRectColor, Length.px(it.bx-1), it.A.screenY, lineWidth, it.A.height))
     
                 
                 if (target instanceof Layer) {
-                    images.push(this.createBackgroundImage('#e600ff', Length.px(it.bx-1), target.screenY, lineWidth, target.height))
+                    images.push(this.createBackgroundImage(baseRectColor, Length.px(it.bx-1), target.screenY, lineWidth, target.height))
                 }
     
                 var minY = Length.min(target.screenY, it.A.screenY);
                 var maxY = Length.max(target.screenY2, it.A.screenY2);
     
-                images.push(this.createBackgroundImage('#4877ff', Length.px(it.bx-1), minY, lineWidth, Length.px(maxY.value - minY.value)))            
+                images.push(this.createBackgroundImage(baseLineColor, Length.px(it.bx-1), minY, lineWidth, Length.px(maxY.value - minY.value)))            
     
             } else {
-                images.push(this.createBackgroundImage('#e600ff', it.A.screenX, Length.px(it.by), it.A.width, lineWidth))            
+                images.push(this.createBackgroundImage(baseRectColor, it.A.screenX, Length.px(it.by), it.A.width, lineWidth))            
     
                 var minX = Length.min(target.screenX, it.A.screenX);
                 var maxX = Length.max(target.screenX2, it.A.screenX2);
     
-                images.push(this.createBackgroundImage('#4877ff', minX, Length.px(it.by), Length.px(maxX.value - minX.value), lineWidth))            
+                images.push(this.createBackgroundImage(baseLineColor, minX, Length.px(it.by), Length.px(maxX.value - minX.value), lineWidth))            
             }
     
         })

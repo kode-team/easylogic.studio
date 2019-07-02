@@ -1,11 +1,11 @@
 import UIElement from "../../../../../util/UIElement";
 import { LOAD, INPUT, BIND } from "../../../../../util/Event";
-import { WHITE_STRING } from "../../../../../util/css/types";
+
 
 export default class InputArrayEditor extends UIElement {
 
     initState() {
-        var values = this.props.values.split(WHITE_STRING).map(it => +it)
+        var values = this.props.values.split(' ').map(it => +it)
         return {
             values,
             column: this.props.column

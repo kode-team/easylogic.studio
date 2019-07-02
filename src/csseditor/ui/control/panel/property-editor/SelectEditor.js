@@ -50,7 +50,7 @@ export default class SelectEditor extends UIElement {
             var label = it; 
 
             if (label === '') {
-                label = '< none-value >'
+                label = this.props['none-value'] ? this.props['none-value'] : '< none-value >'
             } else if (label === '-') {
                 label = '----------'
                 value = ''; 

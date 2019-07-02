@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "../../../../../../util/UIElement";
-import { WHITE_STRING } from "../../../../../../util/css/types";
+
 import { Length } from "../../../../../../editor/unit/Length";
 import { POINTERSTART, MOVE, LOAD, CLICK } from "../../../../../../util/Event";
 import RangeEditor from "../RangeEditor";
@@ -93,7 +93,7 @@ export default class InsetEditor extends UIElement {
     [LOAD('$round')] () {
         var {topRadius, rightRadius, bottomRadius, leftRadius} = this.state
 
-        var value = [topRadius, rightRadius, bottomRadius, leftRadius].join(WHITE_STRING)
+        var value = [topRadius, rightRadius, bottomRadius, leftRadius].join(' ')
 
         return `<DirectionEditor 
                 ref='$borderRadius' 
@@ -259,8 +259,8 @@ export default class InsetEditor extends UIElement {
 
         var {top, right, left, bottom, round, topRadius, leftRadius, bottomRadius, rightRadius} = this.state;
 
-        var position = [top, right, bottom, left].join(WHITE_STRING)
-        var radius = [topRadius, rightRadius, bottomRadius, leftRadius].join(WHITE_STRING)
+        var position = [top, right, bottom, left].join(' ')
+        var radius = [topRadius, rightRadius, bottomRadius, leftRadius].join(' ')
 
         var results = `${position} ${(round && radius.trim()) ? `round ${radius}` : ''}`
 

@@ -1,6 +1,6 @@
 import { Length } from "../unit/Length";
 import { Property } from "../items/Property";
-import { WHITE_STRING } from "../../util/css/types";
+
 
 export class SVGFilter extends Property {
 
@@ -202,7 +202,7 @@ export class ColorMatrixSVGFilter extends SVGFilter {
   toString() {
     var { sourceIn, filterType, values } = this.json; 
 
-    var valueString = values.join(WHITE_STRING)
+    var valueString = values.join(' ')
 
     return `<feColorMatrix in="${sourceIn}" type="${filterType}" values="${valueString}" />`;
   }
@@ -257,7 +257,7 @@ export class ConvolveMatrixSVGFilter extends SVGFilter {
   toString() {
     var { sourceIn, kernelMatrix } = this.json; 
 
-    var valueString = kernelMatrix.join(WHITE_STRING)
+    var valueString = kernelMatrix.join(' ')
 
     return `<feConvolveMatrix in="${sourceIn}" kernelMatrix="${valueString}" />`;
   }

@@ -5,7 +5,7 @@ import { EVENT } from "../../../../../util/UIElement";
 
 import {
   CHANGE_SELECTION,
-  CHANGE_ARTBOARD
+  
 } from "../../../../types/event";
 import RangeEditor from "../property-editor/RangeEditor";
 import SelectEditor from "../property-editor/SelectEditor";
@@ -28,8 +28,20 @@ export default class PositionProperty extends BaseProperty {
     return true; 
   }
 
-  [EVENT(CHANGE_ARTBOARD, CHANGE_SELECTION, 'refreshRect') + DEBOUNCE(100)]() {
-    this.refresh();
+  [EVENT(CHANGE_SELECTION, 'refreshRect') + DEBOUNCE(100)]() {
+
+    var current = editor.selection.current;
+    if (current) {
+      if (current.is('artboard')) {
+        this.hide();
+      } else {
+        this.show();
+        this.refresh();
+      }
+    } else {
+      this.hide();
+    }
+
   }
 
   getBody() {

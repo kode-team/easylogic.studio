@@ -8,7 +8,7 @@ import {
   PREVENT,
   DEBOUNCE
 } from "../../../../../util/Event";
-import { WHITE_STRING } from "../../../../../util/css/types";
+
 import {
   BlurFilter,
   GrayscaleFilter,
@@ -284,7 +284,7 @@ export default class FilterEditor extends UIElement {
   }
 
   modifyFilter () {
-    var value = this.state.filters.join(WHITE_STRING);
+    var value = this.state.filters.join(' ');
 
     this.parent.trigger(this.props.onchange, value)
   }
