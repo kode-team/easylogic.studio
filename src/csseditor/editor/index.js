@@ -1,8 +1,9 @@
+
 import CanvasView from "../ui/view/CanvasView";
 import ToolMenu from "../ui/view/ToolMenu";
 
 import UIElement from "../../util/UIElement";
-import { RESIZE, DEBOUNCE } from "../../util/Event";
+import { RESIZE, DEBOUNCE, DROP, PREVENT, DRAGOVER } from "../../util/Event";
 import { RESIZE_WINDOW } from "../types/event";
 import Inspector from "../ui/control/Inspector";
 
@@ -11,6 +12,8 @@ import StyleView from "../ui/view/StyleView";
 import ObjectList from "../ui/control/ObjectList";
 import LogoView from "../ui/view/LogoView";
 import ExternalToolMenu from "../ui/view/ExternalToolMenu";
+
+// var JSZip = require('jszip')
 
 export default class CSSEditor extends UIElement {
   afterRender() {
@@ -89,4 +92,56 @@ export default class CSSEditor extends UIElement {
   [RESIZE("window") + DEBOUNCE(100)](e) {
     this.emit(RESIZE_WINDOW);
   }
+
+  // [DRAGOVER() + PREVENT] (e) {}
+
+  // [DROP() + PREVENT] (e) {
+  //   const files = [...e.dataTransfer.files]
+
+  //   if (files.length) {
+  //     JSZip.loadAsync(files[0]).then(zip => {
+  //       console.log(zip);
+  //       var len = Object.keys(zip.files).length
+  //       var sketchData = {}
+
+  //       const loadSketch = () => {
+  //         if (Object.keys(sketchData).length === len) {
+  //           this.emit('loadSketchData', sketchData);
+  //         }
+  //       }
+
+
+  //       Object.keys(zip.files).forEach(relativePath => {
+  //         var zipEntry = zip.files[relativePath]
+
+  //         if (relativePath.includes('.json')) {
+  //             zipEntry.async('string').then((content) => {
+  //               var page = JSON.parse(content)
+  //               sketchData[relativePath] = page; 
+
+  //               loadSketch()
+  //             },
+  //             function error (e) {
+  //               console.log(e)
+  //             })
+  //         } else if (relativePath.includes('.png')) {
+  //           zipEntry.async('base64').then((content) => {
+  //             var image = 'data:image/png;base64,' + content; 
+  //             relativePath = relativePath.replace('.png', '')
+  //             sketchData[relativePath] = image; 
+
+  //             loadSketch()              
+  //           },
+  //           function error (e) {
+  //             console.log(e)
+  //           })
+  //         }
+  //       })
+
+        
+  //     })
+  //   }
+
+
+  // }
 }

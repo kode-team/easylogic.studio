@@ -21,12 +21,18 @@ export const editor = new class {
     this.projects = []     
     this.popupZIndex = 10000;
     this.scale = 1
+    this.symbols = {}
+    this.images = {}
   }
 
   // 팝업의 zindex 를 계속 높여 주어 
   // 최근에 열린 팝업이 밑으로 가지 않게 한다. 
   get zIndex () {
     return this.popupZIndex++
+  }
+
+  getFile (url) {
+    return this.images[url] || url;
   }
 
   setStore($store) {

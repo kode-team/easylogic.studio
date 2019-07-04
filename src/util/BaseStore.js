@@ -1,7 +1,5 @@
 import { debounce } from "./functions/func";
 
-export const PREVENT = "PREVENT";
-
 export default class BaseStore {
   constructor(opt = {}) {
     this.cachedCallback = {};

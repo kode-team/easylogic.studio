@@ -4,6 +4,7 @@ import { editor } from "../../../editor/editor";
 import { DEBOUNCE, LOAD } from "../../../util/Event";
 import Dom from "../../../util/Dom";
 import { CSS_TO_STRING } from "../../../util/functions/func";
+import { CHANGE_SELECTION } from "../../types/event";
 
 
 export default class StyleView extends UIElement {
@@ -48,12 +49,12 @@ export default class StyleView extends UIElement {
     </style>
     ` + item.layers.map(it => {
       return this.makeStyle(it);
-    })
+    }).join('')
   }
 
   refreshStyleHead () {
     var $temp = Dom.create('div')
-    var project = editor.projects[0] || { layers : [] }
+    var project = editor.selection.currentProject || { layers : [] }
 
     this.refs.$head.$$(`style`).forEach($style => $style.remove())
 
@@ -89,19 +90,8 @@ export default class StyleView extends UIElement {
     this.emit('refreshComputedStyleCode', computedCSS)
   }
 
-  [EVENT('addElement')] () {
-    var item = editor.selection.current;
-
-    if (item) {
-      var $el = this.refs.$head.$(`[data-id="${item.id}"]`);
-      if ($el) {
-        $el.remove();
-      }
-
-      Dom.create('div').html(this.makeStyle(item)).children().forEach($item => {
-        this.refs.$head.append($item);
-      })
-    }
+  [EVENT('refreshStyleView')] () {
+    this.refresh()    
   }
 
   refresh() {
@@ -109,7 +99,7 @@ export default class StyleView extends UIElement {
     this.refreshStyleHead();
   }
 
-  [EVENT("refreshCanvas")]() { 
+  [EVENT('refreshCanvas', 'addElement', CHANGE_SELECTION)]() { 
     this.refresh()
   }
 }

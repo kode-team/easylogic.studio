@@ -282,6 +282,8 @@ export class BackgroundImage extends Property {
           image = URLImageResource.parse(value);
         }
 
+
+
         backgroundImages[index] = new BackgroundImage({
           type: image.type,
           image

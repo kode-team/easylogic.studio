@@ -57,6 +57,7 @@ export default class SelectionToolView extends UIElement {
         this.parent.trigger('removeRealPosition');                
         // this.initSelectionTool();
         this.emit('refreshCanvas', { transform  : true });
+        this.emit('refreshStyleView')
     }   
 
     refreshSelectionToolView (dx, dy, type) {

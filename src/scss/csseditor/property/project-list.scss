@@ -1,5 +1,5 @@
 .project-list {
-
+    
     .project-item {
         display: grid;
         grid-template-columns: 1fr 20px;
@@ -12,9 +12,8 @@
             padding: 2px 0px;
         }
 
-        &.selected {
-            border:1px solid $border-color;            
-            background-color: rgba(0, 0, 0, 0.1);
+        &.selected {      
+            background-color: rgba(0, 0, 0, 0.05);
             @include title-background();
         }
 

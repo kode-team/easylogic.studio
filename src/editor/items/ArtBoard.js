@@ -23,4 +23,11 @@ export class ArtBoard extends DomItem {
     })
   }
 
+  toDefaultCSS() {
+    return {
+      ...super.toDefaultCSS(),
+      // 'overflow': 'hidden'
+    }
+  }
+
 }

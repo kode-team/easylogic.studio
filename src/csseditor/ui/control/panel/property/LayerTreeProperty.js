@@ -24,10 +24,41 @@ export default class LayerTreeProperty extends BaseProperty {
     `
   }
 
+  initState() {
+    return {
+      layers: [] 
+    }
+  }
+
   getBody() {
     return `
       <div class="property-item layer-list" ref="$layerList"></div>
     `;
+  }
+
+  makeLayerList (parentObject, depth = 0) {
+    if (!parentObject.layers) return '';
+
+    return parentObject.layers.map( (layer, index) => {
+
+      this.state.layers[layer.id] = {layer, parentObject, index}
+
+      var selected = editor.selection.check(layer) ? 'selected' : '';
+      return `        
+      <div class='property-item layer-item ${selected}' data-depth="${depth}" data-layer-id='${layer.id}'>
+        <div class='detail'>
+          <label>${layer.name}</label>
+          <div class="tools">
+            <button type="button" class="lock" data-lock="${layer.lock}">${layer.lock ? icon.lock : icon.lock_open}</button>
+            <button type="button" class="visible" data-visible="${layer.visible}">${icon.visible}</button>
+            <button type="button" class="remove" >${icon.remove2}</button>
+          </div>
+        </div>
+      </div>
+
+      ${this.makeLayerList(layer, depth+1)}
+    `
+    }).join('')
   }
 
   [LOAD("$layerList")]() {
@@ -35,22 +66,7 @@ export default class LayerTreeProperty extends BaseProperty {
     var artboard = editor.selection.currentArtboard;
     if (!artboard) return ''
 
-    
-    return artboard.layers.map( (layer, index) => {
-      var selected = editor.selection.check(layer) ? 'selected' : ''
-      return ` 
-        <div class='property-item layer-item ${selected}' data-layer-id='${layer.id}'>
-          <div class='detail'>
-            <label data-index='${index}'>${layer.name}</label>
-            <div class="tools">
-              <button type="button" class="lock" data-index="${index}" data-lock="${layer.lock}">${layer.lock ? icon.lock : icon.lock_open}</button>
-              <button type="button" class="visible" data-index="${index}" data-visible="${layer.visible}">${icon.visible}</button>
-              <button type="button" class="remove" data-index="${index}">${icon.remove2}</button>
-            </div>
-          </div>
-        </div>
-      `
-    })
+    return this.makeLayerList(artboard, 0)
   }
 
   selectLayer(layer) {
@@ -80,13 +96,16 @@ export default class LayerTreeProperty extends BaseProperty {
   [CLICK('$layerList .layer-item .remove')] (e) {
     var artboard = editor.selection.currentArtboard
     if (artboard) {
-      var index = +e.$delegateTarget.attr('data-index')
+      var $item = e.$delegateTarget.closest('layer-item')
+      var id = $item.attr('data-layer-id');
 
-      artboard.layers.splice(index);
+      var obj = this.state.layers[id]
+      obj.parentObject.layers.splice(obj.index);
+      delete this.state.layers[id]
 
-      var layer = artboard.layers[index] || artboard.layers[index - 1];
-
-      this.selectLayer(layer);
+      this.emit('refreshCanvas')
+      this.emit('addElement')
+      $item.remove();
     }
   }
 
@@ -95,27 +114,31 @@ export default class LayerTreeProperty extends BaseProperty {
     var artboard = editor.selection.currentArtboard
     if (artboard) {
 
-      var index = +e.$delegateTarget.attr('data-index')
+      var $item = e.$delegateTarget.closest('layer-item')
+      var id = $item.attr('data-layer-id');
 
-      var layer = artboard.layers[index]
+      var obj = this.state.layers[id]
+      editor.selection.select(obj.layer)
+      $item.onlyOneClass('selected');
 
-      this.selectLayer(layer);
+      this.emit(CHANGE_SELECTION);      
+
     }
   }
 
   [CLICK('$layerList .layer-item .visible')] (e) {
     var artboard = editor.selection.currentArtboard
     if (artboard) {
+      var $item = e.$delegateTarget.closest('layer-item')
+      var id = $item.attr('data-layer-id');
 
-      var index = +e.$delegateTarget.attr('data-index')
+      var obj = this.state.layers[id]
 
-      var layer = artboard.layers[index]
-
-      layer.reset({
-        visible: !layer.visible
+      obj.layer.reset({
+        visible: !obj.layer.visible
       })
 
-      e.$delegateTarget.attr('data-visible', layer.visible);
+      e.$delegateTarget.attr('data-visible', obj.layer.visible);
 
       this.emit('refreshCanvas');
     }
@@ -125,16 +148,16 @@ export default class LayerTreeProperty extends BaseProperty {
   [CLICK('$layerList .layer-item .lock')] (e) {
     var artboard = editor.selection.currentArtboard
     if (artboard) {
+      var $item = e.$delegateTarget.closest('layer-item')
+      var id = $item.attr('data-layer-id');
 
-      var index = +e.$delegateTarget.attr('data-index')
+      var obj = this.state.layers[id]
 
-      var layer = artboard.layers[index]
-
-      layer.reset({
-        lock: !layer.lock
+      obj.layer.reset({
+        lock: !obj.layer.lock
       })
 
-      this.refresh();
+      e.$delegateTarget.attr('data-lock', obj.layer.lock);
 
       this.emit('refreshCanvas');
     }
@@ -147,21 +170,32 @@ export default class LayerTreeProperty extends BaseProperty {
   }
 
   [EVENT('changeSelection')] () {
-    this.refs.$layerList.$$('.selected').forEach(it => {
-      it.removeClass('selected')
-    })
+    if (this.refs.$layerList) {    
+      this.refs.$layerList.$$('.selected').forEach(it => {
+        it.removeClass('selected')
+      })
 
-    var selector = editor.selection.items.map(it => {
-      return `[data-layer-id="${it.id}"]`
-    }).join(',')
+      var selector = editor.selection.items.map(it => {
+        return `[data-layer-id="${it.id}"]`
+      }).join(',')
 
-    this.refs.$layerList.$$(selector).forEach(it => {
-      it.addClass('selected')
-    })
+      if (selector) {
+        this.refs.$layerList.$$(selector).forEach(it => {
+          it.addClass('selected')
+        })
+      }
+
+    }
+
   }  
 
-  [EVENT(CHANGE_SELECTION, 'addElement')] () {
-    this.refresh();
+  [EVENT(CHANGE_SELECTION)] () {
+    // this.setState({ layers: [] }, false)
+    this.trigger('changeSelection')
   }
 
+  [EVENT('addElement', 'refreshLayerTreeView')] () {
+    this.setState({ layers: [] }, false)    
+    this.refresh();
+  }
 }

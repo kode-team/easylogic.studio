@@ -152,15 +152,15 @@ $display-grid-color: red;
   &.object-list {
     > div {
       &:first-child {
-        height: 15%;
+        height: 25%;
       }
 
       &:nth-child(2) {
-        height: 15%;
+        height: 25%;
       }      
 
       &:last-child {
-        height: 70%;
+        height: 50%;
       }
     }
 
@@ -168,7 +168,14 @@ $display-grid-color: red;
       margin: 0px;
       height: 100%;
       border:0px;
+      padding: 0px 0px;
+
+      .property-body {
+        padding: 0px;
+      }
     }
+
+
   }
 
   > div {

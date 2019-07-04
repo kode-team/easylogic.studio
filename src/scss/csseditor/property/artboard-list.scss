@@ -1,9 +1,11 @@
 .artboard-list {
     height: 100%;
     overflow: auto;
+    padding:0px;
     .artboard-item {
 
-        padding: 5px !important; 
+        padding: 5px 5px !important; 
+        margin-bottom: 0px !important;
 
 
         .preview {
@@ -35,10 +37,8 @@
         }
 
         &.selected {
-            background-color: rgba(0, 0, 0, 0.1);
+            background-color: rgba(0, 0, 0, 0.05);
             @include title-background();
-            border-radius: 3px;
-            border:1px solid $border-color;                        
         }
 
     }

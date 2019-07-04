@@ -34,6 +34,13 @@ export class URLImageResource extends ImageResource {
     });
   }
 
+  static parse(str) {
+
+    var url = str.split('(')[1].split(')')[0]
+
+    return new URLImageResource({ url })
+  }
+
   isUrl() {
     return true;
   }

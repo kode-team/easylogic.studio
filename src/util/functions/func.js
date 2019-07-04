@@ -118,25 +118,6 @@ export function combineKeyArray (obj) {
     return obj;
 }
 
-export function flatKeyValue (obj, rootKey = '') {
-    var values = {};
-
-    Object.keys(obj).forEach(key => {
-        var realKey = key; 
-        if (rootKey !== '') {
-            realKey = `${rootKey}.${key}`
-        }
-
-        if (isObject(obj[key])) {
-            values = {...values, ...flatKeyValue(obj[key], realKey) }
-        } else {
-            values[realKey] = obj[key];
-        }
-    })
-
-    return values; 
-}
-
 export function repeat (count) {
     return [...Array(count)];
 }
@@ -203,3 +184,15 @@ export function CSS_TO_STRING(style) {
       .join(";");
   }
   
+
+export function STRING_TO_CSS (str) {
+    var style = {}
+    str.split(';').forEach(it => {
+       var [key, ...value] = it.split(':').map(it => it.trim())
+       if (key != '') {
+        style[key] = value.join(':'); 
+       }
+    })
+
+    return style;
+}

@@ -71,8 +71,29 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
   background-color: white;
 }
 
+.canvas-view {
+  .element-item {
+
+    &.selected {
+      &:hover {
+        outline: none;
+      }
+    }
+
+    &:hover {
+      outline: 1px solid rgb(173, 173, 241);
+    }
+
+    &.artboard {
+      &:hover {
+        outline: none;
+      }
+    }
+  }
+}
+
 .selection-tool {
-  border: $pointer-color 1px solid;
+  border: $pointer-color 1px dashed;
   position:absolute;
   box-sizing: border-box;
 

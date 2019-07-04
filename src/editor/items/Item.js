@@ -206,15 +206,15 @@ export class Item {
   }
 
   get html () {
-    var {tagName, id, layers, content, itemType} = this.json;
+    var {elementType, id, layers, content, itemType} = this.json;
 
-    tagName = tagName || 'div'
+    const tagName = elementType || 'div'
 
     var selected = this.json.selected ? 'selected' : ''
 
     return `
     <${tagName} class='element-item ${selected} ${itemType}' data-id="${id}">${content ? content : ''}
-      ${layers.map(it => it.html)}
+      ${layers.map(it => it.html).join('')}
     </${tagName}>
     `
   }

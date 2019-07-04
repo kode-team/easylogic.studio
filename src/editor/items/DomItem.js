@@ -7,7 +7,8 @@ import {
   combineKeyArray,
   isUndefined,
   isNotUndefined,
-  CSS_TO_STRING
+  CSS_TO_STRING,
+  STRING_TO_CSS
 } from "../../util/functions/func";
 import { BorderImage } from "../css-property/BorderImage";
 import { Animation } from "../css-property/Animation";
@@ -58,7 +59,7 @@ export class DomItem extends GroupItem {
       'transform': '',
       'filter': '',
       'backdrop-filter': '',
-      'background-color': 'rgba(224, 224, 224, 1)',      
+      'background-color': '',      
       'background-image': '',      
       'border-radius': '',      
       'box-shadow': '',
@@ -319,17 +320,7 @@ export class DomItem extends GroupItem {
   }
 
   toStringPropertyCSS (field) {
-    var obj = {}
-
-    var list = this.json[field].split(';')
-
-    for(var i = 0, len = list.length; i < len; i++) {
-      var [key, value]  = list[i].split(':').map(it => it.trim())
-
-      obj[key] = value
-    }
-
-    return obj;
+    return STRING_TO_CSS(this.json[field]);
   }
 
   toBackgroundImageCSS(isExport = false) {

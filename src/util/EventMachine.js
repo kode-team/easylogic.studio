@@ -213,17 +213,8 @@ const addEvent = (context, eventObject, callback) => {
   );
 };
 
-const bindingEvent = (
-  context,
-  [eventName, dom, ...delegate],
-  checkMethodFilters,
-  callback
-) => {
-  let eventObject = getDefaultEventObject(
-    context,
-    eventName,
-    checkMethodFilters
-  );
+const bindingEvent = ( context, [eventName, dom, ...delegate], checkMethodFilters, callback ) => {
+  let eventObject = getDefaultEventObject( context, eventName, checkMethodFilters);
 
   eventObject.dom = getDefaultDomElement(context, dom);
   eventObject.delegate = delegate.join(SAPARATOR);

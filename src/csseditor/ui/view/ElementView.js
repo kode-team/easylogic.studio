@@ -154,6 +154,7 @@ export default class ElementView extends UIElement {
         this.selectCurrentForBackgroundView(...items)
 
         if (items.length) {
+            this.emit(CHANGE_SELECTION)
             this.emit('changeSelection')
         } else {
             editor.selection.select();            
@@ -176,7 +177,7 @@ export default class ElementView extends UIElement {
         }
 
         this.selectCurrent(...editor.selection.items)
-
+        this.emit(CHANGE_SELECTION);
         editor.selection.setRectCache()
     }
 
@@ -212,6 +213,9 @@ export default class ElementView extends UIElement {
         this.children.$selectionTool.refreshSelectionToolView(dx, dy, 'move');
         this.emit('refreshCanvas');               
         this.trigger('removeRealPosition');
+
+        console.log(dx, dy, 'en');
+
     }
 
     [BIND('$body')] () {
@@ -286,7 +290,7 @@ export default class ElementView extends UIElement {
         } else {
             editor.selection.select(editor.selection.currentArtboard)
         }
-        this.emit(CHANGE_SELECTION)           
+        // this.emit(CHANGE_SELECTION)           
 
         this.emit('initSelectionTool')
 
@@ -327,8 +331,9 @@ export default class ElementView extends UIElement {
             this.trigger('addElement');
         }
 
-        var current = editor.selection.current || { id : ''} 
-        this.selectCurrent(current);        
+        // var current = editor.selection.current || { id : ''} 
+        // this.selectCurrent(current);        
+        this.emit('initSelectionTool')
     }
 
     modifyScale () {

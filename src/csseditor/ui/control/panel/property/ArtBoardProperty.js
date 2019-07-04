@@ -57,8 +57,10 @@ export default class ArtBoardProperty extends BaseProperty {
     }
 
     this.refresh()
-    this.emit('addElement')
     this.emit(CHANGE_SELECTION);
+    this.emit('refreshLayerTreeView')
+    this.emit('refreshCanvas')
+    this.emit('refreshStyleView')
   }
 
   [CLICK('$add')] (e) {

@@ -20,7 +20,7 @@ export default class BackgroundColorProperty extends BaseProperty {
   [LOAD("$backgroundColor")]() {
     var current = editor.selection.current || {};
 
-    var color = current['background-color'] || 'rgba(0, 0, 0, 1)';
+    var color = current['background-color'] || 'rgba(0, 0, 0, 0)';
     return `<ColorViewEditor ref='$1' color="${color}" onchange="changeColor" />`;
   }
 

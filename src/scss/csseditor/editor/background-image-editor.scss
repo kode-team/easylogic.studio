@@ -116,6 +116,17 @@
               border-radius: 100%;
               cursor: pointer;
               position: relative;
+              overflow: hidden;
+              @include transparent-background();
+
+              .color-view {
+                position: absolute;
+                left:0px;
+                top:0px;
+                right:0px;
+                bottom:0px;
+                pointer-events: none;
+              }
 
               &[data-cut='true'] {
                 border-radius: 0%;

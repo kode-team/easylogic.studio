@@ -2,7 +2,7 @@ import UIElement, { EVENT } from "../../../../../util/UIElement";
 import { BackgroundImage } from "../../../../../editor/css-property/BackgroundImage";
 import { LOAD, CLICK, DRAGSTART, DRAGOVER, DROP, PREVENT, DEBOUNCE } from "../../../../../util/Event";
 import icon from "../../../icon/icon";
-import { keyEach, combineKeyArray, CSS_TO_STRING } from "../../../../../util/functions/func";
+import { keyEach, combineKeyArray, CSS_TO_STRING, STRING_TO_CSS } from "../../../../../util/functions/func";
 
 
 const names = {
@@ -37,15 +37,7 @@ export default class BackgroundImageEditor extends UIElement {
     }
 
     parseBackgroundImage(str) {
-        var style = {}
-        str.split(';').forEach(it => {
-           var [key, value] = it.split(':').map(it => it.trim())
-           if (key != '') {
-            style[key] = value; 
-           }
-        })
-
-        return BackgroundImage.parseStyle(style);
+        return BackgroundImage.parseStyle(STRING_TO_CSS(str));
     }
 
     template () {
@@ -81,7 +73,11 @@ export default class BackgroundImageEditor extends UIElement {
     getColorStepString(colorsteps) {
         return colorsteps
             .map((step, index) => {
-                return `<div class='step' data-index="${index}" data-cut="${step.cut}" data-selected='${step.selected}' style='background-color:${step.color};'></div>`;
+                return `
+                    <div class='step' data-index="${index}" data-cut="${step.cut}" data-selected='${step.selected}'>
+                        <div class='color-view' style='background-color:${step.color};'></div>
+                    </div>
+                `;
             })
             .join('');
     }

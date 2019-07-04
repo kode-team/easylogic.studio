@@ -89,4 +89,8 @@ export default class ProjectProperty extends BaseProperty {
     this.refresh()
   }
 
+  [EVENT('addElement')] () {
+    this.refresh();
+  }
+
 }

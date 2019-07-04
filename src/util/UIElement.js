@@ -124,6 +124,7 @@ class UIElement extends EventMachine {
 
   emit($1, $2, $3, $4, $5) {
     this.$store.source = this.source;
+    this.$store.sourceContext = this; 
     this.$store.emit($1, $2, $3, $4, $5);
   }
 

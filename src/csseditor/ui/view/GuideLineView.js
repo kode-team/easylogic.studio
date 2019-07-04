@@ -35,17 +35,17 @@ export default class GuideLineView extends UIElement {
     
             if (isNotUndefined(it.ax)) {
     
-                images.push(this.createBackgroundImage(baseRectColor, Length.px(it.bx-1), it.A.screenY, lineWidth, it.A.height))
+                images.push(this.createBackgroundImage(baseRectColor, Length.px(it.bx), it.A.screenY, lineWidth, it.A.height))
     
                 
                 if (target instanceof Layer) {
-                    images.push(this.createBackgroundImage(baseRectColor, Length.px(it.bx-1), target.screenY, lineWidth, target.height))
+                    images.push(this.createBackgroundImage(baseRectColor, Length.px(it.bx), target.screenY, lineWidth, target.height))
                 }
     
                 var minY = Length.min(target.screenY, it.A.screenY);
                 var maxY = Length.max(target.screenY2, it.A.screenY2);
     
-                images.push(this.createBackgroundImage(baseLineColor, Length.px(it.bx-1), minY, lineWidth, Length.px(maxY.value - minY.value)))            
+                images.push(this.createBackgroundImage(baseLineColor, Length.px(it.bx), minY, lineWidth, Length.px(maxY.value - minY.value)))            
     
             } else {
                 images.push(this.createBackgroundImage(baseRectColor, it.A.screenX, Length.px(it.by), it.A.width, lineWidth))            

@@ -88,7 +88,7 @@ export default class PathParser {
 
     constructor (pathString) {
 		this.segments =  [];
-        this.pathString = pathString;
+        this.pathString = pathString; 
         
         this.parse()
     }

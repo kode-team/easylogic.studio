@@ -21,11 +21,7 @@ export default class Inspector extends UIElement {
               <div class="tab-item" data-value="4">
                 <div class='icon'>${icon.transform}</div>
                 <label>Transform</label>
-              </div>            
-              <div class="tab-item" data-value="5">
-                <div class='icon'>${icon.filter}</div>
-                <label>Effect</label>
-              </div>                          
+              </div>                     
               <div class="tab-item" data-value="6">
                 <div class='icon'>${icon.scatter}</div>
                 <label>Selector & Animation</label>
@@ -47,6 +43,15 @@ export default class Inspector extends UIElement {
                 <!--BorderImageProperty /-->
                 <OutlineProperty />
                 <ArtBoardSizeProperty />
+
+                <BackgroundClipProperty />                         
+                <MixBlendModeProperty />
+                <BackgroundImageProperty />                 
+                <BoxShadowProperty />
+                <TextShadowProperty />                   
+                <FilterProperty />
+                <BackdropFilterProperty />
+                <ClipPathProperty />                 
               </div>
               <div class="tab-content" data-value="3">
                 <ContentProperty />
@@ -61,17 +66,6 @@ export default class Inspector extends UIElement {
                 <PerspectiveOriginProperty />
                 <TransformOriginProperty /> 
                 <TransformProperty />
-              </div>
-              <div class='tab-content' data-value="5">
-
-                <BackgroundClipProperty />                         
-                <MixBlendModeProperty />
-                <BackgroundImageProperty />                 
-                <BoxShadowProperty />
-                <TextShadowProperty />                   
-                <FilterProperty />
-                <BackdropFilterProperty />
-                <ClipPathProperty /> 
               </div>
               <div class='tab-content' data-value='6'>
                 <SelectorProperty />

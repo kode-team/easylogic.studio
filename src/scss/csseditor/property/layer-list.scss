@@ -1,11 +1,21 @@
 .layer-list {
     height: 100%;
     overflow: auto;
+    padding:0px;
     .layer-item {
 
-        padding: 5px !important; 
-        margin-bottom: 5px;
+        padding: 5px 5px !important; 
+        margin-bottom: 0px !important;
 
+        @for $selectValue from 0 to 6 {
+            &[data-depth="#{$selectValue}"] {
+                .detail {
+                    label {
+                        padding-left: $selectValue * 20px;
+                    }
+                }
+            }
+        }
 
         .detail {
             display: grid;
@@ -14,6 +24,8 @@
 
             label {
                 padding: 2px 0px;                
+                cursor: pointer;
+                pointer-events: all;
             }
 
 
@@ -58,10 +70,8 @@
         }
 
         &.selected {
-            background-color: rgba(0, 0, 0, 0.1);
-            @include title-background();
-            border-radius: 3px;
-            border:1px solid $border-color;                        
+            background-color: rgba(0, 0, 0, 0.05);
+            @include title-background();                  
         }
 
     }

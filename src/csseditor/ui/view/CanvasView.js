@@ -11,8 +11,10 @@ import ElementView from "./ElementView";
 import { Layer } from "../../../editor/items/Layer";
 import NumberRangeEditor from "../control/panel/property-editor/NumberRangeEditor";
 import { Length } from "../../../editor/unit/Length";
-
-
+import { rgb } from "../../../util/functions/formatter";
+import { FileImageResource } from "../../../editor/image-resource/URLImageResource";
+import { BackgroundImage } from "../../../editor/css-property/BackgroundImage";
+import { Sketch, SketchUtil } from "../../../editor/parse/Sketch";
 
 
 export default class CanvasView extends UIElement {
@@ -57,8 +59,10 @@ export default class CanvasView extends UIElement {
     }
 
     this.refresh()
+
     this.emit(CHANGE_SELECTION)
     this.emit('refreshCanvas')
+    this.emit('addElement')    
   }
   template() {
     return `
@@ -132,5 +136,19 @@ export default class CanvasView extends UIElement {
     
     this.emit('refreshComputedStyleCode', computedCSS)
   }
+
+  // [EVENT('loadSketchData')] (sketchData) {
+  //   var projects = SketchUtil.parse (sketchData);
+
+  //   projects.forEach(p => {
+  //     editor.add(p);
+  //   })
+
+  //   this.refresh();
+  //   this.emit('addElement');    
+  //   this.emit('refreshCanvas')
+  //   this.emit('refreshStyleView')
+
+  // }
 
 }

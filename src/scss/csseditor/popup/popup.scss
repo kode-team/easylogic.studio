@@ -24,6 +24,8 @@
     cursor: move;
     margin-bottom: 10px;
     display: flex;
+    pointer-events: all;
+    cursor: pointer;
 
     > * {
       flex: 1 1 auto;
