@@ -6,7 +6,7 @@ import icon from "../icon/icon";
 export default class Inspector extends UIElement {
   template() {
     return `
-      <div class="feature-control">
+      <div class="feature-control inspector">
         <div>
           <div class="tab number-tab" data-selected-value="1" ref="$tab">
             <div class="tab-header" ref="$header">

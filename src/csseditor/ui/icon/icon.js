@@ -42,9 +42,14 @@ import shape from "./shape";
 import ballot from "./ballot";
 import add_circle from "./add_circle";
 import lock_open from "./lock_open";
+import outline_image from "./outline_image";
+import edit from "./edit";
+
 
 
 export default {
+  edit,
+  outline_image,
   ballot,
   shape,
   scatter,

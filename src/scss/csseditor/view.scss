@@ -110,6 +110,18 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
     pointer-events: all;
     cursor: pointer;
 
+    &[data-position="move"] {
+      left: 0px;
+      top: 0px;
+      width: 100%;
+      height: 100%;
+      cursor: move;
+      transform: none;
+      border-radius: 0px;
+      background-color: transparent;
+      border:0px;
+    }
+
 
     &[data-position="to top left"] {
       left: 0px;

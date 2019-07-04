@@ -10,8 +10,7 @@ export default class ToolMenu extends UIElement {
     return `
       <div class='tool-menu '>
         <div class='items'>
-          <AddRect />
-          <AddCircle />
+
         </div>
       </div>
     `;

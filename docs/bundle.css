@@ -1430,19 +1430,21 @@ html, body {
   bottom: 0px;
   position: absolute;
 }
-.csseditor .feature-control {
-  display: flex;
-  flex-direction: column;
+.csseditor .feature-control.inspector {
+  display: grid;
+  grid-template-rows: 1fr 40%;
   height: 100%;
 }
-.csseditor .feature-control.object-list > div:first-child {
-  height: 25%;
+.csseditor .feature-control.inspector > div {
+  position: relative;
 }
-.csseditor .feature-control.object-list > div:nth-child(2) {
-  height: 25%;
+.csseditor .feature-control.inspector > div:last-child {
+  border-top: 1px solid #cccccc;
 }
-.csseditor .feature-control.object-list > div:last-child {
-  height: 50%;
+.csseditor .feature-control.object-list {
+  display: grid;
+  grid-template-columns: 1fr 50px;
+  height: 100%;
 }
 .csseditor .feature-control.object-list .property {
   margin: 0px;
@@ -1453,17 +1455,76 @@ html, body {
 .csseditor .feature-control.object-list .property .property-body {
   padding: 0px;
 }
-.csseditor .feature-control > div {
+.csseditor .feature-control .draw-items {
+  position: relative;
+  box-sizing: border-box;
+  border-left: 1px solid #cccccc;
+}
+.csseditor .feature-control .object-items {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.csseditor .feature-control .object-items > div {
   flex: 1 1 auto;
   position: relative;
 }
-.csseditor .feature-control > div:not(:first-child) {
+.csseditor .feature-control .object-items > div:first-child {
+  height: 25%;
+}
+.csseditor .feature-control .object-items > div:nth-child(2) {
+  height: 25%;
+}
+.csseditor .feature-control .object-items > div:last-child {
+  height: 50%;
+}
+.csseditor .feature-control .object-items > div:not(:first-child) {
   border-top: 1px solid #cccccc;
   box-sizing: border-box;
 }
-.csseditor .feature-control > div:last-child {
+.csseditor .feature-control .object-items > div:last-child {
   flex: none;
   height: 40%;
+}
+.csseditor .feature-control .draw-items button {
+  width: 48px;
+  height: 48px;
+  vertical-align: middle;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  outline: none;
+  padding: 0px;
+  border: 0px;
+  display: inline-block;
+  font-size: 11px;
+  cursor: pointer;
+}
+.csseditor .feature-control .draw-items button svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor .feature-control .draw-items .menu-item {
+  text-align: center;
+  margin-top: 10px;
+  color: #6f6f6f;
+}
+.csseditor .feature-control .draw-items .menu-item .icon {
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+}
+.csseditor .feature-control .draw-items .menu-item .icon.rect {
+  border: 2px solid #cccccc;
+  border-radius: 1px;
+}
+.csseditor .feature-control .draw-items .menu-item .icon.circle {
+  border: 2px solid #cccccc;
+  border-radius: 100%;
+}
+.csseditor .feature-control .draw-items .menu-item .icon svg path {
+  fill: #cccccc;
 }
 .csseditor input[type=range] {
   -webkit-appearance: none;
@@ -2148,6 +2209,18 @@ html, body {
   pointer-events: all;
   cursor: pointer;
 }
+.csseditor .selection-tool .selection-tool-item[data-position=move] {
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  cursor: move;
+  -webkit-transform: none;
+          transform: none;
+  border-radius: 0px;
+  background-color: transparent;
+  border: 0px;
+}
 .csseditor .selection-tool .selection-tool-item[data-position="to top left"] {
   left: 0px;
   top: 0px;
@@ -2197,7 +2270,7 @@ html, body {
   pointer-events: none;
 }
 .csseditor .property {
-  padding: 10px 5px;
+  padding: 5px 5px;
   border-bottom: 1px solid rgba(204, 204, 204, 0.8);
   background-color: white;
   border-radius: 3px;

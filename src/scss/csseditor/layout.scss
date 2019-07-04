@@ -145,24 +145,27 @@ $display-grid-color: red;
 }
 
 .feature-control {
-  display: flex; 
-  flex-direction: column;
-  height: 100%;
 
-  &.object-list {
+  &.inspector {
+    display: grid; 
+    grid-template-rows: 1fr 40%;
+    height: 100%;    
+
     > div {
-      &:first-child {
-        height: 25%;
-      }
-
-      &:nth-child(2) {
-        height: 25%;
-      }      
+      position: relative;
 
       &:last-child {
-        height: 50%;
+        border-top: 1px solid $border-color;
       }
     }
+  }
+
+
+  &.object-list {
+
+    display: grid; 
+    grid-template-columns: 1fr 50px;
+    height: 100%;
 
     .property {
       margin: 0px;
@@ -174,26 +177,80 @@ $display-grid-color: red;
         padding: 0px;
       }
     }
-
-
   }
 
-  > div {
-    flex: 1 1 auto; 
+  .draw-items {
     position: relative;
-
-    &:not(:first-child) {
-      border-top: 1px solid $border-color;
-      box-sizing: border-box;
-    }
-
-    &:last-child {
-      flex: none;
-      height: 40%;
-
-    }
+    box-sizing: border-box;
+    border-left: 1px solid $border-color;
   }
 
+  .object-items {
+    display: flex; 
+    flex-direction: column;
+    height: 100%;
+
+    > div {
+      flex: 1 1 auto; 
+      position: relative;
+
+      &:first-child {
+        height: 25%;
+      }
+  
+      &:nth-child(2) {
+        height: 25%;
+      }      
+  
+      &:last-child {
+        height: 50%;
+      }    
+
+      &:not(:first-child) {
+        border-top: 1px solid $border-color;
+        box-sizing: border-box;
+      }
+  
+      &:last-child {
+        flex: none;
+        height: 40%;
+  
+      }  
+    }
+
+
+  }
+
+  .draw-items {
+    @include svg-button(48px);
+
+    .menu-item {
+      text-align: center;
+      margin-top: 10px;
+      color: #6f6f6f;
+      .icon {
+        width: 30px;
+        height: 30px;
+        display: inline-block;
+        &.rect {
+          border: 2px solid $border-color;
+          border-radius: 1px;
+        }
+
+        &.circle {
+          border: 2px solid $border-color;
+          border-radius: 100%;
+        }
+
+        svg {
+          path {
+            fill: $border-color;
+          }
+        }
+      }
+    }
+    
+  }
 }
 
 @import './range-ui.scss';

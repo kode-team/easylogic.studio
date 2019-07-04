@@ -5,10 +5,10 @@ import icon from "../../icon/icon";
 
 import { Length } from "../../../../editor/unit/Length";
 import Color from "../../../../util/Color";
-
+   
 export default class AddCircle extends MenuItem {
-  getIconString() {
-    return icon.add_circle;
+  getIcon() {
+    return 'circle';
   }
   getTitle() {
     return "Circle";

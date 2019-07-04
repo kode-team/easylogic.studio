@@ -25,6 +25,7 @@ export default class SelectionToolView extends UIElement {
                      style='pointer-events:none;position:absolute;left:0px;top:0px;right:0px;bottom:0px;'
                 >
                     <div class='selection-tool' ref='$selectionTool'>
+                        <div class='selection-tool-item' data-position='move'></div>
                         <div class='selection-tool-item' data-position='to top'></div>
                         <div class='selection-tool-item' data-position='to right'></div>
                         <div class='selection-tool-item' data-position='to bottom'></div>
@@ -57,6 +58,7 @@ export default class SelectionToolView extends UIElement {
         this.parent.trigger('removeRealPosition');                
         // this.initSelectionTool();
         this.emit('refreshElement');
+        this.emit('removeGuideLine')
     }   
 
     refreshSelectionToolView (dx, dy, type) {

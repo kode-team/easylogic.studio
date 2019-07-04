@@ -5,10 +5,10 @@ import icon from "../../icon/icon";
 
 import { Length } from "../../../../editor/unit/Length";
 import Color from "../../../../util/Color";
-
+ 
 export default class AddRect extends MenuItem {
-  getIconString() {
-    return icon.add_box;
+  getIcon() {
+    return 'rect';
   }
   getTitle() {
     return "Rect";
