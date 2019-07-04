@@ -4,7 +4,7 @@ import { editor } from "../../../editor/editor";
 import { Project } from "../../../editor/items/Project";
 import { ArtBoard } from "../../../editor/items/ArtBoard";
 import { CLICK, DEBOUNCE, PREVENT, STOP, WHEEL, ALT, THROTTLE } from "../../../util/Event";
-import { CHANGE_SELECTION } from "../../types/event";
+
 import { StyleParser } from "../../../editor/parse/StyleParser";
 import icon from "../icon/icon";
 import ElementView from "./ElementView";
@@ -53,16 +53,8 @@ export default class CanvasView extends UIElement {
 
     this.parser = this;
 
-    if (this.props.embed) {
-      this.$el.hide();
-
-    }
-
-    this.refresh()
-
-    this.emit(CHANGE_SELECTION)
-    this.emit('refreshCanvas')
-    this.emit('addElement')    
+    this.emit('refreshAll')
+    this.emit('refreshSelection')
   }
   template() {
     return `
@@ -121,7 +113,7 @@ export default class CanvasView extends UIElement {
 
     this.modifyArtBoard(newStyles);
 
-    this.emit(CHANGE_SELECTION);
+    this.emit('refreshSelection');
   }
 
   modifyArtBoard(data) {

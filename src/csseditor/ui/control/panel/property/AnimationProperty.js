@@ -9,10 +9,6 @@ import {
 } from "../../../../../util/Event";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
-import {
-  CHANGE_SELECTION,
-  CHANGE_INSPECTOR
-} from "../../../../types/event";
 import icon from "../../../icon/icon";
 import { getPredefinedCubicBezier } from "../../../../../util/functions/bezier";
 
@@ -103,7 +99,7 @@ export default class AnimationProperty extends BaseProperty {
     })
 }
 
-  [EVENT(CHANGE_SELECTION)]() {
+  [EVENT('refreshSelection')]() {
     this.refresh();
     this.emit("hideAnimationPropertyPopup");
   }
@@ -131,12 +127,12 @@ export default class AnimationProperty extends BaseProperty {
       current.createAnimation({
         name: null
       });
-      this.emit("refreshCanvas");
+      this.emit("refreshElement", current);
     }
 
     this.refresh();
 
-    this.emit(CHANGE_INSPECTOR);
+    this.emit('refreshInspector');
   }
 
   [DRAGSTART("$animationList .animation-item")](e) {
@@ -154,7 +150,7 @@ export default class AnimationProperty extends BaseProperty {
     this.selectItem(this.startIndex, true);
     current.sortAnimation(this.startIndex, targetIndex);
 
-    this.emit("refreshCanvas");
+    this.emit("refreshElement", current);
 
     this.refresh();
 
@@ -176,7 +172,7 @@ export default class AnimationProperty extends BaseProperty {
 
     current.removeAnimation(removeIndex);
 
-    this.emit("refreshCanvas");
+    this.emit("refreshElement", current);
 
     this.refresh();
   
@@ -193,7 +189,7 @@ export default class AnimationProperty extends BaseProperty {
 
       e.$delegateTarget.attr('data-play-state-selected-value', animation.playState)
 
-      this.emit('refreshCanvas')
+      this.emit("refreshElement", current);
     }
   }
 
@@ -301,11 +297,9 @@ export default class AnimationProperty extends BaseProperty {
       this.currentAnimation.reset({ ...data });
 
       if (this.current) {
-        this.emit("refreshCanvas", this.current);
-
-        // 리스트 업데이트 
+        this.emit("refreshElement", this.current);        
         this.refresh();
-        // this.refreshAnimationPropertyInfo(this.currentAnimation, data);
+
       }
     }
   }

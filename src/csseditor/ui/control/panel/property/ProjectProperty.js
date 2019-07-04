@@ -3,7 +3,7 @@ import { LOAD, CLICK } from "../../../../../util/Event";
 import { editor } from "../../../../../editor/editor";
 import icon from "../../../icon/icon";
 import { Project } from "../../../../../editor/items/Project";
-import { CHANGE_SELECTION } from "../../../../types/event";
+
 import { EVENT } from "../../../../../util/UIElement";
 
 
@@ -29,7 +29,7 @@ export default class ProjectProperty extends BaseProperty {
 
     this.refresh();
 
-    this.emit(CHANGE_SELECTION)
+    this.emit('refreshSelection')
   }
 
   getBody() {
@@ -61,11 +61,15 @@ export default class ProjectProperty extends BaseProperty {
 
     if (project) {
       editor.selection.selectProject(project)
+
+      if (project.artboards.length) {
+        editor.selection.selectArtboard(project.artboards[0])
+        editor.selection.select();
+      }
     }
 
-    this.refresh()
-    this.emit('addElement')
-    this.emit(CHANGE_SELECTION)    
+    this.refresh()       
+    this.emit('refreshAllSelectProject');    
   }
 
   [CLICK('$projectList .project-item label')] (e) {
@@ -85,11 +89,7 @@ export default class ProjectProperty extends BaseProperty {
     this.selectProject(project);
   }
 
-  [EVENT(CHANGE_SELECTION)] () {
-    this.refresh()
-  }
-
-  [EVENT('addElement')] () {
+  [EVENT('refreshProjectList')] () {
     this.refresh();
   }
 

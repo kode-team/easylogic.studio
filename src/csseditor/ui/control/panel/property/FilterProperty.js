@@ -28,7 +28,7 @@ export default class FilterProperty extends BaseProperty {
 
     if (current) {
       current.reset({ filter })
-      this.emit('refreshCanvas');
+      this.emit('refreshElement', current);
     }
   }
 }

@@ -2,10 +2,7 @@ import BaseProperty from "./BaseProperty";
 import { editor } from "../../../../../editor/editor";
 import { LOAD, DEBOUNCE } from "../../../../../util/Event";
 import { EVENT } from "../../../../../util/UIElement";
-import {
-  CHANGE_SELECTION,
-  
-} from "../../../../types/event";
+
 
 const clip_list = [
   '',
@@ -40,13 +37,13 @@ export default class BackgroundClipProperty extends BaseProperty {
         [key]: value
       })
 
-      this.emit('refreshCanvas')
+      this.emit("refreshElement", current);
     }
   }
 
 
 
-  [EVENT(CHANGE_SELECTION) + DEBOUNCE(100)]() {
+  [EVENT('refreshSelection') + DEBOUNCE(100)]() {
 
     var current = editor.selection.current;
     if (current) {

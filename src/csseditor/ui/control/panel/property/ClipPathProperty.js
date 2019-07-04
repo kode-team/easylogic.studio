@@ -8,7 +8,7 @@ import {
 
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
-import { CHANGE_SELECTION } from "../../../../types/event";
+
 
 export default class ClipPathProperty extends BaseProperty {
   getTitle() {
@@ -56,11 +56,11 @@ export default class ClipPathProperty extends BaseProperty {
 
     this.refresh();
     
-    this.emit("refreshCanvas");
+    this.emit("refreshElement", current);
     this.emit('hideClipPathPopup');    
   }
 
-  [EVENT(CHANGE_SELECTION)] () {
+  [EVENT('refreshSelection')] () {
     this.refresh();
   }
 
@@ -86,7 +86,7 @@ export default class ClipPathProperty extends BaseProperty {
     if (current) {
       current['clip-path'] = 'none';
 
-      this.emit("refreshCanvas");
+      this.emit("refreshElement", current);
     }
 
     this.refresh();
@@ -109,7 +109,7 @@ export default class ClipPathProperty extends BaseProperty {
     current.reset(data); 
 
     this.refresh();
-    this.emit('refreshCanvas');
+    this.emit("refreshElement", current);
   }
 
 }

@@ -2,9 +2,7 @@ import BaseProperty from "./BaseProperty";
 import { LOAD, DEBOUNCE } from "../../../../../util/Event";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
-import {
-  CHANGE_SELECTION
-} from "../../../../types/event";
+
 
 export default class TextShadowProperty extends BaseProperty {
 
@@ -26,7 +24,7 @@ export default class TextShadowProperty extends BaseProperty {
   }
 
 
-  [EVENT(CHANGE_SELECTION) + DEBOUNCE(100)]() {
+  [EVENT('refreshSelection') + DEBOUNCE(100)]() {
 
     var current = editor.selection.current;
     if (current) {
@@ -49,7 +47,7 @@ export default class TextShadowProperty extends BaseProperty {
         'text-shadow': textshadow
       })
 
-      this.emit("refreshCanvas");
+      this.emit('refreshElement', current);
     }
   }
 }

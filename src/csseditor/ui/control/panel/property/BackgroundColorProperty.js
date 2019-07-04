@@ -2,10 +2,7 @@ import BaseProperty from "./BaseProperty";
 import { editor } from "../../../../../editor/editor";
 import { LOAD } from "../../../../../util/Event";
 import { EVENT } from "../../../../../util/UIElement";
-import {
-  CHANGE_SELECTION,
-  
-} from "../../../../types/event";
+
 
 export default class BackgroundColorProperty extends BaseProperty {
 
@@ -32,11 +29,11 @@ export default class BackgroundColorProperty extends BaseProperty {
         'background-color': color
       })
 
-      this.emit('refreshCanvas')
+      this.emit("refreshElement", current);
     }
   }
 
-  [EVENT(CHANGE_SELECTION)]() {
+  [EVENT('refreshSelection')]() {
     this.refresh();
   }
 }

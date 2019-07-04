@@ -4,10 +4,7 @@ import { editor } from "../../../../../editor/editor";
 
 import { EVENT } from "../../../../../util/UIElement";
 
-import {
-  CHANGE_SELECTION,
-  
-} from "../../../../types/event";
+
 import { CSS_TO_STRING } from "../../../../../util/functions/func";
 
 export default class ComputedCodeViewProperty extends BaseProperty {
@@ -17,7 +14,7 @@ export default class ComputedCodeViewProperty extends BaseProperty {
 
   [EVENT(
     
-    CHANGE_SELECTION,
+    'refreshSelection',
   ) + DEBOUNCE(100)]() {
     this.refresh();
   }

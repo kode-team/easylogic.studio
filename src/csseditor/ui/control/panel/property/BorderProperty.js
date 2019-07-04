@@ -3,7 +3,7 @@ import { CLICK, LOAD, DEBOUNCE } from "../../../../../util/Event";
 import { Length } from "../../../../../editor/unit/Length";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
-import { CHANGE_SELECTION } from "../../../../types/event";
+
 
 const borderStyleLit = [
   "none",
@@ -89,12 +89,12 @@ export default class BorderProperty extends BaseProperty {
 
       this.refresh();
 
-      this.emit("refreshCanvas");
+      this.emit("refreshElement", current);
     }
   }
 
 
-  [EVENT(CHANGE_SELECTION) + DEBOUNCE(100)]() {
+  [EVENT('refreshSelection') + DEBOUNCE(100)]() {
 
     var current = editor.selection.current;
     if (current) {

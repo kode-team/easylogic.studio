@@ -2,7 +2,7 @@ import BaseProperty from "./BaseProperty";
 import { LOAD, CLICK } from "../../../../../util/Event";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
-import { CHANGE_SELECTION } from "../../../../types/event";
+
 import icon from "../../../icon/icon";
 
 
@@ -40,7 +40,7 @@ export default class TransformOriginProperty extends BaseProperty {
   }
 
 
-  [EVENT(CHANGE_SELECTION)]() {
+  [EVENT('refreshSelection')]() {
     this.refresh();
   }
 
@@ -51,7 +51,7 @@ export default class TransformOriginProperty extends BaseProperty {
         'transform-origin': value 
       })
 
-      this.emit('refreshCanvas')
+      this.emit('refreshElement', current);
     }
   }
 

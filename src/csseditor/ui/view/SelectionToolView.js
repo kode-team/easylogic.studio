@@ -56,8 +56,7 @@ export default class SelectionToolView extends UIElement {
         this.refreshSelectionToolView(dx, dy);
         this.parent.trigger('removeRealPosition');                
         // this.initSelectionTool();
-        this.emit('refreshCanvas', { transform  : true });
-        this.emit('refreshStyleView')
+        this.emit('refreshElement');
     }   
 
     refreshSelectionToolView (dx, dy, type) {
@@ -176,14 +175,9 @@ export default class SelectionToolView extends UIElement {
     }
 
     [EVENT('refreshCanvas')] (obj = {}) {
-        if (obj.transform) {
-            this.makeSelectionTool(obj);
-        } else if (obj.init) {
+        editor.selection.setRectCache();        
 
-            editor.selection.setRectCache();        
-
-            this.initSelectionTool();
-        }
+        this.initSelectionTool();
     }
 
     

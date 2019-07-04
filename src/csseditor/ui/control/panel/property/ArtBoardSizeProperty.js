@@ -3,10 +3,7 @@ import { LOAD, DEBOUNCE } from "../../../../../util/Event";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
 
-import {
-  CHANGE_SELECTION,
-  
-} from "../../../../types/event";
+
 import SelectEditor from "../property-editor/SelectEditor";
 import { Length } from "../../../../../editor/unit/Length";
 
@@ -34,7 +31,7 @@ export default class ArtBoardSizeProperty extends BaseProperty {
   }
 
 
-  [EVENT(CHANGE_SELECTION) + DEBOUNCE(100)]() {
+  [EVENT('refreshSelection') + DEBOUNCE(100)]() {
 
     var current = editor.selection.current;
     if (current) {
@@ -70,8 +67,7 @@ export default class ArtBoardSizeProperty extends BaseProperty {
       height = Length.px(height);
 
       current.reset({ width, height });
-
-      this.emit("refreshCanvas", { init: true });
+      this.emit("refreshElement", current);
     }
   }
 }

@@ -29,7 +29,7 @@ export default class BackdropFilterProperty extends BaseProperty {
       current.reset({ 
         'backdrop-filter' : filter 
       })
-      this.emit('refreshCanvas');
+      this.emit("refreshElement", current);
     }
   }
 }

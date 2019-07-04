@@ -4,10 +4,7 @@ import { editor } from "../../../../../editor/editor";
 
 import { EVENT } from "../../../../../util/UIElement";
 
-import {
-  CHANGE_SELECTION,
-  
-} from "../../../../types/event";
+
 import { CSS_TO_STRING } from "../../../../../util/functions/func";
 
 export default class CodeViewProperty extends BaseProperty {
@@ -15,7 +12,7 @@ export default class CodeViewProperty extends BaseProperty {
     return "CodeView";
   }
 
-  [EVENT(CHANGE_SELECTION,'refreshCanvas' ) + DEBOUNCE(10) ]() {
+  [EVENT('refreshSelection') + DEBOUNCE(10) ]() {
     this.refresh();
   }
 

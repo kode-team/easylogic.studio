@@ -3,10 +3,7 @@ import { LOAD, DEBOUNCE } from "../../../../../util/Event";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
 
-import {
-  CHANGE_SELECTION,
-  
-} from "../../../../types/event";
+
 import RangeEditor from "../property-editor/RangeEditor";
 import SelectEditor from "../property-editor/SelectEditor";
 
@@ -28,7 +25,7 @@ export default class PositionProperty extends BaseProperty {
     return true; 
   }
 
-  [EVENT(CHANGE_SELECTION, 'refreshRect') + DEBOUNCE(100)]() {
+  [EVENT('refreshSelection', 'refreshRect') + DEBOUNCE(100)]() {
 
     var current = editor.selection.current;
     if (current) {
@@ -74,7 +71,7 @@ export default class PositionProperty extends BaseProperty {
         [key]: value
       });
 
-      this.emit("refreshCanvas");
+      this.emit('refreshElement', current);
     }
   }
 }

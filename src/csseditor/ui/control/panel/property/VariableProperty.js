@@ -28,7 +28,7 @@ export default class VariableProperty extends BaseProperty {
 
     if (current) {
       current.reset({ variable })
-      this.emit('refreshCanvas');
+      this.emit('refreshElement');
     }
   }
 }

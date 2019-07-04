@@ -2,10 +2,7 @@ import BaseProperty from "./BaseProperty";
 import { editor } from "../../../../../editor/editor";
 import { LOAD } from "../../../../../util/Event";
 import { EVENT } from "../../../../../util/UIElement";
-import {
-  CHANGE_SELECTION,
-  
-} from "../../../../types/event";
+
 
 
 export default class OpacityProperty extends BaseProperty {
@@ -47,11 +44,11 @@ export default class OpacityProperty extends BaseProperty {
         [key]: value.value
       })
 
-      this.emit('refreshCanvas')
+      this.emit('refreshElement', current);
     }
   }
 
-  [EVENT(CHANGE_SELECTION)]() {
+  [EVENT('refreshSelection')]() {
     this.refresh();
   }
 }

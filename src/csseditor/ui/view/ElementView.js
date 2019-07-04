@@ -1,7 +1,7 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
 import { BIND, LOAD, POINTERSTART, MOVE, END, IF, DEBOUNCE } from "../../../util/Event";
 import { Length } from "../../../editor/unit/Length";
-import { CHANGE_SELECTION } from "../../types/event";
+
 import { editor } from "../../../editor/editor";
 import Dom from "../../../util/Dom";
 import SelectionToolView from "./SelectionToolView";
@@ -154,7 +154,7 @@ export default class ElementView extends UIElement {
         this.selectCurrentForBackgroundView(...items)
 
         if (items.length) {
-            this.emit(CHANGE_SELECTION)
+            this.emit('refreshSelection')
             this.emit('changeSelection')
         } else {
             editor.selection.select();            
@@ -177,14 +177,13 @@ export default class ElementView extends UIElement {
         }
 
         this.selectCurrent(...editor.selection.items)
-        this.emit(CHANGE_SELECTION);
+        this.emit('refreshSelection');
         editor.selection.setRectCache()
     }
 
     calculateMovedElement (dx, dy) {
         this.children.$selectionTool.refreshSelectionToolView(dx, dy, 'move');
         this.updateRealPosition();     
-        // this.emit('refreshCanvas', { transform: true })     
     }
 
     updateRealPosition() {
@@ -211,10 +210,10 @@ export default class ElementView extends UIElement {
     calculateEndedElement (dx, dy) {
 
         this.children.$selectionTool.refreshSelectionToolView(dx, dy, 'move');
-        this.emit('refreshCanvas');               
+        var current = editor.selection.items.length === 1 ? editor.selection.current : null;
+        this.emit('refreshElement', current);
+        this.emit('removeGuideLine')        
         this.trigger('removeRealPosition');
-
-        console.log(dx, dy, 'en');
 
     }
 
@@ -255,11 +254,7 @@ export default class ElementView extends UIElement {
 
     [EVENT('addElement')] () {
         var artboard = editor.selection.currentArtboard
-        var html = '' 
-        if (artboard) {
-            html = artboard.html
-        }
-
+        var html = artboard.html
         this.setState({ html })
 
         setTimeout(() => {
@@ -290,7 +285,7 @@ export default class ElementView extends UIElement {
         } else {
             editor.selection.select(editor.selection.currentArtboard)
         }
-        // this.emit(CHANGE_SELECTION)           
+        // this.emit('refreshSelection')           
 
         this.emit('initSelectionTool')
 
@@ -319,13 +314,13 @@ export default class ElementView extends UIElement {
         } else {
             editor.selection.select()
         }
-        this.emit(CHANGE_SELECTION)           
+        this.emit('refreshSelection')           
 
         this.emit('initSelectionTool')
 
     }    
     
-    [EVENT(CHANGE_SELECTION)] () {
+    [EVENT('refreshSelection')] () {
 
         if (!this.state.html) {
             this.trigger('addElement');
@@ -348,10 +343,32 @@ export default class ElementView extends UIElement {
        this.modifyScale();
     }
 
-    [EVENT('refreshCanvas')] (obj = {}) {
-        if (obj.update === 'tag') {
-            this.trigger('addElement');
-        } 
+    [EVENT('refreshCanvas')] (obj) {
+
+        if (obj) {
+            // 하나 짜리 바뀌는건 element view 에서 적용하지 않는다. 
+            if (!this.currentElement) {
+                this.currentElement = this.refs.$view.$(`[data-id="${obj.id}"]`);
+            } else if (this.currentElement && this.currentElement.attr('data-id') != obj.id) {
+                this.currentElement = this.refs.$view.$(`[data-id="${obj.id}"]`);
+            }
+
+            if (this.currentElement) {
+                var $content = this.currentElement.$('.content')    
+                if (obj.content) {
+                    if(!$content) {
+                        this.currentElement.prepend(Dom.create('div', 'content'))
+                        $content = this.currentElement.$('.content')
+                    }
+                    $content && $content.text(obj.content);
+                } else {
+                    $content && $content.remove();
+                }
+            }
+        } else {
+            this.trigger('addElement')
+        }
+
     }
     
 } 

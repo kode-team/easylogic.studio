@@ -31,7 +31,7 @@ export default class RootVariableProperty extends BaseProperty {
 
     if (current) {
       current.reset({ rootVariable })
-      this.emit('refreshCanvas');
+      this.emit('refreshElement', current);
     }
   }
 }

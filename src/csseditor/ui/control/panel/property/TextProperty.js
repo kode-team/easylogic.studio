@@ -1,10 +1,7 @@
 import BaseProperty from "./BaseProperty";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
-import {
-  CHANGE_SELECTION,
-  
-} from "../../../../types/event";
+
 
 export default class TextProperty extends BaseProperty {
 
@@ -12,7 +9,7 @@ export default class TextProperty extends BaseProperty {
     return "Text";
   }
 
-  [EVENT(CHANGE_SELECTION)]() {
+  [EVENT('refreshSelection')]() {
     this.refresh();
   }
 
@@ -42,7 +39,7 @@ export default class TextProperty extends BaseProperty {
       [key]: value
     })
 
-    this.emit('refreshCanvas')
+    this.emit('refreshElement', current);
   }
 
 }

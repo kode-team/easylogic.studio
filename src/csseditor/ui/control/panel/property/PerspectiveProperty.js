@@ -2,10 +2,7 @@ import BaseProperty from "./BaseProperty";
 import { editor } from "../../../../../editor/editor";
 import { LOAD, CLICK } from "../../../../../util/Event";
 import { EVENT } from "../../../../../util/UIElement";
-import {
-  CHANGE_SELECTION,
-  
-} from "../../../../types/event";
+
 import icon from "../../../icon/icon";
 
 export default class PerspectiveProperty extends BaseProperty {
@@ -33,11 +30,11 @@ export default class PerspectiveProperty extends BaseProperty {
         [key]: value
       })
 
-      this.emit('refreshCanvas')
+      this.emit('refreshElement', current);
     }
   }
 
-  [EVENT(CHANGE_SELECTION)]() {
+  [EVENT('refreshSelection')]() {
     this.refresh();
   }
 }

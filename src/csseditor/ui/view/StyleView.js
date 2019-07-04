@@ -4,8 +4,6 @@ import { editor } from "../../../editor/editor";
 import { DEBOUNCE, LOAD } from "../../../util/Event";
 import Dom from "../../../util/Dom";
 import { CSS_TO_STRING } from "../../../util/functions/func";
-import { CHANGE_SELECTION } from "../../types/event";
-
 
 export default class StyleView extends UIElement {
 
@@ -65,6 +63,14 @@ export default class StyleView extends UIElement {
     })
   }
 
+  refreshStyleHeadOne (item) {
+    var $temp = Dom.create('div')    
+    this.refs.$head.$$(`style[data-id="${item.id}"]`).forEach($style => $style.remove())
+    $temp.html(this.makeStyle(item)).children().forEach($item => {
+      this.refs.$head.append($item);
+    })    
+  }
+
 
   makeSvg (item) {
     const SVGString = item.toSVGString()
@@ -90,16 +96,17 @@ export default class StyleView extends UIElement {
     this.emit('refreshComputedStyleCode', computedCSS)
   }
 
-  [EVENT('refreshStyleView')] () {
-    this.refresh()    
+  [EVENT('refreshStyleView')] (current) {
+    if (current) {
+      this.refreshStyleHeadOne(current);
+    } else {
+      this.refresh()
+    }
+
   }
 
   refresh() {
     this.load();
     this.refreshStyleHead();
-  }
-
-  [EVENT('refreshCanvas', 'addElement', CHANGE_SELECTION)]() { 
-    this.refresh()
   }
 }

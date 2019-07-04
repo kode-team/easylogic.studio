@@ -2,9 +2,7 @@ import { CLICK, LOAD } from "../../../../../util/Event";
 import UIElement, { EVENT } from "../../../../../util/UIElement";
 import icon from "../../../icon/icon";
 import { BoxShadow } from "../../../../../editor/css-property/BoxShadow";
-import {
-  CHANGE_SELECTION
-} from "../../../../types/event";
+
 
 export default class BoxShadowEditor extends UIElement {
 
@@ -70,7 +68,7 @@ export default class BoxShadowEditor extends UIElement {
     return arr.join('');
   }
 
-  [EVENT(CHANGE_SELECTION)]() {
+  [EVENT('refreshSelection')]() {
     this.refresh();
   }
 

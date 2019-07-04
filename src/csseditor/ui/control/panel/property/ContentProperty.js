@@ -4,9 +4,7 @@ import { editor } from "../../../../../editor/editor";
 
 import { EVENT } from "../../../../../util/UIElement";
 
-import {
-  CHANGE_SELECTION
-} from "../../../../types/event";
+
 
 export default class ContentProperty extends BaseProperty {
   getTitle() {
@@ -14,7 +12,7 @@ export default class ContentProperty extends BaseProperty {
   }
 
 
-  [EVENT(CHANGE_SELECTION) + DEBOUNCE(100)]() {
+  [EVENT('refreshSelection') + DEBOUNCE(100)]() {
 
     var current = editor.selection.current;
     if (current) {
@@ -59,10 +57,7 @@ export default class ContentProperty extends BaseProperty {
         content: this.refs.$contentItem.value
       }
       current.reset(data);
-
-      this.emit("refreshCanvas", {
-        update: 'tag'
-      });
+      this.emit('refreshCanvas', {id: current.id, content: data.content });
     }
   }
 }

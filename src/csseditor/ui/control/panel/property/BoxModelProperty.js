@@ -3,10 +3,7 @@ import { INPUT, LOAD } from "../../../../../util/Event";
 import { editor } from "../../../../../editor/editor";
 import { Length } from "../../../../../editor/unit/Length";
 import { EVENT } from "../../../../../util/UIElement";
-import {
-  CHANGE_SELECTION,
-  
-} from "../../../../types/event";
+
 
 
 const fields = ["margin", "padding"];
@@ -24,7 +21,7 @@ export default class BoxModelProperty extends BaseProperty {
     return false; 
   }
 
-  [EVENT(CHANGE_SELECTION)]() {
+  [EVENT('refreshSelection')]() {
     this.refresh();
   }
 
@@ -99,7 +96,7 @@ export default class BoxModelProperty extends BaseProperty {
     if (current) {
       current.reset(data);
 
-      this.emit("refreshCanvas");
+      this.emit("refreshElement", current);
     }
   }
 

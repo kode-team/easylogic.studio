@@ -213,7 +213,7 @@ export class Item {
     var selected = this.json.selected ? 'selected' : ''
 
     return `
-    <${tagName} class='element-item ${selected} ${itemType}' data-id="${id}">${content ? content : ''}
+    <${tagName} class='element-item ${selected} ${itemType}' data-id="${id}">${content ? `<div class='content'>${content}</div>` : ''}
       ${layers.map(it => it.html).join('')}
     </${tagName}>
     `

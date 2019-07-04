@@ -10,7 +10,7 @@ import {
 } from "../../../../../util/Event";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
-import { CHANGE_SELECTION } from "../../../../types/event";
+
 import { Selector } from "../../../../../editor/css-property/Selector";
 
 
@@ -79,12 +79,12 @@ export default class SelectorProperty extends BaseProperty {
 
     current.removeSelector(removeIndex);
 
-    this.emit("refreshCanvas");
+    this.emit('refreshElement', current);
 
     this.refresh();
   }
 
-  [EVENT(CHANGE_SELECTION)] () {
+  [EVENT('refreshSelection')] () {
     this.refresh();
   }
 
@@ -121,7 +121,7 @@ export default class SelectorProperty extends BaseProperty {
 
     current.sortSelector(this.startIndex, targetIndex);
 
-    this.emit("refreshCanvas");
+    this.emit('refreshElement', current);
 
     this.refresh();
   }
@@ -135,7 +135,7 @@ export default class SelectorProperty extends BaseProperty {
         selector: this.children.$select.getValue()
       });
 
-      this.emit("refreshCanvas");
+      this.emit('refreshElement', current);
     }
 
     this.refresh();
@@ -208,7 +208,7 @@ export default class SelectorProperty extends BaseProperty {
     }
 
     this.refresh();
-    this.emit('refreshCanvas');
+    this.emit('refreshElement', current);
   }
 
 }

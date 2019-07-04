@@ -11,7 +11,7 @@ import {
 
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
-import { CHANGE_SELECTION } from "../../../../types/event";
+
 import { Keyframe } from "../../../../../editor/css-property/Keyframe";
 
 export default class KeyFrameProperty extends BaseProperty {
@@ -70,12 +70,12 @@ export default class KeyFrameProperty extends BaseProperty {
 
     current.removeKeyframe(removeIndex);
 
-    this.emit("refreshCanvas");
+    this.emit('refreshElement', current);
 
     this.refresh();
   }
 
-  [EVENT(CHANGE_SELECTION)] () {
+  [EVENT('refreshSelection')] () {
     this.refresh();
   }
 
@@ -112,7 +112,7 @@ export default class KeyFrameProperty extends BaseProperty {
 
     current.sortKeyframe(this.startIndex, targetIndex);
 
-    this.emit("refreshCanvas");
+    this.emit('refreshElement', current);
 
     this.refresh();
   }
@@ -123,7 +123,7 @@ export default class KeyFrameProperty extends BaseProperty {
     if (current) {
       current.createKeyframe();
 
-      this.emit("refreshCanvas");
+      this.emit('refreshElement', current);
     }
 
     this.refresh();
@@ -196,7 +196,7 @@ export default class KeyFrameProperty extends BaseProperty {
     }
 
     this.refresh();
-    this.emit('refreshCanvas');
+    this.emit('refreshElement', this.current);
   }
 
 }

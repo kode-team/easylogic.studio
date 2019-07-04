@@ -2,7 +2,7 @@
 import CanvasView from "../ui/view/CanvasView";
 import ToolMenu from "../ui/view/ToolMenu";
 
-import UIElement from "../../util/UIElement";
+import UIElement, { EVENT } from "../../util/UIElement";
 import { RESIZE, DEBOUNCE, DROP, PREVENT, DRAGOVER } from "../../util/Event";
 import { RESIZE_WINDOW } from "../types/event";
 import Inspector from "../ui/control/Inspector";
@@ -89,8 +89,24 @@ export default class CSSEditor extends UIElement {
     };
   }
 
-  [RESIZE("window") + DEBOUNCE(100)](e) {
-    this.emit(RESIZE_WINDOW);
+  [EVENT('refreshAll')] () {
+    this.emit('refreshProjectList');
+    this.trigger('refreshAllSelectProject');
+  }
+
+  [EVENT('refreshAllSelectProject')] () {      
+    this.emit('refreshArtBoardList')    
+    this.trigger('refreshAllSelectArtBoard')
+  }
+
+  [EVENT('refreshAllSelectArtBoard')] () {      
+    this.emit('refreshLayerTreeView')    
+    this.trigger('refreshElement')
+  }
+
+  [EVENT('refreshElement')] (current) {
+    this.emit('refreshCanvas', current)
+    this.emit('refreshStyleView', current)
   }
 
   // [DRAGOVER() + PREVENT] (e) {}

@@ -3,7 +3,7 @@ import { LOAD, CLICK } from "../../../../../util/Event";
 import { editor } from "../../../../../editor/editor";
 import icon from "../../../icon/icon";
 import { EVENT } from "../../../../../util/UIElement";
-import { CHANGE_SELECTION } from "../../../../types/event";
+
 import { ArtBoard } from "../../../../../editor/items/ArtBoard";
 
 
@@ -30,9 +30,9 @@ export default class ArtBoardProperty extends BaseProperty {
 
   [LOAD("$artboardList")]() {
 
-    var project = editor.selection.currentProject;
+    var project = editor.selection.currentProject;    
     if (!project) return ''
-    
+
     return project.artboards.map( (artboard, index) => {
       var selected = artboard === editor.selection.currentArtboard ? 'selected' : ''
       return `
@@ -54,13 +54,11 @@ export default class ArtBoardProperty extends BaseProperty {
 
     if (artboard) {
       editor.selection.selectArtboard(artboard)
+      editor.selection.select()
     }
 
     this.refresh()
-    this.emit(CHANGE_SELECTION);
-    this.emit('refreshLayerTreeView')
-    this.emit('refreshCanvas')
-    this.emit('refreshStyleView')
+    this.emit('refreshAllSelectArtBoard');
   }
 
   [CLICK('$add')] (e) {
@@ -97,7 +95,7 @@ export default class ArtBoardProperty extends BaseProperty {
     }
   }
 
-  [EVENT(CHANGE_SELECTION)] () {
+  [EVENT('refreshArtBoardList')] () {
     this.refresh();
   }
 

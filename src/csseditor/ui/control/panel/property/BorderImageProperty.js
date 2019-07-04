@@ -5,7 +5,6 @@ import { Position } from "../../../../../editor/unit/Length";
 import icon from "../../../icon/icon";
 
 import { EVENT } from "../../../../../util/UIElement";
-import { CHANGE_SELECTION,  } from "../../../../types/event";
 
 const typeList = [
   { key: "top", title: "Top" },
@@ -47,7 +46,7 @@ export default class BorderImageProperty extends BaseProperty {
     return "Border Image";
   }
 
-  [EVENT(CHANGE_SELECTION, )] () {
+  [EVENT('refreshSelection', )] () {
     this.refresh()
   }
 
@@ -69,7 +68,7 @@ export default class BorderImageProperty extends BaseProperty {
 
     current.reset({applyBorderImage});
 
-    this.emit("refreshCanvas");
+    this.emit("refreshElement", current);
 
   }
 
@@ -276,7 +275,7 @@ export default class BorderImageProperty extends BaseProperty {
 
     this.viewChangeImage(data);
 
-    this.emit("refreshCanvas");
+    this.emit("refreshElement", current);
   }
 
   viewChangeGradient(data) {
@@ -316,7 +315,7 @@ export default class BorderImageProperty extends BaseProperty {
 
     this.viewChangeGradient(data);
 
-    this.emit("refreshCanvas");
+    this.emit("refreshElement", current);
 
   }
 
@@ -356,7 +355,7 @@ export default class BorderImageProperty extends BaseProperty {
       });
     }
 
-    this.emit("refreshCanvas");
+    this.emit("refreshElement", current);
   }
 
   [CLICK("$selector button")](e) {

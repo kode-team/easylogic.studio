@@ -3,7 +3,7 @@ import { LOAD, CLICK } from "../../../../../util/Event";
 import { editor } from "../../../../../editor/editor";
 import icon from "../../../icon/icon";
 import { EVENT } from "../../../../../util/UIElement";
-import { CHANGE_SELECTION } from "../../../../types/event";
+
 import { Layer } from "../../../../../editor/items/Layer";
 import Color from "../../../../../util/Color";
 import { Length } from "../../../../../editor/unit/Length";
@@ -76,8 +76,15 @@ export default class LayerTreeProperty extends BaseProperty {
     }
 
     this.refresh()
-    this.emit('addElement')
-    this.emit(CHANGE_SELECTION);
+    this.emit('refreshSelection');
+  }
+
+  addLayer (layer) {
+    if (layer) {
+      editor.selection.select(layer);
+
+      this.emit('refreshAllSelectArtBoard')
+    }
   }
 
   [CLICK('$add')] (e) {
@@ -89,7 +96,7 @@ export default class LayerTreeProperty extends BaseProperty {
         height: Length.px(100)
       }))
 
-      this.selectLayer(layer);
+      this.addLayer(layer);
     }
   }
 
@@ -103,9 +110,8 @@ export default class LayerTreeProperty extends BaseProperty {
       obj.parentObject.layers.splice(obj.index);
       delete this.state.layers[id]
 
-      this.emit('refreshCanvas')
-      this.emit('addElement')
-      $item.remove();
+      this.emit('refreshAllSelectArtBoard');
+      // $item.remove();
     }
   }
 
@@ -121,7 +127,7 @@ export default class LayerTreeProperty extends BaseProperty {
       editor.selection.select(obj.layer)
       $item.onlyOneClass('selected');
 
-      this.emit(CHANGE_SELECTION);      
+      this.emit('refreshSelection');      
 
     }
   }
@@ -140,7 +146,7 @@ export default class LayerTreeProperty extends BaseProperty {
 
       e.$delegateTarget.attr('data-visible', obj.layer.visible);
 
-      this.emit('refreshCanvas');
+      this.emit('refreshElement', obj.layer);
     }
   }
 
@@ -159,7 +165,7 @@ export default class LayerTreeProperty extends BaseProperty {
 
       e.$delegateTarget.attr('data-lock', obj.layer.lock);
 
-      this.emit('refreshCanvas');
+      this.emit('refreshElement', obj.layer);
     }
   }
 
@@ -189,12 +195,12 @@ export default class LayerTreeProperty extends BaseProperty {
 
   }  
 
-  [EVENT(CHANGE_SELECTION)] () {
+  [EVENT('refreshSelection')] () {
     // this.setState({ layers: [] }, false)
     this.trigger('changeSelection')
   }
 
-  [EVENT('addElement', 'refreshLayerTreeView')] () {
+  [EVENT('refreshLayerTreeView')] () {
     this.setState({ layers: [] }, false)    
     this.refresh();
   }

@@ -31,7 +31,7 @@ export default class SVGProperty extends BaseProperty {
     if (current) {
       // 받을 때는 배열로 
       current.reset({ svg })
-      this.emit('refreshCanvas');
+      this.emit('refreshElement', current);
     }
   }
 }

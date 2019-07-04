@@ -4,7 +4,7 @@ import { editor } from "../../../editor/editor";
 import { Project } from "../../../editor/items/Project";
 import { ArtBoard } from "../../../editor/items/ArtBoard";
 import { CLICK } from "../../../util/Event";
-import { CHANGE_SELECTION } from "../../types/event";
+
 import { StyleParser } from "../../../editor/parse/StyleParser";
 
 export default class DrawingView extends UIElement {
@@ -45,7 +45,7 @@ export default class DrawingView extends UIElement {
 
     this.modifyArtBoard(newStyles);
 
-    this.emit(CHANGE_SELECTION);
+    this.emit('refreshSelection');
   }
 
   modifyArtBoard(data) {
@@ -85,6 +85,6 @@ export default class DrawingView extends UIElement {
   }
 
   [CLICK()]() {
-    this.emit(CHANGE_SELECTION);
+    this.emit('refreshSelection');
   }
 }

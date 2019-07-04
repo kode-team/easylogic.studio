@@ -206,6 +206,16 @@ export default class Dom {
     return this;
   }
 
+  prepend(el) {
+    if (isString(el)) {
+      this.el.prepend(document.createTextNode(el));
+    } else {
+      this.el.prepend(el.el || el);
+    }
+
+    return this;    
+  }
+
   appendHTML(html) {
     var $dom = Dom.create("div").html(html);
 

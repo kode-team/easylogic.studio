@@ -3403,7 +3403,7 @@ html, body {
   text-align: right;
 }
 .csseditor .color-view-editor .preview .mini-view {
-  width: 100%;
+  width: 24px;
   height: 24px;
   display: inline-block;
   position: relative;

@@ -1,6 +1,4 @@
 import { CLICK, INPUT, CHANGE, LOAD } from "../../../../../util/Event";
-import { html } from "../../../../../util/functions/func";
-import { Length } from "../../../../../editor/unit/Length";
 import icon from "../../../icon/icon";
 import UIElement, { EVENT } from "../../../../../util/UIElement";
 import RangeEditor from "./RangeEditor";
@@ -34,7 +32,7 @@ export default class BorderRadiusEditor extends UIElement {
 
     if (key === 'border-radius') {
       keyList.forEach(type => {
-        this.children[`$${type}`].setValue(value)
+        this.children[`$${type}`].setValue(value.clone())
       });
     }
 

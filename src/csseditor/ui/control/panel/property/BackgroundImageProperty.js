@@ -4,9 +4,7 @@ import {
 } from "../../../../../util/Event";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
-import {
-  CHANGE_SELECTION
-} from "../../../../types/event";
+
 
 export default class BackgroundImageProperty extends BaseProperty {
 
@@ -31,7 +29,7 @@ export default class BackgroundImageProperty extends BaseProperty {
             />`
   }
 
-  [EVENT(CHANGE_SELECTION)]() {
+  [EVENT('refreshSelection')]() {
     this.refresh();
   }
 
@@ -42,7 +40,7 @@ export default class BackgroundImageProperty extends BaseProperty {
         'background-image': value 
       })
 
-      this.emit('refreshCanvas')
+      this.emit("refreshElement", current);
     }
   }
 }

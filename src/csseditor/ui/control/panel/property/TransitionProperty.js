@@ -9,9 +9,7 @@ import {
 } from "../../../../../util/Event";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
-import {
-  CHANGE_SELECTION
-} from "../../../../types/event";
+
 
 import icon from "../../../icon/icon";
 import { getPredefinedCubicBezier } from "../../../../../util/functions/bezier";
@@ -94,7 +92,7 @@ export default class TransitionProperty extends BaseProperty {
     })
 }
 
-  [EVENT(CHANGE_SELECTION)]() {
+  [EVENT('refreshSelection')]() {
     this.refresh();
     this.emit("hideTransitionPropertyPopup"); 
   }
@@ -120,12 +118,11 @@ export default class TransitionProperty extends BaseProperty {
 
     if (current) {
       current.createTransition();
-      this.emit("refreshCanvas");
+      this.emit('refreshElement', current);
     }
 
     this.refresh();
 
-    this.emit('refreshCanvas');
   }
 
   [DRAGSTART("$transitionList .transition-item")](e) {
@@ -143,7 +140,7 @@ export default class TransitionProperty extends BaseProperty {
     this.selectItem(this.startIndex, true);
     current.sortTransition(this.startIndex, targetIndex);
 
-    this.emit("refreshCanvas");
+    this.emit('refreshElement', current);
 
     this.refresh();
 
@@ -165,7 +162,7 @@ export default class TransitionProperty extends BaseProperty {
 
     current.removeTransition(removeIndex);
 
-    this.emit("refreshCanvas");
+    this.emit('refreshElement', current);
 
     this.refresh();
   
@@ -182,7 +179,7 @@ export default class TransitionProperty extends BaseProperty {
 
       e.$delegateTarget.attr('data-play-state-selected-value', transition.playState)
 
-      this.emit('refreshCanvas')
+      this.emit('refreshElement', current);
     }
   }
 
@@ -256,7 +253,7 @@ export default class TransitionProperty extends BaseProperty {
       this.currentTransition.reset({ ...data });
 
       if (this.current) {
-        this.emit("refreshCanvas", this.current);
+        this.emit('refreshElement', this.current);        
 
         // 리스트 업데이트 
         this.refresh();

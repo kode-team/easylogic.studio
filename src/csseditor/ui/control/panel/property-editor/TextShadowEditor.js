@@ -3,9 +3,7 @@ import UIElement, { EVENT } from "../../../../../util/UIElement";
 import icon from "../../../icon/icon";
 import { TextShadow } from "../../../../../editor/css-property/TextShadow";
 
-import {
-  CHANGE_SELECTION
-} from "../../../../types/event";
+
 
 export default class TextShadowEditor extends UIElement {
 
@@ -68,7 +66,7 @@ export default class TextShadowEditor extends UIElement {
     return arr.join('');
   }
 
-  [EVENT(CHANGE_SELECTION)]() {
+  [EVENT('refreshSelection')]() {
     this.refresh();
   }
 
