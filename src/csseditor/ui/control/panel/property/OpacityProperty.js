@@ -32,15 +32,12 @@ export default class OpacityProperty extends BaseProperty {
   }
 
   [EVENT('changeSelect')] (key, value) {
-    var current = editor.selection.current;
 
-    if (current) {
-      current.reset({
-        [key]: value.value
-      })
+    editor.selection.reset({
+      [key]: value.value
+    })
 
-      this.emit('refreshElement', current);
-    }
+    this.emit("refreshSelectionStyleView");
   }
 
   [EVENT('refreshSelection')]() {

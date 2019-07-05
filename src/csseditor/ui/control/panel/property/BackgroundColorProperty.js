@@ -22,15 +22,12 @@ export default class BackgroundColorProperty extends BaseProperty {
   }
 
   [EVENT('changeColor')] (color) {
-    var current = editor.selection.current;
 
-    if (current) {
-      current.reset({
-        'background-color': color
-      })
+    editor.selection.reset({
+      'background-color': color
+    })
 
-      this.emit("refreshElement", current);
-    }
+    this.emit("refreshSelectionStyleView");    
   }
 
   [EVENT('refreshSelection')]() {

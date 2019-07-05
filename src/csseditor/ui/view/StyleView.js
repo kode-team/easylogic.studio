@@ -102,8 +102,14 @@ export default class StyleView extends UIElement {
     } else {
       this.refresh()
     }
-
   }
+
+  [EVENT('refreshSelectionStyleView')] () {
+
+    editor.selection.each(item => {
+      this.refreshStyleHeadOne(item);
+    })
+  }  
 
   refresh() {
     this.load();

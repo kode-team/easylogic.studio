@@ -132,6 +132,10 @@ export class Selection {
 
   }
 
+  reset (obj) {
+    this.each(item => item.reset(obj))
+  }
+
   move (dx, dy) {
     this.each ((item, cachedItem, ) => {
       item.move( 

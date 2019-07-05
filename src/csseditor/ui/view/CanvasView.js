@@ -15,6 +15,7 @@ import { rgb } from "../../../util/functions/formatter";
 import { FileImageResource } from "../../../editor/image-resource/URLImageResource";
 import { BackgroundImage } from "../../../editor/css-property/BackgroundImage";
 import { Sketch, SketchUtil } from "../../../editor/parse/Sketch";
+import Color from "../../../util/Color";
 
 
 export default class CanvasView extends UIElement {
@@ -47,7 +48,8 @@ export default class CanvasView extends UIElement {
     editor.selection.selectArtboard(artboard);
 
     var layer = artboard.add(new Layer({
-      name: 'New layer'
+      name: 'New layer',
+      'background-color': Color.random()
     }));
     editor.selection.select(layer);
 
