@@ -24,11 +24,12 @@ export default class TransformProperty extends BaseProperty {
   }
 
   [EVENT('changeTransformEditor')] (transform) {
-    var current = editor.selection.current; 
 
-    if (current) {
-      current.reset({ transform })
-      this.emit('refreshElement', current);
-    }
+    editor.selection.reset({ 
+      transform
+    })
+
+    this.emit("refreshSelectionStyleView");
+
   }
 }

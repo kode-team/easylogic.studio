@@ -44,15 +44,12 @@ export default class MixBlendModeProperty extends BaseProperty {
   }
 
   [EVENT('changeSelect')] (key, value) {
-    var current = editor.selection.current;
 
-    if (current) {
-      current.reset({
-        [key]: value
-      })
+    editor.selection.reset({ 
+      [key]: value
+    })
 
-      this.emit('refreshElement', current);
-    }
+    this.emit("refreshSelectionStyleView");
   }
 
 

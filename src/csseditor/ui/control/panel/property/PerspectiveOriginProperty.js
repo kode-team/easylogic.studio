@@ -46,14 +46,12 @@ export default class PerspectiveOriginProperty extends BaseProperty {
   }
 
   [EVENT('changePerspectiveOrigin')] (value) {
-    var current = editor.selection.current;
-    if (current) {
-      current.reset({
-        'perspective-origin': value 
-      })
 
-      this.emit('refreshElement', current);
-    }
+    editor.selection.reset({ 
+      'perspective-origin': value 
+    })
+
+    this.emit("refreshSelectionStyleView");
   }
 
 }

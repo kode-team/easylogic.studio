@@ -22,15 +22,12 @@ export default class FontColorProperty extends BaseProperty {
   }
 
   [EVENT('changeColor')] (color) {
-    var current = editor.selection.current;
 
-    if (current) {
-      current.reset({
-        'color': color
-      })
+    editor.selection.reset({ 
+      'color': color
+    })
 
-      this.emit('refreshElement', current);
-    }
+    this.emit("refreshSelectionStyleView");
   }
 
   [EVENT('refreshSelection')]() {

@@ -23,15 +23,12 @@ export default class PerspectiveProperty extends BaseProperty {
   }
 
   [EVENT('changePerspective')] (key, value) {
-    var current = editor.selection.current;
 
-    if (current) {
-      current.reset({
-        [key]: value
-      })
+    editor.selection.reset({ 
+      [key]: value
+    })
 
-      this.emit('refreshElement', current);
-    }
+    this.emit("refreshSelectionStyleView");
   }
 
   [EVENT('refreshSelection')]() {

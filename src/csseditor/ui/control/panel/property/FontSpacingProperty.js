@@ -34,14 +34,12 @@ export default class FontSpacingProperty extends BaseProperty {
   }
 
   [EVENT('changeRangeEditor')] (key, value) {
-    var current = editor.selection.current;
-    if (!current) return;
 
-    current.reset({
+    editor.selection.reset({ 
       [key]: value
     })
 
-    this.emit('refreshElement', current);
+    this.emit("refreshSelectionStyleView");
   }
 
 }

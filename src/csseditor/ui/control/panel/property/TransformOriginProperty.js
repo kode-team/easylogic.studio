@@ -45,14 +45,12 @@ export default class TransformOriginProperty extends BaseProperty {
   }
 
   [EVENT('changeTransformOrigin')] (value) {
-    var current = editor.selection.current;
-    if (current) {
-      current.reset({
-        'transform-origin': value 
-      })
 
-      this.emit('refreshElement', current);
-    }
+    editor.selection.reset({ 
+      'transform-origin': value 
+    })
+
+    this.emit("refreshSelectionStyleView");
   }
 
 }

@@ -32,14 +32,12 @@ export default class TextProperty extends BaseProperty {
   }
 
   [EVENT('changeTextValue')] (key, value) {
-    var current = editor.selection.current;
-    if (!current) return; 
 
-    current.reset({
+    editor.selection.reset({ 
       [key]: value
     })
 
-    this.emit('refreshElement', current);
+    this.emit("refreshSelectionStyleView");
   }
 
 }
