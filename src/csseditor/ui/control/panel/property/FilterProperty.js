@@ -24,11 +24,10 @@ export default class FilterProperty extends BaseProperty {
   }
 
   [EVENT('changeFilterEditor')] (filter) {
-    var current = editor.selection.current; 
 
-    if (current) {
-      current.reset({ filter })
-      this.emit('refreshElement', current);
-    }
+    editor.selection.reset({ filter })
+
+    this.emit("refreshSelectionStyleView");
+
   }
 }

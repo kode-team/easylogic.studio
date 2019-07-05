@@ -41,13 +41,11 @@ export default class TextShadowProperty extends BaseProperty {
   }  
 
   [EVENT("changeTextShadow")](textshadow) {
-    var current = editor.selection.current;
-    if (current) {
-      current.reset({
-        'text-shadow': textshadow
-      })
 
-      this.emit('refreshElement', current);
-    }
+    editor.selection.reset({ 
+      'text-shadow': textshadow
+    })
+
+    this.emit("refreshSelectionStyleView");
   }
 }

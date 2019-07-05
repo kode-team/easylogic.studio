@@ -52,12 +52,26 @@ export default class SelectionToolView extends UIElement {
     }
 
     move (dx, dy) {
+
+        var e = editor.config.get('bodyEvent');
+
+        if (e.altKey) {
+            dy = dx; 
+        }
+
         this.refreshSelectionToolView(dx, dy);
         this.parent.updateRealPosition();     
         this.emit('refreshRedGL')        
     }
 
     end (dx, dy) {
+
+        var e = editor.config.get('bodyEvent');
+
+        if (e.altKey) {
+            dy = dx; 
+        }
+                
         this.refs.$selectionTool.attr('data-selected-position', '');
         this.refreshSelectionToolView(dx, dy);
         this.parent.trigger('removeRealPosition');                

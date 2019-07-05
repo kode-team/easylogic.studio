@@ -23,13 +23,12 @@ export default class BackdropFilterProperty extends BaseProperty {
   }
 
   [EVENT('changeFilterEditor')] (filter) {
-    var current = editor.selection.current; 
 
-    if (current) {
-      current.reset({ 
-        'backdrop-filter' : filter 
-      })
-      this.emit("refreshElement", current);
-    }
+    editor.selection.reset({ 
+      'backdrop-filter' : filter 
+    })
+
+    this.emit("refreshSelectionStyleView");
+
   }
 }

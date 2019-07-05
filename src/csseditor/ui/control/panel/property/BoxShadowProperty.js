@@ -40,13 +40,12 @@ export default class BoxShadowProperty extends BaseProperty {
   }  
 
   [EVENT("changeBoxShadow")](boxshadow) {
-    var current = editor.selection.current;
-    if (current) {
-      current.reset({
-        'box-shadow': boxshadow
-      })
 
-      this.emit("refreshElement", current);
-    }
+    editor.selection.reset({ 
+      'box-shadow': boxshadow
+    })
+
+    this.emit("refreshSelectionStyleView");
+
   }
 }

@@ -98,6 +98,7 @@ export default class StyleView extends UIElement {
 
   [EVENT('refreshStyleView')] (current) {
     if (current) {
+      this.load();
       this.refreshStyleHeadOne(current);
     } else {
       this.refresh()
