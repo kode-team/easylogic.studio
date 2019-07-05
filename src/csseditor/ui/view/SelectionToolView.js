@@ -151,19 +151,21 @@ export default class SelectionToolView extends UIElement {
 
         this.refs.$selectionTool.cssText(`left: ${x};top:${y};width:${width};height:${height}`)
 
-        var newX = Length.px(x.value - editor.selection.currentArtboard.x.value);
-        var newY = Length.px(y.value - editor.selection.currentArtboard.y.value);
+        var newX = Length.px(x.value - editor.selection.currentArtboard.x.value / editor.scale).round(1);
+        var newY = Length.px(y.value - editor.selection.currentArtboard.y.value / editor.scale).round(1);
+        var newWidth = Length.px(width.value / editor.scale).round(1);
+        var newHeight = Length.px(height.value / editor.scale).round(1);
 
         switch(this.pointerType) {
         case 'move': this.$target.attr('data-position-text', `X: ${newX}, Y: ${newY}`); break; 
-        case 'to right': this.$target.attr('data-position-text', `W: ${width}`); break; 
-        case 'to left': this.$target.attr('data-position-text', `X: ${newX}, W: ${width}`); break; 
-        case 'to top': this.$target.attr('data-position-text', `Y: ${newY}, H: ${height}`); break; 
-        case 'to bottom': this.$target.attr('data-position-text', `H: ${height}`); break; 
-        case 'to top right': this.$target.attr('data-position-text', `X: ${newX}, Y: ${newY} W: ${width}, H: ${height}`); break; 
-        case 'to top left': this.$target.attr('data-position-text', `X: ${newX}, Y: ${newY}, W: ${width}, H: ${height}`); break; 
-        case 'to bottom right': this.$target.attr('data-position-text', `W: ${width}, H: ${height}`); break; 
-        case 'to bottom left': this.$target.attr('data-position-text', `X: ${newX}, Y: ${newY}, W: ${width}, H: ${height}`); break; 
+        case 'to right': this.$target.attr('data-position-text', `W: ${newWidth}`); break; 
+        case 'to left': this.$target.attr('data-position-text', `X: ${newX}, W: ${newWidth}`); break; 
+        case 'to top': this.$target.attr('data-position-text', `Y: ${newY}, H: ${newHeight}`); break; 
+        case 'to bottom': this.$target.attr('data-position-text', `H: ${newHeight}`); break; 
+        case 'to top right': this.$target.attr('data-position-text', `X: ${newX}, Y: ${newY} W: ${newWidth}, H: ${newHeight}`); break; 
+        case 'to top left': this.$target.attr('data-position-text', `X: ${newX}, Y: ${newY}, W: ${newWidth}, H: ${newHeight}`); break; 
+        case 'to bottom right': this.$target.attr('data-position-text', `W: ${newWidth}, H: ${newHeight}`); break; 
+        case 'to bottom left': this.$target.attr('data-position-text', `X: ${newX}, Y: ${newY}, W: ${newWidth}, H: ${newHeight}`); break; 
         }
         
     }

@@ -97,7 +97,7 @@ export default class CanvasView extends UIElement {
 
   [WHEEL('$lock') + ALT + PREVENT + THROTTLE(10)] (e) {
 
-    var dt = e.deltaY < 0 ? 0.9 : 1.1;
+    var dt = e.deltaY < 0 ? 1.1 : 0.9;
     editor.scale *= dt; 
     this.children.$scale.setValue(editor.scale * 100)
     this.emit('changeScale')
