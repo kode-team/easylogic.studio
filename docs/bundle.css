@@ -2195,6 +2195,45 @@ html, body {
   position: absolute;
   box-sizing: border-box;
 }
+.csseditor .selection-tool.remove-move-area .selection-tool-item[data-position=move] {
+  width: 10px;
+  height: 10px;
+  top: -10px;
+  bottom: auto;
+  left: 50%;
+  right: auto;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid #cccccc;
+}
+.csseditor .selection-tool[data-selected-position=move] [data-position=move]:before {
+  opacity: 1;
+}
+.csseditor .selection-tool[data-selected-position="to right"] [data-position="to right"]:before {
+  opacity: 1;
+}
+.csseditor .selection-tool[data-selected-position="to left"] [data-position="to left"]:before {
+  opacity: 1;
+}
+.csseditor .selection-tool[data-selected-position="to top"] [data-position="to top"]:before {
+  opacity: 1;
+}
+.csseditor .selection-tool[data-selected-position="to bottom"] [data-position="to bottom"]:before {
+  opacity: 1;
+}
+.csseditor .selection-tool[data-selected-position="to top left"] [data-position="to top left"]:before {
+  opacity: 1;
+}
+.csseditor .selection-tool[data-selected-position="to top right"] [data-position="to top right"]:before {
+  opacity: 1;
+}
+.csseditor .selection-tool[data-selected-position="to bottom left"] [data-position="to bottom left"]:before {
+  opacity: 1;
+}
+.csseditor .selection-tool[data-selected-position="to bottom right"] [data-position="to bottom right"]:before {
+  opacity: 1;
+}
 .csseditor .selection-tool .selection-tool-item {
   position: absolute;
   -webkit-transform: translate(-50%, -50%);
@@ -2209,6 +2248,20 @@ html, body {
   pointer-events: all;
   cursor: pointer;
 }
+.csseditor .selection-tool .selection-tool-item:before {
+  opacity: 0;
+  content: attr(data-position-text);
+  position: absolute;
+  color: white;
+  white-space: nowrap;
+  text-align: center;
+  background-color: #333;
+  border-radius: 3px;
+  border: #cccccc;
+  transition: opacity 0.3s linear;
+  box-sizing: border-box;
+  padding: 4px 10px;
+}
 .csseditor .selection-tool .selection-tool-item[data-position=move] {
   left: 0px;
   top: 0px;
@@ -2221,45 +2274,99 @@ html, body {
   background-color: transparent;
   border: 0px;
 }
+.csseditor .selection-tool .selection-tool-item[data-position=move]:before {
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+}
 .csseditor .selection-tool .selection-tool-item[data-position="to top left"] {
   left: 0px;
   top: 0px;
   cursor: nwse-resize;
+}
+.csseditor .selection-tool .selection-tool-item[data-position="to top left"]:before {
+  right: 100%;
+  bottom: 100%;
+  -webkit-transform: translate(50%, -10px);
+          transform: translate(50%, -10px);
 }
 .csseditor .selection-tool .selection-tool-item[data-position="to top right"] {
   left: 100%;
   top: 0px;
   cursor: nesw-resize;
 }
+.csseditor .selection-tool .selection-tool-item[data-position="to top right"]:before {
+  left: 100%;
+  bottom: 100%;
+  -webkit-transform: translate(-50%, -10px);
+          transform: translate(-50%, -10px);
+}
 .csseditor .selection-tool .selection-tool-item[data-position="to top"] {
   left: 50%;
   top: 0px;
   cursor: ns-resize;
+}
+.csseditor .selection-tool .selection-tool-item[data-position="to top"]:before {
+  left: 50%;
+  bottom: 100%;
+  -webkit-transform: translate(-50%, -10px);
+          transform: translate(-50%, -10px);
 }
 .csseditor .selection-tool .selection-tool-item[data-position="to left"] {
   left: 0px;
   top: 50%;
   cursor: ew-resize;
 }
+.csseditor .selection-tool .selection-tool-item[data-position="to left"]:before {
+  top: 50%;
+  right: 100%;
+  -webkit-transform: translate(-10px, -50%);
+          transform: translate(-10px, -50%);
+}
 .csseditor .selection-tool .selection-tool-item[data-position="to right"] {
   left: 100%;
   top: 50%;
   cursor: ew-resize;
+}
+.csseditor .selection-tool .selection-tool-item[data-position="to right"]:before {
+  top: 50%;
+  left: 100%;
+  -webkit-transform: translate(10px, -50%);
+          transform: translate(10px, -50%);
 }
 .csseditor .selection-tool .selection-tool-item[data-position="to bottom"] {
   left: 50%;
   top: 100%;
   cursor: ns-resize;
 }
+.csseditor .selection-tool .selection-tool-item[data-position="to bottom"]:before {
+  top: 100%;
+  left: 50%;
+  -webkit-transform: translate(-50%, 10px);
+          transform: translate(-50%, 10px);
+}
 .csseditor .selection-tool .selection-tool-item[data-position="to bottom left"] {
   left: 0px;
   top: 100%;
   cursor: nesw-resize;
 }
+.csseditor .selection-tool .selection-tool-item[data-position="to bottom left"]:before {
+  top: 100%;
+  right: 100%;
+  -webkit-transform: translate(50%, 10px);
+          transform: translate(50%, 10px);
+}
 .csseditor .selection-tool .selection-tool-item[data-position="to bottom right"] {
   left: 100%;
   top: 100%;
   cursor: nwse-resize;
+}
+.csseditor .selection-tool .selection-tool-item[data-position="to bottom right"]:before {
+  top: 100%;
+  left: 100%;
+  -webkit-transform: translate(-50%, 10px);
+          transform: translate(-50%, 10px);
 }
 .csseditor .guide-line-view {
   position: absolute;
@@ -5186,6 +5293,10 @@ html, body {
 .csseditor .list-view-editor .list-view-item svg {
   width: 100%;
 }
+.csseditor .image-select-editor img {
+  width: 100%;
+  height: 150px;
+}
 .csseditor .popup {
   position: absolute;
   display: none;
@@ -6192,4 +6303,22 @@ html, body {
   box-shadow: none;
   border-radius: 0px;
   border: 0px;
+}
+.csseditor .popup .image-select-popup {
+  width: 500px;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 1fr;
+  padding: 10px;
+}
+.csseditor .popup .image-select-popup > .box {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: auto;
+  grid-column-gap: 4px;
+}
+.csseditor .popup .image-select-popup > .box .image-item img {
+  width: 100%;
+  cursor: pointer;
+  pointer-events: all;
 }

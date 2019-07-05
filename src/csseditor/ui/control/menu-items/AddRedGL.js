@@ -1,26 +1,24 @@
 import MenuItem from "./MenuItem";
+import icon from "../../icon/icon";
 import { editor } from "../../../../editor/editor";
-import { Layer } from "../../../../editor/items/Layer";
-
 import { Length } from "../../../../editor/unit/Length";
-import Color from "../../../../util/Color";
+import { RedGLLayer } from "../../../../editor/items/layers/canvas/RedGLLayer";
  
-export default class AddRect extends MenuItem {
-  getIcon() {
-    return 'rect';
+export default class AddRedGL extends MenuItem {
+  getIconString() {
+    return icon.outline_image;
   }
   getTitle() {
-    return "Rect";
+    return "RedGL";
   }
 
   clickButton(e) {
     var artboard = editor.selection.currentArtboard
 
     if (artboard) {
-      var layer = artboard.add(new Layer({
+      var layer = artboard.add(new RedGLLayer({
         width: Length.px(100),
-        height: Length.px(100),
-        'background-color': Color.random()
+        height: Length.px(100)
       }))
 
       editor.selection.select(layer);

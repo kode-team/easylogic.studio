@@ -33,6 +33,7 @@ export default class Inspector extends UIElement {
             </div>
             <div class="tab-body" ref="$body">
               <div class="tab-content" data-value="1">
+                <ImageProperty />
                 <PositionProperty />              
                 <SizeProperty />              
                 <BoxModelProperty />

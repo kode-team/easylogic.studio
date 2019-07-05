@@ -1,0 +1,25 @@
+.image-select-popup {
+  
+  width: 500px;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 1fr; 
+  padding: 10px;
+
+
+  > .box {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: auto;
+    grid-column-gap: 4px;
+
+    .image-item {
+      img {
+        width: 100%;
+        cursor: pointer;
+        pointer-events: all;
+      }
+    }
+  }
+
+}

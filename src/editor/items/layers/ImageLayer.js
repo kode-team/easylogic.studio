@@ -12,7 +12,18 @@ export class ImageLayer extends Layer {
   }
 
   getDefaultTitle() {
-    return "Layer";
+    return "Image";
+  }
+
+  get html () {
+    var {id, src, itemType} = this.json;
+
+    var selected = this.json.selected ? 'selected' : ''
+
+    return `
+    <img class='element-item ${selected} ${itemType}' data-id="${id}" src='${src}' />
+    `
   }
 
 }
+ 

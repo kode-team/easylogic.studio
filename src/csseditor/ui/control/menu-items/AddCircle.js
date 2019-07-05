@@ -27,7 +27,8 @@ export default class AddCircle extends MenuItem {
 
       editor.selection.select(layer);
 
-      this.emit('refreshAll');
+      this.emit('refreshAll')
+      this.emit('refreshSelection');
     }
   }
 }

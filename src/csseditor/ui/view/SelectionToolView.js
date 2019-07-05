@@ -39,7 +39,10 @@ export default class SelectionToolView extends UIElement {
     }
 
     [POINTERSTART('$selectionView .selection-tool-item') + MOVE() + END()] (e) {
+        this.$target = e.$delegateTarget;
         this.pointerType = e.$delegateTarget.attr('data-position')
+
+        this.refs.$selectionTool.attr('data-selected-position', this.pointerType);
 
         this.parent.selectCurrent(...editor.selection.items)
 
@@ -51,13 +54,17 @@ export default class SelectionToolView extends UIElement {
     move (dx, dy) {
         this.refreshSelectionToolView(dx, dy);
         this.parent.updateRealPosition();     
+        this.emit('refreshRedGL')        
     }
 
     end (dx, dy) {
+        this.refs.$selectionTool.attr('data-selected-position', '');
         this.refreshSelectionToolView(dx, dy);
         this.parent.trigger('removeRealPosition');                
         // this.initSelectionTool();
-        this.emit('refreshElement');
+
+        this.emit('refreshRedGL')
+        this.emit('refreshStyleView');
         this.emit('removeGuideLine')
     }   
 
@@ -136,7 +143,29 @@ export default class SelectionToolView extends UIElement {
 
         var {x, y, width, height} = this.calculateWorldPosition(this.guideView.rect) ;
 
+        if (editor.selection.items.length === 1 && editor.selection.current.is('redgl-canvas')) {
+            this.refs.$selectionTool.addClass('remove-move-area')
+        } else {
+            this.refs.$selectionTool.removeClass('remove-move-area')
+        }
+
         this.refs.$selectionTool.cssText(`left: ${x};top:${y};width:${width};height:${height}`)
+
+        var newX = Length.px(x.value - editor.selection.currentArtboard.x.value);
+        var newY = Length.px(y.value - editor.selection.currentArtboard.y.value);
+
+        switch(this.pointerType) {
+        case 'move': this.$target.attr('data-position-text', `X: ${newX}, Y: ${newY}`); break; 
+        case 'to right': this.$target.attr('data-position-text', `W: ${width}`); break; 
+        case 'to left': this.$target.attr('data-position-text', `X: ${newX}, W: ${width}`); break; 
+        case 'to top': this.$target.attr('data-position-text', `Y: ${newY}, H: ${height}`); break; 
+        case 'to bottom': this.$target.attr('data-position-text', `H: ${height}`); break; 
+        case 'to top right': this.$target.attr('data-position-text', `X: ${newX}, Y: ${newY} W: ${width}, H: ${height}`); break; 
+        case 'to top left': this.$target.attr('data-position-text', `X: ${newX}, Y: ${newY}, W: ${width}, H: ${height}`); break; 
+        case 'to bottom right': this.$target.attr('data-position-text', `W: ${width}, H: ${height}`); break; 
+        case 'to bottom left': this.$target.attr('data-position-text', `X: ${newX}, Y: ${newY}, W: ${width}, H: ${height}`); break; 
+        }
+        
     }
 
     calculateWorldPositionForGuideLine (list = []) {

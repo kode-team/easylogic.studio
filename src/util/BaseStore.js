@@ -79,19 +79,6 @@ export default class BaseStore {
   }
 
 
-  runCommand(source, event, $2, $3, $4, $5) {
-
-      var list = this.getCachedCallbacks(event);
-      var results = []
-      if (list) {
-        results = list
-          .filter(f => f.originalCallback.source === source)
-          .filter((i, index) => index === 0)
-          .map(f => f.callback($2, $3, $4, $5));
-      } 
-
-      return results[0]
-  }
 
 
   emit($1, $2, $3, $4, $5) {

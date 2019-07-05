@@ -28,10 +28,10 @@ import DirectionEditor from "./DirectionEditor";
 import InputArrayEditor from "./InputArrayEditor";
 import IconListViewEditor from "./IconListViewEditor";
 import EmbedColorPicker from "./EmbedColorPicker";
+import ImageSelectEditor from "./ImageSelectEditor";
 
-
- 
 export default {
+    ImageSelectEditor,
     EmbedColorPicker,
     IconListViewEditor,
     InputArrayEditor,

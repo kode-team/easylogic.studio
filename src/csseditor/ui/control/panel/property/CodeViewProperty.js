@@ -1,10 +1,7 @@
 import BaseProperty from "./BaseProperty";
 import { LOAD, DEBOUNCE } from "../../../../../util/Event";
 import { editor } from "../../../../../editor/editor";
-
 import { EVENT } from "../../../../../util/UIElement";
-
-
 import { CSS_TO_STRING } from "../../../../../util/functions/func";
 
 export default class CodeViewProperty extends BaseProperty {
@@ -12,7 +9,7 @@ export default class CodeViewProperty extends BaseProperty {
     return "CodeView";
   }
 
-  [EVENT('refreshCanvas', 'refreshSelection') + DEBOUNCE(10) ]() {
+  [EVENT('refreshStyleView','refreshSelection') + DEBOUNCE(10) ]() {
     this.refresh();
   }
 

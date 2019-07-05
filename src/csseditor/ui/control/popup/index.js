@@ -8,9 +8,11 @@ import SVGPropertyPopup from "./SVGPropertyPopup";
 import SelectorPopup from "./SelectorPopup";
 import ColorPickerPopup from "./ColoPickerPopup";
 import FillPopup from "./FillPopup";
+import ImageSelectPopup from "./ImageSelectPopup";
 
 
 export default {
+  ImageSelectPopup,
   FillPopup,
   ColorPickerPopup,
   SelectorPopup,

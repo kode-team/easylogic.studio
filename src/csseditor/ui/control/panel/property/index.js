@@ -38,9 +38,11 @@ import ArtBoardProperty from "./ArtBoardProperty";
 import LayerTreeProperty from "./LayerTreeProperty";
 import ArtBoardSizeProperty from "./ArtBoardSizeProperty";
 import RotateProperty from "./RotateProperty";
+import ImageProperty from "./ImageProperty";
 
  
 export default {
+  ImageProperty,
   RotateProperty,
   ArtBoardSizeProperty,
   LayerTreeProperty,
