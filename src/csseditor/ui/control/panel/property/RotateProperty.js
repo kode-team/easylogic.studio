@@ -2,15 +2,13 @@ import BaseProperty from "./BaseProperty";
 import { editor } from "../../../../../editor/editor";
 import { LOAD } from "../../../../../util/Event";
 import { EVENT } from "../../../../../util/UIElement";
+import { Length } from "../../../../../editor/unit/Length";
 
-
-
-export default class OpacityProperty extends BaseProperty {
+export default class RotateProperty extends BaseProperty {
 
   getTitle() {
-    return 'Opacity'
+    return 'Rotate'
   }
-
   getBody() {
     return `<div ref='$body' style='padding-top: 3px;'></div>`;
   }  
@@ -18,15 +16,15 @@ export default class OpacityProperty extends BaseProperty {
   [LOAD("$body")]() {
     var current = editor.selection.current || {};
 
-    var opacity = current['opacity'] || '1'
-    return `<NumberRangeEditor 
+    var rotate = current['rotate'] || Length.deg(0)
+    return `<RangeEditor 
               ref='$1' 
-              key='opacity' 
-              value="${opacity}" 
-              min="0"
-              max="1"
-              step="0.01"
-              selected-unit=' '
+              key='rotate' 
+              value="${rotate}" 
+              min="-360"
+              max="360"
+              step="0.1"
+              units='deg,trun'
               removable="true"
               onchange="changeSelect" />`;
   }
@@ -36,7 +34,7 @@ export default class OpacityProperty extends BaseProperty {
 
     if (current) {
       current.reset({
-        [key]: value.value
+        [key]: value          
       })
 
       this.emit('refreshElement', current);

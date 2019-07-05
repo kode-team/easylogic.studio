@@ -79,9 +79,9 @@ export class DomItem extends GroupItem {
       'perspective': '',
       'mix-blend-mode': '',
       'opacity': '',
+      'rotate': '',      
       border: {},
       outline: {},
-    
       borderRadius: {},
       borderImage: new BorderImage(),
       applyBorderImage: false,
@@ -459,10 +459,27 @@ export class DomItem extends GroupItem {
         'text-align', 'text-transform', 'text-decoration',
         'letter-spacing', 'word-spacing', 'text-indent',
 
-        'filter', 'clip-path', 'transform', 'backdrop-filter', 'box-shadow', 'text-shadow'
+        'filter', 'clip-path', 'backdrop-filter', 'box-shadow', 'text-shadow'
       )
     }
 
+  }
+
+  toTransformCSS() {
+
+    if (this.json.rotate && this.json.transform  &&  this.json.transform.includes('rotate') === false) {
+      var transform = this.json.transform;
+
+      return {
+        transform: [transform, `rotate(${this.json.rotate})` ].join(' ')
+      }
+    } else if (!this.json.rotate) {
+      return this.toKeyListCSS('transform')
+    }
+
+    return {
+      transform : `rotate(${this.json.rotate})`
+    }
   }
 
   toVariableCSS () {
@@ -498,9 +515,9 @@ export class DomItem extends GroupItem {
       ...this.toBoxModelCSS(),
       ...this.toBorderCSS(),
       ...this.toOutlineCSS(),      
+      ...this.toTransformCSS(),      
       ...this.toBorderRadiusCSS(),
       ...this.toBorderImageCSS(),
-      ...this.toAnimationCSS(),
       ...this.toBackgroundImageCSS(isExport),
       ...this.toAnimationCSS(),
       ...this.toTransitionCSS()
@@ -520,6 +537,7 @@ export class DomItem extends GroupItem {
       ...this.toBoxModelCSS(),
       ...this.toBorderCSS(),
       ...this.toOutlineCSS(),
+      ...this.toTransformCSS(),
       ...this.toBorderRadiusCSS(),
       ...this.toBorderImageCSS(),
       ...this.toAnimationCSS(),

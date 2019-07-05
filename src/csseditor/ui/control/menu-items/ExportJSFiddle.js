@@ -7,18 +7,18 @@ import { keyMap, CSS_TO_STRING } from "../../../../util/functions/func";
 export default class ExportJSFiddle extends MenuItem {
   template() {
     return `
-            <form class='jsfiddle' action="https://jsfiddle.net/api/post/library/pure/" method="POST" target="_blank">
-                <input type="hidden" name="title" ref="$title" value=''>
-                <input type="hidden" name="description" ref="$description" value=''>
-                <input type="hidden" name="html" ref="$html" value=''>
-                <input type="hidden" name="css" ref="$css" value=''>
-                <input type="hidden" name="dtd" value='html 5'>
-                <button type="submit">
-                    <div class='icon jsfiddle'></div>
-                    <div class='titie'>JSFiddle</div>
-                </button>                
-            </form>     
-        `;
+      <form class='jsfiddle' action="https://jsfiddle.net/api/post/library/pure/" method="POST" target="_blank">
+          <input type="hidden" name="title" ref="$title" value=''>
+          <input type="hidden" name="description" ref="$description" value=''>
+          <input type="hidden" name="html" ref="$html" value=''>
+          <input type="hidden" name="css" ref="$css" value=''>
+          <input type="hidden" name="dtd" value='html 5'>
+          <button type="submit">
+              <div class='icon jsfiddle'></div>
+              <div class='titie'>JSFiddle</div>
+          </button>                
+      </form>     
+    `;
   }
 
   [SUBMIT()]() {

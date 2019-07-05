@@ -37,9 +37,11 @@ import ProjectProperty from "./ProjectProperty";
 import ArtBoardProperty from "./ArtBoardProperty";
 import LayerTreeProperty from "./LayerTreeProperty";
 import ArtBoardSizeProperty from "./ArtBoardSizeProperty";
+import RotateProperty from "./RotateProperty";
 
  
 export default {
+  RotateProperty,
   ArtBoardSizeProperty,
   LayerTreeProperty,
   ProjectProperty,
