@@ -81,7 +81,7 @@ export default class CanvasView extends UIElement {
 
   [KEYUP() + IF('Backspace')] (e) {
     editor.selection.remove()
-    this.trigger('refreshAllSelectArtBoard')
+    this.emit('refreshAllSelectArtBoard')
   }
 
   [EVENT('changeScale')] (key, scale) {
