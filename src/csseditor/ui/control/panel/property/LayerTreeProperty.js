@@ -107,7 +107,7 @@ export default class LayerTreeProperty extends BaseProperty {
       var id = $item.attr('data-layer-id');
 
       var obj = this.state.layers[id]
-      obj.parentObject.layers.splice(obj.index);
+      obj.parentObject.layers.splice(obj.index, 1);
       delete this.state.layers[id]
 
       this.emit('refreshAllSelectArtBoard');

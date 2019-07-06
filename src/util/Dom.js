@@ -477,6 +477,14 @@ export default class Dom {
     return this.el.value;
   }
 
+  get naturalWidth () {
+    return this.el.naturalWidth
+  }
+
+  get naturalHeight () {
+    return this.el.naturalHeight
+  }  
+
   get files() {
     return this.el.files ? [...this.el.files] : [];
   }

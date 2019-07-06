@@ -136,6 +136,15 @@ export class Selection {
     this.each(item => item.reset(obj))
   }
 
+  resize () {
+    this.each(item => item.resize());
+  }
+
+  remove () {
+    this.each(item => item.remove())
+    this.empty();
+  }
+  
   move (dx, dy) {
     this.each ((item, cachedItem, ) => {
       item.move( 

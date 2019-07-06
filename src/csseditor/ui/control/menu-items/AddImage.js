@@ -3,6 +3,7 @@ import icon from "../../icon/icon";
 import { ImageLayer } from "../../../../editor/items/layers/ImageLayer";
 import { editor } from "../../../../editor/editor";
 import { Length } from "../../../../editor/unit/Length";
+import { EVENT } from "../../../../util/UIElement";
  
 export default class AddImage extends MenuItem {
   getIconString() {
@@ -12,13 +13,15 @@ export default class AddImage extends MenuItem {
     return "Image";
   }
 
-  clickButton(e) {
+
+  [EVENT('changeImageSelectEditor')] (value, info) {
+
     var artboard = editor.selection.currentArtboard
 
     if (artboard) {
       var layer = artboard.add(new ImageLayer({
-        width: Length.px(100),
-        height: Length.px(100)
+        ...info,
+        src: value 
       }))
 
       editor.selection.select(layer);
@@ -26,5 +29,15 @@ export default class AddImage extends MenuItem {
       this.emit('refreshAll')
       this.emit('refreshSelection');
     }
+
+ }  
+
+  clickButton(e) {
+    // open image popup
+    this.emit('showImageSelectPopup', {
+      context: this, 
+      changeEvent: 'changeImageSelectEditor'
+    })
+
   }
 }

@@ -47,13 +47,20 @@
     label {
       cursor: pointer;
       padding-left: 2px;
+      padding-right: 5px;
+      vertical-align: middle;
     }
 
     > .tools {
       text-align: right;
+      vertical-align: middle;
 
       > * {
         flex: none;
+      }
+
+      button {
+        vertical-align: middle;
       }
 
       @include svg-button();
@@ -70,5 +77,29 @@
       margin-bottom: 5px;
 
     }
+  }
+
+  > .property-footer {
+
+    > div {
+      margin-bottom: 5px;
+    }
+
+    font-size: 12px;
+
+    label {
+      width: 60px;
+      display: inline-block;
+      cursor: pointer;
+      padding-left: 2px;
+      padding-right: 5px;
+      vertical-align: middle;
+    }
+
+    button {
+      vertical-align: middle;
+    }
+
+    @include svg-button();    
   }
 }

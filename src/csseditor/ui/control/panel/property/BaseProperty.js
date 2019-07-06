@@ -25,6 +25,7 @@ export default class BaseProperty extends UIElement {
             </div>`
             }
             <div class='property-body'>${this.getBody()}</div>
+            <div class='property-footer'>${this.getFooter()}</div>
         </div>
         `;
   }
@@ -48,6 +49,10 @@ export default class BaseProperty extends UIElement {
   }
   getBody() {
     return '';
+  }
+
+  getFooter() {
+    return ''; 
   }
 
   [CLICK("$title label")](e) {

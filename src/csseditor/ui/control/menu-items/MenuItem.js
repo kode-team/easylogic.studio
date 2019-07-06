@@ -9,10 +9,10 @@ const DEFAULT_CHECKED = false;
 export default class MenuItem extends UIElement {
     template () {
         return `
-            <button type="button" class='menu-item' checked="${this.getChecked() ? 'checked' : ''}">
-                <div class="icon ${this.getIcon()}">${this.getIconString()}</div>
-                <div class="title">${this.getTitle()}</div>
-            </button>
+        <button type="button" class='menu-item' checked="${this.getChecked() ? 'checked' : ''}">
+            <div class="icon ${this.getIcon()}">${this.getIconString()}</div>
+            <div class="title">${this.getTitle()}</div>
+        </button>
         `
     }
 

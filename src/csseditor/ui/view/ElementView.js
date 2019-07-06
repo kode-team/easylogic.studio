@@ -81,6 +81,7 @@ export default class ElementView extends UIElement {
 
     checkEmptyElement (e) {
         var $el = Dom.create(e.target)
+
         return $el.hasClass('element-item') === false && 
                 $el.hasClass('selection-tool-item') === false &&
                 $el.hasClass('redgl-canvas-item') === false 
@@ -169,8 +170,6 @@ export default class ElementView extends UIElement {
             editor.selection.select();            
             this.emit('emptySelection')
         }
-
-
     }
 
     [POINTERSTART('$view .element-item') + MOVE('calculateMovedElement') + END('calculateEndedElement')] (e) {
@@ -197,11 +196,9 @@ export default class ElementView extends UIElement {
             this.children.$selectionTool.refreshSelectionToolView(dx, dy, 'move');
             this.updateRealPosition();     
         }
-
     }
 
     updateRealPosition() {
-
         editor.selection.items.forEach(item => {
             var {x, y, width, height} = item.toBound();
             if (this.cachedCurrentElement[item.id]) {
@@ -213,7 +210,6 @@ export default class ElementView extends UIElement {
     }
 
     [EVENT('removeRealPosition')] () {
-
         editor.selection.items.forEach(item => {
             if (this.cachedCurrentElement[item.id]) {
                 this.cachedCurrentElement[item.id].cssText(``)
@@ -260,25 +256,16 @@ export default class ElementView extends UIElement {
             style: {
                 // 'background-image': createGridLine(100),
                 // 'box-shadow': '0px 0px 5px 0px rgba(0, 0, 0, .5)',
-                'position': 'absolute',
-                'left': Length.percent(50),
-                'top': Length.percent(50),
-                transform: `translate(-50%, -50%) scale(${editor.scale})`,
-                'transform-origin': `left top`,
-                width: Length.percent(100),
-                height: Length.percent(100),
-                
-            }
+                transform: `translate(-50%, -50%) scale(${editor.scale})`
+            },
+            innerHTML: this.state.html
         }
     }    
-
-    [LOAD('$view')] () {
-        return this.state.html
-    }
 
     [EVENT('addElement')] () {
         var artboard = editor.selection.currentArtboard
         var html = artboard.html
+
         this.setState({ html })
 
         setTimeout(() => {
@@ -432,6 +419,14 @@ export default class ElementView extends UIElement {
             this.trigger('addElement')
         }
 
+    }
+
+    refresh() {
+        if (this.state.html != this.prevState.html) {
+            this.load();
+        } else {
+            // NOOP 
+        }
     }
     
 } 

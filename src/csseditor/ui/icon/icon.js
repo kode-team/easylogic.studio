@@ -44,10 +44,12 @@ import add_circle from "./add_circle";
 import lock_open from "./lock_open";
 import outline_image from "./outline_image";
 import edit from "./edit";
+import size from "./size";
 
 
 
 export default {
+  size,
   edit,
   outline_image,
   ballot,

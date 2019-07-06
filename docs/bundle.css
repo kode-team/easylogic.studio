@@ -2078,6 +2078,62 @@ html, body {
   width: 100%;
   height: 100%;
 }
+.csseditor .tool-menu .items .icon.left,
+.csseditor .external-tool-menu .items .icon.left {
+  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, black, black);
+  background-repeat: no-repeat;
+  background-size: 20px 6px, 16px 6px, 2px 24px;
+  background-position: 6px 6px, 6px 16px, 2px 3px;
+}
+.csseditor .tool-menu .items .icon.right,
+.csseditor .external-tool-menu .items .icon.right {
+  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, black, black);
+  background-repeat: no-repeat;
+  background-size: 18px 6px, 14px 6px, 2px 24px;
+  background-position: 2px 5px, 6px 15px, 22px 3px;
+}
+.csseditor .tool-menu .items .icon.center,
+.csseditor .external-tool-menu .items .icon.center {
+  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, black, black);
+  background-repeat: no-repeat;
+  background-size: 20px 6px, 16px 6px, 2px 24px;
+  background-position: 5px 6px, 7px 16px, 14px 3px;
+}
+.csseditor .tool-menu .items .icon.middle,
+.csseditor .external-tool-menu .items .icon.middle {
+  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, black, black);
+  background-repeat: no-repeat;
+  background-size: 8px 20px, 8px 14px, 24px 2px;
+  background-position: 3px 3px, 13px 6px, 0px 12px;
+}
+.csseditor .tool-menu .items .icon.top,
+.csseditor .external-tool-menu .items .icon.top {
+  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, black, black);
+  background-repeat: no-repeat;
+  background-size: 8px 18px, 8px 12px, 24px 2px;
+  background-position: 4px 8px, 14px 8px, 0px 4px;
+}
+.csseditor .tool-menu .items .icon.bottom,
+.csseditor .external-tool-menu .items .icon.bottom {
+  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, black, black);
+  background-repeat: no-repeat;
+  background-size: 8px 18px, 8px 12px, 24px 2px;
+  background-position: 4px 2px, 14px 8px, 0px 22px;
+}
+.csseditor .tool-menu .items .icon.vertical,
+.csseditor .external-tool-menu .items .icon.vertical {
+  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, black, black), linear-gradient(to right, #ccc, #ccc);
+  background-repeat: no-repeat;
+  background-size: 24px 2px, 18px 10px, 24px 2px;
+  background-position: 3px 6px, 6px 11px, 3px 24px;
+}
+.csseditor .tool-menu .items .icon.horizontal,
+.csseditor .external-tool-menu .items .icon.horizontal {
+  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, black, black), linear-gradient(to right, #ccc, #ccc);
+  background-repeat: no-repeat;
+  background-size: 2px 24px, 10px 18px, 2px 24px;
+  background-position: 6px 3px, 11px 6px, 24px 3px;
+}
 .csseditor .tool-menu .items .icon.jsfiddle, .csseditor .tool-menu .items .icon.export, .csseditor .tool-menu .items .icon.codepen, .csseditor .tool-menu .items .icon.github,
 .csseditor .external-tool-menu .items .icon.jsfiddle,
 .csseditor .external-tool-menu .items .icon.export,
@@ -2118,6 +2174,8 @@ html, body {
   right: 0px;
   bottom: 0px;
   top: 0px;
+  pointer-events: all;
+  outline: none;
 }
 .csseditor .page-view {
   position: absolute;
@@ -2180,6 +2238,15 @@ html, body {
   width: 500px;
   height: 400px;
   background-color: white;
+}
+.csseditor .canvas-view {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform-origin: left top;
+          transform-origin: left top;
+  width: 100%;
+  height: 100%;
 }
 .csseditor .canvas-view .element-item.selected:hover {
   outline: none;
@@ -2255,12 +2322,14 @@ html, body {
   color: white;
   white-space: nowrap;
   text-align: center;
-  background-color: #333;
+  background-color: rgba(51, 51, 51, 0.8);
   border-radius: 3px;
   border: #cccccc;
   transition: opacity 0.3s linear;
   box-sizing: border-box;
   padding: 4px 10px;
+  font-size: 12px;
+  pointer-events: none;
 }
 .csseditor .selection-tool .selection-tool-item[data-position=move] {
   left: 0px;
@@ -2418,12 +2487,18 @@ html, body {
 .csseditor .property > .property-title label {
   cursor: pointer;
   padding-left: 2px;
+  padding-right: 5px;
+  vertical-align: middle;
 }
 .csseditor .property > .property-title > .tools {
   text-align: right;
+  vertical-align: middle;
 }
 .csseditor .property > .property-title > .tools > * {
   flex: none;
+}
+.csseditor .property > .property-title > .tools button {
+  vertical-align: middle;
 }
 .csseditor .property > .property-title > .tools button {
   width: 16px;
@@ -2451,6 +2526,42 @@ html, body {
   padding: 0px;
   font-size: 11px;
   margin-bottom: 5px;
+}
+.csseditor .property > .property-footer {
+  font-size: 12px;
+}
+.csseditor .property > .property-footer > div {
+  margin-bottom: 5px;
+}
+.csseditor .property > .property-footer label {
+  width: 60px;
+  display: inline-block;
+  cursor: pointer;
+  padding-left: 2px;
+  padding-right: 5px;
+  vertical-align: middle;
+}
+.csseditor .property > .property-footer button {
+  vertical-align: middle;
+}
+.csseditor .property > .property-footer button {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  outline: none;
+  padding: 0px;
+  border: 0px;
+  display: inline-block;
+  font-size: 11px;
+  cursor: pointer;
+}
+.csseditor .property > .property-footer button svg {
+  width: 100%;
+  height: 100%;
 }
 .csseditor .border-item .border-direction {
   position: relative;
@@ -5293,9 +5404,15 @@ html, body {
 .csseditor .list-view-editor .list-view-item svg {
   width: 100%;
 }
-.csseditor .image-select-editor img {
-  width: 100%;
+.csseditor .image-select-editor {
   height: 150px;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.csseditor .image-select-editor img {
+  max-width: 100%;
+  max-height: 100%;
 }
 .csseditor .popup {
   position: absolute;
@@ -6314,11 +6431,25 @@ html, body {
 .csseditor .popup .image-select-popup > .box {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: auto;
+  grid-auto-rows: 110px;
   grid-column-gap: 4px;
+  grid-row-gap: 4px;
+  margin-bottom: 10px;
+}
+.csseditor .popup .image-select-popup > .box .image-item {
+  position: relative;
+  text-align: center;
+  display: grid;
+}
+.csseditor .popup .image-select-popup > .box .image-item:hover {
+  background-color: #baffb1;
 }
 .csseditor .popup .image-select-popup > .box .image-item img {
-  width: 100%;
+  align-self: center;
+  justify-self: center;
+  vertical-align: middle;
+  max-width: 100%;
+  max-height: 100%;
   cursor: pointer;
   pointer-events: all;
 }

@@ -1,9 +1,9 @@
-import UIElement, { EVENT } from "../../../util/UIElement";
+import UIElement, { EVENT, COMMAND } from "../../../util/UIElement";
 
 import { editor } from "../../../editor/editor";
 import { Project } from "../../../editor/items/Project";
 import { ArtBoard } from "../../../editor/items/ArtBoard";
-import { CLICK, DEBOUNCE, PREVENT, STOP, WHEEL, ALT, THROTTLE } from "../../../util/Event";
+import { CLICK, DEBOUNCE, PREVENT, STOP, WHEEL, ALT, THROTTLE, IF, KEYUP } from "../../../util/Event";
 
 import { StyleParser } from "../../../editor/parse/StyleParser";
 import icon from "../icon/icon";
@@ -60,7 +60,7 @@ export default class CanvasView extends UIElement {
   }
   template() {
     return `
-      <div class='page-container'>
+      <div class='page-container' tabIndex="-1">
         <div class='page-view'>
           <div class='page-lock' ref='$lock'>
             <ElementView ref='$elementView' />
@@ -71,12 +71,17 @@ export default class CanvasView extends UIElement {
           <button type='button' ref='$plus'>${icon.add}</button>
           <button type='button' ref='$minus'>${icon.remove2}</button>
           <div class='select'>
-            <NumberRangeEditor  ref='$scale' min='10' max='240' step="1" key="scale" value="${editor.scale*100}" onchange="changeScale" />
+            <NumberRangeEditor ref='$scale' min='10' max='240' step="1" key="scale" value="${editor.scale*100}" onchange="changeScale" />
           </div>
           <label>%</label>
         </div>
       </div>
     `;
+  }
+
+  [KEYUP() + IF('Backspace')] (e) {
+    editor.selection.remove()
+    this.trigger('refreshAllSelectArtBoard')
   }
 
   [EVENT('changeScale')] (key, scale) {
@@ -130,6 +135,35 @@ export default class CanvasView extends UIElement {
     
     this.emit('refreshComputedStyleCode', computedCSS)
   }
+
+  /*
+    editor.addCommand(new Command ({ 
+      title: '',
+      description: '',
+      id: 'item.add',
+      shortcut: 'C',
+      context: 'document',    // context 에 따라서 ke 바인딩 위치가 달리지는 것을 구현해야하나요? 
+      action : function ($store) {
+        editor.selection.remove();
+        this.emit('refreshSelectionStyleView')
+      }
+    }))
+
+    editor.commands.registerCommand('hello.world', () => {
+
+    })
+
+    class MyCommmand extends UICommand {
+      [COMMAND('hello.world')] (a, b, c) {
+        editor.selection.remove();
+        this.emit('refreshSelectionStyleView')
+      }
+    }
+
+    editor.commands.registerCommand(new MyCommand());
+
+    editor.commands.runCommand('hello.world', 1, 2, 3);
+  */
 
   // [EVENT('loadSketchData')] (sketchData) {
   //   var projects = SketchUtil.parse (sketchData);

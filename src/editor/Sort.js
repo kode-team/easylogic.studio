@@ -1,0 +1,74 @@
+import { editor } from "./editor";
+
+export default class Sort {
+
+    static getContainer () {
+        return editor.selection.items.length === 1 ? editor.selection.currentArtboard : editor.selection.allRect;
+    }
+
+    static left () {
+
+        var x =  Sort.getContainer().screenX.value
+
+        editor.selection.each(item => {
+            item.setScreenX(x);
+        })
+
+        editor.selection.setRectCache();
+    }
+
+    static top () {
+        var y =  Sort.getContainer().screenY.value
+
+        editor.selection.each(item => {
+            item.setScreenY(y);
+        })
+
+        editor.selection.setRectCache();
+    }
+
+    static center () {
+        var container = Sort.getContainer()        
+        var x = container.screenX.value + container.width.value / 2; 
+
+        editor.selection.each(item => {
+            item.setScreenXCenter(x);
+        })
+
+        editor.selection.setRectCache();
+    }
+
+    static middle () {
+        var container = Sort.getContainer()        
+        var y = container.screenY.value + container.height.value / 2;         
+
+        editor.selection.each(item => {
+            item.setScreenYMiddle(y);
+        })
+
+        editor.selection.setRectCache();
+    }    
+
+    static right () {
+        var container = Sort.getContainer()        
+        var x2 = container.screenX2.value;         
+
+        editor.selection.each(item => {
+            item.setScreenX2(x2);
+        })
+
+        editor.selection.setRectCache();
+    } 
+
+
+    static bottom () {
+        var container = Sort.getContainer()        
+        var y2 = container.screenY2.value;         
+
+        editor.selection.each(item => {
+            item.setScreenY2(y2);
+        })
+
+        editor.selection.setRectCache();
+    }     
+}

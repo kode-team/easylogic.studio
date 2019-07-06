@@ -99,6 +99,8 @@ export class Item {
     return this.json.parent;
   }
 
+
+
   is (itemType) {
     if (!this.json) return false;
     return this.json.itemType === itemType;
@@ -217,6 +219,28 @@ export class Item {
       ${layers.map(it => it.html).join('')}
     </${tagName}>
     `
+  }
+
+  resize () {}
+
+  remove () {
+    this.json.parent.removeItem(this.ref);
+  }
+
+  removeItem (childItem) {
+    var layers = this.json.layers;
+
+    var childIndex = -1; 
+    for(var i = 0, len = layers.length; i < len; i++) {
+      if (layers[i] === childItem) {
+        childIndex = i; 
+        break;
+      }
+    }
+
+    if (childIndex > -1) {
+      this.json.layers.splice(childIndex, 1);
+    }
   }
 
   get allLayers () {

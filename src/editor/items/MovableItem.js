@@ -1,5 +1,6 @@
 import { Item } from "./Item";
 import { Length } from "../unit/Length";
+import { round } from "../../util/functions/math";
 
 const zero = Length.px(0)
 
@@ -20,6 +21,45 @@ export class MovableItem extends Item {
 
         this.json.x.set(value - absoluteX);
     }
+
+    setScreenX2(value) {
+        var absoluteX = 0;
+        if (this.json.parent) {
+            absoluteX = this.json.parent.screenX.value; 
+        }
+
+        this.json.x.set(value - this.json.width.value - absoluteX);
+    }    
+
+    setScreenY2(value) {
+        var absoluteY = 0;
+        if (this.json.parent) {
+            absoluteY = this.json.parent.screenY.value; 
+        }
+
+        this.json.y.set(value - this.json.height.value - absoluteY);
+    }        
+
+
+    setScreenXCenter(value) {
+        var absoluteX = 0;
+        if (this.json.parent) {
+            absoluteX = this.json.parent.screenX.value; 
+        }
+
+        this.json.x.set(value - round(this.json.width.value/2, 1) - absoluteX);
+    }        
+
+
+
+    setScreenYMiddle(value) {
+        var absoluteY = 0;
+        if (this.json.parent) {
+            absoluteY = this.json.parent.screenY.value; 
+        }
+
+        this.json.y.set(value - round(this.json.height.value/2, 1) - absoluteY);
+    }            
 
 
     setScreenY(value) {

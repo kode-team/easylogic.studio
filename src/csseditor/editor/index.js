@@ -3,7 +3,7 @@ import CanvasView from "../ui/view/CanvasView";
 import ToolMenu from "../ui/view/ToolMenu";
 
 import UIElement, { EVENT } from "../../util/UIElement";
-import { RESIZE, DEBOUNCE, DROP, PREVENT, DRAGOVER } from "../../util/Event";
+import { RESIZE, DEBOUNCE, DROP, PREVENT, DRAGOVER, KEYUP, IF } from "../../util/Event";
 import { RESIZE_WINDOW } from "../types/event";
 import Inspector from "../ui/control/Inspector";
 
@@ -12,6 +12,7 @@ import StyleView from "../ui/view/StyleView";
 import ObjectList from "../ui/control/ObjectList";
 import LogoView from "../ui/view/LogoView";
 import ExternalToolMenu from "../ui/view/ExternalToolMenu";
+import { editor } from "../../editor/editor";
 
 // var JSZip = require('jszip')
 
