@@ -1614,7 +1614,7 @@ html, body {
   top: 0px;
 }
 .csseditor .tab.number-tab .tab-header {
-  height: 30px;
+  height: 34px;
   cursor: pointer;
 }
 .csseditor .tab.number-tab .tab-content {
@@ -1622,24 +1622,28 @@ html, body {
   background-color: #f0f0f0;
 }
 .csseditor .tab.number-tab .tab-body {
-  top: 30px;
+  top: 34px;
 }
 .csseditor .tab.number-tab > .tab-header {
-  display: inline-block;
+  display: grid;
   border-bottom: 1px solid #cccccc;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 }
 .csseditor .tab.number-tab > .tab-header > .tab-item {
   text-align: center;
   background-color: white;
   position: relative;
   padding: 4px;
-  width: 31px;
+  border-top: 2px solid white;
+  border-bottom: 1px solid #cccccc;
+  border-right: 1px solid #cccccc;
+  box-sizing: border-box;
+}
+.csseditor .tab.number-tab > .tab-header > .tab-item .icon {
+  display: none;
 }
 .csseditor .tab.number-tab > .tab-header > .tab-item:first-child:hover label {
   left: 10px;
-}
-.csseditor .tab.number-tab > .tab-header > .tab-item:last-child {
-  border-right: 0px;
 }
 .csseditor .tab.number-tab > .tab-header > .tab-item:last-child:hover label {
   left: auto;
@@ -1650,68 +1654,71 @@ html, body {
 }
 .csseditor .tab.number-tab > .tab-header > .tab-item label {
   display: inline-block;
-  position: absolute;
-  left: 0px;
-  top: 110%;
   font-size: 11px;
-  opacity: 0;
-  background-color: #333;
   border-radius: 3px;
-  color: white;
   padding: 5px 10px;
   transition: all 0.2s ease;
   pointer-events: none;
 }
 .csseditor .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"] {
-  background-color: #c9c9c9;
+  border-top: 2px solid #3e3ec2;
+  border-bottom: 0px;
 }
 .csseditor .tab.number-tab[data-selected-value="1"] .tab-content[data-value="1"] {
   display: block;
 }
 .csseditor .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"] {
-  background-color: #c9c9c9;
+  border-top: 2px solid #3e3ec2;
+  border-bottom: 0px;
 }
 .csseditor .tab.number-tab[data-selected-value="2"] .tab-content[data-value="2"] {
   display: block;
 }
 .csseditor .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"] {
-  background-color: #c9c9c9;
+  border-top: 2px solid #3e3ec2;
+  border-bottom: 0px;
 }
 .csseditor .tab.number-tab[data-selected-value="3"] .tab-content[data-value="3"] {
   display: block;
 }
 .csseditor .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"] {
-  background-color: #c9c9c9;
+  border-top: 2px solid #3e3ec2;
+  border-bottom: 0px;
 }
 .csseditor .tab.number-tab[data-selected-value="4"] .tab-content[data-value="4"] {
   display: block;
 }
 .csseditor .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"] {
-  background-color: #c9c9c9;
+  border-top: 2px solid #3e3ec2;
+  border-bottom: 0px;
 }
 .csseditor .tab.number-tab[data-selected-value="5"] .tab-content[data-value="5"] {
   display: block;
 }
 .csseditor .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"] {
-  background-color: #c9c9c9;
+  border-top: 2px solid #3e3ec2;
+  border-bottom: 0px;
 }
 .csseditor .tab.number-tab[data-selected-value="6"] .tab-content[data-value="6"] {
   display: block;
 }
 .csseditor .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"] {
-  background-color: #c9c9c9;
+  border-top: 2px solid #3e3ec2;
+  border-bottom: 0px;
 }
 .csseditor .tab.number-tab[data-selected-value="7"] .tab-content[data-value="7"] {
   display: block;
 }
 .csseditor .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"] {
-  background-color: #c9c9c9;
+  border-top: 2px solid #3e3ec2;
+  border-bottom: 0px;
 }
 .csseditor .tab.number-tab[data-selected-value="8"] .tab-content[data-value="8"] {
   display: block;
 }
 .csseditor .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"] {
-  background-color: #c9c9c9;
+  border-top: 2px solid #3e3ec2;
+  border-bottom: 0px;
 }
 .csseditor .tab.number-tab[data-selected-value="9"] .tab-content[data-value="9"] {
   display: block;

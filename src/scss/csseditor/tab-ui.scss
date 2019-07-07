@@ -14,7 +14,7 @@ $tab-horizontal-header-right-width: 60px;
 
   &.number-tab {
     .tab-header {
-      height: 30px;
+      height: 34px;
       cursor: pointer;
     }
     .tab-content {
@@ -23,19 +23,31 @@ $tab-horizontal-header-right-width: 60px;
     }
 
     .tab-body {
-      top: 30px;
+      top: 34px;
     }
 
     > .tab-header {
-      display: inline-block;
+      display: grid;
       border-bottom: 1px solid $border-color;
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+
       > .tab-item {
         // border-right: 1px solid $border-color;
         text-align: center;
         background-color: white;
         position: relative;
         padding: 4px;
-        width: 31px;
+        // width: 31px;
+        border-top: 2px solid white;
+        border-bottom: 1px solid $border-color;
+        border-right: 1px solid $border-color;
+        // border-left: 1px solid $border-color;
+        box-sizing: border-box;
+        
+
+        .icon {
+          display: none;
+        }
 
         &:first-child {
           &:hover {
@@ -46,7 +58,7 @@ $tab-horizontal-header-right-width: 60px;
         }
 
         &:last-child {
-          border-right: 0px;
+          // border-right: 0px;
 
           &:hover {
             label {
@@ -65,14 +77,14 @@ $tab-horizontal-header-right-width: 60px;
 
         label {
           display: inline-block;
-          position: absolute;
-          left: 0px;
-          top: 110%;          
+          // position: absolute;
+          // left: 0px;
+          // top: 110%;          
           font-size: 11px;
-          opacity: 0;
-          background-color: #333;
+          // opacity: 0;
+          // background-color: #333;
           border-radius: 3px;
-          color: white;
+          // color: white;
           padding: 5px 10px;
           transition: all 0.2s ease;
           pointer-events: none;
@@ -83,7 +95,11 @@ $tab-horizontal-header-right-width: 60px;
     @for $selectValue from 1 to 10 {
       &[data-selected-value="#{$selectValue}"]
         .tab-item[data-value="#{$selectValue}"] {
-        background-color: rgb(201, 201, 201);
+        // background-color: rgb(201, 201, 201);
+        border-top: 2px solid rgb(62, 62, 194);
+        border-bottom: 0px;
+        // border-right: 0px;
+        // border-left: 0px;        
         @include title-background();
       }
 

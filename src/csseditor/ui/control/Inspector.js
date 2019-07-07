@@ -12,7 +12,7 @@ export default class Inspector extends UIElement {
             <div class="tab-header" ref="$header">
               <div class="tab-item" data-value="1">
                 <div class='icon'>${icon.shape}</div>
-                <label>Element</label>
+                <label>Style</label>
               </div>                  
               <div class="tab-item" data-value="3">
                 <div class='icon'>${icon.title}</div>
@@ -24,11 +24,11 @@ export default class Inspector extends UIElement {
               </div>                     
               <div class="tab-item" data-value="6">
                 <div class='icon'>${icon.scatter}</div>
-                <label>Selector & Animation</label>
+                <label>Animation</label>
               </div>
               <div class="tab-item" data-value="8">
                 <div class='icon'>${icon.ballot}</div>
-                <label>Information</label>
+                <label>Info</label>
               </div>                                      
             </div>
             <div class="tab-body" ref="$body">
