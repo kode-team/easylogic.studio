@@ -23,27 +23,37 @@ export default class StyleView extends UIElement {
     this.refs.$head = Dom.create(document.head)
   }
 
-  makeStyle (item) {
-    const {
-      rootVariable, 
-      css, 
-      selectorString, 
-      keyframeString 
-    } = item.generateView(`[data-id='${item.id}']`)
+  makeProjectStyle (item) {
+
+    const keyframeString = item.toKeyframeString();
+    const rootVariable = item.toRootVariableCSS()
+    
     return `<style type='text/css' data-id='${item.id}'>
       :root {
         ${CSS_TO_STRING(rootVariable)}
       }
+      /* keyframe */
+      ${keyframeString}
+    </style>
+    `
+  }  
 
+  makeStyle (item) {
+
+    if (item.is('project')) {
+      return this.makeProjectStyle(item);
+    }
+
+    const {
+      css, 
+      selectorString
+    } = item.generateView(`[data-id='${item.id}']`)
+    return `<style type='text/css' data-id='${item.id}'>
       /* element */
       [data-id='${item.id}'] { 
         ${CSS_TO_STRING(css)}; 
       }  
-
       ${selectorString}
-
-      /* keyframe */
-      ${keyframeString}
     </style>
     ` + item.layers.map(it => {
       return this.makeStyle(it);
@@ -56,38 +66,38 @@ export default class StyleView extends UIElement {
 
     this.refs.$head.$$(`style`).forEach($style => $style.remove())
 
-    project.artboards.forEach(item => {
-      $temp.html(this.makeStyle(item)).children().forEach($item => {
-        this.refs.$head.append($item);
-      })
+    // project setting 
+    this.changeStyleHead(project)
+
+    // artboard setting 
+    project.artboards.forEach(item => this.changeStyleHead(item))
+  }
+
+  changeStyleHead (item) {
+    var $temp = Dom.create('div')        
+    $temp.html(this.makeStyle(item)).children().forEach($item => {
+      this.refs.$head.append($item);
     })
   }
 
   refreshStyleHeadOne (item) {
-    var $temp = Dom.create('div')    
     this.refs.$head.$$(`style[data-id="${item.id}"]`).forEach($style => $style.remove())
-    $temp.html(this.makeStyle(item)).children().forEach($item => {
-      this.refs.$head.append($item);
-    })    
+    this.changeStyleHead(item)
   }
 
 
-  makeSvg (item) {
-    const SVGString = item.toSVGString()
+  makeSvg (project) {
+    const SVGString = project.toSVGString ? project.toSVGString() : ''
     return `
       ${SVGString ? `<svg width="0" height="0">${SVGString}</svg>` : ''}
-    ` + item.layers.map(it => {
-      return this.makeSvg(it);
-    })
+    `
   }
 
   [LOAD('$svgArea')] () {
 
-    var project = editor.projects[0] || { layers : [] }
+    var project = editor.selection.currentProject || {  }
 
-    return project.layers.map(item => {
-      return this.makeSvg(item)
-    })
+    return this.makeSvg(project)
   }   
 
   [EVENT('refreshComputedStyle') + DEBOUNCE(100)] (last) {

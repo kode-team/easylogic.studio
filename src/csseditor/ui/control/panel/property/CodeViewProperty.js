@@ -37,32 +37,26 @@ export default class CodeViewProperty extends BaseProperty {
   }
 
   [LOAD('$body')] () {
-    var current = editor.selection.current;
 
+    var currentProject = editor.selection.currentProject;
+    var keyframeCode = currentProject ? currentProject.toKeyframeString() : ''
+    var rootVariable = currentProject ? CSS_TO_STRING(currentProject.toRootVariableCSS()) : ''
+    var svgCode = currentProject ? currentProject.toSVGString() : '';
+
+    rootVariable = this.filterKeyName(rootVariable.trim());
+    keyframeCode = this.modifyNewLine(keyframeCode.trim());
+    svgCode = svgCode.replace(/\</g, '&lt;').replace(/\>/g, '&gt;') 
+
+    var current = editor.selection.current;
     var cssCode = current ? current.toExport().replace(/;/gi, ";\n") : ''
-    var keyframeCode = current ? current.toKeyframeString() : ''
-    var rootVariable = current ? CSS_TO_STRING(current.toRootVariableCSS()) : ''
-    var svgCode = current ? current.toSVGString() : '';
     var selectorCode = current ? current.selectors : [];
 
     cssCode = this.filterKeyName(cssCode.trim())
-    rootVariable = this.filterKeyName(rootVariable.trim());
-    keyframeCode = this.modifyNewLine(keyframeCode.trim());
-    svgCode = svgCode.replace(/\</g, '&lt;').replace(/\>/g, '&gt;')
+
 
     return `
       <div class=''>
-        ${keyframeCode ?         
-          `<div>
-          <pre title='Keyframe'>${keyframeCode}</pre>
-        </div>` : ''}
-        ${rootVariable ? 
-          `<div>
-          <label>:root</label>
-          <pre>${rootVariable}</pre>
-          </div>` : ''
-        }
-
+       
         ${cssCode ? 
           `<div>
           <pre title='CSS'>${cssCode}</pre>
@@ -78,6 +72,16 @@ export default class CodeViewProperty extends BaseProperty {
           </div>` : ''
         }
 
+        ${keyframeCode ?         
+          `<div>
+          <pre title='Keyframe'>${keyframeCode}</pre>
+        </div>` : ''}
+        ${rootVariable ? 
+          `<div>
+          <label>:root</label>
+          <pre>${rootVariable}</pre>
+          </div>` : ''
+        }
         ${svgCode ? 
           `<div>
           <pre title='SVG'>${svgCode}</pre>

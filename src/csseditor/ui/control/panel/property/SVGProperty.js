@@ -17,7 +17,7 @@ export default class SVGProperty extends BaseProperty {
   }
 
   [LOAD('$body')] () {
-    var current = editor.selection.current || { svg: []} 
+    var current = editor.selection.currentProject || { svg: []} 
     var value = JSON.stringify(current.svg);
 
     // 줄 때는 json 포맷으로 
@@ -26,12 +26,12 @@ export default class SVGProperty extends BaseProperty {
   }
 
   [EVENT('changeEditor')] (svg) {
-    var current = editor.selection.current; 
+    var current = editor.selection.currentProject; 
 
     if (current) {
       // 받을 때는 배열로 
       current.reset({ svg })
-      this.emit('refreshElement', current);
+      this.emit('refreshStyleView', current);
     }
   }
 }

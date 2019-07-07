@@ -1,14 +1,18 @@
 
-  &.selector-popup {
-    padding: 7px;
-    width: 250px;
-    height: auto;
-    .box {
+.selector-popup {
+  padding: 7px;
+  width: 250px;
+  height: auto;
+  .box {
 
-      .name {
-        display: grid;
-        grid-template-columns: 60px 1fr; 
-        grid-column-gap: 2px;        
+    .name {
+      display: grid;
+      grid-template-columns: 1fr 2fr; 
+      grid-column-gap: 2px;      
+      
+      input {
+        width: 100%;
       }
     }
   }
+}

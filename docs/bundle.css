@@ -2446,7 +2446,7 @@ html, body {
   pointer-events: none;
 }
 .csseditor .property {
-  padding: 5px 5px;
+  padding: 5px 10px 5px 5px;
   border-bottom: 1px solid rgba(204, 204, 204, 0.8);
   background-color: white;
   border-radius: 3px;
@@ -3835,6 +3835,7 @@ html, body {
   text-align: center;
   box-sizing: border-box;
   padding: 0px 4px;
+  outline: none;
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px;
 }
@@ -3954,6 +3955,18 @@ html, body {
 }
 .csseditor .select-editor.has-label select {
   width: 100%;
+}
+.csseditor .select-editor select {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border-radius: 0px;
+  border: 1px solid #cccccc;
+  outline: none;
+  padding: 4px 4px;
+  line-height: 1;
+  background-color: transparent;
+  cursor: pointer;
 }
 .csseditor .select-editor select[data-count="1"], .csseditor .select-editor select[data-count="0"] {
   -webkit-appearance: none;
@@ -4712,6 +4725,9 @@ html, body {
   grid-column-gap: 2px;
   text-align: center;
   margin-bottom: 5px;
+}
+.csseditor .var-editor .var-item > div input {
+  width: 100%;
 }
 .csseditor .var-editor .var-item .tools {
   text-align: right;
@@ -5847,15 +5863,18 @@ html, body {
 .csseditor .popup .keyframe-popup .box .input.grid-2 {
   grid-template-columns: 3fr 1fr;
 }
-.csseditor .popup.selector-popup {
+.csseditor .popup .selector-popup {
   padding: 7px;
   width: 250px;
   height: auto;
 }
-.csseditor .popup.selector-popup .box .name {
+.csseditor .popup .selector-popup .box .name {
   display: grid;
-  grid-template-columns: 60px 1fr;
+  grid-template-columns: 1fr 2fr;
   grid-column-gap: 2px;
+}
+.csseditor .popup .selector-popup .box .name input {
+  width: 100%;
 }
 .csseditor .popup .clippath-popup {
   width: 220px;

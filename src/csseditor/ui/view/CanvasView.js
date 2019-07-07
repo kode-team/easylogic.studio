@@ -79,6 +79,7 @@ export default class CanvasView extends UIElement {
     `;
   }
 
+  // 단축키 적용하기 
   [KEYUP() + IF('Backspace')] (e) {
     editor.selection.remove()
     this.emit('refreshAllSelectArtBoard')

@@ -155,7 +155,7 @@ export default class FilterEditor extends UIElement {
 
   getSVGFilterList () {
      
-    var current = editor.selection.current;
+    var current = editor.selection.currentProject;
     var arr = [] 
 
     if (current) {
@@ -178,7 +178,7 @@ export default class FilterEditor extends UIElement {
 
       var options = ''
       
-      var current = editor.selection.current;
+      var current = editor.selection.currentProject;
 
       if (current) {
         options = current.svg
@@ -188,13 +188,14 @@ export default class FilterEditor extends UIElement {
         options = ',' + options.join(',')
       }
 
-      return `<SelectEditor 
-                ref='$select${index}' 
-                key="${index}" 
-                label="SVG Filter"
-                value="${filter.value}" 
-                options="${options}"
-                onchange="changeRangeEditor"  />`
+      return `
+      <SelectEditor 
+        ref='$select${index}' 
+        key="${index}" 
+        label="SVG Filter"
+        value="${filter.value}" 
+        options="${options}"
+        onchange="changeRangeEditor"  />`
     }
 
     return `<RangeEditor 

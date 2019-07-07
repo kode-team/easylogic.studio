@@ -70,7 +70,7 @@ export default class ClipPathPopup extends BasePopup {
       return `<PathEditor ref='$path' key='path' value='${this.state.value}' onchange='changeClipPath' />`
     case 'svg':
 
-        var current = editor.selection.current || {svg: []} 
+        var current = editor.selection.currentProject || {svg: []} 
 
         var options = current.svg.filter(it => it.type === 'clip-path').map(it => it.name).join(',')
         

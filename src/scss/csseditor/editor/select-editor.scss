@@ -3,6 +3,7 @@
     grid-template-columns: 1fr;
     grid-column-gap: 4px;
 
+
     &.has-label {
         grid-template-columns: 60px 1fr;
         grid-column-gap: 2px;
@@ -21,6 +22,15 @@
     }
 
     select {
+        appearance: none;
+        border-radius: 0px;
+        border:1px solid $border-color;
+        outline: none;
+        padding: 4px 4px;
+        line-height: 1;
+        background-color: transparent;
+
+        cursor: pointer;
         &[data-count="1"],
         &[data-count="0"] {
             appearance: none;

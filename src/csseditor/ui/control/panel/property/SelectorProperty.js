@@ -208,7 +208,7 @@ export default class SelectorProperty extends BaseProperty {
     }
 
     this.refresh();
-    this.emit('refreshElement', current);
+    this.emit('refreshElement', this.current);
   }
 
 }

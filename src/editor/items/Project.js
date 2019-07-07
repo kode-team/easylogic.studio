@@ -1,7 +1,6 @@
-import { MovableItem } from "./MovableItem";
-import { uuidShort } from "../../util/functions/math";
+import { DomItem } from "./DomItem";
 
-export class Project extends MovableItem {
+export class Project extends DomItem {
   getDefaultTitle() {
     return "New Project";
   }

@@ -584,10 +584,7 @@ export class DomItem extends GroupItem {
   generateEmbed () {
     return {
       css: this.toEmbedCSS(), 
-      keyframeString: this.toKeyframeString(), 
-      rootVariable: this.toRootVariableCSS(), 
       content: this.json.content,
-      SVGString: this.toSVGString(),
       selectorString: this.toSelectorString()
     }
   }
@@ -595,10 +592,7 @@ export class DomItem extends GroupItem {
   generateView (prefix = '') {
     return {
       css: this.toCSS(), 
-      keyframeString: this.toKeyframeString(), 
-      rootVariable: this.toRootVariableCSS(), 
       content: this.json.content,
-      SVGString: this.toSVGString(),
       selectorString: this.toSelectorString(prefix)
     }
   }

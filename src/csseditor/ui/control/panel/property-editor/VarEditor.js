@@ -45,8 +45,12 @@ export default class VarEditor extends UIElement {
         return this.state.values.map( (it, index) => {
             return `
                 <div class='var-item' >
-                    <input type="text" data-type="key" value="${it.key}" data-index="${index}"  placeholder="variable" />
-                    <input type="text" data-type="value" value="${it.value}" data-index="${index}"  placeholder="value" />
+                    <div>
+                        <input type="text" data-type="key" value="${it.key}" data-index="${index}"  placeholder="variable" />
+                    </div>
+                    <div>
+                        <input type="text" data-type="value" value="${it.value}" data-index="${index}"  placeholder="value" />
+                    </div>
                     <div class="tools">
                         <button type="button" class="del" data-index="${index}">
                         ${icon.remove2}
@@ -78,7 +82,7 @@ export default class VarEditor extends UIElement {
 
     updateData (data) {
         var value = this.state.values.map(it => {
-            return `--${it.key}:${it.value}`
+            return `${it.key}:${it.value}`
         }).join(';')
 
         this.parent.trigger(this.props.onchange, value, this.props.params)

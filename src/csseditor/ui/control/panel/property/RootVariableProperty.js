@@ -16,7 +16,7 @@ export default class RootVariableProperty extends BaseProperty {
   }
 
   [LOAD('$body')] () {
-    var current = editor.selection.current || {} 
+    var current = editor.selection.currentProject || {} 
     var value = current.rootVariable || '';
 
     return `<VarEditor ref='$1' value='${value}' title='Root Variables' onchange='changeVarEditor' />`
@@ -27,11 +27,11 @@ export default class RootVariableProperty extends BaseProperty {
   }
 
   [EVENT('changeVarEditor')] (rootVariable) {
-    var current = editor.selection.current; 
+    var current = editor.selection.currentProject; 
 
     if (current) {
       current.reset({ rootVariable })
-      this.emit('refreshElement', current);
+      this.emit('refreshStyleView', current);
     }
   }
 }

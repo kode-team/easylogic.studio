@@ -55,7 +55,7 @@ export default class KeyFrameProperty extends BaseProperty {
   [CLICK('$keyframeList .keyframe-item')] (e) {
     var index  = +e.$delegateTarget.attr('data-index');
 
-    var current = editor.selection.current;
+    var current = editor.selection.currentProject;
     if (!current) return;
 
 
@@ -65,12 +65,12 @@ export default class KeyFrameProperty extends BaseProperty {
 
   [CLICK('$keyframeList .del') + PREVENT] (e) {
     var removeIndex = e.$delegateTarget.attr("data-index");
-    var current = editor.selection.current;
+    var current = editor.selection.currentProject;
     if (!current) return;
 
     current.removeKeyframe(removeIndex);
 
-    this.emit('refreshElement', current);
+    this.emit('refreshStyleView', current);
 
     this.refresh();
   }
@@ -81,7 +81,7 @@ export default class KeyFrameProperty extends BaseProperty {
 
 
   [LOAD("$keyframeList")]() {
-    var current = editor.selection.current;
+    var current = editor.selection.currentProject;
 
     if (!current) return '';
 
@@ -107,23 +107,23 @@ export default class KeyFrameProperty extends BaseProperty {
 
   [DROP("$keyframeList .keyframe-item") + PREVENT](e) {
     var targetIndex = +e.$delegateTarget.attr("data-index");
-    var current = editor.selection.current;
+    var current = editor.selection.currentProject;
     if (!current) return;
 
     current.sortKeyframe(this.startIndex, targetIndex);
 
-    this.emit('refreshElement', current);
+    this.emit('refreshStyleView', current);
 
     this.refresh();
   }
 
   [CLICK("$add")]() {
 
-    var current = editor.selection.current;
+    var current = editor.selection.currentProject;
     if (current) {
       current.createKeyframe();
 
-      this.emit('refreshElement', current);
+      this.emit('refreshStyleView', current);
     }
 
     this.refresh();
@@ -136,7 +136,7 @@ export default class KeyFrameProperty extends BaseProperty {
 
     this.selectedIndex = +index;
     this.selectItem(this.selectedIndex, true);
-    this.current = editor.selection.current;
+    this.current = editor.selection.currentProject;
 
     if (!this.current) return;
     this.currentKeyframe = this.current.keyframes[
@@ -164,7 +164,7 @@ export default class KeyFrameProperty extends BaseProperty {
   }  
 
   viewKeyframePropertyPopup(position) {
-    this.current = editor.selection.current;
+    this.current = editor.selection.currentProject;
 
     if (!this.current) return;
     this.currentKeyframe = this.current.keyframes[
@@ -184,10 +184,10 @@ export default class KeyFrameProperty extends BaseProperty {
   }
 
   [EVENT('changeKeyframePopup')] (data) {
-    this.current = editor.selection.current;
+    var project = editor.selection.currentProject;
 
-    if (!this.current) return;
-    this.currentKeyframe = this.current.keyframes[
+    if (!project) return;
+    this.currentKeyframe = project.keyframes[
       this.selectedIndex
     ];
 
@@ -196,7 +196,7 @@ export default class KeyFrameProperty extends BaseProperty {
     }
 
     this.refresh();
-    this.emit('refreshElement', this.current);
+    this.emit('refreshStyleView', project);
   }
 
 }

@@ -70,9 +70,9 @@ export default class Inspector extends UIElement {
                 <TransformProperty />
               </div>
               <div class='tab-content' data-value='6'>
+                <VariableProperty />              
                 <SelectorProperty />
                 <TransitionProperty />
-                <KeyframeProperty />
                 <AnimationProperty />
               </div>         
               <div class='tab-content' data-value="8">
@@ -99,7 +99,7 @@ export default class Inspector extends UIElement {
                 <CodeViewProperty />
               </div>              
               <div class="tab-content" data-value="2">
-                <VariableProperty />
+                <KeyframeProperty />              
                 <RootVariableProperty />
                 <SVGProperty />
               </div>

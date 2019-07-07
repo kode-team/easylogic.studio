@@ -83,7 +83,7 @@ export default class AnimationPropertyPopup extends BasePopup {
   }
 
   [LOAD('$name')] () {
-    var current = editor.selection.current;
+    var current = editor.selection.currentProject;
     var names = []
     if (current && current.keyframes) {
       names = current.keyframes.map(it => {

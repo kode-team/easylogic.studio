@@ -107,35 +107,11 @@ export class Keyframe extends Property {
       case 'background-image': 
 
         return p.value.toString() + ';';
-
-        // var obj = {}
-
-        // p.value.toString().split(';').filter(it => it.trim()).forEach(it => {
-        //   var [property, value] = it.split(':')
-        //   obj[property] = value 
-        // })
-
-        // var backgroundImages = BackgroundImage.parseStyle(obj)
-
-        // var results = {
-
-        // }
-
-        // backgroundImages.forEach(it => {
-        //   var temp = it.toBackgroundCSS()
-
-        //   keyEach(temp, (k, v) => {
-        //     if (!results[k]) {
-        //       results[k] = []
-        //     }
-
-        //     results[k].push(v);
-        //   })
-        // })
-
-        // return  keyMap(results, (k, v) => {
-        //   return `${k}: ${v.join(',')};`
-        // }).join('')
+      case 'var':
+        var value = (p.value + '').split(';').map(str => {
+          return `--` + str; 
+        }).join(';')
+        return value + ';';
     }
 
 

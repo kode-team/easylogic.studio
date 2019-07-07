@@ -30,6 +30,12 @@
     text-align: center;
     margin-bottom: 5px;
 
+    > div {
+      input {
+        width: 100%;
+      }
+    }
+
 
     .tools {
       text-align: right;
