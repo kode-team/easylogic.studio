@@ -1,6 +1,7 @@
 import BaseProperty from "./BaseProperty";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
+import { Length } from "../../../../../editor/unit/Length";
 
 
 export default class FontProperty extends BaseProperty {
@@ -9,8 +10,21 @@ export default class FontProperty extends BaseProperty {
     return "Font";
   }
 
+  initState() {
+    return {
+      'font-size': Length.px(13)
+    }
+  }
+
   [EVENT('refreshSelection')]() {
-    this.refresh();
+    var current = editor.selection.current;
+
+    if (current) {
+      this.children.$size.setValue(current['font-size'])
+      this.children.$lineHeight.setValue(current['line-height'])
+      this.children.$style.setValue(current['font-style'])
+      this.children.$family.setValue(current['font-family'])
+    }
   }
 
   refresh() {
@@ -35,23 +49,30 @@ export default class FontProperty extends BaseProperty {
           removable="true" 
           key="line-height" 
           onchange="changeRangeEditor" />
-      </div>      
+      </div>   
+ 
       <div class='property-item'>
-        <SelectEditor 
+
+        <NumberRangeEditor 
+          ref='$weightRange' 
+          label='Weight' 
+          key='font-weight' 
+          value="400" 
+          min="100"
+          max="900"
+          step="100"
+          calc="false"
+          unit="number" 
+          onchange="changeRangeEditor" 
+          />
+      </div>              
+      <div class='property-item'>
+        <SelectIconEditor 
           ref='$style' 
           label='Style' 
           key="font-style" 
           options=",normal,italic,oblique" 
           onchange="changeRangeEditor" />
-      </div>      
-      <div class='property-item'>
-        <SelectEditor 
-          ref='$weight' 
-          label='Weight' 
-          key="font-weight" 
-          options=",normal,bold,lighter,bolder,100,200,300,400,500,600,700,800,900" 
-          onchange="changeRangeEditor" 
-        />
       </div>      
 
       <div class='property-item'>

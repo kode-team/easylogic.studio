@@ -12,7 +12,7 @@ export default class ContentProperty extends BaseProperty {
   }
 
 
-  [EVENT('refreshSelection') + DEBOUNCE(100)]() {
+  [EVENT('refreshSelection', 'refreshContent') + DEBOUNCE(100)]() {
 
     var current = editor.selection.current;
     if (current) {
@@ -57,7 +57,7 @@ export default class ContentProperty extends BaseProperty {
         content: this.refs.$contentItem.value
       }
       current.reset(data);
-      this.emit('refreshCanvas', {id: current.id, content: data.content });
+      this.emit('refreshCanvas', {id: current.id, content: data.content, itemType: current.itemType });
     }
   }
 }

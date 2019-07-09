@@ -13,6 +13,10 @@ export default class AddImage extends MenuItem {
     return "Image";
   }
 
+  isHideTitle() {
+    return true; 
+  }
+
 
   [EVENT('changeImageSelectEditor')] (value, info) {
 

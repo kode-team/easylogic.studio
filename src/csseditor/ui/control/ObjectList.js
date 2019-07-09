@@ -7,11 +7,13 @@ import AddCircle from "./menu-items/AddCircle";
 import AddImage from "./menu-items/AddImage";
 import AddPath from "./menu-items/AddPath";
 import AddRedGL from "./menu-items/AddRedGL";
+import AddText from "./menu-items/AddText";
 
 
 export default class ObjectList extends UIElement {
   components() {
     return {
+      AddText,
       AddRedGL,
       AddPath,
       AddRect,
@@ -39,6 +41,7 @@ export default class ObjectList extends UIElement {
         <div class='draw-items'>
           <AddRect />
           <AddCircle />         
+          <AddText />
           <AddImage />
           <AddPath />
           <!-- <AddRedGL /> -->

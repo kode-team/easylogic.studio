@@ -106,8 +106,6 @@ export function DomDiff (A, B) {
     A = A.el || A; 
     B = B.el || B; 
 
-    console.log(A, B);
-
     var aC = children(A);
     var bC = children(B); 
 

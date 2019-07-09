@@ -46,10 +46,16 @@ import outline_image from "./outline_image";
 import edit from "./edit";
 import size from "./size";
 import color from "./color";
-
-
+import align_center from "./align_center";
+import align_justify from "./align_justify";
+import align_left from "./align_left";
+import align_right from "./align_right";
 
 export default {
+  align_center,
+  align_justify,
+  align_left,
+  align_right,
   color,
   size,
   edit,

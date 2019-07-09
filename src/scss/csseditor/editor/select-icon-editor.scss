@@ -1,0 +1,78 @@
+.select-icon-editor {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-column-gap: 4px;
+
+
+    &.has-label {
+        grid-template-columns: 60px 1fr;
+        grid-column-gap: 2px;
+
+        label {
+            text-align: left;
+            vertical-align: middle;
+            padding:2px 3px;
+            font-size: 11px;
+            box-sizing: border-box;
+        }
+
+        > div {
+            width: 100%;
+        }
+    }
+
+    > div {
+        // border:1px solid $border-color;
+        outline: none;
+        line-height: 1;
+        background-color: transparent;
+        height: 24px;
+
+        cursor: pointer;
+        display:flex;
+
+        > .select-icon-item {
+            flex: 1 1 auto; 
+            max-width: 40px;
+            text-align: center;
+            vertical-align: middle;
+            padding: 2px 5px;
+            border:1px solid $border-color;
+            border-right: 0px;
+            white-space: pre-wrap;
+            word-break: break-all;
+            overflow: hidden;
+
+            &:first-child {
+                border-top-left-radius: 3px;
+                border-bottom-left-radius: 3px;
+            }
+
+            &:last-child {
+                border-right: 1px solid $border-color;
+                border-top-right-radius: 3px;
+                border-bottom-right-radius: 3px;
+            }
+
+            svg {
+                width: 16px;
+                height: 16px;
+                vertical-align: middle;
+            }
+
+            &.selected {
+                background-color: $selected-border-color;
+                border-color: $selected-border-color;
+
+                color: white;
+
+                svg {
+                    path {
+                        fill: white; 
+                    }
+                }
+            }
+        }
+
+    }
+}

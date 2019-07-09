@@ -96,7 +96,7 @@ const runEventCallback = (context, e, eventObject, callback) => {
   if (checkEventType(context, e, eventObject)) {
     var returnValue = callback(e, e.$delegateTarget, e.xy);
 
-    if (eventObject.afterMethods.length) {
+    if (returnValue !== false && eventObject.afterMethods.length) {
       eventObject.afterMethods.forEach(after =>
         context[after.target].call(context, e, after.param)
       );

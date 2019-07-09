@@ -1515,6 +1515,12 @@ html, body {
   margin-top: 10px;
   color: #6f6f6f;
 }
+.csseditor .feature-control .draw-items .menu-item[data-no-title=true] {
+  height: 30px;
+}
+.csseditor .feature-control .draw-items .menu-item[data-no-title=true] .title {
+  display: none;
+}
 .csseditor .feature-control .draw-items .menu-item .icon {
   width: 30px;
   height: 30px;
@@ -2270,6 +2276,10 @@ html, body {
   width: 100%;
   height: 100%;
 }
+.csseditor .canvas-view .element-item[contenteditable=true] {
+  margin: 0px;
+  outline: none;
+}
 .csseditor .canvas-view .element-item.selected:hover {
   outline: none;
 }
@@ -2287,7 +2297,7 @@ html, body {
 .csseditor .selection-tool.remove-move-area .selection-tool-item[data-position=move] {
   width: 10px;
   height: 10px;
-  top: -10px;
+  top: -20px;
   bottom: auto;
   left: 50%;
   right: auto;
@@ -3972,10 +3982,11 @@ html, body {
   grid-template-columns: 60px 1fr 16px;
 }
 .csseditor .number-range-editor.has-label label {
-  text-align: right;
+  text-align: left;
   vertical-align: middle;
   padding: 0px 4px;
   box-sizing: border-box;
+  font-size: 12px;
 }
 .csseditor .number-range-editor.has-label.block {
   display: block;
@@ -5540,6 +5551,67 @@ html, body {
 .csseditor .image-select-editor img {
   max-width: 100%;
   max-height: 100%;
+}
+.csseditor .select-icon-editor {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-column-gap: 4px;
+}
+.csseditor .select-icon-editor.has-label {
+  grid-template-columns: 60px 1fr;
+  grid-column-gap: 2px;
+}
+.csseditor .select-icon-editor.has-label label {
+  text-align: left;
+  vertical-align: middle;
+  padding: 2px 3px;
+  font-size: 11px;
+  box-sizing: border-box;
+}
+.csseditor .select-icon-editor.has-label > div {
+  width: 100%;
+}
+.csseditor .select-icon-editor > div {
+  outline: none;
+  line-height: 1;
+  background-color: transparent;
+  height: 24px;
+  cursor: pointer;
+  display: flex;
+}
+.csseditor .select-icon-editor > div > .select-icon-item {
+  flex: 1 1 auto;
+  max-width: 40px;
+  text-align: center;
+  vertical-align: middle;
+  padding: 2px 5px;
+  border: 1px solid #cccccc;
+  border-right: 0px;
+  white-space: pre-wrap;
+  word-break: break-all;
+  overflow: hidden;
+}
+.csseditor .select-icon-editor > div > .select-icon-item:first-child {
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+.csseditor .select-icon-editor > div > .select-icon-item:last-child {
+  border-right: 1px solid #cccccc;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+.csseditor .select-icon-editor > div > .select-icon-item svg {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+.csseditor .select-icon-editor > div > .select-icon-item.selected {
+  background-color: #1576e4;
+  border-color: #1576e4;
+  color: white;
+}
+.csseditor .select-icon-editor > div > .select-icon-item.selected svg path {
+  fill: white;
 }
 .csseditor .popup {
   position: absolute;

@@ -21,7 +21,7 @@ export default class ImageSelectEditor extends UIElement {
         this.setState({ value })
     }
 
-    [LOAD('$body') + VDOM] () {
+    [LOAD('$body')] () {
         return `<img src="${this.state.value}" />`
     }
 

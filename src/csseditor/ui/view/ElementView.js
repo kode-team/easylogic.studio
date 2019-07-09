@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
-import { BIND, LOAD, POINTERSTART, MOVE, END, IF, DEBOUNCE } from "../../../util/Event";
+import { BIND, LOAD, POINTERSTART, MOVE, END, IF, DEBOUNCE, KEYDOWN, KEYUP } from "../../../util/Event";
 import { Length } from "../../../editor/unit/Length";
 
 import { editor } from "../../../editor/editor";
@@ -88,9 +88,9 @@ export default class ElementView extends UIElement {
             return false; 
         }
 
-        return $el.hasClass('element-item') === false && 
-                $el.hasClass('selection-tool-item') === false &&
-                $el.hasClass('redgl-canvas-item') === false 
+        return $el.hasClass('element-item') === false 
+            && $el.hasClass('selection-tool-item') === false 
+            && $el.hasClass('redgl-canvas-item') === false 
         ;
     }
 
@@ -178,10 +178,26 @@ export default class ElementView extends UIElement {
         }
     }
 
-    [POINTERSTART('$view .element-item') + MOVE('calculateMovedElement') + END('calculateEndedElement')] (e) {
+    [KEYUP('$view .element-item.text')] (e) {
+        var content = e.$delegateTarget.html()
+        var id = e.$delegateTarget.attr('data-id');
+
+        editor.selection.items.filter(it => it.id === id).forEach(it => {
+            it.reset({ content })
+        })
+
+        this.emit('refreshContent');
+    }
+
+    [POINTERSTART('$view .element-item')  + MOVE('calculateMovedElement') + END('calculateEndedElement')] (e) {
         this.startXY = e.xy ; 
         this.$element = e.$delegateTarget;
         this.isRedGL = this.$element.hasClass('redgl-canvas');
+
+        if (this.$element.hasClass('text') && this.$element.hasClass('selected')) {
+            return false; 
+        }
+
         if (this.$element.hasClass('selected')) {
             // NOOP 
         } else {
@@ -414,15 +430,21 @@ export default class ElementView extends UIElement {
                     this.currentElement.attr('src', obj.src);
                 } else {
 
-                    if (obj.content) {
-                        if(!$content) {
-                            this.currentElement.prepend(Dom.create('div', 'content'))
-                            $content = this.currentElement.$('.content')
-                        }
-                        $content && $content.text(obj.content);
+                    if (obj.itemType === 'text') {
+                        this.currentElement.html(obj.content);
                     } else {
-                        $content && $content.remove();
+
+                        if (obj.content) {
+                            if(!$content) {
+                                this.currentElement.prepend(Dom.create('div', 'content'))
+                                $content = this.currentElement.$('.content')
+                            }
+                            $content && $content.text(obj.content);
+                        } else {
+                            $content && $content.remove();
+                        }
                     }
+
                 }
 
             }

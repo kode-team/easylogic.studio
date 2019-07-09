@@ -66,7 +66,7 @@ export class DomItem extends GroupItem {
       'text-shadow': '',
       'clip-path': '',
       'color': "",
-      'font-size': '',
+      'font-size': Length.px(13),
       'line-height': '',
       'text-align': '',
       'text-transform': '',
@@ -92,7 +92,6 @@ export class DomItem extends GroupItem {
       selectors: [],
       svg: [],
       // display: Display.parse({ display: "block" }),      
-      content: "",
       ...obj
     });
   }
@@ -142,8 +141,7 @@ export class DomItem extends GroupItem {
       // 'keyframe': 'sample 0% --aaa 100px | sample 100% width 200px | sample2 0.5% background-image background-image:linear-gradient(to right, black, yellow 100%)',
       keyframes: json.keyframes.map(keyframe => keyframe.clone()),
       selectors: json.selectors.map(selector => selector.clone()),
-      svg: json.svg.map(svg => svg.clone()),
-      content: json.content + '',
+      svg: json.svg.map(svg => svg.clone())
     }
   }
 
@@ -570,14 +568,8 @@ export class DomItem extends GroupItem {
   }
 
   toEmbedCSS(isExport = false) {
-    var json = this.json;
-    var css = {
-      content: json.content
-    };
-
     return {
       ...this.toVariableCSS(),      
-      ...css,
       ...this.toDefaultCSS(),
       ...this.toBoxModelCSS(),
       ...this.toBorderCSS(),
@@ -629,7 +621,6 @@ export class DomItem extends GroupItem {
   generateEmbed () {
     return {
       css: this.toEmbedCSS(), 
-      content: this.json.content,
       selectorString: this.toSelectorString()
     }
   }
@@ -637,7 +628,6 @@ export class DomItem extends GroupItem {
   generateView (prefix = '') {
     return {
       css: this.toCSS(), 
-      content: this.json.content,
       selectorString: this.toSelectorString(prefix)
     }
   }

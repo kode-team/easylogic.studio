@@ -208,6 +208,13 @@
       text-align: center;
       margin-top: 10px;
       color: #6f6f6f;
+
+      &[data-no-title="true"] {
+        height: 30px;
+        .title {
+          display: none;
+        }
+      }
       .icon {
         width: 30px;
         height: 30px;

@@ -149,6 +149,10 @@ export default class SelectionToolView extends UIElement {
         }
     }
 
+    isNoMoveArea () {
+        return editor.selection.items.length === 1 && editor.selection.current.is('redgl-canvas', 'text')
+    }
+
     makeSelectionTool() {
 
         // selection 객체는 하나만 만든다. 
@@ -158,7 +162,7 @@ export default class SelectionToolView extends UIElement {
         var {x, y, width, height} = this.calculateWorldPosition(this.guideView.rect) ;
 
 
-        if (editor.selection.items.length === 1 && editor.selection.current.is('redgl-canvas')) {
+        if (this.isNoMoveArea()) {
             this.refs.$selectionTool.addClass('remove-move-area')
         } else {
             this.refs.$selectionTool.removeClass('remove-move-area')

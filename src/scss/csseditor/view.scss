@@ -82,6 +82,12 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
   height: 100%;   
 
   .element-item {
+
+    &[contenteditable="true"] {
+      margin: 0px;
+      outline: none;
+    }
+
     &.selected {
       &:hover {
         outline: none;
@@ -109,7 +115,7 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
     .selection-tool-item[data-position="move"] {
       width: 10px;
       height: 10px;
-      top: -10px;
+      top: -20px;
       bottom: auto; 
       left: 50%;
       right: auto;

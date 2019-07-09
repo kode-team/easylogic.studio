@@ -1,33 +1,30 @@
 import MenuItem from "./MenuItem";
 import { editor } from "../../../../editor/editor";
-import { Layer } from "../../../../editor/items/Layer";
+import { TextLayer } from "../../../../editor/items/layers/TextLayer";
 import icon from "../../icon/icon";
-
 import { Length } from "../../../../editor/unit/Length";
-import Color from "../../../../util/Color";
-   
-export default class AddCircle extends MenuItem {
-  getIcon() {
-    return 'circle';
+ 
+export default class AddText extends MenuItem {
+  getIconString() {
+    return icon.title;
   }
-  getTitle() {
-    return "Circle";
+  getTitle() { 
+    return "Text";
   }
-
 
   isHideTitle() {
     return true; 
-  }  
+  }
 
   clickButton(e) {
     var artboard = editor.selection.currentArtboard
 
     if (artboard) {
-      var layer = artboard.add(new Layer({
-        width: Length.px(100),
-        height: Length.px(100),
-        'background-color': Color.random(),
-        'border-radius': 'border-radius: 100%'
+      var layer = artboard.add(new TextLayer({
+        content: 'Insert a text',
+        width: Length.px(300),
+        height: Length.px(50),
+        'font-size': Length.px(30)
       }))
 
       editor.selection.select(layer);

@@ -16,6 +16,7 @@ import { FileImageResource } from "../../../editor/image-resource/URLImageResour
 import { BackgroundImage } from "../../../editor/css-property/BackgroundImage";
 import { Sketch, SketchUtil } from "../../../editor/parse/Sketch";
 import Color from "../../../util/Color";
+import Dom from "../../../util/Dom";
 
 
 export default class CanvasView extends UIElement {
@@ -81,8 +82,13 @@ export default class CanvasView extends UIElement {
 
   // 단축키 적용하기 
   [KEYUP() + IF('Backspace')] (e) {
-    editor.selection.remove()
-    this.emit('refreshAllSelectArtBoard')
+    var $target = Dom.create(e.target);
+    if ($target.attr('contenteditable')) {
+
+    } else {
+      editor.selection.remove()
+      this.emit('refreshAllSelectArtBoard')
+    }
   }
 
   [EVENT('changeScale')] (key, scale) {

@@ -9,6 +9,11 @@ export default class AddPath extends MenuItem {
     return "Path";
   }
 
+
+  isHideTitle() {
+    return true; 
+  }  
+
   clickButton(e) {
 
   }

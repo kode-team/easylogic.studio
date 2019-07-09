@@ -45,14 +45,14 @@ export default class Inspector extends UIElement {
                 <MixBlendModeProperty />
                 <BackgroundImageProperty />                 
                 <BoxShadowProperty />
-                <TextShadowProperty />                   
                 <FilterProperty />
                 <BackdropFilterProperty />
                 <ClipPathProperty />                 
               </div>
               <div class="tab-content" data-value="3">
-                <ContentProperty />
+                <!-- <ContentProperty /> -->
                 <FontColorProperty />         
+                <TextShadowProperty />                
                 <FontProperty />
                 <TextProperty />
                 <FontSpacingProperty />

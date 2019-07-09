@@ -20,13 +20,28 @@ export default class TextProperty extends BaseProperty {
   getBody() {
     return `
       <div class="property-item">
-        <SelectEditor ref='$align' label='Align' key='text-align' options=",left,center,right,justify" onchange='changeTextValue' />        
+        <SelectIconEditor 
+          ref='$align' 
+          label='Align' 
+          key='text-align' 
+          value='left' 
+          options=",left,center,right,justify" 
+          icons="close,align_left,align_center,align_right,align_justify" 
+          onchange='changeTextValue' />        
       </div>        
       <div class="property-item">
-        <SelectEditor ref='$transform' label='Transform' key='text-transform' options=",none,uppercase,lowercase,capitalize,full-width" onchange='changeTextValue' />        
+        <SelectIconEditor 
+          ref='$transform' 
+          label='Transform' 
+          key='text-transform' 
+          options=",none,uppercase,lowercase,capitalize,full-width"
+          onchange='changeTextValue' />                
       </div>        
       <div class="property-item">
-        <SelectEditor ref='$decoration' label='Decoration' key='text-decoration' options=",none,underline,overline,line-through" onchange='changeTextValue' />        
+        <SelectIconEditor 
+          ref='$decoration' 
+          label='Decoration' 
+          key='text-decoration' options=",none,underline,overline,line-through" onchange='changeTextValue' />        
       </div>                    
     `
   }

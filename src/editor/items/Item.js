@@ -101,9 +101,9 @@ export class Item {
 
 
 
-  is (itemType) {
+  is (...itemType) {
     if (!this.json) return false;
-    return this.json.itemType === itemType;
+    return itemType.indexOf(this.json.itemType) > -1;
   }
 
   /***********************************
@@ -232,12 +232,12 @@ export class Item {
   }
 
   get html () {
-    var {elementType, id, layers, content, itemType} = this.json;
+    var {elementType, id, layers, itemType} = this.json;
 
     const tagName = elementType || 'div'
 
     return `
-    <${tagName} class='element-item ${itemType}' data-id="${id}">${content ? `<div class='content'>${content}</div>` : ''}
+    <${tagName} class='element-item ${itemType}' data-id="${id}">
       ${layers.map(it => it.html).join('')}
     </${tagName}>
     `

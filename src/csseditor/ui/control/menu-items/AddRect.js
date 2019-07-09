@@ -13,6 +13,11 @@ export default class AddRect extends MenuItem {
     return "Rect";
   }
 
+
+  isHideTitle() {
+    return true; 
+  }  
+
   clickButton(e) {
     var artboard = editor.selection.currentArtboard
 

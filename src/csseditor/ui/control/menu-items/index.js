@@ -12,8 +12,11 @@ import MiddleAlign from "./MiddleAlign";
 import SameHeight from "./SameHeight";
 import SameWidth from "./SameWidth";
 import CopyItem from "./CopyItem";
+import AddText from "./AddText";
+
 
 export default {
+  AddText,
   CopyItem,
   SameHeight,
   SameWidth,
