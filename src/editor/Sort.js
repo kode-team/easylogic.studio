@@ -71,4 +71,24 @@ export default class Sort {
 
         editor.selection.setRectCache();
     }     
+
+    static sameWidth () {
+
+        editor.selection.each(item => {
+            item.setScreenX(editor.selection.allRect.x.value);
+            item.width.set( editor.selection.allRect.width.value);
+        })
+
+        editor.selection.setRectCache();
+    }
+
+    static sameHeight () {
+
+        editor.selection.each(item => {
+            item.setScreenY(editor.selection.allRect.y.value);
+            item.height.set( editor.selection.allRect.height.value);
+        })
+
+        editor.selection.setRectCache();
+    }
 }

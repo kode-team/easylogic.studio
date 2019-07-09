@@ -1,25 +1,3 @@
-$background-color: #f3f3f3;
-$border-color: #cccccc;
-$selected-color: #cccccc;
-$item-selected-color: #dbf3ff;
-$font-color: black;
-$pointer-color: rgba(#ececec, 0.8);
-$gutter: 8px;
-$tool-size: 50px;
-$top-size: 100px;
-$left-size: 260px;
-$left-layer-panel: 70px;
-$left-page-size: 70px;
-$toggle-left-size: 80px;
-$right-size: 280px;
-$timeline-header-size: 0px;
-$timeline-size: 300px;
-$show-timeline-animation: all 0.15s linear;
-$gradient-box-size: 0px;
-$layer-toolbar-height: 0px;
-$display-flex-color: #01a270;
-$display-grid-color: red;
-
 .layout-main {
   position: absolute;
   left: 0px;
@@ -44,7 +22,7 @@ $display-grid-color: red;
     }
 
     .vertical-colorstep-container {
-      left: auto !important;
+      left: auto !important; 
       left: auto !important;
       top: 24px !important;
       width: 814px !important;
@@ -162,11 +140,8 @@ $display-grid-color: red;
 
 
   &.object-list {
-
-    display: grid; 
-    grid-template-columns: 1fr 50px;
+    position: relative;
     height: 100%;
-
     .property {
       margin: 0px;
       height: 100%;
@@ -180,42 +155,47 @@ $display-grid-color: red;
   }
 
   .draw-items {
-    position: relative;
+    position: absolute;
+    width: 50px;
+    top: 0px;
+    bottom: 0px;
+    right: 0px;
     box-sizing: border-box;
     border-left: 1px solid $border-color;
   }
 
   .object-items {
-    display: flex; 
-    flex-direction: column;
-    height: 100%;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    bottom: 0px;
+    right: 50px;
+
+
 
     > div {
-      flex: 1 1 auto; 
-      position: relative;
-
+      position: absolute;
+      left: 0px;
+      right: 0px;      
       &:first-child {
-        height: 25%;
+        top: 0px;
+        height: 200px;
       }
-  
+
       &:nth-child(2) {
-        height: 25%;
+        top: 200px;
+        height: 200px;
       }      
-  
-      &:last-child {
-        height: 50%;
-      }    
 
       &:not(:first-child) {
         border-top: 1px solid $border-color;
         box-sizing: border-box;
       }
-  
+
       &:last-child {
-        flex: none;
-        height: 40%;
-  
-      }  
+        top: 400px;
+        bottom : 0px;
+      }
     }
 
 

@@ -5,7 +5,19 @@ const TRANSFORM_REG = /((matrix|translate(X|Y|Z|3d)?|scale(X|Y|Z|3d)?|rotate(X|Y
 
 export class Transform extends Property {
   getDefaultObject(obj = {}) {
-    return super.getDefaultObject({ itemType: "transform", ...obj });
+    return super.getDefaultObject({ 
+      itemType: "transform", 
+      type: '',
+      value: [],
+      ...obj 
+    });
+  }
+
+  toCloneObject() {
+    return {
+      ...super.toCloneObject(),
+      value: JSON.parse( JSON.stringify(this.json.value) )
+    }
   }
 
   toString() {

@@ -11,23 +11,18 @@ export default class Inspector extends UIElement {
           <div class="tab number-tab" data-selected-value="1" ref="$tab">
             <div class="tab-header" ref="$header">
               <div class="tab-item" data-value="1">
-                <div class='icon'>${icon.shape}</div>
                 <label>Style</label>
               </div>                  
               <div class="tab-item" data-value="3">
-                <div class='icon'>${icon.title}</div>
                 <label>Text</label>
               </div>
               <div class="tab-item" data-value="4">
-                <div class='icon'>${icon.transform}</div>
                 <label>Transform</label>
               </div>                     
               <div class="tab-item" data-value="6">
-                <div class='icon'>${icon.scatter}</div>
                 <label>Animation</label>
               </div>
               <div class="tab-item" data-value="8">
-                <div class='icon'>${icon.ballot}</div>
                 <label>Info</label>
               </div>                                      
             </div>
@@ -86,13 +81,18 @@ export default class Inspector extends UIElement {
           <div class='tab number-tab extra-tab' data-selected-value='1' ref='$extraTab'>
             <div class="tab-header" ref="$extraHeader">
               <div class="tab-item" data-value="1">
-                <div class='icon'>${icon.code}</div>
                 <label>Code</label>
               </div>    
               <div class="tab-item" data-value="2">
-                <div class='icon'>${icon.gradient}</div>
                 <label>GLOBAL</label>
-              </div>                                              
+              </div>                                    
+              
+              <div class="tab-item" data-value="3">
+                <label>Color</label>
+              </div>                            
+              <div class="tab-item" data-value="4">
+                <label>Gradient</label>
+              </div>                                                                
             </div>
             <div class="tab-body" ref="$extraBody">
               <div class="tab-content" data-value="1">
@@ -103,6 +103,12 @@ export default class Inspector extends UIElement {
                 <RootVariableProperty />
                 <SVGProperty />
               </div>
+              <div class='tab-content' data-value='3'>
+                <ColorAssetsProperty />
+              </div>
+              <div class='tab-content' data-value='4'>
+                <GradientAssetsProperty />
+              </div>              
             </div>
           </div>
         </div>

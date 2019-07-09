@@ -15,6 +15,16 @@ export class Selector extends Property {
     });
   }
 
+  toCloneObject() {
+    return {
+      ...super.toCloneObject(),
+      selector: this.json.selector,
+      properties: this.json.properties.map(p => {
+        return JSON.parse(JSON.stringify(p))
+      })
+    }
+  }
+
   isMultiStyle (key) {
     switch (key) {
     case 'background-image': 

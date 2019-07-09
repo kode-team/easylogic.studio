@@ -25,7 +25,7 @@ export default class BaseProperty extends UIElement {
             </div>`
             }
             <div class='property-body'>${this.getBody()}</div>
-            <div class='property-footer'>${this.getFooter()}</div>
+            ${ this.getFooter() ? `<div class='property-footer'>${this.getFooter()}</div>` : ''}
         </div>
         `;
   }

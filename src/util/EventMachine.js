@@ -9,7 +9,8 @@ import Event, {
   CHECK_BIND_PATTERN,
   BIND_CHECK_DEFAULT_FUNCTION,
   BIND_CHECK_FUNCTION,
-  LOAD
+  LOAD,
+  VDOM
 } from "./Event";
 import Dom from "./Dom";
 import {
@@ -23,7 +24,8 @@ import {
   isString,
   isObject,
   keyMap,
-  throttle
+  throttle,
+  isNotString
 } from "./functions/func";
 import {
   ADD_BODY_MOUSEMOVE,
@@ -109,8 +111,8 @@ const checkEventType = (context, e, eventObject) => {
   var hasKeyCode = true;
   if (eventObject.codes.length) {
     hasKeyCode =
-      (e.code ? eventObject.codes.includes(e.code.toLowerCase()) : false) ||
-      (e.key ? eventObject.codes.includes(e.key.toLowerCase()) : false);
+      (e.code ? eventObject.codes.indexOf(e.code.toLowerCase()) > -1 : false) ||
+      (e.key ? eventObject.codes.indexOf(e.key.toLowerCase()) > -1 : false);
   }
 
   // 체크 메소드들은 모든 메소드를 다 적용해야한다.
@@ -187,7 +189,7 @@ const getDefaultEventObject = (context, eventName, checkMethodFilters) => {
   ];
 
   var codes = arr
-    .filter(code => !filteredList.includes(code))
+    .filter(code => filteredList.indexOf(code) === -1)
     .map(code => code.toLowerCase());
 
   return {
@@ -257,7 +259,7 @@ const parseEvent = (context, key) => {
 
 const applyElementAttribute = ($element, key, value) => {
   if (key === "style") {
-    if (isObject(value)) {
+    if (isNotString(value)) {
       // 문자열이 아니라 객체 일때는 직접 입력하는 방식으로
       keyEach(value, (sKey, sValue) => {
         if (!sValue) {
@@ -271,6 +273,13 @@ const applyElementAttribute = ($element, key, value) => {
     return;
   } else if (key === "class") {
     // 문자열이 아닐 때는 문자열로 만들어 준다.
+
+    /**
+     * 
+     * "class" : [ 'className', 'className' ] 
+     * "class" : { key: true, key: false } 
+     * "class" : 'string-class' 
+     */
 
     if (isArray(value)) {
       $element.addClass(...value);
@@ -319,7 +328,7 @@ export default class EventMachine {
 
   setState(state = {}, isLoad = true) {
     this.prevState = this.state;
-    this.state = { ...this.state, ...state };
+    this.state = Object.assign({}, this.state, state );
     if (isLoad) {
       this.load();
     }
@@ -328,7 +337,7 @@ export default class EventMachine {
   _reload(props) {
     this.props = props;
     this.setState(this.initState(), false);
-    this.refresh();
+    this.refresh(true);
   }
 
   render($container) {
@@ -414,7 +423,7 @@ export default class EventMachine {
 
     if (this.parent) {
       if (this.parent.childrenIds) {
-        return this.parent.childrenIds().includes(this.id)
+        return this.parent.childrenIds().indexOf(this.id) > -1 
       }
     }
 
@@ -425,13 +434,9 @@ export default class EventMachine {
     let props = {};
 
     // parse properties 
-    [...$dom.el.attributes]
-      .filter(t => {
-        return ATTR_lIST.indexOf(t.nodeName) < 0;
-      })
-      .forEach(t => {
-        props[t.nodeName] = t.nodeValue;
-      });
+    for(var t of $dom.el.attributes) {
+      props[t.nodeName] = t.nodeValue;
+    }
 
     // property 태그는 속성으로 대체 
     $dom.$$('property').forEach($p => {
@@ -539,12 +544,18 @@ export default class EventMachine {
 
     this._loadMethods
     .filter(callbackName => {
-      const elName = callbackName.split(LOAD_SAPARATOR)[1];
+      const elName = callbackName.split(LOAD_SAPARATOR)[1].split(CHECK_SAPARATOR)[0];
       if (!args.length) return true; 
-      return args.includes(elName)
+      return args.indexOf(elName) > -1
     })
     .forEach(callbackName => {
-      const elName = callbackName.split(LOAD_SAPARATOR)[1];
+      let methodName = callbackName.split(LOAD_SAPARATOR)[1];
+      var [elName, ...checker] = methodName.split(CHECK_SAPARATOR).map(it => it.trim())
+
+      checker = checker.map(it => it.trim())
+
+      var isVdom = checker.indexOf(VDOM.value) > -1;
+
       if (this.refs[elName]) {
         
         var newTemplate = this[callbackName].call(this, ...args);
@@ -555,7 +566,12 @@ export default class EventMachine {
 
         const fragment = this.parseTemplate(newTemplate, true);
 
-        this.refs[elName].html(fragment);
+        if (isVdom) {
+          this.refs[elName].htmlDiff(fragment);
+        } else {
+          this.refs[elName].html(fragment);
+        }
+
 
         // 새로운 html 이 로드가 되었으니 
         // 이벤트를 재설정 하자. 
@@ -586,7 +602,7 @@ export default class EventMachine {
 
         var [_, $bind] = callbackName.split(' ')
 
-        return args.includes($bind)
+        return args.indexOf($bind) >  -1 
       })
       .forEach(callbackName => {
         const bindMethod = this[callbackName];
@@ -669,7 +685,11 @@ export default class EventMachine {
 
   initializeDomEvent() {
     this.destroyDomEvent();
-    this.filterProps(CHECK_PATTERN).forEach(key => parseEvent(this, key));
+
+    if (!this._domEvents) {
+      this._domEvents = this.filterProps(CHECK_PATTERN)
+    }
+    this._domEvents.forEach(key => parseEvent(this, key));
   }
 
   /**
@@ -718,7 +738,7 @@ export default class EventMachine {
     return e.shiftKey;
   }
   isMetaKey(e) {
-    return e.metaKey;
+    return e.metaKey || e.key == 'Meta' || e.code.indexOf('Meta') > -1 ;
   }
 
   /* magic check method */

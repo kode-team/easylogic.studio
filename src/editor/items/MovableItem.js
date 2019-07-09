@@ -7,6 +7,27 @@ const zero = Length.px(0)
 export class MovableItem extends Item {
 
 
+    toCloneObject() {
+        return {
+            ...super.toCloneObject(),
+            x: this.json.x + '',
+            y: this.json.y + '',
+            width: this.json.width + '',
+            height: this.json.height + ''
+        }
+    }
+
+    convert (json) {
+        json = super.convert(json);
+
+        json.x = Length.parse(json.x);
+        json.y = Length.parse(json.y);
+        json.width = Length.parse(json.width);
+        json.height = Length.parse(json.height);
+
+        return json; 
+    }
+
     //////////////////////
     //
     // getters 
@@ -76,7 +97,9 @@ export class MovableItem extends Item {
     get screenY () { 
         return this.json.y || Length.px(0) 
     }
-    get screenX2 () { return Length.px(this.screenX.value + this.json.width.value) }
+    get screenX2 () { 
+        return Length.px(this.screenX.value + this.json.width.value) 
+    }
     get screenY2 () { 
         return Length.px(this.screenY.value + this.json.height.value) 
     }    

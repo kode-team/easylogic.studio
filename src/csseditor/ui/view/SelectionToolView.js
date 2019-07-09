@@ -61,7 +61,7 @@ export default class SelectionToolView extends UIElement {
 
         this.refreshSelectionToolView(dx, dy);
         this.parent.updateRealPosition();     
-        this.emit('refreshRedGL')        
+        this.emit('refreshRedGL', false)        
     }
 
     end (dx, dy) {
@@ -77,7 +77,7 @@ export default class SelectionToolView extends UIElement {
         this.parent.trigger('removeRealPosition');                
         // this.initSelectionTool();
 
-        this.emit('refreshRedGL')
+        this.emit('refreshRedGL', false)
         this.emit('refreshStyleView');
         this.emit('removeGuideLine')
     }   
@@ -156,6 +156,7 @@ export default class SelectionToolView extends UIElement {
         this.guideView.recoverAll();
 
         var {x, y, width, height} = this.calculateWorldPosition(this.guideView.rect) ;
+
 
         if (editor.selection.items.length === 1 && editor.selection.current.is('redgl-canvas')) {
             this.refs.$selectionTool.addClass('remove-move-area')

@@ -45,10 +45,12 @@ import lock_open from "./lock_open";
 import outline_image from "./outline_image";
 import edit from "./edit";
 import size from "./size";
+import color from "./color";
 
 
 
 export default {
+  color,
   size,
   edit,
   outline_image,

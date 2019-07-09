@@ -3,7 +3,7 @@ import UIElement, { EVENT, COMMAND } from "../../../util/UIElement";
 import { editor } from "../../../editor/editor";
 import { Project } from "../../../editor/items/Project";
 import { ArtBoard } from "../../../editor/items/ArtBoard";
-import { CLICK, DEBOUNCE, PREVENT, STOP, WHEEL, ALT, THROTTLE, IF, KEYUP } from "../../../util/Event";
+import { CLICK, DEBOUNCE, PREVENT, STOP, WHEEL, ALT, THROTTLE, IF, KEYUP, CONTROL, META, KEYPRESS } from "../../../util/Event";
 
 import { StyleParser } from "../../../editor/parse/StyleParser";
 import icon from "../icon/icon";

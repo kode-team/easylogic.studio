@@ -35,6 +35,13 @@ export class LinearGradient extends Gradient {
     });
   }
 
+  toCloneObject() {
+    return {
+      ...super.toCloneObject(),
+      angle: this.json.angle
+    }
+  }
+
   isLinear() {
     return true;
   }

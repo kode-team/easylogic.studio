@@ -15,6 +15,13 @@ export class ImageLayer extends Layer {
     return "Image";
   }
 
+  toCloneObject() {
+    return {
+      ...super.toCloneObject(),
+      src: this.json.src + ''
+    }
+  }
+
   resize() {
     this.reset({
       width: this.json.naturalWidth.clone(),
@@ -26,10 +33,8 @@ export class ImageLayer extends Layer {
   get html () {
     var {id, src, itemType} = this.json;
 
-    var selected = this.json.selected ? 'selected' : ''
-
     return `
-      <img class='element-item ${selected} ${itemType}' data-id="${id}" src='${src}' />
+      <img class='element-item ${itemType}' data-id="${id}" src='${src}' />
     `
   }
 

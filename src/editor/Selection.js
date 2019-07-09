@@ -94,6 +94,7 @@ export class Selection {
   }
 
   setRectCache () {
+    
     this.cachedItems = this.items.map(it => it.clone())
 
     this.setAllRectCache();
@@ -109,8 +110,9 @@ export class Selection {
 
     this.cachedItems.forEach(it => {
       minX = Math.min(it.screenX.value, minX);
-      maxX = Math.max(it.screenX2.value, maxX);
       minY = Math.min(it.screenY.value, minY);
+
+      maxX = Math.max(it.screenX2.value, maxX);
       maxY = Math.max(it.screenY2.value, maxY);      
     })
 
@@ -120,6 +122,7 @@ export class Selection {
       width: Length.px(maxX - minX),
       height: Length.px(maxY - minY)
     })
+
   }
 
   each (callback) {
@@ -144,6 +147,10 @@ export class Selection {
     this.each(item => item.remove())
     this.empty();
   }
+
+  copy () {
+    this.each(item => item.copy())
+  }  
   
   move (dx, dy) {
     this.each ((item, cachedItem, ) => {

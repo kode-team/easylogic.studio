@@ -167,6 +167,7 @@ export const SELF = CHECKER("self");
 
 export const FIT = CHECKER("fit");
 export const PASSIVE = CHECKER("passive");
+export const VDOM = CHECKER('vdom');
 
 // event config method
 export const DEBOUNCE = (t = 100) => {

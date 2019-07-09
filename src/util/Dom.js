@@ -168,8 +168,11 @@ export default class Dom {
       this.empty().append(fragment);
       this.fragment = true;
     } else {
-      // go diff
-      DomDiff(this.el, fragment);
+      var childFragment = this.createChildrenFragment();
+
+      DomDiff(childFragment, fragment);
+
+      this.html(childFragment)
     }
   }
 
@@ -193,7 +196,8 @@ export default class Dom {
   }
 
   empty() {
-    return this.html('');
+    while (this.el.firstChild) this.el.removeChild(this.el.firstChild);
+    return this;
   }
 
   append(el) {
@@ -248,6 +252,11 @@ export default class Dom {
     }
 
     return this;
+  }
+
+  removeChild(el) {
+    this.el.removeChild(el.el || el);
+    return this; 
   }
 
   text(value) {
@@ -641,6 +650,12 @@ export default class Dom {
 
     return this;
   }
+
+  replaceChild(oldElement, newElement) {
+    this.el.replaceChild(newElement.el || newElement, oldElement.el || oldElement);
+
+    return this;
+  }  
 
   checked(isChecked = false) {
     if (arguments.length == 0) {

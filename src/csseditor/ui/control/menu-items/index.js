@@ -9,9 +9,14 @@ import CenterAlign from "./CenterAlign";
 import TopAlign from "./TopAlign";
 import BottomAlign from "./BottomAlign";
 import MiddleAlign from "./MiddleAlign";
-
+import SameHeight from "./SameHeight";
+import SameWidth from "./SameWidth";
+import CopyItem from "./CopyItem";
 
 export default {
+  CopyItem,
+  SameHeight,
+  SameWidth,
   TopAlign,
   BottomAlign,
   MiddleAlign,

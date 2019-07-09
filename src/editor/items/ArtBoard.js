@@ -13,6 +13,13 @@ export class ArtBoard extends DomItem {
     });
   }
 
+  toCloneObject() {
+    return {
+      ...super.toCloneObject(),
+      name: this.json.name 
+    }
+  }  
+
   getDefaultTitle() {
     return "ArtBoard";
   }

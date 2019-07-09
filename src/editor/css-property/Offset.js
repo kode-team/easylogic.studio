@@ -16,6 +16,24 @@ export class Offset extends Property {
     });
   }
 
+  toCloneObject() {
+    return {
+      ...super.toCloneObject(),
+      offset: this.json.offset + "",
+      color: this.json.color,
+      properties: this.json.properties.map(p => {
+        return JSON.parse(JSON.stringify(p))
+      })
+    }
+  }
+
+  convert(json) {
+    json = super.convert(json)
+
+    json.offset = Length.parse(json.offset);
+    return json ;
+  }
+
   toCSSText() {
     return `${this.json.offset} ${CSS_TO_STRING(this.toCSS())}`
   }

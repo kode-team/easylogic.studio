@@ -216,7 +216,7 @@ export function parseGradient (colors) {
             let arr = trim(ret.str).split(' ');
 
             if (arr[1]) {
-                if (arr[1].includes('%')) {
+                if (arr[1].indexOf('%') > -1) {
                     arr[1] = parseFloat(arr[1].replace(/%/, ''))/100
                 } else {
                     arr[1] = parseFloat(arr[1])
@@ -234,7 +234,7 @@ export function parseGradient (colors) {
             if (!it[1]) {
                 it[1] = '*'
             } else if (isString( it[1] ) ) {
-                if (it[1].includes('%')) {
+                if (it[1].indexOf('%') > -1) {
                     it[1] = parseFloat(it[1].replace(/%/, ''))/100
                 } else {
                     it[1] = +it[1]

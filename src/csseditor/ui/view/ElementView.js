@@ -8,6 +8,7 @@ import SelectionToolView from "./SelectionToolView";
 import GuideLineView from "./GuideLineView";
 import { keyEach } from "../../../util/functions/func";
 import { uuid } from "../../../util/functions/math";
+import { DomDiff } from "../../../util/DomDiff";
 
 
 
@@ -47,6 +48,7 @@ export default class ElementView extends UIElement {
 
     initState() {
         return {
+            mode: 'selection',
             left: Length.px(0),
             top: Length.px(0),
             width: Length.px(10000),
@@ -81,6 +83,10 @@ export default class ElementView extends UIElement {
 
     checkEmptyElement (e) {
         var $el = Dom.create(e.target)
+
+        if (this.state.mode !== 'selection') {
+            return false; 
+        }
 
         return $el.hasClass('element-item') === false && 
                 $el.hasClass('selection-tool-item') === false &&
@@ -242,6 +248,7 @@ export default class ElementView extends UIElement {
         var height = Length.px(10000);
 
         return {
+            'data-mode': this.state.mode,
             style: {
                 'position': 'relative',
                 width,
@@ -266,22 +273,23 @@ export default class ElementView extends UIElement {
         var artboard = editor.selection.currentArtboard
         var html = artboard.html
 
-        this.setState({ html })
+        this.setState({ html }, false)
+        var $div = Dom.create('div').html(html);
+        DomDiff(this.refs.$view, $div)
 
-        setTimeout(() => {
-            this.trigger('refreshRedGL')
-            this.emit('refreshSelectionTool')
-        }, 100)
+        this.trigger('refreshRedGL', true)
+        this.emit('refreshSelectionTool')
     }
 
-    [EVENT('refreshRedGL')] () {
-
+    [EVENT('refreshRedGL')] (isRemove = false) {
         var artboard = editor.selection.currentArtboard;
 
         if (artboard) {
+            // console.log(artboard.allLayers);
             artboard.allLayers.filter(item => item.is('redgl-canvas')).forEach(item => {
+                if (isRemove && !item.redGL) {item.removeRedGL()}
                 var $canvas = this.refs.$view.$(`[data-id="${item.id}"] canvas`);
-                this.runRedGL($canvas, item);
+                this.runRedGL($canvas, item, false);
             })
         }
 
@@ -368,8 +376,11 @@ export default class ElementView extends UIElement {
     }
 
     runRedGL($canvas, item, isRefresh = false) {
-        if (item.redGL && !isRefresh) {
-            item.initRedGLSize();             
+        if (item.redGL) {
+            $canvas.width(item.width)
+            $canvas.height(item.height);            
+            item.initRedGLSize();      
+            // console.log(item);       
         } else {
             var self = this; 
             $canvas.width(item.width)

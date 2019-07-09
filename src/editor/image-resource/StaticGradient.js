@@ -12,6 +12,13 @@ export class StaticGradient extends Gradient {
         }) 
     }
 
+    toCloneObject() {
+        return {
+            ...super.toCloneObject(),
+            static: true 
+        }
+    }
+
     static create (color = 'transparent') {
         return new StaticGradient({
             colorsteps: [

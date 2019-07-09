@@ -2,6 +2,7 @@
     height: 100%;
     overflow: auto;
     padding:0px;
+    margin:0px !important;
     .artboard-item {
 
         padding: 5px 5px !important; 
@@ -37,7 +38,6 @@
         }
 
         &.selected {
-            background-color: rgba(0, 0, 0, 0.05);
             @include title-background();
         }
 

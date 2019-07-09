@@ -1,5 +1,5 @@
 import UIElement from "../../../../../util/UIElement";
-import { LOAD, CHANGE, BIND } from "../../../../../util/Event";
+import { LOAD, CHANGE, BIND, VDOM } from "../../../../../util/Event";
 
 export default class SelectEditor extends UIElement {
 
@@ -32,7 +32,18 @@ export default class SelectEditor extends UIElement {
 
     setValue (value) {
         this.state.value = value + ''; 
-        this.refresh()
+        this.refs.$options.val(this.state.value);
+        // this.refresh()
+    }
+
+    refresh(reload = false) {
+
+        if (reload) {
+            this.refs.$options.val(this.state.value);
+        } else {
+            this.load();
+        }
+
     }
 
     [BIND('$options')] () {

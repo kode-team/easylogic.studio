@@ -9,9 +9,15 @@ export class Project extends DomItem {
     return super.getDefaultObject({
       itemType: "project",
       name: 'Project',
-      ...obj,
-      children: []
+      ...obj
     });
+  }
+
+  toCloneObject() {
+    return {
+      ...super.toCloneObject(),
+      name: this.json.name 
+    }
   }
 
   get artboards () {

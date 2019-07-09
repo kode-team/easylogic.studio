@@ -1442,8 +1442,7 @@ html, body {
   border-top: 1px solid #cccccc;
 }
 .csseditor .feature-control.object-list {
-  display: grid;
-  grid-template-columns: 1fr 50px;
+  position: relative;
   height: 100%;
 }
 .csseditor .feature-control.object-list .property {
@@ -1456,35 +1455,41 @@ html, body {
   padding: 0px;
 }
 .csseditor .feature-control .draw-items {
-  position: relative;
+  position: absolute;
+  width: 50px;
+  top: 0px;
+  bottom: 0px;
+  right: 0px;
   box-sizing: border-box;
   border-left: 1px solid #cccccc;
 }
 .csseditor .feature-control .object-items {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  bottom: 0px;
+  right: 50px;
 }
 .csseditor .feature-control .object-items > div {
-  flex: 1 1 auto;
-  position: relative;
+  position: absolute;
+  left: 0px;
+  right: 0px;
 }
 .csseditor .feature-control .object-items > div:first-child {
-  height: 25%;
+  top: 0px;
+  height: 200px;
 }
 .csseditor .feature-control .object-items > div:nth-child(2) {
-  height: 25%;
-}
-.csseditor .feature-control .object-items > div:last-child {
-  height: 50%;
+  top: 200px;
+  height: 200px;
 }
 .csseditor .feature-control .object-items > div:not(:first-child) {
   border-top: 1px solid #cccccc;
   box-sizing: border-box;
 }
 .csseditor .feature-control .object-items > div:last-child {
-  flex: none;
-  height: 40%;
+  top: 400px;
+  bottom: 0px;
 }
 .csseditor .feature-control .draw-items button {
   width: 48px;
@@ -1616,6 +1621,7 @@ html, body {
 .csseditor .tab.number-tab .tab-header {
   height: 34px;
   cursor: pointer;
+  overflow: auto;
 }
 .csseditor .tab.number-tab .tab-content {
   display: none;
@@ -1633,7 +1639,7 @@ html, body {
   text-align: center;
   background-color: white;
   position: relative;
-  padding: 4px;
+  padding: 4px 0px;
   border-top: 2px solid white;
   border-bottom: 1px solid #cccccc;
   border-right: 1px solid #cccccc;
@@ -1663,6 +1669,7 @@ html, body {
 .csseditor .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"] {
   border-top: 2px solid #3e3ec2;
   border-bottom: 0px;
+  background-color: rgba(21, 118, 228, 0.05);
 }
 .csseditor .tab.number-tab[data-selected-value="1"] .tab-content[data-value="1"] {
   display: block;
@@ -1670,6 +1677,7 @@ html, body {
 .csseditor .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"] {
   border-top: 2px solid #3e3ec2;
   border-bottom: 0px;
+  background-color: rgba(21, 118, 228, 0.05);
 }
 .csseditor .tab.number-tab[data-selected-value="2"] .tab-content[data-value="2"] {
   display: block;
@@ -1677,6 +1685,7 @@ html, body {
 .csseditor .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"] {
   border-top: 2px solid #3e3ec2;
   border-bottom: 0px;
+  background-color: rgba(21, 118, 228, 0.05);
 }
 .csseditor .tab.number-tab[data-selected-value="3"] .tab-content[data-value="3"] {
   display: block;
@@ -1684,6 +1693,7 @@ html, body {
 .csseditor .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"] {
   border-top: 2px solid #3e3ec2;
   border-bottom: 0px;
+  background-color: rgba(21, 118, 228, 0.05);
 }
 .csseditor .tab.number-tab[data-selected-value="4"] .tab-content[data-value="4"] {
   display: block;
@@ -1691,6 +1701,7 @@ html, body {
 .csseditor .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"] {
   border-top: 2px solid #3e3ec2;
   border-bottom: 0px;
+  background-color: rgba(21, 118, 228, 0.05);
 }
 .csseditor .tab.number-tab[data-selected-value="5"] .tab-content[data-value="5"] {
   display: block;
@@ -1698,6 +1709,7 @@ html, body {
 .csseditor .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"] {
   border-top: 2px solid #3e3ec2;
   border-bottom: 0px;
+  background-color: rgba(21, 118, 228, 0.05);
 }
 .csseditor .tab.number-tab[data-selected-value="6"] .tab-content[data-value="6"] {
   display: block;
@@ -1705,6 +1717,7 @@ html, body {
 .csseditor .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"] {
   border-top: 2px solid #3e3ec2;
   border-bottom: 0px;
+  background-color: rgba(21, 118, 228, 0.05);
 }
 .csseditor .tab.number-tab[data-selected-value="7"] .tab-content[data-value="7"] {
   display: block;
@@ -1712,6 +1725,7 @@ html, body {
 .csseditor .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"] {
   border-top: 2px solid #3e3ec2;
   border-bottom: 0px;
+  background-color: rgba(21, 118, 228, 0.05);
 }
 .csseditor .tab.number-tab[data-selected-value="8"] .tab-content[data-value="8"] {
   display: block;
@@ -1719,6 +1733,7 @@ html, body {
 .csseditor .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"] {
   border-top: 2px solid #3e3ec2;
   border-bottom: 0px;
+  background-color: rgba(21, 118, 228, 0.05);
 }
 .csseditor .tab.number-tab[data-selected-value="9"] .tab-content[data-value="9"] {
   display: block;
@@ -3272,11 +3287,17 @@ html, body {
   content: attr(title);
   position: absolute;
   display: inline-block;
+  background-color: #1576e4;
+  border-left: 2px solid #1576e4;
+  color: white;
   left: 0px;
   top: 0px;
   border-top-left-radius: 5px;
   border-bottom-right-radius: 5px;
   padding: 2px 4px;
+}
+.csseditor .code-view-item > div pre::before svg path {
+  fill: white;
 }
 .csseditor .clip-path-list {
   grid-template-columns: 1fr !important;
@@ -3390,6 +3411,12 @@ html, body {
   padding: 4px 6px;
   font-weight: bold;
   border-radius: 5px;
+  background-color: #1576e4;
+  border-left: 2px solid #1576e4;
+  color: white;
+}
+.csseditor .selector-list .selector-item .title .name span svg path {
+  fill: white;
 }
 .csseditor .selector-list .selector-item .title .tools {
   vertical-align: middle;
@@ -3414,19 +3441,26 @@ html, body {
   width: 100%;
   height: 100%;
 }
+.csseditor .project-list {
+  margin: 0px !important;
+}
 .csseditor .project-list .project-item {
   display: grid;
   grid-template-columns: 1fr 20px;
   grid-column-gap: 3px;
   padding: 5px !important;
   cursor: pointer;
-  border-radius: 3px;
 }
 .csseditor .project-list .project-item label {
   padding: 2px 0px;
 }
 .csseditor .project-list .project-item.selected {
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: #1576e4;
+  border-left: 2px solid #1576e4;
+  color: white;
+}
+.csseditor .project-list .project-item.selected svg path {
+  fill: white;
 }
 .csseditor .project-list .project-item .tools {
   text-align: right;
@@ -3454,6 +3488,7 @@ html, body {
   height: 100%;
   overflow: auto;
   padding: 0px;
+  margin: 0px !important;
 }
 .csseditor .artboard-list .artboard-item {
   padding: 5px 5px !important;
@@ -3498,12 +3533,18 @@ html, body {
   height: 100%;
 }
 .csseditor .artboard-list .artboard-item.selected {
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: #1576e4;
+  border-left: 2px solid #1576e4;
+  color: white;
+}
+.csseditor .artboard-list .artboard-item.selected svg path {
+  fill: white;
 }
 .csseditor .layer-list {
   height: 100%;
   overflow: auto;
   padding: 0px;
+  margin: 0px !important;
 }
 .csseditor .layer-list .layer-item {
   padding: 5px 5px !important;
@@ -3573,6 +3614,69 @@ html, body {
 }
 .csseditor .layer-list .layer-item.selected {
   background-color: rgba(0, 0, 0, 0.05);
+  background-color: #1576e4;
+  border-left: 2px solid #1576e4;
+  color: white;
+}
+.csseditor .layer-list .layer-item.selected svg path {
+  fill: white;
+}
+.csseditor .color-assets .color-item {
+  display: grid;
+  grid-template-columns: 20px 1fr 40px;
+  grid-column-gap: 2px;
+  height: 20px;
+}
+.csseditor .color-assets .color-item .preview {
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #cccccc;
+  border-radius: 3px;
+  position: relative;
+  background-color: transparent;
+  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-size: 10px 10px;
+  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.csseditor .color-assets .color-item .preview .color-view {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+}
+.csseditor .color-assets .color-item .title {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template: 4px;
+}
+.csseditor .color-assets .color-item .title div input {
+  height: 100%;
+  border-radius: 2px;
+  border: 1px solid #cccccc;
+  width: 100%;
+}
+.csseditor .color-assets .color-item .tools button {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  outline: none;
+  padding: 0px;
+  border: 0px;
+  display: inline-block;
+  font-size: 11px;
+  cursor: pointer;
+}
+.csseditor .color-assets .color-item .tools button svg {
+  width: 100%;
+  height: 100%;
 }
 .csseditor .cubic-bezier-editor {
   width: 228px;

@@ -34,6 +34,14 @@ export class URLImageResource extends ImageResource {
     });
   }
 
+  toCloneObject() {
+    return {
+      ...super.toCloneObject(),
+      url: this.json.url,
+      datauri: this.json.datauri
+    }
+  }
+
   static parse(str) {
 
     var url = str.split('(')[1].split(')')[0]

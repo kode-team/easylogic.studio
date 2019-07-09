@@ -16,6 +16,8 @@ $tab-horizontal-header-right-width: 60px;
     .tab-header {
       height: 34px;
       cursor: pointer;
+      // background-color: rgba($border-color, 0.3);
+      overflow: auto;
     }
     .tab-content {
       display: none;
@@ -36,7 +38,7 @@ $tab-horizontal-header-right-width: 60px;
         text-align: center;
         background-color: white;
         position: relative;
-        padding: 4px;
+        padding: 4px 0px;
         // width: 31px;
         border-top: 2px solid white;
         border-bottom: 1px solid $border-color;
@@ -100,7 +102,7 @@ $tab-horizontal-header-right-width: 60px;
         border-bottom: 0px;
         // border-right: 0px;
         // border-left: 0px;        
-        @include title-background();
+        @include tab-title-background();
       }
 
       &[data-selected-value="#{$selectValue}"]

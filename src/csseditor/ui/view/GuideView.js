@@ -54,19 +54,19 @@ export default class GuideView {
 
         } else {
 
-            if (type.includes('right')) {
+            if (Segment.isRight(type)) {
                 this.rect.resizeWidth(roundedLength(allRect.width.value + dx))
 
-            } else if (type.includes('left')) {
+            } else if (Segment.isLeft(type)) {
                 if (allRect.width.value - dx >= 0) {
                     this.rect.moveX( roundedLength(allRect.x.value + dx) )
                     this.rect.resizeWidth( roundedLength(allRect.width.value - dx) )
                 }                
             } 
     
-            if (type.includes('bottom')) {      // 밑으로 향하는 애들 
+            if (Segment.isBottom(type)) {      // 밑으로 향하는 애들 
                 this.rect.resizeHeight( roundedLength(allRect.height.value + dy) )                
-            } else if (type.includes('top')) {
+            } else if (Segment.isTop(type)) {
                 if ( allRect.height.value - dy >= 0 ) {
                     this.rect.moveY( roundedLength(allRect.y.value + dy) )                                
                     this.rect.resizeHeight( roundedLength(allRect.height.value - dy) )    

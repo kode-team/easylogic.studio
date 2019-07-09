@@ -17,8 +17,15 @@ export class Layer extends DomItem {
   } 
 
 
-  get screenX () { 
+  toCloneObject() {
+    return {
+      ...super.toCloneObject(),
+      tagName: this.json.tagName
+    }
+  }
 
+
+  get screenX () { 
     if (this.json.parent) {
         return Length.px( this.json.parent.screenX.value + (this.json.x || zero).value )
     }

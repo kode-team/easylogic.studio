@@ -1,19 +1,17 @@
 .project-list {
-    
+    margin: 0px !important;
     .project-item {
         display: grid;
         grid-template-columns: 1fr 20px;
         grid-column-gap: 3px;
         padding: 5px !important; 
         cursor: pointer;
-        border-radius: 3px;
 
         label {
             padding: 2px 0px;
         }
 
         &.selected {      
-            background-color: rgba(0, 0, 0, 0.05);
             @include title-background();
         }
 

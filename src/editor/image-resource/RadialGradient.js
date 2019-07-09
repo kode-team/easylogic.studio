@@ -23,6 +23,14 @@ export class RadialGradient extends Gradient {
     });
   }
 
+  toCloneObject() {
+    return {
+      ...super.toCloneObject(),
+      radialType: this.json.radialType,
+      radialPosition: JSON.parse(JSON.stringify(this.json.radialPosition))
+    }
+  }
+
   isRadial() {
     return true;
   }

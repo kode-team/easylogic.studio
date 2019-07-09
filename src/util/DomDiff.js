@@ -48,35 +48,32 @@ const updateProps = (node, newProps = {}, oldProps = {}) => {
 
 function changed(node1, node2) {
     return (
-        (node1 !== node2) 
-        || (node1.nodeType === Node.TEXT_NODE && node1 !== node2) 
+        (node1.nodeType === Node.TEXT_NODE && node1 !== node2) 
         || node1.nodeName !== node2.nodeName
-    )
+    ) 
 }
 
 function getProps (attributes) {
-    var len = attributes.length;
-
     var results = {}
-    for(var i = 0; i < len; i++) {
-        results[attributes[i].name] = attributes[i].value;
+    for(var t of attributes) {
+        results[t.name] = t.value;
     }
 
     return results;
     
 }
 
-function updateElement ($parent, oldEl, newEl, i) {
+function updateElement (parentElement, oldEl, newEl, i) {
     if (!oldEl) {
-        $parent.appendChild(newEl.cloneNode(true));
+        parentElement.appendChild(newEl.cloneNode(true));
     } else if (!newEl) {
-        $parent.removeChild(oldEl);
+        parentElement.removeChild(oldEl);
     } else if (changed(newEl, oldEl)) {
-        $parent.replaceChild(newEl.cloneNode(true), oldEl);
-    } else if (newEl.nodeType != Node.TEXT_NODE) {
+        parentElement.replaceChild(newEl.cloneNode(true), oldEl);
+    } else if (newEl.nodeType !== Node.TEXT_NODE) {
         updateProps(oldEl, getProps(oldEl.attributes), getProps(oldEl.attributes)); // added        
         var oldChildren = children(oldEl);
-        var newChildren = chlidren(newEl);
+        var newChildren = children(newEl);
         var max = Math.max(oldChildren.length, newChildren.length);
 
         for (var i = 0; i < max; i++) {
@@ -105,11 +102,16 @@ const children = (el) => {
 
 
 export function DomDiff (A, B) {
+
+    A = A.el || A; 
+    B = B.el || B; 
+
+    console.log(A, B);
+
     var aC = children(A);
     var bC = children(B); 
 
     var len = Math.max(aC.length, bC.length);
-
     for (var i = 0; i < len; i++) {
         updateElement(A, aC[i], bC[i], i);
     }

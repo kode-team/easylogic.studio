@@ -40,6 +40,13 @@ export class Gradient extends ImageResource {
     });
   }
 
+  toCloneObject() {
+    return {
+      ...super.toCloneObject(),
+      colorsteps: this.json.colorsteps.map(color => color.clone())
+    }
+  }
+
   convert(json) {
     json.colorsteps = json.colorsteps.map(c => new ColorStep(c));
 

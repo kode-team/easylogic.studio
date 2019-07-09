@@ -38,6 +38,14 @@ export class ConicGradient extends Gradient {
     });
   }
 
+  toCloneObject() {
+    return {
+      ...super.toCloneObject(),
+      angle: this.json.angle,
+      radialPosition: JSON.parse(JSON.stringify(this.json.radialPosition))
+    }
+  }
+
   isConic() {
     return true;
   }

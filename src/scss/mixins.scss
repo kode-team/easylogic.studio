@@ -49,8 +49,21 @@
 }
 
 @mixin title-background () {
+    background-color: $selected-border-color;    
+    border-left: 2px solid $selected-border-color;
+    color: white; 
 
+    svg {
+        path {
+            fill: white; 
+        }
+    }
 }
+
+@mixin tab-title-background () {
+    background-color: rgba($selected-border-color, 0.05);    
+}
+
 
 
 @mixin title-background-2 () { 

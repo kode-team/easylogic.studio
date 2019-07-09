@@ -19,10 +19,8 @@ export class SVGLayer extends Layer {
   get html () {
     var {id, layers} = this.json;
 
-    var selected = this.json.selected ? 'selected' : ''
-
     return `
-    <svg class='element-item ${selected} svg' data-id="${id}">
+    <svg class='element-item svg' data-id="${id}">
         ${layers.map(it => it.html).join('')}
     </svg>
     `

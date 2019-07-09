@@ -22,6 +22,30 @@ export class Animation extends Property {
     });
   }
 
+  convert(json) {
+    json = super.convert(json)
+
+    json.duration = Length.parse(json.duration);
+    json.iterationCount = Length.parse(json.iterationCount);
+    return json 
+  }
+
+  toCloneObject() {
+    var json = this.json; 
+    return {
+      ...super.toCloneObject(),
+      checked: json.checked, 
+      name: json.name,
+      direction: json.direction,
+      duration: json.duration+'',
+      timingFunction: json.timingFunction,
+      delay: json.delay,
+      iterationCount: json.iterationCount + "",
+      playState: json.playState,
+      fillMode: json.fillMode
+    }
+  }
+
   togglePlayState (forcedValue) {
 
     if (forcedValue) {

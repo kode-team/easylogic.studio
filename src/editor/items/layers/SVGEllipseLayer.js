@@ -17,10 +17,6 @@ export class SVGEllipseLayer extends Layer {
   get html () {
     var {id, path} = this.json;
 
-    console.log(path);
-
-    var selected = this.json.selected ? 'selected' : ''
-
-    return `<ellipse class='element-item ${selected} rect' data-id="${id}"></ellipse>`
+    return `<ellipse class='element-item rect' data-id="${id}"></ellipse>`
   }
 }

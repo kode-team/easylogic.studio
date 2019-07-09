@@ -23,7 +23,7 @@ export class Item {
     if (json instanceof Item) {
       json = json.toJSON();
     }
-    this.json = this.convert({ ...this.getDefaultObject(), ...json });
+    this.json = this.convert({ ...this.getDefaultObject(), ...json, parent });
 
     this.ref = new Proxy(this, {
       get: (target, key) => {
@@ -125,6 +125,11 @@ export class Item {
    * @param {*} json
    */
   convert(json) {
+
+    json.layers.forEach(layer => {
+      layer.parent = this.ref; 
+    })
+
     return json;
   }
 
@@ -138,17 +143,34 @@ export class Item {
     return true;
   }
 
+  toCloneObject () {
+    var json = {
+      itemType: this.json.itemType,
+      elementType: this.json.elementType,
+      type: this.json.type,
+      visible: this.json.visible,  // 보이기 여부 설정 
+      lock: this.json.lock,    // 편집을 막고 
+      selected: this.json.selected,  // 선택 여부 체크 
+      layers: this.json.layers.map(layer => layer.clone())
+    }
+
+    return json; 
+  }
 
   /**
    * clone Item
    */
   clone() {
-    var json = {...this.json};
-    delete json.id;
 
     var ItemClass = this.constructor;
 
-    return new ItemClass(json);
+
+    // 클론을 할 때 꼭 부모 참조를 넘겨줘야 한다. 
+    // 그렇지 않으면 screenX, Y 에 대한 값을 계산할 수가 없다. 
+    var item =  new ItemClass(this.toCloneObject());
+    item.parent =   this.json.parent
+
+    return item; 
   }
 
   /**
@@ -179,6 +201,8 @@ export class Item {
       ...obj
     };
   }
+
+
 
   add (layer) {
     this.json.layers.push(layer);
@@ -212,16 +236,41 @@ export class Item {
 
     const tagName = elementType || 'div'
 
-    var selected = this.json.selected ? 'selected' : ''
-
     return `
-    <${tagName} class='element-item ${selected} ${itemType}' data-id="${id}">${content ? `<div class='content'>${content}</div>` : ''}
+    <${tagName} class='element-item ${itemType}' data-id="${id}">${content ? `<div class='content'>${content}</div>` : ''}
       ${layers.map(it => it.html).join('')}
     </${tagName}>
     `
   }
 
   resize () {}
+
+  copy () {
+    this.json.parent.copyItem(this.ref);
+  }
+
+  copyItem (childItem) {
+     // clone 을 어떻게 해야하나? 
+
+    var child = childItem.clone()  
+
+    child.width.add(10);
+    child.width.add(10);
+
+    var layers = this.json.layers;
+
+    var childIndex = -1; 
+    for(var i = 0, len = layers.length; i < len; i++) {
+      if (layers[i] === childItem) {
+        childIndex = i; 
+        break;
+      }
+    }
+
+    if (childIndex > -1) {
+      this.json.layers.splice(childIndex, 0, child);
+    }
+  }
 
   remove () {
     this.json.parent.removeItem(this.ref);

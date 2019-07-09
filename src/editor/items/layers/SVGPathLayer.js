@@ -17,12 +17,8 @@ export class SVGPathLayer extends Layer {
   get html () {
     var {id, path} = this.json;
 
-    console.log(path);
-
-    var selected = this.json.selected ? 'selected' : ''
-
     return `
-      <path class='element-item ${selected} path' data-id="${id}">
+      <path class='element-item  path' data-id="${id}">
       </path>
     `
   }

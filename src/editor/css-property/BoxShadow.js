@@ -55,6 +55,31 @@ export class BoxShadow extends Property {
     });
   }
 
+  toCloneObject() {
+    var json = this.json; 
+    return {
+      ...super.toCloneObject(),
+      inset: json.inset,
+      offsetX: json.offsetX + "",
+      offsetY: json.offsetY + "",
+      blurRadius: json.blurRadius + "",
+      spreadRadius: json.spreadRadius + "",
+      color: json.color 
+    }
+  }
+
+  convert(json) {
+
+    json = super.convert(json);
+
+    json.offsetX = Length.parse(json.offsetX);
+    json.offsetY = Length.parse(json.offsetY);
+    json.blurRadius = Length.parse(json.blurRadius);
+    json.spreadRadius = Length.parse(json.spreadRadius);
+
+    return json 
+  }
+
   toCSS() {
     return {
       "box-shadow": this.toString()

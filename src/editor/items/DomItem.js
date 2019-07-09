@@ -97,13 +97,58 @@ export class DomItem extends GroupItem {
     });
   }
 
+  toCloneObject() {
+
+    var json = this.json; 
+
+    return {
+      ...super.toCloneObject(),
+      'position': json.position,
+      'right': json.right + '',
+      'bottom': json.bottom + '',
+      'rootVariable': json.rootVariable,
+      'variable': json.variable,
+      'transform': json.transform,
+      'filter': json.filter,
+      'backdrop-filter': json['backdrop-filter'],
+      'background-color': json['background-color'],      
+      'background-image': json['background-image'],      
+      'border-radius': json['border-radius'],      
+      'box-shadow': json['box-shadow'],
+      'text-shadow': json['text-shadow'],
+      'clip-path': json['clip-path'],
+      'color': json.color,
+      'font-size': json['font-size'] + "",
+      'line-height': json['line-height'] + "",
+      'text-align': json['text-align'] + "",
+      'text-transform': json['text-transform'] + "",
+      'text-decoration': json['text-decoration'] + "",
+      'letter-spacing': json['letter-spacing'] + "",
+      'word-spacing': json['word-spacing'] + "",
+      'text-indent': json['text-indent'] + "",      
+      'perspective-origin': json['perspective-origin'],
+      'transform-origin': json['transform-origin'],
+      'perspective': json.perspective + "",
+      'mix-blend-mode': json['mix-blend-mode'],
+      'opacity': json.opacity + "",
+      'rotate': json.rotate + "",      
+      border: JSON.parse(JSON.stringify(json.border)),
+      outline: JSON.parse(JSON.stringify(json.outline)),
+      borderRadius: JSON.parse(JSON.stringify(json.borderRadius)),
+      borderImage: json.borderImage.clone(),
+      applyBorderImage: json.applyBorderImage,
+      animations: json.animations.map(animation => animation.clone()),
+      transitions: json.transitions.map(transition => transition.clone()),
+      // 'keyframe': 'sample 0% --aaa 100px | sample 100% width 200px | sample2 0.5% background-image background-image:linear-gradient(to right, black, yellow 100%)',
+      keyframes: json.keyframes.map(keyframe => keyframe.clone()),
+      selectors: json.selectors.map(selector => selector.clone()),
+      svg: json.svg.map(svg => svg.clone()),
+      content: json.content + '',
+    }
+  }
+
   convert(json) {
     json = super.convert(json);
-
-    json.width = Length.parse(json.width);
-    json.height = Length.parse(json.height);
-
-    if (json.display) json.display = Display.parse(json.display);
 
     return json;
   }
@@ -467,7 +512,7 @@ export class DomItem extends GroupItem {
 
   toTransformCSS() {
 
-    if (this.json.rotate && this.json.transform  &&  this.json.transform.includes('rotate') === false) {
+    if (this.json.rotate && this.json.transform  &&  this.json.transform.indexOf('rotate') === -1) {
       var transform = this.json.transform;
 
       return {

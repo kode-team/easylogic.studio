@@ -15,6 +15,18 @@ export class ColorStep extends Item {
     });
   }
 
+  toCloneObject() {
+    return {
+      ...super.toCloneObject(),
+      cut: this.json.cut,
+      percent: this.json.percent,
+      unit: this.json.unit,
+      px: this.json.px,
+      em: this.json.em,
+      color: this.json.color
+    }
+  }
+
   on() {
     this.json.cut = true;
   }

@@ -4,7 +4,10 @@ import { convertMatches } from "../../util/functions/parser";
 const FILTER_REG = /((blur|drop\-shadow|hue\-rotate|invert|brightness|contrast|opacity|saturate|sepia)\(([^\)]*)\))/gi;
 export class Filter extends Property {
   getDefaultObject(obj = {}) {
-    return super.getDefaultObject({ itemType: "filter", ...obj });
+    return super.getDefaultObject({ 
+      itemType: "filter", 
+      ...obj 
+    });
   }
 
   toString() {
@@ -72,6 +75,13 @@ export class BlurFilter extends Filter {
       value: BlurFilter.spec.defaultValue
     });
   }
+
+  toCloneObject() {
+    return {
+      ...super.toCloneObject(),
+      value: Length.parse(this.json.value)
+    }
+  }
 }
 
 BlurFilter.spec = {
@@ -93,6 +103,13 @@ export class URLSvgFilter extends Filter {
     });
   }
 
+  toCloneObject() {
+    return {
+      ...super.toCloneObject(),
+      value: Length.parse(this.json.value) 
+    }
+  }
+
   toString() {
     return `url(#${this.json.value || ""})`;
   }
@@ -112,6 +129,12 @@ export class GrayscaleFilter extends Filter {
     });
   }
 
+  toCloneObject() {
+    return {
+      ...super.toCloneObject(),
+      value: Length.parse(this.json.value) 
+    }
+  }
 }
 
 GrayscaleFilter.spec = {

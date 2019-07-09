@@ -79,7 +79,7 @@ class UIElement extends EventMachine {
       events
         .split(SPLITTER)
         .filter(it => {
-          return methods.includes(it) === false
+          return methods.indexOf(it) === -1
         })
         .map(it => it.trim())
         .forEach(e => {

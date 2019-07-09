@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "../../../../../util/UIElement";
-import { LOAD, CLICK } from "../../../../../util/Event";
+import { LOAD, CLICK, VDOM } from "../../../../../util/Event";
 
 export default class ImageSelectEditor extends UIElement {
 
@@ -21,7 +21,7 @@ export default class ImageSelectEditor extends UIElement {
         this.setState({ value })
     }
 
-    [LOAD('$body')] () {
+    [LOAD('$body') + VDOM] () {
         return `<img src="${this.state.value}" />`
     }
 

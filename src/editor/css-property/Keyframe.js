@@ -92,6 +92,14 @@ export class Keyframe extends Property {
     });
   }
 
+  toCloneObject() {
+    return {
+      ...super.toCloneObject(),
+      name: this.json.name,
+      offsets: this.json.offsets.map(offset => offset.clone())
+    }
+  }
+
   isMultiStyle (key) {
     switch (key) {
     case 'background-image': 

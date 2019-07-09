@@ -44,6 +44,29 @@ export class TextShadow extends Property {
     });
   }
 
+  toCloneObject() {
+    return {
+      ...super.toCloneObject(),
+      offsetX: this.json.offsetX + "",
+      offsetY: this.json.offsetY + "",
+      blurRadius: this.json.blurRadius + "",
+      color: this.json.color
+    }
+  }
+
+
+  convert(json) {
+
+    json = super.convert(json);
+
+    json.offsetX = Length.parse(json.offsetX);
+    json.offsetY = Length.parse(json.offsetY);
+    json.blurRadius = Length.parse(json.blurRadius);
+
+    return json 
+  }
+
+
   toCSS() {
     return {
       "text-shadow": this.toString()

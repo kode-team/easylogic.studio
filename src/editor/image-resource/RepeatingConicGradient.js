@@ -9,7 +9,7 @@ export class RepeatingConicGradient extends ConicGradient {
       radialPosition: [Position.CENTER, Position.CENTER]
     });
   }
-
+  
   static parse(str) {
     var conic = ConicGradient.parse(str);
 

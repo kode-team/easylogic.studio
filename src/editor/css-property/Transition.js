@@ -18,6 +18,17 @@ export class Transition extends Property {
     });
   }
 
+  toCloneObject() {
+    return {
+      ...super.toCloneObject(),
+      checked: this.json.checked,
+      property: this.json.property,
+      duration: this.json.duration + "",
+      timingFunction: this.json.timingFunction,
+      delay: this.json.delay + ''
+    }
+  }
+
   toCSS() {
     return {
       "transition": this.toString()

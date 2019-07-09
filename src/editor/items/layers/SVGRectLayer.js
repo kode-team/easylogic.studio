@@ -16,11 +16,9 @@ export class SVGRectLayer extends Layer {
 
   get html () {
     var {id, path} = this.json;
-    
-    var selected = this.json.selected ? 'selected' : ''
-
+  
     return `
-      <rect class='element-item ${selected} rect' data-id="${id}">
+      <rect class='element-item rect' data-id="${id}">
       </rect>
     `
   }
