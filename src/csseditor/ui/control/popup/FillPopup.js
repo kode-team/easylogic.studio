@@ -1,6 +1,6 @@
 import { EVENT } from "../../../../util/UIElement";
 import icon from "../../icon/icon";
-import { CLICK, CHANGE, LOAD, BIND } from "../../../../util/Event";
+import { CLICK, CHANGE, LOAD, BIND, DEBOUNCE } from "../../../../util/Event";
 
 import { Length } from "../../../../editor/unit/Length";
 import { editor } from "../../../../editor/editor";
@@ -264,10 +264,45 @@ export default class FillPopup extends BasePopup {
             </div>
           </div>
         </div>
+
+
+
+      <div class='box assets'>
+        <label>Assets</label>
+        <div class='project-gradient-list' ref='$projectGradients'></div>
       </div>
-      
+
+      </div>
+          
     `;
   }
+
+
+  [LOAD('$projectGradients')] () {
+    var project = editor.selection.currentProject || {gradients: []};
+
+    return project.gradients.map(c => {
+      return `
+      <div class='gradient-item' title='${c.name}'>
+        <div class='gradient-view' data-gradient='${c.gradient}' style='background-image: ${c.gradient}'></div>
+      </div>`
+    }) 
+  }
+
+  [CLICK('$projectGradients .gradient-view')] (e) {
+    var gradient = e.$delegateTarget.attr('data-gradient');
+    var image = BackgroundImage.parseImage(gradient)
+
+    this.updateData({ image });
+    this.selectTabContent(image.type);
+
+  }
+
+
+  [EVENT('refreshGradientAssets') + DEBOUNCE(100)] () {
+    this.load('$projectGradients')
+  }
+
 
   getColorString() {
     var value = '' ;

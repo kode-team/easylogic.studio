@@ -73,6 +73,7 @@ export default class CSSEditor extends UIElement {
         <SVGPropertyPopup />
         <SelectorPopup />
         <ImageSelectPopup />
+        <GradientPickerPopup />
         <StyleView />        
       </div>
     `;

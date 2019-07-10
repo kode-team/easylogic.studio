@@ -5,6 +5,7 @@ export default class ColorViewEditor extends UIElement {
 
     initState() {
         return {
+            label: this.props.label,
             params: this.props.params,
             color: this.props.color || 'rgba(0, 0, 0, 1)'
         }
@@ -34,9 +35,11 @@ export default class ColorViewEditor extends UIElement {
     }
 
     template() {
-
+        var { label } = this.state;
+        var hasLabel = !!label ? 'has-label' : ''
         return `
-            <div class='color-view-editor'>
+            <div class='color-view-editor ${hasLabel}'>
+                ${label ? `<label>${label}</label>` : '' }            
                 <div class='preview' ref='$preview'>
                     <div class='mini-view'>
                         <div class='color-view' style="background-color: ${this.state.color}" ref='$miniView'></div>

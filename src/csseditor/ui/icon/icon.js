@@ -50,8 +50,12 @@ import align_center from "./align_center";
 import align_justify from "./align_justify";
 import align_left from "./align_left";
 import align_right from "./align_right";
+import list from "./list";
+import grid from "./grid";
 
 export default {
+  list,
+  grid,
   align_center,
   align_justify,
   align_left,

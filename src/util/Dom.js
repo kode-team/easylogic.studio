@@ -68,6 +68,12 @@ export default class Dom {
     return this;
   }
 
+  attrKeyValue(keyField) {
+    return {
+      [this.el.getAttribute(keyField)]: this.val()
+    }
+  }
+
   attrs(...args) {
     return args.map(key => {
       return this.el.getAttribute(key);

@@ -1,6 +1,8 @@
 import { EVENT } from "../../../../util/UIElement";
 import BasePopup from "./BasePopup";
 import EmbedColorPicker from "../panel/property-editor/EmbedColorPicker";
+import { DEBOUNCE, LOAD, CLICK } from "../../../../util/Event";
+import { editor } from "../../../../editor/editor";
 
 export default class ColorPickerPopup extends BasePopup {
 
@@ -46,10 +48,33 @@ export default class ColorPickerPopup extends BasePopup {
         <div class='box'>
           <EmbedColorPicker ref='$color' value='${this.state.color}' onchange='changeColor' />
         </div>
+        <div class='box assets'>
+          <label>Assets</label>
+          <div class='project-color-list' ref='$projectColors'></div>
+        </div>
       </div>
     `;
   }
 
+  [LOAD('$projectColors')] () {
+    var project = editor.selection.currentProject || {colors: []};
+
+    return project.colors.map(c => {
+      return `
+      <div class='color-item' title='${c.name}'>
+        <div class='color-view' data-color='${c.color}' style='background-color: ${c.color}'></div>
+      </div>`
+    }) 
+  }
+
+  [CLICK('$projectColors .color-view')] (e) {
+    this.trigger('changeColor', e.$delegateTarget.attr('data-color'));
+  }
+
+
+  [EVENT('refreshColorAssets') + DEBOUNCE(100)] () {
+    this.load('$projectColors')
+  }
 
 
   [EVENT('changeColor')] (color) {

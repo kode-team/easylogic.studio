@@ -1,11 +1,11 @@
 .select-icon-editor {
     display: grid;
-    grid-template-columns: 1fr;
-    grid-column-gap: 4px;
+    grid-template-columns: 1fr 18px;
+    grid-column-gap: 2px;
 
 
     &.has-label {
-        grid-template-columns: 60px 1fr;
+        grid-template-columns: 60px 1fr 18px;
         grid-column-gap: 2px;
 
         label {
@@ -15,13 +15,9 @@
             font-size: 11px;
             box-sizing: border-box;
         }
-
-        > div {
-            width: 100%;
-        }
     }
 
-    > div {
+    .items {
         // border:1px solid $border-color;
         outline: none;
         line-height: 1;
@@ -33,15 +29,15 @@
 
         > .select-icon-item {
             flex: 1 1 auto; 
-            max-width: 40px;
             text-align: center;
             vertical-align: middle;
-            padding: 2px 5px;
+            padding: 4px 2px;
             border:1px solid $border-color;
             border-right: 0px;
             white-space: pre-wrap;
             word-break: break-all;
             overflow: hidden;
+            font-size: 16px;
 
             &:first-child {
                 border-top-left-radius: 3px;
@@ -72,7 +68,69 @@
                     }
                 }
             }
+            &[data-value=''] {
+                max-width: 20px;
+            }
+
+            &[data-value='none'] {
+                text-transform: none;
+                vertical-align: middle;                
+            }
+            &[data-value='uppercase'] {
+                text-transform: uppercase;
+                vertical-align: middle;                
+            }            
+            &[data-value='lowercase'] {
+                text-transform: lowercase;
+                vertical-align: middle;                
+            }         
+            &[data-value='capitalize'] {
+                text-transform: capitalize;
+                vertical-align: middle;                
+            }         
+            &[data-value='full-width'] {
+                text-transform: full-width;
+                vertical-align: middle;                
+            }                              
+            
+            &[data-value='underline'] {
+                text-decoration: underline;
+                vertical-align: middle;                
+            }                              
+            
+            &[data-value='overline'] {
+                text-decoration: overline;
+                vertical-align: middle;                
+            }                              
+            
+            &[data-value='line-through'] {
+                text-decoration: line-through;
+                vertical-align: middle;
+            }  
+            
+            &[data-value='normal'] {
+                font-style: normal;
+                vertical-align: middle;
+            }              
+
+            &[data-value='italic'] {
+                font-style: italic;
+                vertical-align: middle;
+            }              
+            
+            &[data-value='oblique'] {
+                font-style: oblique;
+                vertical-align: middle;
+            }                          
+        
         }
 
+    }
+
+    .tools {
+        text-align: right;
+        vertical-align: middle;
+        padding: 4px 0px;
+        @include svg-button();
     }
 }

@@ -10,18 +10,12 @@ export default class FontProperty extends BaseProperty {
     return "Font";
   }
 
-  initState() {
-    return {
-      'font-size': Length.px(13)
-    }
-  }
-
   [EVENT('refreshSelection')]() {
     var current = editor.selection.current;
 
     if (current) {
-      this.children.$size.setValue(current['font-size'])
-      this.children.$lineHeight.setValue(current['line-height'])
+      this.children.$color.setValue(current['color'] || 'rgba(0, 0, 0, 1)')
+      this.children.$size.setValue(current['font-size'])      
       this.children.$style.setValue(current['font-style'])
       this.children.$family.setValue(current['font-family'])
     }
@@ -33,7 +27,6 @@ export default class FontProperty extends BaseProperty {
 
   getBody() {
     return `
-
       <div class='property-item'>
         <RangeEditor 
           ref='$size' 
@@ -42,14 +35,6 @@ export default class FontProperty extends BaseProperty {
           removable="true" 
           onchange="changeRangeEditor" />
       </div>
-      <div class='property-item'>
-        <RangeEditor 
-          ref='$lineHeight' 
-          label='line-height' 
-          removable="true" 
-          key="line-height" 
-          onchange="changeRangeEditor" />
-      </div>   
  
       <div class='property-item'>
 
@@ -57,6 +42,7 @@ export default class FontProperty extends BaseProperty {
           ref='$weightRange' 
           label='Weight' 
           key='font-weight' 
+          removable="true"
           value="400" 
           min="100"
           max="900"
@@ -71,7 +57,8 @@ export default class FontProperty extends BaseProperty {
           ref='$style' 
           label='Style' 
           key="font-style" 
-          options=",normal,italic,oblique" 
+          options="normal,italic,oblique" 
+          icons='가,나,다'
           onchange="changeRangeEditor" />
       </div>      
 
@@ -83,8 +70,16 @@ export default class FontProperty extends BaseProperty {
           options=",serif,sans-serif,monospace,cursive,fantasy,system-ui" 
           onchange="changeRangeEditor" 
         />
-      </div>      
+      </div> 
+      <div class='property-item'>
+        <ColorViewEditor ref='$color' label='Color' onchange="changeColor" />
+      </div>           
     `;
+  }
+
+
+  [EVENT('changeColor')] (color) {
+    this.trigger('changeRangeEditor', 'color', color);
   }
 
   [EVENT('changeRangeEditor')] (key, value) {

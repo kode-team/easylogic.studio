@@ -1,4 +1,4 @@
-import { isString, isUndefined, isFunction } from "./functions/func";
+import { isString, isUndefined, isFunction, isNumber } from "./functions/func";
 import Color from "./Color";
 import HueColor from "./HueColor";
 

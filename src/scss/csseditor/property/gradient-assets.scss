@@ -1,6 +1,6 @@
-.color-assets {
+.gradient-assets {
 
-    .color-list-tools {
+    .gradient-list-tools {
         text-align: left;
         margin-bottom: 10px;
         @include svg-button-inline(auto, 24px);
@@ -39,16 +39,16 @@
 
     }
     
-    .color-list {
+    .gradient-list {
 
-        .color-view {
+        .gradient-view {
             pointer-events: none;
         }
 
         &[data-view-mode="grid"] {
             display: block;
 
-            .add-color-item {
+            .add-gradient-item {
                 display: inline-block;
                 width: 80px;
                 position: relative;
@@ -64,7 +64,7 @@
                 padding: 24px;
             }
 
-            .color-item {
+            .gradient-item {
                 display: inline-block;
                 width: 80px;
                 position: relative;
@@ -86,9 +86,9 @@
                     border-radius: 2px;
                     box-sizing: border-box;
                     cursor: pointer;
-                    
+                    @include transparent-background();
 
-                    .color-view{
+                    .gradient-view{
                         position: absolute;
                         left:0px;
                         top:0px;
@@ -131,30 +131,30 @@
         }
 
         &[data-view-mode='list'] {
-            .add-color-item {
+            .add-gradient-item {
                 cursor: pointer;
                 text-align: center;
             }            
 
-            .color-item {
+            .gradient-item {
                 display: grid;
                 grid-template-columns: 22px 1fr 40px;
                 grid-column-gap: 2px;
                 height: 20px;
-                margin-bottom: 2px;
+                margin-bottom: 2px;                
         
                 .preview {
                     cursor: pointer;
                     width: 20px;
                     height: 20px;
-                    border: 1px solid $border-color;
+                    // border: 1px solid $border-color;
                     border-radius: 3px;
                     position: relative;
                     @include transparent-background();
                     box-sizing: border-box;
                     overflow: hidden;
                     cursor: pointer;
-                    .color-view {
+                    .gradient-view {
                         position: absolute;
                         left: 0px;
                         top: 0px;
@@ -189,7 +189,7 @@
 
 }
 
-.property.color-assets-property {
+.property.gradient-assets-property {
     padding-left: 0px !important;
     padding-right: 0px !important;
 }

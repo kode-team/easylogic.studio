@@ -51,11 +51,12 @@ export default class Inspector extends UIElement {
               </div>
               <div class="tab-content" data-value="3">
                 <!-- <ContentProperty /> -->
-                <FontColorProperty />         
-                <TextShadowProperty />                
+                <!-- <FontColorProperty /> -->        
                 <FontProperty />
                 <TextProperty />
-                <FontSpacingProperty />
+                <TextShadowProperty />                
+                <TextFillProperty />
+                <FontSpacingProperty />                
               </div>
               <div class='tab-content' data-value="4">
       

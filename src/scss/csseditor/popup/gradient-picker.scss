@@ -1,4 +1,4 @@
-.fill-picker {
+.gradient-picker {
   
   width: 432px;
   box-sizing: border-box;
@@ -25,94 +25,23 @@
     font-size: 11px;
   }
 
-  .repeat-list {
-    button {
-      width: 20px;
-      height: 20px;
-      appearance: none;
-      border: 1px solid $border-color;
-      background-color: white;
-      outline: none;
-      cursor: pointer;
+  .gradient-preview {
+    width: 100%;
+    height: 100px;
+    position: relative;
+    margin-bottom: 5px;
+    border-radius: 3px;
+    overflow: hidden;
+    @include transparent-background();
 
-      &[value="no-repeat"] {
-        background-image: linear-gradient(
-          to top right,
-          rgba(blue, 0.5),
-          black
-        );
-        background-position: center center;
-        background-size: 8px 8px;
-        background-repeat: no-repeat;
-      }
-
-      &[value="repeat"] {
-        background-image: linear-gradient(
-          to top right,
-          rgba(blue, 0.5),
-          black
-        );
-        background-position: 10px 10px;
-        background-size: 8px 8px;
-        background-repeat: repeat;
-      }
-
-      &[value="repeat-x"] {
-        background-image: linear-gradient(
-          to top right,
-          rgba(blue, 0.5),
-          black
-        );
-        background-position: 10px 8px;
-        background-size: 8px 8px;
-        background-repeat: repeat-x;
-      }
-
-      &[value="repeat-y"] {
-        background-image: linear-gradient(
-          to top right,
-          rgba(blue, 0.5),
-          black
-        );
-        background-position: 8px 10px;
-        background-size: 8px 8px;
-        background-repeat: repeat-y;
-      }
-
-      &[value="space"] {
-        background-image: linear-gradient(
-          to top right,
-          rgba(blue, 0.5),
-          black
-        );
-        background-position: 10px 10px;
-        background-size: 8px 8px;
-        background-repeat: space;
-      }
-
-      &[value="round"] {
-        background-image: linear-gradient(
-          to top right,
-          rgba(blue, 0.5),
-          black
-        );
-        background-position: 0px 0px;
-        background-size: 8px 8px;
-        background-repeat: round;
-      }
-    }
-
-    &[data-value="repeat"] button[value="repeat"],
-    &[data-value="no-repeat"] button[value="no-repeat"],
-    &[data-value="repeat-x"] button[value="repeat-x"],
-    &[data-value="repeat-y"] button[value="repeat-y"],
-    &[data-value="space"] button[value="space"],
-    &[data-value="round"] button[value="round"] {
-      background-color: $border-color;
-      box-shadow: 0 0 1px 1px black;
+    .gradient-view {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      right: 0px;
+      bottom: 0px;
     }
   }
-
 
   .picker-tab {
     .picker-tab-list {
@@ -294,118 +223,9 @@
       }
     }
   }
-
-  .picker-tab-container {
-    // border:solid 1px $border-color;
-    @each $imageType in color, image {
-      &[data-value="#{$imageType}"]
-        .picker-tab-content[data-content-type="#{$imageType}"] {
-        display: block;
-      }
-    }
-
-    .picker-tab-content {
-      display: none;
-      position: relative;
-
-      &.selected {
-        display: block;
-      }
-
-      &[data-content-type='color'] {
-        .codemirror-colorpicker {
-          box-shadow: none;
-          border-radius: 0px;
-        }
-      }
-
-      &[data-content-type="image"] {
-        .image-preview {
-          width: 100%;
-          height: 140px;
-          position: relative;
-          display: block;
-
-          figure {
-            width: 100%;
-            height: 100%;
-            padding: 10px 20px;
-            margin: 0px;
-            box-sizing: border-box;
-            position: relative;
-
-            .select-text {
-              display: inline-block;
-              position: absolute;
-              left: 0px;
-              right: 0px;
-              top: 0px;
-              bottom: 0px;
-              font-size: 20px;
-              padding: 10px 20px;
-            }
-
-            img {
-              width: 100%;
-              height: 100%;
-
-              &[src=""] {
-                display: none;
-              }
-            }
-
-            img:not([src=""]) + .select-text {
-              display: none;
-            }
-          }
-
-          input[type="file"] {
-            position: absolute;
-            left: 0px;
-            top: 0px;
-            width: 220px;
-            height: 140px;
-            padding: 10px 20px;
-            opacity: 0;
-            box-sizing: border-box;
-            appearance: none;
-            background-color: transparent;
-            cursor: pointer;
-          }
-        }
-      }
-    }
-  }
-
-
-  .assets {
-    padding: 0px 10px;
-
-    .project-gradient-list {
-      padding: 5px 0px;
-      .gradient-item {
-        display: inline-block;
-        width: 30px;
-        height: 30px;
-        border-radius: 3px;
-        position: relative;
-        @include transparent-background();
-        margin-right: 9px;
-        margin-bottom: 9px;
-        overflow: hidden;
-  
-        .gradient-view {
-          position: absolute;
-          left: 0px;
-          top: 0px;
-          right: 0px;
-          bottom: 0px;
-        }
-  
-        &:hover {
-          transform: scale(1.2);
-        }
-      }
-    }    
+   
+  .codemirror-colorpicker {
+    box-shadow: none;
+    border-radius: 0px;
   }
 }

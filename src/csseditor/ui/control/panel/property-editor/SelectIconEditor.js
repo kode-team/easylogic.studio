@@ -23,9 +23,19 @@ export default class SelectIconEditor extends UIElement {
         return `
             <div class='select-icon-editor ${hasLabel}'>
                 ${label ? `<label>${label}</label>` : '' }
-                <div ref='$options'></div>
+                <div class='items' ref='$options'></div>
+                <div class='tools'>
+                    <button type="button" ref='$close'>${icon.close}</button>
+                </div>
             </div>
         `
+    }
+
+    [CLICK('$close')] () {
+        this.updateData({
+            value: ''
+        })
+        this.refresh();
     }
 
     getValue () {
@@ -65,10 +75,12 @@ export default class SelectIconEditor extends UIElement {
             if (it === '') {
                 var label = icon.close
             } else {
-                var label = icon[this.state.icons[index]] || it; 
+                var iconKey = this.state.icons[index];
+
+                var label = icon[iconKey] || iconKey || it; 
             }
             
-            return `<div class='select-icon-item ${selected}' data-value="${value}">${label}</div>`
+            return `<div class='select-icon-item ${selected}' data-value="${value}" title='${value}'>${label}</div>`
         })
     }
 

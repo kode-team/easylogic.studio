@@ -25,8 +25,8 @@ export default class TextProperty extends BaseProperty {
           label='Align' 
           key='text-align' 
           value='left' 
-          options=",left,center,right,justify" 
-          icons="close,align_left,align_center,align_right,align_justify" 
+          options="left,center,right,justify" 
+          icons="align_left,align_center,align_right,align_justify" 
           onchange='changeTextValue' />        
       </div>        
       <div class="property-item">
@@ -34,14 +34,18 @@ export default class TextProperty extends BaseProperty {
           ref='$transform' 
           label='Transform' 
           key='text-transform' 
-          options=",none,uppercase,lowercase,capitalize,full-width"
+          options="none,uppercase,lowercase,capitalize,full-width"
+          icons='aa,bb,cc,dd,ee'
           onchange='changeTextValue' />                
       </div>        
       <div class="property-item">
         <SelectIconEditor 
           ref='$decoration' 
           label='Decoration' 
-          key='text-decoration' options=",none,underline,overline,line-through" onchange='changeTextValue' />        
+          key='text-decoration' 
+          options="none,underline,overline,line-through" 
+          icons="가,나,다,라"
+          onchange='changeTextValue' />        
       </div>                    
     `
   }

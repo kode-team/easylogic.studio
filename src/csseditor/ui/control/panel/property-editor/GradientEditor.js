@@ -81,9 +81,9 @@ export default class GradientEditor extends UIElement  {
       type
     }, false)
 
-    this.selectStep(index);
-
     this.refresh();
+
+    this.selectStep(index);
 
     this.setColorUI()
   }
@@ -234,7 +234,7 @@ export default class GradientEditor extends UIElement  {
 
   }
 
-  [POINTERSTART('$stepList .step') + MOVE() + END()] (e) {
+  [POINTERSTART('$stepList .step') + MOVE()] (e) {
     var index = +e.$delegateTarget.attr('data-index')
 
     this.selectStep(index);
@@ -285,10 +285,6 @@ export default class GradientEditor extends UIElement  {
     this.children.$range.setValue(this.currentStep.offset);    
     this.setColorUI()
     this.updateData();    
-  }
-
-  end (dx, dy) {
-    
   }
 
 

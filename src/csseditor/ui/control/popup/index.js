@@ -9,9 +9,11 @@ import SelectorPopup from "./SelectorPopup";
 import ColorPickerPopup from "./ColoPickerPopup";
 import FillPopup from "./FillPopup";
 import ImageSelectPopup from "./ImageSelectPopup";
+import GradientPickerPopup from "./GradientPickerPopup";
 
 
 export default {
+  GradientPickerPopup,
   ImageSelectPopup,
   FillPopup,
   ColorPickerPopup,

@@ -40,9 +40,12 @@ import ArtBoardSizeProperty from "./ArtBoardSizeProperty";
 import RotateProperty from "./RotateProperty";
 import ImageProperty from "./ImageProperty";
 import ColorAssetsProperty from "./ColorAssetsProperty";
-
+import TextFillProperty from "./TextFilllProperty";
+import GradientAssetsProperty from "./GradientAssetsProperty";
  
 export default {
+  GradientAssetsProperty,
+  TextFillProperty,
   ColorAssetsProperty,
   ImageProperty,
   RotateProperty,

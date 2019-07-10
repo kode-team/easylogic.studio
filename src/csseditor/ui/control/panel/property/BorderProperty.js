@@ -53,7 +53,7 @@ export default class BorderProperty extends BaseProperty {
           <SelectEditor label='Style' ref='$style' key='style' options='${borderStyleLit}' onchange="changeRangeEditor" />
         </div>
         <div class='editor-area'>
-          <ColorViewEditor ref='$color'  onchange="changeBorderColor" />
+          <ColorViewEditor ref='$color' label='Color'  onchange="changeBorderColor" />
         </div>
       </div>
     `;

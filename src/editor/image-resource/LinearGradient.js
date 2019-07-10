@@ -67,6 +67,7 @@ export class LinearGradient extends Gradient {
       opt = `${opt}deg`;
     }
 
+
     var result = `${this.json.type}(${opt}, ${colorString})`;
 
     return result;

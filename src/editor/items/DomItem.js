@@ -60,6 +60,7 @@ export class DomItem extends GroupItem {
       'filter': '',
       'backdrop-filter': '',
       'background-color': '',      
+      'background-clip': '',
       'background-image': '',      
       'border-radius': '',      
       'box-shadow': '',
@@ -79,7 +80,10 @@ export class DomItem extends GroupItem {
       'perspective': '',
       'mix-blend-mode': '',
       'opacity': '',
-      'rotate': '',      
+      'rotate': '',    
+      'text-fill-color': '',
+      'text-stroke-color': '',
+      'text-stroke-width': '',  
       border: {},
       outline: {},
       borderRadius: {},
@@ -550,11 +554,29 @@ export class DomItem extends GroupItem {
     return CSS_TO_STRING(this.toRootVariableCSS())
   }
 
+  // convert to only webket css property 
+  toWebkitCSS() {
+    var obj = this.toKeyListCSS(
+      'text-fill-color', 
+      'text-stroke-color', 
+      'text-stroke-width', 
+      'background-clip'
+    )
+
+    var results = {}
+    keyEach(obj, (key, value) => {
+      results[`-webkit-${key}`] = value; 
+    })
+
+    return results;
+  }
+
   toCSS(isExport = false) {
 
     return {
       ...this.toVariableCSS(),
       ...this.toDefaultCSS(isExport),
+      ...this.toWebkitCSS(),      
       ...this.toBoxModelCSS(),
       ...this.toBorderCSS(),
       ...this.toOutlineCSS(),      
@@ -571,6 +593,7 @@ export class DomItem extends GroupItem {
     return {
       ...this.toVariableCSS(),      
       ...this.toDefaultCSS(),
+      ...this.toWebkitCSS(),
       ...this.toBoxModelCSS(),
       ...this.toBorderCSS(),
       ...this.toOutlineCSS(),
