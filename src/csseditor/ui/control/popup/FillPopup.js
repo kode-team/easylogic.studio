@@ -265,15 +265,11 @@ export default class FillPopup extends BasePopup {
           </div>
         </div>
 
-
-
-      <div class='box assets'>
+      </div>
+      <div class='box gradient-assets'>
         <label>Assets</label>
         <div class='project-gradient-list' ref='$projectGradients'></div>
       </div>
-
-      </div>
-          
     `;
   }
 
@@ -293,9 +289,11 @@ export default class FillPopup extends BasePopup {
     var gradient = e.$delegateTarget.attr('data-gradient');
     var image = BackgroundImage.parseImage(gradient)
 
-    this.updateData({ image });
+    this.setState({ image }, false);
     this.selectTabContent(image.type);
 
+
+    this.emit(this.state.changeEvent, this.state.image);
   }
 
 
@@ -440,7 +438,7 @@ export default class FillPopup extends BasePopup {
     data.image = BackgroundImage.parseImage(data.image)
     this.setState(data);
 
-    this.show(432);
+    this.show(460);
 
     this.selectTabContent(this.state.image.type, this.state);
   }

@@ -139,6 +139,7 @@ export default class ColorAssetsProperty extends BaseProperty {
     var color = this.state.$el.css('background-color')
 
     this.emit("showColorPickerPopup", {
+        hideColorAssets: true,
         changeEvent: 'changeColorAssets',
         color
     }, {

@@ -1,6 +1,6 @@
 .fill-picker {
   
-  width: 432px;
+  width: 460px !important;
   box-sizing: border-box;
   display: grid;
   grid-template-columns: 1fr 224px; 
@@ -377,35 +377,40 @@
     }
   }
 
+}
 
-  .assets {
-    padding: 0px 10px;
 
-    .project-gradient-list {
-      padding: 5px 0px;
-      .gradient-item {
-        display: inline-block;
-        width: 30px;
-        height: 30px;
-        border-radius: 3px;
-        position: relative;
-        @include transparent-background();
-        margin-right: 9px;
-        margin-bottom: 9px;
-        overflow: hidden;
-  
-        .gradient-view {
-          position: absolute;
-          left: 0px;
-          top: 0px;
-          right: 0px;
-          bottom: 0px;
-        }
-  
-        &:hover {
-          transform: scale(1.2);
-        }
+
+.gradient-assets {
+  width: 460px;
+
+  .project-gradient-list {
+    margin-top: 5px;
+    display: grid;
+    grid-template-columns: repeat(13, 1fr);
+    grid-column-gap: 4px;
+    grid-row-gap: 6px;
+
+    .gradient-item {
+      display: inline-block;
+      width: 30px;
+      height: 30px;
+      border-radius: 3px;
+      position: relative;
+      @include transparent-background();
+      overflow: hidden;
+
+      .gradient-view {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        right: 0px;
+        bottom: 0px;
       }
-    }    
-  }
+
+      &:hover {
+        transform: scale(1.2);
+      }
+    }
+  }    
 }

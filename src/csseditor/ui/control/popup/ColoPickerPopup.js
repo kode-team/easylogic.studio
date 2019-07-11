@@ -48,7 +48,7 @@ export default class ColorPickerPopup extends BasePopup {
         <div class='box'>
           <EmbedColorPicker ref='$color' value='${this.state.color}' onchange='changeColor' />
         </div>
-        <div class='box assets'>
+        <div class='box assets' ref='$assets'>
           <label>Assets</label>
           <div class='project-color-list' ref='$projectColors'></div>
         </div>
@@ -68,7 +68,10 @@ export default class ColorPickerPopup extends BasePopup {
   }
 
   [CLICK('$projectColors .color-view')] (e) {
-    this.trigger('changeColor', e.$delegateTarget.attr('data-color'));
+    this.updateData({
+      color: e.$delegateTarget.attr('data-color')
+    })
+    this.children.$color.setValue(this.state.color);
   }
 
 
@@ -89,7 +92,11 @@ export default class ColorPickerPopup extends BasePopup {
     this.setState(data, false);
     this.children.$color.setValue(this.state.color);
 
+    this.refs.$assets.toggle(!data.hideColorAssets)
+
     this.show(232);
+
+
   }
 
   [EVENT("hideColorPickerPopup")]() {

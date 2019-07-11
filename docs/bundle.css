@@ -315,7 +315,7 @@
 .codemirror-colorpicker .colorpicker-body .information > .information-item > .input-field {
   display: block;
   flex: 1;
-  padding: 3px;
+  padding: 3px 1px;
   box-sizing: border-box;
   position: relative;
 }
@@ -6721,7 +6721,7 @@ html, body {
   grid-template-columns: 3fr 1fr;
 }
 .csseditor .popup .fill-picker {
-  width: 432px;
+  width: 460px !important;
   box-sizing: border-box;
   display: grid;
   grid-template-columns: 1fr 224px;
@@ -7037,13 +7037,17 @@ html, body {
   background-color: transparent;
   cursor: pointer;
 }
-.csseditor .popup .fill-picker .assets {
-  padding: 0px 10px;
+.csseditor .popup .gradient-assets {
+  width: 460px;
 }
-.csseditor .popup .fill-picker .assets .project-gradient-list {
-  padding: 5px 0px;
+.csseditor .popup .gradient-assets .project-gradient-list {
+  margin-top: 5px;
+  display: grid;
+  grid-template-columns: repeat(13, 1fr);
+  grid-column-gap: 4px;
+  grid-row-gap: 6px;
 }
-.csseditor .popup .fill-picker .assets .project-gradient-list .gradient-item {
+.csseditor .popup .gradient-assets .project-gradient-list .gradient-item {
   display: inline-block;
   width: 30px;
   height: 30px;
@@ -7053,18 +7057,16 @@ html, body {
   background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
   background-size: 10px 10px;
   background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
-  margin-right: 9px;
-  margin-bottom: 9px;
   overflow: hidden;
 }
-.csseditor .popup .fill-picker .assets .project-gradient-list .gradient-item .gradient-view {
+.csseditor .popup .gradient-assets .project-gradient-list .gradient-item .gradient-view {
   position: absolute;
   left: 0px;
   top: 0px;
   right: 0px;
   bottom: 0px;
 }
-.csseditor .popup .fill-picker .assets .project-gradient-list .gradient-item:hover {
+.csseditor .popup .gradient-assets .project-gradient-list .gradient-item:hover {
   -webkit-transform: scale(1.2);
           transform: scale(1.2);
 }
@@ -7081,6 +7083,7 @@ html, body {
 }
 .csseditor .popup .color-picker-popup .assets {
   padding: 0px 10px;
+  background-color: white;
 }
 .csseditor .popup .color-picker-popup .assets .project-color-list {
   padding: 5px 0px;
