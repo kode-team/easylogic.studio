@@ -92,7 +92,12 @@ export default class ColorPickerPopup extends BasePopup {
     this.setState(data, false);
     this.children.$color.setValue(this.state.color);
 
-    this.refs.$assets.toggle(!data.hideColorAssets)
+    if (data.hideColorAssets) {
+      this.refs.$assets.hide()
+    } else {
+      this.refs.$assets.show()
+    }
+    
 
     this.show(232);
 

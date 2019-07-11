@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "../../../../../util/UIElement";
-import { CLICK, INPUT } from "../../../../../util/Event";
+import { CLICK, INPUT, BIND } from "../../../../../util/Event";
 
 export default class ColorViewEditor extends UIElement {
 
@@ -50,6 +50,20 @@ export default class ColorViewEditor extends UIElement {
                 </div>
             </div>
         `
+    }
+
+    [BIND('$miniView')] () {
+        return {
+            style: {
+                'background-color': this.state.color
+            }
+        }
+    }
+
+    [BIND('$colorCode')] () {
+        return {
+            value: this.state.color
+        }
     }
 
 
