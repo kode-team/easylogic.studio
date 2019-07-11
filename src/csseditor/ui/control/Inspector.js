@@ -12,54 +12,53 @@ export default class Inspector extends UIElement {
             <div class="tab-header" ref="$header">
               <div class="tab-item" data-value="1">
                 <label>Style</label>
-              </div>                  
+              </div>
               <div class="tab-item" data-value="3">
                 <label>Text</label>
               </div>
               <div class="tab-item" data-value="4">
                 <label>Transform</label>
-              </div>                     
+              </div>    
               <div class="tab-item" data-value="6">
                 <label>Animation</label>
               </div>
               <div class="tab-item" data-value="8">
-                <label>Info</label>
-              </div>                                      
+                <label>Object</label>
+              </div>       
             </div>
             <div class="tab-body" ref="$body">
               <div class="tab-content" data-value="1">
                 <ImageProperty />
-                <PositionProperty />              
-                <SizeProperty />              
+                <PositionProperty />
+                <SizeProperty />          
                 <BoxModelProperty />
                 <BackgroundColorProperty />
-                <OpacityProperty />                  
-                <RotateProperty />   
+                <OpacityProperty />          
+                <RotateProperty />  
                 <BorderProperty />
                 <BorderRadiusProperty />
                 <!--BorderImageProperty /-->
                 <OutlineProperty />
                 <ArtBoardSizeProperty />
 
-                <BackgroundClipProperty />                         
+                <BackgroundClipProperty />                       
                 <MixBlendModeProperty />
-                <BackgroundImageProperty />                 
+                <BackgroundImageProperty />
                 <BoxShadowProperty />
                 <FilterProperty />
                 <BackdropFilterProperty />
-                <ClipPathProperty />                 
+                <ClipPathProperty />          
               </div>
               <div class="tab-content" data-value="3">
                 <!-- <ContentProperty /> -->
                 <!-- <FontColorProperty /> -->        
                 <FontProperty />
                 <TextProperty />
-                <TextShadowProperty />                
+                <TextShadowProperty />
                 <TextFillProperty />
-                <FontSpacingProperty />                
+                <FontSpacingProperty />
               </div>
               <div class='tab-content' data-value="4">
-      
                 <PerspectiveProperty />
                 <PerspectiveOriginProperty />
                 <TransformOriginProperty /> 

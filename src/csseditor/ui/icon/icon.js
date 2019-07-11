@@ -52,8 +52,10 @@ import align_left from "./align_left";
 import align_right from "./align_right";
 import list from "./list";
 import grid from "./grid";
+import expand from "./expand";
 
 export default {
+  expand,
   list,
   grid,
   align_center,

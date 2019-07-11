@@ -40,7 +40,7 @@ export default class MixBlendModeProperty extends BaseProperty {
     var current = editor.selection.current || {};
 
     var blend = current['mix-blend-mode'] || ''
-    return `<SelectEditor ref='$1' key='mix-blend-mode' value="${blend}" options="${blend_list.join(',')}" onchange="changeSelect" />`;
+    return `<SelectEditor ref='$1' key='mix-blend-mode' icon="true" value="${blend}" options="${blend_list.join(',')}" onchange="changeSelect" />`;
   }
 
   [EVENT('changeSelect')] (key, value) {

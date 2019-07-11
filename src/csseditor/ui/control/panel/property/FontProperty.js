@@ -65,6 +65,7 @@ export default class FontProperty extends BaseProperty {
       <div class='property-item'>
         <SelectEditor 
           ref='$family' 
+          icon="true"
           label='Family' 
           key="font-family" 
           options=",serif,sans-serif,monospace,cursive,fantasy,system-ui" 

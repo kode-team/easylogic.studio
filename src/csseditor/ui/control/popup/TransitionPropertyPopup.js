@@ -144,7 +144,7 @@ export default class TransitionPropertyPopup extends BasePopup {
    
     return `
       <div class='name'>
-        <SelectEditor ref='$property' label="Property" key='property' value="${this.state.property}" options="${property_list.join(',')}" onChange='changeTransition' /> 
+        <SelectEditor ref='$property' icon="true" label="Property" key='property' value="${this.state.property}" options="${property_list.join(',')}" onChange='changeTransition' /> 
       </div>
     `
   }

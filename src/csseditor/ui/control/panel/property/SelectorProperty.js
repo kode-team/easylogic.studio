@@ -39,7 +39,7 @@ export default class SelectorProperty extends BaseProperty {
   getTools() {
     return `
       <div style='display:inline-block;'>
-        <SelectEditor ref='$select' key='selector' none-value="selector" options="${selectorList}" />
+        <SelectEditor ref='$select' key='selector' icon="true" none-value="selector" options="${selectorList}" />
       </div>
       <button type="button" ref="$add" title="add Selector">${icon.add}</button>
     `;

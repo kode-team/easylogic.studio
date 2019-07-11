@@ -2,6 +2,7 @@
     display: grid;
     grid-template-columns: 1fr;
     grid-column-gap: 4px;
+    position: relative;
 
 
     &.has-label {
@@ -25,6 +26,7 @@
         appearance: none;
         border-radius: 0px;
         border:1px solid $border-color;
+        border-radius: 3px;
         outline: none;
         padding: 4px 4px;
         line-height: 1;
@@ -37,6 +39,23 @@
             border:0px;
             border-radius: 0px;
             background-color: transparent;
+        }
+    }
+
+    .icon {
+        position: absolute;
+        display: inline-block;
+        right: 0px;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: none;
+
+        width: 18px;
+        height: 18px;
+
+        svg {
+            width: 100%;
+            height: 100%;
         }
     }
 }
