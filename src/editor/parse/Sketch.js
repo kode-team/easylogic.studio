@@ -12,7 +12,7 @@ import { FileImageResource } from "../image-resource/URLImageResource";
 import { CSS_TO_STRING, keyEach, combineKeyArray, isString } from "../../util/functions/func";
 import { calculateAngle } from "../../util/functions/math";
 import { SVGLayer } from "../items/layers/SVGLayer";
-import { SVGPathLayer } from "../items/layers/SVGPathLayer";
+import { SVGPathItem } from "../items/layers/SVGPathItem";
 import { SVGRectLayer } from "../items/layers/SVGRectLayer";
 import { SVGEllipseLayer } from "../items/layers/SVGEllipseLayer";
 
@@ -329,7 +329,7 @@ export const SketchUtil = {
     if (layer._class === 'shapeGroup') {
       LayerClass = SVGLayer;
     } else if (layer._class === 'shapePath') {
-      LayerClass = SVGPathLayer;
+      LayerClass = SVGPathItem;
     } else if (layer._class === 'rectangle') {
       LayerClass = SVGRectLayer;      
     } else if (layer._class === 'oval') {

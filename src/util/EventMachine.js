@@ -320,6 +320,12 @@ export default class EventMachine {
     this._bindings = [];
     this.id = uuid();    
     this.childComponents = this.components();
+    this.childComponentKeys = Object.keys(this.childComponents)
+    this.childComponentSet = new Map();
+    this.childComponentKeys.forEach(key => {
+      this.childComponentSet.set(key.toLowerCase(), key);
+    })
+    this.childComponentKeysString = [...this.childComponentSet.keys()].join(',');
   }
 
   initState() {
@@ -467,40 +473,36 @@ export default class EventMachine {
   parseComponent() {
     const $el = this.$el;
 
-    // var str = Object.keys(this.childComponents).map(key => key).join(',')
+    let targets = [] 
+    if (this.childComponentKeysString) {
+      targets = $el.$$(this.childComponentKeysString);
+    }
+    
+    targets.forEach($dom => {
+      var tagName = $dom.el.tagName.toLowerCase();
+      var ComponentName = this.childComponentSet.get(tagName);
+      var Component = this.childComponents[ComponentName];
+      let props = this.parseProperty($dom);
 
-    // $el.$$(str).forEach(e => console.log(e))
+      // create component 
+      let refName = $dom.attr(REFERENCE_PROPERTY);
+      var instance = null; 
+      if (this.children[refName]) {
+        //  기존의 같은 객체가 있으면 객체를 새로 생성하지 않고 재활용한다. 
+        instance = this.children[refName] 
+        instance._reload(props);
+      } else {
+        instance = new Component(this, props);
 
-    keyEach(this.childComponents, (ComponentName, Component) => {
-      const targets = $el.$$(ComponentName.toLowerCase());
-      targets.forEach($dom => {
-        let props = this.parseProperty($dom);
+        this.children[refName || instance.id] = instance;
 
-        // create component 
+        instance.render();
+        instance.initializeEvent();  
+      }
 
-        let refName = $dom.attr(REFERENCE_PROPERTY);
-        var instance = null; 
-        if (this.children[refName]) {
-          //  기존의 같은 객체가 있으면 객체를 새로 생성하지 않고 재활용한다. 
-          instance = this.children[refName] 
-          instance._reload(props);
-        } else {
-          instance = new Component(this, props);
+      $dom.replace(instance.$el);      
 
-          this.children[refName || instance.id] = instance;
-
-          instance.render();
-          instance.initializeEvent();  
-        }
-
-        $dom.replace(instance.$el);        
-
-      });
-    });
-
-    // DOM 에서 빠지 애들  ( this.$el.parent() 가 null  인 경우 )
-    // destroy () 시킨다. 
-
+    })
     keyEach(this.children, (key, obj) => {
       if (obj && obj.clean()) {
         delete this.children[key]
@@ -659,12 +661,6 @@ export default class EventMachine {
    */
   initializeEvent() {
     this.initializeDomEvent();
-
-    // 자식 이벤트도 같이 초기화 한다.
-    // 그래서 이 메소드는 부모에서 한번만 불려도 된다.
-    this.eachChildren(Component => {
-      Component.initializeEvent();
-    });
   }
 
   /**
@@ -672,11 +668,11 @@ export default class EventMachine {
    * 이것도 역시 자식 컴포넌트까지 제어하기 때문에 가장 최상위 부모에서 한번만 호출되도 된다.
    */
   destroy() {
-    this.destroyDomEvent();
-
-    this.eachChildren(Component => {
-      Component.destroy();
+    this.eachChildren(childComponent => {
+      childComponent.destroy();
     });
+
+    this.destroyDomEvent();
   }
 
   destroyDomEvent() {

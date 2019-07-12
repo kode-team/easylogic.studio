@@ -23,7 +23,7 @@ export class Item {
     if (json instanceof Item) {
       json = json.toJSON();
     }
-    this.json = this.convert({ ...this.getDefaultObject(), ...json, parent });
+    this.json = this.convert({ ...this.getDefaultObject(), ...json });
 
     this.ref = new Proxy(this, {
       get: (target, key) => {

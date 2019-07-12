@@ -342,9 +342,10 @@ export default class Dom {
       return this.el.style.cssText;
     }
 
-    if (value != this.el.style.cssText) {
+    if (value != this.el.tempCssText) {
       this.el.style.cssText = value;
-    }
+      this.el.tempCssText = value; 
+    } 
 
     return this;
   }

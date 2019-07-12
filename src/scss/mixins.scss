@@ -61,13 +61,10 @@
 @mixin hue-background () {
     background-image: linear-gradient(
         to right,
-        #ff0000 0%,
-        #ffff00 17%,
-        #00ff00 33%,
-        #00ffff 50%,
-        #0000ff 67%,
+        rgba($selected-border-color, 0.5) 0%,
+        $selected-border-color 50%,
         #ff00ff 83%,
-        #ff0000 100%
+        blue 100%
       );
 
 }

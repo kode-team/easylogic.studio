@@ -83,10 +83,10 @@ const matrix = {
         ]);
     }
 };
-
+ 
 export default class PathParser {
 
-    constructor (pathString) {
+    constructor (pathString = '') {
 		this.segments =  [];
         this.pathString = pathString; 
         
@@ -98,7 +98,9 @@ export default class PathParser {
     }
 
     parse () {
-        var arr = this.pathString.match(parseRegForPath);
+
+        var arr = this.pathString.match(parseRegForPath) || [];
+
         this.segments = arr.map(s => {
             var command = s[0]
             var values = this.trim(s.replace(command, ''));
@@ -192,7 +194,7 @@ export default class PathParser {
         this._loop(matrix.reflectionX(angle));
     }
 
-    reflectionY = function (angle) {
+    reflectionY (angle) {
         this._loop(matrix.reflectionY(angle));
     }
 
@@ -202,5 +204,9 @@ export default class PathParser {
 
     skewY (sy) {
         this._loop(matrix.skewY(sy));
+    }
+
+    toString() {
+        return this.joinPath()
     }
 }

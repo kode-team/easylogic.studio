@@ -53,8 +53,11 @@ import align_right from "./align_right";
 import list from "./list";
 import grid from "./grid";
 import expand from "./expand";
+import brush from "./brush";
+
 
 export default {
+  brush,
   expand,
   list,
   grid,

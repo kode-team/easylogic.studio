@@ -164,7 +164,7 @@
     border-left: 1px solid $border-color;
   }
 
-  .object-items {
+  .layer-tab {
     position: absolute;
     left: 0px;
     top: 0px;
@@ -172,29 +172,32 @@
     right: 50px;
 
 
+    .object-items {
 
-    > div {
-      position: absolute;
-      left: 0px;
-      right: 0px;      
-      &:first-child {
-        top: 0px;
-        height: 200px;
-      }
 
-      &:nth-child(2) {
-        top: 200px;
-        height: 200px;
-      }      
-
-      &:not(:first-child) {
-        border-top: 1px solid $border-color;
-        box-sizing: border-box;
-      }
-
-      &:last-child {
-        top: 400px;
-        bottom : 0px;
+      > div {
+        position: absolute;
+        left: 0px;
+        right: 0px;      
+        &:first-child {
+          top: 0px;
+          height: 200px;
+        }
+  
+        &:nth-child(2) {
+          top: 200px;
+          height: 200px;
+        }      
+  
+        &:not(:first-child) {
+          border-top: 1px solid $border-color;
+          box-sizing: border-box;
+        }
+  
+        &:last-child {
+          top: 400px;
+          bottom : 0px;
+        }
       }
     }
 
