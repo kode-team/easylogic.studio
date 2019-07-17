@@ -9,7 +9,7 @@
         height:150px;
         top:30px;
         left:60px;
-        border:1px solid #333;
+        border:1px solid $selected-color;
 
         .bezier-canvas {
             position: absolute;
@@ -33,8 +33,8 @@
                 transform: translateX(-50%) translateY(-50%);
                 border-radius:100%;
                 cursor: pointer;
-                background-color: #ac48ff;
-                border:1px solid #ac48ff;
+                background-color: $selected-color;
+                border:1px solid $selected-color;
                 box-sizing:border-box;
             }
         
@@ -117,7 +117,13 @@
             font-size: 14px;
             font-weight:bold;
             cursor: pointer;
-            vertical-align: middle;            
+            vertical-align: middle;      
+            
+            svg {
+                path {
+                    fill: white;
+                }
+            }
         }
 
         .predefined-text {

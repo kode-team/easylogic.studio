@@ -100,10 +100,23 @@ export class Item {
   }
 
 
+  // selection 이후에 
+  // 위치나 , width, height 등의 geometry 가 변경되었을 때 호출 하는 함수 
+  recover () {  
+    // 내부에 자신의 객체에 필요한 것들을 복구한다. 
+  }
+
+  setCache() {
+
+  }
 
   is (...itemType) {
     if (!this.json) return false;
     return itemType.indexOf(this.json.itemType) > -1;
+  }
+
+  isNot (...itemType) {
+    return this.is(...itemType) === false;
   }
 
   /***********************************

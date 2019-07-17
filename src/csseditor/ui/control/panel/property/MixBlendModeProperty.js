@@ -32,6 +32,10 @@ export default class MixBlendModeProperty extends BaseProperty {
     return "Mix Blend";
   }
 
+  isFirstShow() {
+    return false; 
+  }
+
   getTools() {
     return `<div ref='$mixBlend' style='padding-top: 3px;'></div>`;
   }  

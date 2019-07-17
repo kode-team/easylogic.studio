@@ -9,6 +9,25 @@
     .codemirror-colorpicker {
       box-shadow: none;
       border-radius: 0px;
+      background-color: $background-color;
+
+      input {
+        color: $font-color !important;
+        text-transform: uppercase;
+        border:0px !important;
+      }
+
+      .color-panel {
+        margin-top: 0px;
+      }
+  
+      .title {
+        color: $font-color !important;
+      }
+  
+      .colorsets {
+        border-top: 0px solid $border-color !important;
+      }      
     }
 
     .box {
@@ -19,7 +38,7 @@
 
       .drag-board {
 
-        background-color: white;
+        background-color: $selected-color;
         box-sizing: border-box;
         border: 1px solid $border-color;
         height: 202px;

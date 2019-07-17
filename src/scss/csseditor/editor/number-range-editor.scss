@@ -1,13 +1,13 @@
 .number-range-editor {
     display: grid;
-    grid-template-columns: 1fr 16px;
+    grid-template-columns: 1fr 20px;
     grid-column-gap: 4px;
 
     &.has-label {
         grid-template-columns: 60px 1fr;
         grid-column-gap: 2px;
         &.is-removable {
-            grid-template-columns: 60px 1fr 16px;
+            grid-template-columns: 60px 1fr 20px;
         }
 
         label {
@@ -23,7 +23,6 @@
 
             label {
                 display: block; 
-                color: rgba(0, 0, 0, 0.7);
             }
         }
     }
@@ -37,9 +36,6 @@
     .remove {
         display: none;
     }
-
-
-    @include svg-button();
 
     .range-editor-type {
         vertical-align: middle;
@@ -56,13 +52,12 @@
                 vertical-align: middle;
             }
 
-            input,select {
+            input {
                 width: 100%;
             }
 
-            input[type='number'] {
-                border-radius: 3px;
-                border:1px solid $border-color;
+            select {
+                width: 100%;
             }
         }
     }

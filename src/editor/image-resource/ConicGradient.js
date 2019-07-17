@@ -54,6 +54,7 @@ export class ConicGradient extends Gradient {
   }
 
   getColorString() {
+    if(this.colorsteps.length === 0) return '';    
     var colorsteps = this.colorsteps;
     if (!colorsteps) return '';
 

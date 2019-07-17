@@ -258,7 +258,16 @@ const parseEvent = (context, key) => {
 };
 
 const applyElementAttribute = ($element, key, value) => {
-  if (key === "style") {
+
+  if (key === 'cssText') {
+    /**
+     * cssText: 'position:absolute'
+     */
+    $element.cssText(value);
+  } else if (key === "style") {
+    /**
+     * style: { key: value }
+     */
     if (isNotString(value)) {
       // 문자열이 아니라 객체 일때는 직접 입력하는 방식으로
       keyEach(value, (sKey, sValue) => {
@@ -399,9 +408,10 @@ export default class EventMachine {
       var refs = $el.$$(QUERY_PROPERTY);
       var temp = {} 
       refs.forEach($dom => {
+
         const name = $dom.attr(REFERENCE_PROPERTY);
         if (temp[name]) {
-          console.warn(`${ref} is duplicated. - ${this.sourceName}`)
+          console.warn(`${ref} is duplicated. - ${this.sourceName}`, this)
         } else {
           temp[name] = true; 
         }

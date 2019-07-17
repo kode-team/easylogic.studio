@@ -36,6 +36,7 @@ export class RadialGradient extends Gradient {
   }
 
   toString() {
+    if(this.colorsteps.length === 0) return '';        
     var colorString = this.getColorString();
     var json = this.json;
     var opt = '';

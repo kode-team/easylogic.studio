@@ -23,8 +23,6 @@
       width: 100px !important;
       display: inline-block ;
     }
-
-    @include svg-button();
   }
 
 
@@ -37,7 +35,7 @@
     margin-bottom: 5px;
 
     &.desc {
-      color: #333333;
+      color: $font-color;
       .color {
         visibility: hidden;
       }
@@ -70,8 +68,6 @@
 
     .tools {
       text-align: right;
-
-      @include svg-button();
     }
   }
 }

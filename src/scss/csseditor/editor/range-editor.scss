@@ -8,7 +8,7 @@ $border-radius: 3px;
         grid-template-columns: 60px 1fr;
         grid-column-gap: 2px;
         &.is-removable {
-            grid-template-columns: 20px 1fr 16px;
+            grid-template-columns: 20px 1fr 20px;
         }
 
         label {
@@ -30,10 +30,10 @@ $border-radius: 3px;
     }
 
     &.has-calc {
-        grid-template-columns: 16px 1fr;
+        grid-template-columns: 20px 1fr;
 
         &.is-removable {
-            grid-template-columns: 16px 1fr 16px;
+            grid-template-columns: 20px 1fr 20px;
         }
 
         grid-column-gap: 2px;
@@ -54,17 +54,17 @@ $border-radius: 3px;
         grid-column-gap: 2px;
 
         &.is-removable {
-            grid-template-columns: 60px 20px 1fr 16px;
+            grid-template-columns: 60px 20px 1fr 20px;
         }
 
     }
 
     .type-button,
     .remove {
-        display: none;
+        display: none;        
     }
     
-    @include svg-button();
+    // @include svg-button();
 
     .range-editor-type {
         display: none;
@@ -86,29 +86,24 @@ $border-radius: 3px;
                 width: 100%;
             }
 
-            input[type=number] {
-                appearance: none;
-                border:1px solid $border-color;
+            input[type=number] {         
+                padding: 2px 2px;      
                 border-right: 0px;
-                border-top-left-radius: $border-radius;
-                border-bottom-left-radius: $border-radius;
-                background-color: white;
+                border-top-right-radius: 0px;
+                border-bottom-right-radius: 0px;
             }
 
             .select-editor {
                 select {
-                    margin-left: -4px;
+                    margin-left: -3px;
                     appearance: none;
-                    border:1px solid $border-color;
-                    border-radius: 0px;
-                    background-color: rgba(231, 231, 231, 0.3);
                     border-left:0px;
                     text-align: center;
                     box-sizing: border-box;
                     padding: 0px 4px;
-                    outline: none;
-                    border-top-right-radius: $border-radius;
-                    border-bottom-right-radius: $border-radius;
+                    outline: none;                
+                    border-top-left-radius: 0px;
+                    border-bottom-left-radius: 0px;                    
                 }
             }
         }

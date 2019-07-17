@@ -42,40 +42,41 @@
     button {
       padding: 0px;
       appearance: none;
-      border: 3px solid $border-color;
+      border: 3px solid #ccc;
       box-sizing: border-box;
       cursor: pointer;
-      opacity: 0.4;
+      opacity: 0.7;
       outline: none;
       display: inline-block;
       vertical-align: middle;
       width: 20px;
       height: 20px;
       margin-right: 10px;
+      background-color: $background-color;      
 
       &[has-value="true"] {
-        border-color: rgb(0, 162, 255);
+        border-color: $selected-color;
       }
     }
 
     button[data-value="all"] {
-      border: 3px solid black;
+      border: 3px solid $selected-color;
     }
 
     button[data-value="top"] {
-      border-top: 3px solid black;
+      border-top: 3px solid $selected-color;
     }
 
     button[data-value="right"] {
-      border-right: 3px solid black;
+      border-right: 3px solid $selected-color;
     }
 
     button[data-value="bottom"] {
-      border-bottom: 3px solid black;
+      border-bottom: 3px solid $selected-color;
     }
 
     button[data-value="left"] {
-      border-left: 3px solid black;
+      border-left: 3px solid $selected-color;
     }
   }
 

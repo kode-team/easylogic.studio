@@ -3,7 +3,7 @@
 
     .border-radius-item {
       display: grid; 
-      grid-template-columns: 50px 1fr;
+      grid-template-columns: 62px 1fr;
 
       &.full {
         grid-template-columns: 1fr;
@@ -17,9 +17,7 @@
       @each $borderRadiusType in all, partitial {
         &[data-selected-value="#{$borderRadiusType}"] {
           button[data-value="#{$borderRadiusType}"] {
-            //   background-color: white;
-            // border-color: black;
-            background-color: black;
+            background-color: $selected-color;
             svg {
               path {
                 fill: white;
@@ -50,7 +48,7 @@
           height: 100%;
   
           path {
-            fill: $border-color;
+            fill: #ccc;
           }
         }
       }

@@ -7,7 +7,7 @@
     
             height: 30px;
             position: relative;
-            background-image: linear-gradient(to right, $border-color , black);
+            background-image: linear-gradient(to right, $selected-color , $selected-color);
             background-size: 100% 2px;
             background-position: 0px center;
             background-repeat: no-repeat;
@@ -17,7 +17,7 @@
             @for $selectValue from 0 to 20 {
                 &[data-selected-value="#{$selectValue}"] {
                     .offset-item[data-offset-index="#{$selectValue}"] {
-                        box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+                        box-shadow: 0 0 4px 0 $selected-color;
                     }
                 }
             }
@@ -31,7 +31,7 @@
                 transform: translateX(-50%) translateY(-50%);
                 box-sizing: border-box;
                 border:1px solid $border-color;
-                background-color: black; 
+                background-color: $selected-color; 
                 border-radius: 100%;
                 cursor: pointer;
 

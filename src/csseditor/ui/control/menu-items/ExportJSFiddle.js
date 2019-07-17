@@ -15,7 +15,7 @@ export default class ExportJSFiddle extends MenuItem {
           <input type="hidden" name="dtd" value='html 5'>
           <button type="submit">
               <div class='icon jsfiddle'></div>
-              <div class='titie'>JSFiddle</div>
+              <div class='title'>JSFiddle</div>
           </button>                
       </form>     
     `;

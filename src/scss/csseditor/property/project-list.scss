@@ -1,24 +1,27 @@
 .project-list {
     margin: 0px !important;
     .project-item {
-        display: grid;
-        grid-template-columns: 1fr 20px;
-        grid-column-gap: 3px;
-        padding: 5px !important; 
+        padding: 5px 7px !important; 
         cursor: pointer;
 
-        label {
-            padding: 2px 0px;
-        }
+        .detail {
+            display: grid;
+            grid-template-columns: 1fr 60px;
+            grid-column-gap: 3px;
+
+            label {
+                padding: 2px 0px;                
+            }
+
+
+            .tools {
+                text-align: right; 
+            }
+    
+        }        
 
         &.selected {      
             @include title-background();
-        }
-
-        .tools {
-            text-align: right;
-
-            @include svg-button();
         }
     }
 }

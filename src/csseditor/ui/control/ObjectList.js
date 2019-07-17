@@ -6,8 +6,6 @@ import AddPath from "./menu-items/AddPath";
 import AddRedGL from "./menu-items/AddRedGL";
 import AddText from "./menu-items/AddText";
 import LayerTab from "./LayerTab";
-import { html } from "../../../util/functions/func";
-
 
 export default class ObjectList extends UIElement {
   components() {

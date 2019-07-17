@@ -101,6 +101,10 @@ export default class Dom {
     return this.el === (checkElement.el || checkElement);
   }
 
+  isTag(tag) {
+    return this.el.tagName.toLowerCase() === tag.toLowerCase()
+  }
+
   closest(cls) {
     var temp = this;
     var checkCls = false;

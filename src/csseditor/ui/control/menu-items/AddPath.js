@@ -20,23 +20,6 @@ export default class AddPath extends MenuItem {
   }  
 
   clickButton(e) {
-    var artboard = editor.selection.currentArtboard
-
-    if (artboard) {
-      var layer = artboard.add(new SVGLayer({
-        width: Length.px(100),
-        height: Length.px(100),
-        'background-color': Color.random()
-      }))
-
-      layer.add(new SVGPathItem({
-        d: 'M 0,0 L 10 20'
-      }));
-
-      editor.selection.select(layer);
-
-      this.emit('refreshAll')
-      this.emit('refreshSelection');
-    }
+    this.emit('showPathEditor', 'move');
   }
 }

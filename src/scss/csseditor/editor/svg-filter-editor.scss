@@ -1,5 +1,7 @@
 .svg-filter-editor {
 
+  color: $font-color;
+
   .label {
     height: 20px;
     margin-top: 2px;
@@ -25,6 +27,7 @@
   }
 
   .filter-list {
+    width: 100%;
     display: grid !important;
     grid-template-columns: 1fr !important;
   
@@ -49,16 +52,6 @@
   
         .filter-menu {
           text-align: right;
-
-          @include svg-button();
-
-          button {
-            svg {
-              path {
-                fill: white; 
-              }
-            }
-          }
         }
       }
   

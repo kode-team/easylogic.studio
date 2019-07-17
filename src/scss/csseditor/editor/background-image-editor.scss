@@ -16,9 +16,7 @@
       vertical-align: middle;
       text-align: right;
       float:right;
-
-      @include svg-button();
-    }
+  }
 
     .fill-list {
         display: grid;
@@ -32,7 +30,7 @@
           margin-bottom: 5px;
           text-align: center;
           box-sizing: border-box;
-          padding: 5px 2px;
+          padding: 5px 0px 5px 2px;
           &.selected {
             background-color: rgba($border-color, 0.5);
           }
@@ -151,11 +149,6 @@
                 }
               }
             }
-          }
-      
-          .tools {
-
-            @include svg-button();
           }
         }
       }

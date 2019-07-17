@@ -9,11 +9,25 @@
     box-shadow: none;
     border-radius: 0px;
     border:0px;
+    background-color: $background-color;
+
+    input {
+      color: $font-color !important;
+      text-transform: uppercase;
+      border:0px !important;
+    }
+
+    .title {
+      color: $font-color !important;
+    }
+
+    .colorsets {
+      border-top: 1px solid $border-color !important;
+    }
   }
 
   .assets {
     padding: 0px 10px;
-    background-color: white; 
 
     .project-color-list {
       padding: 5px 0px;

@@ -99,7 +99,6 @@
                 }
 
                 .title {
-                    background-color: rgba(255, 255, 255, 0.8);
                     position: relative;
                     width: 100%;
                     display: grid;
@@ -113,8 +112,7 @@
                     }
                 }
 
-                .tools {
-                    background-color: rgba(255, 255, 255, 0.8);                    
+                .tools {             
                     position: absolute;
                     display: none; 
                     top: 0px;

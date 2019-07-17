@@ -1,4 +1,3 @@
-import { Layer } from "../Layer";
 import PathParser from "../../parse/PathParser";
 import { SVGItem } from "./SVGItem";
 
@@ -7,17 +6,34 @@ export class SVGPathItem extends SVGItem {
     return super.getDefaultObject({
       itemType: 'svg-path',
       name: "New Path",
-      elementType: 'path',
+      overflow: 'visible',      
       d: '',
-      path: new PathParser(),
       stroke: 'black',
-      'stroke-width': 3,
+      'stroke-width': 1,
+      fill: 'transparent',
       ...obj
     });
   }
 
-  convert(json) {
+  setCache () {
+    this.rect = this.clone();
+    this.cachePath = this.json.path.clone()
+  }
 
+  recover () {
+    var sx = this.json.width.value / this.rect.width.value 
+    var sy = this.json.height.value / this.rect.height.value 
+
+    this.scale(sx, sy);
+  }
+
+  scale (sx, sy) {
+    this.json.d = this.cachePath.clone().scaleTo(sx, sy)
+    this.json.path.reset(this.json.d)
+  }
+
+  convert(json) {
+    json = super.convert(json);
     if (json.d)  {
       json.path = new PathParser(json.d);
     }
@@ -26,9 +42,14 @@ export class SVGPathItem extends SVGItem {
   }
 
   toCloneObject() {
+    var json = this.json; 
     return {
       ...super.toCloneObject(),
-      d: this.json.path.toString()
+      overflow: json.overflow,
+      d: json.d,
+      stroke: json.stroke,
+      'stroke-width': json['stroke-width'],
+      fill: json.filll
     }
   }
 
@@ -36,11 +57,26 @@ export class SVGPathItem extends SVGItem {
     return "Path";
   }
 
-  get html () {
-    var {id, path} = this.json;
 
+  toNestedCSS() {
+    var json = this.json; 
+    return [
+      {
+        selector: 'path', 
+        css: {
+          d: `path('${json.d}')`,
+          ...this.toKeyListCSS('stroke', 'stroke-width', 'fill')
+        }
+      }
+    ]
+  }
+
+  get html () {
+    var {id} = this.json; 
     return `
-      <path class='svg-path-item' data-id="${id}" d="${path.toString()}"></path>
+      <svg class='element-item path' data-id="${id}" >
+        <path class='svg-path-item' />
+      </svg>    
     `
   }
 }

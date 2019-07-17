@@ -11,7 +11,7 @@ export default class ExportCodePen extends UIElement {
                 <input type="hidden" name="data" ref="$codepen" value=''>
                 <button type="submit">
                     <div class='icon codepen'></div>
-                    <div class='titie'>CodePen</div>
+                    <div class='title'>CodePen</div>
                 </button>
             </form>     
         `;

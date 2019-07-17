@@ -68,7 +68,9 @@ export default class RangeEditor extends UIElement {
             <div class='range-editor-type' data-type='calc'>
                 <div class='area'>
                     <SelectEditor ref='$varType' key='varType' value="${this.state.value.unit}" options="calc,var" onchange='changeVarType' />
-                    <input type='text' ref='$calc' value='${this.state.value}' />
+                    <div>
+                        <input type='text' ref='$calc' value='${this.state.value}' />
+                    </div>
                 </div>
             </div>
             <button type='button' class='remove' ref='$remove'>${icon.close}</button>

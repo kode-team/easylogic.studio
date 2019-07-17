@@ -1,12 +1,10 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
-import { POINTERSTART, MOVE, END } from "../../../util/Event";
+import { POINTERSTART, MOVE, END, DOUBLECLICK } from "../../../util/Event";
 import { Length } from "../../../editor/unit/Length";
 import { editor } from "../../../editor/editor";
 import { isNotUndefined } from "../../../util/functions/func";
 import GuideView from "./GuideView";
 import { MovableItem } from "../../../editor/items/MovableItem";
-
-
 
 /**
  * 원보 아이템의 크기를 가지고 scale 이랑 조합해서 world 의 크기를 구하는게 기본 컨셉 
@@ -20,23 +18,30 @@ export default class SelectionToolView extends UIElement {
     }
 
     template() {
-        return `<div class='selection-view' 
-                     ref='$selectionView' 
-                     style='pointer-events:none;position:absolute;left:0px;top:0px;right:0px;bottom:0px;'
-                >
-                    <div class='selection-tool' ref='$selectionTool'>
-                        <div class='selection-tool-item' data-position='move'></div>
-                        <div class='selection-tool-item' data-position='to top'></div>
-                        <div class='selection-tool-item' data-position='to right'></div>
-                        <div class='selection-tool-item' data-position='to bottom'></div>
-                        <div class='selection-tool-item' data-position='to left'></div>
-                        <div class='selection-tool-item' data-position='to top right'></div>
-                        <div class='selection-tool-item' data-position='to bottom right'></div>
-                        <div class='selection-tool-item' data-position='to top left'></div>
-                        <div class='selection-tool-item' data-position='to bottom left'></div>
-                    </div>
-                </div>`
+        return `
+    <div class='selection-view' ref='$selectionView' >
+        <div class='selection-tool' ref='$selectionTool'>
+            <div class='selection-tool-item' data-position='move'></div>
+            <div class='selection-tool-item' data-position='to top'></div>
+            <div class='selection-tool-item' data-position='to right'></div>
+            <div class='selection-tool-item' data-position='to bottom'></div>
+            <div class='selection-tool-item' data-position='to left'></div>
+            <div class='selection-tool-item' data-position='to top right'></div>
+            <div class='selection-tool-item' data-position='to bottom right'></div>
+            <div class='selection-tool-item' data-position='to top left'></div>
+            <div class='selection-tool-item' data-position='to bottom left'></div>
+        </div>
+    </div>`
     }
+
+    [DOUBLECLICK('$selectionTool .selection-tool-item[data-position="move"]')] (e) {
+
+        var current = editor.selection.current;
+        if (current) {
+            console.log(e,current);
+        }
+
+    }    
 
     [POINTERSTART('$selectionView .selection-tool-item') + MOVE() + END()] (e) {
         this.$target = e.$delegateTarget;

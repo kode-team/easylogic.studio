@@ -1,17 +1,13 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
-import { BIND, LOAD, POINTERSTART, MOVE, END, IF, DEBOUNCE, KEYDOWN, KEYUP } from "../../../util/Event";
+import { BIND, POINTERSTART, MOVE, END, IF, KEYUP } from "../../../util/Event";
 import { Length } from "../../../editor/unit/Length";
 
 import { editor } from "../../../editor/editor";
 import Dom from "../../../util/Dom";
 import SelectionToolView from "./SelectionToolView";
 import GuideLineView from "./GuideLineView";
-import { keyEach } from "../../../util/functions/func";
-import { uuid } from "../../../util/functions/math";
 import { DomDiff } from "../../../util/DomDiff";
-
-
-
+import PathEditorView from "./PathEditorView";
 
 // 그리드 선 그려주는 함수 
 // background-image 로 그린다. 
@@ -36,7 +32,8 @@ export default class ElementView extends UIElement {
     components() {
         return {
             SelectionToolView,
-            GuideLineView
+            GuideLineView,
+            PathEditorView
         }
     }
 
@@ -76,7 +73,7 @@ export default class ElementView extends UIElement {
                 <div ref='$dragAreaRect' style='pointer-events:none;position: absolute;border:0.5px dashed #556375;box-sizing:border-box;left:-10000px;'></div>
                 <GuideLineView ref='$guideLineView' />                
                 <SelectionToolView ref='$selectionTool' />
-
+                <PathEditorView ref='$pathEditorView' />
             </div>
         `
     }
@@ -90,6 +87,10 @@ export default class ElementView extends UIElement {
 
         return $el.hasClass('element-item') === false 
             && $el.hasClass('selection-tool-item') === false 
+            && $el.hasClass('path-editor-view') === false 
+            && $el.isTag('svg') === false 
+            && $el.isTag('path') === false 
+            && $el.attr('data-segment') !== 'true'
             && $el.hasClass('redgl-canvas-item') === false 
         ;
     }
@@ -223,8 +224,15 @@ export default class ElementView extends UIElement {
     updateRealPosition() {
         editor.selection.items.forEach(item => {
             var {x, y, width, height} = item.toBound();
-            if (this.cachedCurrentElement[item.id]) {
-                this.cachedCurrentElement[item.id].cssText(`left: ${x};top:${y};width:${width};height:${height}`)
+            var cachedItem = this.cachedCurrentElement[item.id]
+            if (cachedItem) {
+
+                cachedItem.cssText(`left: ${x};top:${y};width:${width};height:${height}`)
+                // TODO: 나중에 공통영역으로 처리 해야할 듯 하다. 
+                if (item.is('svg-path')) {
+                    cachedItem.firstChild().cssText(`d: path('${item.d}')`);
+                }
+
             }
         })
 
@@ -233,8 +241,14 @@ export default class ElementView extends UIElement {
 
     [EVENT('removeRealPosition')] () {
         editor.selection.items.forEach(item => {
-            if (this.cachedCurrentElement[item.id]) {
-                this.cachedCurrentElement[item.id].cssText(``)
+            var cachedItem = this.cachedCurrentElement[item.id]
+            if (cachedItem) {
+                cachedItem.cssText(``)
+
+                // TODO: 나중에 공통영역으로 처리 해야할 듯 하다. 
+                if (item.is('svg-path')) {
+                    cachedItem.firstChild().cssText('');
+                }
             }
         })
     }

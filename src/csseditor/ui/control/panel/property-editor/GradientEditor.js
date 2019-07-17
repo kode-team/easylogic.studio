@@ -188,6 +188,12 @@ export default class GradientEditor extends UIElement  {
         offset: Length.percent(percent),
         color: 'rgba(0, 0, 0, 1)'
       })      
+    } else {
+      this.state.colorsteps.push({
+        cut: false, 
+        offset: Length.percent(0),
+        color: 'rgba(0, 0, 0, 1)'
+      })      
     }
 
     this.refresh();
@@ -221,6 +227,23 @@ export default class GradientEditor extends UIElement  {
     } 
   }
 
+  removeStep(index) {
+    if (this.state.colorsteps.length === 2) return;     
+    this.state.colorsteps.splice(index, 1);
+    var currentStep = this.state.colorsteps[index]
+    var currentIndex = index; 
+    if (!currentStep) {
+      currentStep = this.state.colorsteps[index-1]
+      currentIndex = index - 1; 
+    }
+
+    if (currentStep) {
+      this.selectStep(currentIndex);
+    }
+    this.refresh();
+    this.updateData();          
+  }
+
   selectStep(index) {
     this.state.index = index; 
     this.currentStep = this.state.colorsteps[index];
@@ -237,14 +260,21 @@ export default class GradientEditor extends UIElement  {
   [POINTERSTART('$stepList .step') + MOVE()] (e) {
     var index = +e.$delegateTarget.attr('data-index')
 
-    this.selectStep(index);
+    if (e.altKey) {
+      this.removeStep(index);
+      return false; 
+    } else {
 
-    this.startXY = e.xy;
-    this.parent.trigger('selectColorStep', this.currentStep.color)
-    this.refs.$cut.checked(this.currentStep.cut);
-    this.children.$range.setValue(this.currentStep.offset);
-    this.refs.$stepList.attr('data-selected-index', index);
-    this.cachedStepListRect = this.refs.$stepList.rect();
+      this.selectStep(index);
+
+      this.startXY = e.xy;
+      this.parent.trigger('selectColorStep', this.currentStep.color)
+      this.refs.$cut.checked(this.currentStep.cut);
+      this.children.$range.setValue(this.currentStep.offset);
+      this.refs.$stepList.attr('data-selected-index', index);
+      this.cachedStepListRect = this.refs.$stepList.rect();
+    }
+
   }
 
   getStepListRect () {
@@ -294,6 +324,15 @@ export default class GradientEditor extends UIElement  {
   }
 
   getLinearGradient () {
+    if (this.state.colorsteps.length === 0) {
+      return '';
+    }
+
+    if (this.state.colorsteps.length === 1) {
+      var colorstep = this.state.colorsteps[0];
+      return `linear-gradient(to right, ${colorstep.color} ${colorstep.offset}, ${colorstep.color} 100%)`
+    }
+
     return `linear-gradient(to right, ${this.state.colorsteps.map((it, index) => {
 
       if (it.cut) {

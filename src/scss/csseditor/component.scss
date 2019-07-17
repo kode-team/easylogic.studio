@@ -1,0 +1,12 @@
+
+input,textarea {
+    @include input-text-style();
+}
+
+select {
+    @include select-style();
+}
+
+button {
+    @include button-style();
+}

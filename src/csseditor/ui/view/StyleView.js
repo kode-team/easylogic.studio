@@ -44,17 +44,8 @@ export default class StyleView extends UIElement {
       return this.makeProjectStyle(item);
     }
 
-    const {
-      css, 
-      selectorString
-    } = item.generateView(`[data-id='${item.id}']`)
-    return `<style type='text/css' data-id='${item.id}'>
-      /* element */
-      [data-id='${item.id}'] { 
-        ${CSS_TO_STRING(css)}; 
-      }  
-      ${selectorString}
-    </style>
+    const cssString = item.generateView(`[data-id='${item.id}']`)
+    return `<style type='text/css' data-id='${item.id}'>${cssString}</style>
     ` + item.layers.map(it => {
       return this.makeStyle(it);
     }).join('')

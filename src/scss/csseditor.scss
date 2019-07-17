@@ -21,5 +21,7 @@ html,body {
     left:0px;
     top: 0px;
 
+    @import './csseditor/component.scss';
     @import './csseditor/layout.scss';
 }
+ 

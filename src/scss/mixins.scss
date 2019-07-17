@@ -70,8 +70,8 @@
 }
 
 @mixin title-background () {
-    background-color: $selected-border-color;    
-    border-left: 2px solid $selected-border-color;
+    background-color: $selected-color;    
+    border-left: 2px solid $selected-color;
     color: white; 
 
     svg {
@@ -112,4 +112,68 @@
     border-right: $pixel solid transparent;    
     border-top: $pixel solid $color;
     pointer-events: none;
+}
+
+@mixin input-style () {
+    background: linear-gradient(#434b50,#373e42);
+    box-shadow: 0 1px 0 0 hsla(0,0%,100%,.05), inset 0 1px 0 0 hsla(0,0%,100%,.05);
+    border-width: 1px;
+    border-style: solid;
+    border-color: #1d1e20 #111213 #0c0c0d;
+    border-radius: 3px;       
+    color: #ececec; 
+    outline: none;
+    vertical-align: middle;
+}
+
+@mixin select-style () {
+    appearance: none;
+    outline: none;
+    padding: 4px 4px;
+    line-height: 1;
+    cursor: pointer;
+
+    @include input-style();
+}
+
+
+@mixin input-text-style () {
+    background: linear-gradient(#373e42, #434b50);
+    box-shadow: 0 1px 0 0 hsla(0,0%,100%,.05), inset 0 1px 0 0 hsla(0,0%,100%,.05);
+    border-width: 1px;
+    border-style: solid;
+    border-color: #1d1e20 #111213 #0c0c0d;
+    border-radius: 3px;       
+    color: #ececec; 
+    outline: none;
+}
+
+
+@mixin button-style () {
+    background: linear-gradient(#434b50,#373e42);
+    box-shadow: 0 1px 0 0 hsla(0,0%,100%,.05), inset 0 1px 0 0 hsla(0,0%,100%,.05);
+    border-width: 1px;
+    border-style: solid;
+    border-color: #1d1e20 #111213 #0c0c0d;
+    border-radius: 3px;       
+    color: #ececec; 
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    appearance: none;
+    background-color: transparent;
+    outline: none;
+    display: inline-block;
+    cursor: pointer;
+    padding: 0px;
+
+    svg {
+        width: 100%;
+        height: 100%;
+
+        path {
+            fill: #ececec;
+        }
+    }
+
 }

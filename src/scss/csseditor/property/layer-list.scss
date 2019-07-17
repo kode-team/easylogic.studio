@@ -5,7 +5,7 @@
     margin:0px !important;
     .layer-item {
 
-        padding: 5px 5px !important; 
+        padding: 5px 7px !important; 
         margin-bottom: 0px !important;
 
         @for $selectValue from 0 to 6 {
@@ -20,7 +20,7 @@
 
         .detail {
             display: grid;
-            grid-template-columns: 1fr 60px;
+            grid-template-columns: 1fr 66px;
             grid-column-gap: 3px;
 
             label {
@@ -32,8 +32,6 @@
 
             .tools {
                 text-align: right;
-
-                @include svg-button();
 
                 .visible {
                     svg {
@@ -71,7 +69,6 @@
         }
 
         &.selected {
-            background-color: rgba(0, 0, 0, 0.05);
             @include title-background();                  
         }
 

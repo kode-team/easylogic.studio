@@ -319,7 +319,13 @@ export default class GuideView {
 
 
     recoverAll() {
-        editor.selection.items.forEach(item => this.recover(item));
+        editor.selection.items.forEach(item => {
+            // selection 기준으로 item 을 먼저 복구 하고 
+            this.recover(item)
+
+            // 개별 item 의 캐쉬를 기준으로 다시 복구한다. 
+            item.recover();
+        });
     }
     
 } 

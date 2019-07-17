@@ -22,8 +22,6 @@
       width: 100px !important;
       display: inline-block ;
     }
-
-    @include svg-button();
   }
 
 
@@ -33,10 +31,10 @@
     grid-template-columns: 20px 20px 1fr 1fr 1fr 1fr 20px;
     grid-column-gap: 5px;
     text-align: center;
-    margin-bottom: 5px;
+    margin-top: 5px;
 
     &.desc {
-      color: #333333;
+      color: $font-color;
       .color {
         visibility: hidden;
       }
@@ -65,14 +63,14 @@
         height: 16px;
 
         path {
-          fill: $border-color;
+          fill: $background-color;
         }
       }
 
       &[data-value="true"] {
         svg {
           path {
-            fill: black;
+            fill: $selected-color;
           }
         }
       }
@@ -85,12 +83,6 @@
     .inset {
       box-sizing: border-box;
       padding: 4px 0px;
-    }
-
-    .tools {
-      text-align: right;
-
-      @include svg-button();
     }
   }
 }

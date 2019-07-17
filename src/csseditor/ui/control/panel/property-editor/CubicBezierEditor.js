@@ -129,7 +129,7 @@ export default class CubicBezierEditor extends UIElement {
             var context = $canvas.context();
 
             context.lineWidth = 1;
-            context.strokeStyle = 'rgba(0, 0, 0, 0.2)';
+            context.strokeStyle = 'rgba(255, 255, 255, 0.2)';
             // Draw Guide Line
     
             context.beginPath();
@@ -138,7 +138,7 @@ export default class CubicBezierEditor extends UIElement {
             context.stroke();
             context.closePath();
     
-            context.strokeStyle = '#ac48ff';
+            context.strokeStyle = '#3174ad';
     
             // Draw control handles
             context.beginPath();
@@ -156,7 +156,7 @@ export default class CubicBezierEditor extends UIElement {
             context.closePath();
     
             context.lineWidth = 2;
-            context.strokeStyle = '#000000';
+            context.strokeStyle = '#3174ad';
             
             var x1 = currentBezier[0] * width
             var y1 = currentBezier[1] == 0 ? height : (1 - currentBezier[1]) * height 
@@ -252,8 +252,8 @@ export default class CubicBezierEditor extends UIElement {
         var height = this.refs.$animationCanvas.height();
 
         var context = this.refs.$animationCanvas.context();
-        context.fillStyle = "rgba(163, 73, 164, 0.3)";
-        context.strokeStyle = "rgba(163, 73, 164, 0.05)";
+        context.fillStyle = "#3174adcc";
+        context.strokeStyle = "#3174addd";
         context.lineWidth = 1;
 
         this.animationCanvasData = {

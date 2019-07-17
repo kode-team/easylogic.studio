@@ -1,6 +1,5 @@
 import UIElement from "../../../../../util/UIElement";
-import { LOAD, CHANGE, BIND, VDOM } from "../../../../../util/Event";
-import icon from "../../../icon/icon";
+import { LOAD, CHANGE, BIND } from "../../../../../util/Event";
 
 export default class SelectEditor extends UIElement {
 
@@ -12,19 +11,17 @@ export default class SelectEditor extends UIElement {
 
         return {
             label: this.props.label || '',
-            iconView: this.props.icon === 'true', 
             options, value
         }
     }
 
     template() {
-        var { label, iconView } = this.state; 
+        var { label } = this.state; 
         var hasLabel = !!label ? 'has-label' : ''
         return `
             <div class='select-editor ${hasLabel}'>
                 ${label ? `<label>${label}</label>` : '' }
                 <select ref='$options'></select>
-                ${iconView ? `<div class='icon'>${icon.expand}</div>` : '' } 
             </div>
         `
     }

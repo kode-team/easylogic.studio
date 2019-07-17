@@ -1321,6 +1321,61 @@ html, body {
   left: 0px;
   top: 0px;
 }
+.csseditor input, .csseditor textarea {
+  background: linear-gradient(#373e42, #434b50);
+  box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.05), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+  border-width: 1px;
+  border-style: solid;
+  border-color: #1d1e20 #111213 #0c0c0d;
+  border-radius: 3px;
+  color: #ececec;
+  outline: none;
+}
+.csseditor select {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  outline: none;
+  padding: 4px 4px;
+  line-height: 1;
+  cursor: pointer;
+  background: linear-gradient(#434b50, #373e42);
+  box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.05), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+  border-width: 1px;
+  border-style: solid;
+  border-color: #1d1e20 #111213 #0c0c0d;
+  border-radius: 3px;
+  color: #ececec;
+  outline: none;
+  vertical-align: middle;
+}
+.csseditor button {
+  background: linear-gradient(#434b50, #373e42);
+  box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.05), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+  border-width: 1px;
+  border-style: solid;
+  border-color: #1d1e20 #111213 #0c0c0d;
+  border-radius: 3px;
+  color: #ececec;
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  outline: none;
+  display: inline-block;
+  cursor: pointer;
+  padding: 0px;
+}
+.csseditor button svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor button svg path {
+  fill: #ececec;
+}
 .csseditor .layout-main {
   position: absolute;
   left: 0px;
@@ -1333,7 +1388,7 @@ html, body {
 .csseditor .layout-main.embed-editor {
   position: fixed;
   width: 300px;
-  border-left: 1px solid #cccccc;
+  border-left: 1px solid #000;
   right: 0px;
   left: auto;
 }
@@ -1354,11 +1409,12 @@ html, body {
   height: 50px;
   overflow: hidden;
   position: relative;
-  background-color: white;
+  background-color: #292727;
+  color: #ececec;
   z-index: 1;
   pointer-events: all;
   box-sizing: border-box;
-  border-bottom: 1px solid #cccccc;
+  border-bottom: 1px solid #000;
 }
 .csseditor .layout-main .layout-header .logo {
   position: absolute;
@@ -1385,7 +1441,7 @@ html, body {
   flex: none;
   height: -1px;
   overflow: hidden;
-  border-top: 1px solid #cccccc;
+  border-top: 1px solid #000;
   transition: all 0.15s linear;
   position: relative;
   pointer-events: all;
@@ -1402,12 +1458,11 @@ html, body {
   top: 0px;
   bottom: 0px;
   width: 260px;
-  border-right: 1px solid #cccccc;
-  background-color: white;
   display: inline-block;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 }
 .csseditor .layout-main .layout-middle .layout-right {
   position: absolute;
@@ -1416,12 +1471,11 @@ html, body {
   bottom: 0px;
   width: 280px;
   display: inline-block;
-  border-left: 1px solid #cccccc;
-  background-color: white;
   z-index: 100;
   display: flex;
   flex-direction: column;
   overflow: auto;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 }
 .csseditor .layout-main .layout-middle .layout-body {
   top: 0px;
@@ -1439,7 +1493,7 @@ html, body {
   position: relative;
 }
 .csseditor .feature-control.inspector > div:last-child {
-  border-top: 1px solid #cccccc;
+  border-top: 1px solid #000;
 }
 .csseditor .feature-control.object-list {
   position: relative;
@@ -1461,7 +1515,7 @@ html, body {
   bottom: 0px;
   right: 0px;
   box-sizing: border-box;
-  border-left: 1px solid #cccccc;
+  border-left: 1px solid #000;
 }
 .csseditor .feature-control .layer-tab {
   position: absolute;
@@ -1484,36 +1538,27 @@ html, body {
   height: 200px;
 }
 .csseditor .feature-control .layer-tab .object-items > div:not(:first-child) {
-  border-top: 1px solid #cccccc;
+  border-top: 1px solid #000;
   box-sizing: border-box;
 }
 .csseditor .feature-control .layer-tab .object-items > div:last-child {
   top: 400px;
   bottom: 0px;
 }
-.csseditor .feature-control .draw-items button {
-  width: 48px;
-  height: 48px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-  display: inline-block;
-  font-size: 11px;
-  cursor: pointer;
-}
-.csseditor .feature-control .draw-items button svg {
-  width: 100%;
-  height: 100%;
+.csseditor .feature-control .draw-items {
+  background-color: #292727;
 }
 .csseditor .feature-control .draw-items .menu-item {
   text-align: center;
   margin-top: 10px;
-  color: #6f6f6f;
+  color: #ececec;
+  width: 48px;
+  height: 48px;
+  background-color: transparent;
+  background-image: none;
+  border: 0px;
+  box-shadow: none;
+  margin-bottom: 5px;
 }
 .csseditor .feature-control .draw-items .menu-item[data-no-title=true] {
   height: 30px;
@@ -1527,15 +1572,15 @@ html, body {
   display: inline-block;
 }
 .csseditor .feature-control .draw-items .menu-item .icon.rect {
-  border: 2px solid #cccccc;
+  border: 2px solid #ececec;
   border-radius: 1px;
 }
 .csseditor .feature-control .draw-items .menu-item .icon.circle {
-  border: 2px solid #cccccc;
+  border: 2px solid #ececec;
   border-radius: 100%;
 }
 .csseditor .feature-control .draw-items .menu-item .icon svg path {
-  fill: #cccccc;
+  fill: #ececec;
 }
 .csseditor input[type=range] {
   -webkit-appearance: none;
@@ -1550,57 +1595,62 @@ html, body {
 }
 .csseditor input[type=range]::-webkit-slider-runnable-track {
   width: 100%;
-  height: 1px;
+  height: 5px;
   cursor: pointer;
-  background: #556375;
-  border-radius: 0px;
-  border: 0px solid #010101;
+  background: #3174ad;
+  border-radius: 2px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.12), inset 0 1px 2px rgba(0, 0, 0, 0.12);
 }
 .csseditor input[type=range]::-webkit-slider-thumb {
   height: 10px;
   width: 10px;
   border-radius: 10px;
-  background: #556375;
+  background: #f3f3f3;
   cursor: pointer;
   -webkit-appearance: none;
           appearance: none;
-  margin-top: -5px;
+  background-image: radial-gradient(at 30% 20%, #f7f7f7 0px, #adadad 100%);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  margin-top: -2px;
 }
 .csseditor input[type=range]:focus::-webkit-slider-runnable-track {
   background: #3174ad;
 }
 .csseditor input[type=range]::-moz-range-track {
   width: 100%;
-  height: 1px;
+  height: 10px;
   cursor: pointer;
-  background: #556375;
-  border-radius: 0px;
-  border: 0px solid #010101;
+  background: #3174ad;
+  border: 1px solid #000;
+  border-radius: 2px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.12), inset 0 1px 2px rgba(0, 0, 0, 0.12);
 }
 .csseditor input[type=range]::-moz-range-thumb {
   border: 1px solid #000000;
   height: 10px;
   width: 10px;
   border-radius: 9px;
-  background: #556375;
+  background: #f3f3f3;
   cursor: pointer;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
 .csseditor input[type=range]::-ms-track {
   width: 100%;
-  height: 1px;
+  height: 10px;
   cursor: pointer;
-  background: transparent;
-  border-color: transparent;
-  color: transparent;
+  border: 1px solid #000;
+  border-radius: 2px;
+  background: #3174ad;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.12), inset 0 1px 2px rgba(0, 0, 0, 0.12);
 }
 .csseditor input[type=range]::-ms-fill-lower {
-  background: #556375;
+  background: #f3f3f3;
   border: 0px solid #010101;
   border-radius: 0px;
   box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
 }
 .csseditor input[type=range]::-ms-fill-upper {
-  background: #556375;
+  background: #f3f3f3;
   border: 0px solid #010101;
   border-radius: 0px;
 }
@@ -1608,14 +1658,15 @@ html, body {
   height: 10px;
   width: 10px;
   border-radius: 9px;
-  background: #556375;
+  background: #f3f3f3;
   cursor: pointer;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
 .csseditor input[type=range]:focus::-ms-fill-lower {
-  background: #556375;
+  background: #f3f3f3;
 }
 .csseditor input[type=range]:focus::-ms-fill-upper {
-  background: #556375;
+  background: #f3f3f3;
 }
 .csseditor .tab {
   position: absolute;
@@ -1623,6 +1674,8 @@ html, body {
   right: 0px;
   bottom: 0px;
   top: 0px;
+  background-color: #292727;
+  color: #ececec;
 }
 .csseditor .tab.number-tab .tab-header {
   height: 34px;
@@ -1631,24 +1684,20 @@ html, body {
 }
 .csseditor .tab.number-tab .tab-content {
   display: none;
-  background-color: #f0f0f0;
 }
 .csseditor .tab.number-tab .tab-body {
   top: 34px;
 }
 .csseditor .tab.number-tab > .tab-header {
   display: grid;
-  border-bottom: 1px solid #cccccc;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 }
 .csseditor .tab.number-tab > .tab-header > .tab-item {
   text-align: center;
-  background-color: white;
   position: relative;
   padding: 4px 0px;
-  border-top: 2px solid white;
-  border-bottom: 1px solid #cccccc;
-  border-right: 1px solid #cccccc;
+  border-bottom: 1px solid #000;
+  border-right: 1px solid #000;
   box-sizing: border-box;
 }
 .csseditor .tab.number-tab > .tab-header > .tab-item .icon {
@@ -1673,73 +1722,73 @@ html, body {
   pointer-events: none;
 }
 .csseditor .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"] {
-  border-top: 2px solid #3e3ec2;
   border-bottom: 0px;
-  background-color: rgba(96, 157, 226, 0.05);
+  background-color: #3174ad;
+  color: white;
 }
 .csseditor .tab.number-tab[data-selected-value="1"] .tab-content[data-value="1"] {
   display: block;
 }
 .csseditor .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"] {
-  border-top: 2px solid #3e3ec2;
   border-bottom: 0px;
-  background-color: rgba(96, 157, 226, 0.05);
+  background-color: #3174ad;
+  color: white;
 }
 .csseditor .tab.number-tab[data-selected-value="2"] .tab-content[data-value="2"] {
   display: block;
 }
 .csseditor .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"] {
-  border-top: 2px solid #3e3ec2;
   border-bottom: 0px;
-  background-color: rgba(96, 157, 226, 0.05);
+  background-color: #3174ad;
+  color: white;
 }
 .csseditor .tab.number-tab[data-selected-value="3"] .tab-content[data-value="3"] {
   display: block;
 }
 .csseditor .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"] {
-  border-top: 2px solid #3e3ec2;
   border-bottom: 0px;
-  background-color: rgba(96, 157, 226, 0.05);
+  background-color: #3174ad;
+  color: white;
 }
 .csseditor .tab.number-tab[data-selected-value="4"] .tab-content[data-value="4"] {
   display: block;
 }
 .csseditor .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"] {
-  border-top: 2px solid #3e3ec2;
   border-bottom: 0px;
-  background-color: rgba(96, 157, 226, 0.05);
+  background-color: #3174ad;
+  color: white;
 }
 .csseditor .tab.number-tab[data-selected-value="5"] .tab-content[data-value="5"] {
   display: block;
 }
 .csseditor .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"] {
-  border-top: 2px solid #3e3ec2;
   border-bottom: 0px;
-  background-color: rgba(96, 157, 226, 0.05);
+  background-color: #3174ad;
+  color: white;
 }
 .csseditor .tab.number-tab[data-selected-value="6"] .tab-content[data-value="6"] {
   display: block;
 }
 .csseditor .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"] {
-  border-top: 2px solid #3e3ec2;
   border-bottom: 0px;
-  background-color: rgba(96, 157, 226, 0.05);
+  background-color: #3174ad;
+  color: white;
 }
 .csseditor .tab.number-tab[data-selected-value="7"] .tab-content[data-value="7"] {
   display: block;
 }
 .csseditor .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"] {
-  border-top: 2px solid #3e3ec2;
   border-bottom: 0px;
-  background-color: rgba(96, 157, 226, 0.05);
+  background-color: #3174ad;
+  color: white;
 }
 .csseditor .tab.number-tab[data-selected-value="8"] .tab-content[data-value="8"] {
   display: block;
 }
 .csseditor .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"] {
-  border-top: 2px solid #3e3ec2;
   border-bottom: 0px;
-  background-color: rgba(96, 157, 226, 0.05);
+  background-color: #3174ad;
+  color: white;
 }
 .csseditor .tab.number-tab[data-selected-value="9"] .tab-content[data-value="9"] {
   display: block;
@@ -1775,28 +1824,26 @@ html, body {
   height: 100%;
   padding: 6px 4px;
   cursor: pointer;
-  color: black;
 }
 .csseditor .tab > .tab-header > .tab-item svg {
   width: 20px;
   height: 20px;
 }
 .csseditor .tab > .tab-header > .tab-item:not(.selected) {
-  background-color: white;
-  color: black;
+  background-color: #292727;
 }
 .csseditor .tab > .tab-header > .tab-item.selected {
-  background-color: #cccccc;
+  background-color: #3174ad;
 }
 .csseditor .tab > .tab-header > .tab-item.small-font {
   font-size: 11px;
 }
 .csseditor .tab > .tab-header > .tab-item.select-reverse:not(.selected) {
-  background-color: rgba(204, 204, 204, 0.5);
+  background-color: rgba(49, 116, 173, 0.5);
   color: black;
 }
 .csseditor .tab > .tab-header > .tab-item.select-reverse.selected {
-  background-color: white;
+  background-color: #292727;
 }
 .csseditor .tab > .tab-body {
   position: absolute;
@@ -1839,7 +1886,7 @@ html, body {
   right: 0px;
   height: 30px;
   display: none;
-  background-color: #f3f3f3;
+  background-color: #292727;
   font-size: 12px;
   font-weight: bold;
   padding: 8px 5px !important;
@@ -1853,7 +1900,7 @@ html, body {
 }
 .csseditor .tab.bottom > .tab-header > .tab-item.selected {
   border-top: 1px solid #ffffff;
-  border-bottom: 1px solid #cccccc;
+  border-bottom: 1px solid #000;
 }
 .csseditor .tab.bottom > .tab-body {
   top: 0px;
@@ -1873,7 +1920,7 @@ html, body {
 .csseditor .tab.horizontal.left > .tab-body {
   left: 50px;
   right: 0px;
-  border-left: 1px solid #cccccc;
+  border-left: 1px solid #000;
   border-right: 0px;
 }
 .csseditor .tab.horizontal > .tab-header {
@@ -1886,20 +1933,20 @@ html, body {
 }
 .csseditor .tab.horizontal > .tab-header > .tab-item {
   border: 0px;
-  border-bottom: 1px solid #cccccc;
+  border-bottom: 1px solid #000;
   text-align: center;
   line-height: 3;
   height: 50px;
   min-width: 60px;
 }
 .csseditor .tab.horizontal > .tab-header > .tab-item.selected {
-  background-color: rgba(204, 204, 204, 0.5);
+  background-color: rgba(49, 116, 173, 0.5);
 }
 .csseditor .tab.horizontal > .tab-body {
   top: 0px;
   right: 60px;
   border: 0px;
-  border-right: 1px solid #cccccc;
+  border-right: 1px solid #000;
 }
 .csseditor .colorpicker-layer .codemirror-colorpicker {
   background-color: transparent;
@@ -1935,71 +1982,71 @@ html, body {
   display: block;
   height: 30px;
   position: relative;
-  background-image: linear-gradient(to right, #cccccc, black);
+  background-image: linear-gradient(to right, #3174ad, #3174ad);
   background-size: 100% 2px;
   background-position: 0px center;
   background-repeat: no-repeat;
   cursor: pointer;
 }
 .csseditor .editor.offset-editor .offset[data-selected-value="0"] .offset-item[data-offset-index="0"] {
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 4px 0 #3174ad;
 }
 .csseditor .editor.offset-editor .offset[data-selected-value="1"] .offset-item[data-offset-index="1"] {
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 4px 0 #3174ad;
 }
 .csseditor .editor.offset-editor .offset[data-selected-value="2"] .offset-item[data-offset-index="2"] {
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 4px 0 #3174ad;
 }
 .csseditor .editor.offset-editor .offset[data-selected-value="3"] .offset-item[data-offset-index="3"] {
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 4px 0 #3174ad;
 }
 .csseditor .editor.offset-editor .offset[data-selected-value="4"] .offset-item[data-offset-index="4"] {
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 4px 0 #3174ad;
 }
 .csseditor .editor.offset-editor .offset[data-selected-value="5"] .offset-item[data-offset-index="5"] {
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 4px 0 #3174ad;
 }
 .csseditor .editor.offset-editor .offset[data-selected-value="6"] .offset-item[data-offset-index="6"] {
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 4px 0 #3174ad;
 }
 .csseditor .editor.offset-editor .offset[data-selected-value="7"] .offset-item[data-offset-index="7"] {
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 4px 0 #3174ad;
 }
 .csseditor .editor.offset-editor .offset[data-selected-value="8"] .offset-item[data-offset-index="8"] {
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 4px 0 #3174ad;
 }
 .csseditor .editor.offset-editor .offset[data-selected-value="9"] .offset-item[data-offset-index="9"] {
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 4px 0 #3174ad;
 }
 .csseditor .editor.offset-editor .offset[data-selected-value="10"] .offset-item[data-offset-index="10"] {
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 4px 0 #3174ad;
 }
 .csseditor .editor.offset-editor .offset[data-selected-value="11"] .offset-item[data-offset-index="11"] {
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 4px 0 #3174ad;
 }
 .csseditor .editor.offset-editor .offset[data-selected-value="12"] .offset-item[data-offset-index="12"] {
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 4px 0 #3174ad;
 }
 .csseditor .editor.offset-editor .offset[data-selected-value="13"] .offset-item[data-offset-index="13"] {
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 4px 0 #3174ad;
 }
 .csseditor .editor.offset-editor .offset[data-selected-value="14"] .offset-item[data-offset-index="14"] {
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 4px 0 #3174ad;
 }
 .csseditor .editor.offset-editor .offset[data-selected-value="15"] .offset-item[data-offset-index="15"] {
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 4px 0 #3174ad;
 }
 .csseditor .editor.offset-editor .offset[data-selected-value="16"] .offset-item[data-offset-index="16"] {
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 4px 0 #3174ad;
 }
 .csseditor .editor.offset-editor .offset[data-selected-value="17"] .offset-item[data-offset-index="17"] {
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 4px 0 #3174ad;
 }
 .csseditor .editor.offset-editor .offset[data-selected-value="18"] .offset-item[data-offset-index="18"] {
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 4px 0 #3174ad;
 }
 .csseditor .editor.offset-editor .offset[data-selected-value="19"] .offset-item[data-offset-index="19"] {
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 4px 0 #3174ad;
 }
 .csseditor .editor.offset-editor .offset .offset-item {
   position: absolute;
@@ -2010,8 +2057,8 @@ html, body {
   -webkit-transform: translateX(-50%) translateY(-50%);
           transform: translateX(-50%) translateY(-50%);
   box-sizing: border-box;
-  border: 1px solid #cccccc;
-  background-color: black;
+  border: 1px solid #000;
+  background-color: #3174ad;
   border-radius: 100%;
   cursor: pointer;
 }
@@ -2062,7 +2109,7 @@ html, body {
 }
 .csseditor .logo .site {
   font-size: 14px;
-  color: #cccccc;
+  color: #000;
 }
 .csseditor .external-tool-menu {
   padding-left: 10px;
@@ -2078,6 +2125,7 @@ html, body {
   flex: 1 1 auto;
   height: 100%;
   padding: 0px;
+  padding-top: 5px;
 }
 .csseditor .tool-menu .items.flex-2,
 .csseditor .external-tool-menu .items.flex-2 {
@@ -2097,24 +2145,16 @@ html, body {
 .csseditor .external-tool-menu .items form {
   display: inline-block;
   vertical-align: middle;
+  margin-right: 15px;
 }
 .csseditor .tool-menu .items button,
 .csseditor .external-tool-menu .items button {
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  vertical-align: middle;
-  border: 0px;
-  display: inline-block;
-  padding: 5px 2px;
-  text-decoration: none;
-  color: #333;
-  line-height: 1.6;
-  outline: none;
-  cursor: pointer;
-  text-align: center;
-  margin-right: 5px;
+  width: 40px;
+  height: 40px;
   background-color: transparent;
+  background-image: none;
+  border: 0px;
+  box-shadow: none;
 }
 .csseditor .tool-menu .items button[checked=checked] .icon,
 .csseditor .external-tool-menu .items button[checked=checked] .icon {
@@ -2122,7 +2162,8 @@ html, body {
 }
 .csseditor .tool-menu .items .title,
 .csseditor .external-tool-menu .items .title {
-  font-size: 11px;
+  font-size: 9px;
+  color: #999;
 }
 .csseditor .tool-menu .items .icon,
 .csseditor .external-tool-menu .items .icon {
@@ -2137,56 +2178,56 @@ html, body {
 }
 .csseditor .tool-menu .items .icon.left,
 .csseditor .external-tool-menu .items .icon.left {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, black, black);
+  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, #888888, #888888);
   background-repeat: no-repeat;
   background-size: 20px 6px, 16px 6px, 2px 24px;
   background-position: 6px 6px, 6px 16px, 2px 3px;
 }
 .csseditor .tool-menu .items .icon.right,
 .csseditor .external-tool-menu .items .icon.right {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, black, black);
+  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, #888888, #888888);
   background-repeat: no-repeat;
   background-size: 18px 6px, 14px 6px, 2px 24px;
   background-position: 2px 5px, 6px 15px, 22px 3px;
 }
 .csseditor .tool-menu .items .icon.center,
 .csseditor .external-tool-menu .items .icon.center {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, black, black);
+  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, #888888, #888888);
   background-repeat: no-repeat;
   background-size: 20px 6px, 16px 6px, 2px 24px;
   background-position: 5px 6px, 7px 16px, 14px 3px;
 }
 .csseditor .tool-menu .items .icon.middle,
 .csseditor .external-tool-menu .items .icon.middle {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, black, black);
+  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, #888888, #888888);
   background-repeat: no-repeat;
   background-size: 8px 20px, 8px 14px, 24px 2px;
   background-position: 3px 3px, 13px 6px, 0px 12px;
 }
 .csseditor .tool-menu .items .icon.top,
 .csseditor .external-tool-menu .items .icon.top {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, black, black);
+  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, #888888, #888888);
   background-repeat: no-repeat;
   background-size: 8px 18px, 8px 12px, 24px 2px;
   background-position: 4px 8px, 14px 8px, 0px 4px;
 }
 .csseditor .tool-menu .items .icon.bottom,
 .csseditor .external-tool-menu .items .icon.bottom {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, black, black);
+  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, #888888, #888888);
   background-repeat: no-repeat;
   background-size: 8px 18px, 8px 12px, 24px 2px;
   background-position: 4px 2px, 14px 8px, 0px 22px;
 }
 .csseditor .tool-menu .items .icon.vertical,
 .csseditor .external-tool-menu .items .icon.vertical {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, black, black), linear-gradient(to right, #ccc, #ccc);
+  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #888888, #888888), linear-gradient(to right, #ccc, #ccc);
   background-repeat: no-repeat;
   background-size: 24px 2px, 18px 10px, 24px 2px;
   background-position: 3px 6px, 6px 11px, 3px 24px;
 }
 .csseditor .tool-menu .items .icon.horizontal,
 .csseditor .external-tool-menu .items .icon.horizontal {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, black, black), linear-gradient(to right, #ccc, #ccc);
+  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #888888, #888888), linear-gradient(to right, #ccc, #ccc);
   background-repeat: no-repeat;
   background-size: 2px 24px, 10px 18px, 2px 24px;
   background-position: 6px 3px, 11px 6px, 24px 3px;
@@ -2197,7 +2238,6 @@ html, body {
 .csseditor .external-tool-menu .items .icon.codepen,
 .csseditor .external-tool-menu .items .icon.github {
   background-color: transparent;
-  box-shadow: inset 0 0 0 1px #cccccc;
   text-align: right;
   padding-right: 2px;
   border-radius: 3px;
@@ -2240,7 +2280,7 @@ html, body {
   right: 0px;
   bottom: 0px;
   top: 0px;
-  background-color: rgba(204, 204, 204, 0.3);
+  background-color: rgba(0, 0, 0, 0.3);
 }
 .csseditor .page-view .page-lock {
   position: absolute;
@@ -2258,7 +2298,7 @@ html, body {
   padding: 5px 10px;
   background-color: rgba(255, 255, 255, 0.8);
   border-radius: 3px;
-  border: 1px solid #cccccc;
+  border: 1px solid #000;
 }
 .csseditor .page-tools > label {
   vertical-align: middle;
@@ -2318,6 +2358,14 @@ html, body {
 .csseditor .canvas-view .element-item.artboard:hover {
   outline: none;
 }
+.csseditor .selection-view {
+  pointer-events: none;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+}
 .csseditor .selection-tool {
   border: rgba(15, 114, 207, 0.8) 1px dashed;
   position: absolute;
@@ -2333,7 +2381,7 @@ html, body {
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
   background-color: rgba(255, 255, 255, 0.8);
-  border: 1px solid #cccccc;
+  border: 1px solid #000;
 }
 .csseditor .selection-tool[data-selected-position=move] [data-position=move]:before {
   opacity: 1;
@@ -2385,7 +2433,7 @@ html, body {
   text-align: center;
   background-color: rgba(51, 51, 51, 0.8);
   border-radius: 3px;
-  border: #cccccc;
+  border: #000;
   transition: opacity 0.3s linear;
   box-sizing: border-box;
   padding: 4px 10px;
@@ -2507,9 +2555,17 @@ html, body {
   pointer-events: none;
 }
 .csseditor .property {
-  padding: 5px 10px 5px 5px;
-  border-bottom: 1px solid rgba(204, 204, 204, 0.8);
-  background-color: white;
+  padding: 0px 0px;
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.03), 0 1px 0 0 rgba(0, 0, 0, 0.15);
+  border-bottom: 1px solid #000;
+  background-color: #292727;
+  color: #ececec;
+}
+.csseditor .property svg {
+  vertical-align: middle;
+}
+.csseditor .property svg path {
+  fill: rgba(255, 255, 255, 0.9);
 }
 .csseditor .property.compact {
   padding: 0px;
@@ -2527,15 +2583,17 @@ html, body {
   flex: 1 1 auto;
   overflow: auto;
 }
+.csseditor .property.show > .property-title {
+  border-bottom: 1px solid #000;
+}
 .csseditor .property.show > .property-body {
   display: block;
-  padding: 2px 5px;
+  padding: 6px;
 }
 .csseditor .property > .property-title {
   padding: 2px 6px;
-  height: 24px;
+  height: 30px;
   line-height: 2;
-  color: black;
   cursor: pointer;
   position: relative;
   font-size: 12px;
@@ -2543,6 +2601,8 @@ html, body {
   display: grid;
   grid-template-columns: 0.8fr 1fr;
   cursor: pointer;
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.03), 0 1px 0 0 rgba(0, 0, 0, 0.15);
+  border-bottom: 0px;
 }
 .csseditor .property > .property-title label {
   cursor: pointer;
@@ -2557,30 +2617,9 @@ html, body {
 .csseditor .property > .property-title > .tools > * {
   flex: none;
 }
-.csseditor .property > .property-title > .tools button {
-  vertical-align: middle;
-}
-.csseditor .property > .property-title > .tools button {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-  display: inline-block;
-  font-size: 11px;
-  cursor: pointer;
-}
-.csseditor .property > .property-title > .tools button svg {
-  width: 100%;
-  height: 100%;
-}
 .csseditor .property > .property-body {
   display: none;
+  padding: 0px;
 }
 .csseditor .property > .property-body .property-item {
   padding: 0px;
@@ -2648,34 +2687,35 @@ html, body {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
-  border: 3px solid #cccccc;
+  border: 3px solid #ccc;
   box-sizing: border-box;
   cursor: pointer;
-  opacity: 0.4;
+  opacity: 0.7;
   outline: none;
   display: inline-block;
   vertical-align: middle;
   width: 20px;
   height: 20px;
   margin-right: 10px;
+  background-color: #292727;
 }
 .csseditor .border-item .border-direction button[has-value=true] {
-  border-color: #00a2ff;
+  border-color: #3174ad;
 }
 .csseditor .border-item .border-direction button[data-value=all] {
-  border: 3px solid black;
+  border: 3px solid #3174ad;
 }
 .csseditor .border-item .border-direction button[data-value=top] {
-  border-top: 3px solid black;
+  border-top: 3px solid #3174ad;
 }
 .csseditor .border-item .border-direction button[data-value=right] {
-  border-right: 3px solid black;
+  border-right: 3px solid #3174ad;
 }
 .csseditor .border-item .border-direction button[data-value=bottom] {
-  border-bottom: 3px solid black;
+  border-bottom: 3px solid #3174ad;
 }
 .csseditor .border-item .border-direction button[data-value=left] {
-  border-left: 3px solid black;
+  border-left: 3px solid #3174ad;
 }
 .csseditor .border-item .editor-area {
   padding: 5px 0px;
@@ -2744,7 +2784,7 @@ html, body {
   height: 100%;
 }
 .csseditor .border-slice-item .slice-selector button svg path {
-  fill: #cccccc;
+  fill: #000;
 }
 .csseditor .border-slice-item .slice-setting-box {
   display: grid;
@@ -2889,7 +2929,7 @@ html, body {
   right: 5px;
   bottom: 5px;
   padding: 10px;
-  border: 1px dashed #cccccc;
+  border: 1px dashed #000;
 }
 .csseditor .box-model-item > div .margin:before {
   content: "margin";
@@ -2904,7 +2944,7 @@ html, body {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
-  border: 1px solid #cccccc;
+  border: 1px solid #000;
 }
 .csseditor .box-model-item > div .margin [data-value=top] {
   display: inline-block;
@@ -2949,7 +2989,7 @@ html, body {
   right: 40px;
   bottom: 30px;
   padding: 10px;
-  border: 1px dashed #cccccc;
+  border: 1px dashed #000;
 }
 .csseditor .box-model-item > div .padding::before {
   content: "padding";
@@ -2964,7 +3004,7 @@ html, body {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
-  border: 1px solid #cccccc;
+  border: 1px solid #000;
 }
 .csseditor .box-model-item > div .padding [data-value=top] {
   display: inline-block;
@@ -3009,7 +3049,7 @@ html, body {
   right: 75px;
   bottom: 54px;
   padding: 10px 0px;
-  border: 1px dashed #cccccc;
+  border: 1px dashed #000;
 }
 .csseditor .box-model-item > div .content:before {
   content: attr(title);
@@ -3025,7 +3065,7 @@ html, body {
   width: 100%;
   height: 100px;
   box-sizing: border-box;
-  border: 1px solid #cccccc;
+  border: 1px solid #000;
   border-radius: 3px;
 }
 .csseditor .transition-list {
@@ -3036,12 +3076,12 @@ html, body {
   grid-template-columns: 30px 1fr 20px;
   grid-column-gap: 4px;
   box-sizing: border-box;
-  border: 1px solid #cccccc;
+  border: 1px solid #000;
   margin-bottom: 5px;
   padding: 5px;
 }
 .csseditor .transition-list .transition-item.selected {
-  background-color: rgba(204, 204, 204, 0.5);
+  background-color: rgba(0, 0, 0, 0.5);
 }
 .csseditor .transition-list .transition-item .timing {
   border-radius: 3px;
@@ -3112,13 +3152,13 @@ html, body {
   grid-template-columns: 30px 1fr 20px;
   grid-column-gap: 4px;
   box-sizing: border-box;
-  border: 1px solid #cccccc;
+  border: 1px solid #000;
   margin-bottom: 5px;
   text-align: center;
   padding: 5px;
 }
 .csseditor .animation-list .animation-item.selected {
-  background-color: rgba(204, 204, 204, 0.5);
+  background-color: rgba(0, 0, 0, 0.5);
 }
 .csseditor .animation-list .animation-item .name {
   padding: 2px 0px;
@@ -3141,10 +3181,10 @@ html, body {
   margin-top: 4px;
 }
 .csseditor .animation-list .animation-item .labels label {
-  background-color: #cccccc;
+  background-color: #000;
   padding: 1px 3px;
   border-radius: 2px;
-  color: #cccccc;
+  color: #000;
   text-transform: uppercase;
   font-weight: bold;
 }
@@ -3162,7 +3202,7 @@ html, body {
   background-color: blue;
 }
 .csseditor .animation-list .animation-item .labels label.direction small, .csseditor .animation-list .animation-item .labels label.fill-mode small, .csseditor .animation-list .animation-item .labels label.play-state small {
-  color: black;
+  color: #ececec;
 }
 .csseditor .animation-list .animation-item .labels label.play-state {
   background-color: transparent;
@@ -3219,14 +3259,14 @@ html, body {
   display: grid;
   grid-template-columns: 1fr;
   grid-column-gap: 4px;
-  border: 1px solid #cccccc;
+  border: 1px solid #000;
   margin-bottom: 5px;
   padding: 5px;
   cursor: pointer;
   height: 50px;
 }
 .csseditor .keyframe-list .keyframe-item.selected {
-  background-color: rgba(204, 204, 204, 0.5);
+  background-color: rgba(0, 0, 0, 0.5);
 }
 .csseditor .keyframe-list .keyframe-item .title {
   display: grid;
@@ -3266,7 +3306,7 @@ html, body {
 }
 .csseditor .keyframe-list .keyframe-item .offset-list .container {
   position: relative;
-  background-image: linear-gradient(to right, #cccccc, black);
+  background-image: linear-gradient(to right, #000, black);
   background-size: 100% 2px;
   background-repeat: no-repeat;
   background-position: 0px center;
@@ -3325,8 +3365,8 @@ html, body {
   content: attr(title);
   position: absolute;
   display: inline-block;
-  background-color: #609de2;
-  border-left: 2px solid #609de2;
+  background-color: #3174ad;
+  border-left: 2px solid #3174ad;
   color: white;
   left: 0px;
   top: 0px;
@@ -3344,13 +3384,13 @@ html, body {
   display: grid;
   grid-template-columns: 1fr;
   grid-column-gap: 4px;
-  border: 1px solid #cccccc;
+  border: 1px solid #000;
   margin-bottom: 5px;
   padding: 5px;
   cursor: pointer;
 }
 .csseditor .clip-path-list .clippath-item.selected {
-  background-color: rgba(204, 204, 204, 0.5);
+  background-color: rgba(0, 0, 0, 0.5);
 }
 .csseditor .clip-path-list .clippath-item .title {
   display: grid;
@@ -3389,7 +3429,7 @@ html, body {
 }
 .csseditor .clip-path-list .clippath-item .offset-list .container {
   position: relative;
-  background-image: linear-gradient(to right, #cccccc, black);
+  background-image: linear-gradient(to right, #000, black);
   background-size: 100% 2px;
   background-repeat: no-repeat;
   background-position: 0px center;
@@ -3428,14 +3468,14 @@ html, body {
   display: grid;
   grid-template-columns: 1fr;
   grid-column-gap: 4px;
-  border: 1px solid #cccccc;
+  border: 1px solid #000;
   margin-bottom: 5px;
   padding: 5px;
   cursor: pointer;
   height: 30px;
 }
 .csseditor .selector-list .selector-item.selected {
-  background-color: rgba(204, 204, 204, 0.5);
+  background-color: rgba(0, 0, 0, 0.5);
 }
 .csseditor .selector-list .selector-item .title {
   display: grid;
@@ -3449,8 +3489,8 @@ html, body {
   padding: 4px 6px;
   font-weight: bold;
   border-radius: 5px;
-  background-color: #609de2;
-  border-left: 2px solid #609de2;
+  background-color: #3174ad;
+  border-left: 2px solid #3174ad;
   color: white;
 }
 .csseditor .selector-list .selector-item .title .name span svg path {
@@ -3483,44 +3523,27 @@ html, body {
   margin: 0px !important;
 }
 .csseditor .project-list .project-item {
-  display: grid;
-  grid-template-columns: 1fr 20px;
-  grid-column-gap: 3px;
-  padding: 5px !important;
+  padding: 5px 7px !important;
   cursor: pointer;
 }
-.csseditor .project-list .project-item label {
+.csseditor .project-list .project-item .detail {
+  display: grid;
+  grid-template-columns: 1fr 60px;
+  grid-column-gap: 3px;
+}
+.csseditor .project-list .project-item .detail label {
   padding: 2px 0px;
 }
+.csseditor .project-list .project-item .detail .tools {
+  text-align: right;
+}
 .csseditor .project-list .project-item.selected {
-  background-color: #609de2;
-  border-left: 2px solid #609de2;
+  background-color: #3174ad;
+  border-left: 2px solid #3174ad;
   color: white;
 }
 .csseditor .project-list .project-item.selected svg path {
   fill: white;
-}
-.csseditor .project-list .project-item .tools {
-  text-align: right;
-}
-.csseditor .project-list .project-item .tools button {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-  display: inline-block;
-  font-size: 11px;
-  cursor: pointer;
-}
-.csseditor .project-list .project-item .tools button svg {
-  width: 100%;
-  height: 100%;
 }
 .csseditor .artboard-list {
   height: 100%;
@@ -3529,14 +3552,14 @@ html, body {
   margin: 0px !important;
 }
 .csseditor .artboard-list .artboard-item {
-  padding: 5px 5px !important;
+  padding: 5px 7px !important;
   margin-bottom: 0px !important;
 }
 .csseditor .artboard-list .artboard-item .preview {
   height: 110px;
-  background-color: #cccccc;
+  background-color: #000;
   border-radius: 3px;
-  border: 1px solid #cccccc;
+  border: 1px solid #000;
   cursor: pointer;
   display: none;
 }
@@ -3551,28 +3574,9 @@ html, body {
 .csseditor .artboard-list .artboard-item .detail .tools {
   text-align: right;
 }
-.csseditor .artboard-list .artboard-item .detail .tools button {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-  display: inline-block;
-  font-size: 11px;
-  cursor: pointer;
-}
-.csseditor .artboard-list .artboard-item .detail .tools button svg {
-  width: 100%;
-  height: 100%;
-}
 .csseditor .artboard-list .artboard-item.selected {
-  background-color: #609de2;
-  border-left: 2px solid #609de2;
+  background-color: #3174ad;
+  border-left: 2px solid #3174ad;
   color: white;
 }
 .csseditor .artboard-list .artboard-item.selected svg path {
@@ -3585,7 +3589,7 @@ html, body {
   margin: 0px !important;
 }
 .csseditor .layer-list .layer-item {
-  padding: 5px 5px !important;
+  padding: 5px 7px !important;
   margin-bottom: 0px !important;
 }
 .csseditor .layer-list .layer-item[data-depth="0"] .detail label {
@@ -3608,7 +3612,7 @@ html, body {
 }
 .csseditor .layer-list .layer-item .detail {
   display: grid;
-  grid-template-columns: 1fr 60px;
+  grid-template-columns: 1fr 66px;
   grid-column-gap: 3px;
 }
 .csseditor .layer-list .layer-item .detail label {
@@ -3619,41 +3623,21 @@ html, body {
 .csseditor .layer-list .layer-item .detail .tools {
   text-align: right;
 }
-.csseditor .layer-list .layer-item .detail .tools button {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-  display: inline-block;
-  font-size: 11px;
-  cursor: pointer;
-}
-.csseditor .layer-list .layer-item .detail .tools button svg {
-  width: 100%;
-  height: 100%;
-}
 .csseditor .layer-list .layer-item .detail .tools .visible svg path {
-  fill: #cccccc;
+  fill: #000;
 }
 .csseditor .layer-list .layer-item .detail .tools .visible[data-visible=true] svg path {
   fill: #333;
 }
 .csseditor .layer-list .layer-item .detail .tools .lock svg path {
-  fill: #cccccc;
+  fill: #000;
 }
 .csseditor .layer-list .layer-item .detail .tools .lock[data-lock=true] svg path {
   fill: #333;
 }
 .csseditor .layer-list .layer-item.selected {
-  background-color: rgba(0, 0, 0, 0.05);
-  background-color: #609de2;
-  border-left: 2px solid #609de2;
+  background-color: #3174ad;
+  border-left: 2px solid #3174ad;
   color: white;
 }
 .csseditor .layer-list .layer-item.selected svg path {
@@ -3686,7 +3670,7 @@ html, body {
 }
 .csseditor .color-assets .color-list-tools button {
   padding: 2px 10px;
-  border: 1px solid #cccccc;
+  border: 1px solid #000;
 }
 .csseditor .color-assets .color-list-tools[data-view-mode=list] button[data-value=list] {
   background-color: #609de2;
@@ -3717,7 +3701,7 @@ html, body {
   margin-right: 4px;
   margin-bottom: 4px;
   height: 80px;
-  border: 1px solid #cccccc;
+  border: 1px solid #000;
   border-radius: 2px;
   box-sizing: border-box;
   vertical-align: top;
@@ -3740,7 +3724,7 @@ html, body {
   position: relative;
   width: 100%;
   height: 80px;
-  border: 1px solid #cccccc;
+  border: 1px solid #000;
   border-radius: 2px;
   box-sizing: border-box;
   cursor: pointer;
@@ -3753,7 +3737,6 @@ html, body {
   bottom: 0px;
 }
 .csseditor .color-assets .color-list[data-view-mode=grid] .color-item .title {
-  background-color: rgba(255, 255, 255, 0.8);
   position: relative;
   width: 100%;
   display: grid;
@@ -3808,7 +3791,7 @@ html, body {
   cursor: pointer;
   width: 20px;
   height: 20px;
-  border: 1px solid #cccccc;
+  border: 1px solid #000;
   border-radius: 3px;
   position: relative;
   background-color: transparent;
@@ -3833,7 +3816,7 @@ html, body {
 }
 .csseditor .color-assets .color-list[data-view-mode=list] .color-item .title div input {
   border-radius: 2px;
-  border: 1px solid #cccccc;
+  border: 1px solid #000;
   width: 100%;
 }
 .csseditor .color-assets .color-list[data-view-mode=list] .color-item .tools button {
@@ -3886,7 +3869,7 @@ html, body {
 }
 .csseditor .gradient-assets .gradient-list-tools button {
   padding: 2px 10px;
-  border: 1px solid #cccccc;
+  border: 1px solid #000;
 }
 .csseditor .gradient-assets .gradient-list-tools[data-view-mode=list] button[data-value=list] {
   background-color: #609de2;
@@ -3917,7 +3900,7 @@ html, body {
   margin-right: 4px;
   margin-bottom: 4px;
   height: 80px;
-  border: 1px solid #cccccc;
+  border: 1px solid #000;
   border-radius: 2px;
   box-sizing: border-box;
   vertical-align: top;
@@ -3940,7 +3923,7 @@ html, body {
   position: relative;
   width: 100%;
   height: 80px;
-  border: 1px solid #cccccc;
+  border: 1px solid #000;
   border-radius: 2px;
   box-sizing: border-box;
   cursor: pointer;
@@ -3957,7 +3940,6 @@ html, body {
   bottom: 0px;
 }
 .csseditor .gradient-assets .gradient-list[data-view-mode=grid] .gradient-item .title {
-  background-color: rgba(255, 255, 255, 0.8);
   position: relative;
   width: 100%;
   display: grid;
@@ -3970,7 +3952,6 @@ html, body {
   width: 100%;
 }
 .csseditor .gradient-assets .gradient-list[data-view-mode=grid] .gradient-item .tools {
-  background-color: rgba(255, 255, 255, 0.8);
   position: absolute;
   display: none;
   top: 0px;
@@ -4036,7 +4017,7 @@ html, body {
 }
 .csseditor .gradient-assets .gradient-list[data-view-mode=list] .gradient-item .title div input {
   border-radius: 2px;
-  border: 1px solid #cccccc;
+  border: 1px solid #000;
   width: 100%;
 }
 .csseditor .gradient-assets .gradient-list[data-view-mode=list] .gradient-item .tools button {
@@ -4073,7 +4054,7 @@ html, body {
   height: 150px;
   top: 30px;
   left: 60px;
-  border: 1px solid #333;
+  border: 1px solid #3174ad;
 }
 .csseditor .cubic-bezier-editor .bezier .bezier-canvas {
   position: absolute;
@@ -4096,8 +4077,8 @@ html, body {
           transform: translateX(-50%) translateY(-50%);
   border-radius: 100%;
   cursor: pointer;
-  background-color: #ac48ff;
-  border: 1px solid #ac48ff;
+  background-color: #3174ad;
+  border: 1px solid #3174ad;
   box-sizing: border-box;
 }
 .csseditor .cubic-bezier-editor .animation {
@@ -4124,13 +4105,13 @@ html, body {
   box-sizing: border-box;
 }
 .csseditor .cubic-bezier-editor .item-list[data-selected-value=ease] .item[data-bezier=ease] {
-  background-color: #cccccc;
+  background-color: #000;
 }
 .csseditor .cubic-bezier-editor .item-list[data-selected-value=ease-in] .item[data-bezier=ease-in] {
-  background-color: #cccccc;
+  background-color: #000;
 }
 .csseditor .cubic-bezier-editor .item-list[data-selected-value=ease-out] .item[data-bezier=ease-out] {
-  background-color: #cccccc;
+  background-color: #000;
 }
 .csseditor .cubic-bezier-editor .item-list .item {
   position: relative;
@@ -4168,6 +4149,9 @@ html, body {
   font-weight: bold;
   cursor: pointer;
   vertical-align: middle;
+}
+.csseditor .cubic-bezier-editor .predefined .left svg path, .csseditor .cubic-bezier-editor .predefined .right svg path {
+  fill: white;
 }
 .csseditor .cubic-bezier-editor .predefined .predefined-text {
   vertical-align: middle;
@@ -4227,10 +4211,15 @@ html, body {
 .csseditor .color-view-editor .color-code input {
   width: 100%;
   height: 100%;
+  padding: 0px 3px;
+  background: linear-gradient(#373e42, #434b50);
+  box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.05), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+  border-width: 1px;
+  border-style: solid;
+  border-color: #1d1e20 #111213 #0c0c0d;
   border-radius: 3px;
-  border: 1px solid #cccccc;
-  padding: 0px 5px;
-  vertical-align: middle;
+  color: #ececec;
+  outline: none;
 }
 .csseditor .range-editor {
   display: grid;
@@ -4242,7 +4231,7 @@ html, body {
   grid-column-gap: 2px;
 }
 .csseditor .range-editor.has-label.is-removable {
-  grid-template-columns: 20px 1fr 16px;
+  grid-template-columns: 20px 1fr 20px;
 }
 .csseditor .range-editor.has-label label {
   text-align: left;
@@ -4259,11 +4248,11 @@ html, body {
   color: rgba(0, 0, 0, 0.7);
 }
 .csseditor .range-editor.has-calc {
-  grid-template-columns: 16px 1fr;
+  grid-template-columns: 20px 1fr;
   grid-column-gap: 2px;
 }
 .csseditor .range-editor.has-calc.is-removable {
-  grid-template-columns: 16px 1fr 16px;
+  grid-template-columns: 20px 1fr 20px;
 }
 .csseditor .range-editor.has-calc .type-button {
   display: inline-block;
@@ -4276,30 +4265,11 @@ html, body {
   grid-column-gap: 2px;
 }
 .csseditor .range-editor.has-calc.has-label.is-removable {
-  grid-template-columns: 60px 20px 1fr 16px;
+  grid-template-columns: 60px 20px 1fr 20px;
 }
 .csseditor .range-editor .type-button,
 .csseditor .range-editor .remove {
   display: none;
-}
-.csseditor .range-editor button {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-  display: inline-block;
-  font-size: 11px;
-  cursor: pointer;
-}
-.csseditor .range-editor button svg {
-  width: 100%;
-  height: 100%;
 }
 .csseditor .range-editor .range-editor-type {
   display: none;
@@ -4320,30 +4290,23 @@ html, body {
   width: 100%;
 }
 .csseditor .range-editor .range-editor-type .area input[type=number] {
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  border: 1px solid #cccccc;
+  padding: 2px 2px;
   border-right: 0px;
-  border-top-left-radius: 3px;
-  border-bottom-left-radius: 3px;
-  background-color: white;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
 }
 .csseditor .range-editor .range-editor-type .area .select-editor select {
-  margin-left: -4px;
+  margin-left: -3px;
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
-  border: 1px solid #cccccc;
-  border-radius: 0px;
-  background-color: rgba(231, 231, 231, 0.3);
   border-left: 0px;
   text-align: center;
   box-sizing: border-box;
   padding: 0px 4px;
   outline: none;
-  border-top-right-radius: 3px;
-  border-bottom-right-radius: 3px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
 }
 .csseditor .range-editor .range-editor-type[data-type=calc] .area {
   grid-template-columns: 60px 1fr;
@@ -4356,7 +4319,7 @@ html, body {
 }
 .csseditor .number-range-editor {
   display: grid;
-  grid-template-columns: 1fr 16px;
+  grid-template-columns: 1fr 20px;
   grid-column-gap: 4px;
 }
 .csseditor .number-range-editor.has-label {
@@ -4364,7 +4327,7 @@ html, body {
   grid-column-gap: 2px;
 }
 .csseditor .number-range-editor.has-label.is-removable {
-  grid-template-columns: 60px 1fr 16px;
+  grid-template-columns: 60px 1fr 20px;
 }
 .csseditor .number-range-editor.has-label label {
   text-align: left;
@@ -4378,32 +4341,12 @@ html, body {
 }
 .csseditor .number-range-editor.has-label.block label {
   display: block;
-  color: rgba(0, 0, 0, 0.7);
 }
 .csseditor .number-range-editor.is-removable .remove {
   display: inline-block;
 }
 .csseditor .number-range-editor .remove {
   display: none;
-}
-.csseditor .number-range-editor button {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-  display: inline-block;
-  font-size: 11px;
-  cursor: pointer;
-}
-.csseditor .number-range-editor button svg {
-  width: 100%;
-  height: 100%;
 }
 .csseditor .number-range-editor .range-editor-type {
   vertical-align: middle;
@@ -4419,12 +4362,11 @@ html, body {
   box-sizing: border-box;
   vertical-align: middle;
 }
-.csseditor .number-range-editor .range-editor-type .area input, .csseditor .number-range-editor .range-editor-type .area select {
+.csseditor .number-range-editor .range-editor-type .area input {
   width: 100%;
 }
-.csseditor .number-range-editor .range-editor-type .area input[type=number] {
-  border-radius: 3px;
-  border: 1px solid #cccccc;
+.csseditor .number-range-editor .range-editor-type .area select {
+  width: 100%;
 }
 .csseditor .text-editor {
   display: grid;
@@ -4442,7 +4384,7 @@ html, body {
   box-sizing: border-box;
 }
 .csseditor .text-editor input[type=text] {
-  border: 1px solid #cccccc;
+  border: 1px solid #000;
 }
 .csseditor .select-editor {
   display: grid;
@@ -4468,37 +4410,19 @@ html, body {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
-  border-radius: 0px;
-  border: 1px solid #cccccc;
-  border-radius: 3px;
   outline: none;
   padding: 4px 4px;
   line-height: 1;
-  background-color: transparent;
   cursor: pointer;
-}
-.csseditor .select-editor select[data-count="1"], .csseditor .select-editor select[data-count="0"] {
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  border: 0px;
-  border-radius: 0px;
-  background-color: transparent;
-}
-.csseditor .select-editor .icon {
-  position: absolute;
-  display: inline-block;
-  right: 0px;
-  top: 50%;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
-  pointer-events: none;
-  width: 18px;
-  height: 18px;
-}
-.csseditor .select-editor .icon svg {
-  width: 100%;
-  height: 100%;
+  background: linear-gradient(#434b50, #373e42);
+  box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.05), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+  border-width: 1px;
+  border-style: solid;
+  border-color: #1d1e20 #111213 #0c0c0d;
+  border-radius: 3px;
+  color: #ececec;
+  outline: none;
+  vertical-align: middle;
 }
 .csseditor .css-property-editor {
   margin-top: 10px;
@@ -4596,25 +4520,6 @@ html, body {
   text-align: right;
   float: right;
 }
-.csseditor .background-image-editor .tools button {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-  display: inline-block;
-  font-size: 11px;
-  cursor: pointer;
-}
-.csseditor .background-image-editor .tools button svg {
-  width: 100%;
-  height: 100%;
-}
 .csseditor .background-image-editor .fill-list {
   display: grid;
   grid-template-columns: 1fr;
@@ -4627,10 +4532,10 @@ html, body {
   margin-bottom: 5px;
   text-align: center;
   box-sizing: border-box;
-  padding: 5px 2px;
+  padding: 5px 0px 5px 2px;
 }
 .csseditor .background-image-editor .fill-list .fill-item.selected {
-  background-color: rgba(204, 204, 204, 0.5);
+  background-color: rgba(0, 0, 0, 0.5);
 }
 .csseditor .background-image-editor .fill-list .fill-item .gradient-info {
   display: grid;
@@ -4733,28 +4638,9 @@ html, body {
   border-radius: 100%;
   background-color: black;
 }
-.csseditor .background-image-editor .fill-list .fill-item .tools button {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-  display: inline-block;
-  font-size: 11px;
-  cursor: pointer;
-}
-.csseditor .background-image-editor .fill-list .fill-item .tools button svg {
-  width: 100%;
-  height: 100%;
-}
 .csseditor .border-radius-editor .border-radius-item {
   display: grid;
-  grid-template-columns: 50px 1fr;
+  grid-template-columns: 62px 1fr;
 }
 .csseditor .border-radius-editor .border-radius-item.full {
   grid-template-columns: 1fr;
@@ -4764,13 +4650,13 @@ html, body {
   grid-template-columns: 1fr 1fr;
 }
 .csseditor .border-radius-editor .radius-selector[data-selected-value=all] button[data-value=all] {
-  background-color: black;
+  background-color: #3174ad;
 }
 .csseditor .border-radius-editor .radius-selector[data-selected-value=all] button[data-value=all] svg path {
   fill: white;
 }
 .csseditor .border-radius-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] {
-  background-color: black;
+  background-color: #3174ad;
 }
 .csseditor .border-radius-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] svg path {
   fill: white;
@@ -4798,7 +4684,7 @@ html, body {
   height: 100%;
 }
 .csseditor .border-radius-editor .radius-selector button svg path {
-  fill: #cccccc;
+  fill: #ccc;
 }
 .csseditor .transform-editor .label {
   height: 20px;
@@ -4838,11 +4724,13 @@ html, body {
   height: 100%;
 }
 .csseditor .transform-editor .transform-list {
+  width: 100%;
   display: grid !important;
   grid-template-columns: 1fr !important;
 }
 .csseditor .transform-editor .transform-list .transform-item {
   display: block;
+  margin-top: 10px;
 }
 .csseditor .transform-editor .transform-list .transform-item .title {
   display: grid;
@@ -4890,6 +4778,7 @@ html, body {
   display: grid;
   grid-template-columns: 1fr;
   margin-bottom: 2px;
+  margin-top: 10px;
 }
 .csseditor .transform-editor .transform-list .transform-item .transform-ui input[type=range] {
   width: 90%;
@@ -4912,31 +4801,14 @@ html, body {
   width: 100px !important;
   display: inline-block;
 }
-.csseditor .filter-editor .tools button {
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  border: 0px;
-  padding: 0px;
-  font-size: 16px;
-  vertical-align: middle;
-  cursor: pointer;
-  outline: none;
-  font-size: 12px;
-}
-.csseditor .filter-editor .tools button svg {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-}
 .csseditor .filter-editor .filter-list {
+  width: 100%;
   display: grid !important;
   grid-template-columns: 1fr !important;
 }
 .csseditor .filter-editor .filter-list .filter-item {
   display: block;
+  margin-top: 5px;
 }
 .csseditor .filter-editor .filter-list .filter-item .title {
   display: grid;
@@ -4944,33 +4816,17 @@ html, body {
 }
 .csseditor .filter-editor .filter-list .filter-item .title label {
   font-size: 12px;
-  padding: 2px 5px;
+  padding: 2px 3px;
   box-sizing: border-box;
 }
 .csseditor .filter-editor .filter-list .filter-item .title .filter-menu {
   text-align: right;
 }
-.csseditor .filter-editor .filter-list .filter-item .title .filter-menu button {
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  border: 0px;
-  background-color: transparent;
-  width: 16px;
-  height: 16px;
-  display: inline-block;
-  box-sizing: border-box;
-  padding: 0px;
-  cursor: pointer;
-}
-.csseditor .filter-editor .filter-list .filter-item .title .filter-menu button svg {
-  width: 100%;
-  height: 100%;
-}
 .csseditor .filter-editor .filter-list .filter-item .filter-ui {
+  margin-top: 5px;
   display: grid;
   grid-template-columns: 1fr;
-  margin-bottom: 2px;
+  margin-bottom: 5px;
 }
 .csseditor .filter-editor .filter-list .filter-item .filter-ui.drop-shadow {
   grid-template-columns: 50px 1fr;
@@ -4985,9 +4841,6 @@ html, body {
 }
 .csseditor .filter-editor .filter-list .filter-item .filter-ui.drop-shadow-color label {
   font-size: 12px;
-}
-.csseditor .filter-editor .filter-list .filter-item .filter-ui input[type=range] {
-  width: 90%;
 }
 .csseditor .box-shadow-editor {
   grid-template-columns: 1fr !important;
@@ -5010,35 +4863,16 @@ html, body {
   width: 100px !important;
   display: inline-block;
 }
-.csseditor .box-shadow-editor .tools button {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-  display: inline-block;
-  font-size: 11px;
-  cursor: pointer;
-}
-.csseditor .box-shadow-editor .tools button svg {
-  width: 100%;
-  height: 100%;
-}
 .csseditor .box-shadow-editor .shadow-item {
   height: 20px;
   display: grid;
   grid-template-columns: 20px 20px 1fr 1fr 1fr 1fr 20px;
   grid-column-gap: 5px;
   text-align: center;
-  margin-bottom: 5px;
+  margin-top: 5px;
 }
 .csseditor .box-shadow-editor .shadow-item.desc {
-  color: #333333;
+  color: #ececec;
 }
 .csseditor .box-shadow-editor .shadow-item.desc .color {
   visibility: hidden;
@@ -5046,7 +4880,7 @@ html, body {
 .csseditor .box-shadow-editor .shadow-item .color {
   cursor: pointer;
   height: 20px;
-  border: 1px solid #cccccc;
+  border: 1px solid #000;
   border-radius: 100%;
   position: relative;
   background-color: transparent;
@@ -5068,10 +4902,10 @@ html, body {
   height: 16px;
 }
 .csseditor .box-shadow-editor .shadow-item .inset svg path {
-  fill: #cccccc;
+  fill: #292727;
 }
 .csseditor .box-shadow-editor .shadow-item .inset[data-value=true] svg path {
-  fill: black;
+  fill: #3174ad;
 }
 .csseditor .box-shadow-editor .shadow-item .offset-x,
 .csseditor .box-shadow-editor .shadow-item .offset-y,
@@ -5080,28 +4914,6 @@ html, body {
 .csseditor .box-shadow-editor .shadow-item .inset {
   box-sizing: border-box;
   padding: 4px 0px;
-}
-.csseditor .box-shadow-editor .shadow-item .tools {
-  text-align: right;
-}
-.csseditor .box-shadow-editor .shadow-item .tools button {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-  display: inline-block;
-  font-size: 11px;
-  cursor: pointer;
-}
-.csseditor .box-shadow-editor .shadow-item .tools button svg {
-  width: 100%;
-  height: 100%;
 }
 .csseditor .text-shadow-editor {
   grid-template-columns: 1fr !important;
@@ -5124,25 +4936,6 @@ html, body {
   width: 100px !important;
   display: inline-block;
 }
-.csseditor .text-shadow-editor .tools button {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-  display: inline-block;
-  font-size: 11px;
-  cursor: pointer;
-}
-.csseditor .text-shadow-editor .tools button svg {
-  width: 100%;
-  height: 100%;
-}
 .csseditor .text-shadow-editor .shadow-item {
   height: 20px;
   display: grid;
@@ -5152,7 +4945,7 @@ html, body {
   margin-bottom: 5px;
 }
 .csseditor .text-shadow-editor .shadow-item.desc {
-  color: #333333;
+  color: #ececec;
 }
 .csseditor .text-shadow-editor .shadow-item.desc .color {
   visibility: hidden;
@@ -5160,7 +4953,7 @@ html, body {
 .csseditor .text-shadow-editor .shadow-item .color {
   cursor: pointer;
   height: 20px;
-  border: 1px solid #cccccc;
+  border: 1px solid #000;
   border-radius: 100%;
   position: relative;
   background-color: transparent;
@@ -5187,25 +4980,6 @@ html, body {
 .csseditor .text-shadow-editor .shadow-item .tools {
   text-align: right;
 }
-.csseditor .text-shadow-editor .shadow-item .tools button {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-  display: inline-block;
-  font-size: 11px;
-  cursor: pointer;
-}
-.csseditor .text-shadow-editor .shadow-item .tools button svg {
-  width: 100%;
-  height: 100%;
-}
 .csseditor .var-editor {
   grid-template-columns: 1fr !important;
 }
@@ -5223,32 +4997,14 @@ html, body {
   text-align: right;
   float: right;
 }
-.csseditor .var-editor .tools button {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-  display: inline-block;
-  font-size: 11px;
-  cursor: pointer;
-}
-.csseditor .var-editor .tools button svg {
-  width: 100%;
-  height: 100%;
-}
 .csseditor .var-editor .var-item {
-  height: 20px;
+  height: 24px;
   display: grid;
   grid-template-columns: 1fr 1fr 30px;
   grid-column-gap: 2px;
   text-align: center;
   margin-bottom: 5px;
+  margin-top: 10px;
 }
 .csseditor .var-editor .var-item > div input {
   width: 100%;
@@ -5256,28 +5012,9 @@ html, body {
 .csseditor .var-editor .var-item .tools {
   text-align: right;
 }
-.csseditor .var-editor .var-item .tools button {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-  display: inline-block;
-  font-size: 11px;
-  cursor: pointer;
-}
-.csseditor .var-editor .var-item .tools button svg {
-  width: 100%;
-  height: 100%;
-}
 .csseditor .perspective-origin-editor .perspective-origin-item {
   display: grid;
-  grid-template-columns: 60px 1fr;
+  grid-template-columns: 62px 1fr;
 }
 .csseditor .perspective-origin-editor .perspective-origin-item.full {
   grid-template-columns: 1fr;
@@ -5288,45 +5025,23 @@ html, body {
   justify-items: center;
 }
 .csseditor .perspective-origin-editor .radius-selector[data-selected-value=all] button[data-value=all] {
-  background-color: black;
+  background-color: #3174ad;
 }
 .csseditor .perspective-origin-editor .radius-selector[data-selected-value=all] button[data-value=all] svg path {
-  fill: white;
+  fill: #ececec;
 }
 .csseditor .perspective-origin-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] {
-  background-color: black;
+  background-color: #3174ad;
 }
 .csseditor .perspective-origin-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] svg path {
-  fill: white;
+  fill: #ececec;
 }
 .csseditor .perspective-origin-editor .radius-selector button {
-  flex: none;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  box-sizing: border-box;
-  width: 20px;
-  height: 20px;
-  display: inline-block;
-  vertical-align: middle;
-  margin-right: 2px;
-  border-radius: 3px;
-  cursor: pointer;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-}
-.csseditor .perspective-origin-editor .radius-selector button svg {
-  width: 100%;
-  height: 100%;
-}
-.csseditor .perspective-origin-editor .radius-selector button svg path {
-  fill: #cccccc;
+  background-image: none;
 }
 .csseditor .transform-origin-editor .transform-origin-item {
   display: grid;
-  grid-template-columns: 60px 1fr;
+  grid-template-columns: 62px 1fr;
 }
 .csseditor .transform-origin-editor .transform-origin-item.full {
   grid-template-columns: 1fr;
@@ -5337,41 +5052,19 @@ html, body {
   justify-items: center;
 }
 .csseditor .transform-origin-editor .radius-selector[data-selected-value=all] button[data-value=all] {
-  background-color: black;
+  background-color: #3174ad;
 }
 .csseditor .transform-origin-editor .radius-selector[data-selected-value=all] button[data-value=all] svg path {
   fill: white;
 }
 .csseditor .transform-origin-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] {
-  background-color: black;
+  background-color: #3174ad;
 }
 .csseditor .transform-origin-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] svg path {
   fill: white;
 }
 .csseditor .transform-origin-editor .radius-selector button {
-  flex: none;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  box-sizing: border-box;
-  width: 20px;
-  height: 20px;
-  display: inline-block;
-  vertical-align: middle;
-  margin-right: 2px;
-  border-radius: 3px;
-  cursor: pointer;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-}
-.csseditor .transform-origin-editor .radius-selector button svg {
-  width: 100%;
-  height: 100%;
-}
-.csseditor .transform-origin-editor .radius-selector button svg path {
-  fill: #cccccc;
+  background-image: none;
 }
 .csseditor .gradient-editor {
   position: relative;
@@ -5418,7 +5111,7 @@ html, body {
   top: 4px;
   height: 14px;
   border-radius: 10px;
-  border: 1px solid #cccccc;
+  border: 1px solid #000;
   box-sizing: border-box;
   background-color: transparent;
   background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
@@ -5662,26 +5355,8 @@ html, body {
   width: 100px !important;
   display: inline-block;
 }
-.csseditor .svg-property-editor .tools button {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-  display: inline-block;
-  font-size: 11px;
-  cursor: pointer;
-}
-.csseditor .svg-property-editor .tools button svg {
-  width: 100%;
-  height: 100%;
-}
 .csseditor .svg-property-editor .svg-property-list {
+  width: 100%;
   display: grid !important;
   grid-template-columns: 1fr !important;
 }
@@ -5689,14 +5364,14 @@ html, body {
   display: block;
 }
 .csseditor .svg-property-editor .svg-property-list .svg-property-item:last-child .title {
-  border-bottom: 1px solid #cccccc;
+  border-bottom: 1px solid #000;
 }
 .csseditor .svg-property-editor .svg-property-list .svg-property-item .title {
   padding: 5px 2px;
   box-sizing: border-box;
   display: grid;
   grid-template-columns: 70px 1fr 30px;
-  border: 1px solid #cccccc;
+  border: 1px solid #000;
   border-bottom: 0px;
   cursor: pointer;
 }
@@ -5722,24 +5397,8 @@ html, body {
 .csseditor .svg-property-editor .svg-property-list .svg-property-item .title .menu {
   text-align: right;
 }
-.csseditor .svg-property-editor .svg-property-list .svg-property-item .title .menu button {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-  display: inline-block;
-  font-size: 11px;
-  cursor: pointer;
-}
-.csseditor .svg-property-editor .svg-property-list .svg-property-item .title .menu button svg {
-  width: 100%;
-  height: 100%;
+.csseditor .svg-filter-editor {
+  color: #ececec;
 }
 .csseditor .svg-filter-editor .label {
   height: 20px;
@@ -5779,6 +5438,7 @@ html, body {
   height: 100%;
 }
 .csseditor .svg-filter-editor .filter-list {
+  width: 100%;
   display: grid !important;
   grid-template-columns: 1fr !important;
 }
@@ -5801,28 +5461,6 @@ html, body {
 }
 .csseditor .svg-filter-editor .filter-list .filter-item .title .filter-menu {
   text-align: right;
-}
-.csseditor .svg-filter-editor .filter-list .filter-item .title .filter-menu button {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-  display: inline-block;
-  font-size: 11px;
-  cursor: pointer;
-}
-.csseditor .svg-filter-editor .filter-list .filter-item .title .filter-menu button svg {
-  width: 100%;
-  height: 100%;
-}
-.csseditor .svg-filter-editor .filter-list .filter-item .title .filter-menu button svg path {
-  fill: white;
 }
 .csseditor .svg-filter-editor .filter-list .filter-item .filter-ui {
   display: grid;
@@ -5851,7 +5489,7 @@ html, body {
 }
 .csseditor .direction-editor .direction-item {
   display: grid;
-  grid-template-columns: 50px 1fr;
+  grid-template-columns: 62px 1fr;
 }
 .csseditor .direction-editor .direction-item.full {
   grid-template-columns: 1fr;
@@ -5861,13 +5499,13 @@ html, body {
   grid-template-columns: 1fr 1fr;
 }
 .csseditor .direction-editor .radius-selector[data-selected-value=all] button[data-value=all] {
-  background-color: black;
+  background-color: #3174ad;
 }
 .csseditor .direction-editor .radius-selector[data-selected-value=all] button[data-value=all] svg path {
   fill: white;
 }
 .csseditor .direction-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] {
-  background-color: black;
+  background-color: #3174ad;
 }
 .csseditor .direction-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] svg path {
   fill: white;
@@ -5895,7 +5533,7 @@ html, body {
   height: 100%;
 }
 .csseditor .direction-editor .radius-selector button svg path {
-  fill: #cccccc;
+  fill: #ccc;
 }
 .csseditor .list-view-editor {
   position: relative;
@@ -5935,14 +5573,13 @@ html, body {
   grid-template-columns: repeat(9, 1fr);
 }
 .csseditor .list-view-editor .list-view-item.selected {
-  background-color: black;
-  color: white;
-}
-.csseditor .list-view-editor .list-view-item.selected svg path, .csseditor .list-view-editor .list-view-item.selected svg circle, .csseditor .list-view-editor .list-view-item.selected svg rect {
-  fill: white;
+  background-color: #3174ad;
 }
 .csseditor .list-view-editor .list-view-item svg {
   width: 100%;
+}
+.csseditor .list-view-editor .list-view-item svg path, .csseditor .list-view-editor .list-view-item svg circle, .csseditor .list-view-editor .list-view-item svg rect {
+  fill: white;
 }
 .csseditor .image-select-editor {
   height: 150px;
@@ -5983,7 +5620,7 @@ html, body {
   text-align: center;
   vertical-align: middle;
   padding: 4px 2px;
-  border: 1px solid #cccccc;
+  border: 1px solid #000;
   border-right: 0px;
   white-space: pre-wrap;
   word-break: break-all;
@@ -5995,7 +5632,7 @@ html, body {
   border-bottom-left-radius: 3px;
 }
 .csseditor .select-icon-editor .items > .select-icon-item:last-child {
-  border-right: 1px solid #cccccc;
+  border-right: 1px solid #000;
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px;
 }
@@ -6088,10 +5725,11 @@ html, body {
   display: none;
   box-sizing: border-box;
   z-index: 1000;
-  background-color: rgba(255, 255, 255, 0.9);
-  border: 1px solid #cccccc;
-  box-shadow: 0 0 1px 0px #cccccc;
+  background-color: #292727;
+  border: 1px solid #000;
+  box-shadow: 0 0 1px 0px #000;
   padding: 14px;
+  color: #ececec;
 }
 .csseditor .popup.compact {
   padding: 0px;
@@ -6114,25 +5752,6 @@ html, body {
 }
 .csseditor .popup .popup-title .tools {
   text-align: right;
-}
-.csseditor .popup .popup-title .tools button {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-  display: inline-block;
-  font-size: 11px;
-  cursor: pointer;
-}
-.csseditor .popup .popup-title .tools button svg {
-  width: 100%;
-  height: 100%;
 }
 .csseditor .popup .popup-content .popup-item label {
   font-size: 11px;
@@ -6165,10 +5784,10 @@ html, body {
   outline: none;
   box-sizing: border-box;
   width: 50px;
-  background-color: rgba(204, 204, 204, 0.5);
+  background-color: rgba(0, 0, 0, 0.5);
 }
 .csseditor .popup.background-property-popup .size-list[data-value=contain] button[value=contain], .csseditor .popup.background-property-popup .size-list[data-value=cover] button[value=cover], .csseditor .popup.background-property-popup .size-list[data-value=auto] button[value=auto] {
-  background-color: #cccccc;
+  background-color: #000;
   font-weight: bold;
 }
 .csseditor .popup.background-property-popup .popup-item.grid-2 {
@@ -6182,7 +5801,7 @@ html, body {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
-  border: 1px solid #cccccc;
+  border: 1px solid #000;
   background-color: white;
   outline: none;
   cursor: pointer;
@@ -6224,7 +5843,7 @@ html, body {
   background-repeat: round;
 }
 .csseditor .popup.background-property-popup .repeat-list[data-value=repeat] button[value=repeat], .csseditor .popup.background-property-popup .repeat-list[data-value=no-repeat] button[value=no-repeat], .csseditor .popup.background-property-popup .repeat-list[data-value=repeat-x] button[value=repeat-x], .csseditor .popup.background-property-popup .repeat-list[data-value=repeat-y] button[value=repeat-y], .csseditor .popup.background-property-popup .repeat-list[data-value=space] button[value=space], .csseditor .popup.background-property-popup .repeat-list[data-value=round] button[value=round] {
-  background-color: #cccccc;
+  background-color: #000;
   box-shadow: 0 0 1px 1px black;
 }
 .csseditor .popup.background-property-popup .blend-list {
@@ -6253,18 +5872,18 @@ html, body {
   outline: none;
   box-sizing: border-box;
   width: 50px;
-  background-color: rgba(204, 204, 204, 0.5);
+  background-color: rgba(0, 0, 0, 0.5);
 }
 .csseditor .popup.display-property-popup .flex-direction[data-value=row] button[value=row], .csseditor .popup.display-property-popup .flex-direction[data-value=row-reverse] button[value=row-reverse], .csseditor .popup.display-property-popup .flex-direction[data-value=column] button[value=column], .csseditor .popup.display-property-popup .flex-direction[data-value=column-reverse] button[value=column-reverse] {
-  background-color: #cccccc;
+  background-color: #000;
   font-weight: bold;
 }
 .csseditor .popup.display-property-popup .flex-wrap[data-value=nowrap] button[value=nowrap], .csseditor .popup.display-property-popup .flex-wrap[data-value=wrap] button[value=wrap], .csseditor .popup.display-property-popup .flex-wrap[data-value=wrap-reverse] button[value=wrap-reverse] {
-  background-color: #cccccc;
+  background-color: #000;
   font-weight: bold;
 }
 .csseditor .popup.display-property-popup .justify-content[data-value=flex-start] button[value=flex-start], .csseditor .popup.display-property-popup .justify-content[data-value=flex-end] button[value=flex-end], .csseditor .popup.display-property-popup .justify-content[data-value=center] button[value=center], .csseditor .popup.display-property-popup .justify-content[data-value=space-between] button[value=space-between], .csseditor .popup.display-property-popup .justify-content[data-value=space-around] button[value=space-around] {
-  background-color: #cccccc;
+  background-color: #000;
   font-weight: bold;
 }
 .csseditor .popup .box-shadow-property-popup {
@@ -6277,6 +5896,21 @@ html, body {
 .csseditor .popup .box-shadow-property-popup .codemirror-colorpicker {
   box-shadow: none;
   border-radius: 0px;
+  background-color: #292727;
+}
+.csseditor .popup .box-shadow-property-popup .codemirror-colorpicker input {
+  color: #ececec !important;
+  text-transform: uppercase;
+  border: 0px !important;
+}
+.csseditor .popup .box-shadow-property-popup .codemirror-colorpicker .color-panel {
+  margin-top: 0px;
+}
+.csseditor .popup .box-shadow-property-popup .codemirror-colorpicker .title {
+  color: #ececec !important;
+}
+.csseditor .popup .box-shadow-property-popup .codemirror-colorpicker .colorsets {
+  border-top: 0px solid #000 !important;
 }
 .csseditor .popup .box-shadow-property-popup .box .type {
   display: grid;
@@ -6290,33 +5924,29 @@ html, body {
   height: 20px;
 }
 .csseditor .popup .box-shadow-property-popup .box .type .select[data-selected-value=inset] button[data-value=inset] {
-  box-shadow: inset 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
-  background-color: #cccccc;
+  box-shadow: inset 0px 0px 3px 0px #3174ad !important;
+  background-color: #3174ad !important;
 }
 .csseditor .popup .box-shadow-property-popup .box .type .select[data-selected-value=outset] button[data-value=outset] {
-  box-shadow: inset 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
-  background-color: #cccccc;
+  box-shadow: inset 0px 0px 3px 0px #3174ad !important;
+  background-color: #3174ad !important;
 }
 .csseditor .popup .box-shadow-property-popup .box .type .select button {
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  border: 0px;
-  background-color: white;
-  outline: none;
-  cursor: pointer;
+  width: 100%;
+  background-image: none;
+  border-radius: 0px;
 }
 .csseditor .popup .box-shadow-property-popup .box label {
   font-size: 11px;
 }
 .csseditor .popup .box-shadow-property-popup .box .drag-board {
-  background-color: white;
+  background-color: #3174ad;
   box-sizing: border-box;
-  border: 1px solid #cccccc;
+  border: 1px solid #000;
   margin-bottom: 2px;
   height: 204px;
   position: relative;
-  background-image: linear-gradient(to right, #cccccc, #cccccc), linear-gradient(to right, #cccccc, #cccccc);
+  background-image: linear-gradient(to right, #000, #000), linear-gradient(to right, #000, #000);
   background-size: 100% 1px, 1px 100%;
   background-position: 0px center, center 0px;
   background-repeat: no-repeat;
@@ -6328,7 +5958,7 @@ html, body {
   height: 10px;
   -webkit-transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
           transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
-  background-color: #cccccc;
+  background-color: #000;
   border-radius: 100%;
 }
 .csseditor .popup .animation-property-popup {
@@ -6385,18 +6015,33 @@ html, body {
 .csseditor .popup .text-shadow-property-popup .codemirror-colorpicker {
   box-shadow: none;
   border-radius: 0px;
+  background-color: #292727;
+}
+.csseditor .popup .text-shadow-property-popup .codemirror-colorpicker input {
+  color: #ececec !important;
+  text-transform: uppercase;
+  border: 0px !important;
+}
+.csseditor .popup .text-shadow-property-popup .codemirror-colorpicker .color-panel {
+  margin-top: 0px;
+}
+.csseditor .popup .text-shadow-property-popup .codemirror-colorpicker .title {
+  color: #ececec !important;
+}
+.csseditor .popup .text-shadow-property-popup .codemirror-colorpicker .colorsets {
+  border-top: 0px solid #000 !important;
 }
 .csseditor .popup .text-shadow-property-popup .box label {
   font-size: 11px;
 }
 .csseditor .popup .text-shadow-property-popup .box .drag-board {
-  background-color: white;
+  background-color: #3174ad;
   box-sizing: border-box;
-  border: 1px solid #cccccc;
+  border: 1px solid #000;
   height: 202px;
   position: relative;
   margin-bottom: 10px;
-  background-image: linear-gradient(to right, #cccccc, #cccccc), linear-gradient(to right, #cccccc, #cccccc);
+  background-image: linear-gradient(to right, #000, #000), linear-gradient(to right, #000, #000);
   background-size: 100% 1px, 1px 100%;
   background-position: 0px center, center 0px;
   background-repeat: no-repeat;
@@ -6408,7 +6053,7 @@ html, body {
   height: 10px;
   -webkit-transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
           transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
-  background-color: #cccccc;
+  background-color: #000;
   border-radius: 100%;
 }
 .csseditor .popup .keyframe-popup {
@@ -6545,7 +6190,7 @@ html, body {
 .csseditor .popup .clippath-popup .box > .clip-path-editor .clip-area {
   display: inline-block;
   position: absolute;
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: #3174ad;
   z-index: 0;
 }
 .csseditor .popup .clippath-popup .box > .clip-path-editor .clip-area.polygon {
@@ -6608,7 +6253,7 @@ html, body {
   height: 220px;
   position: relative;
   box-sizing: border-box;
-  box-shadow: 0 0 0 1px #cccccc;
+  box-shadow: 0 0 0 1px #000;
 }
 .csseditor .popup .clippath-popup .box > .clip-path-editor .drag-area .pointer-list {
   top: 0px;
@@ -6788,55 +6433,48 @@ html, body {
   font-size: 11px;
 }
 .csseditor .popup .fill-picker .repeat-list button {
-  width: 20px;
-  height: 20px;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  border: 1px solid #cccccc;
-  background-color: white;
-  outline: none;
-  cursor: pointer;
+  width: 24px;
+  height: 24px;
 }
 .csseditor .popup .fill-picker .repeat-list button[value=no-repeat] {
-  background-image: linear-gradient(to top right, rgba(0, 0, 255, 0.5), black);
+  background-image: linear-gradient(to top right, #3174ad, white);
   background-position: center center;
   background-size: 8px 8px;
   background-repeat: no-repeat;
 }
 .csseditor .popup .fill-picker .repeat-list button[value=repeat] {
-  background-image: linear-gradient(to top right, rgba(0, 0, 255, 0.5), black);
+  background-image: linear-gradient(to top right, #3174ad, white);
   background-position: 10px 10px;
   background-size: 8px 8px;
   background-repeat: repeat;
 }
 .csseditor .popup .fill-picker .repeat-list button[value=repeat-x] {
-  background-image: linear-gradient(to top right, rgba(0, 0, 255, 0.5), black);
+  background-image: linear-gradient(to top right, #3174ad, white);
   background-position: 10px 8px;
   background-size: 8px 8px;
   background-repeat: repeat-x;
 }
 .csseditor .popup .fill-picker .repeat-list button[value=repeat-y] {
-  background-image: linear-gradient(to top right, rgba(0, 0, 255, 0.5), black);
+  background-image: linear-gradient(to top right, #3174ad, white);
   background-position: 8px 10px;
   background-size: 8px 8px;
   background-repeat: repeat-y;
 }
 .csseditor .popup .fill-picker .repeat-list button[value=space] {
-  background-image: linear-gradient(to top right, rgba(0, 0, 255, 0.5), black);
+  background-image: linear-gradient(to top right, #3174ad, white);
   background-position: 10px 10px;
   background-size: 8px 8px;
   background-repeat: space;
 }
 .csseditor .popup .fill-picker .repeat-list button[value=round] {
-  background-image: linear-gradient(to top right, rgba(0, 0, 255, 0.5), black);
+  background-image: linear-gradient(to top right, #3174ad, white);
   background-position: 0px 0px;
   background-size: 8px 8px;
   background-repeat: round;
 }
 .csseditor .popup .fill-picker .repeat-list[data-value=repeat] button[value=repeat], .csseditor .popup .fill-picker .repeat-list[data-value=no-repeat] button[value=no-repeat], .csseditor .popup .fill-picker .repeat-list[data-value=repeat-x] button[value=repeat-x], .csseditor .popup .fill-picker .repeat-list[data-value=repeat-y] button[value=repeat-y], .csseditor .popup .fill-picker .repeat-list[data-value=space] button[value=space], .csseditor .popup .fill-picker .repeat-list[data-value=round] button[value=round] {
-  background-color: #cccccc;
-  box-shadow: 0 0 1px 1px black;
+  background-color: #3174ad;
+  box-shadow: 0 0 2px 2px #3174ad;
 }
 .csseditor .popup .fill-picker .picker-tab .picker-tab-list {
   text-align: center;
@@ -6846,49 +6484,49 @@ html, body {
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=static-gradient] .picker-tab-item[data-selected-value=static-gradient] .icon svg path {
-  fill: rgba(0, 0, 255, 0.5);
+  fill: #3174ad;
 }
 .csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=linear-gradient] .picker-tab-item[data-selected-value=linear-gradient] {
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=linear-gradient] .picker-tab-item[data-selected-value=linear-gradient] .icon svg path {
-  fill: rgba(0, 0, 255, 0.5);
+  fill: #3174ad;
 }
 .csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-linear-gradient] .picker-tab-item[data-selected-value=repeating-linear-gradient] {
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-linear-gradient] .picker-tab-item[data-selected-value=repeating-linear-gradient] .icon svg path {
-  fill: rgba(0, 0, 255, 0.5);
+  fill: #3174ad;
 }
 .csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=radial-gradient] .picker-tab-item[data-selected-value=radial-gradient] {
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=radial-gradient] .picker-tab-item[data-selected-value=radial-gradient] .icon svg path {
-  fill: rgba(0, 0, 255, 0.5);
+  fill: #3174ad;
 }
 .csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-radial-gradient] .picker-tab-item[data-selected-value=repeating-radial-gradient] {
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-radial-gradient] .picker-tab-item[data-selected-value=repeating-radial-gradient] .icon svg path {
-  fill: rgba(0, 0, 255, 0.5);
+  fill: #3174ad;
 }
 .csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=conic-gradient] .picker-tab-item[data-selected-value=conic-gradient] {
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=conic-gradient] .picker-tab-item[data-selected-value=conic-gradient] .icon svg path {
-  fill: rgba(0, 0, 255, 0.5);
+  fill: #3174ad;
 }
 .csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-conic-gradient] .picker-tab-item[data-selected-value=repeating-conic-gradient] {
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-conic-gradient] .picker-tab-item[data-selected-value=repeating-conic-gradient] .icon svg path {
-  fill: rgba(0, 0, 255, 0.5);
+  fill: #3174ad;
 }
 .csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=image] .picker-tab-item[data-selected-value=image] {
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=image] .picker-tab-item[data-selected-value=image] .icon svg path {
-  fill: rgba(0, 0, 255, 0.5);
+  fill: #3174ad;
 }
 .csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-is-image-hidden=true] .picker-tab-item[data-selected-value=image] {
   display: none;
@@ -7032,6 +6670,19 @@ html, body {
 .csseditor .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=color] .codemirror-colorpicker {
   box-shadow: none;
   border-radius: 0px;
+  border: 0px;
+  background-color: #292727;
+}
+.csseditor .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=color] .codemirror-colorpicker input {
+  color: #ececec !important;
+  text-transform: uppercase;
+  border: 0px !important;
+}
+.csseditor .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=color] .codemirror-colorpicker .title {
+  color: #ececec !important;
+}
+.csseditor .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=color] .codemirror-colorpicker .colorsets {
+  border-top: 0px solid #000 !important;
 }
 .csseditor .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=image] .image-preview {
   width: 100%;
@@ -7125,10 +6776,21 @@ html, body {
   box-shadow: none;
   border-radius: 0px;
   border: 0px;
+  background-color: #292727;
+}
+.csseditor .popup .color-picker-popup .codemirror-colorpicker input {
+  color: #ececec !important;
+  text-transform: uppercase;
+  border: 0px !important;
+}
+.csseditor .popup .color-picker-popup .codemirror-colorpicker .title {
+  color: #ececec !important;
+}
+.csseditor .popup .color-picker-popup .codemirror-colorpicker .colorsets {
+  border-top: 1px solid #000 !important;
 }
 .csseditor .popup .color-picker-popup .assets {
   padding: 0px 10px;
-  background-color: white;
 }
 .csseditor .popup .color-picker-popup .assets .project-color-list {
   padding: 5px 0px;
@@ -7412,4 +7074,74 @@ html, body {
 .csseditor .popup .gradient-picker .codemirror-colorpicker {
   box-shadow: none;
   border-radius: 0px;
+  border: 0px;
+  background-color: #292727;
+}
+.csseditor .popup .gradient-picker .codemirror-colorpicker .color-panel {
+  margin-top: 0px;
+}
+.csseditor .popup .gradient-picker .codemirror-colorpicker input {
+  color: #ececec !important;
+  text-transform: uppercase;
+  border: 0px !important;
+}
+.csseditor .popup .gradient-picker .codemirror-colorpicker .title {
+  color: #ececec !important;
+}
+.csseditor .popup .gradient-picker .codemirror-colorpicker .colorsets {
+  border-top: 0px solid #000 !important;
+}
+.csseditor .path-editor-view {
+  display: none;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  outline: none;
+  cursor: crosshair;
+}
+.csseditor .path-editor-view:before {
+  content: "Path Editor";
+  display: inline-block;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  background-color: #51717e;
+  color: white;
+}
+.csseditor .path-editor-view svg line {
+  stroke: green;
+  stroke-width: 1;
+  stroke-dasharray: 5 2;
+}
+.csseditor .path-editor-view svg line[data-guide=true] {
+  stroke: purple;
+}
+.csseditor .path-editor-view svg circle {
+  fill: white;
+  stroke: blue;
+  stroke-width: 1;
+  cursor: pointer;
+}
+.csseditor .path-editor-view svg circle.curve {
+  stroke: red;
+}
+.csseditor .path-editor-view svg circle[data-is-first=true] {
+  fill: rgba(0, 0, 255, 0.8);
+}
+.csseditor .path-editor-view svg path.guide {
+  fill: transparent;
+  stroke: blue;
+  stroke-width: 1;
+}
+.csseditor .path-editor-view svg path.segment {
+  fill: transparent;
+  stroke: red;
+  stroke-width: 1;
+}
+.csseditor .path-editor-view svg path.object {
+  fill: transparent;
+  stroke: black;
+  stroke-width: 1;
 }

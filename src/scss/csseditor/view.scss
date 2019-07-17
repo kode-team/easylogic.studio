@@ -106,6 +106,15 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
   }
 }
 
+.selection-view {
+  pointer-events:none;
+  position:absolute;
+  left:0px;
+  top:0px;
+  right:0px;
+  bottom:0px;
+}
+
 .selection-tool {
   border: $pointer-color 1px dashed;
   position:absolute;

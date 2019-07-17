@@ -17,18 +17,17 @@
       text-align: right;
       float:right;
 
-      @include svg-button();
-    
   }
 
 
   .var-item {
-    height: 20px;
+    height: 24px;
     display: grid;
     grid-template-columns: 1fr 1fr 30px;
     grid-column-gap: 2px;
     text-align: center;
     margin-bottom: 5px;
+    margin-top: 10px;
 
     > div {
       input {
@@ -40,7 +39,6 @@
     .tools {
       text-align: right;
 
-      @include svg-button();
     }
   }
 }

@@ -5,7 +5,7 @@
     margin:0px !important;
     .artboard-item {
 
-        padding: 5px 5px !important; 
+        padding: 5px 7px !important; 
         margin-bottom: 0px !important;
 
 
@@ -31,8 +31,6 @@
 
             .tools {
                 text-align: right;
-
-                @include svg-button();
             }
     
         }

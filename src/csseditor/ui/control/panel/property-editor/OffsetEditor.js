@@ -74,7 +74,7 @@ export default class OffsetEditor extends UIElement {
   }
 
   makeOffset (offset, index) {
-    var css = `left: ${offset.offset}; background-color: ${offset.color};`
+    var css = `left: ${offset.offset}; background-color: ${offset.color || '#3174ad'};`
     
     return `<div class='offset-item' style='${css}' data-offset-index='${index.toString()}'></div>`
   }

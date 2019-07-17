@@ -13,18 +13,16 @@
 
     .list-view-item {
         &.selected {
-            background-color: black; 
-            color: white;
-
-            svg {
-                path,circle,rect {
-                    fill: white; 
-                }
-            }
+            background-color: $selected-color; 
         }
 
         svg {
             width: 100%;
+
+            path,circle,rect {
+                fill: white; 
+            }
+
         }
     }
 

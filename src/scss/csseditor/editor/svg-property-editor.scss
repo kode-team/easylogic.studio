@@ -20,11 +20,10 @@
         width: 100px !important;
         display: inline-block ;
       }
-
-      @include svg-button();
   }
 
   .svg-property-list {
+    width: 100%;
     display: grid !important;
     grid-template-columns: 1fr !important;
   
@@ -71,8 +70,6 @@
   
         .menu {
           text-align: right;
-
-          @include svg-button();
         }
       }
   

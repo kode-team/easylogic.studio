@@ -496,9 +496,9 @@ export class DomItem extends GroupItem {
       ...obj,
       ...this.toKeyListCSS(
         
-        'position', 'right','bottom', 'width','height',
+        'position', 'right','bottom', 'width','height', 'overflow',
 
-        'background-color', 'color',  'opacity', 'mix-blend-mode', 
+        'background-color', 'color',  'opacity', 'mix-blend-mode',
 
         'transform-origin', 'perspective', 'perspective-origin',
 
@@ -639,7 +639,9 @@ export class DomItem extends GroupItem {
   }
 
 
-
+  toNestedCSS($prefix) {
+    return []
+  }
 
   generateEmbed () {
     return {
@@ -649,10 +651,25 @@ export class DomItem extends GroupItem {
   }
 
   generateView (prefix = '') {
-    return {
-      css: this.toCSS(), 
-      selectorString: this.toSelectorString(prefix)
-    }
+
+    //1. 원본 객체의 css 를 생성 
+    //2. 원본이 하나의 객체가 아니라 복합 객체일때 중첩 CSS 를 자체 정의해서 생성 
+    //3. 이외에 selector 로 생성할 수 있는 css 를 생성 (:hover, :active 등등 )
+
+    var cssString = `
+${prefix} { 
+  ${CSS_TO_STRING(this.toCSS(), '\n')}; 
+}
+
+${this.toNestedCSS().map(it => {
+  return `${prefix} ${it.selector} { 
+    ${CSS_TO_STRING(it.css, '\n')}; 
+  }`
+}).join('\n')}
+
+${this.toSelectorString(prefix)}
+`  
+    return cssString;
   }
 
   toBound () {

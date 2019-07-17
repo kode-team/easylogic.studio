@@ -1,7 +1,6 @@
-$background-color: #f3f3f3;
-$border-color: #cccccc;
+$border-color: #000;
 $selected-border-color: #609de2;
-$selected-color: #cccccc;
+$selected-color: #3174ad;
 $item-selected-color: #dbf3ff;
 $font-color: black;
 $pointer-color: rgba(#ececec, 0.8);
@@ -20,3 +19,23 @@ $gradient-box-size: 0px;
 $layer-toolbar-height: 0px;
 $display-flex-color: #01a270;
 $display-grid-color: red;
+
+
+$background-color: rgb(41, 39, 39); 
+$font-color: #ececec;
+
+// property 
+$property-border-color: #525252;
+$property-background-color: $background-color; 
+$property-font-color: $font-color;
+
+
+$tab-background-color: $background-color; 
+$tab-font-color: $font-color;
+$tab-selected-color: $selected-color; 
+$tab-border-color: $border-color;
+
+$popup-background-color: $background-color; 
+$popup-font-color: $font-color;
+$popup-selected-color: $selected-color; 
+$popup-border-color: $border-color;

@@ -182,10 +182,10 @@ export default class FilterEditor extends UIElement {
 
       if (current) {
         options = current.svg
-                    .filter(it => it.type === 'filter')
+                    .filter(it => it.type === 'filter' && it.name)
                     .map(it => it.name)
 
-        options = ',' + options.join(',')
+        options = options.length ? ',' + options.join(',') : '';
       }
 
       return `

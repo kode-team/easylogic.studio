@@ -171,13 +171,13 @@ export const html = (strings, ...args) => {
     return results; 
 }
 
-export function CSS_TO_STRING(style) {
+export function CSS_TO_STRING(style, postfix = '') {
     var newStyle = style;
   
     return Object.keys(newStyle)
       .filter(key => newStyle[key])
       .map(key => `${key}: ${newStyle[key]}`)
-      .join(";");
+      .join(";" + postfix);
   }
   
 

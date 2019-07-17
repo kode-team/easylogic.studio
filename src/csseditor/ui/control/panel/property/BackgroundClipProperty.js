@@ -18,6 +18,10 @@ export default class BackgroundClipProperty extends BaseProperty {
     return "Background Clip";
   }
 
+  isFirstShow() {
+    return false; 
+  }
+
   getTools() {
     return `<div ref='$backgroundClip' style='padding-top: 3px;'></div>`;
   }  
