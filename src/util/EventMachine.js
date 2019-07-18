@@ -321,6 +321,66 @@ const applyElementAttribute = ($element, key, value) => {
   }
 };
 
+// collectProps 에서 제외될 메소드 목록 
+const expectMethod = {
+  "constructor": true,
+  "initState": true,
+  "refresh": true,
+  "updateData": true,
+  "constructor": true,
+  "initializeProperty": true,
+  "created": true,
+  "getRealEventName": true,
+  "initializeStoreEvent": true,
+  "destoryStoreEvent": true,
+  "destroy": true,
+  "emit": true,
+  "trigger": true,
+  "on": true,
+  "off": true,
+  "setState": true,
+  "_reload": true,
+  "render": true,
+  "initialize": true,
+  "afterRender": true,
+  "components": true,
+  "getRef": true,
+  "parseTemplate": true,
+  "childrenIds": true,
+  "exists": true,
+  "parseProperty": true,
+  "parseSourceName": true,
+  "parseComponent": true,
+  "clean": true,
+  "refresh": true,
+  "loadTemplate": true,
+  "load": true,
+  "bindData": true,
+  "template": true,
+  "templateClass": true,
+  "eachChildren": true,
+  "initializeEvent": true,
+  "destroy": true,
+  "destroyDomEvent": true,
+  "initializeDomEvent": true,
+  "collectProps": true,
+  "filterProps": true,
+  "self": true,
+  "isAltKey": true,
+  "isCtrlKey": true,
+  "isShiftKey": true,
+  "isMetaKey": true,
+  "preventDefault": true,
+  "stopPropagation": true,
+  "bodyMouseMove": true,
+  "bodyMouseUp": true,
+  "getBindings": true,
+  "addBinding": true,
+  "initBindings": true,
+  "removeEventAll": true,
+  "removeEvent": true
+}
+
 export default class EventMachine {
   constructor() {
     this.state = {};
@@ -717,7 +777,7 @@ export default class EventMachine {
         break;
       }
       const names = Object.getOwnPropertyNames(p).filter(name => {
-        return isFunction(this[name]);
+        return isFunction(this[name]) && !expectMethod[name];
       });
 
       results.push(...names);
