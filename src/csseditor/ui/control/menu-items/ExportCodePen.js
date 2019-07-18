@@ -18,8 +18,11 @@ export default class ExportCodePen extends UIElement {
 
   [SUBMIT()]() {
     var obj = ExportManager.generate();
-    console.log(obj)
-    this.refs.$codepen.val(JSON.stringify(obj))
+    this.refs.$codepen.val(JSON.stringify({
+      title: "sapa - editor.easylogic.studio",
+      description: "https://editor.easylogic.studio",
+      ...obj
+    }))
 
     return false;
   }
