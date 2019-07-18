@@ -16,8 +16,6 @@
             width: 130px !important;
             display: inline-block;
           }
-
-          @include svg-button();
         }
     }
 
@@ -43,13 +41,6 @@
       .value-editor {
         // border: 1px solid rgba(0, 0, 0, 0.3);
         padding:2px;
-      }
-
-      .tools {
-
-        @include svg-button();
-
-
       }
     }    
 

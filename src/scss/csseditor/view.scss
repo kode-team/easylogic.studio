@@ -51,8 +51,6 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
     vertical-align: middle;
   }
 
-  @include svg-button();
-
   button {
     background-color: rgba(255, 255, 255, 0.9);
     border-radius: 3px;

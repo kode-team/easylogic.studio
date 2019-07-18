@@ -33,6 +33,7 @@ import {
 } from "../csseditor/types/event";
 import { uuid } from "./functions/math";
 
+
 const REFERENCE_PROPERTY = "ref";
 const TEMP_DIV = Dom.create("div");
 const QUERY_PROPERTY = `[${REFERENCE_PROPERTY}]`;
@@ -391,6 +392,7 @@ export default class EventMachine {
   }
 
   parseTemplate(html, isLoad) {
+
     if (isArray(html)) {
       html = html.join('');
     }
@@ -487,6 +489,7 @@ export default class EventMachine {
     if (this.childComponentKeysString) {
       targets = $el.$$(this.childComponentKeysString);
     }
+
     
     targets.forEach($dom => {
       var tagName = $dom.el.tagName.toLowerCase();
@@ -509,10 +512,11 @@ export default class EventMachine {
         instance.render();
         instance.initializeEvent();  
       }
-
+      
       $dom.replace(instance.$el);      
-
+  
     })
+
     keyEach(this.children, (key, obj) => {
       if (obj && obj.clean()) {
         delete this.children[key]
@@ -576,14 +580,14 @@ export default class EventMachine {
           newTemplate = newTemplate.join('');
         }
 
-        const fragment = this.parseTemplate(newTemplate, true);
+
+        const fragment = this.parseTemplate(html`${newTemplate}`, true);
 
         if (isVdom) {
           this.refs[elName].htmlDiff(fragment);
         } else {
           this.refs[elName].html(fragment);
         }
-
 
         // 새로운 html 이 로드가 되었으니 
         // 이벤트를 재설정 하자. 

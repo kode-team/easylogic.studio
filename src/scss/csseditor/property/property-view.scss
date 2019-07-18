@@ -107,11 +107,5 @@
       padding-right: 5px;
       vertical-align: middle;
     }
-
-    button {
-      vertical-align: middle;
-    }
-
-    @include svg-button();    
   }
 }

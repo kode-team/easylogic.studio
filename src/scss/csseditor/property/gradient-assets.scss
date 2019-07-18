@@ -120,8 +120,6 @@
                     // display: grid;
                     text-align: right;   
                     padding: 2px;
-                    
-                    @include svg-button();
                 }
             }
 
@@ -175,10 +173,6 @@
                             width: 100%;
                         }
                     }
-                }
-        
-                .tools {
-                    @include svg-button();
                 }
             }
         }

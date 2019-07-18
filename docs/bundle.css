@@ -2096,7 +2096,7 @@ html, body {
 }
 .csseditor .logo .extra-text {
   position: absolute;
-  left: 30px;
+  left: 40px;
   top: 0px;
   right: 0px;
   bottom: 0px;
@@ -2302,25 +2302,6 @@ html, body {
 }
 .csseditor .page-tools > label {
   vertical-align: middle;
-}
-.csseditor .page-tools button {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-  display: inline-block;
-  font-size: 11px;
-  cursor: pointer;
-}
-.csseditor .page-tools button svg {
-  width: 100%;
-  height: 100%;
 }
 .csseditor .page-tools button {
   background-color: rgba(255, 255, 255, 0.9);
@@ -2640,28 +2621,6 @@ html, body {
   padding-right: 5px;
   vertical-align: middle;
 }
-.csseditor .property > .property-footer button {
-  vertical-align: middle;
-}
-.csseditor .property > .property-footer button {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-  display: inline-block;
-  font-size: 11px;
-  cursor: pointer;
-}
-.csseditor .property > .property-footer button svg {
-  width: 100%;
-  height: 100%;
-}
 .csseditor .border-item .border-direction {
   position: relative;
   display: block;
@@ -2895,25 +2854,6 @@ html, body {
 .csseditor .border-image-item .tools {
   line-height: 2;
 }
-.csseditor .border-image-item .tools button {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-  display: inline-block;
-  font-size: 11px;
-  cursor: pointer;
-}
-.csseditor .border-image-item .tools button svg {
-  width: 100%;
-  height: 100%;
-}
 .csseditor .box-model-item {
   grid-template-columns: 1fr !important;
 }
@@ -3125,25 +3065,6 @@ html, body {
   text-align: right;
   padding-top: 8px;
 }
-.csseditor .transition-list .transition-item .tools button {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-  display: inline-block;
-  font-size: 11px;
-  cursor: pointer;
-}
-.csseditor .transition-list .transition-item .tools button svg {
-  width: 100%;
-  height: 100%;
-}
 .csseditor .animation-list {
   grid-template-columns: 1fr !important;
 }
@@ -3233,25 +3154,6 @@ html, body {
   vertical-align: middle;
   text-align: right;
 }
-.csseditor .animation-list .animation-item .tools button {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-  display: inline-block;
-  font-size: 11px;
-  cursor: pointer;
-}
-.csseditor .animation-list .animation-item .tools button svg {
-  width: 100%;
-  height: 100%;
-}
 .csseditor .keyframe-list {
   grid-template-columns: 1fr !important;
 }
@@ -3279,25 +3181,6 @@ html, body {
 .csseditor .keyframe-list .keyframe-item .title .tools {
   vertical-align: middle;
   text-align: right;
-}
-.csseditor .keyframe-list .keyframe-item .title .tools button {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-  display: inline-block;
-  font-size: 11px;
-  cursor: pointer;
-}
-.csseditor .keyframe-list .keyframe-item .title .tools button svg {
-  width: 100%;
-  height: 100%;
 }
 .csseditor .keyframe-list .keyframe-item .offset-list {
   padding: 0px 10px;
@@ -3403,25 +3286,6 @@ html, body {
   vertical-align: middle;
   text-align: right;
 }
-.csseditor .clip-path-list .clippath-item .title .tools button {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-  display: inline-block;
-  font-size: 11px;
-  cursor: pointer;
-}
-.csseditor .clip-path-list .clippath-item .title .tools button svg {
-  width: 100%;
-  height: 100%;
-}
 .csseditor .clip-path-list .clippath-item .offset-list {
   padding: 0px 10px;
   height: 30px;
@@ -3499,25 +3363,6 @@ html, body {
 .csseditor .selector-list .selector-item .title .tools {
   vertical-align: middle;
   text-align: right;
-}
-.csseditor .selector-list .selector-item .title .tools button {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-  display: inline-block;
-  font-size: 11px;
-  cursor: pointer;
-}
-.csseditor .selector-list .selector-item .title .tools button svg {
-  width: 100%;
-  height: 100%;
 }
 .csseditor .project-list {
   margin: 0px !important;
@@ -3757,25 +3602,6 @@ html, body {
   text-align: right;
   padding: 2px;
 }
-.csseditor .color-assets .color-list[data-view-mode=grid] .color-item .tools button {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-  display: inline-block;
-  font-size: 11px;
-  cursor: pointer;
-}
-.csseditor .color-assets .color-list[data-view-mode=grid] .color-item .tools button svg {
-  width: 100%;
-  height: 100%;
-}
 .csseditor .color-assets .color-list[data-view-mode=list] .add-color-item {
   cursor: pointer;
   text-align: center;
@@ -3818,25 +3644,6 @@ html, body {
   border-radius: 2px;
   border: 1px solid #000;
   width: 100%;
-}
-.csseditor .color-assets .color-list[data-view-mode=list] .color-item .tools button {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-  display: inline-block;
-  font-size: 11px;
-  cursor: pointer;
-}
-.csseditor .color-assets .color-list[data-view-mode=list] .color-item .tools button svg {
-  width: 100%;
-  height: 100%;
 }
 .csseditor .property.color-assets-property {
   padding-left: 0px !important;
@@ -3959,25 +3766,6 @@ html, body {
   text-align: right;
   padding: 2px;
 }
-.csseditor .gradient-assets .gradient-list[data-view-mode=grid] .gradient-item .tools button {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-  display: inline-block;
-  font-size: 11px;
-  cursor: pointer;
-}
-.csseditor .gradient-assets .gradient-list[data-view-mode=grid] .gradient-item .tools button svg {
-  width: 100%;
-  height: 100%;
-}
 .csseditor .gradient-assets .gradient-list[data-view-mode=list] .add-gradient-item {
   cursor: pointer;
   text-align: center;
@@ -4019,25 +3807,6 @@ html, body {
   border-radius: 2px;
   border: 1px solid #000;
   width: 100%;
-}
-.csseditor .gradient-assets .gradient-list[data-view-mode=list] .gradient-item .tools button {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-  display: inline-block;
-  font-size: 11px;
-  cursor: pointer;
-}
-.csseditor .gradient-assets .gradient-list[data-view-mode=list] .gradient-item .tools button svg {
-  width: 100%;
-  height: 100%;
 }
 .csseditor .property.gradient-assets-property {
   padding-left: 0px !important;
@@ -4304,12 +4073,17 @@ html, body {
   text-align: center;
   box-sizing: border-box;
   padding: 0px 4px;
-  outline: none;
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
 }
 .csseditor .range-editor .range-editor-type[data-type=calc] .area {
+  height: 100%;
   grid-template-columns: 60px 1fr;
+}
+.csseditor .range-editor .range-editor-type[data-type=calc] .area .select-editor select {
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+  margin-left: 0px;
 }
 .csseditor .range-editor[data-selected-type=calc] .range-editor-type[data-type=calc] {
   display: inline-block;
@@ -4442,25 +4216,6 @@ html, body {
   width: 130px !important;
   display: inline-block;
 }
-.csseditor .css-property-editor .title .tools button {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-  display: inline-block;
-  font-size: 11px;
-  cursor: pointer;
-}
-.csseditor .css-property-editor .title .tools button svg {
-  width: 100%;
-  height: 100%;
-}
 .csseditor .css-property-editor .css-property-item {
   box-sizing: border-box;
   padding: 4px 0px;
@@ -4475,25 +4230,6 @@ html, body {
 }
 .csseditor .css-property-editor .css-property-item .value-editor {
   padding: 2px;
-}
-.csseditor .css-property-editor .css-property-item .tools button {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-  display: inline-block;
-  font-size: 11px;
-  cursor: pointer;
-}
-.csseditor .css-property-editor .css-property-item .tools button svg {
-  width: 100%;
-  height: 100%;
 }
 .csseditor .css-property-editor .input {
   vertical-align: middle;
@@ -4704,25 +4440,6 @@ html, body {
   width: 100px !important;
   display: inline-block;
 }
-.csseditor .transform-editor .tools button {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-  display: inline-block;
-  font-size: 11px;
-  cursor: pointer;
-}
-.csseditor .transform-editor .tools button svg {
-  width: 100%;
-  height: 100%;
-}
 .csseditor .transform-editor .transform-list {
   width: 100%;
   display: grid !important;
@@ -4754,25 +4471,6 @@ html, body {
 }
 .csseditor .transform-editor .transform-list .transform-item .title .transform-menu {
   text-align: right;
-}
-.csseditor .transform-editor .transform-list .transform-item .title .transform-menu button {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-  display: inline-block;
-  font-size: 11px;
-  cursor: pointer;
-}
-.csseditor .transform-editor .transform-list .transform-item .title .transform-menu button svg {
-  width: 100%;
-  height: 100%;
 }
 .csseditor .transform-editor .transform-list .transform-item .transform-ui {
   display: grid;
@@ -5418,25 +5116,6 @@ html, body {
   width: 100px !important;
   display: inline-block;
 }
-.csseditor .svg-filter-editor .tools button {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-  display: inline-block;
-  font-size: 11px;
-  cursor: pointer;
-}
-.csseditor .svg-filter-editor .tools button svg {
-  width: 100%;
-  height: 100%;
-}
 .csseditor .svg-filter-editor .filter-list {
   width: 100%;
   display: grid !important;
@@ -5700,25 +5379,6 @@ html, body {
   text-align: right;
   vertical-align: middle;
   padding: 4px 0px;
-}
-.csseditor .select-icon-editor .tools button {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-  display: inline-block;
-  font-size: 11px;
-  cursor: pointer;
-}
-.csseditor .select-icon-editor .tools button svg {
-  width: 100%;
-  height: 100%;
 }
 .csseditor .popup {
   position: absolute;
@@ -6078,25 +5738,6 @@ html, body {
   width: 100px;
   display: inline-block;
 }
-.csseditor .popup .keyframe-popup .box .property .title .tools button {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-  display: inline-block;
-  font-size: 11px;
-  cursor: pointer;
-}
-.csseditor .popup .keyframe-popup .box .property .title .tools button svg {
-  width: 100%;
-  height: 100%;
-}
 .csseditor .popup .keyframe-popup .box .offset-input {
   padding: 5px 0px;
 }
@@ -6120,25 +5761,6 @@ html, body {
 .csseditor .popup .keyframe-popup .box .keyframe-property-item .value-editor {
   border: 1px solid rgba(0, 0, 0, 0.3);
   padding: 2px;
-}
-.csseditor .popup .keyframe-popup .box .keyframe-property-item .tools button {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-  display: inline-block;
-  font-size: 11px;
-  cursor: pointer;
-}
-.csseditor .popup .keyframe-popup .box .keyframe-property-item .tools button svg {
-  width: 100%;
-  height: 100%;
 }
 .csseditor .popup .keyframe-popup .box label {
   font-size: 12px;
@@ -6230,25 +5852,6 @@ html, body {
 .csseditor .popup .clippath-popup .box > .clip-path-editor .pointer-input .pointer-item > .input-item input, .csseditor .popup .clippath-popup .box > .clip-path-editor .pointer-input .pointer-item > .input-item span {
   vertical-align: middle;
 }
-.csseditor .popup .clippath-popup .box > .clip-path-editor .pointer-input .pointer-item .tools button {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-  display: inline-block;
-  font-size: 11px;
-  cursor: pointer;
-}
-.csseditor .popup .clippath-popup .box > .clip-path-editor .pointer-input .pointer-item .tools button svg {
-  width: 100%;
-  height: 100%;
-}
 .csseditor .popup .clippath-popup .box > .clip-path-editor .drag-area {
   height: 220px;
   position: relative;
@@ -6301,25 +5904,6 @@ html, body {
   width: 100px;
   display: inline-block;
 }
-.csseditor .popup .clippath-popup .box .property .title .tools button {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-  display: inline-block;
-  font-size: 11px;
-  cursor: pointer;
-}
-.csseditor .popup .clippath-popup .box .property .title .tools button svg {
-  width: 100%;
-  height: 100%;
-}
 .csseditor .popup .clippath-popup .box label {
   font-size: 12px;
   text-align: left;
@@ -6367,25 +5951,6 @@ html, body {
 .csseditor .popup .svg-property-editor-popup .box .property .title .tools select {
   width: 100px;
   display: inline-block;
-}
-.csseditor .popup .svg-property-editor-popup .box .property .title .tools button {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-  display: inline-block;
-  font-size: 11px;
-  cursor: pointer;
-}
-.csseditor .popup .svg-property-editor-popup .box .property .title .tools button svg {
-  width: 100%;
-  height: 100%;
 }
 .csseditor .popup .svg-property-editor-popup .box label {
   font-size: 12px;

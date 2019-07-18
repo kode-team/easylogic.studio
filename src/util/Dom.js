@@ -657,7 +657,10 @@ export default class Dom {
   }
 
   replace(newElement) {
-    this.el.parentNode.replaceChild(newElement.el || newElement, this.el);
+
+    if (this.el.parentNode) {
+      this.el.parentNode.replaceChild(newElement.el || newElement, this.el);
+    }
 
     return this;
   }

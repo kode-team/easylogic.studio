@@ -64,8 +64,6 @@ $border-radius: 3px;
         display: none;        
     }
     
-    // @include svg-button();
-
     .range-editor-type {
         display: none;
         vertical-align: middle;
@@ -100,8 +98,7 @@ $border-radius: 3px;
                     border-left:0px;
                     text-align: center;
                     box-sizing: border-box;
-                    padding: 0px 4px;
-                    outline: none;                
+                    padding: 0px 4px;             
                     border-top-left-radius: 0px;
                     border-bottom-left-radius: 0px;                    
                 }
@@ -110,7 +107,16 @@ $border-radius: 3px;
 
         &[data-type='calc'] {
             .area {
+                height: 100%;
                 grid-template-columns: 60px 1fr;    
+
+                .select-editor {
+                    select {
+                        border-top-left-radius: 3px;
+                        border-bottom-left-radius: 3px;
+                        margin-left: 0px;
+                    }
+                }
             }
         }
     }

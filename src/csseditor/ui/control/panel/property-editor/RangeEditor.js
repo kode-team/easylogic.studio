@@ -51,7 +51,7 @@ export default class RangeEditor extends UIElement {
         var layoutClass = layout;
 
         var realValue = (+value).toString();
-        
+
         return `
         <div class='range-editor ${hasLabel} ${hasCalc} ${isRemovable} ${layoutClass}' data-selected-type='${type}' ref='$range'>
             ${label ? `<label>${label}</label>` : '' }
@@ -68,9 +68,8 @@ export default class RangeEditor extends UIElement {
             <div class='range-editor-type' data-type='calc'>
                 <div class='area'>
                     <SelectEditor ref='$varType' key='varType' value="${this.state.value.unit}" options="calc,var" onchange='changeVarType' />
-                    <div>
-                        <input type='text' ref='$calc' value='${this.state.value}' />
-                    </div>
+
+                    <input type='text' ref='$calc' value='${this.state.value}' />
                 </div>
             </div>
             <button type='button' class='remove' ref='$remove'>${icon.close}</button>
@@ -94,6 +93,11 @@ export default class RangeEditor extends UIElement {
         var value = '' 
         if (type === 'calc') {
             value = Length.calc(this.refs.$calc.value) 
+
+            var varType = value.unit;
+
+            this.children.$varType.setValue(varType);
+            
         } else {
             var value = this.getRef('$propertyNumber').value; 
             var unit = this.children.$unit.getValue();

@@ -65,12 +65,6 @@
                 vertical-align: middle;
               }
             }
-
-            .tools {
-              
-              @include svg-button();
-
-            }
           }
         }
 
@@ -139,8 +133,6 @@
               width: 100px;
               display: inline-block;
             }
-
-            @include svg-button();
           }
         }
 
