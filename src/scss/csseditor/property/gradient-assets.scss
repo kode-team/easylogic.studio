@@ -10,32 +10,16 @@
             border: 1px solid $border-color;            
         }
 
-        &[data-view-mode="list"] {
-            button[data-value='list'] {
-                background-color: $selected-border-color;
-                border-color: $selected-border-color;
-                color: white;
-                 
-                svg {
-                    path {
-                        fill: white; 
-                    }
+
+        @each $listType in list, grid {
+            &[data-view-mode="#{$listType}"] {
+                button[data-value='#{$listType}'] {
+                    background-color: $selected-border-color;
+                    border-color: $selected-border-color;
+                    background-image: none;
                 }
             }
-        }
-
-        &[data-view-mode="grid"] {
-            button[data-value='grid'] {
-                background-color: $selected-border-color;
-                border-color: $selected-border-color;                
-                color: white;
-                svg {
-                    path {
-                        fill: white; 
-                    }
-                }                
-            }
-        }        
+        }     
 
     }
     
@@ -134,7 +118,7 @@
 
             .gradient-item {
                 display: grid;
-                grid-template-columns: 22px 1fr 40px;
+                grid-template-columns: 22px 1fr 50px;
                 grid-column-gap: 2px;
                 height: 20px;
                 margin-bottom: 2px;                

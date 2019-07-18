@@ -43,22 +43,23 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
   bottom: 10px;
   display: inline-block;
   padding: 5px 10px;
-  background-color: rgba(255, 255, 255, 0.8);
   border-radius: 3px;
   border: 1px solid $border-color;
+  color: $font-color;
+  background-color: $background-color;
 
   > label {
     vertical-align: middle;
+    font-size: 11px;
   }
 
   button {
-    background-color: rgba(255, 255, 255, 0.9);
     border-radius: 3px;
   }
 
   > .select {
     display: inline-block;
-    width: 200px;
+    width: 150px;
   }
 }
 

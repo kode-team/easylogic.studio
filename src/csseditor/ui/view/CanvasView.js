@@ -68,7 +68,6 @@ export default class CanvasView extends UIElement {
           </div>
         </div>
         <div class='page-tools'>
-          <label>Scale</label>        
           <button type='button' ref='$plus'>${icon.add}</button>
           <button type='button' ref='$minus'>${icon.remove2}</button>
           <div class='select'>

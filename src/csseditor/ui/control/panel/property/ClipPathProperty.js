@@ -14,6 +14,11 @@ export default class ClipPathProperty extends BaseProperty {
   getTitle() {
     return "Clip Path";
   }
+
+  getClassName() {
+    return 'clip-path-property'
+  }
+
   getBody() {
     return `<div class='property-item clip-path-list' ref='$clippathList'></div>`;
   }

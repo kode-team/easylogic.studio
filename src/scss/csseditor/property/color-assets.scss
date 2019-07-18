@@ -10,32 +10,15 @@
             border: 1px solid $border-color;            
         }
 
-        &[data-view-mode="list"] {
-            button[data-value='list'] {
-                background-color: $selected-border-color;
-                border-color: $selected-border-color;
-                color: white;
-                 
-                svg {
-                    path {
-                        fill: white; 
-                    }
+        @each $listType in list, grid {
+            &[data-view-mode="#{$listType}"] {
+                button[data-value='#{$listType}'] {
+                    background-color: $selected-border-color;
+                    border-color: $selected-border-color;
+                    background-image: none;
                 }
             }
-        }
-
-        &[data-view-mode="grid"] {
-            button[data-value='grid'] {
-                background-color: $selected-border-color;
-                border-color: $selected-border-color;                
-                color: white;
-                svg {
-                    path {
-                        fill: white; 
-                    }
-                }                
-            }
-        }        
+        }  
 
     }
     
@@ -113,18 +96,15 @@
                 }
 
                 .tools {
-                    background-color: rgba(255, 255, 255, 0.8);                    
+                    background-color: transparent;
                     position: absolute;
                     display: none; 
                     top: 0px;
                     right: 0px;
-                    // display: grid;
                     text-align: right;   
                     padding: 2px;
                 }
             }
-
-
         }
 
         &[data-view-mode='list'] {
@@ -135,7 +115,7 @@
 
             .color-item {
                 display: grid;
-                grid-template-columns: 22px 1fr 40px;
+                grid-template-columns: 22px 1fr 50px;
                 grid-column-gap: 2px;
                 height: 20px;
                 margin-bottom: 2px;

@@ -52,7 +52,6 @@ export default class StyleView extends UIElement {
   }
 
   refreshStyleHead () {
-    var $temp = Dom.create('div')
     var project = editor.selection.currentProject || { layers : [] }
 
     this.refs.$head.$$(`style`).forEach($style => $style.remove())

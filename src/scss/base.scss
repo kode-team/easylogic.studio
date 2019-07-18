@@ -1,8 +1,5 @@
-$border-color: #000;
-$selected-border-color: #609de2;
-$selected-color: #3174ad;
+
 $item-selected-color: #dbf3ff;
-$font-color: black;
 $pointer-color: rgba(#ececec, 0.8);
 $gutter: 8px;
 $tool-size: 50px;
@@ -21,7 +18,12 @@ $display-flex-color: #01a270;
 $display-grid-color: red;
 
 
-$background-color: rgb(41, 39, 39); 
+
+// common 
+$border-color: #000;
+$selected-border-color: #609de2;
+$selected-color: #3174ad;
+$background-color: #252424; 
 $font-color: #ececec;
 
 // property 
@@ -29,12 +31,13 @@ $property-border-color: #525252;
 $property-background-color: $background-color; 
 $property-font-color: $font-color;
 
-
+// tab 
 $tab-background-color: $background-color; 
 $tab-font-color: $font-color;
 $tab-selected-color: $selected-color; 
 $tab-border-color: $border-color;
 
+// popup 
 $popup-background-color: $background-color; 
 $popup-font-color: $font-color;
 $popup-selected-color: $selected-color; 

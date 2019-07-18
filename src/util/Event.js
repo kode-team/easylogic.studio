@@ -64,7 +64,7 @@ const CHECK_PATTERN_LIST = [
   CHECK_FORM_PATTERN
 ].join("|");
 
-export const CHECK_PATTERN = new RegExp(`^(${CHECK_PATTERN_LIST}\s)`, "ig");
+export const CHECK_PATTERN = new RegExp(`^(${CHECK_PATTERN_LIST})`, "ig");
 
 export const NAME_SAPARATOR = ":";
 export const CHECK_SAPARATOR = "|";

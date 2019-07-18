@@ -72,7 +72,7 @@ export default class RangeEditor extends UIElement {
                     <input type='text' ref='$calc' value='${this.state.value}' />
                 </div>
             </div>
-            <button type='button' class='remove' ref='$remove'>${icon.close}</button>
+            <button type='button' class='remove' ref='$remove' title='Remove'>${icon.close}</button>
         </div>
     `
     }

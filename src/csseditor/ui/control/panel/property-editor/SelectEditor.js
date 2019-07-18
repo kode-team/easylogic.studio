@@ -61,7 +61,7 @@ export default class SelectEditor extends UIElement {
             var label = it; 
 
             if (label === '') {
-                label = this.props['none-value'] ? this.props['none-value'] : '< none-value >'
+                label = this.props['none-value'] ? this.props['none-value'] : ''
             } else if (label === '-') {
                 label = '----------'
                 value = ''; 

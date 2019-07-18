@@ -1409,7 +1409,7 @@ html, body {
   height: 50px;
   overflow: hidden;
   position: relative;
-  background-color: #292727;
+  background-color: #252424;
   color: #ececec;
   z-index: 1;
   pointer-events: all;
@@ -1546,7 +1546,7 @@ html, body {
   bottom: 0px;
 }
 .csseditor .feature-control .draw-items {
-  background-color: #292727;
+  background-color: #252424;
 }
 .csseditor .feature-control .draw-items .menu-item {
   text-align: center;
@@ -1674,7 +1674,7 @@ html, body {
   right: 0px;
   bottom: 0px;
   top: 0px;
-  background-color: #292727;
+  background-color: #252424;
   color: #ececec;
 }
 .csseditor .tab.number-tab .tab-header {
@@ -1830,7 +1830,7 @@ html, body {
   height: 20px;
 }
 .csseditor .tab > .tab-header > .tab-item:not(.selected) {
-  background-color: #292727;
+  background-color: #252424;
 }
 .csseditor .tab > .tab-header > .tab-item.selected {
   background-color: #3174ad;
@@ -1843,7 +1843,7 @@ html, body {
   color: black;
 }
 .csseditor .tab > .tab-header > .tab-item.select-reverse.selected {
-  background-color: #292727;
+  background-color: #252424;
 }
 .csseditor .tab > .tab-body {
   position: absolute;
@@ -1886,7 +1886,7 @@ html, body {
   right: 0px;
   height: 30px;
   display: none;
-  background-color: #292727;
+  background-color: #252424;
   font-size: 12px;
   font-weight: bold;
   padding: 8px 5px !important;
@@ -2176,6 +2176,20 @@ html, body {
   width: 100%;
   height: 100%;
 }
+.csseditor .tool-menu .items .icon.width,
+.csseditor .external-tool-menu .items .icon.width {
+  background-image: linear-gradient(to right, #3174ad, #3174ad), linear-gradient(to right, #ccc, #ccc);
+  background-size: 20px 6px, 20px 6px;
+  background-position: 2px 6px, 2px 16px;
+  background-repeat: no-repeat;
+}
+.csseditor .tool-menu .items .icon.height,
+.csseditor .external-tool-menu .items .icon.height {
+  background-image: linear-gradient(to right, #3174ad, #3174ad), linear-gradient(to right, #ccc, #ccc);
+  background-size: 6px 20px, 6px 20px;
+  background-position: 4px 2px, 14px 2px;
+  background-repeat: no-repeat;
+}
 .csseditor .tool-menu .items .icon.left,
 .csseditor .external-tool-menu .items .icon.left {
   background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, #888888, #888888);
@@ -2296,20 +2310,21 @@ html, body {
   bottom: 10px;
   display: inline-block;
   padding: 5px 10px;
-  background-color: rgba(255, 255, 255, 0.8);
   border-radius: 3px;
   border: 1px solid #000;
+  color: #ececec;
+  background-color: #252424;
 }
 .csseditor .page-tools > label {
   vertical-align: middle;
+  font-size: 11px;
 }
 .csseditor .page-tools button {
-  background-color: rgba(255, 255, 255, 0.9);
   border-radius: 3px;
 }
 .csseditor .page-tools > .select {
   display: inline-block;
-  width: 200px;
+  width: 150px;
 }
 .csseditor .page-canvas {
   position: absolute;
@@ -2539,7 +2554,7 @@ html, body {
   padding: 0px 0px;
   box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.03), 0 1px 0 0 rgba(0, 0, 0, 0.15);
   border-bottom: 1px solid #000;
-  background-color: #292727;
+  background-color: #252424;
   color: #ececec;
 }
 .csseditor .property svg {
@@ -2656,7 +2671,7 @@ html, body {
   width: 20px;
   height: 20px;
   margin-right: 10px;
-  background-color: #292727;
+  background-color: #252424;
 }
 .csseditor .border-item .border-direction button[has-value=true] {
   border-color: #3174ad;
@@ -3260,6 +3275,9 @@ html, body {
 .csseditor .code-view-item > div pre::before svg path {
   fill: white;
 }
+.csseditor .clip-path-property .property-body {
+  padding: 5px 0px !important;
+}
 .csseditor .clip-path-list {
   grid-template-columns: 1fr !important;
 }
@@ -3267,13 +3285,12 @@ html, body {
   display: grid;
   grid-template-columns: 1fr;
   grid-column-gap: 4px;
-  border: 1px solid #000;
   margin-bottom: 5px;
-  padding: 5px;
+  padding: 5px 6px;
   cursor: pointer;
 }
-.csseditor .clip-path-list .clippath-item.selected {
-  background-color: rgba(0, 0, 0, 0.5);
+.csseditor .clip-path-list .clippath-item.selected, .csseditor .clip-path-list .clippath-item:hover {
+  background-color: #3174ad;
 }
 .csseditor .clip-path-list .clippath-item .title {
   display: grid;
@@ -3520,18 +3537,12 @@ html, body {
 .csseditor .color-assets .color-list-tools[data-view-mode=list] button[data-value=list] {
   background-color: #609de2;
   border-color: #609de2;
-  color: white;
-}
-.csseditor .color-assets .color-list-tools[data-view-mode=list] button[data-value=list] svg path {
-  fill: white;
+  background-image: none;
 }
 .csseditor .color-assets .color-list-tools[data-view-mode=grid] button[data-value=grid] {
   background-color: #609de2;
   border-color: #609de2;
-  color: white;
-}
-.csseditor .color-assets .color-list-tools[data-view-mode=grid] button[data-value=grid] svg path {
-  fill: white;
+  background-image: none;
 }
 .csseditor .color-assets .color-list .color-view {
   pointer-events: none;
@@ -3594,7 +3605,7 @@ html, body {
   width: 100%;
 }
 .csseditor .color-assets .color-list[data-view-mode=grid] .color-item .tools {
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: transparent;
   position: absolute;
   display: none;
   top: 0px;
@@ -3608,7 +3619,7 @@ html, body {
 }
 .csseditor .color-assets .color-list[data-view-mode=list] .color-item {
   display: grid;
-  grid-template-columns: 22px 1fr 40px;
+  grid-template-columns: 22px 1fr 50px;
   grid-column-gap: 2px;
   height: 20px;
   margin-bottom: 2px;
@@ -3681,18 +3692,12 @@ html, body {
 .csseditor .gradient-assets .gradient-list-tools[data-view-mode=list] button[data-value=list] {
   background-color: #609de2;
   border-color: #609de2;
-  color: white;
-}
-.csseditor .gradient-assets .gradient-list-tools[data-view-mode=list] button[data-value=list] svg path {
-  fill: white;
+  background-image: none;
 }
 .csseditor .gradient-assets .gradient-list-tools[data-view-mode=grid] button[data-value=grid] {
   background-color: #609de2;
   border-color: #609de2;
-  color: white;
-}
-.csseditor .gradient-assets .gradient-list-tools[data-view-mode=grid] button[data-value=grid] svg path {
-  fill: white;
+  background-image: none;
 }
 .csseditor .gradient-assets .gradient-list .gradient-view {
   pointer-events: none;
@@ -3772,7 +3777,7 @@ html, body {
 }
 .csseditor .gradient-assets .gradient-list[data-view-mode=list] .gradient-item {
   display: grid;
-  grid-template-columns: 22px 1fr 40px;
+  grid-template-columns: 22px 1fr 50px;
   grid-column-gap: 2px;
   height: 20px;
   margin-bottom: 2px;
@@ -4093,7 +4098,7 @@ html, body {
 }
 .csseditor .number-range-editor {
   display: grid;
-  grid-template-columns: 1fr 20px;
+  grid-template-columns: 1fr;
   grid-column-gap: 4px;
 }
 .csseditor .number-range-editor.has-label {
@@ -4387,40 +4392,20 @@ html, body {
 }
 .csseditor .border-radius-editor .radius-selector[data-selected-value=all] button[data-value=all] {
   background-color: #3174ad;
+  background-image: none;
 }
 .csseditor .border-radius-editor .radius-selector[data-selected-value=all] button[data-value=all] svg path {
   fill: white;
 }
 .csseditor .border-radius-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] {
   background-color: #3174ad;
+  background-image: none;
 }
 .csseditor .border-radius-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] svg path {
   fill: white;
 }
-.csseditor .border-radius-editor .radius-selector button {
-  flex: none;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  box-sizing: border-box;
-  width: 20px;
-  height: 20px;
-  display: inline-block;
-  vertical-align: middle;
-  margin-right: 2px;
-  border-radius: 3px;
-  cursor: pointer;
-  outline: none;
-  padding: 0px;
-  border: 0px;
-}
-.csseditor .border-radius-editor .radius-selector button svg {
-  width: 100%;
-  height: 100%;
-}
-.csseditor .border-radius-editor .radius-selector button svg path {
-  fill: #ccc;
+.csseditor .border-radius-editor .radius-setting-box > div {
+  margin-bottom: 5px;
 }
 .csseditor .transform-editor .label {
   height: 20px;
@@ -4600,7 +4585,7 @@ html, body {
   height: 16px;
 }
 .csseditor .box-shadow-editor .shadow-item .inset svg path {
-  fill: #292727;
+  fill: #252424;
 }
 .csseditor .box-shadow-editor .shadow-item .inset[data-value=true] svg path {
   fill: #3174ad;
@@ -5385,7 +5370,7 @@ html, body {
   display: none;
   box-sizing: border-box;
   z-index: 1000;
-  background-color: #292727;
+  background-color: #252424;
   border: 1px solid #000;
   box-shadow: 0 0 1px 0px #000;
   padding: 14px;
@@ -5556,7 +5541,7 @@ html, body {
 .csseditor .popup .box-shadow-property-popup .codemirror-colorpicker {
   box-shadow: none;
   border-radius: 0px;
-  background-color: #292727;
+  background-color: #252424;
 }
 .csseditor .popup .box-shadow-property-popup .codemirror-colorpicker input {
   color: #ececec !important;
@@ -5675,7 +5660,7 @@ html, body {
 .csseditor .popup .text-shadow-property-popup .codemirror-colorpicker {
   box-shadow: none;
   border-radius: 0px;
-  background-color: #292727;
+  background-color: #252424;
 }
 .csseditor .popup .text-shadow-property-popup .codemirror-colorpicker input {
   color: #ececec !important;
@@ -6236,7 +6221,7 @@ html, body {
   box-shadow: none;
   border-radius: 0px;
   border: 0px;
-  background-color: #292727;
+  background-color: #252424;
 }
 .csseditor .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=color] .codemirror-colorpicker input {
   color: #ececec !important;
@@ -6341,7 +6326,7 @@ html, body {
   box-shadow: none;
   border-radius: 0px;
   border: 0px;
-  background-color: #292727;
+  background-color: #252424;
 }
 .csseditor .popup .color-picker-popup .codemirror-colorpicker input {
   color: #ececec !important;
@@ -6640,7 +6625,7 @@ html, body {
   box-shadow: none;
   border-radius: 0px;
   border: 0px;
-  background-color: #292727;
+  background-color: #252424;
 }
 .csseditor .popup .gradient-picker .codemirror-colorpicker .color-panel {
   margin-top: 0px;

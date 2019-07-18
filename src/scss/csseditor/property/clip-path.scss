@@ -1,3 +1,9 @@
+.clip-path-property {
+  .property-body {
+    padding: 5px 0px !important;
+  }
+}
+
 .clip-path-list {
     grid-template-columns: 1fr !important;
   
@@ -5,12 +11,14 @@
       display: grid; 
       grid-template-columns: 1fr; 
       grid-column-gap: 4px;
-      border: 1px solid $border-color;
+      // border: 1px solid $border-color;
       margin-bottom: 5px;
-      padding: 5px;  
+      padding: 5px 6px;  
       cursor: pointer;
-      &.selected {
-        background-color: rgba($border-color, 0.5);
+
+      &.selected,
+      &:hover {
+        background-color: $selected-color;
       }
 
       .title {

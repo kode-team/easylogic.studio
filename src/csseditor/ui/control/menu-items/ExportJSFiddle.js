@@ -1,8 +1,7 @@
 import { SUBMIT } from "../../../../util/Event";
 import MenuItem from "./MenuItem";
-import { editor } from "../../../../editor/editor";
 
-import { keyMap, CSS_TO_STRING } from "../../../../util/functions/func";
+import ExportManager from "../../../../editor/ExportManager";
 
 export default class ExportJSFiddle extends MenuItem {
   template() {
@@ -22,42 +21,14 @@ export default class ExportJSFiddle extends MenuItem {
   }
 
   [SUBMIT()]() {
-    var current = editor.selection.current;
-    if (current) {
-      this.refs.$title.val("Gradient - easylogic.studio");
-      this.refs.$description.val("https://gradient.easylogic.studio");
-      this.refs.$html.val(`
-        <div id="sample"></div>
-        <svg width="0" height="0">
-          ${current.toSVGString()}
-        </svg>
-      `);
-      this.refs.$css.val(this.generate(current));
-    }
+    this.refs.$title.val("sapa - editor.easylogic.studio");
+    this.refs.$description.val("https://editor.easylogic.studio");
+
+    var obj = ExportManager.generate();
+
+    this.refs.$html.val(obj.html);
+    this.refs.$css.val(obj.css);
 
     return false;
-  }
-
-
-  generate(current) {
-    var css = current.toCSS(), keyframeString = current.toKeyframeString(), rootVariable = current.toRootVariableCSS()
-    var selectorString = current.toSelectorString('#sample')
-    var results = `:root {
-  ${CSS_TO_STRING(rootVariable)}
-}
-
-/* element */
-#sample { 
-${keyMap(css, (key, value) => {
-  return `  ${key}: ${value};\n`
-}).join('')}
-}  
-
-${selectorString}
-
-/* keyframe */
-${keyframeString}
-    `
-    return results
   }
 }
