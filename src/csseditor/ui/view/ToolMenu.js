@@ -21,6 +21,10 @@ export default class ToolMenu extends UIElement {
           <SameWidth />
           <SameHeight />
           <CopyItem />
+
+          <div class='split'></div>
+
+          <ToggleRightItem />
         </div>
 
       </div>

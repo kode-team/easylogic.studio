@@ -13,9 +13,11 @@ import SameHeight from "./SameHeight";
 import SameWidth from "./SameWidth";
 import CopyItem from "./CopyItem";
 import AddText from "./AddText";
+import ToggleRightItem from "./ToggleRightItem";
 
 
 export default {
+  ToggleRightItem,
   AddText,
   CopyItem,
   SameHeight,

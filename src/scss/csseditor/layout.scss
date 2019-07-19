@@ -84,6 +84,20 @@
     height: 100%;
     position: relative;
 
+    &.open-right {
+      .layout-body{
+        right: $right-size;
+      }
+
+      .layout-right {
+        right: 0px;
+      }
+
+      .layout-tools {
+        right: $right-size;
+      }
+    }
+
     .layout-left {
       position: absolute;
       left: 0px;
@@ -99,7 +113,7 @@
 
     .layout-right {
       position: absolute;
-      right: 0px;
+      right: -$right-size;
       top: 0px;
       bottom: 0px; 
       width: $right-size;
@@ -109,14 +123,16 @@
       flex-direction: column;
       overflow: auto;
       box-shadow: 0 10px 20px rgba(0,0,0,.19), 0 6px 6px rgba(0,0,0,.23);      
+      transition: right 0.1s linear;
     }
 
     .layout-body {
       top: 0px;
       left: $left-size;
-      right: $left-size;
+      right: 0px;
       bottom: 0px;
       position: absolute;
+      transition: right 0.1s linear;      
     }
   }
 }

@@ -63,7 +63,19 @@
                 fill: transparent;
                 stroke: black;
                 stroke-width: 1; 
-            }            
+            }       
+            
+            &.split-path {
+                fill: transparent;
+                stroke: transparent;
+                pointer-events: stroke;
+                stroke-width: 2;
+
+                &:hover {
+                    cursor: copy;
+                    stroke: $selected-color;
+                }
+            }
         }
     }
 }

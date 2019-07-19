@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
-import { POINTERSTART, MOVE, END, BIND, POINTERMOVE, PREVENT, KEYUP, IF, STOP } from "../../../util/Event";
+import { POINTERSTART, MOVE, END, BIND, POINTERMOVE, PREVENT, KEYUP, IF, STOP, CLICK } from "../../../util/Event";
 import { editor } from "../../../editor/editor";
 import PathGenerator from "../../../editor/parse/PathGenerator";
 import Dom from "../../../util/Dom";
@@ -8,6 +8,7 @@ import { SVGLayer } from "../../../editor/items/layers/SVGLayer";
 import Color from "../../../util/Color";
 import { SVGPathItem } from "../../../editor/items/layers/SVGPathItem";
 import { Length } from "../../../editor/unit/Length";
+import { getBezierPoints, recoverBezier } from "../../../util/functions/bezier";
 
 export default class PathEditorView extends UIElement {
 
@@ -67,16 +68,19 @@ export default class PathEditorView extends UIElement {
     }
 
     addPathLayer(pathRect) {
+        this.changeMode('close');
+        this.bindData('$view');
 
-        var layer = this.makePathLayer(pathRect)
-        if (layer) {
-            editor.selection.select(layer);
 
-            this.emit('refreshAll')
-            this.emit('refreshSelection');
-        }
+        // var layer = this.makePathLayer(pathRect)
+        // if (layer) {
+        //     editor.selection.select(layer);
 
-        this.trigger('hidePathEditor');
+        //     this.emit('refreshAll')
+        //     this.emit('refreshSelection');
+        // }
+
+        // this.trigger('hidePathEditor');
 
     }
 
@@ -107,6 +111,33 @@ export default class PathEditorView extends UIElement {
         }
     }
 
+    getXY ([x, y]) {
+        return {x, y}
+    }
+
+    [CLICK('$view .split-path')] (e) {
+        var parser = new PathParser(e.$delegateTarget.attr('d'));
+        var points = [
+            this.getXY(parser.segments[0].values),
+            this.getXY(parser.segments[1].values.slice(0, 2)),
+            this.getXY(parser.segments[1].values.slice(2, 4)),
+            this.getXY(parser.segments[1].values.slice(4, 6))
+        ]
+        var clickPosition = {
+            x: e.xy.x - this.state.rect.x, 
+            y: e.xy.y - this.state.rect.y
+        }; 
+
+        var curve = recoverBezier(...points, 200)
+        var t = curve(clickPosition.x, clickPosition.y);
+
+        this.changeMode('close');
+
+        this.pathGenerator.setPoint(getBezierPoints(points, t))        
+        this.bindData('$view');
+
+    }
+
     [POINTERMOVE('$view') + PREVENT] (e) {
         if (this.isMode('draw') && this.state.rect) {            
             this.state.moveXY = {
@@ -123,7 +154,7 @@ export default class PathEditorView extends UIElement {
 
     }
 
-    [POINTERSTART('$view') + MOVE() + END()] (e) {
+    [POINTERSTART('$view :not(.split-path)') + MOVE() + END()] (e) {
 
         this.state.rect = this.parent.refs.$body.rect();            
         this.state.canvasOffset = this.refs.$view.rect();

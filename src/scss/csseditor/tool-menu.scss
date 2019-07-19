@@ -88,6 +88,15 @@ $align-sub-color: #ccc;
     padding: 0px;
     padding-top: 5px;
 
+    .split {
+      display: inline-block;
+      height: 30px;
+      vertical-align: middle;
+      width: 3px;
+      margin-right: 2px;
+      border-right: 1px solid $border-color;
+    }
+
     &.flex-2 {
       flex: 5;
     }

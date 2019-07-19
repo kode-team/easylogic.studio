@@ -28,6 +28,7 @@
     }
 
     &.is-removable {
+        grid-template-columns: 1fr 20px;
         .remove {
             display: inline-block;
         }

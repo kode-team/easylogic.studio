@@ -3,7 +3,7 @@ import CanvasView from "../ui/view/CanvasView";
 import ToolMenu from "../ui/view/ToolMenu";
 
 import UIElement, { EVENT } from "../../util/UIElement";
-import { RESIZE, DEBOUNCE, DROP, PREVENT, DRAGOVER, KEYUP, IF } from "../../util/Event";
+import { RESIZE, DEBOUNCE, DROP, PREVENT, DRAGOVER, KEYUP, IF, CLICK } from "../../util/Event";
 import { RESIZE_WINDOW } from "../types/event";
 import Inspector from "../ui/control/Inspector";
 
@@ -13,6 +13,7 @@ import ObjectList from "../ui/control/ObjectList";
 import LogoView from "../ui/view/LogoView";
 import ExternalToolMenu from "../ui/view/ExternalToolMenu";
 import { editor } from "../../editor/editor";
+import icon from "../ui/icon/icon";
 
 // var JSZip = require('jszip')
 
@@ -50,7 +51,7 @@ export default class CSSEditor extends UIElement {
             <ToolMenu />
             <ExternalToolMenu />
         </div>
-        <div class="layout-middle">
+        <div class="layout-middle" ref='$middle'>
           <div class='layout-left'>
             <ObjectList />
           </div>
@@ -60,7 +61,10 @@ export default class CSSEditor extends UIElement {
           <div class="layout-body">
             <CanvasView />
             <DrawingView />            
-          </div>                              
+          </div>                   
+          <div class='layout-tools'>
+            <button ref='$toggleRight'>${icon.dahaze}</button>
+          </div>
         </div>
         <FillPopup />
         <ColorPickerPopup  />
@@ -90,6 +94,14 @@ export default class CSSEditor extends UIElement {
       LogoView,
       ExternalToolMenu
     };
+  }
+
+  [CLICK('$toggleRight')] () {
+    this.trigger('toggleRightPanel');
+  }
+
+  [EVENT('toggleRightPanel')] () {
+    this.refs.$middle.toggleClass('open-right');
   }
 
   [EVENT('refreshAll')] () {

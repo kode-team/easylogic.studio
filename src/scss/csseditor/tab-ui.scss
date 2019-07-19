@@ -17,7 +17,7 @@ $tab-horizontal-header-right-width: 60px;
       height: 34px;
       cursor: pointer;
       // background-color: rgba($border-color, 0.3);
-      overflow: auto;
+      // overflow: auto;
     }
     .tab-content {
       display: none;
@@ -29,19 +29,16 @@ $tab-horizontal-header-right-width: 60px;
 
     > .tab-header {
       display: grid;
-      // border-bottom: 1px solid $border-color;
       grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 
       > .tab-item {
-        // border-right: 1px solid $border-color;
         text-align: center;
         position: relative;
         padding: 4px 0px;
         // width: 31px;
-        // border-top: 2px solid $border-color;
+        border-top: 2px solid transparent;
         border-bottom: 1px solid $border-color;
         border-right: 1px solid $border-color;
-        // border-left: 1px solid $border-color;
         box-sizing: border-box;
         
 
@@ -76,33 +73,21 @@ $tab-horizontal-header-right-width: 60px;
         }
 
         label {
-          display: inline-block;
-          // position: absolute;
-          // left: 0px;
-          // top: 110%;          
+          display: inline-block;       
           font-size: 11px;
-          // opacity: 0;
-          // background-color: #333;
           border-radius: 3px;
-          // color: white;
           padding: 5px 10px;
-          transition: all 0.2s ease;
           pointer-events: none;
         }
       }
     }
 
     @for $selectValue from 1 to 10 {
-      &[data-selected-value="#{$selectValue}"]
-        .tab-item[data-value="#{$selectValue}"] {
-        // background-color: rgb(201, 201, 201);
-        // border-top: 2px solid rgb(62, 62, 194);
-        border-bottom: 0px;
-        // border-right: 0px;
-        // border-left: 0px;        
-        background-color: $tab-selected-color;
+      &[data-selected-value="#{$selectValue}"] .tab-item[data-value="#{$selectValue}"] {
+        border-top: 2px solid $tab-selected-border-color;
         color: white;
-        // @include tab-title-background();
+        font-weight: bold;
+
       }
 
       &[data-selected-value="#{$selectValue}"]

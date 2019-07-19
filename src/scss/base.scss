@@ -22,8 +22,8 @@ $display-grid-color: red;
 // common 
 $border-color: #000;
 $selected-border-color: #609de2;
-$selected-color: #3174ad;
-$background-color: #252424; 
+$selected-color: #3e8ec6;
+$background-color: #383838; 
 $font-color: #ececec;
 
 // property 
@@ -35,6 +35,7 @@ $property-font-color: $font-color;
 $tab-background-color: $background-color; 
 $tab-font-color: $font-color;
 $tab-selected-color: $selected-color; 
+$tab-selected-border-color: $selected-border-color;
 $tab-border-color: $border-color;
 
 // popup 

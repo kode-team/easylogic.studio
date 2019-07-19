@@ -54,9 +54,12 @@ import list from "./list";
 import grid from "./grid";
 import expand from "./expand";
 import brush from "./brush";
+import dahaze from "./dahaze";
+
 
 
 export default {
+  dahaze,
   brush,
   expand,
   list,

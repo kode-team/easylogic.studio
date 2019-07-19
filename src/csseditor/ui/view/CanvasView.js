@@ -43,7 +43,7 @@ export default class CanvasView extends UIElement {
 
     var artboard = project.add(new ArtBoard({
       name: 'New ArtBoard',
-      x: Length.px(300),
+      x: Length.px(600),
       y: Length.px(300)
     }));
     editor.selection.selectArtboard(artboard);

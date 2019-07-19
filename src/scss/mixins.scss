@@ -71,7 +71,7 @@
 
 @mixin title-background () {
     background-color: $selected-color;    
-    border-left: 2px solid $selected-color;
+    border-left: 2px solid $selected-border-color;
     color: white; 
 
     svg {

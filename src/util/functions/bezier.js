@@ -1,3 +1,4 @@
+import { getDist } from "./math";
 
 export const predefinedBezier = {
     'linear': true,
@@ -87,11 +88,43 @@ export const calc = {
 }
 
 export const createBezier = (C1, C2, C3, C4) => {
-    return function (p) {
-        const x = C1.x * calc.B1(p) + C2.x * calc.B2(p) + C3.x * calc.B3(p) + C4.x * calc.B4(p);
-        const y = C1.y * calc.B1(p) + C2.y * calc.B2(p) + C3.y * calc.B3(p) + C4.y * calc.B4(p);
+    var points = [C1, C2, C3, C4]
+    return function (t) {
+        return getBezierPointOne(points, t);
+    }
+}
 
-        return { x, y };
+export const recoverBezier = (C1, C2, C3, C4, count = 100) => {
+    var curve = createBezier(C1, C2, C3, C4);
+    var minDist = Infinity
+    var minT = 0; 
+    var results = []
+
+    function checkDist (t, x, y) {
+        var p = curve(t) 
+        var dist = getDist(x, y, p.x, p.y);
+
+        if (dist < minDist) {
+            minDist = dist; 
+            minT = t; 
+        }        
+    }
+
+    return function (x, y) {
+
+        for(var i = 0; i <= count; i++) {
+            checkDist(i/count, x, y);
+        }
+
+        var step = 1 / (count * 2)
+        var t = minT
+        for(var i = 0; i < count; i++) {
+            checkDist(t - step, x, y);
+            checkDist(t + step, x, y);
+            step /= 2;             
+        }
+
+        return minT;
     }
 }
 
@@ -105,4 +138,40 @@ export const createBezierForPattern = (str) => {
 
     return createBezier(C1, C2, C3, C4);
 
+}
+
+const interpolate = (p1, p2, t) => {
+    return {
+        x: p1.x + (p2.x - p1.x) * t,
+        y: p1.y + (p2.y - p1.y) * t 
+    }
+}
+
+export const getBezierPointOne = (points, t) => {
+
+    // console.log(points, t);
+
+    var p0 = interpolate(points[0], points[1], t);
+    var p1 = interpolate(points[1], points[2], t);
+    var p2 = interpolate(points[2], points[3], t);
+    var p3 = interpolate(p0, p1, t);
+    var p4 = interpolate(p1, p2, t);
+    return interpolate(p3, p4, t);
+}
+
+export const getBezierPoints = (points, t) => {
+
+    // console.log(points, t);
+
+    var p0 = interpolate(points[0], points[1], t);
+    var p1 = interpolate(points[1], points[2], t);
+    var p2 = interpolate(points[2], points[3], t);
+    var p3 = interpolate(p0, p1, t);
+    var p4 = interpolate(p1, p2, t);
+    var p5 = interpolate(p3, p4, t);
+
+    return {
+        first: [ points[0], p0, p3, p5 ],
+        second: [ p5, p4, p2, points[3] ]
+    }
 }

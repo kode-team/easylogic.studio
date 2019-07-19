@@ -11,7 +11,9 @@ export default class CubicBezierEditor extends UIElement {
         return {
             key: this.props.key,
             currentBezier: getPredefinedCubicBezier( this.props.value || 'linear'),
-            currentBezierIndex: 0 
+            currentBezierIndex: 0,
+            selectedColor: '#ac48ff',
+            animatedColor: '#ac48ff66'
         }
     }
 
@@ -138,7 +140,7 @@ export default class CubicBezierEditor extends UIElement {
             context.stroke();
             context.closePath();
     
-            context.strokeStyle = '#3174ad';
+            context.strokeStyle = this.state.selectedColor;
     
             // Draw control handles
             context.beginPath();
@@ -156,7 +158,7 @@ export default class CubicBezierEditor extends UIElement {
             context.closePath();
     
             context.lineWidth = 2;
-            context.strokeStyle = '#3174ad';
+            context.strokeStyle = 'white';
             
             var x1 = currentBezier[0] * width
             var y1 = currentBezier[1] == 0 ? height : (1 - currentBezier[1]) * height 
@@ -234,12 +236,12 @@ export default class CubicBezierEditor extends UIElement {
         context.stroke();
         context.closePath();
 
-        if (i <= 0) {
+        if (i >= 1) {
             return;
         }
 
         this.animationTimer = setTimeout(() => { 
-            this.start(i - 0.05); 
+            this.start(i + 0.05); 
         }, 50);
     }
 
@@ -252,8 +254,8 @@ export default class CubicBezierEditor extends UIElement {
         var height = this.refs.$animationCanvas.height();
 
         var context = this.refs.$animationCanvas.context();
-        context.fillStyle = "#3174adcc";
-        context.strokeStyle = "#3174addd";
+        context.fillStyle = this.state.animatedColor;
+        context.strokeStyle = this.state.selectedColor;
         context.lineWidth = 1;
 
         this.animationCanvasData = {
@@ -264,7 +266,7 @@ export default class CubicBezierEditor extends UIElement {
         }
 
 
-        this.start(1);
+        this.start(0);
 
 
     }

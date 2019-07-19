@@ -61,9 +61,9 @@ export default class ElementView extends UIElement {
 
             var $lock = this.parent.refs.$lock
 
-            $lock.addScrollLeft(-100);
-            $lock.addScrollTop(-100);
-        }, 100);
+            $lock.addScrollLeft(+200);
+            // $lock.addScrollTop(+100);
+        }, 200);
     }
 
     template() {

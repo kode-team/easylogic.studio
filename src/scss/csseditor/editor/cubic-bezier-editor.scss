@@ -9,7 +9,7 @@
         height:150px;
         top:30px;
         left:60px;
-        border:1px solid $selected-color;
+        border:1px solid $border-color;
 
         .bezier-canvas {
             position: absolute;
@@ -33,8 +33,8 @@
                 transform: translateX(-50%) translateY(-50%);
                 border-radius:100%;
                 cursor: pointer;
-                background-color: $selected-color;
-                border:1px solid $selected-color;
+                background-color: #ac48ff;
+                border:1px solid #ac48ff;
                 box-sizing:border-box;
             }
         
@@ -70,7 +70,7 @@
 
         @each $selectType in ease, ease-in, ease-out {
             &[data-selected-value="#{$selectType}"] .item[data-bezier="#{$selectType}"] {
-                background-color: $border-color;
+                background-color: #ac48ff;
             }
         }        
 

@@ -145,17 +145,61 @@ export default class PathGenerator {
             state.reversePoint = PathGenerator.getReversePoint(state.startPoint, state.endPoint);
         }
 
-        state.points.push({
+        var point = {
             startPoint: state.startPoint,
             endPoint: state.endPoint,
             curve: state.dragPoints,
             reversePoint: state.reversePoint
-        })
+        }   
+        
+        var last = state.points[state.points.length-1]
+
+        if (last && last.close) {
+            point.command = 'M'
+        } else if (!last) {
+            point.command = 'M'
+        }
+
+        state.points.push(point)
 
         state.startPoint = null;
         state.endPoint = null;
         state.reversePoint = null;
         state.dragPoints = false
+    }
+
+    setPoint (obj) {
+
+        var p0 = obj.first[0] 
+        var p1 = obj.second[obj.second.length-1]
+
+        var allPoints = [...this.pathEditor.state.points]
+
+        var firstItem = allPoints.filter(p => p.startPoint.x === p0.x && p.startPoint.y === p0.y)[0];
+        var secondItem = allPoints.filter(p => p.startPoint.x === p1.x && p.startPoint.y === p1.y)[0];
+
+        var newPoints = [
+            {...firstItem, endPoint: obj.first[1]},
+            {startPoint: obj.first[3], reversePoint: obj.first[2], curve: true , endPoint: obj.second[1]},
+            {...secondItem, reversePoint: obj.second[2]}
+        ]
+
+        console.table(newPoints);
+
+        var firstIndex = -1; 
+        for(var i = 0, len = allPoints.length; i < len; i++) {
+            var p = allPoints[i]
+
+            if (p.startPoint.x === p0.x && p.startPoint.y === p0.y) {
+                firstIndex = i; 
+                break; 
+            }
+        }
+
+        allPoints.splice(firstIndex, 2, ...newPoints);
+
+        this.pathEditor.state.points = allPoints;
+
     }
 
     toPath (minX, minY, scale = 1) {
@@ -227,6 +271,7 @@ export default class PathGenerator {
         const moving = this.pathEditor.state; 
         var d = [];
         var guide = [] 
+        var splitLines = [] 
         this.segmentManager.reset();
 
 
@@ -257,10 +302,10 @@ export default class PathGenerator {
                         d.push(`L ${current.startPoint.x} ${current.startPoint.y}`)
 
                         this.segmentManager.addPoint({isFirst, isLast}, current.startPoint, currentIndex, 'startPoint')                        
-
+                        splitLines.push(`M ${prev.startPoint.x} ${prev.startPoint.y} L ${current.startPoint.x} ${current.startPoint.y}`)
                     } else {
                         d.push(`Q ${prev.endPoint.x} ${prev.endPoint.y} ${current.startPoint.x} ${current.startPoint.y}`)
-
+                        splitLines.push(`M ${prev.startPoint.x} ${prev.startPoint.y} Q ${prev.endPoint.x} ${prev.endPoint.y} ${current.startPoint.x} ${current.startPoint.y}`)
                         this.segmentManager.addLine(current.startPoint, prev.endPoint)
 
                         this.segmentManager.addPoint({isFirst, isLast}, current.startPoint, currentIndex, 'startPoint')
@@ -275,7 +320,8 @@ export default class PathGenerator {
                     if (prev.curve === false) { 
 
                         d.push(`Q ${current.reversePoint.x} ${current.reversePoint.y} ${current.startPoint.x} ${current.startPoint.y}`)           
-                        
+                        splitLines.push(`M ${prev.startPoint.x} ${prev.startPoint.y} Q ${current.reversePoint.x} ${current.reversePoint.y} ${current.startPoint.x} ${current.startPoint.y}`)
+
                         this.segmentManager.addLine(current.startPoint, current.reversePoint)
                         this.segmentManager.addPoint({isFirst, isLast}, current.startPoint, currentIndex, 'startPoint')
                         this.segmentManager.addCurvePoint(current.reversePoint, currentIndex, 'reversePoint')
@@ -283,7 +329,7 @@ export default class PathGenerator {
                     } else {
                         // 이전도 drag 일 때 
                         d.push(`C ${prev.endPoint.x} ${prev.endPoint.y}  ${current.reversePoint.x} ${current.reversePoint.y} ${current.startPoint.x} ${current.startPoint.y}`)
-                        
+                        splitLines.push(`M ${prev.startPoint.x} ${prev.startPoint.y} C ${prev.endPoint.x} ${prev.endPoint.y}  ${current.reversePoint.x} ${current.reversePoint.y} ${current.startPoint.x} ${current.startPoint.y}`)
                         this.segmentManager.addLine(prev.startPoint, prev.endPoint)
                         this.segmentManager.addLine(current.startPoint, current.reversePoint)
                         if (!isLast) {
@@ -382,6 +428,9 @@ export default class PathGenerator {
         return `<svg width="100%" height="100%">
         <path d="${guide.join('')}" class='guide' />        
         <path d="${d.join('')}" class='object'/>
+        ${splitLines.map(it => {
+            return `<path d="${it}" class='split-path' />`; 
+        }).join('')}
         ${this.segmentManager.toString()}
     </svg>`
     }
