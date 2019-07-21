@@ -5,6 +5,7 @@ import { editor } from "../../../editor/editor";
 import { isNotUndefined } from "../../../util/functions/func";
 import GuideView from "./GuideView";
 import { MovableItem } from "../../../editor/items/MovableItem";
+import icon from "../icon/icon";
 
 /**
  * 원보 아이템의 크기를 가지고 scale 이랑 조합해서 world 의 크기를 구하는게 기본 컨셉 
@@ -22,6 +23,7 @@ export default class SelectionToolView extends UIElement {
     <div class='selection-view' ref='$selectionView' >
         <div class='selection-tool' ref='$selectionTool'>
             <div class='selection-tool-item' data-position='move'></div>
+            <div class='selection-tool-item' data-position='path'>${icon.scatter}</div>
             <div class='selection-tool-item' data-position='to top'></div>
             <div class='selection-tool-item' data-position='to right'></div>
             <div class='selection-tool-item' data-position='to bottom'></div>
@@ -35,17 +37,58 @@ export default class SelectionToolView extends UIElement {
     }
 
     [DOUBLECLICK('$selectionTool .selection-tool-item[data-position="move"]')] (e) {
+        this.trigger('openPathEditor');
+    }    
+
+    toggleEditingPath (isEditingPath) {
+        this.refs.$selectionTool.toggleClass('editing-path', isEditingPath);
+    }
+
+    [EVENT('openPathEditor')] () {
+        var current = editor.selection.current;
+        if (current && current.is('svg-path')) {
+            this.toggleEditingPath(true);
+            this.emit('showPathEditor', 'modify', {
+                current,
+                d: current.d,
+                screenX: current.screenX,
+                screenY: current.screenY,
+                screenWidth: current.screenWidth,
+                screenHeight: current.screenHeight,
+            }) 
+        }
+    }
+
+    [EVENT('finishPathEdit')] () {
+        this.toggleEditingPath(false);
+    }
+
+    [EVENT('updatePathItem')] (pathObject) {
 
         var current = editor.selection.current;
         if (current) {
-            console.log(e,current);
+            if (current.is('svg-path')) {
+                current.updatePathItem(pathObject);
+
+                this.parent.selectCurrent(...editor.selection.items)
+
+                editor.selection.setRectCache();        
+    
+                
+                this.emit('refreshSelectionStyleView')
+            }
         }
 
-    }    
+    }
 
     [POINTERSTART('$selectionView .selection-tool-item') + MOVE() + END()] (e) {
         this.$target = e.$delegateTarget;
         this.pointerType = e.$delegateTarget.attr('data-position')
+
+        if (this.pointerType === 'path') {
+            this.trigger('openPathEditor');
+            return false;
+        }
 
         this.refs.$selectionTool.attr('data-selected-position', this.pointerType);
 
@@ -140,6 +183,13 @@ export default class SelectionToolView extends UIElement {
         this.removeOriginalRect();
 
         this.guideView.makeGuideCache();        
+
+        var current = editor.selection.current;
+        if (current) {
+            var isPath = current.is('svg-path');
+            this.refs.$selectionTool.toggleClass('path', isPath);            
+        }
+
         this.makeSelectionTool();
 
     }    

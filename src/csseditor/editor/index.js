@@ -101,7 +101,8 @@ export default class CSSEditor extends UIElement {
   }
 
   [EVENT('toggleRightPanel')] () {
-    this.refs.$middle.toggleClass('open-right');
+    editor.openRightPanel = !editor.openRightPanel
+    this.refs.$middle.toggleClass('open-right', editor.openRightPanel);
   }
 
   [EVENT('refreshAll')] () {

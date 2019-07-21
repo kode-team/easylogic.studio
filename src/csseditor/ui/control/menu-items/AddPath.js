@@ -20,6 +20,6 @@ export default class AddPath extends MenuItem {
   }  
 
   clickButton(e) {
-    this.emit('showPathEditor', 'move');
+    this.emit('showPathEditor', 'move' );
   }
 }

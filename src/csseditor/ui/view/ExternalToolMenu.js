@@ -13,6 +13,10 @@ export default class ExternalToolMenu extends UIElement {
           <ExportCodePen />
           <ExportJSFiddle />
           <Github />
+
+          <div class='split'></div>
+
+          <ToggleRightItem />          
         </div>                
       </div>
     `;

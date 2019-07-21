@@ -39,8 +39,18 @@ export default class PathEditorView extends UIElement {
         return `<div class='path-editor-view' tabIndex="-1" ref='$view' ></div>`
     }
 
-    [KEYUP() + IF('Escape') + PREVENT + STOP] () {
-        this.addPathLayer()
+    [KEYUP() + IF('Escape') + IF('Enter') + PREVENT + STOP] () {
+
+        var pathRect = this.refs.$view.$('path.object').rect()
+        pathRect.x -= this.state.rect.x;
+        pathRect.y -= this.state.rect.y;
+
+        if (this.state.current) {
+            this.updatePathLayer(pathRect);
+        } else {
+            this.addPathLayer(pathRect); 
+        }
+        this.trigger('hidePathEditor');        
     }
 
     makePathLayer (pathRect) {
@@ -67,18 +77,33 @@ export default class PathEditorView extends UIElement {
         return layer; 
     }
 
+    updatePathLayer (pathRect) {
+        var { d } = this.pathGenerator.toPath(pathRect.x, pathRect.y, editor.scale);
+
+        var layer; 
+        var x = pathRect.x / editor.scale;
+        var y = pathRect.y / editor.scale;
+        var width = pathRect.width / editor.scale;
+        var height = pathRect.height / editor.scale; 
+
+
+        this.emit('updatePathItem', {
+            x, y, width, height, d
+        })
+    }
+
     addPathLayer(pathRect) {
-        this.changeMode('close');
-        this.bindData('$view');
+        this.changeMode('modify');
+        // this.bindData('$view');
 
 
-        // var layer = this.makePathLayer(pathRect)
-        // if (layer) {
-        //     editor.selection.select(layer);
+        var layer = this.makePathLayer(pathRect)
+        if (layer) {
+            editor.selection.select(layer);
 
-        //     this.emit('refreshAll')
-        //     this.emit('refreshSelection');
-        // }
+            this.emit('refreshAll')
+            this.emit('refreshSelection');
+        }
 
         // this.trigger('hidePathEditor');
 
@@ -87,6 +112,7 @@ export default class PathEditorView extends UIElement {
     changeMode (mode, obj) { 
         this.setState({
             mode,
+            moveXY: null,
             ...obj
         }, false)    
     }
@@ -95,18 +121,55 @@ export default class PathEditorView extends UIElement {
         return this.state.mode === mode; 
     }
 
+    [EVENT('changeScale')] () {
+
+        this.refresh();
+
+    }
+
+    refresh (obj) {
+
+        
+        if (!obj) {
+            var current = editor.selection.current;
+            if (current && current.is('svg-path')) {
+                obj = current;
+            }
+        }
+
+        if (obj && obj.d) {
+            this.pathParser.reset(obj.d)
+            this.pathParser.scale(editor.scale, editor.scale);
+            this.pathParser.translate(obj.screenX.value * editor.scale, obj.screenY.value * editor.scale)
+            this.state.points = this.pathParser.convertGenerator();
+    
+            this.bindData('$view');           
+        }
+
+    }
+
     [EVENT('showPathEditor')] (mode = 'draw', obj = {}) {
+
+        if (mode === 'move') {
+            obj.current = null;
+        }
+
         this.changeMode(mode, obj);
 
+        this.refresh(obj);
+
         this.$el.show();
+        this.$el.focus();
     }
 
     [EVENT('hidePathEditor')] () {
         this.$el.hide();
+        this.emit('finishPathEdit')
     }
 
     [BIND('$view')] () {
         return {
+            class: `${this.state.mode}`,
             innerHTML: this.pathGenerator.makeSVGPath()
         }
     }
@@ -131,7 +194,7 @@ export default class PathEditorView extends UIElement {
         var curve = recoverBezier(...points, 200)
         var t = curve(clickPosition.x, clickPosition.y);
 
-        this.changeMode('close');
+        this.changeMode('modify');
 
         this.pathGenerator.setPoint(getBezierPoints(points, t))        
         this.bindData('$view');
@@ -156,6 +219,8 @@ export default class PathEditorView extends UIElement {
 
     [POINTERSTART('$view :not(.split-path)') + MOVE() + END()] (e) {
 
+        // console.log(e);
+
         this.state.rect = this.parent.refs.$body.rect();            
         this.state.canvasOffset = this.refs.$view.rect();
         this.state.altKey = false; 
@@ -169,23 +234,19 @@ export default class PathEditorView extends UIElement {
         this.state.$target = Dom.create(e.target);
         this.state.isSegment = this.state.$target.attr('data-segment') === 'true';
         this.state.isFirstSegment = this.state.isSegment && this.state.$target.attr('data-is-first') === 'true';
+        
 
         if (this.state.isSegment) {
 
             if (this.state.isFirstSegment && this.isMode('draw')) {
-                this.changeMode('close');            
-                this.pathGenerator.setConnectedPoint();
 
-                this.bindData('$view');       
+                // 마지막 지점을 연결할 예정이기 때문에 
+                // startPoint 는  M 이었던 startPoint 로 정리된다. 
+                var index = +this.state.$target.attr('data-index')
+                this.state.startPoint = this.state.points[index].startPoint;
+                this.state.dragPoints = false
+                this.state.endPoint = null;
 
-                setTimeout(() => {
-                    var pathRect = this.refs.$view.$('path.object').rect()
-                    pathRect.x -= this.state.rect.x;
-                    pathRect.y -= this.state.rect.y;
-                    this.addPathLayer(pathRect); 
-                }, 100)
-
-                return false;                 
             } else {
                 this.changeMode('segment-move');
                 var index = +this.state.$target.attr('data-index')
@@ -212,6 +273,12 @@ export default class PathEditorView extends UIElement {
 
             this.bindData('$view');            
 
+            var pathRect = this.refs.$view.$('path.object').rect()
+            pathRect.x -= this.state.rect.x;
+            pathRect.y -= this.state.rect.y;
+            
+            this.updatePathLayer(pathRect);
+
         } else if (this.isMode('draw')) {
             var e = editor.config.get('bodyEvent');
 
@@ -222,13 +289,39 @@ export default class PathEditorView extends UIElement {
 
     end (dx, dy) {
 
+        if (this.state.$target.is(this.refs.$view) && editor.config.get('bodyEvent').altKey)  {
+            // 에디팅  종료 
+            this.trigger('hidePathEditor')
+            return ; 
+        }
+
         if (this.isMode('segment-move')) {
 
-        } else if (this.isMode('draw')) {
+        } else if (this.isMode('draw')) {            
 
-            this.pathGenerator.moveEnd(dx, dy);
 
-            this.bindData('$view');
+            if (this.state.isFirstSegment) {
+                this.changeMode('modify');            
+                this.pathGenerator.setConnectedPoint(dx, dy);
+        
+                this.bindData('$view');       
+
+                var pathRect = this.refs.$view.$('path.object').rect()
+                pathRect.x -= this.state.rect.x;
+                pathRect.y -= this.state.rect.y;
+
+                if (this.state.current) {
+                    this.updatePathLayer(pathRect);
+                } else {
+                    this.addPathLayer(pathRect); 
+                    this.trigger('hidePathEditor')
+                }
+            } else {
+                this.pathGenerator.moveEnd(dx, dy);
+
+                this.bindData('$view');
+            }
+
         }
 
     }   

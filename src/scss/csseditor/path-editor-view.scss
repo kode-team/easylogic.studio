@@ -18,6 +18,16 @@
         color: white; 
     }
 
+    &.close {
+        svg {
+            path {
+                &.object {
+                    // stroke: transparent;
+                }
+            }
+        }
+    }
+
     svg {
 
         line {
@@ -34,7 +44,7 @@
             fill: white;
             stroke: blue; 
             stroke-width: 1;
-            cursor: pointer;
+            cursor: move;
 
             &.curve {
                 stroke: red; 
@@ -75,6 +85,11 @@
                     cursor: copy;
                     stroke: $selected-color;
                 }
+            }
+
+            &.snap-path {
+                fill: transparent;
+                stroke: $selected-color;
             }
         }
     }

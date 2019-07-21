@@ -1,5 +1,6 @@
 import PathParser from "../../parse/PathParser";
 import { SVGItem } from "./SVGItem";
+import { Length } from "../../unit/Length";
 
 export class SVGPathItem extends SVGItem {
   getDefaultObject(obj = {}) {
@@ -13,6 +14,16 @@ export class SVGPathItem extends SVGItem {
       fill: 'transparent',
       ...obj
     });
+  }
+
+  updatePathItem (obj) {
+    this.json.d = obj.d; 
+    this.json.path = new PathParser(obj.d);
+
+    this.setScreenX(obj.x);
+    this.setScreenY(obj.y);
+    this.json.width = Length.px(obj.width);
+    this.json.height = Length.px(obj.height);
   }
 
   setCache () {

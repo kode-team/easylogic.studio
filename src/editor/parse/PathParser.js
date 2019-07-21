@@ -150,33 +150,76 @@ export default class PathParser {
     // svg path 를 가지고 화면 에디터용 형태로 변환한다. 
     // 이렇게 변환하는 이유는 에디팅 하면서 생성하는 구조랑 SVG 를 로드하면서 생성하는 구조랑 맞추기 위해서이다. 
     // 공통된 구조를 가지고 편집하고 결과는 svg 로 변환한다. 
+
+    getLastPoint (points, index) {
+        var lastIndex = -1; 
+        for(var i = index + 1, len = points.length; i < len; i++) {
+            if (points[i].command === 'M') {
+                lastIndex = i - 1;
+                break; 
+            }
+        }
+
+        if (lastIndex == -1) {
+            lastIndex = points.length - 1; 
+        }
+
+        if (points[lastIndex].command === 'Z') {
+            lastIndex -= 1; 
+        }
+
+        return points[lastIndex]
+    }
+
+    getFirstPoint (points, index) {
+        var firstIndex = -1; 
+        for (var i = index - 1; i > 0; i--) {
+            if (points[i].command === 'M') {
+                firstIndex = i; 
+                break; 
+            }
+        }
+        
+        if (firstIndex === -1) {
+            firstIndex = 0; 
+        }
+
+        return points[firstIndex]
+    }
+
+    getPrevPoint (points, index) {
+        var prevIndex = index - 1; 
+
+        if (prevIndex < 0) {
+            return this.getLastPoint(points, index);
+        }
+        
+        return points[prevIndex]
+    }    
+
     convertGenerator () {
 
         var points = [] 
 
         this.segments.forEach((s, index) => {
             const {command, values} = s; 
-            var prev = this.segments[index-1]
+
             if (command === 'M' ) {
                 var [x, y] = values
-                points[index] = { command, startPoint: {x, y}, endPoint: {x, y}, curve: false}
-            } else if (command === 'm' && prev) {
-                var [x, y] = values
-                var p = {
-                    x: prev.startPoint.x + x, 
-                    y: prev.startPoint.y + y
+                points[index] = { 
+                    command, 
+                    startPoint: {x, y}, 
+                    endPoint: {x, y}, 
+                    curve: false
                 }
-                points[index] = { command, startPoint : p, endPoint: p, curve: false }
             } else if (command === 'L') { 
                 var [x, y] = values
-                points[index] = { command, startPoint: {x, y}, endPoint: {x, y}, curve: false}
-            } else if (command === 'l' && prev) {
-                var [x, y] = values
-                var p = {
-                    x: prev.startPoint.x + x, 
-                    y: prev.startPoint.y + y
+                points[index] = { 
+                    command, 
+                    startPoint: {x, y}, 
+                    endPoint: {x, y}, 
+                    curve: false
                 }
-                points[index] = { command, startPoint : p, endPoint: p, curve: false }
             } else if (command === 'Q') {
                 var [cx1, cy1, x, y] = values; 
 
@@ -210,52 +253,35 @@ export default class PathParser {
                     reversePoint
                 }
 
-                var prevPoint = points[index-1]
+                var prevPoint = this.getPrevPoint(points, index)
                 // C 의 경우 이전 포인트의 endpoint 를 바꿔야 하는데. 골치 아프다. 
                 if (prevPoint) {
                     prevPoint.curve = true; 
                     prevPoint.endPoint = {x: cx1, y: cy1 } 
-                }
+                }          
+            } else if (command === 'Z') {
 
-            } else if (command === 'c') {
-                var [cx1, cy1, cx2, cy2, x, y] = values; 
-                var prevPoint = points[index-1] || {}
+                var prevPoint = this.getPrevPoint(points, index);
+                var firstPoint = this.getFirstPoint(points, index);
 
-                var startPoint = {
-                    x: prevPoint.startPoint.x + x, 
-                    y: prevPoint.startPoint.y + y 
+                if (this.isEqual(prevPoint.startPoint, firstPoint.startPoint)) {
+                    prevPoint.connected = true; 
                 }
-                var reversePoint = { 
-                    x: prevPoint.startPoint.x + cx2, 
-                    y: prevPoint.startPoint.y + cy2
-                } 
-                var endPoint = PathGenerator.getReversePoint(startPoint, reversePoint)
-
-                points[index] = {
-                    command, 
-                    curve: true, 
-                    startPoint,
-                    endPoint,
-                    reversePoint
-                }
-
-                var prevPoint = points[index-1]
-                // C 의 경우 이전 포인트의 endpoint 를 바꿔야 하는데. 골치 아프다. 
-                if (prevPoint) {
-                    prevPoint.curve = true; 
-                    prevPoint.endPoint = {
-                        x: prevPoint.startPoint.x + cx1, 
-                        y: prevPoint.startPoint.y + cy1 
-                    } 
-                }                
-            } else if (command === 'Z' || command === 'z') {
-                if (this.isEqual(points[index-1].startPoint, points[0].startPoint)) {
-                    points[index-1].connected = true; 
-                }
-                points[index-1].close = true; 
+                prevPoint.close = true; 
             }
         })
 
+        // 마지막이 connected 가 아니라면 다시 한번 체크 해보자. 
+        var lastIndex = points.length - 1; 
+        var lastPoint = points[lastIndex];
+
+        if (!lastPoint.connected) {
+            var firstPoint = this.getFirstPoint(points, lastIndex);
+
+            if (this.isEqual(lastPoint.startPoint, firstPoint.startPoint)) {
+                lastPoint.connected = true; 
+            }        
+        }
         return points;
     }
 

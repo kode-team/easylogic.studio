@@ -130,6 +130,20 @@ $align-sub-color: #ccc;
           background-color: rgba(255, 255, 255, 0.1);
         }
       }
+
+      &.open {
+        .title {
+          color: white;
+        }
+
+        .open-right-panel {
+          svg {
+            path {
+              fill: $selected-border-color;
+            }
+          }
+        }
+      }
     }
 
     .title {
@@ -218,7 +232,8 @@ $align-sub-color: #ccc;
       &.github {
         background-color: transparent;
         // box-shadow: inset 0 0 0 1px $border-color;
-        text-align: right;
+        // text-align: right;
+        text-shadow: 2px 2px 4px rgba($border-color, 0.59);
         padding-right: 2px;
         border-radius: 3px;
         &:before {
