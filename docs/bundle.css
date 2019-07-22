@@ -2686,6 +2686,13 @@ html, body {
   font-size: 11px;
   margin-bottom: 5px;
 }
+.csseditor .property > .property-body .property-item.label {
+  background-color: rgba(56, 56, 56, 0.5);
+}
+.csseditor .property > .property-body .property-item.label label {
+  font-weight: 900;
+  text-shadow: 2px 2px 1px black;
+}
 .csseditor .property > .property-footer {
   font-size: 12px;
 }
@@ -6730,6 +6737,9 @@ html, body {
   left: 0px;
   background-color: #51717e;
   color: white;
+}
+.csseditor .path-editor-view.modify svg path.object {
+  stroke: transparent;
 }
 .csseditor .path-editor-view svg line {
   stroke: green;

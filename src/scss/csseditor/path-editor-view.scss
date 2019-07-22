@@ -18,11 +18,11 @@
         color: white; 
     }
 
-    &.close {
+    &.modify {
         svg {
             path {
                 &.object {
-                    // stroke: transparent;
+                    stroke: transparent;
                 }
             }
         }

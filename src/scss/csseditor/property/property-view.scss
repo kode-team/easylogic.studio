@@ -88,6 +88,14 @@
       font-size: 11px;
       margin-bottom: 5px;
 
+      &.label {
+        background-color: rgba($property-background-color, 0.5);
+        label {
+          font-weight: 900;
+          text-shadow: 2px 2px 1px rgba(0, 0, 0, 1);
+        }
+      }
+
     }
   }
 

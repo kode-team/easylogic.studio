@@ -105,6 +105,8 @@ export class Length {
   }
 
   static parse(obj) {
+    obj = obj || Length.number(0)
+
     if (isString(obj)) {
       if (obj.indexOf("calc(") > -1) {
         return new Length(obj.split("calc(")[1].split(")")[0], "calc");

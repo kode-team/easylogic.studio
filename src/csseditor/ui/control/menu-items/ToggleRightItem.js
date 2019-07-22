@@ -23,4 +23,8 @@ export default class ToggleRightItem extends MenuItem {
   [EVENT('refreshMenuItem')] () {
     this.$el.toggleClass('open', editor.openRightPanel);
   }
+
+  [EVENT('refreshAll')] () {
+    this.trigger('refreshMenuItem')
+  }
 }

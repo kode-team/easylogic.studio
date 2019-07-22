@@ -106,6 +106,8 @@ export default class CSSEditor extends UIElement {
   }
 
   [EVENT('refreshAll')] () {
+    this.refs.$middle.toggleClass('open-right', editor.openRightPanel);
+
     this.emit('refreshProjectList');
     this.trigger('refreshAllSelectProject');
   }

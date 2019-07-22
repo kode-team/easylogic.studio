@@ -23,7 +23,7 @@ export const editor = new class {
     this.scale = 1
     this.symbols = {}
     this.images = {}
-    this.openRightPanel = false; 
+    this.openRightPanel = true; 
   }
 
   // 팝업의 zindex 를 계속 높여 주어 
