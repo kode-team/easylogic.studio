@@ -2680,14 +2680,12 @@ html, body {
 .csseditor .property > .property-body {
   display: none;
   padding: 0px;
+  background-color: #464646;
 }
 .csseditor .property > .property-body .property-item {
   padding: 0px;
   font-size: 11px;
   margin-bottom: 5px;
-}
-.csseditor .property > .property-body .property-item.label {
-  background-color: rgba(56, 56, 56, 0.5);
 }
 .csseditor .property > .property-body .property-item.label label {
   font-weight: 900;
@@ -6739,7 +6737,7 @@ html, body {
   color: white;
 }
 .csseditor .path-editor-view.modify svg path.object {
-  stroke: transparent;
+  stroke: #609de2;
 }
 .csseditor .path-editor-view svg line {
   stroke: green;
@@ -6748,6 +6746,7 @@ html, body {
 }
 .csseditor .path-editor-view svg line[data-guide=true] {
   stroke: purple;
+  pointer-events: none;
 }
 .csseditor .path-editor-view svg circle {
   fill: white;
@@ -6759,7 +6758,7 @@ html, body {
   stroke: red;
 }
 .csseditor .path-editor-view svg circle[data-is-first=true] {
-  fill: rgba(0, 0, 255, 0.8);
+  fill: rgba(96, 157, 226, 0.8);
 }
 .csseditor .path-editor-view svg path.guide {
   fill: transparent;
@@ -6773,7 +6772,7 @@ html, body {
 }
 .csseditor .path-editor-view svg path.object {
   fill: transparent;
-  stroke: black;
+  stroke: #609de2;
   stroke-width: 1;
 }
 .csseditor .path-editor-view svg path.split-path {

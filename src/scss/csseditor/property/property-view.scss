@@ -82,6 +82,7 @@
   > .property-body {
     display: none;
     padding: 0px;
+    background-color: #464646;
 
     .property-item {
       padding: 0px;
@@ -89,7 +90,7 @@
       margin-bottom: 5px;
 
       &.label {
-        background-color: rgba($property-background-color, 0.5);
+        // background-color: rgba($property-background-color, 0.5);
         label {
           font-weight: 900;
           text-shadow: 2px 2px 1px rgba(0, 0, 0, 1);

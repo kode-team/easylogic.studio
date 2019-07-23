@@ -27,6 +27,7 @@ export default class SVGItemProperty extends BaseProperty {
       this.children.$fillRule.setValue(current['fill-rule'] || 'nonzero')
       this.children.$strokeDashOffset.setValue(current['stroke-dashoffset'] || Length.number(0))
       this.children.$strokeLineCap.setValue(current['stroke-linecap'] || 'butt')
+      this.children.$strokeLineJoin.setValue(current['stroke-linejoin'] || 'miter')
 
     } else {
       this.$el.hide();
@@ -149,9 +150,19 @@ export default class SVGItemProperty extends BaseProperty {
       <div class='property-item'>
         <SelectEditor 
           ref='$strokeLineCap' 
-          label='LineCap' 
+          label='Line Cap' 
           key="stroke-linecap" 
           options="butt,round,square" 
+          onchange="changeRangeEditor" 
+        />
+      </div> 
+
+      <div class='property-item'>
+        <SelectEditor 
+          ref='$strokeLineJoin' 
+          label='Line Join' 
+          key="stroke-linejoin" 
+          options="miter,arcs,bevel,miter-clip,round" 
           onchange="changeRangeEditor" 
         />
       </div> 

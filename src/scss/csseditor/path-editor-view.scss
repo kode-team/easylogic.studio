@@ -22,7 +22,7 @@
         svg {
             path {
                 &.object {
-                    stroke: transparent;
+                    stroke: $selected-border-color;
                 }
             }
         }
@@ -37,6 +37,7 @@
 
             &[data-guide='true'] {
                 stroke: purple;
+                pointer-events: none;
             }
         }
 
@@ -51,7 +52,7 @@
             }
 
             &[data-is-first="true"] {
-                fill: rgba(blue, 0.8);
+                fill: rgba($selected-border-color, 0.8);
             }
             
         }
@@ -71,7 +72,7 @@
             
             &.object {
                 fill: transparent;
-                stroke: black;
+                stroke: $selected-border-color;
                 stroke-width: 1; 
             }       
             

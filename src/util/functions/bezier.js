@@ -94,38 +94,63 @@ export const createBezier = (C1, C2, C3, C4) => {
     }
 }
 
-export const recoverBezier = (C1, C2, C3, C4, count = 100) => {
-    var curve = createBezier(C1, C2, C3, C4);
-    var minDist = Infinity
-    var minT = 0; 
-    var results = []
-
-    function checkDist (t, x, y) {
-        var p = curve(t) 
-        var dist = getDist(x, y, p.x, p.y);
-
-        if (dist < minDist) {
-            minDist = dist; 
-            minT = t; 
-        }        
+export const createBezierQuard = (C1, C2, C3) => {
+    var points = [C1, C2, C3]
+    return function (t) {
+        return getBezierPointOneQuard(points, t);
     }
+}
 
+export const createBezierLine = (C1, C2) => {
+    var points = [C1, C2]
+    return function (t) {
+        return getBezierPointOneLine(points, t);
+    }
+}
+
+const checkDist = (obj, curve, t, x, y) => {
+    var p = curve(t) 
+    var dist = getDist(x, y, p.x, p.y);
+
+    if (dist < obj.minDist) {
+        obj.minDist = dist; 
+        obj.minT = t; 
+    }        
+}
+
+const makeCurveFunction = (curve, count = 100) => {
+    var obj = {
+        minDist: Infinity,
+        minT: 0
+    }
     return function (x, y) {
 
         for(var i = 0; i <= count; i++) {
-            checkDist(i/count, x, y);
+            checkDist(obj, curve, i/count, x, y);
         }
 
         var step = 1 / (count * 2)
-        var t = minT
+        var t = obj.minT
         for(var i = 0; i < count; i++) {
-            checkDist(t - step, x, y);
-            checkDist(t + step, x, y);
+            checkDist(obj, curve, t - step, x, y);
+            checkDist(obj, curve, t + step, x, y);
             step /= 2;             
         }
 
-        return minT;
+        return obj.minT;
     }
+}
+
+export const recoverBezier = (C1, C2, C3, C4, count = 100) => {
+    return makeCurveFunction(createBezier(C1, C2, C3, C4), count)
+}
+
+export const recoverBezierQuard = (C1, C2, C3, count = 100) => {
+    return makeCurveFunction(createBezierQuard(C1, C2, C3), count)
+}
+
+export const recoverBezierLine = (C1, C2, count = 100) => {
+    return makeCurveFunction(createBezierLine(C1, C2), count)    
 }
 
 export const createBezierForPattern = (str) => {
@@ -159,6 +184,20 @@ export const getBezierPointOne = (points, t) => {
     return interpolate(p3, p4, t);
 }
 
+export const getBezierPointOneQuard = (points, t) => {
+
+    // console.log(points, t);
+
+    var p0 = interpolate(points[0], points[1], t);
+    var p1 = interpolate(points[1], points[2], t);
+    return interpolate(p0, p1, t);
+}
+
+export const getBezierPointOneLine = (points, t) => {
+
+    return interpolate(points[0], points[1], t);
+}
+
 export const getBezierPoints = (points, t) => {
 
     // console.log(points, t);
@@ -173,5 +212,26 @@ export const getBezierPoints = (points, t) => {
     return {
         first: [ points[0], p0, p3, p5 ],
         second: [ p5, p4, p2, points[3] ]
+    }
+}
+
+export const getBezierPointsQuard = (points, t) => {
+
+    var p0 = interpolate(points[0], points[1], t);
+    var p1 = interpolate(points[1], points[2], t);
+    var p2 = interpolate(p0, p1, t);
+
+    return {
+        first: [ points[0], p0, p2 ],
+        second: [ p2, p1, points[2] ]
+    }
+}
+
+export const getBezierPointsLine = (points, t) => {
+
+    var p0 = interpolate(points[0], points[1], t);
+    return {
+        first: [ points[0], p0 ],
+        second: [ p0, points[1] ]
     }
 }

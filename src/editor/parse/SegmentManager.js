@@ -5,6 +5,7 @@ export default class SegmentManager {
 
     reset () {
         this.segmentList = []
+        return this;         
     }
 
 
@@ -16,6 +17,7 @@ export default class SegmentManager {
             x2: b.x,
             y2: b.y            
         })
+        return this;         
     }
 
     addGuideLine (a, b) {
@@ -27,6 +29,7 @@ export default class SegmentManager {
             x2: b.x,
             y2: b.y            
         })
+        return this;         
     }    
 
     addPoint(obj, point, index, segment) {
@@ -37,6 +40,8 @@ export default class SegmentManager {
             index,
             segment
         })
+
+        return this; 
     }
 
     addCurvePoint (point, index, segment) {
@@ -48,6 +53,8 @@ export default class SegmentManager {
             index,
             segment
         })     
+
+        return this; 
     }
 
     toString () {

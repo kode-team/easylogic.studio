@@ -1,6 +1,6 @@
 
-import { isNotUndefined } from "../../util/functions/func";
-import PathGenerator from "./PathGenerator";
+import { isNotUndefined, clone } from "../../util/functions/func";
+import Point from "./Point";
 
 const parseRegForPath = /([mMlLvVhHcCsSqQtTaAzZ]([^mMlLvVhHcCsSqQtTaAzZ]*))/g;
 const splitReg = /[\b\t \,]/g;
@@ -147,146 +147,172 @@ export default class PathParser {
         })
     }
 
-    // svg path 를 가지고 화면 에디터용 형태로 변환한다. 
-    // 이렇게 변환하는 이유는 에디팅 하면서 생성하는 구조랑 SVG 를 로드하면서 생성하는 구조랑 맞추기 위해서이다. 
-    // 공통된 구조를 가지고 편집하고 결과는 svg 로 변환한다. 
-
-    getLastPoint (points, index) {
-        var lastIndex = -1; 
-        for(var i = index + 1, len = points.length; i < len; i++) {
-            if (points[i].command === 'M') {
-                lastIndex = i - 1;
-                break; 
-            }
-        }
-
-        if (lastIndex == -1) {
-            lastIndex = points.length - 1; 
-        }
-
-        if (points[lastIndex].command === 'Z') {
-            lastIndex -= 1; 
-        }
-
-        return points[lastIndex]
-    }
-
-    getFirstPoint (points, index) {
-        var firstIndex = -1; 
-        for (var i = index - 1; i > 0; i--) {
-            if (points[i].command === 'M') {
-                firstIndex = i; 
-                break; 
-            }
-        }
-        
-        if (firstIndex === -1) {
-            firstIndex = 0; 
-        }
-
-        return points[firstIndex]
-    }
-
-    getPrevPoint (points, index) {
-        var prevIndex = index - 1; 
-
-        if (prevIndex < 0) {
-            return this.getLastPoint(points, index);
-        }
-        
-        return points[prevIndex]
-    }    
-
     convertGenerator () {
 
         var points = [] 
 
-        this.segments.forEach((s, index) => {
+        for(var index = 0, len = this.segments.length; index < len; index++) {
+            var s = this.segments[index]
             const {command, values} = s; 
 
             if (command === 'M' ) {
                 var [x, y] = values
-                points[index] = { 
+                points.push({ 
                     command, 
+                    originalCommand: command,                    
                     startPoint: {x, y}, 
                     endPoint: {x, y}, 
                     curve: false
-                }
+                })
             } else if (command === 'L') { 
-                var [x, y] = values
-                points[index] = { 
-                    command, 
-                    startPoint: {x, y}, 
-                    endPoint: {x, y}, 
-                    curve: false
+                var prevPoint = Point.getPrevPoint(points, points.length);
+                
+                if (prevPoint.curve) {
+                    var [x, y] = values
+                    points.push({ 
+                        command, 
+                        originalCommand: command,                        
+                        startPoint: {x, y}, 
+                        endPoint: {x, y}, 
+                        reversePoint: clone(prevPoint.endPoint),
+                        curve: true
+                    })
+                } else {
+
+                    var [x, y] = values
+                    points.push({ 
+                        command, 
+                        originalCommand: command,                        
+                        startPoint: {x, y}, 
+                        endPoint: {x, y}, 
+                        reversePoint: { x, y},
+                        curve: false
+                    })
                 }
+
             } else if (command === 'Q') {
                 var [cx1, cy1, x, y] = values; 
+                var prevPoint = Point.getPrevPoint(points, points.length);
 
-                var prevPoint = points[index-1] || {}
+                if (prevPoint.curve) {  // 내가 Q 인데 앞의 포인트가  
+                    var startPoint = {x, y}                    
+                    var endPoint = {x, y}                    
+                    var reversePoint = {x, y}                    
+                    points.push({
+                        command: 'L',
+                        originalCommand: command,                        
+                        startPoint,
+                        endPoint,
+                        reversePoint,
+                        curve: false
+                    })
 
-                var startPoint = {x, y}
-                var reversePoint = { x: cx1, y: cy1} 
-                var endPoint = PathGenerator.getReversePoint(startPoint, reversePoint) 
+                    prevPoint.endPoint = { x: cx1, y: cy1 }
 
-                points[index] = {
-                    command, 
-                    curve: true, 
-                    startPoint,
-                    endPoint,
-                    reversePoint
+                } else {
+
+                    var startPoint = {x, y}
+                    var reversePoint = { x: cx1, y: cy1} 
+                    var endPoint = {x, y}
+    
+                    points.push({
+                        command, 
+                        originalCommand: command,                        
+                        curve: true, 
+                        startPoint,
+                        endPoint,
+                        reversePoint
+                    })
                 }
+            } else if (command === 'T') {
+                var [x, y] = values; 
+                // T 는 앞에 Q 가 있다는 소리 
+                // Q 의 Control Point 반대편에 Control Point 가 있다고 치고 생각하자. 
+                var prevSegment = segments[index-1]
+
+                if (prevSegment && prevSegment.command === 'Q') {
+                    var [cx1, cy1, sx, sy ] = prevSegment.values
+
+                    var prevPoint = Point.getPrevPoint(points, points.length)
+                    prevPoint.endPoint = Point.getReversePoint({x: sx, y: sy}, {x: cx1, y: cy1});
+
+                    var startPoint = {x, y}
+                    var endPoint = {x, y}                    
+                    var reversePoint = {x, y}                    
+                    points.push({
+                        command: 'L',
+                        originalCommand: command,
+                        startPoint,
+                        endPoint,
+                        reversePoint,
+                        curve: false
+                    })
+                }
+
 
             } else if (command === 'C') {
-                var [cx1, cy1, cx2, cy2, x, y] = values; 
+                
+                var prevPoint = Point.getPrevPoint(points, points.length)
 
+                var [cx1, cy1, cx2, cy2, x, y] = values;                 
                 var startPoint = {x, y}
                 var reversePoint = { x: cx2, y: cy2} 
-                var endPoint = PathGenerator.getReversePoint(startPoint, reversePoint)                
+                var endPoint = {x, y}
 
-
-                points[index] = {
+                points.push({
                     command, 
+                    originalCommand: command,                    
                     curve: true, 
                     startPoint,
                     endPoint,
                     reversePoint
-                }
+                })
 
-                var prevPoint = this.getPrevPoint(points, index)
-                // C 의 경우 이전 포인트의 endpoint 를 바꿔야 하는데. 골치 아프다. 
                 if (prevPoint) {
                     prevPoint.curve = true; 
                     prevPoint.endPoint = {x: cx1, y: cy1 } 
-                }          
+                }    
+            } else if (command === 'S') {
+                var [x, y] = values; 
+                // S 는 앞에 C,S 가 있다는 소리 
+                // S 의 Control Point 반대편에 Control Point 가 있다고 치고 생각하자. 
+                var prevSegment = segments[index-1]
+
+                if (prevSegment && prevSegment.command === 'C') {
+                    var [cx2, cy2, sx, sy ] = prevSegment.values
+
+                    var prevPoint = Point.getPrevPoint(points, points.length)
+                    prevPoint.endPoint = Point.getReversePoint(prevPoint.startPoint, prevPoint.reversePoint);
+
+                    var startPoint = {x, y}
+                    var endPoint = {x, y}                    
+                    var reversePoint = { x: cx2, y: cy2}  
+                    points.push({
+                        command: 'Q',
+                        originalCommand: command,
+                        startPoint,
+                        endPoint,
+                        reversePoint,
+                        curve: false
+                    })
+                }
+                            
+                
             } else if (command === 'Z') {
 
-                var prevPoint = this.getPrevPoint(points, index);
-                var firstPoint = this.getFirstPoint(points, index);
+                var prevPoint = Point.getPrevPoint(points, points.length);
+                var firstPoint = Point.getFirstPoint(points, points.length);
 
-                if (this.isEqual(prevPoint.startPoint, firstPoint.startPoint)) {
+                if (Point.isEqual(prevPoint.startPoint, firstPoint.startPoint)) {
                     prevPoint.connected = true; 
                 }
                 prevPoint.close = true; 
             }
-        })
-
-        // 마지막이 connected 가 아니라면 다시 한번 체크 해보자. 
-        var lastIndex = points.length - 1; 
-        var lastPoint = points[lastIndex];
-
-        if (!lastPoint.connected) {
-            var firstPoint = this.getFirstPoint(points, lastIndex);
-
-            if (this.isEqual(lastPoint.startPoint, firstPoint.startPoint)) {
-                lastPoint.connected = true; 
-            }        
         }
-        return points;
-    }
 
-    isEqual(a, b) {
-        return a.x === b.x && a.y === b.y; 
+        points = points.filter(p => !!p);
+
+        return points;
     }
 
     length () {

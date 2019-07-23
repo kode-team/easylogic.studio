@@ -12,8 +12,10 @@ export class SVGPathItem extends SVGItem {
       stroke: 'black',
       'stroke-width': 1,
       fill: 'transparent',
+      'fill-rule': '',
       'fill-opacity': '',
       'stroke-linecap': '',
+      'stroke-linejoin': '',      
       'stroke-dashoffset': '',
       'stroke-dasharray': [],
       ...obj
@@ -65,8 +67,10 @@ export class SVGPathItem extends SVGItem {
       stroke: json.stroke,
       'stroke-width': json['stroke-width'],
       fill: json.filll,
+      'fill-rule': json['fill-rule'],
       'fill-opacity': json['fill-opacity'],
       'stroke-linecap': json['stroke-linecap'],
+      'stroke-linejoin': json['stroke-linejoin'],
       'stroke-dashoffset': json['stroke-dashoffset'],
       'stroke-dasharray': json['stroke-dasharray']
     }
@@ -86,8 +90,8 @@ export class SVGPathItem extends SVGItem {
           d: `path('${json.d}')`,
           'stroke-dasharray': json['stroke-dasharray'].join(' '),
           ...this.toKeyListCSS(
-            'stroke', 'stroke-width', 'stroke-linecap', 'stroke-dashoffset',
-            'fill', 'fill-opacity'
+            'stroke', 'stroke-width', 'stroke-linecap', 'stroke-linejoin', 'stroke-dashoffset',
+            'fill', 'fill-opacity', 'fill-rule'
           )
         }
       }

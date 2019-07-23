@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
-import { POINTERSTART, MOVE, END, BIND, POINTERMOVE, PREVENT, KEYUP, IF, STOP, CLICK } from "../../../util/Event";
+import { POINTERSTART, MOVE, END, BIND, POINTERMOVE, PREVENT, KEYUP, IF, STOP, CLICK, DOUBLECLICK } from "../../../util/Event";
 import { editor } from "../../../editor/editor";
 import PathGenerator from "../../../editor/parse/PathGenerator";
 import Dom from "../../../util/Dom";
@@ -8,7 +8,9 @@ import { SVGLayer } from "../../../editor/items/layers/SVGLayer";
 import Color from "../../../util/Color";
 import { SVGPathItem } from "../../../editor/items/layers/SVGPathItem";
 import { Length } from "../../../editor/unit/Length";
-import { getBezierPoints, recoverBezier } from "../../../util/functions/bezier";
+import { getBezierPoints, recoverBezier, recoverBezierQuard, getBezierPointsQuard, recoverBezierLine, getBezierPointsLine } from "../../../util/functions/bezier";
+import { getDist } from "../../../util/functions/math";
+import { clone } from "../../../util/functions/func";
 
 export default class PathEditorView extends UIElement {
 
@@ -41,13 +43,14 @@ export default class PathEditorView extends UIElement {
 
     [KEYUP() + IF('Escape') + IF('Enter') + PREVENT + STOP] () {
 
-        var pathRect = this.refs.$view.$('path.object').rect()
-        pathRect.x -= this.state.rect.x;
-        pathRect.y -= this.state.rect.y;
+
 
         if (this.state.current) {
-            this.updatePathLayer(pathRect);
+            this.refreshPathLayer();
         } else {
+            var pathRect = this.refs.$view.$('path.object').rect()
+            pathRect.x -= this.state.rect.x;
+            pathRect.y -= this.state.rect.y;            
             this.addPathLayer(pathRect); 
         }
         this.trigger('hidePathEditor');        
@@ -180,25 +183,69 @@ export default class PathEditorView extends UIElement {
 
     [CLICK('$view .split-path')] (e) {
         var parser = new PathParser(e.$delegateTarget.attr('d'));
-        var points = [
-            this.getXY(parser.segments[0].values),
-            this.getXY(parser.segments[1].values.slice(0, 2)),
-            this.getXY(parser.segments[1].values.slice(2, 4)),
-            this.getXY(parser.segments[1].values.slice(4, 6))
-        ]
         var clickPosition = {
             x: e.xy.x - this.state.rect.x, 
             y: e.xy.y - this.state.rect.y
         }; 
 
-        var curve = recoverBezier(...points, 200)
-        var t = curve(clickPosition.x, clickPosition.y);
+        if (parser.segments[1].command === 'C') {
+            var points = [
+                this.getXY(parser.segments[0].values),
+                this.getXY(parser.segments[1].values.slice(0, 2)),
+                this.getXY(parser.segments[1].values.slice(2, 4)),
+                this.getXY(parser.segments[1].values.slice(4, 6))
+            ]
+    
+            var curve = recoverBezier(...points, 200)
+            var t = curve(clickPosition.x, clickPosition.y);
+    
+            this.changeMode('modify');
+    
+            this.pathGenerator.setPoint(getBezierPoints(points, t))        
+    
+        } else if (parser.segments[1].command === 'Q') {
+            var points = [
+                this.getXY(parser.segments[0].values),
+                this.getXY(parser.segments[1].values.slice(0, 2)),
+                this.getXY(parser.segments[1].values.slice(2, 4))
+            ]
+    
+            var curve = recoverBezierQuard(...points, 200)
+            var t = curve(clickPosition.x, clickPosition.y);
+    
+            this.changeMode('modify');
+    
+            this.pathGenerator.setPointQuard(getBezierPointsQuard(points, t))        
+        } else if (parser.segments[1].command === 'L') {
+            var points = [
+                this.getXY(parser.segments[0].values),
+                this.getXY(parser.segments[1].values.slice(0, 2))
+            ]
 
-        this.changeMode('modify');
+            var curve = recoverBezierLine(...points, 200)
+            var t = curve(clickPosition.x, clickPosition.y);          
 
-        this.pathGenerator.setPoint(getBezierPoints(points, t))        
+            this.changeMode('modify');
+    
+            this.pathGenerator.setPointLine(getBezierPointsLine(points, t))
+        }
+
+
+
+
         this.bindData('$view');
 
+        this.refreshPathLayer();
+
+    }
+
+    refreshPathLayer () {
+
+        var pathRect = this.refs.$view.$('path.object').rect()
+        pathRect.x -= this.state.rect.x;
+        pathRect.y -= this.state.rect.y;
+        
+        this.updatePathLayer(pathRect);
     }
 
     [POINTERMOVE('$view') + PREVENT] (e) {
@@ -216,6 +263,19 @@ export default class PathEditorView extends UIElement {
         }
 
     }
+
+    [DOUBLECLICK('$view [data-segment]')] (e) {
+        this.state.$target = e.$delegateTarget
+        var index = +this.state.$target.attr('data-index')
+
+
+        this.pathGenerator.convertToCurve(index);
+
+        this.bindData('$view');
+
+        this.refreshPathLayer()
+    }
+
 
     [POINTERSTART('$view :not(.split-path)') + MOVE() + END()] (e) {
 
@@ -306,13 +366,12 @@ export default class PathEditorView extends UIElement {
         
                 this.bindData('$view');       
 
-                var pathRect = this.refs.$view.$('path.object').rect()
-                pathRect.x -= this.state.rect.x;
-                pathRect.y -= this.state.rect.y;
-
                 if (this.state.current) {
-                    this.updatePathLayer(pathRect);
+                    this.refreshPathLayer();
                 } else {
+                    var pathRect = this.refs.$view.$('path.object').rect()
+                    pathRect.x -= this.state.rect.x;
+                    pathRect.y -= this.state.rect.y;                    
                     this.addPathLayer(pathRect); 
                     this.trigger('hidePathEditor')
                 }
