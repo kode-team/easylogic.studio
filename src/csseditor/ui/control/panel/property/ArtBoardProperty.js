@@ -40,9 +40,7 @@ export default class ArtBoardProperty extends BaseProperty {
           <div class='detail'>
             <label data-index='${index}'>${artboard.name}</label>
             <div class="tools">
-              <button type="button" class="remove" data-index="${index}">
-                ${icon.remove2}
-              </button>
+              <button type="button" class="remove" data-index="${index}" title='Remove'>${icon.remove2}</button>
             </div>
           </div>
         </div>

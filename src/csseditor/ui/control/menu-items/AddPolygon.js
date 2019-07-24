@@ -15,6 +15,7 @@ export default class AddPolygon extends MenuItem {
   }  
 
   clickButton(e) {
+    this.emit('hideSubEditor');    
     this.emit('showPolygonEditor', 'move' );
   }
 }

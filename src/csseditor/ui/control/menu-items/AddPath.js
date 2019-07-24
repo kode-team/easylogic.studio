@@ -15,6 +15,7 @@ export default class AddPath extends MenuItem {
   }  
 
   clickButton(e) {
+    this.emit('hideSubEditor');    
     this.emit('showPathEditor', 'move' );
   }
 }

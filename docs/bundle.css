@@ -1350,12 +1350,7 @@ html, body {
   vertical-align: middle;
 }
 .csseditor button {
-  background: linear-gradient(#434b50, #373e42);
-  box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.05), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
-  border-width: 1px;
-  border-style: solid;
-  border-color: #1d1e20 #111213 #0c0c0d;
-  border-radius: 3px;
+  border-width: 0px;
   color: #ececec;
   width: 20px;
   height: 20px;
@@ -1574,6 +1569,9 @@ html, body {
   border: 0px;
   box-shadow: none;
   margin-bottom: 5px;
+}
+.csseditor .feature-control .draw-items .menu-item.selected .icon svg path {
+  fill: #3e8ec6;
 }
 .csseditor .feature-control .draw-items .menu-item[data-no-title=true] {
   height: 30px;
@@ -6813,7 +6811,7 @@ html, body {
   cursor: move;
 }
 .csseditor .polygon-editor-view:before {
-  content: "Path Editor";
+  content: "Polygon Editor";
   display: inline-block;
   position: absolute;
   top: 0px;

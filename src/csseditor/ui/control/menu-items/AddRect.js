@@ -32,6 +32,7 @@ export default class AddRect extends MenuItem {
 
       this.emit('refreshAll')
       this.emit('refreshSelection');
+      this.emit('hideSubEditor');
     }
   }
 }

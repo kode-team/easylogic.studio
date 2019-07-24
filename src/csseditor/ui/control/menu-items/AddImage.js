@@ -37,6 +37,7 @@ export default class AddImage extends MenuItem {
  }  
 
   clickButton(e) {
+    this.emit('hideSubEditor');    
     // open image popup
     this.emit('showImageSelectPopup', {
       context: this, 

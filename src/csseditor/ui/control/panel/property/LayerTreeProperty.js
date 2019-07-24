@@ -49,9 +49,9 @@ export default class LayerTreeProperty extends BaseProperty {
         <div class='detail'>
           <label>${layer.name}</label>
           <div class="tools">
-            <button type="button" class="lock" data-lock="${layer.lock}">${layer.lock ? icon.lock : icon.lock_open}</button>
-            <button type="button" class="visible" data-visible="${layer.visible}">${icon.visible}</button>
-            <button type="button" class="remove" >${icon.remove2}</button>
+            <button type="button" class="lock" data-lock="${layer.lock}" title='Lock'>${layer.lock ? icon.lock : icon.lock_open}</button>
+            <button type="button" class="visible" data-visible="${layer.visible}" title='Visible'>${icon.visible}</button>
+            <button type="button" class="remove" title='Remove'>${icon.remove2}</button>
           </div>
         </div>
       </div>

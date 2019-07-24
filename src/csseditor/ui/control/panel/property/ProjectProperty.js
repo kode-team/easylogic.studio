@@ -49,9 +49,7 @@ export default class ProjectProperty extends BaseProperty {
           <div class='detail'>
             <label data-index='${index}'>${project.name || 'New Project'}</label>
             <div class="tools">
-              <button type="button" class="remove" data-index="${index}">
-                ${icon.remove2}
-              </button>
+              <button type="button" class="remove" data-index="${index}" title='Remove'>${icon.remove2}</button>
             </div>
           </div>
         </div>

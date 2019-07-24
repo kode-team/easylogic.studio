@@ -15,6 +15,8 @@ export default class AddStar extends MenuItem {
   }  
 
   clickButton(e) {
+    this.emit('hideSubEditor');    
     this.emit('showPolygonEditor', 'star' );
+
   }
 }

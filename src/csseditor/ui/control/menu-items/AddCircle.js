@@ -20,6 +20,7 @@ export default class AddCircle extends MenuItem {
   }  
 
   clickButton(e) {
+    this.emit('hideSubEditor');    
     var artboard = editor.selection.currentArtboard
 
     if (artboard) {

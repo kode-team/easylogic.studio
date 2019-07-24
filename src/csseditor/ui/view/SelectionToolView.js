@@ -48,6 +48,11 @@ export default class SelectionToolView extends UIElement {
         this.refs.$selectionTool.toggleClass('editing-polygon', isEditingPolygon);
     }    
 
+    [EVENT('hideSubEditor')] (e) {
+        this.toggleEditingPath(false);
+        this.toggleEditingPolygon(false);
+    }
+
     [EVENT('openPathEditor')] () {
         var current = editor.selection.current;
         if (current && current.is('svg-path')) {

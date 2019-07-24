@@ -8,6 +8,7 @@ import AddText from "./menu-items/AddText";
 import LayerTab from "./LayerTab";
 import AddPolygon from "./menu-items/AddPolygon";
 import AddStar from "./menu-items/AddStar";
+import { CLICK } from "../../../util/Event";
 
 
 export default class ObjectList extends UIElement {
@@ -28,7 +29,7 @@ export default class ObjectList extends UIElement {
     return `
       <div class="feature-control object-list">
         <LayerTab />
-        <div class='draw-items'>
+        <div class='draw-items' ref='$items'>
           <label>CSS</label>
           <AddRect />
           <AddCircle />         
@@ -43,6 +44,10 @@ export default class ObjectList extends UIElement {
         </div>
       </div>
     `;
+  }
+
+  [CLICK('$items button')] (e) {
+    e.$delegateTarget.onlyOneClass('selected');
   }
 
 }

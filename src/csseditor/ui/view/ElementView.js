@@ -70,6 +70,11 @@ export default class ElementView extends UIElement {
         `
     }
 
+    [EVENT('hideSubEditor')] (e) {
+        this.children.$pathEditorView.$el.hide();
+        this.children.$polygonEditorView.$el.hide();
+    }
+
     getElement (id) {
         return this.refs.$view.$(`[data-id="${id}"]`);
     }

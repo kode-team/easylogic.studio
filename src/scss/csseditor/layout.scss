@@ -236,6 +236,17 @@
       box-shadow: none;
       margin-bottom: 5px;
 
+      &.selected {
+        .icon {
+          svg {
+            path {
+              fill: $selected-color; 
+            }
+          }
+        }
+
+      }
+
       &[data-no-title="true"] {
         height: 30px;
         .title {

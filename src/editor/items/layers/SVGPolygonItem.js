@@ -23,7 +23,10 @@ export class SVGPolygonItem extends SVGItem {
   }
 
   setCache () {
-    this.rect = this.clone();
+    this.rect = {
+      width: this.json.width.clone(),
+      height: this.json.height.clone()
+    }
     this.cachePolygon = this.json.polygon.clone()
   }
 

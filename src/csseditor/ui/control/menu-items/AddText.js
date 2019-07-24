@@ -17,6 +17,7 @@ export default class AddText extends MenuItem {
   }
 
   clickButton(e) {
+    this.emit('hideSubEditor');    
     var artboard = editor.selection.currentArtboard
 
     if (artboard) {

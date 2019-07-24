@@ -287,10 +287,9 @@ export default class PolygonGenerator {
             snapPointList.push(...movePointSnapPointList);
 
             state.moveXY = newMoveXY;
-            moveXY = newMoveXY
             this.snapPointList = snapPointList;
 
-            this.points.push(moveXY)
+            this.points.push(state.moveXY)
 
             this.segmentManager.addStartPoint({}, state.dragXY);
         }
