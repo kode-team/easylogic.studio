@@ -10,11 +10,15 @@ export default class SVGItemProperty extends BaseProperty {
     return "SVG Item";
   }
 
+  isSVGItem  (current) {
+    return current.is('svg-path', 'svg-polygon')
+  }
+
   [EVENT('refreshSelection')]() {
 
     var current = editor.selection.current;
 
-    if (current && current.is('svg-path')) {
+    if (current && this.isSVGItem(current)) {
 
       if (this.$el.css('display') === 'none') {
         this.$el.show();

@@ -76,21 +76,19 @@ export default class BorderProperty extends BaseProperty {
 
   refreshBorderInfo() {
 
+    var type = this.refs.$borderDirection.attr("data-selected-value");
+    var width = this.children.$width.getValue().clone()
+    var style = this.children.$style.getValue();
+    var color = this.children.$color.getValue();
+    var value = { width, style, color}
 
-    var current = editor.selection.current;
+    editor.selection.each(item => {
+      item.setBorder(type, value);
+    })
 
-    if (current) {
-      var type = this.refs.$borderDirection.attr("data-selected-value");
-      var width = this.children.$width.getValue().clone()
-      var style = this.children.$style.getValue();
-      var color = this.children.$color.getValue();
+    this.refresh();
 
-      current.setBorder(type, { width, style, color});
-
-      this.refresh();
-
-      this.emit("refreshElement", current);
-    }
+    this.emit("refreshSelectionStyleView");
   }
 
 

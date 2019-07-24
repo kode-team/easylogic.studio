@@ -6,18 +6,8 @@ export class SVGPathItem extends SVGItem {
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
       itemType: 'svg-path',
-      name: "New Path",
-      overflow: 'visible',      
+      name: "New Path",   
       d: '',
-      stroke: 'black',
-      'stroke-width': 1,
-      fill: 'transparent',
-      'fill-rule': '',
-      'fill-opacity': '',
-      'stroke-linecap': '',
-      'stroke-linejoin': '',      
-      'stroke-dashoffset': '',
-      'stroke-dasharray': [],
       ...obj
     });
   }
@@ -62,17 +52,7 @@ export class SVGPathItem extends SVGItem {
     var json = this.json; 
     return {
       ...super.toCloneObject(),
-      overflow: json.overflow,
-      d: json.d,
-      stroke: json.stroke,
-      'stroke-width': json['stroke-width'],
-      fill: json.filll,
-      'fill-rule': json['fill-rule'],
-      'fill-opacity': json['fill-opacity'],
-      'stroke-linecap': json['stroke-linecap'],
-      'stroke-linejoin': json['stroke-linejoin'],
-      'stroke-dashoffset': json['stroke-dashoffset'],
-      'stroke-dasharray': json['stroke-dasharray']
+      d: json.d
     }
   }
 
@@ -88,11 +68,7 @@ export class SVGPathItem extends SVGItem {
         selector: 'path', 
         css: {
           d: `path('${json.d}')`,
-          'stroke-dasharray': json['stroke-dasharray'].join(' '),
-          ...this.toKeyListCSS(
-            'stroke', 'stroke-width', 'stroke-linecap', 'stroke-linejoin', 'stroke-dashoffset',
-            'fill', 'fill-opacity', 'fill-rule'
-          )
+          ...super.toSVGDefaultCSS()
         }
       }
     ]

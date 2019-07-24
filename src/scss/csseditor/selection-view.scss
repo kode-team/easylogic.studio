@@ -13,9 +13,10 @@
     position:absolute;
     box-sizing: border-box;
     
-    &.editing-path {
-        display: none !important;
-    }
+    &.editing-path,
+    &.editing-polygon {
+      display: none !important;
+    }    
 
     &.remove-move-area {
       .selection-tool-item[data-position="move"] {
@@ -31,7 +32,8 @@
       }
     }
 
-    &.path {
+    &.path,
+    &.polygon {
         .selection-tool-item[data-position="path"] {
             top: -30px;
             bottom: auto; 

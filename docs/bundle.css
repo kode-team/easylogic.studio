@@ -1452,15 +1452,6 @@ html, body {
   height: 100%;
   position: relative;
 }
-.csseditor .layout-main .layout-middle.open-right .layout-body {
-  right: 280px;
-}
-.csseditor .layout-main .layout-middle.open-right .layout-right {
-  right: 0px;
-}
-.csseditor .layout-main .layout-middle.open-right .layout-tools {
-  right: 280px;
-}
 .csseditor .layout-main .layout-middle .layout-left {
   position: absolute;
   left: 0px;
@@ -1475,7 +1466,7 @@ html, body {
 }
 .csseditor .layout-main .layout-middle .layout-right {
   position: absolute;
-  right: -280px;
+  right: 0px;
   top: 0px;
   bottom: 0px;
   width: 280px;
@@ -1485,12 +1476,11 @@ html, body {
   flex-direction: column;
   overflow: auto;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
-  transition: right 0.1s linear;
 }
 .csseditor .layout-main .layout-middle .layout-body {
   top: 0px;
   left: 260px;
-  right: 0px;
+  right: 280px;
   bottom: 0px;
   position: absolute;
   transition: right 0.1s linear;
@@ -1559,9 +1549,23 @@ html, body {
 .csseditor .feature-control .draw-items {
   background-color: #383838;
 }
+.csseditor .feature-control .draw-items .split {
+  border: 0px;
+  border-top: 1px solid #000;
+  margin: 10px 5px;
+}
+.csseditor .feature-control .draw-items > label {
+  color: #ececec;
+  padding: 5px;
+  text-align: center;
+  display: block;
+}
+.csseditor .feature-control .draw-items > label:first-child {
+  margin-top: 5px;
+}
 .csseditor .feature-control .draw-items .menu-item {
   text-align: center;
-  margin-top: 10px;
+  margin-top: 5px;
   color: #ececec;
   width: 48px;
   height: 48px;
@@ -2361,10 +2365,10 @@ html, body {
 }
 .csseditor .canvas-view {
   position: absolute;
-  left: 50%;
-  top: 50%;
   -webkit-transform-origin: left top;
           transform-origin: left top;
+  left: 0px;
+  top: 0px;
   width: 100%;
   height: 100%;
 }
@@ -2394,7 +2398,7 @@ html, body {
   position: absolute;
   box-sizing: border-box;
 }
-.csseditor .selection-tool.editing-path {
+.csseditor .selection-tool.editing-path, .csseditor .selection-tool.editing-polygon {
   display: none !important;
 }
 .csseditor .selection-tool.remove-move-area .selection-tool-item[data-position=move] {
@@ -2409,7 +2413,7 @@ html, body {
   background-color: rgba(255, 255, 255, 0.8);
   border: 1px solid #000;
 }
-.csseditor .selection-tool.path .selection-tool-item[data-position=path] {
+.csseditor .selection-tool.path .selection-tool-item[data-position=path], .csseditor .selection-tool.polygon .selection-tool-item[data-position=path] {
   top: -30px;
   bottom: auto;
   left: 50%;
@@ -6727,6 +6731,9 @@ html, body {
   outline: none;
   cursor: crosshair;
 }
+.csseditor .path-editor-view.alt svg circle {
+  cursor: move;
+}
 .csseditor .path-editor-view:before {
   content: "Path Editor";
   display: inline-block;
@@ -6753,6 +6760,9 @@ html, body {
   stroke: blue;
   stroke-width: 1;
   cursor: move;
+}
+.csseditor .path-editor-view svg circle.selected {
+  fill: yellow;
 }
 .csseditor .path-editor-view svg circle.curve {
   stroke: red;
@@ -6786,6 +6796,87 @@ html, body {
   stroke: #3e8ec6;
 }
 .csseditor .path-editor-view svg path.snap-path {
+  fill: transparent;
+  stroke: #3e8ec6;
+}
+.csseditor .polygon-editor-view {
+  display: none;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  outline: none;
+  cursor: crosshair;
+}
+.csseditor .polygon-editor-view.alt svg circle {
+  cursor: move;
+}
+.csseditor .polygon-editor-view:before {
+  content: "Path Editor";
+  display: inline-block;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  background-color: #51717e;
+  color: white;
+}
+.csseditor .polygon-editor-view.modify svg polygon.object {
+  stroke: #609de2;
+}
+.csseditor .polygon-editor-view svg line {
+  stroke: green;
+  stroke-width: 1;
+  stroke-dasharray: 5 2;
+}
+.csseditor .polygon-editor-view svg line[data-guide=true] {
+  stroke: purple;
+  pointer-events: none;
+}
+.csseditor .polygon-editor-view svg circle {
+  fill: white;
+  stroke: blue;
+  stroke-width: 1;
+  cursor: move;
+}
+.csseditor .polygon-editor-view svg circle.selected {
+  fill: yellow;
+}
+.csseditor .polygon-editor-view svg circle.curve {
+  stroke: red;
+}
+.csseditor .polygon-editor-view svg circle[data-is-first=true] {
+  fill: rgba(96, 157, 226, 0.8);
+}
+.csseditor .polygon-editor-view svg circle[data-start=true] {
+  fill: black;
+}
+.csseditor .polygon-editor-view svg path.guide, .csseditor .polygon-editor-view svg polygon.guide {
+  fill: transparent;
+  stroke: blue;
+  stroke-width: 1;
+}
+.csseditor .polygon-editor-view svg path.segment, .csseditor .polygon-editor-view svg polygon.segment {
+  fill: transparent;
+  stroke: red;
+  stroke-width: 1;
+}
+.csseditor .polygon-editor-view svg path.object, .csseditor .polygon-editor-view svg polygon.object {
+  fill: transparent;
+  stroke: #609de2;
+  stroke-width: 1;
+}
+.csseditor .polygon-editor-view svg path.split-path, .csseditor .polygon-editor-view svg polygon.split-path {
+  fill: transparent;
+  stroke: transparent;
+  pointer-events: stroke;
+  stroke-width: 2;
+}
+.csseditor .polygon-editor-view svg path.split-path:hover, .csseditor .polygon-editor-view svg polygon.split-path:hover {
+  cursor: copy;
+  stroke: #3e8ec6;
+}
+.csseditor .polygon-editor-view svg path.snap-path, .csseditor .polygon-editor-view svg polygon.snap-path {
   fill: transparent;
   stroke: #3e8ec6;
 }

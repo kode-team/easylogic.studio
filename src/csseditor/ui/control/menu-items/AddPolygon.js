@@ -1,12 +1,12 @@
 import MenuItem from "./MenuItem";
 import icon from "../../icon/icon";
  
-export default class AddPath extends MenuItem {
+export default class AddPolygon extends MenuItem {
   getIconString() {
-    return icon.edit;
+    return icon.polygon;
   }
   getTitle() {
-    return "Path";
+    return "Polygon";
   }
 
 
@@ -15,6 +15,6 @@ export default class AddPath extends MenuItem {
   }  
 
   clickButton(e) {
-    this.emit('showPathEditor', 'move' );
+    this.emit('showPolygonEditor', 'move' );
   }
 }

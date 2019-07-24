@@ -16,7 +16,7 @@ export default class ExternalToolMenu extends UIElement {
 
           <div class='split'></div>
 
-          <ToggleRightItem />          
+          <!-- <ToggleRightItem /> -->         
         </div>                
       </div>
     `;

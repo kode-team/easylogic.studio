@@ -139,6 +139,7 @@ export const BEFORE = (value, split = CHECK_SAPARATOR) => {
 };
 
 export const IF = CHECKER;
+export const KEY = CHECKER; 
 
 export const KEY_ALT = "ALT";
 export const KEY_SHIFT = "SHIFT";

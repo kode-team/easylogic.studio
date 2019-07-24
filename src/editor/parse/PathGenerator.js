@@ -178,16 +178,20 @@ export default class PathGenerator {
 
     rotateSegmentTarget (segmentKey, target) {
         var state = this.state; 
-        var {x: cx, y: cy} = state.originalSegment.startPoint;
-        var {x: rx, y: ry} = state.segment[segmentKey];
-        var {x: tx, y: ty} = state.originalSegment[target];
 
-        var radius = getDist(tx, ty, cx, cy)
-        var angle = (calculateAngle(rx - cx, ry - cy) + 180) % 360
-        // reversePoint 체크 
-        var {x, y} = getXYInCircle(angle, radius, cx, cy); 
-
-        state.segment[target] = {x, y}
+        // console.log(state.original, state.segment, state.originalSegment)
+        if (state.originalSegment && state.segment) {
+            var {x: cx, y: cy} = state.originalSegment.startPoint;
+            var {x: rx, y: ry} = state.segment[segmentKey];
+            var {x: tx, y: ty} = state.originalSegment[target];
+    
+            var radius = getDist(tx, ty, cx, cy)
+            var angle = (calculateAngle(rx - cx, ry - cy) + 180) % 360
+            // reversePoint 체크 
+            var {x, y} = getXYInCircle(angle, radius, cx, cy); 
+    
+            state.segment[target] = {x, y}
+        }
     }
 
     rotateSegment (segmentKey) {
@@ -228,7 +232,7 @@ export default class PathGenerator {
         var realY = original.y + dy;
 
         var {point: snapPointX, distanceValue: dx } = this.calculateSnapPoint('x', realX, dx, dist);
-        var {point: snapPointY, distanceValue: dy } = this.calculateSnapPoint('Y', realY, dy, dist);
+        var {point: snapPointY, distanceValue: dy } = this.calculateSnapPoint('y', realY, dy, dist);
 
         var snapEndPoint = {
             x : original.x + dx,
@@ -357,8 +361,8 @@ export default class PathGenerator {
 
         var allPoints = this.clonePoints
 
-        var firstItem = allPoints.filter(p => p.startPoint.x === p0.x && p.startPoint.y === p0.y)[0];
-        var secondItem = allPoints.filter(p => p.startPoint.x === p1.x && p.startPoint.y === p1.y)[0];
+        var firstItem = Point.getPoint(allPoints, p0)
+        var secondItem = Point.getPoint(allPoints, p1)        
 
         var newPoints = [
             {...firstItem, endPoint: obj.first[1]},
@@ -366,15 +370,7 @@ export default class PathGenerator {
             {...secondItem, reversePoint: obj.second[2]}
         ]
 
-        var firstIndex = -1; 
-        for(var i = 0, len = allPoints.length; i < len; i++) {
-            var p = allPoints[i]
-
-            if (p.startPoint.x === p0.x && p.startPoint.y === p0.y) {
-                firstIndex = i; 
-                break; 
-            }
-        }
+        var firstIndex = Point.getIndex(allPoints, p0);         
 
         allPoints.splice(firstIndex, 2, ...newPoints);
 
@@ -389,24 +385,19 @@ export default class PathGenerator {
 
         var allPoints = this.clonePoints
 
-        var secondItem = allPoints.filter(p => p.startPoint.x === p1.x && p.startPoint.y === p1.y)[0];
+        var firstItem = Point.getPoint(allPoints, p0)
+
+        var fx = firstItem.startPoint.x + (firstItem.endPoint.x - firstItem.startPoint.x) / 3 
+        var fy = firstItem.startPoint.y + (firstItem.endPoint.y - firstItem.startPoint.y) / 3 
 
         var newPoints = [
-            {startPoint: obj.first[2], reversePoint: obj.first[1], curve: true , endPoint: obj.second[1]},
-            {...secondItem, reversePoint: obj.second[1]}
+            {...firstItem, endPoint: {x: fx, y : fy }},
+            {startPoint: obj.first[2], reversePoint: obj.first[1], curve: true , endPoint: obj.second[1]}
         ]
 
-        var firstIndex = -1; 
-        for(var i = 0, len = allPoints.length; i < len; i++) {
-            var p = allPoints[i]
+        var firstIndex = Point.getIndex(allPoints, p0); 
 
-            if (p.startPoint.x === p0.x && p.startPoint.y === p0.y) {
-                firstIndex = i; 
-                break; 
-            }
-        }
-
-        allPoints.splice(firstIndex+1, 1, ...newPoints);
+        allPoints.splice(firstIndex, 1, ...newPoints);
 
         this.state.points = allPoints;
 
@@ -423,15 +414,7 @@ export default class PathGenerator {
             {command: 'L', startPoint: obj.first[1], curve: false , endPoint: obj.first[1], reversePoint: obj.first[1]},
         ]
 
-        var firstIndex = -1; 
-        for(var i = 0, len = allPoints.length; i < len; i++) {
-            var p = allPoints[i]
-
-            if (p.startPoint.x === p0.x && p.startPoint.y === p0.y) {
-                firstIndex = i; 
-                break; 
-            }
-        }
+        var firstIndex = Point.getIndex(allPoints, p0); 
 
         allPoints.splice(firstIndex+1, 0, ...newPoints);
 

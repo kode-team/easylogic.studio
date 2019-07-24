@@ -71,7 +71,7 @@ function updateElement (parentElement, oldEl, newEl, i) {
     } else if (changed(newEl, oldEl)) {
         parentElement.replaceChild(newEl.cloneNode(true), oldEl);
     } else if (newEl.nodeType !== Node.TEXT_NODE) {
-        updateProps(oldEl, getProps(oldEl.attributes), getProps(oldEl.attributes)); // added        
+        updateProps(oldEl, getProps(newEl.attributes), getProps(oldEl.attributes)); // added        
         var oldChildren = children(oldEl);
         var newChildren = children(newEl);
         var max = Math.max(oldChildren.length, newChildren.length);

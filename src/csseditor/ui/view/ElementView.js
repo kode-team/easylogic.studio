@@ -8,6 +8,8 @@ import SelectionToolView from "./SelectionToolView";
 import GuideLineView from "./GuideLineView";
 import { DomDiff } from "../../../util/DomDiff";
 import PathEditorView from "./PathEditorView";
+import PolygonEditorView from "./PolygonEditorView";
+
 
 // 그리드 선 그려주는 함수 
 // background-image 로 그린다. 
@@ -33,7 +35,8 @@ export default class ElementView extends UIElement {
         return {
             SelectionToolView,
             GuideLineView,
-            PathEditorView
+            PathEditorView,
+            PolygonEditorView
         }
     }
 
@@ -54,18 +57,6 @@ export default class ElementView extends UIElement {
         }
     }
 
-
-    afterRender() {
-        setTimeout( () => {
-            this.refs.$view.scrollIntoView();
-
-            var $lock = this.parent.refs.$lock
-
-            $lock.addScrollLeft(+200);
-            // $lock.addScrollTop(+100);
-        }, 200);
-    }
-
     template() {
         return `
             <div class='element-view' ref='$body'>
@@ -74,8 +65,13 @@ export default class ElementView extends UIElement {
                 <GuideLineView ref='$guideLineView' />                
                 <SelectionToolView ref='$selectionTool' />
                 <PathEditorView ref='$pathEditorView' />
+                <PolygonEditorView ref='$polygonEditorView' />                
             </div>
         `
+    }
+
+    getElement (id) {
+        return this.refs.$view.$(`[data-id="${id}"]`);
     }
 
     checkEmptyElement (e) {
@@ -88,10 +84,11 @@ export default class ElementView extends UIElement {
         return $el.hasClass('element-item') === false 
             && $el.hasClass('selection-tool-item') === false 
             && $el.hasClass('path-editor-view') === false 
+            && $el.hasClass('polygon-editor-view') === false
             && $el.isTag('svg') === false 
-            && $el.isTag('path') === false 
+            && $el.isTag('path') === false
+            && $el.isTag('polygon') === false
             && $el.attr('data-segment') !== 'true'
-            && $el.hasClass('redgl-canvas-item') === false 
         ;
     }
 
@@ -99,6 +96,7 @@ export default class ElementView extends UIElement {
 
         this.$target = Dom.create(e.target);
         this.dragXY = {x: e.xy.x, y: e.xy.y}; 
+
         this.rect = this.refs.$body.rect();            
         this.canvasOffset = this.refs.$view.rect();
 
@@ -112,7 +110,11 @@ export default class ElementView extends UIElement {
 
 
         editor.selection.empty();
-        this.selectCurrent();
+        
+        this.cachedCurrentElement = {}
+        this.$el.$$('.selected').forEach(it => it.removeClass('selected'))
+
+        this.emit('initSelectionTool')        
 
     }
 
@@ -172,12 +174,12 @@ export default class ElementView extends UIElement {
 
         if (items.length) {
             this.emit('refreshSelection')
-            this.emit('changeSelection')
         } else {
             editor.selection.select();            
             this.emit('emptySelection')
         }
     }
+
 
     [KEYUP('$view .element-item.text')] (e) {
         var content = e.$delegateTarget.html()
@@ -293,7 +295,7 @@ export default class ElementView extends UIElement {
             style: {
                 // 'background-image': createGridLine(100),
                 // 'box-shadow': '0px 0px 5px 0px rgba(0, 0, 0, .5)',
-                transform: `translate(-50%, -50%) scale(${editor.scale})`
+                transform: `scale(${editor.scale})`
             },
             innerHTML: this.state.html
         }
@@ -304,10 +306,11 @@ export default class ElementView extends UIElement {
         var html = artboard.html
 
         this.setState({ html }, false)
+        // this.bindData('$view');
         var $div = Dom.create('div').html(html);
         DomDiff(this.refs.$view, $div)
 
-        this.trigger('refreshRedGL', true)
+        // this.trigger('refreshRedGL', true)
         this.emit('refreshSelectionTool')
     }
 
@@ -395,7 +398,7 @@ export default class ElementView extends UIElement {
 
     modifyScale () {
         this.refs.$view.css({
-            transform: `translate(-50%, -50%) scale(${editor.scale})`
+            transform: `scale(${editor.scale})`
         })
 
         this.emit('makeSelectionTool', true);
@@ -424,6 +427,28 @@ export default class ElementView extends UIElement {
 
         }
 
+    }
+
+    // 객체를 부분 업데이트 하기 위한 메소드 
+    // updateHtml 이 정의 되어 있으면  html 업데이트 
+    // updateAttribute 이 정의 되어 있으면 attr 업데이트 
+    [EVENT('refreshCanvasForPartial')] (obj) {
+
+        var items = obj ? [obj] : editor.selection.items;
+
+        items.forEach(current => {
+            var currentElement = this.refs.$view.$(`[data-id="${current.id}"]`);
+            if (current.updateHtml) {
+                currentElement.html(current.updateHtml);
+            } else if (current.updateAttribute) {
+                currentElement.attr(current.updateAttribute);
+            } else if (current.updateAll) {
+                currentElement.html(current.updateAll.html);
+                currentElement.attr(current.updateAll.attr);
+            } else if (current.updateFunction) {
+                current.updateFunction.call(current, currentElement);
+            }
+        })
     }
 
     [EVENT('refreshCanvas')] (obj) {

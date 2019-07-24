@@ -4,13 +4,10 @@ import { editor } from "../../../editor/editor";
 import PathGenerator from "../../../editor/parse/PathGenerator";
 import Dom from "../../../util/Dom";
 import PathParser from "../../../editor/parse/PathParser";
-import { SVGLayer } from "../../../editor/items/layers/SVGLayer";
-import Color from "../../../util/Color";
+
 import { SVGPathItem } from "../../../editor/items/layers/SVGPathItem";
 import { Length } from "../../../editor/unit/Length";
 import { getBezierPoints, recoverBezier, recoverBezierQuard, getBezierPointsQuard, recoverBezierLine, getBezierPointsLine } from "../../../util/functions/bezier";
-import { getDist } from "../../../util/functions/math";
-import { clone } from "../../../util/functions/func";
 
 export default class PathEditorView extends UIElement {
 

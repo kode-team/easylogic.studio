@@ -44,6 +44,18 @@ export default class SegmentManager {
         return this; 
     }
 
+
+    addStartPoint(obj, point) {
+        this.segmentList.push({
+            ...obj,
+            cx: point.x,
+            cy: point.y,
+            start: true 
+        })
+
+        return this; 
+    }    
+
     addCurvePoint (point, index, segment) {
 
         this.segmentList.push({
@@ -82,6 +94,15 @@ export default class SegmentManager {
                     data-segment-point='${it.segment}' 
                     data-segment="true" 
                 />`
+            } else if (it.start) {
+                return `
+                <circle 
+                    cx='${it.cx}' 
+                    cy='${it.cy}' 
+                    r='4'                     
+                    title="Center"
+                    data-start="true" 
+                />`                  
             } else {
                 return `
                 <circle 

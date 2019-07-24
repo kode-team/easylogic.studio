@@ -259,16 +259,16 @@ export class Item {
   resize () {}
 
   copy () {
-    this.json.parent.copyItem(this.ref);
+    return this.json.parent.copyItem(this.ref);
   }
 
-  copyItem (childItem) {
+  copyItem (childItem, dist = 10 ) {
      // clone 을 어떻게 해야하나? 
 
     var child = childItem.clone()  
 
-    child.width.add(10);
-    child.width.add(10);
+    child.setScreenX(child.screenX.value + dist);
+    child.setScreenY(child.screenY.value + dist);
 
     var layers = this.json.layers;
 
@@ -281,8 +281,9 @@ export class Item {
     }
 
     if (childIndex > -1) {
-      this.json.layers.splice(childIndex, 0, child);
+      this.json.layers.splice(childIndex+1, 0, child);
     }
+    return child;
   }
 
   remove () {

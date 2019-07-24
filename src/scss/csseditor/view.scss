@@ -74,9 +74,9 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
 
 .canvas-view {
   position: absolute;
-  left: 50%;
-  top: 50%;
-  transform-origin: left top;
+  transform-origin: left top;  
+  left: 0px;
+  top: 0px;
   width: 100%;
   height: 100%;   
 

@@ -93,11 +93,11 @@ export class Selection {
     this.select(... _traverse(this.artboard, id))
   }
 
-  setRectCache () {
+  setRectCache (isCache = true) {
     
     this.cachedItems = this.items.map(it => {
       // Layer 마다 캐쉬 할게 있으면 캐쉬 하고 
-      it.setCache();
+      if (isCache) it.setCache();
       // 최종 결과물을 clone 한다. 
       // 이렇게 하는 이유는 복합 객체의 넓이 , 높이르 바꿀 때 실제 path 의 각각의 point 도 바뀌어야 하기 때문이다. 
       return it.clone()
@@ -155,8 +155,13 @@ export class Selection {
   }
 
   copy () {
-    this.each(item => item.copy())
+    this.copyItems = this.items.map(item => item)
   }  
+
+  paste() {
+    this.select(...this.copyItems.map(item => item.copy()));
+    this.copy()
+  }
   
   move (dx, dy) {
     this.each ((item, cachedItem, ) => {

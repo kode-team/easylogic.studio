@@ -101,12 +101,12 @@ export default class CSSEditor extends UIElement {
   }
 
   [EVENT('toggleRightPanel')] () {
-    editor.openRightPanel = !editor.openRightPanel
-    this.refs.$middle.toggleClass('open-right', editor.openRightPanel);
+    // editor.openRightPanel = !editor.openRightPanel
+    // this.refs.$middle.toggleClass('open-right', editor.openRightPanel);
   }
 
   [EVENT('refreshAll')] () {
-    this.refs.$middle.toggleClass('open-right', editor.openRightPanel);
+    // this.refs.$middle.toggleClass('open-right', editor.openRightPanel);
 
     this.emit('refreshProjectList');
     this.trigger('refreshAllSelectProject');
@@ -120,7 +120,7 @@ export default class CSSEditor extends UIElement {
   [EVENT('refreshAllSelectArtBoard')] () {      
     this.emit('refreshLayerTreeView')    
     this.trigger('refreshElement')
-  }
+  }  
 
   [EVENT('refreshElement')] (current) {
     this.emit('refreshCanvas', current)

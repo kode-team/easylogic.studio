@@ -1,4 +1,4 @@
-.path-editor-view {
+.polygon-editor-view {
     display:none;
     position:absolute;
     left:0px;
@@ -28,7 +28,7 @@
 
     &.modify {
         svg {
-            path {
+            polygon {
                 &.object {
                     stroke: $selected-border-color;
                 }
@@ -66,10 +66,14 @@
             &[data-is-first="true"] {
                 fill: rgba($selected-border-color, 0.8);
             }
+
+            &[data-start='true'] {
+                fill: black;
+            }
             
         }
 
-        path {
+        path,polygon {
             &.guide {
                 fill: transparent;
                 stroke: blue;

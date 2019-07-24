@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
-import { POINTERSTART, MOVE, END, DOUBLECLICK } from "../../../util/Event";
+import { POINTERSTART, MOVE, END, DOUBLECLICK, KEYUP, KEY, PREVENT, STOP } from "../../../util/Event";
 import { Length } from "../../../editor/unit/Length";
 import { editor } from "../../../editor/editor";
 import { isNotUndefined } from "../../../util/functions/func";
@@ -44,9 +44,14 @@ export default class SelectionToolView extends UIElement {
         this.refs.$selectionTool.toggleClass('editing-path', isEditingPath);
     }
 
+    toggleEditingPolygon (isEditingPolygon) {
+        this.refs.$selectionTool.toggleClass('editing-polygon', isEditingPolygon);
+    }    
+
     [EVENT('openPathEditor')] () {
         var current = editor.selection.current;
         if (current && current.is('svg-path')) {
+            this.toggleEditingPolygon(false);
             this.toggleEditingPath(true);
             this.emit('showPathEditor', 'modify', {
                 current,
@@ -56,12 +61,35 @@ export default class SelectionToolView extends UIElement {
                 screenWidth: current.screenWidth,
                 screenHeight: current.screenHeight,
             }) 
+        } else if (current.is('svg-polygon')) {
+            this.trigger('openPolygonEditor');
         }
     }
+
+
+    [EVENT('openPolygonEditor')] () {
+        var current = editor.selection.current;
+        if (current && current.is('svg-polygon')) {
+            this.toggleEditingPath(false);            
+            this.toggleEditingPolygon(true);
+            this.emit('showPolygonEditor', 'modify', {
+                current,
+                points: current.points,
+                screenX: current.screenX,
+                screenY: current.screenY,
+                screenWidth: current.screenWidth,
+                screenHeight: current.screenHeight,
+            }) 
+        }
+    }    
 
     [EVENT('finishPathEdit')] () {
         this.toggleEditingPath(false);
     }
+
+    [EVENT('finishPolygonEdit')] () {
+        this.toggleEditingPolygon(false);
+    }    
 
     [EVENT('updatePathItem')] (pathObject) {
 
@@ -81,11 +109,31 @@ export default class SelectionToolView extends UIElement {
 
     }
 
+
+    [EVENT('updatePolygonItem')] (polygonObject) {
+
+        var current = editor.selection.current;
+        if (current) {
+            if (current.is('svg-polygon')) {
+                current.updatePolygonItem(polygonObject);
+
+                this.parent.selectCurrent(...editor.selection.items)
+
+                editor.selection.setRectCache();        
+    
+                this.emit('refreshSelectionStyleView')
+                this.emit('refreshCanvasForPartial', current);
+
+            }
+        }
+
+    }    
+
     [POINTERSTART('$selectionView .selection-tool-item') + MOVE() + END()] (e) {
         this.$target = e.$delegateTarget;
         this.pointerType = e.$delegateTarget.attr('data-position')
 
-        if (this.pointerType === 'path') {
+        if (this.pointerType === 'path' || this.pointerType === 'polygon') {
             this.trigger('openPathEditor');
             return false;
         }
@@ -94,7 +142,7 @@ export default class SelectionToolView extends UIElement {
 
         this.parent.selectCurrent(...editor.selection.items)
 
-        editor.selection.setRectCache();        
+        editor.selection.setRectCache(this.pointerType === 'move' ? false: true);        
 
         this.initSelectionTool();
     }
@@ -108,8 +156,9 @@ export default class SelectionToolView extends UIElement {
         }
 
         this.refreshSelectionToolView(dx, dy);
-        this.parent.updateRealPosition();     
-        this.emit('refreshRedGL', false)        
+        this.parent.updateRealPosition();    
+        this.emit('refreshCanvasForPartial')         
+        // this.emit('refreshRedGL', false)        
     }
 
     end (dx, dy) {
@@ -125,7 +174,8 @@ export default class SelectionToolView extends UIElement {
         this.parent.trigger('removeRealPosition');                
         // this.initSelectionTool();
 
-        this.emit('refreshRedGL', false)
+        // this.emit('refreshRedGL', false)
+        this.emit('refreshCanvasForPartial')
         this.emit('refreshStyleView');
         this.emit('removeGuideLine')
     }   
@@ -188,6 +238,9 @@ export default class SelectionToolView extends UIElement {
         if (current) {
             var isPath = current.is('svg-path');
             this.refs.$selectionTool.toggleClass('path', isPath);            
+
+            var isPolygon = current.is('svg-polygon');
+            this.refs.$selectionTool.toggleClass('polygon', isPolygon);
         }
 
         this.makeSelectionTool();

@@ -3,7 +3,7 @@ import UIElement, { EVENT, COMMAND } from "../../../util/UIElement";
 import { editor } from "../../../editor/editor";
 import { Project } from "../../../editor/items/Project";
 import { ArtBoard } from "../../../editor/items/ArtBoard";
-import { CLICK, DEBOUNCE, PREVENT, STOP, WHEEL, ALT, THROTTLE, IF, KEYUP, CONTROL, META, KEYPRESS } from "../../../util/Event";
+import { CLICK, DEBOUNCE, PREVENT, STOP, WHEEL, ALT, THROTTLE, IF, KEYUP, CONTROL, META, KEYPRESS, SCROLL, KEY } from "../../../util/Event";
 
 import { StyleParser } from "../../../editor/parse/StyleParser";
 import icon from "../icon/icon";
@@ -43,7 +43,7 @@ export default class CanvasView extends UIElement {
 
     var artboard = project.add(new ArtBoard({
       name: 'New ArtBoard',
-      x: Length.px(600),
+      x: Length.px(300),
       y: Length.px(300)
     }));
     editor.selection.selectArtboard(artboard);
@@ -78,6 +78,68 @@ export default class CanvasView extends UIElement {
       </div>
     `;
   }
+
+  [KEYUP('$el') + CONTROL + KEY('c')  + PREVENT ] (e) {
+    editor.selection.copy();
+  }
+
+  [KEYUP('$el') + CONTROL + KEY('v') + PREVENT ] () {
+    editor.selection.paste();
+
+    this.emit('refreshAll');
+  }  
+
+  getScrollTop() {
+    if (this.refs.$lock) {
+      return this.refs.$lock.scrollTop()
+    }
+
+    return 0;
+  }
+
+  getScrollLeft() {
+    if (this.refs.$lock) {
+      return this.refs.$lock.scrollLeft()
+    }
+    
+    return 0; 
+  }  
+
+  get scrollXY () {
+    return {
+      screenX: Length.px(this.getScrollLeft()),
+      screenY: Length.px(this.getScrollTop())
+    }
+  }
+
+  get screenSize () {
+    if (this.refs.$lock) {
+      return this.refs.$lock.rect()
+    }
+
+    return {
+      width: 0,
+      height: 0
+    }
+  } 
+
+  setScrollTop (value) {
+    this.refs.$lock.setScrollTop(value);
+  }
+
+  addScrollTop (value) {
+    this.setScrollTop(this.getScrollTop() + value)
+  }
+
+  setScrollLeft (value) {
+    this.refs.$lock.setScrollLeft(value);
+  }  
+
+  addScrollLeft (value) {
+    this.setScrollLeft(this.getScrollLeft() + value)
+  }
+
+
 
   // 단축키 적용하기 
   [KEYUP() + IF('Backspace')] (e) {

@@ -74,21 +74,37 @@ export default class Sort {
 
     static sameWidth () {
 
-        editor.selection.each(item => {
-            item.setScreenX(editor.selection.allRect.x.value);
-            item.width.set( editor.selection.allRect.width.value);
-        })
+        var len = editor.selection.items.length ;
 
-        editor.selection.setRectCache();
+        if (len == 1) {
+            // artboard 랑 크기를 맞출지 고민해보자. 
+        } else if (len > 1) {
+
+            editor.selection.each(item => {
+                item.setScreenX(editor.selection.allRect.x.value);
+                item.width.set( editor.selection.allRect.width.value);
+            })
+
+            editor.selection.setRectCache();            
+        }
+
+
     }
 
     static sameHeight () {
 
-        editor.selection.each(item => {
-            item.setScreenY(editor.selection.allRect.y.value);
-            item.height.set( editor.selection.allRect.height.value);
-        })
+        var len = editor.selection.items.length ;
 
-        editor.selection.setRectCache();
+        if (len == 1) {
+            // artboard 랑 크기를 맞출지 고민해보자. 
+        } else if (len > 1) {
+
+            editor.selection.each(item => {
+                item.setScreenY(editor.selection.allRect.y.value);
+                item.height.set( editor.selection.allRect.height.value);
+            })
+
+            editor.selection.setRectCache();
+        }
     }
 }

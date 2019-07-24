@@ -21,10 +21,6 @@ export default class PositionProperty extends BaseProperty {
     return "Position";
   }
 
-  isHideHeader() {
-    return true; 
-  }
-
   [EVENT('refreshSelection', 'refreshRect') + DEBOUNCE(100)]() {
 
     var current = editor.selection.current;

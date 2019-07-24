@@ -14,9 +14,13 @@ import SameWidth from "./SameWidth";
 import CopyItem from "./CopyItem";
 import AddText from "./AddText";
 import ToggleRightItem from "./ToggleRightItem";
+import AddPolygon from "./AddPolygon";
+import AddStar from "./AddStar";
 
 
 export default {
+  AddStar,
+  AddPolygon,
   ToggleRightItem,
   AddText,
   CopyItem,
