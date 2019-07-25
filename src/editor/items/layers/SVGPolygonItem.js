@@ -22,6 +22,10 @@ export class SVGPolygonItem extends SVGItem {
     this.json.height = Length.px(obj.height);
   }
 
+  get d () {
+    return this.json.polygon.toPathString();
+  }
+
   setCache () {
     this.rect = {
       width: this.json.width.clone(),

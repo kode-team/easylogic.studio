@@ -156,7 +156,7 @@ export class DisplacementMapSVGFilter extends SVGFilter {
     return super.getDefaultObject({
       type: "DisplacementMap",
       sourceIn: DisplacementMapSVGFilter.spec.sourceIn.defaultValue,
-      sourceInin2: DisplacementMapSVGFilter.spec.sourceIn2.defaultValue,
+      sourceIn2: DisplacementMapSVGFilter.spec.sourceIn2.defaultValue,
       scale: DisplacementMapSVGFilter.spec.scale.defaultValue
     });
   }

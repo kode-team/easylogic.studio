@@ -9,11 +9,12 @@ import LayerTab from "./LayerTab";
 import AddPolygon from "./menu-items/AddPolygon";
 import AddStar from "./menu-items/AddStar";
 import { CLICK } from "../../../util/Event";
-
+import AddCube from "./menu-items/AddCube";
 
 export default class ObjectList extends UIElement {
   components() {
     return {
+      AddCube,
       AddStar,
       AddPolygon,
       LayerTab,      
@@ -35,6 +36,7 @@ export default class ObjectList extends UIElement {
           <AddCircle />         
           <AddText />
           <AddImage />
+          <AddCube />
           <div class='split'></div>
           <label>SVG</label>
           <AddPath />

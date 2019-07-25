@@ -49,6 +49,7 @@ export default class PolygonEditorView extends UIElement {
         this.state.starCount += dt; 
 
         this.refreshStar()
+        this.emit('changeStarManager', this.state.starCount, this.state.starInnerRadiusRate)
     } 
 
     refreshStar () {
@@ -71,6 +72,7 @@ export default class PolygonEditorView extends UIElement {
         this.state.starInnerRadiusRate += dt; 
 
         this.refreshStar()
+        this.emit('changeStarManager', this.state.starCount, this.state.starInnerRadiusRate)        
     } 
 
     [KEYUP() + IF('Escape') + IF('Enter') + PREVENT + STOP] () {
@@ -190,10 +192,33 @@ export default class PolygonEditorView extends UIElement {
 
         this.$el.show();
         this.$el.focus();
+
+        if (mode === 'star') {
+            this.emit('showStarManager', {
+                changeEvent: 'changeStarManager',
+                count: this.state.starCount,
+                radius: this.state.starInnerRadiusRate
+            })
+        } else {
+            this.emit('hideStarManager');
+        }
+    }
+
+    [EVENT('changeStarManager')] (count, radius) {
+
+        this.state.starCount = count; 
+        this.state.starInnerRadiusRate = radius; 
+
+        this.refreshStar()
+
     }
 
     [EVENT('hidePolygonEditor')] () {
         this.$el.hide();
+        if (this.isMode('star')) {
+            this.emit('hideStarManager');
+        }
+
         this.emit('finishPolygonEdit')        
     }
 

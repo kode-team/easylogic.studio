@@ -1,8 +1,9 @@
 import PathParser from "./PathParser";
+import PathStringManager from "./PathStringManager";
 
 
 const splitReg = /[\b\t \,]/g;
-var numberReg = /-?[0-9]*\.?[0-9]+(?:e[-+]?\d+)?/ig
+// var numberReg = /-?[0-9]*\.?[0-9]+(?:e[-+]?\d+)?/ig
  
 export default class PolygonParser extends PathParser {
 
@@ -35,6 +36,25 @@ export default class PolygonParser extends PathParser {
 
     length () {
         return this.segments.length;
+    }
+
+    toPathString () {
+
+        var path = new PathStringManager()
+
+        for(var i = 0, len = this.segments.length; i < len ; i++) {
+            var s = this.segments[i];
+
+            if (i === 0) {
+                path.M(s)
+            } else if (i === len - 1) {
+                path.L(s).L(this.segments[0]).Z();  // 마지막 지점을 연결한다. 
+            } else {
+                path.L(s);
+            }
+        }
+
+        return path.d;
     }
 
     joinPath(segments) {

@@ -6,6 +6,7 @@ import { isNotUndefined } from "../../../util/functions/func";
 import GuideView from "./GuideView";
 import { MovableItem } from "../../../editor/items/MovableItem";
 import icon from "../icon/icon";
+import { Transform } from "../../../editor/css-property/Transform";
 
 /**
  * 원보 아이템의 크기를 가지고 scale 이랑 조합해서 world 의 크기를 구하는게 기본 컨셉 
@@ -24,6 +25,13 @@ export default class SelectionToolView extends UIElement {
         <div class='selection-tool' ref='$selectionTool'>
             <div class='selection-tool-item' data-position='move'></div>
             <div class='selection-tool-item' data-position='path'>${icon.scatter}</div>
+            <div class='selection-tool-item' data-position='rotate3d'>
+                <div class='z'></div>            
+                <div class='y'></div>                
+                <div class='x'></div>
+
+
+            </div>                        
             <div class='selection-tool-item' data-position='to top'></div>
             <div class='selection-tool-item' data-position='to right'></div>
             <div class='selection-tool-item' data-position='to bottom'></div>
@@ -144,12 +152,34 @@ export default class SelectionToolView extends UIElement {
         }
 
         this.refs.$selectionTool.attr('data-selected-position', this.pointerType);
-
         this.parent.selectCurrent(...editor.selection.items)
 
-        editor.selection.setRectCache(this.pointerType === 'move' ? false: true);        
+        editor.selection.setRectCache(this.pointerType === 'move' ? false: true);
 
-        this.initSelectionTool();
+        if (this.pointerType === 'rotate3d') {
+            // 3d rotate 는 transform 속성이라 selection tool ui 를 변경하지 않는다. 
+            editor.selection.each((item, cachedItem) => {
+                item.transformObj = Transform.parseStyle(item.transform);
+                cachedItem.transformObj = Transform.parseStyle(cachedItem.transform);
+
+                cachedItem.rotateX = cachedItem.transformObj.filter(it => it.type === 'rotateX')[0];
+                cachedItem.rotateY = cachedItem.transformObj.filter(it => it.type === 'rotateY')[0];
+
+            })
+        } else {
+            this.initSelectionTool();
+        }
+
+    }
+
+    setRotateValue (item, type, value) {
+
+        var obj = item.transformObj.filter(it => it.type === type)[0]
+        if (obj) {
+            obj.value[0] = value.clone();
+        } else {
+            item.transformObj.push({ type: type, value: [value.clone()] })
+        }    
     }
 
     move (dx, dy) {
@@ -160,10 +190,46 @@ export default class SelectionToolView extends UIElement {
             dy = dx; 
         }
 
-        this.refreshSelectionToolView(dx, dy);
-        this.parent.updateRealPosition();    
-        this.emit('refreshCanvasForPartial')         
-        // this.emit('refreshRedGL', false)        
+        if (this.pointerType === 'rotate3d') {
+
+            var rx = Length.deg(-dy)
+            var ry = Length.deg(dx)
+
+            editor.selection.each((item, cachedItem) => {
+                var tempRotateX = Length.deg(0)
+                var tempRotateY = Length.deg(0)
+
+                if (cachedItem.rotateX) { 
+                    tempRotateX.set(cachedItem.rotateX.value[0].value);
+                } 
+                if (cachedItem.rotateY) {
+                    tempRotateY.set(cachedItem.rotateY.value[0].value);
+                }
+
+                tempRotateX.add(rx);
+                tempRotateY.add(ry);
+
+                this.setRotateValue(item, 'rotateX', tempRotateX);
+                this.setRotateValue(item, 'rotateY', tempRotateY);
+
+                item.transform = Transform.join(item.transformObj);
+            })
+
+            this.emit('refreshSelectionStyleView');
+
+        } else {
+            this.refreshSelectionToolView(dx, dy);
+            this.parent.updateRealPosition();    
+            this.emit('refreshCanvasForPartial')     
+            
+            var current  = editor.selection.current;
+            if (current.is('cube')) {
+                this.emit('refreshStyleView', current);  
+            }
+                
+        }
+
+
     }
 
     end (dx, dy) {

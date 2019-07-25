@@ -34,6 +34,10 @@
       .title {
         display: grid;
         grid-template-columns: 1fr 30px;
+        background-color: $selected-color;
+        color: white;
+        border-radius: 3px;
+        margin: 5px 0px;        
   
         label {
           font-size: 12px;
@@ -42,7 +46,8 @@
 
             span {
               font-weight: bold;
-              background-color: blue;
+              // background-color: white;
+              text-shadow: 1px 1px 0 #333;
               color: white;
               border-radius: 3px;
               padding: 0px;

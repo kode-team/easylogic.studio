@@ -77,6 +77,7 @@ export class DomItem extends GroupItem {
       'text-indent': '',      
       'perspective-origin': '',
       'transform-origin': '',
+      'transform-style': '',
       'perspective': '',
       'mix-blend-mode': '',
       'opacity': '',
@@ -131,6 +132,7 @@ export class DomItem extends GroupItem {
       'text-indent': json['text-indent'] + "",      
       'perspective-origin': json['perspective-origin'],
       'transform-origin': json['transform-origin'],
+      'transform-style': json['transform-style'],      
       'perspective': json.perspective + "",
       'mix-blend-mode': json['mix-blend-mode'],
       'opacity': json.opacity + "",
@@ -500,7 +502,7 @@ export class DomItem extends GroupItem {
 
         'background-color', 'color',  'opacity', 'mix-blend-mode',
 
-        'transform-origin', 'perspective', 'perspective-origin',
+        'transform-origin', 'transform-style', 'perspective', 'perspective-origin',
 
         'font-size', 'line-height', 'font-weight', 'font-family', 'font-style',
         'text-align', 'text-transform', 'text-decoration',
@@ -663,7 +665,7 @@ ${prefix} {
 
 ${this.toNestedCSS().map(it => {
   return `${prefix} ${it.selector} { 
-    ${CSS_TO_STRING(it.css, '\n')}; 
+    ${it.cssText ? it.cssText : CSS_TO_STRING(it.css || {}, '\n')}; 
   }`
 }).join('\n')}
 

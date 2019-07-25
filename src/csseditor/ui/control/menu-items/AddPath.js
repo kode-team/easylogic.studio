@@ -1,5 +1,6 @@
 import MenuItem from "./MenuItem";
 import icon from "../../icon/icon";
+import { editor } from "../../../../editor/editor";
  
 export default class AddPath extends MenuItem {
   getIconString() {
@@ -15,7 +16,9 @@ export default class AddPath extends MenuItem {
   }  
 
   clickButton(e) {
-    this.emit('hideSubEditor');    
+    this.emit('hideSubEditor');
+    editor.selection.empty();
+    this.emit('initSelectionTool');        
     this.emit('showPathEditor', 'move' );
   }
 }

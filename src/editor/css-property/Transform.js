@@ -24,6 +24,10 @@ export class Transform extends Property {
     return `${this.json.type}(${this.json.value.join(', ') || ""})`;
   }
 
+  static join (list) {
+    return list.map(it => new Transform(it).toString()).join(' ')
+  }
+
   hasNumberValue () {
     var type = this.json.type; 
     return type.includes('matrix') || type.includes('scale')

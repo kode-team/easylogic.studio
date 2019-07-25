@@ -57,9 +57,12 @@ import brush from "./brush";
 import dahaze from "./dahaze";
 import star from "./star";
 import polygon from "./polygon";
+import cube from "./cube";
+
 
 
 export default {
+  cube,
   polygon,
   star,
   dahaze,

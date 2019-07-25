@@ -105,6 +105,9 @@ export default class SVGFilterEditor extends UIElement {
         options = s.options(this.state.filters)
       }
 
+      console.log(filter, key)
+      var value = filter[key] || ''; 
+
       return `
         <div>
           <SelectEditor 

@@ -1,6 +1,6 @@
 import BaseProperty from "./BaseProperty";
 import {
-  LOAD,
+  LOAD, DEBOUNCE,
 } from "../../../../../util/Event";
 
 import { editor } from "../../../../../editor/editor";
@@ -32,4 +32,9 @@ export default class TransformProperty extends BaseProperty {
     this.emit("refreshSelectionStyleView");
 
   }
+
+  [EVENT('refreshSelection') + DEBOUNCE(100)] () {
+    this.refresh();
+  }
+  
 }

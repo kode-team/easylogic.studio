@@ -17,6 +17,7 @@ import { BackgroundImage } from "../../../editor/css-property/BackgroundImage";
 import { Sketch, SketchUtil } from "../../../editor/parse/Sketch";
 import Color from "../../../util/Color";
 import Dom from "../../../util/Dom";
+import StarManager from "./StarManager";
 
 
 export default class CanvasView extends UIElement {
@@ -24,7 +25,8 @@ export default class CanvasView extends UIElement {
   components() {
     return {
       NumberRangeEditor,
-      ElementView
+      ElementView,
+      StarManager      
     }
   }
 
@@ -67,6 +69,7 @@ export default class CanvasView extends UIElement {
             <ElementView ref='$elementView' />
           </div>
         </div>
+        <StarManager />
         <div class='page-tools'>
           <button type='button' ref='$plus'>${icon.add}</button>
           <button type='button' ref='$minus'>${icon.remove2}</button>
