@@ -1,4 +1,4 @@
-import UIElement from "../../../../../util/UIElement";
+import UIElement, { EVENT } from "../../../../../util/UIElement";
 import { INPUT, LOAD, CLICK } from "../../../../../util/Event";
 import icon from "../../../icon/icon";
 
@@ -12,15 +12,17 @@ export default class VarEditor extends UIElement {
         });
 
         return {
+            hideLabel: this.props['hide-label'] == 'true' ? true : false, 
             params: this.props.params || '',
             values
         }
     }
 
     template() {
+        var labelClass = this.state.hideLabel ? 'hide' : '';
         return `
         <div class='var-editor var-list'>
-            <div class='label' >
+            <div class='label ${labelClass}' >
                 <label>${this.props.title || ''}</label>
                 <div class='tools'>
                     <button type="button" ref="$add" title="add Var">${icon.add}</button>
@@ -30,7 +32,7 @@ export default class VarEditor extends UIElement {
         </div>`;
     }
 
-    [CLICK('$add')] () {
+    [EVENT('add')] () {
         this.state.values.push({
             key: '',
             value: '' 
@@ -39,6 +41,10 @@ export default class VarEditor extends UIElement {
         this.refresh();
 
         this.updateData();
+    }
+
+    [CLICK('$add')] () {
+        this.trigger('add');
     }
 
     [LOAD('$varList')] () {

@@ -1404,7 +1404,7 @@ html, body {
   height: 50px;
   overflow: hidden;
   position: relative;
-  background-color: #383838;
+  background-color: #3a3a3a;
   color: #ececec;
   z-index: 1;
   pointer-events: all;
@@ -1542,7 +1542,7 @@ html, body {
   bottom: 0px;
 }
 .csseditor .feature-control .draw-items {
-  background-color: #383838;
+  background-color: #3a3a3a;
 }
 .csseditor .feature-control .draw-items .split {
   border: 0px;
@@ -1687,7 +1687,7 @@ html, body {
   right: 0px;
   bottom: 0px;
   top: 0px;
-  background-color: #383838;
+  background-color: #3a3a3a;
   color: #ececec;
 }
 .csseditor .tab.number-tab .tab-header {
@@ -1842,7 +1842,7 @@ html, body {
   height: 20px;
 }
 .csseditor .tab > .tab-header > .tab-item:not(.selected) {
-  background-color: #383838;
+  background-color: #3a3a3a;
 }
 .csseditor .tab > .tab-header > .tab-item.selected {
   background-color: #3e8ec6;
@@ -1855,7 +1855,7 @@ html, body {
   color: black;
 }
 .csseditor .tab > .tab-header > .tab-item.select-reverse.selected {
-  background-color: #383838;
+  background-color: #3a3a3a;
 }
 .csseditor .tab > .tab-body {
   position: absolute;
@@ -1898,7 +1898,7 @@ html, body {
   right: 0px;
   height: 30px;
   display: none;
-  background-color: #383838;
+  background-color: #3a3a3a;
   font-size: 12px;
   font-weight: bold;
   padding: 8px 5px !important;
@@ -2342,7 +2342,7 @@ html, body {
   border-radius: 3px;
   border: 1px solid #1a1a1a;
   color: #ececec;
-  background-color: #383838;
+  background-color: #3a3a3a;
 }
 .csseditor .page-tools > label {
   vertical-align: middle;
@@ -2368,7 +2368,7 @@ html, body {
   border-radius: 3px;
   border: 1px solid #1a1a1a;
   color: #ececec;
-  background-color: #383838;
+  background-color: #3a3a3a;
   padding: 5px 10px;
 }
 .csseditor .star-manager > label {
@@ -2590,16 +2590,16 @@ html, body {
 .csseditor .selection-tool .selection-tool-item[data-position=rotate3d] .z .point {
   display: inline-block;
   height: 10px;
-  width: 10px;
-  top: -20px;
+  width: 20px;
+  top: -10px;
   left: 50%;
   -webkit-transform: translateX(-50%);
           transform: translateX(-50%);
   pointer-events: all;
-  background-color: green;
   border-radius: 50%;
   position: absolute;
   cursor: auto;
+  border-top: 2px solid white;
 }
 .csseditor .selection-tool .selection-tool-item[data-position=path] {
   left: 0px;
@@ -2724,7 +2724,7 @@ html, body {
   padding: 0px 0px;
   box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.03), 0 1px 0 0 rgba(0, 0, 0, 0.15);
   border-bottom: 1px solid #000;
-  background-color: #383838;
+  background-color: #3a3a3a;
   color: #ececec;
 }
 .csseditor .property svg {
@@ -2768,6 +2768,7 @@ html, body {
   grid-template-columns: 0.8fr 1fr;
   cursor: pointer;
   box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.03), 0 1px 0 0 rgba(0, 0, 0, 0.15);
+  background-color: #1f1f1f;
   border-bottom: 0px;
 }
 .csseditor .property > .property-title label {
@@ -2786,12 +2787,15 @@ html, body {
 .csseditor .property > .property-body {
   display: none;
   padding: 0px;
-  background-color: #383838;
+  background-color: #3a3a3a;
 }
 .csseditor .property > .property-body .property-item {
   padding: 0px;
   font-size: 11px;
   margin-bottom: 5px;
+}
+.csseditor .property > .property-body .property-item:empty {
+  margin-bottom: 0px;
 }
 .csseditor .property > .property-body .property-item.label label {
   font-weight: 900;
@@ -2846,7 +2850,7 @@ html, body {
   width: 20px;
   height: 20px;
   margin-right: 10px;
-  background-color: #383838;
+  background-color: #3a3a3a;
 }
 .csseditor .border-item .border-direction button[has-value=true] {
   border-color: #3e8ec6;
@@ -4432,6 +4436,9 @@ html, body {
   height: 20px;
   margin-top: 2px;
 }
+.csseditor .background-image-editor .label.hide {
+  display: none;
+}
 .csseditor .background-image-editor .label label {
   font-size: 12px;
   padding-left: 5px;
@@ -4655,6 +4662,9 @@ html, body {
   height: 20px;
   margin-top: 2px;
 }
+.csseditor .filter-editor .label.hide {
+  display: none;
+}
 .csseditor .filter-editor .label label {
   font-size: 12px;
   padding-left: 5px;
@@ -4717,6 +4727,9 @@ html, body {
   height: 20px;
   margin-top: 2px;
 }
+.csseditor .box-shadow-editor .label.hide {
+  display: none;
+}
 .csseditor .box-shadow-editor .label label {
   font-size: 12px;
   padding-left: 5px;
@@ -4770,7 +4783,7 @@ html, body {
   height: 16px;
 }
 .csseditor .box-shadow-editor .shadow-item .inset svg path {
-  fill: #383838;
+  fill: #3a3a3a;
 }
 .csseditor .box-shadow-editor .shadow-item .inset[data-value=true] svg path {
   fill: #3e8ec6;
@@ -4854,6 +4867,9 @@ html, body {
 .csseditor .var-editor .label {
   height: 20px;
   margin-top: 2px;
+}
+.csseditor .var-editor .label.hide {
+  display: none;
 }
 .csseditor .var-editor .label label {
   font-size: 12px;
@@ -5560,7 +5576,7 @@ html, body {
   display: none;
   box-sizing: border-box;
   z-index: 1000;
-  background-color: #383838;
+  background-color: #3a3a3a;
   border: 1px solid #1a1a1a;
   box-shadow: 0 0 1px 0px #1a1a1a;
   padding: 14px;
@@ -5731,7 +5747,7 @@ html, body {
 .csseditor .popup .box-shadow-property-popup .codemirror-colorpicker {
   box-shadow: none;
   border-radius: 0px;
-  background-color: #383838;
+  background-color: #3a3a3a;
 }
 .csseditor .popup .box-shadow-property-popup .codemirror-colorpicker input {
   color: #ececec !important;
@@ -5854,7 +5870,7 @@ html, body {
 .csseditor .popup .text-shadow-property-popup .codemirror-colorpicker {
   box-shadow: none;
   border-radius: 0px;
-  background-color: #383838;
+  background-color: #3a3a3a;
 }
 .csseditor .popup .text-shadow-property-popup .codemirror-colorpicker input {
   color: #ececec !important;
@@ -6423,7 +6439,7 @@ html, body {
   box-shadow: none;
   border-radius: 0px;
   border: 0px;
-  background-color: #383838;
+  background-color: #3a3a3a;
 }
 .csseditor .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=color] .codemirror-colorpicker input {
   color: #ececec !important;
@@ -6529,7 +6545,7 @@ html, body {
   box-shadow: none;
   border-radius: 0px;
   border: 0px;
-  background-color: #383838;
+  background-color: #3a3a3a;
 }
 .csseditor .popup .color-picker-popup .codemirror-colorpicker input {
   color: #ececec !important;
@@ -6836,7 +6852,7 @@ html, body {
   box-shadow: none;
   border-radius: 0px;
   border: 0px;
-  background-color: #383838;
+  background-color: #3a3a3a;
 }
 .csseditor .popup .gradient-picker .codemirror-colorpicker .color-panel {
   margin-top: 0px;

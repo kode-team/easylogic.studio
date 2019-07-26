@@ -1,26 +1,35 @@
 import BaseProperty from "./BaseProperty";
 import {
-  LOAD
+  LOAD, CLICK
 } from "../../../../../util/Event";
 
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
+import icon from "../../../icon/icon";
 
 export default class VariableProperty extends BaseProperty {
 
-  isHideHeader() {
-    return true; 
+  getTitle() {
+    return 'Variables';
   }
 
   getBody() {
     return `<div class='property-item full var-property' ref='$body'></div>`;
   }
 
+  getTools() {
+    return `<button type="button" ref='$add'>${icon.add}</button>`
+  }
+
+  [CLICK('$add')] () {
+    this.children.$varEditor.trigger('add');
+  }    
+
   [LOAD('$body')] () {
     var current = editor.selection.current || {} 
     var value = current.variable || '';
 
-    return `<VarEditor ref='$1' value='${value}' title='Variables' onchange='changeVarEditor' />`
+    return `<VarEditor ref='$varEditor' value='${value}' hide-label="true" onchange='changeVarEditor' />`
   }
 
   [EVENT('changeVarEditor')] (variable) {

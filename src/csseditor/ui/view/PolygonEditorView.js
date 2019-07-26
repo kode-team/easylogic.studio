@@ -180,6 +180,10 @@ export default class PolygonEditorView extends UIElement {
 
         if (mode === 'move') {
             obj.current = null;
+        } else {
+            if (!obj.current) {
+                obj.current = null; 
+            }            
         }
 
         var newOptions = {

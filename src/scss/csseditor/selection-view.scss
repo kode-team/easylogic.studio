@@ -174,15 +174,17 @@
           .point {
             display: inline-block;
             height: 10px;
-            width: 10px;
-            top: -20px;
+            width: 20px;
+            top: -10px;
             left: 50%;
             transform: translateX(-50%);
             pointer-events: all; 
-            background-color: green;
+            // background-color: green;
             border-radius: 50%;
             position: absolute;
             cursor: auto; 
+            // background-image: radial-gradient(rgba(255, 255, 255, 0.8) 80%, black);
+            border-top: 2px solid white; 
           }
         }                
       }      

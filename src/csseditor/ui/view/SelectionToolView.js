@@ -48,6 +48,28 @@ export default class SelectionToolView extends UIElement {
     </div>`
     }
 
+    [DOUBLECLICK('$rotate3d')] (e) {
+        editor.selection.each(item => {
+            var transform = Transform.join(Transform.parseStyle(item.transform).filter(it => {
+                switch(it.type) {
+                case 'rotate':
+                case 'rotate3d':
+                case 'rotateX':
+                case 'rotateY':                    
+                case 'rotateZ':
+                    return false; 
+                }
+                return true; 
+            }))
+
+            item.reset({ transform })
+        })
+
+        this.emit('refreshSelectionStyleView');
+        this.bindData('$rotateZ')
+        this.bindData('$rotateArea')
+    }
+
     [DOUBLECLICK('$selectionTool .selection-tool-item[data-position="move"]')] (e) {
         this.trigger('openPathEditor');
     }    

@@ -70,14 +70,16 @@ export default class FilterEditor extends UIElement {
 
   initState() {
     return {
+      hideLabel: this.props['hide-label'] === 'true' ? true : false, 
       filters: Filter.parseStyle(this.props.value)
     }
   }
 
   template() {
+    var labelClass = this.state.hideLabel ? 'hide' : '';
     return `
       <div class='filter-editor filter-list'>
-          <div class='label' >
+          <div class='label ${labelClass}' >
               <label>${this.props.title || ''}</label>
               <div class='tools'>
                 <select ref="$filterSelect"></select>
@@ -294,14 +296,19 @@ export default class FilterEditor extends UIElement {
     return Filter.parse({ ...opt, type });
   }
 
-  [CLICK("$add")]() {
-    var filterType = this.refs.$filterSelect.value;
 
+  [EVENT("add")](filterType) {
     this.state.filters.push(this.makeFilter(filterType))
 
     this.refresh();
 
     this.modifyFilter()
+  }  
+
+  [CLICK("$add")]() {
+    var filterType = this.refs.$filterSelect.value;
+
+    this.trigger('add', filterType)
   }
 
   [CLICK("$filterList .filter-menu .del")](e) {

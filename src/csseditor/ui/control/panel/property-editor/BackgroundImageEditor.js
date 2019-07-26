@@ -31,6 +31,7 @@ export default class BackgroundImageEditor extends UIElement {
 
     initState() {
         return {
+            hideLabel: this.props['hide-label'] === 'true' ? true: false,
             value: this.props.value, 
             images : this.parseBackgroundImage(this.props.value)
         }
@@ -41,9 +42,10 @@ export default class BackgroundImageEditor extends UIElement {
     }
 
     template () {
+        var labelClass = this.state.hideLabel ? 'hide' : '';
         return `
             <div class='background-image-editor' >
-                <div class='label'>
+                <div class='label ${labelClass}'>
                     <label>${this.props.title||''}</label>
                     <div class='tools'>
                         <button type="button" ref='$add'>${icon.add} ${this.props.title ? '' : 'Add'}</button>
@@ -138,13 +140,18 @@ export default class BackgroundImageEditor extends UIElement {
         this.parent.trigger(this.props.onchange, value)
     }
 
-    [CLICK('$add')] () {
+    [EVENT('add')] () {
 
         this.state.images.push(new BackgroundImage());
 
         this.refresh();
 
-        this.modifyBackgroundImage();
+        this.modifyBackgroundImage();        
+    }
+
+    [CLICK('$add')] () {
+
+        this.trigger('add')
     }
 
 

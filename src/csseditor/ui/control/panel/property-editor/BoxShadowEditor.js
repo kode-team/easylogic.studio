@@ -8,14 +8,16 @@ export default class BoxShadowEditor extends UIElement {
 
   initState() {
     return {
+      hideLabel: this.props['hide-label'] === 'true' ? 'true' : 'false',
       boxShadows: BoxShadow.parseStyle(this.props.value || '')
     }
   }
 
   template() {
+    var labelClass = this.state.hideLabel ? 'hide' : '';
     return `
       <div class="box-shadow-editor" >
-        <div class='label' >
+        <div class='label ${labelClass}' >
             <label>${this.props.title||''}</label>
             <div class='tools'>
               <button type="button" ref="$add" title="add Box Shadow">${icon.add}</button> ${this.props.title ? '': 'Add'}
@@ -78,13 +80,16 @@ export default class BoxShadowEditor extends UIElement {
     this.parent.trigger(this.props.onchange, value)
   }
 
-
-  [CLICK("$add")]() {
+  [EVENT('add')] () {
     this.state.boxShadows.push(new BoxShadow())
 
     this.refresh();
 
     this.modifyBoxShadow()
+  }
+
+  [CLICK("$add")]() {
+    this.trigger('add');
   }
 
   [CLICK("$shadowList .remove")](e) {

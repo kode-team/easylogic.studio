@@ -1,21 +1,33 @@
 import BaseProperty from "./BaseProperty";
 import {
-  LOAD, DEBOUNCE
+  LOAD, DEBOUNCE, CLICK
 } from "../../../../../util/Event";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
+import icon from "../../../icon/icon";
 
 
 export default class BackgroundImageProperty extends BaseProperty {
 
-  isHideHeader() {
-    return true; 
+  
+  getTitle() {
+    return 'Fill'
   }
+
   getBody() {
     return `
       <div class='property-item full background-image' ref='$property'></div>
     `;
   }
+
+
+  getTools() {
+    return `<button type="button" ref='$add'>${icon.add}</button>`
+  }
+
+  [CLICK('$add')] () {
+    this.children.$backgroundImageEditor.trigger('add');
+  }  
 
   [LOAD('$property')] () {
     var current = editor.selection.current || {}; 
@@ -24,7 +36,7 @@ export default class BackgroundImageProperty extends BaseProperty {
     return `<BackgroundImageEditor 
               ref='$backgroundImageEditor' 
               value='${value}' 
-              title='Background Images'
+              hide-label="true"
               onchange='changeBackgroundImage' 
             />`
   }

@@ -1,13 +1,14 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, DEBOUNCE } from "../../../../../util/Event";
+import { LOAD, DEBOUNCE, CLICK } from "../../../../../util/Event";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
+import icon from "../../../icon/icon";
 
 
 export default class BoxShadowProperty extends BaseProperty {
-  
-  isHideHeader() {
-    return true;
+
+  getTitle () {
+    return 'Box Shadows';
   }
 
   getBody() {
@@ -16,11 +17,21 @@ export default class BoxShadowProperty extends BaseProperty {
     `;
   }
 
+
   [LOAD("$shadowList")]() {
     var current = editor.selection.current || {};
     return `
-      <BoxShadowEditor ref='$boxshadow' value="${current['box-shadow'] || ''}" title='Box Shadows' onChange="changeBoxShadow" />
+      <BoxShadowEditor ref='$boxshadow' value="${current['box-shadow'] || ''}" hide-label="true" onChange="changeBoxShadow" />
     `
+  }
+
+
+  getTools() {
+    return `<button type="button" ref='$add'>${icon.add}</button>`
+  }
+
+  [CLICK('$add')] () {
+    this.children.$boxshadow.trigger('add');
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {

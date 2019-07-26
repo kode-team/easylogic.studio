@@ -4,6 +4,10 @@
   .label {
     height: 20px;
     margin-top: 2px;
+
+    &.hide {
+      display: none; 
+    }
     label {
       font-size: 12px;
       padding-left: 5px;

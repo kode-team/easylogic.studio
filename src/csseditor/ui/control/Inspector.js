@@ -22,12 +22,13 @@ export default class Inspector extends UIElement {
               <div class="tab-item" data-value="6">
                 <label>Animation</label>
               </div>
-              <div class="tab-item" data-value="8">
-                <label>Object</label>
-              </div>       
+              <div class="tab-item" data-value="7">
+                <label>GLOBAL</label>
+              </div>                                 
             </div>
             <div class="tab-body" ref="$body">
               <div class="tab-content" data-value="1">
+                <ArtBoardSizeProperty />              
                 <ImageProperty />
                 <SVGItemProperty />
                 <PositionProperty />
@@ -39,16 +40,14 @@ export default class Inspector extends UIElement {
                 <BorderProperty />
                 <BorderRadiusProperty />
                 <!--BorderImageProperty /-->
-                <OutlineProperty />
-                <ArtBoardSizeProperty />
-
-                <BackgroundClipProperty />                       
-                <MixBlendModeProperty />
                 <BackgroundImageProperty />
                 <BoxShadowProperty />
                 <FilterProperty />
+                <ClipPathProperty />                        
                 <BackdropFilterProperty />
-                <ClipPathProperty />          
+                <OutlineProperty />
+                <BackgroundClipProperty />                       
+                <MixBlendModeProperty />                  
               </div>
               <div class="tab-content" data-value="3">
                 <!-- <ContentProperty /> -->
@@ -71,10 +70,11 @@ export default class Inspector extends UIElement {
                 <TransitionProperty />
                 <AnimationProperty />
               </div>         
-              <div class='tab-content' data-value="8">
-                <ProjectInformationProperty />
-                <ArtBoardInformationProperty />
-              </div>                          
+              <div class="tab-content" data-value="7">
+                <KeyframeProperty />              
+                <RootVariableProperty />
+                <SVGProperty />
+              </div>              
             </div>
           </div>
         </div>
