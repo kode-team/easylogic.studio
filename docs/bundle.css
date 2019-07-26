@@ -2532,14 +2532,14 @@ html, body {
   top: 50%;
   width: 30px;
   height: 30px;
-  cursor: move;
+  cursor: ew-resize;
   border-radius: 0px;
   background-color: transparent;
   border: 0px;
   -webkit-transform-style: preserve-3d;
           transform-style: preserve-3d;
-  -webkit-transform: translate(-50%, -50%) rotate3d(1, 1, 0, 20deg);
-          transform: translate(-50%, -50%) rotate3d(1, 1, 0, 20deg);
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
 }
 .csseditor .selection-tool .selection-tool-item[data-position=rotate3d]:before {
   display: none;
@@ -2555,20 +2555,51 @@ html, body {
   box-sizing: border-box;
   pointer-events: none;
 }
-.csseditor .selection-tool .selection-tool-item[data-position=rotate3d] .x {
+.csseditor .selection-tool .selection-tool-item[data-position=rotate3d] .rotate-area {
+  -webkit-transform-style: preserve-3d;
+          transform-style: preserve-3d;
+  -webkit-transform: translate(0%, 0%);
+          transform: translate(0%, 0%);
+}
+.csseditor .selection-tool .selection-tool-item[data-position=rotate3d] .rotate-area > div {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 30px;
+  height: 30px;
+  background-color: transparent;
+  border-radius: 50%;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+.csseditor .selection-tool .selection-tool-item[data-position=rotate3d] .rotate-area .x {
   -webkit-transform: rotateX(90deg) translateZ(0px);
           transform: rotateX(90deg) translateZ(0px);
-  border: 2px solid red;
+  border: 3px solid red;
 }
-.csseditor .selection-tool .selection-tool-item[data-position=rotate3d] .y {
+.csseditor .selection-tool .selection-tool-item[data-position=rotate3d] .rotate-area .y {
   -webkit-transform: rotateY(90deg) translateZ(0px);
           transform: rotateY(90deg) translateZ(0px);
-  border: 2px solid blue;
+  border: 3px solid blue;
 }
 .csseditor .selection-tool .selection-tool-item[data-position=rotate3d] .z {
   -webkit-transform: rotate(0deg) translateZ(0px);
           transform: rotate(0deg) translateZ(0px);
   border: 2px solid green;
+}
+.csseditor .selection-tool .selection-tool-item[data-position=rotate3d] .z .point {
+  display: inline-block;
+  height: 10px;
+  width: 10px;
+  top: -20px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  pointer-events: all;
+  background-color: green;
+  border-radius: 50%;
+  position: absolute;
+  cursor: auto;
 }
 .csseditor .selection-tool .selection-tool-item[data-position=path] {
   left: 0px;
@@ -3804,6 +3835,9 @@ html, body {
   padding-left: 0px !important;
   padding-right: 0px !important;
 }
+.csseditor .gradient-assets {
+  margin-top: 4px;
+}
 .csseditor .gradient-assets .gradient-list-tools {
   text-align: left;
   margin-bottom: 10px;
@@ -4904,7 +4938,7 @@ html, body {
   position: relative;
 }
 .csseditor .gradient-editor .tools {
-  padding: 4px 6px;
+  padding: 4px 0px;
 }
 .csseditor .gradient-editor [data-editor] {
   display: none;
@@ -4931,7 +4965,7 @@ html, body {
   display: block;
 }
 .csseditor .gradient-editor .sub-editor {
-  padding: 0px 8px;
+  padding: 0px 0px;
 }
 .csseditor .gradient-editor .gradient-steps {
   position: relative;
@@ -6191,48 +6225,56 @@ html, body {
   padding: 2px 5px;
 }
 .csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=static-gradient] .picker-tab-item[data-selected-value=static-gradient] {
+  background-color: #3e8ec6;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=static-gradient] .picker-tab-item[data-selected-value=static-gradient] .icon svg path {
   fill: #3e8ec6;
 }
 .csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=linear-gradient] .picker-tab-item[data-selected-value=linear-gradient] {
+  background-color: #3e8ec6;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=linear-gradient] .picker-tab-item[data-selected-value=linear-gradient] .icon svg path {
   fill: #3e8ec6;
 }
 .csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-linear-gradient] .picker-tab-item[data-selected-value=repeating-linear-gradient] {
+  background-color: #3e8ec6;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-linear-gradient] .picker-tab-item[data-selected-value=repeating-linear-gradient] .icon svg path {
   fill: #3e8ec6;
 }
 .csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=radial-gradient] .picker-tab-item[data-selected-value=radial-gradient] {
+  background-color: #3e8ec6;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=radial-gradient] .picker-tab-item[data-selected-value=radial-gradient] .icon svg path {
   fill: #3e8ec6;
 }
 .csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-radial-gradient] .picker-tab-item[data-selected-value=repeating-radial-gradient] {
+  background-color: #3e8ec6;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-radial-gradient] .picker-tab-item[data-selected-value=repeating-radial-gradient] .icon svg path {
   fill: #3e8ec6;
 }
 .csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=conic-gradient] .picker-tab-item[data-selected-value=conic-gradient] {
+  background-color: #3e8ec6;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=conic-gradient] .picker-tab-item[data-selected-value=conic-gradient] .icon svg path {
   fill: #3e8ec6;
 }
 .csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-conic-gradient] .picker-tab-item[data-selected-value=repeating-conic-gradient] {
+  background-color: #3e8ec6;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-conic-gradient] .picker-tab-item[data-selected-value=repeating-conic-gradient] .icon svg path {
   fill: #3e8ec6;
 }
 .csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=image] .picker-tab-item[data-selected-value=image] {
+  background-color: #3e8ec6;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor .popup .fill-picker .picker-tab .picker-tab-list[data-value=image] .picker-tab-item[data-selected-value=image] .icon svg path {
@@ -6445,6 +6487,7 @@ html, body {
 }
 .csseditor .popup .gradient-assets {
   width: 460px;
+  margin-top: 4px;
 }
 .csseditor .popup .gradient-assets .project-gradient-list {
   margin-top: 5px;
@@ -6608,48 +6651,56 @@ html, body {
   padding: 2px 5px;
 }
 .csseditor .popup .gradient-picker .picker-tab .picker-tab-list[data-value=static-gradient] .picker-tab-item[data-selected-value=static-gradient] {
+  background-color: #3e8ec6;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor .popup .gradient-picker .picker-tab .picker-tab-list[data-value=static-gradient] .picker-tab-item[data-selected-value=static-gradient] .icon svg path {
   fill: rgba(0, 0, 255, 0.5);
 }
 .csseditor .popup .gradient-picker .picker-tab .picker-tab-list[data-value=linear-gradient] .picker-tab-item[data-selected-value=linear-gradient] {
+  background-color: #3e8ec6;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor .popup .gradient-picker .picker-tab .picker-tab-list[data-value=linear-gradient] .picker-tab-item[data-selected-value=linear-gradient] .icon svg path {
   fill: rgba(0, 0, 255, 0.5);
 }
 .csseditor .popup .gradient-picker .picker-tab .picker-tab-list[data-value=repeating-linear-gradient] .picker-tab-item[data-selected-value=repeating-linear-gradient] {
+  background-color: #3e8ec6;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor .popup .gradient-picker .picker-tab .picker-tab-list[data-value=repeating-linear-gradient] .picker-tab-item[data-selected-value=repeating-linear-gradient] .icon svg path {
   fill: rgba(0, 0, 255, 0.5);
 }
 .csseditor .popup .gradient-picker .picker-tab .picker-tab-list[data-value=radial-gradient] .picker-tab-item[data-selected-value=radial-gradient] {
+  background-color: #3e8ec6;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor .popup .gradient-picker .picker-tab .picker-tab-list[data-value=radial-gradient] .picker-tab-item[data-selected-value=radial-gradient] .icon svg path {
   fill: rgba(0, 0, 255, 0.5);
 }
 .csseditor .popup .gradient-picker .picker-tab .picker-tab-list[data-value=repeating-radial-gradient] .picker-tab-item[data-selected-value=repeating-radial-gradient] {
+  background-color: #3e8ec6;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor .popup .gradient-picker .picker-tab .picker-tab-list[data-value=repeating-radial-gradient] .picker-tab-item[data-selected-value=repeating-radial-gradient] .icon svg path {
   fill: rgba(0, 0, 255, 0.5);
 }
 .csseditor .popup .gradient-picker .picker-tab .picker-tab-list[data-value=conic-gradient] .picker-tab-item[data-selected-value=conic-gradient] {
+  background-color: #3e8ec6;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor .popup .gradient-picker .picker-tab .picker-tab-list[data-value=conic-gradient] .picker-tab-item[data-selected-value=conic-gradient] .icon svg path {
   fill: rgba(0, 0, 255, 0.5);
 }
 .csseditor .popup .gradient-picker .picker-tab .picker-tab-list[data-value=repeating-conic-gradient] .picker-tab-item[data-selected-value=repeating-conic-gradient] {
+  background-color: #3e8ec6;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor .popup .gradient-picker .picker-tab .picker-tab-list[data-value=repeating-conic-gradient] .picker-tab-item[data-selected-value=repeating-conic-gradient] .icon svg path {
   fill: rgba(0, 0, 255, 0.5);
 }
 .csseditor .popup .gradient-picker .picker-tab .picker-tab-list[data-value=image] .picker-tab-item[data-selected-value=image] {
+  background-color: #3e8ec6;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor .popup .gradient-picker .picker-tab .picker-tab-list[data-value=image] .picker-tab-item[data-selected-value=image] .icon svg path {

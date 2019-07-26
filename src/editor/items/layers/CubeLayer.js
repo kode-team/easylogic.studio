@@ -28,7 +28,8 @@ export class CubeLayer extends Layer {
       ...obj,
       ...this.toKeyListCSS(
         'position', 'right','bottom', 'width','height', 'opacity',
-        'transform-origin', 'transform-style', 'perspective', 'perspective-origin'
+        'transform-origin', 'transform-style', 'perspective', 'perspective-origin',
+        // 'filter',
       )
     }
 
@@ -58,10 +59,11 @@ export class CubeLayer extends Layer {
 
     var css = {
       ...this.toKeyListCSS(
-        'filter'
+        'filter', 'mix-blend-mode'
       ),      
       ...this.toBackgroundImageCSS(),
-      ...this.toBorderCSS()
+      ...this.toBorderCSS(),
+      ...this.toBorderRadiusCSS()
     }
 
     return [
@@ -108,7 +110,7 @@ export class CubeLayer extends Layer {
       },
       {
         selector: '.top', cssText: `
-          transform: rotateX(-90deg) translateZ(${halfHeight}px);
+          transform: rotateX(90deg) translateZ(${halfHeight}px);
           top: ${halfHeight - halfWidth}px;
           width: ${width};
           height: ${width};
@@ -116,7 +118,7 @@ export class CubeLayer extends Layer {
       },
       {
         selector: '.bottom', cssText: `
-          transform: rotateX(90deg) translateZ(${halfHeight}px);
+          transform: rotateX(-90deg) translateZ(${halfHeight}px);
           top: ${halfHeight - halfWidth}px;          
           width: ${width};
           height: ${width};          

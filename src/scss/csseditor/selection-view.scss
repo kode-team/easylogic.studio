@@ -116,13 +116,13 @@
         top: 50%;
         width: $rotate3d-width;
         height: $rotate3d-width;
-        cursor: move;
+        cursor: ew-resize;
         // transform: none;
         border-radius: 0px;
         background-color: transparent;
         border:0px;
         transform-style: preserve-3d;
-        transform: translate(-50%, -50%) rotate3d(1, 1, 0, 20deg);
+        transform: translate(-50%, -50%);
         &:before { 
           display: none; 
         }
@@ -139,19 +139,51 @@
 
         }
   
-        .x {
-          transform: rotateX(90deg) translateZ(0px);
-          border: 2px solid red; 
-        }
+        .rotate-area {        
+          transform-style: preserve-3d;
+          transform: translate(0%, 0%);
 
-        .y {
-          transform: rotateY(90deg) translateZ(0px);
-          border: 2px solid blue; 
-        }        
+          > div {
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            width: $rotate3d-width;
+            height: $rotate3d-width;
+            background-color: transparent;
+            border-radius: 50%;
+            box-sizing: border-box;
+            pointer-events: none;            
+          }
+
+          .x {
+            transform: rotateX(90deg) translateZ(0px);
+            border: 3px solid red; 
+          }
+  
+          .y {
+            transform: rotateY(90deg) translateZ(0px);
+            border: 3px solid blue; 
+          }        
+  
+        }
 
         .z {
           transform: rotate(0deg) translateZ(0px);
           border: 2px solid green; 
+
+          .point {
+            display: inline-block;
+            height: 10px;
+            width: 10px;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            pointer-events: all; 
+            background-color: green;
+            border-radius: 50%;
+            position: absolute;
+            cursor: auto; 
+          }
         }                
       }      
 

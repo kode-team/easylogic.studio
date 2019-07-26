@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
-import { POINTERSTART, MOVE, END, DOUBLECLICK, KEYUP, KEY, PREVENT, STOP } from "../../../util/Event";
+import { POINTERSTART, MOVE, END, DOUBLECLICK, KEYUP, KEY, PREVENT, STOP, BIND } from "../../../util/Event";
 import { Length } from "../../../editor/unit/Length";
 import { editor } from "../../../editor/editor";
 import { isNotUndefined } from "../../../util/functions/func";
@@ -7,6 +7,8 @@ import GuideView from "./GuideView";
 import { MovableItem } from "../../../editor/items/MovableItem";
 import icon from "../icon/icon";
 import { Transform } from "../../../editor/css-property/Transform";
+import Dom from "../../../util/Dom";
+import { calculateAngle } from "../../../util/functions/math";
 
 /**
  * 원보 아이템의 크기를 가지고 scale 이랑 조합해서 world 의 크기를 구하는게 기본 컨셉 
@@ -25,12 +27,14 @@ export default class SelectionToolView extends UIElement {
         <div class='selection-tool' ref='$selectionTool'>
             <div class='selection-tool-item' data-position='move'></div>
             <div class='selection-tool-item' data-position='path'>${icon.scatter}</div>
-            <div class='selection-tool-item' data-position='rotate3d'>
-                <div class='z'></div>            
-                <div class='y'></div>                
-                <div class='x'></div>
-
-
+            <div class='selection-tool-item' data-position='rotate3d' ref='$rotate3d'>
+                <div class='rotate-area' ref='$rotateArea'>
+                    <div class='y'></div>                
+                    <div class='x'></div>
+                </div>            
+                <div class='z' ref='$rotateZ'>
+                    <div class='point'></div>
+                </div>                        
             </div>                        
             <div class='selection-tool-item' data-position='to top'></div>
             <div class='selection-tool-item' data-position='to right'></div>
@@ -157,15 +161,45 @@ export default class SelectionToolView extends UIElement {
         editor.selection.setRectCache(this.pointerType === 'move' ? false: true);
 
         if (this.pointerType === 'rotate3d') {
-            // 3d rotate 는 transform 속성이라 selection tool ui 를 변경하지 않는다. 
-            editor.selection.each((item, cachedItem) => {
-                item.transformObj = Transform.parseStyle(item.transform);
-                cachedItem.transformObj = Transform.parseStyle(cachedItem.transform);
+            var $point = Dom.create(e.target);
 
-                cachedItem.rotateX = cachedItem.transformObj.filter(it => it.type === 'rotateX')[0];
-                cachedItem.rotateY = cachedItem.transformObj.filter(it => it.type === 'rotateY')[0];
+            var rect = $point.rect()
+            this.hasRotateZ = $point.hasClass('point') 
 
-            })
+            
+
+            if (this.hasRotateZ) {
+                var targetRect = this.$target.rect();
+                this.rotateZCenter = {
+                    x: targetRect.x + targetRect.width/2, 
+                    y: targetRect.y + targetRect.height/2
+                }
+                this.rotateZStart = {
+                    x: rect.x + rect.width/2, 
+                    y: rect.y + rect.height/2 
+                }
+                // 3d rotate 는 transform 속성이라 selection tool ui 를 변경하지 않는다. 
+                editor.selection.each((item, cachedItem) => {
+                    item.transformObj = Transform.parseStyle(item.transform);
+                    cachedItem.transformObj = Transform.parseStyle(cachedItem.transform);
+
+                    cachedItem.rotateZ = cachedItem.transformObj.filter(it => it.type === 'rotateZ')[0];
+                    cachedItem.rotate = cachedItem.transformObj.filter(it => it.type === 'rotate')[0];
+
+                })
+            } else {
+
+                // 3d rotate 는 transform 속성이라 selection tool ui 를 변경하지 않는다. 
+                editor.selection.each((item, cachedItem) => {
+                    item.transformObj = Transform.parseStyle(item.transform);
+                    cachedItem.transformObj = Transform.parseStyle(cachedItem.transform);
+
+                    cachedItem.rotateX = cachedItem.transformObj.filter(it => it.type === 'rotateX')[0];
+                    cachedItem.rotateY = cachedItem.transformObj.filter(it => it.type === 'rotateY')[0];
+
+                })
+            }
+
         } else {
             this.initSelectionTool();
         }
@@ -182,6 +216,45 @@ export default class SelectionToolView extends UIElement {
         }    
     }
 
+    [BIND('$rotateArea')] () {
+        var current = editor.selection.current || { transform : '' }  
+
+        var transform = Transform.join(Transform.parseStyle(current.transform).filter(it => {
+            switch(it.type) {
+            case 'rotateX':
+            case 'rotateY':
+                return true; 
+            }
+
+            return false; 
+        }))
+        return {
+            style: {
+                transform: `${transform}`
+            }
+        }
+    }
+
+    [BIND('$rotateZ')] () {
+        var current = editor.selection.current || { transform : '' }  
+
+        var transform = Transform.join(Transform.parseStyle(current.transform).filter(it => {
+            switch(it.type) {
+            case 'rotate':
+            case 'rotateZ':
+                return true; 
+            }
+
+            return false; 
+        }))
+        return {
+            style: {
+                transform: `${transform}`
+            }
+        }
+    }
+
+
     move (dx, dy) {
 
         var e = editor.config.get('bodyEvent');
@@ -192,30 +265,67 @@ export default class SelectionToolView extends UIElement {
 
         if (this.pointerType === 'rotate3d') {
 
-            var rx = Length.deg(-dy)
-            var ry = Length.deg(dx)
+            if (this.hasRotateZ) {
 
-            editor.selection.each((item, cachedItem) => {
-                var tempRotateX = Length.deg(0)
-                var tempRotateY = Length.deg(0)
+                var x = this.rotateZStart.x - this.rotateZCenter.x
+                var y = this.rotateZStart.y - this.rotateZCenter.y
 
-                if (cachedItem.rotateX) { 
-                    tempRotateX.set(cachedItem.rotateX.value[0].value);
-                } 
-                if (cachedItem.rotateY) {
-                    tempRotateY.set(cachedItem.rotateY.value[0].value);
-                }
+                var angle1 = calculateAngle(x, y) - 90; 
 
-                tempRotateX.add(rx);
-                tempRotateY.add(ry);
+                var x = this.rotateZStart.x + dx - this.rotateZCenter.x
+                var y = this.rotateZStart.y + dy - this.rotateZCenter.y
 
-                this.setRotateValue(item, 'rotateX', tempRotateX);
-                this.setRotateValue(item, 'rotateY', tempRotateY);
+                var angle = calculateAngle(x, y) - 90;
 
-                item.transform = Transform.join(item.transformObj);
-            })
+                var distAngle = Length.deg(angle - angle1);
 
-            this.emit('refreshSelectionStyleView');
+               
+                editor.selection.each((item, cachedItem) => {
+                    var tempRotateZ = Length.deg(0)
+    
+                    if (cachedItem.rotateZ) { 
+                        tempRotateZ.set(cachedItem.rotateZ.value[0].value);
+                    } else if (cachedItem.rotate) {
+                        tempRotateZ.set(cachedItem.rotate.value[0].value);
+                    }
+    
+                    tempRotateZ.add(distAngle.value);
+    
+                    this.setRotateValue(item, 'rotateZ', tempRotateZ);
+    
+                    item.transform = Transform.join(item.transformObj);
+                })
+                this.bindData('$rotateZ')
+                this.emit('refreshSelectionStyleView'); 
+
+            } else {
+
+                var rx = Length.deg(-dy)
+                var ry = Length.deg(dx)
+    
+                editor.selection.each((item, cachedItem) => {
+                    var tempRotateX = Length.deg(0)
+                    var tempRotateY = Length.deg(0)
+    
+                    if (cachedItem.rotateX) { 
+                        tempRotateX.set(cachedItem.rotateX.value[0].value);
+                    } 
+                    if (cachedItem.rotateY) {
+                        tempRotateY.set(cachedItem.rotateY.value[0].value);
+                    }
+    
+                    tempRotateX.add(rx);
+                    tempRotateY.add(ry);
+    
+                    this.setRotateValue(item, 'rotateX', tempRotateX);
+                    this.setRotateValue(item, 'rotateY', tempRotateY);
+    
+                    item.transform = Transform.join(item.transformObj);
+                })
+                this.bindData('$rotateArea')
+                this.emit('refreshSelectionStyleView');
+    
+            }
 
         } else {
             this.refreshSelectionToolView(dx, dy);
@@ -313,6 +423,8 @@ export default class SelectionToolView extends UIElement {
             var isPolygon = current.is('svg-polygon');
             this.refs.$selectionTool.toggleClass('polygon', isPolygon);
         }
+
+        this.bindData('$rotate3d')
 
         this.makeSelectionTool();
 

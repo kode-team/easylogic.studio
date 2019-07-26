@@ -54,7 +54,7 @@
       {
         &[data-value="#{$imageType}"]
           .picker-tab-item[data-selected-value="#{$imageType}"] {
-          // background-color: rgba(0, 0, 255, 0.8);
+          background-color: $selected-color;
           box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
           .icon {
             svg {
