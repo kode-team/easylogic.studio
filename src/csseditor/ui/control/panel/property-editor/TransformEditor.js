@@ -58,14 +58,16 @@ export default class TransformEditor extends UIElement {
 
   initState() {
     return {
+      hideLabel: this.props['hide-label'] === 'true' ? true: false, 
       transforms: Transform.parseStyle(this.props.value)
     }
   }
 
   template() {
+    var labelClass = this.state.hideLabel ? 'hide' : '' 
     return `
       <div class='transform-editor transform-list'>
-          <div class='label' >
+          <div class='label ${labelClass}' >
               <label>Transform</label>
               <div class='tools'>
                 <select ref="$transformSelect">
@@ -311,14 +313,18 @@ export default class TransformEditor extends UIElement {
     return Transform.parse({ ...opt, type, value });
   }
 
-  [CLICK("$add")]() {
-    var transformType = this.refs.$transformSelect.value;
-
+  [EVENT('add')] (transformType) { 
     this.state.transforms.push(this.makeTransform(transformType))
 
     this.refresh();
 
     this.modifyTransform()
+  }
+
+  [CLICK("$add")]() {
+    var transformType = this.refs.$transformSelect.value;
+
+    this.trigger('add', transformType)
   }
 
   [CLICK("$transformList .transform-menu .del")](e) {

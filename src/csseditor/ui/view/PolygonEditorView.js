@@ -228,7 +228,11 @@ export default class PolygonEditorView extends UIElement {
 
     [BIND('$view')] () {
         return {
-            class: this.state.mode,
+            class: {
+                'draw': this.state.mode === 'draw',
+                'modify': this.state.mode === 'modify',
+                'segment-move': this.state.mode === 'segment-move',
+            },
             innerHTML: this.polygonGenerator.makeSVGPath()
         }
     }

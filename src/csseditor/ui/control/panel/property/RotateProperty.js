@@ -10,7 +10,7 @@ export default class RotateProperty extends BaseProperty {
     return 'Rotate'
   }
   getBody() {
-    return `<div ref='$body' style='padding-top: 3px;'></div>`;
+    return `<div ref='$body' class='property-item'></div>`;
   }  
 
   [LOAD("$body")]() {

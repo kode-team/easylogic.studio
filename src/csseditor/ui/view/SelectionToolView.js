@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
-import { POINTERSTART, MOVE, END, DOUBLECLICK, KEYUP, KEY, PREVENT, STOP, BIND } from "../../../util/Event";
+import { POINTERSTART, MOVE, END, DOUBLECLICK, KEYUP, KEY, PREVENT, STOP, BIND, DEBOUNCE } from "../../../util/Event";
 import { Length } from "../../../editor/unit/Length";
 import { editor } from "../../../editor/editor";
 import { isNotUndefined } from "../../../util/functions/func";
@@ -33,7 +33,8 @@ export default class SelectionToolView extends UIElement {
                     <div class='x'></div>
                 </div>            
                 <div class='z' ref='$rotateZ'>
-                    <div class='point'></div>
+                    <div class='handle-top'></div>
+                    <div class='point'></div>                    
                 </div>                        
             </div>                        
             <div class='selection-tool-item' data-position='to top'></div>
@@ -222,6 +223,8 @@ export default class SelectionToolView extends UIElement {
                 })
             }
 
+            this.parent.updateRealTransformWillChange();
+
         } else {
             this.initSelectionTool();
         }
@@ -281,10 +284,6 @@ export default class SelectionToolView extends UIElement {
 
         var e = editor.config.get('bodyEvent');
 
-        if (e.altKey) {
-            dy = dx; 
-        }
-
         if (this.pointerType === 'rotate3d') {
 
             if (this.hasRotateZ) {
@@ -292,12 +291,12 @@ export default class SelectionToolView extends UIElement {
                 var x = this.rotateZStart.x - this.rotateZCenter.x
                 var y = this.rotateZStart.y - this.rotateZCenter.y
 
-                var angle1 = calculateAngle(x, y) - 90; 
+                var angle1 = calculateAngle(x, y); 
 
                 var x = this.rotateZStart.x + dx - this.rotateZCenter.x
                 var y = this.rotateZStart.y + dy - this.rotateZCenter.y
 
-                var angle = calculateAngle(x, y) - 90;
+                var angle = calculateAngle(x, y);
 
                 var distAngle = Length.deg(angle - angle1);
 
@@ -312,13 +311,23 @@ export default class SelectionToolView extends UIElement {
                     }
     
                     tempRotateZ.add(distAngle.value);
+
+                    // degree 를 음수를 안보여주기 위한 작업 
+                    // 기존 값이 음수가 될 수 있어서 구성 맞추기가 애매하다. 
+                    // tempRotateZ.set((360 + tempRotateZ.value)  % 360)       
+
+                    // altKey 일 때  snap 적용 ?  
+                    if (e.altKey) {
+                        tempRotateZ.add(- (tempRotateZ.value % 10)) 
+                    }
+
     
                     this.setRotateValue(item, 'rotateZ', tempRotateZ);
     
                     item.transform = Transform.join(item.transformObj);
                 })
                 this.bindData('$rotateZ')
-                this.emit('refreshSelectionStyleView'); 
+                // this.emit('refreshSelectionStyleView'); 
 
             } else {
 
@@ -345,11 +354,17 @@ export default class SelectionToolView extends UIElement {
                     item.transform = Transform.join(item.transformObj);
                 })
                 this.bindData('$rotateArea')
-                this.emit('refreshSelectionStyleView');
-    
+                // this.emit('refreshSelectionStyleView');
             }
 
+            this.trigger('updateRealTransform');
+
         } else {
+
+            if (e.altKey) {
+                dy = dx; 
+            }
+    
             this.refreshSelectionToolView(dx, dy);
             this.parent.updateRealPosition();    
             this.emit('refreshCanvasForPartial')     
@@ -364,6 +379,10 @@ export default class SelectionToolView extends UIElement {
 
     }
 
+    [EVENT('updateRealTransform')] () {
+        this.parent.updateRealTransform()
+    }
+
     end (dx, dy) {
 
         var e = editor.config.get('bodyEvent');
@@ -371,13 +390,12 @@ export default class SelectionToolView extends UIElement {
         if (e.altKey) {
             dy = dx; 
         }
-                
+
         this.refs.$selectionTool.attr('data-selected-position', '');
         this.refreshSelectionToolView(dx, dy);
         this.parent.trigger('removeRealPosition');                
         // this.initSelectionTool();
 
-        // this.emit('refreshRedGL', false)
         this.emit('refreshCanvasForPartial')
         this.emit('refreshStyleView');
         this.emit('removeGuideLine')
@@ -412,8 +430,7 @@ export default class SelectionToolView extends UIElement {
         this.initSelectionTool();
     }
 
-    [EVENT('initSelectionTool')] (type = 'move') {
-        // this.pointerType = type; 
+    [EVENT('initSelectionTool')] () { 
         this.initSelectionTool();
     }
 
@@ -446,39 +463,37 @@ export default class SelectionToolView extends UIElement {
             this.refs.$selectionTool.toggleClass('polygon', isPolygon);
         }
 
-        this.bindData('$rotate3d')
+        this.bindData('$rotateZ')
+        this.bindData('$rotateArea')
 
         this.makeSelectionTool();
 
+        this.emit('focusCanvasView');
     }    
 
-    getWorldPosition () {
-        var originalRect = this.getOriginalRect();
-        var originalArtboardRect = this.getOriginalArtboardRect();
-
-        return {
-            left: originalArtboardRect.left - originalRect.left,
-            top: originalArtboardRect.top - originalRect.top
-        }
-    }
-
     isNoMoveArea () {
-        return editor.selection.items.length === 1 && editor.selection.current.is('redgl-canvas', 'text')
+        return editor.selection.items.length === 1 && editor.selection.current.is('text')
     }
 
     makeSelectionTool() {
 
         // selection 객체는 하나만 만든다. 
 
+
         this.guideView.recoverAll();
 
         var {x, y, width, height} = this.calculateWorldPosition(this.guideView.rect) ;
-
 
         if (this.isNoMoveArea()) {
             this.refs.$selectionTool.addClass('remove-move-area')
         } else {
             this.refs.$selectionTool.removeClass('remove-move-area')
+        }
+
+        if(x.is(0) && y.is(0) && width.is(0) && height.is(0)) {
+            // 아무것도 없을 때는 안 보이는 곳으로 숨김 
+            x.add(-100);
+            y.add(-100);            
         }
 
         this.refs.$selectionTool.cssText(`left: ${x};top:${y};width:${width};height:${height}`)
@@ -527,8 +542,8 @@ export default class SelectionToolView extends UIElement {
     }
 
     calculateWorldPosition (item) {
-        var x = (item.x || Length.px(0));
-        var y = (item.y || Length.px(0));
+        var x = Length.px(item.x || 0);
+        var y = Length.px(item.y || 0);
 
         return {
             x: Length.px(x.value * editor.scale),

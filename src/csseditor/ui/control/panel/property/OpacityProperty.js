@@ -12,7 +12,7 @@ export default class OpacityProperty extends BaseProperty {
   }
 
   getBody() {
-    return `<div ref='$body' style='padding-top: 3px;'></div>`;
+    return `<div ref='$body' class='property-item'></div>`;
   }  
 
   [LOAD("$body")]() {

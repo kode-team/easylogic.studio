@@ -294,13 +294,7 @@ const applyElementAttribute = ($element, key, value) => {
     if (isArray(value)) {
       $element.addClass(...value);
     } else if (isObject(value)) {
-      keyEach(value, (k, v) => {
-        if (!value) {
-          $element.removeClass(k);
-        } else {
-          $element.addClass(k);
-        }
-      });
+      keyEach(value, (className, hasClass) => $element.toggleClass(className, hasClass));
     } else {
       $element.addClass(value);
     }

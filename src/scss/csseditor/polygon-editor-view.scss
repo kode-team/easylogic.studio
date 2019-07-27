@@ -68,6 +68,7 @@
                 fill: transparent;
                 stroke: blue;
                 stroke-width: 1; 
+                stroke-dasharray: 2 2; 
             }
 
             &.segment {
@@ -78,7 +79,7 @@
             
             &.object {
                 fill: transparent;
-                stroke: $selected-border-color;
+                stroke: rgba($border-color, 0.8);
                 stroke-width: 1; 
             }       
             

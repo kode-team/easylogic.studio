@@ -45,7 +45,7 @@ export default class LayerTreeProperty extends BaseProperty {
 
       var selected = editor.selection.check(layer) ? 'selected' : '';
       return `        
-      <div class='property-item layer-item ${selected}' data-depth="${depth}" data-layer-id='${layer.id}'>
+      <div class='layer-item ${selected}' data-depth="${depth}" data-layer-id='${layer.id}'>
         <div class='detail'>
           <label>${layer.name}</label>
           <div class="tools">

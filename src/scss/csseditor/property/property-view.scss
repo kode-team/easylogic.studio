@@ -36,13 +36,10 @@
 
   &.show {
 
-    > .property-title {
-      border-bottom: 1px solid #000;
-    }
 
     > .property-body {
       display: block;
-      padding: 6px;      
+      padding: 0px 6px;      
     }
   }
 
@@ -76,6 +73,10 @@
       > * {
         flex: none;
       }
+
+      select {
+        min-width: 120px;
+      }
       
     }
   }
@@ -88,7 +89,26 @@
     .property-item {
       padding: 0px;
       font-size: 11px;
-      margin-bottom: 5px;
+      margin-top: 5px;
+
+      &.background-image,
+      &.box-shadow-item,
+      &.filter-property,
+      &.clip-path-list,
+      &.text-shadow-item,
+      &.transform-property,
+      &.var-property,
+      &.selector-list,
+      &.transition-list,
+      &.animation-list,
+      &.keyframe-list,
+      &.svg-property {
+        margin: 0px !important;
+      }      
+
+      &:last-child {
+        margin-bottom: 5px;
+      }
 
       &:empty {
         margin-bottom: 0px;

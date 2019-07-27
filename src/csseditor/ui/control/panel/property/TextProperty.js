@@ -34,8 +34,8 @@ export default class TextProperty extends BaseProperty {
           ref='$transform' 
           label='Transform' 
           key='text-transform' 
-          options="none,uppercase,lowercase,capitalize,full-width"
-          icons='aa,bb,cc,dd,ee'
+          options="uppercase,lowercase,capitalize"
+          icons='aa,bb,cc'
           onchange='changeTextValue' />                
       </div>        
       <div class="property-item">

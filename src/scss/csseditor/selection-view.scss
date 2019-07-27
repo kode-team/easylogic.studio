@@ -6,6 +6,12 @@
     top:0px;
     right:0px;
     bottom:0px;
+
+    &.empty {
+      > * {
+        display: none;
+      }
+    }
   }
   
   .selection-tool {
@@ -162,20 +168,25 @@
   
           .y {
             transform: rotateY(90deg) translateZ(0px);
-            border: 3px solid blue; 
+            border: 3px solid green; 
           }        
   
         }
 
         .z {
+
+          $color: blue; 
+
           transform: rotate(0deg) translateZ(0px);
-          border: 2px solid green; 
+          border: 2px solid $color; 
+          box-shadow: 0 0 4px 0 rgba(255, 255, 255, 0.5);
+
 
           .point {
             display: inline-block;
-            height: 10px;
+            height: 20px;
             width: 20px;
-            top: -10px;
+            top: -20px;
             left: 50%;
             transform: translateX(-50%);
             pointer-events: all; 
@@ -184,8 +195,24 @@
             position: absolute;
             cursor: auto; 
             // background-image: radial-gradient(rgba(255, 255, 255, 0.8) 80%, black);
-            border-top: 2px solid white; 
+            border-top: 2px solid rgba(white, 0); 
+            // cursor: grab;
           }
+
+          .handle-top {
+            display: inline-block;
+            height: 10px;
+            width: 10px;
+            left: 50%;
+            top: -5px;
+            transform: translateX(-50%) translateY(-100%);
+            background-color: $color; 
+            position: absolute; 
+            pointer-events: none;
+            clip-path: polygon(0% 0%, 100% 0%, 50% 100%); 
+            box-shadow: inset 0px -1px 9px 0 rgba(255, 255, 255, 0.5);         
+          }
+      
         }                
       }      
 

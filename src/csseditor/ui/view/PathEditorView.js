@@ -129,22 +129,14 @@ export default class PathEditorView extends UIElement {
 
     refresh (obj) {
 
-        
-        if (!obj) {
-            var current = editor.selection.current;
-            if (current && current.is('svg-path')) {
-                obj = current;
-            }
-        }
-
         if (obj && obj.d) {
             this.pathParser.reset(obj.d)
             this.pathParser.scale(editor.scale, editor.scale);
             this.pathParser.translate(obj.screenX.value * editor.scale, obj.screenY.value * editor.scale)
-            this.state.points = this.pathParser.convertGenerator();
-    
-            this.bindData('$view');           
+            this.state.points = this.pathParser.convertGenerator();      
         }
+
+        this.bindData('$view');             
 
     }
 
@@ -152,6 +144,7 @@ export default class PathEditorView extends UIElement {
 
         if (mode === 'move') {
             obj.current = null;
+            obj.points = [] 
         } else {
             if (!obj.current) {
                 obj.current = null; 
@@ -173,7 +166,11 @@ export default class PathEditorView extends UIElement {
 
     [BIND('$view')] () {
         return {
-            class: `${this.state.mode}`,
+            class: {
+                'draw': this.state.mode === 'draw',
+                'modify': this.state.mode === 'modify',
+                'segment-move': this.state.mode === 'segment-move',                
+            },
             innerHTML: this.pathGenerator.makeSVGPath()
         }
     }

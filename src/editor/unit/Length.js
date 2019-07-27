@@ -399,7 +399,11 @@ export class Length {
   }
 
   equals (t) {
-    return this.value === t.value && this.unit === t.unit; 
+    return this.is(t.value) && this.isUnitType(t.unit); 
+  }
+
+  is (value) {
+    return this.value === value 
   }
 }
 

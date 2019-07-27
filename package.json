@@ -29,7 +29,7 @@
     "webpack-dev-server": "^3.3.1"
   },
   "scripts": {
-    "build:web": "webpack --mode=production",
+    "build:web": "webpack --mode=production --progress",
     "build:ext": "webpack --mode=production --config=webpack.chrome-extension.config.js",
     "build:app": "webpack --mode=production --config=webpack.chrome-app.config.js",
     "build": "npm run build:web && npm run build:ext && npm run build:app && npm run zip",

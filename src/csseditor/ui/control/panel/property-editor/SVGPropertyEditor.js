@@ -37,14 +37,16 @@ export default class SVGPropertyEditor extends UIElement {
 
   initState() {
     return {
+      hideLabel : this.props['hide-label'] === 'true' ? true : false, 
       properties: JSON.parse(this.props.value)
     }
   }
 
   template() {
+    var labelClass = this.state.hideLabel ? 'hide' : ''  
     return `
       <div class='svg-property-editor'>
-          <div class='label' >
+          <div class='label ${labelClass}' >
               <label>${this.props.title || ''}</label>
               <div class='tools'>
                 <select ref="$propertySelect">
@@ -121,14 +123,19 @@ export default class SVGPropertyEditor extends UIElement {
     this.parent.trigger(this.props.onchange, this.state.properties)
   }
 
-  [CLICK("$add")]() {
-    var type = this.refs.$propertySelect.value;
+  [EVENT('add')] (type) {
 
     this.state.properties.push({ type, name: uuidShort(), value: [] })
 
     this.refresh();
 
     this.modifyFilter()
+  }
+
+  [CLICK("$add")]() {
+    var type = this.refs.$propertySelect.value;
+
+    this.trigger('add', type);
   }
 
   [CLICK("$propertyList .menu .del")](e) {

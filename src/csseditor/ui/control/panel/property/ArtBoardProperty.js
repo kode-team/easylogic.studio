@@ -36,7 +36,7 @@ export default class ArtBoardProperty extends BaseProperty {
     return project.artboards.map( (artboard, index) => {
       var selected = artboard === editor.selection.currentArtboard ? 'selected' : ''
       return `
-        <div class='property-item artboard-item ${selected}'>
+        <div class='artboard-item ${selected}'>
           <div class='detail'>
             <label data-index='${index}'>${artboard.name}</label>
             <div class="tools">

@@ -1,6 +1,5 @@
 .background-image-editor {
 
-
   .label {
     height: 20px;
     margin-top: 2px;
@@ -28,13 +27,13 @@
         font-size: 12px;
       
         .fill-item {
+          // margin-top: 5px;
           display: grid;
           grid-template-columns: 30px 1fr;
           grid-column-gap: 5px;
-          margin-bottom: 5px;
           text-align: center;
           box-sizing: border-box;
-          padding: 5px 0px 5px 2px;
+          padding: 10px 0px 10px 2px;
           &.selected {
             background-color: rgba($border-color, 0.5);
           }

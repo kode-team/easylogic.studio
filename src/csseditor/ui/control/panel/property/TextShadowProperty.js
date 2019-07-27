@@ -1,13 +1,14 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, DEBOUNCE } from "../../../../../util/Event";
+import { LOAD, DEBOUNCE, CLICK } from "../../../../../util/Event";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
+import icon from "../../../icon/icon";
 
 
 export default class TextShadowProperty extends BaseProperty {
 
-  isHideHeader() {
-    return true;
+  getTitle() {
+    return 'Text Shadows'
   }
 
   getBody() {
@@ -15,11 +16,20 @@ export default class TextShadowProperty extends BaseProperty {
       <div class="property-item full text-shadow-item" ref="$shadowList"></div>
     `;
   }
+
+
+  getTools() {
+    return `<button type="button" ref='$add'>${icon.add}</button>`
+  }
+
+  [CLICK('$add')] () {
+    this.children.$textshadow.trigger('add');
+  }  
   
   [LOAD("$shadowList")]() {
     var current = editor.selection.current || {};
     return `
-      <TextShadowEditor ref='$textshadow' value="${current['text-shadow'] || ''}" title='Text Shadows' onChange="changeTextShadow" />
+      <TextShadowEditor ref='$textshadow' value="${current['text-shadow'] || ''}" hide-label="true" onChange="changeTextShadow" />
     `
   }
 

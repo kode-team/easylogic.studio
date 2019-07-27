@@ -40,12 +40,6 @@ export default class ElementView extends UIElement {
         }
     }
 
-    initialize() {
-        super.initialize();
-
-        this.redGLObjectList = {}
-    }
-
     initState() {
         return {
             mode: 'selection',
@@ -101,6 +95,8 @@ export default class ElementView extends UIElement {
     [POINTERSTART('$el') + IF('checkEmptyElement') + MOVE('movePointer') + END('moveEndPointer')] (e) {
 
         this.$target = Dom.create(e.target);
+
+
         this.dragXY = {x: e.xy.x, y: e.xy.y}; 
 
         this.rect = this.refs.$body.rect();            
@@ -114,14 +110,12 @@ export default class ElementView extends UIElement {
         this.dragXY.x -= this.rect.x
         this.dragXY.y -= this.rect.y
 
-
         editor.selection.empty();
         
         this.cachedCurrentElement = {}
         this.$el.$$('.selected').forEach(it => it.removeClass('selected'))
 
         this.emit('initSelectionTool')        
-
     }
 
     movePointer (dx, dy) {
@@ -201,7 +195,6 @@ export default class ElementView extends UIElement {
     [POINTERSTART('$view .element-item')  + MOVE('calculateMovedElement') + END('calculateEndedElement')] (e) {
         this.startXY = e.xy ; 
         this.$element = e.$delegateTarget;
-        this.isRedGL = this.$element.hasClass('redgl-canvas');
 
         if (this.$element.hasClass('text') && this.$element.hasClass('selected')) {
             return false; 
@@ -221,12 +214,8 @@ export default class ElementView extends UIElement {
     }
 
     calculateMovedElement (dx, dy) {
-        if (this.isRedGL) {
-            // console.log(this.isRedGL);
-        } else {
-            this.children.$selectionTool.refreshSelectionToolView(dx, dy, 'move');
-            this.updateRealPosition();     
-        }
+        this.children.$selectionTool.refreshSelectionToolView(dx, dy, 'move');
+        this.updateRealPosition();     
     }
 
     updateRealPosition() {
@@ -247,7 +236,30 @@ export default class ElementView extends UIElement {
         this.emit('refreshRect');        
     }
 
-    [EVENT('removeRealPosition')] () {
+    updateRealTransform() {
+        editor.selection.items.forEach(item => {
+            var transform = item.transform;
+            var cachedItem = this.cachedCurrentElement[item.id]
+            if (cachedItem) {
+                cachedItem.css({transform})
+            }
+        })
+
+        this.emit('refreshTransform');        
+    }
+
+
+    updateRealTransformWillChange() {
+        editor.selection.items.forEach(item => {
+            var cachedItem = this.cachedCurrentElement[item.id]
+            if (cachedItem) {
+                cachedItem.css('will-change', 'transform')
+            }
+        })
+
+    }
+
+    [EVENT('removeRealPosition', 'removeRealTransform')] () {
         editor.selection.items.forEach(item => {
             var cachedItem = this.cachedCurrentElement[item.id]
             if (cachedItem) {
@@ -263,19 +275,11 @@ export default class ElementView extends UIElement {
 
     calculateEndedElement (dx, dy) {
 
-        if (this.isRedGL) {
+        this.children.$selectionTool.refreshSelectionToolView(dx, dy, 'move');
+        var current = editor.selection.items.length === 1 ? editor.selection.current : null;
 
-        } else {
-            this.children.$selectionTool.refreshSelectionToolView(dx, dy, 'move');
-            var current = editor.selection.items.length === 1 ? editor.selection.current : null;
-    
-            if(current && current.is('redgl-canvas')) {
-    
-            } else {
-                this.emit('refreshElement', current);
-            }
-    
-        }
+        this.emit('refreshElement', current);
+
         this.emit('removeGuideLine')        
         this.trigger('removeRealPosition');   
 
@@ -316,22 +320,7 @@ export default class ElementView extends UIElement {
         var $div = Dom.create('div').html(html);
         DomDiff(this.refs.$view, $div)
 
-        // this.trigger('refreshRedGL', true)
         this.emit('refreshSelectionTool')
-    }
-
-    [EVENT('refreshRedGL')] (isRemove = false) {
-        var artboard = editor.selection.currentArtboard;
-
-        if (artboard) {
-            // console.log(artboard.allLayers);
-            artboard.allLayers.filter(item => item.is('redgl-canvas')).forEach(item => {
-                if (isRemove && !item.redGL) {item.removeRedGL()}
-                var $canvas = this.refs.$view.$(`[data-id="${item.id}"] canvas`);
-                this.runRedGL($canvas, item, false);
-            })
-        }
-
     }
 
     selectCurrent (...args) {
@@ -414,27 +403,6 @@ export default class ElementView extends UIElement {
        this.modifyScale();
     }
 
-    runRedGL($canvas, item, isRefresh = false) {
-        if (item.redGL) {
-            $canvas.width(item.width)
-            $canvas.height(item.height);            
-            item.initRedGLSize();      
-            // console.log(item);       
-        } else {
-            var self = this; 
-            $canvas.width(item.width)
-            $canvas.height(item.height);
-
-            if (item.redGL && isRefresh) {
-                item.initRedGLSize(); 
-            } else {
-                item.initRedGL($canvas);
-            }
-
-        }
-
-    }
-
     // 객체를 부분 업데이트 하기 위한 메소드 
     // updateHtml 이 정의 되어 있으면  html 업데이트 
     // updateAttribute 이 정의 되어 있으면 attr 업데이트 
@@ -469,9 +437,7 @@ export default class ElementView extends UIElement {
             if (this.currentElement) {
                 var $content = this.currentElement.$('.content')    
 
-                if (obj.itemType === 'redgl-canvas') {
-                    this.runRedGL(this.currentElement.$('canvas'), obj, true);
-                } else if (obj.elementType === 'image') {
+                if (obj.elementType === 'image') {
                     this.currentElement.attr('src', obj.src);
                 } else {
 

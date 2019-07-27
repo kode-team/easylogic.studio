@@ -22,9 +22,6 @@ export default class Inspector extends UIElement {
               <div class="tab-item" data-value="6">
                 <label>Animation</label>
               </div>
-              <div class="tab-item" data-value="7">
-                <label>GLOBAL</label>
-              </div>                                 
             </div>
             <div class="tab-body" ref="$body">
               <div class="tab-content" data-value="1">
@@ -32,22 +29,23 @@ export default class Inspector extends UIElement {
                 <ImageProperty />
                 <SVGItemProperty />
                 <PositionProperty />
-                <SizeProperty />          
+                <SizeProperty /> 
                 <BoxModelProperty />
                 <BackgroundColorProperty />
                 <OpacityProperty />          
                 <RotateProperty />  
                 <BorderProperty />
                 <BorderRadiusProperty />
-                <!--BorderImageProperty /-->
                 <BackgroundImageProperty />
                 <BoxShadowProperty />
                 <FilterProperty />
-                <ClipPathProperty />                        
-                <BackdropFilterProperty />
-                <OutlineProperty />
-                <BackgroundClipProperty />                       
-                <MixBlendModeProperty />                  
+                <ClipPathProperty />       
+                <SVGProperty />
+                <MixBlendModeProperty />
+                <!--BorderImageProperty /-->                
+                <!-- <BackdropFilterProperty /> -->
+                <!-- <OutlineProperty /> -->
+                <!-- <BackgroundClipProperty /> -->                
               </div>
               <div class="tab-content" data-value="3">
                 <!-- <ContentProperty /> -->
@@ -65,16 +63,13 @@ export default class Inspector extends UIElement {
                 <TransformProperty />
               </div>
               <div class='tab-content' data-value='6'>
+                <RootVariableProperty />              
                 <VariableProperty />              
                 <SelectorProperty />
                 <TransitionProperty />
+                <KeyframeProperty />                              
                 <AnimationProperty />
-              </div>         
-              <div class="tab-content" data-value="7">
-                <KeyframeProperty />              
-                <RootVariableProperty />
-                <SVGProperty />
-              </div>              
+              </div>                   
             </div>
           </div>
         </div>
@@ -83,10 +78,7 @@ export default class Inspector extends UIElement {
             <div class="tab-header" ref="$extraHeader">
               <div class="tab-item" data-value="1">
                 <label>Code</label>
-              </div>    
-              <div class="tab-item" data-value="2">
-                <label>GLOBAL</label>
-              </div>                                    
+              </div>                                     
               
               <div class="tab-item" data-value="3">
                 <label>Color</label>
@@ -99,11 +91,6 @@ export default class Inspector extends UIElement {
               <div class="tab-content" data-value="1">
                 <CodeViewProperty />
               </div>              
-              <div class="tab-content" data-value="2">
-                <KeyframeProperty />              
-                <RootVariableProperty />
-                <SVGProperty />
-              </div>
               <div class='tab-content' data-value='3'>
                 <ColorAssetsProperty />
               </div>

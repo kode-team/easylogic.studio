@@ -1693,6 +1693,7 @@ html, body {
 .csseditor .tab.number-tab .tab-header {
   height: 34px;
   cursor: pointer;
+  border-bottom: 1px solid #000;
 }
 .csseditor .tab.number-tab .tab-content {
   display: none;
@@ -1735,6 +1736,7 @@ html, body {
 }
 .csseditor .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"] {
   border-top: 2px solid #609de2;
+  background-color: #3e8ec6;
   color: white;
   font-weight: bold;
 }
@@ -1743,6 +1745,7 @@ html, body {
 }
 .csseditor .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"] {
   border-top: 2px solid #609de2;
+  background-color: #3e8ec6;
   color: white;
   font-weight: bold;
 }
@@ -1751,6 +1754,7 @@ html, body {
 }
 .csseditor .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"] {
   border-top: 2px solid #609de2;
+  background-color: #3e8ec6;
   color: white;
   font-weight: bold;
 }
@@ -1759,6 +1763,7 @@ html, body {
 }
 .csseditor .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"] {
   border-top: 2px solid #609de2;
+  background-color: #3e8ec6;
   color: white;
   font-weight: bold;
 }
@@ -1767,6 +1772,7 @@ html, body {
 }
 .csseditor .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"] {
   border-top: 2px solid #609de2;
+  background-color: #3e8ec6;
   color: white;
   font-weight: bold;
 }
@@ -1775,6 +1781,7 @@ html, body {
 }
 .csseditor .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"] {
   border-top: 2px solid #609de2;
+  background-color: #3e8ec6;
   color: white;
   font-weight: bold;
 }
@@ -1783,6 +1790,7 @@ html, body {
 }
 .csseditor .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"] {
   border-top: 2px solid #609de2;
+  background-color: #3e8ec6;
   color: white;
   font-weight: bold;
 }
@@ -1791,6 +1799,7 @@ html, body {
 }
 .csseditor .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"] {
   border-top: 2px solid #609de2;
+  background-color: #3e8ec6;
   color: white;
   font-weight: bold;
 }
@@ -1799,6 +1808,7 @@ html, body {
 }
 .csseditor .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"] {
   border-top: 2px solid #609de2;
+  background-color: #3e8ec6;
   color: white;
   font-weight: bold;
 }
@@ -2418,6 +2428,9 @@ html, body {
   right: 0px;
   bottom: 0px;
 }
+.csseditor .selection-view.empty > * {
+  display: none;
+}
 .csseditor .selection-tool {
   border: rgba(15, 114, 207, 0.8) 1px dashed;
   position: absolute;
@@ -2580,18 +2593,19 @@ html, body {
 .csseditor .selection-tool .selection-tool-item[data-position=rotate3d] .rotate-area .y {
   -webkit-transform: rotateY(90deg) translateZ(0px);
           transform: rotateY(90deg) translateZ(0px);
-  border: 3px solid blue;
+  border: 3px solid green;
 }
 .csseditor .selection-tool .selection-tool-item[data-position=rotate3d] .z {
   -webkit-transform: rotate(0deg) translateZ(0px);
           transform: rotate(0deg) translateZ(0px);
-  border: 2px solid green;
+  border: 2px solid blue;
+  box-shadow: 0 0 4px 0 rgba(255, 255, 255, 0.5);
 }
 .csseditor .selection-tool .selection-tool-item[data-position=rotate3d] .z .point {
   display: inline-block;
-  height: 10px;
+  height: 20px;
   width: 20px;
-  top: -10px;
+  top: -20px;
   left: 50%;
   -webkit-transform: translateX(-50%);
           transform: translateX(-50%);
@@ -2599,7 +2613,22 @@ html, body {
   border-radius: 50%;
   position: absolute;
   cursor: auto;
-  border-top: 2px solid white;
+  border-top: 2px solid rgba(255, 255, 255, 0);
+}
+.csseditor .selection-tool .selection-tool-item[data-position=rotate3d] .z .handle-top {
+  display: inline-block;
+  height: 10px;
+  width: 10px;
+  left: 50%;
+  top: -5px;
+  -webkit-transform: translateX(-50%) translateY(-100%);
+          transform: translateX(-50%) translateY(-100%);
+  background-color: blue;
+  position: absolute;
+  pointer-events: none;
+  -webkit-clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+          clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+  box-shadow: inset 0px -1px 9px 0 rgba(255, 255, 255, 0.5);
 }
 .csseditor .selection-tool .selection-tool-item[data-position=path] {
   left: 0px;
@@ -2749,12 +2778,9 @@ html, body {
   flex: 1 1 auto;
   overflow: auto;
 }
-.csseditor .property.show > .property-title {
-  border-bottom: 1px solid #000;
-}
 .csseditor .property.show > .property-body {
   display: block;
-  padding: 6px;
+  padding: 0px 6px;
 }
 .csseditor .property > .property-title {
   padding: 2px 6px;
@@ -2784,6 +2810,9 @@ html, body {
 .csseditor .property > .property-title > .tools > * {
   flex: none;
 }
+.csseditor .property > .property-title > .tools select {
+  min-width: 120px;
+}
 .csseditor .property > .property-body {
   display: none;
   padding: 0px;
@@ -2792,6 +2821,12 @@ html, body {
 .csseditor .property > .property-body .property-item {
   padding: 0px;
   font-size: 11px;
+  margin-top: 5px;
+}
+.csseditor .property > .property-body .property-item.background-image, .csseditor .property > .property-body .property-item.box-shadow-item, .csseditor .property > .property-body .property-item.filter-property, .csseditor .property > .property-body .property-item.clip-path-list, .csseditor .property > .property-body .property-item.text-shadow-item, .csseditor .property > .property-body .property-item.transform-property, .csseditor .property > .property-body .property-item.var-property, .csseditor .property > .property-body .property-item.selector-list, .csseditor .property > .property-body .property-item.transition-list, .csseditor .property > .property-body .property-item.animation-list, .csseditor .property > .property-body .property-item.keyframe-list, .csseditor .property > .property-body .property-item.svg-property {
+  margin: 0px !important;
+}
+.csseditor .property > .property-body .property-item:last-child {
   margin-bottom: 5px;
 }
 .csseditor .property > .property-body .property-item:empty {
@@ -3442,7 +3477,7 @@ html, body {
   content: attr(title);
   position: absolute;
   display: inline-block;
-  background-color: #3e8ec6;
+  background-image: linear-gradient(to right, #3e8ec6 0%, rgba(62, 142, 198, 0) 60%);
   border-left: 2px solid #609de2;
   color: white;
   left: 0px;
@@ -3453,9 +3488,6 @@ html, body {
 }
 .csseditor .code-view-item > div pre::before svg path {
   fill: white;
-}
-.csseditor .clip-path-property .property-body {
-  padding: 5px 0px !important;
 }
 .csseditor .clip-path-list {
   grid-template-columns: 1fr !important;
@@ -3549,7 +3581,7 @@ html, body {
   padding: 4px 6px;
   font-weight: bold;
   border-radius: 5px;
-  background-color: #3e8ec6;
+  background-image: linear-gradient(to right, #3e8ec6 0%, rgba(62, 142, 198, 0) 60%);
   border-left: 2px solid #609de2;
   color: white;
 }
@@ -3579,7 +3611,7 @@ html, body {
   text-align: right;
 }
 .csseditor .project-list .project-item.selected {
-  background-color: #3e8ec6;
+  background-image: linear-gradient(to right, #3e8ec6 0%, rgba(62, 142, 198, 0) 60%);
   border-left: 2px solid #609de2;
   color: white;
 }
@@ -3616,7 +3648,7 @@ html, body {
   text-align: right;
 }
 .csseditor .artboard-list .artboard-item.selected {
-  background-color: #3e8ec6;
+  background-image: linear-gradient(to right, #3e8ec6 0%, rgba(62, 142, 198, 0) 60%);
   border-left: 2px solid #609de2;
   color: white;
 }
@@ -3677,7 +3709,7 @@ html, body {
   fill: #333;
 }
 .csseditor .layer-list .layer-item.selected {
-  background-color: #3e8ec6;
+  background-image: linear-gradient(to right, #3e8ec6 0%, rgba(62, 142, 198, 0) 60%);
   border-left: 2px solid #609de2;
   color: white;
 }
@@ -4458,10 +4490,9 @@ html, body {
   display: grid;
   grid-template-columns: 30px 1fr;
   grid-column-gap: 5px;
-  margin-bottom: 5px;
   text-align: center;
   box-sizing: border-box;
-  padding: 5px 0px 5px 2px;
+  padding: 10px 0px 10px 2px;
 }
 .csseditor .background-image-editor .fill-list .fill-item.selected {
   background-color: rgba(26, 26, 26, 0.5);
@@ -4599,6 +4630,9 @@ html, body {
   height: 20px;
   margin-top: 2px;
 }
+.csseditor .transform-editor .label.hide {
+  display: none;
+}
 .csseditor .transform-editor .label label {
   font-size: 12px;
   padding-left: 5px;
@@ -4620,15 +4654,18 @@ html, body {
 }
 .csseditor .transform-editor .transform-list .transform-item {
   display: block;
-  margin-top: 10px;
 }
 .csseditor .transform-editor .transform-list .transform-item .title {
   display: grid;
   grid-template-columns: 1fr 30px;
-  background-color: #3e8ec6;
+  background-image: linear-gradient(to right, #3e8ec6 0%, rgba(62, 142, 198, 0) 60%);
+  border-left: 2px solid #609de2;
   color: white;
   border-radius: 3px;
   margin: 5px 0px;
+}
+.csseditor .transform-editor .transform-list .transform-item .title svg path {
+  fill: white;
 }
 .csseditor .transform-editor .transform-list .transform-item .title label {
   font-size: 12px;
@@ -4642,8 +4679,7 @@ html, body {
   border-radius: 3px;
   padding: 0px;
   display: inline-block;
-  min-width: 20px;
-  text-align: center;
+  min-width: 10px;
   vertical-align: middle;
 }
 .csseditor .transform-editor .transform-list .transform-item .title .transform-menu {
@@ -4803,6 +4839,9 @@ html, body {
   height: 20px;
   margin-top: 2px;
 }
+.csseditor .text-shadow-editor .label.hide {
+  display: none;
+}
 .csseditor .text-shadow-editor .label label {
   font-size: 12px;
   padding-left: 5px;
@@ -4823,7 +4862,7 @@ html, body {
   grid-template-columns: 20px 1fr 1fr 1fr 20px;
   grid-column-gap: 5px;
   text-align: center;
-  margin-bottom: 5px;
+  margin-top: 5px;
 }
 .csseditor .text-shadow-editor .shadow-item.desc {
   color: #ececec;
@@ -4888,10 +4927,26 @@ html, body {
   grid-column-gap: 2px;
   text-align: center;
   margin-bottom: 5px;
-  margin-top: 10px;
+  margin-top: 5px;
 }
 .csseditor .var-editor .var-item > div input {
   width: 100%;
+  height: 100%;
+}
+.csseditor .var-editor .var-item > div input::-webkit-input-placeholder {
+  color: #9e9e9e;
+}
+.csseditor .var-editor .var-item > div input::-moz-placeholder {
+  color: #9e9e9e;
+}
+.csseditor .var-editor .var-item > div input:-ms-input-placeholder {
+  color: #9e9e9e;
+}
+.csseditor .var-editor .var-item > div input::-ms-input-placeholder {
+  color: #9e9e9e;
+}
+.csseditor .var-editor .var-item > div input::placeholder {
+  color: #9e9e9e;
 }
 .csseditor .var-editor .var-item .tools {
   text-align: right;
@@ -5225,6 +5280,9 @@ html, body {
   height: 20px;
   margin-top: 2px;
 }
+.csseditor .svg-property-editor .label.hide {
+  display: none;
+}
 .csseditor .svg-property-editor .label label {
   font-size: 12px;
   padding-left: 5px;
@@ -5247,16 +5305,11 @@ html, body {
 .csseditor .svg-property-editor .svg-property-list .svg-property-item {
   display: block;
 }
-.csseditor .svg-property-editor .svg-property-list .svg-property-item:last-child .title {
-  border-bottom: 1px solid #1a1a1a;
-}
 .csseditor .svg-property-editor .svg-property-list .svg-property-item .title {
   padding: 5px 2px;
   box-sizing: border-box;
   display: grid;
   grid-template-columns: 70px 1fr 30px;
-  border: 1px solid #1a1a1a;
-  border-bottom: 0px;
   cursor: pointer;
 }
 .csseditor .svg-property-editor .svg-property-list .svg-property-item .title .type {
@@ -5267,11 +5320,11 @@ html, body {
 }
 .csseditor .svg-property-editor .svg-property-list .svg-property-item .title .type[data-type=filter] {
   border-radius: 5px;
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: #3e8ec6;
 }
 .csseditor .svg-property-editor .svg-property-list .svg-property-item .title .type[data-type=clip-path] {
   border-radius: 5px;
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(255, 0, 0, 0.5);
 }
 .csseditor .svg-property-editor .svg-property-list .svg-property-item .title label {
   font-size: 12px;
@@ -6875,11 +6928,18 @@ html, body {
   top: 0px;
   right: 0px;
   bottom: 0px;
-  outline: 1px auto blue;
+}
+.csseditor .path-editor-view.draw {
   cursor: crosshair;
+}
+.csseditor .path-editor-view.segment-move {
+  cursor: move;
 }
 .csseditor .path-editor-view.alt svg circle {
   cursor: move;
+}
+.csseditor .path-editor-view.modify {
+  cursor: default;
 }
 .csseditor .path-editor-view.modify svg path.object {
   stroke: #609de2;
@@ -6912,6 +6972,7 @@ html, body {
   fill: transparent;
   stroke: blue;
   stroke-width: 1;
+  stroke-dasharray: 2 2;
 }
 .csseditor .path-editor-view svg path.segment {
   fill: transparent;
@@ -6984,6 +7045,7 @@ html, body {
   fill: transparent;
   stroke: blue;
   stroke-width: 1;
+  stroke-dasharray: 2 2;
 }
 .csseditor .polygon-editor-view svg path.segment, .csseditor .polygon-editor-view svg polygon.segment {
   fill: transparent;
@@ -6992,7 +7054,7 @@ html, body {
 }
 .csseditor .polygon-editor-view svg path.object, .csseditor .polygon-editor-view svg polygon.object {
   fill: transparent;
-  stroke: #609de2;
+  stroke: rgba(26, 26, 26, 0.8);
   stroke-width: 1;
 }
 .csseditor .polygon-editor-view svg path.split-path, .csseditor .polygon-editor-view svg polygon.split-path {

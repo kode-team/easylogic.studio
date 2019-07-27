@@ -70,7 +70,7 @@
 }
 
 @mixin title-background () {
-    background-color: $selected-color;    
+    background-image: linear-gradient(to right, $selected-color 0%, rgba($selected-color, 0) 60%);
     border-left: 2px solid $selected-border-color;
     color: white; 
 

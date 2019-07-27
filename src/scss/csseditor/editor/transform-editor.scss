@@ -3,6 +3,11 @@
   .label {
     height: 20px;
     margin-top: 2px;
+
+    &.hide {
+      display: none; 
+    }
+
     label {
       font-size: 12px;
       padding-left: 5px;
@@ -29,13 +34,13 @@
   
     .transform-item {
       display: block;
-      margin-top: 10px;
+      // margin-top: 5px;
   
       .title {
         display: grid;
         grid-template-columns: 1fr 30px;
-        background-color: $selected-color;
-        color: white;
+        @include title-background();
+
         border-radius: 3px;
         margin: 5px 0px;        
   
@@ -52,8 +57,7 @@
               border-radius: 3px;
               padding: 0px;
               display: inline-block;
-              min-width: 20px;
-              text-align: center;
+              min-width: 10px;
               vertical-align: middle;
               
             }

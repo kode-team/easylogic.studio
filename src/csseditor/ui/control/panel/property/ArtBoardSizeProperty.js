@@ -27,7 +27,7 @@ export default class ArtBoardSizeProperty extends BaseProperty {
   }
 
   getTitle() {
-    return "Template Size";
+    return "ArtBoard Size";
   }
 
 
@@ -48,8 +48,8 @@ export default class ArtBoardSizeProperty extends BaseProperty {
 
   getBody() {
     return `
-      <div class="position-item" ref="$positionItem">
-        <SelectEditor ref='$sizeList' key='size' options="${this.state.sizeList.join(',')}" onchange="changeBoardSize" />
+      <div class="property-item position-item">
+        <SelectEditor ref='$sizeList' key='size' label='Sample' options="${this.state.sizeList.join(',')}" onchange="changeBoardSize" />
       </div>
     `;
   }

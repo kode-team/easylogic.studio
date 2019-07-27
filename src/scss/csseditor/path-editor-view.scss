@@ -5,8 +5,14 @@
     top:0px;
     right:0px;
     bottom:0px;
-    outline:1px auto blue;
-    cursor: crosshair;
+
+    &.draw {
+        cursor: crosshair;
+    }
+
+    &.segment-move {
+        cursor: move; 
+    }
 
     &.alt {
         svg {
@@ -17,6 +23,7 @@
     }
 
     &.modify {
+        cursor: default;
         svg {
             path {
                 &.object {
@@ -64,6 +71,7 @@
                 fill: transparent;
                 stroke: blue;
                 stroke-width: 1; 
+                stroke-dasharray: 2 2;                 
             }
 
             &.segment {

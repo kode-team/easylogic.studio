@@ -142,6 +142,9 @@ export default class CanvasView extends UIElement {
     this.setScrollLeft(this.getScrollLeft() + value)
   }
 
+  [EVENT('focusCanvasView')] () {
+    this.$el.focus()
+  }
 
 
   // 단축키 적용하기 

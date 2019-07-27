@@ -45,7 +45,7 @@ export default class ProjectProperty extends BaseProperty {
     return projects.map( (project, index) => {
       var selected = project === editor.selection.currentProject ? 'selected' : '';
       return `
-        <div class='property-item project-item ${selected}'>
+        <div class='project-item ${selected}'>
           <div class='detail'>
             <label data-index='${index}'>${project.name || 'New Project'}</label>
             <div class="tools">

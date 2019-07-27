@@ -9,15 +9,19 @@ export default class TextShadowEditor extends UIElement {
 
   initState() {
     return {
+      hideLabel: this.props['hide-label'] === 'true' ? true : false, 
       selectedIndex: -1,
       textShadows: TextShadow.parseStyle(this.props.value)
     }
   }
 
   template() {
+
+    var labelClass = this.state.hideLabel ? 'hide' : ''; 
+
     return `
       <div class="text-shadow-editor" >
-        <div class='label' >
+        <div class='label ${labelClass}' >
             <label>${this.props.title}</label>        
             <div class='tools'>
               <button type="button" ref="$add" title="add Text Shadow">${icon.add}</button>
@@ -77,12 +81,16 @@ export default class TextShadowEditor extends UIElement {
   }
 
 
-  [CLICK("$add")]() {
+  [EVENT('add')] () {
     this.state.textShadows.push(new TextShadow())
 
     this.refresh();
 
     this.modifyTextShadow()
+  }
+
+  [CLICK("$add")]() {
+    this.trigger('add');
   }
 
   [CLICK("$shadowList .remove")](e) {

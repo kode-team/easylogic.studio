@@ -29,10 +29,12 @@ export class Selection {
     this.project = null;
     this.artboard = null;
     this.items = [];
+    this.itemKeys = {} 
   }
 
   initialize() {
     this.items = [];
+    this.itemKeys = {} 
   }
 
   /**
@@ -48,6 +50,14 @@ export class Selection {
 
   get currentArtboard () {
     return this.artboard;
+  }
+
+  get isEmpty () {
+    return !this.length 
+  }
+
+  get length () {
+    return this.items.length;
   }
 
   selectProject (project) {
@@ -73,7 +83,7 @@ export class Selection {
 
     this.itemKeys = {}
     this.items.forEach(it => {
-      this.itemKeys[it.id] = true; 
+      this.itemKeys[it.id] = it; 
     })
 
     this.setRectCache();
@@ -81,6 +91,10 @@ export class Selection {
 
   check (item) {
     return this.itemKeys[item.id]
+  }
+
+  get (id) {
+    return this.itemKeys[id];
   }
 
   empty () {
@@ -121,6 +135,11 @@ export class Selection {
       maxX = Math.max(it.screenX2.value, maxX);
       maxY = Math.max(it.screenY2.value, maxY);      
     })
+
+    if (minX === Number.MAX_SAFE_INTEGER) minX = 0;
+    if (minY === Number.MAX_SAFE_INTEGER) minY = 0;
+    if (maxX === Number.MIN_SAFE_INTEGER) maxX = 0;
+    if (maxY === Number.MIN_SAFE_INTEGER) maxY = 0;
 
     this.allRect = new MovableItem({
       x: Length.px(minX),

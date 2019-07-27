@@ -3,7 +3,7 @@ import AddRect from "./menu-items/AddRect";
 import AddCircle from "./menu-items/AddCircle";
 import AddImage from "./menu-items/AddImage";
 import AddPath from "./menu-items/AddPath";
-import AddRedGL from "./menu-items/AddRedGL";
+// import AddRedGL from "./menu-items/AddRedGL";
 import AddText from "./menu-items/AddText";
 import LayerTab from "./LayerTab";
 import AddPolygon from "./menu-items/AddPolygon";
@@ -19,7 +19,7 @@ export default class ObjectList extends UIElement {
       AddPolygon,
       LayerTab,      
       AddText,
-      AddRedGL,
+      // AddRedGL,
       AddPath,
       AddRect,
       AddCircle,

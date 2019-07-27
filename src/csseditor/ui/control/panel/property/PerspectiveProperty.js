@@ -12,7 +12,7 @@ export default class PerspectiveProperty extends BaseProperty {
   }
 
   getBody() {
-    return `<div ref='$perspective'></div>`;
+    return `<div class='property-item' ref='$perspective'></div>`;
   }  
 
   [LOAD("$perspective")]() {

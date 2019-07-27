@@ -6,6 +6,9 @@
   .label {
     height: 20px;
     margin-top: 2px;
+    &.hide {
+      display: none;
+    }
     label {
       font-size: 12px;
       padding-left: 5px;
@@ -32,7 +35,7 @@
     grid-template-columns: 20px 1fr 1fr 1fr 20px;
     grid-column-gap: 5px;
     text-align: center;
-    margin-bottom: 5px;
+    margin-top: 5px;
 
     &.desc {
       color: $font-color;

@@ -17,11 +17,7 @@ export default class SizeProperty extends BaseProperty {
   }
 
   getTitle() {
-    return "Position";
-  }
-
-  isHideHeader() {
-    return true; 
+    return "Size";
   }
 
   [EVENT('refreshSelection', 'refreshRect') + DEBOUNCE(100)]() {
