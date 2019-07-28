@@ -43,3 +43,10 @@ $popup-background-color: $background-color;
 $popup-font-color: $font-color;
 $popup-selected-color: $selected-color; 
 $popup-border-color: $border-color;
+
+
+@keyframes bounce-up-down {
+    0% { top: -10px;  }
+    50% { top: -5px; }
+    100% { top: -10px; }
+}

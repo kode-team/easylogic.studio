@@ -499,11 +499,7 @@ export default class SelectionToolView extends UIElement {
         return this.originalArtboardRect;
     }    
 
-    [EVENT('refreshSelectionTool')] () {
-        this.initSelectionTool();
-    }
-
-    [EVENT('initSelectionTool')] () { 
+    [EVENT('refreshSelectionTool', 'initSelectionTool')] () { 
         this.initSelectionTool();
     }
 
@@ -551,8 +547,6 @@ export default class SelectionToolView extends UIElement {
     makeSelectionTool() {
 
         // selection 객체는 하나만 만든다. 
-
-
         this.guideView.recoverAll();
 
         var {x, y, width, height} = this.calculateWorldPosition(this.guideView.rect) ;
@@ -570,7 +564,8 @@ export default class SelectionToolView extends UIElement {
         }
 
         this.refs.$selectionTool.cssText(`left: ${x};top:${y};width:${width};height:${height}`)
-
+        this.bindData('$rotate3d');
+        this.bindData('$rotateArea');        
         var newX = Length.px(x.value - editor.selection.currentArtboard.x.value / editor.scale).round(1);
         var newY = Length.px(y.value - editor.selection.currentArtboard.y.value / editor.scale).round(1);
         var newWidth = Length.px(width.value / editor.scale).round(1);
@@ -635,6 +630,8 @@ export default class SelectionToolView extends UIElement {
 
     [EVENT('refreshSelectionStyleView')] () {
         this.bindData('$rotate3d');
+        this.bindData('$rotateArea');
+        this.bindData('$rotateZ');
     }
 
     

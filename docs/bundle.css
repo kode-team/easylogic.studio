@@ -1,3 +1,25 @@
+@-webkit-keyframes bounce-up-down {
+  0% {
+    top: -10px;
+  }
+  50% {
+    top: -5px;
+  }
+  100% {
+    top: -10px;
+  }
+}
+@keyframes bounce-up-down {
+  0% {
+    top: -10px;
+  }
+  50% {
+    top: -5px;
+  }
+  100% {
+    top: -10px;
+  }
+}
 /* codemirror colorview */
 .codemirror-colorview {
   border: 1px solid #cecece;
@@ -2629,6 +2651,8 @@ html, body {
   -webkit-clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
           clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
   box-shadow: inset 0px -1px 9px 0 rgba(255, 255, 255, 0.5);
+  -webkit-animation: bounce-up-down 0.75s infinite ease-in-out;
+          animation: bounce-up-down 0.75s infinite ease-in-out;
 }
 .csseditor .selection-tool .selection-tool-item[data-position=path] {
   left: 0px;
