@@ -25,10 +25,8 @@ import ClipPathProperty from "./ClipPathProperty";
 import TransitionProperty from "./TransitionProperty";
 import ComputedCodeViewProperty from "./ComputedCodeViewProperty";
 import PerspectiveOriginProperty from "./PerspectiveOriginProperty";
-import MixBlendModeProperty from "./MixBlendModeProperty";
 import PerspectiveProperty from "./PerspectiveProperty";
 import TransformOriginProperty from "./TransformOriginProperty";
-import OpacityProperty from "./OpacityProperty";
 import BackgroundClipProperty from "./BackgroundClipProperty";
 import SVGProperty from "./SVGProperty";
 import SelectorProperty from "./SelectorProperty";
@@ -37,7 +35,6 @@ import ProjectProperty from "./ProjectProperty";
 import ArtBoardProperty from "./ArtBoardProperty";
 import LayerTreeProperty from "./LayerTreeProperty";
 import ArtBoardSizeProperty from "./ArtBoardSizeProperty";
-import RotateProperty from "./RotateProperty";
 import ImageProperty from "./ImageProperty";
 import ColorAssetsProperty from "./ColorAssetsProperty";
 import TextFillProperty from "./TextFilllProperty";
@@ -52,7 +49,6 @@ export default {
   TextFillProperty,
   ColorAssetsProperty,
   ImageProperty,
-  RotateProperty,
   ArtBoardSizeProperty,
   LayerTreeProperty,
   ProjectProperty,
@@ -61,10 +57,8 @@ export default {
   SelectorProperty,
   SVGProperty,
   BackgroundClipProperty,
-  OpacityProperty,
   TransformOriginProperty,
   PerspectiveProperty,
-  MixBlendModeProperty,
   PerspectiveOriginProperty,
   ComputedCodeViewProperty,
   TransitionProperty,

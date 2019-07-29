@@ -229,10 +229,8 @@ export default class PolygonEditorView extends UIElement {
     [EVENT('hidePolygonEditor')] () {
         this.state.isShow = false;         
         this.$el.hide();
-        if (this.isMode('star')) {
-            this.emit('hideStarManager');
-        }
 
+        this.emit('hideStarManager');
         this.emit('finishPolygonEdit')        
     }
 

@@ -40,6 +40,10 @@
     }
   }
 
+  &.sub-item {
+
+  }
+
   &.show {
 
 
@@ -51,7 +55,7 @@
   }
 
   > .property-title {
-    padding: 2px 6px;
+    padding: 6px;
     height: 30px;
     line-height: 2;
     cursor: pointer;
@@ -61,8 +65,8 @@
     display: grid;
     grid-template-columns: 0.8fr 1fr;
     cursor: pointer;
-    box-shadow: inset 0 1px 0 0 hsla(0,0%,100%,.03), 0 1px 0 0 rgba(0,0,0,.15);
-    background-color: #1f1f1f;
+    // box-shadow: inset 0 1px 0 0 hsla(0,0%,100%,.03), 0 1px 0 0 rgba(0,0,0,.15);
+    // background-color: #1f1f1f;
     border-bottom: 0px;    
 
 
@@ -96,7 +100,7 @@
     .property-item {
       padding: 0px;
       font-size: 11px;
-      margin-top: 5px;
+      margin-top: 8px;
 
       &.background-image,
       &.box-shadow-item,
@@ -114,7 +118,7 @@
       }      
 
       &:last-child {
-        margin-bottom: 5px;
+        margin-bottom: 10px;
       }
 
       &:empty {

@@ -16,6 +16,10 @@ export default class SizeProperty extends BaseProperty {
     }
   }
 
+  isHideHeader() {
+    return true; 
+  }
+
   getTitle() {
     return "Size";
   }

@@ -46,8 +46,6 @@ export default class Inspector extends UIElement {
                 <SizeProperty /> 
                 <BoxModelProperty />
                 <BackgroundColorProperty />
-                <OpacityProperty />          
-                <RotateProperty />  
                 <BorderProperty />
                 <BorderRadiusProperty />
                 <BackgroundImageProperty />
@@ -55,7 +53,6 @@ export default class Inspector extends UIElement {
                 <FilterProperty />
                 <ClipPathProperty />       
                 <SVGProperty />
-                <MixBlendModeProperty />
                 <!--BorderImageProperty /-->                
                 <!-- <BackdropFilterProperty /> -->
                 <!-- <OutlineProperty /> -->

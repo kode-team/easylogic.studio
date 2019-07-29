@@ -17,8 +17,8 @@ export default class BoxModelProperty extends BaseProperty {
     return "Box Model";
   }
 
-  isFirstShow () {
-    return false; 
+  isHideHeader() {
+    return true; 
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
