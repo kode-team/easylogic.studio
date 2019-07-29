@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
-import { POINTERSTART, MOVE, END, BIND, POINTERMOVE, PREVENT, KEYUP, IF, STOP, CLICK, DOUBLECLICK } from "../../../util/Event";
+import { POINTERSTART, MOVE, END, BIND, POINTERMOVE, PREVENT, KEYUP, IF, STOP, CLICK, DOUBLECLICK, KEY } from "../../../util/Event";
 import { editor } from "../../../editor/editor";
 import PathGenerator from "../../../editor/parse/PathGenerator";
 import Dom from "../../../util/Dom";
@@ -26,6 +26,7 @@ export default class PathEditorView extends UIElement {
 
     initState() {
         return {
+            isShow: false,
             points: [],
             mode: 'draw',
             $target: null, 
@@ -38,9 +39,11 @@ export default class PathEditorView extends UIElement {
         return `<div class='path-editor-view' tabIndex="-1" ref='$view' ></div>`
     }
 
-    [KEYUP() + IF('Escape') + IF('Enter') + PREVENT + STOP] () {
+    isShow () {
+        return this.state.isShow
+    }
 
-
+    [KEYUP('document') + IF('isShow') + KEY('Escape') + KEY('Enter') + PREVENT + STOP] () {
 
         if (this.state.current) {
             this.refreshPathLayer();
@@ -155,11 +158,13 @@ export default class PathEditorView extends UIElement {
 
         this.refresh(obj);
 
+        this.state.isShow = true; 
         this.$el.show();
         this.$el.focus();
     }
 
     [EVENT('hidePathEditor')] () {
+        this.state.isShow = false;         
         this.$el.hide();
         this.emit('finishPathEdit')
     }
@@ -266,7 +271,7 @@ export default class PathEditorView extends UIElement {
         this.state.$target = e.$delegateTarget
         var index = +this.state.$target.attr('data-index')
 
-        
+
         this.pathGenerator.convertToCurve(index);
 
         this.bindData('$view');

@@ -20,6 +20,7 @@ export default class PolygonEditorView extends UIElement {
 
     initState() {
         return {
+            isShow: false, 
             points: '',
             segments: [],
             mode: 'draw',
@@ -36,6 +37,10 @@ export default class PolygonEditorView extends UIElement {
 
     isStarMode () {
         return this.isMode('star')
+    }
+
+    isShow () {
+        return this.state.isShow;
     }
 
     [KEYUP() + KEY(1) + KEY(2) + IF('isStarMode') + PREVENT + STOP] (e) {
@@ -75,7 +80,10 @@ export default class PolygonEditorView extends UIElement {
         this.emit('changeStarManager', this.state.starCount, this.state.starInnerRadiusRate)        
     } 
 
-    [KEYUP() + IF('Escape') + IF('Enter') + PREVENT + STOP] () {
+    // svg 에는 키 이벤트를 줄 수 없어서 
+    // document 전체에 걸어서 처리한다. 
+    // 실행은 Polygon 에디터가 보일 때만 
+    [KEYUP('document') + IF('isShow') + KEY('Escape') + KEY('Enter') + PREVENT] (e) {
 
         if (this.state.current) {
             this.refreshPolygonLayer();
@@ -194,6 +202,7 @@ export default class PolygonEditorView extends UIElement {
         this.changeMode(mode, obj);
         this.refresh(newOptions);
 
+        this.state.isShow = true; 
         this.$el.show();
         this.$el.focus();
 
@@ -218,6 +227,7 @@ export default class PolygonEditorView extends UIElement {
     }
 
     [EVENT('hidePolygonEditor')] () {
+        this.state.isShow = false;         
         this.$el.hide();
         if (this.isMode('star')) {
             this.emit('hideStarManager');
@@ -306,6 +316,7 @@ export default class PolygonEditorView extends UIElement {
             y: e.xy.y - this.state.rect.y
         }; 
 
+        this.$el.focus()
 
         this.state.$target = Dom.create(e.target);
         this.state.isSegment = this.state.$target.attr('data-segment') === 'true';
