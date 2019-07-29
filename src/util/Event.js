@@ -175,6 +175,8 @@ export const DEBOUNCE = (t = 100) => {
   return CHECKER(`debounce(${t})`);
 };
 
+export const D1000 = DEBOUNCE(1000)
+
 export const THROTTLE = (t = 100) => {
   return CHECKER(`throttle(${t})`);
 };

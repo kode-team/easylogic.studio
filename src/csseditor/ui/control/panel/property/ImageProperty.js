@@ -1,6 +1,6 @@
 import BaseProperty from "./BaseProperty";
 import { editor } from "../../../../../editor/editor";
-import { LOAD, CLICK, BIND } from "../../../../../util/Event";
+import { LOAD, CLICK, BIND, DEBOUNCE } from "../../../../../util/Event";
 import { EVENT } from "../../../../../util/UIElement";
 import icon from "../../../icon/icon";
 import { Length } from "../../../../../editor/unit/Length";
@@ -16,6 +16,10 @@ const image_size = [
 ] 
 
 export default class ImageProperty extends BaseProperty {
+
+  getClassName() {
+    return 'item'
+  }
 
   getTitle() {
     return 'Image'
@@ -90,22 +94,9 @@ export default class ImageProperty extends BaseProperty {
     }
   }
 
-  [EVENT('refreshSelection')]() {
+  [EVENT('refreshSelection') + DEBOUNCE(100)]() {
 
-    var current = editor.selection.current; 
-
-    if (current) {
-      if (!current.is('image')) {
-        this.hide();
-      } else {
-
-        if (this.$el.css('display') === 'none') {
-          this.show();
-        }
-
-        this.refresh();
-      }
-    }
+    this.refreshShow('image')
 
   }
 }

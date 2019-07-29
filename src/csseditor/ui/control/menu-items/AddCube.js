@@ -5,13 +5,14 @@ import { Length } from "../../../../editor/unit/Length";
 import Color from "../../../../util/Color";
 import { CubeLayer } from "../../../../editor/items/layers/CubeLayer";
 import icon from "../../icon/icon";
+import { EVENT } from "../../../../util/UIElement";
  
 export default class AddCube extends MenuItem {
   getIconString() {
     return icon.cube;
   }
   getTitle() {
-    return "Cube";
+    return "5. Cube";
   }
 
   isHideTitle() {
@@ -19,6 +20,10 @@ export default class AddCube extends MenuItem {
   }  
 
   clickButton(e) {
+   this.trigger('addCube')
+  }
+
+  [EVENT('addCube')] ( ) {
     var artboard = editor.selection.currentArtboard
 
     if (artboard) {

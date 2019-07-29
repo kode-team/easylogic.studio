@@ -1,6 +1,7 @@
 import BaseProperty from "./BaseProperty";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
+import { DEBOUNCE } from "../../../../../util/Event";
 
 
 export default class TextFillProperty extends BaseProperty {
@@ -9,8 +10,12 @@ export default class TextFillProperty extends BaseProperty {
     return "Text Fill";
   }
 
-  [EVENT('refreshSelection')]() {
-    this.refresh();
+  isHideHeader() {
+    return true; 
+  }
+
+  [EVENT('refreshSelection') + DEBOUNCE(100)]() {
+    this.refreshShow('text');
   }
 
   refresh() {
@@ -27,10 +32,10 @@ export default class TextFillProperty extends BaseProperty {
   getBody() {
     return `
       <div class='property-item'>
-        <ColorViewEditor ref='$fillColor' label='Fill' params='text-fill-color' onchange="changeColor" />
+        <ColorViewEditor ref='$fillColor' label='Fill' removable="true" params='text-fill-color' onchange="changeColor" />
       </div>           
       <div class='property-item'>
-        <ColorViewEditor ref='$strokeColor' label='Stroke' params='text-stroke-color' onchange="changeColor" />
+        <ColorViewEditor ref='$strokeColor' label='Stroke' removable="true" params='text-stroke-color' onchange="changeColor" />
       </div>                 
 
       <div class='property-item'>

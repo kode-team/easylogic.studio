@@ -5,13 +5,14 @@ import icon from "../../icon/icon";
 
 import { Length } from "../../../../editor/unit/Length";
 import Color from "../../../../util/Color";
+import { EVENT } from "../../../../util/UIElement";
    
 export default class AddCircle extends MenuItem {
   getIcon() {
     return 'circle';
   }
   getTitle() {
-    return "Circle";
+    return "2. Circle";
   }
 
 
@@ -20,7 +21,11 @@ export default class AddCircle extends MenuItem {
   }  
 
   clickButton(e) {
-    this.emit('hideSubEditor');    
+    this.trigger('addCircle');
+  }
+
+  [EVENT('addCircle')] () {
+
     var artboard = editor.selection.currentArtboard
 
     if (artboard) {
@@ -35,6 +40,7 @@ export default class AddCircle extends MenuItem {
 
       this.emit('refreshAll')
       this.emit('refreshSelection');
+      this.emit('hideSubEditor');          
     }
   }
 }

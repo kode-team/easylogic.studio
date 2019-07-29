@@ -114,6 +114,37 @@
   
       }
 
+
+      &[data-position="transform-origin-path"] {
+        left: 0px;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+        cursor: move;
+        transform: none;
+        border-radius: 0px;
+        background-color: transparent;
+        border:0px;
+  
+        &:before {
+          display: none; 
+        }
+
+        svg {
+          width: 100%;
+          height: 100%;
+          left: 0px;
+          top: 0px;
+          position: absolute;
+          display: block; 
+          overflow: visible;
+          line {
+            stroke: red; 
+          }
+        }
+  
+      }      
+
       $rotate3d-width: 30px;
       $rotate3d-height: 30px;
 
@@ -213,7 +244,46 @@
             box-shadow: inset 0px -1px 9px 0 rgba(255, 255, 255, 0.5);         
             animation: bounce-up-down 0.75s infinite ease-in-out;
           }
+
+          .handle-left {
+            display: inline-block;
+            height: 3px;
+            width: 5px;
+            left: -5px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: $color; 
+            position: absolute; 
+            pointer-events: none;
+            border-radius: 50%;
+          }          
+
+          .handle-right {
+            display: inline-block;
+            height: 3px;
+            width: 5px;
+            right: -5px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: $color; 
+            position: absolute; 
+            pointer-events: none;
+            border-radius: 50%;            
+          }                    
       
+          .handle-bottom {
+            display: inline-block;
+            height: 5px;
+            width: 3px;
+            left: 50%;
+            bottom: -5px;
+            transform: translateX(-50%);
+            background-color: $color; 
+            position: absolute; 
+            pointer-events: none;
+            border-radius: 50%;            
+          }          
+
         }                
       }      
 

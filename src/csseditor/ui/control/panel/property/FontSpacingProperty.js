@@ -2,6 +2,7 @@ import BaseProperty from "./BaseProperty";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
 import { Length } from "../../../../../editor/unit/Length";
+import { DEBOUNCE } from "../../../../../util/Event";
 
 
 export default class FontSpacingProperty extends BaseProperty {
@@ -10,7 +11,16 @@ export default class FontSpacingProperty extends BaseProperty {
     return "Spacing";
   }
 
-  [EVENT('refreshSelection')]() {
+  isHideHeader() {
+    return true; 
+  }
+
+  [EVENT('refreshSelection') + DEBOUNCE(100)]() {
+    this.refreshShow('text');
+  }
+
+  refresh() {
+    // TODO: 업데이트를 어떻게 할까? 
     var current = editor.selection.current;
 
     if (current) {
@@ -19,11 +29,6 @@ export default class FontSpacingProperty extends BaseProperty {
       this.children.$word.setValue(current['word-spacing'])
       this.children.$indent.setValue(current['text-indent'])
     }
-  }
-
-  refresh() {
-    // TODO: 업데이트를 어떻게 할까? 
-    
   }
 
   getBody() {

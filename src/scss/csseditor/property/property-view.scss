@@ -6,7 +6,7 @@
   background-color: $property-background-color;
   // border-radius: 3px; 
   color: $property-font-color; 
-
+  // display: none; 
   svg {
     vertical-align: middle;
     path {
@@ -34,7 +34,14 @@
     }
   }
 
+  &.item {
+    > .property-title {
+      @include title-background-2();
+    }
+  }
+
   &.show {
+
 
 
     > .property-body {
@@ -126,7 +133,7 @@
   }
 
   > .property-footer {
-
+    padding: 0px 6px;
     > div {
       margin-bottom: 5px;
     }

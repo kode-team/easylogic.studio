@@ -3,13 +3,14 @@ import { editor } from "../../../../editor/editor";
 import { TextLayer } from "../../../../editor/items/layers/TextLayer";
 import icon from "../../icon/icon";
 import { Length } from "../../../../editor/unit/Length";
+import { EVENT } from "../../../../util/UIElement";
  
 export default class AddText extends MenuItem {
   getIconString() {
     return icon.title;
   }
   getTitle() { 
-    return "Text";
+    return "3. Text";
   }
 
   isHideTitle() {
@@ -17,7 +18,11 @@ export default class AddText extends MenuItem {
   }
 
   clickButton(e) {
-    this.emit('hideSubEditor');    
+    this.trigger('addText')
+  }
+
+  [EVENT('addText')] () {
+  
     var artboard = editor.selection.currentArtboard
 
     if (artboard) {
@@ -29,9 +34,10 @@ export default class AddText extends MenuItem {
       }))
 
       editor.selection.select(layer);
-
+      this.emit('hideSubEditor');  
       this.emit('refreshAll')
       this.emit('refreshSelection');
     }
   }
+
 }

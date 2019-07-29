@@ -70,7 +70,6 @@ export default class SegmentManager {
     }
 
     toString () {
-
         return this.segmentList.map(it => {
 
             if (it.line) {

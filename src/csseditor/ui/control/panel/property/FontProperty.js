@@ -1,7 +1,7 @@
 import BaseProperty from "./BaseProperty";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
-import { Length } from "../../../../../editor/unit/Length";
+import { DEBOUNCE } from "../../../../../util/Event";
 
 
 export default class FontProperty extends BaseProperty {
@@ -10,7 +10,16 @@ export default class FontProperty extends BaseProperty {
     return "Font";
   }
 
-  [EVENT('refreshSelection')]() {
+  getClassName() {
+    return 'item'
+  }
+
+  [EVENT('refreshSelection') + DEBOUNCE(100)]() {
+    this.refreshShow('text')
+  }
+
+  refresh() {
+    // update 를 어떻게 할지 고민 
     var current = editor.selection.current;
 
     if (current) {
@@ -18,11 +27,7 @@ export default class FontProperty extends BaseProperty {
       this.children.$size.setValue(current['font-size'])      
       this.children.$style.setValue(current['font-style'])
       this.children.$family.setValue(current['font-family'])
-    }
-  }
-
-  refresh() {
-    // update 를 어떻게 할지 고민 
+    }    
   }
 
   getBody() {
@@ -57,8 +62,8 @@ export default class FontProperty extends BaseProperty {
           ref='$style' 
           label='Style' 
           key="font-style" 
-          options="normal,italic,oblique" 
-          icons='가,나,다'
+          options="normal,italic" 
+          icons='I,I'
           onchange="changeRangeEditor" />
       </div>      
 

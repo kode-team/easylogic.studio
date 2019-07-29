@@ -10,6 +10,10 @@ export default class SVGItemProperty extends BaseProperty {
     return "SVG Item";
   }
 
+  getClassName() {
+    return "item"
+  }
+
   isSVGItem  (current) {
     return current.is('svg-path', 'svg-polygon')
   }

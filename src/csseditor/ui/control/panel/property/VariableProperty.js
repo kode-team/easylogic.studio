@@ -13,6 +13,10 @@ export default class VariableProperty extends BaseProperty {
     return 'Variables';
   }
 
+  getClassName() {
+    return 'item'
+  }
+
   getBody() {
     return `<div class='property-item full var-property' ref='$body'></div>`;
   }

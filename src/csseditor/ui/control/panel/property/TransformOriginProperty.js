@@ -1,5 +1,5 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, CLICK } from "../../../../../util/Event";
+import { LOAD, CLICK, DEBOUNCE } from "../../../../../util/Event";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
 
@@ -40,7 +40,7 @@ export default class TransformOriginProperty extends BaseProperty {
   }
 
 
-  [EVENT('refreshSelection')]() {
+  [EVENT('refreshSelection', 'refreshSelectionStyleView') + DEBOUNCE(100)]() {
     this.refresh();
   }
 

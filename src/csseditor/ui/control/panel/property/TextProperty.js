@@ -1,6 +1,7 @@
 import BaseProperty from "./BaseProperty";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
+import { DEBOUNCE } from "../../../../../util/Event";
 
 
 export default class TextProperty extends BaseProperty {
@@ -9,12 +10,23 @@ export default class TextProperty extends BaseProperty {
     return "Text";
   }
 
-  [EVENT('refreshSelection')]() {
-    this.refresh();
+  isHideHeader() {
+    return true; 
+  }
+
+  [EVENT('refreshSelection') + DEBOUNCE(100)]() {
+    this.refreshShow('text');
   }
 
   refresh() {
    // TODO: 데이타 로드를 어떻게 해야할까? 
+    var current = editor.selection.current;
+    if (current) {
+      this.children.$align.setValue(current['text-align']);
+      this.children.$transform.setValue(current['text-transform']);
+      this.children.$decoration.setValue(current['text-decoration']);            
+    }
+
   }
 
   getBody() {
@@ -35,7 +47,7 @@ export default class TextProperty extends BaseProperty {
           label='Transform' 
           key='text-transform' 
           options="uppercase,lowercase,capitalize"
-          icons='aa,bb,cc'
+          icons='uu,ll,cc'
           onchange='changeTextValue' />                
       </div>        
       <div class="property-item">
@@ -44,7 +56,7 @@ export default class TextProperty extends BaseProperty {
           label='Decoration' 
           key='text-decoration' 
           options="none,underline,overline,line-through" 
-          icons="가,나,다,라"
+          icons="A,U,O,S"
           onchange='changeTextValue' />        
       </div>                    
     `

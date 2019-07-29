@@ -72,6 +72,8 @@ export default class ImageSelectPopup extends BasePopup {
       width: Length.px($img.naturalWidth),
       height: Length.px($img.naturalHeight)
     });
+
+    this.trigger('hideImageSelectPopup')
   }
 
   [EVENT("showImageSelectPopup")](data, params) {

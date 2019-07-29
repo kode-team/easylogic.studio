@@ -158,6 +158,29 @@ export default class CanvasView extends UIElement {
     }
   }
 
+  getAddCommand (key) {
+    switch(key) {
+    case '1': return 'addRect';
+    case '2': return 'addCircle';
+    case '3': return 'addText';
+    case '4': return 'addImage';
+    case '5': return 'addCube';
+    case '6': return 'addPath';
+    case '7': return 'addPolygon';
+    case '8': return 'addStar';
+    }
+  }
+
+  isNumberKey(e) {
+    return this.getAddCommand(e.key)
+  }
+
+  [KEYUP('$el') + IF('isNumberKey') + PREVENT+ STOP] (e) {
+    var command = this.getAddCommand(e.key);
+
+    this.emit(command);
+  }
+
   [EVENT('changeScale')] (key, scale) {
     editor.scale = scale/100; 
     this.emit('changeScale');

@@ -6,7 +6,8 @@ import {
   DRAGSTART,
   DRAGOVER,
   DROP,
-  PREVENT
+  PREVENT,
+  DEBOUNCE
 } from "../../../../../util/Event";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
@@ -84,8 +85,13 @@ export default class SelectorProperty extends BaseProperty {
     this.refresh();
   }
 
-  [EVENT('refreshSelection')] () {
-    this.refresh();
+  [EVENT('refreshSelection') + DEBOUNCE(100)] () {
+    if (editor.selection.length) {
+      this.refreshShowIsNot('project');
+    } else {
+      this.$el.hide()
+    }
+    
   }
 
 

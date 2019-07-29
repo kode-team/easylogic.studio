@@ -11,6 +11,10 @@ export default class TextShadowProperty extends BaseProperty {
     return 'Text Shadows'
   }
 
+  isHideHeader() {
+    return true; 
+  }
+
   getBody() {
     return `
       <div class="property-item full text-shadow-item" ref="$shadowList"></div>
@@ -29,24 +33,14 @@ export default class TextShadowProperty extends BaseProperty {
   [LOAD("$shadowList")]() {
     var current = editor.selection.current || {};
     return `
-      <TextShadowEditor ref='$textshadow' value="${current['text-shadow'] || ''}" hide-label="true" onChange="changeTextShadow" />
+      <TextShadowEditor ref='$textshadow' value="${current['text-shadow'] || ''}" title='Text Shadows' onChange="changeTextShadow" />
     `
   }
 
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
 
-    var current = editor.selection.current;
-    if (current) {
-      if (current.is('artboard')) {
-        this.hide();
-      } else {
-        this.show();
-        this.refresh();
-      }
-    } else {
-      this.hide();
-    }
+    this.refreshShow('text');
 
   }  
 

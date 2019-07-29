@@ -1,10 +1,12 @@
 import UIElement, { EVENT } from "../../../../../util/UIElement";
 import { CLICK, INPUT, BIND } from "../../../../../util/Event";
+import icon from "../../../icon/icon";
 
 export default class ColorViewEditor extends UIElement {
 
     initState() {
         return {
+            removable: this.props.removable === 'true',            
             label: this.props.label,
             params: this.props.params,
             color: this.props.color || 'rgba(0, 0, 0, 1)'
@@ -35,10 +37,11 @@ export default class ColorViewEditor extends UIElement {
     }
 
     template() {
-        var { label } = this.state;
+        var { label, removable } = this.state;
         var hasLabel = !!label ? 'has-label' : ''
+        var isRemovable = removable ? 'is-removable' : '';        
         return `
-            <div class='color-view-editor ${hasLabel}'>
+            <div class='color-view-editor ${hasLabel} ${isRemovable}'>
                 ${label ? `<label>${label}</label>` : '' }            
                 <div class='preview' ref='$preview'>
                     <div class='mini-view'>
@@ -48,6 +51,7 @@ export default class ColorViewEditor extends UIElement {
                 <div class='color-code'>
                     <input type="text" ref='$colorCode' value='${this.state.color}' />
                 </div>
+                <button type='button' class='remove' ref='$remove' title='Remove'>${icon.close}</button>                
             </div>
         `
     }
@@ -79,6 +83,11 @@ export default class ColorViewEditor extends UIElement {
             id: this.id
         });
     }
+
+
+    [CLICK('$remove')] (e) {
+        this.updateData({ color: ''})
+    }    
 
     [INPUT("$el .color-code input")](e) {
         var color = e.$delegateTarget.value;

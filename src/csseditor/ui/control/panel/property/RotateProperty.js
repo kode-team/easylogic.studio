@@ -1,6 +1,6 @@
 import BaseProperty from "./BaseProperty";
 import { editor } from "../../../../../editor/editor";
-import { LOAD } from "../../../../../util/Event";
+import { LOAD, DEBOUNCE } from "../../../../../util/Event";
 import { EVENT } from "../../../../../util/UIElement";
 import { Length } from "../../../../../editor/unit/Length";
 
@@ -39,7 +39,7 @@ export default class RotateProperty extends BaseProperty {
     this.emit("refreshSelectionStyleView");    
   }
 
-  [EVENT('refreshSelection')]() {
-    this.refresh();
+  [EVENT('refreshSelection') + DEBOUNCE(100)]() {
+    this.refreshShowIsNot('project');
   }
 }

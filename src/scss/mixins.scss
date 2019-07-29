@@ -70,8 +70,21 @@
 }
 
 @mixin title-background () {
-    background-image: linear-gradient(to right, $selected-color 0%, rgba($selected-color, 0) 60%);
-    border-left: 2px solid $selected-border-color;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, $selected-color 10%, rgba($selected-color, 0) 60%);
+    // border-left: 2px solid $selected-border-color;
+    color: white; 
+
+    svg {
+        path {
+            fill: white; 
+        }
+    }
+}
+
+
+@mixin title-background-2 () {
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, $selected-color 10%, rgba($selected-color, 0) 40%);
+    // border-left: 2px solid $selected-border-color;
     color: white; 
 
     svg {
@@ -87,14 +100,14 @@
 
 
 
-@mixin title-background-2 () { 
-    background-image: linear-gradient(
-        to right,
-        #d1d1ff,
-        rgba(255, 255, 255, 0.282)
-      );
+// @mixin title-background-2 () { 
+//     background-image: linear-gradient(
+//         to right,
+//         #d1d1ff,
+//         rgba(255, 255, 255, 0.282)
+//       );
 
-}
+// }
 
 @mixin arrow_top ($pixel, $color) {
     width: 0; 

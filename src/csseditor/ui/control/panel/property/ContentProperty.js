@@ -14,17 +14,7 @@ export default class ContentProperty extends BaseProperty {
 
   [EVENT('refreshSelection', 'refreshContent') + DEBOUNCE(100)]() {
 
-    var current = editor.selection.current;
-    if (current) {
-      if (current.is('artboard')) {
-        this.hide();
-      } else {
-        this.show();
-        this.refresh();
-      }
-    } else {
-      this.hide();
-    }
+    this.refreshShowIsNot('artboard');
 
   }  
 

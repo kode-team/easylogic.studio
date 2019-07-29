@@ -4,13 +4,14 @@ import { Layer } from "../../../../editor/items/Layer";
 
 import { Length } from "../../../../editor/unit/Length";
 import Color from "../../../../util/Color";
+import { EVENT } from "../../../../util/UIElement";
  
 export default class AddRect extends MenuItem {
   getIcon() {
     return 'rect';
   }
   getTitle() {
-    return "Rect";
+    return "1. Rect";
   }
 
 
@@ -19,6 +20,10 @@ export default class AddRect extends MenuItem {
   }  
 
   clickButton(e) {
+    this.trigger('addRect')
+  }
+
+  [EVENT('addRect')] () {
     var artboard = editor.selection.currentArtboard
 
     if (artboard) {

@@ -266,7 +266,7 @@ export default class PathEditorView extends UIElement {
         this.state.$target = e.$delegateTarget
         var index = +this.state.$target.attr('data-index')
 
-
+        
         this.pathGenerator.convertToCurve(index);
 
         this.bindData('$view');

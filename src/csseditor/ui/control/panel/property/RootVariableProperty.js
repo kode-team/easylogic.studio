@@ -1,6 +1,6 @@
 import BaseProperty from "./BaseProperty";
 import {
-  LOAD, CLICK,
+  LOAD, CLICK, DEBOUNCE,
 } from "../../../../../util/Event";
 
 import { editor } from "../../../../../editor/editor";
@@ -11,6 +11,10 @@ export default class RootVariableProperty extends BaseProperty {
 
   getTitle() {
     return 'Root Variables';
+  }
+
+  getClassName() {
+    return 'item'
   }
 
   getBody() {
@@ -33,9 +37,10 @@ export default class RootVariableProperty extends BaseProperty {
     return `<VarEditor ref='$varEditor' value='${value}' hide-label="true" onchange='changeVarEditor' />`
   }
 
-  refresh() {
-    this.load();
+  [EVENT('refreshSelection') + DEBOUNCE(100)] () {
+    this.refreshShow('artboard');
   }
+
 
   [EVENT('changeVarEditor')] (rootVariable) {
     var current = editor.selection.currentProject; 

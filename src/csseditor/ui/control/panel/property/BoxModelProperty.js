@@ -1,5 +1,5 @@
 import BaseProperty from "./BaseProperty";
-import { INPUT, LOAD } from "../../../../../util/Event";
+import { INPUT, LOAD, DEBOUNCE } from "../../../../../util/Event";
 import { editor } from "../../../../../editor/editor";
 import { Length } from "../../../../../editor/unit/Length";
 import { EVENT } from "../../../../../util/UIElement";
@@ -21,8 +21,8 @@ export default class BoxModelProperty extends BaseProperty {
     return false; 
   }
 
-  [EVENT('refreshSelection')]() {
-    this.refresh();
+  [EVENT('refreshSelection') + DEBOUNCE(100)]() {
+    this.refreshShowIsNot('artboard');
   }
 
   getBody() {

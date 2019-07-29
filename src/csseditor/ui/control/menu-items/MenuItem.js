@@ -9,7 +9,7 @@ const DEFAULT_CHECKED = false;
 export default class MenuItem extends UIElement {
     template () {
         return `
-        <button type="button" class='menu-item' data-no-title="${this.isHideTitle()}" checked="${this.getChecked() ? 'checked' : ''}">
+        <button type="button" class='menu-item' data-no-title="${this.isHideTitle()}" ${this.isHideTitle() ? `title="${this.getTitle()}"` : '' } checked="${this.getChecked() ? 'checked' : ''}">
             <div class="icon ${this.getIcon()}">${this.getIconString()}</div>
             <div class="title">${this.getTitle()}</div>
         </button>

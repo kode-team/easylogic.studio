@@ -6,10 +6,26 @@
     margin-bottom: 5px;
     text-align: center;
 
+    &.is-removable {
+        grid-template-columns: 24px 1fr 20px;
+
+        .remove {
+            display: inline-block;
+        }
+    }    
 
     &.has-label {
         grid-template-columns: 60px 24px 1fr;
         grid-column-gap: 2px;
+
+        &.is-removable {
+            grid-template-columns: 60px 24px 1fr 20px;
+
+            .remove {
+                display: inline-block;
+            }            
+        }
+
 
         label {
             text-align: left;
@@ -59,5 +75,9 @@
             padding: 0px 3px;
             @include input-text-style();
         }
+    }
+
+    .remove {
+        display: none;
     }
 }

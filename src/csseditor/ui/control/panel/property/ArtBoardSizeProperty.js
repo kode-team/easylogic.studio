@@ -14,6 +14,10 @@ export default class ArtBoardSizeProperty extends BaseProperty {
     }
   }
 
+  getClassName() {
+    return 'item'
+  }
+
   initState() {
     return {
       sizeList: [
@@ -33,16 +37,7 @@ export default class ArtBoardSizeProperty extends BaseProperty {
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
 
-    var current = editor.selection.current;
-    if (current) {
-      if (current.is('artboard')) {
-        this.show();   
-      } else {
-        this.hide();
-      }
-    } else {
-      this.hide();
-    }
+    this.refreshShow('artboard')
 
   }
 

@@ -1,5 +1,5 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, DEBOUNCE } from "../../../../../util/Event";
+import { DEBOUNCE } from "../../../../../util/Event";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
 
@@ -21,26 +21,25 @@ export default class SizeProperty extends BaseProperty {
   }
 
   [EVENT('refreshSelection', 'refreshRect') + DEBOUNCE(100)]() {
-    this.refresh();
+    this.refreshShowIsNot('project');
+  }
+
+  refresh() {
+    var current = editor.selection.current;
+    if (current) {
+      this.children.$width.setValue(current.width);
+      this.children.$height.setValue(current.height);
+    }
   }
 
   getBody() {
     return `
-      <div class="property-item size-item" ref="$sizeItem"></div>
-    `;
-  }
-
-  [LOAD("$sizeItem")]() {
-    var current = editor.selection.current;
-    if (!current) return '';
-
-    return `
       <div class='property-item'>
-        <RangeEditor ref='$width' label='Width' removable="true" key='width' value='${current.width}' min="0" max='3000' onchange='changRangeEditor' />
+        <RangeEditor ref='$width' label='Width' removable="true" key='width' min="0" max='3000' onchange='changRangeEditor' />
       </div>
       <div class='property-item'>
-        <RangeEditor ref='$height' label='Height' removable="true" key='height' value='${current.height}' min="0" max='3000' onchange='changRangeEditor' />
-      </div>
+        <RangeEditor ref='$height' label='Height' removable="true" key='height' min="0" max='3000' onchange='changRangeEditor' />
+      </div>      
     `;
   }
 

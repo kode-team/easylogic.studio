@@ -2,6 +2,7 @@ import { CLICK } from "../../../../../util/Event";
 import UIElement from "../../../../../util/UIElement";
 
 import propertyEditor from "../property-editor";
+import { editor } from "../../../../../editor/editor";
 
 
 export default class BaseProperty extends UIElement {
@@ -88,6 +89,38 @@ export default class BaseProperty extends UIElement {
   show() {
     this.$el.show();
   }
+
+  refreshShowIsNot (type, isRefresh = true ) {
+
+    var current = editor.selection.current;
+    if (current) {
+      if (current.is(type)) {
+        this.hide();
+      } else {
+        this.show();
+
+        if (isRefresh) this.refresh();
+      }
+    } else {
+      this.hide();
+    }
+  }
+
+  refreshShow (type, isRefresh = true) {
+
+    var current = editor.selection.current;
+    if (current) {
+      if (current.is(type)) {
+        this.show();
+        if (isRefresh) this.refresh();
+      } else {
+        this.hide();
+      }
+    } else {
+      this.hide();
+    } 
+  }
+ 
 
   // components () {
   //     return items

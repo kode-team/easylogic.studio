@@ -1,7 +1,6 @@
 import UIElement from "../../../util/UIElement";
 import property from "./panel/property/index";
 import { CLICK } from "../../../util/Event";
-import icon from "../icon/icon";
 
 export default class Inspector extends UIElement {
   template() {
@@ -13,9 +12,6 @@ export default class Inspector extends UIElement {
               <div class="tab-item" data-value="1">
                 <label>Style</label>
               </div>
-              <div class="tab-item" data-value="3">
-                <label>Text</label>
-              </div>
               <div class="tab-item" data-value="4">
                 <label>Transform</label>
               </div>    
@@ -25,9 +21,27 @@ export default class Inspector extends UIElement {
             </div>
             <div class="tab-body" ref="$body">
               <div class="tab-content" data-value="1">
+                <!-- ArtBoard --> 
                 <ArtBoardSizeProperty />              
+
+                <!-- Image --> 
                 <ImageProperty />
+
+                <!-- SVG Item --> 
                 <SVGItemProperty />
+
+                <!-- Text -->
+                <!-- <ContentProperty /> -->    
+                <FontProperty />
+                <TextProperty />
+                <TextShadowProperty />
+                <TextFillProperty />
+                <FontSpacingProperty />
+                <TextClipProperty />
+
+                <div class='split'></div>
+
+                <!-- Default Property --> 
                 <PositionProperty />
                 <SizeProperty /> 
                 <BoxModelProperty />
@@ -46,15 +60,6 @@ export default class Inspector extends UIElement {
                 <!-- <BackdropFilterProperty /> -->
                 <!-- <OutlineProperty /> -->
                 <!-- <BackgroundClipProperty /> -->                
-              </div>
-              <div class="tab-content" data-value="3">
-                <!-- <ContentProperty /> -->
-                <!-- <FontColorProperty /> -->        
-                <FontProperty />
-                <TextProperty />
-                <TextShadowProperty />
-                <TextFillProperty />
-                <FontSpacingProperty />
               </div>
               <div class='tab-content' data-value="4">
                 <PerspectiveProperty />

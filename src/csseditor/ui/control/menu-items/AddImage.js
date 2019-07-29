@@ -10,7 +10,7 @@ export default class AddImage extends MenuItem {
     return icon.outline_image;
   }
   getTitle() {
-    return "Image";
+    return "4. Image";
   }
 
   isHideTitle() {
@@ -37,6 +37,10 @@ export default class AddImage extends MenuItem {
  }  
 
   clickButton(e) {
+    this.trigger('addImage')
+  }
+
+  [EVENT('addImage')] () {
     this.emit('hideSubEditor');    
     // open image popup
     this.emit('showImageSelectPopup', {

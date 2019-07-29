@@ -94,17 +94,7 @@ export default class BorderProperty extends BaseProperty {
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
 
-    var current = editor.selection.current;
-    if (current) {
-      if (current.is('artboard')) {
-        this.hide();
-      } else {
-        this.show();
-        this.refresh();
-      }
-    } else {
-      this.hide();
-    }
+    this.refreshShowIsNot('artboard')
 
   }  
 

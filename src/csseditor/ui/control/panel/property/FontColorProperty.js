@@ -1,6 +1,6 @@
 import BaseProperty from "./BaseProperty";
 import { editor } from "../../../../../editor/editor";
-import { LOAD } from "../../../../../util/Event";
+import { LOAD, DEBOUNCE } from "../../../../../util/Event";
 import { EVENT } from "../../../../../util/UIElement";
 
 
@@ -30,8 +30,8 @@ export default class FontColorProperty extends BaseProperty {
     this.emit("refreshSelectionStyleView");
   }
 
-  [EVENT('refreshSelection')]() {
-    this.refresh();
+  [EVENT('refreshSelection') + DEBOUNCE(100)]() {
+    this.refreshShow('text')
   }
 
 }

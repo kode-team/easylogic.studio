@@ -41,8 +41,8 @@ export default class BackgroundImageProperty extends BaseProperty {
             />`
   }
 
-  [EVENT('refreshSelection')]() {
-    this.refresh();
+  [EVENT('refreshSelection') + DEBOUNCE(100)]() {
+    this.refreshShowIsNot('project');
   }
 
   [EVENT('changeBackgroundImage') + DEBOUNCE(10)] (value) {

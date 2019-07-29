@@ -43,8 +43,10 @@ import ColorAssetsProperty from "./ColorAssetsProperty";
 import TextFillProperty from "./TextFilllProperty";
 import GradientAssetsProperty from "./GradientAssetsProperty";
 import SVGItemProperty from "./SVGItemProperty";
+import TextClipProperty from "./TextClipProperty";
  
 export default {
+  TextClipProperty,
   SVGItemProperty,
   GradientAssetsProperty,
   TextFillProperty,

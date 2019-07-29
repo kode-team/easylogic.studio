@@ -65,6 +65,7 @@ export class DomItem extends GroupItem {
       'border-radius': '',      
       'box-shadow': '',
       'text-shadow': '',
+      'text-clip': '',      
       'clip-path': '',
       'color': "",
       'font-size': Length.px(13),
@@ -117,6 +118,7 @@ export class DomItem extends GroupItem {
       'backdrop-filter': json['backdrop-filter'],
       'background-color': json['background-color'],      
       'background-image': json['background-image'],      
+      'text-clip': json['text-clip'],
       'border-radius': json['border-radius'],      
       'box-shadow': json['box-shadow'],
       'text-shadow': json['text-shadow'],
@@ -573,12 +575,28 @@ export class DomItem extends GroupItem {
     return results;
   }
 
+
+  // convert to only webket css property 
+  toTextClipCSS() {
+
+    var results = {} 
+
+    if (this.json['text-clip'] === 'text') {
+      results['-webkit-background-clip'] = 'text'
+      results['-webkit-text-fill-color'] = 'transparent';   
+      results['color'] = 'transparent';
+    }
+
+    return results;
+  }  
+
   toCSS(isExport = false) {
 
     return {
       ...this.toVariableCSS(),
       ...this.toDefaultCSS(isExport),
-      ...this.toWebkitCSS(),      
+      ...this.toWebkitCSS(),
+      ...this.toTextClipCSS(),      
       ...this.toBoxModelCSS(),
       ...this.toBorderCSS(),
       ...this.toOutlineCSS(),      
@@ -596,6 +614,7 @@ export class DomItem extends GroupItem {
       ...this.toVariableCSS(),      
       ...this.toDefaultCSS(),
       ...this.toWebkitCSS(),
+      ...this.toTextClipCSS(),
       ...this.toBoxModelCSS(),
       ...this.toBorderCSS(),
       ...this.toOutlineCSS(),

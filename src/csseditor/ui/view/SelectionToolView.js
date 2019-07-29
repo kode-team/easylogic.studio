@@ -8,7 +8,7 @@ import { MovableItem } from "../../../editor/items/MovableItem";
 import icon from "../icon/icon";
 import { Transform } from "../../../editor/css-property/Transform";
 import Dom from "../../../util/Dom";
-import { calculateAngle } from "../../../util/functions/math";
+import { calculateAngle, getXYInCircle, getDist } from "../../../util/functions/math";
 
 /**
  * 원보 아이템의 크기를 가지고 scale 이랑 조합해서 world 의 크기를 구하는게 기본 컨셉 
@@ -34,9 +34,13 @@ export default class SelectionToolView extends UIElement {
                 </div>            
                 <div class='z' ref='$rotateZ'>
                     <div class='handle-top'></div>
+                    <div class='handle-right'></div>
+                    <div class='handle-left'></div>
+                    <div class='handle-bottom'></div>
                     <div class='point'></div>                    
                 </div>                        
-            </div>                        
+            </div>           
+
             <div class='selection-tool-item' data-position='to top'></div>
             <div class='selection-tool-item' data-position='to right'></div>
             <div class='selection-tool-item' data-position='to bottom'></div>
@@ -335,11 +339,13 @@ export default class SelectionToolView extends UIElement {
 
                 var x = this.rotateZStart.x - this.rotateZCenter.x
                 var y = this.rotateZStart.y - this.rotateZCenter.y
+                var startPoint = { x, y}
 
                 var angle1 = calculateAngle(x, y); 
 
                 var x = this.rotateZStart.x + dx - this.rotateZCenter.x
                 var y = this.rotateZStart.y + dy - this.rotateZCenter.y
+                var endPoint = {x, y}
 
                 var angle = calculateAngle(x, y);
 
@@ -371,7 +377,7 @@ export default class SelectionToolView extends UIElement {
     
                     item.transform = Transform.join(item.transformObj);
                 })
-                this.bindData('$rotateZ')
+                this.bindData('$rotateZ')             
                 // this.emit('refreshSelectionStyleView'); 
 
             } else {
@@ -390,8 +396,8 @@ export default class SelectionToolView extends UIElement {
                             tempOriginY.set(cachedItem.transformOriginYtoPx.value);
                         }                         
         
-                        tempOriginX.add(dx);
-                        tempOriginY.add(dy);
+                        tempOriginX.add(dx/editor.scale);
+                        tempOriginY.add(dy / editor.scale);
 
                         var x = tempOriginX.to(cachedItem.transformOriginX.unit, cachedItem.screenWidth);
                         var y = tempOriginY.to(cachedItem.transformOriginY.unit, cachedItem.screenHeight);
@@ -402,8 +408,8 @@ export default class SelectionToolView extends UIElement {
 
                 } else {
 
-                    var rx = Length.deg(-dy)
-                    var ry = Length.deg(dx)
+                    var rx = Length.deg(-dy / editor.scale)
+                    var ry = Length.deg(dx / editor.scale)
         
                     editor.selection.each((item, cachedItem) => {
                         var tempRotateX = Length.deg(0)
@@ -424,7 +430,7 @@ export default class SelectionToolView extends UIElement {
         
                         item.transform = Transform.join(item.transformObj);
                     })
-                    this.bindData('$rotateArea')
+                    this.bindData('$rotateArea')                 
                 }
 
                 // this.emit('refreshSelectionStyleView');
@@ -451,6 +457,7 @@ export default class SelectionToolView extends UIElement {
 
 
     }
+
 
     [EVENT('updateRealTransform')] () {
         this.parent.updateRealTransform()

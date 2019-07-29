@@ -2562,6 +2562,33 @@ html, body {
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
 }
+.csseditor .selection-tool .selection-tool-item[data-position=transform-origin-path] {
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  cursor: move;
+  -webkit-transform: none;
+          transform: none;
+  border-radius: 0px;
+  background-color: transparent;
+  border: 0px;
+}
+.csseditor .selection-tool .selection-tool-item[data-position=transform-origin-path]:before {
+  display: none;
+}
+.csseditor .selection-tool .selection-tool-item[data-position=transform-origin-path] svg {
+  width: 100%;
+  height: 100%;
+  left: 0px;
+  top: 0px;
+  position: absolute;
+  display: block;
+  overflow: visible;
+}
+.csseditor .selection-tool .selection-tool-item[data-position=transform-origin-path] svg line {
+  stroke: red;
+}
 .csseditor .selection-tool .selection-tool-item[data-position=rotate3d] {
   left: 50%;
   top: 50%;
@@ -2653,6 +2680,45 @@ html, body {
   box-shadow: inset 0px -1px 9px 0 rgba(255, 255, 255, 0.5);
   -webkit-animation: bounce-up-down 0.75s infinite ease-in-out;
           animation: bounce-up-down 0.75s infinite ease-in-out;
+}
+.csseditor .selection-tool .selection-tool-item[data-position=rotate3d] .z .handle-left {
+  display: inline-block;
+  height: 3px;
+  width: 5px;
+  left: -5px;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  background-color: blue;
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+}
+.csseditor .selection-tool .selection-tool-item[data-position=rotate3d] .z .handle-right {
+  display: inline-block;
+  height: 3px;
+  width: 5px;
+  right: -5px;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  background-color: blue;
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+}
+.csseditor .selection-tool .selection-tool-item[data-position=rotate3d] .z .handle-bottom {
+  display: inline-block;
+  height: 5px;
+  width: 3px;
+  left: 50%;
+  bottom: -5px;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  background-color: blue;
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
 }
 .csseditor .selection-tool .selection-tool-item[data-position=path] {
   left: 0px;
@@ -2802,6 +2868,13 @@ html, body {
   flex: 1 1 auto;
   overflow: auto;
 }
+.csseditor .property.item > .property-title {
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, #3e8ec6 10%, rgba(62, 142, 198, 0) 40%);
+  color: white;
+}
+.csseditor .property.item > .property-title svg path {
+  fill: white;
+}
 .csseditor .property.show > .property-body {
   display: block;
   padding: 0px 6px;
@@ -2861,6 +2934,7 @@ html, body {
   text-shadow: 2px 2px 1px black;
 }
 .csseditor .property > .property-footer {
+  padding: 0px 6px;
   font-size: 12px;
 }
 .csseditor .property > .property-footer > div {
@@ -3501,8 +3575,7 @@ html, body {
   content: attr(title);
   position: absolute;
   display: inline-block;
-  background-image: linear-gradient(to right, #3e8ec6 0%, rgba(62, 142, 198, 0) 60%);
-  border-left: 2px solid #609de2;
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, #3e8ec6 10%, rgba(62, 142, 198, 0) 60%);
   color: white;
   left: 0px;
   top: 0px;
@@ -3605,8 +3678,7 @@ html, body {
   padding: 4px 6px;
   font-weight: bold;
   border-radius: 5px;
-  background-image: linear-gradient(to right, #3e8ec6 0%, rgba(62, 142, 198, 0) 60%);
-  border-left: 2px solid #609de2;
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, #3e8ec6 10%, rgba(62, 142, 198, 0) 60%);
   color: white;
 }
 .csseditor .selector-list .selector-item .title .name span svg path {
@@ -3635,8 +3707,7 @@ html, body {
   text-align: right;
 }
 .csseditor .project-list .project-item.selected {
-  background-image: linear-gradient(to right, #3e8ec6 0%, rgba(62, 142, 198, 0) 60%);
-  border-left: 2px solid #609de2;
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, #3e8ec6 10%, rgba(62, 142, 198, 0) 60%);
   color: white;
 }
 .csseditor .project-list .project-item.selected svg path {
@@ -3672,8 +3743,7 @@ html, body {
   text-align: right;
 }
 .csseditor .artboard-list .artboard-item.selected {
-  background-image: linear-gradient(to right, #3e8ec6 0%, rgba(62, 142, 198, 0) 60%);
-  border-left: 2px solid #609de2;
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, #3e8ec6 10%, rgba(62, 142, 198, 0) 60%);
   color: white;
 }
 .csseditor .artboard-list .artboard-item.selected svg path {
@@ -3733,8 +3803,7 @@ html, body {
   fill: #333;
 }
 .csseditor .layer-list .layer-item.selected {
-  background-image: linear-gradient(to right, #3e8ec6 0%, rgba(62, 142, 198, 0) 60%);
-  border-left: 2px solid #609de2;
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, #3e8ec6 10%, rgba(62, 142, 198, 0) 60%);
   color: white;
 }
 .csseditor .layer-list .layer-item.selected svg path {
@@ -4177,9 +4246,21 @@ html, body {
   margin-bottom: 5px;
   text-align: center;
 }
+.csseditor .color-view-editor.is-removable {
+  grid-template-columns: 24px 1fr 20px;
+}
+.csseditor .color-view-editor.is-removable .remove {
+  display: inline-block;
+}
 .csseditor .color-view-editor.has-label {
   grid-template-columns: 60px 24px 1fr;
   grid-column-gap: 2px;
+}
+.csseditor .color-view-editor.has-label.is-removable {
+  grid-template-columns: 60px 24px 1fr 20px;
+}
+.csseditor .color-view-editor.has-label.is-removable .remove {
+  display: inline-block;
 }
 .csseditor .color-view-editor.has-label label {
   text-align: left;
@@ -4232,6 +4313,9 @@ html, body {
   border-radius: 3px;
   color: #ececec;
   outline: none;
+}
+.csseditor .color-view-editor .remove {
+  display: none;
 }
 .csseditor .range-editor {
   display: grid;
@@ -4469,10 +4553,14 @@ html, body {
 }
 .csseditor .css-property-editor .css-property-item > .title {
   grid-template-columns: 1fr 30px;
-  background-image: linear-gradient(to right, #d1d1ff, rgba(255, 255, 255, 0.282));
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, #3e8ec6 10%, rgba(62, 142, 198, 0) 40%);
+  color: white;
   border-radius: 3px;
   padding: 3px 5px;
   margin-bottom: 2px;
+}
+.csseditor .css-property-editor .css-property-item > .title svg path {
+  fill: white;
 }
 .csseditor .css-property-editor .css-property-item .value-editor {
   padding: 2px;
@@ -4682,8 +4770,7 @@ html, body {
 .csseditor .transform-editor .transform-list .transform-item .title {
   display: grid;
   grid-template-columns: 1fr 30px;
-  background-image: linear-gradient(to right, #3e8ec6 0%, rgba(62, 142, 198, 0) 60%);
-  border-left: 2px solid #609de2;
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, #3e8ec6 10%, rgba(62, 142, 198, 0) 60%);
   color: white;
   border-radius: 3px;
   margin: 5px 0px;
@@ -4861,7 +4948,7 @@ html, body {
 }
 .csseditor .text-shadow-editor .label {
   height: 20px;
-  margin-top: 2px;
+  margin: 5px 0px;
 }
 .csseditor .text-shadow-editor .label.hide {
   display: none;
@@ -5573,6 +5660,7 @@ html, body {
   word-break: break-all;
   overflow: hidden;
   font-size: 16px;
+  font-family: "Times New Roman", Times, serif;
 }
 .csseditor .select-icon-editor .items > .select-icon-item:first-child {
   border-top-left-radius: 3px;

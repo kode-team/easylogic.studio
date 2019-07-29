@@ -3,7 +3,8 @@ import icon from "../../../icon/icon";
 import {
   LOAD,
   CLICK,
-  PREVENT
+  PREVENT,
+  DEBOUNCE
 } from "../../../../../util/Event";
 
 import { editor } from "../../../../../editor/editor";
@@ -65,8 +66,8 @@ export default class ClipPathProperty extends BaseProperty {
     this.emit('hideClipPathPopup');    
   }
 
-  [EVENT('refreshSelection')] () {
-    this.refresh();
+  [EVENT('refreshSelection') + DEBOUNCE(100)] () {
+    this.refreshShowIsNot('project');
   }
 
 

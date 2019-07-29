@@ -131,71 +131,178 @@ export default class PathGenerator {
             point.curve = false; 
             point.reversePoint = clone(point.startPoint);
             point.endPoint = clone(point.startPoint);
+
+            if (point.command === 'M') {
+                var lastPoint = Point.getPrevPoint(points, point.index)
+
+                if (lastPoint.connected) {
+                    lastPoint.curve = false; 
+                    lastPoint.reversePoint = clone(lastPoint.startPoint);
+                    lastPoint.endPoint = clone(lastPoint.startPoint);
+                }
+            } else {
+
+                var nextPoint = Point.getNextPoint(points, index);
+
+                if (nextPoint.command === 'M') {
+                    // 다음이 처음일 때 
+                    var firstPoint = nextPoint;
+    
+                    firstPoint.curve = false; 
+                    firstPoint.reversePoint = clone(firstPoint.startPoint);
+                    firstPoint.endPoint = clone(firstPoint.startPoint);                
+                }
+            }
+
+
+
         } else {
             point.curve = true; 
-            
+
             var prevPoint = Point.getPrevPoint(points, index);
             var nextPoint = Point.getNextPoint(points, index);
 
-            var centerX = (nextPoint.startPoint.x + prevPoint.startPoint.x) /2;
-            var centerY = (nextPoint.startPoint.y + prevPoint.startPoint.y) /2;
+            if (nextPoint.command === 'M') {
+                // 마지막 지점의 다음이 처음과 같을 때 
+                // 처음의 다음 포인트를 가지고 와서 다시 계산한다. 
 
-            var dx = (nextPoint.startPoint.x - centerX)/2
-            var dy = (nextPoint.startPoint.y - centerY)/2
+                var firstPoint = nextPoint;
 
-            point.endPoint = {
-                x: point.startPoint.x + dx,
-                y: point.startPoint.y + dy
+                nextPoint = Point.getNextPoint(points, firstPoint.index);
+
+                var centerX = (nextPoint.startPoint.x + prevPoint.startPoint.x) /2;
+                var centerY = (nextPoint.startPoint.y + prevPoint.startPoint.y) /2;
+    
+                var dx = (nextPoint.startPoint.x - centerX)/2
+                var dy = (nextPoint.startPoint.y - centerY)/2
+    
+                // 방향을 맞췄다. 
+                // 마지막 point 가 처음과 같이 연결되어 있을 때는 
+                // reverse, end 를 모두 동일하게 가진다. 
+                point.endPoint = {
+                    x: point.startPoint.x + dx,
+                    y: point.startPoint.y + dy
+                }
+    
+                point.reversePoint = {
+                    x: point.startPoint.x - dx,
+                    y: point.startPoint.y - dy
+                }
+
+                // 처음도 같이 변경해주기 
+                firstPoint.curve = true; 
+                firstPoint.endPoint = {
+                    x: firstPoint.startPoint.x + dx,
+                    y: firstPoint.startPoint.y + dy
+                }
+
+                firstPoint.reversePoint = {
+                    x: firstPoint.startPoint.x - dx,
+                    y: firstPoint.startPoint.y - dy
+                }                
+
+            } else {
+
+                var centerX = (nextPoint.startPoint.x + prevPoint.startPoint.x) /2;
+                var centerY = (nextPoint.startPoint.y + prevPoint.startPoint.y) /2;
+    
+                var dx = (nextPoint.startPoint.x - centerX)/2
+                var dy = (nextPoint.startPoint.y - centerY)/2
+    
+                point.endPoint = {
+                    x: point.startPoint.x + dx,
+                    y: point.startPoint.y + dy
+                }
+    
+                point.reversePoint = {
+                    x: point.startPoint.x - dx,
+                    y: point.startPoint.y - dy
+                }
             }
 
-            point.reversePoint = {
-                x: point.startPoint.x - dx,
-                y: point.startPoint.y - dy
-            }
         }
     }
 
-    moveCurveSegment(segmentKey, dx, dy) {
+    moveCurveSegment(segmentKey, dx, dy, connectedPoint) {
         var state = this.state; 
         if (segmentKey === 'endPoint') {
-            this.moveSegment('endPoint', dx, dy);
 
-            var reversePoint = Point.getReversePoint(state.segment.startPoint, state.segment.endPoint);
+            if (connectedPoint) {
+                this.moveSegment('endPoint', dx, dy, connectedPoint);
 
-            var targetPoint = state.segment.reversePoint
-            targetPoint.x = reversePoint.x; 
-            targetPoint.y = reversePoint.y; 
+                var reversePoint = Point.getReversePoint(connectedPoint.startPoint, connectedPoint.endPoint);
+    
+                var targetPoint = connectedPoint.reversePoint
+                targetPoint.x = reversePoint.x; 
+                targetPoint.y = reversePoint.y;                 
+            } else {
+                this.moveSegment('endPoint', dx, dy);
+
+                var reversePoint = Point.getReversePoint(state.segment.startPoint, state.segment.endPoint);
+    
+                var targetPoint = state.segment.reversePoint
+                targetPoint.x = reversePoint.x; 
+                targetPoint.y = reversePoint.y; 
+            }
+
         } else  if (segmentKey === 'reversePoint') {
-            this.moveSegment('reversePoint', dx, dy);
 
-            var endPoint = Point.getReversePoint(state.segment.startPoint, state.segment.reversePoint);
+            if (connectedPoint) {
+                this.moveSegment('reversePoint', dx, dy, connectedPoint);
 
-            var targetPoint = state.segment.endPoint
-            targetPoint.x = endPoint.x; 
-            targetPoint.y = endPoint.y; 
+                var endPoint = Point.getReversePoint(connectedPoint.startPoint, connectedPoint.reversePoint);
+    
+                var targetPoint = connectedPoint.endPoint
+                targetPoint.x = endPoint.x; 
+                targetPoint.y = endPoint.y; 
+            } else {
+                this.moveSegment('reversePoint', dx, dy);
+
+                var endPoint = Point.getReversePoint(state.segment.startPoint, state.segment.reversePoint);
+    
+                var targetPoint = state.segment.endPoint
+                targetPoint.x = endPoint.x; 
+                targetPoint.y = endPoint.y; 
+            }
+
         }
     }
 
-    rotateSegmentTarget (segmentKey, target) {
+    rotateSegmentTarget (segmentKey, target, connectedPoint) {
         var state = this.state; 
 
-        // console.log(state.original, state.segment, state.originalSegment)
-        if (state.originalSegment && state.segment) {
-            var {x: cx, y: cy} = state.originalSegment.startPoint;
-            var {x: rx, y: ry} = state.segment[segmentKey];
-            var {x: tx, y: ty} = state.originalSegment[target];
+        if (connectedPoint) {
+            var {x: cx, y: cy} = state.originalConnectedPoint.startPoint;
+            var {x: rx, y: ry} = connectedPoint[segmentKey];
+            var {x: tx, y: ty} = state.originalConnectedPoint[target];
     
             var radius = getDist(tx, ty, cx, cy)
             var angle = (calculateAngle(rx - cx, ry - cy) + 180) % 360
             // reversePoint 체크 
             var {x, y} = getXYInCircle(angle, radius, cx, cy); 
     
-            state.segment[target] = {x, y}
+            connectedPoint[target] = {x, y}
+        } else {
+
+            // console.log(state.original, state.segment, state.originalSegment)
+            if (state.originalSegment && state.segment) {
+                var {x: cx, y: cy} = state.originalSegment.startPoint;
+                var {x: rx, y: ry} = state.segment[segmentKey];
+                var {x: tx, y: ty} = state.originalSegment[target];
+        
+                var radius = getDist(tx, ty, cx, cy)
+                var angle = (calculateAngle(rx - cx, ry - cy) + 180) % 360
+                // reversePoint 체크 
+                var {x, y} = getXYInCircle(angle, radius, cx, cy); 
+        
+                state.segment[target] = {x, y}
+            }
         }
+
     }
 
-    rotateSegment (segmentKey) {
-        this.rotateSegmentTarget(segmentKey, segmentKey === 'endPoint' ? 'reversePoint' : 'endPoint');
+    rotateSegment (segmentKey, connectedPoint) {
+        this.rotateSegmentTarget(segmentKey, segmentKey === 'endPoint' ? 'reversePoint' : 'endPoint', connectedPoint);
     }
 
     calculateSnapPoint (sourceKey, target, distanceValue, dist) {
@@ -302,6 +409,17 @@ export default class PathGenerator {
             } else {    // Curve 만 움직이기 
                 this.moveSegment(segmentKey, dx, dy);
                 this.rotateSegment(segmentKey);
+            }
+
+            if (connectedPoint) {
+                if (e.shiftKey) {   // 상대편 길이 동일하게 curve 움직이기 
+                    this.moveCurveSegment (segmentKey, dx, dy, connectedPoint) 
+                } else if (e.altKey) {  // 상대편 길이 유지하면서 curve 움직이기 
+                    this.moveSegment(segmentKey, dx, dy, connectedPoint);
+                } else {    // Curve 만 움직이기 
+                    this.moveSegment(segmentKey, dx, dy, connectedPoint);
+                    this.rotateSegment(segmentKey, connectedPoint);
+                }   
             }
 
         } else {
@@ -435,21 +553,7 @@ export default class PathGenerator {
             if (current.command === 'M') {
                 d.push({command: 'M', values: [
                     current.startPoint
-                ]});
-            } else if (current.connected) {
-
-                var prevPoint = Point.getPrevPoint(points, index);
-
-                if (prevPoint.curve) {
-                    d.push({command: 'Q', values: [
-                        prevPoint.endPoint, 
-                        current.startPoint
-                    ]});
-                } else {
-                    d.push({command: 'L', values: [
-                        current.startPoint
-                    ]});
-                }                
+                ]});             
             } else {
                 var prevPoint = Point.getPrevPoint(points, index);                
                 if (current.curve === false) {  // 1번이 점이면 
@@ -474,8 +578,9 @@ export default class PathGenerator {
                         ]});                        
                     } else {
                         if (current.connected) {
-                            d.push({command: 'Q', values: [
+                            d.push({command: 'C', values: [
                                 prevPoint.endPoint, 
+                                current.reversePoint, 
                                 current.startPoint
                             ]});
                         } else {
@@ -584,7 +689,7 @@ export default class PathGenerator {
                     }
     
 
-                } else {
+                } else {    // 현재가 curve 일 때 
 
                     // 이전은 점이고 현재가 드래그 일 때 
                     if (prevPoint.curve === false) { 
@@ -610,19 +715,20 @@ export default class PathGenerator {
 
                             // 이전도 drag 일 때 
                             this.pathStringManager
-                                .Q( prevPoint.endPoint, current.startPoint);
+                                .C( prevPoint.endPoint, current.reversePoint, current.startPoint);
 
                             this.splitLines.push(
                                 new PathStringManager()
                                     .M(prevPoint.startPoint)
-                                    .Q(prevPoint.endPoint, current.startPoint)
+                                    .C( prevPoint.endPoint, current.reversePoint, current.startPoint)
                                     .toString('split-path')
                             )
 
                             this.segmentManager
                                 .addLine(prevPoint.startPoint, prevPoint.endPoint)
                                 .addLine(current.startPoint, current.reversePoint)
-                                .addCurvePoint(prevPoint.endPoint, prevPoint.index, 'endPoint');
+                                .addCurvePoint(prevPoint.endPoint, prevPoint.index, 'endPoint')
+                                .addCurvePoint(current.reversePoint, currentIndex, 'reversePoint');
                         } else {
                             // 이전도 drag 일 때 
                             this.pathStringManager
@@ -641,7 +747,7 @@ export default class PathGenerator {
                                 .addPoint({isLast}, current.startPoint, currentIndex, 'startPoint')
                                 .addCurvePoint(prevPoint.endPoint, prevPoint.index, 'endPoint')                        
                                 .addCurvePoint(current.reversePoint, currentIndex, 'reversePoint');
-                            
+
                         }
                     }
                 }

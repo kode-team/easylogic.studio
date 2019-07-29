@@ -78,7 +78,13 @@ export default class Point {
             firstIndex = 0; 
         }
 
-        return points[firstIndex]
+        var point = points[firstIndex]
+        
+        if (point) {
+            point.index = firstIndex;
+        }
+
+        return point
     }
 
     static getPrevPoint (points, index) {
@@ -102,14 +108,8 @@ export default class Point {
         var nextIndex = index + 1; 
         var nextPoint = points[nextIndex]
 
-        var lastPoint = Point.getLastPoint(points, index);
-
-        if (lastPoint === nextPoint) {
-            return nextPoint;
-        }
-
-        if (nextPoint) {
-            nextPoint.index = nextIndex
+        if (!nextPoint) {
+            nextPoint = Point.getFirstPoint(points, index);
         }
 
         return nextPoint;

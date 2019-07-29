@@ -4,33 +4,29 @@ import { LOAD, DEBOUNCE } from "../../../../../util/Event";
 import { EVENT } from "../../../../../util/UIElement";
 
 
-const clip_list = [
-  '',
-  "padding-box",
-  "border-box",
-  "content-box",
-  "text"
-];
-
-export default class BackgroundClipProperty extends BaseProperty {
+export default class TextClipProperty extends BaseProperty {
   
   getTitle() {
-    return "Background Clip";
+    return "Text Clip";
   }
 
   isFirstShow() {
     return false; 
   }
 
+  getClassName() {
+    return 'item'
+  }
+
   getTools() {
-    return `<div ref='$backgroundClip' style='padding-top: 3px;'></div>`;
+    return `<div ref='$textClip' style='padding-top: 3px;'></div>`;
   }  
 
-  [LOAD("$backgroundClip")]() {
+  [LOAD("$textClip")]() {
     var current = editor.selection.current || {};
 
-    var clip = current['background-clip'] || ''
-    return `<SelectEditor ref='$1' key='background-clip' icon="true" value="${clip}" options=",paddinb-box,border-box,content-box,text" onchange="changeSelect" />`;
+    var clip = current['text-clip'] || ''
+    return `<SelectEditor ref='$1' key='text-clip' icon="true" value="${clip}" options=",text" onchange="changeSelect" />`;
   }
 
   [EVENT('changeSelect')] (key, value) {
@@ -48,8 +44,6 @@ export default class BackgroundClipProperty extends BaseProperty {
 
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
-
-    this.refreshShowIsNot('artboard')
-
+    this.refreshShow('text')
   }  
 }
