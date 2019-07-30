@@ -1,7 +1,5 @@
 import MenuItem from "./MenuItem";
 import icon from "../../icon/icon";
-import { editor } from "../../../../editor/editor";
-import { EVENT } from "../../../../util/UIElement";
  
 export default class AddPolygon extends MenuItem {
   getIconString() {
@@ -11,19 +9,12 @@ export default class AddPolygon extends MenuItem {
     return "Polygon";
   }
 
-
   isHideTitle() {
     return true; 
   }  
 
   clickButton(e) {
-    this.trigger('addPolygon');
+    this.emit('add.polygon');
   }
 
-  [EVENT('addPolygon')] () {
-    this.emit('hideSubEditor');    
-    editor.selection.empty();
-    this.emit('initSelectionTool');
-    this.emit('showPolygonEditor', 'move' );    
-  }
 }

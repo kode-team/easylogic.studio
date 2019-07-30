@@ -39,7 +39,7 @@
       .title {
         display: grid;
         grid-template-columns: 1fr 30px;
-        @include title-background();
+        @include title-background-2($selected-color, $selected-font-color);
 
         border-radius: 3px;
         margin: 5px 0px;        

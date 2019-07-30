@@ -8,7 +8,7 @@ $border-radius: 3px;
         grid-template-columns: 60px 1fr;
         grid-column-gap: 2px;
         &.is-removable {
-            grid-template-columns: 20px 1fr 20px;
+            grid-template-columns: 20px 1fr 12px;
         }
 
         label {
@@ -33,7 +33,7 @@ $border-radius: 3px;
         grid-template-columns: 20px 1fr;
 
         &.is-removable {
-            grid-template-columns: 20px 1fr 20px;
+            grid-template-columns: 20px 1fr 12px;
         }
 
         grid-column-gap: 2px;
@@ -54,7 +54,7 @@ $border-radius: 3px;
         grid-column-gap: 2px;
 
         &.is-removable {
-            grid-template-columns: 60px 20px 1fr 20px;
+            grid-template-columns: 60px 20px 1fr 12px;
         }
 
     }
@@ -71,7 +71,7 @@ $border-radius: 3px;
         .area {
             display: grid; 
             grid-template-columns: 1fr 40px 30px;
-            grid-column-gap: 4px;
+            grid-column-gap: 3px;
             font-size: 13px;
             
             span {

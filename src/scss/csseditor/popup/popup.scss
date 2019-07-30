@@ -22,11 +22,10 @@
   .popup-title {
     font-size: 12px;
     font-weight: bold;
-    cursor: move;
+
     margin-bottom: 10px;
     display: flex;
     pointer-events: all;
-    cursor: pointer;
 
     > * {
       flex: 1 1 auto;
@@ -34,6 +33,10 @@
 
     .tools {
       text-align: right;
+    }
+
+    label {
+      cursor: move; 
     }
   }
 

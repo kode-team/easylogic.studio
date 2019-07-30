@@ -21,8 +21,4 @@
             width: 100%;
         }
     }
-
-    select {
-        @include select-style();
-    }
 }

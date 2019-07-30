@@ -16,9 +16,13 @@ import AddText from "./AddText";
 import ToggleRightItem from "./ToggleRightItem";
 import AddPolygon from "./AddPolygon";
 import AddStar from "./AddStar";
+import ThemeSwitcher from "./ThemeSwitcher";
+
+
 
 
 export default {
+  ThemeSwitcher,
   AddStar,
   AddPolygon,
   ToggleRightItem,

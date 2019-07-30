@@ -12,12 +12,16 @@ export default class Inspector extends UIElement {
               <div class="tab-item" data-value="1">
                 <label>Style</label>
               </div>
-              <div class="tab-item" data-value="4">
-                <label>Transform</label>
-              </div>    
-              <div class="tab-item" data-value="6">
+              <div class="tab-item" data-value="2">
                 <label>Animation</label>
               </div>
+              <div class="tab-item" data-value="3">
+                <label>Code</label>
+              </div>                                     
+              
+              <div class="tab-item" data-value="4">
+                <label>Assets</label>
+              </div>                            
             </div>
             <div class="tab-body" ref="$body">
               <div class="tab-content" data-value="1">
@@ -46,59 +50,48 @@ export default class Inspector extends UIElement {
                 <SizeProperty /> 
                 <BoxModelProperty />
                 <BackgroundColorProperty />
+                <BackgroundImageProperty />                
                 <BorderProperty />
                 <BorderRadiusProperty />
-                <BackgroundImageProperty />
+
+                <!-- effect -->
                 <BoxShadowProperty />
                 <FilterProperty />
                 <ClipPathProperty />       
                 <SVGProperty />
-                <!--BorderImageProperty /-->                
-                <!-- <BackdropFilterProperty /> -->
-                <!-- <OutlineProperty /> -->
-                <!-- <BackgroundClipProperty /> -->                
-              </div>
-              <div class='tab-content' data-value="4">
+
+                <!-- transform --> 
                 <PerspectiveProperty />
                 <PerspectiveOriginProperty />
                 <TransformOriginProperty /> 
-                <TransformProperty />
+                <TransformProperty />                
+
+                <!--BorderImageProperty /-->                
+                <!-- <BackdropFilterProperty /> -->
+                <!-- <OutlineProperty /> -->
+                <!-- <BackgroundClipProperty /> -->  
+                
+                <div class='empty'></div>
               </div>
-              <div class='tab-content' data-value='6'>
+              <div class='tab-content' data-value='2'>
                 <RootVariableProperty />              
                 <VariableProperty />              
                 <SelectorProperty />
                 <TransitionProperty />
                 <KeyframeProperty />                              
                 <AnimationProperty />
+                
+                <div class='empty'></div>                
               </div>                   
-            </div>
-          </div>
-        </div>
-        <div>
-          <div class='tab number-tab extra-tab' data-selected-value='1' ref='$extraTab'>
-            <div class="tab-header" ref="$extraHeader">
-              <div class="tab-item" data-value="1">
-                <label>Code</label>
-              </div>                                     
-              
-              <div class="tab-item" data-value="3">
-                <label>Color</label>
-              </div>                            
-              <div class="tab-item" data-value="4">
-                <label>Gradient</label>
-              </div>                                                                
-            </div>
-            <div class="tab-body" ref="$extraBody">
-              <div class="tab-content" data-value="1">
+              <div class="tab-content" data-value="3">
                 <CodeViewProperty />
               </div>              
-              <div class='tab-content' data-value='3'>
-                <ColorAssetsProperty />
-              </div>
               <div class='tab-content' data-value='4'>
-                <GradientAssetsProperty />
-              </div>              
+                <ColorAssetsProperty />
+                <GradientAssetsProperty />    
+                
+                <div class='empty'></div>                
+              </div>
             </div>
           </div>
         </div>

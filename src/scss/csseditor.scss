@@ -19,9 +19,21 @@ html,body {
     user-select: none;
     position: fixed;
     left:0px;
-    top: 0px;
+    top: 0px; 
 
-    @import './csseditor/component.scss';
-    @import './csseditor/layout.scss';
+    &[data-theme='dark'] {
+        @import './themes/csseditor/dark.scss';
+
+        @import './csseditor/component.scss';
+        @import './csseditor/layout.scss';        
+    }
+
+    &[data-theme='light'] {
+        @import './themes/csseditor/light.scss';
+
+        @import './csseditor/component.scss';
+        @import './csseditor/layout.scss';        
+    }    
+
 }
  

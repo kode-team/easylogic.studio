@@ -1,12 +1,15 @@
 
-input,textarea {
-    @include input-text-style();
+input[type='text'],
+input[type='number'],
+input[type='email'],
+textarea {
+    @include input-text-style($input-background-color, $input-border-color, $input-border-radius, $input-font-color);
 }
-
+ 
 select {
-    @include select-style();
+    @include select-style($select-background-color, $select-border-color, $select-border-radius, $select-font-color);
 }
 
 button {
-    @include button-style();
-}
+    @include button-style($button-front-color);
+}  

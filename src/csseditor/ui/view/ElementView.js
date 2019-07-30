@@ -208,9 +208,16 @@ export default class ElementView extends UIElement {
             editor.selection.selectById(id);    
         }
 
-        this.selectCurrent(...editor.selection.items)
-        this.emit('refreshSelection');
-        editor.selection.setRectCache()
+        console.log(editor.selection.items)
+
+        if (editor.selection.isRelative) {
+            console.log('relative')
+        } else {    
+            this.selectCurrent(...editor.selection.items)
+            this.emit('refreshSelection');
+            editor.selection.setRectCache()
+        }
+
     }
 
     calculateMovedElement (dx, dy) {

@@ -7,7 +7,7 @@
     text-align: center;
 
     &.is-removable {
-        grid-template-columns: 24px 1fr 20px;
+        grid-template-columns: 24px 1fr 12px;
 
         .remove {
             display: inline-block;
@@ -19,7 +19,7 @@
         grid-column-gap: 2px;
 
         &.is-removable {
-            grid-template-columns: 60px 24px 1fr 20px;
+            grid-template-columns: 60px 24px 1fr 12px;
 
             .remove {
                 display: inline-block;
@@ -73,7 +73,6 @@
             width: 100%;
             height: 100%;
             padding: 0px 3px;
-            @include input-text-style();
         }
     }
 

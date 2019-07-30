@@ -69,7 +69,7 @@
         }
 
         &.selected {
-            @include title-background();                  
+            @include title-background-2($selected-color, $selected-font-color);        
         }
 
     }

@@ -24,6 +24,7 @@ export const editor = new class {
     this.symbols = {}
     this.images = {}
     this.openRightPanel = true; 
+    this.theme = 'light'
   }
 
   // 팝업의 zindex 를 계속 높여 주어 

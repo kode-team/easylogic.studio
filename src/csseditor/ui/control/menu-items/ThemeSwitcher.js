@@ -1,20 +1,20 @@
 import MenuItem from "./MenuItem";
 import icon from "../../icon/icon";
  
-export default class AddText extends MenuItem {
+export default class ThemeSwitcher extends MenuItem {
   getIconString() {
-    return icon.title;
+    return icon.color_lens;
   }
-  getTitle() { 
-    return "3. Text";
+  getTitle() {
+    return "Theme";
   }
+
 
   isHideTitle() {
     return true; 
-  }
+  }  
 
   clickButton(e) {
-    this.emit('add.text')
+    this.emit('switch.theme')
   }
-
 }

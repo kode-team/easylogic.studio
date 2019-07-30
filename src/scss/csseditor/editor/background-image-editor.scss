@@ -25,6 +25,11 @@
         display: grid;
         grid-template-columns: 1fr;
         font-size: 12px;
+
+        &:not(:empty) {
+          padding-bottom: 10px;
+        }
+
       
         .fill-item {
           // margin-top: 5px;
@@ -33,7 +38,22 @@
           grid-column-gap: 5px;
           text-align: center;
           box-sizing: border-box;
-          padding: 10px 0px 10px 2px;
+          padding: 4px;
+          background-color: $list-background-color; 
+          border: 1px solid $list-border-color;
+          border-top: 0px;
+
+          &:first-child {
+            border-top: 1px solid $list-border-color;
+            border-top-left-radius: 3px;
+            border-top-right-radius: 3px;
+          }
+
+          &:last-child {
+            border-bottom-left-radius: 3px;
+            border-bottom-right-radius: 3px;
+          }
+
           &.selected {
             background-color: rgba($border-color, 0.5);
           }

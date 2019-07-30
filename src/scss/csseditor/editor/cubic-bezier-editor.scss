@@ -10,6 +10,7 @@
         top:30px;
         left:60px;
         border:1px solid $border-color;
+        background-color: $bezier-background-color;
 
         .bezier-canvas {
             position: absolute;
@@ -77,10 +78,10 @@
         .item {
             position: relative;
             width: 40px;
-            height: 40px;
+            height: 40px; 
             border:1px solid gray;
             cursor:pointer;
-            // background-color: white;             
+            background-color: $bezier-sample-background-color;             
             
             &:not(:first-child) {
                 border-top: 0px;

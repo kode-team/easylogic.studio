@@ -9,6 +9,6 @@ export default class Github extends MenuItem {
   }
 
   clickButton(e) {
-    window.open("https://github.com/easylogic/gradient", "github-window");
+    window.open("https://github.com/easylogic/editor", "github-window");
   }
 }

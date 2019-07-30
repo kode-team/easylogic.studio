@@ -14,7 +14,7 @@
                 content: attr(title);
                 position: absolute;
                 display: inline-block;
-                @include title-background();
+                @include title-background-2($selected-color, $selected-font-color);
                 left:0px;
                 top:0px;
                 border-top-left-radius: 5px;

@@ -14,9 +14,7 @@ export const EVENT = (...args) => {
   return MULTI_PREFIX + PIPE(...args);
 };
 
-export const COMMAND = (...args) => {
-  return COMMAND_PREFIX + PIPE(...args);
-}
+export const COMMAND = EVENT
 
 class UIElement extends EventMachine {
   constructor(opt, props = {}) {

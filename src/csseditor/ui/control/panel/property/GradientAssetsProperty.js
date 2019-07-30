@@ -34,10 +34,6 @@ export default class GradientAssetsProperty extends BaseProperty {
     `;
   }
 
-  isHideHeader() {
-    return true; 
-  }
-
   [CLICK('$tool button')] (e) {
     var mode = e.$delegateTarget.attr('data-value')
 

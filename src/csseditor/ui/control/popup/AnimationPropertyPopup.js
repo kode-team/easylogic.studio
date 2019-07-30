@@ -12,7 +12,7 @@ import BasePopup from "./BasePopup";
 export default class AnimationPropertyPopup extends BasePopup {
 
   getTitle() {
-    return 'Animation Property'
+    return 'Animation'
   }
 
   components() {

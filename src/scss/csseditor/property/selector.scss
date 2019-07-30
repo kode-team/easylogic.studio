@@ -26,7 +26,7 @@
               padding: 4px 6px;
               font-weight: bold;
               border-radius: 5px;
-              @include title-background();
+              @include title-background-2($selected-color, $selected-font-color);
             }
         }
 

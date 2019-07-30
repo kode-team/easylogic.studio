@@ -4,18 +4,8 @@ import Util from "./util/index";
 import ColorPicker from "./colorpicker/index";
 import CSSEditor from "./csseditor/index";
 
-function startEditor($target) {
-  var editor = new CSSEditor.createCSSEditor({
-    // embed: true
-  });
-  // editor.emit("setParser", function(canvasView) {
-  //   return new CSSEditor.DomParserGenerator(
-  //     canvasView,
-  //     $target /* contenteditable */
-  //   );
-  // });
-
-  // editor.emit("load/start", true);
+function startEditor() {
+  var editor = new CSSEditor.createCSSEditor();
 
   return editor;
 }
@@ -27,6 +17,4 @@ export default {
   startEditor
 };
 
-// if (window.startEditor) {
-window.editor = startEditor(document.getElementById("target"));
-// }
+window.editor = startEditor();

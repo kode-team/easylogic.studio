@@ -40,7 +40,7 @@ export default class BackgroundColorProperty extends BaseProperty {
   getBody() {
     return `
         <div class='property-item'>
-          <ColorViewEditor ref='$color' label="back" onchange="changeColor" />
+          <ColorViewEditor ref='$color' label="color" onchange="changeColor" />
         </div>
 
         <div class='property-item'>
@@ -64,7 +64,7 @@ export default class BackgroundColorProperty extends BaseProperty {
             min="-360"
             max="360"
             step="0.1"
-            units='deg,trun'
+            units='deg,turn'
             removable="true"
             onchange="changeSelect" />
         </div>

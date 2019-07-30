@@ -58,10 +58,11 @@ import dahaze from "./dahaze";
 import star from "./star";
 import polygon from "./polygon";
 import cube from "./cube";
-
+import color_lens from "./color_lens";
 
 
 export default {
+  color_lens,
   cube,
   polygon,
   star,

@@ -3,8 +3,7 @@ import CanvasView from "../ui/view/CanvasView";
 import ToolMenu from "../ui/view/ToolMenu";
 
 import UIElement, { EVENT } from "../../util/UIElement";
-import { RESIZE, DEBOUNCE, DROP, PREVENT, DRAGOVER, KEYUP, IF, CLICK } from "../../util/Event";
-import { RESIZE_WINDOW } from "../types/event";
+import { CLICK } from "../../util/Event";
 import Inspector from "../ui/control/Inspector";
 
 import popup from "../ui/control/popup";
@@ -12,35 +11,22 @@ import StyleView from "../ui/view/StyleView";
 import ObjectList from "../ui/control/ObjectList";
 import LogoView from "../ui/view/LogoView";
 import ExternalToolMenu from "../ui/view/ExternalToolMenu";
-import { editor } from "../../editor/editor";
 import icon from "../ui/icon/icon";
+import CommandView from "../ui/view/CommandView";
+import { editor } from "../../editor/editor";
+import Dom from "../../util/Dom";
 
 // var JSZip = require('jszip')
 
 export default class CSSEditor extends UIElement {
-  afterRender() {
-    this.emit("setTargetElement", this.parent.opt.targetElement);
-  }
-  template() {
-    if (this.props.embed) {
-      return this.templateForEmbed();
-    } else {
-      return this.templateForEditor();
-    }
+  
+  initialize () {
+    super.initialize()
+    Dom.create(document.body).attr('data-theme', editor.theme);
   }
 
-  templateForEmbed() {
-    return `
-      <div class="embed-editor layout-main" ref="$layoutMain">
-        <CanvasView embed="true" />
-        <Inspector />
-        <FillPopup />
-        <BackgroundPropertyPopup />
-        <BoxShadowPropertyPopup />   
-        <TextShadowPropertyPopup />        
-        <StyleView />     
-      </div>
-    `;
+  template() {
+    return this.templateForEditor();
   }
 
   templateForEditor() {
@@ -78,7 +64,8 @@ export default class CSSEditor extends UIElement {
         <SelectorPopup />
         <ImageSelectPopup />
         <GradientPickerPopup />
-        <StyleView />        
+        <StyleView />    
+        <CommandView />    
       </div>
     `;
   }
@@ -87,6 +74,7 @@ export default class CSSEditor extends UIElement {
     return {
       ...popup,
       ObjectList,
+      CommandView,
       Inspector,
       ToolMenu,
       CanvasView,
@@ -94,6 +82,10 @@ export default class CSSEditor extends UIElement {
       LogoView,
       ExternalToolMenu
     };
+  }
+
+  [EVENT('changeTheme')] () {
+    Dom.create(document.body).attr('data-theme', editor.theme);
   }
 
   [CLICK('$toggleRight')] () {

@@ -1,4 +1,4 @@
-import { SUBMIT, PREVENT } from "../../../../util/Event";
+import { SUBMIT } from "../../../../util/Event";
 import UIElement from "../../../../util/UIElement";
 
 import ExportManager from "../../../../editor/ExportManager";

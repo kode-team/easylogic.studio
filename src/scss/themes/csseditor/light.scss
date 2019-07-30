@@ -5,7 +5,7 @@ $gutter: 8px;
 $tool-size: 50px;
 $top-size: 100px;
 $left-size: 260px;
-$left-layer-panel: 70px; 
+$left-layer-panel: 70px;
 $left-page-size: 70px;
 $toggle-left-size: 80px;
 $right-size: 280px;
@@ -20,41 +20,42 @@ $display-grid-color: red;
 
 
 // common 
-$border-color: rgb(26, 26, 26);
+$border-color: rgb(207, 207, 207);
 $selected-border-color: #609de2;
 $selected-color: #3e8ec6;
-$background-color: #3a3a3a; 
-$font-color: #ececec;
+$background-color: white; 
+$font-color: #333;
 $selected-font-color: white;
 
 // base 
 $button-front-color: $font-color;
 
-$select-background-color: #434b50;
-$select-border-color: #0c0c0d;
-$select-border-radius: 3px;
+$select-background-color:  rgb(250, 250, 250); 
+$select-border-color: #dbdbdb;
+$select-border-radius: 2px;
 $select-font-color: $font-color;
 
 $range-thumb-width: 10px;
 $range-thumb-height: 10px;
-$range-track-height: 4px;
-$range-thumb-top: -2px;
+$range-track-height: 2px;
+$range-thumb-top: -4px;
 $range-thumb-color:  rgb(243, 243, 243);
-$range-track-color:  #3174ad;
-$range-thumb-border-color: $range-thumb-color;
+$range-track-color:  #5a8ebb;
+$range-thumb-border-color: $range-track-color;
 
-$input-background-color: #373e42;
-$input-border-color: #0c0c0d;
-$input-border-radius: 3px;
-$input-font-color: #ececec;
+
+$input-background-color: rgb(250, 250, 250);
+$input-border-color: #dbdbdb;
+$input-border-radius: 2px;
+$input-font-color: $font-color;
 
 // property 
-$property-border-color: #202020;
+$property-border-color: $border-color;
 $property-background-color: $background-color; 
 $property-font-color: $font-color;
 
 // list 
-$list-border-color: #676767;
+$list-border-color: lighten($border-color, 0.5);
 $list-background-color: $border-color;
 
 // tab 
@@ -71,5 +72,5 @@ $popup-selected-color: $selected-color;
 $popup-border-color: $border-color;
 
 // cubic-bezier-editor 
-$bezier-background-color: white; 
-$bezier-sample-background-color: white;
+$bezier-background-color: #01538e; 
+$bezier-sample-background-color: black;

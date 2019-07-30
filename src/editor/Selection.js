@@ -78,8 +78,14 @@ export class Selection {
 
   }
 
+  get isRelative () {
+    var item = this.items[0] || { }
+
+    return item.position === 'relative'
+  }
+
   select(...args) {
-    this.items = (args || []).filter(it => !it.lock); 
+    this.items = (args || []).filter(it => !it.lock && it.isAbsolute); 
 
     this.itemKeys = {}
     this.items.forEach(it => {
@@ -102,8 +108,6 @@ export class Selection {
   }
 
   selectById(id) {
-
-
     this.select(... _traverse(this.artboard, id))
   }
 

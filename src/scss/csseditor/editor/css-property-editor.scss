@@ -32,7 +32,7 @@
 
       > .title {
         grid-template-columns: 1fr 30px;
-        @include title-background-2();
+        @include title-background-2($selected-color, $selected-font-color);
         border-radius: 3px;
         padding: 3px 5px; 
         margin-bottom: 2px;
