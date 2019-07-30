@@ -6,7 +6,8 @@ import {
   DRAGSTART,
   DRAGOVER,
   DROP,
-  PREVENT
+  PREVENT,
+  DEBOUNCE
 } from "../../../../../util/Event";
 
 import { editor } from "../../../../../editor/editor";
@@ -75,8 +76,8 @@ export default class KeyFrameProperty extends BaseProperty {
     this.refresh();
   }
 
-  [EVENT('refreshSelection')] () {
-    this.refresh();
+  [EVENT('refreshSelection') + DEBOUNCE(100)] () {
+    this.refreshShowIsNot('project');
   }
 
 

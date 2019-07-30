@@ -6,6 +6,7 @@ import { Length } from "../../../editor/unit/Length";
 import { TextLayer } from "../../../editor/items/layers/TextLayer";
 import { ImageLayer } from "../../../editor/items/layers/ImageLayer";
 import { CubeLayer } from "../../../editor/items/layers/CubeLayer";
+import { SphereLayer } from "../../../editor/items/layers/SphereLayer";
 
 export default class CommandView extends UIElement {
 
@@ -79,6 +80,17 @@ export default class CommandView extends UIElement {
         }))
 
     }
+
+    [COMMAND('add.sphere')] ( ) {
+
+        this.trigger('add.layer', new SphereLayer({
+            width: Length.px(100),
+            height: Length.px(100),
+            'line-count': 10,
+            'background-color': Color.random()
+        }))
+
+    }    
 
     [COMMAND('add.path')] () {
         this.emit('hideSubEditor');

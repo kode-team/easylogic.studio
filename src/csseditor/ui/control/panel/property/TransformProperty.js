@@ -10,26 +10,27 @@ import icon from "../../../icon/icon";
 
 
 var transformList = [
-  'matrix',
-  'matrix3d',
+
+  'rotate',
+  'rotateX',
+  'rotateY',
+  'rotateZ',
+  'rotate3d',    
+  'skewX',    
+  'skewY',   
   'translate',
   'translateX',  
   'translateY',
   'translateZ',
   'translate3d',
+  'perspective',    
   'scale',
   'scaleX',
   'scaleY',
   'scaleZ',
   'scale3d',
-  'rotate',
-  'rotateX',
-  'rotateY',
-  'rotateZ',
-  'rotate3d',  
-  'skewX',    
-  'skewY',   
-  'perspective'
+  'matrix',
+  'matrix3d',  
 ];
 
 export default class TransformProperty extends BaseProperty {
@@ -79,7 +80,8 @@ export default class TransformProperty extends BaseProperty {
   }
 
   [EVENT('refreshSelection', 'refreshSelectionStyleView', 'refreshStyleView') + DEBOUNCE(100)] () {
-    this.refresh();
+    this.refreshShowIsNot('project');
   }
+
   
 }

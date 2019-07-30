@@ -1,5 +1,5 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, CLICK } from "../../../../../util/Event";
+import { LOAD, CLICK, DEBOUNCE } from "../../../../../util/Event";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
 
@@ -41,8 +41,8 @@ export default class PerspectiveOriginProperty extends BaseProperty {
   }
 
 
-  [EVENT('refreshSelection')]() {
-    this.refresh();
+  [EVENT('refreshSelection') + DEBOUNCE(100)]() {
+    this.refreshShowIsNot('project');
   }
 
   [EVENT('changePerspectiveOrigin')] (value) {

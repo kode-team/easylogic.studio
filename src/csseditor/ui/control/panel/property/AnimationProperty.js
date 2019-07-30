@@ -5,7 +5,8 @@ import {
   DROP,
   DRAGSTART,
   PREVENT,
-  DRAGOVER
+  DRAGOVER,
+  DEBOUNCE
 } from "../../../../../util/Event";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
@@ -99,8 +100,8 @@ export default class AnimationProperty extends BaseProperty {
     })
 }
 
-  [EVENT('refreshSelection')]() {
-    this.refresh();
+  [EVENT('refreshSelection') + DEBOUNCE(100)]() {
+    this.refreshShowIsNot('project');
     this.emit("hideAnimationPropertyPopup");
   }
 

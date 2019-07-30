@@ -231,9 +231,10 @@
         }
       }
       .icon {
-        width: 30px;
-        height: 30px;
+        width: 26px;
+        height: 26px;
         display: inline-block;
+
         &.rect {
           border: 2px solid $font-color;
           border-radius: 1px;
@@ -242,12 +243,6 @@
         &.circle {
           border: 2px solid $font-color;
           border-radius: 100%;
-        }
-
-        svg {
-          path {
-            fill: $font-color;
-          }
         }
       }
     }

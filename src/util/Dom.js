@@ -58,6 +58,10 @@ export default class Dom {
     return parser.parseFromString(html, "text/htmll");
   }
 
+  static body () {
+    return Dom.create(document.body)
+  }
+
   attr(key, value) {
     if (arguments.length == 1) {
       return this.el.getAttribute(key);

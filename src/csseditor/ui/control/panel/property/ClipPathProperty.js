@@ -11,6 +11,16 @@ import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
 
 
+var clipPathList = [
+  'circle',
+  'ellipse',
+  'inset',
+  'polygon',
+  'path',
+  'svg'
+];
+
+
 export default class ClipPathProperty extends BaseProperty {
   getTitle() {
     return "Clip Path";
@@ -26,6 +36,11 @@ export default class ClipPathProperty extends BaseProperty {
 
   getTools() {
     return `
+      <select ref="$clipPathSelect">      
+        ${clipPathList.map(it => {
+          return `<option value='${it}'>${it}</option>`
+        }).join('')}
+      </select>
       <button type="button" ref="$add" title="add Clip Path">${icon.add}</button>
     `;
   }
@@ -90,7 +105,7 @@ export default class ClipPathProperty extends BaseProperty {
     }
 
     if (current) {
-      current['clip-path'] = 'none';
+      current['clip-path'] = this.refs.$clipPathSelect.value;
 
       this.emit("refreshElement", current);
     }

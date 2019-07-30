@@ -24,7 +24,7 @@ $border-color: rgb(207, 207, 207);
 $selected-border-color: #609de2;
 $selected-color: #3e8ec6;
 $background-color: white; 
-$font-color: #333;
+$font-color: rgb(102, 102, 102);
 $selected-font-color: white;
 
 // base 
@@ -55,6 +55,8 @@ $property-background-color: $background-color;
 $property-font-color: $font-color;
 
 // list 
+$list-item-selected-color: #4a89b6; 
+$list-item-selected-font-color: $selected-font-color; 
 $list-border-color: lighten($border-color, 0.5);
 $list-background-color: $border-color;
 

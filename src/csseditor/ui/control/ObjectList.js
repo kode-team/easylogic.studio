@@ -10,10 +10,13 @@ import AddPolygon from "./menu-items/AddPolygon";
 import AddStar from "./menu-items/AddStar";
 import { CLICK } from "../../../util/Event";
 import AddCube from "./menu-items/AddCube";
+import AddSphere from "./menu-items/AddSphere";
+
 
 export default class ObjectList extends UIElement {
   components() {
     return {
+      AddSphere,
       AddCube,
       AddStar,
       AddPolygon,
@@ -37,6 +40,7 @@ export default class ObjectList extends UIElement {
           <AddText />
           <AddImage />
           <AddCube />
+          <AddSphere />
           <div class='split'></div>
           <label>SVG</label>
           <AddPath />

@@ -50,10 +50,10 @@ export default class BorderProperty extends BaseProperty {
           <RangeEditor label='width' ref='$width' min="0" max="100" step="1" key='width' onchange='changeRangeEditor' />
         </div>
         <div class='editor-area'>
-          <SelectEditor label='Style' ref='$style' key='style' options='${borderStyleLit}' onchange="changeRangeEditor" />
+          <SelectEditor label='style' ref='$style' key='style' options='${borderStyleLit}' onchange="changeRangeEditor" />
         </div>
         <div class='editor-area'>
-          <ColorViewEditor ref='$color' label='Color'  onchange="changeBorderColor" />
+          <ColorViewEditor ref='$color' label='color'  onchange="changeBorderColor" />
         </div>
       </div>
     `;

@@ -1,6 +1,6 @@
 import BaseProperty from "./BaseProperty";
 import { editor } from "../../../../../editor/editor";
-import { LOAD, BIND, CLICK, INPUT } from "../../../../../util/Event";
+import { LOAD, BIND, CLICK, INPUT, DEBOUNCE } from "../../../../../util/Event";
 import { EVENT } from "../../../../../util/UIElement";
 import icon from "../../../icon/icon";
 import Color from "../../../../../util/Color";
@@ -20,6 +20,10 @@ export default class ColorAssetsProperty extends BaseProperty {
 
   getClassName() {
     return 'color-assets-property'
+  }
+
+  [EVENT('refreshSelection') + DEBOUNCE(100)] () {
+    this.refreshShowIsNot();
   }
 
   getBody() {

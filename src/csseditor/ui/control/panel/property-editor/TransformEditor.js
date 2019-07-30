@@ -18,8 +18,14 @@ import { Length } from "../../../../../editor/unit/Length";
 
 
 var transformList = [
-  'matrix',
-  'matrix3d',
+  'perspective',  
+  'rotate',
+  'rotateX',
+  'rotateY',
+  'rotateZ',
+  'rotate3d',    
+  'skewX',    
+  'skewY',   
   'translate',
   'translateX',  
   'translateY',
@@ -30,14 +36,8 @@ var transformList = [
   'scaleY',
   'scaleZ',
   'scale3d',
-  'rotate',
-  'rotateX',
-  'rotateY',
-  'rotateZ',
-  'rotate3d',  
-  'skewX',    
-  'skewY',   
-  'perspective'
+  'matrix',
+  'matrix3d',  
 ];
 
 const labels = {

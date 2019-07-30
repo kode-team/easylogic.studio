@@ -17,7 +17,7 @@ export default class RangeEditor extends UIElement {
         var value = Length.parse(this.props.value || Length.px(0));
         return {
             removable: this.props.removable === 'true',
-            calc:  this.props.calc === 'false'  ? false : true,
+            calc:  this.props.calc === 'true'  ? true : false,
             label: this.props.label || '',
             min: +this.props.min || 0,
             max: +this.props.max || 100,
@@ -147,7 +147,7 @@ export default class RangeEditor extends UIElement {
         this.initValue()
 
         this.updateData({ 
-            value: this.state.value.set(value)
+            value: new Length(value, this.children.$unit.getValue())
         });
 
         this.updateCalc()
@@ -161,7 +161,7 @@ export default class RangeEditor extends UIElement {
         this.initValue();
 
         this.updateData({ 
-            value: this.state.value.set(value)
+            value: new Length(value, this.children.$unit.getValue())
         });
 
         this.updateCalc()

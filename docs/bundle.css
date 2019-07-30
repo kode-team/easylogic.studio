@@ -1580,8 +1580,8 @@ html, body {
   display: none;
 }
 .csseditor[data-theme=dark] .feature-control .draw-items .menu-item .icon {
-  width: 30px;
-  height: 30px;
+  width: 26px;
+  height: 26px;
   display: inline-block;
 }
 .csseditor[data-theme=dark] .feature-control .draw-items .menu-item .icon.rect {
@@ -1591,9 +1591,6 @@ html, body {
 .csseditor[data-theme=dark] .feature-control .draw-items .menu-item .icon.circle {
   border: 2px solid #ececec;
   border-radius: 100%;
-}
-.csseditor[data-theme=dark] .feature-control .draw-items .menu-item .icon svg path {
-  fill: #ececec;
 }
 .csseditor[data-theme=dark] input[type=range] {
   -webkit-appearance: none;
@@ -2810,6 +2807,7 @@ html, body {
   border-bottom: 1px solid #202020;
   background-color: #3a3a3a;
   color: #ececec;
+  display: none;
 }
 .csseditor[data-theme=dark] .property.compact {
   padding: 0px;
@@ -3662,7 +3660,7 @@ html, body {
   text-align: right;
 }
 .csseditor[data-theme=dark] .project-list .project-item.selected {
-  background-color: #3e8ec6;
+  background-color: #4a89b6;
   color: white;
 }
 .csseditor[data-theme=dark] .project-list .project-item.selected svg path {
@@ -3698,7 +3696,7 @@ html, body {
   text-align: right;
 }
 .csseditor[data-theme=dark] .artboard-list .artboard-item.selected {
-  background-color: #3e8ec6;
+  background-color: #4a89b6;
   color: white;
 }
 .csseditor[data-theme=dark] .artboard-list .artboard-item.selected svg path {
@@ -3758,7 +3756,7 @@ html, body {
   fill: #333;
 }
 .csseditor[data-theme=dark] .layer-list .layer-item.selected {
-  background-color: #3e8ec6;
+  background-color: #4a89b6;
   color: white;
 }
 .csseditor[data-theme=dark] .layer-list .layer-item.selected svg path {
@@ -4276,12 +4274,12 @@ html, body {
   grid-column-gap: 2px;
 }
 .csseditor[data-theme=dark] .range-editor.has-label.is-removable {
-  grid-template-columns: 20px 1fr 12px;
+  grid-template-columns: 60px 1fr 12px;
 }
 .csseditor[data-theme=dark] .range-editor.has-label label {
   text-align: left;
   vertical-align: middle;
-  padding: 2px 4px;
+  padding: 3px 4px;
   box-sizing: border-box;
   font-size: 11px;
 }
@@ -4301,6 +4299,9 @@ html, body {
 }
 .csseditor[data-theme=dark] .range-editor.has-calc .type-button {
   display: inline-block;
+}
+.csseditor[data-theme=dark] .range-editor.is-removable {
+  grid-template-columns: 1fr 12px;
 }
 .csseditor[data-theme=dark] .range-editor.is-removable .remove {
   display: inline-block;
@@ -4669,14 +4670,12 @@ html, body {
 }
 .csseditor[data-theme=dark] .border-radius-editor .radius-selector[data-selected-value=all] button[data-value=all] {
   background-color: #3e8ec6;
-  background-image: none;
 }
 .csseditor[data-theme=dark] .border-radius-editor .radius-selector[data-selected-value=all] button[data-value=all] svg path {
   fill: white;
 }
 .csseditor[data-theme=dark] .border-radius-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] {
   background-color: #3e8ec6;
-  background-image: none;
 }
 .csseditor[data-theme=dark] .border-radius-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] svg path {
   fill: white;
@@ -4745,6 +4744,7 @@ html, body {
 .csseditor[data-theme=dark] .transform-editor .transform-list .transform-item .transform-ui {
   display: grid;
   grid-template-columns: 1fr;
+  grid-row-gap: 2px;
   margin-bottom: 2px;
   margin-top: 10px;
 }
@@ -5024,16 +5024,22 @@ html, body {
   background-color: #3e8ec6;
 }
 .csseditor[data-theme=dark] .perspective-origin-editor .radius-selector[data-selected-value=all] button[data-value=all] svg path {
-  fill: #ececec;
+  fill: white;
 }
 .csseditor[data-theme=dark] .perspective-origin-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] {
   background-color: #3e8ec6;
 }
 .csseditor[data-theme=dark] .perspective-origin-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] svg path {
-  fill: #ececec;
+  fill: white;
 }
 .csseditor[data-theme=dark] .perspective-origin-editor .radius-selector button {
   background-image: none;
+}
+.csseditor[data-theme=dark] .perspective-origin-editor .radius-setting-box {
+  margin-top: 5px;
+}
+.csseditor[data-theme=dark] .perspective-origin-editor .radius-setting-box > div {
+  margin-bottom: 5px;
 }
 .csseditor[data-theme=dark] .transform-origin-editor .transform-origin-item {
   display: grid;
@@ -5061,6 +5067,12 @@ html, body {
 }
 .csseditor[data-theme=dark] .transform-origin-editor .radius-selector button {
   background-image: none;
+}
+.csseditor[data-theme=dark] .transform-origin-editor .radius-setting-box {
+  margin-top: 5px;
+}
+.csseditor[data-theme=dark] .transform-origin-editor .radius-setting-box > div {
+  margin-bottom: 5px;
 }
 .csseditor[data-theme=dark] .gradient-editor {
   position: relative;
@@ -5555,11 +5567,14 @@ html, body {
 .csseditor[data-theme=dark] .list-view-editor .list-view-item.selected {
   background-color: #3e8ec6;
 }
+.csseditor[data-theme=dark] .list-view-editor .list-view-item.selected svg path, .csseditor[data-theme=dark] .list-view-editor .list-view-item.selected svg circle, .csseditor[data-theme=dark] .list-view-editor .list-view-item.selected svg rect {
+  fill: white;
+}
 .csseditor[data-theme=dark] .list-view-editor .list-view-item svg {
   width: 100%;
 }
 .csseditor[data-theme=dark] .list-view-editor .list-view-item svg path, .csseditor[data-theme=dark] .list-view-editor .list-view-item svg circle, .csseditor[data-theme=dark] .list-view-editor .list-view-item svg rect {
-  fill: white;
+  fill: #ececec;
 }
 .csseditor[data-theme=dark] .image-select-editor {
   height: 150px;
@@ -6138,10 +6153,8 @@ html, body {
   pointer-events: none;
   z-index: 1;
 }
-.csseditor[data-theme=dark] .popup .clippath-popup .box > .clip-path-editor .pointer-input {
-  margin-top: 10px;
-}
 .csseditor[data-theme=dark] .popup .clippath-popup .box > .clip-path-editor .pointer-input .pointer-item {
+  margin-top: 5px;
   display: grid;
   grid-template-columns: 1fr 1fr 0.5fr;
   grid-column-gap: 2px;
@@ -6172,7 +6185,7 @@ html, body {
   height: 100%;
   display: inline-block;
   position: absolute;
-  z-index: 0;
+  z-index: 3;
   pointer-events: none;
 }
 .csseditor[data-theme=dark] .popup .clippath-popup .box > .clip-path-editor .drag-area .drag-pointer {
@@ -6987,6 +7000,7 @@ html, body {
   top: 0px;
   right: 0px;
   bottom: 0px;
+  cursor: crosshair;
 }
 .csseditor[data-theme=dark] .path-editor-view.draw {
   cursor: crosshair;
@@ -7137,7 +7151,7 @@ html, body {
   background-color: #fafafa;
   border: 1px solid #dbdbdb;
   border-radius: 2px;
-  color: #333;
+  color: #666666;
   outline: none;
 }
 .csseditor[data-theme=light] select {
@@ -7151,13 +7165,13 @@ html, body {
   background-color: #fafafa;
   border: 1px solid #dbdbdb;
   border-radius: 2px;
-  color: #333;
+  color: #666666;
   outline: none;
   vertical-align: middle;
 }
 .csseditor[data-theme=light] button {
   border-width: 0px;
-  color: #333;
+  color: #666666;
   width: 16px;
   height: 16px;
   vertical-align: middle;
@@ -7175,7 +7189,7 @@ html, body {
   height: 100%;
 }
 .csseditor[data-theme=light] button svg path {
-  fill: #333;
+  fill: #666666;
 }
 .csseditor[data-theme=light] .layout-main {
   position: absolute;
@@ -7192,7 +7206,7 @@ html, body {
   overflow: hidden;
   position: relative;
   background-color: white;
-  color: #333;
+  color: #666666;
   z-index: 1;
   pointer-events: all;
   box-sizing: border-box;
@@ -7337,7 +7351,7 @@ html, body {
   margin: 10px 5px;
 }
 .csseditor[data-theme=light] .feature-control .draw-items > label {
-  color: #333;
+  color: #666666;
   padding: 5px;
   text-align: center;
   display: block;
@@ -7348,7 +7362,7 @@ html, body {
 .csseditor[data-theme=light] .feature-control .draw-items .menu-item {
   text-align: center;
   margin-top: 5px;
-  color: #333;
+  color: #666666;
   width: 48px;
   height: 48px;
   background-color: transparent;
@@ -7367,20 +7381,17 @@ html, body {
   display: none;
 }
 .csseditor[data-theme=light] .feature-control .draw-items .menu-item .icon {
-  width: 30px;
-  height: 30px;
+  width: 26px;
+  height: 26px;
   display: inline-block;
 }
 .csseditor[data-theme=light] .feature-control .draw-items .menu-item .icon.rect {
-  border: 2px solid #333;
+  border: 2px solid #666666;
   border-radius: 1px;
 }
 .csseditor[data-theme=light] .feature-control .draw-items .menu-item .icon.circle {
-  border: 2px solid #333;
+  border: 2px solid #666666;
   border-radius: 100%;
-}
-.csseditor[data-theme=light] .feature-control .draw-items .menu-item .icon svg path {
-  fill: #333;
 }
 .csseditor[data-theme=light] input[type=range] {
   -webkit-appearance: none;
@@ -7474,7 +7485,7 @@ html, body {
   bottom: 0px;
   top: 0px;
   background-color: white;
-  color: #333;
+  color: #666666;
 }
 .csseditor[data-theme=light] .tab.number-tab .tab-header {
   height: 34px;
@@ -8126,7 +8137,7 @@ html, body {
   padding: 5px 10px;
   border-radius: 3px;
   border: 1px solid #cfcfcf;
-  color: #333;
+  color: #666666;
   background-color: white;
 }
 .csseditor[data-theme=light] .page-tools > label {
@@ -8152,7 +8163,7 @@ html, body {
   outline: none;
   border-radius: 3px;
   border: 1px solid #cfcfcf;
-  color: #333;
+  color: #666666;
   background-color: white;
   padding: 5px 10px;
 }
@@ -8596,7 +8607,8 @@ html, body {
   padding: 0px 0px;
   border-bottom: 1px solid #cfcfcf;
   background-color: white;
-  color: #333;
+  color: #666666;
+  display: none;
 }
 .csseditor[data-theme=light] .property.compact {
   padding: 0px;
@@ -9192,7 +9204,7 @@ html, body {
   background-color: blue;
 }
 .csseditor[data-theme=light] .animation-list .animation-item .labels label.direction small, .csseditor[data-theme=light] .animation-list .animation-item .labels label.fill-mode small, .csseditor[data-theme=light] .animation-list .animation-item .labels label.play-state small {
-  color: #333;
+  color: #666666;
 }
 .csseditor[data-theme=light] .animation-list .animation-item .labels label.play-state {
   background-color: transparent;
@@ -9449,7 +9461,7 @@ html, body {
   text-align: right;
 }
 .csseditor[data-theme=light] .project-list .project-item.selected {
-  background-color: #3e8ec6;
+  background-color: #4a89b6;
   color: white;
 }
 .csseditor[data-theme=light] .project-list .project-item.selected svg path {
@@ -9485,7 +9497,7 @@ html, body {
   text-align: right;
 }
 .csseditor[data-theme=light] .artboard-list .artboard-item.selected {
-  background-color: #3e8ec6;
+  background-color: #4a89b6;
   color: white;
 }
 .csseditor[data-theme=light] .artboard-list .artboard-item.selected svg path {
@@ -9545,7 +9557,7 @@ html, body {
   fill: #333;
 }
 .csseditor[data-theme=light] .layer-list .layer-item.selected {
-  background-color: #3e8ec6;
+  background-color: #4a89b6;
   color: white;
 }
 .csseditor[data-theme=light] .layer-list .layer-item.selected svg path {
@@ -10063,12 +10075,12 @@ html, body {
   grid-column-gap: 2px;
 }
 .csseditor[data-theme=light] .range-editor.has-label.is-removable {
-  grid-template-columns: 20px 1fr 12px;
+  grid-template-columns: 60px 1fr 12px;
 }
 .csseditor[data-theme=light] .range-editor.has-label label {
   text-align: left;
   vertical-align: middle;
-  padding: 2px 4px;
+  padding: 3px 4px;
   box-sizing: border-box;
   font-size: 11px;
 }
@@ -10088,6 +10100,9 @@ html, body {
 }
 .csseditor[data-theme=light] .range-editor.has-calc .type-button {
   display: inline-block;
+}
+.csseditor[data-theme=light] .range-editor.is-removable {
+  grid-template-columns: 1fr 12px;
 }
 .csseditor[data-theme=light] .range-editor.is-removable .remove {
   display: inline-block;
@@ -10456,14 +10471,12 @@ html, body {
 }
 .csseditor[data-theme=light] .border-radius-editor .radius-selector[data-selected-value=all] button[data-value=all] {
   background-color: #3e8ec6;
-  background-image: none;
 }
 .csseditor[data-theme=light] .border-radius-editor .radius-selector[data-selected-value=all] button[data-value=all] svg path {
   fill: white;
 }
 .csseditor[data-theme=light] .border-radius-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] {
   background-color: #3e8ec6;
-  background-image: none;
 }
 .csseditor[data-theme=light] .border-radius-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] svg path {
   fill: white;
@@ -10532,6 +10545,7 @@ html, body {
 .csseditor[data-theme=light] .transform-editor .transform-list .transform-item .transform-ui {
   display: grid;
   grid-template-columns: 1fr;
+  grid-row-gap: 2px;
   margin-bottom: 2px;
   margin-top: 10px;
 }
@@ -10633,7 +10647,7 @@ html, body {
   margin-top: 5px;
 }
 .csseditor[data-theme=light] .box-shadow-editor .shadow-item.desc {
-  color: #333;
+  color: #666666;
 }
 .csseditor[data-theme=light] .box-shadow-editor .shadow-item.desc .color {
   visibility: hidden;
@@ -10709,7 +10723,7 @@ html, body {
   margin-top: 5px;
 }
 .csseditor[data-theme=light] .text-shadow-editor .shadow-item.desc {
-  color: #333;
+  color: #666666;
 }
 .csseditor[data-theme=light] .text-shadow-editor .shadow-item.desc .color {
   visibility: hidden;
@@ -10811,16 +10825,22 @@ html, body {
   background-color: #3e8ec6;
 }
 .csseditor[data-theme=light] .perspective-origin-editor .radius-selector[data-selected-value=all] button[data-value=all] svg path {
-  fill: #333;
+  fill: white;
 }
 .csseditor[data-theme=light] .perspective-origin-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] {
   background-color: #3e8ec6;
 }
 .csseditor[data-theme=light] .perspective-origin-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] svg path {
-  fill: #333;
+  fill: white;
 }
 .csseditor[data-theme=light] .perspective-origin-editor .radius-selector button {
   background-image: none;
+}
+.csseditor[data-theme=light] .perspective-origin-editor .radius-setting-box {
+  margin-top: 5px;
+}
+.csseditor[data-theme=light] .perspective-origin-editor .radius-setting-box > div {
+  margin-bottom: 5px;
 }
 .csseditor[data-theme=light] .transform-origin-editor .transform-origin-item {
   display: grid;
@@ -10848,6 +10868,12 @@ html, body {
 }
 .csseditor[data-theme=light] .transform-origin-editor .radius-selector button {
   background-image: none;
+}
+.csseditor[data-theme=light] .transform-origin-editor .radius-setting-box {
+  margin-top: 5px;
+}
+.csseditor[data-theme=light] .transform-origin-editor .radius-setting-box > div {
+  margin-bottom: 5px;
 }
 .csseditor[data-theme=light] .gradient-editor {
   position: relative;
@@ -11179,7 +11205,7 @@ html, body {
   text-align: right;
 }
 .csseditor[data-theme=light] .svg-filter-editor {
-  color: #333;
+  color: #666666;
 }
 .csseditor[data-theme=light] .svg-filter-editor .label {
   height: 20px;
@@ -11342,11 +11368,14 @@ html, body {
 .csseditor[data-theme=light] .list-view-editor .list-view-item.selected {
   background-color: #3e8ec6;
 }
+.csseditor[data-theme=light] .list-view-editor .list-view-item.selected svg path, .csseditor[data-theme=light] .list-view-editor .list-view-item.selected svg circle, .csseditor[data-theme=light] .list-view-editor .list-view-item.selected svg rect {
+  fill: white;
+}
 .csseditor[data-theme=light] .list-view-editor .list-view-item svg {
   width: 100%;
 }
 .csseditor[data-theme=light] .list-view-editor .list-view-item svg path, .csseditor[data-theme=light] .list-view-editor .list-view-item svg circle, .csseditor[data-theme=light] .list-view-editor .list-view-item svg rect {
-  fill: white;
+  fill: #666666;
 }
 .csseditor[data-theme=light] .image-select-editor {
   height: 150px;
@@ -11478,7 +11507,7 @@ html, body {
   border: 1px solid #cfcfcf;
   box-shadow: 0 0 1px 0px #cfcfcf;
   padding: 14px;
-  color: #333;
+  color: #666666;
 }
 .csseditor[data-theme=light] .popup.compact {
   padding: 0px;
@@ -11649,7 +11678,7 @@ html, body {
   background-color: white;
 }
 .csseditor[data-theme=light] .popup .box-shadow-property-popup .codemirror-colorpicker input {
-  color: #333 !important;
+  color: #666666 !important;
   text-transform: uppercase;
   border: 0px !important;
 }
@@ -11657,7 +11686,7 @@ html, body {
   margin-top: 0px;
 }
 .csseditor[data-theme=light] .popup .box-shadow-property-popup .codemirror-colorpicker .title {
-  color: #333 !important;
+  color: #666666 !important;
 }
 .csseditor[data-theme=light] .popup .box-shadow-property-popup .codemirror-colorpicker .colorsets {
   border-top: 0px solid #cfcfcf !important;
@@ -11772,7 +11801,7 @@ html, body {
   background-color: white;
 }
 .csseditor[data-theme=light] .popup .text-shadow-property-popup .codemirror-colorpicker input {
-  color: #333 !important;
+  color: #666666 !important;
   text-transform: uppercase;
   border: 0px !important;
 }
@@ -11780,7 +11809,7 @@ html, body {
   margin-top: 0px;
 }
 .csseditor[data-theme=light] .popup .text-shadow-property-popup .codemirror-colorpicker .title {
-  color: #333 !important;
+  color: #666666 !important;
 }
 .csseditor[data-theme=light] .popup .text-shadow-property-popup .codemirror-colorpicker .colorsets {
   border-top: 0px solid #cfcfcf !important;
@@ -11925,10 +11954,8 @@ html, body {
   pointer-events: none;
   z-index: 1;
 }
-.csseditor[data-theme=light] .popup .clippath-popup .box > .clip-path-editor .pointer-input {
-  margin-top: 10px;
-}
 .csseditor[data-theme=light] .popup .clippath-popup .box > .clip-path-editor .pointer-input .pointer-item {
+  margin-top: 5px;
   display: grid;
   grid-template-columns: 1fr 1fr 0.5fr;
   grid-column-gap: 2px;
@@ -11959,7 +11986,7 @@ html, body {
   height: 100%;
   display: inline-block;
   position: absolute;
-  z-index: 0;
+  z-index: 3;
   pointer-events: none;
 }
 .csseditor[data-theme=light] .popup .clippath-popup .box > .clip-path-editor .drag-area .drag-pointer {
@@ -12341,12 +12368,12 @@ html, body {
   background-color: white;
 }
 .csseditor[data-theme=light] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=color] .codemirror-colorpicker input {
-  color: #333 !important;
+  color: #666666 !important;
   text-transform: uppercase;
   border: 0px !important;
 }
 .csseditor[data-theme=light] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=color] .codemirror-colorpicker .title {
-  color: #333 !important;
+  color: #666666 !important;
 }
 .csseditor[data-theme=light] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=color] .codemirror-colorpicker .colorsets {
   border-top: 0px solid #cfcfcf !important;
@@ -12447,12 +12474,12 @@ html, body {
   background-color: white;
 }
 .csseditor[data-theme=light] .popup .color-picker-popup .codemirror-colorpicker input {
-  color: #333 !important;
+  color: #666666 !important;
   text-transform: uppercase;
   border: 0px !important;
 }
 .csseditor[data-theme=light] .popup .color-picker-popup .codemirror-colorpicker .title {
-  color: #333 !important;
+  color: #666666 !important;
 }
 .csseditor[data-theme=light] .popup .color-picker-popup .codemirror-colorpicker .colorsets {
   border-top: 1px solid #cfcfcf !important;
@@ -12757,12 +12784,12 @@ html, body {
   margin-top: 0px;
 }
 .csseditor[data-theme=light] .popup .gradient-picker .codemirror-colorpicker input {
-  color: #333 !important;
+  color: #666666 !important;
   text-transform: uppercase;
   border: 0px !important;
 }
 .csseditor[data-theme=light] .popup .gradient-picker .codemirror-colorpicker .title {
-  color: #333 !important;
+  color: #666666 !important;
 }
 .csseditor[data-theme=light] .popup .gradient-picker .codemirror-colorpicker .colorsets {
   border-top: 0px solid #cfcfcf !important;
@@ -12774,6 +12801,7 @@ html, body {
   top: 0px;
   right: 0px;
   bottom: 0px;
+  cursor: crosshair;
 }
 .csseditor[data-theme=light] .path-editor-view.draw {
   cursor: crosshair;

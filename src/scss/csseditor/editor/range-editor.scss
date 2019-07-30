@@ -8,13 +8,13 @@ $border-radius: 3px;
         grid-template-columns: 60px 1fr;
         grid-column-gap: 2px;
         &.is-removable {
-            grid-template-columns: 20px 1fr 12px;
+            grid-template-columns: 60px 1fr 12px;
         }
 
         label {
             text-align: left;
             vertical-align: middle;
-            padding:2px 4px;
+            padding:3px 4px;
             box-sizing: border-box;
             font-size: 11px;
         }
@@ -44,6 +44,7 @@ $border-radius: 3px;
     }
 
     &.is-removable {
+        grid-template-columns: 1fr 12px;        
         .remove {
             display: inline-block;
         }

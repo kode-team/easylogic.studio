@@ -44,8 +44,8 @@
         }
 
         .pointer-input {
-          margin-top: 10px;
           .pointer-item {
+            margin-top: 5px;
             display: grid;
             grid-template-columns: 1fr 1fr 0.5fr; 
             grid-column-gap: 2px;
@@ -82,7 +82,7 @@
             height: 100%;
             display: inline-block;
             position: absolute;
-            z-index: 0;
+            z-index: 3;
             pointer-events: none;            
           }
 

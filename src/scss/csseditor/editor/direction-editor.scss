@@ -20,7 +20,7 @@
             background-color: $selected-color;
             svg {
               path {
-                fill: white;
+                fill: $selected-font-color;
               }
             }
           }

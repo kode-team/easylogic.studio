@@ -52,7 +52,7 @@ export default class ClipPathPopup extends BasePopup {
 
   [LOAD('$clippathType')] () {
     return `
-      <SelectEditor ref='$type' label="Type" key='type' value="${this.state.type}" options="none,circle,ellipse,inset,polygon,path,svg" onchange="changeClipPathType" />
+      <div>${this.state.type} Editor</div>
     `
   }
 
@@ -86,16 +86,16 @@ export default class ClipPathPopup extends BasePopup {
   }
 
 
-  [EVENT('changeClipPathType')] (key, type) {
+  // [EVENT('changeClipPathType')] (key, type) {
 
-    this.setState({
-      type,
-      value: ''
-    })
-    this.refresh();    
+  //   this.setState({
+  //     type,
+  //     value: ''
+  //   })
+  //   this.refresh();    
 
-    this.emit("changeClipPathPopup", this.toClipPathCSS());
-  }
+  //   this.emit("changeClipPathPopup", this.toClipPathCSS());
+  // }
 
   [EVENT('changeClipPath')] (type, value) {
     this.updateData({

@@ -3,7 +3,8 @@
   border-bottom: 1px solid $property-border-color;  
   background-color: $property-background-color;
   color: $property-font-color; 
-
+  display: none; 
+  
   &.compact {
     padding:0px;
   }

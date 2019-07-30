@@ -178,8 +178,8 @@ export default class PolygonEditor extends UIElement {
         var maxWidth = 220;
         var maxHeight = 220;
 
-        this.$x.val(left.toPercent(maxWidth).value)
-        this.$y.val(top.toPercent(maxHeight).value)
+        this.$x.val(left.toPercent(maxWidth).round(10).value)
+        this.$y.val(top.toPercent(maxHeight).round(10).value)
 
         this.bindData('$clipArea')
     }
@@ -190,7 +190,7 @@ export default class PolygonEditor extends UIElement {
         var maxHeight = 220;
 
         return this.state.value.map(it => {
-            return `${it.x.toPercent(maxWidth)} ${it.y.toPercent(maxHeight)}`
+            return `${it.x.toPercent(maxWidth).round(10)} ${it.y.toPercent(maxHeight).round(10)}`
         }).join(',');
     }
 

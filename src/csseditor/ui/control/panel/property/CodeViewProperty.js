@@ -10,7 +10,7 @@ export default class CodeViewProperty extends BaseProperty {
   }
 
   [EVENT('refreshSelectionStyleView', 'refreshStyleView','refreshSelection') + DEBOUNCE(100) ]() {
-    this.refresh();
+    this.refreshShowIsNot();
   }
 
   isHideHeader() {

@@ -1,5 +1,5 @@
 import { Property } from "../items/Property";
-const CLIPPATH_REG = /(content\-box|padding\-box|border\-box|margin\-box|view\-box|stroke\-box|fill\-box|none|(inset|circle|ellipse|polygon|path|url)\(([^\)]*)\))/gi;
+const CLIPPATH_REG = /(content\-box|padding\-box|border\-box|margin\-box|view\-box|stroke\-box|fill\-box|none|(inset|circle|ellipse|polygon|path|url)(\(([^\)]*)\))?)/gi;
 export class ClipPath extends Property {
 
     getDefaultObject(obj = {}) {
@@ -77,6 +77,8 @@ export class ClipPath extends Property {
                 clippath.box = value; 
             } else {
                 var [clipPathName, clipPathValue] = value.split("(");
+
+                clipPathValue = clipPathValue || ''; 
 
                 if (clipPathName === 'none') {
                     clipPathValue = ''

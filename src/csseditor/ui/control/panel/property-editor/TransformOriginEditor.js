@@ -72,7 +72,7 @@ export default class TransformOriginEditor extends UIElement {
     var transformOrigin = this.state['transform-origin'];
 
     return `
-      <div class="property-item transform-origin-item">
+      <div class="transform-origin-item">
         <div class="radius-selector" data-selected-value="${selectedValue}" ref="$selector">
           <button type="button" data-value="all">${icon.border_all}</button>
           <button type="button" data-value="partitial">
@@ -83,10 +83,7 @@ export default class TransformOriginEditor extends UIElement {
           <RangeEditor ref='$all' key='transform-origin' value="${transformOrigin}" onchange='changeTransformOrigin' />
         </div>
       </div>
-      <div
-        class="property-item full transform-origin-item"
-        ref="$partitialSetting"
-      >
+      <div class="full transform-origin-item" ref="$partitialSetting" >
         <div class="radius-setting-box" ref="$radiusSettingBox">
           ${typeList.map(it => {
             return `

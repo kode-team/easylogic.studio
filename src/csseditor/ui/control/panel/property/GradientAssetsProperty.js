@@ -1,6 +1,6 @@
 import BaseProperty from "./BaseProperty";
 import { editor } from "../../../../../editor/editor";
-import { LOAD, CLICK, INPUT } from "../../../../../util/Event";
+import { LOAD, CLICK, INPUT, DEBOUNCE } from "../../../../../util/Event";
 import { EVENT } from "../../../../../util/UIElement";
 import icon from "../../../icon/icon";
 import { Gradient } from "../../../../../editor/image-resource/Gradient";
@@ -21,6 +21,12 @@ export default class GradientAssetsProperty extends BaseProperty {
   getClassName() {
     return 'gradient-assets-property'
   }
+
+
+  [EVENT('refreshSelection') + DEBOUNCE(100)] () {
+    this.refreshShowIsNot();
+  }
+
 
   getBody() {
     return `

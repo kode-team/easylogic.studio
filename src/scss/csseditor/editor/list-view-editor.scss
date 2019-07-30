@@ -14,13 +14,19 @@
     .list-view-item {
         &.selected {
             background-color: $selected-color; 
+
+            svg {
+                path, circle, rect {
+                    fill: $selected-font-color;
+                }
+            }
         }
 
         svg {
             width: 100%;
 
             path,circle,rect {
-                fill: white; 
+                fill: $font-color; 
             }
 
         }

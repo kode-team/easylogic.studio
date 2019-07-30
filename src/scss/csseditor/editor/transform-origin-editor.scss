@@ -21,7 +21,7 @@
             background-color: $selected-color;
             svg {
               path {
-                fill: white;
+                fill: $selected-font-color;
               }
             }
           }
@@ -30,6 +30,13 @@
   
       button {
         background-image: none;
+      }
+    }
+
+    .radius-setting-box {
+      margin-top: 5px;
+      > div {
+        margin-bottom: 5px;
       }
     }
     

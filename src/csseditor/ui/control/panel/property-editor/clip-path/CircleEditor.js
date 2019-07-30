@@ -48,7 +48,6 @@ export default class CircleEditor extends UIElement {
                 label='Radius' 
                 key='radius' 
                 value='${this.state.radius}' 
-                selectedUnit='${this.state.radius.unit}' 
                 min="0" 
                 max="100" 
                 step="0.1" 
@@ -124,7 +123,7 @@ export default class CircleEditor extends UIElement {
             radiusString = 'farthest-side'
         }
 
-        return radius ? `${radiusString} at ${results}` :  results;
+        return radius ? `${radiusString} at ${results}` :  `${results}`;
     }
 
     updateData (data) {
@@ -144,8 +143,6 @@ export default class CircleEditor extends UIElement {
             }  else if (tempValue.includes('farthest-side')) {
                 radius = new Length('', 'farthest-side')
             }
-
-            console.log(radius)
 
             this.updateData({
                 radius

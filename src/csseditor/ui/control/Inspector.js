@@ -58,11 +58,10 @@ export default class Inspector extends UIElement {
                 <BoxShadowProperty />
                 <FilterProperty />
                 <ClipPathProperty />       
-                <SVGProperty />
 
                 <!-- transform --> 
+                <PerspectiveOriginProperty />                
                 <PerspectiveProperty />
-                <PerspectiveOriginProperty />
                 <TransformOriginProperty /> 
                 <TransformProperty />                
 
@@ -74,19 +73,20 @@ export default class Inspector extends UIElement {
                 <div class='empty'></div>
               </div>
               <div class='tab-content' data-value='2'>
-                <RootVariableProperty />              
-                <VariableProperty />              
+                <!-- <RootVariableProperty /> -->
+                <!-- <VariableProperty /> -->
                 <SelectorProperty />
                 <TransitionProperty />
                 <KeyframeProperty />                              
                 <AnimationProperty />
-                
+
                 <div class='empty'></div>                
               </div>                   
               <div class="tab-content" data-value="3">
                 <CodeViewProperty />
               </div>              
               <div class='tab-content' data-value='4'>
+                <SVGProperty />              
                 <ColorAssetsProperty />
                 <GradientAssetsProperty />    
                 

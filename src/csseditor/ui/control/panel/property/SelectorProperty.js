@@ -7,7 +7,8 @@ import {
   DRAGOVER,
   DROP,
   PREVENT,
-  DEBOUNCE
+  DEBOUNCE,
+  STOP
 } from "../../../../../util/Event";
 import { editor } from "../../../../../editor/editor";
 import { EVENT } from "../../../../../util/UIElement";
@@ -62,8 +63,8 @@ export default class SelectorProperty extends BaseProperty {
     `
   }
 
-  [CLICK('$selectorList .selector-item')] (e) {
-    var index  = +e.$delegateTarget.attr('data-index');
+  [CLICK('$selectorList .selector-item .name')] (e) {
+    var index  = +e.$delegateTarget.closest('selector-item').attr('data-index');
 
     var current = editor.selection.current;
     if (!current) return;
@@ -73,7 +74,7 @@ export default class SelectorProperty extends BaseProperty {
 
   }
 
-  [CLICK('$selectorList .del') + PREVENT] (e) {
+  [CLICK('$selectorList .selector-item .del') + PREVENT + STOP] (e) {
     var removeIndex = e.$delegateTarget.attr("data-index");
     var current = editor.selection.current;
     if (!current) return;
@@ -86,12 +87,7 @@ export default class SelectorProperty extends BaseProperty {
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)] () {
-    if (editor.selection.length) {
-      this.refreshShowIsNot('project');
-    } else {
-      this.$el.hide()
-    }
-    
+    this.refreshShowIsNot('project');    
   }
 
 

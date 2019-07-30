@@ -63,4 +63,8 @@ export default class SVGProperty extends BaseProperty {
       this.emit('refreshStyleView', current);
     }
   }
+
+  [EVENT('refreshSelection')] () {
+    this.refreshShowIsNot('propject');
+  }
 }

@@ -1,6 +1,6 @@
 import BaseProperty from "./BaseProperty";
 import {
-  LOAD, CLICK
+  LOAD, CLICK, DEBOUNCE
 } from "../../../../../util/Event";
 
 import { editor } from "../../../../../editor/editor";
@@ -43,5 +43,9 @@ export default class VariableProperty extends BaseProperty {
       current.reset({ variable })
       this.emit('refreshElement');
     }
+  }
+
+  [EVENT('refreshSelection') + DEBOUNCE(100)] () {
+    this.refreshShowIsNot()
   }
 }
