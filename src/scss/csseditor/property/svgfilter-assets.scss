@@ -1,7 +1,7 @@
-.color-assets-property {
+.svgfilter-assets-property {
 
-    .color-list-tools {
-        display: grid; 
+    .svgfilter-list-tools {
+        display: grid;
         grid-template-columns: 1fr 1fr; 
         grid-column-gap: 2px;
         text-align: left;
@@ -31,16 +31,22 @@
 
     }
     
-    .color-list {
+    .svgfilter-list {
 
-        .color-view {
+        .svgfilter-view {
+            position: absolute;
+            left:0px;
+            top:0px;
+            right:0px;
+            bottom:0px;
             pointer-events: none;
+            background-image: radial-gradient(yellow 0%, red 100%);            
         }
 
         &[data-view-mode="grid"] {
             display: block;
 
-            .add-color-item {
+            .add-svgfilter-item {
                 display: inline-block;
                 width: 80px;
                 position: relative;
@@ -56,7 +62,7 @@
                 padding: 24px;
             }
 
-            .color-item {
+            .svgfilter-item {
                 display: inline-block;
                 width: 80px;
                 position: relative;
@@ -78,16 +84,7 @@
                     border-radius: 2px;
                     box-sizing: border-box;
                     cursor: pointer;
-                    
 
-                    .color-view{
-                        position: absolute;
-                        left:0px;
-                        top:0px;
-                        right:0px;
-                        bottom:0px;
-
-                    }
                 }
 
                 .title {
@@ -113,6 +110,7 @@
                     text-align: right;   
                     padding: 2px;
 
+
                     svg {
                         path {
                             fill: $selected-font-color;
@@ -123,12 +121,12 @@
         }
 
         &[data-view-mode='list'] {
-            .add-color-item {
+            .add-svgfilter-item {
                 cursor: pointer;
                 text-align: center;
             }            
 
-            .color-item {
+            .svgfilter-item {
                 display: grid;
                 grid-template-columns: 22px 1fr 35px;
                 grid-column-gap: 2px;
@@ -146,19 +144,12 @@
                     box-sizing: border-box;
                     overflow: hidden;
                     cursor: pointer;
-                    .color-view {
-                        position: absolute;
-                        left: 0px;
-                        top: 0px;
-                        right: 0px;
-                        bottom: 0px;
-                    }       
-        
+
                 }
         
                 .title {
                     display: grid;
-                    grid-template-columns: repeat(2, 1fr);
+                    grid-template-columns: 1fr;
                     grid-column-gap: 4px;
         
                     div {
@@ -177,7 +168,7 @@
 
 }
 
-.property.color-assets-property {
+.property.svgfilter-assets-property {
     padding-left: 0px !important;
     padding-right: 0px !important;
 }

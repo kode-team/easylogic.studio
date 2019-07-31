@@ -41,7 +41,7 @@ var filterList = [
   "opacity",
   "saturate",
   "sepia",
-  'svg',
+  // 'svg',
 ];
 
 var specList = {
@@ -161,12 +161,11 @@ export default class FilterEditor extends UIElement {
     var arr = [] 
 
     if (current) {
-      arr = current.svg
-        .filter(it => it.type === 'filter')
+      arr = current.svgfilterList
         .map(it => {
           return {
-            title : `svg - #${it.name}`,
-            value: it.name
+            title : `svg - #${it.id}`,
+            value: it.id
           }
         })
     }
@@ -183,10 +182,7 @@ export default class FilterEditor extends UIElement {
       var current = editor.selection.currentProject;
 
       if (current) {
-        options = current.svg
-                    .filter(it => it.type === 'filter' && it.name)
-                    .map(it => it.name)
-
+        options = current.svgfilterList.map(it => it.id)
         options = options.length ? ',' + options.join(',') : '';
       }
 
@@ -209,21 +205,25 @@ export default class FilterEditor extends UIElement {
   }
 
   makeOneFilterTemplate(spec, filter, index) {
+
+    var subtitle = filter.type === 'svg' ? ` - ${filter.value}` : ''; 
+
     return `
       <div class="filter-item" data-index="${index}">
         <div class="title" draggable="true" data-index="${index}">
-          <label>${spec.title}</label>
+          <label>${spec.title}${subtitle}</label>
           <div class="filter-menu">
             <button type="button" class="del" data-index="${index}">
               ${icon.remove2}
             </button>
           </div>
         </div>
-        <div class="filter-ui">
-
-          ${this.makeOneFilterEditor(index, filter, spec)}
-
-        </div>
+        ${filter.type != 'svg' ? `
+          <div class="filter-ui">
+            ${this.makeOneFilterEditor(index, filter, spec)}
+          </div>
+        `: ''}
+        
       </div>
     `;
   }
@@ -349,5 +349,10 @@ export default class FilterEditor extends UIElement {
   [EVENT('refreshCanvas') + DEBOUNCE(1000) ] () {
     // svg 필터 옵션만 변경한다. 
     this.load('$filterSelect')
+  }
+
+  [EVENT('refreshSVGArea') + DEBOUNCE(1000)] () {
+    this.load('$filterSelect');
+    this.load('$filterList');
   }
 }

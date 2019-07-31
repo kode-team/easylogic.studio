@@ -1,6 +1,10 @@
-.gradient-assets {
+.gradient-assets-property {
     margin-top: 4px;
+
     .gradient-list-tools {
+        display: grid;
+        grid-template-columns: 1fr 1fr; 
+        grid-column-gap: 2px;
         text-align: left;
         margin-bottom: 10px;
         @include svg-button-inline(auto, 24px);
@@ -17,6 +21,13 @@
                     background-color: $selected-border-color;
                     border-color: $selected-border-color;
                     background-image: none;
+                    color: $selected-font-color;
+                    
+                    svg {
+                        path {
+                            fill: $selected-font-color;
+                        }
+                    }
                 }
             }
         }     
@@ -104,6 +115,12 @@
                     // display: grid;
                     text-align: right;   
                     padding: 2px;
+
+                    svg {
+                        path {
+                            fill: $selected-font-color;
+                        }
+                    }
                 }
             }
 

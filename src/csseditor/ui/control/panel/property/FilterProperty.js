@@ -19,7 +19,7 @@ var filterList = [
   "opacity",
   "saturate",
   "sepia",
-  'svg',
+  // 'svg',
 ];
 
 export default class FilterProperty extends BaseProperty {
@@ -82,12 +82,12 @@ export default class FilterProperty extends BaseProperty {
     var arr = [] 
 
     if (current) {
-      arr = current.svg
-        .filter(it => it.type === 'filter')
+      arr = current.svgfilterList
         .map(it => {
+          var id = it.info.objectInfo.id; 
           return {
-            title : `svg - #${it.name}`,
-            value: it.name
+            title : `svg - #${id}`,
+            value: id
           }
         })
     }
@@ -117,5 +117,9 @@ export default class FilterProperty extends BaseProperty {
 
   [EVENT('refreshSelection') + DEBOUNCE(100)] () {
     this.refreshShowIsNot('project')
+  }
+
+  [EVENT('refreshSVGArea') + DEBOUNCE(1000)] () {
+    this.load('$filterSelect');
   }
 }

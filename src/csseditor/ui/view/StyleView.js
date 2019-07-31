@@ -105,6 +105,10 @@ export default class StyleView extends UIElement {
     }
   }
 
+  [EVENT('refreshSVGArea')] () {
+    this.load('$svgArea');
+  }
+
   [EVENT('refreshSelectionStyleView')] () {
 
     editor.selection.each(item => {

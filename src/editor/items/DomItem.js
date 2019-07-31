@@ -642,6 +642,8 @@ export class DomItem extends GroupItem {
               .map(selector => selector.toString(prefix))
               .join('\n\n')
   }
+
+  
  
   toSVGString () {
     return this.json.svg.map(s => {

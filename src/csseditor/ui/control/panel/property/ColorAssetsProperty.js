@@ -4,6 +4,7 @@ import { LOAD, BIND, CLICK, INPUT, DEBOUNCE } from "../../../../../util/Event";
 import { EVENT } from "../../../../../util/UIElement";
 import icon from "../../../icon/icon";
 import Color from "../../../../../util/Color";
+import AssetParser from "../../../../../editor/parse/AssetParser";
 
 
 export default class ColorAssetsProperty extends BaseProperty {
@@ -22,17 +23,22 @@ export default class ColorAssetsProperty extends BaseProperty {
     return 'color-assets-property'
   }
 
+  getTools () {
+    return `
+      <div class='color-list-tools' ref='$tool' data-view-mode='${this.state.mode}'>
+        <button type='button' data-value='list'>${icon.list} List</button>
+        <button type='button' data-value='grid'>${icon.grid} Grid</button>
+      </div>
+    `
+  }
+
   [EVENT('refreshSelection') + DEBOUNCE(100)] () {
-    this.refreshShowIsNot();
+    this.show();
   }
 
   getBody() {
     return `
       <div class='property-item color-assets'>
-        <div class='color-list-tools' ref='$tool' data-view-mode='${this.state.mode}'>
-          <button type='button' data-value='list'>${icon.list} List</button>
-          <button type='button' data-value='grid'>${icon.grid} Grid</button>
-        </div>
         <div class='color-list' ref='$colorList' data-view-mode='${this.state.mode}'></div>
       </div>
     `;
@@ -48,18 +54,22 @@ export default class ColorAssetsProperty extends BaseProperty {
   }
 
   [LOAD("$colorList")]() {
-    var current = editor.selection.currentProject || { colors: [] }
+    var current = editor.selection.currentProject || { colorList: [] }
 
-    var results = current.colors.map( (color, index) => {
+    var colors = current.colorList;   
+
+    var results = colors.map( (color, index) => {
+      var objectInfo = color.info.objectInfo;
+
       return `
         <div class='color-item' data-index="${index}">
-          <div class='preview' data-index="${index}"><div class='color-view' style='background-color: ${color.color};'></div></div>
+          <div class='preview' data-index="${index}"><div class='color-view' style='background-color: ${objectInfo.color};'></div></div>
           <div class='title'>
             <div>
-              <input type='text' class='name' data-key='name' value='${color.name}' placeholder="name" />
+              <input type='text' class='name' data-key='name' value='${objectInfo.name}' placeholder="name" />
             </div>
             <div>
-              <input type='text' class='var' data-key='variable' value='${color.variable}' placeholder="--var" />
+              <input type='text' class='var' data-key='variable' value='${objectInfo.variable}' placeholder="--var" />
             </div>
           </div>
           <div class='tools'>
@@ -74,33 +84,37 @@ export default class ColorAssetsProperty extends BaseProperty {
 
     return results
   }
-  
-  [CLICK('$colorList .add-color-item')] () {
+
+  executeColor (callback, isRefresh = true, isEmit = true ) {
     var project = editor.selection.currentProject;
 
     if(project) {
+
+      callback && callback (project) 
+
+      if (isRefresh) this.refresh();
+      if (isEmit) this.emit('refreshColorAssets');
+    }
+  }
+  
+  [CLICK('$colorList .add-color-item')] () {
+
+    this.executeColor((project) => {
       project.createColor({
         color: Color.random(),
         name: '',
         variable: ''
       })
-
-      this.refresh();
-      this.emit('refreshColorAssets');
-    }
+    })
   }
 
   [CLICK('$colorList .remove')] (e) {
     var $item = e.$delegateTarget.closest('color-item');
     var index = +$item.attr('data-index');
 
-    var project = editor.selection.currentProject;
-    if (project) {
+    this.executeColor(project => {
       project.removeColor(index);
-
-      this.refresh();
-      this.emit('refreshColorAssets');
-    }
+    })
   }
 
 
@@ -108,28 +122,19 @@ export default class ColorAssetsProperty extends BaseProperty {
     var $item = e.$delegateTarget.closest('color-item');
     var index = +$item.attr('data-index');
 
-    var project = editor.selection.currentProject;
-    if (project) {
+    this.executeColor(project => {
       project.copyColor(index);
-
-      this.refresh();
-      this.emit('refreshColorAssets');
-    }
+    })
   }  
 
   [INPUT('$colorList input')] (e) {
     var $item = e.$delegateTarget.closest('color-item');
     var index = +$item.attr('data-index');
-    
-    var project = editor.selection.currentProject;
+    var obj = e.$delegateTarget.attrKeyValue('data-key');    
 
-    if(project) {
-      var obj = e.$delegateTarget.attrKeyValue('data-key');
-
+    this.executeColor(project => {
       project.setColorValue(index, obj);      
-
-      this.emit('refreshColorAssets');
-    }
+    }, false)
   }
 
   [CLICK("$colorList .preview")](e) {
@@ -151,13 +156,11 @@ export default class ColorAssetsProperty extends BaseProperty {
 
   [EVENT('changeColorAssets')] (color, params) {
     if (params.id === this.id) {
-      var project = editor.selection.currentProject;
 
-      if(project) {
+      this.executeColor(project => {
         project.setColorValue(params.index, {color});      
-        this.state.$el.css('background-color', color);        
-        this.emit('refreshColorAssets');        
-      }
+        this.state.$el.css('background-color', color);
+      }, false)
     }
   }
 }

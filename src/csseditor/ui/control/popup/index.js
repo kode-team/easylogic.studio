@@ -10,9 +10,11 @@ import ColorPickerPopup from "./ColoPickerPopup";
 import FillPopup from "./FillPopup";
 import ImageSelectPopup from "./ImageSelectPopup";
 import GradientPickerPopup from "./GradientPickerPopup";
+import SVGFilterPopup from "./SVGFilterPopup";
 
 
 export default {
+  SVGFilterPopup,
   GradientPickerPopup,
   ImageSelectPopup,
   FillPopup,

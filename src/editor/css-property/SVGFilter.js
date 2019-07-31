@@ -29,6 +29,7 @@ export class GaussianBlurSVGFilter extends SVGFilter {
   getDefaultObject() {
     return super.getDefaultObject({
       type: "GaussianBlur",
+      sourceIn: GaussianBlurSVGFilter.spec.sourceIn.defaultValue,      
       stdDeviationX: GaussianBlurSVGFilter.spec.stdDeviationX.defaultValue,
       stdDeviationY: GaussianBlurSVGFilter.spec.stdDeviationY.defaultValue,
       edgeMode: GaussianBlurSVGFilter.spec.edgeMode.defaultValue
@@ -42,19 +43,29 @@ export class GaussianBlurSVGFilter extends SVGFilter {
   }
 
   toString() {
-    var { stdDeviationX, stdDeviationY, edgeMode } = this.json; 
+    var { stdDeviationX, stdDeviationY, edgeMode, sourceIn } = this.json; 
 
     var stdDeviation = `${stdDeviationX} ${stdDeviationY}`
     if (stdDeviationX === stdDeviationY) {
       stdDeviation = stdDeviationX;
     }
 
-    return `<feGaussianBlur stdDeviation="${stdDeviation}" edgeMode="${edgeMode}" />`;
+    return `<feGaussianBlur in="${sourceIn}"  stdDeviation="${stdDeviation}" edgeMode="${edgeMode}" />`;
   }
 }
 
 
 GaussianBlurSVGFilter.spec = {
+  sourceIn: {
+    title: "in",
+    inputType: "select",
+    options: function (list) {
+      var reference = list.filter(it => it.result).map(it => it.result).join(',')
+
+      return `${reference},-,SourceGraphic,SourceAlpha,BackgroundImage,BackgroundAlpha,FillPaint,StrokePaint`
+    },
+    defaultValue: "SourceGraphic"
+  },  
   stdDeviationX: {
     title: "X",
     inputType: "number-range",
@@ -129,7 +140,7 @@ TurbulenceSVGFilter.spec = {
   numOctaves: {
     title: 'numOctaves',
     inputType: 'number-range',
-    min: -10,
+    min: 1,
     max: 10,
     step: 1,
     defaultValue: Length.number(1)

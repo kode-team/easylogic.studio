@@ -4,12 +4,17 @@
     width: 250px;
 
     .box {
-      > .name {
-        height: 20px;
-        display: grid;
-        grid-template-columns: 60px 1fr;
-        grid-column-gap: 4px;
-        margin-bottom: 5px;
+      margin-bottom: 10px;
+      &.preview {
+        height: 150px;
+
+        .preview-box {
+          height: 100%;
+          box-sizing: border-box;
+          margin: 30px 20px;
+          border:1px solid $border-color;
+          background-image: radial-gradient(yellow 0%, red 100%);
+        }
       }
 
       .property {

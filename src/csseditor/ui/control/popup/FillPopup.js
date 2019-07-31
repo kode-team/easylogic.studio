@@ -275,12 +275,15 @@ export default class FillPopup extends BasePopup {
 
 
   [LOAD('$projectGradients')] () {
-    var project = editor.selection.currentProject || {gradients: []};
+    var project = editor.selection.currentProject || {graidentList: []};
 
-    return project.gradients.map(c => {
+    var gradients = project.gradientList;
+
+    return gradients.map(c => {
+      var objectInfo = c.info.objectInfo;
       return `
       <div class='gradient-item' title='${c.name}'>
-        <div class='gradient-view' data-gradient='${c.gradient}' style='background-image: ${c.gradient}'></div>
+        <div class='gradient-view' data-gradient='${objectInfo.gradient}' style='background-image: ${objectInfo.gradient}'></div>
       </div>`
     }) 
   }

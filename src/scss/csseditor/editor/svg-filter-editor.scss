@@ -37,8 +37,8 @@
       .title {
         display: grid;
         grid-template-columns: 1fr 30px;
-        background-color: #2b8cf3;
-        color: white;
+        background-color: $selected-color;
+        color: $selected-font-color;
         border-radius: 3px;
         margin: 5px 0px;
   
@@ -50,6 +50,12 @@
   
         .filter-menu {
           text-align: right;
+
+          svg {
+            path {
+              fill: $selected-font-color;
+            }
+          }
         }
       }
   

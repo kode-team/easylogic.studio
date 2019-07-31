@@ -87,6 +87,7 @@ export default class Inspector extends UIElement {
               </div>              
               <div class='tab-content' data-value='4'>
                 <SVGProperty />              
+                <SVGFilterAssetsProperty />
                 <ColorAssetsProperty />
                 <GradientAssetsProperty />    
                 

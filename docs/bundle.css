@@ -3762,11 +3762,14 @@ html, body {
 .csseditor[data-theme=dark] .layer-list .layer-item.selected svg path {
   fill: white;
 }
-.csseditor[data-theme=dark] .color-assets .color-list-tools {
+.csseditor[data-theme=dark] .color-assets-property .color-list-tools {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 2px;
   text-align: left;
   margin-bottom: 10px;
 }
-.csseditor[data-theme=dark] .color-assets .color-list-tools button {
+.csseditor[data-theme=dark] .color-assets-property .color-list-tools button {
   width: auto;
   height: 24px;
   vertical-align: middle;
@@ -3781,33 +3784,41 @@ html, body {
   font-size: 11px;
   cursor: pointer;
 }
-.csseditor[data-theme=dark] .color-assets .color-list-tools button svg {
+.csseditor[data-theme=dark] .color-assets-property .color-list-tools button svg {
   width: 16px;
   height: 16px;
   display: inline-block;
   vertical-align: middle;
 }
-.csseditor[data-theme=dark] .color-assets .color-list-tools button {
+.csseditor[data-theme=dark] .color-assets-property .color-list-tools button {
   padding: 2px 10px;
   border: 1px solid #1a1a1a;
 }
-.csseditor[data-theme=dark] .color-assets .color-list-tools[data-view-mode=list] button[data-value=list] {
+.csseditor[data-theme=dark] .color-assets-property .color-list-tools[data-view-mode=list] button[data-value=list] {
   background-color: #609de2;
   border-color: #609de2;
   background-image: none;
+  color: white;
 }
-.csseditor[data-theme=dark] .color-assets .color-list-tools[data-view-mode=grid] button[data-value=grid] {
+.csseditor[data-theme=dark] .color-assets-property .color-list-tools[data-view-mode=list] button[data-value=list] svg path {
+  fill: white;
+}
+.csseditor[data-theme=dark] .color-assets-property .color-list-tools[data-view-mode=grid] button[data-value=grid] {
   background-color: #609de2;
   border-color: #609de2;
   background-image: none;
+  color: white;
 }
-.csseditor[data-theme=dark] .color-assets .color-list .color-view {
+.csseditor[data-theme=dark] .color-assets-property .color-list-tools[data-view-mode=grid] button[data-value=grid] svg path {
+  fill: white;
+}
+.csseditor[data-theme=dark] .color-assets-property .color-list .color-view {
   pointer-events: none;
 }
-.csseditor[data-theme=dark] .color-assets .color-list[data-view-mode=grid] {
+.csseditor[data-theme=dark] .color-assets-property .color-list[data-view-mode=grid] {
   display: block;
 }
-.csseditor[data-theme=dark] .color-assets .color-list[data-view-mode=grid] .add-color-item {
+.csseditor[data-theme=dark] .color-assets-property .color-list[data-view-mode=grid] .add-color-item {
   display: inline-block;
   width: 80px;
   position: relative;
@@ -3822,7 +3833,7 @@ html, body {
   text-align: center;
   padding: 24px;
 }
-.csseditor[data-theme=dark] .color-assets .color-list[data-view-mode=grid] .color-item {
+.csseditor[data-theme=dark] .color-assets-property .color-list[data-view-mode=grid] .color-item {
   display: inline-block;
   width: 80px;
   position: relative;
@@ -3830,10 +3841,10 @@ html, body {
   margin-bottom: 4px;
   vertical-align: middle;
 }
-.csseditor[data-theme=dark] .color-assets .color-list[data-view-mode=grid] .color-item:hover .tools {
+.csseditor[data-theme=dark] .color-assets-property .color-list[data-view-mode=grid] .color-item:hover .tools {
   display: inline-block;
 }
-.csseditor[data-theme=dark] .color-assets .color-list[data-view-mode=grid] .color-item .preview {
+.csseditor[data-theme=dark] .color-assets-property .color-list[data-view-mode=grid] .color-item .preview {
   position: relative;
   width: 100%;
   height: 80px;
@@ -3842,14 +3853,14 @@ html, body {
   box-sizing: border-box;
   cursor: pointer;
 }
-.csseditor[data-theme=dark] .color-assets .color-list[data-view-mode=grid] .color-item .preview .color-view {
+.csseditor[data-theme=dark] .color-assets-property .color-list[data-view-mode=grid] .color-item .preview .color-view {
   position: absolute;
   left: 0px;
   top: 0px;
   right: 0px;
   bottom: 0px;
 }
-.csseditor[data-theme=dark] .color-assets .color-list[data-view-mode=grid] .color-item .title {
+.csseditor[data-theme=dark] .color-assets-property .color-list[data-view-mode=grid] .color-item .title {
   position: relative;
   width: 100%;
   display: grid;
@@ -3858,10 +3869,10 @@ html, body {
   grid-row-gap: 4px;
   padding: 4px 0px;
 }
-.csseditor[data-theme=dark] .color-assets .color-list[data-view-mode=grid] .color-item .title input {
+.csseditor[data-theme=dark] .color-assets-property .color-list[data-view-mode=grid] .color-item .title input {
   width: 100%;
 }
-.csseditor[data-theme=dark] .color-assets .color-list[data-view-mode=grid] .color-item .tools {
+.csseditor[data-theme=dark] .color-assets-property .color-list[data-view-mode=grid] .color-item .tools {
   background-color: transparent;
   position: absolute;
   display: none;
@@ -3870,18 +3881,21 @@ html, body {
   text-align: right;
   padding: 2px;
 }
-.csseditor[data-theme=dark] .color-assets .color-list[data-view-mode=list] .add-color-item {
+.csseditor[data-theme=dark] .color-assets-property .color-list[data-view-mode=grid] .color-item .tools svg path {
+  fill: white;
+}
+.csseditor[data-theme=dark] .color-assets-property .color-list[data-view-mode=list] .add-color-item {
   cursor: pointer;
   text-align: center;
 }
-.csseditor[data-theme=dark] .color-assets .color-list[data-view-mode=list] .color-item {
+.csseditor[data-theme=dark] .color-assets-property .color-list[data-view-mode=list] .color-item {
   display: grid;
-  grid-template-columns: 22px 1fr 50px;
+  grid-template-columns: 22px 1fr 35px;
   grid-column-gap: 2px;
   height: 20px;
-  margin-bottom: 2px;
+  margin-bottom: 4px;
 }
-.csseditor[data-theme=dark] .color-assets .color-list[data-view-mode=list] .color-item .preview {
+.csseditor[data-theme=dark] .color-assets-property .color-list[data-view-mode=list] .color-item .preview {
   cursor: pointer;
   width: 20px;
   height: 20px;
@@ -3896,19 +3910,20 @@ html, body {
   overflow: hidden;
   cursor: pointer;
 }
-.csseditor[data-theme=dark] .color-assets .color-list[data-view-mode=list] .color-item .preview .color-view {
+.csseditor[data-theme=dark] .color-assets-property .color-list[data-view-mode=list] .color-item .preview .color-view {
   position: absolute;
   left: 0px;
   top: 0px;
   right: 0px;
   bottom: 0px;
 }
-.csseditor[data-theme=dark] .color-assets .color-list[data-view-mode=list] .color-item .title {
+.csseditor[data-theme=dark] .color-assets-property .color-list[data-view-mode=list] .color-item .title {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-column-gap: 4px;
 }
-.csseditor[data-theme=dark] .color-assets .color-list[data-view-mode=list] .color-item .title div input {
+.csseditor[data-theme=dark] .color-assets-property .color-list[data-view-mode=list] .color-item .title div input {
+  height: 100%;
   border-radius: 2px;
   border: 1px solid #1a1a1a;
   width: 100%;
@@ -3917,14 +3932,17 @@ html, body {
   padding-left: 0px !important;
   padding-right: 0px !important;
 }
-.csseditor[data-theme=dark] .gradient-assets {
+.csseditor[data-theme=dark] .gradient-assets-property {
   margin-top: 4px;
 }
-.csseditor[data-theme=dark] .gradient-assets .gradient-list-tools {
+.csseditor[data-theme=dark] .gradient-assets-property .gradient-list-tools {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 2px;
   text-align: left;
   margin-bottom: 10px;
 }
-.csseditor[data-theme=dark] .gradient-assets .gradient-list-tools button {
+.csseditor[data-theme=dark] .gradient-assets-property .gradient-list-tools button {
   width: auto;
   height: 24px;
   vertical-align: middle;
@@ -3939,33 +3957,41 @@ html, body {
   font-size: 11px;
   cursor: pointer;
 }
-.csseditor[data-theme=dark] .gradient-assets .gradient-list-tools button svg {
+.csseditor[data-theme=dark] .gradient-assets-property .gradient-list-tools button svg {
   width: 16px;
   height: 16px;
   display: inline-block;
   vertical-align: middle;
 }
-.csseditor[data-theme=dark] .gradient-assets .gradient-list-tools button {
+.csseditor[data-theme=dark] .gradient-assets-property .gradient-list-tools button {
   padding: 2px 10px;
   border: 1px solid #1a1a1a;
 }
-.csseditor[data-theme=dark] .gradient-assets .gradient-list-tools[data-view-mode=list] button[data-value=list] {
+.csseditor[data-theme=dark] .gradient-assets-property .gradient-list-tools[data-view-mode=list] button[data-value=list] {
   background-color: #609de2;
   border-color: #609de2;
   background-image: none;
+  color: white;
 }
-.csseditor[data-theme=dark] .gradient-assets .gradient-list-tools[data-view-mode=grid] button[data-value=grid] {
+.csseditor[data-theme=dark] .gradient-assets-property .gradient-list-tools[data-view-mode=list] button[data-value=list] svg path {
+  fill: white;
+}
+.csseditor[data-theme=dark] .gradient-assets-property .gradient-list-tools[data-view-mode=grid] button[data-value=grid] {
   background-color: #609de2;
   border-color: #609de2;
   background-image: none;
+  color: white;
 }
-.csseditor[data-theme=dark] .gradient-assets .gradient-list .gradient-view {
+.csseditor[data-theme=dark] .gradient-assets-property .gradient-list-tools[data-view-mode=grid] button[data-value=grid] svg path {
+  fill: white;
+}
+.csseditor[data-theme=dark] .gradient-assets-property .gradient-list .gradient-view {
   pointer-events: none;
 }
-.csseditor[data-theme=dark] .gradient-assets .gradient-list[data-view-mode=grid] {
+.csseditor[data-theme=dark] .gradient-assets-property .gradient-list[data-view-mode=grid] {
   display: block;
 }
-.csseditor[data-theme=dark] .gradient-assets .gradient-list[data-view-mode=grid] .add-gradient-item {
+.csseditor[data-theme=dark] .gradient-assets-property .gradient-list[data-view-mode=grid] .add-gradient-item {
   display: inline-block;
   width: 80px;
   position: relative;
@@ -3980,7 +4006,7 @@ html, body {
   text-align: center;
   padding: 24px;
 }
-.csseditor[data-theme=dark] .gradient-assets .gradient-list[data-view-mode=grid] .gradient-item {
+.csseditor[data-theme=dark] .gradient-assets-property .gradient-list[data-view-mode=grid] .gradient-item {
   display: inline-block;
   width: 80px;
   position: relative;
@@ -3988,10 +4014,10 @@ html, body {
   margin-bottom: 4px;
   vertical-align: middle;
 }
-.csseditor[data-theme=dark] .gradient-assets .gradient-list[data-view-mode=grid] .gradient-item:hover .tools {
+.csseditor[data-theme=dark] .gradient-assets-property .gradient-list[data-view-mode=grid] .gradient-item:hover .tools {
   display: inline-block;
 }
-.csseditor[data-theme=dark] .gradient-assets .gradient-list[data-view-mode=grid] .gradient-item .preview {
+.csseditor[data-theme=dark] .gradient-assets-property .gradient-list[data-view-mode=grid] .gradient-item .preview {
   position: relative;
   width: 100%;
   height: 80px;
@@ -4004,14 +4030,14 @@ html, body {
   background-size: 10px 10px;
   background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
 }
-.csseditor[data-theme=dark] .gradient-assets .gradient-list[data-view-mode=grid] .gradient-item .preview .gradient-view {
+.csseditor[data-theme=dark] .gradient-assets-property .gradient-list[data-view-mode=grid] .gradient-item .preview .gradient-view {
   position: absolute;
   left: 0px;
   top: 0px;
   right: 0px;
   bottom: 0px;
 }
-.csseditor[data-theme=dark] .gradient-assets .gradient-list[data-view-mode=grid] .gradient-item .title {
+.csseditor[data-theme=dark] .gradient-assets-property .gradient-list[data-view-mode=grid] .gradient-item .title {
   position: relative;
   width: 100%;
   display: grid;
@@ -4020,10 +4046,10 @@ html, body {
   grid-row-gap: 4px;
   padding: 4px 0px;
 }
-.csseditor[data-theme=dark] .gradient-assets .gradient-list[data-view-mode=grid] .gradient-item .title input {
+.csseditor[data-theme=dark] .gradient-assets-property .gradient-list[data-view-mode=grid] .gradient-item .title input {
   width: 100%;
 }
-.csseditor[data-theme=dark] .gradient-assets .gradient-list[data-view-mode=grid] .gradient-item .tools {
+.csseditor[data-theme=dark] .gradient-assets-property .gradient-list[data-view-mode=grid] .gradient-item .tools {
   position: absolute;
   display: none;
   top: 0px;
@@ -4031,18 +4057,21 @@ html, body {
   text-align: right;
   padding: 2px;
 }
-.csseditor[data-theme=dark] .gradient-assets .gradient-list[data-view-mode=list] .add-gradient-item {
+.csseditor[data-theme=dark] .gradient-assets-property .gradient-list[data-view-mode=grid] .gradient-item .tools svg path {
+  fill: white;
+}
+.csseditor[data-theme=dark] .gradient-assets-property .gradient-list[data-view-mode=list] .add-gradient-item {
   cursor: pointer;
   text-align: center;
 }
-.csseditor[data-theme=dark] .gradient-assets .gradient-list[data-view-mode=list] .gradient-item {
+.csseditor[data-theme=dark] .gradient-assets-property .gradient-list[data-view-mode=list] .gradient-item {
   display: grid;
   grid-template-columns: 22px 1fr 50px;
   grid-column-gap: 2px;
   height: 20px;
   margin-bottom: 2px;
 }
-.csseditor[data-theme=dark] .gradient-assets .gradient-list[data-view-mode=list] .gradient-item .preview {
+.csseditor[data-theme=dark] .gradient-assets-property .gradient-list[data-view-mode=list] .gradient-item .preview {
   cursor: pointer;
   width: 20px;
   height: 20px;
@@ -4056,24 +4085,186 @@ html, body {
   overflow: hidden;
   cursor: pointer;
 }
-.csseditor[data-theme=dark] .gradient-assets .gradient-list[data-view-mode=list] .gradient-item .preview .gradient-view {
+.csseditor[data-theme=dark] .gradient-assets-property .gradient-list[data-view-mode=list] .gradient-item .preview .gradient-view {
   position: absolute;
   left: 0px;
   top: 0px;
   right: 0px;
   bottom: 0px;
 }
-.csseditor[data-theme=dark] .gradient-assets .gradient-list[data-view-mode=list] .gradient-item .title {
+.csseditor[data-theme=dark] .gradient-assets-property .gradient-list[data-view-mode=list] .gradient-item .title {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-column-gap: 4px;
 }
-.csseditor[data-theme=dark] .gradient-assets .gradient-list[data-view-mode=list] .gradient-item .title div input {
+.csseditor[data-theme=dark] .gradient-assets-property .gradient-list[data-view-mode=list] .gradient-item .title div input {
   border-radius: 2px;
   border: 1px solid #1a1a1a;
   width: 100%;
 }
 .csseditor[data-theme=dark] .property.gradient-assets-property {
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+}
+.csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list-tools {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 2px;
+  text-align: left;
+  margin-bottom: 10px;
+}
+.csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list-tools button {
+  width: auto;
+  height: 24px;
+  vertical-align: middle;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  outline: none;
+  padding: 0px;
+  border: 0px;
+  display: inline-block;
+  font-size: 11px;
+  cursor: pointer;
+}
+.csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list-tools button svg {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  vertical-align: middle;
+}
+.csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list-tools button {
+  padding: 2px 10px;
+  border: 1px solid #1a1a1a;
+}
+.csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list-tools[data-view-mode=list] button[data-value=list] {
+  background-color: #609de2;
+  border-color: #609de2;
+  background-image: none;
+  color: white;
+}
+.csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list-tools[data-view-mode=list] button[data-value=list] svg path {
+  fill: white;
+}
+.csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list-tools[data-view-mode=grid] button[data-value=grid] {
+  background-color: #609de2;
+  border-color: #609de2;
+  background-image: none;
+  color: white;
+}
+.csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list-tools[data-view-mode=grid] button[data-value=grid] svg path {
+  fill: white;
+}
+.csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list .svgfilter-view {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  pointer-events: none;
+  background-image: radial-gradient(yellow 0%, red 100%);
+}
+.csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list[data-view-mode=grid] {
+  display: block;
+}
+.csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list[data-view-mode=grid] .add-svgfilter-item {
+  display: inline-block;
+  width: 80px;
+  position: relative;
+  margin-right: 4px;
+  margin-bottom: 4px;
+  height: 80px;
+  border: 1px solid #1a1a1a;
+  border-radius: 2px;
+  box-sizing: border-box;
+  vertical-align: top;
+  cursor: pointer;
+  text-align: center;
+  padding: 24px;
+}
+.csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list[data-view-mode=grid] .svgfilter-item {
+  display: inline-block;
+  width: 80px;
+  position: relative;
+  margin-right: 4px;
+  margin-bottom: 4px;
+  vertical-align: middle;
+}
+.csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list[data-view-mode=grid] .svgfilter-item:hover .tools {
+  display: inline-block;
+}
+.csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list[data-view-mode=grid] .svgfilter-item .preview {
+  position: relative;
+  width: 100%;
+  height: 80px;
+  border: 1px solid #1a1a1a;
+  border-radius: 2px;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+.csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list[data-view-mode=grid] .svgfilter-item .title {
+  position: relative;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(2, 1fr);
+  grid-row-gap: 4px;
+  padding: 4px 0px;
+}
+.csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list[data-view-mode=grid] .svgfilter-item .title input {
+  width: 100%;
+}
+.csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list[data-view-mode=grid] .svgfilter-item .tools {
+  background-color: transparent;
+  position: absolute;
+  display: none;
+  top: 0px;
+  right: 0px;
+  text-align: right;
+  padding: 2px;
+}
+.csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list[data-view-mode=grid] .svgfilter-item .tools svg path {
+  fill: white;
+}
+.csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list[data-view-mode=list] .add-svgfilter-item {
+  cursor: pointer;
+  text-align: center;
+}
+.csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list[data-view-mode=list] .svgfilter-item {
+  display: grid;
+  grid-template-columns: 22px 1fr 35px;
+  grid-column-gap: 2px;
+  height: 20px;
+  margin-bottom: 4px;
+}
+.csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list[data-view-mode=list] .svgfilter-item .preview {
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #1a1a1a;
+  border-radius: 3px;
+  position: relative;
+  background-color: transparent;
+  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-size: 10px 10px;
+  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+  box-sizing: border-box;
+  overflow: hidden;
+  cursor: pointer;
+}
+.csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list[data-view-mode=list] .svgfilter-item .title {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-column-gap: 4px;
+}
+.csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list[data-view-mode=list] .svgfilter-item .title div input {
+  height: 100%;
+  border-radius: 2px;
+  border: 1px solid #1a1a1a;
+  width: 100%;
+}
+.csseditor[data-theme=dark] .property.svgfilter-assets-property {
   padding-left: 0px !important;
   padding-right: 0px !important;
 }
@@ -5436,7 +5627,7 @@ html, body {
 .csseditor[data-theme=dark] .svg-filter-editor .filter-list .filter-item .title {
   display: grid;
   grid-template-columns: 1fr 30px;
-  background-color: #2b8cf3;
+  background-color: #3e8ec6;
   color: white;
   border-radius: 3px;
   margin: 5px 0px;
@@ -5448,6 +5639,9 @@ html, body {
 }
 .csseditor[data-theme=dark] .svg-filter-editor .filter-list .filter-item .title .filter-menu {
   text-align: right;
+}
+.csseditor[data-theme=dark] .svg-filter-editor .filter-list .filter-item .title .filter-menu svg path {
+  fill: white;
 }
 .csseditor[data-theme=dark] .svg-filter-editor .filter-list .filter-item .filter-ui {
   display: grid;
@@ -6253,12 +6447,18 @@ html, body {
 .csseditor[data-theme=dark] .popup .svg-property-editor-popup {
   width: 250px;
 }
-.csseditor[data-theme=dark] .popup .svg-property-editor-popup .box > .name {
-  height: 20px;
-  display: grid;
-  grid-template-columns: 60px 1fr;
-  grid-column-gap: 4px;
-  margin-bottom: 5px;
+.csseditor[data-theme=dark] .popup .svg-property-editor-popup .box {
+  margin-bottom: 10px;
+}
+.csseditor[data-theme=dark] .popup .svg-property-editor-popup .box.preview {
+  height: 150px;
+}
+.csseditor[data-theme=dark] .popup .svg-property-editor-popup .box.preview .preview-box {
+  height: 100%;
+  box-sizing: border-box;
+  margin: 30px 20px;
+  border: 1px solid #1a1a1a;
+  background-image: radial-gradient(yellow 0%, red 100%);
 }
 .csseditor[data-theme=dark] .popup .svg-property-editor-popup .box .property .title {
   display: grid;
@@ -9563,11 +9763,14 @@ html, body {
 .csseditor[data-theme=light] .layer-list .layer-item.selected svg path {
   fill: white;
 }
-.csseditor[data-theme=light] .color-assets .color-list-tools {
+.csseditor[data-theme=light] .color-assets-property .color-list-tools {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 2px;
   text-align: left;
   margin-bottom: 10px;
 }
-.csseditor[data-theme=light] .color-assets .color-list-tools button {
+.csseditor[data-theme=light] .color-assets-property .color-list-tools button {
   width: auto;
   height: 24px;
   vertical-align: middle;
@@ -9582,33 +9785,41 @@ html, body {
   font-size: 11px;
   cursor: pointer;
 }
-.csseditor[data-theme=light] .color-assets .color-list-tools button svg {
+.csseditor[data-theme=light] .color-assets-property .color-list-tools button svg {
   width: 16px;
   height: 16px;
   display: inline-block;
   vertical-align: middle;
 }
-.csseditor[data-theme=light] .color-assets .color-list-tools button {
+.csseditor[data-theme=light] .color-assets-property .color-list-tools button {
   padding: 2px 10px;
   border: 1px solid #cfcfcf;
 }
-.csseditor[data-theme=light] .color-assets .color-list-tools[data-view-mode=list] button[data-value=list] {
+.csseditor[data-theme=light] .color-assets-property .color-list-tools[data-view-mode=list] button[data-value=list] {
   background-color: #609de2;
   border-color: #609de2;
   background-image: none;
+  color: white;
 }
-.csseditor[data-theme=light] .color-assets .color-list-tools[data-view-mode=grid] button[data-value=grid] {
+.csseditor[data-theme=light] .color-assets-property .color-list-tools[data-view-mode=list] button[data-value=list] svg path {
+  fill: white;
+}
+.csseditor[data-theme=light] .color-assets-property .color-list-tools[data-view-mode=grid] button[data-value=grid] {
   background-color: #609de2;
   border-color: #609de2;
   background-image: none;
+  color: white;
 }
-.csseditor[data-theme=light] .color-assets .color-list .color-view {
+.csseditor[data-theme=light] .color-assets-property .color-list-tools[data-view-mode=grid] button[data-value=grid] svg path {
+  fill: white;
+}
+.csseditor[data-theme=light] .color-assets-property .color-list .color-view {
   pointer-events: none;
 }
-.csseditor[data-theme=light] .color-assets .color-list[data-view-mode=grid] {
+.csseditor[data-theme=light] .color-assets-property .color-list[data-view-mode=grid] {
   display: block;
 }
-.csseditor[data-theme=light] .color-assets .color-list[data-view-mode=grid] .add-color-item {
+.csseditor[data-theme=light] .color-assets-property .color-list[data-view-mode=grid] .add-color-item {
   display: inline-block;
   width: 80px;
   position: relative;
@@ -9623,7 +9834,7 @@ html, body {
   text-align: center;
   padding: 24px;
 }
-.csseditor[data-theme=light] .color-assets .color-list[data-view-mode=grid] .color-item {
+.csseditor[data-theme=light] .color-assets-property .color-list[data-view-mode=grid] .color-item {
   display: inline-block;
   width: 80px;
   position: relative;
@@ -9631,10 +9842,10 @@ html, body {
   margin-bottom: 4px;
   vertical-align: middle;
 }
-.csseditor[data-theme=light] .color-assets .color-list[data-view-mode=grid] .color-item:hover .tools {
+.csseditor[data-theme=light] .color-assets-property .color-list[data-view-mode=grid] .color-item:hover .tools {
   display: inline-block;
 }
-.csseditor[data-theme=light] .color-assets .color-list[data-view-mode=grid] .color-item .preview {
+.csseditor[data-theme=light] .color-assets-property .color-list[data-view-mode=grid] .color-item .preview {
   position: relative;
   width: 100%;
   height: 80px;
@@ -9643,14 +9854,14 @@ html, body {
   box-sizing: border-box;
   cursor: pointer;
 }
-.csseditor[data-theme=light] .color-assets .color-list[data-view-mode=grid] .color-item .preview .color-view {
+.csseditor[data-theme=light] .color-assets-property .color-list[data-view-mode=grid] .color-item .preview .color-view {
   position: absolute;
   left: 0px;
   top: 0px;
   right: 0px;
   bottom: 0px;
 }
-.csseditor[data-theme=light] .color-assets .color-list[data-view-mode=grid] .color-item .title {
+.csseditor[data-theme=light] .color-assets-property .color-list[data-view-mode=grid] .color-item .title {
   position: relative;
   width: 100%;
   display: grid;
@@ -9659,10 +9870,10 @@ html, body {
   grid-row-gap: 4px;
   padding: 4px 0px;
 }
-.csseditor[data-theme=light] .color-assets .color-list[data-view-mode=grid] .color-item .title input {
+.csseditor[data-theme=light] .color-assets-property .color-list[data-view-mode=grid] .color-item .title input {
   width: 100%;
 }
-.csseditor[data-theme=light] .color-assets .color-list[data-view-mode=grid] .color-item .tools {
+.csseditor[data-theme=light] .color-assets-property .color-list[data-view-mode=grid] .color-item .tools {
   background-color: transparent;
   position: absolute;
   display: none;
@@ -9671,18 +9882,21 @@ html, body {
   text-align: right;
   padding: 2px;
 }
-.csseditor[data-theme=light] .color-assets .color-list[data-view-mode=list] .add-color-item {
+.csseditor[data-theme=light] .color-assets-property .color-list[data-view-mode=grid] .color-item .tools svg path {
+  fill: white;
+}
+.csseditor[data-theme=light] .color-assets-property .color-list[data-view-mode=list] .add-color-item {
   cursor: pointer;
   text-align: center;
 }
-.csseditor[data-theme=light] .color-assets .color-list[data-view-mode=list] .color-item {
+.csseditor[data-theme=light] .color-assets-property .color-list[data-view-mode=list] .color-item {
   display: grid;
-  grid-template-columns: 22px 1fr 50px;
+  grid-template-columns: 22px 1fr 35px;
   grid-column-gap: 2px;
   height: 20px;
-  margin-bottom: 2px;
+  margin-bottom: 4px;
 }
-.csseditor[data-theme=light] .color-assets .color-list[data-view-mode=list] .color-item .preview {
+.csseditor[data-theme=light] .color-assets-property .color-list[data-view-mode=list] .color-item .preview {
   cursor: pointer;
   width: 20px;
   height: 20px;
@@ -9697,19 +9911,20 @@ html, body {
   overflow: hidden;
   cursor: pointer;
 }
-.csseditor[data-theme=light] .color-assets .color-list[data-view-mode=list] .color-item .preview .color-view {
+.csseditor[data-theme=light] .color-assets-property .color-list[data-view-mode=list] .color-item .preview .color-view {
   position: absolute;
   left: 0px;
   top: 0px;
   right: 0px;
   bottom: 0px;
 }
-.csseditor[data-theme=light] .color-assets .color-list[data-view-mode=list] .color-item .title {
+.csseditor[data-theme=light] .color-assets-property .color-list[data-view-mode=list] .color-item .title {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-column-gap: 4px;
 }
-.csseditor[data-theme=light] .color-assets .color-list[data-view-mode=list] .color-item .title div input {
+.csseditor[data-theme=light] .color-assets-property .color-list[data-view-mode=list] .color-item .title div input {
+  height: 100%;
   border-radius: 2px;
   border: 1px solid #cfcfcf;
   width: 100%;
@@ -9718,14 +9933,17 @@ html, body {
   padding-left: 0px !important;
   padding-right: 0px !important;
 }
-.csseditor[data-theme=light] .gradient-assets {
+.csseditor[data-theme=light] .gradient-assets-property {
   margin-top: 4px;
 }
-.csseditor[data-theme=light] .gradient-assets .gradient-list-tools {
+.csseditor[data-theme=light] .gradient-assets-property .gradient-list-tools {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 2px;
   text-align: left;
   margin-bottom: 10px;
 }
-.csseditor[data-theme=light] .gradient-assets .gradient-list-tools button {
+.csseditor[data-theme=light] .gradient-assets-property .gradient-list-tools button {
   width: auto;
   height: 24px;
   vertical-align: middle;
@@ -9740,33 +9958,41 @@ html, body {
   font-size: 11px;
   cursor: pointer;
 }
-.csseditor[data-theme=light] .gradient-assets .gradient-list-tools button svg {
+.csseditor[data-theme=light] .gradient-assets-property .gradient-list-tools button svg {
   width: 16px;
   height: 16px;
   display: inline-block;
   vertical-align: middle;
 }
-.csseditor[data-theme=light] .gradient-assets .gradient-list-tools button {
+.csseditor[data-theme=light] .gradient-assets-property .gradient-list-tools button {
   padding: 2px 10px;
   border: 1px solid #cfcfcf;
 }
-.csseditor[data-theme=light] .gradient-assets .gradient-list-tools[data-view-mode=list] button[data-value=list] {
+.csseditor[data-theme=light] .gradient-assets-property .gradient-list-tools[data-view-mode=list] button[data-value=list] {
   background-color: #609de2;
   border-color: #609de2;
   background-image: none;
+  color: white;
 }
-.csseditor[data-theme=light] .gradient-assets .gradient-list-tools[data-view-mode=grid] button[data-value=grid] {
+.csseditor[data-theme=light] .gradient-assets-property .gradient-list-tools[data-view-mode=list] button[data-value=list] svg path {
+  fill: white;
+}
+.csseditor[data-theme=light] .gradient-assets-property .gradient-list-tools[data-view-mode=grid] button[data-value=grid] {
   background-color: #609de2;
   border-color: #609de2;
   background-image: none;
+  color: white;
 }
-.csseditor[data-theme=light] .gradient-assets .gradient-list .gradient-view {
+.csseditor[data-theme=light] .gradient-assets-property .gradient-list-tools[data-view-mode=grid] button[data-value=grid] svg path {
+  fill: white;
+}
+.csseditor[data-theme=light] .gradient-assets-property .gradient-list .gradient-view {
   pointer-events: none;
 }
-.csseditor[data-theme=light] .gradient-assets .gradient-list[data-view-mode=grid] {
+.csseditor[data-theme=light] .gradient-assets-property .gradient-list[data-view-mode=grid] {
   display: block;
 }
-.csseditor[data-theme=light] .gradient-assets .gradient-list[data-view-mode=grid] .add-gradient-item {
+.csseditor[data-theme=light] .gradient-assets-property .gradient-list[data-view-mode=grid] .add-gradient-item {
   display: inline-block;
   width: 80px;
   position: relative;
@@ -9781,7 +10007,7 @@ html, body {
   text-align: center;
   padding: 24px;
 }
-.csseditor[data-theme=light] .gradient-assets .gradient-list[data-view-mode=grid] .gradient-item {
+.csseditor[data-theme=light] .gradient-assets-property .gradient-list[data-view-mode=grid] .gradient-item {
   display: inline-block;
   width: 80px;
   position: relative;
@@ -9789,10 +10015,10 @@ html, body {
   margin-bottom: 4px;
   vertical-align: middle;
 }
-.csseditor[data-theme=light] .gradient-assets .gradient-list[data-view-mode=grid] .gradient-item:hover .tools {
+.csseditor[data-theme=light] .gradient-assets-property .gradient-list[data-view-mode=grid] .gradient-item:hover .tools {
   display: inline-block;
 }
-.csseditor[data-theme=light] .gradient-assets .gradient-list[data-view-mode=grid] .gradient-item .preview {
+.csseditor[data-theme=light] .gradient-assets-property .gradient-list[data-view-mode=grid] .gradient-item .preview {
   position: relative;
   width: 100%;
   height: 80px;
@@ -9805,14 +10031,14 @@ html, body {
   background-size: 10px 10px;
   background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
 }
-.csseditor[data-theme=light] .gradient-assets .gradient-list[data-view-mode=grid] .gradient-item .preview .gradient-view {
+.csseditor[data-theme=light] .gradient-assets-property .gradient-list[data-view-mode=grid] .gradient-item .preview .gradient-view {
   position: absolute;
   left: 0px;
   top: 0px;
   right: 0px;
   bottom: 0px;
 }
-.csseditor[data-theme=light] .gradient-assets .gradient-list[data-view-mode=grid] .gradient-item .title {
+.csseditor[data-theme=light] .gradient-assets-property .gradient-list[data-view-mode=grid] .gradient-item .title {
   position: relative;
   width: 100%;
   display: grid;
@@ -9821,10 +10047,10 @@ html, body {
   grid-row-gap: 4px;
   padding: 4px 0px;
 }
-.csseditor[data-theme=light] .gradient-assets .gradient-list[data-view-mode=grid] .gradient-item .title input {
+.csseditor[data-theme=light] .gradient-assets-property .gradient-list[data-view-mode=grid] .gradient-item .title input {
   width: 100%;
 }
-.csseditor[data-theme=light] .gradient-assets .gradient-list[data-view-mode=grid] .gradient-item .tools {
+.csseditor[data-theme=light] .gradient-assets-property .gradient-list[data-view-mode=grid] .gradient-item .tools {
   position: absolute;
   display: none;
   top: 0px;
@@ -9832,18 +10058,21 @@ html, body {
   text-align: right;
   padding: 2px;
 }
-.csseditor[data-theme=light] .gradient-assets .gradient-list[data-view-mode=list] .add-gradient-item {
+.csseditor[data-theme=light] .gradient-assets-property .gradient-list[data-view-mode=grid] .gradient-item .tools svg path {
+  fill: white;
+}
+.csseditor[data-theme=light] .gradient-assets-property .gradient-list[data-view-mode=list] .add-gradient-item {
   cursor: pointer;
   text-align: center;
 }
-.csseditor[data-theme=light] .gradient-assets .gradient-list[data-view-mode=list] .gradient-item {
+.csseditor[data-theme=light] .gradient-assets-property .gradient-list[data-view-mode=list] .gradient-item {
   display: grid;
   grid-template-columns: 22px 1fr 50px;
   grid-column-gap: 2px;
   height: 20px;
   margin-bottom: 2px;
 }
-.csseditor[data-theme=light] .gradient-assets .gradient-list[data-view-mode=list] .gradient-item .preview {
+.csseditor[data-theme=light] .gradient-assets-property .gradient-list[data-view-mode=list] .gradient-item .preview {
   cursor: pointer;
   width: 20px;
   height: 20px;
@@ -9857,24 +10086,186 @@ html, body {
   overflow: hidden;
   cursor: pointer;
 }
-.csseditor[data-theme=light] .gradient-assets .gradient-list[data-view-mode=list] .gradient-item .preview .gradient-view {
+.csseditor[data-theme=light] .gradient-assets-property .gradient-list[data-view-mode=list] .gradient-item .preview .gradient-view {
   position: absolute;
   left: 0px;
   top: 0px;
   right: 0px;
   bottom: 0px;
 }
-.csseditor[data-theme=light] .gradient-assets .gradient-list[data-view-mode=list] .gradient-item .title {
+.csseditor[data-theme=light] .gradient-assets-property .gradient-list[data-view-mode=list] .gradient-item .title {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-column-gap: 4px;
 }
-.csseditor[data-theme=light] .gradient-assets .gradient-list[data-view-mode=list] .gradient-item .title div input {
+.csseditor[data-theme=light] .gradient-assets-property .gradient-list[data-view-mode=list] .gradient-item .title div input {
   border-radius: 2px;
   border: 1px solid #cfcfcf;
   width: 100%;
 }
 .csseditor[data-theme=light] .property.gradient-assets-property {
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+}
+.csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list-tools {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 2px;
+  text-align: left;
+  margin-bottom: 10px;
+}
+.csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list-tools button {
+  width: auto;
+  height: 24px;
+  vertical-align: middle;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  outline: none;
+  padding: 0px;
+  border: 0px;
+  display: inline-block;
+  font-size: 11px;
+  cursor: pointer;
+}
+.csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list-tools button svg {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  vertical-align: middle;
+}
+.csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list-tools button {
+  padding: 2px 10px;
+  border: 1px solid #cfcfcf;
+}
+.csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list-tools[data-view-mode=list] button[data-value=list] {
+  background-color: #609de2;
+  border-color: #609de2;
+  background-image: none;
+  color: white;
+}
+.csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list-tools[data-view-mode=list] button[data-value=list] svg path {
+  fill: white;
+}
+.csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list-tools[data-view-mode=grid] button[data-value=grid] {
+  background-color: #609de2;
+  border-color: #609de2;
+  background-image: none;
+  color: white;
+}
+.csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list-tools[data-view-mode=grid] button[data-value=grid] svg path {
+  fill: white;
+}
+.csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list .svgfilter-view {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  pointer-events: none;
+  background-image: radial-gradient(yellow 0%, red 100%);
+}
+.csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list[data-view-mode=grid] {
+  display: block;
+}
+.csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list[data-view-mode=grid] .add-svgfilter-item {
+  display: inline-block;
+  width: 80px;
+  position: relative;
+  margin-right: 4px;
+  margin-bottom: 4px;
+  height: 80px;
+  border: 1px solid #cfcfcf;
+  border-radius: 2px;
+  box-sizing: border-box;
+  vertical-align: top;
+  cursor: pointer;
+  text-align: center;
+  padding: 24px;
+}
+.csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list[data-view-mode=grid] .svgfilter-item {
+  display: inline-block;
+  width: 80px;
+  position: relative;
+  margin-right: 4px;
+  margin-bottom: 4px;
+  vertical-align: middle;
+}
+.csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list[data-view-mode=grid] .svgfilter-item:hover .tools {
+  display: inline-block;
+}
+.csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list[data-view-mode=grid] .svgfilter-item .preview {
+  position: relative;
+  width: 100%;
+  height: 80px;
+  border: 1px solid #cfcfcf;
+  border-radius: 2px;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+.csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list[data-view-mode=grid] .svgfilter-item .title {
+  position: relative;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(2, 1fr);
+  grid-row-gap: 4px;
+  padding: 4px 0px;
+}
+.csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list[data-view-mode=grid] .svgfilter-item .title input {
+  width: 100%;
+}
+.csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list[data-view-mode=grid] .svgfilter-item .tools {
+  background-color: transparent;
+  position: absolute;
+  display: none;
+  top: 0px;
+  right: 0px;
+  text-align: right;
+  padding: 2px;
+}
+.csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list[data-view-mode=grid] .svgfilter-item .tools svg path {
+  fill: white;
+}
+.csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list[data-view-mode=list] .add-svgfilter-item {
+  cursor: pointer;
+  text-align: center;
+}
+.csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list[data-view-mode=list] .svgfilter-item {
+  display: grid;
+  grid-template-columns: 22px 1fr 35px;
+  grid-column-gap: 2px;
+  height: 20px;
+  margin-bottom: 4px;
+}
+.csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list[data-view-mode=list] .svgfilter-item .preview {
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #cfcfcf;
+  border-radius: 3px;
+  position: relative;
+  background-color: transparent;
+  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-size: 10px 10px;
+  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+  box-sizing: border-box;
+  overflow: hidden;
+  cursor: pointer;
+}
+.csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list[data-view-mode=list] .svgfilter-item .title {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-column-gap: 4px;
+}
+.csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list[data-view-mode=list] .svgfilter-item .title div input {
+  height: 100%;
+  border-radius: 2px;
+  border: 1px solid #cfcfcf;
+  width: 100%;
+}
+.csseditor[data-theme=light] .property.svgfilter-assets-property {
   padding-left: 0px !important;
   padding-right: 0px !important;
 }
@@ -11237,7 +11628,7 @@ html, body {
 .csseditor[data-theme=light] .svg-filter-editor .filter-list .filter-item .title {
   display: grid;
   grid-template-columns: 1fr 30px;
-  background-color: #2b8cf3;
+  background-color: #3e8ec6;
   color: white;
   border-radius: 3px;
   margin: 5px 0px;
@@ -11249,6 +11640,9 @@ html, body {
 }
 .csseditor[data-theme=light] .svg-filter-editor .filter-list .filter-item .title .filter-menu {
   text-align: right;
+}
+.csseditor[data-theme=light] .svg-filter-editor .filter-list .filter-item .title .filter-menu svg path {
+  fill: white;
 }
 .csseditor[data-theme=light] .svg-filter-editor .filter-list .filter-item .filter-ui {
   display: grid;
@@ -12054,12 +12448,18 @@ html, body {
 .csseditor[data-theme=light] .popup .svg-property-editor-popup {
   width: 250px;
 }
-.csseditor[data-theme=light] .popup .svg-property-editor-popup .box > .name {
-  height: 20px;
-  display: grid;
-  grid-template-columns: 60px 1fr;
-  grid-column-gap: 4px;
-  margin-bottom: 5px;
+.csseditor[data-theme=light] .popup .svg-property-editor-popup .box {
+  margin-bottom: 10px;
+}
+.csseditor[data-theme=light] .popup .svg-property-editor-popup .box.preview {
+  height: 150px;
+}
+.csseditor[data-theme=light] .popup .svg-property-editor-popup .box.preview .preview-box {
+  height: 100%;
+  box-sizing: border-box;
+  margin: 30px 20px;
+  border: 1px solid #cfcfcf;
+  background-image: radial-gradient(yellow 0%, red 100%);
 }
 .csseditor[data-theme=light] .popup .svg-property-editor-popup .box .property .title {
   display: grid;
