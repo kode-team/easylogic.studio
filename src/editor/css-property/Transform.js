@@ -25,7 +25,10 @@ export class Transform extends Property {
   }
 
   static join (list) {
-    return list.map(it => new Transform(it).toString()).join(' ')
+    var arr = list.filter(it => it.type === 'perspective')
+    var arr2 = list.filter(it => it.type !== 'perspective')
+
+    return [...arr, ...arr2].map(it => new Transform(it).toString()).join(' ')
   }
 
   hasNumberValue () {

@@ -21,7 +21,7 @@ export default class PerspectiveProperty extends BaseProperty {
     var current = editor.selection.current || {};
 
     var perspective = current['perspective'] || ''
-    return `<RangeEditor ref='$1' key='perspective' label='Perspective' removable="true" value="${perspective}" onchange="changePerspective" />`;
+    return `<RangeEditor ref='$1' key='perspective' label='Perspective' removable="true" value="${perspective}" max="2000px" onchange="changePerspective" />`;
   }
 
   [EVENT('changePerspective')] (key, value) {

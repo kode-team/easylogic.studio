@@ -20,6 +20,7 @@ import Dom from "../../../util/Dom";
 import StarManager from "./StarManager";
 import PathManager from "./PathManager";
 import PolygonManager from "./PolygonManager";
+import SelectionManager from "./SelectionManager";
 
 
 
@@ -31,7 +32,8 @@ export default class CanvasView extends UIElement {
       ElementView,
       StarManager,
       PathManager,
-      PolygonManager            
+      PolygonManager,
+      SelectionManager        
     }
   }
 
@@ -78,6 +80,7 @@ export default class CanvasView extends UIElement {
           <PathManager />
           <PolygonManager />
           <StarManager />
+          <SelectionManager />
         </div>
         <div class='page-tools'>
           <button type='button' ref='$plus'>${icon.add}</button>

@@ -38,7 +38,7 @@ export default class SelectionToolView extends UIElement {
                     <div class='handle-left'></div>
                     <div class='handle-bottom'></div>
                     <div class='point'></div>                    
-                </div>                        
+                </div>
             </div>           
 
             <div class='selection-tool-item' data-position='to top'></div>
@@ -60,6 +60,23 @@ export default class SelectionToolView extends UIElement {
                 item.reset({ 'transform-origin': '' })
             })
             this.bindData('$rotate3d')
+        } else if (e.shiftKey) {
+            editor.selection.each(item => {
+                var transform = Transform.join(Transform.parseStyle(item.transform).filter(it => {
+                    switch(it.type) {
+                    case 'translate':
+                    case 'translateX':
+                    case 'translateY':
+                    case 'translateZ':
+                        return false; 
+                    }
+                    return true; 
+                }))
+    
+                item.reset({ transform })
+            })
+            this.bindData('$rotateZ')
+            this.bindData('$rotateArea')            
         } else {
             editor.selection.each(item => {
                 var transform = Transform.join(Transform.parseStyle(item.transform).filter(it => {
@@ -202,6 +219,8 @@ export default class SelectionToolView extends UIElement {
             var rect = $point.rect()
             this.hasRotateZ = $point.hasClass('point') 
             this.hasTransformOrigin = false; 
+            this.hasTranslate = false; 
+            this.hasTranslateZ = false; 
             
 
             if (this.hasRotateZ) {
@@ -240,6 +259,24 @@ export default class SelectionToolView extends UIElement {
                         cachedItem.transformOriginY = cachedItem.transformOrigin[1] || Length.percent(50)
                         cachedItem.transformOriginYtoPx = cachedItem.transformOriginY.toPx(cachedItem.screenHeight);
                     })
+
+                } else if (e.shiftKey) {
+                    this.hasTranslate = true; 
+                    editor.selection.each((item, cachedItem) => {
+                        item.transformObj = Transform.parseStyle(item.transform);
+                        cachedItem.transformObj = Transform.parseStyle(cachedItem.transform);
+    
+                        cachedItem.translateX = cachedItem.transformObj.filter(it => it.type === 'translateX')[0];
+                        cachedItem.translateY = cachedItem.transformObj.filter(it => it.type === 'translateY')[0];
+                    })     
+                } else if (e.metaKey) {
+                    this.hasTranslateZ = true; 
+                    editor.selection.each((item, cachedItem) => {
+                        item.transformObj = Transform.parseStyle(item.transform);
+                        cachedItem.transformObj = Transform.parseStyle(cachedItem.transform);
+    
+                        cachedItem.translateZ = cachedItem.transformObj.filter(it => it.type === 'translateZ')[0];
+                    })                                        
                 } else {
                     // 3d rotate 는 transform 속성이라 selection tool ui 를 변경하지 않는다. 
                     editor.selection.each((item, cachedItem) => {
@@ -263,7 +300,7 @@ export default class SelectionToolView extends UIElement {
 
     }
 
-    setRotateValue (item, type, value) {
+    setTransformValue (item, type, value) {
 
         var obj = item.transformObj.filter(it => it.type === type)[0]
         if (obj) {
@@ -373,7 +410,7 @@ export default class SelectionToolView extends UIElement {
                     }
 
     
-                    this.setRotateValue(item, 'rotateZ', tempRotateZ);
+                    this.setTransformValue(item, 'rotateZ', tempRotateZ);
     
                     item.transform = Transform.join(item.transformObj);
                 })
@@ -406,6 +443,49 @@ export default class SelectionToolView extends UIElement {
                     })
                     this.bindData('$rotate3d')
 
+                } else if (this.hasTranslate) {
+                    var rx = Length.px(dx / editor.scale)
+                    var ry = Length.px(dy / editor.scale)
+        
+                    editor.selection.each((item, cachedItem) => {
+                        var tempTranslateX = Length.px(0)
+                        var tempTranslateY = Length.px(0)
+        
+                        if (cachedItem.translateX) { 
+                            tempTranslateX.set(cachedItem.translateX.value[0].value);
+                        } 
+                        if (cachedItem.translateY) {
+                            tempTranslateY.set(cachedItem.translateY.value[0].value);
+                        }
+        
+                        tempTranslateX.add(rx);
+                        tempTranslateY.add(ry);
+        
+                        this.setTransformValue(item, 'translateX', tempTranslateX);
+                        this.setTransformValue(item, 'translateY', tempTranslateY);
+        
+                        item.transform = Transform.join(item.transformObj);
+                    })
+                    this.bindData('$rotate3d')
+                    this.bindData('$rotateArea')   
+                } else if (this.hasTranslateZ) {
+                    var ry = Length.px(dy / editor.scale)
+        
+                    editor.selection.each((item, cachedItem) => {
+                        var tempTranslateZ = Length.px(0)
+        
+                        if (cachedItem.translateZ) {
+                            tempTranslateZ.set(cachedItem.translateZ.value[0].value);
+                        }
+        
+                        tempTranslateZ.add(ry);
+        
+                        this.setTransformValue(item, 'translateZ', tempTranslateZ);
+        
+                        item.transform = Transform.join(item.transformObj);
+                    })
+                    this.bindData('$rotate3d')
+                    this.bindData('$rotateArea')                        
                 } else {
 
                     var rx = Length.deg(-dy / editor.scale)
@@ -425,8 +505,8 @@ export default class SelectionToolView extends UIElement {
                         tempRotateX.add(rx);
                         tempRotateY.add(ry);
         
-                        this.setRotateValue(item, 'rotateX', tempRotateX);
-                        this.setRotateValue(item, 'rotateY', tempRotateY);
+                        this.setTransformValue(item, 'rotateX', tempRotateX);
+                        this.setTransformValue(item, 'rotateY', tempRotateY);
         
                         item.transform = Transform.join(item.transformObj);
                     })
@@ -567,7 +647,11 @@ export default class SelectionToolView extends UIElement {
         if(x.is(0) && y.is(0) && width.is(0) && height.is(0)) {
             // 아무것도 없을 때는 안 보이는 곳으로 숨김 
             x.add(-100);
-            y.add(-100);            
+            y.add(-100);       
+            
+            this.emit('hideSelectionManager');
+        } else {
+            this.emit('showSelectionManager');
         }
 
         this.refs.$selectionTool.cssText(`left: ${x};top:${y};width:${width};height:${height}`)

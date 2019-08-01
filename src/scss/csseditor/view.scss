@@ -73,9 +73,11 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
   text-align: center; 
   pointer-events: none; 
 
+  @import './sub-editor/selection-manager.scss';  
   @import './sub-editor/path-manager.scss';
   @import './sub-editor/polygon-manager.scss';
   @import './sub-editor/star-manager.scss';
+
 }
 
 

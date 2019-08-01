@@ -2359,6 +2359,22 @@ html, body {
   text-align: center;
   pointer-events: none;
 }
+.csseditor[data-theme=dark] .page-subeditor .selection-manager {
+  display: none;
+  pointer-events: all;
+  outline: none;
+  border: 1px solid #1a1a1a;
+  color: #ececec;
+  background-color: #3a3a3a;
+  padding: 5px 10px;
+  width: 100%;
+}
+.csseditor[data-theme=dark] .page-subeditor .selection-manager .text {
+  display: flex;
+}
+.csseditor[data-theme=dark] .page-subeditor .selection-manager .text > .label {
+  display: inline-block;
+}
 .csseditor[data-theme=dark] .page-subeditor .path-manager {
   display: none;
   pointer-events: all;
@@ -8325,6 +8341,22 @@ html, body {
   height: 50px;
   text-align: center;
   pointer-events: none;
+}
+.csseditor[data-theme=light] .page-subeditor .selection-manager {
+  display: none;
+  pointer-events: all;
+  outline: none;
+  border: 1px solid #cfcfcf;
+  color: #666666;
+  background-color: white;
+  padding: 5px 10px;
+  width: 100%;
+}
+.csseditor[data-theme=light] .page-subeditor .selection-manager .text {
+  display: flex;
+}
+.csseditor[data-theme=light] .page-subeditor .selection-manager .text > .label {
+  display: inline-block;
 }
 .csseditor[data-theme=light] .page-subeditor .path-manager {
   display: none;
