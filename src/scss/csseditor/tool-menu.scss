@@ -73,7 +73,6 @@ $align-sub-color: #ccc;
 
 .external-tool-menu {
   padding-left: 10px;
-  padding-right: 10px;
 }
 
 .tool-menu,
@@ -114,7 +113,10 @@ $align-sub-color: #ccc;
     form {
       display: inline-block;
       vertical-align: middle;
-      margin-right: 15px;
+    }
+
+    > * {
+      margin-right: 10px;
     }
 
     button {

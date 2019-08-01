@@ -11,6 +11,11 @@ export class ImageLayer extends Layer {
     });
   }
 
+  enableHasChildren() {
+    return false; 
+  }
+
+
   getDefaultTitle() {
     return "Image";
   }

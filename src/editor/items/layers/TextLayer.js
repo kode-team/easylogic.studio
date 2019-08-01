@@ -10,6 +10,9 @@ export class TextLayer extends Layer {
       ...obj
     });
   }
+  enableHasChildren() {
+    return false; 
+  }
 
   getDefaultTitle() {
     return "Text";

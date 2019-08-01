@@ -236,6 +236,9 @@ export class DomItem extends GroupItem {
     this.removePropertyList(this.json.transitions, removeIndex);
   }  
 
+  enableHasChildren() {
+    return true; 
+  }
 
   sortItem(arr, startIndex, targetIndex) {
     arr.splice(

@@ -1430,7 +1430,7 @@ html, body {
   top: 0px;
   bottom: 0px;
   right: 0px;
-  width: 280px;
+  width: 295px;
 }
 .csseditor[data-theme=dark] .layout-main .layout-footer {
   flex: none;
@@ -2120,7 +2120,6 @@ html, body {
 }
 .csseditor[data-theme=dark] .external-tool-menu {
   padding-left: 10px;
-  padding-right: 10px;
 }
 .csseditor[data-theme=dark] .tool-menu,
 .csseditor[data-theme=dark] .external-tool-menu {
@@ -2161,7 +2160,10 @@ html, body {
 .csseditor[data-theme=dark] .external-tool-menu .items form {
   display: inline-block;
   vertical-align: middle;
-  margin-right: 15px;
+}
+.csseditor[data-theme=dark] .tool-menu .items > *,
+.csseditor[data-theme=dark] .external-tool-menu .items > * {
+  margin-right: 10px;
 }
 .csseditor[data-theme=dark] .tool-menu .items button,
 .csseditor[data-theme=dark] .external-tool-menu .items button {
@@ -7418,7 +7420,7 @@ html, body {
   top: 0px;
   bottom: 0px;
   right: 0px;
-  width: 280px;
+  width: 295px;
 }
 .csseditor[data-theme=light] .layout-main .layout-footer {
   flex: none;
@@ -8108,7 +8110,6 @@ html, body {
 }
 .csseditor[data-theme=light] .external-tool-menu {
   padding-left: 10px;
-  padding-right: 10px;
 }
 .csseditor[data-theme=light] .tool-menu,
 .csseditor[data-theme=light] .external-tool-menu {
@@ -8149,7 +8150,10 @@ html, body {
 .csseditor[data-theme=light] .external-tool-menu .items form {
   display: inline-block;
   vertical-align: middle;
-  margin-right: 15px;
+}
+.csseditor[data-theme=light] .tool-menu .items > *,
+.csseditor[data-theme=light] .external-tool-menu .items > * {
+  margin-right: 10px;
 }
 .csseditor[data-theme=light] .tool-menu .items button,
 .csseditor[data-theme=light] .external-tool-menu .items button {

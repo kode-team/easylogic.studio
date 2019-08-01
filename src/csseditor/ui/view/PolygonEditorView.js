@@ -267,6 +267,7 @@ export default class PolygonEditorView extends UIElement {
         var curve = recoverBezierLine(...points, 200)
         var t = curve(clickPosition.x, clickPosition.y);          
 
+
         this.polygonGenerator.setPointLine(getBezierPointsLine(points, t))
 
         this.changeMode('modify');

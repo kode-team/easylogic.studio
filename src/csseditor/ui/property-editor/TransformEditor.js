@@ -112,7 +112,7 @@ export default class TransformEditor extends UIElement {
       case 'rotateY': 
       case 'rotateZ': 
       case 'rotate':  
-      return { min: -360, max : 360, step: 0.1, units: 'deg,turn,rad'}              
+        return { min: -360, max : 360, step: 0.1, units: 'deg,turn,rad'}
       case 'perspective':
           return { min: 0, max : 10000, step: 1, units: 'px,%,em'}
       case 'scale': 
@@ -172,7 +172,7 @@ export default class TransformEditor extends UIElement {
             return `
               <div>
                 <RangeEditor 
-                      ref='$range${index}_${tindex}' 
+                      ref='$range_${type}_${index}_${tindex}' 
                       min="${min}" 
                       max="${max}" 
                       step="${step}" 

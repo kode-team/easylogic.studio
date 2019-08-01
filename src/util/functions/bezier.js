@@ -230,6 +230,7 @@ export const getBezierPointsQuard = (points, t) => {
 export const getBezierPointsLine = (points, t) => {
 
     var p0 = interpolate(points[0], points[1], t);
+
     return {
         first: [ points[0], p0 ],
         second: [ p0, points[1] ]

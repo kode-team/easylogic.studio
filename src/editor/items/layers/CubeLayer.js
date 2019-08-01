@@ -13,6 +13,11 @@ export class CubeLayer extends Layer {
     });
   }
 
+  enableHasChildren() {
+    return true; 
+  }
+
+
   getDefaultTitle() {
     return "Cube";
   }

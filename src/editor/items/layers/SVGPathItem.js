@@ -12,6 +12,11 @@ export class SVGPathItem extends SVGItem {
     });
   }
 
+  enableHasChildren() {
+    return false; 
+  }
+
+
   updatePathItem (obj) {
     this.json.d = obj.d; 
     this.json.path = new PathParser(obj.d);

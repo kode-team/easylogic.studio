@@ -14,8 +14,8 @@ export default class PolygonManager extends UIElement {
       <div class='polygon-manager'>
         <div class='text'>
             <label>Polygon Mode</label>
-            <label><input type='radio' name='polygon-mode' value='move' /> move</label>
-            <label><input type='radio' name='polygon-mode' value='draw' /> draw</label>
+            <label><input type='radio' name='polygon-mode' value='draw' /> draw</label>            
+            <label><input type='radio' name='polygon-mode' value='modify' /> modify</label>
         </div>
       </div>    
     `;

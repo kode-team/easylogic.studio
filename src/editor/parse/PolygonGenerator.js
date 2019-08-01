@@ -17,6 +17,7 @@ export default class PolygonGenerator {
     initialize () {
         this.splitLines = []         
         this.points = []
+        this.snapPointList = [] 
         this.segmentManager.reset();
     }
 
@@ -223,7 +224,7 @@ export default class PolygonGenerator {
 
         var allPoints = this.cloneSegments
 
-        var firstIndex = Point.getIndex(allPoints, p0); 
+        var firstIndex = Point.getPointIndex(allPoints, p0); 
 
         allPoints.splice(firstIndex+1, 0, obj.first[1]);
 
@@ -259,7 +260,7 @@ export default class PolygonGenerator {
         this.points = []
 
         points.forEach( (point, index) => {
-
+            var isFirst = index === 0
             this.points.push(point);
 
             this.splitLines.push(
@@ -268,7 +269,8 @@ export default class PolygonGenerator {
                     .L(point)
                     .toString('split-path')
             )
-            this.segmentManager.addPoint({}, point, index);
+            
+            this.segmentManager.addPoint({isFirst}, point, index);
         })
     }
 

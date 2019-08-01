@@ -12,6 +12,11 @@ export class SVGPolygonItem extends SVGItem {
     });
   }
 
+
+  enableHasChildren() {
+    return false; 
+  }  
+
   updatePolygonItem (obj) {
     this.json.points = obj.points; 
     this.json.polygon = new PolygonParser(obj.points);

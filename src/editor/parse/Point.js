@@ -31,6 +31,19 @@ export default class Point {
         return firstIndex;
     }
 
+    static getPointIndex (points, p0) {
+        var firstIndex = -1; 
+        for(var i = 0, len = points.length; i < len; i++) {
+            var p = points[i]
+
+            if (Point.isEqual(p, p0)) {
+                firstIndex = i; 
+                break; 
+            }
+        }
+        return firstIndex;
+    }
+
 
     // svg path 를 가지고 화면 에디터용 형태로 변환한다. 
     // 이렇게 변환하는 이유는 에디팅 하면서 생성하는 구조랑 SVG 를 로드하면서 생성하는 구조랑 맞추기 위해서이다. 
