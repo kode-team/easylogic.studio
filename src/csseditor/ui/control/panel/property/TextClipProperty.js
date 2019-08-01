@@ -19,7 +19,7 @@ export default class TextClipProperty extends BaseProperty {
   }
 
   getTools() {
-    return `<div ref='$textClip' style='padding-top: 3px;'></div>`;
+    return `<div ref='$textClip'></div>`;
   }  
 
   [LOAD("$textClip")]() {

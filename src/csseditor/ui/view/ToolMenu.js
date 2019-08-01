@@ -17,6 +17,8 @@ export default class ToolMenu extends UIElement {
           <TopAlign />
           <MiddleAlign />
           <BottomAlign />
+          
+          <div class='split'></div>
 
           <SameWidth />
           <SameHeight />

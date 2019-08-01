@@ -9,7 +9,12 @@ export default class CodeViewProperty extends BaseProperty {
     return "CodeView";
   }
 
-  [EVENT('refreshSelectionStyleView', 'refreshStyleView','refreshSelection') + DEBOUNCE(100) ]() {
+  [EVENT(
+    'refreshSelectionStyleView', 
+    'refreshStyleView',
+    'refreshSelection',
+    'refreshSVGArea'
+  ) + DEBOUNCE(100) ]() {
     this.refreshShowIsNot();
   }
 

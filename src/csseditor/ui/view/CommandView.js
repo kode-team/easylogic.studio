@@ -100,7 +100,7 @@ export default class CommandView extends UIElement {
     }
 
 
-    [COMMAND('add.polygon')] (mode = 'move') {
+    [COMMAND('add.polygon')] (mode = 'draw') {
         this.emit('hideSubEditor');    
         editor.selection.empty();
         this.emit('initSelectionTool');
@@ -119,5 +119,9 @@ export default class CommandView extends UIElement {
         }
 
         this.emit('changeTheme')
+    }
+
+    [COMMAND('show.exportView')] () {
+        this.emit('showExportView');
     }
 }

@@ -88,6 +88,7 @@ export default class SegmentManager {
                     r='4'                     
                     class='curve' 
                     data-is-last="${it.isLast}"                
+                    data-is-first="${it.isFirst}"                    
                     title="${it.segment} curve"                
                     data-index='${it.index}' 
                     data-segment-point='${it.segment}' 

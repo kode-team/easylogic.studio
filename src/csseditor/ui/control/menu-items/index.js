@@ -17,11 +17,10 @@ import ToggleRightItem from "./ToggleRightItem";
 import AddPolygon from "./AddPolygon";
 import AddStar from "./AddStar";
 import ThemeSwitcher from "./ThemeSwitcher";
-
-
-
+import ExportView from "./ExportView";
 
 export default {
+  ExportView,
   ThemeSwitcher,
   AddStar,
   AddPolygon,

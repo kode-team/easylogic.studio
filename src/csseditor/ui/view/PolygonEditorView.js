@@ -212,7 +212,9 @@ export default class PolygonEditorView extends UIElement {
                 count: this.state.starCount,
                 radius: this.state.starInnerRadiusRate
             })
+            this.emit('hidePolygonManager');
         } else {
+            this.emit('showPolygonManager', { mode: this.state.mode });
             this.emit('hideStarManager');
         }
     }
@@ -231,7 +233,8 @@ export default class PolygonEditorView extends UIElement {
         this.$el.hide();
 
         this.emit('hideStarManager');
-        this.emit('finishPolygonEdit')        
+        this.emit('hidePolygonManager');        
+        this.emit('finishPolygonEdit')   
     }
 
     [BIND('$view')] () {
@@ -328,8 +331,10 @@ export default class PolygonEditorView extends UIElement {
         } else if (this.isMode('star')) {
             this.polygonGenerator.moveStart()
 
+        } else if (this.isMode('draw')) {
+            // this.changeMode('draw');   
         } else {
-            this.changeMode('draw');   
+
         }
 
     }
@@ -354,6 +359,8 @@ export default class PolygonEditorView extends UIElement {
             // var e = editor.config.get('bodyEvent');
 
             // this.state.dragPoints = e.altKey ? false : true; 
+        } else if (this.isMode('move')) {
+            
         }
 
     }

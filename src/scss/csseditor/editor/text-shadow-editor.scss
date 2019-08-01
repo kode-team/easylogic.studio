@@ -5,13 +5,13 @@
 
   .label {
     height: 20px;
-    margin: 5px 0px;
+    // margin: 5px 0px;
     &.hide {
       display: none;
     }
     label {
       font-size: 12px;
-      padding-left: 5px;
+      padding: 2px 6px 2px 0px;
       vertical-align: middle;
 
     }

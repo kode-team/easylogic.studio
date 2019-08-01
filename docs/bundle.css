@@ -2352,8 +2352,9 @@ html, body {
 }
 .csseditor[data-theme=dark] .page-subeditor {
   position: absolute;
-  left: 10px;
-  top: 10px;
+  left: 0px;
+  top: -1px;
+  right: 0px;
   height: 50px;
   text-align: center;
   pointer-events: none;
@@ -2362,7 +2363,6 @@ html, body {
   display: none;
   pointer-events: all;
   outline: none;
-  border-radius: 3px;
   border: 1px solid #1a1a1a;
   color: #ececec;
   background-color: #3a3a3a;
@@ -2372,7 +2372,6 @@ html, body {
   display: none;
   pointer-events: all;
   outline: none;
-  border-radius: 3px;
   border: 1px solid #1a1a1a;
   color: #ececec;
   background-color: #3a3a3a;
@@ -5053,14 +5052,13 @@ html, body {
 }
 .csseditor[data-theme=dark] .text-shadow-editor .label {
   height: 20px;
-  margin: 5px 0px;
 }
 .csseditor[data-theme=dark] .text-shadow-editor .label.hide {
   display: none;
 }
 .csseditor[data-theme=dark] .text-shadow-editor .label label {
   font-size: 12px;
-  padding-left: 5px;
+  padding: 2px 6px 2px 0px;
   vertical-align: middle;
 }
 .csseditor[data-theme=dark] .text-shadow-editor .tools {
@@ -8321,8 +8319,9 @@ html, body {
 }
 .csseditor[data-theme=light] .page-subeditor {
   position: absolute;
-  left: 10px;
-  top: 10px;
+  left: 0px;
+  top: -1px;
+  right: 0px;
   height: 50px;
   text-align: center;
   pointer-events: none;
@@ -8331,7 +8330,6 @@ html, body {
   display: none;
   pointer-events: all;
   outline: none;
-  border-radius: 3px;
   border: 1px solid #cfcfcf;
   color: #666666;
   background-color: white;
@@ -8341,7 +8339,6 @@ html, body {
   display: none;
   pointer-events: all;
   outline: none;
-  border-radius: 3px;
   border: 1px solid #cfcfcf;
   color: #666666;
   background-color: white;
@@ -11022,14 +11019,13 @@ html, body {
 }
 .csseditor[data-theme=light] .text-shadow-editor .label {
   height: 20px;
-  margin: 5px 0px;
 }
 .csseditor[data-theme=light] .text-shadow-editor .label.hide {
   display: none;
 }
 .csseditor[data-theme=light] .text-shadow-editor .label label {
   font-size: 12px;
-  padding-left: 5px;
+  padding: 2px 6px 2px 0px;
   vertical-align: middle;
 }
 .csseditor[data-theme=light] .text-shadow-editor .tools {

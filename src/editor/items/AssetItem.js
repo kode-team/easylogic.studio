@@ -36,11 +36,10 @@ export class AssetItem extends DomItem {
         return SVGFilter.parse(filter);
       })
 
-      return `
-        <filter id='${objectInfo.id}'>
-          ${filters.join('\n')}
-        </filter>
-      `
+      return `<filter id='${objectInfo.id}'>
+  ${filters.join('\n')}
+</filter>
+`
 
     }).join('\n\n')
 

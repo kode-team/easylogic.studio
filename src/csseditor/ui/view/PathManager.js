@@ -1,6 +1,5 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
-import icon from "../icon/icon";
-import { CLICK, BIND } from "../../../util/Event";
+import { CLICK } from "../../../util/Event";
 
 export default class PathManager extends UIElement {
 
@@ -14,7 +13,7 @@ export default class PathManager extends UIElement {
     return `
       <div class='path-manager'>
         <div class='text'>
-            <label>Mode</label>
+            <label>Path Mode</label>
             <label><input type='radio' name='path-mode' value='move' /> move</label>
             <label><input type='radio' name='path-mode' value='draw' /> draw</label>
         </div>

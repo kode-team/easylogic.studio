@@ -641,8 +641,7 @@ export default class PathGenerator {
 
         for(var index = 0, len = points.length; index < len; index++) {
             var currentIndex = index; 
-            var current = points[currentIndex];                                    
-            var isLast = index === len - 1; 
+            var current = points[currentIndex];
 
             if (!current) continue; 
 
@@ -663,7 +662,7 @@ export default class PathGenerator {
                             .L(current.startPoint)
 
                         this.segmentManager
-                            .addPoint({isLast}, current.startPoint, currentIndex, 'startPoint')   
+                            .addPoint({}, current.startPoint, currentIndex, 'startPoint')   
                         
                         this.splitLines.push(
                             new PathStringManager()
@@ -684,7 +683,7 @@ export default class PathGenerator {
 
                         this.segmentManager
                             .addLine(prevPoint.startPoint, prevPoint.endPoint)
-                            .addPoint({isLast}, current.startPoint, currentIndex, 'startPoint')
+                            .addCurvePoint(current.startPoint, currentIndex, 'startPoint')
                             .addCurvePoint(prevPoint.endPoint, prevPoint.index, 'endPoint');
                     }
     
@@ -706,7 +705,7 @@ export default class PathGenerator {
 
                         this.segmentManager
                             .addLine(current.startPoint, current.reversePoint)
-                            .addPoint({isLast}, current.startPoint, currentIndex, 'startPoint')
+                            .addCurvePoint(current.startPoint, currentIndex, 'startPoint')
                             .addCurvePoint(current.reversePoint, currentIndex, 'reversePoint');
 
                     } else {
@@ -744,7 +743,7 @@ export default class PathGenerator {
                             this.segmentManager
                                 .addLine(prevPoint.startPoint, prevPoint.endPoint)
                                 .addLine(current.startPoint, current.reversePoint)
-                                .addPoint({isLast}, current.startPoint, currentIndex, 'startPoint')
+                                .addCurvePoint(current.startPoint, currentIndex, 'startPoint')
                                 .addCurvePoint(prevPoint.endPoint, prevPoint.index, 'endPoint')                        
                                 .addCurvePoint(current.reversePoint, currentIndex, 'reversePoint');
 

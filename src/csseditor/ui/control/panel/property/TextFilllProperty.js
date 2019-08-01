@@ -32,16 +32,16 @@ export default class TextFillProperty extends BaseProperty {
   getBody() {
     return `
       <div class='property-item'>
-        <ColorViewEditor ref='$fillColor' label='Fill' removable="true" params='text-fill-color' onchange="changeColor" />
+        <ColorViewEditor ref='$fillColor' label='Text Fill' removable="true" params='text-fill-color' onchange="changeColor" />
       </div>           
       <div class='property-item'>
-        <ColorViewEditor ref='$strokeColor' label='Stroke' removable="true" params='text-stroke-color' onchange="changeColor" />
+        <ColorViewEditor ref='$strokeColor' label='Text Stroke' removable="true" params='text-stroke-color' onchange="changeColor" />
       </div>                 
 
       <div class='property-item'>
         <RangeEditor 
           ref='$width' 
-          label='Width' 
+          label='Stroke' 
           key="text-stroke-width" 
           removable="true" 
           onchange="changeRangeEditor" />

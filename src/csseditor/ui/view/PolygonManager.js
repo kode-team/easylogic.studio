@@ -1,20 +1,19 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
-import icon from "../icon/icon";
-import { CLICK, BIND } from "../../../util/Event";
+import { CLICK } from "../../../util/Event";
 
 export default class PolygonManager extends UIElement {
 
-    initState() {
-        return {
-            mode: 'move'
-        }
-    }
+  initState() {
+      return {
+          mode: 'move'
+      }
+  }
 
   template() {
     return `
       <div class='polygon-manager'>
         <div class='text'>
-            <label>Mode</label>
+            <label>Polygon Mode</label>
             <label><input type='radio' name='polygon-mode' value='move' /> move</label>
             <label><input type='radio' name='polygon-mode' value='draw' /> draw</label>
         </div>
@@ -28,6 +27,15 @@ export default class PolygonManager extends UIElement {
     this.updateData({
         mode 
     })
+  }
+
+
+  refresh() {
+    var $mode = this.$el.$(`[value=${this.state.mode}]`)
+    
+    if ($mode) {
+      $mode.checked(true);
+    }
   }
 
   updateData(obj = {}) {
