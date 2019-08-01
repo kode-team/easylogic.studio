@@ -284,7 +284,36 @@
             border-radius: 50%;            
           }          
 
-        }                
+        }    
+        
+        
+        .translate {
+
+          $color: purple; 
+
+          transform: rotate(0deg) translateZ(0px);
+          border: 2px solid $color; 
+          box-shadow: 0 0 4px 0 rgba(255, 255, 255, 0.5);
+
+
+          .perspective-handle {
+            display: inline-block;
+            height: 10px;
+            width: 10px;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            pointer-events: all; 
+            background-color: green;
+            border-radius: 50%;
+            position: absolute;
+            cursor: ns-resize; 
+            // background-image: radial-gradient(rgba(255, 255, 255, 0.8) 80%, black);
+            border-top: 2px solid rgba(white, 0); 
+            // cursor: grab;
+          }
+
+        }    
       }      
 
       &[data-position='path'] {

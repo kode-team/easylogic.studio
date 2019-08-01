@@ -2359,22 +2359,6 @@ html, body {
   text-align: center;
   pointer-events: none;
 }
-.csseditor[data-theme=dark] .page-subeditor .selection-manager {
-  display: none;
-  pointer-events: all;
-  outline: none;
-  border: 1px solid #1a1a1a;
-  color: #ececec;
-  background-color: #3a3a3a;
-  padding: 5px 10px;
-  width: 100%;
-}
-.csseditor[data-theme=dark] .page-subeditor .selection-manager .text {
-  display: flex;
-}
-.csseditor[data-theme=dark] .page-subeditor .selection-manager .text > .label {
-  display: inline-block;
-}
 .csseditor[data-theme=dark] .page-subeditor .path-manager {
   display: none;
   pointer-events: all;
@@ -2719,6 +2703,27 @@ html, body {
   position: absolute;
   pointer-events: none;
   border-radius: 50%;
+}
+.csseditor[data-theme=dark] .selection-tool .selection-tool-item[data-position=rotate3d] .translate {
+  -webkit-transform: rotate(0deg) translateZ(0px);
+          transform: rotate(0deg) translateZ(0px);
+  border: 2px solid purple;
+  box-shadow: 0 0 4px 0 rgba(255, 255, 255, 0.5);
+}
+.csseditor[data-theme=dark] .selection-tool .selection-tool-item[data-position=rotate3d] .translate .perspective-handle {
+  display: inline-block;
+  height: 10px;
+  width: 10px;
+  top: -40px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  pointer-events: all;
+  background-color: green;
+  border-radius: 50%;
+  position: absolute;
+  cursor: ns-resize;
+  border-top: 2px solid rgba(255, 255, 255, 0);
 }
 .csseditor[data-theme=dark] .selection-tool .selection-tool-item[data-position=path] {
   left: 0px;
@@ -8342,22 +8347,6 @@ html, body {
   text-align: center;
   pointer-events: none;
 }
-.csseditor[data-theme=light] .page-subeditor .selection-manager {
-  display: none;
-  pointer-events: all;
-  outline: none;
-  border: 1px solid #cfcfcf;
-  color: #666666;
-  background-color: white;
-  padding: 5px 10px;
-  width: 100%;
-}
-.csseditor[data-theme=light] .page-subeditor .selection-manager .text {
-  display: flex;
-}
-.csseditor[data-theme=light] .page-subeditor .selection-manager .text > .label {
-  display: inline-block;
-}
 .csseditor[data-theme=light] .page-subeditor .path-manager {
   display: none;
   pointer-events: all;
@@ -8702,6 +8691,27 @@ html, body {
   position: absolute;
   pointer-events: none;
   border-radius: 50%;
+}
+.csseditor[data-theme=light] .selection-tool .selection-tool-item[data-position=rotate3d] .translate {
+  -webkit-transform: rotate(0deg) translateZ(0px);
+          transform: rotate(0deg) translateZ(0px);
+  border: 2px solid purple;
+  box-shadow: 0 0 4px 0 rgba(255, 255, 255, 0.5);
+}
+.csseditor[data-theme=light] .selection-tool .selection-tool-item[data-position=rotate3d] .translate .perspective-handle {
+  display: inline-block;
+  height: 10px;
+  width: 10px;
+  top: -40px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  pointer-events: all;
+  background-color: green;
+  border-radius: 50%;
+  position: absolute;
+  cursor: ns-resize;
+  border-top: 2px solid rgba(255, 255, 255, 0);
 }
 .csseditor[data-theme=light] .selection-tool .selection-tool-item[data-position=path] {
   left: 0px;

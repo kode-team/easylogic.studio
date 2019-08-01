@@ -39,6 +39,9 @@ export default class SelectionToolView extends UIElement {
                     <div class='handle-bottom'></div>
                     <div class='point'></div>                    
                 </div>
+                <div class='translate' ref='$translateZ'>
+                    <div class='perspective-handle'></div>
+                </div>
             </div>           
 
             <div class='selection-tool-item' data-position='to top'></div>
@@ -199,6 +202,72 @@ export default class SelectionToolView extends UIElement {
 
     }    
 
+    setCacheBaseTrasnform (...args) {
+        editor.selection.each((item, cachedItem) => {
+            item.transformObj = Transform.parseStyle(item.transform);
+            cachedItem.transformObj = Transform.parseStyle(cachedItem.transform);
+
+            args.forEach(key => {
+                cachedItem[key] = cachedItem.transformObj.filter(it => it.type === key)[0];    
+            })
+
+        })
+    }
+
+    setCacheRotateZ () {
+        var targetRect = this.$target.rect();
+        this.rotateZCenter = {
+            x: targetRect.x + targetRect.width/2, 
+            y: targetRect.y + targetRect.height/2
+        }
+        this.rotateZStart = {
+            x: rect.x + rect.width/2, 
+            y: rect.y + rect.height/2 
+        }
+
+        this.setCacheBaseTrasnform('rotateZ', 'rotate');
+    }
+
+    setCachePerspective () {
+        this.setCacheBaseTrasnform('perspective');
+    }
+
+    setCacheTransformOrigin () {
+
+        this.hasTransformOrigin = true; 
+        editor.selection.each((item, cachedItem) => {
+            item.transformOrigin = item['transform-origin'].split(' ').map(it => {
+                return it ? Length.parse(it) : Length.percent(50)
+            });
+            cachedItem.transformOrigin = item['transform-origin'].split(' ').map(it => {
+                return it ? Length.parse(it) : Length.percent(50)
+            });
+
+            cachedItem.transformOriginX = cachedItem.transformOrigin[0] || Length.percent(50)
+            cachedItem.transformOriginXtoPx = cachedItem.transformOriginX.toPx(cachedItem.screenWidth);
+            cachedItem.transformOriginY = cachedItem.transformOrigin[1] || Length.percent(50)
+            cachedItem.transformOriginYtoPx = cachedItem.transformOriginY.toPx(cachedItem.screenHeight);
+        })
+
+    }
+
+    setCacheTranslate () {
+        this.hasTranslate = true; 
+        this.setCacheBaseTrasnform('translateX', 'translateY');        
+    }
+
+    setCacheTranslateZ () {
+
+        this.hasTranslateZ = true; 
+        this.setCacheBaseTrasnform('translateZ');        
+
+    }
+
+    setCacheRotateXY () {
+        this.setCacheBaseTrasnform('rotateX', 'rotateY');        
+    }
+
+
     [POINTERSTART('$selectionView .selection-tool-item') + MOVE() + END()] (e) {
         this.$target = e.$delegateTarget;
         this.pointerType = e.$delegateTarget.attr('data-position')
@@ -218,77 +287,27 @@ export default class SelectionToolView extends UIElement {
 
             var rect = $point.rect()
             this.hasRotateZ = $point.hasClass('point') 
+            this.hasPerspective = $point.hasClass('perspective-handle') 
             this.hasTransformOrigin = false; 
             this.hasTranslate = false; 
             this.hasTranslateZ = false; 
             
 
             if (this.hasRotateZ) {
-                var targetRect = this.$target.rect();
-                this.rotateZCenter = {
-                    x: targetRect.x + targetRect.width/2, 
-                    y: targetRect.y + targetRect.height/2
-                }
-                this.rotateZStart = {
-                    x: rect.x + rect.width/2, 
-                    y: rect.y + rect.height/2 
-                }
-                // 3d rotate 는 transform 속성이라 selection tool ui 를 변경하지 않는다. 
-                editor.selection.each((item, cachedItem) => {
-                    item.transformObj = Transform.parseStyle(item.transform);
-                    cachedItem.transformObj = Transform.parseStyle(cachedItem.transform);
-
-                    cachedItem.rotateZ = cachedItem.transformObj.filter(it => it.type === 'rotateZ')[0];
-                    cachedItem.rotate = cachedItem.transformObj.filter(it => it.type === 'rotate')[0];
-
-                })
+                this.setCacheRotateZ()
+            } else if (this.hasPerspective) {
+                this.setCachePerspective();
             } else {
 
                 if (e.altKey) {
-                    this.hasTransformOrigin = true; 
-                    editor.selection.each((item, cachedItem) => {
-                        item.transformOrigin = item['transform-origin'].split(' ').map(it => {
-                            return it ? Length.parse(it) : Length.percent(50)
-                        });
-                        cachedItem.transformOrigin = item['transform-origin'].split(' ').map(it => {
-                            return it ? Length.parse(it) : Length.percent(50)
-                        });
-
-                        cachedItem.transformOriginX = cachedItem.transformOrigin[0] || Length.percent(50)
-                        cachedItem.transformOriginXtoPx = cachedItem.transformOriginX.toPx(cachedItem.screenWidth);
-                        cachedItem.transformOriginY = cachedItem.transformOrigin[1] || Length.percent(50)
-                        cachedItem.transformOriginYtoPx = cachedItem.transformOriginY.toPx(cachedItem.screenHeight);
-                    })
-
+                    this.setCacheTransformOrigin()
                 } else if (e.shiftKey) {
-                    this.hasTranslate = true; 
-                    editor.selection.each((item, cachedItem) => {
-                        item.transformObj = Transform.parseStyle(item.transform);
-                        cachedItem.transformObj = Transform.parseStyle(cachedItem.transform);
-    
-                        cachedItem.translateX = cachedItem.transformObj.filter(it => it.type === 'translateX')[0];
-                        cachedItem.translateY = cachedItem.transformObj.filter(it => it.type === 'translateY')[0];
-                    })     
+                    this.setCacheTranslate();
                 } else if (e.metaKey) {
-                    this.hasTranslateZ = true; 
-                    editor.selection.each((item, cachedItem) => {
-                        item.transformObj = Transform.parseStyle(item.transform);
-                        cachedItem.transformObj = Transform.parseStyle(cachedItem.transform);
-    
-                        cachedItem.translateZ = cachedItem.transformObj.filter(it => it.type === 'translateZ')[0];
-                    })                                        
+                    this.setCacheTranslateZ();
                 } else {
-                    // 3d rotate 는 transform 속성이라 selection tool ui 를 변경하지 않는다. 
-                    editor.selection.each((item, cachedItem) => {
-                        item.transformObj = Transform.parseStyle(item.transform);
-                        cachedItem.transformObj = Transform.parseStyle(cachedItem.transform);
-
-                        cachedItem.rotateX = cachedItem.transformObj.filter(it => it.type === 'rotateX')[0];
-                        cachedItem.rotateY = cachedItem.transformObj.filter(it => it.type === 'rotateY')[0];
-
-                    })
+                    this.setCacheRotateXY () 
                 }
-
 
             }
 
@@ -366,6 +385,128 @@ export default class SelectionToolView extends UIElement {
     }
 
 
+    modifyRotateZ(dx, dy) {
+
+        var x = this.rotateZStart.x - this.rotateZCenter.x
+        var y = this.rotateZStart.y - this.rotateZCenter.y
+
+        var angle1 = calculateAngle(x, y); 
+
+        var x = this.rotateZStart.x + dx - this.rotateZCenter.x
+        var y = this.rotateZStart.y + dy - this.rotateZCenter.y
+
+        var angle = calculateAngle(x, y);
+
+        var distAngle = Length.deg(angle - angle1);
+
+       
+        editor.selection.each((item, cachedItem) => {
+            var tempRotateZ = Length.deg(0)
+
+            if (cachedItem.rotateZ) { 
+                tempRotateZ.set(cachedItem.rotateZ.value[0].value);
+            } else if (cachedItem.rotate) {
+                tempRotateZ.set(cachedItem.rotate.value[0].value);
+            }
+
+            tempRotateZ.add(distAngle.value);
+
+            // degree 를 음수를 안보여주기 위한 작업 
+            // 기존 값이 음수가 될 수 있어서 구성 맞추기가 애매하다. 
+            // tempRotateZ.set((360 + tempRotateZ.value)  % 360)       
+
+            // altKey 일 때  snap 적용 ?  
+            if (e.altKey) {
+                tempRotateZ.add(- (tempRotateZ.value % 10)) 
+            }
+
+
+            this.setTransformValue(item, 'rotateZ', tempRotateZ);
+
+            item.transform = Transform.join(item.transformObj);
+        })
+    }
+
+    modifyPerspective(dx, dy) {
+        var ry = Length.px(-dy / editor.scale)
+
+        editor.selection.each((item, cachedItem) => {
+            this.modifyCacheItem(item, cachedItem, Length.px(0), 'perspective', ry)
+
+            item.transform = Transform.join(item.transformObj);
+        })
+    }
+
+    modifyTransformOrigin (dx, dy) {
+        editor.selection.each((item, cachedItem) => {
+            var tempOriginX = Length.px(0)
+            var tempOriginY = Length.px(0)
+
+            if (cachedItem.transformOriginXtoPx) { 
+                tempOriginX.set(cachedItem.transformOriginXtoPx.value);
+            } 
+            if (cachedItem.transformOriginYtoPx) { 
+                tempOriginY.set(cachedItem.transformOriginYtoPx.value);
+            }                         
+
+            tempOriginX.add(dx / editor.scale);
+            tempOriginY.add(dy / editor.scale);
+
+            var x = tempOriginX.to(cachedItem.transformOriginX.unit, cachedItem.screenWidth);
+            var y = tempOriginY.to(cachedItem.transformOriginY.unit, cachedItem.screenHeight);
+
+            item['transform-origin'] = `${x} ${y}`
+        })
+    }
+
+    modifyTranslate (dx, dy) {
+        var rx = Length.px(dx / editor.scale)
+        var ry = Length.px(dy / editor.scale)
+
+        editor.selection.each((item, cachedItem) => {
+
+            this.modifyCacheItem(item, cachedItem, Length.px(0), 'translateX', rx)
+            this.modifyCacheItem(item, cachedItem, Length.px(0), 'translateY', ry)
+
+            item.transform = Transform.join(item.transformObj);
+        })
+    }
+
+    modifyTranslateZ (dx, dy) {
+        var ry = Length.px(dy / editor.scale)
+        
+        editor.selection.each((item, cachedItem) => {
+
+            this.modifyCacheItem(item, cachedItem, Length.px(0), 'translateZ', ry)
+
+            item.transform = Transform.join(item.transformObj);
+        })
+    }
+
+    modifyCacheItem (item, cachedItem, tempValue, key, dt) {
+        
+        if (cachedItem[key]) { 
+            tempValue.set(cachedItem[key].value[0].value);
+        } 
+
+        tempValue.add(dt);
+
+        this.setTransformValue(item, key, tempValue);
+    }
+
+    modifyRotateXY (dx, dy) {
+        var rx = Length.deg(-dy / editor.scale)
+        var ry = Length.deg(dx / editor.scale)
+
+        editor.selection.each((item, cachedItem) => {
+
+            this.modifyCacheItem(item, cachedItem, Length.deg(0), 'rotateX', rx)
+            this.modifyCacheItem(item, cachedItem, Length.deg(0), 'rotateY', ry)
+
+            item.transform = Transform.join(item.transformObj);
+        })
+    }
+
     move (dx, dy) {
 
         var e = editor.config.get('bodyEvent');
@@ -374,145 +515,30 @@ export default class SelectionToolView extends UIElement {
 
             if (this.hasRotateZ) {
 
-                var x = this.rotateZStart.x - this.rotateZCenter.x
-                var y = this.rotateZStart.y - this.rotateZCenter.y
-                var startPoint = { x, y}
+                this.modifyRotateZ(dx, dy);
 
-                var angle1 = calculateAngle(x, y); 
-
-                var x = this.rotateZStart.x + dx - this.rotateZCenter.x
-                var y = this.rotateZStart.y + dy - this.rotateZCenter.y
-                var endPoint = {x, y}
-
-                var angle = calculateAngle(x, y);
-
-                var distAngle = Length.deg(angle - angle1);
-
-               
-                editor.selection.each((item, cachedItem) => {
-                    var tempRotateZ = Length.deg(0)
-    
-                    if (cachedItem.rotateZ) { 
-                        tempRotateZ.set(cachedItem.rotateZ.value[0].value);
-                    } else if (cachedItem.rotate) {
-                        tempRotateZ.set(cachedItem.rotate.value[0].value);
-                    }
-    
-                    tempRotateZ.add(distAngle.value);
-
-                    // degree 를 음수를 안보여주기 위한 작업 
-                    // 기존 값이 음수가 될 수 있어서 구성 맞추기가 애매하다. 
-                    // tempRotateZ.set((360 + tempRotateZ.value)  % 360)       
-
-                    // altKey 일 때  snap 적용 ?  
-                    if (e.altKey) {
-                        tempRotateZ.add(- (tempRotateZ.value % 10)) 
-                    }
-
-    
-                    this.setTransformValue(item, 'rotateZ', tempRotateZ);
-    
-                    item.transform = Transform.join(item.transformObj);
-                })
                 this.bindData('$rotateZ')             
                 // this.emit('refreshSelectionStyleView'); 
 
+            } else if (this.hasPerspective) {
+                this.modifyPerspective(dx, dy);
+                
+                this.bindData('$rotate3d')
+                this.bindData('$rotateArea')   
             } else {
 
                 if (this.hasTransformOrigin) {
                     // transform-origin 을 맞춤 
-
-                    editor.selection.each((item, cachedItem) => {
-                        var tempOriginX = Length.px(0)
-                        var tempOriginY = Length.px(0)
-        
-                        if (cachedItem.transformOriginXtoPx) { 
-                            tempOriginX.set(cachedItem.transformOriginXtoPx.value);
-                        } 
-                        if (cachedItem.transformOriginYtoPx) { 
-                            tempOriginY.set(cachedItem.transformOriginYtoPx.value);
-                        }                         
-        
-                        tempOriginX.add(dx/editor.scale);
-                        tempOriginY.add(dy / editor.scale);
-
-                        var x = tempOriginX.to(cachedItem.transformOriginX.unit, cachedItem.screenWidth);
-                        var y = tempOriginY.to(cachedItem.transformOriginY.unit, cachedItem.screenHeight);
-        
-                        item['transform-origin'] = `${x} ${y}`
-                    })
-                    this.bindData('$rotate3d')
-
+                    this.modifyTransformOrigin(dx, dy);
                 } else if (this.hasTranslate) {
-                    var rx = Length.px(dx / editor.scale)
-                    var ry = Length.px(dy / editor.scale)
-        
-                    editor.selection.each((item, cachedItem) => {
-                        var tempTranslateX = Length.px(0)
-                        var tempTranslateY = Length.px(0)
-        
-                        if (cachedItem.translateX) { 
-                            tempTranslateX.set(cachedItem.translateX.value[0].value);
-                        } 
-                        if (cachedItem.translateY) {
-                            tempTranslateY.set(cachedItem.translateY.value[0].value);
-                        }
-        
-                        tempTranslateX.add(rx);
-                        tempTranslateY.add(ry);
-        
-                        this.setTransformValue(item, 'translateX', tempTranslateX);
-                        this.setTransformValue(item, 'translateY', tempTranslateY);
-        
-                        item.transform = Transform.join(item.transformObj);
-                    })
-                    this.bindData('$rotate3d')
-                    this.bindData('$rotateArea')   
+                    this.modifyTranslate(dx, dy); 
                 } else if (this.hasTranslateZ) {
-                    var ry = Length.px(dy / editor.scale)
-        
-                    editor.selection.each((item, cachedItem) => {
-                        var tempTranslateZ = Length.px(0)
-        
-                        if (cachedItem.translateZ) {
-                            tempTranslateZ.set(cachedItem.translateZ.value[0].value);
-                        }
-        
-                        tempTranslateZ.add(ry);
-        
-                        this.setTransformValue(item, 'translateZ', tempTranslateZ);
-        
-                        item.transform = Transform.join(item.transformObj);
-                    })
-                    this.bindData('$rotate3d')
-                    this.bindData('$rotateArea')                        
+                    this.modifyTranslateZ(dx, dy);
                 } else {
-
-                    var rx = Length.deg(-dy / editor.scale)
-                    var ry = Length.deg(dx / editor.scale)
-        
-                    editor.selection.each((item, cachedItem) => {
-                        var tempRotateX = Length.deg(0)
-                        var tempRotateY = Length.deg(0)
-        
-                        if (cachedItem.rotateX) { 
-                            tempRotateX.set(cachedItem.rotateX.value[0].value);
-                        } 
-                        if (cachedItem.rotateY) {
-                            tempRotateY.set(cachedItem.rotateY.value[0].value);
-                        }
-        
-                        tempRotateX.add(rx);
-                        tempRotateY.add(ry);
-        
-                        this.setTransformValue(item, 'rotateX', tempRotateX);
-                        this.setTransformValue(item, 'rotateY', tempRotateY);
-        
-                        item.transform = Transform.join(item.transformObj);
-                    })
-                    this.bindData('$rotateArea')                 
+                    this.modifyRotateXY (dx, dy);
                 }
-
+                this.bindData('$rotate3d')
+                this.bindData('$rotateArea')                        
                 // this.emit('refreshSelectionStyleView');
             }
             this.emit('refreshSelectionStyleView'); 
@@ -648,10 +674,6 @@ export default class SelectionToolView extends UIElement {
             // 아무것도 없을 때는 안 보이는 곳으로 숨김 
             x.add(-100);
             y.add(-100);       
-            
-            this.emit('hideSelectionManager');
-        } else {
-            this.emit('showSelectionManager');
         }
 
         this.refs.$selectionTool.cssText(`left: ${x};top:${y};width:${width};height:${height}`)

@@ -85,6 +85,7 @@ export default class ElementView extends UIElement {
             && $el.hasClass('path-editor-view') === false 
             && $el.hasClass('polygon-editor-view') === false
             && $el.hasClass('point') === false
+            && $el.hasClass('perspective-handle') === false
             && $el.isTag('svg') === false 
             && $el.isTag('path') === false
             && $el.isTag('polygon') === false

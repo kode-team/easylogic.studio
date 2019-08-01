@@ -20,7 +20,6 @@ import Dom from "../../../util/Dom";
 import StarManager from "./StarManager";
 import PathManager from "./PathManager";
 import PolygonManager from "./PolygonManager";
-import SelectionManager from "./SelectionManager";
 
 
 
@@ -32,8 +31,7 @@ export default class CanvasView extends UIElement {
       ElementView,
       StarManager,
       PathManager,
-      PolygonManager,
-      SelectionManager        
+      PolygonManager
     }
   }
 
