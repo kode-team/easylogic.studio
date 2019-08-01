@@ -9,7 +9,7 @@ import { StyleParser } from "../../../editor/parse/StyleParser";
 import icon from "../icon/icon";
 import ElementView from "./ElementView";
 import { Layer } from "../../../editor/items/Layer";
-import NumberRangeEditor from "../control/panel/property-editor/NumberRangeEditor";
+import NumberRangeEditor from "../property-editor/NumberRangeEditor";
 import { Length } from "../../../editor/unit/Length";
 import { rgb } from "../../../util/functions/formatter";
 import { FileImageResource } from "../../../editor/image-resource/URLImageResource";

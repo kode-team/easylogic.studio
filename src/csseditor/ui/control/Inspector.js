@@ -1,6 +1,7 @@
 import UIElement from "../../../util/UIElement";
-import property from "./panel/property/index";
+
 import { CLICK } from "../../../util/Event";
+import property from "../property/index";
 
 export default class Inspector extends UIElement {
   template() {

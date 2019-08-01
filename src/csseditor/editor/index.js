@@ -6,7 +6,7 @@ import UIElement, { EVENT } from "../../util/UIElement";
 import { CLICK } from "../../util/Event";
 import Inspector from "../ui/control/Inspector";
 
-import popup from "../ui/control/popup";
+import popup from "../ui/popup";  
 import StyleView from "../ui/view/StyleView";
 import ObjectList from "../ui/control/ObjectList";
 import LogoView from "../ui/view/LogoView";

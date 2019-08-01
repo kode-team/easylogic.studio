@@ -1,7 +1,7 @@
 import UIElement from "../../../util/UIElement";
-import ProjectProperty from "./panel/property/ProjectProperty";
-import ArtBoardProperty from "./panel/property/ArtBoardProperty";
-import LayerTreeProperty from "./panel/property/LayerTreeProperty";
+import ProjectProperty from "../property/ProjectProperty";
+import ArtBoardProperty from "../property/ArtBoardProperty";
+import LayerTreeProperty from "../property/LayerTreeProperty";
 
 
 export default class ObjectItems extends UIElement {
@@ -17,7 +17,7 @@ export default class ObjectItems extends UIElement {
       <div class='object-items'>
         <div>
           <ProjectProperty />
-        </div>
+        </div> 
         <div>
           <ArtBoardProperty />          
         </div>
