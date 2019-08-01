@@ -1,0 +1,10 @@
+.polygon-manager {
+    display: none; 
+    pointer-events: all;
+    outline: none;
+    border-radius: 3px;
+    border: 1px solid $border-color;
+    color: $font-color;
+    background-color: $background-color;  
+    padding: 5px 10px;
+}

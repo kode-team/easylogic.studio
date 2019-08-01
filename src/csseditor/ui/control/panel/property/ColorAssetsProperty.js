@@ -15,21 +15,12 @@ export default class ColorAssetsProperty extends BaseProperty {
 
   initState() {
     return {
-      mode: 'list'
+      mode: 'grid'
     }
   }
 
   getClassName() {
     return 'color-assets-property'
-  }
-
-  getTools () {
-    return `
-      <div class='color-list-tools' ref='$tool' data-view-mode='${this.state.mode}'>
-        <button type='button' data-value='list'>${icon.list} List</button>
-        <button type='button' data-value='grid'>${icon.grid} Grid</button>
-      </div>
-    `
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)] () {
@@ -42,15 +33,6 @@ export default class ColorAssetsProperty extends BaseProperty {
         <div class='color-list' ref='$colorList' data-view-mode='${this.state.mode}'></div>
       </div>
     `;
-  }
-
-  [CLICK('$tool button')] (e) {
-    var mode = e.$delegateTarget.attr('data-value')
-
-    this.setState({ mode }, false)
-
-    this.refs.$tool.attr('data-view-mode', mode);
-    this.refs.$colorList.attr('data-view-mode', mode);
   }
 
   [LOAD("$colorList")]() {

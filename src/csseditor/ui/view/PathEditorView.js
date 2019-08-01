@@ -35,6 +35,10 @@ export default class PathEditorView extends UIElement {
         }
     }
 
+    get scale () {
+        return editor.scale; 
+    }
+
     template() {
         return `<div class='path-editor-view' tabIndex="-1" ref='$view' ></div>`
     }
@@ -57,15 +61,15 @@ export default class PathEditorView extends UIElement {
     }
 
     makePathLayer (pathRect) {
-        var { d } = this.pathGenerator.toPath(pathRect.x, pathRect.y, editor.scale);
+        var { d } = this.pathGenerator.toPath(pathRect.x, pathRect.y, this.scale);
         var artboard = editor.selection.currentArtboard
         var layer; 
         if (artboard) {
 
-            var x = pathRect.x / editor.scale;
-            var y = pathRect.y / editor.scale;
-            var width = pathRect.width / editor.scale;
-            var height = pathRect.height / editor.scale; 
+            var x = pathRect.x / this.scale;
+            var y = pathRect.y / this.scale;
+            var width = pathRect.width / this.scale;
+            var height = pathRect.height / this.scale; 
 
             layer = artboard.add(new SVGPathItem({
                 width: Length.px(width),
@@ -81,13 +85,13 @@ export default class PathEditorView extends UIElement {
     }
 
     updatePathLayer (pathRect) {
-        var { d } = this.pathGenerator.toPath(pathRect.x, pathRect.y, editor.scale);
+        var { d } = this.pathGenerator.toPath(pathRect.x, pathRect.y, this.scale);
 
         var layer; 
-        var x = pathRect.x / editor.scale;
-        var y = pathRect.y / editor.scale;
-        var width = pathRect.width / editor.scale;
-        var height = pathRect.height / editor.scale; 
+        var x = pathRect.x / this.scale;
+        var y = pathRect.y / this.scale;
+        var width = pathRect.width / this.scale;
+        var height = pathRect.height / this.scale; 
 
 
         this.emit('updatePathItem', {
@@ -118,6 +122,8 @@ export default class PathEditorView extends UIElement {
             moveXY: null,
             ...obj
         }, false)    
+
+        this.emit('changePathManager', this.state.mode );
     }
 
     isMode (mode) {
@@ -134,8 +140,8 @@ export default class PathEditorView extends UIElement {
 
         if (obj && obj.d) {
             this.pathParser.reset(obj.d)
-            this.pathParser.scale(editor.scale, editor.scale);
-            this.pathParser.translate(obj.screenX.value * editor.scale, obj.screenY.value * editor.scale)
+            this.pathParser.scale(this.scale, this.scale);
+            this.pathParser.translate(obj.screenX.value * this.scale, obj.screenY.value * this.scale)
             this.state.points = this.pathParser.convertGenerator();      
         }
 
@@ -161,12 +167,15 @@ export default class PathEditorView extends UIElement {
         this.state.isShow = true; 
         this.$el.show();
         this.$el.focus();
+
+        this.emit('showPathManager', { mode: this.state.mode });
     }
 
     [EVENT('hidePathEditor')] () {
         this.state.isShow = false;         
         this.$el.hide();
         this.emit('finishPathEdit')
+        this.emit('hidePathManager');
     }
 
     [BIND('$view')] () {
@@ -316,13 +325,13 @@ export default class PathEditorView extends UIElement {
                 this.pathGenerator.setCachePoint(index);
             }
 
-        } else {
-
-            this.changeMode('draw');   
-    
+        } else if (this.isMode('draw')) { 
             this.state.startPoint = this.state.dragXY;
             this.state.dragPoints = false
             this.state.endPoint = null;
+        } else  {
+            // draw, segment-move 모드가 아닌 데  드래그 하는 경우는 
+            // 영역을 선택하기 위한 용도 
         }
 
     }
@@ -379,6 +388,8 @@ export default class PathEditorView extends UIElement {
                     this.trigger('hidePathEditor')
                 }
             } else {
+                // this.changeMode('modify');
+
                 this.pathGenerator.moveEnd(dx, dy);
 
                 this.bindData('$view');

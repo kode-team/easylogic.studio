@@ -15,7 +15,7 @@ export default class GradientAssetsProperty extends BaseProperty {
 
   initState() {
     return {
-      mode: 'list'
+      mode: 'grid'
     }
   }
 
@@ -28,30 +28,12 @@ export default class GradientAssetsProperty extends BaseProperty {
     this.show();
   }
 
-  getTools() {
-    return `
-      <div class='gradient-list-tools' ref='$tool' data-view-mode='${this.state.mode}'>
-        <button type='button' data-value='list'>${icon.list} List</button>
-        <button type='button' data-value='grid'>${icon.grid} Grid</button>
-      </div>
-    `
-  }
-
   getBody() {
     return `
       <div class='property-item gradient-assets'>
         <div class='gradient-list' ref='$gradientList' data-view-mode='${this.state.mode}'></div>
       </div>
     `;
-  }
-
-  [CLICK('$tool button')] (e) {
-    var mode = e.$delegateTarget.attr('data-value')
-
-    this.setState({ mode }, false)
-
-    this.refs.$tool.attr('data-view-mode', mode);
-    this.refs.$gradientList.attr('data-view-mode', mode);
   }
 
   [LOAD("$gradientList")]() {

@@ -60,6 +60,7 @@
                 cursor: pointer;         
                 text-align: center;
                 padding: 24px;
+                
             }
 
             .svgfilter-item {
@@ -92,7 +93,6 @@
                     width: 100%;
                     display: grid;
                     grid-template-columns: 1fr;
-                    grid-template-rows: repeat(2, 1fr);
                     grid-row-gap: 4px;
                     padding: 4px 0px;
 
@@ -114,50 +114,6 @@
                     svg {
                         path {
                             fill: $selected-font-color;
-                        }
-                    }
-                }
-            }
-        }
-
-        &[data-view-mode='list'] {
-            .add-svgfilter-item {
-                cursor: pointer;
-                text-align: center;
-            }            
-
-            .svgfilter-item {
-                display: grid;
-                grid-template-columns: 22px 1fr 35px;
-                grid-column-gap: 2px;
-                height: 20px;
-                margin-bottom: 4px;
-        
-                .preview {
-                    cursor: pointer;
-                    width: 20px;
-                    height: 20px;
-                    border: 1px solid $border-color;
-                    border-radius: 3px;
-                    position: relative;
-                    @include transparent-background();
-                    box-sizing: border-box;
-                    overflow: hidden;
-                    cursor: pointer;
-
-                }
-        
-                .title {
-                    display: grid;
-                    grid-template-columns: 1fr;
-                    grid-column-gap: 4px;
-        
-                    div {
-                        input {
-                            height: 100%;
-                            border-radius: 2px;
-                            border: 1px solid $border-color;
-                            width: 100%;
                         }
                     }
                 }

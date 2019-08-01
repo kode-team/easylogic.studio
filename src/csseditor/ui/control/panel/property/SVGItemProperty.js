@@ -139,10 +139,9 @@ export default class SVGItemProperty extends BaseProperty {
       </div>
 
       <div class='property-item'>
-
+        <label>Dash Offset</label>
         <NumberRangeEditor 
           ref='$strokeDashOffset' 
-          label='Dash Offset' 
           key='stroke-dashoffset' 
           removable="true"
           value="0" 

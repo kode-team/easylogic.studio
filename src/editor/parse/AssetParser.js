@@ -26,29 +26,31 @@ export default class AssetParser {
         return datauri.includes(`data:${mediaType}`)
     }    
 
-    static changeColor (datauri, obj = {} ) {
+    static changeAsset (datauri, obj, generateFunc) {
         var info = AssetParser.parse(datauri);
 
         var newObjectInfo = {...info.objectInfo, ...obj}
 
-        return AssetParser.generateColor(info, newObjectInfo);
+        return generateFunc(info, newObjectInfo);
+    }
+
+    static changeColor (datauri, obj = {} ) {
+        return AssetParser.changeAsset(datauri, obj, AssetParser.generateColor);
     }
 
     static changeGradient (datauri, obj = {} ) {
-        var info = AssetParser.parse(datauri);
-
-        var newObjectInfo = {...info.objectInfo, ...obj}
-
-        return AssetParser.generateGradient(info, newObjectInfo);
+        return AssetParser.changeAsset(datauri, obj, AssetParser.generateGradient);
     }   
     
     static changeSVGFilter (datauri, obj = {} ) {
-        var info = AssetParser.parse(datauri);
-
-        var newObjectInfo = {...info.objectInfo, ...obj}
-
-        return AssetParser.generateSVGFilter(info, newObjectInfo);
+        return AssetParser.changeAsset(datauri, obj, AssetParser.generateSVGFilter);        
     }       
+
+    
+    static changeSVGImage (datauri, obj = {} ) {
+        return AssetParser.changeAsset(datauri, obj, AssetParser.generateSVGImage);        
+    }       
+
 
     static generateJSON(type, info) {
         return `data:${type};json,${JSON.stringify(info)}`
@@ -64,5 +66,9 @@ export default class AssetParser {
     
     static generateSVGFilter (info, newObjectInfo) {
         return AssetParser.generateJSON('svgfilter', newObjectInfo);
-    }       
+    }   
+    
+    static generateSVGImage (info, newObjectInfo) {
+        return AssetParser.generateJSON('svgimage', newObjectInfo);
+    }   
 }

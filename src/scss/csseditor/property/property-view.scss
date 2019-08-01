@@ -4,7 +4,7 @@
   background-color: $property-background-color;
   color: $property-font-color; 
   display: none; 
-  
+
   &.compact {
     padding:0px;
   }
@@ -27,7 +27,7 @@
 
   &.item {
     > .property-title {
-      @include title-background-2($selected-color, $selected-font-color);
+      // @include title-background-2($selected-color, $selected-font-color);
     }
   }
 
@@ -118,8 +118,12 @@
         // background-color: rgba($property-background-color, 0.5);
         label {
           font-weight: 900;
-          text-shadow: 2px 2px 1px rgba(0, 0, 0, 1);
+          text-shadow: 2px 2px 3px $border-color;
         }
+      }
+
+      .small-editor {
+        margin-bottom: 3px;
       }
 
     }

@@ -18,6 +18,9 @@ import { Sketch, SketchUtil } from "../../../editor/parse/Sketch";
 import Color from "../../../util/Color";
 import Dom from "../../../util/Dom";
 import StarManager from "./StarManager";
+import PathManager from "./PathManager";
+import PolygonManager from "./PolygonManager";
+
 
 
 export default class CanvasView extends UIElement {
@@ -26,7 +29,9 @@ export default class CanvasView extends UIElement {
     return {
       NumberRangeEditor,
       ElementView,
-      StarManager      
+      StarManager,
+      PathManager,
+      PolygonManager            
     }
   }
 
@@ -69,7 +74,11 @@ export default class CanvasView extends UIElement {
             <ElementView ref='$elementView' />
           </div>
         </div>
-        <StarManager />
+        <div class='page-subeditor'>
+          <PathManager />
+          <PolygonManager />
+          <StarManager />
+        </div>
         <div class='page-tools'>
           <button type='button' ref='$plus'>${icon.add}</button>
           <button type='button' ref='$minus'>${icon.remove2}</button>

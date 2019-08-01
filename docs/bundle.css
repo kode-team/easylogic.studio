@@ -2350,13 +2350,15 @@ html, body {
   display: inline-block;
   width: 150px;
 }
-.csseditor[data-theme=dark] .star-manager {
+.csseditor[data-theme=dark] .page-subeditor {
   position: absolute;
-  left: 50%;
+  left: 10px;
   top: 10px;
-  width: 340px;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
+  height: 50px;
+  text-align: center;
+  pointer-events: none;
+}
+.csseditor[data-theme=dark] .page-subeditor .path-manager {
   display: none;
   pointer-events: all;
   outline: none;
@@ -2366,14 +2368,34 @@ html, body {
   background-color: #3a3a3a;
   padding: 5px 10px;
 }
-.csseditor[data-theme=dark] .star-manager > label {
+.csseditor[data-theme=dark] .page-subeditor .polygon-manager {
+  display: none;
+  pointer-events: all;
+  outline: none;
+  border-radius: 3px;
+  border: 1px solid #1a1a1a;
+  color: #ececec;
+  background-color: #3a3a3a;
+  padding: 5px 10px;
+}
+.csseditor[data-theme=dark] .page-subeditor .star-manager {
+  display: none;
+  pointer-events: all;
+  outline: none;
+  border-radius: 3px;
+  border: 1px solid #1a1a1a;
+  color: #ececec;
+  background-color: #3a3a3a;
+  padding: 5px 10px;
+}
+.csseditor[data-theme=dark] .page-subeditor .star-manager > label {
   vertical-align: middle;
   font-size: 11px;
 }
-.csseditor[data-theme=dark] .star-manager button {
+.csseditor[data-theme=dark] .page-subeditor .star-manager button {
   border-radius: 3px;
 }
-.csseditor[data-theme=dark] .star-manager > .select {
+.csseditor[data-theme=dark] .page-subeditor .star-manager > .select {
   display: inline-block;
   width: 150px;
 }
@@ -2825,13 +2847,6 @@ html, body {
   flex: 1 1 auto;
   overflow: auto;
 }
-.csseditor[data-theme=dark] .property.item > .property-title {
-  background-color: #3e8ec6;
-  color: white;
-}
-.csseditor[data-theme=dark] .property.item > .property-title svg path {
-  fill: white;
-}
 .csseditor[data-theme=dark] .property.show > .property-body {
   display: block;
   padding: 0px 11px 0px 6px;
@@ -2886,7 +2901,10 @@ html, body {
 }
 .csseditor[data-theme=dark] .property > .property-body .property-item.label label {
   font-weight: 900;
-  text-shadow: 2px 2px 1px black;
+  text-shadow: 2px 2px 3px #1a1a1a;
+}
+.csseditor[data-theme=dark] .property > .property-body .property-item .small-editor {
+  margin-bottom: 3px;
 }
 .csseditor[data-theme=dark] .property > .property-footer {
   padding: 0px 6px;
@@ -3884,50 +3902,6 @@ html, body {
 .csseditor[data-theme=dark] .color-assets-property .color-list[data-view-mode=grid] .color-item .tools svg path {
   fill: white;
 }
-.csseditor[data-theme=dark] .color-assets-property .color-list[data-view-mode=list] .add-color-item {
-  cursor: pointer;
-  text-align: center;
-}
-.csseditor[data-theme=dark] .color-assets-property .color-list[data-view-mode=list] .color-item {
-  display: grid;
-  grid-template-columns: 22px 1fr 35px;
-  grid-column-gap: 2px;
-  height: 20px;
-  margin-bottom: 4px;
-}
-.csseditor[data-theme=dark] .color-assets-property .color-list[data-view-mode=list] .color-item .preview {
-  cursor: pointer;
-  width: 20px;
-  height: 20px;
-  border: 1px solid #1a1a1a;
-  border-radius: 3px;
-  position: relative;
-  background-color: transparent;
-  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
-  background-size: 10px 10px;
-  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
-  box-sizing: border-box;
-  overflow: hidden;
-  cursor: pointer;
-}
-.csseditor[data-theme=dark] .color-assets-property .color-list[data-view-mode=list] .color-item .preview .color-view {
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-}
-.csseditor[data-theme=dark] .color-assets-property .color-list[data-view-mode=list] .color-item .title {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-column-gap: 4px;
-}
-.csseditor[data-theme=dark] .color-assets-property .color-list[data-view-mode=list] .color-item .title div input {
-  height: 100%;
-  border-radius: 2px;
-  border: 1px solid #1a1a1a;
-  width: 100%;
-}
 .csseditor[data-theme=dark] .property.color-assets-property {
   padding-left: 0px !important;
   padding-right: 0px !important;
@@ -4060,48 +4034,6 @@ html, body {
 .csseditor[data-theme=dark] .gradient-assets-property .gradient-list[data-view-mode=grid] .gradient-item .tools svg path {
   fill: white;
 }
-.csseditor[data-theme=dark] .gradient-assets-property .gradient-list[data-view-mode=list] .add-gradient-item {
-  cursor: pointer;
-  text-align: center;
-}
-.csseditor[data-theme=dark] .gradient-assets-property .gradient-list[data-view-mode=list] .gradient-item {
-  display: grid;
-  grid-template-columns: 22px 1fr 50px;
-  grid-column-gap: 2px;
-  height: 20px;
-  margin-bottom: 2px;
-}
-.csseditor[data-theme=dark] .gradient-assets-property .gradient-list[data-view-mode=list] .gradient-item .preview {
-  cursor: pointer;
-  width: 20px;
-  height: 20px;
-  border-radius: 3px;
-  position: relative;
-  background-color: transparent;
-  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
-  background-size: 10px 10px;
-  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
-  box-sizing: border-box;
-  overflow: hidden;
-  cursor: pointer;
-}
-.csseditor[data-theme=dark] .gradient-assets-property .gradient-list[data-view-mode=list] .gradient-item .preview .gradient-view {
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-}
-.csseditor[data-theme=dark] .gradient-assets-property .gradient-list[data-view-mode=list] .gradient-item .title {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-column-gap: 4px;
-}
-.csseditor[data-theme=dark] .gradient-assets-property .gradient-list[data-view-mode=list] .gradient-item .title div input {
-  border-radius: 2px;
-  border: 1px solid #1a1a1a;
-  width: 100%;
-}
 .csseditor[data-theme=dark] .property.gradient-assets-property {
   padding-left: 0px !important;
   padding-right: 0px !important;
@@ -4208,7 +4140,6 @@ html, body {
   width: 100%;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: repeat(2, 1fr);
   grid-row-gap: 4px;
   padding: 4px 0px;
 }
@@ -4227,44 +4158,81 @@ html, body {
 .csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list[data-view-mode=grid] .svgfilter-item .tools svg path {
   fill: white;
 }
-.csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list[data-view-mode=list] .add-svgfilter-item {
+.csseditor[data-theme=dark] .property.svgfilter-assets-property {
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+}
+.csseditor[data-theme=dark] .svgpath-assets-property .svgpath-list .svgpath-view {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  pointer-events: none;
+  background-image: radial-gradient(yellow 0%, red 100%);
+}
+.csseditor[data-theme=dark] .svgpath-assets-property .svgpath-list[data-view-mode=grid] {
+  display: block;
+}
+.csseditor[data-theme=dark] .svgpath-assets-property .svgpath-list[data-view-mode=grid] .add-svgpath-item {
+  display: inline-block;
+  width: 80px;
+  position: relative;
+  margin-right: 4px;
+  margin-bottom: 4px;
+  height: 80px;
+  border: 1px solid #1a1a1a;
+  border-radius: 2px;
+  box-sizing: border-box;
+  vertical-align: top;
   cursor: pointer;
   text-align: center;
+  padding: 24px;
 }
-.csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list[data-view-mode=list] .svgfilter-item {
-  display: grid;
-  grid-template-columns: 22px 1fr 35px;
-  grid-column-gap: 2px;
-  height: 20px;
-  margin-bottom: 4px;
-}
-.csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list[data-view-mode=list] .svgfilter-item .preview {
-  cursor: pointer;
-  width: 20px;
-  height: 20px;
-  border: 1px solid #1a1a1a;
-  border-radius: 3px;
+.csseditor[data-theme=dark] .svgpath-assets-property .svgpath-list[data-view-mode=grid] .svgpath-item {
+  display: inline-block;
+  width: 80px;
   position: relative;
-  background-color: transparent;
-  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
-  background-size: 10px 10px;
-  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+  margin-right: 4px;
+  margin-bottom: 4px;
+  vertical-align: middle;
+}
+.csseditor[data-theme=dark] .svgpath-assets-property .svgpath-list[data-view-mode=grid] .svgpath-item:hover .tools {
+  display: inline-block;
+}
+.csseditor[data-theme=dark] .svgpath-assets-property .svgpath-list[data-view-mode=grid] .svgpath-item .preview {
+  position: relative;
+  width: 100%;
+  height: 80px;
+  border: 1px solid #1a1a1a;
+  border-radius: 2px;
   box-sizing: border-box;
-  overflow: hidden;
   cursor: pointer;
 }
-.csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list[data-view-mode=list] .svgfilter-item .title {
+.csseditor[data-theme=dark] .svgpath-assets-property .svgpath-list[data-view-mode=grid] .svgpath-item .title {
+  position: relative;
+  width: 100%;
   display: grid;
   grid-template-columns: 1fr;
-  grid-column-gap: 4px;
+  grid-row-gap: 4px;
+  padding: 4px 0px;
 }
-.csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list[data-view-mode=list] .svgfilter-item .title div input {
-  height: 100%;
-  border-radius: 2px;
-  border: 1px solid #1a1a1a;
+.csseditor[data-theme=dark] .svgpath-assets-property .svgpath-list[data-view-mode=grid] .svgpath-item .title input {
   width: 100%;
 }
-.csseditor[data-theme=dark] .property.svgfilter-assets-property {
+.csseditor[data-theme=dark] .svgpath-assets-property .svgpath-list[data-view-mode=grid] .svgpath-item .tools {
+  background-color: transparent;
+  position: absolute;
+  display: none;
+  top: 0px;
+  right: 0px;
+  text-align: right;
+  padding: 2px;
+}
+.csseditor[data-theme=dark] .svgpath-assets-property .svgpath-list[data-view-mode=grid] .svgpath-item .tools svg path {
+  fill: white;
+}
+.csseditor[data-theme=dark] .property.svgpath-assets-property {
   padding-left: 0px !important;
   padding-right: 0px !important;
 }
@@ -4411,7 +4379,7 @@ html, body {
 .csseditor[data-theme=dark] .color-view-editor.has-label label {
   text-align: left;
   vertical-align: middle;
-  padding: 2px 4px;
+  padding: 2px 4px 2px 0px;
   box-sizing: border-box;
   font-size: 11px;
 }
@@ -4470,7 +4438,7 @@ html, body {
 .csseditor[data-theme=dark] .range-editor.has-label label {
   text-align: left;
   vertical-align: middle;
-  padding: 3px 4px;
+  padding: 2px 4px 2px 0px;
   box-sizing: border-box;
   font-size: 11px;
 }
@@ -4574,7 +4542,7 @@ html, body {
 .csseditor[data-theme=dark] .number-range-editor.has-label label {
   text-align: left;
   vertical-align: middle;
-  padding: 0px 4px;
+  padding: 2px 4px 2px 0px;
   box-sizing: border-box;
   font-size: 12px;
 }
@@ -4625,7 +4593,7 @@ html, body {
 .csseditor[data-theme=dark] .text-editor.has-label label {
   text-align: right;
   vertical-align: middle;
-  padding: 2px 4px;
+  padding: 2px 4px 2px 0px;
   box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .text-editor input[type=text] {
@@ -4644,7 +4612,7 @@ html, body {
 .csseditor[data-theme=dark] .select-editor.has-label label {
   text-align: left;
   vertical-align: middle;
-  padding: 2px 3px;
+  padding: 2px 4px 2px 0px;
   font-size: 11px;
   box-sizing: border-box;
 }
@@ -5792,7 +5760,7 @@ html, body {
 .csseditor[data-theme=dark] .select-icon-editor.has-label label {
   text-align: left;
   vertical-align: middle;
-  padding: 2px 3px;
+  padding: 2px 4px 2px 0px;
   font-size: 11px;
   box-sizing: border-box;
 }
@@ -8351,13 +8319,15 @@ html, body {
   display: inline-block;
   width: 150px;
 }
-.csseditor[data-theme=light] .star-manager {
+.csseditor[data-theme=light] .page-subeditor {
   position: absolute;
-  left: 50%;
+  left: 10px;
   top: 10px;
-  width: 340px;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
+  height: 50px;
+  text-align: center;
+  pointer-events: none;
+}
+.csseditor[data-theme=light] .page-subeditor .path-manager {
   display: none;
   pointer-events: all;
   outline: none;
@@ -8367,14 +8337,34 @@ html, body {
   background-color: white;
   padding: 5px 10px;
 }
-.csseditor[data-theme=light] .star-manager > label {
+.csseditor[data-theme=light] .page-subeditor .polygon-manager {
+  display: none;
+  pointer-events: all;
+  outline: none;
+  border-radius: 3px;
+  border: 1px solid #cfcfcf;
+  color: #666666;
+  background-color: white;
+  padding: 5px 10px;
+}
+.csseditor[data-theme=light] .page-subeditor .star-manager {
+  display: none;
+  pointer-events: all;
+  outline: none;
+  border-radius: 3px;
+  border: 1px solid #cfcfcf;
+  color: #666666;
+  background-color: white;
+  padding: 5px 10px;
+}
+.csseditor[data-theme=light] .page-subeditor .star-manager > label {
   vertical-align: middle;
   font-size: 11px;
 }
-.csseditor[data-theme=light] .star-manager button {
+.csseditor[data-theme=light] .page-subeditor .star-manager button {
   border-radius: 3px;
 }
-.csseditor[data-theme=light] .star-manager > .select {
+.csseditor[data-theme=light] .page-subeditor .star-manager > .select {
   display: inline-block;
   width: 150px;
 }
@@ -8826,13 +8816,6 @@ html, body {
   flex: 1 1 auto;
   overflow: auto;
 }
-.csseditor[data-theme=light] .property.item > .property-title {
-  background-color: #3e8ec6;
-  color: white;
-}
-.csseditor[data-theme=light] .property.item > .property-title svg path {
-  fill: white;
-}
 .csseditor[data-theme=light] .property.show > .property-body {
   display: block;
   padding: 0px 11px 0px 6px;
@@ -8887,7 +8870,10 @@ html, body {
 }
 .csseditor[data-theme=light] .property > .property-body .property-item.label label {
   font-weight: 900;
-  text-shadow: 2px 2px 1px black;
+  text-shadow: 2px 2px 3px #cfcfcf;
+}
+.csseditor[data-theme=light] .property > .property-body .property-item .small-editor {
+  margin-bottom: 3px;
 }
 .csseditor[data-theme=light] .property > .property-footer {
   padding: 0px 6px;
@@ -9885,50 +9871,6 @@ html, body {
 .csseditor[data-theme=light] .color-assets-property .color-list[data-view-mode=grid] .color-item .tools svg path {
   fill: white;
 }
-.csseditor[data-theme=light] .color-assets-property .color-list[data-view-mode=list] .add-color-item {
-  cursor: pointer;
-  text-align: center;
-}
-.csseditor[data-theme=light] .color-assets-property .color-list[data-view-mode=list] .color-item {
-  display: grid;
-  grid-template-columns: 22px 1fr 35px;
-  grid-column-gap: 2px;
-  height: 20px;
-  margin-bottom: 4px;
-}
-.csseditor[data-theme=light] .color-assets-property .color-list[data-view-mode=list] .color-item .preview {
-  cursor: pointer;
-  width: 20px;
-  height: 20px;
-  border: 1px solid #cfcfcf;
-  border-radius: 3px;
-  position: relative;
-  background-color: transparent;
-  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
-  background-size: 10px 10px;
-  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
-  box-sizing: border-box;
-  overflow: hidden;
-  cursor: pointer;
-}
-.csseditor[data-theme=light] .color-assets-property .color-list[data-view-mode=list] .color-item .preview .color-view {
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-}
-.csseditor[data-theme=light] .color-assets-property .color-list[data-view-mode=list] .color-item .title {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-column-gap: 4px;
-}
-.csseditor[data-theme=light] .color-assets-property .color-list[data-view-mode=list] .color-item .title div input {
-  height: 100%;
-  border-radius: 2px;
-  border: 1px solid #cfcfcf;
-  width: 100%;
-}
 .csseditor[data-theme=light] .property.color-assets-property {
   padding-left: 0px !important;
   padding-right: 0px !important;
@@ -10061,48 +10003,6 @@ html, body {
 .csseditor[data-theme=light] .gradient-assets-property .gradient-list[data-view-mode=grid] .gradient-item .tools svg path {
   fill: white;
 }
-.csseditor[data-theme=light] .gradient-assets-property .gradient-list[data-view-mode=list] .add-gradient-item {
-  cursor: pointer;
-  text-align: center;
-}
-.csseditor[data-theme=light] .gradient-assets-property .gradient-list[data-view-mode=list] .gradient-item {
-  display: grid;
-  grid-template-columns: 22px 1fr 50px;
-  grid-column-gap: 2px;
-  height: 20px;
-  margin-bottom: 2px;
-}
-.csseditor[data-theme=light] .gradient-assets-property .gradient-list[data-view-mode=list] .gradient-item .preview {
-  cursor: pointer;
-  width: 20px;
-  height: 20px;
-  border-radius: 3px;
-  position: relative;
-  background-color: transparent;
-  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
-  background-size: 10px 10px;
-  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
-  box-sizing: border-box;
-  overflow: hidden;
-  cursor: pointer;
-}
-.csseditor[data-theme=light] .gradient-assets-property .gradient-list[data-view-mode=list] .gradient-item .preview .gradient-view {
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-}
-.csseditor[data-theme=light] .gradient-assets-property .gradient-list[data-view-mode=list] .gradient-item .title {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-column-gap: 4px;
-}
-.csseditor[data-theme=light] .gradient-assets-property .gradient-list[data-view-mode=list] .gradient-item .title div input {
-  border-radius: 2px;
-  border: 1px solid #cfcfcf;
-  width: 100%;
-}
 .csseditor[data-theme=light] .property.gradient-assets-property {
   padding-left: 0px !important;
   padding-right: 0px !important;
@@ -10209,7 +10109,6 @@ html, body {
   width: 100%;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: repeat(2, 1fr);
   grid-row-gap: 4px;
   padding: 4px 0px;
 }
@@ -10228,44 +10127,81 @@ html, body {
 .csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list[data-view-mode=grid] .svgfilter-item .tools svg path {
   fill: white;
 }
-.csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list[data-view-mode=list] .add-svgfilter-item {
+.csseditor[data-theme=light] .property.svgfilter-assets-property {
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+}
+.csseditor[data-theme=light] .svgpath-assets-property .svgpath-list .svgpath-view {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  pointer-events: none;
+  background-image: radial-gradient(yellow 0%, red 100%);
+}
+.csseditor[data-theme=light] .svgpath-assets-property .svgpath-list[data-view-mode=grid] {
+  display: block;
+}
+.csseditor[data-theme=light] .svgpath-assets-property .svgpath-list[data-view-mode=grid] .add-svgpath-item {
+  display: inline-block;
+  width: 80px;
+  position: relative;
+  margin-right: 4px;
+  margin-bottom: 4px;
+  height: 80px;
+  border: 1px solid #cfcfcf;
+  border-radius: 2px;
+  box-sizing: border-box;
+  vertical-align: top;
   cursor: pointer;
   text-align: center;
+  padding: 24px;
 }
-.csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list[data-view-mode=list] .svgfilter-item {
-  display: grid;
-  grid-template-columns: 22px 1fr 35px;
-  grid-column-gap: 2px;
-  height: 20px;
-  margin-bottom: 4px;
-}
-.csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list[data-view-mode=list] .svgfilter-item .preview {
-  cursor: pointer;
-  width: 20px;
-  height: 20px;
-  border: 1px solid #cfcfcf;
-  border-radius: 3px;
+.csseditor[data-theme=light] .svgpath-assets-property .svgpath-list[data-view-mode=grid] .svgpath-item {
+  display: inline-block;
+  width: 80px;
   position: relative;
-  background-color: transparent;
-  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
-  background-size: 10px 10px;
-  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+  margin-right: 4px;
+  margin-bottom: 4px;
+  vertical-align: middle;
+}
+.csseditor[data-theme=light] .svgpath-assets-property .svgpath-list[data-view-mode=grid] .svgpath-item:hover .tools {
+  display: inline-block;
+}
+.csseditor[data-theme=light] .svgpath-assets-property .svgpath-list[data-view-mode=grid] .svgpath-item .preview {
+  position: relative;
+  width: 100%;
+  height: 80px;
+  border: 1px solid #cfcfcf;
+  border-radius: 2px;
   box-sizing: border-box;
-  overflow: hidden;
   cursor: pointer;
 }
-.csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list[data-view-mode=list] .svgfilter-item .title {
+.csseditor[data-theme=light] .svgpath-assets-property .svgpath-list[data-view-mode=grid] .svgpath-item .title {
+  position: relative;
+  width: 100%;
   display: grid;
   grid-template-columns: 1fr;
-  grid-column-gap: 4px;
+  grid-row-gap: 4px;
+  padding: 4px 0px;
 }
-.csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list[data-view-mode=list] .svgfilter-item .title div input {
-  height: 100%;
-  border-radius: 2px;
-  border: 1px solid #cfcfcf;
+.csseditor[data-theme=light] .svgpath-assets-property .svgpath-list[data-view-mode=grid] .svgpath-item .title input {
   width: 100%;
 }
-.csseditor[data-theme=light] .property.svgfilter-assets-property {
+.csseditor[data-theme=light] .svgpath-assets-property .svgpath-list[data-view-mode=grid] .svgpath-item .tools {
+  background-color: transparent;
+  position: absolute;
+  display: none;
+  top: 0px;
+  right: 0px;
+  text-align: right;
+  padding: 2px;
+}
+.csseditor[data-theme=light] .svgpath-assets-property .svgpath-list[data-view-mode=grid] .svgpath-item .tools svg path {
+  fill: white;
+}
+.csseditor[data-theme=light] .property.svgpath-assets-property {
   padding-left: 0px !important;
   padding-right: 0px !important;
 }
@@ -10412,7 +10348,7 @@ html, body {
 .csseditor[data-theme=light] .color-view-editor.has-label label {
   text-align: left;
   vertical-align: middle;
-  padding: 2px 4px;
+  padding: 2px 4px 2px 0px;
   box-sizing: border-box;
   font-size: 11px;
 }
@@ -10471,7 +10407,7 @@ html, body {
 .csseditor[data-theme=light] .range-editor.has-label label {
   text-align: left;
   vertical-align: middle;
-  padding: 3px 4px;
+  padding: 2px 4px 2px 0px;
   box-sizing: border-box;
   font-size: 11px;
 }
@@ -10575,7 +10511,7 @@ html, body {
 .csseditor[data-theme=light] .number-range-editor.has-label label {
   text-align: left;
   vertical-align: middle;
-  padding: 0px 4px;
+  padding: 2px 4px 2px 0px;
   box-sizing: border-box;
   font-size: 12px;
 }
@@ -10626,7 +10562,7 @@ html, body {
 .csseditor[data-theme=light] .text-editor.has-label label {
   text-align: right;
   vertical-align: middle;
-  padding: 2px 4px;
+  padding: 2px 4px 2px 0px;
   box-sizing: border-box;
 }
 .csseditor[data-theme=light] .text-editor input[type=text] {
@@ -10645,7 +10581,7 @@ html, body {
 .csseditor[data-theme=light] .select-editor.has-label label {
   text-align: left;
   vertical-align: middle;
-  padding: 2px 3px;
+  padding: 2px 4px 2px 0px;
   font-size: 11px;
   box-sizing: border-box;
 }
@@ -10732,7 +10668,7 @@ html, body {
   text-align: center;
   box-sizing: border-box;
   padding: 4px;
-  background-color: #cfcfcf;
+  background-color: white;
   border: 1px solid #d0d0d0;
   border-top: 0px;
 }
@@ -11793,7 +11729,7 @@ html, body {
 .csseditor[data-theme=light] .select-icon-editor.has-label label {
   text-align: left;
   vertical-align: middle;
-  padding: 2px 3px;
+  padding: 2px 4px 2px 0px;
   font-size: 11px;
   box-sizing: border-box;
 }

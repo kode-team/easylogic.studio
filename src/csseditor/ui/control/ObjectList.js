@@ -40,7 +40,7 @@ export default class ObjectList extends UIElement {
           <AddText />
           <AddImage />
           <AddCube />
-          <AddSphere />
+          <!-- AddSphere / -->
           <div class='split'></div>
           <label>SVG</label>
           <AddPath />

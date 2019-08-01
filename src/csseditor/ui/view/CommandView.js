@@ -96,7 +96,7 @@ export default class CommandView extends UIElement {
         this.emit('hideSubEditor');
         editor.selection.empty();
         this.emit('initSelectionTool');        
-        this.emit('showPathEditor', 'move' );
+        this.emit('showPathEditor', 'draw' );
     }
 
 

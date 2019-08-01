@@ -1,46 +1,20 @@
-.color-assets-property {
+.svgpath-assets-property {
+    .svgpath-list {
 
-    .color-list-tools {
-        display: grid; 
-        grid-template-columns: 1fr 1fr; 
-        grid-column-gap: 2px;
-        text-align: left;
-        margin-bottom: 10px;
-        @include svg-button-inline(auto, 24px);
-
-        button {
-            padding: 2px 10px;
-            border: 1px solid $border-color;            
-        }
-
-        @each $listType in list, grid {
-            &[data-view-mode="#{$listType}"] {
-                button[data-value='#{$listType}'] {
-                    background-color: $selected-border-color;
-                    border-color: $selected-border-color;
-                    background-image: none;
-                    color: $selected-font-color;
-                    svg {
-                        path {
-                            fill: $selected-font-color;
-                        }
-                    }
-                }
-            }
-        }  
-
-    }
-    
-    .color-list {
-
-        .color-view {
+        .svgpath-view {
+            position: absolute;
+            left:0px;
+            top:0px;
+            right:0px;
+            bottom:0px;
             pointer-events: none;
+            background-image: radial-gradient(yellow 0%, red 100%);            
         }
 
         &[data-view-mode="grid"] {
             display: block;
 
-            .add-color-item {
+            .add-svgpath-item {
                 display: inline-block;
                 width: 80px;
                 position: relative;
@@ -56,7 +30,7 @@
                 padding: 24px;
             }
 
-            .color-item {
+            .svgpath-item {
                 display: inline-block;
                 width: 80px;
                 position: relative;
@@ -78,16 +52,7 @@
                     border-radius: 2px;
                     box-sizing: border-box;
                     cursor: pointer;
-                    
 
-                    .color-view{
-                        position: absolute;
-                        left:0px;
-                        top:0px;
-                        right:0px;
-                        bottom:0px;
-
-                    }
                 }
 
                 .title {
@@ -95,7 +60,7 @@
                     width: 100%;
                     display: grid;
                     grid-template-columns: 1fr;
-                    grid-template-rows: repeat(2, 1fr);
+                    // grid-template-rows: repeat(2, 1fr);
                     grid-row-gap: 4px;
                     padding: 4px 0px;
 
@@ -113,6 +78,7 @@
                     text-align: right;   
                     padding: 2px;
 
+
                     svg {
                         path {
                             fill: $selected-font-color;
@@ -121,11 +87,12 @@
                 }
             }
         }
+
     }
 
 }
 
-.property.color-assets-property {
+.property.svgpath-assets-property {
     padding-left: 0px !important;
     padding-right: 0px !important;
 }

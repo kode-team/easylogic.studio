@@ -127,57 +127,6 @@
 
         }
 
-        &[data-view-mode='list'] {
-            .add-gradient-item {
-                cursor: pointer;
-                text-align: center;
-            }            
-
-            .gradient-item {
-                display: grid;
-                grid-template-columns: 22px 1fr 50px;
-                grid-column-gap: 2px;
-                height: 20px;
-                margin-bottom: 2px;                
-        
-                .preview {
-                    cursor: pointer;
-                    width: 20px;
-                    height: 20px;
-                    // border: 1px solid $border-color;
-                    border-radius: 3px;
-                    position: relative;
-                    @include transparent-background();
-                    box-sizing: border-box;
-                    overflow: hidden;
-                    cursor: pointer;
-                    .gradient-view {
-                        position: absolute;
-                        left: 0px;
-                        top: 0px;
-                        right: 0px;
-                        bottom: 0px;
-                    }       
-        
-                }
-        
-                .title {
-                    display: grid;
-                    grid-template-columns: repeat(2, 1fr);
-                    grid-column-gap: 4px;
-        
-                    div {
-                        input {
-                            // height: 100%;
-                            border-radius: 2px;
-                            border: 1px solid $border-color;
-                            width: 100%;
-                        }
-                    }
-                }
-            }
-        }
-
     }
 
 }

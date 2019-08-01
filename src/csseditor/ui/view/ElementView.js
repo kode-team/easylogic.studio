@@ -208,10 +208,8 @@ export default class ElementView extends UIElement {
             editor.selection.selectById(id);    
         }
 
-        console.log(editor.selection.items)
-
         if (editor.selection.isRelative) {
-            console.log('relative')
+            // console.log('relative')
         } else {    
             this.selectCurrent(...editor.selection.items)
             this.emit('refreshSelection');
