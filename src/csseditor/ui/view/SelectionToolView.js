@@ -214,7 +214,7 @@ export default class SelectionToolView extends UIElement {
         })
     }
 
-    setCacheRotateZ () {
+    setCacheRotateZ (rect) {
         var targetRect = this.$target.rect();
         this.rotateZCenter = {
             x: targetRect.x + targetRect.width/2, 
@@ -294,7 +294,7 @@ export default class SelectionToolView extends UIElement {
             
 
             if (this.hasRotateZ) {
-                this.setCacheRotateZ()
+                this.setCacheRotateZ(rect)
             } else if (this.hasPerspective) {
                 this.setCachePerspective();
             } else {
@@ -386,7 +386,7 @@ export default class SelectionToolView extends UIElement {
 
 
     modifyRotateZ(dx, dy) {
-
+        var e = editor.config.get('bodyEvent');
         var x = this.rotateZStart.x - this.rotateZCenter.x
         var y = this.rotateZStart.y - this.rotateZCenter.y
 
