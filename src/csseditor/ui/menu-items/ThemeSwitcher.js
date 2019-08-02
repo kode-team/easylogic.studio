@@ -9,11 +9,6 @@ export default class ThemeSwitcher extends MenuItem {
     return "Theme";
   }
 
-
-  isHideTitle() {
-    return true; 
-  }  
-
   clickButton(e) {
     this.emit('switch.theme')
   }

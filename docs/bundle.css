@@ -2143,8 +2143,8 @@ html, body {
 }
 .csseditor[data-theme=dark] .tool-menu .items button,
 .csseditor[data-theme=dark] .external-tool-menu .items button {
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   background-color: transparent;
   background-image: none;
   border: 0px;
@@ -2164,7 +2164,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .tool-menu .items .title,
 .csseditor[data-theme=dark] .external-tool-menu .items .title {
-  font-size: 9px;
+  font-size: 10px;
   color: #999;
 }
 .csseditor[data-theme=dark] .tool-menu .items .icon,
@@ -8269,8 +8269,8 @@ html, body {
 }
 .csseditor[data-theme=light] .tool-menu .items button,
 .csseditor[data-theme=light] .external-tool-menu .items button {
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   background-color: transparent;
   background-image: none;
   border: 0px;
@@ -8290,7 +8290,7 @@ html, body {
 }
 .csseditor[data-theme=light] .tool-menu .items .title,
 .csseditor[data-theme=light] .external-tool-menu .items .title {
-  font-size: 9px;
+  font-size: 10px;
   color: #999;
 }
 .csseditor[data-theme=light] .tool-menu .items .icon,
