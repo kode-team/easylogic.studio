@@ -126,6 +126,7 @@ export default class ColorAssetsProperty extends BaseProperty {
     var $item = e.$delegateTarget.closest('color-item');    
     var index = +$item.attr('data-index')
     this.state.$el = e.$delegateTarget.$('.color-view');
+    this.state.$color = $item.$('.color');
     var color = this.state.$el.css('background-color')
 
     this.emit("showColorPickerPopup", {
@@ -145,6 +146,7 @@ export default class ColorAssetsProperty extends BaseProperty {
       this.executeColor(project => {
         project.setColorValue(params.index, {color});      
         this.state.$el.css('background-color', color);
+        this.state.$color.val(color);
       }, false)
     }
   }

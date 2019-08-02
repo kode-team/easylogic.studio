@@ -3848,6 +3848,9 @@ html, body {
   text-align: center;
   padding: 24px;
 }
+.csseditor[data-theme=dark] .color-assets-property .color-list[data-view-mode=grid] .add-color-item svg path {
+  fill: #ececec;
+}
 .csseditor[data-theme=dark] .color-assets-property .color-list[data-view-mode=grid] .color-item {
   display: inline-block;
   width: 80px;
@@ -3976,6 +3979,9 @@ html, body {
   cursor: pointer;
   text-align: center;
   padding: 24px;
+}
+.csseditor[data-theme=dark] .gradient-assets-property .gradient-list[data-view-mode=grid] .add-gradient-item svg path {
+  fill: #ececec;
 }
 .csseditor[data-theme=dark] .gradient-assets-property .gradient-list[data-view-mode=grid] .gradient-item {
   display: inline-block;
@@ -4111,6 +4117,9 @@ html, body {
   cursor: pointer;
   text-align: center;
   padding: 24px;
+}
+.csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list[data-view-mode=grid] .add-svgfilter-item svg path {
+  fill: #ececec;
 }
 .csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list[data-view-mode=grid] .svgfilter-item {
   display: inline-block;
@@ -4872,23 +4881,20 @@ html, body {
 .csseditor[data-theme=dark] .transform-editor .transform-list .transform-item .title {
   display: grid;
   grid-template-columns: 1fr 30px;
-  background-color: #3e8ec6;
-  color: white;
   border-radius: 3px;
   margin: 5px 0px;
 }
 .csseditor[data-theme=dark] .transform-editor .transform-list .transform-item .title svg path {
-  fill: white;
+  fill: #3e8ec6;
 }
 .csseditor[data-theme=dark] .transform-editor .transform-list .transform-item .title label {
   font-size: 12px;
   padding: 2px 5px;
   box-sizing: border-box;
+  color: #3e8ec6;
 }
 .csseditor[data-theme=dark] .transform-editor .transform-list .transform-item .title label span {
   font-weight: bold;
-  text-shadow: 1px 1px 0 #333;
-  color: white;
   border-radius: 3px;
   padding: 0px;
   display: inline-block;
@@ -4903,7 +4909,29 @@ html, body {
   grid-template-columns: 1fr;
   grid-row-gap: 2px;
   margin-bottom: 2px;
-  margin-top: 10px;
+  margin-top: 2px;
+}
+.csseditor[data-theme=dark] .transform-editor .transform-list .transform-item .transform-ui pre {
+  margin-top: 3px;
+  margin-bottom: 3px;
+}
+.csseditor[data-theme=dark] .transform-editor .transform-list .transform-item .transform-ui .translate3d {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-column-gap: 5px;
+  padding: 0px 2px;
+}
+.csseditor[data-theme=dark] .transform-editor .transform-list .transform-item .transform-ui .matrix {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-column-gap: 5px;
+  padding: 0px 2px;
+}
+.csseditor[data-theme=dark] .transform-editor .transform-list .transform-item .transform-ui .matrix3d {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-column-gap: 5px;
+  padding: 0px 2px;
 }
 .csseditor[data-theme=dark] .transform-editor .transform-list .transform-item .transform-ui input[type=range] {
   width: 90%;
@@ -5855,6 +5883,44 @@ html, body {
   text-align: right;
   vertical-align: middle;
   padding: 4px 0px;
+}
+.csseditor[data-theme=dark] .number-input-editor {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-column-gap: 4px;
+}
+.csseditor[data-theme=dark] .number-input-editor.has-label label {
+  text-align: left;
+  vertical-align: middle;
+  padding: 2px 4px 2px 0px;
+  box-sizing: border-box;
+  font-size: 12px;
+}
+.csseditor[data-theme=dark] .number-input-editor.has-label.block {
+  display: block;
+}
+.csseditor[data-theme=dark] .number-input-editor.has-label.block label {
+  display: block;
+}
+.csseditor[data-theme=dark] .number-input-editor .range-editor-type {
+  vertical-align: middle;
+}
+.csseditor[data-theme=dark] .number-input-editor .range-editor-type .area {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-column-gap: 3px;
+  font-size: 13px;
+}
+.csseditor[data-theme=dark] .number-input-editor .range-editor-type .area span {
+  padding: 1px;
+  box-sizing: border-box;
+  vertical-align: middle;
+}
+.csseditor[data-theme=dark] .number-input-editor .range-editor-type .area input {
+  width: 100%;
+}
+.csseditor[data-theme=dark] .number-input-editor .range-editor-type .area select {
+  width: 100%;
 }
 .csseditor[data-theme=dark] .popup {
   position: absolute;
@@ -9814,6 +9880,9 @@ html, body {
   text-align: center;
   padding: 24px;
 }
+.csseditor[data-theme=light] .color-assets-property .color-list[data-view-mode=grid] .add-color-item svg path {
+  fill: #666666;
+}
 .csseditor[data-theme=light] .color-assets-property .color-list[data-view-mode=grid] .color-item {
   display: inline-block;
   width: 80px;
@@ -9942,6 +10011,9 @@ html, body {
   cursor: pointer;
   text-align: center;
   padding: 24px;
+}
+.csseditor[data-theme=light] .gradient-assets-property .gradient-list[data-view-mode=grid] .add-gradient-item svg path {
+  fill: #666666;
 }
 .csseditor[data-theme=light] .gradient-assets-property .gradient-list[data-view-mode=grid] .gradient-item {
   display: inline-block;
@@ -10077,6 +10149,9 @@ html, body {
   cursor: pointer;
   text-align: center;
   padding: 24px;
+}
+.csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list[data-view-mode=grid] .add-svgfilter-item svg path {
+  fill: #666666;
 }
 .csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list[data-view-mode=grid] .svgfilter-item {
   display: inline-block;
@@ -10838,23 +10913,20 @@ html, body {
 .csseditor[data-theme=light] .transform-editor .transform-list .transform-item .title {
   display: grid;
   grid-template-columns: 1fr 30px;
-  background-color: #3e8ec6;
-  color: white;
   border-radius: 3px;
   margin: 5px 0px;
 }
 .csseditor[data-theme=light] .transform-editor .transform-list .transform-item .title svg path {
-  fill: white;
+  fill: #3e8ec6;
 }
 .csseditor[data-theme=light] .transform-editor .transform-list .transform-item .title label {
   font-size: 12px;
   padding: 2px 5px;
   box-sizing: border-box;
+  color: #3e8ec6;
 }
 .csseditor[data-theme=light] .transform-editor .transform-list .transform-item .title label span {
   font-weight: bold;
-  text-shadow: 1px 1px 0 #333;
-  color: white;
   border-radius: 3px;
   padding: 0px;
   display: inline-block;
@@ -10869,7 +10941,29 @@ html, body {
   grid-template-columns: 1fr;
   grid-row-gap: 2px;
   margin-bottom: 2px;
-  margin-top: 10px;
+  margin-top: 2px;
+}
+.csseditor[data-theme=light] .transform-editor .transform-list .transform-item .transform-ui pre {
+  margin-top: 3px;
+  margin-bottom: 3px;
+}
+.csseditor[data-theme=light] .transform-editor .transform-list .transform-item .transform-ui .translate3d {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-column-gap: 5px;
+  padding: 0px 2px;
+}
+.csseditor[data-theme=light] .transform-editor .transform-list .transform-item .transform-ui .matrix {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-column-gap: 5px;
+  padding: 0px 2px;
+}
+.csseditor[data-theme=light] .transform-editor .transform-list .transform-item .transform-ui .matrix3d {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-column-gap: 5px;
+  padding: 0px 2px;
 }
 .csseditor[data-theme=light] .transform-editor .transform-list .transform-item .transform-ui input[type=range] {
   width: 90%;
@@ -11821,6 +11915,44 @@ html, body {
   text-align: right;
   vertical-align: middle;
   padding: 4px 0px;
+}
+.csseditor[data-theme=light] .number-input-editor {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-column-gap: 4px;
+}
+.csseditor[data-theme=light] .number-input-editor.has-label label {
+  text-align: left;
+  vertical-align: middle;
+  padding: 2px 4px 2px 0px;
+  box-sizing: border-box;
+  font-size: 12px;
+}
+.csseditor[data-theme=light] .number-input-editor.has-label.block {
+  display: block;
+}
+.csseditor[data-theme=light] .number-input-editor.has-label.block label {
+  display: block;
+}
+.csseditor[data-theme=light] .number-input-editor .range-editor-type {
+  vertical-align: middle;
+}
+.csseditor[data-theme=light] .number-input-editor .range-editor-type .area {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-column-gap: 3px;
+  font-size: 13px;
+}
+.csseditor[data-theme=light] .number-input-editor .range-editor-type .area span {
+  padding: 1px;
+  box-sizing: border-box;
+  vertical-align: middle;
+}
+.csseditor[data-theme=light] .number-input-editor .range-editor-type .area input {
+  width: 100%;
+}
+.csseditor[data-theme=light] .number-input-editor .range-editor-type .area select {
+  width: 100%;
 }
 .csseditor[data-theme=light] .popup {
   position: absolute;

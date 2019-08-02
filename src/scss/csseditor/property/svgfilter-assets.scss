@@ -60,6 +60,12 @@
                 cursor: pointer;         
                 text-align: center;
                 padding: 24px;
+
+                svg {
+                    path {
+                        fill: $font-color;
+                    }
+                }
                 
             }
 

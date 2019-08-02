@@ -39,7 +39,12 @@
       .title {
         display: grid;
         grid-template-columns: 1fr 30px;
-        @include title-background-2($selected-color, $selected-font-color);
+        // @include title-background-2($selected-color, $selected-font-color);
+        svg {
+          path {
+            fill: $selected-color;
+          }
+        }
 
         border-radius: 3px;
         margin: 5px 0px;        
@@ -48,12 +53,13 @@
           font-size: 12px;
           padding: 2px 5px;
           box-sizing: border-box;
+          color: $selected-color;
 
             span {
               font-weight: bold;
               // background-color: white;
-              text-shadow: 1px 1px 0 #333;
-              color: white;
+              // text-shadow: 1px 1px 0 #333;
+
               border-radius: 3px;
               padding: 0px;
               display: inline-block;
@@ -73,7 +79,33 @@
         grid-template-columns: 1fr;
         grid-row-gap: 2px;
         margin-bottom: 2px;
-        margin-top: 10px;
+        margin-top: 2px;
+
+        pre {
+          margin-top: 3px;
+          margin-bottom: 3px;
+        }
+
+        .translate3d {
+          display: grid; 
+          grid-template-columns: repeat(3, 1fr);
+          grid-column-gap: 5px;
+          padding: 0px 2px;
+        }
+
+        .matrix {
+          display: grid; 
+          grid-template-columns: repeat(3, 1fr);
+          grid-column-gap: 5px;
+          padding: 0px 2px;
+        }
+
+        .matrix3d {
+          display: grid; 
+          grid-template-columns: repeat(4, 1fr);
+          grid-column-gap: 5px;
+          padding: 0px 2px;
+        }
   
         input[type="range"] {
           width: 90%;

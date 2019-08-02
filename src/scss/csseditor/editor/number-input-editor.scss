@@ -1,0 +1,48 @@
+.number-input-editor {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-column-gap: 4px;
+
+    &.has-label {
+        label {
+            text-align: left;
+            vertical-align: middle;
+            padding: 2px 4px 2px 0px;
+            box-sizing: border-box;
+            font-size: 12px;
+        }
+
+        &.block {
+            display: block;
+
+            label {
+                display: block; 
+            }
+        }
+    }
+
+    .range-editor-type {
+        vertical-align: middle;
+
+        .area {
+            display: grid; 
+            grid-template-columns: 1fr;
+            grid-column-gap: 3px;
+            font-size: 13px;
+            
+            span {
+                padding: 1px;
+                box-sizing: border-box;
+                vertical-align: middle;
+            }
+
+            input {
+                width: 100%;
+            }
+
+            select {
+                width: 100%;
+            }
+        }
+    }
+}

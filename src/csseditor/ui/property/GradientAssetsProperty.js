@@ -146,10 +146,9 @@ export default class GradientAssetsProperty extends BaseProperty {
   [EVENT('changeGradientAssets')] (gradient, params) {
     if (params.id === this.id) {
       this.executeGradient(project => {
-        project.setGradientValue(params.index, {gradient});      
-        this.state.$el.css('background-image', gradient);             
-        this.state.$item.attr('data-gradient', gradient);        
-
+        project.setGradientValue(params.index, {gradient});
+        this.state.$el.css('background-image', gradient);
+        this.state.$item.attr('data-gradient', gradient);
       }, false)              
 
     }

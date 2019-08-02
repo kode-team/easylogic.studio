@@ -15,6 +15,10 @@ import { editor } from "../../../editor/editor";
 import UIElement, { EVENT } from "../../../util/UIElement";
 import RangeEditor from "./RangeEditor";
 import { Length } from "../../../editor/unit/Length";
+import NumberInputEditor from "./NumberInputEditor";
+
+
+
 
 
 var transformList = [
@@ -45,13 +49,19 @@ const labels = {
   'translate' : ['X', 'Y'], 
   'translate3d': ['tx','ty', 'tz'],
   'matrix': ['a','b','c','d','tx','ty'],
-  'matrix3d': ['a1', 'b1', 'c1', 'd1', 'a2', 'b2', 'c2', 'd2', 'a3', 'b3', 'c3', 'd3', 'a4', 'b4', 'c4', 'd4']
+  'matrix3d': [
+    'a1', 'b1', 'c1', 'd1', 
+    'a2', 'b2', 'c2', 'd2', 
+    'a3', 'b3', 'c3', 'd3', 
+    'a4', 'b4', 'c4', 'd4'
+  ]
 }
 
 export default class TransformEditor extends UIElement {
 
   components() {
     return {
+      NumberInputEditor,
       RangeEditor
     }
   }
@@ -136,34 +146,32 @@ export default class TransformEditor extends UIElement {
             </button>
           </div>
         </div>
-        <div class="transform-ui">
+        <div class="transform-ui ${type}">
 
           ${type === 'translate3d' ? `
             <pre>
             1 | 0 | 0 | tx
             0 | 1 | 0 | ty	
             0 | 0 | 1 | tz	
-            0 | 0 | 0 | 1
-            </pre>
+            0 | 0 | 0 | 1</pre>
           `: ''}
 
           ${type === 'matrix' ? `
             <pre>
             a | c | tx	
             b | d | ty	
-            0 | 0 | 1
-            </pre>
-          `: ''}          
-
+            0 | 0 | 1</pre>
+          `: ''}    
+          
           ${type === 'matrix3d' ? `
             <pre>
             a1 | a2 | a3 | a4	
             b1 | b2 | b3 | b4	
             c1 | c2 | c3 | c4	
-            d1 | d2 | d3 | d4
-            </pre>
-          `: ''}          
-
+            d1 | d2 | d3 | d4</pre>
+          `: ''}     
+          
+          <div class='${type}'>
           ${transform.value.map( (it, tindex) => {
 
             var label = this.getLabel(type, tindex);
@@ -171,19 +179,20 @@ export default class TransformEditor extends UIElement {
 
             return `
               <div>
-                <RangeEditor 
+                <NumberInputEditor 
                       ref='$range_${type}_${index}_${tindex}' 
                       min="${min}" 
                       max="${max}" 
                       step="${step}" 
-                      label="${label}" 
+                      label="${label}"
                       key="${index}" 
                       params='${tindex}' 
                       value="${it}" 
                       units="${units}" 
                       onchange="changeRangeEditor" />
               </div>`
-          }).join('')}          
+          }).join('')}   
+          </div>       
         </div>
       </div>
     `;
