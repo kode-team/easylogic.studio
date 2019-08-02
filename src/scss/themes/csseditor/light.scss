@@ -20,7 +20,9 @@ $display-grid-color: red;
 
 
 // common 
-$border-color: rgb(207, 207, 207);
+
+$inner-border-color: rgb(231, 231, 231);
+$border-color: rgb(231, 231, 231);
 $selected-border-color: #609de2;
 $selected-color: #3e8ec6;
 $background-color: white; 
@@ -50,7 +52,7 @@ $input-border-radius: 2px;
 $input-font-color: $font-color;
 
 // property 
-$property-border-color: $border-color;
+$property-border-color: $inner-border-color;
 $property-background-color: $background-color; 
 $property-font-color: $font-color;
 
@@ -64,6 +66,7 @@ $list-background-color: white;
 $tab-background-color: $background-color; 
 $tab-font-color: $font-color;
 $tab-selected-color: $selected-color; 
+$tab-selected-font-color: $selected-color;
 $tab-selected-border-color: $selected-border-color;
 $tab-border-color: $border-color;
 

@@ -39,7 +39,7 @@ $tab-horizontal-header-right-width: 60px;
         // width: 31px;
         // border-top: 2px solid transparent;
         // border-bottom: 1px solid $border-color;
-        border-right: 1px solid $border-color;
+        // border-right: 1px solid $border-color;
         box-sizing: border-box;
         
 
@@ -86,8 +86,8 @@ $tab-horizontal-header-right-width: 60px;
     @for $selectValue from 1 to 10 {
       &[data-selected-value="#{$selectValue}"] .tab-item[data-value="#{$selectValue}"] {
         // border-top: 2px solid $tab-selected-border-color;
-        background-color: $tab-selected-color;
-        color: white;
+        // background-color: $tab-selected-color;
+        color: $tab-selected-font-color;
         font-weight: bold;
 
       }

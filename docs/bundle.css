@@ -1705,7 +1705,6 @@ html, body {
   text-align: center;
   position: relative;
   padding: 4px 0px;
-  border-right: 1px solid #1a1a1a;
   box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .tab.number-tab > .tab-header > .tab-item .icon {
@@ -1729,72 +1728,63 @@ html, body {
   pointer-events: none;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"] {
-  background-color: #3e8ec6;
-  color: white;
+  color: #75b6ff;
   font-weight: bold;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="1"] .tab-content[data-value="1"] {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"] {
-  background-color: #3e8ec6;
-  color: white;
+  color: #75b6ff;
   font-weight: bold;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="2"] .tab-content[data-value="2"] {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"] {
-  background-color: #3e8ec6;
-  color: white;
+  color: #75b6ff;
   font-weight: bold;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="3"] .tab-content[data-value="3"] {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"] {
-  background-color: #3e8ec6;
-  color: white;
+  color: #75b6ff;
   font-weight: bold;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="4"] .tab-content[data-value="4"] {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"] {
-  background-color: #3e8ec6;
-  color: white;
+  color: #75b6ff;
   font-weight: bold;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="5"] .tab-content[data-value="5"] {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"] {
-  background-color: #3e8ec6;
-  color: white;
+  color: #75b6ff;
   font-weight: bold;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="6"] .tab-content[data-value="6"] {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"] {
-  background-color: #3e8ec6;
-  color: white;
+  color: #75b6ff;
   font-weight: bold;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="7"] .tab-content[data-value="7"] {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"] {
-  background-color: #3e8ec6;
-  color: white;
+  color: #75b6ff;
   font-weight: bold;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="8"] .tab-content[data-value="8"] {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"] {
-  background-color: #3e8ec6;
-  color: white;
+  color: #75b6ff;
   font-weight: bold;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="9"] .tab-content[data-value="9"] {
@@ -7385,7 +7375,7 @@ html, body {
   z-index: 1;
   pointer-events: all;
   box-sizing: border-box;
-  border-bottom: 1px solid #cfcfcf;
+  border-bottom: 1px solid #e7e7e7;
 }
 .csseditor[data-theme=light] .layout-main .layout-header .logo {
   position: absolute;
@@ -7412,7 +7402,7 @@ html, body {
   flex: none;
   height: -1px;
   overflow: hidden;
-  border-top: 1px solid #cfcfcf;
+  border-top: 1px solid #e7e7e7;
   transition: all 0.15s linear;
   position: relative;
   pointer-events: all;
@@ -7487,7 +7477,7 @@ html, body {
   bottom: 0px;
   right: 0px;
   box-sizing: border-box;
-  border-left: 1px solid #cfcfcf;
+  border-left: 1px solid #e7e7e7;
 }
 .csseditor[data-theme=light] .feature-control .layer-tab {
   position: absolute;
@@ -7510,7 +7500,7 @@ html, body {
   height: 200px;
 }
 .csseditor[data-theme=light] .feature-control .layer-tab .object-items > div:not(:first-child) {
-  border-top: 1px solid #cfcfcf;
+  border-top: 1px solid #e7e7e7;
   box-sizing: border-box;
 }
 .csseditor[data-theme=light] .feature-control .layer-tab .object-items > div:last-child {
@@ -7522,7 +7512,7 @@ html, body {
 }
 .csseditor[data-theme=light] .feature-control .draw-items .split {
   border: 0px;
-  border-top: 1px solid #cfcfcf;
+  border-top: 1px solid #e7e7e7;
   margin: 10px 5px;
 }
 .csseditor[data-theme=light] .feature-control .draw-items > label {
@@ -7665,7 +7655,7 @@ html, body {
 .csseditor[data-theme=light] .tab.number-tab .tab-header {
   height: 34px;
   cursor: pointer;
-  border-bottom: 1px solid #cfcfcf;
+  border-bottom: 1px solid #e7e7e7;
 }
 .csseditor[data-theme=light] .tab.number-tab .tab-content {
   display: none;
@@ -7681,7 +7671,6 @@ html, body {
   text-align: center;
   position: relative;
   padding: 4px 0px;
-  border-right: 1px solid #cfcfcf;
   box-sizing: border-box;
 }
 .csseditor[data-theme=light] .tab.number-tab > .tab-header > .tab-item .icon {
@@ -7705,72 +7694,63 @@ html, body {
   pointer-events: none;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"] {
-  background-color: #3e8ec6;
-  color: white;
+  color: #3e8ec6;
   font-weight: bold;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="1"] .tab-content[data-value="1"] {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"] {
-  background-color: #3e8ec6;
-  color: white;
+  color: #3e8ec6;
   font-weight: bold;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="2"] .tab-content[data-value="2"] {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"] {
-  background-color: #3e8ec6;
-  color: white;
+  color: #3e8ec6;
   font-weight: bold;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="3"] .tab-content[data-value="3"] {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"] {
-  background-color: #3e8ec6;
-  color: white;
+  color: #3e8ec6;
   font-weight: bold;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="4"] .tab-content[data-value="4"] {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"] {
-  background-color: #3e8ec6;
-  color: white;
+  color: #3e8ec6;
   font-weight: bold;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="5"] .tab-content[data-value="5"] {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"] {
-  background-color: #3e8ec6;
-  color: white;
+  color: #3e8ec6;
   font-weight: bold;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="6"] .tab-content[data-value="6"] {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"] {
-  background-color: #3e8ec6;
-  color: white;
+  color: #3e8ec6;
   font-weight: bold;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="7"] .tab-content[data-value="7"] {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"] {
-  background-color: #3e8ec6;
-  color: white;
+  color: #3e8ec6;
   font-weight: bold;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="8"] .tab-content[data-value="8"] {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"] {
-  background-color: #3e8ec6;
-  color: white;
+  color: #3e8ec6;
   font-weight: bold;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="9"] .tab-content[data-value="9"] {
@@ -7883,7 +7863,7 @@ html, body {
 }
 .csseditor[data-theme=light] .tab.bottom > .tab-header > .tab-item.selected {
   border-top: 1px solid #ffffff;
-  border-bottom: 1px solid #cfcfcf;
+  border-bottom: 1px solid #e7e7e7;
 }
 .csseditor[data-theme=light] .tab.bottom > .tab-body {
   top: 0px;
@@ -7903,7 +7883,7 @@ html, body {
 .csseditor[data-theme=light] .tab.horizontal.left > .tab-body {
   left: 50px;
   right: 0px;
-  border-left: 1px solid #cfcfcf;
+  border-left: 1px solid #e7e7e7;
   border-right: 0px;
 }
 .csseditor[data-theme=light] .tab.horizontal > .tab-header {
@@ -7916,7 +7896,7 @@ html, body {
 }
 .csseditor[data-theme=light] .tab.horizontal > .tab-header > .tab-item {
   border: 0px;
-  border-bottom: 1px solid #cfcfcf;
+  border-bottom: 1px solid #e7e7e7;
   text-align: center;
   line-height: 3;
   height: 50px;
@@ -7929,7 +7909,7 @@ html, body {
   top: 0px;
   right: 60px;
   border: 0px;
-  border-right: 1px solid #cfcfcf;
+  border-right: 1px solid #e7e7e7;
 }
 .csseditor[data-theme=light] .colorpicker-layer .codemirror-colorpicker {
   background-color: transparent;
@@ -8092,7 +8072,7 @@ html, body {
 }
 .csseditor[data-theme=light] .logo .site {
   font-size: 14px;
-  color: #cfcfcf;
+  color: #e7e7e7;
 }
 .csseditor[data-theme=light] .external-tool-menu {
   padding-left: 10px;
@@ -8116,7 +8096,7 @@ html, body {
   vertical-align: middle;
   width: 3px;
   margin-right: 2px;
-  border-right: 1px solid #cfcfcf;
+  border-right: 1px solid #e7e7e7;
 }
 .csseditor[data-theme=light] .tool-menu .items.flex-2,
 .csseditor[data-theme=light] .external-tool-menu .items.flex-2 {
@@ -8254,7 +8234,7 @@ html, body {
 .csseditor[data-theme=light] .external-tool-menu .items .icon.codepen,
 .csseditor[data-theme=light] .external-tool-menu .items .icon.github {
   background-color: transparent;
-  text-shadow: 2px 2px 4px rgba(207, 207, 207, 0.59);
+  text-shadow: 2px 2px 4px rgba(231, 231, 231, 0.59);
   padding-right: 2px;
   border-radius: 3px;
 }
@@ -8296,7 +8276,7 @@ html, body {
   right: 0px;
   bottom: 0px;
   top: 0px;
-  background-color: rgba(207, 207, 207, 0.3);
+  background-color: rgba(231, 231, 231, 0.3);
 }
 .csseditor[data-theme=light] .page-view .page-lock {
   position: absolute;
@@ -8313,7 +8293,7 @@ html, body {
   display: inline-block;
   padding: 5px 10px;
   border-radius: 3px;
-  border: 1px solid #cfcfcf;
+  border: 1px solid #e7e7e7;
   color: #666666;
   background-color: white;
 }
@@ -8341,7 +8321,7 @@ html, body {
   display: none;
   pointer-events: all;
   outline: none;
-  border: 1px solid #cfcfcf;
+  border: 1px solid #e7e7e7;
   color: #666666;
   background-color: white;
   padding: 5px 10px;
@@ -8350,7 +8330,7 @@ html, body {
   display: none;
   pointer-events: all;
   outline: none;
-  border: 1px solid #cfcfcf;
+  border: 1px solid #e7e7e7;
   color: #666666;
   background-color: white;
   padding: 5px 10px;
@@ -8360,7 +8340,7 @@ html, body {
   pointer-events: all;
   outline: none;
   border-radius: 3px;
-  border: 1px solid #cfcfcf;
+  border: 1px solid #e7e7e7;
   color: #666666;
   background-color: white;
   padding: 5px 10px;
@@ -8433,7 +8413,7 @@ html, body {
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
   background-color: rgba(255, 255, 255, 0.8);
-  border: 1px solid #cfcfcf;
+  border: 1px solid #e7e7e7;
 }
 .csseditor[data-theme=light] .selection-tool.path .selection-tool-item[data-position=path], .csseditor[data-theme=light] .selection-tool.polygon .selection-tool-item[data-position=path] {
   top: -30px;
@@ -8443,7 +8423,7 @@ html, body {
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
   background-color: rgba(255, 255, 255, 0.8);
-  border: 1px solid #cfcfcf;
+  border: 1px solid #e7e7e7;
   opacity: 1;
 }
 .csseditor[data-theme=light] .selection-tool[data-selected-position=move] [data-position=move]:before {
@@ -8499,7 +8479,7 @@ html, body {
   text-align: center;
   background-color: rgba(51, 51, 51, 0.8);
   border-radius: 3px;
-  border: #cfcfcf;
+  border: #e7e7e7;
   transition: opacity 0.3s linear;
   box-sizing: border-box;
   padding: 4px 10px;
@@ -8824,7 +8804,7 @@ html, body {
 }
 .csseditor[data-theme=light] .property {
   padding: 0px 0px;
-  border-bottom: 1px solid #cfcfcf;
+  border-bottom: 1px solid #e7e7e7;
   background-color: white;
   color: #666666;
   display: none;
@@ -8899,7 +8879,7 @@ html, body {
 }
 .csseditor[data-theme=light] .property > .property-body .property-item.label label {
   font-weight: 900;
-  text-shadow: 2px 2px 3px #cfcfcf;
+  text-shadow: 2px 2px 3px #e7e7e7;
 }
 .csseditor[data-theme=light] .property > .property-body .property-item .small-editor {
   margin-bottom: 3px;
@@ -9041,7 +9021,7 @@ html, body {
   height: 100%;
 }
 .csseditor[data-theme=light] .border-slice-item .slice-selector button svg path {
-  fill: #cfcfcf;
+  fill: #e7e7e7;
 }
 .csseditor[data-theme=light] .border-slice-item .slice-setting-box {
   display: grid;
@@ -9167,7 +9147,7 @@ html, body {
   right: 5px;
   bottom: 5px;
   padding: 10px;
-  border: 1px dashed #cfcfcf;
+  border: 1px dashed #e7e7e7;
 }
 .csseditor[data-theme=light] .box-model-item > div .margin:before {
   content: "margin";
@@ -9181,7 +9161,7 @@ html, body {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
-  border: 1px solid #cfcfcf;
+  border: 1px solid #e7e7e7;
 }
 .csseditor[data-theme=light] .box-model-item > div .margin [data-value=top] {
   display: inline-block;
@@ -9226,7 +9206,7 @@ html, body {
   right: 40px;
   bottom: 30px;
   padding: 10px;
-  border: 1px dashed #cfcfcf;
+  border: 1px dashed #e7e7e7;
 }
 .csseditor[data-theme=light] .box-model-item > div .padding::before {
   content: "padding";
@@ -9240,7 +9220,7 @@ html, body {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
-  border: 1px solid #cfcfcf;
+  border: 1px solid #e7e7e7;
 }
 .csseditor[data-theme=light] .box-model-item > div .padding [data-value=top] {
   display: inline-block;
@@ -9285,7 +9265,7 @@ html, body {
   right: 75px;
   bottom: 54px;
   padding: 10px 0px;
-  border: 1px dashed #cfcfcf;
+  border: 1px dashed #e7e7e7;
 }
 .csseditor[data-theme=light] .box-model-item > div .content:before {
   content: attr(title);
@@ -9301,7 +9281,7 @@ html, body {
   width: 100%;
   height: 100px;
   box-sizing: border-box;
-  border: 1px solid #cfcfcf;
+  border: 1px solid #e7e7e7;
   border-radius: 3px;
 }
 .csseditor[data-theme=light] .transition-list {
@@ -9318,7 +9298,7 @@ html, body {
   margin-bottom: 5px;
 }
 .csseditor[data-theme=light] .transition-list .transition-item.selected {
-  background-color: rgba(207, 207, 207, 0.5);
+  background-color: rgba(231, 231, 231, 0.5);
 }
 .csseditor[data-theme=light] .transition-list .transition-item .timing {
   border-radius: 3px;
@@ -9375,7 +9355,7 @@ html, body {
   margin-bottom: 5px;
 }
 .csseditor[data-theme=light] .animation-list .animation-item.selected {
-  background-color: rgba(207, 207, 207, 0.5);
+  background-color: rgba(231, 231, 231, 0.5);
 }
 .csseditor[data-theme=light] .animation-list .animation-item .name {
   padding: 2px 0px;
@@ -9398,10 +9378,10 @@ html, body {
   margin-top: 4px;
 }
 .csseditor[data-theme=light] .animation-list .animation-item .labels label {
-  background-color: #cfcfcf;
+  background-color: #e7e7e7;
   padding: 1px 3px;
   border-radius: 2px;
-  color: #cfcfcf;
+  color: #e7e7e7;
   text-transform: uppercase;
   font-weight: bold;
 }
@@ -9457,13 +9437,13 @@ html, body {
   display: grid;
   grid-template-columns: 1fr;
   grid-column-gap: 4px;
-  border: 1px solid #cfcfcf;
+  border: 1px solid #e7e7e7;
   margin-bottom: 5px;
   padding: 5px;
   cursor: pointer;
 }
 .csseditor[data-theme=light] .keyframe-list .keyframe-item.selected {
-  background-color: rgba(207, 207, 207, 0.5);
+  background-color: rgba(231, 231, 231, 0.5);
 }
 .csseditor[data-theme=light] .keyframe-list .keyframe-item .title {
   display: grid;
@@ -9484,7 +9464,7 @@ html, body {
 }
 .csseditor[data-theme=light] .keyframe-list .keyframe-item .offset-list .container {
   position: relative;
-  background-image: linear-gradient(to right, #cfcfcf, black);
+  background-image: linear-gradient(to right, #e7e7e7, black);
   background-size: 100% 2px;
   background-repeat: no-repeat;
   background-position: 0px center;
@@ -9500,7 +9480,7 @@ html, body {
   -webkit-transform: translateX(-50%) translateY(-50%);
           transform: translateX(-50%) translateY(-50%);
   vertical-align: middle;
-  border: 1px solid #cfcfcf;
+  border: 1px solid #e7e7e7;
 }
 .csseditor[data-theme=light] .code-view-item {
   grid-template-columns: 1fr !important;
@@ -9572,7 +9552,7 @@ html, body {
 }
 .csseditor[data-theme=light] .clip-path-list .clippath-item .offset-list .container {
   position: relative;
-  background-image: linear-gradient(to right, #cfcfcf, black);
+  background-image: linear-gradient(to right, #e7e7e7, black);
   background-size: 100% 2px;
   background-repeat: no-repeat;
   background-position: 0px center;
@@ -9611,14 +9591,14 @@ html, body {
   display: grid;
   grid-template-columns: 1fr;
   grid-column-gap: 4px;
-  border: 1px solid #cfcfcf;
+  border: 1px solid #e7e7e7;
   margin-bottom: 5px;
   padding: 5px;
   cursor: pointer;
   height: 30px;
 }
 .csseditor[data-theme=light] .selector-list .selector-item.selected {
-  background-color: rgba(207, 207, 207, 0.5);
+  background-color: rgba(231, 231, 231, 0.5);
 }
 .csseditor[data-theme=light] .selector-list .selector-item .title {
   display: grid;
@@ -9679,9 +9659,9 @@ html, body {
 }
 .csseditor[data-theme=light] .artboard-list .artboard-item .preview {
   height: 110px;
-  background-color: #cfcfcf;
+  background-color: #e7e7e7;
   border-radius: 3px;
-  border: 1px solid #cfcfcf;
+  border: 1px solid #e7e7e7;
   cursor: pointer;
   display: none;
 }
@@ -9745,13 +9725,13 @@ html, body {
   text-align: right;
 }
 .csseditor[data-theme=light] .layer-list .layer-item .detail .tools .visible svg path {
-  fill: #cfcfcf;
+  fill: #e7e7e7;
 }
 .csseditor[data-theme=light] .layer-list .layer-item .detail .tools .visible[data-visible=true] svg path {
   fill: #333;
 }
 .csseditor[data-theme=light] .layer-list .layer-item .detail .tools .lock svg path {
-  fill: #cfcfcf;
+  fill: #e7e7e7;
 }
 .csseditor[data-theme=light] .layer-list .layer-item .detail .tools .lock[data-lock=true] svg path {
   fill: #333;
@@ -9793,7 +9773,7 @@ html, body {
 }
 .csseditor[data-theme=light] .color-assets-property .color-list-tools button {
   padding: 2px 10px;
-  border: 1px solid #cfcfcf;
+  border: 1px solid #e7e7e7;
 }
 .csseditor[data-theme=light] .color-assets-property .color-list-tools[data-view-mode=list] button[data-value=list] {
   background-color: #609de2;
@@ -9826,7 +9806,7 @@ html, body {
   margin-right: 4px;
   margin-bottom: 4px;
   height: 80px;
-  border: 1px solid #cfcfcf;
+  border: 1px solid #e7e7e7;
   border-radius: 2px;
   box-sizing: border-box;
   vertical-align: top;
@@ -9849,7 +9829,7 @@ html, body {
   position: relative;
   width: 100%;
   height: 80px;
-  border: 1px solid #cfcfcf;
+  border: 1px solid #e7e7e7;
   border-radius: 2px;
   box-sizing: border-box;
   cursor: pointer;
@@ -9922,7 +9902,7 @@ html, body {
 }
 .csseditor[data-theme=light] .gradient-assets-property .gradient-list-tools button {
   padding: 2px 10px;
-  border: 1px solid #cfcfcf;
+  border: 1px solid #e7e7e7;
 }
 .csseditor[data-theme=light] .gradient-assets-property .gradient-list-tools[data-view-mode=list] button[data-value=list] {
   background-color: #609de2;
@@ -9955,7 +9935,7 @@ html, body {
   margin-right: 4px;
   margin-bottom: 4px;
   height: 80px;
-  border: 1px solid #cfcfcf;
+  border: 1px solid #e7e7e7;
   border-radius: 2px;
   box-sizing: border-box;
   vertical-align: top;
@@ -9978,7 +9958,7 @@ html, body {
   position: relative;
   width: 100%;
   height: 80px;
-  border: 1px solid #cfcfcf;
+  border: 1px solid #e7e7e7;
   border-radius: 2px;
   box-sizing: border-box;
   cursor: pointer;
@@ -10051,7 +10031,7 @@ html, body {
 }
 .csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list-tools button {
   padding: 2px 10px;
-  border: 1px solid #cfcfcf;
+  border: 1px solid #e7e7e7;
 }
 .csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list-tools[data-view-mode=list] button[data-value=list] {
   background-color: #609de2;
@@ -10090,7 +10070,7 @@ html, body {
   margin-right: 4px;
   margin-bottom: 4px;
   height: 80px;
-  border: 1px solid #cfcfcf;
+  border: 1px solid #e7e7e7;
   border-radius: 2px;
   box-sizing: border-box;
   vertical-align: top;
@@ -10113,7 +10093,7 @@ html, body {
   position: relative;
   width: 100%;
   height: 80px;
-  border: 1px solid #cfcfcf;
+  border: 1px solid #e7e7e7;
   border-radius: 2px;
   box-sizing: border-box;
   cursor: pointer;
@@ -10164,7 +10144,7 @@ html, body {
   margin-right: 4px;
   margin-bottom: 4px;
   height: 80px;
-  border: 1px solid #cfcfcf;
+  border: 1px solid #e7e7e7;
   border-radius: 2px;
   box-sizing: border-box;
   vertical-align: top;
@@ -10187,7 +10167,7 @@ html, body {
   position: relative;
   width: 100%;
   height: 80px;
-  border: 1px solid #cfcfcf;
+  border: 1px solid #e7e7e7;
   border-radius: 2px;
   box-sizing: border-box;
   cursor: pointer;
@@ -10230,7 +10210,7 @@ html, body {
   height: 150px;
   top: 30px;
   left: 60px;
-  border: 1px solid #cfcfcf;
+  border: 1px solid #e7e7e7;
   background-color: white;
 }
 .csseditor[data-theme=light] .cubic-bezier-editor .bezier .bezier-canvas {
@@ -10580,7 +10560,7 @@ html, body {
   box-sizing: border-box;
 }
 .csseditor[data-theme=light] .text-editor input[type=text] {
-  border: 1px solid #cfcfcf;
+  border: 1px solid #e7e7e7;
 }
 .csseditor[data-theme=light] .select-editor {
   display: grid;
@@ -10684,11 +10664,11 @@ html, body {
   box-sizing: border-box;
   padding: 4px;
   background-color: white;
-  border: 1px solid #d0d0d0;
+  border: 1px solid #e8e8e8;
   border-top: 0px;
 }
 .csseditor[data-theme=light] .background-image-editor .fill-list .fill-item:first-child {
-  border-top: 1px solid #d0d0d0;
+  border-top: 1px solid #e8e8e8;
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
 }
@@ -10697,7 +10677,7 @@ html, body {
   border-bottom-right-radius: 3px;
 }
 .csseditor[data-theme=light] .background-image-editor .fill-list .fill-item.selected {
-  background-color: rgba(207, 207, 207, 0.5);
+  background-color: rgba(231, 231, 231, 0.5);
 }
 .csseditor[data-theme=light] .background-image-editor .fill-list .fill-item .gradient-info {
   display: grid;
@@ -10997,7 +10977,7 @@ html, body {
 .csseditor[data-theme=light] .box-shadow-editor .shadow-item .color {
   cursor: pointer;
   height: 20px;
-  border: 1px solid #cfcfcf;
+  border: 1px solid #e7e7e7;
   border-radius: 100%;
   position: relative;
   background-color: transparent;
@@ -11072,7 +11052,7 @@ html, body {
 .csseditor[data-theme=light] .text-shadow-editor .shadow-item .color {
   cursor: pointer;
   height: 20px;
-  border: 1px solid #cfcfcf;
+  border: 1px solid #e7e7e7;
   border-radius: 100%;
   position: relative;
   background-color: transparent;
@@ -11261,7 +11241,7 @@ html, body {
   top: 4px;
   height: 14px;
   border-radius: 10px;
-  border: 1px solid #cfcfcf;
+  border: 1px solid #e7e7e7;
   box-sizing: border-box;
   background-color: transparent;
   background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
@@ -11760,7 +11740,7 @@ html, body {
   text-align: center;
   vertical-align: middle;
   padding: 4px 2px;
-  border: 1px solid #cfcfcf;
+  border: 1px solid #e7e7e7;
   border-right: 0px;
   white-space: pre-wrap;
   word-break: break-all;
@@ -11773,7 +11753,7 @@ html, body {
   border-bottom-left-radius: 3px;
 }
 .csseditor[data-theme=light] .select-icon-editor .items > .select-icon-item:last-child {
-  border-right: 1px solid #cfcfcf;
+  border-right: 1px solid #e7e7e7;
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px;
 }
@@ -11848,8 +11828,8 @@ html, body {
   box-sizing: border-box;
   z-index: 1000;
   background-color: white;
-  border: 1px solid #cfcfcf;
-  box-shadow: 0 0 1px 0px #cfcfcf;
+  border: 1px solid #e7e7e7;
+  box-shadow: 0 0 1px 0px #e7e7e7;
   padding: 14px;
   color: #666666;
 }
@@ -11907,10 +11887,10 @@ html, body {
   outline: none;
   box-sizing: border-box;
   width: 50px;
-  background-color: rgba(207, 207, 207, 0.5);
+  background-color: rgba(231, 231, 231, 0.5);
 }
 .csseditor[data-theme=light] .popup.background-property-popup .size-list[data-value=contain] button[value=contain], .csseditor[data-theme=light] .popup.background-property-popup .size-list[data-value=cover] button[value=cover], .csseditor[data-theme=light] .popup.background-property-popup .size-list[data-value=auto] button[value=auto] {
-  background-color: #cfcfcf;
+  background-color: #e7e7e7;
   font-weight: bold;
 }
 .csseditor[data-theme=light] .popup.background-property-popup .popup-item.grid-2 {
@@ -11924,7 +11904,7 @@ html, body {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
-  border: 1px solid #cfcfcf;
+  border: 1px solid #e7e7e7;
   background-color: white;
   outline: none;
   cursor: pointer;
@@ -11966,7 +11946,7 @@ html, body {
   background-repeat: round;
 }
 .csseditor[data-theme=light] .popup.background-property-popup .repeat-list[data-value=repeat] button[value=repeat], .csseditor[data-theme=light] .popup.background-property-popup .repeat-list[data-value=no-repeat] button[value=no-repeat], .csseditor[data-theme=light] .popup.background-property-popup .repeat-list[data-value=repeat-x] button[value=repeat-x], .csseditor[data-theme=light] .popup.background-property-popup .repeat-list[data-value=repeat-y] button[value=repeat-y], .csseditor[data-theme=light] .popup.background-property-popup .repeat-list[data-value=space] button[value=space], .csseditor[data-theme=light] .popup.background-property-popup .repeat-list[data-value=round] button[value=round] {
-  background-color: #cfcfcf;
+  background-color: #e7e7e7;
   box-shadow: 0 0 1px 1px black;
 }
 .csseditor[data-theme=light] .popup.background-property-popup .blend-list {
@@ -11995,18 +11975,18 @@ html, body {
   outline: none;
   box-sizing: border-box;
   width: 50px;
-  background-color: rgba(207, 207, 207, 0.5);
+  background-color: rgba(231, 231, 231, 0.5);
 }
 .csseditor[data-theme=light] .popup.display-property-popup .flex-direction[data-value=row] button[value=row], .csseditor[data-theme=light] .popup.display-property-popup .flex-direction[data-value=row-reverse] button[value=row-reverse], .csseditor[data-theme=light] .popup.display-property-popup .flex-direction[data-value=column] button[value=column], .csseditor[data-theme=light] .popup.display-property-popup .flex-direction[data-value=column-reverse] button[value=column-reverse] {
-  background-color: #cfcfcf;
+  background-color: #e7e7e7;
   font-weight: bold;
 }
 .csseditor[data-theme=light] .popup.display-property-popup .flex-wrap[data-value=nowrap] button[value=nowrap], .csseditor[data-theme=light] .popup.display-property-popup .flex-wrap[data-value=wrap] button[value=wrap], .csseditor[data-theme=light] .popup.display-property-popup .flex-wrap[data-value=wrap-reverse] button[value=wrap-reverse] {
-  background-color: #cfcfcf;
+  background-color: #e7e7e7;
   font-weight: bold;
 }
 .csseditor[data-theme=light] .popup.display-property-popup .justify-content[data-value=flex-start] button[value=flex-start], .csseditor[data-theme=light] .popup.display-property-popup .justify-content[data-value=flex-end] button[value=flex-end], .csseditor[data-theme=light] .popup.display-property-popup .justify-content[data-value=center] button[value=center], .csseditor[data-theme=light] .popup.display-property-popup .justify-content[data-value=space-between] button[value=space-between], .csseditor[data-theme=light] .popup.display-property-popup .justify-content[data-value=space-around] button[value=space-around] {
-  background-color: #cfcfcf;
+  background-color: #e7e7e7;
   font-weight: bold;
 }
 .csseditor[data-theme=light] .popup .box-shadow-property-popup {
@@ -12033,7 +12013,7 @@ html, body {
   color: #666666 !important;
 }
 .csseditor[data-theme=light] .popup .box-shadow-property-popup .codemirror-colorpicker .colorsets {
-  border-top: 0px solid #cfcfcf !important;
+  border-top: 0px solid #e7e7e7 !important;
 }
 .csseditor[data-theme=light] .popup .box-shadow-property-popup .box .type {
   display: grid;
@@ -12065,11 +12045,11 @@ html, body {
 .csseditor[data-theme=light] .popup .box-shadow-property-popup .box .drag-board {
   background-color: #3e8ec6;
   box-sizing: border-box;
-  border: 1px solid #cfcfcf;
+  border: 1px solid #e7e7e7;
   margin-bottom: 2px;
   height: 204px;
   position: relative;
-  background-image: linear-gradient(to right, #cfcfcf, #cfcfcf), linear-gradient(to right, #cfcfcf, #cfcfcf);
+  background-image: linear-gradient(to right, #e7e7e7, #e7e7e7), linear-gradient(to right, #e7e7e7, #e7e7e7);
   background-size: 100% 1px, 1px 100%;
   background-position: 0px center, center 0px;
   background-repeat: no-repeat;
@@ -12081,7 +12061,7 @@ html, body {
   height: 10px;
   -webkit-transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
           transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
-  background-color: #cfcfcf;
+  background-color: #e7e7e7;
   border-radius: 100%;
 }
 .csseditor[data-theme=light] .popup .animation-property-popup {
@@ -12156,7 +12136,7 @@ html, body {
   color: #666666 !important;
 }
 .csseditor[data-theme=light] .popup .text-shadow-property-popup .codemirror-colorpicker .colorsets {
-  border-top: 0px solid #cfcfcf !important;
+  border-top: 0px solid #e7e7e7 !important;
 }
 .csseditor[data-theme=light] .popup .text-shadow-property-popup .box label {
   font-size: 11px;
@@ -12164,11 +12144,11 @@ html, body {
 .csseditor[data-theme=light] .popup .text-shadow-property-popup .box .drag-board {
   background-color: #3e8ec6;
   box-sizing: border-box;
-  border: 1px solid #cfcfcf;
+  border: 1px solid #e7e7e7;
   height: 202px;
   position: relative;
   margin-bottom: 10px;
-  background-image: linear-gradient(to right, #cfcfcf, #cfcfcf), linear-gradient(to right, #cfcfcf, #cfcfcf);
+  background-image: linear-gradient(to right, #e7e7e7, #e7e7e7), linear-gradient(to right, #e7e7e7, #e7e7e7);
   background-size: 100% 1px, 1px 100%;
   background-position: 0px center, center 0px;
   background-repeat: no-repeat;
@@ -12180,7 +12160,7 @@ html, body {
   height: 10px;
   -webkit-transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
           transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
-  background-color: #cfcfcf;
+  background-color: #e7e7e7;
   border-radius: 100%;
 }
 .csseditor[data-theme=light] .popup .keyframe-popup {
@@ -12321,7 +12301,7 @@ html, body {
   height: 220px;
   position: relative;
   box-sizing: border-box;
-  box-shadow: 0 0 0 1px #cfcfcf;
+  box-shadow: 0 0 0 1px #e7e7e7;
 }
 .csseditor[data-theme=light] .popup .clippath-popup .box > .clip-path-editor .drag-area .pointer-list {
   top: 0px;
@@ -12408,7 +12388,7 @@ html, body {
   height: 100%;
   box-sizing: border-box;
   margin: 30px 20px;
-  border: 1px solid #cfcfcf;
+  border: 1px solid #e7e7e7;
   background-image: radial-gradient(yellow 0%, red 100%);
 }
 .csseditor[data-theme=light] .popup .svg-property-editor-popup .box .property .title {
@@ -12726,7 +12706,7 @@ html, body {
   color: #666666 !important;
 }
 .csseditor[data-theme=light] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=color] .codemirror-colorpicker .colorsets {
-  border-top: 0px solid #cfcfcf !important;
+  border-top: 0px solid #e7e7e7 !important;
 }
 .csseditor[data-theme=light] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=image] .image-preview {
   width: 100%;
@@ -12832,7 +12812,7 @@ html, body {
   color: #666666 !important;
 }
 .csseditor[data-theme=light] .popup .color-picker-popup .codemirror-colorpicker .colorsets {
-  border-top: 1px solid #cfcfcf !important;
+  border-top: 1px solid #e7e7e7 !important;
 }
 .csseditor[data-theme=light] .popup .color-picker-popup .assets {
   padding: 0px 10px;
@@ -13142,7 +13122,7 @@ html, body {
   color: #666666 !important;
 }
 .csseditor[data-theme=light] .popup .gradient-picker .codemirror-colorpicker .colorsets {
-  border-top: 0px solid #cfcfcf !important;
+  border-top: 0px solid #e7e7e7 !important;
 }
 .csseditor[data-theme=light] .path-editor-view {
   display: none;
@@ -13278,7 +13258,7 @@ html, body {
 }
 .csseditor[data-theme=light] .polygon-editor-view svg path.object, .csseditor[data-theme=light] .polygon-editor-view svg polygon.object {
   fill: transparent;
-  stroke: rgba(207, 207, 207, 0.8);
+  stroke: rgba(231, 231, 231, 0.8);
   stroke-width: 1;
 }
 .csseditor[data-theme=light] .polygon-editor-view svg path.split-path, .csseditor[data-theme=light] .polygon-editor-view svg polygon.split-path {
