@@ -76,6 +76,7 @@ export default class Inspector extends UIElement {
                 <div class='empty'></div>
               </div>
               <div class='tab-content' data-value='2'>
+                <MotionProperty />
                 <!-- <RootVariableProperty /> -->
                 <!-- <VariableProperty /> -->
                 <SelectorProperty />

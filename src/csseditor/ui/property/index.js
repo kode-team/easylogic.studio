@@ -44,8 +44,11 @@ import TextClipProperty from "./TextClipProperty";
 import SVGFilterAssetsProperty from "./SVGFilterAssetsProperty";
 import SVGPathAssetsProperty from "./SVGPathAssetsProperty";
 import AlignmentProperty from "./AlignmentProperty";
+import MotionProperty from "./MotionProperty";
+
 
 export default {
+  MotionProperty,
   AlignmentProperty,
   SVGPathAssetsProperty,
   SVGFilterAssetsProperty,

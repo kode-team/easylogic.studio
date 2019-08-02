@@ -86,6 +86,8 @@ export class DomItem extends GroupItem {
       'text-fill-color': '',
       'text-stroke-color': '',
       'text-stroke-width': '',  
+      'offset-path': '',
+      'offset-distance': '',
       border: {},
       outline: {},
       borderRadius: {},
@@ -515,7 +517,9 @@ export class DomItem extends GroupItem {
         'text-align', 'text-transform', 'text-decoration',
         'letter-spacing', 'word-spacing', 'text-indent',
 
-        'filter', 'clip-path', 'backdrop-filter', 'box-shadow', 'text-shadow'
+        'filter', 'clip-path', 'backdrop-filter', 'box-shadow', 'text-shadow',
+
+        'offset-path', 'offset-distance'
       )
     }
 

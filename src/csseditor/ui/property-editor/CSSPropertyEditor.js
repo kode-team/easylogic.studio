@@ -77,7 +77,9 @@ export default class CSSPropertyEditor extends UIElement {
         case 'transform':          
         case 'transform-origin':
         case 'perspective-origin':
-          return Length.string('');
+          return Length.string('');          
+        case 'offset-distance': 
+          return Length.percent(0);
         default: 
           return Length.px(0);
       }
@@ -246,6 +248,7 @@ export default class CSSPropertyEditor extends UIElement {
       case 'width': 
       case 'height':   
       case 'perspective':  
+      case 'offset-distance':
       default: 
         return `
           <div class='property-editor'>
@@ -280,6 +283,9 @@ export default class CSSPropertyEditor extends UIElement {
         <optgroup label='--'>
           <option value='var'>var</option>
         </optgroup>            
+        <optgroup label='Motion'>
+          <option value='offset-distance'>offset-distance</option>
+        </optgroup>      
         <optgroup label='Size'>
           <option value='width'>width</option>
           <option value='height'>height</option>

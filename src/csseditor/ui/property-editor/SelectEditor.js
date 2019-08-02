@@ -10,6 +10,7 @@ export default class SelectEditor extends UIElement {
         var value = this.props.value;
 
         return {
+            splitChar,
             label: this.props.label || '',
             options, value
         }
@@ -68,6 +69,12 @@ export default class SelectEditor extends UIElement {
             }
 
             return `<option ${selected} value="${value}">${label}</option>`
+        })
+    }
+
+    setOptions (options = '') {
+        this.setState({ 
+            options: options.split(this.state.splitChar).map(it => it.trim()) 
         })
     }
 
