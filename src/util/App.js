@@ -52,7 +52,7 @@ export const start = opt => {
       var pos = editor.config.get("pos");
       var isRealMoved = oldPos.x != pos.x || oldPos.y != pos.y;
 
-      if (isRealMoved && this.moves.size) {
+      if (isRealMoved && this.moves.size) {      
         this.moves.forEach(v => {
           var dx = pos.x - v.xy.x;
           var dy = pos.y - v.xy.y;

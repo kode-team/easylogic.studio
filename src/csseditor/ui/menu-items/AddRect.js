@@ -1,8 +1,9 @@
 import MenuItem from "./MenuItem";
+import icon from "../icon/icon";
  
 export default class AddRect extends MenuItem {
-  getIcon() {
-    return 'rect';
+  getIconString() {
+    return icon.rect;
   }
   getTitle() {
     return "1. Rect";
@@ -14,6 +15,9 @@ export default class AddRect extends MenuItem {
   }  
 
   clickButton(e) {
-    this.emit('add.rect')
+
+    this.emit('add.type', 'rect');
+
+    // this.emit('add.rect')
   }
 }

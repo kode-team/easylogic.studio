@@ -1570,8 +1570,11 @@ html, body {
   box-shadow: none;
   margin-bottom: 5px;
 }
+.csseditor[data-theme=dark] .feature-control .draw-items .menu-item.selected .icon {
+  background-color: #3e8ec6;
+}
 .csseditor[data-theme=dark] .feature-control .draw-items .menu-item.selected .icon svg path {
-  fill: #3e8ec6;
+  fill: white;
 }
 .csseditor[data-theme=dark] .feature-control .draw-items .menu-item[data-no-title=true] {
   height: 30px;
@@ -1580,17 +1583,11 @@ html, body {
   display: none;
 }
 .csseditor[data-theme=dark] .feature-control .draw-items .menu-item .icon {
-  width: 26px;
-  height: 26px;
+  width: 30px;
+  height: 30px;
   display: inline-block;
-}
-.csseditor[data-theme=dark] .feature-control .draw-items .menu-item .icon.rect {
-  border: 2px solid #ececec;
-  border-radius: 1px;
-}
-.csseditor[data-theme=dark] .feature-control .draw-items .menu-item .icon.circle {
-  border: 2px solid #ececec;
-  border-radius: 100%;
+  border-radius: 3px;
+  padding: 3px;
 }
 .csseditor[data-theme=dark] input[type=range] {
   -webkit-appearance: none;
@@ -2065,44 +2062,29 @@ html, body {
 }
 .csseditor[data-theme=dark] .logo .text {
   position: absolute;
-  left: 2px;
+  left: 10px;
   top: 0px;
   bottom: 0px;
-  font-size: 40px;
+  font-size: 30px;
   display: inline-block;
   font-style: italic;
   font-weight: bold;
-  line-height: 1.3;
-  background-image: linear-gradient(to right, rgba(96, 157, 226, 0.5) 0%, #609de2 50%, #ff00ff 83%, blue 100%);
-  -webkit-background-clip: text;
-          background-clip: text;
-  -webkit-text-fill-color: transparent;
+  line-height: 1.6;
+  color: #3e8ec6;
   z-index: 1;
-}
-.csseditor[data-theme=dark] .logo .text .brush {
-  margin-left: -2px;
-}
-.csseditor[data-theme=dark] .logo .text .brush svg {
-  width: 30px;
-  height: 30px;
-}
-.csseditor[data-theme=dark] .logo .text .brush svg path {
-  stroke-width: 1px;
-  stroke: white;
-  fill: #609de2;
 }
 .csseditor[data-theme=dark] .logo .extra-text {
   position: absolute;
-  left: 40px;
+  left: 28px;
   top: 0px;
   right: 0px;
   bottom: 0px;
   z-index: 0;
-  font-size: 40px;
+  font-size: 30px;
   display: inline-block;
   font-style: italic;
   font-weight: bold;
-  line-height: 1.3;
+  line-height: 1.6;
 }
 .csseditor[data-theme=dark] .logo .site {
   font-size: 14px;
@@ -2319,6 +2301,9 @@ html, body {
   bottom: 0px;
   top: 0px;
   overflow: auto;
+}
+.csseditor[data-theme=dark] .page-view .page-lock .element-view[data-mode=ADD] {
+  cursor: crosshair;
 }
 .csseditor[data-theme=dark] .page-tools {
   position: absolute;
@@ -7602,8 +7587,11 @@ html, body {
   box-shadow: none;
   margin-bottom: 5px;
 }
+.csseditor[data-theme=light] .feature-control .draw-items .menu-item.selected .icon {
+  background-color: #3e8ec6;
+}
 .csseditor[data-theme=light] .feature-control .draw-items .menu-item.selected .icon svg path {
-  fill: #3e8ec6;
+  fill: white;
 }
 .csseditor[data-theme=light] .feature-control .draw-items .menu-item[data-no-title=true] {
   height: 30px;
@@ -7612,17 +7600,11 @@ html, body {
   display: none;
 }
 .csseditor[data-theme=light] .feature-control .draw-items .menu-item .icon {
-  width: 26px;
-  height: 26px;
+  width: 30px;
+  height: 30px;
   display: inline-block;
-}
-.csseditor[data-theme=light] .feature-control .draw-items .menu-item .icon.rect {
-  border: 2px solid #666666;
-  border-radius: 1px;
-}
-.csseditor[data-theme=light] .feature-control .draw-items .menu-item .icon.circle {
-  border: 2px solid #666666;
-  border-radius: 100%;
+  border-radius: 3px;
+  padding: 3px;
 }
 .csseditor[data-theme=light] input[type=range] {
   -webkit-appearance: none;
@@ -8097,44 +8079,29 @@ html, body {
 }
 .csseditor[data-theme=light] .logo .text {
   position: absolute;
-  left: 2px;
+  left: 10px;
   top: 0px;
   bottom: 0px;
-  font-size: 40px;
+  font-size: 30px;
   display: inline-block;
   font-style: italic;
   font-weight: bold;
-  line-height: 1.3;
-  background-image: linear-gradient(to right, rgba(96, 157, 226, 0.5) 0%, #609de2 50%, #ff00ff 83%, blue 100%);
-  -webkit-background-clip: text;
-          background-clip: text;
-  -webkit-text-fill-color: transparent;
+  line-height: 1.6;
+  color: #3e8ec6;
   z-index: 1;
-}
-.csseditor[data-theme=light] .logo .text .brush {
-  margin-left: -2px;
-}
-.csseditor[data-theme=light] .logo .text .brush svg {
-  width: 30px;
-  height: 30px;
-}
-.csseditor[data-theme=light] .logo .text .brush svg path {
-  stroke-width: 1px;
-  stroke: white;
-  fill: #609de2;
 }
 .csseditor[data-theme=light] .logo .extra-text {
   position: absolute;
-  left: 40px;
+  left: 28px;
   top: 0px;
   right: 0px;
   bottom: 0px;
   z-index: 0;
-  font-size: 40px;
+  font-size: 30px;
   display: inline-block;
   font-style: italic;
   font-weight: bold;
-  line-height: 1.3;
+  line-height: 1.6;
 }
 .csseditor[data-theme=light] .logo .site {
   font-size: 14px;
@@ -8351,6 +8318,9 @@ html, body {
   bottom: 0px;
   top: 0px;
   overflow: auto;
+}
+.csseditor[data-theme=light] .page-view .page-lock .element-view[data-mode=ADD] {
+  cursor: crosshair;
 }
 .csseditor[data-theme=light] .page-tools {
   position: absolute;

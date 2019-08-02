@@ -61,4 +61,8 @@ export default class PolygonManager extends UIElement {
       this.$el.hide();
   }
 
+  [EVENT('hideSubEditor')] () {
+    this.trigger('hidePolygonManager');
+  }
+
 }

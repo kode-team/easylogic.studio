@@ -59,4 +59,8 @@ export default class PathManager extends UIElement {
       this.$el.hide();
   }
 
+  [EVENT('hideSubEditor')] () {
+    this.trigger('hidePathManager');
+  }  
+
 }

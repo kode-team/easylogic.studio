@@ -1,8 +1,9 @@
 import MenuItem from "./MenuItem";
+import icon from "../icon/icon";
    
 export default class AddCircle extends MenuItem {
-  getIcon() {
-    return 'circle';
+  getIconString() {
+    return icon.circle
   }
   getTitle() {
     return "2. Circle";
@@ -14,7 +15,10 @@ export default class AddCircle extends MenuItem {
   }  
 
   clickButton(e) {
-    this.emit('add.circle');
+
+    this.emit('add.type', 'circle');    
+    // this.emit('add.circle');
+
   }
 
 }

@@ -88,4 +88,8 @@ export default class StarManager extends UIElement {
       this.$el.hide();
   }
 
+  [EVENT('hideSubEditor')] () {
+    this.trigger('hideStarManager');
+  }
+
 }

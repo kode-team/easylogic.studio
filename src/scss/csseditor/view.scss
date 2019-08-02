@@ -32,6 +32,12 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
     top: 0px;    
     overflow: auto;    
     // box-shadow: 0 0 3px 0px rgba(0, 0, 0, 0.2);
+
+    .element-view {
+      &[data-mode='ADD'] {
+        cursor: crosshair;
+      }
+    }
   }
 
 }

@@ -544,8 +544,12 @@ export default class Dom {
     return this.css("display", "none");
   }
 
+  isHide () {
+    return this.css("display") == "none"
+  }
+
   toggle(isForce) {
-    var currentHide = this.css("display") == "none";
+    var currentHide = this.isHide();
 
     if (arguments.length == 1) {
       if (currentHide && isForce) {

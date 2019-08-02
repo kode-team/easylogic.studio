@@ -214,10 +214,11 @@
       margin-bottom: 5px;
 
       &.selected {
-        .icon {
+        .icon {      
+          background-color: $selected-color;
           svg {
             path {
-              fill: $selected-color; 
+              fill: $selected-font-color;
             }
           }
         }
@@ -231,19 +232,11 @@
         }
       }
       .icon {
-        width: 26px;
-        height: 26px;
+        width: 30px;
+        height: 30px;
         display: inline-block;
-
-        &.rect {
-          border: 2px solid $font-color;
-          border-radius: 1px;
-        }
-
-        &.circle {
-          border: 2px solid $font-color;
-          border-radius: 100%;
-        }
+        border-radius: 3px;
+        padding: 3px;
       }
     }
     

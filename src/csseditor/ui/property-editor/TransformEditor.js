@@ -17,10 +17,6 @@ import RangeEditor from "./RangeEditor";
 import { Length } from "../../../editor/unit/Length";
 import NumberInputEditor from "./NumberInputEditor";
 
-
-
-
-
 var transformList = [
   'perspective',  
   'rotate',
@@ -104,6 +100,16 @@ export default class TransformEditor extends UIElement {
     return ''
   }
 
+  isMultiValue (type) {
+    switch(type) {
+      case 'translate3d':        
+      case 'matrix':
+      case 'matrix3d': 
+        return true;
+      }
+    return false; 
+  }
+
   getRange(type) {
 
     switch(type) {
@@ -136,6 +142,47 @@ export default class TransformEditor extends UIElement {
   }
 
   makeOneTransformTemplate(type, transform, index) {
+    return `
+      <div class="transform-item" data-index="${index}">
+        <div class="title" draggable="true" data-index="${index}">
+          <label><span>${(+index)+1}</span> ${type}</label>
+          <div class="transform-menu">
+            <button type="button" class="del" data-index="${index}">
+              ${icon.remove2}
+            </button>
+          </div>
+        </div>
+        <div class="transform-ui ${type}">
+          <div class='${type}'>
+          ${transform.value.map( (it, tindex) => {
+
+            var label = this.getLabel(type, tindex);
+            var {min, max, step, units} = this.getRange(type);
+
+            return `
+              <div>
+                <RangeEditor 
+                      ref='$range_${type}_${index}_${tindex}' 
+                      min="${min}" 
+                      max="${max}" 
+                      step="${step}" 
+                      label="${label}"
+                      key="${index}" 
+                      params='${tindex}' 
+                      value="${it}" 
+                      units="${units}" 
+                      onchange="changeRangeEditor" />
+              </div>`
+          }).join('')}   
+          </div>       
+        </div>
+      </div>
+    `;
+  }
+
+
+
+  makeMultiTransformTemplate(type, transform, index) {
     return `
       <div class="transform-item" data-index="${index}">
         <div class="title" draggable="true" data-index="${index}">
@@ -199,11 +246,23 @@ export default class TransformEditor extends UIElement {
   }
 
   makeTransformTemplate(transform, index) {
-    return this.makeOneTransformTemplate(
-      transform.type,
-      transform,
-      index
-    );
+
+    if (this.isMultiValue(transform.type)) {
+
+      return this.makeMultiTransformTemplate(
+        transform.type,
+        transform,
+        index
+      );
+    } else {
+
+      return this.makeOneTransformTemplate(
+        transform.type,
+        transform,
+        index
+      );
+    }
+
   }
 
   [LOAD("$transformList")]() {

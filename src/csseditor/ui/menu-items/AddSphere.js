@@ -2,8 +2,8 @@ import MenuItem from "./MenuItem";
 import icon from "../icon/icon";
  
 export default class AddSphere extends MenuItem {
-  getIcon() {
-    return 'circle';
+  getIconString() {
+    return icon.add_circle;
   }
   getTitle() {
     return "6. Sphere";
@@ -14,7 +14,9 @@ export default class AddSphere extends MenuItem {
   }  
 
   clickButton(e) {
-   this.emit('add.sphere')
+
+    this.emit('add.type', 'sphere');
+    // this.emit('add.sphere')
   }
 
 }

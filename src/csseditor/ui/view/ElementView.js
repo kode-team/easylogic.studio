@@ -2,7 +2,7 @@ import UIElement, { EVENT } from "../../../util/UIElement";
 import { BIND, POINTERSTART, MOVE, END, IF, KEYUP } from "../../../util/Event";
 import { Length } from "../../../editor/unit/Length";
 
-import { editor } from "../../../editor/editor";
+import { editor, EDIT_MODE_ADD } from "../../../editor/editor";
 import Dom from "../../../util/Dom";
 import SelectionToolView from "./SelectionToolView";
 import GuideLineView from "./GuideLineView";
@@ -64,6 +64,12 @@ export default class ElementView extends UIElement {
         `
     }
 
+
+    [EVENT('after.change.mode')] () {
+        this.$el.attr('data-mode', editor.mode);
+    }
+
+
     [EVENT('hideSubEditor')] (e) {
         this.children.$pathEditorView.$el.hide();
         this.children.$polygonEditorView.$el.hide();
@@ -75,6 +81,10 @@ export default class ElementView extends UIElement {
 
     checkEmptyElement (e) {
         var $el = Dom.create(e.target)
+
+        if (editor.isAddMode()) {
+            return true; 
+        }
 
         if (this.state.mode !== 'selection') {
             return false; 
@@ -111,12 +121,19 @@ export default class ElementView extends UIElement {
         this.dragXY.x -= this.rect.x
         this.dragXY.y -= this.rect.y
 
-        editor.selection.empty();
-        
-        this.cachedCurrentElement = {}
-        this.$el.$$('.selected').forEach(it => it.removeClass('selected'))
+        if (editor.isSelectionMode()) {
 
-        this.emit('initSelectionTool')        
+            editor.selection.empty();
+        
+            this.cachedCurrentElement = {}
+            this.$el.$$('.selected').forEach(it => it.removeClass('selected'))
+    
+            this.emit('initSelectionTool')        
+        } else {
+            // add mode 
+            // NOOP 
+        }
+
     }
 
     movePointer (dx, dy) {
@@ -133,14 +150,9 @@ export default class ElementView extends UIElement {
 
     moveEndPointer (dx, dy) {
 
-        var [
-            x, y, 
-            width, height 
-        ] = this.refs.$dragAreaRect
+        var [x, y, width, height ] = this.refs.$dragAreaRect
                 .styles('left', 'top', 'width', 'height')
                 .map(it => Length.parse(it))
-
-
 
         var rect = {
             x: Length.px(x.value -  this.canvasPosition.x), 
@@ -152,18 +164,6 @@ export default class ElementView extends UIElement {
         rect.x2 = Length.px(rect.x.value + rect.width.value);
         rect.y2 = Length.px(rect.y.value + rect.height.value);
 
-        var artboard = editor.selection.currentArtboard;
-
-        if (artboard) {
-            Object.keys(rect).forEach(key => {
-                rect[key].div(editor.scale)
-            })
-
-            var items = artboard.checkInAreaForLayers(rect);
-
-            editor.selection.select(...items);
-        }
-
         this.refs.$dragAreaRect.css({
             left: Length.px(-10000),
             top: Length.px(0),
@@ -171,14 +171,40 @@ export default class ElementView extends UIElement {
             height: Length.px(0)
         })
 
-        this.selectCurrentForBackgroundView(...items)
 
-        if (items.length) {
-            this.emit('refreshSelection')
+        if (editor.isSelectionMode()) {
+
+            var artboard = editor.selection.currentArtboard;
+
+            if (artboard) {
+                Object.keys(rect).forEach(key => {
+                    rect[key].div(editor.scale)
+                })
+    
+                var items = artboard.checkInAreaForLayers(rect);
+    
+                editor.selection.select(...items);
+            }
+    
+            this.selectCurrentForBackgroundView(...items)
+    
+            if (items.length) {
+                this.emit('refreshSelection')
+            } else {
+                editor.selection.select();            
+                this.emit('emptySelection')
+            }
         } else {
-            editor.selection.select();            
-            this.emit('emptySelection')
+            var obj = {
+                x: Length.px(rect.x.value / editor.scale),
+                y: Length.px(rect.y.value / editor.scale),
+                width: Length.px(rect.width.value / editor.scale),
+                height: Length.px(rect.height.value / editor.scale)
+            }
+
+            this.emit('new.layer', editor.addType, obj);
         }
+
     }
 
 
@@ -193,7 +219,11 @@ export default class ElementView extends UIElement {
         this.emit('refreshContent');
     }
 
-    [POINTERSTART('$view .element-item')  + MOVE('calculateMovedElement') + END('calculateEndedElement')] (e) {
+    checkEditMode () {
+        return editor.isSelectionMode()
+    }
+
+    [POINTERSTART('$view .element-item') + IF('checkEditMode')  + MOVE('calculateMovedElement') + END('calculateEndedElement')] (e) {
         this.startXY = e.xy ; 
         this.$element = e.$delegateTarget;
 
@@ -296,7 +326,7 @@ export default class ElementView extends UIElement {
         var height = Length.px(10000);
 
         return {
-            'data-mode': this.state.mode,
+            'data-mode': editor.mode,
             style: {
                 'position': 'relative',
                 width,

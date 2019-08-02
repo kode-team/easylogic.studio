@@ -178,9 +178,11 @@ export default class PolygonEditorView extends UIElement {
 
             // points 문자열에서 변환된 point 는 segments 로 변경된다. 
             this.state.segments = this.polygonParser.convertGenerator();
-    
-            this.bindData('$view');
+        } else {
+            this.state.segments = [] 
         }
+
+        this.bindData('$view')
 
     }
 
@@ -229,12 +231,20 @@ export default class PolygonEditorView extends UIElement {
     }
 
     [EVENT('hidePolygonEditor')] () {
+        this.polygonParser.reset([])
+        this.state.segments = [];        
         this.state.isShow = false;         
+        
         this.$el.hide();
 
         this.emit('hideStarManager');
         this.emit('hidePolygonManager');        
         this.emit('finishPolygonEdit')   
+    }
+
+
+    [EVENT('hideSubEditor')] () {
+        // this.trigger('hidePolygonEditor');
     }
 
     [BIND('$view')] () {

@@ -14,7 +14,9 @@ export default class AddText extends MenuItem {
   }
 
   clickButton(e) {
-    this.emit('add.text')
+
+    this.emit('add.type', 'text');
+    // this.emit('add.text')
   }
 
 }

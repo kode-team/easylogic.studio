@@ -14,6 +14,10 @@ function blobToDataURL(blob) {
 }
 
 export const EDITOR_ID = "";
+
+export const EDIT_MODE_SELECTION = 'SELECTION';
+export const EDIT_MODE_ADD = 'ADD';
+
 export const editor = new class {
   constructor() {
     this.config = new Config(this);
@@ -24,6 +28,8 @@ export const editor = new class {
     this.symbols = {}
     this.images = {}
     this.openRightPanel = true; 
+    this.mode = EDIT_MODE_SELECTION
+    this.addType = '' 
 
     this.initTheme();
   }
@@ -38,6 +44,27 @@ export const editor = new class {
 
     this.theme =  theme || 'light'
     window.localStorage.setItem('easylogic.studio.theme', this.theme);
+  }
+
+  changeMode (mode = EDIT_MODE_SELECTION) {
+    this.mode = mode;   // add or selection  
+  }
+
+  isMode (mode) {
+    return this.mode === mode; 
+  }
+
+  isAddMode () {
+    return this.isMode(EDIT_MODE_ADD)
+  }
+
+  isSelectionMode () {
+    return this.isMode(EDIT_MODE_SELECTION);
+  }
+
+  changeAddType (type = '') {
+    this.changeMode(EDIT_MODE_ADD);
+    this.addType = type;
   }
 
   changeTheme (theme) {

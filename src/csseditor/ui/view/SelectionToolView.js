@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
-import { POINTERSTART, MOVE, END, DOUBLECLICK, KEYUP, KEY, PREVENT, STOP, BIND, DEBOUNCE } from "../../../util/Event";
+import { POINTERSTART, MOVE, END, DOUBLECLICK, KEYUP, KEY, PREVENT, STOP, BIND, DEBOUNCE, IF } from "../../../util/Event";
 import { Length } from "../../../editor/unit/Length";
 import { editor } from "../../../editor/editor";
 import { isNotUndefined } from "../../../util/functions/func";
@@ -54,6 +54,10 @@ export default class SelectionToolView extends UIElement {
             <div class='selection-tool-item' data-position='to bottom left'></div>
         </div>
     </div>`
+    }
+
+    [EVENT('add.type')] () {
+        this.$el.hide();
     }
 
     [DOUBLECLICK('$rotate3d')] (e) {
@@ -267,8 +271,11 @@ export default class SelectionToolView extends UIElement {
         this.setCacheBaseTrasnform('rotateX', 'rotateY');        
     }
 
+    checkEditMode () {
+        return editor.isSelectionMode(); 
+    }
 
-    [POINTERSTART('$selectionView .selection-tool-item') + MOVE() + END()] (e) {
+    [POINTERSTART('$selectionView .selection-tool-item') + IF('checkEditMode') + MOVE() + END()] (e) {
         this.$target = e.$delegateTarget;
         this.pointerType = e.$delegateTarget.attr('data-position')
 
@@ -645,12 +652,16 @@ export default class SelectionToolView extends UIElement {
             this.refs.$selectionTool.toggleClass('polygon', isPolygon);
         }
 
+        if (editor.isSelectionMode() && this.$el.isHide()) {
+            this.$el.show();
+        }
+
         this.bindData('$rotateZ')
         this.bindData('$rotateArea')
 
         this.makeSelectionTool();
 
-        this.emit('focusCanvasView');
+        // this.emit('focusCanvasView');
     }    
 
     isNoMoveArea () {

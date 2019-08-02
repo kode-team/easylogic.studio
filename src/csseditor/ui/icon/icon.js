@@ -59,9 +59,13 @@ import star from "./star";
 import polygon from "./polygon";
 import cube from "./cube";
 import color_lens from "./color_lens";
+import circle from "./circle";
+import rect from "./rect";
 
 
 export default {
+  rect,
+  circle,
   color_lens,
   cube,
   polygon,
