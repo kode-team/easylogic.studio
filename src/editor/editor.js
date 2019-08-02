@@ -24,7 +24,25 @@ export const editor = new class {
     this.symbols = {}
     this.images = {}
     this.openRightPanel = true; 
-    this.theme = 'light'
+
+    this.initTheme();
+  }
+
+  initTheme () {
+    var theme = 'light'
+
+    if (window.localStorage) {
+      theme = window.localStorage.getItem('easylogic.studio.theme')
+      theme = theme === 'null' ? 'light' : theme;
+    }
+
+    this.theme =  theme || 'light'
+    window.localStorage.setItem('easylogic.studio.theme', this.theme);
+  }
+
+  changeTheme (theme) {
+    this.theme = theme;
+    window.localStorage.setItem('easylogic.studio.theme', theme);
   }
 
   // 팝업의 zindex 를 계속 높여 주어 

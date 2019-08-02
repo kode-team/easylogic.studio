@@ -11,7 +11,7 @@ export class Offset extends Property {
     return super.getDefaultObject({
       itemType: "offset",
       offset: Length.percent(0),
-      color: 'rgba(0, 0, 0, 1)',
+      color: 'rgba(255, 255, 255, 1)',
       properties: []
     });
   }

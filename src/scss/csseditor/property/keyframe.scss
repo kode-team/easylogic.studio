@@ -9,7 +9,6 @@
       margin-bottom: 5px;
       padding: 5px;  
       cursor: pointer;
-      height: 50px;
       &.selected {
         background-color: rgba($border-color, 0.5);
       }
@@ -45,30 +44,13 @@
             .offset {
                 width: 10px;
                 height: 10px;
-                background-color: black;
+                background-color: white;
                 border-radius: 100%;
                 position: absolute;
                 top: 50%;
                 transform: translateX(-50%) translateY(-50%);
                 vertical-align: middle;
-
-                &:hover {
-                    &:before {
-                        display: inline-block;
-                        content: attr(data-title);
-                        position: absolute;
-                        left: 50%;
-                        bottom: 100%;
-                        // min-width: 100px;
-                        padding: 1px 3px;
-                        text-align: center;
-                        background-color: rgb(78, 59, 59);
-                        border-radius: 3px;
-                        color: white;
-                        transform: translateX(-50%);
-                        white-space: nowrap;
-                    }
-                }
+                border: 1px solid $border-color;
 
             }
 

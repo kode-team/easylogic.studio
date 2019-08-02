@@ -36,18 +36,20 @@ export default class KeyFrameProperty extends BaseProperty {
         <div class='title'>
           <div class='name'>${keyframe.name}</div>
           <div class='tools'>
-              <button type="button" class="del" data-index="${index}">
-                ${icon.remove2}
-              </button>
+              <button type="button" class="del" data-index="${index}">${icon.remove2}</button>
           </div>
         </div>
         <div class='offset-list'>
           <div class='container'>
             ${keyframe.offsets.map(o => {
-              var title = `${o.offset} ${o.properties.map(p => p.key).join(',')}`
-              return `<div data-title='${title}' class='offset' style='left: ${o.offset}; background-color: ${o.color}'></div>`
+              return `
+              <div class='offset' style='left: ${o.offset}; background-color: ${o.color}'></div>
+              `
             }).join('')}
           </div>
+        </div>
+        <div class='keyframe-code'>
+            <pre>${keyframe.toCSSText()}</pre>
         </div>
       </div>
     `

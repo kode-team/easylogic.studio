@@ -18,6 +18,7 @@ export default class TransitionProperty extends BaseProperty {
   getTitle() {
     return "Transition";
   }
+
   getBody() {
     return `<div class='property-item transition-list' ref='$transitionList'></div>`;
   }

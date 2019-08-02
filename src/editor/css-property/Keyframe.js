@@ -128,20 +128,23 @@ export class Keyframe extends Property {
 
 
   toOffsetString (it) {
-    return `${it.offset.toString()} {
-      ${it.properties.map(p => {
-        if (this.isMultiStyle(p.key)) {
-          return this.getMultiStyleString(p)
-        } else {
-          var value = p.value.toString();
-  
-          if (value) {
-            return `${p.key}: ${value};`
-          } else {
-            return '';
-          }
-        }
-      }).join('')}
+
+    var tabString = '        '
+
+    return `  ${it.offset.toString()} {
+${tabString}${it.properties.map(p => {
+  if (this.isMultiStyle(p.key)) {
+    return this.getMultiStyleString(p)
+  } else {
+    var value = p.value.toString();
+
+    if (value) {
+      return `${p.key}: ${value};`
+    } else {
+      return '';
+    }
+  }
+}).join('').replace(/\;/g, ';\n' + tabString).trim()}
     }`
   }  
 

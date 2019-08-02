@@ -48,11 +48,14 @@ export default class ColorAssetsProperty extends BaseProperty {
           <div class='preview' data-index="${index}"><div class='color-view' style='background-color: ${objectInfo.color};'></div></div>
           <div class='title'>
             <div>
-              <input type='text' class='name' data-key='name' value='${objectInfo.name}' placeholder="name" />
+              <input type='text' class='color' data-key='color' readonly value='${objectInfo.color}' placeholder="color" />
             </div>
             <div>
-              <input type='text' class='var' data-key='variable' value='${objectInfo.variable}' placeholder="--var" />
+              <input type='text' class='name' data-key='name' value='${objectInfo.name}' placeholder="name" />
             </div>
+            <!--<div>
+              <input type='text' class='var' data-key='variable' value='${objectInfo.variable}' placeholder="--var" />
+            </div>-->
           </div>
           <div class='tools'>
             <button type="button" class='copy'>${icon.copy}</button>          

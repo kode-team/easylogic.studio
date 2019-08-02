@@ -32,10 +32,11 @@
 
       > .title {
         grid-template-columns: 1fr 30px;
-        @include title-background-2($selected-color, $selected-font-color);
+        @include title-background-2($background-color, $selected-color);
         border-radius: 3px;
-        padding: 3px 5px; 
+        padding: 3px 0px; 
         margin-bottom: 2px;
+        font-weight: 900;
       }
 
       .value-editor {

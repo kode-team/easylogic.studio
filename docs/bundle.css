@@ -1358,8 +1358,8 @@ html, body {
      -moz-appearance: none;
           appearance: none;
   outline: none;
-  padding: 4px 4px;
-  line-height: 1;
+  padding: 0px 4px;
+  line-height: 1.6;
   cursor: pointer;
   background-color: #434b50;
   border: 1px solid #0c0c0d;
@@ -1608,7 +1608,7 @@ html, body {
 }
 .csseditor[data-theme=dark] input[type=range]::-webkit-slider-runnable-track {
   width: 100%;
-  height: 4px;
+  height: 2px;
   cursor: pointer;
   background: #3174ad;
   border-radius: 2px;
@@ -1622,14 +1622,14 @@ html, body {
   -webkit-appearance: none;
           appearance: none;
   border: 1px solid #f3f3f3;
-  margin-top: -2px;
+  margin-top: -4px;
 }
 .csseditor[data-theme=dark] input[type=range]:focus::-webkit-slider-runnable-track {
   background: #3174ad;
 }
 .csseditor[data-theme=dark] input[type=range]::-moz-range-track {
   width: 100%;
-  height: 4px;
+  height: 2px;
   cursor: pointer;
   background: #3174ad;
   border-radius: 2px;
@@ -1642,11 +1642,11 @@ html, body {
   border-radius: 9px;
   background: #f3f3f3;
   cursor: pointer;
-  margin-top: -2px;
+  margin-top: -4px;
 }
 .csseditor[data-theme=dark] input[type=range]::-ms-track {
   width: 100%;
-  height: 4px;
+  height: 2px;
   cursor: pointer;
   border: 1px solid #000;
   border-radius: 2px;
@@ -1669,7 +1669,7 @@ html, body {
   border-radius: 9px;
   background: #f3f3f3;
   cursor: pointer;
-  margin-top: -2px;
+  margin-top: -4px;
 }
 .csseditor[data-theme=dark] input[type=range]:focus::-ms-fill-lower {
   background: #f3f3f3;
@@ -2064,7 +2064,7 @@ html, body {
   -webkit-transform: translateX(-50%) translateY(-50%);
           transform: translateX(-50%) translateY(-50%);
   box-sizing: border-box;
-  border: 1px solid #1a1a1a;
+  border: 1px solid #609de2;
   background-color: #3e8ec6;
   border-radius: 100%;
   cursor: pointer;
@@ -2874,7 +2874,7 @@ html, body {
   padding: 0px 11px 0px 6px;
 }
 .csseditor[data-theme=dark] .property > .property-title {
-  padding: 4px 6px 4px 6px;
+  padding: 4px 11px 4px 6px;
   height: 30px;
   line-height: 2;
   cursor: pointer;
@@ -3330,27 +3330,27 @@ html, body {
 }
 .csseditor[data-theme=dark] .transition-list {
   grid-template-columns: 1fr !important;
+  padding-bottom: 5px;
 }
 .csseditor[data-theme=dark] .transition-list .transition-item {
   display: grid;
   grid-template-columns: 30px 1fr 20px;
   grid-column-gap: 4px;
   box-sizing: border-box;
-  border: 1px solid #1a1a1a;
+}
+.csseditor[data-theme=dark] .transition-list .transition-item:last-child {
   margin-bottom: 5px;
-  padding: 5px;
 }
 .csseditor[data-theme=dark] .transition-list .transition-item.selected {
   background-color: rgba(26, 26, 26, 0.5);
 }
 .csseditor[data-theme=dark] .transition-list .transition-item .timing {
   border-radius: 3px;
-  background-color: #ac48ff;
+  background-color: #3e8ec6;
   width: 100%;
   height: 30px;
   vertical-align: middle;
   cursor: pointer;
-  margin-top: 3px;
 }
 .csseditor[data-theme=dark] .transition-list .transition-item .timing canvas {
   border-radius: 3px;
@@ -3393,10 +3393,10 @@ html, body {
   grid-template-columns: 30px 1fr 20px;
   grid-column-gap: 4px;
   box-sizing: border-box;
-  border: 1px solid #1a1a1a;
-  margin-bottom: 5px;
   text-align: center;
-  padding: 5px;
+}
+.csseditor[data-theme=dark] .animation-list .animation-item:last-child {
+  margin-bottom: 5px;
 }
 .csseditor[data-theme=dark] .animation-list .animation-item.selected {
   background-color: rgba(26, 26, 26, 0.5);
@@ -3408,7 +3408,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .animation-list .animation-item .timing {
   border-radius: 3px;
-  background-color: #ac48ff;
+  background-color: #3e8ec6;
   width: 100%;
   height: 30px;
   vertical-align: middle;
@@ -3485,7 +3485,6 @@ html, body {
   margin-bottom: 5px;
   padding: 5px;
   cursor: pointer;
-  height: 50px;
 }
 .csseditor[data-theme=dark] .keyframe-list .keyframe-item.selected {
   background-color: rgba(26, 26, 26, 0.5);
@@ -3518,28 +3517,14 @@ html, body {
 .csseditor[data-theme=dark] .keyframe-list .keyframe-item .offset-list .container .offset {
   width: 10px;
   height: 10px;
-  background-color: black;
+  background-color: white;
   border-radius: 100%;
   position: absolute;
   top: 50%;
   -webkit-transform: translateX(-50%) translateY(-50%);
           transform: translateX(-50%) translateY(-50%);
   vertical-align: middle;
-}
-.csseditor[data-theme=dark] .keyframe-list .keyframe-item .offset-list .container .offset:hover:before {
-  display: inline-block;
-  content: attr(data-title);
-  position: absolute;
-  left: 50%;
-  bottom: 100%;
-  padding: 1px 3px;
-  text-align: center;
-  background-color: #4e3b3b;
-  border-radius: 3px;
-  color: white;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
-  white-space: nowrap;
+  border: 1px solid #1a1a1a;
 }
 .csseditor[data-theme=dark] .code-view-item {
   grid-template-columns: 1fr !important;
@@ -4270,7 +4255,7 @@ html, body {
   top: 30px;
   left: 60px;
   border: 1px solid #1a1a1a;
-  background-color: white;
+  background-color: #3a3a3a;
 }
 .csseditor[data-theme=dark] .cubic-bezier-editor .bezier .bezier-canvas {
   position: absolute;
@@ -4293,8 +4278,8 @@ html, body {
           transform: translateX(-50%) translateY(-50%);
   border-radius: 100%;
   cursor: pointer;
-  background-color: #ac48ff;
-  border: 1px solid #ac48ff;
+  background-color: #3a3a3a;
+  border: 1px solid #3e8ec6;
   box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .cubic-bezier-editor .animation {
@@ -4321,13 +4306,13 @@ html, body {
   box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .cubic-bezier-editor .item-list[data-selected-value=ease] .item[data-bezier=ease] {
-  background-color: #ac48ff;
+  background-color: rgba(0, 0, 0, 0.2);
 }
 .csseditor[data-theme=dark] .cubic-bezier-editor .item-list[data-selected-value=ease-in] .item[data-bezier=ease-in] {
-  background-color: #ac48ff;
+  background-color: rgba(0, 0, 0, 0.2);
 }
 .csseditor[data-theme=dark] .cubic-bezier-editor .item-list[data-selected-value=ease-out] .item[data-bezier=ease-out] {
-  background-color: #ac48ff;
+  background-color: rgba(0, 0, 0, 0.2);
 }
 .csseditor[data-theme=dark] .cubic-bezier-editor .item-list .item {
   position: relative;
@@ -4335,7 +4320,7 @@ html, body {
   height: 40px;
   border: 1px solid gray;
   cursor: pointer;
-  background-color: white;
+  background-color: #3a3a3a;
 }
 .csseditor[data-theme=dark] .cubic-bezier-editor .item-list .item:not(:first-child) {
   border-top: 0px;
@@ -4368,7 +4353,7 @@ html, body {
   vertical-align: middle;
 }
 .csseditor[data-theme=dark] .cubic-bezier-editor .predefined .left svg path, .csseditor[data-theme=dark] .cubic-bezier-editor .predefined .right svg path {
-  fill: white;
+  fill: #ececec;
 }
 .csseditor[data-theme=dark] .cubic-bezier-editor .predefined .predefined-text {
   vertical-align: middle;
@@ -4666,14 +4651,15 @@ html, body {
 }
 .csseditor[data-theme=dark] .css-property-editor .css-property-item > .title {
   grid-template-columns: 1fr 30px;
-  background-color: #3e8ec6;
-  color: white;
+  background-color: #3a3a3a;
+  color: #3e8ec6;
   border-radius: 3px;
-  padding: 3px 5px;
+  padding: 3px 0px;
   margin-bottom: 2px;
+  font-weight: 900;
 }
 .csseditor[data-theme=dark] .css-property-editor .css-property-item > .title svg path {
-  fill: white;
+  fill: #3e8ec6;
 }
 .csseditor[data-theme=dark] .css-property-editor .css-property-item .value-editor {
   padding: 2px;
@@ -7348,8 +7334,8 @@ html, body {
      -moz-appearance: none;
           appearance: none;
   outline: none;
-  padding: 4px 4px;
-  line-height: 1;
+  padding: 0px 4px;
+  line-height: 1.6;
   cursor: pointer;
   background-color: #fafafa;
   border: 1px solid #dbdbdb;
@@ -8054,7 +8040,7 @@ html, body {
   -webkit-transform: translateX(-50%) translateY(-50%);
           transform: translateX(-50%) translateY(-50%);
   box-sizing: border-box;
-  border: 1px solid #cfcfcf;
+  border: 1px solid #609de2;
   background-color: #3e8ec6;
   border-radius: 100%;
   cursor: pointer;
@@ -8864,7 +8850,7 @@ html, body {
   padding: 0px 11px 0px 6px;
 }
 .csseditor[data-theme=light] .property > .property-title {
-  padding: 4px 6px 4px 6px;
+  padding: 4px 11px 4px 6px;
   height: 30px;
   line-height: 2;
   cursor: pointer;
@@ -9320,27 +9306,27 @@ html, body {
 }
 .csseditor[data-theme=light] .transition-list {
   grid-template-columns: 1fr !important;
+  padding-bottom: 5px;
 }
 .csseditor[data-theme=light] .transition-list .transition-item {
   display: grid;
   grid-template-columns: 30px 1fr 20px;
   grid-column-gap: 4px;
   box-sizing: border-box;
-  border: 1px solid #cfcfcf;
+}
+.csseditor[data-theme=light] .transition-list .transition-item:last-child {
   margin-bottom: 5px;
-  padding: 5px;
 }
 .csseditor[data-theme=light] .transition-list .transition-item.selected {
   background-color: rgba(207, 207, 207, 0.5);
 }
 .csseditor[data-theme=light] .transition-list .transition-item .timing {
   border-radius: 3px;
-  background-color: #ac48ff;
+  background-color: #3e8ec6;
   width: 100%;
   height: 30px;
   vertical-align: middle;
   cursor: pointer;
-  margin-top: 3px;
 }
 .csseditor[data-theme=light] .transition-list .transition-item .timing canvas {
   border-radius: 3px;
@@ -9383,10 +9369,10 @@ html, body {
   grid-template-columns: 30px 1fr 20px;
   grid-column-gap: 4px;
   box-sizing: border-box;
-  border: 1px solid #cfcfcf;
-  margin-bottom: 5px;
   text-align: center;
-  padding: 5px;
+}
+.csseditor[data-theme=light] .animation-list .animation-item:last-child {
+  margin-bottom: 5px;
 }
 .csseditor[data-theme=light] .animation-list .animation-item.selected {
   background-color: rgba(207, 207, 207, 0.5);
@@ -9398,7 +9384,7 @@ html, body {
 }
 .csseditor[data-theme=light] .animation-list .animation-item .timing {
   border-radius: 3px;
-  background-color: #ac48ff;
+  background-color: #3e8ec6;
   width: 100%;
   height: 30px;
   vertical-align: middle;
@@ -9475,7 +9461,6 @@ html, body {
   margin-bottom: 5px;
   padding: 5px;
   cursor: pointer;
-  height: 50px;
 }
 .csseditor[data-theme=light] .keyframe-list .keyframe-item.selected {
   background-color: rgba(207, 207, 207, 0.5);
@@ -9508,28 +9493,14 @@ html, body {
 .csseditor[data-theme=light] .keyframe-list .keyframe-item .offset-list .container .offset {
   width: 10px;
   height: 10px;
-  background-color: black;
+  background-color: white;
   border-radius: 100%;
   position: absolute;
   top: 50%;
   -webkit-transform: translateX(-50%) translateY(-50%);
           transform: translateX(-50%) translateY(-50%);
   vertical-align: middle;
-}
-.csseditor[data-theme=light] .keyframe-list .keyframe-item .offset-list .container .offset:hover:before {
-  display: inline-block;
-  content: attr(data-title);
-  position: absolute;
-  left: 50%;
-  bottom: 100%;
-  padding: 1px 3px;
-  text-align: center;
-  background-color: #4e3b3b;
-  border-radius: 3px;
-  color: white;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
-  white-space: nowrap;
+  border: 1px solid #cfcfcf;
 }
 .csseditor[data-theme=light] .code-view-item {
   grid-template-columns: 1fr !important;
@@ -10260,7 +10231,7 @@ html, body {
   top: 30px;
   left: 60px;
   border: 1px solid #cfcfcf;
-  background-color: #01538e;
+  background-color: white;
 }
 .csseditor[data-theme=light] .cubic-bezier-editor .bezier .bezier-canvas {
   position: absolute;
@@ -10283,8 +10254,8 @@ html, body {
           transform: translateX(-50%) translateY(-50%);
   border-radius: 100%;
   cursor: pointer;
-  background-color: #ac48ff;
-  border: 1px solid #ac48ff;
+  background-color: white;
+  border: 1px solid #3e8ec6;
   box-sizing: border-box;
 }
 .csseditor[data-theme=light] .cubic-bezier-editor .animation {
@@ -10311,13 +10282,13 @@ html, body {
   box-sizing: border-box;
 }
 .csseditor[data-theme=light] .cubic-bezier-editor .item-list[data-selected-value=ease] .item[data-bezier=ease] {
-  background-color: #ac48ff;
+  background-color: rgba(0, 0, 0, 0.2);
 }
 .csseditor[data-theme=light] .cubic-bezier-editor .item-list[data-selected-value=ease-in] .item[data-bezier=ease-in] {
-  background-color: #ac48ff;
+  background-color: rgba(0, 0, 0, 0.2);
 }
 .csseditor[data-theme=light] .cubic-bezier-editor .item-list[data-selected-value=ease-out] .item[data-bezier=ease-out] {
-  background-color: #ac48ff;
+  background-color: rgba(0, 0, 0, 0.2);
 }
 .csseditor[data-theme=light] .cubic-bezier-editor .item-list .item {
   position: relative;
@@ -10325,7 +10296,7 @@ html, body {
   height: 40px;
   border: 1px solid gray;
   cursor: pointer;
-  background-color: black;
+  background-color: white;
 }
 .csseditor[data-theme=light] .cubic-bezier-editor .item-list .item:not(:first-child) {
   border-top: 0px;
@@ -10358,7 +10329,7 @@ html, body {
   vertical-align: middle;
 }
 .csseditor[data-theme=light] .cubic-bezier-editor .predefined .left svg path, .csseditor[data-theme=light] .cubic-bezier-editor .predefined .right svg path {
-  fill: white;
+  fill: #666666;
 }
 .csseditor[data-theme=light] .cubic-bezier-editor .predefined .predefined-text {
   vertical-align: middle;
@@ -10656,14 +10627,15 @@ html, body {
 }
 .csseditor[data-theme=light] .css-property-editor .css-property-item > .title {
   grid-template-columns: 1fr 30px;
-  background-color: #3e8ec6;
-  color: white;
+  background-color: white;
+  color: #3e8ec6;
   border-radius: 3px;
-  padding: 3px 5px;
+  padding: 3px 0px;
   margin-bottom: 2px;
+  font-weight: 900;
 }
 .csseditor[data-theme=light] .css-property-editor .css-property-item > .title svg path {
-  fill: white;
+  fill: #3e8ec6;
 }
 .csseditor[data-theme=light] .css-property-editor .css-property-item .value-editor {
   padding: 2px;

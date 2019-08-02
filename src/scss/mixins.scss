@@ -140,8 +140,8 @@
 @mixin select-style ($background-color: #434b50, $border-color: #0c0c0d, $border-radius: 3px, $fontColor: #ececec) {
     appearance: none;
     outline: none;
-    padding: 4px 4px;
-    line-height: 1;
+    padding: 0px 4px;
+    line-height: 1.6;
     cursor: pointer;
 
     @include input-style($background-color, $border-color, $border-radius, $fontColor);

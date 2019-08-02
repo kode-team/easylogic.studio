@@ -12,8 +12,10 @@ export default class CubicBezierEditor extends UIElement {
             key: this.props.key,
             currentBezier: getPredefinedCubicBezier( this.props.value || 'linear'),
             currentBezierIndex: 0,
-            selectedColor: '#ac48ff',
-            animatedColor: '#ac48ff66'
+            selectedColor: '#609de2',
+            animatedColor: '#609de266',
+            curveColor: '#609de2',
+            baseLineColor: 'rgba(117, 117, 117, 0.46)'
         }
     }
 
@@ -131,7 +133,7 @@ export default class CubicBezierEditor extends UIElement {
             var context = $canvas.context();
 
             context.lineWidth = 1;
-            context.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+            context.strokeStyle = this.state.baseLineColor;
             // Draw Guide Line
     
             context.beginPath();
@@ -158,7 +160,7 @@ export default class CubicBezierEditor extends UIElement {
             context.closePath();
     
             context.lineWidth = 2;
-            context.strokeStyle = 'white';
+            context.strokeStyle = this.state.curveColor;
             
             var x1 = currentBezier[0] * width
             var y1 = currentBezier[1] == 0 ? height : (1 - currentBezier[1]) * height 
