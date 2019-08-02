@@ -23,7 +23,7 @@ export default class GuideView {
             this.cachedExtraItems = artboard.allLayers.filter(it => {
                 return !editor.selection.check(it)
             });
-            this.rect = editor.selection.allRect.clone()
+            this.rect = editor.selection.allRect ? editor.selection.allRect.clone() : null;
         }
         
         // Rect 안의 position 의  좌표 비율 미리 캐슁 
@@ -77,6 +77,9 @@ export default class GuideView {
 
 
     recover (item) {
+
+        if (!this.rect) return; 
+
         const {xDistRate, x2DistRate} = this.cachedPosition[item.id].x
         const {yDistRate, y2DistRate} = this.cachedPosition[item.id].y
 

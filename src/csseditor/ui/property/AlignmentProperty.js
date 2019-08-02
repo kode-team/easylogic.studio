@@ -26,7 +26,7 @@ export default class AlignmentProperty extends BaseProperty {
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)] () {
-    this.refreshShowIsNot('project');
+    this.refreshShow('layer');
   }
 
   isHideHeader() {

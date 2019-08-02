@@ -24,7 +24,7 @@ export default class SelectionToolView extends UIElement {
     template() {
         return `
     <div class='selection-view' ref='$selectionView' >
-        <div class='selection-tool' ref='$selectionTool'>
+        <div class='selection-tool' ref='$selectionTool' style='left:-100px;top:-100px;'>
             <div class='selection-tool-item' data-position='move'></div>
             <div class='selection-tool-item' data-position='path'>${icon.scatter}</div>
             <div class='selection-tool-item' data-position='rotate3d' ref='$rotate3d'>
@@ -673,7 +673,11 @@ export default class SelectionToolView extends UIElement {
         // selection 객체는 하나만 만든다. 
         this.guideView.recoverAll();
 
-        var {x, y, width, height} = this.calculateWorldPosition(this.guideView.rect) ;
+        var x = Length.px(0), y = Length.px(0), width = Length.px(0), height = Length.px(0);
+
+        if (this.guideView.rect) {
+            var {x, y, width, height} = this.calculateWorldPosition(this.guideView.rect) ;
+        }
 
         if (this.isNoMoveArea()) {
             this.refs.$selectionTool.addClass('remove-move-area')
@@ -690,23 +694,28 @@ export default class SelectionToolView extends UIElement {
         this.refs.$selectionTool.cssText(`left: ${x};top:${y};width:${width};height:${height}`)
         this.bindData('$rotate3d');
         this.bindData('$rotateArea');        
-        var newX = Length.px(x.value - editor.selection.currentArtboard.x.value / editor.scale).round(1);
-        var newY = Length.px(y.value - editor.selection.currentArtboard.y.value / editor.scale).round(1);
-        var newWidth = Length.px(width.value / editor.scale).round(1);
-        var newHeight = Length.px(height.value / editor.scale).round(1);
 
-        switch(this.pointerType) {
-        case 'move': this.$target.attr('data-position-text', `X: ${newX}, Y: ${newY}`); break; 
-        case 'to right': this.$target.attr('data-position-text', `W: ${newWidth}`); break; 
-        case 'to left': this.$target.attr('data-position-text', `X: ${newX}, W: ${newWidth}`); break; 
-        case 'to top': this.$target.attr('data-position-text', `Y: ${newY}, H: ${newHeight}`); break; 
-        case 'to bottom': this.$target.attr('data-position-text', `H: ${newHeight}`); break; 
-        case 'to top right': this.$target.attr('data-position-text', `X: ${newX}, Y: ${newY} W: ${newWidth}, H: ${newHeight}`); break; 
-        case 'to top left': this.$target.attr('data-position-text', `X: ${newX}, Y: ${newY}, W: ${newWidth}, H: ${newHeight}`); break; 
-        case 'to bottom right': this.$target.attr('data-position-text', `W: ${newWidth}, H: ${newHeight}`); break; 
-        case 'to bottom left': this.$target.attr('data-position-text', `X: ${newX}, Y: ${newY}, W: ${newWidth}, H: ${newHeight}`); break; 
+        if (editor.selection.currentArtboard) {
+            var newX = Length.px(x.value - editor.selection.currentArtboard.x.value / editor.scale).round(1);
+            var newY = Length.px(y.value - editor.selection.currentArtboard.y.value / editor.scale).round(1);
+            var newWidth = Length.px(width.value / editor.scale).round(1);
+            var newHeight = Length.px(height.value / editor.scale).round(1);
+    
+            switch(this.pointerType) {
+            case 'move': this.$target.attr('data-position-text', `X: ${newX}, Y: ${newY}`); break; 
+            case 'to right': this.$target.attr('data-position-text', `W: ${newWidth}`); break; 
+            case 'to left': this.$target.attr('data-position-text', `X: ${newX}, W: ${newWidth}`); break; 
+            case 'to top': this.$target.attr('data-position-text', `Y: ${newY}, H: ${newHeight}`); break; 
+            case 'to bottom': this.$target.attr('data-position-text', `H: ${newHeight}`); break; 
+            case 'to top right': this.$target.attr('data-position-text', `X: ${newX}, Y: ${newY} W: ${newWidth}, H: ${newHeight}`); break; 
+            case 'to top left': this.$target.attr('data-position-text', `X: ${newX}, Y: ${newY}, W: ${newWidth}, H: ${newHeight}`); break; 
+            case 'to bottom right': this.$target.attr('data-position-text', `W: ${newWidth}, H: ${newHeight}`); break; 
+            case 'to bottom left': this.$target.attr('data-position-text', `X: ${newX}, Y: ${newY}, W: ${newWidth}, H: ${newHeight}`); break; 
+            }
+            
         }
-        
+
+
     }
 
     calculateWorldPositionForGuideLine (list = []) {
@@ -747,7 +756,7 @@ export default class SelectionToolView extends UIElement {
     }
 
     [EVENT('refreshCanvas')] (obj = {}) {
-        editor.selection.setRectCache();        
+        editor.selection.setRectCache();
 
         this.initSelectionTool();
     }

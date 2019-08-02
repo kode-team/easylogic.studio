@@ -348,7 +348,7 @@ export default class ElementView extends UIElement {
     }    
 
     [EVENT('addElement')] () {
-        var artboard = editor.selection.currentArtboard
+        var artboard = editor.selection.currentArtboard || { html : ''} 
         var html = artboard.html
 
         this.setState({ html }, false)

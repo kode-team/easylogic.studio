@@ -7,13 +7,15 @@ import { TextLayer } from "../../../editor/items/layers/TextLayer";
 import { ImageLayer } from "../../../editor/items/layers/ImageLayer";
 import { CubeLayer } from "../../../editor/items/layers/CubeLayer";
 import { SphereLayer } from "../../../editor/items/layers/SphereLayer";
+import { ArtBoard } from "../../../editor/items/ArtBoard";
+import { Project } from "../../../editor/items/Project";
 
 export default class CommandView extends UIElement {
 
     refreshSelection () {
         this.emit('refreshAll')
-        this.emit('refreshSelection');
         this.emit('hideSubEditor');
+        this.emit('refreshSelection');        
     }
 
     [COMMAND('add.type')] (type) {
@@ -50,6 +52,38 @@ export default class CommandView extends UIElement {
     
           this.refreshSelection()
         }
+    }
+
+    [COMMAND('add.project')] (obj = {}) {
+        var project = editor.add(new Project({
+            ...obj
+        }))
+
+        editor.selection.selectProject(project);
+
+        this.refreshSelection()
+    }
+
+    [COMMAND('add.artboard')] (obj = {}) {
+        var project = editor.selection.currentProject;
+        if (!project) {
+            project = editor.add(new Project())
+    
+            editor.selection.selectProject(project);
+        }
+
+        var artboard = project.add(new ArtBoard({
+            x: Length.px(300),
+            y: Length.px(300),
+            width: Length.px(300),
+            height: Length.px(600),
+            ...obj
+          }))
+
+          editor.selection.selectArtboard(artboard);
+          editor.selection.select(artboard);
+    
+          this.refreshSelection()
     }
 
     [COMMAND('add.rect')] (rect = {}) {

@@ -23,13 +23,7 @@ export default class ProjectProperty extends BaseProperty {
   }
 
   [CLICK('$add')] () {
-    var project = editor.add(new Project())
-
-    editor.selection.selectProject(project);
-
-    this.refresh();
-
-    this.emit('refreshSelection')
+    this.emit('add.project');
   }
 
   getBody() {

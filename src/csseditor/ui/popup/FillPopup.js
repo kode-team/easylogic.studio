@@ -275,7 +275,7 @@ export default class FillPopup extends BasePopup {
 
 
   [LOAD('$projectGradients')] () {
-    var project = editor.selection.currentProject || {graidentList: []};
+    var project = editor.selection.currentProject || {gradientList: []};
 
     var gradients = project.gradientList;
 

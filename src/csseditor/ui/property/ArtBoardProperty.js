@@ -60,12 +60,7 @@ export default class ArtBoardProperty extends BaseProperty {
   }
 
   [CLICK('$add')] (e) {
-    var project = editor.selection.currentProject;
-    if (project) {
-      var artboard = project.add(new ArtBoard())
-
-      this.selectArtboard(artboard);
-    }
+    this.emit('add.artboard');
   }
 
   [CLICK('$artboardList .artboard-item .remove')] (e) {
