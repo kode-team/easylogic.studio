@@ -3480,6 +3480,9 @@ html, body {
   vertical-align: middle;
   text-align: right;
 }
+.csseditor[data-theme=dark] .keyframe-list .keyframe-item pre {
+  white-space: pre-wrap;
+}
 .csseditor[data-theme=dark] .keyframe-list .keyframe-item .offset-list {
   padding: 0px 10px;
   height: 20px;
@@ -9605,6 +9608,9 @@ html, body {
 .csseditor[data-theme=light] .keyframe-list .keyframe-item .title .tools {
   vertical-align: middle;
   text-align: right;
+}
+.csseditor[data-theme=light] .keyframe-list .keyframe-item pre {
+  white-space: pre-wrap;
 }
 .csseditor[data-theme=light] .keyframe-list .keyframe-item .offset-list {
   padding: 0px 10px;

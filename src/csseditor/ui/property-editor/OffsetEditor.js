@@ -146,6 +146,8 @@ export default class OffsetEditor extends UIElement {
 
   }
 
+
+
   refreshOffsetProperty() {
     this.emit('showCSSPropertyEditor', this.selectedOffsetItem.properties)
   }
@@ -160,12 +162,21 @@ export default class OffsetEditor extends UIElement {
     this.currentOffsetXY = e.xy;
     this.baseOffsetMin = this.baseOffsetArea.left;
     this.baseOffsetMax = this.baseOffsetArea.left + this.baseOffsetWidth;
+    this.isRemoveOffset = false; 
 
-    this.selectItem(this.currentOffsetIndex, true)    
-    this.refreshOffsetInput()
+    if (e.altKey) {
+      this.isRemoveOffset = true; 
+    } else {
+
+      this.selectItem(this.currentOffsetIndex, true)    
+      this.refreshOffsetInput()
+    }
+
   }
 
   moveOffset(dx, dy) {
+
+    if (this.isRemoveOffset) return; 
 
     var currentX = this.currentOffsetXY.x + dx 
 
@@ -186,13 +197,32 @@ export default class OffsetEditor extends UIElement {
     this.modifyOffset();
   }
 
+  removeOffset (index) {
+    this.state.offsets.splice(index, 1);
+    this.selectItem(0);
+    this.refresh();    
+    this.modifyOffset();    
+  }
+
   endOffset (dx, dy) {
-    setTimeout(() => {
-      this.currentOffset = null;       
-      this.refreshOffsetInput();
-      this.refreshOffsetProperty();
-      this.modifyOffset();
-    }, 10);
+
+
+    if (this.isRemoveOffset) {
+      setTimeout( () => {
+        this.currentOffset = null; 
+        this.removeOffset(this.currentOffsetIndex)
+      }, 10);
+
+    } else {
+
+      setTimeout(() => {
+        this.currentOffset = null;         
+        this.refreshOffsetInput();
+        this.refreshOffsetProperty();
+        this.modifyOffset();
+      }, 10);
+    }
+
 
   }
 

@@ -292,6 +292,14 @@ export default class CubicBezierEditor extends UIElement {
 
         x -= minX;
 
+        if (x < 0) {
+            x = 0; 
+        }
+
+        if (width < x) {
+            x = width; 
+        }
+
         var y = p.y;
         if (0 > y) {
             y = 0;
@@ -305,6 +313,8 @@ export default class CubicBezierEditor extends UIElement {
             left: x + 'px',
             top : y + 'px'
         });
+
+        console.log(x, y, minX, minY)
 
         return { 
             x : (x == 0 )? 0 : x / width, 
