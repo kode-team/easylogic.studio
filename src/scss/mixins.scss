@@ -185,3 +185,21 @@
     }
 
 }
+
+$align-center-color: rgb(85, 85, 85);
+$align-main-color: rgb(21, 118, 228);
+$align-sub-color: rgb(224, 224, 224);
+
+@mixin background-image-generator ($active-color: $align-main-color) {
+    background-image: linear-gradient(to right, $active-color, $active-color),
+                        linear-gradient(to right, $align-sub-color, $align-sub-color),
+                        linear-gradient(to right, $align-center-color, $align-center-color);
+    background-repeat: no-repeat;
+}
+
+@mixin background-image-generator-2 ($active-color: $align-main-color) {
+    background-image: linear-gradient(to right, $active-color, $active-color),
+                        linear-gradient(to right, $align-center-color, $align-center-color),
+                        linear-gradient(to right, $align-sub-color, $align-sub-color);                        
+    background-repeat: no-repeat;
+}

@@ -10,18 +10,7 @@ export default class ToolMenu extends UIElement {
     return `
       <div class='tool-menu '>
         <div class='items'>
-          <LeftAlign />
-          <CenterAlign />
-          <RightAlign />
-
-          <TopAlign />
-          <MiddleAlign />
-          <BottomAlign />
-          
-          <div class='split'></div>
-
-          <SameWidth />
-          <SameHeight />
+         
           <CopyItem />
         </div>
 

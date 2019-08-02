@@ -9,6 +9,10 @@ export default class SameWidth extends MenuItem {
     return "width";
   }
 
+  isHideTitle () {
+    return true; 
+  }
+
   clickButton(e) {
     Sort.sameWidth();
     this.emit('refreshSelectionStyleView')

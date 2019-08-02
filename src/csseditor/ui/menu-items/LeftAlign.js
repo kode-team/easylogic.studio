@@ -9,6 +9,10 @@ export default class LeftAlign extends MenuItem {
     return "Left";
   }
 
+  isHideTitle () {
+    return true; 
+  }  
+
   clickButton(e) {
     Sort.left();
     this.emit('refreshSelectionStyleView')

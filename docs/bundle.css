@@ -2137,10 +2137,14 @@ html, body {
 .csseditor[data-theme=dark] .external-tool-menu .items > * {
   margin-right: 10px;
 }
+.csseditor[data-theme=dark] .tool-menu .items .menu-item[data-no-title=true] .title,
+.csseditor[data-theme=dark] .external-tool-menu .items .menu-item[data-no-title=true] .title {
+  display: none;
+}
 .csseditor[data-theme=dark] .tool-menu .items button,
 .csseditor[data-theme=dark] .external-tool-menu .items button {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   background-color: transparent;
   background-image: none;
   border: 0px;
@@ -2190,56 +2194,56 @@ html, body {
 }
 .csseditor[data-theme=dark] .tool-menu .items .icon.left,
 .csseditor[data-theme=dark] .external-tool-menu .items .icon.left {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, #888888, #888888);
+  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
   background-repeat: no-repeat;
   background-size: 20px 6px, 16px 6px, 2px 24px;
   background-position: 6px 6px, 6px 16px, 2px 3px;
 }
 .csseditor[data-theme=dark] .tool-menu .items .icon.right,
 .csseditor[data-theme=dark] .external-tool-menu .items .icon.right {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, #888888, #888888);
+  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
   background-repeat: no-repeat;
   background-size: 18px 6px, 14px 6px, 2px 24px;
   background-position: 2px 5px, 6px 15px, 22px 3px;
 }
 .csseditor[data-theme=dark] .tool-menu .items .icon.center,
 .csseditor[data-theme=dark] .external-tool-menu .items .icon.center {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, #888888, #888888);
+  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
   background-repeat: no-repeat;
   background-size: 20px 6px, 16px 6px, 2px 24px;
   background-position: 5px 6px, 7px 16px, 14px 3px;
 }
 .csseditor[data-theme=dark] .tool-menu .items .icon.middle,
 .csseditor[data-theme=dark] .external-tool-menu .items .icon.middle {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, #888888, #888888);
+  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
   background-repeat: no-repeat;
   background-size: 8px 20px, 8px 14px, 24px 2px;
   background-position: 3px 3px, 13px 6px, 0px 12px;
 }
 .csseditor[data-theme=dark] .tool-menu .items .icon.top,
 .csseditor[data-theme=dark] .external-tool-menu .items .icon.top {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, #888888, #888888);
+  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
   background-repeat: no-repeat;
   background-size: 8px 18px, 8px 12px, 24px 2px;
   background-position: 4px 8px, 14px 8px, 0px 4px;
 }
 .csseditor[data-theme=dark] .tool-menu .items .icon.bottom,
 .csseditor[data-theme=dark] .external-tool-menu .items .icon.bottom {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, #888888, #888888);
+  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
   background-repeat: no-repeat;
   background-size: 8px 18px, 8px 12px, 24px 2px;
   background-position: 4px 2px, 14px 8px, 0px 22px;
 }
 .csseditor[data-theme=dark] .tool-menu .items .icon.vertical,
 .csseditor[data-theme=dark] .external-tool-menu .items .icon.vertical {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #888888, #888888), linear-gradient(to right, #ccc, #ccc);
+  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #555555, #555555), linear-gradient(to right, #e0e0e0, #e0e0e0);
   background-repeat: no-repeat;
   background-size: 24px 2px, 18px 10px, 24px 2px;
   background-position: 3px 6px, 6px 11px, 3px 24px;
 }
 .csseditor[data-theme=dark] .tool-menu .items .icon.horizontal,
 .csseditor[data-theme=dark] .external-tool-menu .items .icon.horizontal {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #888888, #888888), linear-gradient(to right, #ccc, #ccc);
+  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #555555, #555555), linear-gradient(to right, #e0e0e0, #e0e0e0);
   background-repeat: no-repeat;
   background-size: 2px 24px, 10px 18px, 2px 24px;
   background-position: 6px 3px, 11px 6px, 24px 3px;
@@ -4226,6 +4230,111 @@ html, body {
 .csseditor[data-theme=dark] .property.svgpath-assets-property {
   padding-left: 0px !important;
   padding-right: 0px !important;
+}
+.csseditor[data-theme=dark] .alignment-item {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr) 10px repeat(2, 1fr);
+  grid-column-gap: 2px;
+  padding: 5px 0px;
+  height: 40px;
+}
+.csseditor[data-theme=dark] .alignment-item .split {
+  border-right: 1px solid #1a1a1a;
+  width: 1px;
+  margin-left: 5px;
+}
+.csseditor[data-theme=dark] .alignment-item button {
+  width: 16px;
+  height: 16px;
+  background-color: transparent;
+  background-image: none;
+  border: 0px;
+  box-shadow: none;
+}
+.csseditor[data-theme=dark] .alignment-item button[checked=checked] .icon {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.csseditor[data-theme=dark] .alignment-item button[data-no-title=true] .title {
+  display: none;
+}
+.csseditor[data-theme=dark] .alignment-item button.open .title {
+  color: white;
+}
+.csseditor[data-theme=dark] .alignment-item button.open .open-right-panel svg path {
+  fill: #609de2;
+}
+.csseditor[data-theme=dark] .alignment-item .title {
+  font-size: 9px;
+  color: #999;
+}
+.csseditor[data-theme=dark] .alignment-item .icon {
+  margin: 0 auto;
+  width: 24px;
+  height: 24px;
+}
+.csseditor[data-theme=dark] .alignment-item .icon svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor[data-theme=dark] .alignment-item .icon.width {
+  background-image: linear-gradient(to right, #737373, #737373), linear-gradient(to right, #ccc, #ccc);
+  background-size: 20px 6px, 20px 6px;
+  background-position: 2px 6px, 2px 16px;
+  background-repeat: no-repeat;
+}
+.csseditor[data-theme=dark] .alignment-item .icon.height {
+  background-image: linear-gradient(to right, #737373, #737373), linear-gradient(to right, #ccc, #ccc);
+  background-size: 6px 20px, 6px 20px;
+  background-position: 4px 2px, 14px 2px;
+  background-repeat: no-repeat;
+}
+.csseditor[data-theme=dark] .alignment-item .icon.left {
+  background-image: linear-gradient(to right, #737373, #737373), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
+  background-repeat: no-repeat;
+  background-size: 20px 6px, 16px 6px, 2px 24px;
+  background-position: 6px 6px, 6px 16px, 2px 3px;
+}
+.csseditor[data-theme=dark] .alignment-item .icon.right {
+  background-image: linear-gradient(to right, #737373, #737373), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
+  background-repeat: no-repeat;
+  background-size: 18px 6px, 14px 6px, 2px 24px;
+  background-position: 2px 5px, 6px 15px, 22px 3px;
+}
+.csseditor[data-theme=dark] .alignment-item .icon.center {
+  background-image: linear-gradient(to right, #737373, #737373), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
+  background-repeat: no-repeat;
+  background-size: 20px 6px, 16px 6px, 2px 24px;
+  background-position: 5px 6px, 7px 16px, 14px 3px;
+}
+.csseditor[data-theme=dark] .alignment-item .icon.middle {
+  background-image: linear-gradient(to right, #737373, #737373), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
+  background-repeat: no-repeat;
+  background-size: 8px 20px, 8px 14px, 24px 2px;
+  background-position: 3px 3px, 13px 6px, 0px 12px;
+}
+.csseditor[data-theme=dark] .alignment-item .icon.top {
+  background-image: linear-gradient(to right, #737373, #737373), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
+  background-repeat: no-repeat;
+  background-size: 8px 18px, 8px 12px, 24px 2px;
+  background-position: 4px 8px, 14px 8px, 0px 4px;
+}
+.csseditor[data-theme=dark] .alignment-item .icon.bottom {
+  background-image: linear-gradient(to right, #737373, #737373), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
+  background-repeat: no-repeat;
+  background-size: 8px 18px, 8px 12px, 24px 2px;
+  background-position: 4px 2px, 14px 8px, 0px 22px;
+}
+.csseditor[data-theme=dark] .alignment-item .icon.vertical {
+  background-image: linear-gradient(to right, #737373, #737373), linear-gradient(to right, #555555, #555555), linear-gradient(to right, #e0e0e0, #e0e0e0);
+  background-repeat: no-repeat;
+  background-size: 24px 2px, 18px 10px, 24px 2px;
+  background-position: 3px 6px, 6px 11px, 3px 24px;
+}
+.csseditor[data-theme=dark] .alignment-item .icon.horizontal {
+  background-image: linear-gradient(to right, #737373, #737373), linear-gradient(to right, #555555, #555555), linear-gradient(to right, #e0e0e0, #e0e0e0);
+  background-repeat: no-repeat;
+  background-size: 2px 24px, 10px 18px, 2px 24px;
+  background-position: 6px 3px, 11px 6px, 24px 3px;
 }
 .csseditor[data-theme=dark] .cubic-bezier-editor {
   width: 228px;
@@ -8154,10 +8263,14 @@ html, body {
 .csseditor[data-theme=light] .external-tool-menu .items > * {
   margin-right: 10px;
 }
+.csseditor[data-theme=light] .tool-menu .items .menu-item[data-no-title=true] .title,
+.csseditor[data-theme=light] .external-tool-menu .items .menu-item[data-no-title=true] .title {
+  display: none;
+}
 .csseditor[data-theme=light] .tool-menu .items button,
 .csseditor[data-theme=light] .external-tool-menu .items button {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   background-color: transparent;
   background-image: none;
   border: 0px;
@@ -8207,56 +8320,56 @@ html, body {
 }
 .csseditor[data-theme=light] .tool-menu .items .icon.left,
 .csseditor[data-theme=light] .external-tool-menu .items .icon.left {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, #888888, #888888);
+  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
   background-repeat: no-repeat;
   background-size: 20px 6px, 16px 6px, 2px 24px;
   background-position: 6px 6px, 6px 16px, 2px 3px;
 }
 .csseditor[data-theme=light] .tool-menu .items .icon.right,
 .csseditor[data-theme=light] .external-tool-menu .items .icon.right {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, #888888, #888888);
+  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
   background-repeat: no-repeat;
   background-size: 18px 6px, 14px 6px, 2px 24px;
   background-position: 2px 5px, 6px 15px, 22px 3px;
 }
 .csseditor[data-theme=light] .tool-menu .items .icon.center,
 .csseditor[data-theme=light] .external-tool-menu .items .icon.center {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, #888888, #888888);
+  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
   background-repeat: no-repeat;
   background-size: 20px 6px, 16px 6px, 2px 24px;
   background-position: 5px 6px, 7px 16px, 14px 3px;
 }
 .csseditor[data-theme=light] .tool-menu .items .icon.middle,
 .csseditor[data-theme=light] .external-tool-menu .items .icon.middle {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, #888888, #888888);
+  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
   background-repeat: no-repeat;
   background-size: 8px 20px, 8px 14px, 24px 2px;
   background-position: 3px 3px, 13px 6px, 0px 12px;
 }
 .csseditor[data-theme=light] .tool-menu .items .icon.top,
 .csseditor[data-theme=light] .external-tool-menu .items .icon.top {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, #888888, #888888);
+  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
   background-repeat: no-repeat;
   background-size: 8px 18px, 8px 12px, 24px 2px;
   background-position: 4px 8px, 14px 8px, 0px 4px;
 }
 .csseditor[data-theme=light] .tool-menu .items .icon.bottom,
 .csseditor[data-theme=light] .external-tool-menu .items .icon.bottom {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #ccc, #ccc), linear-gradient(to right, #888888, #888888);
+  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
   background-repeat: no-repeat;
   background-size: 8px 18px, 8px 12px, 24px 2px;
   background-position: 4px 2px, 14px 8px, 0px 22px;
 }
 .csseditor[data-theme=light] .tool-menu .items .icon.vertical,
 .csseditor[data-theme=light] .external-tool-menu .items .icon.vertical {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #888888, #888888), linear-gradient(to right, #ccc, #ccc);
+  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #555555, #555555), linear-gradient(to right, #e0e0e0, #e0e0e0);
   background-repeat: no-repeat;
   background-size: 24px 2px, 18px 10px, 24px 2px;
   background-position: 3px 6px, 6px 11px, 3px 24px;
 }
 .csseditor[data-theme=light] .tool-menu .items .icon.horizontal,
 .csseditor[data-theme=light] .external-tool-menu .items .icon.horizontal {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #888888, #888888), linear-gradient(to right, #ccc, #ccc);
+  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #555555, #555555), linear-gradient(to right, #e0e0e0, #e0e0e0);
   background-repeat: no-repeat;
   background-size: 2px 24px, 10px 18px, 2px 24px;
   background-position: 6px 3px, 11px 6px, 24px 3px;
@@ -10243,6 +10356,111 @@ html, body {
 .csseditor[data-theme=light] .property.svgpath-assets-property {
   padding-left: 0px !important;
   padding-right: 0px !important;
+}
+.csseditor[data-theme=light] .alignment-item {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr) 10px repeat(2, 1fr);
+  grid-column-gap: 2px;
+  padding: 5px 0px;
+  height: 40px;
+}
+.csseditor[data-theme=light] .alignment-item .split {
+  border-right: 1px solid #e7e7e7;
+  width: 1px;
+  margin-left: 5px;
+}
+.csseditor[data-theme=light] .alignment-item button {
+  width: 16px;
+  height: 16px;
+  background-color: transparent;
+  background-image: none;
+  border: 0px;
+  box-shadow: none;
+}
+.csseditor[data-theme=light] .alignment-item button[checked=checked] .icon {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.csseditor[data-theme=light] .alignment-item button[data-no-title=true] .title {
+  display: none;
+}
+.csseditor[data-theme=light] .alignment-item button.open .title {
+  color: white;
+}
+.csseditor[data-theme=light] .alignment-item button.open .open-right-panel svg path {
+  fill: #609de2;
+}
+.csseditor[data-theme=light] .alignment-item .title {
+  font-size: 9px;
+  color: #999;
+}
+.csseditor[data-theme=light] .alignment-item .icon {
+  margin: 0 auto;
+  width: 24px;
+  height: 24px;
+}
+.csseditor[data-theme=light] .alignment-item .icon svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor[data-theme=light] .alignment-item .icon.width {
+  background-image: linear-gradient(to right, #a2a2a2, #a2a2a2), linear-gradient(to right, #ccc, #ccc);
+  background-size: 20px 6px, 20px 6px;
+  background-position: 2px 6px, 2px 16px;
+  background-repeat: no-repeat;
+}
+.csseditor[data-theme=light] .alignment-item .icon.height {
+  background-image: linear-gradient(to right, #a2a2a2, #a2a2a2), linear-gradient(to right, #ccc, #ccc);
+  background-size: 6px 20px, 6px 20px;
+  background-position: 4px 2px, 14px 2px;
+  background-repeat: no-repeat;
+}
+.csseditor[data-theme=light] .alignment-item .icon.left {
+  background-image: linear-gradient(to right, #a2a2a2, #a2a2a2), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
+  background-repeat: no-repeat;
+  background-size: 20px 6px, 16px 6px, 2px 24px;
+  background-position: 6px 6px, 6px 16px, 2px 3px;
+}
+.csseditor[data-theme=light] .alignment-item .icon.right {
+  background-image: linear-gradient(to right, #a2a2a2, #a2a2a2), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
+  background-repeat: no-repeat;
+  background-size: 18px 6px, 14px 6px, 2px 24px;
+  background-position: 2px 5px, 6px 15px, 22px 3px;
+}
+.csseditor[data-theme=light] .alignment-item .icon.center {
+  background-image: linear-gradient(to right, #a2a2a2, #a2a2a2), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
+  background-repeat: no-repeat;
+  background-size: 20px 6px, 16px 6px, 2px 24px;
+  background-position: 5px 6px, 7px 16px, 14px 3px;
+}
+.csseditor[data-theme=light] .alignment-item .icon.middle {
+  background-image: linear-gradient(to right, #a2a2a2, #a2a2a2), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
+  background-repeat: no-repeat;
+  background-size: 8px 20px, 8px 14px, 24px 2px;
+  background-position: 3px 3px, 13px 6px, 0px 12px;
+}
+.csseditor[data-theme=light] .alignment-item .icon.top {
+  background-image: linear-gradient(to right, #a2a2a2, #a2a2a2), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
+  background-repeat: no-repeat;
+  background-size: 8px 18px, 8px 12px, 24px 2px;
+  background-position: 4px 8px, 14px 8px, 0px 4px;
+}
+.csseditor[data-theme=light] .alignment-item .icon.bottom {
+  background-image: linear-gradient(to right, #a2a2a2, #a2a2a2), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
+  background-repeat: no-repeat;
+  background-size: 8px 18px, 8px 12px, 24px 2px;
+  background-position: 4px 2px, 14px 8px, 0px 22px;
+}
+.csseditor[data-theme=light] .alignment-item .icon.vertical {
+  background-image: linear-gradient(to right, #a2a2a2, #a2a2a2), linear-gradient(to right, #555555, #555555), linear-gradient(to right, #e0e0e0, #e0e0e0);
+  background-repeat: no-repeat;
+  background-size: 24px 2px, 18px 10px, 24px 2px;
+  background-position: 3px 6px, 6px 11px, 3px 24px;
+}
+.csseditor[data-theme=light] .alignment-item .icon.horizontal {
+  background-image: linear-gradient(to right, #a2a2a2, #a2a2a2), linear-gradient(to right, #555555, #555555), linear-gradient(to right, #e0e0e0, #e0e0e0);
+  background-repeat: no-repeat;
+  background-size: 2px 24px, 10px 18px, 2px 24px;
+  background-position: 6px 3px, 11px 6px, 24px 3px;
 }
 .csseditor[data-theme=light] .cubic-bezier-editor {
   width: 228px;

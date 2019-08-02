@@ -9,6 +9,10 @@ export default class BottomAlign extends MenuItem {
     return "Bottom";
   }
 
+  isHideTitle () {
+    return true; 
+  }  
+
   clickButton(e) {
     Sort.bottom();
     this.emit('refreshSelectionStyleView')

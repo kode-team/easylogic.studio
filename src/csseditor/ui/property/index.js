@@ -43,8 +43,10 @@ import SVGItemProperty from "./SVGItemProperty";
 import TextClipProperty from "./TextClipProperty";
 import SVGFilterAssetsProperty from "./SVGFilterAssetsProperty";
 import SVGPathAssetsProperty from "./SVGPathAssetsProperty";
+import AlignmentProperty from "./AlignmentProperty";
 
 export default {
+  AlignmentProperty,
   SVGPathAssetsProperty,
   SVGFilterAssetsProperty,
   TextClipProperty,

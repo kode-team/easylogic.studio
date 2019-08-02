@@ -9,6 +9,10 @@ export default class MiddleAlign extends MenuItem {
     return "middle";
   }
 
+  isHideTitle () {
+    return true; 
+  }
+
   clickButton(e) {
     Sort.middle();
     this.emit('refreshSelectionStyleView')

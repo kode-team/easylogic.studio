@@ -9,6 +9,9 @@ export default class SameHeight extends MenuItem {
     return "height";
   }
 
+  isHideTitle () {
+    return true; 
+  }
   clickButton(e) {
     Sort.sameHeight();
     this.emit('refreshSelectionStyleView')

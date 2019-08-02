@@ -8,6 +8,10 @@ export default class CenterAlign extends MenuItem {
   getTitle() {
     return "Center";
   }
+ 
+  isHideTitle () {
+    return true; 
+  } 
 
   clickButton(e) {
     Sort.center();

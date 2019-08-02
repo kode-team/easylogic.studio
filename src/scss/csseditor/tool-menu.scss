@@ -1,28 +1,9 @@
-$align-center-color: #888888;
-$align-main-color: rgb(21, 118, 228);
-$align-sub-color: #ccc;
-
-@mixin background-image-generator () {
-    background-image: linear-gradient(to right, $align-main-color, $align-main-color),
-                        linear-gradient(to right, $align-sub-color, $align-sub-color),
-                        linear-gradient(to right, $align-center-color, $align-center-color);
-    background-repeat: no-repeat;
-}
-
-@mixin background-image-generator-2 () {
-    background-image: linear-gradient(to right, $align-main-color, $align-main-color),
-                        linear-gradient(to right, $align-center-color, $align-center-color),
-                        linear-gradient(to right, $align-sub-color, $align-sub-color);                        
-    background-repeat: no-repeat;
-}
-
-
 .logo {
   padding: 10px 10px;
   width: 260px;
 
 
-  .text {
+  .text { 
     position: absolute;
     left: 10px;
     top: 0px;
@@ -104,9 +85,18 @@ $align-sub-color: #ccc;
       margin-right: 10px;
     }
 
+    .menu-item {
+      &[data-no-title='true'] {
+        .title {
+          display: none;
+
+        }
+      }
+    }
+
     button {
-      width: 40px;
-      height: 40px;
+      width: 30px;
+      height: 30px;
       background-color: transparent;
       background-image: none;
       border:0px;

@@ -9,6 +9,10 @@ export default class TopAlign extends MenuItem {
     return "Top";
   }
 
+  isHideTitle () {
+    return true; 
+  }  
+
   clickButton(e) {
     Sort.top();
     this.emit('refreshSelectionStyleView')
