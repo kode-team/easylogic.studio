@@ -30,7 +30,7 @@ export default class CSSEditor extends UIElement {
   }
 
   templateForEditor() {
-    return `
+    return /*html*/`
       <div class="layout-main" ref="$layoutMain">
         <div class="layout-header">
             <LogoView />
@@ -38,16 +38,17 @@ export default class CSSEditor extends UIElement {
             <ExternalToolMenu />
         </div>
         <div class="layout-middle" ref='$middle'>
+          <div class="layout-body">
+            <CanvasView />
+            <DrawingView />            
+          </div>                           
           <div class='layout-left'>
             <ObjectList />
           </div>
           <div class="layout-right">
             <Inspector />
           </div>
-          <div class="layout-body">
-            <CanvasView />
-            <DrawingView />            
-          </div>                   
+
           <div class='layout-tools'>
             <button ref='$toggleRight'>${icon.dahaze}</button>
           </div>

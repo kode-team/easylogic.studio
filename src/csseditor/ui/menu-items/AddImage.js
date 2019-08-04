@@ -29,4 +29,8 @@ export default class AddImage extends MenuItem {
       changeEvent: 'changeImageSelectEditor'
     })
   }
+
+  [EVENT('addImage')] () {
+    this.clickButton();
+  }
 }

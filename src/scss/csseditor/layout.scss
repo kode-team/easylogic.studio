@@ -162,8 +162,8 @@
           height: 200px;
         }
   
-        &:nth-child(2) {
-          top: 200px;
+        &:nth-child(1) {
+          top: 0px;
           height: 200px;
         }      
   
@@ -173,7 +173,7 @@
         }
   
         &:last-child {
-          top: 400px;
+          top: 200px;
           bottom : 0px;
         }
       }

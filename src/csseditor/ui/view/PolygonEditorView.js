@@ -381,11 +381,12 @@ export default class PolygonEditorView extends UIElement {
         if (this.state.$target.is(this.refs.$view) && editor.config.get('bodyEvent').altKey)  {
             // 에디팅  종료 
             this.trigger('hidePolygonEditor')
+            this.changeMode('modify');            
             return ; 
         }
 
         if (this.isMode('segment-move')) {
-
+            this.changeMode('modify');
         } else if (this.isMode('star')) {
 
             this.polygonGenerator.moveEndStar(dx, dy);

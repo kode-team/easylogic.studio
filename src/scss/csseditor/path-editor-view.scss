@@ -95,7 +95,7 @@
 
                 &:hover {
                     cursor: copy;
-                    stroke: $selected-color;
+                    stroke: darken($selected-color, 20%);
                 }
             }
 

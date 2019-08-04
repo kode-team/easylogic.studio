@@ -13,11 +13,8 @@ export default class ObjectItems extends UIElement {
     }
   }
   template() {
-    return `
+    return /*html*/`
       <div class='object-items'>
-        <div>
-          <ProjectProperty />
-        </div> 
         <div>
           <ArtBoardProperty />          
         </div>

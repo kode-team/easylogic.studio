@@ -170,14 +170,14 @@ export default class CanvasView extends UIElement {
 
   getAddCommand (key) {
     switch(key) {
-    case '1': return 'addRect';
-    case '2': return 'addCircle';
-    case '3': return 'addText';
+    case '1': return 'add.rect';
+    case '2': return 'add.circle';
+    case '3': return 'add.text';
     case '4': return 'addImage';
-    case '5': return 'addCube';
-    case '6': return 'addPath';
-    case '7': return 'addPolygon';
-    case '8': return 'addStar';
+    case '5': return 'add.cube';
+    case '6': return 'add.path';
+    case '7': return 'add.polygon';
+    case '8': return 'add.star';
     }
   }
 

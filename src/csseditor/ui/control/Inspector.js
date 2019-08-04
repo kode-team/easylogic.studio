@@ -5,7 +5,7 @@ import property from "../property/index";
 
 export default class Inspector extends UIElement {
   template() {
-    return `
+    return /*html*/`
       <div class="feature-control inspector">
         <div>
           <div class="tab number-tab" data-selected-value="1" ref="$tab">

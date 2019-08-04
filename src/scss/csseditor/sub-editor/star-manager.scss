@@ -8,6 +8,8 @@
     color: $font-color;
     background-color: $background-color;  
     padding: 5px 10px;
+    box-sizing: border-box;
+    height: 100%;
   
   
     > label {
@@ -23,5 +25,20 @@
       display: inline-block;
       width: 150px;
     }  
+
+
+    > * {
+      vertical-align: middle;
+    }
+
+    button {
+        font-size: 13px;
+        margin-left: 20px;
+        text-decoration: underline;
+        width: auto;
+        height: auto;
+        vertical-align: middle;
+        white-space: nowrap;
+    }
   }
   

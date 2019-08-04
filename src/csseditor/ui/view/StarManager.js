@@ -26,7 +26,10 @@ export default class StarManager extends UIElement {
                 <button type="button" data-type='plus'>${icon.add}</button>
                 <input type="number" min="0" max="10" step="0.1" ref='$radius'/>
                 <button type="button" data-type='minus'>${icon.remove2}</button>
-            </span>            
+            </span>      
+            <button type="button">Keydown ESC or Enter key to close editing</button>   
+
+            
         </div>
       </div>    
     `;
@@ -81,7 +84,7 @@ export default class StarManager extends UIElement {
       obj.changeEvent = obj.changeEvent || 'changeStarManager';
       this.setState(obj, false)
       this.refresh();
-      this.$el.show('inline-block');
+      this.$el.show();
   }
 
   [EVENT('hideStarManager')] () {

@@ -16,6 +16,7 @@ export default class PolygonManager extends UIElement {
             <label>Polygon Mode</label>
             <label><input type='radio' name='polygon-mode' value='draw' /> draw</label>            
             <label><input type='radio' name='polygon-mode' value='modify' /> modify</label>
+            <button type="button">Keydown ESC or Enter key to close editing</button>            
         </div>
       </div>    
     `;
@@ -54,7 +55,7 @@ export default class PolygonManager extends UIElement {
       obj.changeEvent = obj.changeEvent || 'changePolygonManager';
       this.setState(obj, false)
       this.refresh();
-      this.$el.show('inline-block');
+      this.$el.show();
   }
 
   [EVENT('hidePolygonManager')] () {

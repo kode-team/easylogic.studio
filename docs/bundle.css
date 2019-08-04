@@ -1529,8 +1529,8 @@ html, body {
   top: 0px;
   height: 200px;
 }
-.csseditor[data-theme=dark] .feature-control .layer-tab .object-items > div:nth-child(2) {
-  top: 200px;
+.csseditor[data-theme=dark] .feature-control .layer-tab .object-items > div:nth-child(1) {
+  top: 0px;
   height: 200px;
 }
 .csseditor[data-theme=dark] .feature-control .layer-tab .object-items > div:not(:first-child) {
@@ -1538,7 +1538,7 @@ html, body {
   box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .feature-control .layer-tab .object-items > div:last-child {
-  top: 400px;
+  top: 200px;
   bottom: 0px;
 }
 .csseditor[data-theme=dark] .feature-control .draw-items {
@@ -2075,7 +2075,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .logo .extra-text {
   position: absolute;
-  left: 28px;
+  left: 50px;
   top: 0px;
   right: 0px;
   bottom: 0px;
@@ -2336,8 +2336,7 @@ html, body {
   left: 0px;
   top: -1px;
   right: 0px;
-  height: 50px;
-  text-align: center;
+  height: 35px;
   pointer-events: none;
 }
 .csseditor[data-theme=dark] .page-subeditor .path-manager {
@@ -2348,6 +2347,20 @@ html, body {
   color: #ececec;
   background-color: #3a3a3a;
   padding: 5px 10px;
+  box-sizing: border-box;
+  height: 100%;
+}
+.csseditor[data-theme=dark] .page-subeditor .path-manager > * {
+  vertical-align: middle;
+}
+.csseditor[data-theme=dark] .page-subeditor .path-manager button {
+  font-size: 13px;
+  margin-left: 20px;
+  text-decoration: underline;
+  width: auto;
+  height: auto;
+  vertical-align: middle;
+  white-space: nowrap;
 }
 .csseditor[data-theme=dark] .page-subeditor .polygon-manager {
   display: none;
@@ -2358,6 +2371,18 @@ html, body {
   background-color: #3a3a3a;
   padding: 5px 10px;
 }
+.csseditor[data-theme=dark] .page-subeditor .polygon-manager > * {
+  vertical-align: middle;
+}
+.csseditor[data-theme=dark] .page-subeditor .polygon-manager button {
+  font-size: 13px;
+  margin-left: 20px;
+  text-decoration: underline;
+  width: auto;
+  height: auto;
+  vertical-align: middle;
+  white-space: nowrap;
+}
 .csseditor[data-theme=dark] .page-subeditor .star-manager {
   display: none;
   pointer-events: all;
@@ -2367,6 +2392,8 @@ html, body {
   color: #ececec;
   background-color: #3a3a3a;
   padding: 5px 10px;
+  box-sizing: border-box;
+  height: 100%;
 }
 .csseditor[data-theme=dark] .page-subeditor .star-manager > label {
   vertical-align: middle;
@@ -2378,6 +2405,18 @@ html, body {
 .csseditor[data-theme=dark] .page-subeditor .star-manager > .select {
   display: inline-block;
   width: 150px;
+}
+.csseditor[data-theme=dark] .page-subeditor .star-manager > * {
+  vertical-align: middle;
+}
+.csseditor[data-theme=dark] .page-subeditor .star-manager button {
+  font-size: 13px;
+  margin-left: 20px;
+  text-decoration: underline;
+  width: auto;
+  height: auto;
+  vertical-align: middle;
+  white-space: nowrap;
 }
 .csseditor[data-theme=dark] .page-canvas {
   position: absolute;
@@ -4541,7 +4580,7 @@ html, body {
 .csseditor[data-theme=dark] .range-editor.has-label label {
   text-align: left;
   vertical-align: middle;
-  padding: 2px 4px 2px 0px;
+  padding: 2px 0px 2px 0px;
   box-sizing: border-box;
   font-size: 11px;
 }
@@ -4645,7 +4684,7 @@ html, body {
 .csseditor[data-theme=dark] .number-range-editor.has-label label {
   text-align: left;
   vertical-align: middle;
-  padding: 2px 4px 2px 0px;
+  padding: 2px 0px 2px 0px;
   box-sizing: border-box;
   font-size: 12px;
 }
@@ -7393,7 +7432,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .path-editor-view svg path.split-path:hover {
   cursor: copy;
-  stroke: #3e8ec6;
+  stroke: #24577a;
 }
 .csseditor[data-theme=dark] .path-editor-view svg path.snap-path {
   fill: transparent;
@@ -7455,7 +7494,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .polygon-editor-view svg path.object, .csseditor[data-theme=dark] .polygon-editor-view svg polygon.object {
   fill: transparent;
-  stroke: rgba(26, 26, 26, 0.8);
+  stroke: black;
   stroke-width: 1;
 }
 .csseditor[data-theme=dark] .polygon-editor-view svg path.split-path, .csseditor[data-theme=dark] .polygon-editor-view svg polygon.split-path {
@@ -7466,7 +7505,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .polygon-editor-view svg path.split-path:hover, .csseditor[data-theme=dark] .polygon-editor-view svg polygon.split-path:hover {
   cursor: copy;
-  stroke: #3e8ec6;
+  stroke: #24577a;
 }
 .csseditor[data-theme=dark] .polygon-editor-view svg path.snap-path, .csseditor[data-theme=dark] .polygon-editor-view svg polygon.snap-path {
   fill: transparent;
@@ -7658,8 +7697,8 @@ html, body {
   top: 0px;
   height: 200px;
 }
-.csseditor[data-theme=light] .feature-control .layer-tab .object-items > div:nth-child(2) {
-  top: 200px;
+.csseditor[data-theme=light] .feature-control .layer-tab .object-items > div:nth-child(1) {
+  top: 0px;
   height: 200px;
 }
 .csseditor[data-theme=light] .feature-control .layer-tab .object-items > div:not(:first-child) {
@@ -7667,7 +7706,7 @@ html, body {
   box-sizing: border-box;
 }
 .csseditor[data-theme=light] .feature-control .layer-tab .object-items > div:last-child {
-  top: 400px;
+  top: 200px;
   bottom: 0px;
 }
 .csseditor[data-theme=light] .feature-control .draw-items {
@@ -8204,7 +8243,7 @@ html, body {
 }
 .csseditor[data-theme=light] .logo .extra-text {
   position: absolute;
-  left: 28px;
+  left: 50px;
   top: 0px;
   right: 0px;
   bottom: 0px;
@@ -8465,8 +8504,7 @@ html, body {
   left: 0px;
   top: -1px;
   right: 0px;
-  height: 50px;
-  text-align: center;
+  height: 35px;
   pointer-events: none;
 }
 .csseditor[data-theme=light] .page-subeditor .path-manager {
@@ -8477,6 +8515,20 @@ html, body {
   color: #666666;
   background-color: white;
   padding: 5px 10px;
+  box-sizing: border-box;
+  height: 100%;
+}
+.csseditor[data-theme=light] .page-subeditor .path-manager > * {
+  vertical-align: middle;
+}
+.csseditor[data-theme=light] .page-subeditor .path-manager button {
+  font-size: 13px;
+  margin-left: 20px;
+  text-decoration: underline;
+  width: auto;
+  height: auto;
+  vertical-align: middle;
+  white-space: nowrap;
 }
 .csseditor[data-theme=light] .page-subeditor .polygon-manager {
   display: none;
@@ -8487,6 +8539,18 @@ html, body {
   background-color: white;
   padding: 5px 10px;
 }
+.csseditor[data-theme=light] .page-subeditor .polygon-manager > * {
+  vertical-align: middle;
+}
+.csseditor[data-theme=light] .page-subeditor .polygon-manager button {
+  font-size: 13px;
+  margin-left: 20px;
+  text-decoration: underline;
+  width: auto;
+  height: auto;
+  vertical-align: middle;
+  white-space: nowrap;
+}
 .csseditor[data-theme=light] .page-subeditor .star-manager {
   display: none;
   pointer-events: all;
@@ -8496,6 +8560,8 @@ html, body {
   color: #666666;
   background-color: white;
   padding: 5px 10px;
+  box-sizing: border-box;
+  height: 100%;
 }
 .csseditor[data-theme=light] .page-subeditor .star-manager > label {
   vertical-align: middle;
@@ -8507,6 +8573,18 @@ html, body {
 .csseditor[data-theme=light] .page-subeditor .star-manager > .select {
   display: inline-block;
   width: 150px;
+}
+.csseditor[data-theme=light] .page-subeditor .star-manager > * {
+  vertical-align: middle;
+}
+.csseditor[data-theme=light] .page-subeditor .star-manager button {
+  font-size: 13px;
+  margin-left: 20px;
+  text-decoration: underline;
+  width: auto;
+  height: auto;
+  vertical-align: middle;
+  white-space: nowrap;
 }
 .csseditor[data-theme=light] .page-canvas {
   position: absolute;
@@ -10670,7 +10748,7 @@ html, body {
 .csseditor[data-theme=light] .range-editor.has-label label {
   text-align: left;
   vertical-align: middle;
-  padding: 2px 4px 2px 0px;
+  padding: 2px 0px 2px 0px;
   box-sizing: border-box;
   font-size: 11px;
 }
@@ -10774,7 +10852,7 @@ html, body {
 .csseditor[data-theme=light] .number-range-editor.has-label label {
   text-align: left;
   vertical-align: middle;
-  padding: 2px 4px 2px 0px;
+  padding: 2px 0px 2px 0px;
   box-sizing: border-box;
   font-size: 12px;
 }
@@ -13522,7 +13600,7 @@ html, body {
 }
 .csseditor[data-theme=light] .path-editor-view svg path.split-path:hover {
   cursor: copy;
-  stroke: #3e8ec6;
+  stroke: #24577a;
 }
 .csseditor[data-theme=light] .path-editor-view svg path.snap-path {
   fill: transparent;
@@ -13584,7 +13662,7 @@ html, body {
 }
 .csseditor[data-theme=light] .polygon-editor-view svg path.object, .csseditor[data-theme=light] .polygon-editor-view svg polygon.object {
   fill: transparent;
-  stroke: rgba(231, 231, 231, 0.8);
+  stroke: #b4b4b4;
   stroke-width: 1;
 }
 .csseditor[data-theme=light] .polygon-editor-view svg path.split-path, .csseditor[data-theme=light] .polygon-editor-view svg polygon.split-path {
@@ -13595,7 +13673,7 @@ html, body {
 }
 .csseditor[data-theme=light] .polygon-editor-view svg path.split-path:hover, .csseditor[data-theme=light] .polygon-editor-view svg polygon.split-path:hover {
   cursor: copy;
-  stroke: #3e8ec6;
+  stroke: #24577a;
 }
 .csseditor[data-theme=light] .polygon-editor-view svg path.snap-path, .csseditor[data-theme=light] .polygon-editor-view svg polygon.snap-path {
   fill: transparent;

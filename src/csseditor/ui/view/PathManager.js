@@ -14,8 +14,9 @@ export default class PathManager extends UIElement {
       <div class='path-manager'>
         <div class='text'>
             <label>Path Mode</label>
-            <label><input type='radio' name='path-mode' value='move' /> move</label>
+            <label><input type='radio' name='path-mode' value='modify' /> modify</label>
             <label><input type='radio' name='path-mode' value='draw' /> draw</label>
+            <button type="button">Keydown ESC or Enter key to close editing</button>
         </div>
       </div>    
     `;
@@ -23,7 +24,7 @@ export default class PathManager extends UIElement {
 
   refresh() {
     var $mode = this.$el.$(`[value=${this.state.mode}]`)
-    
+
     if ($mode) {
       $mode.checked(true);
     }
@@ -52,7 +53,7 @@ export default class PathManager extends UIElement {
       obj.changeEvent = obj.changeEvent || 'changePathManager';
       this.setState(obj, false)
       this.refresh();
-      this.$el.show('inline-block');
+      this.$el.show();
   }
 
   [EVENT('hidePathManager')] () {

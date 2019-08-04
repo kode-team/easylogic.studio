@@ -79,7 +79,7 @@
             
             &.object {
                 fill: transparent;
-                stroke: rgba($border-color, 0.8);
+                stroke: darken($border-color, 20%);
                 stroke-width: 1; 
             }       
             
@@ -91,7 +91,7 @@
 
                 &:hover {
                     cursor: copy;
-                    stroke: $selected-color;
+                    stroke: darken($selected-color, 20%);
                 }
             }
 

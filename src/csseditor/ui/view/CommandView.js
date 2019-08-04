@@ -131,7 +131,6 @@ export default class CommandView extends UIElement {
 
     }  
 
-
     [COMMAND('add.cube')] (rect = {}) {
 
         this.trigger('add.layer', new CubeLayer({

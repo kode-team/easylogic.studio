@@ -1,5 +1,6 @@
 import PathParser from "./PathParser";
 import PathStringManager from "./PathStringManager";
+import { isArray } from "../../util/functions/func";
 
 
 const splitReg = /[\b\t \,]/g;
@@ -20,7 +21,13 @@ export default class PolygonParser extends PathParser {
 
     parse () {
 
-        var arr = this.points.trim().split(splitReg);
+        var points = this.points;
+
+        if (isArray(points)) {
+            points = points.join(' ');
+        }
+
+        var arr = points.trim().split(splitReg);
 
         var segments = [] 
 

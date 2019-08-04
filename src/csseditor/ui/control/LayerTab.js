@@ -1,32 +1,37 @@
 import UIElement from "../../../util/UIElement";
 import ObjectItems from "./ObjectItems";
 import { CLICK } from "../../../util/Event";
+import ProjectProperty from "../property/ProjectProperty";
 
 
 export default class LayerTab extends UIElement {
   components() {
     return {
-      ObjectItems
+      ObjectItems,
+      ProjectProperty
     }
   }
   template() {
-    return `
+    return /*html*/`
       <div class='layer-tab'>
-        <div class="tab number-tab" data-selected-value="1" ref="$tab">
+        <div class="tab number-tab" data-selected-value="2" ref="$tab">
           <div class="tab-header" ref="$header">
             <div class="tab-item" data-value="1">
+              <label>Projects</label>
+            </div>          
+            <div class="tab-item" data-value="2">
               <label>Layers</label>
             </div>
-            <div class="tab-item" data-value="2">
+            <!--div class="tab-item" data-value="2">
               <label>LIBRARIES</label>
-            </div>
+            </div-->
           </div>
           <div class="tab-body" ref="$body">
             <div class="tab-content" data-value="1">
-              <ObjectItems />
+              <ProjectProperty />
             </div>
             <div class="tab-content" data-value="2">
-
+              <ObjectItems />
             </div>
           </div>
         </div>

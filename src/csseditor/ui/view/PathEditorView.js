@@ -126,6 +126,10 @@ export default class PathEditorView extends UIElement {
         this.emit('changePathManager', this.state.mode );
     }
 
+    [EVENT('changePathManager')] (mode) {
+        this.setState({ mode }, false);
+    }
+
     isMode (mode) {
         return this.state.mode === mode; 
     }
@@ -366,12 +370,15 @@ export default class PathEditorView extends UIElement {
     end (dx, dy) {
 
         if (this.state.$target.is(this.refs.$view) && editor.config.get('bodyEvent').altKey)  {
+            this.changeMode('modify');
             // 에디팅  종료 
             this.trigger('hidePathEditor')
             return ; 
         }
 
         if (this.isMode('segment-move')) {
+
+            this.changeMode('modify');            
 
         } else if (this.isMode('draw')) {            
 

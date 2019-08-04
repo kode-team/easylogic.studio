@@ -6,4 +6,18 @@
     color: $font-color;
     background-color: $background-color;  
     padding: 5px 10px;
+
+    > * {
+        vertical-align: middle;
+    }
+
+    button {
+        font-size: 13px;
+        margin-left: 20px;
+        text-decoration: underline;
+        width: auto;
+        height: auto;
+        vertical-align: middle;
+        white-space: nowrap;
+    }    
 }
