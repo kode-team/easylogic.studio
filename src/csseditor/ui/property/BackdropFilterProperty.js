@@ -83,12 +83,11 @@ export default class BackdropFilterProperty extends BaseProperty {
     var arr = [] 
 
     if (current) {
-      arr = current.svg
-        .filter(it => it.type === 'filter')
+      arr = current.svgfilters
         .map(it => {
           return {
-            title : `svg - #${it.name}`,
-            value: it.name
+            title : `svg - #${it.id}`,
+            value: it.id
           }
         })
     }

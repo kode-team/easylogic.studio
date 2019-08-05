@@ -1,74 +1,32 @@
 export default class AssetParser {
-    static parse(datauri) {
+    static parse(datauri, enableParselocal = false) {
         var [_, data] = datauri.split('data:')
         var [mediaType, ...content] = data.split(',')
         var [mimeType, encoding] = mediaType.split(';')
 
         content = content.join(',');
 
-        var objectInfo = AssetParser.parseInfo(mimeType, encoding, content);
-
-        return { mediaType, content, mimeType, encoding, objectInfo }
+        return { 
+            mimeType, 
+            local: enableParselocal && AssetParser.getLink(mimeType, encoding, content)
+        }
     }
 
-    static parseInfo (mimeType, encoding, content) {
+    static getLink (mimeType, encoding, content) {
+        if (encoding === 'base64') {
+            var binary = atob(content);
+            var len = binary.length;
+            var unit8Array = new Uint8Array(len);
+    
+            for(var i = 0; i < len; i++) {
+                unit8Array[i] = binary.charCodeAt(i);
+            }
+    
+            var blob = new Blob([unit8Array], {type: mimeType})
 
-        if (encoding === 'json') {
-            return JSON.parse(content);
+            return URL.createObjectURL(blob);
         }
 
-        return {}
+        return '' 
     }
-
-
-
-    static filter (datauri, mediaType) {
-        return datauri.includes(`data:${mediaType}`)
-    }    
-
-    static changeAsset (datauri, obj, generateFunc) {
-        var info = AssetParser.parse(datauri);
-
-        var newObjectInfo = {...info.objectInfo, ...obj}
-
-        return generateFunc(info, newObjectInfo);
-    }
-
-    static changeColor (datauri, obj = {} ) {
-        return AssetParser.changeAsset(datauri, obj, AssetParser.generateColor);
-    }
-
-    static changeGradient (datauri, obj = {} ) {
-        return AssetParser.changeAsset(datauri, obj, AssetParser.generateGradient);
-    }   
-    
-    static changeSVGFilter (datauri, obj = {} ) {
-        return AssetParser.changeAsset(datauri, obj, AssetParser.generateSVGFilter);        
-    }       
-
-    
-    static changeSVGImage (datauri, obj = {} ) {
-        return AssetParser.changeAsset(datauri, obj, AssetParser.generateSVGImage);        
-    }       
-
-
-    static generateJSON(type, info) {
-        return `data:${type};json,${JSON.stringify(info)}`
-    }
-
-    static generateColor (info, newObjectInfo) {
-        return AssetParser.generateJSON('color', newObjectInfo);
-    }
-
-    static generateGradient (info, newObjectInfo) {
-        return AssetParser.generateJSON('gradient', newObjectInfo);
-    }   
-    
-    static generateSVGFilter (info, newObjectInfo) {
-        return AssetParser.generateJSON('svgfilter', newObjectInfo);
-    }   
-    
-    static generateSVGImage (info, newObjectInfo) {
-        return AssetParser.generateJSON('svgimage', newObjectInfo);
-    }   
 }

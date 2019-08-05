@@ -37,20 +37,18 @@ export default class SVGFilterAssetsProperty extends BaseProperty {
   }
 
   [LOAD("$svgfilterList")]() {
-    var current = editor.selection.currentProject || { svgfilterList: [] }
+    var current = editor.selection.currentProject || { svgfilters: [] }
 
-    var svgfilters = current.svgfilterList;
+    var svgfilters = current.svgfilters;
 
     var results = svgfilters.map( (svgfilter, index) => {
 
-      var objectInfo = svgfilter.info.objectInfo;
-
-      var filters = objectInfo.filters.map(filter => {
+      var filters = svgfilter.filters.map(filter => {
         return SVGFilter.parse(filter);
       })
 
       return `
-        <div class='svgfilter-item' data-index="${index}" data-svgfilter='${objectInfo.svgfilter}'>
+        <div class='svgfilter-item' data-index="${index}">
           <div class='preview' data-index="${index}">
             <svg width="0" height="0">
               <filter id="svgfilter-${index}">
@@ -61,7 +59,7 @@ export default class SVGFilterAssetsProperty extends BaseProperty {
           </div>
           <div class='title'>
             <div>
-              <input type='text' class='id' data-key='id' value='${objectInfo.id}' placeholder="id" />
+              <input type='text' class='id' data-key='id' value='${svgfilter.id}' placeholder="id" />
             </div>
           </div>
           <div class='tools'>
@@ -140,15 +138,15 @@ export default class SVGFilterAssetsProperty extends BaseProperty {
     this.state.$item = $item; 
     this.state.$el = e.$delegateTarget.$('.svgfilter-view');
 
-    var currentProject = editor.selection.currentProject || { svgfilterList: [] } 
+    var currentProject = editor.selection.currentProject || { svgfilters: [] } 
 
-    var svgfilter = currentProject.svgfilterList[index];
+    var svgfilter = currentProject.svgfilters[index];
 
     this.emit("showSVGFilterPopup", {
         changeEvent: 'changeSVGFilterAssets',
         id: this.id,
         index,
-        filters: svgfilter.info.objectInfo.filters 
+        filters: svgfilter.filters 
     });
   }
 

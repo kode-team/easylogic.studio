@@ -1,11 +1,7 @@
-.svgfilter-assets-property {
+.image-assets-property {
 
-    .svgfilter-assets {
-        padding: 5px;
-    }
-
-    .svgfilter-list-tools {
-        display: grid;
+    .image-list-tools {
+        display: grid; 
         grid-template-columns: 1fr 1fr; 
         grid-column-gap: 2px;
         text-align: left;
@@ -35,22 +31,16 @@
 
     }
     
-    .svgfilter-list {
+    .image-list {
 
-        .svgfilter-view {
-            position: absolute;
-            left:0px;
-            top:0px;
-            right:0px;
-            bottom:0px;
+        .image-view {
             pointer-events: none;
-            background-image: radial-gradient(yellow 0%, red 100%);            
         }
 
         &[data-view-mode="grid"] {
             display: block;
 
-            .add-svgfilter-item {
+            .add-image-item {
                 display: inline-block;
                 width: 80px;
                 position: relative;
@@ -65,15 +55,15 @@
                 text-align: center;
                 padding: 24px;
 
+
                 svg {
                     path {
                         fill: $font-color;
                     }
                 }
-                
             }
 
-            .svgfilter-item {
+            .image-item {
                 display: inline-block;
                 width: 80px;
                 position: relative;
@@ -95,7 +85,14 @@
                     border-radius: 2px;
                     box-sizing: border-box;
                     cursor: pointer;
-
+                    line-height: 80px;
+                    text-align: center;
+                    
+                    img {
+                        border:0px;
+                        max-width:100%; max-height:100%;
+                        vertical-align:middle;                        
+                    }
                 }
 
                 .title {
@@ -103,6 +100,7 @@
                     width: 100%;
                     display: grid;
                     grid-template-columns: 1fr;
+                    grid-template-rows: repeat(2, 1fr);
                     grid-row-gap: 4px;
                     padding: 4px 0px;
 
@@ -120,7 +118,6 @@
                     text-align: right;   
                     padding: 2px;
 
-
                     svg {
                         path {
                             fill: $selected-font-color;
@@ -129,12 +126,11 @@
                 }
             }
         }
-
     }
 
 }
 
-.property.svgfilter-assets-property {
+.property.image-assets-property {
     padding-left: 0px !important;
     padding-right: 0px !important;
 }

@@ -3,7 +3,7 @@ import CanvasView from "../ui/view/CanvasView";
 import ToolMenu from "../ui/view/ToolMenu";
 
 import UIElement, { EVENT } from "../../util/UIElement";
-import { CLICK } from "../../util/Event";
+import { CLICK, DRAGOVER, DROP, PREVENT } from "../../util/Event";
 import Inspector from "../ui/control/Inspector";
 
 import popup from "../ui/popup";  
@@ -15,6 +15,7 @@ import icon from "../ui/icon/icon";
 import CommandView from "../ui/view/CommandView";
 import { editor } from "../../editor/editor";
 import Dom from "../../util/Dom";
+import Resource from "../../editor/util/Resource";
 
 // var JSZip = require('jszip')
 
@@ -120,6 +121,17 @@ export default class CSSEditor extends UIElement {
     this.emit('refreshCanvas', current)
     this.emit('refreshStyleView', current)
   }
+
+  [DRAGOVER() + PREVENT] (e) {}
+
+  [DROP() + PREVENT] (e) {
+
+    var items = Resource.getAllDropItems(e);
+
+    this.emit('drop.items', items);
+
+  }
+
 
   // [DRAGOVER() + PREVENT] (e) {}
 

@@ -1,4 +1,4 @@
-import UIElement, { COMMAND } from "../../../util/UIElement";
+import UIElement, { COMMAND, EVENT } from "../../../util/UIElement";
 import { editor, EDIT_MODE_SELECTION } from "../../../editor/editor";
 import { Layer } from "../../../editor/items/Layer";
 import Color from "../../../util/Color";
@@ -9,8 +9,44 @@ import { CubeLayer } from "../../../editor/items/layers/CubeLayer";
 import { SphereLayer } from "../../../editor/items/layers/SphereLayer";
 import { ArtBoard } from "../../../editor/items/ArtBoard";
 import { Project } from "../../../editor/items/Project";
+import AssetParser from "../../../editor/parse/AssetParser";
+import Dom from "../../../util/Dom";
 
 export default class CommandView extends UIElement {
+
+    [COMMAND('copy')] () {
+        editor.selection.copy();
+    }
+
+    [COMMAND('paste')] () {
+        editor.selection.paste();
+        this.emit('refreshAll');
+    }
+
+    [COMMAND('keyup.canvas.view')] (key) {
+        console.log(key);
+        var command = this.getAddCommand(key);
+
+        this.trigger(...command);
+    }
+
+    [EVENT('addImage')] () {
+        this.emit('addImage');
+    }
+
+
+    getAddCommand (key) {
+        switch(key) {
+        case '1': return ['add.type', 'rect'];
+        case '2': return ['add.type', 'circle'];
+        case '3': return ['add.type', 'text'];
+        case '4': return ['addImage'];
+        case '5': return ['add.type', 'cube'];
+        case '6': return ['add.path'];
+        case '7': return ['add.polygon'];
+        case '8': return ['add.star'];
+        }
+    }
 
     refreshSelection () {
         this.emit('refreshAll')
@@ -172,6 +208,9 @@ export default class CommandView extends UIElement {
     [COMMAND('add.star')] () {
         this.trigger('add.polygon', 'star')
     }   
+
+
+    /* tools */ 
     
     [COMMAND('switch.theme')] () {
         if (editor.theme === 'dark') {
@@ -185,5 +224,132 @@ export default class CommandView extends UIElement {
 
     [COMMAND('show.exportView')] () {
         this.emit('showExportView');
+    }
+
+    [COMMAND('update.scale')] (scale) {
+        editor.scale = scale;     
+        this.emit('changeScale')
+    }
+
+    /* files */ 
+    [COMMAND('drop.items')] (items = []) {
+        this.trigger('update.resource', items);
+    }
+
+    [COMMAND('load.original.image')] (obj, callback) {
+
+        var img = new Image();
+        img.onload = () => {
+
+            var info = {
+                naturalWidth: Length.px(img.naturalWidth),
+                naturalHeight: Length.px(img.naturalHeight), 
+                width: Length.px(img.naturalWidth),
+                height: Length.px(img.naturalHeight)
+            }
+
+            callback && callback(info);
+        }
+        img.src = obj.local; 
+    }
+
+    [COMMAND('add.assets.image')] (obj) {
+        var project = editor.selection.currentProject;
+
+        if (project) {
+            project.createImage(obj);
+            this.emit('addImageAsset');
+            this.trigger('load.original.image', obj, (info) => {
+                this.trigger('add.image', obj.local, info);
+            });
+
+        }
+    }
+
+    [COMMAND('update.uri-list')] (item) {
+
+        var datauri = item.data; 
+        if (datauri.indexOf('data:') > -1) {
+            var info = AssetParser.parse(datauri, true);
+
+            // datauri 그대로 정의 될 때 
+            switch(info.mimeType) {
+            case 'image/png':  
+            case 'image/gif': 
+            case 'image/jpg': 
+            case 'image/jpeg': 
+                this.trigger('add.assets.image', {
+                    type: info.mimeType,
+                    name: '',
+                    original: datauri, 
+                    local: info.local
+                });            
+                break; 
+            }
+        } else {
+
+            // url 로 정의 될 때 
+            var ext = item.data.split('.').pop();
+            var name = item.data.split('/').pop();
+
+            switch(ext) {
+            case 'png':
+            case 'jpg':
+            case 'gif':
+            case 'svg':
+
+                this.trigger('add.assets.image', {
+                    type: 'image/' + ext,
+                    name,
+                    original: item.data, 
+                    local: item.data
+                })
+                break; 
+            }
+        }
+
+    }
+
+    [COMMAND('update.image')] (item) {
+        var reader = new FileReader();
+        reader.onload = (e) => {
+            var datauri = e.target.result;
+            var local = URL.createObjectURL(item);
+
+            this.trigger('add.assets.image', {
+                type: item.type,
+                name: item.name, 
+                original: datauri, 
+                local
+            })
+        }
+
+        reader.readAsDataURL(item);
+    }
+
+    [COMMAND('update.resource')] (items) {
+        items.forEach(item => {
+            switch(item.type) {
+            case 'image/svg+xml': 
+            case 'image/png':  
+            case 'image/gif': 
+            case 'image/jpg': 
+            case 'image/jpeg': 
+                this.trigger('update.image', item); 
+                break; 
+            case 'text/plain':
+            case 'text/html':
+                if (items.length) {
+                    this.trigger('add.text', {
+                         content: item.data
+                    });
+                }
+                // this.trigger('update.string', item);
+                break;
+            case 'text/uri-list':
+                this.trigger('update.uri-list', item);
+                break;
+            }
+        })
     }
 }

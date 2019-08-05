@@ -4072,6 +4072,9 @@ html, body {
   padding-left: 0px !important;
   padding-right: 0px !important;
 }
+.csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-assets {
+  padding: 5px;
+}
 .csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list-tools {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -4377,6 +4380,136 @@ html, body {
   background-repeat: no-repeat;
   background-size: 2px 24px, 10px 18px, 2px 24px;
   background-position: 6px 3px, 11px 6px, 24px 3px;
+}
+.csseditor[data-theme=dark] .image-assets-property .image-list-tools {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 2px;
+  text-align: left;
+  margin-bottom: 10px;
+}
+.csseditor[data-theme=dark] .image-assets-property .image-list-tools button {
+  width: auto;
+  height: 24px;
+  vertical-align: middle;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  outline: none;
+  padding: 0px;
+  border: 0px;
+  display: inline-block;
+  font-size: 11px;
+  cursor: pointer;
+}
+.csseditor[data-theme=dark] .image-assets-property .image-list-tools button svg {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  vertical-align: middle;
+}
+.csseditor[data-theme=dark] .image-assets-property .image-list-tools button {
+  padding: 2px 10px;
+  border: 1px solid #1a1a1a;
+}
+.csseditor[data-theme=dark] .image-assets-property .image-list-tools[data-view-mode=list] button[data-value=list] {
+  background-color: #609de2;
+  border-color: #609de2;
+  background-image: none;
+  color: white;
+}
+.csseditor[data-theme=dark] .image-assets-property .image-list-tools[data-view-mode=list] button[data-value=list] svg path {
+  fill: white;
+}
+.csseditor[data-theme=dark] .image-assets-property .image-list-tools[data-view-mode=grid] button[data-value=grid] {
+  background-color: #609de2;
+  border-color: #609de2;
+  background-image: none;
+  color: white;
+}
+.csseditor[data-theme=dark] .image-assets-property .image-list-tools[data-view-mode=grid] button[data-value=grid] svg path {
+  fill: white;
+}
+.csseditor[data-theme=dark] .image-assets-property .image-list .image-view {
+  pointer-events: none;
+}
+.csseditor[data-theme=dark] .image-assets-property .image-list[data-view-mode=grid] {
+  display: block;
+}
+.csseditor[data-theme=dark] .image-assets-property .image-list[data-view-mode=grid] .add-image-item {
+  display: inline-block;
+  width: 80px;
+  position: relative;
+  margin-right: 4px;
+  margin-bottom: 4px;
+  height: 80px;
+  border: 1px solid #1a1a1a;
+  border-radius: 2px;
+  box-sizing: border-box;
+  vertical-align: top;
+  cursor: pointer;
+  text-align: center;
+  padding: 24px;
+}
+.csseditor[data-theme=dark] .image-assets-property .image-list[data-view-mode=grid] .add-image-item svg path {
+  fill: #ececec;
+}
+.csseditor[data-theme=dark] .image-assets-property .image-list[data-view-mode=grid] .image-item {
+  display: inline-block;
+  width: 80px;
+  position: relative;
+  margin-right: 4px;
+  margin-bottom: 4px;
+  vertical-align: middle;
+}
+.csseditor[data-theme=dark] .image-assets-property .image-list[data-view-mode=grid] .image-item:hover .tools {
+  display: inline-block;
+}
+.csseditor[data-theme=dark] .image-assets-property .image-list[data-view-mode=grid] .image-item .preview {
+  position: relative;
+  width: 100%;
+  height: 80px;
+  border: 1px solid #1a1a1a;
+  border-radius: 2px;
+  box-sizing: border-box;
+  cursor: pointer;
+  line-height: 80px;
+  text-align: center;
+}
+.csseditor[data-theme=dark] .image-assets-property .image-list[data-view-mode=grid] .image-item .preview img {
+  border: 0px;
+  max-width: 100%;
+  max-height: 100%;
+  vertical-align: middle;
+}
+.csseditor[data-theme=dark] .image-assets-property .image-list[data-view-mode=grid] .image-item .title {
+  position: relative;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(2, 1fr);
+  grid-row-gap: 4px;
+  padding: 4px 0px;
+}
+.csseditor[data-theme=dark] .image-assets-property .image-list[data-view-mode=grid] .image-item .title input {
+  width: 100%;
+}
+.csseditor[data-theme=dark] .image-assets-property .image-list[data-view-mode=grid] .image-item .tools {
+  background-color: transparent;
+  position: absolute;
+  display: none;
+  top: 0px;
+  right: 0px;
+  text-align: right;
+  padding: 2px;
+}
+.csseditor[data-theme=dark] .image-assets-property .image-list[data-view-mode=grid] .image-item .tools svg path {
+  fill: white;
+}
+.csseditor[data-theme=dark] .property.image-assets-property {
+  padding-left: 0px !important;
+  padding-right: 0px !important;
 }
 .csseditor[data-theme=dark] .cubic-bezier-editor {
   width: 228px;
@@ -10240,6 +10373,9 @@ html, body {
   padding-left: 0px !important;
   padding-right: 0px !important;
 }
+.csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-assets {
+  padding: 5px;
+}
 .csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list-tools {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -10545,6 +10681,136 @@ html, body {
   background-repeat: no-repeat;
   background-size: 2px 24px, 10px 18px, 2px 24px;
   background-position: 6px 3px, 11px 6px, 24px 3px;
+}
+.csseditor[data-theme=light] .image-assets-property .image-list-tools {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 2px;
+  text-align: left;
+  margin-bottom: 10px;
+}
+.csseditor[data-theme=light] .image-assets-property .image-list-tools button {
+  width: auto;
+  height: 24px;
+  vertical-align: middle;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: transparent;
+  outline: none;
+  padding: 0px;
+  border: 0px;
+  display: inline-block;
+  font-size: 11px;
+  cursor: pointer;
+}
+.csseditor[data-theme=light] .image-assets-property .image-list-tools button svg {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  vertical-align: middle;
+}
+.csseditor[data-theme=light] .image-assets-property .image-list-tools button {
+  padding: 2px 10px;
+  border: 1px solid #e7e7e7;
+}
+.csseditor[data-theme=light] .image-assets-property .image-list-tools[data-view-mode=list] button[data-value=list] {
+  background-color: #609de2;
+  border-color: #609de2;
+  background-image: none;
+  color: white;
+}
+.csseditor[data-theme=light] .image-assets-property .image-list-tools[data-view-mode=list] button[data-value=list] svg path {
+  fill: white;
+}
+.csseditor[data-theme=light] .image-assets-property .image-list-tools[data-view-mode=grid] button[data-value=grid] {
+  background-color: #609de2;
+  border-color: #609de2;
+  background-image: none;
+  color: white;
+}
+.csseditor[data-theme=light] .image-assets-property .image-list-tools[data-view-mode=grid] button[data-value=grid] svg path {
+  fill: white;
+}
+.csseditor[data-theme=light] .image-assets-property .image-list .image-view {
+  pointer-events: none;
+}
+.csseditor[data-theme=light] .image-assets-property .image-list[data-view-mode=grid] {
+  display: block;
+}
+.csseditor[data-theme=light] .image-assets-property .image-list[data-view-mode=grid] .add-image-item {
+  display: inline-block;
+  width: 80px;
+  position: relative;
+  margin-right: 4px;
+  margin-bottom: 4px;
+  height: 80px;
+  border: 1px solid #e7e7e7;
+  border-radius: 2px;
+  box-sizing: border-box;
+  vertical-align: top;
+  cursor: pointer;
+  text-align: center;
+  padding: 24px;
+}
+.csseditor[data-theme=light] .image-assets-property .image-list[data-view-mode=grid] .add-image-item svg path {
+  fill: #666666;
+}
+.csseditor[data-theme=light] .image-assets-property .image-list[data-view-mode=grid] .image-item {
+  display: inline-block;
+  width: 80px;
+  position: relative;
+  margin-right: 4px;
+  margin-bottom: 4px;
+  vertical-align: middle;
+}
+.csseditor[data-theme=light] .image-assets-property .image-list[data-view-mode=grid] .image-item:hover .tools {
+  display: inline-block;
+}
+.csseditor[data-theme=light] .image-assets-property .image-list[data-view-mode=grid] .image-item .preview {
+  position: relative;
+  width: 100%;
+  height: 80px;
+  border: 1px solid #e7e7e7;
+  border-radius: 2px;
+  box-sizing: border-box;
+  cursor: pointer;
+  line-height: 80px;
+  text-align: center;
+}
+.csseditor[data-theme=light] .image-assets-property .image-list[data-view-mode=grid] .image-item .preview img {
+  border: 0px;
+  max-width: 100%;
+  max-height: 100%;
+  vertical-align: middle;
+}
+.csseditor[data-theme=light] .image-assets-property .image-list[data-view-mode=grid] .image-item .title {
+  position: relative;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(2, 1fr);
+  grid-row-gap: 4px;
+  padding: 4px 0px;
+}
+.csseditor[data-theme=light] .image-assets-property .image-list[data-view-mode=grid] .image-item .title input {
+  width: 100%;
+}
+.csseditor[data-theme=light] .image-assets-property .image-list[data-view-mode=grid] .image-item .tools {
+  background-color: transparent;
+  position: absolute;
+  display: none;
+  top: 0px;
+  right: 0px;
+  text-align: right;
+  padding: 2px;
+}
+.csseditor[data-theme=light] .image-assets-property .image-list[data-view-mode=grid] .image-item .tools svg path {
+  fill: white;
+}
+.csseditor[data-theme=light] .property.image-assets-property {
+  padding-left: 0px !important;
+  padding-right: 0px !important;
 }
 .csseditor[data-theme=light] .cubic-bezier-editor {
   width: 228px;

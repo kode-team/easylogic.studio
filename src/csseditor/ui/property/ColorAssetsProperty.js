@@ -36,25 +36,24 @@ export default class ColorAssetsProperty extends BaseProperty {
   }
 
   [LOAD("$colorList")]() {
-    var current = editor.selection.currentProject || { colorList: [] }
+    var current = editor.selection.currentProject || { colors: [] }
 
-    var colors = current.colorList;   
+    var colors = current.colors;   
 
-    var results = colors.map( (color, index) => {
-      var objectInfo = color.info.objectInfo;
+    var results = colors.map( (item, index) => {
 
       return `
         <div class='color-item' data-index="${index}">
-          <div class='preview' data-index="${index}"><div class='color-view' style='background-color: ${objectInfo.color};'></div></div>
+          <div class='preview' data-index="${index}"><div class='color-view' style='background-color: ${item.color};'></div></div>
           <div class='title'>
             <div>
-              <input type='text' class='color' data-key='color' readonly value='${objectInfo.color}' placeholder="color" />
+              <input type='text' class='color' data-key='color' readonly value='${item.color}' placeholder="color" />
             </div>
             <div>
-              <input type='text' class='name' data-key='name' value='${objectInfo.name}' placeholder="name" />
+              <input type='text' class='name' data-key='name' value='${item.name}' placeholder="name" />
             </div>
             <!--<div>
-              <input type='text' class='var' data-key='variable' value='${objectInfo.variable}' placeholder="--var" />
+              <input type='text' class='var' data-key='variable' value='${item.variable}' placeholder="--var" />
             </div>-->
           </div>
           <div class='tools'>

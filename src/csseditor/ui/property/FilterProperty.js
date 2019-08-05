@@ -82,9 +82,9 @@ export default class FilterProperty extends BaseProperty {
     var arr = [] 
 
     if (current) {
-      arr = current.svgfilterList
+      arr = current.svgfilters
         .map(it => {
-          var id = it.info.objectInfo.id; 
+          var id = it.id; 
           return {
             title : `svg - #${id}`,
             value: id

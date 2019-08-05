@@ -57,15 +57,14 @@ export default class ColorPickerPopup extends BasePopup {
   }
 
   [LOAD('$projectColors')] () {
-    var project = editor.selection.currentProject || {colorList: []};
+    var project = editor.selection.currentProject || {colors: []};
 
-    var colors = project.colorList
+    var colors = project.colors
 
-    return colors.map(c => {
-      var objectInfo = c.info.objectInfo
+    return colors.map(color => {
       return `
-      <div class='color-item' title='${c.name}'>
-        <div class='color-view' data-color='${objectInfo.color}' style='background-color: ${objectInfo.color}'></div>
+      <div class='color-item' title='${color.name}'>
+        <div class='color-view' data-color='${color.color}' style='background-color: ${color.color}'></div>
       </div>`
     }) 
   }

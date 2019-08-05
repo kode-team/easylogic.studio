@@ -161,7 +161,7 @@ export default class FilterEditor extends UIElement {
     var arr = [] 
 
     if (current) {
-      arr = current.svgfilterList
+      arr = current.svgfilters
         .map(it => {
           return {
             title : `svg - #${it.id}`,
@@ -182,7 +182,7 @@ export default class FilterEditor extends UIElement {
       var current = editor.selection.currentProject;
 
       if (current) {
-        options = current.svgfilterList.map(it => it.id)
+        options = current.svgfilters.map(it => it.id)
         options = options.length ? ',' + options.join(',') : '';
       }
 

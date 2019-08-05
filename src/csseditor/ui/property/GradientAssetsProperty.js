@@ -36,25 +36,23 @@ export default class GradientAssetsProperty extends BaseProperty {
   }
 
   [LOAD("$gradientList")]() {
-    var current = editor.selection.currentProject || { gradientList: [] }
+    var current = editor.selection.currentProject || { gradients: [] }
 
-    var gradients = current.gradientList;
+    var gradients = current.gradients;
 
-    var results = gradients.map( (gradient, index) => {
-
-      var objectInfo = gradient.info.objectInfo;
+    var results = gradients.map( (item, index) => {
 
       return `
-        <div class='gradient-item' data-index="${index}" data-gradient='${objectInfo.gradient}'>
+        <div class='gradient-item' data-index="${index}" data-gradient='${item.gradient}'>
           <div class='preview' data-index="${index}">
-            <div class='gradient-view' style='background-image: ${objectInfo.gradient};'></div>
+            <div class='gradient-view' style='background-image: ${item.gradient};'></div>
           </div>
           <div class='title'>
             <div>
-              <input type='text' class='name' data-key='name' value='${objectInfo.name}' placeholder="name" />
+              <input type='text' class='name' data-key='name' value='${item.name}' placeholder="name" />
             </div>
             <div>
-              <input type='text' class='var' data-key='variable' value='${objectInfo.variable}' placeholder="--var" />
+              <input type='text' class='var' data-key='variable' value='${item.variable}' placeholder="--var" />
             </div>
           </div>
           <div class='tools'>
