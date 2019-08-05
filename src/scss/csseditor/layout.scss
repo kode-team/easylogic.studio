@@ -140,6 +140,7 @@
     right: 0px;
     box-sizing: border-box;
     border-left: 1px solid $border-color;
+
   }
 
   .layer-tab {
@@ -183,7 +184,7 @@
   }
 
   .draw-items {
-    background-color: $background-color;
+    background-color: lighten($selected-background-color, 20%);
 
     .split {
       border: 0px;

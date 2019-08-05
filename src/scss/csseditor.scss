@@ -35,5 +35,19 @@ html,body {
         @import './csseditor/layout.scss';        
     }    
 
+    &[data-theme='red'] {
+        @import './themes/csseditor/red.scss';
+
+        @import './csseditor/component.scss';
+        @import './csseditor/layout.scss';        
+    }        
+
+    &[data-theme='orange'] {
+        @import './themes/csseditor/orange.scss';
+
+        @import './csseditor/component.scss';
+        @import './csseditor/layout.scss';        
+    }            
+
 }
  

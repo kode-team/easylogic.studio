@@ -23,8 +23,8 @@ $display-grid-color: red;
 $inner-border-color: rgb(231, 231, 231);
 $border-color: rgb(231, 231, 231);
 $border-color-2: #a2a2a2;
-$selected-border-color: #609de2;
-$selected-color: #3e8ec6;
+$selected-border-color: #833602;
+$selected-color: #b16b32;
 $background-color: white; 
 $selected-background-color: white; 
 $font-color: rgb(102, 102, 102);
@@ -43,7 +43,7 @@ $range-thumb-height: 10px;
 $range-track-height: 2px;
 $range-thumb-top: -4px;
 $range-thumb-color:  rgb(243, 243, 243);
-$range-track-color:  #5a8ebb;
+$range-track-color:  #bb815a;
 $range-thumb-border-color: $range-track-color;
 
 
@@ -58,7 +58,7 @@ $property-background-color: $background-color;
 $property-font-color: $font-color;
 
 // list 
-$list-item-selected-color: #4a89b6; 
+$list-item-selected-color: #d4926c; 
 $list-item-selected-font-color: $selected-font-color; 
 $list-border-color: lighten($border-color, 0.5);
 $list-background-color: white;
@@ -78,5 +78,5 @@ $popup-selected-color: $selected-color;
 $popup-border-color: $border-color;
 
 // cubic-bezier-editor 
-$bezier-background-color: #01538e; 
+$bezier-background-color: #8e3501; 
 $bezier-sample-background-color: black;

@@ -18,6 +18,8 @@ export const EDITOR_ID = "";
 export const EDIT_MODE_SELECTION = 'SELECTION';
 export const EDIT_MODE_ADD = 'ADD';
 
+const DEFAULT_THEME = 'red' 
+
 export const editor = new class {
   constructor() {
     this.config = new Config(this);
@@ -35,14 +37,14 @@ export const editor = new class {
   }
 
   initTheme () {
-    var theme = 'light'
+    var theme = DEFAULT_THEME
 
     if (window.localStorage) {
       theme = window.localStorage.getItem('easylogic.studio.theme')
-      theme = theme === 'null' ? 'light' : theme;
+      theme = theme === 'null' ? DEFAULT_THEME : theme;
     }
 
-    this.theme =  theme || 'light'
+    this.theme =  theme || DEFAULT_THEME
     window.localStorage.setItem('easylogic.studio.theme', this.theme);
   }
 

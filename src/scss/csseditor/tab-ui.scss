@@ -17,7 +17,7 @@ $tab-horizontal-header-right-width: 60px;
       height: 34px;
       cursor: pointer;
       border-bottom: 1px solid $tab-border-color;
-      // background-color: rgba($border-color, 0.3);
+      background-color: $selected-background-color;
       // overflow: auto;
     }
     .tab-content {
@@ -88,7 +88,7 @@ $tab-horizontal-header-right-width: 60px;
         // border-top: 2px solid $tab-selected-border-color;
         // background-color: $tab-selected-color;
         color: $tab-selected-font-color;
-        font-weight: bold;
+
 
       }
 
@@ -139,20 +139,13 @@ $tab-horizontal-header-right-width: 60px;
       height: 100%;
       padding: 6px 4px;
       cursor: pointer;
+      font-weight: bold;      
 
       svg {
         width: 20px;
         height: 20px;
       }
-
-      &:not(.selected) {
-        background-color: $tab-background-color;
-      }
-
-      &.selected {
-        background-color: $tab-selected-color;
-      }
-
+      
       &.small-font {
         font-size: 11px;
       }

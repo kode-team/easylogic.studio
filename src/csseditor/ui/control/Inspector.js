@@ -16,13 +16,14 @@ export default class Inspector extends UIElement {
               <div class="tab-item" data-value="2">
                 <label>Animation</label>
               </div>
+              
               <div class="tab-item" data-value="3">
+                <label>Assets</label>
+              </div>                                     
+              <div class="tab-item" data-value="4">
                 <label>Code</label>
               </div>                                     
-              
-              <div class="tab-item" data-value="4">
-                <label>Assets</label>
-              </div>                            
+     
             </div>
             <div class="tab-body" ref="$body">
               <div class="tab-content" data-value="1">
@@ -85,11 +86,8 @@ export default class Inspector extends UIElement {
                 <AnimationProperty />
 
                 <div class='empty'></div>                
-              </div>                   
-              <div class="tab-content" data-value="3">
-                <CodeViewProperty />
-              </div>              
-              <div class='tab-content' data-value='4'>
+              </div>                        
+              <div class='tab-content' data-value='3'>
                 <ImageAssetsProperty />
                 <!--SVGProperty /-->              
                 <SVGFilterAssetsProperty />
@@ -99,6 +97,10 @@ export default class Inspector extends UIElement {
                 
                 <div class='empty'></div>                
               </div>
+              <div class="tab-content" data-value="4">
+                <CodeViewProperty />
+                <div class='empty'></div>                           
+              </div>                       
             </div>
           </div>
         </div>

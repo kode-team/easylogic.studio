@@ -1,7 +1,7 @@
 {
   "name": "easylogic-studio",
-  "version": "0.7.5",
-  "description": "Fantastic Free Open Source CSS Editor ",
+  "version": "0.8.15",
+  "description": "Fantastic Open Source CSS Editor ",
   "main": "index.js",
   "directories": {
     "test": "test"
@@ -41,13 +41,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/easylogic/css.git"
+    "url": "git+https://github.com/easylogic/editor.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["CSS", "CODE", "Editor", "SVG"],
+  "author": "easylogic",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/easylogic/css/issues"
+    "url": "https://github.com/easylogic/editor/issues"
   },
-  "homepage": "https://github.com/easylogic/css#readme"
+  "homepage": "https://github.com/easylogic/editor#readme"
 }

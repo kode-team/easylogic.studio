@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "version": "0.7.5",
-  "name": "CSS Editor",
-  "description": "Fantastic Free Open Source CSS Editor ",
+  "version": "0.8.15",
+  "name": "EasyLogic Studio",
+  "description": "Fantastic Open Source CSS Editor ",
   "author": "easylogic",
   "app": {
     "background": {
