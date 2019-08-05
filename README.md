@@ -1,7 +1,8 @@
 # EasyLogic Studio
 
 
-이지로직 스튜디오는 CSS 와 SVG 를 사용하여 웹디자인과 코드의 간극을 줄이기 위해서 만들어졌다. 디자이너가 디자인을 한 결과물과 개발자가 보는 결과물이 동일한 시점을 갖는게 목표이다. 
+EasyLogic Studio is built using CSS and SVG to reduce the gap between web design and code. The goal is to have the same point in time between the designer's design and the developer's output.
+
 
 https://editor.easylogic.studio/
 
