@@ -1402,20 +1402,10 @@ html, body {
   display: inline-block;
   background-color: #3a3a3a;
   opacity: 0;
-  pointer-events: all;
+  pointer-events: none;
 }
 .csseditor[data-theme=dark] .add-image-button {
-  position: relative;
-  height: 40px;
-  width: 100%;
-  pointer-events: none;
-  cursor: pointer;
-}
-.csseditor[data-theme=dark] .add-image-button button {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  pointer-events: none;
+  display: none;
 }
 .csseditor[data-theme=dark] .layout-main {
   position: absolute;
@@ -7774,20 +7764,10 @@ html, body {
   display: inline-block;
   background-color: white;
   opacity: 0;
-  pointer-events: all;
+  pointer-events: none;
 }
 .csseditor[data-theme=light] .add-image-button {
-  position: relative;
-  height: 40px;
-  width: 100%;
-  pointer-events: none;
-  cursor: pointer;
-}
-.csseditor[data-theme=light] .add-image-button button {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  pointer-events: none;
+  display: none;
 }
 .csseditor[data-theme=light] .layout-main {
   position: absolute;
@@ -14146,20 +14126,10 @@ html, body {
   display: inline-block;
   background-color: white;
   opacity: 0;
-  pointer-events: all;
+  pointer-events: none;
 }
 .csseditor[data-theme=red] .add-image-button {
-  position: relative;
-  height: 40px;
-  width: 100%;
-  pointer-events: none;
-  cursor: pointer;
-}
-.csseditor[data-theme=red] .add-image-button button {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  pointer-events: none;
+  display: none;
 }
 .csseditor[data-theme=red] .layout-main {
   position: absolute;
@@ -20518,20 +20488,10 @@ html, body {
   display: inline-block;
   background-color: white;
   opacity: 0;
-  pointer-events: all;
+  pointer-events: none;
 }
 .csseditor[data-theme=orange] .add-image-button {
-  position: relative;
-  height: 40px;
-  width: 100%;
-  pointer-events: none;
-  cursor: pointer;
-}
-.csseditor[data-theme=orange] .add-image-button button {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  pointer-events: none;
+  display: none;
 }
 .csseditor[data-theme=orange] .layout-main {
   position: absolute;

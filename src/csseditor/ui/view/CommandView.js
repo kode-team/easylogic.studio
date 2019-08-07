@@ -29,17 +29,12 @@ export default class CommandView extends UIElement {
         this.trigger(...command);
     }
 
-    [EVENT('addImage')] () {
-        this.emit('addImage');
-    }
-
-
     getAddCommand (key) {
         switch(key) {
         case '1': return ['add.type', 'rect'];
         case '2': return ['add.type', 'circle'];
         case '3': return ['add.type', 'text'];
-        case '4': return ['addImage'];
+        case '4': return ['add.type', 'image'];
         case '5': return ['add.type', 'cube'];
         case '6': return ['add.path'];
         case '7': return ['add.polygon'];
@@ -158,11 +153,10 @@ export default class CommandView extends UIElement {
     }
 
 
-    [COMMAND('add.image')] (src, info) {
-
+    [COMMAND('add.image')] (rect = {}) {
         this.trigger('add.layer', new ImageLayer({
-            ...info, src 
-        }))
+            ...rect 
+        }), rect)
 
     }  
 
@@ -256,14 +250,20 @@ export default class CommandView extends UIElement {
         img.src = obj.local; 
     }
 
-    [COMMAND('add.assets.image')] (obj) {
+    [COMMAND('add.assets.image')] (obj, rect = {}) {
         var project = editor.selection.currentProject;
 
         if (project) {
+
+            // append image asset 
             project.createImage(obj);
             this.emit('addImageAsset');
+
+            // convert data or blob to local url 
             this.trigger('load.original.image', obj, (info) => {
-                this.trigger('add.image', obj.local, info);
+                this.trigger('add.image', {src: obj.local, ...info, ...rect });
+                editor.changeMode(EDIT_MODE_SELECTION);
+                this.emit('after.change.mode');                
             });
 
         }
@@ -313,7 +313,7 @@ export default class CommandView extends UIElement {
 
     }
 
-    [COMMAND('update.image')] (item) {
+    [COMMAND('update.image')] (item, rect) {
         var reader = new FileReader();
         reader.onload = (e) => {
             var datauri = e.target.result;
@@ -324,7 +324,7 @@ export default class CommandView extends UIElement {
                 name: item.name, 
                 original: datauri, 
                 local
-            })
+            }, rect)
         }
 
         reader.readAsDataURL(item);

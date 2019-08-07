@@ -25,20 +25,10 @@ input[type=file] {
         display:inline-block;
         background-color:$background-color;
         opacity: 0;
-        pointer-events: all;
+        pointer-events: none;
     }
 }
 
 .add-image-button {
-    position: relative;
-    height: 40px;
-    width: 100%;
-    pointer-events: none;
-    cursor: pointer;
-    button {
-        position: absolute;
-        top:0px;
-        left:0px;
-        pointer-events: none;
-    }
+    display: none;
 }

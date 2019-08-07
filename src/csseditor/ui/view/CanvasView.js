@@ -83,7 +83,13 @@ export default class CanvasView extends UIElement {
     return ((+e.key) + "") === e.key;
   }  
 
-  [KEYUP('$el') + IF('isNumberKey') + PREVENT+ STOP] (e) {
+  isNotFormElement(e) {
+    var tagName = e.target.tagName.toLowerCase();
+
+    return ['input'].includes(tagName) === false;
+  }
+
+  [KEYUP('$el') + IF('isNumberKey') + IF('isNotFormElement') + PREVENT+ STOP] (e) {
     this.emit('keyup.canvas.view', e.key);
   }
 

@@ -1,6 +1,6 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
 import icon from "../icon/icon";
-import { CLICK, BIND } from "../../../util/Event";
+import { CLICK, BIND, CHANGE, CHANGEINPUT } from "../../../util/Event";
 
 export default class StarManager extends UIElement {
 
@@ -67,6 +67,27 @@ export default class StarManager extends UIElement {
     });
     this.refresh();
   }  
+
+  [CHANGEINPUT('$count')] () {
+    var count = +this.refs.$count.value;
+
+    if (count < 3) {
+      count = 3 
+    }
+
+    this.updateData({
+      count 
+    });
+    this.refresh();
+  }
+
+  [CHANGEINPUT('$radius')] () {
+    var radius = +this.refs.$radius.value;
+    this.updateData({
+        radius 
+    });
+    // this.refresh();    
+  }
 
   updateData(obj = {}) {
 

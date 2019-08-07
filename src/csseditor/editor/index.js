@@ -17,6 +17,9 @@ import { editor } from "../../editor/editor";
 import Dom from "../../util/Dom";
 import Resource from "../../editor/util/Resource";
 import windowList from "../ui/window-list";
+import ImageFileView from "../ui/view/ImageFileView";
+
+
 
 // var JSZip = require('jszip')
 
@@ -71,6 +74,7 @@ export default class CSSEditor extends UIElement {
         <StyleView />    
         <CommandView />    
         <ExportWindow />
+        <ImageFileView />
       </div>
     `;
   }
@@ -86,7 +90,8 @@ export default class CSSEditor extends UIElement {
       CanvasView,
       StyleView,
       LogoView,
-      ExternalToolMenu
+      ExternalToolMenu,
+      ImageFileView
     };
   }
 
