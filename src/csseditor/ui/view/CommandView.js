@@ -24,7 +24,6 @@ export default class CommandView extends UIElement {
     }
 
     [COMMAND('keyup.canvas.view')] (key) {
-        console.log(key);
         var command = this.getAddCommand(key);
 
         this.trigger(...command);
@@ -227,7 +226,7 @@ export default class CommandView extends UIElement {
     }
 
     [COMMAND('show.exportView')] () {
-        this.emit('showExportView');
+        this.emit('showExportWindow');
     }
 
     [COMMAND('update.scale')] (scale) {

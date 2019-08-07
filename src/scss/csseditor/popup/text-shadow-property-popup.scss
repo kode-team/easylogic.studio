@@ -38,7 +38,7 @@
 
       .drag-board {
 
-        background-color: $selected-color;
+        // background-color: $selected-color;
         box-sizing: border-box;
         border: 1px solid $border-color;
         height: 202px;
@@ -61,7 +61,7 @@
           width: 10px;
           height: 10px;
           transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
-          background-color: $border-color;
+          background-color: $selected-color;
           border-radius: 100%;
         }
       }

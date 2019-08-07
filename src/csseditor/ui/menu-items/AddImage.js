@@ -1,8 +1,23 @@
 import MenuItem from "./MenuItem";
 import icon from "../icon/icon";
 import { EVENT } from "../../../util/UIElement";
+import { CHANGE } from "../../../util/Event";
  
 export default class AddImage extends MenuItem {
+
+  template () {
+    return `
+    <div class='add-image-button' style='pointer-events:none'>
+        <input type='file' accept='image/*' multiple="true" ref='$file' class='embed-file-input'/>
+        <button  style='pointer-events:none' 
+            type="button" class='menu-item' data-no-title="${this.isHideTitle()}" ${this.isHideTitle() ? `title="${this.getTitle()}"` : '' } checked="${this.getChecked() ? 'checked' : ''}">
+          <div class="icon ${this.getIcon()}">${this.getIconString()}</div>
+          <div class="title">${this.getTitle()}</div>
+        </button>
+    </div>
+    `
+  }
+
   getIconString() {
     return icon.outline_image;
   }
@@ -14,23 +29,13 @@ export default class AddImage extends MenuItem {
     return true; 
   }
 
-
-  [EVENT('changeImageSelectEditor')] (value, info) {
-
-    this.emit('add.image', value, info)
-
- }  
-
-  clickButton(e) {
-    this.emit('hideSubEditor');    
-    // open image popup
-    this.emit('showImageSelectPopup', {
-      context: this, 
-      changeEvent: 'changeImageSelectEditor'
+  [CHANGE('$file')] (e) {
+    this.refs.$file.files.forEach(item => {
+      this.emit('update.image', item);
     })
   }
 
   [EVENT('addImage')] () {
-    this.clickButton();
+    this.refs.$file.click();
   }
 }

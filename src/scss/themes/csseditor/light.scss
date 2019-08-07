@@ -77,6 +77,10 @@ $popup-font-color: $font-color;
 $popup-selected-color: $selected-color; 
 $popup-border-color: $border-color;
 
+// window 
+$window-background-color: rgba(darken($background-color, 50%), 0.5);
+$window-color: $background-color;
+
 // cubic-bezier-editor 
 $bezier-background-color: #01538e; 
 $bezier-sample-background-color: black;

@@ -1,0 +1,72 @@
+.window-background {
+    position: fixed;
+    display: none;
+    left: 0px;
+    top: 0px;
+    bottom:0px;
+    z-index: 10000;
+    right:0px;
+    background-color: $window-background-color;
+
+  
+    .window {
+        position: absolute;
+        width: 200px;
+        height: 200px;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        box-sizing: border-box;
+        z-index: 1000;
+        background-color: $background-color;
+        border: 1px solid $border-color;
+        box-shadow: 0 0 1px 0px $border-color;
+        padding: 14px;
+        color: $popup-font-color;
+
+        .window-title {
+            position: absolute;
+            left: 0px;
+            top:0px;
+            right:0px;
+            height: 40px;
+            font-size: 15px;
+            font-weight: bold;
+            padding:10px;
+        
+            margin-bottom: 10px;
+            display: flex;
+            pointer-events: all;
+        
+            > * {
+              flex: 1 1 auto;
+            }
+        
+            .tools {
+              text-align: right;
+            }
+        
+            label {
+              cursor: move; 
+            }
+          }
+        
+          .window-body {
+            position: absolute;
+            left: 0px;
+            bottom:0px;
+            right:0px;
+            top: 40px;
+
+          }
+        
+    }
+  
+  
+    .window {
+        @import './export-window.scss';
+    }
+
+  }
+
+

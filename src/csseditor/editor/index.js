@@ -16,6 +16,7 @@ import CommandView from "../ui/view/CommandView";
 import { editor } from "../../editor/editor";
 import Dom from "../../util/Dom";
 import Resource from "../../editor/util/Resource";
+import windowList from "../ui/window-list";
 
 // var JSZip = require('jszip')
 
@@ -32,7 +33,7 @@ export default class CSSEditor extends UIElement {
 
   templateForEditor() {
     return /*html*/`
-      <div class="layout-main" ref="$layoutMain">
+      <div class="layout-main">
         <div class="layout-header">
             <LogoView />
             <ToolMenu />
@@ -69,12 +70,14 @@ export default class CSSEditor extends UIElement {
         <SVGFilterPopup />
         <StyleView />    
         <CommandView />    
+        <ExportWindow />
       </div>
     `;
   }
 
   components() {
     return {
+      ...windowList,
       ...popup,
       ObjectList,
       CommandView,

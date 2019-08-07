@@ -687,15 +687,14 @@ export class DomItem extends GroupItem {
     //1. 원본 객체의 css 를 생성 
     //2. 원본이 하나의 객체가 아니라 복합 객체일때 중첩 CSS 를 자체 정의해서 생성 
     //3. 이외에 selector 로 생성할 수 있는 css 를 생성 (:hover, :active 등등 )
-
     var cssString = `
-${prefix} { 
-  ${CSS_TO_STRING(this.toCSS(), '\n')}; 
+${prefix} {  /* ${this.json.itemType} */
+    ${CSS_TO_STRING(this.toCSS(), '\n')}; 
 }
 
 ${this.toNestedCSS().map(it => {
   return `${prefix} ${it.selector} { 
-    ${it.cssText ? it.cssText : CSS_TO_STRING(it.css || {}, '\n')}; 
+      ${it.cssText ? it.cssText : CSS_TO_STRING(it.css || {}, '\n')}; 
   }`
 }).join('\n')}
 

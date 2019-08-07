@@ -497,6 +497,7 @@ export default class Dom {
     return this;
   }
 
+
   get value() {
     return this.el.value;
   }
@@ -688,6 +689,13 @@ export default class Dom {
 
     return this;
   }
+
+
+  click () {
+    this.el.click();
+
+    return this; 
+  }  
 
   focus() {
     this.el.focus();

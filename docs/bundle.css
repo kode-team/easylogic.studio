@@ -1390,6 +1390,33 @@ html, body {
 .csseditor[data-theme=dark] button svg path {
   fill: #ececec;
 }
+.csseditor[data-theme=dark] input[type=file].embed-file-input {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  width: 100%;
+  height: 100%;
+  display: inline-block;
+  background-color: #3a3a3a;
+  opacity: 0;
+  pointer-events: all;
+}
+.csseditor[data-theme=dark] .add-image-button {
+  position: relative;
+  height: 40px;
+  width: 100%;
+  pointer-events: none;
+  cursor: pointer;
+}
+.csseditor[data-theme=dark] .add-image-button button {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  pointer-events: none;
+}
 .csseditor[data-theme=dark] .layout-main {
   position: absolute;
   left: 0px;
@@ -6399,7 +6426,6 @@ html, body {
   font-size: 11px;
 }
 .csseditor[data-theme=dark] .popup .box-shadow-property-popup .box .drag-board {
-  background-color: #3e8ec6;
   box-sizing: border-box;
   border: 1px solid #1a1a1a;
   margin-bottom: 2px;
@@ -6417,7 +6443,7 @@ html, body {
   height: 10px;
   -webkit-transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
           transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
-  background-color: #1a1a1a;
+  background-color: #3e8ec6;
   border-radius: 100%;
 }
 .csseditor[data-theme=dark] .popup .animation-property-popup {
@@ -6498,7 +6524,6 @@ html, body {
   font-size: 11px;
 }
 .csseditor[data-theme=dark] .popup .text-shadow-property-popup .box .drag-board {
-  background-color: #3e8ec6;
   box-sizing: border-box;
   border: 1px solid #1a1a1a;
   height: 202px;
@@ -6516,7 +6541,7 @@ html, body {
   height: 10px;
   -webkit-transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
           transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
-  background-color: #1a1a1a;
+  background-color: #3e8ec6;
   border-radius: 100%;
 }
 .csseditor[data-theme=dark] .popup .keyframe-popup {
@@ -7480,6 +7505,65 @@ html, body {
 .csseditor[data-theme=dark] .popup .gradient-picker .codemirror-colorpicker .colorsets {
   border-top: 0px solid #1a1a1a !important;
 }
+.csseditor[data-theme=dark] .window-background {
+  position: fixed;
+  display: none;
+  left: 0px;
+  top: 0px;
+  bottom: 0px;
+  z-index: 10000;
+  right: 0px;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+.csseditor[data-theme=dark] .window-background .window {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  box-sizing: border-box;
+  z-index: 1000;
+  background-color: #3a3a3a;
+  border: 1px solid #1a1a1a;
+  box-shadow: 0 0 1px 0px #1a1a1a;
+  padding: 14px;
+  color: #ececec;
+}
+.csseditor[data-theme=dark] .window-background .window .window-title {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  height: 40px;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  pointer-events: all;
+}
+.csseditor[data-theme=dark] .window-background .window .window-title > * {
+  flex: 1 1 auto;
+}
+.csseditor[data-theme=dark] .window-background .window .window-title .tools {
+  text-align: right;
+}
+.csseditor[data-theme=dark] .window-background .window .window-title label {
+  cursor: move;
+}
+.csseditor[data-theme=dark] .window-background .window .window-body {
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
+  top: 40px;
+}
+.csseditor[data-theme=dark] .window-background .window.export-window {
+  width: 80%;
+  height: 80%;
+}
 .csseditor[data-theme=dark] .path-editor-view {
   display: none;
   position: absolute;
@@ -7677,6 +7761,33 @@ html, body {
 }
 .csseditor[data-theme=light] button svg path {
   fill: #666666;
+}
+.csseditor[data-theme=light] input[type=file].embed-file-input {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  width: 100%;
+  height: 100%;
+  display: inline-block;
+  background-color: white;
+  opacity: 0;
+  pointer-events: all;
+}
+.csseditor[data-theme=light] .add-image-button {
+  position: relative;
+  height: 40px;
+  width: 100%;
+  pointer-events: none;
+  cursor: pointer;
+}
+.csseditor[data-theme=light] .add-image-button button {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  pointer-events: none;
 }
 .csseditor[data-theme=light] .layout-main {
   position: absolute;
@@ -12687,7 +12798,6 @@ html, body {
   font-size: 11px;
 }
 .csseditor[data-theme=light] .popup .box-shadow-property-popup .box .drag-board {
-  background-color: #3e8ec6;
   box-sizing: border-box;
   border: 1px solid #e7e7e7;
   margin-bottom: 2px;
@@ -12705,7 +12815,7 @@ html, body {
   height: 10px;
   -webkit-transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
           transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
-  background-color: #e7e7e7;
+  background-color: #3e8ec6;
   border-radius: 100%;
 }
 .csseditor[data-theme=light] .popup .animation-property-popup {
@@ -12786,7 +12896,6 @@ html, body {
   font-size: 11px;
 }
 .csseditor[data-theme=light] .popup .text-shadow-property-popup .box .drag-board {
-  background-color: #3e8ec6;
   box-sizing: border-box;
   border: 1px solid #e7e7e7;
   height: 202px;
@@ -12804,7 +12913,7 @@ html, body {
   height: 10px;
   -webkit-transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
           transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
-  background-color: #e7e7e7;
+  background-color: #3e8ec6;
   border-radius: 100%;
 }
 .csseditor[data-theme=light] .popup .keyframe-popup {
@@ -13768,6 +13877,65 @@ html, body {
 .csseditor[data-theme=light] .popup .gradient-picker .codemirror-colorpicker .colorsets {
   border-top: 0px solid #e7e7e7 !important;
 }
+.csseditor[data-theme=light] .window-background {
+  position: fixed;
+  display: none;
+  left: 0px;
+  top: 0px;
+  bottom: 0px;
+  z-index: 10000;
+  right: 0px;
+  background-color: rgba(128, 128, 128, 0.5);
+}
+.csseditor[data-theme=light] .window-background .window {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  box-sizing: border-box;
+  z-index: 1000;
+  background-color: white;
+  border: 1px solid #e7e7e7;
+  box-shadow: 0 0 1px 0px #e7e7e7;
+  padding: 14px;
+  color: #666666;
+}
+.csseditor[data-theme=light] .window-background .window .window-title {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  height: 40px;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  pointer-events: all;
+}
+.csseditor[data-theme=light] .window-background .window .window-title > * {
+  flex: 1 1 auto;
+}
+.csseditor[data-theme=light] .window-background .window .window-title .tools {
+  text-align: right;
+}
+.csseditor[data-theme=light] .window-background .window .window-title label {
+  cursor: move;
+}
+.csseditor[data-theme=light] .window-background .window .window-body {
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
+  top: 40px;
+}
+.csseditor[data-theme=light] .window-background .window.export-window {
+  width: 80%;
+  height: 80%;
+}
 .csseditor[data-theme=light] .path-editor-view {
   display: none;
   position: absolute;
@@ -13965,6 +14133,33 @@ html, body {
 }
 .csseditor[data-theme=red] button svg path {
   fill: #666666;
+}
+.csseditor[data-theme=red] input[type=file].embed-file-input {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  width: 100%;
+  height: 100%;
+  display: inline-block;
+  background-color: white;
+  opacity: 0;
+  pointer-events: all;
+}
+.csseditor[data-theme=red] .add-image-button {
+  position: relative;
+  height: 40px;
+  width: 100%;
+  pointer-events: none;
+  cursor: pointer;
+}
+.csseditor[data-theme=red] .add-image-button button {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  pointer-events: none;
 }
 .csseditor[data-theme=red] .layout-main {
   position: absolute;
@@ -18975,7 +19170,6 @@ html, body {
   font-size: 11px;
 }
 .csseditor[data-theme=red] .popup .box-shadow-property-popup .box .drag-board {
-  background-color: #b13232;
   box-sizing: border-box;
   border: 1px solid #e7e7e7;
   margin-bottom: 2px;
@@ -18993,7 +19187,7 @@ html, body {
   height: 10px;
   -webkit-transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
           transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
-  background-color: #e7e7e7;
+  background-color: #b13232;
   border-radius: 100%;
 }
 .csseditor[data-theme=red] .popup .animation-property-popup {
@@ -19074,7 +19268,6 @@ html, body {
   font-size: 11px;
 }
 .csseditor[data-theme=red] .popup .text-shadow-property-popup .box .drag-board {
-  background-color: #b13232;
   box-sizing: border-box;
   border: 1px solid #e7e7e7;
   height: 202px;
@@ -19092,7 +19285,7 @@ html, body {
   height: 10px;
   -webkit-transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
           transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
-  background-color: #e7e7e7;
+  background-color: #b13232;
   border-radius: 100%;
 }
 .csseditor[data-theme=red] .popup .keyframe-popup {
@@ -20056,6 +20249,65 @@ html, body {
 .csseditor[data-theme=red] .popup .gradient-picker .codemirror-colorpicker .colorsets {
   border-top: 0px solid #e7e7e7 !important;
 }
+.csseditor[data-theme=red] .window-background {
+  position: fixed;
+  display: none;
+  left: 0px;
+  top: 0px;
+  bottom: 0px;
+  z-index: 10000;
+  right: 0px;
+  background-color: rgba(128, 128, 128, 0.5);
+}
+.csseditor[data-theme=red] .window-background .window {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  box-sizing: border-box;
+  z-index: 1000;
+  background-color: white;
+  border: 1px solid #e7e7e7;
+  box-shadow: 0 0 1px 0px #e7e7e7;
+  padding: 14px;
+  color: #666666;
+}
+.csseditor[data-theme=red] .window-background .window .window-title {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  height: 40px;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  pointer-events: all;
+}
+.csseditor[data-theme=red] .window-background .window .window-title > * {
+  flex: 1 1 auto;
+}
+.csseditor[data-theme=red] .window-background .window .window-title .tools {
+  text-align: right;
+}
+.csseditor[data-theme=red] .window-background .window .window-title label {
+  cursor: move;
+}
+.csseditor[data-theme=red] .window-background .window .window-body {
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
+  top: 40px;
+}
+.csseditor[data-theme=red] .window-background .window.export-window {
+  width: 80%;
+  height: 80%;
+}
 .csseditor[data-theme=red] .path-editor-view {
   display: none;
   position: absolute;
@@ -20253,6 +20505,33 @@ html, body {
 }
 .csseditor[data-theme=orange] button svg path {
   fill: #666666;
+}
+.csseditor[data-theme=orange] input[type=file].embed-file-input {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  width: 100%;
+  height: 100%;
+  display: inline-block;
+  background-color: white;
+  opacity: 0;
+  pointer-events: all;
+}
+.csseditor[data-theme=orange] .add-image-button {
+  position: relative;
+  height: 40px;
+  width: 100%;
+  pointer-events: none;
+  cursor: pointer;
+}
+.csseditor[data-theme=orange] .add-image-button button {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  pointer-events: none;
 }
 .csseditor[data-theme=orange] .layout-main {
   position: absolute;
@@ -25263,7 +25542,6 @@ html, body {
   font-size: 11px;
 }
 .csseditor[data-theme=orange] .popup .box-shadow-property-popup .box .drag-board {
-  background-color: #b16b32;
   box-sizing: border-box;
   border: 1px solid #e7e7e7;
   margin-bottom: 2px;
@@ -25281,7 +25559,7 @@ html, body {
   height: 10px;
   -webkit-transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
           transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
-  background-color: #e7e7e7;
+  background-color: #b16b32;
   border-radius: 100%;
 }
 .csseditor[data-theme=orange] .popup .animation-property-popup {
@@ -25362,7 +25640,6 @@ html, body {
   font-size: 11px;
 }
 .csseditor[data-theme=orange] .popup .text-shadow-property-popup .box .drag-board {
-  background-color: #b16b32;
   box-sizing: border-box;
   border: 1px solid #e7e7e7;
   height: 202px;
@@ -25380,7 +25657,7 @@ html, body {
   height: 10px;
   -webkit-transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
           transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
-  background-color: #e7e7e7;
+  background-color: #b16b32;
   border-radius: 100%;
 }
 .csseditor[data-theme=orange] .popup .keyframe-popup {
@@ -26343,6 +26620,65 @@ html, body {
 }
 .csseditor[data-theme=orange] .popup .gradient-picker .codemirror-colorpicker .colorsets {
   border-top: 0px solid #e7e7e7 !important;
+}
+.csseditor[data-theme=orange] .window-background {
+  position: fixed;
+  display: none;
+  left: 0px;
+  top: 0px;
+  bottom: 0px;
+  z-index: 10000;
+  right: 0px;
+  background-color: rgba(128, 128, 128, 0.5);
+}
+.csseditor[data-theme=orange] .window-background .window {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  box-sizing: border-box;
+  z-index: 1000;
+  background-color: white;
+  border: 1px solid #e7e7e7;
+  box-shadow: 0 0 1px 0px #e7e7e7;
+  padding: 14px;
+  color: #666666;
+}
+.csseditor[data-theme=orange] .window-background .window .window-title {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  height: 40px;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  pointer-events: all;
+}
+.csseditor[data-theme=orange] .window-background .window .window-title > * {
+  flex: 1 1 auto;
+}
+.csseditor[data-theme=orange] .window-background .window .window-title .tools {
+  text-align: right;
+}
+.csseditor[data-theme=orange] .window-background .window .window-title label {
+  cursor: move;
+}
+.csseditor[data-theme=orange] .window-background .window .window-body {
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
+  top: 40px;
+}
+.csseditor[data-theme=orange] .window-background .window.export-window {
+  width: 80%;
+  height: 80%;
 }
 .csseditor[data-theme=orange] .path-editor-view {
   display: none;
