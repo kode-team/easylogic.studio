@@ -4,8 +4,8 @@
 EasyLogic Studio is built using CSS and SVG to reduce the gap between web design and code. The goal is to have the same point in time between the designer's design and the developer's output.
 
 
-manual : https://www.easylogic.studio/docs/getting-started.html
-editor : https://editor.easylogic.studio/
+* manual : https://www.easylogic.studio/docs/getting-started.html
+* editor : https://editor.easylogic.studio/
 
 
 # Features 
