@@ -197,7 +197,7 @@ export default class FilterEditor extends UIElement {
     }
 
     return `<RangeEditor 
-                ref='$range${index}' 
+                ref='$range${index}_${filter.type}' 
                 key="${index}" 
                 value="${filter.value}" 
                 units="${spec.units.join(',')}" 
