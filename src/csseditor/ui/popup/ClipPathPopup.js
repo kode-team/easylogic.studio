@@ -8,6 +8,9 @@ import InsetEditor from "../property-editor/clip-path/InsetEditor";
 import PolygonEditor from "../property-editor/clip-path/PolygonEditor";
 import BasePopup from "./BasePopup";
 import { editor } from "../../../editor/editor";
+import EllipseEditor from "../property-editor/clip-path/EllipseEditor";
+
+
 
 export default class ClipPathPopup extends BasePopup {
 
@@ -17,6 +20,7 @@ export default class ClipPathPopup extends BasePopup {
 
   components() {
     return {
+      EllipseEditor,
       PolygonEditor,
       InsetEditor,
       SelectEditor,
@@ -61,7 +65,7 @@ export default class ClipPathPopup extends BasePopup {
     case 'circle':
       return `<CircleEditor ref='$circle' key='circle' value='${this.state.value}' onchange='changeClipPath' />`
     case 'ellipse':
-      return `<CircleEditor ref='$ellipse' key='ellipse' value='${this.state.value}' onchange='changeClipPath' />`
+      return `<EllipseEditor ref='$ellipse' key='ellipse' value='${this.state.value}' onchange='changeClipPath' />`
     case 'inset':
       return `<InsetEditor ref='$inset' key='inset' value='${this.state.value}' onchange='changeClipPath' />`      
     case 'polygon':

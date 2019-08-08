@@ -53,10 +53,6 @@
       height: 20px;
       margin-right: 10px;
       background-color: $background-color;      
-
-      &[has-value="true"] {
-        border-color: $selected-color;
-      }
     }
 
     button[data-value="all"] {

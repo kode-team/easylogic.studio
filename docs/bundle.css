@@ -3002,9 +3002,6 @@ html, body {
   margin-right: 10px;
   background-color: #3a3a3a;
 }
-.csseditor[data-theme=dark] .border-item .border-direction button[has-value=true] {
-  border-color: #3e8ec6;
-}
 .csseditor[data-theme=dark] .border-item .border-direction button[data-value=all] {
   border: 3px solid #3e8ec6;
 }
@@ -9363,9 +9360,6 @@ html, body {
   height: 20px;
   margin-right: 10px;
   background-color: white;
-}
-.csseditor[data-theme=light] .border-item .border-direction button[has-value=true] {
-  border-color: #3e8ec6;
 }
 .csseditor[data-theme=light] .border-item .border-direction button[data-value=all] {
   border: 3px solid #3e8ec6;
@@ -15726,9 +15720,6 @@ html, body {
   margin-right: 10px;
   background-color: white;
 }
-.csseditor[data-theme=red] .border-item .border-direction button[has-value=true] {
-  border-color: #b13232;
-}
 .csseditor[data-theme=red] .border-item .border-direction button[data-value=all] {
   border: 3px solid #b13232;
 }
@@ -22087,9 +22078,6 @@ html, body {
   height: 20px;
   margin-right: 10px;
   background-color: white;
-}
-.csseditor[data-theme=orange] .border-item .border-direction button[has-value=true] {
-  border-color: #b16b32;
 }
 .csseditor[data-theme=orange] .border-item .border-direction button[data-value=all] {
   border: 3px solid #b16b32;
