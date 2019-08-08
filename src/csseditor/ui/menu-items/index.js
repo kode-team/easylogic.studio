@@ -18,8 +18,11 @@ import AddPolygon from "./AddPolygon";
 import AddStar from "./AddStar";
 import ThemeSwitcher from "./ThemeSwitcher";
 import ExportView from "./ExportView";
+import Manual from "./Manual";
+
 
 export default {
+  Manual,
   ExportView,
   ThemeSwitcher,
   AddStar,

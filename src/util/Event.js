@@ -49,6 +49,7 @@ const CHECK_INPUT_PATTERN = "change|input|focus|blur|focus(in|out)";
 const CHECK_CLIPBOARD_PATTERN = "paste";
 const CHECK_BEHAVIOR_PATTERN = "resize|scroll|wheel|mousewheel|DOMMouseScroll";
 const CHECK_FORM_PATTERN = "submit";
+const CHECK_ANIMATION_PATTERN = 'animation(start|end|iteration)'
 
 const CHECK_PATTERN_LIST = [
   CHECK_CLICK_PATTERN,
@@ -61,7 +62,8 @@ const CHECK_PATTERN_LIST = [
   CHECK_INPUT_PATTERN,
   CHECK_CLIPBOARD_PATTERN,
   CHECK_BEHAVIOR_PATTERN,
-  CHECK_FORM_PATTERN
+  CHECK_FORM_PATTERN,
+  CHECK_ANIMATION_PATTERN
 ].join("|");
 
 export const CHECK_PATTERN = new RegExp(`^(${CHECK_PATTERN_LIST})`, "ig");
@@ -124,6 +126,9 @@ export const POINTERMOVE = CUSTOM("mousemove", "touchmove");
 export const POINTEREND = CUSTOM("mouseup", "touchend");
 export const CHANGEINPUT = CUSTOM("change", "input");
 export const WHEEL = CUSTOM("wheel", "mousewheel", "DOMMouseScroll");
+export const ANIMATIONSTART = DOM_EVENT_MAKE('animationstart');
+export const ANIMATIONEND = DOM_EVENT_MAKE('animationend');
+export const ANIMATIONITERATION = DOM_EVENT_MAKE('animationiteration');
 
 // Predefined CHECKER
 export const CHECKER = (value, split = CHECK_SAPARATOR) => {

@@ -3,7 +3,7 @@ import UIElement, { EVENT, COMMAND } from "../../../util/UIElement";
 import { editor } from "../../../editor/editor";
 import { Project } from "../../../editor/items/Project";
 import { ArtBoard } from "../../../editor/items/ArtBoard";
-import { DEBOUNCE, PREVENT, STOP, WHEEL, ALT, THROTTLE, IF, KEYUP, CONTROL, KEY } from "../../../util/Event";
+import { DEBOUNCE, PREVENT, STOP, WHEEL, ALT, THROTTLE, IF, KEYUP, CONTROL, KEY, ANIMATIONITERATION } from "../../../util/Event";
 
 import { StyleParser } from "../../../editor/parse/StyleParser";
 import ElementView from "./ElementView";
@@ -70,6 +70,10 @@ export default class CanvasView extends UIElement {
       </div>
     `;
   }
+
+  // [ANIMATIONITERATION()] (e) {
+  //   // console.log(e.elapsedTime, e);
+  // }
 
   [KEYUP('$el') + CONTROL + KEY('c')  + PREVENT ] (e) {
     this.emit('copy');

@@ -61,9 +61,11 @@ import cube from "./cube";
 import color_lens from "./color_lens";
 import circle from "./circle";
 import rect from "./rect";
+import note from "./note";
 
 
 export default {
+  note,
   rect,
   circle,
   color_lens,

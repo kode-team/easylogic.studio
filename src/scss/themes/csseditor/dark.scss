@@ -23,7 +23,7 @@ $inner-border-color: #202020;
 $border-color: rgb(26, 26, 26);
 $border-color-2: #737373;
 $selected-border-color: #609de2;
-$selected-color: #3e8ec6;
+$selected-color: #6fb2ff;
 $background-color: #3a3a3a; 
 $selected-background-color: #181818; 
 $font-color: #ececec;
@@ -42,7 +42,7 @@ $range-thumb-height: 10px;
 $range-track-height: 2px;
 $range-thumb-top: -4px;
 $range-thumb-color:  rgb(243, 243, 243);
-$range-track-color:  #3174ad;
+$range-track-color:  $selected-color;
 $range-thumb-border-color: $range-thumb-color;
 
 $input-background-color: #373e42;
@@ -65,7 +65,7 @@ $list-background-color: $border-color;
 $tab-background-color: $background-color; 
 $tab-font-color: $font-color;
 $tab-selected-color: $selected-color; 
-$tab-selected-font-color: #75b6ff;
+$tab-selected-font-color: $selected-color;
 $tab-selected-border-color: $selected-border-color;
 $tab-border-color: $border-color;
 

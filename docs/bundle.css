@@ -1440,14 +1440,14 @@ html, body {
   top: 0px;
   bottom: 0px;
   left: 260px;
-  right: 280px;
+  right: 450px;
 }
 .csseditor[data-theme=dark] .layout-main .layout-header .external-tool-menu {
   position: absolute;
   top: 0px;
   bottom: 0px;
   right: 0px;
-  width: 295px;
+  width: 450px;
 }
 .csseditor[data-theme=dark] .layout-main .layout-footer {
   flex: none;
@@ -1588,7 +1588,7 @@ html, body {
   margin-bottom: 5px;
 }
 .csseditor[data-theme=dark] .feature-control .draw-items .menu-item.selected .icon {
-  background-color: #3e8ec6;
+  background-color: #6fb2ff;
 }
 .csseditor[data-theme=dark] .feature-control .draw-items .menu-item.selected .icon svg path {
   fill: white;
@@ -1624,7 +1624,7 @@ html, body {
   width: 100%;
   height: 2px;
   cursor: pointer;
-  background: #3174ad;
+  background: #6fb2ff;
   border-radius: 2px;
 }
 .csseditor[data-theme=dark] input[type=range]::-webkit-slider-thumb {
@@ -1639,13 +1639,13 @@ html, body {
   margin-top: -4px;
 }
 .csseditor[data-theme=dark] input[type=range]:focus::-webkit-slider-runnable-track {
-  background: #3174ad;
+  background: #6fb2ff;
 }
 .csseditor[data-theme=dark] input[type=range]::-moz-range-track {
   width: 100%;
   height: 2px;
   cursor: pointer;
-  background: #3174ad;
+  background: #6fb2ff;
   border-radius: 2px;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.12), inset 0 1px 2px rgba(0, 0, 0, 0.12);
 }
@@ -1664,7 +1664,7 @@ html, body {
   cursor: pointer;
   border: 1px solid #000;
   border-radius: 2px;
-  background: #3174ad;
+  background: #6fb2ff;
 }
 .csseditor[data-theme=dark] input[type=range]::-ms-fill-lower {
   background: #f3f3f3;
@@ -1743,55 +1743,55 @@ html, body {
   pointer-events: none;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"] {
-  color: #75b6ff;
+  color: #6fb2ff;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="1"] .tab-content[data-value="1"] {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"] {
-  color: #75b6ff;
+  color: #6fb2ff;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="2"] .tab-content[data-value="2"] {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"] {
-  color: #75b6ff;
+  color: #6fb2ff;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="3"] .tab-content[data-value="3"] {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"] {
-  color: #75b6ff;
+  color: #6fb2ff;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="4"] .tab-content[data-value="4"] {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"] {
-  color: #75b6ff;
+  color: #6fb2ff;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="5"] .tab-content[data-value="5"] {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"] {
-  color: #75b6ff;
+  color: #6fb2ff;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="6"] .tab-content[data-value="6"] {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"] {
-  color: #75b6ff;
+  color: #6fb2ff;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="7"] .tab-content[data-value="7"] {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"] {
-  color: #75b6ff;
+  color: #6fb2ff;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="8"] .tab-content[data-value="8"] {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"] {
-  color: #75b6ff;
+  color: #6fb2ff;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="9"] .tab-content[data-value="9"] {
   display: block;
@@ -1837,7 +1837,7 @@ html, body {
   font-size: 11px;
 }
 .csseditor[data-theme=dark] .tab > .tab-header > .tab-item.select-reverse:not(.selected) {
-  background-color: rgba(62, 142, 198, 0.5);
+  background-color: rgba(111, 178, 255, 0.5);
   color: black;
 }
 .csseditor[data-theme=dark] .tab > .tab-header > .tab-item.select-reverse.selected {
@@ -1938,7 +1938,7 @@ html, body {
   min-width: 60px;
 }
 .csseditor[data-theme=dark] .tab.horizontal > .tab-header > .tab-item.selected {
-  background-color: rgba(62, 142, 198, 0.5);
+  background-color: rgba(111, 178, 255, 0.5);
 }
 .csseditor[data-theme=dark] .tab.horizontal > .tab-body {
   top: 0px;
@@ -1980,71 +1980,71 @@ html, body {
   display: block;
   height: 30px;
   position: relative;
-  background-image: linear-gradient(to right, #3e8ec6, #3e8ec6);
+  background-image: linear-gradient(to right, #6fb2ff, #6fb2ff);
   background-size: 100% 2px;
   background-position: 0px center;
   background-repeat: no-repeat;
   cursor: pointer;
 }
 .csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="0"] .offset-item[data-offset-index="0"] {
-  box-shadow: 0 0 4px 0 #3e8ec6;
+  box-shadow: 0 0 4px 0 #6fb2ff;
 }
 .csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="1"] .offset-item[data-offset-index="1"] {
-  box-shadow: 0 0 4px 0 #3e8ec6;
+  box-shadow: 0 0 4px 0 #6fb2ff;
 }
 .csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="2"] .offset-item[data-offset-index="2"] {
-  box-shadow: 0 0 4px 0 #3e8ec6;
+  box-shadow: 0 0 4px 0 #6fb2ff;
 }
 .csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="3"] .offset-item[data-offset-index="3"] {
-  box-shadow: 0 0 4px 0 #3e8ec6;
+  box-shadow: 0 0 4px 0 #6fb2ff;
 }
 .csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="4"] .offset-item[data-offset-index="4"] {
-  box-shadow: 0 0 4px 0 #3e8ec6;
+  box-shadow: 0 0 4px 0 #6fb2ff;
 }
 .csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="5"] .offset-item[data-offset-index="5"] {
-  box-shadow: 0 0 4px 0 #3e8ec6;
+  box-shadow: 0 0 4px 0 #6fb2ff;
 }
 .csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="6"] .offset-item[data-offset-index="6"] {
-  box-shadow: 0 0 4px 0 #3e8ec6;
+  box-shadow: 0 0 4px 0 #6fb2ff;
 }
 .csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="7"] .offset-item[data-offset-index="7"] {
-  box-shadow: 0 0 4px 0 #3e8ec6;
+  box-shadow: 0 0 4px 0 #6fb2ff;
 }
 .csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="8"] .offset-item[data-offset-index="8"] {
-  box-shadow: 0 0 4px 0 #3e8ec6;
+  box-shadow: 0 0 4px 0 #6fb2ff;
 }
 .csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="9"] .offset-item[data-offset-index="9"] {
-  box-shadow: 0 0 4px 0 #3e8ec6;
+  box-shadow: 0 0 4px 0 #6fb2ff;
 }
 .csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="10"] .offset-item[data-offset-index="10"] {
-  box-shadow: 0 0 4px 0 #3e8ec6;
+  box-shadow: 0 0 4px 0 #6fb2ff;
 }
 .csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="11"] .offset-item[data-offset-index="11"] {
-  box-shadow: 0 0 4px 0 #3e8ec6;
+  box-shadow: 0 0 4px 0 #6fb2ff;
 }
 .csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="12"] .offset-item[data-offset-index="12"] {
-  box-shadow: 0 0 4px 0 #3e8ec6;
+  box-shadow: 0 0 4px 0 #6fb2ff;
 }
 .csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="13"] .offset-item[data-offset-index="13"] {
-  box-shadow: 0 0 4px 0 #3e8ec6;
+  box-shadow: 0 0 4px 0 #6fb2ff;
 }
 .csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="14"] .offset-item[data-offset-index="14"] {
-  box-shadow: 0 0 4px 0 #3e8ec6;
+  box-shadow: 0 0 4px 0 #6fb2ff;
 }
 .csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="15"] .offset-item[data-offset-index="15"] {
-  box-shadow: 0 0 4px 0 #3e8ec6;
+  box-shadow: 0 0 4px 0 #6fb2ff;
 }
 .csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="16"] .offset-item[data-offset-index="16"] {
-  box-shadow: 0 0 4px 0 #3e8ec6;
+  box-shadow: 0 0 4px 0 #6fb2ff;
 }
 .csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="17"] .offset-item[data-offset-index="17"] {
-  box-shadow: 0 0 4px 0 #3e8ec6;
+  box-shadow: 0 0 4px 0 #6fb2ff;
 }
 .csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="18"] .offset-item[data-offset-index="18"] {
-  box-shadow: 0 0 4px 0 #3e8ec6;
+  box-shadow: 0 0 4px 0 #6fb2ff;
 }
 .csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="19"] .offset-item[data-offset-index="19"] {
-  box-shadow: 0 0 4px 0 #3e8ec6;
+  box-shadow: 0 0 4px 0 #6fb2ff;
 }
 .csseditor[data-theme=dark] .editor.offset-editor .offset .offset-item {
   position: absolute;
@@ -2056,7 +2056,7 @@ html, body {
           transform: translateX(-50%) translateY(-50%);
   box-sizing: border-box;
   border: 1px solid #609de2;
-  background-color: #3e8ec6;
+  background-color: #6fb2ff;
   border-radius: 100%;
   cursor: pointer;
 }
@@ -2074,7 +2074,7 @@ html, body {
   font-style: italic;
   font-weight: bold;
   line-height: 1.6;
-  color: #3e8ec6;
+  color: #6fb2ff;
   z-index: 1;
 }
 .csseditor[data-theme=dark] .logo .extra-text {
@@ -2184,14 +2184,14 @@ html, body {
 }
 .csseditor[data-theme=dark] .tool-menu .items .icon.width,
 .csseditor[data-theme=dark] .external-tool-menu .items .icon.width {
-  background-image: linear-gradient(to right, #3e8ec6, #3e8ec6), linear-gradient(to right, #ccc, #ccc);
+  background-image: linear-gradient(to right, #6fb2ff, #6fb2ff), linear-gradient(to right, #ccc, #ccc);
   background-size: 20px 6px, 20px 6px;
   background-position: 2px 6px, 2px 16px;
   background-repeat: no-repeat;
 }
 .csseditor[data-theme=dark] .tool-menu .items .icon.height,
 .csseditor[data-theme=dark] .external-tool-menu .items .icon.height {
-  background-image: linear-gradient(to right, #3e8ec6, #3e8ec6), linear-gradient(to right, #ccc, #ccc);
+  background-image: linear-gradient(to right, #6fb2ff, #6fb2ff), linear-gradient(to right, #ccc, #ccc);
   background-size: 6px 20px, 6px 20px;
   background-position: 4px 2px, 14px 2px;
   background-repeat: no-repeat;
@@ -3003,19 +3003,19 @@ html, body {
   background-color: #3a3a3a;
 }
 .csseditor[data-theme=dark] .border-item .border-direction button[data-value=all] {
-  border: 3px solid #3e8ec6;
+  border: 3px solid #6fb2ff;
 }
 .csseditor[data-theme=dark] .border-item .border-direction button[data-value=top] {
-  border-top: 3px solid #3e8ec6;
+  border-top: 3px solid #6fb2ff;
 }
 .csseditor[data-theme=dark] .border-item .border-direction button[data-value=right] {
-  border-right: 3px solid #3e8ec6;
+  border-right: 3px solid #6fb2ff;
 }
 .csseditor[data-theme=dark] .border-item .border-direction button[data-value=bottom] {
-  border-bottom: 3px solid #3e8ec6;
+  border-bottom: 3px solid #6fb2ff;
 }
 .csseditor[data-theme=dark] .border-item .border-direction button[data-value=left] {
-  border-left: 3px solid #3e8ec6;
+  border-left: 3px solid #6fb2ff;
 }
 .csseditor[data-theme=dark] .border-item .editor-area {
   padding: 5px 0px;
@@ -3365,7 +3365,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .transition-list .transition-item .timing {
   border-radius: 3px;
-  background-color: #3e8ec6;
+  background-color: #6fb2ff;
   width: 100%;
   height: 30px;
   vertical-align: middle;
@@ -3427,7 +3427,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .animation-list .animation-item .timing {
   border-radius: 3px;
-  background-color: #3e8ec6;
+  background-color: #6fb2ff;
   width: 100%;
   height: 30px;
   vertical-align: middle;
@@ -3575,7 +3575,7 @@ html, body {
   content: attr(title);
   position: absolute;
   display: inline-block;
-  background-color: #3e8ec6;
+  background-color: #6fb2ff;
   color: white;
   left: 0px;
   top: 0px;
@@ -3598,7 +3598,7 @@ html, body {
   cursor: pointer;
 }
 .csseditor[data-theme=dark] .clip-path-list .clippath-item.selected, .csseditor[data-theme=dark] .clip-path-list .clippath-item:hover {
-  background-color: #3e8ec6;
+  background-color: #6fb2ff;
 }
 .csseditor[data-theme=dark] .clip-path-list .clippath-item .title {
   display: grid;
@@ -3678,7 +3678,7 @@ html, body {
   padding: 4px 6px;
   font-weight: bold;
   border-radius: 5px;
-  background-color: #3e8ec6;
+  background-color: #6fb2ff;
   color: white;
 }
 .csseditor[data-theme=dark] .selector-list .selector-item .title .name span svg path {
@@ -4548,7 +4548,7 @@ html, body {
   border-radius: 100%;
   cursor: pointer;
   background-color: #3a3a3a;
-  border: 1px solid #3e8ec6;
+  border: 1px solid #6fb2ff;
   box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .cubic-bezier-editor .animation {
@@ -4921,14 +4921,14 @@ html, body {
 .csseditor[data-theme=dark] .css-property-editor .css-property-item > .title {
   grid-template-columns: 1fr 30px;
   background-color: #3a3a3a;
-  color: #3e8ec6;
+  color: #6fb2ff;
   border-radius: 3px;
   padding: 3px 0px;
   margin-bottom: 2px;
   font-weight: 900;
 }
 .csseditor[data-theme=dark] .css-property-editor .css-property-item > .title svg path {
-  fill: #3e8ec6;
+  fill: #6fb2ff;
 }
 .csseditor[data-theme=dark] .css-property-editor .css-property-item .value-editor {
   padding: 2px;
@@ -5105,13 +5105,13 @@ html, body {
   grid-template-columns: 1fr 1fr;
 }
 .csseditor[data-theme=dark] .border-radius-editor .radius-selector[data-selected-value=all] button[data-value=all] {
-  background-color: #3e8ec6;
+  background-color: #6fb2ff;
 }
 .csseditor[data-theme=dark] .border-radius-editor .radius-selector[data-selected-value=all] button[data-value=all] svg path {
   fill: white;
 }
 .csseditor[data-theme=dark] .border-radius-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] {
-  background-color: #3e8ec6;
+  background-color: #6fb2ff;
 }
 .csseditor[data-theme=dark] .border-radius-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] svg path {
   fill: white;
@@ -5155,13 +5155,13 @@ html, body {
   margin: 5px 0px;
 }
 .csseditor[data-theme=dark] .transform-editor .transform-list .transform-item .title svg path {
-  fill: #3e8ec6;
+  fill: #6fb2ff;
 }
 .csseditor[data-theme=dark] .transform-editor .transform-list .transform-item .title label {
   font-size: 12px;
   padding: 2px 5px;
   box-sizing: border-box;
-  color: #3e8ec6;
+  color: #6fb2ff;
 }
 .csseditor[data-theme=dark] .transform-editor .transform-list .transform-item .title label span {
   font-weight: bold;
@@ -5334,7 +5334,7 @@ html, body {
   fill: #3a3a3a;
 }
 .csseditor[data-theme=dark] .box-shadow-editor .shadow-item .inset[data-value=true] svg path {
-  fill: #3e8ec6;
+  fill: #6fb2ff;
 }
 .csseditor[data-theme=dark] .box-shadow-editor .shadow-item .offset-x,
 .csseditor[data-theme=dark] .box-shadow-editor .shadow-item .offset-y,
@@ -5475,13 +5475,13 @@ html, body {
   justify-items: center;
 }
 .csseditor[data-theme=dark] .perspective-origin-editor .radius-selector[data-selected-value=all] button[data-value=all] {
-  background-color: #3e8ec6;
+  background-color: #6fb2ff;
 }
 .csseditor[data-theme=dark] .perspective-origin-editor .radius-selector[data-selected-value=all] button[data-value=all] svg path {
   fill: white;
 }
 .csseditor[data-theme=dark] .perspective-origin-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] {
-  background-color: #3e8ec6;
+  background-color: #6fb2ff;
 }
 .csseditor[data-theme=dark] .perspective-origin-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] svg path {
   fill: white;
@@ -5508,13 +5508,13 @@ html, body {
   justify-items: center;
 }
 .csseditor[data-theme=dark] .transform-origin-editor .radius-selector[data-selected-value=all] button[data-value=all] {
-  background-color: #3e8ec6;
+  background-color: #6fb2ff;
 }
 .csseditor[data-theme=dark] .transform-origin-editor .radius-selector[data-selected-value=all] button[data-value=all] svg path {
   fill: white;
 }
 .csseditor[data-theme=dark] .transform-origin-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] {
-  background-color: #3e8ec6;
+  background-color: #6fb2ff;
 }
 .csseditor[data-theme=dark] .transform-origin-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] svg path {
   fill: white;
@@ -5843,7 +5843,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .svg-property-editor .svg-property-list .svg-property-item .title .type[data-type=filter] {
   border-radius: 5px;
-  background-color: #3e8ec6;
+  background-color: #6fb2ff;
 }
 .csseditor[data-theme=dark] .svg-property-editor .svg-property-list .svg-property-item .title .type[data-type=clip-path] {
   border-radius: 5px;
@@ -5890,7 +5890,7 @@ html, body {
 .csseditor[data-theme=dark] .svg-filter-editor .filter-list .filter-item .title {
   display: grid;
   grid-template-columns: 1fr 30px;
-  background-color: #3e8ec6;
+  background-color: #6fb2ff;
   color: white;
   border-radius: 3px;
   margin: 5px 0px;
@@ -5948,13 +5948,13 @@ html, body {
   grid-template-columns: 1fr 1fr;
 }
 .csseditor[data-theme=dark] .direction-editor .radius-selector[data-selected-value=all] button[data-value=all] {
-  background-color: #3e8ec6;
+  background-color: #6fb2ff;
 }
 .csseditor[data-theme=dark] .direction-editor .radius-selector[data-selected-value=all] button[data-value=all] svg path {
   fill: white;
 }
 .csseditor[data-theme=dark] .direction-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] {
-  background-color: #3e8ec6;
+  background-color: #6fb2ff;
 }
 .csseditor[data-theme=dark] .direction-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] svg path {
   fill: white;
@@ -6022,7 +6022,7 @@ html, body {
   grid-template-columns: repeat(9, 1fr);
 }
 .csseditor[data-theme=dark] .list-view-editor .list-view-item.selected {
-  background-color: #3e8ec6;
+  background-color: #6fb2ff;
 }
 .csseditor[data-theme=dark] .list-view-editor .list-view-item.selected svg path, .csseditor[data-theme=dark] .list-view-editor .list-view-item.selected svg circle, .csseditor[data-theme=dark] .list-view-editor .list-view-item.selected svg rect {
   fill: white;
@@ -6397,12 +6397,12 @@ html, body {
   height: 20px;
 }
 .csseditor[data-theme=dark] .popup .box-shadow-property-popup .box .type .select[data-selected-value=inset] button[data-value=inset] {
-  box-shadow: inset 0px 0px 3px 0px #3e8ec6 !important;
-  background-color: #3e8ec6 !important;
+  box-shadow: inset 0px 0px 3px 0px #6fb2ff !important;
+  background-color: #6fb2ff !important;
 }
 .csseditor[data-theme=dark] .popup .box-shadow-property-popup .box .type .select[data-selected-value=outset] button[data-value=outset] {
-  box-shadow: inset 0px 0px 3px 0px #3e8ec6 !important;
-  background-color: #3e8ec6 !important;
+  box-shadow: inset 0px 0px 3px 0px #6fb2ff !important;
+  background-color: #6fb2ff !important;
 }
 .csseditor[data-theme=dark] .popup .box-shadow-property-popup .box .type .select button {
   width: 100%;
@@ -6430,7 +6430,7 @@ html, body {
   height: 10px;
   -webkit-transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
           transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
-  background-color: #3e8ec6;
+  background-color: #6fb2ff;
   border-radius: 100%;
 }
 .csseditor[data-theme=dark] .popup .animation-property-popup {
@@ -6528,7 +6528,7 @@ html, body {
   height: 10px;
   -webkit-transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
           transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
-  background-color: #3e8ec6;
+  background-color: #6fb2ff;
   border-radius: 100%;
 }
 .csseditor[data-theme=dark] .popup .keyframe-popup {
@@ -6627,7 +6627,7 @@ html, body {
 .csseditor[data-theme=dark] .popup .clippath-popup .box > .clip-path-editor .clip-area {
   display: inline-block;
   position: absolute;
-  background-color: #3e8ec6;
+  background-color: #6fb2ff;
   z-index: 0;
 }
 .csseditor[data-theme=dark] .popup .clippath-popup .box > .clip-path-editor .clip-area.polygon {
@@ -6821,104 +6821,104 @@ html, body {
   height: 24px;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .repeat-list button[value=no-repeat] {
-  background-image: linear-gradient(to top right, #3e8ec6, white);
+  background-image: linear-gradient(to top right, #6fb2ff, white);
   background-position: center center;
   background-size: 8px 8px;
   background-repeat: no-repeat;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .repeat-list button[value=repeat] {
-  background-image: linear-gradient(to top right, #3e8ec6, white);
+  background-image: linear-gradient(to top right, #6fb2ff, white);
   background-position: 10px 10px;
   background-size: 8px 8px;
   background-repeat: repeat;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .repeat-list button[value=repeat-x] {
-  background-image: linear-gradient(to top right, #3e8ec6, white);
+  background-image: linear-gradient(to top right, #6fb2ff, white);
   background-position: 10px 8px;
   background-size: 8px 8px;
   background-repeat: repeat-x;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .repeat-list button[value=repeat-y] {
-  background-image: linear-gradient(to top right, #3e8ec6, white);
+  background-image: linear-gradient(to top right, #6fb2ff, white);
   background-position: 8px 10px;
   background-size: 8px 8px;
   background-repeat: repeat-y;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .repeat-list button[value=space] {
-  background-image: linear-gradient(to top right, #3e8ec6, white);
+  background-image: linear-gradient(to top right, #6fb2ff, white);
   background-position: 10px 10px;
   background-size: 8px 8px;
   background-repeat: space;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .repeat-list button[value=round] {
-  background-image: linear-gradient(to top right, #3e8ec6, white);
+  background-image: linear-gradient(to top right, #6fb2ff, white);
   background-position: 0px 0px;
   background-size: 8px 8px;
   background-repeat: round;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .repeat-list[data-value=repeat] button[value=repeat], .csseditor[data-theme=dark] .popup .fill-picker .repeat-list[data-value=no-repeat] button[value=no-repeat], .csseditor[data-theme=dark] .popup .fill-picker .repeat-list[data-value=repeat-x] button[value=repeat-x], .csseditor[data-theme=dark] .popup .fill-picker .repeat-list[data-value=repeat-y] button[value=repeat-y], .csseditor[data-theme=dark] .popup .fill-picker .repeat-list[data-value=space] button[value=space], .csseditor[data-theme=dark] .popup .fill-picker .repeat-list[data-value=round] button[value=round] {
-  background-color: #3e8ec6;
-  box-shadow: 0 0 2px 2px #3e8ec6;
+  background-color: #6fb2ff;
+  box-shadow: 0 0 2px 2px #6fb2ff;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list {
   text-align: center;
   padding: 2px 5px;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=static-gradient] .picker-tab-item[data-selected-value=static-gradient] {
-  background-color: #3e8ec6;
+  background-color: #6fb2ff;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=static-gradient] .picker-tab-item[data-selected-value=static-gradient] .icon svg path {
-  fill: #3e8ec6;
+  fill: #6fb2ff;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=linear-gradient] .picker-tab-item[data-selected-value=linear-gradient] {
-  background-color: #3e8ec6;
+  background-color: #6fb2ff;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=linear-gradient] .picker-tab-item[data-selected-value=linear-gradient] .icon svg path {
-  fill: #3e8ec6;
+  fill: #6fb2ff;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-linear-gradient] .picker-tab-item[data-selected-value=repeating-linear-gradient] {
-  background-color: #3e8ec6;
+  background-color: #6fb2ff;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-linear-gradient] .picker-tab-item[data-selected-value=repeating-linear-gradient] .icon svg path {
-  fill: #3e8ec6;
+  fill: #6fb2ff;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=radial-gradient] .picker-tab-item[data-selected-value=radial-gradient] {
-  background-color: #3e8ec6;
+  background-color: #6fb2ff;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=radial-gradient] .picker-tab-item[data-selected-value=radial-gradient] .icon svg path {
-  fill: #3e8ec6;
+  fill: #6fb2ff;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-radial-gradient] .picker-tab-item[data-selected-value=repeating-radial-gradient] {
-  background-color: #3e8ec6;
+  background-color: #6fb2ff;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-radial-gradient] .picker-tab-item[data-selected-value=repeating-radial-gradient] .icon svg path {
-  fill: #3e8ec6;
+  fill: #6fb2ff;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=conic-gradient] .picker-tab-item[data-selected-value=conic-gradient] {
-  background-color: #3e8ec6;
+  background-color: #6fb2ff;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=conic-gradient] .picker-tab-item[data-selected-value=conic-gradient] .icon svg path {
-  fill: #3e8ec6;
+  fill: #6fb2ff;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-conic-gradient] .picker-tab-item[data-selected-value=repeating-conic-gradient] {
-  background-color: #3e8ec6;
+  background-color: #6fb2ff;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-conic-gradient] .picker-tab-item[data-selected-value=repeating-conic-gradient] .icon svg path {
-  fill: #3e8ec6;
+  fill: #6fb2ff;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=image] .picker-tab-item[data-selected-value=image] {
-  background-color: #3e8ec6;
+  background-color: #6fb2ff;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=image] .picker-tab-item[data-selected-value=image] .icon svg path {
-  fill: #3e8ec6;
+  fill: #6fb2ff;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-is-image-hidden=true] .picker-tab-item[data-selected-value=image] {
   display: none;
@@ -7291,56 +7291,56 @@ html, body {
   padding: 2px 5px;
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=static-gradient] .picker-tab-item[data-selected-value=static-gradient] {
-  background-color: #3e8ec6;
+  background-color: #6fb2ff;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=static-gradient] .picker-tab-item[data-selected-value=static-gradient] .icon svg path {
   fill: rgba(0, 0, 255, 0.5);
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=linear-gradient] .picker-tab-item[data-selected-value=linear-gradient] {
-  background-color: #3e8ec6;
+  background-color: #6fb2ff;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=linear-gradient] .picker-tab-item[data-selected-value=linear-gradient] .icon svg path {
   fill: rgba(0, 0, 255, 0.5);
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=repeating-linear-gradient] .picker-tab-item[data-selected-value=repeating-linear-gradient] {
-  background-color: #3e8ec6;
+  background-color: #6fb2ff;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=repeating-linear-gradient] .picker-tab-item[data-selected-value=repeating-linear-gradient] .icon svg path {
   fill: rgba(0, 0, 255, 0.5);
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=radial-gradient] .picker-tab-item[data-selected-value=radial-gradient] {
-  background-color: #3e8ec6;
+  background-color: #6fb2ff;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=radial-gradient] .picker-tab-item[data-selected-value=radial-gradient] .icon svg path {
   fill: rgba(0, 0, 255, 0.5);
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=repeating-radial-gradient] .picker-tab-item[data-selected-value=repeating-radial-gradient] {
-  background-color: #3e8ec6;
+  background-color: #6fb2ff;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=repeating-radial-gradient] .picker-tab-item[data-selected-value=repeating-radial-gradient] .icon svg path {
   fill: rgba(0, 0, 255, 0.5);
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=conic-gradient] .picker-tab-item[data-selected-value=conic-gradient] {
-  background-color: #3e8ec6;
+  background-color: #6fb2ff;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=conic-gradient] .picker-tab-item[data-selected-value=conic-gradient] .icon svg path {
   fill: rgba(0, 0, 255, 0.5);
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=repeating-conic-gradient] .picker-tab-item[data-selected-value=repeating-conic-gradient] {
-  background-color: #3e8ec6;
+  background-color: #6fb2ff;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=repeating-conic-gradient] .picker-tab-item[data-selected-value=repeating-conic-gradient] .icon svg path {
   fill: rgba(0, 0, 255, 0.5);
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=image] .picker-tab-item[data-selected-value=image] {
-  background-color: #3e8ec6;
+  background-color: #6fb2ff;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=image] .picker-tab-item[data-selected-value=image] .icon svg path {
@@ -7623,11 +7623,11 @@ html, body {
 }
 .csseditor[data-theme=dark] .path-editor-view svg path.split-path:hover {
   cursor: copy;
-  stroke: #24577a;
+  stroke: #097bff;
 }
 .csseditor[data-theme=dark] .path-editor-view svg path.snap-path {
   fill: transparent;
-  stroke: #3e8ec6;
+  stroke: #6fb2ff;
 }
 .csseditor[data-theme=dark] .polygon-editor-view {
   display: none;
@@ -7696,11 +7696,11 @@ html, body {
 }
 .csseditor[data-theme=dark] .polygon-editor-view svg path.split-path:hover, .csseditor[data-theme=dark] .polygon-editor-view svg polygon.split-path:hover {
   cursor: copy;
-  stroke: #24577a;
+  stroke: #097bff;
 }
 .csseditor[data-theme=dark] .polygon-editor-view svg path.snap-path, .csseditor[data-theme=dark] .polygon-editor-view svg polygon.snap-path {
   fill: transparent;
-  stroke: #3e8ec6;
+  stroke: #6fb2ff;
 }
 .csseditor[data-theme=light] input[type=text],
 .csseditor[data-theme=light] input[type=number],
@@ -7799,14 +7799,14 @@ html, body {
   top: 0px;
   bottom: 0px;
   left: 260px;
-  right: 280px;
+  right: 450px;
 }
 .csseditor[data-theme=light] .layout-main .layout-header .external-tool-menu {
   position: absolute;
   top: 0px;
   bottom: 0px;
   right: 0px;
-  width: 295px;
+  width: 450px;
 }
 .csseditor[data-theme=light] .layout-main .layout-footer {
   flex: none;
@@ -14158,14 +14158,14 @@ html, body {
   top: 0px;
   bottom: 0px;
   left: 260px;
-  right: 280px;
+  right: 450px;
 }
 .csseditor[data-theme=red] .layout-main .layout-header .external-tool-menu {
   position: absolute;
   top: 0px;
   bottom: 0px;
   right: 0px;
-  width: 295px;
+  width: 450px;
 }
 .csseditor[data-theme=red] .layout-main .layout-footer {
   flex: none;
@@ -20517,14 +20517,14 @@ html, body {
   top: 0px;
   bottom: 0px;
   left: 260px;
-  right: 280px;
+  right: 450px;
 }
 .csseditor[data-theme=orange] .layout-main .layout-header .external-tool-menu {
   position: absolute;
   top: 0px;
   bottom: 0px;
   right: 0px;
-  width: 295px;
+  width: 450px;
 }
 .csseditor[data-theme=orange] .layout-main .layout-footer {
   flex: none;
