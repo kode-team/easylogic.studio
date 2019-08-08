@@ -1,37 +1,8 @@
 
 import { uuid } from "./functions/math";
 
-export class EventChecker {
-  constructor(value, split = CHECK_SAPARATOR) {
-    this.value = value;
-    this.split = split;
-  }
-
-  toString() {
-    return ` ${this.split} ` + this.value;
-  }
-}
-
-export class EventAfterRunner {
-  constructor(value, split = CHECK_SAPARATOR) {
-    this.value = value;
-    this.split = split;
-  }
-
-  toString() {
-    return ` ${this.split} after(${this.value})`;
-  }
-}
-
-export class EventBeforeRunner {
-  constructor(value, split = CHECK_SAPARATOR) {
-    this.value = value;
-    this.split = split;
-  }
-
-  toString() {
-    return ` ${this.split} before(${this.value})`;
-  }
+export const makeEventChecker = (value, split = CHECK_SAPARATOR) => {
+  return ` ${split} ${value}`;
 }
 
 // event name regular expression
@@ -132,15 +103,15 @@ export const ANIMATIONITERATION = DOM_EVENT_MAKE('animationiteration');
 
 // Predefined CHECKER
 export const CHECKER = (value, split = CHECK_SAPARATOR) => {
-  return new EventChecker(value, split);
+  return makeEventChecker(value, split);
 };
 
 export const AFTER = (value, split = CHECK_SAPARATOR) => {
-  return new EventAfterRunner(value, split);
+  return makeEventChecker(`after(${value})`, split);
 };
 
 export const BEFORE = (value, split = CHECK_SAPARATOR) => {
-  return new EventBeforeRunner(value, split);
+  return makeEventChecker(`before(${value})`, split);  
 };
 
 export const IF = CHECKER;

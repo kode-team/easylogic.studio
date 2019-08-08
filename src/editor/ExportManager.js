@@ -1,5 +1,6 @@
 import { CSS_TO_STRING } from "../util/functions/func";
 import { editor } from "./editor";
+import { Length } from "./unit/Length";
 
 export default {
 
@@ -39,8 +40,13 @@ export default {
   },
 
   generate () {
-    var project = editor.selection.currentProject;
-    var artboard = editor.selection.currentArtboard;
+    var project = editor.selection.currentProject.clone();
+    var artboard = editor.selection.currentArtboard.clone();
+
+    artboard.reset({
+      x: Length.px(0),
+      y: Length.px(0)
+    })
 
     var css = `
       ${this.makeStyle(project)}
