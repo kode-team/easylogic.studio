@@ -46,6 +46,7 @@ export default class CommandView extends UIElement {
         this.emit('refreshAll')
         this.emit('hideSubEditor');
         this.emit('refreshSelection');        
+        this.emit('refreshSelectionTool')       
     }
 
     [COMMAND('add.type')] (type) {

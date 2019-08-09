@@ -51,8 +51,8 @@ export default class ArtBoardProperty extends BaseProperty {
   selectArtboard(artboard) {
 
     if (artboard) {
+      editor.selection.select()      
       editor.selection.selectArtboard(artboard)
-      editor.selection.select()
     }
 
     this.refresh()

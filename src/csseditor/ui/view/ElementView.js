@@ -184,16 +184,21 @@ export default class ElementView extends UIElement {
                 var items = artboard.checkInAreaForLayers(rect);
     
                 editor.selection.select(...items);
-            }
+
+                this.selectCurrentForBackgroundView(...items)
     
-            this.selectCurrentForBackgroundView(...items)
-    
-            if (items.length) {
-                this.emit('refreshSelection')
+                if (items.length) {
+                    this.emit('refreshSelection')
+                } else {
+                    editor.selection.select();            
+                    this.emit('emptySelection')
+                }                
             } else {
-                editor.selection.select();            
+                editor.selection.select();                
                 this.emit('emptySelection')
             }
+    
+
         } else {
             var obj = {
                 x: Length.px(rect.x.value / editor.scale),
@@ -504,6 +509,14 @@ export default class ElementView extends UIElement {
             this.trigger('addElement')
         }
 
+    }
+
+    [EVENT('refreshAllCanvas')] () {
+        var artboard = editor.selection.currentArtboard || { html : ''} 
+        var html = artboard.html
+
+        this.setState({ html })
+        this.emit('refreshSelectionTool')        
     }
 
     refresh() {

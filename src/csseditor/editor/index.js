@@ -122,7 +122,8 @@ export default class CSSEditor extends UIElement {
 
   [EVENT('refreshAllSelectArtBoard')] () {      
     this.emit('refreshLayerTreeView')    
-    this.trigger('refreshElement')
+    this.emit('refreshAllCanvas');
+    this.emit('refreshStyleView');
   }  
 
   [EVENT('refreshElement')] (current) {

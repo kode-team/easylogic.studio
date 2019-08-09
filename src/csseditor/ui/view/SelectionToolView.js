@@ -689,6 +689,9 @@ export default class SelectionToolView extends UIElement {
             // 아무것도 없을 때는 안 보이는 곳으로 숨김 
             x.add(-100);
             y.add(-100);       
+        } else if (!editor.selection.currentArtboard) {
+            x.add(-10000);
+            y.add(-10000);            
         }
 
         this.refs.$selectionTool.cssText(`left: ${x};top:${y};width:${width};height:${height}`)
