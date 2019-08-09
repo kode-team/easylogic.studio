@@ -28,7 +28,7 @@
         svg {
             path {
                 &.object {
-                    stroke: $selected-border-color;
+                    stroke: $path-guide-color;
                 }
             }
         }
@@ -37,9 +37,9 @@
     svg {
 
         line {
-            stroke: green; 
+            stroke: $selected-color; 
             stroke-width: 1; 
-            stroke-dasharray: 5 2; 
+            // stroke-dasharray: 5 2; 
 
             &[data-guide='true'] {
                 stroke: purple;
@@ -70,9 +70,9 @@
         path {
             &.guide {
                 fill: transparent;
-                stroke: blue;
+                stroke: $path-guide-color;
                 stroke-width: 1; 
-                stroke-dasharray: 2 2;                 
+                // stroke-dasharray: 2 2;                 
             }
 
             &.segment {
@@ -83,7 +83,7 @@
             
             &.object {
                 fill: transparent;
-                stroke: $selected-border-color;
+                stroke: $path-guide-color;
                 stroke-width: 1; 
             }       
             
@@ -101,7 +101,7 @@
 
             &.snap-path {
                 fill: transparent;
-                stroke: $selected-color;
+                stroke: darken($selected-color, 20%);
             }
         }
     }

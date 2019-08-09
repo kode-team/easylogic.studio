@@ -29,9 +29,9 @@
     svg {
 
         line {
-            stroke: green; 
+            stroke: $path-guide-color; 
             stroke-width: 1; 
-            stroke-dasharray: 5 2; 
+            // stroke-dasharray: 5 2; 
 
             &[data-guide='true'] {
                 stroke: purple;
@@ -66,9 +66,9 @@
         path,polygon {
             &.guide {
                 fill: transparent;
-                stroke: blue;
+                stroke: $selected-color;
                 stroke-width: 1; 
-                stroke-dasharray: 2 2; 
+                // stroke-dasharray: 2 2; 
             }
 
             &.segment {
@@ -79,7 +79,7 @@
             
             &.object {
                 fill: transparent;
-                stroke: darken($border-color, 20%);
+                stroke: darken($path-guide-color, 20%);
                 stroke-width: 1; 
             }       
             

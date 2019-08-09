@@ -7620,12 +7620,11 @@ html, body {
   cursor: default;
 }
 .csseditor[data-theme=dark] .path-editor-view.modify svg path.object {
-  stroke: #609de2;
+  stroke: rgba(0, 0, 0, 0.8);
 }
 .csseditor[data-theme=dark] .path-editor-view svg line {
-  stroke: green;
+  stroke: #6fb2ff;
   stroke-width: 1;
-  stroke-dasharray: 5 2;
 }
 .csseditor[data-theme=dark] .path-editor-view svg line[data-guide=true] {
   stroke: purple;
@@ -7648,9 +7647,8 @@ html, body {
 }
 .csseditor[data-theme=dark] .path-editor-view svg path.guide {
   fill: transparent;
-  stroke: blue;
+  stroke: rgba(0, 0, 0, 0.8);
   stroke-width: 1;
-  stroke-dasharray: 2 2;
 }
 .csseditor[data-theme=dark] .path-editor-view svg path.segment {
   fill: transparent;
@@ -7659,7 +7657,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .path-editor-view svg path.object {
   fill: transparent;
-  stroke: #609de2;
+  stroke: rgba(0, 0, 0, 0.8);
   stroke-width: 1;
 }
 .csseditor[data-theme=dark] .path-editor-view svg path.split-path {
@@ -7674,7 +7672,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .path-editor-view svg path.snap-path {
   fill: transparent;
-  stroke: #6fb2ff;
+  stroke: #097bff;
 }
 .csseditor[data-theme=dark] .polygon-editor-view {
   display: none;
@@ -7693,9 +7691,8 @@ html, body {
   stroke: #609de2;
 }
 .csseditor[data-theme=dark] .polygon-editor-view svg line {
-  stroke: green;
+  stroke: rgba(0, 0, 0, 0.8);
   stroke-width: 1;
-  stroke-dasharray: 5 2;
 }
 .csseditor[data-theme=dark] .polygon-editor-view svg line[data-guide=true] {
   stroke: purple;
@@ -7721,9 +7718,8 @@ html, body {
 }
 .csseditor[data-theme=dark] .polygon-editor-view svg path.guide, .csseditor[data-theme=dark] .polygon-editor-view svg polygon.guide {
   fill: transparent;
-  stroke: blue;
+  stroke: #6fb2ff;
   stroke-width: 1;
-  stroke-dasharray: 2 2;
 }
 .csseditor[data-theme=dark] .polygon-editor-view svg path.segment, .csseditor[data-theme=dark] .polygon-editor-view svg polygon.segment {
   fill: transparent;
@@ -7732,7 +7728,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .polygon-editor-view svg path.object, .csseditor[data-theme=dark] .polygon-editor-view svg polygon.object {
   fill: transparent;
-  stroke: black;
+  stroke: rgba(0, 0, 0, 0.8);
   stroke-width: 1;
 }
 .csseditor[data-theme=dark] .polygon-editor-view svg path.split-path, .csseditor[data-theme=dark] .polygon-editor-view svg polygon.split-path {
@@ -14026,12 +14022,11 @@ html, body {
   cursor: default;
 }
 .csseditor[data-theme=light] .path-editor-view.modify svg path.object {
-  stroke: #609de2;
+  stroke: #3e8ec6;
 }
 .csseditor[data-theme=light] .path-editor-view svg line {
-  stroke: green;
+  stroke: #3e8ec6;
   stroke-width: 1;
-  stroke-dasharray: 5 2;
 }
 .csseditor[data-theme=light] .path-editor-view svg line[data-guide=true] {
   stroke: purple;
@@ -14054,9 +14049,8 @@ html, body {
 }
 .csseditor[data-theme=light] .path-editor-view svg path.guide {
   fill: transparent;
-  stroke: blue;
+  stroke: #3e8ec6;
   stroke-width: 1;
-  stroke-dasharray: 2 2;
 }
 .csseditor[data-theme=light] .path-editor-view svg path.segment {
   fill: transparent;
@@ -14065,7 +14059,7 @@ html, body {
 }
 .csseditor[data-theme=light] .path-editor-view svg path.object {
   fill: transparent;
-  stroke: #609de2;
+  stroke: #3e8ec6;
   stroke-width: 1;
 }
 .csseditor[data-theme=light] .path-editor-view svg path.split-path {
@@ -14080,7 +14074,7 @@ html, body {
 }
 .csseditor[data-theme=light] .path-editor-view svg path.snap-path {
   fill: transparent;
-  stroke: #3e8ec6;
+  stroke: #24577a;
 }
 .csseditor[data-theme=light] .polygon-editor-view {
   display: none;
@@ -14099,9 +14093,8 @@ html, body {
   stroke: #609de2;
 }
 .csseditor[data-theme=light] .polygon-editor-view svg line {
-  stroke: green;
+  stroke: #3e8ec6;
   stroke-width: 1;
-  stroke-dasharray: 5 2;
 }
 .csseditor[data-theme=light] .polygon-editor-view svg line[data-guide=true] {
   stroke: purple;
@@ -14127,9 +14120,8 @@ html, body {
 }
 .csseditor[data-theme=light] .polygon-editor-view svg path.guide, .csseditor[data-theme=light] .polygon-editor-view svg polygon.guide {
   fill: transparent;
-  stroke: blue;
+  stroke: #3e8ec6;
   stroke-width: 1;
-  stroke-dasharray: 2 2;
 }
 .csseditor[data-theme=light] .polygon-editor-view svg path.segment, .csseditor[data-theme=light] .polygon-editor-view svg polygon.segment {
   fill: transparent;
@@ -14138,7 +14130,7 @@ html, body {
 }
 .csseditor[data-theme=light] .polygon-editor-view svg path.object, .csseditor[data-theme=light] .polygon-editor-view svg polygon.object {
   fill: transparent;
-  stroke: #b4b4b4;
+  stroke: #24577a;
   stroke-width: 1;
 }
 .csseditor[data-theme=light] .polygon-editor-view svg path.split-path, .csseditor[data-theme=light] .polygon-editor-view svg polygon.split-path {
@@ -20432,12 +20424,11 @@ html, body {
   cursor: default;
 }
 .csseditor[data-theme=red] .path-editor-view.modify svg path.object {
-  stroke: #830202;
+  stroke: #b13232;
 }
 .csseditor[data-theme=red] .path-editor-view svg line {
-  stroke: green;
+  stroke: #b13232;
   stroke-width: 1;
-  stroke-dasharray: 5 2;
 }
 .csseditor[data-theme=red] .path-editor-view svg line[data-guide=true] {
   stroke: purple;
@@ -20460,9 +20451,8 @@ html, body {
 }
 .csseditor[data-theme=red] .path-editor-view svg path.guide {
   fill: transparent;
-  stroke: blue;
+  stroke: #b13232;
   stroke-width: 1;
-  stroke-dasharray: 2 2;
 }
 .csseditor[data-theme=red] .path-editor-view svg path.segment {
   fill: transparent;
@@ -20471,7 +20461,7 @@ html, body {
 }
 .csseditor[data-theme=red] .path-editor-view svg path.object {
   fill: transparent;
-  stroke: #830202;
+  stroke: #b13232;
   stroke-width: 1;
 }
 .csseditor[data-theme=red] .path-editor-view svg path.split-path {
@@ -20486,7 +20476,7 @@ html, body {
 }
 .csseditor[data-theme=red] .path-editor-view svg path.snap-path {
   fill: transparent;
-  stroke: #b13232;
+  stroke: #611c1c;
 }
 .csseditor[data-theme=red] .polygon-editor-view {
   display: none;
@@ -20505,9 +20495,8 @@ html, body {
   stroke: #830202;
 }
 .csseditor[data-theme=red] .polygon-editor-view svg line {
-  stroke: green;
+  stroke: #b13232;
   stroke-width: 1;
-  stroke-dasharray: 5 2;
 }
 .csseditor[data-theme=red] .polygon-editor-view svg line[data-guide=true] {
   stroke: purple;
@@ -20533,9 +20522,8 @@ html, body {
 }
 .csseditor[data-theme=red] .polygon-editor-view svg path.guide, .csseditor[data-theme=red] .polygon-editor-view svg polygon.guide {
   fill: transparent;
-  stroke: blue;
+  stroke: #b13232;
   stroke-width: 1;
-  stroke-dasharray: 2 2;
 }
 .csseditor[data-theme=red] .polygon-editor-view svg path.segment, .csseditor[data-theme=red] .polygon-editor-view svg polygon.segment {
   fill: transparent;
@@ -20544,7 +20532,7 @@ html, body {
 }
 .csseditor[data-theme=red] .polygon-editor-view svg path.object, .csseditor[data-theme=red] .polygon-editor-view svg polygon.object {
   fill: transparent;
-  stroke: #b4b4b4;
+  stroke: #611c1c;
   stroke-width: 1;
 }
 .csseditor[data-theme=red] .polygon-editor-view svg path.split-path, .csseditor[data-theme=red] .polygon-editor-view svg polygon.split-path {
@@ -26838,12 +26826,11 @@ html, body {
   cursor: default;
 }
 .csseditor[data-theme=orange] .path-editor-view.modify svg path.object {
-  stroke: #833602;
+  stroke: #b16b32;
 }
 .csseditor[data-theme=orange] .path-editor-view svg line {
-  stroke: green;
+  stroke: #b16b32;
   stroke-width: 1;
-  stroke-dasharray: 5 2;
 }
 .csseditor[data-theme=orange] .path-editor-view svg line[data-guide=true] {
   stroke: purple;
@@ -26866,9 +26853,8 @@ html, body {
 }
 .csseditor[data-theme=orange] .path-editor-view svg path.guide {
   fill: transparent;
-  stroke: blue;
+  stroke: #b16b32;
   stroke-width: 1;
-  stroke-dasharray: 2 2;
 }
 .csseditor[data-theme=orange] .path-editor-view svg path.segment {
   fill: transparent;
@@ -26877,7 +26863,7 @@ html, body {
 }
 .csseditor[data-theme=orange] .path-editor-view svg path.object {
   fill: transparent;
-  stroke: #833602;
+  stroke: #b16b32;
   stroke-width: 1;
 }
 .csseditor[data-theme=orange] .path-editor-view svg path.split-path {
@@ -26892,7 +26878,7 @@ html, body {
 }
 .csseditor[data-theme=orange] .path-editor-view svg path.snap-path {
   fill: transparent;
-  stroke: #b16b32;
+  stroke: #613b1c;
 }
 .csseditor[data-theme=orange] .polygon-editor-view {
   display: none;
@@ -26911,9 +26897,8 @@ html, body {
   stroke: #833602;
 }
 .csseditor[data-theme=orange] .polygon-editor-view svg line {
-  stroke: green;
+  stroke: #b16b32;
   stroke-width: 1;
-  stroke-dasharray: 5 2;
 }
 .csseditor[data-theme=orange] .polygon-editor-view svg line[data-guide=true] {
   stroke: purple;
@@ -26939,9 +26924,8 @@ html, body {
 }
 .csseditor[data-theme=orange] .polygon-editor-view svg path.guide, .csseditor[data-theme=orange] .polygon-editor-view svg polygon.guide {
   fill: transparent;
-  stroke: blue;
+  stroke: #b16b32;
   stroke-width: 1;
-  stroke-dasharray: 2 2;
 }
 .csseditor[data-theme=orange] .polygon-editor-view svg path.segment, .csseditor[data-theme=orange] .polygon-editor-view svg polygon.segment {
   fill: transparent;
@@ -26950,7 +26934,7 @@ html, body {
 }
 .csseditor[data-theme=orange] .polygon-editor-view svg path.object, .csseditor[data-theme=orange] .polygon-editor-view svg polygon.object {
   fill: transparent;
-  stroke: #b4b4b4;
+  stroke: #613b1c;
   stroke-width: 1;
 }
 .csseditor[data-theme=orange] .polygon-editor-view svg path.split-path, .csseditor[data-theme=orange] .polygon-editor-view svg polygon.split-path {
