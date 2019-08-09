@@ -96,6 +96,104 @@ GaussianBlurSVGFilter.spec = {
 
 
 
+export class CompositeSVGFilter extends SVGFilter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "Composite",
+      sourceIn: CompositeSVGFilter.spec.sourceIn.defaultValue,      
+      sourceIn2: CompositeSVGFilter.spec.sourceIn2.defaultValue,      
+      operator: CompositeSVGFilter.spec.operator.defaultValue,
+      k1: CompositeSVGFilter.spec.k1.defaultValue,
+      k2: CompositeSVGFilter.spec.k2.defaultValue,
+      k3: CompositeSVGFilter.spec.k3.defaultValue,
+      k4: CompositeSVGFilter.spec.k4.defaultValue
+    });
+  }
+
+  toString() {
+    var { sourceIn, sourceIn2, operator, k1, k2, k3, k4 } = this.json; 
+
+    var kNumbers = '' 
+
+    if (operator === 'arithmetic') {
+      kNumbers = ` k1="${k1}" k2="${k2}" k3="${k3}" k4="${k4}" `
+    }
+
+    return `<feComposite in="${sourceIn}" in2="${sourceIn2}"  operator="${operator}" ${kNumbers} />`;
+  }
+}
+
+
+CompositeSVGFilter.spec = {
+  sourceIn: {
+    title: "in",
+    inputType: "select",
+    options: function (list) {
+      var reference = list.filter(it => it.result).map(it => it.result).join(',')
+
+      return `${reference},-,SourceGraphic,SourceAlpha,BackgroundImage,BackgroundAlpha,FillPaint,StrokePaint`
+    },
+    defaultValue: "SourceGraphic"
+  },  
+  sourceIn2: {
+    title: "in2",
+    inputType: "select",
+    options: function (list) {
+      var reference = list.filter(it => it.result).map(it => it.result).join(',')
+
+      return `${reference},-,SourceGraphic,SourceAlpha,BackgroundImage,BackgroundAlpha,FillPaint,StrokePaint`
+    },
+    defaultValue: "SourceGraphic"
+  },    
+  operator: {
+    title: "operator",
+    inputType: "select",
+    options: "over,in,out,atop,xor,arithmetic",
+    defaultValue: "over"
+  },
+  k1: {
+    title: "k1",
+    inputType: "number-range",
+    min: 0,
+    max: 1,
+    step: 0.01,
+    defaultValue: Length.number(0)
+  },    
+  k2: {
+    title: "k2",
+    inputType: "number-range",
+    min: 0,
+    max: 1,
+    step: 0.01,
+    defaultValue: Length.number(0)
+  },    
+  
+  k3: {
+    title: "k3",
+    inputType: "number-range",
+    min: 0,
+    max: 1,
+    step: 0.01,
+    defaultValue: Length.number(0)
+  },    
+  
+  k4: {
+    title: "k4",
+    inputType: "number-range",
+    min: 0,
+    max: 1,
+    step: 0.01,
+    defaultValue: Length.number(0)
+  },      
+  result: {
+    title: 'result',
+    inputType: 'text'
+  }
+};
+
+
+
+
 export class MorphologySVGFilter extends SVGFilter {
   getDefaultObject() {
     return super.getDefaultObject({
@@ -377,6 +475,7 @@ ConvolveMatrixSVGFilter.spec = {
 
 export const SVGFilterClassList = [
   GaussianBlurSVGFilter,
+  CompositeSVGFilter,
   MorphologySVGFilter,
   TurbulenceSVGFilter,
   DisplacementMapSVGFilter,
@@ -386,6 +485,7 @@ export const SVGFilterClassList = [
 
 export const SVGFilterClassName = {
   GaussianBlur: GaussianBlurSVGFilter,
+  Composite: CompositeSVGFilter,
   Morphology: MorphologySVGFilter,
   Turbulence: TurbulenceSVGFilter,
   DisplacementMap: DisplacementMapSVGFilter,
@@ -395,6 +495,7 @@ export const SVGFilterClassName = {
 
 export const SVGFilterClass = {
   GaussianBlurSVGFilter,
+  CompositeSVGFilter,
   MorphologySVGFilter,
   TurbulenceSVGFilter,
   DisplacementMapSVGFilter,

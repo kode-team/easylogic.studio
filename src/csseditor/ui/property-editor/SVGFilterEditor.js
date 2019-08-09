@@ -12,7 +12,7 @@ import { editor } from "../../../editor/editor";
 import UIElement, { EVENT } from "../../../util/UIElement";
 import RangeEditor from "./RangeEditor";
 import ColorViewEditor from "./ColorViewEditor";
-import { GaussianBlurSVGFilter, SVGFilter, TurbulenceSVGFilter, DisplacementMapSVGFilter, ColorMatrixSVGFilter, ConvolveMatrixSVGFilter, MorphologySVGFilter } from "../../../editor/css-property/SVGFilter";
+import { GaussianBlurSVGFilter, SVGFilter, TurbulenceSVGFilter, DisplacementMapSVGFilter, ColorMatrixSVGFilter, ConvolveMatrixSVGFilter, MorphologySVGFilter, CompositeSVGFilter } from "../../../editor/css-property/SVGFilter";
 import SelectEditor from "./SelectEditor";
 import TextEditor from "./TextEditor";
 import NumberRangeEditor from "./NumberRangeEditor";
@@ -26,12 +26,14 @@ var filterList = [
   "DisplacementMap",
   'ColorMatrix',
   'ConvolveMatrix',
-  'Morphology'
+  'Morphology',
+  'Composite'
 ];
 
 var specList = {
   GaussianBlur: GaussianBlurSVGFilter.spec,
   Morphology: MorphologySVGFilter.spec,
+  Composite: CompositeSVGFilter.spec,
   Turbulence: TurbulenceSVGFilter.spec,
   DisplacementMap: DisplacementMapSVGFilter.spec,
   ColorMatrix: ColorMatrixSVGFilter.spec,
@@ -84,11 +86,13 @@ export default class SVGFilterEditor extends UIElement {
 
   makeFilterEditorTemplate (s, filter, key, index) {
 
+    var objectId = `${filter.type}${key}${index}`
+
     if (s.inputType === 'input-array') {
       return `
         <div>
           <InputArrayEditor 
-            ref='$inputArray${key}${index}' 
+            ref='$inputArray${objectId}' 
             label="${s.title}"
             key="${key}"
             params="${index}"            
@@ -107,12 +111,10 @@ export default class SVGFilterEditor extends UIElement {
         options = s.options(this.state.filters)
       }
 
-      var value = filter[key] || ''; 
-
       return `
         <div>
           <SelectEditor 
-            ref='$select${key}${index}' 
+            ref='$select${objectId}' 
             label="${s.title}"
             options='${options}' 
             key="${key}"
@@ -126,12 +128,12 @@ export default class SVGFilterEditor extends UIElement {
       return `
         <div>
           <TextEditor 
-            ref='$text${key}${index}' 
+            ref='$text${objectId}' 
             label="${s.title}"
             key="${key}"
             params="${index}"
             value='${filter[key].toString()}' 
-            onchange="changeRangeEditor"
+            onchange="changeTextEditor"
           />
         </div>
         `
@@ -139,7 +141,7 @@ export default class SVGFilterEditor extends UIElement {
       return `
         <div>
           <NumberRangeEditor 
-            ref='$numberrange${key}${index}' 
+            ref='$numberrange${objectId}' 
             label="${s.title}" 
             min="${s.min}"
             max="${s.max}"
@@ -156,7 +158,7 @@ export default class SVGFilterEditor extends UIElement {
     return `
       <div>
         <RangeEditor 
-          ref='$range${key}${index}' 
+          ref='$range${objectId}' 
           layout='block' 
           calc='false' 
           label="${s.title}" 
@@ -287,6 +289,43 @@ export default class SVGFilterEditor extends UIElement {
       filter.reset({
         [key]: value
       })
+    }
+  
+    this.modifyFilter();
+  }
+
+  updateAllSelect () {
+    // refresh result 코드 
+    this.state.filters.map((filter, index) => {
+
+      var spec = this.getSpec(filter.type);
+
+      Object.keys(spec).forEach(key => {
+        var s = spec[key]; 
+        var objectId = `${filter.type}${key}${index}`
+        if (s.inputType === 'select') { 
+          if (isFunction(s.options)){
+            var options = s.options(this.state.filters)
+
+            this.children[`$select${objectId}`].setOptions(options); 
+
+          }
+        }
+      })
+
+    });
+  }
+
+  [EVENT('changeTextEditor')] (key, value, index) {
+    var filter =  this.state.filters[+index];
+    if (filter) {
+      filter.reset({
+        [key]: value
+      })
+
+      if (key === 'result') {
+        this.updateAllSelect();
+      }
     }
   
     this.modifyFilter();
