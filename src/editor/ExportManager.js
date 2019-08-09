@@ -40,7 +40,7 @@ export default {
   },
 
   generate () {
-    var project = editor.selection.currentProject.clone();
+    var project = editor.selection.currentProject;
     var artboard = editor.selection.currentArtboard.clone();
 
     artboard.reset({
@@ -56,7 +56,31 @@ export default {
       ${artboard.html}
       ${this.makeSvg(project)}
     `
+
+    html = this.replaceLocalUrltoRealUrl(html);
+    css = this.replaceLocalUrltoRealUrl(css);
+
   
     return { html, css }
+  },
+
+  replaceLocalUrltoRealUrl (str) {
+
+    var project = editor.selection.currentProject;
+    var images = {} 
+
+    project.images.forEach(a => {
+
+      if (str.indexOf(a.local) > -1) { 
+        images[a.local]  = a.original
+      }
+
+    })
+
+    Object.keys(images).forEach(local => {
+      str = str.replace(new RegExp(local, 'g'), images[local])
+    })
+    
+    return str; 
   }
 }
