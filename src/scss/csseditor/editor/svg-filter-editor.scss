@@ -28,19 +28,51 @@
     width: 100%;
     display: grid !important;
     grid-template-columns: 1fr !important;
+    max-height: 400px;
+    overflow: auto;    
   
     .filter-item {
       display: block;
       box-sizing: border-box;
 
+      &.collapsed {
+        
+        .title {
+          .fold {
+            transform: rotate(90deg);
+          }
+        }
+
+        .filter-ui {
+          display: none;
+        }
+      }
+
   
       .title {
         display: grid;
-        grid-template-columns: 1fr 30px;
+        grid-template-columns: 20px 1fr 30px;
+        margin-left: -20px;
         color: $selected-color;
         border-radius: 3px;
         margin: 5px 0px;
   
+        .fold {
+          display: inline-block;
+          width: 20px;
+          height: 20px;
+          transition: all 0.1s linear; 
+          cursor: pointer;
+          svg {
+            width: 100%;
+            height: 100%;
+
+            path {
+              fill: $selected-font-color;
+            }
+          }
+        }
+
         label {
           font-size: 12px;
           padding: 2px 0px;
@@ -62,6 +94,10 @@
         display: grid;
         grid-template-columns: 1fr;
         margin-bottom: 2px;
+
+        label {
+          padding-left: 20px;
+        }
 
         > div {
           margin-bottom: 5px;

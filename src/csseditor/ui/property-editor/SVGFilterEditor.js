@@ -12,25 +12,39 @@ import { editor } from "../../../editor/editor";
 import UIElement, { EVENT } from "../../../util/UIElement";
 import RangeEditor from "./RangeEditor";
 import ColorViewEditor from "./ColorViewEditor";
-import { GaussianBlurSVGFilter, SVGFilter, TurbulenceSVGFilter, DisplacementMapSVGFilter, ColorMatrixSVGFilter, ConvolveMatrixSVGFilter, MorphologySVGFilter, CompositeSVGFilter } from "../../../editor/css-property/SVGFilter";
+
 import SelectEditor from "./SelectEditor";
 import TextEditor from "./TextEditor";
 import NumberRangeEditor from "./NumberRangeEditor";
 import InputArrayEditor from "./InputArrayEditor";
+import { RotaMatrixSVGFilter } from "../../../editor/css-property/svg-filter/RotaMatrixSVGFilter";
+import { MergeSVGFilter } from "../../../editor/css-property/svg-filter/MergeSVGFilter";
+import { GaussianBlurSVGFilter } from "../../../editor/css-property/svg-filter/GaussianBlurSVGFilter";
+import { MorphologySVGFilter } from "../../../editor/css-property/svg-filter/MorphologySVGFilter";
+import { CompositeSVGFilter } from "../../../editor/css-property/svg-filter/CompositeSVGFilter";
+import { TurbulenceSVGFilter } from "../../../editor/css-property/svg-filter/TurbulenceSVGFilter";
+import { DisplacementMapSVGFilter } from "../../../editor/css-property/svg-filter/DisplacementMapSVGFilter";
+import { ColorMatrixSVGFilter } from "../../../editor/css-property/svg-filter/ColorMatrixSVGFilter";
+import { ConvolveMatrixSVGFilter } from "../../../editor/css-property/svg-filter/ConvolveMatrixSVGFilter";
+import { SVGFilter } from "../../../editor/css-property/SVGFilter";
 
 
 
 var filterList = [
+  'RotaMatrix',
   "GaussianBlur",
   "Turbulence",
   "DisplacementMap",
   'ColorMatrix',
   'ConvolveMatrix',
   'Morphology',
-  'Composite'
+  'Composite',
+  'Merge'
 ];
 
 var specList = {
+  RotaMatrix: RotaMatrixSVGFilter.spec,
+  Merge: MergeSVGFilter.spec,
   GaussianBlur: GaussianBlurSVGFilter.spec,
   Morphology: MorphologySVGFilter.spec,
   Composite: CompositeSVGFilter.spec,
@@ -38,7 +52,7 @@ var specList = {
   DisplacementMap: DisplacementMapSVGFilter.spec,
   ColorMatrix: ColorMatrixSVGFilter.spec,
   ConvolveMatrix: ConvolveMatrixSVGFilter.spec
-};
+}; 
 
 
 export default class SVGFilterEditor extends UIElement {
@@ -179,6 +193,7 @@ export default class SVGFilterEditor extends UIElement {
   return `
     <div class="filter-item" data-index="${index}">
       <div class="title" draggable="true" data-index="${index}">
+        <span class='fold'>${icon.chevron_right}</span>      
         <label>${filter.type}</label>
         <div class="filter-menu">
           <button type="button" class="del" data-index="${index}">${icon.remove2}</button>
@@ -251,6 +266,10 @@ export default class SVGFilterEditor extends UIElement {
 
   makeFilter(type, opt = {}) {
     return SVGFilter.parse({ ...opt, type });
+  }
+
+  [CLICK('$el .fold')] (e) {
+    e.$delegateTarget.closest('filter-item').toggleClass('collapsed');
   }
 
   [CLICK("$add")]() {

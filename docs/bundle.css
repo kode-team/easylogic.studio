@@ -4453,6 +4453,27 @@ html, body {
   text-align: center;
   padding: 24px;
 }
+.csseditor[data-theme=dark] .image-assets-property .image-list[data-view-mode=grid] .add-image-item input[type=file] {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  width: 100%;
+  height: 100%;
+  display: inline-block;
+  opacity: 0;
+  pointer-events: all;
+}
+.csseditor[data-theme=dark] .image-assets-property .image-list[data-view-mode=grid] .add-image-item button {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
 .csseditor[data-theme=dark] .image-assets-property .image-list[data-view-mode=grid] .add-image-item svg path {
   fill: #ececec;
 }
@@ -5882,17 +5903,41 @@ html, body {
   width: 100%;
   display: grid !important;
   grid-template-columns: 1fr !important;
+  max-height: 400px;
+  overflow: auto;
 }
 .csseditor[data-theme=dark] .svg-filter-editor .filter-list .filter-item {
   display: block;
   box-sizing: border-box;
 }
+.csseditor[data-theme=dark] .svg-filter-editor .filter-list .filter-item.collapsed .title .fold {
+  -webkit-transform: rotate(90deg);
+          transform: rotate(90deg);
+}
+.csseditor[data-theme=dark] .svg-filter-editor .filter-list .filter-item.collapsed .filter-ui {
+  display: none;
+}
 .csseditor[data-theme=dark] .svg-filter-editor .filter-list .filter-item .title {
   display: grid;
-  grid-template-columns: 1fr 30px;
+  grid-template-columns: 20px 1fr 30px;
+  margin-left: -20px;
   color: #6fb2ff;
   border-radius: 3px;
   margin: 5px 0px;
+}
+.csseditor[data-theme=dark] .svg-filter-editor .filter-list .filter-item .title .fold {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  transition: all 0.1s linear;
+  cursor: pointer;
+}
+.csseditor[data-theme=dark] .svg-filter-editor .filter-list .filter-item .title .fold svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor[data-theme=dark] .svg-filter-editor .filter-list .filter-item .title .fold svg path {
+  fill: white;
 }
 .csseditor[data-theme=dark] .svg-filter-editor .filter-list .filter-item .title label {
   font-size: 12px;
@@ -5909,6 +5954,9 @@ html, body {
   display: grid;
   grid-template-columns: 1fr;
   margin-bottom: 2px;
+}
+.csseditor[data-theme=dark] .svg-filter-editor .filter-list .filter-item .filter-ui label {
+  padding-left: 20px;
 }
 .csseditor[data-theme=dark] .svg-filter-editor .filter-list .filter-item .filter-ui > div {
   margin-bottom: 5px;
@@ -6199,7 +6247,7 @@ html, body {
   background-color: #3a3a3a;
   border: 1px solid #1a1a1a;
   box-shadow: 0 0 1px 0px #1a1a1a;
-  padding: 14px;
+  padding: 14px 10px;
   color: #ececec;
 }
 .csseditor[data-theme=dark] .popup.compact {
@@ -10811,6 +10859,27 @@ html, body {
   text-align: center;
   padding: 24px;
 }
+.csseditor[data-theme=light] .image-assets-property .image-list[data-view-mode=grid] .add-image-item input[type=file] {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  width: 100%;
+  height: 100%;
+  display: inline-block;
+  opacity: 0;
+  pointer-events: all;
+}
+.csseditor[data-theme=light] .image-assets-property .image-list[data-view-mode=grid] .add-image-item button {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
 .csseditor[data-theme=light] .image-assets-property .image-list[data-view-mode=grid] .add-image-item svg path {
   fill: #666666;
 }
@@ -12240,17 +12309,41 @@ html, body {
   width: 100%;
   display: grid !important;
   grid-template-columns: 1fr !important;
+  max-height: 400px;
+  overflow: auto;
 }
 .csseditor[data-theme=light] .svg-filter-editor .filter-list .filter-item {
   display: block;
   box-sizing: border-box;
 }
+.csseditor[data-theme=light] .svg-filter-editor .filter-list .filter-item.collapsed .title .fold {
+  -webkit-transform: rotate(90deg);
+          transform: rotate(90deg);
+}
+.csseditor[data-theme=light] .svg-filter-editor .filter-list .filter-item.collapsed .filter-ui {
+  display: none;
+}
 .csseditor[data-theme=light] .svg-filter-editor .filter-list .filter-item .title {
   display: grid;
-  grid-template-columns: 1fr 30px;
+  grid-template-columns: 20px 1fr 30px;
+  margin-left: -20px;
   color: #3e8ec6;
   border-radius: 3px;
   margin: 5px 0px;
+}
+.csseditor[data-theme=light] .svg-filter-editor .filter-list .filter-item .title .fold {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  transition: all 0.1s linear;
+  cursor: pointer;
+}
+.csseditor[data-theme=light] .svg-filter-editor .filter-list .filter-item .title .fold svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor[data-theme=light] .svg-filter-editor .filter-list .filter-item .title .fold svg path {
+  fill: white;
 }
 .csseditor[data-theme=light] .svg-filter-editor .filter-list .filter-item .title label {
   font-size: 12px;
@@ -12267,6 +12360,9 @@ html, body {
   display: grid;
   grid-template-columns: 1fr;
   margin-bottom: 2px;
+}
+.csseditor[data-theme=light] .svg-filter-editor .filter-list .filter-item .filter-ui label {
+  padding-left: 20px;
 }
 .csseditor[data-theme=light] .svg-filter-editor .filter-list .filter-item .filter-ui > div {
   margin-bottom: 5px;
@@ -12557,7 +12653,7 @@ html, body {
   background-color: white;
   border: 1px solid #e7e7e7;
   box-shadow: 0 0 1px 0px #e7e7e7;
-  padding: 14px;
+  padding: 14px 10px;
   color: #666666;
 }
 .csseditor[data-theme=light] .popup.compact {
@@ -17169,6 +17265,27 @@ html, body {
   text-align: center;
   padding: 24px;
 }
+.csseditor[data-theme=red] .image-assets-property .image-list[data-view-mode=grid] .add-image-item input[type=file] {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  width: 100%;
+  height: 100%;
+  display: inline-block;
+  opacity: 0;
+  pointer-events: all;
+}
+.csseditor[data-theme=red] .image-assets-property .image-list[data-view-mode=grid] .add-image-item button {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
 .csseditor[data-theme=red] .image-assets-property .image-list[data-view-mode=grid] .add-image-item svg path {
   fill: #666666;
 }
@@ -18598,17 +18715,41 @@ html, body {
   width: 100%;
   display: grid !important;
   grid-template-columns: 1fr !important;
+  max-height: 400px;
+  overflow: auto;
 }
 .csseditor[data-theme=red] .svg-filter-editor .filter-list .filter-item {
   display: block;
   box-sizing: border-box;
 }
+.csseditor[data-theme=red] .svg-filter-editor .filter-list .filter-item.collapsed .title .fold {
+  -webkit-transform: rotate(90deg);
+          transform: rotate(90deg);
+}
+.csseditor[data-theme=red] .svg-filter-editor .filter-list .filter-item.collapsed .filter-ui {
+  display: none;
+}
 .csseditor[data-theme=red] .svg-filter-editor .filter-list .filter-item .title {
   display: grid;
-  grid-template-columns: 1fr 30px;
+  grid-template-columns: 20px 1fr 30px;
+  margin-left: -20px;
   color: #b13232;
   border-radius: 3px;
   margin: 5px 0px;
+}
+.csseditor[data-theme=red] .svg-filter-editor .filter-list .filter-item .title .fold {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  transition: all 0.1s linear;
+  cursor: pointer;
+}
+.csseditor[data-theme=red] .svg-filter-editor .filter-list .filter-item .title .fold svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor[data-theme=red] .svg-filter-editor .filter-list .filter-item .title .fold svg path {
+  fill: white;
 }
 .csseditor[data-theme=red] .svg-filter-editor .filter-list .filter-item .title label {
   font-size: 12px;
@@ -18625,6 +18766,9 @@ html, body {
   display: grid;
   grid-template-columns: 1fr;
   margin-bottom: 2px;
+}
+.csseditor[data-theme=red] .svg-filter-editor .filter-list .filter-item .filter-ui label {
+  padding-left: 20px;
 }
 .csseditor[data-theme=red] .svg-filter-editor .filter-list .filter-item .filter-ui > div {
   margin-bottom: 5px;
@@ -18915,7 +19059,7 @@ html, body {
   background-color: white;
   border: 1px solid #e7e7e7;
   box-shadow: 0 0 1px 0px #e7e7e7;
-  padding: 14px;
+  padding: 14px 10px;
   color: #666666;
 }
 .csseditor[data-theme=red] .popup.compact {
@@ -23527,6 +23671,27 @@ html, body {
   text-align: center;
   padding: 24px;
 }
+.csseditor[data-theme=orange] .image-assets-property .image-list[data-view-mode=grid] .add-image-item input[type=file] {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  width: 100%;
+  height: 100%;
+  display: inline-block;
+  opacity: 0;
+  pointer-events: all;
+}
+.csseditor[data-theme=orange] .image-assets-property .image-list[data-view-mode=grid] .add-image-item button {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
 .csseditor[data-theme=orange] .image-assets-property .image-list[data-view-mode=grid] .add-image-item svg path {
   fill: #666666;
 }
@@ -24956,17 +25121,41 @@ html, body {
   width: 100%;
   display: grid !important;
   grid-template-columns: 1fr !important;
+  max-height: 400px;
+  overflow: auto;
 }
 .csseditor[data-theme=orange] .svg-filter-editor .filter-list .filter-item {
   display: block;
   box-sizing: border-box;
 }
+.csseditor[data-theme=orange] .svg-filter-editor .filter-list .filter-item.collapsed .title .fold {
+  -webkit-transform: rotate(90deg);
+          transform: rotate(90deg);
+}
+.csseditor[data-theme=orange] .svg-filter-editor .filter-list .filter-item.collapsed .filter-ui {
+  display: none;
+}
 .csseditor[data-theme=orange] .svg-filter-editor .filter-list .filter-item .title {
   display: grid;
-  grid-template-columns: 1fr 30px;
+  grid-template-columns: 20px 1fr 30px;
+  margin-left: -20px;
   color: #b16b32;
   border-radius: 3px;
   margin: 5px 0px;
+}
+.csseditor[data-theme=orange] .svg-filter-editor .filter-list .filter-item .title .fold {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  transition: all 0.1s linear;
+  cursor: pointer;
+}
+.csseditor[data-theme=orange] .svg-filter-editor .filter-list .filter-item .title .fold svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor[data-theme=orange] .svg-filter-editor .filter-list .filter-item .title .fold svg path {
+  fill: white;
 }
 .csseditor[data-theme=orange] .svg-filter-editor .filter-list .filter-item .title label {
   font-size: 12px;
@@ -24983,6 +25172,9 @@ html, body {
   display: grid;
   grid-template-columns: 1fr;
   margin-bottom: 2px;
+}
+.csseditor[data-theme=orange] .svg-filter-editor .filter-list .filter-item .filter-ui label {
+  padding-left: 20px;
 }
 .csseditor[data-theme=orange] .svg-filter-editor .filter-list .filter-item .filter-ui > div {
   margin-bottom: 5px;
@@ -25273,7 +25465,7 @@ html, body {
   background-color: white;
   border: 1px solid #e7e7e7;
   box-shadow: 0 0 1px 0px #e7e7e7;
-  padding: 14px;
+  padding: 14px 10px;
   color: #666666;
 }
 .csseditor[data-theme=orange] .popup.compact {
