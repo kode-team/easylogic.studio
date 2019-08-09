@@ -95,6 +95,57 @@ GaussianBlurSVGFilter.spec = {
 };
 
 
+
+export class MorphologySVGFilter extends SVGFilter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "Morphology",
+      sourceIn: MorphologySVGFilter.spec.sourceIn.defaultValue,      
+      operator: MorphologySVGFilter.spec.operator.defaultValue,
+      radius: MorphologySVGFilter.spec.radius.defaultValue
+    });
+  }
+
+  toString() {
+    var { operator, radius, sourceIn } = this.json; 
+
+    return `<feMorphology in="${sourceIn}"  operator="${operator}" radius="${radius}" />`;
+  }
+}
+
+
+MorphologySVGFilter.spec = {
+  sourceIn: {
+    title: "in",
+    inputType: "select",
+    options: function (list) {
+      var reference = list.filter(it => it.result).map(it => it.result).join(',')
+
+      return `${reference},-,SourceGraphic,SourceAlpha,BackgroundImage,BackgroundAlpha,FillPaint,StrokePaint`
+    },
+    defaultValue: "SourceGraphic"
+  },  
+  operator: {
+    title: "Operator",
+    inputType: "select",
+    options: 'erode,dilate',
+    defaultValue: 'erode'
+  },
+  radius: {
+    title: "Radius",
+    inputType: "number-range",
+    min: 0,
+    max: 100,
+    step: 1,
+    defaultValue: Length.number(0)
+  },  
+  result: {
+    title: 'result',
+    inputType: 'text'
+  }
+};
+
+
 export class TurbulenceSVGFilter extends SVGFilter {
   getDefaultObject() {
     return super.getDefaultObject({
@@ -326,6 +377,7 @@ ConvolveMatrixSVGFilter.spec = {
 
 export const SVGFilterClassList = [
   GaussianBlurSVGFilter,
+  MorphologySVGFilter,
   TurbulenceSVGFilter,
   DisplacementMapSVGFilter,
   ColorMatrixSVGFilter,
@@ -334,6 +386,7 @@ export const SVGFilterClassList = [
 
 export const SVGFilterClassName = {
   GaussianBlur: GaussianBlurSVGFilter,
+  Morphology: MorphologySVGFilter,
   Turbulence: TurbulenceSVGFilter,
   DisplacementMap: DisplacementMapSVGFilter,
   ColorMatrix: ColorMatrixSVGFilter,
@@ -342,6 +395,7 @@ export const SVGFilterClassName = {
 
 export const SVGFilterClass = {
   GaussianBlurSVGFilter,
+  MorphologySVGFilter,
   TurbulenceSVGFilter,
   DisplacementMapSVGFilter,
   ColorMatrixSVGFilter,

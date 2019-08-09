@@ -37,14 +37,13 @@
       .title {
         display: grid;
         grid-template-columns: 1fr 30px;
-        background-color: $selected-color;
-        color: $selected-font-color;
+        color: $selected-color;
         border-radius: 3px;
         margin: 5px 0px;
   
         label {
           font-size: 12px;
-          padding: 2px 5px;
+          padding: 2px 0px;
           box-sizing: border-box;
         }
   

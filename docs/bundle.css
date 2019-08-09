@@ -5890,14 +5890,13 @@ html, body {
 .csseditor[data-theme=dark] .svg-filter-editor .filter-list .filter-item .title {
   display: grid;
   grid-template-columns: 1fr 30px;
-  background-color: #6fb2ff;
-  color: white;
+  color: #6fb2ff;
   border-radius: 3px;
   margin: 5px 0px;
 }
 .csseditor[data-theme=dark] .svg-filter-editor .filter-list .filter-item .title label {
   font-size: 12px;
-  padding: 2px 5px;
+  padding: 2px 0px;
   box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .svg-filter-editor .filter-list .filter-item .title .filter-menu {
@@ -12249,14 +12248,13 @@ html, body {
 .csseditor[data-theme=light] .svg-filter-editor .filter-list .filter-item .title {
   display: grid;
   grid-template-columns: 1fr 30px;
-  background-color: #3e8ec6;
-  color: white;
+  color: #3e8ec6;
   border-radius: 3px;
   margin: 5px 0px;
 }
 .csseditor[data-theme=light] .svg-filter-editor .filter-list .filter-item .title label {
   font-size: 12px;
-  padding: 2px 5px;
+  padding: 2px 0px;
   box-sizing: border-box;
 }
 .csseditor[data-theme=light] .svg-filter-editor .filter-list .filter-item .title .filter-menu {
@@ -18608,14 +18606,13 @@ html, body {
 .csseditor[data-theme=red] .svg-filter-editor .filter-list .filter-item .title {
   display: grid;
   grid-template-columns: 1fr 30px;
-  background-color: #b13232;
-  color: white;
+  color: #b13232;
   border-radius: 3px;
   margin: 5px 0px;
 }
 .csseditor[data-theme=red] .svg-filter-editor .filter-list .filter-item .title label {
   font-size: 12px;
-  padding: 2px 5px;
+  padding: 2px 0px;
   box-sizing: border-box;
 }
 .csseditor[data-theme=red] .svg-filter-editor .filter-list .filter-item .title .filter-menu {
@@ -24967,14 +24964,13 @@ html, body {
 .csseditor[data-theme=orange] .svg-filter-editor .filter-list .filter-item .title {
   display: grid;
   grid-template-columns: 1fr 30px;
-  background-color: #b16b32;
-  color: white;
+  color: #b16b32;
   border-radius: 3px;
   margin: 5px 0px;
 }
 .csseditor[data-theme=orange] .svg-filter-editor .filter-list .filter-item .title label {
   font-size: 12px;
-  padding: 2px 5px;
+  padding: 2px 0px;
   box-sizing: border-box;
 }
 .csseditor[data-theme=orange] .svg-filter-editor .filter-list .filter-item .title .filter-menu {

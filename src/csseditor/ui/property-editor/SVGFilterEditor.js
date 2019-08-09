@@ -12,7 +12,7 @@ import { editor } from "../../../editor/editor";
 import UIElement, { EVENT } from "../../../util/UIElement";
 import RangeEditor from "./RangeEditor";
 import ColorViewEditor from "./ColorViewEditor";
-import { GaussianBlurSVGFilter, SVGFilter, TurbulenceSVGFilter, DisplacementMapSVGFilter, ColorMatrixSVGFilter, ConvolveMatrixSVGFilter } from "../../../editor/css-property/SVGFilter";
+import { GaussianBlurSVGFilter, SVGFilter, TurbulenceSVGFilter, DisplacementMapSVGFilter, ColorMatrixSVGFilter, ConvolveMatrixSVGFilter, MorphologySVGFilter } from "../../../editor/css-property/SVGFilter";
 import SelectEditor from "./SelectEditor";
 import TextEditor from "./TextEditor";
 import NumberRangeEditor from "./NumberRangeEditor";
@@ -25,11 +25,13 @@ var filterList = [
   "Turbulence",
   "DisplacementMap",
   'ColorMatrix',
-  'ConvolveMatrix'
+  'ConvolveMatrix',
+  'Morphology'
 ];
 
 var specList = {
   GaussianBlur: GaussianBlurSVGFilter.spec,
+  Morphology: MorphologySVGFilter.spec,
   Turbulence: TurbulenceSVGFilter.spec,
   DisplacementMap: DisplacementMapSVGFilter.spec,
   ColorMatrix: ColorMatrixSVGFilter.spec,

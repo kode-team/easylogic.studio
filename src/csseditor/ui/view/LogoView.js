@@ -3,10 +3,10 @@ import icon from "../icon/icon";
 
 export default class LogoView extends UIElement {
   template() {
-    return `
+    return /*html*/`
       <div class='logo'>
         <div class='text'>Easy</div>
-        <div class='extra-text'> &nbsp;&nbsp;&nbsp;Logic</div>
+        <div class='extra-text'> &nbsp;&nbsp;&nbsp;LOGIC</div>
       </div>    
     `;
   }

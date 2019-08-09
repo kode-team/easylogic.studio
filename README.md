@@ -8,14 +8,15 @@ EasyLogic Studio is built using CSS and SVG to reduce the gap between web design
 * editor : https://editor.easylogic.studio/
 
 
+This project is [sapa](https://github.com/easylogic/sapa) based. 
+
+
 # Features 
 
 ### Elements 
 * project
 * artboard
 * layer tree 
-
-
 
 ### Style
 
@@ -69,6 +70,9 @@ cd editor
 npm install 
 npm run dev 
 ```
+
+# Relative Project 
+
 
 
 # License : MIT
