@@ -151,20 +151,28 @@ export default class SVGFilterAssetsProperty extends BaseProperty {
   }
 
 
+  [EVENT('updateSVGFilterAssets')] (params) {
+    this.executeSVGFilter(project => {
+      project.setSVGFilterValue(params.index, {
+        filters: params.filters
+      });
+
+      // preview 업데이트 해주세요. 
+      this.state.$item.$('filter').html(params.filters.join('\n'))
+
+      this.emit('refreshSVGArea');
+
+    }, false)              
+  }
+
   [EVENT('changeSVGFilterAssets')] (params) {
     if (params.id === this.id) {
-      this.executeSVGFilter(project => {
-        project.setSVGFilterValue(params.index, {
-          filters: params.filters
-        });
-
-        // preview 업데이트 해주세요. 
-        this.state.$item.$('filter').html(params.filters.join('\n'))
-
-        this.emit('refreshSVGArea');
-
-      }, false)              
+      this.trigger('updateSVGFilterAssets', params);
 
     }
+  }
+
+  [EVENT('refreshSVGFilterAssets')] () {
+    this.refresh()
   }
 }

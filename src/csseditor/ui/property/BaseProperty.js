@@ -120,4 +120,34 @@ export default class BaseProperty extends UIElement {
       // this.hide();
     } 
   }
+
+
+  startInputEditing (input) {
+    if (!input) return; 
+    input.attr('contenteditable', true);
+
+    input.css({
+      'background-color': 'white',
+      'outline': '1px auto black',
+      'color': 'black',
+    })
+
+    input.focus();
+  }
+
+  endInputEditing (input, callback) {
+    if (!input) return;     
+    input.attr('contenteditable', false);
+    input.css({
+      'background-color': null,
+      'outline': null,
+      'color': null,
+    })
+
+    var index = input.attr('data-index');
+
+    callback && callback (index, input.text().trim())
+
+    input.blur();
+  }
 }

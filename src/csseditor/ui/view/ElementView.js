@@ -260,6 +260,7 @@ export default class ElementView extends UIElement {
     }
 
     calculateMovedElement (dx, dy) {
+        // console.log('move', dx, dy);
         this.children.$selectionTool.refreshSelectionToolView(dx, dy, 'move');
         this.updateRealPosition();     
     }
@@ -320,7 +321,7 @@ export default class ElementView extends UIElement {
     }
 
     calculateEndedElement (dx, dy) {
-
+        // console.log('end', dx, dy);
         this.children.$selectionTool.refreshSelectionToolView(dx, dy, 'move');
         var current = editor.selection.items.length === 1 ? editor.selection.current : null;
 

@@ -1,5 +1,5 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, CLICK } from "../../../util/Event";
+import { LOAD, CLICK, DOUBLECLICK, KEYUP, KEY, PREVENT, STOP, FOCUSOUT, VDOM } from "../../../util/Event";
 import { editor } from "../../../editor/editor";
 import icon from "../icon/icon";
 import { EVENT } from "../../../util/UIElement";
@@ -36,6 +36,21 @@ export default class LayerTreeProperty extends BaseProperty {
     `;
   }
 
+  getIcon (type) {
+    return '';
+
+    switch(type) {
+    case 'circle': return icon.circle;
+    case 'image': return icon.outline_image;
+    case 'text': return icon.title;
+    case 'cube' : return icon.cube;
+    case 'path': return icon.edit;
+    case 'polygon': return icon.polygon;
+    default: 
+      return icon.rect
+    }
+  }
+
   makeLayerList (parentObject, depth = 0) {
     if (!parentObject.layers) return '';
 
@@ -47,6 +62,7 @@ export default class LayerTreeProperty extends BaseProperty {
       return `        
       <div class='layer-item ${selected}' data-depth="${depth}" data-layer-id='${layer.id}'>
         <div class='detail'>
+          <span class='icon'>${this.getIcon(layer.itemType)}</span> 
           <label>${layer.name}</label>
           <div class="tools">
             <button type="button" class="lock" data-lock="${layer.lock}" title='Lock'>${layer.lock ? icon.lock : icon.lock_open}</button>
@@ -61,12 +77,41 @@ export default class LayerTreeProperty extends BaseProperty {
     }).join('')
   }
 
-  [LOAD("$layerList")]() {
+  [LOAD("$layerList") + VDOM]() {
 
     var artboard = editor.selection.currentArtboard;
     if (!artboard) return ''
 
     return this.makeLayerList(artboard, 0)
+  }
+
+
+  [DOUBLECLICK('$layerList .layer-item')] (e) {
+    this.startInputEditing(e.$delegateTarget.$('label'))
+  }
+
+  modifyDoneInputEditing (input) {
+    this.endInputEditing(input, (index, text) => {
+
+
+      var id = input.closest('layer-item').attr('data-layer-id');
+      var layerInfo = this.state.layers[id] 
+      if (layerInfo) {
+
+        layerInfo.layer.reset({
+          name: text
+        })
+      }
+
+    });    
+  }
+
+  [KEYUP('$layerList .layer-item label') + KEY('Enter') + PREVENT + STOP] (e) {
+    this.modifyDoneInputEditing(e.$delegateTarget);
+  }
+
+  [FOCUSOUT('$layerList .layer-item label') + PREVENT  + STOP ] (e) {
+    this.modifyDoneInputEditing(e.$delegateTarget);
   }
 
   selectLayer(layer) {

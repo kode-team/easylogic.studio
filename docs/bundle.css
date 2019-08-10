@@ -1433,13 +1433,13 @@ html, body {
   left: 0px;
   top: 0px;
   bottom: 0px;
-  width: 260px;
+  width: 300px;
 }
 .csseditor[data-theme=dark] .layout-main .layout-header .tool-menu {
   position: absolute;
   top: 0px;
   bottom: 0px;
-  left: 260px;
+  left: 300px;
   right: 450px;
 }
 .csseditor[data-theme=dark] .layout-main .layout-header .external-tool-menu {
@@ -1469,7 +1469,7 @@ html, body {
   left: 0px;
   top: 0px;
   bottom: 0px;
-  width: 260px;
+  width: 300px;
   display: inline-block;
   box-sizing: border-box;
   display: flex;
@@ -1491,7 +1491,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .layout-main .layout-middle .layout-body {
   top: 0px;
-  left: 260px;
+  left: 300px;
   right: 280px;
   bottom: 0px;
   position: absolute;
@@ -2472,7 +2472,7 @@ html, body {
 .csseditor[data-theme=dark] .selection-tool.remove-move-area .selection-tool-item[data-position=move] {
   width: 10px;
   height: 10px;
-  top: -20px;
+  top: -40px;
   bottom: auto;
   left: 50%;
   right: auto;
@@ -3779,8 +3779,21 @@ html, body {
 }
 .csseditor[data-theme=dark] .layer-list .layer-item .detail {
   display: grid;
-  grid-template-columns: 1fr 66px;
+  grid-template-columns: 20px 1fr 66px;
   grid-column-gap: 3px;
+}
+.csseditor[data-theme=dark] .layer-list .layer-item .detail span.icon {
+  vertical-align: middle;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+}
+.csseditor[data-theme=dark] .layer-list .layer-item .detail span.icon svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor[data-theme=dark] .layer-list .layer-item .detail span.icon svg path {
+  fill: white;
 }
 .csseditor[data-theme=dark] .layer-list .layer-item .detail label {
   padding: 2px 0px;
@@ -5265,6 +5278,19 @@ html, body {
   font-size: 12px;
   padding: 2px 3px;
   box-sizing: border-box;
+}
+.csseditor[data-theme=dark] .filter-editor .filter-list .filter-item .title .svg-filter-edit {
+  cursor: pointer;
+}
+.csseditor[data-theme=dark] .filter-editor .filter-list .filter-item .title .svg-filter-edit:before {
+  content: "o";
+  text-transform: uppercase;
+  padding: 0px 2px;
+  border-radius: 3px;
+  margin-right: 2px;
+  vertical-align: middle;
+  background-color: #6fb2ff;
+  color: white;
 }
 .csseditor[data-theme=dark] .filter-editor .filter-list .filter-item .title .filter-menu {
   text-align: right;
@@ -7835,13 +7861,13 @@ html, body {
   left: 0px;
   top: 0px;
   bottom: 0px;
-  width: 260px;
+  width: 300px;
 }
 .csseditor[data-theme=light] .layout-main .layout-header .tool-menu {
   position: absolute;
   top: 0px;
   bottom: 0px;
-  left: 260px;
+  left: 300px;
   right: 450px;
 }
 .csseditor[data-theme=light] .layout-main .layout-header .external-tool-menu {
@@ -7871,7 +7897,7 @@ html, body {
   left: 0px;
   top: 0px;
   bottom: 0px;
-  width: 260px;
+  width: 300px;
   display: inline-block;
   box-sizing: border-box;
   display: flex;
@@ -7893,7 +7919,7 @@ html, body {
 }
 .csseditor[data-theme=light] .layout-main .layout-middle .layout-body {
   top: 0px;
-  left: 260px;
+  left: 300px;
   right: 280px;
   bottom: 0px;
   position: absolute;
@@ -8874,7 +8900,7 @@ html, body {
 .csseditor[data-theme=light] .selection-tool.remove-move-area .selection-tool-item[data-position=move] {
   width: 10px;
   height: 10px;
-  top: -20px;
+  top: -40px;
   bottom: auto;
   left: 50%;
   right: auto;
@@ -10181,8 +10207,21 @@ html, body {
 }
 .csseditor[data-theme=light] .layer-list .layer-item .detail {
   display: grid;
-  grid-template-columns: 1fr 66px;
+  grid-template-columns: 20px 1fr 66px;
   grid-column-gap: 3px;
+}
+.csseditor[data-theme=light] .layer-list .layer-item .detail span.icon {
+  vertical-align: middle;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+}
+.csseditor[data-theme=light] .layer-list .layer-item .detail span.icon svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor[data-theme=light] .layer-list .layer-item .detail span.icon svg path {
+  fill: white;
 }
 .csseditor[data-theme=light] .layer-list .layer-item .detail label {
   padding: 2px 0px;
@@ -11667,6 +11706,19 @@ html, body {
   font-size: 12px;
   padding: 2px 3px;
   box-sizing: border-box;
+}
+.csseditor[data-theme=light] .filter-editor .filter-list .filter-item .title .svg-filter-edit {
+  cursor: pointer;
+}
+.csseditor[data-theme=light] .filter-editor .filter-list .filter-item .title .svg-filter-edit:before {
+  content: "o";
+  text-transform: uppercase;
+  padding: 0px 2px;
+  border-radius: 3px;
+  margin-right: 2px;
+  vertical-align: middle;
+  background-color: #3e8ec6;
+  color: white;
 }
 .csseditor[data-theme=light] .filter-editor .filter-list .filter-item .title .filter-menu {
   text-align: right;
@@ -14237,13 +14289,13 @@ html, body {
   left: 0px;
   top: 0px;
   bottom: 0px;
-  width: 260px;
+  width: 300px;
 }
 .csseditor[data-theme=red] .layout-main .layout-header .tool-menu {
   position: absolute;
   top: 0px;
   bottom: 0px;
-  left: 260px;
+  left: 300px;
   right: 450px;
 }
 .csseditor[data-theme=red] .layout-main .layout-header .external-tool-menu {
@@ -14273,7 +14325,7 @@ html, body {
   left: 0px;
   top: 0px;
   bottom: 0px;
-  width: 260px;
+  width: 300px;
   display: inline-block;
   box-sizing: border-box;
   display: flex;
@@ -14295,7 +14347,7 @@ html, body {
 }
 .csseditor[data-theme=red] .layout-main .layout-middle .layout-body {
   top: 0px;
-  left: 260px;
+  left: 300px;
   right: 280px;
   bottom: 0px;
   position: absolute;
@@ -15276,7 +15328,7 @@ html, body {
 .csseditor[data-theme=red] .selection-tool.remove-move-area .selection-tool-item[data-position=move] {
   width: 10px;
   height: 10px;
-  top: -20px;
+  top: -40px;
   bottom: auto;
   left: 50%;
   right: auto;
@@ -16583,8 +16635,21 @@ html, body {
 }
 .csseditor[data-theme=red] .layer-list .layer-item .detail {
   display: grid;
-  grid-template-columns: 1fr 66px;
+  grid-template-columns: 20px 1fr 66px;
   grid-column-gap: 3px;
+}
+.csseditor[data-theme=red] .layer-list .layer-item .detail span.icon {
+  vertical-align: middle;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+}
+.csseditor[data-theme=red] .layer-list .layer-item .detail span.icon svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor[data-theme=red] .layer-list .layer-item .detail span.icon svg path {
+  fill: white;
 }
 .csseditor[data-theme=red] .layer-list .layer-item .detail label {
   padding: 2px 0px;
@@ -18069,6 +18134,19 @@ html, body {
   font-size: 12px;
   padding: 2px 3px;
   box-sizing: border-box;
+}
+.csseditor[data-theme=red] .filter-editor .filter-list .filter-item .title .svg-filter-edit {
+  cursor: pointer;
+}
+.csseditor[data-theme=red] .filter-editor .filter-list .filter-item .title .svg-filter-edit:before {
+  content: "o";
+  text-transform: uppercase;
+  padding: 0px 2px;
+  border-radius: 3px;
+  margin-right: 2px;
+  vertical-align: middle;
+  background-color: #b13232;
+  color: white;
 }
 .csseditor[data-theme=red] .filter-editor .filter-list .filter-item .title .filter-menu {
   text-align: right;
@@ -20639,13 +20717,13 @@ html, body {
   left: 0px;
   top: 0px;
   bottom: 0px;
-  width: 260px;
+  width: 300px;
 }
 .csseditor[data-theme=orange] .layout-main .layout-header .tool-menu {
   position: absolute;
   top: 0px;
   bottom: 0px;
-  left: 260px;
+  left: 300px;
   right: 450px;
 }
 .csseditor[data-theme=orange] .layout-main .layout-header .external-tool-menu {
@@ -20675,7 +20753,7 @@ html, body {
   left: 0px;
   top: 0px;
   bottom: 0px;
-  width: 260px;
+  width: 300px;
   display: inline-block;
   box-sizing: border-box;
   display: flex;
@@ -20697,7 +20775,7 @@ html, body {
 }
 .csseditor[data-theme=orange] .layout-main .layout-middle .layout-body {
   top: 0px;
-  left: 260px;
+  left: 300px;
   right: 280px;
   bottom: 0px;
   position: absolute;
@@ -21678,7 +21756,7 @@ html, body {
 .csseditor[data-theme=orange] .selection-tool.remove-move-area .selection-tool-item[data-position=move] {
   width: 10px;
   height: 10px;
-  top: -20px;
+  top: -40px;
   bottom: auto;
   left: 50%;
   right: auto;
@@ -22985,8 +23063,21 @@ html, body {
 }
 .csseditor[data-theme=orange] .layer-list .layer-item .detail {
   display: grid;
-  grid-template-columns: 1fr 66px;
+  grid-template-columns: 20px 1fr 66px;
   grid-column-gap: 3px;
+}
+.csseditor[data-theme=orange] .layer-list .layer-item .detail span.icon {
+  vertical-align: middle;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+}
+.csseditor[data-theme=orange] .layer-list .layer-item .detail span.icon svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor[data-theme=orange] .layer-list .layer-item .detail span.icon svg path {
+  fill: white;
 }
 .csseditor[data-theme=orange] .layer-list .layer-item .detail label {
   padding: 2px 0px;
@@ -24471,6 +24562,19 @@ html, body {
   font-size: 12px;
   padding: 2px 3px;
   box-sizing: border-box;
+}
+.csseditor[data-theme=orange] .filter-editor .filter-list .filter-item .title .svg-filter-edit {
+  cursor: pointer;
+}
+.csseditor[data-theme=orange] .filter-editor .filter-list .filter-item .title .svg-filter-edit:before {
+  content: "o";
+  text-transform: uppercase;
+  padding: 0px 2px;
+  border-radius: 3px;
+  margin-right: 2px;
+  vertical-align: middle;
+  background-color: #b16b32;
+  color: white;
 }
 .csseditor[data-theme=orange] .filter-editor .filter-list .filter-item .title .filter-menu {
   text-align: right;

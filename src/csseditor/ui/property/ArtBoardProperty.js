@@ -1,5 +1,5 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, CLICK } from "../../../util/Event";
+import { LOAD, CLICK, DOUBLECLICK, BLUR, FOCUSOUT, KEYUP, KEY, PREVENT, STOP, VDOM } from "../../../util/Event";
 import { editor } from "../../../editor/editor";
 import icon from "../icon/icon";
 import { EVENT } from "../../../util/UIElement";
@@ -28,7 +28,7 @@ export default class ArtBoardProperty extends BaseProperty {
     `;
   }
 
-  [LOAD("$artboardList")]() {
+  [LOAD("$artboardList") + VDOM]() {
 
     var project = editor.selection.currentProject;    
     if (!project) return ''
@@ -48,14 +48,44 @@ export default class ArtBoardProperty extends BaseProperty {
     })
   }
 
+
+  [DOUBLECLICK('$artboardList .artboard-item')] (e) {
+    this.startInputEditing(e.$delegateTarget.$('label'))
+  }
+
+  modifyDoneInputEditing (input) {
+    this.endInputEditing(input, (index, text) => {
+
+      var project = editor.selection.currentProject
+      if (project) {
+        var artboard = project.artboards[index]
+  
+        if (artboard) {
+          artboard.reset({
+            name: text
+          })
+        }
+      }
+    });    
+  }
+
+  [KEYUP('$artboardList .artboard-item label') + KEY('Enter') + PREVENT + STOP] (e) {
+    this.modifyDoneInputEditing(e.$delegateTarget);
+  }
+
+  [FOCUSOUT('$artboardList .artboard-item label') + PREVENT  + STOP ] (e) {
+    this.modifyDoneInputEditing(e.$delegateTarget);
+  }
+
   selectArtboard(artboard) {
 
     if (artboard) {
       editor.selection.select()      
       editor.selection.selectArtboard(artboard)
+
+
     }
 
-    this.refresh()
     this.emit('refreshAllSelectArtBoard');
   }
 
@@ -79,6 +109,8 @@ export default class ArtBoardProperty extends BaseProperty {
   [CLICK('$artboardList .artboard-item label')] (e) {
     var project = editor.selection.currentProject
     if (project) {
+      var $item = e.$delegateTarget.closest('artboard-item');
+      $item.onlyOneClass('selected');
 
       var index = +e.$delegateTarget.attr('data-index')
 

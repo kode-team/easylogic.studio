@@ -1,5 +1,5 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, CLICK } from "../../../util/Event";
+import { LOAD, CLICK, KEYUP, KEY, PREVENT, STOP, FOCUSOUT, DOUBLECLICK, VDOM } from "../../../util/Event";
 import { editor } from "../../../editor/editor";
 import icon from "../icon/icon";
 import { Project } from "../../../editor/items/Project";
@@ -32,7 +32,7 @@ export default class ProjectProperty extends BaseProperty {
     `;
   }
 
-  [LOAD("$projectList")]() {
+  [LOAD("$projectList") + VDOM]() {
     var projects = editor.projects || [];
     
 
@@ -50,6 +50,33 @@ export default class ProjectProperty extends BaseProperty {
       `
     })
   }
+
+
+  [DOUBLECLICK('$projectList .project-item')] (e) {
+    this.startInputEditing(e.$delegateTarget.$('label'))
+  }
+
+  modifyDoneInputEditing (input) {
+    this.endInputEditing(input, (index, text) => {
+
+      var project = editor.projects[index]
+      if (project) {
+        project.reset({
+          name: text
+        })
+      }
+    });    
+  }
+
+  [KEYUP('$projectList .project-item label') + KEY('Enter') + PREVENT + STOP] (e) {
+    this.modifyDoneInputEditing(e.$delegateTarget);
+  }
+
+  [FOCUSOUT('$projectList .project-item label') + PREVENT  + STOP ] (e) {
+    this.modifyDoneInputEditing(e.$delegateTarget);
+  }
+
+
 
   selectProject (project) {
 

@@ -46,11 +46,11 @@ export default class CanvasView extends UIElement {
     }));
     editor.selection.selectArtboard(artboard);
 
-    var layer = artboard.add(new Layer({
-      name: 'New layer',
-      'background-color': Color.random()
-    }));
-    editor.selection.select(layer);
+    // var layer = artboard.add(new Layer({
+    //   name: 'New layer',
+    //   'background-color': Color.random()
+    // }));
+    editor.selection.select(artboard);
 
     this.parser = this;
 

@@ -19,7 +19,7 @@ var filterList = [
   "opacity",
   "saturate",
   "sepia",
-  // 'svg',
+  'svg',
 ];
 
 export default class FilterProperty extends BaseProperty {

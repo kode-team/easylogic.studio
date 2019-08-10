@@ -41,7 +41,7 @@ var filterList = [
   "opacity",
   "saturate",
   "sepia",
-  // 'svg',
+  'svg',
 ];
 
 var specList = {
@@ -206,7 +206,7 @@ export default class FilterEditor extends UIElement {
 
   makeOneFilterTemplate(spec, filter, index) {
 
-    var subtitle = filter.type === 'svg' ? ` - ${filter.value}` : ''; 
+    var subtitle = filter.type === 'svg' ? ` - <span class='svg-filter-edit' data-index="${index}">${filter.value}</span>` : ''; 
 
     return `
       <div class="filter-item" data-index="${index}">
@@ -296,13 +296,75 @@ export default class FilterEditor extends UIElement {
     return Filter.parse({ ...opt, type });
   }
 
+  [CLICK('$filterList .svg-filter-edit')] (e) {
+    var index = +e.$delegateTarget.attr('data-index');
+
+    var filter = this.state.filters[index];
+
+    var project = editor.selection.currentProject; 
+    
+    if (project) {
+      var svgfilterIndex = project.getSVGFilterIndex(filter.value);
+
+      this.trigger('openSVGFilterPopup', svgfilterIndex);
+
+    }
+  }
+
+
+  [EVENT('openSVGFilterPopup')](index) {
+    var currentProject = editor.selection.currentProject || { svgfilters: [] } 
+
+    var svgfilter = currentProject.svgfilters[index];
+
+    this.emit("showSVGFilterPopup", {
+        changeEvent: 'changeSVGFilterRealUpdate',
+        index,
+        filters: svgfilter.filters 
+    });
+  }
+
+
+  [EVENT('changeSVGFilterRealUpdate')] (params) {
+    var project = editor.selection.currentProject
+
+    if (project) {
+      project.setSVGFilterValue(params.index, {
+        filters: params.filters
+      });
+  
+      this.emit('refreshSVGFilterAssets');
+      this.emit('refreshSVGArea');
+    }
+  }
+
 
   [EVENT("add")](filterType) {
-    this.state.filters.push(this.makeFilter(filterType))
 
-    this.refresh();
+    if (filterType === 'svg') {
 
-    this.modifyFilter()
+      this.emit('add.assets.svgfilter', (index, id) => {
+        this.state.filters.push(this.makeFilter(filterType, {
+          value: id
+        }))
+
+        this.refresh();
+    
+        this.modifyFilter()
+
+
+        this.trigger('openSVGFilterPopup', index);
+
+      })
+    } else {
+
+      this.state.filters.push(this.makeFilter(filterType))
+
+      this.refresh();
+  
+      this.modifyFilter()
+    }
+
   }  
 
   [CLICK("$add")]() {

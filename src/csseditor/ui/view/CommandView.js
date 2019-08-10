@@ -11,6 +11,7 @@ import { ArtBoard } from "../../../editor/items/ArtBoard";
 import { Project } from "../../../editor/items/Project";
 import AssetParser from "../../../editor/parse/AssetParser";
 import Dom from "../../../util/Dom";
+import { uuidShort } from "../../../util/functions/math";
 
 export default class CommandView extends UIElement {
 
@@ -268,6 +269,19 @@ export default class CommandView extends UIElement {
             });
 
         }
+    }
+
+    [COMMAND('add.assets.svgfilter')] (callback) {
+
+        var project = editor.selection.currentProject;
+
+        if (project) {
+            var id = uuidShort()
+            var index = project.createSVGFilter({ id, filters: []})
+    
+            callback && callback (index, id);
+        }
+
     }
 
     [COMMAND('update.uri-list')] (item) {

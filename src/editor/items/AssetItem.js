@@ -161,6 +161,17 @@ export class AssetItem extends DomItem {
 
   /* svg filters  */
 
+  getSVGFilterIndex (id) {
+
+    var filter = this.json.svgfilters.map( (it, index) => {
+      return { id: it.id, index }
+    }).filter(it => {
+      return it.id === id 
+    })[0];
+
+    return filter ? filter.index : -1;
+  }
+
   removeSVGFilter(removeIndex) {
     this.removePropertyList(this.json.svgfilters, removeIndex);
   }      
@@ -180,7 +191,8 @@ export class AssetItem extends DomItem {
 
   addSVGFilter(obj = {}) {
     this.json.svgfilters.push(obj)
-    return obj; 
+    var index = this.json.svgfilters.length - 1;
+    return index; 
   }
 
   createSVGFilter(data = {}) {

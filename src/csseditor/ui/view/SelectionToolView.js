@@ -418,11 +418,6 @@ export default class SelectionToolView extends UIElement {
 
             tempRotateZ.add(distAngle.value);
 
-            // degree 를 음수를 안보여주기 위한 작업 
-            // 기존 값이 음수가 될 수 있어서 구성 맞추기가 애매하다. 
-            // tempRotateZ.set((360 + tempRotateZ.value)  % 360)       
-
-            // altKey 일 때  snap 적용 ?  
             if (e.altKey) {
                 tempRotateZ.add(- (tempRotateZ.value % 10)) 
             }
@@ -523,9 +518,7 @@ export default class SelectionToolView extends UIElement {
             if (this.hasRotateZ) {
 
                 this.modifyRotateZ(dx, dy);
-
                 this.bindData('$rotateZ')             
-                // this.emit('refreshSelectionStyleView'); 
 
             } else if (this.hasPerspective) {
                 this.modifyPerspective(dx, dy);
@@ -535,7 +528,6 @@ export default class SelectionToolView extends UIElement {
             } else {
 
                 if (this.hasTransformOrigin) {
-                    // transform-origin 을 맞춤 
                     this.modifyTransformOrigin(dx, dy);
                 } else if (this.hasTranslate) {
                     this.modifyTranslate(dx, dy); 
@@ -546,10 +538,8 @@ export default class SelectionToolView extends UIElement {
                 }
                 this.bindData('$rotate3d')
                 this.bindData('$rotateArea')                        
-                // this.emit('refreshSelectionStyleView');
             }
             this.emit('refreshSelectionStyleView'); 
-            // this.trigger('updateRealTransform');
 
         } else {
 
@@ -567,10 +557,7 @@ export default class SelectionToolView extends UIElement {
             }
                 
         }
-
-
     }
-
 
     [EVENT('updateRealTransform')] () {
         this.parent.updateRealTransform()
@@ -587,7 +574,6 @@ export default class SelectionToolView extends UIElement {
         this.refs.$selectionTool.attr('data-selected-position', '');
         this.refreshSelectionToolView(dx, dy);
         this.parent.trigger('removeRealPosition');                
-        // this.initSelectionTool();
 
         this.emit('refreshCanvasForPartial')
         this.emit('refreshStyleView');
@@ -734,14 +720,7 @@ export default class SelectionToolView extends UIElement {
             if (isNotUndefined(it.ay)) { ay = it.ay * editor.scale }
             if (isNotUndefined(it.by)) { by = it.by * editor.scale }
 
-            return {
-                A, 
-                B,
-                ax, 
-                bx,
-                ay,
-                by
-            }
+            return { A,  B, ax,  bx, ay, by}
         })
     }
 

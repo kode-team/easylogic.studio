@@ -103,6 +103,10 @@ export class Selection {
     return this.itemKeys[id];
   }
 
+  isArtBoard () {
+    return this.items.length ?  this.current.is('artboard') : false;
+  }
+
   empty () {
     this.select()
   }

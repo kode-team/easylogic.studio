@@ -16,17 +16,34 @@
                     }
                 }
             }
-        }
+        }  
 
         .detail {
             display: grid;
-            grid-template-columns: 1fr 66px;
+            grid-template-columns: 20px 1fr 66px;
             grid-column-gap: 3px;
+
+
+            span.icon {
+                vertical-align: middle;
+                display: inline-block;
+                width: 20px;
+                height: 20px;
+                svg {
+                    width: 100%;
+                    height: 100%;
+
+                    path {
+                        fill: $selected-font-color;
+                    }
+                }
+            }            
 
             label {
                 padding: 2px 0px;                
                 cursor: pointer;
                 pointer-events: all;
+
             }
 
 
