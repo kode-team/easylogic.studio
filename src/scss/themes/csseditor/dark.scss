@@ -24,15 +24,20 @@ $border-color: rgb(26, 26, 26);
 $border-color-2: #737373;
 $selected-border-color: #609de2;
 $selected-color: #6fb2ff;
+$selected-color: #10ece4;
+$selected-color: #efcb05;
+$selected-color: #fbde50;
+// $selected-color: #ff4d6e;
+
 $background-color: #3a3a3a; 
 $selected-background-color: #181818; 
 $font-color: #ececec;
-$selected-font-color: white;
+$selected-font-color: black;
 
 // base 
 $button-front-color: $font-color;
 
-$select-background-color: #434b50;
+$select-background-color: rgb(90, 90, 90);
 $select-border-color: #0c0c0d;
 $select-border-radius: 3px;
 $select-font-color: $font-color;
@@ -45,8 +50,8 @@ $range-thumb-color:  rgb(243, 243, 243);
 $range-track-color:  $selected-color;
 $range-thumb-border-color: $range-thumb-color;
 
-$input-background-color: #373e42;
-$input-border-color: #0c0c0d;
+$input-background-color: rgb(75, 75, 75);
+$input-border-color: rgb(90, 90, 90);
 $input-border-radius: 3px;
 $input-font-color: #ececec;
 
@@ -56,8 +61,10 @@ $property-background-color: $background-color;
 $property-font-color: $font-color;
 
 // list 
-$list-item-selected-color: #4a89b6; 
-$list-item-selected-font-color: $selected-font-color; 
+$list-font-color: white;
+$list-item-font-color: #999;
+$list-item-selected-color: rgba(26, 26, 26, 0.3); 
+$list-item-selected-font-color: white; 
 $list-border-color: #676767;
 $list-background-color: $border-color;
 

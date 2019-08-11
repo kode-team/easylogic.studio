@@ -58,7 +58,10 @@ $property-background-color: $background-color;
 $property-font-color: $font-color;
 
 // list 
+$list-font-color: white;
+$list-item-font-color: #999;
 $list-item-selected-color: #d46c6c; 
+$list-item-selected-font-color: white; 
 $list-item-selected-font-color: $selected-font-color; 
 $list-border-color: lighten($border-color, 0.5);
 $list-background-color: white;

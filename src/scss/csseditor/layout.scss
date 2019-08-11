@@ -216,10 +216,10 @@
 
       &.selected {
         .icon {      
-          background-color: $selected-color;
+          background-color: $selected-font-color;
           svg {
             path {
-              fill: $selected-font-color;
+              fill: $selected-color;
             }
           }
         }
