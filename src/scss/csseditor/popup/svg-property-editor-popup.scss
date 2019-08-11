@@ -1,18 +1,29 @@
 
   .svg-property-editor-popup {
 
-    width: 250px;
+    width: 700px;
+    height: 500px;
+
+    display: grid;
+    grid-template-columns: 250px 1fr; 
+    grid-column-gap: 10px;
 
     .box {
       margin-bottom: 10px;
       &.preview {
-        height: 150px;
+        position: relative;
+        width: 100%;
+        height: 100%;
+        border: 1px solid $selected-color;
 
         .preview-box {
-          height: 100%;
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          width: 200px;
+          height: 200px;
           box-sizing: border-box;
-          margin: 30px 20px;
-          border:1px solid $border-color;
           background-image: radial-gradient(yellow 0%, red 100%);
         }
       }

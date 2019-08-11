@@ -104,9 +104,15 @@
 
           .number-range-editor.has-label,
           .select-editor.has-label,
-          .text-editor.has-label {
+          .text-editor.has-label
+          {
             grid-template-columns: 100px 1fr;
           }
+
+          .color-view-editor.has-label
+          {
+            grid-template-columns: 100px 24px 1fr;
+          }          
         }
   
         &.drop-shadow {

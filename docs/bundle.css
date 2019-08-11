@@ -5992,6 +5992,9 @@ html, body {
 .csseditor[data-theme=dark] .svg-filter-editor .filter-list .filter-item .filter-ui > div .text-editor.has-label {
   grid-template-columns: 100px 1fr;
 }
+.csseditor[data-theme=dark] .svg-filter-editor .filter-list .filter-item .filter-ui > div .color-view-editor.has-label {
+  grid-template-columns: 100px 24px 1fr;
+}
 .csseditor[data-theme=dark] .svg-filter-editor .filter-list .filter-item .filter-ui.drop-shadow {
   grid-template-columns: 50px 1fr;
   grid-column-gap: 1px;
@@ -6817,19 +6820,30 @@ html, body {
   grid-template-columns: 3fr 1fr;
 }
 .csseditor[data-theme=dark] .popup .svg-property-editor-popup {
-  width: 250px;
+  width: 700px;
+  height: 500px;
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  grid-column-gap: 10px;
 }
 .csseditor[data-theme=dark] .popup .svg-property-editor-popup .box {
   margin-bottom: 10px;
 }
 .csseditor[data-theme=dark] .popup .svg-property-editor-popup .box.preview {
-  height: 150px;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border: 1px solid #6fb2ff;
 }
 .csseditor[data-theme=dark] .popup .svg-property-editor-popup .box.preview .preview-box {
-  height: 100%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
   box-sizing: border-box;
-  margin: 30px 20px;
-  border: 1px solid #1a1a1a;
   background-image: radial-gradient(yellow 0%, red 100%);
 }
 .csseditor[data-theme=dark] .popup .svg-property-editor-popup .box .property .title {
@@ -12420,6 +12434,9 @@ html, body {
 .csseditor[data-theme=light] .svg-filter-editor .filter-list .filter-item .filter-ui > div .text-editor.has-label {
   grid-template-columns: 100px 1fr;
 }
+.csseditor[data-theme=light] .svg-filter-editor .filter-list .filter-item .filter-ui > div .color-view-editor.has-label {
+  grid-template-columns: 100px 24px 1fr;
+}
 .csseditor[data-theme=light] .svg-filter-editor .filter-list .filter-item .filter-ui.drop-shadow {
   grid-template-columns: 50px 1fr;
   grid-column-gap: 1px;
@@ -13245,19 +13262,30 @@ html, body {
   grid-template-columns: 3fr 1fr;
 }
 .csseditor[data-theme=light] .popup .svg-property-editor-popup {
-  width: 250px;
+  width: 700px;
+  height: 500px;
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  grid-column-gap: 10px;
 }
 .csseditor[data-theme=light] .popup .svg-property-editor-popup .box {
   margin-bottom: 10px;
 }
 .csseditor[data-theme=light] .popup .svg-property-editor-popup .box.preview {
-  height: 150px;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border: 1px solid #3e8ec6;
 }
 .csseditor[data-theme=light] .popup .svg-property-editor-popup .box.preview .preview-box {
-  height: 100%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
   box-sizing: border-box;
-  margin: 30px 20px;
-  border: 1px solid #e7e7e7;
   background-image: radial-gradient(yellow 0%, red 100%);
 }
 .csseditor[data-theme=light] .popup .svg-property-editor-popup .box .property .title {
@@ -18848,6 +18876,9 @@ html, body {
 .csseditor[data-theme=red] .svg-filter-editor .filter-list .filter-item .filter-ui > div .text-editor.has-label {
   grid-template-columns: 100px 1fr;
 }
+.csseditor[data-theme=red] .svg-filter-editor .filter-list .filter-item .filter-ui > div .color-view-editor.has-label {
+  grid-template-columns: 100px 24px 1fr;
+}
 .csseditor[data-theme=red] .svg-filter-editor .filter-list .filter-item .filter-ui.drop-shadow {
   grid-template-columns: 50px 1fr;
   grid-column-gap: 1px;
@@ -19673,19 +19704,30 @@ html, body {
   grid-template-columns: 3fr 1fr;
 }
 .csseditor[data-theme=red] .popup .svg-property-editor-popup {
-  width: 250px;
+  width: 700px;
+  height: 500px;
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  grid-column-gap: 10px;
 }
 .csseditor[data-theme=red] .popup .svg-property-editor-popup .box {
   margin-bottom: 10px;
 }
 .csseditor[data-theme=red] .popup .svg-property-editor-popup .box.preview {
-  height: 150px;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border: 1px solid #b13232;
 }
 .csseditor[data-theme=red] .popup .svg-property-editor-popup .box.preview .preview-box {
-  height: 100%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
   box-sizing: border-box;
-  margin: 30px 20px;
-  border: 1px solid #e7e7e7;
   background-image: radial-gradient(yellow 0%, red 100%);
 }
 .csseditor[data-theme=red] .popup .svg-property-editor-popup .box .property .title {
@@ -25276,6 +25318,9 @@ html, body {
 .csseditor[data-theme=orange] .svg-filter-editor .filter-list .filter-item .filter-ui > div .text-editor.has-label {
   grid-template-columns: 100px 1fr;
 }
+.csseditor[data-theme=orange] .svg-filter-editor .filter-list .filter-item .filter-ui > div .color-view-editor.has-label {
+  grid-template-columns: 100px 24px 1fr;
+}
 .csseditor[data-theme=orange] .svg-filter-editor .filter-list .filter-item .filter-ui.drop-shadow {
   grid-template-columns: 50px 1fr;
   grid-column-gap: 1px;
@@ -26101,19 +26146,30 @@ html, body {
   grid-template-columns: 3fr 1fr;
 }
 .csseditor[data-theme=orange] .popup .svg-property-editor-popup {
-  width: 250px;
+  width: 700px;
+  height: 500px;
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  grid-column-gap: 10px;
 }
 .csseditor[data-theme=orange] .popup .svg-property-editor-popup .box {
   margin-bottom: 10px;
 }
 .csseditor[data-theme=orange] .popup .svg-property-editor-popup .box.preview {
-  height: 150px;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border: 1px solid #b16b32;
 }
 .csseditor[data-theme=orange] .popup .svg-property-editor-popup .box.preview .preview-box {
-  height: 100%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
   box-sizing: border-box;
-  margin: 30px 20px;
-  border: 1px solid #e7e7e7;
   background-image: radial-gradient(yellow 0%, red 100%);
 }
 .csseditor[data-theme=orange] .popup .svg-property-editor-popup .box .property .title {

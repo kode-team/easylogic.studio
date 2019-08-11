@@ -8,6 +8,7 @@ import { DisplacementMapSVGFilter } from "./svg-filter/DisplacementMapSVGFilter"
 import { ColorMatrixSVGFilter } from "./svg-filter/ColorMatrixSVGFilter";
 import { ConvolveMatrixSVGFilter } from "./svg-filter/ConvolveMatrixSVGFilter";
 import { GaussianBlurSVGFilter } from "./svg-filter/GaussianBlurSVGFilter";
+import { FloodSVGFilter } from "./svg-filter/FloodSVGFilter";
 
 export const resultGenerator = (list) => {
   var reference = list.filter(it => it.result).map(it => it.result).join(',')
@@ -53,6 +54,7 @@ export class SVGFilter extends Property {
 export const SVGFilterClassName = {
   RotaMatrix: RotaMatrixSVGFilter,
   GaussianBlur: GaussianBlurSVGFilter,
+  Flood: FloodSVGFilter,
   Merge: MergeSVGFilter,
   Composite: CompositeSVGFilter,
   Morphology: MorphologySVGFilter,
@@ -65,6 +67,7 @@ export const SVGFilterClassName = {
 export const SVGFilterClass = {
   RotaMatrixSVGFilter,
   GaussianBlurSVGFilter,
+  FloodSVGFilter,
   MergeSVGFilter,
   CompositeSVGFilter,
   MorphologySVGFilter,

@@ -27,10 +27,12 @@ import { DisplacementMapSVGFilter } from "../../../editor/css-property/svg-filte
 import { ColorMatrixSVGFilter } from "../../../editor/css-property/svg-filter/ColorMatrixSVGFilter";
 import { ConvolveMatrixSVGFilter } from "../../../editor/css-property/svg-filter/ConvolveMatrixSVGFilter";
 import { SVGFilter } from "../../../editor/css-property/SVGFilter";
+import { FloodSVGFilter } from "../../../editor/css-property/svg-filter/FloodSVGFilter";
 
 
 
 var filterList = [
+  'Flood',
   'RotaMatrix',
   "GaussianBlur",
   "Turbulence",
@@ -46,6 +48,7 @@ var specList = {
   RotaMatrix: RotaMatrixSVGFilter.spec,
   Merge: MergeSVGFilter.spec,
   GaussianBlur: GaussianBlurSVGFilter.spec,
+  Flood: FloodSVGFilter.spec,
   Morphology: MorphologySVGFilter.spec,
   Composite: CompositeSVGFilter.spec,
   Turbulence: TurbulenceSVGFilter.spec,
@@ -53,7 +56,6 @@ var specList = {
   ColorMatrix: ColorMatrixSVGFilter.spec,
   ConvolveMatrix: ConvolveMatrixSVGFilter.spec
 }; 
-
 
 export default class SVGFilterEditor extends UIElement {
 
@@ -164,6 +166,18 @@ export default class SVGFilterEditor extends UIElement {
             params="${index}" 
             value="${filter[key].toString()}" 
             onchange="changeRangeEditor" 
+          />
+        </div>
+      `
+    } else if (s.inputType === 'color') {
+      return `
+        <div>
+          <ColorViewEditor 
+            ref='$colorview${objectId}' 
+            label="${s.title}" 
+            params="${index},${key}" 
+            value="${filter[key].toString()}" 
+            onchange="changeSVGFilterColorViewEditor" 
           />
         </div>
       `
@@ -302,6 +316,13 @@ export default class SVGFilterEditor extends UIElement {
 
   }
 
+  [EVENT('changeSVGFilterColorViewEditor')] (color, params) {
+    const [index, key] = params.split(',');
+
+    this.trigger('changeRangeEditor', key, color, index)
+  }
+
+
   [EVENT('changeRangeEditor')] (key, value, index) {
     var filter =  this.state.filters[+index];
     if (filter) {
@@ -311,7 +332,7 @@ export default class SVGFilterEditor extends UIElement {
     }
   
     this.modifyFilter();
-  }
+  }  
 
   updateAllSelect () {
     // refresh result 코드 

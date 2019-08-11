@@ -260,7 +260,6 @@ export default class ElementView extends UIElement {
     }
 
     calculateMovedElement (dx, dy) {
-        // console.log('move', dx, dy);
         this.children.$selectionTool.refreshSelectionToolView(dx, dy, 'move');
         this.updateRealPosition();     
     }

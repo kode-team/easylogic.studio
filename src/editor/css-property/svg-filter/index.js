@@ -6,8 +6,10 @@ import { MergeSVGFilter } from "./MergeSVGFilter";
 import { MorphologySVGFilter } from "./MorphologySVGFilter";
 import { RotaMatrixSVGFilter } from "./RotaMatrixSVGFilter";
 import { TurbulenceSVGFilter } from "./TurbulenceSVGFilter";
+import { FloodSVGFilter } from "./FloodSVGFilter";
   
 export default {
+    FloodSVGFilter,
     ColorMatrixSVGFilter,
     CompositeSVGFilter,
     ConvolveMatrixSVGFilter,

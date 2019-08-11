@@ -8,7 +8,7 @@ export default class ColorViewEditor extends UIElement {
         return {
             removable: this.props.removable === 'true',            
             label: this.props.label,
-            params: this.props.params,
+            // params: this.props.params,
             color: this.props.color || 'rgba(0, 0, 0, 1)'
         }
     }
@@ -27,7 +27,7 @@ export default class ColorViewEditor extends UIElement {
     }
 
     modifyColor() {
-        this.parent.trigger(this.props.onchange, this.state.color, this.state.params);
+        this.parent.trigger(this.props.onchange, this.state.color, this.props.params);
     }
 
     changeColor (color) {

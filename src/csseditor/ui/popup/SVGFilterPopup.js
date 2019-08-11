@@ -30,18 +30,17 @@ export default class SVGFilterPopup extends BasePopup {
   }
 
   getBody() {
-    return `
+    return /*html*/`
     <div class='svg-property-editor-popup' ref='$popup'>
+      <div class="box">
+        <div class='editor' ref='$editor'></div>
+      </div>
       <div class='box preview'>
           <div class='preview-box' style='filter: url(#svgfilter-popup-sample);'></div>
           <svg width="0" height="0">
             <filter id='svgfilter-popup-sample' ref='$sampleFilter'></filter>
           </svg>
       </div>    
-      <div class="box">
-        <div class='editor' ref='$editor'></div>
-      </div>
-
     </div>`;
   }
 
@@ -82,7 +81,7 @@ export default class SVGFilterPopup extends BasePopup {
     this.setState(data);
     // this.refresh()
 
-    this.show(250);
+    this.show(500);
   }
 
   [EVENT("hideSVGFilterPopup")]() {

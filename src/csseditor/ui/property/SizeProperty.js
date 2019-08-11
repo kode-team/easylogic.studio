@@ -48,14 +48,14 @@ export default class SizeProperty extends BaseProperty {
   }
 
   [EVENT('changRangeEditor')] (key, value) {
-    var current = editor.selection.current;
-    if (current) {
-      current.reset({
-        [key]: value
-      });
 
-      this.emit('refreshElement', current);
-      this.emit('setSize')
-    }
+    editor.selection.reset({
+      [key]: value
+    })
+
+    this.emit('refreshElement');
+    // this.emit('refreshSelectionTool');
+    this.emit('setSize')
+
   }
 }
