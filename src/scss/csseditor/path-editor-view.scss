@@ -37,7 +37,7 @@
     svg {
 
         line {
-            stroke: $selected-color; 
+            stroke: $path-guide-color; 
             stroke-width: 1; 
             // stroke-dasharray: 5 2; 
 
@@ -65,6 +65,12 @@
                 fill: rgba($selected-border-color, 0.8);
             }
             
+        }
+
+        .svg-canvas {
+            fill: transparent;
+            stroke: $selected-border-color;
+            stroke-width: 1;
         }
 
         path {
@@ -95,13 +101,13 @@
 
                 &:hover {
                     cursor: copy;
-                    stroke: darken($selected-color, 20%);
+                    stroke: darken($selected-color, 50%);
                 }
             }
 
             &.snap-path {
                 fill: transparent;
-                stroke: darken($selected-color, 20%);
+                stroke: darken($selected-color, 50%);
             }
         }
     }

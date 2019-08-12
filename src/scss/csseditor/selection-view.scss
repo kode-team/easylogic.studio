@@ -15,7 +15,7 @@
   }
   
   .selection-tool {
-    border: $pointer-color 1px dashed;
+    border: $pointer-color 0.5px solid;
     position:absolute;
     box-sizing: border-box;
     
@@ -68,8 +68,8 @@
       position: absolute;
       transform: translate(-50%, -50%);
       display: inline-block;
-      width: 10px;
-      height: 10px;
+      width: 8px;
+      height: 8px;
       background-color: white;
       box-sizing: border-box;
       border:1px solid $pointer-color;

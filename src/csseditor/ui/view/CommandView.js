@@ -210,8 +210,8 @@ export default class CommandView extends UIElement {
     [COMMAND('switch.theme')] () {
         if (editor.theme === 'dark') {
             editor.changeTheme('light')
-        } else if (editor.theme === 'light') {
-            editor.changeTheme('dark')                        
+        } else {
+            editor.changeTheme('dark')
         }
 
         this.emit('changeTheme')

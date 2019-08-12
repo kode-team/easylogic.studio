@@ -20,11 +20,6 @@ export class SVGPolygonItem extends SVGItem {
   updatePolygonItem (obj) {
     this.json.points = obj.points; 
     this.json.polygon = new PolygonParser(obj.points);
-
-    this.setScreenX(obj.x);
-    this.setScreenY(obj.y);
-    this.json.width = Length.px(obj.width);
-    this.json.height = Length.px(obj.height);
   }
 
   get d () {

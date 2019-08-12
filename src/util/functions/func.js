@@ -192,3 +192,9 @@ export function STRING_TO_CSS (str) {
 
     return style;
 }
+
+export function OBJECT_TO_PROPERTY (obj) {
+    return Object.keys(obj).map(key => {
+        return `${key}="${obj[key]}"`
+    }).join(' ');
+}

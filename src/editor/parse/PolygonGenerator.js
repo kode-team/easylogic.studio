@@ -1,5 +1,5 @@
 import SegmentManager from "./SegmentManager";
-import { clone } from "../../util/functions/func";
+import { clone, OBJECT_TO_PROPERTY } from "../../util/functions/func";
 import { getDist, calculateAngle, getXYInCircle } from "../../util/functions/math";
 import Point from "./Point";
 import PathStringManager from "./PathStringManager";
@@ -315,10 +315,28 @@ export default class PolygonGenerator {
         return snapLines.join('');
     }
 
+
+    makeSelectedSVGZone () {
+
+        var { screenX, screenY, screenWidth, screenHeight} = this.state 
+        var scale = this.polygonEditor.scale; 
+
+        var x = screenX.value * scale; 
+        var y = screenY.value * scale; 
+        var width = screenWidth.value * scale; 
+        var height = screenHeight.value * scale; 
+
+        return `<rect class='svg-canvas' ${OBJECT_TO_PROPERTY({
+            x, y, width, height
+        })} />`
+    }
+
+
     toSVGString () {
 
         return `
         <svg width="100%" height="100%">
+            ${this.makeSelectedSVGZone()}
             <polygon class='object' points="${this.points.map(p => `${p.x} ${p.y}`).join(' ')}" />        
             ${this.makeSnapLines()}
             ${this.splitLines.join('')}            

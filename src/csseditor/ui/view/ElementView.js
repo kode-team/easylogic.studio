@@ -52,10 +52,10 @@ export default class ElementView extends UIElement {
     }
 
     template() {
-        return `
+        return /*html*/`
             <div class='element-view' ref='$body'>
                 <div class='canvas-view' ref='$view'></div>
-                <div ref='$dragAreaRect' style='pointer-events:none;position: absolute;border:0.5px dashed #556375;box-sizing:border-box;left:-10000px;'></div>
+                <div class='drag-area-rect' ref='$dragAreaRect'></div>
                 <GuideLineView ref='$guideLineView' />                
                 <SelectionToolView ref='$selectionTool' />
                 <PathEditorView ref='$pathEditorView' />
@@ -146,6 +146,45 @@ export default class ElementView extends UIElement {
         }        
 
         this.refs.$dragAreaRect.css(obj)
+
+        if (editor.isSelectionMode()) {
+
+            var {left: x, top: y, width, height } = obj
+
+            var rect = {
+                x: Length.px(x.value -  this.canvasPosition.x), 
+                y: Length.px(y.value - this.canvasPosition.y), 
+                width, 
+                height
+            }
+
+            rect.x2 = Length.px(rect.x.value + rect.width.value);
+            rect.y2 = Length.px(rect.y.value + rect.height.value); 
+
+            var artboard = editor.selection.currentArtboard;
+
+            if (artboard) {
+                Object.keys(rect).forEach(key => {
+                    rect[key].div(editor.scale)
+                })
+    
+                var items = artboard.checkInAreaForLayers(rect);
+    
+                editor.selection.select(...items);
+
+                this.selectCurrentForBackgroundView(...items)
+    
+                if (items.length) {
+                    this.emit('refreshSelection')
+                } else {
+                    editor.selection.select();            
+                    this.emit('emptySelection')
+                }                
+            } else {
+                editor.selection.select();                
+                this.emit('emptySelection')
+            }
+        }
     }
 
     moveEndPointer (dx, dy) {

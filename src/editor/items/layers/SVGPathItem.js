@@ -21,10 +21,10 @@ export class SVGPathItem extends SVGItem {
     this.json.d = obj.d; 
     this.json.path = new PathParser(obj.d);
 
-    this.setScreenX(obj.x);
-    this.setScreenY(obj.y);
-    this.json.width = Length.px(obj.width);
-    this.json.height = Length.px(obj.height);
+    // this.setScreenX(obj.x);
+    // this.setScreenY(obj.y);
+    // this.json.width = Length.px(obj.width);
+    // this.json.height = Length.px(obj.height);
   }
 
   setCache () {

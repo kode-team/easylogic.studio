@@ -31,7 +31,11 @@ export default class PathEditorView extends UIElement {
             mode: 'draw',
             $target: null, 
             isSegment: false,
-            isFirstSegment: false 
+            isFirstSegment: false,
+            screenX: Length.px(0),
+            screenY: Length.px(0),
+            screenWidth: Length.px(0),
+            screenHeight: Length.px(0)
         }
     }
 
@@ -85,17 +89,22 @@ export default class PathEditorView extends UIElement {
     }
 
     updatePathLayer (pathRect) {
-        var { d } = this.pathGenerator.toPath(pathRect.x, pathRect.y, this.scale);
+        var { d } = this.pathGenerator.toPath(
+            this.state.screenX.value * this.scale, 
+            this.state.screenY.value * this.scale, 
+            this.scale
+        );
 
-        var layer; 
-        var x = pathRect.x / this.scale;
-        var y = pathRect.y / this.scale;
-        var width = pathRect.width / this.scale;
-        var height = pathRect.height / this.scale; 
+        // var layer; 
+        // var x = pathRect.x / this.scale;
+        // var y = pathRect.y / this.scale;
+        // var width = pathRect.width / this.scale;
+        // var height = pathRect.height / this.scale; 
 
 
         this.emit('updatePathItem', {
-            x, y, width, height, d
+            // x, y, width, height, 
+            d
         })
     }
 

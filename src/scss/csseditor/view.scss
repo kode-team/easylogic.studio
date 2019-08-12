@@ -36,6 +36,11 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
     .element-view {
       &[data-mode='ADD'] {
         cursor: crosshair;
+
+        .drag-area-rect {
+          border:0.5px dashed rgba(0, 0, 0, 0.4);
+          background-color:transparent;
+        }
       }
     }
   }
@@ -94,6 +99,16 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
   background-color: white;
 }
 
+.drag-area-rect {
+  pointer-events:none;
+  position: absolute;
+  border:0.5px solid rgba(62, 168, 255, 0.9);
+  background-color:rgba(107, 188, 255, 0.5);
+  box-sizing:border-box;
+
+  left:-10000px;
+}
+
 .canvas-view {
   position: absolute;
   transform-origin: left top;  
@@ -116,7 +131,13 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
     }
 
     &:hover {
-      outline: 1px solid rgb(173, 173, 241);
+      outline: 2px double rgb(64, 64, 252);
+
+      svg {
+        path, polygon {
+          stroke: rgb(64, 64, 252);
+        }
+      }
     }
 
     &.artboard {

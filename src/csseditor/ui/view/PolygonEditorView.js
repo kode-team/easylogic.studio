@@ -27,8 +27,16 @@ export default class PolygonEditorView extends UIElement {
             starCount: 5, 
             starRadius: 5,
             starInnerRadiusRate: 0.5,
-            $target: null
+            $target: null,
+            screenX: Length.px(0),
+            screenY: Length.px(0),
+            screenWidth: Length.px(0),
+            screenHeight: Length.px(0)
         }
+    }
+
+    get scale () {
+        return editor.scale;
     }
 
     template() {
@@ -63,7 +71,7 @@ export default class PolygonEditorView extends UIElement {
 
         this.bindData('$view');            
 
-        this.updatePolygonLayer(this.getViewRect());
+        this.updatePolygonLayer();
     }
 
     [KEYUP() + KEY(3) + KEY(4) + IF('isStarMode') + PREVENT + STOP] (e) {
@@ -94,15 +102,15 @@ export default class PolygonEditorView extends UIElement {
     }
 
     makePolygonLayer (pathRect) {
-        var { points } = this.polygonGenerator.toPolygon(pathRect.x, pathRect.y, editor.scale);
+        var { points } = this.polygonGenerator.toPolygon(pathRect.x, pathRect.y, this.scale);
         var artboard = editor.selection.currentArtboard
         var layer; 
         if (artboard) {
 
-            var x = pathRect.x / editor.scale;
-            var y = pathRect.y / editor.scale;
-            var width = pathRect.width / editor.scale;
-            var height = pathRect.height / editor.scale; 
+            var x = pathRect.x / this.scale;
+            var y = pathRect.y / this.scale;
+            var width = pathRect.width / this.scale;
+            var height = pathRect.height / this.scale; 
 
             layer = artboard.add(new SVGPolygonItem({
                 width: Length.px(width),
@@ -117,16 +125,15 @@ export default class PolygonEditorView extends UIElement {
         return layer; 
     }
 
-    updatePolygonLayer (pathRect) {
-        var { points } = this.polygonGenerator.toPolygon(pathRect.x, pathRect.y, editor.scale);
-
-        var x = pathRect.x / editor.scale;
-        var y = pathRect.y / editor.scale;
-        var width = pathRect.width / editor.scale;
-        var height = pathRect.height / editor.scale; 
+    updatePolygonLayer () {
+        var { points } = this.polygonGenerator.toPolygon(
+            this.state.screenX.value * this.scale, 
+            this.state.screenY.value * this.scale, 
+            this.scale
+        );
 
         this.emit('updatePolygonItem', {
-            x, y, width, height, points
+            points
         })
     }
 
@@ -173,8 +180,8 @@ export default class PolygonEditorView extends UIElement {
 
         if (obj && obj.points) {
             this.polygonParser.reset(obj.points)
-            this.polygonParser.scale(editor.scale, editor.scale);
-            this.polygonParser.translate(obj.screenX.value * editor.scale, obj.screenY.value * editor.scale)
+            this.polygonParser.scale(this.scale, this.scale);
+            this.polygonParser.translate(obj.screenX.value * this.scale, obj.screenY.value * this.scale)
 
             // points 문자열에서 변환된 point 는 segments 로 변경된다. 
             this.state.segments = this.polygonParser.convertGenerator();
@@ -364,7 +371,7 @@ export default class PolygonEditorView extends UIElement {
 
             this.bindData('$view');            
 
-            this.updatePolygonLayer(this.getViewRect());
+            this.updatePolygonLayer();
 
         } else if (this.isMode('draw')) {
             // var e = editor.config.get('bodyEvent');

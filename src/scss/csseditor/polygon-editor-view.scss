@@ -63,6 +63,13 @@
             
         }
 
+
+        .svg-canvas {
+            fill: transparent;
+            stroke: $selected-border-color;
+            stroke-width: 1;
+        }        
+
         path,polygon {
             &.guide {
                 fill: transparent;

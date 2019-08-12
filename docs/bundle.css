@@ -2313,6 +2313,10 @@ html, body {
 .csseditor[data-theme=dark] .page-view .page-lock .element-view[data-mode=ADD] {
   cursor: crosshair;
 }
+.csseditor[data-theme=dark] .page-view .page-lock .element-view[data-mode=ADD] .drag-area-rect {
+  border: 0.5px dashed rgba(0, 0, 0, 0.4);
+  background-color: transparent;
+}
 .csseditor[data-theme=dark] .page-tools {
   position: absolute;
   left: 10px;
@@ -2428,6 +2432,14 @@ html, body {
   height: 400px;
   background-color: white;
 }
+.csseditor[data-theme=dark] .drag-area-rect {
+  pointer-events: none;
+  position: absolute;
+  border: 0.5px solid rgba(62, 168, 255, 0.9);
+  background-color: rgba(107, 188, 255, 0.5);
+  box-sizing: border-box;
+  left: -10000px;
+}
 .csseditor[data-theme=dark] .canvas-view {
   position: absolute;
   -webkit-transform-origin: left top;
@@ -2445,7 +2457,10 @@ html, body {
   outline: none;
 }
 .csseditor[data-theme=dark] .canvas-view .element-item:hover {
-  outline: 1px solid #adadf1;
+  outline: 2px double #4040fc;
+}
+.csseditor[data-theme=dark] .canvas-view .element-item:hover svg path, .csseditor[data-theme=dark] .canvas-view .element-item:hover svg polygon {
+  stroke: #4040fc;
 }
 .csseditor[data-theme=dark] .canvas-view .element-item.artboard:hover {
   outline: none;
@@ -2462,7 +2477,7 @@ html, body {
   display: none;
 }
 .csseditor[data-theme=dark] .selection-tool {
-  border: rgba(15, 114, 207, 0.8) 1px dashed;
+  border: rgba(15, 114, 207, 0.8) 0.5px solid;
   position: absolute;
   box-sizing: border-box;
 }
@@ -2527,8 +2542,8 @@ html, body {
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
   display: inline-block;
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   background-color: white;
   box-sizing: border-box;
   border: 1px solid rgba(15, 114, 207, 0.8);
@@ -4805,6 +4820,9 @@ html, body {
 }
 .csseditor[data-theme=dark] .range-editor .range-editor-type .area input, .csseditor[data-theme=dark] .range-editor .range-editor-type .area select {
   width: 100%;
+}
+.csseditor[data-theme=dark] .range-editor .range-editor-type .area input[type=range] {
+  width: 95%;
 }
 .csseditor[data-theme=dark] .range-editor .range-editor-type .area input[type=number] {
   padding: 2px 2px;
@@ -7662,10 +7680,10 @@ html, body {
   cursor: default;
 }
 .csseditor[data-theme=dark] .path-editor-view.modify svg path.object {
-  stroke: rgba(0, 0, 0, 0.8);
+  stroke: rgba(158, 158, 158, 0.8);
 }
 .csseditor[data-theme=dark] .path-editor-view svg line {
-  stroke: #fbde50;
+  stroke: rgba(158, 158, 158, 0.8);
   stroke-width: 1;
 }
 .csseditor[data-theme=dark] .path-editor-view svg line[data-guide=true] {
@@ -7687,9 +7705,14 @@ html, body {
 .csseditor[data-theme=dark] .path-editor-view svg circle[data-is-first=true] {
   fill: rgba(96, 157, 226, 0.8);
 }
+.csseditor[data-theme=dark] .path-editor-view svg .svg-canvas {
+  fill: transparent;
+  stroke: #609de2;
+  stroke-width: 1;
+}
 .csseditor[data-theme=dark] .path-editor-view svg path.guide {
   fill: transparent;
-  stroke: rgba(0, 0, 0, 0.8);
+  stroke: rgba(158, 158, 158, 0.8);
   stroke-width: 1;
 }
 .csseditor[data-theme=dark] .path-editor-view svg path.segment {
@@ -7699,7 +7722,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .path-editor-view svg path.object {
   fill: transparent;
-  stroke: rgba(0, 0, 0, 0.8);
+  stroke: rgba(158, 158, 158, 0.8);
   stroke-width: 1;
 }
 .csseditor[data-theme=dark] .path-editor-view svg path.split-path {
@@ -7710,11 +7733,11 @@ html, body {
 }
 .csseditor[data-theme=dark] .path-editor-view svg path.split-path:hover {
   cursor: copy;
-  stroke: #e0bb05;
+  stroke: #4a3e02;
 }
 .csseditor[data-theme=dark] .path-editor-view svg path.snap-path {
   fill: transparent;
-  stroke: #e0bb05;
+  stroke: #4a3e02;
 }
 .csseditor[data-theme=dark] .polygon-editor-view {
   display: none;
@@ -7733,7 +7756,7 @@ html, body {
   stroke: #609de2;
 }
 .csseditor[data-theme=dark] .polygon-editor-view svg line {
-  stroke: rgba(0, 0, 0, 0.8);
+  stroke: rgba(158, 158, 158, 0.8);
   stroke-width: 1;
 }
 .csseditor[data-theme=dark] .polygon-editor-view svg line[data-guide=true] {
@@ -7758,6 +7781,11 @@ html, body {
 .csseditor[data-theme=dark] .polygon-editor-view svg circle[data-start=true] {
   fill: black;
 }
+.csseditor[data-theme=dark] .polygon-editor-view svg .svg-canvas {
+  fill: transparent;
+  stroke: #609de2;
+  stroke-width: 1;
+}
 .csseditor[data-theme=dark] .polygon-editor-view svg path.guide, .csseditor[data-theme=dark] .polygon-editor-view svg polygon.guide {
   fill: transparent;
   stroke: #fbde50;
@@ -7770,7 +7798,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .polygon-editor-view svg path.object, .csseditor[data-theme=dark] .polygon-editor-view svg polygon.object {
   fill: transparent;
-  stroke: rgba(0, 0, 0, 0.8);
+  stroke: rgba(107, 107, 107, 0.8);
   stroke-width: 1;
 }
 .csseditor[data-theme=dark] .polygon-editor-view svg path.split-path, .csseditor[data-theme=dark] .polygon-editor-view svg polygon.split-path {
@@ -8757,6 +8785,10 @@ html, body {
 .csseditor[data-theme=light] .page-view .page-lock .element-view[data-mode=ADD] {
   cursor: crosshair;
 }
+.csseditor[data-theme=light] .page-view .page-lock .element-view[data-mode=ADD] .drag-area-rect {
+  border: 0.5px dashed rgba(0, 0, 0, 0.4);
+  background-color: transparent;
+}
 .csseditor[data-theme=light] .page-tools {
   position: absolute;
   left: 10px;
@@ -8872,6 +8904,14 @@ html, body {
   height: 400px;
   background-color: white;
 }
+.csseditor[data-theme=light] .drag-area-rect {
+  pointer-events: none;
+  position: absolute;
+  border: 0.5px solid rgba(62, 168, 255, 0.9);
+  background-color: rgba(107, 188, 255, 0.5);
+  box-sizing: border-box;
+  left: -10000px;
+}
 .csseditor[data-theme=light] .canvas-view {
   position: absolute;
   -webkit-transform-origin: left top;
@@ -8889,7 +8929,10 @@ html, body {
   outline: none;
 }
 .csseditor[data-theme=light] .canvas-view .element-item:hover {
-  outline: 1px solid #adadf1;
+  outline: 2px double #4040fc;
+}
+.csseditor[data-theme=light] .canvas-view .element-item:hover svg path, .csseditor[data-theme=light] .canvas-view .element-item:hover svg polygon {
+  stroke: #4040fc;
 }
 .csseditor[data-theme=light] .canvas-view .element-item.artboard:hover {
   outline: none;
@@ -8906,7 +8949,7 @@ html, body {
   display: none;
 }
 .csseditor[data-theme=light] .selection-tool {
-  border: rgba(15, 114, 207, 0.8) 1px dashed;
+  border: rgba(15, 114, 207, 0.8) 0.5px solid;
   position: absolute;
   box-sizing: border-box;
 }
@@ -8971,8 +9014,8 @@ html, body {
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
   display: inline-block;
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   background-color: white;
   box-sizing: border-box;
   border: 1px solid rgba(15, 114, 207, 0.8);
@@ -11249,6 +11292,9 @@ html, body {
 }
 .csseditor[data-theme=light] .range-editor .range-editor-type .area input, .csseditor[data-theme=light] .range-editor .range-editor-type .area select {
   width: 100%;
+}
+.csseditor[data-theme=light] .range-editor .range-editor-type .area input[type=range] {
+  width: 95%;
 }
 .csseditor[data-theme=light] .range-editor .range-editor-type .area input[type=number] {
   padding: 2px 2px;
@@ -14131,6 +14177,11 @@ html, body {
 .csseditor[data-theme=light] .path-editor-view svg circle[data-is-first=true] {
   fill: rgba(96, 157, 226, 0.8);
 }
+.csseditor[data-theme=light] .path-editor-view svg .svg-canvas {
+  fill: transparent;
+  stroke: #609de2;
+  stroke-width: 1;
+}
 .csseditor[data-theme=light] .path-editor-view svg path.guide {
   fill: transparent;
   stroke: #3e8ec6;
@@ -14154,11 +14205,11 @@ html, body {
 }
 .csseditor[data-theme=light] .path-editor-view svg path.split-path:hover {
   cursor: copy;
-  stroke: #24577a;
+  stroke: #010304;
 }
 .csseditor[data-theme=light] .path-editor-view svg path.snap-path {
   fill: transparent;
-  stroke: #24577a;
+  stroke: #010304;
 }
 .csseditor[data-theme=light] .polygon-editor-view {
   display: none;
@@ -14201,6 +14252,11 @@ html, body {
 }
 .csseditor[data-theme=light] .polygon-editor-view svg circle[data-start=true] {
   fill: black;
+}
+.csseditor[data-theme=light] .polygon-editor-view svg .svg-canvas {
+  fill: transparent;
+  stroke: #609de2;
+  stroke-width: 1;
 }
 .csseditor[data-theme=light] .polygon-editor-view svg path.guide, .csseditor[data-theme=light] .polygon-editor-view svg polygon.guide {
   fill: transparent;

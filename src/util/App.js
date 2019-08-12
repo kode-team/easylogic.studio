@@ -117,10 +117,10 @@ export const start = opt => {
       }
     }
 
-    [POINTEREND("document") + DEBOUNCE(50)](e) {
+    [POINTEREND("document") + DEBOUNCE(30)](e) {
       var newPos = e.xy || EMPTY_POS;
       editor.config.set("bodyEvent", e);
-      editor.config.set("pos", newPos);
+      // editor.config.set("pos", newPos);
       this.removeBodyMoves();
       this.requestId = null;
     }
