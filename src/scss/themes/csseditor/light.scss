@@ -9,13 +9,12 @@ $left-layer-panel: 70px;
 $left-page-size: 70px;
 $toggle-left-size: 80px;
 $right-size: 280px;
-$timeline-header-size: 0px;
+$timeline-header-size: 70px;
 $timeline-size: 300px;
 $show-timeline-animation: all 0.15s linear;
 $gradient-box-size: 0px;
 $display-flex-color: #01a270;
 $display-grid-color: red;
-
 
 
 // common 
@@ -88,4 +87,9 @@ $window-color: $background-color;
 $bezier-background-color: #01538e; 
 $bezier-sample-background-color: black;
 
+// path 
 $path-guide-color: $selected-color;
+
+// timeline 
+$timeline-background-color: lighten($background-color, 5%);
+$timeline-border-color: $border-color;

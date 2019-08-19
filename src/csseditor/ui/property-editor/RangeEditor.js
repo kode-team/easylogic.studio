@@ -3,6 +3,7 @@ import { Length } from "../../../editor/unit/Length";
 import { LOAD, INPUT, CLICK } from "../../../util/Event";
 import icon from "../icon/icon";
 import SelectEditor from "./SelectEditor";
+import { OBJECT_TO_CLASS, OBJECT_TO_PROPERTY } from "../../../util/functions/func";
 
 export default class RangeEditor extends UIElement {
 
@@ -45,15 +46,22 @@ export default class RangeEditor extends UIElement {
             value = 0
         }
 
-        var hasLabel = !!label ? 'has-label' : ''
-        var hasCalc = calc ? 'has-calc' : '';
-        var isRemovable = removable ? 'is-removable' : '';
         var layoutClass = layout;
 
         var realValue = (+value).toString();
 
         return `
-        <div class='range-editor ${hasLabel} ${hasCalc} ${isRemovable} ${layoutClass}' data-selected-type='${type}' ref='$range'>
+        <div ${OBJECT_TO_PROPERTY({
+            'data-selected-type': type,
+            'ref': '$range',
+            'class': OBJECT_TO_CLASS({
+                'range-editor': true,
+                'has-label': !!label,
+                'has-calc': calc,
+                'is-removable': removable,
+                [layoutClass] : true 
+            })
+        })}>
             ${label ? `<label>${label}</label>` : '' }
             <button type='button' class='type-button' ref='$toggleType'>${icon.autorenew}</button>
             <div class='range-editor-type' data-type='range'>

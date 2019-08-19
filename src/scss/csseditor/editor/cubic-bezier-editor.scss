@@ -2,6 +2,7 @@
     width: 228px;
     height: 210px;
     position: relative;
+    margin: 0 auto;
 
     .bezier {
         position: absolute;
@@ -130,6 +131,7 @@
         .predefined-text {
             vertical-align: middle;
             padding:4px;
+            color: $font-color;
         }
     
     }

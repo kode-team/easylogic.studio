@@ -96,7 +96,11 @@ export default class StyleView extends UIElement {
     this.emit('refreshComputedStyleCode', computedCSS)
   }
 
-  [EVENT('refreshStyleView')] (current) {
+  // timeline 에서 테스트 할 때 이걸 활용할 수 있다. 
+  // 움직이기 원하는 객체가 타임라인 전체라 
+  // 전체를 리프레쉬 하는걸로 한다. 
+  // 애니메이션이 진행되는 동안 임의의 객체는 없는 것으로 하자. 
+  [EVENT('refreshStyleView', 'moveTimeline')] (current) {   
     if (current) {
       this.load();
       this.refreshStyleHeadOne(current);

@@ -5,6 +5,12 @@
     display: grid; 
     grid-template-columns:  1fr !important;
 
+    &.hide-title {
+      > .title {
+        display: none; 
+      }
+    }
+
     .title {
         display: grid;
         grid-template-columns: 1fr 2fr;
@@ -17,12 +23,6 @@
             display: inline-block;
           }
         }
-    }
-
-
-
-    .css-property-list {
-      // max-height: 300px;
     }
 
     .css-property-item {

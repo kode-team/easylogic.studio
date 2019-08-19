@@ -6,6 +6,7 @@ import UIElement, { EVENT } from "../../util/UIElement";
 import { CLICK, DRAGOVER, DROP, PREVENT } from "../../util/Event";
 import Inspector from "../ui/control/Inspector";
 
+
 import popup from "../ui/popup";  
 import StyleView from "../ui/view/StyleView";
 import ObjectList from "../ui/control/ObjectList";
@@ -18,6 +19,7 @@ import Dom from "../../util/Dom";
 import Resource from "../../editor/util/Resource";
 import windowList from "../ui/window-list";
 import ImageFileView from "../ui/view/ImageFileView";
+import TimelineProperty from "../ui/control/TimelineProperty";
 
 
 
@@ -58,6 +60,9 @@ export default class CSSEditor extends UIElement {
             <button ref='$toggleRight'>${icon.dahaze}</button>
           </div>
         </div>
+        <div class='layout-footer'>
+          <TimelineProperty />
+        </div>
         <FillPopup />
         <ColorPickerPopup  />
         <BoxShadowPropertyPopup />
@@ -91,7 +96,8 @@ export default class CSSEditor extends UIElement {
       StyleView,
       LogoView,
       ExternalToolMenu,
-      ImageFileView
+      ImageFileView,
+      TimelineProperty
     };
   }
 
@@ -131,9 +137,9 @@ export default class CSSEditor extends UIElement {
     this.emit('refreshStyleView', current)
   }
 
-  [DRAGOVER() + PREVENT] (e) {}
+  [DRAGOVER('$middle') + PREVENT] (e) {}
 
-  [DROP() + PREVENT] (e) {
+  [DROP('$middle') + PREVENT] (e) {
 
     var items = Resource.getAllDropItems(e);
 

@@ -11,6 +11,7 @@ import VarEditor from "./VarEditor";
 import TransformEditor from "./TransformEditor";
 import TransformOriginEditor from "./TransformOriginEditor";
 import PerspectiveOriginEditor from "./PerspectiveOriginEditor";
+import { OBJECT_TO_CLASS } from "../../../util/functions/func";
 
 
 
@@ -32,6 +33,7 @@ export default class CSSPropertyEditor extends UIElement {
 
   initState() {
     return {
+      hideTitle: this.props['hide-title'] === 'true',
       properties: [] 
     };
   }
@@ -50,8 +52,10 @@ export default class CSSPropertyEditor extends UIElement {
 
   template() {
     return `
-      <div class='css-property-editor'>
-        <div class='title' >
+      <div class='css-property-editor ${OBJECT_TO_CLASS({
+        'hide-title': this.state.hideTitle
+      })}'>
+        <div class='title'>
           <label>Properties</label>
           <div class='tools'>
             ${this.makePropertySelect()}

@@ -1,0 +1,504 @@
+import { DomItem } from "./DomItem";
+import { Length } from "../unit/Length";
+import { uuidShort, uuid } from "../../util/functions/math";
+import { clone, isUndefined } from "../../util/functions/func";
+import { second, timecode, framesToTimecode } from "../../util/functions/time";
+import { editor } from "../editor";
+import { createBezierForPattern } from "../../util/functions/bezier";
+import { createInterpolateFunction, createCurveFunction } from "../util/interpolate";
+
+export class TimelineItem extends DomItem {
+  getDefaultObject(obj = {}) {
+    return super.getDefaultObject({
+      timeline: [
+        /*{ id: "xxx", 
+          title: "xxxx", 
+          currentTimecode: '00:00:00:00',
+          totalTimecode: '00:00:10:00',
+          currentTime: 0,
+          totalTime: second(60, '00:00:10:00'),
+          displayStartTime: second(60, '00:00:00:00'),
+          displayEndTime: second(60, '00:00:10:00'),
+          fps: 60,
+          selectedLayerId: '',
+          selectedProperty : '', 
+          selectedOffsetTime: 0,
+          animations: [
+          {id: 'xxxxx', properties: [
+            {property: 'width', keyframes: [ {time: 10, value: Length.px(10), timing: 'linear'} ] },
+            {property: 'height', keyframes: [ {time: 10, value: Length.px(10), timing: 'linear'} ] },
+            {property: 'translateX', keyframes: [ {time: 10, value: Length.px(10), timing: 'linear'} ] },
+            {property: 'rotateZ', keyframes: [ {time: 10, value: Length.px(10), timing: 'linear'} ] },
+            {property: 'perspective', keyframes: [ {time: 10, value: Length.px(10), timing: 'linear'} ] },
+            {property: 'width', keyframes: [ {time: 10, value: Length.px(10), timing: 'linear'} ] },
+          ]}
+        ]} */
+      ],
+      compiledTimeline: {},
+      ...obj
+    });
+  }
+
+  searchTimelineOffset (time) {
+    var timeline = this.getSelectedTimeline();
+    var filteredTimeline = [] 
+    if (timeline) {
+
+      timeline.animations.forEach(animation => {
+        animation.properties.forEach(p => {
+          var list = this.getCompiledTimingFunction(animation.id, p.property);
+
+          filteredTimeline.push(list.find(keyframe => {
+            return keyframe.startTime <= time && time < keyframe.endTime
+          }))
+        })
+      })
+    }
+
+    return filteredTimeline.filter(it => it);
+  }
+
+  getCompiledTimingFunction (layerId, property) {
+    return this.json.compiledTimeline[`${layerId}.${property}`];
+  }
+
+  compiledTimingFunction (layerId, property) {
+
+    var timeline = this.getSelectedTimeline();
+
+    var {selectedLayerId, selectedProperty} = timeline; 
+
+    layerId = layerId || selectedLayerId
+    property = property || selectedProperty
+
+    var p = this.getTimelineProperty(layerId, property);
+    var layer = this.searchById(layerId);
+
+
+    this.json.compiledTimeline[`${layerId}.${property}`] = p.keyframes.map( (offset, index) => {
+
+      var nextOffset = p.keyframes[index + 1];
+
+      if (!nextOffset) {
+        // 마지막 시점에서 시간을 무한대로 주면 
+        // 이후 좌표를 고정할 수 있다. 
+        // timing 에 hold 를 넣고 중간 단계를 넘어가게도 해보자. 
+        nextOffset = { time: Number.MAX_SAFE_INTEGER, value: offset.value};
+      }
+
+      var it = {
+        layer,
+        property: p.property,
+        startTime: offset.time,
+        endTime: nextOffset.time, 
+        startValue: offset.value,
+        endValue: nextOffset.value,
+        timing: offset.timing,
+        interpolateFunction: createInterpolateFunction(layer, p.property, offset.value, nextOffset.value),
+        timingFunction: createCurveFunction(offset.timing)
+      }
+
+      it.func = this.makeTimingFunction(it);      
+  
+      return it; 
+    }).filter(it => it);
+
+
+  }
+
+  makeTimingFunction (it) {
+    // 시작시간 끝 시간이 있음 . 그리고 현재 시간이 있음 
+    return (time) => {
+      var rate = (time - it.startTime)/(it.endTime - it.startTime);
+      return it.interpolateFunction(it.timingFunction(rate), rate);
+    }
+  }
+
+  seek (frameOrCode) {
+
+    var timeline = this.getSelectedTimeline();
+
+    if (timeline) {
+
+      var time = frameOrCode ?  second(frameOrCode) : timeline.currentTime;
+
+      this.searchTimelineOffset(time).forEach(it => {
+        it.layer.reset({
+          [it.property]: it.func(time) 
+        })
+      });
+
+    }
+
+  }
+
+  getSelectedTimeline () {
+    var timeline = this.json.timeline;
+
+    var a = timeline.filter(it => it.selected);
+
+    var selectedTimeline = a.length ? a[0] : timeline[0]
+
+    return selectedTimeline || null;
+  }
+
+  selectTimeline (id) {
+    this.json.timeline.forEach(it => {
+      it.selected = it.id === id; 
+    })
+  }
+
+  addTimeline (fps = 60, endTimecode = '00:00:10:00' ) {
+    var id = uuidShort();
+    var selectedTimeline = {
+      id,
+      title: 'sample', 
+      ...this.getTimelineLayerInfo(fps, endTimecode),
+      animations: [] 
+    }
+    this.json.timeline.push(selectedTimeline)
+
+    this.selectTimeline(id);
+
+    return selectedTimeline;
+  }
+
+  addTimelineLayer (layerId, fps = 60, endTimecode = '00:00:10:00' ) {
+    var selectedTimeline = this.getSelectedTimeline();
+
+    if (!selectedTimeline) {
+      selectedTimeline = this.addTimeline(fps, endTimecode);
+    }
+
+    selectedTimeline.selected = true; 
+
+    if (layerId) {
+      var layer = selectedTimeline.animations.filter(it => it.id === layerId) 
+
+      if (!layer[0]) {
+        selectedTimeline.animations.push({
+          id: layerId, properties: [] 
+        })
+      }
+    }
+
+
+  }
+
+  getTimelineLayerInfo (fps = 60, endTimecode = '00:00:10:00') {
+
+    var endTime = second(fps, endTimecode);
+
+    return {
+      fps,
+      currentTimecode: timecode(fps, 0),
+      totalTimecode: timecode(fps, endTime),
+      currentTime: 0,
+      totalTime: endTime,
+      displayStartTime: 0,
+      displayEndTime: endTime
+    }
+
+  }
+
+  setTimelineCurrentTime (frameOrCode) {
+    var timeline = this.getSelectedTimeline();
+    var {fps, totalTimecode} = timeline
+
+    if (timeline) {
+      var frame = frameOrCode;
+      var code = frameOrCode; 
+  
+      if ((+frame) + '' === frame) {
+        frame = +frame; 
+        code = framesToTimecode(fps, frame);
+      }
+  
+      if (code > totalTimecode) {
+          code = totalTimecode;
+      }
+  
+      var currentTime = second(fps, code);
+
+      timeline.currentTime = currentTime;
+      timeline.currentTimecode = timecode(fps, currentTime);
+
+    }
+    
+  }
+
+  setDisplayTimeDxRate (dxRate, initStartTime, initEndTime) {
+
+    var timeline = this.getSelectedTimeline();
+
+    if (timeline) {
+
+      var dxTime = dxRate * timeline.totalTime 
+
+      var startTime = initStartTime + dxTime; 
+      var endTime = initEndTime + dxTime; 
+  
+  
+      startTime = Math.max(startTime, 0);
+      startTime = Math.min(startTime, endTime);        
+  
+      if (startTime === 0) {
+          endTime = initEndTime - initStartTime;
+      }
+  
+      endTime = Math.max(endTime, startTime);                
+      endTime = Math.min(endTime, timeline.totalTime);
+  
+      if (endTime === timeline.totalTime) {
+          startTime = timeline.totalTime - (initEndTime - initStartTime);
+      }
+  
+  
+      timeline.displayStartTime = startTime;
+      timeline.displayEndTime = endTime;
+    }
+     
+
+  }
+
+  setDisplayStartTimeRate (rate) {
+    var timeline = this.getSelectedTimeline();
+
+    if (timeline) {
+      timeline.displayStartTime = rate * timeline.totalTime;
+    }
+  }
+
+  setDisplayEndTimeRate (rate) {
+    var timeline = this.getSelectedTimeline();
+
+    if (timeline) {
+      timeline.displayEndTime = rate * timeline.totalTime;
+    }
+  }  
+
+  setTimelineCurrentTimeRate (rate) {
+    var timeline = this.getSelectedTimeline();
+    
+    if (timeline) {
+      var {displayStartTime, displayEndTime, fps} = timeline
+      var currentTime = displayStartTime + (displayEndTime - displayStartTime) * rate
+
+      this.setTimelineCurrentTime(timecode(fps, currentTime));
+    }
+
+  }  
+
+  setTimelineTotalTime (frameOrCode) {
+    var timeline = this.getSelectedTimeline();
+
+    if (timeline) {
+      var frame = frameOrCode;
+      var code = frameOrCode; 
+  
+      if ((+frame) + '' === frame) {
+        frame = +frame; 
+        code = framesToTimecode(timeline.fps, frame);
+      }
+  
+      if (second(timeline.fps, code) < timeline.displayEndTime) {
+        timeline.displayEndTime = second(timeline.fps, code)
+        timeline.displayStartTime = 0; 
+      }
+
+      timeline.totalTimecode = code; 
+      timeline.totalTime = second(timeline.fps, code);
+
+    }
+    
+  }  
+
+
+  getTimelineObject (layerId) {
+    var selectedTimeline = this.getSelectedTimeline();
+
+    if (selectedTimeline) {
+      return selectedTimeline.animations.find(it => it.id === layerId) ;
+    }
+  }
+
+  addTimelineProperty (layerId, property) {
+    this.addTimelineLayer(layerId);
+    var timelineObject = this.getTimelineObject(layerId);
+
+    if (timelineObject) {
+      var p = timelineObject.properties.filter(it => it.property === property);
+
+      if (!p.length) {
+        timelineObject.properties.push({
+          property, keyframes: [] 
+        })
+        this.compiledTimingFunction(layerId, property);                
+      } 
+
+    }
+  }
+
+  getTimelineProperty (layerId, property) {
+
+    var timeline = this.getSelectedTimeline();
+
+    if (timeline) {
+
+      layerId = layerId || timeline.selectedLayerId
+      property = property || timeline.selectedProperty
+
+      var timelineObject = this.getTimelineObject(layerId);
+
+      if (timelineObject) {
+        return timelineObject.properties.find(it => it.property === property);
+      }
+    }
+
+
+  }
+
+  getSelectedPropertyOffset (layerId, property, time) {
+    var timeline = this.getSelectedTimeline();
+
+    if (timeline) {
+      var {selectedOffsetTime, selectedLayerId, selectedProperty} = timeline;
+
+      layerId = layerId || selectedLayerId
+      property = property || selectedProperty
+      time = isUndefined(time)? selectedOffsetTime : time
+
+      var p = this.getTimelineProperty(layerId, property);
+
+      if (p) {
+        return p.keyframes.find(k => k.time === time)
+      }
+    }
+
+    return null; 
+  }
+
+  setSelectedOffset(layerId, property, time) {
+    var timeline = this.getSelectedTimeline();
+
+    if (timeline) {
+      timeline.selectedLayerId = layerId;
+      timeline.selectedProperty = property;
+      timeline.selectedOffsetTime = time;
+
+      var p = this.getTimelineProperty();
+      p.keyframes.forEach(it => {
+        it.selected = it.time === time; 
+      })
+    }
+
+  }
+
+  setSelectedTimelineKeyframe (obj) {
+    var offset = this.getSelectedPropertyOffset();
+
+    if (offset) {
+      Object.keys(obj).forEach(key => {
+        offset[key] = obj[key]; 
+      })
+
+      this.compiledTimingFunction();
+    }
+  }
+
+  addTimelineKeyframe (layerId, property, value, timing = 'linear') {
+    this.addTimelineProperty(layerId, property);
+    var timeline = this.getSelectedTimeline();
+    var p = this.getTimelineProperty(layerId, property);
+
+    if (p) {
+      var time = timeline.currentTime;
+
+      var times = p.keyframes.filter(it => it.time === time); 
+
+      if (!times.length) {
+        p.keyframes.push({ property, time, value, timing })
+
+        p.keyframes.sort( (a, b) => {
+          return a.time > b.time ? 1 : -1; 
+        })
+
+        this.setSelectedOffset(layerId, property, time)
+        this.compiledTimingFunction(layerId, property);        
+      }
+    }
+  }
+
+  copyTimelineKeyframe (layerId, property) {
+    var p = this.getTimelineProperty(layerId, property);
+
+    if (p) {
+      var timeline = this.getSelectedTimeline();
+      var time = timeline.currentTime;
+
+      var times = p.keyframes.filter(it => it.time < time); 
+      var value = Length.px(0);
+      var timing = 'linear';
+      if (times.length) {
+
+        times.sort((a, b) => {
+          return a.time > b.time ? -1 : 1; 
+        })
+
+        value = times[0].value.clone ? times[0].value.clone() : times[0].value;
+        timing = times[0].timing
+      }
+
+      this.addTimelineKeyframe(layerId, property, value, timing);
+
+    }
+  }
+
+  getTimelineKeyframe (layerId, property, time) {
+    var p = this.getTimelineProperty(layerId, property);
+
+    if (p) {
+      var times = p.keyframes.filter(it => it.time === time); 
+
+      return times[0]
+    }
+  }
+
+  getTimelineKeyframeByIndex (layerId, property, index) {
+    var p = this.getTimelineProperty(layerId, property);
+
+    if (p) {
+      return p.keyframes[index]
+    }
+  }  
+
+  sortTimelineKeyframe (layerId, property) {
+    var p = this.getTimelineProperty(layerId, property);
+
+    if (p) {
+      p.keyframes.sort((a, b) => {
+        return a.time > b.time ? 1 : -1; 
+      })
+      this.compiledTimingFunction(layerId, property);      
+    }
+  }
+
+  setFps (fps) {
+    var timeline = this.getSelectedTimeline();
+
+    if (timeline) {
+        timeline.fps = fps; 
+
+        timeline.currentTimecode = timecode(fps, timeline.currentTime);
+        timeline.totalTimecode = timecode(fps, timeline.totalTime);
+    }
+  }
+
+  toCloneObject() {
+    return {
+      ...super.toCloneObject(),
+      timeline: JSON.parse(JSON.stringify(this.json.timeline))
+    }
+  }  
+
+}

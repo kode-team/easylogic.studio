@@ -198,3 +198,9 @@ export function OBJECT_TO_PROPERTY (obj) {
         return `${key}="${obj[key]}"`
     }).join(' ');
 }
+
+export function OBJECT_TO_CLASS (obj) {
+    return Object.keys(obj).filter(k => obj[k]).map(key => {
+        return key
+    }).join(' ');
+}

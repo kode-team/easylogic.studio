@@ -1,0 +1,421 @@
+.animation-selector {
+    .timeline-object {
+        display: inline-block;
+
+        &.selected {
+            background-color: $selected-color;
+            color: $selected-font-color;
+        }
+    }
+}
+
+.timeline-value-area {
+    position: absolute;
+    width: $right-size;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    background-color: $background-color;    
+    font-size: 12px;
+    box-sizing: border-box;
+    border-left: 1px solid $border-color;
+    border-top: 1px solid $border-color;
+
+    .timeline-value-editor {
+
+        .tab-content {
+            padding: 0px 20px;
+
+            &.padding-zero {
+                padding-top: 0px;
+            }
+
+            .tools {
+                display: none;
+            }
+           
+            .title {
+                color: $font-color;
+            } 
+        }
+
+        .value {
+            padding: 5px;
+            margin: 0 auto;
+            width: 228px;
+            display: grid;
+            grid-template-columns: 60px 1fr;
+            grid-column-gap: 4px;
+            label {
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .editor-area {
+                min-height: 20px;
+            }
+
+        }
+
+        .tab-content {
+            padding-top: 10px;
+        }
+    }
+}
+
+.timeline-area {
+    position: absolute;
+    left: 0px;
+    right: $right-size;
+    top: 0px;
+    bottom: 0px;
+    background-color: $background-color;    
+    font-size: 12px;
+
+    .timeline-header {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        height: $timeline-header-size;
+        right: 0px;
+        box-sizing: border-box;
+        border-bottom: 1px solid $timeline-border-color;
+        border-top: 1px solid $timeline-border-color;
+
+        .timeline-object-toolbar {
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            bottom: 0px;
+            width: $left-size;     
+            border-right: 1px solid $timeline-border-color;            
+        }
+
+        .timeline-keyframe-toolbar {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            bottom: 0px;
+            left: $left-size;
+
+            .keyframe-time-view {
+                position: absolute;
+                left: 0px;
+                top: 0px;
+                width: 100%;
+                height: 100%;
+
+                .time-manager {
+                    position: absolute;
+                    left: 0px;
+                    right: 0px;
+                    height: 20px;
+                    top: 0px;
+                    // background-color: black;
+                    box-sizing: border-box;
+                    padding: 3px 10px;
+
+                    > * {
+                        display: inline-block;
+                        margin-right: 10px;
+                    }
+
+                    label {
+                        color: rgba(255, 255, 255, 0.5);
+                    }
+                }
+
+                .time-duration {
+                    position: absolute;
+                    top: 22px;
+                    left: 0px;
+                    right: 0px;
+                    height: 25px;
+
+                    $back-color: lighten($background-color, 5%);
+             
+                    .duration-handle-left {
+                        position: absolute;
+                        left: 15px;
+                        top: 0px;
+                        width: 5px;
+                        height: 10px;
+                        background-color: $back-color;
+                        border-top-left-radius: 10px;
+                        border-bottom-left-radius: 10px;
+
+                    }
+
+                    .duration-handle-right {
+                        position: absolute;
+                        right: 15px;
+                        top: 0px;
+                        width: 5px;
+                        height: 10px;
+                        background-color: $back-color;
+                        border-top-right-radius: 10px;
+                        border-bottom-right-radius: 10px;
+                    }                    
+
+                    .duration-slider {
+                        position: absolute;
+                        left: 20px;
+                        top: 0px;
+                        right: 20px;
+                        height: 10px;
+                        background-color: $back-color;
+                        
+
+                        // overflow: hidden;
+                        // border-radius: 5px;
+
+                        .start {
+                            position: absolute;
+                            left : 0px;
+                            top: 0px;
+                            transform: translateX(-100%);
+                            height: 10px;
+                            width: 5px;
+                            border-top-left-radius: 10px;
+                            border-bottom-left-radius: 10px;
+                            background-color: $selected-color;
+                            cursor: ew-resize;                            
+                        }
+
+                        .end {
+                            position: absolute;
+                            left : 100%;
+                            top: 0px;
+                            // transform: translateX(100%);
+                            height: 10px;
+                            width: 5px;
+                            border-top-right-radius: 10px;
+                            border-bottom-right-radius: 10px;
+                            background-color: $selected-color;
+                            cursor: ew-resize;
+                        }      
+                        
+                        .gauge {
+                            position: absolute;
+                            left : 0%;
+                            width: 100%;
+                            top: 0px;
+                            height: 100%;
+                            background-color: rgba($border-color, 0.7);
+                            cursor: ew-resize;                            
+                        }
+                    }
+                }
+
+                canvas {
+                    position: absolute;
+                    left: 0px;
+                    top: 50%;
+                    width: 100%;
+                    height: $timeline-header-size/2;
+                }
+            }
+
+        }
+
+    }
+
+    .timeline-body {
+        position: absolute;
+        left: 0px;
+        top: $timeline-header-size;
+        bottom: 0px;
+        right: 0px;
+
+        .timeline-object-area {
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            bottom: 0px;
+            width: $left-size;
+            overflow: auto;
+            border-right: 1px solid $timeline-border-color;
+            box-sizing: border-box;
+
+            .timeline-object-list {
+                .timeline-object {
+
+                    &.collapsed {
+
+                        .timeline-object-row.layer {
+                            .icon {
+                                svg {
+                                    transform: rotate(0deg);
+                                }
+                            }
+                        }
+                    
+                        .timeline-object-row.layer-property {
+                            display: none;
+                        }
+                    }
+
+
+
+                    .timeline-object-row {
+                        height: 30px;
+                        display: grid; 
+                        grid-template-columns: 20px 1fr 1.5fr; 
+                        grid-column-gap: 5px;
+                        box-sizing: border-box;
+                        border-bottom: 1px solid lighten($timeline-border-color, 20%);
+
+                        .icon {
+
+                            padding: 5px;
+                            svg {
+                                width: 16px;
+                                height: 16px;
+                                transform: rotate(90deg);
+                                transition: transform 0.2s ease;
+
+                                path {
+                                    fill: $font-color;
+                                }
+                            }
+                        }
+
+                        .title { 
+                            vertical-align: middle;
+                            padding: 5px 0px;
+                            cursor: pointer;
+                            color: $font-color;
+                        }
+
+                        .tools {
+                            padding: 5px 0px;
+                            text-align: right;
+
+                        }
+
+                        &.layer-property {
+                            overflow: hidden;                            
+                            grid-template-columns: 20px 1fr .5fr 1fr; 
+
+                            .title {
+                                padding-left: 10px;
+                            }
+
+                            .tools {
+                                button.add {
+                                    width: 10px;
+                                    height: 10px;
+                                    border-radius: 50%;
+                                    display: inline-block;
+                                    box-shadow: 0 0 0 2px rgba(darken($border-color, 10%), 0.3);
+                                    background-color: rgba(lighten($border-color, 50%), 0.7);
+                                    vertical-align: middle;
+                                    cursor: pointer;
+                                    transform: translateX(-5px) translateY(2px);
+                                
+                                    &:hover {
+                                      box-shadow: 0 0 0 2px rgba($selected-color, 0.5);
+                                      background-color: $selected-color;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .timeline-keyframe-area {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            bottom: 0px;
+            left: $left-size;
+            overflow: auto;            
+
+
+            .keyframe-time-grid-view {
+                position: absolute;
+                left: 0px;
+                top: 0px;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+
+                canvas {
+                    position: absolute;
+                    left: 0px;
+                    top: 0px;
+                    width: 100%;
+                    height: 100%;
+                    pointer-events: none;
+                }
+            }            
+
+            .timeline-keyframe-list {
+
+                .timeline-keyframe {
+                    &.collapsed {
+                    
+                        .timeline-keyframe-row.layer-property {
+                            display: none;
+                        }
+                    }
+
+                    .timeline-keyframe-row {
+                        height: 30px;
+                        box-sizing: border-box;
+                        border-bottom: 1px solid $timeline-border-color;
+
+                        position: relative;
+                        
+                        .keyframe {
+                            position: absolute;
+                            top: 50%;
+                            transform: translateY(-50%);
+                            height: 10px;
+                            background-color: rgba($timeline-border-color, 0.5);
+                            display: inline-block;
+
+                            .offset {
+                                position: absolute;
+                                top: 50%;
+                                // border:1px solid $timeline-border-color;
+                                display: inline-block;
+                                width: 8px;
+                                height:8px;
+                                // border-radius: 50%;
+                                // clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50% );
+                                background-color: $selected-color;
+                                transform: translateY(-50%) translateX(-50%) rotate(45deg);
+                                cursor: ew-resize;
+                                box-shadow: 0 0 0 1px $border-color;                                
+
+                                &.selected {
+                                    background-color: white;
+                                    box-shadow: 0 0 0 1px $selected-color;
+                                }
+                            }
+                        }
+
+                        .keyframe-back{
+                            position: absolute;
+                            height: 100%;
+                            display: inline-block;                            
+                            .offset-line {
+                                position: absolute;
+                                top: 50%;
+                                display: inline-block;
+                                height: 2px;
+                                background-color: $selected-color;
+                                transform: translateY(-50%);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+}

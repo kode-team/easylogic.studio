@@ -20,7 +20,7 @@ export default class CubicBezierEditor extends UIElement {
     }
 
     template () {
-        return `
+        return /*html*/`
             <div class='cubic-bezier-editor'>
                 <div class='predefined'>
                     <div class='left' ref='$left'>${icon.chevron_left}</div>
@@ -313,8 +313,6 @@ export default class CubicBezierEditor extends UIElement {
             left: x + 'px',
             top : y + 'px'
         });
-
-        console.log(x, y, minX, minY)
 
         return { 
             x : (x == 0 )? 0 : x / width, 

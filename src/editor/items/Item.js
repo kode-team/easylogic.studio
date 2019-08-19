@@ -309,4 +309,27 @@ export class Item {
   get allLayers () {
     return [..._traverse(this.ref)]
   }
+
+  searchById (id) {
+
+    if (this.id === id) {
+      return this.ref; 
+    }
+
+    for(var i = 0, len = this.layers.length; i < len; i++) {
+      const item = this.layers[i]
+
+      if (item.id === id) {
+        return item; 
+      } else {
+        var searchedItem = item.searchById(id);
+
+        if (searchedItem) {
+          return searchedItem;
+        }
+      }
+    }
+
+    return null;
+  }
 }

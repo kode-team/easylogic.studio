@@ -39,7 +39,8 @@ export default class BackgroundColorProperty extends BaseProperty {
 
   getBody() {
     return `
-        <div class='property-item'>
+        <div class='property-item animation-property-item'>
+          <span class='add-timeline-property' data-property='background-color'></span>
           <ColorViewEditor ref='$color' label="color" onchange="changeColor" />
         </div>
 
@@ -80,6 +81,13 @@ export default class BackgroundColorProperty extends BaseProperty {
         </div>        
       `;
   }  
+
+  getPropertyValue (key) {
+    switch(key) {
+    case 'background-color': 
+      return this.children.$color.getValue()
+    }
+  }
 
   refresh () {
     var current = editor.selection.current; 

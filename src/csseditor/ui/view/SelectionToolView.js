@@ -118,7 +118,14 @@ export default class SelectionToolView extends UIElement {
 
     toggleEditingPolygon (isEditingPolygon) {
         this.refs.$selectionTool.toggleClass('editing-polygon', isEditingPolygon);
-    }    
+    }   
+    
+    [EVENT('hideSelectionToolView')] () {
+        this.refs.$selectionTool.css({
+            left: '-10000px',
+            top: '-10000px'
+        })
+    }
 
     [EVENT('hideSubEditor')] (e) {
         this.toggleEditingPath(false);
@@ -646,8 +653,6 @@ export default class SelectionToolView extends UIElement {
         this.bindData('$rotateArea')
 
         this.makeSelectionTool();
-
-        // this.emit('focusCanvasView');
     }    
 
     isNoMoveArea () {
@@ -680,7 +685,12 @@ export default class SelectionToolView extends UIElement {
             y.add(-10000);            
         }
 
-        this.refs.$selectionTool.cssText(`left: ${x};top:${y};width:${width};height:${height}`)
+        this.refs.$selectionTool.css({
+            left: x,
+            top: y,
+            width, 
+            height 
+        })
         this.bindData('$rotate3d');
         this.bindData('$rotateArea');        
 
@@ -703,9 +713,9 @@ export default class SelectionToolView extends UIElement {
             }
             
         }
-
-
     }
+
+    
 
     calculateWorldPositionForGuideLine (list = []) {
         return list.map(it => {

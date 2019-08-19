@@ -1,7 +1,7 @@
-import { DomItem } from "./DomItem";
 import { Length } from "../unit/Length";
+import { TimelineItem } from "./TimelineItem";
 
-export class ArtBoard extends DomItem {
+export class ArtBoard extends TimelineItem {
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
       itemType: "artboard",
@@ -16,7 +16,7 @@ export class ArtBoard extends DomItem {
   toCloneObject() {
     return {
       ...super.toCloneObject(),
-      name: this.json.name 
+      name: this.json.name
     }
   }  
 

@@ -47,12 +47,13 @@
 
   .layout-footer {
     flex: none;
-    height: $timeline-header-size - 1px;
+    height: $timeline-size - 1px;
     overflow: hidden;
     border-top: 1px solid $border-color;
     transition: $show-timeline-animation;
     position: relative;
     pointer-events: all;
+    z-index: 10000;
   }
 
   .layout-middle {
@@ -258,9 +259,12 @@
 // editor 
 @import './editor/index.scss';
 
-// popup
+// popup 
 @import "./popup/popup.scss";
 @import './window/window.scss';
 
 @import './path-editor-view.scss';
 @import './polygon-editor-view.scss';
+
+// timeline 
+@import './timeline.scss';

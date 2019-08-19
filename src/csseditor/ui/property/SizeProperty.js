@@ -38,13 +38,25 @@ export default class SizeProperty extends BaseProperty {
 
   getBody() {
     return `
-      <div class='property-item'>
+      <div class='property-item animation-property-item'>
+        <span class='add-timeline-property' data-property='width'></span>
         <RangeEditor ref='$width' label='Width' removable="true" key='width' min="0" max='3000' onchange='changRangeEditor' />
       </div>
-      <div class='property-item'>
+      <div class='property-item animation-property-item'>
+        <span class='add-timeline-property' data-property='height'></span>      
         <RangeEditor ref='$height' label='Height' removable="true" key='height' min="0" max='3000' onchange='changRangeEditor' />
       </div>      
     `;
+  }
+
+
+  getPropertyValue (property) {
+    switch(property){
+    case 'width':
+      return this.children.$width.getValue();
+    case 'height':
+      return this.children.$height.getValue(); 
+    } 
   }
 
   [EVENT('changRangeEditor')] (key, value) {

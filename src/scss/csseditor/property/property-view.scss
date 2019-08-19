@@ -5,6 +5,25 @@
   color: $property-font-color; 
   display: none; 
 
+  .add-timeline-property {
+    display: inline-block;
+    margin-right: 5px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px rgba(darken($border-color, 10%), 0.3);
+    background-color: rgba(lighten($border-color, 50%), 0.7);
+    vertical-align: middle;
+    line-height: 10px;
+    margin-top: 3px;
+    cursor: pointer;
+
+    &:hover {
+      box-shadow: 0 0 0 2px rgba($selected-color, 0.5);
+      background-color: $selected-color;
+    }
+  }
+
   &.compact {
     padding:0px;
   }
@@ -14,14 +33,31 @@
     display: flex;
     flex-direction: column;
 
+    &.show {
+      height: 100%;
+    }
+
     .property-title {
       flex: none; 
       height: 30px;
+
+
+    }
+
+    &.managed-tool {
+      .property-title {
+        grid-template-columns: 100px 1fr;
+
+        .tools {
+          text-align: left;
+        }
+      }
     }
 
     .property-body {
       flex: 1 1 auto; 
       overflow: auto;
+      position: relative;
     }
   }
 
@@ -77,6 +113,12 @@
       padding: 0px;
       font-size: 11px;
       margin-top: 8px;
+
+      &.animation-property-item {
+        display: grid;
+        grid-template-columns: 14px 1fr;
+        grid-column-gap: 2px; 
+      }
 
       &.background-image,
       &.box-shadow-item,

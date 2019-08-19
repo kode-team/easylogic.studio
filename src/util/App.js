@@ -8,9 +8,10 @@ import BaseStore from "./BaseStore";
 import UIElement, { EVENT } from "./UIElement";
 
 import { editor } from "../editor/editor";
-import { debounce, debounceFrame, throttle } from "./functions/func";
+import { debounce } from "./functions/func";
 
 const EMPTY_POS = { x: 0, y: 0 };
+const DEFAULT_POS = { x: Number.MAX_SAFE_INTEGER, y: Number.MAX_SAFE_INTEGER };
 const MOVE_CHECK_MS = 10;
 
 export const start = opt => {
@@ -48,19 +49,20 @@ export const start = opt => {
     }
 
     loopBodyMoves() {
-      var oldPos = editor.config.get("oldPos");
       var pos = editor.config.get("pos");
-      var isRealMoved = oldPos.x != pos.x || oldPos.y != pos.y;
+      var lastPos = editor.config.get("lastPos") || DEFAULT_POS;
+      var isNotEqualLastPos = !(lastPos.x === pos.x && lastPos.y === pos.y);
 
-      if (isRealMoved && this.moves.size) {      
+      if (isNotEqualLastPos && this.moves.size) {      
         this.moves.forEach(v => {
           var dx = pos.x - v.xy.x;
           var dy = pos.y - v.xy.y;
           if (dx != 0 || dy != 0) {
-            //  변화가 있을 때만 호출 한다.
             v.func.call(v.context, dx, dy, 'move');
           }
         });
+
+        editor.config.set('lastPos', pos);
       }
       requestAnimationFrame(this.funcBodyMoves);
     }
@@ -104,13 +106,10 @@ export const start = opt => {
     }
 
     [POINTERMOVE("document")](e) {
-      var oldPos = editor.config.get("pos") || EMPTY_POS;
       var newPos = e.xy || EMPTY_POS;
 
-      this.bodyMoved = !(oldPos.x == newPos.x && oldPos.y == newPos.y);
       editor.config.set("bodyEvent", e);
       editor.config.set("pos", newPos);
-      editor.config.set("oldPos", oldPos);
 
       if (!this.requestId) {
         this.requestId = requestAnimationFrame(this.funcBodyMoves);
@@ -118,9 +117,8 @@ export const start = opt => {
     }
 
     [POINTEREND("document") + DEBOUNCE(30)](e) {
-      var newPos = e.xy || EMPTY_POS;
+      // var newPos = e.xy || EMPTY_POS;
       editor.config.set("bodyEvent", e);
-      // editor.config.set("pos", newPos);
       this.removeBodyMoves();
       this.requestId = null;
     }

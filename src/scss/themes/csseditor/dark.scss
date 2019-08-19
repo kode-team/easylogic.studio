@@ -9,7 +9,7 @@ $left-layer-panel: 70px;
 $left-page-size: 70px;
 $toggle-left-size: 80px;
 $right-size: 280px;
-$timeline-header-size: 0px;
+$timeline-header-size: 70px;
 $timeline-size: 300px;
 $show-timeline-animation: all 0.15s linear;
 $gradient-box-size: 0px;
@@ -20,7 +20,7 @@ $display-grid-color: red;
 
 // common 
 $inner-border-color: #202020;
-$border-color: rgb(26, 26, 26);
+$border-color: rgb(41, 41, 41);
 $border-color-2: #737373;
 $selected-border-color: #609de2;
 $selected-color: #6fb2ff;
@@ -93,3 +93,7 @@ $bezier-sample-background-color: white;
 
 // path guide 
 $path-guide-color: rgba(158, 158, 158, 0.8);
+
+// timeline 
+$timeline-background-color: lighten($background-color, 5%);
+$timeline-border-color: $border-color;

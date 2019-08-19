@@ -120,11 +120,12 @@ const checkEventType = (context, e, eventObject) => {
   var isAllCheck = true;
   if (eventObject.checkMethodList.length) {
     isAllCheck = eventObject.checkMethodList.every(field => {
-      var fieldValue = context[field];
+      var fieldValue = context[field];    
       if (isFunction(fieldValue) && fieldValue) {
         // check method
         return fieldValue.call(context, e);
       } else if (isNotUndefined(fieldValue)) {
+
         // check field value
         return !!fieldValue;
       }
@@ -579,7 +580,7 @@ export default class EventMachine {
   }
 
   clean () {
-    if (!this.$el.hasParent()) {
+    if (this.$el && !this.$el.hasParent()) {
 
       keyEach(this.children, (key, child) => {
         child.clean();

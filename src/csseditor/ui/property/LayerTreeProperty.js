@@ -1,5 +1,5 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, CLICK, DOUBLECLICK, KEYUP, KEY, PREVENT, STOP, FOCUSOUT, VDOM } from "../../../util/Event";
+import { LOAD, CLICK, DOUBLECLICK, KEYUP, KEY, PREVENT, STOP, FOCUSOUT, VDOM, DRAGSTART } from "../../../util/Event";
 import { editor } from "../../../editor/editor";
 import icon from "../icon/icon";
 import { EVENT } from "../../../util/UIElement";
@@ -60,7 +60,7 @@ export default class LayerTreeProperty extends BaseProperty {
 
       var selected = editor.selection.check(layer) ? 'selected' : '';
       return `        
-      <div class='layer-item ${selected}' data-depth="${depth}" data-layer-id='${layer.id}'>
+      <div class='layer-item ${selected}' data-depth="${depth}" data-layer-id='${layer.id}' draggable="true">
         <div class='detail'>
           <span class='icon'>${this.getIcon(layer.itemType)}</span> 
           <label>${layer.name}</label>
@@ -83,6 +83,11 @@ export default class LayerTreeProperty extends BaseProperty {
     if (!artboard) return ''
 
     return this.makeLayerList(artboard, 0)
+  }
+
+  [DRAGSTART('$layerList .layer-item')] (e) {
+    var layerId = e.$delegateTarget.attr('data-layer-id');
+    e.dataTransfer.setData('layer/id', layerId);
   }
 
 
