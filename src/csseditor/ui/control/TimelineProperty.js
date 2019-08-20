@@ -93,4 +93,9 @@ export default class TimelineProperty extends BaseProperty {
   [DROP('$area') + PREVENT] (e) {
     this.emit('add.timeline', e.dataTransfer.getData('layer/id'));
   }
+
+  onToggleShow() {
+    this.emit('toggleFooter', this.isPropertyShow())    
+  }
+
 }

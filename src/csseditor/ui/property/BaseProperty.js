@@ -101,6 +101,10 @@ export default class BaseProperty extends UIElement {
     this.$el.show();
   }
 
+  onShowTitle(isShow) {
+
+  }
+
   refreshShowIsNot (type, isRefresh = true ) {
 
     var current = editor.selection.current;

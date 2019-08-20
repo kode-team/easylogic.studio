@@ -1416,6 +1416,9 @@ html, body {
   display: flex;
   flex-direction: column;
 }
+.csseditor[data-theme=dark] .layout-main.show-footer .layout-footer {
+  height: 299px;
+}
 .csseditor[data-theme=dark] .layout-main .layout-header {
   flex: none;
   height: 50px;
@@ -1451,7 +1454,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .layout-main .layout-footer {
   flex: none;
-  height: 299px;
+  height: 30px;
   overflow: hidden;
   border-top: 1px solid #292929;
   transition: all 0.15s linear;
@@ -8259,6 +8262,9 @@ html, body {
   display: flex;
   flex-direction: column;
 }
+.csseditor[data-theme=light] .layout-main.show-footer .layout-footer {
+  height: 299px;
+}
 .csseditor[data-theme=light] .layout-main .layout-header {
   flex: none;
   height: 50px;
@@ -8294,7 +8300,7 @@ html, body {
 }
 .csseditor[data-theme=light] .layout-main .layout-footer {
   flex: none;
-  height: 299px;
+  height: 30px;
   overflow: hidden;
   border-top: 1px solid #e7e7e7;
   transition: all 0.15s linear;

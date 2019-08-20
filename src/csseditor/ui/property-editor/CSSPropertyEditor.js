@@ -340,7 +340,7 @@ export default class CSSPropertyEditor extends UIElement {
   }
 
   [EVENT('changeRangeEditor')] (key, value) {
-    this.modifyPropertyValue(key, value);
+    this.modifyPropertyValue(key, value + "");
   }
 
   searchKey (key, callback) {

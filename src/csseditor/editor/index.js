@@ -38,7 +38,7 @@ export default class CSSEditor extends UIElement {
 
   templateForEditor() {
     return /*html*/`
-      <div class="layout-main">
+      <div class="layout-main show-footer">
         <div class="layout-header">
             <LogoView />
             <ToolMenu />
@@ -112,6 +112,11 @@ export default class CSSEditor extends UIElement {
   [EVENT('toggleRightPanel')] () {
     // editor.openRightPanel = !editor.openRightPanel
     // this.refs.$middle.toggleClass('open-right', editor.openRightPanel);
+  }
+
+  [EVENT('toggleFooter')] (isShow) {
+    console.log(isShow);
+    this.$el.toggleClass('show-footer', isShow);
   }
 
   [EVENT('refreshAll')] () {
