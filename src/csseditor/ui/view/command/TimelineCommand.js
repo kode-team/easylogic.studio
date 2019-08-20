@@ -1,6 +1,7 @@
 import UIElement, { COMMAND } from "../../../../util/UIElement";
 import { editor } from "../../../../editor/editor";
 import { DEBOUNCE } from "../../../../util/Event";
+import { isArray } from "../../../../util/functions/func";
 
 export default class TimelineCommand extends UIElement {
 
@@ -59,11 +60,20 @@ export default class TimelineCommand extends UIElement {
 
     }
 
-    [COMMAND('add.timeline.property')] (layerId, property, value, timing = 'linear') {
+    [COMMAND('add.timeline.property')] (layerList, property, value, timing = 'linear') {
+
+        if (isArray(layerList) === false) {
+            layerList = [layerList]
+        }
+
         var artboard = editor.selection.currentArtboard;
 
         if (artboard) {
-            artboard.addTimelineKeyframe(layerId, property, value, timing);
+
+            layerList.forEach(id => {
+                artboard.addTimelineKeyframe(id, property, value, timing);
+            })
+
             this.emit('refreshTimeline');
             this.trigger('refresh.selected.offset');
         }

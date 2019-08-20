@@ -14,7 +14,7 @@ export class SVGItem extends Layer {
       'fill-opacity': '',
       'stroke-linecap': '',
       'stroke-linejoin': '',      
-      'stroke-dashoffset': '',
+      'stroke-dashoffset': '', 
       'stroke-dasharray': [],      
       ...obj
     });

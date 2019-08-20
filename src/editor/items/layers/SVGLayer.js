@@ -14,7 +14,7 @@ export class SVGLayer extends Layer {
       ...obj
     });
   }
-
+ 
   toCloneObject() {
     return {
       ...super.toCloneObject(),

@@ -182,6 +182,9 @@ export function CSS_TO_STRING(style, postfix = '') {
   
 
 export function STRING_TO_CSS (str) {
+
+    str = str + "";
+
     var style = {}
     str.split(';').forEach(it => {
        var [key, ...value] = it.split(':').map(it => it.trim())

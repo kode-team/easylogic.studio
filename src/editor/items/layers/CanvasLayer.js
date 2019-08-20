@@ -13,6 +13,6 @@ export class CanvasLayer extends Layer {
 
   getDefaultTitle() {
     return "Canvas";
-  }
+  } 
 
 }

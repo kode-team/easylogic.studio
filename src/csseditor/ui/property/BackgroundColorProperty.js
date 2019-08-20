@@ -44,7 +44,8 @@ export default class BackgroundColorProperty extends BaseProperty {
           <ColorViewEditor ref='$color' label="color" onchange="changeColor" />
         </div>
 
-        <div class='property-item'>
+        <div class='property-item animation-property-item'>
+          <span class='add-timeline-property' data-property='opacity'></span>
           <NumberRangeEditor 
             ref='$opacity' 
             key='opacity' 
@@ -57,7 +58,8 @@ export default class BackgroundColorProperty extends BaseProperty {
             onchange="changeSelect" />
         </div>
         
-        <div class='property-item'>
+        <div class='property-item animation-property-item'>
+          <span class='add-timeline-property' data-property='rotate'></span>
           <RangeEditor 
             ref='$rotate' 
             key='rotate' 
@@ -70,7 +72,8 @@ export default class BackgroundColorProperty extends BaseProperty {
             onchange="changeSelect" />
         </div>
         
-        <div class='property-item'>
+        <div class='property-item animation-property-item'>
+          <span class='add-timeline-property' data-property='mix-blend-mode'></span>
           <SelectEditor 
             label='blend'
             ref='$mixBlend' 
@@ -86,6 +89,12 @@ export default class BackgroundColorProperty extends BaseProperty {
     switch(key) {
     case 'background-color': 
       return this.children.$color.getValue()
+    case 'opacity': 
+      return this.children.$opacity.getValue() + ''      
+    case 'rotate': 
+      return this.children.$rotate.getValue() + ''            
+    case 'mix-blend-mode': 
+      return this.children.$mixBlend.getValue()
     }
   }
 

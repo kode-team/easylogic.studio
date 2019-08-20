@@ -10,7 +10,7 @@ export class CubeLayer extends Layer {
       'transform-style':'preserve-3d',
       transform: 'rotateX(10deg) rotateY(30deg)',
       ...obj
-    });
+    }); 
   }
 
   enableHasChildren() {

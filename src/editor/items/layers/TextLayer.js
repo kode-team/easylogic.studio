@@ -16,7 +16,7 @@ export class TextLayer extends Layer {
 
   getDefaultTitle() {
     return "Text";
-  }
+  } 
 
   toCloneObject() {
     return {

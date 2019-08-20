@@ -271,7 +271,7 @@ export default class PathGenerator {
     rotateSegmentTarget (segmentKey, target, connectedPoint) {
         var state = this.state; 
 
-        if (connectedPoint) {
+        if (connectedPoint && state.originalConnectedPoint[target] && connectedPoint[segmentKey]) {
             var {x: cx, y: cy} = state.originalConnectedPoint.startPoint;
             var {x: rx, y: ry} = connectedPoint[segmentKey];
             var {x: tx, y: ty} = state.originalConnectedPoint[target];
@@ -288,7 +288,7 @@ export default class PathGenerator {
             if (state.originalSegment && state.segment) {
                 var {x: cx, y: cy} = state.originalSegment.startPoint;
                 var {x: rx, y: ry} = state.segment[segmentKey];
-                var {x: tx, y: ty} = state.originalSegment[target];
+                var {x: tx, y: ty} = state.originalSegment[target]
         
                 var radius = getDist(tx, ty, cx, cy)
                 var angle = (calculateAngle(rx - cx, ry - cy) + 180) % 360
@@ -335,6 +335,11 @@ export default class PathGenerator {
         var state = this.state; 
 
         var original = state.originalSegment[segmentKey]
+
+        if (!segmentKey) {
+            return { dx, dy, snapPointList: []}
+        }
+
         var realX = original.x + dx;
         var realY = original.y + dy;
 

@@ -1,10 +1,7 @@
 import { DomItem } from "./DomItem";
-import { Length } from "../unit/Length";
-import { uuidShort, uuid } from "../../util/functions/math";
-import { clone, isUndefined } from "../../util/functions/func";
+import { uuidShort } from "../../util/functions/math";
+import { isUndefined } from "../../util/functions/func";
 import { second, timecode, framesToTimecode } from "../../util/functions/time";
-import { editor } from "../editor";
-import { createBezierForPattern } from "../../util/functions/bezier";
 import { createInterpolateFunction, createCurveFunction } from "../util/interpolate";
 
 export class TimelineItem extends DomItem {
@@ -83,7 +80,8 @@ export class TimelineItem extends DomItem {
         // 마지막 시점에서 시간을 무한대로 주면 
         // 이후 좌표를 고정할 수 있다. 
         // timing 에 hold 를 넣고 중간 단계를 넘어가게도 해보자. 
-        nextOffset = { time: Number.MAX_SAFE_INTEGER, value: offset.value};
+        nextOffset = { time: offset.time + 10, value: offset.value + ''};
+        // return false;
       }
 
       var it = {
@@ -102,8 +100,6 @@ export class TimelineItem extends DomItem {
   
       return it; 
     }).filter(it => it);
-
-
   }
 
   makeTimingFunction (it) {
@@ -417,6 +413,7 @@ export class TimelineItem extends DomItem {
       var times = p.keyframes.filter(it => it.time === time); 
 
       if (!times.length) {
+        value = value || this.getDefaultPropertyValue(property);
         p.keyframes.push({ property, time, value, timing })
 
         p.keyframes.sort( (a, b) => {
@@ -429,6 +426,15 @@ export class TimelineItem extends DomItem {
     }
   }
 
+  getDefaultPropertyValue(property) {
+
+    switch(property) {
+    case 'box-shadow':  return '0px 0px 0px 0px rgba(0, 0, 0, 1)';
+    }
+
+    return '0px;'
+  }
+
   copyTimelineKeyframe (layerId, property) {
     var p = this.getTimelineProperty(layerId, property);
 
@@ -437,7 +443,7 @@ export class TimelineItem extends DomItem {
       var time = timeline.currentTime;
 
       var times = p.keyframes.filter(it => it.time < time); 
-      var value = Length.px(0);
+      var value = this.getDefaultPropertyValue(property);
       var timing = 'linear';
       if (times.length) {
 
@@ -445,8 +451,8 @@ export class TimelineItem extends DomItem {
           return a.time > b.time ? -1 : 1; 
         })
 
-        value = times[0].value.clone ? times[0].value.clone() : times[0].value;
-        timing = times[0].timing
+        value = times[0].value + "";
+        timing = times[0].timing + ""
       }
 
       this.addTimelineKeyframe(layerId, property, value, timing);

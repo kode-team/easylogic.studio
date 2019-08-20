@@ -7878,7 +7878,7 @@ html, body {
 .csseditor[data-theme=dark] .timeline-value-area .timeline-value-editor .tab-content.padding-zero {
   padding-top: 0px;
 }
-.csseditor[data-theme=dark] .timeline-value-area .timeline-value-editor .tab-content .tools {
+.csseditor[data-theme=dark] .timeline-value-area .timeline-value-editor .tab-content .css-property-item > .title > .tools {
   display: none;
 }
 .csseditor[data-theme=dark] .timeline-value-area .timeline-value-editor .tab-content .title {
@@ -14721,7 +14721,7 @@ html, body {
 .csseditor[data-theme=light] .timeline-value-area .timeline-value-editor .tab-content.padding-zero {
   padding-top: 0px;
 }
-.csseditor[data-theme=light] .timeline-value-area .timeline-value-editor .tab-content .tools {
+.csseditor[data-theme=light] .timeline-value-area .timeline-value-editor .tab-content .css-property-item > .title > .tools {
   display: none;
 }
 .csseditor[data-theme=light] .timeline-value-area .timeline-value-editor .tab-content .title {

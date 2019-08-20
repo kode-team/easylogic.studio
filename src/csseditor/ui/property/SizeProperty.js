@@ -53,9 +53,9 @@ export default class SizeProperty extends BaseProperty {
   getPropertyValue (property) {
     switch(property){
     case 'width':
-      return this.children.$width.getValue();
+      return this.children.$width.getValue() + '';
     case 'height':
-      return this.children.$height.getValue(); 
+      return this.children.$height.getValue() + ''; 
     } 
   }
 

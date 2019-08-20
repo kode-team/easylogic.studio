@@ -59,9 +59,9 @@ export default class PositionProperty extends BaseProperty {
   getPropertyValue (property) {
     switch(property){
     case 'x':
-      return this.children.$x.getValue();
+      return this.children.$x.getValue() + '';
     case 'y':
-      return this.children.$y.getValue(); 
+      return this.children.$y.getValue() + ''; 
     } 
   }  
 

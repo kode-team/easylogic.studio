@@ -16,7 +16,7 @@ export class SphereLayer extends Layer {
     });
   }
 
-  getDefaultTitle() {
+  getDefaultTitle() { 
     return "Sphere";
   }
 

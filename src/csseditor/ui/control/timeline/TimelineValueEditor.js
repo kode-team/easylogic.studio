@@ -104,7 +104,7 @@ export default class TimelineValueEditor extends UIElement {
   }
 
   [EVENT('changeCubicBezier')] (key, value) {
-    this.updateData({ [key]: value })
+    this.updateData({ [key]: value + '' })
   }
 
   [EVENT('changePropertyEditor')] (obj) {
@@ -112,7 +112,7 @@ export default class TimelineValueEditor extends UIElement {
     if (obj.length)  {
         var it = obj[0]
         this.updateData({
-            value: it.value 
+            value: it.value + ''
         })
     }
   }

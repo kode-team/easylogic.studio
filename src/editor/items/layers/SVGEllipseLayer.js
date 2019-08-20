@@ -13,7 +13,7 @@ export class SVGEllipseLayer extends Layer {
   getDefaultTitle() {
     return "SVG Ellipse";
   }
-
+ 
   get html () {
     var {id, path} = this.json;
 

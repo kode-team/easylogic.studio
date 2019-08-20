@@ -31,7 +31,7 @@ export default class BoxShadowPropertyPopup extends BasePopup {
 
   updateData(opt) {
     this.setState(opt, false); // 자동 로드를 하지 않음, state 만 업데이트
-    this.emit(this.changeEvent, opt);
+    this.emit(this.changeEvent, opt, this.state.params);
   }
 
   getBody() {
@@ -161,11 +161,11 @@ export default class BoxShadowPropertyPopup extends BasePopup {
     this.trigger('changeRangeEditor', 'color', value);
   }
 
-  [EVENT("showBoxShadowPropertyPopup")](data) {
+  [EVENT("showBoxShadowPropertyPopup")](data, params) {
 
     this.changeEvent = data.changeEvent || "changeBoxShadowPropertyPopup"
 
-    this.setState(data);
+    this.setState({...data, params});
     this.refresh();
 
     this.show(432);

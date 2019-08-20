@@ -8,7 +8,7 @@ export default class BoxShadowEditor extends UIElement {
 
   initState() {
     return {
-      hideLabel: this.props['hide-label'] === 'true' ? 'true' : 'false',
+      hideLabel: this.props['hide-label'] === 'true' ? true : false,
       boxShadows: BoxShadow.parseStyle(this.props.value || '')
     }
   }
@@ -128,7 +128,7 @@ export default class BoxShadowEditor extends UIElement {
       offsetY: shadow.offsetY,
       blurRadius: shadow.blurRadius,
       spreadRadius: shadow.spreadRadius
-    });
+    }, { id: this.id });
 
     // this.emit('hidePropertyPopup')
   }
@@ -137,13 +137,16 @@ export default class BoxShadowEditor extends UIElement {
     this.trigger('changeBoxShadowEditorPopup', { color })
   }
 
-  [EVENT("changeBoxShadowEditorPopup")](data) {
+  [EVENT("changeBoxShadowEditorPopup")](data, params) {
 
-    var shadow = this.state.boxShadows[this.selectedIndex]
-    shadow.reset(data)
-
-    this.refresh();
-
-    this.modifyBoxShadow();
+    if (params.id === this.id) {
+      var shadow = this.state.boxShadows[this.selectedIndex]
+      if (shadow) {
+        shadow.reset(data)
+        this.refresh();
+  
+        this.modifyBoxShadow();      
+      }
+    }
   }
 }

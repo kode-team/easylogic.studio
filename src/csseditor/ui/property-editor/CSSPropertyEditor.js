@@ -12,13 +12,39 @@ import TransformEditor from "./TransformEditor";
 import TransformOriginEditor from "./TransformOriginEditor";
 import PerspectiveOriginEditor from "./PerspectiveOriginEditor";
 import { OBJECT_TO_CLASS } from "../../../util/functions/func";
+import SelectEditor from "./SelectEditor";
+import NumberRangeEditor from "./NumberRangeEditor";
+import BorderRadiusEditor from "./BorderRadiusEditor";
 
+
+
+const blend_list = [
+  '',
+  "normal",
+  "multiply",
+  "screen",
+  "overlay",
+  "darken",
+  "lighten",
+  "color-dodge",
+  "color-burn",
+  "hard-light",
+  "soft-light",
+  "difference",
+  "exclusion",
+  "hue",
+  "saturation",
+  "color",
+  "luminosity"
+].join(',');
 
 
 export default class CSSPropertyEditor extends UIElement {
 
   components() {
     return {
+      NumberRangeEditor,
+      SelectEditor,
       BoxShadowEditor,
       FilterEditor,
       ColorViewEditor,
@@ -27,7 +53,8 @@ export default class CSSPropertyEditor extends UIElement {
       TransformEditor,
       TransformOriginEditor,
       PerspectiveOriginEditor,
-      VarEditor
+      VarEditor,
+      BorderRadiusEditor
     }
   }
 
@@ -84,6 +111,8 @@ export default class CSSPropertyEditor extends UIElement {
           return Length.string('');          
         case 'offset-distance': 
           return Length.percent(0);
+        case 'mix-blend-mode': 
+          return 'normal';
         default: 
           return Length.px(0);
       }
@@ -144,7 +173,7 @@ export default class CSSPropertyEditor extends UIElement {
     } else if (property.key === 'box-shadow') {
       return `
         <div class='property-editor'>
-          <BoxShadowEditor ref='$boxshadow${index}' value="${property.value}" onChange="changeBoxShadowProperty" />
+          <BoxShadowEditor ref='$boxshadow${index}' value="${property.value}" hide-label="false" onChange="changeBoxShadowProperty" />
         </div>
       `      
     } else if (property.key === 'var') {
@@ -170,7 +199,28 @@ export default class CSSPropertyEditor extends UIElement {
         <div class='property-editor'>
           <PerspectiveOriginEditor ref='$perspectiveOrigin${index}' value="${property.value}" onChange="changePerspectiveOrigin" />
         </div>
-      `                  
+      `               
+    } else if (property.key === 'mix-blend-mode') {
+      return `
+        <div class='property-editor'>
+          <SelectEditor 
+          ref='$mixBlendMode${index}' 
+          key='mix-blend-mode' 
+          icon="true" 
+          options="${blend_list}" 
+          value="${property.value}"
+          onchange="changeMixBlendMode" />
+        </div>
+      `   
+    } else if (property.key === 'border-radius') {
+      return `
+        <BorderRadiusEditor 
+          ref='$borderRadius${index}' 
+          key='border-radius'
+          value='${property.value}' 
+          onchange='changeBorderRadius' 
+        />
+      `
     }
 
     return `
@@ -182,9 +232,13 @@ export default class CSSPropertyEditor extends UIElement {
 
   }
 
+  [EVENT('changeBorderRadius')] (value) {
+    this.modifyPropertyValue('border-radius', value);
+  }
+
   [EVENT('changeBackgroundColorProperty')] (color) {
     this.modifyPropertyValue('background-color', color);
-  }
+  }  
 
   [EVENT('changeBackgroundImageProperty')] (backgroundImage) {
     this.modifyPropertyValue('background-image', backgroundImage);
@@ -218,6 +272,10 @@ export default class CSSPropertyEditor extends UIElement {
     this.modifyPropertyValue('perspective-origin', value);
   }         
 
+  [EVENT('changeMixBlendMode')] (key, value) {
+    this.modifyPropertyValue(key, value);
+  }
+
 
   makePropertyEditor (property, index) {
     var min = null;
@@ -236,7 +294,25 @@ export default class CSSPropertyEditor extends UIElement {
       case 'transform':
       case 'transform-origin':
       case 'perspective-origin':
+      case 'mix-blend-mode':  
+      case 'border-radius':      
         return this.makeIndivisualPropertyEditor(property, index);
+      case 'opacity':
+        return `
+          <div class='property-editor'>
+            <NumberRangeEditor 
+              ref='$opacity${index}' 
+              key='${property.key}' 
+              label='opacity'
+              min="0"
+              max="1"
+              step="0.01"
+              value="${property.value}"
+              selected-unit=' '
+              removable="true"
+              onchange="changeRangeEditor" />
+          </div>
+        `
       case 'left': 
       case 'margin-top': 
       case 'margin-bottom': 
@@ -320,7 +396,8 @@ export default class CSSPropertyEditor extends UIElement {
           <option value='box-shadow'>box-shadow</option>
           <option value='text-shadow'>text-shadow</option>
           <option value='filter'>filter</option>      
-          <option value='backdrop-filter'>backdrop-filter</option>          
+          <option value='backdrop-filter'>backdrop-filter</option>
+          <option value='mix-blend-mode'>mix-blend-mode</option>
         </optgroup>            
         <optgroup label='Transform'>
           <option value='transform'>transform</option>

@@ -43,6 +43,10 @@ export class BoxShadow extends Property {
       return boxShadows;
   }
 
+  static join (list) {
+    return list.map(it => BoxShadow.parse(it)).join(', ');
+  }
+
   getDefaultObject() {
     return super.getDefaultObject({
       itemType: "box-shadow",

@@ -14,7 +14,7 @@ export class SVGPolygonItem extends SVGItem {
 
 
   enableHasChildren() {
-    return false; 
+    return false;  
   }  
 
   updatePolygonItem (obj) {

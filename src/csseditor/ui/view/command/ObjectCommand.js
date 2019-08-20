@@ -5,6 +5,10 @@ import { ArtBoard } from "../../../../editor/items/ArtBoard";
 import { Length } from "../../../../editor/unit/Length";
 import { Layer } from "../../../../editor/items/Layer";
 import Color from "../../../../util/Color";
+import { SphereLayer } from "../../../../editor/items/layers/SphereLayer";
+import { CubeLayer } from "../../../../editor/items/layers/CubeLayer";
+import { ImageLayer } from "../../../../editor/items/layers/ImageLayer";
+import { TextLayer } from "../../../../editor/items/layers/TextLayer";
 
 export default class ObjectCommand extends UIElement {
 

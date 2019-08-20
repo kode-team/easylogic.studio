@@ -30,8 +30,11 @@
                 padding-top: 0px;
             }
 
-            .tools {
-                display: none;
+            .css-property-item {
+                > .title > .tools {
+                    display: none;
+                }
+    
             }
            
             .title {
