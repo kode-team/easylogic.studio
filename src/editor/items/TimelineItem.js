@@ -2,7 +2,7 @@ import { DomItem } from "./DomItem";
 import { uuidShort } from "../../util/functions/math";
 import { isUndefined } from "../../util/functions/func";
 import { second, timecode, framesToTimecode } from "../../util/functions/time";
-import { createInterpolateFunction, createCurveFunction } from "../util/interpolate";
+import { createInterpolateFunction, createCurveFunction, createTimingFunction } from "../util/interpolate";
 
 export class TimelineItem extends DomItem {
   getDefaultObject(obj = {}) {
@@ -93,7 +93,7 @@ export class TimelineItem extends DomItem {
         endValue: nextOffset.value,
         timing: offset.timing,
         interpolateFunction: createInterpolateFunction(layer, p.property, offset.value, nextOffset.value),
-        timingFunction: createCurveFunction(offset.timing)
+        timingFunction: createTimingFunction(offset.timing)
       }
 
       it.func = this.makeTimingFunction(it);      
@@ -116,12 +116,16 @@ export class TimelineItem extends DomItem {
 
     if (timeline) {
 
-      var time = frameOrCode ?  second(frameOrCode) : timeline.currentTime;
+      var time = frameOrCode ?  second(timeline.fps, frameOrCode) : timeline.currentTime;
+
+      // console.log(time);
 
       this.searchTimelineOffset(time).forEach(it => {
+
         it.layer.reset({
           [it.property]: it.func(time) 
         })
+        // console.log(it.layer[it.property])        
       });
 
     }

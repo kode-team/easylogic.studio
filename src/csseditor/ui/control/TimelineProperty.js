@@ -24,13 +24,6 @@ export default class TimelineProperty extends BaseProperty {
     }
   }
 
-  initState () {
-    return {
-      'timeline.keyframe.selectedId': null,
-      'timeline.keyframe.selectedType': null,
-    }
-  }
-
   isFirstShow() {
     return true;
   }

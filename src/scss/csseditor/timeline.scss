@@ -92,6 +92,62 @@
             bottom: 0px;
             width: $left-size;     
             border-right: 1px solid $timeline-border-color;            
+
+            .timeline-top-toolbar {
+
+                .row {
+                    display: grid;
+                    grid-template-columns: 50px 1fr;
+                    grid-column-gap: 5px;
+                    margin-bottom: 2px;
+
+                    label {
+                        padding: 2px 2px;
+                    }
+
+                    .input {
+                        input {
+                            min-width: 50px;
+                        }
+                    }
+                }
+
+                .play-buttons {
+                    display: flex;
+
+                    @each $selectSpeed in 0.5, 1, 2, 3 {
+                        &[data-selected-speed="#{$selectSpeed}"] [data-value="#{$selectSpeed}"] {
+                            background-color: $selected-color;
+                            color: $selected-font-color;
+                        }
+                    }        
+
+                    button {
+                        border: 1px solid $border-color;
+                        min-width: 50px;
+                        padding: 2px 10px;
+                        height: auto;
+                    }
+                }
+
+                .direction-buttons {
+                    display: flex;
+
+                    @each $selectDirection in normal, alternate, reverse, alternate-reverse {
+                        &[data-selected-direction="#{$selectDirection}"] [data-value="#{$selectDirection}"] {
+                            background-color: $selected-color;
+                            color: $selected-font-color;
+                        }
+                    }        
+
+                    button {
+                        border: 1px solid $border-color;
+                        min-width: 50px;
+                        padding: 2px 10px;
+                        height: auto;
+                    }
+                }
+            }
         }
 
         .timeline-keyframe-toolbar {

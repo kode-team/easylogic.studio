@@ -7932,6 +7932,68 @@ html, body {
   width: 300px;
   border-right: 1px solid #292929;
 }
+.csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .row {
+  display: grid;
+  grid-template-columns: 50px 1fr;
+  grid-column-gap: 5px;
+  margin-bottom: 2px;
+}
+.csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .row label {
+  padding: 2px 2px;
+}
+.csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .row .input input {
+  min-width: 50px;
+}
+.csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .play-buttons {
+  display: flex;
+}
+.csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .play-buttons[data-selected-speed="0.5"] [data-value="0.5"] {
+  background-color: #fbde50;
+  color: black;
+}
+.csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .play-buttons[data-selected-speed="1"] [data-value="1"] {
+  background-color: #fbde50;
+  color: black;
+}
+.csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .play-buttons[data-selected-speed="2"] [data-value="2"] {
+  background-color: #fbde50;
+  color: black;
+}
+.csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .play-buttons[data-selected-speed="3"] [data-value="3"] {
+  background-color: #fbde50;
+  color: black;
+}
+.csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .play-buttons button {
+  border: 1px solid #292929;
+  min-width: 50px;
+  padding: 2px 10px;
+  height: auto;
+}
+.csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .direction-buttons {
+  display: flex;
+}
+.csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .direction-buttons[data-selected-direction=normal] [data-value=normal] {
+  background-color: #fbde50;
+  color: black;
+}
+.csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .direction-buttons[data-selected-direction=alternate] [data-value=alternate] {
+  background-color: #fbde50;
+  color: black;
+}
+.csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .direction-buttons[data-selected-direction=reverse] [data-value=reverse] {
+  background-color: #fbde50;
+  color: black;
+}
+.csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .direction-buttons[data-selected-direction=alternate-reverse] [data-value=alternate-reverse] {
+  background-color: #fbde50;
+  color: black;
+}
+.csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .direction-buttons button {
+  border: 1px solid #292929;
+  min-width: 50px;
+  padding: 2px 10px;
+  height: auto;
+}
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-keyframe-toolbar {
   position: absolute;
   top: 0px;
@@ -14777,6 +14839,68 @@ html, body {
   bottom: 0px;
   width: 300px;
   border-right: 1px solid #e7e7e7;
+}
+.csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .row {
+  display: grid;
+  grid-template-columns: 50px 1fr;
+  grid-column-gap: 5px;
+  margin-bottom: 2px;
+}
+.csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .row label {
+  padding: 2px 2px;
+}
+.csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .row .input input {
+  min-width: 50px;
+}
+.csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .play-buttons {
+  display: flex;
+}
+.csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .play-buttons[data-selected-speed="0.5"] [data-value="0.5"] {
+  background-color: #3e8ec6;
+  color: white;
+}
+.csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .play-buttons[data-selected-speed="1"] [data-value="1"] {
+  background-color: #3e8ec6;
+  color: white;
+}
+.csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .play-buttons[data-selected-speed="2"] [data-value="2"] {
+  background-color: #3e8ec6;
+  color: white;
+}
+.csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .play-buttons[data-selected-speed="3"] [data-value="3"] {
+  background-color: #3e8ec6;
+  color: white;
+}
+.csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .play-buttons button {
+  border: 1px solid #e7e7e7;
+  min-width: 50px;
+  padding: 2px 10px;
+  height: auto;
+}
+.csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .direction-buttons {
+  display: flex;
+}
+.csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .direction-buttons[data-selected-direction=normal] [data-value=normal] {
+  background-color: #3e8ec6;
+  color: white;
+}
+.csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .direction-buttons[data-selected-direction=alternate] [data-value=alternate] {
+  background-color: #3e8ec6;
+  color: white;
+}
+.csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .direction-buttons[data-selected-direction=reverse] [data-value=reverse] {
+  background-color: #3e8ec6;
+  color: white;
+}
+.csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .direction-buttons[data-selected-direction=alternate-reverse] [data-value=alternate-reverse] {
+  background-color: #3e8ec6;
+  color: white;
+}
+.csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .direction-buttons button {
+  border: 1px solid #e7e7e7;
+  min-width: 50px;
+  padding: 2px 10px;
+  height: auto;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-keyframe-toolbar {
   position: absolute;

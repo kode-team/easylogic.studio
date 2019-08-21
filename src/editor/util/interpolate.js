@@ -4,6 +4,8 @@ import { makeInterpolateBorderRadius } from "./interpolate-functions/makeInterpo
 import { makeInterpolateBoxShadow } from "./interpolate-functions/makeInterpolateBoxShadow";
 import { makeInterpolateColor } from "./interpolate-functions/makeInterpolateColor";
 import { makeInterpolateString } from "./interpolate-functions/makeInterpolateString";
+import timingFunctions from "./timing-functions";
+
 
 
 function makeInterpolate (layer, property, startValue, endValue) {
@@ -34,9 +36,28 @@ export function createInterpolateFunction (layer, property, startValue, endValue
     return makeInterpolate(layer, property, startValue, endValue);
 }
 
+
+export function createTimingFunction(timing) {
+
+    var [funcName, params] = timing.split('(').map(it => it.trim())
+    params = (params || '').split(')')[0].trim()
+
+    var func = timingFunctions[funcName];
+
+    if (func) {
+        
+        var args = timing.split('(')[1].split(')')[0].split(',').map(it => it.trim())
+        return func(...args);
+    } else {
+        return createCurveFunction(timing);
+    }
+}
+
 export function createCurveFunction (timing) {
     var func = createBezierForPattern(timing);
     return (rate) => {
         return func(rate).y;
     }
 }
+
+
