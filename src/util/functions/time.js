@@ -136,6 +136,11 @@ export function makeTimer (opt) {
         timer.pause = true; 
         timer.pauseTime = timer.start; 
         timer.start = null; 
+
+        stop()
+    }
+
+    const stop = () => {
         cancelAnimationFrame(timer.id);
     }
 
@@ -149,6 +154,7 @@ export function makeTimer (opt) {
     return {
         start, 
         pause,
+        stop,
         restart,
         tick,
         timer

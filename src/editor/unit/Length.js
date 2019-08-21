@@ -77,6 +77,9 @@ export class Length {
   static deg(value) {
     return new Length(+value, "deg");
   }
+  static turn(value) {
+    return new Length(+value, "turn");
+  }  
   static fr(value) {
     return new Length(+value, "fr");
   }
@@ -164,6 +167,16 @@ export class Length {
         }
 
         return Length.deg(value);
+      } else if (obj.unit == "turn") {
+        var value = 0;
+
+        if (isNotUndefined(obj.deg)) {
+          value = obj.turn;
+        } else if (isNotUndefined(obj.value)) {
+          value = obj.value;
+        }
+
+        return Length.turn(value);        
       } else if (obj.unit == "s") {
         var value = 0;
 
@@ -244,6 +257,7 @@ export class Length {
   isPx() {return this.isUnitType('px'); }
   isEm() {return this.isUnitType('em'); }
   isDeg() {return this.isUnitType('deg'); }
+  isTurn() {return this.isUnitType('turn'); }
   isSecond() {return this.isUnitType('s'); }
   isMs () {return this.isUnitType('ms'); }
   isNumber () {return this.isUnitType('number'); }
@@ -350,6 +364,23 @@ export class Length {
     }
   }
 
+  toDeg() {
+    if (this.isDeg()) {
+      return this.clone()
+    } else if (this.isTurn()) {
+      return Length.deg(this.value * 360)
+    }
+  }
+
+  toTurn() {
+    if (this.isTurn()) {
+      return this.clone()
+    } else if (this.isDeg()) {
+      return Length.turn(this.value / 360)
+    }
+  }
+
+
   toSecond () {
     if (this.isSecond()) {
       return this; 
@@ -373,6 +404,10 @@ export class Length {
       return this.toPercent(maxValue, fontSize);
     } else if (unit === "em") {
       return this.toEm(maxValue, fontSize);
+    } else if (unit === "deg") {
+      return this.toDeg();      
+    } else if (unit === "turn") {
+      return this.toTurn();
     }
   }
 

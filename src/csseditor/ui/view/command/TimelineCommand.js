@@ -1,4 +1,4 @@
-import UIElement, { COMMAND } from "../../../../util/UIElement";
+import UIElement, { COMMAND, EVENT } from "../../../../util/UIElement";
 import { editor } from "../../../../editor/editor";
 import { DEBOUNCE } from "../../../../util/Event";
 import { isArray } from "../../../../util/functions/func";
@@ -93,7 +93,18 @@ export default class TimelineCommand extends UIElement {
         
     }    
 
+    [EVENT('moveTimeline')] () {
+        if (this.state.timer) {
+            this.state.timer.stop()
+            this.state.timer = null;
+        }
+    }
+
     [COMMAND('play.timeline')] (speed = 1, iterationCount = 1, direction = 'normal') {
+
+        editor.selection.empty()
+        this.emit('refreshSelection');
+
         var artboard = editor.selection.currentArtboard;
 
         if (artboard) {
@@ -101,6 +112,10 @@ export default class TimelineCommand extends UIElement {
             var timeline = artboard.getSelectedTimeline();
 
             if(timeline) {
+
+                if (this.state.timer) {
+                    this.state.timer.stop()
+                }
 
                 var duration = timeline.totalTime * 1000 / speed;
                 var timer = makeTimer({
@@ -115,6 +130,8 @@ export default class TimelineCommand extends UIElement {
                 })
     
                 timer.start();
+
+                this.state.timer = timer; 
     
             }
 

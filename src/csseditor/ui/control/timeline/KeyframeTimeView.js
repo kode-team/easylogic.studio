@@ -242,6 +242,8 @@ export default class KeyframeTimeView extends UIElement {
         this.width = this.originalRect.width - PADDING;     
         this.artboard = editor.selection.currentArtboard
         this.emit('hideSelectionToolView')
+        editor.selection.empty()
+        this.emit('refreshSelection');
     }
 
     move () {

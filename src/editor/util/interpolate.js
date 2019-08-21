@@ -13,8 +13,9 @@ function makeInterpolate (layer, property, startValue, endValue) {
     case 'width':
     case 'x':
     case 'opacity':
+        return makeInterpolateNumber(layer, property, startValue, endValue);        
     case 'rotate':
-        return makeInterpolateNumber(layer, property, startValue, endValue);
+        return makeInterpolateRotate(layer, property, startValue, endValue);
     case 'height':
     case 'y':
         return makeInterpolateNumber(layer, property, startValue, endValue, 'height');
