@@ -65,9 +65,11 @@ export default class StyleView extends UIElement {
 
   changeStyleHead (item) {
     var $temp = Dom.create('div')        
+
     $temp.html(this.makeStyle(item)).children().forEach($item => {
       this.refs.$head.append($item);
     })
+
   }
 
   refreshStyleHeadOne (item) {

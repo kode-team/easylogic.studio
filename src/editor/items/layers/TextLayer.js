@@ -25,6 +25,12 @@ export class TextLayer extends Layer {
     }
   }
 
+  updateFunction (element) {
+    var {content} = this.json;
+
+    element.html(content);
+  }
+
   get html () {
     var {id, itemType, content} = this.json;
 

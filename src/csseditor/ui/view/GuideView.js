@@ -33,7 +33,7 @@ export default class GuideView {
                 x : this.setupX(item),
                 y : this.setupY(item)
             }
-        })
+        })   
 
         return this.rect; 
     }
@@ -126,12 +126,15 @@ export default class GuideView {
         var maxX = allRect.screenX2.value; 
         var width = maxX - minX; 
 
-        var xDistRate = (cacheItem.screenX.value - minX) / width;
-        var x2DistRate = (cacheItem.screenX2.value - minX) / width;
-
-        return {xDistRate, x2DistRate}
+        if (width === 0) {
+            return {xDistRate: 0, x2DistRate: 1}
+        } else {
+            var xDistRate = (cacheItem.screenX.value - minX) / width;
+            var x2DistRate = (cacheItem.screenX2.value - minX) / width;
+    
+            return {xDistRate, x2DistRate}
+        }
     }    
-
 
     setupY (cacheItem) {
         var allRect = editor.selection.allRect;        
@@ -139,10 +142,15 @@ export default class GuideView {
         var maxY = allRect.screenY2.value; 
         var height = maxY - minY; 
 
-        var yDistRate = (cacheItem.screenY.value - minY) / height;
-        var y2DistRate = (cacheItem.screenY2.value - minY) / height;
+        if (height === 0) {
+            return {yDistRate: 0, y2DistRate: 1}
+        } else {
+            var yDistRate = (cacheItem.screenY.value - minY) / height;
+            var y2DistRate = (cacheItem.screenY2.value - minY) / height;
+    
+            return {yDistRate, y2DistRate}
+        }
 
-        return {yDistRate, y2DistRate}
     }
 
     compareX (A, B, dist = MAX_DIST) {

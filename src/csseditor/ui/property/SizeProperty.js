@@ -64,7 +64,7 @@ export default class SizeProperty extends BaseProperty {
     editor.selection.reset({
       [key]: value
     })
-
+    
     this.emit('refreshElement');
     // this.emit('refreshSelectionTool');
     this.emit('setSize')

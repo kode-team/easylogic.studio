@@ -46,8 +46,7 @@ export default class CSSEditor extends UIElement {
         </div>
         <div class="layout-middle" ref='$middle'>
           <div class="layout-body">
-            <CanvasView />
-            <DrawingView />            
+            <CanvasView />        
           </div>                           
           <div class='layout-left'>
             <ObjectList />

@@ -522,25 +522,18 @@ export default class ElementView extends UIElement {
             if (this.currentElement) {
                 var $content = this.currentElement.$('.content')    
 
-                if (obj.elementType === 'image') {
-                    this.currentElement.attr('src', obj.src);
+                if (obj.updateFunction) {
+                    obj.updateFunction.call(obj, this.currentElement);
                 } else {
-
-                    if (obj.itemType === 'text') {
-                        this.currentElement.html(obj.content);
-                    } else {
-
-                        if (obj.content) {
-                            if(!$content) {
-                                this.currentElement.prepend(Dom.create('div', 'content'))
-                                $content = this.currentElement.$('.content')
-                            }
-                            $content && $content.text(obj.content);
-                        } else {
-                            $content && $content.remove();
+                    if (obj.content) {
+                        if(!$content) {
+                            this.currentElement.prepend(Dom.create('div', 'content'))
+                            $content = this.currentElement.$('.content')
                         }
+                        $content && $content.text(obj.content);
+                    } else {
+                        $content && $content.remove();
                     }
-
                 }
 
             }

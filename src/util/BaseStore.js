@@ -69,7 +69,9 @@ export default class BaseStore {
       if (list) {
         list
           .filter(f => f.originalCallback.source === source)
-          .forEach(f => f.callback($2, $3, $4, $5));
+          .forEach(f => {
+            f.callback($2, $3, $4, $5)
+          });
       } else {
         console.warn(event, ' is not valid event');
       }

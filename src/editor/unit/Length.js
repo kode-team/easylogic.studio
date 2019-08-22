@@ -1,4 +1,4 @@
-import { isNotUndefined, isString } from "../../util/functions/func";
+import { isNotUndefined, isString, isNumber } from "../../util/functions/func";
 import { round } from "../../util/functions/math";
 
 const stringToPercent = {
@@ -22,6 +22,11 @@ const REG_CSS_UNIT = /([\d.]+)(px|pt|fr|r?em|deg|vh|vw|m?s|%|g?rad|turn)/gi;
 export class Length {
   constructor(value = "", unit = "") {
     this.value = value;
+
+    if (isNumber(this.value) && isNaN(this.value)) {
+      throw new Error('NaN is not able to set')
+    }
+
     this.unit = unit;
   }
 
@@ -251,18 +256,19 @@ export class Length {
     return this.unit === unit; 
   }
 
-  isCalc() { return this.isUnitType('calc'); }
-  isFr() {return this.isUnitType('fr'); }
-  isPercent() {return this.isUnitType('%'); }
-  isPx() {return this.isUnitType('px'); }
-  isEm() {return this.isUnitType('em'); }
-  isDeg() {return this.isUnitType('deg'); }
-  isTurn() {return this.isUnitType('turn'); }
-  isSecond() {return this.isUnitType('s'); }
-  isMs () {return this.isUnitType('ms'); }
-  isNumber () {return this.isUnitType('number'); }
-  isString() {return this.isUnitType(''); }
-  isVar() {return this.isUnitType('--'); }
+  isCalc()    { return this.isUnitType('calc'); }
+  isFr()      { return this.isUnitType('fr'); }
+  isPercent() { return this.isUnitType('%'); }
+  isPx()      { return this.isUnitType('px'); }
+  isEm()      { return this.isUnitType('em'); }
+  isDeg()     { return this.isUnitType('deg'); }
+  isTurn()    { return this.isUnitType('turn'); }
+  isSecond()  { return this.isUnitType('s'); }
+  isMs ()     { return this.isUnitType('ms'); }
+  isNumber()  { return this.isUnitType('number'); }
+  isString()  { return this.isUnitType(''); }
+  isVar()     { return this.isUnitType('--'); }
+  isNaN()     { return isNumber(this.value) && isNaN(this.value) }
 
   set(value) {
     this.value = value;

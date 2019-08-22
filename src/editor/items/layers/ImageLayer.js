@@ -35,6 +35,12 @@ export class ImageLayer extends Layer {
 
   }
 
+
+  updateFunction (currentElement) {
+    var {src} = this.json;     
+    currentElement.attr('src', src);
+  }    
+
   get html () {
     var {id, src, itemType} = this.json;
 
