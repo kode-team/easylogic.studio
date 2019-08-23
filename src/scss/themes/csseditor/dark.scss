@@ -1,18 +1,14 @@
 
-$item-selected-color: #dbf3ff;
 $pointer-color: rgba(#ececec, 0.8);
-$gutter: 8px;
 $tool-size: 50px;
-$top-size: 100px;
 $left-size: 300px;
 $left-layer-panel: 70px; 
 $left-page-size: 70px;
 $toggle-left-size: 80px;
-$right-size: 280px;
+$right-size: 260px;
 $timeline-header-size: 70px;
 $timeline-size: 300px;
 $show-timeline-animation: all 0.15s linear;
-$gradient-box-size: 0px;
 $display-flex-color: #01a270;
 $display-grid-color: red;
 
@@ -20,18 +16,18 @@ $display-grid-color: red;
 
 // common 
 $inner-border-color: #202020;
-$border-color: rgb(41, 41, 41);
+$border-color: rgb(27, 27, 27);
 $border-color-2: #737373;
 $selected-border-color: #609de2;
-$selected-color: #6fb2ff;
-$selected-color: #10ece4;
-$selected-color: #efcb05;
+$selected-color: #3a89f0;
+// $selected-color: #10ece4;
+// $selected-color: #efcb05;
 $selected-color: #fbde50;
 // $selected-color: #ff4d6e;
 
-$background-color: #3a3a3a; 
+$background-color: #343642; 
 $selected-background-color: #181818; 
-$font-color: #ececec;
+$font-color: #cacaca;
 $selected-font-color: black;
 
 // base 
@@ -72,7 +68,7 @@ $list-background-color: $border-color;
 $tab-background-color: $background-color; 
 $tab-font-color: $font-color;
 $tab-selected-color: $selected-color; 
-$tab-selected-font-color: $selected-color;
+$tab-selected-font-color: $selected-font-color;
 $tab-selected-border-color: $selected-border-color;
 $tab-border-color: $border-color;
 
@@ -97,3 +93,5 @@ $path-guide-color: rgba(158, 158, 158, 0.8);
 // timeline 
 $timeline-background-color: lighten($background-color, 5%);
 $timeline-border-color: $border-color;
+$timeline-gauge-background-color: #3f83bd;
+$timeline-offset-line-color: #3f83bd;

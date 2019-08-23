@@ -77,12 +77,7 @@ export default class BaseProperty extends UIElement {
   [CLICK('$el .property-body .add-timeline-property')] (e) {
     var property = e.$delegateTarget.attr('data-property')
 
-    this.emit('add.timeline.property', Object.keys(editor.selection.itemKeys), property, this.getPropertyValue(property))
-
-  }
-
-  getPropertyValue (property) {
-
+    this.emit('add.timeline.current.property', property)
   }
 
   isPropertyShow() {

@@ -86,7 +86,7 @@ $tab-horizontal-header-right-width: 60px;
     @for $selectValue from 1 to 10 {
       &[data-selected-value="#{$selectValue}"] .tab-item[data-value="#{$selectValue}"] {
         // border-top: 2px solid $tab-selected-border-color;
-        // background-color: $tab-selected-color;
+        background-color: $tab-selected-color;
         color: $tab-selected-font-color;
 
 

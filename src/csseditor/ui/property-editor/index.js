@@ -30,8 +30,11 @@ import IconListViewEditor from "./IconListViewEditor";
 import EmbedColorPicker from "./EmbedColorPicker";
 import ImageSelectEditor from "./ImageSelectEditor";
 import SelectIconEditor from "./SelectIconEditor";
+import InputRangeEditor from "./InputRangeEditor";
+
 
 export default {
+    InputRangeEditor,
     SelectIconEditor,
     ImageSelectEditor,
     EmbedColorPicker,

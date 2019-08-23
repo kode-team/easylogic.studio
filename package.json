@@ -1,7 +1,7 @@
 {
   "name": "easylogic-studio",
   "version": "0.8.15",
-  "description": "Fantastic Open Source CSS Editor ",
+  "description": "Fantastic CSS Design Tool ",
   "main": "index.js",
   "directories": {
     "test": "test"

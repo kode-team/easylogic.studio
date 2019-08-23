@@ -1,11 +1,10 @@
 import UIElement, { COMMAND, EVENT } from "../../../../util/UIElement";
 import { editor } from "../../../../editor/editor";
 import { DEBOUNCE } from "../../../../util/Event";
-import { isArray } from "../../../../util/functions/func";
+import { isArray, isUndefined } from "../../../../util/functions/func";
 import { makeTimer, second, timecode } from "../../../../util/functions/time";
 
 export default class TimelineCommand extends UIElement {
-
 
     [COMMAND('add.timeline')] (layerId) {
         var artboard = editor.selection.currentArtboard;
@@ -28,18 +27,6 @@ export default class TimelineCommand extends UIElement {
             this.emit('refreshTimeline');
         }   
     }
-
-
-    [COMMAND('select.timeline.offset')] (selectedId, property, time) {
-        var artboard = editor.selection.currentArtboard;
-
-        if (artboard) {
-            // artboard.sortTimelineKeyframe(selectedId, property); 
-            artboard.setSelectedOffset(selectedId, property, time);
-
-            this.trigger('refresh.selected.offset');
-        }   
-    }    
 
     [COMMAND('set.timeline.offset') + DEBOUNCE(100)] (obj) {
         var artboard = editor.selection.currentArtboard;
@@ -70,15 +57,58 @@ export default class TimelineCommand extends UIElement {
         var artboard = editor.selection.currentArtboard;
 
         if (artboard) {
-
+            var list = [] 
             layerList.forEach(id => {
-                artboard.addTimelineKeyframe(id, property, value, timing);
+                var obj = artboard.addTimelineKeyframe(id, property, value + "", timing);
+
+                if (obj) {
+                    list.push({id: obj.id, layerId: obj.layerId, property: obj.property});
+                }
             })
+
+            editor.timeline.select(...list);
 
             this.emit('refreshTimeline');
             this.trigger('refresh.selected.offset');
         }
         
+    }
+
+
+    [COMMAND('add.timeline.current.property')] (property, timing = 'linear') {
+        var artboard = editor.selection.currentArtboard;
+        if (artboard) {
+            var list = []
+            editor.selection.each(item => {
+                var obj = artboard.addTimelineKeyframe(item.id, property, item[property] + "", timing);
+
+                if (obj) {
+                    list.push({id: obj.id, layerId: obj.layerId, property: obj.property});
+                }
+            })
+
+            editor.timeline.select(...list);            
+            this.emit('refreshTimeline');
+            this.trigger('refresh.selected.offset');
+        }
+
+    }
+
+    [COMMAND('change.property')] (key, value) {
+
+
+        var artboard = editor.selection.currentArtboard;
+        if (artboard) {
+            editor.selection.each(item => {
+                var newValue = isUndefined(value) ? item[key] : value
+                newValue = newValue + ""
+
+                artboard.setPropertyOffsetValue(item.id, key, undefined, newValue )
+            })
+
+            this.emit('refreshTimelineOffsetValue');
+        }
+
     }
 
     [COMMAND('copy.timeline.property')] (layerId, property) {

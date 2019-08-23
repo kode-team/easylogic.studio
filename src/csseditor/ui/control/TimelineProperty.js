@@ -9,11 +9,15 @@ import KeyframeTimeGridView from "./timeline/KeyframeTimeGridView";
 import AnimationSelector from "./timeline/AnimationSelector";
 import TimelineValueEditor from "./timeline/TimelineValueEditor";
 import { EVENT } from "../../../util/UIElement";
+import KeyframeTimeControl from "./timeline/KeyframeTimeControl";
+import TimelinePlayControl from "./timeline/TimelinePlayControl";
 
 export default class TimelineProperty extends BaseProperty {
 
   components() {
     return {
+      TimelinePlayControl,
+      KeyframeTimeControl,
       TimelineValueEditor,
       AnimationSelector,
       KeyframeTimeView,
@@ -35,6 +39,8 @@ export default class TimelineProperty extends BaseProperty {
   getTools() {
     return /*html*/`
       <AnimationSelector />
+      <TimelinePlayControl />
+      <KeyframeTimeControl />
     `; 
   }
 

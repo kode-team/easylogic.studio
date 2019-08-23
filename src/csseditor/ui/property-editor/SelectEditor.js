@@ -19,7 +19,7 @@ export default class SelectEditor extends UIElement {
     template() {
         var { label } = this.state; 
         var hasLabel = !!label ? 'has-label' : ''
-        return `
+        return /*html*/`
             <div class='select-editor ${hasLabel}'>
                 ${label ? `<label>${label}</label>` : '' }
                 <select ref='$options'></select>

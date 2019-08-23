@@ -1,22 +1,23 @@
 .property {
-  padding: 0px 0px;
-  border-bottom: 1px solid $property-border-color;  
+  padding: 6px 0px;
+  border-bottom: 1px solid rgba(lighten($property-border-color, 30%), 0.2);  
   background-color: $property-background-color;
   color: $property-font-color; 
   display: none; 
 
+
   .add-timeline-property {
     display: inline-block;
     margin-right: 5px;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
+    width: 8px;
+    height: 8px;
     box-shadow: 0 0 0 2px rgba(darken($border-color, 10%), 0.3);
     background-color: rgba(lighten($border-color, 50%), 0.7);
     vertical-align: middle;
     line-height: 10px;
-    margin-top: 3px;
+    margin-top: 5px;
     cursor: pointer;
+    transform: rotate(45deg);
 
     &:hover {
       box-shadow: 0 0 0 2px rgba($selected-color, 0.5);
@@ -50,6 +51,65 @@
 
         .tools {
           text-align: left;
+          display: flex;
+          > * {
+            flex: 1 1 auto;
+          }
+
+          .timeline-play-control {
+            text-align: center;
+
+            button {
+              display: inline-block;
+              vertical-align: middle;
+              width: 24px;
+              height: 24px;
+
+              &.play, &.pause {
+                display: none;
+                width: 30px;
+                height: 30px;
+
+              }
+
+              &.play {
+
+                svg {
+                  path {
+                    fill: $selected-color;
+                  }
+                }
+              }
+
+              &.pause {
+
+                svg {
+                  path {
+                    fill: rgb(102, 119, 216);
+                  }
+                }
+              }
+            }
+
+
+
+            &[data-status='play'] {
+              .pause {
+                display: inline-block;
+              }
+            }
+
+            &[data-status='pause'] {
+              .play {
+                display: inline-block;
+              }
+            }            
+
+          }
+
+          .keyframe-time-control {
+            flex: none; 
+          }
         }
       }
     }
@@ -66,10 +126,28 @@
       display: block;
       padding: 0px 11px 0px 6px;
     }
+
+
+    &.size-property {
+      > .property-body {
+        display: grid;
+        grid-template-columns: 1fr 1fr; 
+        grid-column-gap: 3px;
+
+        .grid-item {
+          display: grid;
+          grid-template-columns: 30px 1fr;
+
+          > label {
+            padding: 2px 0px;
+          }
+        }
+      }
+    }
   }
 
   > .property-title {
-    padding: 4px 11px 4px 6px;
+    padding: 0px 11px 4px 6px;
     height: 30px;
     line-height: 2;
     cursor: pointer;
@@ -77,7 +155,7 @@
     font-size: 12px;
     font-weight: 400;
     display: grid;
-    grid-template-columns: 0.8fr 1fr;
+    grid-template-columns: 0.7fr 1fr;
     cursor: pointer;
     border-bottom: 0px;    
 

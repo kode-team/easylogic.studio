@@ -7,15 +7,6 @@ export default class TimelineTopToolbar extends UIElement {
         return /*html*/`
             <div class='timeline-top-toolbar'>
                 <div class='row'>
-                    <label>Speed</label>
-                    <div class='play-buttons' ref='$play' data-selected-speed='${this.state.speed}'>
-                        <button type="button" data-value='0.5'>0.5x</button>
-                        <button type="button" data-value='1'>1x</button>
-                        <button type="button" data-value='2'>2x</button>
-                        <button type="button" data-value='3'>3x</button>
-                    </div>
-                </div>
-                <div class='row'>
                     <label>Iteration</label>
                     <div class='input' >
                         <input type='number' min="1" max="100" step="1" ref='$iteration' value='${this.state.iteration}' />
@@ -36,18 +27,9 @@ export default class TimelineTopToolbar extends UIElement {
 
     initState() {
         return {
-            speed: 1,
             iteration: 1,
             direction: 'normal'
         }
-    }
-
-    [CLICK('$play button')] (e) {
-        this.setState({
-            speed: +e.$delegateTarget.attr('data-value')
-        })
-
-        this.play()
     }
 
     [CLICK('$direction button')] (e) {
@@ -60,16 +42,6 @@ export default class TimelineTopToolbar extends UIElement {
         this.setState({
             iteration: +this.refs.$iteration.value
         })
-    }
-
-    play () {
-        this.emit('play.timeline', this.state.speed, this.state.iteration, this.state.direction);
-    }
-
-    [BIND('$play') ] () {
-        return {
-            'data-selected-speed' : this.state.speed
-        }
     }
 
     [BIND('$direction') ] () {

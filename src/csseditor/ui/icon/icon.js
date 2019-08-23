@@ -62,6 +62,10 @@ import color_lens from "./color_lens";
 import circle from "./circle";
 import rect from "./rect";
 import note from "./note";
+import skip_next from "./skip_next";
+import skip_prev from "./skip_prev";
+import fast_forward from "./fast_forward";
+import fast_rewind from "./fast_rewind";
 
 
 export default {
@@ -96,6 +100,10 @@ export default {
   autorenew,
   play,
   pause,
+  skip_next,
+  skip_prev,
+  fast_forward,
+  fast_rewind,  
   filter,
   input,
   timer,

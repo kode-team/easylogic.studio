@@ -77,9 +77,11 @@ export default class TimelineObjectList extends UIElement {
             return; 
         }
 
+        var selected = editor.timeline.checkLayer(obj.id);
+
         return /*html*/`
         <div class='timeline-object' data-timeline-animation-id="${obj.id}">
-            <div class='timeline-object-row layer'>
+            <div class='timeline-object-row layer' data-selected='${selected}' data-layer-id='${obj.id}' data-property=''>
                 <div class='icon'>${icon.chevron_right}</div>
                 <div class='title'> ${obj.name}</div>
                 <div class='tools'>
@@ -89,8 +91,10 @@ export default class TimelineObjectList extends UIElement {
             </div>
 
             ${animation.properties.map(property => {
+                var selected = editor.timeline.checkProperty(obj.id, property.property)
+
                 return /*html*/ `
-                <div class='timeline-object-row layer-property'>
+                <div class='timeline-object-row layer-property' data-selected='${selected}' data-layer-id='${obj.id}' data-property='${property.property}'>
                     <div class='icon'></div>                    
                     <div class='title'>${property.property}</div>
                     <div class='current-value'>
@@ -124,8 +128,29 @@ export default class TimelineObjectList extends UIElement {
         })
     }
 
+    refreshSelection () {
+      this.$el.$$('[data-selected="true"]').forEach(it => {
+        it.attr('data-selected', "false");
+      })
+
+      editor.timeline.properties.forEach(it => {
+        var $el = this.$el.$(`[data-layer-id="${it.layerId}"][data-property="${it.property}"]`)
+        
+        $el && $el.attr('data-selected', 'true')
+      })
+    }
+
     [CLICK('$el .timeline-object-row.layer .title')] (e) {
-        e.$delegateTarget.closest('timeline-object').toggleClass('collapsed')
+        var container = e.$delegateTarget.closest('timeline-object');
+        
+        container.toggleClass('collapsed')
+        var layerId = container.attr('data-timeline-animation-id')
+
+        this.emit('toggleTimelineObjectRow', layerId, container.hasClass('collapsed'))
+
+        editor.timeline.selectLayer(layerId)
+
+        this.refreshSelection();
     }
 
     [CLICK('$el .timeline-object-row.layer .add-property')] (e) {
@@ -147,7 +172,7 @@ export default class TimelineObjectList extends UIElement {
 
       if (property) {
         this.emit('copy.timeline.property', layerId, property)
-    }      
+      }       
     }
 
     [EVENT('refreshTimeline')] () {

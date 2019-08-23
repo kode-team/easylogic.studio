@@ -71,11 +71,6 @@ export default class BoxModelProperty extends BaseProperty {
             ${this.templateInput("padding-right", current)}
           </div>
         </div>
-        <div
-          class="content"
-          ref="$content"
-          title="${current.width} x ${current.height}"
-        ></div>
       </div>
     `;
   }
@@ -97,17 +92,6 @@ export default class BoxModelProperty extends BaseProperty {
       current.reset(data);
 
       this.emit("refreshElement", current);
-    }
-  }
-
-  [EVENT("setSize")]() {
-    var current = editor.selection.current;
-
-    if (current) {
-      this.refs.$content.attr(
-        "title",
-        `${current.width} x ${current.height}`
-      );
     }
   }
 }

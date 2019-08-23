@@ -1364,13 +1364,13 @@ html, body {
   background-color: #5a5a5a;
   border: 0px solid #0c0c0d;
   border-radius: 3px;
-  color: #ececec;
+  color: #cacaca;
   outline: none;
   vertical-align: middle;
 }
 .csseditor[data-theme=dark] button {
   border-width: 0px;
-  color: #ececec;
+  color: #cacaca;
   width: 16px;
   height: 16px;
   vertical-align: middle;
@@ -1388,7 +1388,7 @@ html, body {
   height: 100%;
 }
 .csseditor[data-theme=dark] button svg path {
-  fill: #ececec;
+  fill: #cacaca;
 }
 .csseditor[data-theme=dark] input[type=file].embed-file-input {
   position: absolute;
@@ -1400,7 +1400,7 @@ html, body {
   width: 100%;
   height: 100%;
   display: inline-block;
-  background-color: #3a3a3a;
+  background-color: #343642;
   opacity: 0;
   pointer-events: none;
 }
@@ -1424,12 +1424,12 @@ html, body {
   height: 50px;
   overflow: hidden;
   position: relative;
-  background-color: #3a3a3a;
-  color: #ececec;
+  background-color: #343642;
+  color: #cacaca;
   z-index: 1;
   pointer-events: all;
   box-sizing: border-box;
-  border-bottom: 1px solid #292929;
+  border-bottom: 1px solid #1b1b1b;
 }
 .csseditor[data-theme=dark] .layout-main .layout-header .logo {
   position: absolute;
@@ -1456,7 +1456,7 @@ html, body {
   flex: none;
   height: 30px;
   overflow: hidden;
-  border-top: 1px solid #292929;
+  border-top: 1px solid #1b1b1b;
   transition: all 0.15s linear;
   position: relative;
   pointer-events: all;
@@ -1485,7 +1485,7 @@ html, body {
   right: 0px;
   top: 0px;
   bottom: 0px;
-  width: 280px;
+  width: 260px;
   display: inline-block;
   z-index: 100;
   display: flex;
@@ -1496,7 +1496,7 @@ html, body {
 .csseditor[data-theme=dark] .layout-main .layout-middle .layout-body {
   top: 0px;
   left: 300px;
-  right: 280px;
+  right: 260px;
   bottom: 0px;
   position: absolute;
   transition: right 0.1s linear;
@@ -1532,7 +1532,7 @@ html, body {
   bottom: 0px;
   right: 0px;
   box-sizing: border-box;
-  border-left: 1px solid #292929;
+  border-left: 1px solid #1b1b1b;
 }
 .csseditor[data-theme=dark] .feature-control .layer-tab {
   position: absolute;
@@ -1555,7 +1555,7 @@ html, body {
   height: 200px;
 }
 .csseditor[data-theme=dark] .feature-control .layer-tab .object-items > div:not(:first-child) {
-  border-top: 1px solid #292929;
+  border-top: 1px solid #1b1b1b;
   box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .feature-control .layer-tab .object-items > div:last-child {
@@ -1567,11 +1567,11 @@ html, body {
 }
 .csseditor[data-theme=dark] .feature-control .draw-items .split {
   border: 0px;
-  border-top: 1px solid #292929;
+  border-top: 1px solid #1b1b1b;
   margin: 10px 5px;
 }
 .csseditor[data-theme=dark] .feature-control .draw-items > label {
-  color: #ececec;
+  color: #cacaca;
   padding: 5px;
   text-align: center;
   display: block;
@@ -1582,7 +1582,7 @@ html, body {
 .csseditor[data-theme=dark] .feature-control .draw-items .menu-item {
   text-align: center;
   margin-top: 5px;
-  color: #ececec;
+  color: #cacaca;
   width: 48px;
   height: 48px;
   background-color: transparent;
@@ -1701,14 +1701,14 @@ html, body {
   right: 0px;
   bottom: 0px;
   top: 0px;
-  background-color: #3a3a3a;
-  color: #ececec;
+  background-color: #343642;
+  color: #cacaca;
 }
 .csseditor[data-theme=dark] .tab.number-tab .tab-header {
   height: 34px;
   cursor: pointer;
-  border-bottom: 1px solid #292929;
-  background-color: #3a3a3a;
+  border-bottom: 1px solid #1b1b1b;
+  background-color: #343642;
 }
 .csseditor[data-theme=dark] .tab.number-tab .tab-content {
   display: none;
@@ -1747,55 +1747,64 @@ html, body {
   pointer-events: none;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"] {
-  color: #fbde50;
+  background-color: #fbde50;
+  color: black;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="1"] .tab-content[data-value="1"] {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"] {
-  color: #fbde50;
+  background-color: #fbde50;
+  color: black;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="2"] .tab-content[data-value="2"] {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"] {
-  color: #fbde50;
+  background-color: #fbde50;
+  color: black;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="3"] .tab-content[data-value="3"] {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"] {
-  color: #fbde50;
+  background-color: #fbde50;
+  color: black;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="4"] .tab-content[data-value="4"] {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"] {
-  color: #fbde50;
+  background-color: #fbde50;
+  color: black;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="5"] .tab-content[data-value="5"] {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"] {
-  color: #fbde50;
+  background-color: #fbde50;
+  color: black;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="6"] .tab-content[data-value="6"] {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"] {
-  color: #fbde50;
+  background-color: #fbde50;
+  color: black;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="7"] .tab-content[data-value="7"] {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"] {
-  color: #fbde50;
+  background-color: #fbde50;
+  color: black;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="8"] .tab-content[data-value="8"] {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"] {
-  color: #fbde50;
+  background-color: #fbde50;
+  color: black;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="9"] .tab-content[data-value="9"] {
   display: block;
@@ -1845,7 +1854,7 @@ html, body {
   color: black;
 }
 .csseditor[data-theme=dark] .tab > .tab-header > .tab-item.select-reverse.selected {
-  background-color: #3a3a3a;
+  background-color: #343642;
 }
 .csseditor[data-theme=dark] .tab > .tab-body {
   position: absolute;
@@ -1888,7 +1897,7 @@ html, body {
   right: 0px;
   height: 30px;
   display: none;
-  background-color: #3a3a3a;
+  background-color: #343642;
   font-size: 12px;
   font-weight: bold;
   padding: 8px 5px !important;
@@ -1902,7 +1911,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .tab.bottom > .tab-header > .tab-item.selected {
   border-top: 1px solid #ffffff;
-  border-bottom: 1px solid #292929;
+  border-bottom: 1px solid #1b1b1b;
 }
 .csseditor[data-theme=dark] .tab.bottom > .tab-body {
   top: 0px;
@@ -1922,7 +1931,7 @@ html, body {
 .csseditor[data-theme=dark] .tab.horizontal.left > .tab-body {
   left: 50px;
   right: 0px;
-  border-left: 1px solid #292929;
+  border-left: 1px solid #1b1b1b;
   border-right: 0px;
 }
 .csseditor[data-theme=dark] .tab.horizontal > .tab-header {
@@ -1935,7 +1944,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .tab.horizontal > .tab-header > .tab-item {
   border: 0px;
-  border-bottom: 1px solid #292929;
+  border-bottom: 1px solid #1b1b1b;
   text-align: center;
   line-height: 3;
   height: 50px;
@@ -1948,7 +1957,7 @@ html, body {
   top: 0px;
   right: 60px;
   border: 0px;
-  border-right: 1px solid #292929;
+  border-right: 1px solid #1b1b1b;
 }
 .csseditor[data-theme=dark] .colorpicker-layer .codemirror-colorpicker {
   background-color: transparent;
@@ -2096,7 +2105,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .logo .site {
   font-size: 14px;
-  color: #292929;
+  color: #1b1b1b;
 }
 .csseditor[data-theme=dark] .external-tool-menu {
   padding-left: 10px;
@@ -2120,7 +2129,7 @@ html, body {
   vertical-align: middle;
   width: 3px;
   margin-right: 2px;
-  border-right: 1px solid #292929;
+  border-right: 1px solid #1b1b1b;
 }
 .csseditor[data-theme=dark] .tool-menu .items.flex-2,
 .csseditor[data-theme=dark] .external-tool-menu .items.flex-2 {
@@ -2262,7 +2271,7 @@ html, body {
 .csseditor[data-theme=dark] .external-tool-menu .items .icon.codepen,
 .csseditor[data-theme=dark] .external-tool-menu .items .icon.github {
   background-color: transparent;
-  text-shadow: 2px 2px 4px rgba(41, 41, 41, 0.59);
+  text-shadow: 2px 2px 4px rgba(27, 27, 27, 0.59);
   padding-right: 2px;
   border-radius: 3px;
 }
@@ -2304,7 +2313,7 @@ html, body {
   right: 0px;
   bottom: 0px;
   top: 0px;
-  background-color: rgba(41, 41, 41, 0.3);
+  background-color: rgba(27, 27, 27, 0.3);
 }
 .csseditor[data-theme=dark] .page-view .page-lock {
   position: absolute;
@@ -2328,9 +2337,9 @@ html, body {
   display: inline-block;
   padding: 5px 10px;
   border-radius: 3px;
-  border: 1px solid #292929;
-  color: #ececec;
-  background-color: #3a3a3a;
+  border: 1px solid #1b1b1b;
+  color: #cacaca;
+  background-color: #343642;
 }
 .csseditor[data-theme=dark] .page-tools > label {
   vertical-align: middle;
@@ -2355,9 +2364,9 @@ html, body {
   display: none;
   pointer-events: all;
   outline: none;
-  border: 1px solid #292929;
-  color: #ececec;
-  background-color: #3a3a3a;
+  border: 1px solid #1b1b1b;
+  color: #cacaca;
+  background-color: #343642;
   padding: 5px 10px;
   box-sizing: border-box;
   height: 100%;
@@ -2378,9 +2387,9 @@ html, body {
   display: none;
   pointer-events: all;
   outline: none;
-  border: 1px solid #292929;
-  color: #ececec;
-  background-color: #3a3a3a;
+  border: 1px solid #1b1b1b;
+  color: #cacaca;
+  background-color: #343642;
   padding: 5px 10px;
 }
 .csseditor[data-theme=dark] .page-subeditor .polygon-manager > * {
@@ -2400,9 +2409,9 @@ html, body {
   pointer-events: all;
   outline: none;
   border-radius: 3px;
-  border: 1px solid #292929;
-  color: #ececec;
-  background-color: #3a3a3a;
+  border: 1px solid #1b1b1b;
+  color: #cacaca;
+  background-color: #343642;
   padding: 5px 10px;
   box-sizing: border-box;
   height: 100%;
@@ -2498,7 +2507,7 @@ html, body {
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
   background-color: rgba(255, 255, 255, 0.8);
-  border: 1px solid #292929;
+  border: 1px solid #1b1b1b;
 }
 .csseditor[data-theme=dark] .selection-tool.path .selection-tool-item[data-position=path], .csseditor[data-theme=dark] .selection-tool.polygon .selection-tool-item[data-position=path] {
   top: -30px;
@@ -2508,7 +2517,7 @@ html, body {
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
   background-color: rgba(255, 255, 255, 0.8);
-  border: 1px solid #292929;
+  border: 1px solid #1b1b1b;
   opacity: 1;
 }
 .csseditor[data-theme=dark] .selection-tool[data-selected-position=move] [data-position=move]:before {
@@ -2564,7 +2573,7 @@ html, body {
   text-align: center;
   background-color: rgba(51, 51, 51, 0.8);
   border-radius: 3px;
-  border: #292929;
+  border: #1b1b1b;
   transition: opacity 0.3s linear;
   box-sizing: border-box;
   padding: 4px 10px;
@@ -2888,24 +2897,25 @@ html, body {
   pointer-events: none;
 }
 .csseditor[data-theme=dark] .property {
-  padding: 0px 0px;
-  border-bottom: 1px solid #202020;
-  background-color: #3a3a3a;
-  color: #ececec;
+  padding: 6px 0px;
+  border-bottom: 1px solid rgba(109, 109, 109, 0.2);
+  background-color: #343642;
+  color: #cacaca;
   display: none;
 }
 .csseditor[data-theme=dark] .property .add-timeline-property {
   display: inline-block;
   margin-right: 5px;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  box-shadow: 0 0 0 2px rgba(16, 16, 16, 0.3);
-  background-color: rgba(169, 169, 169, 0.7);
+  width: 8px;
+  height: 8px;
+  box-shadow: 0 0 0 2px rgba(2, 2, 2, 0.3);
+  background-color: rgba(155, 155, 155, 0.7);
   vertical-align: middle;
   line-height: 10px;
-  margin-top: 3px;
+  margin-top: 5px;
   cursor: pointer;
+  -webkit-transform: rotate(45deg);
+          transform: rotate(45deg);
 }
 .csseditor[data-theme=dark] .property .add-timeline-property:hover {
   box-shadow: 0 0 0 2px rgba(251, 222, 80, 0.5);
@@ -2931,6 +2941,39 @@ html, body {
 }
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools {
   text-align: left;
+  display: flex;
+}
+.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools > * {
+  flex: 1 1 auto;
+}
+.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control {
+  text-align: center;
+}
+.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control button {
+  display: inline-block;
+  vertical-align: middle;
+  width: 24px;
+  height: 24px;
+}
+.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control button.play, .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control button.pause {
+  display: none;
+  width: 30px;
+  height: 30px;
+}
+.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control button.play svg path {
+  fill: #fbde50;
+}
+.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control button.pause svg path {
+  fill: #6677d8;
+}
+.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control[data-status=play] .pause {
+  display: inline-block;
+}
+.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control[data-status=pause] .play {
+  display: inline-block;
+}
+.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .keyframe-time-control {
+  flex: none;
 }
 .csseditor[data-theme=dark] .property.full .property-body {
   flex: 1 1 auto;
@@ -2941,8 +2984,20 @@ html, body {
   display: block;
   padding: 0px 11px 0px 6px;
 }
+.csseditor[data-theme=dark] .property.show.size-property > .property-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 3px;
+}
+.csseditor[data-theme=dark] .property.show.size-property > .property-body .grid-item {
+  display: grid;
+  grid-template-columns: 30px 1fr;
+}
+.csseditor[data-theme=dark] .property.show.size-property > .property-body .grid-item > label {
+  padding: 2px 0px;
+}
 .csseditor[data-theme=dark] .property > .property-title {
-  padding: 4px 11px 4px 6px;
+  padding: 0px 11px 4px 6px;
   height: 30px;
   line-height: 2;
   cursor: pointer;
@@ -2950,7 +3005,7 @@ html, body {
   font-size: 12px;
   font-weight: 400;
   display: grid;
-  grid-template-columns: 0.8fr 1fr;
+  grid-template-columns: 0.7fr 1fr;
   cursor: pointer;
   border-bottom: 0px;
 }
@@ -2973,7 +3028,7 @@ html, body {
 .csseditor[data-theme=dark] .property > .property-body {
   display: none;
   padding: 0px;
-  background-color: #3a3a3a;
+  background-color: #343642;
 }
 .csseditor[data-theme=dark] .property > .property-body .property-item {
   padding: 0px;
@@ -2996,7 +3051,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .property > .property-body .property-item.label label {
   font-weight: 900;
-  text-shadow: 2px 2px 3px #292929;
+  text-shadow: 2px 2px 3px #1b1b1b;
 }
 .csseditor[data-theme=dark] .property > .property-body .property-item .small-editor {
   margin-bottom: 3px;
@@ -3051,7 +3106,7 @@ html, body {
   width: 20px;
   height: 20px;
   margin-right: 10px;
-  background-color: #3a3a3a;
+  background-color: #343642;
 }
 .csseditor[data-theme=dark] .border-item .border-direction button[data-value=all] {
   border: 3px solid #fbde50;
@@ -3135,7 +3190,7 @@ html, body {
   height: 100%;
 }
 .csseditor[data-theme=dark] .border-slice-item .slice-selector button svg path {
-  fill: #292929;
+  fill: #1b1b1b;
 }
 .csseditor[data-theme=dark] .border-slice-item .slice-setting-box {
   display: grid;
@@ -3261,7 +3316,7 @@ html, body {
   right: 5px;
   bottom: 5px;
   padding: 10px;
-  border: 1px dashed #292929;
+  border: 1px dashed #1b1b1b;
 }
 .csseditor[data-theme=dark] .box-model-item > div .margin:before {
   content: "margin";
@@ -3275,7 +3330,7 @@ html, body {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
-  border: 1px solid #292929;
+  border: 1px solid #1b1b1b;
 }
 .csseditor[data-theme=dark] .box-model-item > div .margin [data-value=top] {
   display: inline-block;
@@ -3320,7 +3375,7 @@ html, body {
   right: 40px;
   bottom: 30px;
   padding: 10px;
-  border: 1px dashed #292929;
+  border: 1px dashed #1b1b1b;
 }
 .csseditor[data-theme=dark] .box-model-item > div .padding::before {
   content: "padding";
@@ -3334,7 +3389,7 @@ html, body {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
-  border: 1px solid #292929;
+  border: 1px solid #1b1b1b;
 }
 .csseditor[data-theme=dark] .box-model-item > div .padding [data-value=top] {
   display: inline-block;
@@ -3379,7 +3434,7 @@ html, body {
   right: 75px;
   bottom: 54px;
   padding: 10px 0px;
-  border: 1px dashed #292929;
+  border: 1px dashed #1b1b1b;
 }
 .csseditor[data-theme=dark] .box-model-item > div .content:before {
   content: attr(title);
@@ -3395,7 +3450,7 @@ html, body {
   width: 100%;
   height: 100px;
   box-sizing: border-box;
-  border: 1px solid #292929;
+  border: 1px solid #1b1b1b;
   border-radius: 3px;
 }
 .csseditor[data-theme=dark] .transition-list {
@@ -3412,7 +3467,7 @@ html, body {
   margin-bottom: 5px;
 }
 .csseditor[data-theme=dark] .transition-list .transition-item.selected {
-  background-color: rgba(41, 41, 41, 0.5);
+  background-color: rgba(27, 27, 27, 0.5);
 }
 .csseditor[data-theme=dark] .transition-list .transition-item .timing {
   border-radius: 3px;
@@ -3469,7 +3524,7 @@ html, body {
   margin-bottom: 5px;
 }
 .csseditor[data-theme=dark] .animation-list .animation-item.selected {
-  background-color: rgba(41, 41, 41, 0.5);
+  background-color: rgba(27, 27, 27, 0.5);
 }
 .csseditor[data-theme=dark] .animation-list .animation-item .name {
   padding: 2px 0px;
@@ -3492,10 +3547,10 @@ html, body {
   margin-top: 4px;
 }
 .csseditor[data-theme=dark] .animation-list .animation-item .labels label {
-  background-color: #292929;
+  background-color: #1b1b1b;
   padding: 1px 3px;
   border-radius: 2px;
-  color: #292929;
+  color: #1b1b1b;
   text-transform: uppercase;
   font-weight: bold;
 }
@@ -3513,7 +3568,7 @@ html, body {
   background-color: blue;
 }
 .csseditor[data-theme=dark] .animation-list .animation-item .labels label.direction small, .csseditor[data-theme=dark] .animation-list .animation-item .labels label.fill-mode small, .csseditor[data-theme=dark] .animation-list .animation-item .labels label.play-state small {
-  color: #ececec;
+  color: #cacaca;
 }
 .csseditor[data-theme=dark] .animation-list .animation-item .labels label.play-state {
   background-color: transparent;
@@ -3551,13 +3606,13 @@ html, body {
   display: grid;
   grid-template-columns: 1fr;
   grid-column-gap: 4px;
-  border: 1px solid #292929;
+  border: 1px solid #1b1b1b;
   margin-bottom: 5px;
   padding: 5px;
   cursor: pointer;
 }
 .csseditor[data-theme=dark] .keyframe-list .keyframe-item.selected {
-  background-color: rgba(41, 41, 41, 0.5);
+  background-color: rgba(27, 27, 27, 0.5);
 }
 .csseditor[data-theme=dark] .keyframe-list .keyframe-item .title {
   display: grid;
@@ -3581,7 +3636,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .keyframe-list .keyframe-item .offset-list .container {
   position: relative;
-  background-image: linear-gradient(to right, #292929, black);
+  background-image: linear-gradient(to right, #1b1b1b, black);
   background-size: 100% 2px;
   background-repeat: no-repeat;
   background-position: 0px center;
@@ -3597,7 +3652,7 @@ html, body {
   -webkit-transform: translateX(-50%) translateY(-50%);
           transform: translateX(-50%) translateY(-50%);
   vertical-align: middle;
-  border: 1px solid #292929;
+  border: 1px solid #1b1b1b;
 }
 .csseditor[data-theme=dark] .code-view-item {
   grid-template-columns: 1fr !important;
@@ -3669,7 +3724,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .clip-path-list .clippath-item .offset-list .container {
   position: relative;
-  background-image: linear-gradient(to right, #292929, black);
+  background-image: linear-gradient(to right, #1b1b1b, black);
   background-size: 100% 2px;
   background-repeat: no-repeat;
   background-position: 0px center;
@@ -3708,14 +3763,14 @@ html, body {
   display: grid;
   grid-template-columns: 1fr;
   grid-column-gap: 4px;
-  border: 1px solid #292929;
+  border: 1px solid #1b1b1b;
   margin-bottom: 5px;
   padding: 5px;
   cursor: pointer;
   height: 30px;
 }
 .csseditor[data-theme=dark] .selector-list .selector-item.selected {
-  background-color: rgba(41, 41, 41, 0.5);
+  background-color: rgba(27, 27, 27, 0.5);
 }
 .csseditor[data-theme=dark] .selector-list .selector-item .title {
   display: grid;
@@ -3777,9 +3832,9 @@ html, body {
 }
 .csseditor[data-theme=dark] .artboard-list .artboard-item .preview {
   height: 110px;
-  background-color: #292929;
+  background-color: #1b1b1b;
   border-radius: 3px;
-  border: 1px solid #292929;
+  border: 1px solid #1b1b1b;
   cursor: pointer;
   display: none;
 }
@@ -3857,13 +3912,13 @@ html, body {
   text-align: right;
 }
 .csseditor[data-theme=dark] .layer-list .layer-item .detail .tools .visible svg path {
-  fill: #292929;
+  fill: #1b1b1b;
 }
 .csseditor[data-theme=dark] .layer-list .layer-item .detail .tools .visible[data-visible=true] svg path {
   fill: #333;
 }
 .csseditor[data-theme=dark] .layer-list .layer-item .detail .tools .lock svg path {
-  fill: #292929;
+  fill: #1b1b1b;
 }
 .csseditor[data-theme=dark] .layer-list .layer-item .detail .tools .lock[data-lock=true] svg path {
   fill: #333;
@@ -3905,7 +3960,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .color-assets-property .color-list-tools button {
   padding: 2px 10px;
-  border: 1px solid #292929;
+  border: 1px solid #1b1b1b;
 }
 .csseditor[data-theme=dark] .color-assets-property .color-list-tools[data-view-mode=list] button[data-value=list] {
   background-color: #609de2;
@@ -3938,7 +3993,7 @@ html, body {
   margin-right: 4px;
   margin-bottom: 4px;
   height: 80px;
-  border: 1px solid #292929;
+  border: 1px solid #1b1b1b;
   border-radius: 2px;
   box-sizing: border-box;
   vertical-align: top;
@@ -3947,7 +4002,7 @@ html, body {
   padding: 24px;
 }
 .csseditor[data-theme=dark] .color-assets-property .color-list[data-view-mode=grid] .add-color-item svg path {
-  fill: #ececec;
+  fill: #cacaca;
 }
 .csseditor[data-theme=dark] .color-assets-property .color-list[data-view-mode=grid] .color-item {
   display: inline-block;
@@ -3964,7 +4019,7 @@ html, body {
   position: relative;
   width: 100%;
   height: 80px;
-  border: 1px solid #292929;
+  border: 1px solid #1b1b1b;
   border-radius: 2px;
   box-sizing: border-box;
   cursor: pointer;
@@ -4037,7 +4092,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .gradient-assets-property .gradient-list-tools button {
   padding: 2px 10px;
-  border: 1px solid #292929;
+  border: 1px solid #1b1b1b;
 }
 .csseditor[data-theme=dark] .gradient-assets-property .gradient-list-tools[data-view-mode=list] button[data-value=list] {
   background-color: #609de2;
@@ -4070,7 +4125,7 @@ html, body {
   margin-right: 4px;
   margin-bottom: 4px;
   height: 80px;
-  border: 1px solid #292929;
+  border: 1px solid #1b1b1b;
   border-radius: 2px;
   box-sizing: border-box;
   vertical-align: top;
@@ -4079,7 +4134,7 @@ html, body {
   padding: 24px;
 }
 .csseditor[data-theme=dark] .gradient-assets-property .gradient-list[data-view-mode=grid] .add-gradient-item svg path {
-  fill: #ececec;
+  fill: #cacaca;
 }
 .csseditor[data-theme=dark] .gradient-assets-property .gradient-list[data-view-mode=grid] .gradient-item {
   display: inline-block;
@@ -4096,7 +4151,7 @@ html, body {
   position: relative;
   width: 100%;
   height: 80px;
-  border: 1px solid #292929;
+  border: 1px solid #1b1b1b;
   border-radius: 2px;
   box-sizing: border-box;
   cursor: pointer;
@@ -4172,7 +4227,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list-tools button {
   padding: 2px 10px;
-  border: 1px solid #292929;
+  border: 1px solid #1b1b1b;
 }
 .csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list-tools[data-view-mode=list] button[data-value=list] {
   background-color: #609de2;
@@ -4211,7 +4266,7 @@ html, body {
   margin-right: 4px;
   margin-bottom: 4px;
   height: 80px;
-  border: 1px solid #292929;
+  border: 1px solid #1b1b1b;
   border-radius: 2px;
   box-sizing: border-box;
   vertical-align: top;
@@ -4220,7 +4275,7 @@ html, body {
   padding: 24px;
 }
 .csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list[data-view-mode=grid] .add-svgfilter-item svg path {
-  fill: #ececec;
+  fill: #cacaca;
 }
 .csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list[data-view-mode=grid] .svgfilter-item {
   display: inline-block;
@@ -4237,7 +4292,7 @@ html, body {
   position: relative;
   width: 100%;
   height: 80px;
-  border: 1px solid #292929;
+  border: 1px solid #1b1b1b;
   border-radius: 2px;
   box-sizing: border-box;
   cursor: pointer;
@@ -4288,7 +4343,7 @@ html, body {
   margin-right: 4px;
   margin-bottom: 4px;
   height: 80px;
-  border: 1px solid #292929;
+  border: 1px solid #1b1b1b;
   border-radius: 2px;
   box-sizing: border-box;
   vertical-align: top;
@@ -4311,7 +4366,7 @@ html, body {
   position: relative;
   width: 100%;
   height: 80px;
-  border: 1px solid #292929;
+  border: 1px solid #1b1b1b;
   border-radius: 2px;
   box-sizing: border-box;
   cursor: pointer;
@@ -4351,7 +4406,7 @@ html, body {
   height: 40px;
 }
 .csseditor[data-theme=dark] .alignment-item .split {
-  border-right: 1px solid #292929;
+  border-right: 1px solid #1b1b1b;
   width: 1px;
   margin-left: 5px;
 }
@@ -4478,7 +4533,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .image-assets-property .image-list-tools button {
   padding: 2px 10px;
-  border: 1px solid #292929;
+  border: 1px solid #1b1b1b;
 }
 .csseditor[data-theme=dark] .image-assets-property .image-list-tools[data-view-mode=list] button[data-value=list] {
   background-color: #609de2;
@@ -4511,7 +4566,7 @@ html, body {
   margin-right: 4px;
   margin-bottom: 4px;
   height: 80px;
-  border: 1px solid #292929;
+  border: 1px solid #1b1b1b;
   border-radius: 2px;
   box-sizing: border-box;
   vertical-align: top;
@@ -4541,7 +4596,7 @@ html, body {
   pointer-events: none;
 }
 .csseditor[data-theme=dark] .image-assets-property .image-list[data-view-mode=grid] .add-image-item svg path {
-  fill: #ececec;
+  fill: #cacaca;
 }
 .csseditor[data-theme=dark] .image-assets-property .image-list[data-view-mode=grid] .image-item {
   display: inline-block;
@@ -4558,7 +4613,7 @@ html, body {
   position: relative;
   width: 100%;
   height: 80px;
-  border: 1px solid #292929;
+  border: 1px solid #1b1b1b;
   border-radius: 2px;
   box-sizing: border-box;
   cursor: pointer;
@@ -4611,8 +4666,8 @@ html, body {
   height: 150px;
   top: 30px;
   left: 60px;
-  border: 1px solid #292929;
-  background-color: #3a3a3a;
+  border: 1px solid #1b1b1b;
+  background-color: #343642;
 }
 .csseditor[data-theme=dark] .cubic-bezier-editor .bezier .bezier-canvas {
   position: absolute;
@@ -4635,7 +4690,7 @@ html, body {
           transform: translateX(-50%) translateY(-50%);
   border-radius: 100%;
   cursor: pointer;
-  background-color: #3a3a3a;
+  background-color: #343642;
   border: 1px solid #fbde50;
   box-sizing: border-box;
 }
@@ -4677,7 +4732,7 @@ html, body {
   height: 40px;
   border: 1px solid gray;
   cursor: pointer;
-  background-color: #3a3a3a;
+  background-color: #343642;
 }
 .csseditor[data-theme=dark] .cubic-bezier-editor .item-list .item:not(:first-child) {
   border-top: 0px;
@@ -4710,12 +4765,12 @@ html, body {
   vertical-align: middle;
 }
 .csseditor[data-theme=dark] .cubic-bezier-editor .predefined .left svg path, .csseditor[data-theme=dark] .cubic-bezier-editor .predefined .right svg path {
-  fill: #ececec;
+  fill: #cacaca;
 }
 .csseditor[data-theme=dark] .cubic-bezier-editor .predefined .predefined-text {
   vertical-align: middle;
   padding: 4px;
-  color: #ececec;
+  color: #cacaca;
 }
 .csseditor[data-theme=dark] .color-view-editor {
   display: grid;
@@ -4847,7 +4902,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .range-editor .range-editor-type .area {
   display: grid;
-  grid-template-columns: 1fr 40px 30px;
+  grid-template-columns: 1fr 50px 40px;
   grid-column-gap: 3px;
   font-size: 13px;
 }
@@ -4858,6 +4913,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .range-editor .range-editor-type .area input, .csseditor[data-theme=dark] .range-editor .range-editor-type .area select {
   width: 100%;
+  background-color: transparent;
 }
 .csseditor[data-theme=dark] .range-editor .range-editor-type .area input[type=range] {
   width: 95%;
@@ -4867,18 +4923,24 @@ html, body {
   border-right: 0px;
   border-top-right-radius: 0px;
   border-bottom-right-radius: 0px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  background-color: transparent;
+  border-bottom: 1px solid #4e4e4e;
+  text-align: right;
 }
 .csseditor[data-theme=dark] .range-editor .range-editor-type .area .select-editor select {
-  margin-left: -3px;
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
   border-left: 0px;
   text-align: center;
   box-sizing: border-box;
-  padding: 0px 4px;
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  background-color: transparent;
+  border-bottom: 1px solid #4e4e4e;
 }
 .csseditor[data-theme=dark] .range-editor .range-editor-type[data-type=calc] .area {
   height: 100%;
@@ -4949,6 +5011,77 @@ html, body {
 .csseditor[data-theme=dark] .number-range-editor .range-editor-type .area select {
   width: 100%;
 }
+.csseditor[data-theme=dark] .input-range-editor {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-column-gap: 4px;
+}
+.csseditor[data-theme=dark] .input-range-editor.has-label {
+  grid-template-columns: 60px 1fr;
+  grid-column-gap: 2px;
+}
+.csseditor[data-theme=dark] .input-range-editor.has-label.is-removable {
+  grid-template-columns: 60px 1fr 12px;
+}
+.csseditor[data-theme=dark] .input-range-editor.has-label label {
+  text-align: left;
+  vertical-align: middle;
+  padding: 2px 0px 2px 0px;
+  box-sizing: border-box;
+  font-size: 11px;
+}
+.csseditor[data-theme=dark] .input-range-editor.has-label.block {
+  display: block;
+}
+.csseditor[data-theme=dark] .input-range-editor.has-label.block label {
+  display: block;
+  color: rgba(0, 0, 0, 0.7);
+}
+.csseditor[data-theme=dark] .input-range-editor.is-removable {
+  grid-template-columns: 1fr 12px;
+}
+.csseditor[data-theme=dark] .input-range-editor.is-removable .remove {
+  display: inline-block;
+}
+.csseditor[data-theme=dark] .input-range-editor .type-button,
+.csseditor[data-theme=dark] .input-range-editor .remove {
+  display: none;
+}
+.csseditor[data-theme=dark] .input-range-editor .range-editor-type {
+  vertical-align: middle;
+}
+.csseditor[data-theme=dark] .input-range-editor .range-editor-type .area {
+  font-size: 13px;
+  display: grid;
+  grid-template-columns: 1fr 30px;
+  grid-column-gap: 3px;
+}
+.csseditor[data-theme=dark] .input-range-editor .range-editor-type .area span {
+  padding: 1px;
+  box-sizing: border-box;
+  vertical-align: middle;
+}
+.csseditor[data-theme=dark] .input-range-editor .range-editor-type .area input, .csseditor[data-theme=dark] .input-range-editor .range-editor-type .area select {
+  width: 100%;
+}
+.csseditor[data-theme=dark] .input-range-editor .range-editor-type .area input[type=number] {
+  padding: 2px 2px;
+  border-right: 0px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+.csseditor[data-theme=dark] .input-range-editor .range-editor-type .area .select-editor select {
+  margin-left: -3px;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border-left: 0px;
+  text-align: center;
+  box-sizing: border-box;
+  padding: 0px 4px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+}
 .csseditor[data-theme=dark] .text-editor {
   display: grid;
   grid-template-columns: 1fr;
@@ -4965,7 +5098,7 @@ html, body {
   box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .text-editor input[type=text] {
-  border: 1px solid #292929;
+  border: 1px solid #1b1b1b;
 }
 .csseditor[data-theme=dark] .select-editor {
   display: grid;
@@ -5015,7 +5148,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .css-property-editor .css-property-item > .title {
   grid-template-columns: 1fr 30px;
-  background-color: #3a3a3a;
+  background-color: #343642;
   color: #fbde50;
   border-radius: 3px;
   padding: 3px 0px;
@@ -5066,26 +5199,14 @@ html, body {
 }
 .csseditor[data-theme=dark] .background-image-editor .fill-list .fill-item {
   display: grid;
-  grid-template-columns: 30px 1fr;
+  grid-template-columns: 40px 1fr;
   grid-column-gap: 5px;
   text-align: center;
   box-sizing: border-box;
-  padding: 4px;
-  background-color: #292929;
-  border: 1px solid #676767;
-  border-top: 0px;
-}
-.csseditor[data-theme=dark] .background-image-editor .fill-list .fill-item:first-child {
-  border-top: 1px solid #676767;
-  border-top-left-radius: 3px;
-  border-top-right-radius: 3px;
-}
-.csseditor[data-theme=dark] .background-image-editor .fill-list .fill-item:last-child {
-  border-bottom-left-radius: 3px;
-  border-bottom-right-radius: 3px;
+  padding: 6px;
 }
 .csseditor[data-theme=dark] .background-image-editor .fill-list .fill-item.selected {
-  background-color: rgba(41, 41, 41, 0.5);
+  background-color: rgba(27, 27, 27, 0.5);
 }
 .csseditor[data-theme=dark] .background-image-editor .fill-list .fill-item .gradient-info {
   display: grid;
@@ -5107,7 +5228,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .background-image-editor .fill-list .fill-item .preview .mini-view {
   display: block;
-  height: 20px;
+  height: 24px;
   box-sizing: border-box;
   pointer-events: none;
   border-radius: 3px;
@@ -5131,6 +5252,7 @@ html, body {
   vertical-align: middle;
   text-align: left;
   box-sizing: border-box;
+  padding: 4px 0px;
 }
 .csseditor[data-theme=dark] .background-image-editor .fill-list .fill-item .fill-title svg {
   width: 16px;
@@ -5145,6 +5267,7 @@ html, body {
   text-align: left;
   height: 100%;
   box-sizing: border-box;
+  padding-top: 4px;
 }
 .csseditor[data-theme=dark] .background-image-editor .fill-list .fill-item .colorsteps .step {
   border: 1px solid white;
@@ -5409,7 +5532,7 @@ html, body {
   margin-top: 5px;
 }
 .csseditor[data-theme=dark] .box-shadow-editor .shadow-item.desc {
-  color: #ececec;
+  color: #cacaca;
 }
 .csseditor[data-theme=dark] .box-shadow-editor .shadow-item.desc .color {
   visibility: hidden;
@@ -5417,7 +5540,7 @@ html, body {
 .csseditor[data-theme=dark] .box-shadow-editor .shadow-item .color {
   cursor: pointer;
   height: 20px;
-  border: 1px solid #292929;
+  border: 1px solid #1b1b1b;
   border-radius: 100%;
   position: relative;
   background-color: transparent;
@@ -5439,7 +5562,7 @@ html, body {
   height: 16px;
 }
 .csseditor[data-theme=dark] .box-shadow-editor .shadow-item .inset svg path {
-  fill: #3a3a3a;
+  fill: #343642;
 }
 .csseditor[data-theme=dark] .box-shadow-editor .shadow-item .inset[data-value=true] svg path {
   fill: #fbde50;
@@ -5484,7 +5607,7 @@ html, body {
   margin-top: 5px;
 }
 .csseditor[data-theme=dark] .text-shadow-editor .shadow-item.desc {
-  color: #ececec;
+  color: #cacaca;
 }
 .csseditor[data-theme=dark] .text-shadow-editor .shadow-item.desc .color {
   visibility: hidden;
@@ -5492,7 +5615,7 @@ html, body {
 .csseditor[data-theme=dark] .text-shadow-editor .shadow-item .color {
   cursor: pointer;
   height: 20px;
-  border: 1px solid #292929;
+  border: 1px solid #1b1b1b;
   border-radius: 100%;
   position: relative;
   background-color: transparent;
@@ -5681,7 +5804,7 @@ html, body {
   top: 4px;
   height: 14px;
   border-radius: 10px;
-  border: 1px solid #292929;
+  border: 1px solid #1b1b1b;
   box-sizing: border-box;
   background-color: transparent;
   background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
@@ -5966,7 +6089,7 @@ html, body {
   text-align: right;
 }
 .csseditor[data-theme=dark] .svg-filter-editor {
-  color: #ececec;
+  color: #cacaca;
 }
 .csseditor[data-theme=dark] .svg-filter-editor .label {
   height: 20px;
@@ -6168,7 +6291,7 @@ html, body {
   width: 100%;
 }
 .csseditor[data-theme=dark] .list-view-editor .list-view-item svg path, .csseditor[data-theme=dark] .list-view-editor .list-view-item svg circle, .csseditor[data-theme=dark] .list-view-editor .list-view-item svg rect {
-  fill: #ececec;
+  fill: #cacaca;
 }
 .csseditor[data-theme=dark] .image-select-editor {
   height: 150px;
@@ -6209,7 +6332,7 @@ html, body {
   text-align: center;
   vertical-align: middle;
   padding: 4px 2px;
-  border: 1px solid #292929;
+  border: 1px solid #1b1b1b;
   border-right: 0px;
   white-space: pre-wrap;
   word-break: break-all;
@@ -6222,7 +6345,7 @@ html, body {
   border-bottom-left-radius: 3px;
 }
 .csseditor[data-theme=dark] .select-icon-editor .items > .select-icon-item:last-child {
-  border-right: 1px solid #292929;
+  border-right: 1px solid #1b1b1b;
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px;
 }
@@ -6334,11 +6457,11 @@ html, body {
   display: none;
   box-sizing: border-box;
   z-index: 1000;
-  background-color: #3a3a3a;
-  border: 1px solid #292929;
-  box-shadow: 0 0 1px 0px #292929;
+  background-color: #343642;
+  border: 1px solid #1b1b1b;
+  box-shadow: 0 0 1px 0px #1b1b1b;
   padding: 14px 10px;
-  color: #ececec;
+  color: #cacaca;
 }
 .csseditor[data-theme=dark] .popup.compact {
   padding: 0px;
@@ -6394,10 +6517,10 @@ html, body {
   outline: none;
   box-sizing: border-box;
   width: 50px;
-  background-color: rgba(41, 41, 41, 0.5);
+  background-color: rgba(27, 27, 27, 0.5);
 }
 .csseditor[data-theme=dark] .popup.background-property-popup .size-list[data-value=contain] button[value=contain], .csseditor[data-theme=dark] .popup.background-property-popup .size-list[data-value=cover] button[value=cover], .csseditor[data-theme=dark] .popup.background-property-popup .size-list[data-value=auto] button[value=auto] {
-  background-color: #292929;
+  background-color: #1b1b1b;
   font-weight: bold;
 }
 .csseditor[data-theme=dark] .popup.background-property-popup .popup-item.grid-2 {
@@ -6411,7 +6534,7 @@ html, body {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
-  border: 1px solid #292929;
+  border: 1px solid #1b1b1b;
   background-color: white;
   outline: none;
   cursor: pointer;
@@ -6453,7 +6576,7 @@ html, body {
   background-repeat: round;
 }
 .csseditor[data-theme=dark] .popup.background-property-popup .repeat-list[data-value=repeat] button[value=repeat], .csseditor[data-theme=dark] .popup.background-property-popup .repeat-list[data-value=no-repeat] button[value=no-repeat], .csseditor[data-theme=dark] .popup.background-property-popup .repeat-list[data-value=repeat-x] button[value=repeat-x], .csseditor[data-theme=dark] .popup.background-property-popup .repeat-list[data-value=repeat-y] button[value=repeat-y], .csseditor[data-theme=dark] .popup.background-property-popup .repeat-list[data-value=space] button[value=space], .csseditor[data-theme=dark] .popup.background-property-popup .repeat-list[data-value=round] button[value=round] {
-  background-color: #292929;
+  background-color: #1b1b1b;
   box-shadow: 0 0 1px 1px black;
 }
 .csseditor[data-theme=dark] .popup.background-property-popup .blend-list {
@@ -6482,18 +6605,18 @@ html, body {
   outline: none;
   box-sizing: border-box;
   width: 50px;
-  background-color: rgba(41, 41, 41, 0.5);
+  background-color: rgba(27, 27, 27, 0.5);
 }
 .csseditor[data-theme=dark] .popup.display-property-popup .flex-direction[data-value=row] button[value=row], .csseditor[data-theme=dark] .popup.display-property-popup .flex-direction[data-value=row-reverse] button[value=row-reverse], .csseditor[data-theme=dark] .popup.display-property-popup .flex-direction[data-value=column] button[value=column], .csseditor[data-theme=dark] .popup.display-property-popup .flex-direction[data-value=column-reverse] button[value=column-reverse] {
-  background-color: #292929;
+  background-color: #1b1b1b;
   font-weight: bold;
 }
 .csseditor[data-theme=dark] .popup.display-property-popup .flex-wrap[data-value=nowrap] button[value=nowrap], .csseditor[data-theme=dark] .popup.display-property-popup .flex-wrap[data-value=wrap] button[value=wrap], .csseditor[data-theme=dark] .popup.display-property-popup .flex-wrap[data-value=wrap-reverse] button[value=wrap-reverse] {
-  background-color: #292929;
+  background-color: #1b1b1b;
   font-weight: bold;
 }
 .csseditor[data-theme=dark] .popup.display-property-popup .justify-content[data-value=flex-start] button[value=flex-start], .csseditor[data-theme=dark] .popup.display-property-popup .justify-content[data-value=flex-end] button[value=flex-end], .csseditor[data-theme=dark] .popup.display-property-popup .justify-content[data-value=center] button[value=center], .csseditor[data-theme=dark] .popup.display-property-popup .justify-content[data-value=space-between] button[value=space-between], .csseditor[data-theme=dark] .popup.display-property-popup .justify-content[data-value=space-around] button[value=space-around] {
-  background-color: #292929;
+  background-color: #1b1b1b;
   font-weight: bold;
 }
 .csseditor[data-theme=dark] .popup .box-shadow-property-popup {
@@ -6506,10 +6629,10 @@ html, body {
 .csseditor[data-theme=dark] .popup .box-shadow-property-popup .codemirror-colorpicker {
   box-shadow: none;
   border-radius: 0px;
-  background-color: #3a3a3a;
+  background-color: #343642;
 }
 .csseditor[data-theme=dark] .popup .box-shadow-property-popup .codemirror-colorpicker input {
-  color: #ececec !important;
+  color: #cacaca !important;
   text-transform: uppercase;
   border: 0px !important;
 }
@@ -6517,10 +6640,10 @@ html, body {
   margin-top: 0px;
 }
 .csseditor[data-theme=dark] .popup .box-shadow-property-popup .codemirror-colorpicker .title {
-  color: #ececec !important;
+  color: #cacaca !important;
 }
 .csseditor[data-theme=dark] .popup .box-shadow-property-popup .codemirror-colorpicker .colorsets {
-  border-top: 0px solid #292929 !important;
+  border-top: 0px solid #1b1b1b !important;
 }
 .csseditor[data-theme=dark] .popup .box-shadow-property-popup .box .type {
   display: grid;
@@ -6551,11 +6674,11 @@ html, body {
 }
 .csseditor[data-theme=dark] .popup .box-shadow-property-popup .box .drag-board {
   box-sizing: border-box;
-  border: 1px solid #292929;
+  border: 1px solid #1b1b1b;
   margin-bottom: 2px;
   height: 204px;
   position: relative;
-  background-image: linear-gradient(to right, #292929, #292929), linear-gradient(to right, #292929, #292929);
+  background-image: linear-gradient(to right, #1b1b1b, #1b1b1b), linear-gradient(to right, #1b1b1b, #1b1b1b);
   background-size: 100% 1px, 1px 100%;
   background-position: 0px center, center 0px;
   background-repeat: no-repeat;
@@ -6628,10 +6751,10 @@ html, body {
 .csseditor[data-theme=dark] .popup .text-shadow-property-popup .codemirror-colorpicker {
   box-shadow: none;
   border-radius: 0px;
-  background-color: #3a3a3a;
+  background-color: #343642;
 }
 .csseditor[data-theme=dark] .popup .text-shadow-property-popup .codemirror-colorpicker input {
-  color: #ececec !important;
+  color: #cacaca !important;
   text-transform: uppercase;
   border: 0px !important;
 }
@@ -6639,21 +6762,21 @@ html, body {
   margin-top: 0px;
 }
 .csseditor[data-theme=dark] .popup .text-shadow-property-popup .codemirror-colorpicker .title {
-  color: #ececec !important;
+  color: #cacaca !important;
 }
 .csseditor[data-theme=dark] .popup .text-shadow-property-popup .codemirror-colorpicker .colorsets {
-  border-top: 0px solid #292929 !important;
+  border-top: 0px solid #1b1b1b !important;
 }
 .csseditor[data-theme=dark] .popup .text-shadow-property-popup .box label {
   font-size: 11px;
 }
 .csseditor[data-theme=dark] .popup .text-shadow-property-popup .box .drag-board {
   box-sizing: border-box;
-  border: 1px solid #292929;
+  border: 1px solid #1b1b1b;
   height: 202px;
   position: relative;
   margin-bottom: 10px;
-  background-image: linear-gradient(to right, #292929, #292929), linear-gradient(to right, #292929, #292929);
+  background-image: linear-gradient(to right, #1b1b1b, #1b1b1b), linear-gradient(to right, #1b1b1b, #1b1b1b);
   background-size: 100% 1px, 1px 100%;
   background-position: 0px center, center 0px;
   background-repeat: no-repeat;
@@ -6806,7 +6929,7 @@ html, body {
   height: 220px;
   position: relative;
   box-sizing: border-box;
-  box-shadow: 0 0 0 1px #292929;
+  box-shadow: 0 0 0 1px #1b1b1b;
 }
 .csseditor[data-theme=dark] .popup .clippath-popup .box > .clip-path-editor .drag-area .pointer-list {
   top: 0px;
@@ -7211,18 +7334,18 @@ html, body {
   box-shadow: none;
   border-radius: 0px;
   border: 0px;
-  background-color: #3a3a3a;
+  background-color: #343642;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=color] .codemirror-colorpicker input {
-  color: #ececec !important;
+  color: #cacaca !important;
   text-transform: uppercase;
   border: 0px !important;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=color] .codemirror-colorpicker .title {
-  color: #ececec !important;
+  color: #cacaca !important;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=color] .codemirror-colorpicker .colorsets {
-  border-top: 0px solid #292929 !important;
+  border-top: 0px solid #1b1b1b !important;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=image] .image-preview {
   width: 100%;
@@ -7317,18 +7440,18 @@ html, body {
   box-shadow: none;
   border-radius: 0px;
   border: 0px;
-  background-color: #3a3a3a;
+  background-color: #343642;
 }
 .csseditor[data-theme=dark] .popup .color-picker-popup .codemirror-colorpicker input {
-  color: #ececec !important;
+  color: #cacaca !important;
   text-transform: uppercase;
   border: 0px !important;
 }
 .csseditor[data-theme=dark] .popup .color-picker-popup .codemirror-colorpicker .title {
-  color: #ececec !important;
+  color: #cacaca !important;
 }
 .csseditor[data-theme=dark] .popup .color-picker-popup .codemirror-colorpicker .colorsets {
-  border-top: 1px solid #292929 !important;
+  border-top: 1px solid #1b1b1b !important;
 }
 .csseditor[data-theme=dark] .popup .color-picker-popup .assets {
   padding: 0px 10px;
@@ -7624,21 +7747,21 @@ html, body {
   box-shadow: none;
   border-radius: 0px;
   border: 0px;
-  background-color: #3a3a3a;
+  background-color: #343642;
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .codemirror-colorpicker .color-panel {
   margin-top: 0px;
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .codemirror-colorpicker input {
-  color: #ececec !important;
+  color: #cacaca !important;
   text-transform: uppercase;
   border: 0px !important;
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .codemirror-colorpicker .title {
-  color: #ececec !important;
+  color: #cacaca !important;
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .codemirror-colorpicker .colorsets {
-  border-top: 0px solid #292929 !important;
+  border-top: 0px solid #1b1b1b !important;
 }
 .csseditor[data-theme=dark] .window-background {
   position: fixed;
@@ -7660,11 +7783,11 @@ html, body {
           transform: translate(-50%, -50%);
   box-sizing: border-box;
   z-index: 1000;
-  background-color: #3a3a3a;
-  border: 1px solid #292929;
-  box-shadow: 0 0 1px 0px #292929;
+  background-color: #343642;
+  border: 1px solid #1b1b1b;
+  box-shadow: 0 0 1px 0px #1b1b1b;
   padding: 14px;
-  color: #ececec;
+  color: #cacaca;
 }
 .csseditor[data-theme=dark] .window-background .window .window-title {
   position: absolute;
@@ -7865,15 +7988,15 @@ html, body {
 }
 .csseditor[data-theme=dark] .timeline-value-area {
   position: absolute;
-  width: 280px;
+  width: 260px;
   right: 0px;
   top: 0px;
   bottom: 0px;
-  background-color: #3a3a3a;
+  background-color: #343642;
   font-size: 12px;
   box-sizing: border-box;
-  border-left: 1px solid #292929;
-  border-top: 1px solid #292929;
+  border-left: 1px solid #1b1b1b;
+  border-top: 1px solid #1b1b1b;
 }
 .csseditor[data-theme=dark] .timeline-value-area .timeline-value-editor .tab-content {
   padding: 0px 20px;
@@ -7885,7 +8008,7 @@ html, body {
   display: none;
 }
 .csseditor[data-theme=dark] .timeline-value-area .timeline-value-editor .tab-content .title {
-  color: #ececec;
+  color: #cacaca;
 }
 .csseditor[data-theme=dark] .timeline-value-area .timeline-value-editor .value {
   padding: 5px;
@@ -7908,10 +8031,10 @@ html, body {
 .csseditor[data-theme=dark] .timeline-area {
   position: absolute;
   left: 0px;
-  right: 280px;
+  right: 260px;
   top: 0px;
   bottom: 0px;
-  background-color: #3a3a3a;
+  background-color: #343642;
   font-size: 12px;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header {
@@ -7921,8 +8044,8 @@ html, body {
   height: 70px;
   right: 0px;
   box-sizing: border-box;
-  border-bottom: 1px solid #292929;
-  border-top: 1px solid #292929;
+  border-bottom: 1px solid #1b1b1b;
+  border-top: 1px solid #1b1b1b;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar {
   position: absolute;
@@ -7930,7 +8053,10 @@ html, body {
   top: 0px;
   bottom: 0px;
   width: 300px;
-  border-right: 1px solid #292929;
+  border-right: 1px solid #1b1b1b;
+}
+.csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar {
+  padding: 3px 10px;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .row {
   display: grid;
@@ -7964,7 +8090,7 @@ html, body {
   color: black;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .play-buttons button {
-  border: 1px solid #292929;
+  border: 1px solid #1b1b1b;
   min-width: 50px;
   padding: 2px 10px;
   height: auto;
@@ -7989,7 +8115,7 @@ html, body {
   color: black;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .direction-buttons button {
-  border: 1px solid #292929;
+  border: 1px solid #1b1b1b;
   min-width: 50px;
   padding: 2px 10px;
   height: auto;
@@ -8026,38 +8152,34 @@ html, body {
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-duration {
   position: absolute;
-  top: 22px;
+  top: 5px;
   left: 0px;
   right: 0px;
-  height: 25px;
+  height: 15px;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-duration .duration-handle-left {
   position: absolute;
   left: 15px;
   top: 0px;
   width: 5px;
-  height: 10px;
-  background-color: #474747;
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
+  height: 100%;
+  background-color: #3f4250;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-duration .duration-handle-right {
   position: absolute;
   right: 15px;
   top: 0px;
   width: 5px;
-  height: 10px;
-  background-color: #474747;
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
+  height: 100%;
+  background-color: #3f4250;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-duration .duration-slider {
   position: absolute;
-  left: 20px;
+  left: 10px;
   top: 0px;
-  right: 20px;
-  height: 10px;
-  background-color: #474747;
+  right: 10px;
+  height: 100%;
+  background-color: #3f4250;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-duration .duration-slider .start {
   position: absolute;
@@ -8065,10 +8187,8 @@ html, body {
   top: 0px;
   -webkit-transform: translateX(-100%);
           transform: translateX(-100%);
-  height: 10px;
+  height: 100%;
   width: 5px;
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
   background-color: #fbde50;
   cursor: ew-resize;
 }
@@ -8076,10 +8196,8 @@ html, body {
   position: absolute;
   left: 100%;
   top: 0px;
-  height: 10px;
+  height: 100%;
   width: 5px;
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
   background-color: #fbde50;
   cursor: ew-resize;
 }
@@ -8089,7 +8207,7 @@ html, body {
   width: 100%;
   top: 0px;
   height: 100%;
-  background-color: rgba(41, 41, 41, 0.7);
+  background-color: #3f83bd;
   cursor: ew-resize;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view canvas {
@@ -8113,7 +8231,7 @@ html, body {
   bottom: 0px;
   width: 300px;
   overflow: auto;
-  border-right: 1px solid #292929;
+  border-right: 1px solid #1b1b1b;
   box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object.collapsed .timeline-object-row.layer .icon svg {
@@ -8129,7 +8247,9 @@ html, body {
   grid-template-columns: 20px 1fr 1.5fr;
   grid-column-gap: 5px;
   box-sizing: border-box;
-  border-bottom: 1px solid #5c5c5c;
+}
+.csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row[data-selected=true] {
+  background-color: #353535;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row .icon {
   padding: 5px;
@@ -8144,13 +8264,13 @@ html, body {
   transition: transform 0.2s ease, -webkit-transform 0.2s ease;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row .icon svg path {
-  fill: #ececec;
+  fill: #cacaca;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row .title {
   vertical-align: middle;
   padding: 5px 0px;
   cursor: pointer;
-  color: #ececec;
+  color: #cacaca;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row .tools {
   padding: 5px 0px;
@@ -8166,14 +8286,13 @@ html, body {
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row.layer-property .tools button.add {
   width: 10px;
   height: 10px;
-  border-radius: 50%;
   display: inline-block;
-  box-shadow: 0 0 0 2px rgba(16, 16, 16, 0.3);
-  background-color: rgba(169, 169, 169, 0.7);
+  box-shadow: 0 0 0 2px rgba(2, 2, 2, 0.3);
+  background-color: rgba(155, 155, 155, 0.7);
   vertical-align: middle;
   cursor: pointer;
-  -webkit-transform: translateX(-5px) translateY(2px);
-          transform: translateX(-5px) translateY(2px);
+  -webkit-transform: translateX(-5px) translateY(2px) rotate(45deg);
+          transform: translateX(-5px) translateY(2px) rotate(45deg);
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row.layer-property .tools button.add:hover {
   box-shadow: 0 0 0 2px rgba(251, 222, 80, 0.5);
@@ -8203,13 +8322,26 @@ html, body {
   height: 100%;
   pointer-events: none;
 }
+.csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-container {
+  position: relative;
+  min-height: 100%;
+}
+.csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-container .drag-area {
+  position: absolute;
+  border: 1px solid #7db4db;
+  background-color: rgba(53, 133, 189, 0.7);
+  left: -10000px;
+  right: -10000px;
+  width: 0px;
+  height: 0px;
+}
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe.collapsed .timeline-keyframe-row.layer-property {
   display: none;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row {
   height: 30px;
   box-sizing: border-box;
-  border-bottom: 1px solid #292929;
+  border-bottom: 1px solid #1b1b1b;
   position: relative;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe {
@@ -8218,7 +8350,7 @@ html, body {
   -webkit-transform: translateY(-50%);
           transform: translateY(-50%);
   height: 10px;
-  background-color: rgba(41, 41, 41, 0.5);
+  background-color: rgba(27, 27, 27, 0.5);
   display: inline-block;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe .offset {
@@ -8231,25 +8363,27 @@ html, body {
   -webkit-transform: translateY(-50%) translateX(-50%) rotate(45deg);
           transform: translateY(-50%) translateX(-50%) rotate(45deg);
   cursor: ew-resize;
-  box-shadow: 0 0 0 1px #292929;
+  box-shadow: 0 0 0 1px #343642;
 }
-.csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe .offset.selected {
+.csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe .offset[data-selected=true] {
   background-color: white;
-  box-shadow: 0 0 0 1px #fbde50;
+  box-shadow: 0 0 0 1px #3f83bd;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe-back {
   position: absolute;
   height: 100%;
   display: inline-block;
+  box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe-back .offset-line {
   position: absolute;
   top: 50%;
   display: inline-block;
-  height: 2px;
-  background-color: #fbde50;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
+  height: 20px;
+  background-color: #3f83bd;
+  -webkit-transform: translateY(-52%);
+          transform: translateY(-52%);
+  box-sizing: border-box;
 }
 .csseditor[data-theme=light] input[type=text],
 .csseditor[data-theme=light] input[type=number],
@@ -8655,54 +8789,63 @@ html, body {
   pointer-events: none;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"] {
+  background-color: #3e8ec6;
   color: #3e8ec6;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="1"] .tab-content[data-value="1"] {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"] {
+  background-color: #3e8ec6;
   color: #3e8ec6;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="2"] .tab-content[data-value="2"] {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"] {
+  background-color: #3e8ec6;
   color: #3e8ec6;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="3"] .tab-content[data-value="3"] {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"] {
+  background-color: #3e8ec6;
   color: #3e8ec6;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="4"] .tab-content[data-value="4"] {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"] {
+  background-color: #3e8ec6;
   color: #3e8ec6;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="5"] .tab-content[data-value="5"] {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"] {
+  background-color: #3e8ec6;
   color: #3e8ec6;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="6"] .tab-content[data-value="6"] {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"] {
+  background-color: #3e8ec6;
   color: #3e8ec6;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="7"] .tab-content[data-value="7"] {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"] {
+  background-color: #3e8ec6;
   color: #3e8ec6;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="8"] .tab-content[data-value="8"] {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"] {
+  background-color: #3e8ec6;
   color: #3e8ec6;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="9"] .tab-content[data-value="9"] {
@@ -9796,8 +9939,8 @@ html, body {
   pointer-events: none;
 }
 .csseditor[data-theme=light] .property {
-  padding: 0px 0px;
-  border-bottom: 1px solid #e7e7e7;
+  padding: 6px 0px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   background-color: white;
   color: #666666;
   display: none;
@@ -9805,15 +9948,16 @@ html, body {
 .csseditor[data-theme=light] .property .add-timeline-property {
   display: inline-block;
   margin-right: 5px;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
+  width: 8px;
+  height: 8px;
   box-shadow: 0 0 0 2px rgba(206, 206, 206, 0.3);
   background-color: rgba(255, 255, 255, 0.7);
   vertical-align: middle;
   line-height: 10px;
-  margin-top: 3px;
+  margin-top: 5px;
   cursor: pointer;
+  -webkit-transform: rotate(45deg);
+          transform: rotate(45deg);
 }
 .csseditor[data-theme=light] .property .add-timeline-property:hover {
   box-shadow: 0 0 0 2px rgba(62, 142, 198, 0.5);
@@ -9839,6 +9983,39 @@ html, body {
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools {
   text-align: left;
+  display: flex;
+}
+.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools > * {
+  flex: 1 1 auto;
+}
+.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control {
+  text-align: center;
+}
+.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control button {
+  display: inline-block;
+  vertical-align: middle;
+  width: 24px;
+  height: 24px;
+}
+.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control button.play, .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control button.pause {
+  display: none;
+  width: 30px;
+  height: 30px;
+}
+.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control button.play svg path {
+  fill: #3e8ec6;
+}
+.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control button.pause svg path {
+  fill: #6677d8;
+}
+.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control[data-status=play] .pause {
+  display: inline-block;
+}
+.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control[data-status=pause] .play {
+  display: inline-block;
+}
+.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .keyframe-time-control {
+  flex: none;
 }
 .csseditor[data-theme=light] .property.full .property-body {
   flex: 1 1 auto;
@@ -9849,8 +10026,20 @@ html, body {
   display: block;
   padding: 0px 11px 0px 6px;
 }
+.csseditor[data-theme=light] .property.show.size-property > .property-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 3px;
+}
+.csseditor[data-theme=light] .property.show.size-property > .property-body .grid-item {
+  display: grid;
+  grid-template-columns: 30px 1fr;
+}
+.csseditor[data-theme=light] .property.show.size-property > .property-body .grid-item > label {
+  padding: 2px 0px;
+}
 .csseditor[data-theme=light] .property > .property-title {
-  padding: 4px 11px 4px 6px;
+  padding: 0px 11px 4px 6px;
   height: 30px;
   line-height: 2;
   cursor: pointer;
@@ -9858,7 +10047,7 @@ html, body {
   font-size: 12px;
   font-weight: 400;
   display: grid;
-  grid-template-columns: 0.8fr 1fr;
+  grid-template-columns: 0.7fr 1fr;
   cursor: pointer;
   border-bottom: 0px;
 }
@@ -11755,7 +11944,7 @@ html, body {
 }
 .csseditor[data-theme=light] .range-editor .range-editor-type .area {
   display: grid;
-  grid-template-columns: 1fr 40px 30px;
+  grid-template-columns: 1fr 50px 40px;
   grid-column-gap: 3px;
   font-size: 13px;
 }
@@ -11766,6 +11955,7 @@ html, body {
 }
 .csseditor[data-theme=light] .range-editor .range-editor-type .area input, .csseditor[data-theme=light] .range-editor .range-editor-type .area select {
   width: 100%;
+  background-color: transparent;
 }
 .csseditor[data-theme=light] .range-editor .range-editor-type .area input[type=range] {
   width: 95%;
@@ -11775,18 +11965,24 @@ html, body {
   border-right: 0px;
   border-top-right-radius: 0px;
   border-bottom-right-radius: 0px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  background-color: transparent;
+  border-bottom: 1px solid white;
+  text-align: right;
 }
 .csseditor[data-theme=light] .range-editor .range-editor-type .area .select-editor select {
-  margin-left: -3px;
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
   border-left: 0px;
   text-align: center;
   box-sizing: border-box;
-  padding: 0px 4px;
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  background-color: transparent;
+  border-bottom: 1px solid white;
 }
 .csseditor[data-theme=light] .range-editor .range-editor-type[data-type=calc] .area {
   height: 100%;
@@ -11856,6 +12052,77 @@ html, body {
 }
 .csseditor[data-theme=light] .number-range-editor .range-editor-type .area select {
   width: 100%;
+}
+.csseditor[data-theme=light] .input-range-editor {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-column-gap: 4px;
+}
+.csseditor[data-theme=light] .input-range-editor.has-label {
+  grid-template-columns: 60px 1fr;
+  grid-column-gap: 2px;
+}
+.csseditor[data-theme=light] .input-range-editor.has-label.is-removable {
+  grid-template-columns: 60px 1fr 12px;
+}
+.csseditor[data-theme=light] .input-range-editor.has-label label {
+  text-align: left;
+  vertical-align: middle;
+  padding: 2px 0px 2px 0px;
+  box-sizing: border-box;
+  font-size: 11px;
+}
+.csseditor[data-theme=light] .input-range-editor.has-label.block {
+  display: block;
+}
+.csseditor[data-theme=light] .input-range-editor.has-label.block label {
+  display: block;
+  color: rgba(0, 0, 0, 0.7);
+}
+.csseditor[data-theme=light] .input-range-editor.is-removable {
+  grid-template-columns: 1fr 12px;
+}
+.csseditor[data-theme=light] .input-range-editor.is-removable .remove {
+  display: inline-block;
+}
+.csseditor[data-theme=light] .input-range-editor .type-button,
+.csseditor[data-theme=light] .input-range-editor .remove {
+  display: none;
+}
+.csseditor[data-theme=light] .input-range-editor .range-editor-type {
+  vertical-align: middle;
+}
+.csseditor[data-theme=light] .input-range-editor .range-editor-type .area {
+  font-size: 13px;
+  display: grid;
+  grid-template-columns: 1fr 30px;
+  grid-column-gap: 3px;
+}
+.csseditor[data-theme=light] .input-range-editor .range-editor-type .area span {
+  padding: 1px;
+  box-sizing: border-box;
+  vertical-align: middle;
+}
+.csseditor[data-theme=light] .input-range-editor .range-editor-type .area input, .csseditor[data-theme=light] .input-range-editor .range-editor-type .area select {
+  width: 100%;
+}
+.csseditor[data-theme=light] .input-range-editor .range-editor-type .area input[type=number] {
+  padding: 2px 2px;
+  border-right: 0px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+.csseditor[data-theme=light] .input-range-editor .range-editor-type .area .select-editor select {
+  margin-left: -3px;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border-left: 0px;
+  text-align: center;
+  box-sizing: border-box;
+  padding: 0px 4px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
 }
 .csseditor[data-theme=light] .text-editor {
   display: grid;
@@ -11974,23 +12241,11 @@ html, body {
 }
 .csseditor[data-theme=light] .background-image-editor .fill-list .fill-item {
   display: grid;
-  grid-template-columns: 30px 1fr;
+  grid-template-columns: 40px 1fr;
   grid-column-gap: 5px;
   text-align: center;
   box-sizing: border-box;
-  padding: 4px;
-  background-color: white;
-  border: 1px solid #e8e8e8;
-  border-top: 0px;
-}
-.csseditor[data-theme=light] .background-image-editor .fill-list .fill-item:first-child {
-  border-top: 1px solid #e8e8e8;
-  border-top-left-radius: 3px;
-  border-top-right-radius: 3px;
-}
-.csseditor[data-theme=light] .background-image-editor .fill-list .fill-item:last-child {
-  border-bottom-left-radius: 3px;
-  border-bottom-right-radius: 3px;
+  padding: 6px;
 }
 .csseditor[data-theme=light] .background-image-editor .fill-list .fill-item.selected {
   background-color: rgba(231, 231, 231, 0.5);
@@ -12015,7 +12270,7 @@ html, body {
 }
 .csseditor[data-theme=light] .background-image-editor .fill-list .fill-item .preview .mini-view {
   display: block;
-  height: 20px;
+  height: 24px;
   box-sizing: border-box;
   pointer-events: none;
   border-radius: 3px;
@@ -12039,6 +12294,7 @@ html, body {
   vertical-align: middle;
   text-align: left;
   box-sizing: border-box;
+  padding: 4px 0px;
 }
 .csseditor[data-theme=light] .background-image-editor .fill-list .fill-item .fill-title svg {
   width: 16px;
@@ -12053,6 +12309,7 @@ html, body {
   text-align: left;
   height: 100%;
   box-sizing: border-box;
+  padding-top: 4px;
 }
 .csseditor[data-theme=light] .background-image-editor .fill-list .fill-item .colorsteps .step {
   border: 1px solid white;
@@ -14840,6 +15097,9 @@ html, body {
   width: 300px;
   border-right: 1px solid #e7e7e7;
 }
+.csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar {
+  padding: 3px 10px;
+}
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .row {
   display: grid;
   grid-template-columns: 50px 1fr;
@@ -14934,37 +15194,33 @@ html, body {
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-duration {
   position: absolute;
-  top: 22px;
+  top: 5px;
   left: 0px;
   right: 0px;
-  height: 25px;
+  height: 15px;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-duration .duration-handle-left {
   position: absolute;
   left: 15px;
   top: 0px;
   width: 5px;
-  height: 10px;
+  height: 100%;
   background-color: white;
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-duration .duration-handle-right {
   position: absolute;
   right: 15px;
   top: 0px;
   width: 5px;
-  height: 10px;
+  height: 100%;
   background-color: white;
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-duration .duration-slider {
   position: absolute;
-  left: 20px;
+  left: 10px;
   top: 0px;
-  right: 20px;
-  height: 10px;
+  right: 10px;
+  height: 100%;
   background-color: white;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-duration .duration-slider .start {
@@ -14973,10 +15229,8 @@ html, body {
   top: 0px;
   -webkit-transform: translateX(-100%);
           transform: translateX(-100%);
-  height: 10px;
+  height: 100%;
   width: 5px;
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
   background-color: #3e8ec6;
   cursor: ew-resize;
 }
@@ -14984,10 +15238,8 @@ html, body {
   position: absolute;
   left: 100%;
   top: 0px;
-  height: 10px;
+  height: 100%;
   width: 5px;
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
   background-color: #3e8ec6;
   cursor: ew-resize;
 }
@@ -14997,7 +15249,7 @@ html, body {
   width: 100%;
   top: 0px;
   height: 100%;
-  background-color: rgba(231, 231, 231, 0.7);
+  background-color: #3585bd;
   cursor: ew-resize;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view canvas {
@@ -15037,7 +15289,9 @@ html, body {
   grid-template-columns: 20px 1fr 1.5fr;
   grid-column-gap: 5px;
   box-sizing: border-box;
-  border-bottom: 1px solid white;
+}
+.csseditor[data-theme=light] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row[data-selected=true] {
+  background-color: #353535;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row .icon {
   padding: 5px;
@@ -15074,14 +15328,13 @@ html, body {
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row.layer-property .tools button.add {
   width: 10px;
   height: 10px;
-  border-radius: 50%;
   display: inline-block;
   box-shadow: 0 0 0 2px rgba(206, 206, 206, 0.3);
   background-color: rgba(255, 255, 255, 0.7);
   vertical-align: middle;
   cursor: pointer;
-  -webkit-transform: translateX(-5px) translateY(2px);
-          transform: translateX(-5px) translateY(2px);
+  -webkit-transform: translateX(-5px) translateY(2px) rotate(45deg);
+          transform: translateX(-5px) translateY(2px) rotate(45deg);
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row.layer-property .tools button.add:hover {
   box-shadow: 0 0 0 2px rgba(62, 142, 198, 0.5);
@@ -15111,6 +15364,19 @@ html, body {
   height: 100%;
   pointer-events: none;
 }
+.csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-container {
+  position: relative;
+  min-height: 100%;
+}
+.csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-container .drag-area {
+  position: absolute;
+  border: 1px solid #7db4db;
+  background-color: rgba(53, 133, 189, 0.7);
+  left: -10000px;
+  right: -10000px;
+  width: 0px;
+  height: 0px;
+}
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe.collapsed .timeline-keyframe-row.layer-property {
   display: none;
 }
@@ -15139,23 +15405,25 @@ html, body {
   -webkit-transform: translateY(-50%) translateX(-50%) rotate(45deg);
           transform: translateY(-50%) translateX(-50%) rotate(45deg);
   cursor: ew-resize;
-  box-shadow: 0 0 0 1px #e7e7e7;
+  box-shadow: 0 0 0 1px white;
 }
-.csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe .offset.selected {
+.csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe .offset[data-selected=true] {
   background-color: white;
-  box-shadow: 0 0 0 1px #3e8ec6;
+  box-shadow: 0 0 0 1px #4987f7;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe-back {
   position: absolute;
   height: 100%;
   display: inline-block;
+  box-sizing: border-box;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe-back .offset-line {
   position: absolute;
   top: 50%;
   display: inline-block;
-  height: 2px;
-  background-color: #3e8ec6;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
+  height: 20px;
+  background-color: #4987f7;
+  -webkit-transform: translateY(-52%);
+          transform: translateY(-52%);
+  box-sizing: border-box;
 }

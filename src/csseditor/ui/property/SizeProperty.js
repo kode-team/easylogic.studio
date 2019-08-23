@@ -24,7 +24,7 @@ export default class SizeProperty extends BaseProperty {
     return "Size";
   }
 
-  [EVENT('refreshSelection', 'refreshRect') + DEBOUNCE(100)]() {
+  [EVENT('refreshSelection', 'refreshRect')]() {
     this.refreshShowIsNot('project');
   }
 
@@ -37,7 +37,7 @@ export default class SizeProperty extends BaseProperty {
   }
 
   getBody() {
-    return `
+    return /*html*/`
       <div class='property-item animation-property-item'>
         <span class='add-timeline-property' data-property='width'></span>
         <RangeEditor ref='$width' label='Width' removable="true" key='width' min="0" max='3000' onchange='changRangeEditor' />
@@ -49,25 +49,17 @@ export default class SizeProperty extends BaseProperty {
     `;
   }
 
-
-  getPropertyValue (property) {
-    switch(property){
-    case 'width':
-      return this.children.$width.getValue() + '';
-    case 'height':
-      return this.children.$height.getValue() + ''; 
-    } 
-  }
-
   [EVENT('changRangeEditor')] (key, value) {
 
     editor.selection.reset({
       [key]: value
     })
-    
-    this.emit('refreshElement');
+
+    this.emit('refreshSelectionStyleView');
     // this.emit('refreshSelectionTool');
     this.emit('setSize')
+
+    this.emit('change.property', key)    
 
   }
 }

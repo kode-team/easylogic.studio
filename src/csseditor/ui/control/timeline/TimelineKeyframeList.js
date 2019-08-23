@@ -4,6 +4,7 @@ import { editor } from "../../../../editor/editor";
 import { Length } from "../../../../editor/unit/Length";
 import { OBJECT_TO_PROPERTY, OBJECT_TO_CLASS } from "../../../../util/functions/func";
 import { timecode, second } from "../../../../util/functions/time";
+import Dom from "../../../../util/Dom";
 
 const PADDING = 20 
 
@@ -56,10 +57,12 @@ export default class TimelineKeyframeList extends UIElement {
         <div class='keyframe'>
 
             ${list.map(it => {
+                var selected = editor.timeline.checked(it.id);
                 return /*html*/`<div class='${OBJECT_TO_CLASS({
-                    'offset': true,
-                    selected: it.selected
+                    'offset': true
                 })}' style='left: ${it.left}' ${OBJECT_TO_PROPERTY({
+                    'data-selected': selected,
+                    'data-offset-id': it.id,
                     'data-layer-id': layerId,
                     'data-property': property.property,
                     'data-offset-index': it.index
@@ -85,7 +88,6 @@ export default class TimelineKeyframeList extends UIElement {
 
         var times = Object.keys(key).map(it => +it);
 
-
         return /*html*/`
         <div class='timeline-keyframe' data-timeline-layer-id="${obj.id}">
             <div class='timeline-keyframe-row layer'>
@@ -106,10 +108,40 @@ export default class TimelineKeyframeList extends UIElement {
     }
 
     template() {
-        return /*html*/ `<div class='timeline-keyframe-list'></div>`
+        return /*html*/ `
+            <div class='timeline-keyframe-container'>
+                <div ref='$keyframeList' class='timeline-keyframe-list'></div>
+                <div class='drag-area' ref='$dragArea'></div>
+            </div>
+        `
     }
 
-    [LOAD() + VDOM] () {
+    hasDragPlace (e) {
+        var dom = Dom.create(e.target);
+        return dom.hasClass('offset') === false 
+    }
+
+    [POINTERSTART('$el') + IF('hasDragPlace') + MOVE('moveDragArea') + END('moveEndDragArea')] (e) {
+        this.dragXY = {x: e.offsetX, y: e.offsetY }; 
+
+    }
+
+    moveDragArea (dx, dy) {
+        var left = dx < 0 ? Length.px(this.dragXY.x + dx) : Length.px(this.dragXY.x);
+        var top = dy < 0 ? Length.px(this.dragXY.y + dy) : Length.px(this.dragXY.y);
+        var width = Length.px(Math.abs(dx)) 
+        var height = Length.px(Math.abs(dy))
+
+        this.refs.$dragArea.css({ left, top,  width, height})
+    }
+
+    moveEndDragArea (dx, dy) {
+        this.refs.$dragArea.css({ left: null, top: null,  width: null, height: null})
+    }
+
+
+
+    [LOAD('$keyframeList') + VDOM] () {
 
         var artboard = editor.selection.currentArtboard || { timeline: [] }
 
@@ -155,8 +187,10 @@ export default class TimelineKeyframeList extends UIElement {
         + IF('hasCurrentTimeline') 
         + MOVE('moveOffset') 
         + END('moveEndOffset')] (e) {
+
         this.$offset = e.$delegateTarget;
-        var index = +this.$offset.attr('data-offset-index');
+
+        var id = this.$offset.attr('data-offset-id');
         var property = this.$offset.attr('data-property')
         var layerId = this.$offset.attr('data-layer-id');
 
@@ -171,30 +205,21 @@ export default class TimelineKeyframeList extends UIElement {
 
         var currentArtboard = editor.selection.currentArtboard;
         if (currentArtboard) {
-            this.offset = currentArtboard.getTimelineKeyframeByIndex(layerId, property, index);
+            this.offset = currentArtboard.getTimelineKeyframeById(layerId, property, id);
             this.layerId = layerId;
             this.property = property;
             this.cachedOffsetTime = this.offset.time; 
         }
         this.timeline = this.currentTimeline;
 
-        this.$el.$$('.selected').forEach(it => {
-            var index = +it.attr('data-offset-index');
-            var property = it.attr('data-property')
-            var layerId = it.attr('data-layer-id');
-
-            var selectedOffset = currentArtboard.getTimelineKeyframeByIndex(layerId, property, index);
-            selectedOffset.selected = false; 
-
-            it.removeClass('selected');
+        this.$el.$$(`[data-selected="true"]`).forEach(it => {
+            it.attr('data-selected', 'false');
         })
-        this.$offset.addClass('selected');
-        this.offset.selected = true; 
-
-        this.emit('select.timeline.offset', this.layerId, this.property, this.offset.time);
-
-        editor.selection.selectById(this.layerId);
+        this.$offset.attr('data-selected', 'true');
         
+        editor.timeline.select(this.offset)
+        this.emit('refreshOffsetValue', this.offset.property, this.offset.value, this.offset.timing)
+
     }
 
     moveOffset (dx, dy) {
@@ -221,7 +246,11 @@ export default class TimelineKeyframeList extends UIElement {
 
         this.refreshOffsetLine();
 
-        this.emit('refreshSelection');
+        // this.emit('refreshSelection');
+    }
+
+    [EVENT('toggleTimelineObjectRow')] (id, isToggle) {
+        this.$el.$(`.timeline-keyframe[data-timeline-layer-id="${id}"]`).toggleClass('collapsed', isToggle);
     }
 
     refreshOffsetLine() {

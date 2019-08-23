@@ -56,23 +56,14 @@ export default class PositionProperty extends BaseProperty {
     `;
   }
 
-  getPropertyValue (property) {
-    switch(property){
-    case 'x':
-      return this.children.$x.getValue() + '';
-    case 'y':
-      return this.children.$y.getValue() + ''; 
-    } 
-  }  
 
   [EVENT('changRangeEditor')] (key, value) {
-    var current = editor.selection.current;
-    if (current) {
-      current.reset({
-        [key]: value
-      });
 
-      this.emit('refreshElement', current);
-    }
+    editor.selection.reset({
+      [key]: value
+    })
+
+    this.emit('refreshSelectionStyleView');
+    this.emit('change.property', key)        
   }
 }

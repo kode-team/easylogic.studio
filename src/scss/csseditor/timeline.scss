@@ -94,7 +94,7 @@
             border-right: 1px solid $timeline-border-color;            
 
             .timeline-top-toolbar {
-
+                padding:3px 10px;
                 .row {
                     display: grid;
                     grid-template-columns: 50px 1fr;
@@ -186,10 +186,10 @@
 
                 .time-duration {
                     position: absolute;
-                    top: 22px;
+                    top: 5px;
                     left: 0px;
                     right: 0px;
-                    height: 25px;
+                    height: 15px;
 
                     $back-color: lighten($background-color, 5%);
              
@@ -198,10 +198,10 @@
                         left: 15px;
                         top: 0px;
                         width: 5px;
-                        height: 10px;
+                        height: 100%;
                         background-color: $back-color;
-                        border-top-left-radius: 10px;
-                        border-bottom-left-radius: 10px;
+                        // border-top-left-radius: 10px;
+                        // border-bottom-left-radius: 10px;
 
                     }
 
@@ -210,18 +210,18 @@
                         right: 15px;
                         top: 0px;
                         width: 5px;
-                        height: 10px;
+                        height: 100%;
                         background-color: $back-color;
-                        border-top-right-radius: 10px;
-                        border-bottom-right-radius: 10px;
+                        // border-top-right-radius: 10px;
+                        // border-bottom-right-radius: 10px;
                     }                    
 
                     .duration-slider {
                         position: absolute;
-                        left: 20px;
+                        left: 10px;
                         top: 0px;
-                        right: 20px;
-                        height: 10px;
+                        right: 10px;
+                        height: 100%;
                         background-color: $back-color;
                         
 
@@ -233,10 +233,10 @@
                             left : 0px;
                             top: 0px;
                             transform: translateX(-100%);
-                            height: 10px;
+                            height: 100%;
                             width: 5px;
-                            border-top-left-radius: 10px;
-                            border-bottom-left-radius: 10px;
+                            // border-top-left-radius: 10px;
+                            // border-bottom-left-radius: 10px;
                             background-color: $selected-color;
                             cursor: ew-resize;                            
                         }
@@ -246,10 +246,10 @@
                             left : 100%;
                             top: 0px;
                             // transform: translateX(100%);
-                            height: 10px;
+                            height: 100%;
                             width: 5px;
-                            border-top-right-radius: 10px;
-                            border-bottom-right-radius: 10px;
+                            // border-top-right-radius: 10px;
+                            // border-bottom-right-radius: 10px;
                             background-color: $selected-color;
                             cursor: ew-resize;
                         }      
@@ -257,10 +257,10 @@
                         .gauge {
                             position: absolute;
                             left : 0%;
-                            width: 100%;
+                            width: 100%; 
                             top: 0px;
                             height: 100%;
-                            background-color: rgba($border-color, 0.7);
+                            background-color: $timeline-gauge-background-color;
                             cursor: ew-resize;                            
                         }
                     }
@@ -314,15 +314,17 @@
                         }
                     }
 
-
-
                     .timeline-object-row {
                         height: 30px;
                         display: grid; 
                         grid-template-columns: 20px 1fr 1.5fr; 
                         grid-column-gap: 5px;
                         box-sizing: border-box;
-                        border-bottom: 1px solid lighten($timeline-border-color, 20%);
+                        // border-bottom: 1px solid lighten($timeline-border-color, 20%);
+
+                        &[data-selected="true"] {
+                            background-color: #353535;
+                        }
 
                         .icon {
 
@@ -364,13 +366,13 @@
                                 button.add {
                                     width: 10px;
                                     height: 10px;
-                                    border-radius: 50%;
+                                    // border-radius: 50%;
                                     display: inline-block;
                                     box-shadow: 0 0 0 2px rgba(darken($border-color, 10%), 0.3);
                                     background-color: rgba(lighten($border-color, 50%), 0.7);
                                     vertical-align: middle;
                                     cursor: pointer;
-                                    transform: translateX(-5px) translateY(2px);
+                                    transform: translateX(-5px) translateY(2px) rotate(45deg);
                                 
                                     &:hover {
                                       box-shadow: 0 0 0 2px rgba($selected-color, 0.5);
@@ -409,7 +411,22 @@
                     height: 100%;
                     pointer-events: none;
                 }
-            }            
+            }     
+            
+            .timeline-keyframe-container {
+                position: relative;
+                min-height: 100%;
+
+                .drag-area {
+                    position: absolute;
+                    border: 1px solid lighten(#3585bd, 20%);
+                    background-color: rgba(#3585bd, 0.7);
+                    left: -10000px;
+                    right: -10000px;
+                    width:0px;
+                    height:0px;
+                }
+            }
 
             .timeline-keyframe-list {
 
@@ -448,11 +465,11 @@
                                 background-color: $selected-color;
                                 transform: translateY(-50%) translateX(-50%) rotate(45deg);
                                 cursor: ew-resize;
-                                box-shadow: 0 0 0 1px $border-color;                                
+                                box-shadow: 0 0 0 1px $background-color;                                
 
-                                &.selected {
+                                &[data-selected='true'] {
                                     background-color: white;
-                                    box-shadow: 0 0 0 1px $selected-color;
+                                    box-shadow: 0 0 0 1px $timeline-offset-line-color;
                                 }
                             }
                         }
@@ -461,13 +478,15 @@
                             position: absolute;
                             height: 100%;
                             display: inline-block;                            
+                            box-sizing: border-box;                            
                             .offset-line {
                                 position: absolute;
                                 top: 50%;
                                 display: inline-block;
-                                height: 2px;
-                                background-color: $selected-color;
-                                transform: translateY(-50%);
+                                height: 20px;
+                                background-color: $timeline-offset-line-color;
+                                transform: translateY(-52%);
+                                box-sizing: border-box;
                             }
                         }
                     }

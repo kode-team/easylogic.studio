@@ -34,25 +34,11 @@
         .fill-item {
           // margin-top: 5px;
           display: grid;
-          grid-template-columns: 30px 1fr;
+          grid-template-columns: 40px 1fr;
           grid-column-gap: 5px;
           text-align: center;
           box-sizing: border-box;
-          padding: 4px;
-          background-color: $list-background-color; 
-          border: 1px solid $list-border-color;
-          border-top: 0px;
-
-          &:first-child {
-            border-top: 1px solid $list-border-color;
-            border-top-left-radius: 3px;
-            border-top-right-radius: 3px;
-          }
-
-          &:last-child {
-            border-bottom-left-radius: 3px;
-            border-bottom-right-radius: 3px;
-          }
+          padding: 6px;
 
           &.selected {
             background-color: rgba($border-color, 0.5);
@@ -84,7 +70,7 @@
       
             .mini-view {
               display: block;
-              height: 20px;
+              height: 24px;
               box-sizing: border-box;
               pointer-events: none;
               border-radius: 3px;
@@ -107,6 +93,7 @@
             vertical-align: middle;
             text-align: left;
             box-sizing: border-box;
+            padding: 4px 0px;
       
             svg {
               width: 16px;
@@ -126,6 +113,7 @@
             text-align: left;
             height: 100%;
             box-sizing: border-box;
+            padding-top: 4px;
       
             .step {
               border: 1px solid white;

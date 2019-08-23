@@ -1,5 +1,6 @@
 import { Config } from "./Config";
 import { Selection } from "./Selection";
+import { TimelineSelection } from "./TimelineSelection";
 
 function blobToDataURL(blob) {
   return new Promise(function(resolve) {
@@ -23,7 +24,8 @@ const DEFAULT_THEME = 'red'
 export const editor = new class {
   constructor() {
     this.config = new Config(this);
-    this.selection = new Selection(this);
+    this.selection = new Selection();
+    this.timeline = new TimelineSelection();
     this.projects = []     
     this.popupZIndex = 10000;
     this.scale = 1

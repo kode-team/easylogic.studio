@@ -23,8 +23,7 @@ function _traverse(obj, id) {
 }
 
 export class Selection {
-  constructor(editor) {
-    this.editor = editor;
+  constructor() {
 
     this.project = null;
     this.artboard = null;

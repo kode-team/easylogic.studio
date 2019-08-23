@@ -40,7 +40,7 @@ export default class ColorViewEditor extends UIElement {
         var { label, removable } = this.state;
         var hasLabel = !!label ? 'has-label' : ''
         var isRemovable = removable ? 'is-removable' : '';        
-        return `
+        return /*html*/`
             <div class='color-view-editor ${hasLabel} ${isRemovable}'>
                 ${label ? `<label>${label}</label>` : '' }            
                 <div class='preview' ref='$preview'>

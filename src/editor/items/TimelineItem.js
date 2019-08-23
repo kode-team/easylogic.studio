@@ -72,6 +72,12 @@ export class TimelineItem extends DomItem {
     var layer = this.searchById(layerId);
 
 
+    if (p.keyframes.length === 1) {
+      this.json.compiledTimeline[`${layerId}.${property}`] = [] 
+      return ;
+    }
+
+
     this.json.compiledTimeline[`${layerId}.${property}`] = p.keyframes.map( (offset, index) => {
 
       var nextOffset = p.keyframes[index + 1];
@@ -80,7 +86,7 @@ export class TimelineItem extends DomItem {
         // 마지막 시점에서 시간을 무한대로 주면 
         // 이후 좌표를 고정할 수 있다. 
         // timing 에 hold 를 넣고 중간 단계를 넘어가게도 해보자. 
-        nextOffset = { time: offset.time + 10, value: offset.value + ''};
+        nextOffset = { time: offset.time + 1, value: offset.value + ''};
         // return false;
       }
 
@@ -118,14 +124,10 @@ export class TimelineItem extends DomItem {
 
       var time = frameOrCode ?  second(timeline.fps, frameOrCode) : timeline.currentTime;
 
-      // console.log(time);
-
       this.searchTimelineOffset(time).forEach(it => {
-
         it.layer.reset({
           [it.property]: it.func(time) 
         })
-        // console.log(it.layer[it.property])        
       });
 
     }
@@ -418,7 +420,9 @@ export class TimelineItem extends DomItem {
 
       if (!times.length) {
         value = value || this.getDefaultPropertyValue(property);
-        p.keyframes.push({ property, time, value, timing })
+
+        var obj = { id: uuidShort(), layerId, property, time, value, timing }
+        p.keyframes.push(obj)
 
         p.keyframes.sort( (a, b) => {
           return a.time > b.time ? 1 : -1; 
@@ -426,6 +430,8 @@ export class TimelineItem extends DomItem {
 
         this.setSelectedOffset(layerId, property, time)
         this.compiledTimingFunction(layerId, property);        
+
+        return obj; 
       }
     }
   }
@@ -481,6 +487,14 @@ export class TimelineItem extends DomItem {
       return p.keyframes[index]
     }
   }  
+
+  getTimelineKeyframeById (layerId, property, id) {
+    var p = this.getTimelineProperty(layerId, property);
+
+    if (p) {
+      return p.keyframes.find(it => it.id === id)
+    }
+  }    
 
   sortTimelineKeyframe (layerId, property) {
     var p = this.getTimelineProperty(layerId, property);
