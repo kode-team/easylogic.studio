@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css?family=Quicksand&display=swap);
+@import url(https://fonts.googleapis.com/css?family=Saira+Stencil+One&display=swap);
 @-webkit-keyframes bounce-up-down {
   0% {
     top: -10px;
@@ -1438,7 +1438,7 @@ html, body {
   top: 0px;
   bottom: 0px;
   width: 300px;
-  font-family: "Quicksand", sans-serif;
+  font-family: "Saira Stencil One", cursive;
 }
 .csseditor[data-theme=dark] .layout-main .layout-header .tool-menu {
   position: absolute;
@@ -2093,7 +2093,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .logo .extra-text {
   position: absolute;
-  left: 52px;
+  left: 60px;
   top: 0px;
   right: 0px;
   bottom: 0px;
@@ -8549,7 +8549,7 @@ html, body {
   top: 0px;
   bottom: 0px;
   width: 300px;
-  font-family: "Quicksand", sans-serif;
+  font-family: "Saira Stencil One", cursive;
 }
 .csseditor[data-theme=light] .layout-main .layout-header .tool-menu {
   position: absolute;
@@ -9204,7 +9204,7 @@ html, body {
 }
 .csseditor[data-theme=light] .logo .extra-text {
   position: absolute;
-  left: 52px;
+  left: 60px;
   top: 0px;
   right: 0px;
   bottom: 0px;
