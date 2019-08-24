@@ -11,7 +11,7 @@ export class TimelineSelection {
   }
 
   currentArtBoard (callback) {
-    var artboard = this.editor.selection.currentArtBoard;
+    var artboard = this.editor.selection.currentArtboard;
 
     if (artboard) {
       callback && callback (artboard);
@@ -51,6 +51,46 @@ export class TimelineSelection {
 
   select (...args) {
     this.refreshCache(args);
+  }
+
+  selectBySearch (list, startTime, endTime) {
+    this.currentArtBoard(artboard => {
+
+      var totalList = []
+
+      list.forEach(it => {
+        var results = []  
+        if (it.property) {
+
+          var p = artboard.getTimelineProperty(it.layerId, it.property)
+
+          results = p.keyframes.filter(keyframe => {
+            return startTime <= keyframe.time && keyframe.time <= endTime; 
+          })
+        } else {
+
+          var p = artboard.getTimelineObject(it.layerId)
+
+          p.properties.filter(property => {
+            return property.property === it.property
+          }).forEach(property => {
+            results.push(...property.keyframes.filter(keyframe => {
+              return startTime <= keyframe.time && keyframe.time <= endTime; 
+            }))
+          }) 
+        }
+
+        totalList.push(...results);
+
+      })
+
+      var uniqueOffset = {}
+      totalList.forEach(it => {
+        uniqueOffset[it.id] = it; 
+      })
+
+      this.select(...Object.values(uniqueOffset))
+    })
   }
 
 

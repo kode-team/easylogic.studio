@@ -56,8 +56,49 @@
             flex: 1 1 auto;
           }
 
+          .animation-selector {
+            flex: none; 
+            width: 194px;
+          }
+
           .timeline-play-control {
-            text-align: center;
+            text-align: left;
+            display: grid;
+            grid-template-columns: 200px 120px 120px 1fr;
+            grid-column-gap: 5px;
+
+            .speed-number {
+              position: relative;
+              &:after {
+                position: absolute;
+                right: 14px;
+                top: 1px;
+                content: 'X';
+                display: inline-block;
+              }
+            }
+
+            label {
+              svg {
+                vertical-align: middle;
+
+                path {
+                  fill: $font-color;
+                }
+              }
+            }
+
+            .input {
+              vertical-align: middle;
+
+              input {
+                vertical-align: middle;
+              }
+            }
+
+            .row {
+              display: flex;
+            }
 
             button {
               display: inline-block;
@@ -66,9 +107,9 @@
               height: 24px;
 
               &.play, &.pause {
+                filter: drop-shadow(0px 0px 2px black);
                 display: none;
-                width: 30px;
-                height: 30px;
+                transform: scale(1.5);
 
               }
 
@@ -92,23 +133,79 @@
             }
 
 
+            .play-buttons {
 
-            &[data-status='play'] {
-              .pause {
-                display: inline-block;
+              &[data-status='play'] {
+                .pause {
+                  display: inline-block;
+                }
               }
+  
+              &[data-status='pause'] {
+                .play {
+                  display: inline-block;
+                }
+              }    
+              
             }
 
-            &[data-status='pause'] {
-              .play {
-                display: inline-block;
+            
+
+            .direction-buttons {
+              display: flex;
+
+              @each $selectDirection in normal, alternate, reverse, alternate-reverse {
+                  &[data-selected-direction="#{$selectDirection}"] [data-value="#{$selectDirection}"] {
+                      background-color: $selected-color;
+                      // color: $selected-font-color;
+
+                      svg {
+                        path {
+                          // stroke: $selected-font-color;
+                          // stroke-width: 1;
+                          fill: $selected-font-color;
+                        }
+                      }
+                  }
+              }        
+
+              button {
+                  // border: 1px solid $border-color;
+                  width: 26px;
+
+                  // min-width: 30px;
+                  // padding: 2px 10px;
+                  // height: auto;
               }
-            }            
+          }
 
           }
 
           .keyframe-time-control {
             flex: none; 
+            text-align: right;
+            width: 254px;
+
+            .time-manager {
+              display: grid;
+              grid-template-columns: 110px 65px 84px 10px;
+              grid-column-gap: 0px;
+
+              label {
+                padding-right:0px;
+              }
+            }
+
+            svg {
+              vertical-align: middle;
+              path {
+                fill: $font-color;
+              }
+            }
+
+            input[type=text] {
+              width: 80px;
+            }
           }
         }
       }

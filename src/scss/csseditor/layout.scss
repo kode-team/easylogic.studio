@@ -31,6 +31,7 @@
       top: 0px;
       bottom: 0px;
       width: $left-size;
+      font-family: 'Quicksand', sans-serif;
     }
 
     .tool-menu {
@@ -53,7 +54,7 @@
 
   .layout-footer {
     flex: none;
-    height: 30px;
+    height: $footer-height;
     overflow: hidden;
     border-top: 1px solid $border-color;
     transition: $show-timeline-animation;

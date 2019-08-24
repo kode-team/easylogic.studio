@@ -16,6 +16,7 @@ export default class TimelineCommand extends UIElement {
                 artboard.addTimeline();                
             }
             this.emit('refreshTimeline');
+            this.emit('addTimeline');
         }   
     }
 
@@ -124,9 +125,12 @@ export default class TimelineCommand extends UIElement {
     }    
 
     [EVENT('moveTimeline')] () {
+        this.trigger('pause.timeline');
+    }
+
+    [COMMAND('pause.timeline')] () {
         if (this.state.timer) {
-            this.state.timer.stop()
-            this.state.timer = null;
+            this.state.timer.stop();
         }
     }
 
@@ -145,23 +149,32 @@ export default class TimelineCommand extends UIElement {
 
                 if (this.state.timer) {
                     this.state.timer.stop()
+                } else {
+                    this.state.timer = makeTimer({
+                        elapsed: timeline.currentTime * 1000,
+                        speed,
+                        duration: timeline.totalTime * 1000,
+                        iterationCount, 
+                        direction
+                    })
                 }
 
-                var duration = timeline.totalTime * 1000 / speed;
-                var timer = makeTimer({
-                    duration,
-                    iterationCount, 
+                this.state.timer.play({
+                    duration: timeline.totalTime * 1000,
+                    elapsed: timeline.currentTime * 1000,
+                    speed,
+                    iterationCount,
                     direction,
                     tick: (elapsed, timer) => {
                         // console.log(timecode(timeline.fps, elapsed / 1000));
-                        artboard.seek(timecode(timeline.fps, elapsed / 1000 *  speed))
+                        artboard.seek(timecode(timeline.fps, elapsed / 1000))
                         this.emit('playTimeline');
+                    },
+                    last: (elapsed, timer) => {                 
+                        this.emit('stopTimeline');
+                        artboard.setTimelineCurrentTime(0);
                     }
-                })
-    
-                timer.start();
-
-                this.state.timer = timer; 
+                })                
     
             }
 

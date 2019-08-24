@@ -25,7 +25,7 @@ export const editor = new class {
   constructor() {
     this.config = new Config(this);
     this.selection = new Selection();
-    this.timeline = new TimelineSelection();
+    this.timeline = new TimelineSelection(this);
     this.projects = []     
     this.popupZIndex = 10000;
     this.scale = 1

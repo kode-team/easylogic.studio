@@ -200,6 +200,10 @@ export default class KeyframeTimeView extends UIElement {
                     this.drawText(startX + restX, y, framesToTimecode(fps, startFrame).replace(/00\:/g, '') + 'f')
                 }
 
+
+                this.drawOption({strokeStyle: 'black', lineWidth: 1})
+                this.drawLine(0, rect.height, rect.width, rect.height);
+
                 var left =  (currentTime - displayStartTime)/(displayEndTime - displayStartTime) * realWidth;
                 var markTop = 10
                 var markWidth = 4
@@ -212,6 +216,7 @@ export default class KeyframeTimeView extends UIElement {
                     [left - markWidth + restX, rect.height - markWidth],
                     [left - markWidth + restX, rect.height - markTop]
                 )
+
                 
             })
         }
@@ -255,7 +260,7 @@ export default class KeyframeTimeView extends UIElement {
         this.refresh();
     }
 
-    [EVENT('refreshTimeline')] () {
+    [EVENT('refreshTimeline', 'playTimeline')] () {
         this.refresh();
     }
 

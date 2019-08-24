@@ -6,7 +6,7 @@ export default class LogoView extends UIElement {
     return /*html*/`
       <div class='logo'>
         <div class='text'>Easy</div>
-        <div class='extra-text'> &nbsp;&nbsp;&nbsp;LOGIC</div>
+        <div class='extra-text'> &nbsp;&nbsp;&nbsp;Logic</div>
       </div>    
     `;
   }

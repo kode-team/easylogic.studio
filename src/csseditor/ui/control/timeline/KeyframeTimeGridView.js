@@ -53,7 +53,7 @@ export default class KeyframeTimeGridView extends UIElement {
         this.refresh();
     }
 
-    [EVENT('refreshTimeline')] ( ) {
+    [EVENT('refreshTimeline', 'playTimeline')] ( ) {
         this.refresh();
     }
 

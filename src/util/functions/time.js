@@ -1,4 +1,4 @@
-import { isString, isNumber } from "./func";
+import { isString, isNumber, isNotUndefined, isFunction } from "./func";
 
 
 export function second (fps, timecode) {
@@ -50,17 +50,17 @@ export function makeTimer (opt) {
     var timer = {
         id: 0,
         start: 0, 
-        elapsed: 0,
+        speed: opt.speed || 1, 
+        elapsed: opt.elapsed || 0,
         duration: opt.duration || 0,
         iterationStartCount: 1,
         iterationCount: opt.iterationCount || Number.MAX_SAFE_INTEGER,
         direction: opt.direction || 'normal',
-        tick: opt.tick,
+        tick: opt.tick || (() => {}),
         startCallback: opt.start || (() => {}),
         endCallback: opt.end || (() => {}),
         firstCallback: opt.first || (() => {}) ,
-        lastCallback: opt.last || (() => {}),
-        pause: false
+        lastCallback: opt.last || (() => {})
     }
 
     const isForward = () => {
@@ -88,12 +88,17 @@ export function makeTimer (opt) {
             isStart = true; 
         }
 
-        timer.elapsed = now - timer.start + timer.pauseTime;
-        // console.log(timer.elapsed);
+        const dt = now - timer.start;
+
+        timer.elapsed += dt * timer.speed;
+
+        timer.start = now; 
 
         if (timer.elapsed > timer.duration) {
             timer.elapsed = timer.duration;
         }
+
+        // console.log(timer.elapsed, dt, timer.speed)
         
         var elapsed = calculateForDirection(timer.elapsed/timer.duration) * timer.duration;
         if (isStart) timer.startCallback(elapsed, timer);
@@ -120,43 +125,55 @@ export function makeTimer (opt) {
         } else {
            // 멈추지 않은 상태면 
            timer.start = null;
+           timer.elapsed = 0; 
            frameStart();
         }
     }
 
-    const start = () => {
-        timer.start = null;
-        timer.pauseTime = 0;         
+    const play = (opt = {}) => {
+        timer.start = null;    
         timer.iterationStartCount = 1;
+
+        if (isNumber(opt.elapsed)) timer.elapsed = opt.elapsed;
+        if (isNumber(opt.speed)) timer.speed = opt.speed;
+        if (isNumber(opt.duration)) timer.duration = opt.duration;
+        if (isNumber(opt.iterationCount)) timer.iterationCount = opt.iterationCount  || Number.MAX_SAFE_INTEGER;
+        if (isString(opt.direction)) timer.direction = opt.direction
+        if (isFunction(opt.tick)) timer.tick = opt.tick;
+        if (isFunction(opt.start)) timer.startCallback = opt.start;
+        if (isFunction(opt.end)) timer.endCallback = opt.end;
+        if (isFunction(opt.first)) timer.firstCallback = opt.first;
+        if (isFunction(opt.last)) timer.lastCallback = opt.last;
+
         timer.firstCallback(timer.elapsed, timer);
         frameStart();
     }
 
-    const pause = () => {
-        timer.pause = true; 
-        timer.pauseTime = timer.start; 
-        timer.start = null; 
-
-        stop()
-    }
 
     const stop = () => {
         cancelAnimationFrame(timer.id);
     }
 
-    const restart = () => {
-        timer.pause = false; 
-        timer.start = null;
-        frameStart();
+    const seek = (t) => {
+        timer.elapsed = t
+        timer.tick (timer.elapsed, timer);
     }
 
+    const first = (t) => {
+        seek(0);
+    }    
+
+    const last = (t) => {
+        seek(timer.duration)
+    }
 
     return {
-        start, 
-        pause,
+        play, 
         stop,
-        restart,
         tick,
+        first,
+        last,
+        seek,
         timer
     }
 }
@@ -199,5 +216,7 @@ makeTimer({
 
     }
 })
+
+timer.start({ elapsed: 10, speed : 0.5, duration : 10 * 1000 })
 
 */

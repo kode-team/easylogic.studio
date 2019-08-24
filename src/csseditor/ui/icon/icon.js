@@ -66,9 +66,19 @@ import skip_next from "./skip_next";
 import skip_prev from "./skip_prev";
 import fast_forward from "./fast_forward";
 import fast_rewind from "./fast_rewind";
+import alternate from "./alternate";
+import alternate_reverse from "./alternate_reverse";
+import speed from "./speed";
+import replay from "./replay";
+import shuffle from "./shuffle";
 
 
 export default {
+  shuffle,
+  replay,
+  speed,
+  alternate_reverse,
+  alternate,
   note,
   rect,
   circle,

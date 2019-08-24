@@ -64,9 +64,9 @@ export default class TimelineProperty extends BaseProperty {
             <TimelineObjectList />
           </div>
           <div class='timeline-keyframe-area' ref='$keyframeArea'>
-            <TimelineKeyframeList ref='$keyframeList' />
-            <KeyframeTimeGridView ref='$keyframeTimeGridView' />            
+            <TimelineKeyframeList ref='$keyframeList' />          
           </div>
+          <KeyframeTimeGridView ref='$keyframeTimeGridView' />            
         </div>
       </div>
       <div class='timeline-value-area'>

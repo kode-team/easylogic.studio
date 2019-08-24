@@ -82,7 +82,7 @@
         height: $timeline-header-size;
         right: 0px;
         box-sizing: border-box;
-        border-bottom: 1px solid $timeline-border-color;
+        // border-bottom: 1px solid $timeline-border-color;
         border-top: 1px solid $timeline-border-color;
 
         .timeline-object-toolbar {
@@ -92,9 +92,12 @@
             bottom: 0px;
             width: $left-size;     
             border-right: 1px solid $timeline-border-color;            
+            box-sizing: border-box;
+
 
             .timeline-top-toolbar {
                 padding:3px 10px;
+                box-sizing: border-box;
                 .row {
                     display: grid;
                     grid-template-columns: 50px 1fr;
@@ -129,24 +132,6 @@
                         height: auto;
                     }
                 }
-
-                .direction-buttons {
-                    display: flex;
-
-                    @each $selectDirection in normal, alternate, reverse, alternate-reverse {
-                        &[data-selected-direction="#{$selectDirection}"] [data-value="#{$selectDirection}"] {
-                            background-color: $selected-color;
-                            color: $selected-font-color;
-                        }
-                    }        
-
-                    button {
-                        border: 1px solid $border-color;
-                        min-width: 50px;
-                        padding: 2px 10px;
-                        height: auto;
-                    }
-                }
             }
         }
 
@@ -163,26 +148,6 @@
                 top: 0px;
                 width: 100%;
                 height: 100%;
-
-                .time-manager {
-                    position: absolute;
-                    left: 0px;
-                    right: 0px;
-                    height: 20px;
-                    top: 0px;
-                    // background-color: black;
-                    box-sizing: border-box;
-                    padding: 3px 10px;
-
-                    > * {
-                        display: inline-block;
-                        margin-right: 10px;
-                    }
-
-                    label {
-                        color: rgba(255, 255, 255, 0.5);
-                    }
-                }
 
                 .time-duration {
                     position: absolute;
@@ -285,6 +250,8 @@
         top: $timeline-header-size;
         bottom: 0px;
         right: 0px;
+        // border-top: 1px solid $timeline-border-color;                    
+        box-sizing: border-box;
 
         .timeline-object-area {
             position: absolute;
@@ -386,6 +353,27 @@
             }
         }
 
+       
+
+        .keyframe-time-grid-view {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            bottom: 0px;
+            left: $left-size;
+            pointer-events: none;
+
+            canvas {
+                position: absolute;
+                left: 0px;
+                top: 0px;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+            }
+        }     
+         
+
         .timeline-keyframe-area {
             position: absolute;
             top: 0px;
@@ -394,25 +382,6 @@
             left: $left-size;
             overflow: auto;            
 
-
-            .keyframe-time-grid-view {
-                position: absolute;
-                left: 0px;
-                top: 0px;
-                width: 100%;
-                height: 100%;
-                pointer-events: none;
-
-                canvas {
-                    position: absolute;
-                    left: 0px;
-                    top: 0px;
-                    width: 100%;
-                    height: 100%;
-                    pointer-events: none;
-                }
-            }     
-            
             .timeline-keyframe-container {
                 position: relative;
                 min-height: 100%;
@@ -425,6 +394,7 @@
                     right: -10000px;
                     width:0px;
                     height:0px;
+                    pointer-events: none;
                 }
             }
 
@@ -442,9 +412,9 @@
                         height: 30px;
                         box-sizing: border-box;
                         border-bottom: 1px solid $timeline-border-color;
-
                         position: relative;
-                        
+
+
                         .keyframe {
                             position: absolute;
                             top: 50%;
@@ -466,6 +436,35 @@
                                 transform: translateY(-50%) translateX(-50%) rotate(45deg);
                                 cursor: ew-resize;
                                 box-shadow: 0 0 0 1px $background-color;                                
+
+                                &[data-selected='true'] {
+                                    background-color: white;
+                                    box-shadow: 0 0 0 1px $timeline-offset-line-color;
+                                }
+                            }
+                        }                        
+                        
+                        .keyframe-shadow {
+                            position: absolute;
+                            top: 50%;
+                            transform: translateY(-50%);
+                            height: 10px;
+                            display: inline-block;
+
+                            .offset {
+                                position: absolute;
+                                top: 50%;
+                                // border:1px solid $timeline-border-color;
+                                display: inline-block;
+                                width: 8px;
+                                height:8px;
+                                // border-radius: 50%;
+                                // clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50% );
+                                background-color: $selected-color;
+                                transform: translateY(-50%) translateX(-50%) rotate(45deg);
+                                cursor: ew-resize;
+                                box-shadow: 0 0 0 1px $background-color;     
+                                pointer-events: all;
 
                                 &[data-selected='true'] {
                                     background-color: white;

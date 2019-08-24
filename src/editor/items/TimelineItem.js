@@ -1,6 +1,6 @@
 import { DomItem } from "./DomItem";
 import { uuidShort } from "../../util/functions/math";
-import { isUndefined } from "../../util/functions/func";
+import { isUndefined, isNotUndefined } from "../../util/functions/func";
 import { second, timecode, framesToTimecode } from "../../util/functions/time";
 import { createInterpolateFunction, createCurveFunction, createTimingFunction } from "../util/interpolate";
 
@@ -122,7 +122,11 @@ export class TimelineItem extends DomItem {
 
     if (timeline) {
 
-      var time = frameOrCode ?  second(timeline.fps, frameOrCode) : timeline.currentTime;
+      if (isNotUndefined(frameOrCode)) {
+        this.setTimelineCurrentTime(frameOrCode);
+      }
+
+      var time = timeline.currentTime;
 
       this.searchTimelineOffset(time).forEach(it => {
         it.layer.reset({

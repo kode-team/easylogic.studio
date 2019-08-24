@@ -1,3 +1,4 @@
+@import url(https://fonts.googleapis.com/css?family=Quicksand&display=swap);
 @-webkit-keyframes bounce-up-down {
   0% {
     top: -10px;
@@ -1437,6 +1438,7 @@ html, body {
   top: 0px;
   bottom: 0px;
   width: 300px;
+  font-family: "Quicksand", sans-serif;
 }
 .csseditor[data-theme=dark] .layout-main .layout-header .tool-menu {
   position: absolute;
@@ -1454,7 +1456,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .layout-main .layout-footer {
   flex: none;
-  height: 30px;
+  height: 40px;
   overflow: hidden;
   border-top: 1px solid #1b1b1b;
   transition: all 0.15s linear;
@@ -2084,7 +2086,6 @@ html, body {
   bottom: 0px;
   font-size: 30px;
   display: inline-block;
-  font-style: italic;
   font-weight: bold;
   line-height: 1.6;
   color: #fbde50;
@@ -2092,14 +2093,13 @@ html, body {
 }
 .csseditor[data-theme=dark] .logo .extra-text {
   position: absolute;
-  left: 50px;
+  left: 52px;
   top: 0px;
   right: 0px;
   bottom: 0px;
   z-index: 0;
   font-size: 30px;
   display: inline-block;
-  font-style: italic;
   font-weight: bold;
   line-height: 1.6;
 }
@@ -2946,8 +2946,40 @@ html, body {
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools > * {
   flex: 1 1 auto;
 }
+.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .animation-selector {
+  flex: none;
+  width: 194px;
+}
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control {
-  text-align: center;
+  text-align: left;
+  display: grid;
+  grid-template-columns: 200px 120px 120px 1fr;
+  grid-column-gap: 5px;
+}
+.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .speed-number {
+  position: relative;
+}
+.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .speed-number:after {
+  position: absolute;
+  right: 14px;
+  top: 1px;
+  content: "X";
+  display: inline-block;
+}
+.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control label svg {
+  vertical-align: middle;
+}
+.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control label svg path {
+  fill: #cacaca;
+}
+.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .input {
+  vertical-align: middle;
+}
+.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .input input {
+  vertical-align: middle;
+}
+.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .row {
+  display: flex;
 }
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control button {
   display: inline-block;
@@ -2956,9 +2988,11 @@ html, body {
   height: 24px;
 }
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control button.play, .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control button.pause {
+  -webkit-filter: drop-shadow(0px 0px 2px black);
+          filter: drop-shadow(0px 0px 2px black);
   display: none;
-  width: 30px;
-  height: 30px;
+  -webkit-transform: scale(1.5);
+          transform: scale(1.5);
 }
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control button.play svg path {
   fill: #fbde50;
@@ -2966,14 +3000,63 @@ html, body {
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control button.pause svg path {
   fill: #6677d8;
 }
-.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control[data-status=play] .pause {
+.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .play-buttons[data-status=play] .pause {
   display: inline-block;
 }
-.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control[data-status=pause] .play {
+.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .play-buttons[data-status=pause] .play {
   display: inline-block;
+}
+.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons {
+  display: flex;
+}
+.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=normal] [data-value=normal] {
+  background-color: #fbde50;
+}
+.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=normal] [data-value=normal] svg path {
+  fill: black;
+}
+.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate] [data-value=alternate] {
+  background-color: #fbde50;
+}
+.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate] [data-value=alternate] svg path {
+  fill: black;
+}
+.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=reverse] [data-value=reverse] {
+  background-color: #fbde50;
+}
+.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=reverse] [data-value=reverse] svg path {
+  fill: black;
+}
+.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate-reverse] [data-value=alternate-reverse] {
+  background-color: #fbde50;
+}
+.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate-reverse] [data-value=alternate-reverse] svg path {
+  fill: black;
+}
+.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons button {
+  width: 26px;
 }
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .keyframe-time-control {
   flex: none;
+  text-align: right;
+  width: 254px;
+}
+.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .keyframe-time-control .time-manager {
+  display: grid;
+  grid-template-columns: 110px 65px 84px 10px;
+  grid-column-gap: 0px;
+}
+.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .keyframe-time-control .time-manager label {
+  padding-right: 0px;
+}
+.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .keyframe-time-control svg {
+  vertical-align: middle;
+}
+.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .keyframe-time-control svg path {
+  fill: #cacaca;
+}
+.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .keyframe-time-control input[type=text] {
+  width: 80px;
 }
 .csseditor[data-theme=dark] .property.full .property-body {
   flex: 1 1 auto;
@@ -8044,7 +8127,6 @@ html, body {
   height: 70px;
   right: 0px;
   box-sizing: border-box;
-  border-bottom: 1px solid #1b1b1b;
   border-top: 1px solid #1b1b1b;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar {
@@ -8054,9 +8136,11 @@ html, body {
   bottom: 0px;
   width: 300px;
   border-right: 1px solid #1b1b1b;
+  box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar {
   padding: 3px 10px;
+  box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .row {
   display: grid;
@@ -8095,31 +8179,6 @@ html, body {
   padding: 2px 10px;
   height: auto;
 }
-.csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .direction-buttons {
-  display: flex;
-}
-.csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .direction-buttons[data-selected-direction=normal] [data-value=normal] {
-  background-color: #fbde50;
-  color: black;
-}
-.csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .direction-buttons[data-selected-direction=alternate] [data-value=alternate] {
-  background-color: #fbde50;
-  color: black;
-}
-.csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .direction-buttons[data-selected-direction=reverse] [data-value=reverse] {
-  background-color: #fbde50;
-  color: black;
-}
-.csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .direction-buttons[data-selected-direction=alternate-reverse] [data-value=alternate-reverse] {
-  background-color: #fbde50;
-  color: black;
-}
-.csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .direction-buttons button {
-  border: 1px solid #1b1b1b;
-  min-width: 50px;
-  padding: 2px 10px;
-  height: auto;
-}
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-keyframe-toolbar {
   position: absolute;
   top: 0px;
@@ -8133,22 +8192,6 @@ html, body {
   top: 0px;
   width: 100%;
   height: 100%;
-}
-.csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-manager {
-  position: absolute;
-  left: 0px;
-  right: 0px;
-  height: 20px;
-  top: 0px;
-  box-sizing: border-box;
-  padding: 3px 10px;
-}
-.csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-manager > * {
-  display: inline-block;
-  margin-right: 10px;
-}
-.csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-manager label {
-  color: rgba(255, 255, 255, 0.5);
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-duration {
   position: absolute;
@@ -8223,6 +8266,7 @@ html, body {
   top: 70px;
   bottom: 0px;
   right: 0px;
+  box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-object-area {
   position: absolute;
@@ -8298,6 +8342,22 @@ html, body {
   box-shadow: 0 0 0 2px rgba(251, 222, 80, 0.5);
   background-color: #fbde50;
 }
+.csseditor[data-theme=dark] .timeline-area .timeline-body .keyframe-time-grid-view {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 300px;
+  pointer-events: none;
+}
+.csseditor[data-theme=dark] .timeline-area .timeline-body .keyframe-time-grid-view canvas {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-keyframe-area {
   position: absolute;
   top: 0px;
@@ -8305,22 +8365,6 @@ html, body {
   bottom: 0px;
   left: 300px;
   overflow: auto;
-}
-.csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-keyframe-area .keyframe-time-grid-view {
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-.csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-keyframe-area .keyframe-time-grid-view canvas {
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-container {
   position: relative;
@@ -8334,6 +8378,7 @@ html, body {
   right: -10000px;
   width: 0px;
   height: 0px;
+  pointer-events: none;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe.collapsed .timeline-keyframe-row.layer-property {
   display: none;
@@ -8366,6 +8411,31 @@ html, body {
   box-shadow: 0 0 0 1px #343642;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe .offset[data-selected=true] {
+  background-color: white;
+  box-shadow: 0 0 0 1px #3f83bd;
+}
+.csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe-shadow {
+  position: absolute;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  height: 10px;
+  display: inline-block;
+}
+.csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe-shadow .offset {
+  position: absolute;
+  top: 50%;
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background-color: #fbde50;
+  -webkit-transform: translateY(-50%) translateX(-50%) rotate(45deg);
+          transform: translateY(-50%) translateX(-50%) rotate(45deg);
+  cursor: ew-resize;
+  box-shadow: 0 0 0 1px #343642;
+  pointer-events: all;
+}
+.csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe-shadow .offset[data-selected=true] {
   background-color: white;
   box-shadow: 0 0 0 1px #3f83bd;
 }
@@ -8479,6 +8549,7 @@ html, body {
   top: 0px;
   bottom: 0px;
   width: 300px;
+  font-family: "Quicksand", sans-serif;
 }
 .csseditor[data-theme=light] .layout-main .layout-header .tool-menu {
   position: absolute;
@@ -8496,7 +8567,7 @@ html, body {
 }
 .csseditor[data-theme=light] .layout-main .layout-footer {
   flex: none;
-  height: 30px;
+  height: 40px;
   overflow: hidden;
   border-top: 1px solid #e7e7e7;
   transition: all 0.15s linear;
@@ -9126,7 +9197,6 @@ html, body {
   bottom: 0px;
   font-size: 30px;
   display: inline-block;
-  font-style: italic;
   font-weight: bold;
   line-height: 1.6;
   color: #3e8ec6;
@@ -9134,14 +9204,13 @@ html, body {
 }
 .csseditor[data-theme=light] .logo .extra-text {
   position: absolute;
-  left: 50px;
+  left: 52px;
   top: 0px;
   right: 0px;
   bottom: 0px;
   z-index: 0;
   font-size: 30px;
   display: inline-block;
-  font-style: italic;
   font-weight: bold;
   line-height: 1.6;
 }
@@ -9988,8 +10057,40 @@ html, body {
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools > * {
   flex: 1 1 auto;
 }
+.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .animation-selector {
+  flex: none;
+  width: 194px;
+}
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control {
-  text-align: center;
+  text-align: left;
+  display: grid;
+  grid-template-columns: 200px 120px 120px 1fr;
+  grid-column-gap: 5px;
+}
+.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .speed-number {
+  position: relative;
+}
+.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .speed-number:after {
+  position: absolute;
+  right: 14px;
+  top: 1px;
+  content: "X";
+  display: inline-block;
+}
+.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control label svg {
+  vertical-align: middle;
+}
+.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control label svg path {
+  fill: #666666;
+}
+.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .input {
+  vertical-align: middle;
+}
+.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .input input {
+  vertical-align: middle;
+}
+.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .row {
+  display: flex;
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control button {
   display: inline-block;
@@ -9998,9 +10099,11 @@ html, body {
   height: 24px;
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control button.play, .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control button.pause {
+  -webkit-filter: drop-shadow(0px 0px 2px black);
+          filter: drop-shadow(0px 0px 2px black);
   display: none;
-  width: 30px;
-  height: 30px;
+  -webkit-transform: scale(1.5);
+          transform: scale(1.5);
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control button.play svg path {
   fill: #3e8ec6;
@@ -10008,14 +10111,63 @@ html, body {
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control button.pause svg path {
   fill: #6677d8;
 }
-.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control[data-status=play] .pause {
+.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .play-buttons[data-status=play] .pause {
   display: inline-block;
 }
-.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control[data-status=pause] .play {
+.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .play-buttons[data-status=pause] .play {
   display: inline-block;
+}
+.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons {
+  display: flex;
+}
+.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=normal] [data-value=normal] {
+  background-color: #3e8ec6;
+}
+.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=normal] [data-value=normal] svg path {
+  fill: white;
+}
+.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate] [data-value=alternate] {
+  background-color: #3e8ec6;
+}
+.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate] [data-value=alternate] svg path {
+  fill: white;
+}
+.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=reverse] [data-value=reverse] {
+  background-color: #3e8ec6;
+}
+.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=reverse] [data-value=reverse] svg path {
+  fill: white;
+}
+.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate-reverse] [data-value=alternate-reverse] {
+  background-color: #3e8ec6;
+}
+.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate-reverse] [data-value=alternate-reverse] svg path {
+  fill: white;
+}
+.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons button {
+  width: 26px;
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .keyframe-time-control {
   flex: none;
+  text-align: right;
+  width: 254px;
+}
+.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .keyframe-time-control .time-manager {
+  display: grid;
+  grid-template-columns: 110px 65px 84px 10px;
+  grid-column-gap: 0px;
+}
+.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .keyframe-time-control .time-manager label {
+  padding-right: 0px;
+}
+.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .keyframe-time-control svg {
+  vertical-align: middle;
+}
+.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .keyframe-time-control svg path {
+  fill: #666666;
+}
+.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .keyframe-time-control input[type=text] {
+  width: 80px;
 }
 .csseditor[data-theme=light] .property.full .property-body {
   flex: 1 1 auto;
@@ -15086,7 +15238,6 @@ html, body {
   height: 70px;
   right: 0px;
   box-sizing: border-box;
-  border-bottom: 1px solid #e7e7e7;
   border-top: 1px solid #e7e7e7;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar {
@@ -15096,9 +15247,11 @@ html, body {
   bottom: 0px;
   width: 300px;
   border-right: 1px solid #e7e7e7;
+  box-sizing: border-box;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar {
   padding: 3px 10px;
+  box-sizing: border-box;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .row {
   display: grid;
@@ -15137,31 +15290,6 @@ html, body {
   padding: 2px 10px;
   height: auto;
 }
-.csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .direction-buttons {
-  display: flex;
-}
-.csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .direction-buttons[data-selected-direction=normal] [data-value=normal] {
-  background-color: #3e8ec6;
-  color: white;
-}
-.csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .direction-buttons[data-selected-direction=alternate] [data-value=alternate] {
-  background-color: #3e8ec6;
-  color: white;
-}
-.csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .direction-buttons[data-selected-direction=reverse] [data-value=reverse] {
-  background-color: #3e8ec6;
-  color: white;
-}
-.csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .direction-buttons[data-selected-direction=alternate-reverse] [data-value=alternate-reverse] {
-  background-color: #3e8ec6;
-  color: white;
-}
-.csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .direction-buttons button {
-  border: 1px solid #e7e7e7;
-  min-width: 50px;
-  padding: 2px 10px;
-  height: auto;
-}
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-keyframe-toolbar {
   position: absolute;
   top: 0px;
@@ -15175,22 +15303,6 @@ html, body {
   top: 0px;
   width: 100%;
   height: 100%;
-}
-.csseditor[data-theme=light] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-manager {
-  position: absolute;
-  left: 0px;
-  right: 0px;
-  height: 20px;
-  top: 0px;
-  box-sizing: border-box;
-  padding: 3px 10px;
-}
-.csseditor[data-theme=light] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-manager > * {
-  display: inline-block;
-  margin-right: 10px;
-}
-.csseditor[data-theme=light] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-manager label {
-  color: rgba(255, 255, 255, 0.5);
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-duration {
   position: absolute;
@@ -15265,6 +15377,7 @@ html, body {
   top: 70px;
   bottom: 0px;
   right: 0px;
+  box-sizing: border-box;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-object-area {
   position: absolute;
@@ -15340,6 +15453,22 @@ html, body {
   box-shadow: 0 0 0 2px rgba(62, 142, 198, 0.5);
   background-color: #3e8ec6;
 }
+.csseditor[data-theme=light] .timeline-area .timeline-body .keyframe-time-grid-view {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 300px;
+  pointer-events: none;
+}
+.csseditor[data-theme=light] .timeline-area .timeline-body .keyframe-time-grid-view canvas {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area {
   position: absolute;
   top: 0px;
@@ -15347,22 +15476,6 @@ html, body {
   bottom: 0px;
   left: 300px;
   overflow: auto;
-}
-.csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area .keyframe-time-grid-view {
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-.csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area .keyframe-time-grid-view canvas {
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-container {
   position: relative;
@@ -15376,6 +15489,7 @@ html, body {
   right: -10000px;
   width: 0px;
   height: 0px;
+  pointer-events: none;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe.collapsed .timeline-keyframe-row.layer-property {
   display: none;
@@ -15408,6 +15522,31 @@ html, body {
   box-shadow: 0 0 0 1px white;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe .offset[data-selected=true] {
+  background-color: white;
+  box-shadow: 0 0 0 1px #4987f7;
+}
+.csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe-shadow {
+  position: absolute;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+  height: 10px;
+  display: inline-block;
+}
+.csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe-shadow .offset {
+  position: absolute;
+  top: 50%;
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background-color: #3e8ec6;
+  -webkit-transform: translateY(-50%) translateX(-50%) rotate(45deg);
+          transform: translateY(-50%) translateX(-50%) rotate(45deg);
+  cursor: ew-resize;
+  box-shadow: 0 0 0 1px white;
+  pointer-events: all;
+}
+.csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe-shadow .offset[data-selected=true] {
   background-color: white;
   box-shadow: 0 0 0 1px #4987f7;
 }

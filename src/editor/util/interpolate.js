@@ -5,6 +5,7 @@ import { makeInterpolateBoxShadow } from "./interpolate-functions/makeInterpolat
 import { makeInterpolateColor } from "./interpolate-functions/makeInterpolateColor";
 import { makeInterpolateString } from "./interpolate-functions/makeInterpolateString";
 import timingFunctions from "./timing-functions";
+import { makeInterpolateRotate } from "./interpolate-functions/makeInterpolateRotate";
 
 
 

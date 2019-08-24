@@ -90,16 +90,25 @@ export default class TimelineKeyframeList extends UIElement {
 
         return /*html*/`
         <div class='timeline-keyframe' data-timeline-layer-id="${obj.id}">
-            <div class='timeline-keyframe-row layer'>
+            <div class='timeline-keyframe-row layer'  ${OBJECT_TO_PROPERTY({
+                'data-row-index': this.state.rowIndex++,
+                "data-layer-id": obj.id 
+            })} >
+                <div class='keyframe-shadow'>
                 ${times.map(time => {
                     var left = this.calculateTimeToPosition(time, timeline.displayStartTime, timeline.displayEndTime);
                     return /*html*/`<div class='offset' style='left: ${left}'></div>`
                 }).join('')}
+                </div>
             </div>
 
             ${animation.properties.map(property => {
                 return /*html*/ `
-                <div class='timeline-keyframe-row layer-property'>
+                <div class='timeline-keyframe-row layer-property' ${OBJECT_TO_PROPERTY({
+                    'data-row-index': this.state.rowIndex++,
+                    "data-property": property.property,
+                    "data-layer-id": obj.id 
+                })} >
                     ${property.keyframes.length ? this.makeKeyframe(obj.id, timeline, property) : ''}
                 </div>`
             }).join('')}                                                      
@@ -118,11 +127,14 @@ export default class TimelineKeyframeList extends UIElement {
 
     hasDragPlace (e) {
         var dom = Dom.create(e.target);
-        return dom.hasClass('offset') === false 
+        return dom.hasClass('offset') === false &&
+                dom.hasClass('offset-line') === false 
     }
 
     [POINTERSTART('$el') + IF('hasDragPlace') + MOVE('moveDragArea') + END('moveEndDragArea')] (e) {
-        this.dragXY = {x: e.offsetX, y: e.offsetY }; 
+        var rect = this.$el.rect()
+        this.dragXY = {x: e.xy.x - rect.left, y : e.xy.y - rect.top }
+        this.startRowIndex = +Dom.create(e.target).attr('data-row-index');
 
     }
 
@@ -133,10 +145,48 @@ export default class TimelineKeyframeList extends UIElement {
         var height = Length.px(Math.abs(dy))
 
         this.refs.$dragArea.css({ left, top,  width, height})
+
+        this.left = left;
+        this.width = width;
     }
 
     moveEndDragArea (dx, dy) {
+        if (!this.left) return;
+
         this.refs.$dragArea.css({ left: null, top: null,  width: null, height: null})
+        var rowIndex = +Dom.create(editor.config.get('bodyEvent').target).attr('data-row-index');
+    
+        var startIndex = Math.min(rowIndex, this.startRowIndex);
+        var endIndex = Math.max(rowIndex, this.startRowIndex);
+
+        var arr = [] 
+        for(var i = startIndex; i <= endIndex; i++) {
+            arr.push(`[data-row-index="${i}"]`);
+        }
+        var list = this.refs.$keyframeList.$$(arr.join(',')).map(it => {
+            var [layerId, property] = it.attrs('data-layer-id', 'data-property')
+            return {layerId, property}
+        });
+
+        var width = this.$el.width();
+        var startPosRate = (this.left.value) / width 
+        var endPosRate = (this.left.value + this.width.value) / width; 
+
+        var artboard = editor.selection.currentArtboard || { timeline: [] }
+
+        var selectedTimeline = artboard.getSelectedTimeline();
+
+        if (selectedTimeline) {
+            var { displayStartTime, displayEndTime} = selectedTimeline;
+
+            var startTime = displayStartTime + (displayEndTime - displayStartTime) * startPosRate
+            var endTime = displayStartTime + (displayEndTime - displayStartTime) * endPosRate
+
+            editor.timeline.selectBySearch(list, startTime, endTime);
+            this.refresh();
+        }
+        
+        
     }
 
 
@@ -155,6 +205,7 @@ export default class TimelineKeyframeList extends UIElement {
         this.rect = {
             totalWidth, startX
         }
+        this.state.rowIndex = 0; 
 
 
         return selectedTimeline.animations.map(animation => {
