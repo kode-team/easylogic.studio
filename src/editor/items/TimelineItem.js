@@ -377,6 +377,8 @@ export class TimelineItem extends DomItem {
     var keyframe = this.getTimelineKeyframeById(layerId, property, offsetId)
     if (keyframe) {
       keyframe.time = changedTime;
+
+      this.compiledTimingFunction(layerId, property);                   
     }
   }
 
@@ -460,14 +462,6 @@ export class TimelineItem extends DomItem {
       return times[0]
     }
   }
-
-  getTimelineKeyframeByIndex (layerId, property, index) {
-    var p = this.getTimelineProperty(layerId, property);
-
-    if (p) {
-      return p.keyframes[index]
-    }
-  }  
 
   getTimelineKeyframeById (layerId, property, id) {
     var p = this.getTimelineProperty(layerId, property);
