@@ -1365,13 +1365,13 @@ html, body {
   background-color: #5a5a5a;
   border: 0px solid #0c0c0d;
   border-radius: 3px;
-  color: #cacaca;
+  color: #ffffff;
   outline: none;
   vertical-align: middle;
 }
 .csseditor[data-theme=dark] button {
   border-width: 0px;
-  color: #cacaca;
+  color: #ffffff;
   width: 16px;
   height: 16px;
   vertical-align: middle;
@@ -1389,7 +1389,7 @@ html, body {
   height: 100%;
 }
 .csseditor[data-theme=dark] button svg path {
-  fill: #cacaca;
+  fill: #ffffff;
 }
 .csseditor[data-theme=dark] input[type=file].embed-file-input {
   position: absolute;
@@ -1401,7 +1401,7 @@ html, body {
   width: 100%;
   height: 100%;
   display: inline-block;
-  background-color: #343642;
+  background-color: #333333;
   opacity: 0;
   pointer-events: none;
 }
@@ -1425,8 +1425,8 @@ html, body {
   height: 50px;
   overflow: hidden;
   position: relative;
-  background-color: #343642;
-  color: #cacaca;
+  background-color: #333333;
+  color: #ffffff;
   z-index: 1;
   pointer-events: all;
   box-sizing: border-box;
@@ -1573,7 +1573,7 @@ html, body {
   margin: 10px 5px;
 }
 .csseditor[data-theme=dark] .feature-control .draw-items > label {
-  color: #cacaca;
+  color: #ffffff;
   padding: 5px;
   text-align: center;
   display: block;
@@ -1584,7 +1584,7 @@ html, body {
 .csseditor[data-theme=dark] .feature-control .draw-items .menu-item {
   text-align: center;
   margin-top: 5px;
-  color: #cacaca;
+  color: #ffffff;
   width: 48px;
   height: 48px;
   background-color: transparent;
@@ -1594,10 +1594,10 @@ html, body {
   margin-bottom: 5px;
 }
 .csseditor[data-theme=dark] .feature-control .draw-items .menu-item.selected .icon {
-  background-color: black;
+  background-color: white;
 }
 .csseditor[data-theme=dark] .feature-control .draw-items .menu-item.selected .icon svg path {
-  fill: #fbde50;
+  fill: #fc554f;
 }
 .csseditor[data-theme=dark] .feature-control .draw-items .menu-item[data-no-title=true] {
   height: 30px;
@@ -1630,7 +1630,7 @@ html, body {
   width: 100%;
   height: 2px;
   cursor: pointer;
-  background: #fbde50;
+  background: #fc554f;
   border-radius: 2px;
 }
 .csseditor[data-theme=dark] input[type=range]::-webkit-slider-thumb {
@@ -1645,13 +1645,13 @@ html, body {
   margin-top: -4px;
 }
 .csseditor[data-theme=dark] input[type=range]:focus::-webkit-slider-runnable-track {
-  background: #fbde50;
+  background: #fc554f;
 }
 .csseditor[data-theme=dark] input[type=range]::-moz-range-track {
   width: 100%;
   height: 2px;
   cursor: pointer;
-  background: #fbde50;
+  background: #fc554f;
   border-radius: 2px;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.12), inset 0 1px 2px rgba(0, 0, 0, 0.12);
 }
@@ -1670,7 +1670,7 @@ html, body {
   cursor: pointer;
   border: 1px solid #000;
   border-radius: 2px;
-  background: #fbde50;
+  background: #fc554f;
 }
 .csseditor[data-theme=dark] input[type=range]::-ms-fill-lower {
   background: #f3f3f3;
@@ -1703,14 +1703,14 @@ html, body {
   right: 0px;
   bottom: 0px;
   top: 0px;
-  background-color: #343642;
-  color: #cacaca;
+  background-color: #333333;
+  color: #ffffff;
 }
 .csseditor[data-theme=dark] .tab.number-tab .tab-header {
   height: 34px;
   cursor: pointer;
   border-bottom: 1px solid #1b1b1b;
-  background-color: #343642;
+  background-color: #333333;
 }
 .csseditor[data-theme=dark] .tab.number-tab .tab-content {
   display: none;
@@ -1749,64 +1749,64 @@ html, body {
   pointer-events: none;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"] {
-  background-color: #fbde50;
-  color: black;
+  background-color: #fc554f;
+  color: white;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="1"] .tab-content[data-value="1"] {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"] {
-  background-color: #fbde50;
-  color: black;
+  background-color: #fc554f;
+  color: white;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="2"] .tab-content[data-value="2"] {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"] {
-  background-color: #fbde50;
-  color: black;
+  background-color: #fc554f;
+  color: white;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="3"] .tab-content[data-value="3"] {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"] {
-  background-color: #fbde50;
-  color: black;
+  background-color: #fc554f;
+  color: white;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="4"] .tab-content[data-value="4"] {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"] {
-  background-color: #fbde50;
-  color: black;
+  background-color: #fc554f;
+  color: white;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="5"] .tab-content[data-value="5"] {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"] {
-  background-color: #fbde50;
-  color: black;
+  background-color: #fc554f;
+  color: white;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="6"] .tab-content[data-value="6"] {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"] {
-  background-color: #fbde50;
-  color: black;
+  background-color: #fc554f;
+  color: white;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="7"] .tab-content[data-value="7"] {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"] {
-  background-color: #fbde50;
-  color: black;
+  background-color: #fc554f;
+  color: white;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="8"] .tab-content[data-value="8"] {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"] {
-  background-color: #fbde50;
-  color: black;
+  background-color: #fc554f;
+  color: white;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="9"] .tab-content[data-value="9"] {
   display: block;
@@ -1852,11 +1852,11 @@ html, body {
   font-size: 11px;
 }
 .csseditor[data-theme=dark] .tab > .tab-header > .tab-item.select-reverse:not(.selected) {
-  background-color: rgba(251, 222, 80, 0.5);
+  background-color: rgba(252, 85, 79, 0.5);
   color: black;
 }
 .csseditor[data-theme=dark] .tab > .tab-header > .tab-item.select-reverse.selected {
-  background-color: #343642;
+  background-color: #333333;
 }
 .csseditor[data-theme=dark] .tab > .tab-body {
   position: absolute;
@@ -1899,7 +1899,7 @@ html, body {
   right: 0px;
   height: 30px;
   display: none;
-  background-color: #343642;
+  background-color: #333333;
   font-size: 12px;
   font-weight: bold;
   padding: 8px 5px !important;
@@ -1953,7 +1953,7 @@ html, body {
   min-width: 60px;
 }
 .csseditor[data-theme=dark] .tab.horizontal > .tab-header > .tab-item.selected {
-  background-color: rgba(251, 222, 80, 0.5);
+  background-color: rgba(252, 85, 79, 0.5);
 }
 .csseditor[data-theme=dark] .tab.horizontal > .tab-body {
   top: 0px;
@@ -1995,71 +1995,71 @@ html, body {
   display: block;
   height: 30px;
   position: relative;
-  background-image: linear-gradient(to right, #fbde50, #fbde50);
+  background-image: linear-gradient(to right, #fc554f, #fc554f);
   background-size: 100% 2px;
   background-position: 0px center;
   background-repeat: no-repeat;
   cursor: pointer;
 }
 .csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="0"] .offset-item[data-offset-index="0"] {
-  box-shadow: 0 0 4px 0 #fbde50;
+  box-shadow: 0 0 4px 0 #fc554f;
 }
 .csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="1"] .offset-item[data-offset-index="1"] {
-  box-shadow: 0 0 4px 0 #fbde50;
+  box-shadow: 0 0 4px 0 #fc554f;
 }
 .csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="2"] .offset-item[data-offset-index="2"] {
-  box-shadow: 0 0 4px 0 #fbde50;
+  box-shadow: 0 0 4px 0 #fc554f;
 }
 .csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="3"] .offset-item[data-offset-index="3"] {
-  box-shadow: 0 0 4px 0 #fbde50;
+  box-shadow: 0 0 4px 0 #fc554f;
 }
 .csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="4"] .offset-item[data-offset-index="4"] {
-  box-shadow: 0 0 4px 0 #fbde50;
+  box-shadow: 0 0 4px 0 #fc554f;
 }
 .csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="5"] .offset-item[data-offset-index="5"] {
-  box-shadow: 0 0 4px 0 #fbde50;
+  box-shadow: 0 0 4px 0 #fc554f;
 }
 .csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="6"] .offset-item[data-offset-index="6"] {
-  box-shadow: 0 0 4px 0 #fbde50;
+  box-shadow: 0 0 4px 0 #fc554f;
 }
 .csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="7"] .offset-item[data-offset-index="7"] {
-  box-shadow: 0 0 4px 0 #fbde50;
+  box-shadow: 0 0 4px 0 #fc554f;
 }
 .csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="8"] .offset-item[data-offset-index="8"] {
-  box-shadow: 0 0 4px 0 #fbde50;
+  box-shadow: 0 0 4px 0 #fc554f;
 }
 .csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="9"] .offset-item[data-offset-index="9"] {
-  box-shadow: 0 0 4px 0 #fbde50;
+  box-shadow: 0 0 4px 0 #fc554f;
 }
 .csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="10"] .offset-item[data-offset-index="10"] {
-  box-shadow: 0 0 4px 0 #fbde50;
+  box-shadow: 0 0 4px 0 #fc554f;
 }
 .csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="11"] .offset-item[data-offset-index="11"] {
-  box-shadow: 0 0 4px 0 #fbde50;
+  box-shadow: 0 0 4px 0 #fc554f;
 }
 .csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="12"] .offset-item[data-offset-index="12"] {
-  box-shadow: 0 0 4px 0 #fbde50;
+  box-shadow: 0 0 4px 0 #fc554f;
 }
 .csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="13"] .offset-item[data-offset-index="13"] {
-  box-shadow: 0 0 4px 0 #fbde50;
+  box-shadow: 0 0 4px 0 #fc554f;
 }
 .csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="14"] .offset-item[data-offset-index="14"] {
-  box-shadow: 0 0 4px 0 #fbde50;
+  box-shadow: 0 0 4px 0 #fc554f;
 }
 .csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="15"] .offset-item[data-offset-index="15"] {
-  box-shadow: 0 0 4px 0 #fbde50;
+  box-shadow: 0 0 4px 0 #fc554f;
 }
 .csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="16"] .offset-item[data-offset-index="16"] {
-  box-shadow: 0 0 4px 0 #fbde50;
+  box-shadow: 0 0 4px 0 #fc554f;
 }
 .csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="17"] .offset-item[data-offset-index="17"] {
-  box-shadow: 0 0 4px 0 #fbde50;
+  box-shadow: 0 0 4px 0 #fc554f;
 }
 .csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="18"] .offset-item[data-offset-index="18"] {
-  box-shadow: 0 0 4px 0 #fbde50;
+  box-shadow: 0 0 4px 0 #fc554f;
 }
 .csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="19"] .offset-item[data-offset-index="19"] {
-  box-shadow: 0 0 4px 0 #fbde50;
+  box-shadow: 0 0 4px 0 #fc554f;
 }
 .csseditor[data-theme=dark] .editor.offset-editor .offset .offset-item {
   position: absolute;
@@ -2071,7 +2071,7 @@ html, body {
           transform: translateX(-50%) translateY(-50%);
   box-sizing: border-box;
   border: 1px solid #609de2;
-  background-color: #fbde50;
+  background-color: #fc554f;
   border-radius: 100%;
   cursor: pointer;
 }
@@ -2088,7 +2088,7 @@ html, body {
   display: inline-block;
   font-weight: bold;
   line-height: 1.6;
-  color: #fbde50;
+  color: #fc554f;
   z-index: 1;
 }
 .csseditor[data-theme=dark] .logo .extra-text {
@@ -2197,14 +2197,14 @@ html, body {
 }
 .csseditor[data-theme=dark] .tool-menu .items .icon.width,
 .csseditor[data-theme=dark] .external-tool-menu .items .icon.width {
-  background-image: linear-gradient(to right, #fbde50, #fbde50), linear-gradient(to right, #ccc, #ccc);
+  background-image: linear-gradient(to right, #fc554f, #fc554f), linear-gradient(to right, #ccc, #ccc);
   background-size: 20px 6px, 20px 6px;
   background-position: 2px 6px, 2px 16px;
   background-repeat: no-repeat;
 }
 .csseditor[data-theme=dark] .tool-menu .items .icon.height,
 .csseditor[data-theme=dark] .external-tool-menu .items .icon.height {
-  background-image: linear-gradient(to right, #fbde50, #fbde50), linear-gradient(to right, #ccc, #ccc);
+  background-image: linear-gradient(to right, #fc554f, #fc554f), linear-gradient(to right, #ccc, #ccc);
   background-size: 6px 20px, 6px 20px;
   background-position: 4px 2px, 14px 2px;
   background-repeat: no-repeat;
@@ -2338,8 +2338,8 @@ html, body {
   padding: 5px 10px;
   border-radius: 3px;
   border: 1px solid #1b1b1b;
-  color: #cacaca;
-  background-color: #343642;
+  color: #ffffff;
+  background-color: #333333;
 }
 .csseditor[data-theme=dark] .page-tools > label {
   vertical-align: middle;
@@ -2365,8 +2365,8 @@ html, body {
   pointer-events: all;
   outline: none;
   border: 1px solid #1b1b1b;
-  color: #cacaca;
-  background-color: #343642;
+  color: #ffffff;
+  background-color: #333333;
   padding: 5px 10px;
   box-sizing: border-box;
   height: 100%;
@@ -2388,8 +2388,8 @@ html, body {
   pointer-events: all;
   outline: none;
   border: 1px solid #1b1b1b;
-  color: #cacaca;
-  background-color: #343642;
+  color: #ffffff;
+  background-color: #333333;
   padding: 5px 10px;
 }
 .csseditor[data-theme=dark] .page-subeditor .polygon-manager > * {
@@ -2410,8 +2410,8 @@ html, body {
   outline: none;
   border-radius: 3px;
   border: 1px solid #1b1b1b;
-  color: #cacaca;
-  background-color: #343642;
+  color: #ffffff;
+  background-color: #333333;
   padding: 5px 10px;
   box-sizing: border-box;
   height: 100%;
@@ -2899,8 +2899,8 @@ html, body {
 .csseditor[data-theme=dark] .property {
   padding: 6px 0px;
   border-bottom: 1px solid rgba(109, 109, 109, 0.2);
-  background-color: #343642;
-  color: #cacaca;
+  background-color: #333333;
+  color: #ffffff;
   display: none;
 }
 .csseditor[data-theme=dark] .property .add-timeline-property {
@@ -2918,8 +2918,8 @@ html, body {
           transform: rotate(45deg);
 }
 .csseditor[data-theme=dark] .property .add-timeline-property:hover {
-  box-shadow: 0 0 0 2px rgba(251, 222, 80, 0.5);
-  background-color: #fbde50;
+  box-shadow: 0 0 0 2px rgba(252, 85, 79, 0.5);
+  background-color: #fc554f;
 }
 .csseditor[data-theme=dark] .property.compact {
   padding: 0px;
@@ -2946,14 +2946,10 @@ html, body {
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools > * {
   flex: 1 1 auto;
 }
-.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .animation-selector {
-  flex: none;
-  width: 194px;
-}
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control {
   text-align: left;
   display: grid;
-  grid-template-columns: 200px 120px 120px 1fr;
+  grid-template-columns: 188px 120px 120px 1fr;
   grid-column-gap: 5px;
 }
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .speed-number {
@@ -2970,7 +2966,7 @@ html, body {
   vertical-align: middle;
 }
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control label svg path {
-  fill: #cacaca;
+  fill: #ffffff;
 }
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .input {
   vertical-align: middle;
@@ -2981,6 +2977,9 @@ html, body {
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .row {
   display: flex;
 }
+.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .row:first-child {
+  text-align: center;
+}
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control button {
   display: inline-block;
   vertical-align: middle;
@@ -2990,18 +2989,23 @@ html, body {
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control button.play, .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control button.pause {
   -webkit-filter: drop-shadow(0px 0px 2px black);
           filter: drop-shadow(0px 0px 2px black);
-  display: none;
   -webkit-transform: scale(1.5);
           transform: scale(1.5);
 }
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control button.play svg path {
-  fill: #fbde50;
+  fill: #fc554f;
+}
+.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control button.pause {
+  display: none;
 }
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control button.pause svg path {
   fill: #6677d8;
 }
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .play-buttons[data-status=play] .pause {
   display: inline-block;
+}
+.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .play-buttons[data-status=play] .play {
+  display: none;
 }
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .play-buttons[data-status=pause] .play {
   display: inline-block;
@@ -3010,28 +3014,28 @@ html, body {
   display: flex;
 }
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=normal] [data-value=normal] {
-  background-color: #fbde50;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=normal] [data-value=normal] svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate] [data-value=alternate] {
-  background-color: #fbde50;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate] [data-value=alternate] svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=reverse] [data-value=reverse] {
-  background-color: #fbde50;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=reverse] [data-value=reverse] svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate-reverse] [data-value=alternate-reverse] {
-  background-color: #fbde50;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate-reverse] [data-value=alternate-reverse] svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons button {
   width: 26px;
@@ -3053,7 +3057,7 @@ html, body {
   vertical-align: middle;
 }
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .keyframe-time-control svg path {
-  fill: #cacaca;
+  fill: #ffffff;
 }
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .keyframe-time-control input[type=text] {
   width: 80px;
@@ -3111,7 +3115,7 @@ html, body {
 .csseditor[data-theme=dark] .property > .property-body {
   display: none;
   padding: 0px;
-  background-color: #343642;
+  background-color: #333333;
 }
 .csseditor[data-theme=dark] .property > .property-body .property-item {
   padding: 0px;
@@ -3189,22 +3193,22 @@ html, body {
   width: 20px;
   height: 20px;
   margin-right: 10px;
-  background-color: #343642;
+  background-color: #333333;
 }
 .csseditor[data-theme=dark] .border-item .border-direction button[data-value=all] {
-  border: 3px solid #fbde50;
+  border: 3px solid #fc554f;
 }
 .csseditor[data-theme=dark] .border-item .border-direction button[data-value=top] {
-  border-top: 3px solid #fbde50;
+  border-top: 3px solid #fc554f;
 }
 .csseditor[data-theme=dark] .border-item .border-direction button[data-value=right] {
-  border-right: 3px solid #fbde50;
+  border-right: 3px solid #fc554f;
 }
 .csseditor[data-theme=dark] .border-item .border-direction button[data-value=bottom] {
-  border-bottom: 3px solid #fbde50;
+  border-bottom: 3px solid #fc554f;
 }
 .csseditor[data-theme=dark] .border-item .border-direction button[data-value=left] {
-  border-left: 3px solid #fbde50;
+  border-left: 3px solid #fc554f;
 }
 .csseditor[data-theme=dark] .border-item .editor-area {
   padding: 5px 0px;
@@ -3554,7 +3558,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .transition-list .transition-item .timing {
   border-radius: 3px;
-  background-color: #fbde50;
+  background-color: #fc554f;
   width: 100%;
   height: 30px;
   vertical-align: middle;
@@ -3616,7 +3620,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .animation-list .animation-item .timing {
   border-radius: 3px;
-  background-color: #fbde50;
+  background-color: #fc554f;
   width: 100%;
   height: 30px;
   vertical-align: middle;
@@ -3651,7 +3655,7 @@ html, body {
   background-color: blue;
 }
 .csseditor[data-theme=dark] .animation-list .animation-item .labels label.direction small, .csseditor[data-theme=dark] .animation-list .animation-item .labels label.fill-mode small, .csseditor[data-theme=dark] .animation-list .animation-item .labels label.play-state small {
-  color: #cacaca;
+  color: #ffffff;
 }
 .csseditor[data-theme=dark] .animation-list .animation-item .labels label.play-state {
   background-color: transparent;
@@ -3764,8 +3768,8 @@ html, body {
   content: attr(title);
   position: absolute;
   display: inline-block;
-  background-color: #fbde50;
-  color: black;
+  background-color: #fc554f;
+  color: white;
   left: 0px;
   top: 0px;
   border-top-left-radius: 5px;
@@ -3773,7 +3777,7 @@ html, body {
   padding: 2px 4px;
 }
 .csseditor[data-theme=dark] .code-view-item > div pre::before svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=dark] .clip-path-list {
   grid-template-columns: 1fr !important;
@@ -3787,7 +3791,7 @@ html, body {
   cursor: pointer;
 }
 .csseditor[data-theme=dark] .clip-path-list .clippath-item.selected, .csseditor[data-theme=dark] .clip-path-list .clippath-item:hover {
-  background-color: #fbde50;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=dark] .clip-path-list .clippath-item .title {
   display: grid;
@@ -3867,11 +3871,11 @@ html, body {
   padding: 4px 6px;
   font-weight: bold;
   border-radius: 5px;
-  background-color: #fbde50;
-  color: black;
+  background-color: #fc554f;
+  color: white;
 }
 .csseditor[data-theme=dark] .selector-list .selector-item .title .name span svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=dark] .selector-list .selector-item .title .tools {
   vertical-align: middle;
@@ -3984,7 +3988,7 @@ html, body {
   height: 100%;
 }
 .csseditor[data-theme=dark] .layer-list .layer-item .detail span.icon svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=dark] .layer-list .layer-item .detail label {
   padding: 2px 0px;
@@ -4049,19 +4053,19 @@ html, body {
   background-color: #609de2;
   border-color: #609de2;
   background-image: none;
-  color: black;
+  color: white;
 }
 .csseditor[data-theme=dark] .color-assets-property .color-list-tools[data-view-mode=list] button[data-value=list] svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=dark] .color-assets-property .color-list-tools[data-view-mode=grid] button[data-value=grid] {
   background-color: #609de2;
   border-color: #609de2;
   background-image: none;
-  color: black;
+  color: white;
 }
 .csseditor[data-theme=dark] .color-assets-property .color-list-tools[data-view-mode=grid] button[data-value=grid] svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=dark] .color-assets-property .color-list .color-view {
   pointer-events: none;
@@ -4085,7 +4089,7 @@ html, body {
   padding: 24px;
 }
 .csseditor[data-theme=dark] .color-assets-property .color-list[data-view-mode=grid] .add-color-item svg path {
-  fill: #cacaca;
+  fill: #ffffff;
 }
 .csseditor[data-theme=dark] .color-assets-property .color-list[data-view-mode=grid] .color-item {
   display: inline-block;
@@ -4136,7 +4140,7 @@ html, body {
   padding: 2px;
 }
 .csseditor[data-theme=dark] .color-assets-property .color-list[data-view-mode=grid] .color-item .tools svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=dark] .property.color-assets-property {
   padding-left: 0px !important;
@@ -4181,19 +4185,19 @@ html, body {
   background-color: #609de2;
   border-color: #609de2;
   background-image: none;
-  color: black;
+  color: white;
 }
 .csseditor[data-theme=dark] .gradient-assets-property .gradient-list-tools[data-view-mode=list] button[data-value=list] svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=dark] .gradient-assets-property .gradient-list-tools[data-view-mode=grid] button[data-value=grid] {
   background-color: #609de2;
   border-color: #609de2;
   background-image: none;
-  color: black;
+  color: white;
 }
 .csseditor[data-theme=dark] .gradient-assets-property .gradient-list-tools[data-view-mode=grid] button[data-value=grid] svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=dark] .gradient-assets-property .gradient-list .gradient-view {
   pointer-events: none;
@@ -4217,7 +4221,7 @@ html, body {
   padding: 24px;
 }
 .csseditor[data-theme=dark] .gradient-assets-property .gradient-list[data-view-mode=grid] .add-gradient-item svg path {
-  fill: #cacaca;
+  fill: #ffffff;
 }
 .csseditor[data-theme=dark] .gradient-assets-property .gradient-list[data-view-mode=grid] .gradient-item {
   display: inline-block;
@@ -4271,7 +4275,7 @@ html, body {
   padding: 2px;
 }
 .csseditor[data-theme=dark] .gradient-assets-property .gradient-list[data-view-mode=grid] .gradient-item .tools svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=dark] .property.gradient-assets-property {
   padding-left: 0px !important;
@@ -4316,19 +4320,19 @@ html, body {
   background-color: #609de2;
   border-color: #609de2;
   background-image: none;
-  color: black;
+  color: white;
 }
 .csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list-tools[data-view-mode=list] button[data-value=list] svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list-tools[data-view-mode=grid] button[data-value=grid] {
   background-color: #609de2;
   border-color: #609de2;
   background-image: none;
-  color: black;
+  color: white;
 }
 .csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list-tools[data-view-mode=grid] button[data-value=grid] svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list .svgfilter-view {
   position: absolute;
@@ -4358,7 +4362,7 @@ html, body {
   padding: 24px;
 }
 .csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list[data-view-mode=grid] .add-svgfilter-item svg path {
-  fill: #cacaca;
+  fill: #ffffff;
 }
 .csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list[data-view-mode=grid] .svgfilter-item {
   display: inline-block;
@@ -4401,7 +4405,7 @@ html, body {
   padding: 2px;
 }
 .csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list[data-view-mode=grid] .svgfilter-item .tools svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=dark] .property.svgfilter-assets-property {
   padding-left: 0px !important;
@@ -4475,7 +4479,7 @@ html, body {
   padding: 2px;
 }
 .csseditor[data-theme=dark] .svgpath-assets-property .svgpath-list[data-view-mode=grid] .svgpath-item .tools svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=dark] .property.svgpath-assets-property {
   padding-left: 0px !important;
@@ -4622,19 +4626,19 @@ html, body {
   background-color: #609de2;
   border-color: #609de2;
   background-image: none;
-  color: black;
+  color: white;
 }
 .csseditor[data-theme=dark] .image-assets-property .image-list-tools[data-view-mode=list] button[data-value=list] svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=dark] .image-assets-property .image-list-tools[data-view-mode=grid] button[data-value=grid] {
   background-color: #609de2;
   border-color: #609de2;
   background-image: none;
-  color: black;
+  color: white;
 }
 .csseditor[data-theme=dark] .image-assets-property .image-list-tools[data-view-mode=grid] button[data-value=grid] svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=dark] .image-assets-property .image-list .image-view {
   pointer-events: none;
@@ -4679,7 +4683,7 @@ html, body {
   pointer-events: none;
 }
 .csseditor[data-theme=dark] .image-assets-property .image-list[data-view-mode=grid] .add-image-item svg path {
-  fill: #cacaca;
+  fill: #ffffff;
 }
 .csseditor[data-theme=dark] .image-assets-property .image-list[data-view-mode=grid] .image-item {
   display: inline-block;
@@ -4731,7 +4735,7 @@ html, body {
   padding: 2px;
 }
 .csseditor[data-theme=dark] .image-assets-property .image-list[data-view-mode=grid] .image-item .tools svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=dark] .property.image-assets-property {
   padding-left: 0px !important;
@@ -4750,7 +4754,7 @@ html, body {
   top: 30px;
   left: 60px;
   border: 1px solid #1b1b1b;
-  background-color: #343642;
+  background-color: #333333;
 }
 .csseditor[data-theme=dark] .cubic-bezier-editor .bezier .bezier-canvas {
   position: absolute;
@@ -4773,8 +4777,8 @@ html, body {
           transform: translateX(-50%) translateY(-50%);
   border-radius: 100%;
   cursor: pointer;
-  background-color: #343642;
-  border: 1px solid #fbde50;
+  background-color: #fc554f;
+  border: 1px solid #fc554f;
   box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .cubic-bezier-editor .animation {
@@ -4815,7 +4819,7 @@ html, body {
   height: 40px;
   border: 1px solid gray;
   cursor: pointer;
-  background-color: #343642;
+  background-color: #333333;
 }
 .csseditor[data-theme=dark] .cubic-bezier-editor .item-list .item:not(:first-child) {
   border-top: 0px;
@@ -4848,12 +4852,12 @@ html, body {
   vertical-align: middle;
 }
 .csseditor[data-theme=dark] .cubic-bezier-editor .predefined .left svg path, .csseditor[data-theme=dark] .cubic-bezier-editor .predefined .right svg path {
-  fill: #cacaca;
+  fill: #ffffff;
 }
 .csseditor[data-theme=dark] .cubic-bezier-editor .predefined .predefined-text {
   vertical-align: middle;
   padding: 4px;
-  color: #cacaca;
+  color: #ffffff;
 }
 .csseditor[data-theme=dark] .color-view-editor {
   display: grid;
@@ -5231,15 +5235,15 @@ html, body {
 }
 .csseditor[data-theme=dark] .css-property-editor .css-property-item > .title {
   grid-template-columns: 1fr 30px;
-  background-color: #343642;
-  color: #fbde50;
+  background-color: #333333;
+  color: #fc554f;
   border-radius: 3px;
   padding: 3px 0px;
   margin-bottom: 2px;
   font-weight: 900;
 }
 .csseditor[data-theme=dark] .css-property-editor .css-property-item > .title svg path {
-  fill: #fbde50;
+  fill: #fc554f;
 }
 .csseditor[data-theme=dark] .css-property-editor .css-property-item .value-editor {
   padding: 2px;
@@ -5406,16 +5410,16 @@ html, body {
   grid-template-columns: 1fr 1fr;
 }
 .csseditor[data-theme=dark] .border-radius-editor .radius-selector[data-selected-value=all] button[data-value=all] {
-  background-color: #fbde50;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=dark] .border-radius-editor .radius-selector[data-selected-value=all] button[data-value=all] svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=dark] .border-radius-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] {
-  background-color: #fbde50;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=dark] .border-radius-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=dark] .border-radius-editor .radius-setting-box > div {
   margin-bottom: 5px;
@@ -5456,13 +5460,13 @@ html, body {
   margin: 5px 0px;
 }
 .csseditor[data-theme=dark] .transform-editor .transform-list .transform-item .title svg path {
-  fill: #fbde50;
+  fill: #fc554f;
 }
 .csseditor[data-theme=dark] .transform-editor .transform-list .transform-item .title label {
   font-size: 12px;
   padding: 2px 5px;
   box-sizing: border-box;
-  color: #fbde50;
+  color: #fc554f;
 }
 .csseditor[data-theme=dark] .transform-editor .transform-list .transform-item .title label span {
   font-weight: bold;
@@ -5556,8 +5560,8 @@ html, body {
   border-radius: 3px;
   margin-right: 2px;
   vertical-align: middle;
-  background-color: #fbde50;
-  color: black;
+  background-color: #fc554f;
+  color: white;
 }
 .csseditor[data-theme=dark] .filter-editor .filter-list .filter-item .title .filter-menu {
   text-align: right;
@@ -5615,7 +5619,7 @@ html, body {
   margin-top: 5px;
 }
 .csseditor[data-theme=dark] .box-shadow-editor .shadow-item.desc {
-  color: #cacaca;
+  color: #ffffff;
 }
 .csseditor[data-theme=dark] .box-shadow-editor .shadow-item.desc .color {
   visibility: hidden;
@@ -5645,10 +5649,10 @@ html, body {
   height: 16px;
 }
 .csseditor[data-theme=dark] .box-shadow-editor .shadow-item .inset svg path {
-  fill: #343642;
+  fill: #333333;
 }
 .csseditor[data-theme=dark] .box-shadow-editor .shadow-item .inset[data-value=true] svg path {
-  fill: #fbde50;
+  fill: #fc554f;
 }
 .csseditor[data-theme=dark] .box-shadow-editor .shadow-item .offset-x,
 .csseditor[data-theme=dark] .box-shadow-editor .shadow-item .offset-y,
@@ -5690,7 +5694,7 @@ html, body {
   margin-top: 5px;
 }
 .csseditor[data-theme=dark] .text-shadow-editor .shadow-item.desc {
-  color: #cacaca;
+  color: #ffffff;
 }
 .csseditor[data-theme=dark] .text-shadow-editor .shadow-item.desc .color {
   visibility: hidden;
@@ -5789,16 +5793,16 @@ html, body {
   justify-items: center;
 }
 .csseditor[data-theme=dark] .perspective-origin-editor .radius-selector[data-selected-value=all] button[data-value=all] {
-  background-color: #fbde50;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=dark] .perspective-origin-editor .radius-selector[data-selected-value=all] button[data-value=all] svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=dark] .perspective-origin-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] {
-  background-color: #fbde50;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=dark] .perspective-origin-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=dark] .perspective-origin-editor .radius-selector button {
   background-image: none;
@@ -5822,16 +5826,16 @@ html, body {
   justify-items: center;
 }
 .csseditor[data-theme=dark] .transform-origin-editor .radius-selector[data-selected-value=all] button[data-value=all] {
-  background-color: #fbde50;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=dark] .transform-origin-editor .radius-selector[data-selected-value=all] button[data-value=all] svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=dark] .transform-origin-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] {
-  background-color: #fbde50;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=dark] .transform-origin-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=dark] .transform-origin-editor .radius-selector button {
   background-image: none;
@@ -6157,7 +6161,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .svg-property-editor .svg-property-list .svg-property-item .title .type[data-type=filter] {
   border-radius: 5px;
-  background-color: #fbde50;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=dark] .svg-property-editor .svg-property-list .svg-property-item .title .type[data-type=clip-path] {
   border-radius: 5px;
@@ -6172,7 +6176,7 @@ html, body {
   text-align: right;
 }
 .csseditor[data-theme=dark] .svg-filter-editor {
-  color: #cacaca;
+  color: #ffffff;
 }
 .csseditor[data-theme=dark] .svg-filter-editor .label {
   height: 20px;
@@ -6214,7 +6218,7 @@ html, body {
   display: grid;
   grid-template-columns: 20px 1fr 30px;
   margin-left: -20px;
-  color: #fbde50;
+  color: #fc554f;
   border-radius: 3px;
   margin: 5px 0px;
 }
@@ -6230,7 +6234,7 @@ html, body {
   height: 100%;
 }
 .csseditor[data-theme=dark] .svg-filter-editor .filter-list .filter-item .title .fold svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=dark] .svg-filter-editor .filter-list .filter-item .title label {
   font-size: 12px;
@@ -6241,7 +6245,7 @@ html, body {
   text-align: right;
 }
 .csseditor[data-theme=dark] .svg-filter-editor .filter-list .filter-item .title .filter-menu svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=dark] .svg-filter-editor .filter-list .filter-item .filter-ui {
   display: grid;
@@ -6291,16 +6295,16 @@ html, body {
   grid-template-columns: 1fr 1fr;
 }
 .csseditor[data-theme=dark] .direction-editor .radius-selector[data-selected-value=all] button[data-value=all] {
-  background-color: #fbde50;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=dark] .direction-editor .radius-selector[data-selected-value=all] button[data-value=all] svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=dark] .direction-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] {
-  background-color: #fbde50;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=dark] .direction-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=dark] .direction-editor .radius-selector button {
   flex: none;
@@ -6365,16 +6369,16 @@ html, body {
   grid-template-columns: repeat(9, 1fr);
 }
 .csseditor[data-theme=dark] .list-view-editor .list-view-item.selected {
-  background-color: #fbde50;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=dark] .list-view-editor .list-view-item.selected svg path, .csseditor[data-theme=dark] .list-view-editor .list-view-item.selected svg circle, .csseditor[data-theme=dark] .list-view-editor .list-view-item.selected svg rect {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=dark] .list-view-editor .list-view-item svg {
   width: 100%;
 }
 .csseditor[data-theme=dark] .list-view-editor .list-view-item svg path, .csseditor[data-theme=dark] .list-view-editor .list-view-item svg circle, .csseditor[data-theme=dark] .list-view-editor .list-view-item svg rect {
-  fill: #cacaca;
+  fill: #ffffff;
 }
 .csseditor[data-theme=dark] .image-select-editor {
   height: 150px;
@@ -6540,11 +6544,11 @@ html, body {
   display: none;
   box-sizing: border-box;
   z-index: 1000;
-  background-color: #343642;
+  background-color: #333333;
   border: 1px solid #1b1b1b;
   box-shadow: 0 0 1px 0px #1b1b1b;
   padding: 14px 10px;
-  color: #cacaca;
+  color: #ffffff;
 }
 .csseditor[data-theme=dark] .popup.compact {
   padding: 0px;
@@ -6712,10 +6716,10 @@ html, body {
 .csseditor[data-theme=dark] .popup .box-shadow-property-popup .codemirror-colorpicker {
   box-shadow: none;
   border-radius: 0px;
-  background-color: #343642;
+  background-color: #333333;
 }
 .csseditor[data-theme=dark] .popup .box-shadow-property-popup .codemirror-colorpicker input {
-  color: #cacaca !important;
+  color: #ffffff !important;
   text-transform: uppercase;
   border: 0px !important;
 }
@@ -6723,7 +6727,7 @@ html, body {
   margin-top: 0px;
 }
 .csseditor[data-theme=dark] .popup .box-shadow-property-popup .codemirror-colorpicker .title {
-  color: #cacaca !important;
+  color: #ffffff !important;
 }
 .csseditor[data-theme=dark] .popup .box-shadow-property-popup .codemirror-colorpicker .colorsets {
   border-top: 0px solid #1b1b1b !important;
@@ -6740,12 +6744,12 @@ html, body {
   height: 20px;
 }
 .csseditor[data-theme=dark] .popup .box-shadow-property-popup .box .type .select[data-selected-value=inset] button[data-value=inset] {
-  box-shadow: inset 0px 0px 3px 0px #fbde50 !important;
-  background-color: #fbde50 !important;
+  box-shadow: inset 0px 0px 3px 0px #fc554f !important;
+  background-color: #fc554f !important;
 }
 .csseditor[data-theme=dark] .popup .box-shadow-property-popup .box .type .select[data-selected-value=outset] button[data-value=outset] {
-  box-shadow: inset 0px 0px 3px 0px #fbde50 !important;
-  background-color: #fbde50 !important;
+  box-shadow: inset 0px 0px 3px 0px #fc554f !important;
+  background-color: #fc554f !important;
 }
 .csseditor[data-theme=dark] .popup .box-shadow-property-popup .box .type .select button {
   width: 100%;
@@ -6773,7 +6777,7 @@ html, body {
   height: 10px;
   -webkit-transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
           transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
-  background-color: #fbde50;
+  background-color: #fc554f;
   border-radius: 100%;
 }
 .csseditor[data-theme=dark] .popup .animation-property-popup {
@@ -6834,10 +6838,10 @@ html, body {
 .csseditor[data-theme=dark] .popup .text-shadow-property-popup .codemirror-colorpicker {
   box-shadow: none;
   border-radius: 0px;
-  background-color: #343642;
+  background-color: #333333;
 }
 .csseditor[data-theme=dark] .popup .text-shadow-property-popup .codemirror-colorpicker input {
-  color: #cacaca !important;
+  color: #ffffff !important;
   text-transform: uppercase;
   border: 0px !important;
 }
@@ -6845,7 +6849,7 @@ html, body {
   margin-top: 0px;
 }
 .csseditor[data-theme=dark] .popup .text-shadow-property-popup .codemirror-colorpicker .title {
-  color: #cacaca !important;
+  color: #ffffff !important;
 }
 .csseditor[data-theme=dark] .popup .text-shadow-property-popup .codemirror-colorpicker .colorsets {
   border-top: 0px solid #1b1b1b !important;
@@ -6871,7 +6875,7 @@ html, body {
   height: 10px;
   -webkit-transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
           transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
-  background-color: #fbde50;
+  background-color: #fc554f;
   border-radius: 100%;
 }
 .csseditor[data-theme=dark] .popup .keyframe-popup {
@@ -6970,7 +6974,7 @@ html, body {
 .csseditor[data-theme=dark] .popup .clippath-popup .box > .clip-path-editor .clip-area {
   display: inline-block;
   position: absolute;
-  background-color: #fbde50;
+  background-color: #fc554f;
   z-index: 0;
 }
 .csseditor[data-theme=dark] .popup .clippath-popup .box > .clip-path-editor .clip-area.polygon {
@@ -7100,7 +7104,7 @@ html, body {
   position: relative;
   width: 100%;
   height: 100%;
-  border: 1px solid #fbde50;
+  border: 1px solid #fc554f;
 }
 .csseditor[data-theme=dark] .popup .svg-property-editor-popup .box.preview .preview-box {
   position: absolute;
@@ -7175,104 +7179,104 @@ html, body {
   height: 24px;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .repeat-list button[value=no-repeat] {
-  background-image: linear-gradient(to top right, #fbde50, white);
+  background-image: linear-gradient(to top right, #fc554f, white);
   background-position: center center;
   background-size: 8px 8px;
   background-repeat: no-repeat;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .repeat-list button[value=repeat] {
-  background-image: linear-gradient(to top right, #fbde50, white);
+  background-image: linear-gradient(to top right, #fc554f, white);
   background-position: 10px 10px;
   background-size: 8px 8px;
   background-repeat: repeat;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .repeat-list button[value=repeat-x] {
-  background-image: linear-gradient(to top right, #fbde50, white);
+  background-image: linear-gradient(to top right, #fc554f, white);
   background-position: 10px 8px;
   background-size: 8px 8px;
   background-repeat: repeat-x;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .repeat-list button[value=repeat-y] {
-  background-image: linear-gradient(to top right, #fbde50, white);
+  background-image: linear-gradient(to top right, #fc554f, white);
   background-position: 8px 10px;
   background-size: 8px 8px;
   background-repeat: repeat-y;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .repeat-list button[value=space] {
-  background-image: linear-gradient(to top right, #fbde50, white);
+  background-image: linear-gradient(to top right, #fc554f, white);
   background-position: 10px 10px;
   background-size: 8px 8px;
   background-repeat: space;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .repeat-list button[value=round] {
-  background-image: linear-gradient(to top right, #fbde50, white);
+  background-image: linear-gradient(to top right, #fc554f, white);
   background-position: 0px 0px;
   background-size: 8px 8px;
   background-repeat: round;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .repeat-list[data-value=repeat] button[value=repeat], .csseditor[data-theme=dark] .popup .fill-picker .repeat-list[data-value=no-repeat] button[value=no-repeat], .csseditor[data-theme=dark] .popup .fill-picker .repeat-list[data-value=repeat-x] button[value=repeat-x], .csseditor[data-theme=dark] .popup .fill-picker .repeat-list[data-value=repeat-y] button[value=repeat-y], .csseditor[data-theme=dark] .popup .fill-picker .repeat-list[data-value=space] button[value=space], .csseditor[data-theme=dark] .popup .fill-picker .repeat-list[data-value=round] button[value=round] {
-  background-color: #fbde50;
-  box-shadow: 0 0 2px 2px #fbde50;
+  background-color: #fc554f;
+  box-shadow: 0 0 2px 2px #fc554f;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list {
   text-align: center;
   padding: 2px 5px;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=static-gradient] .picker-tab-item[data-selected-value=static-gradient] {
-  background-color: #fbde50;
+  background-color: #fc554f;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=static-gradient] .picker-tab-item[data-selected-value=static-gradient] .icon svg path {
-  fill: #fbde50;
+  fill: #fc554f;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=linear-gradient] .picker-tab-item[data-selected-value=linear-gradient] {
-  background-color: #fbde50;
+  background-color: #fc554f;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=linear-gradient] .picker-tab-item[data-selected-value=linear-gradient] .icon svg path {
-  fill: #fbde50;
+  fill: #fc554f;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-linear-gradient] .picker-tab-item[data-selected-value=repeating-linear-gradient] {
-  background-color: #fbde50;
+  background-color: #fc554f;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-linear-gradient] .picker-tab-item[data-selected-value=repeating-linear-gradient] .icon svg path {
-  fill: #fbde50;
+  fill: #fc554f;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=radial-gradient] .picker-tab-item[data-selected-value=radial-gradient] {
-  background-color: #fbde50;
+  background-color: #fc554f;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=radial-gradient] .picker-tab-item[data-selected-value=radial-gradient] .icon svg path {
-  fill: #fbde50;
+  fill: #fc554f;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-radial-gradient] .picker-tab-item[data-selected-value=repeating-radial-gradient] {
-  background-color: #fbde50;
+  background-color: #fc554f;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-radial-gradient] .picker-tab-item[data-selected-value=repeating-radial-gradient] .icon svg path {
-  fill: #fbde50;
+  fill: #fc554f;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=conic-gradient] .picker-tab-item[data-selected-value=conic-gradient] {
-  background-color: #fbde50;
+  background-color: #fc554f;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=conic-gradient] .picker-tab-item[data-selected-value=conic-gradient] .icon svg path {
-  fill: #fbde50;
+  fill: #fc554f;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-conic-gradient] .picker-tab-item[data-selected-value=repeating-conic-gradient] {
-  background-color: #fbde50;
+  background-color: #fc554f;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-conic-gradient] .picker-tab-item[data-selected-value=repeating-conic-gradient] .icon svg path {
-  fill: #fbde50;
+  fill: #fc554f;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=image] .picker-tab-item[data-selected-value=image] {
-  background-color: #fbde50;
+  background-color: #fc554f;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=image] .picker-tab-item[data-selected-value=image] .icon svg path {
-  fill: #fbde50;
+  fill: #fc554f;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-is-image-hidden=true] .picker-tab-item[data-selected-value=image] {
   display: none;
@@ -7417,15 +7421,15 @@ html, body {
   box-shadow: none;
   border-radius: 0px;
   border: 0px;
-  background-color: #343642;
+  background-color: #333333;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=color] .codemirror-colorpicker input {
-  color: #cacaca !important;
+  color: #ffffff !important;
   text-transform: uppercase;
   border: 0px !important;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=color] .codemirror-colorpicker .title {
-  color: #cacaca !important;
+  color: #ffffff !important;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=color] .codemirror-colorpicker .colorsets {
   border-top: 0px solid #1b1b1b !important;
@@ -7523,15 +7527,15 @@ html, body {
   box-shadow: none;
   border-radius: 0px;
   border: 0px;
-  background-color: #343642;
+  background-color: #333333;
 }
 .csseditor[data-theme=dark] .popup .color-picker-popup .codemirror-colorpicker input {
-  color: #cacaca !important;
+  color: #ffffff !important;
   text-transform: uppercase;
   border: 0px !important;
 }
 .csseditor[data-theme=dark] .popup .color-picker-popup .codemirror-colorpicker .title {
-  color: #cacaca !important;
+  color: #ffffff !important;
 }
 .csseditor[data-theme=dark] .popup .color-picker-popup .codemirror-colorpicker .colorsets {
   border-top: 1px solid #1b1b1b !important;
@@ -7645,56 +7649,56 @@ html, body {
   padding: 2px 5px;
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=static-gradient] .picker-tab-item[data-selected-value=static-gradient] {
-  background-color: #fbde50;
+  background-color: #fc554f;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=static-gradient] .picker-tab-item[data-selected-value=static-gradient] .icon svg path {
   fill: rgba(0, 0, 255, 0.5);
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=linear-gradient] .picker-tab-item[data-selected-value=linear-gradient] {
-  background-color: #fbde50;
+  background-color: #fc554f;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=linear-gradient] .picker-tab-item[data-selected-value=linear-gradient] .icon svg path {
   fill: rgba(0, 0, 255, 0.5);
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=repeating-linear-gradient] .picker-tab-item[data-selected-value=repeating-linear-gradient] {
-  background-color: #fbde50;
+  background-color: #fc554f;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=repeating-linear-gradient] .picker-tab-item[data-selected-value=repeating-linear-gradient] .icon svg path {
   fill: rgba(0, 0, 255, 0.5);
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=radial-gradient] .picker-tab-item[data-selected-value=radial-gradient] {
-  background-color: #fbde50;
+  background-color: #fc554f;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=radial-gradient] .picker-tab-item[data-selected-value=radial-gradient] .icon svg path {
   fill: rgba(0, 0, 255, 0.5);
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=repeating-radial-gradient] .picker-tab-item[data-selected-value=repeating-radial-gradient] {
-  background-color: #fbde50;
+  background-color: #fc554f;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=repeating-radial-gradient] .picker-tab-item[data-selected-value=repeating-radial-gradient] .icon svg path {
   fill: rgba(0, 0, 255, 0.5);
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=conic-gradient] .picker-tab-item[data-selected-value=conic-gradient] {
-  background-color: #fbde50;
+  background-color: #fc554f;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=conic-gradient] .picker-tab-item[data-selected-value=conic-gradient] .icon svg path {
   fill: rgba(0, 0, 255, 0.5);
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=repeating-conic-gradient] .picker-tab-item[data-selected-value=repeating-conic-gradient] {
-  background-color: #fbde50;
+  background-color: #fc554f;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=repeating-conic-gradient] .picker-tab-item[data-selected-value=repeating-conic-gradient] .icon svg path {
   fill: rgba(0, 0, 255, 0.5);
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=image] .picker-tab-item[data-selected-value=image] {
-  background-color: #fbde50;
+  background-color: #fc554f;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=image] .picker-tab-item[data-selected-value=image] .icon svg path {
@@ -7830,18 +7834,18 @@ html, body {
   box-shadow: none;
   border-radius: 0px;
   border: 0px;
-  background-color: #343642;
+  background-color: #333333;
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .codemirror-colorpicker .color-panel {
   margin-top: 0px;
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .codemirror-colorpicker input {
-  color: #cacaca !important;
+  color: #ffffff !important;
   text-transform: uppercase;
   border: 0px !important;
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .codemirror-colorpicker .title {
-  color: #cacaca !important;
+  color: #ffffff !important;
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .codemirror-colorpicker .colorsets {
   border-top: 0px solid #1b1b1b !important;
@@ -7866,11 +7870,11 @@ html, body {
           transform: translate(-50%, -50%);
   box-sizing: border-box;
   z-index: 1000;
-  background-color: #343642;
+  background-color: #333333;
   border: 1px solid #1b1b1b;
   box-shadow: 0 0 1px 0px #1b1b1b;
   padding: 14px;
-  color: #cacaca;
+  color: #ffffff;
 }
 .csseditor[data-theme=dark] .window-background .window .window-title {
   position: absolute;
@@ -7980,11 +7984,11 @@ html, body {
 }
 .csseditor[data-theme=dark] .path-editor-view svg path.split-path:hover {
   cursor: copy;
-  stroke: #4a3e02;
+  stroke: #4b0401;
 }
 .csseditor[data-theme=dark] .path-editor-view svg path.snap-path {
   fill: transparent;
-  stroke: #4a3e02;
+  stroke: #4b0401;
 }
 .csseditor[data-theme=dark] .polygon-editor-view {
   display: none;
@@ -8035,7 +8039,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .polygon-editor-view svg path.guide, .csseditor[data-theme=dark] .polygon-editor-view svg polygon.guide {
   fill: transparent;
-  stroke: #fbde50;
+  stroke: #fc554f;
   stroke-width: 1;
 }
 .csseditor[data-theme=dark] .polygon-editor-view svg path.segment, .csseditor[data-theme=dark] .polygon-editor-view svg polygon.segment {
@@ -8056,18 +8060,24 @@ html, body {
 }
 .csseditor[data-theme=dark] .polygon-editor-view svg path.split-path:hover, .csseditor[data-theme=dark] .polygon-editor-view svg polygon.split-path:hover {
   cursor: copy;
-  stroke: #e0bb05;
+  stroke: #e10c04;
 }
 .csseditor[data-theme=dark] .polygon-editor-view svg path.snap-path, .csseditor[data-theme=dark] .polygon-editor-view svg polygon.snap-path {
   fill: transparent;
-  stroke: #fbde50;
+  stroke: #fc554f;
+}
+.csseditor[data-theme=dark] .animation-selector {
+  display: grid;
+  grid-template-columns: 100px 1fr 30px;
+  grid-column-gap: 5px;
+  width: 100%;
 }
 .csseditor[data-theme=dark] .animation-selector .timeline-object {
   display: inline-block;
 }
 .csseditor[data-theme=dark] .animation-selector .timeline-object.selected {
-  background-color: #fbde50;
-  color: black;
+  background-color: #fc554f;
+  color: white;
 }
 .csseditor[data-theme=dark] .timeline-value-area {
   position: absolute;
@@ -8075,7 +8085,7 @@ html, body {
   right: 0px;
   top: 0px;
   bottom: 0px;
-  background-color: #343642;
+  background-color: #333333;
   font-size: 12px;
   box-sizing: border-box;
   border-left: 1px solid #1b1b1b;
@@ -8091,7 +8101,7 @@ html, body {
   display: none;
 }
 .csseditor[data-theme=dark] .timeline-value-area .timeline-value-editor .tab-content .title {
-  color: #cacaca;
+  color: #ffffff;
 }
 .csseditor[data-theme=dark] .timeline-value-area .timeline-value-editor .value {
   padding: 5px;
@@ -8117,7 +8127,7 @@ html, body {
   right: 260px;
   top: 0px;
   bottom: 0px;
-  background-color: #343642;
+  background-color: #333333;
   font-size: 12px;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header {
@@ -8139,7 +8149,7 @@ html, body {
   box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar {
-  padding: 3px 10px;
+  padding: 10px 10px;
   box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .row {
@@ -8158,20 +8168,20 @@ html, body {
   display: flex;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .play-buttons[data-selected-speed="0.5"] [data-value="0.5"] {
-  background-color: #fbde50;
-  color: black;
+  background-color: #fc554f;
+  color: white;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .play-buttons[data-selected-speed="1"] [data-value="1"] {
-  background-color: #fbde50;
-  color: black;
+  background-color: #fc554f;
+  color: white;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .play-buttons[data-selected-speed="2"] [data-value="2"] {
-  background-color: #fbde50;
-  color: black;
+  background-color: #fc554f;
+  color: white;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .play-buttons[data-selected-speed="3"] [data-value="3"] {
-  background-color: #fbde50;
-  color: black;
+  background-color: #fc554f;
+  color: white;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .play-buttons button {
   border: 1px solid #1b1b1b;
@@ -8198,7 +8208,7 @@ html, body {
   top: 5px;
   left: 0px;
   right: 0px;
-  height: 15px;
+  height: 5px;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-duration .duration-handle-left {
   position: absolute;
@@ -8206,7 +8216,7 @@ html, body {
   top: 0px;
   width: 5px;
   height: 100%;
-  background-color: #3f4250;
+  background-color: #1b1b1b;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-duration .duration-handle-right {
   position: absolute;
@@ -8214,7 +8224,7 @@ html, body {
   top: 0px;
   width: 5px;
   height: 100%;
-  background-color: #3f4250;
+  background-color: #1b1b1b;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-duration .duration-slider {
   position: absolute;
@@ -8222,7 +8232,7 @@ html, body {
   top: 0px;
   right: 10px;
   height: 100%;
-  background-color: #3f4250;
+  background-color: #1b1b1b;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-duration .duration-slider .start {
   position: absolute;
@@ -8232,7 +8242,7 @@ html, body {
           transform: translateX(-100%);
   height: 100%;
   width: 5px;
-  background-color: #fbde50;
+  background-color: #1b1b1b;
   cursor: ew-resize;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-duration .duration-slider .end {
@@ -8241,7 +8251,7 @@ html, body {
   top: 0px;
   height: 100%;
   width: 5px;
-  background-color: #fbde50;
+  background-color: #1b1b1b;
   cursor: ew-resize;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-duration .duration-slider .gauge {
@@ -8250,7 +8260,7 @@ html, body {
   width: 100%;
   top: 0px;
   height: 100%;
-  background-color: #3f83bd;
+  background-color: #ee4b66;
   cursor: ew-resize;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view canvas {
@@ -8308,13 +8318,13 @@ html, body {
   transition: transform 0.2s ease, -webkit-transform 0.2s ease;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row .icon svg path {
-  fill: #cacaca;
+  fill: #ffffff;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row .title {
   vertical-align: middle;
   padding: 5px 0px;
   cursor: pointer;
-  color: #cacaca;
+  color: #ffffff;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row .tools {
   padding: 5px 0px;
@@ -8339,8 +8349,8 @@ html, body {
           transform: translateX(-5px) translateY(2px) rotate(45deg);
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row.layer-property .tools button.add:hover {
-  box-shadow: 0 0 0 2px rgba(251, 222, 80, 0.5);
-  background-color: #fbde50;
+  box-shadow: 0 0 0 2px rgba(252, 85, 79, 0.5);
+  background-color: #fc554f;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .keyframe-time-grid-view {
   position: absolute;
@@ -8369,6 +8379,7 @@ html, body {
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-container {
   position: relative;
   min-height: 100%;
+  outline: none;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-container .drag-area {
   position: absolute;
@@ -8401,18 +8412,19 @@ html, body {
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe .offset {
   position: absolute;
   top: 50%;
+  border: 1px solid #fc554f;
   display: inline-block;
   width: 8px;
   height: 8px;
-  background-color: #fbde50;
+  background-color: #333333;
   -webkit-transform: translateY(-50%) translateX(-50%) rotate(45deg);
           transform: translateY(-50%) translateX(-50%) rotate(45deg);
   cursor: ew-resize;
-  box-shadow: 0 0 0 1px #343642;
+  pointer-events: all;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe .offset[data-selected=true] {
-  background-color: white;
-  box-shadow: 0 0 0 1px #3f83bd;
+  background-color: #fc554f;
+  box-shadow: 0 0 0 1px #ee4b66;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe-shadow {
   position: absolute;
@@ -8425,19 +8437,19 @@ html, body {
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe-shadow .offset {
   position: absolute;
   top: 50%;
+  border: 1px solid #fc554f;
   display: inline-block;
   width: 8px;
   height: 8px;
-  background-color: #fbde50;
+  background-color: #333333;
   -webkit-transform: translateY(-50%) translateX(-50%) rotate(45deg);
           transform: translateY(-50%) translateX(-50%) rotate(45deg);
   cursor: ew-resize;
-  box-shadow: 0 0 0 1px #343642;
   pointer-events: all;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe-shadow .offset[data-selected=true] {
-  background-color: white;
-  box-shadow: 0 0 0 1px #3f83bd;
+  background-color: #fc554f;
+  box-shadow: 0 0 0 1px #ee4b66;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe-back {
   position: absolute;
@@ -8449,8 +8461,8 @@ html, body {
   position: absolute;
   top: 50%;
   display: inline-block;
-  height: 20px;
-  background-color: #3f83bd;
+  height: 1px;
+  background-color: #fc554f;
   -webkit-transform: translateY(-52%);
           transform: translateY(-52%);
   box-sizing: border-box;
@@ -10057,14 +10069,10 @@ html, body {
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools > * {
   flex: 1 1 auto;
 }
-.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .animation-selector {
-  flex: none;
-  width: 194px;
-}
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control {
   text-align: left;
   display: grid;
-  grid-template-columns: 200px 120px 120px 1fr;
+  grid-template-columns: 188px 120px 120px 1fr;
   grid-column-gap: 5px;
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .speed-number {
@@ -10092,6 +10100,9 @@ html, body {
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .row {
   display: flex;
 }
+.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .row:first-child {
+  text-align: center;
+}
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control button {
   display: inline-block;
   vertical-align: middle;
@@ -10101,18 +10112,23 @@ html, body {
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control button.play, .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control button.pause {
   -webkit-filter: drop-shadow(0px 0px 2px black);
           filter: drop-shadow(0px 0px 2px black);
-  display: none;
   -webkit-transform: scale(1.5);
           transform: scale(1.5);
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control button.play svg path {
   fill: #3e8ec6;
 }
+.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control button.pause {
+  display: none;
+}
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control button.pause svg path {
   fill: #6677d8;
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .play-buttons[data-status=play] .pause {
   display: inline-block;
+}
+.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .play-buttons[data-status=play] .play {
+  display: none;
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .play-buttons[data-status=pause] .play {
   display: inline-block;
@@ -11884,7 +11900,7 @@ html, body {
           transform: translateX(-50%) translateY(-50%);
   border-radius: 100%;
   cursor: pointer;
-  background-color: white;
+  background-color: #3e8ec6;
   border: 1px solid #3e8ec6;
   box-sizing: border-box;
 }
@@ -15173,6 +15189,12 @@ html, body {
   fill: transparent;
   stroke: #3e8ec6;
 }
+.csseditor[data-theme=light] .animation-selector {
+  display: grid;
+  grid-template-columns: 100px 1fr 30px;
+  grid-column-gap: 5px;
+  width: 100%;
+}
 .csseditor[data-theme=light] .animation-selector .timeline-object {
   display: inline-block;
 }
@@ -15250,7 +15272,7 @@ html, body {
   box-sizing: border-box;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar {
-  padding: 3px 10px;
+  padding: 10px 10px;
   box-sizing: border-box;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .row {
@@ -15309,7 +15331,7 @@ html, body {
   top: 5px;
   left: 0px;
   right: 0px;
-  height: 15px;
+  height: 5px;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-duration .duration-handle-left {
   position: absolute;
@@ -15317,7 +15339,7 @@ html, body {
   top: 0px;
   width: 5px;
   height: 100%;
-  background-color: white;
+  background-color: #e7e7e7;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-duration .duration-handle-right {
   position: absolute;
@@ -15325,7 +15347,7 @@ html, body {
   top: 0px;
   width: 5px;
   height: 100%;
-  background-color: white;
+  background-color: #e7e7e7;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-duration .duration-slider {
   position: absolute;
@@ -15333,7 +15355,7 @@ html, body {
   top: 0px;
   right: 10px;
   height: 100%;
-  background-color: white;
+  background-color: #e7e7e7;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-duration .duration-slider .start {
   position: absolute;
@@ -15343,7 +15365,7 @@ html, body {
           transform: translateX(-100%);
   height: 100%;
   width: 5px;
-  background-color: #3e8ec6;
+  background-color: #e7e7e7;
   cursor: ew-resize;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-duration .duration-slider .end {
@@ -15352,7 +15374,7 @@ html, body {
   top: 0px;
   height: 100%;
   width: 5px;
-  background-color: #3e8ec6;
+  background-color: #e7e7e7;
   cursor: ew-resize;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-duration .duration-slider .gauge {
@@ -15480,6 +15502,7 @@ html, body {
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-container {
   position: relative;
   min-height: 100%;
+  outline: none;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-container .drag-area {
   position: absolute;
@@ -15512,17 +15535,18 @@ html, body {
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe .offset {
   position: absolute;
   top: 50%;
+  border: 1px solid #3e8ec6;
   display: inline-block;
   width: 8px;
   height: 8px;
-  background-color: #3e8ec6;
+  background-color: white;
   -webkit-transform: translateY(-50%) translateX(-50%) rotate(45deg);
           transform: translateY(-50%) translateX(-50%) rotate(45deg);
   cursor: ew-resize;
-  box-shadow: 0 0 0 1px white;
+  pointer-events: all;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe .offset[data-selected=true] {
-  background-color: white;
+  background-color: #3e8ec6;
   box-shadow: 0 0 0 1px #4987f7;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe-shadow {
@@ -15536,18 +15560,18 @@ html, body {
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe-shadow .offset {
   position: absolute;
   top: 50%;
+  border: 1px solid #3e8ec6;
   display: inline-block;
   width: 8px;
   height: 8px;
-  background-color: #3e8ec6;
+  background-color: white;
   -webkit-transform: translateY(-50%) translateX(-50%) rotate(45deg);
           transform: translateY(-50%) translateX(-50%) rotate(45deg);
   cursor: ew-resize;
-  box-shadow: 0 0 0 1px white;
   pointer-events: all;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe-shadow .offset[data-selected=true] {
-  background-color: white;
+  background-color: #3e8ec6;
   box-shadow: 0 0 0 1px #4987f7;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe-back {
@@ -15560,8 +15584,8 @@ html, body {
   position: absolute;
   top: 50%;
   display: inline-block;
-  height: 20px;
-  background-color: #4987f7;
+  height: 1px;
+  background-color: #3e8ec6;
   -webkit-transform: translateY(-52%);
           transform: translateY(-52%);
   box-sizing: border-box;

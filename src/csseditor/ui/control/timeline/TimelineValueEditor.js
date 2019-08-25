@@ -16,32 +16,27 @@ export default class TimelineValueEditor extends UIElement {
 
   initState() {
     return {
-      key: '',
-      value: '',
-      timingFunction: 'ease'
+      timing: 'linear'
     };
   }
 
   updateData(opt) {
     this.setState(opt, false); // 자동 로드를 하지 않음, state 만 업데이트
-    this.parent.trigger(this.props.onchange, opt);
-  }
-
-  setTimingFunction (timingFunction) {
-      this.setState({timingFunction}, false);
-      this.refresh();
+    this.parent.trigger(this.props.onchange, this.state);
   }
 
   getProperties() {
     return [{
-        key: this.state.key,
-        value: this.state.value || Length.px(10)
+        key: this.state.property,
+        value: this.state.value || '10px'
     }].filter(it => it.key);
   }
 
   refresh () {
     this.children.$propertyEditor.trigger('showCSSPropertyEditor', this.getProperties());      
-    this.children.$cubicBezierEditor.trigger('showCubicBezierEditor', this.state);
+    this.children.$cubicBezierEditor.trigger('showCubicBezierEditor', {
+      timingFunction: this.state.timing
+    });
   }
 
   template() {
@@ -94,11 +89,9 @@ export default class TimelineValueEditor extends UIElement {
     `
   }
 
-  [EVENT('refreshOffsetValue')] (key, value, timingFunction) {
+  [EVENT('refreshOffsetValue')] (offset) {
     this.setState({
-        key, 
-        value, 
-        timingFunction 
+        ...offset
     }, false)
     this.refresh();
   }

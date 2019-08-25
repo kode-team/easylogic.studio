@@ -6,7 +6,6 @@ import { DRAGOVER, DROP, PREVENT, DEBOUNCE } from "../../../util/Event";
 import TimelineTopToolbar from "./timeline/TimelineTopToolbar";
 import KeyframeTimeView from "./timeline/KeyframeTimeView";
 import KeyframeTimeGridView from "./timeline/KeyframeTimeGridView";
-import AnimationSelector from "./timeline/AnimationSelector";
 import TimelineValueEditor from "./timeline/TimelineValueEditor";
 import { EVENT } from "../../../util/UIElement";
 import KeyframeTimeControl from "./timeline/KeyframeTimeControl";
@@ -19,7 +18,6 @@ export default class TimelineProperty extends BaseProperty {
       TimelinePlayControl,
       KeyframeTimeControl,
       TimelineValueEditor,
-      AnimationSelector,
       KeyframeTimeView,
       TimelineKeyframeList,
       TimelineObjectList,
@@ -38,7 +36,6 @@ export default class TimelineProperty extends BaseProperty {
 
   getTools() {
     return /*html*/`
-      <AnimationSelector />
       <TimelinePlayControl />
       <KeyframeTimeControl />
     `; 

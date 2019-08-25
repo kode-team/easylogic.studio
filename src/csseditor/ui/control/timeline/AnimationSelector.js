@@ -9,6 +9,7 @@ export default class AnimationSelector extends UIElement {
     template () {
         return `
         <div class='animation-selector'>
+            <label>Animation</label>
             <select ref='$select'></select>
             <button type='button' class='add' ref='$add'>${icon.add}</button>
         </div>

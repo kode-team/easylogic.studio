@@ -56,15 +56,10 @@
             flex: 1 1 auto;
           }
 
-          .animation-selector {
-            flex: none; 
-            width: 194px;
-          }
-
           .timeline-play-control {
             text-align: left;
             display: grid;
-            grid-template-columns: 200px 120px 120px 1fr;
+            grid-template-columns: 188px 120px 120px 1fr;
             grid-column-gap: 5px;
 
             .speed-number {
@@ -98,6 +93,10 @@
 
             .row {
               display: flex;
+              
+              &:first-child{
+                text-align: center;
+              }
             }
 
             button {
@@ -108,7 +107,7 @@
 
               &.play, &.pause {
                 filter: drop-shadow(0px 0px 2px black);
-                display: none;
+                // display: none;
                 transform: scale(1.5);
 
               }
@@ -123,7 +122,7 @@
               }
 
               &.pause {
-
+                display: none;
                 svg {
                   path {
                     fill: rgb(102, 119, 216);
@@ -139,12 +138,17 @@
                 .pause {
                   display: inline-block;
                 }
+
+                .play {
+                  display: none; 
+                }
               }
   
               &[data-status='pause'] {
                 .play {
                   display: inline-block;
                 }
+
               }    
               
             }

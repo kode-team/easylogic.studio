@@ -17,9 +17,6 @@ export class TimelineItem extends DomItem {
           displayStartTime: second(60, '00:00:00:00'),
           displayEndTime: second(60, '00:00:10:00'),
           fps: 60,
-          selectedLayerId: '',
-          selectedProperty : '', 
-          selectedOffsetTime: 0,
           animations: [
           {id: 'xxxxx', properties: [
             {property: 'width', keyframes: [ {time: 10, value: Length.px(10), timing: 'linear'} ] },
@@ -61,33 +58,20 @@ export class TimelineItem extends DomItem {
 
   compiledTimingFunction (layerId, property) {
 
-    var timeline = this.getSelectedTimeline();
-
-    var {selectedLayerId, selectedProperty} = timeline; 
-
-    layerId = layerId || selectedLayerId
-    property = property || selectedProperty
-
     var p = this.getTimelineProperty(layerId, property);
     var layer = this.searchById(layerId);
-
 
     if (p.keyframes.length === 1) {
       this.json.compiledTimeline[`${layerId}.${property}`] = [] 
       return ;
     }
 
-
     this.json.compiledTimeline[`${layerId}.${property}`] = p.keyframes.map( (offset, index) => {
 
       var nextOffset = p.keyframes[index + 1];
 
       if (!nextOffset) {
-        // 마지막 시점에서 시간을 무한대로 주면 
-        // 이후 좌표를 고정할 수 있다. 
-        // timing 에 hold 를 넣고 중간 단계를 넘어가게도 해보자. 
         nextOffset = { time: offset.time + 1, value: offset.value + ''};
-        // return false;
       }
 
       var it = {
@@ -364,25 +348,6 @@ export class TimelineItem extends DomItem {
 
   }
 
-  getSelectedPropertyOffset (layerId, property, time) {
-    var timeline = this.getSelectedTimeline();
-
-    if (timeline) {
-      var {selectedOffsetTime, selectedLayerId, selectedProperty} = timeline;
-
-      layerId = layerId || selectedLayerId
-      property = property || selectedProperty
-      time = isUndefined(time)? selectedOffsetTime : time
-
-      var p = this.getTimelineProperty(layerId, property);
-
-      if (p) {
-        return p.keyframes.find(k => k.time === time)
-      }
-    }
-
-    return null; 
-  }
 
   setSelectedOffset(layerId, property, time) {
     var timeline = this.getSelectedTimeline();
@@ -400,25 +365,36 @@ export class TimelineItem extends DomItem {
 
   }
 
-  setSelectedTimelineKeyframe (obj) {
-    var offset = this.getSelectedPropertyOffset();
+  deleteTimelineKeyframe (layerId, property, offsetId) {
+    var p = this.getTimelineProperty(layerId, property);
 
-    if (offset) {
-      Object.keys(obj).forEach(key => {
-        offset[key] = obj[key]; 
-      })
-
-      this.compiledTimingFunction();
+    if (p) {
+      p.keyframes = p.keyframes.filter(it => it.id != offsetId);
     }
   }
 
-  addTimelineKeyframe (layerId, property, value, timing = 'linear') {
+  setTimelineKeyframeOffsetTime (layerId, property, offsetId, changedTime) {
+    var keyframe = this.getTimelineKeyframeById(layerId, property, offsetId)
+    if (keyframe) {
+      keyframe.time = changedTime;
+    }
+  }
+
+  setTimelineKeyframeOffsetValue (layerId, property, offsetId, value, timing) {
+    var keyframe = this.getTimelineKeyframeById(layerId, property, offsetId)
+    if (keyframe) {
+      keyframe.value = value;
+      keyframe.timing = timing
+    }
+  }  
+
+  addTimelineKeyframe (layerId, property, value, timing = 'linear', newTime = null) {
     this.addTimelineProperty(layerId, property);
     var timeline = this.getSelectedTimeline();
     var p = this.getTimelineProperty(layerId, property);
 
     if (p) {
-      var time = timeline.currentTime;
+      var time = newTime || timeline.currentTime;
 
       var times = p.keyframes.filter(it => it.time === time); 
 
@@ -432,7 +408,6 @@ export class TimelineItem extends DomItem {
           return a.time > b.time ? 1 : -1; 
         })
 
-        this.setSelectedOffset(layerId, property, time)
         this.compiledTimingFunction(layerId, property);        
 
         return obj; 
@@ -449,12 +424,12 @@ export class TimelineItem extends DomItem {
     return '0px;'
   }
 
-  copyTimelineKeyframe (layerId, property) {
+  copyTimelineKeyframe (layerId, property, newTime = null) {
     var p = this.getTimelineProperty(layerId, property);
 
     if (p) {
       var timeline = this.getSelectedTimeline();
-      var time = timeline.currentTime;
+      var time = newTime || timeline.currentTime;
 
       var times = p.keyframes.filter(it => it.time < time); 
       var value = this.getDefaultPropertyValue(property);

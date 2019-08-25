@@ -198,6 +198,13 @@ export function STRING_TO_CSS (str) {
 
 export function OBJECT_TO_PROPERTY (obj) {
     return Object.keys(obj).map(key => {
+
+        if (key === 'class') {
+            if (isObject(obj[key])) {
+                return `${key}="${OBJECT_TO_CLASS(obj[key])}"`
+            }
+        }
+
         return `${key}="${obj[key]}"`
     }).join(' ');
 }

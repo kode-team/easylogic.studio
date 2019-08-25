@@ -33,19 +33,15 @@ export default class TimelineCommand extends UIElement {
         var artboard = editor.selection.currentArtboard;
 
         if (artboard) {
-            artboard.setSelectedTimelineKeyframe(obj);
+            artboard.setTimelineKeyframeOffsetValue(obj.layerId, obj.property, obj.id, obj.value, obj.timing);
         }
     }
 
     [COMMAND('refresh.selected.offset')] () {
-        var artboard = editor.selection.currentArtboard;
-
-        if (artboard) {
-            var offset = artboard.getSelectedPropertyOffset();
-            if (offset) {
-                this.emit('refreshOffsetValue', offset.property, offset.value, offset.timing)
-            }            
-        }        
+        var offset = editor.timeline.items[0]
+        if (offset) {
+            this.emit('refreshOffsetValue', offset)
+        }                    
 
     }
 
@@ -63,7 +59,7 @@ export default class TimelineCommand extends UIElement {
                 var obj = artboard.addTimelineKeyframe(id, property, value + "", timing);
 
                 if (obj) {
-                    list.push({id: obj.id, layerId: obj.layerId, property: obj.property});
+                    list.push(obj);
                 }
             })
 
@@ -84,7 +80,7 @@ export default class TimelineCommand extends UIElement {
                 var obj = artboard.addTimelineKeyframe(item.id, property, item[property] + "", timing);
 
                 if (obj) {
-                    list.push({id: obj.id, layerId: obj.layerId, property: obj.property});
+                    list.push(obj);
                 }
             })
 
@@ -93,6 +89,42 @@ export default class TimelineCommand extends UIElement {
             this.trigger('refresh.selected.offset');
         }
 
+    }
+
+    [COMMAND('delete.timeline.keyframe')] () {
+        var artboard = editor.selection.currentArtboard;
+        if (artboard) {        
+            editor.timeline.each(item => {
+                artboard.deleteTimelineKeyframe(item.layerId, item.property, item.id);
+            })
+
+            editor.timeline.empty();
+            this.emit('refreshTimeline')
+            this.trigger('refresh.selected.offset');            
+        }
+    }
+
+    [COMMAND('add.timeline.keyframe')] (layerId, property, time, timing = 'linear') {
+        var artboard = editor.selection.currentArtboard;
+        if (artboard) {
+            var item = artboard.searchById(layerId);
+
+            var obj = artboard.addTimelineKeyframe(item.id, property, item[property] + "", timing, time);
+            editor.timeline.select(obj);            
+            this.emit('refreshTimeline');
+            this.trigger('refresh.selected.offset');
+        }
+
+    }
+
+    [COMMAND('change.timeline.offset')] () {
+        var artboard = editor.selection.currentArtboard;
+        if (artboard) {
+            list.forEach(keyframe => {
+                artboard.setTimelineKeyframeOffsetTime(keyframe.layerId, keyframe.property, keyframe.id, keyframe.time)
+            })
+            this.emit('refreshTimeline');
+        }
     }
 
     [COMMAND('change.property')] (key, value) {
@@ -112,12 +144,12 @@ export default class TimelineCommand extends UIElement {
 
     }
 
-    [COMMAND('copy.timeline.property')] (layerId, property) {
+    [COMMAND('copy.timeline.property')] (layerId, property, newTime = null) {
         var artboard = editor.selection.currentArtboard;
 
         if (artboard) {
 
-            artboard.copyTimelineKeyframe(layerId, property);
+            artboard.copyTimelineKeyframe(layerId, property, newTime);
             
             this.emit('refreshTimeline');
         }

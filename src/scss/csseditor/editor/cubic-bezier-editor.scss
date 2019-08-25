@@ -35,7 +35,7 @@
                 transform: translateX(-50%) translateY(-50%);
                 border-radius:100%;
                 cursor: pointer;
-                background-color: $background-color;
+                background-color: $selected-color;
                 border:1px solid $selected-color;
                 box-sizing:border-box;
             }

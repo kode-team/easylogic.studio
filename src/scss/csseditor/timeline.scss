@@ -1,4 +1,8 @@
 .animation-selector {
+    display: grid;
+    grid-template-columns: 100px 1fr 30px;
+    grid-column-gap: 5px;
+    width: 100%;
     .timeline-object {
         display: inline-block;
 
@@ -96,7 +100,7 @@
 
 
             .timeline-top-toolbar {
-                padding:3px 10px;
+                padding:10px 10px;
                 box-sizing: border-box;
                 .row {
                     display: grid;
@@ -154,9 +158,9 @@
                     top: 5px;
                     left: 0px;
                     right: 0px;
-                    height: 15px;
+                    height: 5px;
 
-                    $back-color: lighten($background-color, 5%);
+                    $back-color: $border-color;
              
                     .duration-handle-left {
                         position: absolute;
@@ -202,7 +206,7 @@
                             width: 5px;
                             // border-top-left-radius: 10px;
                             // border-bottom-left-radius: 10px;
-                            background-color: $selected-color;
+                            background-color: $border-color;
                             cursor: ew-resize;                            
                         }
 
@@ -215,7 +219,7 @@
                             width: 5px;
                             // border-top-right-radius: 10px;
                             // border-bottom-right-radius: 10px;
-                            background-color: $selected-color;
+                            background-color: $border-color;
                             cursor: ew-resize;
                         }      
                         
@@ -385,7 +389,7 @@
             .timeline-keyframe-container {
                 position: relative;
                 min-height: 100%;
-
+                outline: none; 
                 .drag-area {
                     position: absolute;
                     border: 1px solid lighten(#3585bd, 20%);
@@ -426,19 +430,20 @@
                             .offset {
                                 position: absolute;
                                 top: 50%;
-                                // border:1px solid $timeline-border-color;
+                                border:1px solid $selected-color;
                                 display: inline-block;
                                 width: 8px;
                                 height:8px;
                                 // border-radius: 50%;
                                 // clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50% );
-                                background-color: $selected-color;
+                                background-color: $background-color;                                
                                 transform: translateY(-50%) translateX(-50%) rotate(45deg);
                                 cursor: ew-resize;
-                                box-shadow: 0 0 0 1px $background-color;                                
+                                pointer-events: all;                                
+                                // box-shadow: 0 0 0 1px $selected-color;                                
 
                                 &[data-selected='true'] {
-                                    background-color: white;
+                                    background-color: $selected-color;
                                     box-shadow: 0 0 0 1px $timeline-offset-line-color;
                                 }
                             }
@@ -454,20 +459,20 @@
                             .offset {
                                 position: absolute;
                                 top: 50%;
-                                // border:1px solid $timeline-border-color;
+                                border:1px solid $selected-color;
                                 display: inline-block;
                                 width: 8px;
                                 height:8px;
                                 // border-radius: 50%;
                                 // clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50% );
-                                background-color: $selected-color;
+                                background-color: $background-color;
                                 transform: translateY(-50%) translateX(-50%) rotate(45deg);
                                 cursor: ew-resize;
-                                box-shadow: 0 0 0 1px $background-color;     
+                                // box-shadow: 0 0 0 1px $selected-color;     
                                 pointer-events: all;
 
                                 &[data-selected='true'] {
-                                    background-color: white;
+                                    background-color: $selected-color;
                                     box-shadow: 0 0 0 1px $timeline-offset-line-color;
                                 }
                             }
@@ -482,10 +487,11 @@
                                 position: absolute;
                                 top: 50%;
                                 display: inline-block;
-                                height: 20px;
-                                background-color: $timeline-offset-line-color;
+                                height: 1px;
+                                background-color: $selected-color;
                                 transform: translateY(-52%);
                                 box-sizing: border-box;
+
                             }
                         }
                     }

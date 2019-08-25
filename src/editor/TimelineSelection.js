@@ -18,12 +18,28 @@ export class TimelineSelection {
     }
   }
 
+  empty () {
+    this.select();
+  }
+
+  each (callback) {
+    this.items.forEach((item, index) => {
+      callback && callback(item, index)
+    })
+  }
+
   refreshCache (list) {
-    this.items = list.map(it => it.id);
+    this.items = list;
     this.itemKeys = {} 
 
-    list.forEach(it => {
+    this.items.forEach(it => {
       this.itemKeys[it.id] = it; 
+    })
+  }
+
+  cachedList () {
+    return this.items.map(it => {
+      return {...it}
     })
   }
 
@@ -34,7 +50,9 @@ export class TimelineSelection {
   selectLayer (layerId) {
 
     this.currentArtBoard(artboard => {
-      var list = artboard.keyframes.filter(it => it.layerId === layerId).map(it => it.id);
+      var list = artboard.keyframes.filter(it => {
+        return it.layerId === layerId
+      });
       this.refreshCache(list);
     })
   }

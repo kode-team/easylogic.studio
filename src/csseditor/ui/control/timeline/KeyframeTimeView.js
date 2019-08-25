@@ -207,7 +207,7 @@ export default class KeyframeTimeView extends UIElement {
                 var left =  (currentTime - displayStartTime)/(displayEndTime - displayStartTime) * realWidth;
                 var markTop = 10
                 var markWidth = 4
-                this.drawOption({strokeStyle: 'rgba(204, 204, 204, 0.3)',fillStyle: 'yellow', lineWidth: 1})
+                this.drawOption({strokeStyle: '#fc554f',fillStyle: '#fc554f', lineWidth: 1})
                 this.drawPath(
                     [left - markWidth + restX, rect.height - markTop],
                     [left + markWidth + restX, rect.height - markTop],
