@@ -385,6 +385,8 @@ export class TimelineItem extends DomItem {
     if (keyframe) {
       keyframe.value = value;
       keyframe.timing = timing
+
+      this.compiledTimingFunction(layerId, property);             
     }
   }  
 
