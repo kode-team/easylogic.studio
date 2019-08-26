@@ -67,7 +67,7 @@ export default class KeyframeTimeControl extends UIElement {
         this.refresh();
     }
 
-    [EVENT('moveTimeline', 'refreshSelection', 'resizeTimeline') + THROTTLE(10)] (){
+    [EVENT('moveTimeline', 'refreshSelection') + THROTTLE(10)] (){
         this.refresh();
     }
 

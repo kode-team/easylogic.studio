@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "../../../../util/UIElement";
-import { CLICK, LOAD, VDOM, DEBOUNCE, POINTERSTART, MOVE, IF, END, DOUBLECLICK, KEYUP, KEY } from "../../../../util/Event";
+import { CLICK, LOAD, VDOM, DEBOUNCE, POINTERSTART, MOVE, IF, END, DOUBLECLICK, KEYUP, KEY, RESIZE } from "../../../../util/Event";
 import { editor } from "../../../../editor/editor";
 import { Length } from "../../../../editor/unit/Length";
 import { OBJECT_TO_PROPERTY, OBJECT_TO_CLASS, isUndefined } from "../../../../util/functions/func";
@@ -173,6 +173,8 @@ export default class TimelineKeyframeList extends UIElement {
         
         var rowIndex = this.getRowIndex(Dom.create(editor.config.get('bodyEvent').target).attr('data-row-index'))
 
+        console.log(rowIndex, this.startRowIndex)
+
         var startIndex = Math.min(rowIndex, this.startRowIndex);
         var endIndex = Math.max(rowIndex, this.startRowIndex);
 
@@ -213,6 +215,8 @@ export default class TimelineKeyframeList extends UIElement {
 
         editor.timeline.selectBySearch(this.getLayerList(), startTime, endTime);
         this.refresh();
+
+        this.startRowIndex = null; 
     }
 
     [LOAD('$keyframeList') + VDOM] () {
@@ -386,11 +390,15 @@ export default class TimelineKeyframeList extends UIElement {
         }
     }
 
-    [EVENT('resizeTimeline', 'addTimeline', 'moveTimeline') + DEBOUNCE(100)] () {
+    [EVENT('addTimeline', 'moveTimeline') + DEBOUNCE(100)] () {
         this.refresh();
     }
 
     [EVENT('refreshTimeline')] () {
+        this.refresh();
+    }
+
+    [RESIZE('window') + DEBOUNCE(100)] () {
         this.refresh();
     }
 }

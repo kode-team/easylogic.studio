@@ -50,7 +50,7 @@ export class TimelineSelection {
   selectLayer (layerId) {
 
     this.currentArtBoard(artboard => {
-      var list = artboard.keyframes.filter(it => {
+      var list = artboard.getKeyframeListReturnArray().filter(it => {
         return it.layerId === layerId
       });
       this.refreshCache(list);
@@ -59,7 +59,7 @@ export class TimelineSelection {
 
   selectProperty (layerId, property) {
     this.currentArtBoard(artboard => {
-      var list = artboard.keyframes.filter(it => {
+      var list = artboard.getKeyframeListReturnArray().filter(it => {
         return it.layerId === layerId && it.property === property;
       })
 

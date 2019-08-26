@@ -132,19 +132,75 @@ export class TimelineItem extends DomItem {
     return selectedTimeline || null;
   }
 
-  getSelectedTimelineLastTime () {
+  getKeyframeListReturnArray() {
     var timeline = this.getSelectedTimeline();
-    var time = 0; 
+    var keyframes = []     
+    if (timeline) {
+
+      timeline.animations.forEach(a => {
+        a.properties.forEach(p => {
+          keyframes.push(...p.keyframes);
+        })
+      })
+    }
+
+    return keyframes; 
+  }
+
+  getKeyframeList(callback) {
+    var timeline = this.getSelectedTimeline(); 
     if (timeline) {
 
       timeline.animations.forEach(a => {
         a.properties.forEach(p => {
           p.keyframes.forEach(k => {
-            time = Math.max(k.time, time);
+            callback && callback (timeline, k);
           })
         })
       })
     }
+  }
+
+  getSelectedTimelineLastTime () {
+    var time = 0; 
+    this.getKeyframeList((timeline, keyframe) => {
+      time = Math.max(keyframe.time, time);
+    })
+
+    return time; 
+  }
+
+  getSelectedTimelineFirstTime () {
+
+    var time = Number.MAX_SAFE_INTEGER; 
+    this.getKeyframeList((timeline, keyframe) => {
+      time = Math.min(keyframe.time, time);
+    })
+
+    return time; 
+  }
+
+  getSelectedTimelinePrevTime () {
+
+    var time = 0; 
+    this.getKeyframeList((timeline, keyframe) => {
+      if (timecode(timeline.fps, keyframe.time) < timeline.currentTimecode) {
+        time = Math.max(keyframe.time, time);
+      }      
+    })
+
+    return time; 
+  }
+
+
+  getSelectedTimelineNextTime () {
+    var time = Number.MAX_SAFE_INTEGER; 
+    this.getKeyframeList((timeline, keyframe) => {
+
+      if (timecode(timeline.fps, keyframe.time) > timeline.currentTimecode) {      
+        time = Math.min(keyframe.time, time);
+      }      
+    })
 
     return time; 
   }
@@ -440,10 +496,12 @@ export class TimelineItem extends DomItem {
   getDefaultPropertyValue(property) {
 
     switch(property) {
+    case 'mix-blend-mode': return 'normal';
+    case 'rotate': return '0deg';
     case 'box-shadow':  return '0px 0px 0px 0px rgba(0, 0, 0, 1)';
     }
 
-    return '0px;'
+    return '0px'
   }
 
   copyTimelineKeyframe (layerId, property, newTime = null) {
@@ -475,9 +533,7 @@ export class TimelineItem extends DomItem {
     var p = this.getTimelineProperty(layerId, property);
 
     if (p) {
-      var times = p.keyframes.filter(it => it.time === time); 
-
-      return times[0]
+      return p.keyframes.find(it => it.time === time); 
     }
   }
 

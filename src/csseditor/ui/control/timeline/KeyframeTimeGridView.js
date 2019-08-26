@@ -39,7 +39,7 @@ export default class KeyframeTimeGridView extends UIElement {
             this.refs.$canvas.update(function () {
                 var rect = this.rect();
                 var realWidth = width - 20; 
-                var restX = 10             
+                var restX = 10;             
 
                 var left =  (currentTime - displayStartTime)/(displayEndTime - displayStartTime) * realWidth;
                 this.drawOption({strokeStyle: '#fc554f', lineWidth: 0.5})
@@ -57,7 +57,7 @@ export default class KeyframeTimeGridView extends UIElement {
         this.refresh();
     }
 
-    [EVENT('moveTimeline', 'refreshSelection', 'resizeTimeline') + THROTTLE(10)] (){
+    [EVENT('moveTimeline', 'refreshSelection') + THROTTLE(10)] (){
         this.refresh();
     }
 }

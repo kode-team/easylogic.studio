@@ -133,7 +133,7 @@ export default class TimelineObjectList extends UIElement {
         it.attr('data-selected', "false");
       })
 
-      editor.timeline.properties.forEach(it => {
+      editor.timeline.each(it => {
         var $el = this.$el.$(`[data-layer-id="${it.layerId}"][data-property="${it.property}"]`)
         
         $el && $el.attr('data-selected', 'true')
@@ -144,7 +144,8 @@ export default class TimelineObjectList extends UIElement {
         var container = e.$delegateTarget.closest('timeline-object');
         
         container.toggleClass('collapsed')
-        var layerId = container.attr('data-timeline-animation-id')
+
+        var layerId = e.$delegateTarget.closest('timeline-object-row').attr('data-layer-id')
 
         this.emit('toggleTimelineObjectRow', layerId, container.hasClass('collapsed'))
 
@@ -173,6 +174,16 @@ export default class TimelineObjectList extends UIElement {
       if (property) {
         this.emit('copy.timeline.property', layerId, property)
       }       
+    }
+
+    [CLICK('$el .timeline-object-row.layer-property .title')] (e) {
+      var [layerId, property] = e.$delegateTarget.closest('timeline-object-row').attrs('data-layer-id', 'data-property')
+
+      editor.timeline.selectProperty(layerId, property)
+
+      this.refreshSelection();
+
+      this.emit('refreshTimeline')
     }
 
     [EVENT('refreshTimeline')] () {

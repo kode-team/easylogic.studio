@@ -11,10 +11,10 @@ export default class TimelinePlayControl extends UIElement {
                     <div class='play-buttons' ref='$playButtons' data-status='${this.state.status}'>
                         <button type="button" data-value='play' class='play'>${icon.play}</button>
                         <button type="button" data-value='pause' class='pause'>${icon.pause}</button>                
-                        <button type="button" data-value='prev' class='prev'>${icon.skip_prev}</button>
-                        <button type="button" data-value='rewind' class='rewind'>${icon.fast_rewind}</button>                    
-                        <button type="button" data-value='forward' class='forward'>${icon.fast_forward}</button>                    
-                        <button type="button" data-value='next' class='next'>${icon.skip_next}</button>
+                        <button type="button" data-value='first' class='first'>${icon.skip_prev}</button>
+                        <button type="button" data-value='prev' class='prev'>${icon.fast_rewind}</button>                    
+                        <button type="button" data-value='next' class='next'>${icon.fast_forward}</button>
+                        <button type="button" data-value='last' class='last'>${icon.skip_next}</button>
                     </div>
                 </div>
                 <div class='row'>            
@@ -61,10 +61,33 @@ export default class TimelinePlayControl extends UIElement {
             this.play();
         } else if (status === 'pause') {
             this.pause();
+        } else if (status === 'first') {
+            this.first();
+        } else if (status === 'prev') {
+            this.prev();
+        } else if (status === 'next') {
+            this.next()
+        } else if (status === 'last') {
+            this.last()
         }
 
-
     }
+
+    first () {
+        this.emit('first.timeline')
+    }
+
+    prev () {
+        this.emit('prev.timeline')
+    }
+    
+    next () {
+        this.emit('next.timeline')
+    }
+    
+    last () {
+        this.emit('last.timeline')
+    }    
 
     play () {
         this.emit('play.timeline', this.state.speed, this.state.iteration, this.state.direction);

@@ -191,7 +191,7 @@ export default class KeyframeTimeView extends UIElement {
                 var rect = this.rect();
                 var realWidth = width - PADDING; 
                 this.drawOption({strokeStyle: 'rgba(204, 204, 204, 0.3)',  lineWidth: 0.5, ...textOption})
-                var restX = 10 
+                var restX = 10;
 
                 for(; startFrame < endFrame; startFrame += splitFrame) {
                     var y = rect.height / 4;
@@ -264,7 +264,7 @@ export default class KeyframeTimeView extends UIElement {
         this.refresh();
     }
 
-    [EVENT('moveTimeline', 'refreshSelection', 'resizeTimeline') + THROTTLE(10)] (){
+    [EVENT('moveTimeline', 'refreshSelection') + THROTTLE(10)] (){
         this.refresh();
     }
 }

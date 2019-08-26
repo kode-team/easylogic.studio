@@ -7,9 +7,7 @@ import { makeTimer, second, timecode } from "../../../../util/functions/time";
 export default class TimelineCommand extends UIElement {
 
     [COMMAND('add.timeline')] (layerId) {
-        var artboard = editor.selection.currentArtboard;
-
-        if (artboard) {
+        this.currentArtboard((artboard, timeline) => {
             if (layerId) {
                 artboard.addTimelineLayer(layerId);
             } else {
@@ -17,25 +15,22 @@ export default class TimelineCommand extends UIElement {
             }
             this.emit('refreshTimeline');
             this.emit('addTimeline');
-        }   
+        })
     }
 
     [COMMAND('select.timeline')] (selectedId) {
-        var artboard = editor.selection.currentArtboard;
-
-        if (artboard) {
+        this.currentArtboard((artboard, timeline) => {
             artboard.selectTimeline(selectedId);                
             this.emit('refreshTimeline');
-        }   
+        })        
     }
 
     [COMMAND('set.timeline.offset') + DEBOUNCE(100)] (obj) {
-        var artboard = editor.selection.currentArtboard;
 
-        if (artboard) {
+        this.currentArtboard((artboard, timeline) => {
             artboard.setTimelineKeyframeOffsetValue(obj.layerId, obj.property, obj.id, obj.value, obj.timing, obj.time);
             this.emit('refreshTimeline');
-        }
+        })
     }
 
     [COMMAND('refresh.selected.offset')] () {
@@ -47,14 +42,12 @@ export default class TimelineCommand extends UIElement {
     }
 
     [COMMAND('add.timeline.property')] (layerList, property, value, timing = 'linear') {
+        this.currentArtboard((artboard, timeline) => {
 
-        if (isArray(layerList) === false) {
-            layerList = [layerList]
-        }
-
-        var artboard = editor.selection.currentArtboard;
-
-        if (artboard) {
+            if (isArray(layerList) === false) {
+                layerList = [layerList]
+            }
+    
             var list = [] 
             layerList.forEach(id => {
                 var obj = artboard.addTimelineKeyframe(id, property, value + "", timing);
@@ -68,14 +61,13 @@ export default class TimelineCommand extends UIElement {
 
             this.emit('refreshTimeline');
             this.trigger('refresh.selected.offset');
-        }
+        }) 
         
     }
 
 
     [COMMAND('add.timeline.current.property')] (property, timing = 'linear') {
-        var artboard = editor.selection.currentArtboard;
-        if (artboard) {
+        this.currentArtboard((artboard, timeline) => {
             var list = []
             editor.selection.each(item => {
                 var obj = artboard.addTimelineKeyframe(item.id, property, item[property] + "", timing);
@@ -88,13 +80,11 @@ export default class TimelineCommand extends UIElement {
             editor.timeline.select(...list);            
             this.emit('refreshTimeline');
             this.trigger('refresh.selected.offset');
-        }
-
+        })        
     }
 
     [COMMAND('delete.timeline.keyframe')] () {
-        var artboard = editor.selection.currentArtboard;
-        if (artboard) {        
+        this.currentArtboard((artboard, timeline) => {
             editor.timeline.each(item => {
                 artboard.deleteTimelineKeyframe(item.layerId, item.property, item.id);
             })
@@ -102,37 +92,31 @@ export default class TimelineCommand extends UIElement {
             editor.timeline.empty();
             this.emit('refreshTimeline')
             this.trigger('refresh.selected.offset');            
-        }
+        })
     }
 
     [COMMAND('add.timeline.keyframe')] (layerId, property, time, timing = 'linear') {
-        var artboard = editor.selection.currentArtboard;
-        if (artboard) {
+        this.currentArtboard((artboard, timeline) => {
             var item = artboard.searchById(layerId);
 
             var obj = artboard.addTimelineKeyframe(item.id, property, item[property] + "", timing, time);
             editor.timeline.select(obj);            
             this.emit('refreshTimeline');
             this.trigger('refresh.selected.offset');
-        }
-
+        })        
     }
 
     [COMMAND('change.timeline.offset')] () {
-        var artboard = editor.selection.currentArtboard;
-        if (artboard) {
+        this.currentArtboard((artboard, timeline) => {
             list.forEach(keyframe => {
                 artboard.setTimelineKeyframeOffsetTime(keyframe.layerId, keyframe.property, keyframe.id, keyframe.time)
             })
             this.emit('refreshTimeline');
-        }
+        })
     }
 
     [COMMAND('change.property')] (key, value) {
-
-
-        var artboard = editor.selection.currentArtboard;
-        if (artboard) {
+        this.currentArtboard((artboard, timeline) => {
             editor.selection.each(item => {
                 var newValue = isUndefined(value) ? item[key] : value
                 newValue = newValue + ""
@@ -141,20 +125,17 @@ export default class TimelineCommand extends UIElement {
             })
 
             this.emit('refreshTimelineOffsetValue');
-        }
+        })
 
     }
 
     [COMMAND('copy.timeline.property')] (layerId, property, newTime = null) {
-        var artboard = editor.selection.currentArtboard;
 
-        if (artboard) {
-
+        this.currentArtboard((artboard, timeline) => {
             artboard.copyTimelineKeyframe(layerId, property, newTime);
             
             this.emit('refreshTimeline');
-        }
-        
+        })
     }    
 
     [EVENT('moveTimeline')] () {
@@ -167,55 +148,101 @@ export default class TimelineCommand extends UIElement {
         }
     }
 
+    currentArtboard (callback) {
+        var artboard = editor.selection.currentArtboard;
+
+        if (artboard) {
+            var timeline = artboard.getSelectedTimeline();
+
+            callback && callback (artboard, timeline)            
+        }
+    }
+
+    [COMMAND('last.timeline')] () {
+
+        this.currentArtboard((artboard, timeline) => {
+            var lastTime = artboard.getSelectedTimelineLastTime();
+
+            artboard.setTimelineCurrentTime(timecode(timeline.fps, lastTime));
+
+            this.emit('playTimeline');
+        })
+    }
+
+    [COMMAND('next.timeline')] () {
+
+        this.currentArtboard((artboard, timeline) => {
+            var nextTime = artboard.getSelectedTimelineNextTime();
+
+            artboard.setTimelineCurrentTime(timecode(timeline.fps, nextTime));
+
+            this.emit('playTimeline');
+        })
+    }
+
+
+    [COMMAND('first.timeline')] () {
+
+        this.currentArtboard((artboard, timeline) => {
+            var firstTime = artboard.getSelectedTimelineFirstTime();
+
+            artboard.setTimelineCurrentTime(timecode(timeline.fps, firstTime));
+
+            this.emit('playTimeline');
+        })
+    }    
+
+
+    [COMMAND('prev.timeline')] () {
+
+        this.currentArtboard((artboard, timeline) => {
+            var prevTime = artboard.getSelectedTimelinePrevTime();
+
+            artboard.setTimelineCurrentTime(timecode(timeline.fps, prevTime));
+
+            this.emit('playTimeline');
+        })
+    }    
+
     [COMMAND('play.timeline')] (speed = 1, iterationCount = 1, direction = 'normal') {
 
         editor.selection.empty()
         this.emit('refreshSelection');
 
-        var artboard = editor.selection.currentArtboard;
 
-        if (artboard) {
+        this.currentArtboard((artboard, timeline) => {
+          
+            var lastTime = artboard.getSelectedTimelineLastTime();
 
-            var timeline = artboard.getSelectedTimeline();
-
-            if(timeline) {
-
-                var lastTime = artboard.getSelectedTimelineLastTime();
-
-                if (this.state.timer) {
-                    this.state.timer.stop()
-                } else {
-                    this.state.timer = makeTimer({
-                        elapsed: timeline.currentTime * 1000,
-                        speed,
-                        duration: lastTime * 1000,
-                        iterationCount, 
-                        direction
-                    })
-                }
-
-                this.state.timer.play({
-                    duration: lastTime * 1000,
+            if (this.state.timer) {
+                this.state.timer.stop()
+            } else {
+                this.state.timer = makeTimer({
                     elapsed: timeline.currentTime * 1000,
                     speed,
-                    iterationCount,
-                    direction,
-                    tick: (elapsed, timer) => {
-                        // console.log(timecode(timeline.fps, elapsed / 1000));
-                        artboard.seek(timecode(timeline.fps, elapsed / 1000))
-                        this.emit('playTimeline');
-                    },
-                    last: (elapsed, timer) => {                 
-                        this.emit('stopTimeline');
-                        artboard.setTimelineCurrentTime(0);
-                    }
-                })                
-    
+                    duration: lastTime * 1000,
+                    iterationCount, 
+                    direction
+                })
             }
 
-        }
-
-
+            this.state.timer.play({
+                duration: lastTime * 1000,
+                elapsed: timeline.currentTime * 1000,
+                speed,
+                iterationCount,
+                direction,
+                tick: (elapsed, timer) => {
+                    // console.log(timecode(timeline.fps, elapsed / 1000));
+                    artboard.seek(timecode(timeline.fps, elapsed / 1000))
+                    this.emit('playTimeline');
+                },
+                last: (elapsed, timer) => {                 
+                    this.emit('stopTimeline');
+                    artboard.setTimelineCurrentTime(0);
+                }
+            })      
+        })
         
     }
 
