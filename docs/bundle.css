@@ -8097,6 +8097,9 @@ html, body {
 .csseditor[data-theme=dark] .timeline-value-area .timeline-value-editor .tab-content.padding-zero {
   padding-top: 0px;
 }
+.csseditor[data-theme=dark] .timeline-value-area .timeline-value-editor .tab-content .offset-input {
+  padding-top: 10px;
+}
 .csseditor[data-theme=dark] .timeline-value-area .timeline-value-editor .tab-content .css-property-item > .title > .tools {
   display: none;
 }
@@ -15219,6 +15222,9 @@ html, body {
 }
 .csseditor[data-theme=light] .timeline-value-area .timeline-value-editor .tab-content.padding-zero {
   padding-top: 0px;
+}
+.csseditor[data-theme=light] .timeline-value-area .timeline-value-editor .tab-content .offset-input {
+  padding-top: 10px;
 }
 .csseditor[data-theme=light] .timeline-value-area .timeline-value-editor .tab-content .css-property-item > .title > .tools {
   display: none;

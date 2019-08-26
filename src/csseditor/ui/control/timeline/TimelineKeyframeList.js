@@ -369,6 +369,7 @@ export default class TimelineKeyframeList extends UIElement {
         })
 
         this.refresh();        
+        this.emit('refreshOffsetValue', this.offset)        
     }
 
     [EVENT('toggleTimelineObjectRow')] (id, isToggle) {
@@ -381,7 +382,7 @@ export default class TimelineKeyframeList extends UIElement {
             editor.timeline.each(item => {
                 currentArtboard.sortTimelineKeyframe(item.layerId, item.property)
             })
-            this.refresh();            
+            this.refresh();                        
         }
     }
 

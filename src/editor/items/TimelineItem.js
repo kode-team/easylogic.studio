@@ -132,6 +132,23 @@ export class TimelineItem extends DomItem {
     return selectedTimeline || null;
   }
 
+  getSelectedTimelineLastTime () {
+    var timeline = this.getSelectedTimeline();
+    var time = 0; 
+    if (timeline) {
+
+      timeline.animations.forEach(a => {
+        a.properties.forEach(p => {
+          p.keyframes.forEach(k => {
+            time = Math.max(k.time, time);
+          })
+        })
+      })
+    }
+
+    return time; 
+  }
+
   selectTimeline (id) {
     this.json.timeline.forEach(it => {
       it.selected = it.id === id; 
@@ -382,11 +399,12 @@ export class TimelineItem extends DomItem {
     }
   }
 
-  setTimelineKeyframeOffsetValue (layerId, property, offsetId, value, timing) {
+  setTimelineKeyframeOffsetValue (layerId, property, offsetId, value = undefined, timing = undefined, time = undefined) {
     var keyframe = this.getTimelineKeyframeById(layerId, property, offsetId)
     if (keyframe) {
-      keyframe.value = value;
-      keyframe.timing = timing
+      if (isNotUndefined(time)) { keyframe.time = time; }
+      if (isNotUndefined(value)) { keyframe.value = value; }
+      if (isNotUndefined(timing)) { keyframe.timing = timing; }
 
       this.compiledTimingFunction(layerId, property);             
     }

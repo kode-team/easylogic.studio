@@ -1,8 +1,10 @@
 import UIElement, { EVENT } from "../../../../util/UIElement";
 import CubicBezierEditor from "../../property-editor/CubicBezierEditor";
-import { LOAD, CLICK } from "../../../../util/Event";
+import { LOAD, CLICK, KEYDOWN, KEYUP, KEY, IF, PREVENT } from "../../../../util/Event";
 import CSSPropertyEditor from "../../property-editor/CSSPropertyEditor";
 import { Length } from "../../../../editor/unit/Length";
+import { second, framesToTimecode, timecode } from "../../../../util/functions/time";
+import { editor } from "../../../../editor/editor";
 
 
 
@@ -16,6 +18,7 @@ export default class TimelineValueEditor extends UIElement {
 
   initState() {
     return {
+      time: 0,
       timing: 'linear'
     };
   }
@@ -33,6 +36,17 @@ export default class TimelineValueEditor extends UIElement {
   }
 
   refresh () {
+
+    var artboard = editor.selection.currentArtboard; 
+    var code = '00:00:00:00';
+    if (artboard) {
+      var timeline = artboard.getSelectedTimeline();
+      if (timeline) {
+        code = timecode(timeline.fps, this.state.time)
+      }
+    }
+
+    this.refs.$offsetTime.val(code)
     this.children.$propertyEditor.trigger('showCSSPropertyEditor', this.getProperties());      
     this.children.$cubicBezierEditor.trigger('showCubicBezierEditor', {
       timingFunction: this.state.timing
@@ -53,6 +67,7 @@ export default class TimelineValueEditor extends UIElement {
             </div>
             <div class="tab-body" ref="$body">
                 <div class="tab-content padding-zero" data-value="1">
+                    ${this.templateForOffset()}  
                     ${this.templateForProperty()}  
                 </div>
                 <div class="tab-content" data-value="2">
@@ -72,6 +87,55 @@ export default class TimelineValueEditor extends UIElement {
     );
     this.refresh();
   }
+
+
+  checkNumberOrTimecode (e) {
+    var value = e.target.value.trim();
+    if ((+value) + '' === value) {
+        return true; 
+    } else if (value.match(/^[0-9:]+$/)) {
+        return true; 
+    }
+
+    return false;
+}
+
+checkKey (e) {
+    if (e.key.match(/^[0-9:]+$/)) {
+        return true; 
+    } else if (e.code === 'Backspace' || e.code === 'ArrowRight' || e.code === 'ArrowLeft') {
+        return true; 
+    }
+
+    return false; 
+}
+
+[KEYDOWN('$offsetTime')] (e) {
+    if (!this.checkKey(e)) {
+        e.preventDefault();
+        e.stopPropagation()
+        return false;
+    }
+}
+
+[KEYUP('$offsetTime') + KEY('Enter') + IF('checkNumberOrTimecode') + PREVENT] (e) {
+    var frame = this.refs.$currentTime.value
+
+    this.updateData({
+      time: second(frame)
+    });
+
+}
+
+
+  templateForOffset() {
+    return `
+      <div class='offset-input'>
+        <label>Time</label>
+        <input type="text" ref='$offsetTime' />
+      </div>
+    `
+  }    
 
   templateForProperty() {
     return `<CSSPropertyEditor ref='$propertyEditor' hide-title='true' onchange='changePropertyEditor' />`

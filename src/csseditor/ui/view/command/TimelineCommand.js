@@ -33,7 +33,8 @@ export default class TimelineCommand extends UIElement {
         var artboard = editor.selection.currentArtboard;
 
         if (artboard) {
-            artboard.setTimelineKeyframeOffsetValue(obj.layerId, obj.property, obj.id, obj.value, obj.timing);
+            artboard.setTimelineKeyframeOffsetValue(obj.layerId, obj.property, obj.id, obj.value, obj.timing, obj.time);
+            this.emit('refreshTimeline');
         }
     }
 
@@ -179,20 +180,22 @@ export default class TimelineCommand extends UIElement {
 
             if(timeline) {
 
+                var lastTime = artboard.getSelectedTimelineLastTime();
+
                 if (this.state.timer) {
                     this.state.timer.stop()
                 } else {
                     this.state.timer = makeTimer({
                         elapsed: timeline.currentTime * 1000,
                         speed,
-                        duration: timeline.totalTime * 1000,
+                        duration: lastTime * 1000,
                         iterationCount, 
                         direction
                     })
                 }
 
                 this.state.timer.play({
-                    duration: timeline.totalTime * 1000,
+                    duration: lastTime * 1000,
                     elapsed: timeline.currentTime * 1000,
                     speed,
                     iterationCount,
