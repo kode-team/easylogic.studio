@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "../../../../util/UIElement";
-import { CLICK, LOAD, DEBOUNCE, VDOM } from "../../../../util/Event";
+import { CLICK, LOAD, DEBOUNCE, VDOM, SCROLL } from "../../../../util/Event";
 import icon from "../../icon/icon";
 import { editor } from "../../../../editor/editor";
 
@@ -114,7 +114,7 @@ export default class TimelineObjectList extends UIElement {
             <div class='timeline-object-list'></div>
         `
     }
-
+    
     [LOAD() + VDOM] () {
 
         var artboard = editor.selection.currentArtboard || { timeline: [] }

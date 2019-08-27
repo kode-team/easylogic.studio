@@ -2,7 +2,7 @@
 import BaseProperty from "../property/BaseProperty";
 import TimelineObjectList from "./timeline/TimelineObjectList";
 import TimelineKeyframeList from "./timeline/TimelineKeyframeList";
-import { DRAGOVER, DROP, PREVENT, DEBOUNCE } from "../../../util/Event";
+import { DRAGOVER, DROP, PREVENT, DEBOUNCE, SCROLL, DROPPABLE } from "../../../util/Event";
 import TimelineTopToolbar from "./timeline/TimelineTopToolbar";
 import KeyframeTimeView from "./timeline/KeyframeTimeView";
 import KeyframeTimeGridView from "./timeline/KeyframeTimeGridView";
@@ -71,6 +71,14 @@ export default class TimelineProperty extends BaseProperty {
       </div>
     `;
   }
+
+  [SCROLL('$keyframeArea')] (e) {
+      this.refs.$area.setScrollTop(this.refs.$keyframeArea.scrollTop())
+  }  
+
+  [SCROLL('$area')] (e) {
+    this.refs.$keyframeArea.setScrollTop(this.refs.$area.scrollTop())
+  }    
 
   [EVENT('refreshValueEditor') + DEBOUNCE(100)] () {
     this.children.$valueEditor.refresh();

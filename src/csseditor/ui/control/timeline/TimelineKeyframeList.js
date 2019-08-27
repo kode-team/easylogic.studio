@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "../../../../util/UIElement";
-import { CLICK, LOAD, VDOM, DEBOUNCE, POINTERSTART, MOVE, IF, END, DOUBLECLICK, KEYUP, KEY, RESIZE } from "../../../../util/Event";
+import { CLICK, LOAD, VDOM, DEBOUNCE, POINTERSTART, MOVE, IF, END, DOUBLECLICK, KEYUP, KEY, RESIZE, SCROLL } from "../../../../util/Event";
 import { editor } from "../../../../editor/editor";
 import { Length } from "../../../../editor/unit/Length";
 import { OBJECT_TO_PROPERTY, OBJECT_TO_CLASS, isUndefined } from "../../../../util/functions/func";

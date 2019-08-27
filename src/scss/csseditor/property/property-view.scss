@@ -112,6 +112,12 @@
 
               }
 
+              &:not(.play):not(.pause) {
+                &:hover {
+                  transform: scale(1.2);
+                }
+              }
+
               &.play {
 
                 svg {

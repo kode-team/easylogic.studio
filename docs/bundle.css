@@ -2992,6 +2992,10 @@ html, body {
   -webkit-transform: scale(1.5);
           transform: scale(1.5);
 }
+.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control button:not(.play):not(.pause):hover {
+  -webkit-transform: scale(1.2);
+          transform: scale(1.2);
+}
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control button.play svg path {
   fill: #fc554f;
 }
@@ -10117,6 +10121,10 @@ html, body {
           filter: drop-shadow(0px 0px 2px black);
   -webkit-transform: scale(1.5);
           transform: scale(1.5);
+}
+.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control button:not(.play):not(.pause):hover {
+  -webkit-transform: scale(1.2);
+          transform: scale(1.2);
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control button.play svg path {
   fill: #3e8ec6;

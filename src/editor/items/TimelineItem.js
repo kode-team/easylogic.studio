@@ -182,7 +182,7 @@ export class TimelineItem extends DomItem {
 
   getSelectedTimelinePrevTime () {
 
-    var time = 0; 
+    var time = this.getSelectedTimelineFirstTime(); 
     this.getKeyframeList((timeline, keyframe) => {
       if (timecode(timeline.fps, keyframe.time) < timeline.currentTimecode) {
         time = Math.max(keyframe.time, time);
@@ -194,7 +194,7 @@ export class TimelineItem extends DomItem {
 
 
   getSelectedTimelineNextTime () {
-    var time = Number.MAX_SAFE_INTEGER; 
+    var time = this.getSelectedTimelineLastTime(); 
     this.getKeyframeList((timeline, keyframe) => {
 
       if (timecode(timeline.fps, keyframe.time) > timeline.currentTimecode) {      
