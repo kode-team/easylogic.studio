@@ -5,14 +5,14 @@ export function makeInterpolateColor (layer, property, startColor, endColor) {
     var s = Color.parse(startColor);
     var e = Color.parse(endColor);
 
-    return (ratio, t) => {
+    return (rate, t) => {
 
         if (t === 0) {
-            return startColor;
+            return startColor; 
         } else if (t === 1) {
             return endColor;
         }
 
-        return interpolateRGB(s, e, ratio, 'rgb')
+        return interpolateRGB(s, e, rate, 'rgb')
     } 
 }

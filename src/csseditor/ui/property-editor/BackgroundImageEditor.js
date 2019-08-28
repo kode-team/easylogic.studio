@@ -121,21 +121,20 @@ export default class BackgroundImageEditor extends UIElement {
         });
     }
 
+    // toPropertyCSS(list, isExport = false) {
+    //     var results = {};
+    //     list.forEach(item => {
+    //         keyEach(item.toCSS(isExport), (key, value) => {
+    //             if (!results[key]) results[key] = [];
+    //             results[key].push(value);
+    //         });
+    //     });
 
-    toPropertyCSS(list, isExport = false) {
-        var results = {};
-        list.forEach(item => {
-            keyEach(item.toCSS(isExport), (key, value) => {
-                if (!results[key]) results[key] = [];
-                results[key].push(value);
-            });
-        });
-
-        return combineKeyArray(results);
-    }
+    //     return combineKeyArray(results);
+    // }
 
     modifyBackgroundImage () {
-        var value = CSS_TO_STRING(this.toPropertyCSS(this.state.images));
+        var value = CSS_TO_STRING(BackgroundImage.toPropertyCSS(this.state.images));
 
         this.parent.trigger(this.props.onchange, value)
     }

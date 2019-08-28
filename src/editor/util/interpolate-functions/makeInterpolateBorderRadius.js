@@ -1,4 +1,4 @@
-import { makeInterpolateNumber } from "./makeInterpolateNumber";
+import { makeInterpolateLength } from "./makeInterpolateLength";
 import { STRING_TO_CSS, CSS_TO_STRING } from "../../../util/functions/func";
 
 export function makeInterpolateBorderRadius(layer, property, startValue, endValue) {
@@ -7,7 +7,7 @@ export function makeInterpolateBorderRadius(layer, property, startValue, endValu
 
     var list = [] 
     Object.keys(s).forEach(key => {
-        list.push({ key,  value: makeInterpolateNumber(layer, property, s[key], e[key]) })
+        list.push({ key,  value: makeInterpolateLength(layer, property, s[key], e[key]) })
     })
 
     return (rate, t) => {

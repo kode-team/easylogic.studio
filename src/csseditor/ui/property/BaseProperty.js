@@ -1,8 +1,9 @@
-import { CLICK } from "../../../util/Event";
+import { CLICK, PREVENT, STOP } from "../../../util/Event";
 import UIElement from "../../../util/UIElement";
 
 import propertyEditor from "../property-editor";
 import { editor } from "../../../editor/editor";
+import Dom from "../../../util/Dom";
 
 
 export default class BaseProperty extends UIElement {
@@ -21,7 +22,10 @@ export default class BaseProperty extends UIElement {
                 ? ''
                 : `
             <div class='property-title' ref="$title">
-                <label>${this.getTitle()}</label>
+                <label> 
+                  ${this.hasKeyframe() ? `<span class='add-timeline-property' data-property='${this.getKeyframeProperty()}'></span>` : ''} 
+                  ${this.getTitle()}
+                </label>
                 <span class="tools">${this.getTools()}</span>
             </div>`
             }
@@ -31,6 +35,10 @@ export default class BaseProperty extends UIElement {
         `;
   }
 
+  hasKeyframe () {
+    return false;
+  }
+    
   isHideHeader() {
     return false;
   }
@@ -59,7 +67,9 @@ export default class BaseProperty extends UIElement {
   [CLICK("$title label")](e) {
     var $dom = e.$delegateTarget.parent();
 
-    if ($dom.hasClass("property-title")) {
+    var isAddProperty = Dom.create(e.target).hasClass('add-timeline-property')
+
+    if ($dom.hasClass("property-title") && isAddProperty === false) {
       this.$el.toggleClass("show");
       this.onToggleShow();
     }
@@ -74,11 +84,17 @@ export default class BaseProperty extends UIElement {
     }
   }
 
-  [CLICK('$el .property-body .add-timeline-property')] (e) {
+  [CLICK('$el .property-body .add-timeline-property') + PREVENT + STOP] (e) {
     var property = e.$delegateTarget.attr('data-property')
 
     this.emit('add.timeline.current.property', property)
   }
+
+  [CLICK('$el .property-title .add-timeline-property') + PREVENT + STOP] (e) {
+    var property = e.$delegateTarget.attr('data-property')
+
+    this.emit('add.timeline.current.property', property)
+  }  
 
   isPropertyShow() {
     return this.$el.hasClass("show");

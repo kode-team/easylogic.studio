@@ -42,6 +42,20 @@
                 > .title > .tools {
                     display: none;
                 }
+
+                .background-image-editor {
+                    .tools {
+                        button {
+                            width: 100px;
+                            text-align: right;
+
+                            svg {
+                                width: 16px;
+                                vertical-align: middle;
+                            }
+                        }
+                    }
+                }
     
             }
            

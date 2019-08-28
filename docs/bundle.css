@@ -1,3 +1,27 @@
+
+// MIT License
+
+// Copyright (c) 2019 jinho park (cyberuls@gmail.com, easylogic)
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+
 @import url(https://fonts.googleapis.com/css?family=Saira+Stencil+One&display=swap);
 @-webkit-keyframes bounce-up-down {
   0% {
@@ -2910,7 +2934,6 @@ html, body {
   height: 8px;
   box-shadow: 0 0 0 2px rgba(2, 2, 2, 0.3);
   background-color: rgba(155, 155, 155, 0.7);
-  vertical-align: middle;
   line-height: 10px;
   margin-top: 5px;
   cursor: pointer;
@@ -3904,7 +3927,7 @@ html, body {
   text-align: right;
 }
 .csseditor[data-theme=dark] .project-list .project-item.selected {
-  background-color: rgba(26, 26, 26, 0.3);
+  background-color: #a5504d;
   color: white;
 }
 .csseditor[data-theme=dark] .project-list .project-item.selected svg path {
@@ -3941,7 +3964,7 @@ html, body {
   text-align: right;
 }
 .csseditor[data-theme=dark] .artboard-list .artboard-item.selected {
-  background-color: rgba(26, 26, 26, 0.3);
+  background-color: #a5504d;
   color: white;
 }
 .csseditor[data-theme=dark] .artboard-list .artboard-item.selected svg path {
@@ -4015,7 +4038,7 @@ html, body {
   fill: #333;
 }
 .csseditor[data-theme=dark] .layer-list .layer-item.selected {
-  background-color: rgba(26, 26, 26, 0.3);
+  background-color: #a5504d;
   color: white;
 }
 .csseditor[data-theme=dark] .layer-list .layer-item.selected svg path {
@@ -8107,6 +8130,14 @@ html, body {
 .csseditor[data-theme=dark] .timeline-value-area .timeline-value-editor .tab-content .css-property-item > .title > .tools {
   display: none;
 }
+.csseditor[data-theme=dark] .timeline-value-area .timeline-value-editor .tab-content .css-property-item .background-image-editor .tools button {
+  width: 100px;
+  text-align: right;
+}
+.csseditor[data-theme=dark] .timeline-value-area .timeline-value-editor .tab-content .css-property-item .background-image-editor .tools button svg {
+  width: 16px;
+  vertical-align: middle;
+}
 .csseditor[data-theme=dark] .timeline-value-area .timeline-value-editor .tab-content .title {
   color: #ffffff;
 }
@@ -10040,7 +10071,6 @@ html, body {
   height: 8px;
   box-shadow: 0 0 0 2px rgba(206, 206, 206, 0.3);
   background-color: rgba(255, 255, 255, 0.7);
-  vertical-align: middle;
   line-height: 10px;
   margin-top: 5px;
   cursor: pointer;
@@ -15236,6 +15266,14 @@ html, body {
 }
 .csseditor[data-theme=light] .timeline-value-area .timeline-value-editor .tab-content .css-property-item > .title > .tools {
   display: none;
+}
+.csseditor[data-theme=light] .timeline-value-area .timeline-value-editor .tab-content .css-property-item .background-image-editor .tools button {
+  width: 100px;
+  text-align: right;
+}
+.csseditor[data-theme=light] .timeline-value-area .timeline-value-editor .tab-content .css-property-item .background-image-editor .tools button svg {
+  width: 16px;
+  vertical-align: middle;
 }
 .csseditor[data-theme=light] .timeline-value-area .timeline-value-editor .tab-content .title {
   color: #666666;

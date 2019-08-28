@@ -14,6 +14,14 @@ export default class BackgroundImageProperty extends BaseProperty {
     return 'Fill'
   }
 
+  hasKeyframe () {
+    return true; 
+  }
+
+  getKeyframeProperty () {
+    return 'background-image';
+  }
+
   getBody() {
     return `
       <div class='property-item full background-image' ref='$property'></div>

@@ -1,12 +1,12 @@
 
-export function makeInterpolateBoolean (layer, property, startBoolean, endBoolean) {
+export function makeInterpolateBoolean (layer, property, s, e) {
 
     return (ratio, t) => {
 
         if (t === 1) {
-            return endBoolean;
+            return e;
         }
 
-        return startBoolean
+        return s
     } 
 }

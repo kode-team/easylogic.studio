@@ -40,11 +40,12 @@ export default class GradientEditor extends UIElement  {
       index: 0,
       colorsteps,
       radialPosition: [ 'center', 'center'],
-      radialType: 'ellipse'
+      radialType: 'ellipse',
+      angle: '0deg'
     }
   }
 
-  setValue (str, index = 0, type = 'static-gradient') {
+  setValue (str, index = 0, type = 'static-gradient', image = {}) {
     var results = convertMatches(str);
     var colorsteps = results.str.split(',').map(it => it.trim()).map(it => {
       var [color, offset1, offset2 ] = it.split(' ').filter(str => str.length);
@@ -78,7 +79,10 @@ export default class GradientEditor extends UIElement  {
     this.setState({
       colorsteps,
       index,
-      type
+      type,
+      angle: image.angle,
+      radialPosition: image.radialPosition || ['50%', '50%'],
+      radialType: image.radialType || 'ellipse'
     }, false)
 
     this.refresh();
@@ -89,7 +93,7 @@ export default class GradientEditor extends UIElement  {
   }
 
   template() {
-    return `
+    return /*html*/`
         <div class='gradient-editor' data-selected-editor='${this.state.type || 'static-gradient'}'>
             <div class='gradient-steps' data-editor='gradient'>
                 <div class="hue-container" ref="$back"></div>            
@@ -132,7 +136,7 @@ export default class GradientEditor extends UIElement  {
     this.state[key] = value;
 
     if (key === 'radialPositionX' || key === 'radialPositionY') {
-      this.state['radialPosition'] = [this.state.radialPositionX, this.state.radialPositionY] 
+      this.state['radialPosition'] = [this.state.radialPositionX || 'center', this.state.radialPositionY || 'center'] 
     }
 
     this.updateData();
@@ -351,6 +355,7 @@ export default class GradientEditor extends UIElement  {
   }
 
   setColorUI() {
+    this.refs.$angle
     this.refs.$stepList.css( "background-image", this.getLinearGradient());
     this.refs.$el.attr( "data-selected-editor", this.state.type);
   }

@@ -26,7 +26,6 @@ export default class TimelineCommand extends UIElement {
     }
 
     [COMMAND('set.timeline.offset') + DEBOUNCE(100)] (obj) {
-
         this.currentArtboard((artboard, timeline) => {
             artboard.setTimelineKeyframeOffsetValue(obj.layerId, obj.property, obj.id, obj.value, obj.timing, obj.time);
             this.emit('refreshTimeline');
@@ -120,8 +119,7 @@ export default class TimelineCommand extends UIElement {
             editor.selection.each(item => {
                 var newValue = isUndefined(value) ? item[key] : value
                 newValue = newValue + ""
-
-                artboard.setPropertyOffsetValue(item.id, key, undefined, newValue )
+                artboard.setTimelineKeyframeOffsetValue(item.id, key, undefined, newValue )
             })
 
             this.emit('refreshTimelineOffsetValue');
@@ -164,7 +162,7 @@ export default class TimelineCommand extends UIElement {
             var lastTime = artboard.getSelectedTimelineLastTime();
 
             artboard.setTimelineCurrentTime(timecode(timeline.fps, lastTime));
-
+            artboard.seek();
             this.emit('playTimeline');
         })
     }
@@ -175,7 +173,7 @@ export default class TimelineCommand extends UIElement {
             var nextTime = artboard.getSelectedTimelineNextTime();
 
             artboard.setTimelineCurrentTime(timecode(timeline.fps, nextTime));
-
+            artboard.seek();
             this.emit('playTimeline');
         })
     }
@@ -187,7 +185,7 @@ export default class TimelineCommand extends UIElement {
             var firstTime = artboard.getSelectedTimelineFirstTime();
 
             artboard.setTimelineCurrentTime(timecode(timeline.fps, firstTime));
-
+            artboard.seek();
             this.emit('playTimeline');
         })
     }    
@@ -199,6 +197,7 @@ export default class TimelineCommand extends UIElement {
             var prevTime = artboard.getSelectedTimelinePrevTime();
 
             artboard.setTimelineCurrentTime(timecode(timeline.fps, prevTime));
+            artboard.seek();
 
             this.emit('playTimeline');
         })

@@ -1,5 +1,5 @@
 import { Length, Position } from "../unit/Length";
-import { keyMap } from "../../util/functions/func";
+import { keyMap, combineKeyArray, keyEach, CSS_TO_STRING } from "../../util/functions/func";
 import { Property } from "../items/Property";
 import { StaticGradient } from "../image-resource/StaticGradient";
 import { URLImageResource } from "../image-resource/URLImageResource";
@@ -165,6 +165,7 @@ export class BackgroundImage extends Property {
     };
   }
 
+
   toBackgroundPositionCSS() {
     var json = this.json;
 
@@ -281,18 +282,16 @@ export class BackgroundImage extends Property {
         let image = null;
         value = reverseMatches(value, results.matches);
         if (value.includes("repeating-linear-gradient")) {
-          // 반복을 먼저 파싱하고
           image = RepeatingLinearGradient.parse(value);
         } else if (value.includes("linear-gradient")) {
-          // 그 다음에 파싱 하자.
           image = LinearGradient.parse(value);
         } else if (value.includes("repeating-radial-gradient")) {
           image = RepeatingRadialGradient.parse(value);
-        } else if (value.includes("radial")) {
+        } else if (value.includes("radial-gradient")) {
           image = RadialGradient.parse(value);
         } else if (value.includes("repeating-conic-gradient")) {
           image = RepeatingConicGradient.parse(value);
-        } else if (value.includes("conic")) {
+        } else if (value.includes("conic-gradient")) {
           image = ConicGradient.parse(value);
         } else if (value.includes("url")) {
           image = URLImageResource.parse(value);
@@ -349,5 +348,22 @@ export class BackgroundImage extends Property {
     }
 
     return backgroundImages;
+  }
+
+
+  static toPropertyCSS(list, isExport = false) {
+    var results = {};
+    list.forEach(item => {
+        keyEach(item.toCSS(isExport), (key, value) => {
+            if (!results[key]) results[key] = [];
+            results[key].push(value);
+        });
+    });
+
+    return combineKeyArray(results);
+  }  
+
+  static join (list) {
+    return CSS_TO_STRING(BackgroundImage.toPropertyCSS(list.map(it => BackgroundImage.parse(it))))
   }
 }

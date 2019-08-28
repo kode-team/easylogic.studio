@@ -59,7 +59,7 @@ export default class SizeProperty extends BaseProperty {
     // this.emit('refreshSelectionTool');
     this.emit('setSize')
 
-    this.emit('change.property', key)    
+    // this.emit('change.property', key)    
 
   }
 }

@@ -1,11 +1,13 @@
 import { createBezierForPattern } from "../../util/functions/bezier";
-import { makeInterpolateNumber } from "./interpolate-functions/makeInterpolateNumber";
+import { makeInterpolateLength } from "./interpolate-functions/makeInterpolateLength";
 import { makeInterpolateBorderRadius } from "./interpolate-functions/makeInterpolateBorderRadius";
 import { makeInterpolateBoxShadow } from "./interpolate-functions/makeInterpolateBoxShadow";
 import { makeInterpolateColor } from "./interpolate-functions/makeInterpolateColor";
 import { makeInterpolateString } from "./interpolate-functions/makeInterpolateString";
 import timingFunctions from "./timing-functions";
 import { makeInterpolateRotate } from "./interpolate-functions/makeInterpolateRotate";
+import { makeInterpolateTextShadow } from "./interpolate-functions/makeInterpolateTextShadow";
+import { makeInterpolateBackgroundImage } from "./interpolate-functions/makeInterpolateBackgroundImage";
 
 
 
@@ -14,16 +16,20 @@ function makeInterpolate (layer, property, startValue, endValue) {
     case 'width':
     case 'x':
     case 'opacity':
-        return makeInterpolateNumber(layer, property, startValue, endValue);        
+        return makeInterpolateLength(layer, property, startValue, endValue);        
     case 'rotate':
         return makeInterpolateRotate(layer, property, startValue, endValue);
     case 'height':
     case 'y':
-        return makeInterpolateNumber(layer, property, startValue, endValue, 'height');
+        return makeInterpolateLength(layer, property, startValue, endValue, 'height');
     case 'border-radius':
         return makeInterpolateBorderRadius(layer, property, startValue, endValue);
     case 'box-shadow':
         return makeInterpolateBoxShadow(layer, property, startValue, endValue);        
+    case 'text-shadow':
+        return makeInterpolateTextShadow(layer, property, startValue, endValue);
+    case 'background-image':
+        return makeInterpolateBackgroundImage(layer, property, startValue, endValue); 
     case 'background-color':
     case 'color':
         return makeInterpolateColor(layer, property, startValue, endValue);

@@ -305,12 +305,15 @@ export default class Dom {
       if (isString(key)) {
         return getComputedStyle(this.el)[key];
       } else {
-        var keys = Object.keys(key || {});
 
-        for (var i = 0, len = keys.length; i < len; i++) {
-          var k = keys[i];
-          this.el.style[k] = key[k];
-        }
+        Object.assign(this.el.style, key);
+
+        // var keys = Object.keys(key || {});
+
+        // for (var i = 0, len = keys.length; i < len; i++) {
+        //   var k = keys[i];
+        //   this.el.style[k] = key[k];
+        // }
       }
     }
 

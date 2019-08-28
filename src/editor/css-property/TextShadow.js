@@ -34,6 +34,11 @@ export class TextShadow extends Property {
     return textShadows;
   }
 
+
+  static join (list) {
+    return list.map(it => TextShadow.parse(it)).join(', ');
+  }  
+
   getDefaultObject() {
     return super.getDefaultObject({
       itemType: "text-shadow",

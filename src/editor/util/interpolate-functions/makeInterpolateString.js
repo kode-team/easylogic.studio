@@ -1,11 +1,5 @@
-export function makeInterpolateString (layer, property, startString, endString) {
+import { makeInterpolateBoolean } from "./makeInterpolateBoolean";
 
-    return (ratio, t) => {
-
-        if (t === 1) {
-            return endString;
-        }
-
-        return startString
-    } 
+export function makeInterpolateString (layer, property, startString, endString)  {
+    return makeInterpolateBoolean(layer, property, startString, endString)
 }

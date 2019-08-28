@@ -67,18 +67,12 @@ export class RadialGradient extends Gradient {
           // color 복원
           newValue = reverseMatches(newValue, results.matches);
 
-          // 나머지는 ColorStep 이 파싱하는걸로
-          // ColorStep 은 파싱이후 colorsteps 를 리턴해줌... 배열임, 명심 명심
           colorsteps.push(...ColorStep.parse(newValue));
         } else {
           // direction
           if (newValue.includes("at")) {
-            // at 이 있으면 radialPosition 이 있는 것임
-            [radialType, radialPosition] = newValue
-              .split("at")
-              .map(it => it.trim());
+            [radialType, radialPosition] = newValue.split("at").map(it => it.trim());
           } else {
-            // at 이 없으면 radialPosition 이 center, center 로 있음
             radialType = newValue;
           }
 
@@ -95,13 +89,13 @@ export class RadialGradient extends Gradient {
             } else if (arr.length === 2) {
               radialPosition = arr.map(it => {
                 var len = Length.parse(it);
-                return len.isString() ? len.value : len;
+                return len.isString() ? len.value : len.clone();
               });
             }
           }
         }
       });
 
-    return new RadialGradient({ radialType, colorsteps });
+    return new RadialGradient({ radialType, radialPosition, colorsteps });
   }
 }

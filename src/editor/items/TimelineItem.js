@@ -456,6 +456,7 @@ export class TimelineItem extends DomItem {
   }
 
   setTimelineKeyframeOffsetValue (layerId, property, offsetId, value = undefined, timing = undefined, time = undefined) {
+
     var keyframe = this.getTimelineKeyframeById(layerId, property, offsetId)
     if (keyframe) {
       if (isNotUndefined(time)) { keyframe.time = time; }
@@ -464,6 +465,8 @@ export class TimelineItem extends DomItem {
 
       this.compiledTimingFunction(layerId, property);             
     }
+
+
   }  
 
   addTimelineKeyframe (layerId, property, value, timing = 'linear', newTime = null) {

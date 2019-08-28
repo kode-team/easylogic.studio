@@ -208,7 +208,7 @@ export default class FillPopup extends BasePopup {
   }
 
   getBody() {
-    return `
+    return /*html*/`
       <div class="fill-picker">
 
         <div class='box'>
@@ -329,6 +329,8 @@ export default class FillPopup extends BasePopup {
 
   [EVENT('changeGradientEditor')] (data) {
 
+    // console.log(data);
+
     var colorsteps = data.colorsteps.map((it, index) => {
       return new ColorStep({
         color: it.color,
@@ -397,11 +399,11 @@ export default class FillPopup extends BasePopup {
     // this.load()
     if (this.children.$g) {
 
-
       this.children.$g.setValue(
         this.getColorString(), 
         this.state.selectColorStepIndex, 
-        this.selectedTab
+        this.selectedTab,
+        this.state.image
       );
     }
 

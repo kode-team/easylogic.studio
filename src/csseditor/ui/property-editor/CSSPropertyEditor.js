@@ -155,7 +155,7 @@ export default class CSSPropertyEditor extends UIElement {
     } else if (property.key === 'background-image') {
       return `
         <div class='property-editor'>
-          <BackgroundImageEditor ref='$backgroundImage${index}' value="${property.value}" onChange="changeBackgroundImageProperty" />
+          <BackgroundImageEditor ref='$backgroundImage${index}' hide-title="${this.state.hideTitle}" value="${property.value}" onChange="changeBackgroundImageProperty" />
         </div>
       `
     } else if (property.key === 'filter') {
@@ -303,7 +303,6 @@ export default class CSSPropertyEditor extends UIElement {
             <NumberRangeEditor 
               ref='$opacity${index}' 
               key='${property.key}' 
-              label='opacity'
               min="0"
               max="1"
               step="0.01"
