@@ -29,6 +29,16 @@ export default class BackdropFilterProperty extends BaseProperty {
     return 'Backdrop Filter' 
   }
 
+
+  hasKeyframe () {
+    return true; 
+  }
+
+  getKeyframeProperty () {
+    return 'backdrop-filter';
+  }
+
+
   getBody() {
     return `<div class='property-item full filter-property' ref='$body'></div>`;
   }

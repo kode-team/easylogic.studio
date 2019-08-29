@@ -1,15 +1,12 @@
-import { makeInterpolateRotate } from "./makeInterpolateRotate";;
 import { makeInterpolateColorStepList } from "./makeInterpolateColorStepList";
 import { makeInterpolateLength } from "./makeInterpolateLength";
 import { ConicGradient } from "../../image-resource/ConicGradient";
+import { makeInterpolateNumber } from "./makeInterpolateNumber";
 
 export function makeInterpolateConicGradient (layer, property, s, e) {
 
-    // angle 이랑 
-    // colorsteps 
-
     var obj = {
-        angle: makeInterpolateRotate(layer, property, s.angle, e.angle),
+        angle: makeInterpolateNumber(layer, property, s.angle, e.angle),
         radialPositionX: makeInterpolateLength(layer, property, s.radialPosition[0], e.radialPosition[0], 'width', 'self'),
         radialPositionY: makeInterpolateLength(layer, property, s.radialPosition[1], e.radialPosition[1], 'height', 'self'),
         colorsteps: makeInterpolateColorStepList(layer, property, s.colorsteps, e.colorsteps)

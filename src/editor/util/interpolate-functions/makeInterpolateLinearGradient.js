@@ -1,7 +1,6 @@
-import { makeInterpolateRotate } from "./makeInterpolateRotate";
 import { LinearGradient } from "../../image-resource/LinearGradient";
 import { makeInterpolateColorStepList } from "./makeInterpolateColorStepList";
-import { makeInterpolateString } from "./makeInterpolateString";
+import { makeInterpolateNumber } from "./makeInterpolateNumber";
 
 export function makeInterpolateLinearGradient (layer, property, s, e) {
 
@@ -9,7 +8,7 @@ export function makeInterpolateLinearGradient (layer, property, s, e) {
     // colorsteps 
 
     var obj = {
-        angle: makeInterpolateRotate(layer, property, s.angle, e.angle),
+        angle: makeInterpolateNumber(layer, property, s.angle, e.angle),
         colorsteps: makeInterpolateColorStepList(layer, property, s.colorsteps, e.colorsteps)
     }
 

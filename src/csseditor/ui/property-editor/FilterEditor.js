@@ -123,7 +123,7 @@ export default class FilterEditor extends UIElement {
   }
 
   makeDropShadowFilterTemplate(spec, filter, index) {
-    return `
+    return /*html*/`
       <div class="filter-item">
         <div class="title" draggable="true" data-index="${index}">
           <label>Drop Shadow</label>
@@ -139,14 +139,16 @@ export default class FilterEditor extends UIElement {
           <ColorViewEditor ref='$dropShadowColorView${index}' params="${index}" color="${filter.color}" onChange="changeDropShadowColor" />
         </div>
 
-        ${["offsetX", "offsetY", "blurRadius"].map(key => {
-          return `        
+        ${["offsetX", "offsetY", "blurRadius", 'spreadRadius'].map(key => {
+          return /*html*/`        
             <div class="filter-ui drop-shadow">
                 <label>${spec[key].title}</label>
 
                 <RangeEditor 
                   ref='$${key}${index}' 
                   key="${index}" 
+                  min="${spec[key].min}"
+                  min="${spec[key].max}"
                   params="${key}" 
                   value="${filter[key].value}" units="${spec[key].units.join(',')}" onchange="changeRangeEditor" />
             </div>`;
@@ -186,7 +188,7 @@ export default class FilterEditor extends UIElement {
         options = options.length ? ',' + options.join(',') : '';
       }
 
-      return `
+      return /*html*/`
       <SelectEditor 
         ref='$select${index}' 
         key="${index}" 
@@ -196,19 +198,23 @@ export default class FilterEditor extends UIElement {
         onchange="changeRangeEditor"  />`
     }
 
-    return `<RangeEditor 
-                ref='$range${index}_${filter.type}' 
-                key="${index}" 
-                value="${filter.value}" 
-                units="${spec.units.join(',')}" 
-                onchange="changeRangeEditor" />`
+    return /*html*/`
+      <RangeEditor 
+        ref='$range${index}_${filter.type}' 
+        key="${index}" 
+        min='${spec.min}'
+        max='${spec.max}'
+        value="${filter.value}" 
+        units="${spec.units.join(',')}"   
+        onchange="changeRangeEditor" />
+      `
   }
 
   makeOneFilterTemplate(spec, filter, index) {
 
     var subtitle = filter.type === 'svg' ? ` - <span class='svg-filter-edit' data-index="${index}">${filter.value}</span>` : ''; 
 
-    return `
+    return /*html*/`
       <div class="filter-item" data-index="${index}">
         <div class="title" draggable="true" data-index="${index}">
           <label>${spec.title}${subtitle}</label>

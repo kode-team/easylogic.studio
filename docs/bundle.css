@@ -5317,7 +5317,7 @@ html, body {
   grid-column-gap: 5px;
   text-align: center;
   box-sizing: border-box;
-  padding: 6px;
+  padding: 6px 1px;
 }
 .csseditor[data-theme=dark] .background-image-editor .fill-list .fill-item.selected {
   background-color: rgba(27, 27, 27, 0.5);
@@ -12454,7 +12454,7 @@ html, body {
   grid-column-gap: 5px;
   text-align: center;
   box-sizing: border-box;
-  padding: 6px;
+  padding: 6px 1px;
 }
 .csseditor[data-theme=light] .background-image-editor .fill-list .fill-item.selected {
   background-color: rgba(231, 231, 231, 0.5);

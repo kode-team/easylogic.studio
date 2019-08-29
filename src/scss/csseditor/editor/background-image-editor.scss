@@ -38,7 +38,7 @@
           grid-column-gap: 5px;
           text-align: center;
           box-sizing: border-box;
-          padding: 6px;
+          padding: 6px 1px;
 
           &.selected {
             background-color: rgba($border-color, 0.5);

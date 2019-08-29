@@ -28,6 +28,16 @@ export default class FilterProperty extends BaseProperty {
     return 'Filter' 
   }
 
+
+  hasKeyframe () {
+    return true; 
+  }
+
+  getKeyframeProperty () {
+    return 'filter';
+  }
+
+
   getBody() {
     return `<div class='property-item full filter-property' ref='$body'></div>`;
   }

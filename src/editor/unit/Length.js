@@ -116,10 +116,11 @@ export class Length {
     obj = obj || Length.number(0)
 
     if (isString(obj)) {
+      obj = obj.trim()
       if (obj.indexOf("calc(") > -1) {
         return new Length(obj.split("calc(")[1].split(")")[0], "calc");
       } else {
-        var arr = obj.replace(REG_CSS_UNIT, "$1 $2").split(" ");
+        var arr = obj.replace(REG_CSS_UNIT, "$1 $2").split(" ").map(it => it.trim());
         var isNumberString = +arr[0] == arr[0];
         if (isNumberString) {
           return new Length(+arr[0], arr[1]);

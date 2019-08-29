@@ -8,6 +8,7 @@ import timingFunctions from "./timing-functions";
 import { makeInterpolateRotate } from "./interpolate-functions/makeInterpolateRotate";
 import { makeInterpolateTextShadow } from "./interpolate-functions/makeInterpolateTextShadow";
 import { makeInterpolateBackgroundImage } from "./interpolate-functions/makeInterpolateBackgroundImage";
+import { makeInterpolateFilter } from "./interpolate-functions/makeInterpolateFilter";
 
 
 
@@ -30,6 +31,9 @@ function makeInterpolate (layer, property, startValue, endValue) {
         return makeInterpolateTextShadow(layer, property, startValue, endValue);
     case 'background-image':
         return makeInterpolateBackgroundImage(layer, property, startValue, endValue); 
+    case 'filter':
+    case 'backdrop-filter':
+        return makeInterpolateFilter(layer, property, startValue, endValue);
     case 'background-color':
     case 'color':
         return makeInterpolateColor(layer, property, startValue, endValue);

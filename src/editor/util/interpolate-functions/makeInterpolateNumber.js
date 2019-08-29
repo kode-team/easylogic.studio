@@ -1,4 +1,4 @@
-export function makeInterpolateNumber(layer, property, startNumber, endNumber) {
+export function makeInterpolateNumber(layer, property, startNumber, endNumber, unit = undefined) {
 
     return (rate, t) => {
         if (t === 0) {
@@ -7,6 +7,13 @@ export function makeInterpolateNumber(layer, property, startNumber, endNumber) {
             return endNumber;
         }
 
-        return startNumber + (endNumber - startNumber) * rate
+
+        var result = startNumber + (endNumber - startNumber) * rate
+
+        if (unit) {
+            return result + unit; 
+        }
+
+        return result; 
     }
 }

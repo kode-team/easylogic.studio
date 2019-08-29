@@ -66,6 +66,10 @@ export class Filter extends Property {
     return filters;
   }
 
+  static join (list) {
+    return list.map(it => Filter.parse(it)).join(' ');
+  }
+
 }
 
 export class BlurFilter extends Filter {
@@ -296,15 +300,14 @@ export class DropshadowFilter extends Filter {
       offsetX: DropshadowFilter.spec.offsetX.defaultValue,
       offsetY: DropshadowFilter.spec.offsetY.defaultValue,
       blurRadius: DropshadowFilter.spec.blurRadius.defaultValue,
+      spreadRadius: DropshadowFilter.spec.spreadRadius.defaultValue,
       color: DropshadowFilter.spec.color.defaultValue
     });
   }
 
   toString() {
     var json = this.json;
-    return `drop-shadow(${json.offsetX} ${json.offsetY} ${json.blurRadius} ${
-      json.color
-    })`;
+    return `drop-shadow(${json.offsetX} ${json.offsetY} ${json.blurRadius} ${json.spreadRadius} ${json.color})`;
   }
 }
 
@@ -339,6 +342,16 @@ DropshadowFilter.spec = {
     unit: 'px',
     units: ["px", "em", "%"]
   },
+  spreadRadius: {
+    title: "Spread Radius",
+    inputType: "range",
+    min: 0,
+    max: 100,
+    step: 1,
+    defaultValue: Length.px(0),
+    unit: 'px',
+    units: ["px", "em", "%"]
+  },  
   color: {
     title: "Color",
     inputType: "color",

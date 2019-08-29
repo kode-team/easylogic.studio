@@ -114,6 +114,6 @@ export class LinearGradient extends Gradient {
         }
       });
 
-    return new LinearGradient({ angle, colorsteps });
+    return new LinearGradient({ angle: angle.value, colorsteps });
   }
 }

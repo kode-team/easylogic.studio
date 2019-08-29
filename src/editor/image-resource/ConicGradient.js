@@ -181,6 +181,6 @@ export class ConicGradient extends Gradient {
         }
       });
 
-    return new ConicGradient({ angle, radialPosition, colorsteps });
+    return new ConicGradient({ angle: angle.value, radialPosition, colorsteps });
   }
 }

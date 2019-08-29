@@ -26,6 +26,15 @@ export default class ClipPathProperty extends BaseProperty {
     return "Clip Path";
   }
 
+  hasKeyframe () {
+    return true; 
+  }
+
+  getKeyframeProperty () {
+    return 'clip-path';
+  }
+
+
   getClassName() {
     return 'clip-path-property'
   }
