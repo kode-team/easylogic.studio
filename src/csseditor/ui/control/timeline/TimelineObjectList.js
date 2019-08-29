@@ -61,9 +61,6 @@ export default class TimelineObjectList extends UIElement {
             <optgroup label='Font'>
               <option value='font-size'>font-size</option>
             </optgroup>
-            <optgroup label='Animation'>
-              <option value='animation-timing-function'>timing-function</option>
-            </optgroup>        
           </select>
         `
       }
@@ -85,8 +82,9 @@ export default class TimelineObjectList extends UIElement {
                 <div class='icon'>${icon.chevron_right}</div>
                 <div class='title'> ${obj.name}</div>
                 <div class='tools'>
-                    ${this.makePropertySelect()}
-                    <button type="button" class='add-property' data-layer-id="${obj.id}">${icon.add}</button>
+                    <!--${this.makePropertySelect()}
+                    <button type="button" class='add-property' data-layer-id="${obj.id}">${icon.add}</button>-->
+                    <button type="button" class='remove-timeline' data-layer-id='${obj.id}'>${icon.remove}</button>                    
                 </div>
             </div>
 
@@ -95,12 +93,13 @@ export default class TimelineObjectList extends UIElement {
 
                 return /*html*/ `
                 <div class='timeline-object-row layer-property' data-selected='${selected}' data-layer-id='${obj.id}' data-property='${property.property}'>
-                    <div class='icon'></div>                    
+                <div class='icon'></div>                    
                     <div class='title'>${property.property}</div>
                     <div class='current-value'>
                     
                     </div>
                     <div class='tools'>
+                        <button type="button" class='remove' data-layer-id='${obj.id}' data-property='${property.property}'>${icon.remove}</button>
                         <button type="button" class='add' data-layer-id='${obj.id}' data-property='${property.property}'></button>
                     </div>
                 </div>`
@@ -167,6 +166,15 @@ export default class TimelineObjectList extends UIElement {
         }
     }
 
+    [CLICK('$el .timeline-object-row.layer .remove-timeline')] (e) {
+      var layerId = e.$delegateTarget.attr('data-layer-id')
+
+
+      if (layerId) {
+          this.emit('remove.timeline', layerId)
+      }
+  }
+
     [CLICK('$el .timeline-object-row.layer-property .add')] (e) {
       var layerId = e.$delegateTarget.attr('data-layer-id')
       var property = e.$delegateTarget.attr('data-property')
@@ -175,6 +183,15 @@ export default class TimelineObjectList extends UIElement {
         this.emit('copy.timeline.property', layerId, property)
       }       
     }
+
+    [CLICK('$el .timeline-object-row.layer-property .remove')] (e) {
+      var layerId = e.$delegateTarget.attr('data-layer-id')
+      var property = e.$delegateTarget.attr('data-property')
+
+      if (property) {
+        this.emit('remove.timeline.property', layerId, property)
+      }       
+    }    
 
     [CLICK('$el .timeline-object-row.layer-property .title')] (e) {
       var [layerId, property] = e.$delegateTarget.closest('timeline-object-row').attrs('data-layer-id', 'data-property')

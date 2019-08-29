@@ -8379,6 +8379,9 @@ html, body {
   padding: 5px 0px;
   text-align: right;
 }
+.csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row .tools > * {
+  margin-right: 10px;
+}
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row.layer-property {
   overflow: hidden;
   grid-template-columns: 20px 1fr 0.5fr 1fr;
@@ -15526,6 +15529,9 @@ html, body {
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row .tools {
   padding: 5px 0px;
   text-align: right;
+}
+.csseditor[data-theme=light] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row .tools > * {
+  margin-right: 10px;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row.layer-property {
   overflow: hidden;

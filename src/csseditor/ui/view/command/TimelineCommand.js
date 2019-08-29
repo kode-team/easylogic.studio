@@ -94,6 +94,29 @@ export default class TimelineCommand extends UIElement {
         })
     }
 
+
+    [COMMAND('remove.timeline.property')] (layerId, property) {
+        this.currentArtboard((artboard, timeline) => {
+            artboard.removeTimelineProperty(layerId, property);
+
+            editor.timeline.empty();
+            this.emit('refreshTimeline')
+            this.trigger('refresh.selected.offset');            
+        })
+    }
+
+
+    [COMMAND('remove.timeline')] (layerId) {
+        this.currentArtboard((artboard, timeline) => {
+            artboard.removeTimeline(layerId);
+
+            editor.timeline.empty();
+            this.emit('refreshTimeline')
+            this.trigger('refresh.selected.offset');            
+        })
+    }
+
+
     [COMMAND('add.timeline.keyframe')] (layerId, property, time, timing = 'linear') {
         this.currentArtboard((artboard, timeline) => {
             var item = artboard.searchById(layerId);
@@ -134,7 +157,7 @@ export default class TimelineCommand extends UIElement {
             
             this.emit('refreshTimeline');
         })
-    }    
+    }        
 
     [EVENT('moveTimeline')] () {
         this.trigger('pause.timeline');

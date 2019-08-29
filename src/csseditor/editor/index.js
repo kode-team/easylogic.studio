@@ -20,7 +20,7 @@ import Resource from "../../editor/util/Resource";
 import windowList from "../ui/window-list";
 import ImageFileView from "../ui/view/ImageFileView";
 import TimelineProperty from "../ui/control/TimelineProperty";
-
+// import Lottie from "../../editor/parse/Lottie";
 
 
 // var JSZip = require('jszip')

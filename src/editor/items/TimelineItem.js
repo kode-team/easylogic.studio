@@ -446,6 +446,22 @@ export class TimelineItem extends DomItem {
     }
   }
 
+  removeTimelineProperty (layerId, property) {
+    var layer = this.getTimelineObject(layerId);
+
+    if (layer) {
+      layer.properties = layer.properties.filter(p => p.property != property);
+    }
+  }  
+
+  removeTimeline (layerId) {
+    var timeline = this.getSelectedTimeline();
+
+    if (timeline) {
+      timeline.animations = timeline.animations.filter(ani => ani.id != layerId);
+    }
+  }  
+
   setTimelineKeyframeOffsetTime (layerId, property, offsetId, changedTime) {
     var keyframe = this.getTimelineKeyframeById(layerId, property, offsetId)
     if (keyframe) {
