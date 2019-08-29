@@ -55,7 +55,7 @@ export default class DirectionEditor extends UIElement {
     var direction = this.state.all;
     var display = selectedValue === 'all' ? 'display:none' : 'display:block';
 
-    return `
+    return /*html*/`
       <div class="property-item direction-item">
         <div class="radius-selector" data-selected-value="${selectedValue}" ref="$selector">
           <button type="button" data-value="all">${icon.border_all}</button>
@@ -75,9 +75,9 @@ export default class DirectionEditor extends UIElement {
         <div class="radius-setting-box">
           ${typeList.map(it => {
             var value = this.state[it.key]
-            return `
+            return /*html*/`
               <div>
-                  <RangeEditor ref='$${it.key}' label='${it.title}' key='${it.key}' valule="${value}" onchange='changeBorderRadius' />
+                  <RangeEditor ref='$${it.key}' label='${it.title}' key='${it.key}' value="${value}" onchange='changeBorderRadius' />
               </div>  
             `;
           }).join('')}

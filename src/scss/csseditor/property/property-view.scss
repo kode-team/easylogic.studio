@@ -262,7 +262,7 @@
     font-size: 12px;
     font-weight: 400;
     display: grid;
-    grid-template-columns: 0.7fr 1fr;
+    grid-template-columns: 1fr 1fr;
     cursor: pointer;
     border-bottom: 0px;    
 
@@ -283,7 +283,7 @@
       }
 
       select {
-        min-width: 120px;
+        min-width: 100px;
       }
       
     }

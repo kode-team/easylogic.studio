@@ -18,6 +18,14 @@ export default class TransformOriginProperty extends BaseProperty {
     `
   }
 
+  hasKeyframe () {
+    return true; 
+  }
+
+  getKeyframeProperty () {
+    return 'transform-origin'
+  }  
+
   [CLICK('$remove')] () {
     this.trigger('changeTransformOrigin', '');
   }

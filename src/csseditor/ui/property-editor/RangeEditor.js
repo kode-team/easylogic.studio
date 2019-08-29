@@ -3,7 +3,7 @@ import { Length } from "../../../editor/unit/Length";
 import { LOAD, INPUT, CLICK } from "../../../util/Event";
 import icon from "../icon/icon";
 import SelectEditor from "./SelectEditor";
-import { OBJECT_TO_CLASS, OBJECT_TO_PROPERTY } from "../../../util/functions/func";
+import { OBJECT_TO_CLASS, OBJECT_TO_PROPERTY, isUndefined } from "../../../util/functions/func";
 
 export default class RangeEditor extends UIElement {
 
@@ -16,6 +16,7 @@ export default class RangeEditor extends UIElement {
     initState() {
         var units = this.props.units || 'px,em,%';
         var value = Length.parse(this.props.value || Length.px(0));
+
         return {
             removable: this.props.removable === 'true',
             calc:  this.props.calc === 'true'  ? true : false,

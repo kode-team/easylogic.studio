@@ -29,9 +29,9 @@ export default class Resource {
 
             if (type.includes('text')) {
                 return {
-                kind: 'string', 
-                type,
-                data: e.dataTransfer.getData(type)
+                    kind: 'string', 
+                    type,
+                    data: e.dataTransfer.getData(type)
                 }
             }
         }).filter(it => it);

@@ -4,3 +4,4 @@ export function makeInterpolateIdentity (layer, property, value) {
         return value;
     } 
 }
+ 

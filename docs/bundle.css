@@ -3119,7 +3119,7 @@ html, body {
   font-size: 12px;
   font-weight: 400;
   display: grid;
-  grid-template-columns: 0.7fr 1fr;
+  grid-template-columns: 1fr 1fr;
   cursor: pointer;
   border-bottom: 0px;
 }
@@ -3137,7 +3137,7 @@ html, body {
   flex: none;
 }
 .csseditor[data-theme=dark] .property > .property-title > .tools select {
-  min-width: 120px;
+  min-width: 100px;
 }
 .csseditor[data-theme=dark] .property > .property-body {
   display: none;
@@ -6998,11 +6998,22 @@ html, body {
 .csseditor[data-theme=dark] .popup .clippath-popup .box > .clip-path-editor .round-area {
   margin-top: 5px;
 }
+.csseditor[data-theme=dark] .popup .clippath-popup .box > .clip-path-editor .clip-area-handle {
+  display: inline-block;
+  position: absolute;
+  z-index: 1;
+}
 .csseditor[data-theme=dark] .popup .clippath-popup .box > .clip-path-editor .clip-area {
   display: inline-block;
   position: absolute;
   background-color: #fc554f;
   z-index: 0;
+}
+.csseditor[data-theme=dark] .popup .clippath-popup .box > .clip-path-editor .clip-area.inset {
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
 }
 .csseditor[data-theme=dark] .popup .clippath-popup .box > .clip-path-editor .clip-area.polygon {
   top: 0px;
@@ -10256,7 +10267,7 @@ html, body {
   font-size: 12px;
   font-weight: 400;
   display: grid;
-  grid-template-columns: 0.7fr 1fr;
+  grid-template-columns: 1fr 1fr;
   cursor: pointer;
   border-bottom: 0px;
 }
@@ -10274,7 +10285,7 @@ html, body {
   flex: none;
 }
 .csseditor[data-theme=light] .property > .property-title > .tools select {
-  min-width: 120px;
+  min-width: 100px;
 }
 .csseditor[data-theme=light] .property > .property-body {
   display: none;
@@ -14135,11 +14146,22 @@ html, body {
 .csseditor[data-theme=light] .popup .clippath-popup .box > .clip-path-editor .round-area {
   margin-top: 5px;
 }
+.csseditor[data-theme=light] .popup .clippath-popup .box > .clip-path-editor .clip-area-handle {
+  display: inline-block;
+  position: absolute;
+  z-index: 1;
+}
 .csseditor[data-theme=light] .popup .clippath-popup .box > .clip-path-editor .clip-area {
   display: inline-block;
   position: absolute;
   background-color: #3e8ec6;
   z-index: 0;
+}
+.csseditor[data-theme=light] .popup .clippath-popup .box > .clip-path-editor .clip-area.inset {
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
 }
 .csseditor[data-theme=light] .popup .clippath-popup .box > .clip-path-editor .clip-area.polygon {
   top: 0px;

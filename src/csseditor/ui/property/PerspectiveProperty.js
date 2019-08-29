@@ -9,8 +9,12 @@ export default class PerspectiveProperty extends BaseProperty {
     return "Perspective";
   }
 
-  isHideHeader() {
-    return true;
+  hasKeyframe() {
+    return true; 
+  }
+
+  getKeyframeProperty () {
+    return 'perspective'
   }
 
   getBody() {
@@ -21,7 +25,9 @@ export default class PerspectiveProperty extends BaseProperty {
     var current = editor.selection.current || {};
 
     var perspective = current['perspective'] || ''
-    return `<RangeEditor ref='$1' key='perspective' label='Perspective' removable="true" value="${perspective}" max="2000px" onchange="changePerspective" />`;
+    return /*html*/`
+        <RangeEditor ref='$1' key='perspective' removable="true" value="${perspective}" max="2000px" onchange="changePerspective" />
+    `;
   }
 
   [EVENT('changePerspective')] (key, value) {

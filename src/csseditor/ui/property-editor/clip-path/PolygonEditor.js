@@ -53,7 +53,7 @@ export default class PolygonEditor extends UIElement {
     // 점 데이타 변경의 경우는 사용하지 않고 input 을 바로 업데이트 하는 방식을 사용한다. 
     [LOAD('$inputList')] () {
         return this.state.value.map( (it, index) => {
-            return `
+            return /*html*/`
             <div class='pointer-item' data-index="${index}">
                 <div class='input-item'>
                     <label>X</label><input type='number' class='x' value="${it.x.value.toString()}" /><span>%</span>

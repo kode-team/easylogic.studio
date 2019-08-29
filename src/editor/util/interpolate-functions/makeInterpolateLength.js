@@ -7,7 +7,7 @@ function getRealAttributeValue (layer, property, value, refType = 'width', refEl
         refObject = layer[refElement][refType];
     } else if (refElement === 'self') {
         refObject = layer[refType];
-    }
+    } 
 
     if (refObject) {
         return value.toPx(refObject.value)

@@ -18,11 +18,25 @@
           margin-top: 5px;
         }
 
+        .clip-area-handle {
+          display: inline-block;
+          position: absolute;
+          // background-color: $selected-color;
+          z-index: 1;
+        }
+
         .clip-area {
           display: inline-block;
           position: absolute;
           background-color: $selected-color;
           z-index: 0;
+
+          &.inset {
+            top:0px;
+            left:0px;
+            right:0px;
+            bottom: 0px;
+          }
 
           &.polygon {
             top: 0px;

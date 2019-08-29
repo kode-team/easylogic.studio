@@ -12,6 +12,13 @@ export default class PerspectiveOriginProperty extends BaseProperty {
     return "Perspective Origin";  
   }
 
+  hasKeyframe () {
+    return true; 
+  }
+
+  getKeyframeProperty () {
+    return 'perspective-origin'
+  }
 
   getTools() {
     return `

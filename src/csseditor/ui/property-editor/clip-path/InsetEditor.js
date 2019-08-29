@@ -1,7 +1,7 @@
 import UIElement, { EVENT } from "../../../../util/UIElement";
 
 import { Length } from "../../../../editor/unit/Length";
-import { POINTERSTART, MOVE, LOAD, CLICK } from "../../../../util/Event";
+import { POINTERSTART, MOVE, LOAD, CLICK, BIND } from "../../../../util/Event";
 import RangeEditor from "../RangeEditor";
 import { DirectionLength } from "../../../../editor/unit/DirectionLength";
 import DirectionEditor from "../DirectionEditor";
@@ -66,14 +66,15 @@ export default class InsetEditor extends UIElement {
 
         var roundCheckStatus = round ? 'checked' : '';
 
-        return `
+        return /*html*/`
         <div class='clip-path-editor inset-editor'>
             <div class='drag-area' ref='$area'>
                 <div class='drag-pointer' data-type='top' ref='$top' style='left: ${topX};top: ${topY};'></div>
                 <div class='drag-pointer' data-type='right' ref='$right' style='left: ${rightX};top: ${rightY};'></div>
                 <div class='drag-pointer' data-type='bottom' ref='$bottom' style='left: ${bottomX};top: ${bottomY};'></div>
                 <div class='drag-pointer' data-type='left' ref='$left' style='left: ${leftX};top: ${leftY};'></div>
-                <div class='clip-area' ref='$clipArea' style='left: ${leftX};top: ${topY};width: ${Length.px(rightX.value - left.value)};height: ${Length.px(bottomY.value - topY.value)};'></div>
+                <div class='clip-area inset' ref='$clipAreaView' style='pointer-events: none;'></div>
+                <div class='clip-area-handle' ref='$clipArea' style='left: ${leftX};top: ${topY};width: ${Length.px(rightX.value - left.value)};height: ${Length.px(bottomY.value - topY.value)};'></div>
             </div>
             <div class='round-area'>
                 <label><input type="checkbox" ${roundCheckStatus} ref='$hasRound' /> Round </label>
@@ -83,10 +84,22 @@ export default class InsetEditor extends UIElement {
     `
     }
 
+   
+
+    [BIND('$clipAreaView')] () {
+        return {
+            style : {
+                'clip-path' : `${this.props.key}(${this.toClipPathValueString()})`
+            }
+        }
+    }   
+
     [CLICK('$hasRound')] (e) {
        this.updateData({
            round: this.refs.$hasRound.checked()
        }) 
+
+       this.bindData('$clipAreaView')
     }
 
 
@@ -95,11 +108,7 @@ export default class InsetEditor extends UIElement {
 
         var value = [topRadius, rightRadius, bottomRadius, leftRadius].join(' ')
 
-        return `<DirectionEditor 
-                ref='$borderRadius' 
-                value='${value}' 
-                onchange='changeBorderRadius' 
-                />`
+        return /*html*/`<DirectionEditor ref='$borderRadius' value='${value}' onchange='changeBorderRadius' />`
     }
 
     [EVENT('changeBorderRadius')] ([_count, topRadius, rightRadius, bottomRadius, leftRadius]) {
@@ -111,6 +120,8 @@ export default class InsetEditor extends UIElement {
             bottomRadius, 
             leftRadius
         })
+
+        this.bindData('$clipAreaView')        
 
     }
 
@@ -152,9 +163,11 @@ export default class InsetEditor extends UIElement {
             width: Length.px(rightX.value - leftX.value),
             height: Length.px(bottomY.value - topY.value)
         })
+
+        this.bindData('$clipAreaView')
     }
 
-    [POINTERSTART('$area .clip-area') + MOVE('moveClipArea')] (e) {
+    [POINTERSTART('$area .clip-area-handle') + MOVE('moveClipArea')] (e) {
 
         this.type = e.$delegateTarget.attr('data-type');
         this.$target = e.$delegateTarget;
@@ -235,19 +248,19 @@ export default class InsetEditor extends UIElement {
 
         if (this.type === 'top') {
             this.updateData({ 
-                top : top.toPercent(this.areaRect.height) 
+                top : top.toPercent(this.areaRect.height).round(100) 
             })            
         } else if (this.type === 'bottom') {
             this.updateData({ 
-                bottom : Length.px(this.areaRect.height -  top.value).toPercent(this.areaRect.height) 
+                bottom : Length.px(this.areaRect.height -  top.value).toPercent(this.areaRect.height).round(100) 
             })
         } else if (this.type === 'right') {
             this.updateData({ 
-                right : Length.px(this.areaRect.width - left.value).toPercent(this.areaRect.width) 
+                right : Length.px(this.areaRect.width - left.value).toPercent(this.areaRect.width).round(100) 
             })                                    
         } else if (this.type === 'left') {
             this.updateData({ 
-                left : left.toPercent(this.areaRect.width) 
+                left : left.toPercent(this.areaRect.width).round(100) 
             })
         }
 

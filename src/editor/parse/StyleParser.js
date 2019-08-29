@@ -209,7 +209,7 @@ export class StyleParser {
     var style = this.getStyle();
     var textShadows = TextShadow.parseStyle(style['text-shadow']);
 
-    return { textShadows };
+    return { textShadows }; 
   }
 
   parseBackgroundImages() {

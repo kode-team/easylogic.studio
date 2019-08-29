@@ -41,11 +41,11 @@ export default class ClipPathPopup extends BasePopup {
 
   updateData(opt) {
     this.setState(opt, false); // 자동 로드를 하지 않음, state 만 업데이트
-    this.emit("changeClipPathPopup", this.toClipPathCSS());
+    this.emit(this.state.changeEvent || "changeClipPathPopup", this.toClipPathCSS());
   }
 
   getBody() {
-    return `
+    return /*html*/`
     <div class='clippath-popup' ref='$popup'>
       <div class="box">
         <div class='clip-path-editor clip-path-type' ref='$clippathType'></div>
@@ -109,6 +109,7 @@ export default class ClipPathPopup extends BasePopup {
   }
 
   [EVENT("showClipPathPopup")](data) {
+    this.state.changeEvent = data.changeEvent;
     this.setState(ClipPath.parseStyle(data['clip-path']));
 
     this.refresh();

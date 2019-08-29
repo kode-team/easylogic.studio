@@ -9,38 +9,66 @@ import { makeInterpolateRotate } from "./interpolate-functions/makeInterpolateRo
 import { makeInterpolateTextShadow } from "./interpolate-functions/makeInterpolateTextShadow";
 import { makeInterpolateBackgroundImage } from "./interpolate-functions/makeInterpolateBackgroundImage";
 import { makeInterpolateFilter } from "./interpolate-functions/makeInterpolateFilter";
+import { makeInterpolateNumber } from "./interpolate-functions/makeInterpolateNumber";
+import { makeInterpolateClipPath } from "./interpolate-functions/makeInterpolateClipPath";
 
+const DEFAULT_FUCTION = () => (rate, t) => { } 
+
+function makeInterpolateCustom (property) {
+
+    switch(property) {
+    case 'rotate':
+        return makeInterpolateRotate
+    case 'border-radius':
+        return makeInterpolateBorderRadius
+    case 'box-shadow':
+        return makeInterpolateBoxShadow        
+    case 'text-shadow':
+        return makeInterpolateTextShadow
+    case 'background-image':
+        return makeInterpolateBackgroundImage 
+    case 'filter':
+    case 'backdrop-filter':
+        return makeInterpolateFilter
+    case 'clip-path':
+        return makeInterpolateClipPath
+    case 'transform':
+        return makeInterpolateTransform
+    case 'transform-origin':
+        return makeInterpolateTransformOrigin        
+    case 'perspective-origin':
+        return makeInterpolatePerspectiveOrigin
+    case 'perspective':
+        return makeInterpolatePerspective
+    case 'background-color':
+    case 'color':
+        return makeInterpolateColor
+    case 'mix-blend-mode':
+        return makeInterpolateString
+    }
+}
 
 
 function makeInterpolate (layer, property, startValue, endValue) {
     switch(property) {
     case 'width':
     case 'x':
-    case 'opacity':
-        return makeInterpolateLength(layer, property, startValue, endValue);        
-    case 'rotate':
-        return makeInterpolateRotate(layer, property, startValue, endValue);
+        return makeInterpolateLength(layer, property, startValue, endValue, 'width');
     case 'height':
     case 'y':
         return makeInterpolateLength(layer, property, startValue, endValue, 'height');
-    case 'border-radius':
-        return makeInterpolateBorderRadius(layer, property, startValue, endValue);
-    case 'box-shadow':
-        return makeInterpolateBoxShadow(layer, property, startValue, endValue);        
-    case 'text-shadow':
-        return makeInterpolateTextShadow(layer, property, startValue, endValue);
-    case 'background-image':
-        return makeInterpolateBackgroundImage(layer, property, startValue, endValue); 
-    case 'filter':
-    case 'backdrop-filter':
-        return makeInterpolateFilter(layer, property, startValue, endValue);
-    case 'background-color':
-    case 'color':
-        return makeInterpolateColor(layer, property, startValue, endValue);
-    case 'mix-blend-mode':
-        return makeInterpolateString(layer, property, startValue, endValue);
+    case 'opacity':
+        return makeInterpolateNumber(layer, property, startValue.value, endValue.value);        
     }
 
+    
+    var func = makeInterpolateCustom(property)
+
+    if (func) {
+        return func(layer, property, startValue, endValue)
+    }
+
+    return DEFAULT_FUCTION
 }
 
 

@@ -15,6 +15,7 @@ import { OBJECT_TO_CLASS } from "../../../util/functions/func";
 import SelectEditor from "./SelectEditor";
 import NumberRangeEditor from "./NumberRangeEditor";
 import BorderRadiusEditor from "./BorderRadiusEditor";
+import ClipPathEditor from "./ClipPathEditor";
 
 
 
@@ -54,7 +55,8 @@ export default class CSSPropertyEditor extends UIElement {
       TransformOriginEditor,
       PerspectiveOriginEditor,
       VarEditor,
-      BorderRadiusEditor
+      BorderRadiusEditor,
+      ClipPathEditor
     }
   }
 
@@ -113,6 +115,8 @@ export default class CSSPropertyEditor extends UIElement {
           return Length.percent(0);
         case 'mix-blend-mode': 
           return 'normal';
+        case 'clip-path':
+          return '';
         default: 
           return Length.px(0);
       }
@@ -221,6 +225,15 @@ export default class CSSPropertyEditor extends UIElement {
           onchange='changeBorderRadius' 
         />
       `
+    } else if (property.key === 'clip-path') {
+      return `
+        <ClipPathEditor 
+          ref='$clipPath${index}' 
+          key='clip-path'
+          value='${property.value}' 
+          onchange='changeClipPath' 
+        />
+      `      
     }
 
     return `
@@ -235,6 +248,10 @@ export default class CSSPropertyEditor extends UIElement {
   [EVENT('changeBorderRadius')] (value) {
     this.modifyPropertyValue('border-radius', value);
   }
+
+  [EVENT('changeClipPath')] (value) {
+    this.modifyPropertyValue('clip-path', value);
+  }  
 
   [EVENT('changeBackgroundColorProperty')] (color) {
     this.modifyPropertyValue('background-color', color);
@@ -295,7 +312,8 @@ export default class CSSPropertyEditor extends UIElement {
       case 'transform-origin':
       case 'perspective-origin':
       case 'mix-blend-mode':  
-      case 'border-radius':      
+      case 'border-radius':   
+      case 'clip-path':   
         return this.makeIndivisualPropertyEditor(property, index);
       case 'opacity':
         return `
