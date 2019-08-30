@@ -1372,11 +1372,12 @@ html, body {
 .csseditor[data-theme=dark] input[type=number],
 .csseditor[data-theme=dark] input[type=email],
 .csseditor[data-theme=dark] textarea {
-  background-color: #4b4b4b;
-  border: 0px solid #5a5a5a;
+  background-color: #5a5a5a;
+  border: 1px solid #0c0c0d;
   border-radius: 3px;
   color: #ececec;
   outline: none;
+  box-sizing: border-box;
 }
 .csseditor[data-theme=dark] select {
   -webkit-appearance: none;
@@ -1387,11 +1388,12 @@ html, body {
   line-height: 1.6;
   cursor: pointer;
   background-color: #5a5a5a;
-  border: 0px solid #0c0c0d;
+  border: 1px solid #0c0c0d;
   border-radius: 3px;
   color: #ffffff;
   outline: none;
   vertical-align: middle;
+  box-sizing: border-box;
 }
 .csseditor[data-theme=dark] button {
   border-width: 0px;
@@ -1425,7 +1427,7 @@ html, body {
   width: 100%;
   height: 100%;
   display: inline-block;
-  background-color: #333333;
+  background-color: #383838;
   opacity: 0;
   pointer-events: none;
 }
@@ -1455,12 +1457,12 @@ html, body {
   height: 50px;
   overflow: hidden;
   position: relative;
-  background-color: #333333;
+  background-color: #383838;
   color: #ffffff;
   z-index: 1;
   pointer-events: all;
   box-sizing: border-box;
-  border-bottom: 1px solid #1b1b1b;
+  border-bottom: 1px solid #2c2c2c;
 }
 .csseditor[data-theme=dark] .layout-main .layout-header .logo {
   position: absolute;
@@ -1497,7 +1499,7 @@ html, body {
   bottom: 0px;
   right: 260px;
   overflow: hidden;
-  border-top: 1px solid #1b1b1b;
+  border-top: 1px solid #2c2c2c;
   transition: all 0.15s linear;
   pointer-events: all;
   z-index: 10000;
@@ -1526,7 +1528,7 @@ html, body {
   display: flex;
   flex-direction: column;
   overflow: auto;
-  border-left: 1px solid #1b1b1b;
+  border-left: 1px solid #2c2c2c;
   transition: all 0.15s linear;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 }
@@ -1569,7 +1571,7 @@ html, body {
   bottom: 0px;
   right: 0px;
   box-sizing: border-box;
-  border-left: 1px solid #1b1b1b;
+  border-left: 1px solid #2c2c2c;
 }
 .csseditor[data-theme=dark] .feature-control .layer-tab {
   position: absolute;
@@ -1592,7 +1594,7 @@ html, body {
   height: 200px;
 }
 .csseditor[data-theme=dark] .feature-control .layer-tab .object-items > div:not(:first-child) {
-  border-top: 1px solid #1b1b1b;
+  border-top: 1px solid #2c2c2c;
   box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .feature-control .layer-tab .object-items > div:last-child {
@@ -1604,7 +1606,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .feature-control .draw-items .split {
   border: 0px;
-  border-top: 1px solid #1b1b1b;
+  border-top: 1px solid #2c2c2c;
   margin: 10px 5px;
 }
 .csseditor[data-theme=dark] .feature-control .draw-items > label {
@@ -1738,14 +1740,14 @@ html, body {
   right: 0px;
   bottom: 0px;
   top: 0px;
-  background-color: #333333;
+  background-color: #383838;
   color: #ffffff;
 }
 .csseditor[data-theme=dark] .tab.number-tab .tab-header {
   height: 34px;
   cursor: pointer;
-  border-bottom: 1px solid #1b1b1b;
-  background-color: #333333;
+  border-bottom: 1px solid #2c2c2c;
+  background-color: #383838;
 }
 .csseditor[data-theme=dark] .tab.number-tab .tab-content {
   display: none;
@@ -1891,7 +1893,7 @@ html, body {
   color: black;
 }
 .csseditor[data-theme=dark] .tab > .tab-header > .tab-item.select-reverse.selected {
-  background-color: #333333;
+  background-color: #383838;
 }
 .csseditor[data-theme=dark] .tab > .tab-body {
   position: absolute;
@@ -1934,7 +1936,7 @@ html, body {
   right: 0px;
   height: 30px;
   display: none;
-  background-color: #333333;
+  background-color: #383838;
   font-size: 12px;
   font-weight: bold;
   padding: 8px 5px !important;
@@ -1948,7 +1950,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .tab.bottom > .tab-header > .tab-item.selected {
   border-top: 1px solid #ffffff;
-  border-bottom: 1px solid #1b1b1b;
+  border-bottom: 1px solid #2c2c2c;
 }
 .csseditor[data-theme=dark] .tab.bottom > .tab-body {
   top: 0px;
@@ -1968,7 +1970,7 @@ html, body {
 .csseditor[data-theme=dark] .tab.horizontal.left > .tab-body {
   left: 50px;
   right: 0px;
-  border-left: 1px solid #1b1b1b;
+  border-left: 1px solid #2c2c2c;
   border-right: 0px;
 }
 .csseditor[data-theme=dark] .tab.horizontal > .tab-header {
@@ -1981,7 +1983,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .tab.horizontal > .tab-header > .tab-item {
   border: 0px;
-  border-bottom: 1px solid #1b1b1b;
+  border-bottom: 1px solid #2c2c2c;
   text-align: center;
   line-height: 3;
   height: 50px;
@@ -1994,7 +1996,7 @@ html, body {
   top: 0px;
   right: 60px;
   border: 0px;
-  border-right: 1px solid #1b1b1b;
+  border-right: 1px solid #2c2c2c;
 }
 .csseditor[data-theme=dark] .colorpicker-layer .codemirror-colorpicker {
   background-color: transparent;
@@ -2140,7 +2142,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .logo .site {
   font-size: 14px;
-  color: #1b1b1b;
+  color: #2c2c2c;
 }
 .csseditor[data-theme=dark] .external-tool-menu {
   padding-left: 10px;
@@ -2164,7 +2166,7 @@ html, body {
   vertical-align: middle;
   width: 3px;
   margin-right: 2px;
-  border-right: 1px solid #1b1b1b;
+  border-right: 1px solid #2c2c2c;
 }
 .csseditor[data-theme=dark] .tool-menu .items.flex-2,
 .csseditor[data-theme=dark] .external-tool-menu .items.flex-2 {
@@ -2306,7 +2308,7 @@ html, body {
 .csseditor[data-theme=dark] .external-tool-menu .items .icon.codepen,
 .csseditor[data-theme=dark] .external-tool-menu .items .icon.github {
   background-color: transparent;
-  text-shadow: 2px 2px 4px rgba(27, 27, 27, 0.59);
+  text-shadow: 2px 2px 4px rgba(44, 44, 44, 0.59);
   padding-right: 2px;
   border-radius: 3px;
 }
@@ -2348,7 +2350,7 @@ html, body {
   right: 0px;
   bottom: 0px;
   top: 0px;
-  background-color: rgba(27, 27, 27, 0.3);
+  background-color: rgba(44, 44, 44, 0.3);
 }
 .csseditor[data-theme=dark] .page-view .page-lock {
   position: absolute;
@@ -2372,9 +2374,9 @@ html, body {
   display: inline-block;
   padding: 5px 10px;
   border-radius: 3px;
-  border: 1px solid #1b1b1b;
+  border: 1px solid #2c2c2c;
   color: #ffffff;
-  background-color: #333333;
+  background-color: #383838;
 }
 .csseditor[data-theme=dark] .page-tools > label {
   vertical-align: middle;
@@ -2399,9 +2401,9 @@ html, body {
   display: none;
   pointer-events: all;
   outline: none;
-  border: 1px solid #1b1b1b;
+  border: 1px solid #2c2c2c;
   color: #ffffff;
-  background-color: #333333;
+  background-color: #383838;
   padding: 5px 10px;
   box-sizing: border-box;
   height: 100%;
@@ -2422,9 +2424,9 @@ html, body {
   display: none;
   pointer-events: all;
   outline: none;
-  border: 1px solid #1b1b1b;
+  border: 1px solid #2c2c2c;
   color: #ffffff;
-  background-color: #333333;
+  background-color: #383838;
   padding: 5px 10px;
 }
 .csseditor[data-theme=dark] .page-subeditor .polygon-manager > * {
@@ -2444,9 +2446,9 @@ html, body {
   pointer-events: all;
   outline: none;
   border-radius: 3px;
-  border: 1px solid #1b1b1b;
+  border: 1px solid #2c2c2c;
   color: #ffffff;
-  background-color: #333333;
+  background-color: #383838;
   padding: 5px 10px;
   box-sizing: border-box;
   height: 100%;
@@ -2542,7 +2544,7 @@ html, body {
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
   background-color: rgba(255, 255, 255, 0.8);
-  border: 1px solid #1b1b1b;
+  border: 1px solid #2c2c2c;
 }
 .csseditor[data-theme=dark] .selection-tool.path .selection-tool-item[data-position=path], .csseditor[data-theme=dark] .selection-tool.polygon .selection-tool-item[data-position=path] {
   top: -30px;
@@ -2552,7 +2554,7 @@ html, body {
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
   background-color: rgba(255, 255, 255, 0.8);
-  border: 1px solid #1b1b1b;
+  border: 1px solid #2c2c2c;
   opacity: 1;
 }
 .csseditor[data-theme=dark] .selection-tool[data-selected-position=move] [data-position=move]:before {
@@ -2608,7 +2610,7 @@ html, body {
   text-align: center;
   background-color: rgba(51, 51, 51, 0.8);
   border-radius: 3px;
-  border: #1b1b1b;
+  border: #2c2c2c;
   transition: opacity 0.3s linear;
   box-sizing: border-box;
   padding: 4px 10px;
@@ -2934,7 +2936,7 @@ html, body {
 .csseditor[data-theme=dark] .property {
   padding: 6px 0px;
   border-bottom: 1px solid rgba(109, 109, 109, 0.2);
-  background-color: #333333;
+  background-color: #383838;
   color: #ffffff;
   display: none;
 }
@@ -2943,8 +2945,8 @@ html, body {
   margin-right: 5px;
   width: 8px;
   height: 8px;
-  box-shadow: 0 0 0 2px rgba(2, 2, 2, 0.3);
-  background-color: rgba(155, 155, 155, 0.7);
+  box-shadow: 0 0 0 2px rgba(19, 19, 19, 0.3);
+  background-color: rgba(172, 172, 172, 0.7);
   line-height: 10px;
   margin-top: 5px;
   cursor: pointer;
@@ -3153,7 +3155,7 @@ html, body {
 .csseditor[data-theme=dark] .property > .property-body {
   display: none;
   padding: 0px;
-  background-color: #333333;
+  background-color: #383838;
 }
 .csseditor[data-theme=dark] .property > .property-body .property-item {
   padding: 0px;
@@ -3176,7 +3178,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .property > .property-body .property-item.label label {
   font-weight: 900;
-  text-shadow: 2px 2px 3px #1b1b1b;
+  text-shadow: 2px 2px 3px #2c2c2c;
 }
 .csseditor[data-theme=dark] .property > .property-body .property-item .small-editor {
   margin-bottom: 3px;
@@ -3231,7 +3233,7 @@ html, body {
   width: 20px;
   height: 20px;
   margin-right: 10px;
-  background-color: #333333;
+  background-color: #383838;
 }
 .csseditor[data-theme=dark] .border-item .border-direction button[data-value=all] {
   border: 3px solid #fc554f;
@@ -3315,7 +3317,7 @@ html, body {
   height: 100%;
 }
 .csseditor[data-theme=dark] .border-slice-item .slice-selector button svg path {
-  fill: #1b1b1b;
+  fill: #2c2c2c;
 }
 .csseditor[data-theme=dark] .border-slice-item .slice-setting-box {
   display: grid;
@@ -3441,7 +3443,7 @@ html, body {
   right: 5px;
   bottom: 5px;
   padding: 10px;
-  border: 1px dashed #1b1b1b;
+  border: 1px dashed #2c2c2c;
 }
 .csseditor[data-theme=dark] .box-model-item > div .margin:before {
   content: "margin";
@@ -3455,7 +3457,7 @@ html, body {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
-  border: 1px solid #1b1b1b;
+  border: 1px solid #2c2c2c;
 }
 .csseditor[data-theme=dark] .box-model-item > div .margin [data-value=top] {
   display: inline-block;
@@ -3500,7 +3502,7 @@ html, body {
   right: 40px;
   bottom: 30px;
   padding: 10px;
-  border: 1px dashed #1b1b1b;
+  border: 1px dashed #2c2c2c;
 }
 .csseditor[data-theme=dark] .box-model-item > div .padding::before {
   content: "padding";
@@ -3514,7 +3516,7 @@ html, body {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
-  border: 1px solid #1b1b1b;
+  border: 1px solid #2c2c2c;
 }
 .csseditor[data-theme=dark] .box-model-item > div .padding [data-value=top] {
   display: inline-block;
@@ -3559,7 +3561,7 @@ html, body {
   right: 75px;
   bottom: 54px;
   padding: 10px 0px;
-  border: 1px dashed #1b1b1b;
+  border: 1px dashed #2c2c2c;
 }
 .csseditor[data-theme=dark] .box-model-item > div .content:before {
   content: attr(title);
@@ -3575,7 +3577,7 @@ html, body {
   width: 100%;
   height: 100px;
   box-sizing: border-box;
-  border: 1px solid #1b1b1b;
+  border: 1px solid #2c2c2c;
   border-radius: 3px;
 }
 .csseditor[data-theme=dark] .transition-list {
@@ -3592,7 +3594,7 @@ html, body {
   margin-bottom: 5px;
 }
 .csseditor[data-theme=dark] .transition-list .transition-item.selected {
-  background-color: rgba(27, 27, 27, 0.5);
+  background-color: rgba(44, 44, 44, 0.5);
 }
 .csseditor[data-theme=dark] .transition-list .transition-item .timing {
   border-radius: 3px;
@@ -3649,7 +3651,7 @@ html, body {
   margin-bottom: 5px;
 }
 .csseditor[data-theme=dark] .animation-list .animation-item.selected {
-  background-color: rgba(27, 27, 27, 0.5);
+  background-color: rgba(44, 44, 44, 0.5);
 }
 .csseditor[data-theme=dark] .animation-list .animation-item .name {
   padding: 2px 0px;
@@ -3672,10 +3674,10 @@ html, body {
   margin-top: 4px;
 }
 .csseditor[data-theme=dark] .animation-list .animation-item .labels label {
-  background-color: #1b1b1b;
+  background-color: #2c2c2c;
   padding: 1px 3px;
   border-radius: 2px;
-  color: #1b1b1b;
+  color: #2c2c2c;
   text-transform: uppercase;
   font-weight: bold;
 }
@@ -3731,13 +3733,13 @@ html, body {
   display: grid;
   grid-template-columns: 1fr;
   grid-column-gap: 4px;
-  border: 1px solid #1b1b1b;
+  border: 1px solid #2c2c2c;
   margin-bottom: 5px;
   padding: 5px;
   cursor: pointer;
 }
 .csseditor[data-theme=dark] .keyframe-list .keyframe-item.selected {
-  background-color: rgba(27, 27, 27, 0.5);
+  background-color: rgba(44, 44, 44, 0.5);
 }
 .csseditor[data-theme=dark] .keyframe-list .keyframe-item .title {
   display: grid;
@@ -3761,7 +3763,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .keyframe-list .keyframe-item .offset-list .container {
   position: relative;
-  background-image: linear-gradient(to right, #1b1b1b, black);
+  background-image: linear-gradient(to right, #2c2c2c, black);
   background-size: 100% 2px;
   background-repeat: no-repeat;
   background-position: 0px center;
@@ -3777,7 +3779,7 @@ html, body {
   -webkit-transform: translateX(-50%) translateY(-50%);
           transform: translateX(-50%) translateY(-50%);
   vertical-align: middle;
-  border: 1px solid #1b1b1b;
+  border: 1px solid #2c2c2c;
 }
 .csseditor[data-theme=dark] .code-view-item {
   grid-template-columns: 1fr !important;
@@ -3849,7 +3851,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .clip-path-list .clippath-item .offset-list .container {
   position: relative;
-  background-image: linear-gradient(to right, #1b1b1b, black);
+  background-image: linear-gradient(to right, #2c2c2c, black);
   background-size: 100% 2px;
   background-repeat: no-repeat;
   background-position: 0px center;
@@ -3888,14 +3890,14 @@ html, body {
   display: grid;
   grid-template-columns: 1fr;
   grid-column-gap: 4px;
-  border: 1px solid #1b1b1b;
+  border: 1px solid #2c2c2c;
   margin-bottom: 5px;
   padding: 5px;
   cursor: pointer;
   height: 30px;
 }
 .csseditor[data-theme=dark] .selector-list .selector-item.selected {
-  background-color: rgba(27, 27, 27, 0.5);
+  background-color: rgba(44, 44, 44, 0.5);
 }
 .csseditor[data-theme=dark] .selector-list .selector-item .title {
   display: grid;
@@ -3957,9 +3959,9 @@ html, body {
 }
 .csseditor[data-theme=dark] .artboard-list .artboard-item .preview {
   height: 110px;
-  background-color: #1b1b1b;
+  background-color: #2c2c2c;
   border-radius: 3px;
-  border: 1px solid #1b1b1b;
+  border: 1px solid #2c2c2c;
   cursor: pointer;
   display: none;
 }
@@ -4037,13 +4039,13 @@ html, body {
   text-align: right;
 }
 .csseditor[data-theme=dark] .layer-list .layer-item .detail .tools .visible svg path {
-  fill: #1b1b1b;
+  fill: #2c2c2c;
 }
 .csseditor[data-theme=dark] .layer-list .layer-item .detail .tools .visible[data-visible=true] svg path {
   fill: #333;
 }
 .csseditor[data-theme=dark] .layer-list .layer-item .detail .tools .lock svg path {
-  fill: #1b1b1b;
+  fill: #2c2c2c;
 }
 .csseditor[data-theme=dark] .layer-list .layer-item .detail .tools .lock[data-lock=true] svg path {
   fill: #333;
@@ -4085,7 +4087,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .color-assets-property .color-list-tools button {
   padding: 2px 10px;
-  border: 1px solid #1b1b1b;
+  border: 1px solid #2c2c2c;
 }
 .csseditor[data-theme=dark] .color-assets-property .color-list-tools[data-view-mode=list] button[data-value=list] {
   background-color: #609de2;
@@ -4118,7 +4120,7 @@ html, body {
   margin-right: 4px;
   margin-bottom: 4px;
   height: 80px;
-  border: 1px solid #1b1b1b;
+  border: 1px solid #2c2c2c;
   border-radius: 2px;
   box-sizing: border-box;
   vertical-align: top;
@@ -4144,7 +4146,7 @@ html, body {
   position: relative;
   width: 100%;
   height: 80px;
-  border: 1px solid #1b1b1b;
+  border: 1px solid #2c2c2c;
   border-radius: 2px;
   box-sizing: border-box;
   cursor: pointer;
@@ -4217,7 +4219,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .gradient-assets-property .gradient-list-tools button {
   padding: 2px 10px;
-  border: 1px solid #1b1b1b;
+  border: 1px solid #2c2c2c;
 }
 .csseditor[data-theme=dark] .gradient-assets-property .gradient-list-tools[data-view-mode=list] button[data-value=list] {
   background-color: #609de2;
@@ -4250,7 +4252,7 @@ html, body {
   margin-right: 4px;
   margin-bottom: 4px;
   height: 80px;
-  border: 1px solid #1b1b1b;
+  border: 1px solid #2c2c2c;
   border-radius: 2px;
   box-sizing: border-box;
   vertical-align: top;
@@ -4276,7 +4278,7 @@ html, body {
   position: relative;
   width: 100%;
   height: 80px;
-  border: 1px solid #1b1b1b;
+  border: 1px solid #2c2c2c;
   border-radius: 2px;
   box-sizing: border-box;
   cursor: pointer;
@@ -4352,7 +4354,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list-tools button {
   padding: 2px 10px;
-  border: 1px solid #1b1b1b;
+  border: 1px solid #2c2c2c;
 }
 .csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list-tools[data-view-mode=list] button[data-value=list] {
   background-color: #609de2;
@@ -4391,7 +4393,7 @@ html, body {
   margin-right: 4px;
   margin-bottom: 4px;
   height: 80px;
-  border: 1px solid #1b1b1b;
+  border: 1px solid #2c2c2c;
   border-radius: 2px;
   box-sizing: border-box;
   vertical-align: top;
@@ -4417,7 +4419,7 @@ html, body {
   position: relative;
   width: 100%;
   height: 80px;
-  border: 1px solid #1b1b1b;
+  border: 1px solid #2c2c2c;
   border-radius: 2px;
   box-sizing: border-box;
   cursor: pointer;
@@ -4468,7 +4470,7 @@ html, body {
   margin-right: 4px;
   margin-bottom: 4px;
   height: 80px;
-  border: 1px solid #1b1b1b;
+  border: 1px solid #2c2c2c;
   border-radius: 2px;
   box-sizing: border-box;
   vertical-align: top;
@@ -4491,7 +4493,7 @@ html, body {
   position: relative;
   width: 100%;
   height: 80px;
-  border: 1px solid #1b1b1b;
+  border: 1px solid #2c2c2c;
   border-radius: 2px;
   box-sizing: border-box;
   cursor: pointer;
@@ -4531,7 +4533,7 @@ html, body {
   height: 40px;
 }
 .csseditor[data-theme=dark] .alignment-item .split {
-  border-right: 1px solid #1b1b1b;
+  border-right: 1px solid #2c2c2c;
   width: 1px;
   margin-left: 5px;
 }
@@ -4658,7 +4660,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .image-assets-property .image-list-tools button {
   padding: 2px 10px;
-  border: 1px solid #1b1b1b;
+  border: 1px solid #2c2c2c;
 }
 .csseditor[data-theme=dark] .image-assets-property .image-list-tools[data-view-mode=list] button[data-value=list] {
   background-color: #609de2;
@@ -4691,7 +4693,7 @@ html, body {
   margin-right: 4px;
   margin-bottom: 4px;
   height: 80px;
-  border: 1px solid #1b1b1b;
+  border: 1px solid #2c2c2c;
   border-radius: 2px;
   box-sizing: border-box;
   vertical-align: top;
@@ -4738,7 +4740,7 @@ html, body {
   position: relative;
   width: 100%;
   height: 80px;
-  border: 1px solid #1b1b1b;
+  border: 1px solid #2c2c2c;
   border-radius: 2px;
   box-sizing: border-box;
   cursor: pointer;
@@ -4791,8 +4793,8 @@ html, body {
   height: 150px;
   top: 30px;
   left: 60px;
-  border: 1px solid #1b1b1b;
-  background-color: #333333;
+  border: 1px solid #2c2c2c;
+  background-color: #383838;
 }
 .csseditor[data-theme=dark] .cubic-bezier-editor .bezier .bezier-canvas {
   position: absolute;
@@ -4857,7 +4859,7 @@ html, body {
   height: 40px;
   border: 1px solid gray;
   cursor: pointer;
-  background-color: #333333;
+  background-color: #383838;
 }
 .csseditor[data-theme=dark] .cubic-bezier-editor .item-list .item:not(:first-child) {
   border-top: 0px;
@@ -5039,6 +5041,7 @@ html, body {
 .csseditor[data-theme=dark] .range-editor .range-editor-type .area input, .csseditor[data-theme=dark] .range-editor .range-editor-type .area select {
   width: 100%;
   background-color: transparent;
+  border: 0px;
 }
 .csseditor[data-theme=dark] .range-editor .range-editor-type .area input[type=range] {
   width: 95%;
@@ -5051,7 +5054,7 @@ html, body {
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
   background-color: transparent;
-  border-bottom: 1px solid #4e4e4e;
+  border-bottom: 1px solid #5f5f5f;
   text-align: right;
 }
 .csseditor[data-theme=dark] .range-editor .range-editor-type .area .select-editor select {
@@ -5065,7 +5068,7 @@ html, body {
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
   background-color: transparent;
-  border-bottom: 1px solid #4e4e4e;
+  border-bottom: 1px solid #5f5f5f;
 }
 .csseditor[data-theme=dark] .range-editor .range-editor-type[data-type=calc] .area {
   height: 100%;
@@ -5223,7 +5226,7 @@ html, body {
   box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .text-editor input[type=text] {
-  border: 1px solid #1b1b1b;
+  border: 1px solid #2c2c2c;
 }
 .csseditor[data-theme=dark] .select-editor {
   display: grid;
@@ -5273,7 +5276,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .css-property-editor .css-property-item > .title {
   grid-template-columns: 1fr 30px;
-  background-color: #333333;
+  background-color: #383838;
   color: #fc554f;
   border-radius: 3px;
   padding: 3px 0px;
@@ -5331,7 +5334,7 @@ html, body {
   padding: 6px 1px;
 }
 .csseditor[data-theme=dark] .background-image-editor .fill-list .fill-item.selected {
-  background-color: rgba(27, 27, 27, 0.5);
+  background-color: rgba(44, 44, 44, 0.5);
 }
 .csseditor[data-theme=dark] .background-image-editor .fill-list .fill-item .gradient-info {
   display: grid;
@@ -5665,7 +5668,7 @@ html, body {
 .csseditor[data-theme=dark] .box-shadow-editor .shadow-item .color {
   cursor: pointer;
   height: 20px;
-  border: 1px solid #1b1b1b;
+  border: 1px solid #2c2c2c;
   border-radius: 100%;
   position: relative;
   background-color: transparent;
@@ -5687,7 +5690,7 @@ html, body {
   height: 16px;
 }
 .csseditor[data-theme=dark] .box-shadow-editor .shadow-item .inset svg path {
-  fill: #333333;
+  fill: #383838;
 }
 .csseditor[data-theme=dark] .box-shadow-editor .shadow-item .inset[data-value=true] svg path {
   fill: #fc554f;
@@ -5740,7 +5743,7 @@ html, body {
 .csseditor[data-theme=dark] .text-shadow-editor .shadow-item .color {
   cursor: pointer;
   height: 20px;
-  border: 1px solid #1b1b1b;
+  border: 1px solid #2c2c2c;
   border-radius: 100%;
   position: relative;
   background-color: transparent;
@@ -5929,7 +5932,7 @@ html, body {
   top: 4px;
   height: 14px;
   border-radius: 10px;
-  border: 1px solid #1b1b1b;
+  border: 1px solid #2c2c2c;
   box-sizing: border-box;
   background-color: transparent;
   background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
@@ -6457,7 +6460,7 @@ html, body {
   text-align: center;
   vertical-align: middle;
   padding: 4px 2px;
-  border: 1px solid #1b1b1b;
+  border: 1px solid #2c2c2c;
   border-right: 0px;
   white-space: pre-wrap;
   word-break: break-all;
@@ -6470,7 +6473,7 @@ html, body {
   border-bottom-left-radius: 3px;
 }
 .csseditor[data-theme=dark] .select-icon-editor .items > .select-icon-item:last-child {
-  border-right: 1px solid #1b1b1b;
+  border-right: 1px solid #2c2c2c;
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px;
 }
@@ -6582,9 +6585,9 @@ html, body {
   display: none;
   box-sizing: border-box;
   z-index: 1000;
-  background-color: #333333;
-  border: 1px solid #1b1b1b;
-  box-shadow: 0 0 1px 0px #1b1b1b;
+  background-color: #383838;
+  border: 1px solid #2c2c2c;
+  box-shadow: 0 0 1px 0px #2c2c2c;
   padding: 14px 10px;
   color: #ffffff;
 }
@@ -6642,10 +6645,10 @@ html, body {
   outline: none;
   box-sizing: border-box;
   width: 50px;
-  background-color: rgba(27, 27, 27, 0.5);
+  background-color: rgba(44, 44, 44, 0.5);
 }
 .csseditor[data-theme=dark] .popup.background-property-popup .size-list[data-value=contain] button[value=contain], .csseditor[data-theme=dark] .popup.background-property-popup .size-list[data-value=cover] button[value=cover], .csseditor[data-theme=dark] .popup.background-property-popup .size-list[data-value=auto] button[value=auto] {
-  background-color: #1b1b1b;
+  background-color: #2c2c2c;
   font-weight: bold;
 }
 .csseditor[data-theme=dark] .popup.background-property-popup .popup-item.grid-2 {
@@ -6659,7 +6662,7 @@ html, body {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
-  border: 1px solid #1b1b1b;
+  border: 1px solid #2c2c2c;
   background-color: white;
   outline: none;
   cursor: pointer;
@@ -6701,7 +6704,7 @@ html, body {
   background-repeat: round;
 }
 .csseditor[data-theme=dark] .popup.background-property-popup .repeat-list[data-value=repeat] button[value=repeat], .csseditor[data-theme=dark] .popup.background-property-popup .repeat-list[data-value=no-repeat] button[value=no-repeat], .csseditor[data-theme=dark] .popup.background-property-popup .repeat-list[data-value=repeat-x] button[value=repeat-x], .csseditor[data-theme=dark] .popup.background-property-popup .repeat-list[data-value=repeat-y] button[value=repeat-y], .csseditor[data-theme=dark] .popup.background-property-popup .repeat-list[data-value=space] button[value=space], .csseditor[data-theme=dark] .popup.background-property-popup .repeat-list[data-value=round] button[value=round] {
-  background-color: #1b1b1b;
+  background-color: #2c2c2c;
   box-shadow: 0 0 1px 1px black;
 }
 .csseditor[data-theme=dark] .popup.background-property-popup .blend-list {
@@ -6730,18 +6733,18 @@ html, body {
   outline: none;
   box-sizing: border-box;
   width: 50px;
-  background-color: rgba(27, 27, 27, 0.5);
+  background-color: rgba(44, 44, 44, 0.5);
 }
 .csseditor[data-theme=dark] .popup.display-property-popup .flex-direction[data-value=row] button[value=row], .csseditor[data-theme=dark] .popup.display-property-popup .flex-direction[data-value=row-reverse] button[value=row-reverse], .csseditor[data-theme=dark] .popup.display-property-popup .flex-direction[data-value=column] button[value=column], .csseditor[data-theme=dark] .popup.display-property-popup .flex-direction[data-value=column-reverse] button[value=column-reverse] {
-  background-color: #1b1b1b;
+  background-color: #2c2c2c;
   font-weight: bold;
 }
 .csseditor[data-theme=dark] .popup.display-property-popup .flex-wrap[data-value=nowrap] button[value=nowrap], .csseditor[data-theme=dark] .popup.display-property-popup .flex-wrap[data-value=wrap] button[value=wrap], .csseditor[data-theme=dark] .popup.display-property-popup .flex-wrap[data-value=wrap-reverse] button[value=wrap-reverse] {
-  background-color: #1b1b1b;
+  background-color: #2c2c2c;
   font-weight: bold;
 }
 .csseditor[data-theme=dark] .popup.display-property-popup .justify-content[data-value=flex-start] button[value=flex-start], .csseditor[data-theme=dark] .popup.display-property-popup .justify-content[data-value=flex-end] button[value=flex-end], .csseditor[data-theme=dark] .popup.display-property-popup .justify-content[data-value=center] button[value=center], .csseditor[data-theme=dark] .popup.display-property-popup .justify-content[data-value=space-between] button[value=space-between], .csseditor[data-theme=dark] .popup.display-property-popup .justify-content[data-value=space-around] button[value=space-around] {
-  background-color: #1b1b1b;
+  background-color: #2c2c2c;
   font-weight: bold;
 }
 .csseditor[data-theme=dark] .popup .box-shadow-property-popup {
@@ -6754,7 +6757,7 @@ html, body {
 .csseditor[data-theme=dark] .popup .box-shadow-property-popup .codemirror-colorpicker {
   box-shadow: none;
   border-radius: 0px;
-  background-color: #333333;
+  background-color: #383838;
 }
 .csseditor[data-theme=dark] .popup .box-shadow-property-popup .codemirror-colorpicker input {
   color: #ffffff !important;
@@ -6768,7 +6771,7 @@ html, body {
   color: #ffffff !important;
 }
 .csseditor[data-theme=dark] .popup .box-shadow-property-popup .codemirror-colorpicker .colorsets {
-  border-top: 0px solid #1b1b1b !important;
+  border-top: 0px solid #2c2c2c !important;
 }
 .csseditor[data-theme=dark] .popup .box-shadow-property-popup .box .type {
   display: grid;
@@ -6799,11 +6802,11 @@ html, body {
 }
 .csseditor[data-theme=dark] .popup .box-shadow-property-popup .box .drag-board {
   box-sizing: border-box;
-  border: 1px solid #1b1b1b;
+  border: 1px solid #2c2c2c;
   margin-bottom: 2px;
   height: 204px;
   position: relative;
-  background-image: linear-gradient(to right, #1b1b1b, #1b1b1b), linear-gradient(to right, #1b1b1b, #1b1b1b);
+  background-image: linear-gradient(to right, #2c2c2c, #2c2c2c), linear-gradient(to right, #2c2c2c, #2c2c2c);
   background-size: 100% 1px, 1px 100%;
   background-position: 0px center, center 0px;
   background-repeat: no-repeat;
@@ -6876,7 +6879,7 @@ html, body {
 .csseditor[data-theme=dark] .popup .text-shadow-property-popup .codemirror-colorpicker {
   box-shadow: none;
   border-radius: 0px;
-  background-color: #333333;
+  background-color: #383838;
 }
 .csseditor[data-theme=dark] .popup .text-shadow-property-popup .codemirror-colorpicker input {
   color: #ffffff !important;
@@ -6890,18 +6893,18 @@ html, body {
   color: #ffffff !important;
 }
 .csseditor[data-theme=dark] .popup .text-shadow-property-popup .codemirror-colorpicker .colorsets {
-  border-top: 0px solid #1b1b1b !important;
+  border-top: 0px solid #2c2c2c !important;
 }
 .csseditor[data-theme=dark] .popup .text-shadow-property-popup .box label {
   font-size: 11px;
 }
 .csseditor[data-theme=dark] .popup .text-shadow-property-popup .box .drag-board {
   box-sizing: border-box;
-  border: 1px solid #1b1b1b;
+  border: 1px solid #2c2c2c;
   height: 202px;
   position: relative;
   margin-bottom: 10px;
-  background-image: linear-gradient(to right, #1b1b1b, #1b1b1b), linear-gradient(to right, #1b1b1b, #1b1b1b);
+  background-image: linear-gradient(to right, #2c2c2c, #2c2c2c), linear-gradient(to right, #2c2c2c, #2c2c2c);
   background-size: 100% 1px, 1px 100%;
   background-position: 0px center, center 0px;
   background-repeat: no-repeat;
@@ -7065,7 +7068,7 @@ html, body {
   height: 220px;
   position: relative;
   box-sizing: border-box;
-  box-shadow: 0 0 0 1px #1b1b1b;
+  box-shadow: 0 0 0 1px #2c2c2c;
 }
 .csseditor[data-theme=dark] .popup .clippath-popup .box > .clip-path-editor .drag-area .pointer-list {
   top: 0px;
@@ -7470,7 +7473,7 @@ html, body {
   box-shadow: none;
   border-radius: 0px;
   border: 0px;
-  background-color: #333333;
+  background-color: #383838;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=color] .codemirror-colorpicker input {
   color: #ffffff !important;
@@ -7481,7 +7484,7 @@ html, body {
   color: #ffffff !important;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=color] .codemirror-colorpicker .colorsets {
-  border-top: 0px solid #1b1b1b !important;
+  border-top: 0px solid #2c2c2c !important;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=image] .image-preview {
   width: 100%;
@@ -7576,7 +7579,7 @@ html, body {
   box-shadow: none;
   border-radius: 0px;
   border: 0px;
-  background-color: #333333;
+  background-color: #383838;
 }
 .csseditor[data-theme=dark] .popup .color-picker-popup .codemirror-colorpicker input {
   color: #ffffff !important;
@@ -7587,7 +7590,7 @@ html, body {
   color: #ffffff !important;
 }
 .csseditor[data-theme=dark] .popup .color-picker-popup .codemirror-colorpicker .colorsets {
-  border-top: 1px solid #1b1b1b !important;
+  border-top: 1px solid #2c2c2c !important;
 }
 .csseditor[data-theme=dark] .popup .color-picker-popup .assets {
   padding: 0px 10px;
@@ -7883,7 +7886,7 @@ html, body {
   box-shadow: none;
   border-radius: 0px;
   border: 0px;
-  background-color: #333333;
+  background-color: #383838;
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .codemirror-colorpicker .color-panel {
   margin-top: 0px;
@@ -7897,7 +7900,7 @@ html, body {
   color: #ffffff !important;
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .codemirror-colorpicker .colorsets {
-  border-top: 0px solid #1b1b1b !important;
+  border-top: 0px solid #2c2c2c !important;
 }
 .csseditor[data-theme=dark] .window-background {
   position: fixed;
@@ -7919,9 +7922,9 @@ html, body {
           transform: translate(-50%, -50%);
   box-sizing: border-box;
   z-index: 1000;
-  background-color: #333333;
-  border: 1px solid #1b1b1b;
-  box-shadow: 0 0 1px 0px #1b1b1b;
+  background-color: #383838;
+  border: 1px solid #2c2c2c;
+  box-shadow: 0 0 1px 0px #2c2c2c;
   padding: 14px;
   color: #ffffff;
 }
@@ -8134,11 +8137,11 @@ html, body {
   right: 0px;
   top: 0px;
   bottom: 0px;
-  background-color: #333333;
+  background-color: #383838;
   font-size: 12px;
   box-sizing: border-box;
-  border-left: 1px solid #1b1b1b;
-  border-top: 1px solid #1b1b1b;
+  border-left: 1px solid #2c2c2c;
+  border-top: 1px solid #2c2c2c;
 }
 .csseditor[data-theme=dark] .timeline-value-area .timeline-value-editor .tab-content {
   padding: 0px 20px;
@@ -8187,7 +8190,7 @@ html, body {
   right: 260px;
   top: 0px;
   bottom: 0px;
-  background-color: #333333;
+  background-color: #383838;
   font-size: 12px;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header {
@@ -8197,7 +8200,7 @@ html, body {
   height: 70px;
   right: 0px;
   box-sizing: border-box;
-  border-top: 1px solid #1b1b1b;
+  border-top: 1px solid #2c2c2c;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar {
   position: absolute;
@@ -8205,7 +8208,7 @@ html, body {
   top: 0px;
   bottom: 0px;
   width: 300px;
-  border-right: 1px solid #1b1b1b;
+  border-right: 1px solid #2c2c2c;
   box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar {
@@ -8244,7 +8247,7 @@ html, body {
   color: white;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .play-buttons button {
-  border: 1px solid #1b1b1b;
+  border: 1px solid #2c2c2c;
   min-width: 50px;
   padding: 2px 10px;
   height: auto;
@@ -8276,7 +8279,7 @@ html, body {
   top: 0px;
   width: 5px;
   height: 100%;
-  background-color: #1b1b1b;
+  background-color: #2c2c2c;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-duration .duration-handle-right {
   position: absolute;
@@ -8284,7 +8287,7 @@ html, body {
   top: 0px;
   width: 5px;
   height: 100%;
-  background-color: #1b1b1b;
+  background-color: #2c2c2c;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-duration .duration-slider {
   position: absolute;
@@ -8292,7 +8295,7 @@ html, body {
   top: 0px;
   right: 10px;
   height: 100%;
-  background-color: #1b1b1b;
+  background-color: #2c2c2c;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-duration .duration-slider .start {
   position: absolute;
@@ -8302,7 +8305,7 @@ html, body {
           transform: translateX(-100%);
   height: 100%;
   width: 5px;
-  background-color: #1b1b1b;
+  background-color: #2c2c2c;
   cursor: ew-resize;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-duration .duration-slider .end {
@@ -8311,7 +8314,7 @@ html, body {
   top: 0px;
   height: 100%;
   width: 5px;
-  background-color: #1b1b1b;
+  background-color: #2c2c2c;
   cursor: ew-resize;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-duration .duration-slider .gauge {
@@ -8345,7 +8348,7 @@ html, body {
   bottom: 0px;
   width: 300px;
   overflow: auto;
-  border-right: 1px solid #1b1b1b;
+  border-right: 1px solid #2c2c2c;
   box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object.collapsed .timeline-object-row.layer .icon svg {
@@ -8358,12 +8361,20 @@ html, body {
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row {
   height: 30px;
   display: grid;
-  grid-template-columns: 20px 1fr 1.5fr;
-  grid-column-gap: 5px;
+  grid-template-columns: 20px 1fr 50px;
+  grid-column-gap: 2px;
   box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row[data-selected=true] {
   background-color: #353535;
+}
+.csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row .current-value {
+  vertical-align: middle;
+  padding: 5px 0px;
+}
+.csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row .current-value input {
+  width: 100%;
+  vertical-align: middle;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row .icon {
   padding: 5px;
@@ -8391,11 +8402,11 @@ html, body {
   text-align: right;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row .tools > * {
-  margin-right: 10px;
+  margin-right: 5px;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row.layer-property {
   overflow: hidden;
-  grid-template-columns: 20px 1fr 0.5fr 1fr;
+  grid-template-columns: 20px 1fr 0.8fr 50px;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row.layer-property .title {
   padding-left: 10px;
@@ -8404,8 +8415,8 @@ html, body {
   width: 10px;
   height: 10px;
   display: inline-block;
-  box-shadow: 0 0 0 2px rgba(2, 2, 2, 0.3);
-  background-color: rgba(155, 155, 155, 0.7);
+  box-shadow: 0 0 0 2px rgba(19, 19, 19, 0.3);
+  background-color: rgba(172, 172, 172, 0.7);
   vertical-align: middle;
   cursor: pointer;
   -webkit-transform: translateX(-5px) translateY(2px) rotate(45deg);
@@ -8460,7 +8471,7 @@ html, body {
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row {
   height: 30px;
   box-sizing: border-box;
-  border-bottom: 1px solid #1b1b1b;
+  border-bottom: 1px solid #2c2c2c;
   position: relative;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe {
@@ -8469,7 +8480,7 @@ html, body {
   -webkit-transform: translateY(-50%);
           transform: translateY(-50%);
   height: 10px;
-  background-color: rgba(27, 27, 27, 0.5);
+  background-color: rgba(44, 44, 44, 0.5);
   display: inline-block;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe .offset {
@@ -8479,7 +8490,7 @@ html, body {
   display: inline-block;
   width: 8px;
   height: 8px;
-  background-color: #333333;
+  background-color: #383838;
   -webkit-transform: translateY(-50%) translateX(-50%) rotate(45deg);
           transform: translateY(-50%) translateX(-50%) rotate(45deg);
   cursor: ew-resize;
@@ -8504,7 +8515,7 @@ html, body {
   display: inline-block;
   width: 8px;
   height: 8px;
-  background-color: #333333;
+  background-color: #383838;
   -webkit-transform: translateY(-50%) translateX(-50%) rotate(45deg);
           transform: translateY(-50%) translateX(-50%) rotate(45deg);
   cursor: ew-resize;
@@ -8534,11 +8545,12 @@ html, body {
 .csseditor[data-theme=light] input[type=number],
 .csseditor[data-theme=light] input[type=email],
 .csseditor[data-theme=light] textarea {
-  background-color: #fafafa;
-  border: 0px solid #dbdbdb;
+  background-color: #f7faff;
+  border: 1px solid #dbdbdb;
   border-radius: 2px;
-  color: #666666;
+  color: #1f1f1f;
   outline: none;
+  box-sizing: border-box;
 }
 .csseditor[data-theme=light] select {
   -webkit-appearance: none;
@@ -8548,16 +8560,17 @@ html, body {
   padding: 0px 4px;
   line-height: 1.6;
   cursor: pointer;
-  background-color: #fafafa;
-  border: 0px solid #dbdbdb;
+  background-color: #e5f0ff;
+  border: 1px solid #3e8ec6;
   border-radius: 2px;
-  color: #666666;
+  color: #1f1f1f;
   outline: none;
   vertical-align: middle;
+  box-sizing: border-box;
 }
 .csseditor[data-theme=light] button {
   border-width: 0px;
-  color: #666666;
+  color: #1f1f1f;
   width: 16px;
   height: 16px;
   vertical-align: middle;
@@ -8575,7 +8588,7 @@ html, body {
   height: 100%;
 }
 .csseditor[data-theme=light] button svg path {
-  fill: #666666;
+  fill: #1f1f1f;
 }
 .csseditor[data-theme=light] input[type=file].embed-file-input {
   position: absolute;
@@ -8618,7 +8631,7 @@ html, body {
   overflow: hidden;
   position: relative;
   background-color: white;
-  color: #666666;
+  color: #1f1f1f;
   z-index: 1;
   pointer-events: all;
   box-sizing: border-box;
@@ -8657,7 +8670,7 @@ html, body {
   left: 0px;
   height: 40px;
   bottom: 0px;
-  right: 280px;
+  right: 260px;
   overflow: hidden;
   border-top: 1px solid #e7e7e7;
   transition: all 0.15s linear;
@@ -8682,7 +8695,7 @@ html, body {
   right: 0px;
   top: 0px;
   bottom: 0px;
-  width: 280px;
+  width: 260px;
   display: inline-block;
   z-index: 100;
   display: flex;
@@ -8695,7 +8708,7 @@ html, body {
 .csseditor[data-theme=light] .layout-main .layout-middle .layout-body {
   top: 0px;
   left: 300px;
-  right: 280px;
+  right: 260px;
   bottom: 0px;
   position: absolute;
   transition: all 0.15s linear;
@@ -8770,7 +8783,7 @@ html, body {
   margin: 10px 5px;
 }
 .csseditor[data-theme=light] .feature-control .draw-items > label {
-  color: #666666;
+  color: #1f1f1f;
   padding: 5px;
   text-align: center;
   display: block;
@@ -8781,7 +8794,7 @@ html, body {
 .csseditor[data-theme=light] .feature-control .draw-items .menu-item {
   text-align: center;
   margin-top: 5px;
-  color: #666666;
+  color: #1f1f1f;
   width: 48px;
   height: 48px;
   background-color: transparent;
@@ -8901,7 +8914,7 @@ html, body {
   bottom: 0px;
   top: 0px;
   background-color: white;
-  color: #666666;
+  color: #1f1f1f;
 }
 .csseditor[data-theme=light] .tab.number-tab .tab-header {
   height: 34px;
@@ -8947,63 +8960,63 @@ html, body {
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"] {
   background-color: #3e8ec6;
-  color: #3e8ec6;
+  color: white;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="1"] .tab-content[data-value="1"] {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"] {
   background-color: #3e8ec6;
-  color: #3e8ec6;
+  color: white;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="2"] .tab-content[data-value="2"] {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"] {
   background-color: #3e8ec6;
-  color: #3e8ec6;
+  color: white;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="3"] .tab-content[data-value="3"] {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"] {
   background-color: #3e8ec6;
-  color: #3e8ec6;
+  color: white;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="4"] .tab-content[data-value="4"] {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"] {
   background-color: #3e8ec6;
-  color: #3e8ec6;
+  color: white;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="5"] .tab-content[data-value="5"] {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"] {
   background-color: #3e8ec6;
-  color: #3e8ec6;
+  color: white;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="6"] .tab-content[data-value="6"] {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"] {
   background-color: #3e8ec6;
-  color: #3e8ec6;
+  color: white;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="7"] .tab-content[data-value="7"] {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"] {
   background-color: #3e8ec6;
-  color: #3e8ec6;
+  color: white;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="8"] .tab-content[data-value="8"] {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"] {
   background-color: #3e8ec6;
-  color: #3e8ec6;
+  color: white;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="9"] .tab-content[data-value="9"] {
   display: block;
@@ -9535,7 +9548,7 @@ html, body {
   padding: 5px 10px;
   border-radius: 3px;
   border: 1px solid #e7e7e7;
-  color: #666666;
+  color: #1f1f1f;
   background-color: white;
 }
 .csseditor[data-theme=light] .page-tools > label {
@@ -9562,7 +9575,7 @@ html, body {
   pointer-events: all;
   outline: none;
   border: 1px solid #e7e7e7;
-  color: #666666;
+  color: #1f1f1f;
   background-color: white;
   padding: 5px 10px;
   box-sizing: border-box;
@@ -9585,7 +9598,7 @@ html, body {
   pointer-events: all;
   outline: none;
   border: 1px solid #e7e7e7;
-  color: #666666;
+  color: #1f1f1f;
   background-color: white;
   padding: 5px 10px;
 }
@@ -9607,7 +9620,7 @@ html, body {
   outline: none;
   border-radius: 3px;
   border: 1px solid #e7e7e7;
-  color: #666666;
+  color: #1f1f1f;
   background-color: white;
   padding: 5px 10px;
   box-sizing: border-box;
@@ -10095,9 +10108,9 @@ html, body {
 }
 .csseditor[data-theme=light] .property {
   padding: 6px 0px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid rgba(174, 174, 174, 0.2);
   background-color: white;
-  color: #666666;
+  color: #1f1f1f;
   display: none;
 }
 .csseditor[data-theme=light] .property .add-timeline-property {
@@ -10162,7 +10175,7 @@ html, body {
   vertical-align: middle;
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control label svg path {
-  fill: #666666;
+  fill: #1f1f1f;
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .input {
   vertical-align: middle;
@@ -10257,7 +10270,7 @@ html, body {
   vertical-align: middle;
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .keyframe-time-control svg path {
-  fill: #666666;
+  fill: #1f1f1f;
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .keyframe-time-control input[type=text] {
   width: 80px;
@@ -10855,7 +10868,7 @@ html, body {
   background-color: blue;
 }
 .csseditor[data-theme=light] .animation-list .animation-item .labels label.direction small, .csseditor[data-theme=light] .animation-list .animation-item .labels label.fill-mode small, .csseditor[data-theme=light] .animation-list .animation-item .labels label.play-state small {
-  color: #666666;
+  color: #1f1f1f;
 }
 .csseditor[data-theme=light] .animation-list .animation-item .labels label.play-state {
   background-color: transparent;
@@ -11289,7 +11302,7 @@ html, body {
   padding: 24px;
 }
 .csseditor[data-theme=light] .color-assets-property .color-list[data-view-mode=grid] .add-color-item svg path {
-  fill: #666666;
+  fill: #1f1f1f;
 }
 .csseditor[data-theme=light] .color-assets-property .color-list[data-view-mode=grid] .color-item {
   display: inline-block;
@@ -11421,7 +11434,7 @@ html, body {
   padding: 24px;
 }
 .csseditor[data-theme=light] .gradient-assets-property .gradient-list[data-view-mode=grid] .add-gradient-item svg path {
-  fill: #666666;
+  fill: #1f1f1f;
 }
 .csseditor[data-theme=light] .gradient-assets-property .gradient-list[data-view-mode=grid] .gradient-item {
   display: inline-block;
@@ -11562,7 +11575,7 @@ html, body {
   padding: 24px;
 }
 .csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list[data-view-mode=grid] .add-svgfilter-item svg path {
-  fill: #666666;
+  fill: #1f1f1f;
 }
 .csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list[data-view-mode=grid] .svgfilter-item {
   display: inline-block;
@@ -11883,7 +11896,7 @@ html, body {
   pointer-events: none;
 }
 .csseditor[data-theme=light] .image-assets-property .image-list[data-view-mode=grid] .add-image-item svg path {
-  fill: #666666;
+  fill: #1f1f1f;
 }
 .csseditor[data-theme=light] .image-assets-property .image-list[data-view-mode=grid] .image-item {
   display: inline-block;
@@ -12052,12 +12065,12 @@ html, body {
   vertical-align: middle;
 }
 .csseditor[data-theme=light] .cubic-bezier-editor .predefined .left svg path, .csseditor[data-theme=light] .cubic-bezier-editor .predefined .right svg path {
-  fill: #666666;
+  fill: #1f1f1f;
 }
 .csseditor[data-theme=light] .cubic-bezier-editor .predefined .predefined-text {
   vertical-align: middle;
   padding: 4px;
-  color: #666666;
+  color: #1f1f1f;
 }
 .csseditor[data-theme=light] .color-view-editor {
   display: grid;
@@ -12201,6 +12214,7 @@ html, body {
 .csseditor[data-theme=light] .range-editor .range-editor-type .area input, .csseditor[data-theme=light] .range-editor .range-editor-type .area select {
   width: 100%;
   background-color: transparent;
+  border: 0px;
 }
 .csseditor[data-theme=light] .range-editor .range-editor-type .area input[type=range] {
   width: 95%;
@@ -12213,7 +12227,7 @@ html, body {
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
   background-color: transparent;
-  border-bottom: 1px solid white;
+  border-bottom: 1px solid #8dbcdd;
   text-align: right;
 }
 .csseditor[data-theme=light] .range-editor .range-editor-type .area .select-editor select {
@@ -12227,7 +12241,7 @@ html, body {
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
   background-color: transparent;
-  border-bottom: 1px solid white;
+  border-bottom: 1px solid #8dbcdd;
 }
 .csseditor[data-theme=light] .range-editor .range-editor-type[data-type=calc] .area {
   height: 100%;
@@ -12819,7 +12833,7 @@ html, body {
   margin-top: 5px;
 }
 .csseditor[data-theme=light] .box-shadow-editor .shadow-item.desc {
-  color: #666666;
+  color: #1f1f1f;
 }
 .csseditor[data-theme=light] .box-shadow-editor .shadow-item.desc .color {
   visibility: hidden;
@@ -12894,7 +12908,7 @@ html, body {
   margin-top: 5px;
 }
 .csseditor[data-theme=light] .text-shadow-editor .shadow-item.desc {
-  color: #666666;
+  color: #1f1f1f;
 }
 .csseditor[data-theme=light] .text-shadow-editor .shadow-item.desc .color {
   visibility: hidden;
@@ -13376,7 +13390,7 @@ html, body {
   text-align: right;
 }
 .csseditor[data-theme=light] .svg-filter-editor {
-  color: #666666;
+  color: #1f1f1f;
 }
 .csseditor[data-theme=light] .svg-filter-editor .label {
   height: 20px;
@@ -13578,7 +13592,7 @@ html, body {
   width: 100%;
 }
 .csseditor[data-theme=light] .list-view-editor .list-view-item svg path, .csseditor[data-theme=light] .list-view-editor .list-view-item svg circle, .csseditor[data-theme=light] .list-view-editor .list-view-item svg rect {
-  fill: #666666;
+  fill: #1f1f1f;
 }
 .csseditor[data-theme=light] .image-select-editor {
   height: 150px;
@@ -13748,7 +13762,7 @@ html, body {
   border: 1px solid #e7e7e7;
   box-shadow: 0 0 1px 0px #e7e7e7;
   padding: 14px 10px;
-  color: #666666;
+  color: #1f1f1f;
 }
 .csseditor[data-theme=light] .popup.compact {
   padding: 0px;
@@ -13919,7 +13933,7 @@ html, body {
   background-color: white;
 }
 .csseditor[data-theme=light] .popup .box-shadow-property-popup .codemirror-colorpicker input {
-  color: #666666 !important;
+  color: #1f1f1f !important;
   text-transform: uppercase;
   border: 0px !important;
 }
@@ -13927,7 +13941,7 @@ html, body {
   margin-top: 0px;
 }
 .csseditor[data-theme=light] .popup .box-shadow-property-popup .codemirror-colorpicker .title {
-  color: #666666 !important;
+  color: #1f1f1f !important;
 }
 .csseditor[data-theme=light] .popup .box-shadow-property-popup .codemirror-colorpicker .colorsets {
   border-top: 0px solid #e7e7e7 !important;
@@ -14041,7 +14055,7 @@ html, body {
   background-color: white;
 }
 .csseditor[data-theme=light] .popup .text-shadow-property-popup .codemirror-colorpicker input {
-  color: #666666 !important;
+  color: #1f1f1f !important;
   text-transform: uppercase;
   border: 0px !important;
 }
@@ -14049,7 +14063,7 @@ html, body {
   margin-top: 0px;
 }
 .csseditor[data-theme=light] .popup .text-shadow-property-popup .codemirror-colorpicker .title {
-  color: #666666 !important;
+  color: #1f1f1f !important;
 }
 .csseditor[data-theme=light] .popup .text-shadow-property-popup .codemirror-colorpicker .colorsets {
   border-top: 0px solid #e7e7e7 !important;
@@ -14635,12 +14649,12 @@ html, body {
   background-color: white;
 }
 .csseditor[data-theme=light] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=color] .codemirror-colorpicker input {
-  color: #666666 !important;
+  color: #1f1f1f !important;
   text-transform: uppercase;
   border: 0px !important;
 }
 .csseditor[data-theme=light] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=color] .codemirror-colorpicker .title {
-  color: #666666 !important;
+  color: #1f1f1f !important;
 }
 .csseditor[data-theme=light] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=color] .codemirror-colorpicker .colorsets {
   border-top: 0px solid #e7e7e7 !important;
@@ -14741,12 +14755,12 @@ html, body {
   background-color: white;
 }
 .csseditor[data-theme=light] .popup .color-picker-popup .codemirror-colorpicker input {
-  color: #666666 !important;
+  color: #1f1f1f !important;
   text-transform: uppercase;
   border: 0px !important;
 }
 .csseditor[data-theme=light] .popup .color-picker-popup .codemirror-colorpicker .title {
-  color: #666666 !important;
+  color: #1f1f1f !important;
 }
 .csseditor[data-theme=light] .popup .color-picker-popup .codemirror-colorpicker .colorsets {
   border-top: 1px solid #e7e7e7 !important;
@@ -15051,12 +15065,12 @@ html, body {
   margin-top: 0px;
 }
 .csseditor[data-theme=light] .popup .gradient-picker .codemirror-colorpicker input {
-  color: #666666 !important;
+  color: #1f1f1f !important;
   text-transform: uppercase;
   border: 0px !important;
 }
 .csseditor[data-theme=light] .popup .gradient-picker .codemirror-colorpicker .title {
-  color: #666666 !important;
+  color: #1f1f1f !important;
 }
 .csseditor[data-theme=light] .popup .gradient-picker .codemirror-colorpicker .colorsets {
   border-top: 0px solid #e7e7e7 !important;
@@ -15085,7 +15099,7 @@ html, body {
   border: 1px solid #e7e7e7;
   box-shadow: 0 0 1px 0px #e7e7e7;
   padding: 14px;
-  color: #666666;
+  color: #1f1f1f;
 }
 .csseditor[data-theme=light] .window-background .window .window-title {
   position: absolute;
@@ -15292,7 +15306,7 @@ html, body {
 }
 .csseditor[data-theme=light] .timeline-value-area {
   position: absolute;
-  width: 280px;
+  width: 260px;
   right: 0px;
   top: 0px;
   bottom: 0px;
@@ -15323,7 +15337,7 @@ html, body {
   vertical-align: middle;
 }
 .csseditor[data-theme=light] .timeline-value-area .timeline-value-editor .tab-content .title {
-  color: #666666;
+  color: #1f1f1f;
 }
 .csseditor[data-theme=light] .timeline-value-area .timeline-value-editor .value {
   padding: 5px;
@@ -15346,7 +15360,7 @@ html, body {
 .csseditor[data-theme=light] .timeline-area {
   position: absolute;
   left: 0px;
-  right: 280px;
+  right: 260px;
   top: 0px;
   bottom: 0px;
   background-color: white;
@@ -15520,12 +15534,20 @@ html, body {
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row {
   height: 30px;
   display: grid;
-  grid-template-columns: 20px 1fr 1.5fr;
-  grid-column-gap: 5px;
+  grid-template-columns: 20px 1fr 50px;
+  grid-column-gap: 2px;
   box-sizing: border-box;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row[data-selected=true] {
   background-color: #353535;
+}
+.csseditor[data-theme=light] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row .current-value {
+  vertical-align: middle;
+  padding: 5px 0px;
+}
+.csseditor[data-theme=light] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row .current-value input {
+  width: 100%;
+  vertical-align: middle;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row .icon {
   padding: 5px;
@@ -15540,24 +15562,24 @@ html, body {
   transition: transform 0.2s ease, -webkit-transform 0.2s ease;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row .icon svg path {
-  fill: #666666;
+  fill: #1f1f1f;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row .title {
   vertical-align: middle;
   padding: 5px 0px;
   cursor: pointer;
-  color: #666666;
+  color: #1f1f1f;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row .tools {
   padding: 5px 0px;
   text-align: right;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row .tools > * {
-  margin-right: 10px;
+  margin-right: 5px;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row.layer-property {
   overflow: hidden;
-  grid-template-columns: 20px 1fr 0.5fr 1fr;
+  grid-template-columns: 20px 1fr 0.8fr 50px;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row.layer-property .title {
   padding-left: 10px;

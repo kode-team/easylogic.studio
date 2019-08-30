@@ -17,11 +17,11 @@ export function makeInterpolateTransformNumber (layer, property, startValue, end
         var e = endValue.value[i];
 
         if (s && e) {
-            value.push(makeInterpolateNumber(layer, property, s.value, e.value, s.unit))
+            value.push(makeInterpolateNumber(layer, property, s.value, e.value))
         } else {
             var ss = startValue.value[i].value || startValue.value[i-1].value || startValue.value[i-2].value;
             var ee = endValue.value[i].value || endValue.value[i-1].value || startValue.value[i-2].value
-            value.push(makeInterpolateNumber(layer, property, ss,ee, ss.unit))
+            value.push(makeInterpolateNumber(layer, property, ss,ee))
         }
 
     }
@@ -37,7 +37,9 @@ export function makeInterpolateTransformNumber (layer, property, startValue, end
         var type = obj.type(rate, t);
 
         if (type.includes('matrix') || type.includes('scale')) {
-            value = value.map(it => Length.number(it.value))
+            value = value.map(it => {
+                return Length.number(it)
+            })
         }
 
         return { type, value }

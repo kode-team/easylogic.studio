@@ -96,7 +96,7 @@ export default class TimelineObjectList extends UIElement {
                 <div class='icon'></div>                    
                     <div class='title'>${property.property}</div>
                     <div class='current-value'>
-                    
+                      <!--<input type='text' data-property='${property.property}' data-layer-id="${obj.id}" value='' /> -->
                     </div>
                     <div class='tools'>
                         <button type="button" class='remove' data-layer-id='${obj.id}' data-property='${property.property}'>${icon.remove}</button>
@@ -107,6 +107,15 @@ export default class TimelineObjectList extends UIElement {
         </div>
         `
     }
+
+
+    // [EVENT('refreshOffsetValue')] (offset) {
+    //   var input = this.$el.$(`input[data-property="${offset.property}"][data-layer-id="${offset.layerId}"]`)
+
+    //   if (input) {
+    //     input.val(offset.value);
+    //   }
+    // }
 
     template() {
         return /*html*/ `

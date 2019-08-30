@@ -61,13 +61,15 @@ export default class Inspector extends UIElement {
                 <!-- effect -->
                 <BoxShadowProperty />
                 <FilterProperty />
+                <!-- <BackdropFilterProperty /> -->
                 <ClipPathProperty />       
 
                 <!-- transform --> 
-                <PerspectiveOriginProperty />                
-                <PerspectiveProperty />
+                <TransformProperty />                  
                 <TransformOriginProperty /> 
-                <TransformProperty />                
+                <PerspectiveProperty />
+                <PerspectiveOriginProperty />                                
+              
 
                 <!--BorderImageProperty /-->                
                 <!-- <BackdropFilterProperty /> -->

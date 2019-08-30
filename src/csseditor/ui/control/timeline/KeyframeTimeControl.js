@@ -78,7 +78,7 @@ export default class KeyframeTimeControl extends UIElement {
 
         if (artboard) {
             artboard.setFps(fps);
-            this.refreshCanvas();
+            // this.refreshCanvas();
             this.emit('moveTimeline');            
         }
     }

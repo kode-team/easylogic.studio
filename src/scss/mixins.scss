@@ -130,11 +130,12 @@
 @mixin input-style ($background-color: #434b50, $border-color: #0c0c0d, $border-radius: 3px, $fontColor: #ececec) {
     background-color: $background-color;
     // box-shadow: 0 1px 0 0 hsla(0,0%,100%,.05), inset 0 1px 0 0 hsla(0,0%,100%,.05);
-    border: 0px solid $border-color;
+    border: 1px solid $border-color;
     border-radius: $border-radius;       
     color: $fontColor; 
     outline: none;
     vertical-align: middle;
+    box-sizing: border-box;
 }
 
 @mixin select-style ($background-color: #434b50, $border-color: #0c0c0d, $border-radius: 3px, $fontColor: #ececec) {
@@ -152,10 +153,11 @@
     background-color: $background-color;
     // background-color: rgb(75, 75, 75);
     // box-shadow: 0 1px 0 0 hsla(0,0%,100%,.05), inset 0 1px 0 0 hsla(0,0%,100%,.05);
-    border: 0px solid $border-color;
+    border: 1px solid $border-color;
     border-radius: $border-radius;       
     color: $fontColor; 
     outline: none;
+    box-sizing: border-box;
 }
 
 

@@ -306,13 +306,22 @@
                     .timeline-object-row {
                         height: 30px;
                         display: grid; 
-                        grid-template-columns: 20px 1fr 1.5fr; 
-                        grid-column-gap: 5px;
+                        grid-template-columns: 20px 1fr 50px; 
+                        grid-column-gap: 2px;
                         box-sizing: border-box;
                         // border-bottom: 1px solid lighten($timeline-border-color, 20%);
 
                         &[data-selected="true"] {
                             background-color: #353535;
+                        }
+
+                        .current-value {
+                            vertical-align: middle;
+                            padding: 5px 0px;
+                            input {
+                                width: 100%;
+                                vertical-align: middle;
+                            }
                         }
 
                         .icon {
@@ -342,14 +351,14 @@
                             text-align: right;
 
                             > * {
-                                margin-right: 10px;
+                                margin-right: 5px;
                             }
 
                         }
 
                         &.layer-property {
                             overflow: hidden;                            
-                            grid-template-columns: 20px 1fr .5fr 1fr; 
+                            grid-template-columns: 20px 1fr .8fr 50px; 
 
                             .title {
                                 padding-left: 10px;
