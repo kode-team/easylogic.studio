@@ -1,5 +1,5 @@
-import { makeInterpolateNumber } from "./makeInterpolateNumber";
-import { makeInterpolateBoolean } from "./makeInterpolateBoolean";
+import { makeInterpolateNumber } from "../makeInterpolateNumber";
+import { makeInterpolateBoolean } from "../makeInterpolateBoolean";
 
 export function makeInterpolateClipPathInset (layer, property, s, e) {
 

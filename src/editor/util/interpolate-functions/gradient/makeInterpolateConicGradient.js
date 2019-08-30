@@ -1,7 +1,7 @@
 import { makeInterpolateColorStepList } from "./makeInterpolateColorStepList";
-import { makeInterpolateLength } from "./makeInterpolateLength";
-import { ConicGradient } from "../../image-resource/ConicGradient";
-import { makeInterpolateNumber } from "./makeInterpolateNumber";
+import { makeInterpolateLength } from "../makeInterpolateLength";
+import { ConicGradient } from "../../../image-resource/ConicGradient";
+import { makeInterpolateNumber } from "../makeInterpolateNumber";
 
 export function makeInterpolateConicGradient (layer, property, s, e) {
 

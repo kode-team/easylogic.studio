@@ -11,7 +11,7 @@ export function makeInterpolateBorderRadius(layer, property, startValue, endValu
     })
 
     return (rate, t) => {
-        var obj = {} 
+        var obj = {}  
         list.forEach(it => {
             obj[it.key] = it.value(rate, t);
         })

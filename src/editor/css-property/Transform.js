@@ -24,6 +24,22 @@ export class Transform extends Property {
     return `${this.json.type}(${this.json.value.join(', ') || ""})`;
   }
 
+
+
+  convert(json) {
+
+    json = super.convert(json);
+
+    if (json.type.includes('matrix') || json.type.includes('scale')) {
+      json.value = json.value.map(it => Length.number(it))
+    } else {
+      json.value = json.value.map(it => Length.parse(it))
+    }
+
+    return json 
+  }
+
+
   static join (list) {
     var arr = list.filter(it => it.type === 'perspective')
     var arr2 = list.filter(it => it.type !== 'perspective')

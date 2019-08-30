@@ -1,7 +1,7 @@
 import { makeInterpolateColorStepList } from "./makeInterpolateColorStepList";
-import { makeInterpolateString } from "./makeInterpolateString";
-import { makeInterpolateLength } from "./makeInterpolateLength";
-import { RadialGradient } from "../../image-resource/RadialGradient";
+import { makeInterpolateString } from "../makeInterpolateString";
+import { makeInterpolateLength } from "../makeInterpolateLength";
+import { RadialGradient } from "../../../image-resource/RadialGradient";
 
 
 const DEFINED_POSITIONS = {

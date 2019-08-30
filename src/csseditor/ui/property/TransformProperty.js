@@ -43,6 +43,13 @@ export default class TransformProperty extends BaseProperty {
     return `<div class='property-item full transform-property' ref='$body'></div>`;
   }
 
+  hasKeyframe() {
+    return true; 
+  }
+
+  getKeyframeProperty () {
+    return 'transform'
+  }
 
   getTools() {
     return `

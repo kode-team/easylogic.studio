@@ -1,5 +1,5 @@
-import { makeInterpolateIdentity } from "./makeInterpolateIdentity";
-import { makeInterpolateLength } from "./makeInterpolateLength";
+import { makeInterpolateIdentity } from "../makeInterpolateIdentity";
+import { makeInterpolateLength } from "../makeInterpolateLength";
 
 export function makeInterpolateClipPathPolygon (layer, property, s, e) {
     var max = Math.max(s.length, e.length)

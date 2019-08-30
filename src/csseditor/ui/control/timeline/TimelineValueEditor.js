@@ -5,6 +5,7 @@ import CSSPropertyEditor from "../../property-editor/CSSPropertyEditor";
 import { Length } from "../../../../editor/unit/Length";
 import { second, framesToTimecode, timecode } from "../../../../util/functions/time";
 import { editor } from "../../../../editor/editor";
+import { isUndefined } from "../../../../util/functions/func";
 
 
 
@@ -31,7 +32,7 @@ export default class TimelineValueEditor extends UIElement {
   getProperties() {
     return [{
         key: this.state.property,
-        value: this.state.value || '10px'
+        value: isUndefined(this.state.value) ? '10px' : this.state.value 
     }].filter(it => it.key);
   }
 

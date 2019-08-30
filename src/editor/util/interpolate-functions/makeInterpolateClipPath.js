@@ -1,9 +1,9 @@
 import { ClipPath } from "../../css-property/ClipPath";
 import { makeInterpolateBoolean } from "./makeInterpolateBoolean";
-import { makeInterpolateClipPathCircle } from "./makeInterpolateClipPathCircle";
-import { makeInterpolateClipPathEllipse } from "./makeInterpolateClipPathEllipse";
-import { makeInterpolateClipPathInset } from "./makeInterpolateClipPathInset";
-import { makeInterpolateClipPathPolygon } from "./makeInterpolateClipPathPolygon";
+import { makeInterpolateClipPathCircle } from "./clip-path/makeInterpolateClipPathCircle";
+import { makeInterpolateClipPathEllipse } from "./clip-path/makeInterpolateClipPathEllipse";
+import { makeInterpolateClipPathPolygon } from "./clip-path/makeInterpolateClipPathPolygon";
+import { makeInterpolateClipPathInset } from "./clip-path/makeInterpolateClipPathInset";
 
 export function makeInterpolateClipPath(layer, property, startValue, endValue) {
 
@@ -29,7 +29,7 @@ export function makeInterpolateClipPath(layer, property, startValue, endValue) {
             endObject.value = ClipPath.parseStyleForEllipse(endObject.value);
 
             obj.value = makeInterpolateClipPathEllipse(layer, property, startObject.value, endObject.value);            
-            break; 
+            break;  
         case 'inset': // 구현 해야함 
             startObject.value = ClipPath.parseStyleForInset(startObject.value);
             endObject.value = ClipPath.parseStyleForInset(endObject.value);

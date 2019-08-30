@@ -7,7 +7,6 @@ export default class NumberRangeEditor extends UIElement {
 
     initState() {
         var value = Length.parse(this.props.value || Length.number(0));
-
         value = value.toUnit('number');
         return {
             removable: this.props.removable === 'true',

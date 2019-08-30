@@ -496,7 +496,7 @@ export class TimelineItem extends DomItem {
       var times = p.keyframes.filter(it => it.time === time); 
 
       if (!times.length) {
-        value = value || this.getDefaultPropertyValue(property);
+        value = (isUndefined(value) || value === '') ? this.getDefaultPropertyValue(property) : value;
 
         var obj = { id: uuidShort(), layerId, property, time, value, timing }
         p.keyframes.push(obj)
@@ -518,6 +518,8 @@ export class TimelineItem extends DomItem {
     case 'mix-blend-mode': return 'normal';
     case 'rotate': return '0deg';
     case 'box-shadow':  return '0px 0px 0px 0px rgba(0, 0, 0, 1)';
+    case 'opacity': return 1; 
+    case 'transform': return '';
     }
 
     return '0px'

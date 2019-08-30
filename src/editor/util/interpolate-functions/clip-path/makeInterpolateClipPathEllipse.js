@@ -1,4 +1,4 @@
-import { makeInterpolateLength } from "./makeInterpolateLength";
+import { makeInterpolateLength } from "../makeInterpolateLength";
 
 export function makeInterpolateClipPathEllipse (layer, property, s, e) {
 

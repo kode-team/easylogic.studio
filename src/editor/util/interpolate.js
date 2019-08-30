@@ -11,6 +11,7 @@ import { makeInterpolateBackgroundImage } from "./interpolate-functions/makeInte
 import { makeInterpolateFilter } from "./interpolate-functions/makeInterpolateFilter";
 import { makeInterpolateNumber } from "./interpolate-functions/makeInterpolateNumber";
 import { makeInterpolateClipPath } from "./interpolate-functions/makeInterpolateClipPath";
+import { makeInterpolateTransform } from "./interpolate-functions/makeInterpolateTransform";
 
 const DEFAULT_FUCTION = () => (rate, t) => { } 
 
@@ -57,8 +58,10 @@ function makeInterpolate (layer, property, startValue, endValue) {
     case 'height':
     case 'y':
         return makeInterpolateLength(layer, property, startValue, endValue, 'height');
+    case 'perspective':
+        return makeInterpolateLength(layer, property, startValue, endValue, property);
     case 'opacity':
-        return makeInterpolateNumber(layer, property, startValue.value, endValue.value);        
+        return makeInterpolateNumber(layer, property, +startValue, +endValue);
     }
 
     

@@ -58,10 +58,11 @@ export default class CSSEditor extends UIElement {
           <div class='layout-tools'>
             <button ref='$toggleRight'>${icon.dahaze}</button>
           </div>
+          <div class='layout-footer'>
+            <TimelineProperty />
+          </div>          
         </div>
-        <div class='layout-footer'>
-          <TimelineProperty />
-        </div>
+
         <FillPopup />
         <ColorPickerPopup  />
         <BoxShadowPropertyPopup />
@@ -114,7 +115,6 @@ export default class CSSEditor extends UIElement {
   }
 
   [EVENT('toggleFooter')] (isShow) {
-    console.log(isShow);
     this.$el.toggleClass('show-footer', isShow);
   }
 

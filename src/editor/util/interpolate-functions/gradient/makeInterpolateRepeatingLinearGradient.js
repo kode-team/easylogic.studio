@@ -1,5 +1,5 @@
 import { makeInterpolateLinearGradient } from "./makeInterpolateLinearGradient";
-import { RepeatingLinearGradient } from "../../image-resource/RepeatingLinearGradient";
+import { RepeatingLinearGradient } from "../../../image-resource/RepeatingLinearGradient";
 
 export function makeInterpolateRepeatingLinearGradient (layer, property, s, e) {
 

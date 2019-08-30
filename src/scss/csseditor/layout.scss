@@ -8,9 +8,20 @@
   flex-direction: column;
 
   &.show-footer {
-    .layout-footer { 
-      height: $timeline-size - 1px;
+
+    .layout-middle {
+      .layout-left {
+        bottom: $timeline-size - 1px;
+      }
+  
+      .layout-body {
+        bottom: $timeline-size - 1px;
+      }
+      .layout-footer { 
+        height: $timeline-size - 1px;
+      }
     }
+
   }
 
   .layout-header {
@@ -52,22 +63,26 @@
 
   }
 
-  .layout-footer {
-    flex: none;
-    height: $footer-height;
-    overflow: hidden;
-    border-top: 1px solid $border-color;
-    transition: $show-timeline-animation;
-    position: relative;
-    pointer-events: all;
-    z-index: 10000;
-  }
 
   .layout-middle {
     flex: 1 1 auto;
     display: flex;
     height: 100%;
     position: relative;
+
+
+    .layout-footer {
+      position: absolute;
+      left: 0px;
+      height: $footer-height;
+      bottom: 0px;
+      right: $right-size;
+      overflow: hidden;
+      border-top: 1px solid $border-color;
+      transition: $show-timeline-animation;
+      pointer-events: all;
+      z-index: 10000;
+    }    
 
     .layout-left {
       position: absolute;
@@ -79,6 +94,8 @@
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
+
+      transition: $show-timeline-animation;
       box-shadow: 0 10px 20px rgba(0,0,0,.19), 0 6px 6px rgba(0,0,0,.23);            
     }
 
@@ -93,6 +110,8 @@
       display: flex;
       flex-direction: column;
       overflow: auto;
+      border-left: 1px solid $border-color;       
+      transition: $show-timeline-animation;      
       box-shadow: 0 10px 20px rgba(0,0,0,.19), 0 6px 6px rgba(0,0,0,.23);      
       // transition: right 0.1s linear;
     }
@@ -103,7 +122,7 @@
       right: $right-size;
       bottom: 0px;
       position: absolute;
-      transition: right 0.1s linear;      
+      transition: $show-timeline-animation;
     }
   }
 }

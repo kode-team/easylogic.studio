@@ -1441,7 +1441,13 @@ html, body {
   display: flex;
   flex-direction: column;
 }
-.csseditor[data-theme=dark] .layout-main.show-footer .layout-footer {
+.csseditor[data-theme=dark] .layout-main.show-footer .layout-middle .layout-left {
+  bottom: 299px;
+}
+.csseditor[data-theme=dark] .layout-main.show-footer .layout-middle .layout-body {
+  bottom: 299px;
+}
+.csseditor[data-theme=dark] .layout-main.show-footer .layout-middle .layout-footer {
   height: 299px;
 }
 .csseditor[data-theme=dark] .layout-main .layout-header {
@@ -1478,21 +1484,23 @@ html, body {
   right: 0px;
   width: 450px;
 }
-.csseditor[data-theme=dark] .layout-main .layout-footer {
-  flex: none;
-  height: 40px;
-  overflow: hidden;
-  border-top: 1px solid #1b1b1b;
-  transition: all 0.15s linear;
-  position: relative;
-  pointer-events: all;
-  z-index: 10000;
-}
 .csseditor[data-theme=dark] .layout-main .layout-middle {
   flex: 1 1 auto;
   display: flex;
   height: 100%;
   position: relative;
+}
+.csseditor[data-theme=dark] .layout-main .layout-middle .layout-footer {
+  position: absolute;
+  left: 0px;
+  height: 40px;
+  bottom: 0px;
+  right: 260px;
+  overflow: hidden;
+  border-top: 1px solid #1b1b1b;
+  transition: all 0.15s linear;
+  pointer-events: all;
+  z-index: 10000;
 }
 .csseditor[data-theme=dark] .layout-main .layout-middle .layout-left {
   position: absolute;
@@ -1504,6 +1512,7 @@ html, body {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  transition: all 0.15s linear;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 }
 .csseditor[data-theme=dark] .layout-main .layout-middle .layout-right {
@@ -1517,6 +1526,8 @@ html, body {
   display: flex;
   flex-direction: column;
   overflow: auto;
+  border-left: 1px solid #1b1b1b;
+  transition: all 0.15s linear;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 }
 .csseditor[data-theme=dark] .layout-main .layout-middle .layout-body {
@@ -1525,7 +1536,7 @@ html, body {
   right: 260px;
   bottom: 0px;
   position: absolute;
-  transition: right 0.1s linear;
+  transition: all 0.15s linear;
 }
 .csseditor[data-theme=dark] .feature-control.inspector {
   position: relative;
@@ -8592,7 +8603,13 @@ html, body {
   display: flex;
   flex-direction: column;
 }
-.csseditor[data-theme=light] .layout-main.show-footer .layout-footer {
+.csseditor[data-theme=light] .layout-main.show-footer .layout-middle .layout-left {
+  bottom: 299px;
+}
+.csseditor[data-theme=light] .layout-main.show-footer .layout-middle .layout-body {
+  bottom: 299px;
+}
+.csseditor[data-theme=light] .layout-main.show-footer .layout-middle .layout-footer {
   height: 299px;
 }
 .csseditor[data-theme=light] .layout-main .layout-header {
@@ -8629,21 +8646,23 @@ html, body {
   right: 0px;
   width: 450px;
 }
-.csseditor[data-theme=light] .layout-main .layout-footer {
-  flex: none;
-  height: 40px;
-  overflow: hidden;
-  border-top: 1px solid #e7e7e7;
-  transition: all 0.15s linear;
-  position: relative;
-  pointer-events: all;
-  z-index: 10000;
-}
 .csseditor[data-theme=light] .layout-main .layout-middle {
   flex: 1 1 auto;
   display: flex;
   height: 100%;
   position: relative;
+}
+.csseditor[data-theme=light] .layout-main .layout-middle .layout-footer {
+  position: absolute;
+  left: 0px;
+  height: 40px;
+  bottom: 0px;
+  right: 280px;
+  overflow: hidden;
+  border-top: 1px solid #e7e7e7;
+  transition: all 0.15s linear;
+  pointer-events: all;
+  z-index: 10000;
 }
 .csseditor[data-theme=light] .layout-main .layout-middle .layout-left {
   position: absolute;
@@ -8655,6 +8674,7 @@ html, body {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  transition: all 0.15s linear;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 }
 .csseditor[data-theme=light] .layout-main .layout-middle .layout-right {
@@ -8668,6 +8688,8 @@ html, body {
   display: flex;
   flex-direction: column;
   overflow: auto;
+  border-left: 1px solid #e7e7e7;
+  transition: all 0.15s linear;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 }
 .csseditor[data-theme=light] .layout-main .layout-middle .layout-body {
@@ -8676,7 +8698,7 @@ html, body {
   right: 280px;
   bottom: 0px;
   position: absolute;
-  transition: right 0.1s linear;
+  transition: all 0.15s linear;
 }
 .csseditor[data-theme=light] .feature-control.inspector {
   position: relative;

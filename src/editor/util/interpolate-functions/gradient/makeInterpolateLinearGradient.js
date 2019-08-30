@@ -1,6 +1,6 @@
-import { LinearGradient } from "../../image-resource/LinearGradient";
+import { LinearGradient } from "../../../image-resource/LinearGradient";
 import { makeInterpolateColorStepList } from "./makeInterpolateColorStepList";
-import { makeInterpolateNumber } from "./makeInterpolateNumber";
+import { makeInterpolateNumber } from "../makeInterpolateNumber";
 
 export function makeInterpolateLinearGradient (layer, property, s, e) {
 

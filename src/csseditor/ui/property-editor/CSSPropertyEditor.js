@@ -117,6 +117,8 @@ export default class CSSPropertyEditor extends UIElement {
           return 'normal';
         case 'clip-path':
           return '';
+        case 'opacity':
+          return 1; 
         default: 
           return Length.px(0);
       }
@@ -324,8 +326,8 @@ export default class CSSPropertyEditor extends UIElement {
               min="0"
               max="1"
               step="0.01"
-              value="${property.value}"
-              selected-unit=' '
+              value="${property.value || 1}"
+              selected-unit='number'
               removable="true"
               onchange="changeRangeEditor" />
           </div>
@@ -466,6 +468,7 @@ export default class CSSPropertyEditor extends UIElement {
   // 개별 속성을 변경할 때  state 로 저장 하기 
 
   [EVENT("showCSSPropertyEditor")](properties = []) {
+
     this.setState({ properties });
     this.refresh();
   }
