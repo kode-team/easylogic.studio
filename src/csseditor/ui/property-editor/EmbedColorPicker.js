@@ -17,6 +17,12 @@ export default class EmbedColorPicker extends UIElement {
     });
   }
 
+  initState() {
+    return {
+      color: 'rgba(0, 0, 0, 1)'
+    }
+  }
+
   template() {
     return `<div ref="$color"></div>`;
   }
@@ -27,6 +33,10 @@ export default class EmbedColorPicker extends UIElement {
 
   setValue (color) {
     this.colorPicker.initColorWithoutChangeEvent(color);
+  }
+
+  refresh() {
+    this.colorPicker.initColorWithoutChangeEvent(this.state.color);
   }
 
 }

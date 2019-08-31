@@ -12,14 +12,14 @@ import { makeInterpolateFilter } from "./interpolate-functions/makeInterpolateFi
 import { makeInterpolateNumber } from "./interpolate-functions/makeInterpolateNumber";
 import { makeInterpolateClipPath } from "./interpolate-functions/makeInterpolateClipPath";
 import { makeInterpolateTransform } from "./interpolate-functions/makeInterpolateTransform";
+import { makeInterpolateTransformOrigin } from "./interpolate-functions/makeInterpolateTransformOrigin";
+import { makeInterpolatePerspectiveOrigin } from "./interpolate-functions/makeInterpolatePerspectiveOrigin";
 
 const DEFAULT_FUCTION = () => (rate, t) => { } 
 
 function makeInterpolateCustom (property) {
 
     switch(property) {
-    case 'rotate':
-        return makeInterpolateRotate
     case 'border-radius':
         return makeInterpolateBorderRadius
     case 'box-shadow':
@@ -39,13 +39,6 @@ function makeInterpolateCustom (property) {
         return makeInterpolateTransformOrigin        
     case 'perspective-origin':
         return makeInterpolatePerspectiveOrigin
-    case 'perspective':
-        return makeInterpolatePerspective
-    case 'background-color':
-    case 'color':
-        return makeInterpolateColor
-    case 'mix-blend-mode':
-        return makeInterpolateString
     }
 }
 
@@ -59,9 +52,17 @@ function makeInterpolate (layer, property, startValue, endValue) {
     case 'y':
         return makeInterpolateLength(layer, property, startValue, endValue, 'height');
     case 'perspective':
+    case 'font-size':
         return makeInterpolateLength(layer, property, startValue, endValue, property);
     case 'opacity':
         return makeInterpolateNumber(layer, property, +startValue, +endValue);
+    case 'background-color':
+    case 'color':
+        return makeInterpolateColor(layer, property, startValue, endValue);
+    case 'mix-blend-mode':
+        return makeInterpolateString(layer, property, startValue, endValue); 
+    case 'rotate':
+        return makeInterpolateRotate(layer, property, startValue, endValue);               
     }
 
     

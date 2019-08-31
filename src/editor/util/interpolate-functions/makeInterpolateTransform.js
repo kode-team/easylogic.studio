@@ -4,10 +4,11 @@ import { Transform } from "../../css-property/Transform";
 import { makeInterpolateIdentity } from "./makeInterpolateIdentity";
 import { makeInterpolateTransformLength } from "./transform/makeInterpolateTransformLength";
 import { makeInterpolateTransformNumber } from "./transform/makeInterpolateTransformNumber";
+import { makeInterpolateTransformRotate } from "./transform/makeInterpolateTransformRotate";
 
 export function makeInterpolateTransform(layer, property, startValue, endValue) {
-    var startObject = Transform.parseStyle(startValue);
-    var endObject = Transform.parseStyle(endValue);
+    var startObject = Transform.parseStyle(startValue.trim());
+    var endObject = Transform.parseStyle(endValue.trim());
 
     var max = Math.max(startObject.length, endObject.length);
 
@@ -39,6 +40,8 @@ export function makeInterpolateTransform(layer, property, startValue, endValue) 
             case 'rotateY': 
             case 'rotateZ': 
             case 'rotate3d': 
+                list.push(makeInterpolateTransformRotate(layer, property, s, e));
+                break;  
             case 'scale': 
             case 'scaleX': 
             case 'scaleY': 
@@ -53,9 +56,11 @@ export function makeInterpolateTransform(layer, property, startValue, endValue) 
     }
 
     return (rate, t) => {
-        return  Transform.join(list.map(it => {
+        var results = Transform.join(list.map(it => {
             return it(rate, t)
         }))
+
+        return results;
     }
 
 }

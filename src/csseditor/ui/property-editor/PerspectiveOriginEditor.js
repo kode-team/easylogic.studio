@@ -117,7 +117,7 @@ export default class PerspectiveOriginEditor extends UIElement {
     var value = '';
 
     if (this.state.isAll) {
-      value = this.state['perspective-origin']
+      value = `${this.state['perspective-origin']}`
     } else {
       value = `${this.state['perspective-origin-x']} ${this.state['perspective-origin-y']}`
     }

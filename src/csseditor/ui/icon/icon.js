@@ -71,9 +71,12 @@ import alternate_reverse from "./alternate_reverse";
 import speed from "./speed";
 import replay from "./replay";
 import shuffle from "./shuffle";
+import cat from "./cat";
+
 
 
 export default {
+  cat,
   shuffle,
   replay,
   speed,

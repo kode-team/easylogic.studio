@@ -48,7 +48,7 @@
       cursor: pointer;
       height: 20px;
       border: 1px solid $border-color;
-      border-radius: 100%;
+      // border-radius: 100%;
       position: relative;
       @include transparent-background();
       box-sizing: border-box;
@@ -58,7 +58,7 @@
         top: 0px;
         right: 0px;
         bottom: 0px;
-        border-radius: 100%;
+        // border-radius: 100%;
       }       
     }
 

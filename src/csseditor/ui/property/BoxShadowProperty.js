@@ -17,6 +17,14 @@ export default class BoxShadowProperty extends BaseProperty {
     `;
   }
 
+  hasKeyframe() {
+    return true; 
+  }
+
+  getKeyframeProperty () {
+    return 'box-shadow'
+  }
+
 
   [LOAD("$shadowList")]() {
     var current = editor.selection.current || {};

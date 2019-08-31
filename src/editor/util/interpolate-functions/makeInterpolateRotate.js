@@ -18,7 +18,6 @@ export function makeInterpolateRotate(layer, property, startNumber, endNumber) {
             return realEndValue;
         }
 
-
         return Length.deg(realStartValue.value + (realEndValue.value - realStartValue.value) * rate).to(s.unit);
     }
 }

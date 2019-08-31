@@ -121,7 +121,7 @@ export default class TransformOriginEditor extends UIElement {
     var value = '';
 
     if (this.state.isAll) {
-      value = this.state['transform-origin']
+      value = `${this.state['transform-origin']}`
     } else {
       value = `${this.state['transform-origin-x']} ${this.state['transform-origin-y']}`
 

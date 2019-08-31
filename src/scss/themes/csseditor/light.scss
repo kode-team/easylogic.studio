@@ -23,32 +23,33 @@ $footer-height: 40px;
 $inner-border-color: rgb(97, 97, 97);
 $border-color: rgb(231, 231, 231);
 $border-color-2: #a2a2a2;
-$selected-border-color: #609de2;
-$selected-color: #3e8ec6;
+$selected-border-color: #dfdfdf;
+$selected-color: #e2e7ff;
 $background-color: rgb(255, 255, 255); 
 $selected-background-color: white; 
-$font-color: rgb(31, 31, 31);
-$selected-font-color: white;
+$font-color: rgb(128, 128, 128);
+$selected-font-color: rgba(0, 0, 0, 1);
+$logo-selected-color: #4a89b6;
 
 // base 
 $button-front-color: $font-color;
 
-$select-background-color:  #e5f0ff; 
-$select-border-color: $selected-color;
-$select-border-radius: 2px;
-$select-font-color: $font-color;
+$select-background-color:  #ffffff; 
+$select-border-color: rgb(226, 226, 226);
+$select-border-radius: 0px;
+$select-font-color: rgba(0, 0, 0, 1);
 
 $range-thumb-width: 10px;
 $range-thumb-height: 10px;
 $range-track-height: 2px;
 $range-thumb-top: -4px;
-$range-thumb-color:  rgb(243, 243, 243);
+$range-thumb-color:  rgb(255, 255, 255);
 $range-track-color:  #5a8ebb;
 $range-thumb-border-color: $range-track-color;
 
 
-$input-background-color: #f7faff;
-$input-border-color: #dbdbdb;
+$input-background-color: #ffffff;
+$input-border-color: #b9b9b9;
 $input-border-radius: 2px;
 $input-font-color: $font-color;
 
@@ -56,7 +57,7 @@ $input-font-color: $font-color;
 $property-border-color: $inner-border-color;
 $property-background-color: $background-color; 
 $property-font-color: $font-color;
-$property-input-border-color: lighten($selected-color, 20%);
+$property-input-border-color: $selected-color;
 
 // list 
 $list-font-color: white;
@@ -69,6 +70,7 @@ $list-background-color: white;
 
 // tab 
 $tab-background-color: $background-color; 
+$tab-header-background-color: #f7fcff; 
 $tab-font-color: $font-color;
 $tab-selected-color: $selected-color; 
 $tab-selected-font-color: $selected-font-color;
@@ -97,3 +99,4 @@ $timeline-background-color: lighten($background-color, 5%);
 $timeline-border-color: $border-color;
 $timeline-gauge-background-color: rgb(53, 133, 189);
 $timeline-offset-line-color: #4987f7;
+$timeline-row-selected-color: #eff4ff;

@@ -65,6 +65,9 @@ export default class TimelineValueEditor extends UIElement {
                 <div class="tab-item" data-value="2">
                     <label>Timing</label>
                 </div>
+                <div class='tab-item empty-item'></div>
+                <div class='tab-item empty-item'></div>
+                <div class='tab-item empty-item'></div>                                
             </div>
             <div class="tab-body" ref="$body">
                 <div class="tab-content padding-zero" data-value="1">
@@ -81,7 +84,7 @@ export default class TimelineValueEditor extends UIElement {
   }
 
 
-  [CLICK("$header .tab-item")](e) {
+  [CLICK("$header .tab-item:not(.empty-item)")](e) {
     this.refs.$tab.attr(
       "data-selected-value",
       e.$delegateTarget.attr("data-value")
@@ -166,7 +169,6 @@ checkKey (e) {
   }
 
   [EVENT('changePropertyEditor')] (obj) {
-
     if (obj.length)  {
         var it = obj[0]
         this.updateData({

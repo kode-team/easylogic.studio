@@ -5,8 +5,9 @@ export default class LogoView extends UIElement {
   template() {
     return /*html*/`
       <div class='logo'>
-        <div class='text'>Easy</div>
-        <div class='extra-text'> &nbsp;&nbsp;&nbsp;Logic</div>
+        <div class='text'>Six</div>
+        <div class='extra-text'>Cats</div>
+        <div class='image'></div>
       </div>    
     `;
   }

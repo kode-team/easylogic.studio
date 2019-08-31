@@ -1,7 +1,7 @@
 .property {
   padding: 6px 0px;
   border-bottom: 1px solid rgba(lighten($property-border-color, 30%), 0.2);  
-  background-color: $property-background-color;
+  background-color: rgba(lighten($property-border-color, 30%), 0.2);
   color: $property-font-color; 
   display: none; 
 
@@ -229,6 +229,7 @@
   }
 
   &.show {
+    background-color: $property-background-color;
     > .property-body {
       display: block;
       padding: 0px 11px 0px 6px;

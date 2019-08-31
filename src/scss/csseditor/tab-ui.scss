@@ -16,9 +16,9 @@ $tab-horizontal-header-right-width: 60px;
     .tab-header {
       height: 34px;
       cursor: pointer;
-      border-bottom: 1px solid $tab-border-color;
-      background-color: $background-color;
-      // overflow: auto;
+      // border-bottom: 1px solid $tab-border-color;
+      background-color: $tab-header-background-color;
+      overflow: hidden;
     }
     .tab-content {
       display: none;
@@ -41,7 +41,7 @@ $tab-horizontal-header-right-width: 60px;
         // border-bottom: 1px solid $border-color;
         // border-right: 1px solid $border-color;
         box-sizing: border-box;
-        
+        border-bottom: 1px solid $tab-selected-border-color;
 
         .icon {
           display: none;
@@ -85,11 +85,15 @@ $tab-horizontal-header-right-width: 60px;
 
     @for $selectValue from 1 to 10 {
       &[data-selected-value="#{$selectValue}"] .tab-item[data-value="#{$selectValue}"] {
-        // border-top: 2px solid $tab-selected-border-color;
-        background-color: $tab-selected-color;
+        border-right: 1px solid $tab-selected-border-color;
+
+        &:not(:first-child) {
+          border-left: 1px solid $tab-selected-border-color;
+        }
+
+        border-bottom: 1px solid transparent;        
+        background-color: $tab-background-color;
         color: $tab-selected-font-color;
-
-
       }
 
       &[data-selected-value="#{$selectValue}"]

@@ -173,8 +173,6 @@ export default class TimelineKeyframeList extends UIElement {
         
         var rowIndex = this.getRowIndex(Dom.create(editor.config.get('bodyEvent').target).attr('data-row-index'))
 
-        console.log(rowIndex, this.startRowIndex)
-
         var startIndex = Math.min(rowIndex, this.startRowIndex);
         var endIndex = Math.max(rowIndex, this.startRowIndex);
 

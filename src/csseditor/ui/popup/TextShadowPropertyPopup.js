@@ -28,7 +28,7 @@ export default class TextShadowPropertyPopup extends BasePopup {
 
   updateData(opt) {
     this.setState(opt, false); // 자동 로드를 하지 않음, state 만 업데이트
-    this.emit(this.changeEvent, opt);
+    this.emit(this.changeEvent, opt, this.params);
   }
 
   getBody() {
@@ -36,7 +36,7 @@ export default class TextShadowPropertyPopup extends BasePopup {
   }
 
   [LOAD("$popup")]() {
-    return `
+    return /*html*/`
       <div class='box'>
         <EmbedColorPicker ref='$colorpicker' value='${this.state.color}' onchange='changeColor' />
       </div>
@@ -132,11 +132,13 @@ export default class TextShadowPropertyPopup extends BasePopup {
     this.refreshPointer();
   }
 
-  [EVENT("showTextShadowPropertyPopup")](data) {
+  [EVENT("showTextShadowPropertyPopup")](data, params) {
 
     this.changeEvent = data.changeEvent || "changeTextShadowPropertyPopup"
+    this.params = params;
 
-    this.setState(data);
+    console.log(data);
+    this.setState(data, false);
     this.refresh();
 
     this.show(432);

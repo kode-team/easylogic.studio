@@ -17,6 +17,13 @@ export default class TextShadowProperty extends BaseProperty {
     `;
   }
 
+  hasKeyframe() {
+    return true
+  }
+
+  getKeyframeProperty () {
+    return 'text-shadow'
+  }
 
   getTools() {
     return `<button type="button" ref='$add'>${icon.add}</button>`

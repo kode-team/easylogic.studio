@@ -23,7 +23,7 @@ export default class Inspector extends UIElement {
               <div class="tab-item" data-value="4">
                 <label>Code</label>
               </div>                                     
-     
+              <div class='tab-item empty-item'></div>
             </div>
             <div class="tab-body" ref="$body">
               <div class="tab-content" data-value="1">
@@ -114,14 +114,14 @@ export default class Inspector extends UIElement {
     return property;
   }
 
-  [CLICK("$header .tab-item")](e) {
+  [CLICK("$header .tab-item:not(.empty-item)")](e) {
     this.refs.$tab.attr(
       "data-selected-value",
       e.$delegateTarget.attr("data-value")
     );
   }
 
-  [CLICK("$extraHeader .tab-item")](e) {
+  [CLICK("$extraHeader .tab-item(.empty-item)")](e) {
     this.refs.$extraTab.attr(
       "data-selected-value",
       e.$delegateTarget.attr("data-value")

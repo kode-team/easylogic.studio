@@ -16,6 +16,7 @@ import SelectEditor from "./SelectEditor";
 import NumberRangeEditor from "./NumberRangeEditor";
 import BorderRadiusEditor from "./BorderRadiusEditor";
 import ClipPathEditor from "./ClipPathEditor";
+import TextShadowEditor from "./TextShadowEditor";
 
 
 
@@ -46,6 +47,7 @@ export default class CSSPropertyEditor extends UIElement {
     return {
       NumberRangeEditor,
       SelectEditor,
+      TextShadowEditor,      
       BoxShadowEditor,
       FilterEditor,
       ColorViewEditor,
@@ -80,7 +82,7 @@ export default class CSSPropertyEditor extends UIElement {
 
 
   template() {
-    return `
+    return /*html*/`
       <div class='css-property-editor ${OBJECT_TO_CLASS({
         'hide-title': this.state.hideTitle
       })}'>
@@ -102,6 +104,7 @@ export default class CSSPropertyEditor extends UIElement {
         case 'animation-timing-function':
         case 'box-shadow':
         case 'text-shadow':
+        case 'color':
         case 'background-image':
         case 'background-color':
         case 'filter':      
@@ -146,19 +149,21 @@ export default class CSSPropertyEditor extends UIElement {
 
   }
 
+
+  makeIndivisualPropertyColorEditor (property, index) {
+
+    var key = property.key.split('-').join('');
+
+    return /*html*/`
+      <div class='property-editor'>
+        <ColorViewEditor ref='$${key}${index}' color="${property.value}" params="${property.key}" onChange="changeColorProperty" />
+      </div>
+    `
+  }
+
   makeIndivisualPropertyEditor (property, index) {
 
-    if (property.key === 'background-color') {
-      // colorview 를 열면 다른 팝업도 같이 닫혀 버린다. 
-      // 여기서는 다른 열린 팝업이 변경되지 않아야 하긴 한데... 
-      // 속성이 한두개도 아니고 이거 어떻게 처리하지? 
-      // 컬러만 그런게 아니라 팝업 뜨는 애들 다그렇다. 
-      return `
-        <div class='property-editor'>
-          <ColorViewEditor ref='$backgroundColor${index}' color="${property.value}" onChange="changeBackgroundColorProperty" />
-        </div>
-      `
-    } else if (property.key === 'background-image') {
+    if (property.key === 'background-image') {
       return `
         <div class='property-editor'>
           <BackgroundImageEditor ref='$backgroundImage${index}' hide-title="${this.state.hideTitle}" value="${property.value}" onChange="changeBackgroundImageProperty" />
@@ -182,6 +187,12 @@ export default class CSSPropertyEditor extends UIElement {
           <BoxShadowEditor ref='$boxshadow${index}' value="${property.value}" hide-label="false" onChange="changeBoxShadowProperty" />
         </div>
       `      
+    } else if (property.key === 'text-shadow') {
+      return `
+        <div class='property-editor'>
+          <TextShadowEditor ref='$textshadow${index}' value="${property.value}" hide-label="false" onChange="changeTextShadowProperty" />
+        </div>
+      `            
     } else if (property.key === 'var') {
       return `
         <div class='property-editor'>
@@ -255,8 +266,8 @@ export default class CSSPropertyEditor extends UIElement {
     this.modifyPropertyValue('clip-path', value);
   }  
 
-  [EVENT('changeBackgroundColorProperty')] (color) {
-    this.modifyPropertyValue('background-color', color);
+  [EVENT('changeColorProperty')] (color, key) {
+    this.modifyPropertyValue(key, color);
   }  
 
   [EVENT('changeBackgroundImageProperty')] (backgroundImage) {
@@ -274,6 +285,9 @@ export default class CSSPropertyEditor extends UIElement {
   [EVENT('changeBoxShadowProperty')] (boxshadow) {
     this.modifyPropertyValue('box-shadow', boxshadow);
   }   
+  [EVENT('changeTextShadowProperty')] (textShadow) {
+    this.modifyPropertyValue('text-shadow', textShadow);
+  }     
   
   [EVENT('changeVar')] (value) {
     this.modifyPropertyValue('var', value);
@@ -305,8 +319,9 @@ export default class CSSPropertyEditor extends UIElement {
       case 'animation-timing-function':
       case 'box-shadow':
       case 'text-shadow':
+      // case 'color':
       case 'background-image':
-      case 'background-color':
+      // case 'background-color':
       case 'filter':
       case 'backdrop-filter':
       case 'var':
@@ -317,8 +332,11 @@ export default class CSSPropertyEditor extends UIElement {
       case 'border-radius':   
       case 'clip-path':   
         return this.makeIndivisualPropertyEditor(property, index);
+      case 'color':
+      case 'background-color':
+        return this.makeIndivisualPropertyColorEditor(property, index);
       case 'opacity':
-        return `
+        return /*html*/`
           <div class='property-editor'>
             <NumberRangeEditor 
               ref='$opacity${index}' 

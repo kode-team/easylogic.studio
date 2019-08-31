@@ -31,8 +31,13 @@ export default class FontProperty extends BaseProperty {
   }
 
   getBody() {
-    return `
-      <div class='property-item'>
+    return /*html*/`
+      <div class='property-item animation-property-item'>
+        <span class='add-timeline-property' data-property='color'></span>
+        <ColorViewEditor ref='$color' label='Color' onchange="changeColor" />
+      </div>      
+      <div class='property-item animation-property-item'>
+        <span class='add-timeline-property' data-property='font-size'></span>
         <RangeEditor 
           ref='$size' 
           label='Size' 
@@ -77,9 +82,7 @@ export default class FontProperty extends BaseProperty {
           onchange="changeRangeEditor" 
         />
       </div> 
-      <div class='property-item'>
-        <ColorViewEditor ref='$color' label='Color' onchange="changeColor" />
-      </div>           
+         
     `;
   }
 

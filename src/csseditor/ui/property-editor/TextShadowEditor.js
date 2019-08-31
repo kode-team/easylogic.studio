@@ -19,10 +19,10 @@ export default class TextShadowEditor extends UIElement {
 
     var labelClass = this.state.hideLabel ? 'hide' : ''; 
 
-    return `
+    return /*html*/`
       <div class="text-shadow-editor" >
         <div class='label ${labelClass}' >
-            <label>${this.props.title}</label>        
+            <label>${this.props.title||''}</label>        
             <div class='tools'>
               <button type="button" ref="$add" title="add Text Shadow">${icon.add}</button>
             </div>
@@ -35,7 +35,7 @@ export default class TextShadowEditor extends UIElement {
   [LOAD("$shadowList")]() {
   
     var arr = this.state.textShadows.map((shadow, index) => {
-      return `
+      return /*html*/`
         <div class="shadow-item real" data-index="${index}">
           <div class="color">
             <div class='color-view' style="background-color: ${shadow.color}">
@@ -120,28 +120,33 @@ export default class TextShadowEditor extends UIElement {
   }
 
   viewTextShadowPropertyPopup(shadow) {
+    console.log(shadow);
     this.emit("showTextShadowPropertyPopup", {
       changeEvent: 'changeTextShadowEditorPopup',
       color: shadow.color,
       offsetX: shadow.offsetX,
       offsetY: shadow.offsetY,
       blurRadius: shadow.blurRadius
+    }, {
+      id: this.id
     });
     // this.emit('hidePropertyPopup')
   }
 
-  [EVENT("changeTextShadowEditorColor")](color) {
-    this.trigger('changeTextShadowEditorPopup', { color })
-  }
+  // [EVENT("changeTextShadowEditorColor")](color) {
+  //   this.trigger('changeTextShadowEditorPopup', { color }, {id: this.id})
+  // }
 
-  [EVENT("changeTextShadowEditorPopup")](data) {
+  [EVENT("changeTextShadowEditorPopup")](data, params) {
+    if (params.id === this.id) {
+      var shadow = this.state.textShadows[this.state.selectedIndex]
 
-    var shadow = this.state.textShadows[this.state.selectedIndex]
+      shadow.reset(data)
+  
+      this.refresh();
+  
+      this.modifyTextShadow();
+    }
 
-    shadow.reset(data)
-
-    this.refresh();
-
-    this.modifyTextShadow();
   }
 }
