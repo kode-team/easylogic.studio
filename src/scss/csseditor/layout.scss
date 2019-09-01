@@ -211,7 +211,7 @@
   }
 
   .draw-items {
-    background-color: lighten($selected-background-color, 20%);
+    background-color: $background-color;
 
     .split {
       border: 0px;
@@ -244,7 +244,7 @@
 
       &.selected {
         .icon {      
-          background-color: $selected-font-color;
+          background-color: $selected-background-color;
           svg {
             path {
               fill: $selected-color;

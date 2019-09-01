@@ -515,11 +515,23 @@ export class TimelineItem extends DomItem {
   getDefaultPropertyValue(property) {
 
     switch(property) {
-    case 'mix-blend-mode': return 'normal';
-    case 'rotate': return '0deg';
-    case 'box-shadow':  return '0px 0px 0px 0px rgba(0, 0, 0, 1)';
-    case 'opacity': return 1; 
-    case 'transform': return '';
+    case 'mix-blend-mode': 
+      return 'normal';
+    case 'rotate': 
+      return '0deg';
+    case 'box-shadow':  
+      return '0px 0px 0px 0px rgba(0, 0, 0, 1)';
+    case 'text-shadow':  
+      return '0px 0px 0px rgba(0, 0, 0, 1)';
+    case 'opacity': 
+      return 1; 
+    case 'background-color':
+    case 'color':
+    case 'text-fill-color':
+    case 'text-stroke-color':
+    case 'transform': 
+      return '';
+
     }
 
     return '0px'

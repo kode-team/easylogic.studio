@@ -25,14 +25,14 @@ export default class FontSpacingProperty extends BaseProperty {
 
     if (current) {
       this.children.$lineHeight.setValue(current['line-height'] || Length.number(1))
-      this.children.$letter.setValue(current['letter-spacing'])      
-      this.children.$word.setValue(current['word-spacing'])
-      this.children.$indent.setValue(current['text-indent'])
+      this.children.$letter.setValue(current['letter-spacing'] || '0px')      
+      this.children.$word.setValue(current['word-spacing'] || '0px')
+      this.children.$indent.setValue(current['text-indent'] || '0px')
     }
   }
 
   getBody() {
-    return `
+    return /*html*/`
 
     <div class='property-item'>
       <RangeEditor 
@@ -40,7 +40,7 @@ export default class FontSpacingProperty extends BaseProperty {
         label='line-height' 
         removable="true" 
         key="line-height" 
-        units="number,px,%,em"
+        units=",px,%,em"
         onchange="changeRangeEditor" />
     </div>       
       <div class="property-item font-item">
@@ -58,6 +58,10 @@ export default class FontSpacingProperty extends BaseProperty {
   }
 
   [EVENT('changeRangeEditor')] (key, value) {
+
+    if (value.unit === '') {
+      value = Length.number(value.value)
+    }
 
     editor.selection.reset({ 
       [key]: value

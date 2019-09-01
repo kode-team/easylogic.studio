@@ -30,7 +30,7 @@ export default class TextProperty extends BaseProperty {
   }
 
   getBody() {
-    return `
+    return /*html*/`
       <div class="property-item">
         <SelectIconEditor 
           ref='$align' 
@@ -47,7 +47,7 @@ export default class TextProperty extends BaseProperty {
           label='Transform' 
           key='text-transform' 
           options="uppercase,lowercase,capitalize"
-          icons='uu,ll,cc'
+          icons='A,a,Aa'
           onchange='changeTextValue' />                
       </div>        
       <div class="property-item">

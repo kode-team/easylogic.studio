@@ -69,6 +69,7 @@ export class DomItem extends GroupItem {
       'clip-path': '',
       'color': "",
       'font-size': Length.px(13),
+      'font-stretch': '',
       'line-height': '',
       'text-align': '',
       'text-transform': '',
@@ -127,6 +128,7 @@ export class DomItem extends GroupItem {
       'clip-path': json['clip-path'],
       'color': json.color,
       'font-size': json['font-size'] + "",
+      'font-stretch': json['font-stretch'] + "",
       'line-height': json['line-height'] + "",
       'text-align': json['text-align'] + "",
       'text-transform': json['text-transform'] + "",
@@ -513,7 +515,7 @@ export class DomItem extends GroupItem {
 
         'transform-origin', 'transform-style', 'perspective', 'perspective-origin',
 
-        'font-size', 'line-height', 'font-weight', 'font-family', 'font-style',
+        'font-size', 'font-stretch', 'line-height', 'font-weight', 'font-family', 'font-style',
         'text-align', 'text-transform', 'text-decoration',
         'letter-spacing', 'word-spacing', 'text-indent',
 

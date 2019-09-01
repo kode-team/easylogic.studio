@@ -46,6 +46,7 @@ export class DomParserGenerator extends ParserGenerator {
       "padding",
       "line-height",
       "font-size",
+      'font-stretch',
       "letter-spacing",
       "word-spacing",
       'text-indent'

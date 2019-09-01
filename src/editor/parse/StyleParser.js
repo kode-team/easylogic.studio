@@ -299,6 +299,10 @@ export class StyleParser {
       font.size = Length.parse(style["font-size"]);
     }
 
+    if (style["font-stretch"]) {
+      font.stretch = Length.parse(style["font-stretch"]);
+    }    
+
     if (style["font-weight"]) {
       font.weight = Length.parse(style["font-weight"]);
     }

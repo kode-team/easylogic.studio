@@ -36,6 +36,11 @@ export default class ColorViewEditor extends UIElement {
         this.refs.$colorCode.val(color);
     }
 
+    refresh () {
+        this.refs.$miniView.cssText(`background-color: ${this.state.color}`);
+        this.refs.$colorCode.val(this.state.color);
+    }
+
     template() {
         var { label, removable } = this.state;
         var hasLabel = !!label ? 'has-label' : ''
@@ -51,7 +56,7 @@ export default class ColorViewEditor extends UIElement {
                 <div class='color-code'>
                     <input type="text" ref='$colorCode' value='${this.state.color}' />
                 </div>
-                <button type='button' class='remove' ref='$remove' title='Remove'>${icon.close}</button>                
+                <button type='button' class='remove' ref='$remove' title='Remove'>${icon.remove}</button>                
             </div>
         `
     }

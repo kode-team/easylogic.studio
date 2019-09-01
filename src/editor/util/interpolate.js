@@ -53,11 +53,16 @@ function makeInterpolate (layer, property, startValue, endValue) {
         return makeInterpolateLength(layer, property, startValue, endValue, 'height');
     case 'perspective':
     case 'font-size':
+    case 'font-stretch':
+    case 'font-weight':
+    case 'text-stroke-width':
         return makeInterpolateLength(layer, property, startValue, endValue, property);
     case 'opacity':
         return makeInterpolateNumber(layer, property, +startValue, +endValue);
     case 'background-color':
     case 'color':
+    case 'text-fill-color':
+    case 'text-stroke-color':
         return makeInterpolateColor(layer, property, startValue, endValue);
     case 'mix-blend-mode':
         return makeInterpolateString(layer, property, startValue, endValue); 

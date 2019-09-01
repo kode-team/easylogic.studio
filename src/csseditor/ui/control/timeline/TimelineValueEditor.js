@@ -133,7 +133,7 @@ checkKey (e) {
 
 
   templateForOffset() {
-    return `
+    return /*html*/`
       <div class='offset-input'>
         <label>Time</label>
         <input type="text" ref='$offsetTime' />

@@ -30,15 +30,18 @@ export default class TextFillProperty extends BaseProperty {
   }
 
   getBody() {
-    return `
-      <div class='property-item'>
+    return /*html*/`
+      <div class='property-item animation-property-item'>
+        <span class='add-timeline-property' data-property='text-fill-color'></span>
         <ColorViewEditor ref='$fillColor' label='Text Fill' removable="true" params='text-fill-color' onchange="changeColor" />
       </div>           
-      <div class='property-item'>
+      <div class='property-item animation-property-item'>
+        <span class='add-timeline-property' data-property='text-stroke-color'></span>
         <ColorViewEditor ref='$strokeColor' label='Text Stroke' removable="true" params='text-stroke-color' onchange="changeColor" />
       </div>                 
 
-      <div class='property-item'>
+      <div class='property-item animation-property-item'>
+        <span class='add-timeline-property' data-property='text-stroke-width'></span>
         <RangeEditor 
           ref='$width' 
           label='Stroke' 

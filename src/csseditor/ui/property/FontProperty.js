@@ -25,6 +25,7 @@ export default class FontProperty extends BaseProperty {
     if (current) {
       this.children.$color.setValue(current['color'] || 'rgba(0, 0, 0, 1)')
       this.children.$size.setValue(current['font-size'])      
+      this.children.$stretch.setValue(current['font-stretch'] || '0%')      
       this.children.$style.setValue(current['font-style'])
       this.children.$family.setValue(current['font-family'])
     }    
@@ -45,9 +46,19 @@ export default class FontProperty extends BaseProperty {
           removable="true" 
           onchange="changeRangeEditor" />
       </div>
+      <div class='property-item animation-property-item'>
+        <span class='add-timeline-property' data-property='font-stretch'></span>
+        <RangeEditor 
+          ref='$stretch' 
+          label='Stretch' 
+          key="font-stretch" 
+          removable="true" 
+          units='%',
+          onchange="changeRangeEditor" />
+      </div>      
  
-      <div class='property-item'>
-
+      <div class='property-item animation-property-item'>
+        <span class='add-timeline-property' data-property='font-weight'></span>
         <NumberRangeEditor 
           ref='$weightRange' 
           label='Weight' 
@@ -56,7 +67,7 @@ export default class FontProperty extends BaseProperty {
           value="400" 
           min="100"
           max="900"
-          step="100"
+          step="1"
           calc="false"
           unit="number" 
           onchange="changeRangeEditor" 

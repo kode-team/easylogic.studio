@@ -30,7 +30,7 @@ export default class ObjectList extends UIElement {
     }
   }
   template() {
-    return `
+    return /*html*/`
       <div class="feature-control object-list">
         <LayerTab />
         <div class='draw-items' ref='$items'>

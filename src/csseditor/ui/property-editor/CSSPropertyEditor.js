@@ -107,6 +107,8 @@ export default class CSSPropertyEditor extends UIElement {
         case 'color':
         case 'background-image':
         case 'background-color':
+        case 'text-fill-color':
+        case 'text-stroke-color':
         case 'filter':      
         case 'backdrop-filter':      
         case 'var':
@@ -153,7 +155,6 @@ export default class CSSPropertyEditor extends UIElement {
   makeIndivisualPropertyColorEditor (property, index) {
 
     var key = property.key.split('-').join('');
-
     return /*html*/`
       <div class='property-editor'>
         <ColorViewEditor ref='$${key}${index}' color="${property.value}" params="${property.key}" onChange="changeColorProperty" />
@@ -334,6 +335,8 @@ export default class CSSPropertyEditor extends UIElement {
         return this.makeIndivisualPropertyEditor(property, index);
       case 'color':
       case 'background-color':
+      case 'text-fill-color':
+      case 'text-stroke-color':
         return this.makeIndivisualPropertyColorEditor(property, index);
       case 'opacity':
         return /*html*/`
@@ -375,12 +378,14 @@ export default class CSSPropertyEditor extends UIElement {
 
       case 'border-radius': 
       case 'font-size': 
+      case 'font-stretch': 
       case 'width': 
       case 'height':   
       case 'perspective':  
       case 'offset-distance':
+      case 'text-stroke-width':
       default: 
-        return `
+        return /*html*/`
           <div class='property-editor'>
             <RangeEditor ref='rangeEditor${index}' key='${property.key}' value='${property.value}' onChange="changeRangeEditor" />
           </div>
@@ -457,6 +462,8 @@ export default class CSSPropertyEditor extends UIElement {
         </optgroup>
         <optgroup label='Font'>
           <option value='font-size'>font-size</option>
+          <option value='font-weight'>font-weight</option>          
+          <option value='font-stretch'>font-stretch</option>
         </optgroup>
         <optgroup label='Animation'>
           <option value='animation-timing-function'>timing-function</option>
@@ -486,7 +493,6 @@ export default class CSSPropertyEditor extends UIElement {
   // 개별 속성을 변경할 때  state 로 저장 하기 
 
   [EVENT("showCSSPropertyEditor")](properties = []) {
-
     this.setState({ properties });
     this.refresh();
   }

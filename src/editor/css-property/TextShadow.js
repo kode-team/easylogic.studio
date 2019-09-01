@@ -20,7 +20,7 @@ export class TextShadow extends Property {
         });
 
       var numbers = values.filter(it => {
-        return it !== "inset" && !it.includes("@");
+        return !it.includes("@");
       });
 
       return TextShadow.parse({
