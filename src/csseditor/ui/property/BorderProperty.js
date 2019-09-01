@@ -39,7 +39,7 @@ export default class BorderProperty extends BaseProperty {
   }
 
   getTemplateForBorderProperty() {
-    return `
+    return /*html*/`
       <div class="property-item border-item">
         <div
           class="border-direction"

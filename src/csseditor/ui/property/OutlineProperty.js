@@ -41,7 +41,7 @@ export default class OutlineProperty extends BaseProperty {
   }  
 
   getBody() {
-    return `
+    return /*html*/`
       <div class="property-item">
         <RangeEditor ref='$width' label='Width' min="0" max="0" value="0px" key='width' onchange='changeOutlineValue' />
       </div>
@@ -49,7 +49,7 @@ export default class OutlineProperty extends BaseProperty {
         <SelectEditor ref='$style' label='Style' key='style' value="none" options="${outlineStyleLit}" onchange='changeOutlineValue' />        
       </div>        
       <div class="property-item">        
-        <ColorViewEditor ref='$color' onChange="changeOutlineColor" />
+        <ColorViewEditor ref='$color' key='color', onChange="changeOutlineColor" />
       </div> 
     `;
   }
@@ -60,9 +60,9 @@ export default class OutlineProperty extends BaseProperty {
     this.refreshOutlineInfo()
   }
 
-  [EVENT('changeOutlineColor')] (color) {
+  [EVENT('changeOutlineColor')] (key, color) {
     this.updateData({
-      color
+      [key]: color
     })
   }
 

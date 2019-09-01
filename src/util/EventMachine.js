@@ -384,6 +384,11 @@ export default class EventMachine {
     this.children = {};
     this._bindings = [];
     this.id = uuid();    
+
+    this.initComponents();
+  }
+
+  initComponents() {
     this.childComponents = this.components();
     this.childComponentKeys = Object.keys(this.childComponents)
     this.childComponentSet = new Map();

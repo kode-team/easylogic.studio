@@ -175,7 +175,8 @@ export default class SVGFilterEditor extends UIElement {
           <ColorViewEditor 
             ref='$colorview${objectId}' 
             label="${s.title}" 
-            params="${index},${key}" 
+            key="${key}"
+            params="${index}" 
             value="${filter[key].toString()}" 
             onchange="changeSVGFilterColorViewEditor" 
           />
@@ -316,10 +317,8 @@ export default class SVGFilterEditor extends UIElement {
 
   }
 
-  [EVENT('changeSVGFilterColorViewEditor')] (color, params) {
-    const [index, key] = params.split(',');
-
-    this.trigger('changeRangeEditor', key, color, index)
+  [EVENT('changeSVGFilterColorViewEditor')] (key, color, params) {
+    this.trigger('changeRangeEditor', key, color, params)
   }
 
 

@@ -55,7 +55,7 @@ export default class SVGItemProperty extends BaseProperty {
       </div>
 
       <div class='property-item'>
-        <ColorViewEditor ref='$fill' label='Color' params='fill' onchange="changeColor" />
+        <ColorViewEditor ref='$fill' label='Color' key='fill' onchange="changeColor" />
       </div>
 
 
@@ -91,7 +91,7 @@ export default class SVGItemProperty extends BaseProperty {
       </div>      
 
       <div class='property-item'>
-        <ColorViewEditor ref='$stroke' label='Color' params='stroke' onchange="changeColor" />
+        <ColorViewEditor ref='$stroke' label='Color' key='stroke' onchange="changeColor" />
       </div>      
 
       <div class='property-item'>
@@ -178,8 +178,8 @@ export default class SVGItemProperty extends BaseProperty {
   }
 
 
-  [EVENT('changeColor')] (color, params) {
-    this.trigger('changeRangeEditor', params, color);
+  [EVENT('changeColor')] (key, color, params) {
+    this.trigger('changeRangeEditor', key, color);
   }
 
   [EVENT('changeRangeEditor')] (key, value, params) {

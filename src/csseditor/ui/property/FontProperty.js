@@ -35,7 +35,7 @@ export default class FontProperty extends BaseProperty {
     return /*html*/`
       <div class='property-item animation-property-item'>
         <span class='add-timeline-property' data-property='color'></span>
-        <ColorViewEditor ref='$color' label='Color' onchange="changeColor" />
+        <ColorViewEditor ref='$color' label='Color' key='color' onchange="changeColor" />
       </div>      
       <div class='property-item animation-property-item'>
         <span class='add-timeline-property' data-property='font-size'></span>
@@ -98,8 +98,8 @@ export default class FontProperty extends BaseProperty {
   }
 
 
-  [EVENT('changeColor')] (color) {
-    this.trigger('changeRangeEditor', 'color', color);
+  [EVENT('changeColor')] (key, color) {
+    this.trigger('changeRangeEditor', key, color);
   }
 
   [EVENT('changeRangeEditor')] (key, value) {

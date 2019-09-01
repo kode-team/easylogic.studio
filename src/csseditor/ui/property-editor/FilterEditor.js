@@ -136,10 +136,10 @@ export default class FilterEditor extends UIElement {
 
         <div class="filter-ui drop-shadow-color">
           <label>${spec.color.title}</label>
-          <ColorViewEditor ref='$dropShadowColorView${index}' params="${index}" color="${filter.color}" onChange="changeDropShadowColor" />
+          <ColorViewEditor ref='$dropShadowColorView${index}' params="${index}" value="${filter.color}" onChange="changeDropShadowColor" />
         </div>
 
-        ${["offsetX", "offsetY", "blurRadius", 'spreadRadius'].map(key => {
+        ${["offsetX", "offsetY", "blurRadius"].map(key => {
           return /*html*/`        
             <div class="filter-ui drop-shadow">
                 <label>${spec[key].title}</label>
@@ -388,7 +388,7 @@ export default class FilterEditor extends UIElement {
     this.modifyFilter()
   }
 
-  [EVENT("changeDropShadowColor")](color, params) {
+  [EVENT("changeDropShadowColor")](key, color, params) {
     var index = +params;
 
     this.state.filters[index].reset({

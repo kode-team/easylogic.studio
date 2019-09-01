@@ -6,7 +6,6 @@ import BoxShadowProperty from "./BoxShadowProperty";
 import BoxModelProperty from "./BoxModelProperty";
 import ContentProperty from "./ContentProperty"; 
 import FontProperty from "./FontProperty";
-import FontColorProperty from "./FontColorProperty";
 import TextShadowProperty from "./TextShadowProperty";
 import TextProperty from "./TextProperty";
 import FontSpacingProperty from "./FontSpacingProperty";
@@ -46,8 +45,10 @@ import SVGPathAssetsProperty from "./SVGPathAssetsProperty";
 import AlignmentProperty from "./AlignmentProperty";
 import MotionProperty from "./MotionProperty";
 import ImageAssetsProperty from "./ImageAssetsProperty";
+import ComponentProperty from "./ComponentProperty";
 
 export default {
+  ComponentProperty,
   ImageAssetsProperty,
   MotionProperty,
   AlignmentProperty,
@@ -88,7 +89,6 @@ export default {
   FontSpacingProperty,
   TextProperty,
   TextShadowProperty,
-  FontColorProperty,
   FontProperty,
   ContentProperty,
   BoxModelProperty,

@@ -157,7 +157,7 @@ export default class CSSPropertyEditor extends UIElement {
     var key = property.key.split('-').join('');
     return /*html*/`
       <div class='property-editor'>
-        <ColorViewEditor ref='$${key}${index}' color="${property.value}" params="${property.key}" onChange="changeColorProperty" />
+        <ColorViewEditor ref='$${key}${index}' value="${property.value}" key="${property.key}" onChange="changeColorProperty" />
       </div>
     `
   }
@@ -267,7 +267,7 @@ export default class CSSPropertyEditor extends UIElement {
     this.modifyPropertyValue('clip-path', value);
   }  
 
-  [EVENT('changeColorProperty')] (color, key) {
+  [EVENT('changeColorProperty')] (key, color) {
     this.modifyPropertyValue(key, color);
   }  
 

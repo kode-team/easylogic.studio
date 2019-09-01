@@ -41,7 +41,7 @@ export default class BackgroundColorProperty extends BaseProperty {
     return /*html*/`
         <div class='property-item animation-property-item'>
           <span class='add-timeline-property' data-property='background-color'></span>
-          <ColorViewEditor ref='$color' label="color" onchange="changeColor" />
+          <ColorViewEditor ref='$color' label="color" key='background-color' onchange="changeColor" />
         </div>
 
         <div class='property-item animation-property-item'>
@@ -105,8 +105,8 @@ export default class BackgroundColorProperty extends BaseProperty {
     this.emit("refreshSelectionStyleView");
   }
 
-  [EVENT('changeColor')] (color) {
-    this.trigger('changeSelect', 'background-color', color);
+  [EVENT('changeColor')] (key, color) {
+    this.trigger('changeSelect', key, color);
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {

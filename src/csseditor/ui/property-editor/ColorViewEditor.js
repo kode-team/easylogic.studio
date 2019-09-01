@@ -9,7 +9,7 @@ export default class ColorViewEditor extends UIElement {
             removable: this.props.removable === 'true',            
             label: this.props.label,
             // params: this.props.params,
-            color: this.props.color || 'rgba(0, 0, 0, 1)'
+            value: this.props.value || 'rgba(0, 0, 0, 1)'
         }
     }
 
@@ -19,26 +19,26 @@ export default class ColorViewEditor extends UIElement {
     }
 
     getValue () {
-        return this.state.color; 
+        return this.state.value; 
     }
 
-    setValue (color) {
-        this.changeColor(color)
+    setValue (value) {
+        this.changeColor(value)
     }
 
     modifyColor() {
-        this.parent.trigger(this.props.onchange, this.state.color, this.props.params);
+        this.parent.trigger(this.props.onchange, this.props.key, this.state.value, this.props.params);
     }
 
-    changeColor (color) {
-        this.setState({ color })
-        this.refs.$miniView.cssText(`background-color: ${color}`);
-        this.refs.$colorCode.val(color);
+    changeColor (value) {
+        this.setState({ value })
+        this.refs.$miniView.cssText(`background-color: ${value}`);
+        this.refs.$colorCode.val(value);
     }
 
     refresh () {
-        this.refs.$miniView.cssText(`background-color: ${this.state.color}`);
-        this.refs.$colorCode.val(this.state.color);
+        this.refs.$miniView.cssText(`background-color: ${this.state.value}`);
+        this.refs.$colorCode.val(this.state.value);
     }
 
     template() {
@@ -50,28 +50,28 @@ export default class ColorViewEditor extends UIElement {
                 ${label ? `<label>${label}</label>` : '' }            
                 <div class='preview' ref='$preview'>
                     <div class='mini-view'>
-                        <div class='color-view' style="background-color: ${this.state.color}" ref='$miniView'></div>
+                        <div class='color-view' style="background-color: ${this.state.value}" ref='$miniView'></div>
                     </div>
                 </div>
                 <div class='color-code'>
-                    <input type="text" ref='$colorCode' value='${this.state.color}' />
+                    <input type="text" ref='$colorCode' value='${this.state.value}' />
                 </div>
                 <button type='button' class='remove' ref='$remove' title='Remove'>${icon.remove}</button>                
             </div>
-        `
+        ` 
     }
 
     [BIND('$miniView')] () {
         return {
             style: {
-                'background-color': this.state.color
+                'background-color': this.state.value
             }
         }
     }
 
     [BIND('$colorCode')] () {
         return {
-            value: this.state.color
+            value: this.state.value
         }
     }
 
@@ -83,7 +83,7 @@ export default class ColorViewEditor extends UIElement {
     viewColorPicker() {
         this.emit("showColorPickerPopup", {
             changeEvent: 'changeColorViewEditor',
-            color: this.state.color
+            color: this.state.value
         }, {
             id: this.id
         });
@@ -91,14 +91,14 @@ export default class ColorViewEditor extends UIElement {
 
 
     [CLICK('$remove')] (e) {
-        this.updateData({ color: ''})
+        this.updateData({ value: ''})
     }    
 
     [INPUT("$el .color-code input")](e) {
         var color = e.$delegateTarget.value;
         this.refs.$miniView.cssText(`background-color: ${color}`);
 
-        this.updateData({ color })
+        this.updateData({ value: color })
     }
 
     [EVENT("changeColorViewEditor")](color, data) {
@@ -106,7 +106,7 @@ export default class ColorViewEditor extends UIElement {
             this.refs.$miniView.cssText(`background-color: ${color}`);
             this.refs.$colorCode.val(color);
     
-            this.updateData({ color })
+            this.updateData({ value: color })
         }
     }
 

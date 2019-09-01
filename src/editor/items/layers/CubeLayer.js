@@ -1,16 +1,31 @@
-import { Layer } from "../Layer";
-import Color from "../../../util/Color";
 import { CSS_TO_STRING } from "../../../util/functions/func";
+import { Component } from "../Component";
 
-export class CubeLayer extends Layer {
+export class CubeLayer extends Component {
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
       itemType: 'cube',
       name: "New Cube",
       'transform-style':'preserve-3d',
       transform: 'rotateX(10deg) rotateY(30deg)',
+      'front.color': '',
       ...obj
     }); 
+  }
+
+  getProps() {
+    return [
+      {key: 'front.color', editor: 'ColorViewEditor', editorOptions: {
+        label: 'Front Color', params: 'front.color'
+      }, defaultValue: 'rgba(0, 0, 0, 1)' }
+    ]
+  }
+
+  toCloneObject() {
+    return {
+      ...super.toCloneObject(),
+      'front.color': this.json['front.color']
+    }
   }
 
   enableHasChildren() {
@@ -89,7 +104,8 @@ export class CubeLayer extends Layer {
         selector: '.front', cssText: `
           transform:rotateY(0deg) translateZ(${halfWidth}px);
           width: ${width};
-          height: ${height};          
+          height: ${height};     
+          ${json['front.color'] ? `background-color: ${json['front.color']}`: ''}
         `
       },
       {
