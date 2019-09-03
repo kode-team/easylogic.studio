@@ -156,6 +156,15 @@ export default class SVGItemProperty extends BaseProperty {
         />
       </div> 
 
+      <div class='property-item animation-property-item'>
+        <span class='add-timeline-property' data-property='d'></span>      
+        <label>path</label>
+      </div>      
+
+      <div class='property-item animation-property-item'>
+        <span class='add-timeline-property' data-property='points'></span>      
+        <label>polygon</label>
+      </div>            
     `;
   }
 

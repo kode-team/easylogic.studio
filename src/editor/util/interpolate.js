@@ -15,6 +15,8 @@ import { makeInterpolateTransform } from "./interpolate-functions/makeInterpolat
 import { makeInterpolateTransformOrigin } from "./interpolate-functions/makeInterpolateTransformOrigin";
 import { makeInterpolatePerspectiveOrigin } from "./interpolate-functions/makeInterpolatePerspectiveOrigin";
 import { makeInterpolateStrokeDashArrray } from "./interpolate-functions/makeInterpolateStrokeDashArray";
+import { makeInterpolatePath } from "./interpolate-functions/svg/makeInterpolatePath";
+import { makeInterpolatePolygon } from "./interpolate-functions/svg/makeInterpolatePolygon";
 
 const DEFAULT_FUCTION = () => (rate, t) => { } 
 
@@ -42,6 +44,10 @@ function makeInterpolateCustom (property) {
         return makeInterpolatePerspectiveOrigin
     case 'stroke-dasharray':
         return makeInterpolateStrokeDashArrray        
+    case 'd':
+        return makeInterpolatePath
+    case 'points':
+        return makeInterpolatePolygon
     }
 }
 
