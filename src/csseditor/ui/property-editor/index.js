@@ -19,7 +19,6 @@ import TransformEditor from "./TransformEditor";
 import TransformOriginEditor from "./TransformOriginEditor";
 import VarEditor from "./VarEditor";
 import CircleEditor from "./clip-path/CircleEditor";
-import SVGPropertyEditor from "./SVGPropertyEditor";
 import SVGFilterEditor from "./SVGFilterEditor";
 import TextEditor from "./TextEditor";
 import NumberRangeEditor from "./NumberRangeEditor";
@@ -31,9 +30,11 @@ import EmbedColorPicker from "./EmbedColorPicker";
 import ImageSelectEditor from "./ImageSelectEditor";
 import SelectIconEditor from "./SelectIconEditor";
 import InputRangeEditor from "./InputRangeEditor";
+import StrokeDashArrayEditor from "./StrokeDashArrayEditor";
 
 
 export default {
+    StrokeDashArrayEditor,
     InputRangeEditor,
     SelectIconEditor,
     ImageSelectEditor,
@@ -45,7 +46,6 @@ export default {
     NumberRangeEditor,
     TextEditor,
     SVGFilterEditor,
-    SVGPropertyEditor,
     CircleEditor,
     BackgroundImageEditor,
     BoxShadowEditor,

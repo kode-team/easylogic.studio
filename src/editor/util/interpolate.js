@@ -14,6 +14,7 @@ import { makeInterpolateClipPath } from "./interpolate-functions/makeInterpolate
 import { makeInterpolateTransform } from "./interpolate-functions/makeInterpolateTransform";
 import { makeInterpolateTransformOrigin } from "./interpolate-functions/makeInterpolateTransformOrigin";
 import { makeInterpolatePerspectiveOrigin } from "./interpolate-functions/makeInterpolatePerspectiveOrigin";
+import { makeInterpolateStrokeDashArrray } from "./interpolate-functions/makeInterpolateStrokeDashArray";
 
 const DEFAULT_FUCTION = () => (rate, t) => { } 
 
@@ -39,6 +40,8 @@ function makeInterpolateCustom (property) {
         return makeInterpolateTransformOrigin        
     case 'perspective-origin':
         return makeInterpolatePerspectiveOrigin
+    case 'stroke-dasharray':
+        return makeInterpolateStrokeDashArrray        
     }
 }
 
@@ -57,14 +60,21 @@ function makeInterpolate (layer, property, startValue, endValue) {
     case 'font-weight':
     case 'text-stroke-width':
         return makeInterpolateLength(layer, property, startValue, endValue, property);
+    case 'fill-opacity':
     case 'opacity':
+    case 'stroke-dashoffset':
         return makeInterpolateNumber(layer, property, +startValue, +endValue);
     case 'background-color':
     case 'color':
     case 'text-fill-color':
     case 'text-stroke-color':
+    case 'fill':
+    case 'stroke':
         return makeInterpolateColor(layer, property, startValue, endValue);
     case 'mix-blend-mode':
+    case 'fill-rule':
+    case 'stroke-linecap':
+    case 'stroke-linejoin':
         return makeInterpolateString(layer, property, startValue, endValue); 
     case 'rotate':
         return makeInterpolateRotate(layer, property, startValue, endValue);               

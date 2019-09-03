@@ -9,6 +9,14 @@
       > .title {
         display: none; 
       }
+
+      .css-property-item {
+        > .title {
+          label {
+            display: none; 
+          }
+        }
+      }
     }
 
     .title {

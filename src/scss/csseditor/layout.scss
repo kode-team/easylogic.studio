@@ -79,6 +79,7 @@
       right: $right-size;
       overflow: hidden;
       border-top: 1px solid $border-color;
+      background-color: $background-color;
       transition: $show-timeline-animation;
       pointer-events: all;
       z-index: 10000;
@@ -88,7 +89,7 @@
       position: absolute;
       left: 0px;
       top: 0px;
-      bottom: 0px;
+      bottom: $footer-height;
       width: $left-size;
       display: inline-block;
       box-sizing: border-box;
@@ -120,7 +121,7 @@
       top: 0px;
       left: $left-size;
       right: $right-size;
-      bottom: 0px;
+      bottom: $footer-height;
       position: absolute;
       transition: $show-timeline-animation;
     }
@@ -187,12 +188,12 @@
         right: 0px;      
         &:first-child {
           top: 0px;
-          height: 200px;
+          height: 150px;
         }
   
         &:nth-child(1) {
           top: 0px;
-          height: 200px;
+          height: 150px;
         }      
   
         &:not(:first-child) {
@@ -201,7 +202,7 @@
         }
   
         &:last-child {
-          top: 200px;
+          top: 150px;
           bottom : 0px;
         }
       }

@@ -17,6 +17,7 @@ import NumberRangeEditor from "./NumberRangeEditor";
 import BorderRadiusEditor from "./BorderRadiusEditor";
 import ClipPathEditor from "./ClipPathEditor";
 import TextShadowEditor from "./TextShadowEditor";
+import StrokeDashArrayEditor from "./StrokeDashArrayEditor";
 
 
 
@@ -52,6 +53,7 @@ export default class CSSPropertyEditor extends UIElement {
       FilterEditor,
       ColorViewEditor,
       RangeEditor,
+      StrokeDashArrayEditor,
       BackgroundImageEditor,
       TransformEditor,
       TransformOriginEditor,
@@ -218,6 +220,43 @@ export default class CSSPropertyEditor extends UIElement {
           <PerspectiveOriginEditor ref='$perspectiveOrigin${index}' value="${property.value}" onChange="changePerspectiveOrigin" />
         </div>
       `               
+    } else if (property.key === 'fill-rule') {
+      return `
+        <div class='property-editor'>
+          <SelectEditor 
+          ref='$fillRule${index}' 
+          key='fill-rule' 
+          icon="true" 
+          options="nonzero,evenodd" 
+          value="${property.value}"
+          onchange="changeSelect" />
+        </div>
+      `       
+    } else if (property.key === 'stroke-linecap') {
+      return `
+        <div class='property-editor'>
+          <SelectEditor 
+          ref='$strokeLinecap${index}' 
+          key='stroke-linecap' 
+          icon="true" 
+          options="butt,round,square" 
+          value="${property.value}"
+          onchange="changeSelect" />
+        </div>
+      `       
+      
+    } else if (property.key === 'stroke-linejoin') {
+      return `
+        <div class='property-editor'>
+          <SelectEditor 
+          ref='$strokeLinejoin${index}' 
+          key='stroke-linejoin' 
+          icon="true" 
+          options="miter,arcs,bevel,miter-clip,round" 
+          value="${property.value}"
+          onchange="changeSelect" />
+        </div>
+      `             
     } else if (property.key === 'mix-blend-mode') {
       return `
         <div class='property-editor'>
@@ -227,9 +266,18 @@ export default class CSSPropertyEditor extends UIElement {
           icon="true" 
           options="${blend_list}" 
           value="${property.value}"
-          onchange="changeMixBlendMode" />
+          onchange="changeSelect" />
         </div>
       `   
+    } else if (property.key === 'stroke-dasharray') {
+      return `
+        <StrokeDashArrayEditor 
+          ref='$strokeDashArray${index}' 
+          key='stroke-dasharray'
+          value='${property.value}' 
+          onchange='changeSelect' 
+        />
+      `      
     } else if (property.key === 'border-radius') {
       return `
         <BorderRadiusEditor 
@@ -306,7 +354,7 @@ export default class CSSPropertyEditor extends UIElement {
     this.modifyPropertyValue('perspective-origin', value);
   }         
 
-  [EVENT('changeMixBlendMode')] (key, value) {
+  [EVENT('changeSelect')] (key, value) {
     this.modifyPropertyValue(key, value);
   }
 
@@ -320,9 +368,7 @@ export default class CSSPropertyEditor extends UIElement {
       case 'animation-timing-function':
       case 'box-shadow':
       case 'text-shadow':
-      // case 'color':
       case 'background-image':
-      // case 'background-color':
       case 'filter':
       case 'backdrop-filter':
       case 'var':
@@ -332,13 +378,21 @@ export default class CSSPropertyEditor extends UIElement {
       case 'mix-blend-mode':  
       case 'border-radius':   
       case 'clip-path':   
+      case 'fill-rule':
+      case 'stroke-linecap':
+      case 'stroke-linejoin':
+      case 'stroke-dasharray':
         return this.makeIndivisualPropertyEditor(property, index);
       case 'color':
       case 'background-color':
       case 'text-fill-color':
       case 'text-stroke-color':
+      case 'stroke':
+      case 'fill':
         return this.makeIndivisualPropertyColorEditor(property, index);
       case 'opacity':
+      case 'fill-opacity':        
+      case 'stroke-dashoffset':
         return /*html*/`
           <div class='property-editor'>
             <NumberRangeEditor 
@@ -413,7 +467,7 @@ export default class CSSPropertyEditor extends UIElement {
 
 
   makePropertySelect() {
-    return `
+    return /*html*/`
       <select class='property-select' ref='$propertySelect'>
         <optgroup label='--'>
           <option value='var'>var</option>
@@ -474,7 +528,7 @@ export default class CSSPropertyEditor extends UIElement {
 
   [LOAD('$property')] () {
     return this.state.properties.map( (it, index) => {
-      return `
+      return /*html*/`
         <div class='css-property-item'>
           <div class='title'>
             <label>${it.key}</label>

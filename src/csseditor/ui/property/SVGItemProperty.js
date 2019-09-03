@@ -34,6 +34,7 @@ export default class SVGItemProperty extends BaseProperty {
       this.children.$strokeWidth.setValue(current['stroke-width'] || Length.number(1))
       this.children.$fillRule.setValue(current['fill-rule'] || 'nonzero')
       this.children.$strokeDashOffset.setValue(current['stroke-dashoffset'] || Length.number(0))
+      this.children.$strokeDashArray.setValue(current['stroke-dasharray'] || ' ')
       this.children.$strokeLineCap.setValue(current['stroke-linecap'] || 'butt')
       this.children.$strokeLineJoin.setValue(current['stroke-linejoin'] || 'miter')
 
@@ -54,13 +55,14 @@ export default class SVGItemProperty extends BaseProperty {
         <label>Fill</label>
       </div>
 
-      <div class='property-item'>
-        <ColorViewEditor ref='$fill' label='Color' key='fill' onchange="changeColor" />
+      <div class='property-item animation-property-item'>
+        <span class='add-timeline-property' data-property='fill'></span>
+        <ColorViewEditor ref='$fill' label='Color' key='fill' onchange="changeValue" />
       </div>
 
 
-      <div class='property-item'>
-
+      <div class='property-item animation-property-item'>
+        <span class='add-timeline-property' data-property='fill-opacity'></span>
         <NumberRangeEditor 
           ref='$fillOpacity' 
           label='Opacity' 
@@ -72,73 +74,51 @@ export default class SVGItemProperty extends BaseProperty {
           step="0.01"
           calc="false"
           unit="number" 
-          onchange="changeRangeEditor" 
+          onchange="changeValue" 
           />
       </div>   
 
 
-      <div class='property-item'>
+      <div class='property-item animation-property-item'>
+        <span class='add-timeline-property' data-property='fill-rule'></span>
         <SelectEditor 
           ref='$fillRule' 
           label='Fill Rule' 
           key="fill-rule" 
           options="nonzero,evenodd" 
-          onchange="changeRangeEditor" />
+          onchange="changeValue" />
       </div>            
 
       <div class='property-item label'>
         <label>Stroke</label>
       </div>      
 
-      <div class='property-item'>
-        <ColorViewEditor ref='$stroke' label='Color' key='stroke' onchange="changeColor" />
+      <div class='property-item animation-property-item'>
+        <span class='add-timeline-property' data-property='stroke'></span>
+        <ColorViewEditor ref='$stroke' label='Color' key='stroke' onchange="changeValue" />
       </div>      
 
-      <div class='property-item'>
+      <div class='property-item animation-property-item'>
+        <span class='add-timeline-property' data-property='stroke-width'></span>
         <RangeEditor 
           ref='$strokeWidth' 
           label='Width' 
           key="stroke-width" 
           removable="true" 
-          onchange="changeRangeEditor" />
+          onchange="changeValue" />
       </div>
             
 
-      <div class='property-item'>
+      <div class='property-item animation-property-item'>
+        <span class='add-timeline-property' data-property='stroke-dasharray'></span>      
         <label>Dash Array</label>
-
-        <NumberRangeEditor 
-          ref='$strokeDashArray1' 
-          label='1' 
-          key='stroke-dasharray' 
-          params='1'
-          removable="true"
-          value="0" 
-          min="0"
-          max="1000"
-          step="1"
-          calc="false"
-          unit="number" 
-          onchange="changeRangeEditor" 
-          />
-
-        <NumberRangeEditor 
-          ref='$strokeDashArray2' 
-          label='2' 
-          key='stroke-dasharray' 
-          params='2'
-          removable="true"
-          value="0" 
-          min="0"
-          max="1000"
-          step="1"
-          calc="false"
-          unit="number" 
-          onchange="changeRangeEditor" 
-          />
+      </div>
+      <div class='property-item'>
+        <StrokeDashArrayEditor ref='$strokeDashArray' key='stroke-dasharray' onchange="changeValue" />
       </div>
 
-      <div class='property-item'>
+      <div class='property-item animation-property-item'>
+        <span class='add-timeline-property' data-property='stroke-dashoffset'></span>      
         <NumberRangeEditor 
           ref='$strokeDashOffset' 
           key='stroke-dashoffset' 
@@ -150,57 +130,39 @@ export default class SVGItemProperty extends BaseProperty {
           step="1"
           calc="false"
           unit="number" 
-          onchange="changeRangeEditor" 
+          onchange="changeValue" 
           />
       </div>         
 
-      <div class='property-item'>
+      <div class='property-item animation-property-item'>
+        <span class='add-timeline-property' data-property='stroke-linecap'></span>      
         <SelectEditor 
           ref='$strokeLineCap' 
           label='Line Cap' 
           key="stroke-linecap" 
           options="butt,round,square" 
-          onchange="changeRangeEditor" 
+          onchange="changeValue" 
         />
       </div> 
 
-      <div class='property-item'>
+      <div class='property-item animation-property-item'>
+        <span class='add-timeline-property' data-property='stroke-linejoin'></span>      
         <SelectEditor 
           ref='$strokeLineJoin' 
           label='Line Join' 
           key="stroke-linejoin" 
           options="miter,arcs,bevel,miter-clip,round" 
-          onchange="changeRangeEditor" 
+          onchange="changeValue" 
         />
       </div> 
 
     `;
   }
 
-
-  [EVENT('changeColor')] (key, color, params) {
-    this.trigger('changeRangeEditor', key, color);
-  }
-
-  [EVENT('changeRangeEditor')] (key, value, params) {
-
-    if (key === 'stroke-dasharray') {
-      if (params === '1') {
-        editor.selection.reset({ 
-          [key]: [ value, editor.selection.current['stroke-dasharray'][1] ]
-        })        
-      } else if (params === '2') {
-        editor.selection.reset({ 
-          [key]: [ editor.selection.current['stroke-dasharray'][1], value ]
-        })        
-      }
-    } else {
-      editor.selection.reset({ 
-        [key]: value
-      })
-    }
-
-
+  [EVENT('changeValue')] (key, value, params) {
+    editor.selection.reset({ 
+      [key]: value
+    })
     this.emit("refreshSelectionStyleView");
   }
 }

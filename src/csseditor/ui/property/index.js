@@ -27,7 +27,7 @@ import PerspectiveOriginProperty from "./PerspectiveOriginProperty";
 import PerspectiveProperty from "./PerspectiveProperty";
 import TransformOriginProperty from "./TransformOriginProperty";
 import BackgroundClipProperty from "./BackgroundClipProperty";
-import SVGProperty from "./SVGProperty";
+
 import SelectorProperty from "./SelectorProperty";
 import PositionProperty from "./PositionProperty";
 import ProjectProperty from "./ProjectProperty";
@@ -66,7 +66,6 @@ export default {
   ArtBoardProperty,
   PositionProperty,
   SelectorProperty,
-  SVGProperty,
   BackgroundClipProperty,
   TransformOriginProperty,
   PerspectiveProperty,

@@ -3,6 +3,16 @@ import { CLICK, LOAD, DEBOUNCE, VDOM, SCROLL } from "../../../../util/Event";
 import icon from "../../icon/icon";
 import { editor } from "../../../../editor/editor";
 
+const PROPERTY_TITLE = {
+  'stroke-dasharray': 'Stroke Dash Array',
+  'stroke-dashoffset': 'Stroke Dash Offset',
+  'stroke-linejoin': 'Stroke Line Join',
+}
+
+const getPropertyTitle = (key, defaultTitle = '') => {
+  return PROPERTY_TITLE[key] || defaultTitle || key; 
+}
+
 export default class TimelineObjectList extends UIElement {
 
 
@@ -94,7 +104,7 @@ export default class TimelineObjectList extends UIElement {
                 return /*html*/ `
                 <div class='timeline-object-row layer-property' data-selected='${selected}' data-layer-id='${obj.id}' data-property='${property.property}'>
                 <div class='icon'></div>                    
-                    <div class='title'>${property.property}</div>
+                    <div class='title'>${getPropertyTitle(property.property)}</div>
                     <div class='current-value'>
                       <!--<input type='text' data-property='${property.property}' data-layer-id="${obj.id}" value='' /> -->
                     </div>

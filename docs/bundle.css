@@ -1500,6 +1500,7 @@ html, body {
   right: 260px;
   overflow: hidden;
   border-top: 1px solid #2c2c2c;
+  background-color: #383838;
   transition: all 0.15s linear;
   pointer-events: all;
   z-index: 10000;
@@ -1508,7 +1509,7 @@ html, body {
   position: absolute;
   left: 0px;
   top: 0px;
-  bottom: 0px;
+  bottom: 40px;
   width: 300px;
   display: inline-block;
   box-sizing: border-box;
@@ -1536,7 +1537,7 @@ html, body {
   top: 0px;
   left: 300px;
   right: 260px;
-  bottom: 0px;
+  bottom: 40px;
   position: absolute;
   transition: all 0.15s linear;
 }
@@ -1587,18 +1588,18 @@ html, body {
 }
 .csseditor[data-theme=dark] .feature-control .layer-tab .object-items > div:first-child {
   top: 0px;
-  height: 200px;
+  height: 150px;
 }
 .csseditor[data-theme=dark] .feature-control .layer-tab .object-items > div:nth-child(1) {
   top: 0px;
-  height: 200px;
+  height: 150px;
 }
 .csseditor[data-theme=dark] .feature-control .layer-tab .object-items > div:not(:first-child) {
   border-top: 1px solid #2c2c2c;
   box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .feature-control .layer-tab .object-items > div:last-child {
-  top: 200px;
+  top: 150px;
   bottom: 0px;
 }
 .csseditor[data-theme=dark] .feature-control .draw-items {
@@ -5315,6 +5316,9 @@ html, body {
 .csseditor[data-theme=dark] .css-property-editor.hide-title > .title {
   display: none;
 }
+.csseditor[data-theme=dark] .css-property-editor.hide-title .css-property-item > .title label {
+  display: none;
+}
 .csseditor[data-theme=dark] .css-property-editor .title {
   display: grid;
   grid-template-columns: 1fr 2fr;
@@ -8726,6 +8730,7 @@ html, body {
   right: 260px;
   overflow: hidden;
   border-top: 1px solid #e7e7e7;
+  background-color: white;
   transition: all 0.15s linear;
   pointer-events: all;
   z-index: 10000;
@@ -8734,7 +8739,7 @@ html, body {
   position: absolute;
   left: 0px;
   top: 0px;
-  bottom: 0px;
+  bottom: 40px;
   width: 300px;
   display: inline-block;
   box-sizing: border-box;
@@ -8762,7 +8767,7 @@ html, body {
   top: 0px;
   left: 300px;
   right: 260px;
-  bottom: 0px;
+  bottom: 40px;
   position: absolute;
   transition: all 0.15s linear;
 }
@@ -8813,18 +8818,18 @@ html, body {
 }
 .csseditor[data-theme=light] .feature-control .layer-tab .object-items > div:first-child {
   top: 0px;
-  height: 200px;
+  height: 150px;
 }
 .csseditor[data-theme=light] .feature-control .layer-tab .object-items > div:nth-child(1) {
   top: 0px;
-  height: 200px;
+  height: 150px;
 }
 .csseditor[data-theme=light] .feature-control .layer-tab .object-items > div:not(:first-child) {
   border-top: 1px solid #e7e7e7;
   box-sizing: border-box;
 }
 .csseditor[data-theme=light] .feature-control .layer-tab .object-items > div:last-child {
-  top: 200px;
+  top: 150px;
   bottom: 0px;
 }
 .csseditor[data-theme=light] .feature-control .draw-items {
@@ -12539,6 +12544,9 @@ html, body {
   grid-template-columns: 1fr !important;
 }
 .csseditor[data-theme=light] .css-property-editor.hide-title > .title {
+  display: none;
+}
+.csseditor[data-theme=light] .css-property-editor.hide-title .css-property-item > .title label {
   display: none;
 }
 .csseditor[data-theme=light] .css-property-editor .title {
