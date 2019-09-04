@@ -1373,7 +1373,7 @@ html, body {
 .csseditor[data-theme=dark] input[type=email],
 .csseditor[data-theme=dark] textarea {
   background-color: #5a5a5a;
-  border: 1px solid #0c0c0d;
+  border: 1px solid #5a5a5a;
   border-radius: 3px;
   color: #ececec;
   outline: none;
@@ -1388,7 +1388,7 @@ html, body {
   line-height: 1.6;
   cursor: pointer;
   background-color: #5a5a5a;
-  border: 1px solid #0c0c0d;
+  border: 1px solid #5a5a5a;
   border-radius: 3px;
   color: #ffffff;
   outline: none;
@@ -1667,30 +1667,30 @@ html, body {
 }
 .csseditor[data-theme=dark] input[type=range]::-webkit-slider-runnable-track {
   width: 100%;
-  height: 2px;
+  height: 1px;
   cursor: pointer;
-  background: #fc554f;
+  background: #202020;
   border-radius: 2px;
 }
 .csseditor[data-theme=dark] input[type=range]::-webkit-slider-thumb {
   height: 10px;
   width: 10px;
   border-radius: 10px;
-  background: #f3f3f3;
+  background: #fc554f;
   cursor: pointer;
   -webkit-appearance: none;
           appearance: none;
-  border: 1px solid #f3f3f3;
-  margin-top: -4px;
+  border: 1px solid #fc554f;
+  margin-top: -5px;
 }
 .csseditor[data-theme=dark] input[type=range]:focus::-webkit-slider-runnable-track {
-  background: #fc554f;
+  background: #202020;
 }
 .csseditor[data-theme=dark] input[type=range]::-moz-range-track {
   width: 100%;
-  height: 2px;
+  height: 1px;
   cursor: pointer;
-  background: #fc554f;
+  background: #202020;
   border-radius: 2px;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.12), inset 0 1px 2px rgba(0, 0, 0, 0.12);
 }
@@ -1699,26 +1699,26 @@ html, body {
   height: 10px;
   width: 10px;
   border-radius: 9px;
-  background: #f3f3f3;
+  background: #fc554f;
   cursor: pointer;
-  margin-top: -4px;
+  margin-top: -5px;
 }
 .csseditor[data-theme=dark] input[type=range]::-ms-track {
   width: 100%;
-  height: 2px;
+  height: 1px;
   cursor: pointer;
   border: 1px solid #000;
   border-radius: 2px;
-  background: #fc554f;
+  background: #202020;
 }
 .csseditor[data-theme=dark] input[type=range]::-ms-fill-lower {
-  background: #f3f3f3;
+  background: #fc554f;
   border: 0px solid #010101;
   border-radius: 0px;
   box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
 }
 .csseditor[data-theme=dark] input[type=range]::-ms-fill-upper {
-  background: #f3f3f3;
+  background: #fc554f;
   border: 0px solid #010101;
   border-radius: 0px;
 }
@@ -1726,15 +1726,15 @@ html, body {
   height: 10px;
   width: 10px;
   border-radius: 9px;
-  background: #f3f3f3;
+  background: #fc554f;
   cursor: pointer;
-  margin-top: -4px;
+  margin-top: -5px;
 }
 .csseditor[data-theme=dark] input[type=range]:focus::-ms-fill-lower {
-  background: #f3f3f3;
+  background: #fc554f;
 }
 .csseditor[data-theme=dark] input[type=range]:focus::-ms-fill-upper {
-  background: #f3f3f3;
+  background: #fc554f;
 }
 .csseditor[data-theme=dark] .tab {
   position: absolute;
@@ -5331,6 +5331,10 @@ html, body {
   width: 130px !important;
   display: inline-block;
 }
+.csseditor[data-theme=dark] .css-property-editor > .title-2 {
+  display: none;
+  text-align: right;
+}
 .csseditor[data-theme=dark] .css-property-editor .css-property-item {
   box-sizing: border-box;
   padding: 4px 0px;
@@ -6636,6 +6640,40 @@ html, body {
 }
 .csseditor[data-theme=dark] .number-input-editor .range-editor-type .area select {
   width: 100%;
+}
+.csseditor[data-theme=dark] .path-data-editor .segment {
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  grid-column-gap: 2px;
+  margin-bottom: 4px;
+}
+.csseditor[data-theme=dark] .path-data-editor .segment .command {
+  color: #fc554f;
+}
+.csseditor[data-theme=dark] .path-data-editor .segment .values {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-column-gap: 2px;
+  grid-row-gap: 2px;
+}
+.csseditor[data-theme=dark] .path-data-editor .segment .values input {
+  width: 100%;
+}
+.csseditor[data-theme=dark] .polygon-data-editor .segment {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-column-gap: 2px;
+  margin-bottom: 4px;
+}
+.csseditor[data-theme=dark] .polygon-data-editor .segment .values {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-column-gap: 2px;
+  grid-row-gap: 2px;
+  text-align: right;
+}
+.csseditor[data-theme=dark] .polygon-data-editor .segment .values input {
+  width: 80px;
 }
 .csseditor[data-theme=dark] .popup {
   position: absolute;
@@ -8077,7 +8115,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .path-editor-view svg path.segment {
   fill: transparent;
-  stroke: red;
+  stroke: #fc554f;
   stroke-width: 1;
 }
 .csseditor[data-theme=dark] .path-editor-view svg path.object {
@@ -8089,15 +8127,15 @@ html, body {
   fill: transparent;
   stroke: transparent;
   pointer-events: stroke;
-  stroke-width: 2;
+  stroke-width: 1;
 }
 .csseditor[data-theme=dark] .path-editor-view svg path.split-path:hover {
   cursor: copy;
-  stroke: #4b0401;
+  stroke: #fc554f;
 }
 .csseditor[data-theme=dark] .path-editor-view svg path.snap-path {
   fill: transparent;
-  stroke: #4b0401;
+  stroke: #fc554f;
 }
 .csseditor[data-theme=dark] .polygon-editor-view {
   display: none;
@@ -8133,7 +8171,7 @@ html, body {
   fill: yellow;
 }
 .csseditor[data-theme=dark] .polygon-editor-view svg circle.curve {
-  stroke: red;
+  stroke: #fc554f;
 }
 .csseditor[data-theme=dark] .polygon-editor-view svg circle[data-is-first=true] {
   fill: rgba(96, 157, 226, 0.8);
@@ -8165,11 +8203,11 @@ html, body {
   fill: transparent;
   stroke: transparent;
   pointer-events: stroke;
-  stroke-width: 2;
+  stroke-width: 1;
 }
 .csseditor[data-theme=dark] .polygon-editor-view svg path.split-path:hover, .csseditor[data-theme=dark] .polygon-editor-view svg polygon.split-path:hover {
   cursor: copy;
-  stroke: #e10c04;
+  stroke: #fc554f;
 }
 .csseditor[data-theme=dark] .polygon-editor-view svg path.snap-path, .csseditor[data-theme=dark] .polygon-editor-view svg polygon.snap-path {
   fill: transparent;
@@ -8209,8 +8247,24 @@ html, body {
 .csseditor[data-theme=dark] .timeline-value-area .timeline-value-editor .tab-content .offset-input {
   padding-top: 10px;
 }
+.csseditor[data-theme=dark] .timeline-value-area .timeline-value-editor .tab-content .css-property-editor {
+  margin-top: 0px;
+}
 .csseditor[data-theme=dark] .timeline-value-area .timeline-value-editor .tab-content .css-property-item > .title > .tools {
   display: none;
+}
+.csseditor[data-theme=dark] .timeline-value-area .timeline-value-editor .tab-content .css-property-item > .title-2 {
+  display: block;
+  text-align: right;
+}
+.csseditor[data-theme=dark] .timeline-value-area .timeline-value-editor .tab-content .css-property-item > .title-2 label {
+  cursor: pointer;
+}
+.csseditor[data-theme=dark] .timeline-value-area .timeline-value-editor .tab-content .css-property-item > .title-2:hover {
+  color: #fc554f;
+}
+.csseditor[data-theme=dark] .timeline-value-area .timeline-value-editor .tab-content .css-property-item > .title-2:hover svg path {
+  fill: #fc554f;
 }
 .csseditor[data-theme=dark] .timeline-value-area .timeline-value-editor .tab-content .css-property-item .background-image-editor .tools button {
   width: 100px;
@@ -12561,6 +12615,10 @@ html, body {
   width: 130px !important;
   display: inline-block;
 }
+.csseditor[data-theme=light] .css-property-editor > .title-2 {
+  display: none;
+  text-align: right;
+}
 .csseditor[data-theme=light] .css-property-editor .css-property-item {
   box-sizing: border-box;
   padding: 4px 0px;
@@ -13866,6 +13924,40 @@ html, body {
 }
 .csseditor[data-theme=light] .number-input-editor .range-editor-type .area select {
   width: 100%;
+}
+.csseditor[data-theme=light] .path-data-editor .segment {
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  grid-column-gap: 2px;
+  margin-bottom: 4px;
+}
+.csseditor[data-theme=light] .path-data-editor .segment .command {
+  color: #e2e7ff;
+}
+.csseditor[data-theme=light] .path-data-editor .segment .values {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-column-gap: 2px;
+  grid-row-gap: 2px;
+}
+.csseditor[data-theme=light] .path-data-editor .segment .values input {
+  width: 100%;
+}
+.csseditor[data-theme=light] .polygon-data-editor .segment {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-column-gap: 2px;
+  margin-bottom: 4px;
+}
+.csseditor[data-theme=light] .polygon-data-editor .segment .values {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-column-gap: 2px;
+  grid-row-gap: 2px;
+  text-align: right;
+}
+.csseditor[data-theme=light] .polygon-data-editor .segment .values input {
+  width: 80px;
 }
 .csseditor[data-theme=light] .popup {
   position: absolute;
@@ -15307,7 +15399,7 @@ html, body {
 }
 .csseditor[data-theme=light] .path-editor-view svg path.segment {
   fill: transparent;
-  stroke: red;
+  stroke: #e2e7ff;
   stroke-width: 1;
 }
 .csseditor[data-theme=light] .path-editor-view svg path.object {
@@ -15319,15 +15411,15 @@ html, body {
   fill: transparent;
   stroke: transparent;
   pointer-events: stroke;
-  stroke-width: 2;
+  stroke-width: 1;
 }
 .csseditor[data-theme=light] .path-editor-view svg path.split-path:hover {
   cursor: copy;
-  stroke: #0027e2;
+  stroke: #e2e7ff;
 }
 .csseditor[data-theme=light] .path-editor-view svg path.snap-path {
   fill: transparent;
-  stroke: #0027e2;
+  stroke: #e2e7ff;
 }
 .csseditor[data-theme=light] .polygon-editor-view {
   display: none;
@@ -15363,7 +15455,7 @@ html, body {
   fill: yellow;
 }
 .csseditor[data-theme=light] .polygon-editor-view svg circle.curve {
-  stroke: red;
+  stroke: #e2e7ff;
 }
 .csseditor[data-theme=light] .polygon-editor-view svg circle[data-is-first=true] {
   fill: rgba(223, 223, 223, 0.8);
@@ -15395,11 +15487,11 @@ html, body {
   fill: transparent;
   stroke: transparent;
   pointer-events: stroke;
-  stroke-width: 2;
+  stroke-width: 1;
 }
 .csseditor[data-theme=light] .polygon-editor-view svg path.split-path:hover, .csseditor[data-theme=light] .polygon-editor-view svg polygon.split-path:hover {
   cursor: copy;
-  stroke: #7c93ff;
+  stroke: #e2e7ff;
 }
 .csseditor[data-theme=light] .polygon-editor-view svg path.snap-path, .csseditor[data-theme=light] .polygon-editor-view svg polygon.snap-path {
   fill: transparent;
@@ -15439,8 +15531,24 @@ html, body {
 .csseditor[data-theme=light] .timeline-value-area .timeline-value-editor .tab-content .offset-input {
   padding-top: 10px;
 }
+.csseditor[data-theme=light] .timeline-value-area .timeline-value-editor .tab-content .css-property-editor {
+  margin-top: 0px;
+}
 .csseditor[data-theme=light] .timeline-value-area .timeline-value-editor .tab-content .css-property-item > .title > .tools {
   display: none;
+}
+.csseditor[data-theme=light] .timeline-value-area .timeline-value-editor .tab-content .css-property-item > .title-2 {
+  display: block;
+  text-align: right;
+}
+.csseditor[data-theme=light] .timeline-value-area .timeline-value-editor .tab-content .css-property-item > .title-2 label {
+  cursor: pointer;
+}
+.csseditor[data-theme=light] .timeline-value-area .timeline-value-editor .tab-content .css-property-item > .title-2:hover {
+  color: #e2e7ff;
+}
+.csseditor[data-theme=light] .timeline-value-area .timeline-value-editor .tab-content .css-property-item > .title-2:hover svg path {
+  fill: #e2e7ff;
 }
 .csseditor[data-theme=light] .timeline-value-area .timeline-value-editor .tab-content .css-property-item .background-image-editor .tools button {
   width: 100px;

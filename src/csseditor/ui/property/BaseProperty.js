@@ -15,12 +15,10 @@ export default class BaseProperty extends UIElement {
   onToggleShow() {}
 
   template() {
-    return `
+    return /*html*/`
         <div class='property ${this.getClassName()} ${this.isFirstShow() ?  'show' : '' }'>
-            ${
-              this.isHideHeader()
-                ? ''
-                : `
+            ${this.isHideHeader() ? ''
+            : /*html*/`
             <div class='property-title' ref="$title">
                 <label> 
                   ${this.hasKeyframe() ? `<span class='add-timeline-property' data-property='${this.getKeyframeProperty()}'></span>` : ''} 

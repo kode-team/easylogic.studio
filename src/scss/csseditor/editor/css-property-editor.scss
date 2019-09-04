@@ -33,6 +33,11 @@
         }
     }
 
+    > .title-2 {
+      display: none; 
+      text-align: right;
+    }    
+
     .css-property-item {
       box-sizing: border-box;
       padding: 4px 0px;

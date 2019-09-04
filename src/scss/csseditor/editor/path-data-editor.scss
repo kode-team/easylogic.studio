@@ -1,0 +1,23 @@
+.path-data-editor {
+    .segment {
+        display: grid;
+        grid-template-columns: 30px 1fr; 
+        grid-column-gap: 2px;
+        margin-bottom: 4px;
+
+        .command {
+            color: $selected-color; 
+        }
+
+        .values {
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr);
+            grid-column-gap: 2px;
+            grid-row-gap: 2px;
+
+            input {
+                width: 100%;
+            }
+        }
+    }
+}

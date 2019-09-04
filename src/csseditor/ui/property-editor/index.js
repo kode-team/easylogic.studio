@@ -31,9 +31,13 @@ import ImageSelectEditor from "./ImageSelectEditor";
 import SelectIconEditor from "./SelectIconEditor";
 import InputRangeEditor from "./InputRangeEditor";
 import StrokeDashArrayEditor from "./StrokeDashArrayEditor";
+import PathDataEditor from "./PathDataEditor";
+import PolygonDataEditor from "./PolygonDataEditor";
 
 
 export default {
+    PolygonDataEditor,
+    PathDataEditor,
     StrokeDashArrayEditor,
     InputRangeEditor,
     SelectIconEditor,

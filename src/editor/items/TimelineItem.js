@@ -507,7 +507,7 @@ export class TimelineItem extends DomItem {
 
         this.compiledTimingFunction(layerId, property);        
 
-        return obj; 
+        return obj;
       }
     }
   }

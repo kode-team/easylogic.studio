@@ -157,6 +157,18 @@ checkKey (e) {
     `
   }
 
+  [EVENT('refreshPropertyValue')] () {
+
+    var artboard = editor.selection.currentArtboard;
+    if (artboard) {
+      var selectedLayer = artboard.searchById(this.state.layerId); 
+
+      if (selectedLayer) {
+        this.trigger('refreshOffsetValue', { value: selectedLayer[this.state.property] + '' })
+      }
+    }
+  }
+
   [EVENT('refreshOffsetValue')] (offset) {
     this.setState({
         ...offset

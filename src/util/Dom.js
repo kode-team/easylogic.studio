@@ -62,6 +62,22 @@ export default class Dom {
     return Dom.create(document.body)
   }
 
+  data (key, value) {
+
+    var newKey = key.split('-').map( (it, index) => {
+      if (index === 0) { return it }
+
+      return it.substr(0, 1).toUpperCase() + it.substr(1);
+    }).join(''); 
+
+    if (arguments.length === 1) {
+      return this.el.dataset(newKey);
+    } else {
+      this.el.dataset(newKey, value);
+    }
+    
+  }
+
   attr(key, value) {
     if (arguments.length == 1) {
       return this.el.getAttribute(key);

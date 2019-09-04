@@ -18,6 +18,9 @@ import BorderRadiusEditor from "./BorderRadiusEditor";
 import ClipPathEditor from "./ClipPathEditor";
 import TextShadowEditor from "./TextShadowEditor";
 import StrokeDashArrayEditor from "./StrokeDashArrayEditor";
+import PathDataEditor from "./PathDataEditor";
+import PolygonDataEditor from "./PolygonDataEditor";
+
 
 
 
@@ -60,7 +63,9 @@ export default class CSSPropertyEditor extends UIElement {
       PerspectiveOriginEditor,
       VarEditor,
       BorderRadiusEditor,
-      ClipPathEditor
+      ClipPathEditor,
+      PathDataEditor,
+      PolygonDataEditor
     }
   }
 
@@ -85,9 +90,7 @@ export default class CSSPropertyEditor extends UIElement {
 
   template() {
     return /*html*/`
-      <div class='css-property-editor ${OBJECT_TO_CLASS({
-        'hide-title': this.state.hideTitle
-      })}'>
+      <div class='css-property-editor ${OBJECT_TO_CLASS({ 'hide-title': this.state.hideTitle })}'>
         <div class='title'>
           <label>Properties</label>
           <div class='tools'>
@@ -296,6 +299,14 @@ export default class CSSPropertyEditor extends UIElement {
           onchange='changeClipPath' 
         />
       `      
+    } else if (property.key === 'd') {
+      return /*html*/`
+        <PathDataEditor ref='$pathData${index}' key='d' value='${property.value}' onchange='changeSelect' />
+      `            
+    } else if (property.key === 'points') {
+      return /*html*/`
+        <PolygonDataEditor ref='$polygonData${index}' key='points' value='${property.value}' onchange='changeSelect' />
+      `      
     }
 
     return `
@@ -360,9 +371,6 @@ export default class CSSPropertyEditor extends UIElement {
 
 
   makePropertyEditor (property, index) {
-    var min = null;
-    var max = null; 
-
     switch(property.key) {
 
       case 'animation-timing-function':
@@ -382,6 +390,8 @@ export default class CSSPropertyEditor extends UIElement {
       case 'stroke-linecap':
       case 'stroke-linejoin':
       case 'stroke-dasharray':
+      case 'd':
+      case 'points':
         return this.makeIndivisualPropertyEditor(property, index);
       case 'color':
       case 'background-color':
@@ -536,6 +546,11 @@ export default class CSSPropertyEditor extends UIElement {
               <button type="button" class='remove' data-index="${index}">${icon.remove2}</button>
             </div>
           </div>
+          <div class='title-2'>
+            <div class='tools'>
+              <label><button type="button" class='refresh' data-index="${index}">${icon.refresh}</button> Refresh</label>
+            </div>
+          </div>
           <div class='value-editor'>
             ${this.makePropertyEditor(it, index)}
           </div>
@@ -558,4 +573,8 @@ export default class CSSPropertyEditor extends UIElement {
     this.refresh();
     this.modifyProperty();
   }
+
+  [CLICK('$property .refresh')] (e) {
+    this.parent.trigger('refreshPropertyValue');
+  }  
 }

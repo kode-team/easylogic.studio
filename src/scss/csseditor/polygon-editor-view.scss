@@ -50,7 +50,7 @@
             }
 
             &.curve {
-                stroke: red; 
+                stroke: $selected-color; 
             }
 
             &[data-is-first="true"] {
@@ -94,11 +94,11 @@
                 fill: transparent;
                 stroke: transparent;
                 pointer-events: stroke;
-                stroke-width: 2;
+                stroke-width: 1;
 
                 &:hover {
                     cursor: copy;
-                    stroke: darken($selected-color, 20%);
+                    stroke: $selected-color;
                 }
             }
 

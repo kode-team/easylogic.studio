@@ -98,6 +98,11 @@ export default class PathParser {
         
         this.parse()
     }
+
+    resetSegments (segments) {
+        this.segments = segments || [] 
+        this.pathString = this.joinPath()
+    }
 	
     trim (str = '')  {
         var arr = str.match(numberReg) || [] 

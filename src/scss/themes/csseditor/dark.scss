@@ -37,20 +37,21 @@ $selected-font-color: rgb(255, 255, 255);
 $button-front-color: $font-color;
 
 $select-background-color: rgb(90, 90, 90);
-$select-border-color: #0c0c0d;
+$select-border-color: rgb(90, 90, 90);
 $select-border-radius: 3px;
 $select-font-color: $font-color;
 
 $range-thumb-width: 10px;
 $range-thumb-height: 10px;
-$range-track-height: 2px;
-$range-thumb-top: -4px;
-$range-thumb-color:  rgb(243, 243, 243);
-$range-track-color:  $selected-color;
+$range-track-height: 1px;
+$range-thumb-top: -5px;
+// $range-thumb-color:  rgb(243, 243, 243);
+$range-thumb-color:  $selected-color;
+$range-track-color:  rgb(32, 32, 32);
 $range-thumb-border-color: $range-thumb-color;
 
 $input-background-color: rgb(90, 90, 90);
-$input-border-color: #0c0c0d;
+$input-border-color: rgb(90, 90, 90);
 $input-border-radius: 3px;
 $input-font-color: #ececec;
 

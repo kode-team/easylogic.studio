@@ -28,6 +28,15 @@ export default class SVGItemProperty extends BaseProperty {
         this.$el.show();
       }
 
+      if (current.is('svg-path')) {
+        this.refs.$path.show();
+        this.refs.$polygon.hide();        
+      } else {
+        this.refs.$path.hide();
+        this.refs.$polygon.show();
+      }
+
+
       this.children.$fill.setValue(current['fill'] || 'rgba(0, 0, 0, 0)')
       this.children.$stroke.setValue(current['stroke'] || 'rgba(0, 0, 0, 1)')
       this.children.$fillOpacity.setValue(current['fill-opacity'] || Length.number(1))
@@ -50,6 +59,16 @@ export default class SVGItemProperty extends BaseProperty {
 
   getBody() {
     return /*html*/`
+
+      <div class='property-item animation-property-item' ref='$path'>
+        <span class='add-timeline-property' data-property='d'></span>      
+        <label>Path - d </label>
+      </div>      
+
+      <div class='property-item animation-property-item' ref='$polygon'>
+        <span class='add-timeline-property' data-property='points'></span>      
+        <label>Polygon - points</label>
+      </div>         
 
       <div class='property-item label'>
         <label>Fill</label>
@@ -155,16 +174,7 @@ export default class SVGItemProperty extends BaseProperty {
           onchange="changeValue" 
         />
       </div> 
-
-      <div class='property-item animation-property-item'>
-        <span class='add-timeline-property' data-property='d'></span>      
-        <label>path</label>
-      </div>      
-
-      <div class='property-item animation-property-item'>
-        <span class='add-timeline-property' data-property='points'></span>      
-        <label>polygon</label>
-      </div>            
+   
     `;
   }
 

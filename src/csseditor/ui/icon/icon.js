@@ -72,10 +72,13 @@ import speed from "./speed";
 import replay from "./replay";
 import shuffle from "./shuffle";
 import cat from "./cat";
+import refresh from "./refresh";
+
 
 
 
 export default {
+  refresh,
   cat,
   shuffle,
   replay,

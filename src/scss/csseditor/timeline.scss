@@ -38,9 +38,34 @@
                 padding-top: 10px;
             }
 
+            .css-property-editor {
+                margin-top: 0px;
+            }
+
             .css-property-item {
                 > .title > .tools {
                     display: none;
+                }
+
+
+                > .title-2 {
+                    display: block; 
+                    text-align: right;
+
+                    label {
+                        cursor: pointer;
+                    }
+
+                    &:hover {
+                        color: $selected-color;
+
+                        svg {
+                            path {
+                                fill: $selected-color;
+                            }
+                        }
+                    }
+
                 }
 
                 .background-image-editor {
