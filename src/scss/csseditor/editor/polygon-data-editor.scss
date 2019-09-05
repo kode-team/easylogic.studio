@@ -12,7 +12,12 @@
             grid-row-gap: 2px;
             text-align: right;
 
+            label {
+                color: $selected-color;
+            }
+
             input {
+                color: $font-color;
                 width: 80px;
             }
 

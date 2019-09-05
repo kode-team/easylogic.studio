@@ -9,7 +9,7 @@ import { SVGPathItem } from "../../../editor/items/layers/SVGPathItem";
 import { Length } from "../../../editor/unit/Length";
 import { getBezierPoints, recoverBezier, recoverBezierQuard, getBezierPointsQuard, recoverBezierLine, getBezierPointsLine } from "../../../util/functions/bezier";
 
-export default class PathEditorView extends UIElement {
+export default class CircleShapeEditor extends UIElement {
 
     initialize() {
         super.initialize();

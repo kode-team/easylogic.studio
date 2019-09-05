@@ -164,7 +164,9 @@ checkKey (e) {
       var selectedLayer = artboard.searchById(this.state.layerId); 
 
       if (selectedLayer) {
-        this.trigger('refreshOffsetValue', { value: selectedLayer[this.state.property] + '' })
+        var value = selectedLayer[this.state.property] + ''
+        this.trigger('refreshOffsetValue', { value })
+        this.updateData({ value })
       }
     }
   }

@@ -22,7 +22,7 @@ export default class SelectionToolView extends UIElement {
     }
 
     template() {
-        return `
+        return /*html*/`
     <div class='selection-view' ref='$selectionView' >
         <div class='selection-tool' ref='$selectionTool' style='left:-100px;top:-100px;'>
             <div class='selection-tool-item' data-position='move'></div>
@@ -138,6 +138,7 @@ export default class SelectionToolView extends UIElement {
             this.toggleEditingPolygon(false);
             this.toggleEditingPath(true);
             this.emit('showPathEditor', 'modify', {
+                changeEvent: 'updatePathItem',
                 current,
                 d: current.d,
                 screenX: current.screenX,
@@ -157,6 +158,7 @@ export default class SelectionToolView extends UIElement {
             this.toggleEditingPath(false);            
             this.toggleEditingPolygon(true);
             this.emit('showPolygonEditor', 'modify', {
+                changeEvent: 'updatePolygonItem',
                 current,
                 points: current.points,
                 screenX: current.screenX,

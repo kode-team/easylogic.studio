@@ -1,7 +1,7 @@
 .property {
   padding: 6px 0px;
-  border-bottom: 1px solid rgba(lighten($property-border-color, 30%), 0.2);  
-  background-color: rgba(lighten($property-border-color, 30%), 0.2);
+  border-bottom: 1px solid $property-border-color;  
+  background-color: $property-border-color;
   color: $property-font-color; 
   display: none; 
 

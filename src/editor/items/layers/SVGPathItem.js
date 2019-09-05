@@ -8,6 +8,7 @@ export class SVGPathItem extends SVGItem {
       itemType: 'svg-path',
       name: "New Path",   
       d: '',
+      totalLength: 0,
       ...obj
     });
   }
@@ -19,12 +20,17 @@ export class SVGPathItem extends SVGItem {
 
   updatePathItem (obj) {
     this.json.d = obj.d; 
+    this.json.totalLength = obj.totalLength;
     this.json.path = new PathParser(obj.d);
 
     // this.setScreenX(obj.x);
     // this.setScreenY(obj.y);
     // this.json.width = Length.px(obj.width);
     // this.json.height = Length.px(obj.height);
+  }
+
+  updateFunction (currentElement) {
+    this.json.totalLength = currentElement.$('path').el.getTotalLength();
   }
 
   setCache () {
@@ -57,6 +63,7 @@ export class SVGPathItem extends SVGItem {
     var json = this.json; 
     return {
       ...super.toCloneObject(),
+      totalLength: json.totalLength,
       d: json.d
     }
   }

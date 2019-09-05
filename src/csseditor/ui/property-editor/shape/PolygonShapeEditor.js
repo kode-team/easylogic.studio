@@ -9,7 +9,7 @@ import PolygonParser from "../../../editor/parse/PolygonParser";
 import PolygonGenerator from "../../../editor/parse/PolygonGenerator";
 import { SVGPolygonItem } from "../../../editor/items/layers/SVGPolygonItem";
 
-export default class PolygonEditorView extends UIElement {
+export default class PolygonShapeEditor extends UIElement {
 
     initialize() {
         super.initialize();

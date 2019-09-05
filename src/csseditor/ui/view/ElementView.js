@@ -489,26 +489,33 @@ export default class ElementView extends UIElement {
     }
 
     // 객체를 부분 업데이트 하기 위한 메소드 
-    // updateHtml 이 정의 되어 있으면  html 업데이트 
-    // updateAttribute 이 정의 되어 있으면 attr 업데이트 
     [EVENT('refreshCanvasForPartial')] (obj) {
 
         var items = obj ? [obj] : editor.selection.items;
 
         items.forEach(current => {
-            var currentElement = this.refs.$view.$(`[data-id="${current.id}"]`);
-            if (current.updateHtml) {
-                currentElement.html(current.updateHtml);
-            } else if (current.updateAttribute) {
-                currentElement.attr(current.updateAttribute);
-            } else if (current.updateAll) {
-                currentElement.html(current.updateAll.html);
-                currentElement.attr(current.updateAll.attr);
-            } else if (current.updateFunction) {
-                current.updateFunction.call(current, currentElement);
-            }
+            this.updateElement(current);
         })
     }
+
+    updateElement (item) {
+        if (item.updateFunction) {
+            var currentElement = this.refs.$view.$(`[data-id="${item.id}"]`);
+            item.updateFunction.call(current, currentElement);
+        }
+    }
+
+    [EVENT('playTimeline')] () {
+
+        var artboard = editor.selection.currentArtboard;
+
+        if (artboard) {
+            var timeline = artboard.getSelectedTimeline();
+            timeline.animations.map(it => artboard.searchById(it.id)).forEach(current => {
+                this.updateElement(current);
+            })
+        }
+    }    
 
     [EVENT('refreshCanvas')] (obj) {
         if (obj) {

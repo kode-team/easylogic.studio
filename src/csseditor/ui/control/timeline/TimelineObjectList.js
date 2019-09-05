@@ -85,6 +85,7 @@ export default class TimelineObjectList extends UIElement {
         }
 
         var selected = editor.timeline.checkLayer(obj.id);
+        var layer = artboard.searchById(obj.id)        
 
         return /*html*/`
         <div class='timeline-object' data-timeline-animation-id="${obj.id}">
@@ -92,9 +93,9 @@ export default class TimelineObjectList extends UIElement {
                 <div class='icon'>${icon.chevron_right}</div>
                 <div class='title'> ${obj.name}</div>
                 <div class='tools'>
-                    <!--${this.makePropertySelect()}
-                    <button type="button" class='add-property' data-layer-id="${obj.id}">${icon.add}</button>-->
-                    <button type="button" class='remove-timeline' data-layer-id='${obj.id}'>${icon.remove}</button>                    
+                    <!--${this.makePropertySelect()} -->
+                    <button type="button" class='remove-timeline' data-layer-id='${obj.id}'>${icon.remove}</button>
+                    <button type="button" class='empty'></button>                    
                 </div>
             </div>
 
@@ -106,6 +107,8 @@ export default class TimelineObjectList extends UIElement {
                 <div class='icon'></div>                    
                     <div class='title'>${getPropertyTitle(property.property)}</div>
                     <div class='current-value'>
+                      ${property.property === 'd' ? layer.totalLength : ''}
+                      ${property.property === 'points' ? layer.totalLength : ''}
                       <!--<input type='text' data-property='${property.property}' data-layer-id="${obj.id}" value='' /> -->
                     </div>
                     <div class='tools'>

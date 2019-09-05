@@ -161,6 +161,36 @@ export default class ObjectCommand extends UIElement {
         this.emit('showPathEditor', 'draw' );
     }
 
+    [COMMAND('open.polygon.editor')] (points = '', changeEvent = 'updatePolygonItem') {
+        var current = editor.selection.current;
+        if (current) {
+            this.emit('showPolygonEditor', 'draw', {
+                changeEvent,
+                current,
+                points,
+                screenX: current.screenX,
+                screenY: current.screenY,
+                screenWidth: current.screenWidth,
+                screenHeight: current.screenHeight,
+            }) 
+        }
+    }
+
+    [COMMAND('open.path.editor')] (d = '', changeEvent = 'updatePathItem') {
+        var current = editor.selection.current;
+        if (current) {
+            this.emit('showPathEditor', 'draw', {
+                changeEvent,
+                current,
+                d,
+                screenX: current.screenX,
+                screenY: current.screenY,
+                screenWidth: current.screenWidth,
+                screenHeight: current.screenHeight,
+            }) 
+        }
+    }
+
 
     [COMMAND('add.polygon')] (mode = 'draw') {
         this.emit('hideSubEditor');    

@@ -8,6 +8,7 @@ export class SVGPolygonItem extends SVGItem {
       itemType: 'svg-polygon',
       name: "New Polygon",   
       points: '',
+      totalLength: 0,
       ...obj
     });
   }
@@ -19,6 +20,7 @@ export class SVGPolygonItem extends SVGItem {
 
   updatePolygonItem (obj) {
     this.json.points = obj.points; 
+    this.json.totalLength = obj.totalLength;
     this.json.polygon = new PolygonParser(obj.points);
   }
 
@@ -59,6 +61,7 @@ export class SVGPolygonItem extends SVGItem {
     var json = this.json; 
     return {
       ...super.toCloneObject(),
+      totalLength: json.totalLength,
       points: json.points
     }
   }
@@ -78,8 +81,9 @@ export class SVGPolygonItem extends SVGItem {
   }
 
   updateFunction (currentElement) {
-    var {points} = this.json;     
-    currentElement.$('polygon').attr('points', points);
+    var $polygon = currentElement.$('polygon');
+    $polygon.attr('points', this.json.points);
+    this.json.totalLength = $polygon.el.getTotalLength()
   }  
 
   get html () {

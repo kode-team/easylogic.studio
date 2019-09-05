@@ -7,7 +7,7 @@ export function makeInterpolatePolygon (layer, property, startValue, endValue) {
     var s = new PolygonParser(startValue);
     var e = new PolygonParser(endValue);
 
-    var max = Math.max(s.length, e.length)
+    var max = Math.max(s.segments.length, e.segments.length)
 
     var list = [] 
 
@@ -40,11 +40,13 @@ export function makeInterpolatePolygon (layer, property, startValue, endValue) {
     }
 
     return (rate, t) => {
-        return returnParser.joinPoints(list.map(it => {
+        var points = returnParser.joinPoints(list.map(it => {
             return {
                 x: it.x(rate, t),
                 y: it.y(rate, t)
             }
         }))
+
+        return points;
     } 
 }
