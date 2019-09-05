@@ -62,7 +62,9 @@
             }
 
             &[data-is-first="true"] {
-                fill: rgba($selected-border-color, 0.8);
+                fill: $selected-color;
+                stroke: $selected-color;
+                z-index: 1;
             }
             
         }

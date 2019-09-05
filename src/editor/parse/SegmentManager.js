@@ -70,6 +70,11 @@ export default class SegmentManager {
     }
 
     toString () {
+
+        this.segmentList.sort((a, b) => {
+            return a.isFirst ? 1 : -1; 
+        })
+
         return this.segmentList.map(it => {
 
             if (it.line) {

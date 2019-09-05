@@ -27,6 +27,8 @@ export default class AlignmentProperty extends BaseProperty {
 
   [EVENT('refreshSelection') + DEBOUNCE(100)] () {
     this.refreshShow('layer');
+    this.refreshShow('svg-path');
+    // this.refreshShow('svg-polygon');
   }
 
   isHideHeader() {
@@ -38,7 +40,7 @@ export default class AlignmentProperty extends BaseProperty {
   }
 
   getBody() {
-    return `
+    return /*html*/`
       <div class="alignment-item" ref="$positionItem">
         <LeftAlign />
         <CenterAlign />

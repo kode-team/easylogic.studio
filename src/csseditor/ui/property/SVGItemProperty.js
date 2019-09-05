@@ -2,6 +2,8 @@ import BaseProperty from "./BaseProperty";
 import { editor } from "../../../editor/editor";
 import { EVENT } from "../../../util/UIElement";
 import { Length } from "../../../editor/unit/Length";
+import { OBJECT_TO_PROPERTY } from "../../../util/functions/func";
+import { BIND, CLICK } from "../../../util/Event";
 
 
 export default class SVGItemProperty extends BaseProperty {
@@ -57,125 +59,155 @@ export default class SVGItemProperty extends BaseProperty {
     // update 를 어떻게 할지 고민 
   }
 
+  [BIND('$svgProperty')] () {
+    var current = editor.selection.current || {};
+    var isMotionBased = !!current['motion-based']
+    return {
+      style: {
+        display: isMotionBased ? 'none': 'block'
+      }
+    }
+  }
+
   getBody() {
+    var current = editor.selection.current || {};
+
     return /*html*/`
 
-      <div class='property-item animation-property-item' ref='$path'>
-        <span class='add-timeline-property' data-property='d'></span>      
-        <label>Path - d </label>
+      <div class='property-item'> 
+        <label><input type='checkbox' ref='$motionBased' ${OBJECT_TO_PROPERTY({ checked: !!current['motion-based']})} /> Is Motion Path</label>
       </div>      
 
-      <div class='property-item animation-property-item' ref='$polygon'>
-        <span class='add-timeline-property' data-property='points'></span>      
-        <label>Polygon - points</label>
-      </div>         
+      <div ref='$svgProperty'>
+        <div class='property-item animation-property-item' ref='$path'>
+          <span class='add-timeline-property' data-property='d'></span>      
+          <label>Path - d </label>
+        </div>      
 
-      <div class='property-item label'>
-        <label>Fill</label>
-      </div>
+        <div class='property-item animation-property-item' ref='$polygon'>
+          <span class='add-timeline-property' data-property='points'></span>      
+          <label>Polygon - points</label>
+        </div>         
 
-      <div class='property-item animation-property-item'>
-        <span class='add-timeline-property' data-property='fill'></span>
-        <ColorViewEditor ref='$fill' label='Color' key='fill' onchange="changeValue" />
-      </div>
+        <div class='property-item label'>
+          <label>Fill</label>
+        </div>
+
+        <div class='property-item animation-property-item'>
+          <span class='add-timeline-property' data-property='fill'></span>
+          <ColorViewEditor ref='$fill' label='Color' key='fill' onchange="changeValue" />
+        </div>
 
 
-      <div class='property-item animation-property-item'>
-        <span class='add-timeline-property' data-property='fill-opacity'></span>
-        <NumberRangeEditor 
-          ref='$fillOpacity' 
-          label='Opacity' 
-          key='fill-opacity' 
-          removable="true"
-          value="1" 
-          min="0"
-          max="1"
-          step="0.01"
-          calc="false"
-          unit="number" 
-          onchange="changeValue" 
+        <div class='property-item animation-property-item'>
+          <span class='add-timeline-property' data-property='fill-opacity'></span>
+          <NumberRangeEditor 
+            ref='$fillOpacity' 
+            label='Opacity' 
+            key='fill-opacity' 
+            removable="true"
+            value="1" 
+            min="0"
+            max="1"
+            step="0.01"
+            calc="false"
+            unit="number" 
+            onchange="changeValue" 
+            />
+        </div>   
+
+
+        <div class='property-item animation-property-item'>
+          <span class='add-timeline-property' data-property='fill-rule'></span>
+          <SelectEditor 
+            ref='$fillRule' 
+            label='Fill Rule' 
+            key="fill-rule" 
+            options="nonzero,evenodd" 
+            onchange="changeValue" />
+        </div>            
+
+        <div class='property-item label'>
+          <label>Stroke</label>
+        </div>      
+
+        <div class='property-item animation-property-item'>
+          <span class='add-timeline-property' data-property='stroke'></span>
+          <ColorViewEditor ref='$stroke' label='Color' key='stroke' onchange="changeValue" />
+        </div>      
+
+        <div class='property-item animation-property-item'>
+          <span class='add-timeline-property' data-property='stroke-width'></span>
+          <RangeEditor 
+            ref='$strokeWidth' 
+            label='Width' 
+            key="stroke-width" 
+            removable="true" 
+            onchange="changeValue" />
+        </div>
+              
+
+        <div class='property-item animation-property-item'>
+          <span class='add-timeline-property' data-property='stroke-dasharray'></span>      
+          <label>Dash Array</label>
+        </div>
+        <div class='property-item'>
+          <StrokeDashArrayEditor ref='$strokeDashArray' key='stroke-dasharray' onchange="changeValue" />
+        </div>
+
+        <div class='property-item animation-property-item'>
+          <span class='add-timeline-property' data-property='stroke-dashoffset'></span>      
+          <NumberRangeEditor 
+            ref='$strokeDashOffset' 
+            key='stroke-dashoffset' 
+            label='Dash Offset'
+            removable="true"
+            value="0" 
+            min="-1000"
+            max="1000"
+            step="1"
+            calc="false"
+            unit="number" 
+            onchange="changeValue" 
+            />
+        </div>         
+
+        <div class='property-item animation-property-item'>
+          <span class='add-timeline-property' data-property='stroke-linecap'></span>      
+          <SelectEditor 
+            ref='$strokeLineCap' 
+            label='Line Cap' 
+            key="stroke-linecap" 
+            options="butt,round,square" 
+            onchange="changeValue" 
           />
-      </div>   
+        </div> 
 
-
-      <div class='property-item animation-property-item'>
-        <span class='add-timeline-property' data-property='fill-rule'></span>
-        <SelectEditor 
-          ref='$fillRule' 
-          label='Fill Rule' 
-          key="fill-rule" 
-          options="nonzero,evenodd" 
-          onchange="changeValue" />
-      </div>            
-
-      <div class='property-item label'>
-        <label>Stroke</label>
-      </div>      
-
-      <div class='property-item animation-property-item'>
-        <span class='add-timeline-property' data-property='stroke'></span>
-        <ColorViewEditor ref='$stroke' label='Color' key='stroke' onchange="changeValue" />
-      </div>      
-
-      <div class='property-item animation-property-item'>
-        <span class='add-timeline-property' data-property='stroke-width'></span>
-        <RangeEditor 
-          ref='$strokeWidth' 
-          label='Width' 
-          key="stroke-width" 
-          removable="true" 
-          onchange="changeValue" />
-      </div>
-            
-
-      <div class='property-item animation-property-item'>
-        <span class='add-timeline-property' data-property='stroke-dasharray'></span>      
-        <label>Dash Array</label>
-      </div>
-      <div class='property-item'>
-        <StrokeDashArrayEditor ref='$strokeDashArray' key='stroke-dasharray' onchange="changeValue" />
-      </div>
-
-      <div class='property-item animation-property-item'>
-        <span class='add-timeline-property' data-property='stroke-dashoffset'></span>      
-        <NumberRangeEditor 
-          ref='$strokeDashOffset' 
-          key='stroke-dashoffset' 
-          label='Dash Offset'
-          removable="true"
-          value="0" 
-          min="-1000"
-          max="1000"
-          step="1"
-          calc="false"
-          unit="number" 
-          onchange="changeValue" 
+        <div class='property-item animation-property-item'>
+          <span class='add-timeline-property' data-property='stroke-linejoin'></span>      
+          <SelectEditor 
+            ref='$strokeLineJoin' 
+            label='Line Join' 
+            key="stroke-linejoin" 
+            options="miter,arcs,bevel,miter-clip,round" 
+            onchange="changeValue" 
           />
-      </div>         
-
-      <div class='property-item animation-property-item'>
-        <span class='add-timeline-property' data-property='stroke-linecap'></span>      
-        <SelectEditor 
-          ref='$strokeLineCap' 
-          label='Line Cap' 
-          key="stroke-linecap" 
-          options="butt,round,square" 
-          onchange="changeValue" 
-        />
-      </div> 
-
-      <div class='property-item animation-property-item'>
-        <span class='add-timeline-property' data-property='stroke-linejoin'></span>      
-        <SelectEditor 
-          ref='$strokeLineJoin' 
-          label='Line Join' 
-          key="stroke-linejoin" 
-          options="miter,arcs,bevel,miter-clip,round" 
-          onchange="changeValue" 
-        />
-      </div> 
+        </div> 
+      </div>
    
     `;
+  }
+
+  [CLICK('$motionBased')] () {
+    var current = editor.selection.current;
+
+    if (current) {
+      current.reset({
+        'motion-based': this.refs.$motionBased.checked()
+      })
+      this.bindData('$svgProperty')
+    }
+
   }
 
   [EVENT('changeValue')] (key, value, params) {

@@ -16,6 +16,7 @@ export class SVGItem extends Layer {
       'stroke-linejoin': '',      
       'stroke-dashoffset': '', 
       'stroke-dasharray': ' ',
+      'motion-based': false,
       ...obj
     });
   }
@@ -34,16 +35,29 @@ export class SVGItem extends Layer {
       'stroke-linecap': json['stroke-linecap'],
       'stroke-linejoin': json['stroke-linejoin'],
       'stroke-dashoffset': json['stroke-dashoffset'],
-      'stroke-dasharray': json['stroke-dasharray']
+      'stroke-dasharray': json['stroke-dasharray'],
+      'motion-based': json['motion-based']
     }
   }
 
   toSVGDefaultCSS () {
-    return {
-      ...this.toKeyListCSS(
-        'stroke', 'stroke-width', 'stroke-linecap', 'stroke-linejoin', 'stroke-dasharray', 'stroke-dashoffset',
-        'fill', 'fill-opacity', 'fill-rule')
+
+    if (this.json['motion-based']) {
+
+      return {
+        'fill': 'transparent',
+        'fill-opacity': 1,
+        'stroke': 'rgba(0, 0, 0, 0.2)'
+      }
+    } else {
+
+      return {
+        ...this.toKeyListCSS(
+          'stroke', 'stroke-width', 'stroke-linecap', 'stroke-linejoin', 'stroke-dasharray', 'stroke-dashoffset',
+          'fill', 'fill-opacity', 'fill-rule')
+      }
     }
+
   }
 
   getDefaultTitle() {

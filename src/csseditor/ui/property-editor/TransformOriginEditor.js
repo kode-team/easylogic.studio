@@ -24,9 +24,9 @@ export default class TransformOriginEditor extends UIElement {
 
     var obj = {
       isAll: false,
-      'transform-origin': Length.px(0),
-      'transform-origin-x': Length.px(0),
-      'transform-origin-y': Length.px(0) 
+      'transform-origin': Length.percent(50),
+      'transform-origin-x': Length.percent(50),
+      'transform-origin-y': Length.percent(50)
     }
 
     if (this.props.value) {

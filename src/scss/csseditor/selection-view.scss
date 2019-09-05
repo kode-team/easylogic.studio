@@ -145,8 +145,8 @@
   
       }      
 
-      $rotate3d-width: 30px;
-      $rotate3d-height: 30px;
+      $rotate3d-width: 100px;
+      $rotate3d-height: 100px;
 
       &[data-position="rotate3d"] {
         left: 50%;
@@ -194,7 +194,7 @@
 
           .x {
             transform: rotateX(90deg) translateZ(0px);
-            border: 3px solid red; 
+            border: 3px solid $selected-color; 
           }
   
           .y {
@@ -206,7 +206,7 @@
 
         .z {
 
-          $color: blue; 
+          $color: $selected-color; 
 
           transform: rotate(0deg) translateZ(0px);
           border: 2px solid $color; 
@@ -289,7 +289,7 @@
         
         .translate {
 
-          $color: purple; 
+          $color: $selected-color; 
 
           transform: rotate(0deg) translateZ(0px);
           border: 2px solid $color; 

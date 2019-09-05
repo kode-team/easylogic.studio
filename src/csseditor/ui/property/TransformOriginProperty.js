@@ -40,11 +40,7 @@ export default class TransformOriginProperty extends BaseProperty {
     var current = editor.selection.current || {}; 
     var value = current['transform-origin'] || ''
 
-    return `<TransformOriginEditor 
-              ref='$1' 
-              value='${value}' 
-              onchange='changeTransformOrigin' 
-            />`
+    return /*html*/`<TransformOriginEditor ref='$1' value='${value}' onchange='changeTransformOrigin' />`
   }
 
 

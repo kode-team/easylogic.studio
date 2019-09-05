@@ -205,6 +205,15 @@ export function OBJECT_TO_PROPERTY (obj) {
             }
         }
 
+        if (isBoolean(obj[key])) {
+            if (obj[key]) {
+                return key;
+            } else {
+                return '';
+            }
+
+        } 
+
         return `${key}="${obj[key]}"`
     }).join(' ');
 }

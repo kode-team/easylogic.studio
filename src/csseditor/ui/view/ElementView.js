@@ -501,7 +501,7 @@ export default class ElementView extends UIElement {
     updateElement (item) {
         if (item.updateFunction) {
             var currentElement = this.refs.$view.$(`[data-id="${item.id}"]`);
-            item.updateFunction.call(current, currentElement);
+            item.updateFunction.call(item, currentElement);
         }
     }
 
