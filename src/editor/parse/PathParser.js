@@ -158,6 +158,7 @@ export default class PathParser {
 
         for(var index = 0, len = this.segments.length; index < len; index++) {
             var s = this.segments[index]
+            var nextSegment = this.segments[index+1]
             const {command, values} = s; 
 
             if (command === 'M' ) {
@@ -167,6 +168,7 @@ export default class PathParser {
                     originalCommand: command,                    
                     startPoint: {x, y}, 
                     endPoint: {x, y}, 
+                    reversePoint: {x, y},
                     curve: false
                 })
             } else if (command === 'L') { 
@@ -216,18 +218,41 @@ export default class PathParser {
 
                 } else {
 
-                    var startPoint = {x, y}
-                    var reversePoint = { x: cx1, y: cy1} 
-                    var endPoint = {x, y}
-    
-                    points.push({
-                        command, 
-                        originalCommand: command,                        
-                        curve: true, 
-                        startPoint,
-                        endPoint,
-                        reversePoint
-                    })
+
+                    if (nextSegment && nextSegment.command === 'L') {
+                        prevPoint.curve = true; 
+                        prevPoint.endPoint = { x: cx1, y: cy1 }
+
+                        var startPoint = {x, y}
+                        var reversePoint = { x, y} 
+                        var endPoint = {x, y}
+        
+                        points.push({
+                            command: 'L', 
+                            originalCommand: command,                        
+                            curve: false, 
+                            startPoint,
+                            endPoint,
+                            reversePoint
+                        })
+
+                    } else {
+
+                        var startPoint = {x, y}
+                        var reversePoint = { x: cx1, y: cy1} 
+                        var endPoint = {x, y}
+        
+                        points.push({
+                            command, 
+                            originalCommand: command,                        
+                            curve: true, 
+                            startPoint,
+                            endPoint,
+                            reversePoint
+                        })
+                    }
+
+
                 }
             } else if (command === 'T') {
                 var [x, y] = values; 
@@ -310,8 +335,22 @@ export default class PathParser {
 
                 if (Point.isEqual(prevPoint.startPoint, firstPoint.startPoint)) {
                     prevPoint.connected = true; 
+
+                    // 연결되어 있다면 같이 선언한다. 
+                    prevPoint.reversePoint = clone(firstPoint.endPoint);
+                    firstPoint.reversePoint = clone(prevPoint.endPoint);
+    
+                    var isPrevCurve = prevPoint.curve;
+                    var isFirstCurve = firstPoint.curve
+
+                    if (isPrevCurve && !isFirstCurve) {
+                        firstPoint.curve = true; 
+                    } else if (!isPrevCurve && isFirstCurve) {
+                        prevPoint.curve = true; 
+                    }
                 }
                 prevPoint.close = true; 
+
             }
         }
 

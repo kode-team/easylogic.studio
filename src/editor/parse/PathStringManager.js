@@ -41,7 +41,7 @@ export default class PathStringManager {
     }
 
     toString (className = 'object') {
-        return `<path d="${this.d}" class='${className}'/>`
+        return /*html*/`<path d="${this.d}" class='${className}'/>`
     }
 
 }

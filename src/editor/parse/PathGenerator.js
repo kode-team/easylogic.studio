@@ -577,23 +577,12 @@ export default class PathGenerator {
                 } else {
                     // 이전은 점이고 현재가 드래그 일 때 , 한쪽만 segment 가 있으므로 2차 Curve 
                     if (prevPoint.curve === false) { 
-                        d.push({command: 'Q', values: [
-                            current.reversePoint, 
-                            current.startPoint
-                        ]});                        
+                        d.push({command: 'Q', values: [current.reversePoint, current.startPoint]});                        
                     } else {
                         if (current.connected) {
-                            d.push({command: 'C', values: [
-                                prevPoint.endPoint, 
-                                current.reversePoint, 
-                                current.startPoint
-                            ]});
+                            d.push({command: 'C', values: [ prevPoint.endPoint, current.reversePoint, current.startPoint ]});
                         } else {
-                            d.push({command: 'C', values: [
-                                prevPoint.endPoint, 
-                                current.reversePoint, 
-                                current.startPoint
-                            ]});                            
+                            d.push({command: 'C', values: [ prevPoint.endPoint, current.reversePoint, current.startPoint ]});                            
                         }
                     }
                 }
@@ -642,7 +631,122 @@ export default class PathGenerator {
         return this.toSVGString()
     }
 
+    makeStartPointGuide (prevPoint, current, nextPoint, index) {
+        current.startPoint.isFirst = true; 
+
+        this.pathStringManager.M(current.startPoint)        
+
+        if (current.curve === false) {
+            this.segmentManager.addPoint({}, current.startPoint, index, 'startPoint')
+        } else {
+            // NOOP 
+        }
+
+
+    }
+
+    makeMiddlePointGuide (prevPoint, current, nextPoint, index) {
+
+        if (current.curve === false) { 
+            // 꼭지점
+            if (prevPoint.curve === false) {
+                this.pathStringManager
+                    .L(current.startPoint)
+
+                this.segmentManager
+                    .addPoint({}, current.startPoint, index, 'startPoint')   
+                
+                this.splitLines.push(
+                    new PathStringManager()
+                        .M(prevPoint.startPoint)
+                        .L(current.startPoint)
+                        .toString('split-path')
+                )
+            } else {
+                // console.log(prevPoint, current, `Q ${prevPoint.endPoint.x} ${prevPoint.endPoint.y} ${current.startPoint.x} ${current.startPoint.y}`)
+                this.pathStringManager
+                    .Q(prevPoint.endPoint, current.startPoint)
+                this.splitLines.push(
+                    new PathStringManager()
+                        .M(prevPoint.startPoint)
+                        .Q(prevPoint.endPoint, current.startPoint)
+                        .toString('split-path')
+                );
+
+                this.segmentManager
+                    .addLine(prevPoint.startPoint, prevPoint.endPoint)
+                    .addCurvePoint(current.startPoint, index, 'startPoint')
+                    .addCurvePoint(prevPoint.endPoint, prevPoint.index, 'endPoint');
+            }
+
+
+        } else {    // 현재가 curve 일 때 
+
+            // 이전은 점이고 현재가 드래그 일 때 
+            if (prevPoint.curve === false) { 
+
+                this.pathStringManager
+                    .Q(current.reversePoint, current.startPoint);
+
+                this.splitLines.push(
+                    new PathStringManager()
+                        .M(prevPoint.startPoint)
+                        .Q(current.reversePoint,current.startPoint)
+                        .toString('split-path')
+                )
+
+                this.segmentManager
+                    .addLine(current.startPoint, current.reversePoint)
+                    .addCurvePoint(current.startPoint, index, 'startPoint')
+                    .addCurvePoint(current.reversePoint, index, 'reversePoint');
+
+            } else {
+
+                if (current.connected) {
+
+                    // 이전도 drag 일 때 
+                    this.pathStringManager
+                        .C( prevPoint.endPoint, current.reversePoint, current.startPoint);
+
+                    this.splitLines.push(
+                        new PathStringManager()
+                            .M(prevPoint.startPoint)
+                            .C( prevPoint.endPoint, current.reversePoint, current.startPoint)
+                            .toString('split-path')
+                    )
+
+                    this.segmentManager
+                        .addLine(prevPoint.startPoint, prevPoint.endPoint)
+                        .addLine(current.startPoint, current.reversePoint)
+                        .addCurvePoint(prevPoint.endPoint, prevPoint.index, 'endPoint')
+                        .addCurvePoint(current.reversePoint, index, 'reversePoint');
+                } else {
+                    // 이전도 drag 일 때 
+                    this.pathStringManager
+                        .C(prevPoint.endPoint, current.reversePoint, current.startPoint)
+
+                    this.splitLines.push(
+                        new PathStringManager()
+                            .M(prevPoint.startPoint)
+                            .C(prevPoint.endPoint, current.reversePoint, current.startPoint)
+                            .toString('split-path')
+                    )
+
+                    this.segmentManager
+                        .addLine(prevPoint.startPoint, prevPoint.endPoint)
+                        .addLine(current.startPoint, current.reversePoint)
+                        .addCurvePoint(current.startPoint, index, 'startPoint')
+                        .addCurvePoint(prevPoint.endPoint, prevPoint.index, 'endPoint')                        
+                        .addCurvePoint(current.reversePoint, index, 'reversePoint');
+
+                }
+            }
+        }
+    }
+
     makePointGuide (points) {
+
+        console.log(points);
 
         for(var index = 0, len = points.length; index < len; index++) {
             var currentIndex = index; 
@@ -650,111 +754,26 @@ export default class PathGenerator {
 
             if (!current) continue; 
 
+            var nextPoint = Point.getNextPoint(points, index);
+            var prevPoint = Point.getPrevPoint(points, index);
+
+            if (prevPoint && prevPoint.command === 'M') {
+                current.startPoint.isSecond = true; 
+            }
+
+            if (nextPoint && nextPoint.command === 'M') {
+                current.startPoint.isLast = true; 
+            } else if (!nextPoint) {
+                current.startPoint.isLast = true; 
+            }
+
             if (current.command === 'M') {
-                this.pathStringManager.M(current.startPoint)
-                this.segmentManager.addPoint({
-                    isFirst: true
-                }, current.startPoint, currentIndex, 'startPoint')
+
+                this.makeStartPointGuide(prevPoint, current, nextPoint, index);
+
 
             } else {
-
-                var prevPoint = Point.getPrevPoint(points, index);
-
-                if (current.curve === false) {  // 1번이 점이면 
-                    // 꼭지점
-                    if (prevPoint.curve === false) {
-                        this.pathStringManager
-                            .L(current.startPoint)
-
-                        this.segmentManager
-                            .addPoint({}, current.startPoint, currentIndex, 'startPoint')   
-                        
-                        this.splitLines.push(
-                            new PathStringManager()
-                                .M(prevPoint.startPoint)
-                                .L(current.startPoint)
-                                .toString('split-path')
-                        )
-                    } else {
-                        // console.log(prevPoint, current, `Q ${prevPoint.endPoint.x} ${prevPoint.endPoint.y} ${current.startPoint.x} ${current.startPoint.y}`)
-                        this.pathStringManager
-                            .Q(prevPoint.endPoint, current.startPoint)
-                        this.splitLines.push(
-                            new PathStringManager()
-                                .M(prevPoint.startPoint)
-                                .Q(prevPoint.endPoint, current.startPoint)
-                                .toString('split-path')
-                        );
-
-                        this.segmentManager
-                            .addLine(prevPoint.startPoint, prevPoint.endPoint)
-                            .addCurvePoint(current.startPoint, currentIndex, 'startPoint')
-                            .addCurvePoint(prevPoint.endPoint, prevPoint.index, 'endPoint');
-                    }
-    
-
-                } else {    // 현재가 curve 일 때 
-
-                    // 이전은 점이고 현재가 드래그 일 때 
-                    if (prevPoint.curve === false) { 
-
-                        this.pathStringManager
-                            .Q(current.reversePoint, current.startPoint);
-
-                        this.splitLines.push(
-                            new PathStringManager()
-                                .M(prevPoint.startPoint)
-                                .Q(current.reversePoint,current.startPoint)
-                                .toString('split-path')
-                        )
-
-                        this.segmentManager
-                            .addLine(current.startPoint, current.reversePoint)
-                            .addCurvePoint(current.startPoint, currentIndex, 'startPoint')
-                            .addCurvePoint(current.reversePoint, currentIndex, 'reversePoint');
-
-                    } else {
-
-                        if (current.connected) {
-
-                            // 이전도 drag 일 때 
-                            this.pathStringManager
-                                .C( prevPoint.endPoint, current.reversePoint, current.startPoint);
-
-                            this.splitLines.push(
-                                new PathStringManager()
-                                    .M(prevPoint.startPoint)
-                                    .C( prevPoint.endPoint, current.reversePoint, current.startPoint)
-                                    .toString('split-path')
-                            )
-
-                            this.segmentManager
-                                .addLine(prevPoint.startPoint, prevPoint.endPoint)
-                                .addLine(current.startPoint, current.reversePoint)
-                                .addCurvePoint(prevPoint.endPoint, prevPoint.index, 'endPoint')
-                                .addCurvePoint(current.reversePoint, currentIndex, 'reversePoint');
-                        } else {
-                            // 이전도 drag 일 때 
-                            this.pathStringManager
-                                .C(prevPoint.endPoint, current.reversePoint, current.startPoint)
-
-                            this.splitLines.push(
-                                new PathStringManager()
-                                    .M(prevPoint.startPoint)
-                                    .C(prevPoint.endPoint, current.reversePoint, current.startPoint)
-                                    .toString('split-path')
-                            )
-
-                            this.segmentManager
-                                .addLine(prevPoint.startPoint, prevPoint.endPoint)
-                                .addLine(current.startPoint, current.reversePoint)
-                                .addCurvePoint(current.startPoint, currentIndex, 'startPoint')
-                                .addCurvePoint(prevPoint.endPoint, prevPoint.index, 'endPoint')                        
-                                .addCurvePoint(current.reversePoint, currentIndex, 'reversePoint');
-
-                        }
-                    }
-                }
+                this.makeMiddlePointGuide(prevPoint, current, nextPoint, index);
             }
 
             if (current.close) {

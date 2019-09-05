@@ -38,7 +38,11 @@ export default class SegmentManager {
             cx: point.x,
             cy: point.y,
             index,
-            segment
+            segment,
+            isFirst: point.isFirst,
+            isLast: point.isLast,
+            isSecond: point.isSecond
+
         })
 
         return this; 
@@ -63,18 +67,16 @@ export default class SegmentManager {
             cx: point.x,
             cy: point.y,
             index,
-            segment
+            segment,
+            isFirst: point.isFirst,
+            isLast: point.isLast,
+            isSecond: point.isSecond
         })     
 
         return this; 
     }
 
     toString () {
-
-        this.segmentList.sort((a, b) => {
-            return a.isFirst ? 1 : -1; 
-        })
-
         return this.segmentList.map(it => {
 
             if (it.line) {
@@ -86,14 +88,15 @@ export default class SegmentManager {
                     x1='${it.x1}' x2='${it.x2}' y1='${it.y1}' y2='${it.y2}' 
                 />`
             } else if (it.curve) {
-                return `
+                return /*html*/`
                 <circle 
                     cx='${it.cx}' 
                     cy='${it.cy}' 
                     r='4'                     
                     class='curve' 
                     data-is-last="${it.isLast}"                
-                    data-is-first="${it.isFirst}"                    
+                    data-is-first="${it.isFirst}"      
+                    data-is-second="${it.isSecond}"                                  
                     title="${it.segment} curve"                
                     data-index='${it.index}' 
                     data-segment-point='${it.segment}' 
@@ -109,7 +112,7 @@ export default class SegmentManager {
                     data-start="true" 
                 />`                  
             } else {
-                return `
+                return /*html*/`
                 <circle 
                     cx='${it.cx}' 
                     cy='${it.cy}' 
@@ -117,6 +120,7 @@ export default class SegmentManager {
                     title="${it.segment}"
                     data-is-last="${it.isLast}"
                     data-is-first="${it.isFirst}"
+                    data-is-second="${it.isSecond}"
                     data-index='${it.index}' 
                     data-segment-point='${it.segment}' 
                     data-segment="true" 

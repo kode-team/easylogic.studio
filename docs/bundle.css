@@ -8109,6 +8109,16 @@ html, body {
   stroke: #fc554f;
   z-index: 1;
 }
+.csseditor[data-theme=dark] .path-editor-view svg circle[data-is-second=true] {
+  fill: #e10c04;
+  stroke: #e10c04;
+  z-index: 1;
+}
+.csseditor[data-theme=dark] .path-editor-view svg circle[data-is-last=true] {
+  fill: blue;
+  stroke: blue;
+  z-index: 1;
+}
 .csseditor[data-theme=dark] .path-editor-view svg .svg-canvas {
   fill: transparent;
   stroke: #609de2;
@@ -15400,6 +15410,16 @@ html, body {
 .csseditor[data-theme=light] .path-editor-view svg circle[data-is-first=true] {
   fill: #e2e7ff;
   stroke: #e2e7ff;
+  z-index: 1;
+}
+.csseditor[data-theme=light] .path-editor-view svg circle[data-is-second=true] {
+  fill: #7c93ff;
+  stroke: #7c93ff;
+  z-index: 1;
+}
+.csseditor[data-theme=light] .path-editor-view svg circle[data-is-last=true] {
+  fill: blue;
+  stroke: blue;
   z-index: 1;
 }
 .csseditor[data-theme=light] .path-editor-view svg .svg-canvas {

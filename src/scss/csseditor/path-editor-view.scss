@@ -66,6 +66,18 @@
                 stroke: $selected-color;
                 z-index: 1;
             }
+
+            &[data-is-second="true"] {
+                fill: darken($selected-color, 20%);
+                stroke: darken($selected-color, 20%);
+                z-index: 1;
+            }            
+
+            &[data-is-last="true"] {
+                fill: blue;
+                stroke: blue;
+                z-index: 1;
+            }            
             
         }
 
