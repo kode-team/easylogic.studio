@@ -1,7 +1,7 @@
 import { Gradient } from "./Gradient";
 
 import { Length, Position } from "../unit/Length";
-import { isString } from "../../util/functions/func";
+import { isString, clone } from "../../util/functions/func";
 import { convertMatches, reverseMatches } from "../../util/functions/parser";
 import { ColorStep } from "./ColorStep";
 
@@ -27,7 +27,7 @@ export class RadialGradient extends Gradient {
     return {
       ...super.toCloneObject(),
       radialType: this.json.radialType,
-      radialPosition: JSON.parse(JSON.stringify(this.json.radialPosition))
+      radialPosition: clone(this.json.radialPosition)
     }
   }
 

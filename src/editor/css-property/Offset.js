@@ -1,5 +1,5 @@
 import { Property } from "../items/Property";
-import { html, CSS_TO_STRING } from "../../util/functions/func";
+import { html, CSS_TO_STRING, clone } from "../../util/functions/func";
 import { Length } from "../unit/Length";
 
 export class Offset extends Property {
@@ -22,7 +22,7 @@ export class Offset extends Property {
       offset: this.json.offset + "",
       color: this.json.color,
       properties: this.json.properties.map(p => {
-        return JSON.parse(JSON.stringify(p))
+        return clone(p)
       })
     }
   }

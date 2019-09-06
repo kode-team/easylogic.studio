@@ -77,6 +77,16 @@ export default class SegmentManager {
     }
 
     toString () {
+
+        this.segmentList.sort((a, b) => {
+            if (a.line && !b.line) {
+                return -1; 
+            } else if (!a.line && b.line) {
+                return 1; 
+            }
+            return 0;
+        })
+
         return this.segmentList.map(it => {
 
             if (it.line) {

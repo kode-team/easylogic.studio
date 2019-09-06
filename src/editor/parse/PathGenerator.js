@@ -422,7 +422,7 @@ export default class PathGenerator {
                 } else if (e.altKey) {  // 상대편 길이 유지하면서 curve 움직이기 
                     this.moveSegment(segmentKey, dx, dy, connectedPoint);
                 } else {    // Curve 만 움직이기 
-                    this.moveSegment(segmentKey, dx, dy, connectedPoint);
+                    // this.moveSegment(segmentKey, dx, dy, connectedPoint);
                     this.rotateSegment(segmentKey, connectedPoint);
                 }   
             }
@@ -564,20 +564,22 @@ export default class PathGenerator {
                 if (current.curve === false) {  // 1번이 점이면 
                     // 꼭지점
                     if (prevPoint.curve === false) {
-                        d.push({command: 'L', values: [
-                            current.startPoint
-                        ]});
+                        d.push({command: 'L', values: [ current.startPoint ]});
                     } else {
                         // 이전이 drag이고  지금이 점일 때  한쪽만 segment 가 있으므로 2차 Curve                         
-                        d.push({command: 'Q', values: [
-                            prevPoint.endPoint, 
-                            current.startPoint
-                        ]});
+                        d.push({command: 'Q', values: [ prevPoint.endPoint, current.startPoint]});
                     }
                 } else {
                     // 이전은 점이고 현재가 드래그 일 때 , 한쪽만 segment 가 있으므로 2차 Curve 
                     if (prevPoint.curve === false) { 
-                        d.push({command: 'Q', values: [current.reversePoint, current.startPoint]});                        
+
+                        if (Point.isEqual(current.reversePoint, current.startPoint)) {
+                            d.push({ command: 'L', values: [current.startPoint] })
+                        } else {
+
+                            d.push({command: 'Q', values: [current.reversePoint, current.startPoint ]});
+                        }
+
                     } else {
                         if (current.connected) {
                             d.push({command: 'C', values: [ prevPoint.endPoint, current.reversePoint, current.startPoint ]});
@@ -593,10 +595,16 @@ export default class PathGenerator {
             }
         }
 
+        var dString = d.map(segment => {
+            return this.calculateRelativePosition (minX, minY, segment, scale);
+        }).join(' ')
+
+        // console.log('export', d.map(segment => {
+        //     return this.calculateRelativePosition (minX, minY, segment, 1);
+        // }).join(' '));
+
         return {
-            d: d.map(segment => {
-                return this.calculateRelativePosition (minX, minY, segment, scale);
-            }).join(' ')
+            d: dString
         };
     }
 
@@ -640,6 +648,11 @@ export default class PathGenerator {
             this.segmentManager.addPoint({}, current.startPoint, index, 'startPoint')
         } else {
             // NOOP 
+            // this.segmentManager.addPoint({}, current.startPoint, index, 'startPoint')            
+            this.segmentManager
+                .addPoint({}, current.startPoint, index, 'startPoint')                        
+                .addLine(current.startPoint, current.endPoint)
+                .addCurvePoint(current.endPoint, index, 'endPoint')
         }
 
 
@@ -685,20 +698,34 @@ export default class PathGenerator {
             // 이전은 점이고 현재가 드래그 일 때 
             if (prevPoint.curve === false) { 
 
-                this.pathStringManager
-                    .Q(current.reversePoint, current.startPoint);
+                // console.log(current.reversePoint, current.startPoint)
 
-                this.splitLines.push(
-                    new PathStringManager()
-                        .M(prevPoint.startPoint)
-                        .Q(current.reversePoint,current.startPoint)
-                        .toString('split-path')
-                )
+                if (Point.isEqual(current.reversePoint, current.startPoint)) {
+                    this.pathStringManager.L( current.startPoint);
+                    this.splitLines.push(
+                        new PathStringManager()
+                            .M(prevPoint.startPoint)
+                            .L(current.startPoint)
+                            .toString('split-path')
+                    )                    
+                    this.segmentManager.addPoint({},current.startPoint, index, 'startPoint')
+                } else {
 
-                this.segmentManager
-                    .addLine(current.startPoint, current.reversePoint)
-                    .addCurvePoint(current.startPoint, index, 'startPoint')
-                    .addCurvePoint(current.reversePoint, index, 'reversePoint');
+                    this.pathStringManager.Q( current.reversePoint, current.startPoint);
+
+                    this.splitLines.push(
+                        new PathStringManager()
+                            .M(prevPoint.startPoint)
+                            .Q(current.reversePoint, current.startPoint)
+                            .toString('split-path')
+                    )          
+
+                    this.segmentManager
+                        .addLine(current.startPoint, current.reversePoint)
+                        .addCurvePoint(current.startPoint, index, 'startPoint')
+                        .addCurvePoint(current.reversePoint, index, 'reversePoint');              
+                }
+
 
             } else {
 
@@ -745,8 +772,6 @@ export default class PathGenerator {
     }
 
     makePointGuide (points) {
-
-        console.log(points);
 
         for(var index = 0, len = points.length; index < len; index++) {
             var currentIndex = index; 
@@ -871,12 +896,9 @@ export default class PathGenerator {
                     // 이전에 점이고 지금도 점이면  직선 
                     // console.log(prev.close);
                     if (!prev.close) {
-                        this.guideLineManager
-                            .M(prev.startPoint)
-                            .L(moveXY);
+                        this.guideLineManager.M(prev.startPoint).L(moveXY);
 
-                        this.segmentManager
-                            .addPoint(false, prev.startPoint);
+                        this.segmentManager.addPoint(false, prev.startPoint);
                     }
                 }
             }
@@ -918,7 +940,7 @@ export default class PathGenerator {
     }
 
     toSVGString () {
-
+        // console.log('guide', this.pathStringManager.d)
         return `
         <svg width="100%" height="100%">
             ${this.makeSelectedSVGZone()}

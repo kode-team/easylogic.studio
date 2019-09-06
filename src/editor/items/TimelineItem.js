@@ -1,6 +1,6 @@
 import { DomItem } from "./DomItem";
 import { uuidShort } from "../../util/functions/math";
-import { isUndefined, isNotUndefined } from "../../util/functions/func";
+import { isUndefined, isNotUndefined, clone } from "../../util/functions/func";
 import { second, timecode, framesToTimecode } from "../../util/functions/time";
 import { createInterpolateFunction, createCurveFunction, createTimingFunction } from "../util/interpolate";
 
@@ -603,7 +603,7 @@ export class TimelineItem extends DomItem {
   toCloneObject() {
     return {
       ...super.toCloneObject(),
-      timeline: JSON.parse(JSON.stringify(this.json.timeline))
+      timeline: clone(this.json.timeline)
     }
   }  
 

@@ -1,7 +1,7 @@
 import { DomItem } from "./DomItem";
 import AssetParser from "../parse/AssetParser";
 import { SVGFilter } from "../css-property/SVGFilter";
-import { isString } from "../../util/functions/func";
+import { isString, clone } from "../../util/functions/func";
 
 export class AssetItem extends DomItem {
 
@@ -55,11 +55,11 @@ export class AssetItem extends DomItem {
   toCloneObject() {
     return {
       ...super.toCloneObject(),
-      colors: JSON.parse(JSON.stringify(this.json.colors)),
-      gradients: JSON.parse(JSON.stringify(this.json.gradients)),
-      svgfilters: JSON.parse(JSON.stringify(this.json.svgfilters)),
-      svgimages: JSON.parse(JSON.stringify(this.json.svgimages)),
-      images: JSON.parse(JSON.stringify(this.json.images))
+      colors: clone(this.json.colors),
+      gradients: clone(this.json.gradients),
+      svgfilters: clone(this.json.svgfilters),
+      svgimages: clone(this.json.svgimages),
+      images: clone(this.json.images)
     }
   }
 

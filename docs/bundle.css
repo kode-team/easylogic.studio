@@ -8110,8 +8110,8 @@ html, body {
   z-index: 1;
 }
 .csseditor[data-theme=dark] .path-editor-view svg circle[data-is-second=true] {
-  fill: #e10c04;
-  stroke: #e10c04;
+  fill: #4b0401;
+  stroke: #4b0401;
   z-index: 1;
 }
 .csseditor[data-theme=dark] .path-editor-view svg circle[data-is-last=true] {
@@ -15413,8 +15413,8 @@ html, body {
   z-index: 1;
 }
 .csseditor[data-theme=light] .path-editor-view svg circle[data-is-second=true] {
-  fill: #7c93ff;
-  stroke: #7c93ff;
+  fill: #0027e2;
+  stroke: #0027e2;
   z-index: 1;
 }
 .csseditor[data-theme=light] .path-editor-view svg circle[data-is-last=true] {

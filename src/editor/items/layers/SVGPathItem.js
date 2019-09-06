@@ -1,13 +1,15 @@
 import PathParser from "../../parse/PathParser";
 import { SVGItem } from "./SVGItem";
 import { Length } from "../../unit/Length";
+import { clone } from "../../../util/functions/func";
 
 export class SVGPathItem extends SVGItem {
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
       itemType: 'svg-path',
       name: "New Path",   
-      d: '',
+      d: '',        // 이건 최종 결과물로만 쓰고 나머지는 모두 segments 로만 사용한다. 
+      segments: [],
       totalLength: 0,
       ...obj
     });
@@ -22,6 +24,10 @@ export class SVGPathItem extends SVGItem {
     this.json.d = obj.d; 
     this.json.totalLength = obj.totalLength;
     this.json.path = new PathParser(obj.d);
+
+    if(obj.segments) {
+      this.json.path.resetSegment(obj.segments);
+    }
 
     // this.setScreenX(obj.x);
     // this.setScreenY(obj.y);
@@ -64,7 +70,8 @@ export class SVGPathItem extends SVGItem {
     return {
       ...super.toCloneObject(),
       totalLength: json.totalLength,
-      d: json.d
+      d: json.d,
+      segments: clone(this.json.segments)
     }
   }
 

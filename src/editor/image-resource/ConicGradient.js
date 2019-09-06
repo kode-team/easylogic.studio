@@ -3,7 +3,8 @@ import { Gradient } from "./Gradient";
 import {
   isNotUndefined,
   isString,
-  isUndefined
+  isUndefined,
+  clone
 } from "../../util/functions/func";
 import { ColorStep } from "./ColorStep";
 import { Length, Position } from "../unit/Length";
@@ -42,7 +43,7 @@ export class ConicGradient extends Gradient {
     return {
       ...super.toCloneObject(),
       angle: this.json.angle,
-      radialPosition: JSON.parse(JSON.stringify(this.json.radialPosition))
+      radialPosition: clone(this.json.radialPosition)
     }
   }
 

@@ -1,4 +1,5 @@
 import { Property } from "../items/Property";
+import { clone } from "../../util/functions/func";
 
 export class Selector extends Property {
   static parse(obj) {
@@ -20,7 +21,7 @@ export class Selector extends Property {
       ...super.toCloneObject(),
       selector: this.json.selector,
       properties: this.json.properties.map(p => {
-        return JSON.parse(JSON.stringify(p))
+        return clone(p)
       })
     }
   }

@@ -68,8 +68,8 @@
             }
 
             &[data-is-second="true"] {
-                fill: darken($selected-color, 20%);
-                stroke: darken($selected-color, 20%);
+                fill: darken($selected-color, 50%);
+                stroke: darken($selected-color, 50%);
                 z-index: 1;
             }            
 

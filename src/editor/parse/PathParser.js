@@ -333,22 +333,40 @@ export default class PathParser {
                 var prevPoint = Point.getPrevPoint(points, points.length);
                 var firstPoint = Point.getFirstPoint(points, points.length);
 
+                // if (prevPoint.command === 'Q') {    // 마지막 지점의 Q 는 항상 C 로 대체된다. 
+                //     prevPoint.command = 'C'
+                //     prevPoint.curve = true; 
+                //     prevPoint.endPoint = Point.getReversePoint(prevPoint.startPoint, prevPoint.reversePoint)
+
+                // }
+
                 if (Point.isEqual(prevPoint.startPoint, firstPoint.startPoint)) {
                     prevPoint.connected = true; 
 
-                    // 연결되어 있다면 같이 선언한다. 
-                    prevPoint.reversePoint = clone(firstPoint.endPoint);
-                    firstPoint.reversePoint = clone(prevPoint.endPoint);
-    
-                    var isPrevCurve = prevPoint.curve;
-                    var isFirstCurve = firstPoint.curve
-
-                    if (isPrevCurve && !isFirstCurve) {
+                    if (prevPoint.command === 'C') {
                         firstPoint.curve = true; 
-                    } else if (!isPrevCurve && isFirstCurve) {
-                        prevPoint.curve = true; 
+
+                        if (Point.isEqual(firstPoint.endPoint, firstPoint.startPoint)) {
+                            firstPoint.endPoint = Point.getReversePoint(prevPoint.startPoint, prevPoint.reversePoint);
+                        }
+
                     }
                 }
+
+
+                //     // 연결되어 있다면 같이 선언한다. 
+                //     prevPoint.reversePoint = clone(firstPoint.endPoint);
+                //     firstPoint.reversePoint = clone(prevPoint.endPoint);
+    
+                //     var isPrevCurve = prevPoint.curve;
+                //     var isFirstCurve = firstPoint.curve
+
+                //     if (isPrevCurve && !isFirstCurve) {
+                //         firstPoint.curve = true; 
+                //     } else if (!isPrevCurve && isFirstCurve) {
+                //         prevPoint.curve = true; 
+                //     }
+                // }
                 prevPoint.close = true; 
 
             }

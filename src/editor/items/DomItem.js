@@ -8,7 +8,8 @@ import {
   isUndefined,
   isNotUndefined,
   CSS_TO_STRING,
-  STRING_TO_CSS
+  STRING_TO_CSS,
+  clone
 } from "../../util/functions/func";
 import { BorderImage } from "../css-property/BorderImage";
 import { Animation } from "../css-property/Animation";
@@ -143,9 +144,9 @@ export class DomItem extends GroupItem {
       'mix-blend-mode': json['mix-blend-mode'],
       'opacity': json.opacity + "",
       'rotate': json.rotate + "",      
-      border: JSON.parse(JSON.stringify(json.border)),
-      outline: JSON.parse(JSON.stringify(json.outline)),
-      borderRadius: JSON.parse(JSON.stringify(json.borderRadius)),
+      border: clone(json.border),
+      outline: clone(json.outline),
+      borderRadius: clone(json.borderRadius),
       borderImage: json.borderImage.clone(),
       applyBorderImage: json.applyBorderImage,
       animations: json.animations.map(animation => animation.clone()),
