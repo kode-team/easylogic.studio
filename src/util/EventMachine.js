@@ -411,6 +411,7 @@ export default class EventMachine {
   }
 
   _reload(props) {
+    // console.log(this, this.parent, this.parent.parent, props);
     this.props = props;
     this.setState(this.initState(), false);
     this.refresh(true);
@@ -564,6 +565,7 @@ export default class EventMachine {
         //  기존의 같은 객체가 있으면 객체를 새로 생성하지 않고 재활용한다. 
         instance = this.children[refName] 
         instance._reload(props);
+        console.log(instance)
       } else {
         instance = new Component(this, props);
 

@@ -143,7 +143,7 @@ export class DomItem extends GroupItem {
       'perspective': json.perspective + "",
       'mix-blend-mode': json['mix-blend-mode'],
       'opacity': json.opacity + "",
-      'rotate': json.rotate + "",      
+      'rotate': json.rotate + "",
       border: clone(json.border),
       outline: clone(json.outline),
       borderRadius: clone(json.borderRadius),
@@ -522,7 +522,7 @@ export class DomItem extends GroupItem {
 
         'filter', 'clip-path', 'backdrop-filter', 'box-shadow', 'text-shadow',
 
-        'offset-path', 'offset-distance'
+        'offset-path'
       )
     }
 

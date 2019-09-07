@@ -3,6 +3,10 @@ export default class Point {
         return a.x === b.x && a.y === b.y; 
     }
 
+    static isFirst (point) {
+        return point && point.command == 'M'
+    }
+
 
     static getReversePoint(start, end) {
         var distX = (start.x -  end.x)
@@ -13,6 +17,10 @@ export default class Point {
             y: start.y + distY
         }
     }    
+
+    static getIndexPoint (points, index) {
+        return points[index]
+    }
 
     static getPoint (points, p0) {
         return points.filter(p => Point.isEqual(p.startPoint, p0))[0]
@@ -118,13 +126,13 @@ export default class Point {
 
 
     static getNextPoint (points, index) {
-        var nextIndex = index + 1; 
-        var nextPoint = points[nextIndex]
 
-        if (!nextPoint) {
-            nextPoint = Point.getFirstPoint(points, index);
+        var currentPoint = points[index]
+
+        if (currentPoint.connected) {
+            return Point.getFirstPoint(points, index);
         }
 
-        return nextPoint;
+        return points[index + 1]
     }       
 }

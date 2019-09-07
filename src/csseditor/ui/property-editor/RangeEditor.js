@@ -37,6 +37,10 @@ export default class RangeEditor extends UIElement {
         return `<div class='small-editor' ref='$body'></div>`
     }
 
+    refresh() {
+        this.load();
+    }
+
     [LOAD('$body')] () {
 
         var { min, max, step, label, calc, type, removable, layout } = this.state

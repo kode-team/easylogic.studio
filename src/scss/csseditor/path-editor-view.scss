@@ -45,6 +45,10 @@
                 stroke: purple;
                 pointer-events: none;
             }
+
+            &[data-segment="true"] {
+                stroke-dasharray: 2 2; 
+            }
         }
 
         circle {
@@ -84,7 +88,8 @@
         .svg-canvas {
             fill: transparent;
             stroke: $selected-border-color;
-            stroke-width: 1;
+            stroke-width: 0.5;
+            // display: none;
         }
 
         path {

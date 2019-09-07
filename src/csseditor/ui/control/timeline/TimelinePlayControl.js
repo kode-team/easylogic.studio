@@ -1,6 +1,7 @@
 import UIElement, { EVENT } from "../../../../util/UIElement";
 import { CLICK, INPUT, BIND } from "../../../../util/Event";
 import icon from "../../icon/icon";
+import { editor } from "../../../../editor/editor";
 
 export default class TimelinePlayControl extends UIElement {
     
@@ -75,18 +76,26 @@ export default class TimelinePlayControl extends UIElement {
 
     first () {
         this.emit('first.timeline')
+        editor.changeMode('SELECTION');
+        this.emit('after.change.mode')
     }
 
     prev () {
         this.emit('prev.timeline')
+        editor.changeMode('SELECTION');
+        this.emit('after.change.mode')
     }
     
     next () {
         this.emit('next.timeline')
+        editor.changeMode('SELECTION');
+        this.emit('after.change.mode')           
     }
     
     last () {
         this.emit('last.timeline')
+        editor.changeMode('SELECTION');
+        this.emit('after.change.mode')             
     }    
 
     play () {
@@ -95,6 +104,8 @@ export default class TimelinePlayControl extends UIElement {
 
     pause () {
         this.emit('pause.timeline');
+        editor.changeMode('SELECTION');
+        this.emit('after.change.mode')
     }
 
     [EVENT('stopTimeline')] () {

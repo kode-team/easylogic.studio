@@ -42,6 +42,16 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
           background-color:transparent;
         }
       }
+
+      .motion-based {
+        z-index: 100000000;
+      }
+
+      &[data-mode='play'] {
+        .motion-based {
+          // display: none; 
+        }
+      }
     }
   }
 
@@ -82,6 +92,7 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
   right: 0px;
   height: 35px;
   // text-align: center; 
+  font-size: 12px;
   pointer-events: none; 
 
   @import './sub-editor/path-manager.scss';

@@ -145,8 +145,8 @@
   
       }      
 
-      $rotate3d-width: 100px;
-      $rotate3d-height: 100px;
+      $rotate3d-width: 20px;
+      $rotate3d-height: 20px;
 
       &[data-position="rotate3d"] {
         left: 50%;
@@ -194,12 +194,12 @@
 
           .x {
             transform: rotateX(90deg) translateZ(0px);
-            border: 3px solid $selected-color; 
+            border: 2px solid $selected-color; 
           }
   
           .y {
             transform: rotateY(90deg) translateZ(0px);
-            border: 3px solid green; 
+            border: 2px solid green; 
           }        
   
         }

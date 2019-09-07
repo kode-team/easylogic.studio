@@ -24,6 +24,12 @@
 
   }
 
+  marker {
+    path {
+      fill: $border-color;
+    }
+  }
+
   .layout-header {
     flex: none;
     height: $tool-size;

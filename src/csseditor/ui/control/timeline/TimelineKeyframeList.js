@@ -52,7 +52,7 @@ export default class TimelineKeyframeList extends UIElement {
                 var selected = editor.timeline.checked(it.id) && editor.timeline.checked(next.id)
 
                 return /*html*/`<div ${OBJECT_TO_PROPERTY({
-                    'data-selected': selected,
+                    'data-selected': `${selected}`,
                     'class': {
                         'offset-line': true
                     }
@@ -63,10 +63,11 @@ export default class TimelineKeyframeList extends UIElement {
 
             ${list.map(it => {
                 var selected = editor.timeline.checked(it.id);
+
                 return /*html*/`<div class='${OBJECT_TO_CLASS({
                     'offset': true
                 })}' style='left: ${it.left}' ${OBJECT_TO_PROPERTY({
-                    'data-selected': selected,
+                    'data-selected': `${selected}`,
                     'data-offset-id': it.id,
                     'data-layer-id': layerId,
                     'data-property': property.property,

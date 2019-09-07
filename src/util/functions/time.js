@@ -32,6 +32,18 @@ export function timecode(fps, seconds) {
     var s = Math.floor(seconds % 60);
     var f = Math.round( (seconds - Math.floor(seconds)) * fps );
 
+    if (f === fps) {
+        f = 0;
+        s += 1; 
+        if (s === 60) {
+            m += 1; 
+
+            if (m === 60) {
+                h += 1; 
+            }
+        }
+    }
+
     return [h, m, s, f].map(t => {
         return (t + '').padStart(2, '0')
     }).join(':')
@@ -56,6 +68,8 @@ export function makeTimer (opt) {
         iterationStartCount: 1,
         iterationCount: opt.iterationCount || Number.MAX_SAFE_INTEGER,
         direction: opt.direction || 'normal',
+        log: [],
+        logIndex: 0,
         tick: opt.tick || (() => {}),
         startCallback: opt.start || (() => {}),
         endCallback: opt.end || (() => {}),
@@ -85,6 +99,7 @@ export function makeTimer (opt) {
         var isStart = false; 
         if (timer.start === null) {
             timer.start = now; 
+            // timer.elapsed = 0; 
             isStart = true; 
         }
 
@@ -102,6 +117,8 @@ export function makeTimer (opt) {
         
         var elapsed = calculateForDirection(timer.elapsed/timer.duration) * timer.duration;
         if (isStart) timer.startCallback(elapsed, timer);
+        timer.log[timer.logIndex++] = {elapsed, dt: timer.lastTime - elapsed};
+        timer.lastTime = elapsed;
         timer.tick (elapsed, timer);
 
         if (timer.elapsed === timer.duration) {
@@ -133,6 +150,9 @@ export function makeTimer (opt) {
     const play = (opt = {}) => {
         timer.start = null;    
         timer.iterationStartCount = 1;
+        timer.log = [] 
+        timer.lastTime = 0; 
+        timer.logIndex = 0;
 
         if (isNumber(opt.elapsed)) timer.elapsed = opt.elapsed;
         if (isNumber(opt.speed)) timer.speed = opt.speed;
@@ -151,6 +171,7 @@ export function makeTimer (opt) {
 
 
     const stop = () => {
+        // console.table(timer.log);
         cancelAnimationFrame(timer.id);
     }
 

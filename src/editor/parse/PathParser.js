@@ -128,6 +128,7 @@ export default class PathParser {
             switch(s.command) {
             case 'c':
             case 'm':
+            case 'l':
             case 'q':
             case 's':
             case 't':

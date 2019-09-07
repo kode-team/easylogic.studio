@@ -17,6 +17,7 @@ import { makeInterpolatePerspectiveOrigin } from "./interpolate-functions/makeIn
 import { makeInterpolateStrokeDashArrray } from "./interpolate-functions/makeInterpolateStrokeDashArray";
 import { makeInterpolatePath } from "./interpolate-functions/svg/makeInterpolatePath";
 import { makeInterpolatePolygon } from "./interpolate-functions/svg/makeInterpolatePolygon";
+import { makeInterpolateOffsetPath } from "./interpolate-functions/makeInterpolateOffsetPath";
 
 const DEFAULT_FUCTION = () => (rate, t) => { } 
 
@@ -48,6 +49,8 @@ function makeInterpolateCustom (property) {
         return makeInterpolatePath
     case 'points':
         return makeInterpolatePolygon
+    case 'offset-path':
+        return makeInterpolateOffsetPath
     }
 }
 

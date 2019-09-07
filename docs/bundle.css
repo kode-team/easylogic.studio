@@ -1452,6 +1452,9 @@ html, body {
 .csseditor[data-theme=dark] .layout-main.show-footer .layout-middle .layout-footer {
   height: 299px;
 }
+.csseditor[data-theme=dark] .layout-main marker path {
+  fill: #2c2c2c;
+}
 .csseditor[data-theme=dark] .layout-main .layout-header {
   flex: none;
   height: 50px;
@@ -2423,6 +2426,9 @@ html, body {
   border: 0.5px dashed rgba(0, 0, 0, 0.4);
   background-color: transparent;
 }
+.csseditor[data-theme=dark] .page-view .page-lock .element-view .motion-based {
+  z-index: 100000000;
+}
 .csseditor[data-theme=dark] .page-tools {
   position: absolute;
   left: 10px;
@@ -2451,6 +2457,7 @@ html, body {
   top: -1px;
   right: 0px;
   height: 35px;
+  font-size: 12px;
   pointer-events: none;
 }
 .csseditor[data-theme=dark] .page-subeditor .path-manager {
@@ -2721,8 +2728,8 @@ html, body {
 .csseditor[data-theme=dark] .selection-tool .selection-tool-item[data-position=rotate3d] {
   left: 50%;
   top: 50%;
-  width: 100px;
-  height: 100px;
+  width: 20px;
+  height: 20px;
   cursor: ew-resize;
   border-radius: 0px;
   background-color: transparent;
@@ -2739,8 +2746,8 @@ html, body {
   position: absolute;
   left: 0px;
   top: 0px;
-  width: 100px;
-  height: 100px;
+  width: 20px;
+  height: 20px;
   background-color: transparent;
   border-radius: 50%;
   box-sizing: border-box;
@@ -2756,8 +2763,8 @@ html, body {
   position: absolute;
   left: 0px;
   top: 0px;
-  width: 100px;
-  height: 100px;
+  width: 20px;
+  height: 20px;
   background-color: transparent;
   border-radius: 50%;
   box-sizing: border-box;
@@ -2766,12 +2773,12 @@ html, body {
 .csseditor[data-theme=dark] .selection-tool .selection-tool-item[data-position=rotate3d] .rotate-area .x {
   -webkit-transform: rotateX(90deg) translateZ(0px);
           transform: rotateX(90deg) translateZ(0px);
-  border: 3px solid #fc554f;
+  border: 2px solid #fc554f;
 }
 .csseditor[data-theme=dark] .selection-tool .selection-tool-item[data-position=rotate3d] .rotate-area .y {
   -webkit-transform: rotateY(90deg) translateZ(0px);
           transform: rotateY(90deg) translateZ(0px);
-  border: 3px solid green;
+  border: 2px solid green;
 }
 .csseditor[data-theme=dark] .selection-tool .selection-tool-item[data-position=rotate3d] .z {
   -webkit-transform: rotate(0deg) translateZ(0px);
@@ -3110,31 +3117,32 @@ html, body {
   display: flex;
 }
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=normal] [data-value=normal] {
-  background-color: #fc554f;
+  background-color: #535353;
 }
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=normal] [data-value=normal] svg path {
-  fill: white;
+  fill: #fc554f;
 }
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate] [data-value=alternate] {
-  background-color: #fc554f;
+  background-color: #535353;
 }
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate] [data-value=alternate] svg path {
-  fill: white;
+  fill: #fc554f;
 }
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=reverse] [data-value=reverse] {
-  background-color: #fc554f;
+  background-color: #535353;
 }
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=reverse] [data-value=reverse] svg path {
-  fill: white;
+  fill: #fc554f;
 }
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate-reverse] [data-value=alternate-reverse] {
-  background-color: #fc554f;
+  background-color: #535353;
 }
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate-reverse] [data-value=alternate-reverse] svg path {
-  fill: white;
+  fill: #fc554f;
 }
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons button {
   width: 26px;
+  border-radius: 3px;
 }
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .keyframe-time-control {
   flex: none;
@@ -6679,6 +6687,9 @@ html, body {
   color: #ffffff;
   width: 80px;
 }
+.csseditor[data-theme=dark] .offset-path-editor .offset-path-item {
+  margin-bottom: 10px;
+}
 .csseditor[data-theme=dark] .popup {
   position: absolute;
   display: none;
@@ -8092,6 +8103,9 @@ html, body {
   stroke: purple;
   pointer-events: none;
 }
+.csseditor[data-theme=dark] .path-editor-view svg line[data-segment=true] {
+  stroke-dasharray: 2 2;
+}
 .csseditor[data-theme=dark] .path-editor-view svg circle {
   fill: white;
   stroke: blue;
@@ -8122,7 +8136,7 @@ html, body {
 .csseditor[data-theme=dark] .path-editor-view svg .svg-canvas {
   fill: transparent;
   stroke: #609de2;
-  stroke-width: 1;
+  stroke-width: 0.5;
 }
 .csseditor[data-theme=dark] .path-editor-view svg path.guide {
   fill: transparent;
@@ -8754,6 +8768,9 @@ html, body {
 }
 .csseditor[data-theme=light] .layout-main.show-footer .layout-middle .layout-footer {
   height: 299px;
+}
+.csseditor[data-theme=light] .layout-main marker path {
+  fill: #e7e7e7;
 }
 .csseditor[data-theme=light] .layout-main .layout-header {
   flex: none;
@@ -9726,6 +9743,9 @@ html, body {
   border: 0.5px dashed rgba(0, 0, 0, 0.4);
   background-color: transparent;
 }
+.csseditor[data-theme=light] .page-view .page-lock .element-view .motion-based {
+  z-index: 100000000;
+}
 .csseditor[data-theme=light] .page-tools {
   position: absolute;
   left: 10px;
@@ -9754,6 +9774,7 @@ html, body {
   top: -1px;
   right: 0px;
   height: 35px;
+  font-size: 12px;
   pointer-events: none;
 }
 .csseditor[data-theme=light] .page-subeditor .path-manager {
@@ -10024,8 +10045,8 @@ html, body {
 .csseditor[data-theme=light] .selection-tool .selection-tool-item[data-position=rotate3d] {
   left: 50%;
   top: 50%;
-  width: 100px;
-  height: 100px;
+  width: 20px;
+  height: 20px;
   cursor: ew-resize;
   border-radius: 0px;
   background-color: transparent;
@@ -10042,8 +10063,8 @@ html, body {
   position: absolute;
   left: 0px;
   top: 0px;
-  width: 100px;
-  height: 100px;
+  width: 20px;
+  height: 20px;
   background-color: transparent;
   border-radius: 50%;
   box-sizing: border-box;
@@ -10059,8 +10080,8 @@ html, body {
   position: absolute;
   left: 0px;
   top: 0px;
-  width: 100px;
-  height: 100px;
+  width: 20px;
+  height: 20px;
   background-color: transparent;
   border-radius: 50%;
   box-sizing: border-box;
@@ -10069,12 +10090,12 @@ html, body {
 .csseditor[data-theme=light] .selection-tool .selection-tool-item[data-position=rotate3d] .rotate-area .x {
   -webkit-transform: rotateX(90deg) translateZ(0px);
           transform: rotateX(90deg) translateZ(0px);
-  border: 3px solid #e2e7ff;
+  border: 2px solid #e2e7ff;
 }
 .csseditor[data-theme=light] .selection-tool .selection-tool-item[data-position=rotate3d] .rotate-area .y {
   -webkit-transform: rotateY(90deg) translateZ(0px);
           transform: rotateY(90deg) translateZ(0px);
-  border: 3px solid green;
+  border: 2px solid green;
 }
 .csseditor[data-theme=light] .selection-tool .selection-tool-item[data-position=rotate3d] .z {
   -webkit-transform: rotate(0deg) translateZ(0px);
@@ -10413,31 +10434,32 @@ html, body {
   display: flex;
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=normal] [data-value=normal] {
-  background-color: #e2e7ff;
+  background-color: white;
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=normal] [data-value=normal] svg path {
-  fill: black;
+  fill: #e2e7ff;
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate] [data-value=alternate] {
-  background-color: #e2e7ff;
+  background-color: white;
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate] [data-value=alternate] svg path {
-  fill: black;
+  fill: #e2e7ff;
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=reverse] [data-value=reverse] {
-  background-color: #e2e7ff;
+  background-color: white;
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=reverse] [data-value=reverse] svg path {
-  fill: black;
+  fill: #e2e7ff;
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate-reverse] [data-value=alternate-reverse] {
-  background-color: #e2e7ff;
+  background-color: white;
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate-reverse] [data-value=alternate-reverse] svg path {
-  fill: black;
+  fill: #e2e7ff;
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons button {
   width: 26px;
+  border-radius: 3px;
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .keyframe-time-control {
   flex: none;
@@ -13982,6 +14004,9 @@ html, body {
   color: gray;
   width: 80px;
 }
+.csseditor[data-theme=light] .offset-path-editor .offset-path-item {
+  margin-bottom: 10px;
+}
 .csseditor[data-theme=light] .popup {
   position: absolute;
   display: none;
@@ -15395,6 +15420,9 @@ html, body {
   stroke: purple;
   pointer-events: none;
 }
+.csseditor[data-theme=light] .path-editor-view svg line[data-segment=true] {
+  stroke-dasharray: 2 2;
+}
 .csseditor[data-theme=light] .path-editor-view svg circle {
   fill: white;
   stroke: blue;
@@ -15425,7 +15453,7 @@ html, body {
 .csseditor[data-theme=light] .path-editor-view svg .svg-canvas {
   fill: transparent;
   stroke: #dfdfdf;
-  stroke-width: 1;
+  stroke-width: 0.5;
 }
 .csseditor[data-theme=light] .path-editor-view svg path.guide {
   fill: transparent;

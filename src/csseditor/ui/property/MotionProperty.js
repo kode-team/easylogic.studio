@@ -3,16 +3,15 @@ import { DEBOUNCE } from "../../../util/Event";
 import { editor } from "../../../editor/editor";
 import { EVENT } from "../../../util/UIElement";
 
-
+import OffsetPathListEditor from "../property-editor/OffsetPathListEditor";
 import RangeEditor from "../property-editor/RangeEditor";
-import SelectEditor from "../property-editor/SelectEditor";
 
 
 export default class MotionProperty extends BaseProperty {
   components() {
     return {
-      RangeEditor,
-      SelectEditor
+      OffsetPathListEditor,
+      RangeEditor
     }
   }
 
@@ -25,37 +24,27 @@ export default class MotionProperty extends BaseProperty {
   }
 
   refresh() {
-
-    var currentProject = editor.selection.currentProject;
-    var options = ''
-    var paths = {}
-    if (currentProject) {
-      currentProject.artboards.forEach(artboard => {
-        artboard.allLayers.filter(it => it.is('svg-path', 'svg-polygon')).forEach(it => {
-          paths[it.id] = it.d; 
-        });
-      })
-
-      options = ',' + Object.keys(paths).join(',');
+    var current = editor.selection.current;
+    if (current) {
+      this.children.$offsetPathList.setValue(current['offset-path'])   
     }
- 
-    this.state.paths = paths; 
-    this.children.$path.setOptions(options);
   }
 
   getBody() {
-    return `
-      <div class='property-item'>
-        <SelectEditor ref='$path' label='Path' removable="true" key='path' onchange='changRangeEditor' />
+    var current = editor.selection.current || {'offset-path': ''};
+    return /*html*/`
+      <div class='property-item animation-property-item'>
+        <span class='add-timeline-property' data-property='offset-path'></span>
+        <OffsetPathListEditor ref="$offsetPathList" key="offset-path" value="${current['offset-path']}" onchange="changRangeEditor" />
       </div>
     `;
   }
 
-  [EVENT('changRangeEditor')] (key, id) {
-    var path = this.state.paths[id] || '';
+  [EVENT('changRangeEditor')] (key, value) {
+    // var path = this.state.paths[id] || '';
 
     editor.selection.reset({
-      'offset-path': path ? `path('${path}')` : '' 
+      [key]: value 
     })
 
     this.emit('refreshSelectionStyleView')

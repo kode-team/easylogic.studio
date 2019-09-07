@@ -33,9 +33,11 @@ import InputRangeEditor from "./InputRangeEditor";
 import StrokeDashArrayEditor from "./StrokeDashArrayEditor";
 import PathDataEditor from "./PathDataEditor";
 import PolygonDataEditor from "./PolygonDataEditor";
+import OffsetPathListEditor from "./OffsetPathListEditor";
 
 
 export default {
+    OffsetPathListEditor,
     PolygonDataEditor,
     PathDataEditor,
     StrokeDashArrayEditor,

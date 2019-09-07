@@ -34,17 +34,11 @@ export default class SelectEditor extends UIElement {
     setValue (value) {
         this.state.value = value + ''; 
         this.refs.$options.val(this.state.value);
-        // this.refresh()
+        this.refresh()
     }
 
     refresh(reload = false) {
-
-        if (reload) {
-            this.refs.$options.val(this.state.value);
-        } else {
-            this.load();
-        }
-
+        this.load();
     }
 
     [BIND('$options')] () {
@@ -55,11 +49,16 @@ export default class SelectEditor extends UIElement {
     }
 
     [LOAD('$options')] () {
+
         return this.state.options.map(it => {
 
             var selected = it === this.state.value ? 'selected' : '' 
             var value = it; 
             var label = it; 
+
+            if (value.includes(":")) {
+                var [value, label] = value.split(':')
+            }
 
             if (label === '') {
                 label = this.props['none-value'] ? this.props['none-value'] : ''

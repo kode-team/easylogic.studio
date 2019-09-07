@@ -166,14 +166,11 @@
 
               @each $selectDirection in normal, alternate, reverse, alternate-reverse {
                   &[data-selected-direction="#{$selectDirection}"] [data-value="#{$selectDirection}"] {
-                      background-color: $selected-color;
-                      // color: $selected-font-color;
+                      background-color: $selected-background-color;
 
                       svg {
                         path {
-                          // stroke: $selected-font-color;
-                          // stroke-width: 1;
-                          fill: $selected-font-color;
+                          fill: $selected-color;
                         }
                       }
                   }
@@ -182,7 +179,7 @@
               button {
                   // border: 1px solid $border-color;
                   width: 26px;
-
+                  border-radius: 3px;
                   // min-width: 30px;
                   // padding: 2px 10px;
                   // height: auto;

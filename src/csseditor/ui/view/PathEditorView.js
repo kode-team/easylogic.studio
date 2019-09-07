@@ -176,7 +176,9 @@ export default class PathEditorView extends UIElement {
     }
 
     [EVENT('hidePathEditor')] () {
-        this.state.isShow = false;         
+        this.pathParser.reset('');
+        this.setState(this.initState(), false)
+        this.refs.$view.empty()
         this.$el.hide();
         this.emit('finishPathEdit')
         this.emit('hidePathManager');
@@ -349,9 +351,7 @@ export default class PathEditorView extends UIElement {
 
             this.bindData('$view');            
 
-            var totalLength = this.refs.$view.$('path.object').el.getTotalLength()
-            
-            this.updatePathLayer(totalLength);
+            this.updatePathLayer();
 
         } else if (this.isMode('draw')) {
             var e = editor.config.get('bodyEvent');

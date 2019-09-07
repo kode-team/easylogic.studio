@@ -20,8 +20,7 @@ import TextShadowEditor from "./TextShadowEditor";
 import StrokeDashArrayEditor from "./StrokeDashArrayEditor";
 import PathDataEditor from "./PathDataEditor";
 import PolygonDataEditor from "./PolygonDataEditor";
-
-
+import OffsetPathListEditor from "./OffsetPathListEditor";
 
 
 const blend_list = [
@@ -65,7 +64,8 @@ export default class CSSPropertyEditor extends UIElement {
       BorderRadiusEditor,
       ClipPathEditor,
       PathDataEditor,
-      PolygonDataEditor
+      PolygonDataEditor,
+      OffsetPathListEditor
     }
   }
 
@@ -306,7 +306,11 @@ export default class CSSPropertyEditor extends UIElement {
     } else if (property.key === 'points') {
       return /*html*/`
         <PolygonDataEditor ref='$polygonData${index}' key='points' value='${property.value}' onchange='changeSelect' />
-      `      
+      `    
+    } else if (property.key === 'offset-path') {
+      return /*html*/`
+        <OffsetPathListEditor ref='$offsetPathList${index}' key='offset-path' value='${property.value}' onchange='changeSelect' />
+      `             
     }
 
     return `
@@ -392,6 +396,7 @@ export default class CSSPropertyEditor extends UIElement {
       case 'stroke-dasharray':
       case 'd':
       case 'points':
+      case 'offset-path':
         return this.makeIndivisualPropertyEditor(property, index);
       case 'color':
       case 'background-color':
@@ -403,6 +408,7 @@ export default class CSSPropertyEditor extends UIElement {
       case 'opacity':
       case 'fill-opacity':        
       case 'stroke-dashoffset':
+      case 'offset-distance':
         return /*html*/`
           <div class='property-editor'>
             <NumberRangeEditor 

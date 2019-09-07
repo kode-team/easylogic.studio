@@ -4,6 +4,9 @@ import { getDist, calculateAngle, getXYInCircle } from "../../util/functions/mat
 import Point from "./Point";
 import PathStringManager from "./PathStringManager";
 
+const SEGMENT_DIRECTION = ['startPoint', 'endPoint', 'reversePoint']
+
+
 export default class PathGenerator {
 
     constructor (pathEditor) {
@@ -60,24 +63,25 @@ export default class PathGenerator {
     setCachePoint (index) {
 
         var state = this.state; 
+        var { points } = state; 
 
-        state.connectedPoint =  Point.getPrevPoint(state.points, index)
+        state.connectedPoint =  Point.getPrevPoint(points, index)
 
         if (state.connectedPoint && !state.connectedPoint.connected) {
             state.connectedPoint = null; 
         }
 
-        state.segment = state.points[index];
+        state.segment = Point.getIndexPoint(points, index)
 
         // 연결된 포인트인 경우 , 처음 지점 포인트를 가지고 온다. 
         if (state.segment.connected) {  
-            state.connectedPoint = Point.getFirstPoint(state.points, index);
+            state.connectedPoint = Point.getNextPoint(points, index);
         }
 
-        state.isFirstSegment = state.segment && state.segment.command === 'M'
+        state.isFirstSegment = Point.isFirst(state.segment)
 
         if (state.isFirstSegment) {
-            var lastPoint = Point.getLastPoint(state.points, index);
+            var lastPoint = Point.getLastPoint(points, index);
 
             if (lastPoint.connected) {
                 state.connectedPoint = lastPoint;
@@ -93,37 +97,38 @@ export default class PathGenerator {
         }
 
         state.cachedPoints = [] 
-        state.points.filter(p => p && p != state.segment).forEach(p => {
+        points.filter(p => p && p != state.segment).forEach(p => {
             state.cachedPoints.push(p.startPoint, p.reversePoint, p.endPoint)
         })
 
     }
 
+    moveSegmentDistance (originPoint, targetPoint, dx, dy) {
+        if (originPoint) {
+            targetPoint.x = originPoint.x + dx;
+            targetPoint.y = originPoint.y + dy;     
+        }
+    }
 
     moveSegment (segmentKey, dx, dy, connectedPoint = null) {
         var state = this.state; 
-        if (connectedPoint) {
-            var originalConnectedPoint = state.originalConnectedPoint[segmentKey]
-            if (originalConnectedPoint) {
-                var targetPoint = state.connectedPoint[segmentKey]
-                targetPoint.x = originalConnectedPoint.x + dx;
-                targetPoint.y = originalConnectedPoint.y + dy;     
-            }
+        // console.log('move', segmentKey, dx, dy, connectedPoint);
 
-        } else {
-            var original = state.originalSegment[segmentKey]
-            if (original) {
-                var targetPoint = state.segment[segmentKey]
-                targetPoint.x = original.x + dx;
-                targetPoint.y = original.y + dy;        
-            }
+        var originPoint = state.originalSegment[segmentKey]
+        var targetPoint = state.segment[segmentKey]
+
+        if (connectedPoint) {
+            originPoint = state.originalConnectedPoint[segmentKey]
+            targetPoint = state.connectedPoint[segmentKey]
         }
+
+        this.moveSegmentDistance(originPoint, targetPoint, dx, dy);
     }
 
     convertToCurve (index) {
 
 
-        var points = this.state.points; 
+        var {points} = this.state; 
         var point = points[index];
 
         if (point.curve) {
@@ -222,6 +227,7 @@ export default class PathGenerator {
 
         }
     }
+
 
     moveCurveSegment(segmentKey, dx, dy, connectedPoint) {
         var state = this.state; 
@@ -360,10 +366,10 @@ export default class PathGenerator {
 
 
     calculatePointDist (sourceKey, target, dist) {
-        var state = this.state; 
+        var {points} = this.state; 
         var checkedPointList = []
-        var arr = ['startPoint', 'reversePoint', 'endPoint']
-        state.points.filter(p => p).forEach(p => {
+        var arr = SEGMENT_DIRECTION
+        points.filter(p => p).forEach(p => {
 
             arr.filter(key => p[key]).forEach(key => {
                 var point = p[key];
@@ -401,7 +407,6 @@ export default class PathGenerator {
         var state = this.state;
         var { isCurveSegment, segmentKey, connectedPoint} = state 
 
-
         var { dx, dy, snapPointList} = this.calculateSnap(segmentKey, dx, dy, 2);
     
         this.snapPointList = snapPointList
@@ -409,43 +414,32 @@ export default class PathGenerator {
         if (isCurveSegment) {
             if (e.shiftKey) {   // 상대편 길이 동일하게 curve 움직이기 
                 this.moveCurveSegment (segmentKey, dx, dy) 
+                connectedPoint && this.moveCurveSegment (segmentKey, dx, dy, connectedPoint) 
             } else if (e.altKey) {  // 상대편 길이 유지하면서 curve 움직이기 
                 this.moveSegment(segmentKey, dx, dy);
+                connectedPoint && this.moveSegment(segmentKey, dx, dy, connectedPoint);
             } else {    // Curve 만 움직이기 
                 this.moveSegment(segmentKey, dx, dy);
                 this.rotateSegment(segmentKey);
-            }
-
-            if (connectedPoint) {
-                if (e.shiftKey) {   // 상대편 길이 동일하게 curve 움직이기 
-                    this.moveCurveSegment (segmentKey, dx, dy, connectedPoint) 
-                } else if (e.altKey) {  // 상대편 길이 유지하면서 curve 움직이기 
-                    this.moveSegment(segmentKey, dx, dy, connectedPoint);
-                } else {    // Curve 만 움직이기 
-                    // this.moveSegment(segmentKey, dx, dy, connectedPoint);
-                    this.rotateSegment(segmentKey, connectedPoint);
-                }   
+                connectedPoint && this.rotateSegment(segmentKey, connectedPoint);
             }
 
         } else {
-            this.moveSegment('startPoint', dx, dy);
-            this.moveSegment('endPoint', dx, dy);
-            this.moveSegment('reversePoint', dx, dy);
 
-            if (connectedPoint) {
-                this.moveSegment('startPoint', dx, dy, connectedPoint);
-                this.moveSegment('reversePoint', dx, dy, connectedPoint);
-                this.moveSegment('endPoint', dx, dy, connectedPoint);
-            }
+            SEGMENT_DIRECTION.forEach(tempSegment => {
+                this.moveSegment(tempSegment, dx, dy);
+                connectedPoint && this.moveSegment(tempSegment, dx, dy, connectedPoint);
+            })
         }
 
     }
 
     moveEnd (dx, dy) {
         var state = this.state; 
+        var {points} = state; 
         var x = state.dragXY.x + dx // / editor.scale;
         var y = state.dragXY.y + dy //  / editor.scale;
-
+        
         state.endPoint = {x, y}
         state.reversePoint = {x, y}
 
@@ -460,7 +454,7 @@ export default class PathGenerator {
             reversePoint: state.reversePoint
         }   
 
-        var last = Point.getLastPoint(state.points, state.points.length - 1)
+        var last = Point.getLastPoint(points, points.length - 1)
 
         if (last && last.close) {
             point.command = 'M'
@@ -468,7 +462,7 @@ export default class PathGenerator {
             point.command = 'M'
         }
 
-        state.points.push(point)
+        points.push(point)
 
         state.startPoint = null;
         state.endPoint = null;
@@ -599,10 +593,6 @@ export default class PathGenerator {
             return this.calculateRelativePosition (minX, minY, segment, scale);
         }).join(' ')
 
-        // console.log('export', d.map(segment => {
-        //     return this.calculateRelativePosition (minX, minY, segment, 1);
-        // }).join(' '));
-
         return {
             d: dString
         };
@@ -676,7 +666,7 @@ export default class PathGenerator {
                         .toString('split-path')
                 )
             } else {
-                // console.log(prevPoint, current, `Q ${prevPoint.endPoint.x} ${prevPoint.endPoint.y} ${current.startPoint.x} ${current.startPoint.y}`)
+
                 this.pathStringManager
                     .Q(prevPoint.endPoint, current.startPoint)
                 this.splitLines.push(
@@ -697,8 +687,6 @@ export default class PathGenerator {
 
             // 이전은 점이고 현재가 드래그 일 때 
             if (prevPoint.curve === false) { 
-
-                // console.log(current.reversePoint, current.startPoint)
 
                 if (Point.isEqual(current.reversePoint, current.startPoint)) {
                     this.pathStringManager.L( current.startPoint);
@@ -894,7 +882,6 @@ export default class PathGenerator {
                         .addCurvePoint(prev.endPoint);
                 } else {
                     // 이전에 점이고 지금도 점이면  직선 
-                    // console.log(prev.close);
                     if (!prev.close) {
                         this.guideLineManager.M(prev.startPoint).L(moveXY);
 
@@ -934,13 +921,10 @@ export default class PathGenerator {
         var width = screenWidth.value * scale; 
         var height = screenHeight.value * scale; 
 
-        return `<rect class='svg-canvas' ${OBJECT_TO_PROPERTY({
-            x, y, width, height
-        })} />`
+        return `<rect class='svg-canvas' ${OBJECT_TO_PROPERTY({x, y, width, height})} />`
     }
 
     toSVGString () {
-        // console.log('guide', this.pathStringManager.d)
         return `
         <svg width="100%" height="100%">
             ${this.makeSelectedSVGZone()}

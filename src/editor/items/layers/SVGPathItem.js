@@ -1,7 +1,7 @@
 import PathParser from "../../parse/PathParser";
 import { SVGItem } from "./SVGItem";
 import { Length } from "../../unit/Length";
-import { clone } from "../../../util/functions/func";
+import { clone, OBJECT_TO_CLASS } from "../../../util/functions/func";
 
 export class SVGPathItem extends SVGItem {
   getDefaultObject(obj = {}) {
@@ -95,8 +95,10 @@ export class SVGPathItem extends SVGItem {
 
   get html () {
     var {id} = this.json; 
-    return `
-      <svg class='element-item path' data-id="${id}" >
+    return /*html*/`
+      <svg class='element-item path ${OBJECT_TO_CLASS({
+        'motion-based': this.json['motion-based']
+      })}' data-id="${id}" >
         <path class='svg-path-item' />
       </svg>    
     `

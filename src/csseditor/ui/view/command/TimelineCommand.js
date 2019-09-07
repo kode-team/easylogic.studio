@@ -187,6 +187,8 @@ export default class TimelineCommand extends UIElement {
             artboard.setTimelineCurrentTime(timecode(timeline.fps, lastTime));
             artboard.seek();
             this.emit('playTimeline');
+            editor.changeMode('SELECTION');
+            this.emit('after.change.mode')                                
         })
     }
 
@@ -198,6 +200,8 @@ export default class TimelineCommand extends UIElement {
             artboard.setTimelineCurrentTime(timecode(timeline.fps, nextTime));
             artboard.seek();
             this.emit('playTimeline');
+            editor.changeMode('SELECTION');
+            this.emit('after.change.mode')                                
         })
     }
 
@@ -210,6 +214,8 @@ export default class TimelineCommand extends UIElement {
             artboard.setTimelineCurrentTime(timecode(timeline.fps, firstTime));
             artboard.seek();
             this.emit('playTimeline');
+            editor.changeMode('SELECTION');
+            this.emit('after.change.mode')                                
         })
     }    
 
@@ -223,6 +229,8 @@ export default class TimelineCommand extends UIElement {
             artboard.seek();
 
             this.emit('playTimeline');
+            editor.changeMode('SELECTION');
+            this.emit('after.change.mode')                                
         })
     }    
 
@@ -230,7 +238,8 @@ export default class TimelineCommand extends UIElement {
 
         editor.selection.empty()
         this.emit('refreshSelection');
-
+        editor.changeMode('play');
+        this.emit('after.change.mode')
 
         this.currentArtboard((artboard, timeline) => {
           
@@ -255,13 +264,15 @@ export default class TimelineCommand extends UIElement {
                 iterationCount,
                 direction,
                 tick: (elapsed, timer) => {
-                    // console.log(timecode(timeline.fps, elapsed / 1000));
+                    console.log(timecode(timeline.fps, elapsed / 1000), elapsed, elapsed/1000);
                     artboard.seek(timecode(timeline.fps, elapsed / 1000))
                     this.emit('playTimeline');
                 },
                 last: (elapsed, timer) => {                 
                     this.emit('stopTimeline');
-                    artboard.setTimelineCurrentTime(0);
+                    // artboard.setTimelineCurrentTime(0);
+                    editor.changeMode('SELECTION');
+                    this.emit('after.change.mode')                    
                 }
             })      
         })

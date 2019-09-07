@@ -71,7 +71,7 @@ export default class TransformOriginEditor extends UIElement {
     var selectedValue = this.state.isAll ? 'all' : 'partitial'
     var transformOrigin = this.state['transform-origin'];
 
-    return `
+    return /*html*/`
       <div class="transform-origin-item">
         <div class="radius-selector" data-selected-value="${selectedValue}" ref="$selector">
           <button type="button" data-value="all">${icon.border_all}</button>

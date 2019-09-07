@@ -95,8 +95,8 @@ export class TimelineItem extends DomItem {
   makeTimingFunction (it) {
     // 시작시간 끝 시간이 있음 . 그리고 현재 시간이 있음 
     return (time) => {
-      var rate = (time - it.startTime)/(it.endTime - it.startTime);
-      return it.interpolateFunction(it.timingFunction(rate), rate);
+      var t = (time - it.startTime)/(it.endTime - it.startTime);
+      return it.interpolateFunction(it.timingFunction(t), t, it.timingFunction);
     }
   }
 
@@ -112,10 +112,21 @@ export class TimelineItem extends DomItem {
 
       var time = timeline.currentTime;
 
+      // console.log('-------------------------', time);
+
       this.searchTimelineOffset(time).forEach(it => {
-        it.layer.reset({
-          [it.property]: it.func(time) 
-        })
+
+        if (it.property === 'offset-path') {
+
+          // 객체 속성은 function 안에서 변경한다. 
+          it.func(time)
+
+        } else {
+          it.layer.reset({
+            [it.property]: it.func(time) 
+          })
+        }
+
       });
 
     }
@@ -525,16 +536,16 @@ export class TimelineItem extends DomItem {
       return '0px 0px 0px rgba(0, 0, 0, 1)';
     case 'opacity': 
       return 1; 
-    case 'background-color':
-    case 'color':
-    case 'text-fill-color':
-    case 'text-stroke-color':
-    case 'transform': 
+    // case 'background-color':
+    // case 'color':
+    // case 'text-fill-color':
+    // case 'text-stroke-color':
+    // case 'transform': 
+    // case 'transform-origin':
+    default: 
       return '';
-
     }
 
-    return '0px'
   }
 
   copyTimelineKeyframe (layerId, property, newTime = null) {

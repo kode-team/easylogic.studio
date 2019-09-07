@@ -118,6 +118,49 @@ const checkDist = (obj, curve, t, x, y) => {
     }        
 }
 
+export const getCurveDist = (sx, sy, cx1, cy1, cx2, cy2, ex, ey, count = 1000) => {
+    var curve = createBezier(
+        {x: sx, y: sy},
+        {x: cx1, y: cy1},
+        {x: cx2, y: cy2},
+        {x: ex, y: ey}
+    )
+
+    var total = 0
+    var startPoint = curve(0); 
+    for(var i = 0; i <= count; i++) {
+        var t = i/count
+        var xy = curve(t)
+
+        total += getDist(startPoint.x, startPoint.y, xy.x, xy.y)
+        startPoint = xy; 
+    }
+
+    return total; 
+}
+
+
+export const getQuardDist = (sx, sy, cx1, cy1, ex, ey, count = 1000) => {
+    var curve = createBezierQuard(
+        {x: sx, y: sy},
+        {x: cx1, y: cy1},
+        {x: ex, y: ey}
+    )
+
+    var total = 0
+    var startPoint = curve(0); 
+    for(var i = 0; i <= count; i++) {
+        var t = i/count
+        var xy = curve(t)
+
+        total += getDist(startPoint.x, startPoint.y, xy.x, xy.y)
+        startPoint = xy; 
+    }
+
+    return total; 
+}
+
+
 const makeCurveFunction = (curve, count = 100) => {
     var obj = {
         minDist: Infinity,

@@ -12,7 +12,7 @@ export default class StarManager extends UIElement {
     }
 
   template() {
-    return `
+    return /*html*/`
       <div class='star-manager'>
         <div class='text'>
             <label>Star Count</label>
