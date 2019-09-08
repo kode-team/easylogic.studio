@@ -41,8 +41,7 @@ export default class MotionProperty extends BaseProperty {
   }
 
   [EVENT('changRangeEditor')] (key, value) {
-    // var path = this.state.paths[id] || '';
-
+    
     editor.selection.reset({
       [key]: value 
     })

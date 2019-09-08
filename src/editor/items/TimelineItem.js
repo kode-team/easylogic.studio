@@ -100,7 +100,7 @@ export class TimelineItem extends DomItem {
     }
   }
 
-  seek (frameOrCode) {
+  seek (frameOrCode, filterFunction = (it => it)) {
 
     var timeline = this.getSelectedTimeline();
 
@@ -114,7 +114,7 @@ export class TimelineItem extends DomItem {
 
       // console.log('-------------------------', time);
 
-      this.searchTimelineOffset(time).forEach(it => {
+      this.searchTimelineOffset(time).filter(filterFunction).forEach(it => {
 
         if (it.property === 'offset-path') {
 

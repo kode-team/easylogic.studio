@@ -1452,6 +1452,9 @@ html, body {
 .csseditor[data-theme=dark] .layout-main.show-footer .layout-middle .layout-footer {
   height: 299px;
 }
+.csseditor[data-theme=dark] .layout-main.show-footer .layout-middle .layout-footer .managed-tool .property-title .tools {
+  display: flex;
+}
 .csseditor[data-theme=dark] .layout-main marker path {
   fill: #2c2c2c;
 }
@@ -3040,7 +3043,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools {
   text-align: left;
-  display: flex;
+  display: none;
 }
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools > * {
   flex: 1 1 auto;
@@ -3062,6 +3065,8 @@ html, body {
   display: inline-block;
 }
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control label svg {
+  width: 16px;
+  height: 16px;
   vertical-align: middle;
 }
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control label svg path {
@@ -3141,7 +3146,9 @@ html, body {
   fill: #fc554f;
 }
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons button {
-  width: 26px;
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
   border-radius: 3px;
 }
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .keyframe-time-control {
@@ -3156,6 +3163,10 @@ html, body {
 }
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .keyframe-time-control .time-manager label {
   padding-right: 0px;
+}
+.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .keyframe-time-control .time-manager label svg {
+  width: 16px;
+  height: 16px;
 }
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .keyframe-time-control svg {
   vertical-align: middle;
@@ -8769,6 +8780,9 @@ html, body {
 .csseditor[data-theme=light] .layout-main.show-footer .layout-middle .layout-footer {
   height: 299px;
 }
+.csseditor[data-theme=light] .layout-main.show-footer .layout-middle .layout-footer .managed-tool .property-title .tools {
+  display: flex;
+}
 .csseditor[data-theme=light] .layout-main marker path {
   fill: #e7e7e7;
 }
@@ -10357,7 +10371,7 @@ html, body {
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools {
   text-align: left;
-  display: flex;
+  display: none;
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools > * {
   flex: 1 1 auto;
@@ -10379,6 +10393,8 @@ html, body {
   display: inline-block;
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control label svg {
+  width: 16px;
+  height: 16px;
   vertical-align: middle;
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control label svg path {
@@ -10458,7 +10474,9 @@ html, body {
   fill: #e2e7ff;
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons button {
-  width: 26px;
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
   border-radius: 3px;
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .keyframe-time-control {
@@ -10473,6 +10491,10 @@ html, body {
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .keyframe-time-control .time-manager label {
   padding-right: 0px;
+}
+.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .keyframe-time-control .time-manager label svg {
+  width: 16px;
+  height: 16px;
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .keyframe-time-control svg {
   vertical-align: middle;

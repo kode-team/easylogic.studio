@@ -6,6 +6,7 @@ import { Length } from "../../../../editor/unit/Length";
 import { second, framesToTimecode, timecode } from "../../../../util/functions/time";
 import { editor } from "../../../../editor/editor";
 import { isUndefined } from "../../../../util/functions/func";
+import icon from "../../icon/icon";
 
 
 
@@ -123,11 +124,16 @@ checkKey (e) {
 }
 
 [KEYUP('$offsetTime') + KEY('Enter') + IF('checkNumberOrTimecode') + PREVENT] (e) {
-    var frame = this.refs.$currentTime.value
+    var frame = this.refs.$offsetTime.value
 
-    this.updateData({
-      time: second(frame)
-    });
+    var artboard = editor.selection.currentArtboard;
+    if (artboard) {
+      var timeline = artboard.getSelectedTimeline();
+
+      this.updateData({
+        time: second(timeline.fps, frame)
+      });
+    }
 
 }
 
@@ -137,9 +143,26 @@ checkKey (e) {
       <div class='offset-input'>
         <label>Time</label>
         <input type="text" ref='$offsetTime' />
+        <button type="button" ref='$seek' title='Seek timeline'>${icon.gps_fixed}</button>
       </div>
     `
   }    
+
+  [CLICK('$seek')] () {
+    var artboard = editor.selection.currentArtboard;
+
+    if (artboard) {
+      artboard.seek(this.refs.$offsetTime.value, (it => {
+
+        if ( it.layer.id === this.state.layerId && it.property === this.state.property) {
+          return true; 
+        }
+
+        return false; 
+      }))
+      this.emit('playTimeline');
+    }
+  }
 
   templateForProperty() {
     return `<CSSPropertyEditor ref='$propertyEditor' hide-title='true' onchange='changePropertyEditor' />`

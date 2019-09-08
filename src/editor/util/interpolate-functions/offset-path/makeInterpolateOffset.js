@@ -221,6 +221,6 @@ export default function makeInterpolateOffset (segments) {
     })
     
 
-    return interpolateList;
+    return { totalLength, interpolateList};
 
 }

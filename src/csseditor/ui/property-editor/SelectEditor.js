@@ -50,9 +50,9 @@ export default class SelectEditor extends UIElement {
 
     [LOAD('$options')] () {
 
-        return this.state.options.map(it => {
+        var arr = this.state.options.map(it => {
 
-            var selected = it === this.state.value ? 'selected' : '' 
+
             var value = it; 
             var label = it; 
 
@@ -66,9 +66,11 @@ export default class SelectEditor extends UIElement {
                 label = '----------'
                 value = ''; 
             }
-
+            var selected = value === this.state.value ? 'selected' : '' 
             return `<option ${selected} value="${value}">${label}</option>`
         })
+
+        return arr; 
     }
 
     setOptions (options = '') {

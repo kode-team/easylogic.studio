@@ -50,8 +50,9 @@
         grid-template-columns: 100px 1fr;
 
         .tools {
+
           text-align: left;
-          display: flex;
+          display: none;
           > * {
             flex: 1 1 auto;
           }
@@ -75,6 +76,8 @@
 
             label {
               svg {
+                width: 16px;
+                height: 16px;
                 vertical-align: middle;
 
                 path {
@@ -178,7 +181,9 @@
 
               button {
                   // border: 1px solid $border-color;
-                  width: 26px;
+                  width: 20px;
+                  height: 20px;
+                  margin-right: 5px;
                   border-radius: 3px;
                   // min-width: 30px;
                   // padding: 2px 10px;
@@ -200,6 +205,11 @@
 
               label {
                 padding-right:0px;
+
+                svg {
+                  width: 16px;
+                  height: 16px;
+                }
               }
             }
 

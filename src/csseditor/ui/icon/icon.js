@@ -73,11 +73,13 @@ import replay from "./replay";
 import shuffle from "./shuffle";
 import cat from "./cat";
 import refresh from "./refresh";
+import gps_fixed from "./gps_fixed";
 
 
 
 
 export default {
+  gps_fixed,
   refresh,
   cat,
   shuffle,

@@ -264,7 +264,7 @@ export default class TimelineCommand extends UIElement {
                 iterationCount,
                 direction,
                 tick: (elapsed, timer) => {
-                    console.log(timecode(timeline.fps, elapsed / 1000), elapsed, elapsed/1000);
+                    // console.log(timecode(timeline.fps, elapsed / 1000), elapsed, elapsed/1000);
                     artboard.seek(timecode(timeline.fps, elapsed / 1000))
                     this.emit('playTimeline');
                 },

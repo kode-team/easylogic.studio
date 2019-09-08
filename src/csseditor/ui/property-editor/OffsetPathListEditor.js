@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
-import { LOAD } from "../../../util/Event";
+import { LOAD, BIND } from "../../../util/Event";
 import SelectEditor from "./SelectEditor";
 import { editor } from "../../../editor/editor";
 import RangeEditor from "./RangeEditor";
@@ -19,7 +19,7 @@ export default class OffsetPathListEditor extends UIElement {
 
         var [id, distance, rotateStatus, rotate ] = (this.props.value || '').split(',').map(it => it.trim())
 
-        return {id, distance, rotateStatus, rotate }
+        return {id, distance: distance || '0%', rotateStatus: rotateStatus || 'auto', rotate: rotate || '0deg' }
     }
 
     updateData(opt = {}) {
@@ -44,7 +44,6 @@ export default class OffsetPathListEditor extends UIElement {
     }
 
     modifyOffsetPath() {
-        console.log(this.getValue())
         this.parent.trigger(this.props.onchange, this.props.key, this.getValue(), this.props.params);
     }
 
@@ -81,9 +80,6 @@ export default class OffsetPathListEditor extends UIElement {
 
         var { id, rotateStatus, rotate, distance} = this.state 
 
-        console.log({ id, rotateStatus, rotate, distance, options})
-        var now = Date.now()
-
         return /*html*/`
         <div>
             <div class='offset-path-item'>
@@ -93,30 +89,37 @@ export default class OffsetPathListEditor extends UIElement {
                 <div>Total Length: <span ref='$totalLength'>${paths[id] && paths[id].totalLength || 0}</span></div>
             </div>
             <div class='offset-path-item'>
-                <RangeEditor ref='$distance' label='distance' min="0" max="100" value="${distance || '0%'}" key='distance' unit="%,px" onchange='changRangeEditor' /> 
+                <RangeEditor ref='$distance' label='distance' min="0" max="100" value="${distance || '0%'}" key='distance' unit="%,px" onchange='changeRangeEditor' /> 
             </div>
             <div class='offset-path-item'>
-                <SelectEditor ref='$status' label='direction' key='rotateStatus' value="${rotateStatus}" options=",auto,reverse" onchange='changRangeEditor' /> 
+                <SelectEditor ref='$status' label='direction' key='rotateStatus' value="${rotateStatus}" options="auto,auto angle,angle,reverse" onchange='changeRangeEditor' /> 
             </div>
             <div class='offset-path-item'>
-                <RangeEditor ref='$rotate' label='rotate' min="0" max="2000" key='rotate' value='${rotate || '0deg'}' units="deg,turn" onchange='changRangeEditor' /> 
+                <RangeEditor ref='$rotate' label='rotate' min="0" max="2000" key='rotate' value='${rotate || '0deg'}' units="deg,turn" onchange='changeRangeEditor' /> 
             </div>     
         </div>           
         `
     }
 
-
-    [EVENT('changeRangeEditor')] (key, value) {
-        console.log(key, value);
-        this.updateData({
-            [key]: value 
-        })
-
+    [BIND('$totalLength')] () {
         var { id} = this.state 
         var options = this.getOptions();
 
         var layer = options.paths[id] || { totalLength : 0} 
-        this.refs.$totalLength.text(layer.totalLength || 0)        
+        var totalLength = layer.totalLength || 0
+
+        return {
+            innerHTML: `<span>${totalLength}</span>`
+        }
+    }
+
+
+    [EVENT('changeRangeEditor')] (key, value) {
+        this.updateData({
+            [key]: value 
+        })
+
+        this.bindData('$totalLength');
 
     }
 

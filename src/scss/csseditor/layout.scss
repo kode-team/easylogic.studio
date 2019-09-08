@@ -19,6 +19,14 @@
       }
       .layout-footer { 
         height: $timeline-size - 1px;
+
+        .managed-tool {
+          .property-title {
+            .tools {
+              display: flex; 
+            }
+          }
+        }
       }
     }
 
