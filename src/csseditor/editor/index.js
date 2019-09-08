@@ -38,7 +38,7 @@ export default class CSSEditor extends UIElement {
 
   templateForEditor() {
     return /*html*/`
-      <div class="layout-main show-footer">
+      <div class="layout-main">
         <div class="layout-header">
             <LogoView />
             <ToolMenu />

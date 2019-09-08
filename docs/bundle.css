@@ -5918,13 +5918,13 @@ html, body {
   background-color: #fc554f;
 }
 .csseditor[data-theme=dark] .perspective-origin-editor .radius-selector[data-selected-value=all] button[data-value=all] svg path {
-  fill: white;
+  fill: #2c2c2c;
 }
 .csseditor[data-theme=dark] .perspective-origin-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] {
   background-color: #fc554f;
 }
 .csseditor[data-theme=dark] .perspective-origin-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] svg path {
-  fill: white;
+  fill: #2c2c2c;
 }
 .csseditor[data-theme=dark] .perspective-origin-editor .radius-selector button {
   background-image: none;
@@ -5951,13 +5951,13 @@ html, body {
   background-color: #fc554f;
 }
 .csseditor[data-theme=dark] .transform-origin-editor .radius-selector[data-selected-value=all] button[data-value=all] svg path {
-  fill: white;
+  fill: #2c2c2c;
 }
 .csseditor[data-theme=dark] .transform-origin-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] {
   background-color: #fc554f;
 }
 .csseditor[data-theme=dark] .transform-origin-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] svg path {
-  fill: white;
+  fill: #2c2c2c;
 }
 .csseditor[data-theme=dark] .transform-origin-editor .radius-selector button {
   background-image: none;
@@ -13246,13 +13246,13 @@ html, body {
   background-color: #e2e7ff;
 }
 .csseditor[data-theme=light] .perspective-origin-editor .radius-selector[data-selected-value=all] button[data-value=all] svg path {
-  fill: black;
+  fill: #e7e7e7;
 }
 .csseditor[data-theme=light] .perspective-origin-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] {
   background-color: #e2e7ff;
 }
 .csseditor[data-theme=light] .perspective-origin-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] svg path {
-  fill: black;
+  fill: #e7e7e7;
 }
 .csseditor[data-theme=light] .perspective-origin-editor .radius-selector button {
   background-image: none;
@@ -13279,13 +13279,13 @@ html, body {
   background-color: #e2e7ff;
 }
 .csseditor[data-theme=light] .transform-origin-editor .radius-selector[data-selected-value=all] button[data-value=all] svg path {
-  fill: black;
+  fill: #e7e7e7;
 }
 .csseditor[data-theme=light] .transform-origin-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] {
   background-color: #e2e7ff;
 }
 .csseditor[data-theme=light] .transform-origin-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] svg path {
-  fill: black;
+  fill: #e7e7e7;
 }
 .csseditor[data-theme=light] .transform-origin-editor .radius-selector button {
   background-image: none;

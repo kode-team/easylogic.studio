@@ -205,7 +205,7 @@ export default class SVGItemProperty extends BaseProperty {
       current.reset({
         'motion-based': this.refs.$motionBased.checked()
       })
-      this.bindData('$svgProperty')
+      // this.bindData('$svgProperty')
     }
 
   }

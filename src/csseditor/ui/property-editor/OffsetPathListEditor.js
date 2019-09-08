@@ -92,7 +92,7 @@ export default class OffsetPathListEditor extends UIElement {
                 <RangeEditor ref='$distance' label='distance' min="0" max="100" value="${distance || '0%'}" key='distance' unit="%,px" onchange='changeRangeEditor' /> 
             </div>
             <div class='offset-path-item'>
-                <SelectEditor ref='$status' label='direction' key='rotateStatus' value="${rotateStatus}" options="auto,auto angle,angle,reverse" onchange='changeRangeEditor' /> 
+                <SelectEditor ref='$status' label='direction' key='rotateStatus' value="${rotateStatus}" options="auto,auto angle,angle,reverse,element" onchange='changeRangeEditor' /> 
             </div>
             <div class='offset-path-item'>
                 <RangeEditor ref='$rotate' label='rotate' min="0" max="2000" key='rotate' value='${rotate || '0deg'}' units="deg,turn" onchange='changeRangeEditor' /> 

@@ -27,7 +27,7 @@ export default class TimelineProperty extends BaseProperty {
   }
 
   isFirstShow() {
-    return true;
+    return false;
   }
 
   getTitle() {
