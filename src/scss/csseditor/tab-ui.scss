@@ -19,6 +19,7 @@ $tab-horizontal-header-right-width: 60px;
       // border-bottom: 1px solid $tab-border-color;
       background-color: $tab-header-background-color;
       overflow: hidden;
+      color: $tab-header-font-color;
     }
     .tab-content {
       display: none;

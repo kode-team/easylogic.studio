@@ -73,9 +73,10 @@ $list-background-color: white;
 // tab 
 $tab-background-color: $background-color; 
 $tab-header-background-color: #f7fcff; 
+$tab-header-font-color: rgb(0, 11, 34); 
 $tab-font-color: $font-color;
 $tab-selected-color: $selected-color; 
-$tab-selected-font-color: $font-color;
+$tab-selected-font-color: $tab-header-font-color;
 $tab-selected-border-color: $selected-border-color;
 $tab-border-color: $border-color;
 

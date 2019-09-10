@@ -1755,6 +1755,7 @@ html, body {
   cursor: pointer;
   background-color: #404040;
   overflow: hidden;
+  color: #ffffff;
 }
 .csseditor[data-theme=dark] .tab.number-tab .tab-content {
   display: none;
@@ -9090,6 +9091,7 @@ html, body {
   cursor: pointer;
   background-color: #f7fcff;
   overflow: hidden;
+  color: #000b22;
 }
 .csseditor[data-theme=light] .tab.number-tab .tab-content {
   display: none;
@@ -9132,7 +9134,7 @@ html, body {
   border-right: 1px solid #dfdfdf;
   border-bottom: 1px solid transparent;
   background-color: white;
-  color: gray;
+  color: #000b22;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"]:not(:first-child) {
   border-left: 1px solid #dfdfdf;
@@ -9144,7 +9146,7 @@ html, body {
   border-right: 1px solid #dfdfdf;
   border-bottom: 1px solid transparent;
   background-color: white;
-  color: gray;
+  color: #000b22;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"]:not(:first-child) {
   border-left: 1px solid #dfdfdf;
@@ -9156,7 +9158,7 @@ html, body {
   border-right: 1px solid #dfdfdf;
   border-bottom: 1px solid transparent;
   background-color: white;
-  color: gray;
+  color: #000b22;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"]:not(:first-child) {
   border-left: 1px solid #dfdfdf;
@@ -9168,7 +9170,7 @@ html, body {
   border-right: 1px solid #dfdfdf;
   border-bottom: 1px solid transparent;
   background-color: white;
-  color: gray;
+  color: #000b22;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"]:not(:first-child) {
   border-left: 1px solid #dfdfdf;
@@ -9180,7 +9182,7 @@ html, body {
   border-right: 1px solid #dfdfdf;
   border-bottom: 1px solid transparent;
   background-color: white;
-  color: gray;
+  color: #000b22;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"]:not(:first-child) {
   border-left: 1px solid #dfdfdf;
@@ -9192,7 +9194,7 @@ html, body {
   border-right: 1px solid #dfdfdf;
   border-bottom: 1px solid transparent;
   background-color: white;
-  color: gray;
+  color: #000b22;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"]:not(:first-child) {
   border-left: 1px solid #dfdfdf;
@@ -9204,7 +9206,7 @@ html, body {
   border-right: 1px solid #dfdfdf;
   border-bottom: 1px solid transparent;
   background-color: white;
-  color: gray;
+  color: #000b22;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"]:not(:first-child) {
   border-left: 1px solid #dfdfdf;
@@ -9216,7 +9218,7 @@ html, body {
   border-right: 1px solid #dfdfdf;
   border-bottom: 1px solid transparent;
   background-color: white;
-  color: gray;
+  color: #000b22;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"]:not(:first-child) {
   border-left: 1px solid #dfdfdf;
@@ -9228,7 +9230,7 @@ html, body {
   border-right: 1px solid #dfdfdf;
   border-bottom: 1px solid transparent;
   background-color: white;
-  color: gray;
+  color: #000b22;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"]:not(:first-child) {
   border-left: 1px solid #dfdfdf;
