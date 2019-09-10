@@ -43,8 +43,8 @@
     height: $tool-size;
     overflow: hidden;
     position: relative;
-    background-color: $background-color;
-    color: $font-color;
+    background-color: $header-background-color;
+    color: $selected-font-color;
     z-index: 1;
     pointer-events: all;
     box-sizing: border-box;
@@ -109,9 +109,9 @@
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
-
+      border-right: 1px solid $border-color;    
       transition: $show-timeline-animation;
-      box-shadow: 0 10px 20px rgba(0,0,0,.19), 0 6px 6px rgba(0,0,0,.23);            
+      // box-shadow: 0 10px 20px rgba(0,0,0,.19), 0 6px 6px rgba(0,0,0,.23);            
     }
 
     .layout-right {
@@ -127,7 +127,7 @@
       overflow: auto;
       border-left: 1px solid $border-color;       
       transition: $show-timeline-animation;      
-      box-shadow: 0 10px 20px rgba(0,0,0,.19), 0 6px 6px rgba(0,0,0,.23);      
+      // box-shadow: 0 10px 20px rgba(0,0,0,.19), 0 6px 6px rgba(0,0,0,.23);      
       // transition: right 0.1s linear;
     }
 

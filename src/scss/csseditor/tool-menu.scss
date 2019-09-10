@@ -29,7 +29,7 @@
     line-height: 1.6;
     color: $logo-selected-color;
     z-index: 1;
-    vertical-align: middle;
+    vertical-align: middle; 
   }
 
   .extra-text {
@@ -39,7 +39,8 @@
     // font-style: italic;
     font-weight: bold;
     line-height: 1.6;
-    vertical-align: middle;    
+    vertical-align: middle;   
+    color: $logo-selected-font-color; 
   }
 
   .site {
@@ -56,6 +57,7 @@
 .external-tool-menu {
   height: 100%;
   display: flex;
+  color: $selected-font-color;
 
 
   .items {
@@ -112,22 +114,24 @@
       background-image: none;
       border:0px;
       box-shadow: none;
+      color: $selected-font-color;
 
       &[checked="checked"] {
         .icon {
           background-color: rgba(255, 255, 255, 0.1);
+          color: $selected-font-color;          
         }
       }
 
       &.open {
         .title {
-          color: white;
+          color: $selected-font-color;
         }
 
         .open-right-panel {
           svg {
             path {
-              fill: $selected-border-color;
+              fill: $selected-font-color;
             }
           }
         }
@@ -136,7 +140,7 @@
 
     .title {
       font-size: 10px;
-      color: #999;
+      color: $selected-font-color;
       // display: none;
     }
 
@@ -145,10 +149,15 @@
       width: 24px;
       height: 24px;
       // background-color: rgba(206, 206, 206, 0.5);
+      color: $selected-font-color;      
 
       svg {
         width: 100%;
         height: 100%;
+
+        path {
+          fill : $selected-font-color;
+        }
       }
 
       &.width {
@@ -221,7 +230,7 @@
         background-color: transparent;
         // box-shadow: inset 0 0 0 1px $border-color;
         // text-align: right;
-        text-shadow: 2px 2px 4px rgba($border-color, 0.59);
+        // text-shadow: 2px 2px 4px rgba($border-color, 0.59);
         padding-right: 2px;
         border-radius: 3px;
         &:before {

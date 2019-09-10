@@ -13,6 +13,9 @@ export default class StyleView extends UIElement {
       <div ref='$svgArea'></div>
       <svg width="0" height="0">
         <defs>
+          <marker id="start" markerWidth="8" markerHeight="8" refX="5" refY="5">
+              <circle cx="5" cy="5" r="3" style="stroke: none; fill:#000000;"/>
+          </marker>
           <marker id="head" orient="auto" markerWidth="10" markerHeight="10" refX=".5" refY="3">
             <path d="M0,0 V6 L5,3 Z" fill="red"></path>
           </marker>

@@ -1464,7 +1464,7 @@ html, body {
   overflow: hidden;
   position: relative;
   background-color: #383838;
-  color: #ffffff;
+  color: white;
   z-index: 1;
   pointer-events: all;
   box-sizing: border-box;
@@ -1521,8 +1521,8 @@ html, body {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  border-right: 1px solid #2c2c2c;
   transition: all 0.15s linear;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 }
 .csseditor[data-theme=dark] .layout-main .layout-middle .layout-right {
   position: absolute;
@@ -1537,7 +1537,6 @@ html, body {
   overflow: auto;
   border-left: 1px solid #2c2c2c;
   transition: all 0.15s linear;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 }
 .csseditor[data-theme=dark] .layout-main .layout-middle .layout-body {
   top: 0px;
@@ -2201,6 +2200,7 @@ html, body {
   font-weight: bold;
   line-height: 1.6;
   vertical-align: middle;
+  color: white;
 }
 .csseditor[data-theme=dark] .logo .site {
   font-size: 14px;
@@ -2213,6 +2213,7 @@ html, body {
 .csseditor[data-theme=dark] .external-tool-menu {
   height: 100%;
   display: flex;
+  color: white;
 }
 .csseditor[data-theme=dark] .tool-menu .items,
 .csseditor[data-theme=dark] .external-tool-menu .items {
@@ -2265,10 +2266,12 @@ html, body {
   background-image: none;
   border: 0px;
   box-shadow: none;
+  color: white;
 }
 .csseditor[data-theme=dark] .tool-menu .items button[checked=checked] .icon,
 .csseditor[data-theme=dark] .external-tool-menu .items button[checked=checked] .icon {
   background-color: rgba(255, 255, 255, 0.1);
+  color: white;
 }
 .csseditor[data-theme=dark] .tool-menu .items button.open .title,
 .csseditor[data-theme=dark] .external-tool-menu .items button.open .title {
@@ -2276,23 +2279,28 @@ html, body {
 }
 .csseditor[data-theme=dark] .tool-menu .items button.open .open-right-panel svg path,
 .csseditor[data-theme=dark] .external-tool-menu .items button.open .open-right-panel svg path {
-  fill: #609de2;
+  fill: white;
 }
 .csseditor[data-theme=dark] .tool-menu .items .title,
 .csseditor[data-theme=dark] .external-tool-menu .items .title {
   font-size: 10px;
-  color: #999;
+  color: white;
 }
 .csseditor[data-theme=dark] .tool-menu .items .icon,
 .csseditor[data-theme=dark] .external-tool-menu .items .icon {
   margin: 0 auto;
   width: 24px;
   height: 24px;
+  color: white;
 }
 .csseditor[data-theme=dark] .tool-menu .items .icon svg,
 .csseditor[data-theme=dark] .external-tool-menu .items .icon svg {
   width: 100%;
   height: 100%;
+}
+.csseditor[data-theme=dark] .tool-menu .items .icon svg path,
+.csseditor[data-theme=dark] .external-tool-menu .items .icon svg path {
+  fill: white;
 }
 .csseditor[data-theme=dark] .tool-menu .items .icon.width,
 .csseditor[data-theme=dark] .external-tool-menu .items .icon.width {
@@ -2370,7 +2378,6 @@ html, body {
 .csseditor[data-theme=dark] .external-tool-menu .items .icon.codepen,
 .csseditor[data-theme=dark] .external-tool-menu .items .icon.github {
   background-color: transparent;
-  text-shadow: 2px 2px 4px rgba(44, 44, 44, 0.59);
   padding-right: 2px;
   border-radius: 3px;
 }
@@ -3002,7 +3009,7 @@ html, body {
 .csseditor[data-theme=dark] .property {
   padding: 6px 0px;
   border-bottom: 1px solid #202020;
-  background-color: #202020;
+  background-color: #383838;
   color: #ffffff;
   display: none;
 }
@@ -8791,8 +8798,8 @@ html, body {
   height: 50px;
   overflow: hidden;
   position: relative;
-  background-color: white;
-  color: gray;
+  background-color: #004679;
+  color: white;
   z-index: 1;
   pointer-events: all;
   box-sizing: border-box;
@@ -8849,8 +8856,8 @@ html, body {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  border-right: 1px solid #e7e7e7;
   transition: all 0.15s linear;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 }
 .csseditor[data-theme=light] .layout-main .layout-middle .layout-right {
   position: absolute;
@@ -8865,7 +8872,6 @@ html, body {
   overflow: auto;
   border-left: 1px solid #e7e7e7;
   transition: all 0.15s linear;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 }
 .csseditor[data-theme=light] .layout-main .layout-middle .layout-body {
   top: 0px;
@@ -9126,7 +9132,7 @@ html, body {
   border-right: 1px solid #dfdfdf;
   border-bottom: 1px solid transparent;
   background-color: white;
-  color: black;
+  color: gray;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"]:not(:first-child) {
   border-left: 1px solid #dfdfdf;
@@ -9138,7 +9144,7 @@ html, body {
   border-right: 1px solid #dfdfdf;
   border-bottom: 1px solid transparent;
   background-color: white;
-  color: black;
+  color: gray;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"]:not(:first-child) {
   border-left: 1px solid #dfdfdf;
@@ -9150,7 +9156,7 @@ html, body {
   border-right: 1px solid #dfdfdf;
   border-bottom: 1px solid transparent;
   background-color: white;
-  color: black;
+  color: gray;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"]:not(:first-child) {
   border-left: 1px solid #dfdfdf;
@@ -9162,7 +9168,7 @@ html, body {
   border-right: 1px solid #dfdfdf;
   border-bottom: 1px solid transparent;
   background-color: white;
-  color: black;
+  color: gray;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"]:not(:first-child) {
   border-left: 1px solid #dfdfdf;
@@ -9174,7 +9180,7 @@ html, body {
   border-right: 1px solid #dfdfdf;
   border-bottom: 1px solid transparent;
   background-color: white;
-  color: black;
+  color: gray;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"]:not(:first-child) {
   border-left: 1px solid #dfdfdf;
@@ -9186,7 +9192,7 @@ html, body {
   border-right: 1px solid #dfdfdf;
   border-bottom: 1px solid transparent;
   background-color: white;
-  color: black;
+  color: gray;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"]:not(:first-child) {
   border-left: 1px solid #dfdfdf;
@@ -9198,7 +9204,7 @@ html, body {
   border-right: 1px solid #dfdfdf;
   border-bottom: 1px solid transparent;
   background-color: white;
-  color: black;
+  color: gray;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"]:not(:first-child) {
   border-left: 1px solid #dfdfdf;
@@ -9210,7 +9216,7 @@ html, body {
   border-right: 1px solid #dfdfdf;
   border-bottom: 1px solid transparent;
   background-color: white;
-  color: black;
+  color: gray;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"]:not(:first-child) {
   border-left: 1px solid #dfdfdf;
@@ -9222,7 +9228,7 @@ html, body {
   border-right: 1px solid #dfdfdf;
   border-bottom: 1px solid transparent;
   background-color: white;
-  color: black;
+  color: gray;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"]:not(:first-child) {
   border-left: 1px solid #dfdfdf;
@@ -9511,14 +9517,14 @@ html, body {
   height: 100%;
 }
 .csseditor[data-theme=light] .logo .image svg path {
-  fill: #4a89b6;
+  fill: #7dbbe7;
 }
 .csseditor[data-theme=light] .logo .text {
   font-size: 30px;
   display: inline-block;
   font-weight: bold;
   line-height: 1.6;
-  color: #4a89b6;
+  color: #7dbbe7;
   z-index: 1;
   vertical-align: middle;
 }
@@ -9529,6 +9535,7 @@ html, body {
   font-weight: bold;
   line-height: 1.6;
   vertical-align: middle;
+  color: white;
 }
 .csseditor[data-theme=light] .logo .site {
   font-size: 14px;
@@ -9541,6 +9548,7 @@ html, body {
 .csseditor[data-theme=light] .external-tool-menu {
   height: 100%;
   display: flex;
+  color: white;
 }
 .csseditor[data-theme=light] .tool-menu .items,
 .csseditor[data-theme=light] .external-tool-menu .items {
@@ -9593,10 +9601,12 @@ html, body {
   background-image: none;
   border: 0px;
   box-shadow: none;
+  color: white;
 }
 .csseditor[data-theme=light] .tool-menu .items button[checked=checked] .icon,
 .csseditor[data-theme=light] .external-tool-menu .items button[checked=checked] .icon {
   background-color: rgba(255, 255, 255, 0.1);
+  color: white;
 }
 .csseditor[data-theme=light] .tool-menu .items button.open .title,
 .csseditor[data-theme=light] .external-tool-menu .items button.open .title {
@@ -9604,23 +9614,28 @@ html, body {
 }
 .csseditor[data-theme=light] .tool-menu .items button.open .open-right-panel svg path,
 .csseditor[data-theme=light] .external-tool-menu .items button.open .open-right-panel svg path {
-  fill: #dfdfdf;
+  fill: white;
 }
 .csseditor[data-theme=light] .tool-menu .items .title,
 .csseditor[data-theme=light] .external-tool-menu .items .title {
   font-size: 10px;
-  color: #999;
+  color: white;
 }
 .csseditor[data-theme=light] .tool-menu .items .icon,
 .csseditor[data-theme=light] .external-tool-menu .items .icon {
   margin: 0 auto;
   width: 24px;
   height: 24px;
+  color: white;
 }
 .csseditor[data-theme=light] .tool-menu .items .icon svg,
 .csseditor[data-theme=light] .external-tool-menu .items .icon svg {
   width: 100%;
   height: 100%;
+}
+.csseditor[data-theme=light] .tool-menu .items .icon svg path,
+.csseditor[data-theme=light] .external-tool-menu .items .icon svg path {
+  fill: white;
 }
 .csseditor[data-theme=light] .tool-menu .items .icon.width,
 .csseditor[data-theme=light] .external-tool-menu .items .icon.width {
@@ -9698,7 +9713,6 @@ html, body {
 .csseditor[data-theme=light] .external-tool-menu .items .icon.codepen,
 .csseditor[data-theme=light] .external-tool-menu .items .icon.github {
   background-color: transparent;
-  text-shadow: 2px 2px 4px rgba(231, 231, 231, 0.59);
   padding-right: 2px;
   border-radius: 3px;
 }
@@ -10329,8 +10343,8 @@ html, body {
 }
 .csseditor[data-theme=light] .property {
   padding: 6px 0px;
-  border-bottom: 1px solid #616161;
-  background-color: #616161;
+  border-bottom: 1px solid #f1f1f1;
+  background-color: white;
   color: gray;
   display: none;
 }
@@ -11215,7 +11229,7 @@ html, body {
   position: absolute;
   display: inline-block;
   background-color: #e2e7ff;
-  color: black;
+  color: white;
   left: 0px;
   top: 0px;
   border-top-left-radius: 5px;
@@ -11223,7 +11237,7 @@ html, body {
   padding: 2px 4px;
 }
 .csseditor[data-theme=light] .code-view-item > div pre::before svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=light] .clip-path-list {
   grid-template-columns: 1fr !important;
@@ -11318,10 +11332,10 @@ html, body {
   font-weight: bold;
   border-radius: 5px;
   background-color: #e2e7ff;
-  color: black;
+  color: white;
 }
 .csseditor[data-theme=light] .selector-list .selector-item .title .name span svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=light] .selector-list .selector-item .title .tools {
   vertical-align: middle;
@@ -11347,10 +11361,10 @@ html, body {
 }
 .csseditor[data-theme=light] .project-list .project-item.selected {
   background-color: #4a89b6;
-  color: black;
+  color: white;
 }
 .csseditor[data-theme=light] .project-list .project-item.selected svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=light] .artboard-list {
   height: 100%;
@@ -11384,10 +11398,10 @@ html, body {
 }
 .csseditor[data-theme=light] .artboard-list .artboard-item.selected {
   background-color: #4a89b6;
-  color: black;
+  color: white;
 }
 .csseditor[data-theme=light] .artboard-list .artboard-item.selected svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=light] .layer-list {
   height: 100%;
@@ -11434,7 +11448,7 @@ html, body {
   height: 100%;
 }
 .csseditor[data-theme=light] .layer-list .layer-item .detail span.icon svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=light] .layer-list .layer-item .detail label {
   padding: 2px 0px;
@@ -11458,10 +11472,10 @@ html, body {
 }
 .csseditor[data-theme=light] .layer-list .layer-item.selected {
   background-color: #4a89b6;
-  color: black;
+  color: white;
 }
 .csseditor[data-theme=light] .layer-list .layer-item.selected svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=light] .color-assets-property .color-list-tools {
   display: grid;
@@ -11499,19 +11513,19 @@ html, body {
   background-color: #dfdfdf;
   border-color: #dfdfdf;
   background-image: none;
-  color: black;
+  color: white;
 }
 .csseditor[data-theme=light] .color-assets-property .color-list-tools[data-view-mode=list] button[data-value=list] svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=light] .color-assets-property .color-list-tools[data-view-mode=grid] button[data-value=grid] {
   background-color: #dfdfdf;
   border-color: #dfdfdf;
   background-image: none;
-  color: black;
+  color: white;
 }
 .csseditor[data-theme=light] .color-assets-property .color-list-tools[data-view-mode=grid] button[data-value=grid] svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=light] .color-assets-property .color-list .color-view {
   pointer-events: none;
@@ -11586,7 +11600,7 @@ html, body {
   padding: 2px;
 }
 .csseditor[data-theme=light] .color-assets-property .color-list[data-view-mode=grid] .color-item .tools svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=light] .property.color-assets-property {
   padding-left: 0px !important;
@@ -11631,19 +11645,19 @@ html, body {
   background-color: #dfdfdf;
   border-color: #dfdfdf;
   background-image: none;
-  color: black;
+  color: white;
 }
 .csseditor[data-theme=light] .gradient-assets-property .gradient-list-tools[data-view-mode=list] button[data-value=list] svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=light] .gradient-assets-property .gradient-list-tools[data-view-mode=grid] button[data-value=grid] {
   background-color: #dfdfdf;
   border-color: #dfdfdf;
   background-image: none;
-  color: black;
+  color: white;
 }
 .csseditor[data-theme=light] .gradient-assets-property .gradient-list-tools[data-view-mode=grid] button[data-value=grid] svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=light] .gradient-assets-property .gradient-list .gradient-view {
   pointer-events: none;
@@ -11721,7 +11735,7 @@ html, body {
   padding: 2px;
 }
 .csseditor[data-theme=light] .gradient-assets-property .gradient-list[data-view-mode=grid] .gradient-item .tools svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=light] .property.gradient-assets-property {
   padding-left: 0px !important;
@@ -11766,19 +11780,19 @@ html, body {
   background-color: #dfdfdf;
   border-color: #dfdfdf;
   background-image: none;
-  color: black;
+  color: white;
 }
 .csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list-tools[data-view-mode=list] button[data-value=list] svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list-tools[data-view-mode=grid] button[data-value=grid] {
   background-color: #dfdfdf;
   border-color: #dfdfdf;
   background-image: none;
-  color: black;
+  color: white;
 }
 .csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list-tools[data-view-mode=grid] button[data-value=grid] svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list .svgfilter-view {
   position: absolute;
@@ -11851,7 +11865,7 @@ html, body {
   padding: 2px;
 }
 .csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list[data-view-mode=grid] .svgfilter-item .tools svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=light] .property.svgfilter-assets-property {
   padding-left: 0px !important;
@@ -11925,7 +11939,7 @@ html, body {
   padding: 2px;
 }
 .csseditor[data-theme=light] .svgpath-assets-property .svgpath-list[data-view-mode=grid] .svgpath-item .tools svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=light] .property.svgpath-assets-property {
   padding-left: 0px !important;
@@ -12072,19 +12086,19 @@ html, body {
   background-color: #dfdfdf;
   border-color: #dfdfdf;
   background-image: none;
-  color: black;
+  color: white;
 }
 .csseditor[data-theme=light] .image-assets-property .image-list-tools[data-view-mode=list] button[data-value=list] svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=light] .image-assets-property .image-list-tools[data-view-mode=grid] button[data-value=grid] {
   background-color: #dfdfdf;
   border-color: #dfdfdf;
   background-image: none;
-  color: black;
+  color: white;
 }
 .csseditor[data-theme=light] .image-assets-property .image-list-tools[data-view-mode=grid] button[data-value=grid] svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=light] .image-assets-property .image-list .image-view {
   pointer-events: none;
@@ -12181,7 +12195,7 @@ html, body {
   padding: 2px;
 }
 .csseditor[data-theme=light] .image-assets-property .image-list[data-view-mode=grid] .image-item .tools svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=light] .property.image-assets-property {
   padding-left: 0px !important;
@@ -12867,13 +12881,13 @@ html, body {
   background-color: #e2e7ff;
 }
 .csseditor[data-theme=light] .border-radius-editor .radius-selector[data-selected-value=all] button[data-value=all] svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=light] .border-radius-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] {
   background-color: #e2e7ff;
 }
 .csseditor[data-theme=light] .border-radius-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=light] .border-radius-editor .radius-setting-box > div {
   margin-bottom: 5px;
@@ -13015,7 +13029,7 @@ html, body {
   margin-right: 2px;
   vertical-align: middle;
   background-color: #e2e7ff;
-  color: black;
+  color: white;
 }
 .csseditor[data-theme=light] .filter-editor .filter-list .filter-item .title .filter-menu {
   text-align: right;
@@ -13684,7 +13698,7 @@ html, body {
   height: 100%;
 }
 .csseditor[data-theme=light] .svg-filter-editor .filter-list .filter-item .title .fold svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=light] .svg-filter-editor .filter-list .filter-item .title label {
   font-size: 12px;
@@ -13695,7 +13709,7 @@ html, body {
   text-align: right;
 }
 .csseditor[data-theme=light] .svg-filter-editor .filter-list .filter-item .title .filter-menu svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=light] .svg-filter-editor .filter-list .filter-item .filter-ui {
   display: grid;
@@ -13748,13 +13762,13 @@ html, body {
   background-color: #e2e7ff;
 }
 .csseditor[data-theme=light] .direction-editor .radius-selector[data-selected-value=all] button[data-value=all] svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=light] .direction-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] {
   background-color: #e2e7ff;
 }
 .csseditor[data-theme=light] .direction-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] svg path {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=light] .direction-editor .radius-selector button {
   flex: none;
@@ -13822,7 +13836,7 @@ html, body {
   background-color: #e2e7ff;
 }
 .csseditor[data-theme=light] .list-view-editor .list-view-item.selected svg path, .csseditor[data-theme=light] .list-view-editor .list-view-item.selected svg circle, .csseditor[data-theme=light] .list-view-editor .list-view-item.selected svg rect {
-  fill: black;
+  fill: white;
 }
 .csseditor[data-theme=light] .list-view-editor .list-view-item svg {
   width: 100%;
@@ -15593,7 +15607,7 @@ html, body {
 }
 .csseditor[data-theme=light] .animation-selector .timeline-object.selected {
   background-color: #e2e7ff;
-  color: black;
+  color: white;
 }
 .csseditor[data-theme=light] .timeline-value-area {
   position: absolute;
@@ -15712,19 +15726,19 @@ html, body {
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .play-buttons[data-selected-speed="0.5"] [data-value="0.5"] {
   background-color: #e2e7ff;
-  color: black;
+  color: white;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .play-buttons[data-selected-speed="1"] [data-value="1"] {
   background-color: #e2e7ff;
-  color: black;
+  color: white;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .play-buttons[data-selected-speed="2"] [data-value="2"] {
   background-color: #e2e7ff;
-  color: black;
+  color: white;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .play-buttons[data-selected-speed="3"] [data-value="3"] {
   background-color: #e2e7ff;
-  color: black;
+  color: white;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .play-buttons button {
   border: 1px solid #e7e7e7;

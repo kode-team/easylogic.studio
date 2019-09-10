@@ -20,16 +20,18 @@ $footer-height: 40px;
 
 // common 
 
-$inner-border-color: rgb(97, 97, 97);
+$inner-border-color: rgb(241, 241, 241);
 $border-color: rgb(231, 231, 231);
 $border-color-2: #a2a2a2;
 $selected-border-color: #dfdfdf;
 $selected-color: #e2e7ff;
 $background-color: rgb(255, 255, 255); 
+$header-background-color: #004679;
 $selected-background-color: white; 
 $font-color: rgb(128, 128, 128);
-$selected-font-color: rgba(0, 0, 0, 1);
-$logo-selected-color: #4a89b6;
+$selected-font-color: rgb(255, 255, 255);
+$logo-selected-color: #7dbbe7;
+$logo-selected-font-color: white;
 
 // base 
 $button-front-color: $font-color;
@@ -64,7 +66,7 @@ $list-font-color: white;
 $list-item-font-color: #999;
 $list-item-selected-color: #4a89b6; 
 $list-item-selected-font-color: white; 
-$list-item-selected-font-color: $selected-font-color; 
+// $list-item-selected-font-color: $selected-font-color; 
 $list-border-color: lighten($border-color, 0.5);
 $list-background-color: white;
 
@@ -73,7 +75,7 @@ $tab-background-color: $background-color;
 $tab-header-background-color: #f7fcff; 
 $tab-font-color: $font-color;
 $tab-selected-color: $selected-color; 
-$tab-selected-font-color: $selected-font-color;
+$tab-selected-font-color: $font-color;
 $tab-selected-border-color: $selected-border-color;
 $tab-border-color: $border-color;
 

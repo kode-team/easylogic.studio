@@ -47,6 +47,8 @@ export class SVGItem extends Layer {
       return {
         'fill': 'transparent',
         'fill-opacity': 1,
+        'marker-start': 'url(#start)',
+        // 'marker-mid': 'url(#head)',
         'marker-end': 'url(#head)',
         'stroke': 'rgba(0, 0, 0, 0.2)'
       }
