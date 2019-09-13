@@ -62,6 +62,7 @@ export default class CSSEditor extends UIElement {
             <TimelineProperty />
           </div>          
         </div>
+        <div class='status-bar'></div>
 
         <FillPopup />
         <ColorPickerPopup  />

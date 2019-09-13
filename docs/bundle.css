@@ -1458,6 +1458,18 @@ html, body {
 .csseditor[data-theme=dark] .layout-main marker path {
   fill: #2c2c2c;
 }
+.csseditor[data-theme=dark] .layout-main .status-bar {
+  flex: none;
+  height: 24px;
+  overflow: hidden;
+  position: relative;
+  background-color: #fc554f;
+  z-index: 1;
+  pointer-events: all;
+  box-sizing: border-box;
+  border-top: 1px solid #2c2c2c;
+  color: white;
+}
 .csseditor[data-theme=dark] .layout-main .layout-header {
   flex: none;
   height: 50px;
@@ -8793,6 +8805,18 @@ html, body {
 }
 .csseditor[data-theme=light] .layout-main marker path {
   fill: #e7e7e7;
+}
+.csseditor[data-theme=light] .layout-main .status-bar {
+  flex: none;
+  height: 24px;
+  overflow: hidden;
+  position: relative;
+  background-color: #e2e7ff;
+  z-index: 1;
+  pointer-events: all;
+  box-sizing: border-box;
+  border-top: 1px solid #e7e7e7;
+  color: white;
 }
 .csseditor[data-theme=light] .layout-main .layout-header {
   flex: none;

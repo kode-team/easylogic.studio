@@ -1,6 +1,7 @@
 import { CSS_TO_STRING } from "../util/functions/func";
 import { editor } from "./editor";
 import { Length } from "./unit/Length";
+import AnimationExport from "./export/animation-export/AnimationExport";
 
 export default {
 
@@ -18,13 +19,13 @@ export default {
     `
   },
 
-  makeStyle (item) {
+  makeStyle (item,appendCSS = '') {
 
     if (item.is('project')) {
       return this.makeProjectStyle(item);
     }
 
-    const cssString = item.generateView(`[data-id='${item.id}']`)
+    const cssString = item.generateView(`[data-id='${item.id}']`, appendCSS)
     return `
     ${cssString}
     ` + item.layers.map(it => {
@@ -41,27 +42,33 @@ export default {
 
   generate () {
     var project = editor.selection.currentProject;
-    var artboard = editor.selection.currentArtboard.clone();
+    var artboard = editor.selection.currentArtboard;
 
-    artboard.reset({
-      x: Length.px(0),
-      y: Length.px(0)
-    })
+    // artboard.reset({
+    //   x: Length.px(0),
+    //   y: Length.px(0)
+    // })
 
     var css = `
       ${this.makeStyle(project)}
-      ${this.makeStyle(artboard)}
+      ${this.makeStyle(artboard, `
+        left: 0px;
+        top: 0px;
+      `)}
     `
     var html = `
       ${artboard.html}
       ${this.makeSvg(project)}
     `
 
+    var js = AnimationExport.generate(artboard, 'anipa')
+
     html = this.replaceLocalUrltoRealUrl(html);
     css = this.replaceLocalUrltoRealUrl(css);
+    js = this.replaceLocalUrltoRealUrl(js);
 
   
-    return { html, css }
+    return { html, css, js }
   },
 
   replaceLocalUrltoRealUrl (str) {

@@ -5,12 +5,13 @@ import ExportManager from "../../../editor/ExportManager";
  
 export default class ExportCodePen extends UIElement {
   template() {
-    return `
+    return /*html*/`
     <form class='codepen' action="https://codepen.io/pen/define" method="POST" target="_code_pen">
       <input type="hidden" name="data" ref="$codepen" value=''>
       <button type="submit">
         <div class='icon codepen'></div>
         <div class='title'>CodePen</div>
+        
       </button>
     </form>     
     `;
@@ -21,6 +22,7 @@ export default class ExportCodePen extends UIElement {
     this.refs.$codepen.val(JSON.stringify({
       title: "sapa - editor.easylogic.studio",
       description: "https://editor.easylogic.studio",
+      js_external: "https://cdn.jsdelivr.net/npm/@easylogic/anipa@0.0.2/dist/main.js",
       ...obj
     }))
 

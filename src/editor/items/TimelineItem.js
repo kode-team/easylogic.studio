@@ -33,6 +33,18 @@ export class TimelineItem extends DomItem {
     });
   }
 
+  setTimelineInfo (obj) {
+
+    var timeline = this.getSelectedTimeline();
+    if (!timeline) return; 
+
+    ['speed', 'iterationCount', 'direction'].forEach(key => {
+      if (isNotUndefined(obj[key])) {
+        timeline[key] = obj[key]
+      }
+    })
+  }
+
   searchTimelineOffset (time) {
     var timeline = this.getSelectedTimeline();
     var filteredTimeline = [] 
@@ -43,6 +55,8 @@ export class TimelineItem extends DomItem {
           var list = this.getCompiledTimingFunction(animation.id, p.property);
 
           filteredTimeline.push(list.find(keyframe => {
+            if (keyframe.isOnlyTime && keyframe.startTime <= time) return true; 
+
             return keyframe.startTime <= time && time < keyframe.endTime
           }))
         })
@@ -68,15 +82,17 @@ export class TimelineItem extends DomItem {
 
     this.json.compiledTimeline[`${layerId}.${property}`] = p.keyframes.map( (offset, index) => {
 
+      var currentOffset = offset; 
       var nextOffset = p.keyframes[index + 1];
 
       if (!nextOffset) {
-        nextOffset = { time: offset.time + 1, value: offset.value + ''};
+        nextOffset = { time: offset.time, value: offset.value + ''};
       }
 
       var it = {
         layer,
         property: p.property,
+        isOnlyTime: currentOffset.time === nextOffset.time,
         startTime: offset.time,
         endTime: nextOffset.time, 
         startValue: offset.value,
@@ -265,6 +281,9 @@ export class TimelineItem extends DomItem {
 
     return {
       fps,
+      speed: 1,
+      direction: 'normal',
+      iterationCount: 1, 
       currentTimecode: timecode(fps, 0),
       totalTimecode: timecode(fps, endTime),
       currentTime: 0,

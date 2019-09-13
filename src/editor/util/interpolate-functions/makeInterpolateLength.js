@@ -38,6 +38,11 @@ export function makeInterpolateLength(layer, property, startNumber, endNumber, r
     var e = Length.parse(endNumber);
 
     return (rate, t) => {
+
+        if (s.equals(e)) {
+            return s; 
+        }
+
         var realStartValue = getRealAttributeValue(layer, property, s, refType, refElement);
         var realEndValue = getRealAttributeValue(layer, property, e, refType, refElement);
 

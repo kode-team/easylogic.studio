@@ -685,7 +685,7 @@ export class DomItem extends GroupItem {
     }
   }
 
-  generateView (prefix = '') {
+  generateView (prefix = '', appendCSS = '') {
 
     //1. 원본 객체의 css 를 생성 
     //2. 원본이 하나의 객체가 아니라 복합 객체일때 중첩 CSS 를 자체 정의해서 생성 
@@ -693,6 +693,7 @@ export class DomItem extends GroupItem {
     var cssString = `
 ${prefix} {  /* ${this.json.itemType} */
     ${CSS_TO_STRING(this.toCSS(), '\n')}; 
+    ${appendCSS}
 }
 
 ${this.toNestedCSS().map(it => {

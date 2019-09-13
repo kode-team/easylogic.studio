@@ -27,7 +27,7 @@ export default class TimelinePlayControl extends UIElement {
                 <div class='row'>            
                     <label>${icon.replay} Repeat</label>
                     <div class='input' >
-                        <input type='number' min="1" max="100" step="1" ref='$iteration' value='${this.state.iteration}' />
+                        <input type='number' min="1" max="100" step="1" ref='$iteration' value='${this.state.iterationCount}' />
                     </div> 
                 </div>
                 <div class='row'>
@@ -44,11 +44,40 @@ export default class TimelinePlayControl extends UIElement {
     }
 
     initState() {
+
+        var status = 'pause'
+        var speed = 1
+        var iterationCount = 1
+        var direction = 'normal'
+
+        var timeline = this.getSelectedTimeline();
+
+        if (timeline) {
+            var { speed, iterationCount, direction } = timeline; 
+        }
+
+
         return {
             status: 'pause',
-            speed: 1,
-            iteration: 1,
-            direction: 'normal'            
+            speed,
+            iterationCount,
+            direction
+        }
+    }
+
+    getSelectedTimeline () {
+
+        var artboard = editor.selection.currentArtboard;
+        if (artboard) {
+            return artboard.getSelectedTimeline();
+        }
+    }
+
+    updateData(obj) {
+        this.setState(obj, false);
+        var artboard = editor.selection.currentArtboard;
+        if (artboard) {
+            artboard.setTimelineInfo(obj);
         }
     }
 
@@ -99,7 +128,7 @@ export default class TimelinePlayControl extends UIElement {
     }    
 
     play () {
-        this.emit('play.timeline', this.state.speed, this.state.iteration, this.state.direction);
+        this.emit('play.timeline', this.state.speed, this.state.iterationCount, this.state.direction);
     }
 
     pause () {
@@ -109,25 +138,26 @@ export default class TimelinePlayControl extends UIElement {
     }
 
     [EVENT('stopTimeline')] () {
-        this.setState({
+        this.updateData({
             status: 'pause'
         })
     }
    
     [CLICK('$direction button')] (e) {
-        this.setState({
+        this.updateData({
             direction: e.$delegateTarget.attr('data-value')
         })
+        this.refresh();        
     }    
 
     [INPUT('$iteration')] (e) {
-        this.setState({
-            iteration: +this.refs.$iteration.value
+        this.updateData({
+            iterationCount: +this.refs.$iteration.value
         })
     }
 
     [INPUT('$speed')] (e) {
-        this.setState({
+        this.updateData({
             speed: +this.refs.$speed.value 
         })
     }    

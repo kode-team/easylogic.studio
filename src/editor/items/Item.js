@@ -3,7 +3,7 @@ import {
   isFunction,
   isUndefined
 } from "../../util/functions/func";
-import { editor } from "../editor";
+// import { editor } from "../editor";
 
 
 function _traverse(obj) {
@@ -128,9 +128,9 @@ export class Item {
   /**
    * select item
    */
-  select() {
-    editor.selection.select(this.id);
-  }
+  // select() {
+  //   editor.selection.select(this.id);
+  // }
 
   /**
    * when json is loaded, json object is be a new instance
