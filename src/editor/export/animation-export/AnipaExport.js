@@ -45,9 +45,8 @@ export default class AnipaExport {
         options = JSON.stringify(options,  null, 4);
 
         return `
-            var player = new anipa.Player(${animations}, ${options});
-            player.play();
-        
-        `
+var player = new anipa.Player(${animations}, ${options});
+player.play();
+`
     }
 }

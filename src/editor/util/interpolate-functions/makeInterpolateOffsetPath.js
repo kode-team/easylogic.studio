@@ -2,9 +2,7 @@ import { editor } from "../../editor";
 import PathParser from "../../parse/PathParser";
 import makeInterpolateOffset from "./offset-path/makeInterpolateOffset";
 import { Length } from "../../unit/Length";
-import { resultGenerator } from "../../css-property/SVGFilter";
 import { calculateAngle } from "../../../util/functions/math";
-import { isUndefined } from "../../../util/functions/func";
 
 export function makeInterpolateOffsetPath(layer, property, startValue, endValue) {
 
@@ -17,15 +15,26 @@ export function makeInterpolateOffsetPath(layer, property, startValue, endValue)
         return { x, y }
     }
 
-    var innerInterpolateAngle = (currentAngle) => {
+    var innerInterpolateAngle = (rotateStatus, currentAngle) => {
+
+        var resultAngle = 0; 
 
         switch (rotateStatus) {
-        case 'angle': return startObject.rotate.value;
-        case 'auto angle': return currentAngle + startObject.rotate.value; 
-        case 'reverse': return currentAngle + 180;
-        case 'auto' : return currentAngle;
-        default: return; 
+        case 'angle': 
+            resultAngle =  startObject.rotate.value; 
+            break; 
+        case 'auto angle': 
+            resultAngle =  currentAngle + startObject.rotate.value; 
+            break; 
+        case 'reverse': 
+            resultAngle = currentAngle + 180;
+            break; 
+        case 'auto' : 
+            resultAngle = currentAngle;
+            break; 
         }
+
+        return resultAngle;
     }
 
     var screenX = 0, screenY = 0
@@ -106,8 +115,11 @@ export function makeInterpolateOffsetPath(layer, property, startValue, endValue)
             var current = obj
             var next = innerInterpolate(rate + 1/obj.totalLength, t + 1/obj.totalLength, timing); 
             var angle = calculateAngle(next.x - current.x, next.y - current.y)
-            var newAngle = Length.deg(innerInterpolateAngle(angle))            
-            layer.rotate = newAngle;
+
+            if (!isNaN(angle)) {
+                var newAngle = Length.deg(innerInterpolateAngle(startObject.rotateStatus, angle))
+                layer.rotate = newAngle;                
+            }
         }
 
 

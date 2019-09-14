@@ -489,7 +489,7 @@ export default class ElementView extends UIElement {
     }
 
     // 객체를 부분 업데이트 하기 위한 메소드 
-    [EVENT('refreshCanvasForPartial')] (obj) {
+    [EVENT('refreshCanvasForPartial', 'refreshSelectionStyleView')] (obj) {
 
         var items = obj ? [obj] : editor.selection.items;
 

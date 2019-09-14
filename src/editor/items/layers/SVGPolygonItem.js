@@ -88,7 +88,7 @@ export class SVGPolygonItem extends SVGItem {
 
   get html () {
     var {id, points} = this.json; 
-    return `
+    return /*html*/`
       <svg class='element-item polygon' data-id="${id}" >
         <polygon class='svg-polygon-item' points="${points}" />
       </svg>    

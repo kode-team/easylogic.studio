@@ -86,12 +86,19 @@ export class SVGPathItem extends SVGItem {
       {
         selector: 'path', 
         css: {
-          d: `path('${json.d}')`,
+          // d: `path('${json.d}')`,
           ...super.toSVGDefaultCSS()
         }
       }
     ]
   }
+
+
+  updateFunction (currentElement) {
+    var $path = currentElement.$('path');
+    $path.attr('d', this.json.d);
+    this.json.totalLength = $path.el.getTotalLength()
+  }    
 
   get html () {
     var {id} = this.json; 
@@ -99,7 +106,7 @@ export class SVGPathItem extends SVGItem {
       <svg class='element-item path ${OBJECT_TO_CLASS({
         'motion-based': this.json['motion-based']
       })}' data-id="${id}" >
-        <path class='svg-path-item' />
+        <path class='svg-path-item' d="${this.json.d}" />
       </svg>    
     `
   }

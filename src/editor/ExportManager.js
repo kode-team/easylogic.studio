@@ -50,15 +50,14 @@ export default {
     // })
 
     var css = `
-      ${this.makeStyle(project)}
-      ${this.makeStyle(artboard, `
-        left: 0px;
-        top: 0px;
-      `)}
-    `
+${this.makeStyle(project)}
+${this.makeStyle(artboard, `
+  left: 0px;
+  top: 0px;
+`)}`
     var html = `
-      ${artboard.html}
-      ${this.makeSvg(project)}
+${artboard.html}
+${this.makeSvg(project)}
     `
 
     var js = AnimationExport.generate(artboard, 'anipa')

@@ -111,7 +111,12 @@ export class TimelineItem extends DomItem {
   makeTimingFunction (it) {
     // 시작시간 끝 시간이 있음 . 그리고 현재 시간이 있음 
     return (time) => {
-      var t = (time - it.startTime)/(it.endTime - it.startTime);
+      var totalT = (it.endTime - it.startTime);
+      var t = 1; 
+      if (totalT !== 0) {
+        t = (time - it.startTime)/totalT;
+      }
+      
       return it.interpolateFunction(it.timingFunction(t), t, it.timingFunction);
     }
   }
