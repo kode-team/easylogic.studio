@@ -698,7 +698,7 @@ ${prefix} {  /* ${this.json.itemType} */
 
 ${this.toNestedCSS().map(it => {
   return `${prefix} ${it.selector} { 
-      ${it.cssText ? it.cssText : CSS_TO_STRING(it.css || {}, '\n')}; 
+      ${it.cssText ? it.cssText : CSS_TO_STRING(it.css || {}, '\n\t\t')}; 
   }`
 }).join('\n')}
 

@@ -44,9 +44,7 @@ export class ImageLayer extends Layer {
   get html () {
     var {id, src, itemType} = this.json;
 
-    return `
-      <img class='element-item ${itemType}' data-id="${id}" src='${src}' />
-    `
+    return /*html*/`<img class='element-item ${itemType}' data-id="${id}" src='${src}' />`
   }
 
 }

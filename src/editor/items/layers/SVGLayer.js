@@ -31,10 +31,6 @@ export class SVGLayer extends Layer {
   get html () {
     var {id, layers, overflow, viewBox} = this.json;
 
-    return `
-    <svg class='element-item svg' data-id="${id}" overflow="${overflow}" ${viewBox ? `viewBox='${viewBox}'` : ''} >
-        ${layers.map(it => it.html).join('')}
-    </svg>
-    `
+    return /*html*/`<svg class='element-item svg' data-id="${id}" overflow="${overflow}" ${viewBox ? `viewBox='${viewBox}'` : ''} >${layers.map(it => it.html).join('')}</svg>`
   }
 }

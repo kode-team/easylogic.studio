@@ -1,7 +1,9 @@
 import { uuidShort } from "../../util/functions/math";
 import {
   isFunction,
-  isUndefined
+  isUndefined,
+  OBJECT_TO_CLASS,
+  OBJECT_TO_PROPERTY
 } from "../../util/functions/func";
 // import { editor } from "../editor";
 
@@ -249,11 +251,12 @@ export class Item {
 
     const tagName = elementType || 'div'
 
-    return `
-    <${tagName} class='element-item ${itemType}' data-id="${id}">
-      ${layers.map(it => it.html).join('')}
-    </${tagName}>
-    `
+    return /*html*/`<${tagName} ${OBJECT_TO_CLASS({
+      'element-item': true,
+      [itemType]: true 
+    })} ${OBJECT_TO_PROPERTY({
+      'data-id': id
+    })}>${layers.map(it => it.html).join('')}</${tagName}>`
   }
 
   resize () {}

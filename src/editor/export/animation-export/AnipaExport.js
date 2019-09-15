@@ -1,3 +1,22 @@
+const SVG_PROPERTY_LIST = {
+    'd': true,
+    'points': true,
+    'fill': true,
+    'fill-opacity': true, 
+    'stroke': true,
+    'stroke-width': true,
+    'stroke-dasharray': true,
+    'stroke-dashoffset': true,
+    'fill-rule': true,
+    'stroke-linecap': true,
+    'stroke-linejoin': true
+}
+
+
+const hasSVGProperty = (property) => {
+    return SVG_PROPERTY_LIST[property] || false 
+}
+
 export default class AnipaExport {
     constructor (artboard) {
         this.artboard = artboard 
@@ -13,7 +32,7 @@ export default class AnipaExport {
 
 
         if (timeline) {
-            animations = timeline.animations.map (animation => {
+            timeline.animations.forEach (animation => {
 
                 var properties = animation.properties.map(p => {
                     var property = p.property;
@@ -32,7 +51,12 @@ export default class AnipaExport {
                     };
                 })
 
-                return { properties, selector: `[data-id="${animation.id}"]` }
+                var svgProperties = properties.filter(it => hasSVGProperty(it.property));
+                var cssProperties = properties.filter(it => hasSVGProperty(it.property) === false);
+
+                if (svgProperties.length) animations.push({ properties: svgProperties, selector: `[data-id="${animation.id}"] > *` });
+                if (cssProperties.length) animations.push({ properties: cssProperties, selector: `[data-id="${animation.id}"]` });
+                
             })
 
             var { iterationCount, fps, speed, direction} = timeline

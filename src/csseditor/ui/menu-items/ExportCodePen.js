@@ -11,7 +11,6 @@ export default class ExportCodePen extends UIElement {
       <button type="submit">
         <div class='icon codepen'></div>
         <div class='title'>CodePen</div>
-        
       </button>
     </form>     
     `;

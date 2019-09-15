@@ -1,6 +1,7 @@
 import { SVGItem } from "./SVGItem";
 import { Length } from "../../unit/Length";
 import PolygonParser from "../../parse/PolygonParser";
+import { OBJECT_TO_PROPERTY } from "../../../util/functions/func";
 
 export class SVGPolygonItem extends SVGItem {
   getDefaultObject(obj = {}) {
@@ -88,10 +89,9 @@ export class SVGPolygonItem extends SVGItem {
 
   get html () {
     var {id, points} = this.json; 
-    return /*html*/`
-      <svg class='element-item polygon' data-id="${id}" >
-        <polygon class='svg-polygon-item' points="${points}" />
-      </svg>    
-    `
+    return /*html*/`<svg ${OBJECT_TO_PROPERTY({
+      'class': 'element-item polygon',
+      'data-id' : id
+    })}><polygon class='svg-polygon-item' points="${points}" /></svg>`
   }
 }

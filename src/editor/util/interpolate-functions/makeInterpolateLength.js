@@ -1,4 +1,6 @@
 import { Length } from "../../unit/Length";
+import { makeInterpolateNumber } from "./makeInterpolateNumber";
+import { makeInterpolateIdentity } from "./makeInterpolateIdentity";
 
 function getRealAttributeValue (layer, property, value, refType = 'width', refElement = 'parent') {
 
@@ -37,11 +39,14 @@ export function makeInterpolateLength(layer, property, startNumber, endNumber, r
     var s = Length.parse(startNumber);
     var e = Length.parse(endNumber);
 
-    return (rate, t) => {
 
-        if (s.equals(e)) {
-            return s; 
-        }
+    if (s.unit === e.unit) {
+        return makeInterpolateNumber(layer, property, s.value, e.value, s.unit);
+    } else if (s.equals(e)) {
+        return makeInterpolateIdentity(layer, property, s);
+    }    
+
+    return (rate, t) => {
 
         var realStartValue = getRealAttributeValue(layer, property, s, refType, refElement);
         var realEndValue = getRealAttributeValue(layer, property, e, refType, refElement);

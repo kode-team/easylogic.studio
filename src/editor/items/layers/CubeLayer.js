@@ -151,16 +151,7 @@ export class CubeLayer extends Component {
   get html () {
     var {id, itemType} = this.json;
 
-    return `
-      <div class='element-item ${itemType}' data-id="${id}">
-        <div class='front'></div>
-        <div class='back'></div>
-        <div class='left'></div>
-        <div class='right'></div>
-        <div class='top'></div>
-        <div class='bottom'></div>
-      </div>
-    `
+    return /*html*/`<div class='element-item ${itemType}' data-id="${id}"><div class='front'></div><div class='back'></div><div class='left'></div><div class='right'></div><div class='top'></div><div class='bottom'></div></div>`
   }
 
 }

@@ -34,9 +34,7 @@ export class TextLayer extends Layer {
   get html () {
     var {id, itemType, content} = this.json;
 
-    return `
-      <p class='element-item ${itemType}' contenteditable="true" data-id="${id}">${content}</p>
-    `
+    return /*html*/`<p class='element-item ${itemType}' contenteditable="true" data-id="${id}">${content}</p>`
   }
 
 }
