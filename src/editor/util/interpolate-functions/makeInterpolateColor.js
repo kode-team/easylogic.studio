@@ -2,8 +2,8 @@ import Color from "../../../util/Color";
 import { interpolateRGB } from "../../../util/functions/mixin";
 
 export function makeInterpolateColor (layer, property, startColor, endColor) {
-    var s = Color.parse(startColor);
-    var e = Color.parse(endColor);
+    var s = Color.parse(startColor || 'rgba(0, 0, 0, 1)');
+    var e = Color.parse(endColor || 'rgba(0, 0, 0, 1)');
 
     return (rate, t) => {
 

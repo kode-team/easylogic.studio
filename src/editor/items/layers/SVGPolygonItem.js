@@ -87,6 +87,17 @@ export class SVGPolygonItem extends SVGItem {
     this.json.totalLength = $polygon.el.getTotalLength()
   }  
 
+  toAnimationKeyframes (properties) {
+
+    var svgProperties = properties.filter(it => it.property === 'points');
+    var cssProperties = properties.filter(it => it.property !== 'points');
+
+    return [
+      { properties: cssProperties, selector: `[data-id="${this.json.id}"]` },
+      { properties: svgProperties, selector: `[data-id="${this.json.id}"] polygon` }
+    ] 
+  }    
+
   get html () {
     var {id, points} = this.json; 
     return /*html*/`<svg ${OBJECT_TO_PROPERTY({

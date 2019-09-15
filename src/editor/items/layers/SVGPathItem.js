@@ -93,6 +93,17 @@ export class SVGPathItem extends SVGItem {
     ]
   }
 
+  toAnimationKeyframes (properties) {
+
+    var svgProperties = properties.filter(it => it.property === 'd');
+    var cssProperties = properties.filter(it => it.property !== 'd');
+
+    return [
+      { selector: `[data-id="${this.json.id}"]`, properties: cssProperties  },
+      { selector: `[data-id="${this.json.id}"] path`, properties: svgProperties }
+    ] 
+  }  
+
 
   updateFunction (currentElement) {
     var $path = currentElement.$('path');

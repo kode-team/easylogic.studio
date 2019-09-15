@@ -55,8 +55,11 @@ function makeInterpolateCustom (property) {
 }
 
 
-function makeInterpolate (layer, property, startValue, endValue) {
-    switch(property) {
+function makeInterpolate (layer, property, startValue, endValue, editor) {
+
+    var checkField = editor || property
+
+    switch(checkField) {
     case 'width':
     case 'x':
         return makeInterpolateLength(layer, property, startValue, endValue, 'width');
@@ -68,10 +71,12 @@ function makeInterpolate (layer, property, startValue, endValue) {
     case 'font-stretch':
     case 'font-weight':
     case 'text-stroke-width':
+    case 'RangeEditor':
         return makeInterpolateLength(layer, property, startValue, endValue, property);
     case 'fill-opacity':
     case 'opacity':
     case 'stroke-dashoffset':
+    case 'NumberRangeEditor':
         return makeInterpolateNumber(layer, property, +startValue, +endValue);
     case 'background-color':
     case 'color':
@@ -79,11 +84,13 @@ function makeInterpolate (layer, property, startValue, endValue) {
     case 'text-stroke-color':
     case 'fill':
     case 'stroke':
+    case 'ColorViewEditor':
         return makeInterpolateColor(layer, property, startValue, endValue);
     case 'mix-blend-mode':
     case 'fill-rule':
     case 'stroke-linecap':
     case 'stroke-linejoin':
+    case 'SelectEditor':        
         return makeInterpolateString(layer, property, startValue, endValue); 
     case 'rotate':
         return makeInterpolateRotate(layer, property, startValue, endValue);               
@@ -100,12 +107,12 @@ function makeInterpolate (layer, property, startValue, endValue) {
 }
 
 
-export function createInterpolateFunction (layer, property, startValue, endValue) {
-    return makeInterpolate(layer, property, startValue, endValue);
+export function createInterpolateFunction (layer, property, startValue, endValue, editor) {
+    return makeInterpolate(layer, property, startValue, endValue, editor);
 }
 
 
-export function createTimingFunction(timing) {
+export function createTimingFunction(timing = 'linear') {
 
     var [funcName, params] = timing.split('(').map(it => it.trim())
     params = (params || '').split(')')[0].trim()

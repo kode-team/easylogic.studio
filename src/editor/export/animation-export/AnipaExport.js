@@ -12,9 +12,76 @@ const SVG_PROPERTY_LIST = {
     'stroke-linejoin': true
 }
 
+const CSS_PROPERTY_LIST = {
+    'position': true,
+    'x': true,
+    'y': true,
+    'right': true,
+    'bottom': true,
+    'width': true,
+    'height': true,
+    'rootVariable': true,
+    'variable': true,
+    'transform': true,
+    'filter': true,
+    'backdrop-filter': true,
+    'background-color': true,      
+    'background-clip': true,
+    'background-image': true,      
+    'border-radius': true,      
+    'box-shadow': true,
+    'text-shadow': true,
+    'text-clip': true,      
+    'clip-path': true,
+    'color': true,
+    'font-size': true,
+    'font-stretch': true,
+    'line-height': true,
+    'text-align': true,
+    'text-transform': true,
+    'text-decoration': true,
+    'letter-spacing': true, 
+    'word-spacing': true, 
+    'text-indent': true,      
+    'perspective-origin': true,
+    'transform-origin': true,
+    'transform-style': true,
+    'perspective': true,
+    'mix-blend-mode': true,
+    'opacity': true,
+    'rotate': true,    
+    'text-fill-color': true,
+    'text-stroke-color': true,
+    'text-stroke-width': true,  
+    'offset-path': true,
+    'offset-distance': true,
+    border: true,
+    outline: true,
+    borderRadius: true,
+    borderImage: true,
+    animations: true,
+    transitions: true
+}
 
 const hasSVGProperty = (property) => {
     return SVG_PROPERTY_LIST[property] || false 
+}
+
+const hasCSSProperty = (property) => {
+    return CSS_PROPERTY_LIST[property] || false 
+}
+
+const hasCustomProperty = (property) => {
+    return hasSVGProperty(property) === false && hasCSSProperty(property) === false
+}
+
+const INTERPOLATE_TYPE = {
+    'ColorViewEditor': 'color',
+    'RangeEditor': 'length',
+    'NumberRangeEditor': 'number',
+    'RotateRangeEditor': 'rotate',
+    'PathEditor': 'path',
+    'TransformEditor': 'transform',
 }
 
 export default class AnipaExport {
@@ -33,7 +100,7 @@ export default class AnipaExport {
 
         if (timeline) {
             timeline.animations.forEach (animation => {
-
+                var item = this.artboard.searchById(animation.id);
                 var properties = animation.properties.map(p => {
                     var property = p.property;
 
@@ -45,18 +112,15 @@ export default class AnipaExport {
                     return {
                         property,
                         keyframes: p.keyframes.map(keyframe => {
-                            var { time, value, timing} = keyframe
+                            var { time, value, timing } = keyframe
                             return { time: time * 1000, value, timing }
                         })
                     };
                 })
 
-                var svgProperties = properties.filter(it => hasSVGProperty(it.property));
-                var cssProperties = properties.filter(it => hasSVGProperty(it.property) === false);
 
-                if (svgProperties.length) animations.push({ properties: svgProperties, selector: `[data-id="${animation.id}"] > *` });
-                if (cssProperties.length) animations.push({ properties: cssProperties, selector: `[data-id="${animation.id}"]` });
-                
+                animations.push(...item.toAnimationKeyframes(properties)) 
+
             })
 
             var { iterationCount, fps, speed, direction} = timeline

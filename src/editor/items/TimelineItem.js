@@ -80,10 +80,14 @@ export class TimelineItem extends DomItem {
       return ;
     }
 
+    let editor = p.keyframes.map(it => it.editor)[0];
     this.json.compiledTimeline[`${layerId}.${property}`] = p.keyframes.map( (offset, index) => {
 
       var currentOffset = offset; 
       var nextOffset = p.keyframes[index + 1];
+
+      offset.editor = editor 
+
 
       if (!nextOffset) {
         nextOffset = { time: offset.time, value: offset.value + ''};
@@ -98,7 +102,8 @@ export class TimelineItem extends DomItem {
         startValue: offset.value,
         endValue: nextOffset.value,
         timing: offset.timing,
-        interpolateFunction: createInterpolateFunction(layer, p.property, offset.value, nextOffset.value),
+        // editor: editor,
+        interpolateFunction: createInterpolateFunction(layer, p.property, offset.value, nextOffset.value, editor),
         timingFunction: createTimingFunction(offset.timing)
       }
 
@@ -116,7 +121,7 @@ export class TimelineItem extends DomItem {
       if (totalT !== 0) {
         t = (time - it.startTime)/totalT;
       }
-      
+
       return it.interpolateFunction(it.timingFunction(t), t, it.timingFunction);
     }
   }
@@ -520,12 +525,14 @@ export class TimelineItem extends DomItem {
 
   }  
 
-  addTimelineKeyframe (layerId, property, value, timing = 'linear', newTime = null) {
+  addTimelineKeyframe ({ layerId, property, value, timing, time: newTime, editor }) {
+
     this.addTimelineProperty(layerId, property);
     var timeline = this.getSelectedTimeline();
     var p = this.getTimelineProperty(layerId, property);
 
     if (p) {
+
       var time = newTime || timeline.currentTime;
 
       var times = p.keyframes.filter(it => it.time === time); 
@@ -533,14 +540,14 @@ export class TimelineItem extends DomItem {
       if (!times.length) {
         value = (isUndefined(value) || value === '') ? this.getDefaultPropertyValue(property) : value;
 
-        var obj = { id: uuidShort(), layerId, property, time, value, timing }
+        var obj = { id: uuidShort(), layerId, property, time, value, timing: timing || 'linear', editor }
         p.keyframes.push(obj)
 
         p.keyframes.sort( (a, b) => {
           return a.time > b.time ? 1 : -1; 
         })
 
-        this.compiledTimingFunction(layerId, property);        
+        this.compiledTimingFunction(layerId, property);     
 
         return obj;
       }
@@ -582,6 +589,7 @@ export class TimelineItem extends DomItem {
       var times = p.keyframes.filter(it => it.time < time); 
       var value = this.getDefaultPropertyValue(property);
       var timing = 'linear';
+      var edtior = ''; 
       if (times.length) {
 
         times.sort((a, b) => {
@@ -590,9 +598,10 @@ export class TimelineItem extends DomItem {
 
         value = times[0].value + "";
         timing = times[0].timing + ""
+        editor = times[0].editor
       }
 
-      this.addTimelineKeyframe(layerId, property, value, timing);
+      this.addTimelineKeyframe({layerId, property, value, timing, editor});
 
     }
   }

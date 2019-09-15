@@ -27,7 +27,6 @@ export default class Inspector extends UIElement {
             </div>
             <div class="tab-body" ref="$body">
               <div class="tab-content" data-value="1">
-                <MotionProperty />              
                 <ComponentProperty />
 
                 <AlignmentProperty />
@@ -82,7 +81,7 @@ export default class Inspector extends UIElement {
                 <div class='empty'></div>
               </div>
               <div class='tab-content' data-value='2'>
-
+                <MotionProperty />              
                 <!-- <RootVariableProperty /> -->
                 <!-- <VariableProperty /> -->
                 <SelectorProperty />

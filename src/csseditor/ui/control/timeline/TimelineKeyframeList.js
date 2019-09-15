@@ -300,7 +300,7 @@ export default class TimelineKeyframeList extends UIElement {
 
         var [layerId, property] = e.$delegateTarget.attrs('data-layer-id', 'data-property')
         var time = this.getTimeRateByPosition(this.getRealPosition(e).rate);
-        this.emit('add.timeline.keyframe', layerId, property, time);
+        this.emit('add.timeline.keyframe', {layerId, property, time});
 
         this.refresh();
         this.doubleClicked = true; 

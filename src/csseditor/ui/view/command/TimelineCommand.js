@@ -40,16 +40,23 @@ export default class TimelineCommand extends UIElement {
 
     }
 
-    [COMMAND('add.timeline.property')] (layerList, property, value, timing = 'linear') {
+    [COMMAND('add.timeline.property')] (layerList, options = {timing: 'linear'}) {
         this.currentArtboard((artboard, timeline) => {
 
             if (isArray(layerList) === false) {
                 layerList = [layerList]
             }
     
-            var list = [] 
-            layerList.forEach(id => {
-                var obj = artboard.addTimelineKeyframe(id, property, value + "", timing);
+            var list = []  
+            layerList.forEach(layerId => {
+                var keyframeObj = { 
+                    layerId: layerId, 
+                    property: options.property, 
+                    value: options.value + "", 
+                    timing: options.timing,
+                    editor: options.editor
+                }
+                var obj = artboard.addTimelineKeyframe(keyframeObj);
 
                 if (obj) {
                     list.push(obj);
@@ -65,11 +72,21 @@ export default class TimelineCommand extends UIElement {
     }
 
 
-    [COMMAND('add.timeline.current.property')] (property, timing = 'linear') {
+    [COMMAND('add.timeline.current.property')] (options = {timing: 'linear'}) {
+
         this.currentArtboard((artboard, timeline) => {
             var list = []
             editor.selection.each(item => {
-                var obj = artboard.addTimelineKeyframe(item.id, property, item[property] + "", timing);
+
+                var keyframeObj = {
+                    layerId: item.id,
+                    property: options.property, 
+                    value: item[options.property] + "", 
+                    timing: options.timing,
+                    editor: options.editor
+                }
+
+                var obj = artboard.addTimelineKeyframe(keyframeObj);
 
                 if (obj) {
                     list.push(obj);
@@ -117,11 +134,19 @@ export default class TimelineCommand extends UIElement {
     }
 
 
-    [COMMAND('add.timeline.keyframe')] (layerId, property, time, timing = 'linear') {
+    [COMMAND('add.timeline.keyframe')] (options = {timing : 'linear'}) {
         this.currentArtboard((artboard, timeline) => {
-            var item = artboard.searchById(layerId);
+            var item = artboard.searchById(options.layerId);
 
-            var obj = artboard.addTimelineKeyframe(item.id, property, item[property] + "", timing, time);
+            var keyframeObj = {
+                layerId: options.layerId,
+                property: options.property,
+                time: options.time,
+                value: item[options.property] + "",
+                timing: options.timing,
+                editor: options.editor
+            }
+            var obj = artboard.addTimelineKeyframe(keyframeObj);
             editor.timeline.select(obj);            
             this.emit('refreshTimeline');
             this.trigger('refresh.selected.offset');

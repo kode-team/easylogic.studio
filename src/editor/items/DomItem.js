@@ -440,6 +440,12 @@ export class DomItem extends GroupItem {
     };
   }
   
+  // export animation keyframe
+  toAnimationKeyframes (properties) {
+    return [
+      { selector: `[data-id="${this.json.id}"]`, properties }
+    ] 
+  }
 
   toAnimationCSS() {
     return this.toPropertyCSS(this.json.animations);

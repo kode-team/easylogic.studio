@@ -84,14 +84,16 @@ export default class BaseProperty extends UIElement {
 
   [CLICK('$el .property-body .add-timeline-property') + PREVENT + STOP] (e) {
     var property = e.$delegateTarget.attr('data-property')
+    var editor = e.$delegateTarget.attr('data-editor')
 
-    this.emit('add.timeline.current.property', property)
+    this.emit('add.timeline.current.property', { property, editor })
   }
 
   [CLICK('$el .property-title .add-timeline-property') + PREVENT + STOP] (e) {
     var property = e.$delegateTarget.attr('data-property')
+    var editor = e.$delegateTarget.attr('data-editor')
 
-    this.emit('add.timeline.current.property', property)
+    this.emit('add.timeline.current.property', { property, editor })
   }  
 
   isPropertyShow() {

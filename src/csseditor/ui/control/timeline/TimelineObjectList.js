@@ -184,7 +184,7 @@ export default class TimelineObjectList extends UIElement {
         if (property) {
             var current = editor.selection.current;
 
-            this.emit('add.timeline.property', layerId, property, current[property])
+            this.emit('add.timeline.property', {layerId, property, value: current[property]})
         }
     }
 

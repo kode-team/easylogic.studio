@@ -33,7 +33,8 @@ export default class TimelineValueEditor extends UIElement {
   getProperties() {
     return [{
         key: this.state.property,
-        value: isUndefined(this.state.value) ? '10px' : this.state.value 
+        value: isUndefined(this.state.value) ? '10px' : this.state.value ,
+        editor: this.state.editor
     }].filter(it => it.key);
   }
 

@@ -1,5 +1,51 @@
-import { CSS_TO_STRING } from "../../../util/functions/func";
+import { CSS_TO_STRING, isObject } from "../../../util/functions/func";
 import { Component } from "../Component";
+
+const customKeyValue = {
+  'front.color': true,
+  'back.color': true,
+  'left.color': true,
+  'right.color': true,
+  'top.color': true,
+  'bottom.color': true,
+}
+
+const customSelectorName = {
+  'front.color': '.front',
+  'back.color': '.back',
+  'left.color': '.left',
+  'right.color': '.right',
+  'top.color': '.top',
+  'bottom.color': '.bottom',
+}
+
+const cssKeyValue = { 
+  'position': true, 
+  'right': true,
+  'bottom': true, 
+  'width': true,
+  'height': true, 
+  'opacity': true,
+  'text-fill-color': true, 
+  'text-stroke-color': true, 
+  'text-stroke-width': true, 
+  'background-clip': true,
+  'animation': true,
+  'transition': true,
+  'transform': true, 
+  'transform-origin': true, 
+  'transform-style': true, 
+  'perspective': true, 
+  'perspective-origin': true,
+}
+
+const nestedCssKeyValue = {
+  'filter': true,
+  'mix-blend-mode': true,
+  'background-image': true, 
+  'border-radius': true,
+  'border': true 
+}
 
 export class CubeLayer extends Component {
   getDefaultObject(obj = {}) {
@@ -15,16 +61,134 @@ export class CubeLayer extends Component {
 
   getProps() {
     return [
-      {key: 'front.color', editor: 'ColorViewEditor', editorOptions: {
-        label: 'Front Color', params: 'front.color'
-      }, defaultValue: 'rgba(0, 0, 0, 1)' }
+      'Front',
+      {
+        key: 'front.color', 
+        editor: 'ColorViewEditor', 
+        editorOptions: {
+          label: 'color', 
+          params: 'front.color'
+        }, 
+        defaultValue: 'rgba(0, 0, 0, 1)' 
+      },
+      'Back',      
+      {
+        key: 'back.color', 
+        editor: 'ColorViewEditor', 
+        editorOptions: {
+          label: 'color', 
+          params: 'back.color'
+        }, 
+        defaultValue: 'rgba(0, 0, 0, 1)' 
+      },
+      'Left',
+      {
+        key: 'left.color', 
+        editor: 'ColorViewEditor', 
+        editorOptions: {
+          label: 'color', 
+          params: 'left.color'
+        }, 
+        defaultValue: 'rgba(0, 0, 0, 1)' 
+      },
+      'Right',      
+      {
+        key: 'right.color', 
+        editor: 'ColorViewEditor', 
+        editorOptions: {
+          label: 'color',
+          params: 'right.color'
+        }, 
+        defaultValue: 'rgba(0, 0, 0, 1)' 
+      },
+      'Top',
+      {
+        key: 'top.color', 
+        editor: 'ColorViewEditor', 
+        editorOptions: {
+          label: 'color', 
+          params: 'top.color'
+        }, 
+        defaultValue: 'rgba(0, 0, 0, 1)' 
+      },
+      'Bottom',      
+      {
+        key: 'bottom.color', 
+        editor: 'ColorViewEditor', 
+        editorOptions: {
+          label: 'color', 
+          params: 'front.color'
+        }, 
+        defaultValue: 'rgba(0, 0, 0, 1)' 
+      }
     ]
   }
+
+  setCustomKeyframes (keyframes, customProperty) {
+
+
+    if ([
+      'front.color', 
+      'back.color', 
+      'left.color', 
+      'right.color', 
+      'top.color', 
+      'bottom.color'
+    ].includes(customProperty.property)) {
+      keyframes.push({ 
+        selector: `[data-id="${this.json.id}"] ${customSelectorName[customProperty.property]}`,
+        properties: [{
+        ...customProperty,
+        'property': 'background-color',  // 흠 하나씩 나열해야할 듯 
+      }] } )
+    }
+
+  }
+
+  toAnimationKeyframes (properties) {
+   
+    var customProperties = []
+    var cssProperties = []
+    var nestedProperties = []
+
+    properties.forEach(p => {
+      if (customKeyValue[p.property]) {
+        customProperties.push(p);
+      } else if (cssKeyValue[p.property]) {
+        cssProperties.push(p);
+      } else if (nestedCssKeyValue[p.property]) {
+        nestedProperties.push(p);
+      }
+    })
+
+    var keyframes = [] 
+
+    if (cssProperties.length) {
+      keyframes.push({ selector: `[data-id="${this.json.id}"]`, properties: cssProperties })
+    }
+
+    if (nestedProperties.length) {
+      keyframes.push({ selector: `[data-id="${this.json.id}"] div`, properties: nestedProperties  })
+    }
+
+    if (customProperties.length) {
+      customProperties.forEach(c => {
+        this.setCustomKeyframes(keyframes, c);
+      })  
+    }
+
+    return keyframes
+  }    
 
   toCloneObject() {
     return {
       ...super.toCloneObject(),
-      'front.color': this.json['front.color']
+      'front.color': this.json['front.color'],
+      'back.color': this.json['back.color'],
+      'left.color': this.json['left.color'],
+      'right.color': this.json['right.color'],
+      'top.color': this.json['top.color'],
+      'bottom.color': this.json['bottom.color'],
     }
   }
 
@@ -112,21 +276,24 @@ export class CubeLayer extends Component {
         selector: '.back', cssText: `
           transform: rotateY(180deg) translateZ(${halfWidth}px);
           width: ${width};
-          height: ${height};                    
+          height: ${height};            
+          ${json['back.color'] ? `background-color: ${json['back.color']}`: ''}                  
         `
       },
       {
         selector: '.left', cssText:  `
           transform: rotateY(-90deg) translateZ(${halfWidth}px);
           width: ${width};
-          height: ${height};                    
+          height: ${height};    
+          ${json['left.color'] ? `background-color: ${json['left.color']}`: ''}                          
         `
       },
       {
         selector: '.right', cssText: `
           transform: rotateY(90deg) translateZ(${halfWidth}px);
           width: ${width};
-          height: ${height};                    
+          height: ${height};      
+          ${json['right.color'] ? `background-color: ${json['right.color']}`: ''}                        
         `
       },
       {
@@ -135,6 +302,7 @@ export class CubeLayer extends Component {
           top: ${halfHeight - halfWidth}px;
           width: ${width};
           height: ${width};
+          ${json['top.color'] ? `background-color: ${json['top.color']}`: ''}          
         `
       },
       {
@@ -142,7 +310,8 @@ export class CubeLayer extends Component {
           transform: rotateX(-90deg) translateZ(${halfHeight}px);
           top: ${halfHeight - halfWidth}px;          
           width: ${width};
-          height: ${width};          
+          height: ${width};    
+          ${json['bottom.color'] ? `background-color: ${json['bottom.color']}`: ''}                
         `
       }
     ]

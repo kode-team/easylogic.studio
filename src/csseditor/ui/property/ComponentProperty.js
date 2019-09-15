@@ -64,9 +64,7 @@ export default class ComponentProperty extends BaseProperty {
 
   getBody() {
     return /*html*/`
-      <div class='property-item' ref='$body'>
-        
-      </div>               
+      <div ref='$body'></div>
     `;
   }
 
@@ -128,7 +126,20 @@ export default class ComponentProperty extends BaseProperty {
 
 
     var self = current.getProps().map(it=> {
-      return `<div class='component-property'> ${this.getPropertyEditor(it.key,current[it.key], it.editor, it.editorOptions)}</div>`
+      if (isString(it)) {
+        return /*html*/`
+          <div class='property-item'> 
+            <label>${it}</label>
+          </div>`
+      } else {
+        return /*html*/`
+          <div class='property-item animation-property-item'> 
+            <span class='add-timeline-property' data-property='${it.key}' data-type="${current.itemType}" data-editor="${it.editor}"></span>
+            ${this.getPropertyEditor(it.key, current[it.key] || it.defaultVallue, it.editor, it.editorOptions)}
+          </div>
+        `
+      }
+
     })
 
     return self; 
