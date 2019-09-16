@@ -220,7 +220,9 @@ export default class TimelineKeyframeList extends UIElement {
 
     [LOAD('$keyframeList') + VDOM] () {
 
-        var artboard = editor.selection.currentArtboard || { timeline: [] }
+        var artboard = editor.selection.currentArtboard
+
+        if (!artboard) return '';
 
         var selectedTimeline = artboard.getSelectedTimeline();
 

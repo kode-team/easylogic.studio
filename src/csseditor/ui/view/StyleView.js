@@ -4,6 +4,7 @@ import { editor } from "../../../editor/editor";
 import { DEBOUNCE, LOAD } from "../../../util/Event";
 import Dom from "../../../util/Dom";
 import { CSS_TO_STRING } from "../../../util/functions/func";
+import { Project } from "../../../editor/items/Project";
 
 export default class StyleView extends UIElement {
 
@@ -47,7 +48,6 @@ export default class StyleView extends UIElement {
   }  
 
   makeStyle (item) {
-
     if (item.is('project')) {
       return this.makeProjectStyle(item);
     }
@@ -60,7 +60,7 @@ export default class StyleView extends UIElement {
   }
 
   refreshStyleHead () {
-    var project = editor.selection.currentProject || { layers : [] }
+    var project = editor.selection.currentProject || new Project()
 
     this.refs.$head.$$(`style`).forEach($style => $style.remove())
 

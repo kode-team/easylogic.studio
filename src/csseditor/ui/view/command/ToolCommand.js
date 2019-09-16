@@ -5,7 +5,31 @@ import { uuidShort } from "../../../../util/functions/math";
 import AssetParser from "../../../../editor/parse/AssetParser";
 import Dom from "../../../../util/Dom";
 import { Project } from "../../../../editor/items/Project";
+import { ArtBoard } from "../../../../editor/items/ArtBoard";
+import { Layer } from "../../../../editor/items/Layer";
+import { TextLayer } from "../../../../editor/items/layers/TextLayer";
+import { ImageLayer } from "../../../../editor/items/layers/ImageLayer";
+import { SVGPathItem } from "../../../../editor/items/layers/SVGPathItem";
+import { SVGPolygonItem } from "../../../../editor/items/layers/SVGPolygonItem";
 
+const ItemClassList = {
+    'project': Project,
+    'artboard': ArtBoard,
+    'layer': Layer,
+    'text': TextLayer,
+    'image': ImageLayer,
+    'svg-path': SVGPathItem,
+    'svg-polygon': SVGPolygonItem
+}
+
+const createItem = (obj) => {
+
+    obj.layers = obj.layers.map(it => {
+        return createItem(it);
+    })
+
+    return new ItemClassList[obj.itemType] (obj);
+}
 
 export default class ToolCommand extends UIElement {
     refreshSelection () {
@@ -28,9 +52,29 @@ export default class ToolCommand extends UIElement {
     [COMMAND('load.json')] (json) {
         json = json || [{"id":"id1c024ee","visible":true,"lock":false,"selected":false,"layers":[{"id":"id2226850","visible":true,"lock":false,"selected":false,"layers":[],"position":"absolute","x":"300px","y":"300px","width":"375px","height":"720px","background-color":"white","background-image":"background-image: linear-gradient(to right, red, red);background-position: 0% 0%;background-size: auto;background-repeat: repeat;background-blend-mode: normal","font-size":"13px","border":{},"outline":{},"borderRadius":{},"animations":[],"transitions":[],"keyframes":[],"selectors":[],"svg":[],"timeline":[],"itemType":"artboard","name":"New ArtBoard"}],"colors":[],"gradients":[],"svgfilters":[],"svgimages":[],"images":[],"itemType":"project","name":"New project","keyframes":[]}]
 
-        var projects = json.map(p => {
-            return new Project(p);
+        var projects = json.map(p => createItem(p))
+
+        projects.forEach(p => {
+            p.artboards.forEach(artboard => {
+                artboard.selectTimeline()
+            })
         })
+
+        if (projects.length) {
+            var project = projects[0]
+            editor.selection.selectProject(project)
+            if (project.artboards.length) {
+                var artboard = project.artboards[0]
+                editor.selection.selectArtboard(artboard)
+
+                if (artboard.layers.length) {
+                    editor.selection.select(artboard.layers[0])
+                } else {
+                    editor.selection.select(artboard);
+                }
+            }
+        }
+
 
         editor.load(projects);
         this.refreshSelection()

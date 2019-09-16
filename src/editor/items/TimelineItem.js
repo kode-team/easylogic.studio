@@ -51,6 +51,23 @@ export class TimelineItem extends DomItem {
     })
   }
 
+  compileAll () {
+
+    var timeline = this.getSelectedTimeline();
+
+    this.json.compiledTimeline = {}
+    if (timeline) {
+
+      timeline.animations.forEach(animation => {
+        animation.properties.forEach(property => {
+          this.compiledTimingFunction(animation.id, property.property);
+        })
+      })
+  
+    }
+
+  }
+
   searchTimelineOffset (time) {
     var timeline = this.getSelectedTimeline();
     var filteredTimeline = [] 
@@ -80,14 +97,14 @@ export class TimelineItem extends DomItem {
 
     var p = this.getTimelineProperty(layerId, property);
     var layer = this.searchById(layerId);
-
+    var key = `${layerId}.${property}`
     if (p.keyframes.length === 1) {
-      this.json.compiledTimeline[`${layerId}.${property}`] = [] 
+      this.json.compiledTimeline[key] = [] 
       return ;
     }
 
     let editor = p.keyframes.map(it => it.editor)[0];
-    this.json.compiledTimeline[`${layerId}.${property}`] = p.keyframes.map( (offset, index) => {
+    this.json.compiledTimeline[key] = p.keyframes.map( (offset, index) => {
 
       var currentOffset = offset; 
       var nextOffset = p.keyframes[index + 1];
@@ -249,9 +266,26 @@ export class TimelineItem extends DomItem {
   }
 
   selectTimeline (id) {
-    this.json.timeline.forEach(it => {
-      it.selected = it.id === id; 
-    })
+
+    if (id) {
+      this.json.timeline.forEach(it => {
+        it.selected = it.id === id; 
+      })
+    } else {
+
+      var selectedTimeline = this.json.timeline.filter(it => it.selected);
+
+      if (selectedTimeline.length) {
+        // NOOP 
+      } else {
+        if (this.json.timeline.length) {
+          this.json.timeline.selected = true; 
+        }
+      }
+    }
+
+
+    this.compileAll()
   }
 
   addTimeline (fps = 60, endTimecode = '00:00:10:00' ) {
@@ -433,13 +467,13 @@ export class TimelineItem extends DomItem {
 
   addTimelineProperty (layerId, property) {
     this.addTimelineLayer(layerId);
-    var timelineObject = this.getTimelineObject(layerId);
+    var animation = this.getTimelineObject(layerId);
 
-    if (timelineObject) {
-      var p = timelineObject.properties.filter(it => it.property === property);
+    if (animation) {
+      var p = animation.properties.filter(it => it.property === property);
 
       if (!p.length) {
-        timelineObject.properties.push({
+        animation.properties.push({
           property, keyframes: [] 
         })
         this.compiledTimingFunction(layerId, property);                
@@ -527,8 +561,6 @@ export class TimelineItem extends DomItem {
 
       this.compiledTimingFunction(layerId, property);             
     }
-
-
   }  
 
   addTimelineKeyframe ({ layerId, property, value, timing, time: newTime, editor }) {

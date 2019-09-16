@@ -1,6 +1,7 @@
 import { Config } from "./Config";
 import { Selection } from "./Selection";
 import { TimelineSelection } from "./TimelineSelection";
+import { Project } from "./items/Project";
 
 function blobToDataURL(blob) {
   return new Promise(function(resolve) {
@@ -105,7 +106,7 @@ export const editor = new class {
   }
 
   load (projects = []) {
-    this.projects = projects;
+    this.projects = projects
   }
 
   /**

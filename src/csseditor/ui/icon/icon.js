@@ -74,11 +74,10 @@ import shuffle from "./shuffle";
 import cat from "./cat";
 import refresh from "./refresh";
 import gps_fixed from "./gps_fixed";
-
-
-
+import file_copy from "./file_copy";
 
 export default {
+  file_copy,
   gps_fixed,
   refresh,
   cat,

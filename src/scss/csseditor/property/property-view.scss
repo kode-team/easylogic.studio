@@ -237,6 +237,11 @@
 
   &.show {
     background-color: $property-show-background-color;
+    
+    > .property-title {
+      border-bottom: 1px solid $property-border-color;  
+    }
+
     > .property-body {
       display: block;
       padding: 0px 11px 0px 6px;
@@ -272,7 +277,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     cursor: pointer;
-    border-bottom: 1px solid $property-border-color;  
+    border-bottom: 0px solid $property-border-color;  
     background-color: $property-title-color;
 
  

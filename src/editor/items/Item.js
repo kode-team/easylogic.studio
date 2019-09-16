@@ -22,10 +22,6 @@ function _traverse(obj) {
 
 export class Item {
   constructor(json = {}) {
-    if (json instanceof Item) {
-      json = json.toJSON();
-    }
-    this.json = this.convert({ ...this.getDefaultObject(), ...json });
 
     this.ref = new Proxy(this, {
       get: (target, key) => {
@@ -55,6 +51,11 @@ export class Item {
         return true;
       }
     });
+
+    if (json instanceof Item) {
+      json = json.toJSON();
+    }
+    this.json = this.convert({ ...this.getDefaultObject(), ...json });
 
     return this.ref; 
   }

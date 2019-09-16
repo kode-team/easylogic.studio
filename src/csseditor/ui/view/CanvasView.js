@@ -26,31 +26,33 @@ export default class CanvasView extends UIElement {
   }
 
   afterRender() {
-    var project = editor.add(new Project({
-      name: 'New project'
-    }));
-
-    editor.selection.selectProject(project);
-
-    var artboard = project.add(new ArtBoard({
-      name: 'New ArtBoard',
-      x: Length.px(300),
-      y: Length.px(300),
-      width: Length.px(375),
-      height: Length.px(720)
-    }));
-    editor.selection.selectArtboard(artboard);
-
-    // var layer = artboard.add(new Layer({
-    //   name: 'New layer',
-    //   'background-color': Color.random()
+    // var project = editor.add(new Project({
+    //   name: 'New project'
     // }));
-    editor.selection.select(artboard);
 
-    this.parser = this;
+    // editor.selection.selectProject(project);
 
-    this.emit('refreshAll')
-    this.emit('refreshSelection')
+    // var artboard = project.add(new ArtBoard({
+    //   name: 'New ArtBoard',
+    //   x: Length.px(300),
+    //   y: Length.px(300),
+    //   width: Length.px(375),
+    //   height: Length.px(720)
+    // }));
+    // editor.selection.selectArtboard(artboard);
+
+    // // var layer = artboard.add(new Layer({
+    // //   name: 'New layer',
+    // //   'background-color': Color.random()
+    // // }));
+    // editor.selection.select(artboard);
+
+    // this.parser = this;
+
+    // this.emit('refreshAll')
+    // this.emit('refreshSelection')
+
+    this.emit('load.json');
   }
   template() {
     return/*html*/`

@@ -138,7 +138,9 @@ export default class TimelineObjectList extends UIElement {
     
     [LOAD() + VDOM] () {
 
-        var artboard = editor.selection.currentArtboard || { timeline: [] }
+        var artboard = editor.selection.currentArtboard;
+
+        if (!artboard) return '';
 
         var selectedTimeline = artboard.getSelectedTimeline();
 

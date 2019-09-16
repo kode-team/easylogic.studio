@@ -22,7 +22,7 @@ export default class TimelineCommand extends UIElement {
         this.currentArtboard((artboard, timeline) => {
             artboard.selectTimeline(selectedId);                
             this.emit('refreshTimeline');
-        })        
+        })
     }
 
     [COMMAND('set.timeline.offset') + DEBOUNCE(100)] (obj) {
