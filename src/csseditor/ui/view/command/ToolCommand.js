@@ -3,9 +3,38 @@ import { editor, EDIT_MODE_SELECTION } from "../../../../editor/editor";
 import { Length } from "../../../../editor/unit/Length";
 import { uuidShort } from "../../../../util/functions/math";
 import AssetParser from "../../../../editor/parse/AssetParser";
+import Dom from "../../../../util/Dom";
+import { Project } from "../../../../editor/items/Project";
 
 
 export default class ToolCommand extends UIElement {
+    refreshSelection () {
+        this.emit('refreshAll')
+        this.emit('hideSubEditor');
+        this.emit('refreshSelection');        
+        this.emit('refreshSelectionTool')       
+    }
+
+    [COMMAND('save.json')] (filename) {
+        var json = JSON.stringify(editor.projects)
+        var datauri = 'data:application/json;base64,' + window.btoa(json);
+
+        var a = document.createElement('a');
+        a.href = datauri; 
+        a.download = filename || 'easylogic.json'
+        a.click();
+    }
+
+    [COMMAND('load.json')] (json) {
+        json = json || [{"id":"id1c024ee","visible":true,"lock":false,"selected":false,"layers":[{"id":"id2226850","visible":true,"lock":false,"selected":false,"layers":[],"position":"absolute","x":"300px","y":"300px","width":"375px","height":"720px","background-color":"white","background-image":"background-image: linear-gradient(to right, red, red);background-position: 0% 0%;background-size: auto;background-repeat: repeat;background-blend-mode: normal","font-size":"13px","border":{},"outline":{},"borderRadius":{},"animations":[],"transitions":[],"keyframes":[],"selectors":[],"svg":[],"timeline":[],"itemType":"artboard","name":"New ArtBoard"}],"colors":[],"gradients":[],"svgfilters":[],"svgimages":[],"images":[],"itemType":"project","name":"New project","keyframes":[]}]
+
+        var projects = json.map(p => {
+            return new Project(p);
+        })
+
+        editor.load(projects);
+        this.refreshSelection()
+    }
 
     [COMMAND('copy')] () {
         editor.selection.copy();

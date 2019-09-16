@@ -1427,7 +1427,7 @@ html, body {
   width: 100%;
   height: 100%;
   display: inline-block;
-  background-color: #383838;
+  background-color: #2f3538;
   opacity: 0;
   pointer-events: none;
 }
@@ -1456,7 +1456,7 @@ html, body {
   display: flex;
 }
 .csseditor[data-theme=dark] .layout-main marker path {
-  fill: #2c2c2c;
+  fill: #111111;
 }
 .csseditor[data-theme=dark] .layout-main .status-bar {
   flex: none;
@@ -1467,7 +1467,7 @@ html, body {
   z-index: 1;
   pointer-events: all;
   box-sizing: border-box;
-  border-top: 1px solid #2c2c2c;
+  border-top: 1px solid #111111;
   color: white;
 }
 .csseditor[data-theme=dark] .layout-main .layout-header {
@@ -1475,26 +1475,26 @@ html, body {
   height: 50px;
   overflow: hidden;
   position: relative;
-  background-color: #383838;
+  background-color: #2f3538;
   color: white;
   z-index: 1;
   pointer-events: all;
   box-sizing: border-box;
-  border-bottom: 1px solid #2c2c2c;
+  border-bottom: 1px solid #111111;
 }
 .csseditor[data-theme=dark] .layout-main .layout-header .logo {
   position: absolute;
   left: 0px;
   top: 0px;
   bottom: 0px;
-  width: 300px;
+  width: 270px;
   font-family: "Saira Stencil One", cursive;
 }
 .csseditor[data-theme=dark] .layout-main .layout-header .tool-menu {
   position: absolute;
   top: 0px;
   bottom: 0px;
-  left: 300px;
+  left: 270px;
   right: 450px;
 }
 .csseditor[data-theme=dark] .layout-main .layout-header .external-tool-menu {
@@ -1517,23 +1517,26 @@ html, body {
   bottom: 0px;
   right: 260px;
   overflow: hidden;
-  border-top: 1px solid #2c2c2c;
-  background-color: #383838;
+  border-top: 1px solid #111111;
+  background-color: #2f3538;
   transition: all 0.15s linear;
   pointer-events: all;
   z-index: 10000;
+}
+.csseditor[data-theme=dark] .layout-main .layout-middle .layout-footer .managed-tool {
+  background-color: #2f3538;
 }
 .csseditor[data-theme=dark] .layout-main .layout-middle .layout-left {
   position: absolute;
   left: 0px;
   top: 0px;
   bottom: 40px;
-  width: 300px;
+  width: 270px;
   display: inline-block;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  border-right: 1px solid #2c2c2c;
+  border-right: 1px solid #111111;
   transition: all 0.15s linear;
 }
 .csseditor[data-theme=dark] .layout-main .layout-middle .layout-right {
@@ -1547,12 +1550,12 @@ html, body {
   display: flex;
   flex-direction: column;
   overflow: auto;
-  border-left: 1px solid #2c2c2c;
+  border-left: 1px solid #111111;
   transition: all 0.15s linear;
 }
 .csseditor[data-theme=dark] .layout-main .layout-middle .layout-body {
   top: 0px;
-  left: 300px;
+  left: 270px;
   right: 260px;
   bottom: 40px;
   position: absolute;
@@ -1589,14 +1592,14 @@ html, body {
   bottom: 0px;
   right: 0px;
   box-sizing: border-box;
-  border-left: 1px solid #2c2c2c;
+  border-left: 1px solid #111111;
 }
 .csseditor[data-theme=dark] .feature-control .layer-tab {
   position: absolute;
   left: 0px;
   top: 0px;
   bottom: 0px;
-  right: 50px;
+  right: 0px;
 }
 .csseditor[data-theme=dark] .feature-control .layer-tab .object-items > div {
   position: absolute;
@@ -1612,7 +1615,7 @@ html, body {
   height: 150px;
 }
 .csseditor[data-theme=dark] .feature-control .layer-tab .object-items > div:not(:first-child) {
-  border-top: 1px solid #2c2c2c;
+  border-top: 1px solid #111111;
   box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .feature-control .layer-tab .object-items > div:last-child {
@@ -1620,11 +1623,12 @@ html, body {
   bottom: 0px;
 }
 .csseditor[data-theme=dark] .feature-control .draw-items {
-  background-color: #383838;
+  background-color: #2f3538;
+  display: none;
 }
 .csseditor[data-theme=dark] .feature-control .draw-items .split {
   border: 0px;
-  border-top: 1px solid #2c2c2c;
+  border-top: 1px solid #111111;
   margin: 10px 5px;
 }
 .csseditor[data-theme=dark] .feature-control .draw-items > label {
@@ -1686,7 +1690,7 @@ html, body {
   width: 100%;
   height: 1px;
   cursor: pointer;
-  background: #202020;
+  background: #616161;
   border-radius: 2px;
 }
 .csseditor[data-theme=dark] input[type=range]::-webkit-slider-thumb {
@@ -1701,13 +1705,13 @@ html, body {
   margin-top: -4px;
 }
 .csseditor[data-theme=dark] input[type=range]:focus::-webkit-slider-runnable-track {
-  background: #202020;
+  background: #616161;
 }
 .csseditor[data-theme=dark] input[type=range]::-moz-range-track {
   width: 100%;
   height: 1px;
   cursor: pointer;
-  background: #202020;
+  background: #616161;
   border-radius: 2px;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.12), inset 0 1px 2px rgba(0, 0, 0, 0.12);
 }
@@ -1726,7 +1730,7 @@ html, body {
   cursor: pointer;
   border: 1px solid #000;
   border-radius: 2px;
-  background: #202020;
+  background: #616161;
 }
 .csseditor[data-theme=dark] input[type=range]::-ms-fill-lower {
   background: #fc554f;
@@ -1759,7 +1763,7 @@ html, body {
   right: 0px;
   bottom: 0px;
   top: 0px;
-  background-color: #383838;
+  background-color: #2f3538;
   color: #ffffff;
 }
 .csseditor[data-theme=dark] .tab.number-tab .tab-header {
@@ -1784,7 +1788,8 @@ html, body {
   position: relative;
   padding: 4px 0px;
   box-sizing: border-box;
-  border-bottom: 1px solid #2c2c2c;
+  border-bottom: 1px solid #111111;
+  border-top: 1px solid transparent;
 }
 .csseditor[data-theme=dark] .tab.number-tab > .tab-header > .tab-item .icon {
   display: none;
@@ -1807,109 +1812,118 @@ html, body {
   pointer-events: none;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"] {
-  border-right: 1px solid #2c2c2c;
+  border-right: 1px solid #111111;
+  border-top: 1px solid #fc554f;
   border-bottom: 1px solid transparent;
-  background-color: #383838;
+  background-color: #2f3538;
   color: white;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"]:not(:first-child) {
-  border-left: 1px solid #2c2c2c;
+  border-left: 1px solid #111111;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="1"] .tab-content[data-value="1"] {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"] {
-  border-right: 1px solid #2c2c2c;
+  border-right: 1px solid #111111;
+  border-top: 1px solid #fc554f;
   border-bottom: 1px solid transparent;
-  background-color: #383838;
+  background-color: #2f3538;
   color: white;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"]:not(:first-child) {
-  border-left: 1px solid #2c2c2c;
+  border-left: 1px solid #111111;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="2"] .tab-content[data-value="2"] {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"] {
-  border-right: 1px solid #2c2c2c;
+  border-right: 1px solid #111111;
+  border-top: 1px solid #fc554f;
   border-bottom: 1px solid transparent;
-  background-color: #383838;
+  background-color: #2f3538;
   color: white;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"]:not(:first-child) {
-  border-left: 1px solid #2c2c2c;
+  border-left: 1px solid #111111;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="3"] .tab-content[data-value="3"] {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"] {
-  border-right: 1px solid #2c2c2c;
+  border-right: 1px solid #111111;
+  border-top: 1px solid #fc554f;
   border-bottom: 1px solid transparent;
-  background-color: #383838;
+  background-color: #2f3538;
   color: white;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"]:not(:first-child) {
-  border-left: 1px solid #2c2c2c;
+  border-left: 1px solid #111111;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="4"] .tab-content[data-value="4"] {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"] {
-  border-right: 1px solid #2c2c2c;
+  border-right: 1px solid #111111;
+  border-top: 1px solid #fc554f;
   border-bottom: 1px solid transparent;
-  background-color: #383838;
+  background-color: #2f3538;
   color: white;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"]:not(:first-child) {
-  border-left: 1px solid #2c2c2c;
+  border-left: 1px solid #111111;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="5"] .tab-content[data-value="5"] {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"] {
-  border-right: 1px solid #2c2c2c;
+  border-right: 1px solid #111111;
+  border-top: 1px solid #fc554f;
   border-bottom: 1px solid transparent;
-  background-color: #383838;
+  background-color: #2f3538;
   color: white;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"]:not(:first-child) {
-  border-left: 1px solid #2c2c2c;
+  border-left: 1px solid #111111;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="6"] .tab-content[data-value="6"] {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"] {
-  border-right: 1px solid #2c2c2c;
+  border-right: 1px solid #111111;
+  border-top: 1px solid #fc554f;
   border-bottom: 1px solid transparent;
-  background-color: #383838;
+  background-color: #2f3538;
   color: white;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"]:not(:first-child) {
-  border-left: 1px solid #2c2c2c;
+  border-left: 1px solid #111111;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="7"] .tab-content[data-value="7"] {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"] {
-  border-right: 1px solid #2c2c2c;
+  border-right: 1px solid #111111;
+  border-top: 1px solid #fc554f;
   border-bottom: 1px solid transparent;
-  background-color: #383838;
+  background-color: #2f3538;
   color: white;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"]:not(:first-child) {
-  border-left: 1px solid #2c2c2c;
+  border-left: 1px solid #111111;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="8"] .tab-content[data-value="8"] {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"] {
-  border-right: 1px solid #2c2c2c;
+  border-right: 1px solid #111111;
+  border-top: 1px solid #fc554f;
   border-bottom: 1px solid transparent;
-  background-color: #383838;
+  background-color: #2f3538;
   color: white;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"]:not(:first-child) {
-  border-left: 1px solid #2c2c2c;
+  border-left: 1px solid #111111;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="9"] .tab-content[data-value="9"] {
   display: block;
@@ -1959,7 +1973,7 @@ html, body {
   color: black;
 }
 .csseditor[data-theme=dark] .tab > .tab-header > .tab-item.select-reverse.selected {
-  background-color: #383838;
+  background-color: #2f3538;
 }
 .csseditor[data-theme=dark] .tab > .tab-body {
   position: absolute;
@@ -2002,7 +2016,7 @@ html, body {
   right: 0px;
   height: 30px;
   display: none;
-  background-color: #383838;
+  background-color: #2f3538;
   font-size: 12px;
   font-weight: bold;
   padding: 8px 5px !important;
@@ -2016,7 +2030,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .tab.bottom > .tab-header > .tab-item.selected {
   border-top: 1px solid #ffffff;
-  border-bottom: 1px solid #2c2c2c;
+  border-bottom: 1px solid #111111;
 }
 .csseditor[data-theme=dark] .tab.bottom > .tab-body {
   top: 0px;
@@ -2036,7 +2050,7 @@ html, body {
 .csseditor[data-theme=dark] .tab.horizontal.left > .tab-body {
   left: 50px;
   right: 0px;
-  border-left: 1px solid #2c2c2c;
+  border-left: 1px solid #111111;
   border-right: 0px;
 }
 .csseditor[data-theme=dark] .tab.horizontal > .tab-header {
@@ -2049,7 +2063,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .tab.horizontal > .tab-header > .tab-item {
   border: 0px;
-  border-bottom: 1px solid #2c2c2c;
+  border-bottom: 1px solid #111111;
   text-align: center;
   line-height: 3;
   height: 50px;
@@ -2062,7 +2076,7 @@ html, body {
   top: 0px;
   right: 60px;
   border: 0px;
-  border-right: 1px solid #2c2c2c;
+  border-right: 1px solid #111111;
 }
 .csseditor[data-theme=dark] .colorpicker-layer .codemirror-colorpicker {
   background-color: transparent;
@@ -2217,7 +2231,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .logo .site {
   font-size: 14px;
-  color: #2c2c2c;
+  color: #111111;
 }
 .csseditor[data-theme=dark] .external-tool-menu {
   padding-left: 10px;
@@ -2235,6 +2249,68 @@ html, body {
   padding: 0px;
   padding-top: 5px;
 }
+.csseditor[data-theme=dark] .tool-menu .items .draw-items,
+.csseditor[data-theme=dark] .external-tool-menu .items .draw-items {
+  background-color: #2f3538;
+}
+.csseditor[data-theme=dark] .tool-menu .items .draw-items > *,
+.csseditor[data-theme=dark] .external-tool-menu .items .draw-items > * {
+  display: inline-block;
+}
+.csseditor[data-theme=dark] .tool-menu .items .draw-items .split,
+.csseditor[data-theme=dark] .external-tool-menu .items .draw-items .split {
+  border: 0px;
+  border-right: 1px solid #111111;
+  height: 20px;
+}
+.csseditor[data-theme=dark] .tool-menu .items .draw-items > label,
+.csseditor[data-theme=dark] .external-tool-menu .items .draw-items > label {
+  font-size: 9px;
+  color: #ffffff;
+  padding: 5px;
+  text-align: center;
+}
+.csseditor[data-theme=dark] .tool-menu .items .draw-items > label:first-child,
+.csseditor[data-theme=dark] .external-tool-menu .items .draw-items > label:first-child {
+  margin-top: 5px;
+}
+.csseditor[data-theme=dark] .tool-menu .items .draw-items .menu-item,
+.csseditor[data-theme=dark] .external-tool-menu .items .draw-items .menu-item {
+  text-align: center;
+  margin-top: 5px;
+  color: #ffffff;
+  width: 30px;
+  height: 48px;
+  background-color: transparent;
+  background-image: none;
+  border: 0px;
+  box-shadow: none;
+  margin-bottom: 5px;
+}
+.csseditor[data-theme=dark] .tool-menu .items .draw-items .menu-item.selected .icon,
+.csseditor[data-theme=dark] .external-tool-menu .items .draw-items .menu-item.selected .icon {
+  background-color: #535353;
+}
+.csseditor[data-theme=dark] .tool-menu .items .draw-items .menu-item.selected .icon svg path,
+.csseditor[data-theme=dark] .external-tool-menu .items .draw-items .menu-item.selected .icon svg path {
+  fill: #fc554f;
+}
+.csseditor[data-theme=dark] .tool-menu .items .draw-items .menu-item[data-no-title=true],
+.csseditor[data-theme=dark] .external-tool-menu .items .draw-items .menu-item[data-no-title=true] {
+  height: 30px;
+}
+.csseditor[data-theme=dark] .tool-menu .items .draw-items .menu-item[data-no-title=true] .title,
+.csseditor[data-theme=dark] .external-tool-menu .items .draw-items .menu-item[data-no-title=true] .title {
+  display: none;
+}
+.csseditor[data-theme=dark] .tool-menu .items .draw-items .menu-item .icon,
+.csseditor[data-theme=dark] .external-tool-menu .items .draw-items .menu-item .icon {
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+  border-radius: 3px;
+  padding: 3px;
+}
 .csseditor[data-theme=dark] .tool-menu .items .split,
 .csseditor[data-theme=dark] .external-tool-menu .items .split {
   display: inline-block;
@@ -2242,7 +2318,7 @@ html, body {
   vertical-align: middle;
   width: 3px;
   margin-right: 2px;
-  border-right: 1px solid #2c2c2c;
+  border-right: 1px solid #111111;
 }
 .csseditor[data-theme=dark] .tool-menu .items.flex-2,
 .csseditor[data-theme=dark] .external-tool-menu .items.flex-2 {
@@ -2432,7 +2508,7 @@ html, body {
   right: 0px;
   bottom: 0px;
   top: 0px;
-  background-color: rgba(44, 44, 44, 0.3);
+  background-color: rgba(17, 17, 17, 0.3);
 }
 .csseditor[data-theme=dark] .page-view .page-lock {
   position: absolute;
@@ -2459,9 +2535,9 @@ html, body {
   display: inline-block;
   padding: 5px 10px;
   border-radius: 3px;
-  border: 1px solid #2c2c2c;
+  border: 1px solid #111111;
   color: #ffffff;
-  background-color: #383838;
+  background-color: #2f3538;
 }
 .csseditor[data-theme=dark] .page-tools > label {
   vertical-align: middle;
@@ -2487,9 +2563,9 @@ html, body {
   display: none;
   pointer-events: all;
   outline: none;
-  border: 1px solid #2c2c2c;
+  border: 1px solid #111111;
   color: #ffffff;
-  background-color: #383838;
+  background-color: #2f3538;
   padding: 5px 10px;
   box-sizing: border-box;
   height: 100%;
@@ -2510,9 +2586,9 @@ html, body {
   display: none;
   pointer-events: all;
   outline: none;
-  border: 1px solid #2c2c2c;
+  border: 1px solid #111111;
   color: #ffffff;
-  background-color: #383838;
+  background-color: #2f3538;
   padding: 5px 10px;
 }
 .csseditor[data-theme=dark] .page-subeditor .polygon-manager > * {
@@ -2532,9 +2608,9 @@ html, body {
   pointer-events: all;
   outline: none;
   border-radius: 3px;
-  border: 1px solid #2c2c2c;
+  border: 1px solid #111111;
   color: #ffffff;
-  background-color: #383838;
+  background-color: #2f3538;
   padding: 5px 10px;
   box-sizing: border-box;
   height: 100%;
@@ -2630,7 +2706,7 @@ html, body {
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
   background-color: rgba(255, 255, 255, 0.8);
-  border: 1px solid #2c2c2c;
+  border: 1px solid #111111;
 }
 .csseditor[data-theme=dark] .selection-tool.path .selection-tool-item[data-position=path], .csseditor[data-theme=dark] .selection-tool.polygon .selection-tool-item[data-position=path] {
   top: -30px;
@@ -2640,7 +2716,7 @@ html, body {
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
   background-color: rgba(255, 255, 255, 0.8);
-  border: 1px solid #2c2c2c;
+  border: 1px solid #111111;
   opacity: 1;
 }
 .csseditor[data-theme=dark] .selection-tool[data-selected-position=move] [data-position=move]:before {
@@ -2696,7 +2772,7 @@ html, body {
   text-align: center;
   background-color: rgba(51, 51, 51, 0.8);
   border-radius: 3px;
-  border: #2c2c2c;
+  border: #111111;
   transition: opacity 0.3s linear;
   box-sizing: border-box;
   padding: 4px 10px;
@@ -3020,21 +3096,20 @@ html, body {
   pointer-events: none;
 }
 .csseditor[data-theme=dark] .property {
-  padding: 6px 0px;
-  border-bottom: 1px solid #202020;
-  background-color: #383838;
+  border-bottom: 1px solid black;
+  background-color: #4d4949;
   color: #ffffff;
   display: none;
 }
 .csseditor[data-theme=dark] .property .add-timeline-property {
   display: inline-block;
   margin-right: 5px;
-  width: 8px;
-  height: 8px;
-  box-shadow: 0 0 0 2px rgba(19, 19, 19, 0.3);
-  background-color: rgba(172, 172, 172, 0.7);
+  width: 6px;
+  height: 6px;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.3);
+  background-color: rgba(145, 145, 145, 0.7);
   line-height: 10px;
-  margin-top: 5px;
+  margin-top: 6px;
   cursor: pointer;
   -webkit-transform: rotate(45deg);
           transform: rotate(45deg);
@@ -3174,7 +3249,7 @@ html, body {
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .keyframe-time-control {
   flex: none;
   text-align: right;
-  width: 254px;
+  width: 260px;
 }
 .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .keyframe-time-control .time-manager {
   display: grid;
@@ -3203,7 +3278,7 @@ html, body {
   position: relative;
 }
 .csseditor[data-theme=dark] .property.show {
-  background-color: #383838;
+  background-color: #424242;
 }
 .csseditor[data-theme=dark] .property.show > .property-body {
   display: block;
@@ -3222,7 +3297,7 @@ html, body {
   padding: 2px 0px;
 }
 .csseditor[data-theme=dark] .property > .property-title {
-  padding: 0px 6px 4px 6px;
+  padding: 4px 6px 4px 6px;
   height: 30px;
   line-height: 2;
   cursor: pointer;
@@ -3232,7 +3307,8 @@ html, body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   cursor: pointer;
-  border-bottom: 0px;
+  border-bottom: 1px solid black;
+  background-color: #2b2b2b;
 }
 .csseditor[data-theme=dark] .property > .property-title label {
   cursor: pointer;
@@ -3253,30 +3329,29 @@ html, body {
 .csseditor[data-theme=dark] .property > .property-body {
   display: none;
   padding: 0px;
-  background-color: #383838;
+  background-color: #424242;
+  margin-top: -1px;
 }
 .csseditor[data-theme=dark] .property > .property-body .property-item {
   padding: 0px;
   font-size: 11px;
-  margin-top: 8px;
+  margin-top: 5px;
+  padding: 2px 0px;
 }
 .csseditor[data-theme=dark] .property > .property-body .property-item.animation-property-item {
   display: grid;
   grid-template-columns: 14px 1fr;
   grid-column-gap: 2px;
 }
-.csseditor[data-theme=dark] .property > .property-body .property-item.background-image, .csseditor[data-theme=dark] .property > .property-body .property-item.box-shadow-item, .csseditor[data-theme=dark] .property > .property-body .property-item.filter-property, .csseditor[data-theme=dark] .property > .property-body .property-item.clip-path-list, .csseditor[data-theme=dark] .property > .property-body .property-item.text-shadow-item, .csseditor[data-theme=dark] .property > .property-body .property-item.transform-property, .csseditor[data-theme=dark] .property > .property-body .property-item.var-property, .csseditor[data-theme=dark] .property > .property-body .property-item.selector-list, .csseditor[data-theme=dark] .property > .property-body .property-item.transition-list, .csseditor[data-theme=dark] .property > .property-body .property-item.animation-list, .csseditor[data-theme=dark] .property > .property-body .property-item.keyframe-list, .csseditor[data-theme=dark] .property > .property-body .property-item.svg-property {
-  margin: 0px !important;
-}
 .csseditor[data-theme=dark] .property > .property-body .property-item:last-child {
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 .csseditor[data-theme=dark] .property > .property-body .property-item:empty {
   margin-bottom: 0px;
 }
 .csseditor[data-theme=dark] .property > .property-body .property-item.label label {
   font-weight: 900;
-  text-shadow: 2px 2px 3px #2c2c2c;
+  text-shadow: 2px 2px 3px #111111;
 }
 .csseditor[data-theme=dark] .property > .property-body .property-item .small-editor {
   margin-bottom: 3px;
@@ -3331,7 +3406,7 @@ html, body {
   width: 20px;
   height: 20px;
   margin-right: 10px;
-  background-color: #383838;
+  background-color: #2f3538;
 }
 .csseditor[data-theme=dark] .border-item .border-direction button[data-value=all] {
   border: 3px solid #fc554f;
@@ -3415,7 +3490,7 @@ html, body {
   height: 100%;
 }
 .csseditor[data-theme=dark] .border-slice-item .slice-selector button svg path {
-  fill: #2c2c2c;
+  fill: #111111;
 }
 .csseditor[data-theme=dark] .border-slice-item .slice-setting-box {
   display: grid;
@@ -3541,7 +3616,7 @@ html, body {
   right: 5px;
   bottom: 5px;
   padding: 10px;
-  border: 1px dashed #2c2c2c;
+  border: 1px dashed #111111;
 }
 .csseditor[data-theme=dark] .box-model-item > div .margin:before {
   content: "margin";
@@ -3555,7 +3630,7 @@ html, body {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
-  border: 1px solid #2c2c2c;
+  border: 1px solid #111111;
 }
 .csseditor[data-theme=dark] .box-model-item > div .margin [data-value=top] {
   display: inline-block;
@@ -3600,7 +3675,7 @@ html, body {
   right: 40px;
   bottom: 30px;
   padding: 10px;
-  border: 1px dashed #2c2c2c;
+  border: 1px dashed #111111;
 }
 .csseditor[data-theme=dark] .box-model-item > div .padding::before {
   content: "padding";
@@ -3614,7 +3689,7 @@ html, body {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
-  border: 1px solid #2c2c2c;
+  border: 1px solid #111111;
 }
 .csseditor[data-theme=dark] .box-model-item > div .padding [data-value=top] {
   display: inline-block;
@@ -3659,7 +3734,7 @@ html, body {
   right: 75px;
   bottom: 54px;
   padding: 10px 0px;
-  border: 1px dashed #2c2c2c;
+  border: 1px dashed #111111;
 }
 .csseditor[data-theme=dark] .box-model-item > div .content:before {
   content: attr(title);
@@ -3675,7 +3750,7 @@ html, body {
   width: 100%;
   height: 100px;
   box-sizing: border-box;
-  border: 1px solid #2c2c2c;
+  border: 1px solid #111111;
   border-radius: 3px;
 }
 .csseditor[data-theme=dark] .transition-list {
@@ -3692,7 +3767,7 @@ html, body {
   margin-bottom: 5px;
 }
 .csseditor[data-theme=dark] .transition-list .transition-item.selected {
-  background-color: rgba(44, 44, 44, 0.5);
+  background-color: rgba(17, 17, 17, 0.5);
 }
 .csseditor[data-theme=dark] .transition-list .transition-item .timing {
   border-radius: 3px;
@@ -3749,7 +3824,7 @@ html, body {
   margin-bottom: 5px;
 }
 .csseditor[data-theme=dark] .animation-list .animation-item.selected {
-  background-color: rgba(44, 44, 44, 0.5);
+  background-color: rgba(17, 17, 17, 0.5);
 }
 .csseditor[data-theme=dark] .animation-list .animation-item .name {
   padding: 2px 0px;
@@ -3772,10 +3847,10 @@ html, body {
   margin-top: 4px;
 }
 .csseditor[data-theme=dark] .animation-list .animation-item .labels label {
-  background-color: #2c2c2c;
+  background-color: #111111;
   padding: 1px 3px;
   border-radius: 2px;
-  color: #2c2c2c;
+  color: #111111;
   text-transform: uppercase;
   font-weight: bold;
 }
@@ -3831,13 +3906,13 @@ html, body {
   display: grid;
   grid-template-columns: 1fr;
   grid-column-gap: 4px;
-  border: 1px solid #2c2c2c;
+  border: 1px solid #111111;
   margin-bottom: 5px;
   padding: 5px;
   cursor: pointer;
 }
 .csseditor[data-theme=dark] .keyframe-list .keyframe-item.selected {
-  background-color: rgba(44, 44, 44, 0.5);
+  background-color: rgba(17, 17, 17, 0.5);
 }
 .csseditor[data-theme=dark] .keyframe-list .keyframe-item .title {
   display: grid;
@@ -3861,7 +3936,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .keyframe-list .keyframe-item .offset-list .container {
   position: relative;
-  background-image: linear-gradient(to right, #2c2c2c, black);
+  background-image: linear-gradient(to right, #111111, black);
   background-size: 100% 2px;
   background-repeat: no-repeat;
   background-position: 0px center;
@@ -3877,7 +3952,7 @@ html, body {
   -webkit-transform: translateX(-50%) translateY(-50%);
           transform: translateX(-50%) translateY(-50%);
   vertical-align: middle;
-  border: 1px solid #2c2c2c;
+  border: 1px solid #111111;
 }
 .csseditor[data-theme=dark] .code-view-item {
   grid-template-columns: 1fr !important;
@@ -3897,7 +3972,7 @@ html, body {
      -moz-user-select: text;
       -ms-user-select: text;
           user-select: text;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.5);
   position: relative;
   border-radius: 5px;
   margin-top: 0px;
@@ -3949,7 +4024,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .clip-path-list .clippath-item .offset-list .container {
   position: relative;
-  background-image: linear-gradient(to right, #2c2c2c, black);
+  background-image: linear-gradient(to right, #111111, black);
   background-size: 100% 2px;
   background-repeat: no-repeat;
   background-position: 0px center;
@@ -3988,14 +4063,14 @@ html, body {
   display: grid;
   grid-template-columns: 1fr;
   grid-column-gap: 4px;
-  border: 1px solid #2c2c2c;
+  border: 1px solid #111111;
   margin-bottom: 5px;
   padding: 5px;
   cursor: pointer;
   height: 30px;
 }
 .csseditor[data-theme=dark] .selector-list .selector-item.selected {
-  background-color: rgba(44, 44, 44, 0.5);
+  background-color: rgba(17, 17, 17, 0.5);
 }
 .csseditor[data-theme=dark] .selector-list .selector-item .title {
   display: grid;
@@ -4057,9 +4132,9 @@ html, body {
 }
 .csseditor[data-theme=dark] .artboard-list .artboard-item .preview {
   height: 110px;
-  background-color: #2c2c2c;
+  background-color: #111111;
   border-radius: 3px;
-  border: 1px solid #2c2c2c;
+  border: 1px solid #111111;
   cursor: pointer;
   display: none;
 }
@@ -4137,13 +4212,13 @@ html, body {
   text-align: right;
 }
 .csseditor[data-theme=dark] .layer-list .layer-item .detail .tools .visible svg path {
-  fill: #2c2c2c;
+  fill: #111111;
 }
 .csseditor[data-theme=dark] .layer-list .layer-item .detail .tools .visible[data-visible=true] svg path {
   fill: #333;
 }
 .csseditor[data-theme=dark] .layer-list .layer-item .detail .tools .lock svg path {
-  fill: #2c2c2c;
+  fill: #111111;
 }
 .csseditor[data-theme=dark] .layer-list .layer-item .detail .tools .lock[data-lock=true] svg path {
   fill: #333;
@@ -4185,7 +4260,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .color-assets-property .color-list-tools button {
   padding: 2px 10px;
-  border: 1px solid #2c2c2c;
+  border: 1px solid #111111;
 }
 .csseditor[data-theme=dark] .color-assets-property .color-list-tools[data-view-mode=list] button[data-value=list] {
   background-color: #609de2;
@@ -4218,7 +4293,7 @@ html, body {
   margin-right: 4px;
   margin-bottom: 4px;
   height: 80px;
-  border: 1px solid #2c2c2c;
+  border: 1px solid #111111;
   border-radius: 2px;
   box-sizing: border-box;
   vertical-align: top;
@@ -4244,7 +4319,7 @@ html, body {
   position: relative;
   width: 100%;
   height: 80px;
-  border: 1px solid #2c2c2c;
+  border: 1px solid #111111;
   border-radius: 2px;
   box-sizing: border-box;
   cursor: pointer;
@@ -4317,7 +4392,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .gradient-assets-property .gradient-list-tools button {
   padding: 2px 10px;
-  border: 1px solid #2c2c2c;
+  border: 1px solid #111111;
 }
 .csseditor[data-theme=dark] .gradient-assets-property .gradient-list-tools[data-view-mode=list] button[data-value=list] {
   background-color: #609de2;
@@ -4350,7 +4425,7 @@ html, body {
   margin-right: 4px;
   margin-bottom: 4px;
   height: 80px;
-  border: 1px solid #2c2c2c;
+  border: 1px solid #111111;
   border-radius: 2px;
   box-sizing: border-box;
   vertical-align: top;
@@ -4376,7 +4451,7 @@ html, body {
   position: relative;
   width: 100%;
   height: 80px;
-  border: 1px solid #2c2c2c;
+  border: 1px solid #111111;
   border-radius: 2px;
   box-sizing: border-box;
   cursor: pointer;
@@ -4452,7 +4527,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list-tools button {
   padding: 2px 10px;
-  border: 1px solid #2c2c2c;
+  border: 1px solid #111111;
 }
 .csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list-tools[data-view-mode=list] button[data-value=list] {
   background-color: #609de2;
@@ -4491,7 +4566,7 @@ html, body {
   margin-right: 4px;
   margin-bottom: 4px;
   height: 80px;
-  border: 1px solid #2c2c2c;
+  border: 1px solid #111111;
   border-radius: 2px;
   box-sizing: border-box;
   vertical-align: top;
@@ -4517,7 +4592,7 @@ html, body {
   position: relative;
   width: 100%;
   height: 80px;
-  border: 1px solid #2c2c2c;
+  border: 1px solid #111111;
   border-radius: 2px;
   box-sizing: border-box;
   cursor: pointer;
@@ -4568,7 +4643,7 @@ html, body {
   margin-right: 4px;
   margin-bottom: 4px;
   height: 80px;
-  border: 1px solid #2c2c2c;
+  border: 1px solid #111111;
   border-radius: 2px;
   box-sizing: border-box;
   vertical-align: top;
@@ -4591,7 +4666,7 @@ html, body {
   position: relative;
   width: 100%;
   height: 80px;
-  border: 1px solid #2c2c2c;
+  border: 1px solid #111111;
   border-radius: 2px;
   box-sizing: border-box;
   cursor: pointer;
@@ -4631,7 +4706,7 @@ html, body {
   height: 40px;
 }
 .csseditor[data-theme=dark] .alignment-item .split {
-  border-right: 1px solid #2c2c2c;
+  border-right: 1px solid #111111;
   width: 1px;
   margin-left: 5px;
 }
@@ -4758,7 +4833,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .image-assets-property .image-list-tools button {
   padding: 2px 10px;
-  border: 1px solid #2c2c2c;
+  border: 1px solid #111111;
 }
 .csseditor[data-theme=dark] .image-assets-property .image-list-tools[data-view-mode=list] button[data-value=list] {
   background-color: #609de2;
@@ -4791,7 +4866,7 @@ html, body {
   margin-right: 4px;
   margin-bottom: 4px;
   height: 80px;
-  border: 1px solid #2c2c2c;
+  border: 1px solid #111111;
   border-radius: 2px;
   box-sizing: border-box;
   vertical-align: top;
@@ -4838,7 +4913,7 @@ html, body {
   position: relative;
   width: 100%;
   height: 80px;
-  border: 1px solid #2c2c2c;
+  border: 1px solid #111111;
   border-radius: 2px;
   box-sizing: border-box;
   cursor: pointer;
@@ -4891,8 +4966,8 @@ html, body {
   height: 150px;
   top: 30px;
   left: 60px;
-  border: 1px solid #2c2c2c;
-  background-color: #383838;
+  border: 1px solid #111111;
+  background-color: #2f3538;
 }
 .csseditor[data-theme=dark] .cubic-bezier-editor .bezier .bezier-canvas {
   position: absolute;
@@ -4957,7 +5032,7 @@ html, body {
   height: 40px;
   border: 1px solid gray;
   cursor: pointer;
-  background-color: #383838;
+  background-color: #2f3538;
 }
 .csseditor[data-theme=dark] .cubic-bezier-editor .item-list .item:not(:first-child) {
   border-top: 0px;
@@ -5127,8 +5202,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .range-editor .range-editor-type .area {
   display: grid;
-  grid-template-columns: 1fr 50px 40px;
-  grid-column-gap: 3px;
+  grid-template-columns: 1fr 50px 20px;
   font-size: 13px;
 }
 .csseditor[data-theme=dark] .range-editor .range-editor-type .area span {
@@ -5152,21 +5226,38 @@ html, body {
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
   background-color: transparent;
-  border-bottom: 1px solid #5f5f5f;
+  border-bottom: 1px solid black;
+  border-left: 1px solid black;
+  border-top: 1px solid black;
+  text-align: left;
+  background-color: #2b2b2b;
+}
+.csseditor[data-theme=dark] .range-editor .range-editor-type .area .select-editor {
   text-align: right;
+  background-color: #2b2b2b;
+  position: relative;
 }
 .csseditor[data-theme=dark] .range-editor .range-editor-type .area .select-editor select {
+  position: absolute;
+  right: 0px;
+  display: inline-block;
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
   border-left: 0px;
   text-align: center;
+  padding: 0px;
+  width: 24px;
+  color: #9e9e9e;
   box-sizing: border-box;
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
+  border-top-right-radius: 0px;
   background-color: transparent;
-  border-bottom: 1px solid #5f5f5f;
+  border-bottom: 1px solid black;
+  border-top: 1px solid black;
+  border-right: 1px solid black;
 }
 .csseditor[data-theme=dark] .range-editor .range-editor-type[data-type=calc] .area {
   height: 100%;
@@ -5324,7 +5415,7 @@ html, body {
   box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .text-editor input[type=text] {
-  border: 1px solid #2c2c2c;
+  border: 1px solid #111111;
 }
 .csseditor[data-theme=dark] .select-editor {
   display: grid;
@@ -5381,7 +5472,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .css-property-editor .css-property-item > .title {
   grid-template-columns: 1fr 30px;
-  background-color: #383838;
+  background-color: #2f3538;
   color: #fc554f;
   border-radius: 3px;
   padding: 3px 0px;
@@ -5439,7 +5530,7 @@ html, body {
   padding: 6px 1px;
 }
 .csseditor[data-theme=dark] .background-image-editor .fill-list .fill-item.selected {
-  background-color: rgba(44, 44, 44, 0.5);
+  background-color: rgba(17, 17, 17, 0.5);
 }
 .csseditor[data-theme=dark] .background-image-editor .fill-list .fill-item .gradient-info {
   display: grid;
@@ -5763,6 +5854,10 @@ html, body {
   grid-column-gap: 5px;
   text-align: center;
   margin-top: 5px;
+  font-size: 12px;
+}
+.csseditor[data-theme=dark] .box-shadow-editor .shadow-item:last-child {
+  margin-bottom: 5px;
 }
 .csseditor[data-theme=dark] .box-shadow-editor .shadow-item.desc {
   color: #ffffff;
@@ -5773,7 +5868,7 @@ html, body {
 .csseditor[data-theme=dark] .box-shadow-editor .shadow-item .color {
   cursor: pointer;
   height: 20px;
-  border: 1px solid #2c2c2c;
+  border: 1px solid #111111;
   position: relative;
   background-color: transparent;
   background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
@@ -5793,7 +5888,7 @@ html, body {
   height: 16px;
 }
 .csseditor[data-theme=dark] .box-shadow-editor .shadow-item .inset svg path {
-  fill: #383838;
+  fill: #2f3538;
 }
 .csseditor[data-theme=dark] .box-shadow-editor .shadow-item .inset[data-value=true] svg path {
   fill: #fc554f;
@@ -5846,7 +5941,7 @@ html, body {
 .csseditor[data-theme=dark] .text-shadow-editor .shadow-item .color {
   cursor: pointer;
   height: 20px;
-  border: 1px solid #2c2c2c;
+  border: 1px solid #111111;
   position: relative;
   background-color: transparent;
   background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
@@ -5938,13 +6033,13 @@ html, body {
   background-color: #fc554f;
 }
 .csseditor[data-theme=dark] .perspective-origin-editor .radius-selector[data-selected-value=all] button[data-value=all] svg path {
-  fill: #2c2c2c;
+  fill: #111111;
 }
 .csseditor[data-theme=dark] .perspective-origin-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] {
   background-color: #fc554f;
 }
 .csseditor[data-theme=dark] .perspective-origin-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] svg path {
-  fill: #2c2c2c;
+  fill: #111111;
 }
 .csseditor[data-theme=dark] .perspective-origin-editor .radius-selector button {
   background-image: none;
@@ -5971,13 +6066,13 @@ html, body {
   background-color: #fc554f;
 }
 .csseditor[data-theme=dark] .transform-origin-editor .radius-selector[data-selected-value=all] button[data-value=all] svg path {
-  fill: #2c2c2c;
+  fill: #111111;
 }
 .csseditor[data-theme=dark] .transform-origin-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] {
   background-color: #fc554f;
 }
 .csseditor[data-theme=dark] .transform-origin-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] svg path {
-  fill: #2c2c2c;
+  fill: #111111;
 }
 .csseditor[data-theme=dark] .transform-origin-editor .radius-selector button {
   background-image: none;
@@ -6033,7 +6128,7 @@ html, body {
   top: 4px;
   height: 14px;
   border-radius: 10px;
-  border: 1px solid #2c2c2c;
+  border: 1px solid #111111;
   box-sizing: border-box;
   background-color: transparent;
   background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
@@ -6561,7 +6656,7 @@ html, body {
   text-align: center;
   vertical-align: middle;
   padding: 2px 2px;
-  border: 1px solid #5f5f5f;
+  border: 1px solid #444444;
   border-right: 0px;
   white-space: pre-wrap;
   word-break: break-all;
@@ -6574,7 +6669,7 @@ html, body {
   border-bottom-left-radius: 3px;
 }
 .csseditor[data-theme=dark] .select-icon-editor .items > .select-icon-item:last-child {
-  border-right: 1px solid #5f5f5f;
+  border-right: 1px solid #444444;
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px;
 }
@@ -6726,9 +6821,9 @@ html, body {
   display: none;
   box-sizing: border-box;
   z-index: 1000;
-  background-color: #383838;
-  border: 1px solid #2c2c2c;
-  box-shadow: 0 0 1px 0px #2c2c2c;
+  background-color: #2f3538;
+  border: 1px solid #111111;
+  box-shadow: 0 0 1px 0px #111111;
   padding: 14px 10px;
   color: #ffffff;
 }
@@ -6786,10 +6881,10 @@ html, body {
   outline: none;
   box-sizing: border-box;
   width: 50px;
-  background-color: rgba(44, 44, 44, 0.5);
+  background-color: rgba(17, 17, 17, 0.5);
 }
 .csseditor[data-theme=dark] .popup.background-property-popup .size-list[data-value=contain] button[value=contain], .csseditor[data-theme=dark] .popup.background-property-popup .size-list[data-value=cover] button[value=cover], .csseditor[data-theme=dark] .popup.background-property-popup .size-list[data-value=auto] button[value=auto] {
-  background-color: #2c2c2c;
+  background-color: #111111;
   font-weight: bold;
 }
 .csseditor[data-theme=dark] .popup.background-property-popup .popup-item.grid-2 {
@@ -6803,7 +6898,7 @@ html, body {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
-  border: 1px solid #2c2c2c;
+  border: 1px solid #111111;
   background-color: white;
   outline: none;
   cursor: pointer;
@@ -6845,7 +6940,7 @@ html, body {
   background-repeat: round;
 }
 .csseditor[data-theme=dark] .popup.background-property-popup .repeat-list[data-value=repeat] button[value=repeat], .csseditor[data-theme=dark] .popup.background-property-popup .repeat-list[data-value=no-repeat] button[value=no-repeat], .csseditor[data-theme=dark] .popup.background-property-popup .repeat-list[data-value=repeat-x] button[value=repeat-x], .csseditor[data-theme=dark] .popup.background-property-popup .repeat-list[data-value=repeat-y] button[value=repeat-y], .csseditor[data-theme=dark] .popup.background-property-popup .repeat-list[data-value=space] button[value=space], .csseditor[data-theme=dark] .popup.background-property-popup .repeat-list[data-value=round] button[value=round] {
-  background-color: #2c2c2c;
+  background-color: #111111;
   box-shadow: 0 0 1px 1px black;
 }
 .csseditor[data-theme=dark] .popup.background-property-popup .blend-list {
@@ -6874,18 +6969,18 @@ html, body {
   outline: none;
   box-sizing: border-box;
   width: 50px;
-  background-color: rgba(44, 44, 44, 0.5);
+  background-color: rgba(17, 17, 17, 0.5);
 }
 .csseditor[data-theme=dark] .popup.display-property-popup .flex-direction[data-value=row] button[value=row], .csseditor[data-theme=dark] .popup.display-property-popup .flex-direction[data-value=row-reverse] button[value=row-reverse], .csseditor[data-theme=dark] .popup.display-property-popup .flex-direction[data-value=column] button[value=column], .csseditor[data-theme=dark] .popup.display-property-popup .flex-direction[data-value=column-reverse] button[value=column-reverse] {
-  background-color: #2c2c2c;
+  background-color: #111111;
   font-weight: bold;
 }
 .csseditor[data-theme=dark] .popup.display-property-popup .flex-wrap[data-value=nowrap] button[value=nowrap], .csseditor[data-theme=dark] .popup.display-property-popup .flex-wrap[data-value=wrap] button[value=wrap], .csseditor[data-theme=dark] .popup.display-property-popup .flex-wrap[data-value=wrap-reverse] button[value=wrap-reverse] {
-  background-color: #2c2c2c;
+  background-color: #111111;
   font-weight: bold;
 }
 .csseditor[data-theme=dark] .popup.display-property-popup .justify-content[data-value=flex-start] button[value=flex-start], .csseditor[data-theme=dark] .popup.display-property-popup .justify-content[data-value=flex-end] button[value=flex-end], .csseditor[data-theme=dark] .popup.display-property-popup .justify-content[data-value=center] button[value=center], .csseditor[data-theme=dark] .popup.display-property-popup .justify-content[data-value=space-between] button[value=space-between], .csseditor[data-theme=dark] .popup.display-property-popup .justify-content[data-value=space-around] button[value=space-around] {
-  background-color: #2c2c2c;
+  background-color: #111111;
   font-weight: bold;
 }
 .csseditor[data-theme=dark] .popup .box-shadow-property-popup {
@@ -6898,7 +6993,7 @@ html, body {
 .csseditor[data-theme=dark] .popup .box-shadow-property-popup .codemirror-colorpicker {
   box-shadow: none;
   border-radius: 0px;
-  background-color: #383838;
+  background-color: #2f3538;
 }
 .csseditor[data-theme=dark] .popup .box-shadow-property-popup .codemirror-colorpicker input {
   color: #ffffff !important;
@@ -6912,7 +7007,7 @@ html, body {
   color: #ffffff !important;
 }
 .csseditor[data-theme=dark] .popup .box-shadow-property-popup .codemirror-colorpicker .colorsets {
-  border-top: 0px solid #2c2c2c !important;
+  border-top: 0px solid #111111 !important;
 }
 .csseditor[data-theme=dark] .popup .box-shadow-property-popup .box .type {
   display: grid;
@@ -6943,11 +7038,11 @@ html, body {
 }
 .csseditor[data-theme=dark] .popup .box-shadow-property-popup .box .drag-board {
   box-sizing: border-box;
-  border: 1px solid #2c2c2c;
+  border: 1px solid #111111;
   margin-bottom: 2px;
   height: 204px;
   position: relative;
-  background-image: linear-gradient(to right, #2c2c2c, #2c2c2c), linear-gradient(to right, #2c2c2c, #2c2c2c);
+  background-image: linear-gradient(to right, #111111, #111111), linear-gradient(to right, #111111, #111111);
   background-size: 100% 1px, 1px 100%;
   background-position: 0px center, center 0px;
   background-repeat: no-repeat;
@@ -7020,7 +7115,7 @@ html, body {
 .csseditor[data-theme=dark] .popup .text-shadow-property-popup .codemirror-colorpicker {
   box-shadow: none;
   border-radius: 0px;
-  background-color: #383838;
+  background-color: #2f3538;
 }
 .csseditor[data-theme=dark] .popup .text-shadow-property-popup .codemirror-colorpicker input {
   color: #ffffff !important;
@@ -7034,18 +7129,18 @@ html, body {
   color: #ffffff !important;
 }
 .csseditor[data-theme=dark] .popup .text-shadow-property-popup .codemirror-colorpicker .colorsets {
-  border-top: 0px solid #2c2c2c !important;
+  border-top: 0px solid #111111 !important;
 }
 .csseditor[data-theme=dark] .popup .text-shadow-property-popup .box label {
   font-size: 11px;
 }
 .csseditor[data-theme=dark] .popup .text-shadow-property-popup .box .drag-board {
   box-sizing: border-box;
-  border: 1px solid #2c2c2c;
+  border: 1px solid #111111;
   height: 202px;
   position: relative;
   margin-bottom: 10px;
-  background-image: linear-gradient(to right, #2c2c2c, #2c2c2c), linear-gradient(to right, #2c2c2c, #2c2c2c);
+  background-image: linear-gradient(to right, #111111, #111111), linear-gradient(to right, #111111, #111111);
   background-size: 100% 1px, 1px 100%;
   background-position: 0px center, center 0px;
   background-repeat: no-repeat;
@@ -7209,7 +7304,7 @@ html, body {
   height: 220px;
   position: relative;
   box-sizing: border-box;
-  box-shadow: 0 0 0 1px #2c2c2c;
+  box-shadow: 0 0 0 1px #111111;
 }
 .csseditor[data-theme=dark] .popup .clippath-popup .box > .clip-path-editor .drag-area .pointer-list {
   top: 0px;
@@ -7614,7 +7709,7 @@ html, body {
   box-shadow: none;
   border-radius: 0px;
   border: 0px;
-  background-color: #383838;
+  background-color: #2f3538;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=color] .codemirror-colorpicker input {
   color: #ffffff !important;
@@ -7625,7 +7720,7 @@ html, body {
   color: #ffffff !important;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=color] .codemirror-colorpicker .colorsets {
-  border-top: 0px solid #2c2c2c !important;
+  border-top: 0px solid #111111 !important;
 }
 .csseditor[data-theme=dark] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=image] .image-preview {
   width: 100%;
@@ -7720,7 +7815,7 @@ html, body {
   box-shadow: none;
   border-radius: 0px;
   border: 0px;
-  background-color: #383838;
+  background-color: #2f3538;
 }
 .csseditor[data-theme=dark] .popup .color-picker-popup .codemirror-colorpicker input {
   color: #ffffff !important;
@@ -7731,7 +7826,7 @@ html, body {
   color: #ffffff !important;
 }
 .csseditor[data-theme=dark] .popup .color-picker-popup .codemirror-colorpicker .colorsets {
-  border-top: 1px solid #2c2c2c !important;
+  border-top: 1px solid #111111 !important;
 }
 .csseditor[data-theme=dark] .popup .color-picker-popup .assets {
   padding: 0px 10px;
@@ -8027,7 +8122,7 @@ html, body {
   box-shadow: none;
   border-radius: 0px;
   border: 0px;
-  background-color: #383838;
+  background-color: #2f3538;
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .codemirror-colorpicker .color-panel {
   margin-top: 0px;
@@ -8041,7 +8136,7 @@ html, body {
   color: #ffffff !important;
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .codemirror-colorpicker .colorsets {
-  border-top: 0px solid #2c2c2c !important;
+  border-top: 0px solid #111111 !important;
 }
 .csseditor[data-theme=dark] .window-background {
   position: fixed;
@@ -8063,9 +8158,9 @@ html, body {
           transform: translate(-50%, -50%);
   box-sizing: border-box;
   z-index: 1000;
-  background-color: #383838;
-  border: 1px solid #2c2c2c;
-  box-shadow: 0 0 1px 0px #2c2c2c;
+  background-color: #2f3538;
+  border: 1px solid #111111;
+  box-shadow: 0 0 1px 0px #111111;
   padding: 14px;
   color: #ffffff;
 }
@@ -8101,6 +8196,9 @@ html, body {
 .csseditor[data-theme=dark] .window-background .window.export-window {
   width: 80%;
   height: 80%;
+}
+.csseditor[data-theme=dark] .window-background .window.export-window pre {
+  margin: 10px;
 }
 .csseditor[data-theme=dark] .path-editor-view {
   display: none;
@@ -8293,11 +8391,11 @@ html, body {
   right: 0px;
   top: 0px;
   bottom: 0px;
-  background-color: #383838;
+  background-color: #2f3538;
   font-size: 12px;
   box-sizing: border-box;
-  border-left: 1px solid #2c2c2c;
-  border-top: 1px solid #2c2c2c;
+  border-left: 1px solid #111111;
+  border-top: 1px solid #111111;
 }
 .csseditor[data-theme=dark] .timeline-value-area .timeline-value-editor .tab-content {
   padding: 0px 20px;
@@ -8362,7 +8460,7 @@ html, body {
   right: 260px;
   top: 0px;
   bottom: 0px;
-  background-color: #383838;
+  background-color: #2f3538;
   font-size: 12px;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header {
@@ -8372,15 +8470,15 @@ html, body {
   height: 70px;
   right: 0px;
   box-sizing: border-box;
-  border-top: 1px solid #2c2c2c;
+  border-top: 1px solid #111111;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar {
   position: absolute;
   left: 0px;
   top: 0px;
   bottom: 0px;
-  width: 300px;
-  border-right: 1px solid #2c2c2c;
+  width: 270px;
+  border-right: 1px solid #111111;
   box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar {
@@ -8419,7 +8517,7 @@ html, body {
   color: white;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .play-buttons button {
-  border: 1px solid #2c2c2c;
+  border: 1px solid #111111;
   min-width: 50px;
   padding: 2px 10px;
   height: auto;
@@ -8429,7 +8527,7 @@ html, body {
   top: 0px;
   right: 0px;
   bottom: 0px;
-  left: 300px;
+  left: 270px;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view {
   position: absolute;
@@ -8451,7 +8549,7 @@ html, body {
   top: 0px;
   width: 5px;
   height: 100%;
-  background-color: #2c2c2c;
+  background-color: #111111;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-duration .duration-handle-right {
   position: absolute;
@@ -8459,7 +8557,7 @@ html, body {
   top: 0px;
   width: 5px;
   height: 100%;
-  background-color: #2c2c2c;
+  background-color: #111111;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-duration .duration-slider {
   position: absolute;
@@ -8467,7 +8565,7 @@ html, body {
   top: 0px;
   right: 10px;
   height: 100%;
-  background-color: #2c2c2c;
+  background-color: #111111;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-duration .duration-slider .start {
   position: absolute;
@@ -8477,7 +8575,7 @@ html, body {
           transform: translateX(-100%);
   height: 100%;
   width: 5px;
-  background-color: #2c2c2c;
+  background-color: #111111;
   cursor: ew-resize;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-duration .duration-slider .end {
@@ -8486,7 +8584,7 @@ html, body {
   top: 0px;
   height: 100%;
   width: 5px;
-  background-color: #2c2c2c;
+  background-color: #111111;
   cursor: ew-resize;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-duration .duration-slider .gauge {
@@ -8518,9 +8616,9 @@ html, body {
   left: 0px;
   top: 0px;
   bottom: 0px;
-  width: 300px;
+  width: 270px;
   overflow: auto;
-  border-right: 1px solid #2c2c2c;
+  border-right: 1px solid #111111;
   box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object.collapsed .timeline-object-row.layer .icon svg {
@@ -8590,8 +8688,8 @@ html, body {
   width: 10px;
   height: 10px;
   display: inline-block;
-  box-shadow: 0 0 0 2px rgba(19, 19, 19, 0.3);
-  background-color: rgba(172, 172, 172, 0.7);
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.3);
+  background-color: rgba(145, 145, 145, 0.7);
   vertical-align: middle;
   cursor: pointer;
   -webkit-transform: translateX(-5px) translateY(2px) rotate(45deg);
@@ -8606,7 +8704,7 @@ html, body {
   top: 0px;
   right: 0px;
   bottom: 0px;
-  left: 300px;
+  left: 270px;
   pointer-events: none;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .keyframe-time-grid-view canvas {
@@ -8622,7 +8720,7 @@ html, body {
   top: 0px;
   right: 0px;
   bottom: 0px;
-  left: 300px;
+  left: 270px;
   overflow: auto;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-container {
@@ -8646,7 +8744,7 @@ html, body {
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row {
   height: 30px;
   box-sizing: border-box;
-  border-bottom: 1px solid #2c2c2c;
+  border-bottom: 1px solid #111111;
   position: relative;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe {
@@ -8655,7 +8753,7 @@ html, body {
   -webkit-transform: translateY(-50%);
           transform: translateY(-50%);
   height: 10px;
-  background-color: rgba(44, 44, 44, 0.5);
+  background-color: rgba(17, 17, 17, 0.5);
   display: inline-block;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe .offset {
@@ -8665,7 +8763,7 @@ html, body {
   display: inline-block;
   width: 8px;
   height: 8px;
-  background-color: #383838;
+  background-color: #2f3538;
   -webkit-transform: translateY(-50%) translateX(-50%) rotate(45deg);
           transform: translateY(-50%) translateX(-50%) rotate(45deg);
   cursor: ew-resize;
@@ -8690,7 +8788,7 @@ html, body {
   display: inline-block;
   width: 8px;
   height: 8px;
-  background-color: #383838;
+  background-color: #2f3538;
   -webkit-transform: translateY(-50%) translateX(-50%) rotate(45deg);
           transform: translateY(-50%) translateX(-50%) rotate(45deg);
   cursor: ew-resize;
@@ -8811,7 +8909,7 @@ html, body {
   height: 24px;
   overflow: hidden;
   position: relative;
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
   z-index: 1;
   pointer-events: all;
   box-sizing: border-box;
@@ -8835,14 +8933,14 @@ html, body {
   left: 0px;
   top: 0px;
   bottom: 0px;
-  width: 300px;
+  width: 270px;
   font-family: "Saira Stencil One", cursive;
 }
 .csseditor[data-theme=light] .layout-main .layout-header .tool-menu {
   position: absolute;
   top: 0px;
   bottom: 0px;
-  left: 300px;
+  left: 270px;
   right: 450px;
 }
 .csseditor[data-theme=light] .layout-main .layout-header .external-tool-menu {
@@ -8871,12 +8969,15 @@ html, body {
   pointer-events: all;
   z-index: 10000;
 }
+.csseditor[data-theme=light] .layout-main .layout-middle .layout-footer .managed-tool {
+  background-color: white;
+}
 .csseditor[data-theme=light] .layout-main .layout-middle .layout-left {
   position: absolute;
   left: 0px;
   top: 0px;
   bottom: 40px;
-  width: 300px;
+  width: 270px;
   display: inline-block;
   box-sizing: border-box;
   display: flex;
@@ -8900,7 +9001,7 @@ html, body {
 }
 .csseditor[data-theme=light] .layout-main .layout-middle .layout-body {
   top: 0px;
-  left: 300px;
+  left: 270px;
   right: 260px;
   bottom: 40px;
   position: absolute;
@@ -8944,7 +9045,7 @@ html, body {
   left: 0px;
   top: 0px;
   bottom: 0px;
-  right: 50px;
+  right: 0px;
 }
 .csseditor[data-theme=light] .feature-control .layer-tab .object-items > div {
   position: absolute;
@@ -8969,6 +9070,7 @@ html, body {
 }
 .csseditor[data-theme=light] .feature-control .draw-items {
   background-color: white;
+  display: none;
 }
 .csseditor[data-theme=light] .feature-control .draw-items .split {
   border: 0px;
@@ -9001,7 +9103,7 @@ html, body {
   background-color: white;
 }
 .csseditor[data-theme=light] .feature-control .draw-items .menu-item.selected .icon svg path {
-  fill: #e2e7ff;
+  fill: #4b61ce;
 }
 .csseditor[data-theme=light] .feature-control .draw-items .menu-item[data-no-title=true] {
   height: 30px;
@@ -9032,7 +9134,7 @@ html, body {
 }
 .csseditor[data-theme=light] input[type=range]::-webkit-slider-runnable-track {
   width: 100%;
-  height: 2px;
+  height: 1px;
   cursor: pointer;
   background: #5a8ebb;
   border-radius: 2px;
@@ -9046,14 +9148,14 @@ html, body {
   -webkit-appearance: none;
           appearance: none;
   border: 1px solid #5a8ebb;
-  margin-top: -4px;
+  margin-top: -5px;
 }
 .csseditor[data-theme=light] input[type=range]:focus::-webkit-slider-runnable-track {
   background: #5a8ebb;
 }
 .csseditor[data-theme=light] input[type=range]::-moz-range-track {
   width: 100%;
-  height: 2px;
+  height: 1px;
   cursor: pointer;
   background: #5a8ebb;
   border-radius: 2px;
@@ -9066,11 +9168,11 @@ html, body {
   border-radius: 9px;
   background: white;
   cursor: pointer;
-  margin-top: -4px;
+  margin-top: -5px;
 }
 .csseditor[data-theme=light] input[type=range]::-ms-track {
   width: 100%;
-  height: 2px;
+  height: 1px;
   cursor: pointer;
   border: 1px solid #000;
   border-radius: 2px;
@@ -9093,7 +9195,7 @@ html, body {
   border-radius: 9px;
   background: white;
   cursor: pointer;
-  margin-top: -4px;
+  margin-top: -5px;
 }
 .csseditor[data-theme=light] input[type=range]:focus::-ms-fill-lower {
   background: white;
@@ -9133,6 +9235,7 @@ html, body {
   padding: 4px 0px;
   box-sizing: border-box;
   border-bottom: 1px solid #dfdfdf;
+  border-top: 1px solid transparent;
 }
 .csseditor[data-theme=light] .tab.number-tab > .tab-header > .tab-item .icon {
   display: none;
@@ -9156,6 +9259,7 @@ html, body {
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"] {
   border-right: 1px solid #dfdfdf;
+  border-top: 1px solid #4b61ce;
   border-bottom: 1px solid transparent;
   background-color: white;
   color: #000b22;
@@ -9168,6 +9272,7 @@ html, body {
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"] {
   border-right: 1px solid #dfdfdf;
+  border-top: 1px solid #4b61ce;
   border-bottom: 1px solid transparent;
   background-color: white;
   color: #000b22;
@@ -9180,6 +9285,7 @@ html, body {
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"] {
   border-right: 1px solid #dfdfdf;
+  border-top: 1px solid #4b61ce;
   border-bottom: 1px solid transparent;
   background-color: white;
   color: #000b22;
@@ -9192,6 +9298,7 @@ html, body {
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"] {
   border-right: 1px solid #dfdfdf;
+  border-top: 1px solid #4b61ce;
   border-bottom: 1px solid transparent;
   background-color: white;
   color: #000b22;
@@ -9204,6 +9311,7 @@ html, body {
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"] {
   border-right: 1px solid #dfdfdf;
+  border-top: 1px solid #4b61ce;
   border-bottom: 1px solid transparent;
   background-color: white;
   color: #000b22;
@@ -9216,6 +9324,7 @@ html, body {
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"] {
   border-right: 1px solid #dfdfdf;
+  border-top: 1px solid #4b61ce;
   border-bottom: 1px solid transparent;
   background-color: white;
   color: #000b22;
@@ -9228,6 +9337,7 @@ html, body {
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"] {
   border-right: 1px solid #dfdfdf;
+  border-top: 1px solid #4b61ce;
   border-bottom: 1px solid transparent;
   background-color: white;
   color: #000b22;
@@ -9240,6 +9350,7 @@ html, body {
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"] {
   border-right: 1px solid #dfdfdf;
+  border-top: 1px solid #4b61ce;
   border-bottom: 1px solid transparent;
   background-color: white;
   color: #000b22;
@@ -9252,6 +9363,7 @@ html, body {
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"] {
   border-right: 1px solid #dfdfdf;
+  border-top: 1px solid #4b61ce;
   border-bottom: 1px solid transparent;
   background-color: white;
   color: #000b22;
@@ -9303,7 +9415,7 @@ html, body {
   font-size: 11px;
 }
 .csseditor[data-theme=light] .tab > .tab-header > .tab-item.select-reverse:not(.selected) {
-  background-color: rgba(226, 231, 255, 0.5);
+  background-color: rgba(75, 97, 206, 0.5);
   color: black;
 }
 .csseditor[data-theme=light] .tab > .tab-header > .tab-item.select-reverse.selected {
@@ -9404,7 +9516,7 @@ html, body {
   min-width: 60px;
 }
 .csseditor[data-theme=light] .tab.horizontal > .tab-header > .tab-item.selected {
-  background-color: rgba(226, 231, 255, 0.5);
+  background-color: rgba(75, 97, 206, 0.5);
 }
 .csseditor[data-theme=light] .tab.horizontal > .tab-body {
   top: 0px;
@@ -9446,71 +9558,71 @@ html, body {
   display: block;
   height: 30px;
   position: relative;
-  background-image: linear-gradient(to right, #e2e7ff, #e2e7ff);
+  background-image: linear-gradient(to right, #4b61ce, #4b61ce);
   background-size: 100% 2px;
   background-position: 0px center;
   background-repeat: no-repeat;
   cursor: pointer;
 }
 .csseditor[data-theme=light] .editor.offset-editor .offset[data-selected-value="0"] .offset-item[data-offset-index="0"] {
-  box-shadow: 0 0 4px 0 #e2e7ff;
+  box-shadow: 0 0 4px 0 #4b61ce;
 }
 .csseditor[data-theme=light] .editor.offset-editor .offset[data-selected-value="1"] .offset-item[data-offset-index="1"] {
-  box-shadow: 0 0 4px 0 #e2e7ff;
+  box-shadow: 0 0 4px 0 #4b61ce;
 }
 .csseditor[data-theme=light] .editor.offset-editor .offset[data-selected-value="2"] .offset-item[data-offset-index="2"] {
-  box-shadow: 0 0 4px 0 #e2e7ff;
+  box-shadow: 0 0 4px 0 #4b61ce;
 }
 .csseditor[data-theme=light] .editor.offset-editor .offset[data-selected-value="3"] .offset-item[data-offset-index="3"] {
-  box-shadow: 0 0 4px 0 #e2e7ff;
+  box-shadow: 0 0 4px 0 #4b61ce;
 }
 .csseditor[data-theme=light] .editor.offset-editor .offset[data-selected-value="4"] .offset-item[data-offset-index="4"] {
-  box-shadow: 0 0 4px 0 #e2e7ff;
+  box-shadow: 0 0 4px 0 #4b61ce;
 }
 .csseditor[data-theme=light] .editor.offset-editor .offset[data-selected-value="5"] .offset-item[data-offset-index="5"] {
-  box-shadow: 0 0 4px 0 #e2e7ff;
+  box-shadow: 0 0 4px 0 #4b61ce;
 }
 .csseditor[data-theme=light] .editor.offset-editor .offset[data-selected-value="6"] .offset-item[data-offset-index="6"] {
-  box-shadow: 0 0 4px 0 #e2e7ff;
+  box-shadow: 0 0 4px 0 #4b61ce;
 }
 .csseditor[data-theme=light] .editor.offset-editor .offset[data-selected-value="7"] .offset-item[data-offset-index="7"] {
-  box-shadow: 0 0 4px 0 #e2e7ff;
+  box-shadow: 0 0 4px 0 #4b61ce;
 }
 .csseditor[data-theme=light] .editor.offset-editor .offset[data-selected-value="8"] .offset-item[data-offset-index="8"] {
-  box-shadow: 0 0 4px 0 #e2e7ff;
+  box-shadow: 0 0 4px 0 #4b61ce;
 }
 .csseditor[data-theme=light] .editor.offset-editor .offset[data-selected-value="9"] .offset-item[data-offset-index="9"] {
-  box-shadow: 0 0 4px 0 #e2e7ff;
+  box-shadow: 0 0 4px 0 #4b61ce;
 }
 .csseditor[data-theme=light] .editor.offset-editor .offset[data-selected-value="10"] .offset-item[data-offset-index="10"] {
-  box-shadow: 0 0 4px 0 #e2e7ff;
+  box-shadow: 0 0 4px 0 #4b61ce;
 }
 .csseditor[data-theme=light] .editor.offset-editor .offset[data-selected-value="11"] .offset-item[data-offset-index="11"] {
-  box-shadow: 0 0 4px 0 #e2e7ff;
+  box-shadow: 0 0 4px 0 #4b61ce;
 }
 .csseditor[data-theme=light] .editor.offset-editor .offset[data-selected-value="12"] .offset-item[data-offset-index="12"] {
-  box-shadow: 0 0 4px 0 #e2e7ff;
+  box-shadow: 0 0 4px 0 #4b61ce;
 }
 .csseditor[data-theme=light] .editor.offset-editor .offset[data-selected-value="13"] .offset-item[data-offset-index="13"] {
-  box-shadow: 0 0 4px 0 #e2e7ff;
+  box-shadow: 0 0 4px 0 #4b61ce;
 }
 .csseditor[data-theme=light] .editor.offset-editor .offset[data-selected-value="14"] .offset-item[data-offset-index="14"] {
-  box-shadow: 0 0 4px 0 #e2e7ff;
+  box-shadow: 0 0 4px 0 #4b61ce;
 }
 .csseditor[data-theme=light] .editor.offset-editor .offset[data-selected-value="15"] .offset-item[data-offset-index="15"] {
-  box-shadow: 0 0 4px 0 #e2e7ff;
+  box-shadow: 0 0 4px 0 #4b61ce;
 }
 .csseditor[data-theme=light] .editor.offset-editor .offset[data-selected-value="16"] .offset-item[data-offset-index="16"] {
-  box-shadow: 0 0 4px 0 #e2e7ff;
+  box-shadow: 0 0 4px 0 #4b61ce;
 }
 .csseditor[data-theme=light] .editor.offset-editor .offset[data-selected-value="17"] .offset-item[data-offset-index="17"] {
-  box-shadow: 0 0 4px 0 #e2e7ff;
+  box-shadow: 0 0 4px 0 #4b61ce;
 }
 .csseditor[data-theme=light] .editor.offset-editor .offset[data-selected-value="18"] .offset-item[data-offset-index="18"] {
-  box-shadow: 0 0 4px 0 #e2e7ff;
+  box-shadow: 0 0 4px 0 #4b61ce;
 }
 .csseditor[data-theme=light] .editor.offset-editor .offset[data-selected-value="19"] .offset-item[data-offset-index="19"] {
-  box-shadow: 0 0 4px 0 #e2e7ff;
+  box-shadow: 0 0 4px 0 #4b61ce;
 }
 .csseditor[data-theme=light] .editor.offset-editor .offset .offset-item {
   position: absolute;
@@ -9522,7 +9634,7 @@ html, body {
           transform: translateX(-50%) translateY(-50%);
   box-sizing: border-box;
   border: 1px solid #dfdfdf;
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
   border-radius: 100%;
   cursor: pointer;
 }
@@ -9582,6 +9694,68 @@ html, body {
   height: 100%;
   padding: 0px;
   padding-top: 5px;
+}
+.csseditor[data-theme=light] .tool-menu .items .draw-items,
+.csseditor[data-theme=light] .external-tool-menu .items .draw-items {
+  background-color: white;
+}
+.csseditor[data-theme=light] .tool-menu .items .draw-items > *,
+.csseditor[data-theme=light] .external-tool-menu .items .draw-items > * {
+  display: inline-block;
+}
+.csseditor[data-theme=light] .tool-menu .items .draw-items .split,
+.csseditor[data-theme=light] .external-tool-menu .items .draw-items .split {
+  border: 0px;
+  border-right: 1px solid #e7e7e7;
+  height: 20px;
+}
+.csseditor[data-theme=light] .tool-menu .items .draw-items > label,
+.csseditor[data-theme=light] .external-tool-menu .items .draw-items > label {
+  font-size: 9px;
+  color: gray;
+  padding: 5px;
+  text-align: center;
+}
+.csseditor[data-theme=light] .tool-menu .items .draw-items > label:first-child,
+.csseditor[data-theme=light] .external-tool-menu .items .draw-items > label:first-child {
+  margin-top: 5px;
+}
+.csseditor[data-theme=light] .tool-menu .items .draw-items .menu-item,
+.csseditor[data-theme=light] .external-tool-menu .items .draw-items .menu-item {
+  text-align: center;
+  margin-top: 5px;
+  color: gray;
+  width: 30px;
+  height: 48px;
+  background-color: transparent;
+  background-image: none;
+  border: 0px;
+  box-shadow: none;
+  margin-bottom: 5px;
+}
+.csseditor[data-theme=light] .tool-menu .items .draw-items .menu-item.selected .icon,
+.csseditor[data-theme=light] .external-tool-menu .items .draw-items .menu-item.selected .icon {
+  background-color: white;
+}
+.csseditor[data-theme=light] .tool-menu .items .draw-items .menu-item.selected .icon svg path,
+.csseditor[data-theme=light] .external-tool-menu .items .draw-items .menu-item.selected .icon svg path {
+  fill: #4b61ce;
+}
+.csseditor[data-theme=light] .tool-menu .items .draw-items .menu-item[data-no-title=true],
+.csseditor[data-theme=light] .external-tool-menu .items .draw-items .menu-item[data-no-title=true] {
+  height: 30px;
+}
+.csseditor[data-theme=light] .tool-menu .items .draw-items .menu-item[data-no-title=true] .title,
+.csseditor[data-theme=light] .external-tool-menu .items .draw-items .menu-item[data-no-title=true] .title {
+  display: none;
+}
+.csseditor[data-theme=light] .tool-menu .items .draw-items .menu-item .icon,
+.csseditor[data-theme=light] .external-tool-menu .items .draw-items .menu-item .icon {
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+  border-radius: 3px;
+  padding: 3px;
 }
 .csseditor[data-theme=light] .tool-menu .items .split,
 .csseditor[data-theme=light] .external-tool-menu .items .split {
@@ -9665,14 +9839,14 @@ html, body {
 }
 .csseditor[data-theme=light] .tool-menu .items .icon.width,
 .csseditor[data-theme=light] .external-tool-menu .items .icon.width {
-  background-image: linear-gradient(to right, #e2e7ff, #e2e7ff), linear-gradient(to right, #ccc, #ccc);
+  background-image: linear-gradient(to right, #4b61ce, #4b61ce), linear-gradient(to right, #ccc, #ccc);
   background-size: 20px 6px, 20px 6px;
   background-position: 2px 6px, 2px 16px;
   background-repeat: no-repeat;
 }
 .csseditor[data-theme=light] .tool-menu .items .icon.height,
 .csseditor[data-theme=light] .external-tool-menu .items .icon.height {
-  background-image: linear-gradient(to right, #e2e7ff, #e2e7ff), linear-gradient(to right, #ccc, #ccc);
+  background-image: linear-gradient(to right, #4b61ce, #4b61ce), linear-gradient(to right, #ccc, #ccc);
   background-size: 6px 20px, 6px 20px;
   background-position: 4px 2px, 14px 2px;
   background-repeat: no-repeat;
@@ -10144,7 +10318,7 @@ html, body {
 .csseditor[data-theme=light] .selection-tool .selection-tool-item[data-position=rotate3d] .rotate-area .x {
   -webkit-transform: rotateX(90deg) translateZ(0px);
           transform: rotateX(90deg) translateZ(0px);
-  border: 2px solid #e2e7ff;
+  border: 2px solid #4b61ce;
 }
 .csseditor[data-theme=light] .selection-tool .selection-tool-item[data-position=rotate3d] .rotate-area .y {
   -webkit-transform: rotateY(90deg) translateZ(0px);
@@ -10154,7 +10328,7 @@ html, body {
 .csseditor[data-theme=light] .selection-tool .selection-tool-item[data-position=rotate3d] .z {
   -webkit-transform: rotate(0deg) translateZ(0px);
           transform: rotate(0deg) translateZ(0px);
-  border: 2px solid #e2e7ff;
+  border: 2px solid #4b61ce;
   box-shadow: 0 0 4px 0 rgba(255, 255, 255, 0.5);
 }
 .csseditor[data-theme=light] .selection-tool .selection-tool-item[data-position=rotate3d] .z .point {
@@ -10179,7 +10353,7 @@ html, body {
   top: -5px;
   -webkit-transform: translateX(-50%) translateY(-100%);
           transform: translateX(-50%) translateY(-100%);
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
   position: absolute;
   pointer-events: none;
   -webkit-clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
@@ -10196,7 +10370,7 @@ html, body {
   top: 50%;
   -webkit-transform: translateY(-50%);
           transform: translateY(-50%);
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
   position: absolute;
   pointer-events: none;
   border-radius: 50%;
@@ -10209,7 +10383,7 @@ html, body {
   top: 50%;
   -webkit-transform: translateY(-50%);
           transform: translateY(-50%);
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
   position: absolute;
   pointer-events: none;
   border-radius: 50%;
@@ -10222,7 +10396,7 @@ html, body {
   bottom: -5px;
   -webkit-transform: translateX(-50%);
           transform: translateX(-50%);
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
   position: absolute;
   pointer-events: none;
   border-radius: 50%;
@@ -10230,7 +10404,7 @@ html, body {
 .csseditor[data-theme=light] .selection-tool .selection-tool-item[data-position=rotate3d] .translate {
   -webkit-transform: rotate(0deg) translateZ(0px);
           transform: rotate(0deg) translateZ(0px);
-  border: 2px solid #e2e7ff;
+  border: 2px solid #4b61ce;
   box-shadow: 0 0 4px 0 rgba(255, 255, 255, 0.5);
 }
 .csseditor[data-theme=light] .selection-tool .selection-tool-item[data-position=rotate3d] .translate .perspective-handle {
@@ -10368,28 +10542,27 @@ html, body {
   pointer-events: none;
 }
 .csseditor[data-theme=light] .property {
-  padding: 6px 0px;
   border-bottom: 1px solid #f1f1f1;
-  background-color: white;
+  background-color: #f1f1f1;
   color: gray;
   display: none;
 }
 .csseditor[data-theme=light] .property .add-timeline-property {
   display: inline-block;
   margin-right: 5px;
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
   box-shadow: 0 0 0 2px rgba(206, 206, 206, 0.3);
   background-color: rgba(255, 255, 255, 0.7);
   line-height: 10px;
-  margin-top: 5px;
+  margin-top: 6px;
   cursor: pointer;
   -webkit-transform: rotate(45deg);
           transform: rotate(45deg);
 }
 .csseditor[data-theme=light] .property .add-timeline-property:hover {
-  box-shadow: 0 0 0 2px rgba(226, 231, 255, 0.5);
-  background-color: #e2e7ff;
+  box-shadow: 0 0 0 2px rgba(75, 97, 206, 0.5);
+  background-color: #4b61ce;
 }
 .csseditor[data-theme=light] .property.compact {
   padding: 0px;
@@ -10469,7 +10642,7 @@ html, body {
           transform: scale(1.2);
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control button.play svg path {
-  fill: #e2e7ff;
+  fill: #4b61ce;
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control button.pause {
   display: none;
@@ -10493,25 +10666,25 @@ html, body {
   background-color: white;
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=normal] [data-value=normal] svg path {
-  fill: #e2e7ff;
+  fill: #4b61ce;
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate] [data-value=alternate] {
   background-color: white;
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate] [data-value=alternate] svg path {
-  fill: #e2e7ff;
+  fill: #4b61ce;
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=reverse] [data-value=reverse] {
   background-color: white;
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=reverse] [data-value=reverse] svg path {
-  fill: #e2e7ff;
+  fill: #4b61ce;
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate-reverse] [data-value=alternate-reverse] {
   background-color: white;
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate-reverse] [data-value=alternate-reverse] svg path {
-  fill: #e2e7ff;
+  fill: #4b61ce;
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons button {
   width: 20px;
@@ -10522,7 +10695,7 @@ html, body {
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .keyframe-time-control {
   flex: none;
   text-align: right;
-  width: 254px;
+  width: 260px;
 }
 .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .keyframe-time-control .time-manager {
   display: grid;
@@ -10570,7 +10743,7 @@ html, body {
   padding: 2px 0px;
 }
 .csseditor[data-theme=light] .property > .property-title {
-  padding: 0px 6px 4px 6px;
+  padding: 4px 6px 4px 6px;
   height: 30px;
   line-height: 2;
   cursor: pointer;
@@ -10580,7 +10753,8 @@ html, body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   cursor: pointer;
-  border-bottom: 0px;
+  border-bottom: 1px solid #f1f1f1;
+  background-color: #f1f1f1;
 }
 .csseditor[data-theme=light] .property > .property-title label {
   cursor: pointer;
@@ -10602,22 +10776,21 @@ html, body {
   display: none;
   padding: 0px;
   background-color: white;
+  margin-top: -1px;
 }
 .csseditor[data-theme=light] .property > .property-body .property-item {
   padding: 0px;
   font-size: 11px;
-  margin-top: 8px;
+  margin-top: 5px;
+  padding: 2px 0px;
 }
 .csseditor[data-theme=light] .property > .property-body .property-item.animation-property-item {
   display: grid;
   grid-template-columns: 14px 1fr;
   grid-column-gap: 2px;
 }
-.csseditor[data-theme=light] .property > .property-body .property-item.background-image, .csseditor[data-theme=light] .property > .property-body .property-item.box-shadow-item, .csseditor[data-theme=light] .property > .property-body .property-item.filter-property, .csseditor[data-theme=light] .property > .property-body .property-item.clip-path-list, .csseditor[data-theme=light] .property > .property-body .property-item.text-shadow-item, .csseditor[data-theme=light] .property > .property-body .property-item.transform-property, .csseditor[data-theme=light] .property > .property-body .property-item.var-property, .csseditor[data-theme=light] .property > .property-body .property-item.selector-list, .csseditor[data-theme=light] .property > .property-body .property-item.transition-list, .csseditor[data-theme=light] .property > .property-body .property-item.animation-list, .csseditor[data-theme=light] .property > .property-body .property-item.keyframe-list, .csseditor[data-theme=light] .property > .property-body .property-item.svg-property {
-  margin: 0px !important;
-}
 .csseditor[data-theme=light] .property > .property-body .property-item:last-child {
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 .csseditor[data-theme=light] .property > .property-body .property-item:empty {
   margin-bottom: 0px;
@@ -10682,19 +10855,19 @@ html, body {
   background-color: white;
 }
 .csseditor[data-theme=light] .border-item .border-direction button[data-value=all] {
-  border: 3px solid #e2e7ff;
+  border: 3px solid #4b61ce;
 }
 .csseditor[data-theme=light] .border-item .border-direction button[data-value=top] {
-  border-top: 3px solid #e2e7ff;
+  border-top: 3px solid #4b61ce;
 }
 .csseditor[data-theme=light] .border-item .border-direction button[data-value=right] {
-  border-right: 3px solid #e2e7ff;
+  border-right: 3px solid #4b61ce;
 }
 .csseditor[data-theme=light] .border-item .border-direction button[data-value=bottom] {
-  border-bottom: 3px solid #e2e7ff;
+  border-bottom: 3px solid #4b61ce;
 }
 .csseditor[data-theme=light] .border-item .border-direction button[data-value=left] {
-  border-left: 3px solid #e2e7ff;
+  border-left: 3px solid #4b61ce;
 }
 .csseditor[data-theme=light] .border-item .editor-area {
   padding: 5px 0px;
@@ -11044,7 +11217,7 @@ html, body {
 }
 .csseditor[data-theme=light] .transition-list .transition-item .timing {
   border-radius: 3px;
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
   width: 100%;
   height: 30px;
   vertical-align: middle;
@@ -11106,7 +11279,7 @@ html, body {
 }
 .csseditor[data-theme=light] .animation-list .animation-item .timing {
   border-radius: 3px;
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
   width: 100%;
   height: 30px;
   vertical-align: middle;
@@ -11245,7 +11418,7 @@ html, body {
      -moz-user-select: text;
       -ms-user-select: text;
           user-select: text;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.5);
   position: relative;
   border-radius: 5px;
   margin-top: 0px;
@@ -11254,7 +11427,7 @@ html, body {
   content: attr(title);
   position: absolute;
   display: inline-block;
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
   color: white;
   left: 0px;
   top: 0px;
@@ -11277,7 +11450,7 @@ html, body {
   cursor: pointer;
 }
 .csseditor[data-theme=light] .clip-path-list .clippath-item.selected, .csseditor[data-theme=light] .clip-path-list .clippath-item:hover {
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
 }
 .csseditor[data-theme=light] .clip-path-list .clippath-item .title {
   display: grid;
@@ -11357,7 +11530,7 @@ html, body {
   padding: 4px 6px;
   font-weight: bold;
   border-radius: 5px;
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
   color: white;
 }
 .csseditor[data-theme=light] .selector-list .selector-item .title .name span svg path {
@@ -12263,8 +12436,8 @@ html, body {
           transform: translateX(-50%) translateY(-50%);
   border-radius: 100%;
   cursor: pointer;
-  background-color: #e2e7ff;
-  border: 1px solid #e2e7ff;
+  background-color: #4b61ce;
+  border: 1px solid #4b61ce;
   box-sizing: border-box;
 }
 .csseditor[data-theme=light] .cubic-bezier-editor .animation {
@@ -12475,8 +12648,7 @@ html, body {
 }
 .csseditor[data-theme=light] .range-editor .range-editor-type .area {
   display: grid;
-  grid-template-columns: 1fr 50px 40px;
-  grid-column-gap: 3px;
+  grid-template-columns: 1fr 50px 20px;
   font-size: 13px;
 }
 .csseditor[data-theme=light] .range-editor .range-editor-type .area span {
@@ -12500,21 +12672,38 @@ html, body {
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
   background-color: transparent;
-  border-bottom: 1px solid #e2e7ff;
+  border-bottom: 1px solid #f1f1f1;
+  border-left: 1px solid #f1f1f1;
+  border-top: 1px solid #f1f1f1;
+  text-align: left;
+  background-color: #f1f1f1;
+}
+.csseditor[data-theme=light] .range-editor .range-editor-type .area .select-editor {
   text-align: right;
+  background-color: #f1f1f1;
+  position: relative;
 }
 .csseditor[data-theme=light] .range-editor .range-editor-type .area .select-editor select {
+  position: absolute;
+  right: 0px;
+  display: inline-block;
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
   border-left: 0px;
   text-align: center;
+  padding: 0px;
+  width: 24px;
+  color: #9e9e9e;
   box-sizing: border-box;
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
+  border-top-right-radius: 0px;
   background-color: transparent;
-  border-bottom: 1px solid #e2e7ff;
+  border-bottom: 1px solid #f1f1f1;
+  border-top: 1px solid #f1f1f1;
+  border-right: 1px solid #f1f1f1;
 }
 .csseditor[data-theme=light] .range-editor .range-editor-type[data-type=calc] .area {
   height: 100%;
@@ -12730,14 +12919,14 @@ html, body {
 .csseditor[data-theme=light] .css-property-editor .css-property-item > .title {
   grid-template-columns: 1fr 30px;
   background-color: white;
-  color: #e2e7ff;
+  color: #4b61ce;
   border-radius: 3px;
   padding: 3px 0px;
   margin-bottom: 2px;
   font-weight: 900;
 }
 .csseditor[data-theme=light] .css-property-editor .css-property-item > .title svg path {
-  fill: #e2e7ff;
+  fill: #4b61ce;
 }
 .csseditor[data-theme=light] .css-property-editor .css-property-item .value-editor {
   padding: 2px;
@@ -12904,13 +13093,13 @@ html, body {
   grid-template-columns: 1fr 1fr;
 }
 .csseditor[data-theme=light] .border-radius-editor .radius-selector[data-selected-value=all] button[data-value=all] {
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
 }
 .csseditor[data-theme=light] .border-radius-editor .radius-selector[data-selected-value=all] button[data-value=all] svg path {
   fill: white;
 }
 .csseditor[data-theme=light] .border-radius-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] {
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
 }
 .csseditor[data-theme=light] .border-radius-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] svg path {
   fill: white;
@@ -12954,13 +13143,13 @@ html, body {
   margin: 5px 0px;
 }
 .csseditor[data-theme=light] .transform-editor .transform-list .transform-item .title svg path {
-  fill: #e2e7ff;
+  fill: #4b61ce;
 }
 .csseditor[data-theme=light] .transform-editor .transform-list .transform-item .title label {
   font-size: 12px;
   padding: 2px 5px;
   box-sizing: border-box;
-  color: #e2e7ff;
+  color: #4b61ce;
 }
 .csseditor[data-theme=light] .transform-editor .transform-list .transform-item .title label span {
   font-weight: bold;
@@ -13054,7 +13243,7 @@ html, body {
   border-radius: 3px;
   margin-right: 2px;
   vertical-align: middle;
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
   color: white;
 }
 .csseditor[data-theme=light] .filter-editor .filter-list .filter-item .title .filter-menu {
@@ -13111,6 +13300,10 @@ html, body {
   grid-column-gap: 5px;
   text-align: center;
   margin-top: 5px;
+  font-size: 12px;
+}
+.csseditor[data-theme=light] .box-shadow-editor .shadow-item:last-child {
+  margin-bottom: 5px;
 }
 .csseditor[data-theme=light] .box-shadow-editor .shadow-item.desc {
   color: gray;
@@ -13144,7 +13337,7 @@ html, body {
   fill: white;
 }
 .csseditor[data-theme=light] .box-shadow-editor .shadow-item .inset[data-value=true] svg path {
-  fill: #e2e7ff;
+  fill: #4b61ce;
 }
 .csseditor[data-theme=light] .box-shadow-editor .shadow-item .offset-x,
 .csseditor[data-theme=light] .box-shadow-editor .shadow-item .offset-y,
@@ -13283,13 +13476,13 @@ html, body {
   justify-items: center;
 }
 .csseditor[data-theme=light] .perspective-origin-editor .radius-selector[data-selected-value=all] button[data-value=all] {
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
 }
 .csseditor[data-theme=light] .perspective-origin-editor .radius-selector[data-selected-value=all] button[data-value=all] svg path {
   fill: #e7e7e7;
 }
 .csseditor[data-theme=light] .perspective-origin-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] {
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
 }
 .csseditor[data-theme=light] .perspective-origin-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] svg path {
   fill: #e7e7e7;
@@ -13316,13 +13509,13 @@ html, body {
   justify-items: center;
 }
 .csseditor[data-theme=light] .transform-origin-editor .radius-selector[data-selected-value=all] button[data-value=all] {
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
 }
 .csseditor[data-theme=light] .transform-origin-editor .radius-selector[data-selected-value=all] button[data-value=all] svg path {
   fill: #e7e7e7;
 }
 .csseditor[data-theme=light] .transform-origin-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] {
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
 }
 .csseditor[data-theme=light] .transform-origin-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] svg path {
   fill: #e7e7e7;
@@ -13651,7 +13844,7 @@ html, body {
 }
 .csseditor[data-theme=light] .svg-property-editor .svg-property-list .svg-property-item .title .type[data-type=filter] {
   border-radius: 5px;
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
 }
 .csseditor[data-theme=light] .svg-property-editor .svg-property-list .svg-property-item .title .type[data-type=clip-path] {
   border-radius: 5px;
@@ -13708,7 +13901,7 @@ html, body {
   display: grid;
   grid-template-columns: 20px 1fr 30px;
   margin-left: -20px;
-  color: #e2e7ff;
+  color: #4b61ce;
   border-radius: 3px;
   margin: 5px 0px;
 }
@@ -13785,13 +13978,13 @@ html, body {
   grid-template-columns: 1fr 1fr;
 }
 .csseditor[data-theme=light] .direction-editor .radius-selector[data-selected-value=all] button[data-value=all] {
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
 }
 .csseditor[data-theme=light] .direction-editor .radius-selector[data-selected-value=all] button[data-value=all] svg path {
   fill: white;
 }
 .csseditor[data-theme=light] .direction-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] {
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
 }
 .csseditor[data-theme=light] .direction-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] svg path {
   fill: white;
@@ -13859,7 +14052,7 @@ html, body {
   grid-template-columns: repeat(9, 1fr);
 }
 .csseditor[data-theme=light] .list-view-editor .list-view-item.selected {
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
 }
 .csseditor[data-theme=light] .list-view-editor .list-view-item.selected svg path, .csseditor[data-theme=light] .list-view-editor .list-view-item.selected svg circle, .csseditor[data-theme=light] .list-view-editor .list-view-item.selected svg rect {
   fill: white;
@@ -13935,7 +14128,7 @@ html, body {
   fill: white;
 }
 .csseditor[data-theme=light] .select-icon-editor .items > .select-icon-item.selected {
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
   color: white;
 }
 .csseditor[data-theme=light] .select-icon-editor .items > .select-icon-item[data-value=""] {
@@ -14035,7 +14228,7 @@ html, body {
   margin-bottom: 4px;
 }
 .csseditor[data-theme=light] .path-data-editor .segment .command {
-  color: #e2e7ff;
+  color: #4b61ce;
 }
 .csseditor[data-theme=light] .path-data-editor .segment .values {
   display: grid;
@@ -14060,7 +14253,7 @@ html, body {
   text-align: right;
 }
 .csseditor[data-theme=light] .polygon-data-editor .segment .values label {
-  color: #e2e7ff;
+  color: #4b61ce;
 }
 .csseditor[data-theme=light] .polygon-data-editor .segment .values input {
   color: gray;
@@ -14274,12 +14467,12 @@ html, body {
   height: 20px;
 }
 .csseditor[data-theme=light] .popup .box-shadow-property-popup .box .type .select[data-selected-value=inset] button[data-value=inset] {
-  box-shadow: inset 0px 0px 3px 0px #e2e7ff !important;
-  background-color: #e2e7ff !important;
+  box-shadow: inset 0px 0px 3px 0px #4b61ce !important;
+  background-color: #4b61ce !important;
 }
 .csseditor[data-theme=light] .popup .box-shadow-property-popup .box .type .select[data-selected-value=outset] button[data-value=outset] {
-  box-shadow: inset 0px 0px 3px 0px #e2e7ff !important;
-  background-color: #e2e7ff !important;
+  box-shadow: inset 0px 0px 3px 0px #4b61ce !important;
+  background-color: #4b61ce !important;
 }
 .csseditor[data-theme=light] .popup .box-shadow-property-popup .box .type .select button {
   width: 100%;
@@ -14307,7 +14500,7 @@ html, body {
   height: 10px;
   -webkit-transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
           transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
   border-radius: 100%;
 }
 .csseditor[data-theme=light] .popup .animation-property-popup {
@@ -14405,7 +14598,7 @@ html, body {
   height: 10px;
   -webkit-transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
           transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
   border-radius: 100%;
 }
 .csseditor[data-theme=light] .popup .keyframe-popup {
@@ -14509,7 +14702,7 @@ html, body {
 .csseditor[data-theme=light] .popup .clippath-popup .box > .clip-path-editor .clip-area {
   display: inline-block;
   position: absolute;
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
   z-index: 0;
 }
 .csseditor[data-theme=light] .popup .clippath-popup .box > .clip-path-editor .clip-area.inset {
@@ -14645,7 +14838,7 @@ html, body {
   position: relative;
   width: 100%;
   height: 100%;
-  border: 1px solid #e2e7ff;
+  border: 1px solid #4b61ce;
 }
 .csseditor[data-theme=light] .popup .svg-property-editor-popup .box.preview .preview-box {
   position: absolute;
@@ -14720,104 +14913,104 @@ html, body {
   height: 24px;
 }
 .csseditor[data-theme=light] .popup .fill-picker .repeat-list button[value=no-repeat] {
-  background-image: linear-gradient(to top right, #e2e7ff, white);
+  background-image: linear-gradient(to top right, #4b61ce, white);
   background-position: center center;
   background-size: 8px 8px;
   background-repeat: no-repeat;
 }
 .csseditor[data-theme=light] .popup .fill-picker .repeat-list button[value=repeat] {
-  background-image: linear-gradient(to top right, #e2e7ff, white);
+  background-image: linear-gradient(to top right, #4b61ce, white);
   background-position: 10px 10px;
   background-size: 8px 8px;
   background-repeat: repeat;
 }
 .csseditor[data-theme=light] .popup .fill-picker .repeat-list button[value=repeat-x] {
-  background-image: linear-gradient(to top right, #e2e7ff, white);
+  background-image: linear-gradient(to top right, #4b61ce, white);
   background-position: 10px 8px;
   background-size: 8px 8px;
   background-repeat: repeat-x;
 }
 .csseditor[data-theme=light] .popup .fill-picker .repeat-list button[value=repeat-y] {
-  background-image: linear-gradient(to top right, #e2e7ff, white);
+  background-image: linear-gradient(to top right, #4b61ce, white);
   background-position: 8px 10px;
   background-size: 8px 8px;
   background-repeat: repeat-y;
 }
 .csseditor[data-theme=light] .popup .fill-picker .repeat-list button[value=space] {
-  background-image: linear-gradient(to top right, #e2e7ff, white);
+  background-image: linear-gradient(to top right, #4b61ce, white);
   background-position: 10px 10px;
   background-size: 8px 8px;
   background-repeat: space;
 }
 .csseditor[data-theme=light] .popup .fill-picker .repeat-list button[value=round] {
-  background-image: linear-gradient(to top right, #e2e7ff, white);
+  background-image: linear-gradient(to top right, #4b61ce, white);
   background-position: 0px 0px;
   background-size: 8px 8px;
   background-repeat: round;
 }
 .csseditor[data-theme=light] .popup .fill-picker .repeat-list[data-value=repeat] button[value=repeat], .csseditor[data-theme=light] .popup .fill-picker .repeat-list[data-value=no-repeat] button[value=no-repeat], .csseditor[data-theme=light] .popup .fill-picker .repeat-list[data-value=repeat-x] button[value=repeat-x], .csseditor[data-theme=light] .popup .fill-picker .repeat-list[data-value=repeat-y] button[value=repeat-y], .csseditor[data-theme=light] .popup .fill-picker .repeat-list[data-value=space] button[value=space], .csseditor[data-theme=light] .popup .fill-picker .repeat-list[data-value=round] button[value=round] {
-  background-color: #e2e7ff;
-  box-shadow: 0 0 2px 2px #e2e7ff;
+  background-color: #4b61ce;
+  box-shadow: 0 0 2px 2px #4b61ce;
 }
 .csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list {
   text-align: center;
   padding: 2px 5px;
 }
 .csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list[data-value=static-gradient] .picker-tab-item[data-selected-value=static-gradient] {
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list[data-value=static-gradient] .picker-tab-item[data-selected-value=static-gradient] .icon svg path {
-  fill: #e2e7ff;
+  fill: #4b61ce;
 }
 .csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list[data-value=linear-gradient] .picker-tab-item[data-selected-value=linear-gradient] {
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list[data-value=linear-gradient] .picker-tab-item[data-selected-value=linear-gradient] .icon svg path {
-  fill: #e2e7ff;
+  fill: #4b61ce;
 }
 .csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-linear-gradient] .picker-tab-item[data-selected-value=repeating-linear-gradient] {
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-linear-gradient] .picker-tab-item[data-selected-value=repeating-linear-gradient] .icon svg path {
-  fill: #e2e7ff;
+  fill: #4b61ce;
 }
 .csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list[data-value=radial-gradient] .picker-tab-item[data-selected-value=radial-gradient] {
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list[data-value=radial-gradient] .picker-tab-item[data-selected-value=radial-gradient] .icon svg path {
-  fill: #e2e7ff;
+  fill: #4b61ce;
 }
 .csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-radial-gradient] .picker-tab-item[data-selected-value=repeating-radial-gradient] {
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-radial-gradient] .picker-tab-item[data-selected-value=repeating-radial-gradient] .icon svg path {
-  fill: #e2e7ff;
+  fill: #4b61ce;
 }
 .csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list[data-value=conic-gradient] .picker-tab-item[data-selected-value=conic-gradient] {
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list[data-value=conic-gradient] .picker-tab-item[data-selected-value=conic-gradient] .icon svg path {
-  fill: #e2e7ff;
+  fill: #4b61ce;
 }
 .csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-conic-gradient] .picker-tab-item[data-selected-value=repeating-conic-gradient] {
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-conic-gradient] .picker-tab-item[data-selected-value=repeating-conic-gradient] .icon svg path {
-  fill: #e2e7ff;
+  fill: #4b61ce;
 }
 .csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list[data-value=image] .picker-tab-item[data-selected-value=image] {
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list[data-value=image] .picker-tab-item[data-selected-value=image] .icon svg path {
-  fill: #e2e7ff;
+  fill: #4b61ce;
 }
 .csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list[data-is-image-hidden=true] .picker-tab-item[data-selected-value=image] {
   display: none;
@@ -15190,56 +15383,56 @@ html, body {
   padding: 2px 5px;
 }
 .csseditor[data-theme=light] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=static-gradient] .picker-tab-item[data-selected-value=static-gradient] {
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=light] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=static-gradient] .picker-tab-item[data-selected-value=static-gradient] .icon svg path {
   fill: rgba(0, 0, 255, 0.5);
 }
 .csseditor[data-theme=light] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=linear-gradient] .picker-tab-item[data-selected-value=linear-gradient] {
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=light] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=linear-gradient] .picker-tab-item[data-selected-value=linear-gradient] .icon svg path {
   fill: rgba(0, 0, 255, 0.5);
 }
 .csseditor[data-theme=light] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=repeating-linear-gradient] .picker-tab-item[data-selected-value=repeating-linear-gradient] {
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=light] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=repeating-linear-gradient] .picker-tab-item[data-selected-value=repeating-linear-gradient] .icon svg path {
   fill: rgba(0, 0, 255, 0.5);
 }
 .csseditor[data-theme=light] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=radial-gradient] .picker-tab-item[data-selected-value=radial-gradient] {
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=light] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=radial-gradient] .picker-tab-item[data-selected-value=radial-gradient] .icon svg path {
   fill: rgba(0, 0, 255, 0.5);
 }
 .csseditor[data-theme=light] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=repeating-radial-gradient] .picker-tab-item[data-selected-value=repeating-radial-gradient] {
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=light] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=repeating-radial-gradient] .picker-tab-item[data-selected-value=repeating-radial-gradient] .icon svg path {
   fill: rgba(0, 0, 255, 0.5);
 }
 .csseditor[data-theme=light] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=conic-gradient] .picker-tab-item[data-selected-value=conic-gradient] {
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=light] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=conic-gradient] .picker-tab-item[data-selected-value=conic-gradient] .icon svg path {
   fill: rgba(0, 0, 255, 0.5);
 }
 .csseditor[data-theme=light] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=repeating-conic-gradient] .picker-tab-item[data-selected-value=repeating-conic-gradient] {
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=light] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=repeating-conic-gradient] .picker-tab-item[data-selected-value=repeating-conic-gradient] .icon svg path {
   fill: rgba(0, 0, 255, 0.5);
 }
 .csseditor[data-theme=light] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=image] .picker-tab-item[data-selected-value=image] {
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=light] .popup .gradient-picker .picker-tab .picker-tab-list[data-value=image] .picker-tab-item[data-selected-value=image] .icon svg path {
@@ -15450,6 +15643,9 @@ html, body {
   width: 80%;
   height: 80%;
 }
+.csseditor[data-theme=light] .window-background .window.export-window pre {
+  margin: 10px;
+}
 .csseditor[data-theme=light] .path-editor-view {
   display: none;
   position: absolute;
@@ -15472,10 +15668,10 @@ html, body {
   cursor: default;
 }
 .csseditor[data-theme=light] .path-editor-view.modify svg path.object {
-  stroke: #e2e7ff;
+  stroke: #4b61ce;
 }
 .csseditor[data-theme=light] .path-editor-view svg line {
-  stroke: #e2e7ff;
+  stroke: #4b61ce;
   stroke-width: 1;
 }
 .csseditor[data-theme=light] .path-editor-view svg line[data-guide=true] {
@@ -15498,13 +15694,13 @@ html, body {
   stroke: red;
 }
 .csseditor[data-theme=light] .path-editor-view svg circle[data-is-first=true] {
-  fill: #e2e7ff;
-  stroke: #e2e7ff;
+  fill: #4b61ce;
+  stroke: #4b61ce;
   z-index: 1;
 }
 .csseditor[data-theme=light] .path-editor-view svg circle[data-is-second=true] {
-  fill: #0027e2;
-  stroke: #0027e2;
+  fill: #060814;
+  stroke: #060814;
   z-index: 1;
 }
 .csseditor[data-theme=light] .path-editor-view svg circle[data-is-last=true] {
@@ -15519,17 +15715,17 @@ html, body {
 }
 .csseditor[data-theme=light] .path-editor-view svg path.guide {
   fill: transparent;
-  stroke: #e2e7ff;
+  stroke: #4b61ce;
   stroke-width: 1;
 }
 .csseditor[data-theme=light] .path-editor-view svg path.segment {
   fill: transparent;
-  stroke: #e2e7ff;
+  stroke: #4b61ce;
   stroke-width: 1;
 }
 .csseditor[data-theme=light] .path-editor-view svg path.object {
   fill: transparent;
-  stroke: #e2e7ff;
+  stroke: #4b61ce;
   stroke-width: 1;
 }
 .csseditor[data-theme=light] .path-editor-view svg path.split-path {
@@ -15540,11 +15736,11 @@ html, body {
 }
 .csseditor[data-theme=light] .path-editor-view svg path.split-path:hover {
   cursor: copy;
-  stroke: #e2e7ff;
+  stroke: #4b61ce;
 }
 .csseditor[data-theme=light] .path-editor-view svg path.snap-path {
   fill: transparent;
-  stroke: #e2e7ff;
+  stroke: #4b61ce;
 }
 .csseditor[data-theme=light] .polygon-editor-view {
   display: none;
@@ -15563,7 +15759,7 @@ html, body {
   stroke: #dfdfdf;
 }
 .csseditor[data-theme=light] .polygon-editor-view svg line {
-  stroke: #e2e7ff;
+  stroke: #4b61ce;
   stroke-width: 1;
 }
 .csseditor[data-theme=light] .polygon-editor-view svg line[data-guide=true] {
@@ -15580,7 +15776,7 @@ html, body {
   fill: yellow;
 }
 .csseditor[data-theme=light] .polygon-editor-view svg circle.curve {
-  stroke: #e2e7ff;
+  stroke: #4b61ce;
 }
 .csseditor[data-theme=light] .polygon-editor-view svg circle[data-is-first=true] {
   fill: rgba(223, 223, 223, 0.8);
@@ -15595,7 +15791,7 @@ html, body {
 }
 .csseditor[data-theme=light] .polygon-editor-view svg path.guide, .csseditor[data-theme=light] .polygon-editor-view svg polygon.guide {
   fill: transparent;
-  stroke: #e2e7ff;
+  stroke: #4b61ce;
   stroke-width: 1;
 }
 .csseditor[data-theme=light] .polygon-editor-view svg path.segment, .csseditor[data-theme=light] .polygon-editor-view svg polygon.segment {
@@ -15605,7 +15801,7 @@ html, body {
 }
 .csseditor[data-theme=light] .polygon-editor-view svg path.object, .csseditor[data-theme=light] .polygon-editor-view svg polygon.object {
   fill: transparent;
-  stroke: #7c93ff;
+  stroke: #26378d;
   stroke-width: 1;
 }
 .csseditor[data-theme=light] .polygon-editor-view svg path.split-path, .csseditor[data-theme=light] .polygon-editor-view svg polygon.split-path {
@@ -15616,11 +15812,11 @@ html, body {
 }
 .csseditor[data-theme=light] .polygon-editor-view svg path.split-path:hover, .csseditor[data-theme=light] .polygon-editor-view svg polygon.split-path:hover {
   cursor: copy;
-  stroke: #e2e7ff;
+  stroke: #4b61ce;
 }
 .csseditor[data-theme=light] .polygon-editor-view svg path.snap-path, .csseditor[data-theme=light] .polygon-editor-view svg polygon.snap-path {
   fill: transparent;
-  stroke: #e2e7ff;
+  stroke: #4b61ce;
 }
 .csseditor[data-theme=light] .animation-selector {
   display: grid;
@@ -15632,7 +15828,7 @@ html, body {
   display: inline-block;
 }
 .csseditor[data-theme=light] .animation-selector .timeline-object.selected {
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
   color: white;
 }
 .csseditor[data-theme=light] .timeline-value-area {
@@ -15670,10 +15866,10 @@ html, body {
   cursor: pointer;
 }
 .csseditor[data-theme=light] .timeline-value-area .timeline-value-editor .tab-content .css-property-item > .title-2:hover {
-  color: #e2e7ff;
+  color: #4b61ce;
 }
 .csseditor[data-theme=light] .timeline-value-area .timeline-value-editor .tab-content .css-property-item > .title-2:hover svg path {
-  fill: #e2e7ff;
+  fill: #4b61ce;
 }
 .csseditor[data-theme=light] .timeline-value-area .timeline-value-editor .tab-content .css-property-item .background-image-editor .tools button {
   width: 100px;
@@ -15727,7 +15923,7 @@ html, body {
   left: 0px;
   top: 0px;
   bottom: 0px;
-  width: 300px;
+  width: 270px;
   border-right: 1px solid #e7e7e7;
   box-sizing: border-box;
 }
@@ -15751,19 +15947,19 @@ html, body {
   display: flex;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .play-buttons[data-selected-speed="0.5"] [data-value="0.5"] {
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
   color: white;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .play-buttons[data-selected-speed="1"] [data-value="1"] {
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
   color: white;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .play-buttons[data-selected-speed="2"] [data-value="2"] {
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
   color: white;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .play-buttons[data-selected-speed="3"] [data-value="3"] {
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
   color: white;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .play-buttons button {
@@ -15777,7 +15973,7 @@ html, body {
   top: 0px;
   right: 0px;
   bottom: 0px;
-  left: 300px;
+  left: 270px;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view {
   position: absolute;
@@ -15866,7 +16062,7 @@ html, body {
   left: 0px;
   top: 0px;
   bottom: 0px;
-  width: 300px;
+  width: 270px;
   overflow: auto;
   border-right: 1px solid #e7e7e7;
   box-sizing: border-box;
@@ -15946,15 +16142,15 @@ html, body {
           transform: translateX(-5px) translateY(2px) rotate(45deg);
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row.layer-property .tools button.add:hover {
-  box-shadow: 0 0 0 2px rgba(226, 231, 255, 0.5);
-  background-color: #e2e7ff;
+  box-shadow: 0 0 0 2px rgba(75, 97, 206, 0.5);
+  background-color: #4b61ce;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .keyframe-time-grid-view {
   position: absolute;
   top: 0px;
   right: 0px;
   bottom: 0px;
-  left: 300px;
+  left: 270px;
   pointer-events: none;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .keyframe-time-grid-view canvas {
@@ -15970,7 +16166,7 @@ html, body {
   top: 0px;
   right: 0px;
   bottom: 0px;
-  left: 300px;
+  left: 270px;
   overflow: auto;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-container {
@@ -16009,7 +16205,7 @@ html, body {
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe .offset {
   position: absolute;
   top: 50%;
-  border: 1px solid #e2e7ff;
+  border: 1px solid #4b61ce;
   display: inline-block;
   width: 8px;
   height: 8px;
@@ -16020,7 +16216,7 @@ html, body {
   pointer-events: all;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe .offset[data-selected=true] {
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
   box-shadow: 0 0 0 1px #4987f7;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe-shadow {
@@ -16034,7 +16230,7 @@ html, body {
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe-shadow .offset {
   position: absolute;
   top: 50%;
-  border: 1px solid #e2e7ff;
+  border: 1px solid #4b61ce;
   display: inline-block;
   width: 8px;
   height: 8px;
@@ -16045,7 +16241,7 @@ html, body {
   pointer-events: all;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe-shadow .offset[data-selected=true] {
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
   box-shadow: 0 0 0 1px #4987f7;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe-back {
@@ -16059,7 +16255,7 @@ html, body {
   top: 50%;
   display: inline-block;
   height: 1px;
-  background-color: #e2e7ff;
+  background-color: #4b61ce;
   -webkit-transform: translateY(-52%);
           transform: translateY(-52%);
   box-sizing: border-box;

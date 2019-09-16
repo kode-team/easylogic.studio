@@ -1,9 +1,8 @@
-import { DomItem } from "./DomItem";
-import AssetParser from "../parse/AssetParser";
 import { SVGFilter } from "../css-property/SVGFilter";
-import { isString, clone } from "../../util/functions/func";
+import { clone } from "../../util/functions/func";
+import { Item } from "./Item";
 
-export class AssetItem extends DomItem {
+export class AssetItem extends Item {
 
   getDefaultObject(obj = {}) { 
     return super.getDefaultObject({
@@ -15,7 +14,6 @@ export class AssetItem extends DomItem {
       ...obj
     });
   }
-
   // 모든 Assets 은  JSON 포맷만가진다. 따로 문자열화 하지 않는다. 
   // {color, name, variable}
   // {gradient,name,variable}

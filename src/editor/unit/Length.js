@@ -82,6 +82,9 @@ export class Length {
   static deg(value) {
     return new Length(+value, "deg");
   }
+  static rad(value) {
+    return new Length(+value, "rad");
+  }  
   static turn(value) {
     return new Length(+value, "turn");
   }  
@@ -263,6 +266,7 @@ export class Length {
   isPx()      { return this.isUnitType('px'); }
   isEm()      { return this.isUnitType('em'); }
   isDeg()     { return this.isUnitType('deg'); }
+  isRad()     { return this.isUnitType('rad'); }
   isTurn()    { return this.isUnitType('turn'); }
   isSecond()  { return this.isUnitType('s'); }
   isMs ()     { return this.isUnitType('ms'); }
@@ -310,7 +314,7 @@ export class Length {
   }
 
   toJSON() {
-    return { value: this.value, unit: this.unit };
+    return this.toString(); // { value: this.value, unit: this.unit };
   }
 
   rate(value) {
@@ -376,6 +380,8 @@ export class Length {
       return this.clone()
     } else if (this.isTurn()) {
       return Length.deg(this.value * 360)
+    } else if (this.isRad()) {
+      return Length.deg(this.value * (180 / Math.PI))
     }
   }
 

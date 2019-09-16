@@ -19,9 +19,16 @@ import AddStar from "./AddStar";
 import ThemeSwitcher from "./ThemeSwitcher";
 import ExportView from "./ExportView";
 import Manual from "./Manual";
-
+import AddCube from "./AddCube";
+import AddImage from "./AddImage";
+import AddPath from "./AddPath";
+import Save from "./Save";
 
 export default {
+  Save,
+  AddCube,
+  AddImage,
+  AddPath,
   Manual,
   ExportView,
   ThemeSwitcher,

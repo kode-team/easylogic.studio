@@ -42,9 +42,9 @@ export class Item {
       },
       set: (target, key, value) => {
         // Dom 객체가 오면 자동으로 입력 해줌
-        if (value && value.realVal && isFunction(value.realVal)) {
-          value = value.realVal();
-        }
+        // if (value && value.realVal && isFunction(value.realVal)) {
+        //   value = value.realVal();
+        // }
 
         if (this.checkField(key, value)) {
           target.json[key] = value;
@@ -239,11 +239,26 @@ export class Item {
     }
   }
 
+  expectJSON (key) {
+    if (key === 'parent') return false; 
+    if (this.json[key] === '') return false; 
+
+    return true; 
+  }
+
   /**
    * convert to json
+   * 
    */
   toJSON() {
-    return this.json;
+    var a = this.json; 
+
+    var newJSON = {}
+    Object.keys(a).filter(key => this.expectJSON(key)).forEach(key => {
+      newJSON[key] = a[key]; 
+    })
+
+    return newJSON;
   }
 
   get html () {

@@ -43,7 +43,7 @@ export default class BackgroundImageEditor extends UIElement {
 
     template () {
         var labelClass = this.state.hideLabel ? 'hide' : '';
-        return `
+        return /*html*/`
             <div class='background-image-editor' >
                 <div class='label ${labelClass}'>
                     <label>${this.props.title||''}</label>
@@ -91,6 +91,8 @@ export default class BackgroundImageEditor extends UIElement {
             var backgroundType = types[image.type];
             var backgroundTypeName = names[image.type];
 
+            console.log(image);
+
             const imageCSS = `background-image: ${image.toString()}; background-size: cover;`;
             const selectedClass = it.selected ? "selected" : "";
       
@@ -98,7 +100,7 @@ export default class BackgroundImageEditor extends UIElement {
               this.selectedIndex = index;
             }
       
-            return `
+            return /*html*/`
             <div class='fill-item ${selectedClass}' data-index='${index}' ref="fillIndex${index}"  draggable='true' data-fill-type="${backgroundType}" >
                 <div class='preview' data-index="${index}" ref="preview${index}">
                     <div class='mini-view' >

@@ -2,8 +2,6 @@ import { Item } from "./Item";
 import { Length } from "../unit/Length";
 import { round } from "../../util/functions/math";
 
-const zero = Length.px(0)
-
 export class MovableItem extends Item {
 
 
@@ -13,6 +11,18 @@ export class MovableItem extends Item {
 
     get isRelative  (){
         return this.json.position === 'relative'; 
+    }
+
+    get isChild() {
+        if (this.json.parent) {
+            var isParentDrawItem = this.json.parent.is('project') === false; 
+
+            if (isParentDrawItem && this.isAbsolute) {
+                return true; 
+            }
+        }
+
+        return false; 
     }
 
     toCloneObject() {
@@ -44,7 +54,7 @@ export class MovableItem extends Item {
 
     setScreenX(value) {
         var absoluteX = 0;
-        if (this.json.parent && this.isAbsolute) {
+        if (this.isChild) {
             absoluteX = this.json.parent.screenX.value; 
         }
 
@@ -53,7 +63,7 @@ export class MovableItem extends Item {
 
     setScreenX2(value) {
         var absoluteX = 0;
-        if (this.json.parent && this.isAbsolute) {
+        if (this.isChild) {
             absoluteX = this.json.parent.screenX.value; 
         }
 
@@ -62,7 +72,7 @@ export class MovableItem extends Item {
 
     setScreenY2(value) {
         var absoluteY = 0;
-        if (this.json.parent && this.isAbsolute) {
+        if (this.isChild) {
             absoluteY = this.json.parent.screenY.value; 
         }
 
@@ -72,7 +82,7 @@ export class MovableItem extends Item {
 
     setScreenXCenter(value) {
         var absoluteX = 0;
-        if (this.json.parent && this.isAbsolute) {
+        if (this.isChild) {
             absoluteX = this.json.parent.screenX.value; 
         }
 
@@ -83,7 +93,7 @@ export class MovableItem extends Item {
 
     setScreenYMiddle(value) {
         var absoluteY = 0;
-        if (this.json.parent && this.isAbsolute) {
+        if (this.isChild) {
             absoluteY = this.json.parent.screenY.value; 
         }
 
@@ -93,7 +103,7 @@ export class MovableItem extends Item {
 
     setScreenY(value) {
         var absoluteY = 0;
-        if (this.json.parent && this.isAbsolute) {
+        if (this.isChild) {
             absoluteY = this.json.parent.screenY.value; 
         }
         this.json.y.set(value - absoluteY);
@@ -101,7 +111,7 @@ export class MovableItem extends Item {
 
     get screenX () { 
 
-        if (this.json.parent && this.isAbsolute) {
+        if (this.isChild) {
             return Length.px(this.json.parent.screenX.value + this.json.x.value); 
         }
 
@@ -109,7 +119,7 @@ export class MovableItem extends Item {
     }
     get screenY () { 
 
-        if (this.json.parent && this.isAbsolute) {
+        if (this.isChild) {
             return Length.px(this.json.parent.screenY.value + this.json.y.value); 
         }        
         return this.json.y || Length.px(0) 

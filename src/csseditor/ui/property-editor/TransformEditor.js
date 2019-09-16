@@ -71,7 +71,7 @@ export default class TransformEditor extends UIElement {
 
   template() {
     var labelClass = this.state.hideLabel ? 'hide' : '' 
-    return `
+    return /*html*/`
       <div class='transform-editor transform-list'>
           <div class='label ${labelClass}' >
               <label>Transform</label>
@@ -118,8 +118,6 @@ export default class TransformEditor extends UIElement {
       case 'translateZ': 
       case 'translate':      
       case 'translate3d':            
-      case 'skewY':
-      case 'skewX':      
         return { min: -1000, max : 1000, step: 1, units: 'px,%,em'}
       case 'matrix':
       case 'matrix3d':     
@@ -128,6 +126,8 @@ export default class TransformEditor extends UIElement {
       case 'rotateY': 
       case 'rotateZ': 
       case 'rotate':  
+      case 'skewY':
+      case 'skewX':            
         return { min: -360, max : 360, step: 0.1, units: 'deg,turn,rad'}
       case 'perspective':
           return { min: 0, max : 10000, step: 1, units: 'px,%,em'}

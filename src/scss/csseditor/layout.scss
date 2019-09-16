@@ -110,6 +110,10 @@
       transition: $show-timeline-animation;
       pointer-events: all;
       z-index: 10000;
+
+      .managed-tool {
+        background-color: $background-color;
+      }
     }    
 
     .layout-left {
@@ -203,7 +207,8 @@
     left: 0px;
     top: 0px;
     bottom: 0px;
-    right: 50px;
+    // right: 50px;
+    right: 0px;
 
 
     .object-items {
@@ -240,6 +245,7 @@
 
   .draw-items {
     background-color: $background-color;
+    display: none;
 
     .split {
       border: 0px;

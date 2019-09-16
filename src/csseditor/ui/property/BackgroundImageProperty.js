@@ -24,7 +24,7 @@ export default class BackgroundImageProperty extends BaseProperty {
 
   getBody() {
     return `
-      <div class='property-item full background-image' ref='$property'></div>
+      <div class='full background-image' ref='$property'></div>
     `;
   }
 
@@ -39,9 +39,9 @@ export default class BackgroundImageProperty extends BaseProperty {
 
   [LOAD('$property')] () {
     var current = editor.selection.current || {}; 
-    var value = current['background-image']
+    var value = current['background-image'] || ''
 
-    return `<BackgroundImageEditor 
+    return /*html*/`<BackgroundImageEditor 
               ref='$backgroundImageEditor' 
               value='${value}' 
               hide-label="true"

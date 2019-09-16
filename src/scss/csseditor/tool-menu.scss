@@ -66,6 +66,73 @@
     padding: 0px;
     padding-top: 5px;
 
+
+    .draw-items {
+      background-color: $background-color;
+      > * {
+        display: inline-block;
+      }
+  
+      .split {
+        border: 0px;
+        border-right: 1px solid $border-color;
+        // margin: 5px 10px;
+        height: 20px;
+      }
+  
+      > label {
+        font-size: 9px;
+        &:first-child {
+          margin-top: 5px;
+        }
+        color: $font-color;
+        padding: 5px;
+        text-align: center;
+        // display: block;
+      }
+  
+      .menu-item {
+        text-align: center;
+        margin-top: 5px;
+        color: $font-color;
+        width: 30px;
+        height: 48px;
+        background-color: transparent;
+        background-image: none;
+        border:0px;
+        box-shadow: none;
+        margin-bottom: 5px;
+  
+        &.selected {
+          .icon {      
+            background-color: $selected-background-color;
+            svg {
+              path {
+                fill: $selected-color;
+              }
+            }
+          }
+  
+        }
+  
+        &[data-no-title="true"] {
+          height: 30px;
+          .title {
+            display: none;
+          }
+        }
+        .icon {
+          width: 30px;
+          height: 30px;
+          display: inline-block;
+          border-radius: 3px;
+          padding: 3px;
+        }
+      }
+      
+    }
+
+
     .split {
       display: inline-block;
       height: 30px;

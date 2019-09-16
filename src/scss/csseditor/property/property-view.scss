@@ -1,5 +1,5 @@
 .property {
-  padding: 6px 0px;
+  // padding: 6px 0px;
   border-bottom: 1px solid $property-border-color;  
   background-color: $property-background-color;
   color: $property-font-color; 
@@ -9,13 +9,13 @@
   .add-timeline-property {
     display: inline-block;
     margin-right: 5px;
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
     box-shadow: 0 0 0 2px rgba(darken($border-color, 10%), 0.3);
     background-color: rgba(lighten($border-color, 50%), 0.7);
     // vertical-align: middle;
     line-height: 10px;
-    margin-top: 5px;
+    margin-top: 6px;
     cursor: pointer;
     transform: rotate(45deg);
 
@@ -196,7 +196,7 @@
           .keyframe-time-control {
             flex: none; 
             text-align: right;
-            width: 254px;
+            width: 260px;
 
             .time-manager {
               display: grid;
@@ -236,7 +236,7 @@
   }
 
   &.show {
-    background-color: $property-background-color;
+    background-color: $property-show-background-color;
     > .property-body {
       display: block;
       padding: 0px 11px 0px 6px;
@@ -262,7 +262,7 @@
   }
 
   > .property-title {
-    padding: 0px 6px 4px 6px;
+    padding: 4px 6px 4px 6px;
     height: 30px;
     line-height: 2;
     cursor: pointer;
@@ -272,9 +272,10 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     cursor: pointer;
-    border-bottom: 0px;    
+    border-bottom: 1px solid $property-border-color;  
+    background-color: $property-title-color;
 
-
+ 
     label {
       cursor: pointer;
       padding-left: 2px;
@@ -300,12 +301,14 @@
   > .property-body {
     display: none;
     padding: 0px;
-    background-color: $property-background-color;
+    background-color: $property-show-background-color;
+    margin-top:-1px;
 
     .property-item {
       padding: 0px;
       font-size: 11px;
-      margin-top: 8px;
+      margin-top: 5px;
+      padding:2px 0px;
 
       &.animation-property-item {
         display: grid;
@@ -313,23 +316,23 @@
         grid-column-gap: 2px; 
       }
 
-      &.background-image,
-      &.box-shadow-item,
-      &.filter-property,
-      &.clip-path-list,
-      &.text-shadow-item,
-      &.transform-property,
-      &.var-property,
-      &.selector-list,
-      &.transition-list,
-      &.animation-list,
-      &.keyframe-list,
-      &.svg-property {
-        margin: 0px !important;
-      }      
+      // &.background-image,
+      // &.box-shadow-item,
+      // &.filter-property,
+      // &.clip-path-list,
+      // &.text-shadow-item,
+      // &.transform-property,
+      // &.var-property,
+      // &.selector-list,
+      // &.transition-list,
+      // &.animation-list,
+      // &.keyframe-list,
+      // &.svg-property {
+      //   margin: 0px !important;
+      // }      
 
       &:last-child {
-        margin-bottom: 10px;
+        margin-bottom: 5px;
       }
 
       &:empty {

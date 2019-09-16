@@ -93,8 +93,8 @@ export class DomItem extends GroupItem {
       border: {},
       outline: {},
       borderRadius: {},
-      borderImage: new BorderImage(),
-      applyBorderImage: false,
+      // borderImage: new BorderImage(),
+      // applyBorderImage: false,
       animations: [],
       transitions: [],
       // 'keyframe': 'sample 0% --aaa 100px | sample 100% width 200px | sample2 0.5% background-image background-image:linear-gradient(to right, black, yellow 100%)',
@@ -147,8 +147,8 @@ export class DomItem extends GroupItem {
       border: clone(json.border),
       outline: clone(json.outline),
       borderRadius: clone(json.borderRadius),
-      borderImage: json.borderImage.clone(),
-      applyBorderImage: json.applyBorderImage,
+      // borderImage: json.borderImage.clone(),
+      // applyBorderImage: json.applyBorderImage,
       animations: json.animations.map(animation => animation.clone()),
       transitions: json.transitions.map(transition => transition.clone()),
       // 'keyframe': 'sample 0% --aaa 100px | sample 100% width 200px | sample2 0.5% background-image background-image:linear-gradient(to right, black, yellow 100%)',
@@ -335,13 +335,13 @@ export class DomItem extends GroupItem {
     this.json.borderRadius = data;
   }
 
-  setBorderImageOffset(type, data) {
-    this.json.borderImageOffset = data;
-  }  
+  // setBorderImageOffset(type, data) {
+  //   this.json.borderImageOffset = data;
+  // }  
 
-  setBorderImage(data) {
-    this.json.borderImage = data;
-  }    
+  // setBorderImage(data) {
+  //   this.json.borderImage = data;
+  // }    
 
   traverse(item, results, hasLayoutItem) {
     // var parentItemType = item.parent().itemType;
@@ -425,13 +425,13 @@ export class DomItem extends GroupItem {
     return this.toStringPropertyCSS('border-radius')
   }
 
-  toBorderImageCSS() {
+  // toBorderImageCSS() {
 
-    if (!this.json.borderImage) return {} 
-    if (!this.json.applyBorderImage) return {} 
+  //   if (!this.json.borderImage) return {} 
+  //   if (!this.json.applyBorderImage) return {} 
 
-    return this.json.borderImage.toCSS();
-  }
+  //   return this.json.borderImage.toCSS();
+  // }
 
   toKeyCSS (key) {
     if (!this.json[key]) return {} 
@@ -620,7 +620,7 @@ export class DomItem extends GroupItem {
       ...this.toOutlineCSS(),      
       ...this.toTransformCSS(),      
       ...this.toBorderRadiusCSS(),
-      ...this.toBorderImageCSS(),
+      // ...this.toBorderImageCSS(),
       ...this.toBackgroundImageCSS(isExport),
       ...this.toAnimationCSS(),
       ...this.toTransitionCSS()
@@ -638,7 +638,7 @@ export class DomItem extends GroupItem {
       ...this.toOutlineCSS(),
       ...this.toTransformCSS(),
       ...this.toBorderRadiusCSS(),
-      ...this.toBorderImageCSS(),
+      // ...this.toBorderImageCSS(),
       ...this.toAnimationCSS(),
       ...this.toTransitionCSS(),      
       ...this.toBackgroundImageCSS(isExport)

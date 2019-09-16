@@ -7,7 +7,8 @@ export class StaticGradient extends Gradient {
             type: 'static-gradient', 
             static: true, 
             colorsteps: [
-                new ColorStep({color: 'red', percent: 0, index: 0})
+                new ColorStep({color: 'red', percent: 0, index: 0}),
+                new ColorStep({color: 'red', percent: 100, index: 0})
             ]
         }) 
     }

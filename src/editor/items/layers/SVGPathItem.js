@@ -1,7 +1,7 @@
 import PathParser from "../../parse/PathParser";
 import { SVGItem } from "./SVGItem";
-import { Length } from "../../unit/Length";
 import { clone, OBJECT_TO_CLASS } from "../../../util/functions/func";
+import { hasSVGProperty, hasCSSProperty } from "../../util/Resource";
 
 export class SVGPathItem extends SVGItem {
   getDefaultObject(obj = {}) {
@@ -28,11 +28,6 @@ export class SVGPathItem extends SVGItem {
     if(obj.segments) {
       this.json.path.resetSegment(obj.segments);
     }
-
-    // this.setScreenX(obj.x);
-    // this.setScreenY(obj.y);
-    // this.json.width = Length.px(obj.width);
-    // this.json.height = Length.px(obj.height);
   }
 
   updateFunction (currentElement) {
@@ -95,8 +90,8 @@ export class SVGPathItem extends SVGItem {
 
   toAnimationKeyframes (properties) {
 
-    var svgProperties = properties.filter(it => it.property === 'd');
-    var cssProperties = properties.filter(it => it.property !== 'd');
+    var svgProperties = properties.filter(it => hasSVGProperty(it.property));
+    var cssProperties = properties.filter(it => hasCSSProperty(it.property));
 
     return [
       { selector: `[data-id="${this.json.id}"]`, properties: cssProperties  },

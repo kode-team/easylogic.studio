@@ -1,7 +1,7 @@
 
 $pointer-color: rgba(#ececec, 0.8);
 $tool-size: 50px;
-$left-size: 300px;
+$left-size: 270px;
 $left-layer-panel: 70px; 
 $left-page-size: 70px;
 $toggle-left-size: 80px;
@@ -16,8 +16,8 @@ $footer-height: 40px;
 
 
 // common 
-$inner-border-color: #202020;
-$border-color: rgb(44, 44, 44);
+$inner-border-color: #4d4949;
+$border-color: rgb(17, 17, 17);
 $border-color-2: #737373;
 $selected-border-color: #609de2;
 $selected-color: #3a89f0;
@@ -29,7 +29,7 @@ $selected-color: #fc554f;
 $logo-selected-color: #fc554f;
 $logo-selected-font-color: white;
 
-$background-color: #383838; 
+$background-color: rgb(47, 53, 56);; 
 $header-background-color: $background-color;
 $selected-background-color: #535353; 
 $font-color: #ffffff;
@@ -49,7 +49,7 @@ $range-track-height: 1px;
 $range-thumb-top: -4px;
 // $range-thumb-color:  rgb(243, 243, 243);
 $range-thumb-color:  $selected-color;
-$range-track-color:  rgb(32, 32, 32);
+$range-track-color:  rgb(97, 97, 97);
 $range-thumb-border-color: $range-thumb-color;
 
 $input-background-color: rgb(90, 90, 90);
@@ -58,10 +58,12 @@ $input-border-radius: 3px;
 $input-font-color: #ececec;
 
 // property 
-$property-border-color: $inner-border-color;
-$property-background-color: $background-color; 
+$property-title-color:  rgb(43, 43, 43);
+$property-border-color: black;
+$property-background-color: $inner-border-color; 
+$property-show-background-color: rgb(66, 66, 66); 
 $property-font-color: $font-color;
-$property-input-border-color: lighten($border-color, 20%);
+$property-input-border-color: rgb(107, 107, 107);
 
 // list 
 $list-font-color: white;

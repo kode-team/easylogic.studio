@@ -3,6 +3,7 @@ import { EVENT } from "../../../util/UIElement";
 import { CLICK } from "../../../util/Event";
 import { editor } from "../../../editor/editor";
 import { CSS_TO_STRING } from "../../../util/functions/func";
+import ExportManager from "../../../editor/ExportManager";
 
 export default class ExportWindow extends BaseWindow {
 
@@ -23,14 +24,16 @@ export default class ExportWindow extends BaseWindow {
                 </div>
                 <div class="tab-item" data-value="2">
                     <label>CSS</label>
-                </div>
-                
+                </div>   
                 <div class="tab-item" data-value="3">
                     <label>SVG</label>
                 </div>                                     
                 <div class="tab-item" data-value="4">
                     <label>Assets</label>
-                </div>                                     
+                </div>
+                <div class="tab-item" data-value="5">
+                    <label>Animation Player</label>
+                </div>                                                                                  
         
             </div>
             <div class="tab-body" ref="$body">
@@ -44,8 +47,11 @@ export default class ExportWindow extends BaseWindow {
                     <pre ref='$svg'></pre>
                 </div>
                 <div class="tab-content" data-value="4">
-                    <pre ref='$assets'></pre>                
-                </div>                       
+                    <pre ref='$assets'></pre>
+                </div>
+                <div class="tab-content" data-value="5">
+                    <pre ref='$js'></pre>
+                </div>                                       
             </div>
       </div>
         `
@@ -70,6 +76,10 @@ ${project.artboards.map(item => item.html).join('\n')}
         `
 
         this.refs.$html.text(html);
+
+        var obj = ExportManager.generate();
+
+        this.refs.$js.text(obj.js);
     }
 
     makeProjectStyle (item) {
@@ -103,9 +113,6 @@ ${project.artboards.map(item => item.html).join('\n')}
 
 
     [CLICK("$header .tab-item")](e) {
-        this.refs.$tab.attr(
-        "data-selected-value",
-        e.$delegateTarget.attr("data-value")
-        );
+        this.refs.$tab.attr("data-selected-value",e.$delegateTarget.attr("data-value"));
     }
 }

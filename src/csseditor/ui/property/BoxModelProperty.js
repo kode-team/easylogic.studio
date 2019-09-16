@@ -17,10 +17,6 @@ export default class BoxModelProperty extends BaseProperty {
     return "Box Model";
   }
 
-  isHideHeader() {
-    return true; 
-  }
-
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
     this.refreshShowIsNot('artboard');
   }

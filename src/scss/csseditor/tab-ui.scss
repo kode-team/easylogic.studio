@@ -37,12 +37,9 @@ $tab-horizontal-header-right-width: 60px;
         text-align: center;
         position: relative;
         padding: 4px 0px;
-        // width: 31px;
-        // border-top: 2px solid transparent;
-        // border-bottom: 1px solid $border-color;
-        // border-right: 1px solid $border-color;
         box-sizing: border-box;
         border-bottom: 1px solid $tab-selected-border-color;
+        border-top: 1px solid transparent;                
 
         .icon {
           display: none;
@@ -92,6 +89,7 @@ $tab-horizontal-header-right-width: 60px;
           border-left: 1px solid $tab-selected-border-color;
         }
 
+        border-top: 1px solid $selected-color;        
         border-bottom: 1px solid transparent;        
         background-color: $tab-background-color;
         color: $tab-selected-font-color;

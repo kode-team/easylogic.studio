@@ -10,6 +10,7 @@ export default class ExternalToolMenu extends UIElement {
     return /*html*/`
       <div class='external-tool-menu'>
         <div class='items  right'>
+          <Save />
           <ExportView />
           <ExportCodePen />
           <!-- ExportJSFiddle / -->

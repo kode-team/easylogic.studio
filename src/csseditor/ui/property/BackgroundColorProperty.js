@@ -30,11 +30,7 @@ const blend_list = [
 export default class BackgroundColorProperty extends BaseProperty {
 
   getTitle() {
-    return "Background Color";
-  }
-
-  isHideHeader() {
-    return true; 
+    return "Common";
   }
 
   getBody() {

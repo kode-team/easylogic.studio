@@ -89,8 +89,8 @@ export class SVGPolygonItem extends SVGItem {
 
   toAnimationKeyframes (properties) {
 
-    var svgProperties = properties.filter(it => it.property === 'points');
-    var cssProperties = properties.filter(it => it.property !== 'points');
+    var svgProperties = properties.filter(it => hasSVGProperty(it.property));
+    var cssProperties = properties.filter(it => hasCSSProperty(it.property));
 
     return [
       { properties: cssProperties, selector: `[data-id="${this.json.id}"]` },

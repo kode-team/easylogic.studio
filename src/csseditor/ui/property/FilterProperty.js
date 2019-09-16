@@ -39,11 +39,11 @@ export default class FilterProperty extends BaseProperty {
 
 
   getBody() {
-    return `<div class='property-item full filter-property' ref='$body'></div>`;
+    return `<div class='full filter-property' ref='$body'></div>`;
   }
 
   getTools() {
-    return `
+    return /*html*/`
       <select ref="$filterSelect">      
       </select>
       <button type="button" ref="$add" title="add Filter">${icon.add}</button>

@@ -37,6 +37,11 @@
     grid-column-gap: 5px;
     text-align: center;
     margin-top: 5px;
+    font-size: 12px;
+
+    &:last-child {
+      margin-bottom: 5px;
+    }
 
     &.desc {
       color: $font-color;

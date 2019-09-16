@@ -4,7 +4,7 @@ $pointer-color: rgba(#ececec, 0.8);
 $gutter: 8px;
 $tool-size: 50px;
 $top-size: 100px;
-$left-size: 300px;
+$left-size: 270px;
 $left-layer-panel: 70px;
 $left-page-size: 70px;
 $toggle-left-size: 80px;
@@ -24,7 +24,7 @@ $inner-border-color: rgb(241, 241, 241);
 $border-color: rgb(231, 231, 231);
 $border-color-2: #a2a2a2;
 $selected-border-color: #dfdfdf;
-$selected-color: #e2e7ff;
+$selected-color: #4b61ce;
 $background-color: rgb(255, 255, 255); 
 $header-background-color: #004679;
 $selected-background-color: white; 
@@ -43,8 +43,8 @@ $select-font-color: rgba(0, 0, 0, 1);
 
 $range-thumb-width: 10px;
 $range-thumb-height: 10px;
-$range-track-height: 2px;
-$range-thumb-top: -4px;
+$range-track-height: 1px;
+$range-thumb-top: -5px;
 $range-thumb-color:  rgb(255, 255, 255);
 $range-track-color:  #5a8ebb;
 $range-thumb-border-color: $range-track-color;
@@ -56,8 +56,10 @@ $input-border-radius: 2px;
 $input-font-color: $font-color;
 
 // property 
+$property-title-color:  $inner-border-color;
 $property-border-color: $inner-border-color;
-$property-background-color: $background-color; 
+$property-background-color: $inner-border-color; 
+$property-show-background-color: $background-color; 
 $property-font-color: $font-color;
 $property-input-border-color: $selected-color;
 

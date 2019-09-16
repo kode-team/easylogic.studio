@@ -17,10 +17,6 @@ export default class PositionProperty extends BaseProperty {
     }
   }
 
-  isHideHeader() {
-    return true; 
-  }
-
   getTitle() {
     return "Position";
   }

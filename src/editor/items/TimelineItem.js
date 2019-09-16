@@ -33,6 +33,12 @@ export class TimelineItem extends DomItem {
     });
   }
 
+  expectJSON (key) {
+    if (key === 'compiledTimeline') return false; 
+
+    return super.expectJSON(key);
+  }  
+
   setTimelineInfo (obj) {
 
     var timeline = this.getSelectedTimeline();

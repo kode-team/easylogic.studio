@@ -104,6 +104,10 @@ export const editor = new class {
     }
   }
 
+  load (projects = []) {
+    this.projects = projects;
+  }
+
   /**
    * add item
    *

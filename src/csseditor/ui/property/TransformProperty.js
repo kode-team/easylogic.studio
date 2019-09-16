@@ -40,7 +40,7 @@ export default class TransformProperty extends BaseProperty {
   }
 
   getBody() {
-    return `<div class='property-item full transform-property' ref='$body'></div>`;
+    return `<div class='full transform-property' ref='$body'></div>`;
   }
 
   hasKeyframe() {
@@ -52,7 +52,7 @@ export default class TransformProperty extends BaseProperty {
   }
 
   getTools() {
-    return `
+    return /*html*/`
       <select ref="$transformSelect">
       ${transformList.map(transform => {
         return `<option value='${transform}'>${transform}</option>`;
