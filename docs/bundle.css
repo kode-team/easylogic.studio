@@ -1446,13 +1446,16 @@ html, body {
 .csseditor[data-theme=dark] .layout-main.show-footer .layout-middle .layout-left {
   bottom: 299px;
 }
+.csseditor[data-theme=dark] .layout-main.show-footer .layout-middle .layer-right {
+  bottom: 299px;
+}
 .csseditor[data-theme=dark] .layout-main.show-footer .layout-middle .layout-body {
   bottom: 299px;
 }
 .csseditor[data-theme=dark] .layout-main.show-footer .layout-middle .layout-footer {
   height: 299px;
 }
-.csseditor[data-theme=dark] .layout-main.show-footer .layout-middle .layout-footer .managed-tool .property-title .tools {
+.csseditor[data-theme=dark] .layout-main.show-footer .layout-middle .layout-footer .managed-tool > .property-title > .tools {
   display: flex;
 }
 .csseditor[data-theme=dark] .layout-main marker path {
@@ -1513,9 +1516,9 @@ html, body {
 .csseditor[data-theme=dark] .layout-main .layout-middle .layout-footer {
   position: absolute;
   left: 0px;
-  height: 40px;
+  height: 30px;
   bottom: 0px;
-  right: 260px;
+  right: 0px;
   overflow: hidden;
   border-top: 1px solid #111111;
   background-color: #2f3538;
@@ -1530,7 +1533,7 @@ html, body {
   position: absolute;
   left: 0px;
   top: 0px;
-  bottom: 40px;
+  bottom: 30px;
   width: 270px;
   display: inline-block;
   box-sizing: border-box;
@@ -1543,7 +1546,7 @@ html, body {
   position: absolute;
   right: 0px;
   top: 0px;
-  bottom: 0px;
+  bottom: 30px;
   width: 260px;
   display: inline-block;
   z-index: 100;
@@ -1557,7 +1560,7 @@ html, body {
   top: 0px;
   left: 270px;
   right: 260px;
-  bottom: 40px;
+  bottom: 30px;
   position: absolute;
   transition: all 0.15s linear;
 }
@@ -3133,143 +3136,143 @@ html, body {
   flex: none;
   height: 30px;
 }
-.csseditor[data-theme=dark] .property.full.managed-tool .property-title {
-  grid-template-columns: 100px 1fr;
+.csseditor[data-theme=dark] .property.full.managed-tool > .property-title {
+  grid-template-columns: 260px 1fr;
 }
-.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools {
+.csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools {
   text-align: left;
   display: none;
 }
-.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools > * {
+.csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools > * {
   flex: 1 1 auto;
 }
-.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control {
+.csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools .timeline-play-control {
   text-align: left;
   display: grid;
   grid-template-columns: 188px 120px 120px 1fr;
   grid-column-gap: 5px;
 }
-.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .speed-number {
+.csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools .timeline-play-control .speed-number {
   position: relative;
 }
-.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .speed-number:after {
+.csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools .timeline-play-control .speed-number:after {
   position: absolute;
   right: 14px;
   top: 1px;
   content: "X";
   display: inline-block;
 }
-.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control label svg {
+.csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools .timeline-play-control label svg {
   width: 16px;
   height: 16px;
   vertical-align: middle;
 }
-.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control label svg path {
+.csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools .timeline-play-control label svg path {
   fill: #ffffff;
 }
-.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .input {
+.csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools .timeline-play-control .input {
   vertical-align: middle;
 }
-.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .input input {
+.csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools .timeline-play-control .input input {
   vertical-align: middle;
 }
-.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .row {
+.csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools .timeline-play-control .row {
   display: flex;
 }
-.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .row:first-child {
+.csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools .timeline-play-control .row:first-child {
   text-align: center;
 }
-.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control button {
+.csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools .timeline-play-control button {
   display: inline-block;
   vertical-align: middle;
   width: 24px;
   height: 24px;
 }
-.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control button.play, .csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control button.pause {
+.csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools .timeline-play-control button.play, .csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools .timeline-play-control button.pause {
   -webkit-filter: drop-shadow(0px 0px 2px black);
           filter: drop-shadow(0px 0px 2px black);
   -webkit-transform: scale(1.5);
           transform: scale(1.5);
 }
-.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control button:not(.play):not(.pause):hover {
+.csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools .timeline-play-control button:not(.play):not(.pause):hover {
   -webkit-transform: scale(1.2);
           transform: scale(1.2);
 }
-.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control button.play svg path {
+.csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools .timeline-play-control button.play svg path {
   fill: #fc554f;
 }
-.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control button.pause {
+.csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools .timeline-play-control button.pause {
   display: none;
 }
-.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control button.pause svg path {
+.csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools .timeline-play-control button.pause svg path {
   fill: #6677d8;
 }
-.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .play-buttons[data-status=play] .pause {
+.csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools .timeline-play-control .play-buttons[data-status=play] .pause {
   display: inline-block;
 }
-.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .play-buttons[data-status=play] .play {
+.csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools .timeline-play-control .play-buttons[data-status=play] .play {
   display: none;
 }
-.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .play-buttons[data-status=pause] .play {
+.csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools .timeline-play-control .play-buttons[data-status=pause] .play {
   display: inline-block;
 }
-.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons {
+.csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools .timeline-play-control .direction-buttons {
   display: flex;
 }
-.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=normal] [data-value=normal] {
+.csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=normal] [data-value=normal] {
   background-color: #535353;
 }
-.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=normal] [data-value=normal] svg path {
+.csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=normal] [data-value=normal] svg path {
   fill: #fc554f;
 }
-.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate] [data-value=alternate] {
+.csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate] [data-value=alternate] {
   background-color: #535353;
 }
-.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate] [data-value=alternate] svg path {
+.csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate] [data-value=alternate] svg path {
   fill: #fc554f;
 }
-.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=reverse] [data-value=reverse] {
+.csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=reverse] [data-value=reverse] {
   background-color: #535353;
 }
-.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=reverse] [data-value=reverse] svg path {
+.csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=reverse] [data-value=reverse] svg path {
   fill: #fc554f;
 }
-.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate-reverse] [data-value=alternate-reverse] {
+.csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate-reverse] [data-value=alternate-reverse] {
   background-color: #535353;
 }
-.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate-reverse] [data-value=alternate-reverse] svg path {
+.csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate-reverse] [data-value=alternate-reverse] svg path {
   fill: #fc554f;
 }
-.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons button {
+.csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools .timeline-play-control .direction-buttons button {
   width: 20px;
   height: 20px;
   margin-right: 5px;
   border-radius: 3px;
 }
-.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .keyframe-time-control {
+.csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools .keyframe-time-control {
   flex: none;
   text-align: right;
   width: 260px;
 }
-.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .keyframe-time-control .time-manager {
+.csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools .keyframe-time-control .time-manager {
   display: grid;
   grid-template-columns: 110px 65px 84px 10px;
   grid-column-gap: 0px;
 }
-.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .keyframe-time-control .time-manager label {
+.csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools .keyframe-time-control .time-manager label {
   padding-right: 0px;
 }
-.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .keyframe-time-control .time-manager label svg {
+.csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools .keyframe-time-control .time-manager label svg {
   width: 16px;
   height: 16px;
 }
-.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .keyframe-time-control svg {
+.csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools .keyframe-time-control svg {
   vertical-align: middle;
 }
-.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .keyframe-time-control svg path {
+.csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools .keyframe-time-control svg path {
   fill: #ffffff;
 }
-.csseditor[data-theme=dark] .property.full.managed-tool .property-title .tools .keyframe-time-control input[type=text] {
+.csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools .keyframe-time-control input[type=text] {
   width: 80px;
 }
 .csseditor[data-theme=dark] .property.full .property-body {
@@ -4132,14 +4135,15 @@ html, body {
   color: #999;
   padding: 5px 7px !important;
   margin-bottom: 0px !important;
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  grid-column-gap: 4px;
 }
 .csseditor[data-theme=dark] .artboard-list .artboard-item .preview {
-  height: 110px;
-  background-color: #111111;
+  background-color: #2f3538;
   border-radius: 3px;
   border: 1px solid #111111;
   cursor: pointer;
-  display: none;
 }
 .csseditor[data-theme=dark] .artboard-list .artboard-item .detail {
   display: grid;
@@ -4198,6 +4202,9 @@ html, body {
   display: inline-block;
   width: 20px;
   height: 20px;
+  background-color: #2f3538;
+  border: 1px solid #111111;
+  border-radius: 3px;
 }
 .csseditor[data-theme=dark] .layer-list .layer-item .detail span.icon svg {
   width: 100%;
@@ -4889,6 +4896,7 @@ html, body {
   display: inline-block;
   opacity: 0;
   pointer-events: all;
+  cursor: pointer;
 }
 .csseditor[data-theme=dark] .image-assets-property .image-list[data-view-mode=grid] .add-image-item button {
   position: absolute;
@@ -4897,6 +4905,17 @@ html, body {
   width: 100%;
   height: 100%;
   pointer-events: none;
+  cursor: pointer;
+}
+.csseditor[data-theme=dark] .image-assets-property .image-list[data-view-mode=grid] .add-image-item svg {
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  cursor: pointer;
 }
 .csseditor[data-theme=dark] .image-assets-property .image-list[data-view-mode=grid] .add-image-item svg path {
   fill: #ffffff;
@@ -4956,6 +4975,44 @@ html, body {
 .csseditor[data-theme=dark] .property.image-assets-property {
   padding-left: 0px !important;
   padding-right: 0px !important;
+}
+.csseditor[data-theme=dark] .timeline-animation-list {
+  height: 100%;
+  overflow: auto;
+  padding: 0px;
+  margin: 0px !important;
+}
+.csseditor[data-theme=dark] .timeline-animation-list .timeline-animation-item {
+  color: #999;
+  padding: 5px 7px !important;
+  margin-bottom: 0px !important;
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  grid-column-gap: 4px;
+}
+.csseditor[data-theme=dark] .timeline-animation-list .timeline-animation-item .preview {
+  background-color: #2f3538;
+  border-radius: 3px;
+  border: 1px solid #111111;
+  cursor: pointer;
+}
+.csseditor[data-theme=dark] .timeline-animation-list .timeline-animation-item .detail {
+  display: grid;
+  grid-template-columns: 1fr 60px;
+  grid-column-gap: 3px;
+}
+.csseditor[data-theme=dark] .timeline-animation-list .timeline-animation-item .detail label {
+  padding: 2px 0px;
+}
+.csseditor[data-theme=dark] .timeline-animation-list .timeline-animation-item .detail .tools {
+  text-align: right;
+}
+.csseditor[data-theme=dark] .timeline-animation-list .timeline-animation-item.selected {
+  background-color: #535353;
+  color: white;
+}
+.csseditor[data-theme=dark] .timeline-animation-list .timeline-animation-item.selected svg path {
+  fill: white;
 }
 .csseditor[data-theme=dark] .cubic-bezier-editor {
   width: 228px;
@@ -5520,9 +5577,6 @@ html, body {
   display: grid;
   grid-template-columns: 1fr;
   font-size: 12px;
-}
-.csseditor[data-theme=dark] .background-image-editor .fill-list:not(:empty) {
-  padding-bottom: 10px;
 }
 .csseditor[data-theme=dark] .background-image-editor .fill-list .fill-item {
   display: grid;
@@ -8457,9 +8511,27 @@ html, body {
 .csseditor[data-theme=dark] .timeline-value-area .timeline-value-editor .tab-content {
   padding-top: 10px;
 }
+.csseditor[data-theme=dark] .timeline-animation-area {
+  position: absolute;
+  width: 270px;
+  left: 0px;
+  top: 0px;
+  bottom: 0px;
+  background-color: #2f3538;
+  font-size: 12px;
+  box-sizing: border-box;
+  border-right: 1px solid #111111;
+  border-top: 1px solid #111111;
+}
+.csseditor[data-theme=dark] .timeline-animation-area .property-title {
+  height: 40px !important;
+}
+.csseditor[data-theme=dark] .timeline-animation-area .property-body {
+  padding: 0px !important;
+}
 .csseditor[data-theme=dark] .timeline-area {
   position: absolute;
-  left: 0px;
+  left: 270px;
   right: 260px;
   top: 0px;
   bottom: 0px;
@@ -8470,7 +8542,7 @@ html, body {
   position: absolute;
   left: 0px;
   top: 0px;
-  height: 70px;
+  height: 40px;
   right: 0px;
   box-sizing: border-box;
   border-top: 1px solid #111111;
@@ -8482,10 +8554,11 @@ html, body {
   bottom: 0px;
   width: 270px;
   border-right: 1px solid #111111;
+  border-bottom: 1px solid #111111;
   box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar {
-  padding: 10px 10px;
+  padding: 10px 5px;
   box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .row {
@@ -8602,14 +8675,14 @@ html, body {
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view canvas {
   position: absolute;
   left: 0px;
-  top: 50%;
+  top: 15px;
   width: 100%;
-  height: 35px;
+  height: 25px;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body {
   position: absolute;
   left: 0px;
-  top: 70px;
+  top: 40px;
   bottom: 0px;
   right: 0px;
   box-sizing: border-box;
@@ -8637,6 +8710,7 @@ html, body {
   grid-template-columns: 20px 1fr 50px;
   grid-column-gap: 2px;
   box-sizing: border-box;
+  border-bottom: 1px solid #111111;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row[data-selected=true] {
   background-color: #353535;
@@ -8817,6 +8891,27 @@ html, body {
           transform: translateY(-52%);
   box-sizing: border-box;
 }
+.csseditor[data-theme=dark] .keyframe-time-control .time-manager {
+  display: grid;
+  grid-template-columns: 110px 65px 84px 10px;
+  grid-column-gap: 0px;
+}
+.csseditor[data-theme=dark] .keyframe-time-control .time-manager label {
+  padding-right: 0px;
+}
+.csseditor[data-theme=dark] .keyframe-time-control .time-manager label svg {
+  width: 16px;
+  height: 16px;
+}
+.csseditor[data-theme=dark] .keyframe-time-control svg {
+  vertical-align: middle;
+}
+.csseditor[data-theme=dark] .keyframe-time-control svg path {
+  fill: #ffffff;
+}
+.csseditor[data-theme=dark] .keyframe-time-control input[type=text] {
+  width: 80px;
+}
 .csseditor[data-theme=light] input[type=text],
 .csseditor[data-theme=light] input[type=number],
 .csseditor[data-theme=light] input[type=email],
@@ -8895,13 +8990,16 @@ html, body {
 .csseditor[data-theme=light] .layout-main.show-footer .layout-middle .layout-left {
   bottom: 299px;
 }
+.csseditor[data-theme=light] .layout-main.show-footer .layout-middle .layer-right {
+  bottom: 299px;
+}
 .csseditor[data-theme=light] .layout-main.show-footer .layout-middle .layout-body {
   bottom: 299px;
 }
 .csseditor[data-theme=light] .layout-main.show-footer .layout-middle .layout-footer {
   height: 299px;
 }
-.csseditor[data-theme=light] .layout-main.show-footer .layout-middle .layout-footer .managed-tool .property-title .tools {
+.csseditor[data-theme=light] .layout-main.show-footer .layout-middle .layout-footer .managed-tool > .property-title > .tools {
   display: flex;
 }
 .csseditor[data-theme=light] .layout-main marker path {
@@ -8962,9 +9060,9 @@ html, body {
 .csseditor[data-theme=light] .layout-main .layout-middle .layout-footer {
   position: absolute;
   left: 0px;
-  height: 40px;
+  height: 30px;
   bottom: 0px;
-  right: 260px;
+  right: 0px;
   overflow: hidden;
   border-top: 1px solid #e7e7e7;
   background-color: white;
@@ -8979,7 +9077,7 @@ html, body {
   position: absolute;
   left: 0px;
   top: 0px;
-  bottom: 40px;
+  bottom: 30px;
   width: 270px;
   display: inline-block;
   box-sizing: border-box;
@@ -8992,7 +9090,7 @@ html, body {
   position: absolute;
   right: 0px;
   top: 0px;
-  bottom: 0px;
+  bottom: 30px;
   width: 260px;
   display: inline-block;
   z-index: 100;
@@ -9006,7 +9104,7 @@ html, body {
   top: 0px;
   left: 270px;
   right: 260px;
-  bottom: 40px;
+  bottom: 30px;
   position: absolute;
   transition: all 0.15s linear;
 }
@@ -10582,143 +10680,143 @@ html, body {
   flex: none;
   height: 30px;
 }
-.csseditor[data-theme=light] .property.full.managed-tool .property-title {
-  grid-template-columns: 100px 1fr;
+.csseditor[data-theme=light] .property.full.managed-tool > .property-title {
+  grid-template-columns: 260px 1fr;
 }
-.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools {
+.csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools {
   text-align: left;
   display: none;
 }
-.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools > * {
+.csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools > * {
   flex: 1 1 auto;
 }
-.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control {
+.csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control {
   text-align: left;
   display: grid;
   grid-template-columns: 188px 120px 120px 1fr;
   grid-column-gap: 5px;
 }
-.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .speed-number {
+.csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control .speed-number {
   position: relative;
 }
-.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .speed-number:after {
+.csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control .speed-number:after {
   position: absolute;
   right: 14px;
   top: 1px;
   content: "X";
   display: inline-block;
 }
-.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control label svg {
+.csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control label svg {
   width: 16px;
   height: 16px;
   vertical-align: middle;
 }
-.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control label svg path {
+.csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control label svg path {
   fill: gray;
 }
-.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .input {
+.csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control .input {
   vertical-align: middle;
 }
-.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .input input {
+.csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control .input input {
   vertical-align: middle;
 }
-.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .row {
+.csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control .row {
   display: flex;
 }
-.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .row:first-child {
+.csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control .row:first-child {
   text-align: center;
 }
-.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control button {
+.csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control button {
   display: inline-block;
   vertical-align: middle;
   width: 24px;
   height: 24px;
 }
-.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control button.play, .csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control button.pause {
+.csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control button.play, .csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control button.pause {
   -webkit-filter: drop-shadow(0px 0px 2px black);
           filter: drop-shadow(0px 0px 2px black);
   -webkit-transform: scale(1.5);
           transform: scale(1.5);
 }
-.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control button:not(.play):not(.pause):hover {
+.csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control button:not(.play):not(.pause):hover {
   -webkit-transform: scale(1.2);
           transform: scale(1.2);
 }
-.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control button.play svg path {
+.csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control button.play svg path {
   fill: #4b61ce;
 }
-.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control button.pause {
+.csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control button.pause {
   display: none;
 }
-.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control button.pause svg path {
+.csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control button.pause svg path {
   fill: #6677d8;
 }
-.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .play-buttons[data-status=play] .pause {
+.csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control .play-buttons[data-status=play] .pause {
   display: inline-block;
 }
-.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .play-buttons[data-status=play] .play {
+.csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control .play-buttons[data-status=play] .play {
   display: none;
 }
-.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .play-buttons[data-status=pause] .play {
+.csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control .play-buttons[data-status=pause] .play {
   display: inline-block;
 }
-.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons {
+.csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control .direction-buttons {
   display: flex;
 }
-.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=normal] [data-value=normal] {
+.csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=normal] [data-value=normal] {
   background-color: white;
 }
-.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=normal] [data-value=normal] svg path {
+.csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=normal] [data-value=normal] svg path {
   fill: #4b61ce;
 }
-.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate] [data-value=alternate] {
+.csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate] [data-value=alternate] {
   background-color: white;
 }
-.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate] [data-value=alternate] svg path {
+.csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate] [data-value=alternate] svg path {
   fill: #4b61ce;
 }
-.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=reverse] [data-value=reverse] {
+.csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=reverse] [data-value=reverse] {
   background-color: white;
 }
-.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=reverse] [data-value=reverse] svg path {
+.csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=reverse] [data-value=reverse] svg path {
   fill: #4b61ce;
 }
-.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate-reverse] [data-value=alternate-reverse] {
+.csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate-reverse] [data-value=alternate-reverse] {
   background-color: white;
 }
-.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate-reverse] [data-value=alternate-reverse] svg path {
+.csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate-reverse] [data-value=alternate-reverse] svg path {
   fill: #4b61ce;
 }
-.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .timeline-play-control .direction-buttons button {
+.csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control .direction-buttons button {
   width: 20px;
   height: 20px;
   margin-right: 5px;
   border-radius: 3px;
 }
-.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .keyframe-time-control {
+.csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .keyframe-time-control {
   flex: none;
   text-align: right;
   width: 260px;
 }
-.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .keyframe-time-control .time-manager {
+.csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .keyframe-time-control .time-manager {
   display: grid;
   grid-template-columns: 110px 65px 84px 10px;
   grid-column-gap: 0px;
 }
-.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .keyframe-time-control .time-manager label {
+.csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .keyframe-time-control .time-manager label {
   padding-right: 0px;
 }
-.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .keyframe-time-control .time-manager label svg {
+.csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .keyframe-time-control .time-manager label svg {
   width: 16px;
   height: 16px;
 }
-.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .keyframe-time-control svg {
+.csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .keyframe-time-control svg {
   vertical-align: middle;
 }
-.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .keyframe-time-control svg path {
+.csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .keyframe-time-control svg path {
   fill: gray;
 }
-.csseditor[data-theme=light] .property.full.managed-tool .property-title .tools .keyframe-time-control input[type=text] {
+.csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .keyframe-time-control input[type=text] {
   width: 80px;
 }
 .csseditor[data-theme=light] .property.full .property-body {
@@ -11581,14 +11679,15 @@ html, body {
   color: #999;
   padding: 5px 7px !important;
   margin-bottom: 0px !important;
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  grid-column-gap: 4px;
 }
 .csseditor[data-theme=light] .artboard-list .artboard-item .preview {
-  height: 110px;
-  background-color: #e7e7e7;
+  background-color: white;
   border-radius: 3px;
   border: 1px solid #e7e7e7;
   cursor: pointer;
-  display: none;
 }
 .csseditor[data-theme=light] .artboard-list .artboard-item .detail {
   display: grid;
@@ -11647,6 +11746,9 @@ html, body {
   display: inline-block;
   width: 20px;
   height: 20px;
+  background-color: white;
+  border: 1px solid #e7e7e7;
+  border-radius: 3px;
 }
 .csseditor[data-theme=light] .layer-list .layer-item .detail span.icon svg {
   width: 100%;
@@ -12338,6 +12440,7 @@ html, body {
   display: inline-block;
   opacity: 0;
   pointer-events: all;
+  cursor: pointer;
 }
 .csseditor[data-theme=light] .image-assets-property .image-list[data-view-mode=grid] .add-image-item button {
   position: absolute;
@@ -12346,6 +12449,17 @@ html, body {
   width: 100%;
   height: 100%;
   pointer-events: none;
+  cursor: pointer;
+}
+.csseditor[data-theme=light] .image-assets-property .image-list[data-view-mode=grid] .add-image-item svg {
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  cursor: pointer;
 }
 .csseditor[data-theme=light] .image-assets-property .image-list[data-view-mode=grid] .add-image-item svg path {
   fill: gray;
@@ -12405,6 +12519,44 @@ html, body {
 .csseditor[data-theme=light] .property.image-assets-property {
   padding-left: 0px !important;
   padding-right: 0px !important;
+}
+.csseditor[data-theme=light] .timeline-animation-list {
+  height: 100%;
+  overflow: auto;
+  padding: 0px;
+  margin: 0px !important;
+}
+.csseditor[data-theme=light] .timeline-animation-list .timeline-animation-item {
+  color: #999;
+  padding: 5px 7px !important;
+  margin-bottom: 0px !important;
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  grid-column-gap: 4px;
+}
+.csseditor[data-theme=light] .timeline-animation-list .timeline-animation-item .preview {
+  background-color: white;
+  border-radius: 3px;
+  border: 1px solid #e7e7e7;
+  cursor: pointer;
+}
+.csseditor[data-theme=light] .timeline-animation-list .timeline-animation-item .detail {
+  display: grid;
+  grid-template-columns: 1fr 60px;
+  grid-column-gap: 3px;
+}
+.csseditor[data-theme=light] .timeline-animation-list .timeline-animation-item .detail label {
+  padding: 2px 0px;
+}
+.csseditor[data-theme=light] .timeline-animation-list .timeline-animation-item .detail .tools {
+  text-align: right;
+}
+.csseditor[data-theme=light] .timeline-animation-list .timeline-animation-item.selected {
+  background-color: #4a89b6;
+  color: white;
+}
+.csseditor[data-theme=light] .timeline-animation-list .timeline-animation-item.selected svg path {
+  fill: white;
 }
 .csseditor[data-theme=light] .cubic-bezier-editor {
   width: 228px;
@@ -12969,9 +13121,6 @@ html, body {
   display: grid;
   grid-template-columns: 1fr;
   font-size: 12px;
-}
-.csseditor[data-theme=light] .background-image-editor .fill-list:not(:empty) {
-  padding-bottom: 10px;
 }
 .csseditor[data-theme=light] .background-image-editor .fill-list .fill-item {
   display: grid;
@@ -15906,9 +16055,27 @@ html, body {
 .csseditor[data-theme=light] .timeline-value-area .timeline-value-editor .tab-content {
   padding-top: 10px;
 }
+.csseditor[data-theme=light] .timeline-animation-area {
+  position: absolute;
+  width: 270px;
+  left: 0px;
+  top: 0px;
+  bottom: 0px;
+  background-color: white;
+  font-size: 12px;
+  box-sizing: border-box;
+  border-right: 1px solid #e7e7e7;
+  border-top: 1px solid #e7e7e7;
+}
+.csseditor[data-theme=light] .timeline-animation-area .property-title {
+  height: 40px !important;
+}
+.csseditor[data-theme=light] .timeline-animation-area .property-body {
+  padding: 0px !important;
+}
 .csseditor[data-theme=light] .timeline-area {
   position: absolute;
-  left: 0px;
+  left: 270px;
   right: 260px;
   top: 0px;
   bottom: 0px;
@@ -15919,7 +16086,7 @@ html, body {
   position: absolute;
   left: 0px;
   top: 0px;
-  height: 70px;
+  height: 40px;
   right: 0px;
   box-sizing: border-box;
   border-top: 1px solid #e7e7e7;
@@ -15931,10 +16098,11 @@ html, body {
   bottom: 0px;
   width: 270px;
   border-right: 1px solid #e7e7e7;
+  border-bottom: 1px solid #e7e7e7;
   box-sizing: border-box;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar {
-  padding: 10px 10px;
+  padding: 10px 5px;
   box-sizing: border-box;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .row {
@@ -16051,14 +16219,14 @@ html, body {
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view canvas {
   position: absolute;
   left: 0px;
-  top: 50%;
+  top: 15px;
   width: 100%;
-  height: 35px;
+  height: 25px;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body {
   position: absolute;
   left: 0px;
-  top: 70px;
+  top: 40px;
   bottom: 0px;
   right: 0px;
   box-sizing: border-box;
@@ -16086,6 +16254,7 @@ html, body {
   grid-template-columns: 20px 1fr 50px;
   grid-column-gap: 2px;
   box-sizing: border-box;
+  border-bottom: 1px solid #e7e7e7;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row[data-selected=true] {
   background-color: #eff4ff;
@@ -16265,4 +16434,25 @@ html, body {
   -webkit-transform: translateY(-52%);
           transform: translateY(-52%);
   box-sizing: border-box;
+}
+.csseditor[data-theme=light] .keyframe-time-control .time-manager {
+  display: grid;
+  grid-template-columns: 110px 65px 84px 10px;
+  grid-column-gap: 0px;
+}
+.csseditor[data-theme=light] .keyframe-time-control .time-manager label {
+  padding-right: 0px;
+}
+.csseditor[data-theme=light] .keyframe-time-control .time-manager label svg {
+  width: 16px;
+  height: 16px;
+}
+.csseditor[data-theme=light] .keyframe-time-control svg {
+  vertical-align: middle;
+}
+.csseditor[data-theme=light] .keyframe-time-control svg path {
+  fill: gray;
+}
+.csseditor[data-theme=light] .keyframe-time-control input[type=text] {
+  width: 80px;
 }

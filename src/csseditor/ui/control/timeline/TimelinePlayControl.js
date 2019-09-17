@@ -25,9 +25,9 @@ export default class TimelinePlayControl extends UIElement {
                     </div>
                 </div>                
                 <div class='row'>            
-                    <label>${icon.replay} Repeat</label>
+                    <label>${icon.replay} <span ref='$repeatStatus'>Repeat</span></label>
                     <div class='input' >
-                        <input type='number' min="1" max="100" step="1" ref='$iteration' value='${this.state.iterationCount}' />
+                        <input type='number' min="0" max="100" step="1" ref='$iteration' value='${this.state.iterationCount}' />
                     </div> 
                 </div>
                 <div class='row'>
@@ -64,6 +64,7 @@ export default class TimelinePlayControl extends UIElement {
             direction
         }
     }
+
 
     getSelectedTimeline () {
 
@@ -154,12 +155,20 @@ export default class TimelinePlayControl extends UIElement {
         this.updateData({
             iterationCount: +this.refs.$iteration.value
         })
+        this.bindData('$repeatStatus');
     }
 
     [INPUT('$speed')] (e) {
         this.updateData({
             speed: +this.refs.$speed.value 
         })
+    }    
+
+
+    [BIND('$repeatStatus')] () {
+        return {
+            text: this.state.iterationCount === 0 ? 'Infinite': 'Repeat'
+        }
     }    
 
     [BIND('$playButtons')] () {

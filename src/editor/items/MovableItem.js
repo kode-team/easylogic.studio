@@ -169,9 +169,6 @@ export class MovableItem extends Item {
 
 
     checkInArea (area) {
-
-        if (area.width.value === 0) {return false; }
-        if (area.height.value === 0) {return false; } 
         if (area.x2.value < this.screenX.value) { return false; }
         if (area.y2.value < this.screenY.value) { return false; }
         if (area.x.value > this.screenX2.value) { return false; }

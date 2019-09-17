@@ -13,6 +13,10 @@
       .layout-left {
         bottom: $timeline-size - 1px;
       }
+
+      .layer-right {
+        bottom: $timeline-size - 1px;
+      }
   
       .layout-body {
         bottom: $timeline-size - 1px;
@@ -21,8 +25,8 @@
         height: $timeline-size - 1px;
 
         .managed-tool {
-          .property-title {
-            .tools {
+          > .property-title {
+            > .tools {
               display: flex; 
             }
           }
@@ -103,7 +107,7 @@
       left: 0px;
       height: $footer-height;
       bottom: 0px;
-      right: $right-size;
+      right: 0px;
       overflow: hidden;
       border-top: 1px solid $border-color;
       background-color: $background-color;
@@ -135,7 +139,7 @@
       position: absolute;
       right: 0px;
       top: 0px;
-      bottom: 0px; 
+      bottom: $footer-height; 
       width: $right-size;
       display: inline-block;
       z-index: 100;

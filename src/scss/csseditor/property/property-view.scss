@@ -46,8 +46,8 @@
     }
 
     &.managed-tool {
-      .property-title {
-        grid-template-columns: 100px 1fr;
+      > .property-title {
+        grid-template-columns: ($left-size - 10px) 1fr;
 
         .tools {
 

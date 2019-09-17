@@ -1,5 +1,5 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, CLICK, KEYUP, KEY, PREVENT, STOP, FOCUSOUT, DOUBLECLICK, VDOM } from "../../../util/Event";
+import { LOAD, CLICK, KEYUP, KEY, PREVENT, STOP, FOCUSOUT, DOUBLECLICK, VDOM, KEYDOWN } from "../../../util/Event";
 import { editor } from "../../../editor/editor";
 import icon from "../icon/icon";
 import { Project } from "../../../editor/items/Project";
@@ -28,7 +28,7 @@ export default class ProjectProperty extends BaseProperty {
 
   getBody() {
     return `
-      <div class="property-item project-list" ref="$projectList"></div>
+      <div class="project-list" ref="$projectList"></div>
     `;
   }
 
@@ -38,7 +38,7 @@ export default class ProjectProperty extends BaseProperty {
 
     return projects.map( (project, index) => {
       var selected = project === editor.selection.currentProject ? 'selected' : '';
-      return `
+      return /*html*/`
         <div class='project-item ${selected}'>
           <div class='detail'>
             <label data-index='${index}'>${project.name || 'New Project'}</label>
@@ -68,8 +68,9 @@ export default class ProjectProperty extends BaseProperty {
     });    
   }
 
-  [KEYUP('$projectList .project-item label') + KEY('Enter') + PREVENT + STOP] (e) {
+  [KEYDOWN('$projectList .project-item label') + KEY('Enter') + PREVENT + STOP] (e) {
     this.modifyDoneInputEditing(e.$delegateTarget);
+    return false;
   }
 
   [FOCUSOUT('$projectList .project-item label') + PREVENT  + STOP ] (e) {
@@ -89,7 +90,7 @@ export default class ProjectProperty extends BaseProperty {
       }
     }
 
-    this.refresh()       
+    // this.refresh()       
     this.emit('refreshAllSelectProject');    
   }
 

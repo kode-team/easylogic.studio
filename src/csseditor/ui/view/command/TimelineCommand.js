@@ -22,8 +22,18 @@ export default class TimelineCommand extends UIElement {
         this.currentArtboard((artboard, timeline) => {
             artboard.selectTimeline(selectedId);                
             this.emit('refreshTimeline');
+            this.emit('selectTimeline');            
         })
     }
+
+    [COMMAND('remove.timeline')] (selectedId) {
+        this.currentArtboard((artboard, timeline) => {
+            artboard.removeTimeline(selectedId);
+            this.emit('refreshTimeline');
+            this.emit('removeTimeline');            
+        })
+    }
+
 
     [COMMAND('set.timeline.offset') + DEBOUNCE(100)] (obj) {
         this.currentArtboard((artboard, timeline) => {

@@ -46,8 +46,12 @@ import AlignmentProperty from "./AlignmentProperty";
 import MotionProperty from "./MotionProperty";
 import ImageAssetsProperty from "./ImageAssetsProperty";
 import ComponentProperty from "./ComponentProperty";
+import TimelineAnimationProperty from "./TimelineAnimationProperty";
+
+
 
 export default {
+  TimelineAnimationProperty,
   ComponentProperty,
   ImageAssetsProperty,
   MotionProperty,

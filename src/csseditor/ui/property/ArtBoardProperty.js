@@ -1,5 +1,5 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, CLICK, DOUBLECLICK, BLUR, FOCUSOUT, KEYUP, KEY, PREVENT, STOP, VDOM } from "../../../util/Event";
+import { LOAD, CLICK, DOUBLECLICK, BLUR, FOCUSOUT, KEYUP, KEY, PREVENT, STOP, VDOM, KEYDOWN } from "../../../util/Event";
 import { editor } from "../../../editor/editor";
 import icon from "../icon/icon";
 import { EVENT } from "../../../util/UIElement";
@@ -24,7 +24,7 @@ export default class ArtBoardProperty extends BaseProperty {
 
   getBody() {
     return `
-      <div class="property-item artboard-list" ref="$artboardList"></div>
+      <div class="artboard-list" ref="$artboardList"></div>
     `;
   }
 
@@ -35,8 +35,9 @@ export default class ArtBoardProperty extends BaseProperty {
 
     return project.artboards.map( (artboard, index) => {
       var selected = artboard === editor.selection.currentArtboard ? 'selected' : ''
-      return `
+      return /*html*/`
         <div class='artboard-item ${selected}'>
+          <div class='preview'></div>
           <div class='detail'>
             <label data-index='${index}'>${artboard.name}</label>
             <div class="tools">
@@ -69,7 +70,7 @@ export default class ArtBoardProperty extends BaseProperty {
     });    
   }
 
-  [KEYUP('$artboardList .artboard-item label') + KEY('Enter') + PREVENT + STOP] (e) {
+  [KEYDOWN('$artboardList .artboard-item label') + KEY('Enter') + PREVENT + STOP] (e) {
     this.modifyDoneInputEditing(e.$delegateTarget);
   }
 

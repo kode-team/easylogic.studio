@@ -1,16 +1,16 @@
 import UIElement from "../../../../util/UIElement";
-import AnimationSelector from "./AnimationSelector";
+import KeyframeTimeControl from "./KeyframeTimeControl";
 
 export default class TimelineTopToolbar extends UIElement {
     components() {
         return {
-            AnimationSelector
+            KeyframeTimeControl        
         }
     }    
     template() {
         return /*html*/`
             <div class='timeline-top-toolbar'>
-                <AnimationSelector />
+                <KeyframeTimeControl />
             </div>
         `
     }

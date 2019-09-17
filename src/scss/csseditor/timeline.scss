@@ -113,9 +113,30 @@
     }
 }
 
+.timeline-animation-area {
+    position: absolute;
+    width: $left-size;
+    left: 0px;
+    top: 0px;
+    bottom: 0px;
+    background-color: $background-color;
+    font-size: 12px;
+    box-sizing: border-box;
+    border-right: 1px solid $border-color;
+    border-top: 1px solid $border-color;
+
+    .property-title {
+        height: $timeline-header-size !important;
+    }
+
+    .property-body {
+        padding: 0px !important;
+    }
+}
+
 .timeline-area {
     position: absolute;
-    left: 0px;
+    left: $left-size;
     right: $right-size;
     top: 0px;
     bottom: 0px;
@@ -138,12 +159,13 @@
             top: 0px;
             bottom: 0px;
             width: $left-size;     
-            border-right: 1px solid $timeline-border-color;            
+            border-right: 1px solid $timeline-border-color;        
+            border-bottom: 1px solid $timeline-border-color;    
             box-sizing: border-box;
 
 
             .timeline-top-toolbar {
-                padding:10px 10px;
+                padding:10px 5px;
                 box-sizing: border-box;
                 .row {
                     display: grid;
@@ -281,9 +303,9 @@
                 canvas {
                     position: absolute;
                     left: 0px;
-                    top: 50%;
+                    top: 15px;
                     width: 100%;
-                    height: $timeline-header-size/2;
+                    height: 25px;
                 }
             }
 
@@ -334,7 +356,7 @@
                         grid-template-columns: 20px 1fr 50px; 
                         grid-column-gap: 2px;
                         box-sizing: border-box;
-                        // border-bottom: 1px solid lighten($timeline-border-color, 20%);
+                        border-bottom: 1px solid $timeline-border-color;
 
                         &[data-selected="true"] {
                             background-color: $timeline-row-selected-color;
@@ -562,3 +584,32 @@
     }
 
 }
+
+.keyframe-time-control {
+
+    .time-manager {
+      display: grid;
+      grid-template-columns: 110px 65px 84px 10px;
+      grid-column-gap: 0px;
+
+      label {
+        padding-right:0px;
+
+        svg {
+          width: 16px;
+          height: 16px;
+        }
+      }
+    }
+
+    svg {
+      vertical-align: middle;
+      path {
+        fill: $font-color;
+      }
+    }
+
+    input[type=text] {
+      width: 80px;
+    }
+  }

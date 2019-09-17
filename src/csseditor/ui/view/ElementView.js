@@ -123,6 +123,15 @@ export default class ElementView extends UIElement {
 
         if (editor.isSelectionMode()) {
 
+            var obj = {
+                left: Length.px(this.dragXY.x),
+                top: Length.px(this.dragXY.y),
+                width: Length.px(0),
+                height: Length.px(0)
+            }        
+    
+            this.refs.$dragAreaRect.css(obj) 
+
             editor.selection.empty();
         
             this.cachedCurrentElement = {}
@@ -173,17 +182,9 @@ export default class ElementView extends UIElement {
                 editor.selection.select(...items);
 
                 this.selectCurrentForBackgroundView(...items)
-    
-                if (items.length) {
-                    this.emit('refreshSelection')
-                } else {
-                    editor.selection.select();            
-                    this.emit('emptySelection')
-                }                
-            } else {
-                editor.selection.select();                
-                this.emit('emptySelection')
             }
+            editor.selection.select(...items);    
+            this.emit('refreshSelection')
         }
     }
 
@@ -214,14 +215,26 @@ export default class ElementView extends UIElement {
         if (editor.isSelectionMode()) {
 
             var artboard = editor.selection.currentArtboard;
-
+            var items = [] 
             if (artboard) {
                 Object.keys(rect).forEach(key => {
                     rect[key].div(editor.scale)
                 })
-    
-                var items = artboard.checkInAreaForLayers(rect);
-    
+
+                items = artboard.checkInAreaForLayers(rect);
+
+                if (rect.width.value === 0 && rect.height.value === 0) {
+                    if (items.length) {
+                        items = [items.pop()]
+                    }
+                } 
+
+                if (items.length === 0) {
+                    if (artboard.checkInArea(rect)) {
+                        items = [artboard]
+                    }
+                }
+
                 editor.selection.select(...items);
 
                 this.selectCurrentForBackgroundView(...items)

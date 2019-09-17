@@ -265,6 +265,16 @@ export class TimelineItem extends DomItem {
     return time; 
   }
 
+  setTimelineTitle (id, text) {
+    var timeline = this.json.timeline.find(it => {
+      return it.id === id; 
+    })
+
+    if (timeline) {
+      timeline.title = text; 
+    }
+  }
+
   selectTimeline (id) {
 
     if (id) {
@@ -287,6 +297,21 @@ export class TimelineItem extends DomItem {
 
     this.compileAll()
   }
+
+
+  removeTimeline (id) {
+
+    this.json.timeline = this.json.timeline.filter(it => {
+      return it.id !== id; 
+    })
+
+    if (this.json.timeline.length) {
+      this.json.timeline[0].selected = true; 
+    }
+
+    this.compileAll()
+  }
+
 
   addTimeline (fps = 60, endTimecode = '00:00:10:00' ) {
     var id = uuidShort();

@@ -1,5 +1,5 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, CLICK, DOUBLECLICK, KEYUP, KEY, PREVENT, STOP, FOCUSOUT, VDOM, DRAGSTART } from "../../../util/Event";
+import { LOAD, CLICK, DOUBLECLICK, KEYUP, KEY, PREVENT, STOP, FOCUSOUT, VDOM, DRAGSTART, KEYDOWN } from "../../../util/Event";
 import { editor } from "../../../editor/editor";
 import icon from "../icon/icon";
 import { EVENT } from "../../../util/UIElement";
@@ -32,7 +32,7 @@ export default class LayerTreeProperty extends BaseProperty {
 
   getBody() {
     return `
-      <div class="property-item layer-list" ref="$layerList"></div>
+      <div class="layer-list" ref="$layerList"></div>
     `;
   }
 
@@ -59,7 +59,7 @@ export default class LayerTreeProperty extends BaseProperty {
       this.state.layers[layer.id] = {layer, parentObject, index}
 
       var selected = editor.selection.check(layer) ? 'selected' : '';
-      return `        
+      return /*html*/`        
       <div class='layer-item ${selected}' data-depth="${depth}" data-layer-id='${layer.id}' draggable="true">
         <div class='detail'>
           <span class='icon'>${this.getIcon(layer.itemType)}</span> 
@@ -111,7 +111,7 @@ export default class LayerTreeProperty extends BaseProperty {
     });    
   }
 
-  [KEYUP('$layerList .layer-item label') + KEY('Enter') + PREVENT + STOP] (e) {
+  [KEYDOWN('$layerList .layer-item label') + KEY('Enter') + PREVENT + STOP] (e) {
     this.modifyDoneInputEditing(e.$delegateTarget);
   }
 

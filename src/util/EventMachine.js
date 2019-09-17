@@ -73,9 +73,10 @@ const makeDefaultCallback = (context, eventObject, callback) => {
 const makeDelegateCallback = (context, eventObject, callback) => {
   return e => {
     const delegateTarget = hasDelegate(e, eventObject);
+
     if (delegateTarget) {
       // delegate target 이 있는 경우만 callback 실행
-      e.$delegateTarget = Dom.create(delegateTarget);
+      e.$delegateTarget = Dom.create(delegateTarget);      
 
       var returnValue = runEventCallback(context, e, eventObject, callback);
       if (isNotUndefined(returnValue)) {
@@ -308,7 +309,9 @@ const applyElementAttribute = ($element, key, value) => {
   } else {
     if ($element.el.nodeName === "TEXTAREA" && key === "value") {
       $element.text(value);
-    } else if (key === 'innerHTML') {
+    } else if (key === 'text' || key === 'textContent') {
+      $element.text(value);
+    } else if (key === 'innerHTML' || key === 'html') {
       $element.html(value);
     } else {
       $element.attr(key, value);

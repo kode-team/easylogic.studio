@@ -35,7 +35,7 @@ export class Project extends AssetItem {
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
       itemType: "project",
-      name: 'Project',
+      name: 'new Project',
       keyframes: [],      
       'rootVariable': '',            
       ...obj

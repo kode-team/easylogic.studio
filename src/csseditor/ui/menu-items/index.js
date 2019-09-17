@@ -23,8 +23,11 @@ import AddCube from "./AddCube";
 import AddImage from "./AddImage";
 import AddPath from "./AddPath";
 import Save from "./Save";
+import Download from "./Download";
+
 
 export default {
+  Download,
   Save,
   AddCube,
   AddImage,

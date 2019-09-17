@@ -61,62 +61,56 @@ export class CubeLayer extends Component {
 
   getProps() {
     return [
-      'Front',
+      'Colors',
       {
-        key: 'front.color', 
-        editor: 'ColorViewEditor', 
+        key: 'front.color', editor: 'ColorViewEditor', 
         editorOptions: {
-          label: 'color', 
+          label: 'front', 
           params: 'front.color'
         }, 
         defaultValue: 'rgba(0, 0, 0, 1)' 
       },
-      'Back',      
       {
         key: 'back.color', 
         editor: 'ColorViewEditor', 
         editorOptions: {
-          label: 'color', 
+          label: 'back', 
           params: 'back.color'
         }, 
         defaultValue: 'rgba(0, 0, 0, 1)' 
       },
-      'Left',
       {
         key: 'left.color', 
         editor: 'ColorViewEditor', 
         editorOptions: {
-          label: 'color', 
+          label: 'left', 
           params: 'left.color'
         }, 
         defaultValue: 'rgba(0, 0, 0, 1)' 
       },
-      'Right',      
       {
         key: 'right.color', 
         editor: 'ColorViewEditor', 
         editorOptions: {
-          label: 'color',
+          label: 'right',
           params: 'right.color'
         }, 
         defaultValue: 'rgba(0, 0, 0, 1)' 
       },
-      'Top',
       {
         key: 'top.color', 
         editor: 'ColorViewEditor', 
         editorOptions: {
-          label: 'color', 
+          label: 'top', 
           params: 'top.color'
         }, 
         defaultValue: 'rgba(0, 0, 0, 1)' 
-      },
-      'Bottom',      
+      },  
       {
         key: 'bottom.color', 
         editor: 'ColorViewEditor', 
         editorOptions: {
-          label: 'color', 
+          label: 'bottom', 
           params: 'front.color'
         }, 
         defaultValue: 'rgba(0, 0, 0, 1)' 

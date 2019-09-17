@@ -185,16 +185,16 @@ export default class KeyframeTimeView extends UIElement {
             
             this.refs.$canvas.resize({
                 width,
-                height: height/2
+                height: 25
             });
             this.refs.$canvas.update(function () {
                 var rect = this.rect();
                 var realWidth = width - PADDING; 
                 this.drawOption({strokeStyle: 'rgba(204, 204, 204, 0.3)',  lineWidth: 0.5, ...textOption})
                 var restX = 10;
-
+                var y = 7;
                 for(; startFrame < endFrame; startFrame += splitFrame) {
-                    var y = rect.height / 4;
+
                     var startX = (second(fps, startFrame) - displayStartTime)/(displayEndTime - displayStartTime) * realWidth;
                     this.drawOption({ fillStyle: '#ececec'})                                
                     this.drawText(startX + restX, y, framesToTimecode(fps, startFrame).replace(/00\:/g, '') + 'f')
@@ -202,7 +202,7 @@ export default class KeyframeTimeView extends UIElement {
 
 
                 this.drawOption({strokeStyle: 'black', lineWidth: 1})
-                this.drawLine(0, rect.height, rect.width, rect.height);
+                this.drawLine(0, rect.height-0.5, rect.width, rect.height);
 
                 var left =  (currentTime - displayStartTime)/(displayEndTime - displayStartTime) * realWidth;
                 var markTop = 10

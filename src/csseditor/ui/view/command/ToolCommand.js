@@ -11,6 +11,7 @@ import { TextLayer } from "../../../../editor/items/layers/TextLayer";
 import { ImageLayer } from "../../../../editor/items/layers/ImageLayer";
 import { SVGPathItem } from "../../../../editor/items/layers/SVGPathItem";
 import { SVGPolygonItem } from "../../../../editor/items/layers/SVGPolygonItem";
+import { saveResource, loadResource } from "../../../../editor/util/Resource";
 
 const ItemClassList = {
     'project': Project,
@@ -39,7 +40,7 @@ export default class ToolCommand extends UIElement {
         this.emit('refreshSelectionTool')       
     }
 
-    [COMMAND('save.json')] (filename) {
+    [COMMAND('download.json')] (filename) {
         var json = JSON.stringify(editor.projects)
         var datauri = 'data:application/json;base64,' + window.btoa(json);
 
@@ -49,8 +50,12 @@ export default class ToolCommand extends UIElement {
         a.click();
     }
 
+    [COMMAND('save.json')] () {
+        saveResource('projects', editor.projects)
+    }    
+
     [COMMAND('load.json')] (json) {
-        json = json || [{"id":"id1c024ee","visible":true,"lock":false,"selected":false,"layers":[{"id":"id2226850","visible":true,"lock":false,"selected":false,"layers":[],"position":"absolute","x":"300px","y":"300px","width":"375px","height":"720px","background-color":"white","background-image":"background-image: linear-gradient(to right, red, red);background-position: 0% 0%;background-size: auto;background-repeat: repeat;background-blend-mode: normal","font-size":"13px","border":{},"outline":{},"borderRadius":{},"animations":[],"transitions":[],"keyframes":[],"selectors":[],"svg":[],"timeline":[],"itemType":"artboard","name":"New ArtBoard"}],"colors":[],"gradients":[],"svgfilters":[],"svgimages":[],"images":[],"itemType":"project","name":"New project","keyframes":[]}]
+        json = json || loadResource('projects', []);
 
         var projects = json.map(p => createItem(p))
 
