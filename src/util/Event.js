@@ -21,6 +21,7 @@ const CHECK_CLIPBOARD_PATTERN = "paste";
 const CHECK_BEHAVIOR_PATTERN = "resize|scroll|wheel|mousewheel|DOMMouseScroll";
 const CHECK_FORM_PATTERN = "submit";
 const CHECK_ANIMATION_PATTERN = 'animation(start|end|iteration)'
+const CHECK_TRANSITION_PATTERN = 'transition(start|end|cancel|run)'
 
 const CHECK_PATTERN_LIST = [
   CHECK_CLICK_PATTERN,
@@ -34,7 +35,8 @@ const CHECK_PATTERN_LIST = [
   CHECK_CLIPBOARD_PATTERN,
   CHECK_BEHAVIOR_PATTERN,
   CHECK_FORM_PATTERN,
-  CHECK_ANIMATION_PATTERN
+  CHECK_ANIMATION_PATTERN,
+  CHECK_TRANSITION_PATTERN
 ].join("|");
 
 export const CHECK_PATTERN = new RegExp(`^(${CHECK_PATTERN_LIST})`, "ig");
@@ -100,6 +102,10 @@ export const WHEEL = CUSTOM("wheel", "mousewheel", "DOMMouseScroll");
 export const ANIMATIONSTART = DOM_EVENT_MAKE('animationstart');
 export const ANIMATIONEND = DOM_EVENT_MAKE('animationend');
 export const ANIMATIONITERATION = DOM_EVENT_MAKE('animationiteration');
+export const TRANSITIONSTART = DOM_EVENT_MAKE('transitionstart');
+export const TRANSITIONEND = DOM_EVENT_MAKE('transitionend');
+export const TRANSITIONRUN = DOM_EVENT_MAKE('transitionrun');
+export const TRANSITIONCANCEL = DOM_EVENT_MAKE('transitioncancel');
 
 // Predefined CHECKER
 export const CHECKER = (value, split = CHECK_SAPARATOR) => {

@@ -1,6 +1,6 @@
 import { isFunction } from "../util/functions/func";
 import { Length } from "./unit/Length";
-import { MovableItem } from "./items/MovableItem";
+import AreaItem from "./items/AreaItem";
 
 
 
@@ -148,7 +148,7 @@ export class Selection {
     if (maxX === Number.MIN_SAFE_INTEGER) maxX = 0;
     if (maxY === Number.MIN_SAFE_INTEGER) maxY = 0;
 
-    this.allRect = new MovableItem({
+    this.allRect = new AreaItem({
       x: Length.px(minX),
       y: Length.px(minY),
       width: Length.px(maxX - minX),

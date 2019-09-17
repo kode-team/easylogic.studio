@@ -3,7 +3,7 @@ import CanvasView from "../ui/view/CanvasView";
 import ToolMenu from "../ui/view/ToolMenu";
 
 import UIElement, { EVENT } from "../../util/UIElement";
-import { CLICK, DRAGOVER, DROP, PREVENT } from "../../util/Event";
+import { CLICK, DRAGOVER, DROP, PREVENT, ANIMATIONEND, TRANSITIONEND } from "../../util/Event";
 import Inspector from "../ui/control/Inspector";
 
 
@@ -117,6 +117,10 @@ export default class CSSEditor extends UIElement {
 
   [EVENT('toggleFooter')] (isShow) {
     this.$el.toggleClass('show-footer', isShow);
+  }
+
+  [TRANSITIONEND('$el .layout-footer')] (e) {
+    this.emit('toggleFooterEnd');
   }
 
   [EVENT('refreshAll')] () {

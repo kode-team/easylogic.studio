@@ -1446,7 +1446,7 @@ html, body {
 .csseditor[data-theme=dark] .layout-main.show-footer .layout-middle .layout-left {
   bottom: 299px;
 }
-.csseditor[data-theme=dark] .layout-main.show-footer .layout-middle .layer-right {
+.csseditor[data-theme=dark] .layout-main.show-footer .layout-middle .layout-right {
   bottom: 299px;
 }
 .csseditor[data-theme=dark] .layout-main.show-footer .layout-middle .layout-body {
@@ -3189,8 +3189,6 @@ html, body {
   height: 24px;
 }
 .csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools .timeline-play-control button.play, .csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools .timeline-play-control button.pause {
-  -webkit-filter: drop-shadow(0px 0px 2px black);
-          filter: drop-shadow(0px 0px 2px black);
   -webkit-transform: scale(1.5);
           transform: scale(1.5);
 }
@@ -4114,6 +4112,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .project-list .project-item .detail label {
   padding: 2px 0px;
+  font-size: 12px;
 }
 .csseditor[data-theme=dark] .project-list .project-item .detail .tools {
   text-align: right;
@@ -4152,6 +4151,8 @@ html, body {
 }
 .csseditor[data-theme=dark] .artboard-list .artboard-item .detail label {
   padding: 2px 0px;
+  font-size: 12px;
+  vertical-align: middle;
 }
 .csseditor[data-theme=dark] .artboard-list .artboard-item .detail .tools {
   text-align: right;
@@ -4192,9 +4193,51 @@ html, body {
 .csseditor[data-theme=dark] .layer-list .layer-item[data-depth="5"] .detail label {
   padding-left: 100px;
 }
+.csseditor[data-theme=dark] .layer-list .layer-item[data-depth="6"] .detail label {
+  padding-left: 120px;
+}
+.csseditor[data-theme=dark] .layer-list .layer-item[data-depth="7"] .detail label {
+  padding-left: 140px;
+}
+.csseditor[data-theme=dark] .layer-list .layer-item[data-depth="8"] .detail label {
+  padding-left: 160px;
+}
+.csseditor[data-theme=dark] .layer-list .layer-item[data-depth="9"] .detail label {
+  padding-left: 180px;
+}
+.csseditor[data-theme=dark] .layer-list .layer-item[data-depth="10"] .detail label {
+  padding-left: 200px;
+}
+.csseditor[data-theme=dark] .layer-list .layer-item[data-depth="11"] .detail label {
+  padding-left: 220px;
+}
+.csseditor[data-theme=dark] .layer-list .layer-item[data-depth="12"] .detail label {
+  padding-left: 240px;
+}
+.csseditor[data-theme=dark] .layer-list .layer-item[data-depth="13"] .detail label {
+  padding-left: 260px;
+}
+.csseditor[data-theme=dark] .layer-list .layer-item[data-depth="14"] .detail label {
+  padding-left: 280px;
+}
+.csseditor[data-theme=dark] .layer-list .layer-item[data-depth="15"] .detail label {
+  padding-left: 300px;
+}
+.csseditor[data-theme=dark] .layer-list .layer-item[data-depth="16"] .detail label {
+  padding-left: 320px;
+}
+.csseditor[data-theme=dark] .layer-list .layer-item[data-depth="17"] .detail label {
+  padding-left: 340px;
+}
+.csseditor[data-theme=dark] .layer-list .layer-item[data-depth="18"] .detail label {
+  padding-left: 360px;
+}
+.csseditor[data-theme=dark] .layer-list .layer-item[data-depth="19"] .detail label {
+  padding-left: 380px;
+}
 .csseditor[data-theme=dark] .layer-list .layer-item .detail {
   display: grid;
-  grid-template-columns: 20px 1fr 66px;
+  grid-template-columns: 1fr 80px;
   grid-column-gap: 3px;
 }
 .csseditor[data-theme=dark] .layer-list .layer-item .detail span.icon {
@@ -4217,6 +4260,11 @@ html, body {
   padding: 2px 0px;
   cursor: pointer;
   pointer-events: all;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+  vertical-align: middle;
 }
 .csseditor[data-theme=dark] .layer-list .layer-item .detail .tools {
   text-align: right;
@@ -4989,6 +5037,7 @@ html, body {
   display: grid;
   grid-template-columns: 20px 1fr;
   grid-column-gap: 4px;
+  cursor: pointer;
 }
 .csseditor[data-theme=dark] .timeline-animation-list .timeline-animation-item .preview {
   background-color: #2f3538;
@@ -8990,7 +9039,7 @@ html, body {
 .csseditor[data-theme=light] .layout-main.show-footer .layout-middle .layout-left {
   bottom: 299px;
 }
-.csseditor[data-theme=light] .layout-main.show-footer .layout-middle .layer-right {
+.csseditor[data-theme=light] .layout-main.show-footer .layout-middle .layout-right {
   bottom: 299px;
 }
 .csseditor[data-theme=light] .layout-main.show-footer .layout-middle .layout-body {
@@ -10733,8 +10782,6 @@ html, body {
   height: 24px;
 }
 .csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control button.play, .csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control button.pause {
-  -webkit-filter: drop-shadow(0px 0px 2px black);
-          filter: drop-shadow(0px 0px 2px black);
   -webkit-transform: scale(1.5);
           transform: scale(1.5);
 }
@@ -11658,6 +11705,7 @@ html, body {
 }
 .csseditor[data-theme=light] .project-list .project-item .detail label {
   padding: 2px 0px;
+  font-size: 12px;
 }
 .csseditor[data-theme=light] .project-list .project-item .detail .tools {
   text-align: right;
@@ -11696,6 +11744,8 @@ html, body {
 }
 .csseditor[data-theme=light] .artboard-list .artboard-item .detail label {
   padding: 2px 0px;
+  font-size: 12px;
+  vertical-align: middle;
 }
 .csseditor[data-theme=light] .artboard-list .artboard-item .detail .tools {
   text-align: right;
@@ -11736,9 +11786,51 @@ html, body {
 .csseditor[data-theme=light] .layer-list .layer-item[data-depth="5"] .detail label {
   padding-left: 100px;
 }
+.csseditor[data-theme=light] .layer-list .layer-item[data-depth="6"] .detail label {
+  padding-left: 120px;
+}
+.csseditor[data-theme=light] .layer-list .layer-item[data-depth="7"] .detail label {
+  padding-left: 140px;
+}
+.csseditor[data-theme=light] .layer-list .layer-item[data-depth="8"] .detail label {
+  padding-left: 160px;
+}
+.csseditor[data-theme=light] .layer-list .layer-item[data-depth="9"] .detail label {
+  padding-left: 180px;
+}
+.csseditor[data-theme=light] .layer-list .layer-item[data-depth="10"] .detail label {
+  padding-left: 200px;
+}
+.csseditor[data-theme=light] .layer-list .layer-item[data-depth="11"] .detail label {
+  padding-left: 220px;
+}
+.csseditor[data-theme=light] .layer-list .layer-item[data-depth="12"] .detail label {
+  padding-left: 240px;
+}
+.csseditor[data-theme=light] .layer-list .layer-item[data-depth="13"] .detail label {
+  padding-left: 260px;
+}
+.csseditor[data-theme=light] .layer-list .layer-item[data-depth="14"] .detail label {
+  padding-left: 280px;
+}
+.csseditor[data-theme=light] .layer-list .layer-item[data-depth="15"] .detail label {
+  padding-left: 300px;
+}
+.csseditor[data-theme=light] .layer-list .layer-item[data-depth="16"] .detail label {
+  padding-left: 320px;
+}
+.csseditor[data-theme=light] .layer-list .layer-item[data-depth="17"] .detail label {
+  padding-left: 340px;
+}
+.csseditor[data-theme=light] .layer-list .layer-item[data-depth="18"] .detail label {
+  padding-left: 360px;
+}
+.csseditor[data-theme=light] .layer-list .layer-item[data-depth="19"] .detail label {
+  padding-left: 380px;
+}
 .csseditor[data-theme=light] .layer-list .layer-item .detail {
   display: grid;
-  grid-template-columns: 20px 1fr 66px;
+  grid-template-columns: 1fr 80px;
   grid-column-gap: 3px;
 }
 .csseditor[data-theme=light] .layer-list .layer-item .detail span.icon {
@@ -11761,6 +11853,11 @@ html, body {
   padding: 2px 0px;
   cursor: pointer;
   pointer-events: all;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+  vertical-align: middle;
 }
 .csseditor[data-theme=light] .layer-list .layer-item .detail .tools {
   text-align: right;
@@ -12533,6 +12630,7 @@ html, body {
   display: grid;
   grid-template-columns: 20px 1fr;
   grid-column-gap: 4px;
+  cursor: pointer;
 }
 .csseditor[data-theme=light] .timeline-animation-list .timeline-animation-item .preview {
   background-color: white;

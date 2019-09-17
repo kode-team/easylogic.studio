@@ -1,14 +1,14 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
-import { POINTERSTART, MOVE, END, DOUBLECLICK, KEYUP, KEY, PREVENT, STOP, BIND, DEBOUNCE, IF } from "../../../util/Event";
+import { POINTERSTART, MOVE, END, DOUBLECLICK, BIND, IF } from "../../../util/Event";
 import { Length } from "../../../editor/unit/Length";
 import { editor } from "../../../editor/editor";
 import { isNotUndefined } from "../../../util/functions/func";
 import GuideView from "./GuideView";
-import { MovableItem } from "../../../editor/items/MovableItem";
 import icon from "../icon/icon";
 import { Transform } from "../../../editor/css-property/Transform";
 import Dom from "../../../util/Dom";
-import { calculateAngle, getXYInCircle, getDist } from "../../../util/functions/math";
+import { calculateAngle } from "../../../util/functions/math";
+import AreaItem from "../../../editor/items/AreaItem";
 
 /**
  * 원보 아이템의 크기를 가지고 scale 이랑 조합해서 world 의 크기를 구하는게 기본 컨셉 
@@ -56,9 +56,9 @@ export default class SelectionToolView extends UIElement {
     </div>`
     }
 
-    [EVENT('add.type')] () {
-        this.$el.hide();
-    }
+    // [EVENT('add.type')] () {
+    //     this.$el.hide();
+    // }
 
     [DOUBLECLICK('$rotate3d')] (e) {
 
@@ -735,8 +735,8 @@ export default class SelectionToolView extends UIElement {
     calculateWorldPositionForGuideLine (list = []) {
         return list.map(it => {
 
-            var A = new MovableItem(this.calculateWorldPosition(it.A))
-            var B = new MovableItem(this.calculateWorldPosition(it.B))
+            var A = new AreaItem(this.calculateWorldPosition(it.A))
+            var B = new AreaItem(this.calculateWorldPosition(it.B))
 
             var ax, bx, ay, by; 
 

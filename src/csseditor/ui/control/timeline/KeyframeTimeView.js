@@ -185,7 +185,7 @@ export default class KeyframeTimeView extends UIElement {
             
             this.refs.$canvas.resize({
                 width,
-                height: 25
+                height: 24
             });
             this.refs.$canvas.update(function () {
                 var rect = this.rect();
@@ -260,7 +260,7 @@ export default class KeyframeTimeView extends UIElement {
         this.refresh();
     }
 
-    [EVENT('refreshTimeline', 'playTimeline')] () {
+    [EVENT('refreshTimeline', 'playTimeline', 'toggleFooterEnd')] () {
         this.refresh();
     }
 

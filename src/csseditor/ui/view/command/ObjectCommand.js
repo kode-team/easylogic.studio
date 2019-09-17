@@ -21,8 +21,8 @@ export default class ObjectCommand extends UIElement {
 
     [COMMAND('add.type')] (type) {
 
-        editor.selection.empty()
-        this.emit('refreshSelection')
+        // editor.selection.empty()
+        // this.emit('refreshSelection')
         this.emit('hideSubEditor');
         editor.changeAddType(type)        
 
@@ -38,20 +38,25 @@ export default class ObjectCommand extends UIElement {
 
     [COMMAND('add.layer')] (layer, rect = {}) {
 
-        var artboard = editor.selection.currentArtboard
+        var selectedItem = editor.selection.current || editor.selection.currentArtboard
 
         // 클릭 할 때 마지막 selection 의 current 를 유지를 해줘야할텐데 ... 
         // 무조건 artboard 기준으로 넣으면 될려나. 
-    
-        if (artboard) {
-          artboard.add(layer)
 
-          if (rect.x) { layer.setScreenX(rect.x.value); }
-          if (rect.y) { layer.setScreenY(rect.y.value); }
-
-          editor.selection.select(layer);
+        // 여러개의 객체에 동시에 넣어야 할까?  예를 들어 
+        // a 객체의 하위로 지정했으면 b 도 같은 거리에 하위로 ?  넣어줘? 
+        // 말이 안되는 거긴한데 ..... 
+        // 하위로 넣고 카피 해야할까? 
     
-          this.refreshSelection()
+        if (selectedItem) {
+            selectedItem.add(layer)
+
+            if (rect.x) { layer.setScreenX(rect.x.value); }
+            if (rect.y) { layer.setScreenY(rect.y.value); }
+
+            editor.selection.select(layer);
+    
+            this.refreshSelection()
         }
     }
 

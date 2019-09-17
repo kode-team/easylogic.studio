@@ -11,6 +11,7 @@
         display: grid;
         grid-template-columns: 20px 1fr;
         grid-column-gap: 4px;
+        cursor: pointer;
 
         .preview {
             // height: 110px;

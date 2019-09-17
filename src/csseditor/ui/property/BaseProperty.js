@@ -20,10 +20,7 @@ export default class BaseProperty extends UIElement {
             ${this.isHideHeader() ? ''
             : /*html*/`
             <div class='property-title' ref="$title">
-                <label> 
-                  ${this.hasKeyframe() ? `<span class='add-timeline-property' data-property='${this.getKeyframeProperty()}'></span>` : ''} 
-                  ${this.getTitle()}
-                </label>
+                <label> ${this.hasKeyframe() ? `<span class='add-timeline-property' data-property='${this.getKeyframeProperty()}'></span>` : ''} ${this.getTitle()}</label>
                 <span class="tools">${this.getTools()}</span>
             </div>`
             }

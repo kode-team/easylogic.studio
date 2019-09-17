@@ -62,11 +62,11 @@ export default class LayerTreeProperty extends BaseProperty {
       return /*html*/`        
       <div class='layer-item ${selected}' data-depth="${depth}" data-layer-id='${layer.id}' draggable="true">
         <div class='detail'>
-          <span class='icon'>${this.getIcon(layer.itemType)}</span> 
-          <label>${layer.name}</label>
+          <label> <span class='icon'>${this.getIcon(layer.itemType)}</span> ${layer.name}</label>
           <div class="tools">
             <button type="button" class="lock" data-lock="${layer.lock}" title='Lock'>${layer.lock ? icon.lock : icon.lock_open}</button>
             <button type="button" class="visible" data-visible="${layer.visible}" title='Visible'>${icon.visible}</button>
+            <button type="button" class="copy" title='Copy'>${icon.copy}</button>
             <button type="button" class="remove" title='Remove'>${icon.remove2}</button>
           </div>
         </div>
@@ -216,6 +216,22 @@ export default class LayerTreeProperty extends BaseProperty {
       e.$delegateTarget.attr('data-lock', obj.layer.lock);
 
       this.emit('refreshElement', obj.layer);
+    }
+  }
+
+
+  [CLICK('$layerList .layer-item .copy')] (e) {
+    var artboard = editor.selection.currentArtboard
+    if (artboard) {
+      var $item = e.$delegateTarget.closest('layer-item')
+      var id = $item.attr('data-layer-id');
+
+      var obj = this.state.layers[id]
+      var copyObject = obj.layer.copy();
+
+      editor.selection.select(copyObject);
+      this.refresh();
+      this.emit('refreshElement');
     }
   }
 

@@ -100,13 +100,12 @@ export default class ElementView extends UIElement {
             && $el.isTag('path') === false
             && $el.isTag('polygon') === false
             && $el.attr('data-segment') !== 'true'
-        ;
+    ;
     }
 
     [POINTERSTART('$el') + IF('checkEmptyElement') + MOVE('movePointer') + END('moveEndPointer')] (e) {
 
         this.$target = Dom.create(e.target);
-
 
         this.dragXY = {x: e.xy.x, y: e.xy.y}; 
 
@@ -289,6 +288,7 @@ export default class ElementView extends UIElement {
         this.startXY = e.xy ; 
         this.$element = e.$delegateTarget;
 
+
         if (this.$element.hasClass('text') && this.$element.hasClass('selected')) {
             return false; 
         }
@@ -308,7 +308,6 @@ export default class ElementView extends UIElement {
             this.emit('refreshSelection');
             editor.selection.setRectCache()
         }
-
     }
 
     calculateMovedElement (dx, dy) {

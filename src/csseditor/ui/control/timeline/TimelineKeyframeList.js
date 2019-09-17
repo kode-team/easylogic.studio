@@ -395,7 +395,7 @@ export default class TimelineKeyframeList extends UIElement {
         this.refresh();
     }
 
-    [EVENT('refreshTimeline')] () {
+    [EVENT('refreshTimeline', 'toggleFooterEnd')] () {
         this.refresh();
     }
 

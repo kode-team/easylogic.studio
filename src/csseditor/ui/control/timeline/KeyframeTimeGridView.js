@@ -11,7 +11,7 @@ export default class KeyframeTimeGridView extends UIElement {
         this.refreshCanvas();
     }
 
-    get currentTimeline () {
+    currentTimeline () {
         var currentArtboard = editor.selection.currentArtboard;
 
         if (currentArtboard) {
@@ -21,14 +21,14 @@ export default class KeyframeTimeGridView extends UIElement {
 
 
     hasCurrentTimeline() {
-        return !!this.currentTimeline;
+        return !!this.currentTimeline();
     }
 
 
 
     refreshCanvas() {
 
-        var timeline = this.currentTimeline;
+        var timeline = this.currentTimeline();
 
         if (timeline) {
             var originalRect = this.$el.rect()
@@ -53,11 +53,11 @@ export default class KeyframeTimeGridView extends UIElement {
         this.refresh();
     }
 
-    [EVENT('refreshTimeline', 'playTimeline')] ( ) {
+    [EVENT('refreshTimeline', 'playTimeline', 'toggleFooterEnd')] ( ) {
         this.refresh();
     }
 
-    [EVENT('moveTimeline', 'refreshSelection') + THROTTLE(10)] (){
+    [EVENT('moveTimeline', 'refreshSelection') + THROTTLE(50)] (){
         this.refresh();
     }
 }

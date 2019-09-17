@@ -1,4 +1,4 @@
-import { uuidShort } from "../../util/functions/math";
+import { uuidShort, uuid } from "../../util/functions/math";
 import {
   isFunction,
   isUndefined,
@@ -55,6 +55,7 @@ export class Item {
     if (json instanceof Item) {
       json = json.toJSON();
     }
+
     this.json = this.convert({ ...this.getDefaultObject(), ...json });
 
     return this.ref; 
@@ -208,8 +209,10 @@ export class Item {
    * @param {object} obj
    */
   getDefaultObject(obj = {}) {
+    var id = uuidShort()
+    // console.log(id, this);
     return {
-      id: uuidShort(),
+      id,
       visible: true,  // 보이기 여부 설정 
       lock: false,    // 편집을 막고 
       selected: false,  // 선택 여부 체크 
@@ -267,10 +270,10 @@ export class Item {
 
     const tagName = elementType || 'div'
 
-    return /*html*/`<${tagName} ${OBJECT_TO_CLASS({
+    return /*html*/`<${tagName} class="${OBJECT_TO_CLASS({
       'element-item': true,
       [itemType]: true 
-    })} ${OBJECT_TO_PROPERTY({
+    })}" ${OBJECT_TO_PROPERTY({
       'data-id': id
     })}>${layers.map(it => it.html).join('')}</${tagName}>`
   }
@@ -286,8 +289,8 @@ export class Item {
 
     var child = childItem.clone()  
 
-    child.setScreenX(child.screenX.value + dist);
-    child.setScreenY(child.screenY.value + dist);
+    child.x.add(dist);
+    child.y.add(dist);
 
     var layers = this.json.layers;
 

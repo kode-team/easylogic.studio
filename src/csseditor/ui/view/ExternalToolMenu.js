@@ -18,7 +18,7 @@ export default class ExternalToolMenu extends UIElement {
 
           <div class='split'></div>
           
-          <ThemeSwitcher />
+          <!--ThemeSwitcher /-->
           <Github />
           <Manual />
 
