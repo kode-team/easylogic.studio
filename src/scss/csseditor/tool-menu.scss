@@ -68,7 +68,7 @@
 
 
     .draw-items {
-      background-color: $background-color;
+      // background-color: $background-color;
       > * {
         display: inline-block;
       }
@@ -106,15 +106,15 @@
         &.text {
           svg {
             path {
-              stroke: $background-color;
-              stroke-width: 2px;
+              // stroke: $background-color;
+              // stroke-width: 2px;
             }
           }          
         }
         svg {
           path {
-            stroke: $background-color;
-            stroke-width: 1px;            
+            // stroke: $background-color;
+            // stroke-width: 1px;            
           }
         }
   
@@ -125,7 +125,7 @@
               path {
                 stroke: $background-color;  
                 // stroke: $selected-background-color;  
-                fill: lighten($selected-color, 20%);
+                fill: $selected-color;
               }
             }
           }

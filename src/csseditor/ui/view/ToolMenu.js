@@ -1,4 +1,4 @@
-import UIElement from "../../../util/UIElement";
+import UIElement, { EVENT } from "../../../util/UIElement";
 import menuItems from "../menu-items/index";
 import { CLICK } from "../../../util/Event";
 
@@ -32,6 +32,12 @@ export default class ToolMenu extends UIElement {
     `;
   }
 
+  [EVENT('noneSelectMenu')] () {
+    var $selected = this.refs.$items.$('.selected');
+    if ($selected) {
+      $selected.removeClass('selected');
+    }
+  }
 
   [CLICK('$items button')] (e) {
     e.$delegateTarget.onlyOneClass('selected');

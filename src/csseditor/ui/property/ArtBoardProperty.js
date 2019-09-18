@@ -37,7 +37,7 @@ export default class ArtBoardProperty extends BaseProperty {
       var selected = artboard === editor.selection.currentArtboard ? 'selected' : ''
       return /*html*/`
         <div class='artboard-item ${selected}'>
-          <div class='preview'></div>
+          <div class='preview'>${icon.doc}</div>
           <div class='detail'>
             <label data-index='${index}'>${artboard.name}</label>
             <div class="tools">

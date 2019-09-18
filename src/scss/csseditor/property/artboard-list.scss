@@ -14,11 +14,15 @@
 
         .preview {
             // height: 110px;
-            background-color: $background-color;
-            border-radius: 3px;
-            border:1px solid $border-color;            
+            // background-color: $background-color;
+            // border-radius: 3px;
+            // border:1px solid $border-color;            
             cursor: pointer;            
             // display: none;
+            svg {
+                width: 16px;
+                height: 16px;
+            }
         }
 
 

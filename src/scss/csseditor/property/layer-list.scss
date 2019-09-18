@@ -38,6 +38,8 @@
 
                     path {
                         fill: $selected-font-color;
+                        stroke: $property-background-color;
+                        stroke-width: 1px;
                     }
                 }
             }            
@@ -94,6 +96,16 @@
 
         &.selected {
             @include title-background-2($list-item-selected-color, $list-item-selected-font-color);        
+
+            .detail {
+                span.icon {
+                    svg {
+                        path {
+                            stroke: $list-item-selected-color;
+                        }
+                    }
+                }
+            }
         }
 
     }

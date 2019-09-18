@@ -16,7 +16,8 @@ export default class ObjectCommand extends UIElement {
         this.emit('refreshAll')
         this.emit('hideSubEditor');
         this.emit('refreshSelection');        
-        this.emit('refreshSelectionTool')       
+        this.emit('refreshSelectionTool')      
+        this.emit('noneSelectMenu') 
     }
 
     [COMMAND('add.type')] (type) {

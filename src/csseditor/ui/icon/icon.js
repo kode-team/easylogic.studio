@@ -77,9 +77,11 @@ import gps_fixed from "./gps_fixed";
 import file_copy from "./file_copy";
 import archive from "./archive";
 import storage from "./storage";
+import doc from "./doc";
 
 
 export default {
+  doc,
   storage,
   archive,
   file_copy,

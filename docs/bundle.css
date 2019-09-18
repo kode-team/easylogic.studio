@@ -1470,7 +1470,6 @@ html, body {
   z-index: 1;
   pointer-events: all;
   box-sizing: border-box;
-  border-top: 1px solid #111111;
   color: white;
 }
 .csseditor[data-theme=dark] .layout-main .layout-header {
@@ -1766,7 +1765,7 @@ html, body {
   right: 0px;
   bottom: 0px;
   top: 0px;
-  background-color: #2f3538;
+  background-color: #2b2b2b;
   color: #ffffff;
 }
 .csseditor[data-theme=dark] .tab.number-tab .tab-header {
@@ -1818,7 +1817,7 @@ html, body {
   border-right: 1px solid #111111;
   border-top: 1px solid #fc554f;
   border-bottom: 1px solid transparent;
-  background-color: #2f3538;
+  background-color: #2b2b2b;
   color: white;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"]:not(:first-child) {
@@ -1831,7 +1830,7 @@ html, body {
   border-right: 1px solid #111111;
   border-top: 1px solid #fc554f;
   border-bottom: 1px solid transparent;
-  background-color: #2f3538;
+  background-color: #2b2b2b;
   color: white;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"]:not(:first-child) {
@@ -1844,7 +1843,7 @@ html, body {
   border-right: 1px solid #111111;
   border-top: 1px solid #fc554f;
   border-bottom: 1px solid transparent;
-  background-color: #2f3538;
+  background-color: #2b2b2b;
   color: white;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"]:not(:first-child) {
@@ -1857,7 +1856,7 @@ html, body {
   border-right: 1px solid #111111;
   border-top: 1px solid #fc554f;
   border-bottom: 1px solid transparent;
-  background-color: #2f3538;
+  background-color: #2b2b2b;
   color: white;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"]:not(:first-child) {
@@ -1870,7 +1869,7 @@ html, body {
   border-right: 1px solid #111111;
   border-top: 1px solid #fc554f;
   border-bottom: 1px solid transparent;
-  background-color: #2f3538;
+  background-color: #2b2b2b;
   color: white;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"]:not(:first-child) {
@@ -1883,7 +1882,7 @@ html, body {
   border-right: 1px solid #111111;
   border-top: 1px solid #fc554f;
   border-bottom: 1px solid transparent;
-  background-color: #2f3538;
+  background-color: #2b2b2b;
   color: white;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"]:not(:first-child) {
@@ -1896,7 +1895,7 @@ html, body {
   border-right: 1px solid #111111;
   border-top: 1px solid #fc554f;
   border-bottom: 1px solid transparent;
-  background-color: #2f3538;
+  background-color: #2b2b2b;
   color: white;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"]:not(:first-child) {
@@ -1909,7 +1908,7 @@ html, body {
   border-right: 1px solid #111111;
   border-top: 1px solid #fc554f;
   border-bottom: 1px solid transparent;
-  background-color: #2f3538;
+  background-color: #2b2b2b;
   color: white;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"]:not(:first-child) {
@@ -1922,7 +1921,7 @@ html, body {
   border-right: 1px solid #111111;
   border-top: 1px solid #fc554f;
   border-bottom: 1px solid transparent;
-  background-color: #2f3538;
+  background-color: #2b2b2b;
   color: white;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"]:not(:first-child) {
@@ -1972,11 +1971,11 @@ html, body {
   font-size: 11px;
 }
 .csseditor[data-theme=dark] .tab > .tab-header > .tab-item.select-reverse:not(.selected) {
-  background-color: rgba(252, 85, 79, 0.5);
+  background-color: rgba(43, 43, 43, 0.5);
   color: black;
 }
 .csseditor[data-theme=dark] .tab > .tab-header > .tab-item.select-reverse.selected {
-  background-color: #2f3538;
+  background-color: #2b2b2b;
 }
 .csseditor[data-theme=dark] .tab > .tab-body {
   position: absolute;
@@ -2073,7 +2072,7 @@ html, body {
   min-width: 60px;
 }
 .csseditor[data-theme=dark] .tab.horizontal > .tab-header > .tab-item.selected {
-  background-color: rgba(252, 85, 79, 0.5);
+  background-color: rgba(43, 43, 43, 0.5);
 }
 .csseditor[data-theme=dark] .tab.horizontal > .tab-body {
   top: 0px;
@@ -2252,10 +2251,6 @@ html, body {
   padding: 0px;
   padding-top: 5px;
 }
-.csseditor[data-theme=dark] .tool-menu .items .draw-items,
-.csseditor[data-theme=dark] .external-tool-menu .items .draw-items {
-  background-color: #2f3538;
-}
 .csseditor[data-theme=dark] .tool-menu .items .draw-items > *,
 .csseditor[data-theme=dark] .external-tool-menu .items .draw-items > * {
   display: inline-block;
@@ -2290,20 +2285,10 @@ html, body {
   box-shadow: none;
   margin-bottom: 5px;
 }
-.csseditor[data-theme=dark] .tool-menu .items .draw-items .menu-item.text svg path,
-.csseditor[data-theme=dark] .external-tool-menu .items .draw-items .menu-item.text svg path {
-  stroke: #2f3538;
-  stroke-width: 2px;
-}
-.csseditor[data-theme=dark] .tool-menu .items .draw-items .menu-item svg path,
-.csseditor[data-theme=dark] .external-tool-menu .items .draw-items .menu-item svg path {
-  stroke: #2f3538;
-  stroke-width: 1px;
-}
 .csseditor[data-theme=dark] .tool-menu .items .draw-items .menu-item.selected .icon svg path,
 .csseditor[data-theme=dark] .external-tool-menu .items .draw-items .menu-item.selected .icon svg path {
   stroke: #2f3538;
-  fill: #feb6b3;
+  fill: #fc554f;
 }
 .csseditor[data-theme=dark] .tool-menu .items .draw-items .menu-item[data-no-title=true],
 .csseditor[data-theme=dark] .external-tool-menu .items .draw-items .menu-item[data-no-title=true] {
@@ -4114,10 +4099,11 @@ html, body {
   grid-column-gap: 4px;
 }
 .csseditor[data-theme=dark] .artboard-list .artboard-item .preview {
-  background-color: #2f3538;
-  border-radius: 3px;
-  border: 1px solid #111111;
   cursor: pointer;
+}
+.csseditor[data-theme=dark] .artboard-list .artboard-item .preview svg {
+  width: 16px;
+  height: 16px;
 }
 .csseditor[data-theme=dark] .artboard-list .artboard-item .detail {
   display: grid;
@@ -4227,6 +4213,8 @@ html, body {
 }
 .csseditor[data-theme=dark] .layer-list .layer-item .detail span.icon svg path {
   fill: white;
+  stroke: #4d4949;
+  stroke-width: 1px;
 }
 .csseditor[data-theme=dark] .layer-list .layer-item .detail label {
   padding: 2px 0px;
@@ -4259,6 +4247,9 @@ html, body {
 }
 .csseditor[data-theme=dark] .layer-list .layer-item.selected svg path {
   fill: white;
+}
+.csseditor[data-theme=dark] .layer-list .layer-item.selected .detail span.icon svg path {
+  stroke: #535353;
 }
 .csseditor[data-theme=dark] .color-assets-property .color-list-tools {
   display: grid;
@@ -9035,7 +9026,6 @@ html, body {
   z-index: 1;
   pointer-events: all;
   box-sizing: border-box;
-  border-top: 1px solid #e7e7e7;
   color: white;
 }
 .csseditor[data-theme=light] .layout-main .layout-header {
@@ -9817,10 +9807,6 @@ html, body {
   padding: 0px;
   padding-top: 5px;
 }
-.csseditor[data-theme=light] .tool-menu .items .draw-items,
-.csseditor[data-theme=light] .external-tool-menu .items .draw-items {
-  background-color: white;
-}
 .csseditor[data-theme=light] .tool-menu .items .draw-items > *,
 .csseditor[data-theme=light] .external-tool-menu .items .draw-items > * {
   display: inline-block;
@@ -9855,20 +9841,10 @@ html, body {
   box-shadow: none;
   margin-bottom: 5px;
 }
-.csseditor[data-theme=light] .tool-menu .items .draw-items .menu-item.text svg path,
-.csseditor[data-theme=light] .external-tool-menu .items .draw-items .menu-item.text svg path {
-  stroke: white;
-  stroke-width: 2px;
-}
-.csseditor[data-theme=light] .tool-menu .items .draw-items .menu-item svg path,
-.csseditor[data-theme=light] .external-tool-menu .items .draw-items .menu-item svg path {
-  stroke: white;
-  stroke-width: 1px;
-}
 .csseditor[data-theme=light] .tool-menu .items .draw-items .menu-item.selected .icon svg path,
 .csseditor[data-theme=light] .external-tool-menu .items .draw-items .menu-item.selected .icon svg path {
   stroke: white;
-  fill: #9ba7e4;
+  fill: #4b61ce;
 }
 .csseditor[data-theme=light] .tool-menu .items .draw-items .menu-item[data-no-title=true],
 .csseditor[data-theme=light] .external-tool-menu .items .draw-items .menu-item[data-no-title=true] {
@@ -11679,10 +11655,11 @@ html, body {
   grid-column-gap: 4px;
 }
 .csseditor[data-theme=light] .artboard-list .artboard-item .preview {
-  background-color: white;
-  border-radius: 3px;
-  border: 1px solid #e7e7e7;
   cursor: pointer;
+}
+.csseditor[data-theme=light] .artboard-list .artboard-item .preview svg {
+  width: 16px;
+  height: 16px;
 }
 .csseditor[data-theme=light] .artboard-list .artboard-item .detail {
   display: grid;
@@ -11792,6 +11769,8 @@ html, body {
 }
 .csseditor[data-theme=light] .layer-list .layer-item .detail span.icon svg path {
   fill: white;
+  stroke: #f1f1f1;
+  stroke-width: 1px;
 }
 .csseditor[data-theme=light] .layer-list .layer-item .detail label {
   padding: 2px 0px;
@@ -11824,6 +11803,9 @@ html, body {
 }
 .csseditor[data-theme=light] .layer-list .layer-item.selected svg path {
   fill: white;
+}
+.csseditor[data-theme=light] .layer-list .layer-item.selected .detail span.icon svg path {
+  stroke: #4a89b6;
 }
 .csseditor[data-theme=light] .color-assets-property .color-list-tools {
   display: grid;

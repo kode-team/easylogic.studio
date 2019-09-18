@@ -37,7 +37,7 @@ export default class LayerTreeProperty extends BaseProperty {
   }
 
   getIcon (type) {
-    return '';
+    // return '';
 
     switch(type) {
     case 'circle': return icon.circle;
