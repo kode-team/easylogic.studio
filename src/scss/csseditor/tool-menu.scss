@@ -102,13 +102,30 @@
         border:0px;
         box-shadow: none;
         margin-bottom: 5px;
+
+        &.text {
+          svg {
+            path {
+              stroke: $background-color;
+              stroke-width: 2px;
+            }
+          }          
+        }
+        svg {
+          path {
+            stroke: $background-color;
+            stroke-width: 1px;            
+          }
+        }
   
         &.selected {
           .icon {      
-            background-color: $selected-background-color;
+            // background-color: $selected-background-color;
             svg {
               path {
-                fill: $selected-color;
+                stroke: $background-color;  
+                // stroke: $selected-background-color;  
+                fill: lighten($selected-color, 20%);
               }
             }
           }

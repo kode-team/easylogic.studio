@@ -464,7 +464,6 @@ export default class CSSPropertyEditor extends UIElement {
       case 'padding-left': 
       case 'padding-right': 
 
-      case 'border-radius': 
       case 'font-size': 
       case 'font-stretch': 
       case 'width': 

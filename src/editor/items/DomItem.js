@@ -421,10 +421,6 @@ export class DomItem extends GroupItem {
     }
   }
 
-  toBorderRadiusCSS() {
-    return this.toStringPropertyCSS('border-radius')
-  }
-
   // toBorderImageCSS() {
 
   //   if (!this.json.borderImage) return {} 
@@ -526,6 +522,8 @@ export class DomItem extends GroupItem {
         'text-align', 'text-transform', 'text-decoration',
         'letter-spacing', 'word-spacing', 'text-indent',
 
+        'border-radius',
+
         'filter', 'clip-path', 'backdrop-filter', 'box-shadow', 'text-shadow',
 
         'offset-path'
@@ -619,7 +617,6 @@ export class DomItem extends GroupItem {
       ...this.toBorderCSS(),
       ...this.toOutlineCSS(),      
       ...this.toTransformCSS(),      
-      ...this.toBorderRadiusCSS(),
       // ...this.toBorderImageCSS(),
       ...this.toBackgroundImageCSS(isExport),
       ...this.toAnimationCSS(),
@@ -637,7 +634,6 @@ export class DomItem extends GroupItem {
       ...this.toBorderCSS(),
       ...this.toOutlineCSS(),
       ...this.toTransformCSS(),
-      ...this.toBorderRadiusCSS(),
       // ...this.toBorderImageCSS(),
       ...this.toAnimationCSS(),
       ...this.toTransitionCSS(),      

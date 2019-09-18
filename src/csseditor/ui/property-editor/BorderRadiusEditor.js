@@ -7,8 +7,8 @@ import BorderRadius from "../../../editor/css-property/BorderRadius";
 const typeList = [
   { key: "border-top-left-radius", title: "Top Left" },
   { key: "border-top-right-radius", title: "Top Right" },
-  { key: "border-bottom-left-radius", title: "Bottom Left" },
-  { key: "border-bottom-right-radius", title: "Bottom Right" }
+  { key: "border-bottom-right-radius", title: "Bottom Right" },
+  { key: "border-bottom-left-radius", title: "Bottom Left" }  
 ];
 
 const keyList = typeList.map(it => it.key);
@@ -44,7 +44,7 @@ export default class BorderRadiusEditor extends UIElement {
     var selectedValue = this.state.isAll ? 'all' : 'partitial'
     var borderRadius = this.state['border-radius'];
 
-    return `
+    return /*html*/`
       <div class="property-item border-radius-item">
         <div class="radius-selector" data-selected-value="${selectedValue}" ref="$selector">
           <button type="button" data-value="all">${icon.border_all}</button>
@@ -64,7 +64,7 @@ export default class BorderRadiusEditor extends UIElement {
         <div class="radius-setting-box" ref="$radiusSettingBox">
           ${typeList.map(it => {
             var value = this.state[it.key]
-            return `
+            return /*html*/`
               <div>
                   <RangeEditor ref='$${it.key}' label='${it.title}' key='${it.key}' value='${value}' onchange='changeBorderRadius' />
               </div>  
@@ -104,9 +104,9 @@ export default class BorderRadiusEditor extends UIElement {
     var value = '';
 
     if (this.state.isAll) {
-      value = ['border-radius'].map(key => `${key}: ${this.state[key]}`).join(';')
+      value = this.state['border-radius'] + ''
     } else {
-      value = keyList.map(key => `${key}: ${this.state[key]}`).join(';')
+      value = keyList.map(key => `${this.state[key]}`).join(' ')
     }
 
     this.parent.trigger(this.props.onchange, value);

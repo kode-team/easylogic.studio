@@ -9,6 +9,10 @@ export default class AddText extends MenuItem {
     return "3. Text";
   }
 
+  getClassName() {
+    return 'text'
+  }
+
   isHideTitle() {
     return true; 
   }

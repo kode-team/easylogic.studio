@@ -107,9 +107,9 @@
         border:0px;
   
         &:before {
-          left: 50%;
-          top: 50%;
-          transform: translate(-50%, -50%);
+          left: 0px;
+          top: 0px;
+          transform: translate(-100%, calc(-100% - 5px));
         }
   
       }

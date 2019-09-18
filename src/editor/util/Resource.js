@@ -168,13 +168,22 @@ export const applyAsset = (json, assets) => {
 
         Object.keys(assets).forEach(idString => {
             var a = assets[idString]
-            json = json.replace(new RegExp(`#${a.id}`, 'g'), a.local);
+            if (json.indexOf(`#${a.id}`) > -1) {
+                json = json.replace(new RegExp(`#${a.id}`, 'g'), a.local);
+            }
+
         })
     }
 
     return json; 
 }
 
+/**
+ * 
+ * recover origin to local blob url for Asset 
+ * 
+ * @param {string} value JSON String for project list 
+ */
 export const revokeResource = (value) => {
     var json = JSON.parse(value || '[]');
     var assets = {} 
@@ -198,8 +207,6 @@ export const revokeResource = (value) => {
     return json; 
 }
 
-export const loadResource = (key, defaultValue) => {
-
-
+export const loadResource = (key) => {
     return revokeResource(window.localStorage.getItem(`easylogic.studio.${key}`))
 }

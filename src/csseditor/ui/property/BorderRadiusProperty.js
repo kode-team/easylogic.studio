@@ -10,20 +10,25 @@ export default class BorderRadiusProperty extends BaseProperty {
     return "Border Radius";  
   }
 
+
+  hasKeyframe () {
+    return true; 
+  }
+
+  getKeyframeProperty () {
+    return 'border-radius'
+  }
+
   getBody() {
-    return `<div class="property-item full border-radius-item" ref='$body'></div>`;
+    return /*html*/`<div class="property-item full border-radius-item" ref='$body'></div>`;
   }
 
   [LOAD('$body')] () {
     var current = editor.selection.current || {}; 
-    var value = current['border-radius']
+    var value = current['border-radius'] || ''
 
-    return `
-      <BorderRadiusEditor 
-              ref='$1' 
-              value='${value}' 
-              onchange='changeBorderRadius' 
-            />
+    return /*html*/`
+      <BorderRadiusEditor ref='$1' value='${value}' onchange='changeBorderRadius' />
     `
   }
 

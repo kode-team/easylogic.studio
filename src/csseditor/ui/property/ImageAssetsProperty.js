@@ -24,10 +24,11 @@ export default class ImageAssetsProperty extends BaseProperty {
 
   [EVENT('refreshSelection') + DEBOUNCE(1000)] () {
     this.show();
+    this.refresh();
   }
 
   getBody() {
-    return `
+    return /*html*/`
       <div class='property-item image-assets'>
         <div class='image-list' ref='$imageList' data-view-mode='${this.state.mode}'></div>
       </div>

@@ -2290,13 +2290,20 @@ html, body {
   box-shadow: none;
   margin-bottom: 5px;
 }
-.csseditor[data-theme=dark] .tool-menu .items .draw-items .menu-item.selected .icon,
-.csseditor[data-theme=dark] .external-tool-menu .items .draw-items .menu-item.selected .icon {
-  background-color: #535353;
+.csseditor[data-theme=dark] .tool-menu .items .draw-items .menu-item.text svg path,
+.csseditor[data-theme=dark] .external-tool-menu .items .draw-items .menu-item.text svg path {
+  stroke: #2f3538;
+  stroke-width: 2px;
+}
+.csseditor[data-theme=dark] .tool-menu .items .draw-items .menu-item svg path,
+.csseditor[data-theme=dark] .external-tool-menu .items .draw-items .menu-item svg path {
+  stroke: #2f3538;
+  stroke-width: 1px;
 }
 .csseditor[data-theme=dark] .tool-menu .items .draw-items .menu-item.selected .icon svg path,
 .csseditor[data-theme=dark] .external-tool-menu .items .draw-items .menu-item.selected .icon svg path {
-  fill: #fc554f;
+  stroke: #2f3538;
+  fill: #feb6b3;
 }
 .csseditor[data-theme=dark] .tool-menu .items .draw-items .menu-item[data-no-title=true],
 .csseditor[data-theme=dark] .external-tool-menu .items .draw-items .menu-item[data-no-title=true] {
@@ -2795,10 +2802,10 @@ html, body {
   border: 0px;
 }
 .csseditor[data-theme=dark] .selection-tool .selection-tool-item[data-position=move]:before {
-  left: 50%;
-  top: 50%;
-  -webkit-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
+  left: 0px;
+  top: 0px;
+  -webkit-transform: translate(-100%, calc(-100% - 5px));
+          transform: translate(-100%, calc(-100% - 5px));
 }
 .csseditor[data-theme=dark] .selection-tool .selection-tool-item[data-position=transform-origin-path] {
   left: 0px;
@@ -3099,7 +3106,7 @@ html, body {
   pointer-events: none;
 }
 .csseditor[data-theme=dark] .property {
-  border-bottom: 1px solid #1b1b1b;
+  border-bottom: 1px solid #2b2b2b;
   background-color: #4d4949;
   color: #ffffff;
   display: none;
@@ -3274,7 +3281,7 @@ html, body {
   background-color: #424242;
 }
 .csseditor[data-theme=dark] .property.show > .property-title {
-  border-bottom: 1px solid #1b1b1b;
+  border-bottom: 1px solid #2b2b2b;
 }
 .csseditor[data-theme=dark] .property.show > .property-body {
   display: block;
@@ -3303,7 +3310,7 @@ html, body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   cursor: pointer;
-  border-bottom: 0px solid #1b1b1b;
+  border-bottom: 0px solid #2b2b2b;
   background-color: #2b2b2b;
 }
 .csseditor[data-theme=dark] .property > .property-title label {
@@ -3626,7 +3633,6 @@ html, body {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
-  border: 1px solid #111111;
 }
 .csseditor[data-theme=dark] .box-model-item > div .margin [data-value=top] {
   display: inline-block;
@@ -3685,7 +3691,6 @@ html, body {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
-  border: 1px solid #111111;
 }
 .csseditor[data-theme=dark] .box-model-item > div .padding [data-value=top] {
   display: inline-block;
@@ -5302,9 +5307,9 @@ html, body {
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
   background-color: transparent;
-  border-bottom: 1px solid #1b1b1b;
-  border-left: 1px solid #1b1b1b;
-  border-top: 1px solid #1b1b1b;
+  border-bottom: 1px solid #2b2b2b;
+  border-left: 1px solid #2b2b2b;
+  border-top: 1px solid #2b2b2b;
   text-align: left;
   background-color: #2b2b2b;
 }
@@ -5331,9 +5336,9 @@ html, body {
   border-bottom-right-radius: 3px;
   border-top-right-radius: 3px;
   background-color: transparent;
-  border-bottom: 1px solid #1b1b1b;
-  border-top: 1px solid #1b1b1b;
-  border-right: 1px solid #1b1b1b;
+  border-bottom: 1px solid #2b2b2b;
+  border-top: 1px solid #2b2b2b;
+  border-right: 1px solid #2b2b2b;
 }
 .csseditor[data-theme=dark] .range-editor .range-editor-type[data-type=calc] .area {
   height: 100%;
@@ -9850,13 +9855,20 @@ html, body {
   box-shadow: none;
   margin-bottom: 5px;
 }
-.csseditor[data-theme=light] .tool-menu .items .draw-items .menu-item.selected .icon,
-.csseditor[data-theme=light] .external-tool-menu .items .draw-items .menu-item.selected .icon {
-  background-color: white;
+.csseditor[data-theme=light] .tool-menu .items .draw-items .menu-item.text svg path,
+.csseditor[data-theme=light] .external-tool-menu .items .draw-items .menu-item.text svg path {
+  stroke: white;
+  stroke-width: 2px;
+}
+.csseditor[data-theme=light] .tool-menu .items .draw-items .menu-item svg path,
+.csseditor[data-theme=light] .external-tool-menu .items .draw-items .menu-item svg path {
+  stroke: white;
+  stroke-width: 1px;
 }
 .csseditor[data-theme=light] .tool-menu .items .draw-items .menu-item.selected .icon svg path,
 .csseditor[data-theme=light] .external-tool-menu .items .draw-items .menu-item.selected .icon svg path {
-  fill: #4b61ce;
+  stroke: white;
+  fill: #9ba7e4;
 }
 .csseditor[data-theme=light] .tool-menu .items .draw-items .menu-item[data-no-title=true],
 .csseditor[data-theme=light] .external-tool-menu .items .draw-items .menu-item[data-no-title=true] {
@@ -10355,10 +10367,10 @@ html, body {
   border: 0px;
 }
 .csseditor[data-theme=light] .selection-tool .selection-tool-item[data-position=move]:before {
-  left: 50%;
-  top: 50%;
-  -webkit-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
+  left: 0px;
+  top: 0px;
+  -webkit-transform: translate(-100%, calc(-100% - 5px));
+          transform: translate(-100%, calc(-100% - 5px));
 }
 .csseditor[data-theme=light] .selection-tool .selection-tool-item[data-position=transform-origin-path] {
   left: 0px;
@@ -11186,7 +11198,6 @@ html, body {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
-  border: 1px solid #e7e7e7;
 }
 .csseditor[data-theme=light] .box-model-item > div .margin [data-value=top] {
   display: inline-block;
@@ -11245,7 +11256,6 @@ html, body {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
-  border: 1px solid #e7e7e7;
 }
 .csseditor[data-theme=light] .box-model-item > div .padding [data-value=top] {
   display: inline-block;

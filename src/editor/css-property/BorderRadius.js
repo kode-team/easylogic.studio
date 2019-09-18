@@ -8,24 +8,23 @@ export default class BorderRadius {
             'border-radius': Length.px(0),
             'border-top-left-radius': Length.px(0),
             'border-top-right-radius': Length.px(0),
-            'border-bottom-left-radius': Length.px(0),
-            'border-bottom-right-radius': Length.px(0)
+            'border-bottom-right-radius': Length.px(0),
+            'border-bottom-left-radius': Length.px(0)
         }
 
         var temp = {} 
-        str.split(';').filter(it => it.includes(':')).forEach(borderValue => {
-            var [key, value] = borderValue.split(':').map(it => it.trim())
-            
-            value = Length.parse(value);
+        var arr = str.split(' ').filter(it => Length.parse(it))
 
-            if (obj[key]) {
-                obj[key] = value; 
-            }
-
-            temp[key] = true; 
-        })
-
-        if (temp['border-radius']) obj.isAll = true; 
+        if (arr.length === 1) {
+            obj.isAll = true; 
+            obj['border-radius'] = arr[0]
+        } else {
+            obj.isAll = false; 
+            obj['border-top-left-radius'] = arr[0];
+            obj['border-top-right-radius'] = arr[1];
+            obj['border-bottom-right-radius'] = arr[2];
+            obj['border-bottom-left-radius'] = arr[3];
+        }
 
         return obj; 
     }

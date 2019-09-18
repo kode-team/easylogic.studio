@@ -61,6 +61,11 @@ export class AssetItem extends Item {
     }
   }
 
+
+  removePropertyList(arr, removeIndex) {
+    arr.splice(removeIndex, 1);
+  }  
+
   /* color assets manage */ 
 
   removeColor(removeIndex) {
