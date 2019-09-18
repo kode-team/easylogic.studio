@@ -3,7 +3,7 @@ import icon from "../icon/icon";
 
 export default class Save extends MenuItem {
   getIconString() {
-    return icon.file_copy;
+    return icon.storage;
   }
   getTitle() {
     return "Save";

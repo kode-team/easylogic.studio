@@ -3,10 +3,10 @@ import icon from "../icon/icon";
 
 export default class Download extends MenuItem {
   getIconString() {
-    return icon.save;
+    return icon.archive;
   }
   getTitle() {
-    return "Download";
+    return "Archive";
   }
 
   clickButton(e) {

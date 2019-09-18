@@ -6,10 +6,7 @@
     grid-template-columns: 30px 1fr 20px ; 
     grid-column-gap: 4px;
     box-sizing: border-box;
-
-    &:last-child {
-      margin-bottom: 5px;
-    }
+    padding: 5px 0px;
 
     text-align: center;
     &.selected {
@@ -37,7 +34,7 @@
     }
 
     .labels {
-      margin-top: 4px;
+      // margin-top: 4px;
 
       label {
         // border: 1px solid $border-color;
@@ -50,19 +47,7 @@
         small {
           color: white;
           text-transform: lowercase;
-        }
-
-        &.delay {
-          background-color: red;
-        }
-
-        &.duration {
-          background-color: green;
-        }       
-
-        &.count {
-          background-color: blue;
-        }               
+        }      
         
         &.direction,
         &.fill-mode,
@@ -85,7 +70,7 @@
               vertical-align: middle;
 
               path {
-                fill: blue;
+                fill: $font-color;
               }
             }
           }

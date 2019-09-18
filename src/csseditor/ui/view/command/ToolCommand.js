@@ -1,7 +1,7 @@
 import UIElement, { COMMAND } from "../../../../util/UIElement";
 import { editor, EDIT_MODE_SELECTION } from "../../../../editor/editor";
 import { Length } from "../../../../editor/unit/Length";
-import { uuidShort } from "../../../../util/functions/math";
+import { uuidShort, uuid } from "../../../../util/functions/math";
 import AssetParser from "../../../../editor/parse/AssetParser";
 import Dom from "../../../../util/Dom";
 import { Project } from "../../../../editor/items/Project";
@@ -167,7 +167,7 @@ export default class ToolCommand extends UIElement {
 
             // convert data or blob to local url 
             this.trigger('load.original.image', obj, (info) => {
-                this.trigger('add.image', {src: obj.local, ...info, ...rect });
+                this.emit('add.image', {src: obj.local, ...info, ...rect });
                 editor.changeMode(EDIT_MODE_SELECTION);
                 this.emit('after.change.mode');                
             });
@@ -201,6 +201,7 @@ export default class ToolCommand extends UIElement {
             case 'image/jpg': 
             case 'image/jpeg': 
                 this.trigger('add.assets.image', {
+                    id: uuidShort(),
                     type: info.mimeType,
                     name: '',
                     original: datauri, 
@@ -221,6 +222,7 @@ export default class ToolCommand extends UIElement {
             case 'svg':
 
                 this.trigger('add.assets.image', {
+                    id: uuidShort(),
                     type: 'image/' + ext,
                     name,
                     original: item.data, 
@@ -239,6 +241,7 @@ export default class ToolCommand extends UIElement {
             var local = URL.createObjectURL(item);
 
             this.trigger('add.assets.image', {
+                id: uuidShort(),
                 type: item.type,
                 name: item.name, 
                 original: datauri, 

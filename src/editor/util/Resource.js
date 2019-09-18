@@ -1,27 +1,6 @@
-function makeFilePromise (it) {
-    return new Promise((resolve, reject) => {
-        resolve({
-            kind: it.kind, 
-            type: it.type, 
-            data: it.getAsFile()
-        })
-    })
-}
-
-function makeStringPromise (it) {
-    return new Promise((resolve, reject) => {
-
-        it.getAsFile(content => {
-        
-            resolve({
-                kind: it.kind, 
-                type: it.type, 
-                data: content  
-            })
-        })
-
-    })
-}
+import { editor } from "../editor"
+import { isArray, isObject, isString } from "../../util/functions/func";
+import AssetParser from "../parse/AssetParser";
   
 export default class Resource {
     static getAllDropItems (e) {
@@ -120,10 +99,107 @@ export const hasCustomProperty = (property) => {
     return hasSVGProperty(property) === false && hasCSSProperty(property) === false
 }
 
+
+export const replaceLocalUrltoRealUrl = (str) => {
+
+    var project = editor.selection.currentProject;
+    var images = {} 
+
+    project.images.forEach(a => {
+      if (str.indexOf(a.local) > -1) { 
+        images[a.local]  = a.original
+      }
+    })
+
+    Object.keys(images).forEach(local => {
+        if (str.indexOf(local) > -1) {
+            str = str.replace(new RegExp(local, 'g'), images[local])
+        }
+    })
+    
+    return str; 
+  }
+
+export const replaceLocalUrltoId = (str) => {
+
+    var projects = editor.projects;
+    var images = {} 
+
+    projects.forEach(project => {
+
+        project.images.forEach(a => {
+            if (str.indexOf(a.local) > -1) { 
+                images[a.local]  = '#' + a.id
+            }
+        })
+    })
+
+
+    Object.keys(images).forEach(local => {
+        if (str.indexOf(local) > -1) {
+            str = str.replace(new RegExp(local, 'g'), images[local])
+        }
+    })
+
+    return str; 
+}
+
+export const makeResource = (json) => {
+    var result = JSON.stringify(json)
+
+    // image check 
+    result = replaceLocalUrltoId(result);
+
+    return result;
+}
+
 export const saveResource = (key, value) => {
-    window.localStorage.setItem(`easylogic.studio.${key}`, JSON.stringify(value));
+    window.localStorage.setItem(`easylogic.studio.${key}`, makeResource(value));
+}
+
+export const applyAsset = (json, assets) => {
+    if (isArray(json)) {
+        json = json.map(it => applyAsset(it, assets))
+    } else if (isObject(json)) {
+        Object.keys(json).forEach(key => {
+            json[key] = applyAsset(json[key], assets);
+        }) 
+    } else if (isString(json)) {
+
+        Object.keys(assets).forEach(idString => {
+            var a = assets[idString]
+            json = json.replace(new RegExp(`#${a.id}`, 'g'), a.local);
+        })
+    }
+
+    return json; 
+}
+
+export const revokeResource = (value) => {
+    var json = JSON.parse(value || '[]');
+    var assets = {} 
+
+    json.forEach(project => {
+        project.images.forEach(it => {
+            assets[`#${it.id}`] = it; 
+        })
+    })
+
+    Object.keys(assets).map(idString => {
+        var a = assets[idString];
+        var info = AssetParser.parse(a.original, true);
+        a.local = info.local;
+    })
+
+    json.forEach(project => {
+        project.layers = applyAsset(project.layers, assets);
+    })
+
+    return json; 
 }
 
 export const loadResource = (key, defaultValue) => {
-    return JSON.parse(window.localStorage.getItem(`easylogic.studio.${key}`) || JSON.stringify(defaultValue))
+
+
+    return revokeResource(window.localStorage.getItem(`easylogic.studio.${key}`))
 }

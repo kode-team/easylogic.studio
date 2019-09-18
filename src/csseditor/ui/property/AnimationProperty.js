@@ -18,11 +18,11 @@ export default class AnimationProperty extends BaseProperty {
     return "Animation";
   }
   getBody() {
-    return `<div class='property-item animation-list' ref='$animationList'></div>`;
+    return /*html*/`<div class='animation-list' ref='$animationList'></div>`;
   }
 
   getTools() {
-    return `
+    return /*html*/`
         <button type="button" ref="$add" title="add Fill">${icon.add}</button>
     `;
   }
@@ -40,7 +40,7 @@ export default class AnimationProperty extends BaseProperty {
         this.selectedIndex = index;
       }
 
-      return `
+      return /*html*/`
       <div class='animation-group-item'>
         <div class='animation-item ${selectedClass}' data-index='${index}' ref="animationIndex${index}" draggable='true' >
             <div class='timing preview' data-index='${index}' ref='$preview${index}'>
@@ -57,8 +57,8 @@ export default class AnimationProperty extends BaseProperty {
                 <label class='direction' title='Direction'><small>${it.direction}</small></label>
                 <label class='fill-mode' title='Fill Mode'><small>${it.fillMode}</small></label>
                 <label class='play-state' title='Play State' data-index='${index}' data-play-state-selected-value="${it.playState}">
-                  <small data-play-state-value='running'>${icon.pause}</small>
-                  <small data-play-state-value='paused'>${icon.play}</small>
+                  <small data-play-state-value='running'>${icon.play}</small>
+                  <small data-play-state-value='paused'>${icon.pause}</small>
                 </label>
               </div>
             </div>

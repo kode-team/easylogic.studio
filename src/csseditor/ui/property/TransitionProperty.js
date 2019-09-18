@@ -20,11 +20,11 @@ export default class TransitionProperty extends BaseProperty {
   }
 
   getBody() {
-    return `<div class='property-item transition-list' ref='$transitionList'></div>`;
+    return /*html*/`<div class='transition-list' ref='$transitionList'></div>`;
   }
 
   getTools() {
-    return `
+    return /*html*/`
         <button type="button" ref="$add" title="add Transition">${icon.add}</button>
     `;
   }

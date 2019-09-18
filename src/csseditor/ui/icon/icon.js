@@ -75,8 +75,13 @@ import cat from "./cat";
 import refresh from "./refresh";
 import gps_fixed from "./gps_fixed";
 import file_copy from "./file_copy";
+import archive from "./archive";
+import storage from "./storage";
+
 
 export default {
+  storage,
+  archive,
   file_copy,
   gps_fixed,
   refresh,

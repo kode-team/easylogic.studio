@@ -1,15 +1,13 @@
 .transition-list {
   grid-template-columns: 1fr !important;
-  padding-bottom: 5px;
+  // padding-bottom: 5px;
 
   .transition-item {
     display: grid;
     grid-template-columns: 30px 1fr 20px ; 
     grid-column-gap: 4px;
     box-sizing: border-box;
-    &:last-child{
-      margin-bottom: 5px;
-    }
+    padding: 5px 0px;
 
     &.selected {
       background-color: rgba($border-color, 0.5);
@@ -37,7 +35,9 @@
       label {
         padding: 1px 3px;
         border-radius: 2px;
-        font-weight: bold;        
+        font-weight: bold;      
+        background-color: $border-color;
+
         small {
           color: white;
         }
@@ -47,14 +47,6 @@
           font-weight: normal;
           border-bottom: 0px;
         }
-
-        &.delay {
-          background-color: red;
-        }
-
-        &.duration {
-          background-color: green;
-        }  
       }
     }     
 

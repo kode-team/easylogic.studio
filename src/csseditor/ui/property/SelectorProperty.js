@@ -35,11 +35,11 @@ export default class SelectorProperty extends BaseProperty {
     return "Selector";
   }
   getBody() {
-    return `<div class='property-item selector-list' ref='$selectorList'></div>`;
+    return `<div class='selector-list' ref='$selectorList'></div>`;
   }
 
   getTools() {
-    return `
+    return /*html*/`
       <div style='display:inline-block;'>
         <SelectEditor ref='$select' key='selector' icon="true" none-value="selector" options="${selectorList}" />
       </div>
@@ -49,7 +49,7 @@ export default class SelectorProperty extends BaseProperty {
 
   makeSelectorTemplate (selector, index) {
     index = index.toString()
-    return `
+    return /*html*/`
       <div class='selector-item' draggable='true' ref='$selectorIndex${index}' data-index='${index}'>
         <div class='title'>
           <div class='name'>

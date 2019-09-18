@@ -56,8 +56,6 @@ export default class LayerTreeProperty extends BaseProperty {
 
     return parentObject.layers.map( (layer, index) => {
 
-      this.state.layers[layer.id] = {layer, parentObject, index}
-
       var selected = editor.selection.check(layer) ? 'selected' : '';
       return /*html*/`        
       <div class='layer-item ${selected}' data-depth="${depth}" data-layer-id='${layer.id}' draggable="true">
@@ -95,18 +93,25 @@ export default class LayerTreeProperty extends BaseProperty {
     this.startInputEditing(e.$delegateTarget.$('label'))
   }
 
+
+
   modifyDoneInputEditing (input) {
     this.endInputEditing(input, (index, text) => {
 
 
       var id = input.closest('layer-item').attr('data-layer-id');
-      var layerInfo = this.state.layers[id] 
-      if (layerInfo) {
 
-        layerInfo.layer.reset({
-          name: text
-        })
+      var artboard = editor.selection.currentArtboard;
+      if (artboard) {
+        var item = artboard.searchById(id)
+        if (item) {
+          item.reset({
+            name: text
+          })
+        }
+  
       }
+
 
     });    
   }
@@ -156,9 +161,8 @@ export default class LayerTreeProperty extends BaseProperty {
       var $item = e.$delegateTarget.closest('layer-item')
       var id = $item.attr('data-layer-id');
 
-      var obj = this.state.layers[id]
-      obj.parentObject.layers.splice(obj.index, 1);
-      delete this.state.layers[id]
+      var item = artboard.searchById(id);
+      item.remove();
 
       this.emit('refreshAllSelectArtBoard');
       // $item.remove();
@@ -171,11 +175,11 @@ export default class LayerTreeProperty extends BaseProperty {
     if (artboard) {
 
       var $item = e.$delegateTarget.closest('layer-item')
-      var id = $item.attr('data-layer-id');
-
-      var obj = this.state.layers[id]
-      editor.selection.select(obj.layer)
       $item.onlyOneClass('selected');
+
+      var id = $item.attr('data-layer-id');
+      var item = artboard.searchById(id);
+      editor.selection.select(item)
 
       this.emit('refreshSelection');      
 
@@ -188,15 +192,11 @@ export default class LayerTreeProperty extends BaseProperty {
       var $item = e.$delegateTarget.closest('layer-item')
       var id = $item.attr('data-layer-id');
 
-      var obj = this.state.layers[id]
+      var item = artboard.searchById(id);      
+      item.toggle('visible')
+      e.$delegateTarget.attr('data-visible', item.visible);
 
-      obj.layer.reset({
-        visible: !obj.layer.visible
-      })
-
-      e.$delegateTarget.attr('data-visible', obj.layer.visible);
-
-      this.emit('refreshElement', obj.layer);
+      this.emit('refreshElement', item);
     }
   }
 
@@ -207,15 +207,11 @@ export default class LayerTreeProperty extends BaseProperty {
       var $item = e.$delegateTarget.closest('layer-item')
       var id = $item.attr('data-layer-id');
 
-      var obj = this.state.layers[id]
+      var item = artboard.searchById(id);
+      item.toggle('lock')
+      e.$delegateTarget.attr('data-lock', item.lock);
 
-      obj.layer.reset({
-        lock: !obj.layer.lock
-      })
-
-      e.$delegateTarget.attr('data-lock', obj.layer.lock);
-
-      this.emit('refreshElement', obj.layer);
+      this.emit('refreshElement', item);
     }
   }
 
@@ -226,8 +222,8 @@ export default class LayerTreeProperty extends BaseProperty {
       var $item = e.$delegateTarget.closest('layer-item')
       var id = $item.attr('data-layer-id');
 
-      var obj = this.state.layers[id]
-      var copyObject = obj.layer.copy();
+      var obj = artboard.searchById(id)
+      var copyObject = obj.copy();
 
       editor.selection.select(copyObject);
       this.refresh();

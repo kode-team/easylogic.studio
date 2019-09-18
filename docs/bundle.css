@@ -3099,7 +3099,7 @@ html, body {
   pointer-events: none;
 }
 .csseditor[data-theme=dark] .property {
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid #1b1b1b;
   background-color: #4d4949;
   color: #ffffff;
   display: none;
@@ -3188,14 +3188,6 @@ html, body {
   width: 24px;
   height: 24px;
 }
-.csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools .timeline-play-control button.play, .csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools .timeline-play-control button.pause {
-  -webkit-transform: scale(1.5);
-          transform: scale(1.5);
-}
-.csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools .timeline-play-control button:not(.play):not(.pause):hover {
-  -webkit-transform: scale(1.2);
-          transform: scale(1.2);
-}
 .csseditor[data-theme=dark] .property.full.managed-tool > .property-title .tools .timeline-play-control button.play svg path {
   fill: #fc554f;
 }
@@ -3282,11 +3274,11 @@ html, body {
   background-color: #424242;
 }
 .csseditor[data-theme=dark] .property.show > .property-title {
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid #1b1b1b;
 }
 .csseditor[data-theme=dark] .property.show > .property-body {
   display: block;
-  padding: 0px 11px 0px 6px;
+  padding: 0px 6px 0px 6px;
 }
 .csseditor[data-theme=dark] .property.show.size-property > .property-body {
   display: grid;
@@ -3311,7 +3303,7 @@ html, body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   cursor: pointer;
-  border-bottom: 0px solid black;
+  border-bottom: 0px solid #1b1b1b;
   background-color: #2b2b2b;
 }
 .csseditor[data-theme=dark] .property > .property-title label {
@@ -3759,16 +3751,13 @@ html, body {
 }
 .csseditor[data-theme=dark] .transition-list {
   grid-template-columns: 1fr !important;
-  padding-bottom: 5px;
 }
 .csseditor[data-theme=dark] .transition-list .transition-item {
   display: grid;
   grid-template-columns: 30px 1fr 20px;
   grid-column-gap: 4px;
   box-sizing: border-box;
-}
-.csseditor[data-theme=dark] .transition-list .transition-item:last-child {
-  margin-bottom: 5px;
+  padding: 5px 0px;
 }
 .csseditor[data-theme=dark] .transition-list .transition-item.selected {
   background-color: rgba(17, 17, 17, 0.5);
@@ -3794,6 +3783,7 @@ html, body {
   padding: 1px 3px;
   border-radius: 2px;
   font-weight: bold;
+  background-color: #111111;
 }
 .csseditor[data-theme=dark] .transition-list .transition-item .labels label small {
   color: white;
@@ -3802,12 +3792,6 @@ html, body {
   font-size: 11px;
   font-weight: normal;
   border-bottom: 0px;
-}
-.csseditor[data-theme=dark] .transition-list .transition-item .labels label.delay {
-  background-color: red;
-}
-.csseditor[data-theme=dark] .transition-list .transition-item .labels label.duration {
-  background-color: green;
 }
 .csseditor[data-theme=dark] .transition-list .transition-item .tools {
   vertical-align: middle;
@@ -3822,10 +3806,8 @@ html, body {
   grid-template-columns: 30px 1fr 20px;
   grid-column-gap: 4px;
   box-sizing: border-box;
+  padding: 5px 0px;
   text-align: center;
-}
-.csseditor[data-theme=dark] .animation-list .animation-item:last-child {
-  margin-bottom: 5px;
 }
 .csseditor[data-theme=dark] .animation-list .animation-item.selected {
   background-color: rgba(17, 17, 17, 0.5);
@@ -3847,9 +3829,6 @@ html, body {
 .csseditor[data-theme=dark] .animation-list .animation-item .timing canvas {
   border-radius: 3px;
 }
-.csseditor[data-theme=dark] .animation-list .animation-item .labels {
-  margin-top: 4px;
-}
 .csseditor[data-theme=dark] .animation-list .animation-item .labels label {
   background-color: #111111;
   padding: 1px 3px;
@@ -3861,15 +3840,6 @@ html, body {
 .csseditor[data-theme=dark] .animation-list .animation-item .labels label small {
   color: white;
   text-transform: lowercase;
-}
-.csseditor[data-theme=dark] .animation-list .animation-item .labels label.delay {
-  background-color: red;
-}
-.csseditor[data-theme=dark] .animation-list .animation-item .labels label.duration {
-  background-color: green;
-}
-.csseditor[data-theme=dark] .animation-list .animation-item .labels label.count {
-  background-color: blue;
 }
 .csseditor[data-theme=dark] .animation-list .animation-item .labels label.direction small, .csseditor[data-theme=dark] .animation-list .animation-item .labels label.fill-mode small, .csseditor[data-theme=dark] .animation-list .animation-item .labels label.play-state small {
   color: #ffffff;
@@ -3888,7 +3858,7 @@ html, body {
   vertical-align: middle;
 }
 .csseditor[data-theme=dark] .animation-list .animation-item .labels label.play-state [data-play-state-value] svg path {
-  fill: blue;
+  fill: #ffffff;
 }
 .csseditor[data-theme=dark] .animation-list .animation-item .labels label.play-state [data-play-state-value=pause] svg path {
   fill: red;
@@ -4245,9 +4215,6 @@ html, body {
   display: inline-block;
   width: 20px;
   height: 20px;
-  background-color: #2f3538;
-  border: 1px solid #111111;
-  border-radius: 3px;
 }
 .csseditor[data-theme=dark] .layer-list .layer-item .detail span.icon svg {
   width: 100%;
@@ -5335,9 +5302,9 @@ html, body {
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
   background-color: transparent;
-  border-bottom: 1px solid black;
-  border-left: 1px solid black;
-  border-top: 1px solid black;
+  border-bottom: 1px solid #1b1b1b;
+  border-left: 1px solid #1b1b1b;
+  border-top: 1px solid #1b1b1b;
   text-align: left;
   background-color: #2b2b2b;
 }
@@ -5364,9 +5331,9 @@ html, body {
   border-bottom-right-radius: 3px;
   border-top-right-radius: 3px;
   background-color: transparent;
-  border-bottom: 1px solid black;
-  border-top: 1px solid black;
-  border-right: 1px solid black;
+  border-bottom: 1px solid #1b1b1b;
+  border-top: 1px solid #1b1b1b;
+  border-right: 1px solid #1b1b1b;
 }
 .csseditor[data-theme=dark] .range-editor .range-editor-type[data-type=calc] .area {
   height: 100%;
@@ -10781,14 +10748,6 @@ html, body {
   width: 24px;
   height: 24px;
 }
-.csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control button.play, .csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control button.pause {
-  -webkit-transform: scale(1.5);
-          transform: scale(1.5);
-}
-.csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control button:not(.play):not(.pause):hover {
-  -webkit-transform: scale(1.2);
-          transform: scale(1.2);
-}
 .csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control button.play svg path {
   fill: #4b61ce;
 }
@@ -10879,7 +10838,7 @@ html, body {
 }
 .csseditor[data-theme=light] .property.show > .property-body {
   display: block;
-  padding: 0px 11px 0px 6px;
+  padding: 0px 6px 0px 6px;
 }
 .csseditor[data-theme=light] .property.show.size-property > .property-body {
   display: grid;
@@ -11352,16 +11311,13 @@ html, body {
 }
 .csseditor[data-theme=light] .transition-list {
   grid-template-columns: 1fr !important;
-  padding-bottom: 5px;
 }
 .csseditor[data-theme=light] .transition-list .transition-item {
   display: grid;
   grid-template-columns: 30px 1fr 20px;
   grid-column-gap: 4px;
   box-sizing: border-box;
-}
-.csseditor[data-theme=light] .transition-list .transition-item:last-child {
-  margin-bottom: 5px;
+  padding: 5px 0px;
 }
 .csseditor[data-theme=light] .transition-list .transition-item.selected {
   background-color: rgba(231, 231, 231, 0.5);
@@ -11387,6 +11343,7 @@ html, body {
   padding: 1px 3px;
   border-radius: 2px;
   font-weight: bold;
+  background-color: #e7e7e7;
 }
 .csseditor[data-theme=light] .transition-list .transition-item .labels label small {
   color: white;
@@ -11395,12 +11352,6 @@ html, body {
   font-size: 11px;
   font-weight: normal;
   border-bottom: 0px;
-}
-.csseditor[data-theme=light] .transition-list .transition-item .labels label.delay {
-  background-color: red;
-}
-.csseditor[data-theme=light] .transition-list .transition-item .labels label.duration {
-  background-color: green;
 }
 .csseditor[data-theme=light] .transition-list .transition-item .tools {
   vertical-align: middle;
@@ -11415,10 +11366,8 @@ html, body {
   grid-template-columns: 30px 1fr 20px;
   grid-column-gap: 4px;
   box-sizing: border-box;
+  padding: 5px 0px;
   text-align: center;
-}
-.csseditor[data-theme=light] .animation-list .animation-item:last-child {
-  margin-bottom: 5px;
 }
 .csseditor[data-theme=light] .animation-list .animation-item.selected {
   background-color: rgba(231, 231, 231, 0.5);
@@ -11440,9 +11389,6 @@ html, body {
 .csseditor[data-theme=light] .animation-list .animation-item .timing canvas {
   border-radius: 3px;
 }
-.csseditor[data-theme=light] .animation-list .animation-item .labels {
-  margin-top: 4px;
-}
 .csseditor[data-theme=light] .animation-list .animation-item .labels label {
   background-color: #e7e7e7;
   padding: 1px 3px;
@@ -11454,15 +11400,6 @@ html, body {
 .csseditor[data-theme=light] .animation-list .animation-item .labels label small {
   color: white;
   text-transform: lowercase;
-}
-.csseditor[data-theme=light] .animation-list .animation-item .labels label.delay {
-  background-color: red;
-}
-.csseditor[data-theme=light] .animation-list .animation-item .labels label.duration {
-  background-color: green;
-}
-.csseditor[data-theme=light] .animation-list .animation-item .labels label.count {
-  background-color: blue;
 }
 .csseditor[data-theme=light] .animation-list .animation-item .labels label.direction small, .csseditor[data-theme=light] .animation-list .animation-item .labels label.fill-mode small, .csseditor[data-theme=light] .animation-list .animation-item .labels label.play-state small {
   color: gray;
@@ -11481,7 +11418,7 @@ html, body {
   vertical-align: middle;
 }
 .csseditor[data-theme=light] .animation-list .animation-item .labels label.play-state [data-play-state-value] svg path {
-  fill: blue;
+  fill: gray;
 }
 .csseditor[data-theme=light] .animation-list .animation-item .labels label.play-state [data-play-state-value=pause] svg path {
   fill: red;
@@ -11838,9 +11775,6 @@ html, body {
   display: inline-block;
   width: 20px;
   height: 20px;
-  background-color: white;
-  border: 1px solid #e7e7e7;
-  border-radius: 3px;
 }
 .csseditor[data-theme=light] .layer-list .layer-item .detail span.icon svg {
   width: 100%;

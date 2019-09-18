@@ -19,19 +19,19 @@ export default class TimelinePlayControl extends UIElement {
                     </div>
                 </div>
                 <div class='row'>            
-                    <label title='Speed'>${icon.speed} Speed</label>
+                    <label title='Speed'>speed</label>
                     <div class='input speed-number' >
                         <input type='number' min="0.1" max="10" step="0.1" ref='$speed' value='${this.state.speed}' />
                     </div>
                 </div>                
                 <div class='row'>            
-                    <label>${icon.replay} <span ref='$repeatStatus'>Repeat</span></label>
+                    <label><span ref='$repeatStatus'>repeat</span></label>
                     <div class='input' >
                         <input type='number' min="0" max="100" step="1" ref='$iteration' value='${this.state.iterationCount}' />
                     </div> 
                 </div>
                 <div class='row'>
-                    <label>${icon.shuffle} Direction</label>
+                    <label> Direction</label>
                     <div class='direction-buttons' ref='$direction' data-selected-direction='${this.state.direction}'>
                         <button type="button" data-value='normal' title='normal'>${icon.arrowRight}</button>
                         <button type="button" data-value='alternate' title='alternate'>${icon.alternate}</button>
@@ -45,7 +45,6 @@ export default class TimelinePlayControl extends UIElement {
 
     initState() {
 
-        var status = 'pause'
         var speed = 1
         var iterationCount = 1
         var direction = 'normal'

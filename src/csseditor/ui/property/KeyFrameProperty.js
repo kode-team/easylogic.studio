@@ -20,7 +20,7 @@ export default class KeyFrameProperty extends BaseProperty {
     return "Keyframes";
   }
   getBody() {
-    return `<div class='property-item keyframe-list' ref='$keyframeList'></div>`;
+    return `<div class='keyframe-list' ref='$keyframeList'></div>`;
   }
 
   getTools() {
