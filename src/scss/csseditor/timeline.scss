@@ -43,6 +43,11 @@
             }
 
             .css-property-item {
+
+                > .title {
+                    display: none;
+                }
+
                 > .title > .tools {
                     display: none;
                 }

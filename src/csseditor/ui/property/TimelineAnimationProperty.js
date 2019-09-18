@@ -91,8 +91,8 @@ export default class TimelineAnimationProperty extends BaseProperty {
   [EVENT('addTimeline', 'removeTimeline', 'removeAnimation')] () {
     this.refresh();
   }
-
-  [EVENT('refreshSelection', 'refreshAllSelectArtBoard') + DEBOUNCE(100)] () {
+    
+  [EVENT('refreshTimeline', 'refreshSelection', 'refreshAllSelectArtBoard') + DEBOUNCE(100)] () {
     this.refresh();
   }
 }
