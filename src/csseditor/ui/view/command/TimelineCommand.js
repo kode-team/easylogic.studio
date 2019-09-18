@@ -26,15 +26,6 @@ export default class TimelineCommand extends UIElement {
         })
     }
 
-    [COMMAND('remove.timeline')] (selectedId) {
-        this.currentArtboard((artboard, timeline) => {
-            artboard.removeTimeline(selectedId);
-            this.emit('refreshTimeline');
-            this.emit('removeTimeline');            
-        })
-    }
-
-
     [COMMAND('set.timeline.offset') + DEBOUNCE(100)] (obj) {
         this.currentArtboard((artboard, timeline) => {
             artboard.setTimelineKeyframeOffsetValue(obj.layerId, obj.property, obj.id, obj.value, obj.timing, obj.time);
@@ -140,6 +131,18 @@ export default class TimelineCommand extends UIElement {
             editor.timeline.empty();
             this.emit('refreshTimeline')
             this.trigger('refresh.selected.offset');            
+        })
+    }
+
+
+
+    [COMMAND('remove.animation')] (id) {
+        this.currentArtboard((artboard, timeline) => {
+            artboard.removeAnimation(id);
+
+            editor.timeline.empty();
+            this.emit('refreshTimeline')
+            this.emit('removeAnimation');
         })
     }
 

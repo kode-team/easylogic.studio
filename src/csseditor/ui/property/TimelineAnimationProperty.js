@@ -76,7 +76,8 @@ export default class TimelineAnimationProperty extends BaseProperty {
 
   [CLICK('$timelineAnimationList .timeline-animation-item .remove')] (e) {
     var id = e.$delegateTarget.attr('data-id');
-    this.emit('remove.timeline', id);
+    this.emit('remove.animation', id);
+    // this.refresh();
   }
 
   [CLICK('$timelineAnimationList .timeline-animation-item label')] (e) {
@@ -87,7 +88,7 @@ export default class TimelineAnimationProperty extends BaseProperty {
     $item.onlyOneClass('selected');
   }
 
-  [EVENT('addTimeline', 'removeTimeline')] () {
+  [EVENT('addTimeline', 'removeTimeline', 'removeAnimation')] () {
     this.refresh();
   }
 

@@ -299,7 +299,7 @@ export class TimelineItem extends DomItem {
   }
 
 
-  removeTimeline (id) {
+  removeAnimation (id) {
 
     this.json.timeline = this.json.timeline.filter(it => {
       return it.id !== id; 

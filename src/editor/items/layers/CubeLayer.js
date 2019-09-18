@@ -237,11 +237,10 @@ export class CubeLayer extends Component {
 
     var css = {
       ...this.toKeyListCSS(
-        'filter', 'mix-blend-mode'
+        'filter', 'mix-blend-mode', 'border-radius'
       ),      
       ...this.toBackgroundImageCSS(),
-      ...this.toBorderCSS(),
-      ...this.toBorderRadiusCSS()
+      ...this.toBorderCSS()
     }
 
     return [
