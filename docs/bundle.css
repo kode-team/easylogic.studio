@@ -3359,77 +3359,42 @@ html, body {
   padding-right: 5px;
   vertical-align: middle;
 }
-.csseditor[data-theme=dark] .border-item .border-direction {
-  position: relative;
-  display: block;
-  padding: 2px 10px;
+.csseditor[data-theme=dark] .border-editor .header {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-column-gap: 2px;
+  text-align: center;
 }
-.csseditor[data-theme=dark] .border-item .border-direction[data-selected-value=all] button[data-value=all] {
-  opacity: 1;
-}
-.csseditor[data-theme=dark] .border-item .border-direction[data-selected-value=top] button[data-value=top] {
-  opacity: 1;
-}
-.csseditor[data-theme=dark] .border-item .border-direction[data-selected-value=right] button[data-value=right] {
-  opacity: 1;
-}
-.csseditor[data-theme=dark] .border-item .border-direction[data-selected-value=bottom] button[data-value=bottom] {
-  opacity: 1;
-}
-.csseditor[data-theme=dark] .border-item .border-direction[data-selected-value=left] button[data-value=left] {
-  opacity: 1;
-}
-.csseditor[data-theme=dark] .border-item .border-direction button {
-  padding: 0px;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  border: 3px solid #ccc;
-  box-sizing: border-box;
-  cursor: pointer;
-  opacity: 0.7;
-  outline: none;
-  display: inline-block;
-  vertical-align: middle;
-  width: 20px;
-  height: 20px;
-  margin-right: 10px;
-  background-color: #2f3538;
-}
-.csseditor[data-theme=dark] .border-item .border-direction button[data-value=all] {
-  border: 3px solid #fc554f;
-}
-.csseditor[data-theme=dark] .border-item .border-direction button[data-value=top] {
-  border-top: 3px solid #fc554f;
-}
-.csseditor[data-theme=dark] .border-item .border-direction button[data-value=right] {
-  border-right: 3px solid #fc554f;
-}
-.csseditor[data-theme=dark] .border-item .border-direction button[data-value=bottom] {
-  border-bottom: 3px solid #fc554f;
-}
-.csseditor[data-theme=dark] .border-item .border-direction button[data-value=left] {
-  border-left: 3px solid #fc554f;
-}
-.csseditor[data-theme=dark] .border-item .editor-area {
+.csseditor[data-theme=dark] .border-editor > .editor-area {
   padding: 5px 0px;
 }
-.csseditor[data-theme=dark] .border-item .input-group {
+.csseditor[data-theme=dark] .border-editor > .editor-area > div > label {
+  padding: 2px 0px;
+  text-transform: uppercase;
+  font-weight: bold;
+  text-shadow: 0px 0px 2px #111111;
+}
+.csseditor[data-theme=dark] .border-editor .input-group {
   display: grid;
   grid-template-rows: repeat(3, 1fr);
 }
-.csseditor[data-theme=dark] .border-item .input-field {
+.csseditor[data-theme=dark] .border-editor .input-field {
   display: grid;
   grid-template-columns: 1fr 3fr;
   grid-column-gap: 4px;
   vertical-align: middle;
 }
-.csseditor[data-theme=dark] .border-item .input-field input {
+.csseditor[data-theme=dark] .border-editor .input-field input {
   width: 100%;
   vertical-align: middle;
 }
-.csseditor[data-theme=dark] .border-item .input-field .input-ui {
+.csseditor[data-theme=dark] .border-editor .input-field .input-ui {
   vertical-align: middle;
+}
+.csseditor[data-theme=dark] .border-value-editor {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-column-gap: 2px;
 }
 .csseditor[data-theme=dark] .border-slice-item {
   display: grid;
@@ -5214,6 +5179,22 @@ html, body {
 }
 .csseditor[data-theme=dark] .color-view-editor .remove {
   display: none;
+}
+.csseditor[data-theme=dark] .color-single-editor {
+  height: 19px;
+  text-align: center;
+  width: 100%;
+}
+.csseditor[data-theme=dark] .color-single-editor .preview {
+  height: 100%;
+}
+.csseditor[data-theme=dark] .color-single-editor .preview .mini-view {
+  height: 100%;
+}
+.csseditor[data-theme=dark] .color-single-editor .preview .mini-view .color-view {
+  cursor: pointer;
+  height: 100%;
+  border-radius: 3px;
 }
 .csseditor[data-theme=dark] .range-editor {
   display: grid;
@@ -10918,77 +10899,42 @@ html, body {
   padding-right: 5px;
   vertical-align: middle;
 }
-.csseditor[data-theme=light] .border-item .border-direction {
-  position: relative;
-  display: block;
-  padding: 2px 10px;
+.csseditor[data-theme=light] .border-editor .header {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-column-gap: 2px;
+  text-align: center;
 }
-.csseditor[data-theme=light] .border-item .border-direction[data-selected-value=all] button[data-value=all] {
-  opacity: 1;
-}
-.csseditor[data-theme=light] .border-item .border-direction[data-selected-value=top] button[data-value=top] {
-  opacity: 1;
-}
-.csseditor[data-theme=light] .border-item .border-direction[data-selected-value=right] button[data-value=right] {
-  opacity: 1;
-}
-.csseditor[data-theme=light] .border-item .border-direction[data-selected-value=bottom] button[data-value=bottom] {
-  opacity: 1;
-}
-.csseditor[data-theme=light] .border-item .border-direction[data-selected-value=left] button[data-value=left] {
-  opacity: 1;
-}
-.csseditor[data-theme=light] .border-item .border-direction button {
-  padding: 0px;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  border: 3px solid #ccc;
-  box-sizing: border-box;
-  cursor: pointer;
-  opacity: 0.7;
-  outline: none;
-  display: inline-block;
-  vertical-align: middle;
-  width: 20px;
-  height: 20px;
-  margin-right: 10px;
-  background-color: white;
-}
-.csseditor[data-theme=light] .border-item .border-direction button[data-value=all] {
-  border: 3px solid #4b61ce;
-}
-.csseditor[data-theme=light] .border-item .border-direction button[data-value=top] {
-  border-top: 3px solid #4b61ce;
-}
-.csseditor[data-theme=light] .border-item .border-direction button[data-value=right] {
-  border-right: 3px solid #4b61ce;
-}
-.csseditor[data-theme=light] .border-item .border-direction button[data-value=bottom] {
-  border-bottom: 3px solid #4b61ce;
-}
-.csseditor[data-theme=light] .border-item .border-direction button[data-value=left] {
-  border-left: 3px solid #4b61ce;
-}
-.csseditor[data-theme=light] .border-item .editor-area {
+.csseditor[data-theme=light] .border-editor > .editor-area {
   padding: 5px 0px;
 }
-.csseditor[data-theme=light] .border-item .input-group {
+.csseditor[data-theme=light] .border-editor > .editor-area > div > label {
+  padding: 2px 0px;
+  text-transform: uppercase;
+  font-weight: bold;
+  text-shadow: 0px 0px 2px #e7e7e7;
+}
+.csseditor[data-theme=light] .border-editor .input-group {
   display: grid;
   grid-template-rows: repeat(3, 1fr);
 }
-.csseditor[data-theme=light] .border-item .input-field {
+.csseditor[data-theme=light] .border-editor .input-field {
   display: grid;
   grid-template-columns: 1fr 3fr;
   grid-column-gap: 4px;
   vertical-align: middle;
 }
-.csseditor[data-theme=light] .border-item .input-field input {
+.csseditor[data-theme=light] .border-editor .input-field input {
   width: 100%;
   vertical-align: middle;
 }
-.csseditor[data-theme=light] .border-item .input-field .input-ui {
+.csseditor[data-theme=light] .border-editor .input-field .input-ui {
   vertical-align: middle;
+}
+.csseditor[data-theme=light] .border-value-editor {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-column-gap: 2px;
 }
 .csseditor[data-theme=light] .border-slice-item {
   display: grid;
@@ -12773,6 +12719,22 @@ html, body {
 }
 .csseditor[data-theme=light] .color-view-editor .remove {
   display: none;
+}
+.csseditor[data-theme=light] .color-single-editor {
+  height: 19px;
+  text-align: center;
+  width: 100%;
+}
+.csseditor[data-theme=light] .color-single-editor .preview {
+  height: 100%;
+}
+.csseditor[data-theme=light] .color-single-editor .preview .mini-view {
+  height: 100%;
+}
+.csseditor[data-theme=light] .color-single-editor .preview .mini-view .color-view {
+  cursor: pointer;
+  height: 100%;
+  border-radius: 3px;
 }
 .csseditor[data-theme=light] .range-editor {
   display: grid;

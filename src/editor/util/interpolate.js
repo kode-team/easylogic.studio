@@ -26,6 +26,8 @@ function makeInterpolateCustom (property) {
     switch(property) {
     case 'border-radius':
         return makeInterpolateBorderRadius
+    case 'border':
+        return makeInterpolateBorder        
     case 'box-shadow':
         return makeInterpolateBoxShadow        
     case 'text-shadow':

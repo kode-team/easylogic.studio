@@ -57,7 +57,7 @@ export default class Inspector extends UIElement {
                 <BoxModelProperty />
                 <BackgroundColorProperty />
                 <BackgroundImageProperty />                
-                <BorderProperty />
+                <BorderNewProperty />
                 <BorderRadiusProperty />
 
                 <!-- effect -->

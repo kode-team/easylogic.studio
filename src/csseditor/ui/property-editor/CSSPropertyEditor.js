@@ -21,6 +21,7 @@ import StrokeDashArrayEditor from "./StrokeDashArrayEditor";
 import PathDataEditor from "./PathDataEditor";
 import PolygonDataEditor from "./PolygonDataEditor";
 import OffsetPathListEditor from "./OffsetPathListEditor";
+import BorderEditor from "./BorderEditor";
 
 
 const blend_list = [
@@ -48,6 +49,7 @@ export default class CSSPropertyEditor extends UIElement {
 
   components() {
     return {
+      BorderEditor,
       NumberRangeEditor,
       SelectEditor,
       TextShadowEditor,      
@@ -303,6 +305,15 @@ export default class CSSPropertyEditor extends UIElement {
           onchange='changeBorderRadius' 
         />
       `
+    } else if (property.key === 'border') {
+      return `
+        <BorderEditor 
+          ref='$border${index}' 
+          key='border'
+          value='${property.value}' 
+          onchange='changeKeyValue' 
+        />
+      `      
     } else if (property.key === 'clip-path') {
       return `
         <ClipPathEditor 
@@ -334,6 +345,11 @@ export default class CSSPropertyEditor extends UIElement {
     `
 
   }
+
+  [EVENT('changeKeyValue')] (key, value) {
+    this.modifyPropertyValue(key, value);
+  }
+
 
   [EVENT('changeBorderRadius')] (value) {
     this.modifyPropertyValue('border-radius', value);
@@ -406,6 +422,7 @@ export default class CSSPropertyEditor extends UIElement {
       case 'transform-origin':
       case 'perspective-origin':
       case 'mix-blend-mode':  
+      case 'border':
       case 'border-radius':   
       case 'clip-path':   
       case 'fill-rule':

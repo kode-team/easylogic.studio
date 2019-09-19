@@ -181,11 +181,14 @@ export function CSS_TO_STRING(style, postfix = '') {
   }
   
 
-export function STRING_TO_CSS (str) {
+export function STRING_TO_CSS (str = '') {
 
     str = str + "";
 
     var style = {}
+
+    if (str === '') return style;
+
     str.split(';').forEach(it => {
        var [key, ...value] = it.split(':').map(it => it.trim())
        if (key != '') {

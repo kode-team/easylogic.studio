@@ -63,6 +63,7 @@ export class DomItem extends GroupItem {
       'background-color': '',      
       'background-clip': '',
       'background-image': '',      
+      'border': '',
       'border-radius': '',      
       'box-shadow': '',
       'text-shadow': '',
@@ -90,9 +91,9 @@ export class DomItem extends GroupItem {
       'text-stroke-width': '',  
       'offset-path': '',
       'offset-distance': '',
-      border: {},
+      // border: {},
       outline: {},
-      borderRadius: {},
+      // borderRadius: {},
       // borderImage: new BorderImage(),
       // applyBorderImage: false,
       animations: [],
@@ -124,6 +125,7 @@ export class DomItem extends GroupItem {
       'background-image': json['background-image'],      
       'text-clip': json['text-clip'],
       'border-radius': json['border-radius'],      
+      'border': json['border'],
       'box-shadow': json['box-shadow'],
       'text-shadow': json['text-shadow'],
       'clip-path': json['clip-path'],
@@ -144,11 +146,8 @@ export class DomItem extends GroupItem {
       'mix-blend-mode': json['mix-blend-mode'],
       'opacity': json.opacity + "",
       'rotate': json.rotate + "",
-      border: clone(json.border),
       outline: clone(json.outline),
-      borderRadius: clone(json.borderRadius),
-      // borderImage: json.borderImage.clone(),
-      // applyBorderImage: json.applyBorderImage,
+
       animations: json.animations.map(animation => animation.clone()),
       transitions: json.transitions.map(transition => transition.clone()),
       // 'keyframe': 'sample 0% --aaa 100px | sample 100% width 200px | sample2 0.5% background-image background-image:linear-gradient(to right, black, yellow 100%)',
@@ -386,25 +385,8 @@ export class DomItem extends GroupItem {
     return this.toStringPropertyCSS('background-image')
   }
 
-  getBorderString(data) {
-    return `${data.width} ${data.style} ${data.color}`;
-  }
-
   toBorderCSS() {
-    var results = {};
-    var border = this.json.border;
-
-    if (border.all) {
-      results = {
-        border: this.getBorderString(border.all)
-      };
-    } else {
-      keyEach(border, (type, data) => {
-        results[`border-${type}`] = this.getBorderString(data);
-      });
-    }
-
-    return results;
+    return this.toStringPropertyCSS('border')
   }
 
   toOutlineCSS () {
@@ -611,7 +593,7 @@ export class DomItem extends GroupItem {
     return {
       ...this.toVariableCSS(),
       ...this.toDefaultCSS(isExport),
-      ...this.toWebkitCSS(),
+      ...this.toWebkitCSS(), 
       ...this.toTextClipCSS(),      
       ...this.toBoxModelCSS(),
       ...this.toBorderCSS(),

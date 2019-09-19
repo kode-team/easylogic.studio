@@ -47,10 +47,12 @@ import MotionProperty from "./MotionProperty";
 import ImageAssetsProperty from "./ImageAssetsProperty";
 import ComponentProperty from "./ComponentProperty";
 import TimelineAnimationProperty from "./TimelineAnimationProperty";
+import BorderNewProperty from "./BorderNewProperty";
 
 
 
 export default {
+  BorderNewProperty,
   TimelineAnimationProperty,
   ComponentProperty,
   ImageAssetsProperty,

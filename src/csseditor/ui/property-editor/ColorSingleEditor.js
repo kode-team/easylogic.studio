@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
-import { CLICK } from "../../../util/Event";
+import { CLICK, BIND } from "../../../util/Event";
 
 export default class ColorSingleEditor extends UIElement {
 
@@ -11,22 +11,33 @@ export default class ColorSingleEditor extends UIElement {
     }
 
     updateData(opt = {}) {
-        this.setState(opt);
+        this.setState(opt, false);
         this.modifyColor();
     }
 
     modifyColor() {
-        this.parent.trigger(this.props.onchange, this.state.color, this.state.params);
+        this.parent.trigger(this.props.onchange, this.props.key, this.state.color, this.state.params);
     }
 
     changeColor (color) {
         this.setState({ color })
-        this.refs.$miniView.cssText(`background-color: ${color}`);
+    }
+
+    setValue (color) {
+        this.changeColor(color);
+    }
+
+    [BIND('$miniView')] () {
+        return {
+            style: {
+                'background-color': this.state.color
+            }
+        }
     }
 
     template() {
 
-        return `
+        return /*html*/`
             <div class='color-single-editor'>
                 <div class='preview' ref='$preview'>
                     <div class='mini-view'>
@@ -38,29 +49,24 @@ export default class ColorSingleEditor extends UIElement {
     }
 
 
-    [CLICK("$preview")]() {
+    [CLICK("$preview")](e) {
         this.viewColorPicker();
     }
 
     viewColorPicker() {
-        var rect = this.refs.$preview.rect();
-
-        this.emit("showColorPicker", {
+        this.emit("showColorPickerPopup", {
             changeEvent: 'changeColorSingleEditor',
-            color: this.state.color,
-            left: rect.left + 90,
-            top: rect.top
+            color: this.state.color
         }, {
             id: this.id
         });
     }
 
+
     [EVENT("changeColorSingleEditor")](color, data) {
         if (data.id === this.id) {
             this.refs.$miniView.cssText(`background-color: ${color}`);
-
             this.updateData({ color })
         }
-    }
-
+    }    
 }
