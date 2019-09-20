@@ -110,6 +110,8 @@ $border-radius: 3px;
                 text-align: right;
                 background-color: $property-title-color;   
                 position: relative;             
+                border-bottom-right-radius: 3px;      
+                border-top-right-radius: 3px;                
                 select {
                     position: absolute;
                     right:0px;

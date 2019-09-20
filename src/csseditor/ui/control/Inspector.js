@@ -34,12 +34,6 @@ export default class Inspector extends UIElement {
               <div class="tab-content" data-value="1">
                 <AlignmentProperty />
 
-                <!-- ArtBoard --> 
-                <ArtBoardSizeProperty />              
-
-                <!-- SVG Item --> 
-                <SVGItemProperty />
-
                 <!-- Default Property --> 
                 <PositionProperty />
                 <SizeProperty /> 
@@ -70,6 +64,13 @@ export default class Inspector extends UIElement {
                 <div class='empty'></div>
               </div>
               <div class="tab-content" data-value="2">
+
+                <!-- ArtBoard --> 
+                <ArtBoardSizeProperty />              
+
+                <!-- SVG Item --> 
+                <SVGItemProperty />
+
                 <ComponentProperty />
 
                 <!-- Image --> 

@@ -130,7 +130,7 @@
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
-      border-right: 1px solid $border-color;    
+      // border-right: 1px solid $border-color;    
       transition: $show-timeline-animation;
       // box-shadow: 0 10px 20px rgba(0,0,0,.19), 0 6px 6px rgba(0,0,0,.23);            
     }
@@ -146,7 +146,7 @@
       display: flex;
       flex-direction: column;
       overflow: auto;
-      border-left: 1px solid $border-color;       
+      // border-left: 1px solid $border-color;       
       transition: $show-timeline-animation;      
       // box-shadow: 0 10px 20px rgba(0,0,0,.19), 0 6px 6px rgba(0,0,0,.23);      
       // transition: right 0.1s linear;

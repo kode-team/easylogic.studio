@@ -1537,7 +1537,6 @@ html, body {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  border-right: 1px solid #111111;
   transition: all 0.15s linear;
 }
 .csseditor[data-theme=dark] .layout-main .layout-middle .layout-right {
@@ -1551,7 +1550,6 @@ html, body {
   display: flex;
   flex-direction: column;
   overflow: auto;
-  border-left: 1px solid #111111;
   transition: all 0.15s linear;
 }
 .csseditor[data-theme=dark] .layout-main .layout-middle .layout-body {
@@ -5267,6 +5265,8 @@ html, body {
   text-align: right;
   background-color: #2b2b2b;
   position: relative;
+  border-bottom-right-radius: 3px;
+  border-top-right-radius: 3px;
 }
 .csseditor[data-theme=dark] .range-editor .range-editor-type .area .select-editor select {
   position: absolute;
@@ -9055,7 +9055,6 @@ html, body {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  border-right: 1px solid #e7e7e7;
   transition: all 0.15s linear;
 }
 .csseditor[data-theme=light] .layout-main .layout-middle .layout-right {
@@ -9069,7 +9068,6 @@ html, body {
   display: flex;
   flex-direction: column;
   overflow: auto;
-  border-left: 1px solid #e7e7e7;
   transition: all 0.15s linear;
 }
 .csseditor[data-theme=light] .layout-main .layout-middle .layout-body {
@@ -12785,6 +12783,8 @@ html, body {
   text-align: right;
   background-color: #f1f1f1;
   position: relative;
+  border-bottom-right-radius: 3px;
+  border-top-right-radius: 3px;
 }
 .csseditor[data-theme=light] .range-editor .range-editor-type .area .select-editor select {
   position: absolute;

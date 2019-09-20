@@ -139,12 +139,23 @@ export default class ToolCommand extends UIElement {
         this.trigger('update.resource', items);
     }
 
+    [COMMAND('drop.image.url')] (imageUrl) {
+            // convert data or blob to local url 
+        this.trigger('load.original.image', {local: imageUrl}, (info) => {
+            
+            this.emit('add.image', {src: info.local, ...info });
+            editor.changeMode(EDIT_MODE_SELECTION);
+            this.emit('after.change.mode');                
+        });
+    }
+
     [COMMAND('load.original.image')] (obj, callback) {
 
         var img = new Image();
         img.onload = () => {
 
             var info = {
+                local: obj.local,
                 naturalWidth: Length.px(img.naturalWidth),
                 naturalHeight: Length.px(img.naturalHeight), 
                 width: Length.px(img.naturalWidth),

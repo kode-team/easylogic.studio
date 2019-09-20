@@ -1,9 +1,7 @@
-import UIElement, { EVENT, COMMAND } from "../../../util/UIElement";
+import UIElement, { EVENT } from "../../../util/UIElement";
 
-import { editor } from "../../../editor/editor";
-import { Project } from "../../../editor/items/Project";
-import { ArtBoard } from "../../../editor/items/ArtBoard";
-import { DEBOUNCE, PREVENT, STOP, WHEEL, ALT, THROTTLE, IF, KEYUP, CONTROL, KEY } from "../../../util/Event";
+import { editor, EDIT_MODE_SELECTION } from "../../../editor/editor";
+import { DEBOUNCE, PREVENT, STOP, WHEEL, ALT, THROTTLE, IF, KEYUP, CONTROL, KEY, DRAGOVER, DROP } from "../../../util/Event";
 
 import ElementView from "./ElementView";
 import NumberRangeEditor from "../property-editor/NumberRangeEditor";
@@ -26,31 +24,6 @@ export default class CanvasView extends UIElement {
   }
 
   afterRender() {
-    // var project = editor.add(new Project({
-    //   name: 'New project'
-    // }));
-
-    // editor.selection.selectProject(project);
-
-    // var artboard = project.add(new ArtBoard({
-    //   name: 'New ArtBoard',
-    //   x: Length.px(300),
-    //   y: Length.px(300),
-    //   width: Length.px(375),
-    //   height: Length.px(720)
-    // }));
-    // editor.selection.selectArtboard(artboard);
-
-    // // var layer = artboard.add(new Layer({
-    // //   name: 'New layer',
-    // //   'background-color': Color.random()
-    // // }));
-    // editor.selection.select(artboard);
-
-    // this.parser = this;
-
-    // this.emit('refreshAll')
-    // this.emit('refreshSelection')
 
     this.emit('load.json');
   }
@@ -166,7 +139,12 @@ export default class CanvasView extends UIElement {
     }
   }
 
+  [DRAGOVER() + PREVENT] (e) { }
+  [DROP() + PREVENT] (e) { 
+    var imageUrl = e.dataTransfer.getData('image/info');
 
+    this.emit('drop.image.url', imageUrl)
+  } 
 
   [EVENT('refreshComputedStyle') + DEBOUNCE(100)] (last) {
     var computedCSS = this.refs.$canvas.getComputedStyle(...last)

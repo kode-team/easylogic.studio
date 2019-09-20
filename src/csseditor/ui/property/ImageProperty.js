@@ -73,7 +73,7 @@ export default class ImageProperty extends BaseProperty {
     var current = editor.selection.current || {};
 
     var src = current['src'] || ''
-    return `<ImageSelectEditor 
+    return /*html*/`<ImageSelectEditor 
               ref='$1' 
               key='src' 
               value="${src}" 

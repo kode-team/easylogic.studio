@@ -97,6 +97,7 @@ export default class PathEditorView extends UIElement {
         this.emit(this.state.changeEvent, {
             d,totalLength
         })
+        this.emit('refreshPathLayer')
     }
 
     addPathLayer(pathRect) {

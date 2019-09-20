@@ -1,6 +1,6 @@
 import BaseProperty from "./BaseProperty";
 import { editor } from "../../../editor/editor";
-import { LOAD, CLICK, INPUT, DEBOUNCE, VDOM } from "../../../util/Event";
+import { LOAD, CLICK, INPUT, DEBOUNCE, VDOM, DRAGSTART } from "../../../util/Event";
 import { EVENT } from "../../../util/UIElement";
 import icon from "../icon/icon";
 import AssetParser from "../../../editor/parse/AssetParser";
@@ -44,7 +44,7 @@ export default class ImageAssetsProperty extends BaseProperty {
 
       return /*html*/`
         <div class='image-item' data-index="${index}">
-          <div class='preview'>
+          <div class='preview' draggable="true">
             <img src="${image.local}" />
           </div>
           <div class='title'>
@@ -81,6 +81,19 @@ export default class ImageAssetsProperty extends BaseProperty {
       if (isRefresh) this.refresh();
       if (isEmit) this.emit('refreshImageAssets');
     }
+  }
+
+  [DRAGSTART('$imageList .preview img')] (e) { 
+    var index = +e.$delegateTarget.closest('image-item').attr('data-index');
+
+    var project = editor.selection.currentProject;
+
+    if(project) {
+      var imageInfo  =  project.images[index];
+
+      e.dataTransfer.setData('image/info',  imageInfo.local);
+    }
+
   }
   
   [CLICK('$imageList .add-image-item')] () {

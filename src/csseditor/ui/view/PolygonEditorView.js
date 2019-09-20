@@ -139,6 +139,7 @@ export default class PolygonEditorView extends UIElement {
             points,
             totalLength
         })
+        this.emit('refreshPolygonLayer')
     }
 
     addPolygonLayer(pathRect) {
