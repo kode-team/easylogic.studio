@@ -89,7 +89,7 @@
       top: 0px;
       bottom: 0px;
       right: 0px;
-      width: 450px;
+      max-width: 450px;
     }    
 
   }
@@ -341,7 +341,6 @@
 @import './range-ui.scss';
 @import "./tab-ui.scss";
 @import "./colorpicker-ui.scss";
-@import './mini-editor.scss'; 
 @import "./tool-menu.scss";
 @import "./view.scss";
 @import './selection-view.scss';

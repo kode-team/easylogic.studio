@@ -515,20 +515,7 @@ export class DomItem extends GroupItem {
   }
 
   toTransformCSS() {
-
-    if (this.json.rotate && this.json.transform  &&  this.json.transform.indexOf('rotate') === -1) {
-      var transform = this.json.transform;
-
-      return {
-        transform: [transform, `rotate(${this.json.rotate})` ].join(' ')
-      }
-    } else if (!this.json.rotate) {
-      return this.toKeyListCSS('transform')
-    }
-
-    return {
-      transform : `rotate(${this.json.rotate})`
-    }
+    return this.toKeyListCSS('transform')
   }
 
   toVariableCSS () {

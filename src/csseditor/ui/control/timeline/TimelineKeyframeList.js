@@ -242,8 +242,6 @@ export default class TimelineKeyframeList extends UIElement {
         })
     }
 
-    // 처음과 끝 포인트는 시작시간과 endTime  을 설정하는 도구가 된다. 
-
     [CLICK('$el .timeline-keyframe-row.layer .title')] (e) {
         e.$delegateTarget.closest('timeline-keyframe').toggleClass('collapsed')
     }

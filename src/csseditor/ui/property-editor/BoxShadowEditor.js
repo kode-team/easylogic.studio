@@ -130,7 +130,6 @@ export default class BoxShadowEditor extends UIElement {
       spreadRadius: shadow.spreadRadius
     }, { id: this.id });
 
-    // this.emit('hidePropertyPopup')
   }
 
   [EVENT("changeBoxShadowEditorColor")](color) {

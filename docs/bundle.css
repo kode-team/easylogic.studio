@@ -1503,7 +1503,7 @@ html, body {
   top: 0px;
   bottom: 0px;
   right: 0px;
-  width: 450px;
+  max-width: 450px;
 }
 .csseditor[data-theme=dark] .layout-main .layout-middle {
   flex: 1 1 auto;
@@ -2157,96 +2157,6 @@ html, body {
   border: 0px;
   background-color: transparent;
 }
-.csseditor[data-theme=dark] .editor {
-  height: auto !important;
-}
-.csseditor[data-theme=dark] .editor.offset-editor {
-  display: block !important;
-}
-.csseditor[data-theme=dark] .editor.offset-editor .offset {
-  display: block;
-  height: 30px;
-  position: relative;
-  background-image: linear-gradient(to right, #fc554f, #fc554f);
-  background-size: 100% 2px;
-  background-position: 0px center;
-  background-repeat: no-repeat;
-  cursor: pointer;
-}
-.csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="0"] .offset-item[data-offset-index="0"] {
-  box-shadow: 0 0 4px 0 #fc554f;
-}
-.csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="1"] .offset-item[data-offset-index="1"] {
-  box-shadow: 0 0 4px 0 #fc554f;
-}
-.csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="2"] .offset-item[data-offset-index="2"] {
-  box-shadow: 0 0 4px 0 #fc554f;
-}
-.csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="3"] .offset-item[data-offset-index="3"] {
-  box-shadow: 0 0 4px 0 #fc554f;
-}
-.csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="4"] .offset-item[data-offset-index="4"] {
-  box-shadow: 0 0 4px 0 #fc554f;
-}
-.csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="5"] .offset-item[data-offset-index="5"] {
-  box-shadow: 0 0 4px 0 #fc554f;
-}
-.csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="6"] .offset-item[data-offset-index="6"] {
-  box-shadow: 0 0 4px 0 #fc554f;
-}
-.csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="7"] .offset-item[data-offset-index="7"] {
-  box-shadow: 0 0 4px 0 #fc554f;
-}
-.csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="8"] .offset-item[data-offset-index="8"] {
-  box-shadow: 0 0 4px 0 #fc554f;
-}
-.csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="9"] .offset-item[data-offset-index="9"] {
-  box-shadow: 0 0 4px 0 #fc554f;
-}
-.csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="10"] .offset-item[data-offset-index="10"] {
-  box-shadow: 0 0 4px 0 #fc554f;
-}
-.csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="11"] .offset-item[data-offset-index="11"] {
-  box-shadow: 0 0 4px 0 #fc554f;
-}
-.csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="12"] .offset-item[data-offset-index="12"] {
-  box-shadow: 0 0 4px 0 #fc554f;
-}
-.csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="13"] .offset-item[data-offset-index="13"] {
-  box-shadow: 0 0 4px 0 #fc554f;
-}
-.csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="14"] .offset-item[data-offset-index="14"] {
-  box-shadow: 0 0 4px 0 #fc554f;
-}
-.csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="15"] .offset-item[data-offset-index="15"] {
-  box-shadow: 0 0 4px 0 #fc554f;
-}
-.csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="16"] .offset-item[data-offset-index="16"] {
-  box-shadow: 0 0 4px 0 #fc554f;
-}
-.csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="17"] .offset-item[data-offset-index="17"] {
-  box-shadow: 0 0 4px 0 #fc554f;
-}
-.csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="18"] .offset-item[data-offset-index="18"] {
-  box-shadow: 0 0 4px 0 #fc554f;
-}
-.csseditor[data-theme=dark] .editor.offset-editor .offset[data-selected-value="19"] .offset-item[data-offset-index="19"] {
-  box-shadow: 0 0 4px 0 #fc554f;
-}
-.csseditor[data-theme=dark] .editor.offset-editor .offset .offset-item {
-  position: absolute;
-  display: inline-block;
-  width: 12px;
-  height: 12px;
-  top: 50%;
-  -webkit-transform: translateX(-50%) translateY(-50%);
-          transform: translateX(-50%) translateY(-50%);
-  box-sizing: border-box;
-  border: 1px solid #609de2;
-  background-color: #fc554f;
-  border-radius: 100%;
-  cursor: pointer;
-}
 .csseditor[data-theme=dark] .logo {
   padding: 0px 10px;
   width: 260px;
@@ -2358,6 +2268,11 @@ html, body {
   display: inline-block;
   border-radius: 3px;
   padding: 3px;
+}
+.csseditor[data-theme=dark] .tool-menu .items .draw-items .menu-item .icon.flipY,
+.csseditor[data-theme=dark] .external-tool-menu .items .draw-items .menu-item .icon.flipY {
+  -webkit-transform: rotateY(-180deg);
+          transform: rotateY(-180deg);
 }
 .csseditor[data-theme=dark] .tool-menu .items .split,
 .csseditor[data-theme=dark] .external-tool-menu .items .split {
@@ -2655,7 +2570,6 @@ html, body {
   display: none;
   pointer-events: all;
   outline: none;
-  border-radius: 3px;
   border: 1px solid #111111;
   color: #ffffff;
   background-color: #2f3538;
@@ -9107,7 +9021,7 @@ html, body {
   top: 0px;
   bottom: 0px;
   right: 0px;
-  width: 450px;
+  max-width: 450px;
 }
 .csseditor[data-theme=light] .layout-main .layout-middle {
   flex: 1 1 auto;
@@ -9761,96 +9675,6 @@ html, body {
   border: 0px;
   background-color: transparent;
 }
-.csseditor[data-theme=light] .editor {
-  height: auto !important;
-}
-.csseditor[data-theme=light] .editor.offset-editor {
-  display: block !important;
-}
-.csseditor[data-theme=light] .editor.offset-editor .offset {
-  display: block;
-  height: 30px;
-  position: relative;
-  background-image: linear-gradient(to right, #4b61ce, #4b61ce);
-  background-size: 100% 2px;
-  background-position: 0px center;
-  background-repeat: no-repeat;
-  cursor: pointer;
-}
-.csseditor[data-theme=light] .editor.offset-editor .offset[data-selected-value="0"] .offset-item[data-offset-index="0"] {
-  box-shadow: 0 0 4px 0 #4b61ce;
-}
-.csseditor[data-theme=light] .editor.offset-editor .offset[data-selected-value="1"] .offset-item[data-offset-index="1"] {
-  box-shadow: 0 0 4px 0 #4b61ce;
-}
-.csseditor[data-theme=light] .editor.offset-editor .offset[data-selected-value="2"] .offset-item[data-offset-index="2"] {
-  box-shadow: 0 0 4px 0 #4b61ce;
-}
-.csseditor[data-theme=light] .editor.offset-editor .offset[data-selected-value="3"] .offset-item[data-offset-index="3"] {
-  box-shadow: 0 0 4px 0 #4b61ce;
-}
-.csseditor[data-theme=light] .editor.offset-editor .offset[data-selected-value="4"] .offset-item[data-offset-index="4"] {
-  box-shadow: 0 0 4px 0 #4b61ce;
-}
-.csseditor[data-theme=light] .editor.offset-editor .offset[data-selected-value="5"] .offset-item[data-offset-index="5"] {
-  box-shadow: 0 0 4px 0 #4b61ce;
-}
-.csseditor[data-theme=light] .editor.offset-editor .offset[data-selected-value="6"] .offset-item[data-offset-index="6"] {
-  box-shadow: 0 0 4px 0 #4b61ce;
-}
-.csseditor[data-theme=light] .editor.offset-editor .offset[data-selected-value="7"] .offset-item[data-offset-index="7"] {
-  box-shadow: 0 0 4px 0 #4b61ce;
-}
-.csseditor[data-theme=light] .editor.offset-editor .offset[data-selected-value="8"] .offset-item[data-offset-index="8"] {
-  box-shadow: 0 0 4px 0 #4b61ce;
-}
-.csseditor[data-theme=light] .editor.offset-editor .offset[data-selected-value="9"] .offset-item[data-offset-index="9"] {
-  box-shadow: 0 0 4px 0 #4b61ce;
-}
-.csseditor[data-theme=light] .editor.offset-editor .offset[data-selected-value="10"] .offset-item[data-offset-index="10"] {
-  box-shadow: 0 0 4px 0 #4b61ce;
-}
-.csseditor[data-theme=light] .editor.offset-editor .offset[data-selected-value="11"] .offset-item[data-offset-index="11"] {
-  box-shadow: 0 0 4px 0 #4b61ce;
-}
-.csseditor[data-theme=light] .editor.offset-editor .offset[data-selected-value="12"] .offset-item[data-offset-index="12"] {
-  box-shadow: 0 0 4px 0 #4b61ce;
-}
-.csseditor[data-theme=light] .editor.offset-editor .offset[data-selected-value="13"] .offset-item[data-offset-index="13"] {
-  box-shadow: 0 0 4px 0 #4b61ce;
-}
-.csseditor[data-theme=light] .editor.offset-editor .offset[data-selected-value="14"] .offset-item[data-offset-index="14"] {
-  box-shadow: 0 0 4px 0 #4b61ce;
-}
-.csseditor[data-theme=light] .editor.offset-editor .offset[data-selected-value="15"] .offset-item[data-offset-index="15"] {
-  box-shadow: 0 0 4px 0 #4b61ce;
-}
-.csseditor[data-theme=light] .editor.offset-editor .offset[data-selected-value="16"] .offset-item[data-offset-index="16"] {
-  box-shadow: 0 0 4px 0 #4b61ce;
-}
-.csseditor[data-theme=light] .editor.offset-editor .offset[data-selected-value="17"] .offset-item[data-offset-index="17"] {
-  box-shadow: 0 0 4px 0 #4b61ce;
-}
-.csseditor[data-theme=light] .editor.offset-editor .offset[data-selected-value="18"] .offset-item[data-offset-index="18"] {
-  box-shadow: 0 0 4px 0 #4b61ce;
-}
-.csseditor[data-theme=light] .editor.offset-editor .offset[data-selected-value="19"] .offset-item[data-offset-index="19"] {
-  box-shadow: 0 0 4px 0 #4b61ce;
-}
-.csseditor[data-theme=light] .editor.offset-editor .offset .offset-item {
-  position: absolute;
-  display: inline-block;
-  width: 12px;
-  height: 12px;
-  top: 50%;
-  -webkit-transform: translateX(-50%) translateY(-50%);
-          transform: translateX(-50%) translateY(-50%);
-  box-sizing: border-box;
-  border: 1px solid #dfdfdf;
-  background-color: #4b61ce;
-  border-radius: 100%;
-  cursor: pointer;
-}
 .csseditor[data-theme=light] .logo {
   padding: 0px 10px;
   width: 260px;
@@ -9962,6 +9786,11 @@ html, body {
   display: inline-block;
   border-radius: 3px;
   padding: 3px;
+}
+.csseditor[data-theme=light] .tool-menu .items .draw-items .menu-item .icon.flipY,
+.csseditor[data-theme=light] .external-tool-menu .items .draw-items .menu-item .icon.flipY {
+  -webkit-transform: rotateY(-180deg);
+          transform: rotateY(-180deg);
 }
 .csseditor[data-theme=light] .tool-menu .items .split,
 .csseditor[data-theme=light] .external-tool-menu .items .split {
@@ -10259,7 +10088,6 @@ html, body {
   display: none;
   pointer-events: all;
   outline: none;
-  border-radius: 3px;
   border: 1px solid #e7e7e7;
   color: gray;
   background-color: white;

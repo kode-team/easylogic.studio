@@ -27,7 +27,7 @@ export default class TextShadowPropertyPopup extends BasePopup {
   }
 
   updateData(opt) {
-    this.setState(opt, false); // 자동 로드를 하지 않음, state 만 업데이트
+    this.setState(opt, false); 
     this.emit(this.changeEvent, opt, this.params);
   }
 
@@ -120,7 +120,6 @@ export default class TextShadowPropertyPopup extends BasePopup {
     x = Math.floor(x);
     y = Math.floor(y);
 
-    // 다른 곳의 숫자르 바로 업데이트 할 수 있어야 한다.
     this.updateData({
       offsetX: Length.px(x),
       offsetY: Length.px(y)
@@ -137,7 +136,6 @@ export default class TextShadowPropertyPopup extends BasePopup {
     this.changeEvent = data.changeEvent || "changeTextShadowPropertyPopup"
     this.params = params;
 
-    console.log(data);
     this.setState(data, false);
     this.refresh();
 

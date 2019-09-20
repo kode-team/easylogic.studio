@@ -26,6 +26,7 @@ export default class AnipaExport {
         if (timeline) {
             timeline.animations.forEach (animation => {
                 var item = this.artboard.searchById(animation.id);
+
                 var properties = animation.properties.map(p => {
                     var property = p.property;
 

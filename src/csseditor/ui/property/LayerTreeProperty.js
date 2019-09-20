@@ -165,7 +165,7 @@ export default class LayerTreeProperty extends BaseProperty {
       item.remove();
 
       this.emit('refreshAllSelectArtBoard');
-      // $item.remove();
+      
     }
   }
 
@@ -258,7 +258,7 @@ export default class LayerTreeProperty extends BaseProperty {
   }  
 
   [EVENT('refreshSelection')] () {
-    // this.setState({ layers: [] }, false)
+    
     this.trigger('changeSelection')
   }
 

@@ -134,7 +134,6 @@ export default class CubicBezierEditor extends UIElement {
 
             context.lineWidth = 1;
             context.strokeStyle = this.state.baseLineColor;
-            // Draw Guide Line
     
             context.beginPath();
             context.moveTo(left, height + top);
@@ -144,7 +143,6 @@ export default class CubicBezierEditor extends UIElement {
     
             context.strokeStyle = this.state.selectedColor;
     
-            // Draw control handles
             context.beginPath();
             context.moveTo(left, height + top);
             context.lineTo(
@@ -169,9 +167,8 @@ export default class CubicBezierEditor extends UIElement {
             var x = width
             var y = 0
 
-            // Draw bezier curve
             context.beginPath();
-            context.moveTo(left , top + height);   // 0, 0
+            context.moveTo(left , top + height);   
             context.bezierCurveTo( 
                 left + x1, top + y1,
                 left + x2, top + y2, 
@@ -226,7 +223,7 @@ export default class CubicBezierEditor extends UIElement {
     start (i) {
 
         var pos = this.animationCanvasData.func(i);
-        var x = 10 + (this.animationCanvasData.width - 20) * pos.y;        // y
+        var x = 10 + (this.animationCanvasData.width - 20) * pos.y;       
         var y = 10
         var context = this.animationCanvasData.context;
 

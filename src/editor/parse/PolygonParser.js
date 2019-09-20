@@ -4,7 +4,6 @@ import { isArray } from "../../util/functions/func";
 
 
 const splitReg = /[\b\t \,]/g;
-// var numberReg = /-?[0-9]*\.?[0-9]+(?:e[-+]?\d+)?/ig
  
 export default class PolygonParser extends PathParser {
 

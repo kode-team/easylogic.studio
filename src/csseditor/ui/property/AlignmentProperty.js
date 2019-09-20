@@ -28,7 +28,7 @@ export default class AlignmentProperty extends BaseProperty {
   [EVENT('refreshSelection') + DEBOUNCE(100)] () {
     this.refreshShow('layer');
     this.refreshShow('svg-path');
-    // this.refreshShow('svg-polygon');
+    
   }
 
   isHideHeader() {

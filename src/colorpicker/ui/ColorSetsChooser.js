@@ -26,9 +26,8 @@ export default class ColorSetsChooser extends UIElement {
         this.toggle()
     }
 
-    // loadable 
     [LOAD('$colorsetsList')] () {
-        // colorsets 
+
         const colorSets = this.parent.manager.getColorSetsList();
 
         return `

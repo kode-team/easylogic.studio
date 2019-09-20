@@ -98,8 +98,6 @@ class UIElement extends EventMachine {
   destroy () {
     super.destroy()
 
-    // 객체가 남아있지 않도록 store 에 저장된 이벤트를 지운다. 
-    // context 변수로 참조가 남아 있어서 이벤트를 그대로 받아들이기 때문 
     this.destoryStoreEvent();
   }
 

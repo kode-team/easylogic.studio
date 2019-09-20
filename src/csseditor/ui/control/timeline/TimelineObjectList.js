@@ -121,15 +121,6 @@ export default class TimelineObjectList extends UIElement {
         `
     }
 
-
-    // [EVENT('refreshOffsetValue')] (offset) {
-    //   var input = this.$el.$(`input[data-property="${offset.property}"][data-layer-id="${offset.layerId}"]`)
-
-    //   if (input) {
-    //     input.val(offset.value);
-    //   }
-    // }
-
     template() {
         return /*html*/ `
             <div class='timeline-object-list'></div>

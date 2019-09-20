@@ -63,12 +63,6 @@ export default class FillPopup extends BasePopup {
 
   initState() {
 
-    // 1. tab 이 바뀌면 gradient editor 는 변하지 않는다. 
-    // 2. tab 이 바뀌면 기타 에디터 툴들이 재 생성된다. gradient editor 만 안 바뀐다. 
-    // 3. 데이타 넘기는 방식을 다 문자열로 할 것인가? 
-    // 4. 아님 모두다 객체로 넘길 것인가? 
-    // 5. gradient 에디터가 제일 어려운 듯 하다. 
-
     return {
       hideBackgroundProperty: true,
       size: "auto",
@@ -329,8 +323,6 @@ export default class FillPopup extends BasePopup {
 
   [EVENT('changeGradientEditor')] (data) {
 
-    // console.log(data);
-
     var colorsteps = data.colorsteps.map((it, index) => {
       return new ColorStep({
         color: it.color,
@@ -355,11 +347,6 @@ export default class FillPopup extends BasePopup {
 
   [CHANGE("$imageFile")](e) {
     var files = this.refs.$imageFile.files;
-
-    //화면 표시 하기
-    // files.length 따라 Preview 에 표시 하기
-    // URL.createObjectUrl 로 임시 url 생성 (임시 URL 은 어디서 관리하나)
-    // emit('changeFillPopup', { images: [........] })
 
     var images = files.map(file => {
       return editor.createUrl(file);
@@ -389,14 +376,8 @@ export default class FillPopup extends BasePopup {
       type === "image" ? "image" : "color"
     );
 
-    // 설정된 이미지를 재생성한다. type 에 맞게 
-    // 데이타 전송은 다 문자열로 하는게 나을까? 객체로 하는게 나을 까 ? 
-    // json 형태로만 주고 받는게 좋을 듯 하다. 
-    // 자체 객체가 있으니 다루기가 너무 힘들어지고 있다. 
-    // 파싱 용도로만 쓰자. 
     this.state.image = BackgroundImage.createGradient({ type }, this.state.image);
 
-    // this.load()
     if (this.children.$g) {
 
       this.children.$g.setValue(
@@ -408,7 +389,7 @@ export default class FillPopup extends BasePopup {
     }
 
     switch (type) {
-      case "image": // image
+      case "image": 
         if (data.url) {
           this.refs.$imagePreview.attr("src", data.url);
         }

@@ -21,7 +21,7 @@ export default class ExportCodePen extends UIElement {
     this.refs.$codepen.val(JSON.stringify({
       title: "sapa - editor.easylogic.studio",
       description: "https://editor.easylogic.studio",
-      js_external: "https://cdn.jsdelivr.net/npm/@easylogic/anipa@0.0.6/dist/main.js",
+      js_external: "https://cdn.jsdelivr.net/npm/@easylogic/anipa@0.0.7/dist/main.js",
       ...obj
     }))
 

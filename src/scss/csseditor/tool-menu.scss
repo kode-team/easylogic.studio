@@ -144,6 +144,10 @@
           display: inline-block;
           border-radius: 3px;
           padding: 3px;
+
+          &.flipY {
+            transform: rotateY(-180deg);
+          }
         }
       }
       

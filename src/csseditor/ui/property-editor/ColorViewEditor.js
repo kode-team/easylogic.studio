@@ -8,7 +8,6 @@ export default class ColorViewEditor extends UIElement {
         return {
             removable: this.props.removable === 'true',            
             label: this.props.label,
-            // params: this.props.params,
             value: this.props.value || 'rgba(0, 0, 0, 1)'
         }
     }

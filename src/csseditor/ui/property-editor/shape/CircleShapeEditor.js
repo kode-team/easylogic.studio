@@ -101,8 +101,6 @@ export default class CircleShapeEditor extends UIElement {
 
     addPathLayer(pathRect) {
         this.changeMode('modify');
-        // this.bindData('$view');
-
 
         var layer = this.makePathLayer(pathRect)
         if (layer) {
@@ -111,9 +109,6 @@ export default class CircleShapeEditor extends UIElement {
             this.emit('refreshAll')
             this.emit('refreshSelection');
         }
-
-        // this.trigger('hidePathEditor');
-
     }
 
     changeMode (mode, obj) { 
@@ -295,8 +290,6 @@ export default class CircleShapeEditor extends UIElement {
 
     [POINTERSTART('$view :not(.split-path)') + MOVE() + END()] (e) {
 
-        // console.log(e);
-
         this.state.rect = this.parent.refs.$body.rect();            
         this.state.canvasOffset = this.refs.$view.rect();
         this.state.altKey = false; 
@@ -316,8 +309,6 @@ export default class CircleShapeEditor extends UIElement {
 
             if (this.state.isFirstSegment && this.isMode('draw')) {
 
-                // 마지막 지점을 연결할 예정이기 때문에 
-                // startPoint 는  M 이었던 startPoint 로 정리된다. 
                 var index = +this.state.$target.attr('data-index')
                 this.state.startPoint = this.state.points[index].startPoint;
                 this.state.dragPoints = false
@@ -334,8 +325,7 @@ export default class CircleShapeEditor extends UIElement {
             this.state.dragPoints = false
             this.state.endPoint = null;
         } else  {
-            // draw, segment-move 모드가 아닌 데  드래그 하는 경우는 
-            // 영역을 선택하기 위한 용도 
+            
         }
 
     }
@@ -365,7 +355,7 @@ export default class CircleShapeEditor extends UIElement {
 
         if (this.state.$target.is(this.refs.$view) && editor.config.get('bodyEvent').altKey)  {
             this.changeMode('modify');
-            // 에디팅  종료 
+            
             this.trigger('hidePathEditor')
             return ; 
         }
@@ -393,7 +383,6 @@ export default class CircleShapeEditor extends UIElement {
                     this.trigger('hidePathEditor')
                 }
             } else {
-                // this.changeMode('modify');
 
                 this.pathGenerator.moveEnd(dx, dy);
 

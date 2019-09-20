@@ -38,7 +38,7 @@ export default class AnimationPropertyPopup extends BasePopup {
   }
 
   updateData(opt) {
-    this.setState(opt, false); // 자동 로드를 하지 않음, state 만 업데이트
+    this.setState(opt, false); 
     this.emit("changeAnimationPropertyPopup", opt);
   }
 
@@ -176,8 +176,6 @@ export default class AnimationPropertyPopup extends BasePopup {
     `
   }
 
-  // 개별 속성을 변경할 때  state 로 저장 하기 
-
   [EVENT('changeRangeEditor')] (key, value) {
 
     if (key === 'iterationCount') {
@@ -199,7 +197,6 @@ export default class AnimationPropertyPopup extends BasePopup {
 
     this.show(250)
 
-    // 화면에 보이고 난 후에 업데이트 할까? 
     this.emit('showCubicBezierEditor', data)    
   }
 

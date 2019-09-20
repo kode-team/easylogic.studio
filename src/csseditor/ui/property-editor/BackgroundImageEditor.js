@@ -121,18 +121,6 @@ export default class BackgroundImageEditor extends UIElement {
         });
     }
 
-    // toPropertyCSS(list, isExport = false) {
-    //     var results = {};
-    //     list.forEach(item => {
-    //         keyEach(item.toCSS(isExport), (key, value) => {
-    //             if (!results[key]) results[key] = [];
-    //             results[key].push(value);
-    //         });
-    //     });
-
-    //     return combineKeyArray(results);
-    // }
-
     modifyBackgroundImage () {
         var value = CSS_TO_STRING(BackgroundImage.toPropertyCSS(this.state.images));
 
@@ -169,7 +157,6 @@ export default class BackgroundImageEditor extends UIElement {
         this.startIndex = +e.$delegateTarget.attr("data-index");
     }
 
-    // drop 이벤트를 걸 때 dragover 가 같이 선언되어 있어야 한다.
     [DRAGOVER("$fillList .fill-item") + PREVENT](e) {}
 
 
@@ -218,8 +205,6 @@ export default class BackgroundImageEditor extends UIElement {
         this.modifyBackgroundImage()
     }
 
-      // 객체를 선택하는 괜찮은 패턴이 어딘가에 있을 텐데......
-    // 언제까지 selected 를 설정해야하는가?
     selectItem(selectedIndex, isSelected = true) {
         if (isSelected) {
             this.refs[`fillIndex${selectedIndex}`].addClass("selected");
@@ -265,7 +250,6 @@ export default class BackgroundImageEditor extends UIElement {
             repeat,
             size,
             blendMode,            
-            // 왜 그런지는 모르겠지만 image 를 객체 그대로 넘기니 뭔가 맞지 않아서  문자열로 변환해서 넘긴다. 
             image: this.currentBackgroundImage.image + '',  
             selectColorStepIndex,
             refresh: true,

@@ -79,14 +79,13 @@ export default class CSSPropertyEditor extends UIElement {
   }
 
   updateData(opt) {
-    this.setState(opt, false); // 자동 로드를 하지 않음, state 만 업데이트
+    this.setState(opt, false); 
     this.modifyProperty();
   }
 
   modifyProperty () {
 
     this.parent.trigger(this.props.onchange, this.state.properties);
-    // this.emit("changeCSSPropertyEditor", this.state.properties);  
   }
 
 
@@ -458,19 +457,19 @@ export default class CSSPropertyEditor extends UIElement {
               onchange="changeRangeEditor" />
           </div>
         `
-      case 'rotate':
-        return /*html*/`
-          <div class='property-editor'>
-            <RangeEditor 
-              ref='rangeEditor${index}' 
-              key='${property.key}' 
-              value='${property.value}'  
-              min="-2000"
-              max="2000"
-              units="deg" 
-              onChange="changeRangeEditor" />
-          </div>
-        `
+      // case 'rotate':
+      //   return /*html*/`
+      //     <div class='property-editor'>
+      //       <RangeEditor 
+      //         ref='rangeEditor${index}' 
+      //         key='${property.key}' 
+      //         value='${property.value}'  
+      //         min="-2000"
+      //         max="2000"
+      //         units="deg" 
+      //         onChange="changeRangeEditor" />
+      //     </div>
+      //   `
       case 'left': 
       case 'margin-top': 
       case 'margin-bottom': 
@@ -526,6 +525,8 @@ export default class CSSPropertyEditor extends UIElement {
           <option value='offset-distance'>offset-distance</option>
         </optgroup>      
         <optgroup label='Size'>
+          <option value='x'>x</option>
+          <option value='y'>y</option>        
           <option value='width'>width</option>
           <option value='height'>height</option>
         </optgroup>      
@@ -541,12 +542,6 @@ export default class CSSPropertyEditor extends UIElement {
         </optgroup>
         <optgroup label='Border'>
           <option value='border'>border</option>
-          <option value='border-top'>border-top</option>
-          <option value='border-bottom'>border-bottom</option>
-          <option value='border-left'>border-left</option>
-          <option value='border-right'>border-right</option>
-        </optgroup>
-        <optgroup label='Border Radius'>
           <option value='border-radius'>border-radius</option>
         </optgroup>        
         <optgroup label='Style'>
@@ -598,8 +593,6 @@ export default class CSSPropertyEditor extends UIElement {
       `
     })
   }
-
-  // 개별 속성을 변경할 때  state 로 저장 하기 
 
   [EVENT("showCSSPropertyEditor")](properties = []) {
     this.setState({ properties });

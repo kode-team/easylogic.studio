@@ -56,6 +56,21 @@ export class Transform extends Property {
     return new Transform(transform);
   }
 
+  static replace (transform, valueObject) {
+
+    var obj = Transform.parseStyle(transform)
+
+    var tObject = obj.find(t => t.type === valueObject.type);
+
+    if (tObject) {
+      tObject.value = valueObject.value
+    } else {
+      obj.push(valueObject)
+    }
+
+    return Transform.join(obj);
+  }
+
   static parseStyle (transform) {
 
     var transforms = [];

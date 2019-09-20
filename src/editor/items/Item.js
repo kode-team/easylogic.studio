@@ -71,6 +71,10 @@ export class Item {
     return "Item";
   }
 
+  isLeaf() {
+    return true; 
+  }
+
   /**
    * check attribute object
    */

@@ -26,7 +26,7 @@ export default class TimelineValueEditor extends UIElement {
   }
 
   updateData(opt) {
-    this.setState(opt, false); // 자동 로드를 하지 않음, state 만 업데이트
+    this.setState(opt, false); 
     this.parent.trigger(this.props.onchange, this.state);
   }
 

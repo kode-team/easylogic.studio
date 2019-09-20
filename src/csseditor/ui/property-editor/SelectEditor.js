@@ -43,7 +43,6 @@ export default class SelectEditor extends UIElement {
 
     [BIND('$options')] () {
         return {
-            // 'disabled': this.state.options.length === 1,
             'data-count': this.state.options.length.toString()
         }
     }

@@ -31,7 +31,6 @@ export default class PolygonEditor extends UIElement {
 
     initState() {
         return {
-            // percent 로 온 것을 px 로 바꿈 
             value: this.parseValue(this.props.value)
         }
     }
@@ -48,9 +47,7 @@ export default class PolygonEditor extends UIElement {
         </div>
     `
     }
-
-    // 추가, 삭제의 경우는 이걸로 처리하고 
-    // 점 데이타 변경의 경우는 사용하지 않고 input 을 바로 업데이트 하는 방식을 사용한다. 
+    
     [LOAD('$inputList')] () {
         return this.state.value.map( (it, index) => {
             return /*html*/`

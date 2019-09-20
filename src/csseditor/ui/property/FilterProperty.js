@@ -121,7 +121,7 @@ export default class FilterProperty extends BaseProperty {
   }
 
   [EVENT('refreshCanvas') + DEBOUNCE(1000) ] () {
-    // svg 필터 옵션만 변경한다. 
+    
     this.load('$filterSelect')
   }
 

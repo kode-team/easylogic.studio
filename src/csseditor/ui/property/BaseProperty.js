@@ -125,7 +125,7 @@ export default class BaseProperty extends UIElement {
         if (isRefresh) this.refresh();
       }
     } else {
-      // this.hide();
+      
     }
   }
 
@@ -140,7 +140,7 @@ export default class BaseProperty extends UIElement {
         this.hide();
       }
     } else {
-      // this.hide();
+      
     } 
   }
 

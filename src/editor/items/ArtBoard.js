@@ -13,6 +13,10 @@ export class ArtBoard extends TimelineItem {
     });
   }
 
+  isLeaf() {
+    return false; 
+  }
+
   toCloneObject() {
     return {
       ...super.toCloneObject(),

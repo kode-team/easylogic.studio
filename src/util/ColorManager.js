@@ -138,7 +138,6 @@ export default class ColorManager {
             }
         })
 
-        // this.$store.emit('changeUserList');
     }
 
     setCurrentColorSets(nameOrIndex) {

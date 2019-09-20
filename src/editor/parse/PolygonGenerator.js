@@ -77,7 +77,6 @@ export default class PolygonGenerator {
 
             point = checkedPointList[0].point
 
-            // 기존 거리와의 차이를 지정함. 
             distanceValue += point[sourceKey] - target
         }
 
@@ -208,8 +207,8 @@ export default class PolygonGenerator {
 
     moveEnd (dx, dy) {
         var state = this.state; 
-        var x = state.dragXY.x + dx // / editor.scale;
-        var y = state.dragXY.y + dy //  / editor.scale;
+        var x = state.dragXY.x + dx 
+        var y = state.dragXY.y + dy 
 
         state.segments.push({x, y})
     }
@@ -300,7 +299,6 @@ export default class PolygonGenerator {
     makeSnapLines () {
 
         var snapLines = [] 
-        // snapPoint 를 그려준다. 
         if (this.snapPointList) {
             var snapPath = new PathStringManager()
             snapLines = this.snapPointList.map(snapPoint => {

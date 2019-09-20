@@ -171,6 +171,10 @@ export class Selection {
     this.each(item => item.reset(obj))
   }
 
+  resetCallback (callback) {
+    this.each(item => item.reset(callback(item)))
+  }
+
   resize () {
     this.each(item => item.resize());
   }

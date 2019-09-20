@@ -271,17 +271,11 @@ export default class TransformEditor extends UIElement {
     });
   }
 
-  // transform-item 을 통째로  dragstart 를 걸어버리니깐
-  // 다른 ui 를 핸들링 할 수가 없어서
-  // title  에만 dragstart 거는 걸로 ok ?
   [DRAGSTART("$transformList .transform-item .title")](e) {
     this.startIndex = +e.$delegateTarget.attr("data-index");
   }
 
-  // drop 이벤트를 걸 때 dragover 가 같이 선언되어 있어야 한다.
   [DRAGOVER("$transformList .transform-item") + PREVENT](e) {}
-
-
 
   sortItem(arr, startIndex, targetIndex) {
     arr.splice(

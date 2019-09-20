@@ -3,6 +3,7 @@ import PathParser from "../../parse/PathParser";
 import makeInterpolateOffset from "./offset-path/makeInterpolateOffset";
 import { Length } from "../../unit/Length";
 import { calculateAngle } from "../../../util/functions/math";
+import { Transform } from "../../css-property/Transform";
 
 export function makeInterpolateOffsetPath(layer, property, startValue, endValue) {
 
@@ -41,7 +42,6 @@ export function makeInterpolateOffsetPath(layer, property, startValue, endValue)
 
     if (artboard) {
         var pathLayer = artboard.searchById(startObject.id);
-        // parser.translate(pathLayer.screenX.value, pathLayer.screenY.value)
         screenX = pathLayer.screenX.value
         screenY = pathLayer.screenY.value        
 
@@ -72,13 +72,9 @@ export function makeInterpolateOffsetPath(layer, property, startValue, endValue)
             if (arr) {
                 obj = arr
             }
-
-            // console.log(obj);
             
             var newT = (t - obj.startT)/(obj.endT - obj.startT)
             var newRate = timing(newT)
-
-            // console.log(newT, newRate, t, obj.startT, obj.endT);
 
             return {
                 ...obj.interpolate(newRate, newT, timing),
@@ -103,14 +99,11 @@ export function makeInterpolateOffsetPath(layer, property, startValue, endValue)
             y: obj.y + screenY - ty.value
         }
 
-        // console.log(results, rate, t);
-
         layer.setScreenX(results.x)
         layer.setScreenY(results.y)
 
-
         if (startObject.rotateStatus === 'element') {
-
+            // NOOP 
         } else {
             var current = obj
             var next = innerInterpolate(rate + 1/obj.totalLength, t + 1/obj.totalLength, timing); 
@@ -118,7 +111,10 @@ export function makeInterpolateOffsetPath(layer, property, startValue, endValue)
 
             if (!isNaN(angle)) {
                 var newAngle = Length.deg(innerInterpolateAngle(startObject.rotateStatus, angle))
-                layer.rotate = newAngle;                
+
+                layer.reset({
+                    transform: Transform.replace(layer.transform, { type: 'rotate', value: [ newAngle] })
+                })
             }
         }
 

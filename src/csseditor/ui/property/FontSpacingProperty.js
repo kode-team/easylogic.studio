@@ -16,7 +16,7 @@ export default class FontSpacingProperty extends BaseProperty {
   }
 
   refresh() {
-    // TODO: 업데이트를 어떻게 할까? 
+    
     var current = editor.selection.current;
 
     if (current) {

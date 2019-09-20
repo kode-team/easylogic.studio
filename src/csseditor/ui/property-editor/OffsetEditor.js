@@ -24,7 +24,7 @@ export default class OffsetEditor extends UIElement {
   }
 
   updateData(opt) {
-    this.setState(opt, false); // 자동 로드를 하지 않음, state 만 업데이트
+    this.setState(opt, false); 
     this.modifyOffset();
   }
 
@@ -80,8 +80,7 @@ export default class OffsetEditor extends UIElement {
   }
 
 
-  // 객체를 선택하는 괜찮은 패턴이 어딘가에 있을 텐데......
-  // 언제까지 selected 를 설정해야하는가?
+  
   selectItem(selectedIndex, isSelected = true) {
     
     if (isUndefined(selectedIndex)) {
@@ -225,8 +224,6 @@ export default class OffsetEditor extends UIElement {
 
 
   }
-
-  // 개별 속성을 변경할 때  state 로 저장 하기 
 
   refresh() {
     this.load();

@@ -30,7 +30,7 @@ export default class BoxShadowPropertyPopup extends BasePopup {
   }
 
   updateData(opt) {
-    this.setState(opt, false); // 자동 로드를 하지 않음, state 만 업데이트
+    this.setState(opt, false); 
     this.emit(this.changeEvent, opt, this.state.params);
   }
 
@@ -135,7 +135,6 @@ export default class BoxShadowPropertyPopup extends BasePopup {
     this.getRef("$offsetX").val(x);
     this.getRef("$offsetY").val(y);
 
-    // 다른 곳의 숫자르 바로 업데이트 할 수 있어야 한다.
     this.updateData({
       offsetX: Length.px(x),
       offsetY: Length.px(y)

@@ -30,7 +30,6 @@ export const start = opt => {
 
       this.render(this.$container);
 
-      // 이벤트 연결
       this.initializeEvent();
 
       this.initBodyMoves();

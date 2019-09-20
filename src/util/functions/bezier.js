@@ -217,8 +217,6 @@ const interpolate = (p1, p2, t) => {
 
 export const getBezierPointOne = (points, t) => {
 
-    // console.log(points, t);
-
     var p0 = interpolate(points[0], points[1], t);
     var p1 = interpolate(points[1], points[2], t);
     var p2 = interpolate(points[2], points[3], t);
@@ -228,8 +226,6 @@ export const getBezierPointOne = (points, t) => {
 }
 
 export const getBezierPointOneQuard = (points, t) => {
-
-    // console.log(points, t);
 
     var p0 = interpolate(points[0], points[1], t);
     var p1 = interpolate(points[1], points[2], t);
@@ -242,9 +238,6 @@ export const getBezierPointOneLine = (points, t) => {
 }
 
 export const getBezierPoints = (points, t) => {
-
-    // console.log(points, t);
-
     var p0 = interpolate(points[0], points[1], t);
     var p1 = interpolate(points[1], points[2], t);
     var p2 = interpolate(points[2], points[3], t);

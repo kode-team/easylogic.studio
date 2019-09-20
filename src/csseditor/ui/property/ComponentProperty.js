@@ -40,7 +40,7 @@ export default class ComponentProperty extends BaseProperty {
       this.refresh()
     } else {
       this.hide();
-      // this.refresh()
+      
     }
 
   }
@@ -49,7 +49,7 @@ export default class ComponentProperty extends BaseProperty {
 
     if (!this.isShow()) return; 
 
-    // update 를 어떻게 할지 고민 
+    
     var current = editor.selection.current;
 
     if (current && current.is('component')) {
@@ -77,7 +77,7 @@ export default class ComponentProperty extends BaseProperty {
       current.getProps().forEach(it => {
 
         if (isString(it.editor)) {
-          // NOOP 
+          
         } else {
           components = { ...components, ...it.editor}
         }

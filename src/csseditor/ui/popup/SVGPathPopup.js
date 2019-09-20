@@ -11,7 +11,6 @@ export default class SVGPathPopup extends BasePopup {
 
   components() {
     return {
-      // SVGPathEditor
       SVGItemProperty
     }
   }
@@ -25,7 +24,7 @@ export default class SVGPathPopup extends BasePopup {
   }
 
   updateData(opt) {
-    this.setState(opt, false); // 자동 로드를 하지 않음, state 만 업데이트
+    this.setState(opt, false); 
     this.emit(this.state.changeEvent, this.state);
   }
 
@@ -60,7 +59,6 @@ export default class SVGPathPopup extends BasePopup {
   [EVENT("showSVGPathPopup")](data) {
 
     this.setState(data);
-    // this.refresh()
 
     this.show(600);
   }

@@ -86,10 +86,8 @@ export function gradient(colors, count = 10) {
         var startColor = colors[i-1][0]
         var endColor = colors[i][0]
 
-        // if it is second color
         var rate = i == 1 ? colors[i][1] : colors[i][1] - colors[i-1][1]
 
-        // if it is last color 
         var colorCount = (i == colors.length - 1) ? allCount : Math.floor(rate * maxCount)
 
         newColors = newColors.concat(scale([startColor, endColor], colorCount), [endColor])

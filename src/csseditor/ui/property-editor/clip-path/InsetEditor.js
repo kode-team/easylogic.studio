@@ -125,12 +125,6 @@ export default class InsetEditor extends UIElement {
 
     }
 
-
-    // 버그가 많다. 
-    // 몇가지를 더 해야한다. 
-
-    // 1. top, bottom, 또는 right, left 는 서로의 경계를 넘어갈 수가 없다. 
-    // 2. clipRect 를 드래그 할 때 width, height 안 맞는 문제 해결해야함 
     refreshPointer () {
         var { top, right, bottom, left} = this.state; 
 

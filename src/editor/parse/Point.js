@@ -11,7 +11,7 @@ export default class Point {
     static getReversePoint(start, end) {
         var distX = (start.x -  end.x)
         var distY = (start.y -  end.y)
-        // 여긴 시작 지점의 curve 
+
         return {
             x: start.x + distX,
             y: start.y + distY
@@ -51,12 +51,7 @@ export default class Point {
         }
         return firstIndex;
     }
-
-
-    // svg path 를 가지고 화면 에디터용 형태로 변환한다. 
-    // 이렇게 변환하는 이유는 에디팅 하면서 생성하는 구조랑 SVG 를 로드하면서 생성하는 구조랑 맞추기 위해서이다. 
-    // 공통된 구조를 가지고 편집하고 결과는 svg 로 변환한다. 
-
+    
     static getLastPoint (points, index) {
 
         if (!points.length) return null;

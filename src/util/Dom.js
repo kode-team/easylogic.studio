@@ -323,13 +323,6 @@ export default class Dom {
       } else {
 
         Object.assign(this.el.style, key);
-
-        // var keys = Object.keys(key || {});
-
-        // for (var i = 0, len = keys.length; i < len; i++) {
-        //   var k = keys[i];
-        //   this.el.style[k] = key[k];
-        // }
       }
     }
 

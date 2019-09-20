@@ -40,7 +40,7 @@ export default class ClipPathPopup extends BasePopup {
   }
 
   updateData(opt) {
-    this.setState(opt, false); // 자동 로드를 하지 않음, state 만 업데이트
+    this.setState(opt, false); 
     this.emit(this.state.changeEvent || "changeClipPathPopup", this.toClipPathCSS());
   }
 
@@ -88,18 +88,6 @@ export default class ClipPathPopup extends BasePopup {
     }
     
   }
-
-
-  // [EVENT('changeClipPathType')] (key, type) {
-
-  //   this.setState({
-  //     type,
-  //     value: ''
-  //   })
-  //   this.refresh();    
-
-  //   this.emit("changeClipPathPopup", this.toClipPathCSS());
-  // }
 
   [EVENT('changeClipPath')] (type, value) {
     this.updateData({

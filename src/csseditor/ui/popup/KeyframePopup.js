@@ -23,7 +23,7 @@ export default class KeyframePopup extends BasePopup {
   }
 
   updateData(opt) {
-    this.setState(opt, false); // 자동 로드를 하지 않음, state 만 업데이트
+    this.setState(opt, false); 
     this.emit("changeKeyframePopup", this.state);
   }
 
@@ -66,8 +66,6 @@ export default class KeyframePopup extends BasePopup {
     }
   }
   
-  // 개별 속성을 변경할 때  state 로 저장 하기 
-
   getOffsetData () {
     var offsets = this.state.offsets.map(it => it)
 

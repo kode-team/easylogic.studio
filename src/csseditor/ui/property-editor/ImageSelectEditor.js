@@ -26,7 +26,7 @@ export default class ImageSelectEditor extends UIElement {
     }
 
     [CLICK('$body')] () {
-        // open image popup
+        
         this.emit('showImageSelectPopup', {
             context: this, 
             changeEvent: 'changeImageSelectEditor',

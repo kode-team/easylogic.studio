@@ -3,6 +3,7 @@ import { editor } from "../../../editor/editor";
 import { LOAD, DEBOUNCE } from "../../../util/Event";
 import { EVENT } from "../../../util/UIElement";
 import { Length } from "../../../editor/unit/Length";
+import { Transform } from "../../../editor/css-property/Transform";
 
 
 
@@ -94,9 +95,24 @@ export default class BackgroundColorProperty extends BaseProperty {
 
 
   [EVENT('changeSelect')] (key, value) {
-    editor.selection.reset({
-      [key]: value
-    })
+
+    if (key === 'rotate') {
+      editor.selection.resetCallback(item => {
+        return {
+          transform: Transform.replace(item.transform, {
+            type: 'rotate', 
+            value: [value]
+          })
+        }
+      })
+      
+    } else {
+
+      editor.selection.reset({
+        [key]: value
+      })
+  
+    }
 
     this.emit("refreshSelectionStyleView");
   }

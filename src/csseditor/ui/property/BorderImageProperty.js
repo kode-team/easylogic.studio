@@ -101,7 +101,7 @@ export default class BorderImageProperty extends BaseProperty {
   [LOAD('$borderImageView')] () {
     var current  = editor.selection.current || {borderImage: { image: {}}} ;
     var borderImage = current.borderImage;
-    // var backgroundType = types[image.type];
+    
     var backgroundTypeName = borderImage.type ?  names[borderImage.type] : '';
 
     const imageCSS = `background-image: ${borderImage.image.toString()}; background-size: cover;`;    

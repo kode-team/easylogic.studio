@@ -130,12 +130,8 @@ export default class TextShadowEditor extends UIElement {
     }, {
       id: this.id
     });
-    // this.emit('hidePropertyPopup')
+    
   }
-
-  // [EVENT("changeTextShadowEditorColor")](color) {
-  //   this.trigger('changeTextShadowEditorPopup', { color }, {id: this.id})
-  // }
 
   [EVENT("changeTextShadowEditorPopup")](data, params) {
     if (params.id === this.id) {

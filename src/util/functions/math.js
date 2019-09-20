@@ -21,7 +21,7 @@ export function radianToDegree(radian) {
     var angle =  radian * 180 / Math.PI;
 
 
-    if (angle < 0) {   // 각도가 0보다 작으면 360 에서 반전시킨다. 
+    if (angle < 0) {   
         angle = 360 + angle
     }
 

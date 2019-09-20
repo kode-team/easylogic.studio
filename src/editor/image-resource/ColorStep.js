@@ -115,8 +115,8 @@ export class ColorStep extends Item {
 
   reset(json) {
     super.reset(json);
-    if (this.parent()) {
-      this.parent().sortColorStep();
+    if (this.parent) {
+      this.parent.sortColorStep();
     }
   }
 

@@ -1,12 +1,15 @@
 import MenuItem from "./MenuItem";
 import icon from "../icon/icon";
  
-export default class AddRect extends MenuItem {
+export default class SelectTool extends MenuItem {
   getIconString() {
-    return icon.rect;
+    return icon.near_me;
+  }
+  getIcon() {
+    return 'flipY'
   }
   getTitle() {
-    return "1. Rect";
+    return "1. Select a item";
   }
 
 
@@ -16,6 +19,6 @@ export default class AddRect extends MenuItem {
 
   clickButton(e) {
 
-    this.emit('add.type', 'rect');
+    this.emit('select.item');
   }
 }

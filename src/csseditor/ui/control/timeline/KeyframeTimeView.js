@@ -66,7 +66,6 @@ export default class KeyframeTimeView extends UIElement {
     [POINTERSTART('$start') + IF('hasCurrentTimeline') + MOVE('moveStartButton')] (e) {
         this.sliderRect = this.refs.$slider.rect();
         this.endX = Length.parse(this.refs.$end.css('left')).toPx(this.sliderRect.width);
-        // this.timeline = this.currentTimeline;
         this.artboard = editor.selection.currentArtboard;
 
     }
@@ -92,7 +91,6 @@ export default class KeyframeTimeView extends UIElement {
     [POINTERSTART('$end') + IF('hasCurrentTimeline') + MOVE('moveEndButton')] (e) {
         this.sliderRect = this.refs.$slider.rect();
         this.startX = Length.parse(this.refs.$start.css('left')).toPx(this.sliderRect.width);
-        // this.timeline = this.currentTimeline;
         this.artboard = editor.selection.currentArtboard;        
 
     }
@@ -248,7 +246,6 @@ export default class KeyframeTimeView extends UIElement {
         this.artboard.seek();
 
         this.emit('moveTimeline')
-        // this.emit('refreshSelection')        
     }
 
     moveEndCurrentTime () {

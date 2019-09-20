@@ -13,6 +13,7 @@ export default class ToolMenu extends UIElement {
         <div class='items'>
           <div class='draw-items' ref='$items'>
             <!--<label>CSS</label>-->
+            <SelectTool />
             <AddRect />
             <AddCircle />         
             <AddText />

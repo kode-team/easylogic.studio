@@ -85,9 +85,8 @@ export default class AnimationProperty extends BaseProperty {
         context.lineWidth = 2;
         context.strokeStyle = 'white';
 
-        // Draw bezier curve
         context.beginPath();
-        context.moveTo(0,height);   // 0, 0
+        context.moveTo(0,height);   
         context.bezierCurveTo( 
             currentBezier[0] * width, 
             currentBezier[1] == 0 ? height : (1 - currentBezier[1]) * height, 
@@ -140,7 +139,7 @@ export default class AnimationProperty extends BaseProperty {
     this.startIndex = +e.$delegateTarget.attr("data-index");
   }
 
-  // drop 이벤트를 걸 때 dragover 가 같이 선언되어 있어야 한다.
+  
   [DRAGOVER("$animationList .animation-item") + PREVENT](e) {}
 
   [DROP("$animationList .animation-item") + PREVENT](e) {
@@ -155,10 +154,7 @@ export default class AnimationProperty extends BaseProperty {
 
     this.refresh();
 
-    // startIndex 가 target 이랑 바뀌면
-    // startIndex 객체는 selected 르 true 로 설정하고
-    // refresh 될 때 selectedIndex 가 설정 되고
-    // viewAnimationPicker 를 호출할 $preview 가 필요하네 ?
+    
     this.viewAnimationPicker(this.getRef('$preview', this.selectedIndex));
   }
 
@@ -194,8 +190,7 @@ export default class AnimationProperty extends BaseProperty {
     }
   }
 
-  // 객체를 선택하는 괜찮은 패턴이 어딘가에 있을 텐데......
-  // 언제까지 selected 를 설정해야하는가?
+  
   selectItem(selectedIndex, isSelected = true) {
     if (isSelected) {
       this.refs[`animationIndex${selectedIndex}`].addClass("selected");

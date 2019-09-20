@@ -9,7 +9,6 @@ import * as fromHSL from './functions/fromHSL'
 import * as fromYCrCb from './functions/fromYCrCb'
 import * as mixin from "./functions/mixin";
 import * as parser from "./functions/parser";
-// import * as image from "./functions/image";
 import * as func from './functions/func';
 
 export default {
@@ -24,7 +23,6 @@ export default {
     ...fromHSV,
     ...fromHSL,
     ...fromLAB,
-    // ...image,
     ...func
 }
 

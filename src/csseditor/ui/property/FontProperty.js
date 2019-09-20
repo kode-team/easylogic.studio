@@ -19,7 +19,7 @@ export default class FontProperty extends BaseProperty {
   }
 
   refresh() {
-    // update 를 어떻게 할지 고민 
+    
     var current = editor.selection.current;
 
     if (current) {

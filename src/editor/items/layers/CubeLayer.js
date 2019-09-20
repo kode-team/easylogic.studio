@@ -37,6 +37,7 @@ const cssKeyValue = {
   'transform-style': true, 
   'perspective': true, 
   'perspective-origin': true,
+  'offset-path': true,
 }
 
 const nestedCssKeyValue = {

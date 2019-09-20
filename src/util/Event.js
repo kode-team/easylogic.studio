@@ -47,8 +47,6 @@ export const LOAD_SAPARATOR = "load ";
 export const BIND_SAPARATOR = "bind ";
 export const SAPARATOR = ' ';
 
-// 임의의 값을 저장하기 위한 구조
-// 임의의 값은 하나의 id 로 만들어지고 id 를 조회 할 때  값으로 다시 치환
 const refManager = {};
 
 const DOM_EVENT_MAKE = (...keys) => {

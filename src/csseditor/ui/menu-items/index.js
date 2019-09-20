@@ -24,9 +24,11 @@ import AddImage from "./AddImage";
 import AddPath from "./AddPath";
 import Save from "./Save";
 import Download from "./Download";
+import SelectTool from "./SelectTool";
 
 
 export default {
+  SelectTool,
   Download,
   Save,
   AddCube,
