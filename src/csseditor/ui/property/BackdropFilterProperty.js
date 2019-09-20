@@ -40,13 +40,12 @@ export default class BackdropFilterProperty extends BaseProperty {
 
 
   getBody() {
-    return `<div class='property-item full filter-property' ref='$body'></div>`;
+    return /*html*/`<div class='full filter-property' ref='$body'></div>`;
   }
 
   getTools() {
-    return `
-      <select ref="$filterSelect">      
-      </select>
+    return /*html*/`
+      <select ref="$filterSelect"></select>
       <button type="button" ref="$add" title="add Filter">${icon.add}</button>
     `
   }
@@ -110,7 +109,7 @@ export default class BackdropFilterProperty extends BaseProperty {
     var current = editor.selection.current || {} 
     var value = current['backdrop-filter'];
 
-    return `<FilterEditor ref='$filterEditor' value='${value}' hide-label="true" onchange='changeFilterEditor' />`
+    return /*html*/`<FilterEditor ref='$filterEditor' value='${value}' hide-label="true" onchange='changeFilterEditor' />`
   }
 
   [EVENT('changeFilterEditor')] (filter) {
@@ -123,6 +122,10 @@ export default class BackdropFilterProperty extends BaseProperty {
 
   }
 
+
+  [EVENT('refreshSelection') + DEBOUNCE(100)] () {
+    this.refreshShowIsNot('project')
+  }  
 
   [EVENT('refreshCanvas') + DEBOUNCE(1000) ] () {
     // svg 필터 옵션만 변경한다. 

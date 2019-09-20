@@ -8,11 +8,7 @@ import { DEBOUNCE } from "../../../util/Event";
 export default class FontSpacingProperty extends BaseProperty {
 
   getTitle() {
-    return "Spacing";
-  }
-
-  isHideHeader() {
-    return true; 
+    return "Font Spacing";
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {

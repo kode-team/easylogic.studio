@@ -39,10 +39,20 @@ $tab-horizontal-header-right-width: 60px;
         padding: 4px 0px;
         box-sizing: border-box;
         border-bottom: 1px solid $tab-selected-border-color;
-        border-top: 1px solid transparent;                
+        border-top: 1px solid transparent;        
+        
+        label {
+          &.icon {
+            padding: 2px 10px;
+          }
 
-        .icon {
-          display: none;
+          svg {
+            path  {
+              fill: $tab-header-font-color;
+              stroke: $tab-header-background-color;
+              stroke-width: 1px;
+            }
+          }
         }
 
         &:first-child {
@@ -93,6 +103,14 @@ $tab-horizontal-header-right-width: 60px;
         border-bottom: 1px solid transparent;        
         background-color: $tab-background-color;
         color: $tab-selected-font-color;
+
+        label {
+          svg {
+            path {
+              stroke: $tab-background-color;
+            }
+          }
+        }
       }
 
       &[data-selected-value="#{$selectValue}"]

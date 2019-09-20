@@ -18,10 +18,6 @@ export default class CodeViewProperty extends BaseProperty {
     this.refreshShowIsNot();
   }
 
-  isHideHeader() {
-    return true;
-  }
-
   getBody() {
     return `
       <div class="property-item code-view-item" ref='$body'></div>

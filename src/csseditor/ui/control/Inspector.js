@@ -2,6 +2,7 @@ import UIElement from "../../../util/UIElement";
 
 import { CLICK } from "../../../util/Event";
 import property from "../property/index";
+import icon from "../icon/icon";
 
 export default class Inspector extends UIElement {
   template() {
@@ -10,46 +11,34 @@ export default class Inspector extends UIElement {
         <div>
           <div class="tab number-tab" data-selected-value="1" ref="$tab">
             <div class="tab-header" ref="$header">
-              <div class="tab-item" data-value="1">
-                <label>Style</label>
+              <div class="tab-item" data-value="1" title='Style'>
+                <label class='icon'>${icon.brush}</label>
               </div>
-              <div class="tab-item" data-value="2">
-                <label>Animation</label>
+              <div class="tab-item" data-value="2" title="Component">
+                <label class='icon'>${icon.cube}</label>
+              </div>              
+              <div class="tab-item" data-value="3" title="Transition & Animation">
+                <label>${icon.flash_on}</label>
               </div>
               
-              <div class="tab-item" data-value="3">
-                <label>Assets</label>
+              <div class="tab-item" data-value="4" title='Assets'>
+                <label class='icon'>${icon.view_list}</label>
               </div>                                     
-              <div class="tab-item" data-value="4">
-                <label>Code</label>
+              <div class="tab-item" data-value="5" title='Code'>
+                <label class='icon'>${icon.code}</label>
               </div>                                     
               <div class='tab-item empty-item'></div>
             </div>
             <div class="tab-body" ref="$body">
-              <div class="tab-content" data-value="1">
-                <ComponentProperty />
 
+              <div class="tab-content" data-value="1">
                 <AlignmentProperty />
 
                 <!-- ArtBoard --> 
                 <ArtBoardSizeProperty />              
 
-                <!-- Image --> 
-                <ImageProperty />
-
                 <!-- SVG Item --> 
                 <SVGItemProperty />
-
-                <!-- Text -->
-                <!-- <ContentProperty /> -->    
-                <FontProperty />
-                <TextProperty />
-                <TextShadowProperty />
-                <TextFillProperty />
-                <FontSpacingProperty />
-                <TextClipProperty />
-
-                <div class='split'></div>
 
                 <!-- Default Property --> 
                 <PositionProperty />
@@ -63,7 +52,7 @@ export default class Inspector extends UIElement {
                 <!-- effect -->
                 <BoxShadowProperty />
                 <FilterProperty />
-                <!-- <BackdropFilterProperty /> -->
+                <BackdropFilterProperty />
                 <ClipPathProperty />       
 
                 <!-- transform --> 
@@ -74,13 +63,31 @@ export default class Inspector extends UIElement {
               
 
                 <!--BorderImageProperty /-->                
-                <!-- <BackdropFilterProperty /> -->
+
                 <!-- <OutlineProperty /> -->
                 <!-- <BackgroundClipProperty /> -->  
                 
                 <div class='empty'></div>
               </div>
-              <div class='tab-content' data-value='2'>
+              <div class="tab-content" data-value="2">
+                <ComponentProperty />
+
+                <!-- Image --> 
+                <ImageProperty />
+
+                <!-- Text -->
+                <!-- <ContentProperty /> -->    
+                <FontProperty />
+                <TextProperty />
+                <TextShadowProperty />
+                <TextFillProperty />
+                <FontSpacingProperty />
+                <TextClipProperty />
+
+
+                <div class='empty'></div>                
+              </div>              
+              <div class='tab-content' data-value='3'>
                 <MotionProperty />              
                 <!-- <RootVariableProperty /> -->
                 <!-- <VariableProperty /> -->
@@ -91,7 +98,7 @@ export default class Inspector extends UIElement {
 
                 <div class='empty'></div>                
               </div>                        
-              <div class='tab-content' data-value='3'>
+              <div class='tab-content' data-value='4'>
                 <ImageAssetsProperty />
                 <!--SVGProperty /-->              
                 <SVGFilterAssetsProperty />
@@ -101,7 +108,7 @@ export default class Inspector extends UIElement {
                 
                 <div class='empty'></div>                
               </div>
-              <div class="tab-content" data-value="4">
+              <div class="tab-content" data-value="5">
                 <CodeViewProperty />
                 <div class='empty'></div>                           
               </div>                       

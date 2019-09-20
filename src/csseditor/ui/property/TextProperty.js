@@ -7,11 +7,7 @@ import { DEBOUNCE } from "../../../util/Event";
 export default class TextProperty extends BaseProperty {
 
   getTitle() {
-    return "Text";
-  }
-
-  isHideHeader() {
-    return true; 
+    return "Text Style";
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {

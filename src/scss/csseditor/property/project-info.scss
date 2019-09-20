@@ -1,0 +1,11 @@
+.project-info {
+    margin: 0px !important;
+    .project-info-item {
+        padding: 5px 7px !important; 
+        cursor: pointer;
+
+        input, textarea {
+            width: 100%;
+        }
+    }
+}

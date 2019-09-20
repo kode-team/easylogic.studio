@@ -2,13 +2,15 @@ import UIElement from "../../../util/UIElement";
 import ObjectItems from "./ObjectItems";
 import { CLICK } from "../../../util/Event";
 import ProjectProperty from "../property/ProjectProperty";
+import ProjectInformationProperty from "../property/ProjectInformationProperty";
 
 
 export default class LayerTab extends UIElement {
   components() {
     return {
       ObjectItems,
-      ProjectProperty
+      ProjectProperty,
+      ProjectInformationProperty
     }
   }
   template() {
@@ -27,8 +29,9 @@ export default class LayerTab extends UIElement {
             <div class='tab-item empty-item'></div>                                 
           </div>
           <div class="tab-body" ref="$body">
-            <div class="tab-content" data-value="1">
+            <div class="tab-content project-content" data-value="1">
               <ProjectProperty />
+              <ProjectInformationProperty />
             </div>
             <div class="tab-content" data-value="2">
               <ObjectItems />

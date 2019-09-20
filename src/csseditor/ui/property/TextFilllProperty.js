@@ -10,10 +10,6 @@ export default class TextFillProperty extends BaseProperty {
     return "Text Fill";
   }
 
-  isHideHeader() {
-    return true; 
-  }
-
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
     this.refreshShow('text');
   }

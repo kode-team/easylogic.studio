@@ -112,7 +112,7 @@ export default class ObjectCommand extends UIElement {
             height: Length.px(100),
             ...rect,
             'background-color': Color.random(),
-            'border-radius': 'border-radius: 100%'
+            'border-radius': Length.percent(100)
         }), rect)
     }
 

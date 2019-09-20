@@ -1602,6 +1602,28 @@ html, body {
   bottom: 0px;
   right: 0px;
 }
+.csseditor[data-theme=dark] .feature-control .layer-tab .project-content > div {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+}
+.csseditor[data-theme=dark] .feature-control .layer-tab .project-content > div:first-child {
+  top: 0px;
+  height: 150px;
+}
+.csseditor[data-theme=dark] .feature-control .layer-tab .project-content > div:nth-child(1) {
+  top: 0px;
+  height: 150px;
+}
+.csseditor[data-theme=dark] .feature-control .layer-tab .project-content > div:not(:first-child) {
+  border-top: 1px solid #111111;
+  box-sizing: border-box;
+}
+.csseditor[data-theme=dark] .feature-control .layer-tab .project-content > div:last-child {
+  top: 150px;
+  bottom: 0px;
+  height: auto !important;
+}
 .csseditor[data-theme=dark] .feature-control .layer-tab .object-items > div {
   position: absolute;
   left: 0px;
@@ -1792,8 +1814,13 @@ html, body {
   border-bottom: 1px solid #111111;
   border-top: 1px solid transparent;
 }
-.csseditor[data-theme=dark] .tab.number-tab > .tab-header > .tab-item .icon {
-  display: none;
+.csseditor[data-theme=dark] .tab.number-tab > .tab-header > .tab-item label.icon {
+  padding: 2px 10px;
+}
+.csseditor[data-theme=dark] .tab.number-tab > .tab-header > .tab-item label svg path {
+  fill: #ffffff;
+  stroke: #404040;
+  stroke-width: 1px;
 }
 .csseditor[data-theme=dark] .tab.number-tab > .tab-header > .tab-item:first-child:hover label {
   left: 10px;
@@ -1822,6 +1849,9 @@ html, body {
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"]:not(:first-child) {
   border-left: 1px solid #111111;
 }
+.csseditor[data-theme=dark] .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"] label svg path {
+  stroke: #2b2b2b;
+}
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="1"] .tab-content[data-value="1"] {
   display: block;
 }
@@ -1834,6 +1864,9 @@ html, body {
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"]:not(:first-child) {
   border-left: 1px solid #111111;
+}
+.csseditor[data-theme=dark] .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"] label svg path {
+  stroke: #2b2b2b;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="2"] .tab-content[data-value="2"] {
   display: block;
@@ -1848,6 +1881,9 @@ html, body {
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"]:not(:first-child) {
   border-left: 1px solid #111111;
 }
+.csseditor[data-theme=dark] .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"] label svg path {
+  stroke: #2b2b2b;
+}
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="3"] .tab-content[data-value="3"] {
   display: block;
 }
@@ -1860,6 +1896,9 @@ html, body {
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"]:not(:first-child) {
   border-left: 1px solid #111111;
+}
+.csseditor[data-theme=dark] .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"] label svg path {
+  stroke: #2b2b2b;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="4"] .tab-content[data-value="4"] {
   display: block;
@@ -1874,6 +1913,9 @@ html, body {
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"]:not(:first-child) {
   border-left: 1px solid #111111;
 }
+.csseditor[data-theme=dark] .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"] label svg path {
+  stroke: #2b2b2b;
+}
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="5"] .tab-content[data-value="5"] {
   display: block;
 }
@@ -1886,6 +1928,9 @@ html, body {
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"]:not(:first-child) {
   border-left: 1px solid #111111;
+}
+.csseditor[data-theme=dark] .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"] label svg path {
+  stroke: #2b2b2b;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="6"] .tab-content[data-value="6"] {
   display: block;
@@ -1900,6 +1945,9 @@ html, body {
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"]:not(:first-child) {
   border-left: 1px solid #111111;
 }
+.csseditor[data-theme=dark] .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"] label svg path {
+  stroke: #2b2b2b;
+}
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="7"] .tab-content[data-value="7"] {
   display: block;
 }
@@ -1913,6 +1961,9 @@ html, body {
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"]:not(:first-child) {
   border-left: 1px solid #111111;
 }
+.csseditor[data-theme=dark] .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"] label svg path {
+  stroke: #2b2b2b;
+}
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="8"] .tab-content[data-value="8"] {
   display: block;
 }
@@ -1925,6 +1976,9 @@ html, body {
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"]:not(:first-child) {
   border-left: 1px solid #111111;
+}
+.csseditor[data-theme=dark] .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"] label svg path {
+  stroke: #2b2b2b;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="9"] .tab-content[data-value="9"] {
   display: block;
@@ -4989,6 +5043,16 @@ html, body {
 }
 .csseditor[data-theme=dark] .timeline-animation-list .timeline-animation-item.selected svg path {
   fill: white;
+}
+.csseditor[data-theme=dark] .project-info {
+  margin: 0px !important;
+}
+.csseditor[data-theme=dark] .project-info .project-info-item {
+  padding: 5px 7px !important;
+  cursor: pointer;
+}
+.csseditor[data-theme=dark] .project-info .project-info-item input, .csseditor[data-theme=dark] .project-info .project-info-item textarea {
+  width: 100%;
 }
 .csseditor[data-theme=dark] .cubic-bezier-editor {
   width: 228px;
@@ -9142,6 +9206,28 @@ html, body {
   bottom: 0px;
   right: 0px;
 }
+.csseditor[data-theme=light] .feature-control .layer-tab .project-content > div {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+}
+.csseditor[data-theme=light] .feature-control .layer-tab .project-content > div:first-child {
+  top: 0px;
+  height: 150px;
+}
+.csseditor[data-theme=light] .feature-control .layer-tab .project-content > div:nth-child(1) {
+  top: 0px;
+  height: 150px;
+}
+.csseditor[data-theme=light] .feature-control .layer-tab .project-content > div:not(:first-child) {
+  border-top: 1px solid #e7e7e7;
+  box-sizing: border-box;
+}
+.csseditor[data-theme=light] .feature-control .layer-tab .project-content > div:last-child {
+  top: 150px;
+  bottom: 0px;
+  height: auto !important;
+}
 .csseditor[data-theme=light] .feature-control .layer-tab .object-items > div {
   position: absolute;
   left: 0px;
@@ -9332,8 +9418,13 @@ html, body {
   border-bottom: 1px solid #dfdfdf;
   border-top: 1px solid transparent;
 }
-.csseditor[data-theme=light] .tab.number-tab > .tab-header > .tab-item .icon {
-  display: none;
+.csseditor[data-theme=light] .tab.number-tab > .tab-header > .tab-item label.icon {
+  padding: 2px 10px;
+}
+.csseditor[data-theme=light] .tab.number-tab > .tab-header > .tab-item label svg path {
+  fill: #000b22;
+  stroke: #f7fcff;
+  stroke-width: 1px;
 }
 .csseditor[data-theme=light] .tab.number-tab > .tab-header > .tab-item:first-child:hover label {
   left: 10px;
@@ -9362,6 +9453,9 @@ html, body {
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"]:not(:first-child) {
   border-left: 1px solid #dfdfdf;
 }
+.csseditor[data-theme=light] .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"] label svg path {
+  stroke: white;
+}
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="1"] .tab-content[data-value="1"] {
   display: block;
 }
@@ -9374,6 +9468,9 @@ html, body {
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"]:not(:first-child) {
   border-left: 1px solid #dfdfdf;
+}
+.csseditor[data-theme=light] .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"] label svg path {
+  stroke: white;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="2"] .tab-content[data-value="2"] {
   display: block;
@@ -9388,6 +9485,9 @@ html, body {
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"]:not(:first-child) {
   border-left: 1px solid #dfdfdf;
 }
+.csseditor[data-theme=light] .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"] label svg path {
+  stroke: white;
+}
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="3"] .tab-content[data-value="3"] {
   display: block;
 }
@@ -9400,6 +9500,9 @@ html, body {
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"]:not(:first-child) {
   border-left: 1px solid #dfdfdf;
+}
+.csseditor[data-theme=light] .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"] label svg path {
+  stroke: white;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="4"] .tab-content[data-value="4"] {
   display: block;
@@ -9414,6 +9517,9 @@ html, body {
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"]:not(:first-child) {
   border-left: 1px solid #dfdfdf;
 }
+.csseditor[data-theme=light] .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"] label svg path {
+  stroke: white;
+}
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="5"] .tab-content[data-value="5"] {
   display: block;
 }
@@ -9426,6 +9532,9 @@ html, body {
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"]:not(:first-child) {
   border-left: 1px solid #dfdfdf;
+}
+.csseditor[data-theme=light] .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"] label svg path {
+  stroke: white;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="6"] .tab-content[data-value="6"] {
   display: block;
@@ -9440,6 +9549,9 @@ html, body {
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"]:not(:first-child) {
   border-left: 1px solid #dfdfdf;
 }
+.csseditor[data-theme=light] .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"] label svg path {
+  stroke: white;
+}
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="7"] .tab-content[data-value="7"] {
   display: block;
 }
@@ -9453,6 +9565,9 @@ html, body {
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"]:not(:first-child) {
   border-left: 1px solid #dfdfdf;
 }
+.csseditor[data-theme=light] .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"] label svg path {
+  stroke: white;
+}
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="8"] .tab-content[data-value="8"] {
   display: block;
 }
@@ -9465,6 +9580,9 @@ html, body {
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"]:not(:first-child) {
   border-left: 1px solid #dfdfdf;
+}
+.csseditor[data-theme=light] .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"] label svg path {
+  stroke: white;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="9"] .tab-content[data-value="9"] {
   display: block;
@@ -12529,6 +12647,16 @@ html, body {
 }
 .csseditor[data-theme=light] .timeline-animation-list .timeline-animation-item.selected svg path {
   fill: white;
+}
+.csseditor[data-theme=light] .project-info {
+  margin: 0px !important;
+}
+.csseditor[data-theme=light] .project-info .project-info-item {
+  padding: 5px 7px !important;
+  cursor: pointer;
+}
+.csseditor[data-theme=light] .project-info .project-info-item input, .csseditor[data-theme=light] .project-info .project-info-item textarea {
+  width: 100%;
 }
 .csseditor[data-theme=light] .cubic-bezier-editor {
   width: 228px;

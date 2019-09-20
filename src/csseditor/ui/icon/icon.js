@@ -78,9 +78,14 @@ import file_copy from "./file_copy";
 import archive from "./archive";
 import storage from "./storage";
 import doc from "./doc";
+import flash_on from "./flash_on";
+import view_list from "./view_list";
+
 
 
 export default {
+  view_list,
+  flash_on,
   doc,
   storage,
   archive,

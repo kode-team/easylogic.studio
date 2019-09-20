@@ -48,10 +48,11 @@ import ImageAssetsProperty from "./ImageAssetsProperty";
 import ComponentProperty from "./ComponentProperty";
 import TimelineAnimationProperty from "./TimelineAnimationProperty";
 import BorderNewProperty from "./BorderNewProperty";
+import ProjectInformationProperty from "./ProjectInformationProperty";
 
 
-
-export default {
+export default {  
+  ProjectInformationProperty,
   BorderNewProperty,
   TimelineAnimationProperty,
   ComponentProperty,

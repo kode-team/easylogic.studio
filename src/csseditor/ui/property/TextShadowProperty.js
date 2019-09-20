@@ -13,7 +13,7 @@ export default class TextShadowProperty extends BaseProperty {
 
   getBody() {
     return `
-      <div class="property-item full text-shadow-item" ref="$shadowList"></div>
+      <div class="full text-shadow-item" ref="$shadowList"></div>
     `;
   }
 

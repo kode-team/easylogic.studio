@@ -214,6 +214,34 @@
     // right: 50px;
     right: 0px;
 
+    .project-content {
+      > div {
+        position: absolute;
+        left: 0px;
+        right: 0px;      
+        &:first-child {
+          top: 0px;
+          height: 150px;
+        }
+  
+        &:nth-child(1) {
+          top: 0px;
+          height: 150px;
+        }      
+  
+        &:not(:first-child) {
+          border-top: 1px solid $border-color;
+          box-sizing: border-box;
+        }
+  
+        &:last-child {
+          top: 150px;
+          bottom : 0px;
+          height: auto !important;
+        }
+      }
+    }
+
 
     .object-items {
 
