@@ -1490,7 +1490,6 @@ html, body {
   top: 0px;
   bottom: 0px;
   width: 270px;
-  font-family: "Saira Stencil One", cursive;
 }
 .csseditor[data-theme=dark] .layout-main .layout-header .tool-menu {
   position: absolute;
@@ -5067,7 +5066,8 @@ html, body {
   position: relative;
   width: 40px;
   height: 40px;
-  border: 1px solid gray;
+  border-radius: 5px;
+  margin-bottom: 5px;
   cursor: pointer;
   background-color: #2f3538;
 }
@@ -9030,7 +9030,6 @@ html, body {
   top: 0px;
   bottom: 0px;
   width: 270px;
-  font-family: "Saira Stencil One", cursive;
 }
 .csseditor[data-theme=light] .layout-main .layout-header .tool-menu {
   position: absolute;
@@ -12607,7 +12606,8 @@ html, body {
   position: relative;
   width: 40px;
   height: 40px;
-  border: 1px solid gray;
+  border-radius: 5px;
+  margin-bottom: 5px;
   cursor: pointer;
   background-color: white;
 }
