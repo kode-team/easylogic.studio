@@ -184,9 +184,9 @@ export default class CSSPropertyEditor extends UIElement {
   makeIndivisualPropertyEditor (property, index) {
 
     if (property.key === 'background-image') {
-      return `
+      return /*html*/`
         <div class='property-editor'>
-          <BackgroundImageEditor ref='$backgroundImage${index}' hide-title="${this.state.hideTitle}" value="${property.value}" onChange="changeBackgroundImageProperty" />
+          <BackgroundImageEditor ref='$backgroundImage${index}' key="${property.key}" hide-title="${this.state.hideTitle}" value="${property.value}" onChange="changeBackgroundImageProperty" />
         </div>
       `
     } else if (property.key === 'filter') {
@@ -362,8 +362,8 @@ export default class CSSPropertyEditor extends UIElement {
     this.modifyPropertyValue(key, color);
   }  
 
-  [EVENT('changeBackgroundImageProperty')] (backgroundImage) {
-    this.modifyPropertyValue('background-image', backgroundImage);
+  [EVENT('changeBackgroundImageProperty')] (key, backgroundImage) {
+    this.modifyPropertyValue(key, backgroundImage);
   }  
 
   [EVENT('changeFilterProperty')] (filter) {

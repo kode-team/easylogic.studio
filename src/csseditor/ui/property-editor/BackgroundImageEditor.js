@@ -2,7 +2,9 @@ import UIElement, { EVENT } from "../../../util/UIElement";
 import { BackgroundImage } from "../../../editor/css-property/BackgroundImage";
 import { LOAD, CLICK, DRAGSTART, DRAGOVER, DROP, PREVENT, DEBOUNCE } from "../../../util/Event";
 import icon from "../icon/icon";
-import { keyEach, combineKeyArray, CSS_TO_STRING, STRING_TO_CSS } from "../../../util/functions/func";
+import { keyEach, combineKeyArray, CSS_TO_STRING, STRING_TO_CSS, OBJECT_TO_PROPERTY } from "../../../util/functions/func";
+import BackgroundPositionEditor from "./BackgroundPositionEditor";
+import GradientSingleEditor from "./GradientSingleEditor";
 
 
 const names = {
@@ -29,6 +31,13 @@ const names = {
 
 export default class BackgroundImageEditor extends UIElement {
 
+    components() {
+        return {
+            GradientSingleEditor,
+            BackgroundPositionEditor
+        }
+    }
+
     initState() {
         return {
             hideLabel: this.props['hide-label'] === 'true' ? true: false,
@@ -39,6 +48,13 @@ export default class BackgroundImageEditor extends UIElement {
 
     parseBackgroundImage(str) {
         return BackgroundImage.parseStyle(STRING_TO_CSS(str));
+    }
+
+    setValue (value) {
+        this.setState({
+            value, 
+            images : this.parseBackgroundImage(value)
+        })
     }
 
     template () {
@@ -100,11 +116,29 @@ export default class BackgroundImageEditor extends UIElement {
       
             return /*html*/`
             <div class='fill-item ${selectedClass}' data-index='${index}' ref="fillIndex${index}"  draggable='true' data-fill-type="${backgroundType}" >
-                <div class='preview' data-index="${index}" ref="preview${index}">
+                <BackgroundPositionEditor ${OBJECT_TO_PROPERTY({
+                    key: 'background-position',
+                    index,
+                    x: it.x,
+                    y: it.y,
+                    width: it.width,
+                    height: it.height,
+                    repeat: it.repeat,
+                    size: it.size,
+                    blendMode: it.blendMode     
+                })} onchange='changePattern' />
+                <GradientSingleEditor ${OBJECT_TO_PROPERTY({
+                    index,
+                    image: it.image,
+                    key: 'background-image'
+                })} onchange='changePattern'
+
+                />
+                <!--<div class='preview' data-index="${index}" ref="preview${index}">
                     <div class='mini-view' >
                       <div class='color-view' style="${imageCSS}" ref="miniView${index}"></div>
                     </div>
-                </div>
+                </div> -->
                 <div class='fill-info'>
                   <div class='gradient-info'>
                     <div class='fill-title' ref="fillTitle${index}">${backgroundTypeName}</div>
@@ -124,7 +158,7 @@ export default class BackgroundImageEditor extends UIElement {
     modifyBackgroundImage () {
         var value = CSS_TO_STRING(BackgroundImage.toPropertyCSS(this.state.images));
 
-        this.parent.trigger(this.props.onchange, value)
+        this.parent.trigger(this.props.onchange, this.props.key, value)
     }
 
     [EVENT('add')] () {
@@ -219,125 +253,10 @@ export default class BackgroundImageEditor extends UIElement {
         
     }
 
-    viewFillPopup($preview, selectColorStepIndex) {
-        if (typeof this.selectedIndex === "number") {
-            this.selectItem(this.selectedIndex, false);
-        }
-
-        this.selectedIndex = +$preview.attr("data-index");
-        this.selectItem(this.selectedIndex, true);
-
-        this.currentBackgroundImage =  this.getCurrentBackgroundImage()
-
-
-        const back = this.currentBackgroundImage;
-
-        const x = back.x;
-        const y = back.y;
-        const width = back.width;
-        const height = back.height;
-        const repeat = back.repeat;
-        const size = back.size;
-        const blendMode = back.blendMode;
-
-        this.emit("showFillPopup", {
-            hideBackgroundProperty: false,
-            changeEvent: 'changeBackgroundImageEditor',
-            x,
-            y,
-            width,
-            height,
-            repeat,
-            size,
-            blendMode,            
-            image: this.currentBackgroundImage.image + '',  
-            selectColorStepIndex,
-            refresh: true,
-            isImageHidden: true
-        });
-    }
-
-    [CLICK("$fillList .preview")](e) {
-        this.viewFillPopup(e.$delegateTarget);
-    }
-
-    viewChangeImage(data) {
-        var backgroundImage = this.currentBackgroundImage;
-        if (!backgroundImage) return;
-        var $el = this.getRef("miniView", this.selectedIndex);
-        if ($el) {
-            $el.css({
-                ...backgroundImage.toCSS(),
-                "background-size": "cover"
-            });
-        }
-
-        var $el = this.getRef("fillTitle", this.selectedIndex);
-        if ($el) {
-            $el.html(names["image"]);
-        }
-
-        var $el = this.getRef("colorsteps", this.selectedIndex);
-        if ($el) {
-            $el.empty();
-        }
-    }
-
-    setImage(data) {
-        if (this.currentBackgroundImage) {
-            this.currentBackgroundImage.setImageUrl(data);
-
-            this.viewChangeImage(data);
-
-            this.modifyBackgroundImage()
-        }
-    }
-
     [EVENT("selectFillPopupTab")](type, data) {
         var typeName = types[type];
         var $fillItem = this.refs[`fillIndex${this.selectedIndex}`];
         $fillItem.attr("data-fill-type", typeName);
-    }
-
-    viewChangeGradient(data) {
-        var backgroundImage = this.currentBackgroundImage;
-
-        if (!backgroundImage) return;
-        var $el = this.getRef("miniView", this.selectedIndex);
-        if ($el) {
-            $el.cssText(backgroundImage.toString());
-        }
-
-        var $el = this.getRef("fillTitle", this.selectedIndex);
-        if ($el) {
-            $el.html(names[data.type]);
-        }
-
-        var $el = this.getRef("colorsteps", this.selectedIndex);
-        if ($el) {
-            $el.html(this.getColorStepString(data.colorsteps));
-        }
-    }
-
-    setGradient(data) {
-        if (this.currentBackgroundImage) {
-            this.currentBackgroundImage.setGradient(data);
-            this.viewChangeGradient(data);
-
-            this.modifyBackgroundImage();
-        }
-    }
-
-    [EVENT("changeBackgroundImageEditor")](data) {
-
-        switch (data.type) {
-        case "image":
-            this.setImage(data);
-            break;
-        default:
-            this.setGradient(data);
-            break;
-        }
     }
 
     [EVENT("changeBackgroundProperty") + DEBOUNCE(10)](data) {
@@ -346,5 +265,15 @@ export default class BackgroundImageEditor extends UIElement {
 
             this.modifyBackgroundImage();
         }
+    }
+
+    [EVENT('changePattern')] (key, value, params) {
+        var index = +params;
+        var image = this.state.images[index];
+
+        image.reset(value);
+
+        this.modifyBackgroundImage();
+        this.refresh();
     }
 }

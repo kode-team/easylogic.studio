@@ -12,9 +12,11 @@ import ImageSelectPopup from "./ImageSelectPopup";
 import GradientPickerPopup from "./GradientPickerPopup";
 import SVGFilterPopup from "./SVGFilterPopup";
 import SVGPathPopup from "./SVGPathPopup";
+import BackgroundImagePositionPopup from "./BackgroundImagePositionPopup";
 
 
 export default {
+  BackgroundImagePositionPopup,
   SVGPathPopup,
   SVGFilterPopup,
   GradientPickerPopup,

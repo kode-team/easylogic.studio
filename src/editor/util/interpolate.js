@@ -33,6 +33,7 @@ function makeInterpolateCustom (property) {
     case 'text-shadow':
         return makeInterpolateTextShadow
     case 'background-image':
+    case 'BackgroundImageEditor':
         return makeInterpolateBackgroundImage 
     case 'filter':
     case 'backdrop-filter':
@@ -57,9 +58,9 @@ function makeInterpolateCustom (property) {
 }
 
 
-function makeInterpolate (layer, property, startValue, endValue, editor) {
+function makeInterpolate (layer, property, startValue, endValue, editorString) {
 
-    var checkField = editor || property
+    var checkField = editorString || property
 
     switch(checkField) {
     case 'width':
@@ -99,7 +100,7 @@ function makeInterpolate (layer, property, startValue, endValue, editor) {
     }
 
     
-    var func = makeInterpolateCustom(property)
+    var func = makeInterpolateCustom(checkField)
 
     if (func) {
         return func(layer, property, startValue, endValue)
@@ -109,8 +110,8 @@ function makeInterpolate (layer, property, startValue, endValue, editor) {
 }
 
 
-export function createInterpolateFunction (layer, property, startValue, endValue, editor) {
-    return makeInterpolate(layer, property, startValue, endValue, editor);
+export function createInterpolateFunction (layer, property, startValue, endValue, editorString) {
+    return makeInterpolate(layer, property, startValue, endValue, editorString);
 }
 
 

@@ -67,6 +67,7 @@ export default class CSSEditor extends UIElement {
         <FillPopup />
         <ColorPickerPopup  />
         <BoxShadowPropertyPopup />
+        <BackgroundImagePositionPopup />
         <TextShadowPropertyPopup />
         <AnimationPropertyPopup />
         <TransitionPropertyPopup />

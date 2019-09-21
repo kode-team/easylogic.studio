@@ -4,8 +4,6 @@ import { EVENT } from "../../../util/UIElement";
 import { DEBOUNCE, LOAD } from "../../../util/Event";
 import { isString, OBJECT_TO_PROPERTY, isNotUndefined } from "../../../util/functions/func";
 
-editor
-
 
 export default class ComponentProperty extends BaseProperty {
 
@@ -46,13 +44,11 @@ export default class ComponentProperty extends BaseProperty {
   }
 
   refresh() {
-
-    if (!this.isShow()) return; 
-
     
     var current = editor.selection.current;
 
     if (current && current.is('component')) {
+      this.setTitle(current.itemType || current.name);
       this.load();
       current.getProps().forEach(it => {
         if (this.children[it.key]) {

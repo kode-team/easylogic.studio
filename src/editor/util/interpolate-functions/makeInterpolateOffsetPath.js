@@ -113,7 +113,7 @@ export function makeInterpolateOffsetPath(layer, property, startValue, endValue)
                 var newAngle = Length.deg(innerInterpolateAngle(startObject.rotateStatus, angle))
 
                 layer.reset({
-                    transform: Transform.replace(layer.transform, { type: 'rotate', value: [ newAngle] })
+                    transform: Transform.rotate(layer.transform, newAngle)
                 })
             }
         }

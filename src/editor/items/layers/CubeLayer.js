@@ -7,7 +7,13 @@ const customKeyValue = {
   'left.color': true,
   'right.color': true,
   'top.color': true,
-  'bottom.color': true,
+  'bottom.background': true,
+  'front.background': true,
+  'back.background': true,
+  'left.background': true,
+  'right.background': true,
+  'top.background': true,
+  'bottom.background': true,  
 }
 
 const customSelectorName = {
@@ -17,6 +23,12 @@ const customSelectorName = {
   'right.color': '.right',
   'top.color': '.top',
   'bottom.color': '.bottom',
+  'front.background': '.front',
+  'back.background': '.back',
+  'left.background': '.left',
+  'right.background': '.right',
+  'top.background': '.top',
+  'bottom.background': '.bottom',  
 }
 
 const cssKeyValue = { 
@@ -56,44 +68,45 @@ export class CubeLayer extends Component {
       'transform-style':'preserve-3d',
       transform: 'rotateX(10deg) rotateY(30deg)',
       'front.color': '',
+      'front.background': '',
       ...obj
     }); 
   }
 
   getProps() {
     return [
-      'Colors',
+      'Color',
       {
         key: 'front.color', editor: 'ColorViewEditor', 
         editorOptions: {
-          label: 'front', 
+          label: 'front',
           params: 'front.color'
         }, 
         defaultValue: 'rgba(0, 0, 0, 1)' 
       },
       {
         key: 'back.color', 
-        editor: 'ColorViewEditor', 
+        editor: 'ColorViewEditor',      
         editorOptions: {
-          label: 'back', 
+          label: 'back',             
           params: 'back.color'
         }, 
         defaultValue: 'rgba(0, 0, 0, 1)' 
       },
       {
         key: 'left.color', 
-        editor: 'ColorViewEditor', 
-        editorOptions: {
-          label: 'left', 
+        editor: 'ColorViewEditor',    
+        editorOptions: { 
+          label: 'left',               
           params: 'left.color'
         }, 
         defaultValue: 'rgba(0, 0, 0, 1)' 
       },
       {
         key: 'right.color', 
-        editor: 'ColorViewEditor', 
+        editor: 'ColorViewEditor',   
         editorOptions: {
-          label: 'right',
+          label: 'right',                
           params: 'right.color'
         }, 
         defaultValue: 'rgba(0, 0, 0, 1)' 
@@ -101,21 +114,70 @@ export class CubeLayer extends Component {
       {
         key: 'top.color', 
         editor: 'ColorViewEditor', 
-        editorOptions: {
-          label: 'top', 
+        editorOptions: { 
+          label: 'top',                  
           params: 'top.color'
         }, 
         defaultValue: 'rgba(0, 0, 0, 1)' 
       },  
       {
         key: 'bottom.color', 
-        editor: 'ColorViewEditor', 
+        editor: 'ColorViewEditor',   
         editorOptions: {
-          label: 'bottom', 
+          label: 'bottom',                 
           params: 'front.color'
         }, 
         defaultValue: 'rgba(0, 0, 0, 1)' 
-      }
+      },
+      'Background',
+      {
+        key: 'front.background', 
+        editor: 'BackgroundImageEditor', 
+        editorOptions: {
+          'title': 'front'
+        }, 
+        defaultValue: ''
+      },
+      {
+        key: 'back.background', 
+        editor: 'BackgroundImageEditor', 
+        editorOptions: {
+          'title': 'back'
+        },          
+        defaultValue: ''
+      },
+      {
+        key: 'left.background', 
+        editor: 'BackgroundImageEditor', 
+        editorOptions: {
+          'title': 'left'
+        },      
+        defaultValue: ''
+      },
+      {
+        key: 'right.background', 
+        editor: 'BackgroundImageEditor', 
+        editorOptions: {
+          'title': 'right'
+        },         
+        defaultValue: ''
+      },
+      {
+        key: 'top.background', 
+        editor: 'BackgroundImageEditor', 
+        editorOptions: {
+          'title': 'top'
+        }, 
+        defaultValue: ''
+      },  
+      {
+        key: 'bottom.background', 
+        editor: 'BackgroundImageEditor',        
+        editorOptions: {
+          'title': 'bottom'
+        }, 
+        defaultValue: ''
+      }      
     ]
   }
 
@@ -137,6 +199,22 @@ export class CubeLayer extends Component {
         'property': 'background-color',  // 흠 하나씩 나열해야할 듯 
       }] } )
     }
+
+    if ([
+      'front.background', 
+      'back.background', 
+      'left.background', 
+      'right.background', 
+      'top.background', 
+      'bottom.background'
+    ].includes(customProperty.property)) {
+      keyframes.push({ 
+        selector: `[data-id="${this.json.id}"] ${customSelectorName[customProperty.property]}`,
+        properties: [{
+        ...customProperty,
+        'property': 'background-image',  // 흠 하나씩 나열해야할 듯 
+      }] } )
+    }    
 
   }
 
@@ -184,11 +262,17 @@ export class CubeLayer extends Component {
       'right.color': this.json['right.color'],
       'top.color': this.json['top.color'],
       'bottom.color': this.json['bottom.color'],
+      'front.background': this.json['front.background'],
+      'back.background': this.json['back.background'],
+      'left.background': this.json['left.background'],
+      'right.background': this.json['right.background'],
+      'top.background': this.json['top.background'],
+      'bottom.background': this.json['bottom.background'],      
     }
   }
 
   enableHasChildren() {
-    return true; 
+    return false; 
   }
 
 
@@ -263,7 +347,9 @@ export class CubeLayer extends Component {
           transform:rotateY(0deg) translateZ(${halfWidth}px);
           width: ${width};
           height: ${height};     
-          ${json['front.color'] ? `background-color: ${json['front.color']}`: ''}
+          ${json['front.color'] ? `background-color: ${json['front.color']};`: ''}
+          ${json['front.background'] ? `${json['front.background']}`: ''}
+
         `
       },
       {
@@ -272,6 +358,7 @@ export class CubeLayer extends Component {
           width: ${width};
           height: ${height};            
           ${json['back.color'] ? `background-color: ${json['back.color']}`: ''}                  
+          ${json['back.background'] ? `${json['back.background']}`: ''}
         `
       },
       {
@@ -280,6 +367,7 @@ export class CubeLayer extends Component {
           width: ${width};
           height: ${height};    
           ${json['left.color'] ? `background-color: ${json['left.color']}`: ''}                          
+          ${json['left.background'] ? `${json['left.background']}`: ''}
         `
       },
       {
@@ -288,6 +376,7 @@ export class CubeLayer extends Component {
           width: ${width};
           height: ${height};      
           ${json['right.color'] ? `background-color: ${json['right.color']}`: ''}                        
+          ${json['right.background'] ? `${json['right.background']}`: ''}          
         `
       },
       {
@@ -296,7 +385,8 @@ export class CubeLayer extends Component {
           top: ${halfHeight - halfWidth}px;
           width: ${width};
           height: ${width};
-          ${json['top.color'] ? `background-color: ${json['top.color']}`: ''}          
+          ${json['top.color'] ? `background-color: ${json['top.color']}`: ''}      
+          ${json['top.background'] ? `${json['top.background']}`: ''}              
         `
       },
       {
@@ -305,7 +395,8 @@ export class CubeLayer extends Component {
           top: ${halfHeight - halfWidth}px;          
           width: ${width};
           height: ${width};    
-          ${json['bottom.color'] ? `background-color: ${json['bottom.color']}`: ''}                
+          ${json['bottom.color'] ? `background-color: ${json['bottom.color']}`: ''}
+          ${json['bottom.background'] ? `${json['bottom.background']}`: ''}                          
         `
       }
     ]

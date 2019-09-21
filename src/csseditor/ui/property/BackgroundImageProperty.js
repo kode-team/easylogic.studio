@@ -22,9 +22,13 @@ export default class BackgroundImageProperty extends BaseProperty {
     return 'background-image';
   }
 
+  getClassName() {
+    return 'background-image'
+  }
+
   getBody() {
     return `
-      <div class='full background-image' ref='$property'></div>
+      <div class='full' ref='$property'></div>
     `;
   }
 
@@ -43,6 +47,7 @@ export default class BackgroundImageProperty extends BaseProperty {
 
     return /*html*/`<BackgroundImageEditor 
               ref='$backgroundImageEditor' 
+              key='background-image'
               value='${value}' 
               hide-label="true"
               onchange='changeBackgroundImage' 
@@ -53,11 +58,11 @@ export default class BackgroundImageProperty extends BaseProperty {
     this.refreshShowIsNot('project');
   }
 
-  [EVENT('changeBackgroundImage') + DEBOUNCE(10)] (value) {
+  [EVENT('changeBackgroundImage') + DEBOUNCE(10)] (key, value) {
     var current = editor.selection.current;
     if (current) {
       current.reset({
-        'background-image': value 
+        [key]: value 
       })
 
       this.emit("refreshElement", current);

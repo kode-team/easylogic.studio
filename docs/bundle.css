@@ -1838,14 +1838,10 @@ html, body {
   pointer-events: none;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"] {
-  border-right: 1px solid #111111;
   border-top: 1px solid #fc554f;
   border-bottom: 1px solid transparent;
   background-color: #2b2b2b;
   color: white;
-}
-.csseditor[data-theme=dark] .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"]:not(:first-child) {
-  border-left: 1px solid #111111;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"] label svg path {
   stroke: #2b2b2b;
@@ -1854,14 +1850,10 @@ html, body {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"] {
-  border-right: 1px solid #111111;
   border-top: 1px solid #fc554f;
   border-bottom: 1px solid transparent;
   background-color: #2b2b2b;
   color: white;
-}
-.csseditor[data-theme=dark] .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"]:not(:first-child) {
-  border-left: 1px solid #111111;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"] label svg path {
   stroke: #2b2b2b;
@@ -1870,14 +1862,10 @@ html, body {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"] {
-  border-right: 1px solid #111111;
   border-top: 1px solid #fc554f;
   border-bottom: 1px solid transparent;
   background-color: #2b2b2b;
   color: white;
-}
-.csseditor[data-theme=dark] .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"]:not(:first-child) {
-  border-left: 1px solid #111111;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"] label svg path {
   stroke: #2b2b2b;
@@ -1886,14 +1874,10 @@ html, body {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"] {
-  border-right: 1px solid #111111;
   border-top: 1px solid #fc554f;
   border-bottom: 1px solid transparent;
   background-color: #2b2b2b;
   color: white;
-}
-.csseditor[data-theme=dark] .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"]:not(:first-child) {
-  border-left: 1px solid #111111;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"] label svg path {
   stroke: #2b2b2b;
@@ -1902,14 +1886,10 @@ html, body {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"] {
-  border-right: 1px solid #111111;
   border-top: 1px solid #fc554f;
   border-bottom: 1px solid transparent;
   background-color: #2b2b2b;
   color: white;
-}
-.csseditor[data-theme=dark] .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"]:not(:first-child) {
-  border-left: 1px solid #111111;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"] label svg path {
   stroke: #2b2b2b;
@@ -1918,14 +1898,10 @@ html, body {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"] {
-  border-right: 1px solid #111111;
   border-top: 1px solid #fc554f;
   border-bottom: 1px solid transparent;
   background-color: #2b2b2b;
   color: white;
-}
-.csseditor[data-theme=dark] .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"]:not(:first-child) {
-  border-left: 1px solid #111111;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"] label svg path {
   stroke: #2b2b2b;
@@ -1934,14 +1910,10 @@ html, body {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"] {
-  border-right: 1px solid #111111;
   border-top: 1px solid #fc554f;
   border-bottom: 1px solid transparent;
   background-color: #2b2b2b;
   color: white;
-}
-.csseditor[data-theme=dark] .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"]:not(:first-child) {
-  border-left: 1px solid #111111;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"] label svg path {
   stroke: #2b2b2b;
@@ -1950,14 +1922,10 @@ html, body {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"] {
-  border-right: 1px solid #111111;
   border-top: 1px solid #fc554f;
   border-bottom: 1px solid transparent;
   background-color: #2b2b2b;
   color: white;
-}
-.csseditor[data-theme=dark] .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"]:not(:first-child) {
-  border-left: 1px solid #111111;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"] label svg path {
   stroke: #2b2b2b;
@@ -1966,14 +1934,10 @@ html, body {
   display: block;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"] {
-  border-right: 1px solid #111111;
   border-top: 1px solid #fc554f;
   border-bottom: 1px solid transparent;
   background-color: #2b2b2b;
   color: white;
-}
-.csseditor[data-theme=dark] .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"]:not(:first-child) {
-  border-left: 1px solid #111111;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"] label svg path {
   stroke: #2b2b2b;
@@ -3236,6 +3200,9 @@ html, body {
 .csseditor[data-theme=dark] .property.show > .property-body {
   display: block;
   padding: 0px 6px 0px 6px;
+}
+.csseditor[data-theme=dark] .property.show.background-image > .property-body {
+  padding: 0px;
 }
 .csseditor[data-theme=dark] .property.show.size-property > .property-body {
   display: grid;
@@ -4958,13 +4925,69 @@ html, body {
 }
 .csseditor[data-theme=dark] .project-info {
   margin: 0px !important;
+  padding: 10px;
 }
 .csseditor[data-theme=dark] .project-info .project-info-item {
-  padding: 5px 7px !important;
-  cursor: pointer;
+  margin-bottom: 5px;
 }
-.csseditor[data-theme=dark] .project-info .project-info-item input, .csseditor[data-theme=dark] .project-info .project-info-item textarea {
+.csseditor[data-theme=dark] .project-info input, .csseditor[data-theme=dark] .project-info textarea {
   width: 100%;
+}
+.csseditor[data-theme=dark] .project-info .input input {
+  height: 24px;
+}
+.csseditor[data-theme=dark] .artboard-size-list .property-body {
+  padding: 0px !important;
+}
+.csseditor[data-theme=dark] .artboard-size-list .artboard-size-item {
+  border-top: 1px solid #111111;
+}
+.csseditor[data-theme=dark] .artboard-size-list .category {
+  height: 26px;
+  border-bottom: 1px solid #111111;
+  box-sizing: border-box;
+  line-height: 2;
+}
+.csseditor[data-theme=dark] .artboard-size-list .category .title {
+  color: #ffffff;
+  pointer-events: none;
+  padding: 0px 10px;
+}
+.csseditor[data-theme=dark] .artboard-size-list .group-item {
+  background-color: #565656;
+  height: 30px;
+  border-bottom: 1px solid #111111;
+  box-sizing: border-box;
+  line-height: 2.5;
+}
+.csseditor[data-theme=dark] .artboard-size-list .group-item .title {
+  color: #ffffff;
+  pointer-events: none;
+  text-transform: uppercase;
+  padding: 0px 10px;
+}
+.csseditor[data-theme=dark] .artboard-size-list .device-item {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 2px;
+  font-size: 12px;
+  cursor: pointer;
+  height: 26px;
+  border-bottom: 1px solid #111111;
+  box-sizing: border-box;
+  line-height: 2.3;
+}
+.csseditor[data-theme=dark] .artboard-size-list .device-item .title {
+  color: #ffffff;
+  pointer-events: none;
+  padding-left: 20px;
+}
+.csseditor[data-theme=dark] .artboard-size-list .device-item .size {
+  pointer-events: none;
+  text-align: right;
+  padding-right: 10px;
+  letter-spacing: 2px;
+  color: #bdbdbd;
 }
 .csseditor[data-theme=dark] .cubic-bezier-editor {
   width: 228px;
@@ -5551,11 +5574,11 @@ html, body {
 }
 .csseditor[data-theme=dark] .background-image-editor .fill-list .fill-item {
   display: grid;
-  grid-template-columns: 40px 1fr;
+  grid-template-columns: 24px 24px 1fr;
   grid-column-gap: 5px;
   text-align: center;
   box-sizing: border-box;
-  padding: 6px 1px;
+  padding: 6px 6px;
 }
 .csseditor[data-theme=dark] .background-image-editor .fill-list .fill-item.selected {
   background-color: rgba(17, 17, 17, 0.5);
@@ -5573,6 +5596,10 @@ html, body {
 }
 .csseditor[data-theme=dark] .background-image-editor .fill-list .fill-item[data-fill-type=gradient] .colorsteps {
   display: block;
+}
+.csseditor[data-theme=dark] .background-image-editor .fill-list .fill-item .pattern {
+  background-color: #111111;
+  border-radius: 3px;
 }
 .csseditor[data-theme=dark] .background-image-editor .fill-list .fill-item .preview {
   display: grid;
@@ -6843,6 +6870,38 @@ html, body {
 }
 .csseditor[data-theme=dark] .offset-path-editor .offset-path-item {
   margin-bottom: 10px;
+}
+.csseditor[data-theme=dark] .background-position-editor {
+  height: 19px;
+  text-align: center;
+  width: 100%;
+}
+.csseditor[data-theme=dark] .background-position-editor .preview {
+  height: 100%;
+}
+.csseditor[data-theme=dark] .background-position-editor .preview .mini-view {
+  height: 100%;
+}
+.csseditor[data-theme=dark] .background-position-editor .preview .mini-view .color-view {
+  cursor: pointer;
+  height: 100%;
+  border-radius: 3px;
+}
+.csseditor[data-theme=dark] .gradient-single-editor {
+  height: 19px;
+  text-align: center;
+  width: 100%;
+}
+.csseditor[data-theme=dark] .gradient-single-editor .preview {
+  height: 100%;
+}
+.csseditor[data-theme=dark] .gradient-single-editor .preview .mini-view {
+  height: 100%;
+}
+.csseditor[data-theme=dark] .gradient-single-editor .preview .mini-view .color-view {
+  cursor: pointer;
+  height: 100%;
+  border-radius: 3px;
 }
 .csseditor[data-theme=dark] .popup {
   position: absolute;
@@ -8166,6 +8225,69 @@ html, body {
 .csseditor[data-theme=dark] .popup .gradient-picker .codemirror-colorpicker .colorsets {
   border-top: 0px solid #111111 !important;
 }
+.csseditor[data-theme=dark] .popup .background-image-position-picker {
+  width: 260px !important;
+  box-sizing: border-box;
+}
+.csseditor[data-theme=dark] .popup .background-image-position-picker .popup-item {
+  margin-bottom: 5px;
+}
+.csseditor[data-theme=dark] .popup .background-image-position-picker .grid-2 {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+}
+.csseditor[data-theme=dark] .popup .background-image-position-picker .grid-2 label {
+  font-size: 11px;
+  padding-right: 2px;
+  text-align: left;
+}
+.csseditor[data-theme=dark] .popup .background-image-position-picker label {
+  font-size: 11px;
+}
+.csseditor[data-theme=dark] .popup .background-image-position-picker .repeat-list button {
+  width: 24px;
+  height: 24px;
+}
+.csseditor[data-theme=dark] .popup .background-image-position-picker .repeat-list button[value=no-repeat] {
+  background-image: linear-gradient(to top right, #fc554f, white);
+  background-position: center center;
+  background-size: 8px 8px;
+  background-repeat: no-repeat;
+}
+.csseditor[data-theme=dark] .popup .background-image-position-picker .repeat-list button[value=repeat] {
+  background-image: linear-gradient(to top right, #fc554f, white);
+  background-position: 10px 10px;
+  background-size: 8px 8px;
+  background-repeat: repeat;
+}
+.csseditor[data-theme=dark] .popup .background-image-position-picker .repeat-list button[value=repeat-x] {
+  background-image: linear-gradient(to top right, #fc554f, white);
+  background-position: 10px 8px;
+  background-size: 8px 8px;
+  background-repeat: repeat-x;
+}
+.csseditor[data-theme=dark] .popup .background-image-position-picker .repeat-list button[value=repeat-y] {
+  background-image: linear-gradient(to top right, #fc554f, white);
+  background-position: 8px 10px;
+  background-size: 8px 8px;
+  background-repeat: repeat-y;
+}
+.csseditor[data-theme=dark] .popup .background-image-position-picker .repeat-list button[value=space] {
+  background-image: linear-gradient(to top right, #fc554f, white);
+  background-position: 10px 10px;
+  background-size: 8px 8px;
+  background-repeat: space;
+}
+.csseditor[data-theme=dark] .popup .background-image-position-picker .repeat-list button[value=round] {
+  background-image: linear-gradient(to top right, #fc554f, white);
+  background-position: 0px 0px;
+  background-size: 8px 8px;
+  background-repeat: round;
+}
+.csseditor[data-theme=dark] .popup .background-image-position-picker .repeat-list[data-value=repeat] button[value=repeat], .csseditor[data-theme=dark] .popup .background-image-position-picker .repeat-list[data-value=no-repeat] button[value=no-repeat], .csseditor[data-theme=dark] .popup .background-image-position-picker .repeat-list[data-value=repeat-x] button[value=repeat-x], .csseditor[data-theme=dark] .popup .background-image-position-picker .repeat-list[data-value=repeat-y] button[value=repeat-y], .csseditor[data-theme=dark] .popup .background-image-position-picker .repeat-list[data-value=space] button[value=space], .csseditor[data-theme=dark] .popup .background-image-position-picker .repeat-list[data-value=round] button[value=round] {
+  background-color: #fc554f;
+  box-shadow: 0 0 2px 2px #fc554f;
+}
 .csseditor[data-theme=dark] .window-background {
   position: fixed;
   display: none;
@@ -8865,6 +8987,17 @@ html, body {
           transform: translateY(-52%);
   box-sizing: border-box;
 }
+.csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe-back .sub-offset {
+  position: absolute;
+  top: 50%;
+  display: inline-block;
+  width: 2px;
+  height: 10px;
+  background-color: #0bc4e4;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  box-sizing: border-box;
+}
 .csseditor[data-theme=dark] .keyframe-time-control .time-manager {
   display: grid;
   grid-template-columns: 110px 65px 84px 10px;
@@ -9356,14 +9489,10 @@ html, body {
   pointer-events: none;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"] {
-  border-right: 1px solid #dfdfdf;
   border-top: 1px solid #4b61ce;
   border-bottom: 1px solid transparent;
   background-color: white;
   color: #000b22;
-}
-.csseditor[data-theme=light] .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"]:not(:first-child) {
-  border-left: 1px solid #dfdfdf;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"] label svg path {
   stroke: white;
@@ -9372,14 +9501,10 @@ html, body {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"] {
-  border-right: 1px solid #dfdfdf;
   border-top: 1px solid #4b61ce;
   border-bottom: 1px solid transparent;
   background-color: white;
   color: #000b22;
-}
-.csseditor[data-theme=light] .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"]:not(:first-child) {
-  border-left: 1px solid #dfdfdf;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"] label svg path {
   stroke: white;
@@ -9388,14 +9513,10 @@ html, body {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"] {
-  border-right: 1px solid #dfdfdf;
   border-top: 1px solid #4b61ce;
   border-bottom: 1px solid transparent;
   background-color: white;
   color: #000b22;
-}
-.csseditor[data-theme=light] .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"]:not(:first-child) {
-  border-left: 1px solid #dfdfdf;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"] label svg path {
   stroke: white;
@@ -9404,14 +9525,10 @@ html, body {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"] {
-  border-right: 1px solid #dfdfdf;
   border-top: 1px solid #4b61ce;
   border-bottom: 1px solid transparent;
   background-color: white;
   color: #000b22;
-}
-.csseditor[data-theme=light] .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"]:not(:first-child) {
-  border-left: 1px solid #dfdfdf;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"] label svg path {
   stroke: white;
@@ -9420,14 +9537,10 @@ html, body {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"] {
-  border-right: 1px solid #dfdfdf;
   border-top: 1px solid #4b61ce;
   border-bottom: 1px solid transparent;
   background-color: white;
   color: #000b22;
-}
-.csseditor[data-theme=light] .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"]:not(:first-child) {
-  border-left: 1px solid #dfdfdf;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"] label svg path {
   stroke: white;
@@ -9436,14 +9549,10 @@ html, body {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"] {
-  border-right: 1px solid #dfdfdf;
   border-top: 1px solid #4b61ce;
   border-bottom: 1px solid transparent;
   background-color: white;
   color: #000b22;
-}
-.csseditor[data-theme=light] .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"]:not(:first-child) {
-  border-left: 1px solid #dfdfdf;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"] label svg path {
   stroke: white;
@@ -9452,14 +9561,10 @@ html, body {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"] {
-  border-right: 1px solid #dfdfdf;
   border-top: 1px solid #4b61ce;
   border-bottom: 1px solid transparent;
   background-color: white;
   color: #000b22;
-}
-.csseditor[data-theme=light] .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"]:not(:first-child) {
-  border-left: 1px solid #dfdfdf;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"] label svg path {
   stroke: white;
@@ -9468,14 +9573,10 @@ html, body {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"] {
-  border-right: 1px solid #dfdfdf;
   border-top: 1px solid #4b61ce;
   border-bottom: 1px solid transparent;
   background-color: white;
   color: #000b22;
-}
-.csseditor[data-theme=light] .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"]:not(:first-child) {
-  border-left: 1px solid #dfdfdf;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"] label svg path {
   stroke: white;
@@ -9484,14 +9585,10 @@ html, body {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"] {
-  border-right: 1px solid #dfdfdf;
   border-top: 1px solid #4b61ce;
   border-bottom: 1px solid transparent;
   background-color: white;
   color: #000b22;
-}
-.csseditor[data-theme=light] .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"]:not(:first-child) {
-  border-left: 1px solid #dfdfdf;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"] label svg path {
   stroke: white;
@@ -10754,6 +10851,9 @@ html, body {
 .csseditor[data-theme=light] .property.show > .property-body {
   display: block;
   padding: 0px 6px 0px 6px;
+}
+.csseditor[data-theme=light] .property.show.background-image > .property-body {
+  padding: 0px;
 }
 .csseditor[data-theme=light] .property.show.size-property > .property-body {
   display: grid;
@@ -12476,13 +12576,69 @@ html, body {
 }
 .csseditor[data-theme=light] .project-info {
   margin: 0px !important;
+  padding: 10px;
 }
 .csseditor[data-theme=light] .project-info .project-info-item {
-  padding: 5px 7px !important;
-  cursor: pointer;
+  margin-bottom: 5px;
 }
-.csseditor[data-theme=light] .project-info .project-info-item input, .csseditor[data-theme=light] .project-info .project-info-item textarea {
+.csseditor[data-theme=light] .project-info input, .csseditor[data-theme=light] .project-info textarea {
   width: 100%;
+}
+.csseditor[data-theme=light] .project-info .input input {
+  height: 24px;
+}
+.csseditor[data-theme=light] .artboard-size-list .property-body {
+  padding: 0px !important;
+}
+.csseditor[data-theme=light] .artboard-size-list .artboard-size-item {
+  border-top: 1px solid #e7e7e7;
+}
+.csseditor[data-theme=light] .artboard-size-list .category {
+  height: 26px;
+  border-bottom: 1px solid #e7e7e7;
+  box-sizing: border-box;
+  line-height: 2;
+}
+.csseditor[data-theme=light] .artboard-size-list .category .title {
+  color: gray;
+  pointer-events: none;
+  padding: 0px 10px;
+}
+.csseditor[data-theme=light] .artboard-size-list .group-item {
+  background-color: #565656;
+  height: 30px;
+  border-bottom: 1px solid #e7e7e7;
+  box-sizing: border-box;
+  line-height: 2.5;
+}
+.csseditor[data-theme=light] .artboard-size-list .group-item .title {
+  color: gray;
+  pointer-events: none;
+  text-transform: uppercase;
+  padding: 0px 10px;
+}
+.csseditor[data-theme=light] .artboard-size-list .device-item {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 2px;
+  font-size: 12px;
+  cursor: pointer;
+  height: 26px;
+  border-bottom: 1px solid #e7e7e7;
+  box-sizing: border-box;
+  line-height: 2.3;
+}
+.csseditor[data-theme=light] .artboard-size-list .device-item .title {
+  color: gray;
+  pointer-events: none;
+  padding-left: 20px;
+}
+.csseditor[data-theme=light] .artboard-size-list .device-item .size {
+  pointer-events: none;
+  text-align: right;
+  padding-right: 10px;
+  letter-spacing: 2px;
+  color: #bdbdbd;
 }
 .csseditor[data-theme=light] .cubic-bezier-editor {
   width: 228px;
@@ -13069,11 +13225,11 @@ html, body {
 }
 .csseditor[data-theme=light] .background-image-editor .fill-list .fill-item {
   display: grid;
-  grid-template-columns: 40px 1fr;
+  grid-template-columns: 24px 24px 1fr;
   grid-column-gap: 5px;
   text-align: center;
   box-sizing: border-box;
-  padding: 6px 1px;
+  padding: 6px 6px;
 }
 .csseditor[data-theme=light] .background-image-editor .fill-list .fill-item.selected {
   background-color: rgba(231, 231, 231, 0.5);
@@ -13091,6 +13247,10 @@ html, body {
 }
 .csseditor[data-theme=light] .background-image-editor .fill-list .fill-item[data-fill-type=gradient] .colorsteps {
   display: block;
+}
+.csseditor[data-theme=light] .background-image-editor .fill-list .fill-item .pattern {
+  background-color: #e7e7e7;
+  border-radius: 3px;
 }
 .csseditor[data-theme=light] .background-image-editor .fill-list .fill-item .preview {
   display: grid;
@@ -14361,6 +14521,38 @@ html, body {
 }
 .csseditor[data-theme=light] .offset-path-editor .offset-path-item {
   margin-bottom: 10px;
+}
+.csseditor[data-theme=light] .background-position-editor {
+  height: 19px;
+  text-align: center;
+  width: 100%;
+}
+.csseditor[data-theme=light] .background-position-editor .preview {
+  height: 100%;
+}
+.csseditor[data-theme=light] .background-position-editor .preview .mini-view {
+  height: 100%;
+}
+.csseditor[data-theme=light] .background-position-editor .preview .mini-view .color-view {
+  cursor: pointer;
+  height: 100%;
+  border-radius: 3px;
+}
+.csseditor[data-theme=light] .gradient-single-editor {
+  height: 19px;
+  text-align: center;
+  width: 100%;
+}
+.csseditor[data-theme=light] .gradient-single-editor .preview {
+  height: 100%;
+}
+.csseditor[data-theme=light] .gradient-single-editor .preview .mini-view {
+  height: 100%;
+}
+.csseditor[data-theme=light] .gradient-single-editor .preview .mini-view .color-view {
+  cursor: pointer;
+  height: 100%;
+  border-radius: 3px;
 }
 .csseditor[data-theme=light] .popup {
   position: absolute;
@@ -15684,6 +15876,69 @@ html, body {
 .csseditor[data-theme=light] .popup .gradient-picker .codemirror-colorpicker .colorsets {
   border-top: 0px solid #e7e7e7 !important;
 }
+.csseditor[data-theme=light] .popup .background-image-position-picker {
+  width: 260px !important;
+  box-sizing: border-box;
+}
+.csseditor[data-theme=light] .popup .background-image-position-picker .popup-item {
+  margin-bottom: 5px;
+}
+.csseditor[data-theme=light] .popup .background-image-position-picker .grid-2 {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+}
+.csseditor[data-theme=light] .popup .background-image-position-picker .grid-2 label {
+  font-size: 11px;
+  padding-right: 2px;
+  text-align: left;
+}
+.csseditor[data-theme=light] .popup .background-image-position-picker label {
+  font-size: 11px;
+}
+.csseditor[data-theme=light] .popup .background-image-position-picker .repeat-list button {
+  width: 24px;
+  height: 24px;
+}
+.csseditor[data-theme=light] .popup .background-image-position-picker .repeat-list button[value=no-repeat] {
+  background-image: linear-gradient(to top right, #4b61ce, white);
+  background-position: center center;
+  background-size: 8px 8px;
+  background-repeat: no-repeat;
+}
+.csseditor[data-theme=light] .popup .background-image-position-picker .repeat-list button[value=repeat] {
+  background-image: linear-gradient(to top right, #4b61ce, white);
+  background-position: 10px 10px;
+  background-size: 8px 8px;
+  background-repeat: repeat;
+}
+.csseditor[data-theme=light] .popup .background-image-position-picker .repeat-list button[value=repeat-x] {
+  background-image: linear-gradient(to top right, #4b61ce, white);
+  background-position: 10px 8px;
+  background-size: 8px 8px;
+  background-repeat: repeat-x;
+}
+.csseditor[data-theme=light] .popup .background-image-position-picker .repeat-list button[value=repeat-y] {
+  background-image: linear-gradient(to top right, #4b61ce, white);
+  background-position: 8px 10px;
+  background-size: 8px 8px;
+  background-repeat: repeat-y;
+}
+.csseditor[data-theme=light] .popup .background-image-position-picker .repeat-list button[value=space] {
+  background-image: linear-gradient(to top right, #4b61ce, white);
+  background-position: 10px 10px;
+  background-size: 8px 8px;
+  background-repeat: space;
+}
+.csseditor[data-theme=light] .popup .background-image-position-picker .repeat-list button[value=round] {
+  background-image: linear-gradient(to top right, #4b61ce, white);
+  background-position: 0px 0px;
+  background-size: 8px 8px;
+  background-repeat: round;
+}
+.csseditor[data-theme=light] .popup .background-image-position-picker .repeat-list[data-value=repeat] button[value=repeat], .csseditor[data-theme=light] .popup .background-image-position-picker .repeat-list[data-value=no-repeat] button[value=no-repeat], .csseditor[data-theme=light] .popup .background-image-position-picker .repeat-list[data-value=repeat-x] button[value=repeat-x], .csseditor[data-theme=light] .popup .background-image-position-picker .repeat-list[data-value=repeat-y] button[value=repeat-y], .csseditor[data-theme=light] .popup .background-image-position-picker .repeat-list[data-value=space] button[value=space], .csseditor[data-theme=light] .popup .background-image-position-picker .repeat-list[data-value=round] button[value=round] {
+  background-color: #4b61ce;
+  box-shadow: 0 0 2px 2px #4b61ce;
+}
 .csseditor[data-theme=light] .window-background {
   position: fixed;
   display: none;
@@ -16381,6 +16636,17 @@ html, body {
   background-color: #4b61ce;
   -webkit-transform: translateY(-52%);
           transform: translateY(-52%);
+  box-sizing: border-box;
+}
+.csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe-back .sub-offset {
+  position: absolute;
+  top: 50%;
+  display: inline-block;
+  width: 2px;
+  height: 10px;
+  background-color: #0bc4e4;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
   box-sizing: border-box;
 }
 .csseditor[data-theme=light] .keyframe-time-control .time-manager {

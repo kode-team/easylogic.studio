@@ -1,5 +1,5 @@
 import { Length, Position } from "../unit/Length";
-import { keyMap, combineKeyArray, keyEach, CSS_TO_STRING } from "../../util/functions/func";
+import { keyMap, combineKeyArray, keyEach, CSS_TO_STRING, isString } from "../../util/functions/func";
 import { Property } from "../items/Property";
 import { StaticGradient } from "../image-resource/StaticGradient";
 import { URLImageResource } from "../image-resource/URLImageResource";
@@ -138,6 +138,10 @@ export class BackgroundImage extends Property {
 
     if (json.width) json.width = Length.parse(json.width);
     if (json.height) json.height = Length.parse(json.height);
+
+    if (isString(json.image)) {
+      json.image = BackgroundImage.parseImage(json.image);
+    }
 
     return json;
   }

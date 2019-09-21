@@ -565,6 +565,17 @@
                                 box-sizing: border-box;
 
                             }
+
+                            .sub-offset {
+                                position: absolute;
+                                top: 50%;
+                                display: inline-block;
+                                width: 2px;
+                                height: 10px;
+                                background-color: #0bc4e4;
+                                transform: translate(-50%, -50%);
+                                box-sizing: border-box;
+                            }
                         }
                     }
                 }

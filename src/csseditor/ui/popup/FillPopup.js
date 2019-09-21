@@ -102,7 +102,7 @@ export default class FillPopup extends BasePopup {
   }
 
   templateForX() {
-    return `
+    return /*html*/`
       <div class='popup-item'>
         <RangeEditor 
             label="X"
@@ -118,7 +118,7 @@ export default class FillPopup extends BasePopup {
   }
 
   templateForY() {
-    return `
+    return /*html*/`
       <div class='popup-item'>
         <RangeEditor 
             label="Y" 
@@ -134,7 +134,7 @@ export default class FillPopup extends BasePopup {
   }
 
   templateForWidth() {
-    return `
+    return /*html*/`
     <div class='popup-item'>
       <RangeEditor 
           label="Width"   
@@ -150,7 +150,7 @@ export default class FillPopup extends BasePopup {
   }
 
   templateForHeight() {
-    return `
+    return /*html*/`
     <div class='popup-item'>
       <RangeEditor 
           label="Height"
@@ -165,7 +165,7 @@ export default class FillPopup extends BasePopup {
   }
 
   templateForRepeat() {
-    return `
+    return /*html*/`
     <div class='popup-item grid-2'>
       <label>Repeat</label>
       <div class='repeat-list' ref="$repeat" data-value='${this.state.repeat}'>
@@ -186,7 +186,7 @@ export default class FillPopup extends BasePopup {
   }
 
   templateForBlendMode() {
-    return `
+    return /*html*/`
     <div class='popup-item'>
       <SelectEditor label="Blend" ref='$blend' key='blendMode' value="${this.state.blendMode}" options="${blend_list.join(',')}" onchange="changeRangeEditor" />
     </div>

@@ -217,4 +217,21 @@ export default class ObjectCommand extends UIElement {
         this.refreshSelection()
     }
 
+    [COMMAND('resize.artboard')] (size = '') {
+        var current = editor.selection.currentArtboard;
+        if (current && current.is('artboard')) {
+    
+          if (!size.trim()) return;
+    
+          var [width, height] = size.split('x')
+    
+          width = Length.px(width);
+          height = Length.px(height);
+    
+          current.reset({ width, height });
+          editor.selection.select(current);
+          this.refreshSelection();
+        }
+    }
+
 }

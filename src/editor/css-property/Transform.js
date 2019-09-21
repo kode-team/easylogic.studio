@@ -71,6 +71,10 @@ export class Transform extends Property {
     return Transform.join(obj);
   }
 
+  static rotate (transform, angle) {
+    return Transform.replace(transform, { type: 'rotate', value: [angle] })
+  }
+
   static parseStyle (transform) {
 
     var transforms = [];

@@ -235,6 +235,13 @@
     }
 
 
+
+    &.background-image {
+      > .property-body {
+        padding: 0px;
+      }   
+    }
+
     &.size-property {
       > .property-body {
         display: grid;
@@ -308,7 +315,6 @@
         grid-column-gap: 2px; 
       }
 
-      // &.background-image,
       // &.box-shadow-item,
       // &.filter-property,
       // &.clip-path-list,

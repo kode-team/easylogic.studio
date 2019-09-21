@@ -34,9 +34,13 @@ import StrokeDashArrayEditor from "./StrokeDashArrayEditor";
 import PathDataEditor from "./PathDataEditor";
 import PolygonDataEditor from "./PolygonDataEditor";
 import OffsetPathListEditor from "./OffsetPathListEditor";
+import BackgroundPositionEditor from "./BackgroundPositionEditor";
+import GradientSingleEditor from "./GradientSingleEditor";
 
 
 export default {
+    GradientSingleEditor,
+    BackgroundPositionEditor,
     OffsetPathListEditor,
     PolygonDataEditor,
     PathDataEditor,

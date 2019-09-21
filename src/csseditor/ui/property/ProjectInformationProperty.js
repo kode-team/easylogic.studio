@@ -14,30 +14,31 @@ export default class ProjectInformationProperty extends BaseProperty {
     return 'full';
   }
 
+  refresh() {
+    var project = editor.selection.currentProject || { name: '', description: ''}
+    
+    this.refs.$name.val(project.name);
+    this.refs.$description.val(project.description);
+  }
+
   getBody() {
+
+    var project = editor.selection.currentProject || { name: '', description: ''}
+
     return /*html*/`
       <div class="project-info" ref="$info">
         <div class='project-info-item'>
           <label>Name</label>
-          <div><input type='text' /></div>
+          <div class='input'><input type='text' value='${project.name}' ref='$name' /></div>
         </div>
         <div class='project-info-item'>
           <label>Description</label>
-          <div>
-            <textarea ></textarea>
+          <div class='input'>
+            <textarea  value='${project.description}' ref='$description'></textarea>
           </div>
         </div>
       </div>
     `;
-  }
-
-  [LOAD("$projectInfo") + VDOM]() {
-    var projects = editor.selection.currentProject || {} 
-    
-
-    return `
-
-    `
   }
 
   [EVENT('refreshProjectList', 'refreshAllSelectProject')] () {

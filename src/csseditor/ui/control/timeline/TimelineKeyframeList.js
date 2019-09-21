@@ -5,6 +5,8 @@ import { Length } from "../../../../editor/unit/Length";
 import { OBJECT_TO_PROPERTY, OBJECT_TO_CLASS, isUndefined } from "../../../../util/functions/func";
 import { timecode, second } from "../../../../util/functions/time";
 import Dom from "../../../../util/Dom";
+import makeInterpolateOffset from "../../../../editor/util/interpolate-functions/offset-path/makeInterpolateOffset";
+import PathParser from "../../../../editor/parse/PathParser";
 
 const PADDING = 20 
 
@@ -22,6 +24,37 @@ export default class TimelineKeyframeList extends UIElement {
     }
 
 
+    makeSubOffset(property, value) {
+
+        var subOffset = [] 
+
+        if (property === 'offset-path') {
+            var artboard = editor.selection.currentArtboard;             
+            var [id] = value.split(',').map(it =>it.trim());
+            var pathLayer = artboard.searchById(id);
+            value = pathLayer.d; 
+        } else {
+            value = null; 
+        }
+
+        if (value) {
+            var parser = new PathParser(value);            
+            var {totalLength, interpolateList} = makeInterpolateOffset(parser.segments); 
+        
+            var prevLength = 0; 
+            subOffset = interpolateList.map(it => {
+                var obj = { totalLength, length: it.length + prevLength }
+                prevLength += it.length; 
+                return obj; 
+            })
+
+            subOffset.pop();    // delete last length
+        }
+
+    
+        return subOffset;
+      }
+    
 
     makeKeyframe (layerId, timeline, property) {
 
@@ -30,7 +63,9 @@ export default class TimelineKeyframeList extends UIElement {
         }).map((offset, index) => {
             var left = this.calculateTimeToPosition(offset.time, timeline.displayStartTime, timeline.displayEndTime);
 
-            return { left, ...offset, index}
+            var subOffset = this.makeSubOffset(property.property, offset.value);
+
+            return { left, ...offset, subOffset, index}
         })
 
 
@@ -51,12 +86,29 @@ export default class TimelineKeyframeList extends UIElement {
 
                 var selected = editor.timeline.checked(it.id) && editor.timeline.checked(next.id)
 
-                return /*html*/`<div ${OBJECT_TO_PROPERTY({
-                    'data-selected': `${selected}`,
-                    'class': {
-                        'offset-line': true
-                    }
-                })} style='left: ${start}; width: ${width}'} ></div>`
+                return /*html*/`
+                    <div ${OBJECT_TO_PROPERTY({
+                        'data-selected': `${selected}`,
+                        'class': {
+                            'offset-line': true
+                        }
+                    })} style='left: ${start}; width: ${width}'} ></div>
+
+                    ${it.subOffset.map((subOffset, subOffsetIndex) => {
+                        var subOffsetLeft = Length.px(it.left.value +  (subOffset.length / subOffset.totalLength) * width.value)
+                        return /*html*/`
+                        <div class='${OBJECT_TO_CLASS({
+                            'sub-offset': true
+                        })}' style='left: ${subOffsetLeft}' ${OBJECT_TO_PROPERTY({
+                            'data-offset-id': it.id,
+                            'data-layer-id': layerId,
+                            'data-property': property.property,
+                            'data-suboffset-index': subOffsetIndex
+                        })} ></div>
+        
+                        `
+                    }).join('')}
+                `
             }).join('')}
         </div>
         <div class='keyframe'>
@@ -72,7 +124,9 @@ export default class TimelineKeyframeList extends UIElement {
                     'data-layer-id': layerId,
                     'data-property': property.property,
                     'data-offset-index': it.index
-                })} ></div>`
+                })} ></div>
+
+                `
             }).join('')}
         </div>`
     }

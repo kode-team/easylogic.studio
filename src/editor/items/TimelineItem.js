@@ -3,6 +3,7 @@ import { uuidShort } from "../../util/functions/math";
 import { isUndefined, isNotUndefined, clone } from "../../util/functions/func";
 import { second, timecode, framesToTimecode } from "../../util/functions/time";
 import { createInterpolateFunction, createCurveFunction, createTimingFunction } from "../util/interpolate";
+import makeInterpolateOffset from "../util/interpolate-functions/offset-path/makeInterpolateOffset";
 
 export class TimelineItem extends DomItem {
   getDefaultObject(obj = {}) {
@@ -103,13 +104,13 @@ export class TimelineItem extends DomItem {
       return ;
     }
 
-    let editor = p.keyframes.map(it => it.editor)[0];
+    let editorString = p.keyframes.map(it => it.editor)[0];
     this.json.compiledTimeline[key] = p.keyframes.map( (offset, index) => {
 
       var currentOffset = offset; 
       var nextOffset = p.keyframes[index + 1];
 
-      offset.editor = editor 
+      offset.editor = editorString 
 
 
       if (!nextOffset) {
@@ -125,8 +126,7 @@ export class TimelineItem extends DomItem {
         startValue: offset.value,
         endValue: nextOffset.value,
         timing: offset.timing,
-        // editor: editor,
-        interpolateFunction: createInterpolateFunction(layer, p.property, offset.value, nextOffset.value, editor),
+        interpolateFunction: createInterpolateFunction(layer, p.property, offset.value, nextOffset.value, offset.editor),
         timingFunction: createTimingFunction(offset.timing)
       }
 

@@ -36,18 +36,21 @@ export class Project extends AssetItem {
     return super.getDefaultObject({
       itemType: "project",
       name: 'new Project',
+      description: '',
       keyframes: [],      
-      'rootVariable': '',            
+      rootVariable: '',            
       ...obj
     });
   }
 
   toCloneObject() {
+    var { name, description, keyframes, rootVariable } = this.json;
     return {
       ...super.toCloneObject(),
-      name: this.json.name,
-      keyframes: clone(this.json.keyframes),
-      'rootVariable': this.json.rootVariable
+      name,
+      description, 
+      keyframes: clone(keyframes),
+      rootVariable
     }
   }
 

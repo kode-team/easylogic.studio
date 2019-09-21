@@ -1,11 +1,18 @@
 .project-info {
     margin: 0px !important;
-    .project-info-item {
-        padding: 5px 7px !important; 
-        cursor: pointer;
+    padding: 10px;
 
-        input, textarea {
-            width: 100%;
+    .project-info-item {
+        margin-bottom: 5px;
+    }
+
+    input, textarea {
+        width: 100%;
+    }
+
+    .input {
+        input {
+            height: 24px;
         }
     }
 }
