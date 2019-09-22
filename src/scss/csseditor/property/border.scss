@@ -28,9 +28,11 @@
 
   .header {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-column-gap: 2px;
+    grid-template-columns: repeat(3, 1fr) 24px;
+    grid-column-gap: 4px;
     text-align: center;
+    font-size: 10px;
+    text-transform: uppercase;
   }
 
   > .editor-area {
@@ -71,8 +73,8 @@
 
 .border-value-editor {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-column-gap: 2px;
+  grid-template-columns: repeat(3, 1fr) 24px;
+  grid-column-gap: 4px;
 }
 
 .border-slice-item {

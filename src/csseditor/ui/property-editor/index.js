@@ -4,7 +4,7 @@ import BorderRadiusEditor from "./BorderRadiusEditor";
 import ColorSingleEditor from "./ColorSingleEditor";
 import ColorViewEditor from "./ColorViewEditor";
 import CubicBezierEditor from "./CubicBezierEditor";
-import FillPopup from "../popup/FillPopup";
+// import FillPopup from "../popup/FillPopup";
 import FilterEditor from "./FilterEditor";
 import GradientEditor from "./GradientEditor";
 import IterationCountEditor from "./IterationCountEditor";
@@ -63,7 +63,7 @@ export default {
     ColorSingleEditor,
     ColorViewEditor,
     CubicBezierEditor,
-    FillPopup,
+    // FillPopup,
     FilterEditor,
     GradientEditor,
     IterationCountEditor,

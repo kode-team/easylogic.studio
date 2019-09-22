@@ -270,7 +270,7 @@ export class Item {
   }
 
   get html () {
-    var {elementType, id, layers, itemType} = this.json;
+    var {elementType, id, name, layers, itemType} = this.json;
 
     const tagName = elementType || 'div'
 
@@ -278,7 +278,8 @@ export class Item {
       'element-item': true,
       [itemType]: true 
     })}" ${OBJECT_TO_PROPERTY({
-      'data-id': id
+      'data-id': id,
+      'data-title': name 
     })}>${layers.map(it => it.html).join('')}</${tagName}>`
   }
 

@@ -174,6 +174,10 @@ export class Gradient extends ImageResource {
     }
   }
 
+  removeColorStep(id) {
+    this.json.colorsteps = this.json.colorsteps.filter(it => it.id != id)
+  }
+
   /**
    * get colorstep list
    *

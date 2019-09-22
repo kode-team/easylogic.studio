@@ -71,7 +71,7 @@ export default class BorderEditor extends UIElement {
           <div></div>
           <label>Width</label>
           <label>Style</label>
-          <label>Color</label>
+          <label></label>
         </div>
         <div class='editor-area' ref='$editorArea'>
 

@@ -134,7 +134,8 @@ export class ColorStep extends Item {
         new ColorStep({
           color,
           unit: "%",
-          percent: 0
+          percent: 0,
+          hasNotUnit: true 
         })
       );
     } else if (arr.length === 2) {

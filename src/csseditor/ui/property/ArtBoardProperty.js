@@ -65,6 +65,7 @@ export default class ArtBoardProperty extends BaseProperty {
           artboard.reset({
             name: text
           })
+          this.emit('refreshArtBoardName', artboard.id, text);
         }
       }
     });    
@@ -81,10 +82,8 @@ export default class ArtBoardProperty extends BaseProperty {
   selectArtboard(artboard) {
 
     if (artboard) {
-      editor.selection.select()      
-      editor.selection.selectArtboard(artboard)
-
-
+      editor.selection.selectArtboard(artboard)      
+      editor.selection.select(artboard)
     }
 
     this.emit('refreshAllSelectArtBoard');

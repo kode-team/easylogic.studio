@@ -250,14 +250,16 @@ export class BackgroundImage extends Property {
     var results = convertMatches(str);
     let image = null;
 
-    results.str.match(reg).forEach((value, index) => {
+    var matchResult = results.str.match(reg)
+
+    if (!matchResult) return image; 
+
+    matchResult.forEach((value, index) => {
 
       value = reverseMatches(value, results.matches);
       if (value.includes("repeating-linear-gradient")) {
-        // 반복을 먼저 파싱하고
         image = RepeatingLinearGradient.parse(value);
       } else if (value.includes("linear-gradient")) {
-        // 그 다음에 파싱 하자.
         image = LinearGradient.parse(value);
       } else if (value.includes("repeating-radial-gradient")) {
         image = RepeatingRadialGradient.parse(value);
@@ -273,6 +275,23 @@ export class BackgroundImage extends Property {
     });
 
     return image
+  }
+
+  static changeImageType (options) {
+    switch  (options.type) {
+    case 'linear-gradient': 
+      return new LinearGradient(options);
+    case 'repeating-linear-gradient': 
+      return new RepeatingLinearGradient(options);      
+    case 'radial-gradient': 
+      return new RadialGradient(options);
+    case 'repeating-radial-gradient': 
+      return new RepeatingRadialGradient(options);      
+    case 'conic-gradient': 
+      return new ConicGradient(options);
+    case 'repeating-conic-gradient': 
+      return new RepeatingConicGradient(options);      
+    }
   }
 
   static parseStyle(style) {

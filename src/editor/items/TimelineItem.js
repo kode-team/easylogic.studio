@@ -2,8 +2,7 @@ import { DomItem } from "./DomItem";
 import { uuidShort } from "../../util/functions/math";
 import { isUndefined, isNotUndefined, clone } from "../../util/functions/func";
 import { second, timecode, framesToTimecode } from "../../util/functions/time";
-import { createInterpolateFunction, createCurveFunction, createTimingFunction } from "../util/interpolate";
-import makeInterpolateOffset from "../util/interpolate-functions/offset-path/makeInterpolateOffset";
+import { createInterpolateFunction, createTimingFunction } from "../util/interpolate";
 
 export class TimelineItem extends DomItem {
   getDefaultObject(obj = {}) {

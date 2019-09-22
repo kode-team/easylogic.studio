@@ -6,6 +6,10 @@ import RangeEditor from "./RangeEditor";
 import { convertMatches, reverseMatches } from "../../../util/functions/parser";
 
 import SelectEditor from "./SelectEditor";
+import InputRangeEditor from "./InputRangeEditor";
+import { BackgroundImage } from "../../../editor/css-property/BackgroundImage";
+import { LinearGradient } from "../../../editor/image-resource/LinearGradient";
+import { editor } from "../../../editor/editor";
 
 var radialTypeList = [
   'circle',
@@ -20,81 +24,62 @@ var radialTypeList = [
   'ellipse farthest-corner'
 ]
 
+var imageTypeList = [
+  'static-gradient',
+  'linear-gradient',
+  'repeating-linear-gradient',
+  'radial-gradient',
+  'repeating-radial-gradient',
+  'conic-gradient',
+  'repeating-conic-gradient',
+  'image-resource'
+]
+
 export default class GradientEditor extends UIElement  {
 
   components() {
     return {
+      InputRangeEditor,
       RangeEditor,
       SelectEditor
     }
   }
 
   initState() {
-    var colorsteps = [
-      { offset: Length.percent(0), cut: false, color: 'yellow' },
-      { offset: Length.percent(100), cut: false, color: 'red' }
-    ] 
 
     return {
-      type: 'static-gradient',
-      index: 0,
-      colorsteps,
-      radialPosition: [ 'center', 'center'],
-      radialType: 'ellipse',
-      angle: '0deg'
+      index: +(this.props.index || 0 ),
+      value: this.props.value, 
+      image: BackgroundImage.parseImage(this.props.value || '') || { type: '', colorsteps: [] } 
     }
   }
 
-  setValue (str, index = 0, type = 'static-gradient', image = {}) {
-    var results = convertMatches(str);
-    var colorsteps = results.str.split(',').map(it => it.trim()).map(it => {
-      var [color, offset1, offset2 ] = it.split(' ').filter(str => str.length);
-
-       color = reverseMatches(color, results.matches);
-      var cut = false; 
-      if (offset2) {
-        cut = true; 
-      }
-
-      var offset = cut ? Length.parse(offset2) : Length.parse(offset1)
-
-      if (offset.isDeg()) {
-        offset = Length.percent(offset.value/360 * 100)
-      }
-
-      return { color, offset, cut }
-
-    })
-
-    if (colorsteps.length == 1)  {
-      colorsteps.push({
-        color: colorsteps[0].color,
-        offset: Length.percent(100),
-        cut: false
-      })
-    }
-
-    this.cachedStepListRect = null;
-
+  setValue (value) {
     this.setState({
-      colorsteps,
-      index,
-      type,
-      angle: image.angle,
-      radialPosition: image.radialPosition || ['50%', '50%'],
-      radialType: image.radialType || 'ellipse'
+      image: BackgroundImage.parseImage(value)
     }, false)
 
     this.refresh();
-
-    this.selectStep(index);
-
-    this.setColorUI()
   }
 
   template() {
+
+    var { image } = this.state; 
+
+    image = image || {} 
+
     return /*html*/`
-        <div class='gradient-editor' data-selected-editor='${this.state.type || 'static-gradient'}'>
+        <div class='gradient-editor' data-selected-editor='${image.type || 'static-gradient'}'>
+            <div class='gradient-preview'>
+              <div class='gradient-view' ref='$gradientView'></div>
+            </div>
+            <div class="picker-tab">
+              <div class="picker-tab-list" ref="$tab">
+                ${imageTypeList.map(it => {
+                  return `<span class='picker-tab-item ${it}' data-editor='${it}'><span class='icon'></span></span>`
+                }).join('')}
+              </div>
+            </div>
             <div class='gradient-steps' data-editor='gradient'>
                 <div class="hue-container" ref="$back"></div>            
                 <div class="hue" ref="$steps">
@@ -103,28 +88,38 @@ export default class GradientEditor extends UIElement  {
             </div>
             <div class='tools' data-editor='tools'>
               <label>Offset <input type='checkbox' ref='$cut' checked />  connected</label>
-              <RangeEditor ref='$range' calc="false" key='length' onchange='changeColorStepOffset' />
+              <InputRangeEditor ref='$range' calc="false" key='length' onchange='changeColorStepOffset' />
             </div>
             <div class='sub-editor' ref='$subEditor'> 
               <div data-editor='angle'>
-                <label>Angle</label>
-                <RangeEditor ref='$angle' calc="false" units="deg" min="-720" max="720" key='angle' onchange='changeKeyValue' />
+                <RangeEditor label='Angle' ref='$angle' calc="false" units="deg" min="-720" max="720" key='angle' onchange='changeKeyValue' />
               </div>
               <div data-editor='centerX'>
-                <label>Center X</label>
-                <RangeEditor ref='$radialPositionX' calc="false"  key='radialPositionX' onchange='changeKeyValue' />
+                <RangeEditor label='Center X' ref='$radialPositionX' calc="false"  key='radialPositionX' onchange='changeKeyValue' />
               </div>                
-              <div data-editor='centerY'>           
-                <label>Center Y</label>                 
-                <RangeEditor ref='$radialPositionY' calc="false" key='radialPositionY' onchange='changeKeyValue' />
+              <div data-editor='centerY'>                      
+                <RangeEditor label='Center Y' ref='$radialPositionY' calc="false" key='radialPositionY' onchange='changeKeyValue' />
               </div>                
-              <div data-editor='radialType'>       
-                <label>Radial Type</label>              
-                <SelectEditor ref='$radialType' value="${this.state.radialType}" options="${radialTypeList.join(',')}" key='radialType' onchange='changeKeyValue' />
+              <div data-editor='radialType'>              
+                <SelectEditor label='Radial Type' ref='$radialType' value="" options="${radialTypeList.join(',')}" key='radialType' onchange='changeKeyValue' />
               </div>
             </div>            
         </div>
       `;
+  }
+
+  [CLICK('$tab .picker-tab-item')] (e) {
+    var type = e.$delegateTarget.attr('data-editor')
+    this.$el.attr('data-selected-editor', type);
+    this.state.image = BackgroundImage.changeImageType({
+      type,
+      colorsteps: this.state.image.colorsteps,   
+      angle: Length.parse(this.children.$angle.getValue()).value,
+      radialType: this.children.$radialType.getValue(),
+      radialPosition: [ this.children.$radialPositionX.getValue(), this.children.$radialPositionY.getValue() ] 
+    })
+    this.refresh();
+    this.updateData();
   }
 
   [EVENT('changeKeyValue')] (key, value) {
@@ -133,22 +128,25 @@ export default class GradientEditor extends UIElement  {
       value = value.value; 
     } 
 
-    this.state[key] = value;
+    this.state.image[key] = value;
 
     if (key === 'radialPositionX' || key === 'radialPositionY') {
-      this.state['radialPosition'] = [this.state.radialPositionX || 'center', this.state.radialPositionY || 'center'] 
+      this.state.image['radialPosition'] = [
+        this.state.image.radialPositionX || 'center', 
+        this.state.image.radialPositionY || 'center'
+      ] 
     }
+
+    this.bindData('$gradientView')
 
     this.updateData();
   }
 
   [EVENT('changeColorStepOffset')] (key, value) {
     if (this.currentStep) {
-      this.currentStep.offset = value.clone();
-      this.$currentStep.css({
-        left: this.currentStep.offset
-      })  
-      this.setColorUI()
+      this.currentStep.percent = value.value;
+      this.state.image.sortColorStep();
+      this.refresh()
       this.updateData();      
     }
   }
@@ -166,42 +164,17 @@ export default class GradientEditor extends UIElement  {
     else if (x > maxX) x = maxX
     var percent = (x - minX) / rect.width * 100;
 
-
-    var list = this.state.colorsteps.map((it, index) => { 
-      return {index, color : it.color, offset: it.offset}
-    })
-
-    var prev = list.filter(it => it.offset.value <= percent).pop();
-    var next = list.filter(it => it.offset.value >= percent).shift();
-
-    if (prev && next) {
-      this.state.colorsteps.splice(next.index, 0, {
-        cut: false, 
-        offset: Length.percent(percent),
-        color: Color.mix(prev.color, next.color, ( percent - prev.offset.value )/(next.offset.value - prev.offset.value))
-      })
-    } else if (prev) {
-      this.state.colorsteps.splice(prev.index+1, 0, {
-        cut: false, 
-        offset: Length.percent(percent),
-        color: 'rgba(0, 0, 0, 1)'
-      })      
-    } else if (next) {
-      this.state.colorsteps.splice(next.index-1, 0, {
-        cut: false, 
-        offset: Length.percent(percent),
-        color: 'rgba(0, 0, 0, 1)'
-      })      
-    } else {
-      this.state.colorsteps.push({
-        cut: false, 
-        offset: Length.percent(0),
-        color: 'rgba(0, 0, 0, 1)'
-      })      
-    }
+    this.state.image.insertColorStep(percent);
+    this.state.image.sortColorStep()
 
     this.refresh();
     this.updateData();
+  }
+
+  [BIND('$el')] () {
+    return {
+      "data-selected-editor": this.state.image.type
+    }
   }
 
   [BIND('$stepList')] () {
@@ -213,9 +186,21 @@ export default class GradientEditor extends UIElement  {
     }
   }
 
+  [BIND('$gradientView')] () {
+    return {
+      style: {
+        'background-image': this.state.image.toString()
+      }
+    }
+  }
+
   [LOAD('$stepList')] () {
-    return this.state.colorsteps.map( (it, index) => {
-      return `<div class='step' data-index='${index}' data-cut='${it.cut}' style='left: ${it.offset};'>
+    return this.state.image.colorsteps.map( (it, index) => {
+
+      var selected = editor.selection.isSelectedColorStep(it.id) ? 'selected' : '';
+
+      return /*html*/`
+      <div class='step ${selected}' data-id='${it.id}' style='left: ${it.percent}%;'>
         <div class='color-view' style="background-color: ${it.color}"></div>
         <div class='arrow' style="background-color: ${it.color}"></div>
       </div>`
@@ -224,58 +209,50 @@ export default class GradientEditor extends UIElement  {
 
   [CLICK('$cut')] () {
     if (this.currentStep) {
+
       this.currentStep.cut = this.refs.$cut.checked()
-      this.$currentStep.attr('data-cut', this.currentStep.cut);
-      this.setColorUI()
+      // this.$currentStep.attr('data-cut', this.currentStep.cut);
+      this.refresh()
       this.updateData();      
     } 
   }
 
-  removeStep(index) {
-    if (this.state.colorsteps.length === 2) return;     
-    this.state.colorsteps.splice(index, 1);
-    var currentStep = this.state.colorsteps[index]
-    var currentIndex = index; 
-    if (!currentStep) {
-      currentStep = this.state.colorsteps[index-1]
-      currentIndex = index - 1; 
-    }
+  removeStep(id) {
 
-    if (currentStep) {
-      this.selectStep(currentIndex);
-    }
+    this.state.image.removeColorStep(id);
+
     this.refresh();
     this.updateData();          
   }
 
-  selectStep(index) {
-    this.state.index = index; 
-    this.currentStep = this.state.colorsteps[index];
-    this.$currentStep = this.refs.$stepList.$(`[data-index="${index.toString()}"]`)
-    if (this.$currentStep) {
-      this.$colorView = this.$currentStep.$('.color-view');
-      this.$arrow = this.$currentStep.$('.arrow');
-    }
-    this.prev = this.state.colorsteps[index-1];
-    this.next = this.state.colorsteps[index+1];
+  selectStep(id) {
+    this.state.id = id; 
+
+    editor.selection.selectColorStep(id);
+
+    this.currentStep = this.state.image.colorsteps.find( it => editor.selection.isSelectedColorStep(it.id))
+
+
+    this.refresh();
+
+    this.refs.$cut.checked(this.currentStep.cut);
+    this.children.$range.setValue(Length.percent(this.currentStep.percent));
+    this.parent.trigger('selectColorStep', this.currentStep.color)    
 
   }
 
   [POINTERSTART('$stepList .step') + MOVE()] (e) {
-    var index = +e.$delegateTarget.attr('data-index')
+    var id = e.$delegateTarget.attr('data-id')
 
     if (e.altKey) {
-      this.removeStep(index);
+      this.removeStep(id);
       return false; 
     } else {
 
-      this.selectStep(index);
+      this.selectStep(id);
 
       this.startXY = e.xy;
-      this.parent.trigger('selectColorStep', this.currentStep.color)
-      this.refs.$cut.checked(this.currentStep.cut);
-      this.children.$range.setValue(this.currentStep.offset);
-      this.refs.$stepList.attr('data-selected-index', index);
+
       this.cachedStepListRect = this.refs.$stepList.rect();
     }
 
@@ -298,86 +275,51 @@ export default class GradientEditor extends UIElement  {
     else if (x > maxX) x = maxX
     var percent = (x - minX) / rect.width * 100;
 
-    if (this.prev) {
-      if (this.prev.offset.value > percent) {
-        percent = this.prev.offset.value
-      }
-    }
 
-    if (this.next) {
-      if (this.next.offset.value < percent) {
-        percent = this.next.offset.value
-      }
-    }
-
-
-
-    this.currentStep.offset.set(percent);
-    this.$currentStep.css({
-      left: Length.percent(percent)
-    })
-    this.children.$range.setValue(this.currentStep.offset);    
-    this.setColorUI()
+    this.currentStep.percent = percent;
+    // this.$currentStep.css({
+    //   left: Length.percent(percent)
+    // })
+    this.children.$range.setValue(Length.percent(percent));    
+    this.state.image.sortColorStep();
+    this.refresh()
+    // console.log(this.state.image.toString());
+    // this.bindData('$gradientView');
+    // this.bindData('$stepList');
     this.updateData();    
   }
 
 
   refresh() {
     this.load();
-    this.setColorUI();
+    // this.setColorUI();
   }
 
   getLinearGradient () {
-    if (this.state.colorsteps.length === 0) {
-      return '';
-    }
 
-    if (this.state.colorsteps.length === 1) {
-      var colorstep = this.state.colorsteps[0];
-      return `linear-gradient(to right, ${colorstep.color} ${colorstep.offset}, ${colorstep.color} 100%)`
-    }
+    var { image } = this.state; 
 
-    return `linear-gradient(to right, ${this.state.colorsteps.map((it, index) => {
+    return LinearGradient.toLinearGradient(image.colorsteps);
 
-      if (it.cut) {
-        var prev = this.state.colorsteps[index-1]
-        if (prev) {
-          return `${it.color} ${prev.offset} ${it.offset}`
-        } else {
-          return `${it.color} ${it.offset}`
-        }
-
-      } else {
-        return `${it.color} ${it.offset}`
-      }
-
-    }).join(',')})`
   }
 
   setColorUI() {
-    this.refs.$angle
-    this.refs.$stepList.css( "background-image", this.getLinearGradient());
-    this.refs.$el.attr( "data-selected-editor", this.state.type);
+    // this.refs.$stepList.css( "background-image", this.getLinearGradient());
+
   }
 
   [EVENT('setColorStepColor')] (color) {
 
     if (this.currentStep) {
       this.currentStep.color = color;
-      this.$colorView.css({
-        'background-color': color
-      })
-      this.$arrow.css({
-        'background-color': color
-      })      
-      this.setColorUI()
+      this.refresh()
       this.updateData();
     }
   }
 
   updateData(data = {}) {
     this.setState(data, false);
-    this.parent.trigger(this.props.onchange, this.state);
+    this.parent.trigger(this.props.onchange, this.state.image.toString());
   }
 
 }

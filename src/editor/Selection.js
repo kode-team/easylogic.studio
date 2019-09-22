@@ -29,9 +29,11 @@ export class Selection {
     this.artboard = null;
     this.items = [];
     this.itemKeys = {} 
+    this.colorsteps = []
   }
 
   initialize() {
+    this.colorsteps = []    
     this.items = [];
     this.itemKeys = {} 
   }
@@ -57,6 +59,14 @@ export class Selection {
 
   get length () {
     return this.items.length;
+  }
+
+  selectColorStep (...args) {
+    this.colorsteps = args; 
+  }
+
+  isSelectedColorStep (id) {
+    return this.colorsteps.includes(id);
   }
 
   selectProject (project) {

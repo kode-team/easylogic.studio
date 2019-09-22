@@ -370,6 +370,10 @@ export default class ElementView extends UIElement {
         })
     }
 
+    [EVENT('refreshArtBoardName')] (id, title) {
+        this.$el.$(`[data-id='${id}']`).attr('data-title', title);
+    }
+
     calculateEndedElement (dx, dy) {
         // console.log('end', dx, dy);
         this.children.$selectionTool.refreshSelectionToolView(dx, dy, 'move');

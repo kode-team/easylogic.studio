@@ -135,7 +135,7 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
     }
 
     &:hover {
-      outline: 2px double rgb(64, 64, 252);
+      outline: 1px double rgb(64, 64, 252);
 
       svg {
         path, polygon {
@@ -145,6 +145,15 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
     }
 
     &.artboard {
+      &:before {
+        content: attr(data-title);
+        position: absolute;
+        left: 0px;
+        top: -15px;
+        font-size: 12px;
+        color: #484848;
+        display: inline-block;
+      }
       &:hover {
         outline: none;
       }

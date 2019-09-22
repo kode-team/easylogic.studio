@@ -2609,10 +2609,19 @@ html, body {
   outline: none;
 }
 .csseditor[data-theme=dark] .canvas-view .element-item:hover {
-  outline: 2px double #4040fc;
+  outline: 1px double #4040fc;
 }
 .csseditor[data-theme=dark] .canvas-view .element-item:hover svg path, .csseditor[data-theme=dark] .canvas-view .element-item:hover svg polygon {
   stroke: #4040fc;
+}
+.csseditor[data-theme=dark] .canvas-view .element-item.artboard:before {
+  content: attr(data-title);
+  position: absolute;
+  left: 0px;
+  top: -15px;
+  font-size: 12px;
+  color: #484848;
+  display: inline-block;
 }
 .csseditor[data-theme=dark] .canvas-view .element-item.artboard:hover {
   outline: none;
@@ -3309,9 +3318,11 @@ html, body {
 }
 .csseditor[data-theme=dark] .border-editor .header {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-column-gap: 2px;
+  grid-template-columns: repeat(3, 1fr) 24px;
+  grid-column-gap: 4px;
   text-align: center;
+  font-size: 10px;
+  text-transform: uppercase;
 }
 .csseditor[data-theme=dark] .border-editor > .editor-area {
   padding: 5px 0px;
@@ -3341,8 +3352,8 @@ html, body {
 }
 .csseditor[data-theme=dark] .border-value-editor {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-column-gap: 2px;
+  grid-template-columns: repeat(3, 1fr) 24px;
+  grid-column-gap: 4px;
 }
 .csseditor[data-theme=dark] .border-slice-item {
   display: grid;
@@ -6159,17 +6170,198 @@ html, body {
 }
 .csseditor[data-theme=dark] .gradient-editor .tools {
   padding: 4px 0px;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-column-gap: 2px;
 }
 .csseditor[data-theme=dark] .gradient-editor [data-editor] {
   display: none;
-  margin-top: 2px;
+  margin-top: 3px;
 }
 .csseditor[data-theme=dark] .gradient-editor [data-editor] > label {
   font-size: 11px;
 }
-.csseditor[data-theme=dark] .gradient-editor:not([data-selected-editor*=static-gradient]) [data-editor=gradient],
-.csseditor[data-theme=dark] .gradient-editor:not([data-selected-editor*=static-gradient]) [data-editor=tools] {
+.csseditor[data-theme=dark] .gradient-editor:not([data-selected-editor*=static-gradient]) [data-editor=gradient] {
   display: block;
+}
+.csseditor[data-theme=dark] .gradient-editor:not([data-selected-editor*=static-gradient]) [data-editor=tools] {
+  display: grid;
+}
+.csseditor[data-theme=dark] .gradient-editor[data-selected-editor=static-gradient] .static-gradient {
+  background-color: #fc554f;
+}
+.csseditor[data-theme=dark] .gradient-editor[data-selected-editor=static-gradient] .static-gradient svg path {
+  fill: white;
+}
+.csseditor[data-theme=dark] .gradient-editor[data-selected-editor=linear-gradient] .linear-gradient {
+  background-color: #fc554f;
+}
+.csseditor[data-theme=dark] .gradient-editor[data-selected-editor=linear-gradient] .linear-gradient svg path {
+  fill: white;
+}
+.csseditor[data-theme=dark] .gradient-editor[data-selected-editor=repeating-linear-gradient] .repeating-linear-gradient {
+  background-color: #fc554f;
+}
+.csseditor[data-theme=dark] .gradient-editor[data-selected-editor=repeating-linear-gradient] .repeating-linear-gradient svg path {
+  fill: white;
+}
+.csseditor[data-theme=dark] .gradient-editor[data-selected-editor=radial-gradient] .radial-gradient {
+  background-color: #fc554f;
+}
+.csseditor[data-theme=dark] .gradient-editor[data-selected-editor=radial-gradient] .radial-gradient svg path {
+  fill: white;
+}
+.csseditor[data-theme=dark] .gradient-editor[data-selected-editor=repeating-radial-gradient] .repeating-radial-gradient {
+  background-color: #fc554f;
+}
+.csseditor[data-theme=dark] .gradient-editor[data-selected-editor=repeating-radial-gradient] .repeating-radial-gradient svg path {
+  fill: white;
+}
+.csseditor[data-theme=dark] .gradient-editor[data-selected-editor=conic-gradient] .conic-gradient {
+  background-color: #fc554f;
+}
+.csseditor[data-theme=dark] .gradient-editor[data-selected-editor=conic-gradient] .conic-gradient svg path {
+  fill: white;
+}
+.csseditor[data-theme=dark] .gradient-editor[data-selected-editor=repeating-conic-gradient] .repeating-conic-gradient {
+  background-color: #fc554f;
+}
+.csseditor[data-theme=dark] .gradient-editor[data-selected-editor=repeating-conic-gradient] .repeating-conic-gradient svg path {
+  fill: white;
+}
+.csseditor[data-theme=dark] .gradient-editor[data-selected-editor=image-resource] .image-resource {
+  background-color: #fc554f;
+}
+.csseditor[data-theme=dark] .gradient-editor[data-selected-editor=image-resource] .image-resource svg path {
+  fill: white;
+}
+.csseditor[data-theme=dark] .gradient-editor .picker-tab .picker-tab-list {
+  text-align: center;
+  padding: 2px 5px;
+}
+.csseditor[data-theme=dark] .gradient-editor .picker-tab .picker-tab-list .picker-tab-item {
+  display: inline-block;
+  vertical-align: middle;
+  height: 20px;
+  width: 20px;
+  box-sizing: border-box;
+  cursor: pointer;
+  position: relative;
+  border-radius: 20%;
+  margin: 0px 2px;
+}
+.csseditor[data-theme=dark] .gradient-editor .picker-tab .picker-tab-list .picker-tab-item .icon {
+  pointer-events: none;
+  border-radius: 100%;
+  display: inline-block;
+  width: 90%;
+  height: 90%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+}
+.csseditor[data-theme=dark] .gradient-editor .picker-tab .picker-tab-list .picker-tab-item .icon svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor[data-theme=dark] .gradient-editor .picker-tab .picker-tab-list .picker-tab-item.static-gradient .icon {
+  background-image: linear-gradient(to right, red, red);
+}
+.csseditor[data-theme=dark] .gradient-editor .picker-tab .picker-tab-list .picker-tab-item.linear-gradient .icon {
+  background-image: linear-gradient(to right, black, gray);
+}
+.csseditor[data-theme=dark] .gradient-editor .picker-tab .picker-tab-list .picker-tab-item.radial-gradient .icon {
+  background-image: radial-gradient(closest-side, black, #ebf8e1, gray);
+}
+.csseditor[data-theme=dark] .gradient-editor .picker-tab .picker-tab-list .picker-tab-item.conic-gradient .icon {
+  background-image: conic-gradient(black, #ebf8e1);
+}
+.csseditor[data-theme=dark] .gradient-editor .picker-tab .picker-tab-list .picker-tab-item.repeating-linear-gradient .icon {
+  background-image: repeating-linear-gradient(45deg, #3f87a6, #ebf8e1 15%, #f69d3c 20%);
+}
+.csseditor[data-theme=dark] .gradient-editor .picker-tab .picker-tab-list .picker-tab-item.repeating-radial-gradient .icon {
+  background-image: repeating-radial-gradient(circle, #3f87a6, #ebf8e1 15%, #f69d3c 20%);
+}
+.csseditor[data-theme=dark] .gradient-editor .picker-tab .picker-tab-list .picker-tab-item.repeating-conic-gradient .icon {
+  background-image: repeating-conic-gradient(#3f87a6, #ebf8e1 5%, #f69d3c 10%);
+}
+.csseditor[data-theme=dark] .gradient-editor .picker-tab .picker-gradient-selector {
+  padding: 2px 10px;
+}
+.csseditor[data-theme=dark] .gradient-editor .picker-tab .picker-gradient-selector .gradient-steps {
+  position: relative;
+  display: block;
+  height: 30px;
+}
+.csseditor[data-theme=dark] .gradient-editor .picker-tab .picker-gradient-selector .gradient-steps .hue-container {
+  width: 100%;
+  height: 14px;
+  position: absolute;
+  z-index: 0;
+  background-color: transparent;
+  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-size: 10px 10px;
+  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+  box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.1);
+}
+.csseditor[data-theme=dark] .gradient-editor .picker-tab .picker-gradient-selector .gradient-steps .hue {
+  position: relative;
+  padding: 0px;
+  margin: 0px;
+  cursor: pointer;
+}
+.csseditor[data-theme=dark] .gradient-editor .picker-tab .picker-gradient-selector .gradient-steps .hue > .step-list {
+  position: relative;
+  width: 100%;
+  cursor: copy;
+  height: 14px;
+  z-index: 1;
+}
+.csseditor[data-theme=dark] .gradient-editor .picker-tab .picker-gradient-selector .gradient-steps .hue > .step-list.mode-drag {
+  cursor: pointer;
+}
+.csseditor[data-theme=dark] .gradient-editor .picker-tab .picker-gradient-selector .gradient-steps .hue .drag-bar {
+  border: 0px;
+  background-color: transparent;
+  border: 2px solid white;
+  box-shadow: 0 0 2px 0px rgba(0, 0, 0, 0.6);
+  width: 10px;
+  height: 10px;
+  -webkit-transform: none;
+          transform: none;
+  border-radius: 50%;
+  display: inline-block;
+  left: 0px;
+  top: 17px;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: top 0.3s ease-out;
+}
+.csseditor[data-theme=dark] .gradient-editor .picker-tab .picker-gradient-selector .gradient-steps .hue .drag-bar .guide-line {
+  pointer-events: none;
+  position: absolute;
+  width: 1px;
+  height: 0px;
+  bottom: 8px;
+  left: 3px;
+  -webkit-transform: translateX(-1px);
+          transform: translateX(-1px);
+  transition: all 0.3s ease-out;
+}
+.csseditor[data-theme=dark] .gradient-editor .picker-tab .picker-gradient-selector .gradient-steps .hue .drag-bar.selected {
+  z-index: 1;
+  top: 30px;
+}
+.csseditor[data-theme=dark] .gradient-editor .picker-tab .picker-gradient-selector .gradient-steps .hue .drag-bar.selected .guide-line {
+  height: 17px;
+}
+.csseditor[data-theme=dark] .gradient-editor .picker-tab .picker-gradient-selector .gradient-steps .hue .drag-bar.selected .guide-change {
+  opacity: 1;
 }
 .csseditor[data-theme=dark] .gradient-editor[data-selected-editor=linear-gradient] [data-editor=angle], .csseditor[data-theme=dark] .gradient-editor[data-selected-editor=repeating-linear-gradient] [data-editor=angle], .csseditor[data-theme=dark] .gradient-editor[data-selected-editor=conic-gradient] [data-editor=angle], .csseditor[data-theme=dark] .gradient-editor[data-selected-editor=repeating-conic-gradient] [data-editor=angle] {
   display: block;
@@ -6194,8 +6386,8 @@ html, body {
 .csseditor[data-theme=dark] .gradient-editor .hue-container,
 .csseditor[data-theme=dark] .gradient-editor .hue {
   position: absolute;
-  left: 10px;
-  right: 10px;
+  left: 0px;
+  right: 0px;
   top: 4px;
   height: 14px;
   border-radius: 10px;
@@ -6396,6 +6588,14 @@ html, body {
   background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
   background-size: 10px 10px;
   background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+}
+.csseditor[data-theme=dark] .gradient-editor .hue .step-list .step.selected {
+  border: 0px;
+  -webkit-transform: translateX(-50%) translateY(calc(100%));
+          transform: translateX(-50%) translateY(calc(100%));
+}
+.csseditor[data-theme=dark] .gradient-editor .hue .step-list .step.selected .arrow {
+  display: block;
 }
 .csseditor[data-theme=dark] .gradient-editor .hue .step-list .step[data-cut=true] {
   border-radius: 0%;
@@ -7542,371 +7742,6 @@ html, body {
 }
 .csseditor[data-theme=dark] .popup .svg-property-editor-popup .box .input.grid-2 {
   grid-template-columns: 3fr 1fr;
-}
-.csseditor[data-theme=dark] .popup .fill-picker {
-  width: 460px !important;
-  box-sizing: border-box;
-  display: grid;
-  grid-template-columns: 1fr 224px;
-  grid-column-gap: 4px;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .popup-item {
-  margin-bottom: 5px;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .grid-2 {
-  display: grid;
-  grid-template-columns: 60px 1fr;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .grid-2 label {
-  font-size: 11px;
-  padding-right: 2px;
-  text-align: left;
-}
-.csseditor[data-theme=dark] .popup .fill-picker label {
-  font-size: 11px;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .repeat-list button {
-  width: 24px;
-  height: 24px;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .repeat-list button[value=no-repeat] {
-  background-image: linear-gradient(to top right, #fc554f, white);
-  background-position: center center;
-  background-size: 8px 8px;
-  background-repeat: no-repeat;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .repeat-list button[value=repeat] {
-  background-image: linear-gradient(to top right, #fc554f, white);
-  background-position: 10px 10px;
-  background-size: 8px 8px;
-  background-repeat: repeat;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .repeat-list button[value=repeat-x] {
-  background-image: linear-gradient(to top right, #fc554f, white);
-  background-position: 10px 8px;
-  background-size: 8px 8px;
-  background-repeat: repeat-x;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .repeat-list button[value=repeat-y] {
-  background-image: linear-gradient(to top right, #fc554f, white);
-  background-position: 8px 10px;
-  background-size: 8px 8px;
-  background-repeat: repeat-y;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .repeat-list button[value=space] {
-  background-image: linear-gradient(to top right, #fc554f, white);
-  background-position: 10px 10px;
-  background-size: 8px 8px;
-  background-repeat: space;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .repeat-list button[value=round] {
-  background-image: linear-gradient(to top right, #fc554f, white);
-  background-position: 0px 0px;
-  background-size: 8px 8px;
-  background-repeat: round;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .repeat-list[data-value=repeat] button[value=repeat], .csseditor[data-theme=dark] .popup .fill-picker .repeat-list[data-value=no-repeat] button[value=no-repeat], .csseditor[data-theme=dark] .popup .fill-picker .repeat-list[data-value=repeat-x] button[value=repeat-x], .csseditor[data-theme=dark] .popup .fill-picker .repeat-list[data-value=repeat-y] button[value=repeat-y], .csseditor[data-theme=dark] .popup .fill-picker .repeat-list[data-value=space] button[value=space], .csseditor[data-theme=dark] .popup .fill-picker .repeat-list[data-value=round] button[value=round] {
-  background-color: #fc554f;
-  box-shadow: 0 0 2px 2px #fc554f;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list {
-  text-align: center;
-  padding: 2px 5px;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=static-gradient] .picker-tab-item[data-selected-value=static-gradient] {
-  background-color: #fc554f;
-  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=static-gradient] .picker-tab-item[data-selected-value=static-gradient] .icon svg path {
-  fill: #fc554f;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=linear-gradient] .picker-tab-item[data-selected-value=linear-gradient] {
-  background-color: #fc554f;
-  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=linear-gradient] .picker-tab-item[data-selected-value=linear-gradient] .icon svg path {
-  fill: #fc554f;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-linear-gradient] .picker-tab-item[data-selected-value=repeating-linear-gradient] {
-  background-color: #fc554f;
-  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-linear-gradient] .picker-tab-item[data-selected-value=repeating-linear-gradient] .icon svg path {
-  fill: #fc554f;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=radial-gradient] .picker-tab-item[data-selected-value=radial-gradient] {
-  background-color: #fc554f;
-  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=radial-gradient] .picker-tab-item[data-selected-value=radial-gradient] .icon svg path {
-  fill: #fc554f;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-radial-gradient] .picker-tab-item[data-selected-value=repeating-radial-gradient] {
-  background-color: #fc554f;
-  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-radial-gradient] .picker-tab-item[data-selected-value=repeating-radial-gradient] .icon svg path {
-  fill: #fc554f;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=conic-gradient] .picker-tab-item[data-selected-value=conic-gradient] {
-  background-color: #fc554f;
-  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=conic-gradient] .picker-tab-item[data-selected-value=conic-gradient] .icon svg path {
-  fill: #fc554f;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-conic-gradient] .picker-tab-item[data-selected-value=repeating-conic-gradient] {
-  background-color: #fc554f;
-  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-conic-gradient] .picker-tab-item[data-selected-value=repeating-conic-gradient] .icon svg path {
-  fill: #fc554f;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=image] .picker-tab-item[data-selected-value=image] {
-  background-color: #fc554f;
-  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-value=image] .picker-tab-item[data-selected-value=image] .icon svg path {
-  fill: #fc554f;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list[data-is-image-hidden=true] .picker-tab-item[data-selected-value=image] {
-  display: none;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list .picker-tab-item {
-  display: inline-block;
-  vertical-align: middle;
-  height: 20px;
-  width: 20px;
-  box-sizing: border-box;
-  cursor: pointer;
-  position: relative;
-  border-radius: 20%;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list .picker-tab-item .icon {
-  pointer-events: none;
-  border-radius: 100%;
-  display: inline-block;
-  width: 90%;
-  height: 90%;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  -webkit-transform: translateX(-50%) translateY(-50%);
-          transform: translateX(-50%) translateY(-50%);
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list .picker-tab-item .icon svg {
-  width: 100%;
-  height: 100%;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list .picker-tab-item[data-selected-value=static-gradient] .icon {
-  background-image: linear-gradient(to right, red, red);
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list .picker-tab-item[data-selected-value=linear-gradient] .icon {
-  background-image: linear-gradient(to right, black, gray);
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list .picker-tab-item[data-selected-value=radial-gradient] .icon {
-  background-image: radial-gradient(closest-side, black, #ebf8e1, gray);
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list .picker-tab-item[data-selected-value=conic-gradient] .icon {
-  background-image: conic-gradient(black, #ebf8e1);
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list .picker-tab-item[data-selected-value=repeating-linear-gradient] .icon {
-  background-image: repeating-linear-gradient(45deg, #3f87a6, #ebf8e1 15%, #f69d3c 20%);
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list .picker-tab-item[data-selected-value=repeating-radial-gradient] .icon {
-  background-image: repeating-radial-gradient(circle, #3f87a6, #ebf8e1 15%, #f69d3c 20%);
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-tab-list .picker-tab-item[data-selected-value=repeating-conic-gradient] .icon {
-  background-image: repeating-conic-gradient(#3f87a6, #ebf8e1 5%, #f69d3c 10%);
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-gradient-selector {
-  padding: 2px 10px;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-gradient-selector .gradient-steps {
-  position: relative;
-  display: block;
-  height: 30px;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue-container {
-  width: 100%;
-  height: 14px;
-  position: absolute;
-  z-index: 0;
-  background-color: transparent;
-  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
-  background-size: 10px 10px;
-  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
-  box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.1);
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue {
-  position: relative;
-  padding: 0px;
-  margin: 0px;
-  cursor: pointer;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue > .step-list {
-  position: relative;
-  width: 100%;
-  cursor: copy;
-  height: 14px;
-  z-index: 1;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue > .step-list.mode-drag {
-  cursor: pointer;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue .drag-bar {
-  border: 0px;
-  background-color: transparent;
-  border: 2px solid white;
-  box-shadow: 0 0 2px 0px rgba(0, 0, 0, 0.6);
-  width: 10px;
-  height: 10px;
-  -webkit-transform: none;
-          transform: none;
-  border-radius: 50%;
-  display: inline-block;
-  left: 0px;
-  top: 17px;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
-  position: absolute;
-  background-color: rgba(255, 255, 255, 0.8);
-  cursor: pointer;
-  transition: top 0.3s ease-out;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue .drag-bar .guide-line {
-  pointer-events: none;
-  position: absolute;
-  width: 1px;
-  height: 0px;
-  bottom: 8px;
-  left: 3px;
-  -webkit-transform: translateX(-1px);
-          transform: translateX(-1px);
-  transition: all 0.3s ease-out;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue .drag-bar.selected {
-  z-index: 1;
-  top: 30px;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue .drag-bar.selected .guide-line {
-  height: 17px;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue .drag-bar.selected .guide-change {
-  opacity: 1;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab-container[data-value=color] .picker-tab-content[data-content-type=color] {
-  display: block;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab-container[data-value=image] .picker-tab-content[data-content-type=image] {
-  display: block;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab-container .picker-tab-content {
-  display: none;
-  position: relative;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab-container .picker-tab-content.selected {
-  display: block;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=color] .codemirror-colorpicker {
-  box-shadow: none;
-  border-radius: 0px;
-  border: 0px;
-  background-color: #2f3538;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=color] .codemirror-colorpicker input {
-  color: #ffffff !important;
-  text-transform: uppercase;
-  border: 0px !important;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=color] .codemirror-colorpicker .title {
-  color: #ffffff !important;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=color] .codemirror-colorpicker .colorsets {
-  border-top: 0px solid #111111 !important;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=image] .image-preview {
-  width: 100%;
-  height: 140px;
-  position: relative;
-  display: block;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=image] .image-preview figure {
-  width: 100%;
-  height: 100%;
-  padding: 10px 20px;
-  margin: 0px;
-  box-sizing: border-box;
-  position: relative;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=image] .image-preview figure .select-text {
-  display: inline-block;
-  position: absolute;
-  left: 0px;
-  right: 0px;
-  top: 0px;
-  bottom: 0px;
-  font-size: 20px;
-  padding: 10px 20px;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=image] .image-preview figure img {
-  width: 100%;
-  height: 100%;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=image] .image-preview figure img[src=""] {
-  display: none;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=image] .image-preview figure img:not([src=""]) + .select-text {
-  display: none;
-}
-.csseditor[data-theme=dark] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=image] .image-preview input[type=file] {
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  width: 220px;
-  height: 140px;
-  padding: 10px 20px;
-  opacity: 0;
-  box-sizing: border-box;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  cursor: pointer;
-}
-.csseditor[data-theme=dark] .popup .gradient-assets {
-  width: 460px;
-  margin-top: 4px;
-}
-.csseditor[data-theme=dark] .popup .gradient-assets .project-gradient-list {
-  margin-top: 5px;
-  display: grid;
-  grid-template-columns: repeat(13, 1fr);
-  grid-column-gap: 4px;
-  grid-row-gap: 6px;
-}
-.csseditor[data-theme=dark] .popup .gradient-assets .project-gradient-list .gradient-item {
-  display: inline-block;
-  width: 30px;
-  height: 30px;
-  border-radius: 3px;
-  position: relative;
-  background-color: transparent;
-  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
-  background-size: 10px 10px;
-  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
-  overflow: hidden;
-}
-.csseditor[data-theme=dark] .popup .gradient-assets .project-gradient-list .gradient-item .gradient-view {
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-}
-.csseditor[data-theme=dark] .popup .gradient-assets .project-gradient-list .gradient-item:hover {
-  -webkit-transform: scale(1.2);
-          transform: scale(1.2);
 }
 .csseditor[data-theme=dark] .popup .color-picker-popup {
   width: 224px;
@@ -10260,10 +10095,19 @@ html, body {
   outline: none;
 }
 .csseditor[data-theme=light] .canvas-view .element-item:hover {
-  outline: 2px double #4040fc;
+  outline: 1px double #4040fc;
 }
 .csseditor[data-theme=light] .canvas-view .element-item:hover svg path, .csseditor[data-theme=light] .canvas-view .element-item:hover svg polygon {
   stroke: #4040fc;
+}
+.csseditor[data-theme=light] .canvas-view .element-item.artboard:before {
+  content: attr(data-title);
+  position: absolute;
+  left: 0px;
+  top: -15px;
+  font-size: 12px;
+  color: #484848;
+  display: inline-block;
 }
 .csseditor[data-theme=light] .canvas-view .element-item.artboard:hover {
   outline: none;
@@ -10960,9 +10804,11 @@ html, body {
 }
 .csseditor[data-theme=light] .border-editor .header {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-column-gap: 2px;
+  grid-template-columns: repeat(3, 1fr) 24px;
+  grid-column-gap: 4px;
   text-align: center;
+  font-size: 10px;
+  text-transform: uppercase;
 }
 .csseditor[data-theme=light] .border-editor > .editor-area {
   padding: 5px 0px;
@@ -10992,8 +10838,8 @@ html, body {
 }
 .csseditor[data-theme=light] .border-value-editor {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-column-gap: 2px;
+  grid-template-columns: repeat(3, 1fr) 24px;
+  grid-column-gap: 4px;
 }
 .csseditor[data-theme=light] .border-slice-item {
   display: grid;
@@ -13810,17 +13656,198 @@ html, body {
 }
 .csseditor[data-theme=light] .gradient-editor .tools {
   padding: 4px 0px;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-column-gap: 2px;
 }
 .csseditor[data-theme=light] .gradient-editor [data-editor] {
   display: none;
-  margin-top: 2px;
+  margin-top: 3px;
 }
 .csseditor[data-theme=light] .gradient-editor [data-editor] > label {
   font-size: 11px;
 }
-.csseditor[data-theme=light] .gradient-editor:not([data-selected-editor*=static-gradient]) [data-editor=gradient],
-.csseditor[data-theme=light] .gradient-editor:not([data-selected-editor*=static-gradient]) [data-editor=tools] {
+.csseditor[data-theme=light] .gradient-editor:not([data-selected-editor*=static-gradient]) [data-editor=gradient] {
   display: block;
+}
+.csseditor[data-theme=light] .gradient-editor:not([data-selected-editor*=static-gradient]) [data-editor=tools] {
+  display: grid;
+}
+.csseditor[data-theme=light] .gradient-editor[data-selected-editor=static-gradient] .static-gradient {
+  background-color: #4b61ce;
+}
+.csseditor[data-theme=light] .gradient-editor[data-selected-editor=static-gradient] .static-gradient svg path {
+  fill: white;
+}
+.csseditor[data-theme=light] .gradient-editor[data-selected-editor=linear-gradient] .linear-gradient {
+  background-color: #4b61ce;
+}
+.csseditor[data-theme=light] .gradient-editor[data-selected-editor=linear-gradient] .linear-gradient svg path {
+  fill: white;
+}
+.csseditor[data-theme=light] .gradient-editor[data-selected-editor=repeating-linear-gradient] .repeating-linear-gradient {
+  background-color: #4b61ce;
+}
+.csseditor[data-theme=light] .gradient-editor[data-selected-editor=repeating-linear-gradient] .repeating-linear-gradient svg path {
+  fill: white;
+}
+.csseditor[data-theme=light] .gradient-editor[data-selected-editor=radial-gradient] .radial-gradient {
+  background-color: #4b61ce;
+}
+.csseditor[data-theme=light] .gradient-editor[data-selected-editor=radial-gradient] .radial-gradient svg path {
+  fill: white;
+}
+.csseditor[data-theme=light] .gradient-editor[data-selected-editor=repeating-radial-gradient] .repeating-radial-gradient {
+  background-color: #4b61ce;
+}
+.csseditor[data-theme=light] .gradient-editor[data-selected-editor=repeating-radial-gradient] .repeating-radial-gradient svg path {
+  fill: white;
+}
+.csseditor[data-theme=light] .gradient-editor[data-selected-editor=conic-gradient] .conic-gradient {
+  background-color: #4b61ce;
+}
+.csseditor[data-theme=light] .gradient-editor[data-selected-editor=conic-gradient] .conic-gradient svg path {
+  fill: white;
+}
+.csseditor[data-theme=light] .gradient-editor[data-selected-editor=repeating-conic-gradient] .repeating-conic-gradient {
+  background-color: #4b61ce;
+}
+.csseditor[data-theme=light] .gradient-editor[data-selected-editor=repeating-conic-gradient] .repeating-conic-gradient svg path {
+  fill: white;
+}
+.csseditor[data-theme=light] .gradient-editor[data-selected-editor=image-resource] .image-resource {
+  background-color: #4b61ce;
+}
+.csseditor[data-theme=light] .gradient-editor[data-selected-editor=image-resource] .image-resource svg path {
+  fill: white;
+}
+.csseditor[data-theme=light] .gradient-editor .picker-tab .picker-tab-list {
+  text-align: center;
+  padding: 2px 5px;
+}
+.csseditor[data-theme=light] .gradient-editor .picker-tab .picker-tab-list .picker-tab-item {
+  display: inline-block;
+  vertical-align: middle;
+  height: 20px;
+  width: 20px;
+  box-sizing: border-box;
+  cursor: pointer;
+  position: relative;
+  border-radius: 20%;
+  margin: 0px 2px;
+}
+.csseditor[data-theme=light] .gradient-editor .picker-tab .picker-tab-list .picker-tab-item .icon {
+  pointer-events: none;
+  border-radius: 100%;
+  display: inline-block;
+  width: 90%;
+  height: 90%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+}
+.csseditor[data-theme=light] .gradient-editor .picker-tab .picker-tab-list .picker-tab-item .icon svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor[data-theme=light] .gradient-editor .picker-tab .picker-tab-list .picker-tab-item.static-gradient .icon {
+  background-image: linear-gradient(to right, red, red);
+}
+.csseditor[data-theme=light] .gradient-editor .picker-tab .picker-tab-list .picker-tab-item.linear-gradient .icon {
+  background-image: linear-gradient(to right, black, gray);
+}
+.csseditor[data-theme=light] .gradient-editor .picker-tab .picker-tab-list .picker-tab-item.radial-gradient .icon {
+  background-image: radial-gradient(closest-side, black, #ebf8e1, gray);
+}
+.csseditor[data-theme=light] .gradient-editor .picker-tab .picker-tab-list .picker-tab-item.conic-gradient .icon {
+  background-image: conic-gradient(black, #ebf8e1);
+}
+.csseditor[data-theme=light] .gradient-editor .picker-tab .picker-tab-list .picker-tab-item.repeating-linear-gradient .icon {
+  background-image: repeating-linear-gradient(45deg, #3f87a6, #ebf8e1 15%, #f69d3c 20%);
+}
+.csseditor[data-theme=light] .gradient-editor .picker-tab .picker-tab-list .picker-tab-item.repeating-radial-gradient .icon {
+  background-image: repeating-radial-gradient(circle, #3f87a6, #ebf8e1 15%, #f69d3c 20%);
+}
+.csseditor[data-theme=light] .gradient-editor .picker-tab .picker-tab-list .picker-tab-item.repeating-conic-gradient .icon {
+  background-image: repeating-conic-gradient(#3f87a6, #ebf8e1 5%, #f69d3c 10%);
+}
+.csseditor[data-theme=light] .gradient-editor .picker-tab .picker-gradient-selector {
+  padding: 2px 10px;
+}
+.csseditor[data-theme=light] .gradient-editor .picker-tab .picker-gradient-selector .gradient-steps {
+  position: relative;
+  display: block;
+  height: 30px;
+}
+.csseditor[data-theme=light] .gradient-editor .picker-tab .picker-gradient-selector .gradient-steps .hue-container {
+  width: 100%;
+  height: 14px;
+  position: absolute;
+  z-index: 0;
+  background-color: transparent;
+  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
+  background-size: 10px 10px;
+  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+  box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.1);
+}
+.csseditor[data-theme=light] .gradient-editor .picker-tab .picker-gradient-selector .gradient-steps .hue {
+  position: relative;
+  padding: 0px;
+  margin: 0px;
+  cursor: pointer;
+}
+.csseditor[data-theme=light] .gradient-editor .picker-tab .picker-gradient-selector .gradient-steps .hue > .step-list {
+  position: relative;
+  width: 100%;
+  cursor: copy;
+  height: 14px;
+  z-index: 1;
+}
+.csseditor[data-theme=light] .gradient-editor .picker-tab .picker-gradient-selector .gradient-steps .hue > .step-list.mode-drag {
+  cursor: pointer;
+}
+.csseditor[data-theme=light] .gradient-editor .picker-tab .picker-gradient-selector .gradient-steps .hue .drag-bar {
+  border: 0px;
+  background-color: transparent;
+  border: 2px solid white;
+  box-shadow: 0 0 2px 0px rgba(0, 0, 0, 0.6);
+  width: 10px;
+  height: 10px;
+  -webkit-transform: none;
+          transform: none;
+  border-radius: 50%;
+  display: inline-block;
+  left: 0px;
+  top: 17px;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: top 0.3s ease-out;
+}
+.csseditor[data-theme=light] .gradient-editor .picker-tab .picker-gradient-selector .gradient-steps .hue .drag-bar .guide-line {
+  pointer-events: none;
+  position: absolute;
+  width: 1px;
+  height: 0px;
+  bottom: 8px;
+  left: 3px;
+  -webkit-transform: translateX(-1px);
+          transform: translateX(-1px);
+  transition: all 0.3s ease-out;
+}
+.csseditor[data-theme=light] .gradient-editor .picker-tab .picker-gradient-selector .gradient-steps .hue .drag-bar.selected {
+  z-index: 1;
+  top: 30px;
+}
+.csseditor[data-theme=light] .gradient-editor .picker-tab .picker-gradient-selector .gradient-steps .hue .drag-bar.selected .guide-line {
+  height: 17px;
+}
+.csseditor[data-theme=light] .gradient-editor .picker-tab .picker-gradient-selector .gradient-steps .hue .drag-bar.selected .guide-change {
+  opacity: 1;
 }
 .csseditor[data-theme=light] .gradient-editor[data-selected-editor=linear-gradient] [data-editor=angle], .csseditor[data-theme=light] .gradient-editor[data-selected-editor=repeating-linear-gradient] [data-editor=angle], .csseditor[data-theme=light] .gradient-editor[data-selected-editor=conic-gradient] [data-editor=angle], .csseditor[data-theme=light] .gradient-editor[data-selected-editor=repeating-conic-gradient] [data-editor=angle] {
   display: block;
@@ -13845,8 +13872,8 @@ html, body {
 .csseditor[data-theme=light] .gradient-editor .hue-container,
 .csseditor[data-theme=light] .gradient-editor .hue {
   position: absolute;
-  left: 10px;
-  right: 10px;
+  left: 0px;
+  right: 0px;
   top: 4px;
   height: 14px;
   border-radius: 10px;
@@ -14047,6 +14074,14 @@ html, body {
   background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
   background-size: 10px 10px;
   background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+}
+.csseditor[data-theme=light] .gradient-editor .hue .step-list .step.selected {
+  border: 0px;
+  -webkit-transform: translateX(-50%) translateY(calc(100%));
+          transform: translateX(-50%) translateY(calc(100%));
+}
+.csseditor[data-theme=light] .gradient-editor .hue .step-list .step.selected .arrow {
+  display: block;
 }
 .csseditor[data-theme=light] .gradient-editor .hue .step-list .step[data-cut=true] {
   border-radius: 0%;
@@ -15193,371 +15228,6 @@ html, body {
 }
 .csseditor[data-theme=light] .popup .svg-property-editor-popup .box .input.grid-2 {
   grid-template-columns: 3fr 1fr;
-}
-.csseditor[data-theme=light] .popup .fill-picker {
-  width: 460px !important;
-  box-sizing: border-box;
-  display: grid;
-  grid-template-columns: 1fr 224px;
-  grid-column-gap: 4px;
-}
-.csseditor[data-theme=light] .popup .fill-picker .popup-item {
-  margin-bottom: 5px;
-}
-.csseditor[data-theme=light] .popup .fill-picker .grid-2 {
-  display: grid;
-  grid-template-columns: 60px 1fr;
-}
-.csseditor[data-theme=light] .popup .fill-picker .grid-2 label {
-  font-size: 11px;
-  padding-right: 2px;
-  text-align: left;
-}
-.csseditor[data-theme=light] .popup .fill-picker label {
-  font-size: 11px;
-}
-.csseditor[data-theme=light] .popup .fill-picker .repeat-list button {
-  width: 24px;
-  height: 24px;
-}
-.csseditor[data-theme=light] .popup .fill-picker .repeat-list button[value=no-repeat] {
-  background-image: linear-gradient(to top right, #4b61ce, white);
-  background-position: center center;
-  background-size: 8px 8px;
-  background-repeat: no-repeat;
-}
-.csseditor[data-theme=light] .popup .fill-picker .repeat-list button[value=repeat] {
-  background-image: linear-gradient(to top right, #4b61ce, white);
-  background-position: 10px 10px;
-  background-size: 8px 8px;
-  background-repeat: repeat;
-}
-.csseditor[data-theme=light] .popup .fill-picker .repeat-list button[value=repeat-x] {
-  background-image: linear-gradient(to top right, #4b61ce, white);
-  background-position: 10px 8px;
-  background-size: 8px 8px;
-  background-repeat: repeat-x;
-}
-.csseditor[data-theme=light] .popup .fill-picker .repeat-list button[value=repeat-y] {
-  background-image: linear-gradient(to top right, #4b61ce, white);
-  background-position: 8px 10px;
-  background-size: 8px 8px;
-  background-repeat: repeat-y;
-}
-.csseditor[data-theme=light] .popup .fill-picker .repeat-list button[value=space] {
-  background-image: linear-gradient(to top right, #4b61ce, white);
-  background-position: 10px 10px;
-  background-size: 8px 8px;
-  background-repeat: space;
-}
-.csseditor[data-theme=light] .popup .fill-picker .repeat-list button[value=round] {
-  background-image: linear-gradient(to top right, #4b61ce, white);
-  background-position: 0px 0px;
-  background-size: 8px 8px;
-  background-repeat: round;
-}
-.csseditor[data-theme=light] .popup .fill-picker .repeat-list[data-value=repeat] button[value=repeat], .csseditor[data-theme=light] .popup .fill-picker .repeat-list[data-value=no-repeat] button[value=no-repeat], .csseditor[data-theme=light] .popup .fill-picker .repeat-list[data-value=repeat-x] button[value=repeat-x], .csseditor[data-theme=light] .popup .fill-picker .repeat-list[data-value=repeat-y] button[value=repeat-y], .csseditor[data-theme=light] .popup .fill-picker .repeat-list[data-value=space] button[value=space], .csseditor[data-theme=light] .popup .fill-picker .repeat-list[data-value=round] button[value=round] {
-  background-color: #4b61ce;
-  box-shadow: 0 0 2px 2px #4b61ce;
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list {
-  text-align: center;
-  padding: 2px 5px;
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list[data-value=static-gradient] .picker-tab-item[data-selected-value=static-gradient] {
-  background-color: #4b61ce;
-  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list[data-value=static-gradient] .picker-tab-item[data-selected-value=static-gradient] .icon svg path {
-  fill: #4b61ce;
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list[data-value=linear-gradient] .picker-tab-item[data-selected-value=linear-gradient] {
-  background-color: #4b61ce;
-  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list[data-value=linear-gradient] .picker-tab-item[data-selected-value=linear-gradient] .icon svg path {
-  fill: #4b61ce;
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-linear-gradient] .picker-tab-item[data-selected-value=repeating-linear-gradient] {
-  background-color: #4b61ce;
-  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-linear-gradient] .picker-tab-item[data-selected-value=repeating-linear-gradient] .icon svg path {
-  fill: #4b61ce;
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list[data-value=radial-gradient] .picker-tab-item[data-selected-value=radial-gradient] {
-  background-color: #4b61ce;
-  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list[data-value=radial-gradient] .picker-tab-item[data-selected-value=radial-gradient] .icon svg path {
-  fill: #4b61ce;
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-radial-gradient] .picker-tab-item[data-selected-value=repeating-radial-gradient] {
-  background-color: #4b61ce;
-  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-radial-gradient] .picker-tab-item[data-selected-value=repeating-radial-gradient] .icon svg path {
-  fill: #4b61ce;
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list[data-value=conic-gradient] .picker-tab-item[data-selected-value=conic-gradient] {
-  background-color: #4b61ce;
-  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list[data-value=conic-gradient] .picker-tab-item[data-selected-value=conic-gradient] .icon svg path {
-  fill: #4b61ce;
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-conic-gradient] .picker-tab-item[data-selected-value=repeating-conic-gradient] {
-  background-color: #4b61ce;
-  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list[data-value=repeating-conic-gradient] .picker-tab-item[data-selected-value=repeating-conic-gradient] .icon svg path {
-  fill: #4b61ce;
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list[data-value=image] .picker-tab-item[data-selected-value=image] {
-  background-color: #4b61ce;
-  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list[data-value=image] .picker-tab-item[data-selected-value=image] .icon svg path {
-  fill: #4b61ce;
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list[data-is-image-hidden=true] .picker-tab-item[data-selected-value=image] {
-  display: none;
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list .picker-tab-item {
-  display: inline-block;
-  vertical-align: middle;
-  height: 20px;
-  width: 20px;
-  box-sizing: border-box;
-  cursor: pointer;
-  position: relative;
-  border-radius: 20%;
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list .picker-tab-item .icon {
-  pointer-events: none;
-  border-radius: 100%;
-  display: inline-block;
-  width: 90%;
-  height: 90%;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  -webkit-transform: translateX(-50%) translateY(-50%);
-          transform: translateX(-50%) translateY(-50%);
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list .picker-tab-item .icon svg {
-  width: 100%;
-  height: 100%;
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list .picker-tab-item[data-selected-value=static-gradient] .icon {
-  background-image: linear-gradient(to right, red, red);
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list .picker-tab-item[data-selected-value=linear-gradient] .icon {
-  background-image: linear-gradient(to right, black, gray);
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list .picker-tab-item[data-selected-value=radial-gradient] .icon {
-  background-image: radial-gradient(closest-side, black, #ebf8e1, gray);
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list .picker-tab-item[data-selected-value=conic-gradient] .icon {
-  background-image: conic-gradient(black, #ebf8e1);
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list .picker-tab-item[data-selected-value=repeating-linear-gradient] .icon {
-  background-image: repeating-linear-gradient(45deg, #3f87a6, #ebf8e1 15%, #f69d3c 20%);
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list .picker-tab-item[data-selected-value=repeating-radial-gradient] .icon {
-  background-image: repeating-radial-gradient(circle, #3f87a6, #ebf8e1 15%, #f69d3c 20%);
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-tab-list .picker-tab-item[data-selected-value=repeating-conic-gradient] .icon {
-  background-image: repeating-conic-gradient(#3f87a6, #ebf8e1 5%, #f69d3c 10%);
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-gradient-selector {
-  padding: 2px 10px;
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-gradient-selector .gradient-steps {
-  position: relative;
-  display: block;
-  height: 30px;
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue-container {
-  width: 100%;
-  height: 14px;
-  position: absolute;
-  z-index: 0;
-  background-color: transparent;
-  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
-  background-size: 10px 10px;
-  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
-  box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.1);
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue {
-  position: relative;
-  padding: 0px;
-  margin: 0px;
-  cursor: pointer;
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue > .step-list {
-  position: relative;
-  width: 100%;
-  cursor: copy;
-  height: 14px;
-  z-index: 1;
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue > .step-list.mode-drag {
-  cursor: pointer;
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue .drag-bar {
-  border: 0px;
-  background-color: transparent;
-  border: 2px solid white;
-  box-shadow: 0 0 2px 0px rgba(0, 0, 0, 0.6);
-  width: 10px;
-  height: 10px;
-  -webkit-transform: none;
-          transform: none;
-  border-radius: 50%;
-  display: inline-block;
-  left: 0px;
-  top: 17px;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
-  position: absolute;
-  background-color: rgba(255, 255, 255, 0.8);
-  cursor: pointer;
-  transition: top 0.3s ease-out;
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue .drag-bar .guide-line {
-  pointer-events: none;
-  position: absolute;
-  width: 1px;
-  height: 0px;
-  bottom: 8px;
-  left: 3px;
-  -webkit-transform: translateX(-1px);
-          transform: translateX(-1px);
-  transition: all 0.3s ease-out;
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue .drag-bar.selected {
-  z-index: 1;
-  top: 30px;
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue .drag-bar.selected .guide-line {
-  height: 17px;
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab .picker-gradient-selector .gradient-steps .hue .drag-bar.selected .guide-change {
-  opacity: 1;
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab-container[data-value=color] .picker-tab-content[data-content-type=color] {
-  display: block;
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab-container[data-value=image] .picker-tab-content[data-content-type=image] {
-  display: block;
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab-container .picker-tab-content {
-  display: none;
-  position: relative;
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab-container .picker-tab-content.selected {
-  display: block;
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=color] .codemirror-colorpicker {
-  box-shadow: none;
-  border-radius: 0px;
-  border: 0px;
-  background-color: white;
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=color] .codemirror-colorpicker input {
-  color: gray !important;
-  text-transform: uppercase;
-  border: 0px !important;
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=color] .codemirror-colorpicker .title {
-  color: gray !important;
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=color] .codemirror-colorpicker .colorsets {
-  border-top: 0px solid #e7e7e7 !important;
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=image] .image-preview {
-  width: 100%;
-  height: 140px;
-  position: relative;
-  display: block;
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=image] .image-preview figure {
-  width: 100%;
-  height: 100%;
-  padding: 10px 20px;
-  margin: 0px;
-  box-sizing: border-box;
-  position: relative;
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=image] .image-preview figure .select-text {
-  display: inline-block;
-  position: absolute;
-  left: 0px;
-  right: 0px;
-  top: 0px;
-  bottom: 0px;
-  font-size: 20px;
-  padding: 10px 20px;
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=image] .image-preview figure img {
-  width: 100%;
-  height: 100%;
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=image] .image-preview figure img[src=""] {
-  display: none;
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=image] .image-preview figure img:not([src=""]) + .select-text {
-  display: none;
-}
-.csseditor[data-theme=light] .popup .fill-picker .picker-tab-container .picker-tab-content[data-content-type=image] .image-preview input[type=file] {
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  width: 220px;
-  height: 140px;
-  padding: 10px 20px;
-  opacity: 0;
-  box-sizing: border-box;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  cursor: pointer;
-}
-.csseditor[data-theme=light] .popup .gradient-assets {
-  width: 460px;
-  margin-top: 4px;
-}
-.csseditor[data-theme=light] .popup .gradient-assets .project-gradient-list {
-  margin-top: 5px;
-  display: grid;
-  grid-template-columns: repeat(13, 1fr);
-  grid-column-gap: 4px;
-  grid-row-gap: 6px;
-}
-.csseditor[data-theme=light] .popup .gradient-assets .project-gradient-list .gradient-item {
-  display: inline-block;
-  width: 30px;
-  height: 30px;
-  border-radius: 3px;
-  position: relative;
-  background-color: transparent;
-  background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
-  background-size: 10px 10px;
-  background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
-  overflow: hidden;
-}
-.csseditor[data-theme=light] .popup .gradient-assets .project-gradient-list .gradient-item .gradient-view {
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-}
-.csseditor[data-theme=light] .popup .gradient-assets .project-gradient-list .gradient-item:hover {
-  -webkit-transform: scale(1.2);
-          transform: scale(1.2);
 }
 .csseditor[data-theme=light] .popup .color-picker-popup {
   width: 224px;

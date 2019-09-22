@@ -100,14 +100,12 @@ export class LinearGradient extends Gradient {
       .map(it => it.trim())
       .forEach((newValue, index) => {
         if (newValue.includes("@")) {
-          // color 복원
+
           newValue = reverseMatches(newValue, results.matches);
 
-          // 나머지는 ColorStep 이 파싱하는걸로
-          // ColorStep 은 파싱이후 colorsteps 를 리턴해줌... 배열임, 명심 명심
           colorsteps.push(...ColorStep.parse(newValue));
         } else {
-          // direction
+
           angle = isUndefined(DEFINED_ANGLES[newValue])
             ? Length.parse(newValue)
             : Length.deg(+DEFINED_ANGLES[newValue]);

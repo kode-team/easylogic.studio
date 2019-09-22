@@ -207,14 +207,34 @@ const getDefaultEventObject = (context, eventName, checkMethodFilters) => {
   };
 };
 
+const scrollBlockingEvents = {
+  'touchstart': true,
+  'touchmove': true,
+  'mousedown': true,
+  'mouseup': true,
+  'mousemove': true, 
+  'wheel': true,
+  'mousewheel': true
+}
+
 const addEvent = (context, eventObject, callback) => {
   eventObject.callback = makeCallback(context, eventObject, callback);
   context.addBinding(eventObject);
+
+  var options = !!eventObject.captures.length
+
+  if (scrollBlockingEvents[eventObject.eventName]) {
+    options = {
+      passive: true,
+      capture: options  
+    }
+  }
+
   Event.addEvent(
     eventObject.dom,
     eventObject.eventName,
     eventObject.callback,
-    !!eventObject.captures.length
+    options
   );
 };
 

@@ -3,11 +3,14 @@
 
     .tools {
         padding: 4px 0px;
+        display: grid;
+        grid-template-columns: 2fr 1fr; 
+        grid-column-gap: 2px;
     }
 
     [data-editor] {
         display: none;
-        margin-top: 2px;
+        margin-top: 3px;
 
         > label {
             font-size: 11px;
@@ -16,11 +19,190 @@
     }
 
     &:not([data-selected-editor*='static-gradient']) {
-        [data-editor='gradient'],
+        [data-editor='gradient'] {
+            display: block; 
+        }
         [data-editor='tools'] {
-            display: block;
+            display: grid;
         }
     }
+
+    
+    @each $imageType in static-gradient, linear-gradient, repeating-linear-gradient, radial-gradient, repeating-radial-gradient, conic-gradient, repeating-conic-gradient, image-resource  {
+        &[data-selected-editor="#{$imageType}"] {
+          .#{$imageType} {
+            background-color: $selected-color;
+            svg {
+              path {
+                fill: $selected-font-color;
+              }
+            }
+          }
+        }
+      }
+
+    
+    .picker-tab {
+        .picker-tab-list {
+            text-align: center;
+            padding: 2px 5px;
+
+            .picker-tab-item {
+                display: inline-block;
+                vertical-align: middle;
+                height: 20px;
+                width: 20px;
+                box-sizing: border-box;
+                // border: 1px solid $border-color;
+                cursor: pointer;
+                position: relative;
+                border-radius: 20%;
+                margin:0px 2px;
+
+                .icon {
+                    pointer-events: none;
+                    border-radius: 100%;
+                    display: inline-block;
+                    width: 90%;
+                    height: 90%;
+                    position: absolute;
+                    left: 50%;
+                    top: 50%;
+                    transform: translateX(-50%) translateY(-50%);
+
+                    svg {
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+
+                &.static-gradient .icon {
+                    background-image: linear-gradient(to right, red, red);
+                }
+
+                &.linear-gradient .icon {
+                    background-image: linear-gradient(to right, black, gray);
+                }
+
+                &.radial-gradient .icon {
+                    background-image: radial-gradient(closest-side, black, #ebf8e1, gray);
+                }
+
+                &.conic-gradient .icon {
+                    background-image: conic-gradient(black, #ebf8e1);
+                }
+
+                &.repeating-linear-gradient .icon {
+                    background-image: repeating-linear-gradient(
+                        45deg,
+                        #3f87a6,
+                        #ebf8e1 15%,
+                        #f69d3c 20%
+                    );
+                }
+
+                &.repeating-radial-gradient .icon {
+                    background-image: repeating-radial-gradient(
+                        circle,
+                        #3f87a6,
+                        #ebf8e1 15%,
+                        #f69d3c 20%
+                    );
+                }
+
+                &.repeating-conic-gradient .icon {
+                    background-image: repeating-conic-gradient(
+                        #3f87a6,
+                        #ebf8e1 5%,
+                        #f69d3c 10%
+                    );
+                }
+
+                &.image-resource .icon {
+
+                }
+            }
+        }
+
+        .picker-gradient-selector {
+             padding: 2px 10px;
+            .gradient-steps {
+                position: relative;
+                display: block;
+                height: 30px;
+
+                .hue-container {
+                width: 100%;
+                height: 14px;
+                position: absolute;
+                z-index: 0;
+                @include transparent-background();
+                box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.1);
+                }
+
+                .hue {
+                position: relative;
+                padding: 0px;
+                margin: 0px;
+                cursor: pointer;
+
+                > .step-list {
+                    position: relative;
+                    width: 100%;
+                    cursor: copy;
+                    height: 14px;
+                    z-index: 1;
+
+                    &.mode-drag {
+                    cursor: pointer;
+                    }
+                }
+
+                .drag-bar {
+                    border: 0px;
+                    background-color: transparent;
+                    border: 2px solid white;
+                    box-shadow: 0 0 2px 0px rgba(0, 0, 0, 0.6);
+                    width: 10px;
+                    height: 10px;
+                    transform: none;
+                    border-radius: 50%;
+                    display: inline-block;
+                    left: 0px;
+                    top: 17px;
+                    transform: translateX(-50%);
+                    position: absolute;
+                    background-color: rgba(white, 0.8);
+                    cursor: pointer;
+                    transition: top 0.3s ease-out;
+
+                    .guide-line {
+                    pointer-events: none;
+                    position: absolute;
+                    width: 1px;
+                    height: 0px;
+                    bottom: 8px;
+                    left: 3px;
+                    transform: translateX(-1px);
+                    transition: all 0.3s ease-out;
+                    }
+
+                    &.selected {
+                    z-index: 1;
+                    top: 30px;
+                    .guide-line {
+                        height: 17px;
+                    }
+
+                    .guide-change {
+                        opacity: 1;
+                    }
+                    }
+                }
+                }
+            }
+        }
+    } 
 
     &[data-selected-editor='linear-gradient'], 
     &[data-selected-editor='repeating-linear-gradient'], 
@@ -67,8 +249,8 @@
     .hue-container,
     .hue {
         position: absolute;
-        left: 10px;
-        right: 10px;
+        left: 0px;
+        right:0px;
         top: 4px;
         height: 14px;
         border-radius: 10px;
@@ -113,7 +295,16 @@
                 position: absolute;
                 top: 50%;
                 border-radius: 100%;
-                box-shadow: 0 0 2px 0px rgba(0, 0, 0, 0.5);                
+                box-shadow: 0 0 2px 0px rgba(0, 0, 0, 0.5);    
+                
+                &.selected {
+                    border:0px;
+                    transform: translateX(-50%) translateY(calc(100%));
+
+                    .arrow {
+                        display: block; 
+                    }
+                }
 
                 &[data-cut='true'] {
                     border-radius: 0%;
