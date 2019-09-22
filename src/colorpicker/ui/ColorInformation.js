@@ -4,7 +4,7 @@ import UIElement, { EVENT } from '../../util/UIElement';
 export default class ColorInformation extends UIElement {
 
     template () {
-        return `
+        return /*html*/`
         <div class="information hex">
             <div ref="$informationChange" class="information-change">
                 <button ref="$formatChangeButton" type="button" class="format-change-button arrow-button"></button>
@@ -66,9 +66,10 @@ export default class ColorInformation extends UIElement {
     initFormat () {
         var current_format = this.format || 'hex';
     
-        this.$el.removeClass('hex');
-        this.$el.removeClass('rgb');
-        this.$el.removeClass('hsl');
+        ['hex', 'rgb', 'hsl'].filter(it => it !== current_format).forEach(formatString => {
+            this.$el.removeClass(formatString);
+        })
+
         this.$el.addClass(current_format);
     }
     
@@ -88,12 +89,21 @@ export default class ColorInformation extends UIElement {
             }
         }
 
-        this.$el.removeClass(current_format);
-        this.$el.addClass(next_format);
         this.format = next_format;
+
+        this.initFormat();
 
         this.parent.manager.changeFormat(this.format)
     }
+
+    goToFormat(to_format) {
+        this.format = to_format;
+        if (to_format === 'rgb' || to_format === 'hsl') {
+            this.initFormat();
+        }
+
+        this.parent.manager.changeFormat(this.format)
+    }    
     
     getFormat () {
         return this.format || 'hex';   
@@ -158,6 +168,18 @@ export default class ColorInformation extends UIElement {
     [CLICK('$formatChangeButton')] (e) {
         this.nextFormat();
     }
+
+    [CLICK('$el .information-item.hex .input-field .title')] (e) {
+        this.goToFormat('hex');
+    }    
+
+    [CLICK('$el .information-item.rgb .input-field .title')] (e) {
+        this.goToFormat('hsl');
+    }    
+
+    [CLICK('$el .information-item.hsl .input-field .title')] (e) {
+        this.goToFormat('rgb');
+    }        
 
     setRGBInput() {
         this.refs.$rgb_r.val(this.parent.rgb.r);

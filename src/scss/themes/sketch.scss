@@ -78,12 +78,30 @@
         .information-item.rgb {
           display: inherit;
         }
+
+        .information-item.hsl {
+          display: none !important;
+        }        
       }
 
       &.hex {
         .information-item.hex {
           display: inherit;
         }
+
+        .information-item.hsl {
+          display: none !important;
+        }                
+      }
+
+      &.hsl {
+        .information-item.rgb {
+          display: none !important;
+        }
+
+        .information-item.hsl {
+          display: inherit;
+        }        
       }
 
       .information-item {
@@ -94,16 +112,13 @@
           > .title {
             color: black;
             font-size: 11px;
+            cursor: pointer;
           }
         }
 
         > .input-field:last-child:not(:first-child) {
           padding-right: 0px;
         }
-      }
-
-      .information-item.hsl {
-        display: none !important;
       }
 
       .information-item.hex {
@@ -117,6 +132,13 @@
         padding-left: 0px;
         padding-right: 0px;
       }
+
+      .information-item.hsl {
+        display: none;
+        width: 144px;
+        padding-left: 0px;
+        padding-right: 0px;
+      }      
     }
 
     > .colorsets {

@@ -715,7 +715,19 @@
 .codemirror-colorpicker.sketch > .colorpicker-body > .information.rgb .information-item.rgb {
   display: inherit;
 }
+.codemirror-colorpicker.sketch > .colorpicker-body > .information.rgb .information-item.hsl {
+  display: none !important;
+}
 .codemirror-colorpicker.sketch > .colorpicker-body > .information.hex .information-item.hex {
+  display: inherit;
+}
+.codemirror-colorpicker.sketch > .colorpicker-body > .information.hex .information-item.hsl {
+  display: none !important;
+}
+.codemirror-colorpicker.sketch > .colorpicker-body > .information.hsl .information-item.rgb {
+  display: none !important;
+}
+.codemirror-colorpicker.sketch > .colorpicker-body > .information.hsl .information-item.hsl {
   display: inherit;
 }
 .codemirror-colorpicker.sketch > .colorpicker-body > .information .information-item {
@@ -725,12 +737,10 @@
 .codemirror-colorpicker.sketch > .colorpicker-body > .information .information-item > .input-field > .title {
   color: black;
   font-size: 11px;
+  cursor: pointer;
 }
 .codemirror-colorpicker.sketch > .colorpicker-body > .information .information-item > .input-field:last-child:not(:first-child) {
   padding-right: 0px;
-}
-.codemirror-colorpicker.sketch > .colorpicker-body > .information .information-item.hsl {
-  display: none !important;
 }
 .codemirror-colorpicker.sketch > .colorpicker-body > .information .information-item.hex {
   width: 70px;
@@ -738,6 +748,12 @@
   padding-left: 5px;
 }
 .codemirror-colorpicker.sketch > .colorpicker-body > .information .information-item.rgb {
+  width: 144px;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+.codemirror-colorpicker.sketch > .colorpicker-body > .information .information-item.hsl {
+  display: none;
   width: 144px;
   padding-left: 0px;
   padding-right: 0px;

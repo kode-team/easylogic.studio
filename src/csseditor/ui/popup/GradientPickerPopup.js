@@ -48,14 +48,8 @@ export default class GradientPickerPopup extends BasePopup {
     this.selectedTab = "static-gradient";
   }
 
-  updateData(opt = {}) {
-    this.setState(opt, false);
-
-    this.emit("changeBackgroundProperty", opt);
-  }
-
   getBody() {
-    return `
+    return /*html*/`
       <div class="gradient-picker">
 
         <div class='box'>
@@ -65,7 +59,7 @@ export default class GradientPickerPopup extends BasePopup {
           <div class="picker-tab">
             <div class="picker-tab-list" ref="$tab" data-value="static-gradient" data-is-image-hidden="false">
               ${tabs.map(it => {
-                return `
+                return /*html*/`
                   <span 
                       class='picker-tab-item ${it.selected ? "selected" : ''}' 
                       data-selected-value='${it.type}'
@@ -103,7 +97,7 @@ export default class GradientPickerPopup extends BasePopup {
   }
 
   [LOAD('$gradientEditor')] () {
-    return `<GradientEditor 
+    return /*html*/`<GradientEditor 
       ref="$g" 
       value="${this.getColorString()}" 
       selectedIndex="${this.state.selectColorStepIndex}" 

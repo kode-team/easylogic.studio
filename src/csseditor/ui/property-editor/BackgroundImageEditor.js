@@ -259,13 +259,13 @@ export default class BackgroundImageEditor extends UIElement {
         $fillItem.attr("data-fill-type", typeName);
     }
 
-    [EVENT("changeBackgroundProperty") + DEBOUNCE(10)](data) {
-        if (this.currentBackgroundImage) {
-            this.currentBackgroundImage.reset(data);
+    // [EVENT("changeBackgroundProperty") + DEBOUNCE(10)](data) {
+    //     if (this.currentBackgroundImage) {
+    //         this.currentBackgroundImage.reset(data);
 
-            this.modifyBackgroundImage();
-        }
-    }
+    //         this.modifyBackgroundImage();
+    //     }
+    // }
 
     [EVENT('changePattern')] (key, value, params) {
         var index = +params;
