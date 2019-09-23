@@ -6,15 +6,17 @@ import GradientEditor from "../property-editor/GradientEditor";
 import { Gradient } from "../../../editor/image-resource/Gradient";
 import BasePopup from "./BasePopup";
 import EmbedColorPicker from "../property-editor/EmbedColorPicker";
+import ImageAssetPicker from "../property/ImageAssetPicker";
 
 export default class GradientPickerPopup extends BasePopup {
 
   getTitle() {
-    return 'Gradient Picker'
+    return 'Gradient & Image Picker'
   }
 
   components() {
     return {
+      ImageAssetPicker,
       EmbedColorPicker,
       GradientEditor
     }
@@ -34,17 +36,25 @@ export default class GradientPickerPopup extends BasePopup {
 
   getBody() {
     return /*html*/`
-      <div class="gradient-picker">
-
+      <div class="gradient-picker" ref='$body' data-selected-editor=''>
         <div class='box'>
           <div ref='$gradientEditor'></div>
         </div>
         <div class='box'>
-          <EmbedColorPicker ref='$color' onchange='changeColor' />          
+          <div class='colorpicker'>
+            <EmbedColorPicker ref='$color' onchange='changeColor' />                    
+          </div>
+          <div class='assetpicker'>
+            <ImageAssetPicker ref='$asset' onchange='changeImageUrl' />
+          </div>
         </div>
       </div>
      
     `;
+  }
+
+  [EVENT('changeTabType')] (type) {
+    this.refs.$body.attr('data-selected-editor', type);
   }
 
   getColorString() {
@@ -78,7 +88,11 @@ export default class GradientPickerPopup extends BasePopup {
   }
 
   [EVENT('changeColor')] (color) {
-    this.emit('setColorStepColor', color);
+    this.children.$g.trigger('setColorStepColor', color);
+  }
+
+  [EVENT('changeImageUrl')] (url) {
+    this.children.$g.trigger('setImageUrl', url);
   }
 
   [EVENT("showGradientPickerPopup")](data, params) {
@@ -93,6 +107,7 @@ export default class GradientPickerPopup extends BasePopup {
   [EVENT("selectColorStep")](color) {
     this.children.$color.setValue(color);
   }
+
 
   [EVENT("changeColorStep")](data = {}) {
 

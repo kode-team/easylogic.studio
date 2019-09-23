@@ -293,6 +293,9 @@ export class BackgroundImage extends Property {
       return new ConicGradient(options);
     case 'repeating-conic-gradient': 
       return new RepeatingConicGradient(options);      
+    case 'image-resource':
+    case 'url':
+      return new URLImageResource(options);
     }
   }
 

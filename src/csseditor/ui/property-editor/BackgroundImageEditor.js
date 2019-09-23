@@ -5,9 +5,13 @@ import icon from "../icon/icon";
 import { keyEach, combineKeyArray, CSS_TO_STRING, STRING_TO_CSS, OBJECT_TO_PROPERTY } from "../../../util/functions/func";
 import BackgroundPositionEditor from "./BackgroundPositionEditor";
 import GradientSingleEditor from "./GradientSingleEditor";
+import { LinearGradient } from "../../../editor/image-resource/LinearGradient";
+import { ColorStep } from "../../../editor/image-resource/ColorStep";
 
 
 const names = {
+    'image-resource': "Image",
+    'url': "Image",
     image: "Image",
     "static-gradient": "Static",
     "linear-gradient": "Linear",
@@ -20,6 +24,9 @@ const names = {
   
   const types = {
     image: "image",
+    'image-resource': "image",    
+    'url': 'image',
+
     "static-gradient": "gradient",
     "linear-gradient": "gradient",
     "repeating-linear-gradient": "gradient",
@@ -91,7 +98,7 @@ export default class BackgroundImageEditor extends UIElement {
     getColorStepString(colorsteps) {
         return colorsteps
             .map((step, index) => {
-                return `
+                return /*html*/`
                     <div class='step' data-index="${index}" data-cut="${step.cut}" data-selected='${step.selected}'>
                         <div class='color-view' style='background-color:${step.color};'></div>
                     </div>
@@ -104,6 +111,7 @@ export default class BackgroundImageEditor extends UIElement {
     [LOAD('$fillList')] () {
         return this.state.images.map((it, index) => {
             var image = it.image;
+
             var backgroundType = types[image.type];
             var backgroundTypeName = names[image.type];
 
@@ -119,6 +127,7 @@ export default class BackgroundImageEditor extends UIElement {
                 <BackgroundPositionEditor ${OBJECT_TO_PROPERTY({
                     key: 'background-position',
                     index,
+                    ref: `$bp${index}`,
                     x: it.x,
                     y: it.y,
                     width: it.width,
@@ -129,6 +138,7 @@ export default class BackgroundImageEditor extends UIElement {
                 })} onchange='changePattern' />
                 <GradientSingleEditor ${OBJECT_TO_PROPERTY({
                     index,
+                    ref: `$gse${index}`,                    
                     image: it.image,
                     key: 'background-image'
                 })} onchange='changePattern'
@@ -163,7 +173,15 @@ export default class BackgroundImageEditor extends UIElement {
 
     [EVENT('add')] () {
 
-        this.state.images.push(new BackgroundImage());
+        this.state.images.push(new BackgroundImage({
+            image: new LinearGradient({
+                angle: 90,
+                colorsteps: [
+                    new ColorStep({ percent: 0, color: 'white', index: 0}),
+                    new ColorStep({ percent: 100, color: 'black', index: 1})
+                ]
+            })
+        }));
 
         this.refresh();
 
@@ -174,17 +192,6 @@ export default class BackgroundImageEditor extends UIElement {
 
         this.trigger('add')
     }
-
-
-    [CLICK("$fillList .colorsteps .step")](e) {
-        this.getRef('colorsteps', this.selectedIndex).$(`[data-selected="true"]`).removeAttr('data-selected')
-        e.$delegateTarget.attr('data-selected', true);
-
-        var selectColorStepIndex = e.$delegateTarget.attr("data-index");
-        var $preview = e.$delegateTarget.closest("fill-item").$(".preview");
-        this.viewFillPopup($preview, selectColorStepIndex);
-    }
-
 
 
     [DRAGSTART("$fillList .fill-item")](e) {
@@ -216,7 +223,7 @@ export default class BackgroundImageEditor extends UIElement {
 
         this.refresh();
 
-        this.viewFillPopup(this.getRef("preview", this.selectedIndex));
+        // this.viewFillPopup(this.getRef("preview", this.selectedIndex));
 
         this.modifyBackgroundImage()
 
@@ -258,14 +265,6 @@ export default class BackgroundImageEditor extends UIElement {
         var $fillItem = this.refs[`fillIndex${this.selectedIndex}`];
         $fillItem.attr("data-fill-type", typeName);
     }
-
-    // [EVENT("changeBackgroundProperty") + DEBOUNCE(10)](data) {
-    //     if (this.currentBackgroundImage) {
-    //         this.currentBackgroundImage.reset(data);
-
-    //         this.modifyBackgroundImage();
-    //     }
-    // }
 
     [EVENT('changePattern')] (key, value, params) {
         var index = +params;

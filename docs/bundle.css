@@ -6183,11 +6183,27 @@ html, body {
 .csseditor[data-theme=dark] .gradient-editor [data-editor] > label {
   font-size: 11px;
 }
-.csseditor[data-theme=dark] .gradient-editor:not([data-selected-editor*=static-gradient]) [data-editor=gradient] {
+.csseditor[data-theme=dark] .gradient-editor:not([data-selected-editor*=static-gradient]) [data-editor=gradient], .csseditor[data-theme=dark] .gradient-editor:not([data-selected-editor*=image-resource]) [data-editor=gradient] {
   display: block;
 }
-.csseditor[data-theme=dark] .gradient-editor:not([data-selected-editor*=static-gradient]) [data-editor=tools] {
+.csseditor[data-theme=dark] .gradient-editor:not([data-selected-editor*=static-gradient]) [data-editor=tools], .csseditor[data-theme=dark] .gradient-editor:not([data-selected-editor*=image-resource]) [data-editor=tools] {
   display: grid;
+}
+.csseditor[data-theme=dark] .gradient-editor [data-editor=image-loader] {
+  display: none;
+  pointer-events: all;
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+}
+.csseditor[data-theme=dark] .gradient-editor [data-editor=image-loader] input[type=file] {
+  width: 100%;
+  height: 100%;
+  display: block;
+  opacity: 0;
+  pointer-events: all;
 }
 .csseditor[data-theme=dark] .gradient-editor .gradient-preview {
   width: 100%;
@@ -6199,6 +6215,7 @@ html, body {
   background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
   background-size: 10px 10px;
   background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+  box-shadow: 0 0 10px 1px #111111;
 }
 .csseditor[data-theme=dark] .gradient-editor .gradient-preview .gradient-view {
   position: absolute;
@@ -6376,6 +6393,9 @@ html, body {
   width: 100%;
   height: 100%;
 }
+.csseditor[data-theme=dark] .gradient-editor .picker-tab .picker-tab-list .picker-tab-item .icon svg path {
+  fill: #ffffff;
+}
 .csseditor[data-theme=dark] .gradient-editor .picker-tab .picker-tab-list .picker-tab-item.static-gradient .icon {
   background-image: linear-gradient(to right, red, red);
 }
@@ -6473,10 +6493,10 @@ html, body {
 .csseditor[data-theme=dark] .gradient-editor .picker-tab .picker-gradient-selector .gradient-steps .hue .drag-bar.selected .guide-change {
   opacity: 1;
 }
-.csseditor[data-theme=dark] .gradient-editor[data-selected-editor=linear-gradient] .drag-pointer, .csseditor[data-theme=dark] .gradient-editor[data-selected-editor=repeating-linear-gradient] .drag-pointer {
+.csseditor[data-theme=dark] .gradient-editor[data-selected-editor=linear-gradient] .drag-pointer, .csseditor[data-theme=dark] .gradient-editor[data-selected-editor=repeating-linear-gradient] .drag-pointer, .csseditor[data-theme=dark] .gradient-editor[data-selected-editor=image-resource] .drag-pointer {
   display: none;
 }
-.csseditor[data-theme=dark] .gradient-editor[data-selected-editor=linear-gradient] .preset-position, .csseditor[data-theme=dark] .gradient-editor[data-selected-editor=repeating-linear-gradient] .preset-position {
+.csseditor[data-theme=dark] .gradient-editor[data-selected-editor=linear-gradient] .preset-position, .csseditor[data-theme=dark] .gradient-editor[data-selected-editor=repeating-linear-gradient] .preset-position, .csseditor[data-theme=dark] .gradient-editor[data-selected-editor=image-resource] .preset-position {
   display: none;
 }
 .csseditor[data-theme=dark] .gradient-editor[data-selected-editor=linear-gradient] [data-editor=angle], .csseditor[data-theme=dark] .gradient-editor[data-selected-editor=repeating-linear-gradient] [data-editor=angle], .csseditor[data-theme=dark] .gradient-editor[data-selected-editor=conic-gradient] [data-editor=angle], .csseditor[data-theme=dark] .gradient-editor[data-selected-editor=repeating-conic-gradient] [data-editor=angle] {
@@ -6490,6 +6510,16 @@ html, body {
   display: block;
 }
 .csseditor[data-theme=dark] .gradient-editor[data-selected-editor=radial-gradient] [data-editor=radialType], .csseditor[data-theme=dark] .gradient-editor[data-selected-editor=repeating-radial-gradient] [data-editor=radialType] {
+  display: block;
+}
+.csseditor[data-theme=dark] .gradient-editor[data-selected-editor=image-resource] [data-editor=gradient],
+.csseditor[data-theme=dark] .gradient-editor[data-selected-editor=image-resource] [data-editor=tools],
+.csseditor[data-theme=dark] .gradient-editor[data-selected-editor=image-resource] .drag-pointer,
+.csseditor[data-theme=dark] .gradient-editor[data-selected-editor=image-resource] .preset-position,
+.csseditor[data-theme=dark] .gradient-editor[data-selected-editor=image-resource] .sub-editor {
+  display: none;
+}
+.csseditor[data-theme=dark] .gradient-editor[data-selected-editor=image-resource] [data-editor=image-loader] {
   display: block;
 }
 .csseditor[data-theme=dark] .gradient-editor .sub-editor {
@@ -7368,40 +7398,6 @@ html, body {
 .csseditor[data-theme=dark] .popup.background-property-popup .blend-list select.full-size {
   width: 100px;
 }
-.csseditor[data-theme=dark] .popup.display-property-popup .popup-item {
-  height: auto;
-  margin-bottom: 2px;
-}
-.csseditor[data-theme=dark] .popup.display-property-popup .grid-5 {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-column-gap: 2px;
-}
-.csseditor[data-theme=dark] .popup.display-property-popup button {
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  border: 0px;
-  padding: 2px 5px;
-  cursor: pointer;
-  outline: none;
-  box-sizing: border-box;
-  width: 50px;
-  background-color: rgba(17, 17, 17, 0.5);
-}
-.csseditor[data-theme=dark] .popup.display-property-popup .flex-direction[data-value=row] button[value=row], .csseditor[data-theme=dark] .popup.display-property-popup .flex-direction[data-value=row-reverse] button[value=row-reverse], .csseditor[data-theme=dark] .popup.display-property-popup .flex-direction[data-value=column] button[value=column], .csseditor[data-theme=dark] .popup.display-property-popup .flex-direction[data-value=column-reverse] button[value=column-reverse] {
-  background-color: #111111;
-  font-weight: bold;
-}
-.csseditor[data-theme=dark] .popup.display-property-popup .flex-wrap[data-value=nowrap] button[value=nowrap], .csseditor[data-theme=dark] .popup.display-property-popup .flex-wrap[data-value=wrap] button[value=wrap], .csseditor[data-theme=dark] .popup.display-property-popup .flex-wrap[data-value=wrap-reverse] button[value=wrap-reverse] {
-  background-color: #111111;
-  font-weight: bold;
-}
-.csseditor[data-theme=dark] .popup.display-property-popup .justify-content[data-value=flex-start] button[value=flex-start], .csseditor[data-theme=dark] .popup.display-property-popup .justify-content[data-value=flex-end] button[value=flex-end], .csseditor[data-theme=dark] .popup.display-property-popup .justify-content[data-value=center] button[value=center], .csseditor[data-theme=dark] .popup.display-property-popup .justify-content[data-value=space-between] button[value=space-between], .csseditor[data-theme=dark] .popup.display-property-popup .justify-content[data-value=space-around] button[value=space-around] {
-  background-color: #111111;
-  font-weight: bold;
-}
 .csseditor[data-theme=dark] .popup .box-shadow-property-popup {
   width: 432px;
   box-sizing: border-box;
@@ -7952,6 +7948,19 @@ html, body {
   grid-template-columns: 1fr 224px;
   grid-column-gap: 10px;
 }
+.csseditor[data-theme=dark] .popup .gradient-picker > .box > .colorpicker {
+  display: block;
+}
+.csseditor[data-theme=dark] .popup .gradient-picker > .box > .assetpicker {
+  display: none;
+  min-height: 310px;
+}
+.csseditor[data-theme=dark] .popup .gradient-picker[data-selected-editor=image-resource] > .box > .colorpicker {
+  display: none;
+}
+.csseditor[data-theme=dark] .popup .gradient-picker[data-selected-editor=image-resource] > .box > .assetpicker {
+  display: block;
+}
 .csseditor[data-theme=dark] .popup .gradient-picker .popup-item {
   margin-bottom: 5px;
 }
@@ -7986,6 +7995,40 @@ html, body {
 }
 .csseditor[data-theme=dark] .popup .gradient-picker .codemirror-colorpicker .colorsets {
   border-top: 0px solid #111111 !important;
+}
+.csseditor[data-theme=dark] .popup .gradient-picker .assetpicker {
+  background-color: rgba(230, 230, 230, 0.1);
+}
+.csseditor[data-theme=dark] .popup .gradient-picker .assetpicker .image-asset-picker {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+.csseditor[data-theme=dark] .popup .gradient-picker .assetpicker .image-asset-picker .image-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-column-gap: 2px;
+}
+.csseditor[data-theme=dark] .popup .gradient-picker .assetpicker .image-asset-picker .image-list .image-item {
+  margin-bottom: 2px;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+.csseditor[data-theme=dark] .popup .gradient-picker .assetpicker .image-asset-picker .image-list .image-item .preview {
+  position: relative;
+  width: 100%;
+  height: 80px;
+  border: 1px solid #111111;
+  border-radius: 2px;
+  box-sizing: border-box;
+  cursor: pointer;
+  line-height: 80px;
+  text-align: center;
+}
+.csseditor[data-theme=dark] .popup .gradient-picker .assetpicker .image-asset-picker .image-list .image-item .preview img {
+  border: 0px;
+  max-width: 100%;
+  max-height: 100%;
+  vertical-align: middle;
 }
 .csseditor[data-theme=dark] .popup .background-image-position-picker {
   width: 260px !important;
@@ -13580,11 +13623,27 @@ html, body {
 .csseditor[data-theme=light] .gradient-editor [data-editor] > label {
   font-size: 11px;
 }
-.csseditor[data-theme=light] .gradient-editor:not([data-selected-editor*=static-gradient]) [data-editor=gradient] {
+.csseditor[data-theme=light] .gradient-editor:not([data-selected-editor*=static-gradient]) [data-editor=gradient], .csseditor[data-theme=light] .gradient-editor:not([data-selected-editor*=image-resource]) [data-editor=gradient] {
   display: block;
 }
-.csseditor[data-theme=light] .gradient-editor:not([data-selected-editor*=static-gradient]) [data-editor=tools] {
+.csseditor[data-theme=light] .gradient-editor:not([data-selected-editor*=static-gradient]) [data-editor=tools], .csseditor[data-theme=light] .gradient-editor:not([data-selected-editor*=image-resource]) [data-editor=tools] {
   display: grid;
+}
+.csseditor[data-theme=light] .gradient-editor [data-editor=image-loader] {
+  display: none;
+  pointer-events: all;
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+}
+.csseditor[data-theme=light] .gradient-editor [data-editor=image-loader] input[type=file] {
+  width: 100%;
+  height: 100%;
+  display: block;
+  opacity: 0;
+  pointer-events: all;
 }
 .csseditor[data-theme=light] .gradient-editor .gradient-preview {
   width: 100%;
@@ -13596,6 +13655,7 @@ html, body {
   background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
   background-size: 10px 10px;
   background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+  box-shadow: 0 0 10px 1px #e7e7e7;
 }
 .csseditor[data-theme=light] .gradient-editor .gradient-preview .gradient-view {
   position: absolute;
@@ -13773,6 +13833,9 @@ html, body {
   width: 100%;
   height: 100%;
 }
+.csseditor[data-theme=light] .gradient-editor .picker-tab .picker-tab-list .picker-tab-item .icon svg path {
+  fill: gray;
+}
 .csseditor[data-theme=light] .gradient-editor .picker-tab .picker-tab-list .picker-tab-item.static-gradient .icon {
   background-image: linear-gradient(to right, red, red);
 }
@@ -13870,10 +13933,10 @@ html, body {
 .csseditor[data-theme=light] .gradient-editor .picker-tab .picker-gradient-selector .gradient-steps .hue .drag-bar.selected .guide-change {
   opacity: 1;
 }
-.csseditor[data-theme=light] .gradient-editor[data-selected-editor=linear-gradient] .drag-pointer, .csseditor[data-theme=light] .gradient-editor[data-selected-editor=repeating-linear-gradient] .drag-pointer {
+.csseditor[data-theme=light] .gradient-editor[data-selected-editor=linear-gradient] .drag-pointer, .csseditor[data-theme=light] .gradient-editor[data-selected-editor=repeating-linear-gradient] .drag-pointer, .csseditor[data-theme=light] .gradient-editor[data-selected-editor=image-resource] .drag-pointer {
   display: none;
 }
-.csseditor[data-theme=light] .gradient-editor[data-selected-editor=linear-gradient] .preset-position, .csseditor[data-theme=light] .gradient-editor[data-selected-editor=repeating-linear-gradient] .preset-position {
+.csseditor[data-theme=light] .gradient-editor[data-selected-editor=linear-gradient] .preset-position, .csseditor[data-theme=light] .gradient-editor[data-selected-editor=repeating-linear-gradient] .preset-position, .csseditor[data-theme=light] .gradient-editor[data-selected-editor=image-resource] .preset-position {
   display: none;
 }
 .csseditor[data-theme=light] .gradient-editor[data-selected-editor=linear-gradient] [data-editor=angle], .csseditor[data-theme=light] .gradient-editor[data-selected-editor=repeating-linear-gradient] [data-editor=angle], .csseditor[data-theme=light] .gradient-editor[data-selected-editor=conic-gradient] [data-editor=angle], .csseditor[data-theme=light] .gradient-editor[data-selected-editor=repeating-conic-gradient] [data-editor=angle] {
@@ -13887,6 +13950,16 @@ html, body {
   display: block;
 }
 .csseditor[data-theme=light] .gradient-editor[data-selected-editor=radial-gradient] [data-editor=radialType], .csseditor[data-theme=light] .gradient-editor[data-selected-editor=repeating-radial-gradient] [data-editor=radialType] {
+  display: block;
+}
+.csseditor[data-theme=light] .gradient-editor[data-selected-editor=image-resource] [data-editor=gradient],
+.csseditor[data-theme=light] .gradient-editor[data-selected-editor=image-resource] [data-editor=tools],
+.csseditor[data-theme=light] .gradient-editor[data-selected-editor=image-resource] .drag-pointer,
+.csseditor[data-theme=light] .gradient-editor[data-selected-editor=image-resource] .preset-position,
+.csseditor[data-theme=light] .gradient-editor[data-selected-editor=image-resource] .sub-editor {
+  display: none;
+}
+.csseditor[data-theme=light] .gradient-editor[data-selected-editor=image-resource] [data-editor=image-loader] {
   display: block;
 }
 .csseditor[data-theme=light] .gradient-editor .sub-editor {
@@ -14765,40 +14838,6 @@ html, body {
 .csseditor[data-theme=light] .popup.background-property-popup .blend-list select.full-size {
   width: 100px;
 }
-.csseditor[data-theme=light] .popup.display-property-popup .popup-item {
-  height: auto;
-  margin-bottom: 2px;
-}
-.csseditor[data-theme=light] .popup.display-property-popup .grid-5 {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-column-gap: 2px;
-}
-.csseditor[data-theme=light] .popup.display-property-popup button {
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  background-color: transparent;
-  border: 0px;
-  padding: 2px 5px;
-  cursor: pointer;
-  outline: none;
-  box-sizing: border-box;
-  width: 50px;
-  background-color: rgba(231, 231, 231, 0.5);
-}
-.csseditor[data-theme=light] .popup.display-property-popup .flex-direction[data-value=row] button[value=row], .csseditor[data-theme=light] .popup.display-property-popup .flex-direction[data-value=row-reverse] button[value=row-reverse], .csseditor[data-theme=light] .popup.display-property-popup .flex-direction[data-value=column] button[value=column], .csseditor[data-theme=light] .popup.display-property-popup .flex-direction[data-value=column-reverse] button[value=column-reverse] {
-  background-color: #e7e7e7;
-  font-weight: bold;
-}
-.csseditor[data-theme=light] .popup.display-property-popup .flex-wrap[data-value=nowrap] button[value=nowrap], .csseditor[data-theme=light] .popup.display-property-popup .flex-wrap[data-value=wrap] button[value=wrap], .csseditor[data-theme=light] .popup.display-property-popup .flex-wrap[data-value=wrap-reverse] button[value=wrap-reverse] {
-  background-color: #e7e7e7;
-  font-weight: bold;
-}
-.csseditor[data-theme=light] .popup.display-property-popup .justify-content[data-value=flex-start] button[value=flex-start], .csseditor[data-theme=light] .popup.display-property-popup .justify-content[data-value=flex-end] button[value=flex-end], .csseditor[data-theme=light] .popup.display-property-popup .justify-content[data-value=center] button[value=center], .csseditor[data-theme=light] .popup.display-property-popup .justify-content[data-value=space-between] button[value=space-between], .csseditor[data-theme=light] .popup.display-property-popup .justify-content[data-value=space-around] button[value=space-around] {
-  background-color: #e7e7e7;
-  font-weight: bold;
-}
 .csseditor[data-theme=light] .popup .box-shadow-property-popup {
   width: 432px;
   box-sizing: border-box;
@@ -15349,6 +15388,19 @@ html, body {
   grid-template-columns: 1fr 224px;
   grid-column-gap: 10px;
 }
+.csseditor[data-theme=light] .popup .gradient-picker > .box > .colorpicker {
+  display: block;
+}
+.csseditor[data-theme=light] .popup .gradient-picker > .box > .assetpicker {
+  display: none;
+  min-height: 310px;
+}
+.csseditor[data-theme=light] .popup .gradient-picker[data-selected-editor=image-resource] > .box > .colorpicker {
+  display: none;
+}
+.csseditor[data-theme=light] .popup .gradient-picker[data-selected-editor=image-resource] > .box > .assetpicker {
+  display: block;
+}
 .csseditor[data-theme=light] .popup .gradient-picker .popup-item {
   margin-bottom: 5px;
 }
@@ -15383,6 +15435,40 @@ html, body {
 }
 .csseditor[data-theme=light] .popup .gradient-picker .codemirror-colorpicker .colorsets {
   border-top: 0px solid #e7e7e7 !important;
+}
+.csseditor[data-theme=light] .popup .gradient-picker .assetpicker {
+  background-color: rgba(230, 230, 230, 0.1);
+}
+.csseditor[data-theme=light] .popup .gradient-picker .assetpicker .image-asset-picker {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+.csseditor[data-theme=light] .popup .gradient-picker .assetpicker .image-asset-picker .image-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-column-gap: 2px;
+}
+.csseditor[data-theme=light] .popup .gradient-picker .assetpicker .image-asset-picker .image-list .image-item {
+  margin-bottom: 2px;
+  background-color: rgba(128, 128, 128, 0.5);
+}
+.csseditor[data-theme=light] .popup .gradient-picker .assetpicker .image-asset-picker .image-list .image-item .preview {
+  position: relative;
+  width: 100%;
+  height: 80px;
+  border: 1px solid #e7e7e7;
+  border-radius: 2px;
+  box-sizing: border-box;
+  cursor: pointer;
+  line-height: 80px;
+  text-align: center;
+}
+.csseditor[data-theme=light] .popup .gradient-picker .assetpicker .image-asset-picker .image-list .image-item .preview img {
+  border: 0px;
+  max-width: 100%;
+  max-height: 100%;
+  vertical-align: middle;
 }
 .csseditor[data-theme=light] .popup .background-image-position-picker {
   width: 260px !important;

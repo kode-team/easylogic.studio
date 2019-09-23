@@ -32,7 +32,7 @@ const removeProp = (node, name, value) => {
 const updateProp = (node, name, newValue, oldValue) => {
     if (!newValue) {
       removeProp(node, name, oldValue);
-    } else if (!oldValue || newValue === oldValue) {
+    } else if (!oldValue || newValue !== oldValue) {
       setProp(node, name, newValue);
     }
   };

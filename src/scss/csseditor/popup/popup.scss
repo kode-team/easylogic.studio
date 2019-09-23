@@ -196,59 +196,6 @@
     }
   }
 
-  &.display-property-popup {
-    .popup-item {
-      height: auto;
-      margin-bottom: 2px;
-    }
-    .grid-5 {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      grid-column-gap: 2px;
-    }
-
-    button {
-      appearance: none;
-      background-color: transparent;
-      border: 0px;
-      padding: 2px 5px;
-      cursor: pointer;
-      outline: none;
-      box-sizing: border-box;
-      width: 50px;
-      background-color: rgba($border-color, 0.5);
-    }
-    .flex-direction {
-      &[data-value="row"] button[value="row"],
-      &[data-value="row-reverse"] button[value="row-reverse"],
-      &[data-value="column"] button[value="column"],
-      &[data-value="column-reverse"] button[value="column-reverse"] {
-        background-color: $border-color;
-        font-weight: bold;
-      }
-    }
-
-    .flex-wrap {
-      &[data-value="nowrap"] button[value="nowrap"],
-      &[data-value="wrap"] button[value="wrap"],
-      &[data-value="wrap-reverse"] button[value="wrap-reverse"] {
-        background-color: $border-color;
-        font-weight: bold;
-      }
-    }
-
-    .justify-content {
-      &[data-value="flex-start"] button[value="flex-start"],
-      &[data-value="flex-end"] button[value="flex-end"],
-      &[data-value="center"] button[value="center"],
-      &[data-value="space-between"] button[value="space-between"],
-      &[data-value="space-around"] button[value="space-around"] {
-        background-color: $border-color;
-        font-weight: bold;
-      }
-    }
-  }
-
   @import './box-shadow-property-popup.scss';
   @import './animation-property-popup.scss';
   @import './transition-property-popup.scss';
@@ -257,7 +204,6 @@
   @import './selector-popup.scss';
   @import './clippath-popup.scss';
   @import './svg-property-editor-popup.scss';
-  // @import './fill-picker.scss';
   @import './color-picker-popup.scss';
   @import './image-select-popup.scss';
   @import './gradient-picker.scss';

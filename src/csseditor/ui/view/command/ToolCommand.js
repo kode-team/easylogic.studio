@@ -142,7 +142,7 @@ export default class ToolCommand extends UIElement {
     [COMMAND('drop.image.url')] (imageUrl) {
             // convert data or blob to local url 
         this.trigger('load.original.image', {local: imageUrl}, (info) => {
-            
+
             this.emit('add.image', {src: info.local, ...info });
             editor.changeMode(EDIT_MODE_SELECTION);
             this.emit('after.change.mode');                
@@ -262,6 +262,32 @@ export default class ToolCommand extends UIElement {
 
         reader.readAsDataURL(item);
     }
+
+
+    [COMMAND('update.asset.image')] (item) {
+        var reader = new FileReader();
+        reader.onload = (e) => {
+            var datauri = e.target.result;
+            var local = URL.createObjectURL(item);
+
+            var project = editor.selection.currentProject;
+
+            if (project) {
+    
+                // append image asset 
+                project.createImage({
+                    id: uuidShort(),
+                    type: item.type,
+                    name: item.name, 
+                    original: datauri, 
+                    local
+                });
+                this.emit('addImageAsset');
+            }
+        }
+
+        reader.readAsDataURL(item);
+    }    
 
     [COMMAND('update.resource')] (items) {
         items.forEach(item => {

@@ -35,6 +35,10 @@ var imageTypeList = [
   'image-resource'
 ]
 
+var iconList = {
+  'image-resource': icon.photo
+}
+
 var hasRadialPosition = {
   'radial-gradient': true,
   'repeating-radial-gradient': true,
@@ -78,6 +82,7 @@ export default class GradientEditor extends UIElement  {
     }, false)
 
     this.refresh();
+    this.parent.trigger('changeTabType', this.state.image.type);
   }
 
   template() {
@@ -86,8 +91,13 @@ export default class GradientEditor extends UIElement  {
 
     image = image || {} 
 
+    var type = image.type || 'static-gradient'
+    
+    if (type === 'url') type = 'image-resource'
+
+
     return /*html*/`
-        <div class='gradient-editor' data-selected-editor='${image.type || 'static-gradient'}'>
+        <div class='gradient-editor' data-selected-editor='${type}'>
             <div class='gradient-preview'>
               <div class='gradient-view' ref='$gradientView'></div>
               <div class='drag-pointer' ref='$dragPosition'></div>
@@ -101,11 +111,14 @@ export default class GradientEditor extends UIElement  {
                 <div data-value='bottom left'>${icon.chevron_right}</div>
                 <div data-value='bottom right'>${icon.chevron_right}</div>                
               </div>
+              <div data-editor='image-loader'>
+                <input type='file' accept="image/*" />
+              </div>              
             </div>
             <div class="picker-tab">
               <div class="picker-tab-list" ref="$tab">
                 ${imageTypeList.map(it => {
-                  return `<span class='picker-tab-item ${it}' data-editor='${it}'><span class='icon'></span></span>`
+                  return `<span class='picker-tab-item ${it}' data-editor='${it}'><span class='icon'>${iconList[it] || ''}</span></span>`
                 }).join('')}
               </div>
             </div>
@@ -132,10 +145,12 @@ export default class GradientEditor extends UIElement  {
               <div data-editor='radialType'>              
                 <SelectEditor label='Radial Type' ref='$radialType' value="" options="${radialTypeList.join(',')}" key='radialType' onchange='changeKeyValue' />
               </div>
+
             </div>            
         </div>
       `;
   }
+
 
   [CLICK('$el .preset-position [data-value]')] (e) {
     var type = e.$delegateTarget.attr('data-value')
@@ -193,12 +208,19 @@ export default class GradientEditor extends UIElement  {
   [CLICK('$tab .picker-tab-item')] (e) {
     var type = e.$delegateTarget.attr('data-editor')
     this.$el.attr('data-selected-editor', type);
+    this.parent.trigger('changeTabType', type);
+
+    var url = type === 'image-resource' ? this.state.image.url : this.state.url;
     this.state.image = BackgroundImage.changeImageType({
       type,
-      colorsteps: this.state.image.colorsteps,   
+      url,
+      colorsteps: this.state.image.colorsteps || [] ,   
       angle: Length.parse(this.children.$angle.getValue()).value,
       radialType: this.children.$radialType.getValue(),
-      radialPosition: [ this.children.$radialPositionX.getValue(), this.children.$radialPositionY.getValue() ] 
+      radialPosition: [ 
+        this.children.$radialPositionX.getValue(), 
+        this.children.$radialPositionY.getValue() 
+      ] 
     })
     this.refresh();
     this.updateData();
@@ -254,8 +276,13 @@ export default class GradientEditor extends UIElement  {
   }
 
   [BIND('$el')] () {
+    var type = this.state.image.type;
+    if (type === 'url') {
+      type = 'image-resource'
+    }
+    this.parent.trigger('changeTabType', type);
     return {
-      "data-selected-editor": this.state.image.type
+      "data-selected-editor": type
     }
   }
 
@@ -269,9 +296,19 @@ export default class GradientEditor extends UIElement  {
   }
 
   [BIND('$gradientView')] () {
+
+    var type = this.state.image.type;
+    var size = 'auto';
+
+    if (type === 'url' || type === 'image-resource') {
+      size = 'cover'
+    }
+
     return {
       style: {
-        'background-image': this.state.image.toString()
+        'background-image': this.state.image.toString(),
+        'background-size': size,
+        'background-repeat': 'no-repeat'
       }
     }
   }
@@ -328,14 +365,15 @@ export default class GradientEditor extends UIElement  {
 
     editor.selection.selectColorStep(id);
 
-    this.currentStep = this.state.image.colorsteps.find( it => editor.selection.isSelectedColorStep(it.id))
-
+    if (this.state.image.colorsteps) {
+      this.currentStep = this.state.image.colorsteps.find( it => editor.selection.isSelectedColorStep(it.id))
+      this.refs.$cut.checked(this.currentStep.cut);
+      this.children.$range.setValue(Length.percent(this.currentStep.percent));
+      this.parent.trigger('selectColorStep', this.currentStep.color)    
+  
+    }
 
     this.refresh();
-
-    this.refs.$cut.checked(this.currentStep.cut);
-    this.children.$range.setValue(Length.percent(this.currentStep.percent));
-    this.parent.trigger('selectColorStep', this.currentStep.color)    
 
   }
 
@@ -411,6 +449,17 @@ export default class GradientEditor extends UIElement  {
       }
     }
 
+  }
+
+
+  [EVENT('setImageUrl')] (url) {
+
+    if (this.state.image) {
+      this.state.url = url; 
+      this.state.image.reset({ url });
+      this.refresh();
+      this.updateData();
+    }
   }
 
   updateData(data = {}) {

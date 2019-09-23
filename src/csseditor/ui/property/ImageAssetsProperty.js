@@ -1,9 +1,8 @@
 import BaseProperty from "./BaseProperty";
 import { editor } from "../../../editor/editor";
-import { LOAD, CLICK, INPUT, DEBOUNCE, VDOM, DRAGSTART } from "../../../util/Event";
+import { LOAD, CLICK, INPUT, DEBOUNCE, VDOM, DRAGSTART, CHANGE } from "../../../util/Event";
 import { EVENT } from "../../../util/UIElement";
 import icon from "../icon/icon";
-import AssetParser from "../../../editor/parse/AssetParser";
 
 
 export default class ImageAssetsProperty extends BaseProperty {
@@ -96,8 +95,12 @@ export default class ImageAssetsProperty extends BaseProperty {
 
   }
   
-  [CLICK('$imageList .add-image-item')] () {
+  [CHANGE('$imageList .add-image-item input[type=file]')] (e) {
 
+    [...e.target.files].forEach(item => {
+      this.emit('update.asset.image', item);
+    })
+    
   }
 
   [CLICK('$imageList .remove')] (e) {
@@ -120,8 +123,8 @@ export default class ImageAssetsProperty extends BaseProperty {
   }  
 
 
-  [INPUT('$imageList input')] (e) {
-    var $item = e.$delegateTarget.closest('color-item');
+  [INPUT('$imageList input[type=text]')] (e) {
+    var $item = e.$delegateTarget.closest('image-item');
     var index = +$item.attr('data-index');
     var obj = e.$delegateTarget.attrKeyValue('data-key');    
 

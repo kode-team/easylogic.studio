@@ -4,18 +4,26 @@ import AssetParser from "../parse/AssetParser";
   
 export default class Resource {
     static getAllDropItems (e) {
-        var items = [...e.dataTransfer.types].map((type, index) => {
+        var items = []
+        
+        if (e.dataTransfer ) {
+            items = [...e.dataTransfer.types].map((type, index) => {
 
-            if (type.includes('text')) {
-                return {
-                    kind: 'string', 
-                    type,
-                    data: e.dataTransfer.getData(type)
+                if (type.includes('text')) {
+                    return {
+                        kind: 'string', 
+                        type,
+                        data: e.dataTransfer.getData(type)
+                    }
                 }
-            }
-        }).filter(it => it);
+            }).filter(it => it);
+        }
     
-        var files = [...e.dataTransfer.files]
+        var files = [] 
+        
+        if (e.dataTransfer) {
+            files = [...e.dataTransfer.files]
+        }
 
         return  [...items, ...files]
     }

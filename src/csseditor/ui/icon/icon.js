@@ -81,11 +81,10 @@ import doc from "./doc";
 import flash_on from "./flash_on";
 import view_list from "./view_list";
 import near_me from "./near_me";
-
-
-
+import photo from "./photo";
 
 export default {
+  photo,
   near_me,
   view_list,
   flash_on,
