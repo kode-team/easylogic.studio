@@ -42,7 +42,7 @@ export default class ColorAssetsProperty extends BaseProperty {
 
     var results = colors.map( (item, index) => {
 
-      return `
+      return /*html*/`
         <div class='color-item' data-index="${index}">
           <div class='preview' data-index="${index}"><div class='color-view' style='background-color: ${item.color};'></div></div>
           <div class='title'>
@@ -78,6 +78,8 @@ export default class ColorAssetsProperty extends BaseProperty {
 
       if (isRefresh) this.refresh();
       if (isEmit) this.emit('refreshColorAssets');
+    } else{
+      alert('Please select a project.')
     }
   }
   

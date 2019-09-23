@@ -144,11 +144,6 @@ export default class BackgroundImageEditor extends UIElement {
                 })} onchange='changePattern'
 
                 />
-                <!--<div class='preview' data-index="${index}" ref="preview${index}">
-                    <div class='mini-view' >
-                      <div class='color-view' style="${imageCSS}" ref="miniView${index}"></div>
-                    </div>
-                </div> -->
                 <div class='fill-info'>
                   <div class='gradient-info'>
                     <div class='fill-title' ref="fillTitle${index}">${backgroundTypeName}</div>

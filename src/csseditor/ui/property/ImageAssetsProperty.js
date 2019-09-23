@@ -62,11 +62,12 @@ export default class ImageAssetsProperty extends BaseProperty {
     return /*html*/`
       <div class='loaded-list'>
         ${results.join('')}
+        <div class='add-image-item'>
+          <input type='file' accept='image/*' ref='$file' />
+          <button type="button">${icon.add}</button>
+        </div>        
       </div>
-      <div class='add-image-item'>
-        <input type='file' accept='image/*' ref='$file' />
-        <button type="button">${icon.add}</button>
-      </div>
+
     `
   }
 
@@ -79,6 +80,8 @@ export default class ImageAssetsProperty extends BaseProperty {
 
       if (isRefresh) this.refresh();
       if (isEmit) this.emit('refreshImageAssets');
+    } else {
+      alert('Please select a project.')
     }
   }
 
@@ -96,10 +99,12 @@ export default class ImageAssetsProperty extends BaseProperty {
   }
   
   [CHANGE('$imageList .add-image-item input[type=file]')] (e) {
-
-    [...e.target.files].forEach(item => {
-      this.emit('update.asset.image', item);
+    this.executeImage(project => {
+      [...e.target.files].forEach(item => {
+        this.emit('update.asset.image', item);
+      })
     })
+
     
   }
 
@@ -128,7 +133,7 @@ export default class ImageAssetsProperty extends BaseProperty {
     var index = +$item.attr('data-index');
     var obj = e.$delegateTarget.attrKeyValue('data-key');    
 
-    this.executeColor(project => {
+    this.executeImage(project => {
       project.setImageValue(index, obj);
     }, false)
   }

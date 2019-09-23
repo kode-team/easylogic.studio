@@ -99,7 +99,7 @@ export class DomItem extends GroupItem {
       animations: [],
       transitions: [],
       // 'keyframe': 'sample 0% --aaa 100px | sample 100% width 200px | sample2 0.5% background-image background-image:linear-gradient(to right, black, yellow 100%)',
-      keyframes: [],
+      // keyframes: [],
       selectors: [],
       svg: [],
       // display: Display.parse({ display: "block" }),      
@@ -151,7 +151,7 @@ export class DomItem extends GroupItem {
       animations: json.animations.map(animation => animation.clone()),
       transitions: json.transitions.map(transition => transition.clone()),
       // 'keyframe': 'sample 0% --aaa 100px | sample 100% width 200px | sample2 0.5% background-image background-image:linear-gradient(to right, black, yellow 100%)',
-      keyframes: json.keyframes.map(keyframe => keyframe.clone()),
+      // keyframes: json.keyframes.map(keyframe => keyframe.clone()),
       selectors: json.selectors.map(selector => selector.clone()),
       svg: json.svg.map(svg => svg.clone())
     }
@@ -173,10 +173,46 @@ export class DomItem extends GroupItem {
     return transition;
   }    
 
-  addKeyframe(keyframe) {
-    this.json.keyframes.push(keyframe);
-    return keyframe;
-  }      
+//   addKeyframe(keyframe) {
+//     this.json.keyframes.push(keyframe);
+//     return keyframe;
+//   }     
+
+
+//   createKeyframe(data = {}) {
+//     return this.addKeyframe(
+//       new Keyframe({
+//         checked: true,
+//         ...data
+//       })
+//     );
+//   }    
+  
+
+//   removeKeyframe(removeIndex) {
+//     this.removePropertyList(this.json.keyframes, removeIndex);
+//   }    
+
+
+//   sortKeyframe(startIndex, targetIndex) {
+//     this.sortItem(this.json.keyframes, startIndex, targetIndex);
+//   }    
+
+
+//   updateKeyframe(index, data = {}) {
+//     this.json.keyframes[+index].reset(data);
+//   }      
+
+
+// /**
+//    * `@keyframes` 문자열만 따로 생성 
+//    */
+//   toKeyframeString (isAnimate = false) {
+//     return this.json.keyframes
+//               .map(keyframe => keyframe.toString(isAnimate))
+//               .join('\n\n')
+//   }  
+
 
   addSelector(selector) {
     this.json.selectors.push(selector);
@@ -186,15 +222,6 @@ export class DomItem extends GroupItem {
   createAnimation(data = {}) {
     return this.addAnimation(
       new Animation({
-        checked: true,
-        ...data
-      })
-    );
-  }  
-
-  createKeyframe(data = {}) {
-    return this.addKeyframe(
-      new Keyframe({
         checked: true,
         ...data
       })
@@ -228,9 +255,6 @@ export class DomItem extends GroupItem {
     this.removePropertyList(this.json.animations, removeIndex);
   }  
 
-  removeKeyframe(removeIndex) {
-    this.removePropertyList(this.json.keyframes, removeIndex);
-  }  
   
   removeSelector(removeIndex) {
     this.removePropertyList(this.json.selectors, removeIndex);
@@ -261,9 +285,6 @@ export class DomItem extends GroupItem {
     this.sortItem(this.json.transitions, startIndex, targetIndex);
   }  
 
-  sortKeyframe(startIndex, targetIndex) {
-    this.sortItem(this.json.keyframes, startIndex, targetIndex);
-  }  
   
   updateAnimation(index, data = {}) {
     this.json.animations[+index].reset(data);
@@ -273,10 +294,6 @@ export class DomItem extends GroupItem {
     this.json.transitions[+index].reset(data);
   }    
 
-
-  updateKeyframe(index, data = {}) {
-    this.json.keyframes[+index].reset(data);
-  }      
 
   updateSelector(index, data = {}) {
     this.json.selectors[+index].reset(data);
@@ -609,14 +626,7 @@ export class DomItem extends GroupItem {
       ...this.toBackgroundImageCSS(isExport)
     };
   }
-  /**
-   * `@keyframes` 문자열만 따로 생성 
-   */
-  toKeyframeString (isAnimate = false) {
-    return this.json.keyframes
-              .map(keyframe => keyframe.toString(isAnimate))
-              .join('\n\n')
-  }
+  
  
   toSelectorString (prefix = '') {
     return this.json.selectors

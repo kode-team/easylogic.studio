@@ -78,6 +78,8 @@ export default class GradientAssetsProperty extends BaseProperty {
 
       if (isRefresh) this.refresh();
       if (isEmit) this.emit('refreshGradientAssets');
+    } else {
+      alert('Please select a project.')
     }
   } 
   

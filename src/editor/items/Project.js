@@ -1,5 +1,4 @@
 import { AssetItem } from "./AssetItem";
-import { clone } from "../../util/functions/func";
 
 export class Project extends AssetItem {
   getDefaultTitle() {
@@ -22,34 +21,22 @@ export class Project extends AssetItem {
     return obj;
   }  
 
-  /**
-   * `@keyframes` 문자열만 따로 생성 
-   */
-  toKeyframeString (isAnimate = false) {
-    return this.json.keyframes
-              .map(keyframe => keyframe.toString(isAnimate))
-              .join('\n\n')
-  }
-
-
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
       itemType: "project",
       name: 'new Project',
       description: '',
-      keyframes: [],      
       rootVariable: '',            
       ...obj
     });
   }
 
   toCloneObject() {
-    var { name, description, keyframes, rootVariable } = this.json;
+    var { name, description, rootVariable } = this.json;
     return {
       ...super.toCloneObject(),
       name,
       description, 
-      keyframes: clone(keyframes),
       rootVariable
     }
   }

@@ -41,7 +41,7 @@ export default class LayerTreeProperty extends BaseProperty {
 
     switch(type) {
     case 'circle': return icon.circle;
-    case 'image': return icon.outline_image;
+    case 'image': return icon.photo;
     case 'text': return icon.title;
     case 'cube' : return icon.cube;
     case 'path': return icon.edit;

@@ -129,9 +129,9 @@ export class Keyframe extends Property {
 
   toOffsetString (it) {
 
-    var tabString = '        '
+    var tabString = '      '
 
-    return `  ${it.offset.toString()} {
+    return `${it.offset.toString()} {
 ${tabString}${it.properties.map(p => {
   if (this.isMultiStyle(p.key)) {
     return this.getMultiStyleString(p)
@@ -139,13 +139,19 @@ ${tabString}${it.properties.map(p => {
     var value = p.value.toString();
 
     if (value) {
-      return `${p.key}: ${value};`
+
+      var key = p.key; 
+
+      if (key === 'x') key = 'left';
+      else if (key === 'y') key = 'top';
+
+      return `${key}: ${value};`
     } else {
       return '';
     }
   }
 }).join('').replace(/\;/g, ';\n' + tabString).trim()}
-    }`
+  }`
   }  
 
 

@@ -31,7 +31,7 @@ export default class KeyFrameProperty extends BaseProperty {
 
   makeKeyframeTemplate (keyframe, index) {
     index = index.toString()
-    return `
+    return /*html*/`
       <div class='keyframe-item' draggable='true' ref='$keyframeIndex${index}' data-index='${index}'>
         <div class='title'>
           <div class='name'>${keyframe.name}</div>

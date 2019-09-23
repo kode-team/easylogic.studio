@@ -55,36 +55,36 @@ export default class CodeViewProperty extends BaseProperty {
     cssCode = this.filterKeyName(cssCode.trim())
 
 
-    return `
+    return /*html*/`
       <div class=''>
        
         ${cssCode ? 
-          `<div>
+          /*html*/`<div>
           <pre title='CSS'>${cssCode}</pre>
           </div>` : ''
         }
 
         ${selectorCode.length ? 
-          `<div>
+          /*html*/`<div>
             ${selectorCode.map(selector => {
               return `<pre title='${selector.selector}'>${selector.toPropertyString()}</pre>`
-            })}
+            }).join('')}
             
           </div>` : ''
         }
 
         ${keyframeCode ?         
-          `<div>
+          /*html*/`<div>
           <pre title='Keyframe'>${keyframeCode}</pre>
         </div>` : ''}
         ${rootVariable ? 
-          `<div>
+          /*html*/`<div>
           <label>:root</label>
           <pre>${rootVariable}</pre>
           </div>` : ''
         }
         ${svgCode ? 
-          `<div>
+          /*html*/`<div>
           <pre title='SVG'>${svgCode}</pre>
           </div>` : ''
         }

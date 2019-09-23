@@ -47,7 +47,7 @@ export default class SVGFilterAssetsProperty extends BaseProperty {
         return SVGFilter.parse(filter);
       })
 
-      return `
+      return /*html*/`
         <div class='svgfilter-item' data-index="${index}">
           <div class='preview' data-index="${index}">
             <svg width="0" height="0">
@@ -85,6 +85,8 @@ export default class SVGFilterAssetsProperty extends BaseProperty {
 
       if (isRefresh) this.refresh();
       if (isEmit) this.emit('refreshSVGFilterAssets');
+    } else {
+      alert('Please select a project.')
     }
   } 
   

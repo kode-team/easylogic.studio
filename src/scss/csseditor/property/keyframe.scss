@@ -1,5 +1,5 @@
 .keyframe-list {
-    grid-template-columns: 1fr !important;
+    display: block;
   
     .keyframe-item {
       display: grid; 
@@ -9,6 +9,11 @@
       margin-bottom: 5px;
       padding: 5px;  
       cursor: pointer;
+
+      &:first-child {
+        margin-top: 5px;
+      }
+
       &.selected {
         background-color: rgba($border-color, 0.5);
       }

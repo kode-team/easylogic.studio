@@ -29,9 +29,9 @@
             padding: 2px 0px;
 
             span {
-              padding: 4px 6px;
+              padding: 2px 4px;
               font-weight: bold;
-              border-radius: 5px;
+              border-radius: 3px;
               @include title-background-2($selected-color, $selected-font-color);
             }
         }

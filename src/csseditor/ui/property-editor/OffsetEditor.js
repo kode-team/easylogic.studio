@@ -44,7 +44,7 @@ export default class OffsetEditor extends UIElement {
 
 
   templateForOffsetInput () {
-    return `
+    return /*html*/`
       <div class='offset-input' >
         <div class='title'>
           <label>Offset</label>
@@ -66,7 +66,7 @@ export default class OffsetEditor extends UIElement {
   }
 
   templateForProperty() {
-    return `<CSSPropertyEditor ref='$offsetPropertyEditor' onchange='changeCSSPropertyEditor' />`
+    return /*html*/`<CSSPropertyEditor ref='$offsetPropertyEditor' onchange='changeCSSPropertyEditor' />`
   }  
 
   templateForOffset () {
@@ -74,9 +74,7 @@ export default class OffsetEditor extends UIElement {
   }
 
   makeOffset (offset, index) {
-    var css = `left: ${offset.offset}; background-color: ${offset.color || '#3174ad'};`
-    
-    return `<div class='offset-item' style='${css}' data-offset-index='${index.toString()}'></div>`
+    return `<div class='offset-item' style='left: ${offset.offset};' data-offset-index='${index.toString()}'></div>`
   }
 
 

@@ -4,7 +4,7 @@ import icon from "../icon/icon";
 export default class AddImage extends MenuItem {
 
   getIconString() {
-    return icon.outline_image;
+    return icon.photo;
   }
 
   getTitle() {

@@ -37,7 +37,7 @@ export default class BackgroundPositionEditor extends UIElement {
             style: {
                 'background-image': 'linear-gradient(to top right, black, white)',
                 'background-repeat': this.state.repeat,
-                'background-size': '5px 5px'
+                'background-size': '7px 7px'
             }
         }
     }

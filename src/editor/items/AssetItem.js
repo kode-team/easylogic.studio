@@ -1,6 +1,7 @@
 import { SVGFilter } from "../css-property/SVGFilter";
 import { clone } from "../../util/functions/func";
 import { Item } from "./Item";
+import { Keyframe } from "../css-property/Keyframe";
 
 export class AssetItem extends Item {
 
@@ -10,10 +11,54 @@ export class AssetItem extends Item {
       gradients: [],
       svgfilters: [],
       svgimages: [],
+      keyframes: [],      
       images: [],     //  { id: xxxx, url : '' }
       ...obj
     });
   }
+
+
+  addKeyframe(keyframe) {
+    this.json.keyframes.push(keyframe);
+    return keyframe;
+  }     
+
+
+  createKeyframe(data = {}) {
+    return this.addKeyframe(
+      new Keyframe({
+        checked: true,
+        ...data
+      })
+    );
+  }    
+  
+
+  removeKeyframe(removeIndex) {
+    this.removePropertyList(this.json.keyframes, removeIndex);
+  }    
+
+
+  sortKeyframe(startIndex, targetIndex) {
+    this.sortItem(this.json.keyframes, startIndex, targetIndex);
+  }    
+
+
+  updateKeyframe(index, data = {}) {
+    this.json.keyframes[+index].reset(data);
+  }      
+
+
+/**
+   * `@keyframes` 문자열만 따로 생성 
+   */
+  toKeyframeString (isAnimate = false) {
+    return this.json.keyframes
+              .map(keyframe => keyframe.toString(isAnimate))
+              .join('\n\n')
+  }  
+
+
   // 모든 Assets 은  JSON 포맷만가진다. 따로 문자열화 하지 않는다. 
   // {color, name, variable}
   // {gradient,name,variable}
@@ -51,13 +96,15 @@ export class AssetItem extends Item {
   }
 
   toCloneObject() {
+    var json = this.json; 
     return {
       ...super.toCloneObject(),
-      colors: clone(this.json.colors),
-      gradients: clone(this.json.gradients),
-      svgfilters: clone(this.json.svgfilters),
-      svgimages: clone(this.json.svgimages),
-      images: clone(this.json.images)
+      colors: clone(json.colors),
+      gradients: clone(json.gradients),
+      svgfilters: clone(json.svgfilters),
+      svgimages: clone(json.svgimages),
+      images: clone(json.images),
+      keyframes: json.keyframes.map(keyframe => keyframe.clone()),      
     }
   }
 

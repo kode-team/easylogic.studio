@@ -28,7 +28,7 @@ export default class KeyframePopup extends BasePopup {
   }
 
   getBody() {
-    return `
+    return /*html*/`
     <div class='keyframe-popup' ref='$popup'>
       <div class="box">
         ${this.templateForName()}
@@ -38,15 +38,15 @@ export default class KeyframePopup extends BasePopup {
   }
 
   templateForOffset () {
-    return `
+    return /*html*/`
       <div>
-        <OffsetEditor />
+        <OffsetEditor ref='$offsetEditor' />
       </div>
     `
   }
 
   templateForName() {
-    return `
+    return /*html*/`
       <div class='name'>
         <label>Name</label>
         <div class='input grid-1'>
@@ -84,7 +84,7 @@ export default class KeyframePopup extends BasePopup {
 
   [EVENT("showKeyframePopup")](data) {
     this.setState(data);
-    this.refresh()
+    this.refresh();
 
     this.show(240);
 
