@@ -292,14 +292,17 @@ const applyElementAttribute = ($element, key, value) => {
      * style: { key: value }
      */
     if (isNotString(value)) {
-      // 문자열이 아니라 객체 일때는 직접 입력하는 방식으로
-      keyEach(value, (sKey, sValue) => {
-        if (!sValue) {
-          $element.removeStyle(sKey);
-        } else {
-          $element.css(sKey, sValue);
-        }
-      });
+
+      $element.css(value);
+
+      // // 문자열이 아니라 객체 일때는 직접 입력하는 방식으로
+      // keyEach(value, (sKey, sValue) => {
+      //   if (isUndefined(sValue)) {
+      //     $element.removeStyle(sKey);
+      //   } else {
+      //     $element.css(sKey, sValue);
+      //   }
+      // });
     }
 
     return;

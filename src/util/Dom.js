@@ -316,12 +316,11 @@ export default class Dom {
 
   css(key, value) {
     if (isNotUndefined(key) && isNotUndefined(value)) {
-      this.el.style[key] = value;
+      Object.assign(this.el.style, {[key]: value});
     } else if (isNotUndefined(key)) {
       if (isString(key)) {
-        return getComputedStyle(this.el)[key];
+        return getComputedStyle(this.el)[key];  
       } else {
-
         Object.assign(this.el.style, key);
       }
     }

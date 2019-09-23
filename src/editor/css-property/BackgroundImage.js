@@ -279,6 +279,8 @@ export class BackgroundImage extends Property {
 
   static changeImageType (options) {
     switch  (options.type) {
+    case 'static-gradient':
+      return new StaticGradient(options);
     case 'linear-gradient': 
       return new LinearGradient(options);
     case 'repeating-linear-gradient': 

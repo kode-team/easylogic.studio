@@ -84,7 +84,9 @@ export default class Inspector extends UIElement {
                 <TextFillProperty />
                 <FontSpacingProperty />
                 <TextClipProperty />
-
+                <!-- <RootVariableProperty /> -->
+                <!-- <VariableProperty /> -->
+                <SelectorProperty />
 
                 <div class='empty'></div>                
               </div>              
@@ -92,7 +94,7 @@ export default class Inspector extends UIElement {
                 <MotionProperty />              
                 <!-- <RootVariableProperty /> -->
                 <!-- <VariableProperty /> -->
-                <SelectorProperty />
+                <!-- SelectorProperty /> --> 
                 <TransitionProperty />
                 <KeyframeProperty />                              
                 <AnimationProperty />

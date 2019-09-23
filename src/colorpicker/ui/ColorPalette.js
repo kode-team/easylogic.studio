@@ -3,7 +3,7 @@ import Event, { POINTERSTART, POINTEREND, POINTERMOVE } from "../../util/Event";
 
 export default class ColorPalette extends UIElement {
   template() {
-    return `
+    return /*html*/`
         <div class="color-panel">
             <div ref="$saturation" class="saturation">
                 <div ref="$value" class="value">

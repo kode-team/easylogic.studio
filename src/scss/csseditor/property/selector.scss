@@ -5,11 +5,17 @@
       display: grid; 
       grid-template-columns: 1fr; 
       grid-column-gap: 4px;
-      border: 1px solid $border-color;
+      // border: 1px solid $border-color;
       margin-bottom: 5px;
       padding: 5px;  
       cursor: pointer;
       height: 30px;
+
+
+      &:first-child {
+        margin-top: 5px;
+      }
+
       &.selected {
         background-color: rgba($border-color, 0.5);
       }

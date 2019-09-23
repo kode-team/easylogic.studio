@@ -22,6 +22,7 @@ import PathDataEditor from "./PathDataEditor";
 import PolygonDataEditor from "./PolygonDataEditor";
 import OffsetPathListEditor from "./OffsetPathListEditor";
 import BorderEditor from "./BorderEditor";
+import { editor } from "../../../editor/editor";
 
 
 const blend_list = [
@@ -148,9 +149,15 @@ export default class CSSPropertyEditor extends UIElement {
       return; 
     }
 
-    this.state.properties.push({
-      key, value: this.getPropertyDefaultValue(key)
-    })
+    var value = this.getPropertyDefaultValue(key)
+
+    var current = editor.selection.current;  
+
+    if (current) {
+      value = current[key]
+    }
+
+    this.state.properties.push({ key, value })
 
     this.refresh();
     this.modifyProperty();
@@ -190,25 +197,25 @@ export default class CSSPropertyEditor extends UIElement {
         </div>
       `
     } else if (property.key === 'filter') {
-      return `
+      return /*html*/`
         <div class='property-editor'>
           <FilterEditor ref='$filter${index}' value="${property.value}" onChange="changeFilterProperty" />
         </div>
       `
     } else if (property.key === 'backdrop-filter') {
-      return `
+      return /*html*/`
         <div class='property-editor'>
           <FilterEditor ref='$backdropFilter${index}' value="${property.value}" onChange="changeBackdropFilterProperty" />
         </div>
       `      
     } else if (property.key === 'box-shadow') {
-      return `
+      return /*html*/`
         <div class='property-editor'>
           <BoxShadowEditor ref='$boxshadow${index}' value="${property.value}" hide-label="false" onChange="changeBoxShadowProperty" />
         </div>
       `      
     } else if (property.key === 'text-shadow') {
-      return `
+      return /*html*/`
         <div class='property-editor'>
           <TextShadowEditor ref='$textshadow${index}' value="${property.value}" hide-label="false" onChange="changeTextShadowProperty" />
         </div>
@@ -490,7 +497,7 @@ export default class CSSPropertyEditor extends UIElement {
       default: 
         return /*html*/`
           <div class='property-editor'>
-            <RangeEditor ref='rangeEditor${index}' key='${property.key}' value='${property.value}' onChange="changeRangeEditor" />
+            <RangeEditor ref='rangeEditor${index}' key='${property.key}' value='${property.value}' max="1000" onChange="changeRangeEditor" />
           </div>
         `
     }

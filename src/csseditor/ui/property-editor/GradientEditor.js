@@ -1,15 +1,15 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
-import { LOAD, CLICK, POINTERSTART, MOVE, END, BIND } from "../../../util/Event";
+import { LOAD, CLICK, POINTERSTART, MOVE, END, BIND, PREVENT, DOUBLECLICK } from "../../../util/Event";
 import { Length } from "../../../editor/unit/Length";
-import Color from "../../../util/Color";
 import RangeEditor from "./RangeEditor";
-import { convertMatches, reverseMatches } from "../../../util/functions/parser";
 
 import SelectEditor from "./SelectEditor";
 import InputRangeEditor from "./InputRangeEditor";
 import { BackgroundImage } from "../../../editor/css-property/BackgroundImage";
-import { LinearGradient } from "../../../editor/image-resource/LinearGradient";
 import { editor } from "../../../editor/editor";
+import { Gradient } from "../../../editor/image-resource/Gradient";
+import icon from "../icon/icon";
+import { clone } from "../../../util/functions/func";
 
 var radialTypeList = [
   'circle',
@@ -34,6 +34,24 @@ var imageTypeList = [
   'repeating-conic-gradient',
   'image-resource'
 ]
+
+var hasRadialPosition = {
+  'radial-gradient': true,
+  'repeating-radial-gradient': true,
+  'conic-gradient': true,
+  'repeating-conic-gradient': true
+}
+
+var presetPosition = {
+  top: [ '50%', '0%' ],
+  'top left': [ '0%', '0%' ],
+  'top right': [ '100%', '0%' ],
+  left: [ '0%', '50%' ],
+  right: [ '100%', '50%' ],
+  bottom: [ '50%', '100%' ],
+  'bottom left': [ '0%', '100%' ],
+  'bottom right': [ '100%', '100%' ]
+}
 
 export default class GradientEditor extends UIElement  {
 
@@ -72,6 +90,17 @@ export default class GradientEditor extends UIElement  {
         <div class='gradient-editor' data-selected-editor='${image.type || 'static-gradient'}'>
             <div class='gradient-preview'>
               <div class='gradient-view' ref='$gradientView'></div>
+              <div class='drag-pointer' ref='$dragPosition'></div>
+              <div class='preset-position'>
+                <div data-value='top'>${icon.chevron_right}</div>
+                <div data-value='right'>${icon.chevron_right}</div>
+                <div data-value='left'>${icon.chevron_right}</div>
+                <div data-value='bottom'>${icon.chevron_right}</div>
+                <div data-value='top left'>${icon.chevron_right}</div>
+                <div data-value='top right'>${icon.chevron_right}</div>
+                <div data-value='bottom left'>${icon.chevron_right}</div>
+                <div data-value='bottom right'>${icon.chevron_right}</div>                
+              </div>
             </div>
             <div class="picker-tab">
               <div class="picker-tab-list" ref="$tab">
@@ -95,10 +124,10 @@ export default class GradientEditor extends UIElement  {
                 <RangeEditor label='Angle' ref='$angle' calc="false" units="deg" min="-720" max="720" key='angle' onchange='changeKeyValue' />
               </div>
               <div data-editor='centerX'>
-                <RangeEditor label='Center X' ref='$radialPositionX' calc="false"  key='radialPositionX' onchange='changeKeyValue' />
+                <RangeEditor label='Center X' ref='$radialPositionX' calc="false" value="50%"  key='radialPositionX' onchange='changeKeyValue' />
               </div>                
               <div data-editor='centerY'>                      
-                <RangeEditor label='Center Y' ref='$radialPositionY' calc="false" key='radialPositionY' onchange='changeKeyValue' />
+                <RangeEditor label='Center Y' ref='$radialPositionY' calc="false" value="50%" key='radialPositionY' onchange='changeKeyValue' />
               </div>                
               <div data-editor='radialType'>              
                 <SelectEditor label='Radial Type' ref='$radialType' value="" options="${radialTypeList.join(',')}" key='radialType' onchange='changeKeyValue' />
@@ -106,6 +135,59 @@ export default class GradientEditor extends UIElement  {
             </div>            
         </div>
       `;
+  }
+
+  [CLICK('$el .preset-position [data-value]')] (e) {
+    var type = e.$delegateTarget.attr('data-value')
+
+    if (presetPosition[type]) {
+      this.state.image.radialPosition = clone(presetPosition[type])
+      this.refresh();
+      this.updateData();
+    }
+
+  }
+
+  [DOUBLECLICK('$gradientView') + PREVENT] (e) {
+    this.state.image.radialPosition = ['50%', '50%']
+    this.refresh();
+    this.updateData();
+  }
+
+  [POINTERSTART('$gradientView') + MOVE('moveDragPosition')]  (e) {
+    var parent = this.refs.$dragPosition.parent();
+    this.containerRect = parent.rect();
+    this.startXY = e.xy; 
+
+  }
+
+  moveDragPosition (dx, dy) {
+    var x = this.startXY.x + dx; 
+    var y = this.startXY.y + dy; 
+
+    if (this.containerRect.x > x) {
+      x = this.containerRect.x; 
+    } else if (this.containerRect.x + this.containerRect.width < x) {
+      x = this.containerRect.x + this.containerRect.width; 
+    }
+
+    if (this.containerRect.y > y) {
+      y = this.containerRect.y; 
+    } else if (this.containerRect.y + this.containerRect.height < y) {
+      y = this.containerRect.y + this.containerRect.height; 
+    }    
+
+    var left = Length.percent((x - this.containerRect.x ) / this.containerRect.width  * 100) 
+    var top = Length.percent((y - this.containerRect.y ) / this.containerRect.height  * 100) 
+
+    this.state.image.radialPosition = [ left, top]
+
+    this.bindData('$dragPosition');
+    this.bindData('$gradientView')    
+    this.children.$radialPositionX.setValue(left)
+    this.children.$radialPositionY.setValue(top)
+
+    this.updateData();
   }
 
   [CLICK('$tab .picker-tab-item')] (e) {
@@ -132,8 +214,8 @@ export default class GradientEditor extends UIElement  {
 
     if (key === 'radialPositionX' || key === 'radialPositionY') {
       this.state.image['radialPosition'] = [
-        this.state.image.radialPositionX || 'center', 
-        this.state.image.radialPositionY || 'center'
+        this.state.image.radialPositionX || '50%', 
+        this.state.image.radialPositionY || '50%'
       ] 
     }
 
@@ -194,8 +276,24 @@ export default class GradientEditor extends UIElement  {
     }
   }
 
+  [BIND('$dragPosition')] () {
+    var left = '50%'
+    var top = '50%'
+
+    if (hasRadialPosition[this.state.image.type]) {
+      var [left, top] = this.state.image.radialPosition;
+    }
+
+    return {
+      style: {
+        left, top 
+      }
+    }
+  }
+
   [LOAD('$stepList')] () {
-    return this.state.image.colorsteps.map( (it, index) => {
+    var colorsteps = this.state.image.colorsteps || [] 
+    return colorsteps.map( (it, index) => {
 
       var selected = editor.selection.isSelectedColorStep(it.id) ? 'selected' : '';
 
@@ -211,7 +309,7 @@ export default class GradientEditor extends UIElement  {
     if (this.currentStep) {
 
       this.currentStep.cut = this.refs.$cut.checked()
-      // this.$currentStep.attr('data-cut', this.currentStep.cut);
+
       this.refresh()
       this.updateData();      
     } 
@@ -277,44 +375,42 @@ export default class GradientEditor extends UIElement  {
 
 
     this.currentStep.percent = percent;
-    // this.$currentStep.css({
-    //   left: Length.percent(percent)
-    // })
+
     this.children.$range.setValue(Length.percent(percent));    
     this.state.image.sortColorStep();
     this.refresh()
-    // console.log(this.state.image.toString());
-    // this.bindData('$gradientView');
-    // this.bindData('$stepList');
+
     this.updateData();    
   }
 
 
   refresh() {
     this.load();
-    // this.setColorUI();
   }
 
   getLinearGradient () {
 
     var { image } = this.state; 
 
-    return LinearGradient.toLinearGradient(image.colorsteps);
-
-  }
-
-  setColorUI() {
-    // this.refs.$stepList.css( "background-image", this.getLinearGradient());
+    return `linear-gradient(to right, ${Gradient.toColorString(image.colorsteps)})`;
 
   }
 
   [EVENT('setColorStepColor')] (color) {
 
-    if (this.currentStep) {
-      this.currentStep.color = color;
+    if (this.state.image.type === 'static-gradient') {
+      this.state.image.colorsteps[0].color = color; 
       this.refresh()
-      this.updateData();
+      this.updateData();      
+    } else {
+
+      if (this.currentStep) {
+        this.currentStep.color = color;
+        this.refresh()
+        this.updateData();
+      }
     }
+
   }
 
   updateData(data = {}) {

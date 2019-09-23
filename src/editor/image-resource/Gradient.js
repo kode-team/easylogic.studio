@@ -194,6 +194,11 @@ export class Gradient extends ImageResource {
    */
   getColorString() {
     var colorsteps = this.colorsteps;
+
+    return Gradient.toColorString(colorsteps);
+  }
+
+  static toColorString (colorsteps = [] ) {
     if (!colorsteps.length) return '';
 
     var newColors = colorsteps.map((c, index) => {
