@@ -39,6 +39,14 @@ export class AssetItem extends Item {
   }    
 
 
+  sortItem(arr, startIndex, targetIndex) {
+    arr.splice(
+      targetIndex + (startIndex < targetIndex ? -1 : 0),
+      0,
+      ...arr.splice(startIndex, 1)
+    );
+  }
+
   sortKeyframe(startIndex, targetIndex) {
     this.sortItem(this.json.keyframes, startIndex, targetIndex);
   }    

@@ -58,7 +58,7 @@ export default class KeyFrameProperty extends BaseProperty {
   makeKeyframeTemplate (keyframe, index) {
     index = index.toString()
     return /*html*/`
-      <div class='keyframe-item' draggable='true' data-selected-value='${keyframe.selectedType}' ref='$keyframeIndex${index}' data-index='${index}'>
+      <div class='keyframe-item' data-selected-value='${keyframe.selectedType}' ref='$keyframeIndex${index}' data-index='${index}'>
         <div class='title'>
           <div class='name'>${keyframe.name}</div>
           <div class='tools'>
@@ -151,26 +151,6 @@ export default class KeyFrameProperty extends BaseProperty {
     return keyframes.map((keyframe, index) => {
       return this.makeKeyframeTemplate(keyframe, index);
     });
-  }
-
-  
-  [DRAGSTART("$keyframeList .keyframe-item .title")](e) {
-    this.startIndex = +e.$delegateTarget.attr("data-index");
-  }
-
-  
-  [DRAGOVER("$keyframeList .keyframe-item") + PREVENT](e) {}
-
-  [DROP("$keyframeList .keyframe-item") + PREVENT](e) {
-    var targetIndex = +e.$delegateTarget.attr("data-index");
-    var current = editor.selection.currentProject;
-    if (!current) return;
-
-    current.sortKeyframe(this.startIndex, targetIndex);
-
-    this.emit('refreshStyleView', current);
-
-    this.refresh();
   }
 
   [CLICK("$add")]() {
