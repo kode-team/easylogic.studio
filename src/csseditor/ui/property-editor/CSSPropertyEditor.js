@@ -75,6 +75,7 @@ export default class CSSPropertyEditor extends UIElement {
   initState() {
     return {
       hideTitle: this.props['hide-title'] === 'true',
+      hideRefresh: this.props['hide-refresh'] === 'true',
       properties: [] 
     };
   }
@@ -92,7 +93,10 @@ export default class CSSPropertyEditor extends UIElement {
 
   template() {
     return /*html*/`
-      <div class='css-property-editor ${OBJECT_TO_CLASS({ 'hide-title': this.state.hideTitle })}'>
+      <div class='css-property-editor ${OBJECT_TO_CLASS({ 
+        'hide-title': this.state.hideTitle, 
+        'hide-refresh': this.state.hideRefresh 
+      })}'>
         <div class='title'>
           <label>Properties</label>
           <div class='tools'>

@@ -6,12 +6,14 @@ import Dom from "../../../util/Dom";
 import { isUndefined } from "../../../util/functions/func";
 import CSSPropertyEditor from "./CSSPropertyEditor";
 import RangeEditor from "./RangeEditor";
+import InputRangeEditor from "./InputRangeEditor";
 
 
 export default class OffsetEditor extends UIElement {
 
   components() {
     return {
+      InputRangeEditor,
       RangeEditor,
       CSSPropertyEditor
     }
@@ -49,7 +51,7 @@ export default class OffsetEditor extends UIElement {
         <div class='title'>
           <label>Offset</label>
           <div class='tools'>
-            <RangeEditor key='offset' calc='false' min='0' max='100' step="0.01" ref='$offsetInput' options="%" onchange='changeRangeEditor' />
+            <InputRangeEditor key='offset' calc='false' min='0' max='100' step="0.01" ref='$offsetInput' options="%" onchange='changeRangeEditor' />
           </div>
         </div>
       </div>
@@ -66,7 +68,7 @@ export default class OffsetEditor extends UIElement {
   }
 
   templateForProperty() {
-    return /*html*/`<CSSPropertyEditor ref='$offsetPropertyEditor' onchange='changeCSSPropertyEditor' />`
+    return /*html*/`<CSSPropertyEditor ref='$offsetPropertyEditor' hide-refresh="true" onchange='changeCSSPropertyEditor' />`
   }  
 
   templateForOffset () {

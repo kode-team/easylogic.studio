@@ -88,15 +88,18 @@ export class Keyframe extends Property {
     return super.getDefaultObject({
       itemType: "keyframe",
       name: 'sample',
+      selectedType: 'list',
       offsets: []
     });
   }
 
   toCloneObject() {
+    var {name, selectedType, offsets} = this.json; 
     return {
       ...super.toCloneObject(),
-      name: this.json.name,
-      offsets: this.json.offsets.map(offset => offset.clone())
+      name,
+      selectedType,
+      offsets: offsets.map(offset => offset.clone())
     }
   }
 
@@ -136,7 +139,7 @@ ${tabString}${it.properties.map(p => {
   if (this.isMultiStyle(p.key)) {
     return this.getMultiStyleString(p)
   } else {
-    var value = p.value.toString();
+    var value = (p.value || '').toString();
 
     if (value) {
 
@@ -150,7 +153,7 @@ ${tabString}${it.properties.map(p => {
       return '';
     }
   }
-}).join('').replace(/\;/g, ';\n' + tabString).trim()}
+}).join('').replace(/\;/g, ';' + tabString).trim()}
   }`
   }  
 

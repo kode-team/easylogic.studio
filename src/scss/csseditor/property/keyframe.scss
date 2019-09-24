@@ -2,9 +2,6 @@
     display: block;
   
     .keyframe-item {
-      display: grid; 
-      grid-template-columns: 1fr; 
-      grid-column-gap: 4px;
       border: 1px solid $border-color;
       margin-bottom: 5px;
       padding: 5px;  
@@ -18,9 +15,27 @@
         background-color: rgba($border-color, 0.5);
       }
 
+
+      @each $type in list, code {
+        &[data-selected-value="#{$type}"] {
+          button[data-type="#{$type}"] {
+            background-color: $selected-color;
+            svg {
+              path {
+                fill: $border-color;
+              }
+            }
+          }
+
+          .keyframe-code[data-type="#{$type}"] {
+            display:block; 
+          }
+        }
+      }
+
       .title {
           display: grid;
-          grid-template-columns: 1fr 20px;
+          grid-template-columns: 1fr 60px;
           height: 20px;
 
         .name {
@@ -30,11 +45,39 @@
         .tools {
             vertical-align: middle;
             text-align: right;
+
+            .group {
+              display: inline-block; 
+
+
+            }
         } 
       }
 
       pre {
         white-space: pre-wrap;
+        margin: 0px;
+      }
+
+      .keyframe-code {
+        display: none; 
+        > .offset {
+          display: grid;
+          grid-template-columns: 30px 1fr; 
+          margin-top: 2px;
+          font-size: 12px;
+        }
+        .offset-property-item {
+          display: grid;
+          grid-template-columns: 1fr 1fr; 
+          text-align: left; 
+
+          label {
+            font-weight: bold;
+            color: darken($font-color, 10%);
+            padding-left: 10px;
+          }
+        }
       }
 
 

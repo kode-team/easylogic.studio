@@ -19,6 +19,14 @@
       }
     }
 
+    &.hide-refresh {
+      .css-property-item {
+        .title-2 {
+          display: none; 
+        } 
+      }
+    }
+
     .title {
         display: grid;
         grid-template-columns: 1fr 2fr;
@@ -40,8 +48,6 @@
 
     .css-property-item {
       box-sizing: border-box;
-      padding: 4px 0px;
-      margin-top: 2px;
 
       > .title {
         grid-template-columns: 1fr 30px;

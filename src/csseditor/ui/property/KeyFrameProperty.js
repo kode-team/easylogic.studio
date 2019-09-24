@@ -29,34 +29,89 @@ export default class KeyFrameProperty extends BaseProperty {
     `;
   }
 
+  makeProperty (property) {
+    var key = property.key
+    if (key === 'x') key = 'left';
+    else if (key === 'y') key = 'top';
+
+    return /*html*/`
+      <div class='offset-property-item'>
+        <label>${key}:</label>
+        <div class='value'>${property.value}</div>
+      </div>
+    `
+  }
+
+  makeOffset (offset) {
+    return /*html*/`
+      <div class='offset'>
+        <label>${offset.offset}</label>
+        <div class='properties'>
+          ${offset.properties.map(p => {
+            return this.makeProperty (p);
+          }).join('')}
+        </div>        
+      </div>
+    `    
+  }
+
   makeKeyframeTemplate (keyframe, index) {
     index = index.toString()
     return /*html*/`
-      <div class='keyframe-item' draggable='true' ref='$keyframeIndex${index}' data-index='${index}'>
+      <div class='keyframe-item' draggable='true' data-selected-value='${keyframe.selectedType}' ref='$keyframeIndex${index}' data-index='${index}'>
         <div class='title'>
           <div class='name'>${keyframe.name}</div>
           <div class='tools'>
-              <button type="button" class="del" data-index="${index}">${icon.remove2}</button>
+            <div class='group'>
+              <button type="button" data-type='list'>${icon.list}</button>
+              <button type="button" data-type='code'>${icon.code}</button>
+            </div>
+            <button type="button" class="del" data-index="${index}">${icon.remove2}</button>
           </div>
         </div>
         <div class='offset-list'>
           <div class='container'>
             ${keyframe.offsets.map(o => {
-              return `
+              return /*html*/`
               <div class='offset' style='left: ${o.offset}; background-color: ${o.color}'></div>
               `
             }).join('')}
           </div>
         </div>
-        <div class='keyframe-code'>
-            <pre>${keyframe.toCSSText()}</pre>
+        <div class='keyframe-code' data-type='list'>
+          ${keyframe.offsets.map(offset => {
+            return this.makeOffset(offset);
+          }).join('')}
         </div>
+        <div class='keyframe-code' data-type='code'>
+          <pre>${keyframe.toString().trim()}</pre>
+        </div>        
       </div>
     `
   }
 
-  [CLICK('$keyframeList .keyframe-item')] (e) {
-    var index  = +e.$delegateTarget.attr('data-index');
+  [CLICK('$keyframeList .keyframe-item .title .group button[data-type]')] (e) {
+    var $keyframeItem = e.$delegateTarget.closest('keyframe-item');
+    var index  = +$keyframeItem.attr('data-index');
+    var type = e.$delegateTarget.attr('data-type');
+
+    var current = editor.selection.currentProject;
+    if (!current) return;
+
+    var currentKeyframe = current.keyframes[index];
+
+    if (currentKeyframe) {
+      currentKeyframe.reset({
+        selectedType: type
+      });
+    }
+
+    $keyframeItem.attr('data-selected-value', type)
+
+  }
+
+  [CLICK('$keyframeList .keyframe-item .offset-list')] (e) {
+    var index  = +e.$delegateTarget.closest('keyframe-item').attr('data-index');
 
     var current = editor.selection.currentProject;
     if (!current) return;
@@ -123,11 +178,12 @@ export default class KeyFrameProperty extends BaseProperty {
     var current = editor.selection.currentProject;
     if (current) {
       current.createKeyframe();
-
+      this.refresh();
       this.emit('refreshStyleView', current);
+    } else {
+      alert('Please select a project.')
     }
 
-    this.refresh();
   }
 
   viewKeyframePicker(index) {

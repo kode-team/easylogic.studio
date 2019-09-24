@@ -3791,9 +3791,6 @@ html, body {
   display: block;
 }
 .csseditor[data-theme=dark] .keyframe-list .keyframe-item {
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-column-gap: 4px;
   border: 1px solid #111111;
   margin-bottom: 5px;
   padding: 5px;
@@ -3805,9 +3802,27 @@ html, body {
 .csseditor[data-theme=dark] .keyframe-list .keyframe-item.selected {
   background-color: rgba(17, 17, 17, 0.5);
 }
+.csseditor[data-theme=dark] .keyframe-list .keyframe-item[data-selected-value=list] button[data-type=list] {
+  background-color: #fc554f;
+}
+.csseditor[data-theme=dark] .keyframe-list .keyframe-item[data-selected-value=list] button[data-type=list] svg path {
+  fill: #111111;
+}
+.csseditor[data-theme=dark] .keyframe-list .keyframe-item[data-selected-value=list] .keyframe-code[data-type=list] {
+  display: block;
+}
+.csseditor[data-theme=dark] .keyframe-list .keyframe-item[data-selected-value=code] button[data-type=code] {
+  background-color: #fc554f;
+}
+.csseditor[data-theme=dark] .keyframe-list .keyframe-item[data-selected-value=code] button[data-type=code] svg path {
+  fill: #111111;
+}
+.csseditor[data-theme=dark] .keyframe-list .keyframe-item[data-selected-value=code] .keyframe-code[data-type=code] {
+  display: block;
+}
 .csseditor[data-theme=dark] .keyframe-list .keyframe-item .title {
   display: grid;
-  grid-template-columns: 1fr 20px;
+  grid-template-columns: 1fr 60px;
   height: 20px;
 }
 .csseditor[data-theme=dark] .keyframe-list .keyframe-item .title .name {
@@ -3817,8 +3832,31 @@ html, body {
   vertical-align: middle;
   text-align: right;
 }
+.csseditor[data-theme=dark] .keyframe-list .keyframe-item .title .tools .group {
+  display: inline-block;
+}
 .csseditor[data-theme=dark] .keyframe-list .keyframe-item pre {
   white-space: pre-wrap;
+  margin: 0px;
+}
+.csseditor[data-theme=dark] .keyframe-list .keyframe-item .keyframe-code {
+  display: none;
+}
+.csseditor[data-theme=dark] .keyframe-list .keyframe-item .keyframe-code > .offset {
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  margin-top: 2px;
+  font-size: 12px;
+}
+.csseditor[data-theme=dark] .keyframe-list .keyframe-item .keyframe-code .offset-property-item {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  text-align: left;
+}
+.csseditor[data-theme=dark] .keyframe-list .keyframe-item .keyframe-code .offset-property-item label {
+  font-weight: bold;
+  color: #e6e6e6;
+  padding-left: 10px;
 }
 .csseditor[data-theme=dark] .keyframe-list .keyframe-item .offset-list {
   padding: 0px 10px;
@@ -5533,6 +5571,9 @@ html, body {
 .csseditor[data-theme=dark] .css-property-editor.hide-title .css-property-item > .title label {
   display: none;
 }
+.csseditor[data-theme=dark] .css-property-editor.hide-refresh .css-property-item .title-2 {
+  display: none;
+}
 .csseditor[data-theme=dark] .css-property-editor .title {
   display: grid;
   grid-template-columns: 1fr 2fr;
@@ -5551,8 +5592,6 @@ html, body {
 }
 .csseditor[data-theme=dark] .css-property-editor .css-property-item {
   box-sizing: border-box;
-  padding: 4px 0px;
-  margin-top: 2px;
 }
 .csseditor[data-theme=dark] .css-property-editor .css-property-item > .title {
   grid-template-columns: 1fr 30px;
@@ -11313,9 +11352,6 @@ html, body {
   display: block;
 }
 .csseditor[data-theme=light] .keyframe-list .keyframe-item {
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-column-gap: 4px;
   border: 1px solid #e7e7e7;
   margin-bottom: 5px;
   padding: 5px;
@@ -11327,9 +11363,27 @@ html, body {
 .csseditor[data-theme=light] .keyframe-list .keyframe-item.selected {
   background-color: rgba(231, 231, 231, 0.5);
 }
+.csseditor[data-theme=light] .keyframe-list .keyframe-item[data-selected-value=list] button[data-type=list] {
+  background-color: #4b61ce;
+}
+.csseditor[data-theme=light] .keyframe-list .keyframe-item[data-selected-value=list] button[data-type=list] svg path {
+  fill: #e7e7e7;
+}
+.csseditor[data-theme=light] .keyframe-list .keyframe-item[data-selected-value=list] .keyframe-code[data-type=list] {
+  display: block;
+}
+.csseditor[data-theme=light] .keyframe-list .keyframe-item[data-selected-value=code] button[data-type=code] {
+  background-color: #4b61ce;
+}
+.csseditor[data-theme=light] .keyframe-list .keyframe-item[data-selected-value=code] button[data-type=code] svg path {
+  fill: #e7e7e7;
+}
+.csseditor[data-theme=light] .keyframe-list .keyframe-item[data-selected-value=code] .keyframe-code[data-type=code] {
+  display: block;
+}
 .csseditor[data-theme=light] .keyframe-list .keyframe-item .title {
   display: grid;
-  grid-template-columns: 1fr 20px;
+  grid-template-columns: 1fr 60px;
   height: 20px;
 }
 .csseditor[data-theme=light] .keyframe-list .keyframe-item .title .name {
@@ -11339,8 +11393,31 @@ html, body {
   vertical-align: middle;
   text-align: right;
 }
+.csseditor[data-theme=light] .keyframe-list .keyframe-item .title .tools .group {
+  display: inline-block;
+}
 .csseditor[data-theme=light] .keyframe-list .keyframe-item pre {
   white-space: pre-wrap;
+  margin: 0px;
+}
+.csseditor[data-theme=light] .keyframe-list .keyframe-item .keyframe-code {
+  display: none;
+}
+.csseditor[data-theme=light] .keyframe-list .keyframe-item .keyframe-code > .offset {
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  margin-top: 2px;
+  font-size: 12px;
+}
+.csseditor[data-theme=light] .keyframe-list .keyframe-item .keyframe-code .offset-property-item {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  text-align: left;
+}
+.csseditor[data-theme=light] .keyframe-list .keyframe-item .keyframe-code .offset-property-item label {
+  font-weight: bold;
+  color: #676767;
+  padding-left: 10px;
 }
 .csseditor[data-theme=light] .keyframe-list .keyframe-item .offset-list {
   padding: 0px 10px;
@@ -13055,6 +13132,9 @@ html, body {
 .csseditor[data-theme=light] .css-property-editor.hide-title .css-property-item > .title label {
   display: none;
 }
+.csseditor[data-theme=light] .css-property-editor.hide-refresh .css-property-item .title-2 {
+  display: none;
+}
 .csseditor[data-theme=light] .css-property-editor .title {
   display: grid;
   grid-template-columns: 1fr 2fr;
@@ -13073,8 +13153,6 @@ html, body {
 }
 .csseditor[data-theme=light] .css-property-editor .css-property-item {
   box-sizing: border-box;
-  padding: 4px 0px;
-  margin-top: 2px;
 }
 .csseditor[data-theme=light] .css-property-editor .css-property-item > .title {
   grid-template-columns: 1fr 30px;
