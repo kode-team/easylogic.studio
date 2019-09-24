@@ -153,7 +153,7 @@ ${tabString}${it.properties.map(p => {
       return '';
     }
   }
-}).join('').replace(/\;/g, ';' + tabString).trim()}
+}).join('').replace(/\;/g, ';\n' + tabString).trim()}
   }`
   }  
 
