@@ -25,7 +25,7 @@ export default class ObjectCommand extends UIElement {
         // editor.selection.empty()
         // this.emit('refreshSelection')
         this.emit('hideSubEditor');
-        editor.changeAddType(type)        
+        editor.changeAddType(type)
 
         this.emit('after.change.mode');
     }

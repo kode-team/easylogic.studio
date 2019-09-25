@@ -145,8 +145,8 @@
   
       }      
 
-      $rotate3d-width: 20px;
-      $rotate3d-height: 20px;
+      $rotate3d-width: 60px;
+      $rotate3d-height: 60px;
 
       &[data-position="rotate3d"] {
         left: 50%;
@@ -194,12 +194,12 @@
 
           .x {
             transform: rotateX(90deg) translateZ(0px);
-            border: 2px solid $selected-color; 
+            border: 3px solid $selected-color; 
           }
   
           .y {
             transform: rotateY(90deg) translateZ(0px);
-            border: 2px solid green; 
+            border: 3px solid green; 
           }        
   
         }
@@ -209,7 +209,7 @@
           $color: $selected-color; 
 
           transform: rotate(0deg) translateZ(0px);
-          border: 2px solid $color; 
+          border: 3px solid $color; 
           box-shadow: 0 0 4px 0 rgba(255, 255, 255, 0.5);
 
 

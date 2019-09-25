@@ -8,9 +8,7 @@ import {
   PREVENT
 } from "../../../util/Event";
 
-import {
-  Transform
-} from "../../../editor/css-property/Transform";
+import { Transform } from "../../../editor/css-property/Transform";
 import { editor } from "../../../editor/editor";
 import UIElement, { EVENT } from "../../../util/UIElement";
 import RangeEditor from "./RangeEditor";
@@ -142,7 +140,7 @@ export default class TransformEditor extends UIElement {
   }
 
   makeOneTransformTemplate(type, transform, index) {
-    return `
+    return /*html*/`
       <div class="transform-item" data-index="${index}">
         <div class="title" draggable="true" data-index="${index}">
           <label><span>${(+index)+1}</span> ${type}</label>
@@ -159,7 +157,7 @@ export default class TransformEditor extends UIElement {
             var label = this.getLabel(type, tindex);
             var {min, max, step, units} = this.getRange(type);
 
-            return `
+            return /*html*/`
               <div>
                 <RangeEditor 
                       ref='$range_${type}_${index}_${tindex}' 
@@ -183,7 +181,7 @@ export default class TransformEditor extends UIElement {
 
 
   makeMultiTransformTemplate(type, transform, index) {
-    return `
+    return /*html*/`
       <div class="transform-item" data-index="${index}">
         <div class="title" draggable="true" data-index="${index}">
           <label><span>${(+index)+1}</span> ${type}</label>
@@ -197,25 +195,25 @@ export default class TransformEditor extends UIElement {
 
           ${type === 'translate3d' ? `
             <pre>
-            1 | 0 | 0 | tx
-            0 | 1 | 0 | ty	
-            0 | 0 | 1 | tz	
-            0 | 0 | 0 | 1</pre>
+  1 | 0 | 0 | tx
+  0 | 1 | 0 | ty	
+  0 | 0 | 1 | tz	
+  0 | 0 | 0 | 1</pre>
           `: ''}
 
           ${type === 'matrix' ? `
             <pre>
-            a | c | tx	
-            b | d | ty	
-            0 | 0 | 1</pre>
+  a | c | tx	
+  b | d | ty	
+  0 | 0 | 1</pre>
           `: ''}    
           
           ${type === 'matrix3d' ? `
             <pre>
-            a1 | a2 | a3 | a4	
-            b1 | b2 | b3 | b4	
-            c1 | c2 | c3 | c4	
-            d1 | d2 | d3 | d4</pre>
+  a1 | a2 | a3 | a4	
+  b1 | b2 | b3 | b4	
+  c1 | c2 | c3 | c4	
+  d1 | d2 | d3 | d4</pre>
           `: ''}     
           
           <div class='${type}'>
@@ -224,7 +222,7 @@ export default class TransformEditor extends UIElement {
             var label = this.getLabel(type, tindex);
             var {min, max, step, units} = this.getRange(type);
 
-            return `
+            return /*html*/`
               <div>
                 <NumberInputEditor 
                       ref='$range_${type}_${index}_${tindex}' 

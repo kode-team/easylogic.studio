@@ -2776,8 +2776,8 @@ html, body {
 .csseditor[data-theme=dark] .selection-tool .selection-tool-item[data-position=rotate3d] {
   left: 50%;
   top: 50%;
-  width: 20px;
-  height: 20px;
+  width: 60px;
+  height: 60px;
   cursor: ew-resize;
   border-radius: 0px;
   background-color: transparent;
@@ -2794,8 +2794,8 @@ html, body {
   position: absolute;
   left: 0px;
   top: 0px;
-  width: 20px;
-  height: 20px;
+  width: 60px;
+  height: 60px;
   background-color: transparent;
   border-radius: 50%;
   box-sizing: border-box;
@@ -2811,8 +2811,8 @@ html, body {
   position: absolute;
   left: 0px;
   top: 0px;
-  width: 20px;
-  height: 20px;
+  width: 60px;
+  height: 60px;
   background-color: transparent;
   border-radius: 50%;
   box-sizing: border-box;
@@ -2821,17 +2821,17 @@ html, body {
 .csseditor[data-theme=dark] .selection-tool .selection-tool-item[data-position=rotate3d] .rotate-area .x {
   -webkit-transform: rotateX(90deg) translateZ(0px);
           transform: rotateX(90deg) translateZ(0px);
-  border: 2px solid #fc554f;
+  border: 3px solid #fc554f;
 }
 .csseditor[data-theme=dark] .selection-tool .selection-tool-item[data-position=rotate3d] .rotate-area .y {
   -webkit-transform: rotateY(90deg) translateZ(0px);
           transform: rotateY(90deg) translateZ(0px);
-  border: 2px solid green;
+  border: 3px solid green;
 }
 .csseditor[data-theme=dark] .selection-tool .selection-tool-item[data-position=rotate3d] .z {
   -webkit-transform: rotate(0deg) translateZ(0px);
           transform: rotate(0deg) translateZ(0px);
-  border: 2px solid #fc554f;
+  border: 3px solid #fc554f;
   box-shadow: 0 0 4px 0 rgba(255, 255, 255, 0.5);
 }
 .csseditor[data-theme=dark] .selection-tool .selection-tool-item[data-position=rotate3d] .z .point {
@@ -10337,8 +10337,8 @@ html, body {
 .csseditor[data-theme=light] .selection-tool .selection-tool-item[data-position=rotate3d] {
   left: 50%;
   top: 50%;
-  width: 20px;
-  height: 20px;
+  width: 60px;
+  height: 60px;
   cursor: ew-resize;
   border-radius: 0px;
   background-color: transparent;
@@ -10355,8 +10355,8 @@ html, body {
   position: absolute;
   left: 0px;
   top: 0px;
-  width: 20px;
-  height: 20px;
+  width: 60px;
+  height: 60px;
   background-color: transparent;
   border-radius: 50%;
   box-sizing: border-box;
@@ -10372,8 +10372,8 @@ html, body {
   position: absolute;
   left: 0px;
   top: 0px;
-  width: 20px;
-  height: 20px;
+  width: 60px;
+  height: 60px;
   background-color: transparent;
   border-radius: 50%;
   box-sizing: border-box;
@@ -10382,17 +10382,17 @@ html, body {
 .csseditor[data-theme=light] .selection-tool .selection-tool-item[data-position=rotate3d] .rotate-area .x {
   -webkit-transform: rotateX(90deg) translateZ(0px);
           transform: rotateX(90deg) translateZ(0px);
-  border: 2px solid #4b61ce;
+  border: 3px solid #4b61ce;
 }
 .csseditor[data-theme=light] .selection-tool .selection-tool-item[data-position=rotate3d] .rotate-area .y {
   -webkit-transform: rotateY(90deg) translateZ(0px);
           transform: rotateY(90deg) translateZ(0px);
-  border: 2px solid green;
+  border: 3px solid green;
 }
 .csseditor[data-theme=light] .selection-tool .selection-tool-item[data-position=rotate3d] .z {
   -webkit-transform: rotate(0deg) translateZ(0px);
           transform: rotate(0deg) translateZ(0px);
-  border: 2px solid #4b61ce;
+  border: 3px solid #4b61ce;
   box-shadow: 0 0 4px 0 rgba(255, 255, 255, 0.5);
 }
 .csseditor[data-theme=light] .selection-tool .selection-tool-item[data-position=rotate3d] .z .point {

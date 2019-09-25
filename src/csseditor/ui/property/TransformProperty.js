@@ -73,7 +73,7 @@ export default class TransformProperty extends BaseProperty {
     var current = editor.selection.current || {} 
     var value = current.transform;
 
-    return `<TransformEditor ref='$transformEditor' value='${value}' hide-label="true" onchange='changeTransformEditor' />`
+    return /*html*/`<TransformEditor ref='$transformEditor' value='${value}' hide-label="true" onchange='changeTransformEditor' />`
   }
 
   [EVENT('changeTransformEditor')] (transform) {
