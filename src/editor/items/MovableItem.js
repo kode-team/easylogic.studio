@@ -176,7 +176,7 @@ export class MovableItem extends Item {
         if (area.y2.value < this.screenY.value) { return false; }
         if (area.x.value > this.screenX2.value) { return false; }
         if (area.y.value > this.screenY2.value) { return false; }
-        
+
         return true;
     }
 
@@ -304,4 +304,19 @@ export class MovableItem extends Item {
 
         return v; 
     }
+
+
+  checkInAreaForLayers(area) {
+    var items = [] 
+    this.layers.forEach(layer => {
+
+      items.push(...layer.checkInAreaForLayers(area));
+
+      if (layer.checkInArea(area)) {
+        items.push(layer);
+      }
+    })
+
+    return items; 
+  }
 }

@@ -60,7 +60,10 @@ export default class LayerTreeProperty extends BaseProperty {
       return /*html*/`        
       <div class='layer-item ${selected}' data-depth="${depth}" data-layer-id='${layer.id}' draggable="true">
         <div class='detail'>
-          <label> <span class='icon'>${this.getIcon(layer.itemType)}</span> ${layer.name}</label>
+          <label> 
+            <span class='icon'>${this.getIcon(layer.itemType)}</span> 
+            <span class='name'>${layer.name}</span>
+          </label>
           <div class="tools">
             <button type="button" class="lock" data-lock="${layer.lock}" title='Lock'>${layer.lock ? icon.lock : icon.lock_open}</button>
             <button type="button" class="visible" data-visible="${layer.visible}" title='Visible'>${icon.visible}</button>
@@ -90,7 +93,7 @@ export default class LayerTreeProperty extends BaseProperty {
 
 
   [DOUBLECLICK('$layerList .layer-item')] (e) {
-    this.startInputEditing(e.$delegateTarget.$('label'))
+    this.startInputEditing(e.$delegateTarget.$('.name'))
   }
 
 
@@ -116,11 +119,11 @@ export default class LayerTreeProperty extends BaseProperty {
     });    
   }
 
-  [KEYDOWN('$layerList .layer-item label') + KEY('Enter') + PREVENT + STOP] (e) {
+  [KEYDOWN('$layerList .layer-item .name') + KEY('Enter') + PREVENT + STOP] (e) {
     this.modifyDoneInputEditing(e.$delegateTarget);
   }
 
-  [FOCUSOUT('$layerList .layer-item label') + PREVENT  + STOP ] (e) {
+  [FOCUSOUT('$layerList .layer-item .name') + PREVENT  + STOP ] (e) {
     this.modifyDoneInputEditing(e.$delegateTarget);
   }
 

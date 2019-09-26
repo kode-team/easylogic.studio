@@ -28,12 +28,6 @@ export class ArtBoard extends TimelineItem {
     return "ArtBoard";
   }
 
-  checkInAreaForLayers(area) {
-    return this.layers.filter(layer => {
-      return layer.checkInArea(area);
-    })
-  }
-
   toDefaultCSS() {
     return {
       ...super.toDefaultCSS(),

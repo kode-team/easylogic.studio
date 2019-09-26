@@ -473,7 +473,7 @@ export default class ElementView extends UIElement {
             })
             
         } else {
-            editor.selection.select()
+            // editor.selection.select()
         }
         this.emit('refreshSelection')           
 
