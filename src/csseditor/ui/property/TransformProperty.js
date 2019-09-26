@@ -6,6 +6,7 @@ import {
 import { editor } from "../../../editor/editor";
 import { EVENT } from "../../../util/UIElement";
 import icon from "../icon/icon";
+import { Transform } from "../../../editor/css-property/Transform";
 
 
 
@@ -80,6 +81,12 @@ export default class TransformProperty extends BaseProperty {
 
     editor.selection.reset({ 
       transform
+    })
+
+    editor.selection.each(item => {
+      item.reset({
+        transform: Transform.replaceAll(item.transform, transform)
+      })
     })
 
     this.emit("refreshSelectionStyleView");

@@ -13,6 +13,40 @@
       }
     }
   }
+
+  .selection-pointer {
+    position: absolute;
+    left:0px;
+    top:0px;
+    width:100%;
+    height:100%;
+    pointer-events: none;
+    .marker {
+      position: absolute;
+      // pointer-events: all;
+      left:0px;
+      top:0px;
+      width: 10px;
+      height: 10px;
+      margin-left: -5px;
+      margin-top: -5px;
+      background-color: black;
+      border-radius: 100%;
+
+      &[data-index='1'] {
+        background-color:rgba($selected-color, 0.5);
+      }
+      &[data-index='2'] {
+        background-color:rgba($border-color, 0.6);
+      }
+      &[data-index='3'] {
+        background-color:rgba($border-color, 0.8);
+      }
+      &[data-index='4'] {
+        background-color:rgba($border-color, 0.9);
+      }                  
+    }
+  }
   
   .selection-tool {
     border: $pointer-color 0.5px solid;

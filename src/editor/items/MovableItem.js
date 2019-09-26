@@ -1,6 +1,9 @@
 import { Item } from "./Item";
 import { Length } from "../unit/Length";
 import { round } from "../../util/functions/math";
+import { Transform } from "../css-property/Transform";
+import matrix from "../../util/functions/matrix";
+import Dom from "../../util/Dom";
 
 export class MovableItem extends Item {
 
@@ -224,5 +227,81 @@ export class MovableItem extends Item {
         }
 
         return this;
+    }
+
+    get screenTransform () {
+        return Transform.addTransform(this.json.parent.screenTransform, this.json.transform);
+    }
+
+    getTransform (element) {
+        var list = Transform.parseStyle(Dom.create(element).css('transform'));
+        var m = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
+        if (list.length) {
+            m = list[0].value.map(it => +it);
+        } else {
+            return {
+                rotate : {x: 0, y: 0, z: 0},
+                translate: {x: 0, y: 0, z: 0}
+            }
+        }
+
+        var m11 = m[0],  m21 = m[1],  m31 = m[2], m41 = m[3];
+        var m12 = m[4],  m22 = m[5],  m32 = m[6], m42 = m[7];
+        var m13 = m[8],  m23 = m[9],  m33 = m[10], m43 = m[11];
+        var m14 = m[12], m24 = m[13], m34 = m[14], m44 = m[15];
+        
+
+        var rotateY = Math.asin(-m13);
+        var rotateX;
+        var rotateZ;
+     
+        if (Math.cos(rotateY) !== 0) {
+            rotateX = Math.atan2(m23, m33);
+            rotateZ = Math.atan2(m12, m11);
+        } else {
+            rotateX = Math.atan2(m31, m22);
+            rotateZ = 0;
+        }
+
+        var translateX = m14;
+        var translateY = m24;
+        var translateZ = m34;
+
+        return {
+            rotate: { x: rotateX, y: rotateY, z: rotateZ },
+            translate: { x: translateX, y: translateY, z: translateZ }
+        };
+    }    
+
+    verties ($el, rootElement) {
+
+        var {height: offsetHeight, width: offsetWidth} = $el.offsetRect()
+
+        var w = offsetWidth / 2;
+        var h = offsetHeight / 2;
+
+        var v = {
+            a: {x: -w, y: -h, z: 0},
+            b: {x: w, y: -h, z: 0},
+            c: {x: w, y: h, z: 0},
+            d: {x: -w, y: h, z: 0}
+        };
+
+        var transform = this.getTransform($el.el);
+        while ($el.el) {
+            transform = this.getTransform($el.el);
+
+            v.a = matrix.addVector(matrix.rotateVector(v.a, transform.rotate), transform.translate);
+            v.b = matrix.addVector(matrix.rotateVector(v.b, transform.rotate), transform.translate);
+            v.c = matrix.addVector(matrix.rotateVector(v.c, transform.rotate), transform.translate);
+            v.d = matrix.addVector(matrix.rotateVector(v.d, transform.rotate), transform.translate);
+
+            $el = $el.parent();
+            if ($el.el === rootElement) {
+                break; 
+            }
+        }        
+
+        return v; 
     }
 }

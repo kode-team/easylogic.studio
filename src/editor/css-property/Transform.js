@@ -76,6 +76,44 @@ export class Transform extends Property {
     return Transform.join(obj);
   }
 
+  static replaceAll (oldTransform, newTransform) {
+    var oldT = Transform.parseStyle(oldTransform)
+    var newT = Transform.parseStyle(newTransform)
+
+    for(var i = 0, len = newT.length; i < len ;i++) {
+      var newObject = newT[i];
+      var oldObject = oldT.find(t => t.type === newObject.type);
+
+      if (oldObject) {
+        oldObject.value = newObject.value
+      } else {
+        oldT.push(newObject)
+      }
+    }
+
+    return Transform.join(oldT);
+  }
+
+  static addTransform (oldTransform, newTransform) {
+    var oldT = Transform.parseStyle(oldTransform)
+    var newT = Transform.parseStyle(newTransform)
+
+    for(var i = 0, len = newT.length; i < len ;i++) {
+      var newObject = newT[i];
+      var oldObject = oldT.find(t => t.type === newObject.type);
+
+      if (oldObject) {
+        newObject.value.forEach((v, i) => {
+          oldObject.value[i].value += v.value;
+        })
+      } else {
+        oldT.push(newObject)
+      }
+    }
+
+    return Transform.join(oldT);
+  }
+
   static rotate (transform, angle) {
     return Transform.replace(transform, { type: 'rotate', value: [angle] })
   }

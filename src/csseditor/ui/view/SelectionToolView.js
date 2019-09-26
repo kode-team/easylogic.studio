@@ -53,6 +53,7 @@ export default class SelectionToolView extends UIElement {
             <div class='selection-tool-item' data-position='to top left'></div>
             <div class='selection-tool-item' data-position='to bottom left'></div>
         </div>
+        <div class='selection-pointer' ref='$selectionPointer'></div>
     </div>`
     }
 
@@ -327,7 +328,7 @@ export default class SelectionToolView extends UIElement {
 
             }
 
-            this.parent.updateRealTransformWillChange();
+            // this.parent.updateRealTransformWillChange();
 
         } else {
             this.initSelectionTool();
@@ -382,7 +383,7 @@ export default class SelectionToolView extends UIElement {
     }
 
     [BIND('$rotateZ')] () {
-        var current = editor.selection.current || { transform : '' }  
+        var current = editor.selection.current || { transform: '' }  
 
         var transform = Transform.join(Transform.parseStyle(current.transform).filter(it => {
             switch(it.type) {
@@ -395,7 +396,7 @@ export default class SelectionToolView extends UIElement {
         }))
         return {
             style: {
-                transform: `${transform}`
+                transform
             }
         }
     }
@@ -548,6 +549,7 @@ export default class SelectionToolView extends UIElement {
                 this.bindData('$rotate3d')
                 this.bindData('$rotateArea')                        
             }
+            // this.bindData('$selectionPointer')            
             this.emit('refreshSelectionStyleView'); 
 
         } else {
@@ -581,16 +583,21 @@ export default class SelectionToolView extends UIElement {
         }
 
         this.refs.$selectionTool.attr('data-selected-position', '');
-        this.refreshSelectionToolView(dx, dy);
         this.parent.trigger('removeRealPosition');                
 
         this.emit('refreshCanvasForPartial')
         this.emit('refreshStyleView');
         this.emit('removeGuideLine')
+        this.refreshSelectionToolView(dx, dy);        
     }   
 
     refreshSelectionToolView (dx, dy, type) {
-        this.guideView.move(type || this.pointerType, dx / editor.scale,  dy / editor.scale )
+        if (dx === 0 && dy === 0) {
+
+        } else {
+            this.guideView.move(type || this.pointerType, dx / editor.scale,  dy / editor.scale )
+        }
+
 
         var drawList = this.guideView.calculate();
 
@@ -694,9 +701,40 @@ export default class SelectionToolView extends UIElement {
         
         this.bindData('$rotate3d');
         this.bindData('$rotateArea');     
+        // this.bindData('$selectionPointer')
         
         this.refreshPositionText(x, y, width, height)
 
+    }
+
+
+    [BIND('$selectionPointer')] () {
+
+        var html = '<div></div>'
+
+        var current = editor.selection.current || { id: ''}
+        var element = this.parent.getElement(current.id);
+
+        if (element) {
+            var v = current.verties(element, this.parent.refs.$view.el);
+            // var offset = element.rect();
+            var screenX = current.screenX.value + current.width.value/ 2;
+            var screenY = current.screenY.value + current.height.value/2;
+            var str = ['a', 'b', 'c', 'd'].map((it, index) => {
+                var x = Length.px(v[it].x + screenX); 
+                var y = Length.px(v[it].y + screenY); 
+                var z = Length.px(v[it].z);
+                return `<div class='marker' data-index='${index+1}' style='transform:translate3d(${x},${y},${z})'></div>`    
+            }).join('')
+            
+            html = `<div >${str}</div>`
+
+            // element.append(this.refs.$selectionPointer)
+        }
+
+        return {
+            innerHTML: html 
+        }
     }
 
     refreshPositionText (x, y, width, height) {
