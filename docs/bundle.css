@@ -4231,13 +4231,13 @@ html, body {
   fill: #111111;
 }
 .csseditor[data-theme=dark] .layer-list .layer-item .detail .tools .visible[data-visible=true] svg path {
-  fill: #333;
+  fill: #ffffff;
 }
 .csseditor[data-theme=dark] .layer-list .layer-item .detail .tools .lock svg path {
-  fill: #111111;
+  fill: #ffffff;
 }
 .csseditor[data-theme=dark] .layer-list .layer-item .detail .tools .lock[data-lock=true] svg path {
-  fill: #333;
+  fill: #111111;
 }
 .csseditor[data-theme=dark] .layer-list .layer-item.selected {
   background-color: #535353;
@@ -11823,13 +11823,13 @@ html, body {
   fill: #e7e7e7;
 }
 .csseditor[data-theme=light] .layer-list .layer-item .detail .tools .visible[data-visible=true] svg path {
-  fill: #333;
+  fill: gray;
 }
 .csseditor[data-theme=light] .layer-list .layer-item .detail .tools .lock svg path {
-  fill: #e7e7e7;
+  fill: gray;
 }
 .csseditor[data-theme=light] .layer-list .layer-item .detail .tools .lock[data-lock=true] svg path {
-  fill: #333;
+  fill: #e7e7e7;
 }
 .csseditor[data-theme=light] .layer-list .layer-item.selected {
   background-color: #4a89b6;

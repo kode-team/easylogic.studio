@@ -235,9 +235,11 @@ export class MovableItem extends Item {
 
     getTransform (element) {
         var list = Transform.parseStyle(Dom.create(element).css('transform'));
+
         var m = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
         if (list.length) {
             m = list[0].value.map(it => +it);
+
         } else {
             return {
                 rotate : {x: 0, y: 0, z: 0},
@@ -266,6 +268,7 @@ export class MovableItem extends Item {
         var translateX = m14;
         var translateY = m24;
         var translateZ = m34;
+
 
         return {
             rotate: { x: rotateX, y: rotateY, z: rotateZ },

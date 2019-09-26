@@ -150,6 +150,20 @@ export default class TimelinePlayControl extends UIElement {
         this.refresh();        
     }    
 
+    [CLICK('$repeatStatus')] (e) {
+
+        var count = this.refs.$iteration.value; 
+        var iterationCount = 0; 
+
+        if (count === 0) {
+            iterationCount = 1; 
+        } 
+
+        this.updateData({ iterationCount })
+        this.refs.$iteration.val(iterationCount);
+        this.bindData('$repeatStatus');
+    }
+
     [INPUT('$iteration')] (e) {
         this.updateData({
             iterationCount: +this.refs.$iteration.value

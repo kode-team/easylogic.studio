@@ -23,7 +23,7 @@ export function makeInterpolateTransformLength (layer, property, startValue, end
                     layer, 
                     property, 
                     startValue.value[i] || startValue.value[i-1] || startValue.value[i-2],
-                    endValue.value[i] || endValue.value[i-1] || startValue.value[i-2], 
+                    endValue.value[i] || endValue.value[i-1] || endValue.value[i-2], 
                     startValue.type
                 )
             )

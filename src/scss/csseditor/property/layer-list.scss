@@ -69,7 +69,7 @@
                     &[data-visible='true'] {
                         svg {
                             path {
-                                fill: #333;
+                                fill: $font-color;
                             }
                         }   
                     }
@@ -78,14 +78,14 @@
                 .lock {
                     svg {
                         path {
-                            fill: $border-color;
+                            fill: $font-color;
                         }
                     }
 
                     &[data-lock='true'] {
                         svg {
                             path {
-                                fill: #333;
+                                fill: $border-color;
                             }
                         }   
                     }
