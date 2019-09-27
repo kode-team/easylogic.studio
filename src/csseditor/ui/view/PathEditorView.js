@@ -267,7 +267,7 @@ export default class PathEditorView extends UIElement {
         this.updatePathLayer();
     }
 
-    [POINTERMOVE('$view') + PREVENT] (e) {
+    [POINTERMOVE('$view')] (e) {
         if (this.isMode('draw') && this.state.rect) {            
             this.state.moveXY = {
                 x: e.xy.x - this.state.rect.x, 

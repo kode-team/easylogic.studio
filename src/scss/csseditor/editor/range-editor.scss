@@ -4,7 +4,6 @@ $border-radius: 3px;
     grid-template-columns: 1fr;
     grid-column-gap: 4px;
 
-
     &.has-label {
         grid-template-columns: 60px 1fr;
         grid-column-gap: 2px;
@@ -69,7 +68,8 @@ $border-radius: 3px;
     .range-editor-type {
         display: none;
         vertical-align: middle;
-        grid-template-columns: 1fr 70px;        
+        grid-template-columns: 1fr 70px;     
+        grid-column-gap: 4px;           
 
         .area {
             display: grid; 

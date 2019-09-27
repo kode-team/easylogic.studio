@@ -1800,7 +1800,7 @@ html, body {
   right: 0px;
   bottom: 0px;
   top: 0px;
-  background-color: #2b2b2b;
+  background-color: #424242;
   color: #ffffff;
 }
 .csseditor[data-theme=dark] .tab.number-tab .tab-header {
@@ -1826,7 +1826,6 @@ html, body {
   position: relative;
   padding: 0px 0px 0px 0px;
   box-sizing: border-box;
-  border-bottom: 1px solid #2b2b2b;
   height: 100%;
 }
 .csseditor[data-theme=dark] .tab.number-tab > .tab-header > .tab-item label {
@@ -1874,7 +1873,7 @@ html, body {
   background-color: #fc554f;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"] label svg path {
-  stroke: #2b2b2b;
+  stroke: #424242;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="1"] .tab-content[data-value="1"] {
   display: block;
@@ -1893,7 +1892,7 @@ html, body {
   background-color: #fc554f;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"] label svg path {
-  stroke: #2b2b2b;
+  stroke: #424242;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="2"] .tab-content[data-value="2"] {
   display: block;
@@ -1912,7 +1911,7 @@ html, body {
   background-color: #fc554f;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"] label svg path {
-  stroke: #2b2b2b;
+  stroke: #424242;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="3"] .tab-content[data-value="3"] {
   display: block;
@@ -1931,7 +1930,7 @@ html, body {
   background-color: #fc554f;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"] label svg path {
-  stroke: #2b2b2b;
+  stroke: #424242;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="4"] .tab-content[data-value="4"] {
   display: block;
@@ -1950,7 +1949,7 @@ html, body {
   background-color: #fc554f;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"] label svg path {
-  stroke: #2b2b2b;
+  stroke: #424242;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="5"] .tab-content[data-value="5"] {
   display: block;
@@ -1969,7 +1968,7 @@ html, body {
   background-color: #fc554f;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"] label svg path {
-  stroke: #2b2b2b;
+  stroke: #424242;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="6"] .tab-content[data-value="6"] {
   display: block;
@@ -1988,7 +1987,7 @@ html, body {
   background-color: #fc554f;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"] label svg path {
-  stroke: #2b2b2b;
+  stroke: #424242;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="7"] .tab-content[data-value="7"] {
   display: block;
@@ -2007,7 +2006,7 @@ html, body {
   background-color: #fc554f;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"] label svg path {
-  stroke: #2b2b2b;
+  stroke: #424242;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="8"] .tab-content[data-value="8"] {
   display: block;
@@ -2026,7 +2025,7 @@ html, body {
   background-color: #fc554f;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"] label svg path {
-  stroke: #2b2b2b;
+  stroke: #424242;
 }
 .csseditor[data-theme=dark] .tab.number-tab[data-selected-value="9"] .tab-content[data-value="9"] {
   display: block;
@@ -2076,7 +2075,7 @@ html, body {
   color: black;
 }
 .csseditor[data-theme=dark] .tab > .tab-header > .tab-item.select-reverse.selected {
-  background-color: #2b2b2b;
+  background-color: #424242;
 }
 .csseditor[data-theme=dark] .tab > .tab-body {
   position: absolute;
@@ -2564,7 +2563,7 @@ html, body {
 .csseditor[data-theme=dark] .page-subeditor {
   position: absolute;
   left: 0px;
-  top: -1px;
+  top: 0px;
   right: 0px;
   height: 35px;
   font-size: 12px;
@@ -2575,6 +2574,7 @@ html, body {
   pointer-events: all;
   outline: none;
   border: 1px solid #111111;
+  border-top: 0px;
   color: #ffffff;
   background-color: #2f3538;
   padding: 5px 10px;
@@ -2598,6 +2598,7 @@ html, body {
   pointer-events: all;
   outline: none;
   border: 1px solid #111111;
+  border-top: 0px;
   color: #ffffff;
   background-color: #2f3538;
   padding: 5px 10px;
@@ -2986,6 +2987,10 @@ html, body {
   -webkit-clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
           clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
   cursor: pointer;
+}
+.csseditor[data-theme=dark] .selection-tool .selection-tool-item[data-position=transform-origin] .transform-origin .handle:hover {
+  -webkit-filter: drop-shadow(0px 0px 4px white);
+          filter: drop-shadow(0px 0px 4px white);
 }
 .csseditor[data-theme=dark] .selection-tool .selection-tool-item[data-position=transform-origin] .transform-origin .handle-top {
   left: 50%;
@@ -3406,9 +3411,6 @@ html, body {
   font-weight: 900;
   text-shadow: 2px 2px 3px #111111;
 }
-.csseditor[data-theme=dark] .property > .property-body .property-item .small-editor {
-  margin-bottom: 3px;
-}
 .csseditor[data-theme=dark] .property > .property-footer {
   padding: 0px 6px;
   font-size: 12px;
@@ -3434,6 +3436,12 @@ html, body {
 }
 .csseditor[data-theme=dark] .border-editor > .editor-area {
   padding: 5px 0px;
+}
+.csseditor[data-theme=dark] .border-editor > .editor-area > div {
+  margin-top: 5px;
+}
+.csseditor[data-theme=dark] .border-editor > .editor-area > div:first-child {
+  margin-top: 0px;
 }
 .csseditor[data-theme=dark] .border-editor > .editor-area > div > label {
   padding: 2px 0px;
@@ -5434,6 +5442,7 @@ html, body {
   display: none;
   vertical-align: middle;
   grid-template-columns: 1fr 70px;
+  grid-column-gap: 4px;
 }
 .csseditor[data-theme=dark] .range-editor .range-editor-type .area {
   display: grid;
@@ -8612,9 +8621,6 @@ html, body {
 .csseditor[data-theme=dark] .timeline-value-area .timeline-value-editor .tab-content .offset-input {
   padding-top: 10px;
 }
-.csseditor[data-theme=dark] .timeline-value-area .timeline-value-editor .tab-content .css-property-editor {
-  margin-top: 0px;
-}
 .csseditor[data-theme=dark] .timeline-value-area .timeline-value-editor .tab-content .css-property-item > .title {
   display: none;
 }
@@ -9517,7 +9523,6 @@ html, body {
   position: relative;
   padding: 0px 0px 0px 0px;
   box-sizing: border-box;
-  border-bottom: 1px solid white;
   height: 100%;
 }
 .csseditor[data-theme=light] .tab.number-tab > .tab-header > .tab-item label {
@@ -9552,7 +9557,7 @@ html, body {
   pointer-events: none;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"] {
-  background-color: white;
+  background-color: #4b61ce;
   color: #000b22;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"]:before {
@@ -9571,7 +9576,7 @@ html, body {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"] {
-  background-color: white;
+  background-color: #4b61ce;
   color: #000b22;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"]:before {
@@ -9590,7 +9595,7 @@ html, body {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"] {
-  background-color: white;
+  background-color: #4b61ce;
   color: #000b22;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"]:before {
@@ -9609,7 +9614,7 @@ html, body {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"] {
-  background-color: white;
+  background-color: #4b61ce;
   color: #000b22;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"]:before {
@@ -9628,7 +9633,7 @@ html, body {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"] {
-  background-color: white;
+  background-color: #4b61ce;
   color: #000b22;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"]:before {
@@ -9647,7 +9652,7 @@ html, body {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"] {
-  background-color: white;
+  background-color: #4b61ce;
   color: #000b22;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"]:before {
@@ -9666,7 +9671,7 @@ html, body {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"] {
-  background-color: white;
+  background-color: #4b61ce;
   color: #000b22;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"]:before {
@@ -9685,7 +9690,7 @@ html, body {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"] {
-  background-color: white;
+  background-color: #4b61ce;
   color: #000b22;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"]:before {
@@ -9704,7 +9709,7 @@ html, body {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"] {
-  background-color: white;
+  background-color: #4b61ce;
   color: #000b22;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"]:before {
@@ -10255,7 +10260,7 @@ html, body {
 .csseditor[data-theme=light] .page-subeditor {
   position: absolute;
   left: 0px;
-  top: -1px;
+  top: 0px;
   right: 0px;
   height: 35px;
   font-size: 12px;
@@ -10266,6 +10271,7 @@ html, body {
   pointer-events: all;
   outline: none;
   border: 1px solid #e7e7e7;
+  border-top: 0px;
   color: gray;
   background-color: white;
   padding: 5px 10px;
@@ -10289,6 +10295,7 @@ html, body {
   pointer-events: all;
   outline: none;
   border: 1px solid #e7e7e7;
+  border-top: 0px;
   color: gray;
   background-color: white;
   padding: 5px 10px;
@@ -10677,6 +10684,10 @@ html, body {
   -webkit-clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
           clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
   cursor: pointer;
+}
+.csseditor[data-theme=light] .selection-tool .selection-tool-item[data-position=transform-origin] .transform-origin .handle:hover {
+  -webkit-filter: drop-shadow(0px 0px 4px white);
+          filter: drop-shadow(0px 0px 4px white);
 }
 .csseditor[data-theme=light] .selection-tool .selection-tool-item[data-position=transform-origin] .transform-origin .handle-top {
   left: 50%;
@@ -11097,9 +11108,6 @@ html, body {
   font-weight: 900;
   text-shadow: 2px 2px 3px #e7e7e7;
 }
-.csseditor[data-theme=light] .property > .property-body .property-item .small-editor {
-  margin-bottom: 3px;
-}
 .csseditor[data-theme=light] .property > .property-footer {
   padding: 0px 6px;
   font-size: 12px;
@@ -11125,6 +11133,12 @@ html, body {
 }
 .csseditor[data-theme=light] .border-editor > .editor-area {
   padding: 5px 0px;
+}
+.csseditor[data-theme=light] .border-editor > .editor-area > div {
+  margin-top: 5px;
+}
+.csseditor[data-theme=light] .border-editor > .editor-area > div:first-child {
+  margin-top: 0px;
 }
 .csseditor[data-theme=light] .border-editor > .editor-area > div > label {
   padding: 2px 0px;
@@ -13125,6 +13139,7 @@ html, body {
   display: none;
   vertical-align: middle;
   grid-template-columns: 1fr 70px;
+  grid-column-gap: 4px;
 }
 .csseditor[data-theme=light] .range-editor .range-editor-type .area {
   display: grid;
@@ -16302,9 +16317,6 @@ html, body {
 }
 .csseditor[data-theme=light] .timeline-value-area .timeline-value-editor .tab-content .offset-input {
   padding-top: 10px;
-}
-.csseditor[data-theme=light] .timeline-value-area .timeline-value-editor .tab-content .css-property-editor {
-  margin-top: 0px;
 }
 .csseditor[data-theme=light] .timeline-value-area .timeline-value-editor .tab-content .css-property-item > .title {
   display: none;

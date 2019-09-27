@@ -22,7 +22,7 @@ export default class BaseBox extends UIElement {
   }
 
   [POINTERSTART("$bar")](e) {
-    e.preventDefault();
+    // e.preventDefault();
     this.isDown = true;
   }
 

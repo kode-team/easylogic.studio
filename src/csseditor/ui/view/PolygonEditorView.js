@@ -310,7 +310,7 @@ export default class PolygonEditorView extends UIElement {
         this.updatePolygonLayer(this.getViewRect());
     }
 
-    [POINTERMOVE('$view') + PREVENT] (e) {
+    [POINTERMOVE('$view')] (e) {
         if (this.isMode('draw') && this.state.rect) {            
             this.state.moveXY = {
                 x: e.xy.x - this.state.rect.x, 

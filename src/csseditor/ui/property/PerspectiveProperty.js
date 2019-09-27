@@ -2,6 +2,7 @@ import BaseProperty from "./BaseProperty";
 import { editor } from "../../../editor/editor";
 import { LOAD, CLICK, DEBOUNCE } from "../../../util/Event";
 import { EVENT } from "../../../util/UIElement";
+import icon from "../icon/icon";
 
 export default class PerspectiveProperty extends BaseProperty {
 
@@ -17,6 +18,18 @@ export default class PerspectiveProperty extends BaseProperty {
     return 'perspective'
   }
 
+  getTools() {
+    return `
+        <button type="button" class="remove" ref='$remove'>${icon.remove}</button>
+    `
+  }
+
+
+  [CLICK('$remove')] () {
+    this.trigger('changePerspective', 'perspective', '');
+  }  
+
+
   getBody() {
     return `<div class='property-item' ref='$perspective'></div>`;
   }  
@@ -26,7 +39,7 @@ export default class PerspectiveProperty extends BaseProperty {
 
     var perspective = current['perspective'] || ''
     return /*html*/`
-        <RangeEditor ref='$1' key='perspective' removable="true" value="${perspective}" max="2000px" onchange="changePerspective" />
+        <RangeEditor ref='$1' key='perspective' value="${perspective}" max="2000px" onchange="changePerspective" />
     `;
   }
 

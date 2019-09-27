@@ -203,7 +203,7 @@ export default class ColorWheel extends UIElement {
   }
 
   [POINTERSTART("$drag_pointer")](e) {
-    e.preventDefault();
+    // e.preventDefault();
     this.isDown = true;
   }
 

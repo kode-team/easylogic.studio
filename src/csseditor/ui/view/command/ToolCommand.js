@@ -263,6 +263,9 @@ export default class ToolCommand extends UIElement {
         reader.readAsDataURL(item);
     }
 
+    [COMMAND('remove.asset.image')] (localUrl) {
+        URL.revokeObjectURL(localUrl);
+    }
 
     [COMMAND('update.asset.image')] (item, callback) {
         var reader = new FileReader();

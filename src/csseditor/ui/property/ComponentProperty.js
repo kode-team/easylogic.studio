@@ -142,12 +142,14 @@ export default class ComponentProperty extends BaseProperty {
   }
 
   [EVENT('changeComponentProperty')] (key, value) {
-    var current = editor.selection.current;
 
-    if (current && current.is('component')) {
-      current.reset({ [key]: value })
-      this.emit('refreshSelectionStyleView');
-    }
+
+    editor.selection.each(item => {
+      if (item.is('component')) {
+        item.reset({ [key]: value })
+      }
+    })
+    this.emit('refreshSelectionStyleView');
 
   }
 }

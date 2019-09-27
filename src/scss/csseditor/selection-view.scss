@@ -313,6 +313,9 @@
             clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
             // border-radius: 100%;
             cursor: pointer;
+            &:hover {
+              filter: drop-shadow(0px 0px 4px white);
+            }
           }
          
           .handle-top {

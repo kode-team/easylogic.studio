@@ -39,6 +39,10 @@
     padding: 5px 0px;
 
     > div {
+      margin-top: 5px;
+      &:first-child {
+        margin-top: 0px;
+      }
       > label {
         padding: 2px 0px;
         text-transform: uppercase;

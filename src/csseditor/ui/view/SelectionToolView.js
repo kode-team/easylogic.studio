@@ -693,7 +693,7 @@ export default class SelectionToolView extends UIElement {
                 this.bindData('$transformOrigin');                                             
             }
             // this.bindData('$selectionPointer')            
-            this.emit('refreshSelectionStyleView'); 
+            this.emit('refreshStylePosition'); 
 
         } else {
 
@@ -705,10 +705,18 @@ export default class SelectionToolView extends UIElement {
             this.parent.updateRealPosition();    
             this.emit('refreshCanvasForPartial')     
             
-            var current  = editor.selection.current;
-            if (current.is('cube')) {
-                this.emit('refreshStyleView', current);  
+
+            if (this.pointerType === 'move') {
+
+            } else {
+                editor.selection.each(item => {
+                    if (item.is('component')) {
+                        this.emit('refreshStyleView', item);  
+                    }
+                });
             }
+
+
                 
         }
     }

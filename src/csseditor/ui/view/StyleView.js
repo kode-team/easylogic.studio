@@ -100,21 +100,30 @@ export default class StyleView extends UIElement {
 
   }  
 
-  refreshStyleHeadOne (item) {
-    var $all = this.refs.$head.$(`style[data-id="${item.id}"]`)
-    var $pos = this.refs.$head.$(`style[data-id="${item.id}-move"]`);
-    
-    if ($all) $all.remove()
-    if ($pos) $pos.remove()
+  refreshStyleHeadOne (item, isOnlyOne = false) {
+    var list = [item]
+    if (!isOnlyOne) {
+      list = [item, ...item.allLayers]
+    }
+
+    var selector = list.map(it => {
+      return `style[data-id="${it.id}"],style[data-id="${it.id}-move"]`
+    });
+
+    this.refs.$head.$$(selector).forEach(it => {
+      it.remove();
+    })
 
     this.changeStyleHead(item)
   }
 
 
   refreshStyleHeadPositionOne (item) {
-    var $pos = this.refs.$head.$(`style[data-id="${item.id}-move"]`);
-    
-    if ($pos) $pos.remove()
+    var selector = `style[data-id="${item.id}-move"]`
+
+    this.refs.$head.$$(selector).forEach(it => {
+      it.remove();
+    }) 
 
     this.changeStyleHeadPosition(item)
   }  
@@ -158,16 +167,14 @@ export default class StyleView extends UIElement {
   }
 
   [EVENT('refreshStylePosition')] () {
-
     editor.selection.each(item => {
       this.refreshStyleHeadPositionOne(item);
     })    
   }
 
   [EVENT('refreshSelectionStyleView')] () {
-
     editor.selection.each(item => {
-      this.refreshStyleHeadOne(item);
+      this.refreshStyleHeadOne(item, true);
     })
   }  
 

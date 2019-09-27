@@ -114,6 +114,7 @@ export default class ImageAssetsProperty extends BaseProperty {
 
     this.executeImage(project => {
       project.removeImage(index);
+      this.emit('remove.asset.image', $item.$('.preview img').attr('src'))
     })
   }
 

@@ -379,9 +379,12 @@ export default class ElementView extends UIElement {
     calculateEndedElement (dx, dy) {
         // console.log('end', dx, dy);
         this.children.$selectionTool.refreshSelectionToolView(dx, dy, 'move');
+
         var current = editor.selection.items.length === 1 ? editor.selection.current : null;
 
         this.emit('refreshElement', current);
+
+        this.emit('refreshSelection');
 
         this.emit('removeGuideLine')        
         this.trigger('removeRealPosition');   
@@ -516,10 +519,7 @@ export default class ElementView extends UIElement {
     }
 
     updateElement (item) {
-        if (item.updateFunction) {
-            var currentElement = this.refs.$view.$(`[data-id="${item.id}"]`);
-            item.updateFunction.call(item, currentElement);
-        }
+        item.updateFunction(this.getElement(item.id));
     }
 
     [EVENT('playTimeline')] () {
@@ -538,29 +538,13 @@ export default class ElementView extends UIElement {
         if (obj) {
             // 하나 짜리 바뀌는건 element view 에서 적용하지 않는다. 
             if (!this.currentElement) {
-                this.currentElement = this.refs.$view.$(`[data-id="${obj.id}"]`);
+                this.currentElement = this.getElement(obj.id);
             } else if (this.currentElement && this.currentElement.attr('data-id') != obj.id) {
-                this.currentElement = this.refs.$view.$(`[data-id="${obj.id}"]`);
+                this.currentElement = this.getElement(obj.id);
             }
 
-            if (this.currentElement) {
-                var $content = this.currentElement.$('.content')    
+            obj.updateFunction(this.currentElement);
 
-                if (obj.updateFunction) {
-                    obj.updateFunction.call(obj, this.currentElement);
-                } else {
-                    if (obj.content) {
-                        if(!$content) {
-                            this.currentElement.prepend(Dom.create('div', 'content'))
-                            $content = this.currentElement.$('.content')
-                        }
-                        $content && $content.text(obj.content);
-                    } else {
-                        $content && $content.remove();
-                    }
-                }
-
-            }
         } else {
             this.trigger('addElement')
         }
