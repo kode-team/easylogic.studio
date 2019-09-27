@@ -1,6 +1,6 @@
 import UIElement from "../../../util/UIElement";
 import { Length } from "../../../editor/unit/Length";
-import { LOAD, INPUT, CLICK } from "../../../util/Event";
+import { LOAD, INPUT, CLICK, FOCUS, BLUR } from "../../../util/Event";
 import icon from "../icon/icon";
 
 export default class NumberRangeEditor extends UIElement {
@@ -63,6 +63,14 @@ export default class NumberRangeEditor extends UIElement {
         this.setState({
             value: Length.parse(value)
         })
+    }
+
+    [FOCUS('$propertyNumber')] (e) {
+        this.refs.$propertyNumber.addClass('focused');
+    } 
+
+    [BLUR('$propertyNumber')] (e) {
+        this.refs.$propertyNumber.removeClass('focused');
     }
 
     [CLICK('$remove')] (e) {

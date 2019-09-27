@@ -54,7 +54,7 @@ export default class BackgroundColorProperty extends BaseProperty {
             removable="true"
             onchange="changeSelect" />
         </div>
-        
+        <!--
         <div class='property-item animation-property-item'>
           <span class='add-timeline-property' data-property='rotate'></span>
           <RangeEditor 
@@ -68,6 +68,7 @@ export default class BackgroundColorProperty extends BaseProperty {
             removable="true"
             onchange="changeSelect" />
         </div>
+        -->
         
         <div class='property-item animation-property-item'>
           <span class='add-timeline-property' data-property='mix-blend-mode'></span>
@@ -88,7 +89,7 @@ export default class BackgroundColorProperty extends BaseProperty {
     if (current) {
       this.children.$color.setValue(current['background-color'] || 'rgba(0, 0, 0, 1)')
       this.children.$opacity.setValue(current.opacity || '1')
-      this.children.$rotate.setValue(current.rotate || Length.deg(0))
+      // this.children.$rotate.setValue(current.rotate || Length.deg(0))
       this.children.$mixBlend.setValue(current['mix-blend-mode'])
     }
   }

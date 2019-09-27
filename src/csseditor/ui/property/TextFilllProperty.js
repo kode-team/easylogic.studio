@@ -43,6 +43,7 @@ export default class TextFillProperty extends BaseProperty {
           label='Stroke' 
           key="text-stroke-width" 
           removable="true" 
+          max="50"
           onchange="changeRangeEditor" />
       </div>
     

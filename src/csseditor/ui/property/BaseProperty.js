@@ -117,11 +117,11 @@ export default class BaseProperty extends UIElement {
 
   }
 
-  refreshShowIsNot (type, isRefresh = true ) {
+  refreshShowIsNot (type = '', isRefresh = true ) {
 
     var current = editor.selection.current;
     if (current) {
-      if (current.is(type)) {
+      if (type.includes(current.itemType)) {
         this.hide();
       } else {
         this.show();

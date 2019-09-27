@@ -1,6 +1,6 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
 import { Length } from "../../../editor/unit/Length";
-import { LOAD, INPUT, CLICK } from "../../../util/Event";
+import { LOAD, INPUT, CLICK, FOCUS, BLUR } from "../../../util/Event";
 import icon from "../icon/icon";
 import SelectEditor from "./SelectEditor";
 import { OBJECT_TO_CLASS, OBJECT_TO_PROPERTY, isUndefined } from "../../../util/functions/func";
@@ -70,12 +70,10 @@ export default class RangeEditor extends UIElement {
             ${label ? `<label>${label}</label>` : '' }
             <button type='button' class='type-button' ref='$toggleType'>${icon.autorenew}</button>
             <div class='range-editor-type' data-type='range'>
-                <div class='area'>
-                    <input type='range' ref='$property' value="${realValue}" min="${min}" max="${max}" step="${step}" />
+                <input type='range' ref='$property' value="${realValue}" min="${min}" max="${max}" step="${step}" /> 
+                <div class='area' ref='$rangeArea'>
                     <input type='number' ref='$propertyNumber' value="${realValue}" min="${min}" max="${max}" step="${step}" />
-                    
                     <SelectEditor ref='$unit' key='unit' value="${this.state.selectedUnit || this.state.value.unit}" options="${this.state.units}" onchange='changeUnit' />
-                    
                 </div>
             </div>
             <div class='range-editor-type' data-type='calc'>
@@ -99,6 +97,14 @@ export default class RangeEditor extends UIElement {
             value: Length.parse(value)
         })
     }
+
+    [FOCUS('$propertyNumber')] (e) {
+        this.refs.$rangeArea.addClass('focused');
+    }
+
+    [BLUR('$propertyNumber')] (e) {
+        this.refs.$rangeArea.removeClass('focused');
+    }    
 
     [CLICK('$toggleType')] (e) {
 

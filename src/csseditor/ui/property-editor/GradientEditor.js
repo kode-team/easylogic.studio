@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
-import { LOAD, CLICK, POINTERSTART, MOVE, END, BIND, PREVENT, DOUBLECLICK } from "../../../util/Event";
+import { LOAD, CLICK, POINTERSTART, MOVE, END, BIND, PREVENT, DOUBLECLICK, CHANGE } from "../../../util/Event";
 import { Length } from "../../../editor/unit/Length";
 import RangeEditor from "./RangeEditor";
 
@@ -112,7 +112,7 @@ export default class GradientEditor extends UIElement  {
                 <div data-value='bottom right'>${icon.chevron_right}</div>                
               </div>
               <div data-editor='image-loader'>
-                <input type='file' accept="image/*" />
+                <input type='file' accept="image/*" ref='$file' />
               </div>              
             </div>
             <div class="picker-tab">
@@ -149,6 +149,17 @@ export default class GradientEditor extends UIElement  {
             </div>            
         </div>
       `;
+  }
+
+  [CHANGE('$file')] (e) {
+    var project = editor.selection.currentProject;
+    if (project) {
+      [...e.target.files].forEach(item => {
+        this.emit('update.asset.image', item, (local) => {
+          this.trigger('setImageUrl', local);
+        });
+      })
+    }
   }
 
 

@@ -28,8 +28,19 @@ export class TextLayer extends Layer {
   updateFunction (element) {
     var {content} = this.json;
 
-    element.html(content);
+    element.updateDiff(content);
   }
+
+
+  toNestedCSS() {
+    
+    return [
+      { selector: '> *', cssText: `
+          pointer-events: none;
+        `
+      }
+    ]
+  }  
 
   get html () {
     var {id, itemType, content} = this.json;

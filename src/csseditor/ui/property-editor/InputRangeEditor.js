@@ -1,6 +1,6 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
 import { Length } from "../../../editor/unit/Length";
-import { LOAD, INPUT, CLICK } from "../../../util/Event";
+import { LOAD, INPUT, CLICK, FOCUS, BLUR } from "../../../util/Event";
 import icon from "../icon/icon";
 import SelectEditor from "./SelectEditor";
 import { OBJECT_TO_CLASS, OBJECT_TO_PROPERTY } from "../../../util/functions/func";
@@ -85,6 +85,15 @@ export default class InputRangeEditor extends UIElement {
             value: Length.parse(value)
         })
     }
+
+    [FOCUS('$propertyNumber')] (e) {
+        this.refs.$range.addClass('focused');
+    }
+
+    [BLUR('$propertyNumber')] (e) {
+        this.refs.$range.removeClass('focused');
+    }
+
 
     [CLICK('$remove')] (e) {
         this.updateData({

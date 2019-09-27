@@ -302,7 +302,6 @@ export class BackgroundImage extends Property {
   static parseStyle(style) {
     var backgroundImages = [];
 
-
     if (style["background-image"]) {
       var results = convertMatches(style["background-image"]);
 

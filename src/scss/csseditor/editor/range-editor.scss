@@ -4,6 +4,7 @@ $border-radius: 3px;
     grid-template-columns: 1fr;
     grid-column-gap: 4px;
 
+
     &.has-label {
         grid-template-columns: 60px 1fr;
         grid-column-gap: 2px;
@@ -68,12 +69,19 @@ $border-radius: 3px;
     .range-editor-type {
         display: none;
         vertical-align: middle;
+        grid-template-columns: 1fr 70px;        
 
         .area {
             display: grid; 
-            grid-template-columns: 1fr 50px 20px;
+            grid-template-columns: 1fr 20px;
             // grid-column-gap: 3px;
             font-size: 13px;
+
+
+            &.focused {
+                box-shadow: 0 0 0 1px $selected-color;
+                border-radius: 3px;
+            }            
             
             span {
                 padding: 1px;
@@ -154,7 +162,7 @@ $border-radius: 3px;
     @each $display-type in calc, range {
         &[data-selected-type="#{$display-type}"] {
           .range-editor-type[data-type="#{$display-type}"] {
-            display: inline-block;
+            display: grid;
           }
         }
       }

@@ -70,7 +70,7 @@ export class MovableItem extends Item {
             absoluteX = this.json.parent.screenX.value; 
         }
 
-        this.json.x.set(value - this.json.width.value - absoluteX);
+        this.json.x.set(value - this.json.width.value - absoluteX + 1);
     }    
 
     setScreenY2(value) {
@@ -79,7 +79,7 @@ export class MovableItem extends Item {
             absoluteY = this.json.parent.screenY.value; 
         }
 
-        this.json.y.set(value - this.json.height.value - absoluteY);
+        this.json.y.set(value - this.json.height.value - absoluteY + 1);
     }        
 
 
@@ -89,7 +89,7 @@ export class MovableItem extends Item {
             absoluteX = this.json.parent.screenX.value; 
         }
 
-        this.json.x.set(value - round(this.json.width.value/2, 1) - absoluteX);
+        this.json.x.set(value - (this.json.width.value/2) - absoluteX + 1);
     }        
 
 
@@ -100,7 +100,7 @@ export class MovableItem extends Item {
             absoluteY = this.json.parent.screenY.value; 
         }
 
-        this.json.y.set(value - round(this.json.height.value/2, 1) - absoluteY);
+        this.json.y.set(value - (this.json.height.value/2) - absoluteY + 1);
     }            
 
 
@@ -181,11 +181,9 @@ export class MovableItem extends Item {
     }
 
     toBoundCSS() {
+        var {x: left, y: top, width, height, transform} = this.json; 
         return {
-            top: `${this.json.y}`,
-            left: `${this.json.x}`,
-            width: `${this.json.width}`,
-            height: `${this.json.height}`
+            top,left,width, height, transform
         }
     }
 

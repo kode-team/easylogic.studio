@@ -3,7 +3,6 @@ import { editor, EDIT_MODE_SELECTION } from "../../../../editor/editor";
 import { Length } from "../../../../editor/unit/Length";
 import { uuidShort, uuid } from "../../../../util/functions/math";
 import AssetParser from "../../../../editor/parse/AssetParser";
-import Dom from "../../../../util/Dom";
 import { Project } from "../../../../editor/items/Project";
 import { ArtBoard } from "../../../../editor/items/ArtBoard";
 import { Layer } from "../../../../editor/items/Layer";
@@ -12,6 +11,7 @@ import { ImageLayer } from "../../../../editor/items/layers/ImageLayer";
 import { SVGPathItem } from "../../../../editor/items/layers/SVGPathItem";
 import { SVGPolygonItem } from "../../../../editor/items/layers/SVGPolygonItem";
 import { saveResource, loadResource } from "../../../../editor/util/Resource";
+import { isFunction } from "../../../../util/functions/func";
 
 const ItemClassList = {
     'project': Project,
@@ -264,7 +264,7 @@ export default class ToolCommand extends UIElement {
     }
 
 
-    [COMMAND('update.asset.image')] (item) {
+    [COMMAND('update.asset.image')] (item, callback) {
         var reader = new FileReader();
         reader.onload = (e) => {
             var datauri = e.target.result;
@@ -283,6 +283,7 @@ export default class ToolCommand extends UIElement {
                     local
                 });
                 this.emit('addImageAsset');
+                isFunction(callback) && callback (local);
             }
         }
 

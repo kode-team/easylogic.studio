@@ -53,7 +53,13 @@ export class Selector extends Property {
         var value = p.value.toString();
 
         if (value) {
-          return `${p.key}: ${value};`
+
+          var key = p.key 
+
+          if (key === 'x') key = 'left';
+          else if (key === 'y') key = 'top';
+
+          return `${key}: ${value};`
         } else {
           return '';
         }

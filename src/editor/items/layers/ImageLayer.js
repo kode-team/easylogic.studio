@@ -38,6 +38,7 @@ export class ImageLayer extends Layer {
 
   updateFunction (currentElement) {
     var {src} = this.json;     
+
     if (currentElement.attr('src') != src) {
       currentElement.attr('src', src);
     }

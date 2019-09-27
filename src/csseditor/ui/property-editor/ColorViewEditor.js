@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
-import { CLICK, INPUT, BIND } from "../../../util/Event";
+import { CLICK, INPUT, BIND, FOCUS, BLUR } from "../../../util/Event";
 import icon from "../icon/icon";
 
 export default class ColorViewEditor extends UIElement {
@@ -74,6 +74,13 @@ export default class ColorViewEditor extends UIElement {
         }
     }
 
+    [FOCUS('$colorCode')] (e) {
+        this.refs.$colorCode.addClass('focused');
+    }
+
+    [BLUR('$colorCode')] (e) {
+        this.refs.$colorCode.removeClass('focused');
+    }
 
     [CLICK("$preview")](e) {
         this.viewColorPicker();

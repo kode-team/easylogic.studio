@@ -205,6 +205,9 @@ export default class Dom {
       this.html(childFragment)
     }
   }
+  updateDiff (html) {
+    DomDiff(this, Dom.create('div').html(html))
+  }
 
   find(selector) {
     return this.el.querySelector(selector);

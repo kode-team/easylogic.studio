@@ -45,7 +45,7 @@ export default class TransformOriginProperty extends BaseProperty {
 
 
   [EVENT('refreshSelection', 'refreshSelectionStyleView') + DEBOUNCE(100)]() {
-    this.refreshShowIsNot('project');
+    this.refreshShowIsNot(['project', 'artboard']);
   }
 
   [EVENT('changeTransformOrigin')] (value) {

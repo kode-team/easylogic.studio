@@ -2,11 +2,10 @@ import UIElement, { EVENT } from "../../../util/UIElement";
 import { BIND, POINTERSTART, MOVE, END, IF, KEYUP } from "../../../util/Event";
 import { Length } from "../../../editor/unit/Length";
 
-import { editor, EDIT_MODE_ADD } from "../../../editor/editor";
+import { editor } from "../../../editor/editor";
 import Dom from "../../../util/Dom";
 import SelectionToolView from "./SelectionToolView";
 import GuideLineView from "./GuideLineView";
-import { DomDiff } from "../../../util/DomDiff";
 import PathEditorView from "./PathEditorView";
 import PolygonEditorView from "./PolygonEditorView";
 
@@ -64,7 +63,6 @@ export default class ElementView extends UIElement {
         `
     }
 
-
     [EVENT('after.change.mode')] () {
         this.$el.attr('data-mode', editor.mode);
     }
@@ -95,6 +93,7 @@ export default class ElementView extends UIElement {
             && $el.hasClass('path-editor-view') === false 
             && $el.hasClass('polygon-editor-view') === false
             && $el.hasClass('point') === false
+            && $el.hasClass('handle') === false            
             && $el.hasClass('perspective-handle') === false
             && $el.isTag('svg') === false 
             && $el.isTag('path') === false
@@ -271,13 +270,16 @@ export default class ElementView extends UIElement {
 
     [KEYUP('$view .element-item.text')] (e) {
         var content = e.$delegateTarget.html()
+        var text = e.$delegateTarget.text().trim()
         var id = e.$delegateTarget.attr('data-id');
 
+        var arr = [] 
         editor.selection.items.filter(it => it.id === id).forEach(it => {
-            it.reset({ content })
+            it.reset({ content, text })
+            arr.push({id:it.id, content, text})
         })
 
-        this.emit('refreshContent');
+        this.emit('refreshContent', arr);
     }
 
     checkEditMode () {
@@ -414,12 +416,11 @@ export default class ElementView extends UIElement {
 
     [EVENT('addElement')] () {
         var artboard = editor.selection.currentArtboard || { html : ''} 
-        var html = artboard.html
+        var html = artboard.html;
 
         this.setState({ html }, false)
         // this.bindData('$view');
-        var $div = Dom.create('div').html(html);
-        DomDiff(this.refs.$view, $div)
+        this.refs.$view.updateDiff(html)
 
         this.emit('refreshSelectionTool')
     }

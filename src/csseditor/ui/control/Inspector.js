@@ -97,11 +97,10 @@ export default class Inspector extends UIElement {
                 <!-- SelectorProperty /> --> 
                 <TransitionProperty />                            
                 <AnimationProperty />
-
+                <KeyframeProperty />    
                 <div class='empty'></div>                
               </div>                        
               <div class='tab-content' data-value='4'>
-                <KeyframeProperty />                
                 <ImageAssetsProperty />
                 <!--SVGProperty /-->              
                 <SVGFilterAssetsProperty />

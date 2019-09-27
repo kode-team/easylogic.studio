@@ -44,7 +44,7 @@ export default class ClipPathProperty extends BaseProperty {
   }
 
   getTools() {
-    return `
+    return /*html*/`
       <select ref="$clipPathSelect">      
         ${clipPathList.map(it => {
           return `<option value='${it}'>${it}</option>`
@@ -55,7 +55,7 @@ export default class ClipPathProperty extends BaseProperty {
   }
 
   makeClipPathTemplate (clippath) {
-    return `
+    return /*html*/`
       <div class='clippath-item'>
         <div class='title'>
           <div class='name'>${clippath}</div>
@@ -91,7 +91,7 @@ export default class ClipPathProperty extends BaseProperty {
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)] () {
-    this.refreshShowIsNot('project');
+    this.refreshShowIsNot(['project', 'artboard']);
   }
 
 

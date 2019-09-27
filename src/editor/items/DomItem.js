@@ -688,6 +688,17 @@ ${this.toSelectorString(prefix)}
     return cssString;
   }
 
+
+  generateViewBoundCSS (prefix = '', appendCSS = '') {
+    var cssString = `
+${prefix} {  /* ${this.json.itemType} */
+    ${CSS_TO_STRING(this.toBoundCSS(), '\n')}; 
+}
+`  
+    return cssString;
+  }
+
+
   toBound () {
     var obj = {
       x: this.json.x ? this.json.x.clone() : Length.px(0),

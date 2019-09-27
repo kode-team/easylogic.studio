@@ -10,6 +10,18 @@ import Dom from "../../../util/Dom";
 import { calculateAngle } from "../../../util/functions/math";
 import AreaItem from "../../../editor/items/AreaItem";
 
+var DEFINED_TRANFORM_ORIGIN = {
+    'top': '50% 0%',
+    'right': '100% 50%',
+    'left': '0% 50%',
+    'bottom': '50% 100%',
+    'top-left': '0% 0%',
+    'top-right': '100% 0%',
+    'bottom-left': '0% 100%',
+    'bottom-right': '100% 100%',    
+}
+
+
 /**
  * 원보 아이템의 크기를 가지고 scale 이랑 조합해서 world 의 크기를 구하는게 기본 컨셉 
  */
@@ -28,22 +40,33 @@ export default class SelectionToolView extends UIElement {
             <div class='selection-tool-item' data-position='move'></div>
             <div class='selection-tool-item' data-position='path'>${icon.scatter}</div>
             <svg class='selection-tool-item' data-position='translate' ref='$translate'></svg>            
+            
+            <div class='selection-tool-item' data-position='transform-origin' ref='$transformOrigin'>
+                <div class='transform-origin' >
+                    <div class='handle handle-top' data-value='top'></div>
+                    <div class='handle handle-right' data-value='right'></div>
+                    <div class='handle handle-left' data-value='left'></div>
+                    <div class='handle handle-bottom' data-value='bottom'></div>
+                    <div class='handle handle-top-left' data-value='top-left'></div>
+                    <div class='handle handle-top-right' data-value='top-right'></div>
+                    <div class='handle handle-bottom-left' data-value='bottom-left'></div>
+                    <div class='handle handle-bottom-right' data-value='bottom-right'></div>
+                </div>                
+            </div>
             <div class='selection-tool-item' data-position='rotate3d' ref='$rotate3d'>
                 <div class='rotate-area' ref='$rotateArea'>
                     <div class='y'></div>                
                     <div class='x'></div>
                 </div>            
                 <div class='z' ref='$rotateZ'>
-                    <div class='handle-top'></div>
-                    <div class='handle-right'></div>
-                    <div class='handle-left'></div>
-                    <div class='handle-bottom'></div>
                     <div class='point'></div>                    
+                    <div class='handle-top'></div>                    
                 </div>
                 <div class='translate' ref='$translateZ'>
                     <div class='perspective-handle'></div>
                 </div>
-            </div>           
+
+            </div>                      
 
             <div class='selection-tool-item' data-position='to top'></div>
             <div class='selection-tool-item' data-position='to right'></div>
@@ -86,7 +109,8 @@ export default class SelectionToolView extends UIElement {
                 item.reset({ transform })
             })
             this.bindData('$rotateZ')
-            this.bindData('$rotateArea')            
+            this.bindData('$rotateArea')  
+            this.bindData('$transformOrigin');                      
         } else {
             editor.selection.each(item => {
                 var transform = Transform.join(Transform.parseStyle(item.transform).filter(it => {
@@ -105,6 +129,7 @@ export default class SelectionToolView extends UIElement {
             })
             this.bindData('$rotateZ')
             this.bindData('$rotateArea')    
+            this.bindData('$transformOrigin');            
         }
 
         this.emit('refreshSelectionStyleView');
@@ -301,7 +326,12 @@ export default class SelectionToolView extends UIElement {
 
         editor.selection.setRectCache(this.pointerType === 'move' ? false: true);
 
-        if (this.pointerType === 'rotate3d') {
+        if (this.pointerType === 'transform-origin') {
+            var $point = Dom.create(e.target);
+
+            this.transformOriginValue = $point.attr('data-value')
+
+        } else if (this.pointerType === 'rotate3d') {
             var $point = Dom.create(e.target);
 
             var rect = $point.rect()
@@ -351,6 +381,14 @@ export default class SelectionToolView extends UIElement {
     [BIND('$rotate3d')] () {
         var current = editor.selection.current || { 'transform-origin'  : '50% 50%' }
 
+        if (current && current.is && current.is('artboard')) {
+            return {
+                style: {
+                    display: 'none'
+                }
+            }
+        }
+
         var [left, top] = current['transform-origin'].split(' ').map(it => {
             return Length.parse(it || '50%');
         })
@@ -360,10 +398,39 @@ export default class SelectionToolView extends UIElement {
         
         return {
             style: {
+                display: 'block',
                 left, top 
             }
         }
     }
+
+
+    [BIND('$transformOrigin')] () {
+        var current = editor.selection.current || { 'transform-origin'  : '50% 50%' }
+
+        if (current && current.is && current.is('artboard')) {
+            return {
+                style: {
+                    display: 'none'
+                }
+            }
+        }
+
+        var [left, top] = current['transform-origin'].split(' ').map(it => {
+            return Length.parse(it || '50%');
+        })
+
+        left = left || Length.percent(50)
+        top = top || Length.percent(50)
+        
+        return {
+            style: {
+                display: 'block',
+                left, top 
+            }
+        }
+    }
+
 
 
     [BIND('$translate')] () {
@@ -415,6 +482,16 @@ export default class SelectionToolView extends UIElement {
     [BIND('$rotateArea')] () {
         var current = editor.selection.current || { transform : '' }  
 
+
+        if (current && current.is && current.is('artboard')) {
+            return {
+                style: {
+                    display: 'none'
+                }
+            }
+        }
+
+
         var transform = Transform.join(Transform.parseStyle(current.transform).filter(it => {
             switch(it.type) {
             case 'rotateX':
@@ -426,6 +503,7 @@ export default class SelectionToolView extends UIElement {
         }))
         return {
             style: {
+                display: 'block',
                 transform: `${transform}`
             }
         }
@@ -433,6 +511,14 @@ export default class SelectionToolView extends UIElement {
 
     [BIND('$rotateZ')] () {
         var current = editor.selection.current || { transform: '' }  
+
+        if (current && current.is && current.is('artboard')) {
+            return {
+                style: {
+                    display: 'none'
+                }
+            }
+        }
 
         var transform = Transform.join(Transform.parseStyle(current.transform).filter(it => {
             switch(it.type) {
@@ -445,6 +531,7 @@ export default class SelectionToolView extends UIElement {
         }))
         return {
             style: {
+                display: 'block',
                 transform
             }
         }
@@ -572,7 +659,10 @@ export default class SelectionToolView extends UIElement {
 
         var e = editor.config.get('bodyEvent');
 
-        if (this.pointerType === 'rotate3d') {
+        if (this.pointerType === 'transform-origin') {
+
+
+        } else if (this.pointerType === 'rotate3d') {
 
             if (this.hasRotateZ) {
 
@@ -585,6 +675,7 @@ export default class SelectionToolView extends UIElement {
                 this.bindData('$rotate3d')
                 this.bindData('$rotateArea')   
                 this.bindData('$translate');
+                this.bindData('$transformOrigin');                
             } else {
 
                 if (this.hasTransformOrigin) {
@@ -598,7 +689,8 @@ export default class SelectionToolView extends UIElement {
                 }
                 this.bindData('$rotate3d')
                 this.bindData('$rotateArea')       
-                this.bindData('$translate');                                 
+                this.bindData('$translate');    
+                this.bindData('$transformOrigin');                                             
             }
             // this.bindData('$selectionPointer')            
             this.emit('refreshSelectionStyleView'); 
@@ -627,19 +719,31 @@ export default class SelectionToolView extends UIElement {
 
     end (dx, dy) {
 
-        var e = editor.config.get('bodyEvent');
+        if (this.pointerType === 'transform-origin') {
+           editor.selection.reset({
+               'transform-origin': DEFINED_TRANFORM_ORIGIN[this.transformOriginValue] || '50% 50%'
+           }) 
 
-        if (e.altKey) {
-            dy = dx; 
+           this.bindData('$rotate3d');
+           this.bindData('$rotateArea');
+           this.bindData('$transformOrigin');           
+        } else {
+
+            var e = editor.config.get('bodyEvent');
+
+            if (e.altKey) {
+                dy = dx; 
+            }
+    
+            this.refs.$selectionTool.attr('data-selected-position', '');
+            this.parent.trigger('removeRealPosition');                
+    
+            this.emit('refreshCanvasForPartial')
+            this.emit('refreshStylePosition');
+            this.emit('removeGuideLine')
+            this.refreshSelectionToolView(dx, dy);   
         }
-
-        this.refs.$selectionTool.attr('data-selected-position', '');
-        this.parent.trigger('removeRealPosition');                
-
-        this.emit('refreshCanvasForPartial')
-        this.emit('refreshStyleView');
-        this.emit('removeGuideLine')
-        this.refreshSelectionToolView(dx, dy);        
+     
     }   
 
     refreshSelectionToolView (dx, dy, type) {
@@ -712,6 +816,7 @@ export default class SelectionToolView extends UIElement {
 
         this.bindData('$rotateZ')
         this.bindData('$rotateArea')
+        this.bindData('$transformOrigin');        
 
         this.makeSelectionTool();
 
@@ -751,7 +856,8 @@ export default class SelectionToolView extends UIElement {
         this.refs.$selectionTool.css({ left, top, width, height })
         
         this.bindData('$rotate3d');
-        this.bindData('$rotateArea');     
+        this.bindData('$rotateArea');  
+        this.bindData('$transformOrigin');           
         this.bindData('$translate');        
         // this.bindData('$selectionPointer')
         
@@ -861,6 +967,7 @@ export default class SelectionToolView extends UIElement {
     [EVENT('refreshSelectionStyleView')] () {
         this.bindData('$rotate3d');
         this.bindData('$rotateArea');
+        this.bindData('$transformOrigin');        
         this.bindData('$rotateZ');
         this.bindData('$translate'); 
     }

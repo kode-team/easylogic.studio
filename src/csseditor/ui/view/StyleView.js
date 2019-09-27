@@ -53,10 +53,21 @@ export default class StyleView extends UIElement {
     }
 
     const cssString = item.generateView(`[data-id='${item.id}']`)
-    return `<style type='text/css' data-id='${item.id}'>${cssString}</style>
+    const boundCssString = item.generateViewBoundCSS(`[data-id='${item.id}']`)
+    return `
+      <style type='text/css' data-id='${item.id}'>${cssString}</style>
+      <style type='text/css' data-id='${item.id}-move'>${boundCssString}</style>
     ` + item.layers.map(it => {
       return this.makeStyle(it);
     }).join('')
+  }
+
+  makeStylePosition (item) {
+
+    const boundCssString = item.generateViewBoundCSS(`[data-id='${item.id}']`)
+    return `
+      <style type='text/css' data-id='${item.id}-move'>${boundCssString}</style>
+      `
   }
 
   refreshStyleHead () {
@@ -80,10 +91,33 @@ export default class StyleView extends UIElement {
 
   }
 
+  changeStyleHeadPosition (item) {
+    var $temp = Dom.create('div')        
+
+    $temp.html(this.makeStylePosition(item)).children().forEach($item => {
+      this.refs.$head.append($item);
+    })
+
+  }  
+
   refreshStyleHeadOne (item) {
-    this.refs.$head.$$(`style[data-id="${item.id}"]`).forEach($style => $style.remove())
+    var $all = this.refs.$head.$(`style[data-id="${item.id}"]`)
+    var $pos = this.refs.$head.$(`style[data-id="${item.id}-move"]`);
+    
+    if ($all) $all.remove()
+    if ($pos) $pos.remove()
+
     this.changeStyleHead(item)
   }
+
+
+  refreshStyleHeadPositionOne (item) {
+    var $pos = this.refs.$head.$(`style[data-id="${item.id}-move"]`);
+    
+    if ($pos) $pos.remove()
+
+    this.changeStyleHeadPosition(item)
+  }  
 
 
   makeSvg (project) {
@@ -121,6 +155,13 @@ export default class StyleView extends UIElement {
 
   [EVENT('refreshSVGArea')] () {
     this.load('$svgArea');
+  }
+
+  [EVENT('refreshStylePosition')] () {
+
+    editor.selection.each(item => {
+      this.refreshStyleHeadPositionOne(item);
+    })    
   }
 
   [EVENT('refreshSelectionStyleView')] () {

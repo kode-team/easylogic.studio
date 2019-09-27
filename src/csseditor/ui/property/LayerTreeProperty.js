@@ -24,12 +24,6 @@ export default class LayerTreeProperty extends BaseProperty {
     `
   }
 
-  initState() {
-    return {
-      layers: [] 
-    }
-  }
-
   getBody() {
     return `
       <div class="layer-list" ref="$layerList"></div>
@@ -57,12 +51,17 @@ export default class LayerTreeProperty extends BaseProperty {
     return parentObject.layers.map( (layer, index) => {
 
       var selected = editor.selection.check(layer) ? 'selected' : '';
+      var name = layer.name; 
+
+      if (layer.is('text')) {
+        name = layer.text || layer.name 
+      }
       return /*html*/`        
       <div class='layer-item ${selected}' data-depth="${depth}" data-layer-id='${layer.id}' draggable="true">
         <div class='detail'>
           <label> 
             <span class='icon'>${this.getIcon(layer.itemType)}</span> 
-            <span class='name'>${layer.name}</span>
+            <span class='name'>${name}</span>
           </label>
           <div class="tools">
             <button type="button" class="lock" data-lock="${layer.lock}" title='Lock'>${layer.lock ? icon.lock : icon.lock_open}</button>
@@ -76,6 +75,10 @@ export default class LayerTreeProperty extends BaseProperty {
       ${this.makeLayerList(layer, depth+1)}
     `
     }).join('')
+  }
+
+  [EVENT('refreshContent')] (arr) {
+    this.refresh();
   }
 
   [LOAD("$layerList") + VDOM]() {
@@ -266,7 +269,7 @@ export default class LayerTreeProperty extends BaseProperty {
   }
 
   [EVENT('refreshLayerTreeView')] () {
-    this.setState({ layers: [] }, false)    
     this.refresh();
   }
+
 }

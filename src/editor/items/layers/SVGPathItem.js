@@ -29,11 +29,7 @@ export class SVGPathItem extends SVGItem {
       this.json.path.resetSegment(obj.segments);
     }
   }
-
-  updateFunction (currentElement) {
-    this.json.totalLength = currentElement.$('path').el.getTotalLength();
-  }
-
+  
   setCache () {
     this.rect = this.clone();
     this.cachePath = this.json.path.clone()
