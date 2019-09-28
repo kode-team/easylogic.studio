@@ -68,11 +68,12 @@ git clone https://github.com/easylogic/editor.git
 cd editor
 npm install 
 npm run dev 
-```
+``` 
 
-# Relative Project 
+# Thanks to 
 
 * icon - https://material.io/resources/icons/?style=baseline
 
 
 # License : MIT
+s
