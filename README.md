@@ -17,11 +17,6 @@ This project is [sapa](https://github.com/easylogic/sapa) based.
 
 # Features 
 
-### Elements 
-* project
-* artboard
-* layer tree 
-
 ### Style
 
 * Alignment 
@@ -63,7 +58,7 @@ This project is [sapa](https://github.com/easylogic/sapa) based.
 * Cube Layer 
 
 ### Theming  
-* dark, light, red, orange
+* dark
 
 
 # Development 
