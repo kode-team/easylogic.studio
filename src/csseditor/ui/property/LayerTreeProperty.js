@@ -30,16 +30,24 @@ export default class LayerTreeProperty extends BaseProperty {
     `;
   }
 
-  getIcon (type) {
+  getIcon (item) {
     // return '';
 
-    switch(type) {
+    switch(item.itemType) {
     case 'circle': return icon.circle;
     case 'image': return icon.photo;
     case 'text': return icon.title;
     case 'cube' : return icon.cube;
-    case 'path': return icon.edit;
-    case 'polygon': return icon.polygon;
+    case 'svg-path': 
+      var rate = (24/item.width.value); 
+
+      var strokeWidth = rate > 1 ? 1: 1/rate; 
+
+      return `<svg viewBox="0 0 ${item.width.value} ${item.height.value}"><path d="${item.d}" stroke-width="${strokeWidth}" /></svg>`;
+    case 'svg-polygon': 
+      var rate = (24/item.width.value);    
+      var strokeWidth = rate > 1 ? 1: 1/rate;       
+      return `<svg viewBox="0 0 ${item.width.value} ${item.height.value}"><polygon points="${item.points}" stroke-width="${strokeWidth}" /></svg>`;
     default: 
       return icon.rect
     }
@@ -60,7 +68,7 @@ export default class LayerTreeProperty extends BaseProperty {
       <div class='layer-item ${selected}' data-depth="${depth}" data-layer-id='${layer.id}' draggable="true">
         <div class='detail'>
           <label> 
-            <span class='icon'>${this.getIcon(layer.itemType)}</span> 
+            <span class='icon'>${this.getIcon(layer)}</span> 
             <span class='name'>${name}</span>
           </label>
           <div class="tools">
@@ -255,15 +263,23 @@ export default class LayerTreeProperty extends BaseProperty {
 
       if (selector) {
         this.refs.$layerList.$$(selector).forEach(it => {
+
           it.addClass('selected')
+
+          var item = editor.selection.itemKeys[it.attr('data-layer-id')]
+          if (item.is('svg-path', 'svg-polygon') ) {
+            it.$('.icon').html(this.getIcon(item));
+          }
+
         })
       }
+
 
     }
 
   }  
 
-  [EVENT('refreshSelection')] () {
+  [EVENT('refreshSelection', 'refreshStylePosition', 'refreshSelectionStyleView', 'refreshCanvasForPartial')] () {
     
     this.trigger('changeSelection')
   }

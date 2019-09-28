@@ -4269,10 +4269,9 @@ html, body {
   width: 100%;
   height: 100%;
 }
-.csseditor .layer-list .layer-item .detail span.icon svg path {
-  fill: white;
-  stroke: #4d4949;
-  stroke-width: 1px;
+.csseditor .layer-list .layer-item .detail span.icon svg path, .csseditor .layer-list .layer-item .detail span.icon svg polygon {
+  fill: transparent;
+  stroke: white;
 }
 .csseditor .layer-list .layer-item .detail label {
   padding: 2px 0px;
@@ -4305,9 +4304,6 @@ html, body {
 }
 .csseditor .layer-list .layer-item.selected svg path {
   fill: white;
-}
-.csseditor .layer-list .layer-item.selected .detail span.icon svg path {
-  stroke: #884745;
 }
 .csseditor .color-assets-property .color-list-tools {
   display: grid;
@@ -11861,10 +11857,9 @@ html, body {
   width: 100%;
   height: 100%;
 }
-.csseditor[data-theme=light] .layer-list .layer-item .detail span.icon svg path {
-  fill: white;
-  stroke: #f1f1f1;
-  stroke-width: 1px;
+.csseditor[data-theme=light] .layer-list .layer-item .detail span.icon svg path, .csseditor[data-theme=light] .layer-list .layer-item .detail span.icon svg polygon {
+  fill: transparent;
+  stroke: white;
 }
 .csseditor[data-theme=light] .layer-list .layer-item .detail label {
   padding: 2px 0px;
@@ -11897,9 +11892,6 @@ html, body {
 }
 .csseditor[data-theme=light] .layer-list .layer-item.selected svg path {
   fill: white;
-}
-.csseditor[data-theme=light] .layer-list .layer-item.selected .detail span.icon svg path {
-  stroke: #4a89b6;
 }
 .csseditor[data-theme=light] .color-assets-property .color-list-tools {
   display: grid;
