@@ -1814,7 +1814,7 @@ html, body {
   text-align: center;
   position: relative;
   padding: 0px 0px 0px 0px;
-  height: 100%;
+  height: 34px;
 }
 .csseditor .tab.number-tab > .tab-header > .tab-item label {
   line-height: 2;
@@ -2539,6 +2539,9 @@ html, body {
 .csseditor .page-tools > label {
   vertical-align: middle;
   font-size: 11px;
+  display: inline-block;
+  height: 100%;
+  padding-top: 5px;
 }
 .csseditor .page-tools button {
   border-radius: 3px;
@@ -2657,15 +2660,18 @@ html, body {
   width: 100%;
   height: 100%;
 }
+.csseditor .canvas-view svg.element-item {
+  pointer-events: none;
+}
+.csseditor .canvas-view svg.element-item > * {
+  pointer-events: painted;
+}
 .csseditor .canvas-view .element-item[contenteditable=true] {
   margin: 0px;
   outline: none;
 }
 .csseditor .canvas-view .element-item.selected:hover {
   outline: none;
-}
-.csseditor .canvas-view .element-item:hover {
-  outline: 1px double #4040fc;
 }
 .csseditor .canvas-view .element-item:hover svg path, .csseditor .canvas-view .element-item:hover svg polygon {
   stroke: #4040fc;
@@ -9400,7 +9406,7 @@ html, body {
   text-align: center;
   position: relative;
   padding: 0px 0px 0px 0px;
-  height: 100%;
+  height: 34px;
 }
 .csseditor[data-theme=light] .tab.number-tab > .tab-header > .tab-item label {
   line-height: 2;
@@ -10125,6 +10131,9 @@ html, body {
 .csseditor[data-theme=light] .page-tools > label {
   vertical-align: middle;
   font-size: 11px;
+  display: inline-block;
+  height: 100%;
+  padding-top: 5px;
 }
 .csseditor[data-theme=light] .page-tools button {
   border-radius: 3px;
@@ -10243,15 +10252,18 @@ html, body {
   width: 100%;
   height: 100%;
 }
+.csseditor[data-theme=light] .canvas-view svg.element-item {
+  pointer-events: none;
+}
+.csseditor[data-theme=light] .canvas-view svg.element-item > * {
+  pointer-events: painted;
+}
 .csseditor[data-theme=light] .canvas-view .element-item[contenteditable=true] {
   margin: 0px;
   outline: none;
 }
 .csseditor[data-theme=light] .canvas-view .element-item.selected:hover {
   outline: none;
-}
-.csseditor[data-theme=light] .canvas-view .element-item:hover {
-  outline: 1px double #4040fc;
 }
 .csseditor[data-theme=light] .canvas-view .element-item:hover svg path, .csseditor[data-theme=light] .canvas-view .element-item:hover svg polygon {
   stroke: #4040fc;

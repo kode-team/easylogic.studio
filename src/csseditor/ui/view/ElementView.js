@@ -176,6 +176,10 @@ export default class ElementView extends UIElement {
                 })
     
                 var items = artboard.checkInAreaForLayers(rect);
+
+                if (rect.width.value === 0 && rect.height.value === 0) {
+                    items = [] 
+                }                 
     
                 editor.selection.select(...items);
 
@@ -222,9 +226,7 @@ export default class ElementView extends UIElement {
                 items = artboard.checkInAreaForLayers(rect);
 
                 if (rect.width.value === 0 && rect.height.value === 0) {
-                    if (items.length) {
-                        items = [items.pop()]
-                    }
+                    items = [] 
                 } 
 
                 if (items.length === 0) {

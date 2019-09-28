@@ -918,7 +918,7 @@ export default class SelectionToolView extends UIElement {
             case 'to left': text =  `X: ${newX}, W: ${newWidth}`; break;
             case 'to top': text =  `Y: ${newY}, H: ${newHeight}`; break;
             case 'to bottom': text =  `H: ${newHeight}`; break;
-            case 'to top right': text =  `X: ${newX}, Y: ${newY} W: ${newWidth}, H: ${newHeight}`; break;
+            case 'to top right': text =  `X: ${newX}, Y: ${newY}, W: ${newWidth}, H: ${newHeight}`; break;
             case 'to top left': text =  `X: ${newX}, Y: ${newY}, W: ${newWidth}, H: ${newHeight}`; break;
             case 'to bottom right': text =  `W: ${newWidth}, H: ${newHeight}`; break;
             case 'to bottom left': text =  `X: ${newX}, Y: ${newY}, W: ${newWidth}, H: ${newHeight}`; break;
@@ -930,6 +930,13 @@ export default class SelectionToolView extends UIElement {
 
     setPositionText (text) {
         if (this.$target) {
+
+            if (editor.selection.current && editor.selection.current.is('artboard')) {
+                text = text.split(',').filter(it => {
+                    return !it.includes('X:') && !it.includes('Y:');
+                }).join(',');
+            }
+
             this.$target.attr('data-position-text', text);
         }
 

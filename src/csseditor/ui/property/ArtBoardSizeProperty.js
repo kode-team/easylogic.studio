@@ -89,7 +89,7 @@ export default class ArtBoardSizeProperty extends BaseProperty {
   }
 
   getTitle() {
-    return "ArtBoard Size";
+    return "Preset";
   }
 
   getTools() {

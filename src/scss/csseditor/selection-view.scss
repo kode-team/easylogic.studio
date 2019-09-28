@@ -111,7 +111,6 @@
       pointer-events: all;
       cursor: pointer;
   
-  
       &:before { 
         opacity: 0;
         content: attr(data-position-text);

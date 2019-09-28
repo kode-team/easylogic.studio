@@ -72,12 +72,10 @@ export class SVGPathItem extends SVGItem {
 
 
   toNestedCSS() {
-    var json = this.json; 
     return [
       {
         selector: 'path', 
         css: {
-          // d: `path('${json.d}')`,
           ...super.toSVGDefaultCSS()
         }
       }

@@ -66,6 +66,9 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
   > label {
     vertical-align: middle;
     font-size: 11px;
+    display: inline-block;
+    height: 100%;
+    padding-top: 5px;    
   }
 
   button {
@@ -121,7 +124,16 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
   width: 100%;
   height: 100%;   
 
+  svg.element-item {
+    pointer-events: none;
+
+    > * {
+      pointer-events: painted;
+    }
+  }
+
   .element-item {
+
 
     &[contenteditable="true"] {
       margin: 0px;
@@ -135,7 +147,7 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
     }
 
     &:hover {
-      outline: 1px double rgb(64, 64, 252);
+      // outline: 1px double rgb(64, 64, 252);
 
       svg {
         path, polygon {
