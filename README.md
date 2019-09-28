@@ -10,6 +10,10 @@ EasyLogic Studio is built using CSS and SVG to reduce the gap between web design
 
 This project is [sapa](https://github.com/easylogic/sapa) based. 
 
+# Screen Shot 
+
+<img src='https://www.easylogic.studio/images/editor.png' />
+
 
 # Features 
 
