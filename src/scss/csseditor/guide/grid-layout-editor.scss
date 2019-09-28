@@ -7,10 +7,10 @@ $grid-tool-size: 18px;
     width: 0px;
     height: 0px;
     box-shadow: 0 0 0 1px rgba(#000000, 0.1);
-    box-sizing: border-box;
+    
 
     .grid-item {
-        box-sizing: border-box;
+        
         text-align: center;
         line-height: 1.9;      
         position: relative;
@@ -31,7 +31,7 @@ $grid-tool-size: 18px;
             appearance: none;
             background-color: transparent;
             border:0px;
-            box-sizing: border-box;
+            
             height: 100%;
             color: white;
             left: 50%;
@@ -101,7 +101,7 @@ $grid-tool-size: 18px;
         appearance: none;
         border:1px solid $border-color;
         border-radius: 3px;
-        box-sizing: border-box;
+        
         width: $grid-tool-size;
         height: $grid-tool-size;
         outline: none;
@@ -127,7 +127,7 @@ $grid-tool-size: 18px;
             width: 50px;
             background-color: white; 
             border: 1px solid $border-color;
-            box-sizing: border-box;
+            
         }
 
     }
@@ -150,7 +150,7 @@ $grid-tool-size: 18px;
             width: 50px;
             background-color: white; 
             border: 1px solid $border-color;
-            box-sizing: border-box;
+            
         }
 
     }
@@ -186,7 +186,7 @@ $grid-tool-size: 18px;
         appearance: none;
         border:1px solid $border-color;
         border-radius: 3px;
-        box-sizing: border-box;
+        
         width: $grid-tool-size;
         height: $grid-tool-size;
         outline: none;   
@@ -204,7 +204,7 @@ $grid-tool-size: 18px;
         appearance: none;
         border:1px solid $border-color;
         border-radius: 3px;
-        box-sizing: border-box;
+        
         width: $grid-tool-size;
         height: $grid-tool-size;
         outline: none;    
@@ -221,7 +221,7 @@ $grid-tool-size: 18px;
         display: grid;
 
         .preview-item {
-            box-sizing: border-box;
+            
             border: 1px dashed rgba(gray, 0.1);
             display: flex;
             flex-direction: column;

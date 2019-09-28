@@ -1,7 +1,7 @@
 .gradient-picker {
   
   width: 432px;
-  box-sizing: border-box;
+  
   display: grid;
   grid-template-columns: 1fr 224px; 
   grid-column-gap: 10px;
@@ -95,7 +95,7 @@
             height: 80px;
             border: 1px solid $border-color;
             border-radius: 2px;
-            box-sizing: border-box;
+            
             cursor: pointer;
             line-height: 80px;
             text-align: center;

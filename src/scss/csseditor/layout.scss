@@ -50,7 +50,7 @@
     background-color: $selected-color;
     z-index: 1;
     pointer-events: all;
-    box-sizing: border-box;
+    
     // border-top: 1px solid $border-color;
     color: white; 
   }
@@ -64,7 +64,7 @@
     color: $selected-font-color;
     z-index: 1;
     pointer-events: all;
-    box-sizing: border-box;
+    
     border-bottom: 1px solid $border-color;
 
     .logo {
@@ -127,7 +127,7 @@
       bottom: $footer-height;
       width: $left-size;
       display: inline-block;
-      box-sizing: border-box;
+      
       display: flex;
       flex-direction: column;
       // border-right: 1px solid $border-color;    
@@ -201,7 +201,7 @@
     top: 0px;
     bottom: 0px;
     right: 0px;
-    box-sizing: border-box;
+    
     border-left: 1px solid $border-color;
 
   }
@@ -231,7 +231,7 @@
   
         &:not(:first-child) {
           border-top: 1px solid $border-color;
-          box-sizing: border-box;
+          
         }
   
         &:last-child {
@@ -262,7 +262,7 @@
   
         &:not(:first-child) {
           border-top: 1px solid $border-color;
-          box-sizing: border-box;
+          
         }
   
         &:last-child {

@@ -20,7 +20,7 @@ $tab-horizontal-header-right-width: 60px;
       background-color: $tab-header-background-color;
       overflow: hidden;
       color: $tab-header-font-color;
-      box-sizing: border-box;
+      
     }
     .tab-content {
       display: none;
@@ -38,7 +38,7 @@ $tab-horizontal-header-right-width: 60px;
         text-align: center;
         position: relative;
         padding: 0px 0px 0px 0px;
-        box-sizing: border-box;
+        
         // border-bottom: 1px solid $tab-background-color;
         // border-top: 1px solid transparent;   
         height: 100%;
@@ -46,7 +46,7 @@ $tab-horizontal-header-right-width: 60px;
         
         label {
           line-height: 2;
-          box-sizing: border-box;
+          
           height: 100%;
           display: inline-block;
           &.icon {

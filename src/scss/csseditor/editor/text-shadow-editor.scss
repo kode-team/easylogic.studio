@@ -50,7 +50,7 @@
       // border-radius: 100%;
       position: relative;
       @include transparent-background();
-      box-sizing: border-box;
+      
       .color-view {
         position: absolute;
         left: 0px;
@@ -65,7 +65,7 @@
     .offset-y,
     .blur-radius,
     .inset {
-      box-sizing: border-box;
+      
       padding: 4px 0px;
     }
 

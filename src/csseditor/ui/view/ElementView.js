@@ -536,14 +536,8 @@ export default class ElementView extends UIElement {
 
     [EVENT('refreshCanvas')] (obj) {
         if (obj) {
-            // 하나 짜리 바뀌는건 element view 에서 적용하지 않는다. 
-            if (!this.currentElement) {
-                this.currentElement = this.getElement(obj.id);
-            } else if (this.currentElement && this.currentElement.attr('data-id') != obj.id) {
-                this.currentElement = this.getElement(obj.id);
-            }
 
-            obj.updateFunction(this.currentElement);
+            this.updateElement(obj);
 
         } else {
             this.trigger('addElement')

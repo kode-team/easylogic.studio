@@ -21,7 +21,7 @@
     bottom: 0px;
     background-color: $background-color;    
     font-size: 12px;
-    box-sizing: border-box;
+    
     border-left: 1px solid $border-color;
     border-top: 1px solid $border-color;
 
@@ -122,7 +122,7 @@
     bottom: 0px;
     background-color: $background-color;
     font-size: 12px;
-    box-sizing: border-box;
+    
     border-right: 1px solid $border-color;
     border-top: 1px solid $border-color;
 
@@ -150,7 +150,7 @@
         top: 0px;
         height: $timeline-header-size;
         right: 0px;
-        box-sizing: border-box;
+        
         border-top: 1px solid $timeline-border-color;
 
         .timeline-object-toolbar {
@@ -161,12 +161,12 @@
             width: $left-size;     
             border-right: 1px solid $timeline-border-color;        
             border-bottom: 1px solid $timeline-border-color;    
-            box-sizing: border-box;
+            
 
 
             .timeline-top-toolbar {
                 padding:10px 5px;
-                box-sizing: border-box;
+                
                 .row {
                     display: grid;
                     grid-template-columns: 50px 1fr;
@@ -308,7 +308,7 @@
         bottom: 0px;
         right: 0px;
         
-        box-sizing: border-box;
+        
 
         .timeline-object-area {
             position: absolute;
@@ -318,7 +318,7 @@
             width: $left-size;
             overflow: auto;
             border-right: 1px solid $timeline-border-color;
-            box-sizing: border-box;
+            
 
             .timeline-object-list {
                 .timeline-object {
@@ -343,7 +343,7 @@
                         display: grid; 
                         grid-template-columns: 20px 1fr 50px; 
                         grid-column-gap: 2px;
-                        box-sizing: border-box;
+                        
                         border-bottom: 1px solid $timeline-border-color;
 
                         &[data-selected="true"] {
@@ -484,7 +484,7 @@
 
                     .timeline-keyframe-row {
                         height: 30px;
-                        box-sizing: border-box;
+                        
                         border-bottom: 1px solid $timeline-border-color;
                         position: relative;
 
@@ -550,7 +550,7 @@
                             position: absolute;
                             height: 100%;
                             display: inline-block;                            
-                            box-sizing: border-box;                            
+                                                        
                             .offset-line {
                                 position: absolute;
                                 top: 50%;
@@ -558,7 +558,7 @@
                                 height: 1px;
                                 background-color: $selected-color;
                                 transform: translateY(-52%);
-                                box-sizing: border-box;
+                                
 
                             }
 
@@ -570,7 +570,7 @@
                                 height: 10px;
                                 background-color: #0bc4e4;
                                 transform: translate(-50%, -50%);
-                                box-sizing: border-box;
+                                
                             }
                         }
                     }

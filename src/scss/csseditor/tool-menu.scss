@@ -24,8 +24,7 @@
   .text { 
     font-size: 30px;
     display: inline-block;
-    // font-style: italic;
-    font-weight: bold;
+    font-weight: 900;
     line-height: 1.6;
     color: $logo-selected-color;
     z-index: 1;
@@ -36,8 +35,7 @@
     z-index: 0;    
     font-size: 30px;
     display: inline-block;
-    // font-style: italic;
-    font-weight: bold;
+    font-weight: 900;
     line-height: 1.6;
     vertical-align: middle;   
     color: $logo-selected-font-color; 
@@ -102,29 +100,12 @@
         border:0px;
         box-shadow: none;
         margin-bottom: 5px;
-
-        &.text {
-          svg {
-            path {
-              // stroke: $background-color;
-              // stroke-width: 2px;
-            }
-          }          
-        }
-        svg {
-          path {
-            // stroke: $background-color;
-            // stroke-width: 1px;            
-          }
-        }
   
         &.selected {
           .icon {      
-            // background-color: $selected-background-color;
             svg {
               path {
                 stroke: $background-color;  
-                // stroke: $selected-background-color;  
                 fill: $selected-color;
               }
             }

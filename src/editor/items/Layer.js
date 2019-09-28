@@ -41,6 +41,4 @@ export class Layer extends DomItem {
       return this.json.y || Length.px(0) 
   }  
 
-  updateFunction (element) {}
-
 }

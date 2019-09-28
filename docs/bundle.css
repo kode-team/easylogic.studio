@@ -129,7 +129,6 @@
   border-bottom: 3px solid black;
   pointer-events: none;
   margin: 2px;
-  box-sizing: border-box;
 }
 .codemirror-colorpicker .colorpicker-body .arrow-button:after {
   content: "";
@@ -146,7 +145,6 @@
   border-top: 3px solid black;
   pointer-events: none;
   margin: 2px;
-  box-sizing: border-box;
 }
 .codemirror-colorpicker .colorpicker-body .color-tab {
   display: flex;
@@ -1370,7 +1368,7 @@ html, body {
 *,
 *:before,
 *:after {
-  box-sizing: inherit;
+  box-sizing: border-box;
 }
 
 .csseditor {
@@ -1393,7 +1391,6 @@ html, body {
   border-radius: 3px;
   color: #ececec;
   outline: none;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=dark] select {
   -webkit-appearance: none;
@@ -1409,7 +1406,6 @@ html, body {
   color: #ffffff;
   outline: none;
   vertical-align: middle;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=dark] button {
   border-width: 0px;
@@ -1485,7 +1481,6 @@ html, body {
   background-color: #fc554f;
   z-index: 1;
   pointer-events: all;
-  box-sizing: border-box;
   color: white;
 }
 .csseditor[data-theme=dark] .layout-main .layout-header {
@@ -1497,7 +1492,6 @@ html, body {
   color: white;
   z-index: 1;
   pointer-events: all;
-  box-sizing: border-box;
   border-bottom: 1px solid #111111;
 }
 .csseditor[data-theme=dark] .layout-main .layout-header .logo {
@@ -1550,7 +1544,6 @@ html, body {
   bottom: 30px;
   width: 270px;
   display: inline-block;
-  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   transition: all 0.15s linear;
@@ -1606,7 +1599,6 @@ html, body {
   top: 0px;
   bottom: 0px;
   right: 0px;
-  box-sizing: border-box;
   border-left: 1px solid #111111;
 }
 .csseditor[data-theme=dark] .feature-control .layer-tab {
@@ -1631,7 +1623,6 @@ html, body {
 }
 .csseditor[data-theme=dark] .feature-control .layer-tab .project-content > div:not(:first-child) {
   border-top: 1px solid #111111;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .feature-control .layer-tab .project-content > div:last-child {
   top: 150px;
@@ -1653,7 +1644,6 @@ html, body {
 }
 .csseditor[data-theme=dark] .feature-control .layer-tab .object-items > div:not(:first-child) {
   border-top: 1px solid #111111;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .feature-control .layer-tab .object-items > div:last-child {
   top: 150px;
@@ -1809,7 +1799,6 @@ html, body {
   background-color: #404040;
   overflow: hidden;
   color: #ffffff;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .tab.number-tab .tab-content {
   display: none;
@@ -1825,12 +1814,10 @@ html, body {
   text-align: center;
   position: relative;
   padding: 0px 0px 0px 0px;
-  box-sizing: border-box;
   height: 100%;
 }
 .csseditor[data-theme=dark] .tab.number-tab > .tab-header > .tab-item label {
   line-height: 2;
-  box-sizing: border-box;
   height: 100%;
   display: inline-block;
 }
@@ -2226,7 +2213,7 @@ html, body {
 .csseditor[data-theme=dark] .logo .text {
   font-size: 30px;
   display: inline-block;
-  font-weight: bold;
+  font-weight: 900;
   line-height: 1.6;
   color: #fc554f;
   z-index: 1;
@@ -2236,7 +2223,7 @@ html, body {
   z-index: 0;
   font-size: 30px;
   display: inline-block;
-  font-weight: bold;
+  font-weight: 900;
   line-height: 1.6;
   vertical-align: middle;
   color: white;
@@ -2578,7 +2565,6 @@ html, body {
   color: #ffffff;
   background-color: #2f3538;
   padding: 5px 10px;
-  box-sizing: border-box;
   height: 100%;
 }
 .csseditor[data-theme=dark] .page-subeditor .path-manager > * {
@@ -2623,7 +2609,6 @@ html, body {
   color: #ffffff;
   background-color: #2f3538;
   padding: 5px 10px;
-  box-sizing: border-box;
   height: 100%;
 }
 .csseditor[data-theme=dark] .page-subeditor .star-manager > label {
@@ -2742,7 +2727,6 @@ html, body {
 .csseditor[data-theme=dark] .selection-tool {
   border: rgba(15, 114, 207, 0.8) 0.5px solid;
   position: absolute;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .selection-tool.editing-path, .csseditor[data-theme=dark] .selection-tool.editing-polygon {
   display: none !important;
@@ -2808,7 +2792,6 @@ html, body {
   width: 8px;
   height: 8px;
   background-color: white;
-  box-sizing: border-box;
   border: 1px solid rgba(15, 114, 207, 0.8);
   border-radius: 100%;
   pointer-events: all;
@@ -2825,7 +2808,6 @@ html, body {
   border-radius: 3px;
   border: #111111;
   transition: opacity 0.3s linear;
-  box-sizing: border-box;
   padding: 4px 10px;
   font-size: 12px;
   pointer-events: none;
@@ -2873,7 +2855,6 @@ html, body {
   height: 60px;
   background-color: transparent;
   border-radius: 50%;
-  box-sizing: border-box;
   pointer-events: none;
 }
 .csseditor[data-theme=dark] .selection-tool .selection-tool-item[data-position=rotate3d] .rotate-area {
@@ -2890,7 +2871,6 @@ html, body {
   height: 60px;
   background-color: transparent;
   border-radius: 50%;
-  box-sizing: border-box;
   pointer-events: none;
 }
 .csseditor[data-theme=dark] .selection-tool .selection-tool-item[data-position=rotate3d] .rotate-area .x {
@@ -3501,7 +3481,6 @@ html, body {
      -moz-appearance: none;
           appearance: none;
   background-color: transparent;
-  box-sizing: border-box;
   width: 20px;
   height: 20px;
   display: inline-block;
@@ -3547,7 +3526,6 @@ html, body {
   grid-column-gap: 5px;
   margin-bottom: 5px;
   text-align: center;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .border-image-item .gradient-info {
   display: grid;
@@ -3564,7 +3542,6 @@ html, body {
 .csseditor[data-theme=dark] .border-image-item .preview .mini-view {
   display: block;
   height: 100%;
-  box-sizing: border-box;
   pointer-events: none;
   border-radius: 100%;
   position: relative;
@@ -3587,7 +3564,6 @@ html, body {
   vertical-align: middle;
   text-align: left;
   padding: 4px 0px;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .border-image-item .fill-title svg {
   width: 16px;
@@ -3598,7 +3574,6 @@ html, body {
   text-align: left;
   padding: 5px 0px;
   height: 100%;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .border-image-item .colorsteps .step {
   border: 1px solid #333;
@@ -3606,7 +3581,6 @@ html, body {
   margin-left: -5px;
   width: 16px;
   height: 16px;
-  box-sizing: border-box;
   border-radius: 100%;
   cursor: pointer;
   position: relative;
@@ -3775,7 +3749,6 @@ html, body {
 .csseditor[data-theme=dark] .content-item textarea {
   width: 100%;
   height: 100px;
-  box-sizing: border-box;
   border: 1px solid #111111;
   border-radius: 3px;
 }
@@ -3786,7 +3759,6 @@ html, body {
   display: grid;
   grid-template-columns: 30px 1fr 20px;
   grid-column-gap: 4px;
-  box-sizing: border-box;
   padding: 5px 0px;
 }
 .csseditor[data-theme=dark] .transition-list .transition-item.selected {
@@ -3835,7 +3807,6 @@ html, body {
   display: grid;
   grid-template-columns: 30px 1fr 20px;
   grid-column-gap: 4px;
-  box-sizing: border-box;
   padding: 5px 0px;
   text-align: center;
 }
@@ -3977,7 +3948,6 @@ html, body {
 .csseditor[data-theme=dark] .keyframe-list .keyframe-item .offset-list {
   padding: 0px 10px;
   height: 20px;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .keyframe-list .keyframe-item .offset-list .container {
   position: relative;
@@ -4065,7 +4035,6 @@ html, body {
 .csseditor[data-theme=dark] .clip-path-list .clippath-item .offset-list {
   padding: 0px 10px;
   height: 30px;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .clip-path-list .clippath-item .offset-list .container {
   position: relative;
@@ -4399,7 +4368,6 @@ html, body {
   height: 80px;
   border: 1px solid #111111;
   border-radius: 2px;
-  box-sizing: border-box;
   vertical-align: top;
   cursor: pointer;
   text-align: center;
@@ -4425,7 +4393,6 @@ html, body {
   height: 80px;
   border: 1px solid #111111;
   border-radius: 2px;
-  box-sizing: border-box;
   cursor: pointer;
 }
 .csseditor[data-theme=dark] .color-assets-property .color-list[data-view-mode=grid] .color-item .preview .color-view {
@@ -4531,7 +4498,6 @@ html, body {
   height: 80px;
   border: 1px solid #111111;
   border-radius: 2px;
-  box-sizing: border-box;
   vertical-align: top;
   cursor: pointer;
   text-align: center;
@@ -4557,7 +4523,6 @@ html, body {
   height: 80px;
   border: 1px solid #111111;
   border-radius: 2px;
-  box-sizing: border-box;
   cursor: pointer;
   background-color: transparent;
   background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
@@ -4672,7 +4637,6 @@ html, body {
   height: 80px;
   border: 1px solid #111111;
   border-radius: 2px;
-  box-sizing: border-box;
   vertical-align: top;
   cursor: pointer;
   text-align: center;
@@ -4698,7 +4662,6 @@ html, body {
   height: 80px;
   border: 1px solid #111111;
   border-radius: 2px;
-  box-sizing: border-box;
   cursor: pointer;
 }
 .csseditor[data-theme=dark] .svgfilter-assets-property .svgfilter-list[data-view-mode=grid] .svgfilter-item .title {
@@ -4749,7 +4712,6 @@ html, body {
   height: 80px;
   border: 1px solid #111111;
   border-radius: 2px;
-  box-sizing: border-box;
   vertical-align: top;
   cursor: pointer;
   text-align: center;
@@ -4772,7 +4734,6 @@ html, body {
   height: 80px;
   border: 1px solid #111111;
   border-radius: 2px;
-  box-sizing: border-box;
   cursor: pointer;
 }
 .csseditor[data-theme=dark] .svgpath-assets-property .svgpath-list[data-view-mode=grid] .svgpath-item .title {
@@ -4971,7 +4932,6 @@ html, body {
   height: 80px;
   border: 1px solid #111111;
   border-radius: 2px;
-  box-sizing: border-box;
   vertical-align: top;
   cursor: pointer;
   text-align: center;
@@ -5029,7 +4989,6 @@ html, body {
   height: 80px;
   border: 1px solid #111111;
   border-radius: 2px;
-  box-sizing: border-box;
   cursor: pointer;
   line-height: 80px;
   text-align: center;
@@ -5129,7 +5088,6 @@ html, body {
 .csseditor[data-theme=dark] .artboard-size-list .category {
   height: 26px;
   border-bottom: 1px solid #111111;
-  box-sizing: border-box;
   line-height: 2;
 }
 .csseditor[data-theme=dark] .artboard-size-list .category .title {
@@ -5141,7 +5099,6 @@ html, body {
   background-color: #565656;
   height: 30px;
   border-bottom: 1px solid #111111;
-  box-sizing: border-box;
   line-height: 2.5;
 }
 .csseditor[data-theme=dark] .artboard-size-list .group-item .title {
@@ -5158,7 +5115,6 @@ html, body {
   cursor: pointer;
   height: 26px;
   border-bottom: 1px solid #111111;
-  box-sizing: border-box;
   line-height: 2.3;
 }
 .csseditor[data-theme=dark] .artboard-size-list .device-item .title {
@@ -5211,7 +5167,6 @@ html, body {
   cursor: pointer;
   background-color: #fc554f;
   border: 1px solid #fc554f;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .cubic-bezier-editor .animation {
   position: absolute;
@@ -5234,7 +5189,6 @@ html, body {
   left: 0px;
   width: 50px;
   padding-right: 0px;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .cubic-bezier-editor .item-list[data-selected-value=ease] .item[data-bezier=ease] {
   background-color: rgba(0, 0, 0, 0.2);
@@ -5278,7 +5232,6 @@ html, body {
   grid-template-columns: 30px 1fr 30px;
 }
 .csseditor[data-theme=dark] .cubic-bezier-editor .predefined .left, .csseditor[data-theme=dark] .cubic-bezier-editor .predefined .right {
-  box-sizing: border-box;
   font-size: 14px;
   font-weight: bold;
   cursor: pointer;
@@ -5320,12 +5273,10 @@ html, body {
   text-align: left;
   vertical-align: middle;
   padding: 2px 4px 2px 0px;
-  box-sizing: border-box;
   font-size: 11px;
 }
 .csseditor[data-theme=dark] .color-view-editor .preview {
   display: inline-block;
-  box-sizing: border-box;
   vertical-align: middle;
   cursor: pointer;
   text-align: right;
@@ -5335,7 +5286,6 @@ html, body {
   height: 24px;
   display: inline-block;
   position: relative;
-  box-sizing: border-box;
   vertical-align: middle;
   border-radius: 1px;
   overflow: hidden;
@@ -5401,7 +5351,6 @@ html, body {
   text-align: left;
   vertical-align: middle;
   padding: 2px 0px 2px 0px;
-  box-sizing: border-box;
   font-size: 11px;
 }
 .csseditor[data-theme=dark] .range-editor.has-label.block {
@@ -5455,7 +5404,6 @@ html, body {
 }
 .csseditor[data-theme=dark] .range-editor .range-editor-type .area span {
   padding: 1px;
-  box-sizing: border-box;
   vertical-align: middle;
 }
 .csseditor[data-theme=dark] .range-editor .range-editor-type .area input, .csseditor[data-theme=dark] .range-editor .range-editor-type .area select {
@@ -5499,7 +5447,6 @@ html, body {
   padding: 0px;
   width: 24px;
   color: #9e9e9e;
-  box-sizing: border-box;
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 3px;
@@ -5540,7 +5487,6 @@ html, body {
   text-align: left;
   vertical-align: middle;
   padding: 2px 0px 2px 0px;
-  box-sizing: border-box;
   font-size: 12px;
 }
 .csseditor[data-theme=dark] .number-range-editor.has-label.block {
@@ -5569,7 +5515,6 @@ html, body {
 }
 .csseditor[data-theme=dark] .number-range-editor .range-editor-type .area span {
   padding: 1px;
-  box-sizing: border-box;
   vertical-align: middle;
 }
 .csseditor[data-theme=dark] .number-range-editor .range-editor-type .area input {
@@ -5603,7 +5548,6 @@ html, body {
   text-align: left;
   vertical-align: middle;
   padding: 2px 0px 2px 0px;
-  box-sizing: border-box;
   font-size: 11px;
 }
 .csseditor[data-theme=dark] .input-range-editor.has-label.block {
@@ -5633,7 +5577,6 @@ html, body {
 }
 .csseditor[data-theme=dark] .input-range-editor .range-editor-type .area span {
   padding: 1px;
-  box-sizing: border-box;
   vertical-align: middle;
 }
 .csseditor[data-theme=dark] .input-range-editor .range-editor-type .area input, .csseditor[data-theme=dark] .input-range-editor .range-editor-type .area select {
@@ -5653,7 +5596,6 @@ html, body {
           appearance: none;
   border-left: 0px;
   text-align: center;
-  box-sizing: border-box;
   padding: 0px 4px;
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
@@ -5673,7 +5615,6 @@ html, body {
   text-align: right;
   vertical-align: middle;
   padding: 2px 4px 2px 0px;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .text-editor input[type=text] {
   border: 1px solid #111111;
@@ -5693,7 +5634,6 @@ html, body {
   vertical-align: middle;
   padding: 2px 4px 2px 0px;
   font-size: 11px;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .select-editor.has-label select {
   width: 100%;
@@ -5728,9 +5668,6 @@ html, body {
 .csseditor[data-theme=dark] .css-property-editor > .title-2 {
   display: none;
   text-align: right;
-}
-.csseditor[data-theme=dark] .css-property-editor .css-property-item {
-  box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .css-property-editor .css-property-item > .title {
   grid-template-columns: 1fr 30px;
@@ -5785,7 +5722,6 @@ html, body {
   grid-template-columns: 24px 24px 1fr;
   grid-column-gap: 5px;
   text-align: center;
-  box-sizing: border-box;
   padding: 6px 6px;
 }
 .csseditor[data-theme=dark] .background-image-editor .fill-list .fill-item.selected {
@@ -5816,7 +5752,6 @@ html, body {
 .csseditor[data-theme=dark] .background-image-editor .fill-list .fill-item .preview .mini-view {
   display: block;
   height: 24px;
-  box-sizing: border-box;
   pointer-events: none;
   border-radius: 3px;
   position: relative;
@@ -5838,7 +5773,6 @@ html, body {
   display: inline-block;
   vertical-align: middle;
   text-align: left;
-  box-sizing: border-box;
   padding: 4px 0px;
 }
 .csseditor[data-theme=dark] .background-image-editor .fill-list .fill-item .fill-title svg {
@@ -5853,7 +5787,6 @@ html, body {
   display: none;
   text-align: left;
   height: 100%;
-  box-sizing: border-box;
   padding-top: 6px;
 }
 .csseditor[data-theme=dark] .background-image-editor .fill-list .fill-item .colorsteps .step {
@@ -5862,7 +5795,6 @@ html, body {
   margin-left: -6px;
   width: 12px;
   height: 12px;
-  box-sizing: border-box;
   border-radius: 100%;
   cursor: pointer;
   position: relative;
@@ -5965,7 +5897,6 @@ html, body {
 .csseditor[data-theme=dark] .transform-editor .transform-list .transform-item .title label {
   font-size: 12px;
   padding: 2px 5px;
-  box-sizing: border-box;
   color: #fc554f;
 }
 .csseditor[data-theme=dark] .transform-editor .transform-list .transform-item .title label span {
@@ -6048,7 +5979,6 @@ html, body {
 .csseditor[data-theme=dark] .filter-editor .filter-list .filter-item .title label {
   font-size: 12px;
   padding: 2px 3px;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .filter-editor .filter-list .filter-item .title .svg-filter-edit {
   cursor: pointer;
@@ -6137,7 +6067,6 @@ html, body {
   background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
   background-size: 10px 10px;
   background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .box-shadow-editor .shadow-item .color .color-view {
   position: absolute;
@@ -6161,7 +6090,6 @@ html, body {
 .csseditor[data-theme=dark] .box-shadow-editor .shadow-item .blur-radius,
 .csseditor[data-theme=dark] .box-shadow-editor .shadow-item .spread-radius,
 .csseditor[data-theme=dark] .box-shadow-editor .shadow-item .inset {
-  box-sizing: border-box;
   padding: 4px 0px;
 }
 .csseditor[data-theme=dark] .text-shadow-editor {
@@ -6210,7 +6138,6 @@ html, body {
   background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
   background-size: 10px 10px;
   background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .text-shadow-editor .shadow-item .color .color-view {
   position: absolute;
@@ -6223,7 +6150,6 @@ html, body {
 .csseditor[data-theme=dark] .text-shadow-editor .shadow-item .offset-y,
 .csseditor[data-theme=dark] .text-shadow-editor .shadow-item .blur-radius,
 .csseditor[data-theme=dark] .text-shadow-editor .shadow-item .inset {
-  box-sizing: border-box;
   padding: 4px 0px;
 }
 .csseditor[data-theme=dark] .text-shadow-editor .shadow-item .tools {
@@ -6352,8 +6278,8 @@ html, body {
 .csseditor[data-theme=dark] .gradient-editor .tools {
   padding: 4px 0px;
   display: grid;
-  grid-template-columns: 2fr 1fr;
-  grid-column-gap: 2px;
+  grid-template-columns: 1fr 70px;
+  grid-column-gap: 4px;
 }
 .csseditor[data-theme=dark] .gradient-editor [data-editor] {
   display: none;
@@ -6550,7 +6476,6 @@ html, body {
   vertical-align: middle;
   height: 20px;
   width: 20px;
-  box-sizing: border-box;
   cursor: pointer;
   position: relative;
   border-radius: 20%;
@@ -6717,7 +6642,6 @@ html, body {
   height: 14px;
   border-radius: 10px;
   border: 1px solid #111111;
-  box-sizing: border-box;
   background-color: transparent;
   background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
   background-size: 10px 10px;
@@ -6901,7 +6825,6 @@ html, body {
   width: 10px;
   height: 10px;
   border: 1px solid white;
-  box-sizing: border-box;
   display: inline-block;
   position: absolute;
   top: 50%;
@@ -6916,6 +6839,7 @@ html, body {
 }
 .csseditor[data-theme=dark] .gradient-editor .hue .step-list .step.selected {
   border: 0px;
+  box-shadow: 0 0 0px 1px rgba(255, 255, 255, 0.5);
   -webkit-transform: translateX(-50%) translateY(calc(100%));
           transform: translateX(-50%) translateY(calc(100%));
 }
@@ -6981,7 +6905,6 @@ html, body {
 }
 .csseditor[data-theme=dark] .svg-property-editor .svg-property-list .svg-property-item .title {
   padding: 5px 2px;
-  box-sizing: border-box;
   display: grid;
   grid-template-columns: 70px 1fr 30px;
   cursor: pointer;
@@ -6989,7 +6912,6 @@ html, body {
 .csseditor[data-theme=dark] .svg-property-editor .svg-property-list .svg-property-item .title .type {
   padding: 3px 5px;
   text-align: center;
-  box-sizing: border-box;
   text-transform: uppercase;
 }
 .csseditor[data-theme=dark] .svg-property-editor .svg-property-list .svg-property-item .title .type[data-type=filter] {
@@ -7003,7 +6925,6 @@ html, body {
 .csseditor[data-theme=dark] .svg-property-editor .svg-property-list .svg-property-item .title label {
   font-size: 12px;
   padding: 2px 5px;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .svg-property-editor .svg-property-list .svg-property-item .title .menu {
   text-align: right;
@@ -7038,7 +6959,6 @@ html, body {
 }
 .csseditor[data-theme=dark] .svg-filter-editor .filter-list .filter-item {
   display: block;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .svg-filter-editor .filter-list .filter-item.collapsed .title .fold {
   -webkit-transform: rotate(90deg);
@@ -7072,7 +6992,6 @@ html, body {
 .csseditor[data-theme=dark] .svg-filter-editor .filter-list .filter-item .title label {
   font-size: 12px;
   padding: 2px 0px;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .svg-filter-editor .filter-list .filter-item .title .filter-menu {
   text-align: right;
@@ -7145,7 +7064,6 @@ html, body {
      -moz-appearance: none;
           appearance: none;
   background-color: transparent;
-  box-sizing: border-box;
   width: 20px;
   height: 20px;
   display: inline-block;
@@ -7237,7 +7155,6 @@ html, body {
   vertical-align: middle;
   padding: 2px 4px 2px 0px;
   font-size: 11px;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .select-icon-editor .items {
   outline: none;
@@ -7342,7 +7259,6 @@ html, body {
   text-align: left;
   vertical-align: middle;
   padding: 2px 4px 2px 0px;
-  box-sizing: border-box;
   font-size: 12px;
 }
 .csseditor[data-theme=dark] .number-input-editor.has-label.block {
@@ -7362,7 +7278,6 @@ html, body {
 }
 .csseditor[data-theme=dark] .number-input-editor .range-editor-type .area span {
   padding: 1px;
-  box-sizing: border-box;
   vertical-align: middle;
 }
 .csseditor[data-theme=dark] .number-input-editor .range-editor-type .area input {
@@ -7447,7 +7362,6 @@ html, body {
 .csseditor[data-theme=dark] .popup {
   position: absolute;
   display: none;
-  box-sizing: border-box;
   z-index: 1000;
   background-color: #333333;
   border-radius: 3px;
@@ -7485,7 +7399,6 @@ html, body {
   text-align: right;
   line-height: 1.6;
   padding-right: 2px;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .popup .popup-content .popup-item label + div {
   vertical-align: middle;
@@ -7508,7 +7421,6 @@ html, body {
   padding: 2px 5px;
   cursor: pointer;
   outline: none;
-  box-sizing: border-box;
   width: 50px;
   background-color: rgba(17, 17, 17, 0.5);
 }
@@ -7580,7 +7492,6 @@ html, body {
 }
 .csseditor[data-theme=dark] .popup .box-shadow-property-popup {
   width: 432px;
-  box-sizing: border-box;
   display: grid;
   grid-template-columns: 224px 1fr;
   grid-column-gap: 4px;
@@ -7632,7 +7543,6 @@ html, body {
   font-size: 11px;
 }
 .csseditor[data-theme=dark] .popup .box-shadow-property-popup .box .drag-board {
-  box-sizing: border-box;
   border: 1px solid #111111;
   margin-bottom: 2px;
   height: 204px;
@@ -7702,7 +7612,6 @@ html, body {
 }
 .csseditor[data-theme=dark] .popup .text-shadow-property-popup {
   width: 432px;
-  box-sizing: border-box;
   display: grid;
   grid-template-columns: 224px 1fr;
   grid-column-gap: 4px;
@@ -7730,7 +7639,6 @@ html, body {
   font-size: 11px;
 }
 .csseditor[data-theme=dark] .popup .text-shadow-property-popup .box .drag-board {
-  box-sizing: border-box;
   border: 1px solid #111111;
   height: 202px;
   position: relative;
@@ -7865,7 +7773,6 @@ html, body {
   overflow: auto;
 }
 .csseditor[data-theme=dark] .popup .keyframe-popup .box .keyframe-property-item {
-  box-sizing: border-box;
   padding: 4px 0px;
   margin-top: 2px;
 }
@@ -7978,7 +7885,6 @@ html, body {
 .csseditor[data-theme=dark] .popup .clippath-popup .box > .clip-path-editor .drag-area {
   height: 220px;
   position: relative;
-  box-sizing: border-box;
   box-shadow: 0 0 0 1px #111111;
 }
 .csseditor[data-theme=dark] .popup .clippath-popup .box > .clip-path-editor .drag-area .pointer-list {
@@ -8077,7 +7983,6 @@ html, body {
           transform: translate(-50%, -50%);
   width: 200px;
   height: 200px;
-  box-sizing: border-box;
   background-image: radial-gradient(yellow 0%, red 100%);
 }
 .csseditor[data-theme=dark] .popup .svg-property-editor-popup .box .property .title {
@@ -8117,7 +8022,6 @@ html, body {
 }
 .csseditor[data-theme=dark] .popup .color-picker-popup {
   width: 224px;
-  box-sizing: border-box;
   display: grid;
   grid-template-columns: 1fr;
 }
@@ -8171,7 +8075,6 @@ html, body {
 }
 .csseditor[data-theme=dark] .popup .image-select-popup {
   width: 500px;
-  box-sizing: border-box;
   display: grid;
   grid-template-columns: 1fr;
   padding: 10px;
@@ -8203,7 +8106,6 @@ html, body {
 }
 .csseditor[data-theme=dark] .popup .gradient-picker {
   width: 432px;
-  box-sizing: border-box;
   display: grid;
   grid-template-columns: 1fr 224px;
   grid-column-gap: 10px;
@@ -8279,7 +8181,6 @@ html, body {
   height: 80px;
   border: 1px solid #111111;
   border-radius: 2px;
-  box-sizing: border-box;
   cursor: pointer;
   line-height: 80px;
   text-align: center;
@@ -8292,7 +8193,6 @@ html, body {
 }
 .csseditor[data-theme=dark] .popup .background-image-position-picker {
   width: 260px !important;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .popup .background-image-position-picker .popup-item {
   margin-bottom: 5px;
@@ -8371,7 +8271,6 @@ html, body {
   top: 50%;
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
-  box-sizing: border-box;
   z-index: 1000;
   background-color: #2f3538;
   border: 1px solid #111111;
@@ -8608,7 +8507,6 @@ html, body {
   bottom: 0px;
   background-color: #2f3538;
   font-size: 12px;
-  box-sizing: border-box;
   border-left: 1px solid #111111;
   border-top: 1px solid #111111;
 }
@@ -8677,7 +8575,6 @@ html, body {
   bottom: 0px;
   background-color: #2f3538;
   font-size: 12px;
-  box-sizing: border-box;
   border-right: 1px solid #111111;
   border-top: 1px solid #111111;
 }
@@ -8702,7 +8599,6 @@ html, body {
   top: 0px;
   height: 40px;
   right: 0px;
-  box-sizing: border-box;
   border-top: 1px solid #111111;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar {
@@ -8713,11 +8609,9 @@ html, body {
   width: 270px;
   border-right: 1px solid #111111;
   border-bottom: 1px solid #111111;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar {
   padding: 10px 5px;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .row {
   display: grid;
@@ -8843,7 +8737,6 @@ html, body {
   top: 40px;
   bottom: 0px;
   right: 0px;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-object-area {
   position: absolute;
@@ -8853,7 +8746,6 @@ html, body {
   width: 270px;
   overflow: auto;
   border-right: 1px solid #111111;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object.collapsed .timeline-object-row.layer .icon svg {
   -webkit-transform: rotate(0deg);
@@ -8867,7 +8759,6 @@ html, body {
   display: grid;
   grid-template-columns: 20px 1fr 50px;
   grid-column-gap: 2px;
-  box-sizing: border-box;
   border-bottom: 1px solid #111111;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row[data-selected=true] {
@@ -8978,7 +8869,6 @@ html, body {
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row {
   height: 30px;
-  box-sizing: border-box;
   border-bottom: 1px solid #111111;
   position: relative;
 }
@@ -9037,7 +8927,6 @@ html, body {
   position: absolute;
   height: 100%;
   display: inline-block;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe-back .offset-line {
   position: absolute;
@@ -9047,7 +8936,6 @@ html, body {
   background-color: #fc554f;
   -webkit-transform: translateY(-52%);
           transform: translateY(-52%);
-  box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe-back .sub-offset {
   position: absolute;
@@ -9058,7 +8946,6 @@ html, body {
   background-color: #0bc4e4;
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
-  box-sizing: border-box;
 }
 .csseditor[data-theme=dark] .keyframe-time-control .time-manager {
   display: grid;
@@ -9090,7 +8977,6 @@ html, body {
   border-radius: 2px;
   color: gray;
   outline: none;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=light] select {
   -webkit-appearance: none;
@@ -9106,7 +8992,6 @@ html, body {
   color: black;
   outline: none;
   vertical-align: middle;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=light] button {
   border-width: 0px;
@@ -9182,7 +9067,6 @@ html, body {
   background-color: #4b61ce;
   z-index: 1;
   pointer-events: all;
-  box-sizing: border-box;
   color: white;
 }
 .csseditor[data-theme=light] .layout-main .layout-header {
@@ -9194,7 +9078,6 @@ html, body {
   color: white;
   z-index: 1;
   pointer-events: all;
-  box-sizing: border-box;
   border-bottom: 1px solid #e7e7e7;
 }
 .csseditor[data-theme=light] .layout-main .layout-header .logo {
@@ -9247,7 +9130,6 @@ html, body {
   bottom: 30px;
   width: 270px;
   display: inline-block;
-  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   transition: all 0.15s linear;
@@ -9303,7 +9185,6 @@ html, body {
   top: 0px;
   bottom: 0px;
   right: 0px;
-  box-sizing: border-box;
   border-left: 1px solid #e7e7e7;
 }
 .csseditor[data-theme=light] .feature-control .layer-tab {
@@ -9328,7 +9209,6 @@ html, body {
 }
 .csseditor[data-theme=light] .feature-control .layer-tab .project-content > div:not(:first-child) {
   border-top: 1px solid #e7e7e7;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=light] .feature-control .layer-tab .project-content > div:last-child {
   top: 150px;
@@ -9350,7 +9230,6 @@ html, body {
 }
 .csseditor[data-theme=light] .feature-control .layer-tab .object-items > div:not(:first-child) {
   border-top: 1px solid #e7e7e7;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=light] .feature-control .layer-tab .object-items > div:last-child {
   top: 150px;
@@ -9506,7 +9385,6 @@ html, body {
   background-color: #f7fcff;
   overflow: hidden;
   color: #000b22;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=light] .tab.number-tab .tab-content {
   display: none;
@@ -9522,12 +9400,10 @@ html, body {
   text-align: center;
   position: relative;
   padding: 0px 0px 0px 0px;
-  box-sizing: border-box;
   height: 100%;
 }
 .csseditor[data-theme=light] .tab.number-tab > .tab-header > .tab-item label {
   line-height: 2;
-  box-sizing: border-box;
   height: 100%;
   display: inline-block;
 }
@@ -9923,7 +9799,7 @@ html, body {
 .csseditor[data-theme=light] .logo .text {
   font-size: 30px;
   display: inline-block;
-  font-weight: bold;
+  font-weight: 900;
   line-height: 1.6;
   color: #7dbbe7;
   z-index: 1;
@@ -9933,7 +9809,7 @@ html, body {
   z-index: 0;
   font-size: 30px;
   display: inline-block;
-  font-weight: bold;
+  font-weight: 900;
   line-height: 1.6;
   vertical-align: middle;
   color: white;
@@ -10275,7 +10151,6 @@ html, body {
   color: gray;
   background-color: white;
   padding: 5px 10px;
-  box-sizing: border-box;
   height: 100%;
 }
 .csseditor[data-theme=light] .page-subeditor .path-manager > * {
@@ -10320,7 +10195,6 @@ html, body {
   color: gray;
   background-color: white;
   padding: 5px 10px;
-  box-sizing: border-box;
   height: 100%;
 }
 .csseditor[data-theme=light] .page-subeditor .star-manager > label {
@@ -10439,7 +10313,6 @@ html, body {
 .csseditor[data-theme=light] .selection-tool {
   border: rgba(15, 114, 207, 0.8) 0.5px solid;
   position: absolute;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=light] .selection-tool.editing-path, .csseditor[data-theme=light] .selection-tool.editing-polygon {
   display: none !important;
@@ -10505,7 +10378,6 @@ html, body {
   width: 8px;
   height: 8px;
   background-color: white;
-  box-sizing: border-box;
   border: 1px solid rgba(15, 114, 207, 0.8);
   border-radius: 100%;
   pointer-events: all;
@@ -10522,7 +10394,6 @@ html, body {
   border-radius: 3px;
   border: #e7e7e7;
   transition: opacity 0.3s linear;
-  box-sizing: border-box;
   padding: 4px 10px;
   font-size: 12px;
   pointer-events: none;
@@ -10570,7 +10441,6 @@ html, body {
   height: 60px;
   background-color: transparent;
   border-radius: 50%;
-  box-sizing: border-box;
   pointer-events: none;
 }
 .csseditor[data-theme=light] .selection-tool .selection-tool-item[data-position=rotate3d] .rotate-area {
@@ -10587,7 +10457,6 @@ html, body {
   height: 60px;
   background-color: transparent;
   border-radius: 50%;
-  box-sizing: border-box;
   pointer-events: none;
 }
 .csseditor[data-theme=light] .selection-tool .selection-tool-item[data-position=rotate3d] .rotate-area .x {
@@ -11198,7 +11067,6 @@ html, body {
      -moz-appearance: none;
           appearance: none;
   background-color: transparent;
-  box-sizing: border-box;
   width: 20px;
   height: 20px;
   display: inline-block;
@@ -11244,7 +11112,6 @@ html, body {
   grid-column-gap: 5px;
   margin-bottom: 5px;
   text-align: center;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=light] .border-image-item .gradient-info {
   display: grid;
@@ -11261,7 +11128,6 @@ html, body {
 .csseditor[data-theme=light] .border-image-item .preview .mini-view {
   display: block;
   height: 100%;
-  box-sizing: border-box;
   pointer-events: none;
   border-radius: 100%;
   position: relative;
@@ -11284,7 +11150,6 @@ html, body {
   vertical-align: middle;
   text-align: left;
   padding: 4px 0px;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=light] .border-image-item .fill-title svg {
   width: 16px;
@@ -11295,7 +11160,6 @@ html, body {
   text-align: left;
   padding: 5px 0px;
   height: 100%;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=light] .border-image-item .colorsteps .step {
   border: 1px solid #333;
@@ -11303,7 +11167,6 @@ html, body {
   margin-left: -5px;
   width: 16px;
   height: 16px;
-  box-sizing: border-box;
   border-radius: 100%;
   cursor: pointer;
   position: relative;
@@ -11472,7 +11335,6 @@ html, body {
 .csseditor[data-theme=light] .content-item textarea {
   width: 100%;
   height: 100px;
-  box-sizing: border-box;
   border: 1px solid #e7e7e7;
   border-radius: 3px;
 }
@@ -11483,7 +11345,6 @@ html, body {
   display: grid;
   grid-template-columns: 30px 1fr 20px;
   grid-column-gap: 4px;
-  box-sizing: border-box;
   padding: 5px 0px;
 }
 .csseditor[data-theme=light] .transition-list .transition-item.selected {
@@ -11532,7 +11393,6 @@ html, body {
   display: grid;
   grid-template-columns: 30px 1fr 20px;
   grid-column-gap: 4px;
-  box-sizing: border-box;
   padding: 5px 0px;
   text-align: center;
 }
@@ -11674,7 +11534,6 @@ html, body {
 .csseditor[data-theme=light] .keyframe-list .keyframe-item .offset-list {
   padding: 0px 10px;
   height: 20px;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=light] .keyframe-list .keyframe-item .offset-list .container {
   position: relative;
@@ -11762,7 +11621,6 @@ html, body {
 .csseditor[data-theme=light] .clip-path-list .clippath-item .offset-list {
   padding: 0px 10px;
   height: 30px;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=light] .clip-path-list .clippath-item .offset-list .container {
   position: relative;
@@ -12096,7 +11954,6 @@ html, body {
   height: 80px;
   border: 1px solid #e7e7e7;
   border-radius: 2px;
-  box-sizing: border-box;
   vertical-align: top;
   cursor: pointer;
   text-align: center;
@@ -12122,7 +11979,6 @@ html, body {
   height: 80px;
   border: 1px solid #e7e7e7;
   border-radius: 2px;
-  box-sizing: border-box;
   cursor: pointer;
 }
 .csseditor[data-theme=light] .color-assets-property .color-list[data-view-mode=grid] .color-item .preview .color-view {
@@ -12228,7 +12084,6 @@ html, body {
   height: 80px;
   border: 1px solid #e7e7e7;
   border-radius: 2px;
-  box-sizing: border-box;
   vertical-align: top;
   cursor: pointer;
   text-align: center;
@@ -12254,7 +12109,6 @@ html, body {
   height: 80px;
   border: 1px solid #e7e7e7;
   border-radius: 2px;
-  box-sizing: border-box;
   cursor: pointer;
   background-color: transparent;
   background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
@@ -12369,7 +12223,6 @@ html, body {
   height: 80px;
   border: 1px solid #e7e7e7;
   border-radius: 2px;
-  box-sizing: border-box;
   vertical-align: top;
   cursor: pointer;
   text-align: center;
@@ -12395,7 +12248,6 @@ html, body {
   height: 80px;
   border: 1px solid #e7e7e7;
   border-radius: 2px;
-  box-sizing: border-box;
   cursor: pointer;
 }
 .csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list[data-view-mode=grid] .svgfilter-item .title {
@@ -12446,7 +12298,6 @@ html, body {
   height: 80px;
   border: 1px solid #e7e7e7;
   border-radius: 2px;
-  box-sizing: border-box;
   vertical-align: top;
   cursor: pointer;
   text-align: center;
@@ -12469,7 +12320,6 @@ html, body {
   height: 80px;
   border: 1px solid #e7e7e7;
   border-radius: 2px;
-  box-sizing: border-box;
   cursor: pointer;
 }
 .csseditor[data-theme=light] .svgpath-assets-property .svgpath-list[data-view-mode=grid] .svgpath-item .title {
@@ -12668,7 +12518,6 @@ html, body {
   height: 80px;
   border: 1px solid #e7e7e7;
   border-radius: 2px;
-  box-sizing: border-box;
   vertical-align: top;
   cursor: pointer;
   text-align: center;
@@ -12726,7 +12575,6 @@ html, body {
   height: 80px;
   border: 1px solid #e7e7e7;
   border-radius: 2px;
-  box-sizing: border-box;
   cursor: pointer;
   line-height: 80px;
   text-align: center;
@@ -12826,7 +12674,6 @@ html, body {
 .csseditor[data-theme=light] .artboard-size-list .category {
   height: 26px;
   border-bottom: 1px solid #e7e7e7;
-  box-sizing: border-box;
   line-height: 2;
 }
 .csseditor[data-theme=light] .artboard-size-list .category .title {
@@ -12838,7 +12685,6 @@ html, body {
   background-color: #565656;
   height: 30px;
   border-bottom: 1px solid #e7e7e7;
-  box-sizing: border-box;
   line-height: 2.5;
 }
 .csseditor[data-theme=light] .artboard-size-list .group-item .title {
@@ -12855,7 +12701,6 @@ html, body {
   cursor: pointer;
   height: 26px;
   border-bottom: 1px solid #e7e7e7;
-  box-sizing: border-box;
   line-height: 2.3;
 }
 .csseditor[data-theme=light] .artboard-size-list .device-item .title {
@@ -12908,7 +12753,6 @@ html, body {
   cursor: pointer;
   background-color: #4b61ce;
   border: 1px solid #4b61ce;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=light] .cubic-bezier-editor .animation {
   position: absolute;
@@ -12931,7 +12775,6 @@ html, body {
   left: 0px;
   width: 50px;
   padding-right: 0px;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=light] .cubic-bezier-editor .item-list[data-selected-value=ease] .item[data-bezier=ease] {
   background-color: rgba(0, 0, 0, 0.2);
@@ -12975,7 +12818,6 @@ html, body {
   grid-template-columns: 30px 1fr 30px;
 }
 .csseditor[data-theme=light] .cubic-bezier-editor .predefined .left, .csseditor[data-theme=light] .cubic-bezier-editor .predefined .right {
-  box-sizing: border-box;
   font-size: 14px;
   font-weight: bold;
   cursor: pointer;
@@ -13017,12 +12859,10 @@ html, body {
   text-align: left;
   vertical-align: middle;
   padding: 2px 4px 2px 0px;
-  box-sizing: border-box;
   font-size: 11px;
 }
 .csseditor[data-theme=light] .color-view-editor .preview {
   display: inline-block;
-  box-sizing: border-box;
   vertical-align: middle;
   cursor: pointer;
   text-align: right;
@@ -13032,7 +12872,6 @@ html, body {
   height: 24px;
   display: inline-block;
   position: relative;
-  box-sizing: border-box;
   vertical-align: middle;
   border-radius: 1px;
   overflow: hidden;
@@ -13098,7 +12937,6 @@ html, body {
   text-align: left;
   vertical-align: middle;
   padding: 2px 0px 2px 0px;
-  box-sizing: border-box;
   font-size: 11px;
 }
 .csseditor[data-theme=light] .range-editor.has-label.block {
@@ -13152,7 +12990,6 @@ html, body {
 }
 .csseditor[data-theme=light] .range-editor .range-editor-type .area span {
   padding: 1px;
-  box-sizing: border-box;
   vertical-align: middle;
 }
 .csseditor[data-theme=light] .range-editor .range-editor-type .area input, .csseditor[data-theme=light] .range-editor .range-editor-type .area select {
@@ -13196,7 +13033,6 @@ html, body {
   padding: 0px;
   width: 24px;
   color: #9e9e9e;
-  box-sizing: border-box;
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 3px;
@@ -13237,7 +13073,6 @@ html, body {
   text-align: left;
   vertical-align: middle;
   padding: 2px 0px 2px 0px;
-  box-sizing: border-box;
   font-size: 12px;
 }
 .csseditor[data-theme=light] .number-range-editor.has-label.block {
@@ -13266,7 +13101,6 @@ html, body {
 }
 .csseditor[data-theme=light] .number-range-editor .range-editor-type .area span {
   padding: 1px;
-  box-sizing: border-box;
   vertical-align: middle;
 }
 .csseditor[data-theme=light] .number-range-editor .range-editor-type .area input {
@@ -13300,7 +13134,6 @@ html, body {
   text-align: left;
   vertical-align: middle;
   padding: 2px 0px 2px 0px;
-  box-sizing: border-box;
   font-size: 11px;
 }
 .csseditor[data-theme=light] .input-range-editor.has-label.block {
@@ -13330,7 +13163,6 @@ html, body {
 }
 .csseditor[data-theme=light] .input-range-editor .range-editor-type .area span {
   padding: 1px;
-  box-sizing: border-box;
   vertical-align: middle;
 }
 .csseditor[data-theme=light] .input-range-editor .range-editor-type .area input, .csseditor[data-theme=light] .input-range-editor .range-editor-type .area select {
@@ -13350,7 +13182,6 @@ html, body {
           appearance: none;
   border-left: 0px;
   text-align: center;
-  box-sizing: border-box;
   padding: 0px 4px;
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
@@ -13370,7 +13201,6 @@ html, body {
   text-align: right;
   vertical-align: middle;
   padding: 2px 4px 2px 0px;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=light] .text-editor input[type=text] {
   border: 1px solid #e7e7e7;
@@ -13390,7 +13220,6 @@ html, body {
   vertical-align: middle;
   padding: 2px 4px 2px 0px;
   font-size: 11px;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=light] .select-editor.has-label select {
   width: 100%;
@@ -13425,9 +13254,6 @@ html, body {
 .csseditor[data-theme=light] .css-property-editor > .title-2 {
   display: none;
   text-align: right;
-}
-.csseditor[data-theme=light] .css-property-editor .css-property-item {
-  box-sizing: border-box;
 }
 .csseditor[data-theme=light] .css-property-editor .css-property-item > .title {
   grid-template-columns: 1fr 30px;
@@ -13482,7 +13308,6 @@ html, body {
   grid-template-columns: 24px 24px 1fr;
   grid-column-gap: 5px;
   text-align: center;
-  box-sizing: border-box;
   padding: 6px 6px;
 }
 .csseditor[data-theme=light] .background-image-editor .fill-list .fill-item.selected {
@@ -13513,7 +13338,6 @@ html, body {
 .csseditor[data-theme=light] .background-image-editor .fill-list .fill-item .preview .mini-view {
   display: block;
   height: 24px;
-  box-sizing: border-box;
   pointer-events: none;
   border-radius: 3px;
   position: relative;
@@ -13535,7 +13359,6 @@ html, body {
   display: inline-block;
   vertical-align: middle;
   text-align: left;
-  box-sizing: border-box;
   padding: 4px 0px;
 }
 .csseditor[data-theme=light] .background-image-editor .fill-list .fill-item .fill-title svg {
@@ -13550,7 +13373,6 @@ html, body {
   display: none;
   text-align: left;
   height: 100%;
-  box-sizing: border-box;
   padding-top: 6px;
 }
 .csseditor[data-theme=light] .background-image-editor .fill-list .fill-item .colorsteps .step {
@@ -13559,7 +13381,6 @@ html, body {
   margin-left: -6px;
   width: 12px;
   height: 12px;
-  box-sizing: border-box;
   border-radius: 100%;
   cursor: pointer;
   position: relative;
@@ -13662,7 +13483,6 @@ html, body {
 .csseditor[data-theme=light] .transform-editor .transform-list .transform-item .title label {
   font-size: 12px;
   padding: 2px 5px;
-  box-sizing: border-box;
   color: #4b61ce;
 }
 .csseditor[data-theme=light] .transform-editor .transform-list .transform-item .title label span {
@@ -13745,7 +13565,6 @@ html, body {
 .csseditor[data-theme=light] .filter-editor .filter-list .filter-item .title label {
   font-size: 12px;
   padding: 2px 3px;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=light] .filter-editor .filter-list .filter-item .title .svg-filter-edit {
   cursor: pointer;
@@ -13834,7 +13653,6 @@ html, body {
   background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
   background-size: 10px 10px;
   background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=light] .box-shadow-editor .shadow-item .color .color-view {
   position: absolute;
@@ -13858,7 +13676,6 @@ html, body {
 .csseditor[data-theme=light] .box-shadow-editor .shadow-item .blur-radius,
 .csseditor[data-theme=light] .box-shadow-editor .shadow-item .spread-radius,
 .csseditor[data-theme=light] .box-shadow-editor .shadow-item .inset {
-  box-sizing: border-box;
   padding: 4px 0px;
 }
 .csseditor[data-theme=light] .text-shadow-editor {
@@ -13907,7 +13724,6 @@ html, body {
   background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
   background-size: 10px 10px;
   background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=light] .text-shadow-editor .shadow-item .color .color-view {
   position: absolute;
@@ -13920,7 +13736,6 @@ html, body {
 .csseditor[data-theme=light] .text-shadow-editor .shadow-item .offset-y,
 .csseditor[data-theme=light] .text-shadow-editor .shadow-item .blur-radius,
 .csseditor[data-theme=light] .text-shadow-editor .shadow-item .inset {
-  box-sizing: border-box;
   padding: 4px 0px;
 }
 .csseditor[data-theme=light] .text-shadow-editor .shadow-item .tools {
@@ -14049,8 +13864,8 @@ html, body {
 .csseditor[data-theme=light] .gradient-editor .tools {
   padding: 4px 0px;
   display: grid;
-  grid-template-columns: 2fr 1fr;
-  grid-column-gap: 2px;
+  grid-template-columns: 1fr 70px;
+  grid-column-gap: 4px;
 }
 .csseditor[data-theme=light] .gradient-editor [data-editor] {
   display: none;
@@ -14247,7 +14062,6 @@ html, body {
   vertical-align: middle;
   height: 20px;
   width: 20px;
-  box-sizing: border-box;
   cursor: pointer;
   position: relative;
   border-radius: 20%;
@@ -14414,7 +14228,6 @@ html, body {
   height: 14px;
   border-radius: 10px;
   border: 1px solid #e7e7e7;
-  box-sizing: border-box;
   background-color: transparent;
   background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
   background-size: 10px 10px;
@@ -14598,7 +14411,6 @@ html, body {
   width: 10px;
   height: 10px;
   border: 1px solid white;
-  box-sizing: border-box;
   display: inline-block;
   position: absolute;
   top: 50%;
@@ -14613,6 +14425,7 @@ html, body {
 }
 .csseditor[data-theme=light] .gradient-editor .hue .step-list .step.selected {
   border: 0px;
+  box-shadow: 0 0 0px 1px rgba(255, 255, 255, 0.5);
   -webkit-transform: translateX(-50%) translateY(calc(100%));
           transform: translateX(-50%) translateY(calc(100%));
 }
@@ -14678,7 +14491,6 @@ html, body {
 }
 .csseditor[data-theme=light] .svg-property-editor .svg-property-list .svg-property-item .title {
   padding: 5px 2px;
-  box-sizing: border-box;
   display: grid;
   grid-template-columns: 70px 1fr 30px;
   cursor: pointer;
@@ -14686,7 +14498,6 @@ html, body {
 .csseditor[data-theme=light] .svg-property-editor .svg-property-list .svg-property-item .title .type {
   padding: 3px 5px;
   text-align: center;
-  box-sizing: border-box;
   text-transform: uppercase;
 }
 .csseditor[data-theme=light] .svg-property-editor .svg-property-list .svg-property-item .title .type[data-type=filter] {
@@ -14700,7 +14511,6 @@ html, body {
 .csseditor[data-theme=light] .svg-property-editor .svg-property-list .svg-property-item .title label {
   font-size: 12px;
   padding: 2px 5px;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=light] .svg-property-editor .svg-property-list .svg-property-item .title .menu {
   text-align: right;
@@ -14735,7 +14545,6 @@ html, body {
 }
 .csseditor[data-theme=light] .svg-filter-editor .filter-list .filter-item {
   display: block;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=light] .svg-filter-editor .filter-list .filter-item.collapsed .title .fold {
   -webkit-transform: rotate(90deg);
@@ -14769,7 +14578,6 @@ html, body {
 .csseditor[data-theme=light] .svg-filter-editor .filter-list .filter-item .title label {
   font-size: 12px;
   padding: 2px 0px;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=light] .svg-filter-editor .filter-list .filter-item .title .filter-menu {
   text-align: right;
@@ -14842,7 +14650,6 @@ html, body {
      -moz-appearance: none;
           appearance: none;
   background-color: transparent;
-  box-sizing: border-box;
   width: 20px;
   height: 20px;
   display: inline-block;
@@ -14934,7 +14741,6 @@ html, body {
   vertical-align: middle;
   padding: 2px 4px 2px 0px;
   font-size: 11px;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=light] .select-icon-editor .items {
   outline: none;
@@ -15039,7 +14845,6 @@ html, body {
   text-align: left;
   vertical-align: middle;
   padding: 2px 4px 2px 0px;
-  box-sizing: border-box;
   font-size: 12px;
 }
 .csseditor[data-theme=light] .number-input-editor.has-label.block {
@@ -15059,7 +14864,6 @@ html, body {
 }
 .csseditor[data-theme=light] .number-input-editor .range-editor-type .area span {
   padding: 1px;
-  box-sizing: border-box;
   vertical-align: middle;
 }
 .csseditor[data-theme=light] .number-input-editor .range-editor-type .area input {
@@ -15144,7 +14948,6 @@ html, body {
 .csseditor[data-theme=light] .popup {
   position: absolute;
   display: none;
-  box-sizing: border-box;
   z-index: 1000;
   background-color: white;
   border-radius: 3px;
@@ -15182,7 +14985,6 @@ html, body {
   text-align: right;
   line-height: 1.6;
   padding-right: 2px;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=light] .popup .popup-content .popup-item label + div {
   vertical-align: middle;
@@ -15205,7 +15007,6 @@ html, body {
   padding: 2px 5px;
   cursor: pointer;
   outline: none;
-  box-sizing: border-box;
   width: 50px;
   background-color: rgba(231, 231, 231, 0.5);
 }
@@ -15277,7 +15078,6 @@ html, body {
 }
 .csseditor[data-theme=light] .popup .box-shadow-property-popup {
   width: 432px;
-  box-sizing: border-box;
   display: grid;
   grid-template-columns: 224px 1fr;
   grid-column-gap: 4px;
@@ -15329,7 +15129,6 @@ html, body {
   font-size: 11px;
 }
 .csseditor[data-theme=light] .popup .box-shadow-property-popup .box .drag-board {
-  box-sizing: border-box;
   border: 1px solid #e7e7e7;
   margin-bottom: 2px;
   height: 204px;
@@ -15399,7 +15198,6 @@ html, body {
 }
 .csseditor[data-theme=light] .popup .text-shadow-property-popup {
   width: 432px;
-  box-sizing: border-box;
   display: grid;
   grid-template-columns: 224px 1fr;
   grid-column-gap: 4px;
@@ -15427,7 +15225,6 @@ html, body {
   font-size: 11px;
 }
 .csseditor[data-theme=light] .popup .text-shadow-property-popup .box .drag-board {
-  box-sizing: border-box;
   border: 1px solid #e7e7e7;
   height: 202px;
   position: relative;
@@ -15562,7 +15359,6 @@ html, body {
   overflow: auto;
 }
 .csseditor[data-theme=light] .popup .keyframe-popup .box .keyframe-property-item {
-  box-sizing: border-box;
   padding: 4px 0px;
   margin-top: 2px;
 }
@@ -15675,7 +15471,6 @@ html, body {
 .csseditor[data-theme=light] .popup .clippath-popup .box > .clip-path-editor .drag-area {
   height: 220px;
   position: relative;
-  box-sizing: border-box;
   box-shadow: 0 0 0 1px #e7e7e7;
 }
 .csseditor[data-theme=light] .popup .clippath-popup .box > .clip-path-editor .drag-area .pointer-list {
@@ -15774,7 +15569,6 @@ html, body {
           transform: translate(-50%, -50%);
   width: 200px;
   height: 200px;
-  box-sizing: border-box;
   background-image: radial-gradient(yellow 0%, red 100%);
 }
 .csseditor[data-theme=light] .popup .svg-property-editor-popup .box .property .title {
@@ -15814,7 +15608,6 @@ html, body {
 }
 .csseditor[data-theme=light] .popup .color-picker-popup {
   width: 224px;
-  box-sizing: border-box;
   display: grid;
   grid-template-columns: 1fr;
 }
@@ -15868,7 +15661,6 @@ html, body {
 }
 .csseditor[data-theme=light] .popup .image-select-popup {
   width: 500px;
-  box-sizing: border-box;
   display: grid;
   grid-template-columns: 1fr;
   padding: 10px;
@@ -15900,7 +15692,6 @@ html, body {
 }
 .csseditor[data-theme=light] .popup .gradient-picker {
   width: 432px;
-  box-sizing: border-box;
   display: grid;
   grid-template-columns: 1fr 224px;
   grid-column-gap: 10px;
@@ -15976,7 +15767,6 @@ html, body {
   height: 80px;
   border: 1px solid #e7e7e7;
   border-radius: 2px;
-  box-sizing: border-box;
   cursor: pointer;
   line-height: 80px;
   text-align: center;
@@ -15989,7 +15779,6 @@ html, body {
 }
 .csseditor[data-theme=light] .popup .background-image-position-picker {
   width: 260px !important;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=light] .popup .background-image-position-picker .popup-item {
   margin-bottom: 5px;
@@ -16068,7 +15857,6 @@ html, body {
   top: 50%;
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
-  box-sizing: border-box;
   z-index: 1000;
   background-color: white;
   border: 1px solid #e7e7e7;
@@ -16305,7 +16093,6 @@ html, body {
   bottom: 0px;
   background-color: white;
   font-size: 12px;
-  box-sizing: border-box;
   border-left: 1px solid #e7e7e7;
   border-top: 1px solid #e7e7e7;
 }
@@ -16374,7 +16161,6 @@ html, body {
   bottom: 0px;
   background-color: white;
   font-size: 12px;
-  box-sizing: border-box;
   border-right: 1px solid #e7e7e7;
   border-top: 1px solid #e7e7e7;
 }
@@ -16399,7 +16185,6 @@ html, body {
   top: 0px;
   height: 40px;
   right: 0px;
-  box-sizing: border-box;
   border-top: 1px solid #e7e7e7;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar {
@@ -16410,11 +16195,9 @@ html, body {
   width: 270px;
   border-right: 1px solid #e7e7e7;
   border-bottom: 1px solid #e7e7e7;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar {
   padding: 10px 5px;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .row {
   display: grid;
@@ -16540,7 +16323,6 @@ html, body {
   top: 40px;
   bottom: 0px;
   right: 0px;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-object-area {
   position: absolute;
@@ -16550,7 +16332,6 @@ html, body {
   width: 270px;
   overflow: auto;
   border-right: 1px solid #e7e7e7;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object.collapsed .timeline-object-row.layer .icon svg {
   -webkit-transform: rotate(0deg);
@@ -16564,7 +16345,6 @@ html, body {
   display: grid;
   grid-template-columns: 20px 1fr 50px;
   grid-column-gap: 2px;
-  box-sizing: border-box;
   border-bottom: 1px solid #e7e7e7;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row[data-selected=true] {
@@ -16675,7 +16455,6 @@ html, body {
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row {
   height: 30px;
-  box-sizing: border-box;
   border-bottom: 1px solid #e7e7e7;
   position: relative;
 }
@@ -16734,7 +16513,6 @@ html, body {
   position: absolute;
   height: 100%;
   display: inline-block;
-  box-sizing: border-box;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe-back .offset-line {
   position: absolute;
@@ -16744,7 +16522,6 @@ html, body {
   background-color: #4b61ce;
   -webkit-transform: translateY(-52%);
           transform: translateY(-52%);
-  box-sizing: border-box;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe-back .sub-offset {
   position: absolute;
@@ -16755,7 +16532,6 @@ html, body {
   background-color: #0bc4e4;
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
-  box-sizing: border-box;
 }
 .csseditor[data-theme=light] .keyframe-time-control .time-manager {
   display: grid;

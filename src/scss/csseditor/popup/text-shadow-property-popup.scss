@@ -1,7 +1,7 @@
 
   .text-shadow-property-popup {
     width: 432px;
-    box-sizing: border-box;
+    
     display: grid;
     grid-template-columns: 224px 1fr; 
     grid-column-gap: 4px;
@@ -39,7 +39,7 @@
       .drag-board {
 
         // background-color: $selected-color;
-        box-sizing: border-box;
+        
         border: 1px solid $border-color;
         height: 202px;
         position: relative;

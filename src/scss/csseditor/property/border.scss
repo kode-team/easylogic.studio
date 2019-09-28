@@ -114,7 +114,7 @@
       flex: none;
       appearance: none;
       background-color: transparent;
-      box-sizing: border-box;
+      
       width: 20px;
       height: 20px;
       display: inline-block;
@@ -135,10 +135,6 @@
         }
       }
     }
-  }
-
-  .slice-value {
-
   }
 
   .slice-setting-box {
@@ -177,7 +173,7 @@
   grid-column-gap: 5px;
   margin-bottom: 5px;
   text-align: center;
-  box-sizing: border-box;
+  
 
   .gradient-info {
     display: grid;
@@ -197,7 +193,7 @@
       display: block;
       height: 100%;
       // border: 1px solid $border-color;
-      box-sizing: border-box;
+      
       pointer-events: none;
       border-radius: 100%;
       position: relative;
@@ -220,7 +216,7 @@
     vertical-align: middle;
     text-align: left;
     padding: 4px 0px;
-    box-sizing: border-box;
+    
 
     svg {
       width: 16px;
@@ -233,7 +229,7 @@
     text-align: left;
     padding: 5px 0px;
     height: 100%;
-    box-sizing: border-box;
+    
 
     .step {
       border: 1px solid #333;
@@ -241,7 +237,7 @@
       margin-left: -5px;
       width: 16px;
       height: 16px;
-      box-sizing: border-box;
+      
       border-radius: 100%;
       cursor: pointer;
       position: relative;

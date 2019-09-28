@@ -359,4 +359,7 @@ export class Item {
 
     return null;
   }
+
+
+  updateFunction (element) {}
 }

@@ -135,7 +135,7 @@
     color: $fontColor; 
     outline: none;
     vertical-align: middle;
-    box-sizing: border-box;
+    
 }
 
 @mixin select-style ($background-color: #434b50, $border-color: #0c0c0d, $border-radius: 3px, $fontColor: #ececec) {
@@ -157,7 +157,7 @@
     border-radius: $border-radius;       
     color: $fontColor; 
     outline: none;
-    box-sizing: border-box;
+    
 }
 
 

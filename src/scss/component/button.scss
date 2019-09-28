@@ -14,7 +14,6 @@
     height:50%;    
     @include arrow_top(3px, black);
     margin: 2px;
-    box-sizing:border-box;
   }
 
   &:after {
@@ -26,7 +25,6 @@
     bottom:0px;
     top:50%;
     @include arrow_bottom(3px, black);
-    margin: 2px;
-    box-sizing:border-box;    
+    margin: 2px; 
   }
 }

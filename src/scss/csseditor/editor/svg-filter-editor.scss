@@ -33,7 +33,7 @@
   
     .filter-item {
       display: block;
-      box-sizing: border-box;
+      
 
       &.collapsed {
         
@@ -76,7 +76,7 @@
         label {
           font-size: 12px;
           padding: 2px 0px;
-          box-sizing: border-box;
+          
         }
   
         .filter-menu {

@@ -52,7 +52,7 @@ export default class ComponentProperty extends BaseProperty {
       this.load();
       current.getProps().forEach(it => {
         if (this.children[it.key]) {
-          this.children[it.key].setValue(current[it.key] || it.defaultVallue)  
+          this.children[it.key].setValue(current[it.key] || it.defaultValue)  
         }
       })
     }    

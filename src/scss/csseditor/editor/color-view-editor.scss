@@ -31,14 +31,14 @@
             text-align: left;
             vertical-align: middle;
             padding: 2px 4px 2px 0px;
-            box-sizing: border-box;
+            
             font-size: 11px;
         }
     }    
 
     .preview {
         display: inline-block;
-        box-sizing: border-box;
+        
         vertical-align: middle;
         cursor: pointer;
         text-align: right;
@@ -48,7 +48,7 @@
             height: 24px;
             display: inline-block;
             position: relative; 
-            box-sizing: border-box;
+            
             vertical-align: middle;
             // border:1px solid $border-color;
             border-radius: 1px;           

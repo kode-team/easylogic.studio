@@ -206,6 +206,13 @@ export class Gradient extends ImageResource {
       return c;
     });
 
+    if (newColors.length === 1) {
+      newColors.push(new ColorStep({
+        color: newColors[0].color,
+        percent: 100 
+      }))
+    }
+
     return newColors.map(f => `${f}`).join(",");
   }
 

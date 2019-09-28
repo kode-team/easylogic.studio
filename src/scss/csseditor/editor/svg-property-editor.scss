@@ -35,7 +35,7 @@
 
       .title {
         padding: 5px 2px;
-        box-sizing: border-box;
+        
         display: grid;
         grid-template-columns: 70px 1fr 30px;
         cursor: pointer;
@@ -43,7 +43,7 @@
         .type {
           padding: 3px 5px;
           text-align: center;
-          box-sizing: border-box;
+          
           text-transform: uppercase;
 
           &[data-type="filter"] {
@@ -60,7 +60,7 @@
         label {
           font-size: 12px;
           padding: 2px 5px;
-          box-sizing: border-box;
+          
         }
   
         .menu {

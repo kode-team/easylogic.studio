@@ -4,8 +4,8 @@
     .tools {
         padding: 4px 0px;
         display: grid;
-        grid-template-columns: 2fr 1fr; 
-        grid-column-gap: 2px;
+        grid-template-columns: 1fr 70px; 
+        grid-column-gap: 4px;
     }
 
     [data-editor] {
@@ -189,7 +189,7 @@
                 vertical-align: middle;
                 height: 20px;
                 width: 20px;
-                box-sizing: border-box;
+                
                 // border: 1px solid $border-color;
                 cursor: pointer;
                 position: relative;
@@ -258,10 +258,6 @@
                         #f69d3c 10%
                     );
                 }
-
-                &.image-resource .icon {
-
-                }
             }
         }
 
@@ -273,31 +269,31 @@
                 height: 30px;
 
                 .hue-container {
-                width: 100%;
-                height: 14px;
-                position: absolute;
-                z-index: 0;
-                @include transparent-background();
-                box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.1);
+                    width: 100%;
+                    height: 14px;
+                    position: absolute;
+                    z-index: 0;
+                    @include transparent-background();
+                    box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.1);
                 }
 
                 .hue {
-                position: relative;
-                padding: 0px;
-                margin: 0px;
-                cursor: pointer;
-
-                > .step-list {
                     position: relative;
-                    width: 100%;
-                    cursor: copy;
-                    height: 14px;
-                    z-index: 1;
-
-                    &.mode-drag {
+                    padding: 0px;
+                    margin: 0px;
                     cursor: pointer;
+
+                    > .step-list {
+                        position: relative;
+                        width: 100%;
+                        cursor: copy;
+                        height: 14px;
+                        z-index: 1;
+
+                        &.mode-drag {
+                        cursor: pointer;
+                        }
                     }
-                }
 
                 .drag-bar {
                     border: 0px;
@@ -318,26 +314,26 @@
                     transition: top 0.3s ease-out;
 
                     .guide-line {
-                    pointer-events: none;
-                    position: absolute;
-                    width: 1px;
-                    height: 0px;
-                    bottom: 8px;
-                    left: 3px;
-                    transform: translateX(-1px);
-                    transition: all 0.3s ease-out;
+                        pointer-events: none;
+                        position: absolute;
+                        width: 1px;
+                        height: 0px;
+                        bottom: 8px;
+                        left: 3px;
+                        transform: translateX(-1px);
+                        transition: all 0.3s ease-out;
                     }
 
                     &.selected {
-                    z-index: 1;
-                    top: 30px;
-                    .guide-line {
-                        height: 17px;
-                    }
+                        z-index: 1;
+                        top: 30px;
+                        .guide-line {
+                            height: 17px;
+                        }
 
-                    .guide-change {
-                        opacity: 1;
-                    }
+                        .guide-change {
+                            opacity: 1;
+                        }
                     }
                 }
                 }
@@ -429,7 +425,7 @@
         height: 14px;
         border-radius: 10px;
         border:1px solid $border-color;
-        box-sizing: border-box;
+        
         @include transparent-background();
         pointer-events: all;
     }
@@ -464,7 +460,7 @@
                 width: 10px;
                 height: 10px; 
                 border: 1px solid white;
-                box-sizing: border-box;
+                
                 display: inline-block;
                 position: absolute;
                 top: 50%;
@@ -473,6 +469,7 @@
                 
                 &.selected {
                     border:0px;
+                    box-shadow: 0 0 0px 1px rgba(255, 255, 255, 0.5);
                     transform: translateX(-50%) translateY(calc(100%));
 
                     .arrow {

@@ -1,7 +1,7 @@
 .popup {
   position: absolute;
   display: none;
-  box-sizing: border-box;
+  
   z-index: 1000;
   background-color: $popup-background-color;
   // border: 1px solid $border-color;
@@ -53,7 +53,7 @@
         text-align: right;
         line-height: 1.6;
         padding-right: 2px;
-        box-sizing: border-box;
+        
       }
 
       label + div {
@@ -82,7 +82,7 @@
         padding: 2px 5px;
         cursor: pointer;
         outline: none;
-        box-sizing: border-box;
+        
         width: 50px;
         background-color: rgba($border-color, 0.5);
       }
