@@ -291,7 +291,7 @@ export class CubeLayer extends Component {
       ...obj,
       ...this.toKeyListCSS(
         'position', 'right','bottom', 'width','height', 'opacity',
-        'transform-origin', 'transform-style', 'perspective', 'perspective-origin',
+        'transform-origin', 'transform', 'transform-style', 'perspective', 'perspective-origin',
         // 'filter',
       )
     }
@@ -305,7 +305,7 @@ export class CubeLayer extends Component {
       ...this.toDefaultCSS(isExport),
       ...this.toWebkitCSS(),      
       ...this.toBoxModelCSS(),
-      ...this.toTransformCSS(),      
+      // ...this.toTransformCSS(),      
       ...this.toAnimationCSS(),
       ...this.toTransitionCSS()
     };

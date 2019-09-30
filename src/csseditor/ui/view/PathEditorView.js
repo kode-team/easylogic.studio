@@ -86,21 +86,28 @@ export default class PathEditorView extends UIElement {
     }
 
     updatePathLayer () {
+        var rect = this.refs.$view.$('path.object').rect()
+        rect.x -= this.state.rect.x;
+        rect.y -= this.state.rect.y;
+
         var totalLength = this.refs.$view.$('path.object').el.getTotalLength()        
         var { d } = this.pathGenerator.toPath(
-            this.state.screenX.value * this.scale, 
-            this.state.screenY.value * this.scale, 
+            rect.x * this.scale, 
+            rect.y * this.scale, 
             this.scale
         );
 
-
         this.emit(this.state.changeEvent, {
-            d,totalLength
+            d, totalLength, rect 
         })
         this.emit('refreshPathLayer')
     }
 
     addPathLayer(pathRect) {
+        var pathRect = this.refs.$view.$('path.object').rect()
+        pathRect.x -= this.state.rect.x;
+        pathRect.y -= this.state.rect.y;
+
         this.changeMode('modify');
         // this.bindData('$view');
 
@@ -263,7 +270,6 @@ export default class PathEditorView extends UIElement {
     }
 
     refreshPathLayer () {
-
         this.updatePathLayer();
     }
 
@@ -383,14 +389,12 @@ export default class PathEditorView extends UIElement {
                 this.pathGenerator.setConnectedPoint(dx, dy);
         
                 this.bindData('$view');       
-
+                   
                 if (this.state.current) {
-                    this.refreshPathLayer();
+                    this.refreshPathLayer;
                 } else {
-                    var pathRect = this.refs.$view.$('path.object').rect()
-                    pathRect.x -= this.state.rect.x;
-                    pathRect.y -= this.state.rect.y;                    
-                    this.addPathLayer(pathRect); 
+                 
+                    this.addPathLayer(); 
                     this.trigger('hidePathEditor')
                 }
             } else {

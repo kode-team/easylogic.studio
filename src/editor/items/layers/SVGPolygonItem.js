@@ -23,6 +23,12 @@ export class SVGPolygonItem extends SVGItem {
     this.json.points = obj.points; 
     this.json.totalLength = obj.totalLength;
     this.json.polygon = new PolygonParser(obj.points);
+
+    this.json.width = Length.px(obj.rect.width);
+    this.json.height = Length.px(obj.rect.height);
+
+    this.setScreenX(Length.px(obj.rect.x))
+    this.setScreenY(Length.px(obj.rect.y))    
   }
 
   get d () {

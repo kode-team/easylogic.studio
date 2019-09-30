@@ -2,6 +2,7 @@ import PathParser from "../../parse/PathParser";
 import { SVGItem } from "./SVGItem";
 import { clone, OBJECT_TO_CLASS } from "../../../util/functions/func";
 import { hasSVGProperty, hasCSSProperty } from "../../util/Resource";
+import { Length } from "../../unit/Length";
 
 export class SVGPathItem extends SVGItem {
   getDefaultObject(obj = {}) {
@@ -28,6 +29,12 @@ export class SVGPathItem extends SVGItem {
     if(obj.segments) {
       this.json.path.resetSegment(obj.segments);
     }
+
+    this.json.width = Length.px(obj.rect.width);
+    this.json.height = Length.px(obj.rect.height);
+
+    this.setScreenX(Length.px(obj.rect.x))
+    this.setScreenY(Length.px(obj.rect.y))
   }
   
   setCache () {

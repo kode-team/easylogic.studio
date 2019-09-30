@@ -96,7 +96,7 @@ export default class PolygonEditorView extends UIElement {
         if (this.state.current) {
             this.refreshPolygonLayer();
         } else {    
-            this.addPolygonLayer(this.getViewRect()); 
+            this.addPolygonLayer(); 
         }
         this.trigger('hidePolygonEditor');        
     }
@@ -128,16 +128,18 @@ export default class PolygonEditorView extends UIElement {
     }
 
     updatePolygonLayer () {
+        var rect = this.getViewRect()
         var totalLength = this.refs.$view.$('polygon.object').el.getTotalLength()        
         var { points } = this.polygonGenerator.toPolygon(
-            this.state.screenX.value * this.scale, 
-            this.state.screenY.value * this.scale, 
+            rect.x * this.scale, 
+            rect.y * this.scale, 
             this.scale
         );
 
         this.emit('updatePolygonItem', {
             points,
-            totalLength
+            totalLength,
+            rect
         })
         this.emit('refreshPolygonLayer')
     }
@@ -146,8 +148,8 @@ export default class PolygonEditorView extends UIElement {
         this.changeMode('modify');
         // this.bindData('$view');
 
-
-        var layer = this.makePolygonLayer(pathRect)
+        var rect = this.getViewRect()
+        var layer = this.makePolygonLayer(rect)
         if (layer) {
             editor.selection.select(layer);
 
@@ -307,7 +309,7 @@ export default class PolygonEditorView extends UIElement {
     }
 
     refreshPolygonLayer () {
-        this.updatePolygonLayer(this.getViewRect());
+        this.updatePolygonLayer();
     }
 
     [POINTERMOVE('$view')] (e) {

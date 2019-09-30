@@ -181,9 +181,16 @@ export class MovableItem extends Item {
     }
 
     toBoundCSS() {
-        var {x: left, y: top, width, height, transform} = this.json; 
+        var {
+            x: left, 
+            y: top, 
+            width, 
+            height, 
+            transform,
+            'transform-origin': transformOrigin
+        } = this.json; 
         return {
-            top,left,width, height, transform
+            top,left,width, height, transform, 'transform-origin': transformOrigin
         }
     }
 

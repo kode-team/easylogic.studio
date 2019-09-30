@@ -8398,6 +8398,7 @@ html, body {
   fill: transparent;
   stroke: #609de2;
   stroke-width: 0.5;
+  display: none;
 }
 .csseditor .path-editor-view svg path.guide {
   fill: transparent;
@@ -8435,7 +8436,6 @@ html, body {
   top: 0px;
   right: 0px;
   bottom: 0px;
-  outline: 1px auto blue;
   cursor: crosshair;
 }
 .csseditor .polygon-editor-view.alt svg circle {
@@ -8474,6 +8474,7 @@ html, body {
   fill: transparent;
   stroke: #609de2;
   stroke-width: 1;
+  display: none;
 }
 .csseditor .polygon-editor-view svg path.guide, .csseditor .polygon-editor-view svg polygon.guide {
   fill: transparent;
@@ -16002,6 +16003,7 @@ html, body {
   fill: transparent;
   stroke: #dfdfdf;
   stroke-width: 0.5;
+  display: none;
 }
 .csseditor[data-theme=light] .path-editor-view svg path.guide {
   fill: transparent;
@@ -16039,7 +16041,6 @@ html, body {
   top: 0px;
   right: 0px;
   bottom: 0px;
-  outline: 1px auto blue;
   cursor: crosshair;
 }
 .csseditor[data-theme=light] .polygon-editor-view.alt svg circle {
@@ -16078,6 +16079,7 @@ html, body {
   fill: transparent;
   stroke: #dfdfdf;
   stroke-width: 1;
+  display: none;
 }
 .csseditor[data-theme=light] .polygon-editor-view svg path.guide, .csseditor[data-theme=light] .polygon-editor-view svg polygon.guide {
   fill: transparent;

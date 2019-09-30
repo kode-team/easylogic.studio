@@ -6,6 +6,7 @@
     right:0px;
     bottom:0px;
     cursor: crosshair;
+    // background-color: rgba($background-color, 0.5);
 
     &.draw {
         cursor: crosshair;
@@ -89,7 +90,7 @@
             fill: transparent;
             stroke: $selected-border-color;
             stroke-width: 0.5;
-            // display: none;
+            display: none;
         }
 
         path {

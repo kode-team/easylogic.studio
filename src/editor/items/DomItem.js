@@ -515,7 +515,7 @@ export class DomItem extends GroupItem {
 
         'background-color', 'color',  'opacity', 'mix-blend-mode',
 
-        'transform-origin', 'transform-style', 'perspective', 'perspective-origin',
+        'transform-origin', 'transform', 'transform-style', 'perspective', 'perspective-origin',
 
         'font-size', 'font-stretch', 'line-height', 'font-weight', 'font-family', 'font-style',
         'text-align', 'text-transform', 'text-decoration',
@@ -531,9 +531,9 @@ export class DomItem extends GroupItem {
 
   }
 
-  toTransformCSS() {
-    return this.toKeyListCSS('transform')
-  }
+  // toTransformCSS() {
+  //   return this.toKeyListCSS('transform')
+  // }
 
   toVariableCSS () {
     var obj = {}
@@ -602,7 +602,7 @@ export class DomItem extends GroupItem {
       ...this.toBoxModelCSS(),
       ...this.toBorderCSS(),
       ...this.toOutlineCSS(),      
-      ...this.toTransformCSS(),      
+      // ...this.toTransformCSS(),      
       // ...this.toBorderImageCSS(),
       ...this.toBackgroundImageCSS(isExport),
       ...this.toAnimationCSS(),
@@ -619,7 +619,7 @@ export class DomItem extends GroupItem {
       ...this.toBoxModelCSS(),
       ...this.toBorderCSS(),
       ...this.toOutlineCSS(),
-      ...this.toTransformCSS(),
+      // ...this.toTransformCSS(),
       // ...this.toBorderImageCSS(),
       ...this.toAnimationCSS(),
       ...this.toTransitionCSS(),      
@@ -659,6 +659,10 @@ export class DomItem extends GroupItem {
     return []
   }
 
+  toNestedBoundCSS($prefix) {
+    return []
+  }  
+
   generateEmbed () {
     return {
       css: this.toEmbedCSS(), 
@@ -694,6 +698,14 @@ ${this.toSelectorString(prefix)}
 ${prefix} {  /* ${this.json.itemType} */
     ${CSS_TO_STRING(this.toBoundCSS(), '\n')}; 
 }
+
+
+${this.toNestedBoundCSS().map(it => {
+  return `${prefix} ${it.selector} { 
+      ${it.cssText ? it.cssText : CSS_TO_STRING(it.css || {}, '\n\t\t')}; 
+  }`
+}).join('\n')}
+
 `  
     return cssString;
   }

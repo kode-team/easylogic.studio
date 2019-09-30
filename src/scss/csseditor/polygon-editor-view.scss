@@ -5,7 +5,7 @@
     top:0px;
     right:0px;
     bottom:0px;
-    outline:1px auto blue;
+    // outline:1px auto blue;
     cursor: crosshair;
 
     &.alt {
@@ -68,6 +68,7 @@
             fill: transparent;
             stroke: $selected-border-color;
             stroke-width: 1;
+            display: none; 
         }        
 
         path,polygon {
