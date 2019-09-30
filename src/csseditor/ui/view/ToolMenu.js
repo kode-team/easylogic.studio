@@ -22,6 +22,8 @@ export default class ToolMenu extends UIElement {
             <!-- AddSphere / -->
             <div class='split'></div>
             <!--<label>SVG</label>-->
+            <AddSVGRect />
+            <AddSVGCircle />
             <AddPath />
             <AddPolygon />
             <AddStar />

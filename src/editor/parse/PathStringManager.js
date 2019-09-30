@@ -1,3 +1,5 @@
+import PathParser from "./PathParser";
+
 export default class PathStringManager {
     constructor () {
         this.pathArray = [] 
@@ -42,6 +44,39 @@ export default class PathStringManager {
 
     toString (className = 'object') {
         return /*html*/`<path d="${this.d}" class='${className}'/>`
+    }
+
+    static makeRect (x, y, width, height) {
+        var d = new PathStringManager()
+            .M({x, y})
+            .L({x: x + width, y})
+            .L({x: x + width, y: y + height})
+            .L({x, y: y + height})
+            .L({x, y})
+            .Z()
+            .d
+
+        return d; 
+    }
+
+    static makeCircle (x, y, width, height) {
+        // refer to https://stackoverflow.com/questions/1734745/how-to-create-circle-with-b%C3%A9zier-curves
+
+        var segmentSize = 0.552284749831;
+
+        var d = new PathStringManager()
+            .M({x: 0, y: -1})
+            .C({x: segmentSize, y: -1},{x: 1, y: -segmentSize},{x: 1, y: 0})
+            .C({x: 1, y: segmentSize},{x: segmentSize, y: 1},{x: 0, y: 1})
+            .C({x: -segmentSize, y: 1},{x: -1, y: segmentSize},{x: -1, y: 0})
+            .C({x: -1, y: -segmentSize},{x: -segmentSize, y: -1},{x: 0, y: -1})
+            .Z()
+            .d
+        var parser = new PathParser(d);
+
+        parser.translate(1, 1).scaleTo(width/2, height/2);
+
+        return parser.toString();
     }
 
 }

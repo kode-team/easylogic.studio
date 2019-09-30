@@ -9,6 +9,8 @@ import { SphereLayer } from "../../../../editor/items/layers/SphereLayer";
 import { CubeLayer } from "../../../../editor/items/layers/CubeLayer";
 import { ImageLayer } from "../../../../editor/items/layers/ImageLayer";
 import { TextLayer } from "../../../../editor/items/layers/TextLayer";
+import PathStringManager from "../../../../editor/parse/PathStringManager";
+import { SVGPathItem } from "../../../../editor/items/layers/SVGPathItem";
 
 export default class ObjectCommand extends UIElement {
 
@@ -106,6 +108,27 @@ export default class ObjectCommand extends UIElement {
 
     }
 
+    [COMMAND('add.svgrect')] (rect = {}) {
+
+        this.trigger('add.layer', new SVGPathItem({
+            width: Length.px(100),
+            height: Length.px(100),
+            d: PathStringManager.makeRect(0, 0, rect.width.value, rect.height.value),
+            ...rect
+        }), rect)
+    }        
+
+
+    [COMMAND('add.svgcircle')] (rect = {}) {
+
+        this.trigger('add.layer', new SVGPathItem({
+            width: Length.px(100),
+            height: Length.px(100),
+            d: PathStringManager.makeCircle(0, 0, rect.width.value, rect.height.value),
+            ...rect
+        }), rect)
+    }            
+
 
     [COMMAND('add.circle')] (rect = {}) {
 
@@ -167,7 +190,7 @@ export default class ObjectCommand extends UIElement {
         editor.selection.empty();
         this.emit('initSelectionTool');        
         this.emit('showPathEditor', 'draw' );
-    }
+    } 
 
     [COMMAND('open.polygon.editor')] (points = '', changeEvent = 'updatePolygonItem') {
         var current = editor.selection.current;

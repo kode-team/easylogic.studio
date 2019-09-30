@@ -58,7 +58,7 @@ export default class ElementView extends UIElement {
                 <GuideLineView ref='$guideLineView' />                
                 <SelectionToolView ref='$selectionTool' />
                 <PathEditorView ref='$pathEditorView' />
-                <PolygonEditorView ref='$polygonEditorView' />                
+                <PolygonEditorView ref='$polygonEditorView' />                             
             </div>
         `
     }

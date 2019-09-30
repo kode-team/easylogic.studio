@@ -1,11 +1,8 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, CLICK, DOUBLECLICK, BLUR, FOCUSOUT, KEYUP, KEY, PREVENT, STOP, VDOM, KEYDOWN } from "../../../util/Event";
+import { LOAD, CLICK, DOUBLECLICK, FOCUSOUT, KEY, PREVENT, STOP, VDOM, KEYDOWN } from "../../../util/Event";
 import { editor } from "../../../editor/editor";
 import icon from "../icon/icon";
 import { EVENT } from "../../../util/UIElement";
-import { ArtBoard } from "../../../editor/items/ArtBoard";
-
-
 
 export default class ArtBoardProperty extends BaseProperty {
   getTitle() {

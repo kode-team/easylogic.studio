@@ -56,13 +56,13 @@ export default class SVGImageAssetsProperty extends BaseProperty {
   [LOAD("$svgimageList")]() {
     var current = editor.selection.currentProject || { svgimageList: [] }
 
-    var svgimages = current.svgimageList;
+    var svgimages = current.svgimages;
 
     var results = svgimages.map( (svgimage, index) => {
 
       var objectInfo = svgimage.info.objectInfo;
 
-      return `
+      return /*html*/`
         <div class='svgimage-item' data-index="${index}">
           <div class='preview' data-index="${index}">
             <div class='svgimage-view'>${objectInfo.svgimage}</div>

@@ -17,6 +17,16 @@ This project is [sapa](https://github.com/easylogic/sapa) based.
 
 # Features 
 
+### Support Element 
+
+* Rect 
+* Circle 
+* Text 
+* Image 
+* Cube 
+* SVG Path 
+* SVG Polygon with star 
+
 ### Style
 
 * Alignment 
@@ -69,6 +79,12 @@ cd editor
 npm install 
 npm run dev 
 ``` 
+
+# build 
+
+```
+npm run build 
+```
 
 # Thanks to 
 

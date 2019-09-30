@@ -29,6 +29,7 @@
                 display: inline-block;
                 width: 20px;
                 height: 20px;
+                position: relative;
                 svg {
                     width: 100%;
                     height: 100%;
@@ -36,6 +37,21 @@
                     path,polygon {
                         fill: transparent;
                         stroke: $list-item-selected-font-color;
+                    }
+                }
+
+                &[data-item-type='svg-path'],
+                &[data-item-type='svg-polygon'] {
+                    &:before {
+                        content: 'S';
+                        position: absolute;
+                        left:0px;
+                        top:0px;
+                        width:100%;
+                        height:100%;
+                        text-align: center;
+                        font-size: 10px;
+                        line-height: 2;
                     }
                 }
             }            

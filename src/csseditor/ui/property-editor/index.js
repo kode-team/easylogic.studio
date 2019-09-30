@@ -36,9 +36,12 @@ import PolygonDataEditor from "./PolygonDataEditor";
 import OffsetPathListEditor from "./OffsetPathListEditor";
 import BackgroundPositionEditor from "./BackgroundPositionEditor";
 import GradientSingleEditor from "./GradientSingleEditor";
-
+import BorderEditor from "./BorderEditor";
+import BorderValueEditor from "./BorderValueEditor";
 
 export default {
+    BorderEditor,
+    BorderValueEditor,
     GradientSingleEditor,
     BackgroundPositionEditor,
     OffsetPathListEditor,

@@ -256,4 +256,46 @@ export class AssetItem extends Item {
   createSVGFilter(data = {}) {
     return this.addSVGFilter(data)
   }  
+
+ 
+
+  /* svg clip-path images   */
+
+  getSVGImageIndex (id) {
+
+    var filter = this.json.svgimages.map( (it, index) => {
+      return { id: it.id, index }
+    }).filter(it => {
+      return it.id === id 
+    })[0];
+
+    return filter ? filter.index : -1;
+  }
+
+  removeSVGImage(removeIndex) {
+    this.removePropertyList(this.json.svgimages, removeIndex);
+  }      
+
+
+  copySVGImage(index) {
+    this.copyPropertyList(this.json.svgimages, index);    
+  }        
+
+  sortSVGImage(startIndex, targetIndex) {
+    this.sortItem(this.json.svgimages, startIndex, targetIndex);
+  }    
+
+  setSVGImageValue(index, value) {
+    this.json.svgimages[index] = {...this.json.svgimages[index], ...value}
+  }
+
+  addSVGImage(obj = {}) {
+    this.json.svgimages.push(obj)
+    var index = this.json.svgimages.length - 1;
+    return index; 
+  }
+
+  createSVGImage(data = {}) {
+    return this.addSVGImage(data)
+  }   
 }

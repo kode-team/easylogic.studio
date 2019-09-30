@@ -8,7 +8,7 @@ import ProjectInformationProperty from "../property/ProjectInformationProperty";
 export default class LayerTab extends UIElement {
   components() {
     return {
-      ObjectItems,
+      ObjectItems, 
       ProjectProperty,
       ProjectInformationProperty
     }

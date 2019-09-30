@@ -34,7 +34,8 @@ export default class LayerTreeProperty extends BaseProperty {
     // return '';
 
     switch(item.itemType) {
-    case 'circle': return icon.circle;
+    case 'circle': 
+      return icon.circle;
     case 'image': return icon.photo;
     case 'text': return icon.title;
     case 'cube' : return icon.cube;
@@ -68,7 +69,7 @@ export default class LayerTreeProperty extends BaseProperty {
       <div class='layer-item ${selected}' data-depth="${depth}" data-layer-id='${layer.id}' draggable="true">
         <div class='detail'>
           <label> 
-            <span class='icon'>${this.getIcon(layer)}</span> 
+            <span class='icon' data-item-type="${layer.itemType}">${this.getIcon(layer)}</span> 
             <span class='name'>${name}</span>
           </label>
           <div class="tools">

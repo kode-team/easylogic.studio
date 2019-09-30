@@ -107,9 +107,10 @@ export default class ToolCommand extends UIElement {
         case '3': return ['add.type', 'text'];
         case '4': return ['add.type', 'image'];
         case '5': return ['add.type', 'cube'];
-        case '6': return ['add.path'];
-        case '7': return ['add.polygon'];
-        case '8': return ['add.star'];
+        case '6': return ['add.type', 'svgrect'];
+        case '7': return ['add.path'];
+        case '8': return ['add.polygon'];
+        case '9': return ['add.star'];
         }
     }
 

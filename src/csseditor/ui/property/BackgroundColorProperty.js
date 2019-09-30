@@ -1,8 +1,7 @@
 import BaseProperty from "./BaseProperty";
 import { editor } from "../../../editor/editor";
-import { LOAD, DEBOUNCE } from "../../../util/Event";
+import { DEBOUNCE } from "../../../util/Event";
 import { EVENT } from "../../../util/UIElement";
-import { Length } from "../../../editor/unit/Length";
 import { Transform } from "../../../editor/css-property/Transform";
 
 
@@ -54,21 +53,6 @@ export default class BackgroundColorProperty extends BaseProperty {
             removable="true"
             onchange="changeSelect" />
         </div>
-        <!--
-        <div class='property-item animation-property-item'>
-          <span class='add-timeline-property' data-property='rotate'></span>
-          <RangeEditor 
-            ref='$rotate' 
-            key='rotate' 
-            label='rotate'
-            min="-360"
-            max="360"
-            step="0.1"
-            units='deg,turn'
-            removable="true"
-            onchange="changeSelect" />
-        </div>
-        -->
         
         <div class='property-item animation-property-item'>
           <span class='add-timeline-property' data-property='mix-blend-mode'></span>
@@ -89,32 +73,16 @@ export default class BackgroundColorProperty extends BaseProperty {
     if (current) {
       this.children.$color.setValue(current['background-color'] || 'rgba(0, 0, 0, 1)')
       this.children.$opacity.setValue(current.opacity || '1')
-      // this.children.$rotate.setValue(current.rotate || Length.deg(0))
       this.children.$mixBlend.setValue(current['mix-blend-mode'])
     }
   }
 
 
   [EVENT('changeSelect')] (key, value) {
-
-    if (key === 'rotate') {
-      editor.selection.resetCallback(item => {
-        return {
-          transform: Transform.replace(item.transform, {
-            type: 'rotate', 
-            value: [value]
-          })
-        }
-      })
-      
-    } else {
-
-      editor.selection.reset({
+       editor.selection.reset({
         [key]: value
       })
-  
-    }
-
+ 
     this.emit("refreshSelectionStyleView");
   }
 

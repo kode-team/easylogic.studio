@@ -25,9 +25,13 @@ import AddPath from "./AddPath";
 import Save from "./Save";
 import Download from "./Download";
 import SelectTool from "./SelectTool";
+import AddSVGRect from "./AddSVGRect";
+import AddSVGCircle from "./AddSVGCircle";
 
 
 export default {
+  AddSVGCircle,
+  AddSVGRect,
   SelectTool,
   Download,
   Save,

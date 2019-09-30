@@ -29,7 +29,7 @@ export default class SVGFilterAssetsProperty extends BaseProperty {
   }
 
   getBody() {
-    return `
+    return /*html*/`
       <div class='property-item svgfilter-assets'>
         <div class='svgfilter-list' ref='$svgfilterList' data-view-mode='${this.state.mode}'></div>
       </div>

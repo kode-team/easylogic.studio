@@ -1,30 +1,16 @@
 import UIElement from "../../../util/UIElement";
-import AddRect from "../menu-items/AddRect";
-import AddCircle from "../menu-items/AddCircle";
-import AddImage from "../menu-items/AddImage";
-import AddPath from "../menu-items/AddPath";
-import AddText from "../menu-items/AddText";
-import LayerTab from "./LayerTab";
-import AddPolygon from "../menu-items/AddPolygon";
-import AddStar from "../menu-items/AddStar";
 import { CLICK } from "../../../util/Event";
-import AddCube from "../menu-items/AddCube";
-import AddSphere from "../menu-items/AddSphere";
+import menuItems from "../menu-items";
+import LayerTab from "./LayerTab";
+
+
 
 
 export default class ObjectList extends UIElement {
   components() {
     return {
-      AddSphere,
-      AddCube,
-      AddStar,
-      AddPolygon,
-      LayerTab,      
-      AddText,
-      AddPath,
-      AddRect,
-      AddCircle,
-      AddImage
+      ...menuItems,
+      LayerTab
     }
   }
   template() {
@@ -41,6 +27,7 @@ export default class ObjectList extends UIElement {
           <!-- AddSphere / -->
           <div class='split'></div>
           <label>SVG</label>
+          <AddSVGRect />
           <AddPath />
           <AddPolygon />
           <AddStar />

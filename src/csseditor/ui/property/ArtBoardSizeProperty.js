@@ -8,11 +8,6 @@ import SelectEditor from "../property-editor/SelectEditor";
 import { Length } from "../../../editor/unit/Length";
 
 export default class ArtBoardSizeProperty extends BaseProperty {
-  components() {
-    return {
-      SelectEditor
-    }
-  }
 
   getClassName() {
     return 'artboard-size-list'

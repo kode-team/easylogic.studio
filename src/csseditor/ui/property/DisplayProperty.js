@@ -4,7 +4,19 @@ import { editor } from "../../../editor/editor";
 import { EVENT } from "../../../util/UIElement";
 
 
-export default class PositionProperty extends BaseProperty {
+import RangeEditor from "../property-editor/RangeEditor";
+import SelectEditor from "../property-editor/SelectEditor";
+
+
+
+export default class DisplayProperty extends BaseProperty {
+  components() {
+    return {
+      RangeEditor,
+      SelectEditor
+    }
+  }
+
   getTitle() {
     return "Position";
   }
@@ -25,7 +37,7 @@ export default class PositionProperty extends BaseProperty {
     var current = editor.selection.current;
     if (!current) return '';
 
-    return /*html*/`
+    return `
       <div class='property-item'>
         <SelectEditor ref='$position' icon="true" label='position' key='position' value='${current.position}' options='absolute,relative,fixed,static' onchange="changRangeEditor" />
       </div>    
