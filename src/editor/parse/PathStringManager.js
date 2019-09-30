@@ -74,7 +74,7 @@ export default class PathStringManager {
             .d
         var parser = new PathParser(d);
 
-        parser.translate(1, 1).scaleTo(width/2, height/2).translate(x, y);
+        parser.translate(1, 1).scale(width/2, height/2).translate(x, y);
 
         return parser.toString();
     }
