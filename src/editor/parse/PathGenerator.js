@@ -926,7 +926,7 @@ export default class PathGenerator {
 
     toSVGString () {
         return `
-        <svg width="100%" height="100%">
+        <svg width="100%" height="100%" class='svg-editor-canvas'>
             ${this.makeSelectedSVGZone()}
             ${this.guideLineManager.toString('guide')}
             ${this.pathStringManager.toString('object')}

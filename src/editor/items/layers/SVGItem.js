@@ -40,6 +40,22 @@ export class SVGItem extends Layer {
     }
   }
 
+  toDefaultCSS() {
+    return {
+      ...super.toDefaultCSS(),
+      'transform': '',
+      'transform-origin': ''
+    }
+  }
+
+  toBoundCSS() {
+    return {
+      ...super.toBoundCSS(),
+      'transform': '',
+      'transform-origin': ''
+    }
+  }
+
   toSVGDefaultCSS () {
 
     if (this.json['motion-based']) {

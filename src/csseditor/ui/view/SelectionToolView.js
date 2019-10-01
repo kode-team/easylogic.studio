@@ -9,6 +9,7 @@ import { Transform } from "../../../editor/css-property/Transform";
 import Dom from "../../../util/Dom";
 import { calculateAngle } from "../../../util/functions/math";
 import AreaItem from "../../../editor/items/AreaItem";
+import PathStringManager from "../../../editor/parse/PathStringManager";
 
 var DEFINED_TRANFORM_ORIGIN = {
     'top': '50% 0%',
@@ -38,7 +39,6 @@ export default class SelectionToolView extends UIElement {
     <div class='selection-view' ref='$selectionView' >
         <div class='selection-tool' ref='$selectionTool' style='left:-100px;top:-100px;'>
             <div class='selection-tool-item' data-position='move'></div>
-            <div class='selection-tool-item' data-position='path'>${icon.scatter}</div>
             <svg class='selection-tool-item' data-position='translate' ref='$translate'></svg>            
             
             <div class='selection-tool-item' data-position='transform-origin' ref='$transformOrigin'>
@@ -78,8 +78,72 @@ export default class SelectionToolView extends UIElement {
             <div class='selection-tool-item' data-position='to bottom left'></div>
         </div>
         <div class='selection-pointer' ref='$selectionPointer'></div>
+        <svg class='transform-translate' ref='$pathMaker'></svg>
     </div>`
     }
+
+
+    [BIND('$pathMaker')] () {
+        var current = editor.selection.current 
+
+        if (current && current.is && current.is('artboard')) {
+            return {
+                style: {
+                    display: 'none'
+                }
+            }
+        } else if (editor.selection.length !== 1) {
+            return {
+                style: {
+                    display: 'none'
+                }
+            }
+        }
+
+        var obj = {
+            translate: { x: 0, y: 0, z: 0 }
+        }
+        var x = 0, y = 0;
+        if (current) {
+
+
+            var [left, top] = (current['transform-origin'] || '50% 50%').split(' ').map(it => {
+                return Length.parse(it || '50%');
+            })
+    
+            left = left.toPx(current.screenWidth.value);
+            top = top.toPx(current.screenHeight.value);
+
+            var x = (current.screenX.value + left.value ) * editor.scale;
+            var y = (current.screenY.value + top.value ) * editor.scale;
+
+            var [tx, ty] = Transform.get(current['transform'], 'translate');
+            if (!tx) {
+                var [tx] = Transform.get(current['transform'], 'translateX');
+            }
+            if (!ty) {
+                var [ty] = Transform.get(current['transform'], 'translateY');
+            }            
+            tx = tx || Length.px(0)
+            ty = ty || Length.px(0)
+
+
+
+            obj.translate.x = x + tx.value * editor.scale ; 
+            obj.translate.y = y + ty.value * editor.scale; 
+
+        }
+
+        return {
+            style: {
+                display: 'block'
+            },
+            innerHTML: `
+                <path d="M${x}, ${y}L${obj.translate.x},${obj.translate.y}Z" fill="transparent" />
+            `
+        }
+    }    
+
 
     // [EVENT('add.type')] () {
     //     this.$el.hide();
@@ -92,7 +156,7 @@ export default class SelectionToolView extends UIElement {
                 item.reset({ 'transform-origin': '' })
             })
             this.bindData('$rotate3d')
-            this.bindData('$translate');            
+            this.bindData('$pathMaker');            
         } else if (e.shiftKey) {
             editor.selection.each(item => {
                 var transform = Transform.join(Transform.parseStyle(item.transform).filter(it => {
@@ -110,7 +174,8 @@ export default class SelectionToolView extends UIElement {
             })
             this.bindData('$rotateZ')
             this.bindData('$rotateArea')  
-            this.bindData('$transformOrigin');                      
+            this.bindData('$transformOrigin');       
+            this.bindData('$pathMaker');                                       
         } else {
             editor.selection.each(item => {
                 var transform = Transform.join(Transform.parseStyle(item.transform).filter(it => {
@@ -129,7 +194,8 @@ export default class SelectionToolView extends UIElement {
             })
             this.bindData('$rotateZ')
             this.bindData('$rotateArea')    
-            this.bindData('$transformOrigin');            
+            this.bindData('$transformOrigin');     
+            this.bindData('$pathMaker');                               
         }
 
         this.emit('refreshSelectionStyleView');
@@ -316,11 +382,6 @@ export default class SelectionToolView extends UIElement {
         this.$target = e.$delegateTarget;
         this.pointerType = e.$delegateTarget.attr('data-position')
 
-        if (this.pointerType === 'path' || this.pointerType === 'polygon') {
-            this.trigger('openPathEditor');
-            return false;
-        }
-
         this.refs.$selectionTool.attr('data-selected-position', this.pointerType);
         this.parent.selectCurrent(...editor.selection.items)
 
@@ -431,53 +492,6 @@ export default class SelectionToolView extends UIElement {
         }
     }
 
-
-
-    [BIND('$translate')] () {
-        return {} ;
-        
-        var current = editor.selection.current 
-
-        var obj = {
-            translate: { x: 0, y: 0, z: 0 }
-        }
-        var left = '0px', top = '0px';
-        if (current) {
-            var [left, top] = (current['transform-origin'] || '50% 50%').split(' ').map(it => {
-                return Length.parse(it || '50%');
-            })
-    
-            left = left || Length.percent(50)
-            top = top || Length.percent(50)
-    
-            if (current) {
-    
-                left = left.toPx(current.width.value);
-                top = top.toPx(current.height.value);
-        
-                var element = this.parent.getElement(current.id)
-                if (element) {
-                    obj = current.getTransform(element.el)
-                }
-
-
-            }
-    
-        }
-
-        return {
-            style: {
-                position: 'absolute',
-                left, top,
-                width: '1px', 
-                height: '1px',
-                overflow:  'visible'
-            },
-            innerHTML: `
-                <path d="M0, 0L${obj.translate.x},${obj.translate.y}Z" fill="transparent" />
-            `
-        }
-    }    
 
     [BIND('$rotateArea')] () {
         var current = editor.selection.current || { transform : '' }  
@@ -668,14 +682,14 @@ export default class SelectionToolView extends UIElement {
 
                 this.modifyRotateZ(dx, dy);
                 this.bindData('$rotateZ')             
-
+                this.bindData('$pathMaker');            
             } else if (this.hasPerspective) {
                 this.modifyPerspective(dx, dy);
                 
                 this.bindData('$rotate3d')
                 this.bindData('$rotateArea')   
-                this.bindData('$translate');
-                this.bindData('$transformOrigin');                
+                this.bindData('$transformOrigin');    
+                this.bindData('$pathMaker');                                        
             } else {
 
                 if (this.hasTransformOrigin) {
@@ -689,8 +703,8 @@ export default class SelectionToolView extends UIElement {
                 }
                 this.bindData('$rotate3d')
                 this.bindData('$rotateArea')       
-                this.bindData('$translate');    
-                this.bindData('$transformOrigin');                                             
+                this.bindData('$transformOrigin'); 
+                this.bindData('$pathMaker');                                                                        
             }
             // this.bindData('$selectionPointer')            
             this.emit('refreshStylePosition'); 
@@ -727,6 +741,13 @@ export default class SelectionToolView extends UIElement {
 
     end (dx, dy) {
 
+        if (this.pointerType === 'move') {
+            if (dx === 0 && dy === 0) {
+                this.trigger('openPathEditor');
+                return; 
+            }
+        }
+
         if (this.pointerType === 'transform-origin') {
            editor.selection.reset({
                'transform-origin': DEFINED_TRANFORM_ORIGIN[this.transformOriginValue] || '50% 50%'
@@ -734,7 +755,8 @@ export default class SelectionToolView extends UIElement {
 
            this.bindData('$rotate3d');
            this.bindData('$rotateArea');
-           this.bindData('$transformOrigin');           
+           this.bindData('$transformOrigin');  
+           this.bindData('$pathMaker');                                
         } else {
 
             var e = editor.config.get('bodyEvent');
@@ -824,7 +846,8 @@ export default class SelectionToolView extends UIElement {
 
         this.bindData('$rotateZ')
         this.bindData('$rotateArea')
-        this.bindData('$transformOrigin');        
+        this.bindData('$transformOrigin');       
+        this.bindData('$pathMaker'); 
 
         this.makeSelectionTool();
 
@@ -866,7 +889,7 @@ export default class SelectionToolView extends UIElement {
         this.bindData('$rotate3d');
         this.bindData('$rotateArea');  
         this.bindData('$transformOrigin');           
-        this.bindData('$translate');        
+        this.bindData('$pathMaker');            
         // this.bindData('$selectionPointer')
         
         this.refreshPositionText(x, y, width, height)
@@ -984,7 +1007,7 @@ export default class SelectionToolView extends UIElement {
         this.bindData('$rotateArea');
         this.bindData('$transformOrigin');        
         this.bindData('$rotateZ');
-        this.bindData('$translate'); 
+        this.bindData('$pathMaker');            
     }
 
     

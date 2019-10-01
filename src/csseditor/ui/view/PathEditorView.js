@@ -8,6 +8,8 @@ import PathParser from "../../../editor/parse/PathParser";
 import { SVGPathItem } from "../../../editor/items/layers/SVGPathItem";
 import { Length } from "../../../editor/unit/Length";
 import { getBezierPoints, recoverBezier, recoverBezierQuard, getBezierPointsQuard, recoverBezierLine, getBezierPointsLine } from "../../../util/functions/bezier";
+import { Transform } from "../../../editor/css-property/Transform";
+import { degreeToRadian } from "../../../util/functions/math";
 
 export default class PathEditorView extends UIElement {
 
@@ -49,6 +51,7 @@ export default class PathEditorView extends UIElement {
     [KEYUP('document') + IF('isShow') + KEY('Escape') + KEY('Enter') + PREVENT + STOP] () {
 
         if (this.state.current) {
+            this.state.rect = this.parent.refs.$body.rect();               
             this.refreshPathLayer();
         } else {
             var pathRect = this.refs.$view.$('path.object').rect()
@@ -90,15 +93,23 @@ export default class PathEditorView extends UIElement {
         rect.x -= this.state.rect.x;
         rect.y -= this.state.rect.y;
 
-        var totalLength = this.refs.$view.$('path.object').el.getTotalLength()        
+        var totalLength = this.refs.$view.$('path.object').el.getTotalLength()       
+
+        // 돌린만큼 원상 복구 
+
+
         var { d } = this.pathGenerator.toPath(
             rect.x * this.scale, 
             rect.y * this.scale, 
             this.scale
         );
 
+        var parser = new PathParser(d);
+        var [radian, cx, cy] = this.state.reverse
+        parser.rotate(radian, rect.width/2, rect.height/2) 
+
         this.emit(this.state.changeEvent, {
-            d, totalLength, rect 
+            d: parser.toString(), totalLength, rect 
         })
         this.emit('refreshPathLayer')
     }
@@ -153,7 +164,32 @@ export default class PathEditorView extends UIElement {
         if (obj && obj.d) {
             this.pathParser.reset(obj.d)
             this.pathParser.scale(this.scale, this.scale);
-            this.pathParser.translate(obj.screenX.value * this.scale, obj.screenY.value * this.scale)
+
+            var x = obj.screenX.value * this.scale
+            var y = obj.screenY.value * this.scale
+            var width = obj.screenWidth.value * this.scale
+            var height = obj.screenHeight.value * this.scale
+
+            this.pathParser.translate(x, y)
+
+            var transform = Transform.parseStyle(obj.current.transform);
+            var rotateValue = transform.find(it => it.type === 'rotateZ' || it.type === 'rotate');
+            var transformRotate = 0; 
+
+            if (rotateValue) {
+                transformRotate = rotateValue.value[0].value;
+            }
+
+            transformRotate = (transformRotate + 360) % 360
+            this.pathParser.rotate(degreeToRadian(transformRotate), x + width/2, y + height/2)
+
+            this.state.reverse = [
+                degreeToRadian(-transformRotate), 
+                x + width/2, 
+                y + height/2
+            ]
+            this.state.reverseXY = {x, y, width, height}
+
             this.state.points = this.pathParser.convertGenerator();      
         }
 
@@ -317,6 +353,13 @@ export default class PathEditorView extends UIElement {
 
 
         this.state.$target = Dom.create(e.target);
+
+        if (this.state.$target.hasClass('svg-editor-canvas') && !this.isMode('draw')) {
+            this.changeMode('modify');
+            this.trigger('hidePathEditor')
+            return false; 
+        }
+
         this.state.isSegment = this.state.$target.attr('data-segment') === 'true';
         this.state.isFirstSegment = this.state.isSegment && this.state.$target.attr('data-is-first') === 'true';
         
@@ -370,14 +413,10 @@ export default class PathEditorView extends UIElement {
 
     end (dx, dy) {
 
-        if (this.state.$target.is(this.refs.$view) && editor.config.get('bodyEvent').altKey)  {
-            this.changeMode('modify');
-            // 에디팅  종료 
-            this.trigger('hidePathEditor')
-            return ; 
-        }
+        if (this.isMode('modify')) {
+            // NOOP 
 
-        if (this.isMode('segment-move')) {
+        } else if (this.isMode('segment-move')) {
 
             this.changeMode('modify');            
 
@@ -391,7 +430,7 @@ export default class PathEditorView extends UIElement {
                 this.bindData('$view');       
                    
                 if (this.state.current) {
-                    this.refreshPathLayer;
+                    this.refreshPathLayer();
                 } else {
                  
                     this.addPathLayer(); 

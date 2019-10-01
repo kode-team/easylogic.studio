@@ -194,6 +194,17 @@ export class MovableItem extends Item {
         }
     }
 
+    get transformOrigin () {
+        var [left, top] = (this.json['transform-origin'] || '50% 50%').split(' ').map(it => {
+            return Length.parse(it || '50%');
+        })
+
+        left = left.toPx(this.screenWidth.value);
+        top = top.toPx(this.screenHeight.value);
+
+        return {left, top}
+    }
+
     move (x, y) {
         this.reset({ x, y })
         return this;         

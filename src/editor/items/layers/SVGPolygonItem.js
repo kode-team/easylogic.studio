@@ -87,6 +87,19 @@ export class SVGPolygonItem extends SVGItem {
     ]
   }
 
+
+  toNestedBoundCSS() {
+    return [
+      {
+        selector: 'polygon', 
+        css: {
+          transform: this.json.transform,
+          'transform-origin': this.json['transform-origin'] || '50% 50%'
+        }
+      }
+    ]
+  }
+
   updateFunction (currentElement) {
     var $polygon = currentElement.$('polygon');
     $polygon.attr('points', this.json.points);
@@ -106,9 +119,8 @@ export class SVGPolygonItem extends SVGItem {
 
   get html () {
     var {id, points} = this.json; 
-    return /*html*/`<svg ${OBJECT_TO_PROPERTY({
-      'class': 'element-item polygon',
-      'data-id' : id
-    })}><polygon class='svg-polygon-item' points="${points}" /></svg>`
+    return /*html*/`<svg class='element-item polygon' ${OBJECT_TO_PROPERTY({
+      'motion-based': this.json['motion-based']
+    })} data-id="${id}"><polygon class='svg-polygon-item' points="${points}" /></svg>`
   }
 }

@@ -29,6 +29,7 @@
         svg {
             path {
                 &.object {
+                    pointer-events: visibleStroke;
                     stroke: $path-guide-color;
                 }
             }

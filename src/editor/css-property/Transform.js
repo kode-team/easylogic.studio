@@ -114,6 +114,18 @@ export class Transform extends Property {
     return Transform.join(oldT);
   }
 
+  static get (transform, type) {
+    var arr = Transform.parseStyle(transform)
+
+    var arr = arr.find(it => it.type === type);
+
+    if (arr) {
+      return arr.value; 
+    }
+
+    return [] 
+  } 
+
   static rotate (transform, angle) {
     return Transform.replace(transform, { type: 'rotate', value: [angle] })
   }

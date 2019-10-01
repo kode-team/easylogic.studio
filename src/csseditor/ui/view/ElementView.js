@@ -63,6 +63,15 @@ export default class ElementView extends UIElement {
         `
     }
 
+    getScrollXY () {
+        return {
+            width: this.refs.$body.scrollWidth(),
+            height: this.refs.$body.scrollHeight(),
+            left: this.refs.$body.scrollLeft(),
+            top: this.refs.$body.scrollTop()
+        }
+    }
+
     [EVENT('after.change.mode')] () {
         this.$el.attr('data-mode', editor.mode);
     }

@@ -9,13 +9,14 @@ var numberReg = /-?[0-9]*\.?[0-9]+(?:e[-+]?\d+)?/ig
 const matrix = {
 
     multiply : function (a) {
-        return function (b, startIndex) {
+
+        return function (b, startIndex = 0) {
             var x = +b[startIndex];
             var y = +b[startIndex+1];
 
             return [
-                a[0][0] * x + a[0][1] * x +  a[0][2],
-                a[1][0] * y + a[1][1] * y +  a[1][2],
+                a[0][0] * x + a[0][1] * y +  a[0][2],
+                a[1][0] * x + a[1][1] * y +  a[1][2],
                 1
             ];
         };
@@ -31,10 +32,18 @@ const matrix = {
 
     rotate : function (angle) {
         return this.multiply([
-            [Math.cos(angle) , Math.sin(angle), 0]
-                [-Math.sin(angle),  Math.cos(angle), 0],
+            [Math.cos(angle) , -Math.sin(angle), 0],
+            [Math.sin(angle),  Math.cos(angle), 0],
             [0, 0, 1]
         ]);
+    },
+
+    rotateCenter : function (angle, cx, cy) {
+        return this.multiply([
+            [Math.cos(angle) , -Math.sin(angle), -cx * Math.cos(angle) + cy * Math.sin(angle) + cx],
+            [Math.sin(angle),  Math.cos(angle), -cx * Math.sin(angle) - cy * Math.cos(angle) + cy],
+            [0, 0, 1]
+        ])
     },
 
     scale : function (sx, sy) {
@@ -474,8 +483,13 @@ export default class PathParser {
         return this.joinPath(this._loop(matrix.scale(sx, sy), true))
     }    
 
-    rotate (angle) {
-        this._loop(matrix.rotate(angle));
+    rotate (angle, centerX, centerY) {
+
+        if (isNotUndefined(centerX) && isNotUndefined(centerY)) {
+            this._loop(matrix.rotateCenter(angle, centerX, centerY));   
+        } else {    
+            this._loop(matrix.rotate(angle));
+        }
         return this;        
     }
 

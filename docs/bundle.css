@@ -2699,6 +2699,20 @@ html, body {
 .csseditor .selection-view.empty > * {
   display: none;
 }
+.csseditor .transform-translate {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+}
+.csseditor .transform-translate path {
+  stroke: #111111;
+  stroke-width: 0.5;
+  stroke-dasharray: 1 2;
+}
 .csseditor .selection-pointer {
   position: absolute;
   left: 0px;
@@ -4287,6 +4301,7 @@ html, body {
   line-height: 1.5;
   border-radius: 100%;
   color: #ffffff;
+  opacity: 0.8;
   background-color: #2f3538;
 }
 .csseditor .layer-list .layer-item .detail label {
@@ -8354,6 +8369,7 @@ html, body {
   cursor: default;
 }
 .csseditor .path-editor-view.modify svg path.object {
+  pointer-events: visibleStroke;
   stroke: rgba(158, 158, 158, 0.8);
 }
 .csseditor .path-editor-view svg line {
@@ -10304,6 +10320,20 @@ html, body {
 .csseditor[data-theme=light] .selection-view.empty > * {
   display: none;
 }
+.csseditor[data-theme=light] .transform-translate {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+}
+.csseditor[data-theme=light] .transform-translate path {
+  stroke: #e7e7e7;
+  stroke-width: 0.5;
+  stroke-dasharray: 1 2;
+}
 .csseditor[data-theme=light] .selection-pointer {
   position: absolute;
   left: 0px;
@@ -11892,6 +11922,7 @@ html, body {
   line-height: 1.5;
   border-radius: 100%;
   color: #ffffff;
+  opacity: 0.8;
   background-color: white;
 }
 .csseditor[data-theme=light] .layer-list .layer-item .detail label {
@@ -15959,6 +15990,7 @@ html, body {
   cursor: default;
 }
 .csseditor[data-theme=light] .path-editor-view.modify svg path.object {
+  pointer-events: visibleStroke;
   stroke: #4b61ce;
 }
 .csseditor[data-theme=light] .path-editor-view svg line {

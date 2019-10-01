@@ -8,7 +8,6 @@ import {
 import { DomDiff } from "./DomDiff";
 import { Length } from "../editor/unit/Length";
 
-let counter = 0;
 let cached = [];
 
 export default class Dom {
@@ -17,7 +16,6 @@ export default class Dom {
       this.el = tag;
     } else {
       var el = document.createElement(tag);
-      this.uniqId = counter++;
 
       if (className) {
         el.className = className;
@@ -464,35 +462,6 @@ export default class Dom {
       this.cssFloat("padding-top") -
       this.cssFloat("padding-bottom")
     );
-  }
-
-  dataKey(key) {
-    return this.uniqId + "." + key;
-  }
-
-  data(key, value) {
-    if (arguments.length == 2) {
-      cached[this.dataKey(key)] = value;
-    } else if (arguments.length == 1) {
-      return cached[this.dataKey(key)];
-    } else {
-      var keys = Object.keys(cached);
-
-      var uniqId = this.uniqId + ".";
-      return keys
-        .filter(function(key) {
-          if (key.indexOf(uniqId) == 0) {
-            return true;
-          }
-
-          return false;
-        })
-        .map(function(value) {
-          return cached[value];
-        });
-    }
-
-    return this;
   }
 
   val(value) {

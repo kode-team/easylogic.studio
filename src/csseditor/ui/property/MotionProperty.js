@@ -4,14 +4,12 @@ import { editor } from "../../../editor/editor";
 import { EVENT } from "../../../util/UIElement";
 
 import OffsetPathListEditor from "../property-editor/OffsetPathListEditor";
-import RangeEditor from "../property-editor/RangeEditor";
 
 
 export default class MotionProperty extends BaseProperty {
   components() {
     return {
-      OffsetPathListEditor,
-      RangeEditor
+      OffsetPathListEditor
     }
   }
 
