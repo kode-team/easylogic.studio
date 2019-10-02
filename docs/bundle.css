@@ -1483,6 +1483,13 @@ html, body {
   pointer-events: all;
   color: white;
 }
+.csseditor .layout-main .status-bar > div {
+  display: flex;
+  padding: 4px 10px;
+}
+.csseditor .layout-main .status-bar > div > * {
+  flex: 1 1 auto;
+}
 .csseditor .layout-main .layout-header {
   flex: none;
   height: 50px;
@@ -9103,6 +9110,13 @@ html, body {
   z-index: 1;
   pointer-events: all;
   color: white;
+}
+.csseditor[data-theme=light] .layout-main .status-bar > div {
+  display: flex;
+  padding: 4px 10px;
+}
+.csseditor[data-theme=light] .layout-main .status-bar > div > * {
+  flex: 1 1 auto;
 }
 .csseditor[data-theme=light] .layout-main .layout-header {
   flex: none;

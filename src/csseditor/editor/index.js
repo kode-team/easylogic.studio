@@ -20,6 +20,8 @@ import Resource from "../../editor/util/Resource";
 import windowList from "../ui/window-list";
 import ImageFileView from "../ui/view/ImageFileView";
 import TimelineProperty from "../ui/control/TimelineProperty";
+import StatusBar from "../ui/view/StatusBar";
+
 // import Lottie from "../../editor/parse/Lottie";
 
 
@@ -62,7 +64,10 @@ export default class CSSEditor extends UIElement {
             <TimelineProperty />
           </div>          
         </div>
-        <div class='status-bar'></div>
+        
+        <div class='status-bar'>
+          <StatusBar />
+        </div>
 
         <FillPopup />
         <ColorPickerPopup  />
@@ -99,6 +104,7 @@ export default class CSSEditor extends UIElement {
       LogoView,
       ExternalToolMenu,
       ImageFileView,
+      StatusBar,
       TimelineProperty
     };
   }

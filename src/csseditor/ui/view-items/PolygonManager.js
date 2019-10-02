@@ -5,18 +5,19 @@ export default class PolygonManager extends UIElement {
 
   initState() {
       return {
-          mode: 'move'
+          mode: 'move',
+          msg: 'Keydown ESC or Enter key to close editing'
       }
   }
 
   template() {
-    return `
+    return /*html*/`
       <div class='polygon-manager'>
         <div class='text'>
             <label>Polygon Mode</label>
             <label><input type='radio' name='polygon-mode' value='draw' /> draw</label>            
             <label><input type='radio' name='polygon-mode' value='modify' /> modify</label>
-            <button type="button">Keydown ESC or Enter key to close editing</button>            
+            <button type="button">${this.state.msg}</button>            
         </div>
       </div>    
     `;
@@ -56,6 +57,7 @@ export default class PolygonManager extends UIElement {
       this.setState(obj, false)
       this.refresh();
       this.$el.show();
+      this.emit('addStatusBarMessage', this.state.msg)      
   }
 
   [EVENT('hidePolygonManager')] () {
