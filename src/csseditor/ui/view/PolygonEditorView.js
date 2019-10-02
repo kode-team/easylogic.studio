@@ -255,11 +255,6 @@ export default class PolygonEditorView extends UIElement {
         this.emit('finishPolygonEdit')   
     }
 
-
-    [EVENT('hideSubEditor')] () {
-        // this.trigger('hidePolygonEditor');
-    }
-
     [BIND('$view')] () {
         return {
             class: {
@@ -345,6 +340,12 @@ export default class PolygonEditorView extends UIElement {
 
         this.state.$target = Dom.create(e.target);
         this.state.isSegment = this.state.$target.attr('data-segment') === 'true';
+
+        if (this.state.$target.hasClass('svg-editor-canvas') && !this.isMode('draw') && !this.isMode('star')) {
+            this.changeMode('modify');
+            this.trigger('hidePolygonEditor')
+            return false; 
+        } 
 
         if (this.state.isSegment) {
 

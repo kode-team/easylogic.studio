@@ -1656,6 +1656,22 @@ html, body {
   top: 150px;
   bottom: 0px;
 }
+.csseditor .feature-control .layer-tab .library-items > .group > .title {
+  background-color: #2b2b2b;
+  color: white;
+  padding: 4px 10px;
+}
+.csseditor .feature-control .layer-tab .library-items > .group > .list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+.csseditor .feature-control .layer-tab .library-items > .group > .list > .item {
+  border-right: 1px solid #2b2b2b;
+  border-bottom: 1px solid #2b2b2b;
+  height: 90px;
+  padding: 5px;
+  text-align: center;
+}
 .csseditor .feature-control .draw-items {
   background-color: #2f3538;
   display: none;
@@ -9283,6 +9299,22 @@ html, body {
 .csseditor[data-theme=light] .feature-control .layer-tab .object-items > div:last-child {
   top: 150px;
   bottom: 0px;
+}
+.csseditor[data-theme=light] .feature-control .layer-tab .library-items > .group > .title {
+  background-color: #f1f1f1;
+  color: white;
+  padding: 4px 10px;
+}
+.csseditor[data-theme=light] .feature-control .layer-tab .library-items > .group > .list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+.csseditor[data-theme=light] .feature-control .layer-tab .library-items > .group > .list > .item {
+  border-right: 1px solid #f1f1f1;
+  border-bottom: 1px solid #f1f1f1;
+  height: 90px;
+  padding: 5px;
+  text-align: center;
 }
 .csseditor[data-theme=light] .feature-control .draw-items {
   background-color: white;

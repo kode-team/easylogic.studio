@@ -228,10 +228,6 @@ export default class PathEditorView extends UIElement {
         this.emit('hidePathManager');
     }
 
-    [EVENT('hideSubEditor')] () {
-        // this.trigger('hidePathEditor');
-    }
-
     [BIND('$view')] () {
         return {
             class: {

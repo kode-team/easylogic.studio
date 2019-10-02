@@ -283,6 +283,31 @@
     }
 
 
+    .library-items {
+      > .group {
+        > .title {
+          background-color: $property-title-color;
+          color: white; 
+          padding: 4px 10px;
+        }
+
+        > .list {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          // grid-column-gap: 3px;
+
+          > .item {
+            border-right:1px  solid $property-border-color;
+            border-bottom:1px  solid $property-border-color;
+            height: 90px;
+            padding:5px;
+            text-align: center;
+          }
+        }
+      }
+    }
+
+
   }
 
   .draw-items {

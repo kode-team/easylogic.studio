@@ -82,10 +82,20 @@ export default class TimelineAnimationProperty extends BaseProperty {
 
   [CLICK('$timelineAnimationList .timeline-animation-item label')] (e) {
     var id = e.$delegateTarget.attr('data-id');
-    this.emit('select.timeline', id);
 
-    var $item = e.$delegateTarget.closest('timeline-animation-item');
-    $item.onlyOneClass('selected');
+    var artboard = editor.selection.currentArtboard;
+
+    if (artboard) {
+      artboard.selectTimeline(id);                 
+
+  
+      var $item = e.$delegateTarget.closest('timeline-animation-item');
+      $item.onlyOneClass('selected');
+
+      this.emit('refreshTimeline');
+      this.emit('selectTimeline');          
+    }
+
   }
 
   [EVENT('addTimeline', 'removeTimeline', 'removeAnimation')] () {

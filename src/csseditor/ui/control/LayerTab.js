@@ -3,6 +3,7 @@ import ObjectItems from "./ObjectItems";
 import { CLICK } from "../../../util/Event";
 import ProjectProperty from "../property/ProjectProperty";
 import ProjectInformationProperty from "../property/ProjectInformationProperty";
+import LibraryItems from "./Libraryitems";
 
 
 export default class LayerTab extends UIElement {
@@ -10,7 +11,8 @@ export default class LayerTab extends UIElement {
     return {
       ObjectItems, 
       ProjectProperty,
-      ProjectInformationProperty
+      ProjectInformationProperty,
+      LibraryItems
     }
   }
   template() {
@@ -24,7 +26,9 @@ export default class LayerTab extends UIElement {
             <div class="tab-item" data-value="2">
               <label>Layers</label>
             </div>
-            <div class='tab-item empty-item'></div>   
+            <div class='tab-item' data-value='3'>
+              <label>Library</label>
+            </div>   
             <div class='tab-item empty-item'></div>
             <div class='tab-item empty-item'></div>                                 
           </div>
@@ -35,6 +39,9 @@ export default class LayerTab extends UIElement {
             </div>
             <div class="tab-content" data-value="2">
               <ObjectItems />
+            </div>
+            <div class='tab-content' data-value='3'>
+              <LibraryItems />
             </div>
           </div>
         </div>

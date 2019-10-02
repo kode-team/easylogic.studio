@@ -332,8 +332,8 @@ export default class PolygonGenerator {
 
     toSVGString () {
 
-        return `
-        <svg width="100%" height="100%">
+        return /*html*/`
+        <svg width="100%" height="100%" class='svg-editor-canvas'>
             ${this.makeSelectedSVGZone()}
             <polygon class='object' points="${this.points.map(p => `${p.x} ${p.y}`).join(' ')}" />        
             ${this.makeSnapLines()}
