@@ -6,7 +6,7 @@
     right:0px;
     bottom:0px;
     cursor: crosshair;
-    // background-color: rgba($background-color, 0.5);
+    background-color: rgba($background-color, 0.1);
 
     &.draw {
         cursor: crosshair;
@@ -24,13 +24,14 @@
         }
     }
 
-    &.modify {
+    &.modify,
+    &.segment-move {
         cursor: default;
         svg {
             path {
                 &.object {
                     pointer-events: visibleStroke;
-                    stroke: $path-guide-color;
+                    stroke: transparent;
                 }
             }
         }
@@ -83,7 +84,14 @@
                 fill: blue;
                 stroke: blue;
                 z-index: 1;
-            }            
+            }       
+            
+            &[data-selected='true'] {
+                r: 6;
+                stroke-width: 2;
+                stroke: black;
+                opacity: 0.2;
+            }
             
         }
 

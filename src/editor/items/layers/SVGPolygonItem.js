@@ -77,29 +77,6 @@ export class SVGPolygonItem extends SVGItem {
     return "Polygon";
   }
 
-
-  toNestedCSS() {
-    return [
-      {
-        selector: 'polygon', 
-        css: super.toSVGDefaultCSS()
-      }
-    ]
-  }
-
-
-  toNestedBoundCSS() {
-    return [
-      {
-        selector: 'polygon', 
-        css: {
-          transform: this.json.transform,
-          'transform-origin': this.json['transform-origin'] || '50% 50%'
-        }
-      }
-    ]
-  }
-
   updateFunction (currentElement) {
     var $polygon = currentElement.$('polygon');
     $polygon.attr('points', this.json.points);

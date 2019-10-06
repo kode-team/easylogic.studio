@@ -43,40 +43,11 @@ export class SVGItem extends Layer {
   toDefaultCSS() {
     return {
       ...super.toDefaultCSS(),
-      'transform': '',
-      'transform-origin': ''
+      ...this.toKeyListCSS(
+        'stroke', 'stroke-width', 'stroke-linecap', 'stroke-linejoin', 'stroke-dasharray', 'stroke-dashoffset',
+        'fill', 'fill-opacity', 'fill-rule'
+      )
     }
-  }
-
-  toBoundCSS() {
-    return {
-      ...super.toBoundCSS(),
-      'transform': '',
-      'transform-origin': ''
-    }
-  }
-
-  toSVGDefaultCSS () {
-
-    if (this.json['motion-based']) {
-
-      return {
-        'fill': 'transparent',
-        'fill-opacity': 1,
-        'marker-start': 'url(#start)',
-        // 'marker-mid': 'url(#head)',
-        'marker-end': 'url(#head)',
-        'stroke': 'rgba(0, 0, 0, 0.2)'
-      }
-    } else {
-
-      return {
-        ...this.toKeyListCSS(
-          'stroke', 'stroke-width', 'stroke-linecap', 'stroke-linejoin', 'stroke-dasharray', 'stroke-dashoffset',
-          'fill', 'fill-opacity', 'fill-rule')
-      }
-    }
-
   }
 
   getDefaultTitle() {

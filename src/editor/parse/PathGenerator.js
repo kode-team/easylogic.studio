@@ -65,6 +65,7 @@ export default class PathGenerator {
         var state = this.state; 
         var { points } = state; 
 
+        state.selectedIndex = index; 
         state.connectedPoint =  Point.getPrevPoint(points, index)
 
         if (state.connectedPoint && !state.connectedPoint.connected) {
@@ -112,7 +113,6 @@ export default class PathGenerator {
 
     moveSegment (segmentKey, dx, dy, connectedPoint = null) {
         var state = this.state; 
-        // console.log('move', segmentKey, dx, dy, connectedPoint);
 
         var originPoint = state.originalSegment[segmentKey]
         var targetPoint = state.segment[segmentKey]
@@ -123,6 +123,28 @@ export default class PathGenerator {
         }
 
         this.moveSegmentDistance(originPoint, targetPoint, dx, dy);
+    }
+
+    calculateToCurve (point, nextPoint, prevPoint) {
+
+        var centerX = (nextPoint.startPoint.x + prevPoint.startPoint.x) /2;
+        var centerY = (nextPoint.startPoint.y + prevPoint.startPoint.y) /2;
+
+        var dx = (nextPoint.startPoint.x - centerX)/2
+        var dy = (nextPoint.startPoint.y - centerY)/2
+
+        // 방향을 맞췄다. 
+        // 마지막 point 가 처음과 같이 연결되어 있을 때는 
+        // reverse, end 를 모두 동일하게 가진다. 
+        point.endPoint = {
+            x: point.startPoint.x + dx,
+            y: point.startPoint.y + dy
+        }
+
+        point.reversePoint = {
+            x: point.startPoint.x - dx,
+            y: point.startPoint.y - dy
+        }
     }
 
     convertToCurve (index) {
@@ -167,32 +189,15 @@ export default class PathGenerator {
             var prevPoint = Point.getPrevPoint(points, index);
             var nextPoint = Point.getNextPoint(points, index);
 
-            if (nextPoint.command === 'M') {
-                // 마지막 지점의 다음이 처음과 같을 때 
-                // 처음의 다음 포인트를 가지고 와서 다시 계산한다. 
+            if (nextPoint.index < index && nextPoint.command === 'M') {  
+                // 현재 포인트가 마지막 일 때 connected 상태를 보고 
+                // firstPoint 랑 맞춘다. 
 
                 var firstPoint = nextPoint;
 
                 nextPoint = Point.getNextPoint(points, firstPoint.index);
 
-                var centerX = (nextPoint.startPoint.x + prevPoint.startPoint.x) /2;
-                var centerY = (nextPoint.startPoint.y + prevPoint.startPoint.y) /2;
-    
-                var dx = (nextPoint.startPoint.x - centerX)/2
-                var dy = (nextPoint.startPoint.y - centerY)/2
-    
-                // 방향을 맞췄다. 
-                // 마지막 point 가 처음과 같이 연결되어 있을 때는 
-                // reverse, end 를 모두 동일하게 가진다. 
-                point.endPoint = {
-                    x: point.startPoint.x + dx,
-                    y: point.startPoint.y + dy
-                }
-    
-                point.reversePoint = {
-                    x: point.startPoint.x - dx,
-                    y: point.startPoint.y - dy
-                }
+                this.calculateToCurve(point, nextPoint, prevPoint)
 
                 // 처음도 같이 변경해주기 
                 firstPoint.curve = true; 
@@ -206,23 +211,9 @@ export default class PathGenerator {
                     y: firstPoint.startPoint.y - dy
                 }                
 
-            } else {
+            } else if (nextPoint.index > index && nextPoint.command !== 'M') {
 
-                var centerX = (nextPoint.startPoint.x + prevPoint.startPoint.x) /2;
-                var centerY = (nextPoint.startPoint.y + prevPoint.startPoint.y) /2;
-    
-                var dx = (nextPoint.startPoint.x - centerX)/2
-                var dy = (nextPoint.startPoint.y - centerY)/2
-    
-                point.endPoint = {
-                    x: point.startPoint.x + dx,
-                    y: point.startPoint.y + dy
-                }
-    
-                point.reversePoint = {
-                    x: point.startPoint.x - dx,
-                    y: point.startPoint.y - dy
-                }
+                this.calculateToCurve(point, nextPoint, prevPoint)
             }
 
         }
@@ -290,7 +281,6 @@ export default class PathGenerator {
             connectedPoint[target] = {x, y}
         } else {
 
-            // console.log(state.original, state.segment, state.originalSegment)
             if (state.originalSegment && state.segment) {
                 var {x: cx, y: cy} = state.originalSegment.startPoint;
                 var {x: rx, y: ry} = state.segment[segmentKey];
@@ -447,22 +437,13 @@ export default class PathGenerator {
             state.reversePoint = Point.getReversePoint(state.startPoint, state.endPoint);
         }
 
-        var point = {
+        points.push({
+            command: state.clickCount === 0 ? 'M' : '',
             startPoint: state.startPoint,
             endPoint: state.endPoint,
-            curve: state.dragPoints,
+            curve: !!state.dragPoints,
             reversePoint: state.reversePoint
-        }   
-
-        var last = Point.getLastPoint(points, points.length - 1)
-
-        if (last && last.close) {
-            point.command = 'M'
-        } else if (!last) {
-            point.command = 'M'
-        }
-
-        points.push(point)
+        })
 
         state.startPoint = null;
         state.endPoint = null;
@@ -635,12 +616,12 @@ export default class PathGenerator {
         this.pathStringManager.M(current.startPoint)        
 
         if (current.curve === false) {
-            this.segmentManager.addPoint({}, current.startPoint, index, 'startPoint')
+            this.segmentManager.addPoint({}, current.startPoint, index, 'startPoint', current.selected)
         } else {
             // NOOP 
             // this.segmentManager.addPoint({}, current.startPoint, index, 'startPoint')            
             this.segmentManager
-                .addPoint({}, current.startPoint, index, 'startPoint')                        
+                .addPoint({}, current.startPoint, index, 'startPoint', current.selected)                        
                 .addLine(current.startPoint, current.endPoint)
                 .addCurvePoint(current.endPoint, index, 'endPoint')
         }
@@ -657,7 +638,7 @@ export default class PathGenerator {
                     .L(current.startPoint)
 
                 this.segmentManager
-                    .addPoint({}, current.startPoint, index, 'startPoint')   
+                    .addPoint({}, current.startPoint, index, 'startPoint', current.selected)   
                 
                 this.splitLines.push(
                     new PathStringManager()
@@ -678,7 +659,7 @@ export default class PathGenerator {
 
                 this.segmentManager
                     .addLine(prevPoint.startPoint, prevPoint.endPoint)
-                    .addCurvePoint(current.startPoint, index, 'startPoint')
+                    .addCurvePoint(current.startPoint, index, 'startPoint', current.selected)
                     .addCurvePoint(prevPoint.endPoint, prevPoint.index, 'endPoint');
             }
 
@@ -696,7 +677,7 @@ export default class PathGenerator {
                             .L(current.startPoint)
                             .toString('split-path')
                     )                    
-                    this.segmentManager.addPoint({},current.startPoint, index, 'startPoint')
+                    this.segmentManager.addPoint({},current.startPoint, index, 'startPoint', current.selected)
                 } else {
 
                     this.pathStringManager.Q( current.reversePoint, current.startPoint);
@@ -710,7 +691,7 @@ export default class PathGenerator {
 
                     this.segmentManager
                         .addLine(current.startPoint, current.reversePoint)
-                        .addCurvePoint(current.startPoint, index, 'startPoint')
+                        .addCurvePoint(current.startPoint, index, 'startPoint', current.selected)
                         .addCurvePoint(current.reversePoint, index, 'reversePoint');              
                 }
 
@@ -750,7 +731,7 @@ export default class PathGenerator {
                     this.segmentManager
                         .addLine(prevPoint.startPoint, prevPoint.endPoint)
                         .addLine(current.startPoint, current.reversePoint)
-                        .addCurvePoint(current.startPoint, index, 'startPoint')
+                        .addCurvePoint(current.startPoint, index, 'startPoint', current.selected)
                         .addCurvePoint(prevPoint.endPoint, prevPoint.index, 'endPoint')                        
                         .addCurvePoint(current.reversePoint, index, 'reversePoint');
 
@@ -760,7 +741,7 @@ export default class PathGenerator {
     }
 
     makePointGuide (points) {
-
+        var {selectedIndex} = this.state; 
         for(var index = 0, len = points.length; index < len; index++) {
             var currentIndex = index; 
             var current = points[currentIndex];
@@ -774,11 +755,13 @@ export default class PathGenerator {
                 current.startPoint.isSecond = true; 
             }
 
-            if (nextPoint && nextPoint.command === 'M') {
-                current.startPoint.isLast = true; 
-            } else if (!nextPoint) {
-                current.startPoint.isLast = true; 
+            if (nextPoint ) {
+                current.startPoint.isLast = nextPoint.command === 'M';                 
+            } else {
+                current.startPoint.isLast = index === len - 1; 
             }
+
+            current.selected = selectedIndex === index;
 
             if (current.command === 'M') {
 

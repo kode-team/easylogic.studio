@@ -27,7 +27,6 @@ export default class Inspector extends UIElement {
               <div class="tab-item" data-value="5" title='Code'>
                 <label class='icon'>${icon.code}</label>
               </div>                                     
-              <div class='tab-item empty-item'></div>
             </div>
             <div class="tab-body" ref="$body">
 
@@ -70,6 +69,7 @@ export default class Inspector extends UIElement {
 
                 <!-- SVG Item --> 
                 <SVGItemProperty />
+                <PathDataProperty />
 
                 <ComponentProperty />
 

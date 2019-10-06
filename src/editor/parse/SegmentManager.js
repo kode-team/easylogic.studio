@@ -32,11 +32,12 @@ export default class SegmentManager {
         return this;         
     }    
 
-    addPoint(obj, point, index, segment) {
+    addPoint(obj, point, index, segment, selected = false) {
         this.segmentList.push({
             ...obj,
             cx: point.x,
             cy: point.y,
+            selected,
             index,
             segment,
             isFirst: point.isFirst,
@@ -60,13 +61,14 @@ export default class SegmentManager {
         return this; 
     }    
 
-    addCurvePoint (point, index, segment) {
+    addCurvePoint (point, index, segment, selected = false) {
 
         this.segmentList.push({
             curve: true, 
             cx: point.x,
             cy: point.y,
             index,
+            selected,
             segment,
             isFirst: point.isFirst,
             isLast: point.isLast,
@@ -90,7 +92,7 @@ export default class SegmentManager {
         return this.segmentList.map(it => {
 
             if (it.line) {
-                return  `
+                return  /*html*/`
                 <line stroke-width='1' 
                     data-segment="true"
                     data-is-last="${it.isLast}"                
@@ -104,6 +106,7 @@ export default class SegmentManager {
                     cy='${it.cy}' 
                     r='4'                     
                     class='curve' 
+                    data-selected='${it.selected}'                    
                     data-is-last="${it.isLast}"                
                     data-is-first="${it.isFirst}"      
                     data-is-second="${it.isSecond}"                                  
@@ -113,11 +116,12 @@ export default class SegmentManager {
                     data-segment="true" 
                 />`
             } else if (it.start) {
-                return `
+                return /*html*/`
                 <circle 
                     cx='${it.cx}' 
                     cy='${it.cy}' 
-                    r='4'                     
+                    r='4'      
+                    data-selected='${it.selected}'                                   
                     title="Center"
                     data-start="true" 
                 />`                  
@@ -127,6 +131,7 @@ export default class SegmentManager {
                     cx='${it.cx}' 
                     cy='${it.cy}' 
                     r='4'                     
+                    data-selected='${it.selected}'
                     title="${it.segment}"
                     data-is-last="${it.isLast}"
                     data-is-first="${it.isFirst}"

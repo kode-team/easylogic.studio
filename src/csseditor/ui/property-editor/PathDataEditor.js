@@ -14,9 +14,9 @@ export default class PathDataEditor extends UIElement {
     }
 
     makeSegments () {
-        return this.refs.$data.$$('segment').map($segment => {
-            var command = $segment.$('.command').data('command');
-            var values = $segment.$('.values input[type=number]').map(it => {
+        return this.refs.$data.$$('.segment').map($segment => {
+            var command = $segment.$('.command').attr('data-command');
+            var values = $segment.$$('.values input[type=number]').map(it => {
                 return +it.value; 
             })
 
@@ -36,7 +36,7 @@ export default class PathDataEditor extends UIElement {
     }
 
     modifyPathData() {
-        this.parent.trigger(this.props.onchange, this.props.key, this.state.parser.joinPath(), this.props.params);
+        this.parent.trigger(this.props.onchange, this.props.key, this.getValue(), this.props.params);
     }
 
     setValue (value) {
@@ -65,9 +65,7 @@ export default class PathDataEditor extends UIElement {
                     <div class='command' data-command='${it.command}'>${it.command}</div>
                     <div class='values'>
                         ${it.values.map(v => {
-                            return /*html*/`
-                                <input type="number" value="${v}" />
-                            `
+                            return /*html*/`<input type="number" value="${v}" />`
                         }).join('')}
                     </div>
                 </div>

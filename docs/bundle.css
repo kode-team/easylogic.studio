@@ -1513,14 +1513,12 @@ html, body {
   top: 0px;
   bottom: 0px;
   left: 270px;
-  right: 450px;
 }
 .csseditor .layout-main .layout-header .external-tool-menu {
   position: absolute;
   top: 0px;
   bottom: 0px;
   right: 0px;
-  max-width: 450px;
 }
 .csseditor .layout-main .layout-middle {
   flex: 1 1 auto;
@@ -2261,12 +2259,11 @@ html, body {
 .csseditor .tool-menu,
 .csseditor .external-tool-menu {
   height: 100%;
-  display: flex;
+  display: inline-block;
   color: white;
 }
 .csseditor .tool-menu .items,
 .csseditor .external-tool-menu .items {
-  flex: 1 1 auto;
   height: 100%;
   padding: 0px;
   padding-top: 5px;
@@ -2797,6 +2794,22 @@ html, body {
   border: 1px solid #111111;
   opacity: 1;
 }
+.csseditor .selection-tool[data-selected-movetype=move] [data-position=rotate3d],
+.csseditor .selection-tool[data-selected-movetype=move] [data-position=translate],
+.csseditor .selection-tool[data-selected-movetype=move] [data-position=transform-origin] {
+  opacity: 0;
+}
+.csseditor .selection-tool[data-selected-movetype=transform] [data-position=move],
+.csseditor .selection-tool[data-selected-movetype=transform] [data-position="to top"],
+.csseditor .selection-tool[data-selected-movetype=transform] [data-position="to top left"],
+.csseditor .selection-tool[data-selected-movetype=transform] [data-position="to top right"],
+.csseditor .selection-tool[data-selected-movetype=transform] [data-position="to bottom"],
+.csseditor .selection-tool[data-selected-movetype=transform] [data-position="to bottom left"],
+.csseditor .selection-tool[data-selected-movetype=transform] [data-position="to bottom right"],
+.csseditor .selection-tool[data-selected-movetype=transform] [data-position="to left"],
+.csseditor .selection-tool[data-selected-movetype=transform] [data-position="to right"] {
+  opacity: 0;
+}
 .csseditor .selection-tool[data-selected-position=move] [data-position=move]:before {
   opacity: 1;
 }
@@ -2876,8 +2889,8 @@ html, body {
 .csseditor .selection-tool .selection-tool-item[data-position=rotate3d] {
   left: 50%;
   top: 50%;
-  width: 60px;
-  height: 60px;
+  width: 40px;
+  height: 40px;
   cursor: ew-resize;
   border-radius: 0px;
   background-color: transparent;
@@ -2894,8 +2907,8 @@ html, body {
   position: absolute;
   left: 0px;
   top: 0px;
-  width: 60px;
-  height: 60px;
+  width: 40px;
+  height: 40px;
   background-color: transparent;
   border-radius: 50%;
   pointer-events: none;
@@ -2910,8 +2923,8 @@ html, body {
   position: absolute;
   left: 0px;
   top: 0px;
-  width: 60px;
-  height: 60px;
+  width: 40px;
+  height: 40px;
   background-color: transparent;
   border-radius: 50%;
   pointer-events: none;
@@ -2995,6 +3008,7 @@ html, body {
           transform-style: preserve-3d;
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
+  display: none !important;
 }
 .csseditor .selection-tool .selection-tool-item[data-position=transform-origin]:before {
   display: none;
@@ -5184,6 +5198,9 @@ html, body {
   padding-right: 10px;
   letter-spacing: 2px;
   color: #bdbdbd;
+}
+.csseditor .path-data-property .property-body > div {
+  padding: 10px 0px;
 }
 .csseditor .cubic-bezier-editor {
   width: 228px;
@@ -8378,6 +8395,7 @@ html, body {
   right: 0px;
   bottom: 0px;
   cursor: crosshair;
+  background-color: rgba(47, 53, 56, 0.1);
 }
 .csseditor .path-editor-view.draw {
   cursor: crosshair;
@@ -8388,15 +8406,15 @@ html, body {
 .csseditor .path-editor-view.alt svg circle {
   cursor: move;
 }
-.csseditor .path-editor-view.modify {
+.csseditor .path-editor-view.modify, .csseditor .path-editor-view.segment-move {
   cursor: default;
 }
-.csseditor .path-editor-view.modify svg path.object {
+.csseditor .path-editor-view.modify svg path.object, .csseditor .path-editor-view.segment-move svg path.object {
   pointer-events: visibleStroke;
-  stroke: rgba(158, 158, 158, 0.8);
+  stroke: transparent;
 }
 .csseditor .path-editor-view svg line {
-  stroke: rgba(158, 158, 158, 0.8);
+  stroke: black;
   stroke-width: 1;
 }
 .csseditor .path-editor-view svg line[data-guide=true] {
@@ -8433,6 +8451,12 @@ html, body {
   stroke: blue;
   z-index: 1;
 }
+.csseditor .path-editor-view svg circle[data-selected=true] {
+  r: 6;
+  stroke-width: 2;
+  stroke: black;
+  opacity: 0.2;
+}
 .csseditor .path-editor-view svg .svg-canvas {
   fill: transparent;
   stroke: #609de2;
@@ -8441,7 +8465,7 @@ html, body {
 }
 .csseditor .path-editor-view svg path.guide {
   fill: transparent;
-  stroke: rgba(158, 158, 158, 0.8);
+  stroke: black;
   stroke-width: 1;
 }
 .csseditor .path-editor-view svg path.segment {
@@ -8451,7 +8475,7 @@ html, body {
 }
 .csseditor .path-editor-view svg path.object {
   fill: transparent;
-  stroke: rgba(158, 158, 158, 0.8);
+  stroke: black;
   stroke-width: 1;
 }
 .csseditor .path-editor-view svg path.split-path {
@@ -8476,6 +8500,7 @@ html, body {
   right: 0px;
   bottom: 0px;
   cursor: crosshair;
+  background-color: rgba(47, 53, 56, 0.1);
 }
 .csseditor .polygon-editor-view.alt svg circle {
   cursor: move;
@@ -8484,7 +8509,7 @@ html, body {
   stroke: #609de2;
 }
 .csseditor .polygon-editor-view svg line {
-  stroke: rgba(158, 158, 158, 0.8);
+  stroke: black;
   stroke-width: 1;
 }
 .csseditor .polygon-editor-view svg line[data-guide=true] {
@@ -8527,7 +8552,7 @@ html, body {
 }
 .csseditor .polygon-editor-view svg path.object, .csseditor .polygon-editor-view svg polygon.object {
   fill: transparent;
-  stroke: rgba(107, 107, 107, 0.8);
+  stroke: black;
   stroke-width: 1;
 }
 .csseditor .polygon-editor-view svg path.split-path, .csseditor .polygon-editor-view svg polygon.split-path {
@@ -9157,14 +9182,12 @@ html, body {
   top: 0px;
   bottom: 0px;
   left: 270px;
-  right: 450px;
 }
 .csseditor[data-theme=light] .layout-main .layout-header .external-tool-menu {
   position: absolute;
   top: 0px;
   bottom: 0px;
   right: 0px;
-  max-width: 450px;
 }
 .csseditor[data-theme=light] .layout-main .layout-middle {
   flex: 1 1 auto;
@@ -9905,12 +9928,11 @@ html, body {
 .csseditor[data-theme=light] .tool-menu,
 .csseditor[data-theme=light] .external-tool-menu {
   height: 100%;
-  display: flex;
+  display: inline-block;
   color: white;
 }
 .csseditor[data-theme=light] .tool-menu .items,
 .csseditor[data-theme=light] .external-tool-menu .items {
-  flex: 1 1 auto;
   height: 100%;
   padding: 0px;
   padding-top: 5px;
@@ -10441,6 +10463,22 @@ html, body {
   border: 1px solid #e7e7e7;
   opacity: 1;
 }
+.csseditor[data-theme=light] .selection-tool[data-selected-movetype=move] [data-position=rotate3d],
+.csseditor[data-theme=light] .selection-tool[data-selected-movetype=move] [data-position=translate],
+.csseditor[data-theme=light] .selection-tool[data-selected-movetype=move] [data-position=transform-origin] {
+  opacity: 0;
+}
+.csseditor[data-theme=light] .selection-tool[data-selected-movetype=transform] [data-position=move],
+.csseditor[data-theme=light] .selection-tool[data-selected-movetype=transform] [data-position="to top"],
+.csseditor[data-theme=light] .selection-tool[data-selected-movetype=transform] [data-position="to top left"],
+.csseditor[data-theme=light] .selection-tool[data-selected-movetype=transform] [data-position="to top right"],
+.csseditor[data-theme=light] .selection-tool[data-selected-movetype=transform] [data-position="to bottom"],
+.csseditor[data-theme=light] .selection-tool[data-selected-movetype=transform] [data-position="to bottom left"],
+.csseditor[data-theme=light] .selection-tool[data-selected-movetype=transform] [data-position="to bottom right"],
+.csseditor[data-theme=light] .selection-tool[data-selected-movetype=transform] [data-position="to left"],
+.csseditor[data-theme=light] .selection-tool[data-selected-movetype=transform] [data-position="to right"] {
+  opacity: 0;
+}
 .csseditor[data-theme=light] .selection-tool[data-selected-position=move] [data-position=move]:before {
   opacity: 1;
 }
@@ -10520,8 +10558,8 @@ html, body {
 .csseditor[data-theme=light] .selection-tool .selection-tool-item[data-position=rotate3d] {
   left: 50%;
   top: 50%;
-  width: 60px;
-  height: 60px;
+  width: 40px;
+  height: 40px;
   cursor: ew-resize;
   border-radius: 0px;
   background-color: transparent;
@@ -10538,8 +10576,8 @@ html, body {
   position: absolute;
   left: 0px;
   top: 0px;
-  width: 60px;
-  height: 60px;
+  width: 40px;
+  height: 40px;
   background-color: transparent;
   border-radius: 50%;
   pointer-events: none;
@@ -10554,8 +10592,8 @@ html, body {
   position: absolute;
   left: 0px;
   top: 0px;
-  width: 60px;
-  height: 60px;
+  width: 40px;
+  height: 40px;
   background-color: transparent;
   border-radius: 50%;
   pointer-events: none;
@@ -10639,6 +10677,7 @@ html, body {
           transform-style: preserve-3d;
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
+  display: none !important;
 }
 .csseditor[data-theme=light] .selection-tool .selection-tool-item[data-position=transform-origin]:before {
   display: none;
@@ -12828,6 +12867,9 @@ html, body {
   padding-right: 10px;
   letter-spacing: 2px;
   color: #bdbdbd;
+}
+.csseditor[data-theme=light] .path-data-property .property-body > div {
+  padding: 10px 0px;
 }
 .csseditor[data-theme=light] .cubic-bezier-editor {
   width: 228px;
@@ -16022,6 +16064,7 @@ html, body {
   right: 0px;
   bottom: 0px;
   cursor: crosshair;
+  background-color: rgba(255, 255, 255, 0.1);
 }
 .csseditor[data-theme=light] .path-editor-view.draw {
   cursor: crosshair;
@@ -16032,12 +16075,12 @@ html, body {
 .csseditor[data-theme=light] .path-editor-view.alt svg circle {
   cursor: move;
 }
-.csseditor[data-theme=light] .path-editor-view.modify {
+.csseditor[data-theme=light] .path-editor-view.modify, .csseditor[data-theme=light] .path-editor-view.segment-move {
   cursor: default;
 }
-.csseditor[data-theme=light] .path-editor-view.modify svg path.object {
+.csseditor[data-theme=light] .path-editor-view.modify svg path.object, .csseditor[data-theme=light] .path-editor-view.segment-move svg path.object {
   pointer-events: visibleStroke;
-  stroke: #4b61ce;
+  stroke: transparent;
 }
 .csseditor[data-theme=light] .path-editor-view svg line {
   stroke: #4b61ce;
@@ -16076,6 +16119,12 @@ html, body {
   fill: blue;
   stroke: blue;
   z-index: 1;
+}
+.csseditor[data-theme=light] .path-editor-view svg circle[data-selected=true] {
+  r: 6;
+  stroke-width: 2;
+  stroke: black;
+  opacity: 0.2;
 }
 .csseditor[data-theme=light] .path-editor-view svg .svg-canvas {
   fill: transparent;
@@ -16120,6 +16169,7 @@ html, body {
   right: 0px;
   bottom: 0px;
   cursor: crosshair;
+  background-color: rgba(255, 255, 255, 0.1);
 }
 .csseditor[data-theme=light] .polygon-editor-view.alt svg circle {
   cursor: move;

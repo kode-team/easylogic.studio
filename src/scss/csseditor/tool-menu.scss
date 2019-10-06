@@ -54,12 +54,12 @@
 .tool-menu,
 .external-tool-menu {
   height: 100%;
-  display: flex;
+  display: inline-block;
   color: $selected-font-color;
 
 
   .items {
-    flex: 1 1 auto;
+    // flex: 1 1 auto;
     height: 100%;
     padding: 0px;
     padding-top: 5px;

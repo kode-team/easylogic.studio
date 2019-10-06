@@ -33,15 +33,6 @@ export default class Resource {
 const SVG_PROPERTY_LIST = {
     'd': true,
     'points': true,
-    'fill': true,
-    'fill-opacity': true, 
-    'stroke': true,
-    'stroke-width': true,
-    'stroke-dasharray': true,
-    'stroke-dashoffset': true,
-    'fill-rule': true,
-    'stroke-linecap': true,
-    'stroke-linejoin': true
 }
 
 const CSS_PROPERTY_LIST = {
@@ -92,7 +83,16 @@ const CSS_PROPERTY_LIST = {
     borderRadius: true,
     // borderImage: true,
     animations: true,
-    transitions: true
+    transitions: true,
+    'fill': true,
+    'fill-opacity': true, 
+    'stroke': true,
+    'stroke-width': true,
+    'stroke-dasharray': true,
+    'stroke-dashoffset': true,
+    'fill-rule': true,
+    'stroke-linecap': true,
+    'stroke-linejoin': true    
 }
 
 export const hasSVGProperty = (property) => {

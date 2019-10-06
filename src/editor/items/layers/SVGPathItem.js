@@ -77,30 +77,6 @@ export class SVGPathItem extends SVGItem {
     return "Path";
   }
 
-
-  toNestedCSS() {
-    return [
-      {
-        selector: 'path', 
-        css: {
-          ...super.toSVGDefaultCSS()
-        }
-      }
-    ]
-  }
-
-  toNestedBoundCSS() {
-    return [
-      {
-        selector: 'path', 
-        css: {
-          transform: this.json.transform,
-          'transform-origin': this.json['transform-origin'] || '50% 50%'
-        }
-      }
-    ]
-  }
-
   toAnimationKeyframes (properties) {
 
     var svgProperties = properties.filter(it => hasSVGProperty(it.property));

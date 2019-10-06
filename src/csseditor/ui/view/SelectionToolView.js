@@ -22,6 +22,20 @@ var DEFINED_TRANFORM_ORIGIN = {
     'bottom-right': '100% 100%',    
 }
 
+var moveType = {
+    'move': 'move',
+    'to top': 'move',    
+    'to top right': 'move',
+    'to top left': 'move',
+    'to bottom': 'move',    
+    'to bottom right': 'move',
+    'to bottom left': 'move',
+    'to left': 'move',    
+    'to right': 'move',
+    'translate': 'transform',
+    'transform-origin': 'transform',
+    'rotate3d': 'transform'
+}
 
 /**
  * 원보 아이템의 크기를 가지고 scale 이랑 조합해서 world 의 크기를 구하는게 기본 컨셉 
@@ -38,8 +52,7 @@ export default class SelectionToolView extends UIElement {
         return /*html*/`
     <div class='selection-view' ref='$selectionView' >
         <div class='selection-tool' ref='$selectionTool' style='left:-100px;top:-100px;'>
-            <div class='selection-tool-item' data-position='move'></div>
-            <svg class='selection-tool-item' data-position='translate' ref='$translate'></svg>            
+            <div class='selection-tool-item' data-position='move'></div>       
             
             <div class='selection-tool-item' data-position='transform-origin' ref='$transformOrigin'>
                 <div class='transform-origin' >
@@ -383,6 +396,7 @@ export default class SelectionToolView extends UIElement {
         this.pointerType = e.$delegateTarget.attr('data-position')
 
         this.refs.$selectionTool.attr('data-selected-position', this.pointerType);
+        this.refs.$selectionTool.attr('data-selected-movetype', moveType[this.pointerType]);        
         this.parent.selectCurrent(...editor.selection.items)
 
         editor.selection.setRectCache(this.pointerType === 'move' ? false: true);
@@ -766,6 +780,7 @@ export default class SelectionToolView extends UIElement {
             }
     
             this.refs.$selectionTool.attr('data-selected-position', '');
+            this.refs.$selectionTool.attr('data-selected-movetype', '');
             this.parent.trigger('removeRealPosition');                
     
             this.emit('refreshCanvasForPartial')

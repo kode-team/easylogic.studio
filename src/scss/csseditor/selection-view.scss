@@ -103,7 +103,28 @@
             opacity: 1;
           } 
     }
-  
+
+    &[data-selected-movetype='move'] {
+      [data-position='rotate3d'],
+      [data-position='translate'],
+      [data-position='transform-origin'] {
+        opacity: 0;
+      }
+    }
+
+    &[data-selected-movetype='transform'] {
+      [data-position='move'],
+      [data-position='to top'],
+      [data-position='to top left'],
+      [data-position='to top right'],
+      [data-position='to bottom'],
+      [data-position='to bottom left'],
+      [data-position='to bottom right'],
+      [data-position='to left'],
+      [data-position='to right'] {
+        opacity: 0;
+      }
+    }    
   
     &[data-selected-position="move"] [data-position="move"] { &:before { opacity: 1; } }
     &[data-selected-position="rotate3d"] [data-position="rotate3d"] { &:before { opacity: 1; } }
@@ -166,8 +187,8 @@
       }
 
 
-      $rotate3d-width: 60px;
-      $rotate3d-height: 60px;
+      $rotate3d-width: 40px;
+      $rotate3d-height: 40px;
 
       &[data-position="rotate3d"] {
         left: 50%;
@@ -311,6 +332,7 @@
         border:0px;
         transform-style: preserve-3d;
         transform: translate(-50%, -50%);
+        display: none !important;
         &:before { 
           display: none; 
         }

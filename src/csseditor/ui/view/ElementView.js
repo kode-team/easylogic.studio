@@ -333,13 +333,7 @@ export default class ElementView extends UIElement {
             var {x, y, width, height} = item.toBound();
             var cachedItem = this.cachedCurrentElement[item.id]
             if (cachedItem) {
-
                 cachedItem.cssText(`left: ${x};top:${y};width:${width};height:${height}`)
-                // TODO: 나중에 공통영역으로 처리 해야할 듯 하다. 
-                if (item.is('svg-path')) {
-                    cachedItem.firstChild().cssText(`d: path('${item.d}')`);
-                }
-
             }
         })
 

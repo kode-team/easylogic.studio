@@ -27,6 +27,7 @@ export default class PathEditorView extends UIElement {
             points: [],
             mode: 'draw',
             $target: null, 
+            clickCount: 0,
             isSegment: false,
             isFirstSegment: false,
             screenX: Length.px(0),
@@ -105,8 +106,8 @@ export default class PathEditorView extends UIElement {
         );
 
         var parser = new PathParser(d);
-        var [radian, cx, cy] = this.state.reverse
-        parser.rotate(radian, rect.width/2, rect.height/2) 
+        // var [radian, cx, cy] = this.state.reverse
+        // parser.rotate(radian, rect.width/2, rect.height/2) 
 
         this.emit(this.state.changeEvent, {
             d: parser.toString(), totalLength, rect 
@@ -138,6 +139,7 @@ export default class PathEditorView extends UIElement {
     changeMode (mode, obj) { 
         this.setState({
             mode,
+            clickCount: 0,
             moveXY: null,
             ...obj
         }, false)    
@@ -146,7 +148,8 @@ export default class PathEditorView extends UIElement {
     }
 
     [EVENT('changePathManager')] (mode) {
-        this.setState({ mode }, false);
+        this.setState({ mode, clickCount: 0 }, false);
+        this.bindData('$view');
     }
 
     isMode (mode) {
@@ -167,28 +170,28 @@ export default class PathEditorView extends UIElement {
 
             var x = obj.screenX.value * this.scale
             var y = obj.screenY.value * this.scale
-            var width = obj.screenWidth.value * this.scale
-            var height = obj.screenHeight.value * this.scale
+            // var width = obj.screenWidth.value * this.scale
+            // var height = obj.screenHeight.value * this.scale
 
             this.pathParser.translate(x, y)
 
-            var transform = Transform.parseStyle(obj.current.transform);
-            var rotateValue = transform.find(it => it.type === 'rotateZ' || it.type === 'rotate');
-            var transformRotate = 0; 
+            // var transform = Transform.parseStyle(obj.current.transform);
+            // var rotateValue = transform.find(it => it.type === 'rotateZ' || it.type === 'rotate');
+            // var transformRotate = 0; 
 
-            if (rotateValue) {
-                transformRotate = rotateValue.value[0].value;
-            }
+            // if (rotateValue) {
+            //     transformRotate = rotateValue.value[0].value;
+            // }
 
-            transformRotate = (transformRotate + 360) % 360
-            this.pathParser.rotate(degreeToRadian(transformRotate), x + width/2, y + height/2)
+            // transformRotate = (transformRotate + 360) % 360
+            // this.pathParser.rotate(degreeToRadian(transformRotate), x + width/2, y + height/2)
 
-            this.state.reverse = [
-                degreeToRadian(-transformRotate), 
-                x + width/2, 
-                y + height/2
-            ]
-            this.state.reverseXY = {x, y, width, height}
+            // this.state.reverse = [
+            //     degreeToRadian(-transformRotate), 
+            //     x + width/2, 
+            //     y + height/2
+            // ]
+            // this.state.reverseXY = {x, y, width, height}
 
             this.state.points = this.pathParser.convertGenerator();      
         }
@@ -233,7 +236,7 @@ export default class PathEditorView extends UIElement {
             class: {
                 'draw': this.state.mode === 'draw',
                 'modify': this.state.mode === 'modify',
-                'segment-move': this.state.mode === 'segment-move',                
+                'segment-move': this.state.mode === 'segment-move',         
             },
             innerHTML: this.pathGenerator.makeSVGPath()
         }
@@ -313,12 +316,12 @@ export default class PathEditorView extends UIElement {
             }; 
 
             this.state.altKey = e.altKey
-            
-            this.bindData('$view');
+            this.bindData('$view');                 
         } else {
-            // this.state.altKey = false; 
+            this.state.altKey = false; 
         }
 
+   
     }
 
     [DOUBLECLICK('$view [data-segment]')] (e) {
@@ -436,6 +439,7 @@ export default class PathEditorView extends UIElement {
                 // this.changeMode('modify');
 
                 this.pathGenerator.moveEnd(dx, dy);
+                this.state.clickCount++;
 
                 this.bindData('$view');
             }

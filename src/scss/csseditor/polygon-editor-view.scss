@@ -7,6 +7,7 @@
     bottom:0px;
     // outline:1px auto blue;
     cursor: crosshair;
+    background-color: rgba($background-color, 0.1);    
 
     &.alt {
         svg {

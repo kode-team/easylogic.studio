@@ -123,11 +123,16 @@ export default class Point {
     static getNextPoint (points, index) {
 
         var currentPoint = points[index]
+        var nextPoint = points[index + 1]
 
-        if (currentPoint.connected) {
-            return Point.getFirstPoint(points, index);
+        if (nextPoint) {
+            nextPoint.index = index + 1; 
         }
 
-        return points[index + 1]
+        if (currentPoint.connected) {
+            nextPoint = Point.getFirstPoint(points, index);
+        }
+
+        return nextPoint;
     }       
 }

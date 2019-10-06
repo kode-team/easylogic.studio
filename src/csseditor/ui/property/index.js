@@ -49,9 +49,12 @@ import ComponentProperty from "./ComponentProperty";
 import TimelineAnimationProperty from "./TimelineAnimationProperty";
 import BorderNewProperty from "./BorderNewProperty";
 import ProjectInformationProperty from "./ProjectInformationProperty";
+import PathDataProperty from "./PathDataProperty";
+
 
 
 export default {  
+  PathDataProperty,
   ProjectInformationProperty,
   BorderNewProperty,
   TimelineAnimationProperty,
