@@ -1,4 +1,5 @@
 import PathParser from "./PathParser";
+import Point from "./Point";
 
 export default class PathStringManager {
     constructor () {

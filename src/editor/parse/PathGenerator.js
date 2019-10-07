@@ -7,6 +7,86 @@ import PathStringManager from "./PathStringManager";
 const SEGMENT_DIRECTION = ['startPoint', 'endPoint', 'reversePoint']
 
 
+
+function toPath (points, minX, minY, scale = 1) {
+    var d = [];
+
+    for(var index = 0, len = points.length; index < len; index++) {
+        var currentIndex = index; 
+        var current = points[currentIndex];                
+
+        if (!current) continue; 
+
+        if (current.command === 'M') {
+            d.push({command: 'M', values: [
+                current.startPoint
+            ]});             
+        } else {
+            var prevPoint = Point.getPrevPoint(points, index);                
+            if (current.curve === false) {  // 1번이 점이면 
+                // 꼭지점
+                if (prevPoint.curve === false) {
+                    d.push({command: 'L', values: [ current.startPoint ]});
+                } else {
+                    // 이전이 drag이고  지금이 점일 때  한쪽만 segment 가 있으므로 2차 Curve                         
+                    d.push({command: 'Q', values: [ prevPoint.endPoint, current.startPoint]});
+                }
+            } else {
+                // 이전은 점이고 현재가 드래그 일 때 , 한쪽만 segment 가 있으므로 2차 Curve 
+                if (prevPoint.curve === false) { 
+
+                    if (Point.isEqual(current.reversePoint, current.startPoint)) {
+                        d.push({ command: 'L', values: [current.startPoint] })
+                    } else {
+
+                        d.push({command: 'Q', values: [current.reversePoint, current.startPoint ]});
+                    }
+
+                } else {
+                    if (current.connected) {
+                        d.push({command: 'C', values: [ prevPoint.endPoint, current.reversePoint, current.startPoint ]});
+                    } else {
+                        d.push({command: 'C', values: [ prevPoint.endPoint, current.reversePoint, current.startPoint ]});                            
+                    }
+                }
+            }
+        }
+
+        if (current.close) {
+            d.push({command: 'Z'});
+        }
+    }
+
+    var dString = d.map(segment => {
+        return calculateRelativePosition (minX, minY, segment, scale);
+    }).join(' ')
+
+    return {
+        d: dString
+    };
+}
+
+
+function calculateRelativePosition (minX, minY, segment, scale = 1) {
+
+    var { command, values } = segment;
+
+    switch(command) {
+    case 'Z':
+        return 'Z';
+    default:
+        var str = values.map(v => {
+            var tx = (v.x - minX) / scale; 
+            var ty = (v.y - minY) / scale; 
+
+            return `${tx} ${ty}`
+        }).join(' ')
+
+        return `${command} ${str}`
+    }
+}
+
+
 export default class PathGenerator {
 
     constructor (pathEditor) {
@@ -20,7 +100,7 @@ export default class PathGenerator {
 
     initialize () {
         this.splitLines = [] 
-        this.snapPointList = [] 
+        // this.snapPointList = [] 
         this.guideLineManager.reset();
         this.segmentManager.reset();
         this.pathStringManager.reset();
@@ -65,6 +145,7 @@ export default class PathGenerator {
         var state = this.state; 
         var { points } = state; 
 
+        this.snapPointList = []     // 객체 처음 움직일 때 snap line 은 초기화 
         state.selectedIndex = index; 
         state.connectedPoint =  Point.getPrevPoint(points, index)
 
@@ -133,9 +214,6 @@ export default class PathGenerator {
         var dx = (nextPoint.startPoint.x - centerX)/2
         var dy = (nextPoint.startPoint.y - centerY)/2
 
-        // 방향을 맞췄다. 
-        // 마지막 point 가 처음과 같이 연결되어 있을 때는 
-        // reverse, end 를 모두 동일하게 가진다. 
         point.endPoint = {
             x: point.startPoint.x + dx,
             y: point.startPoint.y + dy
@@ -399,7 +477,7 @@ export default class PathGenerator {
 
         var { dx, dy, snapPointList} = this.calculateSnap(segmentKey, dx, dy, 2);
     
-        this.snapPointList = snapPointList
+        this.snapPointList = snapPointList || []
 
         if (isCurveSegment) {
             if (e.shiftKey) {   // 상대편 길이 동일하게 curve 움직이기 
@@ -521,82 +599,7 @@ export default class PathGenerator {
     }
 
     toPath (minX, minY, scale = 1) {
-        var d = [];
-        var points = this.clonePoints
-
-        for(var index = 0, len = points.length; index < len; index++) {
-            var currentIndex = index; 
-            var current = points[currentIndex];                
-
-            if (!current) continue; 
-
-            if (current.command === 'M') {
-                d.push({command: 'M', values: [
-                    current.startPoint
-                ]});             
-            } else {
-                var prevPoint = Point.getPrevPoint(points, index);                
-                if (current.curve === false) {  // 1번이 점이면 
-                    // 꼭지점
-                    if (prevPoint.curve === false) {
-                        d.push({command: 'L', values: [ current.startPoint ]});
-                    } else {
-                        // 이전이 drag이고  지금이 점일 때  한쪽만 segment 가 있으므로 2차 Curve                         
-                        d.push({command: 'Q', values: [ prevPoint.endPoint, current.startPoint]});
-                    }
-                } else {
-                    // 이전은 점이고 현재가 드래그 일 때 , 한쪽만 segment 가 있으므로 2차 Curve 
-                    if (prevPoint.curve === false) { 
-
-                        if (Point.isEqual(current.reversePoint, current.startPoint)) {
-                            d.push({ command: 'L', values: [current.startPoint] })
-                        } else {
-
-                            d.push({command: 'Q', values: [current.reversePoint, current.startPoint ]});
-                        }
-
-                    } else {
-                        if (current.connected) {
-                            d.push({command: 'C', values: [ prevPoint.endPoint, current.reversePoint, current.startPoint ]});
-                        } else {
-                            d.push({command: 'C', values: [ prevPoint.endPoint, current.reversePoint, current.startPoint ]});                            
-                        }
-                    }
-                }
-            }
-
-            if (current.close) {
-                d.push({command: 'Z'});
-            }
-        }
-
-        var dString = d.map(segment => {
-            return this.calculateRelativePosition (minX, minY, segment, scale);
-        }).join(' ')
-
-        return {
-            d: dString
-        };
-    }
-
-
-    calculateRelativePosition (x, y, segment, scale = 1) {
-
-        var { command, values } = segment;
-
-        switch(command) {
-        case 'Z':
-            return 'Z';
-        default:
-            var str = values.map(v => {
-                var tx = (v.x - x) / scale; 
-                var ty = (v.y - y) / scale; 
-
-                return `${tx} ${ty}`
-            }).join(' ')
-
-            return `${command} ${str}`
-        }
+        return toPath(this.clonePoints, minX, minY, scale)
     }
 
     makeSVGPath() {
@@ -764,10 +767,7 @@ export default class PathGenerator {
             current.selected = selectedIndex === index;
 
             if (current.command === 'M') {
-
                 this.makeStartPointGuide(prevPoint, current, nextPoint, index);
-
-
             } else {
                 this.makeMiddlePointGuide(prevPoint, current, nextPoint, index);
             }
@@ -908,7 +908,7 @@ export default class PathGenerator {
     }
 
     toSVGString () {
-        return `
+        return /*html*/`
         <svg width="100%" height="100%" class='svg-editor-canvas'>
             ${this.makeSelectedSVGZone()}
             ${this.guideLineManager.toString('guide')}

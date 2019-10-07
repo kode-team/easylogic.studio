@@ -339,8 +339,6 @@ export default class PathEditorView extends UIElement {
 
     [POINTERSTART('$view :not(.split-path)') + MOVE() + END()] (e) {
 
-        // console.log(e);
-
         this.state.rect = this.parent.refs.$body.rect();            
         this.state.canvasOffset = this.refs.$view.rect();
         this.state.altKey = false; 
@@ -395,8 +393,8 @@ export default class PathEditorView extends UIElement {
 
 
         if (this.isMode('segment-move')) {
-
-            this.pathGenerator.move(dx, dy, editor.config.get('bodyEvent'));
+            var e = editor.config.get('bodyEvent')
+            this.pathGenerator.move(dx, dy, e);
 
             this.bindData('$view');            
 
