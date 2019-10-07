@@ -56,6 +56,10 @@ export function calculateAngle (rx, ry) {
     return radianToDegree(Math.atan2(ry, rx))
 }
 
+export function calculateAngle360 (rx, ry) {
+    return (radianToDegree(Math.atan2(ry, rx)) + 180) % 360
+}
+
 const UUID_REG = /[xy]/g
 
 export function uuid(){

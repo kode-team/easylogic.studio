@@ -325,8 +325,7 @@ export default class PathEditorView extends UIElement {
     }
 
     [DOUBLECLICK('$view [data-segment]')] (e) {
-        this.state.$target = e.$delegateTarget
-        var index = +this.state.$target.attr('data-index')
+        var index = +e.$delegateTarget.attr('data-index')
 
 
         this.pathGenerator.convertToCurve(index);
@@ -349,16 +348,16 @@ export default class PathEditorView extends UIElement {
         }; 
 
 
-        this.state.$target = Dom.create(e.target);
+        var $target = Dom.create(e.target);
 
-        if (this.state.$target.hasClass('svg-editor-canvas') && !this.isMode('draw')) {
+        if ($target.hasClass('svg-editor-canvas') && !this.isMode('draw')) {
             this.changeMode('modify');
             this.trigger('hidePathEditor')
             return false; 
         }
 
-        this.state.isSegment = this.state.$target.attr('data-segment') === 'true';
-        this.state.isFirstSegment = this.state.isSegment && this.state.$target.attr('data-is-first') === 'true';
+        this.state.isSegment = $target.attr('data-segment') === 'true';
+        this.state.isFirstSegment = this.state.isSegment && $target.attr('data-is-first') === 'true';
         
 
         if (this.state.isSegment) {
@@ -367,15 +366,15 @@ export default class PathEditorView extends UIElement {
 
                 // 마지막 지점을 연결할 예정이기 때문에 
                 // startPoint 는  M 이었던 startPoint 로 정리된다. 
-                var index = +this.state.$target.attr('data-index')
+                var index = +$target.attr('data-index')
                 this.state.startPoint = this.state.points[index].startPoint;
                 this.state.dragPoints = false
                 this.state.endPoint = null;
 
             } else {
                 this.changeMode('segment-move');
-                var index = +this.state.$target.attr('data-index')
-                this.pathGenerator.setCachePoint(index);
+                var index = +$target.attr('data-index')
+                this.pathGenerator.setCachePoint(index, $target.attr('data-segment-point'));
             }
 
         } else if (this.isMode('draw')) { 
