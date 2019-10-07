@@ -31,7 +31,8 @@ export default class PolygonParser extends PathParser {
             points = points.join(' ');
         }
 
-        var arr = points.trim().split(splitReg);
+        var arr = points.trim().split(splitReg).filter(it => it);
+
 
         var segments = [] 
 
@@ -74,6 +75,7 @@ export default class PolygonParser extends PathParser {
 
 	joinPoints (segments) {
         var list = (segments || this.segments);
+
         return list.map(it => {
             return `${it.x},${it.y}`
         }).join(' ')

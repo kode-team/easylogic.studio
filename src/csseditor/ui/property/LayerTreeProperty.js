@@ -1,5 +1,5 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, CLICK, DOUBLECLICK, KEYUP, KEY, PREVENT, STOP, FOCUSOUT, VDOM, DRAGSTART, KEYDOWN } from "../../../util/Event";
+import { LOAD, CLICK, DOUBLECLICK, KEYUP, KEY, PREVENT, STOP, FOCUSOUT, VDOM, DRAGSTART, KEYDOWN, DRAGOVER, DROP } from "../../../util/Event";
 import { editor } from "../../../editor/editor";
 import icon from "../icon/icon";
 import { EVENT } from "../../../util/UIElement";
@@ -101,6 +101,18 @@ export default class LayerTreeProperty extends BaseProperty {
   [DRAGSTART('$layerList .layer-item')] (e) {
     var layerId = e.$delegateTarget.attr('data-layer-id');
     e.dataTransfer.setData('layer/id', layerId);
+  }
+
+  [DRAGOVER('$layerList .layer-item') + PREVENT] (e) {}
+  [DROP('$layerList .layer-item')] (e) {
+    var layerId = e.dataTransfer.getData('layer/id');
+
+    console.log(layerId)
+    // 순서 바꾸기 
+    // order 순서는 어떤식으로 바꿔야 하는 것일까?  
+    // 내가 위치한 곳에서 상위 그룹 안에 내가 들어가야할 듯 한데 
+    // 몇가지 규칙이 있다. 
+    // 아니면 z-order 숫자만 바꿔야할 것인가? 
   }
 
 

@@ -70,6 +70,7 @@ export default class Inspector extends UIElement {
                 <!-- SVG Item --> 
                 <SVGItemProperty />
                 <PathDataProperty />
+                <PolygonDataProperty /> 
 
                 <ComponentProperty />
 

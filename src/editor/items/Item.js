@@ -337,6 +337,53 @@ export class Item {
     return [..._traverse(this.ref)]
   }
 
+  getIndex () {
+    var parent = this.json.parent;    
+    var startIndex = -1; 
+    for(var i = 0, len = parent.layers.length; i < len; i++) {
+      if (layers[i] === this.ref) {
+        startIndex = i; 
+        break;
+      }
+    }
+
+    return startIndex;
+  }
+
+  setOrder (targetIndex) {
+    var parent = this.json.parent; 
+
+    var startIndex = this.getIndex()
+
+    parent.layers.splice(
+      targetIndex + (startIndex < targetIndex ? -1 : 0),
+      0,
+      ...arr.splice(startIndex, 1)
+    )
+  }
+
+  orderNext() {
+    var startIndex = this.getIndex();
+    if (startIndex > -1) {
+      this.setOrder(startIndex + 1);
+    }
+  }
+
+  orderPrev () {
+    var startIndex = this.getIndex();
+    if (startIndex > 0) {
+      this.setOrder(startIndex - 1);
+    }
+  }
+
+  orderFirst () {
+    this.setOrder(0)
+  }
+
+  orderLast () {
+    this.setOrder(this.json.parent.layers.length-1)
+  }
+
   searchById (id) {
 
     if (this.id === id) {

@@ -12,7 +12,7 @@ export default class PolygonDataEditor extends UIElement {
     }
 
     makeSegments () {
-        return this.refs.$data.$$('segment').map($segment => {
+        return this.refs.$data.$$('.segment').map($segment => {
             var x = +$segment.$('[data-key="x"]').value;
             var y = +$segment.$('[data-key="y"]').value;
 
@@ -29,12 +29,12 @@ export default class PolygonDataEditor extends UIElement {
     }
 
     modifyPolygonData() {
-        this.parent.trigger(this.props.onchange, this.props.key, this.state.parser.joinPoints(), this.props.params);
+        this.parent.trigger(this.props.onchange, this.props.key, this.getValue(), this.props.params);
     }
 
     setValue (value) {
         this.setState({
-            parser: new PolygonParser(value)
+            parser: new PolygonParser(value || '')
         })
     }
 

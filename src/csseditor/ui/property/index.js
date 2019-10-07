@@ -50,10 +50,12 @@ import TimelineAnimationProperty from "./TimelineAnimationProperty";
 import BorderNewProperty from "./BorderNewProperty";
 import ProjectInformationProperty from "./ProjectInformationProperty";
 import PathDataProperty from "./PathDataProperty";
+import PolygonDataProperty from "./PolygonDataProperty";
 
 
 
 export default {  
+  PolygonDataProperty,
   PathDataProperty,
   ProjectInformationProperty,
   BorderNewProperty,

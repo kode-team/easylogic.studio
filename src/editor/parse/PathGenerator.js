@@ -616,11 +616,18 @@ export default class PathGenerator {
         this.pathStringManager.M(current.startPoint)        
 
         if (current.curve === false) {
-            this.segmentManager.addPoint({}, current.startPoint, index, 'startPoint', current.selected)
+            this.segmentManager
+                .addPoint({}, current.startPoint, index, 'startPoint', current.selected)
+
+            if (!current.startPoint.isLast) {
+                this.segmentManager.addText(current.startPoint, index+1);
+            }
+
+
         } else {      
             this.segmentManager
                 .addPoint({}, current.startPoint, index, 'startPoint', current.selected)                        
-                .addLine(current.startPoint, current.endPoint)
+                .addGuideLine(current.startPoint, current.endPoint)
                 .addCurvePoint(current.endPoint, index, 'endPoint')
         }
 
@@ -637,6 +644,11 @@ export default class PathGenerator {
 
                 this.segmentManager
                     .addPoint({}, current.startPoint, index, 'startPoint', current.selected)   
+
+                if (!current.startPoint.isLast) {
+                    this.segmentManager.addText(current.startPoint, index+1);
+                }
+        
                 
                 this.splitLines.push(
                     new PathStringManager()
@@ -656,9 +668,14 @@ export default class PathGenerator {
                 );
 
                 this.segmentManager
-                    .addLine(prevPoint.startPoint, prevPoint.endPoint)
+                    .addGuideLine(prevPoint.startPoint, prevPoint.endPoint)
                     .addCurvePoint(current.startPoint, index, 'startPoint', current.selected)
                     .addCurvePoint(prevPoint.endPoint, prevPoint.index, 'endPoint');
+
+                if (!current.startPoint.isLast) {
+                    this.segmentManager.addText(current.startPoint, index+1);
+                }
+        
             }
 
 
@@ -673,7 +690,12 @@ export default class PathGenerator {
                             .L(current.startPoint)
                             .toString('split-path')
                     )                    
-                    this.segmentManager.addPoint({},current.startPoint, index, 'startPoint', current.selected)
+                    this.segmentManager
+                        .addPoint({},current.startPoint, index, 'startPoint', current.selected)
+
+                    if (!current.startPoint.isLast) {
+                        this.segmentManager.addText(current.startPoint, index+1);
+                    }                                       
                 } else {
 
                     this.pathStringManager.Q( current.reversePoint, current.startPoint);
@@ -686,9 +708,13 @@ export default class PathGenerator {
                     )          
 
                     this.segmentManager
-                        .addLine(current.startPoint, current.reversePoint)
+                        .addGuideLine(current.startPoint, current.reversePoint)
                         .addCurvePoint(current.startPoint, index, 'startPoint', current.selected)
-                        .addCurvePoint(current.reversePoint, index, 'reversePoint');              
+                        .addCurvePoint(current.reversePoint, index, 'reversePoint');     
+
+                        if (!current.startPoint.isLast) {
+                            this.segmentManager.addText(current.startPoint, index+1);
+                        }
                 }
 
 
@@ -707,8 +733,8 @@ export default class PathGenerator {
                     )
 
                     this.segmentManager
-                        .addLine(prevPoint.startPoint, prevPoint.endPoint)
-                        .addLine(current.startPoint, current.reversePoint)
+                        .addGuideLine(prevPoint.startPoint, prevPoint.endPoint)
+                        .addGuideLine(current.startPoint, current.reversePoint)
                         .addCurvePoint(prevPoint.endPoint, prevPoint.index, 'endPoint')
                         .addCurvePoint(current.reversePoint, index, 'reversePoint');
                 } else {
@@ -723,11 +749,15 @@ export default class PathGenerator {
                     )
 
                     this.segmentManager
-                        .addLine(prevPoint.startPoint, prevPoint.endPoint)
-                        .addLine(current.startPoint, current.reversePoint)
+                        .addGuideLine(prevPoint.startPoint, prevPoint.endPoint)
+                        .addGuideLine(current.startPoint, current.reversePoint)
                         .addCurvePoint(current.startPoint, index, 'startPoint', current.selected)
                         .addCurvePoint(prevPoint.endPoint, prevPoint.index, 'endPoint')                        
                         .addCurvePoint(current.reversePoint, index, 'reversePoint');
+
+                        if (!current.startPoint.isLast) {
+                            this.segmentManager.addText(current.startPoint, index+1);
+                        }                        
 
                 }
             }
@@ -814,9 +844,9 @@ export default class PathGenerator {
                         .C(prev.endPoint, {x,y}, startPoint);
 
                     this.segmentManager
-                        .addLine(prev.startPoint, prev.endPoint)
-                        .addLine(startPoint, {x, y})
-                        .addLine(startPoint, moveXY)
+                        .addGuideLine(prev.startPoint, prev.endPoint)
+                        .addGuideLine(startPoint, {x, y})
+                        .addGuideLine(startPoint, moveXY)
                         .addCurvePoint(prev.endPoint)                    
                         .addCurvePoint({x, y})
                         .addCurvePoint(moveXY)
@@ -832,7 +862,7 @@ export default class PathGenerator {
                         .Q({x, y},startPoint);
 
                     this.segmentManager
-                        .addLine(moveXY, {x, y})
+                        .addGuideLine(moveXY, {x, y})
                         .addPoint(false, startPoint)
                         .addCurvePoint({x, y})
                         .addCurvePoint(moveXY);
@@ -849,7 +879,7 @@ export default class PathGenerator {
                         .Q(prev.endPoint, moveXY);
 
                     this.segmentManager
-                        .addLine(prev.endPoint, prev.startPoint)
+                        .addGuideLine(prev.endPoint, prev.startPoint)
                         .addCurvePoint(prev.endPoint);
                 } else {
                     // 이전에 점이고 지금도 점이면  직선 

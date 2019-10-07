@@ -42,7 +42,10 @@ export default class PathEditorView extends UIElement {
     }
 
     template() {
-        return `<div class='path-editor-view' tabIndex="-1" ref='$view' ></div>`
+        return /*html*/`
+        <div class='path-editor-view' tabIndex="-1" ref='$view'> 
+        </div>
+        `
     }
 
     isShow () {
@@ -308,6 +311,13 @@ export default class PathEditorView extends UIElement {
         this.updatePathLayer();
     }
 
+    [BIND('$splitCircle')] () {
+        return {
+            cx: this.state.splitXY.x,
+            cy: this.state.splitXY.y
+        }
+    }
+
     [POINTERMOVE('$view')] (e) {
         if (this.isMode('draw') && this.state.rect) {            
             this.state.moveXY = {
@@ -318,6 +328,18 @@ export default class PathEditorView extends UIElement {
             this.state.altKey = e.altKey
             this.bindData('$view');                 
         } else {
+
+            var isSplitPath = Dom.create(e.target).hasClass('split-path')
+            if (isSplitPath) {
+                this.state.splitXY = {
+                    x: e.xy.x - this.state.rect.x, 
+                    y: e.xy.y - this.state.rect.y 
+                }; 
+    
+                this.bindData('$splitCircle');
+            }
+
+
             this.state.altKey = false; 
         }
 

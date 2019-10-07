@@ -78,6 +78,17 @@ export default class SegmentManager {
         return this; 
     }
 
+    addText (point, text) {
+        this.segmentList.push({
+            type: 'text',
+            cx: point.x,
+            cy: point.y,
+            text: text + ""  
+        })
+
+        return this;
+    }
+
     toString () {
 
         this.segmentList.sort((a, b) => {
@@ -99,6 +110,10 @@ export default class SegmentManager {
                     data-guide='${it.guide}'
                     x1='${it.x1}' x2='${it.x2}' y1='${it.y1}' y2='${it.y2}' 
                 />`
+            } else if (it.text) {
+                return /*html*/ `
+                <text x="${it.cx}" y="${it.cy}" dx="5" dy="-5">${it.text}</text>
+                `                              
             } else if (it.curve) {
                 return /*html*/`
                 <circle 
@@ -124,7 +139,7 @@ export default class SegmentManager {
                     data-selected='${it.selected}'                                   
                     title="Center"
                     data-start="true" 
-                />`                  
+                />`    
             } else {
                 return /*html*/`
                 <circle 

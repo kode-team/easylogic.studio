@@ -45,7 +45,7 @@
             // stroke-dasharray: 5 2; 
 
             &[data-guide='true'] {
-                stroke: purple;
+                stroke: rgb(131, 8, 8);
                 pointer-events: none;
             }
 
@@ -61,7 +61,7 @@
             cursor: move;
 
             &.selected {
-                fill: yellow;
+                // fill: yellow;
             }
 
             &.curve {
@@ -69,19 +69,19 @@
             }
 
             &[data-is-first="true"] {
-                fill: $selected-color;
+                // fill: $selected-color;
                 stroke: $selected-color;
                 z-index: 1;
             }
 
             &[data-is-second="true"] {
-                fill: darken($selected-color, 50%);
+                // fill: darken($selected-color, 50%);
                 stroke: darken($selected-color, 50%);
                 z-index: 1;
             }            
 
             &[data-is-last="true"] {
-                fill: blue;
+                // fill: blue;
                 stroke: blue;
                 z-index: 1;
             }       
@@ -124,7 +124,7 @@
             
             &.split-path {
                 fill: transparent;
-                stroke: transparent;
+                stroke: $path-guide-color;
                 pointer-events: stroke;
                 stroke-width: 1;
 
@@ -138,6 +138,13 @@
                 fill: transparent;
                 stroke: $selected-color;
             }
+        }
+
+        text {
+            fill: $selected-color; 
+            stroke: $selected-color;
+            stroke-width: 0.5;
+            pointer-events: none;
         }
     }
 }

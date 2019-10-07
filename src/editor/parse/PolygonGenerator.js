@@ -257,9 +257,10 @@ export default class PolygonGenerator {
 
     makeMoveGuide(points) {
         this.points = []
-
+        var lastIndex = points.length - 1
         points.forEach( (point, index) => {
             var isFirst = index === 0
+            var isLast = index === lastIndex
             this.points.push(point);
 
             this.splitLines.push(
@@ -270,6 +271,7 @@ export default class PolygonGenerator {
             )
             
             this.segmentManager.addPoint({isFirst}, point, index);
+            this.segmentManager.addText(point, index + 1);
         })
     }
 
