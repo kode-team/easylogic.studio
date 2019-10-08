@@ -781,4 +781,15 @@ export default class Dom {
   drawText(x, y, text) {
     this.context().fillText(text, x, y);
   }
+
+  /* utility */ 
+  fullscreen () {
+    var element = this.el; 
+    
+    if (element.requestFullscreen) {
+      element.requestFullscreen();
+    } else if (element.wekitRequestFullscreen) {
+      element.wekitRequestFullscreen();
+    }
+  }
 }

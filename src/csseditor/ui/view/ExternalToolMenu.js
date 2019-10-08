@@ -14,6 +14,7 @@ export default class ExternalToolMenu extends UIElement {
           <Save />
           <ExportView />
           <ExportCodePen />
+          <Fullscreen />
           <!-- ExportJSFiddle / -->
 
           <div class='split'></div>

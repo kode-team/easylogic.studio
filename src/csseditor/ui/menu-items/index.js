@@ -27,9 +27,11 @@ import Download from "./Download";
 import SelectTool from "./SelectTool";
 import AddSVGRect from "./AddSVGRect";
 import AddSVGCircle from "./AddSVGCircle";
+import Fullscreen from "./Fullscreen";
 
 
 export default {
+  Fullscreen,
   AddSVGCircle,
   AddSVGRect,
   SelectTool,
