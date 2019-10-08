@@ -10,6 +10,134 @@
       }
     }
 
+
+    .direction {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      margin: 0 auto;
+      margin-bottom: 10px;      
+
+      > div {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        display: inline-block;
+        background-color: $background-color;
+        cursor: pointer;
+
+        &:before {
+          pointer-events: none;
+          content: '';
+          background-color: $selected-color;
+          border-radius: 3px;
+          width: 10px;
+          height: 10px;
+          display: inline-block;
+          position: absolute;
+        }
+      }
+
+      [data-value="top"] {
+        top: 0px;
+        left: 50%;
+        transform: translateX(-50%);
+
+        &:before {
+          top: 0px;
+          left: 50%;
+          transform: translateX(-50%);  
+        }
+      }
+
+      [data-value="top left"] {
+        top: 0px;
+        left: 0px;
+        &:before {
+          top: 0px;
+          left: 0px;
+        }        
+      }      
+
+      [data-value="top right"] {
+        top: 0px;
+        right: 0px;
+        &:before {
+          top: 0px;
+          right: 0px;
+        }
+      }            
+
+      [data-value="bottom"] {
+        bottom: 0px;
+        left: 50%;
+        transform: translateX(-50%);
+        &:before  {
+          bottom: 0px;
+          left: 50%;
+          transform: translateX(-50%);
+        }
+      }      
+
+      [data-value="bottom left"] {
+        bottom: 0px;
+        left: 0px;
+        &:before  {
+          bottom: 0px;
+          left: 0px;
+        }
+      }      
+     
+      
+
+      [data-value="bottom right"] {
+        bottom: 0px;
+        right: 0px;
+
+        &:before {
+          bottom: 0px;
+          right: 0px;
+        }
+      }            
+
+      [data-value="left"] {
+        top: 50%;
+        left: 0px;
+        transform: translateY(-50%);
+
+        &:before {
+          top: 50%;
+          left: 0px;
+          transform: translateY(-50%);
+        }
+      }           
+      
+      [data-value="right"] {
+        top: 50%;
+        right: 0px;
+        transform: translateY(-50%);
+
+        &:before {
+          top: 50%;
+          right: 0px;
+          transform: translateY(-50%);
+        }
+      }                 
+
+      [data-value="center"] {
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
+
+        &:before {
+          top: 50%;
+          left: 50%;
+          transform: translateX(-50%) translateY(-50%);
+        }
+      }                       
+    }
+
+
     .radius-selector {
       display: grid;
       grid-template-columns: 1fr 1fr;

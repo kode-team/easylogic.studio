@@ -52,10 +52,16 @@ export default class PathEditorView extends UIElement {
         return this.state.isShow
     }
 
+    initRect (isForce  = false) {
+        if (!this.state.rect || isForce) {
+            this.state.rect = this.parent.refs.$body.rect();
+        }
+    }
+
     [KEYUP('document') + IF('isShow') + KEY('Escape') + KEY('Enter') + PREVENT + STOP] () {
 
         if (this.state.current) {
-            this.state.rect = this.parent.refs.$body.rect();               
+            this.initRect();
             this.refreshPathLayer();
         } else {
             var pathRect = this.refs.$view.$('path.object').rect()
@@ -318,7 +324,7 @@ export default class PathEditorView extends UIElement {
         }
     }
 
-    [POINTERMOVE('$view')] (e) {
+    [POINTERMOVE('$view')] (e) {        
         if (this.isMode('draw') && this.state.rect) {            
             this.state.moveXY = {
                 x: e.xy.x - this.state.rect.x, 
@@ -363,6 +369,7 @@ export default class PathEditorView extends UIElement {
         this.state.rect = this.parent.refs.$body.rect();            
         this.state.canvasOffset = this.refs.$view.rect();
         this.state.altKey = false; 
+        var isDrawMode = this.isMode('draw');
 
         this.state.dragXY = {
             x: e.xy.x - this.state.rect.x, 
@@ -372,7 +379,7 @@ export default class PathEditorView extends UIElement {
 
         var $target = Dom.create(e.target);
 
-        if ($target.hasClass('svg-editor-canvas') && !this.isMode('draw')) {
+        if ($target.hasClass('svg-editor-canvas') && !isDrawMode) {
             this.changeMode('modify');
             this.trigger('hidePathEditor')
             return false; 
@@ -382,30 +389,27 @@ export default class PathEditorView extends UIElement {
         this.state.isFirstSegment = this.state.isSegment && $target.attr('data-is-first') === 'true';
         
 
-        if (this.state.isSegment) {
+        if (isDrawMode) {
 
-            if (this.state.isFirstSegment && this.isMode('draw')) {
-
+            if (this.state.isFirstSegment) {
                 // 마지막 지점을 연결할 예정이기 때문에 
                 // startPoint 는  M 이었던 startPoint 로 정리된다. 
                 var index = +$target.attr('data-index')
                 this.state.startPoint = this.state.points[index].startPoint;
-                this.state.dragPoints = false
-                this.state.endPoint = null;
-
             } else {
+                this.state.startPoint = this.state.dragXY;
+    
+            }
+            this.state.dragPoints = false
+            this.state.endPoint = null;
+
+
+        } else {
+            if (this.state.isSegment) {
                 this.changeMode('segment-move');
                 var index = +$target.attr('data-index')
                 this.pathGenerator.setCachePoint(index, $target.attr('data-segment-point'));
             }
-
-        } else if (this.isMode('draw')) { 
-            this.state.startPoint = this.state.dragXY;
-            this.state.dragPoints = false
-            this.state.endPoint = null;
-        } else  {
-            // draw, segment-move 모드가 아닌 데  드래그 하는 경우는 
-            // 영역을 선택하기 위한 용도 
         }
 
     }

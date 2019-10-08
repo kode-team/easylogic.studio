@@ -12,6 +12,18 @@ const typeList = [
 
 const keyList = typeList.map(it => it.key);
 
+const origin = {
+  top: '50% 0%',
+  'top left': '0% 0%' ,
+  'top right': '100% 0%' ,
+  left: '0% 50%' ,
+  center: '50% 50%',
+  right: '100% 50%' ,
+  bottom: '50% 100%' ,
+  'bottom left': '0% 100%' ,
+  'bottom right': '100% 100%'
+}
+
 export default class TransformOriginEditor extends UIElement {
   components() {
     return { 
@@ -48,7 +60,34 @@ export default class TransformOriginEditor extends UIElement {
   }
 
   template() {
-    return `<div class='transform-origin-editor' ref='$body'></div>`
+    return /*html*/`
+      <div class='transform-origin-editor'>
+        <div class='direction' ref='$direction'>
+          <div class='pos' data-value='top'></div>
+          <div class='pos' data-value='top left'></div>
+          <div class='pos' data-value='top right'></div>
+          <div class='pos' data-value='bottom'></div>
+          <div class='pos' data-value='bottom left'></div>
+          <div class='pos' data-value='bottom right'></div>
+          <div class='pos' data-value='left'></div>
+          <div class='pos' data-value='right'></div>
+          <div class='pos' data-value='center'></div>
+        </div>
+        <div ref='$body'></div>
+      </div>
+    `
+  }
+
+  [CLICK('$direction .pos')] (e) {
+    var direct = e.$delegateTarget.attr('data-value');
+    
+
+    this.state.isAll = false; 
+    var [x, y] = origin[direct].split(' ')
+    this.state['transform-origin-x'] = Length.parse(x);
+    this.state['transform-origin-y'] = Length.parse(y);
+    this.refresh();
+    this.modifyTransformOrigin();
   }
 
   [EVENT('changeTransformOrigin')] (key, value) {

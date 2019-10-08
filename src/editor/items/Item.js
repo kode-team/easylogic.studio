@@ -280,7 +280,9 @@ export class Item {
     })}" ${OBJECT_TO_PROPERTY({
       'data-id': id,
       'data-title': name 
-    })}>${layers.map(it => it.html).join('')}</${tagName}>`
+    })}>
+  ${layers.map(it => it.html).join('\n\t')}
+</${tagName}>`
   }
 
   resize () {}

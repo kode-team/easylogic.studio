@@ -677,16 +677,14 @@ export class DomItem extends GroupItem {
     //3. 이외에 selector 로 생성할 수 있는 css 를 생성 (:hover, :active 등등 )
     var cssString = `
 ${prefix} {  /* ${this.json.itemType} */
-    ${CSS_TO_STRING(this.toCSS(), '\n')}; 
+    ${CSS_TO_STRING(this.toCSS(), '\n    ')}; 
     ${appendCSS}
 }
-
 ${this.toNestedCSS().map(it => {
   return `${prefix} ${it.selector} { 
       ${it.cssText ? it.cssText : CSS_TO_STRING(it.css || {}, '\n\t\t')}; 
   }`
 }).join('\n')}
-
 ${this.toSelectorString(prefix)}
 `  
     return cssString;

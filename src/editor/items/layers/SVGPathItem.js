@@ -97,8 +97,10 @@ export class SVGPathItem extends SVGItem {
 
   get html () {
     var {id} = this.json; 
-    return /*html*/`<svg class='element-item path ${OBJECT_TO_CLASS({
-        'motion-based': this.json['motion-based']
-      })}' data-id="${id}" ><path class='svg-path-item' d="${this.json.d}" /></svg>`
+    var p = {'motion-based': this.json['motion-based'] }
+    return /*html*/`
+  <svg class='element-item path ${OBJECT_TO_CLASS(p)}' data-id="${id}" >
+    <path class='svg-path-item' d="${this.json.d}" />
+  </svg>`
   }
 }

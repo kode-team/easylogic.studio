@@ -402,7 +402,7 @@
 .codemirror-colorpicker .colorpicker-body .information > .information-item > .input-field .postfix {
   display: inline-block;
   position: absolute;
-  right: 4px;
+  right: 1px;
   top: 2px;
   height: 21px;
   line-height: 2;
@@ -1664,8 +1664,8 @@ html, body {
   grid-template-columns: repeat(3, 1fr);
 }
 .csseditor .feature-control .layer-tab .library-items > .group > .list > .item {
-  border-right: 1px solid #2b2b2b;
-  border-bottom: 1px solid #2b2b2b;
+  border-right: 1px solid black;
+  border-bottom: 1px solid black;
   height: 90px;
   padding: 5px;
   text-align: center;
@@ -3195,7 +3195,7 @@ html, body {
   pointer-events: none;
 }
 .csseditor .property {
-  border-bottom: 1px solid #2b2b2b;
+  border-bottom: 1px solid black;
   background-color: #4d4949;
   color: #ffffff;
   display: none;
@@ -3370,7 +3370,7 @@ html, body {
   background-color: #424242;
 }
 .csseditor .property.show > .property-title {
-  border-bottom: 1px solid #2b2b2b;
+  border-bottom: 1px solid black;
 }
 .csseditor .property.show > .property-body {
   display: block;
@@ -3402,7 +3402,7 @@ html, body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   cursor: pointer;
-  border-bottom: 0px solid #2b2b2b;
+  border-bottom: 0px solid black;
   background-color: #2b2b2b;
 }
 .csseditor .property > .property-title label {
@@ -4324,22 +4324,6 @@ html, body {
 .csseditor .layer-list .layer-item .detail span.icon svg path, .csseditor .layer-list .layer-item .detail span.icon svg polygon {
   fill: transparent;
   stroke: white;
-}
-.csseditor .layer-list .layer-item .detail span.icon[data-item-type=svg-path]:before, .csseditor .layer-list .layer-item .detail span.icon[data-item-type=svg-polygon]:before {
-  content: "S";
-  position: absolute;
-  left: 0px;
-  bottom: 0px;
-  display: inline-block;
-  text-align: center;
-  font-size: 10px;
-  width: 13px;
-  height: 13px;
-  line-height: 1.5;
-  border-radius: 100%;
-  color: #ffffff;
-  opacity: 0.8;
-  background-color: #2f3538;
 }
 .csseditor .layer-list .layer-item .detail label {
   padding: 2px 0px;
@@ -5383,7 +5367,7 @@ html, body {
   height: 100%;
   padding: 0px 3px;
   background-color: #2b2b2b;
-  border: 1px solid #2b2b2b;
+  border: 1px solid black;
 }
 .csseditor .color-view-editor .color-code input.focused {
   box-shadow: 0 0 0 1px #fc554f;
@@ -5495,9 +5479,9 @@ html, body {
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
   background-color: transparent;
-  border-bottom: 1px solid #2b2b2b;
-  border-left: 1px solid #2b2b2b;
-  border-top: 1px solid #2b2b2b;
+  border-bottom: 1px solid black;
+  border-left: 1px solid black;
+  border-top: 1px solid black;
   text-align: left;
   background-color: #2b2b2b;
 }
@@ -5525,9 +5509,9 @@ html, body {
   border-bottom-right-radius: 3px;
   border-top-right-radius: 3px;
   background-color: transparent;
-  border-bottom: 1px solid #2b2b2b;
-  border-top: 1px solid #2b2b2b;
-  border-right: 1px solid #2b2b2b;
+  border-bottom: 1px solid black;
+  border-top: 1px solid black;
+  border-right: 1px solid black;
 }
 .csseditor .range-editor .range-editor-type[data-type=calc] .area {
   height: 100%;
@@ -5595,7 +5579,7 @@ html, body {
 }
 .csseditor .number-range-editor .range-editor-type .area input[type=number] {
   background-color: #2b2b2b;
-  border: 1px solid #2b2b2b;
+  border: 1px solid black;
 }
 .csseditor .number-range-editor .range-editor-type .area input[type=number].focused {
   box-shadow: 0 0 0 1px #fc554f;
@@ -5661,7 +5645,7 @@ html, body {
   border-top-right-radius: 0px;
   border-bottom-right-radius: 0px;
   background-color: #2b2b2b;
-  border: 1px solid #2b2b2b;
+  border: 1px solid black;
 }
 .csseditor .input-range-editor .range-editor-type .area .select-editor select {
   -webkit-appearance: none;
@@ -5673,7 +5657,7 @@ html, body {
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
   background-color: #2b2b2b;
-  border: 1px solid #2b2b2b;
+  border: 1px solid black;
 }
 .csseditor .text-editor {
   display: grid;
@@ -6286,6 +6270,123 @@ html, body {
 .csseditor .perspective-origin-editor .perspective-origin-item.full {
   grid-template-columns: 1fr;
 }
+.csseditor .perspective-origin-editor .direction {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto;
+  margin-bottom: 10px;
+}
+.csseditor .perspective-origin-editor .direction > div {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+  background-color: #2f3538;
+  cursor: pointer;
+}
+.csseditor .perspective-origin-editor .direction > div:before {
+  pointer-events: none;
+  content: "";
+  background-color: #fc554f;
+  border-radius: 3px;
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  position: absolute;
+}
+.csseditor .perspective-origin-editor .direction [data-value=top] {
+  top: 0px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+}
+.csseditor .perspective-origin-editor .direction [data-value=top]:before {
+  top: 0px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+}
+.csseditor .perspective-origin-editor .direction [data-value="top left"] {
+  top: 0px;
+  left: 0px;
+}
+.csseditor .perspective-origin-editor .direction [data-value="top left"]:before {
+  top: 0px;
+  left: 0px;
+}
+.csseditor .perspective-origin-editor .direction [data-value="top right"] {
+  top: 0px;
+  right: 0px;
+}
+.csseditor .perspective-origin-editor .direction [data-value="top right"]:before {
+  top: 0px;
+  right: 0px;
+}
+.csseditor .perspective-origin-editor .direction [data-value=bottom] {
+  bottom: 0px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+}
+.csseditor .perspective-origin-editor .direction [data-value=bottom]:before {
+  bottom: 0px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+}
+.csseditor .perspective-origin-editor .direction [data-value="bottom left"] {
+  bottom: 0px;
+  left: 0px;
+}
+.csseditor .perspective-origin-editor .direction [data-value="bottom left"]:before {
+  bottom: 0px;
+  left: 0px;
+}
+.csseditor .perspective-origin-editor .direction [data-value="bottom right"] {
+  bottom: 0px;
+  right: 0px;
+}
+.csseditor .perspective-origin-editor .direction [data-value="bottom right"]:before {
+  bottom: 0px;
+  right: 0px;
+}
+.csseditor .perspective-origin-editor .direction [data-value=left] {
+  top: 50%;
+  left: 0px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+.csseditor .perspective-origin-editor .direction [data-value=left]:before {
+  top: 50%;
+  left: 0px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+.csseditor .perspective-origin-editor .direction [data-value=right] {
+  top: 50%;
+  right: 0px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+.csseditor .perspective-origin-editor .direction [data-value=right]:before {
+  top: 50%;
+  right: 0px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+.csseditor .perspective-origin-editor .direction [data-value=center] {
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+}
+.csseditor .perspective-origin-editor .direction [data-value=center]:before {
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+}
 .csseditor .perspective-origin-editor .radius-selector {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -6318,6 +6419,123 @@ html, body {
 }
 .csseditor .transform-origin-editor .transform-origin-item.full {
   grid-template-columns: 1fr;
+}
+.csseditor .transform-origin-editor .direction {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto;
+  margin-bottom: 10px;
+}
+.csseditor .transform-origin-editor .direction > div {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+  background-color: #2f3538;
+  cursor: pointer;
+}
+.csseditor .transform-origin-editor .direction > div:before {
+  pointer-events: none;
+  content: "";
+  background-color: #fc554f;
+  border-radius: 3px;
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  position: absolute;
+}
+.csseditor .transform-origin-editor .direction [data-value=top] {
+  top: 0px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+}
+.csseditor .transform-origin-editor .direction [data-value=top]:before {
+  top: 0px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+}
+.csseditor .transform-origin-editor .direction [data-value="top left"] {
+  top: 0px;
+  left: 0px;
+}
+.csseditor .transform-origin-editor .direction [data-value="top left"]:before {
+  top: 0px;
+  left: 0px;
+}
+.csseditor .transform-origin-editor .direction [data-value="top right"] {
+  top: 0px;
+  right: 0px;
+}
+.csseditor .transform-origin-editor .direction [data-value="top right"]:before {
+  top: 0px;
+  right: 0px;
+}
+.csseditor .transform-origin-editor .direction [data-value=bottom] {
+  bottom: 0px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+}
+.csseditor .transform-origin-editor .direction [data-value=bottom]:before {
+  bottom: 0px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+}
+.csseditor .transform-origin-editor .direction [data-value="bottom left"] {
+  bottom: 0px;
+  left: 0px;
+}
+.csseditor .transform-origin-editor .direction [data-value="bottom left"]:before {
+  bottom: 0px;
+  left: 0px;
+}
+.csseditor .transform-origin-editor .direction [data-value="bottom right"] {
+  bottom: 0px;
+  right: 0px;
+}
+.csseditor .transform-origin-editor .direction [data-value="bottom right"]:before {
+  bottom: 0px;
+  right: 0px;
+}
+.csseditor .transform-origin-editor .direction [data-value=left] {
+  top: 50%;
+  left: 0px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+.csseditor .transform-origin-editor .direction [data-value=left]:before {
+  top: 50%;
+  left: 0px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+.csseditor .transform-origin-editor .direction [data-value=right] {
+  top: 50%;
+  right: 0px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+.csseditor .transform-origin-editor .direction [data-value=right]:before {
+  top: 50%;
+  right: 0px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+.csseditor .transform-origin-editor .direction [data-value=center] {
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+}
+.csseditor .transform-origin-editor .direction [data-value=center]:before {
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
 }
 .csseditor .transform-origin-editor .radius-selector {
   display: grid;
@@ -8395,7 +8613,7 @@ html, body {
   right: 0px;
   bottom: 0px;
   cursor: crosshair;
-  background-color: rgba(47, 53, 56, 0.1);
+  background-color: rgba(255, 255, 255, 0.7);
 }
 .csseditor .path-editor-view.draw {
   cursor: crosshair;
@@ -8418,11 +8636,8 @@ html, body {
   stroke-width: 1;
 }
 .csseditor .path-editor-view svg line[data-guide=true] {
-  stroke: #830808;
+  stroke: #00a2ff;
   pointer-events: none;
-}
-.csseditor .path-editor-view svg line[data-segment=true] {
-  stroke-dasharray: 2 2;
 }
 .csseditor .path-editor-view svg circle {
   fill: white;
@@ -12000,22 +12215,6 @@ html, body {
   fill: transparent;
   stroke: white;
 }
-.csseditor[data-theme=light] .layer-list .layer-item .detail span.icon[data-item-type=svg-path]:before, .csseditor[data-theme=light] .layer-list .layer-item .detail span.icon[data-item-type=svg-polygon]:before {
-  content: "S";
-  position: absolute;
-  left: 0px;
-  bottom: 0px;
-  display: inline-block;
-  text-align: center;
-  font-size: 10px;
-  width: 13px;
-  height: 13px;
-  line-height: 1.5;
-  border-radius: 100%;
-  color: #ffffff;
-  opacity: 0.8;
-  background-color: white;
-}
 .csseditor[data-theme=light] .layer-list .layer-item .detail label {
   padding: 2px 0px;
   cursor: pointer;
@@ -13961,6 +14160,123 @@ html, body {
 .csseditor[data-theme=light] .perspective-origin-editor .perspective-origin-item.full {
   grid-template-columns: 1fr;
 }
+.csseditor[data-theme=light] .perspective-origin-editor .direction {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto;
+  margin-bottom: 10px;
+}
+.csseditor[data-theme=light] .perspective-origin-editor .direction > div {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+  background-color: white;
+  cursor: pointer;
+}
+.csseditor[data-theme=light] .perspective-origin-editor .direction > div:before {
+  pointer-events: none;
+  content: "";
+  background-color: #4b61ce;
+  border-radius: 3px;
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  position: absolute;
+}
+.csseditor[data-theme=light] .perspective-origin-editor .direction [data-value=top] {
+  top: 0px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+}
+.csseditor[data-theme=light] .perspective-origin-editor .direction [data-value=top]:before {
+  top: 0px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+}
+.csseditor[data-theme=light] .perspective-origin-editor .direction [data-value="top left"] {
+  top: 0px;
+  left: 0px;
+}
+.csseditor[data-theme=light] .perspective-origin-editor .direction [data-value="top left"]:before {
+  top: 0px;
+  left: 0px;
+}
+.csseditor[data-theme=light] .perspective-origin-editor .direction [data-value="top right"] {
+  top: 0px;
+  right: 0px;
+}
+.csseditor[data-theme=light] .perspective-origin-editor .direction [data-value="top right"]:before {
+  top: 0px;
+  right: 0px;
+}
+.csseditor[data-theme=light] .perspective-origin-editor .direction [data-value=bottom] {
+  bottom: 0px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+}
+.csseditor[data-theme=light] .perspective-origin-editor .direction [data-value=bottom]:before {
+  bottom: 0px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+}
+.csseditor[data-theme=light] .perspective-origin-editor .direction [data-value="bottom left"] {
+  bottom: 0px;
+  left: 0px;
+}
+.csseditor[data-theme=light] .perspective-origin-editor .direction [data-value="bottom left"]:before {
+  bottom: 0px;
+  left: 0px;
+}
+.csseditor[data-theme=light] .perspective-origin-editor .direction [data-value="bottom right"] {
+  bottom: 0px;
+  right: 0px;
+}
+.csseditor[data-theme=light] .perspective-origin-editor .direction [data-value="bottom right"]:before {
+  bottom: 0px;
+  right: 0px;
+}
+.csseditor[data-theme=light] .perspective-origin-editor .direction [data-value=left] {
+  top: 50%;
+  left: 0px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+.csseditor[data-theme=light] .perspective-origin-editor .direction [data-value=left]:before {
+  top: 50%;
+  left: 0px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+.csseditor[data-theme=light] .perspective-origin-editor .direction [data-value=right] {
+  top: 50%;
+  right: 0px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+.csseditor[data-theme=light] .perspective-origin-editor .direction [data-value=right]:before {
+  top: 50%;
+  right: 0px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+.csseditor[data-theme=light] .perspective-origin-editor .direction [data-value=center] {
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+}
+.csseditor[data-theme=light] .perspective-origin-editor .direction [data-value=center]:before {
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+}
 .csseditor[data-theme=light] .perspective-origin-editor .radius-selector {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -13993,6 +14309,123 @@ html, body {
 }
 .csseditor[data-theme=light] .transform-origin-editor .transform-origin-item.full {
   grid-template-columns: 1fr;
+}
+.csseditor[data-theme=light] .transform-origin-editor .direction {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto;
+  margin-bottom: 10px;
+}
+.csseditor[data-theme=light] .transform-origin-editor .direction > div {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+  background-color: white;
+  cursor: pointer;
+}
+.csseditor[data-theme=light] .transform-origin-editor .direction > div:before {
+  pointer-events: none;
+  content: "";
+  background-color: #4b61ce;
+  border-radius: 3px;
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  position: absolute;
+}
+.csseditor[data-theme=light] .transform-origin-editor .direction [data-value=top] {
+  top: 0px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+}
+.csseditor[data-theme=light] .transform-origin-editor .direction [data-value=top]:before {
+  top: 0px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+}
+.csseditor[data-theme=light] .transform-origin-editor .direction [data-value="top left"] {
+  top: 0px;
+  left: 0px;
+}
+.csseditor[data-theme=light] .transform-origin-editor .direction [data-value="top left"]:before {
+  top: 0px;
+  left: 0px;
+}
+.csseditor[data-theme=light] .transform-origin-editor .direction [data-value="top right"] {
+  top: 0px;
+  right: 0px;
+}
+.csseditor[data-theme=light] .transform-origin-editor .direction [data-value="top right"]:before {
+  top: 0px;
+  right: 0px;
+}
+.csseditor[data-theme=light] .transform-origin-editor .direction [data-value=bottom] {
+  bottom: 0px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+}
+.csseditor[data-theme=light] .transform-origin-editor .direction [data-value=bottom]:before {
+  bottom: 0px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+}
+.csseditor[data-theme=light] .transform-origin-editor .direction [data-value="bottom left"] {
+  bottom: 0px;
+  left: 0px;
+}
+.csseditor[data-theme=light] .transform-origin-editor .direction [data-value="bottom left"]:before {
+  bottom: 0px;
+  left: 0px;
+}
+.csseditor[data-theme=light] .transform-origin-editor .direction [data-value="bottom right"] {
+  bottom: 0px;
+  right: 0px;
+}
+.csseditor[data-theme=light] .transform-origin-editor .direction [data-value="bottom right"]:before {
+  bottom: 0px;
+  right: 0px;
+}
+.csseditor[data-theme=light] .transform-origin-editor .direction [data-value=left] {
+  top: 50%;
+  left: 0px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+.csseditor[data-theme=light] .transform-origin-editor .direction [data-value=left]:before {
+  top: 50%;
+  left: 0px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+.csseditor[data-theme=light] .transform-origin-editor .direction [data-value=right] {
+  top: 50%;
+  right: 0px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+.csseditor[data-theme=light] .transform-origin-editor .direction [data-value=right]:before {
+  top: 50%;
+  right: 0px;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+.csseditor[data-theme=light] .transform-origin-editor .direction [data-value=center] {
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+}
+.csseditor[data-theme=light] .transform-origin-editor .direction [data-value=center]:before {
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
 }
 .csseditor[data-theme=light] .transform-origin-editor .radius-selector {
   display: grid;
@@ -16070,7 +16503,7 @@ html, body {
   right: 0px;
   bottom: 0px;
   cursor: crosshair;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.7);
 }
 .csseditor[data-theme=light] .path-editor-view.draw {
   cursor: crosshair;
@@ -16093,11 +16526,8 @@ html, body {
   stroke-width: 1;
 }
 .csseditor[data-theme=light] .path-editor-view svg line[data-guide=true] {
-  stroke: #830808;
+  stroke: #00a2ff;
   pointer-events: none;
-}
-.csseditor[data-theme=light] .path-editor-view svg line[data-segment=true] {
-  stroke-dasharray: 2 2;
 }
 .csseditor[data-theme=light] .path-editor-view svg circle {
   fill: white;

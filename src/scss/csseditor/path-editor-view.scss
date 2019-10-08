@@ -6,7 +6,7 @@
     right:0px;
     bottom:0px;
     cursor: crosshair;
-    background-color: rgba($background-color, 0.1);
+    background-color: $path-background-color;
 
     &.draw {
         cursor: crosshair;
@@ -45,13 +45,13 @@
             // stroke-dasharray: 5 2; 
 
             &[data-guide='true'] {
-                stroke: rgb(131, 8, 8);
+                stroke: rgb(0, 162, 255);
                 pointer-events: none;
             }
 
-            &[data-segment="true"] {
-                stroke-dasharray: 2 2; 
-            }
+            // &[data-segment="true"] {
+            //     stroke-dasharray: 2 2; 
+            // }
         }
 
         circle {

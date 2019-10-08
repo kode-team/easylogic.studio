@@ -59,7 +59,7 @@ $input-font-color: #ececec;
 
 // property 
 $property-title-color:  rgb(43, 43, 43);
-$property-border-color: rgb(43, 43, 43);
+$property-border-color: rgb(0, 0, 0);
 $property-background-color: $inner-border-color; 
 $property-show-background-color: rgb(66, 66, 66); 
 $property-font-color: $font-color;
@@ -99,6 +99,7 @@ $bezier-sample-background-color: white;
 
 
 // path guide 
+$path-background-color: rgba(255, 255, 255, 0.7);
 $path-guide-color: rgba(0, 0, 0, 1);
 
 // timeline 

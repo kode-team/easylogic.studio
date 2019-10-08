@@ -12,6 +12,17 @@ const typeList = [
 
 const keyList = typeList.map(it => it.key);
 
+const origin = {
+  top: '50% 0%',
+  'top left': '0% 0%' ,
+  'top right': '100% 0%' ,
+  left: '0% 50%' ,
+  center: '50% 50%',
+  right: '100% 50%' ,
+  bottom: '50% 100%' ,
+  'bottom left': '0% 100%' ,
+  'bottom right': '100% 100%'
+}
 export default class PerspectiveOriginEditor extends UIElement {
   components() {
     return { 
@@ -48,8 +59,35 @@ export default class PerspectiveOriginEditor extends UIElement {
   }
 
   template() {
-    return `<div class='perspective-origin-editor' ref='$body'></div>`
+    return /*html*/`
+      <div class='perspective-origin-editor' ref='$body'>
+        <div class='direction' ref='$direction'>
+          <div class='pos' data-value='top'></div>
+          <div class='pos' data-value='top left'></div>
+          <div class='pos' data-value='top right'></div>
+          <div class='pos' data-value='bottom'></div>
+          <div class='pos' data-value='bottom left'></div>
+          <div class='pos' data-value='bottom right'></div>
+          <div class='pos' data-value='left'></div>
+          <div class='pos' data-value='right'></div>
+          <div class='pos' data-value='center'></div>
+        </div>
+        <div ref='$body'></div>
+      </div>
+    `
   }
+
+
+  [CLICK('$direction .pos')] (e) {
+    var direct = e.$delegateTarget.attr('data-value');
+    
+    this.state.isAll = false; 
+    var [x, y] = origin[direct].split(' ')
+    this.state['perspective-origin-x'] = Length.parse(x);
+    this.state['perspective-origin-y'] = Length.parse(y);
+    this.refresh();
+    this.modifyPerspectiveOrigin();
+  }  
 
   [EVENT('changePerspectiveOrigin')] (key, value) {
 
@@ -67,7 +105,7 @@ export default class PerspectiveOriginEditor extends UIElement {
     var selectedValue = this.state.isAll ? 'all' : 'partitial'
     var perspectiveOrigin = this.state['perspective-origin'];
 
-    return `
+    return /*html*/`
       <div class="property-item perspective-origin-item">
         <div class="radius-selector" data-selected-value="${selectedValue}" ref="$selector">
           <button type="button" data-value="all">${icon.border_all}</button>
@@ -86,7 +124,7 @@ export default class PerspectiveOriginEditor extends UIElement {
       >
         <div class="radius-setting-box" ref="$radiusSettingBox">
           ${typeList.map(it => {
-            return `
+            return /*html*/`
               <div>
                   <RangeEditor ref='$${it.key}' label='${it.title}' key='${it.key}' value="${this.state[it.key]}" onchange='changePerspectiveOrigin' />
               </div>  
