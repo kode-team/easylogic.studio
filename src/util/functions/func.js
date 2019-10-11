@@ -226,3 +226,7 @@ export function OBJECT_TO_CLASS (obj) {
         return key
     }).join(' ');
 }
+
+export function TAG_TO_STRING (str) {
+    return str.replace(/\</g, '&lt;').replace(/\>/g, '&gt;') 
+}

@@ -106,15 +106,11 @@ export default class SVGItemProperty extends BaseProperty {
         <div class='property-item label'>
           <label>Total Length <span ref='$length'></span></label>
         </div>
-        <div class='property-item label'>
-          <label>Fill</label>
-        </div>
 
         <div class='property-item animation-property-item'>
           <span class='add-timeline-property' data-property='fill'></span>
-          <ColorViewEditor ref='$fill' label='Color' key='fill' onchange="changeValue" />
+          <FillSingleEditor ref='$fill' label='Fill' key='fill' onchange="changeValue" />
         </div>
-
 
         <div class='property-item animation-property-item'>
           <span class='add-timeline-property' data-property='fill-opacity'></span>
@@ -144,13 +140,9 @@ export default class SVGItemProperty extends BaseProperty {
             onchange="changeValue" />
         </div>            
 
-        <div class='property-item label'>
-          <label>Stroke</label>
-        </div>      
-
         <div class='property-item animation-property-item'>
           <span class='add-timeline-property' data-property='stroke'></span>
-          <ColorViewEditor ref='$stroke' label='Color' key='stroke' onchange="changeValue" />
+          <FillSingleEditor ref='$stroke' label='Stroke' key='stroke' onchange="changeValue" />
         </div>      
 
         <div class='property-item animation-property-item'>

@@ -1,8 +1,10 @@
 import PathParser from "../../parse/PathParser";
 import { SVGItem } from "./SVGItem";
-import { clone, OBJECT_TO_CLASS } from "../../../util/functions/func";
+import { clone, OBJECT_TO_CLASS, OBJECT_TO_PROPERTY } from "../../../util/functions/func";
 import { hasSVGProperty, hasCSSProperty } from "../../util/Resource";
 import { Length } from "../../unit/Length";
+import { SVGFill } from "../../svg-property/SVGFill";
+import Dom from "../../../util/Dom";
 
 export class SVGPathItem extends SVGItem {
   getDefaultObject(obj = {}) {
@@ -90,17 +92,31 @@ export class SVGPathItem extends SVGItem {
 
 
   updateFunction (currentElement) {
+
     var $path = currentElement.$('path');
     $path.attr('d', this.json.d);
+    $path.attr('fill', this.toFillValue)
+    $path.attr('stroke', this.toStrokeValue)
+
+    var $defs = currentElement.$('defs');
+    $defs.html(this.toDefInnerString)
+
     this.json.totalLength = $path.el.getTotalLength()
   }    
 
   get html () {
     var {id} = this.json; 
     var p = {'motion-based': this.json['motion-based'] }
+
     return /*html*/`
   <svg class='element-item path ${OBJECT_TO_CLASS(p)}' data-id="${id}" >
-    <path class='svg-path-item' d="${this.json.d}" />
+    ${this.toDefString}
+    <path ${OBJECT_TO_PROPERTY({
+      'class': 'svg-path-item',
+      d: this.json.d, 
+      fill: this.toFillValue,
+      stroke: this.toStrokeValue
+    })} />
   </svg>`
   }
 }

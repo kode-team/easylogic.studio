@@ -208,7 +208,7 @@ export class Gradient extends ImageResource {
 
     if (newColors.length === 1) {
       newColors.push(new ColorStep({
-        color: newColors[0].color,
+        color: newColors[0].color || 'transparent',
         percent: 100 
       }))
     }

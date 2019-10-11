@@ -45,11 +45,6 @@ export default {
     var project = editor.selection.currentProject;
     var artboard = editor.selection.currentArtboard;
 
-    // artboard.reset({
-    //   x: Length.px(0),
-    //   y: Length.px(0)
-    // })
-
     var css = `
 ${this.makeStyle(project)}
 ${this.makeStyle(artboard, `
@@ -70,5 +65,53 @@ ${this.makeSvg(project)}
   
     return { html, css, js }
   },
+
+  generateSVG (rootItem, depth = 0) {
+    var {width, height}= rootItem;
+
+    if (depth === 0) {
+
+      return /*html*/`
+      <svg width="${width.value}" height="${height.value}" viewBox="0 0 ${width.value} ${height.value}">
+        ${rootItem.layers.map(it => this.generateSVG(it, depth + 1)).join('')}
+      </svg>
+`
+    } else if (depth > 0) {
+      if (rootItem.is('svg-path')) {
+        var screenX = rootItem.screenX.value;
+        var screenY = rootItem.screenY.value;
+        var screenWidth = rootItem.screenWidth.value;
+        var screenHeight = rootItem.screenHeight.value;
+        var d = rootItem.d; 
+
+        return /*html*/`
+  <g transfom="translate(${screenX},${screenY})">
+    <svg x="0" y="0" width="${screenWidth}" height="${screenHeight}">
+        <path d="${d}" />
+    </svg>
+  </g>
+` 
+    } else if (rootItem.is('svg-polygon')) {
+      var screenX = rootItem.screenX.value;
+      var screenY = rootItem.screenY.value;
+      var screenWidth = rootItem.screenWidth.value;
+      var screenHeight = rootItem.screenHeight.value;
+      var points = rootItem.points; 
+
+      return /*html*/`
+    <g transfom="translate(${screenX},${screenY})">
+    <svg x="0" y="0" width="${screenWidth}" height="${screenHeight}">
+      <polygon points="${points}" />
+    </svg>
+    </g>
+    ` 
+      } else if (rootItem.enableHasChildren() && rootItem.layers.length) {
+        return /*html*/`
+      ${rootItem.layers.map(it => this.generateSVG(it, depth + 1)).join('')}
+`
+      }
+    }
+
+  }
 
 }

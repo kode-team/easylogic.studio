@@ -3,7 +3,7 @@ import icon from "../icon/icon";
 
 export default class Fullscreen extends MenuItem {
   getIconString() {
-    return icon.play;
+    return icon.fullscreen;
   }
   getTitle() {
     return "Screen";

@@ -2,6 +2,7 @@ import { SVGItem } from "./SVGItem";
 import { Length } from "../../unit/Length";
 import PolygonParser from "../../parse/PolygonParser";
 import { OBJECT_TO_PROPERTY } from "../../../util/functions/func";
+import Dom from "../../../util/Dom";
 
 export class SVGPolygonItem extends SVGItem {
   getDefaultObject(obj = {}) {
@@ -80,6 +81,12 @@ export class SVGPolygonItem extends SVGItem {
   updateFunction (currentElement) {
     var $polygon = currentElement.$('polygon');
     $polygon.attr('points', this.json.points);
+    $polygon.attr('fill', this.toFillValue)
+    $polygon.attr('stroke', this.toStrokeValue)
+
+    var $defs = currentElement.$('defs');
+    $defs.html(this.toDefInnerString)
+
     this.json.totalLength = $polygon.el.getTotalLength()
   }  
 
@@ -98,6 +105,14 @@ export class SVGPolygonItem extends SVGItem {
     var {id, points} = this.json; 
     return /*html*/`<svg class='element-item polygon' ${OBJECT_TO_PROPERTY({
       'motion-based': this.json['motion-based']
-    })} data-id="${id}"><polygon class='svg-polygon-item' points="${points}" /></svg>`
+    })} data-id="${id}">
+      ${this.toDefString}
+      <polygon ${OBJECT_TO_PROPERTY({
+        'class': 'svg-polygon-item',
+        points, 
+        fill: this.toFillValue,
+        stroke: this.toStrokeValue
+      })} />
+    </svg>`
   }
 }

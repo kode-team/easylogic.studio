@@ -5,59 +5,42 @@ import RangeEditor from "./RangeEditor";
 
 import SelectEditor from "./SelectEditor";
 import InputRangeEditor from "./InputRangeEditor";
-import { BackgroundImage } from "../../../editor/css-property/BackgroundImage";
 import { editor } from "../../../editor/editor";
 import { Gradient } from "../../../editor/image-resource/Gradient";
 import icon from "../icon/icon";
-import { clone } from "../../../util/functions/func";
+import { SVGFill } from "../../../editor/svg-property/SVGFill";
+import { SVGStaticGradient } from "../../../editor/image-resource/SVGStaticGradient";
+import { isUndefined } from "../../../util/functions/func";
 
-var radialTypeList = [
-  'circle',
-  'circle closest-side',
-  'circle closest-corner',
-  'circle farthest-side',
-  'circle farthest-corner',
-  'ellipse',
-  'ellipse closest-side',
-  'ellipse closest-corner',
-  'ellipse farthest-side',
-  'ellipse farthest-corner'
-]
-
-var imageTypeList = [
+const imageTypeList = [
   'static-gradient',
   'linear-gradient',
-  'repeating-linear-gradient',
   'radial-gradient',
-  'repeating-radial-gradient',
-  'conic-gradient',
-  'repeating-conic-gradient',
   'image-resource'
 ]
 
-var iconList = {
+const iconList = {
   'image-resource': icon.photo
 }
 
-var hasRadialPosition = {
-  'radial-gradient': true,
-  'repeating-radial-gradient': true,
-  'conic-gradient': true,
-  'repeating-conic-gradient': true
+const hasRadialPosition = {
+  'radial-gradient': true
 }
 
-var presetPosition = {
-  top: [ '50%', '0%' ],
-  'top left': [ '0%', '0%' ],
-  'top right': [ '100%', '0%' ],
-  left: [ '0%', '50%' ],
-  right: [ '100%', '50%' ],
-  bottom: [ '50%', '100%' ],
-  'bottom left': [ '0%', '100%' ],
-  'bottom right': [ '100%', '100%' ]
+const presetPosition = {
+  top: { x1: '0%', y1: '100%', x2: '0%', y2: '0%'},
+  'top left': { x1: '100%', y1: '100%', x2: '0%', y2: '0%'},
+  'top right': { x1: '0%', y1: '100%', x2: '100%', y2: '0%'},
+  left: { x1: '100%', y1: '0%', x2: '0%', y2: '0%'},
+  right: { x1: '0%', y1: '0%', x2: '100%', y2: '0%'},
+  bottom: { x1: '0%', y1: '0%', x2: '0%', y2: '100%'},
+  'bottom left': { x1: '100%', y1: '0%', x2: '0%', y2: '100%'},
+  'bottom right': { x1: '0%', y1: '0%', x2: '100%', y2: '100%'}
 }
 
-export default class GradientEditor extends UIElement  {
+const props = ['x1', 'y1', 'x2', 'y2', 'cx', 'cy', 'r', 'fx', 'fy', 'fr', 'spreadMethod']
+
+export default class FillEditor extends UIElement  {
 
   components() {
     return {
@@ -68,17 +51,18 @@ export default class GradientEditor extends UIElement  {
   }
 
   initState() {
-
     return {
+      cachedRect: null,
       index: +(this.props.index || 0 ),
       value: this.props.value, 
-      image: BackgroundImage.parseImage(this.props.value || '') || { type: '', colorsteps: [] } 
+      image: SVGFill.parseImage(this.props.value || 'transparent') || SVGStaticGradient.create()
     }
   }
 
   setValue (value) {
     this.setState({
-      image: BackgroundImage.parseImage(value)
+      cachedRect: null,
+      image: SVGFill.parseImage(value)
     }, false)
 
     this.refresh();
@@ -97,10 +81,18 @@ export default class GradientEditor extends UIElement  {
 
 
     return /*html*/`
-        <div class='gradient-editor' data-selected-editor='${type}'>
+        <div class='fill-editor' data-selected-editor='${type}'>
             <div class='gradient-preview'>
-              <div class='gradient-view' ref='$gradientView'></div>
-              <div class='drag-pointer' ref='$dragPosition'></div>
+              <div class='gradient-view' ref='$gradientView'>
+                <div class='drag-pointer' ref='$dragPosition'></div>
+              </div>
+              <svg class='pointer-draw' ref='$pointerDrawArea'>
+                <line data-type='line' ref='$line' />
+                <circle r='5' data-type='start' ref='$startPoint' />
+                <circle r='5' data-type='end' ref='$endPoint' />
+                <circle r='5' data-type='center' ref='$centerPoint' />
+                <circle r='5' data-type='f' ref='$fPoint' />
+              </svg>              
               <div class='preset-position'>
                 <div data-value='top' title='top'>${icon.chevron_right}</div>
                 <div data-value='right' title='right'>${icon.chevron_right}</div>
@@ -129,26 +121,47 @@ export default class GradientEditor extends UIElement  {
                 </div>
             </div>
             <div class='tools' data-editor='tools'>
-              <label>Offset <input type='checkbox' ref='$cut' checked />  connected</label>
-              <InputRangeEditor ref='$range' calc="false" key='length' onchange='changeColorStepOffset' />
+              <InputRangeEditor label='Offset' ref='$range' calc="false" key='length' onchange='changeColorStepOffset' />
             </div>
             <div class='sub-editor' ref='$subEditor'> 
-              <div data-editor='angle'>
-                <RangeEditor label='Angle' ref='$angle' calc="false" units="deg" min="-720" max="720" key='angle' onchange='changeKeyValue' />
-              </div>
-              <div data-editor='centerX'>
-                <RangeEditor label='Center X' ref='$radialPositionX' calc="false" value="50%"  key='radialPositionX' onchange='changeKeyValue' />
-              </div>                
-              <div data-editor='centerY'>                      
-                <RangeEditor label='Center Y' ref='$radialPositionY' calc="false" value="50%" key='radialPositionY' onchange='changeKeyValue' />
-              </div>                
-              <div data-editor='radialType'>              
-                <SelectEditor label='Radial Type' ref='$radialType' value="" options="${radialTypeList.join(',')}" key='radialType' onchange='changeKeyValue' />
-              </div>
-
+                <div data-editor='spreadMethod'>
+                  <SelectEditor label='Spread' ref='$spreadMethod' options='pad,reflect,repeat' key='spreadMethod' onchange='changeKeyValue' />
+                </div>  
+                ${['x1', 'y1', 'x2', 'y2', 'cx', 'cy', 'r', 'fx', 'fy', 'fr'].map(field => {
+                  return /*html*/`
+                    <div data-editor='${field}'>
+                      <RangeEditor label='${field}' ref='$${field}' value="${this.getImageFieldValue(image, field)}" key='${field}' onchange='changeKeyValue' />
+                    </div>
+                  `
+                }).join('')}
+                                                                                                                                
             </div>            
         </div>
       `;
+  }
+
+  getImageFieldValue(image, field) {
+    var value = image[field]
+
+    if (isUndefined(value)) {
+      switch(field) {
+      case 'cx':
+      case 'cy':
+      case 'r':        
+      case 'fx':
+      case 'fy':        
+        return '50%'    
+      case 'x1':
+      case 'y1': 
+      case 'y2': 
+      case 'fr':
+        return '0%';
+      case 'x2':
+        return '100%';    
+      }
+    }
+
+    return value; 
   }
 
   [CHANGE('$file')] (e) {
@@ -167,51 +180,158 @@ export default class GradientEditor extends UIElement  {
     var type = e.$delegateTarget.attr('data-value')
 
     if (presetPosition[type]) {
-      this.state.image.radialPosition = clone(presetPosition[type])
+      this.state.image.reset(presetPosition[type])
       this.refresh();
+      this.refreshFieldValue();
       this.updateData();
     }
 
   }
 
-  [DOUBLECLICK('$gradientView') + PREVENT] (e) {
-    this.state.image.radialPosition = ['50%', '50%']
-    this.refresh();
-    this.updateData();
+  refreshFieldValue() {
+    this.children.$x1.setValue(this.state.image.x1)
+    this.children.$y1.setValue(this.state.image.y1)
+    this.children.$x2.setValue(this.state.image.x2)
+    this.children.$y2.setValue(this.state.image.y2)
+
+    this.children.$cx.setValue(this.state.image.cx)
+    this.children.$cy.setValue(this.state.image.cy)
+    this.children.$r.setValue(this.state.image.r)
+
+    this.children.$fx.setValue(this.state.image.fx)
+    this.children.$fy.setValue(this.state.image.fy)
+    this.children.$fr.setValue(this.state.image.fr)    
   }
 
-  [POINTERSTART('$gradientView') + MOVE('moveDragPosition')]  (e) {
-    var parent = this.refs.$dragPosition.parent();
-    this.containerRect = parent.rect();
+  getDrawAreaRect () {
+    return {width: 198, height: 150};
+  }
+
+  getFieldValue(field) {
+    return Length.parse(this.getImageFieldValue(this.state.image, field));
+  }
+
+  [BIND('$line')] () {
+    var {width, height} = this.getDrawAreaRect()
+
+    var x1 = this.getFieldValue('x1').toPx(width)
+    var y1 = this.getFieldValue('y1').toPx(height)
+    var x2 = this.getFieldValue('x2').toPx(width)
+    var y2 = this.getFieldValue('y2').toPx(height)    
+
+    return { x1, y1, x2, y2 }
+  }
+
+
+  [BIND('$startPoint')] () {
+    var {width, height} = this.getDrawAreaRect()
+
+    var cx = this.getFieldValue('x1').toPx(width)
+    var cy = this.getFieldValue('y1').toPx(height)
+
+    console.log('start', cx, cy, width, height);    
+
+    return { cx, cy }
+  }  
+
+  [BIND('$endPoint')] () {
+    var {width, height} = this.getDrawAreaRect()
+
+    var cx = this.getFieldValue('x2').toPx(width)
+    var cy = this.getFieldValue('y2').toPx(height)
+
+    console.log('end', cx, cy, width, height);        
+
+    return { cx, cy }
+  }  
+
+  [BIND('$centerPoint')] () {
+    var {width, height} = this.getDrawAreaRect()
+
+    var cx = this.getFieldValue('cx').toPx(width)
+    var cy = this.getFieldValue('cy').toPx(height)
+
+    return { cx, cy }
+  }  
+
+  [BIND('$fPoint')] () {
+    var {width, height} = this.getDrawAreaRect()
+
+    var cx = this.getFieldValue('fx').toPx(width)
+    var cy = this.getFieldValue('fy').toPx(height)
+
+
+    return { cx, cy }
+  }    
+
+  [POINTERSTART('$pointerDrawArea circle[data-type]') + MOVE('moveDragPointer')]  (e) {
+    this.containerRect = this.refs.$pointerDrawArea.rect();
     this.startXY = e.xy; 
+    this.type = e.$delegateTarget.attr('data-type');
+    this.state.cachedRect = null; 
 
+    console.log(this.type);
   }
 
-  moveDragPosition (dx, dy) {
+  getRectRate (rect, x, y) {
+
+    var {width, height, x:rx, y: ry } = rect
+
+    if (rx > x) {
+      x = rx; 
+    } else if (rx + width < x) {
+      x = rx + width; 
+    }
+
+    if (ry > y) {
+      y = ry; 
+    } else if (ry + height < y) {
+      y = ry + height; 
+    }    
+
+    var left = Length.percent((x - rx ) / width  * 100) 
+    var top = Length.percent((y - ry ) / height  * 100) 
+
+    return {left, top}
+  }
+
+  moveDragPointer (dx, dy) {
     var x = this.startXY.x + dx; 
     var y = this.startXY.y + dy; 
 
-    if (this.containerRect.x > x) {
-      x = this.containerRect.x; 
-    } else if (this.containerRect.x + this.containerRect.width < x) {
-      x = this.containerRect.x + this.containerRect.width; 
+    var {left, top } = this.getRectRate(this.containerRect, x, y);
+
+    console.log(left, top);
+
+    if (this.type == 'start') {
+      this.state.image.reset({ x1: left, y1: top })
+      this.children.$x1.setValue(left)
+      this.children.$y1.setValue(top)            
+
+      this.bindData('$startPoint')
+      this.bindData('$line')
+
+    } else if (this.type == 'end') {
+      this.state.image.reset({ x2: left, y2: top })
+      this.children.$x2.setValue(left)
+      this.children.$y2.setValue(top)      
+      this.bindData('$endPoint')
+      this.bindData('$line')      
+    } else if (this.type == 'center') {
+      this.state.image.reset({ cx: left, cy: top })
+      this.children.$cx.setValue(left)
+      this.children.$cy.setValue(top)      
+      this.bindData('$centerPoint')
+    } else if (this.type == 'f') {
+      console.log('aaaa');
+      this.state.image.reset({ fx: left, fy: top })            
+      this.children.$fx.setValue(left)
+      this.children.$fy.setValue(top)      
+      this.bindData('$fPoint')      
     }
 
-    if (this.containerRect.y > y) {
-      y = this.containerRect.y; 
-    } else if (this.containerRect.y + this.containerRect.height < y) {
-      y = this.containerRect.y + this.containerRect.height; 
-    }    
-
-    var left = Length.percent((x - this.containerRect.x ) / this.containerRect.width  * 100) 
-    var top = Length.percent((y - this.containerRect.y ) / this.containerRect.height  * 100) 
-
-    this.state.image.radialPosition = [ left, top]
-
-    this.bindData('$dragPosition');
     this.bindData('$gradientView')    
-    this.children.$radialPositionX.setValue(left)
-    this.children.$radialPositionY.setValue(top)
+
 
     this.updateData();
   }
@@ -222,16 +342,17 @@ export default class GradientEditor extends UIElement  {
     this.parent.trigger('changeTabType', type);
 
     var url = type === 'image-resource' ? this.state.image.url : this.state.url;
-    this.state.image = BackgroundImage.changeImageType({
+    var opt = {}
+    
+    props.forEach(it => {
+      opt[it] = this.children[`$${it}`].getValue()
+    })
+
+    this.state.image = SVGFill.changeImageType({
       type,
       url,
       colorsteps: this.state.image.colorsteps || [] ,   
-      angle: Length.parse(this.children.$angle.getValue()).value,
-      radialType: this.children.$radialType.getValue(),
-      radialPosition: [ 
-        this.children.$radialPositionX.getValue(), 
-        this.children.$radialPositionY.getValue() 
-      ] 
+      ...opt
     })
     this.refresh();
     this.updateData();
@@ -240,7 +361,7 @@ export default class GradientEditor extends UIElement  {
 
   sendMessage (type) {
     var type = this.$el.attr('data-selected-editor');
-    if (type === 'linear-gradient' || type === 'repeating-linear-gradient') {
+    if (type === 'linear-gradient') {
       this.emit('addStatusBarMessage', '');
     } else {
       this.emit('addStatusBarMessage', 'Drag if you want to move center position');
@@ -249,20 +370,14 @@ export default class GradientEditor extends UIElement  {
 
   [EVENT('changeKeyValue')] (key, value) {
 
-    if (key === 'angle') {
-      value = value.value; 
-    } 
-
     this.state.image[key] = value;
 
-    if (key === 'radialPositionX' || key === 'radialPositionY') {
-      this.state.image['radialPosition'] = [
-        this.state.image.radialPositionX || '50%', 
-        this.state.image.radialPositionY || '50%'
-      ] 
-    }
-
     this.bindData('$gradientView')
+    this.bindData('$line')
+    this.bindData('$startPoint')
+    this.bindData('$endPoint')
+    this.bindData('$centerPoint')
+    this.bindData('$fPoint')
 
     this.updateData();
   }
@@ -316,36 +431,20 @@ export default class GradientEditor extends UIElement  {
     }
   }
 
-  [BIND('$gradientView')] () {
-
-    var type = this.state.image.type;
-    var size = 'auto';
-
-    if (type === 'url' || type === 'image-resource') {
-      size = 'cover'
-    }
-
-    return {
-      style: {
-        'background-image': this.state.image.toString(),
-        'background-size': size,
-        'background-repeat': 'no-repeat'
-      }
-    }
+  get fillId () {
+    return this.id + 'fill';
   }
 
-  [BIND('$dragPosition')] () {
-    var left = '50%'
-    var top = '50%'
-
-    if (hasRadialPosition[this.state.image.type]) {
-      var [left, top] = this.state.image.radialPosition;
-    }
-
+  [BIND('$gradientView')] () {
     return {
-      style: {
-        left, top 
-      }
+      innerHTML : /*html*/`
+        <svg x="0" y="0" width="100%" height="100%">
+          <defs>
+            ${this.state.image.toSVGString(this.fillId)}
+          </defs>
+          <rect x="0" y="0" width="100%" height="100%" fill="${this.state.image.toFillValue(this.fillId)}" />
+        </svg>
+      `
     }
   }
 
@@ -363,15 +462,6 @@ export default class GradientEditor extends UIElement  {
     })
   }
 
-  [CLICK('$cut')] () {
-    if (this.currentStep) {
-
-      this.currentStep.cut = this.refs.$cut.checked()
-
-      this.refresh()
-      this.updateData();      
-    } 
-  }
 
   removeStep(id) {
 
@@ -388,7 +478,6 @@ export default class GradientEditor extends UIElement  {
 
     if (this.state.image.colorsteps) {
       this.currentStep = this.state.image.colorsteps.find( it => editor.selection.isSelectedColorStep(it.id))
-      this.refs.$cut.checked(this.currentStep.cut);
       this.children.$range.setValue(Length.percent(this.currentStep.percent));
       this.parent.trigger('selectColorStep', this.currentStep.color)    
   
@@ -458,7 +547,7 @@ export default class GradientEditor extends UIElement  {
   [EVENT('setColorStepColor')] (color) {
 
     if (this.state.image.type === 'static-gradient') {
-      this.state.image.colorsteps[0].color = color; 
+      this.state.image.setColor(color)
       this.refresh()
       this.updateData();      
     } else {

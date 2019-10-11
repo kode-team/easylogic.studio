@@ -110,7 +110,8 @@ export class ColorStep extends Item {
    */
   toString() {
     var prev = this.json.cut ? this.getPrevLength() : ''
-    return `${this.json.color} ${prev} ${this.toLength()}`;
+    var color = this.json.color || 'transparent'
+    return `${color} ${prev} ${this.toLength()}`;
   }
 
   reset(json) {

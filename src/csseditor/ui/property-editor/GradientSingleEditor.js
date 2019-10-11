@@ -56,22 +56,15 @@ export default class GradientSingleEditor extends UIElement {
     viewGradientPopup() {
 
         this.emit("showGradientPickerPopup", {
+            instance: this,
             changeEvent: 'changeGradientSingle',
             gradient: this.state.image 
-        }, {
-            id: this.id
         });
     }
 
-    [EVENT('changeGradientSingle')] (gradient, params) {
-        if (params.id === this.id) {
+    [EVENT('changeGradientSingle')] (image, params) {
+        this.updateData({ image })
 
-            this.updateData({
-                image: gradient 
-            })
-
-            this.refresh();
-    
-        }
+        this.refresh();
       }
 }

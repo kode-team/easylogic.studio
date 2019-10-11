@@ -1,30 +1,30 @@
 import { EVENT } from "../../../util/UIElement";
 import { LOAD } from "../../../util/Event";
 
-import { Length } from "../../../editor/unit/Length";
-import GradientEditor from "../property-editor/GradientEditor";
 import { Gradient } from "../../../editor/image-resource/Gradient";
 import BasePopup from "./BasePopup";
 import EmbedColorPicker from "../property-editor/EmbedColorPicker";
 import ImageAssetPicker from "../property/ImageAssetPicker";
-
-export default class GradientPickerPopup extends BasePopup {
+import FillEditor from "../property-editor/FillEditor";
+import { SVGStaticGradient } from "../../../editor/image-resource/SVGStaticGradient";
+export default class FillPickerPopup extends BasePopup {
 
   getTitle() {
-    return 'Gradient & Image Picker'
+    return 'Fill Picker'
   }
 
   components() {
     return {
       ImageAssetPicker,
       EmbedColorPicker,
-      GradientEditor
+      FillEditor
     }
   }
 
   initState() {
 
     return {
+      image: SVGStaticGradient.create()
     }
   }
 
@@ -72,15 +72,16 @@ export default class GradientPickerPopup extends BasePopup {
   }
 
   [LOAD('$gradientEditor')] () {
-    return /*html*/`<GradientEditor 
+    console.log(this.state.image.toString());
+    return /*html*/`<FillEditor 
       ref="$g" 
       value="${this.state.image}" 
       selectedIndex="${this.state.selectColorStepIndex}" 
-      onchange='changeGradientEditor'
+      onchange='changeFillEditor'
     />`
   }
 
-  [EVENT('changeGradientEditor')] (data) {
+  [EVENT('changeFillEditor')] (data) {
 
     this.state.image = data;
 
@@ -95,13 +96,13 @@ export default class GradientPickerPopup extends BasePopup {
     this.children.$g.trigger('setImageUrl', url);
   }
 
-  [EVENT("showGradientPickerPopup")](data, params) {    
+  [EVENT("showFillPickerPopup")](data, params) {
+    this.show(432);
+
     data.changeEvent = data.changeEvent || 'changeFillPopup'
-    data.image = data.gradient
+    // data.image = data.gradient
     data.params = params;
     this.setState(data);
-
-    this.show(432);
   }
 
   [EVENT("selectColorStep")](color) {

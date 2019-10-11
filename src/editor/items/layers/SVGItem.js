@@ -1,4 +1,5 @@
 import { Layer } from "../Layer";
+import { SVGFill } from "../../svg-property/SVGFill";
 
 export class SVGItem extends Layer {
   getDefaultObject(obj = {}) {
@@ -44,13 +45,59 @@ export class SVGItem extends Layer {
     return {
       ...super.toDefaultCSS(),
       ...this.toKeyListCSS(
-        'stroke', 'stroke-width', 'stroke-linecap', 'stroke-linejoin', 'stroke-dasharray', 'stroke-dashoffset',
-        'fill', 'fill-opacity', 'fill-rule'
+        'stroke-width', 'stroke-linecap', 'stroke-linejoin', 'stroke-dasharray', 'stroke-dashoffset',
+        'fill-opacity', 'fill-rule'
       )
     }
   }
 
   getDefaultTitle() {
     return "SVG";
+  }
+
+  get toDefInnerString () {
+    return /*html*/`
+        ${this.toFillSVG}
+        ${this.toStrokeSVG}
+    `
+  }
+
+  get toDefString () {
+    return /*html*/`
+      <defs>
+        ${this.toDefInnerString}
+      </defs>
+    `
+  }
+
+  get fillId () {
+    return this.json.id + 'fill'
+  }
+
+  get strokeId () {
+    return this.json.id + 'stroke'
+  }
+
+  get toFillSVG () {
+    return SVGFill.parseImage(this.json.fill || 'transparent').toSVGString(this.fillId);
+  }
+
+  get toStrokeSVG () {
+    return SVGFill.parseImage(this.json.stroke || 'black').toSVGString(this.strokeId);
+  }  
+
+  get toFillValue () {
+    return  SVGFill.parseImage(this.json.fill || 'transparent').toFillValue(this.fillId);
+  }
+
+  get toStrokeValue () {
+    return  SVGFill.parseImage(this.json.stroke || 'black').toFillValue(this.strokeId);
+  }  
+
+  toExportSVGCode () {
+    return `
+      ${this.toFillSVG}
+      ${this.toStrokeSVG}
+    `
   }
 }

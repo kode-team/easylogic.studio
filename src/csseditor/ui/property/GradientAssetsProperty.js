@@ -134,23 +134,20 @@ export default class GradientAssetsProperty extends BaseProperty {
     this.state.$el = e.$delegateTarget.$('.gradient-view');
 
     this.emit("showGradientPickerPopup", {
-        changeEvent: 'changeGradientAssets',
-        gradient
-    }, {
-        id: this.id,
-        index
+      instance: this,
+      changeEvent: 'changeGradientAssets',
+      gradient
     });
   }
 
 
-  [EVENT('changeGradientAssets')] (gradient, params) {
-    if (params.id === this.id) {
-      this.executeGradient(project => {
-        project.setGradientValue(params.index, {gradient});
-        this.state.$el.css('background-image', gradient);
-        this.state.$item.attr('data-gradient', gradient);
-      }, false)              
+  [EVENT('changeGradientAssets')] (image, params) {
 
-    }
+    this.executeGradient(project => {
+      project.setGradientValue(params.index, {image});
+      this.state.$el.css('background-image', image);
+      this.state.$item.attr('data-gradient', image);
+    }, false)              
+
   }
 }

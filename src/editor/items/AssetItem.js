@@ -91,7 +91,7 @@ export class AssetItem extends Item {
         return SVGFilter.parse(filter);
       })
 
-      return `<filter id='${svgfilter.id}'>
+      return /*html*/`<filter id='${svgfilter.id}'>
   ${filters.join('\n')}
 </filter>
 `

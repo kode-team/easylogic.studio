@@ -38,8 +38,12 @@ import BackgroundPositionEditor from "./BackgroundPositionEditor";
 import GradientSingleEditor from "./GradientSingleEditor";
 import BorderEditor from "./BorderEditor";
 import BorderValueEditor from "./BorderValueEditor";
+import FillSingleEditor from "./FillSingleEditor";
+import FillEditor from "./FillEditor";
 
 export default {
+    FillEditor,
+    FillSingleEditor,
     BorderEditor,
     BorderValueEditor,
     GradientSingleEditor,

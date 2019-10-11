@@ -328,7 +328,7 @@ export default class PolygonEditorView extends UIElement {
         // console.log(e);
 
         this.state.rect = this.parent.refs.$body.rect();            
-        this.state.canvasOffset = this.refs.$view.rect();
+        // this.state.canvasOffset = this.refs.$view.rect();
         this.state.altKey = false; 
 
         this.state.dragXY = {

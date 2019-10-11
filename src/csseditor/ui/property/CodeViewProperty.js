@@ -2,7 +2,7 @@ import BaseProperty from "./BaseProperty";
 import { LOAD, DEBOUNCE } from "../../../util/Event";
 import { editor } from "../../../editor/editor";
 import { EVENT } from "../../../util/UIElement";
-import { CSS_TO_STRING } from "../../../util/functions/func";
+import { CSS_TO_STRING, TAG_TO_STRING } from "../../../util/functions/func";
 
 export default class CodeViewProperty extends BaseProperty {
   getTitle() {
@@ -49,10 +49,12 @@ export default class CodeViewProperty extends BaseProperty {
     svgCode = svgCode.replace(/\</g, '&lt;').replace(/\>/g, '&gt;') 
 
     var current = editor.selection.current;
-    var cssCode = current ? current.toExport().replace(/;/gi, ";\n") : ''
+    var cssCode = current ? TAG_TO_STRING(current.toExport()) : ''
+    var svgPropertyCode = current ? TAG_TO_STRING(current.toExportSVGCode()) : '' 
     var selectorCode = current ? current.selectors : [];
 
     cssCode = this.filterKeyName(cssCode.trim())
+    // svgPropertyCode = this.filterKeyName(svgPropertyCode.trim())
 
 
     return /*html*/`
@@ -63,6 +65,12 @@ export default class CodeViewProperty extends BaseProperty {
           <pre title='CSS'>${cssCode}</pre>
           </div>` : ''
         }
+
+        ${svgPropertyCode ? 
+          /*html*/`<div>
+          <pre title='SVG'>${svgPropertyCode}</pre>
+          </div>` : ''
+        }        
 
         ${selectorCode.length ? 
           /*html*/`<div>

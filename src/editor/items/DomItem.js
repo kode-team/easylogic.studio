@@ -458,6 +458,10 @@ export class DomItem extends GroupItem {
     return CSS_TO_STRING(this.toCSS(true));
   }
 
+  toExportSVGCode () {
+    return ''; 
+  }
+
   toBoxModelCSS() {
     var json = this.json;
     var obj = {};
@@ -634,26 +638,6 @@ export class DomItem extends GroupItem {
               .join('\n\n')
   }
 
-  
- 
-  toSVGString () {
-    return this.json.svg.map(s => {
-
-      if (s.type === 'filter') {
-        return `
-<${s.type} id='${s.name}'>
-  ${s.value.join('\n')}
-</${s.type}>`
-      } else if (s.type === 'clip-path') {
-        var obj = filterSVGClipPath(icon[s.value.icon], s.value.fit, this.json.width, this.json.height)
-        return `
-<clipPath id='${s.name}' ${obj.transform}>
-  ${obj.paths}
-</clipPath>`
-      }
-    }).join('\n\n')
-  }
-
 
   toNestedCSS($prefix) {
     return []
@@ -707,7 +691,6 @@ ${this.toNestedBoundCSS().map(it => {
 `  
     return cssString;
   }
-
 
   toBound () {
     var obj = {
