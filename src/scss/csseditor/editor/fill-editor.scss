@@ -73,7 +73,7 @@
                 pointer-events: all;
                 fill: black; 
                 stroke: white; 
-                stroke-width: .5;
+                stroke-width: 1;
 
                 &[data-type='start'] {
                     fill: red; 
@@ -274,31 +274,6 @@
                     background-image: conic-gradient(black, #ebf8e1);
                 }
 
-                &.repeating-linear-gradient .icon {
-                    background-image: repeating-linear-gradient(
-                        45deg,
-                        #3f87a6,
-                        #ebf8e1 15%,
-                        #f69d3c 20%
-                    );
-                }
-
-                &.repeating-radial-gradient .icon {
-                    background-image: repeating-radial-gradient(
-                        circle,
-                        #3f87a6,
-                        #ebf8e1 15%,
-                        #f69d3c 20%
-                    );
-                }
-
-                &.repeating-conic-gradient .icon {
-                    background-image: repeating-conic-gradient(
-                        #3f87a6,
-                        #ebf8e1 5%,
-                        #f69d3c 10%
-                    );
-                }
             }
         }
 
@@ -384,9 +359,17 @@
 
     &[data-selected-editor='image-resource']
     {
-        .preset-position {
-            display: none; 
-        }
+
+        [data-editor='patternUnits'],
+        [data-editor='patternWidth'],
+        [data-editor='patternHeight'],
+        [data-editor='imageX'],
+        [data-editor='imageY'],
+        [data-editor='imageWidth'],
+        [data-editor='imageHeight']
+        {
+            display: block;
+        }        
     }    
 
     &[data-selected-editor='linear-gradient']
@@ -448,9 +431,7 @@
         
         [data-editor='gradient'],
         [data-editor='tools'],
-        .drag-pointer,
-        .preset-position,
-        .sub-editor
+        .preset-position
         {
             display: none;
         } 

@@ -18,10 +18,13 @@ export default class InputArrayEditor extends UIElement {
 
     [BIND('$body')] () {
         return {
-            style: {
-                'display': 'grid',
-                'grid-template-columns': `repeat(${this.state.column}, 1fr)`
-            }
+
+            cssText : `
+                display: grid;
+                grid-template-columns: repeat(${this.state.column}, 1fr);
+                grid-column-gap: 2px;
+                grid-row-gap: 2px;
+            `
         }
     }
 

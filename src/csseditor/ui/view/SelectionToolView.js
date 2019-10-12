@@ -731,7 +731,7 @@ export default class SelectionToolView extends UIElement {
     
             this.refreshSelectionToolView(dx, dy);
             this.parent.updateRealPosition();    
-            this.emit('refreshCanvasForPartial')     
+            this.emit('refreshCanvasForPartial', null, false)     
             
 
             if (this.pointerType === 'move') {
@@ -783,7 +783,7 @@ export default class SelectionToolView extends UIElement {
             this.refs.$selectionTool.attr('data-selected-movetype', '');
             this.parent.trigger('removeRealPosition');                
     
-            this.emit('refreshCanvasForPartial')
+            this.emit('refreshCanvasForPartial', null, false)
             this.emit('refreshStylePosition');
             this.emit('removeGuideLine')
             this.refreshSelectionToolView(dx, dy);   

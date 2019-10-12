@@ -30,6 +30,25 @@ export default class Resource {
 }
 
 
+export const blend_list = [
+  "normal",
+  "multiply",
+  "screen",
+  "overlay",
+  "darken",
+  "lighten",
+  "color-dodge",
+  "color-burn",
+  "hard-light",
+  "soft-light",
+  "difference",
+  "exclusion",
+  "hue",
+  "saturation",
+  "color",
+  "luminosity"
+].join(',');
+
 const SVG_PROPERTY_LIST = {
     'd': true,
     'points': true,

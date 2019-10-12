@@ -1,0 +1,56 @@
+.func-filter-editor {
+    display: grid;
+    grid-template-columns: 1fr;
+    // grid-column-gap: 4px;
+
+    &.focused {
+        box-shadow: 0 0 0 1px $selected-color;
+        border-radius: 3px;
+    }
+
+    &.has-label {
+        grid-template-columns: 60px 1fr;
+
+        label {
+            text-align: left;
+            vertical-align: middle;
+            padding: 2px 0px 2px 0px;
+            
+            font-size: 11px;
+            padding-left: 0px !important;
+        }
+    }
+
+    > [data-type] {
+        display: none;
+        padding: 4px 0px;
+    }
+
+    &[data-selected-type='identity'] {
+        > [data-type='identity'] {
+            display: block; 
+        }
+    }
+
+    &[data-selected-type='table'],
+    &[data-selected-type='discrete']
+    {
+        > [data-type='table'] {
+            display: block; 
+        }
+    }    
+
+    &[data-selected-type='linear']
+    {
+        > [data-type='linear'] {
+            display: block; 
+        }
+    }
+
+    &[data-selected-type='gamma']
+    {
+        > [data-type='gamma'] {
+            display: block; 
+        }
+    }    
+} 

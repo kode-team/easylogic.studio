@@ -201,7 +201,16 @@ export default class SVGItemProperty extends BaseProperty {
             options="miter,arcs,bevel,miter-clip,round" 
             onchange="changeValue" 
           />
-        </div> 
+        </div>
+        <div class='property-item animation-property-item'>
+          <span class='add-timeline-property' data-property='svgfilter'></span>      
+          <SVGFilterSelectEditor 
+            ref='$svgFilter' 
+            label='Filter' 
+            key="svgfilter" 
+            onchange="changeValue" 
+          />
+        </div>         
       </div>
    
     `;

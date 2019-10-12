@@ -17,24 +17,37 @@ import SelectEditor from "./SelectEditor";
 import TextEditor from "./TextEditor";
 import NumberRangeEditor from "./NumberRangeEditor";
 import InputArrayEditor from "./InputArrayEditor";
-import { RotaMatrixSVGFilter } from "../../../editor/css-property/svg-filter/RotaMatrixSVGFilter";
-import { MergeSVGFilter } from "../../../editor/css-property/svg-filter/MergeSVGFilter";
-import { GaussianBlurSVGFilter } from "../../../editor/css-property/svg-filter/GaussianBlurSVGFilter";
-import { MorphologySVGFilter } from "../../../editor/css-property/svg-filter/MorphologySVGFilter";
-import { CompositeSVGFilter } from "../../../editor/css-property/svg-filter/CompositeSVGFilter";
-import { TurbulenceSVGFilter } from "../../../editor/css-property/svg-filter/TurbulenceSVGFilter";
-import { DisplacementMapSVGFilter } from "../../../editor/css-property/svg-filter/DisplacementMapSVGFilter";
-import { ColorMatrixSVGFilter } from "../../../editor/css-property/svg-filter/ColorMatrixSVGFilter";
-import { ConvolveMatrixSVGFilter } from "../../../editor/css-property/svg-filter/ConvolveMatrixSVGFilter";
-import { SVGFilter } from "../../../editor/css-property/SVGFilter";
-import { FloodSVGFilter } from "../../../editor/css-property/svg-filter/FloodSVGFilter";
-
-
+import { RotaMatrixSVGFilter } from "../../../editor/svg-property/svg-filter/RotaMatrixSVGFilter";
+import { MergeSVGFilter } from "../../../editor/svg-property/svg-filter/MergeSVGFilter";
+import { GaussianBlurSVGFilter } from "../../../editor/svg-property/svg-filter/GaussianBlurSVGFilter";
+import { MorphologySVGFilter } from "../../../editor/svg-property/svg-filter/MorphologySVGFilter";
+import { CompositeSVGFilter } from "../../../editor/svg-property/svg-filter/CompositeSVGFilter";
+import { TurbulenceSVGFilter } from "../../../editor/svg-property/svg-filter/TurbulenceSVGFilter";
+import { DisplacementMapSVGFilter } from "../../../editor/svg-property/svg-filter/DisplacementMapSVGFilter";
+import { ColorMatrixSVGFilter } from "../../../editor/svg-property/svg-filter/ColorMatrixSVGFilter";
+import { ConvolveMatrixSVGFilter } from "../../../editor/svg-property/svg-filter/ConvolveMatrixSVGFilter";
+import { SVGFilter } from "../../../editor/svg-property/SVGFilter";
+import { FloodSVGFilter } from "../../../editor/svg-property/svg-filter/FloodSVGFilter";
+import { BlendSVGFilter } from "../../../editor/svg-property/svg-filter/BlendSVGFilter";
+import { DiffuseLightingSVGFilter } from "../../../editor/svg-property/svg-filter/DiffuseLightingSVGFilter";
+import { SpecularLightingSVGFilter } from "../../../editor/svg-property/svg-filter/SpecularLightingSVGFilter";
+import { SpotLightSVGFilter } from "../../../editor/svg-property/svg-filter/SpotLightSVGFilter";
+import { PointLightSVGFilter } from "../../../editor/svg-property/svg-filter/PointLightSVGFilter";
+import { DistanceLightSVGFilter } from "../../../editor/svg-property/svg-filter/DistanceLightSVGFilter";
+import { ComponentTransferSVGFilter } from "../../../editor/svg-property/svg-filter/ComponentTransferSVGFilter";
+import FuncFilterEditor from "./FuncFilterEditor";
 
 var filterList = [
+  'ComponentTransfer',
+  'Blend',
   'Flood',
   'RotaMatrix',
   "GaussianBlur",
+  'DiffuseLighting',
+  'SpecularLighting',
+  'SpotLight',
+  'PointLight',
+  'DistanceLight',
   "Turbulence",
   "DisplacementMap",
   'ColorMatrix',
@@ -45,6 +58,13 @@ var filterList = [
 ];
 
 var specList = {
+  ComponentTransfer: ComponentTransferSVGFilter.spec,
+  SpecularLighting: SpecularLightingSVGFilter.spec,
+  SpotLight: SpotLightSVGFilter.spec,
+  PointLight: PointLightSVGFilter.spec,
+  DistanceLight:DistanceLightSVGFilter.spec,  
+  DiffuseLighting: DiffuseLightingSVGFilter.spec,
+  Blend: BlendSVGFilter.spec,
   RotaMatrix: RotaMatrixSVGFilter.spec,
   Merge: MergeSVGFilter.spec,
   GaussianBlur: GaussianBlurSVGFilter.spec,
@@ -66,7 +86,8 @@ export default class SVGFilterEditor extends UIElement {
       RangeEditor,
       ColorViewEditor,
       SelectEditor,
-      TextEditor
+      TextEditor,
+      FuncFilterEditor
     }
   }
 
@@ -79,7 +100,7 @@ export default class SVGFilterEditor extends UIElement {
   }
 
   template() {
-    return `
+    return /*html*/`
       <div class='svg-filter-editor filter-list'>
           <div class='label' >
               <label>${this.props.title || ''}</label>
@@ -105,7 +126,7 @@ export default class SVGFilterEditor extends UIElement {
     var objectId = `${filter.type}${key}${index}`
 
     if (s.inputType === 'input-array') {
-      return `
+      return /*html*/`
         <div>
           <InputArrayEditor 
             ref='$inputArray${objectId}' 
@@ -127,7 +148,7 @@ export default class SVGFilterEditor extends UIElement {
         options = s.options(this.state.filters)
       }
 
-      return `
+      return /*html*/`
         <div>
           <SelectEditor 
             ref='$select${objectId}' 
@@ -141,7 +162,7 @@ export default class SVGFilterEditor extends UIElement {
         </div>
         `
     } else if (s.inputType === 'text') {
-      return `
+      return /*html*/`
         <div>
           <TextEditor 
             ref='$text${objectId}' 
@@ -154,7 +175,7 @@ export default class SVGFilterEditor extends UIElement {
         </div>
         `
     } else if (s.inputType === 'number-range') {  
-      return `
+      return /*html*/` 
         <div>
           <NumberRangeEditor 
             ref='$numberrange${objectId}' 
@@ -170,7 +191,7 @@ export default class SVGFilterEditor extends UIElement {
         </div>
       `
     } else if (s.inputType === 'color') {
-      return `
+      return /*html*/`
         <div>
           <ColorViewEditor 
             ref='$colorview${objectId}' 
@@ -182,9 +203,22 @@ export default class SVGFilterEditor extends UIElement {
           />
         </div>
       `
+    } else if (s.inputType === 'FuncFilter') {
+      return /*html*/`
+        <div>
+          <FuncFilterEditor 
+            ref='$funcFilter${objectId}' 
+            label="${s.title}" 
+            key="${key}"
+            params="${index}" 
+            value="${filter[key].toString()}" 
+            onchange="changeFuncFilterEditor" 
+          />
+        </div>
+      `      
     }
 
-    return `
+    return /*html*/`
       <div>
         <RangeEditor 
           ref='$range${objectId}' 
@@ -205,7 +239,7 @@ export default class SVGFilterEditor extends UIElement {
   }
 
   makeOneFilterTemplate(spec, filter, index) {
-  return `
+  return /*html*/`
     <div class="filter-item" data-index="${index}">
       <div class="title" draggable="true" data-index="${index}">
         <span class='fold'>${icon.chevron_right}</span>      
@@ -315,6 +349,17 @@ export default class SVGFilterEditor extends UIElement {
     this.trigger('changeRangeEditor', key, color, params)
   }
 
+
+  [EVENT('changeFuncFilterEditor')] (key, value, index) {
+    var filter =  this.state.filters[+index];
+    if (filter) {
+      filter.reset({
+        [key]: value
+      })
+    }
+  
+    this.modifyFilter();
+  }    
 
   [EVENT('changeRangeEditor')] (key, value, index) {
     var filter =  this.state.filters[+index];

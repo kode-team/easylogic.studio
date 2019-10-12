@@ -9,6 +9,15 @@ import { ColorMatrixSVGFilter } from "./svg-filter/ColorMatrixSVGFilter";
 import { ConvolveMatrixSVGFilter } from "./svg-filter/ConvolveMatrixSVGFilter";
 import { GaussianBlurSVGFilter } from "./svg-filter/GaussianBlurSVGFilter";
 import { FloodSVGFilter } from "./svg-filter/FloodSVGFilter";
+import { ComponentTransferSVGFilter } from "./svg-filter/ComponentTransferSVGFilter";
+import { DistanceLightSVGFilter } from "./svg-filter/DistanceLightSVGFilter";
+import { PointLightSVGFilter } from "./svg-filter/PointLightSVGFilter";
+import { SpotLightSVGFilter } from "./svg-filter/SpotLightSVGFilter";
+import { DiffuseLightingSVGFilter } from "./svg-filter/DiffuseLightingSVGFilter";
+import { SpecularLightingSVGFilter } from "./svg-filter/SpecularLightingSVGFilter";
+import { OffsetSVGFilter } from "./svg-filter/OffsetSVGFilter";
+import { BlendSVGFilter } from "./svg-filter/BlendSVGFilter";
+
 
 export const resultGenerator = (list) => {
   var reference = list.filter(it => it.result).map(it => it.result).join(',')
@@ -52,6 +61,14 @@ export class SVGFilter extends Property {
 
 
 export const SVGFilterClassName = {
+  ComponentTransfer: ComponentTransferSVGFilter,
+  DistanceLight: DistanceLightSVGFilter,
+  PointLight: PointLightSVGFilter,
+  SpotLight: SpotLightSVGFilter,
+  DiffuseLighting: DiffuseLightingSVGFilter,
+  SpecularLighting: SpecularLightingSVGFilter,
+  Blend: BlendSVGFilter,
+  Offset: OffsetSVGFilter,
   RotaMatrix: RotaMatrixSVGFilter,
   GaussianBlur: GaussianBlurSVGFilter,
   Flood: FloodSVGFilter,
@@ -65,6 +82,15 @@ export const SVGFilterClassName = {
 };
 
 export const SVGFilterClass = {
+  
+  ComponentTransferSVGFilter,
+  DistanceLightSVGFilter,
+  PointLightSVGFilter,
+  SpotLightSVGFilter,
+  DiffuseLightingSVGFilter,
+  SpecularLightingSVGFilter,
+  BlendSVGFilter,
+  OffsetSVGFilter,
   RotaMatrixSVGFilter,
   GaussianBlurSVGFilter,
   FloodSVGFilter,

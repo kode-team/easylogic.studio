@@ -91,15 +91,18 @@ export class SVGPathItem extends SVGItem {
   }  
 
 
-  updateFunction (currentElement) {
+  updateFunction (currentElement, isChangeFragment = true) {
 
     var $path = currentElement.$('path');
     $path.attr('d', this.json.d);
-    $path.attr('fill', this.toFillValue)
-    $path.attr('stroke', this.toStrokeValue)
-
-    var $defs = currentElement.$('defs');
-    $defs.html(this.toDefInnerString)
+    if (isChangeFragment) {
+      $path.attr('filter', this.toFilterValue)
+      $path.attr('fill', this.toFillValue)
+      $path.attr('stroke', this.toStrokeValue)
+  
+      var $defs = currentElement.$('defs');
+      $defs.html(this.toDefInnerString)  
+    }
 
     this.json.totalLength = $path.el.getTotalLength()
   }    
@@ -114,6 +117,7 @@ export class SVGPathItem extends SVGItem {
     <path ${OBJECT_TO_PROPERTY({
       'class': 'svg-path-item',
       d: this.json.d, 
+      filter: this.toFilterValue,
       fill: this.toFillValue,
       stroke: this.toStrokeValue
     })} />

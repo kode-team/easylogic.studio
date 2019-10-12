@@ -1,0 +1,24 @@
+.svg-filter-select-editor {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 16px 16px;
+    grid-column-gap: 4px;
+
+    &.has-label {
+        grid-template-columns: 60px 1fr 16px 16px;
+        grid-column-gap: 4px;
+
+        label {
+            text-align: left;
+            vertical-align: middle;
+            padding: 2px 4px 2px 0px;
+            font-size: 11px;
+            
+        }
+    }
+
+
+    select {
+        width: 100%;
+    }
+}

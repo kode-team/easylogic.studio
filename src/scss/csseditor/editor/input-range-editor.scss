@@ -68,19 +68,17 @@ $border-radius: 3px;
 
             input[type=number] {         
                 padding: 2px 2px;      
-                border-right: 0px;
                 border-top-right-radius: 0px;
                 border-bottom-right-radius: 0px;
                 background-color: $property-title-color;
                 border: 1px solid $property-border-color;                
-
+                border-right: 0px;
             }
 
             .select-editor {
                 select {
                     // margin-left: -3px;
                     appearance: none;
-                    border-left:0px;
                     text-align: center;
                     
                     padding: 0px 4px;             
@@ -88,7 +86,7 @@ $border-radius: 3px;
                     border-bottom-left-radius: 0px;     
                     background-color: $property-title-color;
                     border: 1px solid $property-border-color;                
-
+                    border-left:0px;
                 }
             }
         }

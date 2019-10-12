@@ -1,4 +1,4 @@
-import { SVGFilter } from "../css-property/SVGFilter";
+import { SVGFilter } from "../svg-property/SVGFilter";
 import { clone } from "../../util/functions/func";
 import { Item } from "./Item";
 import { Keyframe } from "../css-property/Keyframe";

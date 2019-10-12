@@ -5641,23 +5641,23 @@ html, body {
 }
 .csseditor .input-range-editor .range-editor-type .area input[type=number] {
   padding: 2px 2px;
-  border-right: 0px;
   border-top-right-radius: 0px;
   border-bottom-right-radius: 0px;
   background-color: #2b2b2b;
   border: 1px solid black;
+  border-right: 0px;
 }
 .csseditor .input-range-editor .range-editor-type .area .select-editor select {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
-  border-left: 0px;
   text-align: center;
   padding: 0px 4px;
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
   background-color: #2b2b2b;
   border: 1px solid black;
+  border-left: 0px;
 }
 .csseditor .text-editor {
   display: grid;
@@ -6028,6 +6028,9 @@ html, body {
 .csseditor .filter-editor .filter-list .filter-item {
   display: block;
   margin-top: 5px;
+}
+.csseditor .filter-editor .filter-list .filter-item:last-child {
+  margin-bottom: 5px;
 }
 .csseditor .filter-editor .filter-list .filter-item .title {
   display: grid;
@@ -7767,7 +7770,7 @@ html, body {
   pointer-events: all;
   fill: black;
   stroke: white;
-  stroke-width: 0.5;
+  stroke-width: 1;
 }
 .csseditor .fill-editor .gradient-preview .pointer-draw circle[data-type=start] {
   fill: red;
@@ -7976,15 +7979,6 @@ html, body {
 .csseditor .fill-editor .picker-tab .picker-tab-list .picker-tab-item.conic-gradient .icon {
   background-image: conic-gradient(black, #ebf8e1);
 }
-.csseditor .fill-editor .picker-tab .picker-tab-list .picker-tab-item.repeating-linear-gradient .icon {
-  background-image: repeating-linear-gradient(45deg, #3f87a6, #ebf8e1 15%, #f69d3c 20%);
-}
-.csseditor .fill-editor .picker-tab .picker-tab-list .picker-tab-item.repeating-radial-gradient .icon {
-  background-image: repeating-radial-gradient(circle, #3f87a6, #ebf8e1 15%, #f69d3c 20%);
-}
-.csseditor .fill-editor .picker-tab .picker-tab-list .picker-tab-item.repeating-conic-gradient .icon {
-  background-image: repeating-conic-gradient(#3f87a6, #ebf8e1 5%, #f69d3c 10%);
-}
 .csseditor .fill-editor .picker-tab .picker-gradient-selector {
   padding: 2px 10px;
 }
@@ -8061,8 +8055,14 @@ html, body {
 .csseditor .fill-editor .picker-tab .picker-gradient-selector .gradient-steps .hue .drag-bar.selected .guide-change {
   opacity: 1;
 }
-.csseditor .fill-editor[data-selected-editor=image-resource] .preset-position {
-  display: none;
+.csseditor .fill-editor[data-selected-editor=image-resource] [data-editor=patternUnits],
+.csseditor .fill-editor[data-selected-editor=image-resource] [data-editor=patternWidth],
+.csseditor .fill-editor[data-selected-editor=image-resource] [data-editor=patternHeight],
+.csseditor .fill-editor[data-selected-editor=image-resource] [data-editor=imageX],
+.csseditor .fill-editor[data-selected-editor=image-resource] [data-editor=imageY],
+.csseditor .fill-editor[data-selected-editor=image-resource] [data-editor=imageWidth],
+.csseditor .fill-editor[data-selected-editor=image-resource] [data-editor=imageHeight] {
+  display: block;
 }
 .csseditor .fill-editor[data-selected-editor=linear-gradient] .pointer-draw [data-type=line],
 .csseditor .fill-editor[data-selected-editor=linear-gradient] .pointer-draw [data-type=start],
@@ -8094,9 +8094,7 @@ html, body {
 }
 .csseditor .fill-editor[data-selected-editor=image-resource] [data-editor=gradient],
 .csseditor .fill-editor[data-selected-editor=image-resource] [data-editor=tools],
-.csseditor .fill-editor[data-selected-editor=image-resource] .drag-pointer,
-.csseditor .fill-editor[data-selected-editor=image-resource] .preset-position,
-.csseditor .fill-editor[data-selected-editor=image-resource] .sub-editor {
+.csseditor .fill-editor[data-selected-editor=image-resource] .preset-position {
   display: none;
 }
 .csseditor .fill-editor[data-selected-editor=image-resource] [data-editor=image-loader] {
@@ -8349,6 +8347,59 @@ html, body {
   pointer-events: none;
   -webkit-clip-path: polygon(40% 0%, 60% 0%, 60% 100%, 40% 100%);
           clip-path: polygon(40% 0%, 60% 0%, 60% 100%, 40% 100%);
+}
+.csseditor .svg-filter-select-editor {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 16px 16px;
+  grid-column-gap: 4px;
+}
+.csseditor .svg-filter-select-editor.has-label {
+  grid-template-columns: 60px 1fr 16px 16px;
+  grid-column-gap: 4px;
+}
+.csseditor .svg-filter-select-editor.has-label label {
+  text-align: left;
+  vertical-align: middle;
+  padding: 2px 4px 2px 0px;
+  font-size: 11px;
+}
+.csseditor .svg-filter-select-editor select {
+  width: 100%;
+}
+.csseditor .func-filter-editor {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+.csseditor .func-filter-editor.focused {
+  box-shadow: 0 0 0 1px #fc554f;
+  border-radius: 3px;
+}
+.csseditor .func-filter-editor.has-label {
+  grid-template-columns: 60px 1fr;
+}
+.csseditor .func-filter-editor.has-label label {
+  text-align: left;
+  vertical-align: middle;
+  padding: 2px 0px 2px 0px;
+  font-size: 11px;
+  padding-left: 0px !important;
+}
+.csseditor .func-filter-editor > [data-type] {
+  display: none;
+  padding: 4px 0px;
+}
+.csseditor .func-filter-editor[data-selected-type=identity] > [data-type=identity] {
+  display: block;
+}
+.csseditor .func-filter-editor[data-selected-type=table] > [data-type=table], .csseditor .func-filter-editor[data-selected-type=discrete] > [data-type=table] {
+  display: block;
+}
+.csseditor .func-filter-editor[data-selected-type=linear] > [data-type=linear] {
+  display: block;
+}
+.csseditor .func-filter-editor[data-selected-type=gamma] > [data-type=gamma] {
+  display: block;
 }
 .csseditor .popup {
   position: absolute;
@@ -8956,6 +9007,14 @@ html, body {
   display: grid;
   grid-template-columns: 250px 1fr;
   grid-column-gap: 10px;
+}
+.csseditor .popup .svg-property-editor-popup.preview-none {
+  grid-template-columns: 1fr;
+  width: 250px;
+  height: auto;
+}
+.csseditor .popup .svg-property-editor-popup.preview-none .preview {
+  display: none;
 }
 .csseditor .popup .svg-property-editor-popup .box {
   margin-bottom: 10px;
@@ -14231,23 +14290,23 @@ html, body {
 }
 .csseditor[data-theme=light] .input-range-editor .range-editor-type .area input[type=number] {
   padding: 2px 2px;
-  border-right: 0px;
   border-top-right-radius: 0px;
   border-bottom-right-radius: 0px;
   background-color: #f1f1f1;
   border: 1px solid #f1f1f1;
+  border-right: 0px;
 }
 .csseditor[data-theme=light] .input-range-editor .range-editor-type .area .select-editor select {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
-  border-left: 0px;
   text-align: center;
   padding: 0px 4px;
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
   background-color: #f1f1f1;
   border: 1px solid #f1f1f1;
+  border-left: 0px;
 }
 .csseditor[data-theme=light] .text-editor {
   display: grid;
@@ -14618,6 +14677,9 @@ html, body {
 .csseditor[data-theme=light] .filter-editor .filter-list .filter-item {
   display: block;
   margin-top: 5px;
+}
+.csseditor[data-theme=light] .filter-editor .filter-list .filter-item:last-child {
+  margin-bottom: 5px;
 }
 .csseditor[data-theme=light] .filter-editor .filter-list .filter-item .title {
   display: grid;
@@ -16357,7 +16419,7 @@ html, body {
   pointer-events: all;
   fill: black;
   stroke: white;
-  stroke-width: 0.5;
+  stroke-width: 1;
 }
 .csseditor[data-theme=light] .fill-editor .gradient-preview .pointer-draw circle[data-type=start] {
   fill: red;
@@ -16566,15 +16628,6 @@ html, body {
 .csseditor[data-theme=light] .fill-editor .picker-tab .picker-tab-list .picker-tab-item.conic-gradient .icon {
   background-image: conic-gradient(black, #ebf8e1);
 }
-.csseditor[data-theme=light] .fill-editor .picker-tab .picker-tab-list .picker-tab-item.repeating-linear-gradient .icon {
-  background-image: repeating-linear-gradient(45deg, #3f87a6, #ebf8e1 15%, #f69d3c 20%);
-}
-.csseditor[data-theme=light] .fill-editor .picker-tab .picker-tab-list .picker-tab-item.repeating-radial-gradient .icon {
-  background-image: repeating-radial-gradient(circle, #3f87a6, #ebf8e1 15%, #f69d3c 20%);
-}
-.csseditor[data-theme=light] .fill-editor .picker-tab .picker-tab-list .picker-tab-item.repeating-conic-gradient .icon {
-  background-image: repeating-conic-gradient(#3f87a6, #ebf8e1 5%, #f69d3c 10%);
-}
 .csseditor[data-theme=light] .fill-editor .picker-tab .picker-gradient-selector {
   padding: 2px 10px;
 }
@@ -16651,8 +16704,14 @@ html, body {
 .csseditor[data-theme=light] .fill-editor .picker-tab .picker-gradient-selector .gradient-steps .hue .drag-bar.selected .guide-change {
   opacity: 1;
 }
-.csseditor[data-theme=light] .fill-editor[data-selected-editor=image-resource] .preset-position {
-  display: none;
+.csseditor[data-theme=light] .fill-editor[data-selected-editor=image-resource] [data-editor=patternUnits],
+.csseditor[data-theme=light] .fill-editor[data-selected-editor=image-resource] [data-editor=patternWidth],
+.csseditor[data-theme=light] .fill-editor[data-selected-editor=image-resource] [data-editor=patternHeight],
+.csseditor[data-theme=light] .fill-editor[data-selected-editor=image-resource] [data-editor=imageX],
+.csseditor[data-theme=light] .fill-editor[data-selected-editor=image-resource] [data-editor=imageY],
+.csseditor[data-theme=light] .fill-editor[data-selected-editor=image-resource] [data-editor=imageWidth],
+.csseditor[data-theme=light] .fill-editor[data-selected-editor=image-resource] [data-editor=imageHeight] {
+  display: block;
 }
 .csseditor[data-theme=light] .fill-editor[data-selected-editor=linear-gradient] .pointer-draw [data-type=line],
 .csseditor[data-theme=light] .fill-editor[data-selected-editor=linear-gradient] .pointer-draw [data-type=start],
@@ -16684,9 +16743,7 @@ html, body {
 }
 .csseditor[data-theme=light] .fill-editor[data-selected-editor=image-resource] [data-editor=gradient],
 .csseditor[data-theme=light] .fill-editor[data-selected-editor=image-resource] [data-editor=tools],
-.csseditor[data-theme=light] .fill-editor[data-selected-editor=image-resource] .drag-pointer,
-.csseditor[data-theme=light] .fill-editor[data-selected-editor=image-resource] .preset-position,
-.csseditor[data-theme=light] .fill-editor[data-selected-editor=image-resource] .sub-editor {
+.csseditor[data-theme=light] .fill-editor[data-selected-editor=image-resource] .preset-position {
   display: none;
 }
 .csseditor[data-theme=light] .fill-editor[data-selected-editor=image-resource] [data-editor=image-loader] {
@@ -16939,6 +16996,59 @@ html, body {
   pointer-events: none;
   -webkit-clip-path: polygon(40% 0%, 60% 0%, 60% 100%, 40% 100%);
           clip-path: polygon(40% 0%, 60% 0%, 60% 100%, 40% 100%);
+}
+.csseditor[data-theme=light] .svg-filter-select-editor {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 16px 16px;
+  grid-column-gap: 4px;
+}
+.csseditor[data-theme=light] .svg-filter-select-editor.has-label {
+  grid-template-columns: 60px 1fr 16px 16px;
+  grid-column-gap: 4px;
+}
+.csseditor[data-theme=light] .svg-filter-select-editor.has-label label {
+  text-align: left;
+  vertical-align: middle;
+  padding: 2px 4px 2px 0px;
+  font-size: 11px;
+}
+.csseditor[data-theme=light] .svg-filter-select-editor select {
+  width: 100%;
+}
+.csseditor[data-theme=light] .func-filter-editor {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+.csseditor[data-theme=light] .func-filter-editor.focused {
+  box-shadow: 0 0 0 1px #4b61ce;
+  border-radius: 3px;
+}
+.csseditor[data-theme=light] .func-filter-editor.has-label {
+  grid-template-columns: 60px 1fr;
+}
+.csseditor[data-theme=light] .func-filter-editor.has-label label {
+  text-align: left;
+  vertical-align: middle;
+  padding: 2px 0px 2px 0px;
+  font-size: 11px;
+  padding-left: 0px !important;
+}
+.csseditor[data-theme=light] .func-filter-editor > [data-type] {
+  display: none;
+  padding: 4px 0px;
+}
+.csseditor[data-theme=light] .func-filter-editor[data-selected-type=identity] > [data-type=identity] {
+  display: block;
+}
+.csseditor[data-theme=light] .func-filter-editor[data-selected-type=table] > [data-type=table], .csseditor[data-theme=light] .func-filter-editor[data-selected-type=discrete] > [data-type=table] {
+  display: block;
+}
+.csseditor[data-theme=light] .func-filter-editor[data-selected-type=linear] > [data-type=linear] {
+  display: block;
+}
+.csseditor[data-theme=light] .func-filter-editor[data-selected-type=gamma] > [data-type=gamma] {
+  display: block;
 }
 .csseditor[data-theme=light] .popup {
   position: absolute;
@@ -17546,6 +17656,14 @@ html, body {
   display: grid;
   grid-template-columns: 250px 1fr;
   grid-column-gap: 10px;
+}
+.csseditor[data-theme=light] .popup .svg-property-editor-popup.preview-none {
+  grid-template-columns: 1fr;
+  width: 250px;
+  height: auto;
+}
+.csseditor[data-theme=light] .popup .svg-property-editor-popup.preview-none .preview {
+  display: none;
 }
 .csseditor[data-theme=light] .popup .svg-property-editor-popup .box {
   margin-bottom: 10px;

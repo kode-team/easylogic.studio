@@ -17,7 +17,7 @@ export class RotaMatrixSVGFilter extends BaseSVGFilter {
 
   toString() {
     var {id, hueRotate} = this.json 
-    return `
+    return /*html*/`
       <feColorMatrix type="hueRotate" result="romatrix-${id}"  values="${hueRotate}"/>
       <feColorMatrix type="matrix" in="romatrix-${id}" in2="SourceGraphic"  ${this.getDefaultAttribute()} values="-1 2 -3 0 -.5 2 1 0 0 0 0 3 1 0 0 0 0 1 1 0"/>
     `;

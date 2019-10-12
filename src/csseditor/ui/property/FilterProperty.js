@@ -109,7 +109,7 @@ export default class FilterProperty extends BaseProperty {
     var current = editor.selection.current || {} 
     var value = current.filter;
 
-    return `<FilterEditor ref='$filterEditor' value='${value}' hide-label='true' onchange='changeFilterEditor' />`
+    return /*html*/`<FilterEditor ref='$filterEditor' value='${value}' hide-label='true' onchange='changeFilterEditor' />`
   }
 
   [EVENT('changeFilterEditor')] (filter) {

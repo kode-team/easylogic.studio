@@ -10,7 +10,7 @@ import { SVGStaticGradient } from "../../../editor/image-resource/SVGStaticGradi
 export default class FillPickerPopup extends BasePopup {
 
   getTitle() {
-    return 'Fill Picker'
+    return 'SVG Fragment picker'
   }
 
   components() {
@@ -72,7 +72,6 @@ export default class FillPickerPopup extends BasePopup {
   }
 
   [LOAD('$gradientEditor')] () {
-    console.log(this.state.image.toString());
     return /*html*/`<FillEditor 
       ref="$g" 
       value="${this.state.image}" 

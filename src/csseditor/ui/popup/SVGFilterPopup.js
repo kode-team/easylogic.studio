@@ -2,7 +2,8 @@ import { EVENT } from "../../../util/UIElement";
 import { INPUT, LOAD, BIND } from "../../../util/Event";
 import SVGFilterEditor from "../property-editor/SVGFilterEditor";
 import BasePopup from "./BasePopup";
-import { SVGFilter } from "../../../editor/css-property/SVGFilter";
+import { SVGFilter } from "../../../editor/svg-property/SVGFilter";
+import { isNotUndefined } from "../../../util/functions/func";
 
 export default class SVGFilterPopup extends BasePopup {
 
@@ -20,6 +21,7 @@ export default class SVGFilterPopup extends BasePopup {
     return {
       changeEvent: 'changeSVGFilterPopup',
       id: '',
+      preview: true, 
       filters: []
     };
   }
@@ -44,6 +46,14 @@ export default class SVGFilterPopup extends BasePopup {
     </div>`;
   }
 
+  [BIND('$popup')] () {
+    return {  
+      'class': {
+        'preview-none': !this.state.preview
+      }
+    }
+  }
+
   [BIND('$sampleFilter')] () {
     return {
       innerHTML : this.state.filters.join('\n')
@@ -52,7 +62,7 @@ export default class SVGFilterPopup extends BasePopup {
 
   [LOAD('$editor')] () {
 
-    return `
+    return /*html*/`
       <SVGFilterEditor ref='$filter' title='Filter Type' key="filter" onchange='changeFilterEditor'>
         <property name="value" type="json">${JSON.stringify(this.state.filters)}</property>
       </SVGFilterEditor>
@@ -77,6 +87,8 @@ export default class SVGFilterPopup extends BasePopup {
     data.filters = data.filters.map( it => {
       return SVGFilter.parse(it);
     })
+
+    data.preview = isNotUndefined(data.preview) ? data.preview : true; 
 
     this.setState(data);
 

@@ -2,29 +2,7 @@ import BaseProperty from "./BaseProperty";
 import { editor } from "../../../editor/editor";
 import { DEBOUNCE } from "../../../util/Event";
 import { EVENT } from "../../../util/UIElement";
-import { Transform } from "../../../editor/css-property/Transform";
-
-
-
-const blend_list = [
-  '',
-  "normal",
-  "multiply",
-  "screen",
-  "overlay",
-  "darken",
-  "lighten",
-  "color-dodge",
-  "color-burn",
-  "hard-light",
-  "soft-light",
-  "difference",
-  "exclusion",
-  "hue",
-  "saturation",
-  "color",
-  "luminosity"
-].join(',');
+import { blend_list } from "../../../editor/util/Resource";
 
 
 export default class BackgroundColorProperty extends BaseProperty {
@@ -59,6 +37,7 @@ export default class BackgroundColorProperty extends BaseProperty {
           <SelectEditor 
             label='blend'
             ref='$mixBlend' 
+            removable='true'
             key='mix-blend-mode' 
             icon="true" 
             options="${blend_list}" 

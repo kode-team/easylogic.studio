@@ -3,7 +3,7 @@ import { editor } from "../../../editor/editor";
 import { LOAD, CLICK, INPUT, DEBOUNCE } from "../../../util/Event";
 import { EVENT } from "../../../util/UIElement";
 import icon from "../icon/icon";
-import { SVGFilter } from "../../../editor/css-property/SVGFilter";
+import { SVGFilter } from "../../../editor/svg-property/SVGFilter";
 import { uuidShort } from "../../../util/functions/math";
 
 

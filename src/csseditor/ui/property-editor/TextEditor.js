@@ -15,7 +15,7 @@ export default class TextEditor extends UIElement {
     template() {
         var { label } = this.state; 
         var hasLabel = !!label ? 'has-label' : ''
-        return `
+        return /*html*/`
             <div class='text-editor ${hasLabel}'>
                 ${label ? `<label>${label}</label>` : '' }
                 <input type='text' ref='$text' />

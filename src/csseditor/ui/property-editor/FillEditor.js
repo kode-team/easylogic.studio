@@ -38,7 +38,22 @@ const presetPosition = {
   'bottom right': { x1: '0%', y1: '0%', x2: '100%', y2: '100%'}
 }
 
-const props = ['x1', 'y1', 'x2', 'y2', 'cx', 'cy', 'r', 'fx', 'fy', 'fr', 'spreadMethod']
+const props = [
+  'x1', 'y1', 'x2', 'y2', 
+  'cx', 'cy', 'r', 
+  'fx', 'fy', 'fr', 
+  'spreadMethod',  
+  'patternUnits', 'patternWidth', 'patternHeight',
+  'imageX', 'imageY', 'imageWidth', 'imageHeight'
+]
+
+const rangeEditorList = [
+  'x1', 'y1', 'x2', 'y2', 
+  'cx', 'cy', 'r', 
+  'fx', 'fy', 'fr', 
+  'patternWidth', 'patternHeight',
+  'imageX', 'imageY', 'imageWidth', 'imageHeight'
+]
 
 export default class FillEditor extends UIElement  {
 
@@ -121,13 +136,16 @@ export default class FillEditor extends UIElement  {
                 </div>
             </div>
             <div class='tools' data-editor='tools'>
-              <InputRangeEditor label='Offset' ref='$range' calc="false" key='length' onchange='changeColorStepOffset' />
+              <RangeEditor label='Offset' ref='$range' key='length' onchange='changeColorStepOffset' />
             </div>
             <div class='sub-editor' ref='$subEditor'> 
                 <div data-editor='spreadMethod'>
                   <SelectEditor label='Spread' ref='$spreadMethod' options='pad,reflect,repeat' key='spreadMethod' onchange='changeKeyValue' />
                 </div>  
-                ${['x1', 'y1', 'x2', 'y2', 'cx', 'cy', 'r', 'fx', 'fy', 'fr'].map(field => {
+                <div data-editor='patternUnits'>
+                  <SelectEditor label='Pattern' ref='$patternUnits' options='userSpaceOnUse' key='patternUnits' onchange='changeKeyValue' />
+                </div>                  
+                ${rangeEditorList.map(field => {
                   return /*html*/`
                     <div data-editor='${field}'>
                       <RangeEditor label='${field}' ref='$${field}' value="${this.getImageFieldValue(image, field)}" key='${field}' onchange='changeKeyValue' />
@@ -155,8 +173,14 @@ export default class FillEditor extends UIElement  {
       case 'y1': 
       case 'y2': 
       case 'fr':
+      case 'imageX':
+      case 'imageY':
         return '0%';
       case 'x2':
+      case 'patternWidth':
+      case 'patternHeight':
+      case 'imageWidth':
+      case 'imageHeight':        
         return '100%';    
       }
     }
@@ -200,7 +224,15 @@ export default class FillEditor extends UIElement  {
 
     this.children.$fx.setValue(this.state.image.fx)
     this.children.$fy.setValue(this.state.image.fy)
-    this.children.$fr.setValue(this.state.image.fr)    
+    this.children.$fr.setValue(this.state.image.fr)  
+    
+    this.children.$patternUnits.setValue(this.state.image.patternUnits);
+    this.children.$patternWidth.setValue(this.state.image.patternWidth);
+    this.children.$patternHeight.setValue(this.state.image.patternHeight);
+    this.children.$imageX.setValue(this.state.image.imageX);
+    this.children.$imageY.setValue(this.state.image.imageY);
+    this.children.$imageWidth.setValue(this.state.image.imageWidth);        
+    this.children.$imagenHeight.setValue(this.state.image.imageHeight);
   }
 
   getDrawAreaRect () {
@@ -229,8 +261,6 @@ export default class FillEditor extends UIElement  {
     var cx = this.getFieldValue('x1').toPx(width)
     var cy = this.getFieldValue('y1').toPx(height)
 
-    console.log('start', cx, cy, width, height);    
-
     return { cx, cy }
   }  
 
@@ -239,8 +269,6 @@ export default class FillEditor extends UIElement  {
 
     var cx = this.getFieldValue('x2').toPx(width)
     var cy = this.getFieldValue('y2').toPx(height)
-
-    console.log('end', cx, cy, width, height);        
 
     return { cx, cy }
   }  
@@ -269,8 +297,6 @@ export default class FillEditor extends UIElement  {
     this.startXY = e.xy; 
     this.type = e.$delegateTarget.attr('data-type');
     this.state.cachedRect = null; 
-
-    console.log(this.type);
   }
 
   getRectRate (rect, x, y) {
@@ -300,8 +326,6 @@ export default class FillEditor extends UIElement  {
     var y = this.startXY.y + dy; 
 
     var {left, top } = this.getRectRate(this.containerRect, x, y);
-
-    console.log(left, top);
 
     if (this.type == 'start') {
       this.state.image.reset({ x1: left, y1: top })
@@ -363,6 +387,8 @@ export default class FillEditor extends UIElement  {
     var type = this.$el.attr('data-selected-editor');
     if (type === 'linear-gradient') {
       this.emit('addStatusBarMessage', '');
+    } else if (type === 'url' || type === 'image-resource') {
+      this.emit('addStatusBarMessage', 'Click the preview area if you want to select a image');
     } else {
       this.emit('addStatusBarMessage', 'Drag if you want to move center position');
     }
@@ -370,7 +396,9 @@ export default class FillEditor extends UIElement  {
 
   [EVENT('changeKeyValue')] (key, value) {
 
-    this.state.image[key] = value;
+    this.state.image.reset({
+      [key]: value
+    })
 
     this.bindData('$gradientView')
     this.bindData('$line')

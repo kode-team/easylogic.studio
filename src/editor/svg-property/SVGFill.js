@@ -1,9 +1,9 @@
 import { Property } from "../items/Property"
-import { URLImageResource } from "../image-resource/URLImageResource";
 import { convertMatches, reverseMatches } from "../../util/functions/parser";
 import { SVGLinearGradient } from "../image-resource/SVGLinearGradient";
 import { SVGRadialGradient } from "../image-resource/SVGRadialGradient";
 import { SVGStaticGradient } from "../image-resource/SVGStaticGradient";
+import { SVGImageResource } from "../image-resource/SVGImageResource";
 
 
 const reg = /((linear\-gradient|radial\-gradient|url)\(([^\)]*)\))/gi;
@@ -28,7 +28,7 @@ export class SVGFill extends Property {
   }
 
   static createImage(url) {
-    return new URLImageResource({ url });
+    return new SVGLImageResource({ url });
   }
 
   setGradient(data) {
@@ -83,7 +83,7 @@ export class SVGFill extends Property {
       } else if (value.includes("radial")) {
         image = SVGRadialGradient.parse(value);
       } else if (value.includes("url")) {
-        image = URLImageResource.parse(value);
+        image = SVGImageResource.parse(value);
       } else {
         image = SVGStaticGradient.parse(value);
       }
@@ -101,7 +101,7 @@ export class SVGFill extends Property {
       return new SVGRadialGradient(options);
     case 'image-resource':
     case 'url':
-      return new URLImageResource(options);
+      return new SVGImageResource(options);
     default: 
       return new SVGStaticGradient(options);
     }

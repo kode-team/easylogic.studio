@@ -78,14 +78,19 @@ export class SVGPolygonItem extends SVGItem {
     return "Polygon";
   }
 
-  updateFunction (currentElement) {
+  updateFunction (currentElement, isChangeFragment = true) {
     var $polygon = currentElement.$('polygon');
     $polygon.attr('points', this.json.points);
-    $polygon.attr('fill', this.toFillValue)
-    $polygon.attr('stroke', this.toStrokeValue)
 
-    var $defs = currentElement.$('defs');
-    $defs.html(this.toDefInnerString)
+    if (isChangeFragment) {
+      $polygon.attr('filter', this.json.svgfilter)      
+      $polygon.attr('fill', this.toFillValue)
+      $polygon.attr('stroke', this.toStrokeValue)
+  
+      var $defs = currentElement.$('defs');
+      $defs.html(this.toDefInnerString)
+  
+    }
 
     this.json.totalLength = $polygon.el.getTotalLength()
   }  
@@ -110,6 +115,7 @@ export class SVGPolygonItem extends SVGItem {
       <polygon ${OBJECT_TO_PROPERTY({
         'class': 'svg-polygon-item',
         points, 
+        filter: this.json.svgfilter,
         fill: this.toFillValue,
         stroke: this.toStrokeValue
       })} />

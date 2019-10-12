@@ -11,7 +11,7 @@ export class MergeSVGFilter extends BaseSVGFilter {
 
   toString() {
     var { sourceIn, sourceIn2 } = this.json; 
-    return `
+    return /*html*/`
     <feMerge  ${this.getDefaultAttribute()} >
       <feMergeNode in="${sourceIn}" />
       <feMergeNode in="${sourceIn2}" />

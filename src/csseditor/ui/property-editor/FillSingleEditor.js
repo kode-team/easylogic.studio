@@ -62,7 +62,7 @@ export default class FillSingleEditor extends UIElement {
 
         if (!image) return {fill: 'transparent'}; 
 
-        var colors = `${image.colorsteps[0].color}`
+        var colors = image.type != 'url' ?  `${image.colorsteps[0].color}` : 'transparent'
 
         if (image.type.includes('linear') || image.type.includes('radial') ) {
             colors = image.colorsteps.map(it => {

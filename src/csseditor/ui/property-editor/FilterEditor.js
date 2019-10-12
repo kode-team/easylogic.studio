@@ -77,7 +77,7 @@ export default class FilterEditor extends UIElement {
 
   template() {
     var labelClass = this.state.hideLabel ? 'hide' : '';
-    return `
+    return /*html*/`
       <div class='filter-editor filter-list'>
           <div class='label ${labelClass}' >
               <label>${this.props.title || ''}</label>
@@ -324,6 +324,7 @@ export default class FilterEditor extends UIElement {
     this.emit("showSVGFilterPopup", {
         changeEvent: 'changeSVGFilterRealUpdate',
         index,
+        preview: false,
         filters: svgfilter.filters 
     });
   }

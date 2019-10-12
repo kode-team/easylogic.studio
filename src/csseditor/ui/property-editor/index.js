@@ -40,8 +40,12 @@ import BorderEditor from "./BorderEditor";
 import BorderValueEditor from "./BorderValueEditor";
 import FillSingleEditor from "./FillSingleEditor";
 import FillEditor from "./FillEditor";
+import SVGFilterSelectEditor from "./SVGFilterSelectEditor";
+import FuncFilterEditor from "./FuncFilterEditor";
 
 export default {
+    FuncFilterEditor,
+    SVGFilterSelectEditor,
     FillEditor,
     FillSingleEditor,
     BorderEditor,

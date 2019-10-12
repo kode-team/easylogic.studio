@@ -10,6 +10,7 @@ export class SVGItem extends Layer {
       overflow: 'visible',         
       stroke: 'black',
       'stroke-width': 1,
+      'svgfilter': '',
       fill: 'transparent',
       'fill-rule': '',
       'fill-opacity': '',
@@ -30,6 +31,7 @@ export class SVGItem extends Layer {
       overflow: json.overflow,
       stroke: json.stroke,
       'stroke-width': json['stroke-width'],
+      svgfilter: json.svgfilter,
       fill: json.fill,
       'fill-rule': json['fill-rule'],
       'fill-opacity': json['fill-opacity'],
@@ -93,6 +95,15 @@ export class SVGItem extends Layer {
   get toStrokeValue () {
     return  SVGFill.parseImage(this.json.stroke || 'black').toFillValue(this.strokeId);
   }  
+
+  get toFilterValue () {
+
+    if (!this.json.svgfilter) {
+      return '';
+    }
+
+    return `url(#${this.json.svgfilter})`
+  }
 
   toExportSVGCode () {
     return `
