@@ -17,6 +17,12 @@ import { DiffuseLightingSVGFilter } from "./svg-filter/DiffuseLightingSVGFilter"
 import { SpecularLightingSVGFilter } from "./svg-filter/SpecularLightingSVGFilter";
 import { OffsetSVGFilter } from "./svg-filter/OffsetSVGFilter";
 import { BlendSVGFilter } from "./svg-filter/BlendSVGFilter";
+import { SourceGraphicSVGFilter } from "./svg-filter/SourceGraphicSVGFilter";
+import { SourceAlphaSVGFilter } from "./svg-filter/SourceAlphaSVGFilter";
+import { BackgroundImageSVGFilter } from "./svg-filter/BackgroundImageSVGFilter";
+import { BackgroundAlphaSVGFilter } from "./svg-filter/BackgroundAlphaSVGFilter";
+import { FillPaintSVGFilter } from "./svg-filter/FillPaintSVGFilter";
+import { StrokePaintSVGFilter } from "./svg-filter/StrokePaintSVGFilter";
 
 
 export const resultGenerator = (list) => {
@@ -61,6 +67,12 @@ export class SVGFilter extends Property {
 
 
 export const SVGFilterClassName = {
+  SourceGraphic: SourceGraphicSVGFilter,
+  SourceAlpha: SourceAlphaSVGFilter,
+  BackgroundImage: BackgroundImageSVGFilter,
+  BackgroundAlpha: BackgroundAlphaSVGFilter,
+  FillPaint: FillPaintSVGFilter,
+  StrokePaint: StrokePaintSVGFilter,
   ComponentTransfer: ComponentTransferSVGFilter,
   DistanceLight: DistanceLightSVGFilter,
   PointLight: PointLightSVGFilter,
@@ -82,7 +94,12 @@ export const SVGFilterClassName = {
 };
 
 export const SVGFilterClass = {
-  
+  SourceAlphaSVGFilter,
+  SourceGraphicSVGFilter,
+  BackgroundImageSVGFilter,
+  BackgroundAlphaSVGFilter,
+  FillPaintSVGFilter,
+  StrokePaintSVGFilter,
   ComponentTransferSVGFilter,
   DistanceLightSVGFilter,
   PointLightSVGFilter,

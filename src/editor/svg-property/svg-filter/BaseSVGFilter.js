@@ -1,4 +1,6 @@
 import { Property } from "../../items/Property";
+import { uuidShort } from "../../../util/functions/math";
+import { SVGFilterClassName } from "../SVGFilter";
 
 export const resultGenerator = (list) => {
   var reference = list.filter(it => it.result).map(it => it.result).join(',')
@@ -20,9 +22,15 @@ export class BaseSVGFilter extends Property {
   }  
 
 
+  isSource () {
+    return false; 
+  }
+
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({ 
       itemType: "svgfilter", 
+      id: uuidShort(),
+      bound: { x: 100, y: 100 },
       result: '',
       ...obj 
     });
@@ -39,3 +47,5 @@ export class BaseSVGFilter extends Property {
     return `<fe${type} value="${value}" ${this.getDefaultAttribute()} />`;
   }
 }
+
+

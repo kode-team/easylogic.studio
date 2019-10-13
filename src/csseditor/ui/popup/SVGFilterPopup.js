@@ -37,27 +37,7 @@ export default class SVGFilterPopup extends BasePopup {
       <div class="box">
         <div class='editor' ref='$editor'></div>
       </div>
-      <div class='box preview'>
-          <div class='preview-box' style='filter: url(#svgfilter-popup-sample);'></div>
-          <svg width="0" height="0">
-            <filter id='svgfilter-popup-sample' ref='$sampleFilter'></filter>
-          </svg>
-      </div>    
     </div>`;
-  }
-
-  [BIND('$popup')] () {
-    return {  
-      'class': {
-        'preview-none': !this.state.preview
-      }
-    }
-  }
-
-  [BIND('$sampleFilter')] () {
-    return {
-      innerHTML : this.state.filters.join('\n')
-    }
   }
 
   [LOAD('$editor')] () {

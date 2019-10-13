@@ -5,37 +5,14 @@
     height: 500px;
 
     display: grid;
-    grid-template-columns: 250px 1fr; 
-    grid-column-gap: 10px;
-
-    &.preview-none {
-      grid-template-columns: 1fr;
-      width: 250px;
-      height: auto;
-
-      .preview {
-        display: none; 
-      }
-    }
+    grid-template-columns: 1fr; 
+    // grid-column-gap: 10px;
 
     .box {
       margin-bottom: 10px;
-      &.preview {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        border: 1px solid $selected-color;
 
-        .preview-box {
-          position: absolute;
-          left: 50%;
-          top: 50%;
-          transform: translate(-50%, -50%);
-          width: 200px;
-          height: 200px;
-          
-          background-image: radial-gradient(yellow 0%, red 100%);
-        }
+      > div {
+        height: 100%;
       }
 
       .property {

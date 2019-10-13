@@ -15,8 +15,6 @@ export class BlendSVGFilter extends BaseSVGFilter {
   toString() {
     var { sourceIn, sourceIn2, mode } = this.json; 
 
-    var mode = mode ? `mode="${mode}"` : '';  
-
     return /*html*/`<feBlend ${OBJECT_TO_PROPERTY({
       in: sourceIn,
       in2: sourceIn2,
@@ -38,7 +36,7 @@ BlendSVGFilter.spec = {
     options: resultGenerator,
     defaultValue: "SourceGraphic"
   },
-  scale: {
+  mode: {
     title: 'mode',
     inputType: 'select',
     options: blend_list,

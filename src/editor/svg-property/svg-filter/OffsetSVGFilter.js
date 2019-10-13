@@ -7,8 +7,8 @@ export class OffsetSVGFilter extends BaseSVGFilter {
     return super.getDefaultObject({
       type: "Offset",
       sourceIn: OffsetSVGFilter.spec.sourceIn.defaultValue,      
-      operator: OffsetSVGFilter.spec.operator.defaultValue,
-      radius: OffsetSVGFilter.spec.radius.defaultValue
+      dx: OffsetSVGFilter.spec.dx.defaultValue,
+      dy: OffsetSVGFilter.spec.dy.defaultValue
     });
   }
 

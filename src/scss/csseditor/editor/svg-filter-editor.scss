@@ -1,6 +1,10 @@
 .svg-filter-editor {
 
   color: $font-color;
+  display: grid;
+  grid-template-columns: 1fr 250px;
+  grid-column-gap:10px;
+  height: 100%;
 
   .label {
     height: 20px;
@@ -24,54 +28,111 @@
       }
   }
 
+  .left {
+    display: grid;
+    grid-template-rows: 30px 460px; 
+    height: 100%;
+
+    .graph {
+      overflow: auto; 
+      box-sizing: border-box;
+      border: 1px solid $selected-color;
+      position: relative;
+
+      .graph-panel {
+        width: 1000px;
+        height: 1000px;
+        position: relative;
+
+        .filter-node {
+          display: inline-block;
+          position: absolute;
+          left: 10px;
+          top: 10px;
+          width: 50px;
+          height: 50px;
+          background-color: white; 
+
+          > .label {
+            position: absolute;
+            bottom: 100%;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.7);
+          }
+
+          > .preview {
+            height: 100%;
+            width: 100%;
+            pointer-events: none; 
+          }
+
+          .in-list {
+            position: absolute;            
+            top: 50%;
+            width: 10px;
+            left: -10px;
+            transform: translateY(-50%);
+            display: inline-block;
+          }
+
+          .in {
+            width: 10px;
+            height: 10px;
+            display: block; 
+            background-color: rgb(0, 153, 255); 
+            border-top-left-radius: 50%;
+            border-bottom-left-radius: 50%;
+            margin: 2px 0px;
+          }
+
+          .out {
+            position: absolute;            
+            width: 10px;
+            height: 10px;
+            right: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgb(0, 153, 255); 
+            border-top-right-radius: 50%;
+            border-bottom-right-radius: 50%;
+          }          
+
+          &.selected {
+            box-shadow: 0 0 0 2px $selected-color;
+          }
+        }
+      }
+
+    }
+  }
+
+  .right {
+    height: 100%;
+    overflow: auto; 
+    box-sizing: border-box;
+    border-left: 1px solid $border-color;
+    padding: 0px 0px 0px 10px;
+  }
+
   .filter-list {
     width: 100%;
     display: grid !important;
     grid-template-columns: 1fr !important;
-    max-height: 400px;
-    overflow: auto;    
   
     .filter-item {
       display: block;
       
-
-      &.collapsed {
-        
-        .title {
-          .fold {
-            transform: rotate(90deg);
-          }
-        }
-
-        .filter-ui {
-          display: none;
-        }
-      }
-
   
       .title {
         display: grid;
-        grid-template-columns: 20px 1fr 30px;
+        grid-template-columns: 1fr 30px;
         margin-left: -20px;
         color: $selected-color;
         border-radius: 3px;
         margin: 5px 0px;
-  
-        .fold {
-          display: inline-block;
-          width: 20px;
-          height: 20px;
-          transition: all 0.1s linear; 
-          cursor: pointer;
-          svg {
-            width: 100%;
-            height: 100%;
-
-            path {
-              fill: $selected-font-color;
-            }
-          }
-        }
 
         label {
           font-size: 12px;
@@ -94,10 +155,6 @@
         display: grid;
         grid-template-columns: 1fr;
         margin-bottom: 2px;
-
-        label {
-          padding-left: 20px;
-        }
 
         > div {
           margin-bottom: 5px;
