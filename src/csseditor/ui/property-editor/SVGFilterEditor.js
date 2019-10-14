@@ -3,11 +3,6 @@ import icon from "../icon/icon";
 import {
   LOAD,
   CLICK,
-  DRAGSTART,
-  DRAGOVER,
-  DROP,
-  PREVENT,
-  BIND,
   POINTERSTART,
   MOVE,
   END
@@ -42,6 +37,8 @@ import { ComponentTransferSVGFilter } from "../../../editor/svg-property/svg-fil
 import FuncFilterEditor from "./FuncFilterEditor";
 import { OffsetSVGFilter } from "../../../editor/svg-property/svg-filter/OffsetSVGFilter";
 import { Length } from "../../../editor/unit/Length";
+import Dom from "../../../util/Dom";
+import PathStringManager from "../../../editor/parse/PathStringManager";
 
 var specList = {
   Offset: OffsetSVGFilter.spec,
@@ -125,6 +122,7 @@ export default class SVGFilterEditor extends UIElement {
                     <option value="DistanceLight">Distance Light</option>
                   </optgroup>
                   <optgroup label="COMBINERS">
+                    <option value="Blend">Blend</option>
                     <option value="Composite">Composite</option>
                     <option value="Merge">Merge</option>
                     <option value="DisplacementMap">Displacement Map</option>
@@ -134,7 +132,10 @@ export default class SVGFilterEditor extends UIElement {
               </div>
           </div>
           <div class='graph'>
+            <div class='connected-line-panel' ref='$connectedLinePanel'></div>
+            <div class='drag-line-panel' ref='$dragLinePanel'></div>
             <div class='graph-panel' ref='$graphPanel'></div>
+            <div class='select-point-panel' ref='$selectPointPanel'></div>            
           </div>
         </div>
         <div class='right'>
@@ -293,36 +294,6 @@ export default class SVGFilterEditor extends UIElement {
     return '';
   }
 
-  [DRAGSTART("$filterList .filter-item .title")](e) {
-    this.startIndex = +e.$delegateTarget.attr("data-index");
-  }
-
-  [DRAGOVER("$filterList .filter-item") + PREVENT](e) {}
-
-  sortItem(arr, startIndex, targetIndex) {
-    arr.splice(
-      targetIndex + (startIndex < targetIndex ? -1 : 0),
-      0,
-      ...arr.splice(startIndex, 1)
-    );
-  }
-
-  sortFilter(startIndex, targetIndex) {
-      this.sortItem(this.state.filters, startIndex, targetIndex);
-  }
-
-  [DROP("$filterList .filter-item") + PREVENT](e) {
-    var targetIndex = +e.$delegateTarget.attr("data-index");
-    var current = editor.selection.current;
-    if (!current) return;
-
-    this.sortFilter(this.startIndex, targetIndex);
-
-    this.refresh();
-
-    this.modifyFilter()
-  }
-
   modifyFilter () {
     this.parent.trigger(this.props.onchange, this.props.key, this.state.filters)
   }
@@ -366,27 +337,207 @@ export default class SVGFilterEditor extends UIElement {
     this.load('$filterList')
   }
 
-  [POINTERSTART('$graphPanel .filter-node') + MOVE()] (e) {
+  [POINTERSTART('$graphPanel .filter-node') + MOVE()  + END()] (e) {
     this.$target = e.$delegateTarget;
-    var index = +this.$target.attr('data-index');
-    
+    this.$point = null; 
+    this.pointType = 'object';
+    this.pointIndex = 0; 
+    var rect = this.refs.$graphPanel.rect();
+    this.rect = rect;  
+
+    var index = +this.$target.attr('data-index');    
     this.selectFilter(index);
-    this.startXY = clone(this.state.selectedFilter.bound);
     this.$target.onlyOneClass('selected');
+
+    var  pointer = Dom.create(e.target);
+
+    if (pointer.hasClass('out')) {
+      this.$point = pointer;
+      this.pointType = 'out';
+      this.pointIndex = 0; 
+    } else if (pointer.hasClass('in')) {
+      this.$point = pointer;
+      this.pointType = 'in'; 
+      this.pointIndex = +pointer.attr('data-index');      
+    } else {
+      var filter = this.state.selectedFilter
+      this.startXY = clone(filter.bound);
+
+      this.inputPointList = []  
+      
+      this.inputPointList.push(...filter.connected.map(c => {
+        return {
+          obj: c.path, 
+          index: 0,
+          point: clone(c.path[0])
+        }
+      }))
+
+      this.state.filters.forEach((it, filterIndex) => {
+
+        it.connected.filter(c => c.id === filter.id).forEach(source =>  {
+          this.inputPointList.push({
+            obj: source.path, 
+            index: source.path.length-1, 
+            point: clone(source.path[source.path.length-1])
+          })
+        })
+      })
+    }
+
+    if (this.pointType === 'in' || this.pointType === 'out') {
+      var inRect = pointer.rect()
+      var x = inRect.x - rect.x;
+      var y = inRect.y - rect.y;
+
+      var centerX = x + inRect.width/2;
+      var centerY = y + inRect.height/2;
+
+      this.startXY = {x: centerX, y: centerY };
+    }
+
+    this.startXY.dx = 0
+    this.startXY.dy = 0; 
+
+    this.load('$dragLinePanel');
+
+  }
+
+  [LOAD('$dragLinePanel')] () {
+    if (this.pointType === 'in' || this.pointType === 'out') {
+      var {x, y, dx, dy } = this.startXY;
+      return /*html*/`
+      <svg>
+        <path class='drag-line' fill='transparent' stroke-width="1" stroke='block' d="M${x},${y}L${x + dx},${y + dy}Z" />
+      </svg>
+      `
+    } else {
+      return ''; 
+    }
+  }
+
+  makeConnectedPath (points) {
+
+    var manager = new PathStringManager();
+
+    points.forEach((p, index) => {
+      if (index === 0) {
+        manager.M(p)
+      } else {
+        manager.L(p);
+      }
+    })
+    manager.Z()
+
+    return manager.d;
+  }
+
+  [LOAD('$connectedLinePanel')] () {
+
+    return /*html*/`
+      <svg>
+        ${this.state.filters.map(it => {
+          return it.connected.map(({path}) => {
+            return /*html*/`<path class='connected-line' d="${this.makeConnectedPath(path)}" />`
+          }).join('');
+        }).join('')}
+      </svg>
+    `
+  }
+
+  getCenterXY ($target) {
+    var inRect = $target.rect()
+    var x = inRect.x - this.rect.x;
+    var y = inRect.y - this.rect.y;
+
+    var centerX = x + inRect.width/2;
+    var centerY = y + inRect.height/2;
+
+    return {x: centerX, y: centerY}
+  }
+
+  end (dx, dy) {
+
+    if (this.pointType === 'in'|| this.pointType === 'out') {
+
+      this.startXY.dx = dx; 
+      this.startXY.dy = dy; 
+      var filter = this.state.selectedFilter;
+
+      var e = editor.config.get('bodyEvent')      
+
+      var $target = Dom.create(e.target);
+      var $targetNode = $target.closest('filter-node');
+      
+      if (this.pointType === 'out') {
+
+        if ($target.hasClass('in')) {
+          var center = this.getCenterXY($target);
+
+          var targetFilter = this.state.filters[+$targetNode.attr('data-index')]
+          if (targetFilter) {
+            targetFilter.setIn(+$target.attr('data-index'), filter);
+            filter.setConnected(targetFilter, [
+              {x: this.startXY.x, y: this.startXY.y },
+              {x: center.x, y: center.y }
+            ])
+          }
+        }
+      } else if (this.pointType === 'in') {
+        if ($target.hasClass('out'))  {
+          var center = this.getCenterXY($target);          
+          var targetFilter = this.state.filters[+$targetNode.attr('data-index')]
+          if (targetFilter) {
+
+            filter.setIn(this.pointIndex, targetFilter);
+            targetFilter.setConnected(filter, [
+              {x: center.x, y: center.y}, 
+              {x: this.startXY.x, y: this.startXY.y }
+            ])                      
+          }
+        }
+      }
+
+      this.pointType = '';
+  
+    }
+
+    this.load('$dragLinePanel');
+    this.load('$connectedLinePanel');
+
+    this.modifyFilter();    
   }
 
   move (dx, dy) {
+
+
     var filter = this.state.selectedFilter;
     if (filter) {
+      this.startXY.dx = dx; 
+      this.startXY.dy = dy; 
 
-      filter.reset({
-        bound: { x: this.startXY.x + dx, y : this.startXY.y + dy }
-      })
+      if (this.pointType === 'in') {
+        this.load('$dragLinePanel')
+      } else if (this.pointType === 'out') {
+        this.load('$dragLinePanel')
+      } else {
 
-      this.$target.css({
-        left: Length.px(filter.bound.x),
-        top: Length.px(filter.bound.y),
-      })
+        filter.reset({
+          bound: { x: this.startXY.x + dx, y : this.startXY.y + dy }
+        })
+  
+        this.$target.css({
+          left: Length.px(filter.bound.x),
+          top: Length.px(filter.bound.y),
+        })
+
+        this.inputPointList.forEach(it => {
+          it.obj[it.index] = {x: it.point.x + dx, y: it.point.y + dy } 
+        })
+        
+        this.load('$connectedLinePanel');
+      }
+
     }
 
   }
@@ -400,12 +551,15 @@ export default class SVGFilterEditor extends UIElement {
           'selected': index ===  this.state.selectedIndex
         })}' data-type="${it.type}" data-index="${index}" data-filter-id="${it.id}" style='left: ${it.bound.x}px;top: ${it.bound.y}px;'>
           <div class='label'>${it.type}</div>
+          <div class='remove'>${icon.close}</div>
           <div class='preview'></div>
           <div class='in-list'>
-            <div class='in'></div>
+            ${[...Array(it.getInCount())].map((itIn, inIndex) => {
+              return /*html*/`<div class='in' data-index='${inIndex}'>${icon.chevron_left}</div>`
+            }).join('')}
           </div>
           
-          <div class='out'></div>
+          <div class='out' data-index="0">${icon.chevron_right}</div>
         </div>
       `
     })
@@ -446,6 +600,29 @@ export default class SVGFilterEditor extends UIElement {
       })
     }
   
+    this.modifyFilter();
+  }
+
+  [CLICK('$graphPanel .filter-node .remove')] (e) {
+    var $target = e.$delegateTarget.closest('filter-node');
+    var index = +$target.attr('data-index');
+    var f = this.state.filters[index]
+
+    var filters  = this.state.filters.filter(it => it.id != f.id);
+    filters.forEach(it => {
+      it.connected = it.connected.filter(c => c.id != f.id);
+      it.in = it.in.filter(c => c.id != f.id);
+    })
+
+    if (this.state.selectedFilter === f) {
+      this.state.selectedFilter = null; 
+      this.state.selectedIndex = -1; 
+    }
+
+    this.setState({
+      filters
+    })
+
     this.modifyFilter();
   }
 }

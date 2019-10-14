@@ -5,26 +5,20 @@ export class MorphologySVGFilter extends BaseSVGFilter {
   getDefaultObject() {
     return super.getDefaultObject({
       type: "Morphology",
-      sourceIn: MorphologySVGFilter.spec.sourceIn.defaultValue,      
       operator: MorphologySVGFilter.spec.operator.defaultValue,
       radius: MorphologySVGFilter.spec.radius.defaultValue
     });
   }
+  getInCount() { return 1 }    
 
   toString() {
-    var { operator, radius, sourceIn } = this.json; 
-    return `<feMorphology in="${sourceIn}"  operator="${operator}" radius="${radius}"  ${this.getDefaultAttribute()} />`;
+    var { operator, radius } = this.json; 
+    return `<feMorphology operator="${operator}" radius="${radius}"  ${this.getDefaultAttribute()} />`;
   }
 }
 
 
 MorphologySVGFilter.spec = {
-  sourceIn: {
-    title: "in",
-    inputType: "select",
-    options: resultGenerator,
-    defaultValue: "SourceGraphic"
-  },  
   operator: {
     title: "Operator",
     inputType: "select",
@@ -38,9 +32,5 @@ MorphologySVGFilter.spec = {
     max: 100,
     step: 1,
     defaultValue: Length.number(0)
-  },  
-  result: {
-    title: 'result',
-    inputType: 'text'
   }
 };

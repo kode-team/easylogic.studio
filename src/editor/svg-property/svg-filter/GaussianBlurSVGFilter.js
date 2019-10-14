@@ -6,12 +6,15 @@ export class GaussianBlurSVGFilter extends BaseSVGFilter {
   getDefaultObject() {
     return super.getDefaultObject({
       type: "GaussianBlur",
-      sourceIn: GaussianBlurSVGFilter.spec.sourceIn.defaultValue,      
       stdDeviationX: GaussianBlurSVGFilter.spec.stdDeviationX.defaultValue,
       stdDeviationY: GaussianBlurSVGFilter.spec.stdDeviationY.defaultValue,
       edgeMode: GaussianBlurSVGFilter.spec.edgeMode.defaultValue
     });
   }
+
+
+  getInCount() { return 1 }  
+
 
   convert (obj) {
     obj.stdDeviationX = Length.parse(obj.stdDeviationX)
@@ -20,24 +23,18 @@ export class GaussianBlurSVGFilter extends BaseSVGFilter {
   }
 
   toString() {
-    var { stdDeviationX, stdDeviationY, edgeMode, sourceIn } = this.json; 
+    var { stdDeviationX, stdDeviationY, edgeMode } = this.json; 
 
     var stdDeviation = `${stdDeviationX} ${stdDeviationY}`
     if (stdDeviationX === stdDeviationY) {
       stdDeviation = stdDeviationX;
     }     
 
-    return `<feGaussianBlur in="${sourceIn}"  stdDeviation="${stdDeviation}" edgeMode="${edgeMode}"  ${this.getDefaultAttribute()} />`;
+    return `<feGaussianBlur  stdDeviation="${stdDeviation}" edgeMode="${edgeMode}"  ${this.getDefaultAttribute()} />`;
   }
 }
 
 GaussianBlurSVGFilter.spec = {
-  sourceIn: {
-    title: "in",
-    inputType: "select",
-    options: resultGenerator,
-    defaultValue: "SourceGraphic"
-  },  
   stdDeviationX: {
     title: "X",
     inputType: "number-range",
@@ -59,10 +56,6 @@ GaussianBlurSVGFilter.spec = {
     inputType: "select",
     options: "none,duplicate,wrap",
     defaultValue: "none"
-  },
-  result: {
-    title: 'result',
-    inputType: 'text'
   }
 };
 

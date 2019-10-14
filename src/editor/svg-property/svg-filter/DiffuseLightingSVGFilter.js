@@ -7,7 +7,6 @@ export class DiffuseLightingSVGFilter extends BaseSVGFilter {
   getDefaultObject() {
     return super.getDefaultObject({
       type: "DiffuseLighting",
-      sourceIn: DiffuseLightingSVGFilter.spec.sourceIn.defaultValue,      
       surfaceScale: DiffuseLightingSVGFilter.spec.surfaceScale.defaultValue,      
       lightingColor: DiffuseLightingSVGFilter.spec.lightingColor.defaultValue,      
       diffuseConstant: DiffuseLightingSVGFilter.spec.diffuseConstant.defaultValue
@@ -15,11 +14,13 @@ export class DiffuseLightingSVGFilter extends BaseSVGFilter {
   }
 
 
+  getInCount() { return 1 }  
+
+
   toString() {
-    var { sourceIn, surfaceScale, diffuseConstant, lightingColor } = this.json; 
+    var { surfaceScale, diffuseConstant, lightingColor } = this.json; 
 
     return /*html*/`<feDiffuseLighting ${OBJECT_TO_PROPERTY({
-      in: sourceIn,
       surfaceScale,
       diffuseConstant,
       'lighting-color': lightingColor
@@ -30,12 +31,6 @@ export class DiffuseLightingSVGFilter extends BaseSVGFilter {
 }
 
 DiffuseLightingSVGFilter.spec = {
-  sourceIn: {
-    title: "in",
-    inputType: "select",
-    options: resultGenerator,
-    defaultValue: "SourceGraphic"
-  },
   surfaceScale: {
     title: "surfaceScale",
     inputType: "number-range",
@@ -57,10 +52,6 @@ DiffuseLightingSVGFilter.spec = {
     title: "Lighting Color",
     inputType: "color",
     defaultValue: 'rgba(0, 0, 0, 1)'
-  },   
-  result: {
-    title: 'result',
-    inputType: 'text'
   }
 };
 

@@ -33,9 +33,5 @@ RotaMatrixSVGFilter.spec = {
     max: 360,
     step: 1,
     defaultValue: Length.number(0)
-  },    
-  result: {
-    title: 'result',
-    inputType: 'text'
   }
 };

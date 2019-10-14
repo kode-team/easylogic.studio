@@ -56,10 +56,6 @@ TurbulenceSVGFilter.spec = {
     max: 10000,
     step: 1,
     defaultValue: Length.number(0)
-  },
-  result: {
-    title: 'result',
-    inputType: 'text'
   }
   
 };

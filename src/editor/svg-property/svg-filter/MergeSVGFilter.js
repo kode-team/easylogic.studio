@@ -3,40 +3,27 @@ import { resultGenerator, BaseSVGFilter } from "./BaseSVGFilter";
 export class MergeSVGFilter extends BaseSVGFilter {
   getDefaultObject() {
     return super.getDefaultObject({
-      type: "Merge",
-      sourceIn: MergeSVGFilter.spec.sourceIn.defaultValue,      
-      sourceIn2: MergeSVGFilter.spec.sourceIn2.defaultValue
+      type: "Merge"
     });
   }
 
+  getInCount() { return 3 }  
+
+
   toString() {
-    var { sourceIn, sourceIn2 } = this.json; 
+    var { in: inList } = this.json; 
     return /*html*/`
     <feMerge  ${this.getDefaultAttribute()} >
-      <feMergeNode in="${sourceIn}" />
-      <feMergeNode in="${sourceIn2}" />
+      ${inList.map(it => {
+        return `<feMergeNode ${this.getSourceInAttribute([it])} />`
+      }).join('')}
     </feMerge>`;
   }
 }
 
 
 MergeSVGFilter.spec = {
-  sourceIn: {
-    title: "in",
-    inputType: "select",
-    options: resultGenerator,
-    defaultValue: "SourceGraphic"
-  },  
-  sourceIn2: {
-    title: "in2",
-    inputType: "select",
-    options: resultGenerator,
-    defaultValue: "SourceGraphic"
-  },    
-  result: {
-    title: 'result',
-    inputType: 'text'
-  }
+
 };
 
 

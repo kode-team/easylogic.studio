@@ -39,10 +39,6 @@ DistanceLightSVGFilter.spec = {
     max: 1000,
     step: 1,
     defaultValue: Length.number(0)
-  },    
-  result: {
-    title: 'result',
-    inputType: 'text'
   }
 };
 

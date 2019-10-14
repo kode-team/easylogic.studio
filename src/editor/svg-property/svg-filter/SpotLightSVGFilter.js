@@ -93,10 +93,6 @@ SpotLightSVGFilter.spec = {
     max: 100,
     step: 1,
     defaultValue: Length.number(1)
-  },    
-  result: {
-    title: 'result',
-    inputType: 'text'
   }
 };
 

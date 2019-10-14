@@ -7259,6 +7259,38 @@ html, body {
   border: 1px solid #fc554f;
   position: relative;
 }
+.csseditor .svg-filter-editor .left .graph .connected-line-panel {
+  width: 1000px;
+  height: 1000px;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  pointer-events: none;
+}
+.csseditor .svg-filter-editor .left .graph .connected-line-panel svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor .svg-filter-editor .left .graph .connected-line-panel svg path {
+  stroke: #fc554f;
+  stroke-width: 2;
+}
+.csseditor .svg-filter-editor .left .graph .drag-line-panel {
+  width: 1000px;
+  height: 1000px;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  pointer-events: none;
+}
+.csseditor .svg-filter-editor .left .graph .drag-line-panel svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor .svg-filter-editor .left .graph .drag-line-panel svg path {
+  stroke: #fc554f;
+  stroke-width: 2;
+}
 .csseditor .svg-filter-editor .left .graph .graph-panel {
   width: 1000px;
   height: 1000px;
@@ -7269,8 +7301,8 @@ html, body {
   position: absolute;
   left: 10px;
   top: 10px;
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   background-color: white;
 }
 .csseditor .svg-filter-editor .left .graph .graph-panel .filter-node > .label {
@@ -7283,6 +7315,27 @@ html, body {
   font-size: 11px;
   color: rgba(255, 255, 255, 0.7);
 }
+.csseditor .svg-filter-editor .left .graph .graph-panel .filter-node > .remove {
+  position: absolute;
+  top: -35px;
+  display: inline-block;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.7);
+  height: 14px;
+  width: 14px;
+  border-radius: 100%;
+  background-color: #fc554f;
+}
+.csseditor .svg-filter-editor .left .graph .graph-panel .filter-node > .remove svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor .svg-filter-editor .left .graph .graph-panel .filter-node > .remove svg path {
+  fill: #ffffff;
+}
 .csseditor .svg-filter-editor .left .graph .graph-panel .filter-node > .preview {
   height: 100%;
   width: 100%;
@@ -7291,32 +7344,51 @@ html, body {
 .csseditor .svg-filter-editor .left .graph .graph-panel .filter-node .in-list {
   position: absolute;
   top: 50%;
-  width: 10px;
-  left: -10px;
+  width: 14px;
+  left: -14px;
   -webkit-transform: translateY(-50%);
           transform: translateY(-50%);
   display: inline-block;
 }
 .csseditor .svg-filter-editor .left .graph .graph-panel .filter-node .in {
-  width: 10px;
-  height: 10px;
+  width: 14px;
+  height: 12px;
   display: block;
   background-color: #0099ff;
   border-top-left-radius: 50%;
   border-bottom-left-radius: 50%;
   margin: 2px 0px;
+  position: relative;
 }
 .csseditor .svg-filter-editor .left .graph .graph-panel .filter-node .out {
   position: absolute;
-  width: 10px;
-  height: 10px;
-  right: -10px;
+  width: 14px;
+  height: 14px;
+  right: -14px;
   top: 50%;
   -webkit-transform: translateY(-50%);
           transform: translateY(-50%);
   background-color: #0099ff;
   border-top-right-radius: 50%;
   border-bottom-right-radius: 50%;
+}
+.csseditor .svg-filter-editor .left .graph .graph-panel .filter-node .in svg, .csseditor .svg-filter-editor .left .graph .graph-panel .filter-node .out svg {
+  pointer-events: none;
+  width: 14px;
+  height: 24px;
+  position: absolute;
+  top: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+}
+.csseditor .svg-filter-editor .left .graph .graph-panel .filter-node .in svg path, .csseditor .svg-filter-editor .left .graph .graph-panel .filter-node .out svg path {
+  fill: white;
+}
+.csseditor .svg-filter-editor .left .graph .graph-panel .filter-node .in svg {
+  left: 6px;
+}
+.csseditor .svg-filter-editor .left .graph .graph-panel .filter-node .out svg {
+  left: 8px;
 }
 .csseditor .svg-filter-editor .left .graph .graph-panel .filter-node.selected {
   box-shadow: 0 0 0 2px #fc554f;
@@ -15944,6 +16016,38 @@ html, body {
   border: 1px solid #4b61ce;
   position: relative;
 }
+.csseditor[data-theme=light] .svg-filter-editor .left .graph .connected-line-panel {
+  width: 1000px;
+  height: 1000px;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  pointer-events: none;
+}
+.csseditor[data-theme=light] .svg-filter-editor .left .graph .connected-line-panel svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor[data-theme=light] .svg-filter-editor .left .graph .connected-line-panel svg path {
+  stroke: #4b61ce;
+  stroke-width: 2;
+}
+.csseditor[data-theme=light] .svg-filter-editor .left .graph .drag-line-panel {
+  width: 1000px;
+  height: 1000px;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  pointer-events: none;
+}
+.csseditor[data-theme=light] .svg-filter-editor .left .graph .drag-line-panel svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor[data-theme=light] .svg-filter-editor .left .graph .drag-line-panel svg path {
+  stroke: #4b61ce;
+  stroke-width: 2;
+}
 .csseditor[data-theme=light] .svg-filter-editor .left .graph .graph-panel {
   width: 1000px;
   height: 1000px;
@@ -15954,8 +16058,8 @@ html, body {
   position: absolute;
   left: 10px;
   top: 10px;
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   background-color: white;
 }
 .csseditor[data-theme=light] .svg-filter-editor .left .graph .graph-panel .filter-node > .label {
@@ -15968,6 +16072,27 @@ html, body {
   font-size: 11px;
   color: rgba(255, 255, 255, 0.7);
 }
+.csseditor[data-theme=light] .svg-filter-editor .left .graph .graph-panel .filter-node > .remove {
+  position: absolute;
+  top: -35px;
+  display: inline-block;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.7);
+  height: 14px;
+  width: 14px;
+  border-radius: 100%;
+  background-color: #4b61ce;
+}
+.csseditor[data-theme=light] .svg-filter-editor .left .graph .graph-panel .filter-node > .remove svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor[data-theme=light] .svg-filter-editor .left .graph .graph-panel .filter-node > .remove svg path {
+  fill: gray;
+}
 .csseditor[data-theme=light] .svg-filter-editor .left .graph .graph-panel .filter-node > .preview {
   height: 100%;
   width: 100%;
@@ -15976,32 +16101,51 @@ html, body {
 .csseditor[data-theme=light] .svg-filter-editor .left .graph .graph-panel .filter-node .in-list {
   position: absolute;
   top: 50%;
-  width: 10px;
-  left: -10px;
+  width: 14px;
+  left: -14px;
   -webkit-transform: translateY(-50%);
           transform: translateY(-50%);
   display: inline-block;
 }
 .csseditor[data-theme=light] .svg-filter-editor .left .graph .graph-panel .filter-node .in {
-  width: 10px;
-  height: 10px;
+  width: 14px;
+  height: 12px;
   display: block;
   background-color: #0099ff;
   border-top-left-radius: 50%;
   border-bottom-left-radius: 50%;
   margin: 2px 0px;
+  position: relative;
 }
 .csseditor[data-theme=light] .svg-filter-editor .left .graph .graph-panel .filter-node .out {
   position: absolute;
-  width: 10px;
-  height: 10px;
-  right: -10px;
+  width: 14px;
+  height: 14px;
+  right: -14px;
   top: 50%;
   -webkit-transform: translateY(-50%);
           transform: translateY(-50%);
   background-color: #0099ff;
   border-top-right-radius: 50%;
   border-bottom-right-radius: 50%;
+}
+.csseditor[data-theme=light] .svg-filter-editor .left .graph .graph-panel .filter-node .in svg, .csseditor[data-theme=light] .svg-filter-editor .left .graph .graph-panel .filter-node .out svg {
+  pointer-events: none;
+  width: 14px;
+  height: 24px;
+  position: absolute;
+  top: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+}
+.csseditor[data-theme=light] .svg-filter-editor .left .graph .graph-panel .filter-node .in svg path, .csseditor[data-theme=light] .svg-filter-editor .left .graph .graph-panel .filter-node .out svg path {
+  fill: white;
+}
+.csseditor[data-theme=light] .svg-filter-editor .left .graph .graph-panel .filter-node .in svg {
+  left: 6px;
+}
+.csseditor[data-theme=light] .svg-filter-editor .left .graph .graph-panel .filter-node .out svg {
+  left: 8px;
 }
 .csseditor[data-theme=light] .svg-filter-editor .left .graph .graph-panel .filter-node.selected {
   box-shadow: 0 0 0 2px #4b61ce;

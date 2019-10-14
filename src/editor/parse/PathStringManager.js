@@ -8,7 +8,7 @@ export default class PathStringManager {
 
     reset () {
         this.pathArray = []
-    }
+    } 
 
     getPointString (values) {
         return values.map(v => `${v.x} ${v.y}`).join(' ')

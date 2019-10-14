@@ -5,8 +5,6 @@ export class CompositeSVGFilter extends BaseSVGFilter {
   getDefaultObject() {
     return super.getDefaultObject({
       type: "Composite",
-      sourceIn: CompositeSVGFilter.spec.sourceIn.defaultValue,      
-      sourceIn2: CompositeSVGFilter.spec.sourceIn2.defaultValue,      
       operator: CompositeSVGFilter.spec.operator.defaultValue,
       k1: CompositeSVGFilter.spec.k1.defaultValue,
       k2: CompositeSVGFilter.spec.k2.defaultValue,
@@ -15,8 +13,10 @@ export class CompositeSVGFilter extends BaseSVGFilter {
     });
   }
 
+  getInCount() { return 2 }  
+
   toString() {
-    var { sourceIn, sourceIn2, operator, k1, k2, k3, k4 } = this.json; 
+    var { operator, k1, k2, k3, k4 } = this.json; 
 
     var kNumbers = '' 
 
@@ -24,24 +24,12 @@ export class CompositeSVGFilter extends BaseSVGFilter {
       kNumbers = ` k1="${k1}" k2="${k2}" k3="${k3}" k4="${k4}" `
     }
 
-    return `<feComposite in="${sourceIn}" in2="${sourceIn2}"  operator="${operator}" ${kNumbers}  ${this.getDefaultAttribute()} />`;
+    return `<feComposite operator="${operator}" ${kNumbers}  ${this.getDefaultAttribute()} />`;
   }
 }
 
 
-CompositeSVGFilter.spec = {
-  sourceIn: {
-    title: "in",
-    inputType: "select",
-    options: resultGenerator,
-    defaultValue: "SourceGraphic"
-  },  
-  sourceIn2: {
-    title: "in2",
-    inputType: "select",
-    options: resultGenerator,
-    defaultValue: "SourceGraphic"
-  },    
+CompositeSVGFilter.spec = {  
   operator: {
     title: "operator",
     inputType: "select",
@@ -81,10 +69,6 @@ CompositeSVGFilter.spec = {
     max: 1,
     step: 0.01,
     defaultValue: Length.number(0)
-  },      
-  result: {
-    title: 'result',
-    inputType: 'text'
   }
 };
 

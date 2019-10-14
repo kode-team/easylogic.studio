@@ -6,17 +6,17 @@ export class OffsetSVGFilter extends BaseSVGFilter {
   getDefaultObject() {
     return super.getDefaultObject({
       type: "Offset",
-      sourceIn: OffsetSVGFilter.spec.sourceIn.defaultValue,      
       dx: OffsetSVGFilter.spec.dx.defaultValue,
       dy: OffsetSVGFilter.spec.dy.defaultValue
     });
   }
 
+  getInCount() { return 1 }    
+
   toString() {
-    var { sourceIn, dx, dy } = this.json; 
+    var {dx, dy } = this.json; 
     return /*html*/`<feOffset 
       ${OBJECT_TO_PROPERTY({
-        in: sourceIn,
         dx, dy 
       })}  ${this.getDefaultAttribute()} />`;
   }
@@ -24,12 +24,6 @@ export class OffsetSVGFilter extends BaseSVGFilter {
 
 
 OffsetSVGFilter.spec = {
-  sourceIn: {
-    title: "in",
-    inputType: "select",
-    options: resultGenerator,
-    defaultValue: "SourceGraphic"
-  },  
   dx: {
     title: "dx",
     inputType: "number-range",
@@ -45,9 +39,5 @@ OffsetSVGFilter.spec = {
     max: 1000,
     step: 1,
     defaultValue: Length.number(0)
-  },    
-  result: {
-    title: 'result',
-    inputType: 'text'
   }
 };

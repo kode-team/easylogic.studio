@@ -7,20 +7,18 @@ export class SpecularLightingSVGFilter extends BaseSVGFilter {
   getDefaultObject() {
     return super.getDefaultObject({
       type: "SpecularLighting",
-      sourceIn: SpecularLightingSVGFilter.spec.sourceIn.defaultValue,      
       surfaceScale: SpecularLightingSVGFilter.spec.surfaceScale.defaultValue,      
       lightingColor: SpecularLightingSVGFilter.spec.lightingColor.defaultValue,      
       specularConstant: SpecularLightingSVGFilter.spec.specularConstant.defaultValue,      
       specularExponent: SpecularLightingSVGFilter.spec.specularExponent.defaultValue
     });
   }
-
+  getInCount() { return 1 }  
 
   toString() {
-    var { sourceIn, surfaceScale, specularConstant, specularExponent, lightingColor } = this.json; 
+    var { surfaceScale, specularConstant, specularExponent, lightingColor } = this.json; 
 
     return /*html*/`<feSpecularLighting ${OBJECT_TO_PROPERTY({
-      in: sourceIn,
       surfaceScale,
       specularConstant, 
       specularExponent,
@@ -32,12 +30,6 @@ export class SpecularLightingSVGFilter extends BaseSVGFilter {
 }
 
 SpecularLightingSVGFilter.spec = {
-  sourceIn: {
-    title: "in",
-    inputType: "select",
-    options: resultGenerator,
-    defaultValue: "SourceGraphic"
-  },
   surfaceScale: {
     title: "surfaceScale",
     inputType: "number-range",
@@ -67,10 +59,6 @@ SpecularLightingSVGFilter.spec = {
     title: "Lighting Color",
     inputType: "color",
     defaultValue: 'rgba(0, 0, 0, 1)'
-  },   
-  result: {
-    title: 'result',
-    inputType: 'text'
   }
 };
 

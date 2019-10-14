@@ -1,9 +1,6 @@
 import { resultGenerator, BaseSVGFilter } from "./BaseSVGFilter";
 import { Length } from "../../unit/Length";
-
-const FLOOD_FILTER_ATTRIBUTE = [
-  'x', 'y', 'width', 'height'
-]
+import { OBJECT_TO_PROPERTY } from "../../../util/functions/func";
 
 export class FloodSVGFilter extends BaseSVGFilter {
   getDefaultObject() {
@@ -18,12 +15,6 @@ export class FloodSVGFilter extends BaseSVGFilter {
     });
   }
 
-  getDefaultAttribute () {
-    return FLOOD_FILTER_ATTRIBUTE.map(key => {
-      return `${key}="${this.json[key]}"`
-    }).join(' ')
-  }  
-
   convert (json) {
 
     json.x = Length.parse(json.x);
@@ -36,9 +27,11 @@ export class FloodSVGFilter extends BaseSVGFilter {
 
   toString() {
 
-    const {opacity, color} = this.json;
+    const {opacity, color, x, y, width, height} = this.json;
 
-    return `<feFlood flood-opacity="${opacity}" flood-color="${color}" ${this.getDefaultAttribute()} />`;
+    return `<feFlood ${OBJECT_TO_PROPERTY({
+      x, y, width, height
+    })} flood-opacity="${opacity}" flood-color="${color}" ${this.getDefaultAttribute()} />`;
   }
 }
 
@@ -89,10 +82,6 @@ FloodSVGFilter.spec = {
     title: "color",
     inputType: "color",
     defaultValue: 'rgba(0, 0, 0, 1)'
-  },  
-  result: {
-    title: 'result',
-    inputType: 'text'
   }
 };
 

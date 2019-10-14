@@ -5,13 +5,14 @@ export class ComponentTransferSVGFilter extends BaseSVGFilter {
   getDefaultObject() {
     return super.getDefaultObject({
       type: "ComponentTransfer",
-      sourceIn: ComponentTransferSVGFilter.spec.sourceIn.defaultValue,      
       r: ComponentTransferSVGFilter.spec.r.defaultValue,
       g: ComponentTransferSVGFilter.spec.g.defaultValue,
       b: ComponentTransferSVGFilter.spec.b.defaultValue,
       a: ComponentTransferSVGFilter.spec.a.defaultValue,
     });
   }
+
+  getInCount() { return 1 }  
 
   parse (value) {
     var [type, ...values] = value.split(' ')
@@ -30,14 +31,14 @@ export class ComponentTransferSVGFilter extends BaseSVGFilter {
 }
 
   toString() {
-    var { sourceIn, r, g, b, a } = this.json;
+    var { r, g, b, a } = this.json;
     
     r = this.parse(r);
     g = this.parse(g);
     b = this.parse(b);
     a = this.parse(a);
 
-    return /*html*/`<feComponentTransfer in="${sourceIn}" ${this.getDefaultAttribute()} >
+    return /*html*/`<feComponentTransfer ${this.getDefaultAttribute()} >
       ${r && `<feFuncR ${OBJECT_TO_PROPERTY(r)} />`}
       ${g && `<feFuncG ${OBJECT_TO_PROPERTY(g)} />`}
       ${b && `<feFuncB ${OBJECT_TO_PROPERTY(b)} />`}
@@ -48,12 +49,6 @@ export class ComponentTransferSVGFilter extends BaseSVGFilter {
 
 
 ComponentTransferSVGFilter.spec = {
-  sourceIn: {
-    title: "in",
-    inputType: "select",
-    options: resultGenerator,
-    defaultValue: "SourceGraphic"
-  },  
   r: {
     title: "R",
     inputType: "FuncFilter",
@@ -73,10 +68,6 @@ ComponentTransferSVGFilter.spec = {
     title: "A",
     inputType: "FuncFilter",
     defaultValue: "identity"
-  },        
-  result: {
-    title: 'result',
-    inputType: 'text'
   }
 };
 

@@ -5,27 +5,22 @@ export class ColorMatrixSVGFilter extends BaseSVGFilter {
     return super.getDefaultObject({
       type: "ColorMatrix",
       filterType: ColorMatrixSVGFilter.spec.filterType.defaultValue,
-      sourceIn: ColorMatrixSVGFilter.spec.sourceIn.defaultValue,
       values: ColorMatrixSVGFilter.spec.values.defaultValue,
     });
   }
 
+
+  getInCount() { return 1 }
   toString() {
-    var { sourceIn, filterType, values } = this.json; 
+    var { filterType, values } = this.json; 
 
     var valueString = values.join(' ') 
 
-    return `<feColorMatrix in="${sourceIn}" type="${filterType}" values="${valueString}"  ${this.getDefaultAttribute()} />`;
+    return /*html*/`<feColorMatrix type="${filterType}" values="${valueString}"  ${this.getDefaultAttribute()} />`;
   }
 }
 
 ColorMatrixSVGFilter.spec = {
-  sourceIn: {
-    title: "in",
-    inputType: "select",
-    options: resultGenerator,
-    defaultValue: "SourceGraphic"
-  },
   filterType: {
     title: "type",
     inputType: "select",
@@ -42,10 +37,6 @@ ColorMatrixSVGFilter.spec = {
       0, 0, 1, 0, 0,
       0, 0, 0, 1, 0
     ]
-  },
-  result: {
-    title: 'result',
-    inputType: 'text'
   }
 };
 
