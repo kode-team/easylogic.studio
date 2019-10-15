@@ -12,13 +12,30 @@ export class DistanceLightSVGFilter extends BaseSVGFilter {
     });
   }
 
+  isLight() {
+    return true; 
+  }
+
+
+  // toString() {
+  //   var { azimuth, elevation } = this.json; 
+
+  //   return /*html*/`<feDistanceLight ${OBJECT_TO_PROPERTY({
+  //     azimuth, elevation
+  //   })}  ${this.getDefaultAttribute()} />`;
+  // }
+
 
   toString() {
+    return '';
+  }
+
+  toLightString() {
     var { azimuth, elevation } = this.json; 
 
     return /*html*/`<feDistanceLight ${OBJECT_TO_PROPERTY({
       azimuth, elevation
-    })}  ${this.getDefaultAttribute()} />`;
+    })} />`;
   }
 }
 

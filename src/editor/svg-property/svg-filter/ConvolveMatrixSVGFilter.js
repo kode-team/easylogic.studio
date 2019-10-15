@@ -1,4 +1,4 @@
-import { resultGenerator, BaseSVGFilter } from "./BaseSVGFilter";
+import { BaseSVGFilter } from "./BaseSVGFilter";
 
 
 export class ConvolveMatrixSVGFilter extends BaseSVGFilter {
@@ -17,7 +17,7 @@ export class ConvolveMatrixSVGFilter extends BaseSVGFilter {
 
     var valueString = kernelMatrix.join(' ')
 
-    return `<feConvolveMatrix kernelMatrix="${valueString}"  ${this.getDefaultAttribute()} />`;
+    return /*html*/`<feConvolveMatrix kernelMatrix="${valueString}"  ${this.getDefaultAttribute()} />`;
   }
 }
 
@@ -32,10 +32,6 @@ ConvolveMatrixSVGFilter.spec = {
       0, 1, 0,
       0, 0, 1
     ]
-  },
-  result: {
-    title: 'result',
-    inputType: 'text'
   }
 };
 

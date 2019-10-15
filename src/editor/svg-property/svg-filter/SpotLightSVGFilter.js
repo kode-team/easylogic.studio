@@ -19,13 +19,27 @@ export class SpotLightSVGFilter extends BaseSVGFilter {
   }
 
 
-  toString() {
+  isLight() {
+    return true; 
+  }
+
+  // toString() {
+  //   var { x, y, z, pointsAtX, pointsAtY, pointsAtZ, specularExponent, limitingConeAngle } = this.json; 
+
+  //   return /*html*/`<feSpotLight ${OBJECT_TO_PROPERTY({
+  //     x, y, z, pointsAtX, pointsAtY, pointsAtZ, specularExponent, limitingConeAngle
+  //   })}  ${this.getDefaultAttribute()} />`;
+  // }
+
+  toString() { }
+
+  toLightString() {
     var { x, y, z, pointsAtX, pointsAtY, pointsAtZ, specularExponent, limitingConeAngle } = this.json; 
 
     return /*html*/`<feSpotLight ${OBJECT_TO_PROPERTY({
       x, y, z, pointsAtX, pointsAtY, pointsAtZ, specularExponent, limitingConeAngle
-    })}  ${this.getDefaultAttribute()} />`;
-  }
+    })} />`;
+  }  
 }
 
 SpotLightSVGFilter.spec = {

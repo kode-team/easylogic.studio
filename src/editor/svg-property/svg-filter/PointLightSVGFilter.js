@@ -13,13 +13,30 @@ export class PointLightSVGFilter extends BaseSVGFilter {
     });
   }
 
+  isLight() {
+    return true; 
+  }
+
+
+  // toString() {
+  //   var { x, y, z } = this.json; 
+
+  //   return /*html*/`<fePointLight ${OBJECT_TO_PROPERTY({
+  //     x, y, z
+  //   })}  ${this.getDefaultAttribute()} />`;
+  // }
+
 
   toString() {
+    return '';
+  }
+
+  toLightString() {
     var { x, y, z } = this.json; 
 
     return /*html*/`<fePointLight ${OBJECT_TO_PROPERTY({
       x, y, z
-    })}  ${this.getDefaultAttribute()} />`;
+    })} />`;
   }
 }
 

@@ -42,8 +42,10 @@ import FillSingleEditor from "./FillSingleEditor";
 import FillEditor from "./FillEditor";
 import SVGFilterSelectEditor from "./SVGFilterSelectEditor";
 import FuncFilterEditor from "./FuncFilterEditor";
+import ColorMatrixEditor from "./ColorMatrixEditor";
 
 export default {
+    ColorMatrixEditor,
     FuncFilterEditor,
     SVGFilterSelectEditor,
     FillEditor,

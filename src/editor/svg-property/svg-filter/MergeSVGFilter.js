@@ -1,4 +1,4 @@
-import { resultGenerator, BaseSVGFilter } from "./BaseSVGFilter";
+import { BaseSVGFilter } from "./BaseSVGFilter";
 
 export class MergeSVGFilter extends BaseSVGFilter {
   getDefaultObject() {
@@ -9,6 +9,16 @@ export class MergeSVGFilter extends BaseSVGFilter {
 
   getInCount() { return 3 }  
 
+
+  getDefaultAttribute () {
+    var list = [] 
+
+    if (this.json.connected.length) {
+      list.push(`result="${this.json.id}result"`)
+    }
+
+    return list.join(' ');
+  }  
 
   toString() {
     var { in: inList } = this.json; 

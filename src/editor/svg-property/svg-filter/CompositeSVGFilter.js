@@ -1,4 +1,4 @@
-import { resultGenerator, BaseSVGFilter } from "./BaseSVGFilter";
+import {BaseSVGFilter } from "./BaseSVGFilter";
 import { Length } from "../../unit/Length";
 
 export class CompositeSVGFilter extends BaseSVGFilter {
@@ -25,6 +25,11 @@ export class CompositeSVGFilter extends BaseSVGFilter {
     }
 
     return `<feComposite operator="${operator}" ${kNumbers}  ${this.getDefaultAttribute()} />`;
+  }
+
+
+  hasInIndex () {
+    return true; 
   }
 }
 

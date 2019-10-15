@@ -23,13 +23,10 @@ import { BackgroundImageSVGFilter } from "./svg-filter/BackgroundImageSVGFilter"
 import { BackgroundAlphaSVGFilter } from "./svg-filter/BackgroundAlphaSVGFilter";
 import { FillPaintSVGFilter } from "./svg-filter/FillPaintSVGFilter";
 import { StrokePaintSVGFilter } from "./svg-filter/StrokePaintSVGFilter";
-
-
-export const resultGenerator = (list) => {
-  var reference = list.filter(it => it.result).map(it => it.result).join(',')
-
-  return `${reference},-,SourceGraphic,SourceAlpha,BackgroundImage,BackgroundAlpha,FillPaint,StrokePaint`
-}
+import { DropShadowSVGFilter } from "./svg-filter/DropShadowSVGFilter";
+import { SaturateSVGFilter } from "./svg-filter/SaturateSVGFilter";
+import { HueRotateSVGFilter } from "./svg-filter/HueRotateSVGFilter";
+import { LuminanceAlphaSVGFilter } from "./svg-filter/LuminanceAlphaSVGFilter";
 
 const SVG_FILTER_COMMON_ATTRIBUTES = [
   'result'
@@ -67,6 +64,10 @@ export class SVGFilter extends Property {
 
 
 export const SVGFilterClassName = {
+  Saturate: SaturateSVGFilter,
+  HueRotate: HueRotateSVGFilter,
+  LuminanceAlpha: LuminanceAlphaSVGFilter,
+  DropShadow: DropShadowSVGFilter,
   SourceGraphic: SourceGraphicSVGFilter,
   SourceAlpha: SourceAlphaSVGFilter,
   BackgroundImage: BackgroundImageSVGFilter,
@@ -94,6 +95,10 @@ export const SVGFilterClassName = {
 };
 
 export const SVGFilterClass = {
+  SaturateSVGFilter,
+  HueRotateSVGFilter,
+  LuminanceAlphaSVGFilter,  
+  DropShadowSVGFilter,
   SourceAlphaSVGFilter,
   SourceGraphicSVGFilter,
   BackgroundImageSVGFilter,

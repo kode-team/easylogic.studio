@@ -39,8 +39,19 @@ import { OffsetSVGFilter } from "../../../editor/svg-property/svg-filter/OffsetS
 import { Length } from "../../../editor/unit/Length";
 import Dom from "../../../util/Dom";
 import PathStringManager from "../../../editor/parse/PathStringManager";
+import { DropShadowSVGFilter } from "../../../editor/svg-property/svg-filter/DropShadowSVGFilter";
+import { SaturateSVGFilter } from "../../../editor/svg-property/svg-filter/SaturateSVGFilter";
+import { HueRotateSVGFilter } from "../../../editor/svg-property/svg-filter/HueRotateSVGFilter";
+import { LuminanceAlphaSVGFilter } from "../../../editor/svg-property/svg-filter/LuminanceAlphaSVGFilter";
+import ColorMatrixEditor from "./ColorMatrixEditor";
+
+
 
 var specList = {
+  DropShadow: DropShadowSVGFilter.spec,
+  Saturate: SaturateSVGFilter.spec,
+  HueRotate: HueRotateSVGFilter.spec,
+  LuminanceAlpha: LuminanceAlphaSVGFilter.spec,  
   Offset: OffsetSVGFilter.spec,
   ComponentTransfer: ComponentTransferSVGFilter.spec,
   SpecularLighting: SpecularLightingSVGFilter.spec,
@@ -61,10 +72,56 @@ var specList = {
   ConvolveMatrix: ConvolveMatrixSVGFilter.spec
 }; 
 
+const makeFilterSelect = () => {
+  return /*html*/`
+  <div class='filter-item-list' ref="$filterSelect">
+    <div class='group' label='GRAPHIC REFERENCES'>
+      <div class='item' value='SourceGraphic'>Source Graphic</div>
+      <div class='item'  value='SourceAlpha'>Source Alpha</div>
+      <div class='item'  value='BackgroundImage'>Background Image</div>
+      <div class='item'  value='BackgroundAlpha'>Background Alpha</div>
+      <div class='item'  value='FillPaint'>Fill Paint</div>
+      <div class='item'  value='StrokePaint'>Stroke Paint</div>
+    </div>
+    <div class='group' label="SOURCES">
+      <div class='item'  value='Flood'>Flood</div>
+      <div class='item'  value='Turbulence'>Turbulence</div>
+      <div class='item'  value='Image'>Image</div>
+    </div>
+    <div class='group' label='MODIFIER'>
+      <div class='item'  value="ColorMatrix">Color Matrix</div>
+      <div class='item'  value="Saturate">Saturate</div>
+      <div class='item'  value="HueRotate">Hue Rotate</div>
+      <div class='item'  value="LuminanceAlpha">Luminance Alpha</div>
+      <div class='item'  value="DropShadow">Drop Shadow</div>
+      <div class='item'  value="Morphology">Morphology</div>
+      <div class='item'  value="ConvolveMatrix">Convolve Matrix</div>
+      <div class='item'  value="Offset">Offset</div>
+      <div class='item'  value="GaussianBlur">Gaussian Blur</div>
+      <div class='item'  value="Tile">Tile</div>
+    </div>
+    <div class='group' label="LIGHTING">
+      <div class='item'  value="SpecularLighting">Specular Lighting</div>
+      <div class='item'  value="DiffuseLighting">Diffuse Lighting</div>
+      <div class='item'  value="PointLight">Point Light</div>
+      <div class='item'  value="SpotLight">Spot Light</div>
+      <div class='item'  value="DistanceLight">Distance Light</div>
+    </div>
+    <div class='group' label="COMBINERS">
+      <div class='item'  value="Blend">Blend</div>
+      <div class='item'  value="Composite">Composite</div>
+      <div class='item'  value="Merge">Merge</div>
+      <div class='item'  value="DisplacementMap">Displacement Map</div>
+    </div>
+  </div>
+  `
+}
+
 export default class SVGFilterEditor extends UIElement {
 
   components() {
     return {
+      ColorMatrixEditor,
       InputArrayEditor,
       NumberRangeEditor,
       RangeEditor,
@@ -90,50 +147,11 @@ export default class SVGFilterEditor extends UIElement {
       <div class='svg-filter-editor filter-list'>
         <div class='left'>
           <div class='label' >
-              <label>${this.props.title || ''}</label>
-              <div class='tools'>
-                <select ref="$filterSelect">
-                  <optgroup label='GRAPHIC REFERENCES'>
-                    <option value='SourceGraphic'>Source Graphic</option>
-                    <option value='SourceAlpha'>Source Alpha</option>
-                    <option value='BackgroundImage'>Background Image</option>
-                    <option value='BackgroundAlpha'>Background Alpha</option>
-                    <option value='FillPaint'>Fill Paint</option>
-                    <option value='StrokePaint'>Stroke Paint</option>
-                  </optgroup>
-                  <optgroup label="SOURCES">
-                    <option value='Flood'>Flood</option>
-                    <option value='Turbulence'>Turbulence</option>
-                    <option value='Image'>Image</option>
-                  </optgroup>
-                  <optgroup label='MODIFIER'>
-                    <option value="ColorMatrix">Color Matrix</option>
-                    <option value="Morphology">Morphology</option>
-                    <option value="ConvolveMatrix">Convolve Matrix</option>
-                    <option value="Offset">Offset</option>
-                    <option value="GaussianBlur">Gaussian Blur</option>
-                    <option value="Tile">Tile</option>
-                  </optgroup>
-                  <optgroup label="LIGHTING">
-                    <option value="SpecularLighting">Specular Lighting</option>
-                    <option value="DiffuseLighting">Diffuse Lighting</option>
-                    <option value="PointLight">Point Light</option>
-                    <option value="SpotLight">Spot Light</option>
-                    <option value="DistanceLight">Distance Light</option>
-                  </optgroup>
-                  <optgroup label="COMBINERS">
-                    <option value="Blend">Blend</option>
-                    <option value="Composite">Composite</option>
-                    <option value="Merge">Merge</option>
-                    <option value="DisplacementMap">Displacement Map</option>
-                  </optgroup>
-                </select>
-                <button type="button" ref="$add" title="add Filter">${icon.add} ${this.props.title ? '' : 'Add'}</button>
-              </div>
+              ${makeFilterSelect()}
           </div>
           <div class='graph'>
+            <div class='drag-line-panel' ref='$dragLinePanel'></div>          
             <div class='connected-line-panel' ref='$connectedLinePanel'></div>
-            <div class='drag-line-panel' ref='$dragLinePanel'></div>
             <div class='graph-panel' ref='$graphPanel'></div>
             <div class='select-point-panel' ref='$selectPointPanel'></div>            
           </div>
@@ -153,13 +171,28 @@ export default class SVGFilterEditor extends UIElement {
     var objectId = `${filter.type}${key}${this.state.selectedIndex}${Date.now()}`
 
 
-    if (s.inputType === 'input-array') {
+    if (s.inputType === 'color-matrix') {
+      return /*html*/`
+        <div>
+          <ColorMatrixEditor 
+            ref='$colorMatrix${objectId}' 
+            label="${s.title}"
+            key="${key}"       
+            column='${s.column}' 
+            values='${filter[key].join(' ')}' 
+            onchange="changeRangeEditor"
+          />
+        </div>
+        `
+    } else if (s.inputType === 'input-array') {
       return /*html*/`
         <div>
           <InputArrayEditor 
             ref='$inputArray${objectId}' 
             label="${s.title}"
             key="${key}"       
+            column-label="R,G,B,A,M",
+            row-label="R,G,B,A",
             column='${s.column}' 
             values='${filter[key].join(' ')}' 
             onchange="changeRangeEditor"
@@ -295,6 +328,19 @@ export default class SVGFilterEditor extends UIElement {
   }
 
   modifyFilter () {
+
+    this.state.filters.forEach(f => {
+      if (f.isLight() && f.connected.length) {
+        f.connected.forEach(c => {
+          this.state.filters.filter(s => s.id === c.id).forEach(lightManager => {
+            lightManager.reset({
+              lightInfo: f.toLightString()
+            })
+          })
+        })
+      }
+    })
+
     this.parent.trigger(this.props.onchange, this.props.key, this.state.filters)
   }
 
@@ -303,8 +349,8 @@ export default class SVGFilterEditor extends UIElement {
   }
 
 
-  [CLICK("$add")]() {
-    var filterType = this.refs.$filterSelect.value;
+  [CLICK("$filterSelect .item[value]")](e) {
+    var filterType = e.$delegateTarget.attr('value');
 
     this.state.filters.push(this.makeFilter(filterType))
     this.state.selectedIndex = this.state.filters.length - 1; 
@@ -316,13 +362,7 @@ export default class SVGFilterEditor extends UIElement {
   }
 
   [CLICK("$filterList .filter-menu .del")](e) {
-    this.state.filters.splice(this.state.selectedIndex, 1);
-    this.state.selectedIndex = -1; 
-    this.state.selectedFilter = null; 
-
-    this.refresh();
-
-    this.modifyFilter()
+    this.removeFilter(this.state.selectedFilter.id);
   }
 
   [LOAD('$graphPanel')] () {
@@ -437,12 +477,29 @@ export default class SVGFilterEditor extends UIElement {
     return /*html*/`
       <svg>
         ${this.state.filters.map(it => {
-          return it.connected.map(({path}) => {
-            return /*html*/`<path class='connected-line' d="${this.makeConnectedPath(path)}" />`
+          return it.connected.map(({id, path}) => {
+            return /*html*/`
+              <path class='connected-line' d="${this.makeConnectedPath(path)}" />
+              <circle data-target-id='${id}' data-source-id="${it.id}" class='connected-remove-circle' cx="${(path[0].x + path[1].x) / 2 }" cy="${(path[0].y + path[1].y) / 2}" />
+            `
           }).join('');
         }).join('')}
       </svg>
     `
+  }
+
+  [CLICK('$connectedLinePanel .connected-remove-circle')] (e) {
+    var  [tid, sid] = e.$delegateTarget.attrs('data-target-id', 'data-source-id');
+
+    var filters  = this.state.filters;
+    filters.forEach(it => {
+      it.connected = it.connected.filter(c => c.id != tid);
+      it.in = it.in.filter(c => c.id != sid);
+    })
+
+    this.refresh();
+
+    this.modifyFilter();    
   }
 
   getCenterXY ($target) {
@@ -476,11 +533,18 @@ export default class SVGFilterEditor extends UIElement {
 
           var targetFilter = this.state.filters[+$targetNode.attr('data-index')]
           if (targetFilter) {
-            targetFilter.setIn(+$target.attr('data-index'), filter);
-            filter.setConnected(targetFilter, [
-              {x: this.startXY.x, y: this.startXY.y },
-              {x: center.x, y: center.y }
-            ])
+
+            if (!targetFilter.hasLight() && filter.isLight()) {
+              // light 계열은 lighting 에만 갈 수 있음.  
+            } else {
+
+              targetFilter.setIn(+$target.attr('data-index'), filter);
+              filter.setConnected(targetFilter, [
+                {x: this.startXY.x, y: this.startXY.y },
+                {x: center.x, y: center.y }
+              ])
+            }
+
           }
         }
       } else if (this.pointType === 'in') {
@@ -489,11 +553,16 @@ export default class SVGFilterEditor extends UIElement {
           var targetFilter = this.state.filters[+$targetNode.attr('data-index')]
           if (targetFilter) {
 
-            filter.setIn(this.pointIndex, targetFilter);
-            targetFilter.setConnected(filter, [
-              {x: center.x, y: center.y}, 
-              {x: this.startXY.x, y: this.startXY.y }
-            ])                      
+            if (filter.hasLight() && !targetFilter.isLight()) {
+              // lighting  는 light 와  연결된다. 
+            } else {
+              filter.setIn(this.pointIndex, targetFilter);
+              targetFilter.setConnected(filter, [
+                {x: center.x, y: center.y}, 
+                {x: this.startXY.x, y: this.startXY.y }
+              ])
+            }
+                      
           }
         }
       }
@@ -555,11 +624,12 @@ export default class SVGFilterEditor extends UIElement {
           <div class='preview'></div>
           <div class='in-list'>
             ${[...Array(it.getInCount())].map((itIn, inIndex) => {
-              return /*html*/`<div class='in' data-index='${inIndex}'>${icon.chevron_left}</div>`
+              return /*html*/`<div class='in' data-index='${inIndex}'></div>`
             }).join('')}
           </div>
           
           <div class='out' data-index="0">${icon.chevron_right}</div>
+          ${it.hasLight() ? /*html*/`<div class='light'  data-index="0"></div>` : ''}
         </div>
       `
     })
@@ -603,18 +673,15 @@ export default class SVGFilterEditor extends UIElement {
     this.modifyFilter();
   }
 
-  [CLICK('$graphPanel .filter-node .remove')] (e) {
-    var $target = e.$delegateTarget.closest('filter-node');
-    var index = +$target.attr('data-index');
-    var f = this.state.filters[index]
+  removeFilter (id) {
 
-    var filters  = this.state.filters.filter(it => it.id != f.id);
+    var filters  = this.state.filters.filter(it => it.id != id);
     filters.forEach(it => {
-      it.connected = it.connected.filter(c => c.id != f.id);
-      it.in = it.in.filter(c => c.id != f.id);
+      it.connected = it.connected.filter(c => c.id != id);
+      it.in = it.in.filter(c => c.id != id);
     })
 
-    if (this.state.selectedFilter === f) {
+    if (this.state.selectedFilter.id === id) {
       this.state.selectedFilter = null; 
       this.state.selectedIndex = -1; 
     }
@@ -624,5 +691,13 @@ export default class SVGFilterEditor extends UIElement {
     })
 
     this.modifyFilter();
+  }
+
+  [CLICK('$graphPanel .filter-node .remove')] (e) {
+    var $target = e.$delegateTarget.closest('filter-node');
+    var index = +$target.attr('data-index');
+    var f = this.state.filters[index]
+
+    this.removeFilter(f.id);
   }
 }

@@ -3,16 +3,6 @@ import { uuidShort } from "../../../util/functions/math";
 import { SVGFilterClassName } from "../SVGFilter";
 import { clone, isString } from "../../../util/functions/func";
 
-export const resultGenerator = (list) => {
-  var reference = list.filter(it => it.result).map(it => it.result).join(',')
-
-  return `${reference},-,SourceGraphic,SourceAlpha,BackgroundImage,BackgroundAlpha,FillPaint,StrokePaint`
-}
-
-const SVG_FILTER_COMMON_ATTRIBUTES = [
-  'result'
-]
-
 const  Primitive = 'SourceGraphic,SourceAlpha,BackgroundImage,BackgroundAlpha,FillPaint,StrokePaint'
 
 
@@ -24,6 +14,13 @@ export class BaseSVGFilter extends Property {
     return new FilterClass(obj);
   }  
 
+  hasLight () {
+    return false; 
+  }
+
+  isLight () {
+    return false; 
+  }
 
   isSource () {
     return false; 
@@ -46,7 +43,6 @@ export class BaseSVGFilter extends Property {
   }
 
   setIn  (index, target) {
-    console.log(index, target)
     this.json.in[index] = {id: target.id, type: target.type}; 
   }
 
@@ -98,10 +94,20 @@ export class BaseSVGFilter extends Property {
     return list.join(' ') + this.getSourceInAttribute();
   }
 
+  hasInIndex () {
+    return false; 
+  }
+
   getSourceInAttribute (inList) {
     return (inList || this.json.in).map((it, index) => {
 
-      var indexString = index === 0 ? '' : index + '' 
+      if (!it) return '';
+
+      var indexString = index === 0 ? '' : (index + 1) + '' 
+
+      if (!this.hasInIndex()) {
+        indexString = ''; 
+      }
 
       if (Primitive.includes(it.type)) {
         return `in${indexString}="${it.type}"`

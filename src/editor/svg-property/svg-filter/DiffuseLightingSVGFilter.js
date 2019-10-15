@@ -1,4 +1,4 @@
-import { resultGenerator, BaseSVGFilter } from "./BaseSVGFilter";
+import { BaseSVGFilter } from "./BaseSVGFilter";
 import { OBJECT_TO_PROPERTY } from "../../../util/functions/func";
 import { Length } from "../../unit/Length";
 
@@ -9,8 +9,22 @@ export class DiffuseLightingSVGFilter extends BaseSVGFilter {
       type: "DiffuseLighting",
       surfaceScale: DiffuseLightingSVGFilter.spec.surfaceScale.defaultValue,      
       lightingColor: DiffuseLightingSVGFilter.spec.lightingColor.defaultValue,      
-      diffuseConstant: DiffuseLightingSVGFilter.spec.diffuseConstant.defaultValue
+      diffuseConstant: DiffuseLightingSVGFilter.spec.diffuseConstant.defaultValue,
+      lightInfo: '' 
     });
+  }
+  toCloneObject () {
+    return {
+      ...super.toCloneObject(),
+      surfaceScale: this.json.surfaceScale,      
+      lightingColor: this.json.lightingColor,      
+      diffuseConstant: this.json.diffuseConstant,
+      lightInfo: this.json.lightInfo
+    }
+  }  
+
+  hasLight() {
+    return true; 
   }
 
 
@@ -25,7 +39,7 @@ export class DiffuseLightingSVGFilter extends BaseSVGFilter {
       diffuseConstant,
       'lighting-color': lightingColor
     })}  ${this.getDefaultAttribute()} >
-    
+      ${this.json.lightInfo}
     </feDiffuseLighting>`;
   }
 }

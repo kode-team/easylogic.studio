@@ -14,8 +14,28 @@ import { SpotLightSVGFilter } from "./SpotLightSVGFilter";
 import { PointLightSVGFilter } from "./PointLightSVGFilter";
 import { DistanceLightSVGFilter } from "./DistanceLightSVGFilter";
 import { ComponentTransferSVGFilter } from "./ComponentTransferSVGFilter";
+import { SaturateSVGFilter } from "./SaturateSVGFilter";
+import { LuminanceAlphaSVGFilter } from "./LuminanceAlphaSVGFilter";
+import { HueRotateSVGFilter } from "./HueRotateSVGFilter";
+import { DropShadowSVGFilter } from "./DropShadowSVGFilter";
+import { BackgroundAlphaSVGFilter } from "./BackgroundAlphaSVGFilter";
+import { BackgroundImageSVGFilter } from "./BackgroundImageSVGFilter";
+import { SourceGraphicSVGFilter } from "./SourceGraphicSVGFilter";
+import { SourceAlphaSVGFilter } from "./SourceAlphaSVGFilter";
+import { FillPaintSVGFilter } from "./FillPaintSVGFilter";
+import { StrokePaintSVGFilter } from "./StrokePaintSVGFilter";
 
 export default {
+    DropShadowSVGFilter,
+    BackgroundAlphaSVGFilter,
+    BackgroundImageSVGFilter,
+    SourceGraphicSVGFilter,
+    SourceAlphaSVGFilter,
+    FillPaintSVGFilter,
+    StrokePaintSVGFilter,
+    SaturateSVGFilter,
+    LuminanceAlphaSVGFilter,
+    HueRotateSVGFilter,
     ComponentTransferSVGFilter,
     SpecularLightingSVGFilter,
     SpotLightSVGFilter,

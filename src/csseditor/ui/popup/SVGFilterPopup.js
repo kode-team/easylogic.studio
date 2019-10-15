@@ -1,9 +1,10 @@
 import { EVENT } from "../../../util/UIElement";
-import { INPUT, LOAD, BIND } from "../../../util/Event";
+import { INPUT, LOAD, BIND, CLICK } from "../../../util/Event";
 import SVGFilterEditor from "../property-editor/SVGFilterEditor";
 import BasePopup from "./BasePopup";
 import { SVGFilter } from "../../../editor/svg-property/SVGFilter";
 import { isNotUndefined } from "../../../util/functions/func";
+import icon from "../icon/icon";
 
 export default class SVGFilterPopup extends BasePopup {
 
@@ -15,6 +16,16 @@ export default class SVGFilterPopup extends BasePopup {
     return {
       SVGFilterEditor
     }
+  }
+
+  getTools() {
+    return `<button type="button" ref='$fullscreen'>${icon.fullscreen}</button>`
+  }
+
+  [CLICK('$fullscreen')] () {
+    // 이전 정보 저장 
+    // 레이어 전ㄴ체 사이즈로 올림 
+    // 내부 editor 사이트 때문에 안될려나. 
   }
 
   initState() {

@@ -30,14 +30,42 @@
 
   .left {
     display: grid;
-    grid-template-rows: 30px 460px; 
+    grid-template-columns: 150px 1fr; 
+    grid-column-gap: 5px;
     height: 100%;
+
+    .filter-item-list {
+      height: 550px;
+      overflow: auto;
+      .group {
+        margin-bottom: 6px;
+
+        &:before {
+          content: attr(label);
+          display: block; 
+          color: $selected-color;
+          font-size: 11px;
+        }
+
+        .item {
+          padding-left: 10px;
+          font-size: 12px;          
+          cursor: pointer;
+          padding: 2px 10px;
+
+          &:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+          }
+        }
+      }
+    }
 
     .graph {
       overflow: auto; 
       box-sizing: border-box;
       border: 1px solid $selected-color;
       position: relative;
+      height: 540px;
 
       .connected-line-panel {
         width: 1000px;
@@ -45,7 +73,6 @@
         position: absolute;
         left:0px;
         top:0px;
-        pointer-events: none;
 
         svg {
           width: 100%;
@@ -54,7 +81,17 @@
           path {
             stroke: $selected-color;
             stroke-width: 2;
+            pointer-events: none;            
           }          
+
+          circle {
+            fill: $selected-color;
+            r: 6;
+            stroke: rgba($selected-color,  0.5);
+            stroke-width:4;
+            pointer-events: all;
+            cursor: pointer;
+          }
         }
       }
 
@@ -64,7 +101,7 @@
         position: absolute;
         left:0px;
         top:0px;
-        pointer-events: none;
+        // pointer-events: none;
 
         svg {
           width: 100%;
@@ -81,6 +118,7 @@
         width: 1000px;
         height: 1000px;
         position: relative;
+        pointer-events: none; 
 
         .filter-node {
           display: inline-block;
@@ -90,6 +128,19 @@
           width: 40px;
           height: 40px;
           background-color: white; 
+          border-radius: 10px;
+          pointer-events: all;
+
+          &[data-type='PointLight'],
+          &[data-type='SpotLight'],
+          &[data-type='DistanceLight'] {
+            .out {
+              background-color: rgb(248, 229, 121);
+              svg {
+                display: none; 
+              }
+            }
+          }
 
           > .label {
             position: absolute;
@@ -147,6 +198,19 @@
             border-bottom-left-radius: 50%;
             margin: 2px 0px;
             position: relative;
+
+            &:before {
+              content:  '';
+              position: absolute;
+              display: block;
+              width: 8px;
+              height: 8px;
+              background-color: rgba(white, 0.8);
+              border-radius: 100%;
+              top: 50%;
+              left:3px;
+              transform: translateY(-50%); 
+            }
           }
 
           .out {
@@ -159,7 +223,19 @@
             background-color: rgb(0, 153, 255); 
             border-top-right-radius: 50%;
             border-bottom-right-radius: 50%;
-          }     
+          }    
+          
+          .light {
+            position: absolute;            
+            width: 30px;
+            height: 15px;
+            left: 50%;
+            bottom: -15px;
+            transform: translateX(-50%);
+            background-color: rgb(248, 229, 121); 
+            border-bottom-left-radius: 100%;
+            border-bottom-right-radius: 100%;
+          }              
           
           .in,.out {
 
@@ -202,8 +278,6 @@
     height: 100%;
     overflow: auto; 
     box-sizing: border-box;
-    border-left: 1px solid $border-color;
-    padding: 0px 0px 0px 10px;
   }
 
   .filter-list {

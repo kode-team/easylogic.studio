@@ -1,4 +1,4 @@
-import { resultGenerator, BaseSVGFilter } from "./BaseSVGFilter";
+import { BaseSVGFilter } from "./BaseSVGFilter";
 import { OBJECT_TO_PROPERTY } from "../../../util/functions/func";
 import { Length } from "../../unit/Length";
 
@@ -10,9 +10,26 @@ export class SpecularLightingSVGFilter extends BaseSVGFilter {
       surfaceScale: SpecularLightingSVGFilter.spec.surfaceScale.defaultValue,      
       lightingColor: SpecularLightingSVGFilter.spec.lightingColor.defaultValue,      
       specularConstant: SpecularLightingSVGFilter.spec.specularConstant.defaultValue,      
-      specularExponent: SpecularLightingSVGFilter.spec.specularExponent.defaultValue
+      specularExponent: SpecularLightingSVGFilter.spec.specularExponent.defaultValue,
+      lightInfo: ''
     });
   }
+  
+  toCloneObject () {
+    return {
+      ...super.toCloneObject(),
+      surfaceScale: this.json.surfaceScale,      
+      lightingColor: this.json.lightingColor,      
+      specularConstant: this.json.specularConstant,
+      specularExponent: this.json.specularExponent,
+      lightInfo: ''
+    }
+  }
+
+  hasLight() {
+    return true; 
+  }
+
   getInCount() { return 1 }  
 
   toString() {
@@ -24,8 +41,12 @@ export class SpecularLightingSVGFilter extends BaseSVGFilter {
       specularExponent,
       'lighting-color': lightingColor
     })}  ${this.getDefaultAttribute()} >
-    
+      ${this.json.lightInfo}
     </feSpecularLighting>`;
+  }
+
+  getSourceInAttribute () {
+    return '';
   }
 }
 

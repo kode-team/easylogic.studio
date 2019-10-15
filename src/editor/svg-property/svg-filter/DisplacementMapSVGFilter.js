@@ -1,4 +1,4 @@
-import { resultGenerator, BaseSVGFilter } from "./BaseSVGFilter";
+import { BaseSVGFilter } from "./BaseSVGFilter";
 import { Length } from "../../unit/Length";
 
 
@@ -23,6 +23,11 @@ export class DisplacementMapSVGFilter extends BaseSVGFilter {
     var scaleOption = scale.value ? `scale="${scale}"` : '';  
 
     return `<feDisplacementMap ${scaleOption}  ${this.getDefaultAttribute()} />`;
+  }
+
+
+  hasInIndex () {
+    return true; 
   }
 }
 

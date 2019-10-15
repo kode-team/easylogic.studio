@@ -1,4 +1,4 @@
-import { resultGenerator, BaseSVGFilter } from "./BaseSVGFilter";
+import {BaseSVGFilter } from "./BaseSVGFilter";
 import { OBJECT_TO_PROPERTY } from "../../../util/functions/func";
 
 export class ComponentTransferSVGFilter extends BaseSVGFilter {

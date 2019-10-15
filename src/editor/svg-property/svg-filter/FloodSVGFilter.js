@@ -1,4 +1,4 @@
-import { resultGenerator, BaseSVGFilter } from "./BaseSVGFilter";
+import { BaseSVGFilter } from "./BaseSVGFilter";
 import { Length } from "../../unit/Length";
 import { OBJECT_TO_PROPERTY } from "../../../util/functions/func";
 

@@ -1,4 +1,4 @@
-import { resultGenerator, BaseSVGFilter } from "./BaseSVGFilter";
+import { BaseSVGFilter } from "./BaseSVGFilter";
 import { Length } from "../../unit/Length";
 
 export class MorphologySVGFilter extends BaseSVGFilter {
