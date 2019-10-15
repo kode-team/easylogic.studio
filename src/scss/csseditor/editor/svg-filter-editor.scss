@@ -2,7 +2,7 @@
 
   color: $font-color;
   display: grid;
-  grid-template-columns: 1fr 250px;
+  grid-template-columns: 150px 1fr 200px;
   grid-column-gap:10px;
   height: 100%;
 
@@ -60,6 +60,11 @@
       }
     }
 
+  }
+
+  .center {
+    position: relative;
+    overflow: auto;
     .graph {
       overflow: auto; 
       box-sizing: border-box;
@@ -86,11 +91,15 @@
 
           circle {
             fill: $selected-color;
-            r: 6;
+            r: 4;
             stroke: rgba($selected-color,  0.5);
-            stroke-width:4;
+            stroke-width:0;
             pointer-events: all;
             cursor: pointer;
+
+            &:hover {
+              stroke-width: 4;
+            }
           }
         }
       }
@@ -215,9 +224,9 @@
 
           .out {
             position: absolute;            
-            width: 14px;
-            height: 14px;
-            right: -14px;
+            width: 12px;
+            height: 12px;
+            right: -12px;
             top: 50%;
             transform: translateY(-50%);
             background-color: rgb(0, 153, 255); 
@@ -261,7 +270,7 @@
 
           .out {
             svg {
-              left: 8px;
+              left: 7px;
             }
           }
 

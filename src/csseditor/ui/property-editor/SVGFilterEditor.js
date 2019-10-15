@@ -149,6 +149,8 @@ export default class SVGFilterEditor extends UIElement {
           <div class='label' >
               ${makeFilterSelect()}
           </div>
+        </div>
+        <div  class='center'>
           <div class='graph'>
             <div class='drag-line-panel' ref='$dragLinePanel'></div>          
             <div class='connected-line-panel' ref='$connectedLinePanel'></div>
@@ -491,11 +493,20 @@ export default class SVGFilterEditor extends UIElement {
   [CLICK('$connectedLinePanel .connected-remove-circle')] (e) {
     var  [tid, sid] = e.$delegateTarget.attrs('data-target-id', 'data-source-id');
 
-    var filters  = this.state.filters;
-    filters.forEach(it => {
+    var filters = this.state.filters; 
+    filters.filter(it => it.id === sid).forEach(it => {
       it.connected = it.connected.filter(c => c.id != tid);
-      it.in = it.in.filter(c => c.id != sid);
-    })
+    });
+
+    filters.filter(it => it.id === tid).forEach(it => {
+      it.in = it.in.map(inObject => {
+        if (inObject.id ==  sid) {
+          return null; 
+        }
+
+        return inObject; 
+      })
+    });
 
     this.refresh();
 

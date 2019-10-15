@@ -18,6 +18,10 @@ export default class SVGFilterPopup extends BasePopup {
     }
   }
 
+  getClassName() {
+    return 'transparent'
+  }
+
   getTools() {
     return `<button type="button" ref='$fullscreen'>${icon.fullscreen}</button>`
   }
