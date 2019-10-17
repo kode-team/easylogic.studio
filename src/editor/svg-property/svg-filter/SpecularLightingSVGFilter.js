@@ -60,7 +60,7 @@ SpecularLightingSVGFilter.spec = {
     defaultValue: Length.number(1)
   },
   specularConstant: {
-    title: "specularConstant",
+    title: "Constant",
     inputType: "number-range",
     min: 0,
     max: 100,
@@ -68,7 +68,7 @@ SpecularLightingSVGFilter.spec = {
     defaultValue: Length.number(1)
   },  
   specularExponent: {
-    title: "specularExponent",
+    title: 'Exponent',
     inputType: "number-range",
     min: 0,
     max: 100,

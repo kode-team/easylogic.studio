@@ -1,11 +1,15 @@
-import { isFunction, clone, OBJECT_TO_CLASS } from "../../../util/functions/func";
+import { isFunction, clone, OBJECT_TO_CLASS, mapjoin } from "../../../util/functions/func";
 import icon from "../icon/icon";
 import {
   LOAD,
   CLICK,
   POINTERSTART,
   MOVE,
-  END
+  END,
+  DRAGOVER,
+  PREVENT,
+  DROP,
+  DRAGSTART
 } from "../../../util/Event";
 import { editor } from "../../../editor/editor";
 import UIElement, { EVENT } from "../../../util/UIElement";
@@ -32,7 +36,7 @@ import { DiffuseLightingSVGFilter } from "../../../editor/svg-property/svg-filte
 import { SpecularLightingSVGFilter } from "../../../editor/svg-property/svg-filter/SpecularLightingSVGFilter";
 import { SpotLightSVGFilter } from "../../../editor/svg-property/svg-filter/SpotLightSVGFilter";
 import { PointLightSVGFilter } from "../../../editor/svg-property/svg-filter/PointLightSVGFilter";
-import { DistanceLightSVGFilter } from "../../../editor/svg-property/svg-filter/DistanceLightSVGFilter";
+import { DistantLightSVGFilter } from "../../../editor/svg-property/svg-filter/DistantLightSVGFilter";
 import { ComponentTransferSVGFilter } from "../../../editor/svg-property/svg-filter/ComponentTransferSVGFilter";
 import FuncFilterEditor from "./FuncFilterEditor";
 import { OffsetSVGFilter } from "../../../editor/svg-property/svg-filter/OffsetSVGFilter";
@@ -44,10 +48,12 @@ import { SaturateSVGFilter } from "../../../editor/svg-property/svg-filter/Satur
 import { HueRotateSVGFilter } from "../../../editor/svg-property/svg-filter/HueRotateSVGFilter";
 import { LuminanceAlphaSVGFilter } from "../../../editor/svg-property/svg-filter/LuminanceAlphaSVGFilter";
 import ColorMatrixEditor from "./ColorMatrixEditor";
+import { TileSVGFilter } from "../../../editor/svg-property/svg-filter/TileSVGFilter";
 
 
 
 var specList = {
+  Tile: TileSVGFilter.spec,
   DropShadow: DropShadowSVGFilter.spec,
   Saturate: SaturateSVGFilter.spec,
   HueRotate: HueRotateSVGFilter.spec,
@@ -57,7 +63,7 @@ var specList = {
   SpecularLighting: SpecularLightingSVGFilter.spec,
   SpotLight: SpotLightSVGFilter.spec,
   PointLight: PointLightSVGFilter.spec,
-  DistanceLight:DistanceLightSVGFilter.spec,  
+  DistantLight:DistantLightSVGFilter.spec,  
   DiffuseLighting: DiffuseLightingSVGFilter.spec,
   Blend: BlendSVGFilter.spec,
   RotaMatrix: RotaMatrixSVGFilter.spec,
@@ -72,47 +78,61 @@ var specList = {
   ConvolveMatrix: ConvolveMatrixSVGFilter.spec
 }; 
 
+const filterTypes = [
+  {label: 'GRAPHIC REFERENCES', items : [
+    {label: 'Source Graphic', value:"SourceGraphic"},
+    {label: 'Source Alpha', value:"SourceAlpha"},
+    {label: 'Background Image', value:"BackgroundImage"},
+    {label: 'Background Alpha', value:"BackgroundAlpha"},
+    {label: 'Fill Paint', value:"FillPaint"},                
+    {label: 'Stroke Paint', value:"StrokePaint"},
+  ]},
+  {label: 'SOURCES', items : [
+    {label: 'Flood', value:"Flood"},
+    {label: 'Turbulence', value:"Turbulence"},
+    {label: 'Image', value:"Image"}
+  ]},  
+  {label: 'MODIFIER', items : [
+    {label: 'Color Matrix', value:"ColorMatrix"},
+    {label: 'Saturate', value:"Saturate"},
+    {label: 'HueRotate', value:"HueRotate"},
+    {label: 'Luminance To Alpha', value:"LuminanceAlpha"},
+    {label: 'Drop Shadow', value:"DropShadow"},
+    {label: 'Morphology', value:"Morphology"},
+    {label: 'Convolve Matrix', value:"ConvolveMatrix"},
+    {label: 'Offset', value:"Offset"},
+    {label: 'Gaussian Blur', value:"GaussianBlur"},
+    {label: 'Tile', value:"Tile"}
+  ]},    
+  {label: 'LIGHTING', items : [
+    {label: 'Specular Lighting', value:"SpecularLighting"},
+    {label: 'Diffuse Lighting', value:"DiffuseLighting"},
+    {label: 'Point Light', value:"PointLight"},
+    {label: 'Spot Light', value:"SpotLight"},
+    {label: 'Distant Light', value:"DistantLight"}
+  ]},     
+  {label: 'COMBINERS', items : [
+    {label: 'Blend', value:"Blend"},
+    {label: 'Composite', value:"Composite"},
+    {label: 'Merge', value:"Merge"},
+    {label: 'DisplacementMap', value:"DisplacementMap"}
+  ]},        
+]
+
 const makeFilterSelect = () => {
   return /*html*/`
+
   <div class='filter-item-list' ref="$filterSelect">
-    <div class='group' label='GRAPHIC REFERENCES'>
-      <div class='item' value='SourceGraphic'>Source Graphic</div>
-      <div class='item'  value='SourceAlpha'>Source Alpha</div>
-      <div class='item'  value='BackgroundImage'>Background Image</div>
-      <div class='item'  value='BackgroundAlpha'>Background Alpha</div>
-      <div class='item'  value='FillPaint'>Fill Paint</div>
-      <div class='item'  value='StrokePaint'>Stroke Paint</div>
-    </div>
-    <div class='group' label="SOURCES">
-      <div class='item'  value='Flood'>Flood</div>
-      <div class='item'  value='Turbulence'>Turbulence</div>
-      <div class='item'  value='Image'>Image</div>
-    </div>
-    <div class='group' label='MODIFIER'>
-      <div class='item'  value="ColorMatrix">Color Matrix</div>
-      <div class='item'  value="Saturate">Saturate</div>
-      <div class='item'  value="HueRotate">Hue Rotate</div>
-      <div class='item'  value="LuminanceAlpha">Luminance Alpha</div>
-      <div class='item'  value="DropShadow">Drop Shadow</div>
-      <div class='item'  value="Morphology">Morphology</div>
-      <div class='item'  value="ConvolveMatrix">Convolve Matrix</div>
-      <div class='item'  value="Offset">Offset</div>
-      <div class='item'  value="GaussianBlur">Gaussian Blur</div>
-      <div class='item'  value="Tile">Tile</div>
-    </div>
-    <div class='group' label="LIGHTING">
-      <div class='item'  value="SpecularLighting">Specular Lighting</div>
-      <div class='item'  value="DiffuseLighting">Diffuse Lighting</div>
-      <div class='item'  value="PointLight">Point Light</div>
-      <div class='item'  value="SpotLight">Spot Light</div>
-      <div class='item'  value="DistanceLight">Distance Light</div>
-    </div>
-    <div class='group' label="COMBINERS">
-      <div class='item'  value="Blend">Blend</div>
-      <div class='item'  value="Composite">Composite</div>
-      <div class='item'  value="Merge">Merge</div>
-      <div class='item'  value="DisplacementMap">Displacement Map</div>
-    </div>
+
+    ${mapjoin(filterTypes, f => {
+      return /*html*/`
+        <div class='group' label="${f.label}">
+          ${mapjoin(f.items, i => {
+            return /*html*/ ` <div class='item' draggable="true" value="${i.value}">${i.label}</div>`
+          })}
+        </div>
+      `
+    })}
   </div>
   `
 }
@@ -154,14 +174,39 @@ export default class SVGFilterEditor extends UIElement {
           <div class='graph'>
             <div class='drag-line-panel' ref='$dragLinePanel'></div>          
             <div class='connected-line-panel' ref='$connectedLinePanel'></div>
-            <div class='graph-panel' ref='$graphPanel'></div>
-            <div class='select-point-panel' ref='$selectPointPanel'></div>            
+            <div class='graph-panel' ref='$graphPanel' droppable="true"></div>
           </div>
         </div>
         <div class='right'>
           <div class='filter-list' ref='$filterList'></div>
         </div>
       </div>`;
+  }
+
+  [DRAGSTART('$filterSelect .item')] (e) {
+    var filter = e.$delegateTarget.attr('value');
+
+    e.dataTransfer.setData('filter/type', filter);
+  }
+
+  [DRAGOVER('$graphPanel') + PREVENT] () {}
+  [DROP('$graphPanel') + PREVENT] (e) {
+
+    var offset  = {x: e.offsetX, y: e.offsetY  }
+
+    var filterType = e.dataTransfer.getData('filter/type')
+
+    this.makeFilterNode(filterType, { bound: offset })
+  }
+
+  makeFilterNode  (filterType, opt = {}) {
+    this.state.filters.push(this.makeFilter(filterType, opt))
+    this.state.selectedIndex = this.state.filters.length - 1; 
+    this.state.selectedFilter = this.state.filters[this.state.selectedIndex]; 
+
+    this.refresh();
+
+    this.modifyFilter()    
   }
 
   getSpec(filterType) {
@@ -354,13 +399,7 @@ export default class SVGFilterEditor extends UIElement {
   [CLICK("$filterSelect .item[value]")](e) {
     var filterType = e.$delegateTarget.attr('value');
 
-    this.state.filters.push(this.makeFilter(filterType))
-    this.state.selectedIndex = this.state.filters.length - 1; 
-    this.state.selectedFilter = this.state.filters[this.state.selectedIndex]; 
-
-    this.refresh();
-
-    this.modifyFilter()
+    this.makeFilterNode(filterType);
   }
 
   [CLICK("$filterList .filter-menu .del")](e) {

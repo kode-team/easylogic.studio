@@ -12,7 +12,7 @@ import { DiffuseLightingSVGFilter } from "./DiffuseLightingSVGFilter";
 import { SpecularLightingSVGFilter } from "./SpecularLightingSVGFilter";
 import { SpotLightSVGFilter } from "./SpotLightSVGFilter";
 import { PointLightSVGFilter } from "./PointLightSVGFilter";
-import { DistanceLightSVGFilter } from "./DistanceLightSVGFilter";
+import { DistantLightSVGFilter } from "./DistantLightSVGFilter";
 import { ComponentTransferSVGFilter } from "./ComponentTransferSVGFilter";
 import { SaturateSVGFilter } from "./SaturateSVGFilter";
 import { LuminanceAlphaSVGFilter } from "./LuminanceAlphaSVGFilter";
@@ -24,8 +24,10 @@ import { SourceGraphicSVGFilter } from "./SourceGraphicSVGFilter";
 import { SourceAlphaSVGFilter } from "./SourceAlphaSVGFilter";
 import { FillPaintSVGFilter } from "./FillPaintSVGFilter";
 import { StrokePaintSVGFilter } from "./StrokePaintSVGFilter";
+import { TileSVGFilter } from "./TileSVGFilter";
 
 export default {
+    TileSVGFilter,
     DropShadowSVGFilter,
     BackgroundAlphaSVGFilter,
     BackgroundImageSVGFilter,
@@ -40,7 +42,7 @@ export default {
     SpecularLightingSVGFilter,
     SpotLightSVGFilter,
     PointLightSVGFilter,
-    DistanceLightSVGFilter,
+    DistantLightSVGFilter,
     DiffuseLightingSVGFilter,
     BlendSVGFilter,
     FloodSVGFilter,

@@ -230,3 +230,7 @@ export function OBJECT_TO_CLASS (obj) {
 export function TAG_TO_STRING (str) {
     return str.replace(/\</g, '&lt;').replace(/\>/g, '&gt;') 
 }
+
+export function mapjoin(arr, callback, joinString = '') {
+    return arr.map(callback).join(joinString);
+}

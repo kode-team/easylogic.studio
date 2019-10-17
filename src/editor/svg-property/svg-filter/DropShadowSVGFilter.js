@@ -60,7 +60,7 @@ DropShadowSVGFilter.spec = {
     min: 0,
     max: 1,
     step: 0.01,
-    defaultValue: Length.number(0)
+    defaultValue: Length.number(1)
   },
 
   color: {

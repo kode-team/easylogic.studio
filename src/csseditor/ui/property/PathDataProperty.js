@@ -8,7 +8,7 @@ import { DEBOUNCE } from "../../../util/Event";
 export default class PathDataProperty extends BaseProperty {
 
   getTitle() {
-    return "Path Data";
+    return "Path";
   }
 
   getClassName() {

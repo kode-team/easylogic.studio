@@ -125,7 +125,7 @@ export class SVGImageResource extends ImageResource {
       return /*html*/`
   <pattern ${OBJECT_TO_PROPERTY({ id, patternUnits, width, height })} >
     <image xlink:href="${this.json.url}" ${OBJECT_TO_PROPERTY({
-      x: imageX, y: imageY, width: imageWidth, height: imageHeight
+      x: imageX, y: imageY, width: imageWidth, height: imageHeight, preserveAspectRatio: "none"
     })} />
   </pattern>
       `

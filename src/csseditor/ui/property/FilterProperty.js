@@ -9,6 +9,8 @@ import icon from "../icon/icon";
 
 
 var filterList = [
+  '',
+  '-',
   "blur",
   "grayscale",
   "hue-rotate",

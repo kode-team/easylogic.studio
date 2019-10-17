@@ -7333,7 +7333,6 @@ html, body {
   width: 1000px;
   height: 1000px;
   position: relative;
-  pointer-events: none;
 }
 .csseditor .svg-filter-editor .center .graph .graph-panel .filter-node {
   display: inline-block;
@@ -7345,11 +7344,12 @@ html, body {
   background-color: white;
   border-radius: 10px;
   pointer-events: all;
+  cursor: pointer;
 }
-.csseditor .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=PointLight] .out, .csseditor .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=SpotLight] .out, .csseditor .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=DistanceLight] .out {
+.csseditor .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=PointLight] .out, .csseditor .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=SpotLight] .out, .csseditor .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=DistantLight] .out {
   background-color: #f8e579;
 }
-.csseditor .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=PointLight] .out svg, .csseditor .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=SpotLight] .out svg, .csseditor .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=DistanceLight] .out svg {
+.csseditor .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=PointLight] .out svg, .csseditor .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=SpotLight] .out svg, .csseditor .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=DistantLight] .out svg {
   display: none;
 }
 .csseditor .svg-filter-editor .center .graph .graph-panel .filter-node > .label {
@@ -16179,7 +16179,6 @@ html, body {
   width: 1000px;
   height: 1000px;
   position: relative;
-  pointer-events: none;
 }
 .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node {
   display: inline-block;
@@ -16191,11 +16190,12 @@ html, body {
   background-color: white;
   border-radius: 10px;
   pointer-events: all;
+  cursor: pointer;
 }
-.csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=PointLight] .out, .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=SpotLight] .out, .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=DistanceLight] .out {
+.csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=PointLight] .out, .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=SpotLight] .out, .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=DistantLight] .out {
   background-color: #f8e579;
 }
-.csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=PointLight] .out svg, .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=SpotLight] .out svg, .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=DistanceLight] .out svg {
+.csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=PointLight] .out svg, .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=SpotLight] .out svg, .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=DistantLight] .out svg {
   display: none;
 }
 .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node > .label {

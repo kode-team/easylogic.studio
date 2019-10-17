@@ -10,7 +10,7 @@ import { ConvolveMatrixSVGFilter } from "./svg-filter/ConvolveMatrixSVGFilter";
 import { GaussianBlurSVGFilter } from "./svg-filter/GaussianBlurSVGFilter";
 import { FloodSVGFilter } from "./svg-filter/FloodSVGFilter";
 import { ComponentTransferSVGFilter } from "./svg-filter/ComponentTransferSVGFilter";
-import { DistanceLightSVGFilter } from "./svg-filter/DistanceLightSVGFilter";
+import { DistantLightSVGFilter } from "./svg-filter/DistantLightSVGFilter";
 import { PointLightSVGFilter } from "./svg-filter/PointLightSVGFilter";
 import { SpotLightSVGFilter } from "./svg-filter/SpotLightSVGFilter";
 import { DiffuseLightingSVGFilter } from "./svg-filter/DiffuseLightingSVGFilter";
@@ -27,6 +27,7 @@ import { DropShadowSVGFilter } from "./svg-filter/DropShadowSVGFilter";
 import { SaturateSVGFilter } from "./svg-filter/SaturateSVGFilter";
 import { HueRotateSVGFilter } from "./svg-filter/HueRotateSVGFilter";
 import { LuminanceAlphaSVGFilter } from "./svg-filter/LuminanceAlphaSVGFilter";
+import { TileSVGFilter } from "./svg-filter/TileSVGFilter";
 
 const SVG_FILTER_COMMON_ATTRIBUTES = [
   'result'
@@ -64,6 +65,7 @@ export class SVGFilter extends Property {
 
 
 export const SVGFilterClassName = {
+  Tile: TileSVGFilter,
   Saturate: SaturateSVGFilter,
   HueRotate: HueRotateSVGFilter,
   LuminanceAlpha: LuminanceAlphaSVGFilter,
@@ -75,7 +77,7 @@ export const SVGFilterClassName = {
   FillPaint: FillPaintSVGFilter,
   StrokePaint: StrokePaintSVGFilter,
   ComponentTransfer: ComponentTransferSVGFilter,
-  DistanceLight: DistanceLightSVGFilter,
+  DistantLight: DistantLightSVGFilter,
   PointLight: PointLightSVGFilter,
   SpotLight: SpotLightSVGFilter,
   DiffuseLighting: DiffuseLightingSVGFilter,
@@ -95,6 +97,7 @@ export const SVGFilterClassName = {
 };
 
 export const SVGFilterClass = {
+  TileSVGFilter,
   SaturateSVGFilter,
   HueRotateSVGFilter,
   LuminanceAlphaSVGFilter,  
@@ -106,7 +109,7 @@ export const SVGFilterClass = {
   FillPaintSVGFilter,
   StrokePaintSVGFilter,
   ComponentTransferSVGFilter,
-  DistanceLightSVGFilter,
+  DistantLightSVGFilter,
   PointLightSVGFilter,
   SpotLightSVGFilter,
   DiffuseLightingSVGFilter,

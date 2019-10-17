@@ -347,7 +347,6 @@ export default class FillEditor extends UIElement  {
       this.children.$cy.setValue(top)      
       this.bindData('$centerPoint')
     } else if (this.type == 'f') {
-      console.log('aaaa');
       this.state.image.reset({ fx: left, fy: top })            
       this.children.$fx.setValue(left)
       this.children.$fy.setValue(top)      

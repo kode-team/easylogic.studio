@@ -3,12 +3,12 @@ import { OBJECT_TO_PROPERTY } from "../../../util/functions/func";
 import { Length } from "../../unit/Length";
 
 
-export class DistanceLightSVGFilter extends BaseSVGFilter {
+export class DistantLightSVGFilter extends BaseSVGFilter {
   getDefaultObject() {
     return super.getDefaultObject({
-      type: "DistanceLight",
-      azimuth: DistanceLightSVGFilter.spec.azimuth.defaultValue,      
-      elevation: DistanceLightSVGFilter.spec.elevation.defaultValue
+      type: "DistantLight",
+      azimuth: DistantLightSVGFilter.spec.azimuth.defaultValue,      
+      elevation: DistantLightSVGFilter.spec.elevation.defaultValue
     });
   }
 
@@ -20,7 +20,7 @@ export class DistanceLightSVGFilter extends BaseSVGFilter {
   // toString() {
   //   var { azimuth, elevation } = this.json; 
 
-  //   return /*html*/`<feDistanceLight ${OBJECT_TO_PROPERTY({
+  //   return /*html*/`<feDistantLight ${OBJECT_TO_PROPERTY({
   //     azimuth, elevation
   //   })}  ${this.getDefaultAttribute()} />`;
   // }
@@ -33,13 +33,13 @@ export class DistanceLightSVGFilter extends BaseSVGFilter {
   toLightString() {
     var { azimuth, elevation } = this.json; 
 
-    return /*html*/`<feDistanceLight ${OBJECT_TO_PROPERTY({
+    return /*html*/`<feDistantLight ${OBJECT_TO_PROPERTY({
       azimuth, elevation
     })} />`;
   }
 }
 
-DistanceLightSVGFilter.spec = {
+DistantLightSVGFilter.spec = {
  
   azimuth: {
     title: "azimuth",

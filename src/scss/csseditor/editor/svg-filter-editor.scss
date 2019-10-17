@@ -1,3 +1,4 @@
+
 .svg-filter-editor {
 
   color: $font-color;
@@ -5,6 +6,7 @@
   grid-template-columns: 150px 1fr 200px;
   grid-column-gap:10px;
   height: 100%;
+
 
   .label {
     height: 20px;
@@ -127,7 +129,7 @@
         width: 1000px;
         height: 1000px;
         position: relative;
-        pointer-events: none; 
+        // pointer-events: none; 
 
         .filter-node {
           display: inline-block;
@@ -139,10 +141,11 @@
           background-color: white; 
           border-radius: 10px;
           pointer-events: all;
+          cursor: pointer;
 
           &[data-type='PointLight'],
           &[data-type='SpotLight'],
-          &[data-type='DistanceLight'] {
+          &[data-type='DistantLight'] {
             .out {
               background-color: rgb(248, 229, 121);
               svg {

@@ -73,7 +73,7 @@ export default class ColorMatrixEditor extends UIElement {
         var a = values.map( (value, index) => {
             var h = '' 
             if (index % (COLUMN - 1) === 0) {
-                h = `<div>${text[Math.floor(index/COLUMN)]}</div>`
+                h = `<div>${text[Math.floor(index/(COLUMN-1))]}</div>`
             }
             var result = `
                 ${h}
