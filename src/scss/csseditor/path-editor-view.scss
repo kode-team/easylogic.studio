@@ -6,7 +6,11 @@
     right:0px;
     bottom:0px;
     cursor: crosshair;
-    background-color: $path-background-color;
+    background-color: transparent;
+
+    &.has-transform {
+        background-color: $path-background-color;
+    }
 
     &.draw {
         cursor: crosshair;

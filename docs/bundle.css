@@ -9569,6 +9569,9 @@ html, body {
   right: 0px;
   bottom: 0px;
   cursor: crosshair;
+  background-color: transparent;
+}
+.csseditor .path-editor-view.has-transform {
   background-color: rgba(255, 255, 255, 0.7);
 }
 .csseditor .path-editor-view.draw {
@@ -18415,6 +18418,9 @@ html, body {
   right: 0px;
   bottom: 0px;
   cursor: crosshair;
+  background-color: transparent;
+}
+.csseditor[data-theme=light] .path-editor-view.has-transform {
   background-color: rgba(255, 255, 255, 0.7);
 }
 .csseditor[data-theme=light] .path-editor-view.draw {
