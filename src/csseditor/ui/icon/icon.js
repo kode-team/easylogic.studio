@@ -82,6 +82,14 @@ import flash_on from "./flash_on";
 import view_list from "./view_list";
 import near_me from "./near_me";
 import photo from "./photo";
+import specular from "./specular";
+import diffuse from "./diffuse";
+import palette from "./palette";
+import landscape from "./landscape";
+import blur from "./blur";
+import blur_linear from "./blur_linear";
+
+
 
 const alias = {
   fullscreen:  border_inner
@@ -89,6 +97,12 @@ const alias = {
 
 export default {
   ...alias,
+  blur_linear,
+  blur,
+  landscape,
+  palette,
+  diffuse,
+  specular,
   photo,
   near_me,
   view_list,

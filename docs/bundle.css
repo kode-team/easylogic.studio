@@ -7249,13 +7249,12 @@ html, body {
   display: inline-block;
 }
 .csseditor .svg-filter-editor .left {
-  display: grid;
-  grid-template-columns: 150px 1fr;
-  grid-column-gap: 5px;
   height: 100%;
+  position: relative;
 }
 .csseditor .svg-filter-editor .left .filter-item-list {
-  height: 550px;
+  padding: 10px 5px;
+  height: 100%;
   overflow: auto;
 }
 .csseditor .svg-filter-editor .left .filter-item-list .group {
@@ -7272,6 +7271,18 @@ html, body {
   font-size: 12px;
   cursor: pointer;
   padding: 2px 10px;
+  vertical-align: middle;
+}
+.csseditor .svg-filter-editor .left .filter-item-list .group .item svg {
+  vertical-align: middle;
+  width: 20px;
+  height: 20px;
+}
+.csseditor .svg-filter-editor .left .filter-item-list .group .item svg path {
+  fill: #ffffff;
+}
+.csseditor .svg-filter-editor .left .filter-item-list .group .item[value=SourceGraphic] svg path, .csseditor .svg-filter-editor .left .filter-item-list .group .item[value=BackgroundImage] svg path, .csseditor .svg-filter-editor .left .filter-item-list .group .item[value=FillPaint] svg path {
+  fill: #fc554f;
 }
 .csseditor .svg-filter-editor .left .filter-item-list .group .item:hover {
   background-color: rgba(255, 255, 255, 0.3);
@@ -7333,6 +7344,7 @@ html, body {
   width: 1000px;
   height: 1000px;
   position: relative;
+  pointer-events: none;
 }
 .csseditor .svg-filter-editor .center .graph .graph-panel .filter-node {
   display: inline-block;
@@ -7345,6 +7357,9 @@ html, body {
   border-radius: 10px;
   pointer-events: all;
   cursor: pointer;
+}
+.csseditor .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=SourceGraphic], .csseditor .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=SourceAlpha], .csseditor .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=BackgroundImage], .csseditor .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=BackgroundAlpha], .csseditor .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=FillPaint], .csseditor .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=StrokePaint], .csseditor .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=Flood], .csseditor .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=Turbulence], .csseditor .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=Image] {
+  border-radius: 0px;
 }
 .csseditor .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=PointLight] .out, .csseditor .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=SpotLight] .out, .csseditor .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=DistantLight] .out {
   background-color: #f8e579;
@@ -7364,7 +7379,7 @@ html, body {
 }
 .csseditor .svg-filter-editor .center .graph .graph-panel .filter-node > .remove {
   position: absolute;
-  top: -35px;
+  top: -8px;
   display: inline-block;
   left: 50%;
   -webkit-transform: translateX(-50%);
@@ -7387,6 +7402,17 @@ html, body {
   height: 100%;
   width: 100%;
   pointer-events: none;
+  position: relative;
+}
+.csseditor .svg-filter-editor .center .graph .graph-panel .filter-node > .preview svg {
+  display: block;
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
 }
 .csseditor .svg-filter-editor .center .graph .graph-panel .filter-node .in-list {
   position: absolute;
@@ -16098,13 +16124,12 @@ html, body {
   display: inline-block;
 }
 .csseditor[data-theme=light] .svg-filter-editor .left {
-  display: grid;
-  grid-template-columns: 150px 1fr;
-  grid-column-gap: 5px;
   height: 100%;
+  position: relative;
 }
 .csseditor[data-theme=light] .svg-filter-editor .left .filter-item-list {
-  height: 550px;
+  padding: 10px 5px;
+  height: 100%;
   overflow: auto;
 }
 .csseditor[data-theme=light] .svg-filter-editor .left .filter-item-list .group {
@@ -16121,6 +16146,18 @@ html, body {
   font-size: 12px;
   cursor: pointer;
   padding: 2px 10px;
+  vertical-align: middle;
+}
+.csseditor[data-theme=light] .svg-filter-editor .left .filter-item-list .group .item svg {
+  vertical-align: middle;
+  width: 20px;
+  height: 20px;
+}
+.csseditor[data-theme=light] .svg-filter-editor .left .filter-item-list .group .item svg path {
+  fill: gray;
+}
+.csseditor[data-theme=light] .svg-filter-editor .left .filter-item-list .group .item[value=SourceGraphic] svg path, .csseditor[data-theme=light] .svg-filter-editor .left .filter-item-list .group .item[value=BackgroundImage] svg path, .csseditor[data-theme=light] .svg-filter-editor .left .filter-item-list .group .item[value=FillPaint] svg path {
+  fill: #4b61ce;
 }
 .csseditor[data-theme=light] .svg-filter-editor .left .filter-item-list .group .item:hover {
   background-color: rgba(255, 255, 255, 0.3);
@@ -16182,6 +16219,7 @@ html, body {
   width: 1000px;
   height: 1000px;
   position: relative;
+  pointer-events: none;
 }
 .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node {
   display: inline-block;
@@ -16194,6 +16232,9 @@ html, body {
   border-radius: 10px;
   pointer-events: all;
   cursor: pointer;
+}
+.csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=SourceGraphic], .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=SourceAlpha], .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=BackgroundImage], .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=BackgroundAlpha], .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=FillPaint], .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=StrokePaint], .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=Flood], .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=Turbulence], .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=Image] {
+  border-radius: 0px;
 }
 .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=PointLight] .out, .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=SpotLight] .out, .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=DistantLight] .out {
   background-color: #f8e579;
@@ -16213,7 +16254,7 @@ html, body {
 }
 .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node > .remove {
   position: absolute;
-  top: -35px;
+  top: -8px;
   display: inline-block;
   left: 50%;
   -webkit-transform: translateX(-50%);
@@ -16236,6 +16277,17 @@ html, body {
   height: 100%;
   width: 100%;
   pointer-events: none;
+  position: relative;
+}
+.csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node > .preview svg {
+  display: block;
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
 }
 .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node .in-list {
   position: absolute;

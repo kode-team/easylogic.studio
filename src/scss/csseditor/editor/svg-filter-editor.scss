@@ -31,13 +31,12 @@
   }
 
   .left {
-    display: grid;
-    grid-template-columns: 150px 1fr; 
-    grid-column-gap: 5px;
     height: 100%;
+    position: relative;
 
     .filter-item-list {
-      height: 550px;
+      padding: 10px 5px;
+      height: 100%;
       overflow: auto;
       .group {
         margin-bottom: 6px;
@@ -54,6 +53,27 @@
           font-size: 12px;          
           cursor: pointer;
           padding: 2px 10px;
+          vertical-align: middle;
+
+          svg {
+            vertical-align: middle;
+            width: 20px;
+            height: 20px;
+            path {
+              fill: $font-color; 
+            }
+          }
+
+          &[value="SourceGraphic"],
+          &[value="BackgroundImage"], 
+          &[value="FillPaint"]
+          {
+            svg {
+              path {
+                fill: $selected-color;
+              }
+            }
+          }
 
           &:hover {
             background-color: rgba(255, 255, 255, 0.3);
@@ -129,7 +149,7 @@
         width: 1000px;
         height: 1000px;
         position: relative;
-        // pointer-events: none; 
+        pointer-events: none; 
 
         .filter-node {
           display: inline-block;
@@ -142,6 +162,18 @@
           border-radius: 10px;
           pointer-events: all;
           cursor: pointer;
+
+          &[data-type="SourceGraphic"],
+          &[data-type="SourceAlpha"],
+          &[data-type="BackgroundImage"],
+          &[data-type="BackgroundAlpha"],
+          &[data-type="FillPaint"],
+          &[data-type="StrokePaint"],
+          &[data-type="Flood"],
+          &[data-type="Turbulence"],
+          &[data-type="Image"] {
+            border-radius: 0px;
+          }
 
           &[data-type='PointLight'],
           &[data-type='SpotLight'],
@@ -166,7 +198,7 @@
 
           > .remove {
             position: absolute;
-            top: -35px;
+            top: -8px;
             display: inline-block;
             left: 50%;
             transform: translateX(-50%);
@@ -190,6 +222,17 @@
             height: 100%;
             width: 100%;
             pointer-events: none; 
+            position: relative;
+
+            svg {
+              display: block;
+              width: 30px;
+              height: 30px;
+              position: absolute;
+              left:50%;
+              top: 50%;
+              transform: translate(-50%, -50%);
+            }
           }
 
           .in-list {

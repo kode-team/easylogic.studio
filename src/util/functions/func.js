@@ -42,6 +42,10 @@ export function keyMap (obj, callback) {
     })
 }
 
+export function keyMapJoin (obj, callback, joinString = '') {
+    return keyMap(obj, callback).join(joinString);
+}
+
 export function get(obj, key, callback) {
     
     var returnValue = defaultValue(obj[key], key);

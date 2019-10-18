@@ -93,7 +93,7 @@ export default class CodeViewProperty extends BaseProperty {
         }
         ${svgCode ? 
           /*html*/`<div>
-          <pre title='SVG'>${svgCode}</pre>
+            <pre title='SVG'>${svgCode}</pre>
           </div>` : ''
         }
 

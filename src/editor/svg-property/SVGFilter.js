@@ -127,3 +127,31 @@ export const SVGFilterClass = {
   ColorMatrixSVGFilter,
   ConvolveMatrixSVGFilter
 };
+
+
+
+export const SVGFilterSpecList = {
+  Tile: TileSVGFilter.spec,
+  DropShadow: DropShadowSVGFilter.spec,
+  Saturate: SaturateSVGFilter.spec,
+  HueRotate: HueRotateSVGFilter.spec,
+  LuminanceAlpha: LuminanceAlphaSVGFilter.spec,  
+  Offset: OffsetSVGFilter.spec,
+  ComponentTransfer: ComponentTransferSVGFilter.spec,
+  SpecularLighting: SpecularLightingSVGFilter.spec,
+  SpotLight: SpotLightSVGFilter.spec,
+  PointLight: PointLightSVGFilter.spec,
+  DistantLight:DistantLightSVGFilter.spec,  
+  DiffuseLighting: DiffuseLightingSVGFilter.spec,
+  Blend: BlendSVGFilter.spec,
+  RotaMatrix: RotaMatrixSVGFilter.spec,
+  Merge: MergeSVGFilter.spec,
+  GaussianBlur: GaussianBlurSVGFilter.spec,
+  Flood: FloodSVGFilter.spec,
+  Morphology: MorphologySVGFilter.spec,
+  Composite: CompositeSVGFilter.spec,
+  Turbulence: TurbulenceSVGFilter.spec,
+  DisplacementMap: DisplacementMapSVGFilter.spec,
+  ColorMatrix: ColorMatrixSVGFilter.spec,
+  ConvolveMatrix: ConvolveMatrixSVGFilter.spec
+}; 

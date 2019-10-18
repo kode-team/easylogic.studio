@@ -46,12 +46,12 @@ export class BaseSVGFilter extends Property {
     this.json.in[index] = {id: target.id, type: target.type}; 
   }
 
-  setConnected (target, path) {
+  setConnected (target ) {
 
     var f = this.json.connected.filter(c => c.id === target.id);
 
     if (f.length === 0) {
-      this.json.connected.push({id: target.id,  path});
+      this.json.connected.push({id: target.id });
     }
 
   }  

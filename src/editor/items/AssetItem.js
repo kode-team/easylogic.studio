@@ -98,9 +98,7 @@ export class AssetItem extends Item {
 
     }).join('\n\n')
 
-    return `
-      ${filterString}
-    `
+    return filterString
   }
 
   toCloneObject() {
