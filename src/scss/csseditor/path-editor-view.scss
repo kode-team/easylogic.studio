@@ -141,6 +141,7 @@
             &.snap-path {
                 fill: transparent;
                 stroke: $selected-color;
+                stroke-width: 0.5;
             }
         }
 

@@ -88,7 +88,17 @@ import palette from "./palette";
 import landscape from "./landscape";
 import blur from "./blur";
 import blur_linear from "./blur_linear";
-
+import waves from "./waves";
+import vintage from "./vintage";
+import looks from "./looks";
+import opacity from "./opacity";
+import shadow from "./shadow";
+import broken_image from "./broken_image";
+import camera_roll from "./camera_roll";
+import view_comfy from "./view_comfy";
+import settings_input_component from "./settings_input_component";
+import merge from "./merge";
+import texture from "./texture";
 
 
 const alias = {
@@ -97,6 +107,17 @@ const alias = {
 
 export default {
   ...alias,
+  merge,
+  texture,
+  settings_input_component,
+  view_comfy,
+  camera_roll,
+  broken_image,
+  shadow,
+  opacity,
+  looks,
+  vintage,
+  waves,
   blur_linear,
   blur,
   landscape,

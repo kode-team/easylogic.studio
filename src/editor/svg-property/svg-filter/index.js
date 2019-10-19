@@ -25,8 +25,11 @@ import { SourceAlphaSVGFilter } from "./SourceAlphaSVGFilter";
 import { FillPaintSVGFilter } from "./FillPaintSVGFilter";
 import { StrokePaintSVGFilter } from "./StrokePaintSVGFilter";
 import { TileSVGFilter } from "./TileSVGFilter";
+import { ImageSVGFilter } from "./ImageSVGFilter";
+
 
 export default {
+    ImageSVGFilter,
     TileSVGFilter,
     DropShadowSVGFilter,
     BackgroundAlphaSVGFilter,

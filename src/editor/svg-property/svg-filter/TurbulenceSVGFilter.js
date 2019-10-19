@@ -1,5 +1,6 @@
 import { BaseSVGFilter } from "./BaseSVGFilter";
 import { Length } from "../../unit/Length";
+import { OBJECT_TO_PROPERTY } from "../../../util/functions/func";
 
 export class TurbulenceSVGFilter extends BaseSVGFilter {
   getDefaultObject() {
@@ -22,7 +23,12 @@ export class TurbulenceSVGFilter extends BaseSVGFilter {
   toString() {
     var { filterType, baseFrequency, numOctaves, seed } = this.json; 
 
-    return `<feTurbulence type="${filterType}" baseFrequency="${baseFrequency}" numOctaves="${numOctaves}" seed="${seed}"  ${this.getDefaultAttribute()} />`;
+    return /*html*/`<feTurbulence ${OBJECT_TO_PROPERTY({
+      type: filterType,
+      baseFrequency,
+      numOctaves, 
+      seed
+    })}   ${this.getDefaultAttribute()} />`;
   }
 }
 
@@ -34,7 +40,7 @@ TurbulenceSVGFilter.spec = {
     defaultValue: "turbulence"
   },
   baseFrequency: {
-    title: 'baseFrequency',
+    title: 'Frequency',
     inputType: 'number-range',
     min: 0,
     max: 1,
@@ -42,7 +48,7 @@ TurbulenceSVGFilter.spec = {
     defaultValue: Length.number(0)
   },
   numOctaves: {
-    title: 'numOctaves',
+    title: 'Octaves',
     inputType: 'number-range',
     min: 1,
     max: 10,
@@ -50,7 +56,7 @@ TurbulenceSVGFilter.spec = {
     defaultValue: Length.number(1)
   },
   seed: {
-    title: 'seed',
+    title: 'Seed',
     inputType: 'number-range',
     min: 0,
     max: 10000,

@@ -3,7 +3,7 @@ import { uuidShort } from "../../../util/functions/math";
 import { SVGFilterClassName } from "../SVGFilter";
 import { clone, isString } from "../../../util/functions/func";
 
-const  Primitive = 'SourceGraphic,SourceAlpha,BackgroundImage,BackgroundAlpha,FillPaint,StrokePaint'
+const  Primitive = 'SourceGraphic,SourceAlpha,BackgroundImage,BackgroundAlpha,FillPaint,StrokePaint'.split(',')
 
 
 export class BaseSVGFilter extends Property {

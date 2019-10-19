@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
-import { LOAD, CLICK, VDOM } from "../../../util/Event";
+import { LOAD, CLICK, CHANGE } from "../../../util/Event";
 
 export default class ImageSelectEditor extends UIElement {
 
@@ -10,7 +10,9 @@ export default class ImageSelectEditor extends UIElement {
     }
 
     template() {
-        return `<div class='image-select-editor' ref='$body'></div>`
+        return /*html*/`
+            <div class='image-select-editor' ref='$body'></div>
+        `
     }
 
     getValue () {
@@ -22,10 +24,30 @@ export default class ImageSelectEditor extends UIElement {
     }
 
     [LOAD('$body')] () {
-        return `<img src="${this.state.value}" />`
+        return /*html*/`
+            <div class='preview-container'>
+                <img src="${this.state.value}" />
+                <input type='file' ref='$file' accept="image/*" />
+            </div>
+            <div class='select-container'>
+                <button type="button" ref='$select'>Select a image</button>
+            <div>
+        `
     }
 
-    [CLICK('$body')] () {
+    [CHANGE('$file')] (e) {
+
+        var files = [...e.target.files];
+        
+        if (files.length) {
+            this.emit('update.asset.image', files[0], local => {
+                this.trigger('changeImageSelectEditor', local);
+            });
+        }
+
+    }
+
+    [CLICK('$select')] () {
         
         this.emit('showImageSelectPopup', {
             context: this, 

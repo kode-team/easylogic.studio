@@ -7311,7 +7311,7 @@ html, body {
 }
 .csseditor .svg-filter-editor .center .graph .connected-line-panel svg path {
   stroke: #fc554f;
-  stroke-width: 2;
+  stroke-width: 1;
   pointer-events: none;
 }
 .csseditor .svg-filter-editor .center .graph .connected-line-panel svg circle {
@@ -7338,7 +7338,7 @@ html, body {
 }
 .csseditor .svg-filter-editor .center .graph .drag-line-panel svg path {
   stroke: #fc554f;
-  stroke-width: 2;
+  stroke-width: 1;
 }
 .csseditor .svg-filter-editor .center .graph .graph-panel {
   width: 1000px;
@@ -7379,15 +7379,15 @@ html, body {
 }
 .csseditor .svg-filter-editor .center .graph .graph-panel .filter-node > .remove {
   position: absolute;
-  top: -8px;
+  top: -6px;
   display: inline-block;
   left: 50%;
   -webkit-transform: translateX(-50%);
           transform: translateX(-50%);
   font-size: 11px;
   color: rgba(255, 255, 255, 0.7);
-  height: 14px;
-  width: 14px;
+  height: 12px;
+  width: 12px;
   border-radius: 100%;
   background-color: #fc554f;
 }
@@ -7652,14 +7652,36 @@ html, body {
   fill: #ffffff;
 }
 .csseditor .image-select-editor {
-  height: 150px;
   text-align: center;
   margin-top: 10px;
   margin-bottom: 10px;
+  background-color: rgba(0, 0, 0, 0.3);
 }
-.csseditor .image-select-editor img {
+.csseditor .image-select-editor .preview-container {
+  width: 100%;
+  height: 150px;
+  position: relative;
+}
+.csseditor .image-select-editor .preview-container img {
   max-width: 100%;
   max-height: 100%;
+}
+.csseditor .image-select-editor .preview-container input[type=file] {
+  position: absolute;
+  left: 0px;
+  width: 100%;
+  bottom: 0px;
+  top: 0px;
+  opacity: 0;
+  cursor: pointer;
+}
+.csseditor .image-select-editor .select-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  padding: 4px 0px;
+}
+.csseditor .image-select-editor .select-container button {
+  width: 100%;
 }
 .csseditor .select-icon-editor {
   display: grid;
@@ -9348,6 +9370,7 @@ html, body {
 }
 .csseditor .popup .image-select-popup {
   width: 500px;
+  min-height: 450px;
   display: grid;
   grid-template-columns: 1fr;
   padding: 10px;
@@ -9364,6 +9387,8 @@ html, body {
   position: relative;
   text-align: center;
   display: grid;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-sizing: border-box;
 }
 .csseditor .popup .image-select-popup > .box .image-item:hover {
   background-color: #baffb1;
@@ -9685,6 +9710,7 @@ html, body {
 .csseditor .path-editor-view svg path.snap-path {
   fill: transparent;
   stroke: #fc554f;
+  stroke-width: 0.5;
 }
 .csseditor .path-editor-view svg text {
   fill: #fc554f;
@@ -16186,7 +16212,7 @@ html, body {
 }
 .csseditor[data-theme=light] .svg-filter-editor .center .graph .connected-line-panel svg path {
   stroke: #4b61ce;
-  stroke-width: 2;
+  stroke-width: 1;
   pointer-events: none;
 }
 .csseditor[data-theme=light] .svg-filter-editor .center .graph .connected-line-panel svg circle {
@@ -16213,7 +16239,7 @@ html, body {
 }
 .csseditor[data-theme=light] .svg-filter-editor .center .graph .drag-line-panel svg path {
   stroke: #4b61ce;
-  stroke-width: 2;
+  stroke-width: 1;
 }
 .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel {
   width: 1000px;
@@ -16254,15 +16280,15 @@ html, body {
 }
 .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node > .remove {
   position: absolute;
-  top: -8px;
+  top: -6px;
   display: inline-block;
   left: 50%;
   -webkit-transform: translateX(-50%);
           transform: translateX(-50%);
   font-size: 11px;
   color: rgba(255, 255, 255, 0.7);
-  height: 14px;
-  width: 14px;
+  height: 12px;
+  width: 12px;
   border-radius: 100%;
   background-color: #4b61ce;
 }
@@ -16527,14 +16553,36 @@ html, body {
   fill: gray;
 }
 .csseditor[data-theme=light] .image-select-editor {
-  height: 150px;
   text-align: center;
   margin-top: 10px;
   margin-bottom: 10px;
+  background-color: rgba(0, 0, 0, 0.3);
 }
-.csseditor[data-theme=light] .image-select-editor img {
+.csseditor[data-theme=light] .image-select-editor .preview-container {
+  width: 100%;
+  height: 150px;
+  position: relative;
+}
+.csseditor[data-theme=light] .image-select-editor .preview-container img {
   max-width: 100%;
   max-height: 100%;
+}
+.csseditor[data-theme=light] .image-select-editor .preview-container input[type=file] {
+  position: absolute;
+  left: 0px;
+  width: 100%;
+  bottom: 0px;
+  top: 0px;
+  opacity: 0;
+  cursor: pointer;
+}
+.csseditor[data-theme=light] .image-select-editor .select-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  padding: 4px 0px;
+}
+.csseditor[data-theme=light] .image-select-editor .select-container button {
+  width: 100%;
 }
 .csseditor[data-theme=light] .select-icon-editor {
   display: grid;
@@ -18223,6 +18271,7 @@ html, body {
 }
 .csseditor[data-theme=light] .popup .image-select-popup {
   width: 500px;
+  min-height: 450px;
   display: grid;
   grid-template-columns: 1fr;
   padding: 10px;
@@ -18239,6 +18288,8 @@ html, body {
   position: relative;
   text-align: center;
   display: grid;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-sizing: border-box;
 }
 .csseditor[data-theme=light] .popup .image-select-popup > .box .image-item:hover {
   background-color: #baffb1;
@@ -18560,6 +18611,7 @@ html, body {
 .csseditor[data-theme=light] .path-editor-view svg path.snap-path {
   fill: transparent;
   stroke: #4b61ce;
+  stroke-width: 0.5;
 }
 .csseditor[data-theme=light] .path-editor-view svg text {
   fill: #4b61ce;

@@ -107,7 +107,7 @@
 
           path {
             stroke: $selected-color;
-            stroke-width: 2;
+            stroke-width: 1;
             pointer-events: none;            
           }          
 
@@ -140,7 +140,7 @@
 
           path {
             stroke: $selected-color;
-            stroke-width: 2;            
+            stroke-width: 1;            
           }
         }
       }
@@ -198,14 +198,14 @@
 
           > .remove {
             position: absolute;
-            top: -8px;
+            top: -6px;
             display: inline-block;
             left: 50%;
             transform: translateX(-50%);
             font-size: 11px;
             color: rgba(255, 255, 255, 0.7);
-            height: 14px;
-            width: 14px;
+            height: 12px;
+            width: 12px;
             border-radius: 100%;
             background-color: $selected-color;
 

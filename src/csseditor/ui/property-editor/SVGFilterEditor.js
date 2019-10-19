@@ -27,6 +27,7 @@ import Dom from "../../../util/Dom";
 import PathStringManager from "../../../editor/parse/PathStringManager";
 import ColorMatrixEditor from "./ColorMatrixEditor";
 import svgFilterPreset from "./svg-filter-preset";
+import ImageSelectEditor from "./ImageSelectEditor";
 
 
 
@@ -48,7 +49,7 @@ const filterTypes = [
     {label: 'Color Matrix', value:"ColorMatrix"},
     {label: 'Saturate', value:"Saturate"},
     {label: 'HueRotate', value:"HueRotate"},
-    {label: 'Luminance To Alpha', value:"LuminanceAlpha"},
+    {label: 'LuminanceToAlpha', value:"LuminanceAlpha"},
     {label: 'Drop Shadow', value:"DropShadow"},
     {label: 'Morphology', value:"Morphology"},
     {label: 'Convolve Matrix', value:"ConvolveMatrix"},
@@ -133,6 +134,19 @@ function getIcon(type) {
   case 'Image': return icon.landscape;
   case 'GaussianBlur': return icon.blur;
   case 'ColorMatrix': return icon.blur_linear;
+  case 'Turbulence': return icon.waves;
+  case 'Saturate': return icon.vintage;
+  case 'HueRotate': return icon.looks;
+  case 'LuminanceAlpha': return icon.opacity;
+  case 'DropShadow': return icon.shadow;
+  case 'Morphology': return icon.broken_image;
+  case 'ConvolveMatrix': return icon.camera_roll;
+  case 'Offset': return icon.transform;
+  case 'Tile': return icon.view_comfy;
+  case 'Blend': return icon.gradient;
+  case 'Composite': return icon.settings_input_component;
+  case 'Merge': return icon.merge;
+  case 'DisplacementMap': return icon.texture;
   }
 
   return ''; 
@@ -173,6 +187,8 @@ Object.keys(inYAxis).forEach(len => {
   inYAxis[len] = inYAxis[len].map(it => it + half_height)
 })
 
+
+
 export default class SVGFilterEditor extends UIElement {
 
   components() {
@@ -184,7 +200,8 @@ export default class SVGFilterEditor extends UIElement {
       ColorViewEditor,
       SelectEditor,
       TextEditor,
-      FuncFilterEditor
+      FuncFilterEditor,
+      ImageSelectEditor
     }
   }
 
@@ -211,7 +228,10 @@ export default class SVGFilterEditor extends UIElement {
               </div>
               <div class="tab-item" data-value="2" title="Preset">
                 <label class='icon'>Preset</label>
-              </div>              
+              </div>
+              <div class="tab-item" data-value="3" title="Asset">
+                <label class='icon'>Asset</label>
+              </div>
             </div>
             <div class="tab-body">
               <div class="tab-content" data-value="1">
@@ -220,6 +240,7 @@ export default class SVGFilterEditor extends UIElement {
               <div class="tab-content" data-value="2">
                 ${makeFilterTemplateSelect()}
               </div>
+                     
             </div>
           </div>
         </div>
@@ -396,7 +417,19 @@ export default class SVGFilterEditor extends UIElement {
             onchange="changeFuncFilterEditor" 
           />
         </div>
-      `      
+      `  
+    } else if (s.inputType === 'ImageSelectEditor') {
+      return /*html*/`
+        <div>
+          <ImageSelectEditor 
+            ref='$imageSelect${objectId}' 
+            label="${s.title}" 
+            key="${key}"
+            value="${filter[key].toString()}" 
+            onchange="changeRangeEditor" 
+          />
+        </div>
+      `            
     }
 
     return /*html*/`
@@ -598,13 +631,21 @@ export default class SVGFilterEditor extends UIElement {
 
     var target = this.state.filters.map((it, index) => {
       return {it, index}
-    }).find(it => it.it.id === connectedInfo.id);
+    }).find(it => {
+      if (!it) return false; 
+      if (!it.it) return false;       
+      return it && it.it.id === connectedInfo.id
+    });
 
 
     var len = `${target.it.getInCount()}`;
     var source = target.it.in.map((it, index) => {
       return { it, index}
-    }) .find((it) => it.it.id === sourceItem.id);
+    }) .find((it) => {
+      if (!it) return false; 
+      if (!it.it) return false; 
+      return it.it.id === sourceItem.id
+    });
     
     if (!source) {
       return [] 
@@ -655,7 +696,7 @@ export default class SVGFilterEditor extends UIElement {
 
     filters.filter(it => it.id === tid).forEach(it => {
       it.in = it.in.map(inObject => {
-        if (inObject.id ==  sid) {
+        if (inObject && inObject.id ==  sid) {
           return null; 
         }
 

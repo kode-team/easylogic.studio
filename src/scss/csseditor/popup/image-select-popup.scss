@@ -1,6 +1,7 @@
 .image-select-popup {
   
   width: 500px;
+  min-height: 450px;
   
   display: grid;
   grid-template-columns: 1fr; 
@@ -20,6 +21,8 @@
       position: relative;
       text-align: center;
       display: grid;
+      border:1px  solid rgba(255, 255, 255, 0.5);
+      box-sizing: border-box;
 
       &:hover {
         background-color: rgb(186, 255, 177);

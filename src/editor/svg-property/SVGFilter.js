@@ -28,6 +28,7 @@ import { SaturateSVGFilter } from "./svg-filter/SaturateSVGFilter";
 import { HueRotateSVGFilter } from "./svg-filter/HueRotateSVGFilter";
 import { LuminanceAlphaSVGFilter } from "./svg-filter/LuminanceAlphaSVGFilter";
 import { TileSVGFilter } from "./svg-filter/TileSVGFilter";
+import { ImageSVGFilter } from "./svg-filter/ImageSVGFilter";
 
 const SVG_FILTER_COMMON_ATTRIBUTES = [
   'result'
@@ -65,6 +66,7 @@ export class SVGFilter extends Property {
 
 
 export const SVGFilterClassName = {
+  Image: ImageSVGFilter,
   Tile: TileSVGFilter,
   Saturate: SaturateSVGFilter,
   HueRotate: HueRotateSVGFilter,
@@ -96,41 +98,8 @@ export const SVGFilterClassName = {
   ConvolveMatrix: ConvolveMatrixSVGFilter,
 };
 
-export const SVGFilterClass = {
-  TileSVGFilter,
-  SaturateSVGFilter,
-  HueRotateSVGFilter,
-  LuminanceAlphaSVGFilter,  
-  DropShadowSVGFilter,
-  SourceAlphaSVGFilter,
-  SourceGraphicSVGFilter,
-  BackgroundImageSVGFilter,
-  BackgroundAlphaSVGFilter,
-  FillPaintSVGFilter,
-  StrokePaintSVGFilter,
-  ComponentTransferSVGFilter,
-  DistantLightSVGFilter,
-  PointLightSVGFilter,
-  SpotLightSVGFilter,
-  DiffuseLightingSVGFilter,
-  SpecularLightingSVGFilter,
-  BlendSVGFilter,
-  OffsetSVGFilter,
-  RotaMatrixSVGFilter,
-  GaussianBlurSVGFilter,
-  FloodSVGFilter,
-  MergeSVGFilter,
-  CompositeSVGFilter,
-  MorphologySVGFilter,
-  TurbulenceSVGFilter,
-  DisplacementMapSVGFilter,
-  ColorMatrixSVGFilter,
-  ConvolveMatrixSVGFilter
-};
-
-
-
 export const SVGFilterSpecList = {
+  Image: ImageSVGFilter.spec,
   Tile: TileSVGFilter.spec,
   DropShadow: DropShadowSVGFilter.spec,
   Saturate: SaturateSVGFilter.spec,
