@@ -28,9 +28,12 @@ import SelectTool from "./SelectTool";
 import AddSVGRect from "./AddSVGRect";
 import AddSVGCircle from "./AddSVGCircle";
 import Fullscreen from "./Fullscreen";
+import AddSVGTextPath from "./AddSVGTextPath";
+
 
 
 export default {
+  AddSVGTextPath,
   Fullscreen,
   AddSVGCircle,
   AddSVGRect,

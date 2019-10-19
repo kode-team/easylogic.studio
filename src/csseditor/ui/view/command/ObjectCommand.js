@@ -11,6 +11,7 @@ import { ImageLayer } from "../../../../editor/items/layers/ImageLayer";
 import { TextLayer } from "../../../../editor/items/layers/TextLayer";
 import PathStringManager from "../../../../editor/parse/PathStringManager";
 import { SVGPathItem } from "../../../../editor/items/layers/SVGPathItem";
+import { SVGTextPathItem } from "../../../../editor/items/layers/SVGTextPathItem";
 
 export default class ObjectCommand extends UIElement {
 
@@ -117,6 +118,17 @@ export default class ObjectCommand extends UIElement {
             ...rect
         }), rect)
     }        
+
+    [COMMAND('add.svgtextpath')] (rect = {}) {
+
+        this.trigger('add.layer', new SVGTextPathItem({
+            width: Length.px(100),
+            height: Length.px(100),
+            text: 'Insert a newText',
+            d: `M0,${rect.height.value}L${rect.width.value},${rect.height.value}Z`,
+            ...rect
+        }), rect)
+    }            
 
 
     [COMMAND('add.svgcircle')] (rect = {}) {

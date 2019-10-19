@@ -9,25 +9,6 @@ import GuideLineView from "./GuideLineView";
 import PathEditorView from "./PathEditorView";
 import PolygonEditorView from "./PolygonEditorView";
 
-
-// 그리드 선 그려주는 함수 
-// background-image 로 그린다. 
-const createGridLine = (width) => {
-    var subLineColor = 'rgba(247, 247, 247, 1)'
-    var lineColor = 'rgba(232, 232, 232, 1)'
-    var superLineColor = 'rgba(148, 148, 148, 0.5)'
-    var subWidth = width/5;
-    var superWidth = width * 5; 
-    return `
-        repeating-linear-gradient(to right, transparent 0px ${superWidth-1}px, ${superLineColor} ${superWidth-1}px ${superWidth}px ),
-        repeating-linear-gradient(to bottom, transparent 0px ${superWidth-1}px, ${superLineColor} ${superWidth-1}px ${superWidth}px ),        
-        repeating-linear-gradient(to right, transparent 0px ${width-1}px, ${lineColor} ${width-1}px ${width}px ),
-        repeating-linear-gradient(to bottom, transparent 0px ${width-1}px, ${lineColor} ${width-1}px ${width}px ),
-        repeating-linear-gradient(to right, transparent 0px ${subWidth - 1}px, ${subLineColor} ${subWidth - 1}px ${subWidth}px ),
-        repeating-linear-gradient(to bottom, transparent 0px ${subWidth - 1}px, ${subLineColor} ${subWidth - 1}px ${subWidth}px )
-    `
-}
-
 export default class ElementView extends UIElement {
 
     components() {
@@ -106,6 +87,8 @@ export default class ElementView extends UIElement {
             && $el.hasClass('perspective-handle') === false
             && $el.isTag('svg') === false 
             && $el.isTag('path') === false
+            && $el.isTag('textPath') === false
+            && $el.isTag('text') === false
             && $el.isTag('polygon') === false
             && $el.attr('data-segment') !== 'true'
     ;

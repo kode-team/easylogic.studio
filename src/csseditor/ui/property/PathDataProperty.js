@@ -16,7 +16,7 @@ export default class PathDataProperty extends BaseProperty {
   }
 
   isSVGItem  (current) {
-    return current.is('svg-path')
+    return current.is('svg-path', 'svg-textpath')
   }
 
   components () {
@@ -32,7 +32,7 @@ export default class PathDataProperty extends BaseProperty {
 
   [EVENT('refreshSelection')]() {
 
-    this.refreshShow('svg-path')
+    this.refreshShow(['svg-path', 'svg-textpath'])
 
   }
 
@@ -45,6 +45,8 @@ export default class PathDataProperty extends BaseProperty {
 
   getBody() {
     var current = editor.selection.current || {};
+
+    console.log(current);
 
     return /*html*/`
       <div>

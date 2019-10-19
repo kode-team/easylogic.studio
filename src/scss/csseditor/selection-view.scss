@@ -91,6 +91,7 @@
     }
 
     &.path,
+    &.textpath,
     &.polygon {
         .selection-tool-item[data-position="path"] {
             top: -30px;

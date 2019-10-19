@@ -137,7 +137,7 @@ export default class BaseProperty extends UIElement {
 
     var current = editor.selection.current;
     if (current) {
-      if (current.is(type)) {
+      if (type.includes(current.itemType)) {
         this.show();
         if (isRefresh) this.refresh();
       } else {

@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
-import { POINTERSTART, MOVE, END, DOUBLECLICK, BIND, IF } from "../../../util/Event";
+import { POINTERSTART, MOVE, END, DOUBLECLICK, BIND, IF, CLICK } from "../../../util/Event";
 import { Length } from "../../../editor/unit/Length";
 import { editor } from "../../../editor/editor";
 import { isNotUndefined } from "../../../util/functions/func";
@@ -215,9 +215,13 @@ export default class SelectionToolView extends UIElement {
 
     }
 
-    [DOUBLECLICK('$selectionTool .selection-tool-item[data-position="move"]')] (e) {
+    // [DOUBLECLICK('$selectionTool .selection-tool-item[data-position="move"]')] (e) {
+    //     this.trigger('openPathEditor');
+    // }    
+
+    [CLICK('$selectionTool .selection-tool-item[data-position="path"]')] (e) {
         this.trigger('openPathEditor');
-    }    
+    }        
 
     toggleEditingPath (isEditingPath) {
         this.refs.$selectionTool.toggleClass('editing-path', isEditingPath);
@@ -241,7 +245,7 @@ export default class SelectionToolView extends UIElement {
 
     [EVENT('openPathEditor')] () {
         var current = editor.selection.current;
-        if (current && current.is('svg-path')) {
+        if (current && current.is('svg-path', 'svg-textpath')) {
             this.toggleEditingPolygon(false);
             this.toggleEditingPath(true);
             this.emit('showPathEditor', 'modify', {
@@ -288,7 +292,7 @@ export default class SelectionToolView extends UIElement {
 
         var current = editor.selection.current;
         if (current) {
-            if (current.is('svg-path')) {
+            if (current.is('svg-path', 'svg-textpath')) {
                 current.updatePathItem(pathObject);
 
                 this.parent.selectCurrent(...editor.selection.items)
@@ -848,7 +852,7 @@ export default class SelectionToolView extends UIElement {
 
         var current = editor.selection.current;
         if (current) {
-            var isPath = current.is('svg-path');
+            var isPath = current.is('svg-path', 'svg-textpath');
             this.refs.$selectionTool.toggleClass('path', isPath);            
 
             var isPolygon = current.is('svg-polygon');
