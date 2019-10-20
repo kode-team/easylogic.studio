@@ -96,9 +96,11 @@ export class SVGPathItem extends SVGItem {
     var $path = currentElement.$('path');
     $path.attr('d', this.json.d);
     if (isChangeFragment) {
-      $path.attr('filter', this.toFilterValue)
-      $path.attr('fill', this.toFillValue)
-      $path.attr('stroke', this.toStrokeValue)
+      $path.setAttr({
+        'filter': this.toFilterValue,
+        'fill': this.toFillValue,
+        'stroke': this.toStrokeValue
+      })
   
       var $defs = currentElement.$('defs');
       $defs.html(this.toDefInnerString)  

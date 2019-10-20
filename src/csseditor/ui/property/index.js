@@ -51,10 +51,12 @@ import BorderNewProperty from "./BorderNewProperty";
 import ProjectInformationProperty from "./ProjectInformationProperty";
 import PathDataProperty from "./PathDataProperty";
 import PolygonDataProperty from "./PolygonDataProperty";
+import SVGTextProperty from "./SVGTextProperty";
 
 
 
 export default {  
+  SVGTextProperty,
   PolygonDataProperty,
   PathDataProperty,
   ProjectInformationProperty,

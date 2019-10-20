@@ -44,11 +44,18 @@ export default class SVGItemProperty extends BaseProperty {
 
       if (current.is('svg-path')) {
         this.refs.$path.show();
+        this.refs.$totalLength.show();
         this.refs.$polygon.hide();        
+
+      } else if (current.is('svg-polygon')) {
+        this.refs.$path.hide();
+        this.refs.$polygon.show();
+        this.refs.$totalLength.show();        
 
       } else {
         this.refs.$path.hide();
-        this.refs.$polygon.show();
+        this.refs.$polygon.hide();
+        this.refs.$totalLength.hide();        
       }
 
       this.refs.$length.text(current.totalLength);
@@ -103,7 +110,7 @@ export default class SVGItemProperty extends BaseProperty {
           <label>Polygon - points </label>
         </div>         
 
-        <div class='property-item label'>
+        <div class='property-item label' ref='$totalLength'>
           <label>Total Length <span ref='$length'></span></label>
         </div>
 

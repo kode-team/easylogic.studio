@@ -27,6 +27,7 @@ const SegmentConvertor = class extends UIElement {
 const PathCutter = class extends SegmentConvertor {
 
     [CLICK('$view .split-path')] (e) {
+        this.initRect()
         var parser = new PathParser(e.$delegateTarget.attr('d'));
         var clickPosition = {
             x: e.xy.x - this.state.rect.x, 
@@ -173,20 +174,31 @@ export default class PathEditorView extends PathCutter {
     }
 
     updatePathLayer () {
+        this.initRect()
         var rect = this.refs.$view.$('path.object').rect()
         rect.x -= this.state.rect.x;
         rect.y -= this.state.rect.y;
 
         var totalLength = this.refs.$view.$('path.object').el.getTotalLength()       
+        var minX = rect.x;
+        var minY = rect.y; 
+        
+        var item = this.state.current;
 
-        // 돌린만큼 원상 복구 
-
+        // textpath의 기준점은 
+        // textpath 자체이기 때문에 
+        // 내부의 path는 rect 로 정ㅇ의되지 않고 textpath 컨테이너 크기에 영향을 받는다.  
+        if (item && item.is('svg-textpath')) {            
+            var minX = item.screenX.value
+            var minY = item.screenY.value
+        }
 
         var { d } = this.pathGenerator.toPath(
-            rect.x * this.scale, 
-            rect.y * this.scale, 
+            minX * this.scale, 
+            minY * this.scale, 
             this.scale
         );
+
 
         var parser = new PathParser(d);
         // var [radian, cx, cy] = this.state.reverse
@@ -195,10 +207,13 @@ export default class PathEditorView extends PathCutter {
         this.emit(this.state.changeEvent, {
             d: parser.toString(), totalLength, rect 
         })
+
+
         this.emit('refreshPathLayer')
     }
 
     addPathLayer(pathRect) {
+        this.initRect()
         var pathRect = this.refs.$view.$('path.object').rect()
         pathRect.x -= this.state.rect.x;
         pathRect.y -= this.state.rect.y;
@@ -347,6 +362,7 @@ export default class PathEditorView extends PathCutter {
     }
 
     [POINTERMOVE('$view')] (e) {        
+        this.initRect()
         if (this.isMode('draw') && this.state.rect) {            
             this.state.moveXY = {
                 x: e.xy.x - this.state.rect.x, 
@@ -374,22 +390,9 @@ export default class PathEditorView extends PathCutter {
    
     }
 
-    // [DOUBLECLICK('$view [data-segment]')] (e) {
-    //     var index = +e.$delegateTarget.attr('data-index')
-
-
-    //     this.pathGenerator.convertToCurve(index);
-
-    //     this.bindData('$view');
-
-    //     this.refreshPathLayer()
-    // }
-
-
     [POINTERSTART('$view :not(.split-path)') + MOVE() + END()] (e) {
+        this.initRect();
 
-        this.state.rect = this.parent.refs.$body.rect();            
-        // this.state.canvasOffset = this.refs.$view.rect();
         this.state.altKey = false; 
         var isDrawMode = this.isMode('draw');
 

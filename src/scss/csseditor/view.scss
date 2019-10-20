@@ -153,6 +153,10 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
         path, polygon {
           stroke: rgb(64, 64, 252);
         }
+
+        text {
+          fill: rgb(64, 64, 252);
+        }
       }
     }
 

@@ -88,7 +88,6 @@ export default class ElementView extends UIElement {
             && $el.isTag('svg') === false 
             && $el.isTag('path') === false
             && $el.isTag('textPath') === false
-            && $el.isTag('text') === false
             && $el.isTag('polygon') === false
             && $el.attr('data-segment') !== 'true'
     ;

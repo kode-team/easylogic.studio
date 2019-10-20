@@ -46,8 +46,6 @@ export default class PathDataProperty extends BaseProperty {
   getBody() {
     var current = editor.selection.current || {};
 
-    console.log(current);
-
     return /*html*/`
       <div>
         <PathDataEditor ref='$pathData' key='d' value='${current.d}' onchange='changeValue' />

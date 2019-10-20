@@ -68,9 +68,10 @@ export default class Inspector extends UIElement {
                 <ArtBoardSizeProperty />              
 
                 <!-- SVG Item --> 
+                <SVGTextProperty />                
                 <SVGItemProperty />
                 <PathDataProperty />
-                <PolygonDataProperty /> 
+                <PolygonDataProperty />
 
                 <ComponentProperty />
 

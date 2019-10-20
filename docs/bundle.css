@@ -2696,6 +2696,9 @@ html, body {
 .csseditor .canvas-view .element-item:hover svg path, .csseditor .canvas-view .element-item:hover svg polygon {
   stroke: #4040fc;
 }
+.csseditor .canvas-view .element-item:hover svg text {
+  fill: #4040fc;
+}
 .csseditor .canvas-view .element-item.artboard:before {
   content: attr(data-title);
   position: absolute;
@@ -2783,7 +2786,7 @@ html, body {
   background-color: rgba(255, 255, 255, 0.8);
   border: 1px solid #111111;
 }
-.csseditor .selection-tool.path .selection-tool-item[data-position=path], .csseditor .selection-tool.polygon .selection-tool-item[data-position=path] {
+.csseditor .selection-tool.path .selection-tool-item[data-position=path], .csseditor .selection-tool.textpath .selection-tool-item[data-position=path], .csseditor .selection-tool.polygon .selection-tool-item[data-position=path] {
   top: -30px;
   bottom: auto;
   left: 50%;
@@ -5669,7 +5672,6 @@ html, body {
   grid-column-gap: 2px;
 }
 .csseditor .text-editor.has-label label {
-  text-align: right;
   vertical-align: middle;
   padding: 2px 4px 2px 0px;
 }
@@ -11597,6 +11599,9 @@ html, body {
 .csseditor[data-theme=light] .canvas-view .element-item:hover svg path, .csseditor[data-theme=light] .canvas-view .element-item:hover svg polygon {
   stroke: #4040fc;
 }
+.csseditor[data-theme=light] .canvas-view .element-item:hover svg text {
+  fill: #4040fc;
+}
 .csseditor[data-theme=light] .canvas-view .element-item.artboard:before {
   content: attr(data-title);
   position: absolute;
@@ -11684,7 +11689,7 @@ html, body {
   background-color: rgba(255, 255, 255, 0.8);
   border: 1px solid #e7e7e7;
 }
-.csseditor[data-theme=light] .selection-tool.path .selection-tool-item[data-position=path], .csseditor[data-theme=light] .selection-tool.polygon .selection-tool-item[data-position=path] {
+.csseditor[data-theme=light] .selection-tool.path .selection-tool-item[data-position=path], .csseditor[data-theme=light] .selection-tool.textpath .selection-tool-item[data-position=path], .csseditor[data-theme=light] .selection-tool.polygon .selection-tool-item[data-position=path] {
   top: -30px;
   bottom: auto;
   left: 50%;
@@ -14570,7 +14575,6 @@ html, body {
   grid-column-gap: 2px;
 }
 .csseditor[data-theme=light] .text-editor.has-label label {
-  text-align: right;
   vertical-align: middle;
   padding: 2px 4px 2px 0px;
 }

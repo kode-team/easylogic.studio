@@ -1,6 +1,6 @@
 import PathParser from "../../parse/PathParser";
 import { SVGItem } from "./SVGItem";
-import { OBJECT_TO_CLASS, OBJECT_TO_PROPERTY } from "../../../util/functions/func";
+import { OBJECT_TO_PROPERTY } from "../../../util/functions/func";
 import { hasSVGProperty, hasCSSProperty } from "../../util/Resource";
 import { Length } from "../../unit/Length";
 
@@ -12,7 +12,11 @@ export class SVGTextPathItem extends SVGItem {
       d: '',
       // segments: [],
       totalLength: 0,
+      fill: 'rgba(0, 0, 0, 1)',
       text: 'Insert a text', 
+      textLength: Length.em(0),
+      lengthAdjust: 'spacingAndGlyphs',
+      startOffset: Length.em(0),
       ...obj
     });
   }
@@ -30,12 +34,6 @@ export class SVGTextPathItem extends SVGItem {
     if(obj.segments) {
       this.json.path.resetSegment(obj.segments);
     }
-
-    this.json.width = Length.px(obj.rect.width);
-    this.json.height = Length.px(obj.rect.height);
-
-    this.setScreenX(Length.px(obj.rect.x))
-    this.setScreenY(Length.px(obj.rect.y))
   }
   
   setCache () {
@@ -61,6 +59,9 @@ export class SVGTextPathItem extends SVGItem {
       json.path = new PathParser(json.d);
     }
 
+    json.textLength = Length.parse(json.textLength);
+    json.startOffset = Length.parse(json.startOffset);
+
     return json;
   }
 
@@ -71,6 +72,9 @@ export class SVGTextPathItem extends SVGItem {
       totalLength: json.totalLength,
       d: json.d,
       text: json.text, 
+      textLength: `${json.textLength}`,
+      lengthAdjust: json.lengthAdjust,
+      startOffset: `${json.startOffset}`
       // segments: clone(this.json.segments)
     }
   }
@@ -86,7 +90,7 @@ export class SVGTextPathItem extends SVGItem {
 
     return [
       { selector: `[data-id="${this.json.id}"]`, properties: cssProperties  },
-      { selector: `[data-id="${this.json.id}"] path`, properties: svgProperties }
+      { selector: `[data-id="${this.json.id}"] textPath`, properties: svgProperties }
     ] 
   }  
 
@@ -96,18 +100,26 @@ export class SVGTextPathItem extends SVGItem {
     var $path = currentElement.$('path');
     $path.attr('d', this.json.d);
 
-
     if (isChangeFragment) {
       var $textPath = currentElement.$('textPath'); 
       $textPath.text(this.json.text)
+      $textPath.setAttr({
+        filter: this.toFilterValue,
+        fill: this.toFillValue,
+        stroke: this.toStrokeValue,
+        textLength: this.json.textLength,
+        lengthAdjust: this.json.lengthAdjust,
+        startOffset: this.json.startOffset
+      })
   
       var $defs = currentElement.$('defs');
       $defs.html(this.toDefInnerString)  
+
+
     }
 
     this.json.totalLength = $path.el.getTotalLength()
   }    
-
 
   get toDefInnerString () {
     return /*html*/`
@@ -133,7 +145,7 @@ export class SVGTextPathItem extends SVGItem {
   }
 
   get html () {
-    var {id} = this.json; 
+    var {id, textLength, lengthAdjust, startOffset} = this.json; 
 
     return /*html*/`
   <svg class='element-item textpath' data-id="${id}" >
@@ -141,7 +153,12 @@ export class SVGTextPathItem extends SVGItem {
       <text ${OBJECT_TO_PROPERTY({
         'class': 'svg-textpath-item',
       })} >
-        <textPath xlink:href="#${this.toPathId}">${this.json.text}</textPath>
+        <textPath ${OBJECT_TO_PROPERTY({
+          'xlink:href' :`#${this.toPathId}`,
+          textLength,
+          lengthAdjust,
+          startOffset
+        })} >${this.json.text}</textPath>
     </text>
   </svg>`
   }

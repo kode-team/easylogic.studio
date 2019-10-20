@@ -125,6 +125,8 @@ export default class ObjectCommand extends UIElement {
             width: Length.px(100),
             height: Length.px(100),
             text: 'Insert a newText',
+            'font-size': Length.parse(rect.height),
+            textLength: '100%',
             d: `M0,${rect.height.value}L${rect.width.value},${rect.height.value}Z`,
             ...rect
         }), rect)

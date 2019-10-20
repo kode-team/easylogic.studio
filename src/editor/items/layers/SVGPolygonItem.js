@@ -83,9 +83,11 @@ export class SVGPolygonItem extends SVGItem {
     $polygon.attr('points', this.json.points);
 
     if (isChangeFragment) {
-      $polygon.attr('filter', this.json.svgfilter)      
-      $polygon.attr('fill', this.toFillValue)
-      $polygon.attr('stroke', this.toStrokeValue)
+      $polygon.setAttr({
+        'filter': this.toFilterValue,
+        'fill': this.toFillValue,
+        'stroke': this.toStrokeValue
+      })
   
       var $defs = currentElement.$('defs');
       $defs.html(this.toDefInnerString)
