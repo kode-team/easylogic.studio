@@ -52,6 +52,9 @@ export const blend_list = [
 const SVG_PROPERTY_LIST = {
     'd': true,
     'points': true,
+    'textLength': true, 
+    'startOffset': true,
+    'lengthAdjust': true 
 }
 
 const CSS_PROPERTY_LIST = {

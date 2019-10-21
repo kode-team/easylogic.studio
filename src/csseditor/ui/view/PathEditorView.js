@@ -432,8 +432,8 @@ export default class PathEditorView extends PathCutter {
         } else {
             if (this.state.isSegment) {
                 this.changeMode('segment-move');
-                var index = +$target.attr('data-index')
-                this.pathGenerator.setCachePoint(index, $target.attr('data-segment-point'));
+                var [index, segmentKey] = $target.attrs('data-index', 'data-segment-point')
+                this.pathGenerator.setCachePoint(+index, segmentKey);
             }
         }
 
@@ -465,7 +465,8 @@ export default class PathEditorView extends PathCutter {
 
         } else if (this.isMode('segment-move')) {
 
-            this.changeMode('modify');            
+            this.changeMode('modify');           
+            this.bindData('$view'); 
 
         } else if (this.isMode('draw')) {            
 

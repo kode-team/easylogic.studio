@@ -9648,7 +9648,7 @@ html, body {
   stroke-width: 1;
 }
 .csseditor .path-editor-view svg line[data-guide=true] {
-  stroke: #00a2ff;
+  stroke: #919191;
   pointer-events: none;
 }
 .csseditor .path-editor-view svg circle {
@@ -9684,6 +9684,18 @@ html, body {
   stroke-width: 0.5;
   display: none;
 }
+.csseditor .path-editor-view svg rect.segment {
+  fill: black;
+  stroke: #111111;
+  stroke-width: 1;
+  width: 8px;
+  height: 8px;
+}
+.csseditor .path-editor-view svg rect.segment[data-selected=true] {
+  stroke-width: 2;
+  stroke: black;
+  opacity: 0.2;
+}
 .csseditor .path-editor-view svg path.guide {
   fill: transparent;
   stroke: black;
@@ -9701,9 +9713,9 @@ html, body {
 }
 .csseditor .path-editor-view svg path.split-path {
   fill: transparent;
-  stroke: black;
+  stroke: transparent;
   pointer-events: stroke;
-  stroke-width: 1;
+  stroke-width: 2;
 }
 .csseditor .path-editor-view svg path.split-path:hover {
   cursor: copy;
@@ -18551,7 +18563,7 @@ html, body {
   stroke-width: 1;
 }
 .csseditor[data-theme=light] .path-editor-view svg line[data-guide=true] {
-  stroke: #00a2ff;
+  stroke: #919191;
   pointer-events: none;
 }
 .csseditor[data-theme=light] .path-editor-view svg circle {
@@ -18587,6 +18599,18 @@ html, body {
   stroke-width: 0.5;
   display: none;
 }
+.csseditor[data-theme=light] .path-editor-view svg rect.segment {
+  fill: black;
+  stroke: #e7e7e7;
+  stroke-width: 1;
+  width: 8px;
+  height: 8px;
+}
+.csseditor[data-theme=light] .path-editor-view svg rect.segment[data-selected=true] {
+  stroke-width: 2;
+  stroke: black;
+  opacity: 0.2;
+}
 .csseditor[data-theme=light] .path-editor-view svg path.guide {
   fill: transparent;
   stroke: #4b61ce;
@@ -18604,9 +18628,9 @@ html, body {
 }
 .csseditor[data-theme=light] .path-editor-view svg path.split-path {
   fill: transparent;
-  stroke: #4b61ce;
+  stroke: transparent;
   pointer-events: stroke;
-  stroke-width: 1;
+  stroke-width: 2;
 }
 .csseditor[data-theme=light] .path-editor-view svg path.split-path:hover {
   cursor: copy;

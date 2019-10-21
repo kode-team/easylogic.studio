@@ -49,7 +49,7 @@
             // stroke-dasharray: 5 2; 
 
             &[data-guide='true'] {
-                stroke: rgb(0, 162, 255);
+                stroke: rgb(145, 145, 145);
                 pointer-events: none;
             }
 
@@ -63,10 +63,6 @@
             stroke: blue; 
             stroke-width: 1;
             cursor: move;
-
-            &.selected {
-                // fill: yellow;
-            }
 
             &.curve {
                 stroke: red; 
@@ -106,6 +102,25 @@
             display: none;
         }
 
+        rect {
+            &.segment {
+                fill: rgba(0, 0, 0, 1);
+                stroke: $border-color;
+                stroke-width: 1; 
+                width: 8px;
+                height: 8px;
+
+                &[data-selected='true'] {
+                    stroke-width: 2;
+                    stroke: black;
+                    opacity: 0.2;
+                }
+
+            }
+
+
+        }
+
         path {
             &.guide {
                 fill: transparent;
@@ -128,9 +143,9 @@
             
             &.split-path {
                 fill: transparent;
-                stroke: $path-guide-color;
+                stroke: transparent;
                 pointer-events: stroke;
-                stroke-width: 1;
+                stroke-width: 2;
 
                 &:hover {
                     cursor: copy;

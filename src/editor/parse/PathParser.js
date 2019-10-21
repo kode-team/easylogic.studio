@@ -2,7 +2,7 @@
 import { isNotUndefined, clone } from "../../util/functions/func";
 import Point from "./Point";
 
-const parseRegForPath = /([mMlLvVhHcCsSqQtTaAzZ]([^mMlLvVhHcCsSqQtTaAzZ]*))/g;
+const REG_PARSE_NUMBER_FOR_PATH = /([mMlLvVhHcCsSqQtTaAzZ]([^mMlLvVhHcCsSqQtTaAzZ]*))/g;
 const splitReg = /[\b\t \,]/g;
 var numberReg = /-?[0-9]*\.?[0-9]+(?:e[-+]?\d+)?/ig
 
@@ -120,7 +120,7 @@ export default class PathParser {
 
     parse () {
 
-        var arr = this.pathString.match(parseRegForPath) || [];
+        var arr = this.pathString.match(REG_PARSE_NUMBER_FOR_PATH) || [];
 
         this.segments = arr.map(s => {
             var command = s[0]
@@ -343,13 +343,6 @@ export default class PathParser {
                 var prevPoint = Point.getPrevPoint(points, points.length);
                 var firstPoint = Point.getFirstPoint(points, points.length);
 
-                // if (prevPoint.command === 'Q') {    // 마지막 지점의 Q 는 항상 C 로 대체된다. 
-                //     prevPoint.command = 'C'
-                //     prevPoint.curve = true; 
-                //     prevPoint.endPoint = Point.getReversePoint(prevPoint.startPoint, prevPoint.reversePoint)
-
-                // }
-
                 if (Point.isEqual(prevPoint.startPoint, firstPoint.startPoint)) {
                     prevPoint.connected = true; 
 
@@ -363,20 +356,6 @@ export default class PathParser {
                     }
                 }
 
-
-                //     // 연결되어 있다면 같이 선언한다. 
-                //     prevPoint.reversePoint = clone(firstPoint.endPoint);
-                //     firstPoint.reversePoint = clone(prevPoint.endPoint);
-    
-                //     var isPrevCurve = prevPoint.curve;
-                //     var isFirstCurve = firstPoint.curve
-
-                //     if (isPrevCurve && !isFirstCurve) {
-                //         firstPoint.curve = true; 
-                //     } else if (!isPrevCurve && isFirstCurve) {
-                //         prevPoint.curve = true; 
-                //     }
-                // }
                 prevPoint.close = true; 
 
             }

@@ -132,20 +132,20 @@ export default class SegmentManager {
                 />`
             } else if (it.start) {
                 return /*html*/`
-                <circle 
-                    cx='${it.cx}' 
-                    cy='${it.cy}' 
-                    r='4'      
+                <rect 
+                    x='${it.cx - 4}' 
+                    y='${it.cy - 4}' 
+                    class='segment'
                     data-selected='${it.selected}'                                   
                     title="Center"
                     data-start="true" 
                 />`    
             } else {
                 return /*html*/`
-                <circle 
-                    cx='${it.cx}' 
-                    cy='${it.cy}' 
-                    r='4'                     
+                <rect 
+                    x='${it.cx - 4}' 
+                    y='${it.cy - 4}' 
+                    class='segment'
                     data-selected='${it.selected}'
                     title="${it.segment}"
                     data-is-last="${it.isLast}"
