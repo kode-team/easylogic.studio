@@ -5,6 +5,7 @@
   display: grid;
   grid-template-columns: 1fr 224px; 
   grid-column-gap: 10px;
+  margin-left:5px;
 
   > .box {
     > .colorpicker {

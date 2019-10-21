@@ -7346,7 +7346,6 @@ html, body {
   width: 1000px;
   height: 1000px;
   position: relative;
-  pointer-events: none;
 }
 .csseditor .svg-filter-editor .center .graph .graph-panel .filter-node {
   display: inline-block;
@@ -9409,6 +9408,7 @@ html, body {
   display: grid;
   grid-template-columns: 1fr 224px;
   grid-column-gap: 10px;
+  margin-left: 5px;
 }
 .csseditor .popup .gradient-picker > .box > .colorpicker {
   display: block;
@@ -16249,7 +16249,6 @@ html, body {
   width: 1000px;
   height: 1000px;
   position: relative;
-  pointer-events: none;
 }
 .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node {
   display: inline-block;
@@ -18312,6 +18311,7 @@ html, body {
   display: grid;
   grid-template-columns: 1fr 224px;
   grid-column-gap: 10px;
+  margin-left: 5px;
 }
 .csseditor[data-theme=light] .popup .gradient-picker > .box > .colorpicker {
   display: block;

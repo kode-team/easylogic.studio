@@ -18,6 +18,7 @@ export class SVGItem extends Layer {
       'stroke-linejoin': '',      
       'stroke-dashoffset': '', 
       'stroke-dasharray': ' ',
+      'text-anchor': 'start',
       'motion-based': false,
       ...obj
     });
@@ -39,6 +40,7 @@ export class SVGItem extends Layer {
       'stroke-linejoin': json['stroke-linejoin'],
       'stroke-dashoffset': json['stroke-dashoffset'],
       'stroke-dasharray': json['stroke-dasharray'],
+      'text-anchor': json['text-anchor'],
       'motion-based': json['motion-based']
     }
   }
@@ -48,7 +50,7 @@ export class SVGItem extends Layer {
       ...super.toDefaultCSS(),
       ...this.toKeyListCSS(
         'stroke-width', 'stroke-linecap', 'stroke-linejoin', 'stroke-dasharray', 'stroke-dashoffset',
-        'fill-opacity', 'fill-rule'
+        'fill-opacity', 'fill-rule', 'text-anchor'
       )
     }
   }
