@@ -59,9 +59,10 @@ export default class PathDataEditor extends UIElement {
     }
 
     [LOAD('$data')] () {
-        return this.state.parser.segments.map(it => {
+        var arr = this.state.parser.segments.map(it => {
+            var cls = it.command === 'M' ? 'm' : '';
             return /*html*/`
-                <div class='segment'>
+                <div class='segment ${cls}'>
                     <div class='command' data-command='${it.command}'>${it.command}</div>
                     <div class='values'>
                         ${it.values.map(v => {
@@ -71,6 +72,18 @@ export default class PathDataEditor extends UIElement {
                 </div>
             `
         })
+
+        arr.unshift(/*html*/`
+            <div class='segment'>
+                <div class='command'></div>
+                <div class='values'>
+                    <span>X</span>
+                    <span>Y</span>
+                </div>
+            </div>
+        `)
+
+        return arr; 
     }
 
     [INPUT('$data input[type=number]') + DEBOUNCE(300)] (e) {

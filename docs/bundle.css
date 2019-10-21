@@ -7835,6 +7835,9 @@ html, body {
   grid-column-gap: 2px;
   margin-bottom: 4px;
 }
+.csseditor .path-data-editor .segment.m {
+  padding-top: 10px;
+}
 .csseditor .path-data-editor .segment .command {
   color: #fc554f;
 }
@@ -7843,6 +7846,9 @@ html, body {
   grid-template-columns: repeat(2, 1fr);
   grid-column-gap: 2px;
   grid-row-gap: 2px;
+}
+.csseditor .path-data-editor .segment .values span {
+  text-align: center;
 }
 .csseditor .path-data-editor .segment .values input {
   width: 100%;
@@ -16750,6 +16756,9 @@ html, body {
   grid-column-gap: 2px;
   margin-bottom: 4px;
 }
+.csseditor[data-theme=light] .path-data-editor .segment.m {
+  padding-top: 10px;
+}
 .csseditor[data-theme=light] .path-data-editor .segment .command {
   color: #4b61ce;
 }
@@ -16758,6 +16767,9 @@ html, body {
   grid-template-columns: repeat(2, 1fr);
   grid-column-gap: 2px;
   grid-row-gap: 2px;
+}
+.csseditor[data-theme=light] .path-data-editor .segment .values span {
+  text-align: center;
 }
 .csseditor[data-theme=light] .path-data-editor .segment .values input {
   width: 100%;
