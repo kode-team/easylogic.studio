@@ -6,6 +6,7 @@ export class SourceSVGFilter extends BaseSVGFilter {
       ...obj
     });
   }
+  
   isSource() {
     return true; 
   }

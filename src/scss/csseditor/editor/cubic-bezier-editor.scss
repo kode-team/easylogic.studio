@@ -114,9 +114,9 @@
         display: grid;
         grid-template-columns: 30px 1fr 30px;
 
-        .left,.right
+        .left,
+        .right
         {
-            
             font-size: 14px;
             font-weight:bold;
             cursor: pointer;

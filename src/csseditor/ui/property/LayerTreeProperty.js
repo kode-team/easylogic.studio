@@ -37,18 +37,24 @@ export default class LayerTreeProperty extends BaseProperty {
     case 'circle': 
       return icon.circle;
     case 'image': return icon.photo;
-    case 'text': return icon.title;
-    case 'cube' : return icon.cube;
+    case 'text': 
+    case 'svg-textpath':
+      return icon.title;
+
+    case 'cube' : 
+      return icon.cube;
     case 'svg-path': 
-      var rate = (24/item.width.value); 
-
-      var strokeWidth = rate > 1 ? 1: 1/rate; 
-
-      return `<svg viewBox="0 0 ${item.width.value} ${item.height.value}"><path d="${item.d}" stroke-width="${strokeWidth}" /></svg>`;
     case 'svg-polygon': 
       var rate = (24/item.width.value);    
       var strokeWidth = rate > 1 ? 1: 1/rate;       
-      return `<svg viewBox="0 0 ${item.width.value} ${item.height.value}"><polygon points="${item.points}" stroke-width="${strokeWidth}" /></svg>`;
+
+      switch (item.itemType) {
+      case 'svg-path': 
+        return `<svg viewBox="0 0 ${item.width.value} ${item.height.value}"><path d="${item.d}" stroke-width="${strokeWidth}" /></svg>`;
+      case 'svg-polygon': 
+        return `<svg viewBox="0 0 ${item.width.value} ${item.height.value}"><polygon points="${item.points}" stroke-width="${strokeWidth}" /></svg>`;
+      }
+
     default: 
       return icon.rect
     }

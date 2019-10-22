@@ -339,6 +339,7 @@ export default class PathEditorView extends PathCutter {
             class: {
                 'draw': this.state.mode === 'draw',
                 'modify': this.state.mode === 'modify',
+                'textpath': this.state.current && this.state.current.is('svg-textpath'),
                 'has-transform': !!this.state.hasTransform,
                 'segment-move': this.state.mode === 'segment-move',         
             },

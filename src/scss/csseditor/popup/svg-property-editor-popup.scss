@@ -1,7 +1,7 @@
 
   .svg-property-editor-popup {
 
-    width: 800px;
+    width: 900px;
     height: 550px;
 
     display: grid;
@@ -45,20 +45,6 @@
       select {
         width: 100%;
         vertical-align: middle;
-      }
-
-      .input {
-        vertical-align: middle;
-        display: grid;
-        grid-template-columns: 2fr 1fr 1fr;
-
-        &.grid-1 {
-          grid-template-columns: 1fr;
-        }
-
-        &.grid-2 {
-          grid-template-columns: 3fr 1fr;
-        }        
       }
     }
   }

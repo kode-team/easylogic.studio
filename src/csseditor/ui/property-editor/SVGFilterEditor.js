@@ -153,10 +153,49 @@ function getIcon(type) {
 }
 
 
-const width = 40; 
-const height = 40; 
+function getSourceTypeString(type) {
+  switch(type) {
+  case 'SourceGraphic': 
+  case 'SourceAlpha': 
+  case 'BackgroundImage':
+  case 'BackgroundAlpha':
+  case 'FillPaint':
+  case 'StrokePaint':
+    return 'graphic';    
 
-const half_width = 20; 
+  case 'Flood': 
+  case 'Turbulence':   
+  case 'Image': 
+    return 'source';
+  case 'GaussianBlur': 
+  case 'ColorMatrix': 
+  case 'Saturate': 
+  case 'HueRotate': 
+  case 'LuminanceAlpha': 
+  case 'DropShadow': 
+  case 'Morphology': 
+  case 'ConvolveMatrix': 
+  case 'Offset': 
+  case 'Tile': 
+    return 'modifier';    
+  case 'SpecularLighting':
+  case 'DiffuseLighting':
+  case 'SpotLight':
+  case 'PointLight':
+  case 'DistantLight':
+    return 'lighting';            
+  case 'Blend': 
+  case 'Composite': 
+  case 'Merge': 
+  case 'DisplacementMap': 
+    return 'combiner';
+  }
+
+  return ''; 
+}
+
+
+const width = 40; 
 const half_height = 20; 
 
 const connectedXAxis = {
@@ -271,8 +310,8 @@ export default class SVGFilterEditor extends UIElement {
     e.dataTransfer.setData('filter/type', filter);
   }
 
-  [DRAGOVER('$graphPanel') + PREVENT] () {}
-  [DROP('$graphPanel') + PREVENT] (e) {
+  [DRAGOVER('$connectedLinePanel') + PREVENT] () {}
+  [DROP('$connectedLinePanel') + PREVENT] (e) {
 
     var offset  = {x: e.offsetX, y: e.offsetY  }
 
@@ -608,14 +647,14 @@ export default class SVGFilterEditor extends UIElement {
 
     var manager = new PathStringManager();
 
-    points.forEach((p, index) => {
-      if (index === 0) {
-        manager.M(p)
-      } else {
-        manager.L(p);
-      }
-    })
-    manager.Z()
+    var first = points[0];
+    var last = points[points.length-1]
+
+    var dist = Math.abs(first.x - last.x)/2;
+
+    manager
+    .M(first)
+    .C({x: first.x + dist, y: first.y}, {x: last.x - dist, y: last.y}, last)
 
     return manager.d;
   }
@@ -666,13 +705,17 @@ export default class SVGFilterEditor extends UIElement {
           return it.connected.map(connectedItem => {
 
             var path = this.createPath(it, connectedItem);
+            var sourceType = getSourceTypeString(it.type);
 
             return /*html*/`
               <path ${OBJECT_TO_PROPERTY({
                 'class': 'connected-line',
+                'data-source-type': sourceType,
                 d: this.makeConnectedPath(path)
               })} />
               <circle ${OBJECT_TO_PROPERTY({
+                
+                'data-source-type': sourceType,
                 'data-target-id': connectedItem.id,
                 'data-source-id': it.id,
                 'class': 'connected-remove-circle',
@@ -742,9 +785,12 @@ export default class SVGFilterEditor extends UIElement {
             if (!targetFilter.hasLight() && filter.isLight()) {
               // light 계열은 lighting 에만 갈 수 있음.  
             } else {
+              var targetIndex = +$target.attr('data-index');
+              if (!targetFilter.in[targetIndex]) {
+                targetFilter.setIn(targetIndex, filter);
+                filter.setConnected(targetFilter)
+              }
 
-              targetFilter.setIn(+$target.attr('data-index'), filter);
-              filter.setConnected(targetFilter)
             }
 
           }
@@ -757,8 +803,11 @@ export default class SVGFilterEditor extends UIElement {
             if (filter.hasLight() && !targetFilter.isLight()) {
               // lighting  는 light 와  연결된다. 
             } else {
-              filter.setIn(this.pointIndex, targetFilter);
-              targetFilter.setConnected(filter)
+              if (!filter.in[this.pointIndex]) {
+                filter.setIn(this.pointIndex, targetFilter);
+                targetFilter.setConnected(filter)
+              }
+
             }
                       
           }
@@ -815,7 +864,7 @@ export default class SVGFilterEditor extends UIElement {
         })}' data-type="${it.type}" data-index="${index}" data-filter-id="${it.id}" style='left: ${it.bound.x}px;top: ${it.bound.y}px;'>
           <div class='label'>${it.type}</div>
           <div class='remove'>${icon.close}</div>
-          <div class='preview'>${getIcon(it.type)}</div>
+          <div class='preview' data-source-type="${getSourceTypeString(it.type)}">${getIcon(it.type)}</div>
           <div class='in-list'>
             ${[...Array(it.getInCount())].map((itIn, inIndex) => {
               return /*html*/`<div class='in' data-index='${inIndex}'></div>`

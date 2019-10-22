@@ -41,6 +41,16 @@
         }
     }
 
+    &.textpath {
+        svg {
+            path {
+                &.split-path {
+                    stroke: $path-guide-color;
+                }
+            }
+        }
+    }
+
     svg {
 
         line {

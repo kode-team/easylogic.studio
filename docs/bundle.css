@@ -5291,13 +5291,15 @@ html, body {
   display: grid;
   grid-template-columns: 30px 1fr 30px;
 }
-.csseditor .cubic-bezier-editor .predefined .left, .csseditor .cubic-bezier-editor .predefined .right {
+.csseditor .cubic-bezier-editor .predefined .left,
+.csseditor .cubic-bezier-editor .predefined .right {
   font-size: 14px;
   font-weight: bold;
   cursor: pointer;
   vertical-align: middle;
 }
-.csseditor .cubic-bezier-editor .predefined .left svg path, .csseditor .cubic-bezier-editor .predefined .right svg path {
+.csseditor .cubic-bezier-editor .predefined .left svg path,
+.csseditor .cubic-bezier-editor .predefined .right svg path {
   fill: #ffffff;
 }
 .csseditor .cubic-bezier-editor .predefined .predefined-text {
@@ -7312,9 +7314,25 @@ html, body {
   height: 100%;
 }
 .csseditor .svg-filter-editor .center .graph .connected-line-panel svg path {
+  fill: transparent;
   stroke: #fc554f;
   stroke-width: 1;
   pointer-events: none;
+}
+.csseditor .svg-filter-editor .center .graph .connected-line-panel svg path[data-source-type=graphic] {
+  stroke: #a6a6ff;
+}
+.csseditor .svg-filter-editor .center .graph .connected-line-panel svg path[data-source-type=source] {
+  stroke: yellowgreen;
+}
+.csseditor .svg-filter-editor .center .graph .connected-line-panel svg path[data-source-type=modifier] {
+  stroke: #fc554f;
+}
+.csseditor .svg-filter-editor .center .graph .connected-line-panel svg path[data-source-type=lighting] {
+  stroke: #e6ff00;
+}
+.csseditor .svg-filter-editor .center .graph .connected-line-panel svg path[data-source-type=combiner] {
+  stroke: #ff9bff;
 }
 .csseditor .svg-filter-editor .center .graph .connected-line-panel svg circle {
   fill: #fc554f;
@@ -7323,6 +7341,26 @@ html, body {
   stroke-width: 0;
   pointer-events: all;
   cursor: pointer;
+}
+.csseditor .svg-filter-editor .center .graph .connected-line-panel svg circle[data-source-type=graphic] {
+  fill: #a6a6ff;
+  stroke: rgba(166, 166, 255, 0.5);
+}
+.csseditor .svg-filter-editor .center .graph .connected-line-panel svg circle[data-source-type=source] {
+  fill: yellowgreen;
+  stroke: rgba(154, 205, 50, 0.5);
+}
+.csseditor .svg-filter-editor .center .graph .connected-line-panel svg circle[data-source-type=modifier] {
+  fill: #fc554f;
+  stroke: rgba(252, 85, 79, 0.5);
+}
+.csseditor .svg-filter-editor .center .graph .connected-line-panel svg circle[data-source-type=lighting] {
+  fill: #e6ff00;
+  stroke: rgba(230, 255, 0, 0.5);
+}
+.csseditor .svg-filter-editor .center .graph .connected-line-panel svg circle[data-source-type=combiner] {
+  fill: #ff9bff;
+  stroke: rgba(255, 155, 255, 0.5);
 }
 .csseditor .svg-filter-editor .center .graph .connected-line-panel svg circle:hover {
   stroke-width: 4;
@@ -7346,6 +7384,7 @@ html, body {
   width: 1000px;
   height: 1000px;
   position: relative;
+  pointer-events: none;
 }
 .csseditor .svg-filter-editor .center .graph .graph-panel .filter-node {
   display: inline-block;
@@ -7358,6 +7397,7 @@ html, body {
   border-radius: 10px;
   pointer-events: all;
   cursor: pointer;
+  box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.3), 0 0 0 3px #777777;
 }
 .csseditor .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=SourceGraphic], .csseditor .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=SourceAlpha], .csseditor .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=BackgroundImage], .csseditor .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=BackgroundAlpha], .csseditor .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=FillPaint], .csseditor .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=StrokePaint], .csseditor .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=Flood], .csseditor .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=Turbulence], .csseditor .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=Image] {
   border-radius: 0px;
@@ -7404,6 +7444,21 @@ html, body {
   width: 100%;
   pointer-events: none;
   position: relative;
+}
+.csseditor .svg-filter-editor .center .graph .graph-panel .filter-node > .preview[data-source-type=graphic] path {
+  fill: #a6a6ff;
+}
+.csseditor .svg-filter-editor .center .graph .graph-panel .filter-node > .preview[data-source-type=source] path {
+  fill: yellowgreen;
+}
+.csseditor .svg-filter-editor .center .graph .graph-panel .filter-node > .preview[data-source-type=modifier] path {
+  fill: #fc554f;
+}
+.csseditor .svg-filter-editor .center .graph .graph-panel .filter-node > .preview[data-source-type=lighting] path {
+  fill: #e6ff00;
+}
+.csseditor .svg-filter-editor .center .graph .graph-panel .filter-node > .preview[data-source-type=combiner] path {
+  fill: #ff9bff;
 }
 .csseditor .svg-filter-editor .center .graph .graph-panel .filter-node > .preview svg {
   display: block;
@@ -7490,7 +7545,7 @@ html, body {
   left: 7px;
 }
 .csseditor .svg-filter-editor .center .graph .graph-panel .filter-node.selected {
-  box-shadow: 0 0 0 2px #fc554f;
+  box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.3), 0 0 0 3px #fc554f;
 }
 .csseditor .svg-filter-editor .right {
   height: 100%;
@@ -8667,6 +8722,9 @@ html, body {
   box-sizing: border-box;
   border: 1px solid rgba(17, 17, 17, 0.5);
 }
+.csseditor .color-matrix-editor .color-matrix-template input, .csseditor .color-matrix-editor .color-matrix-template select {
+  width: 100%;
+}
 .csseditor .color-matrix-editor .color-matrix-template .sample-item {
   padding: 2px 5px;
   cursor: pointer;
@@ -9276,7 +9334,7 @@ html, body {
   grid-template-columns: 3fr 1fr;
 }
 .csseditor .popup .svg-property-editor-popup {
-  width: 800px;
+  width: 900px;
   height: 550px;
   display: grid;
   grid-template-columns: 1fr;
@@ -9310,17 +9368,6 @@ html, body {
 .csseditor .popup .svg-property-editor-popup .box select {
   width: 100%;
   vertical-align: middle;
-}
-.csseditor .popup .svg-property-editor-popup .box .input {
-  vertical-align: middle;
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
-}
-.csseditor .popup .svg-property-editor-popup .box .input.grid-1 {
-  grid-template-columns: 1fr;
-}
-.csseditor .popup .svg-property-editor-popup .box .input.grid-2 {
-  grid-template-columns: 3fr 1fr;
 }
 .csseditor .popup .color-picker-popup {
   width: 224px;
@@ -9648,6 +9695,9 @@ html, body {
 .csseditor .path-editor-view.modify svg path.object, .csseditor .path-editor-view.segment-move svg path.object {
   pointer-events: visibleStroke;
   stroke: transparent;
+}
+.csseditor .path-editor-view.textpath svg path.split-path {
+  stroke: black;
 }
 .csseditor .path-editor-view svg line {
   stroke: black;
@@ -14212,13 +14262,15 @@ html, body {
   display: grid;
   grid-template-columns: 30px 1fr 30px;
 }
-.csseditor[data-theme=light] .cubic-bezier-editor .predefined .left, .csseditor[data-theme=light] .cubic-bezier-editor .predefined .right {
+.csseditor[data-theme=light] .cubic-bezier-editor .predefined .left,
+.csseditor[data-theme=light] .cubic-bezier-editor .predefined .right {
   font-size: 14px;
   font-weight: bold;
   cursor: pointer;
   vertical-align: middle;
 }
-.csseditor[data-theme=light] .cubic-bezier-editor .predefined .left svg path, .csseditor[data-theme=light] .cubic-bezier-editor .predefined .right svg path {
+.csseditor[data-theme=light] .cubic-bezier-editor .predefined .left svg path,
+.csseditor[data-theme=light] .cubic-bezier-editor .predefined .right svg path {
   fill: gray;
 }
 .csseditor[data-theme=light] .cubic-bezier-editor .predefined .predefined-text {
@@ -16233,9 +16285,25 @@ html, body {
   height: 100%;
 }
 .csseditor[data-theme=light] .svg-filter-editor .center .graph .connected-line-panel svg path {
+  fill: transparent;
   stroke: #4b61ce;
   stroke-width: 1;
   pointer-events: none;
+}
+.csseditor[data-theme=light] .svg-filter-editor .center .graph .connected-line-panel svg path[data-source-type=graphic] {
+  stroke: #a6a6ff;
+}
+.csseditor[data-theme=light] .svg-filter-editor .center .graph .connected-line-panel svg path[data-source-type=source] {
+  stroke: yellowgreen;
+}
+.csseditor[data-theme=light] .svg-filter-editor .center .graph .connected-line-panel svg path[data-source-type=modifier] {
+  stroke: #4b61ce;
+}
+.csseditor[data-theme=light] .svg-filter-editor .center .graph .connected-line-panel svg path[data-source-type=lighting] {
+  stroke: #e6ff00;
+}
+.csseditor[data-theme=light] .svg-filter-editor .center .graph .connected-line-panel svg path[data-source-type=combiner] {
+  stroke: #ff9bff;
 }
 .csseditor[data-theme=light] .svg-filter-editor .center .graph .connected-line-panel svg circle {
   fill: #4b61ce;
@@ -16244,6 +16312,26 @@ html, body {
   stroke-width: 0;
   pointer-events: all;
   cursor: pointer;
+}
+.csseditor[data-theme=light] .svg-filter-editor .center .graph .connected-line-panel svg circle[data-source-type=graphic] {
+  fill: #a6a6ff;
+  stroke: rgba(166, 166, 255, 0.5);
+}
+.csseditor[data-theme=light] .svg-filter-editor .center .graph .connected-line-panel svg circle[data-source-type=source] {
+  fill: yellowgreen;
+  stroke: rgba(154, 205, 50, 0.5);
+}
+.csseditor[data-theme=light] .svg-filter-editor .center .graph .connected-line-panel svg circle[data-source-type=modifier] {
+  fill: #4b61ce;
+  stroke: rgba(75, 97, 206, 0.5);
+}
+.csseditor[data-theme=light] .svg-filter-editor .center .graph .connected-line-panel svg circle[data-source-type=lighting] {
+  fill: #e6ff00;
+  stroke: rgba(230, 255, 0, 0.5);
+}
+.csseditor[data-theme=light] .svg-filter-editor .center .graph .connected-line-panel svg circle[data-source-type=combiner] {
+  fill: #ff9bff;
+  stroke: rgba(255, 155, 255, 0.5);
 }
 .csseditor[data-theme=light] .svg-filter-editor .center .graph .connected-line-panel svg circle:hover {
   stroke-width: 4;
@@ -16267,6 +16355,7 @@ html, body {
   width: 1000px;
   height: 1000px;
   position: relative;
+  pointer-events: none;
 }
 .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node {
   display: inline-block;
@@ -16279,6 +16368,7 @@ html, body {
   border-radius: 10px;
   pointer-events: all;
   cursor: pointer;
+  box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.3), 0 0 0 3px #777777;
 }
 .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=SourceGraphic], .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=SourceAlpha], .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=BackgroundImage], .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=BackgroundAlpha], .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=FillPaint], .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=StrokePaint], .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=Flood], .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=Turbulence], .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node[data-type=Image] {
   border-radius: 0px;
@@ -16325,6 +16415,21 @@ html, body {
   width: 100%;
   pointer-events: none;
   position: relative;
+}
+.csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node > .preview[data-source-type=graphic] path {
+  fill: #a6a6ff;
+}
+.csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node > .preview[data-source-type=source] path {
+  fill: yellowgreen;
+}
+.csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node > .preview[data-source-type=modifier] path {
+  fill: #4b61ce;
+}
+.csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node > .preview[data-source-type=lighting] path {
+  fill: #e6ff00;
+}
+.csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node > .preview[data-source-type=combiner] path {
+  fill: #ff9bff;
 }
 .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node > .preview svg {
   display: block;
@@ -16411,7 +16516,7 @@ html, body {
   left: 7px;
 }
 .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node.selected {
-  box-shadow: 0 0 0 2px #4b61ce;
+  box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.3), 0 0 0 3px #4b61ce;
 }
 .csseditor[data-theme=light] .svg-filter-editor .right {
   height: 100%;
@@ -17588,6 +17693,9 @@ html, body {
   box-sizing: border-box;
   border: 1px solid rgba(231, 231, 231, 0.5);
 }
+.csseditor[data-theme=light] .color-matrix-editor .color-matrix-template input, .csseditor[data-theme=light] .color-matrix-editor .color-matrix-template select {
+  width: 100%;
+}
 .csseditor[data-theme=light] .color-matrix-editor .color-matrix-template .sample-item {
   padding: 2px 5px;
   cursor: pointer;
@@ -18197,7 +18305,7 @@ html, body {
   grid-template-columns: 3fr 1fr;
 }
 .csseditor[data-theme=light] .popup .svg-property-editor-popup {
-  width: 800px;
+  width: 900px;
   height: 550px;
   display: grid;
   grid-template-columns: 1fr;
@@ -18231,17 +18339,6 @@ html, body {
 .csseditor[data-theme=light] .popup .svg-property-editor-popup .box select {
   width: 100%;
   vertical-align: middle;
-}
-.csseditor[data-theme=light] .popup .svg-property-editor-popup .box .input {
-  vertical-align: middle;
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
-}
-.csseditor[data-theme=light] .popup .svg-property-editor-popup .box .input.grid-1 {
-  grid-template-columns: 1fr;
-}
-.csseditor[data-theme=light] .popup .svg-property-editor-popup .box .input.grid-2 {
-  grid-template-columns: 3fr 1fr;
 }
 .csseditor[data-theme=light] .popup .color-picker-popup {
   width: 224px;
@@ -18569,6 +18666,9 @@ html, body {
 .csseditor[data-theme=light] .path-editor-view.modify svg path.object, .csseditor[data-theme=light] .path-editor-view.segment-move svg path.object {
   pointer-events: visibleStroke;
   stroke: transparent;
+}
+.csseditor[data-theme=light] .path-editor-view.textpath svg path.split-path {
+  stroke: #4b61ce;
 }
 .csseditor[data-theme=light] .path-editor-view svg line {
   stroke: #4b61ce;
