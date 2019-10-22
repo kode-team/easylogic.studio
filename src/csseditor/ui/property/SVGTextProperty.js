@@ -88,7 +88,7 @@ export default class SVGTextProperty extends BaseProperty {
           onchange="changeTextValue" />
       </div>      
       <div class='property-item'>
-        <SelectEditor 
+        <SelectIconEditor 
           ref='$text-anchor' 
           label='Text Anchor' 
           key="text-anchor" 

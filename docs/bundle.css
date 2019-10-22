@@ -1439,7 +1439,7 @@ html, body {
   width: 100%;
   height: 100%;
   display: inline-block;
-  background-color: #2f3538;
+  background-color: #212121;
   opacity: 0;
   pointer-events: none;
 }
@@ -1495,7 +1495,7 @@ html, body {
   height: 50px;
   overflow: hidden;
   position: relative;
-  background-color: #2f3538;
+  background-color: #212121;
   color: white;
   z-index: 1;
   pointer-events: all;
@@ -1534,13 +1534,13 @@ html, body {
   right: 0px;
   overflow: hidden;
   border-top: 1px solid #111111;
-  background-color: #2f3538;
+  background-color: #212121;
   transition: all 0.15s linear;
   pointer-events: all;
   z-index: 10000;
 }
 .csseditor .layout-main .layout-middle .layout-footer .managed-tool {
-  background-color: #2f3538;
+  background-color: #212121;
 }
 .csseditor .layout-main .layout-middle .layout-left {
   position: absolute;
@@ -1671,7 +1671,7 @@ html, body {
   text-align: center;
 }
 .csseditor .feature-control .draw-items {
-  background-color: #2f3538;
+  background-color: #212121;
   display: none;
 }
 .csseditor .feature-control .draw-items .split {
@@ -1811,13 +1811,13 @@ html, body {
   right: 0px;
   bottom: 0px;
   top: 0px;
-  background-color: #424242;
+  background-color: #212121;
   color: #ffffff;
 }
 .csseditor .tab.number-tab .tab-header {
   height: 34px;
   cursor: pointer;
-  background-color: #404040;
+  background-color: #212121;
   overflow: hidden;
   color: #ffffff;
 }
@@ -1847,7 +1847,7 @@ html, body {
 }
 .csseditor .tab.number-tab > .tab-header > .tab-item label svg path {
   fill: #ffffff;
-  stroke: #404040;
+  stroke: #212121;
   stroke-width: 1px;
 }
 .csseditor .tab.number-tab > .tab-header > .tab-item:first-child:hover label {
@@ -1868,7 +1868,7 @@ html, body {
   pointer-events: none;
 }
 .csseditor .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"] {
-  background-color: #2b2b2b;
+  background-color: #212121;
   color: white;
 }
 .csseditor .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"]:before {
@@ -1881,13 +1881,13 @@ html, body {
   background-color: #fc554f;
 }
 .csseditor .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"] label svg path {
-  stroke: #424242;
+  stroke: #212121;
 }
 .csseditor .tab.number-tab[data-selected-value="1"] .tab-content[data-value="1"] {
   display: block;
 }
 .csseditor .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"] {
-  background-color: #2b2b2b;
+  background-color: #212121;
   color: white;
 }
 .csseditor .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"]:before {
@@ -1900,13 +1900,13 @@ html, body {
   background-color: #fc554f;
 }
 .csseditor .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"] label svg path {
-  stroke: #424242;
+  stroke: #212121;
 }
 .csseditor .tab.number-tab[data-selected-value="2"] .tab-content[data-value="2"] {
   display: block;
 }
 .csseditor .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"] {
-  background-color: #2b2b2b;
+  background-color: #212121;
   color: white;
 }
 .csseditor .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"]:before {
@@ -1919,13 +1919,13 @@ html, body {
   background-color: #fc554f;
 }
 .csseditor .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"] label svg path {
-  stroke: #424242;
+  stroke: #212121;
 }
 .csseditor .tab.number-tab[data-selected-value="3"] .tab-content[data-value="3"] {
   display: block;
 }
 .csseditor .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"] {
-  background-color: #2b2b2b;
+  background-color: #212121;
   color: white;
 }
 .csseditor .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"]:before {
@@ -1938,13 +1938,13 @@ html, body {
   background-color: #fc554f;
 }
 .csseditor .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"] label svg path {
-  stroke: #424242;
+  stroke: #212121;
 }
 .csseditor .tab.number-tab[data-selected-value="4"] .tab-content[data-value="4"] {
   display: block;
 }
 .csseditor .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"] {
-  background-color: #2b2b2b;
+  background-color: #212121;
   color: white;
 }
 .csseditor .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"]:before {
@@ -1957,13 +1957,13 @@ html, body {
   background-color: #fc554f;
 }
 .csseditor .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"] label svg path {
-  stroke: #424242;
+  stroke: #212121;
 }
 .csseditor .tab.number-tab[data-selected-value="5"] .tab-content[data-value="5"] {
   display: block;
 }
 .csseditor .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"] {
-  background-color: #2b2b2b;
+  background-color: #212121;
   color: white;
 }
 .csseditor .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"]:before {
@@ -1976,13 +1976,13 @@ html, body {
   background-color: #fc554f;
 }
 .csseditor .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"] label svg path {
-  stroke: #424242;
+  stroke: #212121;
 }
 .csseditor .tab.number-tab[data-selected-value="6"] .tab-content[data-value="6"] {
   display: block;
 }
 .csseditor .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"] {
-  background-color: #2b2b2b;
+  background-color: #212121;
   color: white;
 }
 .csseditor .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"]:before {
@@ -1995,13 +1995,13 @@ html, body {
   background-color: #fc554f;
 }
 .csseditor .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"] label svg path {
-  stroke: #424242;
+  stroke: #212121;
 }
 .csseditor .tab.number-tab[data-selected-value="7"] .tab-content[data-value="7"] {
   display: block;
 }
 .csseditor .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"] {
-  background-color: #2b2b2b;
+  background-color: #212121;
   color: white;
 }
 .csseditor .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"]:before {
@@ -2014,13 +2014,13 @@ html, body {
   background-color: #fc554f;
 }
 .csseditor .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"] label svg path {
-  stroke: #424242;
+  stroke: #212121;
 }
 .csseditor .tab.number-tab[data-selected-value="8"] .tab-content[data-value="8"] {
   display: block;
 }
 .csseditor .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"] {
-  background-color: #2b2b2b;
+  background-color: #212121;
   color: white;
 }
 .csseditor .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"]:before {
@@ -2033,7 +2033,7 @@ html, body {
   background-color: #fc554f;
 }
 .csseditor .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"] label svg path {
-  stroke: #424242;
+  stroke: #212121;
 }
 .csseditor .tab.number-tab[data-selected-value="9"] .tab-content[data-value="9"] {
   display: block;
@@ -2079,11 +2079,11 @@ html, body {
   font-size: 11px;
 }
 .csseditor .tab > .tab-header > .tab-item.select-reverse:not(.selected) {
-  background-color: rgba(43, 43, 43, 0.5);
+  background-color: rgba(33, 33, 33, 0.5);
   color: black;
 }
 .csseditor .tab > .tab-header > .tab-item.select-reverse.selected {
-  background-color: #424242;
+  background-color: #212121;
 }
 .csseditor .tab > .tab-body {
   position: absolute;
@@ -2126,7 +2126,7 @@ html, body {
   right: 0px;
   height: 30px;
   display: none;
-  background-color: #2f3538;
+  background-color: #212121;
   font-size: 12px;
   font-weight: bold;
   padding: 8px 5px !important;
@@ -2180,7 +2180,7 @@ html, body {
   min-width: 60px;
 }
 .csseditor .tab.horizontal > .tab-header > .tab-item.selected {
-  background-color: rgba(43, 43, 43, 0.5);
+  background-color: rgba(33, 33, 33, 0.5);
 }
 .csseditor .tab.horizontal > .tab-body {
   top: 0px;
@@ -2304,7 +2304,7 @@ html, body {
 }
 .csseditor .tool-menu .items .draw-items .menu-item.selected .icon svg path,
 .csseditor .external-tool-menu .items .draw-items .menu-item.selected .icon svg path {
-  stroke: #2f3538;
+  stroke: #212121;
   fill: #fc554f;
 }
 .csseditor .tool-menu .items .draw-items .menu-item[data-no-title=true],
@@ -2554,7 +2554,7 @@ html, body {
   border-radius: 3px;
   border: 1px solid #111111;
   color: #ffffff;
-  background-color: #2f3538;
+  background-color: #212121;
 }
 .csseditor .page-tools > label {
   vertical-align: middle;
@@ -2586,7 +2586,7 @@ html, body {
   border: 1px solid #111111;
   border-top: 0px;
   color: #ffffff;
-  background-color: #2f3538;
+  background-color: #212121;
   padding: 5px 10px;
   height: 100%;
 }
@@ -2609,7 +2609,7 @@ html, body {
   border: 1px solid #111111;
   border-top: 0px;
   color: #ffffff;
-  background-color: #2f3538;
+  background-color: #212121;
   padding: 5px 10px;
 }
 .csseditor .page-subeditor .polygon-manager > * {
@@ -2630,7 +2630,7 @@ html, body {
   outline: none;
   border: 1px solid #111111;
   color: #ffffff;
-  background-color: #2f3538;
+  background-color: #212121;
   padding: 5px 10px;
   height: 100%;
 }
@@ -3199,7 +3199,7 @@ html, body {
 }
 .csseditor .property {
   border-bottom: 1px solid black;
-  background-color: #4d4949;
+  background-color: #212121;
   color: #ffffff;
   display: none;
 }
@@ -3369,9 +3369,6 @@ html, body {
   overflow: auto;
   position: relative;
 }
-.csseditor .property.show {
-  background-color: #424242;
-}
 .csseditor .property.show > .property-title {
   border-bottom: 1px solid black;
 }
@@ -3427,7 +3424,7 @@ html, body {
 .csseditor .property > .property-body {
   display: none;
   padding: 0px;
-  background-color: #424242;
+  background-color: #212121;
   margin-top: -1px;
 }
 .csseditor .property > .property-body .property-item {
@@ -3678,7 +3675,7 @@ html, body {
   right: 5px;
   bottom: 5px;
   padding: 10px;
-  border: 1px dashed #111111;
+  border: 1px dashed rgba(255, 255, 255, 0.3);
 }
 .csseditor .box-model-item > div .margin:before {
   content: "margin";
@@ -3736,7 +3733,7 @@ html, body {
   right: 40px;
   bottom: 30px;
   padding: 10px;
-  border: 1px dashed #111111;
+  border: 1px dashed rgba(255, 255, 255, 0.3);
 }
 .csseditor .box-model-item > div .padding::before {
   content: "padding";
@@ -4047,7 +4044,7 @@ html, body {
      -moz-user-select: text;
       -ms-user-select: text;
           user-select: text;
-  border: 1px solid rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   position: relative;
   border-radius: 5px;
   margin-top: 0px;
@@ -4423,7 +4420,7 @@ html, body {
   margin-right: 4px;
   margin-bottom: 4px;
   height: 80px;
-  border: 1px solid #111111;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 2px;
   vertical-align: top;
   cursor: pointer;
@@ -4448,7 +4445,7 @@ html, body {
   position: relative;
   width: 100%;
   height: 80px;
-  border: 1px solid #111111;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 2px;
   cursor: pointer;
 }
@@ -4553,7 +4550,7 @@ html, body {
   margin-right: 4px;
   margin-bottom: 4px;
   height: 80px;
-  border: 1px solid #111111;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 2px;
   vertical-align: top;
   cursor: pointer;
@@ -4578,7 +4575,7 @@ html, body {
   position: relative;
   width: 100%;
   height: 80px;
-  border: 1px solid #111111;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 2px;
   cursor: pointer;
   background-color: transparent;
@@ -4692,7 +4689,7 @@ html, body {
   margin-right: 4px;
   margin-bottom: 4px;
   height: 80px;
-  border: 1px solid #111111;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 2px;
   vertical-align: top;
   cursor: pointer;
@@ -4717,7 +4714,7 @@ html, body {
   position: relative;
   width: 100%;
   height: 80px;
-  border: 1px solid #111111;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 2px;
   cursor: pointer;
 }
@@ -4743,10 +4740,6 @@ html, body {
 }
 .csseditor .svgfilter-assets-property .svgfilter-list[data-view-mode=grid] .svgfilter-item .tools svg path {
   fill: white;
-}
-.csseditor .property.svgfilter-assets-property {
-  padding-left: 0px !important;
-  padding-right: 0px !important;
 }
 .csseditor .svgpath-assets-property .svgpath-list .svgpath-view {
   position: absolute;
@@ -4987,7 +4980,7 @@ html, body {
   position: relative;
   margin-bottom: 4px;
   height: 80px;
-  border: 1px solid #111111;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 2px;
   vertical-align: top;
   cursor: pointer;
@@ -5044,7 +5037,7 @@ html, body {
   position: relative;
   width: 100%;
   height: 80px;
-  border: 1px solid #111111;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 2px;
   cursor: pointer;
   line-height: 80px;
@@ -5100,7 +5093,7 @@ html, body {
   cursor: pointer;
 }
 .csseditor .timeline-animation-list .timeline-animation-item .preview {
-  background-color: #2f3538;
+  background-color: #212121;
   border-radius: 3px;
   border: 1px solid #111111;
   cursor: pointer;
@@ -5202,7 +5195,7 @@ html, body {
   top: 30px;
   left: 60px;
   border: 1px solid #111111;
-  background-color: #2f3538;
+  background-color: #212121;
 }
 .csseditor .cubic-bezier-editor .bezier .bezier-canvas {
   position: absolute;
@@ -5266,7 +5259,7 @@ html, body {
   border-radius: 5px;
   margin-bottom: 5px;
   cursor: pointer;
-  background-color: #2f3538;
+  background-color: #212121;
 }
 .csseditor .cubic-bezier-editor .item-list .item:not(:first-child) {
   border-top: 0px;
@@ -5355,7 +5348,7 @@ html, body {
   background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
   background-size: 10px 10px;
   background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
-  box-shadow: 0 0 1px 0 black;
+  box-shadow: 0 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 .csseditor .color-view-editor .preview .mini-view .color-view {
   position: absolute;
@@ -5732,7 +5725,7 @@ html, body {
 }
 .csseditor .css-property-editor .css-property-item > .title {
   grid-template-columns: 1fr 30px;
-  background-color: #2f3538;
+  background-color: #212121;
   color: #fc554f;
   border-radius: 3px;
   padding: 3px 0px;
@@ -6144,7 +6137,7 @@ html, body {
   height: 16px;
 }
 .csseditor .box-shadow-editor .shadow-item .inset svg path {
-  fill: #2f3538;
+  fill: #212121;
 }
 .csseditor .box-shadow-editor .shadow-item .inset[data-value=true] svg path {
   fill: #fc554f;
@@ -6289,7 +6282,7 @@ html, body {
   width: 30px;
   height: 30px;
   display: inline-block;
-  background-color: #2f3538;
+  background-color: rgba(255, 255, 255, 0.1);
   cursor: pointer;
 }
 .csseditor .perspective-origin-editor .direction > div:before {
@@ -6439,7 +6432,7 @@ html, body {
   width: 30px;
   height: 30px;
   display: inline-block;
-  background-color: #2f3538;
+  background-color: rgba(255, 255, 255, 0.1);
   cursor: pointer;
 }
 .csseditor .transform-origin-editor .direction > div:before {
@@ -7772,7 +7765,7 @@ html, body {
   white-space: pre-wrap;
   word-break: break-all;
   overflow: hidden;
-  font-size: 16px;
+  font-size: 13px;
   line-height: 1.3;
 }
 .csseditor .select-icon-editor .items > .select-icon-item:first-child {
@@ -8873,7 +8866,7 @@ html, body {
 .csseditor .popup .box-shadow-property-popup .codemirror-colorpicker {
   box-shadow: none;
   border-radius: 0px;
-  background-color: #2f3538;
+  background-color: #212121;
 }
 .csseditor .popup .box-shadow-property-popup .codemirror-colorpicker input {
   color: #ffffff !important;
@@ -8993,7 +8986,7 @@ html, body {
 .csseditor .popup .text-shadow-property-popup .codemirror-colorpicker {
   box-shadow: none;
   border-radius: 0px;
-  background-color: #2f3538;
+  background-color: #212121;
 }
 .csseditor .popup .text-shadow-property-popup .codemirror-colorpicker input {
   color: #ffffff !important;
@@ -9378,7 +9371,7 @@ html, body {
   box-shadow: none;
   border-radius: 0px;
   border: 0px;
-  background-color: #2f3538;
+  background-color: transparent;
 }
 .csseditor .popup .color-picker-popup .codemirror-colorpicker input {
   color: #ffffff !important;
@@ -9495,7 +9488,7 @@ html, body {
   box-shadow: none;
   border-radius: 0px;
   border: 0px;
-  background-color: #2f3538;
+  background-color: transparent;
 }
 .csseditor .popup .gradient-picker .codemirror-colorpicker .color-panel {
   margin-top: 0px;
@@ -9625,7 +9618,7 @@ html, body {
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
   z-index: 1000;
-  background-color: #2f3538;
+  background-color: #212121;
   border: 1px solid #111111;
   box-shadow: 0 0 1px 0px #111111;
   padding: 14px;
@@ -9746,6 +9739,7 @@ html, body {
   stroke-width: 1;
   width: 8px;
   height: 8px;
+  cursor: pointer;
 }
 .csseditor .path-editor-view svg rect.segment[data-selected=true] {
   stroke-width: 2;
@@ -9796,7 +9790,7 @@ html, body {
   right: 0px;
   bottom: 0px;
   cursor: crosshair;
-  background-color: rgba(47, 53, 56, 0.1);
+  background-color: rgba(33, 33, 33, 0.1);
 }
 .csseditor .polygon-editor-view.alt svg circle {
   cursor: move;
@@ -9890,7 +9884,7 @@ html, body {
   right: 0px;
   top: 0px;
   bottom: 0px;
-  background-color: #2f3538;
+  background-color: #212121;
   font-size: 12px;
   border-left: 1px solid #111111;
   border-top: 1px solid #111111;
@@ -9958,7 +9952,7 @@ html, body {
   left: 0px;
   top: 0px;
   bottom: 0px;
-  background-color: #2f3538;
+  background-color: #212121;
   font-size: 12px;
   border-right: 1px solid #111111;
   border-top: 1px solid #111111;
@@ -9975,7 +9969,7 @@ html, body {
   right: 260px;
   top: 0px;
   bottom: 0px;
-  background-color: #2f3538;
+  background-color: #212121;
   font-size: 12px;
 }
 .csseditor .timeline-area .timeline-header {
@@ -10273,7 +10267,7 @@ html, body {
   display: inline-block;
   width: 8px;
   height: 8px;
-  background-color: #2f3538;
+  background-color: #212121;
   -webkit-transform: translateY(-50%) translateX(-50%) rotate(45deg);
           transform: translateY(-50%) translateX(-50%) rotate(45deg);
   cursor: ew-resize;
@@ -10298,7 +10292,7 @@ html, body {
   display: inline-block;
   width: 8px;
   height: 8px;
-  background-color: #2f3538;
+  background-color: #212121;
   -webkit-transform: translateY(-50%) translateX(-50%) rotate(45deg);
           transform: translateY(-50%) translateX(-50%) rotate(45deg);
   cursor: ew-resize;
@@ -12340,9 +12334,6 @@ html, body {
   overflow: auto;
   position: relative;
 }
-.csseditor[data-theme=light] .property.show {
-  background-color: white;
-}
 .csseditor[data-theme=light] .property.show > .property-title {
   border-bottom: 1px solid #f1f1f1;
 }
@@ -12649,7 +12640,7 @@ html, body {
   right: 5px;
   bottom: 5px;
   padding: 10px;
-  border: 1px dashed #e7e7e7;
+  border: 1px dashed rgba(255, 255, 255, 0.3);
 }
 .csseditor[data-theme=light] .box-model-item > div .margin:before {
   content: "margin";
@@ -12707,7 +12698,7 @@ html, body {
   right: 40px;
   bottom: 30px;
   padding: 10px;
-  border: 1px dashed #e7e7e7;
+  border: 1px dashed rgba(255, 255, 255, 0.3);
 }
 .csseditor[data-theme=light] .box-model-item > div .padding::before {
   content: "padding";
@@ -13018,7 +13009,7 @@ html, body {
      -moz-user-select: text;
       -ms-user-select: text;
           user-select: text;
-  border: 1px solid rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   position: relative;
   border-radius: 5px;
   margin-top: 0px;
@@ -13394,7 +13385,7 @@ html, body {
   margin-right: 4px;
   margin-bottom: 4px;
   height: 80px;
-  border: 1px solid #e7e7e7;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 2px;
   vertical-align: top;
   cursor: pointer;
@@ -13419,7 +13410,7 @@ html, body {
   position: relative;
   width: 100%;
   height: 80px;
-  border: 1px solid #e7e7e7;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 2px;
   cursor: pointer;
 }
@@ -13524,7 +13515,7 @@ html, body {
   margin-right: 4px;
   margin-bottom: 4px;
   height: 80px;
-  border: 1px solid #e7e7e7;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 2px;
   vertical-align: top;
   cursor: pointer;
@@ -13549,7 +13540,7 @@ html, body {
   position: relative;
   width: 100%;
   height: 80px;
-  border: 1px solid #e7e7e7;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 2px;
   cursor: pointer;
   background-color: transparent;
@@ -13663,7 +13654,7 @@ html, body {
   margin-right: 4px;
   margin-bottom: 4px;
   height: 80px;
-  border: 1px solid #e7e7e7;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 2px;
   vertical-align: top;
   cursor: pointer;
@@ -13688,7 +13679,7 @@ html, body {
   position: relative;
   width: 100%;
   height: 80px;
-  border: 1px solid #e7e7e7;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 2px;
   cursor: pointer;
 }
@@ -13714,10 +13705,6 @@ html, body {
 }
 .csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list[data-view-mode=grid] .svgfilter-item .tools svg path {
   fill: white;
-}
-.csseditor[data-theme=light] .property.svgfilter-assets-property {
-  padding-left: 0px !important;
-  padding-right: 0px !important;
 }
 .csseditor[data-theme=light] .svgpath-assets-property .svgpath-list .svgpath-view {
   position: absolute;
@@ -13958,7 +13945,7 @@ html, body {
   position: relative;
   margin-bottom: 4px;
   height: 80px;
-  border: 1px solid #e7e7e7;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 2px;
   vertical-align: top;
   cursor: pointer;
@@ -14015,7 +14002,7 @@ html, body {
   position: relative;
   width: 100%;
   height: 80px;
-  border: 1px solid #e7e7e7;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 2px;
   cursor: pointer;
   line-height: 80px;
@@ -14326,7 +14313,7 @@ html, body {
   background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
   background-size: 10px 10px;
   background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
-  box-shadow: 0 0 1px 0 black;
+  box-shadow: 0 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 .csseditor[data-theme=light] .color-view-editor .preview .mini-view .color-view {
   position: absolute;
@@ -15260,7 +15247,7 @@ html, body {
   width: 30px;
   height: 30px;
   display: inline-block;
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.1);
   cursor: pointer;
 }
 .csseditor[data-theme=light] .perspective-origin-editor .direction > div:before {
@@ -15410,7 +15397,7 @@ html, body {
   width: 30px;
   height: 30px;
   display: inline-block;
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.1);
   cursor: pointer;
 }
 .csseditor[data-theme=light] .transform-origin-editor .direction > div:before {
@@ -16743,7 +16730,7 @@ html, body {
   white-space: pre-wrap;
   word-break: break-all;
   overflow: hidden;
-  font-size: 16px;
+  font-size: 13px;
   line-height: 1.3;
 }
 .csseditor[data-theme=light] .select-icon-editor .items > .select-icon-item:first-child {
@@ -18349,7 +18336,7 @@ html, body {
   box-shadow: none;
   border-radius: 0px;
   border: 0px;
-  background-color: white;
+  background-color: transparent;
 }
 .csseditor[data-theme=light] .popup .color-picker-popup .codemirror-colorpicker input {
   color: gray !important;
@@ -18466,7 +18453,7 @@ html, body {
   box-shadow: none;
   border-radius: 0px;
   border: 0px;
-  background-color: white;
+  background-color: transparent;
 }
 .csseditor[data-theme=light] .popup .gradient-picker .codemirror-colorpicker .color-panel {
   margin-top: 0px;
@@ -18717,6 +18704,7 @@ html, body {
   stroke-width: 1;
   width: 8px;
   height: 8px;
+  cursor: pointer;
 }
 .csseditor[data-theme=light] .path-editor-view svg rect.segment[data-selected=true] {
   stroke-width: 2;

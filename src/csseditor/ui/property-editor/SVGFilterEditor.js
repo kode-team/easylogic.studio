@@ -650,6 +650,9 @@ export default class SVGFilterEditor extends UIElement {
     var first = points[0];
     var last = points[points.length-1]
 
+    if (!first) return '';
+    if (!last) return '';
+
     var dist = Math.abs(first.x - last.x)/2;
 
     manager
@@ -713,15 +716,18 @@ export default class SVGFilterEditor extends UIElement {
                 'data-source-type': sourceType,
                 d: this.makeConnectedPath(path)
               })} />
-              <circle ${OBJECT_TO_PROPERTY({
-                
-                'data-source-type': sourceType,
-                'data-target-id': connectedItem.id,
-                'data-source-id': it.id,
-                'class': 'connected-remove-circle',
-                'cx': (path[0].x + path[1].x) / 2 ,
-                'cy': (path[0].y + path[1].y) / 2,
-              })} />
+
+              ${path.length && /*html*/`
+                <circle ${OBJECT_TO_PROPERTY({
+                  'data-source-type': sourceType,
+                  'data-target-id': connectedItem.id,
+                  'data-source-id': it.id,
+                  'class': 'connected-remove-circle',
+                  'cx': (path[0].x + path[1].x) / 2 ,
+                  'cy': (path[0].y + path[1].y) / 2,
+                })} />
+              `}
+              
             `
           }).join('');
         }).join('')}

@@ -25,7 +25,10 @@ export default [
         type: 'Composite',
         id: 'composite1',
         bound: { x: 400, y: 150 },
-        in: [ 'flood', 'shadowSource' ] ,
+        in: [ 
+            {id: 'flood'}, 
+            {id: 'shadowSource'}
+        ] ,
         operator: 'out',
         connected: [{
             id: 'offset'
@@ -38,7 +41,9 @@ export default [
         bound: { x: 200, y : 100 }, 
         dx: 4, 
         dy: 4, 
-        in: ['composite1'],
+        in: [
+            {id: 'composite1'}
+        ],
         connected: [
             {id: 'blur'}
         ]
@@ -52,7 +57,9 @@ export default [
         stdDeviationX: 4,
         stdDeviationY: 4, 
         edge: 'none',
-        in: ['offset'],
+        in: [
+            {id: 'offset'} 
+        ],
         connected: [{
             id: 'composite2'
         }]
@@ -74,7 +81,10 @@ export default [
         type: 'Composite',
         id: 'composite2',
         bound: { x: 400, y: 150 },
-        in: [ 'blur', 'shadowSource2' ] ,
+        in: [ 
+            {id: 'blur'}, 
+            {id: 'shadowSource2'}
+        ] ,
         operator: 'out',
         connected: [{
             id: 'merge'
@@ -96,7 +106,10 @@ export default [
         type: 'Merge',
         id: 'merge',
         bound: { x: 500, y: 150 },
-        in: [ 'composite2', 'shadowSource3']
+        in: [ 
+            {id: 'composite2'}, 
+            {id: 'shadowSource3'}
+        ]
     }
 
 ]

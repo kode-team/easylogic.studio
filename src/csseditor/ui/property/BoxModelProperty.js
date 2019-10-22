@@ -18,7 +18,7 @@ export default class BoxModelProperty extends BaseProperty {
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
-    this.refreshShowIsNot('artboard');
+    this.refreshShow('text');
   }
 
   getBody() {

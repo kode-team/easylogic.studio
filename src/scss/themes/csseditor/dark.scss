@@ -16,7 +16,7 @@ $footer-height: 30px;
 
 
 // common 
-$inner-border-color: #4d4949;
+$inner-border-color: #181818;
 $border-color: rgb(17, 17, 17);
 $border-color-2: #737373;
 $selected-border-color: #609de2;
@@ -29,7 +29,7 @@ $selected-color: #fc554f;
 $logo-selected-color: #fc554f;
 $logo-selected-font-color: white;
 
-$background-color: rgb(47, 53, 56);; 
+$background-color: #212121; 
 $header-background-color: $background-color;
 $selected-background-color: #535353; 
 $font-color: #ffffff;
@@ -60,8 +60,8 @@ $input-font-color: #ececec;
 // property 
 $property-title-color:  rgb(43, 43, 43);
 $property-border-color: rgb(0, 0, 0);
-$property-background-color: $inner-border-color; 
-$property-show-background-color: rgb(66, 66, 66); 
+$property-background-color: $background-color; 
+$property-show-background-color: $background-color; 
 $property-font-color: $font-color;
 $property-input-border-color: rgb(107, 107, 107);
 
@@ -74,11 +74,11 @@ $list-border-color: #676767;
 $list-background-color: $border-color;
 
 // tab 
-$tab-background-color: rgb(66, 66, 66); 
-$tab-header-background-color: #404040; 
+$tab-background-color: $background-color; 
+$tab-header-background-color: $background-color; 
 $tab-header-font-color: $font-color; 
 $tab-font-color: $font-color;
-$tab-selected-color: rgb(43, 43, 43); 
+$tab-selected-color: $background-color; 
 $tab-selected-font-color: $selected-font-color;
 $tab-selected-border-color: $border-color;
 $tab-border-color: $border-color;

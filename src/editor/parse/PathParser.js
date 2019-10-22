@@ -340,20 +340,26 @@ export default class PathParser {
                 
             } else if (command === 'Z') {
 
+                // Z 가 있으면  
+                // 이전 포인트와 처음 포인트는 같은 형태로 존재하게 된다. 
+
                 var prevPoint = Point.getPrevPoint(points, points.length);
                 var firstPoint = Point.getFirstPoint(points, points.length);
 
                 if (Point.isEqual(prevPoint.startPoint, firstPoint.startPoint)) {
                     prevPoint.connected = true; 
 
-                    if (prevPoint.command === 'C') {
-                        firstPoint.curve = true; 
+                    prevPoint.endPoint = clone(firstPoint.endPoint)
+                    firstPoint.reversePoint = clone(prevPoint.reversePoint)
 
-                        if (Point.isEqual(firstPoint.endPoint, firstPoint.startPoint)) {
-                            firstPoint.endPoint = Point.getReversePoint(prevPoint.startPoint, prevPoint.reversePoint);
-                        }
+                    // if (prevPoint.command === 'C') {
+                    //     firstPoint.curve = true; 
 
-                    }
+                    //     if (Point.isEqual(firstPoint.endPoint, firstPoint.startPoint)) {
+                    //         firstPoint.endPoint = Point.getReversePoint(prevPoint.startPoint, prevPoint.reversePoint);
+                    //     }
+
+                    // }
                 }
 
                 prevPoint.close = true; 

@@ -139,7 +139,7 @@ export default class SVGItemProperty extends BaseProperty {
 
         <div class='property-item animation-property-item'>
           <span class='add-timeline-property' data-property='fill-rule'></span>
-          <SelectEditor 
+          <SelectIconEditor 
             ref='$fillRule' 
             label='Fill Rule' 
             key="fill-rule" 
@@ -190,7 +190,7 @@ export default class SVGItemProperty extends BaseProperty {
 
         <div class='property-item animation-property-item'>
           <span class='add-timeline-property' data-property='stroke-linecap'></span>      
-          <SelectEditor 
+          <SelectIconEditor 
             ref='$strokeLineCap' 
             label='Line Cap' 
             key="stroke-linecap" 

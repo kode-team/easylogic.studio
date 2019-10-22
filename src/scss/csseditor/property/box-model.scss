@@ -12,7 +12,7 @@
       right: 5px;
       bottom: 5px;
       padding: 10px;
-      border: 1px dashed $border-color;
+      border: 1px dashed rgba(255, 255, 255, 0.3);
 
       &:before {
         content: "margin";
@@ -73,7 +73,7 @@
       right: 40px;
       bottom: 30px;
       padding: 10px;
-      border: 1px dashed $border-color;
+      border: 1px dashed rgba(255, 255, 255, 0.3);
 
       &::before {
         content: "padding";

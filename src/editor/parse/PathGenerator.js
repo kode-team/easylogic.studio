@@ -81,9 +81,7 @@ function toPath (points, minX, minY, scale = 1) {
         if (!current) continue; 
 
         if (current.command === 'M') {
-            d.push({command: 'M', values: [
-                current.startPoint
-            ]});             
+            d.push({command: 'M', values: [ current.startPoint ]});             
         } else {
             var prevPoint = Point.getPrevPoint(points, index);                
             if (current.curve === false) {  // 1번이 점이면 
@@ -101,16 +99,11 @@ function toPath (points, minX, minY, scale = 1) {
                     if (Point.isEqual(current.reversePoint, current.startPoint)) {
                         d.push({ command: 'L', values: [current.startPoint] })
                     } else {
-
                         d.push({command: 'Q', values: [current.reversePoint, current.startPoint ]});
                     }
 
                 } else {
-                    if (current.connected) {
-                        d.push({command: 'C', values: [ prevPoint.endPoint, current.reversePoint, current.startPoint ]});
-                    } else {
-                        d.push({command: 'C', values: [ prevPoint.endPoint, current.reversePoint, current.startPoint ]});                            
-                    }
+                    d.push({command: 'C', values: [ prevPoint.endPoint, current.reversePoint, current.startPoint ]});
                 }
             }
         }
@@ -437,7 +430,10 @@ export default class PathGenerator {
         if (isCurveSegment) {
             if (e.shiftKey) {   
                 // 상대편 길이 동일하게 curve 움직이기 
-                this.moveCurveSegment (segmentKey, dx, dy)
+                this.moveSegment(segmentKey, dx, dy);
+                var targetSegmentKey = segmentKey === 'endPoint' ? 'reversePoint' : 'endPoint'
+                state.segment[targetSegmentKey] = Point.getReversePoint(state.segment.startPoint, state.segment[segmentKey]);                
+
             } else if (e.altKey) {  
                 this.moveSegment(segmentKey, dx, dy);
             } else {    // Curve 만 움직이기 
@@ -464,7 +460,7 @@ export default class PathGenerator {
         var endPoint = {x, y}
         var reversePoint = {x, y}
 
-        if (state.dragPoints) {
+        if (state.dragPoints) { // drag 상태 일 때 
             reversePoint = Point.getReversePoint(state.startPoint, endPoint);
         }
 
