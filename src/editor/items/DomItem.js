@@ -11,39 +11,12 @@ import {
   STRING_TO_CSS,
   clone
 } from "../../util/functions/func";
-import { BorderImage } from "../css-property/BorderImage";
 import { Animation } from "../css-property/Animation";
 import { Transition } from "../css-property/Transition";
-import { Keyframe } from "../css-property/Keyframe";
 import { Selector } from "../css-property/Selector";
-import icon from "../../csseditor/ui/icon/icon";
+
+import { ClipPath } from "../css-property/ClipPath";
 import Dom from "../../util/Dom";
-
-function filterSVGClipPath (str = '', isFit = false, maxWidth, maxHeight) {
-  var $div = Dom.create('div');
-  var $svg = $div.html(str).$('svg');
-
-  if (!$svg) { 
-    return {
-      paths: '',
-      transform: ''
-    } 
-  }
-
-  var paths = $svg.html();
-  var width = Length.parse($svg.attr('width'))
-  var height = Length.parse($svg.attr('height'))
-
-  var transform = '' 
-  if (isFit) {
-    var scaleX = maxWidth.value / width.value 
-    var scaleY = maxHeight.value / height.value 
-
-    transform = `transform="scale(${scaleX} ${scaleY})"`
-  }
-
-  return { paths, transform };
-}
 
 export class DomItem extends GroupItem {
   getDefaultObject(obj = {}) {
@@ -172,47 +145,6 @@ export class DomItem extends GroupItem {
     this.json.transitions.push(transition);
     return transition;
   }    
-
-//   addKeyframe(keyframe) {
-//     this.json.keyframes.push(keyframe);
-//     return keyframe;
-//   }     
-
-
-//   createKeyframe(data = {}) {
-//     return this.addKeyframe(
-//       new Keyframe({
-//         checked: true,
-//         ...data
-//       })
-//     );
-//   }    
-  
-
-//   removeKeyframe(removeIndex) {
-//     this.removePropertyList(this.json.keyframes, removeIndex);
-//   }    
-
-
-//   sortKeyframe(startIndex, targetIndex) {
-//     this.sortItem(this.json.keyframes, startIndex, targetIndex);
-//   }    
-
-
-//   updateKeyframe(index, data = {}) {
-//     this.json.keyframes[+index].reset(data);
-//   }      
-
-
-// /**
-//    * `@keyframes` 문자열만 따로 생성 
-//    */
-//   toKeyframeString (isAnimate = false) {
-//     return this.json.keyframes
-//               .map(keyframe => keyframe.toString(isAnimate))
-//               .join('\n\n')
-//   }  
-
 
   addSelector(selector) {
     this.json.selectors.push(selector);
@@ -351,14 +283,6 @@ export class DomItem extends GroupItem {
     this.json.borderRadius = data;
   }
 
-  // setBorderImageOffset(type, data) {
-  //   this.json.borderImageOffset = data;
-  // }  
-
-  // setBorderImage(data) {
-  //   this.json.borderImage = data;
-  // }    
-
   traverse(item, results, hasLayoutItem) {
     // var parentItemType = item.parent().itemType;
     if (item.isAttribute()) return;
@@ -419,14 +343,6 @@ export class DomItem extends GroupItem {
       outline: `${outline.color} ${outline.style} ${outline.width}`
     }
   }
-
-  // toBorderImageCSS() {
-
-  //   if (!this.json.borderImage) return {} 
-  //   if (!this.json.applyBorderImage) return {} 
-
-  //   return this.json.borderImage.toCSS();
-  // }
 
   toKeyCSS (key) {
     if (!this.json[key]) return {} 
@@ -527,7 +443,7 @@ export class DomItem extends GroupItem {
 
         'border-radius',
 
-        'filter', 'clip-path', 'backdrop-filter', 'box-shadow', 'text-shadow',
+        'filter', 'backdrop-filter', 'box-shadow', 'text-shadow',
 
         'offset-path'
       )
@@ -596,11 +512,28 @@ export class DomItem extends GroupItem {
     return results;
   }  
 
+  toClipPathCSS () {
+    var str = this.json['clip-path']
+    var obj = ClipPath.parseStyle(str)
+
+    switch (obj.type) {
+    case 'path': 
+    case 'svg': 
+      str = `url(#${this.clipPathId})`
+      break; 
+    }
+
+    return {
+      'clip-path': str
+    }
+  }
+
   toCSS(isExport = false) {
 
     return {
       ...this.toVariableCSS(),
       ...this.toDefaultCSS(isExport),
+      ...this.toClipPathCSS(),
       ...this.toWebkitCSS(), 
       ...this.toTextClipCSS(),      
       ...this.toBoxModelCSS(),
@@ -618,6 +551,7 @@ export class DomItem extends GroupItem {
     return {
       ...this.toVariableCSS(),      
       ...this.toDefaultCSS(),
+      ...this.toClipPathCSS(),
       ...this.toWebkitCSS(),
       ...this.toTextClipCSS(),
       ...this.toBoxModelCSS(),
@@ -705,4 +639,61 @@ ${this.toNestedBoundCSS().map(it => {
 
     return obj
   }
+
+
+
+
+  updateFunction (currentElement, isChangeFragment = true) {
+
+    if (isChangeFragment) {
+      var $svg = currentElement.$(`[data-id="${this.innerSVGId}"]`);  
+
+      if ($svg) {
+        var $defs = $svg.$('defs');
+        $defs.html(this.toDefInnerString)          
+      } else {
+        currentElement.prepend(Dom.createByHTML(this.toDefString));
+      }
+
+    }
+
+  }    
+
+  get toDefInnerString () {
+    return /*html*/`${this.toClipPath}`
+  }
+
+  get toClipPath() {
+
+    var obj = ClipPath.parseStyle(this.json['clip-path']);
+    var value = obj.value; 
+    switch (obj.type) {
+    case 'path':
+      return /*html*/`<clipPath id="${this.clipPathId}"><path d="${value}" /></clipPath>`
+    case 'svg': 
+      return /*html*/`<clipPath id="${this.clipPathId}">${value}</clipPath>`
+    }
+
+    return ``
+  }
+
+  get innerSVGId() {
+    return this.json.id + 'inner-svg'
+  }
+
+  get toDefString () {
+    var str = this.toDefInnerString.trim()
+
+    return str && /*html*/`
+    <svg class='inner-svg-element' data-id="${this.innerSVGId}" width="0" height="0">
+      <defs>
+        ${str}
+      </defs>
+    </svg>
+    `
+  }
+
+  get clipPathId () {
+    return this.json.id + 'clip-path'
+  }  
 }

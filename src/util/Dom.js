@@ -35,6 +35,17 @@ export default class Dom {
     return new Dom(tag, className, attr);
   }
 
+  static createByHTML (htmlString) {
+    var div = Dom.create('div')
+    var list = div.html(htmlString).children();
+
+    if (list.length) {
+      return Dom.create(list[0].el);
+    }
+
+    return null; 
+  }
+
   static getScrollTop() {
     return Math.max(
       window.pageYOffset,

@@ -9689,8 +9689,8 @@ html, body {
   pointer-events: visibleStroke;
   stroke: transparent;
 }
-.csseditor .path-editor-view.textpath svg path.split-path {
-  stroke: black;
+.csseditor .path-editor-view.box svg path.object {
+  stroke: rgba(17, 17, 17, 0.5);
 }
 .csseditor .path-editor-view svg line {
   stroke: black;
@@ -18654,8 +18654,8 @@ html, body {
   pointer-events: visibleStroke;
   stroke: transparent;
 }
-.csseditor[data-theme=light] .path-editor-view.textpath svg path.split-path {
-  stroke: #4b61ce;
+.csseditor[data-theme=light] .path-editor-view.box svg path.object {
+  stroke: rgba(231, 231, 231, 0.5);
 }
 .csseditor[data-theme=light] .path-editor-view svg line {
   stroke: #4b61ce;

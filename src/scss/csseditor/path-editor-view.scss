@@ -41,11 +41,14 @@
         }
     }
 
-    &.textpath {
+    &.box {
         svg {
             path {
+                &.object {
+                    stroke: rgba($border-color, 0.5);
+                }                
                 &.split-path {
-                    stroke: $path-guide-color;
+                    // stroke: $path-guide-color;
                 }
             }
         }

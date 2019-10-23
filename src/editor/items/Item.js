@@ -269,6 +269,10 @@ export class Item {
     return newJSON;
   }
 
+  get toDefString() {
+    return '' 
+  }
+
   get html () {
     var {elementType, id, name, layers, itemType} = this.json;
 
@@ -281,6 +285,7 @@ export class Item {
       'data-id': id,
       'data-title': name 
     })}>
+    ${this.toDefString}
   ${layers.map(it => it.html).join('\n\t')}
 </${tagName}>`
   }

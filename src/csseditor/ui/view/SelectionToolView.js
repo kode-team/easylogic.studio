@@ -252,6 +252,7 @@ export default class SelectionToolView extends UIElement {
                 changeEvent: 'updatePathItem',
                 current,
                 d: current.d,
+                box: current.is('svg-textpath') ? 'box': 'canvas', 
                 screenX: current.screenX,
                 screenY: current.screenY,
                 screenWidth: current.screenWidth,

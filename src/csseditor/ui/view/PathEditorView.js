@@ -185,10 +185,8 @@ export default class PathEditorView extends PathCutter {
         
         var item = this.state.current;
 
-        // textpath의 기준점은 
-        // textpath 자체이기 때문에 
-        // 내부의 path는 rect 로 정ㅇ의되지 않고 textpath 컨테이너 크기에 영향을 받는다.  
-        if (item && item.is('svg-textpath')) {            
+        // 객체 내부에 포함된 패스는 box 를 기준으로 재설정 
+        if (item && this.state.box === 'box') {
             var minX = item.screenX.value
             var minY = item.screenY.value
         }
@@ -314,6 +312,8 @@ export default class PathEditorView extends PathCutter {
             }
         }
 
+        obj.box = obj.box || 'canvas'
+
         this.changeMode(mode, obj);
 
         this.refresh(obj);
@@ -339,7 +339,7 @@ export default class PathEditorView extends PathCutter {
             class: {
                 'draw': this.state.mode === 'draw',
                 'modify': this.state.mode === 'modify',
-                'textpath': this.state.current && this.state.current.is('svg-textpath'),
+                'box': this.state.box === 'box',
                 'has-transform': !!this.state.hasTransform,
                 'segment-move': this.state.mode === 'segment-move',         
             },

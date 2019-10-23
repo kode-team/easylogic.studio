@@ -9,6 +9,7 @@ import {
 
 import { editor } from "../../../editor/editor";
 import { EVENT } from "../../../util/UIElement";
+import { ClipPath } from "../../../editor/css-property/ClipPath";
 
 
 var clipPathList = [
@@ -40,7 +41,7 @@ export default class ClipPathProperty extends BaseProperty {
   }
 
   getBody() {
-    return `<div class='clip-path-list' ref='$clippathList'></div>`;
+    return /*html*/`<div class='clip-path-list' ref='$clippathList'></div>`;
   }
 
   getTools() {
@@ -126,9 +127,48 @@ export default class ClipPathProperty extends BaseProperty {
     var current = editor.selection.current;
     if (!current) return;
 
-    this.emit("showClipPathPopup", {
-      'clip-path': current['clip-path']
-    });
+    var obj = ClipPath.parseStyle(current['clip-path'])
+
+    switch(obj.type) {
+    case 'path':
+      var d = obj.value.trim()
+      var mode = d ? 'modify' : 'draw'
+
+      this.emit('showPathEditor', mode, {
+        changeEvent: 'updateClipPathString',
+        current,
+        d,
+        box: 'box',
+        screenX: current.screenX,
+        screenY: current.screenY,
+        screenWidth: current.screenWidth,
+        screenHeight: current.screenHeight,
+      }) 
+      break; 
+    case 'svg':
+      // TODO: clip art 선택하기 
+      break; 
+    default: 
+      this.emit("showClipPathPopup", {
+        'clip-path': current['clip-path']
+      });      
+      break; 
+    }
+
+
+  }
+
+  [EVENT('updateClipPathString')] (data) {
+    var current = editor.selection.current;
+
+    if (!current) return;
+
+    current.reset({
+      'clip-path': `path(${data.d})`
+    }); 
+
+    this.refresh();
+    this.emit("refreshElement", current);
   }
 
   [EVENT('changeClipPathPopup')] (data) {
