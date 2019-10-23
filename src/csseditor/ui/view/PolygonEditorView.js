@@ -102,7 +102,7 @@ export default class PolygonEditorView extends UIElement {
     }
 
     makePolygonLayer (pathRect) {
-        var totalLength = this.refs.$view.$('polygon.object').el.getTotalLength()                
+        var totalLength = this.refs.$view.$('polygon.object').totalLength
         var { points } = this.polygonGenerator.toPolygon(pathRect.x, pathRect.y, this.scale);
         var artboard = editor.selection.currentArtboard
         var layer; 
@@ -129,7 +129,7 @@ export default class PolygonEditorView extends UIElement {
 
     updatePolygonLayer () {
         var rect = this.getViewRect()
-        var totalLength = this.refs.$view.$('polygon.object').el.getTotalLength()        
+        var totalLength = this.refs.$view.$('polygon.object').totalLength        
         var { points } = this.polygonGenerator.toPolygon(
             rect.x * this.scale, 
             rect.y * this.scale, 

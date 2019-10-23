@@ -568,6 +568,10 @@ export default class Dom {
     }
   }
 
+  get totalLength () {
+    return this.el.getTotalLength()
+  }
+
   scrollIntoView () {
     this.el.scrollIntoView()
   }

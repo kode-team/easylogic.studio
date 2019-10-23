@@ -17,6 +17,7 @@ export default class PathManager extends UIElement {
             <label>Path Mode</label>
             <label><input type='radio' name='path-mode' value='modify' /> modify</label>
             <label><input type='radio' name='path-mode' value='draw' /> draw</label>
+            <label><input type='radio' name='path-mode' value='transform' /> transform</label>            
         </div>
       </div>    
     `;

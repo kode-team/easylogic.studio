@@ -118,7 +118,7 @@ export class SVGTextPathItem extends SVGItem {
 
     }
 
-    this.json.totalLength = $path.el.getTotalLength()
+    this.json.totalLength = $path.totalLength
   }    
 
   get toDefInnerString () {

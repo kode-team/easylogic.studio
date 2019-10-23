@@ -99,6 +99,8 @@ import view_comfy from "./view_comfy";
 import settings_input_component from "./settings_input_component";
 import merge from "./merge";
 import texture from "./texture";
+import account_tree from "./account_tree";
+import format_shapes from "./format_shapes";
 
 
 const alias = {
@@ -107,6 +109,8 @@ const alias = {
 
 export default {
   ...alias,
+  account_tree,
+  format_shapes,  
   merge,
   texture,
   settings_input_component,

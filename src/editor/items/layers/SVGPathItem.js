@@ -106,7 +106,7 @@ export class SVGPathItem extends SVGItem {
       $defs.html(this.toDefInnerString)  
     }
 
-    this.json.totalLength = $path.el.getTotalLength()
+    this.json.totalLength = $path.totalLength
   }    
 
   get html () {

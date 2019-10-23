@@ -7,6 +7,17 @@ export default class Point {
         return point && point.command == 'M'
     }
 
+    // check whether C is in A->C line 
+    // 지점의 각도가 맞는지 계산해서 같은 각이면 같이 움직이는 걸로 처리 하자 .
+    static isInLine (A, B, C) {
+        if (A.x === C.x) return B.x === C.x;
+        if (A.y === C.y) return B.y === C.y;
+        return (A.x - C.x) * (A.y - C.y) === (C.x - B.x) * (C.y - B.y);
+    }
+
+    static isLine (point) {
+        return Point.isInLine(point.endPoint, point.startPoint, point,reversePoint);
+    }
 
     static getReversePoint(start, end) {
         var distX = (start.x -  end.x)

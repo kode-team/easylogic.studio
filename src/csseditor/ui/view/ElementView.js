@@ -85,12 +85,13 @@ export default class ElementView extends UIElement {
             && $el.hasClass('point') === false
             && $el.hasClass('handle') === false            
             && $el.hasClass('perspective-handle') === false
+            && $el.hasClass('transform-tool-item') === false
+            && $el.hasClass('transform-tool') === false            
             && $el.isTag('svg') === false 
             && $el.isTag('path') === false
             && $el.isTag('textPath') === false
             && $el.isTag('polygon') === false
-            && $el.attr('data-segment') !== 'true'
-    ;
+            && $el.attr('data-segment') !== 'true';
     }
 
     [POINTERSTART('$el') + IF('checkEmptyElement') + MOVE('movePointer') + END('moveEndPointer')] (e) {

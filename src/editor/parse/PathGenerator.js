@@ -1,8 +1,9 @@
 import SegmentManager from "./SegmentManager";
 import { clone, OBJECT_TO_PROPERTY } from "../../util/functions/func";
-import { getDist, calculateAngle, getXYInCircle, calculateAngle360 } from "../../util/functions/math";
+import { getDist, calculateAngle, getXYInCircle, calculateAngle360, degreeToRadian } from "../../util/functions/math";
 import Point from "./Point";
 import PathStringManager from "./PathStringManager";
+import matrix from "../../util/functions/matrix";
 
 const SEGMENT_DIRECTION = ['startPoint', 'endPoint', 'reversePoint']
 
@@ -169,6 +170,130 @@ export default class PathGenerator {
         return [...this.state.points]
     }
 
+    applyMatrix (p, ...mat) {
+
+        var {x, y} = p; 
+
+        mat.forEach(m => {
+            if (m) {
+                [x, y] = m([x, y], 0)
+            }
+        })
+
+        return {x, y}
+    }
+
+    applyTransform (...mat) {
+
+        var first = matrix.matrix2d.translate(-this.transformRect.x, -this.transformRect.y);
+        var second = matrix.matrix2d.translate(this.transformRect.x, this.transformRect.y);
+
+        this.transformPoints.forEach((p, index) => {
+            var realPoint = this.state.points[index];
+
+            Object.assign(realPoint.startPoint, this.applyMatrix(p.startPoint, first, ...mat, second)) ;
+            Object.assign(realPoint.endPoint, this.applyMatrix(p.endPoint, first, ...mat, second)) ;
+            Object.assign(realPoint.reversePoint, this.applyMatrix(p.reversePoint, first, ...mat, second)) ;
+
+        })
+
+    }
+
+    transform (type, dx, dy) {
+        switch(type) {
+        case 'to move': 
+            this.applyTransform(matrix.matrix2d.translate(dx, dy)); 
+            break; 
+        case 'to top': 
+        case 'to bottom': 
+            var hw = this.transformRect.width/2;
+            var hh = this.transformRect.height/2;
+
+            var a = calculateAngle(
+                this.transformRect.x + hw, 
+                this.transformRect.y + hh, 
+            )
+            var b = calculateAngle(
+                this.transformRect.x + hw + dx, 
+                this.transformRect.y + hh, 
+            )
+
+            var xAngle = a - b;        
+            this.applyTransform(matrix.matrix2d.skewX(degreeToRadian(xAngle))); 
+            break;             
+        case 'to left': 
+        case 'to right': 
+            var hw = this.transformRect.width/2;
+            var hh = this.transformRect.height/2;
+
+            var a = calculateAngle(
+                this.transformRect.x + hw, 
+                this.transformRect.y + hh, 
+            )
+            var b = calculateAngle(
+                this.transformRect.x + hw, 
+                this.transformRect.y + hh + dy, 
+            )
+
+            var yAngle = b - a;        
+            this.applyTransform(
+                matrix.matrix2d.skewY(degreeToRadian(yAngle))
+            ); 
+            break;                         
+        case 'to bottom right':
+
+            var sx =  (this.transformRect.width + dx)/ this.transformRect.width;
+            var sy =  (this.transformRect.height + dy) / this.transformRect.height;
+
+            this.applyTransform(
+                matrix.matrix2d.scale(sx, sy)
+            ); 
+            break; 
+
+        case 'to top right':
+
+            var sx =  (this.transformRect.width + dx)/ this.transformRect.width;
+            var sy =  (this.transformRect.height - dy) / this.transformRect.height;
+
+            this.applyTransform(
+                matrix.matrix2d.scale(sx, sy),
+                matrix.matrix2d.translate(0, dy)
+            ); 
+            break;             
+        case 'to top left':
+
+            var sx =  (this.transformRect.width - dx)/ this.transformRect.width;
+            var sy =  (this.transformRect.height - dy) / this.transformRect.height;
+
+            this.applyTransform(
+                matrix.matrix2d.scale(sx, sy),
+                matrix.matrix2d.translate(dx, dy)
+            ); 
+            break;                         
+        case 'to bottom left':
+
+            var sx =  (this.transformRect.width - dx)/ this.transformRect.width;
+            var sy =  (this.transformRect.height + dy) / this.transformRect.height;
+
+            this.applyTransform(
+                matrix.matrix2d.scale(sx, sy),
+                matrix.matrix2d.translate(dx, 0)
+            ); 
+            break;                                     
+        }
+    }
+
+    initTransform (rect) {
+        this.transformRect = clone(rect);
+        this.transformPoints = this.clonePoints.map(p => {
+            
+            return {
+                startPoint: clone(p.startPoint),
+                endPoint: clone(p.endPoint),
+                reversePoint: clone(p.reversePoint)
+            }
+        });   
+    }
 
     setConnectedPoint (dx, dy) {
         var state = this.state

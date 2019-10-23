@@ -94,7 +94,7 @@ export class SVGPolygonItem extends SVGItem {
   
     }
 
-    this.json.totalLength = $polygon.el.getTotalLength()
+    this.json.totalLength = $polygon.totalLength
   }  
 
   toAnimationKeyframes (properties) {

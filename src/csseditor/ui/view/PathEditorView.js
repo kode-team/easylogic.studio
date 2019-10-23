@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
-import { POINTERSTART, MOVE, END, BIND, POINTERMOVE, PREVENT, KEYUP, IF, STOP, CLICK, DOUBLECLICK, KEY } from "../../../util/Event";
+import { POINTERSTART, MOVE, END, BIND, POINTERMOVE, PREVENT, KEYUP, IF, STOP, CLICK, DOUBLECLICK, KEY, LOAD } from "../../../util/Event";
 import { editor } from "../../../editor/editor";
 import PathGenerator from "../../../editor/parse/PathGenerator";
 import Dom from "../../../util/Dom";
@@ -8,6 +8,7 @@ import PathParser from "../../../editor/parse/PathParser";
 import { SVGPathItem } from "../../../editor/items/layers/SVGPathItem";
 import { Length } from "../../../editor/unit/Length";
 import { getBezierPoints, recoverBezier, recoverBezierQuard, getBezierPointsQuard, recoverBezierLine, getBezierPointsLine } from "../../../util/functions/bezier";
+import { calculateAngle360, calculateAngle } from "../../../util/functions/math";
 
 
 const SegmentConvertor = class extends UIElement {
@@ -18,7 +19,7 @@ const SegmentConvertor = class extends UIElement {
 
         this.pathGenerator.convertToCurve(index);
 
-        this.bindData('$view');
+        this.renderPath()
 
         this.refreshPathLayer()
     }
@@ -79,14 +80,39 @@ const PathCutter = class extends SegmentConvertor {
 
 
 
-        this.bindData('$view');
+        this.renderPath()
 
         this.refreshPathLayer();
 
     }
 }
 
-export default class PathEditorView extends PathCutter {
+const PathTransformEditor = class extends PathCutter {
+    [POINTERSTART('$tool .transform-tool-item') + MOVE('moveTransformTool') + END('moveEndTransformTool')]  (e) {
+        this.transformMoveType = e.$delegateTarget.attr('data-position')
+
+        this.pathGenerator.initTransform(this.state.transformZoneRect);
+        this.startXY = e.xy; 
+    }
+
+    moveTransformTool (dx, dy) {
+
+      
+        this.pathGenerator.transform(this.transformMoveType, dx, dy);
+
+        this.renderPath()
+
+        this.refreshPathLayer();
+    }
+
+    moveEndTransformTool  (dx, dy) {
+        // this.pathGenerator.transform(this.transformMoveType, dx, dy);
+
+        // this.renderPath();
+    }
+}
+
+export default class PathEditorView extends PathTransformEditor {
 
     initialize() {
         super.initialize();
@@ -119,9 +145,42 @@ export default class PathEditorView extends PathCutter {
 
     template() {
         return /*html*/`
-        <div class='path-editor-view' tabIndex="-1" ref='$view'> 
-        </div>
-        `
+        <div class='path-editor-view' tabIndex="-1" ref='$view'>
+            <div class='path-container' ref='$view'></div>
+            <div class='path-tool'>
+                <div class='transform-manager' ref='$tool'>
+                    <div class='transform-tool-item' data-position='to move'></div>
+                    <div class='transform-tool-item' data-position='to top'></div>
+                    <div class='transform-tool-item' data-position='to right'></div>
+                    <div class='transform-tool-item' data-position='to bottom'></div>
+                    <div class='transform-tool-item' data-position='to left'></div>
+                    <div class='transform-tool-item' data-position='to top right'></div>
+                    <div class='transform-tool-item' data-position='to bottom right'></div>
+                    <div class='transform-tool-item' data-position='to top left'></div>
+                    <div class='transform-tool-item' data-position='to bottom left'></div>  
+                </div>
+            </div>
+        </div>`
+    }
+
+    [BIND('$tool')] () {
+        this.resetTransformZone();
+        var rect = this.state.transformZoneRect;
+
+        return {
+            'data-show': this.state.mode === 'transform',
+            style: {
+                left: Length.px(rect.x),
+                top: Length.px(rect.y),
+                width: Length.px(rect.width),
+                height: Length.px(rect.height)
+            }
+
+        }
+    }
+
+    renderTransformTool () {
+        this.bindData('$tool')
     }
 
     isShow () {
@@ -135,20 +194,23 @@ export default class PathEditorView extends PathCutter {
     }
 
     [KEYUP('document') + IF('isShow') + KEY('Escape') + KEY('Enter') + PREVENT + STOP] () {
-        this.initRect();
         if (this.state.current) {
             this.refreshPathLayer();
-        } else {
-            var pathRect = this.refs.$view.$('path.object').rect()
-            pathRect.x -= this.state.rect.x;
-            pathRect.y -= this.state.rect.y;            
-            this.addPathLayer(pathRect); 
+        } else {     
+            this.addPathLayer(); 
         }
         this.trigger('hidePathEditor');        
     }
 
+    get totalPathLength () {
+        if (!this.refs.$view) return 0 
+        var $obj = this.refs.$view.$('path.object');
+        if (!$obj) return 0; 
+
+        return $obj.totalLength
+    }
+
     makePathLayer (pathRect) {
-        var totalLength = this.refs.$view.$('path.object').el.getTotalLength()                
         var { d } = this.pathGenerator.toPath(pathRect.x, pathRect.y, this.scale);
         var artboard = editor.selection.currentArtboard
         var layer; 
@@ -163,7 +225,7 @@ export default class PathEditorView extends PathCutter {
                 width: Length.px(width),
                 height: Length.px(height),
                 d,
-                totalLength
+                totalLength: this.totalPathLength
             }))
 
             layer.setScreenX(x);
@@ -173,20 +235,20 @@ export default class PathEditorView extends PathCutter {
         return layer; 
     }
 
-    updatePathLayer () {
-        this.initRect()
-        var rect = this.refs.$view.$('path.object').rect()
-        rect.x -= this.state.rect.x;
-        rect.y -= this.state.rect.y;
+    get isBoxMode () {
+        return this.state.box === 'box'
+    }
 
-        var totalLength = this.refs.$view.$('path.object').el.getTotalLength()       
+    updatePathLayer () {
+        var rect = this.getPathRect()
+
         var minX = rect.x;
         var minY = rect.y; 
         
         var item = this.state.current;
 
         // 객체 내부에 포함된 패스는 box 를 기준으로 재설정 
-        if (item && this.state.box === 'box') {
+        if (item && this.isBoxMode) {
             var minX = item.screenX.value
             var minY = item.screenY.value
         }
@@ -203,21 +265,19 @@ export default class PathEditorView extends PathCutter {
         // parser.rotate(radian, rect.width/2, rect.height/2) 
 
         this.emit(this.state.changeEvent, {
-            d: parser.toString(), totalLength, rect 
+            d: parser.toString(), 
+            totalLength: this.totalPathLength, 
+            rect 
         })
 
 
         this.emit('refreshPathLayer')
     }
 
-    addPathLayer(pathRect) {
-        this.initRect()
-        var pathRect = this.refs.$view.$('path.object').rect()
-        pathRect.x -= this.state.rect.x;
-        pathRect.y -= this.state.rect.y;
+    addPathLayer() {
+        var pathRect = this.getPathRect()
 
         this.changeMode('modify');
-        // this.bindData('$view');
 
         if (pathRect.width !==  0 && pathRect.height !== 0) {
 
@@ -245,7 +305,7 @@ export default class PathEditorView extends PathCutter {
 
     [EVENT('changePathManager')] (mode) {
         this.setState({ mode, clickCount: 0 }, false);
-        this.bindData('$view');
+        this.renderPath()
     }
 
     isMode (mode) {
@@ -297,7 +357,7 @@ export default class PathEditorView extends PathCutter {
             this.state.hasTransform = false;        
         }
 
-        this.bindData('$view');             
+        this.renderPath()
 
     }
 
@@ -339,6 +399,7 @@ export default class PathEditorView extends PathCutter {
             class: {
                 'draw': this.state.mode === 'draw',
                 'modify': this.state.mode === 'modify',
+                'transform': this.state.mode === 'transform',
                 'box': this.state.box === 'box',
                 'has-transform': !!this.state.hasTransform,
                 'segment-move': this.state.mode === 'segment-move',         
@@ -362,6 +423,34 @@ export default class PathEditorView extends PathCutter {
         }
     }
 
+    renderPath () {
+        this.bindData('$view');
+
+        this.renderTransformTool()
+    }
+
+    getPathRect () {
+        this.initRect(true);
+
+        var $obj = this.refs.$view.$('path.object')
+
+        var pathRect = {x: Length.px(0), y: Length.px(0),  width: Length.px(0), height: Length.px(0)}
+        if ($obj) {
+
+            pathRect = $obj.rect()
+            pathRect.x -= this.state.rect.x;
+            pathRect.y -= this.state.rect.y;
+        }
+
+        return pathRect;
+    }
+
+    resetTransformZone() {
+        var rect = this.getPathRect();
+
+        this.state.transformZoneRect = rect; 
+    }
+
     [POINTERMOVE('$view')] (e) {        
         this.initRect()
         if (this.isMode('draw') && this.state.rect) {            
@@ -371,7 +460,7 @@ export default class PathEditorView extends PathCutter {
             }; 
 
             this.state.altKey = e.altKey
-            this.bindData('$view');                 
+            this.renderPath()
         } else {
 
             var isSplitPath = Dom.create(e.target).hasClass('split-path')
@@ -447,7 +536,7 @@ export default class PathEditorView extends PathCutter {
             var e = editor.config.get('bodyEvent')
             this.pathGenerator.move(dx, dy, e);
 
-            this.bindData('$view');            
+            this.renderPath()      
 
             this.updatePathLayer();
 
@@ -467,7 +556,7 @@ export default class PathEditorView extends PathCutter {
         } else if (this.isMode('segment-move')) {
 
             this.changeMode('modify');           
-            this.bindData('$view'); 
+            this.renderPath()
 
         } else if (this.isMode('draw')) {            
 
@@ -476,7 +565,7 @@ export default class PathEditorView extends PathCutter {
                 this.changeMode('modify');            
                 this.pathGenerator.setConnectedPoint(dx, dy);
         
-                this.bindData('$view');       
+                this.renderPath()
                    
                 if (this.state.current) {
                     this.refreshPathLayer();
@@ -491,7 +580,7 @@ export default class PathEditorView extends PathCutter {
                 this.pathGenerator.moveEnd(dx, dy);
                 this.state.clickCount++;
 
-                this.bindData('$view');
+                this.renderPath()
             }
 
         }

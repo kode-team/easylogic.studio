@@ -8,51 +8,163 @@
     cursor: crosshair;
     background-color: transparent;
 
-    &.has-transform {
-        background-color: $path-background-color;
-    }
+    .path-container {
+        position: absolute;
+        left: 0px;
+        top:0px;
+        right:0px;
+        bottom:0px;
 
-    &.draw {
-        cursor: crosshair;
-    }
 
-    &.segment-move {
-        cursor: move; 
-    }
+        &.has-transform {
+            background-color: $path-background-color;
+        }
 
-    &.alt {
-        svg {
-            circle {
-                cursor: move;
+        &.draw {
+            cursor: crosshair;
+        }
+
+        &.segment-move {
+            cursor: move; 
+        }
+
+        &.alt {
+            svg {
+                circle {
+                    cursor: move;
+                }
             }
         }
-    }
 
-    &.modify,
-    &.segment-move {
-        cursor: default;
-        svg {
-            path {
-                &.object {
-                    pointer-events: visibleStroke;
-                    stroke: transparent;
+        &.transform {
+            svg {
+                circle, rect, text {
+                    display: none;
+                }
+            }
+        }
+
+        &.modify,
+        &.segment-move {
+            cursor: default;
+            svg {
+                path {
+                    &.object {
+                        pointer-events: visibleStroke;
+                        stroke: transparent;
+                    }
+                }
+            }
+        }
+
+        &.box {
+            svg {
+                path {
+                    &.object {
+                        stroke: rgba($border-color, 0.5);
+                    }                
+                    &.split-path {
+                        // stroke: $path-guide-color;
+                    }
                 }
             }
         }
     }
 
-    &.box {
-        svg {
-            path {
-                &.object {
-                    stroke: rgba($border-color, 0.5);
-                }                
-                &.split-path {
-                    // stroke: $path-guide-color;
+    .path-tool {
+        pointer-events: none;
+        position: absolute;
+        left: 0px;
+        top:0px;
+        right:0px;
+        bottom:0px;        
+        // background-color: rgba(yellow, 0.1);
+
+
+        .transform-manager {
+            position: absolute;
+            // background-color: rgba($selected-color, 0.2);
+            pointer-events: all;
+            display: none;
+
+            &[data-show="true"] {
+                display: inline-block;
+            }            
+
+            .transform-tool-item {
+                position: absolute;
+                background-color: rgba(255, 255, 255, 0.5);
+                box-shadow: 0 0 0 1px #7b7b7b;
+                display: inline-block;
+                width: 8px;
+                height: 8px;
+                transform: translate(-50%, -50%);                            
+
+                &[data-position="to move"] {
+                    left: 0px;
+                    top: 0px;
+                    right: 0px;
+                    bottom: 0px;
+                    width: auto;
+                    height: auto;
+                    background-color: transparent;
+                    cursor: move;
+                    transform: none;
                 }
+
+                &[data-position="to top left"] {
+                    left: 0px;
+                    top: 0px;
+                    cursor: nwse-resize;
+                }
+            
+                &[data-position="to top right"] {
+                    left: 100%;
+                    top: 0px;
+                    cursor: nesw-resize;      
+                }    
+            
+                &[data-position="to top"] {
+                    left: 50%;
+                    top: 0px;
+                    cursor: ns-resize;
+                }        
+            
+                &[data-position="to left"] {
+                    left: 0px;
+                    top: 50%;
+                    cursor: ew-resize;       
+                }
+            
+                &[data-position="to right"] {
+                    left: 100%;
+                    top: 50%;
+                    cursor: ew-resize;             
+                }    
+            
+                &[data-position="to bottom"] {
+                    left: 50%;
+                    top: 100%;
+                    cursor: ns-resize;                   
+                }          
+                
+                
+                &[data-position="to bottom left"] {
+                    left: 0px;
+                    top: 100%;
+                    cursor: nesw-resize;            
+       
+                }
+            
+                &[data-position="to bottom right"] {
+                    left: 100%;
+                    top: 100%;
+                    cursor: nwse-resize;      
+                }    
             }
         }
     }
+
 
     svg {
 

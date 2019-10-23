@@ -7,8 +7,8 @@ const matrix2d = {
             var y = +b[startIndex+1];
 
             return [
-                a[0][0] * x + a[0][1] * x +  a[0][2],
-                a[1][0] * y + a[1][1] * y +  a[1][2],
+                a[0][0] * x + a[0][1] * y +  a[0][2],
+                a[1][0] * x + a[1][1] * y +  a[1][2],
                 1
             ];
         };
@@ -40,16 +40,18 @@ const matrix2d = {
 
     skewX : function (x) {
         return this.multiply([
-            [1, x, 0],
+            [1, Math.tan(x), 0],
             [0, 1, 0],
             [0, 0, 1]
         ]);
+
+        // a + Math.tan(x) * (disty) 
     },
 
     skewY : function (y) {
         return this.multiply([
             [1, 0, 0],
-            [y, 1, 0],
+            [Math.tan(y), 1, 0],
             [0, 0, 1]
         ]);
     },
