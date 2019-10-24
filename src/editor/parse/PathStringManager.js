@@ -60,6 +60,16 @@ export default class PathStringManager {
         return d; 
     }
 
+
+    static makeLine (x, y, x2, y2) {
+        var d = new PathStringManager()
+            .M({x, y})
+            .L({x: x2, y: y2})
+            .d
+
+        return d; 
+    }    
+
     static makeCircle (x, y, width, height) {
         // refer to https://stackoverflow.com/questions/1734745/how-to-create-circle-with-b%C3%A9zier-curves
 

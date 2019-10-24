@@ -55,10 +55,9 @@ export default class PathDataProperty extends BaseProperty {
 
 
   [EVENT('changeValue')] (key, value, params) {
-
-    editor.selection.reset({ 
-      [key]: value
+    this.emit("updatePathItem", {
+      [key]: value 
     })
-    this.emit("refreshSelectionStyleView");
+    
   }
 }

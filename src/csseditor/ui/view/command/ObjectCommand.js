@@ -127,7 +127,7 @@ export default class ObjectCommand extends UIElement {
             text: 'Insert a newText',
             'font-size': Length.parse(rect.height),
             textLength: '100%',
-            d: `M0,${rect.height.value}L${rect.width.value},${rect.height.value}Z`,
+            d: PathStringManager.makeLine(0, rect.height.value, rect.width.value, rect.height.value),
             ...rect
         }), rect)
     }            

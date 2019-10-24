@@ -1,4 +1,18 @@
 .path-data-editor {
+    .segment-empty {
+        display: grid;
+        grid-template-columns: 30px 1fr; 
+        grid-column-gap: 2px;
+
+        .values {
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr);
+            grid-column-gap: 2px;
+            grid-row-gap: 2px;
+            text-align: center;
+        }
+    }    
+    
     .segment {
         display: grid;
         grid-template-columns: 30px 1fr; 

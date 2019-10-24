@@ -74,7 +74,7 @@ export default class PathDataEditor extends UIElement {
         })
 
         arr.unshift(/*html*/`
-            <div class='segment'>
+            <div class='segment-empty'>
                 <div class='command'></div>
                 <div class='values'>
                     <span>X</span>

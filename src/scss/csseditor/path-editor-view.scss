@@ -38,7 +38,7 @@
 
         &.transform {
             svg {
-                circle, rect, text {
+                circle, rect, text, line {
                     display: none;
                 }
             }
@@ -51,7 +51,7 @@
                 path {
                     &.object {
                         pointer-events: visibleStroke;
-                        stroke: transparent;
+                        stroke: rgb(160, 160, 160);
                     }
                 }
             }

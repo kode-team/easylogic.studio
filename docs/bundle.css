@@ -7856,6 +7856,18 @@ html, body {
 .csseditor .number-input-editor .range-editor-type .area select {
   width: 100%;
 }
+.csseditor .path-data-editor .segment-empty {
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  grid-column-gap: 2px;
+}
+.csseditor .path-data-editor .segment-empty .values {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-column-gap: 2px;
+  grid-row-gap: 2px;
+  text-align: center;
+}
 .csseditor .path-data-editor .segment {
   display: grid;
   grid-template-columns: 30px 1fr;
@@ -9668,7 +9680,7 @@ html, body {
 .csseditor .path-editor-view .path-container.alt svg circle {
   cursor: move;
 }
-.csseditor .path-editor-view .path-container.transform svg circle, .csseditor .path-editor-view .path-container.transform svg rect, .csseditor .path-editor-view .path-container.transform svg text {
+.csseditor .path-editor-view .path-container.transform svg circle, .csseditor .path-editor-view .path-container.transform svg rect, .csseditor .path-editor-view .path-container.transform svg text, .csseditor .path-editor-view .path-container.transform svg line {
   display: none;
 }
 .csseditor .path-editor-view .path-container.modify, .csseditor .path-editor-view .path-container.segment-move {
@@ -9676,7 +9688,7 @@ html, body {
 }
 .csseditor .path-editor-view .path-container.modify svg path.object, .csseditor .path-editor-view .path-container.segment-move svg path.object {
   pointer-events: visibleStroke;
-  stroke: transparent;
+  stroke: #a0a0a0;
 }
 .csseditor .path-editor-view .path-container.box svg path.object {
   stroke: rgba(17, 17, 17, 0.5);
@@ -16888,6 +16900,18 @@ html, body {
 .csseditor[data-theme=light] .number-input-editor .range-editor-type .area select {
   width: 100%;
 }
+.csseditor[data-theme=light] .path-data-editor .segment-empty {
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  grid-column-gap: 2px;
+}
+.csseditor[data-theme=light] .path-data-editor .segment-empty .values {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-column-gap: 2px;
+  grid-row-gap: 2px;
+  text-align: center;
+}
 .csseditor[data-theme=light] .path-data-editor .segment {
   display: grid;
   grid-template-columns: 30px 1fr;
@@ -18700,7 +18724,7 @@ html, body {
 .csseditor[data-theme=light] .path-editor-view .path-container.alt svg circle {
   cursor: move;
 }
-.csseditor[data-theme=light] .path-editor-view .path-container.transform svg circle, .csseditor[data-theme=light] .path-editor-view .path-container.transform svg rect, .csseditor[data-theme=light] .path-editor-view .path-container.transform svg text {
+.csseditor[data-theme=light] .path-editor-view .path-container.transform svg circle, .csseditor[data-theme=light] .path-editor-view .path-container.transform svg rect, .csseditor[data-theme=light] .path-editor-view .path-container.transform svg text, .csseditor[data-theme=light] .path-editor-view .path-container.transform svg line {
   display: none;
 }
 .csseditor[data-theme=light] .path-editor-view .path-container.modify, .csseditor[data-theme=light] .path-editor-view .path-container.segment-move {
@@ -18708,7 +18732,7 @@ html, body {
 }
 .csseditor[data-theme=light] .path-editor-view .path-container.modify svg path.object, .csseditor[data-theme=light] .path-editor-view .path-container.segment-move svg path.object {
   pointer-events: visibleStroke;
-  stroke: transparent;
+  stroke: #a0a0a0;
 }
 .csseditor[data-theme=light] .path-editor-view .path-container.box svg path.object {
   stroke: rgba(231, 231, 231, 0.5);

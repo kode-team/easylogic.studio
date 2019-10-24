@@ -293,15 +293,15 @@ export default class SelectionToolView extends UIElement {
 
         var current = editor.selection.current;
         if (current) {
-            if (current.is('svg-path', 'svg-textpath')) {
+            if (current.updatePathItem) {
                 current.updatePathItem(pathObject);
 
                 this.parent.selectCurrent(...editor.selection.items)
 
                 editor.selection.setRectCache();        
-    
-                
+                    
                 this.emit('refreshSelectionStyleView')
+
             }
         }
 
