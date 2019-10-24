@@ -2,11 +2,11 @@
     position: relative;
     display: grid;
     grid-template-columns: 1fr 16px 16px;
-    grid-column-gap: 4px;
+    grid-column-gap: 2px;
 
     &.has-label {
         grid-template-columns: 60px 1fr 16px 16px;
-        grid-column-gap: 4px;
+        grid-column-gap: 2px;
 
         label {
             text-align: left;

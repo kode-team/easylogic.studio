@@ -1,11 +1,11 @@
 .select-icon-editor {
     display: grid;
-    grid-template-columns: 1fr 18px;
+    grid-template-columns: 1fr;
     grid-column-gap: 2px;
 
 
     &.has-label {
-        grid-template-columns: 60px 1fr 18px;
+        grid-template-columns: 60px 1fr;
         grid-column-gap: 2px;
 
         label {

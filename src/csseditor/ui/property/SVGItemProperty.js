@@ -125,7 +125,6 @@ export default class SVGItemProperty extends BaseProperty {
             ref='$fillOpacity' 
             label='Opacity' 
             key='fill-opacity' 
-            removable="true"
             value="1" 
             min="0"
             max="1"
@@ -158,7 +157,6 @@ export default class SVGItemProperty extends BaseProperty {
             ref='$strokeWidth' 
             label='Width' 
             key="stroke-width" 
-            removable="true" 
             onchange="changeValue" />
         </div>
               
@@ -177,7 +175,6 @@ export default class SVGItemProperty extends BaseProperty {
             ref='$strokeDashOffset' 
             key='stroke-dashoffset' 
             label='Dash Offset'
-            removable="true"
             value="0" 
             min="-1000"
             max="1000"

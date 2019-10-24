@@ -2275,7 +2275,7 @@ html, body {
 .csseditor .tool-menu .items .draw-items .split,
 .csseditor .external-tool-menu .items .draw-items .split {
   border: 0px;
-  border-right: 1px solid #111111;
+  border-right: 1px solid rgba(255, 255, 255, 0.3);
   height: 20px;
 }
 .csseditor .tool-menu .items .draw-items > label,
@@ -2331,11 +2331,11 @@ html, body {
 .csseditor .tool-menu .items .split,
 .csseditor .external-tool-menu .items .split {
   display: inline-block;
-  height: 30px;
+  height: 20px;
   vertical-align: middle;
   width: 3px;
   margin-right: 2px;
-  border-right: 1px solid #111111;
+  border-right: 1px solid rgba(255, 255, 255, 0.3);
 }
 .csseditor .tool-menu .items.flex-2,
 .csseditor .external-tool-menu .items.flex-2 {
@@ -2407,76 +2407,8 @@ html, body {
 .csseditor .tool-menu .items .icon svg path,
 .csseditor .external-tool-menu .items .icon svg path {
   fill: white;
-}
-.csseditor .tool-menu .items .icon.width,
-.csseditor .external-tool-menu .items .icon.width {
-  background-image: linear-gradient(to right, #fc554f, #fc554f), linear-gradient(to right, #ccc, #ccc);
-  background-size: 20px 6px, 20px 6px;
-  background-position: 2px 6px, 2px 16px;
-  background-repeat: no-repeat;
-}
-.csseditor .tool-menu .items .icon.height,
-.csseditor .external-tool-menu .items .icon.height {
-  background-image: linear-gradient(to right, #fc554f, #fc554f), linear-gradient(to right, #ccc, #ccc);
-  background-size: 6px 20px, 6px 20px;
-  background-position: 4px 2px, 14px 2px;
-  background-repeat: no-repeat;
-}
-.csseditor .tool-menu .items .icon.left,
-.csseditor .external-tool-menu .items .icon.left {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
-  background-repeat: no-repeat;
-  background-size: 20px 6px, 16px 6px, 2px 24px;
-  background-position: 6px 6px, 6px 16px, 2px 3px;
-}
-.csseditor .tool-menu .items .icon.right,
-.csseditor .external-tool-menu .items .icon.right {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
-  background-repeat: no-repeat;
-  background-size: 18px 6px, 14px 6px, 2px 24px;
-  background-position: 2px 5px, 6px 15px, 22px 3px;
-}
-.csseditor .tool-menu .items .icon.center,
-.csseditor .external-tool-menu .items .icon.center {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
-  background-repeat: no-repeat;
-  background-size: 20px 6px, 16px 6px, 2px 24px;
-  background-position: 5px 6px, 7px 16px, 14px 3px;
-}
-.csseditor .tool-menu .items .icon.middle,
-.csseditor .external-tool-menu .items .icon.middle {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
-  background-repeat: no-repeat;
-  background-size: 8px 20px, 8px 14px, 24px 2px;
-  background-position: 3px 3px, 13px 6px, 0px 12px;
-}
-.csseditor .tool-menu .items .icon.top,
-.csseditor .external-tool-menu .items .icon.top {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
-  background-repeat: no-repeat;
-  background-size: 8px 18px, 8px 12px, 24px 2px;
-  background-position: 4px 8px, 14px 8px, 0px 4px;
-}
-.csseditor .tool-menu .items .icon.bottom,
-.csseditor .external-tool-menu .items .icon.bottom {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
-  background-repeat: no-repeat;
-  background-size: 8px 18px, 8px 12px, 24px 2px;
-  background-position: 4px 2px, 14px 8px, 0px 22px;
-}
-.csseditor .tool-menu .items .icon.vertical,
-.csseditor .external-tool-menu .items .icon.vertical {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #555555, #555555), linear-gradient(to right, #e0e0e0, #e0e0e0);
-  background-repeat: no-repeat;
-  background-size: 24px 2px, 18px 10px, 24px 2px;
-  background-position: 3px 6px, 6px 11px, 3px 24px;
-}
-.csseditor .tool-menu .items .icon.horizontal,
-.csseditor .external-tool-menu .items .icon.horizontal {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #555555, #555555), linear-gradient(to right, #e0e0e0, #e0e0e0);
-  background-repeat: no-repeat;
-  background-size: 2px 24px, 10px 18px, 2px 24px;
-  background-position: 6px 3px, 11px 6px, 24px 3px;
+  stroke-width: 1;
+  stroke: #212121;
 }
 .csseditor .tool-menu .items .icon.jsfiddle, .csseditor .tool-menu .items .icon.export, .csseditor .tool-menu .items .icon.codepen, .csseditor .tool-menu .items .icon.github,
 .csseditor .external-tool-menu .items .icon.jsfiddle,
@@ -2587,20 +2519,59 @@ html, body {
   border-top: 0px;
   color: #ffffff;
   background-color: #212121;
-  padding: 5px 10px;
   height: 100%;
 }
-.csseditor .page-subeditor .path-manager > * {
-  vertical-align: middle;
+.csseditor .page-subeditor .path-manager .text {
+  display: inline-block;
 }
-.csseditor .page-subeditor .path-manager button {
+.csseditor .page-subeditor .path-manager .split {
+  display: inline-block;
+  height: 20px;
+  vertical-align: middle;
+  width: 3px;
+  margin-right: 2px;
+  border-right: 1px solid rgba(255, 255, 255, 0.3);
+}
+.csseditor .page-subeditor .path-manager .tools {
+  height: 100%;
+  display: inline-block;
+}
+.csseditor .page-subeditor .path-manager .tools[data-selected-value=modify] button[data-value=modify] svg path {
+  fill: #fc554f;
+}
+.csseditor .page-subeditor .path-manager .tools[data-selected-value=draw] button[data-value=draw] svg path {
+  fill: #fc554f;
+}
+.csseditor .page-subeditor .path-manager .tools[data-selected-value=transform] button[data-value=transform] svg path {
+  fill: #fc554f;
+}
+.csseditor .page-subeditor .path-manager .tools button {
   font-size: 13px;
-  margin-left: 20px;
+  margin: 0 2px;
   text-decoration: underline;
   width: auto;
   height: auto;
   vertical-align: middle;
   white-space: nowrap;
+  display: inline-block;
+  box-sizing: border-box;
+  width: 34px;
+  height: 34px;
+}
+.csseditor .page-subeditor .path-manager .tools button[data-value=flipY] {
+  -webkit-transform: rotate(90deg);
+          transform: rotate(90deg);
+}
+.csseditor .page-subeditor .path-manager .tools button svg {
+  width: 24px;
+  height: 24px;
+}
+.csseditor .page-subeditor .path-manager .tools button svg path {
+  stroke-width: 1;
+  stroke: #212121;
+}
+.csseditor .page-subeditor .path-manager > * {
+  vertical-align: middle;
 }
 .csseditor .page-subeditor .polygon-manager {
   display: none;
@@ -7742,11 +7713,11 @@ html, body {
 }
 .csseditor .select-icon-editor {
   display: grid;
-  grid-template-columns: 1fr 18px;
+  grid-template-columns: 1fr;
   grid-column-gap: 2px;
 }
 .csseditor .select-icon-editor.has-label {
-  grid-template-columns: 60px 1fr 18px;
+  grid-template-columns: 60px 1fr;
   grid-column-gap: 2px;
 }
 .csseditor .select-icon-editor.has-label label {
@@ -8663,11 +8634,11 @@ html, body {
   position: relative;
   display: grid;
   grid-template-columns: 1fr 16px 16px;
-  grid-column-gap: 4px;
+  grid-column-gap: 2px;
 }
 .csseditor .svg-filter-select-editor.has-label {
   grid-template-columns: 60px 1fr 16px 16px;
-  grid-column-gap: 4px;
+  grid-column-gap: 2px;
 }
 .csseditor .svg-filter-select-editor.has-label label {
   text-align: left;
@@ -11336,7 +11307,7 @@ html, body {
 .csseditor[data-theme=light] .tool-menu .items .draw-items .split,
 .csseditor[data-theme=light] .external-tool-menu .items .draw-items .split {
   border: 0px;
-  border-right: 1px solid #e7e7e7;
+  border-right: 1px solid rgba(255, 255, 255, 0.3);
   height: 20px;
 }
 .csseditor[data-theme=light] .tool-menu .items .draw-items > label,
@@ -11392,11 +11363,11 @@ html, body {
 .csseditor[data-theme=light] .tool-menu .items .split,
 .csseditor[data-theme=light] .external-tool-menu .items .split {
   display: inline-block;
-  height: 30px;
+  height: 20px;
   vertical-align: middle;
   width: 3px;
   margin-right: 2px;
-  border-right: 1px solid #e7e7e7;
+  border-right: 1px solid rgba(255, 255, 255, 0.3);
 }
 .csseditor[data-theme=light] .tool-menu .items.flex-2,
 .csseditor[data-theme=light] .external-tool-menu .items.flex-2 {
@@ -11468,76 +11439,8 @@ html, body {
 .csseditor[data-theme=light] .tool-menu .items .icon svg path,
 .csseditor[data-theme=light] .external-tool-menu .items .icon svg path {
   fill: white;
-}
-.csseditor[data-theme=light] .tool-menu .items .icon.width,
-.csseditor[data-theme=light] .external-tool-menu .items .icon.width {
-  background-image: linear-gradient(to right, #4b61ce, #4b61ce), linear-gradient(to right, #ccc, #ccc);
-  background-size: 20px 6px, 20px 6px;
-  background-position: 2px 6px, 2px 16px;
-  background-repeat: no-repeat;
-}
-.csseditor[data-theme=light] .tool-menu .items .icon.height,
-.csseditor[data-theme=light] .external-tool-menu .items .icon.height {
-  background-image: linear-gradient(to right, #4b61ce, #4b61ce), linear-gradient(to right, #ccc, #ccc);
-  background-size: 6px 20px, 6px 20px;
-  background-position: 4px 2px, 14px 2px;
-  background-repeat: no-repeat;
-}
-.csseditor[data-theme=light] .tool-menu .items .icon.left,
-.csseditor[data-theme=light] .external-tool-menu .items .icon.left {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
-  background-repeat: no-repeat;
-  background-size: 20px 6px, 16px 6px, 2px 24px;
-  background-position: 6px 6px, 6px 16px, 2px 3px;
-}
-.csseditor[data-theme=light] .tool-menu .items .icon.right,
-.csseditor[data-theme=light] .external-tool-menu .items .icon.right {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
-  background-repeat: no-repeat;
-  background-size: 18px 6px, 14px 6px, 2px 24px;
-  background-position: 2px 5px, 6px 15px, 22px 3px;
-}
-.csseditor[data-theme=light] .tool-menu .items .icon.center,
-.csseditor[data-theme=light] .external-tool-menu .items .icon.center {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
-  background-repeat: no-repeat;
-  background-size: 20px 6px, 16px 6px, 2px 24px;
-  background-position: 5px 6px, 7px 16px, 14px 3px;
-}
-.csseditor[data-theme=light] .tool-menu .items .icon.middle,
-.csseditor[data-theme=light] .external-tool-menu .items .icon.middle {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
-  background-repeat: no-repeat;
-  background-size: 8px 20px, 8px 14px, 24px 2px;
-  background-position: 3px 3px, 13px 6px, 0px 12px;
-}
-.csseditor[data-theme=light] .tool-menu .items .icon.top,
-.csseditor[data-theme=light] .external-tool-menu .items .icon.top {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
-  background-repeat: no-repeat;
-  background-size: 8px 18px, 8px 12px, 24px 2px;
-  background-position: 4px 8px, 14px 8px, 0px 4px;
-}
-.csseditor[data-theme=light] .tool-menu .items .icon.bottom,
-.csseditor[data-theme=light] .external-tool-menu .items .icon.bottom {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
-  background-repeat: no-repeat;
-  background-size: 8px 18px, 8px 12px, 24px 2px;
-  background-position: 4px 2px, 14px 8px, 0px 22px;
-}
-.csseditor[data-theme=light] .tool-menu .items .icon.vertical,
-.csseditor[data-theme=light] .external-tool-menu .items .icon.vertical {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #555555, #555555), linear-gradient(to right, #e0e0e0, #e0e0e0);
-  background-repeat: no-repeat;
-  background-size: 24px 2px, 18px 10px, 24px 2px;
-  background-position: 3px 6px, 6px 11px, 3px 24px;
-}
-.csseditor[data-theme=light] .tool-menu .items .icon.horizontal,
-.csseditor[data-theme=light] .external-tool-menu .items .icon.horizontal {
-  background-image: linear-gradient(to right, #1576e4, #1576e4), linear-gradient(to right, #555555, #555555), linear-gradient(to right, #e0e0e0, #e0e0e0);
-  background-repeat: no-repeat;
-  background-size: 2px 24px, 10px 18px, 2px 24px;
-  background-position: 6px 3px, 11px 6px, 24px 3px;
+  stroke-width: 1;
+  stroke: white;
 }
 .csseditor[data-theme=light] .tool-menu .items .icon.jsfiddle, .csseditor[data-theme=light] .tool-menu .items .icon.export, .csseditor[data-theme=light] .tool-menu .items .icon.codepen, .csseditor[data-theme=light] .tool-menu .items .icon.github,
 .csseditor[data-theme=light] .external-tool-menu .items .icon.jsfiddle,
@@ -11648,20 +11551,59 @@ html, body {
   border-top: 0px;
   color: gray;
   background-color: white;
-  padding: 5px 10px;
   height: 100%;
 }
-.csseditor[data-theme=light] .page-subeditor .path-manager > * {
-  vertical-align: middle;
+.csseditor[data-theme=light] .page-subeditor .path-manager .text {
+  display: inline-block;
 }
-.csseditor[data-theme=light] .page-subeditor .path-manager button {
+.csseditor[data-theme=light] .page-subeditor .path-manager .split {
+  display: inline-block;
+  height: 20px;
+  vertical-align: middle;
+  width: 3px;
+  margin-right: 2px;
+  border-right: 1px solid rgba(255, 255, 255, 0.3);
+}
+.csseditor[data-theme=light] .page-subeditor .path-manager .tools {
+  height: 100%;
+  display: inline-block;
+}
+.csseditor[data-theme=light] .page-subeditor .path-manager .tools[data-selected-value=modify] button[data-value=modify] svg path {
+  fill: #4b61ce;
+}
+.csseditor[data-theme=light] .page-subeditor .path-manager .tools[data-selected-value=draw] button[data-value=draw] svg path {
+  fill: #4b61ce;
+}
+.csseditor[data-theme=light] .page-subeditor .path-manager .tools[data-selected-value=transform] button[data-value=transform] svg path {
+  fill: #4b61ce;
+}
+.csseditor[data-theme=light] .page-subeditor .path-manager .tools button {
   font-size: 13px;
-  margin-left: 20px;
+  margin: 0 2px;
   text-decoration: underline;
   width: auto;
   height: auto;
   vertical-align: middle;
   white-space: nowrap;
+  display: inline-block;
+  box-sizing: border-box;
+  width: 34px;
+  height: 34px;
+}
+.csseditor[data-theme=light] .page-subeditor .path-manager .tools button[data-value=flipY] {
+  -webkit-transform: rotate(90deg);
+          transform: rotate(90deg);
+}
+.csseditor[data-theme=light] .page-subeditor .path-manager .tools button svg {
+  width: 24px;
+  height: 24px;
+}
+.csseditor[data-theme=light] .page-subeditor .path-manager .tools button svg path {
+  stroke-width: 1;
+  stroke: white;
+}
+.csseditor[data-theme=light] .page-subeditor .path-manager > * {
+  vertical-align: middle;
 }
 .csseditor[data-theme=light] .page-subeditor .polygon-manager {
   display: none;
@@ -16803,11 +16745,11 @@ html, body {
 }
 .csseditor[data-theme=light] .select-icon-editor {
   display: grid;
-  grid-template-columns: 1fr 18px;
+  grid-template-columns: 1fr;
   grid-column-gap: 2px;
 }
 .csseditor[data-theme=light] .select-icon-editor.has-label {
-  grid-template-columns: 60px 1fr 18px;
+  grid-template-columns: 60px 1fr;
   grid-column-gap: 2px;
 }
 .csseditor[data-theme=light] .select-icon-editor.has-label label {
@@ -17724,11 +17666,11 @@ html, body {
   position: relative;
   display: grid;
   grid-template-columns: 1fr 16px 16px;
-  grid-column-gap: 4px;
+  grid-column-gap: 2px;
 }
 .csseditor[data-theme=light] .svg-filter-select-editor.has-label {
   grid-template-columns: 60px 1fr 16px 16px;
-  grid-column-gap: 4px;
+  grid-column-gap: 2px;
 }
 .csseditor[data-theme=light] .svg-filter-select-editor.has-label label {
   text-align: left;

@@ -6,21 +6,69 @@
     border-top: 0px;
     color: $font-color;
     background-color: $background-color;  
-    padding: 5px 10px;
-    
     height: 100%;
+
+    .text {
+        display: inline-block;
+    }
+
+
+    .split {
+        display: inline-block;
+        height: 20px;
+        vertical-align: middle;
+        width: 3px;
+        margin-right: 2px;
+        border-right: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .tools {
+        height: 100%;        
+        display: inline-block;
+
+        @each $modeType in modify, draw, transform {
+            &[data-selected-value="#{$modeType}"] {
+              button[data-value="#{$modeType}"] {
+                svg {
+                  path {
+                    fill: $selected-color;
+                  }
+                }
+              }
+            }
+          }        
+
+        button {
+            font-size: 13px;
+            margin: 0 2px;
+            text-decoration: underline;
+            width: auto;
+            height: auto;
+            vertical-align: middle;
+            white-space: nowrap;
+            display: inline-block;
+            box-sizing: border-box;
+            width: 34px;
+            height: 34px;
+
+            &[data-value='flipY']  {
+                transform: rotate(90deg);
+            }
+
+            svg {
+                width: 24px;
+                height: 24px;
+
+                path {
+                    stroke-width: 1;
+                    stroke: $background-color;
+                }
+            }
+        }
+    }
 
     > * {
         vertical-align: middle;
     }
 
-    button {
-        font-size: 13px;
-        margin-left: 20px;
-        text-decoration: underline;
-        width: auto;
-        height: auto;
-        vertical-align: middle;
-        white-space: nowrap;
-    }
 }

@@ -133,8 +133,8 @@ function calculateRelativePosition (minX, minY, segment, scale = 1) {
         return 'Z';
     default:
         var str = values.map(v => {
-            var tx = (v.x - minX) / scale; 
-            var ty = (v.y - minY) / scale; 
+            var tx = (v.x - minX) === 0 ? 0 : (v.x - minX) / scale; 
+            var ty = (v.y - minY) === 0 ? 0 : (v.y - minY) / scale; 
 
             return `${tx} ${ty}`
         }).join(' ')
@@ -194,46 +194,52 @@ export default class PathGenerator {
             Object.assign(realPoint.startPoint, this.applyMatrix(p.startPoint, first, ...mat, second)) ;
             Object.assign(realPoint.endPoint, this.applyMatrix(p.endPoint, first, ...mat, second)) ;
             Object.assign(realPoint.reversePoint, this.applyMatrix(p.reversePoint, first, ...mat, second)) ;
-
         })
 
     }
 
-    transform (type, dx, dy) {
+    transform (type, dx = 0, dy = 0) {
+
+        var {x, y, width, height} = this.transformRect;
+
         switch(type) {
+        case 'flipX':
+            this.applyTransform(
+                matrix.matrix2d.translate(-dx, 0),
+                matrix.matrix2d.flipX()
+            ); 
+            break; 
+        case 'flipY':
+            this.applyTransform(
+                matrix.matrix2d.translate(0, -dy),
+                matrix.matrix2d.flipY()
+            ); 
+            break;      
+        case 'flip':
+            this.applyTransform(
+                matrix.matrix2d.translate(-dx, -dy),
+                matrix.matrix2d.flip()
+            ); 
+            break;                         
         case 'to move': 
             this.applyTransform(matrix.matrix2d.translate(dx, dy)); 
             break; 
-        case 'to top': 
-        case 'to bottom': 
-            var hw = this.transformRect.width/2;
-            var hh = this.transformRect.height/2;
+        case 'to skewX': 
+            var hw = width/2;
+            var hh = height/2;
 
-            var a = calculateAngle(
-                this.transformRect.x + hw, 
-                this.transformRect.y + hh, 
-            )
-            var b = calculateAngle(
-                this.transformRect.x + hw + dx, 
-                this.transformRect.y + hh, 
-            )
+            var a = calculateAngle(hw, hh)
+            var b = calculateAngle(hw + dx, hh)
 
             var xAngle = a - b;        
             this.applyTransform(matrix.matrix2d.skewX(degreeToRadian(xAngle))); 
             break;             
-        case 'to left': 
-        case 'to right': 
-            var hw = this.transformRect.width/2;
-            var hh = this.transformRect.height/2;
+        case 'to skewY': 
+            var hw = width/2;
+            var hh = height/2;
 
-            var a = calculateAngle(
-                this.transformRect.x + hw, 
-                this.transformRect.y + hh, 
-            )
-            var b = calculateAngle(
-                this.transformRect.x + hw, 
-                this.transformRect.y + hh + dy, 
-            )
+            var a = calculateAngle(hw, hh)
+            var b = calculateAngle(hw, hh + dy)
 
             var yAngle = b - a;        
             this.applyTransform(
@@ -242,18 +248,33 @@ export default class PathGenerator {
             break;                         
         case 'to bottom right':
 
-            var sx =  (this.transformRect.width + dx)/ this.transformRect.width;
-            var sy =  (this.transformRect.height + dy) / this.transformRect.height;
+            var sx =  (width + dx) === 0 ? 0  : (width + dx) / width;
+            var sy =  (height + dy) === 0 ? 0 : (height + dy) / height;
 
             this.applyTransform(
                 matrix.matrix2d.scale(sx, sy)
             ); 
             break; 
+        case 'to right':
+
+            var sx =  (width + dx) === 0 ? 0  : (width + dx) / width;
+
+            this.applyTransform(
+                matrix.matrix2d.scale(sx, 1)
+            ); 
+            break;             
+        case 'to bottom':
+                var sy =  (height + dy) === 0 ? 0 : (height + dy) / height;
+
+                this.applyTransform(
+                    matrix.matrix2d.scale(1, sy)
+                ); 
+                break;             
 
         case 'to top right':
 
-            var sx =  (this.transformRect.width + dx)/ this.transformRect.width;
-            var sy =  (this.transformRect.height - dy) / this.transformRect.height;
+            var sx =  (width + dx) === 0 ? 0  : (width + dx) / width;
+            var sy =  (height - dy) === 0 ? 0 : (height - dy) / height;
 
             this.applyTransform(
                 matrix.matrix2d.scale(sx, sy),
@@ -262,18 +283,36 @@ export default class PathGenerator {
             break;             
         case 'to top left':
 
-            var sx =  (this.transformRect.width - dx)/ this.transformRect.width;
-            var sy =  (this.transformRect.height - dy) / this.transformRect.height;
+            var sx =  (width - dx) === 0 ? 0 : (width - dx)/ width;
+            var sy =  (height - dy) === 0 ? 0 : (height - dy) / height;
 
             this.applyTransform(
                 matrix.matrix2d.scale(sx, sy),
                 matrix.matrix2d.translate(dx, dy)
             ); 
-            break;                         
+            break;    
+        case 'to left':
+
+            var sx =  (width - dx) === 0 ? 0 : (width - dx)/ width;
+
+            this.applyTransform(
+                matrix.matrix2d.scale(sx, 1),
+                matrix.matrix2d.translate(dx, 0)
+            ); 
+            break;                      
+        case 'to top':
+
+            var sy =  (height - dy) === 0 ? 0 : (height - dy) / height
+
+            this.applyTransform(
+                matrix.matrix2d.scale(1, sy),
+                matrix.matrix2d.translate(0, dy)
+            ); 
+            break;          
         case 'to bottom left':
 
-            var sx =  (this.transformRect.width - dx)/ this.transformRect.width;
-            var sy =  (this.transformRect.height + dy) / this.transformRect.height;
+            var sx =  (width - dx) === 0 ? 0 : (width - dx)/ width;
+            var sy =  (height + dy) === 0 ? 0 : (height + dy) / height;
 
             this.applyTransform(
                 matrix.matrix2d.scale(sx, sy),
@@ -672,6 +711,11 @@ export default class PathGenerator {
 
     toPath (minX, minY, scale = 1) {
         return toPath(this.clonePoints, minX, minY, scale)
+    }
+
+    changeScale () {
+
+        this.pathEditor.scale; 
     }
 
     makeSVGPath() {

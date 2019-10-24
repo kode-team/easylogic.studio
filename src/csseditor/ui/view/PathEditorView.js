@@ -8,8 +8,16 @@ import PathParser from "../../../editor/parse/PathParser";
 import { SVGPathItem } from "../../../editor/items/layers/SVGPathItem";
 import { Length } from "../../../editor/unit/Length";
 import { getBezierPoints, recoverBezier, recoverBezierQuard, getBezierPointsQuard, recoverBezierLine, getBezierPointsLine } from "../../../util/functions/bezier";
-import { calculateAngle360, calculateAngle } from "../../../util/functions/math";
 
+
+/**
+ * convert array[x, y] to object{x, y} 
+ * 
+ * @param {array} param0 
+ */
+function xy ([x, y]) {
+    return {x, y}
+}
 
 const SegmentConvertor = class extends UIElement {
 
@@ -37,10 +45,10 @@ const PathCutter = class extends SegmentConvertor {
 
         if (parser.segments[1].command === 'C') {
             var points = [
-                this.getXY(parser.segments[0].values),
-                this.getXY(parser.segments[1].values.slice(0, 2)),
-                this.getXY(parser.segments[1].values.slice(2, 4)),
-                this.getXY(parser.segments[1].values.slice(4, 6))
+                xy(parser.segments[0].values),
+                xy(parser.segments[1].values.slice(0, 2)),
+                xy(parser.segments[1].values.slice(2, 4)),
+                xy(parser.segments[1].values.slice(4, 6))
             ]
     
             var curve = recoverBezier(...points, 200)
@@ -52,9 +60,9 @@ const PathCutter = class extends SegmentConvertor {
     
         } else if (parser.segments[1].command === 'Q') {
             var points = [
-                this.getXY(parser.segments[0].values),
-                this.getXY(parser.segments[1].values.slice(0, 2)),
-                this.getXY(parser.segments[1].values.slice(2, 4))
+                xy(parser.segments[0].values),
+                xy(parser.segments[1].values.slice(0, 2)),
+                xy(parser.segments[1].values.slice(2, 4))
             ]
     
             var curve = recoverBezierQuard(...points, 200)
@@ -65,8 +73,8 @@ const PathCutter = class extends SegmentConvertor {
             this.pathGenerator.setPointQuard(getBezierPointsQuard(points, t))        
         } else if (parser.segments[1].command === 'L') {
             var points = [
-                this.getXY(parser.segments[0].values),
-                this.getXY(parser.segments[1].values.slice(0, 2))
+                xy(parser.segments[0].values),
+                xy(parser.segments[1].values.slice(0, 2))
             ]
 
             var curve = recoverBezierLine(...points, 200)
@@ -88,9 +96,35 @@ const PathCutter = class extends SegmentConvertor {
 }
 
 const PathTransformEditor = class extends PathCutter {
+
+    [EVENT('changePathTransform')] (transformMoveType) {
+        this.resetTransformZone()
+
+        var {width, height} = this.state.transformZoneRect;
+        this.pathGenerator.initTransform(this.state.transformZoneRect);
+
+        switch(transformMoveType) {
+        case 'flipX':
+            this.pathGenerator.transform('flipX', width, 0)     // rect 가운데를 기준으로 뒤집기 
+            break; 
+        case 'flipY':
+            this.pathGenerator.transform('flipY', 0, height)    
+            break;        
+        case 'flip':
+            this.pathGenerator.transform('flip', width, height)    
+            break;                         
+        }
+        
+
+        this.renderPath()
+
+        this.refreshPathLayer();        
+    }
+        
     [POINTERSTART('$tool .transform-tool-item') + MOVE('moveTransformTool') + END('moveEndTransformTool')]  (e) {
         this.transformMoveType = e.$delegateTarget.attr('data-position')
 
+        this.resetTransformZone()        
         this.pathGenerator.initTransform(this.state.transformZoneRect);
         this.startXY = e.xy; 
     }
@@ -249,29 +283,31 @@ export default class PathEditorView extends PathTransformEditor {
 
         // 객체 내부에 포함된 패스는 box 를 기준으로 재설정 
         if (item && this.isBoxMode) {
-            var minX = item.screenX.value
-            var minY = item.screenY.value
+            var minX = item.screenX.value / this.scale 
+            var minY = item.screenY.value / this.scale 
         }
 
         var { d } = this.pathGenerator.toPath(
-            minX * this.scale, 
-            minY * this.scale, 
+            minX, 
+            minY, 
             this.scale
         );
 
-
         var parser = new PathParser(d);
-        // var [radian, cx, cy] = this.state.reverse
-        // parser.rotate(radian, rect.width/2, rect.height/2) 
 
         this.emit(this.state.changeEvent, {
             d: parser.toString(), 
             totalLength: this.totalPathLength, 
-            rect 
+            rect: {
+                x: rect.x/this.scale,
+                y: rect.y/this.scale,
+                width: rect.width / this.scale,     // scale 이전의 크기 계산 
+                height: rect.height / this.scale    // scale 이전의 실제 크기 계산 
+            }
         })
 
 
-        this.emit('refreshPathLayer')
+        this.emit('refreshPathLayer')   // 외부 데이타 변경 시점 정의 
     }
 
     addPathLayer() {
@@ -318,7 +354,26 @@ export default class PathEditorView extends PathTransformEditor {
 
     }
 
+    getCurrentObject () {
+        var current = this.state.current; 
+
+        if (!current) {
+            return null;
+        }
+
+        return {
+            current,
+            d: current.d,
+            screenX: current.screenX,
+            screenY: current.screenY,
+            screenWidth: current.screenWidth,
+            screenHeight: current.screenHeight,
+        }
+    }
+
     refresh (obj) {
+
+        obj = obj || this.getCurrentObject();
 
         if (obj && obj.d) {
             this.pathParser.reset(obj.d)
@@ -353,7 +408,6 @@ export default class PathEditorView extends PathTransformEditor {
             this.state.points = this.pathParser.convertGenerator();      
             this.state.hasTransform = !!obj.current.transform;
         } else {
-
             this.state.hasTransform = false;        
         }
 
@@ -408,9 +462,6 @@ export default class PathEditorView extends PathTransformEditor {
         }
     }
 
-    getXY ([x, y]) {
-        return {x, y}
-    }
 
     refreshPathLayer () {
         this.updatePathLayer();

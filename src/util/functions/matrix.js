@@ -56,7 +56,7 @@ const matrix2d = {
         ]);
     },
 
-    reflectionOrigin : function () {
+    flip : function () {
         return this.multiply([
             [-1, 0, 0],
             [0, -1, 0],
@@ -64,18 +64,18 @@ const matrix2d = {
         ]);
     },
 
-    reflectionX : function () {
-        return this.multiply([
-            [1, 0, 0],
-            [0, -1, 0],
-            [0, 0, 1]
-        ]);
-    },
-
-    reflectionY : function () {
+    flipX : function () {
         return this.multiply([
             [-1, 0, 0],
             [0, 1, 0],
+            [0, 0, 1]
+        ]);
+    },
+
+    flipY : function () {
+        return this.multiply([
+            [1, 0, 0],
+            [0, -1, 0],
             [0, 0, 1]
         ]);
     }

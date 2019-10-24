@@ -101,6 +101,11 @@ import merge from "./merge";
 import texture from "./texture";
 import account_tree from "./account_tree";
 import format_shapes from "./format_shapes";
+import flip from "./flip";
+import flipY from "./flipY";
+import control_point from "./control_point";
+import flip_camera from "./flip_camera";
+import device_hub from "./device_hub";
 
 
 const alias = {
@@ -109,6 +114,11 @@ const alias = {
 
 export default {
   ...alias,
+  device_hub,
+  control_point,
+  flip_camera,
+  flipY,
+  flip,
   account_tree,
   format_shapes,  
   merge,

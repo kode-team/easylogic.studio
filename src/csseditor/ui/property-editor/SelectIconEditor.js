@@ -20,13 +20,10 @@ export default class SelectIconEditor extends UIElement {
     template() {
         var { label } = this.state; 
         var hasLabel = !!label ? 'has-label' : ''
-        return `
+        return /*html*/`
             <div class='select-icon-editor ${hasLabel}'>
                 ${label ? `<label>${label}</label>` : '' }
                 <div class='items' ref='$options'></div>
-                <div class='tools'>
-                    <button type="button" ref='$close'>${icon.remove}</button>
-                </div>
             </div>
         `
     }

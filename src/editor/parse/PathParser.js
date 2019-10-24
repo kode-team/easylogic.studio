@@ -78,7 +78,7 @@ const matrix = {
         ]);
     },
 
-    reflectionX : function () {
+    flipX : function () {
         return this.multiply([
             [1, 0, 0],
             [0, -1, 0],
@@ -86,7 +86,7 @@ const matrix = {
         ]);
     },
 
-    reflectionY : function () {
+    flipY : function () {
         return this.multiply([
             [-1, 0, 0],
             [0, 1, 0],
@@ -339,10 +339,6 @@ export default class PathParser {
                             
                 
             } else if (command === 'Z') {
-
-                // Z 가 있으면  
-                // 이전 포인트와 처음 포인트는 같은 형태로 존재하게 된다. 
-
                 var prevPoint = Point.getPrevPoint(points, points.length);
                 var firstPoint = Point.getFirstPoint(points, points.length);
 
@@ -351,15 +347,6 @@ export default class PathParser {
 
                     prevPoint.endPoint = clone(firstPoint.endPoint)
                     firstPoint.reversePoint = clone(prevPoint.reversePoint)
-
-                    // if (prevPoint.command === 'C') {
-                    //     firstPoint.curve = true; 
-
-                    //     if (Point.isEqual(firstPoint.endPoint, firstPoint.startPoint)) {
-                    //         firstPoint.endPoint = Point.getReversePoint(prevPoint.startPoint, prevPoint.reversePoint);
-                    //     }
-
-                    // }
                 }
 
                 prevPoint.close = true; 
@@ -491,22 +478,22 @@ export default class PathParser {
         return this.joinPath(this._loop(matrix.reflectionOrigin(angle), true))
     }            
 
-    reflectionX (angle) {
-        this._loop(matrix.reflectionX(angle));
+    flipX (angle) {
+        this._loop(matrix.flipX(angle));
         return this;        
     }
 
-    reflectionXTo (angle) {
-        return this.joinPath(this._loop(matrix.reflectionX(angle), true))
+    flipXTo (angle) {
+        return this.joinPath(this._loop(matrix.flipX(angle), true))
     }    
 
-    reflectionY (angle) {
-        this._loop(matrix.reflectionY(angle));
+    flipY (angle) {
+        this._loop(matrix.flipY(angle));
         return this;        
     }
 
-    reflectionYTo (angle) {
-        return this.joinPath(this._loop(matrix.reflectionY(angle), true))
+    flipYTo (angle) {
+        return this.joinPath(this._loop(matrix.flipY(angle), true))
     }    
 
 
