@@ -4,3 +4,4 @@ test-report/
 package-lock.json
 chrome-app/
 chrome-extension/
+whale-extension/

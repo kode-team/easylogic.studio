@@ -1,7 +1,7 @@
 {
   "name": "easylogic-studio",
-  "version": "0.9.1",
-  "description": "Fantastic CSS Design Tool ",
+  "version": "0.9.4",
+  "description": "Fantastic CSS+SVG Design Tool ",
   "main": "index.js",
   "directories": {
     "test": "test"
@@ -34,12 +34,12 @@
   "scripts": {
     "build:web": "webpack --mode=production --progress",
     "build:ext": "webpack --mode=production --config=webpack.chrome-extension.config.js",
-    "build:app": "webpack --mode=production --config=webpack.chrome-app.config.js",
+    "build:ext:whale": "webpack --mode=production --config=webpack.whale-extension.config.js",    
     "build": "npm run build:web",
-    "build:all": "npm run build:web && npm run build:ext && npm run build:app && npm run zip",    
-    "zip:app": "zip -r chrome-app/chrome-app.zip chrome-app",
+    "build:all": "npm run build:web && npm run build:ext && npm run build:ext:whale && npm run zip",    
     "zip:ext": "zip -r chrome-extension/chrome-extension.zip chrome-extension",
-    "zip": "npm run zip:app && npm run zip:ext",
+    "zip:ext:whale": "zip -r whale-extension/whale-extension.zip whale-extension",    
+    "zip": "npm run zip:ext && npm run zip:ext:whale",
     "dev": "webpack-dev-server --config=webpack.dev.config.js --progress --open",
     "test": "NODE_ENV=test jest --watch"
   },

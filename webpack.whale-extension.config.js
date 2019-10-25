@@ -8,7 +8,7 @@ module.exports = {
     popup: "./src/popup.js"
   },
   output: {
-    path: __dirname + "/chrome-app"
+    path: __dirname + "/whale-extension"
   },
   module: {
     rules: [
@@ -98,7 +98,7 @@ module.exports = {
       filename: "./popup.html"
     }),
     // copy extension manifest and icons
-    new CopyWebpackPlugin([{ from: "./src/assets/app/" }]),
+    new CopyWebpackPlugin([{ from: "./src/assets/extension/" }]),
     new MiniCssExtractPlugin({
       filename: "bundle.css"
     })
