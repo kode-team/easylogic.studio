@@ -1,4 +1,5 @@
 import { Layer } from "../Layer";
+import Dom from "../../../util/Dom";
 
 export class ImageLayer extends Layer {
   getDefaultObject(obj = {}) {
@@ -36,14 +37,24 @@ export class ImageLayer extends Layer {
   }
 
 
-  updateFunction (currentElement) {
+  updateFunction (currentElement, isChangeFragment = true) {
     var {src} = this.json;     
 
-    if (currentElement.attr('src') != src) {
+    if (isChangeFragment) {
       currentElement.attr('src', src);
+
+      var $svg = currentElement.parent().$(`[data-id="${this.innerSVGId}"]`);  
+
+      if ($svg) {
+        var $defs = $svg.$('defs');
+        $defs.html(this.toDefInnerString)          
+      } else {
+        currentElement.parent().prepend(Dom.createByHTML(this.toDefString));
+      }
+
     }
 
-  }    
+  }      
 
   get html () {
     var {id, src, itemType} = this.json;

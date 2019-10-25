@@ -78,6 +78,8 @@ const SVGFilterTemplateList = [
       {label: 'Grayscale', value: 'grayscale'},
       {label: 'Shadow', value: 'shadow'},
       {label: 'Inner Shadow', value: 'innerShadow'},      
+      {label: 'Stroke', value: 'stroke'},
+      {label: 'Dancing Stroke', value: 'dancingStroke'}
     ]
   }
 ]

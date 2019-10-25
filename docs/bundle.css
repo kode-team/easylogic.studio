@@ -9680,7 +9680,7 @@ html, body {
 .csseditor .path-editor-view .path-container.alt svg circle {
   cursor: move;
 }
-.csseditor .path-editor-view .path-container.transform svg circle, .csseditor .path-editor-view .path-container.transform svg rect, .csseditor .path-editor-view .path-container.transform svg text, .csseditor .path-editor-view .path-container.transform svg line {
+.csseditor .path-editor-view .path-container.transform svg circle, .csseditor .path-editor-view .path-container.transform svg rect, .csseditor .path-editor-view .path-container.transform svg text, .csseditor .path-editor-view .path-container.transform svg line, .csseditor .path-editor-view .path-container.transform svg .snap-path {
   display: none;
 }
 .csseditor .path-editor-view .path-container.modify, .csseditor .path-editor-view .path-container.segment-move {
@@ -18724,7 +18724,7 @@ html, body {
 .csseditor[data-theme=light] .path-editor-view .path-container.alt svg circle {
   cursor: move;
 }
-.csseditor[data-theme=light] .path-editor-view .path-container.transform svg circle, .csseditor[data-theme=light] .path-editor-view .path-container.transform svg rect, .csseditor[data-theme=light] .path-editor-view .path-container.transform svg text, .csseditor[data-theme=light] .path-editor-view .path-container.transform svg line {
+.csseditor[data-theme=light] .path-editor-view .path-container.transform svg circle, .csseditor[data-theme=light] .path-editor-view .path-container.transform svg rect, .csseditor[data-theme=light] .path-editor-view .path-container.transform svg text, .csseditor[data-theme=light] .path-editor-view .path-container.transform svg line, .csseditor[data-theme=light] .path-editor-view .path-container.transform svg .snap-path {
   display: none;
 }
 .csseditor[data-theme=light] .path-editor-view .path-container.modify, .csseditor[data-theme=light] .path-editor-view .path-container.segment-move {

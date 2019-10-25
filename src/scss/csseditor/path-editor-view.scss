@@ -38,7 +38,7 @@
 
         &.transform {
             svg {
-                circle, rect, text, line {
+                circle, rect, text, line, .snap-path {
                     display: none;
                 }
             }

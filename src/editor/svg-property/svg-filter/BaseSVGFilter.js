@@ -5,6 +5,10 @@ import { clone, isString } from "../../../util/functions/func";
 
 const  Primitive = 'SourceGraphic,SourceAlpha,BackgroundImage,BackgroundAlpha,FillPaint,StrokePaint'.split(',')
 
+const DEFAULT_ATTRIBUTES = {
+  xChannelSelector: true,
+  yChannelSelector: true  
+}
 
 export class BaseSVGFilter extends Property {
 
@@ -91,7 +95,13 @@ export class BaseSVGFilter extends Property {
       list.push(`result="${this.json.id}result"`)
     }
 
-    return list.join(' ') + this.getSourceInAttribute();
+    Object.keys(DEFAULT_ATTRIBUTES).filter(key => {
+      return !!this.json[key]
+    }).forEach(key => {
+      list.push(`${key}="${this.json[key]}"`)
+    })
+
+    return list.join(' ') + ' ' + this.getSourceInAttribute();
   }
 
   hasInIndex () {

@@ -42,6 +42,7 @@ const cssKeyValue = {
   'text-stroke-color': true, 
   'text-stroke-width': true, 
   'background-clip': true,
+  'clip-path': true, 
   'animation': true,
   'transition': true,
   'transform': true, 
@@ -303,6 +304,7 @@ export class CubeLayer extends Component {
     return {
       ...this.toVariableCSS(),
       ...this.toDefaultCSS(isExport),
+      ...this.toClipPathCSS(),
       ...this.toWebkitCSS(),      
       ...this.toBoxModelCSS(),
       // ...this.toTransformCSS(),      
@@ -405,7 +407,16 @@ export class CubeLayer extends Component {
   get html () {
     var {id, itemType} = this.json;
 
-    return /*html*/`<div class='element-item ${itemType}' data-id="${id}"><div class='front'></div><div class='back'></div><div class='left'></div><div class='right'></div><div class='top'></div><div class='bottom'></div></div>`
+    return /*html*/`
+      <div class='element-item ${itemType}' data-id="${id}">
+        ${this.toDefString}
+        <div class='front'></div>
+        <div class='back'></div>
+        <div class='left'></div>
+        <div class='right'></div>
+        <div class='top'></div>
+        <div class='bottom'></div>
+      </div>`
   }
 
 }
