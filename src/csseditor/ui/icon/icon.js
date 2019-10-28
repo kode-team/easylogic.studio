@@ -106,6 +106,7 @@ import flipY from "./flipY";
 import control_point from "./control_point";
 import flip_camera from "./flip_camera";
 import device_hub from "./device_hub";
+import text_rotate from "./text_rotate";
 
 
 const alias = {
@@ -114,6 +115,7 @@ const alias = {
 
 export default {
   ...alias,
+  text_rotate,
   device_hub,
   control_point,
   flip_camera,

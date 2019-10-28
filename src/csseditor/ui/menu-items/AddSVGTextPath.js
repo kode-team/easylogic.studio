@@ -3,7 +3,7 @@ import icon from "../icon/icon";
  
 export default class AddSVGTextPath extends MenuItem {
   getIconString() {
-    return icon.title;
+    return icon.text_rotate;
   }
   getTitle() {
     return "10. SVG TextPath";

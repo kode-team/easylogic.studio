@@ -55,6 +55,10 @@
                 transform: rotate(90deg);
             }
 
+            &[data-value='flip']  {
+              transform: rotate(45deg);
+            }
+
             svg {
                 width: 24px;
                 height: 24px;

@@ -312,12 +312,19 @@
     padding: 0px;
     background-color: $property-show-background-color;
     margin-top:-1px;
+    box-shadow: inset 0 0 5px 0px rgba(0, 0, 0, 1);
 
     .property-item {
-      padding: 0px;
       font-size: 11px;
-      margin-top: 5px;
-      padding:2px 0px;
+      padding:5px 0px;
+
+      &:first-child {
+        padding-top: 10px;
+      }
+
+      &:last-child {
+        padding-bottom: 10px; 
+      }
 
       &.animation-property-item {
         display: grid;
@@ -325,30 +332,7 @@
         grid-column-gap: 2px; 
       }
 
-      // &.box-shadow-item,
-      // &.filter-property,
-      // &.clip-path-list,
-      // &.text-shadow-item,
-      // &.transform-property,
-      // &.var-property,
-      // &.selector-list,
-      // &.transition-list,
-      // &.animation-list,
-      // &.keyframe-list,
-      // &.svg-property {
-      //   margin: 0px !important;
-      // }      
-
-      &:last-child {
-        margin-bottom: 5px;
-      }
-
-      &:empty {
-        margin-bottom: 0px;
-      }
-
       &.label {
-        // background-color: rgba($property-background-color, 0.5);
         label {
           font-weight: 900;
           text-shadow: 2px 2px 3px $border-color;

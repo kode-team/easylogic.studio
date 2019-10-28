@@ -36,11 +36,11 @@ export default class SizeProperty extends BaseProperty {
     return /*html*/`
       <div class='property-item animation-property-item'>
         <span class='add-timeline-property' data-property='width'></span>
-        <RangeEditor ref='$width' label='Width' removable="true" key='width' min="0" max='3000' onchange='changRangeEditor' />
+        <RangeEditor ref='$width' label='Width' key='width' min="0" max='3000' onchange='changRangeEditor' />
       </div>
       <div class='property-item animation-property-item'>
         <span class='add-timeline-property' data-property='height'></span>      
-        <RangeEditor ref='$height' label='Height' removable="true" key='height' min="0" max='3000' onchange='changRangeEditor' />
+        <RangeEditor ref='$height' label='Height' key='height' min="0" max='3000' onchange='changRangeEditor' />
       </div>      
     `;
   }

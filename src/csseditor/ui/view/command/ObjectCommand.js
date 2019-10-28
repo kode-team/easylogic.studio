@@ -63,6 +63,12 @@ export default class ObjectCommand extends UIElement {
             editor.selection.select(layer);
     
             this.refreshSelection()
+        } else {
+            this.trigger('add.artboard')
+
+            setTimeout(() => {
+                this.trigger('add.layer', layer, rect);
+            }, 50)
         }
     }
 

@@ -1868,7 +1868,7 @@ html, body {
   pointer-events: none;
 }
 .csseditor .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"] {
-  background-color: #212121;
+  background-color: #2b2b2b;
   color: white;
 }
 .csseditor .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"]:before {
@@ -1887,7 +1887,7 @@ html, body {
   display: block;
 }
 .csseditor .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"] {
-  background-color: #212121;
+  background-color: #2b2b2b;
   color: white;
 }
 .csseditor .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"]:before {
@@ -1906,7 +1906,7 @@ html, body {
   display: block;
 }
 .csseditor .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"] {
-  background-color: #212121;
+  background-color: #2b2b2b;
   color: white;
 }
 .csseditor .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"]:before {
@@ -1925,7 +1925,7 @@ html, body {
   display: block;
 }
 .csseditor .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"] {
-  background-color: #212121;
+  background-color: #2b2b2b;
   color: white;
 }
 .csseditor .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"]:before {
@@ -1944,7 +1944,7 @@ html, body {
   display: block;
 }
 .csseditor .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"] {
-  background-color: #212121;
+  background-color: #2b2b2b;
   color: white;
 }
 .csseditor .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"]:before {
@@ -1963,7 +1963,7 @@ html, body {
   display: block;
 }
 .csseditor .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"] {
-  background-color: #212121;
+  background-color: #2b2b2b;
   color: white;
 }
 .csseditor .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"]:before {
@@ -1982,7 +1982,7 @@ html, body {
   display: block;
 }
 .csseditor .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"] {
-  background-color: #212121;
+  background-color: #2b2b2b;
   color: white;
 }
 .csseditor .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"]:before {
@@ -2001,7 +2001,7 @@ html, body {
   display: block;
 }
 .csseditor .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"] {
-  background-color: #212121;
+  background-color: #2b2b2b;
   color: white;
 }
 .csseditor .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"]:before {
@@ -2020,7 +2020,7 @@ html, body {
   display: block;
 }
 .csseditor .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"] {
-  background-color: #212121;
+  background-color: #2b2b2b;
   color: white;
 }
 .csseditor .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"]:before {
@@ -2079,7 +2079,7 @@ html, body {
   font-size: 11px;
 }
 .csseditor .tab > .tab-header > .tab-item.select-reverse:not(.selected) {
-  background-color: rgba(33, 33, 33, 0.5);
+  background-color: rgba(43, 43, 43, 0.5);
   color: black;
 }
 .csseditor .tab > .tab-header > .tab-item.select-reverse.selected {
@@ -2180,7 +2180,7 @@ html, body {
   min-width: 60px;
 }
 .csseditor .tab.horizontal > .tab-header > .tab-item.selected {
-  background-color: rgba(33, 33, 33, 0.5);
+  background-color: rgba(43, 43, 43, 0.5);
 }
 .csseditor .tab.horizontal > .tab-body {
   top: 0px;
@@ -2321,7 +2321,6 @@ html, body {
   height: 30px;
   display: inline-block;
   border-radius: 3px;
-  padding: 3px;
 }
 .csseditor .tool-menu .items .draw-items .menu-item .icon.flipY,
 .csseditor .external-tool-menu .items .draw-items .menu-item .icon.flipY {
@@ -2561,6 +2560,10 @@ html, body {
 .csseditor .page-subeditor .path-manager .tools button[data-value=flipY] {
   -webkit-transform: rotate(90deg);
           transform: rotate(90deg);
+}
+.csseditor .page-subeditor .path-manager .tools button[data-value=flip] {
+  -webkit-transform: rotate(45deg);
+          transform: rotate(45deg);
 }
 .csseditor .page-subeditor .path-manager .tools button svg {
   width: 24px;
@@ -3405,23 +3408,22 @@ html, body {
   padding: 0px;
   background-color: #212121;
   margin-top: -1px;
+  box-shadow: inset 0 0 5px 0px black;
 }
 .csseditor .property > .property-body .property-item {
-  padding: 0px;
   font-size: 11px;
-  margin-top: 5px;
-  padding: 2px 0px;
+  padding: 5px 0px;
+}
+.csseditor .property > .property-body .property-item:first-child {
+  padding-top: 10px;
+}
+.csseditor .property > .property-body .property-item:last-child {
+  padding-bottom: 10px;
 }
 .csseditor .property > .property-body .property-item.animation-property-item {
   display: grid;
   grid-template-columns: 14px 1fr;
   grid-column-gap: 2px;
-}
-.csseditor .property > .property-body .property-item:last-child {
-  margin-bottom: 5px;
-}
-.csseditor .property > .property-body .property-item:empty {
-  margin-bottom: 0px;
 }
 .csseditor .property > .property-body .property-item.label label {
   font-weight: 900;
@@ -4462,9 +4464,6 @@ html, body {
 .csseditor .property.color-assets-property {
   padding-left: 0px !important;
   padding-right: 0px !important;
-}
-.csseditor .gradient-assets-property {
-  margin-top: 4px;
 }
 .csseditor .gradient-assets-property .gradient-list-tools {
   display: grid;
@@ -7431,6 +7430,10 @@ html, body {
 }
 .csseditor .svg-filter-editor .center .graph .graph-panel .filter-node > .preview[data-source-type=combiner] path {
   fill: #ff9bff;
+}
+.csseditor .svg-filter-editor .center .graph .graph-panel .filter-node > .preview[data-source-type=lighting] svg {
+  -webkit-filter: drop-shadow(0px 0px 1px rgba(0, 0, 0, 0.3));
+          filter: drop-shadow(0px 0px 1px rgba(0, 0, 0, 0.3));
 }
 .csseditor .svg-filter-editor .center .graph .graph-panel .filter-node > .preview svg {
   display: block;
@@ -11365,7 +11368,6 @@ html, body {
   height: 30px;
   display: inline-block;
   border-radius: 3px;
-  padding: 3px;
 }
 .csseditor[data-theme=light] .tool-menu .items .draw-items .menu-item .icon.flipY,
 .csseditor[data-theme=light] .external-tool-menu .items .draw-items .menu-item .icon.flipY {
@@ -11605,6 +11607,10 @@ html, body {
 .csseditor[data-theme=light] .page-subeditor .path-manager .tools button[data-value=flipY] {
   -webkit-transform: rotate(90deg);
           transform: rotate(90deg);
+}
+.csseditor[data-theme=light] .page-subeditor .path-manager .tools button[data-value=flip] {
+  -webkit-transform: rotate(45deg);
+          transform: rotate(45deg);
 }
 .csseditor[data-theme=light] .page-subeditor .path-manager .tools button svg {
   width: 24px;
@@ -12449,23 +12455,22 @@ html, body {
   padding: 0px;
   background-color: white;
   margin-top: -1px;
+  box-shadow: inset 0 0 5px 0px black;
 }
 .csseditor[data-theme=light] .property > .property-body .property-item {
-  padding: 0px;
   font-size: 11px;
-  margin-top: 5px;
-  padding: 2px 0px;
+  padding: 5px 0px;
+}
+.csseditor[data-theme=light] .property > .property-body .property-item:first-child {
+  padding-top: 10px;
+}
+.csseditor[data-theme=light] .property > .property-body .property-item:last-child {
+  padding-bottom: 10px;
 }
 .csseditor[data-theme=light] .property > .property-body .property-item.animation-property-item {
   display: grid;
   grid-template-columns: 14px 1fr;
   grid-column-gap: 2px;
-}
-.csseditor[data-theme=light] .property > .property-body .property-item:last-child {
-  margin-bottom: 5px;
-}
-.csseditor[data-theme=light] .property > .property-body .property-item:empty {
-  margin-bottom: 0px;
 }
 .csseditor[data-theme=light] .property > .property-body .property-item.label label {
   font-weight: 900;
@@ -13506,9 +13511,6 @@ html, body {
 .csseditor[data-theme=light] .property.color-assets-property {
   padding-left: 0px !important;
   padding-right: 0px !important;
-}
-.csseditor[data-theme=light] .gradient-assets-property {
-  margin-top: 4px;
 }
 .csseditor[data-theme=light] .gradient-assets-property .gradient-list-tools {
   display: grid;
@@ -16475,6 +16477,10 @@ html, body {
 }
 .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node > .preview[data-source-type=combiner] path {
   fill: #ff9bff;
+}
+.csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node > .preview[data-source-type=lighting] svg {
+  -webkit-filter: drop-shadow(0px 0px 1px rgba(0, 0, 0, 0.3));
+          filter: drop-shadow(0px 0px 1px rgba(0, 0, 0, 0.3));
 }
 .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node > .preview svg {
   display: block;

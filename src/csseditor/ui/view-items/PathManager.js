@@ -30,7 +30,7 @@ export default class PathManager extends UIElement {
         <div class='tools' ref='$flip'>
             <button type="button" data-value='flipX' title='flip X'>${icon.flip}</button>
             <button type="button" data-value='flipY' title='flip Y'>${icon.flip}</button>
-            <button type="button" data-value='flip' title='flip origin'>${icon.flip_camera}</button>
+            <button type="button" data-value='flip' title='flip origin'>${icon.flip}</button>
         </div>
       </div>    
     `;

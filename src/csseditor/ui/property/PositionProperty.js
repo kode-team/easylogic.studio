@@ -27,15 +27,15 @@ export default class PositionProperty extends BaseProperty {
 
     return /*html*/`
       <div class='property-item'>
-        <SelectEditor ref='$position' icon="true" label='position' key='position' value='${current.position}' options='absolute,relative,fixed,static' onchange="changRangeEditor" />
+        <SelectIconEditor ref='$position' icon="true" key='position' value='${current.position}' options='absolute,relative,fixed,static' onchange="changRangeEditor" />
       </div>    
       <div class='property-item animation-property-item'>
         <span class='add-timeline-property' data-property='x'></span>
-        <RangeEditor ref='$x' label='X' key='x' removable="true" value='${current.x}' min="-1000" max='1000' onchange='changRangeEditor' />
+        <RangeEditor ref='$x' label='X' key='x' value='${current.x}' min="-1000" max='1000' onchange='changRangeEditor' />
       </div>
       <div class='property-item animation-property-item'>
         <span class='add-timeline-property' data-property='y'></span>
-        <RangeEditor ref='$y' label='Y' key='y' removable="true" value='${current.y}' min="-1000" max='1000' onchange='changRangeEditor' />
+        <RangeEditor ref='$y' label='Y' key='y' value='${current.y}' min="-1000" max='1000' onchange='changRangeEditor' />
       </div>
     `;
   }
