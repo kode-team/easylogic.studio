@@ -98,7 +98,7 @@ module.exports = {
       filename: "./popup.html"
     }),
     // copy extension manifest and icons
-    new CopyWebpackPlugin([{ from: "./src/assets/extension/" }]),
+    new CopyWebpackPlugin([{ from: "./src/assets/whale/" }]),
     new MiniCssExtractPlugin({
       filename: "bundle.css"
     })
