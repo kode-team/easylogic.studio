@@ -729,6 +729,50 @@ export default class PathGenerator {
         return this.toSVGString()
     }
 
+    makeTriangleDistancePointGuide (first, second) {
+
+        var minX = Math.min(first.startPoint.x, second.startPoint.x);
+        var maxX = Math.max(first.startPoint.x, second.startPoint.x);
+
+        var minY = Math.min(first.startPoint.y, second.startPoint.y);
+        var maxY = Math.max(first.startPoint.y, second.startPoint.y);
+
+        // right bottom 
+        if (first.startPoint.x < second.startPoint.x && first.startPoint.y < second.startPoint.y) {
+            this.segmentManager
+            .addDistanceLine({x: minX, y: maxY}, {x: maxX, y : maxY} )
+            .addDistanceLine({x: minX, y: minY}, {x: minX, y : maxY} )            
+        } else if (first.startPoint.x < second.startPoint.x && first.startPoint.y > second.startPoint.y) {
+            this.segmentManager
+            .addDistanceLine({x: minX, y: maxY}, {x: maxX, y : maxY} )
+            .addDistanceLine({x: maxX, y: minY}, {x: maxX, y : maxY} )            
+        } else if (first.startPoint.x > second.startPoint.x && first.startPoint.y > second.startPoint.y) {
+            this.segmentManager
+            .addDistanceLine({x: minX, y: minY}, {x: minX, y : maxY} )
+            .addDistanceLine({x: minX, y: maxY}, {x: maxX, y : maxY} )
+        } else if (first.startPoint.x > second.startPoint.x && first.startPoint.y < second.startPoint.y) {
+            this.segmentManager
+            .addDistanceLine({x: minX, y: maxY}, {x: maxX, y : maxY} )
+            .addDistanceLine({x: maxX, y: minY}, {x: maxX, y : maxY} )            
+        }
+
+    }
+
+    makeDistancePointGuide (prevPoint, current, nextPoint, index) {
+
+        if (current.selected) {
+
+            if (prevPoint) {
+                this.makeTriangleDistancePointGuide(prevPoint, current);
+            }
+
+            if (nextPoint) {
+                this.makeTriangleDistancePointGuide(current, nextPoint);
+            }
+
+        }
+    }
+
     makeStartPointGuide (prevPoint, current, nextPoint, index) {
         current.startPoint.isFirst = true; 
 
@@ -918,6 +962,8 @@ export default class PathGenerator {
             }
 
             current.selected = selectedIndex === index;
+
+            this.makeDistancePointGuide(prevPoint, current, nextPoint, index);
 
             if (current.command === 'M') {
                 this.makeStartPointGuide(prevPoint, current, nextPoint, index);

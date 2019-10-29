@@ -3,6 +3,7 @@ import { SVGItem } from "./SVGItem";
 import { OBJECT_TO_PROPERTY } from "../../../util/functions/func";
 import { hasSVGProperty, hasCSSProperty } from "../../util/Resource";
 import { Length } from "../../unit/Length";
+import Dom from "../../../util/Dom";
 
 export class SVGTextPathItem extends SVGItem {
   getDefaultObject(obj = {}) {
@@ -111,10 +112,8 @@ export class SVGTextPathItem extends SVGItem {
         lengthAdjust: this.json.lengthAdjust,
         startOffset: this.json.startOffset
       })
-  
-      var $defs = currentElement.$('defs');
-      $defs.html(this.toDefInnerString)  
 
+      this.updateDefString(currentElement)
 
     }
 
@@ -130,7 +129,7 @@ export class SVGTextPathItem extends SVGItem {
   }
 
   get toPathId () {
-    return this.json.id + 'path'
+    return this.getInnerId('path')
   }
 
   get toPathSVG () {

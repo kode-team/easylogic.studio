@@ -1439,7 +1439,7 @@ html, body {
   width: 100%;
   height: 100%;
   display: inline-block;
-  background-color: #212121;
+  background-color: #16191e;
   opacity: 0;
   pointer-events: none;
 }
@@ -1495,7 +1495,7 @@ html, body {
   height: 50px;
   overflow: hidden;
   position: relative;
-  background-color: #212121;
+  background-color: #292f38;
   color: white;
   z-index: 1;
   pointer-events: all;
@@ -1534,13 +1534,13 @@ html, body {
   right: 0px;
   overflow: hidden;
   border-top: 1px solid #111111;
-  background-color: #212121;
+  background-color: #16191e;
   transition: all 0.15s linear;
   pointer-events: all;
   z-index: 10000;
 }
 .csseditor .layout-main .layout-middle .layout-footer .managed-tool {
-  background-color: #212121;
+  background-color: #16191e;
 }
 .csseditor .layout-main .layout-middle .layout-left {
   position: absolute;
@@ -1671,7 +1671,7 @@ html, body {
   text-align: center;
 }
 .csseditor .feature-control .draw-items {
-  background-color: #212121;
+  background-color: #16191e;
   display: none;
 }
 .csseditor .feature-control .draw-items .split {
@@ -1811,13 +1811,13 @@ html, body {
   right: 0px;
   bottom: 0px;
   top: 0px;
-  background-color: #212121;
+  background-color: #16191e;
   color: #ffffff;
 }
 .csseditor .tab.number-tab .tab-header {
   height: 34px;
   cursor: pointer;
-  background-color: #212121;
+  background-color: #16191e;
   overflow: hidden;
   color: #ffffff;
 }
@@ -1847,7 +1847,7 @@ html, body {
 }
 .csseditor .tab.number-tab > .tab-header > .tab-item label svg path {
   fill: #ffffff;
-  stroke: #212121;
+  stroke: #16191e;
   stroke-width: 1px;
 }
 .csseditor .tab.number-tab > .tab-header > .tab-item:first-child:hover label {
@@ -1881,7 +1881,7 @@ html, body {
   background-color: #fc554f;
 }
 .csseditor .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"] label svg path {
-  stroke: #212121;
+  stroke: #16191e;
 }
 .csseditor .tab.number-tab[data-selected-value="1"] .tab-content[data-value="1"] {
   display: block;
@@ -1900,7 +1900,7 @@ html, body {
   background-color: #fc554f;
 }
 .csseditor .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"] label svg path {
-  stroke: #212121;
+  stroke: #16191e;
 }
 .csseditor .tab.number-tab[data-selected-value="2"] .tab-content[data-value="2"] {
   display: block;
@@ -1919,7 +1919,7 @@ html, body {
   background-color: #fc554f;
 }
 .csseditor .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"] label svg path {
-  stroke: #212121;
+  stroke: #16191e;
 }
 .csseditor .tab.number-tab[data-selected-value="3"] .tab-content[data-value="3"] {
   display: block;
@@ -1938,7 +1938,7 @@ html, body {
   background-color: #fc554f;
 }
 .csseditor .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"] label svg path {
-  stroke: #212121;
+  stroke: #16191e;
 }
 .csseditor .tab.number-tab[data-selected-value="4"] .tab-content[data-value="4"] {
   display: block;
@@ -1957,7 +1957,7 @@ html, body {
   background-color: #fc554f;
 }
 .csseditor .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"] label svg path {
-  stroke: #212121;
+  stroke: #16191e;
 }
 .csseditor .tab.number-tab[data-selected-value="5"] .tab-content[data-value="5"] {
   display: block;
@@ -1976,7 +1976,7 @@ html, body {
   background-color: #fc554f;
 }
 .csseditor .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"] label svg path {
-  stroke: #212121;
+  stroke: #16191e;
 }
 .csseditor .tab.number-tab[data-selected-value="6"] .tab-content[data-value="6"] {
   display: block;
@@ -1995,7 +1995,7 @@ html, body {
   background-color: #fc554f;
 }
 .csseditor .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"] label svg path {
-  stroke: #212121;
+  stroke: #16191e;
 }
 .csseditor .tab.number-tab[data-selected-value="7"] .tab-content[data-value="7"] {
   display: block;
@@ -2014,7 +2014,7 @@ html, body {
   background-color: #fc554f;
 }
 .csseditor .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"] label svg path {
-  stroke: #212121;
+  stroke: #16191e;
 }
 .csseditor .tab.number-tab[data-selected-value="8"] .tab-content[data-value="8"] {
   display: block;
@@ -2033,7 +2033,7 @@ html, body {
   background-color: #fc554f;
 }
 .csseditor .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"] label svg path {
-  stroke: #212121;
+  stroke: #16191e;
 }
 .csseditor .tab.number-tab[data-selected-value="9"] .tab-content[data-value="9"] {
   display: block;
@@ -2083,7 +2083,7 @@ html, body {
   color: black;
 }
 .csseditor .tab > .tab-header > .tab-item.select-reverse.selected {
-  background-color: #212121;
+  background-color: #16191e;
 }
 .csseditor .tab > .tab-body {
   position: absolute;
@@ -2126,7 +2126,7 @@ html, body {
   right: 0px;
   height: 30px;
   display: none;
-  background-color: #212121;
+  background-color: #16191e;
   font-size: 12px;
   font-weight: bold;
   padding: 8px 5px !important;
@@ -2304,7 +2304,7 @@ html, body {
 }
 .csseditor .tool-menu .items .draw-items .menu-item.selected .icon svg path,
 .csseditor .external-tool-menu .items .draw-items .menu-item.selected .icon svg path {
-  stroke: #212121;
+  stroke: #16191e;
   fill: #fc554f;
 }
 .csseditor .tool-menu .items .draw-items .menu-item[data-no-title=true],
@@ -2407,7 +2407,7 @@ html, body {
 .csseditor .external-tool-menu .items .icon svg path {
   fill: white;
   stroke-width: 1;
-  stroke: #212121;
+  stroke: #16191e;
 }
 .csseditor .tool-menu .items .icon.jsfiddle, .csseditor .tool-menu .items .icon.export, .csseditor .tool-menu .items .icon.codepen, .csseditor .tool-menu .items .icon.github,
 .csseditor .external-tool-menu .items .icon.jsfiddle,
@@ -2485,7 +2485,7 @@ html, body {
   border-radius: 3px;
   border: 1px solid #111111;
   color: #ffffff;
-  background-color: #212121;
+  background-color: #16191e;
 }
 .csseditor .page-tools > label {
   vertical-align: middle;
@@ -2517,7 +2517,7 @@ html, body {
   border: 1px solid #111111;
   border-top: 0px;
   color: #ffffff;
-  background-color: #212121;
+  background-color: #16191e;
   height: 100%;
 }
 .csseditor .page-subeditor .path-manager .text {
@@ -2571,7 +2571,7 @@ html, body {
 }
 .csseditor .page-subeditor .path-manager .tools button svg path {
   stroke-width: 1;
-  stroke: #212121;
+  stroke: #16191e;
 }
 .csseditor .page-subeditor .path-manager > * {
   vertical-align: middle;
@@ -2583,7 +2583,7 @@ html, body {
   border: 1px solid #111111;
   border-top: 0px;
   color: #ffffff;
-  background-color: #212121;
+  background-color: #16191e;
   padding: 5px 10px;
 }
 .csseditor .page-subeditor .polygon-manager > * {
@@ -2604,7 +2604,7 @@ html, body {
   outline: none;
   border: 1px solid #111111;
   color: #ffffff;
-  background-color: #212121;
+  background-color: #16191e;
   padding: 5px 10px;
   height: 100%;
 }
@@ -3173,19 +3173,19 @@ html, body {
 }
 .csseditor .property {
   border-bottom: 1px solid black;
-  background-color: #212121;
+  background-color: #16191e;
   color: #ffffff;
   display: none;
 }
 .csseditor .property .add-timeline-property {
   display: inline-block;
   margin-right: 5px;
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
   box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.3);
   background-color: rgba(145, 145, 145, 0.7);
   line-height: 10px;
-  margin-top: 6px;
+  margin-top: 4px;
   cursor: pointer;
   -webkit-transform: rotate(45deg);
           transform: rotate(45deg);
@@ -3406,9 +3406,8 @@ html, body {
 .csseditor .property > .property-body {
   display: none;
   padding: 0px;
-  background-color: #212121;
+  background-color: #3a3a3a;
   margin-top: -1px;
-  box-shadow: inset 0 0 5px 0px black;
 }
 .csseditor .property > .property-body .property-item {
   font-size: 11px;
@@ -5071,7 +5070,7 @@ html, body {
   cursor: pointer;
 }
 .csseditor .timeline-animation-list .timeline-animation-item .preview {
-  background-color: #212121;
+  background-color: #16191e;
   border-radius: 3px;
   border: 1px solid #111111;
   cursor: pointer;
@@ -5173,7 +5172,7 @@ html, body {
   top: 30px;
   left: 60px;
   border: 1px solid #111111;
-  background-color: #212121;
+  background-color: #16191e;
 }
 .csseditor .cubic-bezier-editor .bezier .bezier-canvas {
   position: absolute;
@@ -5237,7 +5236,7 @@ html, body {
   border-radius: 5px;
   margin-bottom: 5px;
   cursor: pointer;
-  background-color: #212121;
+  background-color: #16191e;
 }
 .csseditor .cubic-bezier-editor .item-list .item:not(:first-child) {
   border-top: 0px;
@@ -5703,7 +5702,7 @@ html, body {
 }
 .csseditor .css-property-editor .css-property-item > .title {
   grid-template-columns: 1fr 30px;
-  background-color: #212121;
+  background-color: #16191e;
   color: #fc554f;
   border-radius: 3px;
   padding: 3px 0px;
@@ -6115,7 +6114,7 @@ html, body {
   height: 16px;
 }
 .csseditor .box-shadow-editor .shadow-item .inset svg path {
-  fill: #212121;
+  fill: #16191e;
 }
 .csseditor .box-shadow-editor .shadow-item .inset[data-value=true] svg path {
   fill: #fc554f;
@@ -7741,21 +7740,22 @@ html, body {
   flex: 1 1 auto;
   text-align: center;
   vertical-align: middle;
-  padding: 2px 2px;
-  border: 1px solid #444444;
+  padding: 6px 2px;
+  border: 1px solid #fc554f;
+  color: #fc554f;
   border-right: 0px;
   white-space: pre-wrap;
   word-break: break-all;
   overflow: hidden;
-  font-size: 13px;
-  line-height: 1.3;
+  font-size: 11px;
+  text-transform: uppercase;
 }
 .csseditor .select-icon-editor .items > .select-icon-item:first-child {
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
 }
 .csseditor .select-icon-editor .items > .select-icon-item:last-child {
-  border-right: 1px solid #444444;
+  border-right: 1px solid #fc554f;
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px;
 }
@@ -8860,7 +8860,7 @@ html, body {
 .csseditor .popup .box-shadow-property-popup .codemirror-colorpicker {
   box-shadow: none;
   border-radius: 0px;
-  background-color: #212121;
+  background-color: #16191e;
 }
 .csseditor .popup .box-shadow-property-popup .codemirror-colorpicker input {
   color: #ffffff !important;
@@ -8980,7 +8980,7 @@ html, body {
 .csseditor .popup .text-shadow-property-popup .codemirror-colorpicker {
   box-shadow: none;
   border-radius: 0px;
-  background-color: #212121;
+  background-color: #16191e;
 }
 .csseditor .popup .text-shadow-property-popup .codemirror-colorpicker input {
   color: #ffffff !important;
@@ -9612,7 +9612,7 @@ html, body {
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
   z-index: 1000;
-  background-color: #212121;
+  background-color: #16191e;
   border: 1px solid #111111;
   box-shadow: 0 0 1px 0px #111111;
   padding: 14px;
@@ -9782,6 +9782,11 @@ html, body {
   stroke: #919191;
   pointer-events: none;
 }
+.csseditor .path-editor-view svg line[data-distance=true] {
+  stroke: #fc554f;
+  stroke-dasharray: 2 2;
+  pointer-events: none;
+}
 .csseditor .path-editor-view svg circle {
   fill: white;
   stroke: blue;
@@ -9817,16 +9822,14 @@ html, body {
 }
 .csseditor .path-editor-view svg rect.segment {
   fill: black;
-  stroke: #111111;
+  stroke: white;
   stroke-width: 1;
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   cursor: pointer;
 }
 .csseditor .path-editor-view svg rect.segment[data-selected=true] {
-  stroke-width: 2;
-  stroke: black;
-  opacity: 0.2;
+  fill: #fc554f;
 }
 .csseditor .path-editor-view svg path.guide {
   fill: transparent;
@@ -9872,7 +9875,7 @@ html, body {
   right: 0px;
   bottom: 0px;
   cursor: crosshair;
-  background-color: rgba(33, 33, 33, 0.1);
+  background-color: rgba(22, 25, 30, 0.1);
 }
 .csseditor .polygon-editor-view.alt svg circle {
   cursor: move;
@@ -9966,7 +9969,7 @@ html, body {
   right: 0px;
   top: 0px;
   bottom: 0px;
-  background-color: #212121;
+  background-color: #16191e;
   font-size: 12px;
   border-left: 1px solid #111111;
   border-top: 1px solid #111111;
@@ -10034,7 +10037,7 @@ html, body {
   left: 0px;
   top: 0px;
   bottom: 0px;
-  background-color: #212121;
+  background-color: #16191e;
   font-size: 12px;
   border-right: 1px solid #111111;
   border-top: 1px solid #111111;
@@ -10051,7 +10054,7 @@ html, body {
   right: 260px;
   top: 0px;
   bottom: 0px;
-  background-color: #212121;
+  background-color: #16191e;
   font-size: 12px;
 }
 .csseditor .timeline-area .timeline-header {
@@ -10349,7 +10352,7 @@ html, body {
   display: inline-block;
   width: 8px;
   height: 8px;
-  background-color: #212121;
+  background-color: #16191e;
   -webkit-transform: translateY(-50%) translateX(-50%) rotate(45deg);
           transform: translateY(-50%) translateX(-50%) rotate(45deg);
   cursor: ew-resize;
@@ -10374,7 +10377,7 @@ html, body {
   display: inline-block;
   width: 8px;
   height: 8px;
-  background-color: #212121;
+  background-color: #16191e;
   -webkit-transform: translateY(-50%) translateX(-50%) rotate(45deg);
           transform: translateY(-50%) translateX(-50%) rotate(45deg);
   cursor: ew-resize;
@@ -12227,12 +12230,12 @@ html, body {
 .csseditor[data-theme=light] .property .add-timeline-property {
   display: inline-block;
   margin-right: 5px;
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
   box-shadow: 0 0 0 2px rgba(206, 206, 206, 0.3);
   background-color: rgba(255, 255, 255, 0.7);
   line-height: 10px;
-  margin-top: 6px;
+  margin-top: 4px;
   cursor: pointer;
   -webkit-transform: rotate(45deg);
           transform: rotate(45deg);
@@ -12455,7 +12458,6 @@ html, body {
   padding: 0px;
   background-color: white;
   margin-top: -1px;
-  box-shadow: inset 0 0 5px 0px black;
 }
 .csseditor[data-theme=light] .property > .property-body .property-item {
   font-size: 11px;
@@ -16788,21 +16790,22 @@ html, body {
   flex: 1 1 auto;
   text-align: center;
   vertical-align: middle;
-  padding: 2px 2px;
-  border: 1px solid white;
+  padding: 6px 2px;
+  border: 1px solid #4b61ce;
+  color: #4b61ce;
   border-right: 0px;
   white-space: pre-wrap;
   word-break: break-all;
   overflow: hidden;
-  font-size: 13px;
-  line-height: 1.3;
+  font-size: 11px;
+  text-transform: uppercase;
 }
 .csseditor[data-theme=light] .select-icon-editor .items > .select-icon-item:first-child {
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
 }
 .csseditor[data-theme=light] .select-icon-editor .items > .select-icon-item:last-child {
-  border-right: 1px solid white;
+  border-right: 1px solid #4b61ce;
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px;
 }
@@ -18829,6 +18832,11 @@ html, body {
   stroke: #919191;
   pointer-events: none;
 }
+.csseditor[data-theme=light] .path-editor-view svg line[data-distance=true] {
+  stroke: #4b61ce;
+  stroke-dasharray: 2 2;
+  pointer-events: none;
+}
 .csseditor[data-theme=light] .path-editor-view svg circle {
   fill: white;
   stroke: blue;
@@ -18864,16 +18872,14 @@ html, body {
 }
 .csseditor[data-theme=light] .path-editor-view svg rect.segment {
   fill: black;
-  stroke: #e7e7e7;
+  stroke: white;
   stroke-width: 1;
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   cursor: pointer;
 }
 .csseditor[data-theme=light] .path-editor-view svg rect.segment[data-selected=true] {
-  stroke-width: 2;
-  stroke: black;
-  opacity: 0.2;
+  fill: #4b61ce;
 }
 .csseditor[data-theme=light] .path-editor-view svg path.guide {
   fill: transparent;

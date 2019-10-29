@@ -198,14 +198,16 @@ export default class SVGItemProperty extends BaseProperty {
 
         <div class='property-item animation-property-item'>
           <span class='add-timeline-property' data-property='stroke-linejoin'></span>      
-          <SelectEditor 
+          <span>Line Join</span>
+        </div>
+        <div class='property-item'>
+          <SelectIconEditor 
             ref='$strokeLineJoin' 
-            label='Line Join' 
             key="stroke-linejoin" 
             options="miter,arcs,bevel,miter-clip,round" 
             onchange="changeValue" 
           />
-        </div>
+        </div>        
         <div class='property-item animation-property-item'>
           <span class='add-timeline-property' data-property='svgfilter'></span>      
           <SVGFilterSelectEditor 

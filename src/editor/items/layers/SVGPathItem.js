@@ -105,9 +105,9 @@ export class SVGPathItem extends SVGItem {
         'fill': this.toFillValue,
         'stroke': this.toStrokeValue
       })
-  
-      var $defs = currentElement.$('defs');
-      $defs.html(this.toDefInnerString)  
+
+      this.updateDefString(currentElement)
+
     }
 
     this.json.totalLength = $path.totalLength

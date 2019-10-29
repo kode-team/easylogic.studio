@@ -107,6 +107,9 @@ export class Item {
     return this.json.parent;
   }
 
+  getInnerId(postfix = '') {
+    return this.json.id + postfix;
+  }
 
   // selection 이후에 
   // 위치나 , width, height 등의 geometry 가 변경되었을 때 호출 하는 함수 

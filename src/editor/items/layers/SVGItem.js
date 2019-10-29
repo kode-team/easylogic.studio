@@ -1,5 +1,6 @@
 import { Layer } from "../Layer";
 import { SVGFill } from "../../svg-property/SVGFill";
+import Dom from "../../../util/Dom";
 
 export class SVGItem extends Layer {
   getDefaultObject(obj = {}) {
@@ -59,6 +60,20 @@ export class SVGItem extends Layer {
     return "SVG";
   }
 
+
+  updateDefString (currentElement) {
+
+    var $defs = currentElement.$('defs');
+    if ($defs) {
+      $defs.html(this.toDefInnerString)          
+    } else {
+      if (this.toDefString) {
+        currentElement.prepend(Dom.createByHTML(this.toDefString));
+      }
+
+    }      
+  }  
+
   get toDefInnerString () {
     return /*html*/`
         ${this.toFillSVG}
@@ -67,19 +82,24 @@ export class SVGItem extends Layer {
   }
 
   get toDefString () {
+
+    var str = this.toDefInnerString.trim();
+
+    if (!str) return ''; 
+
     return /*html*/`
       <defs>
-        ${this.toDefInnerString}
+        ${str}
       </defs>
     `
   }
 
   get fillId () {
-    return this.json.id + 'fill'
+    return this.getInnerId('fill')
   }
 
   get strokeId () {
-    return this.json.id + 'stroke'
+    return this.getInnerId('stroke')
   }
 
   get toFillSVG () {

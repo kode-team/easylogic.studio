@@ -32,6 +32,19 @@ export default class SegmentManager {
         return this;         
     }    
 
+
+    addDistanceLine (a, b) {
+        this.segmentList.push({
+            line: true,
+            distance: true, 
+            x1: a.x,
+            y1: a.y,
+            x2: b.x,
+            y2: b.y            
+        })
+        return this;         
+    }        
+
     addPoint(obj, point, index, segment, selected = false) {
         this.segmentList.push({
             ...obj,
@@ -108,6 +121,7 @@ export default class SegmentManager {
                     data-segment="true"
                     data-is-last="${it.isLast}"                
                     data-guide='${it.guide}'
+                    data-distance='${it.distance}'
                     x1='${it.x1}' x2='${it.x2}' y1='${it.y1}' y2='${it.y2}' 
                 />`
             } else if (it.text) {

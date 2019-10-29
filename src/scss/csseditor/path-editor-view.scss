@@ -178,6 +178,12 @@
                 pointer-events: none;
             }
 
+            &[data-distance='true'] {
+                stroke: $selected-color;
+                stroke-dasharray: 2 2;
+                pointer-events: none;
+            }            
+
             // &[data-segment="true"] {
             //     stroke-dasharray: 2 2; 
             // }
@@ -230,16 +236,16 @@
         rect {
             &.segment {
                 fill: rgba(0, 0, 0, 1);
-                stroke: $border-color;
+                stroke: white;
                 stroke-width: 1; 
-                width: 8px;
-                height: 8px;
+                width: 10px;
+                height: 10px;
                 cursor: pointer;
 
                 &[data-selected='true'] {
-                    stroke-width: 2;
-                    stroke: black;
-                    opacity: 0.2;
+                    // stroke-width: 2;
+                    // stroke: rgba(0, 0, 0, 0);
+                    fill: $selected-color;
                 }
 
             }

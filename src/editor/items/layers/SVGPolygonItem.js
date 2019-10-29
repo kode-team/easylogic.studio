@@ -89,9 +89,8 @@ export class SVGPolygonItem extends SVGItem {
         'stroke': this.toStrokeValue
       })
   
-      var $defs = currentElement.$('defs');
-      $defs.html(this.toDefInnerString)
-  
+      this.updateDefString(currentElement)
+
     }
 
     this.json.totalLength = $polygon.totalLength
