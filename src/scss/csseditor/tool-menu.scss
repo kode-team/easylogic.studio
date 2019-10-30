@@ -105,7 +105,7 @@
           .icon {      
             svg {
               path {
-                stroke: $background-color;  
+                stroke: $border-color;  
                 fill: $selected-color;
               }
             }
@@ -141,7 +141,7 @@
       vertical-align: middle;
       width: 3px;
       margin-right: 2px;
-      border-right: 1px solid rgba(255, 255, 255, 0.3);
+      border-right: 1px solid $border-color;
     }
 
     &.flex-2 {
@@ -191,25 +191,11 @@
           color: $selected-font-color;          
         }
       }
-
-      &.open {
-        .title {
-          color: $selected-font-color;
-        }
-
-        .open-right-panel {
-          svg {
-            path {
-              fill: $selected-font-color;
-            }
-          }
-        }
-      }
     }
 
     .title {
       font-size: 10px;
-      color: $selected-font-color;
+      color: $font-color;
       // display: none;
     }
 
@@ -218,14 +204,14 @@
       width: 24px;
       height: 24px;
       // background-color: rgba(206, 206, 206, 0.5);
-      color: $selected-font-color;      
+      color: $font-color;      
 
       svg {
         width: 100%;
         height: 100%;
 
         path {
-          fill : $selected-font-color;
+          fill : $font-color;
 
           stroke-width: 1;
           stroke: $background-color;                    

@@ -45,6 +45,19 @@ export default class SegmentManager {
         return this;         
     }        
 
+    addDistanceAngle (center, rx, ry, degree, last, line) {
+        this.segmentList.push({
+            angle: true,
+            rx, 
+            ry, 
+            line,
+            degree,
+            center, 
+            last
+        })
+        return this;         
+    }            
+
     addPoint(obj, point, index, segment, selected = false) {
         this.segmentList.push({
             ...obj,
@@ -115,7 +128,14 @@ export default class SegmentManager {
 
         return this.segmentList.map(it => {
 
-            if (it.line) {
+            if (it.angle) {
+                return  /*html*/`
+                <path stroke-width='1' 
+                    data-distance='true'
+                    fill="rgba(0,0,0,0.5)"
+                    d="M ${it.center.x},${it.center.y} A ${it.rx} ${it.ry},${it.degree},0,0,${it.last.x} ${it.last.y} L${it.line.x} ${it.line.y} Z"
+                />`
+            } else if (it.line) {
                 return  /*html*/`
                 <line stroke-width='1' 
                     data-segment="true"
@@ -126,7 +146,7 @@ export default class SegmentManager {
                 />`
             } else if (it.text) {
                 return /*html*/ `
-                <text x="${it.cx}" y="${it.cy}" dx="5" dy="-5">${it.text}</text>
+                <text x="${it.cx}" y="${it.cy}" dx="5" dy="-5" text-anchor="start">${it.text}</text>
                 `                              
             } else if (it.curve) {
                 return /*html*/`

@@ -67,10 +67,8 @@ export class SVGItem extends Layer {
     if ($defs) {
       $defs.html(this.toDefInnerString)          
     } else {
-      if (this.toDefString) {
-        currentElement.prepend(Dom.createByHTML(this.toDefString));
-      }
-
+      var str = this.toDefString.trim();
+      currentElement.prepend(Dom.createByHTML(str));
     }      
   }  
 
@@ -85,7 +83,7 @@ export class SVGItem extends Layer {
 
     var str = this.toDefInnerString.trim();
 
-    if (!str) return ''; 
+    // if (!str) return ''; 
 
     return /*html*/`
       <defs>

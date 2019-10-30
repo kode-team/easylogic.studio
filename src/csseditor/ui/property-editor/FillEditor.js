@@ -11,6 +11,7 @@ import icon from "../icon/icon";
 import { SVGFill } from "../../../editor/svg-property/SVGFill";
 import { SVGStaticGradient } from "../../../editor/image-resource/SVGStaticGradient";
 import { isUndefined } from "../../../util/functions/func";
+import SelectIconEditor from "./SelectIconEditor";
 
 const imageTypeList = [
   'static-gradient',
@@ -55,12 +56,15 @@ const rangeEditorList = [
   'imageX', 'imageY', 'imageWidth', 'imageHeight'
 ]
 
+
+
 export default class FillEditor extends UIElement  {
 
   components() {
     return {
       InputRangeEditor,
       RangeEditor,
+      SelectIconEditor,
       SelectEditor
     }
   }
@@ -140,7 +144,7 @@ export default class FillEditor extends UIElement  {
             </div>
             <div class='sub-editor' ref='$subEditor'> 
                 <div data-editor='spreadMethod'>
-                  <SelectEditor label='Spread' ref='$spreadMethod' options='pad,reflect,repeat' key='spreadMethod' onchange='changeKeyValue' />
+                  <SelectIconEditor label='Spread' ref='$spreadMethod' value="pad" options='pad,reflect,repeat' key='spreadMethod' onchange='changeKeyValue' />
                 </div>  
                 <div data-editor='patternUnits'>
                   <SelectEditor label='Pattern' ref='$patternUnits' options='userSpaceOnUse' key='patternUnits' onchange='changeKeyValue' />
@@ -226,6 +230,7 @@ export default class FillEditor extends UIElement  {
     this.children.$fy.setValue(this.state.image.fy)
     this.children.$fr.setValue(this.state.image.fr)  
     
+    this.children.$spreadMethod.setValue(this.state.image.spreadMethod);
     this.children.$patternUnits.setValue(this.state.image.patternUnits);
     this.children.$patternWidth.setValue(this.state.image.patternWidth);
     this.children.$patternHeight.setValue(this.state.image.patternHeight);

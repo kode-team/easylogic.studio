@@ -740,17 +740,49 @@ export default class PathGenerator {
         // right bottom 
         if (first.startPoint.x < second.startPoint.x && first.startPoint.y < second.startPoint.y) {
             this.segmentManager
-            .addDistanceLine({x: minX, y: maxY}, {x: maxX, y : maxY} )
-            .addDistanceLine({x: minX, y: minY}, {x: minX, y : maxY} )            
+            .addDistanceLine({x: minX, y: minY}, {x: maxX, y : minY} )
+            .addDistanceLine({x: maxX, y: minY}, {x: maxX, y : maxY} )            
+
+
+            var centerX = minX
+            var centerY = minY 
+            var angle = calculateAngle360(maxX-minX, maxY-minY) - 180
+            var dist = 20;            
+            var {x, y} = getXYInCircle(
+                0, 
+                dist, 
+                centerX, 
+                centerY
+            );                 
+            var {x: tx, y: ty} = getXYInCircle(
+                angle/2, 
+                dist, 
+                centerX, 
+                centerY
+            );     
+            
+            var last = getXYInCircle(
+                angle, 
+                dist, 
+                centerX, 
+                centerY
+            );                 
+
+            this.segmentManager
+                .addDistanceAngle(last, dist, dist, angle, {x, y}, {x: x-dist, y})
+                .addText({x: tx-5, y: ty+15}, angle)
         } else if (first.startPoint.x < second.startPoint.x && first.startPoint.y > second.startPoint.y) {
+            // right top  
             this.segmentManager
             .addDistanceLine({x: minX, y: maxY}, {x: maxX, y : maxY} )
             .addDistanceLine({x: maxX, y: minY}, {x: maxX, y : maxY} )            
         } else if (first.startPoint.x > second.startPoint.x && first.startPoint.y > second.startPoint.y) {
+            // left top 
             this.segmentManager
             .addDistanceLine({x: minX, y: minY}, {x: minX, y : maxY} )
             .addDistanceLine({x: minX, y: maxY}, {x: maxX, y : maxY} )
         } else if (first.startPoint.x > second.startPoint.x && first.startPoint.y < second.startPoint.y) {
+            // left bottom 
             this.segmentManager
             .addDistanceLine({x: minX, y: maxY}, {x: maxX, y : maxY} )
             .addDistanceLine({x: maxX, y: minY}, {x: maxX, y : maxY} )            
@@ -963,7 +995,9 @@ export default class PathGenerator {
 
             current.selected = selectedIndex === index;
 
-            this.makeDistancePointGuide(prevPoint, current, nextPoint, index);
+            // 각도를 표시 해준다. 
+            // 쓸 곳이 없다. 
+            // this.makeDistancePointGuide(prevPoint, current, nextPoint, index);
 
             if (current.command === 'M') {
                 this.makeStartPointGuide(prevPoint, current, nextPoint, index);

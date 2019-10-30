@@ -9,7 +9,7 @@ export default class SelectIconEditor extends UIElement {
         var options = (this.props.options || '').split(splitChar).map(it => it.trim());
         var icons = (this.props.icons || '').split(splitChar).map(it => it.trim());
 
-        var value = this.props.value;
+        var value = this.props.value || '';
 
         return {
             label: this.props.label || '',
@@ -36,7 +36,7 @@ export default class SelectIconEditor extends UIElement {
     }
 
     getValue () {
-        return this.refs.$options.value; 
+        return this.state.value || ''; 
     }
 
     setValue (value) {
@@ -96,6 +96,6 @@ export default class SelectIconEditor extends UIElement {
     updateData (data) {
         this.setState(data, false)
 
-        this.parent.trigger(this.props.onchange, this.props.key, this.state.value, this.props.params)
+        this.parent.trigger(this.props.onchange, this.props.key, this.getValue(), this.props.params)
     }
 }

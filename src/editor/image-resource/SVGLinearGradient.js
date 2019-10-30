@@ -48,7 +48,7 @@ export class SVGLinearGradient extends SVGGradient {
       return /*html*/`
 <linearGradient ${OBJECT_TO_PROPERTY({ id, x1, x2, y1, y2, spreadMethod })} >
   ${this.colorsteps.map(it => {
-    return /*html*/`<stop offset="${it.percent}%"  stop-color="${it.color}" />`
+    return /*html*/`<stop offset="${it.percent}%"  stop-color="${it.color}" ></stop>`
   }).join('\n')}
 </linearGradient>
       `

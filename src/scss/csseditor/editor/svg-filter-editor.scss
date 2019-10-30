@@ -185,7 +185,7 @@
           top: 10px;
           width: 40px;
           height: 40px;
-          background-color: white; 
+          background-color: $background-color; 
           border-radius: 10px;
           pointer-events: all;
           cursor: pointer;
@@ -220,7 +220,7 @@
             left: 50%;
             transform: translateX(-50%);
             font-size: 11px;
-            color: rgba(255, 255, 255, 0.7);
+            color: $font-color;
           }
 
           > .remove {
@@ -230,7 +230,7 @@
             left: 50%;
             transform: translateX(-50%);
             font-size: 11px;
-            color: rgba(255, 255, 255, 0.7);
+            color: $font-color;
             height: 12px;
             width: 12px;
             border-radius: 100%;

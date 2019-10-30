@@ -2304,7 +2304,7 @@ html, body {
 }
 .csseditor .tool-menu .items .draw-items .menu-item.selected .icon svg path,
 .csseditor .external-tool-menu .items .draw-items .menu-item.selected .icon svg path {
-  stroke: #16191e;
+  stroke: #111111;
   fill: #fc554f;
 }
 .csseditor .tool-menu .items .draw-items .menu-item[data-no-title=true],
@@ -2334,7 +2334,7 @@ html, body {
   vertical-align: middle;
   width: 3px;
   margin-right: 2px;
-  border-right: 1px solid rgba(255, 255, 255, 0.3);
+  border-right: 1px solid #111111;
 }
 .csseditor .tool-menu .items.flex-2,
 .csseditor .external-tool-menu .items.flex-2 {
@@ -2378,25 +2378,17 @@ html, body {
   background-color: rgba(255, 255, 255, 0.1);
   color: white;
 }
-.csseditor .tool-menu .items button.open .title,
-.csseditor .external-tool-menu .items button.open .title {
-  color: white;
-}
-.csseditor .tool-menu .items button.open .open-right-panel svg path,
-.csseditor .external-tool-menu .items button.open .open-right-panel svg path {
-  fill: white;
-}
 .csseditor .tool-menu .items .title,
 .csseditor .external-tool-menu .items .title {
   font-size: 10px;
-  color: white;
+  color: #ffffff;
 }
 .csseditor .tool-menu .items .icon,
 .csseditor .external-tool-menu .items .icon {
   margin: 0 auto;
   width: 24px;
   height: 24px;
-  color: white;
+  color: #ffffff;
 }
 .csseditor .tool-menu .items .icon svg,
 .csseditor .external-tool-menu .items .icon svg {
@@ -2405,7 +2397,7 @@ html, body {
 }
 .csseditor .tool-menu .items .icon svg path,
 .csseditor .external-tool-menu .items .icon svg path {
-  fill: white;
+  fill: #ffffff;
   stroke-width: 1;
   stroke: #16191e;
 }
@@ -5390,7 +5382,7 @@ html, body {
 }
 .csseditor .range-editor.has-label.block label {
   display: block;
-  color: rgba(0, 0, 0, 0.7);
+  color: #ffffff;
 }
 .csseditor .range-editor.has-calc {
   grid-template-columns: 20px 1fr;
@@ -5478,7 +5470,7 @@ html, body {
   text-align: center;
   padding: 0px;
   width: 24px;
-  color: #9e9e9e;
+  color: #ffffff;
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 3px;
@@ -7363,7 +7355,7 @@ html, body {
   top: 10px;
   width: 40px;
   height: 40px;
-  background-color: white;
+  background-color: #16191e;
   border-radius: 10px;
   pointer-events: all;
   cursor: pointer;
@@ -7386,7 +7378,7 @@ html, body {
   -webkit-transform: translateX(-50%);
           transform: translateX(-50%);
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.7);
+  color: #ffffff;
 }
 .csseditor .svg-filter-editor .center .graph .graph-panel .filter-node > .remove {
   position: absolute;
@@ -7396,7 +7388,7 @@ html, body {
   -webkit-transform: translateX(-50%);
           transform: translateX(-50%);
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.7);
+  color: #ffffff;
   height: 12px;
   width: 12px;
   border-radius: 100%;
@@ -10436,10 +10428,10 @@ html, body {
 .csseditor[data-theme=light] input[type=number],
 .csseditor[data-theme=light] input[type=email],
 .csseditor[data-theme=light] textarea {
-  background-color: #ffffff;
-  border: 1px solid #b9b9b9;
-  border-radius: 2px;
-  color: gray;
+  background-color: white;
+  border: 1px solid #111111;
+  border-radius: 3px;
+  color: black;
   outline: none;
 }
 .csseditor[data-theme=light] select {
@@ -10450,16 +10442,16 @@ html, body {
   padding: 0px 4px;
   line-height: 1.6;
   cursor: pointer;
-  background-color: #ffffff;
-  border: 1px solid #e2e2e2;
-  border-radius: 0px;
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 3px;
   color: black;
   outline: none;
   vertical-align: middle;
 }
 .csseditor[data-theme=light] button {
   border-width: 0px;
-  color: gray;
+  color: black;
   width: 16px;
   height: 16px;
   vertical-align: middle;
@@ -10477,7 +10469,7 @@ html, body {
   height: 100%;
 }
 .csseditor[data-theme=light] button svg path {
-  fill: gray;
+  fill: black;
 }
 .csseditor[data-theme=light] input[type=file].embed-file-input {
   position: absolute;
@@ -10521,14 +10513,14 @@ html, body {
   display: flex;
 }
 .csseditor[data-theme=light] .layout-main marker path {
-  fill: #e7e7e7;
+  fill: #111111;
 }
 .csseditor[data-theme=light] .layout-main .status-bar {
   flex: none;
   height: 24px;
   overflow: hidden;
   position: relative;
-  background-color: #4b61ce;
+  background-color: #fc554f;
   z-index: 1;
   pointer-events: all;
   color: white;
@@ -10545,11 +10537,11 @@ html, body {
   height: 50px;
   overflow: hidden;
   position: relative;
-  background-color: #004679;
+  background-color: white;
   color: white;
   z-index: 1;
   pointer-events: all;
-  border-bottom: 1px solid #e7e7e7;
+  border-bottom: 1px solid #111111;
 }
 .csseditor[data-theme=light] .layout-main .layout-header .logo {
   position: absolute;
@@ -10583,7 +10575,7 @@ html, body {
   bottom: 0px;
   right: 0px;
   overflow: hidden;
-  border-top: 1px solid #e7e7e7;
+  border-top: 1px solid #111111;
   background-color: white;
   transition: all 0.15s linear;
   pointer-events: all;
@@ -10654,7 +10646,7 @@ html, body {
   top: 0px;
   bottom: 0px;
   right: 0px;
-  border-left: 1px solid #e7e7e7;
+  border-left: 1px solid #111111;
 }
 .csseditor[data-theme=light] .feature-control .layer-tab {
   position: absolute;
@@ -10677,7 +10669,7 @@ html, body {
   height: 150px;
 }
 .csseditor[data-theme=light] .feature-control .layer-tab .project-content > div:not(:first-child) {
-  border-top: 1px solid #e7e7e7;
+  border-top: 1px solid #111111;
 }
 .csseditor[data-theme=light] .feature-control .layer-tab .project-content > div:last-child {
   top: 150px;
@@ -10698,14 +10690,14 @@ html, body {
   height: 150px;
 }
 .csseditor[data-theme=light] .feature-control .layer-tab .object-items > div:not(:first-child) {
-  border-top: 1px solid #e7e7e7;
+  border-top: 1px solid #111111;
 }
 .csseditor[data-theme=light] .feature-control .layer-tab .object-items > div:last-child {
   top: 150px;
   bottom: 0px;
 }
 .csseditor[data-theme=light] .feature-control .layer-tab .library-items > .group > .title {
-  background-color: #f1f1f1;
+  background-color: white;
   color: white;
   padding: 4px 10px;
 }
@@ -10714,8 +10706,8 @@ html, body {
   grid-template-columns: repeat(3, 1fr);
 }
 .csseditor[data-theme=light] .feature-control .layer-tab .library-items > .group > .list > .item {
-  border-right: 1px solid #f1f1f1;
-  border-bottom: 1px solid #f1f1f1;
+  border-right: 1px solid black;
+  border-bottom: 1px solid black;
   height: 90px;
   padding: 5px;
   text-align: center;
@@ -10726,12 +10718,12 @@ html, body {
 }
 .csseditor[data-theme=light] .feature-control .draw-items .split {
   border: 0px;
-  border-top: 1px solid #e7e7e7;
+  border-top: 1px solid #111111;
   margin: 10px 5px;
 }
 .csseditor[data-theme=light] .feature-control .draw-items > label {
   font-size: 9px;
-  color: gray;
+  color: black;
   padding: 5px;
   text-align: center;
   display: block;
@@ -10742,7 +10734,7 @@ html, body {
 .csseditor[data-theme=light] .feature-control .draw-items .menu-item {
   text-align: center;
   margin-top: 5px;
-  color: gray;
+  color: black;
   width: 48px;
   height: 48px;
   background-color: transparent;
@@ -10752,10 +10744,10 @@ html, body {
   margin-bottom: 5px;
 }
 .csseditor[data-theme=light] .feature-control .draw-items .menu-item.selected .icon {
-  background-color: white;
+  background-color: #535353;
 }
 .csseditor[data-theme=light] .feature-control .draw-items .menu-item.selected .icon svg path {
-  fill: #4b61ce;
+  fill: #fc554f;
 }
 .csseditor[data-theme=light] .feature-control .draw-items .menu-item[data-no-title=true] {
   height: 30px;
@@ -10788,39 +10780,39 @@ html, body {
   width: 100%;
   height: 1px;
   cursor: pointer;
-  background: #5a8ebb;
+  background: black;
   border-radius: 2px;
 }
 .csseditor[data-theme=light] input[type=range]::-webkit-slider-thumb {
-  height: 10px;
-  width: 10px;
+  height: 8px;
+  width: 8px;
   border-radius: 10px;
-  background: white;
+  background: #fc554f;
   cursor: pointer;
   -webkit-appearance: none;
           appearance: none;
-  border: 1px solid #5a8ebb;
-  margin-top: -5px;
+  border: 1px solid #fc554f;
+  margin-top: -4px;
 }
 .csseditor[data-theme=light] input[type=range]:focus::-webkit-slider-runnable-track {
-  background: #5a8ebb;
+  background: black;
 }
 .csseditor[data-theme=light] input[type=range]::-moz-range-track {
   width: 100%;
   height: 1px;
   cursor: pointer;
-  background: #5a8ebb;
+  background: black;
   border-radius: 2px;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.12), inset 0 1px 2px rgba(0, 0, 0, 0.12);
 }
 .csseditor[data-theme=light] input[type=range]::-moz-range-thumb {
   border: 1px solid #000000;
-  height: 10px;
-  width: 10px;
+  height: 8px;
+  width: 8px;
   border-radius: 9px;
-  background: white;
+  background: #fc554f;
   cursor: pointer;
-  margin-top: -5px;
+  margin-top: -4px;
 }
 .csseditor[data-theme=light] input[type=range]::-ms-track {
   width: 100%;
@@ -10828,32 +10820,32 @@ html, body {
   cursor: pointer;
   border: 1px solid #000;
   border-radius: 2px;
-  background: #5a8ebb;
+  background: black;
 }
 .csseditor[data-theme=light] input[type=range]::-ms-fill-lower {
-  background: white;
+  background: #fc554f;
   border: 0px solid #010101;
   border-radius: 0px;
   box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
 }
 .csseditor[data-theme=light] input[type=range]::-ms-fill-upper {
-  background: white;
+  background: #fc554f;
   border: 0px solid #010101;
   border-radius: 0px;
 }
 .csseditor[data-theme=light] input[type=range]::-ms-thumb {
-  height: 10px;
-  width: 10px;
+  height: 8px;
+  width: 8px;
   border-radius: 9px;
-  background: white;
+  background: #fc554f;
   cursor: pointer;
-  margin-top: -5px;
+  margin-top: -4px;
 }
 .csseditor[data-theme=light] input[type=range]:focus::-ms-fill-lower {
-  background: white;
+  background: #fc554f;
 }
 .csseditor[data-theme=light] input[type=range]:focus::-ms-fill-upper {
-  background: white;
+  background: #fc554f;
 }
 .csseditor[data-theme=light] .tab {
   position: absolute;
@@ -10862,14 +10854,14 @@ html, body {
   bottom: 0px;
   top: 0px;
   background-color: white;
-  color: gray;
+  color: black;
 }
 .csseditor[data-theme=light] .tab.number-tab .tab-header {
   height: 34px;
   cursor: pointer;
-  background-color: #f7fcff;
+  background-color: white;
   overflow: hidden;
-  color: #000b22;
+  color: black;
 }
 .csseditor[data-theme=light] .tab.number-tab .tab-content {
   display: none;
@@ -10896,8 +10888,8 @@ html, body {
   padding: 8px 10px 2px;
 }
 .csseditor[data-theme=light] .tab.number-tab > .tab-header > .tab-item label svg path {
-  fill: #000b22;
-  stroke: #f7fcff;
+  fill: black;
+  stroke: white;
   stroke-width: 1px;
 }
 .csseditor[data-theme=light] .tab.number-tab > .tab-header > .tab-item:first-child:hover label {
@@ -10918,8 +10910,8 @@ html, body {
   pointer-events: none;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"] {
-  background-color: #4b61ce;
-  color: #000b22;
+  background-color: white;
+  color: black;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"]:before {
   position: absolute;
@@ -10928,7 +10920,7 @@ html, body {
   top: 0px;
   right: 0px;
   height: 1px;
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"] label svg path {
   stroke: white;
@@ -10937,8 +10929,8 @@ html, body {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"] {
-  background-color: #4b61ce;
-  color: #000b22;
+  background-color: white;
+  color: black;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"]:before {
   position: absolute;
@@ -10947,7 +10939,7 @@ html, body {
   top: 0px;
   right: 0px;
   height: 1px;
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"] label svg path {
   stroke: white;
@@ -10956,8 +10948,8 @@ html, body {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"] {
-  background-color: #4b61ce;
-  color: #000b22;
+  background-color: white;
+  color: black;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"]:before {
   position: absolute;
@@ -10966,7 +10958,7 @@ html, body {
   top: 0px;
   right: 0px;
   height: 1px;
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"] label svg path {
   stroke: white;
@@ -10975,8 +10967,8 @@ html, body {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"] {
-  background-color: #4b61ce;
-  color: #000b22;
+  background-color: white;
+  color: black;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"]:before {
   position: absolute;
@@ -10985,7 +10977,7 @@ html, body {
   top: 0px;
   right: 0px;
   height: 1px;
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"] label svg path {
   stroke: white;
@@ -10994,8 +10986,8 @@ html, body {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"] {
-  background-color: #4b61ce;
-  color: #000b22;
+  background-color: white;
+  color: black;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"]:before {
   position: absolute;
@@ -11004,7 +10996,7 @@ html, body {
   top: 0px;
   right: 0px;
   height: 1px;
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"] label svg path {
   stroke: white;
@@ -11013,8 +11005,8 @@ html, body {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"] {
-  background-color: #4b61ce;
-  color: #000b22;
+  background-color: white;
+  color: black;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"]:before {
   position: absolute;
@@ -11023,7 +11015,7 @@ html, body {
   top: 0px;
   right: 0px;
   height: 1px;
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"] label svg path {
   stroke: white;
@@ -11032,8 +11024,8 @@ html, body {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"] {
-  background-color: #4b61ce;
-  color: #000b22;
+  background-color: white;
+  color: black;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"]:before {
   position: absolute;
@@ -11042,7 +11034,7 @@ html, body {
   top: 0px;
   right: 0px;
   height: 1px;
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"] label svg path {
   stroke: white;
@@ -11051,8 +11043,8 @@ html, body {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"] {
-  background-color: #4b61ce;
-  color: #000b22;
+  background-color: white;
+  color: black;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"]:before {
   position: absolute;
@@ -11061,7 +11053,7 @@ html, body {
   top: 0px;
   right: 0px;
   height: 1px;
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"] label svg path {
   stroke: white;
@@ -11070,8 +11062,8 @@ html, body {
   display: block;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"] {
-  background-color: #4b61ce;
-  color: #000b22;
+  background-color: white;
+  color: black;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"]:before {
   position: absolute;
@@ -11080,7 +11072,7 @@ html, body {
   top: 0px;
   right: 0px;
   height: 1px;
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"] label svg path {
   stroke: white;
@@ -11129,7 +11121,7 @@ html, body {
   font-size: 11px;
 }
 .csseditor[data-theme=light] .tab > .tab-header > .tab-item.select-reverse:not(.selected) {
-  background-color: rgba(75, 97, 206, 0.5);
+  background-color: rgba(255, 255, 255, 0.5);
   color: black;
 }
 .csseditor[data-theme=light] .tab > .tab-header > .tab-item.select-reverse.selected {
@@ -11190,7 +11182,7 @@ html, body {
 }
 .csseditor[data-theme=light] .tab.bottom > .tab-header > .tab-item.selected {
   border-top: 1px solid #ffffff;
-  border-bottom: 1px solid #e7e7e7;
+  border-bottom: 1px solid #111111;
 }
 .csseditor[data-theme=light] .tab.bottom > .tab-body {
   top: 0px;
@@ -11210,7 +11202,7 @@ html, body {
 .csseditor[data-theme=light] .tab.horizontal.left > .tab-body {
   left: 50px;
   right: 0px;
-  border-left: 1px solid #e7e7e7;
+  border-left: 1px solid #111111;
   border-right: 0px;
 }
 .csseditor[data-theme=light] .tab.horizontal > .tab-header {
@@ -11223,20 +11215,20 @@ html, body {
 }
 .csseditor[data-theme=light] .tab.horizontal > .tab-header > .tab-item {
   border: 0px;
-  border-bottom: 1px solid #e7e7e7;
+  border-bottom: 1px solid #111111;
   text-align: center;
   line-height: 3;
   height: 50px;
   min-width: 60px;
 }
 .csseditor[data-theme=light] .tab.horizontal > .tab-header > .tab-item.selected {
-  background-color: rgba(75, 97, 206, 0.5);
+  background-color: rgba(255, 255, 255, 0.5);
 }
 .csseditor[data-theme=light] .tab.horizontal > .tab-body {
   top: 0px;
   right: 60px;
   border: 0px;
-  border-right: 1px solid #e7e7e7;
+  border-right: 1px solid #111111;
 }
 .csseditor[data-theme=light] .colorpicker-layer .codemirror-colorpicker {
   background-color: transparent;
@@ -11279,14 +11271,14 @@ html, body {
   height: 100%;
 }
 .csseditor[data-theme=light] .logo .image svg path {
-  fill: #7dbbe7;
+  fill: #fc554f;
 }
 .csseditor[data-theme=light] .logo .text {
   font-size: 30px;
   display: inline-block;
   font-weight: 900;
   line-height: 1.6;
-  color: #7dbbe7;
+  color: #fc554f;
   z-index: 1;
   vertical-align: middle;
 }
@@ -11301,7 +11293,7 @@ html, body {
 }
 .csseditor[data-theme=light] .logo .site {
   font-size: 14px;
-  color: #e7e7e7;
+  color: #111111;
 }
 .csseditor[data-theme=light] .external-tool-menu {
   padding-left: 10px;
@@ -11331,7 +11323,7 @@ html, body {
 .csseditor[data-theme=light] .tool-menu .items .draw-items > label,
 .csseditor[data-theme=light] .external-tool-menu .items .draw-items > label {
   font-size: 9px;
-  color: gray;
+  color: black;
   padding: 5px;
   text-align: center;
 }
@@ -11343,7 +11335,7 @@ html, body {
 .csseditor[data-theme=light] .external-tool-menu .items .draw-items .menu-item {
   text-align: center;
   margin-top: 5px;
-  color: gray;
+  color: black;
   width: 30px;
   height: 48px;
   background-color: transparent;
@@ -11354,8 +11346,8 @@ html, body {
 }
 .csseditor[data-theme=light] .tool-menu .items .draw-items .menu-item.selected .icon svg path,
 .csseditor[data-theme=light] .external-tool-menu .items .draw-items .menu-item.selected .icon svg path {
-  stroke: white;
-  fill: #4b61ce;
+  stroke: #111111;
+  fill: #fc554f;
 }
 .csseditor[data-theme=light] .tool-menu .items .draw-items .menu-item[data-no-title=true],
 .csseditor[data-theme=light] .external-tool-menu .items .draw-items .menu-item[data-no-title=true] {
@@ -11384,7 +11376,7 @@ html, body {
   vertical-align: middle;
   width: 3px;
   margin-right: 2px;
-  border-right: 1px solid rgba(255, 255, 255, 0.3);
+  border-right: 1px solid #111111;
 }
 .csseditor[data-theme=light] .tool-menu .items.flex-2,
 .csseditor[data-theme=light] .external-tool-menu .items.flex-2 {
@@ -11428,25 +11420,17 @@ html, body {
   background-color: rgba(255, 255, 255, 0.1);
   color: white;
 }
-.csseditor[data-theme=light] .tool-menu .items button.open .title,
-.csseditor[data-theme=light] .external-tool-menu .items button.open .title {
-  color: white;
-}
-.csseditor[data-theme=light] .tool-menu .items button.open .open-right-panel svg path,
-.csseditor[data-theme=light] .external-tool-menu .items button.open .open-right-panel svg path {
-  fill: white;
-}
 .csseditor[data-theme=light] .tool-menu .items .title,
 .csseditor[data-theme=light] .external-tool-menu .items .title {
   font-size: 10px;
-  color: white;
+  color: black;
 }
 .csseditor[data-theme=light] .tool-menu .items .icon,
 .csseditor[data-theme=light] .external-tool-menu .items .icon {
   margin: 0 auto;
   width: 24px;
   height: 24px;
-  color: white;
+  color: black;
 }
 .csseditor[data-theme=light] .tool-menu .items .icon svg,
 .csseditor[data-theme=light] .external-tool-menu .items .icon svg {
@@ -11455,7 +11439,7 @@ html, body {
 }
 .csseditor[data-theme=light] .tool-menu .items .icon svg path,
 .csseditor[data-theme=light] .external-tool-menu .items .icon svg path {
-  fill: white;
+  fill: black;
   stroke-width: 1;
   stroke: white;
 }
@@ -11506,7 +11490,7 @@ html, body {
   right: 0px;
   bottom: 0px;
   top: 0px;
-  background-color: rgba(231, 231, 231, 0.3);
+  background-color: rgba(17, 17, 17, 0.3);
 }
 .csseditor[data-theme=light] .page-view .page-lock {
   position: absolute;
@@ -11533,8 +11517,8 @@ html, body {
   display: inline-block;
   padding: 5px 10px;
   border-radius: 3px;
-  border: 1px solid #e7e7e7;
-  color: gray;
+  border: 1px solid #111111;
+  color: black;
   background-color: white;
 }
 .csseditor[data-theme=light] .page-tools > label {
@@ -11564,9 +11548,9 @@ html, body {
   display: none;
   pointer-events: all;
   outline: none;
-  border: 1px solid #e7e7e7;
+  border: 1px solid #111111;
   border-top: 0px;
-  color: gray;
+  color: black;
   background-color: white;
   height: 100%;
 }
@@ -11586,13 +11570,13 @@ html, body {
   display: inline-block;
 }
 .csseditor[data-theme=light] .page-subeditor .path-manager .tools[data-selected-value=modify] button[data-value=modify] svg path {
-  fill: #4b61ce;
+  fill: #fc554f;
 }
 .csseditor[data-theme=light] .page-subeditor .path-manager .tools[data-selected-value=draw] button[data-value=draw] svg path {
-  fill: #4b61ce;
+  fill: #fc554f;
 }
 .csseditor[data-theme=light] .page-subeditor .path-manager .tools[data-selected-value=transform] button[data-value=transform] svg path {
-  fill: #4b61ce;
+  fill: #fc554f;
 }
 .csseditor[data-theme=light] .page-subeditor .path-manager .tools button {
   font-size: 13px;
@@ -11630,9 +11614,9 @@ html, body {
   display: none;
   pointer-events: all;
   outline: none;
-  border: 1px solid #e7e7e7;
+  border: 1px solid #111111;
   border-top: 0px;
-  color: gray;
+  color: black;
   background-color: white;
   padding: 5px 10px;
 }
@@ -11652,8 +11636,8 @@ html, body {
   display: none;
   pointer-events: all;
   outline: none;
-  border: 1px solid #e7e7e7;
-  color: gray;
+  border: 1px solid #111111;
+  color: black;
   background-color: white;
   padding: 5px 10px;
   height: 100%;
@@ -11756,7 +11740,7 @@ html, body {
   pointer-events: none;
 }
 .csseditor[data-theme=light] .transform-translate path {
-  stroke: #e7e7e7;
+  stroke: #111111;
   stroke-width: 0.5;
   stroke-dasharray: 1 2;
 }
@@ -11780,16 +11764,16 @@ html, body {
   border-radius: 100%;
 }
 .csseditor[data-theme=light] .selection-pointer .marker[data-index="1"] {
-  background-color: rgba(75, 97, 206, 0.5);
+  background-color: rgba(252, 85, 79, 0.5);
 }
 .csseditor[data-theme=light] .selection-pointer .marker[data-index="2"] {
-  background-color: rgba(231, 231, 231, 0.6);
+  background-color: rgba(17, 17, 17, 0.6);
 }
 .csseditor[data-theme=light] .selection-pointer .marker[data-index="3"] {
-  background-color: rgba(231, 231, 231, 0.8);
+  background-color: rgba(17, 17, 17, 0.8);
 }
 .csseditor[data-theme=light] .selection-pointer .marker[data-index="4"] {
-  background-color: rgba(231, 231, 231, 0.9);
+  background-color: rgba(17, 17, 17, 0.9);
 }
 .csseditor[data-theme=light] .selection-tool {
   border: rgba(15, 114, 207, 0.8) 0.5px solid;
@@ -11808,7 +11792,7 @@ html, body {
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
   background-color: rgba(255, 255, 255, 0.8);
-  border: 1px solid #e7e7e7;
+  border: 1px solid #111111;
 }
 .csseditor[data-theme=light] .selection-tool.path .selection-tool-item[data-position=path], .csseditor[data-theme=light] .selection-tool.textpath .selection-tool-item[data-position=path], .csseditor[data-theme=light] .selection-tool.polygon .selection-tool-item[data-position=path] {
   top: -30px;
@@ -11818,7 +11802,7 @@ html, body {
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
   background-color: rgba(255, 255, 255, 0.8);
-  border: 1px solid #e7e7e7;
+  border: 1px solid #111111;
   opacity: 1;
 }
 .csseditor[data-theme=light] .selection-tool[data-selected-movetype=move] [data-position=rotate3d],
@@ -11889,7 +11873,7 @@ html, body {
   text-align: center;
   background-color: rgba(51, 51, 51, 0.8);
   border-radius: 3px;
-  border: #e7e7e7;
+  border: #111111;
   transition: opacity 0.3s linear;
   padding: 4px 10px;
   font-size: 12px;
@@ -11959,7 +11943,7 @@ html, body {
 .csseditor[data-theme=light] .selection-tool .selection-tool-item[data-position=rotate3d] .rotate-area .x {
   -webkit-transform: rotateX(90deg) translateZ(0px);
           transform: rotateX(90deg) translateZ(0px);
-  border: 3px solid #4b61ce;
+  border: 3px solid #fc554f;
 }
 .csseditor[data-theme=light] .selection-tool .selection-tool-item[data-position=rotate3d] .rotate-area .y {
   -webkit-transform: rotateY(90deg) translateZ(0px);
@@ -11969,7 +11953,7 @@ html, body {
 .csseditor[data-theme=light] .selection-tool .selection-tool-item[data-position=rotate3d] .z {
   -webkit-transform: rotate(0deg) translateZ(0px);
           transform: rotate(0deg) translateZ(0px);
-  border: 3px solid #4b61ce;
+  border: 3px solid #fc554f;
   box-shadow: 0 0 4px 0 rgba(255, 255, 255, 0.5);
 }
 .csseditor[data-theme=light] .selection-tool .selection-tool-item[data-position=rotate3d] .z .point {
@@ -11994,7 +11978,7 @@ html, body {
   top: -10%;
   -webkit-transform: translateX(-50%) translateY(-100%);
           transform: translateX(-50%) translateY(-100%);
-  background-color: #4b61ce;
+  background-color: #fc554f;
   position: absolute;
   pointer-events: none;
   -webkit-clip-path: polygon(0% 0%, 50% 100%, 100% 0%);
@@ -12004,7 +11988,7 @@ html, body {
 .csseditor[data-theme=light] .selection-tool .selection-tool-item[data-position=rotate3d] .translate {
   -webkit-transform: rotate(0deg) translateZ(0px);
           transform: rotate(0deg) translateZ(0px);
-  border: 2px solid #4b61ce;
+  border: 2px solid #fc554f;
   box-shadow: 0 0 4px 0 rgba(255, 255, 255, 0.5);
 }
 .csseditor[data-theme=light] .selection-tool .selection-tool-item[data-position=rotate3d] .translate .perspective-handle {
@@ -12047,7 +12031,7 @@ html, body {
   width: 10px;
   -webkit-transform: translateX(-50%) translateY(-50%);
           transform: translateX(-50%) translateY(-50%);
-  background-color: #e7e7e7;
+  background-color: #111111;
   -webkit-clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
           clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
   cursor: pointer;
@@ -12222,9 +12206,9 @@ html, body {
   pointer-events: none;
 }
 .csseditor[data-theme=light] .property {
-  border-bottom: 1px solid #f1f1f1;
-  background-color: #f1f1f1;
-  color: gray;
+  border-bottom: 1px solid black;
+  background-color: white;
+  color: black;
   display: none;
 }
 .csseditor[data-theme=light] .property .add-timeline-property {
@@ -12232,8 +12216,8 @@ html, body {
   margin-right: 5px;
   width: 8px;
   height: 8px;
-  box-shadow: 0 0 0 2px rgba(206, 206, 206, 0.3);
-  background-color: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.3);
+  background-color: rgba(145, 145, 145, 0.7);
   line-height: 10px;
   margin-top: 4px;
   cursor: pointer;
@@ -12241,8 +12225,8 @@ html, body {
           transform: rotate(45deg);
 }
 .csseditor[data-theme=light] .property .add-timeline-property:hover {
-  box-shadow: 0 0 0 2px rgba(75, 97, 206, 0.5);
-  background-color: #4b61ce;
+  box-shadow: 0 0 0 2px rgba(252, 85, 79, 0.5);
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .property.compact {
   padding: 0px;
@@ -12291,7 +12275,7 @@ html, body {
   vertical-align: middle;
 }
 .csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control label svg path {
-  fill: gray;
+  fill: black;
 }
 .csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control .input {
   vertical-align: middle;
@@ -12312,7 +12296,7 @@ html, body {
   height: 24px;
 }
 .csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control button.play svg path {
-  fill: #4b61ce;
+  fill: #fc554f;
 }
 .csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control button.pause {
   display: none;
@@ -12333,28 +12317,28 @@ html, body {
   display: flex;
 }
 .csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=normal] [data-value=normal] {
-  background-color: white;
+  background-color: #535353;
 }
 .csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=normal] [data-value=normal] svg path {
-  fill: #4b61ce;
+  fill: #fc554f;
 }
 .csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate] [data-value=alternate] {
-  background-color: white;
+  background-color: #535353;
 }
 .csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate] [data-value=alternate] svg path {
-  fill: #4b61ce;
+  fill: #fc554f;
 }
 .csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=reverse] [data-value=reverse] {
-  background-color: white;
+  background-color: #535353;
 }
 .csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=reverse] [data-value=reverse] svg path {
-  fill: #4b61ce;
+  fill: #fc554f;
 }
 .csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate-reverse] [data-value=alternate-reverse] {
-  background-color: white;
+  background-color: #535353;
 }
 .csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control .direction-buttons[data-selected-direction=alternate-reverse] [data-value=alternate-reverse] svg path {
-  fill: #4b61ce;
+  fill: #fc554f;
 }
 .csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .timeline-play-control .direction-buttons button {
   width: 20px;
@@ -12383,7 +12367,7 @@ html, body {
   vertical-align: middle;
 }
 .csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .keyframe-time-control svg path {
-  fill: gray;
+  fill: black;
 }
 .csseditor[data-theme=light] .property.full.managed-tool > .property-title .tools .keyframe-time-control input[type=text] {
   width: 80px;
@@ -12394,7 +12378,7 @@ html, body {
   position: relative;
 }
 .csseditor[data-theme=light] .property.show > .property-title {
-  border-bottom: 1px solid #f1f1f1;
+  border-bottom: 1px solid black;
 }
 .csseditor[data-theme=light] .property.show > .property-body {
   display: block;
@@ -12426,8 +12410,8 @@ html, body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   cursor: pointer;
-  border-bottom: 0px solid #f1f1f1;
-  background-color: #f1f1f1;
+  border-bottom: 0px solid black;
+  background-color: white;
 }
 .csseditor[data-theme=light] .property > .property-title svg {
   width: 16px;
@@ -12435,7 +12419,7 @@ html, body {
   vertical-align: middle;
 }
 .csseditor[data-theme=light] .property > .property-title svg path {
-  fill: gray;
+  fill: black;
 }
 .csseditor[data-theme=light] .property > .property-title label {
   cursor: pointer;
@@ -12476,7 +12460,7 @@ html, body {
 }
 .csseditor[data-theme=light] .property > .property-body .property-item.label label {
   font-weight: 900;
-  text-shadow: 2px 2px 3px #e7e7e7;
+  text-shadow: 2px 2px 3px #111111;
 }
 .csseditor[data-theme=light] .property > .property-footer {
   padding: 0px 6px;
@@ -12514,7 +12498,7 @@ html, body {
   padding: 2px 0px;
   text-transform: uppercase;
   font-weight: bold;
-  text-shadow: 0px 0px 2px #e7e7e7;
+  text-shadow: 0px 0px 2px #111111;
 }
 .csseditor[data-theme=light] .border-editor .input-group {
   display: grid;
@@ -12584,7 +12568,7 @@ html, body {
   height: 100%;
 }
 .csseditor[data-theme=light] .border-slice-item .slice-selector button svg path {
-  fill: #e7e7e7;
+  fill: #111111;
 }
 .csseditor[data-theme=light] .border-slice-item .slice-setting-box {
   display: grid;
@@ -12821,7 +12805,7 @@ html, body {
   right: 75px;
   bottom: 54px;
   padding: 10px 0px;
-  border: 1px dashed #e7e7e7;
+  border: 1px dashed #111111;
 }
 .csseditor[data-theme=light] .box-model-item > div .content:before {
   content: attr(title);
@@ -12836,7 +12820,7 @@ html, body {
 .csseditor[data-theme=light] .content-item textarea {
   width: 100%;
   height: 100px;
-  border: 1px solid #e7e7e7;
+  border: 1px solid #111111;
   border-radius: 3px;
 }
 .csseditor[data-theme=light] .transition-list {
@@ -12849,11 +12833,11 @@ html, body {
   padding: 5px 0px;
 }
 .csseditor[data-theme=light] .transition-list .transition-item.selected {
-  background-color: rgba(231, 231, 231, 0.5);
+  background-color: rgba(17, 17, 17, 0.5);
 }
 .csseditor[data-theme=light] .transition-list .transition-item .timing {
   border-radius: 3px;
-  background-color: #4b61ce;
+  background-color: #fc554f;
   width: 100%;
   height: 30px;
   vertical-align: middle;
@@ -12872,7 +12856,7 @@ html, body {
   padding: 1px 3px;
   border-radius: 2px;
   font-weight: bold;
-  background-color: #e7e7e7;
+  background-color: #111111;
 }
 .csseditor[data-theme=light] .transition-list .transition-item .labels label small {
   color: white;
@@ -12898,7 +12882,7 @@ html, body {
   text-align: center;
 }
 .csseditor[data-theme=light] .animation-list .animation-item.selected {
-  background-color: rgba(231, 231, 231, 0.5);
+  background-color: rgba(17, 17, 17, 0.5);
 }
 .csseditor[data-theme=light] .animation-list .animation-item .name {
   padding: 2px 0px;
@@ -12907,7 +12891,7 @@ html, body {
 }
 .csseditor[data-theme=light] .animation-list .animation-item .timing {
   border-radius: 3px;
-  background-color: #4b61ce;
+  background-color: #fc554f;
   width: 100%;
   height: 30px;
   vertical-align: middle;
@@ -12918,10 +12902,10 @@ html, body {
   border-radius: 3px;
 }
 .csseditor[data-theme=light] .animation-list .animation-item .labels label {
-  background-color: #e7e7e7;
+  background-color: #111111;
   padding: 1px 3px;
   border-radius: 2px;
-  color: #e7e7e7;
+  color: #111111;
   text-transform: uppercase;
   font-weight: bold;
 }
@@ -12930,7 +12914,7 @@ html, body {
   text-transform: lowercase;
 }
 .csseditor[data-theme=light] .animation-list .animation-item .labels label.direction small, .csseditor[data-theme=light] .animation-list .animation-item .labels label.fill-mode small, .csseditor[data-theme=light] .animation-list .animation-item .labels label.play-state small {
-  color: gray;
+  color: black;
 }
 .csseditor[data-theme=light] .animation-list .animation-item .labels label.play-state {
   background-color: transparent;
@@ -12946,7 +12930,7 @@ html, body {
   vertical-align: middle;
 }
 .csseditor[data-theme=light] .animation-list .animation-item .labels label.play-state [data-play-state-value] svg path {
-  fill: gray;
+  fill: black;
 }
 .csseditor[data-theme=light] .animation-list .animation-item .labels label.play-state [data-play-state-value=pause] svg path {
   fill: red;
@@ -12965,7 +12949,7 @@ html, body {
   display: block;
 }
 .csseditor[data-theme=light] .keyframe-list .keyframe-item {
-  border: 1px solid #e7e7e7;
+  border: 1px solid #111111;
   margin-bottom: 5px;
   padding: 5px;
   cursor: pointer;
@@ -12974,22 +12958,22 @@ html, body {
   margin-top: 5px;
 }
 .csseditor[data-theme=light] .keyframe-list .keyframe-item.selected {
-  background-color: rgba(231, 231, 231, 0.5);
+  background-color: rgba(17, 17, 17, 0.5);
 }
 .csseditor[data-theme=light] .keyframe-list .keyframe-item[data-selected-value=list] button[data-type=list] {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .keyframe-list .keyframe-item[data-selected-value=list] button[data-type=list] svg path {
-  fill: #e7e7e7;
+  fill: #111111;
 }
 .csseditor[data-theme=light] .keyframe-list .keyframe-item[data-selected-value=list] .keyframe-code[data-type=list] {
   display: block;
 }
 .csseditor[data-theme=light] .keyframe-list .keyframe-item[data-selected-value=code] button[data-type=code] {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .keyframe-list .keyframe-item[data-selected-value=code] button[data-type=code] svg path {
-  fill: #e7e7e7;
+  fill: #111111;
 }
 .csseditor[data-theme=light] .keyframe-list .keyframe-item[data-selected-value=code] .keyframe-code[data-type=code] {
   display: block;
@@ -13029,7 +13013,7 @@ html, body {
 }
 .csseditor[data-theme=light] .keyframe-list .keyframe-item .keyframe-code .offset-property-item label {
   font-weight: bold;
-  color: #676767;
+  color: black;
   padding-left: 10px;
 }
 .csseditor[data-theme=light] .keyframe-list .keyframe-item .offset-list {
@@ -13038,7 +13022,7 @@ html, body {
 }
 .csseditor[data-theme=light] .keyframe-list .keyframe-item .offset-list .container {
   position: relative;
-  background-image: linear-gradient(to right, #e7e7e7, black);
+  background-image: linear-gradient(to right, #111111, black);
   background-size: 100% 2px;
   background-repeat: no-repeat;
   background-position: 0px center;
@@ -13054,7 +13038,7 @@ html, body {
   -webkit-transform: translateX(-50%) translateY(-50%);
           transform: translateX(-50%) translateY(-50%);
   vertical-align: middle;
-  border: 1px solid #e7e7e7;
+  border: 1px solid #111111;
 }
 .csseditor[data-theme=light] .code-view-item {
   grid-template-columns: 1fr !important;
@@ -13083,7 +13067,7 @@ html, body {
   content: attr(title);
   position: absolute;
   display: inline-block;
-  background-color: #4b61ce;
+  background-color: #fc554f;
   color: white;
   left: 0px;
   top: 0px;
@@ -13106,7 +13090,7 @@ html, body {
   cursor: pointer;
 }
 .csseditor[data-theme=light] .clip-path-list .clippath-item.selected, .csseditor[data-theme=light] .clip-path-list .clippath-item:hover {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .clip-path-list .clippath-item .title {
   display: grid;
@@ -13125,7 +13109,7 @@ html, body {
 }
 .csseditor[data-theme=light] .clip-path-list .clippath-item .offset-list .container {
   position: relative;
-  background-image: linear-gradient(to right, #e7e7e7, black);
+  background-image: linear-gradient(to right, #111111, black);
   background-size: 100% 2px;
   background-repeat: no-repeat;
   background-position: 0px center;
@@ -13173,7 +13157,7 @@ html, body {
   margin-top: 5px;
 }
 .csseditor[data-theme=light] .selector-list .selector-item.selected {
-  background-color: rgba(231, 231, 231, 0.5);
+  background-color: rgba(17, 17, 17, 0.5);
 }
 .csseditor[data-theme=light] .selector-list .selector-item .title {
   display: grid;
@@ -13187,7 +13171,7 @@ html, body {
   padding: 2px 4px;
   font-weight: bold;
   border-radius: 3px;
-  background-color: #4b61ce;
+  background-color: #fc554f;
   color: white;
 }
 .csseditor[data-theme=light] .selector-list .selector-item .title .name span svg path {
@@ -13217,7 +13201,7 @@ html, body {
   text-align: right;
 }
 .csseditor[data-theme=light] .project-list .project-item.selected {
-  background-color: #4a89b6;
+  background-color: #fc554f;
   color: white;
 }
 .csseditor[data-theme=light] .project-list .project-item.selected svg path {
@@ -13230,7 +13214,7 @@ html, body {
   margin: 0px !important;
 }
 .csseditor[data-theme=light] .artboard-list .artboard-item {
-  color: #999;
+  color: black;
   padding: 5px 7px !important;
   margin-bottom: 0px !important;
   display: grid;
@@ -13258,7 +13242,7 @@ html, body {
   text-align: right;
 }
 .csseditor[data-theme=light] .artboard-list .artboard-item.selected {
-  background-color: #4a89b6;
+  background-color: #fc554f;
   color: white;
 }
 .csseditor[data-theme=light] .artboard-list .artboard-item.selected svg path {
@@ -13271,7 +13255,7 @@ html, body {
   margin: 0px !important;
 }
 .csseditor[data-theme=light] .layer-list .layer-item {
-  color: #999;
+  color: black;
   padding: 5px 7px !important;
   margin-bottom: 0px !important;
 }
@@ -13369,19 +13353,19 @@ html, body {
   text-align: right;
 }
 .csseditor[data-theme=light] .layer-list .layer-item .detail .tools .visible svg path {
-  fill: #e7e7e7;
+  fill: #111111;
 }
 .csseditor[data-theme=light] .layer-list .layer-item .detail .tools .visible[data-visible=true] svg path {
-  fill: gray;
+  fill: black;
 }
 .csseditor[data-theme=light] .layer-list .layer-item .detail .tools .lock svg path {
-  fill: gray;
+  fill: black;
 }
 .csseditor[data-theme=light] .layer-list .layer-item .detail .tools .lock[data-lock=true] svg path {
-  fill: #e7e7e7;
+  fill: #111111;
 }
 .csseditor[data-theme=light] .layer-list .layer-item.selected {
-  background-color: #4a89b6;
+  background-color: #fc554f;
   color: white;
 }
 .csseditor[data-theme=light] .layer-list .layer-item.selected svg path {
@@ -13417,11 +13401,11 @@ html, body {
 }
 .csseditor[data-theme=light] .color-assets-property .color-list-tools button {
   padding: 2px 10px;
-  border: 1px solid #e7e7e7;
+  border: 1px solid #111111;
 }
 .csseditor[data-theme=light] .color-assets-property .color-list-tools[data-view-mode=list] button[data-value=list] {
-  background-color: #dfdfdf;
-  border-color: #dfdfdf;
+  background-color: #609de2;
+  border-color: #609de2;
   background-image: none;
   color: white;
 }
@@ -13429,8 +13413,8 @@ html, body {
   fill: white;
 }
 .csseditor[data-theme=light] .color-assets-property .color-list-tools[data-view-mode=grid] button[data-value=grid] {
-  background-color: #dfdfdf;
-  border-color: #dfdfdf;
+  background-color: #609de2;
+  border-color: #609de2;
   background-image: none;
   color: white;
 }
@@ -13458,7 +13442,7 @@ html, body {
   padding: 24px;
 }
 .csseditor[data-theme=light] .color-assets-property .color-list[data-view-mode=grid] .add-color-item svg path {
-  fill: gray;
+  fill: black;
 }
 .csseditor[data-theme=light] .color-assets-property .color-list[data-view-mode=grid] .color-item {
   display: inline-block;
@@ -13544,11 +13528,11 @@ html, body {
 }
 .csseditor[data-theme=light] .gradient-assets-property .gradient-list-tools button {
   padding: 2px 10px;
-  border: 1px solid #e7e7e7;
+  border: 1px solid #111111;
 }
 .csseditor[data-theme=light] .gradient-assets-property .gradient-list-tools[data-view-mode=list] button[data-value=list] {
-  background-color: #dfdfdf;
-  border-color: #dfdfdf;
+  background-color: #609de2;
+  border-color: #609de2;
   background-image: none;
   color: white;
 }
@@ -13556,8 +13540,8 @@ html, body {
   fill: white;
 }
 .csseditor[data-theme=light] .gradient-assets-property .gradient-list-tools[data-view-mode=grid] button[data-value=grid] {
-  background-color: #dfdfdf;
-  border-color: #dfdfdf;
+  background-color: #609de2;
+  border-color: #609de2;
   background-image: none;
   color: white;
 }
@@ -13585,7 +13569,7 @@ html, body {
   padding: 24px;
 }
 .csseditor[data-theme=light] .gradient-assets-property .gradient-list[data-view-mode=grid] .add-gradient-item svg path {
-  fill: gray;
+  fill: black;
 }
 .csseditor[data-theme=light] .gradient-assets-property .gradient-list[data-view-mode=grid] .gradient-item {
   display: inline-block;
@@ -13677,11 +13661,11 @@ html, body {
 }
 .csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list-tools button {
   padding: 2px 10px;
-  border: 1px solid #e7e7e7;
+  border: 1px solid #111111;
 }
 .csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list-tools[data-view-mode=list] button[data-value=list] {
-  background-color: #dfdfdf;
-  border-color: #dfdfdf;
+  background-color: #609de2;
+  border-color: #609de2;
   background-image: none;
   color: white;
 }
@@ -13689,8 +13673,8 @@ html, body {
   fill: white;
 }
 .csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list-tools[data-view-mode=grid] button[data-value=grid] {
-  background-color: #dfdfdf;
-  border-color: #dfdfdf;
+  background-color: #609de2;
+  border-color: #609de2;
   background-image: none;
   color: white;
 }
@@ -13724,7 +13708,7 @@ html, body {
   padding: 24px;
 }
 .csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list[data-view-mode=grid] .add-svgfilter-item svg path {
-  fill: gray;
+  fill: black;
 }
 .csseditor[data-theme=light] .svgfilter-assets-property .svgfilter-list[data-view-mode=grid] .svgfilter-item {
   display: inline-block;
@@ -13787,7 +13771,7 @@ html, body {
   margin-right: 4px;
   margin-bottom: 4px;
   height: 80px;
-  border: 1px solid #e7e7e7;
+  border: 1px solid #111111;
   border-radius: 2px;
   vertical-align: top;
   cursor: pointer;
@@ -13809,7 +13793,7 @@ html, body {
   position: relative;
   width: 100%;
   height: 80px;
-  border: 1px solid #e7e7e7;
+  border: 1px solid #111111;
   border-radius: 2px;
   cursor: pointer;
 }
@@ -13848,7 +13832,7 @@ html, body {
   height: 40px;
 }
 .csseditor[data-theme=light] .alignment-item .split {
-  border-right: 1px solid #e7e7e7;
+  border-right: 1px solid #111111;
   width: 1px;
   margin-left: 5px;
 }
@@ -13870,7 +13854,7 @@ html, body {
   color: white;
 }
 .csseditor[data-theme=light] .alignment-item button.open .open-right-panel svg path {
-  fill: #dfdfdf;
+  fill: #609de2;
 }
 .csseditor[data-theme=light] .alignment-item .title {
   font-size: 9px;
@@ -13886,61 +13870,61 @@ html, body {
   height: 100%;
 }
 .csseditor[data-theme=light] .alignment-item .icon.width {
-  background-image: linear-gradient(to right, #a2a2a2, #a2a2a2), linear-gradient(to right, #ccc, #ccc);
+  background-image: linear-gradient(to right, #737373, #737373), linear-gradient(to right, #ccc, #ccc);
   background-size: 20px 6px, 20px 6px;
   background-position: 2px 6px, 2px 16px;
   background-repeat: no-repeat;
 }
 .csseditor[data-theme=light] .alignment-item .icon.height {
-  background-image: linear-gradient(to right, #a2a2a2, #a2a2a2), linear-gradient(to right, #ccc, #ccc);
+  background-image: linear-gradient(to right, #737373, #737373), linear-gradient(to right, #ccc, #ccc);
   background-size: 6px 20px, 6px 20px;
   background-position: 4px 2px, 14px 2px;
   background-repeat: no-repeat;
 }
 .csseditor[data-theme=light] .alignment-item .icon.left {
-  background-image: linear-gradient(to right, #a2a2a2, #a2a2a2), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
+  background-image: linear-gradient(to right, #737373, #737373), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
   background-repeat: no-repeat;
   background-size: 20px 6px, 16px 6px, 2px 24px;
   background-position: 6px 6px, 6px 16px, 2px 3px;
 }
 .csseditor[data-theme=light] .alignment-item .icon.right {
-  background-image: linear-gradient(to right, #a2a2a2, #a2a2a2), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
+  background-image: linear-gradient(to right, #737373, #737373), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
   background-repeat: no-repeat;
   background-size: 18px 6px, 14px 6px, 2px 24px;
   background-position: 2px 5px, 6px 15px, 22px 3px;
 }
 .csseditor[data-theme=light] .alignment-item .icon.center {
-  background-image: linear-gradient(to right, #a2a2a2, #a2a2a2), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
+  background-image: linear-gradient(to right, #737373, #737373), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
   background-repeat: no-repeat;
   background-size: 20px 6px, 16px 6px, 2px 24px;
   background-position: 5px 6px, 7px 16px, 14px 3px;
 }
 .csseditor[data-theme=light] .alignment-item .icon.middle {
-  background-image: linear-gradient(to right, #a2a2a2, #a2a2a2), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
+  background-image: linear-gradient(to right, #737373, #737373), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
   background-repeat: no-repeat;
   background-size: 8px 20px, 8px 14px, 24px 2px;
   background-position: 3px 3px, 13px 6px, 0px 12px;
 }
 .csseditor[data-theme=light] .alignment-item .icon.top {
-  background-image: linear-gradient(to right, #a2a2a2, #a2a2a2), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
+  background-image: linear-gradient(to right, #737373, #737373), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
   background-repeat: no-repeat;
   background-size: 8px 18px, 8px 12px, 24px 2px;
   background-position: 4px 8px, 14px 8px, 0px 4px;
 }
 .csseditor[data-theme=light] .alignment-item .icon.bottom {
-  background-image: linear-gradient(to right, #a2a2a2, #a2a2a2), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
+  background-image: linear-gradient(to right, #737373, #737373), linear-gradient(to right, #e0e0e0, #e0e0e0), linear-gradient(to right, #555555, #555555);
   background-repeat: no-repeat;
   background-size: 8px 18px, 8px 12px, 24px 2px;
   background-position: 4px 2px, 14px 8px, 0px 22px;
 }
 .csseditor[data-theme=light] .alignment-item .icon.vertical {
-  background-image: linear-gradient(to right, #a2a2a2, #a2a2a2), linear-gradient(to right, #555555, #555555), linear-gradient(to right, #e0e0e0, #e0e0e0);
+  background-image: linear-gradient(to right, #737373, #737373), linear-gradient(to right, #555555, #555555), linear-gradient(to right, #e0e0e0, #e0e0e0);
   background-repeat: no-repeat;
   background-size: 24px 2px, 18px 10px, 24px 2px;
   background-position: 3px 6px, 6px 11px, 3px 24px;
 }
 .csseditor[data-theme=light] .alignment-item .icon.horizontal {
-  background-image: linear-gradient(to right, #a2a2a2, #a2a2a2), linear-gradient(to right, #555555, #555555), linear-gradient(to right, #e0e0e0, #e0e0e0);
+  background-image: linear-gradient(to right, #737373, #737373), linear-gradient(to right, #555555, #555555), linear-gradient(to right, #e0e0e0, #e0e0e0);
   background-repeat: no-repeat;
   background-size: 2px 24px, 10px 18px, 2px 24px;
   background-position: 6px 3px, 11px 6px, 24px 3px;
@@ -13975,11 +13959,11 @@ html, body {
 }
 .csseditor[data-theme=light] .image-assets-property .image-list-tools button {
   padding: 2px 10px;
-  border: 1px solid #e7e7e7;
+  border: 1px solid #111111;
 }
 .csseditor[data-theme=light] .image-assets-property .image-list-tools[data-view-mode=list] button[data-value=list] {
-  background-color: #dfdfdf;
-  border-color: #dfdfdf;
+  background-color: #609de2;
+  border-color: #609de2;
   background-image: none;
   color: white;
 }
@@ -13987,8 +13971,8 @@ html, body {
   fill: white;
 }
 .csseditor[data-theme=light] .image-assets-property .image-list-tools[data-view-mode=grid] button[data-value=grid] {
-  background-color: #dfdfdf;
-  border-color: #dfdfdf;
+  background-color: #609de2;
+  border-color: #609de2;
   background-image: none;
   color: white;
 }
@@ -14048,7 +14032,7 @@ html, body {
   cursor: pointer;
 }
 .csseditor[data-theme=light] .image-assets-property .image-list[data-view-mode=grid] .add-image-item svg path {
-  fill: gray;
+  fill: black;
 }
 .csseditor[data-theme=light] .image-assets-property .image-list[data-view-mode=grid] .image-item {
   display: inline-block;
@@ -14111,7 +14095,7 @@ html, body {
   margin: 0px !important;
 }
 .csseditor[data-theme=light] .timeline-animation-list .timeline-animation-item {
-  color: #999;
+  color: black;
   padding: 5px 7px !important;
   margin-bottom: 0px !important;
   display: grid;
@@ -14122,7 +14106,7 @@ html, body {
 .csseditor[data-theme=light] .timeline-animation-list .timeline-animation-item .preview {
   background-color: white;
   border-radius: 3px;
-  border: 1px solid #e7e7e7;
+  border: 1px solid #111111;
   cursor: pointer;
 }
 .csseditor[data-theme=light] .timeline-animation-list .timeline-animation-item .detail {
@@ -14137,7 +14121,7 @@ html, body {
   text-align: right;
 }
 .csseditor[data-theme=light] .timeline-animation-list .timeline-animation-item.selected {
-  background-color: #4a89b6;
+  background-color: #fc554f;
   color: white;
 }
 .csseditor[data-theme=light] .timeline-animation-list .timeline-animation-item.selected svg path {
@@ -14160,26 +14144,26 @@ html, body {
   padding: 0px !important;
 }
 .csseditor[data-theme=light] .artboard-size-list .artboard-size-item {
-  border-top: 1px solid #e7e7e7;
+  border-top: 1px solid #111111;
 }
 .csseditor[data-theme=light] .artboard-size-list .category {
   height: 26px;
-  border-bottom: 1px solid #e7e7e7;
+  border-bottom: 1px solid #111111;
   line-height: 2;
 }
 .csseditor[data-theme=light] .artboard-size-list .category .title {
-  color: gray;
+  color: black;
   pointer-events: none;
   padding: 0px 10px;
 }
 .csseditor[data-theme=light] .artboard-size-list .group-item {
   background-color: #565656;
   height: 30px;
-  border-bottom: 1px solid #e7e7e7;
+  border-bottom: 1px solid #111111;
   line-height: 2.5;
 }
 .csseditor[data-theme=light] .artboard-size-list .group-item .title {
-  color: gray;
+  color: black;
   pointer-events: none;
   text-transform: uppercase;
   padding: 0px 10px;
@@ -14191,11 +14175,11 @@ html, body {
   font-size: 12px;
   cursor: pointer;
   height: 26px;
-  border-bottom: 1px solid #e7e7e7;
+  border-bottom: 1px solid #111111;
   line-height: 2.3;
 }
 .csseditor[data-theme=light] .artboard-size-list .device-item .title {
-  color: gray;
+  color: black;
   pointer-events: none;
   padding-left: 20px;
 }
@@ -14221,7 +14205,7 @@ html, body {
   height: 150px;
   top: 30px;
   left: 60px;
-  border: 1px solid #e7e7e7;
+  border: 1px solid #111111;
   background-color: white;
 }
 .csseditor[data-theme=light] .cubic-bezier-editor .bezier .bezier-canvas {
@@ -14245,8 +14229,8 @@ html, body {
           transform: translateX(-50%) translateY(-50%);
   border-radius: 100%;
   cursor: pointer;
-  background-color: #4b61ce;
-  border: 1px solid #4b61ce;
+  background-color: #fc554f;
+  border: 1px solid #fc554f;
 }
 .csseditor[data-theme=light] .cubic-bezier-editor .animation {
   position: absolute;
@@ -14320,12 +14304,12 @@ html, body {
 }
 .csseditor[data-theme=light] .cubic-bezier-editor .predefined .left svg path,
 .csseditor[data-theme=light] .cubic-bezier-editor .predefined .right svg path {
-  fill: gray;
+  fill: black;
 }
 .csseditor[data-theme=light] .cubic-bezier-editor .predefined .predefined-text {
   vertical-align: middle;
   padding: 4px;
-  color: gray;
+  color: black;
 }
 .csseditor[data-theme=light] .color-view-editor {
   display: grid;
@@ -14391,11 +14375,11 @@ html, body {
   width: 100%;
   height: 100%;
   padding: 0px 3px;
-  background-color: #f1f1f1;
-  border: 1px solid #f1f1f1;
+  background-color: white;
+  border: 1px solid black;
 }
 .csseditor[data-theme=light] .color-view-editor .color-code input.focused {
-  box-shadow: 0 0 0 1px #4b61ce;
+  box-shadow: 0 0 0 1px #fc554f;
   border-radius: 3px;
 }
 .csseditor[data-theme=light] .color-view-editor .remove {
@@ -14440,7 +14424,7 @@ html, body {
 }
 .csseditor[data-theme=light] .range-editor.has-label.block label {
   display: block;
-  color: rgba(0, 0, 0, 0.7);
+  color: black;
 }
 .csseditor[data-theme=light] .range-editor.has-calc {
   grid-template-columns: 20px 1fr;
@@ -14481,7 +14465,7 @@ html, body {
   font-size: 13px;
 }
 .csseditor[data-theme=light] .range-editor .range-editor-type .area.focused {
-  box-shadow: 0 0 0 1px #4b61ce;
+  box-shadow: 0 0 0 1px #fc554f;
   border-radius: 3px;
 }
 .csseditor[data-theme=light] .range-editor .range-editor-type .area span {
@@ -14504,15 +14488,15 @@ html, body {
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
   background-color: transparent;
-  border-bottom: 1px solid #f1f1f1;
-  border-left: 1px solid #f1f1f1;
-  border-top: 1px solid #f1f1f1;
+  border-bottom: 1px solid black;
+  border-left: 1px solid black;
+  border-top: 1px solid black;
   text-align: left;
-  background-color: #f1f1f1;
+  background-color: white;
 }
 .csseditor[data-theme=light] .range-editor .range-editor-type .area .select-editor {
   text-align: right;
-  background-color: #f1f1f1;
+  background-color: white;
   position: relative;
   border-bottom-right-radius: 3px;
   border-top-right-radius: 3px;
@@ -14528,15 +14512,15 @@ html, body {
   text-align: center;
   padding: 0px;
   width: 24px;
-  color: #9e9e9e;
+  color: black;
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 3px;
   border-top-right-radius: 3px;
   background-color: transparent;
-  border-bottom: 1px solid #f1f1f1;
-  border-top: 1px solid #f1f1f1;
-  border-right: 1px solid #f1f1f1;
+  border-bottom: 1px solid black;
+  border-top: 1px solid black;
+  border-right: 1px solid black;
 }
 .csseditor[data-theme=light] .range-editor .range-editor-type[data-type=calc] .area {
   height: 100%;
@@ -14603,11 +14587,11 @@ html, body {
   width: 100%;
 }
 .csseditor[data-theme=light] .number-range-editor .range-editor-type .area input[type=number] {
-  background-color: #f1f1f1;
-  border: 1px solid #f1f1f1;
+  background-color: white;
+  border: 1px solid black;
 }
 .csseditor[data-theme=light] .number-range-editor .range-editor-type .area input[type=number].focused {
-  box-shadow: 0 0 0 1px #4b61ce;
+  box-shadow: 0 0 0 1px #fc554f;
 }
 .csseditor[data-theme=light] .number-range-editor .range-editor-type .area select {
   width: 100%;
@@ -14617,7 +14601,7 @@ html, body {
   grid-template-columns: 1fr;
 }
 .csseditor[data-theme=light] .input-range-editor.focused {
-  box-shadow: 0 0 0 1px #4b61ce;
+  box-shadow: 0 0 0 1px #fc554f;
   border-radius: 3px;
 }
 .csseditor[data-theme=light] .input-range-editor.has-label {
@@ -14668,8 +14652,8 @@ html, body {
   padding: 2px 2px;
   border-top-right-radius: 0px;
   border-bottom-right-radius: 0px;
-  background-color: #f1f1f1;
-  border: 1px solid #f1f1f1;
+  background-color: white;
+  border: 1px solid black;
   border-right: 0px;
 }
 .csseditor[data-theme=light] .input-range-editor .range-editor-type .area .select-editor select {
@@ -14680,8 +14664,8 @@ html, body {
   padding: 0px 4px;
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
-  background-color: #f1f1f1;
-  border: 1px solid #f1f1f1;
+  background-color: white;
+  border: 1px solid black;
   border-left: 0px;
 }
 .csseditor[data-theme=light] .text-editor {
@@ -14698,7 +14682,7 @@ html, body {
   padding: 2px 4px 2px 0px;
 }
 .csseditor[data-theme=light] .text-editor input[type=text] {
-  border: 1px solid #e7e7e7;
+  border: 1px solid #111111;
 }
 .csseditor[data-theme=light] .select-editor {
   display: grid;
@@ -14753,14 +14737,14 @@ html, body {
 .csseditor[data-theme=light] .css-property-editor .css-property-item > .title {
   grid-template-columns: 1fr 30px;
   background-color: white;
-  color: #4b61ce;
+  color: #fc554f;
   border-radius: 3px;
   padding: 3px 0px;
   margin-bottom: 2px;
   font-weight: 900;
 }
 .csseditor[data-theme=light] .css-property-editor .css-property-item > .title svg path {
-  fill: #4b61ce;
+  fill: #fc554f;
 }
 .csseditor[data-theme=light] .css-property-editor .css-property-item .value-editor {
   padding: 2px;
@@ -14806,7 +14790,7 @@ html, body {
   padding: 6px 6px;
 }
 .csseditor[data-theme=light] .background-image-editor .fill-list .fill-item.selected {
-  background-color: rgba(231, 231, 231, 0.5);
+  background-color: rgba(17, 17, 17, 0.5);
 }
 .csseditor[data-theme=light] .background-image-editor .fill-list .fill-item .gradient-info {
   display: grid;
@@ -14823,7 +14807,7 @@ html, body {
   display: block;
 }
 .csseditor[data-theme=light] .background-image-editor .fill-list .fill-item .pattern {
-  background-color: #e7e7e7;
+  background-color: #111111;
   border-radius: 3px;
 }
 .csseditor[data-theme=light] .background-image-editor .fill-list .fill-item .preview {
@@ -14923,13 +14907,13 @@ html, body {
   grid-template-columns: 1fr 1fr;
 }
 .csseditor[data-theme=light] .border-radius-editor .radius-selector[data-selected-value=all] button[data-value=all] {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .border-radius-editor .radius-selector[data-selected-value=all] button[data-value=all] svg path {
   fill: white;
 }
 .csseditor[data-theme=light] .border-radius-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .border-radius-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] svg path {
   fill: white;
@@ -14973,12 +14957,12 @@ html, body {
   margin: 5px 0px;
 }
 .csseditor[data-theme=light] .transform-editor .transform-list .transform-item .title svg path {
-  fill: #4b61ce;
+  fill: #fc554f;
 }
 .csseditor[data-theme=light] .transform-editor .transform-list .transform-item .title label {
   font-size: 12px;
   padding: 2px 5px;
-  color: #4b61ce;
+  color: #fc554f;
 }
 .csseditor[data-theme=light] .transform-editor .transform-list .transform-item .title label span {
   font-weight: bold;
@@ -15074,7 +15058,7 @@ html, body {
   border-radius: 3px;
   margin-right: 2px;
   vertical-align: middle;
-  background-color: #4b61ce;
+  background-color: #fc554f;
   color: white;
 }
 .csseditor[data-theme=light] .filter-editor .filter-list .filter-item .title .filter-menu {
@@ -15137,7 +15121,7 @@ html, body {
   margin-bottom: 5px;
 }
 .csseditor[data-theme=light] .box-shadow-editor .shadow-item.desc {
-  color: gray;
+  color: black;
 }
 .csseditor[data-theme=light] .box-shadow-editor .shadow-item.desc .color {
   visibility: hidden;
@@ -15145,7 +15129,7 @@ html, body {
 .csseditor[data-theme=light] .box-shadow-editor .shadow-item .color {
   cursor: pointer;
   height: 20px;
-  border: 1px solid #e7e7e7;
+  border: 1px solid #111111;
   position: relative;
   background-color: transparent;
   background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
@@ -15167,7 +15151,7 @@ html, body {
   fill: white;
 }
 .csseditor[data-theme=light] .box-shadow-editor .shadow-item .inset[data-value=true] svg path {
-  fill: #4b61ce;
+  fill: #fc554f;
 }
 .csseditor[data-theme=light] .box-shadow-editor .shadow-item .offset-x,
 .csseditor[data-theme=light] .box-shadow-editor .shadow-item .offset-y,
@@ -15208,7 +15192,7 @@ html, body {
   margin-top: 5px;
 }
 .csseditor[data-theme=light] .text-shadow-editor .shadow-item.desc {
-  color: gray;
+  color: black;
 }
 .csseditor[data-theme=light] .text-shadow-editor .shadow-item.desc .color {
   visibility: hidden;
@@ -15216,7 +15200,7 @@ html, body {
 .csseditor[data-theme=light] .text-shadow-editor .shadow-item .color {
   cursor: pointer;
   height: 20px;
-  border: 1px solid #e7e7e7;
+  border: 1px solid #111111;
   position: relative;
   background-color: transparent;
   background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
@@ -15315,7 +15299,7 @@ html, body {
 .csseditor[data-theme=light] .perspective-origin-editor .direction > div:before {
   pointer-events: none;
   content: "";
-  background-color: #4b61ce;
+  background-color: #fc554f;
   border-radius: 3px;
   width: 10px;
   height: 10px;
@@ -15420,16 +15404,16 @@ html, body {
   justify-items: center;
 }
 .csseditor[data-theme=light] .perspective-origin-editor .radius-selector[data-selected-value=all] button[data-value=all] {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .perspective-origin-editor .radius-selector[data-selected-value=all] button[data-value=all] svg path {
-  fill: #e7e7e7;
+  fill: #111111;
 }
 .csseditor[data-theme=light] .perspective-origin-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .perspective-origin-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] svg path {
-  fill: #e7e7e7;
+  fill: #111111;
 }
 .csseditor[data-theme=light] .perspective-origin-editor .radius-selector button {
   background-image: none;
@@ -15465,7 +15449,7 @@ html, body {
 .csseditor[data-theme=light] .transform-origin-editor .direction > div:before {
   pointer-events: none;
   content: "";
-  background-color: #4b61ce;
+  background-color: #fc554f;
   border-radius: 3px;
   width: 10px;
   height: 10px;
@@ -15570,16 +15554,16 @@ html, body {
   justify-items: center;
 }
 .csseditor[data-theme=light] .transform-origin-editor .radius-selector[data-selected-value=all] button[data-value=all] {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .transform-origin-editor .radius-selector[data-selected-value=all] button[data-value=all] svg path {
-  fill: #e7e7e7;
+  fill: #111111;
 }
 .csseditor[data-theme=light] .transform-origin-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .transform-origin-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] svg path {
-  fill: #e7e7e7;
+  fill: #111111;
 }
 .csseditor[data-theme=light] .transform-origin-editor .radius-selector button {
   background-image: none;
@@ -15638,7 +15622,7 @@ html, body {
   background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
   background-size: 10px 10px;
   background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
-  box-shadow: 0 0 10px 1px #e7e7e7;
+  box-shadow: 0 0 10px 1px #111111;
 }
 .csseditor[data-theme=light] .gradient-editor .gradient-preview .gradient-view {
   position: absolute;
@@ -15679,7 +15663,7 @@ html, body {
   height: 100%;
 }
 .csseditor[data-theme=light] .gradient-editor .gradient-preview .preset-position > div svg path {
-  fill: gray;
+  fill: black;
 }
 .csseditor[data-theme=light] .gradient-editor .gradient-preview .preset-position [data-value=top] {
   position: absolute;
@@ -15738,49 +15722,49 @@ html, body {
           transform: translate(0%, 0%) rotate(45deg);
 }
 .csseditor[data-theme=light] .gradient-editor[data-selected-editor=static-gradient] .static-gradient {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .gradient-editor[data-selected-editor=static-gradient] .static-gradient svg path {
   fill: white;
 }
 .csseditor[data-theme=light] .gradient-editor[data-selected-editor=linear-gradient] .linear-gradient {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .gradient-editor[data-selected-editor=linear-gradient] .linear-gradient svg path {
   fill: white;
 }
 .csseditor[data-theme=light] .gradient-editor[data-selected-editor=repeating-linear-gradient] .repeating-linear-gradient {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .gradient-editor[data-selected-editor=repeating-linear-gradient] .repeating-linear-gradient svg path {
   fill: white;
 }
 .csseditor[data-theme=light] .gradient-editor[data-selected-editor=radial-gradient] .radial-gradient {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .gradient-editor[data-selected-editor=radial-gradient] .radial-gradient svg path {
   fill: white;
 }
 .csseditor[data-theme=light] .gradient-editor[data-selected-editor=repeating-radial-gradient] .repeating-radial-gradient {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .gradient-editor[data-selected-editor=repeating-radial-gradient] .repeating-radial-gradient svg path {
   fill: white;
 }
 .csseditor[data-theme=light] .gradient-editor[data-selected-editor=conic-gradient] .conic-gradient {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .gradient-editor[data-selected-editor=conic-gradient] .conic-gradient svg path {
   fill: white;
 }
 .csseditor[data-theme=light] .gradient-editor[data-selected-editor=repeating-conic-gradient] .repeating-conic-gradient {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .gradient-editor[data-selected-editor=repeating-conic-gradient] .repeating-conic-gradient svg path {
   fill: white;
 }
 .csseditor[data-theme=light] .gradient-editor[data-selected-editor=image-resource] .image-resource {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .gradient-editor[data-selected-editor=image-resource] .image-resource svg path {
   fill: white;
@@ -15816,7 +15800,7 @@ html, body {
   height: 100%;
 }
 .csseditor[data-theme=light] .gradient-editor .picker-tab .picker-tab-list .picker-tab-item .icon svg path {
-  fill: gray;
+  fill: black;
 }
 .csseditor[data-theme=light] .gradient-editor .picker-tab .picker-tab-list .picker-tab-item.static-gradient .icon {
   background-image: linear-gradient(to right, red, red);
@@ -15959,7 +15943,7 @@ html, body {
   top: 4px;
   height: 14px;
   border-radius: 10px;
-  border: 1px solid #e7e7e7;
+  border: 1px solid #111111;
   background-color: transparent;
   background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
   background-size: 10px 10px;
@@ -16234,7 +16218,7 @@ html, body {
 }
 .csseditor[data-theme=light] .svg-property-editor .svg-property-list .svg-property-item .title .type[data-type=filter] {
   border-radius: 5px;
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .svg-property-editor .svg-property-list .svg-property-item .title .type[data-type=clip-path] {
   border-radius: 5px;
@@ -16248,7 +16232,7 @@ html, body {
   text-align: right;
 }
 .csseditor[data-theme=light] .svg-filter-editor {
-  color: gray;
+  color: black;
   display: grid;
   grid-template-columns: 150px 1fr 200px;
   grid-column-gap: 10px;
@@ -16287,7 +16271,7 @@ html, body {
 .csseditor[data-theme=light] .svg-filter-editor .left .filter-item-list .group:before {
   content: attr(label);
   display: block;
-  color: #4b61ce;
+  color: #fc554f;
   font-size: 11px;
 }
 .csseditor[data-theme=light] .svg-filter-editor .left .filter-item-list .group .item {
@@ -16303,10 +16287,10 @@ html, body {
   height: 20px;
 }
 .csseditor[data-theme=light] .svg-filter-editor .left .filter-item-list .group .item svg path {
-  fill: gray;
+  fill: black;
 }
 .csseditor[data-theme=light] .svg-filter-editor .left .filter-item-list .group .item[value=SourceGraphic] svg path, .csseditor[data-theme=light] .svg-filter-editor .left .filter-item-list .group .item[value=BackgroundImage] svg path, .csseditor[data-theme=light] .svg-filter-editor .left .filter-item-list .group .item[value=FillPaint] svg path {
-  fill: #4b61ce;
+  fill: #fc554f;
 }
 .csseditor[data-theme=light] .svg-filter-editor .left .filter-item-list .group .item:hover {
   background-color: rgba(255, 255, 255, 0.3);
@@ -16318,7 +16302,7 @@ html, body {
 .csseditor[data-theme=light] .svg-filter-editor .center .graph {
   overflow: auto;
   box-sizing: border-box;
-  border: 1px solid #4b61ce;
+  border: 1px solid #fc554f;
   position: relative;
   height: 540px;
 }
@@ -16335,7 +16319,7 @@ html, body {
 }
 .csseditor[data-theme=light] .svg-filter-editor .center .graph .connected-line-panel svg path {
   fill: transparent;
-  stroke: #4b61ce;
+  stroke: #fc554f;
   stroke-width: 1;
   pointer-events: none;
 }
@@ -16346,7 +16330,7 @@ html, body {
   stroke: yellowgreen;
 }
 .csseditor[data-theme=light] .svg-filter-editor .center .graph .connected-line-panel svg path[data-source-type=modifier] {
-  stroke: #4b61ce;
+  stroke: #fc554f;
 }
 .csseditor[data-theme=light] .svg-filter-editor .center .graph .connected-line-panel svg path[data-source-type=lighting] {
   stroke: #e6ff00;
@@ -16355,9 +16339,9 @@ html, body {
   stroke: #ff9bff;
 }
 .csseditor[data-theme=light] .svg-filter-editor .center .graph .connected-line-panel svg circle {
-  fill: #4b61ce;
+  fill: #fc554f;
   r: 4;
-  stroke: rgba(75, 97, 206, 0.5);
+  stroke: rgba(252, 85, 79, 0.5);
   stroke-width: 0;
   pointer-events: all;
   cursor: pointer;
@@ -16371,8 +16355,8 @@ html, body {
   stroke: rgba(154, 205, 50, 0.5);
 }
 .csseditor[data-theme=light] .svg-filter-editor .center .graph .connected-line-panel svg circle[data-source-type=modifier] {
-  fill: #4b61ce;
-  stroke: rgba(75, 97, 206, 0.5);
+  fill: #fc554f;
+  stroke: rgba(252, 85, 79, 0.5);
 }
 .csseditor[data-theme=light] .svg-filter-editor .center .graph .connected-line-panel svg circle[data-source-type=lighting] {
   fill: #e6ff00;
@@ -16397,7 +16381,7 @@ html, body {
   height: 100%;
 }
 .csseditor[data-theme=light] .svg-filter-editor .center .graph .drag-line-panel svg path {
-  stroke: #4b61ce;
+  stroke: #fc554f;
   stroke-width: 1;
 }
 .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel {
@@ -16436,7 +16420,7 @@ html, body {
   -webkit-transform: translateX(-50%);
           transform: translateX(-50%);
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.7);
+  color: black;
 }
 .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node > .remove {
   position: absolute;
@@ -16446,18 +16430,18 @@ html, body {
   -webkit-transform: translateX(-50%);
           transform: translateX(-50%);
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.7);
+  color: black;
   height: 12px;
   width: 12px;
   border-radius: 100%;
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node > .remove svg {
   width: 100%;
   height: 100%;
 }
 .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node > .remove svg path {
-  fill: gray;
+  fill: black;
 }
 .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node > .preview {
   height: 100%;
@@ -16472,7 +16456,7 @@ html, body {
   fill: yellowgreen;
 }
 .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node > .preview[data-source-type=modifier] path {
-  fill: #4b61ce;
+  fill: #fc554f;
 }
 .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node > .preview[data-source-type=lighting] path {
   fill: #e6ff00;
@@ -16569,7 +16553,7 @@ html, body {
   left: 7px;
 }
 .csseditor[data-theme=light] .svg-filter-editor .center .graph .graph-panel .filter-node.selected {
-  box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.3), 0 0 0 3px #4b61ce;
+  box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.3), 0 0 0 3px #fc554f;
 }
 .csseditor[data-theme=light] .svg-filter-editor .right {
   height: 100%;
@@ -16588,7 +16572,7 @@ html, body {
   display: grid;
   grid-template-columns: 1fr 30px;
   margin-left: -20px;
-  color: #4b61ce;
+  color: #fc554f;
   border-radius: 3px;
   margin: 5px 0px;
 }
@@ -16647,13 +16631,13 @@ html, body {
   grid-template-columns: 1fr 1fr;
 }
 .csseditor[data-theme=light] .direction-editor .radius-selector[data-selected-value=all] button[data-value=all] {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .direction-editor .radius-selector[data-selected-value=all] button[data-value=all] svg path {
   fill: white;
 }
 .csseditor[data-theme=light] .direction-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .direction-editor .radius-selector[data-selected-value=partitial] button[data-value=partitial] svg path {
   fill: white;
@@ -16720,7 +16704,7 @@ html, body {
   grid-template-columns: repeat(9, 1fr);
 }
 .csseditor[data-theme=light] .list-view-editor .list-view-item.selected {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .list-view-editor .list-view-item.selected svg path, .csseditor[data-theme=light] .list-view-editor .list-view-item.selected svg circle, .csseditor[data-theme=light] .list-view-editor .list-view-item.selected svg rect {
   fill: white;
@@ -16729,7 +16713,7 @@ html, body {
   width: 100%;
 }
 .csseditor[data-theme=light] .list-view-editor .list-view-item svg path, .csseditor[data-theme=light] .list-view-editor .list-view-item svg circle, .csseditor[data-theme=light] .list-view-editor .list-view-item svg rect {
-  fill: gray;
+  fill: black;
 }
 .csseditor[data-theme=light] .image-select-editor {
   text-align: center;
@@ -16791,8 +16775,8 @@ html, body {
   text-align: center;
   vertical-align: middle;
   padding: 6px 2px;
-  border: 1px solid #4b61ce;
-  color: #4b61ce;
+  border: 1px solid #fc554f;
+  color: #fc554f;
   border-right: 0px;
   white-space: pre-wrap;
   word-break: break-all;
@@ -16805,7 +16789,7 @@ html, body {
   border-bottom-left-radius: 3px;
 }
 .csseditor[data-theme=light] .select-icon-editor .items > .select-icon-item:last-child {
-  border-right: 1px solid #4b61ce;
+  border-right: 1px solid #fc554f;
   border-top-right-radius: 3px;
   border-bottom-right-radius: 3px;
 }
@@ -16818,7 +16802,7 @@ html, body {
   fill: white;
 }
 .csseditor[data-theme=light] .select-icon-editor .items > .select-icon-item.selected {
-  background-color: #4b61ce;
+  background-color: #fc554f;
   color: white;
 }
 .csseditor[data-theme=light] .select-icon-editor .items > .select-icon-item[data-value=""] {
@@ -16931,7 +16915,7 @@ html, body {
   padding-top: 10px;
 }
 .csseditor[data-theme=light] .path-data-editor .segment .command {
-  color: #4b61ce;
+  color: #fc554f;
 }
 .csseditor[data-theme=light] .path-data-editor .segment .values {
   display: grid;
@@ -16959,10 +16943,10 @@ html, body {
   text-align: right;
 }
 .csseditor[data-theme=light] .polygon-data-editor .segment .values label {
-  color: #4b61ce;
+  color: #fc554f;
 }
 .csseditor[data-theme=light] .polygon-data-editor .segment .values input {
-  color: gray;
+  color: black;
   width: 80px;
 }
 .csseditor[data-theme=light] .offset-path-editor .offset-path-item {
@@ -17044,7 +17028,7 @@ html, body {
   margin-left: 2px;
 }
 .csseditor[data-theme=light] .fill-single-editor .colors .color {
-  border: 1px solid gray;
+  border: 1px solid black;
   display: inline-block;
   width: 14px;
   vertical-align: middle;
@@ -17099,7 +17083,7 @@ html, body {
   background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
   background-size: 10px 10px;
   background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
-  box-shadow: 0 0 10px 1px #e7e7e7;
+  box-shadow: 0 0 10px 1px #111111;
 }
 .csseditor[data-theme=light] .fill-editor .gradient-preview .pointer-draw {
   position: absolute;
@@ -17175,7 +17159,7 @@ html, body {
   height: 100%;
 }
 .csseditor[data-theme=light] .fill-editor .gradient-preview .preset-position > div svg path {
-  fill: gray;
+  fill: black;
 }
 .csseditor[data-theme=light] .fill-editor .gradient-preview .preset-position [data-value=top] {
   position: absolute;
@@ -17234,49 +17218,49 @@ html, body {
           transform: translate(0%, 0%) rotate(45deg);
 }
 .csseditor[data-theme=light] .fill-editor[data-selected-editor=static-gradient] .static-gradient {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .fill-editor[data-selected-editor=static-gradient] .static-gradient svg path {
   fill: white;
 }
 .csseditor[data-theme=light] .fill-editor[data-selected-editor=linear-gradient] .linear-gradient {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .fill-editor[data-selected-editor=linear-gradient] .linear-gradient svg path {
   fill: white;
 }
 .csseditor[data-theme=light] .fill-editor[data-selected-editor=repeating-linear-gradient] .repeating-linear-gradient {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .fill-editor[data-selected-editor=repeating-linear-gradient] .repeating-linear-gradient svg path {
   fill: white;
 }
 .csseditor[data-theme=light] .fill-editor[data-selected-editor=radial-gradient] .radial-gradient {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .fill-editor[data-selected-editor=radial-gradient] .radial-gradient svg path {
   fill: white;
 }
 .csseditor[data-theme=light] .fill-editor[data-selected-editor=repeating-radial-gradient] .repeating-radial-gradient {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .fill-editor[data-selected-editor=repeating-radial-gradient] .repeating-radial-gradient svg path {
   fill: white;
 }
 .csseditor[data-theme=light] .fill-editor[data-selected-editor=conic-gradient] .conic-gradient {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .fill-editor[data-selected-editor=conic-gradient] .conic-gradient svg path {
   fill: white;
 }
 .csseditor[data-theme=light] .fill-editor[data-selected-editor=repeating-conic-gradient] .repeating-conic-gradient {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .fill-editor[data-selected-editor=repeating-conic-gradient] .repeating-conic-gradient svg path {
   fill: white;
 }
 .csseditor[data-theme=light] .fill-editor[data-selected-editor=image-resource] .image-resource {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .fill-editor[data-selected-editor=image-resource] .image-resource svg path {
   fill: white;
@@ -17312,7 +17296,7 @@ html, body {
   height: 100%;
 }
 .csseditor[data-theme=light] .fill-editor .picker-tab .picker-tab-list .picker-tab-item .icon svg path {
-  fill: gray;
+  fill: black;
 }
 .csseditor[data-theme=light] .fill-editor .picker-tab .picker-tab-list .picker-tab-item.static-gradient .icon {
   background-image: linear-gradient(to right, red, red);
@@ -17462,7 +17446,7 @@ html, body {
   top: 4px;
   height: 14px;
   border-radius: 10px;
-  border: 1px solid #e7e7e7;
+  border: 1px solid #111111;
   background-color: transparent;
   background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%);
   background-size: 10px 10px;
@@ -17719,7 +17703,7 @@ html, body {
   grid-template-columns: 1fr;
 }
 .csseditor[data-theme=light] .func-filter-editor.focused {
-  box-shadow: 0 0 0 1px #4b61ce;
+  box-shadow: 0 0 0 1px #fc554f;
   border-radius: 3px;
 }
 .csseditor[data-theme=light] .func-filter-editor.has-label {
@@ -17750,14 +17734,14 @@ html, body {
 }
 .csseditor[data-theme=light] .color-matrix-editor .title {
   padding: 5px 0px;
-  color: #4b61ce;
+  color: #fc554f;
 }
 .csseditor[data-theme=light] .color-matrix-editor .color-matrix-template {
   padding: 5px 10px;
   max-height: 383px;
   overflow: auto;
   box-sizing: border-box;
-  border: 1px solid rgba(231, 231, 231, 0.5);
+  border: 1px solid rgba(17, 17, 17, 0.5);
 }
 .csseditor[data-theme=light] .color-matrix-editor .color-matrix-template input, .csseditor[data-theme=light] .color-matrix-editor .color-matrix-template select {
   width: 100%;
@@ -17768,7 +17752,7 @@ html, body {
 }
 .csseditor[data-theme=light] .color-matrix-editor .color-matrix-template .sample-item:hover {
   background-color: rgba(255, 255, 255, 0.2);
-  color: #4b61ce;
+  color: #fc554f;
 }
 .csseditor[data-theme=light] .popup {
   position: absolute;
@@ -17779,7 +17763,7 @@ html, body {
   -webkit-filter: drop-shadow(rgba(0, 0, 0, 0.5) 0px 0px 1px) drop-shadow(rgba(0, 0, 0, 0.5) 0px 2px 4px) drop-shadow(rgba(0, 0, 0, 0.5) 0px 4px 12px);
           filter: drop-shadow(rgba(0, 0, 0, 0.5) 0px 0px 1px) drop-shadow(rgba(0, 0, 0, 0.5) 0px 2px 4px) drop-shadow(rgba(0, 0, 0, 0.5) 0px 4px 12px);
   padding: 10px 10px;
-  color: gray;
+  color: black;
 }
 .csseditor[data-theme=light] .popup.compact {
   padding: 0px;
@@ -17833,10 +17817,10 @@ html, body {
   cursor: pointer;
   outline: none;
   width: 50px;
-  background-color: rgba(231, 231, 231, 0.5);
+  background-color: rgba(17, 17, 17, 0.5);
 }
 .csseditor[data-theme=light] .popup.background-property-popup .size-list[data-value=contain] button[value=contain], .csseditor[data-theme=light] .popup.background-property-popup .size-list[data-value=cover] button[value=cover], .csseditor[data-theme=light] .popup.background-property-popup .size-list[data-value=auto] button[value=auto] {
-  background-color: #e7e7e7;
+  background-color: #111111;
   font-weight: bold;
 }
 .csseditor[data-theme=light] .popup.background-property-popup .popup-item.grid-2 {
@@ -17850,7 +17834,7 @@ html, body {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
-  border: 1px solid #e7e7e7;
+  border: 1px solid #111111;
   background-color: white;
   outline: none;
   cursor: pointer;
@@ -17892,7 +17876,7 @@ html, body {
   background-repeat: round;
 }
 .csseditor[data-theme=light] .popup.background-property-popup .repeat-list[data-value=repeat] button[value=repeat], .csseditor[data-theme=light] .popup.background-property-popup .repeat-list[data-value=no-repeat] button[value=no-repeat], .csseditor[data-theme=light] .popup.background-property-popup .repeat-list[data-value=repeat-x] button[value=repeat-x], .csseditor[data-theme=light] .popup.background-property-popup .repeat-list[data-value=repeat-y] button[value=repeat-y], .csseditor[data-theme=light] .popup.background-property-popup .repeat-list[data-value=space] button[value=space], .csseditor[data-theme=light] .popup.background-property-popup .repeat-list[data-value=round] button[value=round] {
-  background-color: #e7e7e7;
+  background-color: #111111;
   box-shadow: 0 0 1px 1px black;
 }
 .csseditor[data-theme=light] .popup.background-property-popup .blend-list {
@@ -17913,7 +17897,7 @@ html, body {
   background-color: white;
 }
 .csseditor[data-theme=light] .popup .box-shadow-property-popup .codemirror-colorpicker input {
-  color: gray !important;
+  color: black !important;
   text-transform: uppercase;
   border: 0px !important;
 }
@@ -17921,10 +17905,10 @@ html, body {
   margin-top: 0px;
 }
 .csseditor[data-theme=light] .popup .box-shadow-property-popup .codemirror-colorpicker .title {
-  color: gray !important;
+  color: black !important;
 }
 .csseditor[data-theme=light] .popup .box-shadow-property-popup .codemirror-colorpicker .colorsets {
-  border-top: 0px solid #e7e7e7 !important;
+  border-top: 0px solid #111111 !important;
 }
 .csseditor[data-theme=light] .popup .box-shadow-property-popup .box .type {
   display: grid;
@@ -17938,12 +17922,12 @@ html, body {
   height: 20px;
 }
 .csseditor[data-theme=light] .popup .box-shadow-property-popup .box .type .select[data-selected-value=inset] button[data-value=inset] {
-  box-shadow: inset 0px 0px 3px 0px #4b61ce !important;
-  background-color: #4b61ce !important;
+  box-shadow: inset 0px 0px 3px 0px #fc554f !important;
+  background-color: #fc554f !important;
 }
 .csseditor[data-theme=light] .popup .box-shadow-property-popup .box .type .select[data-selected-value=outset] button[data-value=outset] {
-  box-shadow: inset 0px 0px 3px 0px #4b61ce !important;
-  background-color: #4b61ce !important;
+  box-shadow: inset 0px 0px 3px 0px #fc554f !important;
+  background-color: #fc554f !important;
 }
 .csseditor[data-theme=light] .popup .box-shadow-property-popup .box .type .select button {
   width: 100%;
@@ -17954,11 +17938,11 @@ html, body {
   font-size: 11px;
 }
 .csseditor[data-theme=light] .popup .box-shadow-property-popup .box .drag-board {
-  border: 1px solid #e7e7e7;
+  border: 1px solid #111111;
   margin-bottom: 2px;
   height: 204px;
   position: relative;
-  background-image: linear-gradient(to right, #e7e7e7, #e7e7e7), linear-gradient(to right, #e7e7e7, #e7e7e7);
+  background-image: linear-gradient(to right, #111111, #111111), linear-gradient(to right, #111111, #111111);
   background-size: 100% 1px, 1px 100%;
   background-position: 0px center, center 0px;
   background-repeat: no-repeat;
@@ -17970,7 +17954,7 @@ html, body {
   height: 10px;
   -webkit-transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
           transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
-  background-color: #4b61ce;
+  background-color: #fc554f;
   border-radius: 100%;
 }
 .csseditor[data-theme=light] .popup .animation-property-popup {
@@ -18033,7 +18017,7 @@ html, body {
   background-color: white;
 }
 .csseditor[data-theme=light] .popup .text-shadow-property-popup .codemirror-colorpicker input {
-  color: gray !important;
+  color: black !important;
   text-transform: uppercase;
   border: 0px !important;
 }
@@ -18041,20 +18025,20 @@ html, body {
   margin-top: 0px;
 }
 .csseditor[data-theme=light] .popup .text-shadow-property-popup .codemirror-colorpicker .title {
-  color: gray !important;
+  color: black !important;
 }
 .csseditor[data-theme=light] .popup .text-shadow-property-popup .codemirror-colorpicker .colorsets {
-  border-top: 0px solid #e7e7e7 !important;
+  border-top: 0px solid #111111 !important;
 }
 .csseditor[data-theme=light] .popup .text-shadow-property-popup .box label {
   font-size: 11px;
 }
 .csseditor[data-theme=light] .popup .text-shadow-property-popup .box .drag-board {
-  border: 1px solid #e7e7e7;
+  border: 1px solid #111111;
   height: 202px;
   position: relative;
   margin-bottom: 10px;
-  background-image: linear-gradient(to right, #e7e7e7, #e7e7e7), linear-gradient(to right, #e7e7e7, #e7e7e7);
+  background-image: linear-gradient(to right, #111111, #111111), linear-gradient(to right, #111111, #111111);
   background-size: 100% 1px, 1px 100%;
   background-position: 0px center, center 0px;
   background-repeat: no-repeat;
@@ -18066,7 +18050,7 @@ html, body {
   height: 10px;
   -webkit-transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
           transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
-  background-color: #4b61ce;
+  background-color: #fc554f;
   border-radius: 100%;
 }
 .csseditor[data-theme=light] .popup .keyframe-popup {
@@ -18093,83 +18077,83 @@ html, body {
 }
 .csseditor[data-theme=light] .popup .keyframe-popup .box .offset-editor .offset {
   position: relative;
-  background-image: linear-gradient(to right, #e7e7e7, black);
+  background-image: linear-gradient(to right, #111111, black);
   background-size: 100% 2px;
   background-repeat: no-repeat;
   background-position: 0px center;
   height: 20px;
 }
 .csseditor[data-theme=light] .popup .keyframe-popup .box .offset-editor .offset[data-selected-value="0"] [data-offset-index="0"] {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .popup .keyframe-popup .box .offset-editor .offset[data-selected-value="1"] [data-offset-index="1"] {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .popup .keyframe-popup .box .offset-editor .offset[data-selected-value="2"] [data-offset-index="2"] {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .popup .keyframe-popup .box .offset-editor .offset[data-selected-value="3"] [data-offset-index="3"] {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .popup .keyframe-popup .box .offset-editor .offset[data-selected-value="4"] [data-offset-index="4"] {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .popup .keyframe-popup .box .offset-editor .offset[data-selected-value="5"] [data-offset-index="5"] {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .popup .keyframe-popup .box .offset-editor .offset[data-selected-value="6"] [data-offset-index="6"] {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .popup .keyframe-popup .box .offset-editor .offset[data-selected-value="7"] [data-offset-index="7"] {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .popup .keyframe-popup .box .offset-editor .offset[data-selected-value="8"] [data-offset-index="8"] {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .popup .keyframe-popup .box .offset-editor .offset[data-selected-value="9"] [data-offset-index="9"] {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .popup .keyframe-popup .box .offset-editor .offset[data-selected-value="10"] [data-offset-index="10"] {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .popup .keyframe-popup .box .offset-editor .offset[data-selected-value="11"] [data-offset-index="11"] {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .popup .keyframe-popup .box .offset-editor .offset[data-selected-value="12"] [data-offset-index="12"] {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .popup .keyframe-popup .box .offset-editor .offset[data-selected-value="13"] [data-offset-index="13"] {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .popup .keyframe-popup .box .offset-editor .offset[data-selected-value="14"] [data-offset-index="14"] {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .popup .keyframe-popup .box .offset-editor .offset[data-selected-value="15"] [data-offset-index="15"] {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .popup .keyframe-popup .box .offset-editor .offset[data-selected-value="16"] [data-offset-index="16"] {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .popup .keyframe-popup .box .offset-editor .offset[data-selected-value="17"] [data-offset-index="17"] {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .popup .keyframe-popup .box .offset-editor .offset[data-selected-value="18"] [data-offset-index="18"] {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .popup .keyframe-popup .box .offset-editor .offset[data-selected-value="19"] [data-offset-index="19"] {
-  background-color: #4b61ce;
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .popup .keyframe-popup .box .offset-editor .offset .offset-item {
   width: 10px;
   height: 10px;
-  background-color: gray;
+  background-color: black;
   border-radius: 100%;
   position: absolute;
   top: 50%;
   -webkit-transform: translateX(-50%) translateY(-50%);
           transform: translateX(-50%) translateY(-50%);
   vertical-align: middle;
-  border: 1px solid #e7e7e7;
+  border: 1px solid #111111;
 }
 .csseditor[data-theme=light] .popup .keyframe-popup .box .offset-input {
   padding: 5px 0px;
@@ -18249,7 +18233,7 @@ html, body {
 .csseditor[data-theme=light] .popup .clippath-popup .box > .clip-path-editor .clip-area {
   display: inline-block;
   position: absolute;
-  background-color: #4b61ce;
+  background-color: #fc554f;
   z-index: 0;
 }
 .csseditor[data-theme=light] .popup .clippath-popup .box > .clip-path-editor .clip-area.inset {
@@ -18296,7 +18280,7 @@ html, body {
 .csseditor[data-theme=light] .popup .clippath-popup .box > .clip-path-editor .drag-area {
   height: 220px;
   position: relative;
-  box-shadow: 0 0 0 1px #e7e7e7;
+  box-shadow: 0 0 0 1px #111111;
 }
 .csseditor[data-theme=light] .popup .clippath-popup .box > .clip-path-editor .drag-area .pointer-list {
   top: 0px;
@@ -18418,15 +18402,15 @@ html, body {
   background-color: transparent;
 }
 .csseditor[data-theme=light] .popup .color-picker-popup .codemirror-colorpicker input {
-  color: gray !important;
+  color: black !important;
   text-transform: uppercase;
   border: 0px !important;
 }
 .csseditor[data-theme=light] .popup .color-picker-popup .codemirror-colorpicker .title {
-  color: gray !important;
+  color: black !important;
 }
 .csseditor[data-theme=light] .popup .color-picker-popup .codemirror-colorpicker .colorsets {
-  border-top: 1px solid #e7e7e7 !important;
+  border-top: 1px solid #111111 !important;
 }
 .csseditor[data-theme=light] .popup .color-picker-popup .assets {
   padding: 0px 10px;
@@ -18538,15 +18522,15 @@ html, body {
   margin-top: 0px;
 }
 .csseditor[data-theme=light] .popup .gradient-picker .codemirror-colorpicker input {
-  color: gray !important;
+  color: black !important;
   text-transform: uppercase;
   border: 0px !important;
 }
 .csseditor[data-theme=light] .popup .gradient-picker .codemirror-colorpicker .title {
-  color: gray !important;
+  color: black !important;
 }
 .csseditor[data-theme=light] .popup .gradient-picker .codemirror-colorpicker .colorsets {
-  border-top: 0px solid #e7e7e7 !important;
+  border-top: 0px solid #111111 !important;
 }
 .csseditor[data-theme=light] .popup .gradient-picker .assetpicker {
   background-color: rgba(230, 230, 230, 0.1);
@@ -18563,13 +18547,13 @@ html, body {
 }
 .csseditor[data-theme=light] .popup .gradient-picker .assetpicker .image-asset-picker .image-list .image-item {
   margin-bottom: 2px;
-  background-color: rgba(128, 128, 128, 0.5);
+  background-color: rgba(0, 0, 0, 0.5);
 }
 .csseditor[data-theme=light] .popup .gradient-picker .assetpicker .image-asset-picker .image-list .image-item .preview {
   position: relative;
   width: 100%;
   height: 80px;
-  border: 1px solid #e7e7e7;
+  border: 1px solid #111111;
   border-radius: 2px;
   cursor: pointer;
   line-height: 80px;
@@ -18604,44 +18588,44 @@ html, body {
   height: 24px;
 }
 .csseditor[data-theme=light] .popup .background-image-position-picker .repeat-list button[value=no-repeat] {
-  background-image: linear-gradient(to top right, #4b61ce, white);
+  background-image: linear-gradient(to top right, #fc554f, white);
   background-position: center center;
   background-size: 8px 8px;
   background-repeat: no-repeat;
 }
 .csseditor[data-theme=light] .popup .background-image-position-picker .repeat-list button[value=repeat] {
-  background-image: linear-gradient(to top right, #4b61ce, white);
+  background-image: linear-gradient(to top right, #fc554f, white);
   background-position: 10px 10px;
   background-size: 8px 8px;
   background-repeat: repeat;
 }
 .csseditor[data-theme=light] .popup .background-image-position-picker .repeat-list button[value=repeat-x] {
-  background-image: linear-gradient(to top right, #4b61ce, white);
+  background-image: linear-gradient(to top right, #fc554f, white);
   background-position: 10px 8px;
   background-size: 8px 8px;
   background-repeat: repeat-x;
 }
 .csseditor[data-theme=light] .popup .background-image-position-picker .repeat-list button[value=repeat-y] {
-  background-image: linear-gradient(to top right, #4b61ce, white);
+  background-image: linear-gradient(to top right, #fc554f, white);
   background-position: 8px 10px;
   background-size: 8px 8px;
   background-repeat: repeat-y;
 }
 .csseditor[data-theme=light] .popup .background-image-position-picker .repeat-list button[value=space] {
-  background-image: linear-gradient(to top right, #4b61ce, white);
+  background-image: linear-gradient(to top right, #fc554f, white);
   background-position: 10px 10px;
   background-size: 8px 8px;
   background-repeat: space;
 }
 .csseditor[data-theme=light] .popup .background-image-position-picker .repeat-list button[value=round] {
-  background-image: linear-gradient(to top right, #4b61ce, white);
+  background-image: linear-gradient(to top right, #fc554f, white);
   background-position: 0px 0px;
   background-size: 8px 8px;
   background-repeat: round;
 }
 .csseditor[data-theme=light] .popup .background-image-position-picker .repeat-list[data-value=repeat] button[value=repeat], .csseditor[data-theme=light] .popup .background-image-position-picker .repeat-list[data-value=no-repeat] button[value=no-repeat], .csseditor[data-theme=light] .popup .background-image-position-picker .repeat-list[data-value=repeat-x] button[value=repeat-x], .csseditor[data-theme=light] .popup .background-image-position-picker .repeat-list[data-value=repeat-y] button[value=repeat-y], .csseditor[data-theme=light] .popup .background-image-position-picker .repeat-list[data-value=space] button[value=space], .csseditor[data-theme=light] .popup .background-image-position-picker .repeat-list[data-value=round] button[value=round] {
-  background-color: #4b61ce;
-  box-shadow: 0 0 2px 2px #4b61ce;
+  background-color: #fc554f;
+  box-shadow: 0 0 2px 2px #fc554f;
 }
 .csseditor[data-theme=light] .window-background {
   position: fixed;
@@ -18651,7 +18635,7 @@ html, body {
   bottom: 0px;
   z-index: 10000;
   right: 0px;
-  background-color: rgba(128, 128, 128, 0.5);
+  background-color: white;
 }
 .csseditor[data-theme=light] .window-background .window {
   position: absolute;
@@ -18663,10 +18647,10 @@ html, body {
           transform: translate(-50%, -50%);
   z-index: 1000;
   background-color: white;
-  border: 1px solid #e7e7e7;
-  box-shadow: 0 0 1px 0px #e7e7e7;
+  border: 1px solid #111111;
+  box-shadow: 0 0 1px 0px #111111;
   padding: 14px;
-  color: gray;
+  color: black;
 }
 .csseditor[data-theme=light] .window-background .window .window-title {
   position: absolute;
@@ -18744,7 +18728,7 @@ html, body {
   stroke: #a0a0a0;
 }
 .csseditor[data-theme=light] .path-editor-view .path-container.box svg path.object {
-  stroke: rgba(231, 231, 231, 0.5);
+  stroke: rgba(17, 17, 17, 0.5);
 }
 .csseditor[data-theme=light] .path-editor-view .path-tool {
   pointer-events: none;
@@ -18825,7 +18809,7 @@ html, body {
   cursor: nwse-resize;
 }
 .csseditor[data-theme=light] .path-editor-view svg line {
-  stroke: #4b61ce;
+  stroke: black;
   stroke-width: 1;
 }
 .csseditor[data-theme=light] .path-editor-view svg line[data-guide=true] {
@@ -18833,7 +18817,7 @@ html, body {
   pointer-events: none;
 }
 .csseditor[data-theme=light] .path-editor-view svg line[data-distance=true] {
-  stroke: #4b61ce;
+  stroke: #fc554f;
   stroke-dasharray: 2 2;
   pointer-events: none;
 }
@@ -18847,11 +18831,11 @@ html, body {
   stroke: red;
 }
 .csseditor[data-theme=light] .path-editor-view svg circle[data-is-first=true] {
-  stroke: #4b61ce;
+  stroke: #fc554f;
   z-index: 1;
 }
 .csseditor[data-theme=light] .path-editor-view svg circle[data-is-second=true] {
-  stroke: #060814;
+  stroke: #4b0401;
   z-index: 1;
 }
 .csseditor[data-theme=light] .path-editor-view svg circle[data-is-last=true] {
@@ -18866,7 +18850,7 @@ html, body {
 }
 .csseditor[data-theme=light] .path-editor-view svg .svg-canvas {
   fill: transparent;
-  stroke: #dfdfdf;
+  stroke: #609de2;
   stroke-width: 0.5;
   display: none;
 }
@@ -18879,21 +18863,21 @@ html, body {
   cursor: pointer;
 }
 .csseditor[data-theme=light] .path-editor-view svg rect.segment[data-selected=true] {
-  fill: #4b61ce;
+  fill: #fc554f;
 }
 .csseditor[data-theme=light] .path-editor-view svg path.guide {
   fill: transparent;
-  stroke: #4b61ce;
+  stroke: black;
   stroke-width: 1;
 }
 .csseditor[data-theme=light] .path-editor-view svg path.segment {
   fill: transparent;
-  stroke: #4b61ce;
+  stroke: #fc554f;
   stroke-width: 1;
 }
 .csseditor[data-theme=light] .path-editor-view svg path.object {
   fill: transparent;
-  stroke: #4b61ce;
+  stroke: black;
   stroke-width: 1;
 }
 .csseditor[data-theme=light] .path-editor-view svg path.split-path {
@@ -18904,16 +18888,16 @@ html, body {
 }
 .csseditor[data-theme=light] .path-editor-view svg path.split-path:hover {
   cursor: copy;
-  stroke: #4b61ce;
+  stroke: #fc554f;
 }
 .csseditor[data-theme=light] .path-editor-view svg path.snap-path {
   fill: transparent;
-  stroke: #4b61ce;
+  stroke: #fc554f;
   stroke-width: 0.5;
 }
 .csseditor[data-theme=light] .path-editor-view svg text {
-  fill: #4b61ce;
-  stroke: #4b61ce;
+  fill: #fc554f;
+  stroke: #fc554f;
   stroke-width: 0.5;
   pointer-events: none;
 }
@@ -18931,10 +18915,10 @@ html, body {
   cursor: move;
 }
 .csseditor[data-theme=light] .polygon-editor-view.modify svg polygon.object {
-  stroke: #dfdfdf;
+  stroke: #609de2;
 }
 .csseditor[data-theme=light] .polygon-editor-view svg line {
-  stroke: #4b61ce;
+  stroke: black;
   stroke-width: 1;
 }
 .csseditor[data-theme=light] .polygon-editor-view svg line[data-guide=true] {
@@ -18951,23 +18935,23 @@ html, body {
   fill: yellow;
 }
 .csseditor[data-theme=light] .polygon-editor-view svg circle.curve {
-  stroke: #4b61ce;
+  stroke: #fc554f;
 }
 .csseditor[data-theme=light] .polygon-editor-view svg circle[data-is-first=true] {
-  fill: rgba(223, 223, 223, 0.8);
+  fill: rgba(96, 157, 226, 0.8);
 }
 .csseditor[data-theme=light] .polygon-editor-view svg circle[data-start=true] {
   fill: black;
 }
 .csseditor[data-theme=light] .polygon-editor-view svg .svg-canvas {
   fill: transparent;
-  stroke: #dfdfdf;
+  stroke: #609de2;
   stroke-width: 1;
   display: none;
 }
 .csseditor[data-theme=light] .polygon-editor-view svg path.guide, .csseditor[data-theme=light] .polygon-editor-view svg polygon.guide {
   fill: transparent;
-  stroke: #4b61ce;
+  stroke: #fc554f;
   stroke-width: 1;
 }
 .csseditor[data-theme=light] .polygon-editor-view svg path.segment, .csseditor[data-theme=light] .polygon-editor-view svg polygon.segment {
@@ -18977,7 +18961,7 @@ html, body {
 }
 .csseditor[data-theme=light] .polygon-editor-view svg path.object, .csseditor[data-theme=light] .polygon-editor-view svg polygon.object {
   fill: transparent;
-  stroke: #26378d;
+  stroke: black;
   stroke-width: 1;
 }
 .csseditor[data-theme=light] .polygon-editor-view svg path.split-path, .csseditor[data-theme=light] .polygon-editor-view svg polygon.split-path {
@@ -18988,15 +18972,15 @@ html, body {
 }
 .csseditor[data-theme=light] .polygon-editor-view svg path.split-path:hover, .csseditor[data-theme=light] .polygon-editor-view svg polygon.split-path:hover {
   cursor: copy;
-  stroke: #4b61ce;
+  stroke: #fc554f;
 }
 .csseditor[data-theme=light] .polygon-editor-view svg path.snap-path, .csseditor[data-theme=light] .polygon-editor-view svg polygon.snap-path {
   fill: transparent;
-  stroke: #4b61ce;
+  stroke: #fc554f;
 }
 .csseditor[data-theme=light] .polygon-editor-view svg text {
-  fill: #4b61ce;
-  stroke: #4b61ce;
+  fill: #fc554f;
+  stroke: #fc554f;
   stroke-width: 0.5;
   pointer-events: none;
 }
@@ -19010,7 +18994,7 @@ html, body {
   display: inline-block;
 }
 .csseditor[data-theme=light] .animation-selector .timeline-object.selected {
-  background-color: #4b61ce;
+  background-color: #fc554f;
   color: white;
 }
 .csseditor[data-theme=light] .timeline-value-area {
@@ -19021,8 +19005,8 @@ html, body {
   bottom: 0px;
   background-color: white;
   font-size: 12px;
-  border-left: 1px solid #e7e7e7;
-  border-top: 1px solid #e7e7e7;
+  border-left: 1px solid #111111;
+  border-top: 1px solid #111111;
 }
 .csseditor[data-theme=light] .timeline-value-area .timeline-value-editor .tab-content {
   padding: 0px 20px;
@@ -19047,10 +19031,10 @@ html, body {
   cursor: pointer;
 }
 .csseditor[data-theme=light] .timeline-value-area .timeline-value-editor .tab-content .css-property-item > .title-2:hover {
-  color: #4b61ce;
+  color: #fc554f;
 }
 .csseditor[data-theme=light] .timeline-value-area .timeline-value-editor .tab-content .css-property-item > .title-2:hover svg path {
-  fill: #4b61ce;
+  fill: #fc554f;
 }
 .csseditor[data-theme=light] .timeline-value-area .timeline-value-editor .tab-content .css-property-item .background-image-editor .tools button {
   width: 100px;
@@ -19061,7 +19045,7 @@ html, body {
   vertical-align: middle;
 }
 .csseditor[data-theme=light] .timeline-value-area .timeline-value-editor .tab-content .title {
-  color: gray;
+  color: black;
 }
 .csseditor[data-theme=light] .timeline-value-area .timeline-value-editor .value {
   padding: 5px;
@@ -19089,8 +19073,8 @@ html, body {
   bottom: 0px;
   background-color: white;
   font-size: 12px;
-  border-right: 1px solid #e7e7e7;
-  border-top: 1px solid #e7e7e7;
+  border-right: 1px solid #111111;
+  border-top: 1px solid #111111;
 }
 .csseditor[data-theme=light] .timeline-animation-area .property-title {
   height: 40px !important;
@@ -19113,7 +19097,7 @@ html, body {
   top: 0px;
   height: 40px;
   right: 0px;
-  border-top: 1px solid #e7e7e7;
+  border-top: 1px solid #111111;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar {
   position: absolute;
@@ -19121,8 +19105,8 @@ html, body {
   top: 0px;
   bottom: 0px;
   width: 270px;
-  border-right: 1px solid #e7e7e7;
-  border-bottom: 1px solid #e7e7e7;
+  border-right: 1px solid #111111;
+  border-bottom: 1px solid #111111;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar {
   padding: 10px 5px;
@@ -19143,23 +19127,23 @@ html, body {
   display: flex;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .play-buttons[data-selected-speed="0.5"] [data-value="0.5"] {
-  background-color: #4b61ce;
+  background-color: #fc554f;
   color: white;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .play-buttons[data-selected-speed="1"] [data-value="1"] {
-  background-color: #4b61ce;
+  background-color: #fc554f;
   color: white;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .play-buttons[data-selected-speed="2"] [data-value="2"] {
-  background-color: #4b61ce;
+  background-color: #fc554f;
   color: white;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .play-buttons[data-selected-speed="3"] [data-value="3"] {
-  background-color: #4b61ce;
+  background-color: #fc554f;
   color: white;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-object-toolbar .timeline-top-toolbar .play-buttons button {
-  border: 1px solid #e7e7e7;
+  border: 1px solid #111111;
   min-width: 50px;
   padding: 2px 10px;
   height: auto;
@@ -19191,7 +19175,7 @@ html, body {
   top: 0px;
   width: 5px;
   height: 100%;
-  background-color: #e7e7e7;
+  background-color: #111111;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-duration .duration-handle-right {
   position: absolute;
@@ -19199,7 +19183,7 @@ html, body {
   top: 0px;
   width: 5px;
   height: 100%;
-  background-color: #e7e7e7;
+  background-color: #111111;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-duration .duration-slider {
   position: absolute;
@@ -19207,7 +19191,7 @@ html, body {
   top: 0px;
   right: 10px;
   height: 100%;
-  background-color: #e7e7e7;
+  background-color: #111111;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-duration .duration-slider .start {
   position: absolute;
@@ -19217,7 +19201,7 @@ html, body {
           transform: translateX(-100%);
   height: 100%;
   width: 5px;
-  background-color: #e7e7e7;
+  background-color: #111111;
   cursor: ew-resize;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-duration .duration-slider .end {
@@ -19226,7 +19210,7 @@ html, body {
   top: 0px;
   height: 100%;
   width: 5px;
-  background-color: #e7e7e7;
+  background-color: #111111;
   cursor: ew-resize;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view .time-duration .duration-slider .gauge {
@@ -19235,7 +19219,7 @@ html, body {
   width: 100%;
   top: 0px;
   height: 100%;
-  background-color: #3585bd;
+  background-color: #ee4b66;
   cursor: ew-resize;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-header .timeline-keyframe-toolbar .keyframe-time-view canvas {
@@ -19259,7 +19243,7 @@ html, body {
   bottom: 0px;
   width: 270px;
   overflow: auto;
-  border-right: 1px solid #e7e7e7;
+  border-right: 1px solid #111111;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object.collapsed .timeline-object-row.layer .icon svg {
   -webkit-transform: rotate(0deg);
@@ -19273,10 +19257,10 @@ html, body {
   display: grid;
   grid-template-columns: 20px 1fr 50px;
   grid-column-gap: 2px;
-  border-bottom: 1px solid #e7e7e7;
+  border-bottom: 1px solid #111111;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row[data-selected=true] {
-  background-color: #eff4ff;
+  background-color: #353535;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row .current-value {
   vertical-align: middle;
@@ -19299,13 +19283,13 @@ html, body {
   transition: transform 0.2s ease, -webkit-transform 0.2s ease;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row .icon svg path {
-  fill: gray;
+  fill: black;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row .title {
   vertical-align: middle;
   padding: 5px 0px;
   cursor: pointer;
-  color: gray;
+  color: black;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row .tools {
   padding: 5px 0px;
@@ -19328,16 +19312,16 @@ html, body {
   width: 10px;
   height: 10px;
   display: inline-block;
-  box-shadow: 0 0 0 2px rgba(206, 206, 206, 0.3);
-  background-color: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.3);
+  background-color: rgba(145, 145, 145, 0.7);
   vertical-align: middle;
   cursor: pointer;
   -webkit-transform: translateX(-5px) translateY(2px) rotate(45deg);
           transform: translateX(-5px) translateY(2px) rotate(45deg);
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row.layer-property .tools button.add:hover {
-  box-shadow: 0 0 0 2px rgba(75, 97, 206, 0.5);
-  background-color: #4b61ce;
+  box-shadow: 0 0 0 2px rgba(252, 85, 79, 0.5);
+  background-color: #fc554f;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .keyframe-time-grid-view {
   position: absolute;
@@ -19383,7 +19367,7 @@ html, body {
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row {
   height: 30px;
-  border-bottom: 1px solid #e7e7e7;
+  border-bottom: 1px solid #111111;
   position: relative;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe {
@@ -19392,13 +19376,13 @@ html, body {
   -webkit-transform: translateY(-50%);
           transform: translateY(-50%);
   height: 10px;
-  background-color: rgba(231, 231, 231, 0.5);
+  background-color: rgba(17, 17, 17, 0.5);
   display: inline-block;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe .offset {
   position: absolute;
   top: 50%;
-  border: 1px solid #4b61ce;
+  border: 1px solid #fc554f;
   display: inline-block;
   width: 8px;
   height: 8px;
@@ -19409,8 +19393,8 @@ html, body {
   pointer-events: all;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe .offset[data-selected=true] {
-  background-color: #4b61ce;
-  box-shadow: 0 0 0 1px #4987f7;
+  background-color: #fc554f;
+  box-shadow: 0 0 0 1px #ee4b66;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe-shadow {
   position: absolute;
@@ -19423,7 +19407,7 @@ html, body {
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe-shadow .offset {
   position: absolute;
   top: 50%;
-  border: 1px solid #4b61ce;
+  border: 1px solid #fc554f;
   display: inline-block;
   width: 8px;
   height: 8px;
@@ -19434,8 +19418,8 @@ html, body {
   pointer-events: all;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe-shadow .offset[data-selected=true] {
-  background-color: #4b61ce;
-  box-shadow: 0 0 0 1px #4987f7;
+  background-color: #fc554f;
+  box-shadow: 0 0 0 1px #ee4b66;
 }
 .csseditor[data-theme=light] .timeline-area .timeline-body .timeline-keyframe-area .timeline-keyframe-list .timeline-keyframe .timeline-keyframe-row .keyframe-back {
   position: absolute;
@@ -19447,7 +19431,7 @@ html, body {
   top: 50%;
   display: inline-block;
   height: 1px;
-  background-color: #4b61ce;
+  background-color: #fc554f;
   -webkit-transform: translateY(-52%);
           transform: translateY(-52%);
 }
@@ -19477,7 +19461,7 @@ html, body {
   vertical-align: middle;
 }
 .csseditor[data-theme=light] .keyframe-time-control svg path {
-  fill: gray;
+  fill: black;
 }
 .csseditor[data-theme=light] .keyframe-time-control input[type=text] {
   width: 80px;
