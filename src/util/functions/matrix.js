@@ -81,7 +81,7 @@ const matrix2d = {
     }
 };
 
-var Vect3 = {
+export const Vect3 = {
     create: function(x, y, z) {
         return {x: x || 0, y: y || 0, z: z || 0};
     },
@@ -108,6 +108,9 @@ var Vect3 = {
     },
     dot: function(v1, v2) {
         return (v1.x * v2.x) + (v1.y * v2.y) + (v1.z * v2.z);
+    },
+    cross2d: function (v1, v2) {
+        return v1.x * v2.y - v1.y * v2.x; 
     },
     cross: function(v1, v2) {
         return {x: v1.y * v2.z - v1.z * v2.y, y: v1.z * v2.x - v1.x * v2.z, z: v1.x * v2.y - v1.y * v2.x};

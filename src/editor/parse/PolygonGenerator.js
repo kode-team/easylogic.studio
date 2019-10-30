@@ -1,9 +1,10 @@
 import SegmentManager from "./SegmentManager";
 import { clone, OBJECT_TO_PROPERTY } from "../../util/functions/func";
-import { getDist, calculateAngle, getXYInCircle } from "../../util/functions/math";
+import { getDist, calculateAngle, getXYInCircle, Deluanay } from "../../util/functions/math";
 import Point from "./Point";
 import PathStringManager from "./PathStringManager";
 import { randomNumber, random } from "../../util/functions/create";
+import Color from "../../util/Color";
 
 export default class PolygonGenerator {
 
@@ -331,6 +332,11 @@ export default class PolygonGenerator {
         })} />`
     }
 
+    makeDeluanay() {
+        return Deluanay(clone(this.points)).map(({a, b, c}) => {
+            return /*html*/`<polygon class='deluanay-polygon' fill="${Color.randomRGBA()}" stroke="black" stroke-width='1' points="${a.x},${a.y} ${b.x},${b.y} ${c.x},${c.y}" />`
+        })
+    }
 
     toSVGString () {
 

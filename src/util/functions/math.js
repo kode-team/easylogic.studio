@@ -1,4 +1,5 @@
 import { isUndefined } from "./func";
+import { Vect3 } from "./matrix";
 
 export function round (n, k) {
     k = isUndefined(k) ? 1 : k; 
@@ -127,4 +128,137 @@ export function getGradientLine(angle, box) {
         y: center.y + yDiff
       }
     };
+}
+
+export function CCW(A, B, C) {
+    return Vect3.cross2d(Vect3.sub(B, A), Vect3.sub(C, A))
+}
+
+// refer to http://www.secmem.org/blog/2019/01/11/Deluanay_Triangulation/
+export function incircle (a, b, c, d) {
+    var ccw = CCW(a, b, c)
+
+    var adx = a.x - d.x;
+    var ady = a.y - d.y;
+    var bdx = b.x - d.x;
+    var bdy = b.y - d.y;
+    var cdx = c.x - d.x;
+    var cdy = c.y - d.y;
+
+    var bdxcdy = bdx * cdy, cdxbdy = cdx * bdy;
+    var cdxady = cdx * ady, adxcdy = adx * cdy;
+    var adxbdy = adx * bdy, bdxady = bdx * ady;
+
+    var alift = adx * adx + ady * ady;
+    var blift = bdx * bdx + bdy * bdy;
+    var clift = cdx * cdx + cdy * cdy;
+    
+    var det = alift * (bdxcdy - cdxbdy) + blift * (cdxady - adxcdy) + clift * (adxbdy - bdxady);
+    
+    if(ccw > 0) return det >= 0;
+    else return det <= 0;
+}
+
+export function initPolygon (polygon, x, y) {
+
+    var A = Vect3.create(x, y)
+
+    var selectedIndex = -1; 
+    for(var i = 0, len = polygon.length; i < len; i++ ) {
+        if (Vect3.equal(polygon[i], A)) {
+            selectedIndex = i;
+            break; 
+        }
+    }
+
+    if (selectedIndex > -1) {
+        polygon.splice(selectedIndex, 1);
+    } else {
+        polygon.push(A)
+    }
+}
+
+function swap (data, i, j) {
+    var temp = data[i];
+    data[i] = data[j]
+    data[j] = temp 
+}
+
+export function Deluanay (points = []) {    
+
+    var n = points.length;
+
+    points[n] = Vect3.create(-2e9, -2e9)
+    points[n+1] = Vect3.create(2e9, -2e9)
+    points[n+2] = Vect3.create(0, 2e9)
+
+    var triangle = [Vect3.create(n, n+1, n+2)] 
+
+    for(var i = 0; i < n; i++) {
+        let polygon = [];
+
+        var complete = new Array(triangle.length);
+
+        for(var j = 0; j < triangle.length; j++) {
+            if(complete[j]) continue;
+            var current = triangle[j];
+
+            if (!current) continue;
+
+            var a = points[current.x]
+            var b = points[current.y]
+            var c = points[current.z]
+            var d = points[i]
+
+            if(incircle(a, b, c, d)) {
+
+                initPolygon(polygon, current.x, current.y)
+                initPolygon(polygon, current.y, current.z)
+                initPolygon(polygon, current.z, current.x)
+
+
+                swap(complete, j, triangle.length - 1 ); 
+                swap(triangle, j, triangle.length - 1);
+                triangle.pop();
+                j--;
+                continue;
+            }
+            complete[j] = true;
+        }
+
+        polygon.forEach(current => {
+
+            var a = points[current.x]
+            var b = points[current.y]
+            var d = points[i]
+
+            if (CCW(a, b, d) === 0) {  // 0 은 평면 
+
+            } else {
+                triangle.push(Vect3.create(current.x, current.y, i))
+            }
+        })
+    }
+
+    // SuperTriangle delete    
+    for(var i = 0; i < triangle.length; i++) {
+        var current = triangle[i]
+
+        console.log(current.x >= n, current.y >= n, current.z >= n)
+        if (current.x >= n || current.y >= n || current.z >= n) {
+            swap(triangle, i, triangle.length - 1);
+            triangle.pop();
+            i--;
+            continue; 
+        }
+    }
+
+    return triangle.map(current => {
+        console.log(current.x, current.y, current.z);
+        return {
+            a: points[current.x], 
+            b: points[current.y], 
+            c: points[current.z] 
+        }
+    })
 }

@@ -9907,6 +9907,17 @@ html, body {
   stroke-width: 1;
   display: none;
 }
+.csseditor .polygon-editor-view svg rect.segment {
+  fill: black;
+  stroke: white;
+  stroke-width: 1;
+  width: 10px;
+  height: 10px;
+  cursor: pointer;
+}
+.csseditor .polygon-editor-view svg rect.segment[data-selected=true] {
+  fill: #fc554f;
+}
 .csseditor .polygon-editor-view svg path.guide, .csseditor .polygon-editor-view svg polygon.guide {
   fill: transparent;
   stroke: #fc554f;
@@ -9914,7 +9925,7 @@ html, body {
 }
 .csseditor .polygon-editor-view svg path.segment, .csseditor .polygon-editor-view svg polygon.segment {
   fill: transparent;
-  stroke: red;
+  stroke: #fc554f;
   stroke-width: 1;
 }
 .csseditor .polygon-editor-view svg path.object, .csseditor .polygon-editor-view svg polygon.object {
@@ -9926,7 +9937,7 @@ html, body {
   fill: transparent;
   stroke: transparent;
   pointer-events: stroke;
-  stroke-width: 1;
+  stroke-width: 2;
 }
 .csseditor .polygon-editor-view svg path.split-path:hover, .csseditor .polygon-editor-view svg polygon.split-path:hover {
   cursor: copy;
@@ -18949,6 +18960,17 @@ html, body {
   stroke-width: 1;
   display: none;
 }
+.csseditor[data-theme=light] .polygon-editor-view svg rect.segment {
+  fill: black;
+  stroke: white;
+  stroke-width: 1;
+  width: 10px;
+  height: 10px;
+  cursor: pointer;
+}
+.csseditor[data-theme=light] .polygon-editor-view svg rect.segment[data-selected=true] {
+  fill: #fc554f;
+}
 .csseditor[data-theme=light] .polygon-editor-view svg path.guide, .csseditor[data-theme=light] .polygon-editor-view svg polygon.guide {
   fill: transparent;
   stroke: #fc554f;
@@ -18956,7 +18978,7 @@ html, body {
 }
 .csseditor[data-theme=light] .polygon-editor-view svg path.segment, .csseditor[data-theme=light] .polygon-editor-view svg polygon.segment {
   fill: transparent;
-  stroke: red;
+  stroke: #fc554f;
   stroke-width: 1;
 }
 .csseditor[data-theme=light] .polygon-editor-view svg path.object, .csseditor[data-theme=light] .polygon-editor-view svg polygon.object {
@@ -18968,7 +18990,7 @@ html, body {
   fill: transparent;
   stroke: transparent;
   pointer-events: stroke;
-  stroke-width: 1;
+  stroke-width: 2;
 }
 .csseditor[data-theme=light] .polygon-editor-view svg path.split-path:hover, .csseditor[data-theme=light] .polygon-editor-view svg polygon.split-path:hover {
   cursor: copy;

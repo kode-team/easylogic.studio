@@ -3,6 +3,7 @@ import { Length } from "../../unit/Length";
 import PolygonParser from "../../parse/PolygonParser";
 import { OBJECT_TO_PROPERTY } from "../../../util/functions/func";
 import Dom from "../../../util/Dom";
+import { Deluanay } from "../../../util/functions/math";
 
 export class SVGPolygonItem extends SVGItem {
   getDefaultObject(obj = {}) {

@@ -11,3 +11,12 @@ export function random() {
         b : randomNumber(0, 255),
     })
 }
+
+export function randomRGBA() {
+    return rgb({
+        r: randomNumber(0, 255),
+        g: randomNumber(0, 255),
+        b: randomNumber(0, 255),
+        a: randomNumber(0, 1000)/1000,
+    })
+}

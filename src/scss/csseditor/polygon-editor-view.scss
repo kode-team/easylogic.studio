@@ -70,6 +70,25 @@
             stroke: $selected-border-color;
             stroke-width: 1;
             display: none; 
+        }   
+        
+
+        rect {
+            &.segment {
+                fill: rgba(0, 0, 0, 1);
+                stroke: white;
+                stroke-width: 1; 
+                width: 10px;
+                height: 10px;
+                cursor: pointer;
+
+                &[data-selected='true'] {
+                    fill: $selected-color;
+                }
+
+            }
+
+
         }        
 
         path,polygon {
@@ -82,13 +101,13 @@
 
             &.segment {
                 fill: transparent;
-                stroke: red;
+                stroke: $selected-color;
                 stroke-width: 1; 
             }
             
             &.object {
                 fill: transparent;
-                stroke: darken($path-guide-color, 20%);
+                stroke: $path-guide-color;
                 stroke-width: 1; 
             }       
             
@@ -96,7 +115,7 @@
                 fill: transparent;
                 stroke: transparent;
                 pointer-events: stroke;
-                stroke-width: 1;
+                stroke-width: 2;
 
                 &:hover {
                     cursor: copy;
@@ -107,6 +126,10 @@
             &.snap-path {
                 fill: transparent;
                 stroke: $selected-color;
+            }
+
+            &.deluanay-polygon {
+
             }
         }
 
