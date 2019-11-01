@@ -1386,8 +1386,8 @@ html, body {
 .csseditor input[type=number],
 .csseditor input[type=email],
 .csseditor textarea {
-  background-color: #5a5a5a;
-  border: 1px solid #5a5a5a;
+  background-color: #13161c;
+  border: 1px solid #13161c;
   border-radius: 3px;
   color: #ececec;
   outline: none;
@@ -1400,8 +1400,8 @@ html, body {
   padding: 0px 4px;
   line-height: 1.6;
   cursor: pointer;
-  background-color: #5a5a5a;
-  border: 1px solid #5a5a5a;
+  background-color: #13161c;
+  border: 1px solid #13161c;
   border-radius: 3px;
   color: #ffffff;
   outline: none;
@@ -1655,7 +1655,7 @@ html, body {
   bottom: 0px;
 }
 .csseditor .feature-control .layer-tab .library-items > .group > .title {
-  background-color: #2b2b2b;
+  background-color: #292b35;
   color: white;
   padding: 4px 10px;
 }
@@ -3165,7 +3165,7 @@ html, body {
 }
 .csseditor .property {
   border-bottom: 1px solid black;
-  background-color: #16191e;
+  background-color: #292b35;
   color: #ffffff;
   display: none;
 }
@@ -3358,7 +3358,7 @@ html, body {
   padding: 2px 0px;
 }
 .csseditor .property > .property-title {
-  padding: 4px 6px 4px 6px;
+  padding: 2px 6px 4px 6px;
   height: 30px;
   line-height: 2;
   cursor: pointer;
@@ -3369,7 +3369,7 @@ html, body {
   grid-template-columns: 1fr 1fr;
   cursor: pointer;
   border-bottom: 0px solid black;
-  background-color: #2b2b2b;
+  background-color: #292b35;
 }
 .csseditor .property > .property-title svg {
   width: 16px;
@@ -3398,12 +3398,12 @@ html, body {
 .csseditor .property > .property-body {
   display: none;
   padding: 0px;
-  background-color: #3a3a3a;
+  background-color: #292b35;
   margin-top: -1px;
 }
 .csseditor .property > .property-body .property-item {
   font-size: 11px;
-  padding: 5px 0px;
+  padding: 3px 0px;
 }
 .csseditor .property > .property-body .property-item:first-child {
   padding-top: 10px;
@@ -5333,8 +5333,6 @@ html, body {
   width: 100%;
   height: 100%;
   padding: 0px 3px;
-  background-color: #2b2b2b;
-  border: 1px solid black;
 }
 .csseditor .color-view-editor .color-code input.focused {
   box-shadow: 0 0 0 1px #fc554f;
@@ -5347,6 +5345,7 @@ html, body {
   height: 19px;
   text-align: center;
   width: 100%;
+  height: 24px;
 }
 .csseditor .color-single-editor .preview {
   height: 100%;
@@ -5363,6 +5362,7 @@ html, body {
   display: grid;
   grid-template-columns: 1fr;
   grid-column-gap: 4px;
+  height: 24px;
 }
 .csseditor .range-editor.has-label {
   grid-template-columns: 60px 1fr;
@@ -5445,16 +5445,15 @@ html, body {
   border-bottom-right-radius: 0px;
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
-  background-color: transparent;
-  border-bottom: 1px solid black;
-  border-left: 1px solid black;
-  border-top: 1px solid black;
+  border-bottom: 1px solid #13161c;
+  border-left: 1px solid #13161c;
+  border-top: 1px solid #13161c;
   text-align: left;
-  background-color: #2b2b2b;
+  background-color: #13161c;
 }
 .csseditor .range-editor .range-editor-type .area .select-editor {
   text-align: right;
-  background-color: #2b2b2b;
+  background-color: #13161c;
   position: relative;
   border-bottom-right-radius: 3px;
   border-top-right-radius: 3px;
@@ -5470,15 +5469,16 @@ html, body {
   text-align: center;
   padding: 0px;
   width: 24px;
+  height: 100%;
   color: #ffffff;
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 3px;
   border-top-right-radius: 3px;
   background-color: transparent;
-  border-bottom: 1px solid black;
-  border-top: 1px solid black;
-  border-right: 1px solid black;
+  border-bottom: 1px solid #13161c;
+  border-top: 1px solid #13161c;
+  border-right: 1px solid #13161c;
 }
 .csseditor .range-editor .range-editor-type[data-type=calc] .area {
   height: 100%;
@@ -5499,6 +5499,7 @@ html, body {
   display: grid;
   grid-template-columns: 1fr;
   grid-column-gap: 4px;
+  height: 24px;
 }
 .csseditor .number-range-editor.has-label {
   grid-template-columns: 60px 1fr;
@@ -5536,6 +5537,7 @@ html, body {
   grid-template-columns: 1fr 40px;
   grid-column-gap: 3px;
   font-size: 13px;
+  height: 100%;
 }
 .csseditor .number-range-editor .range-editor-type .area span {
   padding: 1px;
@@ -5543,10 +5545,6 @@ html, body {
 }
 .csseditor .number-range-editor .range-editor-type .area input {
   width: 100%;
-}
-.csseditor .number-range-editor .range-editor-type .area input[type=number] {
-  background-color: #2b2b2b;
-  border: 1px solid black;
 }
 .csseditor .number-range-editor .range-editor-type .area input[type=number].focused {
   box-shadow: 0 0 0 1px #fc554f;
@@ -5557,6 +5555,7 @@ html, body {
 .csseditor .input-range-editor {
   display: grid;
   grid-template-columns: 1fr;
+  height: 24px;
 }
 .csseditor .input-range-editor.focused {
   box-shadow: 0 0 0 1px #fc554f;
@@ -5598,6 +5597,7 @@ html, body {
   font-size: 13px;
   display: grid;
   grid-template-columns: 1fr 30px;
+  height: 100%;
 }
 .csseditor .input-range-editor .range-editor-type .area span {
   padding: 1px;
@@ -5610,8 +5610,6 @@ html, body {
   padding: 2px 2px;
   border-top-right-radius: 0px;
   border-bottom-right-radius: 0px;
-  background-color: #2b2b2b;
-  border: 1px solid black;
   border-right: 0px;
 }
 .csseditor .input-range-editor .range-editor-type .area .select-editor select {
@@ -5619,11 +5617,10 @@ html, body {
      -moz-appearance: none;
           appearance: none;
   text-align: center;
+  height: 100%;
   padding: 0px 4px;
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
-  background-color: #2b2b2b;
-  border: 1px solid black;
   border-left: 0px;
 }
 .csseditor .text-editor {
@@ -5647,6 +5644,7 @@ html, body {
   grid-template-columns: 1fr;
   grid-column-gap: 4px;
   position: relative;
+  height: 24px;
 }
 .csseditor .select-editor.has-label {
   grid-template-columns: 60px 1fr;
@@ -5660,6 +5658,7 @@ html, body {
 }
 .csseditor .select-editor.has-label select {
   width: 100%;
+  height: 100%;
 }
 .csseditor .css-property-editor {
   margin-top: 10px;
@@ -8642,6 +8641,7 @@ html, body {
   display: grid;
   grid-template-columns: 1fr 16px 16px;
   grid-column-gap: 2px;
+  height: 24px;
 }
 .csseditor .svg-filter-select-editor.has-label {
   grid-template-columns: 60px 1fr 16px 16px;
@@ -8655,6 +8655,10 @@ html, body {
 }
 .csseditor .svg-filter-select-editor select {
   width: 100%;
+  height: 100%;
+}
+.csseditor .svg-filter-select-editor button {
+  margin-top: 4px;
 }
 .csseditor .func-filter-editor {
   display: grid;
@@ -8711,6 +8715,9 @@ html, body {
 .csseditor .color-matrix-editor .color-matrix-template .sample-item:hover {
   background-color: rgba(255, 255, 255, 0.2);
   color: #fc554f;
+}
+.csseditor .stroke-dasharray-editor > div {
+  padding-bottom: 3px;
 }
 .csseditor .popup {
   position: absolute;
@@ -12411,7 +12418,7 @@ html, body {
   padding: 2px 0px;
 }
 .csseditor[data-theme=light] .property > .property-title {
-  padding: 4px 6px 4px 6px;
+  padding: 2px 6px 4px 6px;
   height: 30px;
   line-height: 2;
   cursor: pointer;
@@ -12456,7 +12463,7 @@ html, body {
 }
 .csseditor[data-theme=light] .property > .property-body .property-item {
   font-size: 11px;
-  padding: 5px 0px;
+  padding: 3px 0px;
 }
 .csseditor[data-theme=light] .property > .property-body .property-item:first-child {
   padding-top: 10px;
@@ -14386,8 +14393,6 @@ html, body {
   width: 100%;
   height: 100%;
   padding: 0px 3px;
-  background-color: white;
-  border: 1px solid black;
 }
 .csseditor[data-theme=light] .color-view-editor .color-code input.focused {
   box-shadow: 0 0 0 1px #fc554f;
@@ -14400,6 +14405,7 @@ html, body {
   height: 19px;
   text-align: center;
   width: 100%;
+  height: 24px;
 }
 .csseditor[data-theme=light] .color-single-editor .preview {
   height: 100%;
@@ -14416,6 +14422,7 @@ html, body {
   display: grid;
   grid-template-columns: 1fr;
   grid-column-gap: 4px;
+  height: 24px;
 }
 .csseditor[data-theme=light] .range-editor.has-label {
   grid-template-columns: 60px 1fr;
@@ -14498,10 +14505,9 @@ html, body {
   border-bottom-right-radius: 0px;
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
-  background-color: transparent;
-  border-bottom: 1px solid black;
-  border-left: 1px solid black;
-  border-top: 1px solid black;
+  border-bottom: 1px solid #111111;
+  border-left: 1px solid #111111;
+  border-top: 1px solid #111111;
   text-align: left;
   background-color: white;
 }
@@ -14523,15 +14529,16 @@ html, body {
   text-align: center;
   padding: 0px;
   width: 24px;
+  height: 100%;
   color: black;
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 3px;
   border-top-right-radius: 3px;
   background-color: transparent;
-  border-bottom: 1px solid black;
-  border-top: 1px solid black;
-  border-right: 1px solid black;
+  border-bottom: 1px solid #111111;
+  border-top: 1px solid #111111;
+  border-right: 1px solid #111111;
 }
 .csseditor[data-theme=light] .range-editor .range-editor-type[data-type=calc] .area {
   height: 100%;
@@ -14552,6 +14559,7 @@ html, body {
   display: grid;
   grid-template-columns: 1fr;
   grid-column-gap: 4px;
+  height: 24px;
 }
 .csseditor[data-theme=light] .number-range-editor.has-label {
   grid-template-columns: 60px 1fr;
@@ -14589,6 +14597,7 @@ html, body {
   grid-template-columns: 1fr 40px;
   grid-column-gap: 3px;
   font-size: 13px;
+  height: 100%;
 }
 .csseditor[data-theme=light] .number-range-editor .range-editor-type .area span {
   padding: 1px;
@@ -14596,10 +14605,6 @@ html, body {
 }
 .csseditor[data-theme=light] .number-range-editor .range-editor-type .area input {
   width: 100%;
-}
-.csseditor[data-theme=light] .number-range-editor .range-editor-type .area input[type=number] {
-  background-color: white;
-  border: 1px solid black;
 }
 .csseditor[data-theme=light] .number-range-editor .range-editor-type .area input[type=number].focused {
   box-shadow: 0 0 0 1px #fc554f;
@@ -14610,6 +14615,7 @@ html, body {
 .csseditor[data-theme=light] .input-range-editor {
   display: grid;
   grid-template-columns: 1fr;
+  height: 24px;
 }
 .csseditor[data-theme=light] .input-range-editor.focused {
   box-shadow: 0 0 0 1px #fc554f;
@@ -14651,6 +14657,7 @@ html, body {
   font-size: 13px;
   display: grid;
   grid-template-columns: 1fr 30px;
+  height: 100%;
 }
 .csseditor[data-theme=light] .input-range-editor .range-editor-type .area span {
   padding: 1px;
@@ -14663,8 +14670,6 @@ html, body {
   padding: 2px 2px;
   border-top-right-radius: 0px;
   border-bottom-right-radius: 0px;
-  background-color: white;
-  border: 1px solid black;
   border-right: 0px;
 }
 .csseditor[data-theme=light] .input-range-editor .range-editor-type .area .select-editor select {
@@ -14672,11 +14677,10 @@ html, body {
      -moz-appearance: none;
           appearance: none;
   text-align: center;
+  height: 100%;
   padding: 0px 4px;
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
-  background-color: white;
-  border: 1px solid black;
   border-left: 0px;
 }
 .csseditor[data-theme=light] .text-editor {
@@ -14700,6 +14704,7 @@ html, body {
   grid-template-columns: 1fr;
   grid-column-gap: 4px;
   position: relative;
+  height: 24px;
 }
 .csseditor[data-theme=light] .select-editor.has-label {
   grid-template-columns: 60px 1fr;
@@ -14713,6 +14718,7 @@ html, body {
 }
 .csseditor[data-theme=light] .select-editor.has-label select {
   width: 100%;
+  height: 100%;
 }
 .csseditor[data-theme=light] .css-property-editor {
   margin-top: 10px;
@@ -17695,6 +17701,7 @@ html, body {
   display: grid;
   grid-template-columns: 1fr 16px 16px;
   grid-column-gap: 2px;
+  height: 24px;
 }
 .csseditor[data-theme=light] .svg-filter-select-editor.has-label {
   grid-template-columns: 60px 1fr 16px 16px;
@@ -17708,6 +17715,10 @@ html, body {
 }
 .csseditor[data-theme=light] .svg-filter-select-editor select {
   width: 100%;
+  height: 100%;
+}
+.csseditor[data-theme=light] .svg-filter-select-editor button {
+  margin-top: 4px;
 }
 .csseditor[data-theme=light] .func-filter-editor {
   display: grid;
@@ -17764,6 +17775,9 @@ html, body {
 .csseditor[data-theme=light] .color-matrix-editor .color-matrix-template .sample-item:hover {
   background-color: rgba(255, 255, 255, 0.2);
   color: #fc554f;
+}
+.csseditor[data-theme=light] .stroke-dasharray-editor > div {
+  padding-bottom: 3px;
 }
 .csseditor[data-theme=light] .popup {
   position: absolute;

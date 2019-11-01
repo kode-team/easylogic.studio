@@ -3,6 +3,7 @@ $border-radius: 3px;
     display: grid;
     grid-template-columns: 1fr;
     // grid-column-gap: 4px;
+    height: 24px;
 
     &.focused {
         box-shadow: 0 0 0 1px $selected-color;
@@ -55,6 +56,7 @@ $border-radius: 3px;
             display: grid;
             grid-template-columns: 1fr 30px;
             // grid-column-gap: 3px;
+            height: 100%;
             
             span {
                 padding: 1px;
@@ -69,9 +71,7 @@ $border-radius: 3px;
             input[type=number] {         
                 padding: 2px 2px;      
                 border-top-right-radius: 0px;
-                border-bottom-right-radius: 0px;
-                background-color: $property-title-color;
-                border: 1px solid $property-border-color;                
+                border-bottom-right-radius: 0px;           
                 border-right: 0px;
             }
 
@@ -80,12 +80,11 @@ $border-radius: 3px;
                     // margin-left: -3px;
                     appearance: none;
                     text-align: center;
+                    height: 100%;
                     
                     padding: 0px 4px;             
                     border-top-left-radius: 0px;
                     border-bottom-left-radius: 0px;     
-                    background-color: $property-title-color;
-                    border: 1px solid $property-border-color;                
                     border-left:0px;
                 }
             }

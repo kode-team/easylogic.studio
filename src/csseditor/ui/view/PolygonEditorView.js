@@ -106,6 +106,7 @@ export default class PolygonEditorView extends UIElement {
         var { points } = this.polygonGenerator.toPolygon(pathRect.x, pathRect.y, this.scale);
         var artboard = editor.selection.currentArtboard
         var layer; 
+
         if (artboard) {
 
             var x = pathRect.x / this.scale;
@@ -144,9 +145,8 @@ export default class PolygonEditorView extends UIElement {
         this.emit('refreshPolygonLayer')
     }
 
-    addPolygonLayer(pathRect) {
+    addPolygonLayer() {
         this.changeMode('modify');
-        // this.bindData('$view');
 
         var rect = this.getViewRect()
         var layer = this.makePolygonLayer(rect)
@@ -160,8 +160,6 @@ export default class PolygonEditorView extends UIElement {
             this.emit('refreshAll')
             this.emit('refreshSelection');
         }
-
-        // this.trigger('hidePathEditor');
 
     }
 

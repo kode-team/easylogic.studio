@@ -2,6 +2,7 @@
     display: grid;
     grid-template-columns: 1fr;
     grid-column-gap: 4px;
+    height: 24px;
 
     &.has-label {
         grid-template-columns: 60px 1fr;
@@ -46,6 +47,7 @@
             grid-template-columns: 1fr 40px;
             grid-column-gap: 3px;
             font-size: 13px;
+            height: 100%;
             
             span {
                 padding: 1px;
@@ -57,9 +59,6 @@
                 width: 100%;
 
                 &[type='number'] {
-
-                    background-color: $property-title-color;
-                    border: 1px solid $property-border-color;                
                     
                     &.focused {
                         box-shadow: 0 0 0 1px $selected-color;

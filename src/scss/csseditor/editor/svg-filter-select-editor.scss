@@ -3,6 +3,7 @@
     display: grid;
     grid-template-columns: 1fr 16px 16px;
     grid-column-gap: 2px;
+    height: 24px;
 
     &.has-label {
         grid-template-columns: 60px 1fr 16px 16px;
@@ -20,5 +21,10 @@
 
     select {
         width: 100%;
+        height: 100%;
+    }
+
+    button {
+        margin-top: 4px;
     }
 }

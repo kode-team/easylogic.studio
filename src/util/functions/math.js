@@ -161,7 +161,7 @@ export function incircle (a, b, c, d) {
 
 export function initPolygon (polygon, x, y) {
 
-    var A = Vect3.create(x, y)
+    var A = Vect3.create(Math.min(x, y), Math.max(x, y))
 
     var selectedIndex = -1; 
     for(var i = 0, len = polygon.length; i < len; i++ ) {
@@ -244,7 +244,6 @@ export function Deluanay (points = []) {
     for(var i = 0; i < triangle.length; i++) {
         var current = triangle[i]
 
-        console.log(current.x >= n, current.y >= n, current.z >= n)
         if (current.x >= n || current.y >= n || current.z >= n) {
             swap(triangle, i, triangle.length - 1);
             triangle.pop();
@@ -254,11 +253,34 @@ export function Deluanay (points = []) {
     }
 
     return triangle.map(current => {
-        console.log(current.x, current.y, current.z);
         return {
             a: points[current.x], 
             b: points[current.y], 
             c: points[current.z] 
         }
     })
+}
+
+export function generate_sample_points(width, height, xSize =  50, ySize = 50, boxSize = 100, variance = 1, func = () => Math.random()) {
+  var points = [];
+  var minX = -xSize; 
+  var maxX = width + xSize;
+  var minY = -ySize; 
+  var maxY = height + ySize; 
+  for (var x = minX; x < maxX; x += boxSize) {
+    for (var y = minY; y < maxY; y += boxSize) {
+        var tempX = Math.floor(x + (boxSize / 2) * (func() * variance * 2  - variance));
+        var tempY = Math.floor(y + (boxSize / 2) * (func() * variance * 2  - variance));
+        points[points.length] = { x: tempX, y: tempY }
+    }
+  }
+
+  return points;
+}
+
+export function getCenterInTriangle (a, b, c) {
+    return {
+        x: (a.x + b.x + c.x) / 3 ,
+        y: (a.y + b.y + c.y) / 3
+    }
 }
