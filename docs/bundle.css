@@ -1843,7 +1843,7 @@ html, body {
   display: inline-block;
 }
 .csseditor .tab.number-tab > .tab-header > .tab-item label.icon {
-  padding: 8px 10px 2px;
+  padding: 4px 10px 2px;
 }
 .csseditor .tab.number-tab > .tab-header > .tab-item label svg path {
   fill: #ffffff;
@@ -2070,10 +2070,6 @@ html, body {
   padding: 6px 4px;
   cursor: pointer;
   font-weight: bold;
-}
-.csseditor .tab > .tab-header > .tab-item svg {
-  width: 20px;
-  height: 20px;
 }
 .csseditor .tab > .tab-header > .tab-item.small-font {
   font-size: 11px;
@@ -2317,8 +2313,6 @@ html, body {
 }
 .csseditor .tool-menu .items .draw-items .menu-item .icon,
 .csseditor .external-tool-menu .items .draw-items .menu-item .icon {
-  width: 30px;
-  height: 30px;
   display: inline-block;
   border-radius: 3px;
 }
@@ -4159,7 +4153,7 @@ html, body {
   text-align: right;
 }
 .csseditor .project-list .project-item.selected {
-  background-color: #884745;
+  background-color: #435cb5;
   color: white;
 }
 .csseditor .project-list .project-item.selected svg path {
@@ -4200,7 +4194,7 @@ html, body {
   text-align: right;
 }
 .csseditor .artboard-list .artboard-item.selected {
-  background-color: #884745;
+  background-color: #435cb5;
   color: white;
 }
 .csseditor .artboard-list .artboard-item.selected svg path {
@@ -4323,7 +4317,7 @@ html, body {
   fill: #111111;
 }
 .csseditor .layer-list .layer-item.selected {
-  background-color: #884745;
+  background-color: #435cb5;
   color: white;
 }
 .csseditor .layer-list .layer-item.selected svg path {
@@ -5079,7 +5073,7 @@ html, body {
   text-align: right;
 }
 .csseditor .timeline-animation-list .timeline-animation-item.selected {
-  background-color: #884745;
+  background-color: #435cb5;
   color: white;
 }
 .csseditor .timeline-animation-list .timeline-animation-item.selected svg path {
@@ -10236,7 +10230,7 @@ html, body {
   border-bottom: 1px solid #111111;
 }
 .csseditor .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row[data-selected=true] {
-  background-color: #353535;
+  background-color: rgba(67, 92, 181, 0.4);
 }
 .csseditor .timeline-area .timeline-body .timeline-object-area .timeline-object-list .timeline-object .timeline-object-row .current-value {
   vertical-align: middle;
@@ -10903,7 +10897,7 @@ html, body {
   display: inline-block;
 }
 .csseditor[data-theme=light] .tab.number-tab > .tab-header > .tab-item label.icon {
-  padding: 8px 10px 2px;
+  padding: 4px 10px 2px;
 }
 .csseditor[data-theme=light] .tab.number-tab > .tab-header > .tab-item label svg path {
   fill: black;
@@ -11130,10 +11124,6 @@ html, body {
   padding: 6px 4px;
   cursor: pointer;
   font-weight: bold;
-}
-.csseditor[data-theme=light] .tab > .tab-header > .tab-item svg {
-  width: 20px;
-  height: 20px;
 }
 .csseditor[data-theme=light] .tab > .tab-header > .tab-item.small-font {
   font-size: 11px;
@@ -11377,8 +11367,6 @@ html, body {
 }
 .csseditor[data-theme=light] .tool-menu .items .draw-items .menu-item .icon,
 .csseditor[data-theme=light] .external-tool-menu .items .draw-items .menu-item .icon {
-  width: 30px;
-  height: 30px;
   display: inline-block;
   border-radius: 3px;
 }

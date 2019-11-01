@@ -68,7 +68,7 @@ $property-input-border-color: rgb(107, 107, 107);
 // list 
 $list-font-color: white;
 $list-item-font-color: #999;
-$list-item-selected-color: #884745; 
+$list-item-selected-color: #435cb5; 
 $list-item-selected-font-color: white; 
 $list-border-color: #676767;
 $list-background-color: $border-color;
@@ -108,4 +108,4 @@ $timeline-border-color: $border-color;
 $timeline-gauge-background-color: #ee4b66;
 $timeline-offset-line-color: #ee4b66;
 // $timeline-offset-line-color: #497594;
-$timeline-row-selected-color: #353535;
+$timeline-row-selected-color: rgba(#435cb5, 0.4);

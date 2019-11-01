@@ -50,7 +50,7 @@ $tab-horizontal-header-right-width: 60px;
           height: 100%;
           display: inline-block;
           &.icon {
-            padding: 8px 10px 2px;
+            padding: 4px 10px 2px;
           }
 
           svg {
@@ -172,11 +172,6 @@ $tab-horizontal-header-right-width: 60px;
       padding: 6px 4px;
       cursor: pointer;
       font-weight: bold;      
-
-      svg {
-        width: 20px;
-        height: 20px;
-      }
       
       &.small-font {
         font-size: 11px;
