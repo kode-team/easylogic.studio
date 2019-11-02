@@ -1811,7 +1811,7 @@ html, body {
   right: 0px;
   bottom: 0px;
   top: 0px;
-  background-color: #16191e;
+  background-color: #292b35;
   color: #ffffff;
 }
 .csseditor .tab.number-tab .tab-header {
@@ -1868,7 +1868,7 @@ html, body {
   pointer-events: none;
 }
 .csseditor .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"] {
-  background-color: #2b2b2b;
+  background-color: #292b35;
   color: white;
 }
 .csseditor .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"]:before {
@@ -1881,13 +1881,13 @@ html, body {
   background-color: #fc554f;
 }
 .csseditor .tab.number-tab[data-selected-value="1"] .tab-item[data-value="1"] label svg path {
-  stroke: #16191e;
+  stroke: #292b35;
 }
 .csseditor .tab.number-tab[data-selected-value="1"] .tab-content[data-value="1"] {
   display: block;
 }
 .csseditor .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"] {
-  background-color: #2b2b2b;
+  background-color: #292b35;
   color: white;
 }
 .csseditor .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"]:before {
@@ -1900,13 +1900,13 @@ html, body {
   background-color: #fc554f;
 }
 .csseditor .tab.number-tab[data-selected-value="2"] .tab-item[data-value="2"] label svg path {
-  stroke: #16191e;
+  stroke: #292b35;
 }
 .csseditor .tab.number-tab[data-selected-value="2"] .tab-content[data-value="2"] {
   display: block;
 }
 .csseditor .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"] {
-  background-color: #2b2b2b;
+  background-color: #292b35;
   color: white;
 }
 .csseditor .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"]:before {
@@ -1919,13 +1919,13 @@ html, body {
   background-color: #fc554f;
 }
 .csseditor .tab.number-tab[data-selected-value="3"] .tab-item[data-value="3"] label svg path {
-  stroke: #16191e;
+  stroke: #292b35;
 }
 .csseditor .tab.number-tab[data-selected-value="3"] .tab-content[data-value="3"] {
   display: block;
 }
 .csseditor .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"] {
-  background-color: #2b2b2b;
+  background-color: #292b35;
   color: white;
 }
 .csseditor .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"]:before {
@@ -1938,13 +1938,13 @@ html, body {
   background-color: #fc554f;
 }
 .csseditor .tab.number-tab[data-selected-value="4"] .tab-item[data-value="4"] label svg path {
-  stroke: #16191e;
+  stroke: #292b35;
 }
 .csseditor .tab.number-tab[data-selected-value="4"] .tab-content[data-value="4"] {
   display: block;
 }
 .csseditor .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"] {
-  background-color: #2b2b2b;
+  background-color: #292b35;
   color: white;
 }
 .csseditor .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"]:before {
@@ -1957,13 +1957,13 @@ html, body {
   background-color: #fc554f;
 }
 .csseditor .tab.number-tab[data-selected-value="5"] .tab-item[data-value="5"] label svg path {
-  stroke: #16191e;
+  stroke: #292b35;
 }
 .csseditor .tab.number-tab[data-selected-value="5"] .tab-content[data-value="5"] {
   display: block;
 }
 .csseditor .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"] {
-  background-color: #2b2b2b;
+  background-color: #292b35;
   color: white;
 }
 .csseditor .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"]:before {
@@ -1976,13 +1976,13 @@ html, body {
   background-color: #fc554f;
 }
 .csseditor .tab.number-tab[data-selected-value="6"] .tab-item[data-value="6"] label svg path {
-  stroke: #16191e;
+  stroke: #292b35;
 }
 .csseditor .tab.number-tab[data-selected-value="6"] .tab-content[data-value="6"] {
   display: block;
 }
 .csseditor .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"] {
-  background-color: #2b2b2b;
+  background-color: #292b35;
   color: white;
 }
 .csseditor .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"]:before {
@@ -1995,13 +1995,13 @@ html, body {
   background-color: #fc554f;
 }
 .csseditor .tab.number-tab[data-selected-value="7"] .tab-item[data-value="7"] label svg path {
-  stroke: #16191e;
+  stroke: #292b35;
 }
 .csseditor .tab.number-tab[data-selected-value="7"] .tab-content[data-value="7"] {
   display: block;
 }
 .csseditor .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"] {
-  background-color: #2b2b2b;
+  background-color: #292b35;
   color: white;
 }
 .csseditor .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"]:before {
@@ -2014,13 +2014,13 @@ html, body {
   background-color: #fc554f;
 }
 .csseditor .tab.number-tab[data-selected-value="8"] .tab-item[data-value="8"] label svg path {
-  stroke: #16191e;
+  stroke: #292b35;
 }
 .csseditor .tab.number-tab[data-selected-value="8"] .tab-content[data-value="8"] {
   display: block;
 }
 .csseditor .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"] {
-  background-color: #2b2b2b;
+  background-color: #292b35;
   color: white;
 }
 .csseditor .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"]:before {
@@ -2033,7 +2033,7 @@ html, body {
   background-color: #fc554f;
 }
 .csseditor .tab.number-tab[data-selected-value="9"] .tab-item[data-value="9"] label svg path {
-  stroke: #16191e;
+  stroke: #292b35;
 }
 .csseditor .tab.number-tab[data-selected-value="9"] .tab-content[data-value="9"] {
   display: block;
@@ -2075,11 +2075,11 @@ html, body {
   font-size: 11px;
 }
 .csseditor .tab > .tab-header > .tab-item.select-reverse:not(.selected) {
-  background-color: rgba(43, 43, 43, 0.5);
+  background-color: rgba(41, 43, 53, 0.5);
   color: black;
 }
 .csseditor .tab > .tab-header > .tab-item.select-reverse.selected {
-  background-color: #16191e;
+  background-color: #292b35;
 }
 .csseditor .tab > .tab-body {
   position: absolute;
@@ -2176,7 +2176,7 @@ html, body {
   min-width: 60px;
 }
 .csseditor .tab.horizontal > .tab-header > .tab-item.selected {
-  background-color: rgba(43, 43, 43, 0.5);
+  background-color: rgba(41, 43, 53, 0.5);
 }
 .csseditor .tab.horizontal > .tab-body {
   top: 0px;
@@ -9973,7 +9973,7 @@ html, body {
   right: 0px;
   top: 0px;
   bottom: 0px;
-  background-color: #16191e;
+  background-color: #292b35;
   font-size: 12px;
   border-left: 1px solid #111111;
   border-top: 1px solid #111111;

@@ -78,6 +78,8 @@ function makeInterpolate (layer, property, startValue, endValue, editorString) {
     case 'font-weight':
     case 'text-stroke-width':
     case 'RangeEditor':
+    case 'textLength':
+    case 'startOffset':
         return makeInterpolateLength(layer, property, startValue, endValue, property);
     case 'fill-opacity':
     case 'opacity':
@@ -96,7 +98,8 @@ function makeInterpolate (layer, property, startValue, endValue, editorString) {
     case 'fill-rule':
     case 'stroke-linecap':
     case 'stroke-linejoin':
-    case 'SelectEditor':        
+    case 'SelectEditor':       
+    case 'lengthAdjust': 
         return makeInterpolateString(layer, property, startValue, endValue); 
     case 'rotate':
         return makeInterpolateRotate(layer, property, startValue, endValue);               

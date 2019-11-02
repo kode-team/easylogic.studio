@@ -74,11 +74,11 @@ $list-border-color: #676767;
 $list-background-color: $border-color;
 
 // tab 
-$tab-background-color: $background-color; 
+$tab-background-color: #292b35; 
 $tab-header-background-color: $background-color; 
 $tab-header-font-color: $font-color; 
 $tab-font-color: $font-color;
-$tab-selected-color: #2b2b2b; 
+$tab-selected-color: #292b35; 
 $tab-selected-font-color: $selected-font-color;
 $tab-selected-border-color: $border-color;
 $tab-border-color: $border-color;
@@ -103,7 +103,7 @@ $path-background-color: rgba(255, 255, 255, 0.7);
 $path-guide-color: rgba(0, 0, 0, 1);
 
 // timeline 
-$timeline-background-color: lighten($background-color, 5%);
+$timeline-background-color: $background-color;
 $timeline-border-color: $border-color;
 $timeline-gauge-background-color: #ee4b66;
 $timeline-offset-line-color: #ee4b66;
