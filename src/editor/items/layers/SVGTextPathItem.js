@@ -1,7 +1,7 @@
 import PathParser from "../../parse/PathParser";
 import { SVGItem } from "./SVGItem";
 import { OBJECT_TO_PROPERTY } from "../../../util/functions/func";
-import { hasSVGProperty, hasCSSProperty } from "../../util/Resource";
+import { hasSVGProperty, hasCSSProperty, hasSVGPathProperty } from "../../util/Resource";
 import { Length } from "../../unit/Length";
 import Dom from "../../../util/Dom";
 
@@ -87,11 +87,13 @@ export class SVGTextPathItem extends SVGItem {
   toAnimationKeyframes (properties) {
 
     var svgProperties = properties.filter(it => hasSVGProperty(it.property));
+    var svgPathProperties = properties.filter(it => hasSVGPathProperty(it.property));
     var cssProperties = properties.filter(it => hasCSSProperty(it.property));
 
     return [
       { selector: `[data-id="${this.json.id}"]`, properties: cssProperties  },
-      { selector: `[data-id="${this.json.id}"] textPath`, properties: svgProperties }
+      { selector: `[data-id="${this.json.id}"] textPath`, properties: svgProperties },
+      { selector: `[data-id="${this.json.id}"] path`, properties: svgPathProperties }
     ] 
   }  
 

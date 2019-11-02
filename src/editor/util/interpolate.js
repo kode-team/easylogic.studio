@@ -18,6 +18,7 @@ import { makeInterpolateStrokeDashArrray } from "./interpolate-functions/makeInt
 import { makeInterpolatePath } from "./interpolate-functions/svg/makeInterpolatePath";
 import { makeInterpolatePolygon } from "./interpolate-functions/svg/makeInterpolatePolygon";
 import { makeInterpolateOffsetPath } from "./interpolate-functions/makeInterpolateOffsetPath";
+import { makeInterpolateText } from "./interpolate-functions/makeInterpolateText";
 
 const DEFAULT_FUCTION = () => (rate, t) => { } 
 
@@ -54,6 +55,8 @@ function makeInterpolateCustom (property) {
         return makeInterpolatePolygon
     case 'offset-path':
         return makeInterpolateOffsetPath
+    case 'text': 
+        return makeInterpolateText
     }
 }
 

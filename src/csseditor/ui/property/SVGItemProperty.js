@@ -42,7 +42,7 @@ export default class SVGItemProperty extends BaseProperty {
         this.$el.show();
       }
 
-      if (current.is('svg-path')) {
+      if (current.is('svg-path', 'svg-textpath')) {
         this.refs.$path.show();
         this.refs.$totalLength.show();
         this.refs.$polygon.hide();        

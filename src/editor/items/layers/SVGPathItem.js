@@ -1,7 +1,7 @@
 import PathParser from "../../parse/PathParser";
 import { SVGItem } from "./SVGItem";
 import { clone, OBJECT_TO_CLASS, OBJECT_TO_PROPERTY } from "../../../util/functions/func";
-import { hasSVGProperty, hasCSSProperty } from "../../util/Resource";
+import { hasSVGProperty, hasCSSProperty, hasSVGPathProperty } from "../../util/Resource";
 import { Length } from "../../unit/Length";
 import { SVGFill } from "../../svg-property/SVGFill";
 import Dom from "../../../util/Dom";
@@ -85,7 +85,7 @@ export class SVGPathItem extends SVGItem {
 
   toAnimationKeyframes (properties) {
 
-    var svgProperties = properties.filter(it => hasSVGProperty(it.property));
+    var svgProperties = properties.filter(it => hasSVGProperty(it.property) && hasSVGPathProperty(it.property));
     var cssProperties = properties.filter(it => hasCSSProperty(it.property));
 
     return [

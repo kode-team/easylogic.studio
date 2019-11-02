@@ -1,14 +1,3 @@
-
-
-const INTERPOLATE_TYPE = {
-    'ColorViewEditor': 'color',
-    'RangeEditor': 'length',
-    'NumberRangeEditor': 'number',
-    'RotateRangeEditor': 'rotate',
-    'PathEditor': 'path',
-    'TransformEditor': 'transform',
-}
-
 export default class AnipaExport {
     constructor (artboard) {
         this.artboard = artboard 
@@ -45,7 +34,9 @@ export default class AnipaExport {
                 })
 
 
-                animations.push(...item.toAnimationKeyframes(properties)) 
+                animations.push(...item.toAnimationKeyframes(properties).filter(it => {
+                    return it.properties.length
+                })) 
 
             })
 

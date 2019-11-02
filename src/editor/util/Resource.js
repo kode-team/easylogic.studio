@@ -50,11 +50,15 @@ export const blend_list = [
 ].join(',');
 
 const SVG_PROPERTY_LIST = {
-    'd': true,
+    'text': true, 
     'points': true,
     'textLength': true, 
     'startOffset': true,
     'lengthAdjust': true 
+}
+
+const SVG_PATH_PROPERTY_LIST = {
+    'd': true
 }
 
 const CSS_PROPERTY_LIST = {
@@ -119,6 +123,10 @@ const CSS_PROPERTY_LIST = {
 
 export const hasSVGProperty = (property) => {
     return SVG_PROPERTY_LIST[property] || false 
+}
+
+export const hasSVGPathProperty = (property) => {
+    return SVG_PATH_PROPERTY_LIST[property] || false 
 }
 
 export const hasCSSProperty = (property) => {
