@@ -272,27 +272,6 @@ export class Item {
     return newJSON;
   }
 
-  get toDefString() {
-    return '' 
-  }
-
-  get html () {
-    var {elementType, id, name, layers, itemType} = this.json;
-
-    const tagName = elementType || 'div'
-
-    return /*html*/`<${tagName} class="${OBJECT_TO_CLASS({
-      'element-item': true,
-      [itemType]: true 
-    })}" ${OBJECT_TO_PROPERTY({
-      'data-id': id,
-      'data-title': name 
-    })}>
-    ${this.toDefString}
-  ${layers.map(it => it.html).join('\n\t')}
-</${tagName}>`
-  }
-
   resize () {}
 
   copy () {

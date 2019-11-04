@@ -1831,6 +1831,9 @@ html, body {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 }
+.csseditor .tab.number-tab > .tab-header.full {
+  display: flex;
+}
 .csseditor .tab.number-tab > .tab-header > .tab-item {
   text-align: center;
   position: relative;
@@ -10884,6 +10887,9 @@ html, body {
 .csseditor[data-theme=light] .tab.number-tab > .tab-header {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+}
+.csseditor[data-theme=light] .tab.number-tab > .tab-header.full {
+  display: flex;
 }
 .csseditor[data-theme=light] .tab.number-tab > .tab-header > .tab-item {
   text-align: center;

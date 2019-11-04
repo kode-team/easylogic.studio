@@ -4,6 +4,7 @@ import { CLICK } from "../../../util/Event";
 import { editor } from "../../../editor/editor";
 import { CSS_TO_STRING } from "../../../util/functions/func";
 import ExportManager from "../../../editor/ExportManager";
+import Dom from "../../../util/Dom";
 
 export default class ExportWindow extends BaseWindow {
 
@@ -18,7 +19,7 @@ export default class ExportWindow extends BaseWindow {
     getBody() {
         return /*html*/`
         <div class="tab number-tab" data-selected-value="1" ref="$tab">
-            <div class="tab-header" ref="$header">
+            <div class="tab-header full" ref="$header">
                 <div class="tab-item" data-value="1">
                     <label>HTML</label>
                 </div>
@@ -34,7 +35,12 @@ export default class ExportWindow extends BaseWindow {
                 <div class="tab-item" data-value="5">
                     <label>Animation Player</label>
                 </div>                                                                                  
-        
+                <div class="tab-item" data-value="6">
+                    <label>SVG Image</label>
+                </div>     
+                <div class="tab-item" data-value="7">
+                    <label>SVG Image Preview</label>
+                </div>                        
             </div>
             <div class="tab-body" ref="$body">
                 <div class="tab-content" data-value="1">
@@ -51,7 +57,13 @@ export default class ExportWindow extends BaseWindow {
                 </div>
                 <div class="tab-content" data-value="5">
                     <pre ref='$js'></pre>
-                </div>                                       
+                </div>     
+                <div class="tab-content" data-value="6">
+                    <pre ref='$svgimage'></pre>
+                </div>                                                                       
+                <div class="tab-content" data-value="7">
+                    <div ref='$svgimagePreview'></div>
+                </div>                                                       
             </div>
       </div>
         `
@@ -80,6 +92,17 @@ ${project.artboards.map(item => item.html).join('\n')}
         var obj = ExportManager.generate();
 
         this.refs.$js.text(obj.js);
+
+
+        // export svg image 
+        if (editor.selection.currentArtboard) {
+            var svgString = ExportManager.generateSVG(editor.selection.currentArtboard);
+            this.refs.$svgimage.text(svgString);
+            this.refs.$svgimagePreview.html(Dom.createByHTML(svgString));
+        } else  {
+            this.refs.$svgimage.empty();
+            this.refs.$svgimagePreview.empty();
+        }
     }
 
     makeProjectStyle (item) {

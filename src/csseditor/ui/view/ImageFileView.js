@@ -4,8 +4,8 @@ import { CHANGE } from "../../../util/Event";
 export default class ImageFileView extends UIElement {
 
     template() {
-        return `
-        <div class='add-image-button' style='pointer-events:none'>
+        return /*html*/`
+        <div class='add-image-button'>
             <input type='file' accept='image/*' multiple="true" ref='$file' class='embed-file-input'/>
         </div>
         `

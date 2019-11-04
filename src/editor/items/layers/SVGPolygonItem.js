@@ -1,7 +1,7 @@
 import { SVGItem } from "./SVGItem";
 import { Length } from "../../unit/Length";
 import PolygonParser from "../../parse/PolygonParser";
-import { OBJECT_TO_PROPERTY } from "../../../util/functions/func";
+import { OBJECT_TO_PROPERTY, CSS_TO_STRING } from "../../../util/functions/func";
 import Dom from "../../../util/Dom";
 import { Deluanay } from "../../../util/functions/math";
 
@@ -122,5 +122,24 @@ export class SVGPolygonItem extends SVGItem {
         stroke: this.toStrokeValue
       })} />
     </svg>`
+  }
+
+  get svg () {
+    var x = this.screenX.value;
+    var y = this.screenY.value;    
+        
+    return /*html*/`
+    <g transform="translate(${x}, ${y})">
+      ${this.toDefString}
+      <polygon ${OBJECT_TO_PROPERTY({
+        'class': 'svg-polygon-item',
+        points: this.json.points, 
+        filter: this.json.svgfilter,
+        fill: this.toFillValue,
+        stroke: this.toStrokeValue,
+        style: CSS_TO_STRING(this.toSVGCSS())      
+      })} />
+    </g>
+    `
   }
 }

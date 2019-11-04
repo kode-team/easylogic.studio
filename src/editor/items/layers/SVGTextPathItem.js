@@ -1,6 +1,6 @@
 import PathParser from "../../parse/PathParser";
 import { SVGItem } from "./SVGItem";
-import { OBJECT_TO_PROPERTY } from "../../../util/functions/func";
+import { OBJECT_TO_PROPERTY, OBJECT_TO_CLASS, CSS_TO_STRING } from "../../../util/functions/func";
 import { hasSVGProperty, hasCSSProperty, hasSVGPathProperty } from "../../util/Resource";
 import { Length } from "../../unit/Length";
 import Dom from "../../../util/Dom";
@@ -149,10 +149,10 @@ export class SVGTextPathItem extends SVGItem {
     var {id, textLength, lengthAdjust, startOffset} = this.json; 
 
     return /*html*/`
-  <svg class='element-item textpath' data-id="${id}" >
+  <svg class='element-item textpath' data-id="${id}">
     ${this.toDefString}
       <text ${OBJECT_TO_PROPERTY({
-        'class': 'svg-textpath-item',
+        'class': 'svg-textpath-item'
       })} >
         <textPath ${OBJECT_TO_PROPERTY({
           'xlink:href' :`#${this.toPathId}`,
@@ -162,5 +162,27 @@ export class SVGTextPathItem extends SVGItem {
         })} >${this.json.text}</textPath>
     </text>
   </svg>`
+  }
+
+
+  get svg () {
+    var {textLength, lengthAdjust, startOffset} = this.json; 
+    var x = this.screenX.value;
+    var y = this.screenY.value;    
+    return /*html*/`
+    <g transform="translate(${x}, ${y})">    
+      ${this.toDefString}
+      <text ${OBJECT_TO_PROPERTY({
+        'class': 'svg-textpath-item',
+        style: CSS_TO_STRING(this.toSVGCSS())
+      })} >
+        <textPath ${OBJECT_TO_PROPERTY({
+          'xlink:href' :`#${this.toPathId}`,
+          textLength,
+          lengthAdjust,
+          startOffset
+        })} >${this.json.text}</textPath>
+      </text>
+    </g>`
   }
 }

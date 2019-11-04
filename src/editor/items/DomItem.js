@@ -9,7 +9,9 @@ import {
   isNotUndefined,
   CSS_TO_STRING,
   STRING_TO_CSS,
-  clone
+  clone,
+  OBJECT_TO_PROPERTY,
+  OBJECT_TO_CLASS
 } from "../../util/functions/func";
 import { Animation } from "../css-property/Animation";
 import { Transition } from "../css-property/Transition";
@@ -42,7 +44,7 @@ export class DomItem extends GroupItem {
       'text-shadow': '',
       'text-clip': '',      
       'clip-path': '',
-      'color': "",
+      'color': "black",
       'font-size': Length.px(13),
       'font-stretch': '',
       'line-height': '',
@@ -451,6 +453,34 @@ export class DomItem extends GroupItem {
 
   }
 
+  toDefaultSVGCSS(isExport = false) {
+
+    var obj = {
+      overflow: 'visible',
+      fill: this.json['background-color']
+    }
+
+    return {
+      ...obj,
+      ...this.toKeyListCSS(
+        'background-color', 'color',  'opacity', 'mix-blend-mode',
+
+        'transform-origin', 'transform', 'transform-style', 'perspective', 'perspective-origin',
+
+        'font-size', 'font-stretch', 'line-height', 'font-weight', 'font-family', 'font-style',
+        'text-align', 'text-transform', 'text-decoration',
+        'letter-spacing', 'word-spacing', 'text-indent',
+
+        'border-radius',
+
+        'filter', 'backdrop-filter', 'box-shadow', 'text-shadow',
+
+        'offset-path'
+      )
+    }
+
+  }
+
   // toTransformCSS() {
   //   return this.toKeyListCSS('transform')
   // }
@@ -547,6 +577,25 @@ export class DomItem extends GroupItem {
     };
   }
 
+  toSVGCSS(isExport = false) {
+
+    return {
+      ...this.toVariableCSS(),
+      ...this.toDefaultSVGCSS(isExport),
+      ...this.toClipPathCSS(),
+      ...this.toWebkitCSS(), 
+      ...this.toTextClipCSS(),      
+      ...this.toBoxModelCSS(),
+      ...this.toBorderCSS(),
+      ...this.toOutlineCSS(),      
+      // ...this.toTransformCSS(),      
+      // ...this.toBorderImageCSS(),
+      ...this.toBackgroundImageCSS(isExport),
+      ...this.toAnimationCSS(),
+      ...this.toTransitionCSS()
+    };
+  }
+
   toEmbedCSS(isExport = false) {
     return {
       ...this.toVariableCSS(),      
@@ -626,6 +675,112 @@ ${this.toNestedBoundCSS().map(it => {
     return cssString;
   }
 
+
+  get html () {
+    var {elementType, id, name, layers, itemType} = this.json;
+
+    const tagName = elementType || 'div'
+
+    return /*html*/`<${tagName} class="${OBJECT_TO_CLASS({
+      'element-item': true,
+      [itemType]: true 
+    })}" ${OBJECT_TO_PROPERTY({
+      'data-id': id,
+      'data-title': name 
+    })}>
+    ${this.toDefString}
+  ${layers.map(it => it.html).join('\n\t')}
+</${tagName}>`
+  }
+
+  generateSVG (isRoot = false) {
+    if (isRoot) {
+      var width = this.json.width.value;
+      var height = this.json.height.value; 
+      return /*html*/`
+        <svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink= "http://www.w3.org/1999/xlink">
+          ${this.rootSVG}
+        </svg>`
+    }
+
+    return this.svg; 
+  }
+
+  get toSVGStyleString () {
+    // 하위 객체에 대한 style 만 지정 
+    // 그럼 나는 누가 지정하니? 
+    // root 에하면 되지 
+    const cssString = this.layers.map(it => it.generateView(`[data-svg-id='${it.id}']`)).join('\n');
+    return /*html*/`<style>${cssString}</style>`
+  }
+
+  get toSVGBound () {
+    var {width, height} = this.json; 
+
+    return {
+      width: width.value,
+      height: height.value
+    }
+  }
+
+
+  get svg () {
+    var {layers, width, height, elementType, x, y} = this.json;
+    var tagName = elementType || 'div'
+    x = x.value;
+    y = y.value;
+    var css = this.toCSS();
+
+    delete css.left;
+    delete css.top;
+    if (css.position === 'absolute') {
+      delete css.position; 
+    }
+
+    return /*html*/`
+    <g transform="translate(${x}, ${y})">
+    ${this.toDefString}
+      <foreignObject ${OBJECT_TO_PROPERTY({ 
+        width: width.value,
+        height: height.value
+      })}>
+        <div xmlns="http://www.w3.org/1999/xhtml">
+          <${tagName} style="${CSS_TO_STRING(css)}" ></${tagName}>
+        </div>
+      </foreignObject>    
+    </g>
+    ${layers.map(it => it.svg).join('\n\t')}
+`
+  }  
+
+
+  get rootSVG () {
+    var {layers, elementType, width, height} = this.json;
+
+    var tagName = elementType || 'div'
+    var css = this.toCSS();
+
+    delete css.left;
+    delete css.top;
+
+    return /*html*/`
+    
+    <g transform="translate(0, 0)">
+    ${this.toDefString}
+      <foreignObject ${OBJECT_TO_PROPERTY({
+        width: width.value,
+        height: height.value
+      })}>
+        <div xmlns="http://www.w3.org/1999/xhtml">
+          <${tagName} style="${CSS_TO_STRING(css)}" ></${tagName}>
+        </div>
+      </foreignObject>
+    </g>
+    ${layers.map(it => it.svg).join('\n\t')}
+`
+  }  
+
+
   toBound () {
     var obj = {
       x: this.json.x ? this.json.x.clone() : Length.px(0),
@@ -652,7 +807,11 @@ ${this.toNestedBoundCSS().map(it => {
         var $defs = $svg.$('defs');
         $defs.html(this.toDefInnerString)          
       } else {
-        currentElement.prepend(Dom.createByHTML(this.toDefString));
+        var a = Dom.createByHTML(this.toDefString);
+        if (a) {
+          currentElement.prepend(a);
+        }
+
       }
 
     }

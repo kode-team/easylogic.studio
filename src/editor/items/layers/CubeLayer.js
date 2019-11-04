@@ -1,4 +1,4 @@
-import { CSS_TO_STRING, isObject } from "../../../util/functions/func";
+import { CSS_TO_STRING, isObject, OBJECT_TO_PROPERTY } from "../../../util/functions/func";
 import { Component } from "../Component";
 
 const customKeyValue = {
@@ -342,7 +342,7 @@ export class CubeLayer extends Component {
           background-color: ${json['background-color']};
           border: 1px solid ${borderColor};
           ${CSS_TO_STRING(css)}
-        `
+        `.trim()
       },
       {
         selector: '.front', cssText: `
@@ -350,36 +350,36 @@ export class CubeLayer extends Component {
           width: ${width};
           height: ${height};     
           ${json['front.color'] ? `background-color: ${json['front.color']};`: ''}
-          ${json['front.background'] ? `${json['front.background']}`: ''}
+          ${json['front.background'] ? `${json['front.background']};`: ''}
 
-        `
+        `.trim()
       },
       {
         selector: '.back', cssText: `
           transform: rotateY(180deg) translateZ(${halfWidth}px);
           width: ${width};
           height: ${height};            
-          ${json['back.color'] ? `background-color: ${json['back.color']}`: ''}                  
-          ${json['back.background'] ? `${json['back.background']}`: ''}
-        `
+          ${json['back.color'] ? `background-color: ${json['back.color']};`: ''}                  
+          ${json['back.background'] ? `${json['back.background']};`: ''}
+        `.trim()
       },
       {
         selector: '.left', cssText:  `
           transform: rotateY(-90deg) translateZ(${halfWidth}px);
           width: ${width};
           height: ${height};    
-          ${json['left.color'] ? `background-color: ${json['left.color']}`: ''}                          
-          ${json['left.background'] ? `${json['left.background']}`: ''}
-        `
+          ${json['left.color'] ? `background-color: ${json['left.color']};`: ''}                          
+          ${json['left.background'] ? `${json['left.background']};`: ''}
+        `.trim()
       },
       {
         selector: '.right', cssText: `
           transform: rotateY(90deg) translateZ(${halfWidth}px);
           width: ${width};
           height: ${height};      
-          ${json['right.color'] ? `background-color: ${json['right.color']}`: ''}                        
-          ${json['right.background'] ? `${json['right.background']}`: ''}          
-        `
+          ${json['right.color'] ? `background-color: ${json['right.color']};`: ''}                        
+          ${json['right.background'] ? `${json['right.background']};`: ''}          
+        `.trim()
       },
       {
         selector: '.top', cssText: `
@@ -387,9 +387,9 @@ export class CubeLayer extends Component {
           top: ${halfHeight - halfWidth}px;
           width: ${width};
           height: ${width};
-          ${json['top.color'] ? `background-color: ${json['top.color']}`: ''}      
-          ${json['top.background'] ? `${json['top.background']}`: ''}              
-        `
+          ${json['top.color'] ? `background-color: ${json['top.color']};`: ''}      
+          ${json['top.background'] ? `${json['top.background']};`: ''}              
+        `.trim()
       },
       {
         selector: '.bottom', cssText: `
@@ -397,9 +397,9 @@ export class CubeLayer extends Component {
           top: ${halfHeight - halfWidth}px;          
           width: ${width};
           height: ${width};    
-          ${json['bottom.color'] ? `background-color: ${json['bottom.color']}`: ''}
-          ${json['bottom.background'] ? `${json['bottom.background']}`: ''}                          
-        `
+          ${json['bottom.color'] ? `background-color: ${json['bottom.color']};`: ''}
+          ${json['bottom.background'] ? `${json['bottom.background']};`: ''}                          
+        `.trim()
       }
     ]
   }
@@ -418,6 +418,59 @@ export class CubeLayer extends Component {
         <div class='bottom'></div>
       </div>`
   }
+
+
+  get svg () {
+    var {width, height, x, y, src} = this.json;
+    x = x.value;
+    y = y.value;
+    var css = this.toCSS();
+    var nestedCSS = this.toNestedCSS();
+
+    var common = nestedCSS.find(it => it.selector === 'div') || '';
+    var front = nestedCSS.find(it => it.selector === '.front') || '';
+    var back = nestedCSS.find(it => it.selector === '.back') || '';
+    var right = nestedCSS.find(it => it.selector === '.right') || '';
+    var left = nestedCSS.find(it => it.selector === '.left') || '';
+    var top = nestedCSS.find(it => it.selector === '.top') || '';
+    var bottom = nestedCSS.find(it => it.selector === '.bottom') || '';
+
+    common = common && common.cssText.replace(/\n/g, '');
+    front = front && front.cssText.replace(/\n/g, '');
+    back = back && back.cssText.replace(/\n/g, '');
+    right = right && right.cssText.replace(/\n/g, '');
+    left = left && left.cssText.replace(/\n/g, '');
+    top = top && top.cssText.replace(/\n/g, '');
+    bottom = bottom && bottom.cssText.replace(/\n/g, '');
+
+    delete css.left;
+    delete css.top;
+    if (css.position === 'absolute') {
+      delete css.position; 
+    }
+
+    return /*html*/`
+    <g transform="translate(${x}, ${y})">
+    ${this.toDefString}
+      <foreignObject ${OBJECT_TO_PROPERTY({ 
+        width: width.value,
+        height: height.value,
+        overflow: 'visible'
+      })}>
+        <div xmlns="http://www.w3.org/1999/xhtml">
+          <div style="${CSS_TO_STRING(css)}">
+            <div class='front' style="${common};${front}"></div>
+            <div class='back' style="${common};${back}"></div>
+            <div class='left' style="${common};${left}"></div>
+            <div class='right' style="${common};${right}"></div>
+            <div class='top' style="${common};${top}"></div>
+            <div class='bottom' style="${common};${bottom}"></div>
+          </div>
+        </div>
+      </foreignObject>    
+    </g>
+`
+  }    
 
 }
  

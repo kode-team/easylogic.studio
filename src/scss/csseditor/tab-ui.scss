@@ -34,6 +34,10 @@ $tab-horizontal-header-right-width: 60px;
       display: grid;
       grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 
+      &.full {
+        display: flex;
+      }
+
       > .tab-item {
         text-align: center;
         position: relative;

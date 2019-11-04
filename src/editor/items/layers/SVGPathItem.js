@@ -1,6 +1,6 @@
 import PathParser from "../../parse/PathParser";
 import { SVGItem } from "./SVGItem";
-import { clone, OBJECT_TO_CLASS, OBJECT_TO_PROPERTY } from "../../../util/functions/func";
+import { clone, OBJECT_TO_CLASS, OBJECT_TO_PROPERTY, CSS_TO_STRING } from "../../../util/functions/func";
 import { hasSVGProperty, hasCSSProperty, hasSVGPathProperty } from "../../util/Resource";
 import { Length } from "../../unit/Length";
 import { SVGFill } from "../../svg-property/SVGFill";
@@ -118,7 +118,10 @@ export class SVGPathItem extends SVGItem {
     var p = {'motion-based': this.json['motion-based'] }
 
     return /*html*/`
-  <svg class='element-item path ${OBJECT_TO_CLASS(p)}' data-id="${id}" >
+  <svg class='element-item path ${OBJECT_TO_CLASS(p)}'  ${OBJECT_TO_PROPERTY({
+    'motion-based': this.json['motion-based'],
+    "xmlns": "http://www.w3.org/2000/svg"
+  })}  data-id="${id}" >
     ${this.toDefString}
     <path ${OBJECT_TO_PROPERTY({
       'class': 'svg-path-item',
@@ -128,5 +131,24 @@ export class SVGPathItem extends SVGItem {
       stroke: this.toStrokeValue
     })} />
   </svg>`
+  }
+
+
+  get svg () {
+    var x = this.screenX.value;
+    var y = this.screenY.value;
+    return /*html*/`
+      <g transform="translate(${x}, ${y})">
+      ${this.toDefString}
+      <path ${OBJECT_TO_PROPERTY({
+        'class': 'svg-path-item',
+        d: this.json.d, 
+        filter: this.toFilterValue,
+        fill: this.toFillValue,
+        stroke: this.toStrokeValue,
+        style: CSS_TO_STRING(this.toSVGCSS())      
+      })} />
+    </g>
+  `
   }
 }
