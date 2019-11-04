@@ -457,25 +457,17 @@ export class DomItem extends GroupItem {
 
     var obj = {
       overflow: 'visible',
-      fill: this.json['background-color']
     }
 
     return {
       ...obj,
       ...this.toKeyListCSS(
-        'background-color', 'color',  'opacity', 'mix-blend-mode',
 
-        'transform-origin', 'transform', 'transform-style', 'perspective', 'perspective-origin',
+        'transform', 
 
         'font-size', 'font-stretch', 'line-height', 'font-weight', 'font-family', 'font-style',
         'text-align', 'text-transform', 'text-decoration',
-        'letter-spacing', 'word-spacing', 'text-indent',
-
-        'border-radius',
-
-        'filter', 'backdrop-filter', 'box-shadow', 'text-shadow',
-
-        'offset-path'
+        'letter-spacing', 'word-spacing', 'text-indent'
       )
     }
 
@@ -698,37 +690,24 @@ ${this.toNestedBoundCSS().map(it => {
       var width = this.json.width.value;
       var height = this.json.height.value; 
       return /*html*/`
-        <svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink= "http://www.w3.org/1999/xlink">
-          ${this.rootSVG}
-        </svg>`
+<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink= "http://www.w3.org/1999/xlink">
+  ${this.rootSVG}
+</svg>`
     }
 
     return this.svg; 
   }
 
-  get toSVGStyleString () {
-    // 하위 객체에 대한 style 만 지정 
-    // 그럼 나는 누가 지정하니? 
-    // root 에하면 되지 
-    const cssString = this.layers.map(it => it.generateView(`[data-svg-id='${it.id}']`)).join('\n');
-    return /*html*/`<style>${cssString}</style>`
-  }
-
-  get toSVGBound () {
-    var {width, height} = this.json; 
-
-    return {
-      width: width.value,
-      height: height.value
-    }
-  }
-
-
   get svg () {
-    var {layers, width, height, elementType, x, y} = this.json;
-    var tagName = elementType || 'div'
+    var {x, y} = this.json;    
     x = x.value;
-    y = y.value;
+    y = y.value;    
+    return this.toSVG(x, y)
+  }  
+
+  toSVG (x = 0, y = 0) {
+    var {layers, width, height, elementType} = this.json;
+    var tagName = elementType || 'div'
     var css = this.toCSS();
 
     delete css.left;
@@ -750,34 +729,11 @@ ${this.toNestedBoundCSS().map(it => {
       </foreignObject>    
     </g>
     ${layers.map(it => it.svg).join('\n\t')}
-`
-  }  
-
+    `
+  }
 
   get rootSVG () {
-    var {layers, elementType, width, height} = this.json;
-
-    var tagName = elementType || 'div'
-    var css = this.toCSS();
-
-    delete css.left;
-    delete css.top;
-
-    return /*html*/`
-    
-    <g transform="translate(0, 0)">
-    ${this.toDefString}
-      <foreignObject ${OBJECT_TO_PROPERTY({
-        width: width.value,
-        height: height.value
-      })}>
-        <div xmlns="http://www.w3.org/1999/xhtml">
-          <${tagName} style="${CSS_TO_STRING(css)}" ></${tagName}>
-        </div>
-      </foreignObject>
-    </g>
-    ${layers.map(it => it.svg).join('\n\t')}
-`
+    return this.toSVG()
   }  
 
 

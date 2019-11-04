@@ -124,9 +124,14 @@ export class SVGPolygonItem extends SVGItem {
     </svg>`
   }
 
+
   get svg () {
-    var x = this.screenX.value;
-    var y = this.screenY.value;    
+    var x = this.json.x.value;
+    var y = this.json.y.value;
+    return this.toSVG(x, y);
+  }  
+
+  toSVG (x = 0, y = 0) {
         
     return /*html*/`
     <g transform="translate(${x}, ${y})">
@@ -137,6 +142,7 @@ export class SVGPolygonItem extends SVGItem {
         filter: this.json.svgfilter,
         fill: this.toFillValue,
         stroke: this.toStrokeValue,
+        ...this.toSVGAttribute(),        
         style: CSS_TO_STRING(this.toSVGCSS())      
       })} />
     </g>

@@ -59,6 +59,8 @@ export default class Inspector extends UIElement {
 
                 <!-- <OutlineProperty /> -->
                 <!-- <BackgroundClipProperty /> -->  
+
+                <ExportProperty />
                 
                 <div class='empty'></div>
               </div>

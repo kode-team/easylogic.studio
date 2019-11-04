@@ -63,11 +63,14 @@ export class ImageLayer extends Layer {
     return /*html*/`<img class='element-item ${itemType}' data-id="${id}" src='${src}' />`
   }
 
-
   get svg () {
-    var {width, height, x, y, src} = this.json;
-    x = x.value;
-    y = y.value;
+    var x = this.json.x.value;
+    var y = this.json.y.value;
+    return this.toSVG(x, y);
+  }
+
+  toSVG (x, y) {
+    var {width, height, src} = this.json;
     var css = this.toCSS();
 
     delete css.left;

@@ -49,10 +49,15 @@ export class TextLayer extends Layer {
     return /*html*/`<p class='element-item ${itemType}' contenteditable="true" data-id="${id}">${content}</p>`
   }
 
+
   get svg () {
-    var {width, height, content, x, y} = this.json;
-    x = x.value;
-    y = y.value;
+    var x = this.json.x.value;
+    var y = this.json.y.value;
+    return this.toSVG(x, y);
+  }  
+
+  toSVG(x, y) {
+    var {width, height, content} = this.json;
     var css = this.toCSS();
 
     delete css.left;

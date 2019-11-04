@@ -741,13 +741,17 @@ export default class Dom {
     var ctx = this.context();
     var scale = window.devicePixelRatio || 1;
 
-    this.px("width", width);
-    this.px("height", height);
+    this.px("width", +width);
+    this.px("height", +height);
 
     this.el.width = width * scale;
     this.el.height = height * scale;
 
     ctx.scale(scale, scale);
+  }
+
+  toDataURL (type = 'image/png', quality = 1) {
+    return this.el.toDataURL(type, quality)
   }
 
   clear() {
@@ -757,6 +761,12 @@ export default class Dom {
   update(callback) {
     this.clear();
     callback.call(this, this);
+  }
+
+  drawImage (img, dx = 0, dy = 0) {
+    var ctx = this.context()
+    var scale = window.devicePixelRatio || 1;    
+    ctx.drawImage(img, dx, dy, img.width, img.height, 0, 0, this.el.width / scale, this.el.height / scale);
   }
 
   drawOption(option = {}) {

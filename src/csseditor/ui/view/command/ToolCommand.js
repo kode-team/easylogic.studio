@@ -12,6 +12,8 @@ import { SVGPathItem } from "../../../../editor/items/layers/SVGPathItem";
 import { SVGPolygonItem } from "../../../../editor/items/layers/SVGPolygonItem";
 import { saveResource, loadResource } from "../../../../editor/util/Resource";
 import { isFunction } from "../../../../util/functions/func";
+import ExportManager from "../../../../editor/ExportManager";
+import Dom from "../../../../util/Dom";
 
 const ItemClassList = {
     'project': Project,
@@ -40,14 +42,54 @@ export default class ToolCommand extends UIElement {
         this.emit('refreshSelectionTool')       
     }
 
+    [COMMAND('download.file')] (datauri, filename = 'easylogic.json') {
+
+        var a = document.createElement('a');
+        a.href = datauri; 
+        a.download = filename 
+        a.click();
+        
+        
+    }
+
     [COMMAND('download.json')] (filename) {
         var json = JSON.stringify(editor.projects)
         var datauri = 'data:application/json;base64,' + window.btoa(json);
 
-        var a = document.createElement('a');
-        a.href = datauri; 
-        a.download = filename || 'easylogic.json'
-        a.click();
+        this.trigger('download.file', datauri, filename || 'easylogic.json')
+    }
+
+    [COMMAND('download.to.svg')] () {
+        var item = editor.selection.current || editor.selection.currentArtboard;
+
+        var svgString = ExportManager.generateSVG(item).trim();
+        var datauri = 'data:image/svg+xml;base64,' + window.btoa(svgString);
+        var filename = item.id;
+
+        this.trigger('download.file', datauri, filename)
+    }
+
+    [COMMAND('create.image.png')] (img, callback, imageType = 'image/png') {
+        var canvas = Dom.create('canvas');
+        var {width, height} = img; 
+        canvas.resize({ width, height });
+        canvas.drawImage(img)
+
+        callback && callback (canvas.toDataURL(imageType))
+    }
+
+    [COMMAND('download.to.png')] () {
+        var item = editor.selection.current || editor.selection.currentArtboard;
+
+        var svgString = ExportManager.generateSVG(item).trim();
+        var datauri = 'data:image/svg+xml;base64,' + window.btoa(svgString);
+        var filename = item.id;
+
+        this.trigger('load.original.image', {local: datauri}, (info, img) => {
+            this.trigger('create.image.png', img, (pngDataUri) => {
+                this.trigger('download.file', pngDataUri, filename)
+            }, 'image/png')
+        })
     }
 
     [COMMAND('save.json')] () {
@@ -163,7 +205,7 @@ export default class ToolCommand extends UIElement {
                 height: Length.px(img.naturalHeight)
             }
 
-            callback && callback(info);
+            callback && callback(info, img);
         }
         img.src = obj.local; 
     }

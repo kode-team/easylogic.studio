@@ -166,14 +166,18 @@ export class SVGTextPathItem extends SVGItem {
 
 
   get svg () {
+    var x = this.json.x.value;
+    var y = this.json.y.value;
+    return this.toSVG(x, y);
+  }
+  toSVG (x = 0, y = 0) {
     var {textLength, lengthAdjust, startOffset} = this.json; 
-    var x = this.screenX.value;
-    var y = this.screenY.value;    
     return /*html*/`
     <g transform="translate(${x}, ${y})">    
       ${this.toDefString}
       <text ${OBJECT_TO_PROPERTY({
         'class': 'svg-textpath-item',
+        ...this.toSVGAttribute(),        
         style: CSS_TO_STRING(this.toSVGCSS())
       })} >
         <textPath ${OBJECT_TO_PROPERTY({

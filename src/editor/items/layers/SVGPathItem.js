@@ -135,8 +135,12 @@ export class SVGPathItem extends SVGItem {
 
 
   get svg () {
-    var x = this.screenX.value;
-    var y = this.screenY.value;
+    var x = this.json.x.value;
+    var y = this.json.y.value;
+    return this.toSVG(x, y);
+  }
+
+  toSVG(x = 0, y = 0) {
     return /*html*/`
       <g transform="translate(${x}, ${y})">
       ${this.toDefString}
@@ -146,6 +150,7 @@ export class SVGPathItem extends SVGItem {
         filter: this.toFilterValue,
         fill: this.toFillValue,
         stroke: this.toStrokeValue,
+        ...this.toSVGAttribute(),
         style: CSS_TO_STRING(this.toSVGCSS())      
       })} />
     </g>

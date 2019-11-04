@@ -52,10 +52,12 @@ import ProjectInformationProperty from "./ProjectInformationProperty";
 import PathDataProperty from "./PathDataProperty";
 import PolygonDataProperty from "./PolygonDataProperty";
 import SVGTextProperty from "./SVGTextProperty";
+import ExportProperty from "./ExportProperty";
 
 
 
 export default {  
+  ExportProperty,
   SVGTextProperty,
   PolygonDataProperty,
   PathDataProperty,

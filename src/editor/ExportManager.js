@@ -67,7 +67,7 @@ ${this.makeSvg(project)}
   },
 
   generateSVG (rootItem) {
-    return rootItem.generateSVG(true);
+    return replaceLocalUrltoRealUrl(rootItem.generateSVG(true));
   }
 
 }

@@ -5148,6 +5148,29 @@ html, body {
 .csseditor .path-data-property .property-body > div {
   padding: 10px 0px;
 }
+.csseditor .export-item {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  grid-column-gap: 2px;
+  padding: 10px 6px;
+  font-size: 12px;
+}
+.csseditor .export-item label {
+  vertical-align: middle;
+}
+.csseditor .export-item button {
+  width: 100%;
+  text-align: left;
+  background-color: transparent;
+  background-image: none;
+  border: 0px;
+  box-shadow: none;
+  vertical-align: middle;
+}
+.csseditor .export-item button svg {
+  width: 16px;
+  vertical-align: middle;
+}
 .csseditor .cubic-bezier-editor {
   width: 228px;
   height: 200px;
@@ -14204,6 +14227,29 @@ html, body {
 }
 .csseditor[data-theme=light] .path-data-property .property-body > div {
   padding: 10px 0px;
+}
+.csseditor[data-theme=light] .export-item {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  grid-column-gap: 2px;
+  padding: 10px 6px;
+  font-size: 12px;
+}
+.csseditor[data-theme=light] .export-item label {
+  vertical-align: middle;
+}
+.csseditor[data-theme=light] .export-item button {
+  width: 100%;
+  text-align: left;
+  background-color: transparent;
+  background-image: none;
+  border: 0px;
+  box-shadow: none;
+  vertical-align: middle;
+}
+.csseditor[data-theme=light] .export-item button svg {
+  width: 16px;
+  vertical-align: middle;
 }
 .csseditor[data-theme=light] .cubic-bezier-editor {
   width: 228px;
