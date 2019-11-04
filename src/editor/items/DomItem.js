@@ -727,8 +727,9 @@ ${this.toNestedBoundCSS().map(it => {
           <${tagName} style="${CSS_TO_STRING(css)}" ></${tagName}>
         </div>
       </foreignObject>    
+      ${layers.map(it => it.svg).join('\n\t')}      
     </g>
-    ${layers.map(it => it.svg).join('\n\t')}
+
     `
   }
 
