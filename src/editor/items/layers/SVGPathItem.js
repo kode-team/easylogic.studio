@@ -24,6 +24,7 @@ export class SVGPathItem extends SVGItem {
  
 
   updatePathItem (obj) {
+
     this.json.d = obj.d; 
     this.json.totalLength = obj.totalLength;
     this.json.path = new PathParser(obj.d);
@@ -46,11 +47,19 @@ export class SVGPathItem extends SVGItem {
   setCache () {
     this.rect = this.clone();
     this.cachePath = this.json.path.clone()
+
   }
 
   recover () {
-    var sx = this.json.width.value / this.rect.width.value 
-    var sy = this.json.height.value / this.rect.height.value 
+
+    var baseWidth = this.rect.width.value
+    if (baseWidth === 0) baseWidth = 1; 
+
+    var baseHeight = this.rect.height.value
+    if (baseHeight === 0) baseHeight = 1;     
+
+    var sx = this.json.width.value / baseWidth 
+    var sy = this.json.height.value / baseHeight
 
     this.scale(sx, sy);
   }

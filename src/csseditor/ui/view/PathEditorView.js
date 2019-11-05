@@ -194,6 +194,7 @@ export default class PathEditorView extends PathTransformEditor {
                     <div class='transform-tool-item' data-position='to bottom left'></div>  
                 </div>
             </div>
+            <div class='segment-box' ref='$segmentBox'></div>
         </div>`
     }
 
@@ -287,6 +288,7 @@ export default class PathEditorView extends PathTransformEditor {
             var minY = item.screenY.value / this.scale 
         }
 
+
         var { d } = this.pathGenerator.toPath(
             minX, 
             minY, 
@@ -299,10 +301,10 @@ export default class PathEditorView extends PathTransformEditor {
             d: parser.toString(), 
             totalLength: this.totalPathLength, 
             rect: {
-                x: rect.x/this.scale,
-                y: rect.y/this.scale,
-                width: rect.width / this.scale,     // scale 이전의 크기 계산 
-                height: rect.height / this.scale    // scale 이전의 실제 크기 계산 
+                x: rect.x === 0? 0 : rect.x/this.scale,
+                y: rect.y === 0? 0 : rect.y/this.scale,
+                width: rect.width === 0? 0 : rect.width / this.scale,     // scale 이전의 크기 계산 
+                height: rect.height === 0? 0 : rect.height / this.scale    // scale 이전의 실제 크기 계산 
             }
         })
 
@@ -411,6 +413,7 @@ export default class PathEditorView extends PathTransformEditor {
             this.state.hasTransform = false;        
         }
 
+        this.pathGenerator.initializeSelect();
         this.renderPath()
 
     }
@@ -541,19 +544,21 @@ export default class PathEditorView extends PathTransformEditor {
             x: e.xy.x - this.state.rect.x, 
             y: e.xy.y - this.state.rect.y
         }; 
+        this.state.isOnCanvas = false; 
 
 
         var $target = Dom.create(e.target);
 
         if ($target.hasClass('svg-editor-canvas') && !isDrawMode) {
-            this.changeMode('modify');
-            this.trigger('hidePathEditor')
-            return false; 
-        }
+            this.state.isOnCanvas = true; 
+            // return false; 
+        } else {
 
-        this.state.isSegment = $target.attr('data-segment') === 'true';
-        this.state.isFirstSegment = this.state.isSegment && $target.attr('data-is-first') === 'true';
-        
+            this.pathGenerator.reselect()
+            this.state.isSegment = $target.attr('data-segment') === 'true';
+            this.state.isFirstSegment = this.state.isSegment && $target.attr('data-is-first') === 'true';
+            
+        }
 
         if (isDrawMode) {
 
@@ -571,19 +576,65 @@ export default class PathEditorView extends PathTransformEditor {
 
 
         } else {
-            if (this.state.isSegment) {
+            if (this.isOnCanvas) {
+                this.renderSelectBox(this.state.dragXY);
+            } else if (this.state.isSegment) {
                 this.changeMode('segment-move');
                 var [index, segmentKey] = $target.attrs('data-index', 'data-segment-point')
                 this.pathGenerator.setCachePoint(+index, segmentKey);
+
+                this.pathGenerator.selectKeyIndex(segmentKey, index)
             }
         }
 
     }
 
+    hideSelectBox() {
+        this.refs.$segmentBox.css({
+            left: Length.px(-100000)
+        })
+    }
+
+    renderSelectBox (startXY = null, dx = 0, dy = 0) {
+
+        var obj = {
+            left: Length.px(startXY.x + (dx < 0 ? dx : 0)),
+            top: Length.px(startXY.y + (dy < 0 ? dy : 0)),
+            width: Length.px(Math.abs(dx)),
+            height: Length.px(Math.abs(dy))
+        }        
+
+        this.refs.$segmentBox.css(obj)
+
+
+    }
+
+    getSelectBox() {
+
+        var [x, y, width, height ] = this.refs.$segmentBox
+                .styles('left', 'top', 'width', 'height')
+                .map(it => Length.parse(it))
+
+        var rect = {
+            x, 
+            y, 
+            width, 
+            height
+        }
+
+        rect.x2 = Length.px(rect.x.value + rect.width.value);
+        rect.y2 = Length.px(rect.y.value + rect.height.value);
+
+        return rect; 
+    }
+
     move (dx, dy) {
 
+        if (this.state.isOnCanvas) {
+            // 드래그 상자 만들기 
+            this.renderSelectBox(this.state.dragXY, dx, dy);
 
-        if (this.isMode('segment-move')) {
+        } else if (this.isMode('segment-move')) {
             var e = editor.config.get('bodyEvent')
             this.pathGenerator.move(dx, dy, e);
 
@@ -601,7 +652,21 @@ export default class PathEditorView extends PathTransformEditor {
 
     end (dx, dy) {
 
-        if (this.isMode('modify')) {
+        if (this.state.isOnCanvas) {
+            if (dx === 0 &&  dy === 0) {    // 아무것도 움직인게 없으면 편집 종료 
+                this.changeMode('modify');
+                this.trigger('hidePathEditor')
+            } else {
+                // 움직였으면 drag 상자를 기준으로 좌표를 검색해서 선택한다. 
+                // this.renderSelectBox(this.state.dragXY, dx, dy);
+                this.changeMode('segment-move');
+                this.pathGenerator.selectInBox(this.getSelectBox())
+                this.renderPath()
+                // 여기에 무엇을 할까? 
+                this.hideSelectBox();
+            }
+
+        } else if (this.isMode('modify')) {
             // NOOP 
 
         } else if (this.isMode('segment-move')) {

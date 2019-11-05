@@ -135,12 +135,21 @@ function calculateRelativePosition (minX, minY, segment, scale = 1) {
         var str = values.map(v => {
             var tx = (v.x - minX) === 0 ? 0 : (v.x - minX) / scale; 
             var ty = (v.y - minY) === 0 ? 0 : (v.y - minY) / scale; 
-
             return `${tx} ${ty}`
         }).join(' ')
 
         return `${command} ${str}`
     }
+}
+
+function checkInArea (area, point) {
+
+    if (area.x2.value < point.x) { return false; }
+    if (area.y2.value < point.y) { return false; }
+    if (area.x.value > point.x) { return false; }
+    if (area.y.value > point.y) { return false; }
+
+    return true;
 }
 
 
@@ -152,7 +161,9 @@ export default class PathGenerator {
         this.pathStringManager = new PathStringManager();
         this.guideLineManager = new PathStringManager();
         this.segmentManager = new SegmentManager();
+
         this.initialize()
+        this.initializeSelect();
     }
 
     initialize () {
@@ -160,6 +171,12 @@ export default class PathGenerator {
         this.guideLineManager.reset();
         this.segmentManager.reset();
         this.pathStringManager.reset();
+ 
+    }
+
+    initializeSelect () {
+        this.selectedPointKeys = {}
+        this.selectedPointList = [];               
     }
 
     get state () {
@@ -168,6 +185,56 @@ export default class PathGenerator {
 
     get clonePoints() {
         return [...this.state.points]
+    }
+
+    selectInBox (box) {
+        var list = [] 
+        var target = ['startPoint', 'endPoint', 'reversePoint']
+        this.state.points.forEach((point, index) => {
+
+            target.forEach(key => {
+                if (checkInArea(box, point[key])) {
+                    var p = point[key]
+                    list.push({ x: p.x, y: p.y,  key, index})
+                }
+            })
+
+        })
+
+        this.select(...list);
+    }
+
+    select (...list) {
+        this.selectedPointKeys = {}
+        this.selectedPointList = list;
+        list.forEach(it => {
+            var key = `${it.key}_${it.index}`
+            this.selectedPointKeys[key] = true;
+        }) 
+    }
+
+    selectKeyIndex (key, index) {
+
+        if (this.state.points[index]) {
+            var point = this.state.points[index][key];
+            if (point && !this.isSelectedSegment(key, index)) {
+                this.select({x: point.x, y: point.y, key, index})
+            }
+        }
+
+    }
+
+    reselect () {
+        this.selectedPointList.forEach(it => {
+            var point = this.state.points[it.index][it.key];
+            it.x = point.x;
+            it.y = point.y;
+        });
+    }
+
+    isSelectedSegment (segment, index) {
+        var key = `${segment}_${index}`
+        return this.selectedPointKeys[key]
     }
 
     applyMatrix (p, ...mat) {
@@ -583,6 +650,19 @@ export default class PathGenerator {
         to.reversePoint =  clone(from.reversePoint)
     }
 
+    moveSelectedSegment (dx, dy) {
+
+        // 선택된 포인터를 옮길 때 
+        // curve 에 연결된 endPoint와 reversePoint 를 같이 책임 질 것인가? 
+
+        this.selectedPointList.forEach(it => {
+            var target = this.state.points[it.index][it.key]
+
+            target.x = it.x + dx; 
+            target.y = it.y + dy; 
+        })
+    }
+
     move (dx, dy, e) {
         var state = this.state;
         var { isCurveSegment, segmentKey, connectedPoint} = state 
@@ -591,7 +671,10 @@ export default class PathGenerator {
     
         this.snapPointList = snapPointList || []
 
-        if (isCurveSegment) {
+        if (this.selectedPointList.length > 1) {
+            // 여러개가 동시에 선택된 상태에서는 
+            this.moveSelectedSegment(dx, dy);
+        } else if (isCurveSegment) {
             if (e.shiftKey) {   
                 // 상대편 길이 동일하게 curve 움직이기 
                 this.moveSegment(segmentKey, dx, dy);
@@ -812,7 +895,7 @@ export default class PathGenerator {
 
         if (current.curve === false) {
             this.segmentManager
-                .addPoint({}, current.startPoint, index, 'startPoint', current.selected)
+                .addPoint({}, current.startPoint, index, 'startPoint', this.isSelectedSegment('startPoint', index))
 
             if (!current.startPoint.isLast) {
                 this.segmentManager.addText(current.startPoint, index+1);
@@ -821,9 +904,9 @@ export default class PathGenerator {
 
         } else {      
             this.segmentManager
-                .addPoint({}, current.startPoint, index, 'startPoint', current.selected)                        
+                .addPoint({}, current.startPoint, index, 'startPoint', this.isSelectedSegment('startPoint', index))
                 .addGuideLine(current.startPoint, current.endPoint)
-                .addCurvePoint(current.endPoint, index, 'endPoint')
+                .addCurvePoint(current.endPoint, index, 'endPoint', this.isSelectedSegment('endPoint', index))
         }
 
 
@@ -834,7 +917,7 @@ export default class PathGenerator {
         if (current.curve === false) { 
             // 꼭지점
             if (prevPoint.curve === false) {
-                mng.addPoint({}, current.startPoint, index, 'startPoint', current.selected)   
+                mng.addPoint({}, current.startPoint, index, 'startPoint', this.isSelectedSegment('startPoint', index))   
 
                 if (!current.startPoint.isLast) {
                     mng.addText(current.startPoint, index+1);
@@ -843,8 +926,8 @@ export default class PathGenerator {
 
                 mng
                 .addGuideLine(prevPoint.startPoint, prevPoint.endPoint)
-                .addCurvePoint(current.startPoint, index, 'startPoint', current.selected)
-                .addCurvePoint(prevPoint.endPoint, prevPoint.index, 'endPoint');
+                .addCurvePoint(current.startPoint, index, 'startPoint', this.isSelectedSegment('startPoint', index))
+                .addCurvePoint(prevPoint.endPoint, prevPoint.index, 'endPoint', this.isSelectedSegment('endPoint', index));
 
                 if (!current.startPoint.isLast) {
                     mng.addText(current.startPoint, index+1);
@@ -857,7 +940,7 @@ export default class PathGenerator {
             if (prevPoint.curve === false) { 
 
                 if (Point.isEqual(current.reversePoint, current.startPoint)) {
-                    mng.addPoint({},current.startPoint, index, 'startPoint', current.selected)
+                    mng.addPoint({},current.startPoint, index, 'startPoint', this.isSelectedSegment('startPoint', index))
 
                     if (!current.startPoint.isLast) {
                         mng.addText(current.startPoint, index+1);
@@ -865,8 +948,8 @@ export default class PathGenerator {
                 } else {
                     mng
                     .addGuideLine(current.startPoint, current.reversePoint)
-                    .addCurvePoint(current.startPoint, index, 'startPoint', current.selected)
-                    .addCurvePoint(current.reversePoint, index, 'reversePoint');     
+                    .addCurvePoint(current.startPoint, index, 'startPoint', this.isSelectedSegment('startPoint', index))
+                    .addCurvePoint(current.reversePoint, index, 'reversePoint', this.isSelectedSegment('reversePoint', index));     
 
                     if (!current.startPoint.isLast) {
                         mng.addText(current.startPoint, index+1);
@@ -880,15 +963,15 @@ export default class PathGenerator {
                     mng
                     .addGuideLine(prevPoint.startPoint, prevPoint.endPoint)
                     .addGuideLine(current.startPoint, current.reversePoint)
-                    .addCurvePoint(prevPoint.endPoint, prevPoint.index, 'endPoint')
-                    .addCurvePoint(current.reversePoint, index, 'reversePoint');
+                    .addCurvePoint(prevPoint.endPoint, prevPoint.index, 'endPoint', this.isSelectedSegment('endPoint', prevPoint.index))
+                    .addCurvePoint(current.reversePoint, index, 'reversePoint', this.isSelectedSegment('reversePoint', index));
                 } else {
                     mng
                     .addGuideLine(prevPoint.startPoint, prevPoint.endPoint)
                     .addGuideLine(current.startPoint, current.reversePoint)
-                    .addCurvePoint(current.startPoint, index, 'startPoint', current.selected)
-                    .addCurvePoint(prevPoint.endPoint, prevPoint.index, 'endPoint')                        
-                    .addCurvePoint(current.reversePoint, index, 'reversePoint');
+                    .addCurvePoint(current.startPoint, index, 'startPoint', this.isSelectedSegment('startPoint', index))
+                    .addCurvePoint(prevPoint.endPoint, prevPoint.index, 'endPoint', this.isSelectedSegment('endPoint', prevPoint.index))                        
+                    .addCurvePoint(current.reversePoint, index, 'reversePoint', this.isSelectedSegment('reversePoint', index));
 
                     if (!current.startPoint.isLast) {
                         mng.addText(current.startPoint, index+1);

@@ -718,7 +718,7 @@ ${this.toNestedBoundCSS().map(it => {
 
     return /*html*/`
     <g transform="translate(${x}, ${y})">
-    ${this.toDefString}
+      ${this.toDefString}
       <foreignObject ${OBJECT_TO_PROPERTY({ 
         width: width.value,
         height: height.value
@@ -729,7 +729,6 @@ ${this.toNestedBoundCSS().map(it => {
       </foreignObject>    
       ${layers.map(it => it.svg).join('\n\t')}      
     </g>
-
     `
   }
 

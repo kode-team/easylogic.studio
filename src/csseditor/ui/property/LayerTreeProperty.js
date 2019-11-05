@@ -19,13 +19,13 @@ export default class LayerTreeProperty extends BaseProperty {
   }
 
   getTools() {
-    return `
+    return /*html*/`
       <button type='button' ref='$add' title="Add a layer">${icon.add}</button>
     `
   }
 
   getBody() {
-    return `
+    return /*html*/`
       <div class="layer-list" ref="$layerList"></div>
     `;
   }
@@ -45,8 +45,8 @@ export default class LayerTreeProperty extends BaseProperty {
       return icon.cube;
     case 'svg-path': 
     case 'svg-polygon': 
-      var rate = (24/item.width.value);    
-      var strokeWidth = rate > 1 ? 1: 1/rate;       
+      var rate = item.width.value === 0 ? 0 : (24/item.width.value);    
+      var strokeWidth = rate > 1 ? 1: 1/(rate === 0 ? 1 : rate);       
 
       switch (item.itemType) {
       case 'svg-path': 

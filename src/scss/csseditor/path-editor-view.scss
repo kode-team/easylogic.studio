@@ -8,6 +8,17 @@
     cursor: crosshair;
     background-color: transparent;
 
+
+    .segment-box {
+        pointer-events:none;
+        position: absolute;
+        border:0.5px solid rgba(62, 168, 255, 0.9);
+        background-color:rgba(107, 188, 255, 0.5);
+        box-sizing:border-box;
+      
+        left:-10000px;
+    }    
+
     .path-container {
         position: absolute;
         left: 0px;
@@ -191,12 +202,12 @@
 
         circle {
             fill: white;
-            stroke: blue; 
+            stroke: black; 
             stroke-width: 1;
             cursor: move;
 
             &.curve {
-                stroke: red; 
+                stroke: black; 
             }
 
             &[data-is-first="true"] {
@@ -218,10 +229,7 @@
             }       
             
             &[data-selected='true'] {
-                r: 6;
-                stroke-width: 2;
-                stroke: black;
-                opacity: 0.2;
+                fill: rgba(0, 0, 0, 1);
             }
             
         }
@@ -235,22 +243,17 @@
 
         rect {
             &.segment {
-                fill: rgba(0, 0, 0, 1);
-                stroke: white;
+                stroke: rgba(0, 0, 0, 1);
+                fill: white;
                 stroke-width: 1; 
                 width: 10px;
                 height: 10px;
                 cursor: pointer;
 
                 &[data-selected='true'] {
-                    // stroke-width: 2;
-                    // stroke: rgba(0, 0, 0, 0);
-                    fill: $selected-color;
+                    fill: rgba(0, 0, 0, 1);
                 }
-
             }
-
-
         }
 
         path {

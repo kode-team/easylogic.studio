@@ -9683,6 +9683,14 @@ html, body {
   cursor: crosshair;
   background-color: transparent;
 }
+.csseditor .path-editor-view .segment-box {
+  pointer-events: none;
+  position: absolute;
+  border: 0.5px solid rgba(62, 168, 255, 0.9);
+  background-color: rgba(107, 188, 255, 0.5);
+  box-sizing: border-box;
+  left: -10000px;
+}
 .csseditor .path-editor-view .path-container {
   position: absolute;
   left: 0px;
@@ -9808,12 +9816,12 @@ html, body {
 }
 .csseditor .path-editor-view svg circle {
   fill: white;
-  stroke: blue;
+  stroke: black;
   stroke-width: 1;
   cursor: move;
 }
 .csseditor .path-editor-view svg circle.curve {
-  stroke: red;
+  stroke: black;
 }
 .csseditor .path-editor-view svg circle[data-is-first=true] {
   stroke: #fc554f;
@@ -9828,10 +9836,7 @@ html, body {
   z-index: 1;
 }
 .csseditor .path-editor-view svg circle[data-selected=true] {
-  r: 6;
-  stroke-width: 2;
-  stroke: black;
-  opacity: 0.2;
+  fill: black;
 }
 .csseditor .path-editor-view svg .svg-canvas {
   fill: transparent;
@@ -9840,15 +9845,15 @@ html, body {
   display: none;
 }
 .csseditor .path-editor-view svg rect.segment {
-  fill: black;
-  stroke: white;
+  stroke: black;
+  fill: white;
   stroke-width: 1;
   width: 10px;
   height: 10px;
   cursor: pointer;
 }
 .csseditor .path-editor-view svg rect.segment[data-selected=true] {
-  fill: #fc554f;
+  fill: black;
 }
 .csseditor .path-editor-view svg path.guide {
   fill: transparent;
@@ -18763,6 +18768,14 @@ html, body {
   cursor: crosshair;
   background-color: transparent;
 }
+.csseditor[data-theme=light] .path-editor-view .segment-box {
+  pointer-events: none;
+  position: absolute;
+  border: 0.5px solid rgba(62, 168, 255, 0.9);
+  background-color: rgba(107, 188, 255, 0.5);
+  box-sizing: border-box;
+  left: -10000px;
+}
 .csseditor[data-theme=light] .path-editor-view .path-container {
   position: absolute;
   left: 0px;
@@ -18888,12 +18901,12 @@ html, body {
 }
 .csseditor[data-theme=light] .path-editor-view svg circle {
   fill: white;
-  stroke: blue;
+  stroke: black;
   stroke-width: 1;
   cursor: move;
 }
 .csseditor[data-theme=light] .path-editor-view svg circle.curve {
-  stroke: red;
+  stroke: black;
 }
 .csseditor[data-theme=light] .path-editor-view svg circle[data-is-first=true] {
   stroke: #fc554f;
@@ -18908,10 +18921,7 @@ html, body {
   z-index: 1;
 }
 .csseditor[data-theme=light] .path-editor-view svg circle[data-selected=true] {
-  r: 6;
-  stroke-width: 2;
-  stroke: black;
-  opacity: 0.2;
+  fill: black;
 }
 .csseditor[data-theme=light] .path-editor-view svg .svg-canvas {
   fill: transparent;
@@ -18920,15 +18930,15 @@ html, body {
   display: none;
 }
 .csseditor[data-theme=light] .path-editor-view svg rect.segment {
-  fill: black;
-  stroke: white;
+  stroke: black;
+  fill: white;
   stroke-width: 1;
   width: 10px;
   height: 10px;
   cursor: pointer;
 }
 .csseditor[data-theme=light] .path-editor-view svg rect.segment[data-selected=true] {
-  fill: #fc554f;
+  fill: black;
 }
 .csseditor[data-theme=light] .path-editor-view svg path.guide {
   fill: transparent;
