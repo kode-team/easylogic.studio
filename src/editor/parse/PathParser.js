@@ -514,7 +514,11 @@ export default class PathParser {
 
     skewYTo (angle) {
         return this.joinPath(this._loop(matrix.skewY(angle), true))
-    }        
+    }     
+    
+    get d () {
+        return this.toString()
+    }
 
     toString() {
         return this.joinPath()

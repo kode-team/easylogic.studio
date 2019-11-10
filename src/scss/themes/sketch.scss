@@ -113,6 +113,9 @@
             color: black;
             font-size: 11px;
             cursor: pointer;
+            &:hover  {
+              font-weight: bold;
+            }
           }
         }
 

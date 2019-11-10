@@ -1,20 +1,9 @@
 import { CSS_TO_STRING, isObject, OBJECT_TO_PROPERTY } from "../../../util/functions/func";
 import { Component } from "../Component";
 
-const customKeyValue = {
-  'front.color': true,
-  'back.color': true,
-  'left.color': true,
-  'right.color': true,
-  'top.color': true,
-  'bottom.background': true,
-  'front.background': true,
-  'back.background': true,
-  'left.background': true,
-  'right.background': true,
-  'top.background': true,
-  'bottom.background': true,  
-}
+const faceKeys = [
+  'front', 'back', 'left', 'right', 'bottom', 'top'
+]
 
 const customSelectorName = {
   'front.color': '.front',
@@ -68,8 +57,7 @@ export class CubeLayer extends Component {
       name: "New Cube",
       'transform-style':'preserve-3d',
       transform: 'rotateX(10deg) rotateY(30deg)',
-      'front.color': '',
-      'front.background': '',
+      border: 'border:1px solid black',
       ...obj
     }); 
   }
@@ -77,143 +65,48 @@ export class CubeLayer extends Component {
   getProps() {
     return [
       'Color',
-      {
-        key: 'front.color', editor: 'ColorViewEditor', 
-        editorOptions: {
-          label: 'front',
-          params: 'front.color'
-        }, 
-        defaultValue: 'rgba(0, 0, 0, 1)' 
-      },
-      {
-        key: 'back.color', 
-        editor: 'ColorViewEditor',      
-        editorOptions: {
-          label: 'back',             
-          params: 'back.color'
-        }, 
-        defaultValue: 'rgba(0, 0, 0, 1)' 
-      },
-      {
-        key: 'left.color', 
-        editor: 'ColorViewEditor',    
-        editorOptions: { 
-          label: 'left',               
-          params: 'left.color'
-        }, 
-        defaultValue: 'rgba(0, 0, 0, 1)' 
-      },
-      {
-        key: 'right.color', 
-        editor: 'ColorViewEditor',   
-        editorOptions: {
-          label: 'right',                
-          params: 'right.color'
-        }, 
-        defaultValue: 'rgba(0, 0, 0, 1)' 
-      },
-      {
-        key: 'top.color', 
-        editor: 'ColorViewEditor', 
-        editorOptions: { 
-          label: 'top',                  
-          params: 'top.color'
-        }, 
-        defaultValue: 'rgba(0, 0, 0, 1)' 
-      },  
-      {
-        key: 'bottom.color', 
-        editor: 'ColorViewEditor',   
-        editorOptions: {
-          label: 'bottom',                 
-          params: 'front.color'
-        }, 
-        defaultValue: 'rgba(0, 0, 0, 1)' 
-      },
+      ...faceKeys.map(key => {
+        return       {
+          key: `${key}.color`, editor: 'ColorViewEditor', 
+          editorOptions: {
+            label: key,
+            params: `${key}.color`
+          }, 
+          defaultValue: 'rgba(0, 0, 0, 1)' 
+        }
+      }),
       'Background',
-      {
-        key: 'front.background', 
-        editor: 'BackgroundImageEditor', 
-        editorOptions: {
-          'title': 'front'
-        }, 
-        defaultValue: ''
-      },
-      {
-        key: 'back.background', 
-        editor: 'BackgroundImageEditor', 
-        editorOptions: {
-          'title': 'back'
-        },          
-        defaultValue: ''
-      },
-      {
-        key: 'left.background', 
-        editor: 'BackgroundImageEditor', 
-        editorOptions: {
-          'title': 'left'
-        },      
-        defaultValue: ''
-      },
-      {
-        key: 'right.background', 
-        editor: 'BackgroundImageEditor', 
-        editorOptions: {
-          'title': 'right'
-        },         
-        defaultValue: ''
-      },
-      {
-        key: 'top.background', 
-        editor: 'BackgroundImageEditor', 
-        editorOptions: {
-          'title': 'top'
-        }, 
-        defaultValue: ''
-      },  
-      {
-        key: 'bottom.background', 
-        editor: 'BackgroundImageEditor',        
-        editorOptions: {
-          'title': 'bottom'
-        }, 
-        defaultValue: ''
-      }      
+      ...faceKeys.map(key => {
+        return       {
+          key: `${key}.background`, 
+          editor: 'BackgroundImageEditor', 
+          editorOptions: {
+            title: key,
+          }, 
+          defaultValue: '' 
+        }
+      })  
     ]
   }
 
   setCustomKeyframes (keyframes, customProperty) {
 
 
-    if ([
-      'front.color', 
-      'back.color', 
-      'left.color', 
-      'right.color', 
-      'top.color', 
-      'bottom.color'
-    ].includes(customProperty.property)) {
+    if (customProperty.property.includes('.color')) {
       keyframes.push({ 
         selector: `[data-id="${this.json.id}"] ${customSelectorName[customProperty.property]}`,
         properties: [{
         ...customProperty,
-        'property': 'background-color',  // 흠 하나씩 나열해야할 듯 
+        'property': 'background-color',
       }] } )
     }
 
-    if ([
-      'front.background', 
-      'back.background', 
-      'left.background', 
-      'right.background', 
-      'top.background', 
-      'bottom.background'
-    ].includes(customProperty.property)) {
+    if (customProperty.property.includes('.background')) {
       keyframes.push({ 
         selector: `[data-id="${this.json.id}"] ${customSelectorName[customProperty.property]}`,
         properties: [{
         ...customProperty,
-        'property': 'background-image',  // 흠 하나씩 나열해야할 듯 
+        'property': 'background-image', 
       }] } )
     }    
 
@@ -226,7 +119,7 @@ export class CubeLayer extends Component {
     var nestedProperties = []
 
     properties.forEach(p => {
-      if (customKeyValue[p.property]) {
+      if (p.property.includes('.color') || p.property.includes('.background')) {
         customProperties.push(p);
       } else if (cssKeyValue[p.property]) {
         cssProperties.push(p);
@@ -255,20 +148,16 @@ export class CubeLayer extends Component {
   }    
 
   toCloneObject() {
+
+    var obj = {}
+    faceKeys.forEach(key => {
+      obj[`${key}.color`] = this.json[`${key}.color`]
+      obj[`${key}.background`] = this.json[`${key}.background`]
+    })
+
     return {
       ...super.toCloneObject(),
-      'front.color': this.json['front.color'],
-      'back.color': this.json['back.color'],
-      'left.color': this.json['left.color'],
-      'right.color': this.json['right.color'],
-      'top.color': this.json['top.color'],
-      'bottom.color': this.json['bottom.color'],
-      'front.background': this.json['front.background'],
-      'back.background': this.json['back.background'],
-      'left.background': this.json['left.background'],
-      'right.background': this.json['right.background'],
-      'top.background': this.json['top.background'],
-      'bottom.background': this.json['bottom.background'],      
+      ...obj
     }
   }
 
@@ -304,7 +193,7 @@ export class CubeLayer extends Component {
     return {
       ...this.toVariableCSS(),
       ...this.toDefaultCSS(isExport),
-      ...this.toClipPathCSS(),
+      // ...this.toClipPathCSS(),
       ...this.toWebkitCSS(),      
       ...this.toBoxModelCSS(),
       // ...this.toTransformCSS(),      
@@ -318,14 +207,14 @@ export class CubeLayer extends Component {
 
     var width = json.width; 
     var height = json.height; 
-    var borderColor = '#333'
     var halfWidth = width.value/2
     var halfHeight = height.value/2
 
     var css = {
       ...this.toKeyListCSS(
-        'filter', 'mix-blend-mode', 'border-radius'
+        'filter', 'mix-blend-mode', 'border-radius', 'background-color',
       ),      
+      ...this.toClipPathCSS(),
       ...this.toBackgroundImageCSS(),
       ...this.toBorderCSS()
     }
@@ -339,8 +228,6 @@ export class CubeLayer extends Component {
           right: 0px;
           opacity: 1;
           pointer-events: none;
-          background-color: ${json['background-color']};
-          border: 1px solid ${borderColor};
           ${CSS_TO_STRING(css)}
         `.trim()
       },
@@ -410,12 +297,9 @@ export class CubeLayer extends Component {
     return /*html*/`
       <div class='element-item ${itemType}' data-id="${id}">
         ${this.toDefString}
-        <div class='front'></div>
-        <div class='back'></div>
-        <div class='left'></div>
-        <div class='right'></div>
-        <div class='top'></div>
-        <div class='bottom'></div>
+        ${faceKeys.map(key => {
+          return /*html*/`<div class='${key}'></div>`
+        }).join('')}
       </div>`
   }
 
@@ -427,21 +311,15 @@ export class CubeLayer extends Component {
     var css = this.toCSS();
     var nestedCSS = this.toNestedCSS();
 
-    var common = nestedCSS.find(it => it.selector === 'div') || '';
-    var front = nestedCSS.find(it => it.selector === '.front') || '';
-    var back = nestedCSS.find(it => it.selector === '.back') || '';
-    var right = nestedCSS.find(it => it.selector === '.right') || '';
-    var left = nestedCSS.find(it => it.selector === '.left') || '';
-    var top = nestedCSS.find(it => it.selector === '.top') || '';
-    var bottom = nestedCSS.find(it => it.selector === '.bottom') || '';
+    var keyCSS = {} 
 
-    common = common && common.cssText.replace(/\n/g, '');
-    front = front && front.cssText.replace(/\n/g, '');
-    back = back && back.cssText.replace(/\n/g, '');
-    right = right && right.cssText.replace(/\n/g, '');
-    left = left && left.cssText.replace(/\n/g, '');
-    top = top && top.cssText.replace(/\n/g, '');
-    bottom = bottom && bottom.cssText.replace(/\n/g, '');
+    var common = nestedCSS.find(it => it.selector === 'div') || {cssText:''};
+    common = common.cssText.replace(/\n/g, '');
+
+    faceKeys.forEach(key => {
+      keyCSS[key] = nestedCSS.find(it => it.selector === '.' + key) || {cssText:''};  
+      keyCSS[key] = keyCSS[key].cssText.replace(/\n/g, '');
+    })
 
     delete css.left;
     delete css.top;
@@ -459,12 +337,9 @@ export class CubeLayer extends Component {
       })}>
         <div xmlns="http://www.w3.org/1999/xhtml">
           <div style="${CSS_TO_STRING(css)}">
-            <div class='front' style="${common};${front}"></div>
-            <div class='back' style="${common};${back}"></div>
-            <div class='left' style="${common};${left}"></div>
-            <div class='right' style="${common};${right}"></div>
-            <div class='top' style="${common};${top}"></div>
-            <div class='bottom' style="${common};${bottom}"></div>
+            ${faceKeys.map(key => {
+              return `<div class='front' style="${common};${keyCSS[key]}"></div>`
+            }).join('')}          
           </div>
         </div>
       </foreignObject>    

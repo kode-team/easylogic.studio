@@ -1,6 +1,6 @@
 import SegmentManager from "./SegmentManager";
 import { clone, OBJECT_TO_PROPERTY } from "../../util/functions/func";
-import { getDist, calculateAngle, getXYInCircle, calculateAngle360, degreeToRadian } from "../../util/functions/math";
+import { getDist, calculateAngle, getXYInCircle, calculateAngle360, degreeToRadian, div } from "../../util/functions/math";
 import Point from "./Point";
 import PathStringManager from "./PathStringManager";
 import matrix from "../../util/functions/matrix";
@@ -193,8 +193,8 @@ export default class PathGenerator {
         this.state.points.forEach((point, index) => {
 
             target.forEach(key => {
-                if (checkInArea(box, point[key])) {
-                    var p = point[key]
+                const p = point[key]
+                if (checkInArea(box, p)) {
                     list.push({ x: p.x, y: p.y,  key, index})
                 }
             })
@@ -315,8 +315,8 @@ export default class PathGenerator {
             break;                         
         case 'to bottom right':
 
-            var sx =  (width + dx) === 0 ? 0  : (width + dx) / width;
-            var sy =  (height + dy) === 0 ? 0 : (height + dy) / height;
+            var sx =  div(width + dx, width);
+            var sy =  div(height + dy, height);
 
             this.applyTransform(
                 matrix.matrix2d.scale(sx, sy)
@@ -324,14 +324,14 @@ export default class PathGenerator {
             break; 
         case 'to right':
 
-            var sx =  (width + dx) === 0 ? 0  : (width + dx) / width;
+            var sx =  div(width + dx, width)
 
             this.applyTransform(
                 matrix.matrix2d.scale(sx, 1)
             ); 
             break;             
         case 'to bottom':
-                var sy =  (height + dy) === 0 ? 0 : (height + dy) / height;
+                var sy =  div(height + dy, height)
 
                 this.applyTransform(
                     matrix.matrix2d.scale(1, sy)
@@ -340,8 +340,8 @@ export default class PathGenerator {
 
         case 'to top right':
 
-            var sx =  (width + dx) === 0 ? 0  : (width + dx) / width;
-            var sy =  (height - dy) === 0 ? 0 : (height - dy) / height;
+            var sx =  div(width + dx, width)
+            var sy =  div(height - dy, height)
 
             this.applyTransform(
                 matrix.matrix2d.scale(sx, sy),
@@ -350,8 +350,8 @@ export default class PathGenerator {
             break;             
         case 'to top left':
 
-            var sx =  (width - dx) === 0 ? 0 : (width - dx)/ width;
-            var sy =  (height - dy) === 0 ? 0 : (height - dy) / height;
+            var sx =  div(width - dx, width)
+            var sy =  div(height - dy, height)
 
             this.applyTransform(
                 matrix.matrix2d.scale(sx, sy),
@@ -360,7 +360,7 @@ export default class PathGenerator {
             break;    
         case 'to left':
 
-            var sx =  (width - dx) === 0 ? 0 : (width - dx)/ width;
+            var sx =  div(width - dx, width)
 
             this.applyTransform(
                 matrix.matrix2d.scale(sx, 1),
@@ -369,7 +369,7 @@ export default class PathGenerator {
             break;                      
         case 'to top':
 
-            var sy =  (height - dy) === 0 ? 0 : (height - dy) / height
+            var sy =  div(height - dy, height)
 
             this.applyTransform(
                 matrix.matrix2d.scale(1, sy),
@@ -378,8 +378,8 @@ export default class PathGenerator {
             break;          
         case 'to bottom left':
 
-            var sx =  (width - dx) === 0 ? 0 : (width - dx)/ width;
-            var sy =  (height + dy) === 0 ? 0 : (height + dy) / height;
+            var sx =  div(width - dx, width)
+            var sy =  div(height + dy, height)
 
             this.applyTransform(
                 matrix.matrix2d.scale(sx, sy),
@@ -927,7 +927,7 @@ export default class PathGenerator {
                 mng
                 .addGuideLine(prevPoint.startPoint, prevPoint.endPoint)
                 .addCurvePoint(current.startPoint, index, 'startPoint', this.isSelectedSegment('startPoint', index))
-                .addCurvePoint(prevPoint.endPoint, prevPoint.index, 'endPoint', this.isSelectedSegment('endPoint', index));
+                .addCurvePoint(prevPoint.endPoint, prevPoint.index, 'endPoint', this.isSelectedSegment('endPoint', prevPoint.index));
 
                 if (!current.startPoint.isLast) {
                     mng.addText(current.startPoint, index+1);

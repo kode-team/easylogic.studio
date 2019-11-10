@@ -149,7 +149,7 @@ export default class ComponentProperty extends BaseProperty {
         item.reset({ [key]: value })
       }
     })
-    this.emit('refreshSelectionStyleView');
+    this.emit('refreshSelectionStyleView', null, true);
 
   }
 }

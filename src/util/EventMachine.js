@@ -292,29 +292,14 @@ const applyElementAttribute = ($element, key, value) => {
      * style: { key: value }
      */
     if (isNotString(value)) {
-
       $element.css(value);
-
-      // // 문자열이 아니라 객체 일때는 직접 입력하는 방식으로
-      // keyEach(value, (sKey, sValue) => {
-      //   if (isUndefined(sValue)) {
-      //     $element.removeStyle(sKey);
-      //   } else {
-      //     $element.css(sKey, sValue);
-      //   }
-      // });
     }
 
     return;
   } else if (key === "class") {
-    // 문자열이 아닐 때는 문자열로 만들어 준다.
-
-    /**
-     * 
-     * "class" : [ 'className', 'className' ] 
-     * "class" : { key: true, key: false } 
-     * "class" : 'string-class' 
-     */
+    //  "class" : [ 'className', 'className' ] 
+    //  "class" : { key: true, key: false } 
+    //  "class" : 'string-class' 
 
     if (isArray(value)) {
       $element.addClass(...value);
@@ -588,7 +573,6 @@ export default class EventMachine {
       let refName = $dom.attr(REFERENCE_PROPERTY);
       var instance = null; 
       if (this.children[refName]) {
-        //  기존의 같은 객체가 있으면 객체를 새로 생성하지 않고 재활용한다. 
         instance = this.children[refName] 
         instance._reload(props);
       } else {
@@ -676,9 +660,6 @@ export default class EventMachine {
           this.refs[elName].html(fragment);
         }
 
-        // 새로운 html 이 로드가 되었으니 
-        // 이벤트를 재설정 하자. 
-        // 그래야 refs 에 있던 객체를 다시 사용할 수 있다. 
         this.initializeDomEvent()
       }
     });
@@ -838,10 +819,6 @@ export default class EventMachine {
     return e.metaKey || e.key == 'Meta' || e.code.indexOf('Meta') > -1 ;
   }
 
-  /* magic check method */
-
-  /** before check method */
-
   /** before check method */
 
   /* after check method */
@@ -867,7 +844,6 @@ export default class EventMachine {
       this.emit(ADD_BODY_MOUSEUP, this[methodName], this, e.xy);
     }
   }
-  /* after check method */
 
   getBindings() {
     if (!this._bindings) {

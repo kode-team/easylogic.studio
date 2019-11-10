@@ -259,6 +259,20 @@ export default class ElementView extends UIElement {
 
         }
 
+        this.sendHelpMessage();
+    }
+
+    sendHelpMessage () {
+
+        if (editor.selection.length === 1) {
+            var current = editor.selection.current;
+
+            if (current.is('svg-path', 'svg-polygon', 'svg-textpath')) {
+                this.emit('addStatusBarMessage', 'Please click if you want to edit to path ');
+            }
+
+        } 
+
     }
 
 

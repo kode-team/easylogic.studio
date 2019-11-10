@@ -312,7 +312,7 @@ export default class CubicBezierEditor extends UIElement {
         });
 
         return { 
-            x : (x == 0 )? 0 : x / width, 
+            x : div(x, width), 
             y : (y == height ) ? 0 : (height-y) / height 
         };
     }

@@ -29,10 +29,12 @@ import AddSVGRect from "./AddSVGRect";
 import AddSVGCircle from "./AddSVGCircle";
 import Fullscreen from "./Fullscreen";
 import AddSVGTextPath from "./AddSVGTextPath";
+import AddCylinder from "./AddCylinder";
 
 
 
 export default {
+  AddCylinder,
   AddSVGTextPath,
   Fullscreen,
   AddSVGCircle,

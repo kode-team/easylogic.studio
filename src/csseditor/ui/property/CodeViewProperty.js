@@ -50,6 +50,11 @@ export default class CodeViewProperty extends BaseProperty {
 
     var current = editor.selection.current;
     var cssCode = current ? TAG_TO_STRING(current.toExport()) : ''
+    var nestedCssCode = current ?  current.toNestedCSS().map(it => {
+      return `${it.selector} { 
+${this.filterKeyName(TAG_TO_STRING(it.cssText))}
+}`
+    }) : []
     var svgPropertyCode = current ? TAG_TO_STRING(current.toExportSVGCode()) : '' 
     var selectorCode = current ? current.selectors : [];
 
@@ -65,6 +70,12 @@ export default class CodeViewProperty extends BaseProperty {
           <pre title='CSS'>${cssCode}</pre>
           </div>` : ''
         }
+        
+        ${nestedCssCode.map(it => {
+          return /*html*/`<div>
+          <pre title='CSS'>${it}</pre>
+          </div>`
+        }).join('')}
 
         ${svgPropertyCode ? 
           /*html*/`<div>

@@ -737,6 +737,9 @@
   font-size: 11px;
   cursor: pointer;
 }
+.codemirror-colorpicker.sketch > .colorpicker-body > .information .information-item > .input-field > .title:hover {
+  font-weight: bold;
+}
 .codemirror-colorpicker.sketch > .colorpicker-body > .information .information-item > .input-field:last-child:not(:first-child) {
   padding-right: 0px;
 }
@@ -4013,7 +4016,7 @@ html, body {
      -moz-user-select: text;
       -ms-user-select: text;
           user-select: text;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid #111111;
   position: relative;
   border-radius: 5px;
   margin-top: 0px;
@@ -4026,8 +4029,8 @@ html, body {
   color: white;
   left: 0px;
   top: 0px;
-  border-top-left-radius: 5px;
-  border-bottom-right-radius: 5px;
+  border-top-left-radius: 4px;
+  border-bottom-right-radius: 4px;
   padding: 2px 4px;
 }
 .csseditor .code-view-item > div pre::before svg path {
@@ -5171,6 +5174,32 @@ html, body {
   width: 16px;
   vertical-align: middle;
 }
+.csseditor .library-items {
+  padding: 10px;
+}
+.csseditor .library-items .group .title {
+  padding: 10px 0px !important;
+}
+.csseditor .library-items .group.path .list {
+  display: grid;
+  grid-template-columns: repeat(5, 50px) !important;
+}
+.csseditor .library-items .group.path .list .path-item {
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+}
+.csseditor .library-items .group.path .list .path-item:hover {
+  background-color: #435cb5;
+}
+.csseditor .library-items .group.path .list .path-item svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor .library-items .group.path .list .path-item svg path {
+  fill: #ffffff;
+  stroke: transparent;
+}
 .csseditor .cubic-bezier-editor {
   width: 228px;
   height: 200px;
@@ -5394,7 +5423,7 @@ html, body {
 .csseditor .range-editor.has-label label {
   text-align: left;
   vertical-align: middle;
-  padding: 2px 0px 2px 0px;
+  padding: 7px 0px 2px 0px;
   font-size: 11px;
 }
 .csseditor .range-editor.has-label.block {
@@ -5531,7 +5560,7 @@ html, body {
 .csseditor .number-range-editor.has-label label {
   text-align: left;
   vertical-align: middle;
-  padding: 2px 0px 2px 0px;
+  padding: 7px 0px 2px 0px;
   font-size: 12px;
 }
 .csseditor .number-range-editor.has-label.block {
@@ -9704,6 +9733,10 @@ html, body {
 .csseditor .path-editor-view .path-container.draw {
   cursor: crosshair;
 }
+.csseditor .path-editor-view .path-container.draw svg path.object {
+  pointer-events: visibleStroke;
+  stroke: #7c7c7c;
+}
 .csseditor .path-editor-view .path-container.segment-move {
   cursor: move;
 }
@@ -9718,7 +9751,7 @@ html, body {
 }
 .csseditor .path-editor-view .path-container.modify svg path.object, .csseditor .path-editor-view .path-container.segment-move svg path.object {
   pointer-events: visibleStroke;
-  stroke: #a0a0a0;
+  stroke: #7c7c7c;
 }
 .csseditor .path-editor-view .path-container.box svg path.object {
   stroke: rgba(17, 17, 17, 0.5);
@@ -9845,15 +9878,15 @@ html, body {
   display: none;
 }
 .csseditor .path-editor-view svg rect.segment {
-  stroke: black;
+  stroke: #111111;
   fill: white;
   stroke-width: 1;
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   cursor: pointer;
 }
 .csseditor .path-editor-view svg rect.segment[data-selected=true] {
-  fill: black;
+  fill: #111111;
 }
 .csseditor .path-editor-view svg path.guide {
   fill: transparent;
@@ -9867,7 +9900,7 @@ html, body {
 }
 .csseditor .path-editor-view svg path.object {
   fill: transparent;
-  stroke: black;
+  stroke: transparent;
   stroke-width: 1;
 }
 .csseditor .path-editor-view svg path.split-path {
@@ -13098,7 +13131,7 @@ html, body {
      -moz-user-select: text;
       -ms-user-select: text;
           user-select: text;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid #111111;
   position: relative;
   border-radius: 5px;
   margin-top: 0px;
@@ -13111,8 +13144,8 @@ html, body {
   color: white;
   left: 0px;
   top: 0px;
-  border-top-left-radius: 5px;
-  border-bottom-right-radius: 5px;
+  border-top-left-radius: 4px;
+  border-bottom-right-radius: 4px;
   padding: 2px 4px;
 }
 .csseditor[data-theme=light] .code-view-item > div pre::before svg path {
@@ -14256,6 +14289,32 @@ html, body {
   width: 16px;
   vertical-align: middle;
 }
+.csseditor[data-theme=light] .library-items {
+  padding: 10px;
+}
+.csseditor[data-theme=light] .library-items .group .title {
+  padding: 10px 0px !important;
+}
+.csseditor[data-theme=light] .library-items .group.path .list {
+  display: grid;
+  grid-template-columns: repeat(5, 50px) !important;
+}
+.csseditor[data-theme=light] .library-items .group.path .list .path-item {
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+}
+.csseditor[data-theme=light] .library-items .group.path .list .path-item:hover {
+  background-color: #fc554f;
+}
+.csseditor[data-theme=light] .library-items .group.path .list .path-item svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor[data-theme=light] .library-items .group.path .list .path-item svg path {
+  fill: black;
+  stroke: transparent;
+}
 .csseditor[data-theme=light] .cubic-bezier-editor {
   width: 228px;
   height: 200px;
@@ -14479,7 +14538,7 @@ html, body {
 .csseditor[data-theme=light] .range-editor.has-label label {
   text-align: left;
   vertical-align: middle;
-  padding: 2px 0px 2px 0px;
+  padding: 7px 0px 2px 0px;
   font-size: 11px;
 }
 .csseditor[data-theme=light] .range-editor.has-label.block {
@@ -14616,7 +14675,7 @@ html, body {
 .csseditor[data-theme=light] .number-range-editor.has-label label {
   text-align: left;
   vertical-align: middle;
-  padding: 2px 0px 2px 0px;
+  padding: 7px 0px 2px 0px;
   font-size: 12px;
 }
 .csseditor[data-theme=light] .number-range-editor.has-label.block {
@@ -18789,6 +18848,10 @@ html, body {
 .csseditor[data-theme=light] .path-editor-view .path-container.draw {
   cursor: crosshair;
 }
+.csseditor[data-theme=light] .path-editor-view .path-container.draw svg path.object {
+  pointer-events: visibleStroke;
+  stroke: #7c7c7c;
+}
 .csseditor[data-theme=light] .path-editor-view .path-container.segment-move {
   cursor: move;
 }
@@ -18803,7 +18866,7 @@ html, body {
 }
 .csseditor[data-theme=light] .path-editor-view .path-container.modify svg path.object, .csseditor[data-theme=light] .path-editor-view .path-container.segment-move svg path.object {
   pointer-events: visibleStroke;
-  stroke: #a0a0a0;
+  stroke: #7c7c7c;
 }
 .csseditor[data-theme=light] .path-editor-view .path-container.box svg path.object {
   stroke: rgba(17, 17, 17, 0.5);
@@ -18930,15 +18993,15 @@ html, body {
   display: none;
 }
 .csseditor[data-theme=light] .path-editor-view svg rect.segment {
-  stroke: black;
+  stroke: #111111;
   fill: white;
   stroke-width: 1;
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   cursor: pointer;
 }
 .csseditor[data-theme=light] .path-editor-view svg rect.segment[data-selected=true] {
-  fill: black;
+  fill: #111111;
 }
 .csseditor[data-theme=light] .path-editor-view svg path.guide {
   fill: transparent;
@@ -18952,7 +19015,7 @@ html, body {
 }
 .csseditor[data-theme=light] .path-editor-view svg path.object {
   fill: transparent;
-  stroke: black;
+  stroke: transparent;
   stroke-width: 1;
 }
 .csseditor[data-theme=light] .path-editor-view svg path.split-path {

@@ -33,6 +33,14 @@
 
         &.draw {
             cursor: crosshair;
+            svg {
+                path {
+                    &.object {
+                        pointer-events: visibleStroke;
+                        stroke: rgb(124, 124, 124);
+                    }
+                }
+            }
         }
 
         &.segment-move {
@@ -62,7 +70,7 @@
                 path {
                     &.object {
                         pointer-events: visibleStroke;
-                        stroke: rgb(160, 160, 160);
+                        stroke: rgb(124, 124, 124);
                     }
                 }
             }
@@ -243,15 +251,15 @@
 
         rect {
             &.segment {
-                stroke: rgba(0, 0, 0, 1);
+                stroke: $border-color;
                 fill: white;
                 stroke-width: 1; 
-                width: 10px;
-                height: 10px;
+                width: 8px;
+                height: 8px;
                 cursor: pointer;
 
                 &[data-selected='true'] {
-                    fill: rgba(0, 0, 0, 1);
+                    fill: $border-color;
                 }
             }
         }
@@ -272,7 +280,7 @@
             
             &.object {
                 fill: transparent;
-                stroke: $path-guide-color;
+                stroke: transparent;
                 stroke-width: 1; 
             }       
             

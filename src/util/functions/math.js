@@ -11,6 +11,10 @@ export function degreeToRadian (degrees) {
     return degrees * Math.PI / 180;
 }
 
+export function div(num, divNum = 1) {
+    return (num === 0) ? 0 : num / divNum;
+}
+
 /**
  * 
  * convert radian to degree 
@@ -130,7 +134,14 @@ export function getGradientLine(angle, box) {
     };
 }
 
+// 외적 구하기 
 export function CCW(A, B, C) {
+    // cross (B - A, C - A)
+
+    if (isUndefined(C)) {
+        return Vect3.cross2d(A, B);
+    }
+
     return Vect3.cross2d(Vect3.sub(B, A), Vect3.sub(C, A))
 }
 

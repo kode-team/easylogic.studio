@@ -17,15 +17,15 @@
                 @include title-background-2($selected-color, $selected-font-color);
                 left:0px;
                 top:0px;
-                border-top-left-radius: 5px;
-                border-bottom-right-radius: 5px;
+                border-top-left-radius: 4px;
+                border-bottom-right-radius: 4px;
                 padding: 2px 4px;
             }
 
             white-space: pre-wrap;
             padding:20px 8px;
             user-select: text;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid $border-color;
             position: relative;
             border-radius: 5px;
             margin-top:0px;

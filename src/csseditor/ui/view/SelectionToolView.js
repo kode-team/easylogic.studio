@@ -4,12 +4,10 @@ import { Length } from "../../../editor/unit/Length";
 import { editor } from "../../../editor/editor";
 import { isNotUndefined } from "../../../util/functions/func";
 import GuideView from "./GuideView";
-import icon from "../icon/icon";
 import { Transform } from "../../../editor/css-property/Transform";
 import Dom from "../../../util/Dom";
 import { calculateAngle } from "../../../util/functions/math";
 import AreaItem from "../../../editor/items/AreaItem";
-import PathStringManager from "../../../editor/parse/PathStringManager";
 
 var DEFINED_TRANFORM_ORIGIN = {
     'top': '50% 0%',
@@ -248,6 +246,7 @@ export default class SelectionToolView extends UIElement {
         if (current && current.is('svg-path', 'svg-textpath')) {
             this.toggleEditingPolygon(false);
             this.toggleEditingPath(true);
+
             this.emit('showPathEditor', 'modify', {
                 changeEvent: 'updatePathItem',
                 current,

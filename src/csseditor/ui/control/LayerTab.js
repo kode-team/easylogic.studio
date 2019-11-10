@@ -41,7 +41,7 @@ export default class LayerTab extends UIElement {
               <ObjectItems />
             </div>
             <div class='tab-content' data-value='3'>
-              <!--LibraryItems /-->
+              <LibraryItems />
             </div>
           </div>
         </div>
