@@ -1,5 +1,5 @@
 import UIElement from "../../../util/UIElement";
-import { LOAD, INPUT, DEBOUNCE } from "../../../util/Event";
+import { LOAD, INPUT, DEBOUNCE, CLICK } from "../../../util/Event";
 import PathParser from "../../../editor/parse/PathParser";
 
 export default class PathDataEditor extends UIElement {
@@ -15,7 +15,13 @@ export default class PathDataEditor extends UIElement {
 
     makeSegments () {
         return this.refs.$data.$$('.segment').map($segment => {
-            var command = $segment.$('.command').attr('data-command');
+            var $command = $segment.$('.command');
+            var command = $command.attr('data-command');
+            
+            if (command === 'Z' && $command.attr('data-toggle') === 'false') {
+                return null; 
+            }
+
             var values = $segment.$$('.values input[type=number]').map(it => {
                 return +it.value; 
             })
@@ -24,7 +30,7 @@ export default class PathDataEditor extends UIElement {
                 command,
                 values
             }
-        })
+        }).filter(it => it);
     }
 
     updateData() {
@@ -59,11 +65,44 @@ export default class PathDataEditor extends UIElement {
     }
 
     [LOAD('$data')] () {
-        var arr = this.state.parser.segments.map(it => {
+
+
+        var  segments = []
+        
+        this.state.parser.segments.forEach((it, index) => {
+
+            var s = {...it}
+
+            segments.push(s);
+            var next = this.state.parser.segments[index+1]
+            if (next && next.command === 'M') {
+                if (s.command !== 'Z') {
+                    segments.push({command: 'Z', toggle: false, values: []})
+                } else {
+                    s.toggle = true; 
+                } 
+            }      
+
+        });
+
+        var last = this.state.parser.segments[this.state.parser.segments.length-1];
+        if (last && last.command !== 'Z') {
+            segments.push({command: 'Z', toggle: false, values: [] })
+        }
+
+
+
+
+        var arr = segments.map(it => {
             var cls = it.command === 'M' ? 'm' : '';
+
+            // 마지막 체크 
+            // Z 인지 체크 
+            // Z 토글 
+            // 유령 Z 를 만들어두고 토글하기 
             return /*html*/`
                 <div class='segment ${cls}'>
-                    <div class='command' data-command='${it.command}'>${it.command}</div>
+                    <div class='command' data-command='${it.command}' data-toggle="${it.toggle}" title='Toggle'>${it.command}</div>
                     <div class='values'>
                         ${it.values.map(v => {
                             return /*html*/`<input type="number" value="${v}" />`
@@ -88,5 +127,20 @@ export default class PathDataEditor extends UIElement {
 
     [INPUT('$data input[type=number]') + DEBOUNCE(300)] (e) {
         this.updateData();
+    }
+
+    [CLICK('$data .command[data-toggle]')] (e) {
+        var [command, toggle] = e.$delegateTarget.attrs('data-command', 'data-toggle');
+        if (command === 'Z') {
+            if (toggle !== 'false') {
+                toggle = 'false'; 
+            } else {
+                toggle = 'true'
+            }
+
+            e.$delegateTarget.attr('data-toggle', toggle);
+
+            this.updateData();
+        }
     }
 }

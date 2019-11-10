@@ -25,6 +25,12 @@
 
         .command {
             color: $selected-color; 
+            cursor: pointer;
+
+            &[data-toggle="false"] {
+                opacity: 0.3;
+                font-weight: bold;
+            }
         }
 
         .values {

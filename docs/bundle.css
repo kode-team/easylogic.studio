@@ -7922,6 +7922,11 @@ html, body {
 }
 .csseditor .path-data-editor .segment .command {
   color: #fc554f;
+  cursor: pointer;
+}
+.csseditor .path-data-editor .segment .command[data-toggle=false] {
+  opacity: 0.3;
+  font-weight: bold;
 }
 .csseditor .path-data-editor .segment .values {
   display: grid;
@@ -17037,6 +17042,11 @@ html, body {
 }
 .csseditor[data-theme=light] .path-data-editor .segment .command {
   color: #fc554f;
+  cursor: pointer;
+}
+.csseditor[data-theme=light] .path-data-editor .segment .command[data-toggle=false] {
+  opacity: 0.3;
+  font-weight: bold;
 }
 .csseditor[data-theme=light] .path-data-editor .segment .values {
   display: grid;
