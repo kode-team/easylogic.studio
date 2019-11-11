@@ -30,6 +30,8 @@ export class SVGLinearGradient extends SVGGradient {
 
   toString() {
 
+    // linear-gradient(x1 y1 x2 y2 spreadMethod, ....colors)
+
     if(this.colorsteps.length === 0) return '';    
 
     var colorString = this.getColorString();

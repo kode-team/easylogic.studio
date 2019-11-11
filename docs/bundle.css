@@ -3159,9 +3159,26 @@ html, body {
   position: absolute;
   left: 0px;
   top: 0px;
-  right: 0px;
-  bottom: 0px;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
+  overflow: visible;
+}
+.csseditor .guide-line-view line {
+  stroke-width: 1;
+}
+.csseditor .guide-line-view line.base-line {
+  stroke: #fc554f;
+}
+.csseditor .guide-line-view line.base-rect {
+  stroke: #435cb5;
+}
+.csseditor .guide-line-view text {
+  font-size: 11px;
+  fill: #fc554f;
+}
+.csseditor .guide-line-view text.text-center {
+  text-anchor: middle;
 }
 .csseditor .property {
   border-bottom: 1px solid black;
@@ -12279,9 +12296,26 @@ html, body {
   position: absolute;
   left: 0px;
   top: 0px;
-  right: 0px;
-  bottom: 0px;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
+  overflow: visible;
+}
+.csseditor[data-theme=light] .guide-line-view line {
+  stroke-width: 1;
+}
+.csseditor[data-theme=light] .guide-line-view line.base-line {
+  stroke: #fc554f;
+}
+.csseditor[data-theme=light] .guide-line-view line.base-rect {
+  stroke: #435cb5;
+}
+.csseditor[data-theme=light] .guide-line-view text {
+  font-size: 11px;
+  fill: #fc554f;
+}
+.csseditor[data-theme=light] .guide-line-view text.text-center {
+  text-anchor: middle;
 }
 .csseditor[data-theme=light] .property {
   border-bottom: 1px solid black;

@@ -1003,12 +1003,9 @@ export default class SelectionToolView extends UIElement {
     }
 
     calculateWorldPosition (item) {
-        var x = Length.px(item.x || 0);
-        var y = Length.px(item.y || 0);
-
         return {
-            x: Length.px(x.value * editor.scale),
-            y: Length.px(y.value * editor.scale),
+            x: Length.px(item.screenX.value * editor.scale),
+            y: Length.px(item.screenY.value * editor.scale),
             width: Length.px(item.width.value  *  editor.scale),
             height: Length.px(item.height.value  * editor.scale),
             transform: item.transform

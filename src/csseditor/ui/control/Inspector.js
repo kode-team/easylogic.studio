@@ -90,7 +90,7 @@ export default class Inspector extends UIElement {
                 <TextClipProperty />
                 <!-- <RootVariableProperty /> -->
                 <!-- <VariableProperty /> -->
-                <SelectorProperty />
+
 
                 <div class='empty'></div>                
               </div>              
@@ -102,6 +102,7 @@ export default class Inspector extends UIElement {
                 <TransitionProperty />                            
                 <AnimationProperty />
                 <KeyframeProperty />    
+                <SelectorProperty />                              
                 <div class='empty'></div>                
               </div>                        
               <div class='tab-content' data-value='4'>

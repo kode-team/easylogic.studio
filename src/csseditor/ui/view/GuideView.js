@@ -154,6 +154,7 @@ export default class GuideView {
     }
 
     compareX (A, B, dist = MAX_DIST) {
+
         var AX = [A.screenX.value, A.centerX.value, A.screenX2.value]
         var BX = [B.screenX.value, B.centerX.value, B.screenX2.value]
 
@@ -319,7 +320,7 @@ export default class GuideView {
         if (isNotUndefined(it.ax)) {
             var distX = Math.round(this.rect.width.value / 2 * it.source);
             var minX = it.bx - distX;             
-            this.rect.x.set(minX);            
+            this.rect.x.set(minX);       
         } else if (isNotUndefined(it.ay)) {
             var distY = Math.round(this.rect.height.value / 2 * it.source);
             var minY = it.by - distY;             

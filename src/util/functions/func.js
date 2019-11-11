@@ -133,7 +133,13 @@ const HTML_TAG = {
     'image': true,
     'input': true,
     'br': true,
-    'path': true 
+    'path': true,
+    'line': true,
+    'circle': true,
+    'rect': true,
+    'polygon': true,
+    'polyline': true,
+    'use': true
 }
 
 
