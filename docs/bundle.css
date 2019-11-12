@@ -3174,7 +3174,7 @@ html, body {
   stroke: #435cb5;
 }
 .csseditor .guide-line-view text {
-  font-size: 11px;
+  font-size: 10px;
   fill: #fc554f;
 }
 .csseditor .guide-line-view text.text-center {
@@ -3194,7 +3194,7 @@ html, body {
   box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.3);
   background-color: rgba(145, 145, 145, 0.7);
   line-height: 10px;
-  margin-top: 4px;
+  margin-top: 9px;
   cursor: pointer;
   -webkit-transform: rotate(45deg);
           transform: rotate(45deg);
@@ -5216,6 +5216,69 @@ html, body {
 .csseditor .library-items .group.path .list .path-item svg path {
   fill: #ffffff;
   stroke: transparent;
+}
+.csseditor .shape-inside-list {
+  grid-template-columns: 1fr !important;
+}
+.csseditor .shape-inside-list .shapeinside-item {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-column-gap: 4px;
+  margin-bottom: 5px;
+  padding: 5px 6px;
+  cursor: pointer;
+}
+.csseditor .shape-inside-list .shapeinside-item.selected, .csseditor .shape-inside-list .shapeinside-item:hover {
+  background-color: #fc554f;
+}
+.csseditor .shape-inside-list .shapeinside-item .title {
+  display: grid;
+  grid-template-columns: 1fr 20px;
+}
+.csseditor .shape-inside-list .shapeinside-item .title .name {
+  padding: 2px 0px;
+}
+.csseditor .shape-inside-list .shapeinside-item .title .tools {
+  vertical-align: middle;
+  text-align: right;
+}
+.csseditor .shape-inside-list .shapeinside-item .offset-list {
+  padding: 0px 10px;
+  height: 30px;
+}
+.csseditor .shape-inside-list .shapeinside-item .offset-list .container {
+  position: relative;
+  background-image: linear-gradient(to right, #111111, black);
+  background-size: 100% 2px;
+  background-repeat: no-repeat;
+  background-position: 0px center;
+  height: 100%;
+}
+.csseditor .shape-inside-list .shapeinside-item .offset-list .container .offset {
+  width: 10px;
+  height: 10px;
+  background-color: black;
+  border-radius: 100%;
+  position: absolute;
+  top: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+  vertical-align: middle;
+}
+.csseditor .shape-inside-list .shapeinside-item .offset-list .container .offset:hover:before {
+  display: inline-block;
+  content: attr(data-title);
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  padding: 1px 3px;
+  text-align: center;
+  background-color: #4e3b3b;
+  border-radius: 3px;
+  color: white;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  white-space: nowrap;
 }
 .csseditor .cubic-bezier-editor {
   width: 228px;
@@ -8062,6 +8125,11 @@ html, body {
   vertical-align: middle;
   height: 14px;
   border-radius: 100%;
+  pointer-events: all;
+  -webkit-user-select: all;
+     -moz-user-select: all;
+      -ms-user-select: all;
+          user-select: all;
 }
 .csseditor .fill-single-editor .colors .color:not(:first-child) {
   margin-left: -2px;
@@ -8930,7 +8998,8 @@ html, body {
 .csseditor .popup .box-shadow-property-popup .codemirror-colorpicker {
   box-shadow: none;
   border-radius: 0px;
-  background-color: #16191e;
+  background-color: #333333;
+  border-color: #333333;
 }
 .csseditor .popup .box-shadow-property-popup .codemirror-colorpicker input {
   color: #ffffff !important;
@@ -8993,6 +9062,12 @@ html, body {
   background-color: #fc554f;
   border-radius: 100%;
 }
+.csseditor .popup .box-shadow-property-popup .box .offset-x,
+.csseditor .popup .box-shadow-property-popup .box .offset-y,
+.csseditor .popup .box-shadow-property-popup .box .blur-radius,
+.csseditor .popup .box-shadow-property-popup .box .spread-radius {
+  margin-bottom: 2px;
+}
 .csseditor .popup .animation-property-popup {
   width: 220px;
 }
@@ -9050,7 +9125,7 @@ html, body {
 .csseditor .popup .text-shadow-property-popup .codemirror-colorpicker {
   box-shadow: none;
   border-radius: 0px;
-  background-color: #16191e;
+  background-color: #333333;
 }
 .csseditor .popup .text-shadow-property-popup .codemirror-colorpicker input {
   color: #ffffff !important;
@@ -12311,7 +12386,7 @@ html, body {
   stroke: #435cb5;
 }
 .csseditor[data-theme=light] .guide-line-view text {
-  font-size: 11px;
+  font-size: 10px;
   fill: #fc554f;
 }
 .csseditor[data-theme=light] .guide-line-view text.text-center {
@@ -12331,7 +12406,7 @@ html, body {
   box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.3);
   background-color: rgba(145, 145, 145, 0.7);
   line-height: 10px;
-  margin-top: 4px;
+  margin-top: 9px;
   cursor: pointer;
   -webkit-transform: rotate(45deg);
           transform: rotate(45deg);
@@ -14353,6 +14428,69 @@ html, body {
 .csseditor[data-theme=light] .library-items .group.path .list .path-item svg path {
   fill: black;
   stroke: transparent;
+}
+.csseditor[data-theme=light] .shape-inside-list {
+  grid-template-columns: 1fr !important;
+}
+.csseditor[data-theme=light] .shape-inside-list .shapeinside-item {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-column-gap: 4px;
+  margin-bottom: 5px;
+  padding: 5px 6px;
+  cursor: pointer;
+}
+.csseditor[data-theme=light] .shape-inside-list .shapeinside-item.selected, .csseditor[data-theme=light] .shape-inside-list .shapeinside-item:hover {
+  background-color: #fc554f;
+}
+.csseditor[data-theme=light] .shape-inside-list .shapeinside-item .title {
+  display: grid;
+  grid-template-columns: 1fr 20px;
+}
+.csseditor[data-theme=light] .shape-inside-list .shapeinside-item .title .name {
+  padding: 2px 0px;
+}
+.csseditor[data-theme=light] .shape-inside-list .shapeinside-item .title .tools {
+  vertical-align: middle;
+  text-align: right;
+}
+.csseditor[data-theme=light] .shape-inside-list .shapeinside-item .offset-list {
+  padding: 0px 10px;
+  height: 30px;
+}
+.csseditor[data-theme=light] .shape-inside-list .shapeinside-item .offset-list .container {
+  position: relative;
+  background-image: linear-gradient(to right, #111111, black);
+  background-size: 100% 2px;
+  background-repeat: no-repeat;
+  background-position: 0px center;
+  height: 100%;
+}
+.csseditor[data-theme=light] .shape-inside-list .shapeinside-item .offset-list .container .offset {
+  width: 10px;
+  height: 10px;
+  background-color: black;
+  border-radius: 100%;
+  position: absolute;
+  top: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
+  vertical-align: middle;
+}
+.csseditor[data-theme=light] .shape-inside-list .shapeinside-item .offset-list .container .offset:hover:before {
+  display: inline-block;
+  content: attr(data-title);
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  padding: 1px 3px;
+  text-align: center;
+  background-color: #4e3b3b;
+  border-radius: 3px;
+  color: white;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  white-space: nowrap;
 }
 .csseditor[data-theme=light] .cubic-bezier-editor {
   width: 228px;
@@ -17199,6 +17337,11 @@ html, body {
   vertical-align: middle;
   height: 14px;
   border-radius: 100%;
+  pointer-events: all;
+  -webkit-user-select: all;
+     -moz-user-select: all;
+      -ms-user-select: all;
+          user-select: all;
 }
 .csseditor[data-theme=light] .fill-single-editor .colors .color:not(:first-child) {
   margin-left: -2px;
@@ -18068,6 +18211,7 @@ html, body {
   box-shadow: none;
   border-radius: 0px;
   background-color: white;
+  border-color: white;
 }
 .csseditor[data-theme=light] .popup .box-shadow-property-popup .codemirror-colorpicker input {
   color: black !important;
@@ -18129,6 +18273,12 @@ html, body {
           transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
   background-color: #fc554f;
   border-radius: 100%;
+}
+.csseditor[data-theme=light] .popup .box-shadow-property-popup .box .offset-x,
+.csseditor[data-theme=light] .popup .box-shadow-property-popup .box .offset-y,
+.csseditor[data-theme=light] .popup .box-shadow-property-popup .box .blur-radius,
+.csseditor[data-theme=light] .popup .box-shadow-property-popup .box .spread-radius {
+  margin-bottom: 2px;
 }
 .csseditor[data-theme=light] .popup .animation-property-popup {
   width: 220px;

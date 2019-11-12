@@ -1,6 +1,7 @@
 import UIElement from "../../../util/UIElement";
 import { LOAD, INPUT, BIND, CLICK } from "../../../util/Event";
 import colormatrix from "./colormatrix";
+import { normalize } from "../../../util/functions/math";
 
 
 
@@ -10,13 +11,11 @@ const sampleList = Object.keys(colormatrix).map(it => {
     return {title: it, values: colormatrix[it] }    
 })
 
-const splitReg = /[\b\t \,\n]/g;
-
 export default class ColorMatrixEditor extends UIElement {
 
     initState() {
         return {
-            values: this.normalize(this.props.values)
+            values: normalize(this.props.values)
         }
     }
 
@@ -49,16 +48,12 @@ export default class ColorMatrixEditor extends UIElement {
         })
     }
 
-    normalize (str) {
-        return str.trim().split(splitReg).filter(it => it).map(it  => +it);
-    }
-
     [CLICK('$sample .sample-item')] (e) {
         var index = +e.$delegateTarget.attr('data-index')
         var sample = sampleList[index]
 
         this.updateData({
-            values: this.normalize(sample.values)
+            values: normalize(sample.values)
         })
 
         this.load('$body');

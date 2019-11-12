@@ -5,6 +5,7 @@ import { CLICK, PREVENT, STOP } from "../../../util/Event";
 
 import icon from "../icon/icon";
 import NumberRangeEditor from "../property-editor/NumberRangeEditor";
+import { round } from "../../../util/functions/math";
 
 export default class PageTools extends UIElement {
 
@@ -30,8 +31,10 @@ export default class PageTools extends UIElement {
 
   [EVENT('changeScaleValue')] (scale) {
 
-    this.children.$scale.setValue(editor.scale * 100);
-    this.emit('update.scale', scale);
+    scale = round(scale * 100, 100)
+
+    this.children.$scale.setValue(scale);
+    this.emit('update.scale', scale/100);
   }
 
   [EVENT('changeRangeEditor')] (key, scale) {

@@ -1,11 +1,8 @@
 import { uuidShort, uuid } from "../../util/functions/math";
 import {
   isFunction,
-  isUndefined,
-  OBJECT_TO_CLASS,
-  OBJECT_TO_PROPERTY
+  isUndefined
 } from "../../util/functions/func";
-// import { editor } from "../editor";
 
 
 function _traverse(obj) {
@@ -230,9 +227,47 @@ export class Item {
 
 
 
-  add (layer) {
-    this.json.layers.push(layer);
-    layer.parent = this.ref; 
+  add (layer, direction = 'self') {
+
+    if (layer.parent) {
+      layer.remove();
+    }
+
+    if (direction === 'self') {
+      this.json.layers.push(layer);
+      layer.parent = this.ref;   
+    } else if (direction === 'before') {
+      // 현재 객체 앞으로 넣기 
+      layer.parent = this.parent.ref; 
+
+      var list  = []
+      
+      this.parent.layers.forEach(it => {
+        if (it === this.ref) {
+          list.push(layer);
+        }                
+        list.push(it);        
+      }) 
+
+      this.parent.layers = list;       
+
+    } else if (direction === 'after') {
+      // 현재 객체 뒤로 넣기 
+      layer.parent = this.parent.ref;       
+      var list  = []
+      
+      this.parent.layers.forEach(it => {
+        list.push(it);        
+        if (it === this.ref) {
+          list.push(layer);
+        }        
+      }) 
+
+      this.parent.layers = list; 
+      
+    }
+
+
     return layer;
   }
 
@@ -320,6 +355,14 @@ export class Item {
     if (childIndex > -1) {
       this.json.layers.splice(childIndex, 1);
     }
+  }
+
+  hasParent (parentId) {
+    var isParent = this.json.parent.id === parentId
+
+    if (!isParent && this.json.parent.is('project') === false) return this.json.parent.hasParent(parentId);
+
+    return isParent; 
   }
 
   get allLayers () {

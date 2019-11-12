@@ -1,5 +1,5 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, CLICK, DOUBLECLICK, KEYUP, KEY, PREVENT, STOP, FOCUSOUT, VDOM, DRAGSTART, KEYDOWN, DRAGOVER, DROP } from "../../../util/Event";
+import { LOAD, CLICK, DOUBLECLICK, KEYUP, KEY, PREVENT, STOP, FOCUSOUT, VDOM, DRAGSTART, KEYDOWN, DRAGOVER, DROP, DRAG, BIND, DRAGEND } from "../../../util/Event";
 import { editor } from "../../../editor/editor";
 import icon from "../icon/icon";
 import { EVENT } from "../../../util/UIElement";
@@ -18,6 +18,16 @@ export default class LayerTreeProperty extends BaseProperty {
     return 'full'
   }
 
+  initState() {
+    return {
+      hideDragPointer: true,
+      lastDragOverPosition: 0,
+      lastDragOverOffset: 0,
+      rootRect: { top: 0 },
+      itemRect: { height: 0 }
+    }
+  }
+
   getTools() {
     return /*html*/`
       <button type='button' ref='$add' title="Add a layer">${icon.add}</button>
@@ -27,7 +37,67 @@ export default class LayerTreeProperty extends BaseProperty {
   getBody() {
     return /*html*/`
       <div class="layer-list" ref="$layerList"></div>
+      <div class='drag-point' ref='$dragPointer'></div>
     `;
+  }
+
+  [BIND('$dragPointer')] () {
+
+
+    var offset = this.state.lastDragOverOffset 
+    var dist = this.state.itemRect.height/3; 
+    var bound = {} 
+
+    if (this.state.lastDragOverOffset < dist) {
+      offset = 0;
+
+      var top = this.state.lastDragOverPosition + offset - this.state.rootRect.top
+
+      bound = {
+        top: Length.px(top),
+        height: '1px',
+        width: '100%',
+        left: '0px'
+      }
+
+      this.state.lastDragOverItemDirection = 'before';
+    } else if (this.state.lastDragOverOffset > this.state.itemRect.height - dist) {
+      offset = this.state.itemRect.height; 
+
+      var top = this.state.lastDragOverPosition + offset - this.state.rootRect.top
+
+      bound = {
+        top: Length.px(top),
+        height: '1px',
+        width: '100%',
+        left: '0px'
+      }            
+      this.state.lastDragOverItemDirection = 'after';      
+    } else {
+      offset = 0; 
+
+      var top = this.state.lastDragOverPosition + offset - this.state.rootRect.top
+
+      bound = {
+        top: Length.px(top),
+        height: Length.px(this.state.itemRect.height),
+        width: '100%',
+        left: '0px'
+      }      
+      this.state.lastDragOverItemDirection = 'self';      
+    }
+
+    
+
+    return {
+      style: {
+        position: 'absolute',
+        ...bound,
+        'display': this.state.hideDragPointer ? 'none':  'block',
+        'border': '1px solid blue',
+        'pointer-events': 'none'
+      }
+    }
   }
 
   getIcon (item) {
@@ -107,20 +177,59 @@ export default class LayerTreeProperty extends BaseProperty {
   [DRAGSTART('$layerList .layer-item')] (e) {
     var layerId = e.$delegateTarget.attr('data-layer-id');
     e.dataTransfer.setData('layer/id', layerId);
+    this.state.rootRect = this.refs.$layerList.rect()
+    this.state.itemRect = e.$delegateTarget.rect();
+    this.setState({
+      hideDragPointer: false 
+    }, false)
+
+    this.bindData('$dragPointer');
   }
 
-  [DRAGOVER('$layerList .layer-item') + PREVENT] (e) {}
+  [DRAGEND('$layerList .layer-item')] (e) {
+    this.setState({
+      hideDragPointer: true 
+    }, false)
+
+    this.bindData('$dragPointer');
+  }
+
+  [DRAGOVER('$layerList .layer-item') + PREVENT] (e) {
+    var targetLayerId = e.$delegateTarget.attr('data-layer-id') 
+    // console.log({targetLayerId, x: e.offsetX, y: e.offsetY});
+
+    this.state.lastDragOverItemId = targetLayerId;
+    this.state.lastDragOverPosition = e.$delegateTarget.rect().top;
+    this.state.lastDragOverOffset = e.offsetY;
+
+    this.bindData('$dragPointer')
+
+  }
   [DROP('$layerList .layer-item')] (e) {
-    var layerId = e.dataTransfer.getData('layer/id');
+    var targetLayerId = e.$delegateTarget.attr('data-layer-id')
+    var sourceLayerId = e.dataTransfer.getData('layer/id');
 
-    console.log(layerId)
-    // 순서 바꾸기 
-    // order 순서는 어떤식으로 바꿔야 하는 것일까?  
-    // 내가 위치한 곳에서 상위 그룹 안에 내가 들어가야할 듯 한데 
-    // 몇가지 규칙이 있다. 
-    // 아니면 z-order 숫자만 바꿔야할 것인가? 
+    if (targetLayerId === sourceLayerId) return; 
+    var artboard = editor.selection.currentArtboard
+
+    if (artboard) {
+      var targetItem = artboard.searchById(targetLayerId);
+      var sourceItem = artboard.searchById(sourceLayerId);
+
+      if (targetItem.hasParent(sourceItem.id)) return; 
+
+      targetItem.add(sourceItem, this.state.lastDragOverItemDirection);
+
+      editor.selection.select(sourceItem);
+
+      this.setState({
+        hideDragPointer: true 
+      })
+
+      this.emit('refreshAllSelectArtBoard')      
+
+    }
   }
-
 
   [DOUBLECLICK('$layerList .layer-item')] (e) {
     this.startInputEditing(e.$delegateTarget.$('.name'))

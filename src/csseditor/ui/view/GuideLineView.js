@@ -124,7 +124,7 @@ export default class GuideLineView extends UIElement {
                 if (it.A.screenX.value > it.B.screenX2.value) {
                     vLine(images, startY, it.B.screenX2.value, it.A.screenX.value);
                 } else {
-                    vLine(images, startY, it.A.screenX.value, it.B.screenX2.value);
+                    vLine(images, startY, it.A.screenX2.value, it.B.screenX.value);
                 }
 
 

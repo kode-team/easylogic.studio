@@ -40,8 +40,10 @@ export class CylinderLayer extends Component {
       itemType: 'cylinder',
       name: "New Cylinder",
       'transform-style':'preserve-3d',
+      'backface-visibility': 'visible',
       transform: 'rotateX(10deg) rotateY(30deg)',
       count: Length.number(40),
+      rate: Length.number(1),
       border: 'border-top: 1px solid black;border-bottom: 1px solid black;',
       ...obj
     }); 
@@ -49,6 +51,7 @@ export class CylinderLayer extends Component {
 
   getProps() {
     var count = this.json.count.value; 
+    var rate = this.json.rate.value; 
 
 
     return [
@@ -56,7 +59,7 @@ export class CylinderLayer extends Component {
       {
         key: `count`, editor: 'NumberRangeEditor', 
         editorOptions: {
-          label: `Side Count`,
+          label: `Count`,
           min: 3,
           max: 100,
           step: 1 
@@ -64,6 +67,26 @@ export class CylinderLayer extends Component {
         refresh: true, 
         defaultValue: count 
       },
+      {
+        key: `rate`, editor: 'NumberRangeEditor', 
+        editorOptions: {
+          label: `radius`,
+          min: 0,
+          max: 10,
+          step: 0.1 
+        }, 
+        refresh: true, 
+        defaultValue: rate 
+      },      
+      {
+        key: `backface-visibility`, editor: 'SelectIconEditor', 
+        editorOptions: {
+          label: 'visibility',
+          options: 'visible,hidden'
+        }, 
+        refresh: true, 
+        defaultValue: this.json['backface-visibility'] 
+      },      
       'Color',
       ...repeat(count).map((it, index) => {
         return {
@@ -156,6 +179,7 @@ export class CylinderLayer extends Component {
     json = super.convert(json);
 
     json.count = Length.parse(json.count);
+    json.rate = Length.parse(json.rate);
     return json; 
   }
 
@@ -172,6 +196,7 @@ export class CylinderLayer extends Component {
     return {
       ...super.toCloneObject(),
       count:  this.json.count.clone(), 
+      rate:  this.json.rate.clone(), 
       ...obj   
     }
   }
@@ -208,7 +233,6 @@ export class CylinderLayer extends Component {
     return {
       ...this.toVariableCSS(),
       ...this.toDefaultCSS(isExport),
-      // ...this.toClipPathCSS(),
       ...this.toWebkitCSS(),      
       ...this.toBoxModelCSS(),
       // ...this.toTransformCSS(),      
@@ -222,6 +246,8 @@ export class CylinderLayer extends Component {
 
     var count = json.count.value;
     var width = json.width; 
+    var backfaceVisibility = json['backface-visibility']
+    var rate = json.rate.value; 
     var {angle, r, faceWidth} = this.cylinderInfo;
 
     var css = {
@@ -241,9 +267,9 @@ export class CylinderLayer extends Component {
 
       return  {
         selector: `.face[data-index="${index}"]`, cssText: `
-          transform:rotateY(${rotateY}deg) translateZ(${r}px);
-          ${json[colorKey] && `background-color: ${json[colorKey]};`}
-          ${json[backgroundKey] && `${json[backgroundKey]};`}
+          transform:rotateY(${rotateY}deg) translateZ(${r * rate}px);
+          ${json[colorKey] ? `background-color: ${json[colorKey]};` : ''}
+          ${json[backgroundKey] ? `${json[backgroundKey]};` : '' }
         `.trim()
       }
     })
@@ -257,6 +283,7 @@ export class CylinderLayer extends Component {
           bottom: 0px;
           right: 0px;
           width: ${faceWidth}px;
+          backface-visibility: ${backfaceVisibility};
           opacity: 1;
           pointer-events: none;
           ${CSS_TO_STRING(css)}
@@ -286,12 +313,12 @@ export class CylinderLayer extends Component {
       polygon.push(getXYInCircle(i, r, center.x, center.y))
     }
 
-    var faceWidth = Math.ceil(getDist(polygon[0].x,polygon[0].y,polygon[1].x,polygon[1].y))
+    var faceWidth = getDist(polygon[0].x,polygon[0].y,polygon[1].x,polygon[1].y)
     var centerR = {
       x: (polygon[0].x + polygon[1].x)/2,
       y: (polygon[0].y + polygon[1].y)/2
     }
-    var r = Math.ceil(getDist(centerR.x, centerR.y, center.x, center.y))
+    var r = getDist(centerR.x, centerR.y, center.x, center.y)
 
     return {
       polygon,

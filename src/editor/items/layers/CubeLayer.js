@@ -1,5 +1,6 @@
 import { CSS_TO_STRING, isObject, OBJECT_TO_PROPERTY } from "../../../util/functions/func";
 import { Component } from "../Component";
+import { Length } from "../../unit/Length";
 
 const faceKeys = [
   'front', 'back', 'left', 'right', 'bottom', 'top'
@@ -56,6 +57,7 @@ export class CubeLayer extends Component {
       itemType: 'cube',
       name: "New Cube",
       'transform-style':'preserve-3d',
+      rate: Length.number(1),      
       transform: 'rotateX(10deg) rotateY(30deg)',
       border: 'border:1px solid black',
       ...obj
@@ -63,7 +65,19 @@ export class CubeLayer extends Component {
   }
 
   getProps() {
+    var rate = this.json.rate.value; 
     return [
+      {
+        key: `rate`, editor: 'NumberRangeEditor', 
+        editorOptions: {
+          label: `radius`,
+          min: 0,
+          max: 10,
+          step: 0.1 
+        }, 
+        refresh: true, 
+        defaultValue: rate 
+      },         
       'Color',
       ...faceKeys.map(key => {
         return       {
@@ -74,7 +88,7 @@ export class CubeLayer extends Component {
           }, 
           defaultValue: 'rgba(0, 0, 0, 1)' 
         }
-      }),
+      }),      
       'Background',
       ...faceKeys.map(key => {
         return       {
@@ -157,6 +171,7 @@ export class CubeLayer extends Component {
 
     return {
       ...super.toCloneObject(),
+      rate: this.json.rate.clone(),
       ...obj
     }
   }
@@ -193,7 +208,6 @@ export class CubeLayer extends Component {
     return {
       ...this.toVariableCSS(),
       ...this.toDefaultCSS(isExport),
-      // ...this.toClipPathCSS(),
       ...this.toWebkitCSS(),      
       ...this.toBoxModelCSS(),
       // ...this.toTransformCSS(),      
@@ -205,6 +219,7 @@ export class CubeLayer extends Component {
   toNestedCSS() {
     var json = this.json; 
 
+    var rate = json.rate.value; 
     var width = json.width; 
     var height = json.height; 
     var halfWidth = width.value/2
@@ -233,7 +248,7 @@ export class CubeLayer extends Component {
       },
       {
         selector: '.front', cssText: `
-          transform:rotateY(0deg) translateZ(${halfWidth}px);
+          transform:rotateY(0deg) translateZ(${halfWidth * rate}px);
           width: ${width};
           height: ${height};     
           ${json['front.color'] ? `background-color: ${json['front.color']};`: ''}
@@ -243,7 +258,7 @@ export class CubeLayer extends Component {
       },
       {
         selector: '.back', cssText: `
-          transform: rotateY(180deg) translateZ(${halfWidth}px);
+          transform: rotateY(180deg) translateZ(${halfWidth * rate}px);
           width: ${width};
           height: ${height};            
           ${json['back.color'] ? `background-color: ${json['back.color']};`: ''}                  
@@ -252,7 +267,7 @@ export class CubeLayer extends Component {
       },
       {
         selector: '.left', cssText:  `
-          transform: rotateY(-90deg) translateZ(${halfWidth}px);
+          transform: rotateY(-90deg) translateZ(${halfWidth * rate}px);
           width: ${width};
           height: ${height};    
           ${json['left.color'] ? `background-color: ${json['left.color']};`: ''}                          
@@ -261,7 +276,7 @@ export class CubeLayer extends Component {
       },
       {
         selector: '.right', cssText: `
-          transform: rotateY(90deg) translateZ(${halfWidth}px);
+          transform: rotateY(90deg) translateZ(${halfWidth * rate}px);
           width: ${width};
           height: ${height};      
           ${json['right.color'] ? `background-color: ${json['right.color']};`: ''}                        
@@ -270,7 +285,7 @@ export class CubeLayer extends Component {
       },
       {
         selector: '.top', cssText: `
-          transform: rotateX(90deg) translateZ(${halfHeight}px);
+          transform: rotateX(90deg) translateZ(${halfHeight * rate}px);
           top: ${halfHeight - halfWidth}px;
           width: ${width};
           height: ${width};
@@ -280,7 +295,7 @@ export class CubeLayer extends Component {
       },
       {
         selector: '.bottom', cssText: `
-          transform: rotateX(-90deg) translateZ(${halfHeight}px);
+          transform: rotateX(-90deg) translateZ(${halfHeight * rate}px);
           top: ${halfHeight - halfWidth}px;          
           width: ${width};
           height: ${width};    

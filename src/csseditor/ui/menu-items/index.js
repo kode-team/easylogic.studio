@@ -30,10 +30,13 @@ import AddSVGCircle from "./AddSVGCircle";
 import Fullscreen from "./Fullscreen";
 import AddSVGTextPath from "./AddSVGTextPath";
 import AddCylinder from "./AddCylinder";
+import AddSVGText from "./AddSVGText";
+
 
 
 
 export default {
+  AddSVGText,
   AddCylinder,
   AddSVGTextPath,
   Fullscreen,

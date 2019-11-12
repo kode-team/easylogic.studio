@@ -104,6 +104,10 @@ export class Selection {
     this.setRectCache();
   }
 
+  reselect () {
+    this.setRectCache();
+  }
+
   check (item) {
     return this.itemKeys[item.id]
   }

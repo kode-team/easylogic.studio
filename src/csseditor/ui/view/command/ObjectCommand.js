@@ -14,6 +14,7 @@ import { SVGPathItem } from "../../../../editor/items/layers/SVGPathItem";
 import { SVGTextPathItem } from "../../../../editor/items/layers/SVGTextPathItem";
 import { CylinderLayer } from "../../../../editor/items/layers/CylinderLayer";
 import PathParser from "../../../../editor/parse/PathParser";
+import { SVGTextItem } from "../../../../editor/items/layers/SVGTextItem";
 
 export default class ObjectCommand extends UIElement {
 
@@ -140,6 +141,16 @@ export default class ObjectCommand extends UIElement {
         }), rect)
     }            
 
+
+    [COMMAND('add.svgtext')] (rect = {}) {
+
+        this.trigger('add.layer', new SVGTextItem({
+            width: Length.px(100),
+            height: Length.px(100),
+            text: 'Insert a newText',
+            ...rect
+        }), rect)
+    }            
 
     [COMMAND('add.svgcircle')] (rect = {}) {
 

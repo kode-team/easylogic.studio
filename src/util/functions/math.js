@@ -295,3 +295,8 @@ export function getCenterInTriangle (a, b, c) {
         y: (a.y + b.y + c.y) / 3
     }
 }
+
+const splitReg = /[\b\t \,\n]/g;
+export function normalize (str) {
+    return str.trim().split(splitReg).filter(it => it).map(it  => +it);
+}

@@ -19,13 +19,14 @@ export default class ToolMenu extends UIElement {
             <AddText />
             <AddImage />
             <AddCube />
-            <!-- AddCylinder / -->
+            <AddCylinder />
             <!-- AddSphere / -->
             <div class='split'></div>
             <!--<label>SVG</label>-->
             <AddPath />
             <AddSVGRect />
             <AddSVGCircle />            
+            <AddSVGText />
             <AddSVGTextPath />
             <AddPolygon />
             <AddStar />

@@ -10,7 +10,8 @@
     .codemirror-colorpicker {
       box-shadow: none;
       border-radius: 0px;
-      background-color: $background-color;
+      background-color: $popup-background-color;
+      border-color: $popup-background-color;
 
       input {
         color: $font-color !important;
@@ -89,6 +90,13 @@
           background-color: $selected-color;
           border-radius: 100%;
         }
+      }
+
+      .offset-x,
+      .offset-y,
+      .blur-radius,
+      .spread-radius {
+        margin-bottom: 2px;
       }
     }
   }

@@ -53,10 +53,12 @@ import PathDataProperty from "./PathDataProperty";
 import PolygonDataProperty from "./PolygonDataProperty";
 import SVGTextProperty from "./SVGTextProperty";
 import ExportProperty from "./ExportProperty";
+import ShapeInsideProperty from "./ShapeInsideProperty";
 
 
 
 export default {  
+  ShapeInsideProperty,
   ExportProperty,
   SVGTextProperty,
   PolygonDataProperty,
