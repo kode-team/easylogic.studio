@@ -4,6 +4,7 @@ import PolygonParser from "../../parse/PolygonParser";
 import { OBJECT_TO_PROPERTY, CSS_TO_STRING } from "../../../util/functions/func";
 import Dom from "../../../util/Dom";
 import { Deluanay } from "../../../util/functions/math";
+import { editor } from "../../editor";
 
 export class SVGPolygonItem extends SVGItem {
   getDefaultObject(obj = {}) {
@@ -149,3 +150,5 @@ export class SVGPolygonItem extends SVGItem {
     `
   }
 }
+
+editor.registerComponent('svg-polygon', SVGPolygonItem);

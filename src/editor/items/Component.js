@@ -1,11 +1,9 @@
 import { Layer } from "./Layer";
+import { editor } from "../editor";
 
-// 속성 리스트 
-// editor 리스트 
-// selection 처리 
-// selection 될지 말지를 니가 고르지 말고 
-// 객체 스스로 기능을 정의 한다면 ? 
-
+/**
+ * Complex Component with children 
+ */
 export class Component extends Layer {
     
     is (...itemType) {
@@ -19,7 +17,10 @@ export class Component extends Layer {
     getProps () {
         
         return [
-            // {key: 'color', defaultValue: Length.px(0), editor: { ColorViewEditor } }
+            // 'label',s
+            // {key: 'color', defaultValue: Length.px(0), editor: 'ColorViewEditor', editorOptions: {} }
         ] 
     }
 }
+
+editor.registerComponent('component', Component);

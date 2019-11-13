@@ -1,7 +1,6 @@
 import { Config } from "./Config";
 import { Selection } from "./Selection";
 import { TimelineSelection } from "./TimelineSelection";
-import { Project } from "./items/Project";
 
 function blobToDataURL(blob) {
   return new Promise(function(resolve) {
@@ -36,7 +35,26 @@ export const editor = new class {
     this.mode = EDIT_MODE_SELECTION
     this.addType = '' 
 
+    this.components = {} 
+
     this.initTheme();
+  }
+
+  registerComponent (name, Component) {
+    this.components[name] = Component;
+  }
+
+  getComponentClass(name) {
+    return this.components[name]
+  }
+
+  createComponent (name, obj = {}) {
+    var ComponentClass = this.getComponentClass(name);
+    return new ComponentClass(obj);
+  }
+
+  setUser (user) {
+    this.user = user; 
   }
 
   initTheme () {

@@ -4,6 +4,7 @@ import { OBJECT_TO_PROPERTY, CSS_TO_STRING } from "../../../util/functions/func"
 import { hasSVGProperty, hasCSSProperty} from "../../util/Resource";
 import { Shape } from "../../css-property/Shape";
 import { Length } from "../../unit/Length";
+import { editor } from "../../editor";
 
 export class SVGTextItem extends SVGItem {
   getDefaultObject(obj = {}) {
@@ -203,3 +204,6 @@ export class SVGTextItem extends SVGItem {
     </g>`
   }
 }
+
+editor.registerComponent('svg-text', SVGTextItem);
+ 

@@ -1,7 +1,6 @@
 node_modules/
 .DS_Store
 test-report/
-package-lock.json
-chrome-app/
+package-lock.json   
 chrome-extension/
 whale-extension/

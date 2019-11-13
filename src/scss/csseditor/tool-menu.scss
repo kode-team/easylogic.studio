@@ -119,6 +119,18 @@
             display: none;
           }
         }
+
+
+        &.cylinder {
+          .icon {
+            svg {
+              path {
+                stroke-width: 0;
+              }
+            }
+          }
+        }
+
         .icon {
           // width: 30px;
           // height: 30px;
@@ -198,6 +210,7 @@
       color: $font-color;
       // display: none;
     }
+
 
     .icon {
       margin: 0 auto;

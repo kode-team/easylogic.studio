@@ -21,6 +21,7 @@ import windowList from "../ui/window-list";
 import ImageFileView from "../ui/view/ImageFileView";
 import TimelineProperty from "../ui/control/TimelineProperty";
 import StatusBar from "../ui/view/StatusBar";
+import items from "../../editor/items";
 
 // import Lottie from "../../editor/parse/Lottie";
 
@@ -87,6 +88,8 @@ export default class CSSEditor extends UIElement {
         <StyleView />    
         <CommandView />    
         <ExportWindow />
+        <LoginWindow />
+        <SignWindow />
         <ImageFileView />
       </div>
     `;

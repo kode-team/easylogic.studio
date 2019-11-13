@@ -1,6 +1,7 @@
 import { Layer } from "../Layer";
 import Dom from "../../../util/Dom";
 import { OBJECT_TO_PROPERTY, CSS_TO_STRING } from "../../../util/functions/func";
+import { editor } from "../../editor";
 
 export class ImageLayer extends Layer {
   getDefaultObject(obj = {}) {
@@ -93,7 +94,8 @@ export class ImageLayer extends Layer {
       </foreignObject>    
     </g>
 `
-  }    
+  }     
 
 }
  
+editor.registerComponent('image', ImageLayer);

@@ -1,5 +1,6 @@
 import { DomItem } from "./DomItem";
 import { Length } from "../unit/Length";
+import { editor } from "../editor";
 
 
 export class Layer extends DomItem {
@@ -42,3 +43,5 @@ export class Layer extends DomItem {
   }  
 
 }
+
+editor.registerComponent('layer', Layer);

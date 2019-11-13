@@ -2317,6 +2317,10 @@ html, body {
 .csseditor .external-tool-menu .items .draw-items .menu-item[data-no-title=true] .title {
   display: none;
 }
+.csseditor .tool-menu .items .draw-items .menu-item.cylinder .icon svg path,
+.csseditor .external-tool-menu .items .draw-items .menu-item.cylinder .icon svg path {
+  stroke-width: 0;
+}
 .csseditor .tool-menu .items .draw-items .menu-item .icon,
 .csseditor .external-tool-menu .items .draw-items .menu-item .icon {
   display: inline-block;
@@ -11528,6 +11532,10 @@ html, body {
 .csseditor[data-theme=light] .tool-menu .items .draw-items .menu-item[data-no-title=true] .title,
 .csseditor[data-theme=light] .external-tool-menu .items .draw-items .menu-item[data-no-title=true] .title {
   display: none;
+}
+.csseditor[data-theme=light] .tool-menu .items .draw-items .menu-item.cylinder .icon svg path,
+.csseditor[data-theme=light] .external-tool-menu .items .draw-items .menu-item.cylinder .icon svg path {
+  stroke-width: 0;
 }
 .csseditor[data-theme=light] .tool-menu .items .draw-items .menu-item .icon,
 .csseditor[data-theme=light] .external-tool-menu .items .draw-items .menu-item .icon {

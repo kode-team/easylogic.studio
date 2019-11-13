@@ -1,5 +1,6 @@
 import { Length } from "../unit/Length";
 import { TimelineItem } from "./TimelineItem";
+import { editor } from "../editor";
 
 export class ArtBoard extends TimelineItem {
   getDefaultObject(obj = {}) {
@@ -36,3 +37,5 @@ export class ArtBoard extends TimelineItem {
   }
 
 }
+
+editor.registerComponent('artboard', ArtBoard);

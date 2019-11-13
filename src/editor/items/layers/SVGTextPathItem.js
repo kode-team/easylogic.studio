@@ -4,6 +4,7 @@ import { OBJECT_TO_PROPERTY, OBJECT_TO_CLASS, CSS_TO_STRING } from "../../../uti
 import { hasSVGProperty, hasCSSProperty, hasSVGPathProperty } from "../../util/Resource";
 import { Length } from "../../unit/Length";
 import Dom from "../../../util/Dom";
+import { editor } from "../../editor";
 
 export class SVGTextPathItem extends SVGItem {
   getDefaultObject(obj = {}) {
@@ -190,3 +191,5 @@ export class SVGTextPathItem extends SVGItem {
     </g>`
   }
 }
+
+editor.registerComponent('svg-textpath', SVGTextPathItem); 

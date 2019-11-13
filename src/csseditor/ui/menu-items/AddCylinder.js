@@ -3,10 +3,14 @@ import icon from "../icon/icon";
  
 export default class AddCylinder extends MenuItem {
   getIconString() {
-    return icon.cube;
+    return icon.cylinder;
   }
   getTitle() {
     return "5. Cylinder";
+  }
+
+  getClassName() {
+    return 'cylinder'
   }
 
   isHideTitle() {

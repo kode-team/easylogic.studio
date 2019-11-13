@@ -22,7 +22,8 @@ export default class ExternalToolMenu extends UIElement {
           <!--ThemeSwitcher /-->
           <Github />
           <Manual />
-
+          <!-- LoginButton /-->
+          <!-- SignButton /-->
         </div>                
       </div>
     `;

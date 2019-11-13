@@ -5,6 +5,7 @@ import { hasSVGProperty, hasCSSProperty, hasSVGPathProperty } from "../../util/R
 import { Length } from "../../unit/Length";
 import { SVGFill } from "../../svg-property/SVGFill";
 import Dom from "../../../util/Dom";
+import { editor } from "../../editor";
 
 export class SVGPathItem extends SVGItem {
   getDefaultObject(obj = {}) {
@@ -166,3 +167,5 @@ export class SVGPathItem extends SVGItem {
   `
   }
 }
+
+editor.registerComponent('svg-path', SVGPathItem)

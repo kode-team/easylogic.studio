@@ -1,6 +1,7 @@
 import { CSS_TO_STRING, isObject, OBJECT_TO_PROPERTY } from "../../../util/functions/func";
 import { Component } from "../Component";
 import { Length } from "../../unit/Length";
+import { editor } from "../../editor";
 
 const faceKeys = [
   'front', 'back', 'left', 'right', 'bottom', 'top'
@@ -57,6 +58,7 @@ export class CubeLayer extends Component {
       itemType: 'cube',
       name: "New Cube",
       'transform-style':'preserve-3d',
+      'backface-visibility': 'visible',      
       rate: Length.number(1),      
       transform: 'rotateX(10deg) rotateY(30deg)',
       border: 'border:1px solid black',
@@ -77,7 +79,16 @@ export class CubeLayer extends Component {
         }, 
         refresh: true, 
         defaultValue: rate 
-      },         
+      },   
+      {
+        key: `backface-visibility`, editor: 'SelectIconEditor', 
+        editorOptions: {
+          label: 'visibility',
+          options: 'visible,hidden'
+        }, 
+        refresh: true, 
+        defaultValue: this.json['backface-visibility'] 
+      },                  
       'Color',
       ...faceKeys.map(key => {
         return       {
@@ -161,6 +172,14 @@ export class CubeLayer extends Component {
     return keyframes
   }    
 
+
+  convert (json) {
+    json = super.convert(json);
+
+    json.rate = Length.parse(json.rate);
+    return json; 
+  }  
+
   toCloneObject() {
 
     var obj = {}
@@ -224,7 +243,7 @@ export class CubeLayer extends Component {
     var height = json.height; 
     var halfWidth = width.value/2
     var halfHeight = height.value/2
-
+    var backfaceVisibility = json['backface-visibility']
     var css = {
       ...this.toKeyListCSS(
         'filter', 'mix-blend-mode', 'border-radius', 'background-color',
@@ -251,6 +270,7 @@ export class CubeLayer extends Component {
           transform:rotateY(0deg) translateZ(${halfWidth * rate}px);
           width: ${width};
           height: ${height};     
+          backface-visibility: ${backfaceVisibility};          
           ${json['front.color'] ? `background-color: ${json['front.color']};`: ''}
           ${json['front.background'] ? `${json['front.background']};`: ''}
 
@@ -260,7 +280,8 @@ export class CubeLayer extends Component {
         selector: '.back', cssText: `
           transform: rotateY(180deg) translateZ(${halfWidth * rate}px);
           width: ${width};
-          height: ${height};            
+          height: ${height};        
+          backface-visibility: ${backfaceVisibility};              
           ${json['back.color'] ? `background-color: ${json['back.color']};`: ''}                  
           ${json['back.background'] ? `${json['back.background']};`: ''}
         `.trim()
@@ -270,6 +291,7 @@ export class CubeLayer extends Component {
           transform: rotateY(-90deg) translateZ(${halfWidth * rate}px);
           width: ${width};
           height: ${height};    
+          backface-visibility: ${backfaceVisibility};          
           ${json['left.color'] ? `background-color: ${json['left.color']};`: ''}                          
           ${json['left.background'] ? `${json['left.background']};`: ''}
         `.trim()
@@ -279,6 +301,7 @@ export class CubeLayer extends Component {
           transform: rotateY(90deg) translateZ(${halfWidth * rate}px);
           width: ${width};
           height: ${height};      
+          backface-visibility: ${backfaceVisibility};          
           ${json['right.color'] ? `background-color: ${json['right.color']};`: ''}                        
           ${json['right.background'] ? `${json['right.background']};`: ''}          
         `.trim()
@@ -289,6 +312,7 @@ export class CubeLayer extends Component {
           top: ${halfHeight - halfWidth}px;
           width: ${width};
           height: ${width};
+          backface-visibility: ${backfaceVisibility};          
           ${json['top.color'] ? `background-color: ${json['top.color']};`: ''}      
           ${json['top.background'] ? `${json['top.background']};`: ''}              
         `.trim()
@@ -299,6 +323,7 @@ export class CubeLayer extends Component {
           top: ${halfHeight - halfWidth}px;          
           width: ${width};
           height: ${width};    
+          backface-visibility: ${backfaceVisibility};          
           ${json['bottom.color'] ? `background-color: ${json['bottom.color']};`: ''}
           ${json['bottom.background'] ? `${json['bottom.background']};`: ''}                          
         `.trim()
@@ -363,4 +388,6 @@ export class CubeLayer extends Component {
   }    
 
 }
+
+editor.registerComponent('cube', CubeLayer);
  

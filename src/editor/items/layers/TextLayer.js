@@ -1,5 +1,6 @@
 import { Layer } from "../Layer";
 import { OBJECT_TO_PROPERTY, CSS_TO_STRING } from "../../../util/functions/func";
+import { editor } from "../../editor";
 
 export class TextLayer extends Layer {
   getDefaultObject(obj = {}) {
@@ -86,3 +87,4 @@ export class TextLayer extends Layer {
 
 }
  
+editor.registerComponent('text', TextLayer); 

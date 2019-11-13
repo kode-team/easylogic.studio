@@ -1,29 +1,13 @@
 import UIElement, { COMMAND } from "../../../../util/UIElement";
 import { editor, EDIT_MODE_SELECTION } from "../../../../editor/editor";
 import { Length } from "../../../../editor/unit/Length";
-import { uuidShort, uuid } from "../../../../util/functions/math";
+import { uuidShort } from "../../../../util/functions/math";
 import AssetParser from "../../../../editor/parse/AssetParser";
-import { Project } from "../../../../editor/items/Project";
-import { ArtBoard } from "../../../../editor/items/ArtBoard";
-import { Layer } from "../../../../editor/items/Layer";
-import { TextLayer } from "../../../../editor/items/layers/TextLayer";
-import { ImageLayer } from "../../../../editor/items/layers/ImageLayer";
-import { SVGPathItem } from "../../../../editor/items/layers/SVGPathItem";
-import { SVGPolygonItem } from "../../../../editor/items/layers/SVGPolygonItem";
 import { saveResource, loadResource } from "../../../../editor/util/Resource";
 import { isFunction } from "../../../../util/functions/func";
 import ExportManager from "../../../../editor/ExportManager";
 import Dom from "../../../../util/Dom";
 
-const ItemClassList = {
-    'project': Project,
-    'artboard': ArtBoard,
-    'layer': Layer,
-    'text': TextLayer,
-    'image': ImageLayer,
-    'svg-path': SVGPathItem,
-    'svg-polygon': SVGPolygonItem
-}
 
 const createItem = (obj) => {
 
@@ -31,7 +15,9 @@ const createItem = (obj) => {
         return createItem(it);
     })
 
-    return new ItemClassList[obj.itemType] (obj);
+    var ComponentClass = editor.getComponentClass(obj.itemType)
+
+    return new ComponentClass(obj);
 }
 
 export default class ToolCommand extends UIElement {
@@ -97,6 +83,7 @@ export default class ToolCommand extends UIElement {
     }    
 
     [COMMAND('load.json')] (json) {
+
         json = json || loadResource('projects', []);
 
         var projects = json.map(p => createItem(p))

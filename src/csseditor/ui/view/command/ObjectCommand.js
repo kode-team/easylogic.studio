@@ -1,20 +1,9 @@
 import UIElement, { COMMAND } from "../../../../util/UIElement";
 import { editor, EDIT_MODE_SELECTION } from "../../../../editor/editor";
-import { Project } from "../../../../editor/items/Project";
-import { ArtBoard } from "../../../../editor/items/ArtBoard";
 import { Length } from "../../../../editor/unit/Length";
-import { Layer } from "../../../../editor/items/Layer";
 import Color from "../../../../util/Color";
-import { SphereLayer } from "../../../../editor/items/layers/SphereLayer";
-import { CubeLayer } from "../../../../editor/items/layers/CubeLayer";
-import { ImageLayer } from "../../../../editor/items/layers/ImageLayer";
-import { TextLayer } from "../../../../editor/items/layers/TextLayer";
 import PathStringManager from "../../../../editor/parse/PathStringManager";
-import { SVGPathItem } from "../../../../editor/items/layers/SVGPathItem";
-import { SVGTextPathItem } from "../../../../editor/items/layers/SVGTextPathItem";
-import { CylinderLayer } from "../../../../editor/items/layers/CylinderLayer";
 import PathParser from "../../../../editor/parse/PathParser";
-import { SVGTextItem } from "../../../../editor/items/layers/SVGTextItem";
 
 export default class ObjectCommand extends UIElement {
 
@@ -76,7 +65,7 @@ export default class ObjectCommand extends UIElement {
     }
 
     [COMMAND('add.project')] (obj = {}) {
-        var project = editor.add(new Project({
+        var project = editor.add(editor.createComponent('project', {
             ...obj
         }))
 
@@ -88,12 +77,12 @@ export default class ObjectCommand extends UIElement {
     [COMMAND('add.artboard')] (obj = {}) {
         var project = editor.selection.currentProject;
         if (!project) {
-            project = editor.add(new Project())
+            project = editor.add(editor.createComponent('project'))
     
             editor.selection.selectProject(project);
         }
 
-        var artboard = project.add(new ArtBoard({
+        var artboard = project.add(editor.createComponent('artboard', {
             x: Length.px(300),
             y: Length.px(300),
             width: Length.px(300),
@@ -109,7 +98,7 @@ export default class ObjectCommand extends UIElement {
 
     [COMMAND('add.rect')] (rect = {}) {
 
-        this.trigger('add.layer', new Layer({
+        this.trigger('add.layer', editor.createComponent('layer', {
             width: Length.px(100),
             height: Length.px(100),
             ...rect,
@@ -120,7 +109,7 @@ export default class ObjectCommand extends UIElement {
 
     [COMMAND('add.svgrect')] (rect = {}) {
 
-        this.trigger('add.layer', new SVGPathItem({
+        this.trigger('add.layer', editor.createComponent('svg-path', {
             width: Length.px(100),
             height: Length.px(100),
             d: PathStringManager.makeRect(0, 0, rect.width.value, rect.height.value),
@@ -130,7 +119,7 @@ export default class ObjectCommand extends UIElement {
 
     [COMMAND('add.svgtextpath')] (rect = {}) {
 
-        this.trigger('add.layer', new SVGTextPathItem({
+        this.trigger('add.layer', editor.createComponent('svg-textpath', {
             width: Length.px(100),
             height: Length.px(100),
             text: 'Insert a newText',
@@ -144,7 +133,7 @@ export default class ObjectCommand extends UIElement {
 
     [COMMAND('add.svgtext')] (rect = {}) {
 
-        this.trigger('add.layer', new SVGTextItem({
+        this.trigger('add.layer', editor.createComponent('svg-text', {
             width: Length.px(100),
             height: Length.px(100),
             text: 'Insert a newText',
@@ -153,8 +142,7 @@ export default class ObjectCommand extends UIElement {
     }            
 
     [COMMAND('add.svgcircle')] (rect = {}) {
-
-        this.trigger('add.layer', new SVGPathItem({
+        this.trigger('add.layer', editor.createComponent('svg-path', {
             width: Length.px(100),
             height: Length.px(100),
             d: PathStringManager.makeCircle(0, 0, rect.width.value, rect.height.value),
@@ -165,7 +153,7 @@ export default class ObjectCommand extends UIElement {
 
     [COMMAND('add.circle')] (rect = {}) {
 
-        this.trigger('add.layer', new Layer({
+        this.trigger('add.layer', editor.createComponent('layer', {
             width: Length.px(100),
             height: Length.px(100),
             ...rect,
@@ -178,7 +166,7 @@ export default class ObjectCommand extends UIElement {
 
     [COMMAND('add.text')] (rect = {}) {
     
-        this.trigger('add.layer', new TextLayer({
+        this.trigger('add.layer', editor.createComponent('text', {
             content: 'Insert a text',
             width: Length.px(300),
             height: Length.px(50),
@@ -189,15 +177,14 @@ export default class ObjectCommand extends UIElement {
 
 
     [COMMAND('add.image')] (rect = {}) {
-        this.trigger('add.layer', new ImageLayer({
+        this.trigger('add.layer', editor.createComponent('image', {
             ...rect 
         }), rect)
 
     }  
 
     [COMMAND('add.cube')] (rect = {}) {
-
-        this.trigger('add.layer', new CubeLayer({
+        this.trigger('add.layer', editor.createComponent('cube', {
             width: Length.px(100),
             height: Length.px(100),
             ...rect,
@@ -208,8 +195,7 @@ export default class ObjectCommand extends UIElement {
 
 
     [COMMAND('add.cylinder')] (rect = {}) {
-
-        this.trigger('add.layer', new CylinderLayer({
+        this.trigger('add.layer', editor.createComponent('cylinder', {
             width: Length.px(100),
             height: Length.px(100),
             ...rect,
@@ -218,17 +204,6 @@ export default class ObjectCommand extends UIElement {
 
     }
 
-    [COMMAND('add.sphere')] (rect = {} ) {
-
-        this.trigger('add.layer', new SphereLayer({
-            width: Length.px(100),
-            height: Length.px(100),
-            ...rect,
-            'line-count': 10,
-            'background-color': Color.random()
-        }), rect)
-
-    }    
 
     [COMMAND('convert.path')] (pathString, rect = null) {
         var current = editor.selection.current;

@@ -2,6 +2,7 @@ import { CSS_TO_STRING, OBJECT_TO_PROPERTY, repeat } from "../../../util/functio
 import { Component } from "../Component";
 import { getXYInCircle, getDist } from "../../../util/functions/math";
 import { Length } from "../../unit/Length";
+import { editor } from "../../editor";
 
 const cssKeyValue = { 
   'position': true, 
@@ -405,4 +406,6 @@ export class CylinderLayer extends Component {
   }    
 
 }
+
+editor.registerComponent('cylinder', CylinderLayer);
  

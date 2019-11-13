@@ -1,4 +1,5 @@
 import { AssetItem } from "./AssetItem";
+import { editor } from "../editor";
 
 export class Project extends AssetItem {
   getDefaultTitle() {
@@ -49,3 +50,5 @@ export class Project extends AssetItem {
     return this.artboards.map(it => it.html).join('\n\n');
   }
 }
+
+editor.registerComponent('project', Project);
