@@ -1495,7 +1495,7 @@ html, body {
 }
 .csseditor .layout-main .layout-header {
   flex: none;
-  height: 50px;
+  height: 70px;
   overflow: hidden;
   position: relative;
   background-color: #292f38;
@@ -1656,22 +1656,6 @@ html, body {
 .csseditor .feature-control .layer-tab .object-items > div:last-child {
   top: 150px;
   bottom: 0px;
-}
-.csseditor .feature-control .layer-tab .library-items > .group > .title {
-  background-color: #292b35;
-  color: white;
-  padding: 4px 10px;
-}
-.csseditor .feature-control .layer-tab .library-items > .group > .list {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-}
-.csseditor .feature-control .layer-tab .library-items > .group > .list > .item {
-  border-right: 1px solid black;
-  border-bottom: 1px solid black;
-  height: 90px;
-  padding: 5px;
-  text-align: center;
 }
 .csseditor .feature-control .draw-items {
   background-color: #16191e;
@@ -2268,7 +2252,7 @@ html, body {
 .csseditor .external-tool-menu .items {
   height: 100%;
   padding: 0px;
-  padding-top: 5px;
+  padding-top: 15px;
 }
 .csseditor .tool-menu .items .draw-items > *,
 .csseditor .external-tool-menu .items .draw-items > * {
@@ -2316,6 +2300,15 @@ html, body {
 .csseditor .tool-menu .items .draw-items .menu-item[data-no-title=true] .title,
 .csseditor .external-tool-menu .items .draw-items .menu-item[data-no-title=true] .title {
   display: none;
+}
+.csseditor .tool-menu .items .draw-items .menu-item.cylinder .icon,
+.csseditor .external-tool-menu .items .draw-items .menu-item.cylinder .icon {
+  padding-top: 4px;
+}
+.csseditor .tool-menu .items .draw-items .menu-item.cylinder .icon svg,
+.csseditor .external-tool-menu .items .draw-items .menu-item.cylinder .icon svg {
+  width: 24px;
+  height: 24px;
 }
 .csseditor .tool-menu .items .draw-items .menu-item.cylinder .icon svg path,
 .csseditor .external-tool-menu .items .draw-items .menu-item.cylinder .icon svg path {
@@ -2390,8 +2383,8 @@ html, body {
 .csseditor .tool-menu .items .icon,
 .csseditor .external-tool-menu .items .icon {
   margin: 0 auto;
-  width: 24px;
-  height: 24px;
+  width: 30px;
+  height: 30px;
   color: #ffffff;
 }
 .csseditor .tool-menu .items .icon svg,
@@ -2403,7 +2396,7 @@ html, body {
 .csseditor .external-tool-menu .items .icon svg path {
   fill: #ffffff;
   stroke-width: 1;
-  stroke: #16191e;
+  stroke: #292f38;
 }
 .csseditor .tool-menu .items .icon.jsfiddle, .csseditor .tool-menu .items .icon.export, .csseditor .tool-menu .items .icon.codepen, .csseditor .tool-menu .items .icon.github,
 .csseditor .external-tool-menu .items .icon.jsfiddle,
@@ -5283,6 +5276,41 @@ html, body {
   -webkit-transform: translateX(-50%);
           transform: translateX(-50%);
   white-space: nowrap;
+}
+.csseditor .component-items {
+  padding: 10px 10px;
+}
+.csseditor .component-items .group .list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  -webkit-column-gap: 5px;
+     -moz-column-gap: 5px;
+          column-gap: 5px;
+  row-gap: 5px;
+}
+.csseditor .component-items .group .list .item {
+  height: 80px;
+  cursor: pointer;
+  text-align: center;
+  box-sizing: border-box;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.csseditor .component-items .group .list .item .icon {
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  display: inline-block;
+}
+.csseditor .component-items .group .list .item:hover {
+  background-color: #435cb5;
+}
+.csseditor .component-items .group .list .item svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor .component-items .group .list .item svg path {
+  fill: #ffffff;
+  stroke: transparent;
 }
 .csseditor .cubic-bezier-editor {
   width: 228px;
@@ -10873,22 +10901,6 @@ html, body {
   top: 150px;
   bottom: 0px;
 }
-.csseditor[data-theme=light] .feature-control .layer-tab .library-items > .group > .title {
-  background-color: white;
-  color: white;
-  padding: 4px 10px;
-}
-.csseditor[data-theme=light] .feature-control .layer-tab .library-items > .group > .list {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-}
-.csseditor[data-theme=light] .feature-control .layer-tab .library-items > .group > .list > .item {
-  border-right: 1px solid black;
-  border-bottom: 1px solid black;
-  height: 90px;
-  padding: 5px;
-  text-align: center;
-}
 .csseditor[data-theme=light] .feature-control .draw-items {
   background-color: white;
   display: none;
@@ -11484,7 +11496,7 @@ html, body {
 .csseditor[data-theme=light] .external-tool-menu .items {
   height: 100%;
   padding: 0px;
-  padding-top: 5px;
+  padding-top: 15px;
 }
 .csseditor[data-theme=light] .tool-menu .items .draw-items > *,
 .csseditor[data-theme=light] .external-tool-menu .items .draw-items > * {
@@ -11532,6 +11544,15 @@ html, body {
 .csseditor[data-theme=light] .tool-menu .items .draw-items .menu-item[data-no-title=true] .title,
 .csseditor[data-theme=light] .external-tool-menu .items .draw-items .menu-item[data-no-title=true] .title {
   display: none;
+}
+.csseditor[data-theme=light] .tool-menu .items .draw-items .menu-item.cylinder .icon,
+.csseditor[data-theme=light] .external-tool-menu .items .draw-items .menu-item.cylinder .icon {
+  padding-top: 4px;
+}
+.csseditor[data-theme=light] .tool-menu .items .draw-items .menu-item.cylinder .icon svg,
+.csseditor[data-theme=light] .external-tool-menu .items .draw-items .menu-item.cylinder .icon svg {
+  width: 24px;
+  height: 24px;
 }
 .csseditor[data-theme=light] .tool-menu .items .draw-items .menu-item.cylinder .icon svg path,
 .csseditor[data-theme=light] .external-tool-menu .items .draw-items .menu-item.cylinder .icon svg path {
@@ -11606,8 +11627,8 @@ html, body {
 .csseditor[data-theme=light] .tool-menu .items .icon,
 .csseditor[data-theme=light] .external-tool-menu .items .icon {
   margin: 0 auto;
-  width: 24px;
-  height: 24px;
+  width: 30px;
+  height: 30px;
   color: black;
 }
 .csseditor[data-theme=light] .tool-menu .items .icon svg,
@@ -14499,6 +14520,41 @@ html, body {
   -webkit-transform: translateX(-50%);
           transform: translateX(-50%);
   white-space: nowrap;
+}
+.csseditor[data-theme=light] .component-items {
+  padding: 10px 10px;
+}
+.csseditor[data-theme=light] .component-items .group .list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  -webkit-column-gap: 5px;
+     -moz-column-gap: 5px;
+          column-gap: 5px;
+  row-gap: 5px;
+}
+.csseditor[data-theme=light] .component-items .group .list .item {
+  height: 80px;
+  cursor: pointer;
+  text-align: center;
+  box-sizing: border-box;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+.csseditor[data-theme=light] .component-items .group .list .item .icon {
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  display: inline-block;
+}
+.csseditor[data-theme=light] .component-items .group .list .item:hover {
+  background-color: #fc554f;
+}
+.csseditor[data-theme=light] .component-items .group .list .item svg {
+  width: 100%;
+  height: 100%;
+}
+.csseditor[data-theme=light] .component-items .group .list .item svg path {
+  fill: black;
+  stroke: transparent;
 }
 .csseditor[data-theme=light] .cubic-bezier-editor {
   width: 228px;

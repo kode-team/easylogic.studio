@@ -25,12 +25,33 @@ export default class ObjectCommand extends UIElement {
         this.emit('after.change.mode');
     }
 
+    [COMMAND('add.component')] (type) {
+
+        // editor.selection.empty()
+        // this.emit('refreshSelection')
+        this.emit('hideSubEditor');
+        editor.changeAddType(type, true)
+
+        this.emit('after.change.mode');
+    }    
+
     [COMMAND('new.layer')] (type, obj) {
         this.trigger(`add.${type}`, obj);
         editor.changeMode(EDIT_MODE_SELECTION);
 
         this.emit('after.change.mode');
     }
+
+
+    [COMMAND('new.component')] (type, obj) {
+        this.trigger('add.layer', editor.createComponent(type, {
+            ...obj,
+        }), obj)
+
+        editor.changeMode(EDIT_MODE_SELECTION);
+
+        this.emit('after.change.mode');
+    }    
 
     [COMMAND('select.item')] () {
         editor.changeMode(EDIT_MODE_SELECTION);

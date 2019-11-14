@@ -62,7 +62,7 @@
     // flex: 1 1 auto;
     height: 100%;
     padding: 0px;
-    padding-top: 5px;
+    padding-top: 15px;
 
 
     .draw-items {
@@ -123,7 +123,10 @@
 
         &.cylinder {
           .icon {
+            padding-top: 4px;
             svg {
+              width: 24px;
+              height: 24px;
               path {
                 stroke-width: 0;
               }
@@ -214,8 +217,8 @@
 
     .icon {
       margin: 0 auto;
-      width: 24px;
-      height: 24px;
+      width: 30px;
+      height: 30px;
       // background-color: rgba(206, 206, 206, 0.5);
       color: $font-color;      
 
@@ -227,7 +230,7 @@
           fill : $font-color;
 
           stroke-width: 1;
-          stroke: $background-color;                    
+          stroke: $header-background-color;                    
         }
       }
 

@@ -1,6 +1,10 @@
 import { Layer } from "../Layer";
 
 export class SVGRectLayer extends Layer {
+
+  static getIcon () {
+    return icon.rect;
+  }  
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
       itemType: 'svg-rect',

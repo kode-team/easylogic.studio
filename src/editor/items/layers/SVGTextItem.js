@@ -5,8 +5,13 @@ import { hasSVGProperty, hasCSSProperty} from "../../util/Resource";
 import { Shape } from "../../css-property/Shape";
 import { Length } from "../../unit/Length";
 import { editor } from "../../editor";
+import icon from "../../../csseditor/ui/icon/icon";
 
 export class SVGTextItem extends SVGItem {
+
+  static getIcon () {
+    return icon.title;
+  }  
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
       itemType: 'svg-text',

@@ -2,8 +2,13 @@ import { Layer } from "../Layer";
 import Dom from "../../../util/Dom";
 import { OBJECT_TO_PROPERTY, CSS_TO_STRING } from "../../../util/functions/func";
 import { editor } from "../../editor";
+import icon from "../../../csseditor/ui/icon/icon";
 
 export class ImageLayer extends Layer {
+
+  static getIcon () {
+    return icon.image;
+  }  
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
       itemType: 'image',

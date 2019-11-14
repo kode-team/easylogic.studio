@@ -66,11 +66,8 @@ export class DomItem extends GroupItem {
       'text-stroke-width': '',  
       'offset-path': '',
       'offset-distance': '',
-      // border: {},
+      'z-index': Length.auto,
       outline: {},
-      // borderRadius: {},
-      // borderImage: new BorderImage(),
-      // applyBorderImage: false,
       animations: [],
       transitions: [],
       // 'keyframe': 'sample 0% --aaa 100px | sample 100% width 200px | sample2 0.5% background-image background-image:linear-gradient(to right, black, yellow 100%)',
@@ -433,7 +430,7 @@ export class DomItem extends GroupItem {
       ...obj,
       ...this.toKeyListCSS(
         
-        'position', 'right','bottom', 'width','height', 'overflow',
+        'position', 'right','bottom', 'width','height', 'overflow', 'z-index',
 
         'background-color', 'color',  'opacity', 'mix-blend-mode',
 

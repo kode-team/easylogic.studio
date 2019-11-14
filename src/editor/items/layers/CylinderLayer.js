@@ -3,6 +3,7 @@ import { Component } from "../Component";
 import { getXYInCircle, getDist } from "../../../util/functions/math";
 import { Length } from "../../unit/Length";
 import { editor } from "../../editor";
+import icon from "../../../csseditor/ui/icon/icon";
 
 const cssKeyValue = { 
   'position': true, 
@@ -36,6 +37,10 @@ const nestedCssKeyValue = {
 }
 
 export class CylinderLayer extends Component {
+
+  static getIcon () {
+    return icon.cylinder;
+  }  
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
       itemType: 'cylinder',

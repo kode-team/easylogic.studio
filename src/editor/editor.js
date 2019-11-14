@@ -86,9 +86,10 @@ export const editor = new class {
     return this.isMode(EDIT_MODE_SELECTION);
   }
 
-  changeAddType (type = '') {
+  changeAddType (type = '', isComponent = false) {
     this.changeMode(EDIT_MODE_ADD);
     this.addType = type;
+    this.isComponent = isComponent
   }
 
   changeTheme (theme) {

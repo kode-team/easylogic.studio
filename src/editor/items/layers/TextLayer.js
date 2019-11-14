@@ -1,8 +1,13 @@
 import { Layer } from "../Layer";
 import { OBJECT_TO_PROPERTY, CSS_TO_STRING } from "../../../util/functions/func";
 import { editor } from "../../editor";
+import icon from "../../../csseditor/ui/icon/icon";
 
 export class TextLayer extends Layer {
+
+  static getIcon () {
+    return icon.title;
+  }  
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
       itemType: 'text',

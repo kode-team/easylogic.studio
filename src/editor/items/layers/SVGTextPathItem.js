@@ -5,8 +5,13 @@ import { hasSVGProperty, hasCSSProperty, hasSVGPathProperty } from "../../util/R
 import { Length } from "../../unit/Length";
 import Dom from "../../../util/Dom";
 import { editor } from "../../editor";
+import icon from "../../../csseditor/ui/icon/icon";
 
 export class SVGTextPathItem extends SVGItem {
+
+  static getIcon () {
+    return icon.text_rotate;
+  }  
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
       itemType: 'svg-textpath',
@@ -57,9 +62,9 @@ export class SVGTextPathItem extends SVGItem {
 
   convert(json) {
     json = super.convert(json);
-    if (json.d)  {
+    // if (json.d)  {
       json.path = new PathParser(json.d);
-    }
+    // }
 
     json.textLength = Length.parse(json.textLength);
     json.startOffset = Length.parse(json.startOffset);

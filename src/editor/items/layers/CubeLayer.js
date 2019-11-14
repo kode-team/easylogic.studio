@@ -2,6 +2,7 @@ import { CSS_TO_STRING, isObject, OBJECT_TO_PROPERTY } from "../../../util/funct
 import { Component } from "../Component";
 import { Length } from "../../unit/Length";
 import { editor } from "../../editor";
+import icon from "../../../csseditor/ui/icon/icon";
 
 const faceKeys = [
   'front', 'back', 'left', 'right', 'bottom', 'top'
@@ -53,6 +54,10 @@ const nestedCssKeyValue = {
 }
 
 export class CubeLayer extends Component {
+
+  static getIcon () {
+    return icon.cube;
+  }  
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
       itemType: 'cube',

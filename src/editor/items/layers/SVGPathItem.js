@@ -6,8 +6,13 @@ import { Length } from "../../unit/Length";
 import { SVGFill } from "../../svg-property/SVGFill";
 import Dom from "../../../util/Dom";
 import { editor } from "../../editor";
+import icon from "../../../csseditor/ui/icon/icon";
 
 export class SVGPathItem extends SVGItem {
+
+  static getIcon () {
+    return icon.edit;
+  }  
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
       itemType: 'svg-path',

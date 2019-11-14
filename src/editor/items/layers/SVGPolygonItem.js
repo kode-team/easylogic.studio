@@ -5,8 +5,13 @@ import { OBJECT_TO_PROPERTY, CSS_TO_STRING } from "../../../util/functions/func"
 import Dom from "../../../util/Dom";
 import { Deluanay } from "../../../util/functions/math";
 import { editor } from "../../editor";
+import icon from "../../../csseditor/ui/icon/icon";
 
 export class SVGPolygonItem extends SVGItem {
+
+  static getIcon () {
+    return icon.polygon;
+  }  
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
       itemType: 'svg-polygon',

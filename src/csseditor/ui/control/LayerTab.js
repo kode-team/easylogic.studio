@@ -4,12 +4,14 @@ import { CLICK } from "../../../util/Event";
 import ProjectProperty from "../property/ProjectProperty";
 import ProjectInformationProperty from "../property/ProjectInformationProperty";
 import LibraryItems from "./Libraryitems";
+import ComponentItems from "./Componentitems";
 
 
 export default class LayerTab extends UIElement {
   components() {
     return {
       ObjectItems, 
+      ComponentItems,
       ProjectProperty,
       ProjectInformationProperty,
       LibraryItems
@@ -29,8 +31,11 @@ export default class LayerTab extends UIElement {
             <div class='tab-item' data-value='3'>
               <label>Library</label>
             </div>   
+            <div class='tab-item' data-value='4'>
+              <label>Component</label>
+            </div>               
             <div class='tab-item empty-item'></div>
-            <div class='tab-item empty-item'></div>                                 
+            <div class='tab-item empty-item'></div>
           </div>
           <div class="tab-body" ref="$body">
             <div class="tab-content project-content" data-value="1">
@@ -43,6 +48,9 @@ export default class LayerTab extends UIElement {
             <div class='tab-content' data-value='3'>
               <LibraryItems />
             </div>
+            <div class='tab-content' data-value='4'>
+              <ComponentItems />
+            </div>            
           </div>
         </div>
       </div>

@@ -19,6 +19,18 @@ export default class BackgroundColorProperty extends BaseProperty {
         </div>
 
         <div class='property-item animation-property-item'>
+          <span class='add-timeline-property' data-property='z-index'></span>
+          <NumberRangeEditor 
+            ref='$zIndex' 
+            key='z-index' 
+            label='z-index'
+            min="-1"
+            max="100000"
+            step="1"
+            onchange="changeSelect" />
+        </div>
+
+        <div class='property-item animation-property-item'>
           <span class='add-timeline-property' data-property='opacity'></span>
           <NumberRangeEditor 
             ref='$opacity' 
@@ -28,7 +40,7 @@ export default class BackgroundColorProperty extends BaseProperty {
             max="1"
             step="0.01"
             onchange="changeSelect" />
-        </div>
+        </div>        
         
         <div class='property-item animation-property-item'>
           <span class='add-timeline-property' data-property='mix-blend-mode'></span>
@@ -49,6 +61,7 @@ export default class BackgroundColorProperty extends BaseProperty {
 
     if (current) {
       this.children.$color.setValue(current['background-color'] || 'rgba(0, 0, 0, 1)')
+      this.children.$zIndex.setValue(current['z-index'] || 0)
       this.children.$opacity.setValue(current.opacity || '1')
       this.children.$mixBlend.setValue(current['mix-blend-mode'])
     }

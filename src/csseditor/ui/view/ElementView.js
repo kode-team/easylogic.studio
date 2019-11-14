@@ -254,7 +254,12 @@ export default class ElementView extends UIElement {
             if (editor.addType === 'image') { 
                 this.emit('addImage', obj);
             } else {
-                this.emit('new.layer', editor.addType, obj);
+                if (editor.isComponent) {
+                    this.emit('new.component', editor.addType, obj);
+                } else {
+                    this.emit('new.layer', editor.addType, obj);
+                }
+
             }
 
         }
