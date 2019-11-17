@@ -254,7 +254,25 @@ export default class ObjectCommand extends UIElement {
                 this.emit('refreshSelectionStyleView');                        
 
             } else if (current['clip-path'].includes('path')) {
+                var d = pathString;
 
+                if (rect) {
+                    var parser = new PathParser(pathString)
+                    parser.scale(current.width.value/rect.width, current.height.value/rect.height)
+
+                    d = parser.d; 
+                }
+
+                // path string 을 저걸로 맞추기 
+                current.reset({
+                    'clip-path': `path(${d})`
+                })
+
+                // selection 을 다시 해야 cache 를 다시 설정한다. 
+                // 이 구조를 바꿀려면 어떻게 해야할까?   
+                editor.selection.select(current);
+
+                this.emit('refreshSelectionStyleView');  
             }
         }
     }

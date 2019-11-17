@@ -5,6 +5,7 @@ import ProjectProperty from "../property/ProjectProperty";
 import ProjectInformationProperty from "../property/ProjectInformationProperty";
 import LibraryItems from "./Libraryitems";
 import ComponentItems from "./Componentitems";
+import { editor } from "../../../editor/editor";
 
 
 export default class LayerTab extends UIElement {
@@ -21,21 +22,19 @@ export default class LayerTab extends UIElement {
     return /*html*/`
       <div class='layer-tab'>
         <div class="tab number-tab" data-selected-value="2" ref="$tab">
-          <div class="tab-header" ref="$header">
+          <div class="tab-header full" ref="$header">
             <div class="tab-item" data-value="1">
-              <label>Projects</label>
+              <label>${editor.i18n('app.tab.title.projects')}</label>
             </div>          
             <div class="tab-item" data-value="2">
-              <label>Layers</label>
+              <label>${editor.i18n('app.tab.title.layers')}</label>
             </div>
             <div class='tab-item' data-value='3'>
-              <label>Library</label>
+              <label>${editor.i18n('app.tab.title.libraries')}</label>
             </div>   
             <div class='tab-item' data-value='4'>
-              <label>Component</label>
-            </div>               
-            <div class='tab-item empty-item'></div>
-            <div class='tab-item empty-item'></div>
+              <label>${editor.i18n('app.tab.title.components')}</label>
+            </div>
           </div>
           <div class="tab-body" ref="$body">
             <div class="tab-content project-content" data-value="1">

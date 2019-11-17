@@ -12,7 +12,7 @@ export default class BorderNewProperty extends BaseProperty {
     }
   }
   getTitle() {
-    return "Border";  
+    return editor.i18n('border.property.title');  
   }
 
 

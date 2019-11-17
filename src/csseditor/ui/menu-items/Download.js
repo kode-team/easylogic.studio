@@ -1,12 +1,13 @@
 import MenuItem from "./MenuItem";
 import icon from "../icon/icon";
+import { editor } from "../../../editor/editor";
 
 export default class Download extends MenuItem {
   getIconString() {
     return icon.archive;
   }
   getTitle() {
-    return "Archive";
+    return editor.i18n('menu.item.download.title');
   }
 
   clickButton(e) {

@@ -35,6 +35,11 @@ export default class CSSEditor extends UIElement {
     Dom.create(document.body).attr('data-theme', editor.theme);
   }
 
+  
+  [EVENT('changed.locale')] () {
+    this.rerender()
+  }
+
   template() {
     return this.templateForEditor();
   }

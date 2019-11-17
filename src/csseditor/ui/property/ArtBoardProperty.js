@@ -6,7 +6,7 @@ import { EVENT } from "../../../util/UIElement";
 
 export default class ArtBoardProperty extends BaseProperty {
   getTitle() {
-    return "ArtBoards";
+    return editor.i18n('artboard.property.title');
   }
 
   getClassName() {

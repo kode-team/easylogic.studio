@@ -11,7 +11,7 @@ import { Length } from "../../../editor/unit/Length";
 
 export default class LayerTreeProperty extends BaseProperty {
   getTitle() {
-    return `<span>${icon.account_tree}</span> Layers`;
+    return `<span>${icon.account_tree}</span> ${editor.i18n('layer.tree.property.title')}`;
   }
 
   getClassName() {

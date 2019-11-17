@@ -28,6 +28,11 @@ export default class ToolCommand extends UIElement {
         this.emit('refreshSelectionTool')       
     }
 
+    [COMMAND('set.locale')] (locale) {
+        editor.setLocale(locale);
+        this.emit('changed.locale')
+    }
+
     [COMMAND('download.file')] (datauri, filename = 'easylogic.json') {
 
         var a = document.createElement('a');

@@ -24,7 +24,7 @@ var clipPathList = [
 
 export default class ClipPathProperty extends BaseProperty {
   getTitle() {
-    return "Clip Path";
+    return editor.i18n('clippath.property.title');
   }
 
   hasKeyframe () {
@@ -91,7 +91,7 @@ export default class ClipPathProperty extends BaseProperty {
     this.emit('hideClipPathPopup');    
   }
 
-  [EVENT('refreshSelection') + DEBOUNCE(100)] () {
+  [EVENT('refreshSelection', 'refreshSelectionStyleView') + DEBOUNCE(100)] () {
     this.refreshShowIsNot(['project', 'artboard']);
   }
 

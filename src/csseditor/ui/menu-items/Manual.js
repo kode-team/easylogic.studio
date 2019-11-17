@@ -1,12 +1,13 @@
 import MenuItem from "./MenuItem";
 import icon from "../icon/icon";
+import { editor } from "../../../editor/editor";
 
 export default class Manual extends MenuItem {
   getIconString() {
     return icon.note;
   }
   getTitle() {
-    return "Learn";
+    return editor.i18n('menu.item.learn.title');
   }
 
   clickButton(e) {

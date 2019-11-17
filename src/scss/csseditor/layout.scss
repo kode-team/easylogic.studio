@@ -56,9 +56,25 @@
 
     > div {
       display: flex; 
-      padding: 4px 10px;
+      padding: 2px 10px;
+
       > * {
         flex: 1 1 auto;
+      }
+
+      .tool-view {
+        text-align: right;
+      }
+
+      .select-editor {
+        display: inline-grid;
+        width: 130px; 
+        height: auto;
+
+        select {
+          width: auto; 
+          height: auto;
+        }
       }
     }
 

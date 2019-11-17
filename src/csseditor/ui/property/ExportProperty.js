@@ -2,12 +2,13 @@ import BaseProperty from "./BaseProperty";
 import { DEBOUNCE, CLICK } from "../../../util/Event";
 import { EVENT } from "../../../util/UIElement";
 import icon from "../icon/icon";
+import { editor } from "../../../editor/editor";
 
 
 export default class ExportProperty extends BaseProperty {
 
   getTitle() {
-    return "Export";
+    return editor.i18n('export.property.title');
   }
 
 

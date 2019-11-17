@@ -6,11 +6,11 @@ import Border from "../../../editor/css-property/Border";
 
 const borderTypeList = ["border", "border-top", "border-right", "border-bottom", "border-left"]
 const borderTypeTitle = {
-  "border": 'Border', 
-  "border-top": 'Top', 
-  "border-right": 'Right', 
-  "border-bottom": 'Bottom', 
-  "border-left": 'Left'
+  "border":  'all', 
+  "border-top": 'top', 
+  "border-right": 'right', 
+  "border-bottom": 'bottom', 
+  "border-left": 'left'
 }
 
 
@@ -56,6 +56,8 @@ export default class BorderEditor extends UIElement {
   [LOAD('$editorArea')] () {
     return borderTypeList.map(type => {
       var label = borderTypeTitle[type] || type; 
+
+      label = editor.i18n('border.editor.' + label);
       return /*html*/`
       <div>
         <BorderValueEditor ref='$${type}' label='${label}' key="${type}" value="${this.state.borders[type]}" onchange="changeKeyValue" />
@@ -69,9 +71,9 @@ export default class BorderEditor extends UIElement {
       <div class="border-editor">
         <div class='header'>
           <div></div>
-          <label>Width</label>
-          <label>Style</label>
-          <label></label>
+          <label>${editor.i18n('border.editor.width')}</label>
+          <label>${editor.i18n('border.editor.style')}</label>
+          <label>${editor.i18n('border.editor.color')}</label>
         </div>
         <div class='editor-area' ref='$editorArea'>
 

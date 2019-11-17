@@ -392,9 +392,9 @@ export default class FillEditor extends UIElement  {
     if (type === 'linear-gradient') {
       this.emit('addStatusBarMessage', '');
     } else if (type === 'url' || type === 'image-resource') {
-      this.emit('addStatusBarMessage', 'Click the preview area if you want to select a image');
+      this.emit('addStatusBarMessage', editor.i18n('fill.editor.message.click.image'));
     } else {
-      this.emit('addStatusBarMessage', 'Drag if you want to move center position');
+      this.emit('addStatusBarMessage', editor.i18n('fill.editor.message.drag.position'));
     }
   }
 

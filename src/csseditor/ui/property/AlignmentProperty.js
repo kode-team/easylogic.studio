@@ -9,6 +9,7 @@ import { EVENT } from "../../../util/UIElement";
 import { DEBOUNCE } from "../../../util/Event";
 import SameHeight from "../menu-items/SameHeight";
 import SameWidth from "../menu-items/SameWidth";
+import { editor } from "../../../editor/editor";
 
 
 export default class AlignmentProperty extends BaseProperty {
@@ -30,7 +31,7 @@ export default class AlignmentProperty extends BaseProperty {
   }
 
   getTitle() {
-    return "Alignment";
+    return editor.i18n('alignment.property.title');
   }
 
   getBody() {

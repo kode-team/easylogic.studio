@@ -2,6 +2,7 @@ import { SUBMIT } from "../../../util/Event";
 import UIElement from "../../../util/UIElement";
 
 import ExportManager from "../../../editor/ExportManager";
+import { editor } from "../../../editor/editor";
  
 export default class ExportCodePen extends UIElement {
   template() {
@@ -10,7 +11,7 @@ export default class ExportCodePen extends UIElement {
       <input type="hidden" name="data" ref="$codepen" value=''>
       <button type="submit">
         <div class='icon codepen'></div>
-        <div class='title'>CodePen</div>
+        <div class='title'>${editor.i18n('menu.item.codepen.title')}</div>
       </button>
     </form>     
     `;

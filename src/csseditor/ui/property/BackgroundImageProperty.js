@@ -11,7 +11,7 @@ export default class BackgroundImageProperty extends BaseProperty {
 
   
   getTitle() {
-    return 'Background'
+    return editor.i18n('background.image.property.title');
   }
 
   hasKeyframe () {

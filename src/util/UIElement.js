@@ -101,6 +101,14 @@ class UIElement extends EventMachine {
     this.destoryStoreEvent();
   }
 
+  rerender() {
+    super.rerender();
+
+    this.initialize();
+
+    this.initializeStoreEvent();
+  }
+
 
   emit($1, $2, $3, $4, $5) {
     this.$store.source = this.source;

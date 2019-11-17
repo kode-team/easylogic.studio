@@ -8,7 +8,7 @@ import icon from "../icon/icon";
 export default class BoxShadowProperty extends BaseProperty {
 
   getTitle () {
-    return 'Box Shadows';
+    return editor.i18n('boxshadow.property.title');
   }
 
   getBody() {

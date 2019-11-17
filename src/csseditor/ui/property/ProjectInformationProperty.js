@@ -7,7 +7,7 @@ import { EVENT } from "../../../util/UIElement";
 
 export default class ProjectInformationProperty extends BaseProperty {
   getTitle() {
-    return "Information";
+    return editor.i18n('project.information.property.title');
   }
 
   getClassName() {
@@ -28,11 +28,11 @@ export default class ProjectInformationProperty extends BaseProperty {
     return /*html*/`
       <div class="project-info" ref="$info">
         <div class='project-info-item'>
-          <label>Name</label>
+          <label>${editor.i18n('project.information.property.name')}</label>
           <div class='input'><input type='text' value='${project.name}' ref='$name' /></div>
         </div>
         <div class='project-info-item'>
-          <label>Description</label>
+          <label>${editor.i18n('project.information.property.description')}</label>
           <div class='input'>
             <textarea  value='${project.description}' ref='$description'></textarea>
           </div>

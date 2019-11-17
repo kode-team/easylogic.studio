@@ -1488,10 +1488,22 @@ html, body {
 }
 .csseditor .layout-main .status-bar > div {
   display: flex;
-  padding: 4px 10px;
+  padding: 2px 10px;
 }
 .csseditor .layout-main .status-bar > div > * {
   flex: 1 1 auto;
+}
+.csseditor .layout-main .status-bar > div .tool-view {
+  text-align: right;
+}
+.csseditor .layout-main .status-bar > div .select-editor {
+  display: inline-grid;
+  width: 130px;
+  height: auto;
+}
+.csseditor .layout-main .status-bar > div .select-editor select {
+  width: auto;
+  height: auto;
 }
 .csseditor .layout-main .layout-header {
   flex: none;
@@ -2647,7 +2659,10 @@ html, body {
   pointer-events: none;
 }
 .csseditor .canvas-view svg.element-item > * {
-  pointer-events: painted;
+  pointer-events: stroke;
+}
+.csseditor .canvas-view svg.element-item > :not([fill=transparent]) {
+  pointer-events: visible;
 }
 .csseditor .canvas-view .element-item[contenteditable=true] {
   margin: 0px;
@@ -3493,6 +3508,12 @@ html, body {
   display: grid;
   grid-template-columns: repeat(3, 1fr) 24px;
   grid-column-gap: 4px;
+}
+.csseditor .border-value-editor label {
+  text-align: left;
+  vertical-align: middle;
+  padding: 6px 4px 2px 0px;
+  font-size: 11px;
 }
 .csseditor .border-slice-item {
   display: grid;
@@ -5457,7 +5478,7 @@ html, body {
 .csseditor .color-view-editor.has-label label {
   text-align: left;
   vertical-align: middle;
-  padding: 2px 4px 2px 0px;
+  padding: 6px 4px 2px 0px;
   font-size: 11px;
 }
 .csseditor .color-view-editor .preview {
@@ -5814,7 +5835,7 @@ html, body {
 .csseditor .select-editor.has-label label {
   text-align: left;
   vertical-align: middle;
-  padding: 2px 4px 2px 0px;
+  padding: 6px 4px 2px 0px;
   font-size: 11px;
 }
 .csseditor .select-editor.has-label select {
@@ -7877,7 +7898,7 @@ html, body {
 .csseditor .select-icon-editor.has-label label {
   text-align: left;
   vertical-align: middle;
-  padding: 2px 4px 2px 0px;
+  padding: 6px 4px 2px 0px;
   font-size: 11px;
 }
 .csseditor .select-icon-editor .items {
@@ -10732,10 +10753,22 @@ html, body {
 }
 .csseditor[data-theme=light] .layout-main .status-bar > div {
   display: flex;
-  padding: 4px 10px;
+  padding: 2px 10px;
 }
 .csseditor[data-theme=light] .layout-main .status-bar > div > * {
   flex: 1 1 auto;
+}
+.csseditor[data-theme=light] .layout-main .status-bar > div .tool-view {
+  text-align: right;
+}
+.csseditor[data-theme=light] .layout-main .status-bar > div .select-editor {
+  display: inline-grid;
+  width: 130px;
+  height: auto;
+}
+.csseditor[data-theme=light] .layout-main .status-bar > div .select-editor select {
+  width: auto;
+  height: auto;
 }
 .csseditor[data-theme=light] .layout-main .layout-header {
   flex: none;
@@ -11891,7 +11924,10 @@ html, body {
   pointer-events: none;
 }
 .csseditor[data-theme=light] .canvas-view svg.element-item > * {
-  pointer-events: painted;
+  pointer-events: stroke;
+}
+.csseditor[data-theme=light] .canvas-view svg.element-item > :not([fill=transparent]) {
+  pointer-events: visible;
 }
 .csseditor[data-theme=light] .canvas-view .element-item[contenteditable=true] {
   margin: 0px;
@@ -12737,6 +12773,12 @@ html, body {
   display: grid;
   grid-template-columns: repeat(3, 1fr) 24px;
   grid-column-gap: 4px;
+}
+.csseditor[data-theme=light] .border-value-editor label {
+  text-align: left;
+  vertical-align: middle;
+  padding: 6px 4px 2px 0px;
+  font-size: 11px;
 }
 .csseditor[data-theme=light] .border-slice-item {
   display: grid;
@@ -14701,7 +14743,7 @@ html, body {
 .csseditor[data-theme=light] .color-view-editor.has-label label {
   text-align: left;
   vertical-align: middle;
-  padding: 2px 4px 2px 0px;
+  padding: 6px 4px 2px 0px;
   font-size: 11px;
 }
 .csseditor[data-theme=light] .color-view-editor .preview {
@@ -15058,7 +15100,7 @@ html, body {
 .csseditor[data-theme=light] .select-editor.has-label label {
   text-align: left;
   vertical-align: middle;
-  padding: 2px 4px 2px 0px;
+  padding: 6px 4px 2px 0px;
   font-size: 11px;
 }
 .csseditor[data-theme=light] .select-editor.has-label select {
@@ -17121,7 +17163,7 @@ html, body {
 .csseditor[data-theme=light] .select-icon-editor.has-label label {
   text-align: left;
   vertical-align: middle;
-  padding: 2px 4px 2px 0px;
+  padding: 6px 4px 2px 0px;
   font-size: 11px;
 }
 .csseditor[data-theme=light] .select-icon-editor .items {

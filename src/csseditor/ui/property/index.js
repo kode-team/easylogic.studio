@@ -1,5 +1,5 @@
 import BackgroundColorProperty from "./BackgroundColorProperty";
-import BorderProperty from "./BorderProperty";
+// import BorderProperty from "./BorderProperty";
 import BorderRadiusProperty from "./BorderRadiusProperty";
 import SizeProperty from "./SizeProperty";
 import BoxShadowProperty from "./BoxShadowProperty";
@@ -112,6 +112,6 @@ export default {
   BoxShadowProperty,
   SizeProperty,
   BorderRadiusProperty,
-  BorderProperty,
+  // BorderProperty,
   BackgroundColorProperty,
 };

@@ -1,6 +1,8 @@
 import { Config } from "./Config";
 import { Selection } from "./Selection";
 import { TimelineSelection } from "./TimelineSelection";
+import i18n from "../csseditor/i18n";
+import { saveResource, loadResource, loadItem, saveItem } from "./util/Resource";
 
 function blobToDataURL(blob) {
   return new Promise(function(resolve) {
@@ -34,10 +36,20 @@ export const editor = new class {
     this.openRightPanel = true; 
     this.mode = EDIT_MODE_SELECTION
     this.addType = '' 
+    this.locale = loadItem('locale') || 'en_US'
 
     this.components = {} 
 
     this.initTheme();
+  }
+
+  i18n (key, params = {}, locale) {
+    return i18n.get(key, params, locale || this.locale)
+  }
+
+  setLocale (locale = 'en_US') {
+    this.locale = locale; 
+    saveItem('locale', this.locale);    
   }
 
   registerComponent (name, Component) {

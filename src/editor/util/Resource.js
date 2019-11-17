@@ -191,9 +191,16 @@ export const makeResource = (json) => {
     return result;
 }
 
+
+
 export const saveResource = (key, value) => {
     window.localStorage.setItem(`easylogic.studio.${key}`, makeResource(value));
 }
+
+export const saveItem = (key, value) => {
+    window.localStorage.setItem(`easylogic.studio.${key}`, JSON.stringify(value));
+}
+
 
 export const applyAsset = (json, assets) => {
     if (isArray(json)) {
@@ -247,4 +254,8 @@ export const revokeResource = (value) => {
 
 export const loadResource = (key) => {
     return revokeResource(window.localStorage.getItem(`easylogic.studio.${key}`))
+}
+
+export const loadItem = (key) => {
+    return JSON.parse(window.localStorage.getItem(`easylogic.studio.${key}`) || JSON.stringify(""))
 }

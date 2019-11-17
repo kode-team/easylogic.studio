@@ -6,7 +6,7 @@ import { EVENT } from "../../../util/UIElement";
 
 export default class PositionProperty extends BaseProperty {
   getTitle() {
-    return "Position";
+    return editor.i18n('position.property.title');
   }
 
   [EVENT('refreshSelection', 'refreshRect') + DEBOUNCE(100)]() {

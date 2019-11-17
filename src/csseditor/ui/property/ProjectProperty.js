@@ -9,7 +9,7 @@ import { EVENT } from "../../../util/UIElement";
 
 export default class ProjectProperty extends BaseProperty {
   getTitle() {
-    return "Projects";
+    return editor.i18n('project.property.title');
   }
 
   getClassName() {

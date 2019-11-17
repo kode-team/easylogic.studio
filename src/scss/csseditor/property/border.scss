@@ -79,6 +79,14 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr) 24px;
   grid-column-gap: 4px;
+
+  label {
+    text-align: left;
+    vertical-align: middle;
+    padding: 6px 4px 2px 0px;
+    
+    font-size: 11px;    
+  }
 }
 
 .border-slice-item {

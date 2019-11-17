@@ -7,7 +7,7 @@ import { EVENT } from "../../../util/UIElement";
 export default class BorderRadiusProperty extends BaseProperty {
 
   getTitle() {
-    return "Border Radius";  
+    return editor.i18n('border.radius.property.title');  
   }
 
 

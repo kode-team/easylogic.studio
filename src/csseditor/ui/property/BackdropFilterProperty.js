@@ -26,7 +26,7 @@ var filterList = [
 export default class BackdropFilterProperty extends BaseProperty {
 
   getTitle() {
-    return 'Backdrop Filter' 
+    return editor.i18n('backdrop.filter.property.title');
   }
 
 

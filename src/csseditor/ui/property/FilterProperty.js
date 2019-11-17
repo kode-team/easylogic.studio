@@ -25,7 +25,7 @@ var filterList = [
 export default class FilterProperty extends BaseProperty {
 
   getTitle () {
-    return 'Filter' 
+    return editor.i18n('filter.property.title');
   }
 
 

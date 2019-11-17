@@ -34,7 +34,7 @@ export const start = opt => {
 
       this.initBodyMoves();
     }
-
+    
     initBodyMoves() {
       this.moves = new Set();
       this.ends = new Set();

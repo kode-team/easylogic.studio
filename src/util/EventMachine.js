@@ -436,10 +436,12 @@ export default class EventMachine {
     );
     this.refs.$el = this.$el;
 
-    if ($container) $container.append(this.$el);
+    if ($container) {
+      $container.append(this.$el);
+    }
 
     this.load();
-    this.parseComponent(false);
+    // this.parseComponent(false);
 
     this.afterRender();
   }
@@ -738,6 +740,12 @@ export default class EventMachine {
     });
   }
 
+  rerender () {
+    var $parent = this.$el.parent();
+    this.destroy();
+    this.render($parent);  
+  }
+
   /**
    * 이벤트를 초기화한다.
    */
@@ -755,6 +763,10 @@ export default class EventMachine {
     });
 
     this.destroyDomEvent();
+    this.$el.remove();
+    this.$el = null; 
+    this.refs = {} 
+    this.children = {} 
   }
 
   destroyDomEvent() {

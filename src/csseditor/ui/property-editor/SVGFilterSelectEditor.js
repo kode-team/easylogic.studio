@@ -2,7 +2,6 @@ import UIElement, { EVENT } from "../../../util/UIElement";
 import { LOAD, CHANGE, BIND, DEBOUNCE, CLICK } from "../../../util/Event";
 import icon from "../icon/icon";
 import { editor } from "../../../editor/editor";
-import { isNotUndefined } from "../../../util/functions/func";
 
 export default class SVGFilterSelectEditor extends UIElement {
 
@@ -114,9 +113,9 @@ export default class SVGFilterSelectEditor extends UIElement {
 
     sendMessage (type) {
         if (type === 'new') {
-            this.emit('addStatusBarMessage', 'Create new svg filter');
+            this.emit('addStatusBarMessage', editor.i18n('svgfilter.select.editor.message.create'));
         } else if (type === '-') {
-            this.emit('addStatusBarMessage', 'Select a filter');
+            this.emit('addStatusBarMessage', editor.i18n('svgfilter.select.editor.message.select'));
         } else {
             this.emit('addStatusBarMessage', '');
         }

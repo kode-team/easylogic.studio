@@ -1,5 +1,4 @@
 import BaseProperty from "./BaseProperty";
-import { DEBOUNCE } from "../../../util/Event";
 import { editor } from "../../../editor/editor";
 import { EVENT } from "../../../util/UIElement";
 
@@ -17,7 +16,7 @@ export default class SizeProperty extends BaseProperty {
   }
 
   getTitle() {
-    return "Size";
+    return editor.i18n('size.property.title');
   }
 
   [EVENT('refreshSelection', 'refreshRect')]() {
@@ -36,11 +35,11 @@ export default class SizeProperty extends BaseProperty {
     return /*html*/`
       <div class='property-item animation-property-item'>
         <span class='add-timeline-property' data-property='width'></span>
-        <RangeEditor ref='$width' label='Width' key='width' min="0" max='3000' onchange='changRangeEditor' />
+        <RangeEditor ref='$width' label='${editor.i18n('size.property.width')}' key='width' min="0" max='3000' onchange='changRangeEditor' />
       </div>
       <div class='property-item animation-property-item'>
         <span class='add-timeline-property' data-property='height'></span>      
-        <RangeEditor ref='$height' label='Height' key='height' min="0" max='3000' onchange='changRangeEditor' />
+        <RangeEditor ref='$height' label='${editor.i18n('size.property.height')}' key='height' min="0" max='3000' onchange='changRangeEditor' />
       </div>      
     `;
   }

@@ -8,14 +8,14 @@ import { blend_list } from "../../../editor/util/Resource";
 export default class BackgroundColorProperty extends BaseProperty {
 
   getTitle() {
-    return "Common";
+    return editor.i18n('background.color.property.title');
   }
 
   getBody() {
     return /*html*/`
         <div class='property-item animation-property-item'>
           <span class='add-timeline-property' data-property='background-color'></span>
-          <ColorViewEditor ref='$color' label="color" key='background-color' onchange="changeColor" />
+          <ColorViewEditor ref='$color' label="${editor.i18n('background.color.property.color')}" key='background-color' onchange="changeColor" />
         </div>
 
         <div class='property-item animation-property-item'>
@@ -23,7 +23,7 @@ export default class BackgroundColorProperty extends BaseProperty {
           <NumberRangeEditor 
             ref='$zIndex' 
             key='z-index' 
-            label='z-index'
+            label='${editor.i18n('background.color.property.zindex')}'
             min="-1"
             max="100000"
             step="1"
@@ -35,7 +35,7 @@ export default class BackgroundColorProperty extends BaseProperty {
           <NumberRangeEditor 
             ref='$opacity' 
             key='opacity' 
-            label='opacity'
+            label='${editor.i18n('background.color.property.opacity')}'
             min="0"
             max="1"
             step="0.01"
@@ -45,7 +45,7 @@ export default class BackgroundColorProperty extends BaseProperty {
         <div class='property-item animation-property-item'>
           <span class='add-timeline-property' data-property='mix-blend-mode'></span>
           <SelectEditor 
-            label='blend'
+            label='${editor.i18n('background.color.property.blend')}'
             ref='$mixBlend' 
             removable='true'
             key='mix-blend-mode' 
