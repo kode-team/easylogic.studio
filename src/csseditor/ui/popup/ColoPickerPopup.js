@@ -7,7 +7,7 @@ import { editor } from "../../../editor/editor";
 export default class ColorPickerPopup extends BasePopup {
 
   getTitle() {
-    return 'Color Picker'
+    return editor.i18n('colorpicker.popup.title')
   }
 
   getClassName() {

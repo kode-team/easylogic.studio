@@ -83,19 +83,19 @@ export default class OffsetPathListEditor extends UIElement {
         return /*html*/`
         <div>
             <div class='offset-path-item'>
-                <SelectEditor ref='$path' label='Path' key="id" value="${id}" options="${options}" onchange='changeRangeEditor' />
+                <SelectEditor ref='$path' label='${editor.i18n('offset.path.list.editor.path')}' key="id" value="${id}" options="${options}" onchange='changeRangeEditor' />
             </div>
             <div class='offset-path-item'>
-                <div>Total Length: <span ref='$totalLength'>${paths[id] && paths[id].totalLength || 0}</span></div>
+                <div>${editor.i18n('offset.path.list.editor.totalLength')}: <span ref='$totalLength'>${paths[id] && paths[id].totalLength || 0}</span></div>
             </div>
             <div class='offset-path-item'>
-                <RangeEditor ref='$distance' label='distance' min="0" max="100" value="${distance || '0%'}" key='distance' unit="%,px" onchange='changeRangeEditor' /> 
+                <RangeEditor ref='$distance' label='${editor.i18n('offset.path.list.editor.distance')}' min="0" max="100" value="${distance || '0%'}" key='distance' unit="%,px" onchange='changeRangeEditor' /> 
             </div>
             <div class='offset-path-item'>
-                <SelectEditor ref='$status' label='direction' key='rotateStatus' value="${rotateStatus}" options="auto,auto angle,angle,reverse,element" onchange='changeRangeEditor' /> 
+                <SelectEditor ref='$status' label='${editor.i18n('offset.path.list.editor.direction')}' key='rotateStatus' value="${rotateStatus}" options="auto,auto angle,angle,reverse,element" onchange='changeRangeEditor' /> 
             </div>
             <div class='offset-path-item'>
-                <RangeEditor ref='$rotate' label='rotate' min="0" max="2000" key='rotate' value='${rotate || '0deg'}' units="deg,turn" onchange='changeRangeEditor' /> 
+                <RangeEditor ref='$rotate' label='${editor.i18n('offset.path.list.editor.rotate')}' min="0" max="2000" key='rotate' value='${rotate || '0deg'}' units="deg,turn" onchange='changeRangeEditor' /> 
             </div>     
         </div>           
         `

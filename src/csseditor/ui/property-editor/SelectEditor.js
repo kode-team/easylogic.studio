@@ -4,12 +4,14 @@ import { LOAD, CHANGE, BIND } from "../../../util/Event";
 export default class SelectEditor extends UIElement {
 
     initState() {
+        var keyValueChar = this.props['key-value-char'] || ':'
         var splitChar = this.props.split || ',';
         var options = (this.props.options || '').split(splitChar).map(it => it.trim());
 
         var value = this.props.value;
 
         return {
+            keyValueChar,
             splitChar,
             label: this.props.label || '',
             options, value
@@ -51,12 +53,11 @@ export default class SelectEditor extends UIElement {
 
         var arr = this.state.options.map(it => {
 
-
             var value = it; 
             var label = it; 
 
-            if (value.includes(":")) {
-                var [value, label] = value.split(':')
+            if (value.includes(this.state.keyValueChar)) {
+                var [value, label] = value.split(this.state.keyValueChar)
             }
 
             if (label === '') {

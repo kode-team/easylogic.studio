@@ -8,7 +8,7 @@ import icon from "../icon/icon";
 export default class ImageAssetsProperty extends BaseProperty {
 
   getTitle() {
-    return "Image";
+    return editor.i18n('image.asset.property.title');
   }
 
   initState() {

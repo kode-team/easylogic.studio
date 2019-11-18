@@ -98,7 +98,7 @@ export default class CSSPropertyEditor extends UIElement {
         'hide-refresh': this.state.hideRefresh 
       })}'>
         <div class='title'>
-          <label>Properties</label>
+          <label>${editor.i18n('css.property.editor.properties')}</label>
           <div class='tools'>
             ${this.makePropertySelect()}
             <button type="button" ref='$addProperty'>${icon.add}</button>

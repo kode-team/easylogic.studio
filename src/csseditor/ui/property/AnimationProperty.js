@@ -15,7 +15,7 @@ import { getPredefinedCubicBezier } from "../../../util/functions/bezier";
 
 export default class AnimationProperty extends BaseProperty {
   getTitle() {
-    return "Animation";
+    return editor.i18n('animation.property.title');
   }
   getBody() {
     return /*html*/`<div class='animation-list' ref='$animationList'></div>`;

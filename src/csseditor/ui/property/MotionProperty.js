@@ -14,7 +14,7 @@ export default class MotionProperty extends BaseProperty {
   }
 
   getTitle() {
-    return "Motion";
+    return editor.i18n('motion.property.title');
   }
 
   [EVENT('refreshSelection', 'refreshRect') + DEBOUNCE(100)]() {

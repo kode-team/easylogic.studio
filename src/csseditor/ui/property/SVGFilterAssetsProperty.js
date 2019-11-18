@@ -10,7 +10,7 @@ import { uuidShort } from "../../../util/functions/math";
 export default class SVGFilterAssetsProperty extends BaseProperty {
 
   getTitle() {
-    return "SVG Filter";
+    return editor.i18n('svgfilter.asset.property.title');
   }
 
   initState() {

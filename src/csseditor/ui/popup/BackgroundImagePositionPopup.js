@@ -9,6 +9,7 @@ import RangeEditor from "../property-editor/RangeEditor";
 import SelectEditor from "../property-editor/SelectEditor";
 import BasePopup from "./BasePopup";
 import EmbedColorPicker from "../property-editor/EmbedColorPicker";
+import { editor } from "../../../editor/editor";
 
 
 const blend_list = [
@@ -34,7 +35,7 @@ const blend_list = [
 export default class BackgroundImagePositionPopup extends BasePopup {
 
   getTitle() {
-    return 'Background Pattern'
+    return editor.i18n('background.image.position.popup.title')
   }
 
   components() {
@@ -69,7 +70,7 @@ export default class BackgroundImagePositionPopup extends BasePopup {
   templateForSize() {
     return /*html*/`
       <div class='popup-item'>
-        <SelectEditor label="Size" ref='$size' key='size' value="${this.state.size}" options="contain,cover,auto" onchange="changeRangeEditor" />      
+        <SelectEditor label="${editor.i18n('background.image.position.popup.size')}" ref='$size' key='size' value="${this.state.size}" options="contain,cover,auto" onchange="changeRangeEditor" />      
       </div>
     `;
   }
@@ -114,7 +115,7 @@ export default class BackgroundImagePositionPopup extends BasePopup {
     return /*html*/`
     <div class='popup-item'>
       <RangeEditor 
-          label="Width"   
+          label="${editor.i18n('background.image.position.popup.width')}"   
           calc="false"             
           ref="$width" 
           key="width"
@@ -130,7 +131,7 @@ export default class BackgroundImagePositionPopup extends BasePopup {
     return /*html*/`
     <div class='popup-item'>
       <RangeEditor 
-          label="Height"
+          label="${editor.i18n('background.image.position.popup.height')}"
           calc="false"          
           ref="$height" 
           key="height"
@@ -144,14 +145,14 @@ export default class BackgroundImagePositionPopup extends BasePopup {
   templateForRepeat() {
     return /*html*/`
     <div class='popup-item grid-2'>
-      <label>Repeat</label>
+      <label>${editor.i18n('background.image.position.popup.repeat')}</label>
       <div class='repeat-list' ref="$repeat" data-value='${this.state.repeat}'>
-          <button type="button" value='no-repeat' title="no-repeat"></button>
-          <button type="button" value='repeat' title="repeat"></button>
-          <button type="button" value='repeat-x' title="repeat-x"></button>
-          <button type="button" value='repeat-y' title="repeat-y"></button>
-          <button type="button" value='space' title="space"></button>
-          <button type="button" value='round' title="round"></button>
+          <button type="button" value='no-repeat' title="${editor.i18n('background.image.position.popup.type.no-repeat')}"></button>
+          <button type="button" value='repeat' title="${editor.i18n('background.image.position.popup.type.repeat')}"></button>
+          <button type="button" value='repeat-x' title="${editor.i18n('background.image.position.popup.type.repeat-x')}"></button>
+          <button type="button" value='repeat-y' title="${editor.i18n('background.image.position.popup.type.repeat-y')}"></button>
+          <button type="button" value='space' title="${editor.i18n('background.image.position.popup.type.space')}"></button>
+          <button type="button" value='round' title="${editor.i18n('background.image.position.popup.type.round')}"></button>
       </div>
     </div>
     `;
@@ -165,7 +166,7 @@ export default class BackgroundImagePositionPopup extends BasePopup {
   templateForBlendMode() {
     return /*html*/`
     <div class='popup-item'>
-      <SelectEditor label="Blend" ref='$blend' key='blendMode' value="${this.state.blendMode}" options="${blend_list.join(',')}" onchange="changeRangeEditor" />
+      <SelectEditor label="${editor.i18n('background.image.position.popup.blend')}" ref='$blend' key='blendMode' value="${this.state.blendMode}" options="${blend_list.join(',')}" onchange="changeRangeEditor" />
     </div>
     `;
   }

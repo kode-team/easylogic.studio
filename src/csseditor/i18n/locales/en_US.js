@@ -77,6 +77,7 @@ export default {
     'image.property.width': 'Width',    
     'image.property.height': 'height',    
 
+    'motion.property.title': 'Motion',
 
     'text.property.title': 'Text Style',
     'text.property.align': 'Align',
@@ -96,6 +97,12 @@ export default {
 
     'transform.property.title': 'Transform',
     'transform.origin.property.title': 'Transform Origin',    
+
+    'transition.property.title': 'CSS Transition',
+    'animation.property.title': 'CSS Animation',  
+    'keyframe.property.title': 'CSS Keyframe',      
+    'selector.property.title': 'Selector',
+    'selector.property.none': 'None selector',    
 
     'path.data.property.title': 'Path Information',
     'polygon.data.property.title': 'Polygon Information',    
@@ -137,6 +144,14 @@ export default {
 
     'boxshadow.editor.blur': 'Blur',
     'boxshadow.editor.spread': 'Spread',
+
+    'css.property.editor.properties': 'Properties',
+
+    'offset.path.list.editor.path': 'Path',
+    'offset.path.list.editor.totalLength': 'Total Length',
+    'offset.path.list.editor.distance': 'Distance',
+    'offset.path.list.editor.direction': 'Direction',
+    'offset.path.list.editor.rotate': 'Rotate',
     
     'svgfilter.select.editor.message.create': 'Create new svg filter',
     'svgfilter.select.editor.message.select': 'Select a filter',
@@ -154,4 +169,26 @@ export default {
     'path.manager.mode.flipX': 'Flip X',    
     'path.manager.mode.flipY': 'Flip Y',    
     'path.manager.mode.flipOrigin': 'Flip Origin',    
+
+    'colorpicker.popup.title': 'ColorPicker',    
+
+    'selector.popup.title': 'Selector Property',
+    'selector.popup.selector': 'Selector',    
+
+    'background.image.position.popup.title': 'Background Pattern',
+    'background.image.position.popup.size': 'Size',
+    'background.image.position.popup.width': 'Width',
+    'background.image.position.popup.height': 'Height',
+    'background.image.position.popup.repeat': 'Repeat',
+    'background.image.position.popup.blend': 'Blend',    
+    'background.image.position.popup.type.repeat': 'repeat',
+    'background.image.position.popup.type.no-repeat': 'no repeat',
+    'background.image.position.popup.type.repeat-x': 'repeat-x', 
+    'background.image.position.popup.type.repeat-y': 'repeat-y', 
+    'background.image.position.popup.type.space': 'space', 
+    'background.image.position.popup.type.round': 'round',     
+
+    'gradient.picker.popup.title': 'Gradient & Image Picker',    
+    'image.asset.property.title': 'Image',
+    'svgfilter.asset.property.title': 'SVG Filter',
 }

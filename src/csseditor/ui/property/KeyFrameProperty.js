@@ -17,7 +17,7 @@ import { Keyframe } from "../../../editor/css-property/Keyframe";
 
 export default class KeyFrameProperty extends BaseProperty {
   getTitle() {
-    return "Keyframes";
+    return editor.i18n('keyframe.property.title');
   }
   getBody() {
     return `<div class='keyframe-list' ref='$keyframeList'></div>`;

@@ -79,6 +79,8 @@ export default {
     'image.property.width': '넓이',    
     'image.property.height': '높이',    
 
+    'motion.property.title': '모션',
+
     'path.data.property.title': '패스 정보',
     'polygon.data.property.title': '폴리곤 정보',
 
@@ -98,6 +100,13 @@ export default {
 
     'transform.property.title': '변형',
     'transform.origin.property.title': '변형 중심점',    
+
+    'transition.property.title': 'CSS 트랜지션',
+    'animation.property.title': 'CSS 애니메이션',
+    'keyframe.property.title': 'CSS 키프레임',
+    'selector.property.title': 'CSS 셀렉터', 
+    'selector.property.none': '선택자 없음',
+
     'perspective.property.title': '원근',        
     'perspective.origin.property.title': '원근 중심점',                
 
@@ -137,6 +146,17 @@ export default {
     'boxshadow.editor.blur': '흐림',
     'boxshadow.editor.spread': '길이',    
 
+    'css.property.editor.properties': '속성',    
+
+
+    'offset.path.list.editor.path': '패스',
+    'offset.path.list.editor.totalLength': '전체 길이',
+    'offset.path.list.editor.distance': '거리',
+    'offset.path.list.editor.direction': '방향',
+    'offset.path.list.editor.rotate': '회전',
+    
+
+
     'svgfilter.select.editor.message.create': '새로운 SVG Filter 를 만드세요.',
     'svgfilter.select.editor.message.select': '필터를 선택하세요.',
 
@@ -153,4 +173,27 @@ export default {
     'path.manager.mode.flipX': 'X축 회전',    
     'path.manager.mode.flipY': 'Y축 회전',    
     'path.manager.mode.flipOrigin': '전체 회전',        
+
+    'colorpicker.popup.title': '색상 선택',
+
+    'selector.popup.title': '선택자 속성',
+    'selector.popup.selector': '선택자',
+
+    'background.image.position.popup.title': '배경 패턴',   
+    'background.image.position.popup.size': '크기',
+    'background.image.position.popup.width': '넓이',
+    'background.image.position.popup.height': '높이',
+    'background.image.position.popup.repeat': '반복',
+    'background.image.position.popup.blend': '블렌드',        
+    'background.image.position.popup.type.repeat': '반복',
+    'background.image.position.popup.type.no-repeat': '반복 안함',
+    'background.image.position.popup.type.repeat-x': 'x축 반복', 
+    'background.image.position.popup.type.repeat-y': 'y축 반복', 
+    'background.image.position.popup.type.space': '공백유지', 
+    'background.image.position.popup.type.round': '반올림', 
+
+    'gradient.picker.popup.title': '그라디언트와 이미지',
+
+    'image.asset.property.title': '이미지',
+    'svgfilter.asset.property.title': 'SVG 필터',       
 }

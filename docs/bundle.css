@@ -4431,7 +4431,7 @@ html, body {
   display: inline-block;
   width: 80px;
   position: relative;
-  margin-right: 4px;
+  margin-right: 2px;
   margin-bottom: 4px;
   vertical-align: middle;
 }
@@ -4558,7 +4558,7 @@ html, body {
   display: inline-block;
   width: 80px;
   position: relative;
-  margin-right: 4px;
+  margin-right: 2px;
   margin-bottom: 4px;
   vertical-align: middle;
 }
@@ -4569,7 +4569,6 @@ html, body {
   position: relative;
   width: 100%;
   height: 80px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 2px;
   cursor: pointer;
   background-color: transparent;
@@ -4697,7 +4696,7 @@ html, body {
   display: inline-block;
   width: 80px;
   position: relative;
-  margin-right: 4px;
+  margin-right: 2px;
   margin-bottom: 4px;
   vertical-align: middle;
 }
@@ -5866,7 +5865,7 @@ html, body {
 }
 .csseditor .css-property-editor .css-property-item > .title {
   grid-template-columns: 1fr 30px;
-  background-color: #16191e;
+  background-color: transparent;
   color: #fc554f;
   border-radius: 3px;
   padding: 3px 0px;
@@ -8906,7 +8905,7 @@ html, body {
   position: absolute;
   display: none;
   z-index: 1000;
-  background-color: #333333;
+  background-color: #292b35;
   border-radius: 3px;
   -webkit-filter: drop-shadow(rgba(0, 0, 0, 0.5) 0px 0px 1px) drop-shadow(rgba(0, 0, 0, 0.5) 0px 2px 4px) drop-shadow(rgba(0, 0, 0, 0.5) 0px 4px 12px);
           filter: drop-shadow(rgba(0, 0, 0, 0.5) 0px 0px 1px) drop-shadow(rgba(0, 0, 0, 0.5) 0px 2px 4px) drop-shadow(rgba(0, 0, 0, 0.5) 0px 4px 12px);
@@ -9042,8 +9041,8 @@ html, body {
 .csseditor .popup .box-shadow-property-popup .codemirror-colorpicker {
   box-shadow: none;
   border-radius: 0px;
-  background-color: #333333;
-  border-color: #333333;
+  background-color: #292b35;
+  border-color: #292b35;
 }
 .csseditor .popup .box-shadow-property-popup .codemirror-colorpicker input {
   color: #ffffff !important;
@@ -9169,7 +9168,7 @@ html, body {
 .csseditor .popup .text-shadow-property-popup .codemirror-colorpicker {
   box-shadow: none;
   border-radius: 0px;
-  background-color: #333333;
+  background-color: #292b35;
 }
 .csseditor .popup .text-shadow-property-popup .codemirror-colorpicker input {
   color: #ffffff !important;
@@ -13687,7 +13686,7 @@ html, body {
   display: inline-block;
   width: 80px;
   position: relative;
-  margin-right: 4px;
+  margin-right: 2px;
   margin-bottom: 4px;
   vertical-align: middle;
 }
@@ -13814,7 +13813,7 @@ html, body {
   display: inline-block;
   width: 80px;
   position: relative;
-  margin-right: 4px;
+  margin-right: 2px;
   margin-bottom: 4px;
   vertical-align: middle;
 }
@@ -13825,7 +13824,6 @@ html, body {
   position: relative;
   width: 100%;
   height: 80px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 2px;
   cursor: pointer;
   background-color: transparent;
@@ -13953,7 +13951,7 @@ html, body {
   display: inline-block;
   width: 80px;
   position: relative;
-  margin-right: 4px;
+  margin-right: 2px;
   margin-bottom: 4px;
   vertical-align: middle;
 }
@@ -15122,7 +15120,7 @@ html, body {
 }
 .csseditor[data-theme=light] .css-property-editor .css-property-item > .title {
   grid-template-columns: 1fr 30px;
-  background-color: white;
+  background-color: transparent;
   color: #fc554f;
   border-radius: 3px;
   padding: 3px 0px;

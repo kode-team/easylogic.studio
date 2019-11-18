@@ -16,7 +16,7 @@ import { getPredefinedCubicBezier } from "../../../util/functions/bezier";
 
 export default class TransitionProperty extends BaseProperty {
   getTitle() {
-    return "Transition";
+    return editor.i18n('transition.property.title');
   }
 
   getBody() {
@@ -42,7 +42,7 @@ export default class TransitionProperty extends BaseProperty {
         this.selectedIndex = index;
       }
 
-      return `
+      return /*html*/`
       <div class='transition-group-item'>
         <div class='transition-item ${selectedClass}' data-index='${index}' ref="transitionIndex${index}" draggable='true' >
             <div class='timing preview' data-index='${index}' ref='$preview${index}'>

@@ -32,7 +32,7 @@ const selectorList = [
 export default class SelectorProperty extends BaseProperty {
 
   getTitle() {
-    return "Selector";
+    return editor.i18n('selector.property.title');
   }
   getBody() {
     return `<div class='selector-list' ref='$selectorList'></div>`;
@@ -41,7 +41,7 @@ export default class SelectorProperty extends BaseProperty {
   getTools() {
     return /*html*/`
       <div style='display:inline-block;'>
-        <SelectEditor ref='$select' key='selector' icon="true" none-value="selector" options="${selectorList}" />
+        <SelectEditor ref='$select' key='selector' icon="true" key-value-char=';' none-value="selector" options="${selectorList}" />
       </div>
       <button type="button" ref="$add" title="add Selector">${icon.add}</button>
     `;
@@ -53,7 +53,7 @@ export default class SelectorProperty extends BaseProperty {
       <div class='selector-item' draggable='true' ref='$selectorIndex${index}' data-index='${index}'>
         <div class='title'>
           <div class='name'>
-            <span>${selector.selector || '&lt;none selector&gt;'}</span>
+            <span>${selector.selector || `&lt;${editor.i18n('selector.property.none')}&gt;`}</span>
           </div>
           <div class='tools'>
               <button type="button" class="del" data-index="${index}">${icon.remove2}</button>
