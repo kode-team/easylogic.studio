@@ -178,9 +178,9 @@
       vertical-align: middle;
     }
 
-    > * {
-      margin-right: 10px;
-    }
+    // > * {
+    //   margin-right: 10px;
+    // }
 
     .menu-item {
       &[data-no-title='true'] {
@@ -217,8 +217,8 @@
 
     .icon {
       margin: 0 auto;
-      width: 30px;
-      height: 30px;
+      width: 24px;
+      height: 24px;
       // background-color: rgba(206, 206, 206, 0.5);
       color: $font-color;      
 
@@ -234,7 +234,6 @@
         }
       }
 
-      &.jsfiddle,
       &.export,
       &.codepen,
       &.github {
@@ -256,11 +255,6 @@
       &.codepen {
         &:before {
           content: "C";
-        }
-      }
-      &.jsfiddle {
-        &:before {
-          content: "J";
         }
       }
       &.github {
