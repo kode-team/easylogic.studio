@@ -24,8 +24,17 @@ This project is [sapa](https://github.com/easylogic/sapa) based.
 * Text 
 * Image 
 * Cube 
+* Cylinder 
+
+
 * SVG Path 
-* SVG Polygon with star 
+* SVG Rect with path 
+* SVG Circle with path 
+* SVG Text 
+* SVG TextPath
+* SVG Polygon 
+* SVG Polygon Star 
+
 
 ### Style
 
@@ -36,7 +45,8 @@ This project is [sapa](https://github.com/easylogic/sapa) based.
 * Transform 
   * Support transform ui  (rotate X,Y,Z )
 * Many styling tools 
-  * color
+  * background
+  * font & text style 
   * gradient (multiple background images)
   * border & radius 
   * filter
@@ -49,10 +59,12 @@ This project is [sapa](https://github.com/easylogic/sapa) based.
 * Transition 
 * Animation & Keyframes 
 * Support cubic-bezier editor 
+* Support timeline editor 
 
 ### Code & Share 
-* Support export to JSFiddle or CodePen 
+* Support export to CodePen 
 * Support code viewer  
+* Support png & svg download  
 
 ### Drawing 
 * Support mini path and polygon editor 
