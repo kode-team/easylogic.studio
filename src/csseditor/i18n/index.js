@@ -9,7 +9,7 @@ export const FALLBACK_LANG = 'en_US';
 const i18n = {
     locales,
     get (key, params = {}, lang = FALLBACK_LANG) {
-        var str = locales[lang][key] || locales[FALLBACK_LANG][key] || undefined;
+        var str = locales[lang][key] || locales[FALLBACK_LANG][key] || key || undefined;
 
         if(isFunction(str)) {
             return str(params)

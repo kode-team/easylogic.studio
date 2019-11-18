@@ -52,7 +52,14 @@ export default {
     'filter.property.title': '필터',    
     'backdrop.filter.property.title': '후면 필터',    
     'clippath.property.title': '클립패스',    
+
     'export.property.title': '내보내기',
+    'export.property.download': '다운로드',
+
+    'transform.property.title': '변형',
+    'transform.origin.property.title': '변형 중심점',    
+    'perspective.property.title': '원근',        
+    'perspective.origin.property.title': '원근 중심점',                
 
     'border.editor.all': '전체',      
     'border.editor.width': '크기',        
@@ -61,11 +68,17 @@ export default {
     'border.editor.top': '위',        
     'border.editor.left': '왼쪽',        
     'border.editor.right': '오른쪽',        
-    'border.editor.bottom': '아래',            
+    'border.editor.bottom': '아래',      
+    
+    'boxshadow.editor.blur': '흐림',
+    'boxshadow.editor.spread': '길이',    
 
     'svgfilter.select.editor.message.create': '새로운 SVG Filter 를 만드세요.',
     'svgfilter.select.editor.message.select': '필터를 선택하세요.',
 
     'fill.editor.message.click.image': '이미지를 선택하고 싶으면 프리뷰 영역을 클릭하세요.',
     'fill.editor.message.drag.position': '가운데 위치를 드래그 해보세요.',
+
+    'perspective.origin.editor.originX': '중심점 X',
+    'perspective.origin.editor.originY': '중심점 Y',    
 }

@@ -37,7 +37,7 @@ var transformList = [
 export default class TransformProperty extends BaseProperty {
 
   getTitle() {
-    return 'Transform'
+    return editor.i18n('transform.property.title')
   }
 
   getBody() {

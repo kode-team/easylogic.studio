@@ -52,8 +52,14 @@ export default {
     'filter.property.title': 'Filter',
     'backdrop.filter.property.title': 'Backdrop Filter',        
     'clippath.property.title': 'Clip Path',
-    'export.property.title': 'Export',    
 
+    'export.property.title': 'Export',    
+    'export.property.download': 'Download',    
+
+    'transform.property.title': 'Transform',
+    'transform.origin.property.title': 'Transform Origin',    
+    'perspective.property.title': 'Perspective',            
+    'perspective.origin.property.title': 'Perspective Origin',            
 
     'border.editor.all': 'All',     
     'border.editor.width': 'Width',        
@@ -63,10 +69,16 @@ export default {
     'border.editor.left': 'Left',        
     'border.editor.right': 'Right',        
     'border.editor.bottom': 'Bottom',     
+
+    'boxshadow.editor.blur': 'Blur',
+    'boxshadow.editor.spread': 'Spread',
     
     'svgfilter.select.editor.message.create': 'Create new svg filter',
     'svgfilter.select.editor.message.select': 'Select a filter',
 
     'fill.editor.message.click.image': 'Click the preview area if you want to select a image',
     'fill.editor.message.drag.position': 'Drag if you want to move center position',
+
+    'perspective.origin.editor.originX': 'Origin X',
+    'perspective.origin.editor.originY': 'Origin Y',
 }

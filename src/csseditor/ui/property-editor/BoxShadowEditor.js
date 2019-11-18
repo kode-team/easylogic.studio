@@ -2,6 +2,7 @@ import { CLICK, LOAD } from "../../../util/Event";
 import UIElement, { EVENT } from "../../../util/UIElement";
 import icon from "../icon/icon";
 import { BoxShadow } from "../../../editor/css-property/BoxShadow";
+import { editor } from "../../../editor/editor";
 
 
 export default class BoxShadowEditor extends UIElement {
@@ -15,7 +16,7 @@ export default class BoxShadowEditor extends UIElement {
 
   template() {
     var labelClass = this.state.hideLabel ? 'hide' : '';
-    return `
+    return /*html*/`
       <div class="box-shadow-editor" >
         <div class='label ${labelClass}' >
             <label>${this.props.title||''}</label>
@@ -30,7 +31,7 @@ export default class BoxShadowEditor extends UIElement {
 
   [LOAD("$shadowList")]() {
     var arr = this.state.boxShadows.map((shadow, index) => {
-      return `
+      return /*html*/`
         <div class="shadow-item real" data-index="${index}">
           <div class="color">
             <div class='color-view' style="background-color: ${shadow.color}">
@@ -51,15 +52,15 @@ export default class BoxShadowEditor extends UIElement {
     });
 
     if (arr.length) {
-      arr.push(`
+      arr.push(/*html*/`
       <div class="shadow-item desc">
         <div class="color"></div>      
         <div class="inset" >Inset</div>
 
         <div class="offset-x">X</div>
         <div class="offset-y">Y</div>
-        <div class="blur-radius">Blur</div>
-        <div class="spread-radius">Spread</div>
+        <div class="blur-radius">${editor.i18n('boxshadow.editor.blur')}</div>
+        <div class="spread-radius">${editor.i18n('boxshadow.editor.spread')}</div>
         <div class="tools">
         </div>
       </div>

@@ -7,7 +7,7 @@ import icon from "../icon/icon";
 export default class PerspectiveProperty extends BaseProperty {
 
   getTitle() {
-    return "Perspective";
+    return editor.i18n('perspective.property.title')
   }
 
   hasKeyframe() {
@@ -19,7 +19,7 @@ export default class PerspectiveProperty extends BaseProperty {
   }
 
   getTools() {
-    return `
+    return /*html*/`
         <button type="button" class="remove" ref='$remove'>${icon.remove}</button>
     `
   }

@@ -28,11 +28,11 @@ export default class ExportProperty extends BaseProperty {
     return /*html*/`
         <div class='export-item svg'>
           <label>SVG</label>
-          <button ref='$svg'>${icon.archive} Download</button>
+          <button ref='$svg'>${icon.archive} ${editor.i18n('export.property.download')}</button>
         </div>
         <div class='export-item png'>
           <label>PNG</label>
-          <button ref='$png'>${icon.archive} Download</button>
+          <button ref='$png'>${icon.archive} ${editor.i18n('export.property.download')}</button>
         </div> 
       `;
   }  

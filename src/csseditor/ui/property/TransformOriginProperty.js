@@ -9,7 +9,7 @@ import icon from "../icon/icon";
 export default class TransformOriginProperty extends BaseProperty {
 
   getTitle() {
-    return "Transform Origin";  
+    return editor.i18n('transform.origin.property.title');  
   }
 
   getTools() {

@@ -2,8 +2,8 @@ import { Config } from "./Config";
 import { Selection } from "./Selection";
 import { TimelineSelection } from "./TimelineSelection";
 import i18n from "../csseditor/i18n";
-import { saveResource, loadResource, loadItem, saveItem } from "./util/Resource";
-
+import { loadItem, saveItem } from "./util/Resource";
+ 
 function blobToDataURL(blob) {
   return new Promise(function(resolve) {
     var fileReader = new FileReader();

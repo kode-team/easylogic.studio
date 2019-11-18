@@ -3,11 +3,12 @@ import { Length } from "../../../editor/unit/Length";
 import icon from "../icon/icon";
 import UIElement, { EVENT } from "../../../util/UIElement";
 import RangeEditor from "./RangeEditor";
+import { editor } from "../../../editor/editor";
 
 
 const typeList = [
-  { key: "perspective-origin-x", title: "Origin X" },
-  { key: "perspective-origin-y", title: "Origin Y" },
+  { key: "perspective-origin-x", title: "X" },
+  { key: "perspective-origin-y", title: "Y" },
 ];
 
 const keyList = typeList.map(it => it.key);
@@ -124,9 +125,12 @@ export default class PerspectiveOriginEditor extends UIElement {
       >
         <div class="radius-setting-box" ref="$radiusSettingBox">
           ${typeList.map(it => {
+
+            var label = editor.i18n(it.title)
+
             return /*html*/`
               <div>
-                  <RangeEditor ref='$${it.key}' label='${it.title}' key='${it.key}' value="${this.state[it.key]}" onchange='changePerspectiveOrigin' />
+                  <RangeEditor ref='$${it.key}' label='${label}' key='${it.key}' value="${this.state[it.key]}" onchange='changePerspectiveOrigin' />
               </div>  
             `;
           }).join('')}
