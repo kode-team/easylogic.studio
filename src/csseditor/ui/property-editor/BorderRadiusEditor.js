@@ -3,12 +3,13 @@ import icon from "../icon/icon";
 import UIElement, { EVENT } from "../../../util/UIElement";
 import RangeEditor from "./RangeEditor";
 import BorderRadius from "../../../editor/css-property/BorderRadius";
+import { editor } from "../../../editor/editor";
 
 const typeList = [
-  { key: "border-top-left-radius", title: "Top Left" },
-  { key: "border-top-right-radius", title: "Top Right" },
-  { key: "border-bottom-right-radius", title: "Bottom Right" },
-  { key: "border-bottom-left-radius", title: "Bottom Left" }  
+  { key: "border-top-left-radius", title: "border.radius.editor.topLeft" },
+  { key: "border-top-right-radius", title: "border.radius.editor.topRight" },
+  { key: "border-bottom-right-radius", title: "border.radius.editor.bottomRight" },
+  { key: "border-bottom-left-radius", title: "border.radius.editor.bottomLeft" }  
 ];
 
 const keyList = typeList.map(it => it.key);
@@ -64,9 +65,10 @@ export default class BorderRadiusEditor extends UIElement {
         <div class="radius-setting-box" ref="$radiusSettingBox">
           ${typeList.map(it => {
             var value = this.state[it.key]
+            var label = editor.i18n(it.title);
             return /*html*/`
               <div>
-                  <RangeEditor ref='$${it.key}' label='${it.title}' key='${it.key}' value='${value}' onchange='changeBorderRadius' />
+                  <RangeEditor ref='$${it.key}' label='${label}' key='${it.key}' value='${value}' onchange='changeBorderRadius' />
               </div>  
             `;
           }).join('')}

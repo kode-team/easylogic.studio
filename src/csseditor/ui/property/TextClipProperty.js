@@ -7,7 +7,7 @@ import { EVENT } from "../../../util/UIElement";
 export default class TextClipProperty extends BaseProperty {
   
   getTitle() {
-    return "Text Clip";
+    return editor.i18n('text.clip.property.title');
   }
 
   isFirstShow() {

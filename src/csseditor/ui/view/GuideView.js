@@ -7,7 +7,7 @@ const roundedLength = (px, fixedRound = 1) => {
     return Length.px(px).round(fixedRound);
 }
 
-const MAX_DIST = 3;
+const MAX_DIST = 5;
 
 /**
  * 원보 아이템의 크기를 가지고 scale 이랑 조합해서 world 의 크기를 구하는게 기본 컨셉 

@@ -8,7 +8,7 @@ import PolygonDataEditor from "../property-editor/PolygonDataEditor";
 export default class PolygonDataProperty extends BaseProperty {
 
   getTitle() {
-    return "Polygon";
+    return editor.i18n('polygon.data.property.title');
   }
 
   getClassName() {

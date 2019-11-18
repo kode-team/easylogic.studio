@@ -7,7 +7,7 @@ import { DEBOUNCE } from "../../../util/Event";
 export default class FontProperty extends BaseProperty {
 
   getTitle() {
-    return "Font";
+    return editor.i18n('font.property.title');
   }
 
   getClassName() {
@@ -35,13 +35,13 @@ export default class FontProperty extends BaseProperty {
     return /*html*/`
       <div class='property-item animation-property-item'>
         <span class='add-timeline-property' data-property='color'></span>
-        <ColorViewEditor ref='$color' label='Color' key='color' onchange="changeColor" />
+        <ColorViewEditor ref='$color' label='${editor.i18n('font.property.color')}' key='color' onchange="changeColor" />
       </div>      
       <div class='property-item animation-property-item'>
         <span class='add-timeline-property' data-property='font-size'></span>
         <RangeEditor 
           ref='$size' 
-          label='Size' 
+          label='${editor.i18n('font.property.size')}' 
           key="font-size" 
           removable="true" 
           onchange="changeRangeEditor" />
@@ -50,7 +50,7 @@ export default class FontProperty extends BaseProperty {
         <span class='add-timeline-property' data-property='font-stretch'></span>
         <RangeEditor 
           ref='$stretch' 
-          label='Stretch' 
+          label='${editor.i18n('font.property.stretch')}' 
           key="font-stretch" 
           removable="true" 
           units='%',
@@ -61,7 +61,7 @@ export default class FontProperty extends BaseProperty {
         <span class='add-timeline-property' data-property='font-weight'></span>
         <NumberRangeEditor 
           ref='$weightRange' 
-          label='Weight' 
+          label='${editor.i18n('font.property.weight')}' 
           key='font-weight' 
           removable="true"
           value="400" 
@@ -76,7 +76,7 @@ export default class FontProperty extends BaseProperty {
       <div class='property-item'>
         <SelectIconEditor 
           ref='$style' 
-          label='Style' 
+          label='${editor.i18n('font.property.style')}' 
           key="font-style" 
           options="normal,italic" 
           icons='I,I'
@@ -87,7 +87,7 @@ export default class FontProperty extends BaseProperty {
         <SelectEditor 
           ref='$family' 
           icon="true"
-          label='Family' 
+          label='${editor.i18n('font.property.family')}' 
           key="font-family" 
           options=",serif,sans-serif,monospace,cursive,fantasy,system-ui" 
           onchange="changeRangeEditor" 

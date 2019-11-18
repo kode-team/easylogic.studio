@@ -8,7 +8,7 @@ import icon from "../icon/icon";
 export default class TextShadowProperty extends BaseProperty {
 
   getTitle() {
-    return 'Text Shadows'
+    return editor.i18n('text.shadow.property.title')
   }
 
   getBody() {

@@ -22,7 +22,7 @@ export default class ImageProperty extends BaseProperty {
   }
 
   getTitle() {
-    return 'Image'
+    return editor.i18n('image.property.title')
   }
 
   getBody() {
@@ -30,12 +30,12 @@ export default class ImageProperty extends BaseProperty {
   }  
 
   getFooter() {
-    return `
+    return /*html*/`
       <div>
-        <label> Original </label> <span ref='$sizeInfo'></span> <button type="button" ref='$resize'>${icon.size}</button>
+        <label> ${editor.i18n('image.property.origin')} </label> <span ref='$sizeInfo'></span> <button type="button" ref='$resize'>${icon.size}</button>
       </div>
       <div>
-        <SelectEditor ref='$select' label="Size" key='size' value='' options='${image_size.join(',')}' onchange='changeImageSize' />
+        <SelectEditor ref='$select' label="${editor.i18n('image.property.size')}" key='size' value='' options='${image_size.join(',')}' onchange='changeImageSize' />
       </div>
     `
   }
@@ -65,7 +65,7 @@ export default class ImageProperty extends BaseProperty {
     var current = editor.selection.current || {};
 
     return {
-      innerHTML: `Width: ${current.naturalWidth}, Height: ${current.naturalHeight}`
+      innerHTML: `${editor.i18n('image.property.width')}: ${current.naturalWidth}, ${editor.i18n('image.property.height')}: ${current.naturalHeight}`
     }
   }
 

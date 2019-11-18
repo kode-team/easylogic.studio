@@ -8,7 +8,7 @@ import { DEBOUNCE } from "../../../util/Event";
 export default class FontSpacingProperty extends BaseProperty {
 
   getTitle() {
-    return "Font Spacing";
+    return editor.i18n('font.spacing.property.title');
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
@@ -33,22 +33,22 @@ export default class FontSpacingProperty extends BaseProperty {
     <div class='property-item'>
       <RangeEditor 
         ref='$lineHeight' 
-        label='line-height' 
+        label='${editor.i18n('font.spacing.property.lineHeight')}' 
         removable="true" 
         key="line-height" 
         units=",px,%,em"
         onchange="changeRangeEditor" />
     </div>       
       <div class="property-item font-item">
-        <RangeEditor ref='$letter' label='Letter' removable='true' key="letter-spacing" onchange="changeRangeEditor" />
+        <RangeEditor ref='$letter' label='${editor.i18n('font.spacing.property.letterSpacing')}' removable='true' key="letter-spacing" onchange="changeRangeEditor" />
       </div>
 
       <div class="property-item font-item">
-        <RangeEditor ref='$word' label='Word' removable='true' key="word-spacing" onchange="changeRangeEditor" />
+        <RangeEditor ref='$word' label='${editor.i18n('font.spacing.property.wordSpacing')}' removable='true' key="word-spacing" onchange="changeRangeEditor" />
       </div>
 
       <div class="property-item font-item">
-        <RangeEditor ref='$indent' label='Indent' removable='true' key="text-indent" onchange="changeRangeEditor" />
+        <RangeEditor ref='$indent' label='${editor.i18n('font.spacing.property.indent')}' removable='true' key="text-indent" onchange="changeRangeEditor" />
       </div>      
     `;
   }

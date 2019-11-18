@@ -1,6 +1,7 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
 import { CLICK, BIND } from "../../../util/Event";
 import icon from "../icon/icon";
+import { editor } from "../../../editor/editor";
 
 const MODES = {
   'segment-move': 'modify',
@@ -14,7 +15,7 @@ export default class PathManager extends UIElement {
     initState() {
         return {
             mode: 'move',
-            msg: 'Keydown ESC or Enter key to close editing'
+            msg: editor.i18n('path.manager.msg')
         }
     }
 
@@ -22,15 +23,15 @@ export default class PathManager extends UIElement {
     return /*html*/`
       <div class='path-manager'>
         <div class='tools' ref='$mode' data-selected-value='${this.state.mode}'>
-            <button type="button" data-value='modify' title='Modify' > ${icon.device_hub}</button>
-            <button type="button" data-value='draw' title='Draw' > ${icon.control_point}</button>
-            <button type="button" data-value='transform' title='transform' > ${icon.format_shapes}</button>
+            <button type="button" data-value='modify' title='${editor.i18n('path.manager.mode.modify')}' > ${icon.device_hub}</button>
+            <button type="button" data-value='draw' title='${editor.i18n('path.manager.mode.draw')}' > ${icon.control_point}</button>
+            <button type="button" data-value='transform' title='${editor.i18n('path.manager.mode.transform')}' > ${icon.format_shapes}</button>
         </div>
         <div class='split'></div>
         <div class='tools' ref='$flip'>
-            <button type="button" data-value='flipX' title='flip X'>${icon.flip}</button>
-            <button type="button" data-value='flipY' title='flip Y'>${icon.flip}</button>
-            <button type="button" data-value='flip' title='flip origin'>${icon.flip}</button>
+            <button type="button" data-value='flipX' title='${editor.i18n('path.manager.mode.flipX')}'>${icon.flip}</button>
+            <button type="button" data-value='flipY' title='${editor.i18n('path.manager.mode.flipY')}'>${icon.flip}</button>
+            <button type="button" data-value='flip' title='${editor.i18n('path.manager.mode.flipOrigin')}'>${icon.flip}</button>
         </div>
       </div>    
     `;

@@ -1,12 +1,13 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
 import { CLICK } from "../../../util/Event";
+import { editor } from "../../../editor/editor";
 
 export default class PolygonManager extends UIElement {
 
   initState() {
       return {
           mode: 'move',
-          msg: 'Keydown ESC or Enter key to close editing'
+          msg: editor.i18n('path.manager.msg')
       }
   }
 

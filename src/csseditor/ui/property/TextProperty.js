@@ -7,7 +7,7 @@ import { DEBOUNCE } from "../../../util/Event";
 export default class TextProperty extends BaseProperty {
 
   getTitle() {
-    return "Text Style";
+    return editor.i18n('text.property.title');
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
@@ -30,7 +30,7 @@ export default class TextProperty extends BaseProperty {
       <div class="property-item">
         <SelectIconEditor 
           ref='$align' 
-          label='Align' 
+          label='${editor.i18n('text.property.align')}' 
           key='text-align' 
           value='left' 
           options="left,center,right,justify" 
@@ -40,7 +40,7 @@ export default class TextProperty extends BaseProperty {
       <div class="property-item">
         <SelectIconEditor 
           ref='$transform' 
-          label='Transform' 
+          label='${editor.i18n('text.property.transform')}' 
           key='text-transform' 
           options="uppercase,lowercase,capitalize"
           icons='A,a,Aa'
@@ -49,7 +49,7 @@ export default class TextProperty extends BaseProperty {
       <div class="property-item">
         <SelectIconEditor 
           ref='$decoration' 
-          label='Decoration' 
+          label='${editor.i18n('text.property.decoration')}' 
           key='text-decoration' 
           options="none,underline,overline,line-through" 
           icons="A,U,O,S"

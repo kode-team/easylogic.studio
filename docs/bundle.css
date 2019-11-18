@@ -5571,6 +5571,7 @@ html, body {
 }
 .csseditor .range-editor.is-removable .remove {
   display: inline-block;
+  margin-top: 3px;
 }
 .csseditor .range-editor.has-calc.has-label {
   grid-template-columns: 60px 20px 1fr;
@@ -14826,6 +14827,7 @@ html, body {
 }
 .csseditor[data-theme=light] .range-editor.is-removable .remove {
   display: inline-block;
+  margin-top: 3px;
 }
 .csseditor[data-theme=light] .range-editor.has-calc.has-label {
   grid-template-columns: 60px 20px 1fr;
