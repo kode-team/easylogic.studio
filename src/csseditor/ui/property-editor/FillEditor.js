@@ -24,9 +24,6 @@ const iconList = {
   'image-resource': icon.photo
 }
 
-const hasRadialPosition = {
-  'radial-gradient': true
-}
 
 const presetPosition = {
   top: { x1: '0%', y1: '100%', x2: '0%', y2: '0%'},
@@ -56,7 +53,7 @@ const rangeEditorList = [
   'imageX', 'imageY', 'imageWidth', 'imageHeight'
 ]
 
-
+const i18n = editor.initI18n('fill.editor')
 
 export default class FillEditor extends UIElement  {
 
@@ -392,9 +389,9 @@ export default class FillEditor extends UIElement  {
     if (type === 'linear-gradient') {
       this.emit('addStatusBarMessage', '');
     } else if (type === 'url' || type === 'image-resource') {
-      this.emit('addStatusBarMessage', editor.i18n('fill.editor.message.click.image'));
+      this.emit('addStatusBarMessage', i18n('message.click.image'));
     } else {
-      this.emit('addStatusBarMessage', editor.i18n('fill.editor.message.drag.position'));
+      this.emit('addStatusBarMessage', i18n('message.drag.position'));
     }
   }
 

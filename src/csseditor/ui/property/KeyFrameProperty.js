@@ -3,9 +3,6 @@ import icon from "../icon/icon";
 import {
   LOAD,
   CLICK,
-  DRAGSTART,
-  DRAGOVER,
-  DROP,
   PREVENT,
   DEBOUNCE
 } from "../../../util/Event";

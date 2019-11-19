@@ -2,12 +2,14 @@ import UIElement, { EVENT } from "../../../util/UIElement";
 import { CLICK } from "../../../util/Event";
 import { editor } from "../../../editor/editor";
 
+const i18n = editor.initI18n('path.manager');
+
 export default class PolygonManager extends UIElement {
 
   initState() {
       return {
           mode: 'move',
-          msg: editor.i18n('path.manager.msg')
+          msg: i18n('msg')
       }
   }
 

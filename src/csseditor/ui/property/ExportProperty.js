@@ -4,11 +4,12 @@ import { EVENT } from "../../../util/UIElement";
 import icon from "../icon/icon";
 import { editor } from "../../../editor/editor";
 
+const i18n = editor.initI18n('export.property');
 
 export default class ExportProperty extends BaseProperty {
 
   getTitle() {
-    return editor.i18n('export.property.title');
+    return i18n('title');
   }
 
 
@@ -28,11 +29,11 @@ export default class ExportProperty extends BaseProperty {
     return /*html*/`
         <div class='export-item svg'>
           <label>SVG</label>
-          <button ref='$svg'>${icon.archive} ${editor.i18n('export.property.download')}</button>
+          <button ref='$svg'>${icon.archive} ${i18n('download')}</button>
         </div>
         <div class='export-item png'>
           <label>PNG</label>
-          <button ref='$png'>${icon.archive} ${editor.i18n('export.property.download')}</button>
+          <button ref='$png'>${icon.archive} ${i18n('download')}</button>
         </div> 
       `;
   }  

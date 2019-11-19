@@ -4,6 +4,7 @@ import icon from "../icon/icon";
 import { BoxShadow } from "../../../editor/css-property/BoxShadow";
 import { editor } from "../../../editor/editor";
 
+const i18n = editor.initI18n('boxshadow.editor')
 
 export default class BoxShadowEditor extends UIElement {
 
@@ -59,8 +60,8 @@ export default class BoxShadowEditor extends UIElement {
 
         <div class="offset-x">X</div>
         <div class="offset-y">Y</div>
-        <div class="blur-radius">${editor.i18n('boxshadow.editor.blur')}</div>
-        <div class="spread-radius">${editor.i18n('boxshadow.editor.spread')}</div>
+        <div class="blur-radius">${i18n('blur')}</div>
+        <div class="spread-radius">${i18n('spread')}</div>
         <div class="tools">
         </div>
       </div>

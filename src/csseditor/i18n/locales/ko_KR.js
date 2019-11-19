@@ -21,7 +21,7 @@ export default {
     'menu.item.codepen.title': 'CodePen',
     'menu.item.fullscreen.title': '전체화면',
     'menu.item.github.title': 'Github',
-    'menu.item.learn.title': '설명',    
+    'menu.item.learn.title': '배우기',     
 
     'project.property.title' : '프로젝트',    
     'project.information.property.title': '프로젝트 정보',
@@ -166,7 +166,7 @@ export default {
     'perspective.origin.editor.originX': '중심점 X',
     'perspective.origin.editor.originY': '중심점 Y',    
 
-    'path.manager.msg':  '편집을 종료할 때는 ESC 키나 Enter 키를 누르세요. 또는 화면을 클릭하시면 됩니다.',    
+    'path.manager.msg': '편집을 종료할 때는 ESC 키나 Enter 키를 누르세요. 또는 화면을 클릭하시면 됩니다.',    
     'path.manager.mode.modify': '점 편집',
     'path.manager.mode.draw': '점 추가',
     'path.manager.mode.transform': '변형',

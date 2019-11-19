@@ -3,11 +3,12 @@ import { editor } from "../../../editor/editor";
 import { EVENT } from "../../../util/UIElement";
 import { DEBOUNCE } from "../../../util/Event";
 
+const i18n = editor.initI18n('text.fill.property')
 
 export default class TextFillProperty extends BaseProperty {
 
   getTitle() {
-    return editor.i18n('text.fill.property.title');
+    return i18n('title');
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
@@ -29,18 +30,18 @@ export default class TextFillProperty extends BaseProperty {
     return /*html*/`
       <div class='property-item animation-property-item'>
         <span class='add-timeline-property' data-property='text-fill-color'></span>
-        <ColorViewEditor ref='$fillColor' label='${editor.i18n('text.fill.property.fill')}' removable="true" key='text-fill-color' onchange="changeColor" />
+        <ColorViewEditor ref='$fillColor' label='${i18n('fill')}' removable="true" key='text-fill-color' onchange="changeColor" />
       </div>           
       <div class='property-item animation-property-item'>
         <span class='add-timeline-property' data-property='text-stroke-color'></span>
-        <ColorViewEditor ref='$strokeColor' label='${editor.i18n('text.fill.property.stroke')}' removable="true" key='text-stroke-color' onchange="changeColor" />
+        <ColorViewEditor ref='$strokeColor' label='${i18n('stroke')}' removable="true" key='text-stroke-color' onchange="changeColor" />
       </div>                 
 
       <div class='property-item animation-property-item'>
         <span class='add-timeline-property' data-property='text-stroke-width'></span>
         <RangeEditor 
           ref='$width' 
-          label='${editor.i18n('text.fill.property.strokeWidth')}' 
+          label='${i18n('strokeWidth')}' 
           key="text-stroke-width" 
           removable="true" 
           max="50"

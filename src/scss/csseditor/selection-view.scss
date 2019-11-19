@@ -76,6 +76,12 @@
       display: none !important;
     }    
 
+    &[data-selection-length="1"] {
+      .selection-tool-item[data-position="move"] {
+        pointer-events: none;
+      }
+    }
+
     &.remove-move-area {
       .selection-tool-item[data-position="move"] {
         width: 10px;

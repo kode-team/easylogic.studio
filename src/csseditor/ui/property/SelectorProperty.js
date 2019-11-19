@@ -15,6 +15,7 @@ import { EVENT } from "../../../util/UIElement";
 
 import { Selector } from "../../../editor/css-property/Selector";
 
+const i18n = editor.initI18n('selector.property')
 
 const selectorList = [
   '',   // custom 
@@ -32,7 +33,7 @@ const selectorList = [
 export default class SelectorProperty extends BaseProperty {
 
   getTitle() {
-    return editor.i18n('selector.property.title');
+    return i18n('title');
   }
   getBody() {
     return `<div class='selector-list' ref='$selectorList'></div>`;
@@ -53,7 +54,7 @@ export default class SelectorProperty extends BaseProperty {
       <div class='selector-item' draggable='true' ref='$selectorIndex${index}' data-index='${index}'>
         <div class='title'>
           <div class='name'>
-            <span>${selector.selector || `&lt;${editor.i18n('selector.property.none')}&gt;`}</span>
+            <span>${selector.selector || `&lt;${i18n('none')}&gt;`}</span>
           </div>
           <div class='tools'>
               <button type="button" class="del" data-index="${index}">${icon.remove2}</button>

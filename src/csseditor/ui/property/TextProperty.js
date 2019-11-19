@@ -3,11 +3,12 @@ import { editor } from "../../../editor/editor";
 import { EVENT } from "../../../util/UIElement";
 import { DEBOUNCE } from "../../../util/Event";
 
+const i18n = editor.initI18n('text.property')
 
 export default class TextProperty extends BaseProperty {
 
   getTitle() {
-    return editor.i18n('text.property.title');
+    return i18n('title');
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
@@ -30,7 +31,7 @@ export default class TextProperty extends BaseProperty {
       <div class="property-item">
         <SelectIconEditor 
           ref='$align' 
-          label='${editor.i18n('text.property.align')}' 
+          label='${i18n('align')}' 
           key='text-align' 
           value='left' 
           options="left,center,right,justify" 
@@ -40,7 +41,7 @@ export default class TextProperty extends BaseProperty {
       <div class="property-item">
         <SelectIconEditor 
           ref='$transform' 
-          label='${editor.i18n('text.property.transform')}' 
+          label='${i18n('transform')}' 
           key='text-transform' 
           options="uppercase,lowercase,capitalize"
           icons='A,a,Aa'
@@ -49,7 +50,7 @@ export default class TextProperty extends BaseProperty {
       <div class="property-item">
         <SelectIconEditor 
           ref='$decoration' 
-          label='${editor.i18n('text.property.decoration')}' 
+          label='${i18n('decoration')}' 
           key='text-decoration' 
           options="none,underline,overline,line-through" 
           icons="A,U,O,S"

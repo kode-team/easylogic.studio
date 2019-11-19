@@ -15,6 +15,8 @@ const image_size = [
   '1024x762'
 ] 
 
+const i18n = editor.initI18n('image.property')
+
 export default class ImageProperty extends BaseProperty {
 
   getClassName() {
@@ -22,7 +24,7 @@ export default class ImageProperty extends BaseProperty {
   }
 
   getTitle() {
-    return editor.i18n('image.property.title')
+    return i18n('title')
   }
 
   getBody() {
@@ -32,10 +34,10 @@ export default class ImageProperty extends BaseProperty {
   getFooter() {
     return /*html*/`
       <div>
-        <label> ${editor.i18n('image.property.origin')} </label> <span ref='$sizeInfo'></span> <button type="button" ref='$resize'>${icon.size}</button>
+        <label> ${i18n('origin')} </label> <span ref='$sizeInfo'></span> <button type="button" ref='$resize'>${icon.size}</button>
       </div>
       <div>
-        <SelectEditor ref='$select' label="${editor.i18n('image.property.size')}" key='size' value='' options='${image_size.join(',')}' onchange='changeImageSize' />
+        <SelectEditor ref='$select' label="${i18n('size')}" key='size' value='' options='${image_size.join(',')}' onchange='changeImageSize' />
       </div>
     `
   }
@@ -65,7 +67,7 @@ export default class ImageProperty extends BaseProperty {
     var current = editor.selection.current || {};
 
     return {
-      innerHTML: `${editor.i18n('image.property.width')}: ${current.naturalWidth}, ${editor.i18n('image.property.height')}: ${current.naturalHeight}`
+      innerHTML: `${i18n('width')}: ${current.naturalWidth}, ${i18n('height')}: ${current.naturalHeight}`
     }
   }
 

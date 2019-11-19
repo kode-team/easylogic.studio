@@ -5,6 +5,8 @@ import property from "../property/index";
 import icon from "../icon/icon";
 import { editor } from "../../../editor/editor";
 
+const i18n = editor.initI18n('inspector');
+
 export default class Inspector extends UIElement {
   template() {
     return /*html*/`
@@ -12,20 +14,20 @@ export default class Inspector extends UIElement {
         <div>
           <div class="tab number-tab" data-selected-value="1" ref="$tab">
             <div class="tab-header" ref="$header">
-              <div class="tab-item" data-value="1" title='${editor.i18n('inspector.tab.title.style')}'>
+              <div class="tab-item" data-value="1" title='${i18n('tab.title.style')}'>
                 <label class='icon'>${icon.brush}</label>
               </div>
-              <div class="tab-item" data-value="2" title="${editor.i18n('inspector.tab.title.component')}">
+              <div class="tab-item" data-value="2" title="${i18n('tab.title.component')}">
                 <label class='icon'>${icon.cube}</label>
               </div>              
-              <div class="tab-item" data-value="3" title="${editor.i18n('inspector.tab.title.transition')}">
+              <div class="tab-item" data-value="3" title="${i18n('tab.title.transition')}">
                 <label>${icon.flash_on}</label>
               </div>
               
-              <div class="tab-item" data-value="4" title='${editor.i18n('inspector.tab.title.asset')}'>
+              <div class="tab-item" data-value="4" title='${i18n('tab.title.asset')}'>
                 <label class='icon'>${icon.view_list}</label>
               </div>                                     
-              <div class="tab-item" data-value="5" title='${editor.i18n('inspector.tab.title.code')}'>
+              <div class="tab-item" data-value="5" title='${i18n('tab.title.code')}'>
                 <label class='icon'>${icon.code}</label>
               </div>                                     
             </div>

@@ -3,6 +3,7 @@ import { LOAD, CHANGE, BIND, DEBOUNCE, CLICK } from "../../../util/Event";
 import icon from "../icon/icon";
 import { editor } from "../../../editor/editor";
 
+const i18n = editor.initI18n('svgfilter.select.editor')
 export default class SVGFilterSelectEditor extends UIElement {
 
     initState() {
@@ -113,9 +114,9 @@ export default class SVGFilterSelectEditor extends UIElement {
 
     sendMessage (type) {
         if (type === 'new') {
-            this.emit('addStatusBarMessage', editor.i18n('svgfilter.select.editor.message.create'));
+            this.emit('addStatusBarMessage', i18n('message.create'));
         } else if (type === '-') {
-            this.emit('addStatusBarMessage', editor.i18n('svgfilter.select.editor.message.select'));
+            this.emit('addStatusBarMessage', i18n('message.select'));
         } else {
             this.emit('addStatusBarMessage', '');
         }

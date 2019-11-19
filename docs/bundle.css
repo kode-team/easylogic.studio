@@ -2742,6 +2742,9 @@ html, body {
 .csseditor .selection-tool.editing-path, .csseditor .selection-tool.editing-polygon {
   display: none !important;
 }
+.csseditor .selection-tool[data-selection-length="1"] .selection-tool-item[data-position=move] {
+  pointer-events: none;
+}
 .csseditor .selection-tool.remove-move-area .selection-tool-item[data-position=move] {
   width: 10px;
   height: 10px;
@@ -11996,6 +11999,9 @@ html, body {
 }
 .csseditor[data-theme=light] .selection-tool.editing-path, .csseditor[data-theme=light] .selection-tool.editing-polygon {
   display: none !important;
+}
+.csseditor[data-theme=light] .selection-tool[data-selection-length="1"] .selection-tool-item[data-position=move] {
+  pointer-events: none;
 }
 .csseditor[data-theme=light] .selection-tool.remove-move-area .selection-tool-item[data-position=move] {
   width: 10px;

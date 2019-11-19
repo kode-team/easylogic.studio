@@ -6,13 +6,15 @@ import BorderRadius from "../../../editor/css-property/BorderRadius";
 import { editor } from "../../../editor/editor";
 
 const typeList = [
-  { key: "border-top-left-radius", title: "border.radius.editor.topLeft" },
-  { key: "border-top-right-radius", title: "border.radius.editor.topRight" },
-  { key: "border-bottom-right-radius", title: "border.radius.editor.bottomRight" },
-  { key: "border-bottom-left-radius", title: "border.radius.editor.bottomLeft" }  
+  { key: "border-top-left-radius", title: "topLeft" },
+  { key: "border-top-right-radius", title: "topRight" },
+  { key: "border-bottom-right-radius", title: "bottomRight" },
+  { key: "border-bottom-left-radius", title: "bottomLeft" }  
 ];
 
 const keyList = typeList.map(it => it.key);
+
+const i18n = editor.initI18n('border.radius.editor');
 
 export default class BorderRadiusEditor extends UIElement {
   components() {
@@ -65,7 +67,7 @@ export default class BorderRadiusEditor extends UIElement {
         <div class="radius-setting-box" ref="$radiusSettingBox">
           ${typeList.map(it => {
             var value = this.state[it.key]
-            var label = editor.i18n(it.title);
+            var label = i18n(it.title);
             return /*html*/`
               <div>
                   <RangeEditor ref='$${it.key}' label='${label}' key='${it.key}' value='${value}' onchange='changeBorderRadius' />

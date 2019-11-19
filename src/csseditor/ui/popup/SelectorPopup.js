@@ -4,10 +4,12 @@ import CSSPropertyEditor from "../property-editor/CSSPropertyEditor";
 import BasePopup from "./BasePopup";
 import { editor } from "../../../editor/editor";
 
+const i18n = editor.initI18n('selector.popup')
+
 export default class SelectorPopup extends BasePopup {
 
   getTitle() {
-    return editor.i18n('selector.popup.title')
+    return i18n('title')
   }
 
   components() {
@@ -47,7 +49,7 @@ export default class SelectorPopup extends BasePopup {
   templateForSelector() {
     return /*html*/`
       <div class='name'>
-        <label>${editor.i18n('selector.popup.selector')}</label>
+        <label>${i18n('selector')}</label>
         <div class='input grid-1'>
           <input type='text' value='${this.state.selector}' ref='$selector'/>
         </div>

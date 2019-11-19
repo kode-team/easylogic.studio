@@ -47,6 +47,12 @@ export const editor = new class {
     return i18n.get(key, params, locale || this.locale)
   }
 
+  initI18n (root = '') {
+    return (key, params = {}, locale) => {
+      return this.i18n(`${root}.${key}`, params, locale)
+    }
+  }
+
   setLocale (locale = 'en_US') {
     this.locale = locale; 
     saveItem('locale', this.locale);    
