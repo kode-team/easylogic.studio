@@ -1498,7 +1498,7 @@ html, body {
 }
 .csseditor .layout-main .status-bar > div .select-editor {
   display: inline-grid;
-  width: 130px;
+  width: 100px;
   height: auto;
 }
 .csseditor .layout-main .status-bar > div .select-editor select {
@@ -2673,7 +2673,7 @@ html, body {
   left: 0px;
   top: -15px;
   font-size: 12px;
-  color: #484848;
+  color: black;
   display: inline-block;
 }
 .csseditor .canvas-view .element-item.artboard:hover {
@@ -10756,7 +10756,7 @@ html, body {
 }
 .csseditor[data-theme=light] .layout-main .status-bar > div .select-editor {
   display: inline-grid;
-  width: 130px;
+  width: 100px;
   height: auto;
 }
 .csseditor[data-theme=light] .layout-main .status-bar > div .select-editor select {
@@ -11931,7 +11931,7 @@ html, body {
   left: 0px;
   top: -15px;
   font-size: 12px;
-  color: #484848;
+  color: black;
   display: inline-block;
 }
 .csseditor[data-theme=light] .canvas-view .element-item.artboard:hover {

@@ -27,7 +27,6 @@ export default class StatusBar extends UIElement {
                 <div class='message-view' ref='$msg'></div>
                 <div class='tool-view' ref='$tool'>
                     <SelectEditor 
-                        label='${editor.i18n('app.label.lang')}' 
                         ref='$locale' 
                         options="${languages.join(',')}" 
                         value="${editor.locale}" 

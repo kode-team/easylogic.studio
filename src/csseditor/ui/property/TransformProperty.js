@@ -34,10 +34,12 @@ var transformList = [
   'matrix3d',  
 ];
 
+const i18n = editor.initI18n('transform.property');
+
 export default class TransformProperty extends BaseProperty {
 
   getTitle() {
-    return editor.i18n('transform.property.title')
+    return i18n('title')
   }
 
   getBody() {
@@ -56,7 +58,8 @@ export default class TransformProperty extends BaseProperty {
     return /*html*/`
       <select ref="$transformSelect">
       ${transformList.map(transform => {
-        return `<option value='${transform}'>${transform}</option>`;
+        var label = editor.i18n('css.item.' + transform)
+        return `<option value='${transform}'>${label}</option>`;
       }).join('')}
       </select>
       <button type="button" ref="$add" title="add Filter">${icon.add}</button>

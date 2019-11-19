@@ -76,7 +76,8 @@ export default class TransformEditor extends UIElement {
               <div class='tools'>
                 <select ref="$transformSelect">
                   ${transformList.map(transform => {
-                    return `<option value='${transform}'>${transform}</option>`;
+                    var label = editor.i18n('css.item.' + transform)
+                    return `<option value='${transform}'>${label}</option>`;
                   }).join('')}
                 </select>
                 <button type="button" ref="$add" title="add Transform">${icon.add}</button>
@@ -143,7 +144,7 @@ export default class TransformEditor extends UIElement {
     return /*html*/`
       <div class="transform-item" data-index="${index}">
         <div class="title" draggable="true" data-index="${index}">
-          <label><span>${(+index)+1}</span> ${type}</label>
+          <label><span>${(+index)+1}</span> ${editor.i18n('css.item.' + type)}</label>
           <div class="transform-menu">
             <button type="button" class="del" data-index="${index}">
               ${icon.remove2}
@@ -184,7 +185,7 @@ export default class TransformEditor extends UIElement {
     return /*html*/`
       <div class="transform-item" data-index="${index}">
         <div class="title" draggable="true" data-index="${index}">
-          <label><span>${(+index)+1}</span> ${type}</label>
+          <label><span>${(+index)+1}</span> ${editor.i18n('css.item.' + type)}</label>
           <div class="transform-menu">
             <button type="button" class="del" data-index="${index}">
               ${icon.remove2}

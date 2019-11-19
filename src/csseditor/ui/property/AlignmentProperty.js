@@ -34,6 +34,10 @@ export default class AlignmentProperty extends BaseProperty {
     return editor.i18n('alignment.property.title');
   }
 
+  isHideHeader() {
+    return true;
+  }
+
   getBody() {
     return /*html*/`
       <div class="alignment-item" ref="$positionItem">

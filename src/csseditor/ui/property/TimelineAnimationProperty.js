@@ -6,7 +6,7 @@ import { EVENT } from "../../../util/UIElement";
 
 export default class TimelineAnimationProperty extends BaseProperty {
   getTitle() {
-    return "Animations";
+    return editor.i18n('timeline.animation.property.title');
   }
 
   getClassName() {

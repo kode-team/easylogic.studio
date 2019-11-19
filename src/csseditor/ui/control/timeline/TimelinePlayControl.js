@@ -3,6 +3,8 @@ import { CLICK, INPUT, BIND } from "../../../../util/Event";
 import icon from "../../icon/icon";
 import { editor } from "../../../../editor/editor";
 
+const i18n = editor.initI18n('timeline.play.control')
+
 export default class TimelinePlayControl extends UIElement {
     
     template() {
@@ -10,33 +12,33 @@ export default class TimelinePlayControl extends UIElement {
             <div class='timeline-play-control' >
                 <div class='row'>
                     <div class='play-buttons' ref='$playButtons' data-status='${this.state.status}'>
-                        <button type="button" data-value='play' class='play'>${icon.play}</button>
-                        <button type="button" data-value='pause' class='pause'>${icon.pause}</button>                
-                        <button type="button" data-value='first' class='first'>${icon.skip_prev}</button>
-                        <button type="button" data-value='prev' class='prev'>${icon.fast_rewind}</button>                    
-                        <button type="button" data-value='next' class='next'>${icon.fast_forward}</button>
-                        <button type="button" data-value='last' class='last'>${icon.skip_next}</button>
+                        <button type="button" data-value='play' class='play' title='${i18n('play')}'>${icon.play}</button>
+                        <button type="button" data-value='pause' class='pause' title='${i18n('pause')}'>${icon.pause}</button>                
+                        <button type="button" data-value='first' class='first' title='${i18n('first')}'>${icon.skip_prev}</button>
+                        <button type="button" data-value='prev' class='prev' title='${i18n('prev')}'>${icon.fast_rewind}</button>                    
+                        <button type="button" data-value='next' class='next' title='${i18n('next')}'>${icon.fast_forward}</button>
+                        <button type="button" data-value='last' class='last' title='${i18n('last')}'>${icon.skip_next}</button>
                     </div>
                 </div>
                 <div class='row'>            
-                    <label title='Speed'>speed</label>
+                    <label title='Speed'>${i18n('speed')}</label>
                     <div class='input speed-number' >
                         <input type='number' min="0.1" max="10" step="0.1" ref='$speed' value='${this.state.speed}' />
                     </div>
                 </div>                
                 <div class='row'>            
-                    <label><span ref='$repeatStatus'>repeat</span></label>
+                    <label><span ref='$repeatStatus'>${i18n('repeat')}</span></label>
                     <div class='input' >
                         <input type='number' min="0" max="100" step="1" ref='$iteration' value='${this.state.iterationCount}' />
                     </div> 
                 </div>
                 <div class='row'>
-                    <label> Direction</label>
+                    <label> ${i18n('direction')}</label>
                     <div class='direction-buttons' ref='$direction' data-selected-direction='${this.state.direction}'>
-                        <button type="button" data-value='normal' title='normal'>${icon.arrowRight}</button>
-                        <button type="button" data-value='alternate' title='alternate'>${icon.alternate}</button>
-                        <button type="button" data-value='reverse' title='reverse' style='transform: rotateY(180deg)'>${icon.arrowRight}</button>
-                        <button type="button" data-value='alternate-reverse' title='alternate reverse' style='transform: rotateY(180deg)'>${icon.alternate_reverse}</button>
+                        <button type="button" data-value='normal' title='${i18n('normal')}'>${icon.arrowRight}</button>
+                        <button type="button" data-value='alternate' title='${i18n('alternate')}'>${icon.alternate}</button>
+                        <button type="button" data-value='reverse' title='${i18n('reverse')}' style='transform: rotateY(180deg)'>${icon.arrowRight}</button>
+                        <button type="button" data-value='alternate-reverse' title='${i18n('alternate.reverse')}' style='transform: rotateY(180deg)'>${icon.alternate_reverse}</button>
                     </div>
                 </div>                                
             </div>
@@ -180,7 +182,7 @@ export default class TimelinePlayControl extends UIElement {
 
     [BIND('$repeatStatus')] () {
         return {
-            text: this.state.iterationCount === 0 ? 'Infinite': 'Repeat'
+            text: this.state.iterationCount === 0 ? i18n('infinite'): i18n('repeat')
         }
     }    
 

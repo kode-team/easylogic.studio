@@ -15,6 +15,9 @@ export default {
     'app.tab.title.components': 'Components',
 
 
+
+
+
     'menu.item.download.title': 'Download',
     'menu.item.save.title': 'Save',
     'menu.item.export.title': 'Export',
@@ -199,4 +202,51 @@ export default {
     'inspector.tab.title.asset': 'Assets',
     'inspector.tab.title.code': 'Code',
 
+
+    'timeline.property.title': 'Timeline',
+    'timeline.animation.property.title': 'Animations',    
+
+    'timeline.play.control.play': 'Play',
+    'timeline.play.control.pause': 'Pause',
+    'timeline.play.control.first': 'First',
+    'timeline.play.control.prev': 'Previous',
+    'timeline.play.control.next': 'Next',
+    'timeline.play.control.last': 'Last',
+    'timeline.play.control.direction': 'Direction',
+    'timeline.play.control.speed': 'Speed',
+    'timeline.play.control.repeat': 'Repeat',
+    'timeline.play.control.infinite': 'Infinite',
+    'timeline.play.control.normal': 'normal',
+    'timeline.play.control.alternate': 'alternate',
+    'timeline.play.control.reverse': 'reverse',
+    'timeline.play.control.alternate.reverse': 'alternate reverse',
+
+    'timeline.value.editor.value': 'Value',
+    'timeline.value.editor.time': 'Time',    
+    'timeline.value.editor.timing': 'Timing',
+
+    'svgfilter.popup.title': 'SVG Filter',
+
+
+    'css.item.rotate': 'Rotate',
+    'css.item.rotateX': 'Rotate X',
+    'css.item.rotateY': 'Rotate Y',
+    'css.item.rotateZ': 'Rotate Z',
+    'css.item.rotate3d': '3D Rotate',    
+    'css.item.skewX': 'Skew X',    
+    'css.item.skewY': 'Skew Y',   
+    'css.item.translate': 'Translate',
+    'css.item.translateX': 'Translate X',  
+    'css.item.translateY': 'Translate Y',
+    'css.item.translateZ': 'Translate Z',
+    'css.item.translate3d': '3D Translate',
+    'css.item.perspective': 'Perspective',    
+    'css.item.scale': 'Scale',
+    'css.item.scaleX': 'Scale X',
+    'css.item.scaleY': 'Scale Y',
+    'css.item.scaleZ': 'Scale Z',
+    'css.item.scale3d': '3D Scale',
+    'css.item.matrix': 'Matrix',
+    'css.item.matrix3d': '3D Matrix',  
+    
 }

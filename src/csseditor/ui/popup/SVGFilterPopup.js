@@ -4,12 +4,12 @@ import SVGFilterEditor from "../property-editor/SVGFilterEditor";
 import BasePopup from "./BasePopup";
 import { SVGFilter } from "../../../editor/svg-property/SVGFilter";
 import { isNotUndefined } from "../../../util/functions/func";
-import icon from "../icon/icon";
+import { editor } from "../../../editor/editor";
 
 export default class SVGFilterPopup extends BasePopup {
 
   getTitle() {
-    return 'SVG Filter';
+    return editor.i18n('svgfilter.popup.title');
   }
 
   components() {

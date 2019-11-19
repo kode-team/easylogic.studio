@@ -2,13 +2,13 @@ import UIElement, { EVENT } from "../../../../util/UIElement";
 import CubicBezierEditor from "../../property-editor/CubicBezierEditor";
 import { LOAD, CLICK, KEYDOWN, KEYUP, KEY, IF, PREVENT } from "../../../../util/Event";
 import CSSPropertyEditor from "../../property-editor/CSSPropertyEditor";
-import { Length } from "../../../../editor/unit/Length";
-import { second, framesToTimecode, timecode } from "../../../../util/functions/time";
+
+import { second, timecode } from "../../../../util/functions/time";
 import { editor } from "../../../../editor/editor";
 import { isUndefined } from "../../../../util/functions/func";
 import icon from "../../icon/icon";
 
-
+const  i18n = editor.initI18n('timeline.value.editor')
 
 export default class TimelineValueEditor extends UIElement {
   components() {
@@ -60,16 +60,13 @@ export default class TimelineValueEditor extends UIElement {
     return /*html*/`
     <div class='timeline-value-editor'>
         <div class="tab number-tab" data-selected-value="1" ref="$tab">
-            <div class="tab-header" ref="$header">
+            <div class="tab-header full" ref="$header">
                 <div class="tab-item" data-value="1">
-                    <label>Value</label>
+                    <label>${i18n('value')}</label>
                 </div>          
                 <div class="tab-item" data-value="2">
-                    <label>Timing</label>
-                </div>
-                <div class='tab-item empty-item'></div>
-                <div class='tab-item empty-item'></div>
-                <div class='tab-item empty-item'></div>                                
+                    <label>${i18n('timing')}</label> 
+                </div>                            
             </div>
             <div class="tab-body" ref="$body">
                 <div class="tab-content padding-zero" data-value="1">
@@ -142,7 +139,7 @@ checkKey (e) {
   templateForOffset() {
     return /*html*/`
       <div class='offset-input'>
-        <label>Time</label>
+        <label>${i18n('time')}</label>
         <input type="text" ref='$offsetTime' />
         <button type="button" ref='$seek' title='Seek timeline'>${icon.gps_fixed}</button>
       </div>
