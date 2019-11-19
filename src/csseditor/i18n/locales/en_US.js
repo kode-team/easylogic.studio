@@ -191,4 +191,12 @@ export default {
     'gradient.picker.popup.title': 'Gradient & Image Picker',    
     'image.asset.property.title': 'Image',
     'svgfilter.asset.property.title': 'SVG Filter',
+
+
+    'inspector.tab.title.style': 'Style',
+    'inspector.tab.title.component': 'Component',
+    'inspector.tab.title.transition': 'Transition & Animation',
+    'inspector.tab.title.asset': 'Assets',
+    'inspector.tab.title.code': 'Code',
+
 }

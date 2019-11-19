@@ -195,5 +195,11 @@ export default {
     'gradient.picker.popup.title': '그라디언트와 이미지',
 
     'image.asset.property.title': '이미지',
-    'svgfilter.asset.property.title': 'SVG 필터',       
+    'svgfilter.asset.property.title': 'SVG 필터',     
+    
+    'inspector.tab.title.style': '스타일 속성',
+    'inspector.tab.title.component': '컴포넌트 속성',
+    'inspector.tab.title.transition': '트랜지션과 애니메이션 속성',
+    'inspector.tab.title.asset': '에셋 관리자',
+    'inspector.tab.title.code': '코드',    
 }
