@@ -2,7 +2,7 @@
 import BaseProperty from "../property/BaseProperty";
 import TimelineObjectList from "./timeline/TimelineObjectList";
 import TimelineKeyframeList from "./timeline/TimelineKeyframeList";
-import { DRAGOVER, DROP, PREVENT, DEBOUNCE, SCROLL, DROPPABLE } from "../../../util/Event";
+import { DRAGOVER, DROP, PREVENT, DEBOUNCE, SCROLL } from "../../../util/Event";
 import TimelineTopToolbar from "./timeline/TimelineTopToolbar";
 import KeyframeTimeView from "./timeline/KeyframeTimeView";
 import KeyframeTimeGridView from "./timeline/KeyframeTimeGridView";

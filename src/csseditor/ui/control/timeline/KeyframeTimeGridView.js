@@ -4,7 +4,11 @@ import { editor } from "../../../../editor/editor";
 
 export default class KeyframeTimeGridView extends UIElement {
     template () {
-        return `<div class='keyframe-time-grid-view'><canvas ref="$canvas"></canvas></div>`
+        return /*html*/`
+            <div class='keyframe-time-grid-view'>
+                <canvas ref="$canvas"></canvas>
+            </div>
+        `
     }
 
     refresh () {

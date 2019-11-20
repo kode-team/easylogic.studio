@@ -4,9 +4,11 @@ import { editor } from "../../../editor/editor";
 import { EVENT } from "../../../util/UIElement";
 import { CSS_TO_STRING, TAG_TO_STRING } from "../../../util/functions/func";
 
+const i18n = editor.initI18n('code.view.property');
+
 export default class CodeViewProperty extends BaseProperty {
   getTitle() {
-    return "CodeView";
+    return i18n('title');
   }
 
   [EVENT(
@@ -95,7 +97,7 @@ ${this.filterKeyName(TAG_TO_STRING(cssText))}
 
         ${keyframeCode ?         
           /*html*/`<div>
-          <pre title='Keyframe'>${keyframeCode}</pre>
+          <pre title='${i18n('keyframe')}'>${keyframeCode}</pre>
         </div>` : ''}
         ${rootVariable ? 
           /*html*/`<div>

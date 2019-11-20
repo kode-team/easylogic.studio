@@ -1,6 +1,6 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
 import { Length } from "../../../editor/unit/Length";
-import { LOAD, POINTERSTART, MOVE, END, CLICK, IF, INPUT, PREVENT } from "../../../util/Event";
+import { LOAD, POINTERSTART, MOVE, END, CLICK, IF, PREVENT } from "../../../util/Event";
 import { Offset } from "../../../editor/css-property/Offset";
 import Dom from "../../../util/Dom";
 import { isUndefined } from "../../../util/functions/func";
@@ -35,7 +35,7 @@ export default class OffsetEditor extends UIElement {
   }
 
   template() {
-    return `
+    return /*html*/`
     <div class='editor offset-editor' ref='$editor'>
         ${this.templateForOffset()}
         ${this.templateForOffsetInput()}
@@ -51,7 +51,16 @@ export default class OffsetEditor extends UIElement {
         <div class='title'>
           <label>Offset</label>
           <div class='tools'>
-            <InputRangeEditor key='offset' calc='false' min='0' max='100' step="0.01" ref='$offsetInput' options="%" onchange='changeRangeEditor' />
+            <InputRangeEditor 
+              key='offset' 
+              min='0' 
+              max='100' 
+              step="0.01" 
+              value="${Length.percent(0)}" 
+              ref='$offsetInput' 
+              units="%" 
+              onchange='changeRangeEditor' 
+            />
           </div>
         </div>
       </div>

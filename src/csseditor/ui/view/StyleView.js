@@ -37,7 +37,7 @@ export default class StyleView extends UIElement {
     const keyframeString = item.toKeyframeString();
     const rootVariable = item.toRootVariableCSS()
     
-    return `<style type='text/css' data-id='${item.id}'>
+    return /*html*/`<style type='text/css' data-id='${item.id}'>
       :root {
         ${CSS_TO_STRING(rootVariable)}
       }
@@ -54,7 +54,7 @@ export default class StyleView extends UIElement {
 
     const cssString = item.generateView(`[data-id='${item.id}']`)
     const boundCssString = item.generateViewBoundCSS(`[data-id='${item.id}']`)
-    return `
+    return /*html*/`
       <style type='text/css' data-id='${item.id}'>${cssString}</style>
       <style type='text/css' data-id='${item.id}-move'>${boundCssString}</style>
     ` + item.layers.map(it => {
@@ -65,7 +65,7 @@ export default class StyleView extends UIElement {
   makeStylePosition (item) {
 
     const boundCssString = item.generateViewBoundCSS(`[data-id='${item.id}']`)
-    return `
+    return /*html*/`
       <style type='text/css' data-id='${item.id}-move'>${boundCssString}</style>
       `
   }
@@ -108,7 +108,7 @@ export default class StyleView extends UIElement {
 
     var selector = list.map(it => {
       return `style[data-id="${it.id}"],style[data-id="${it.id}-move"]`
-    });
+    }).join(',');
 
     this.refs.$head.$$(selector).forEach(it => {
       it.remove();
@@ -153,10 +153,10 @@ export default class StyleView extends UIElement {
   // 움직이기 원하는 객체가 타임라인 전체라 
   // 전체를 리프레쉬 하는걸로 한다. 
   // 애니메이션이 진행되는 동안 임의의 객체는 없는 것으로 하자. 
-  [EVENT('refreshStyleView', 'moveTimeline', 'playTimeline')] (current) {   
+  [EVENT('refreshStyleView', 'moveTimeline', 'playTimeline')] (current,  isOnlyOne = false) {   
     if (current) {
       this.load();
-      this.refreshStyleHeadOne(current);
+      this.refreshStyleHeadOne(current, isOnlyOne);
     } else {
       this.refresh()
     }

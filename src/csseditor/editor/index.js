@@ -93,8 +93,8 @@ export default class CSSEditor extends UIElement {
         <StyleView />    
         <CommandView />    
         <ExportWindow />
-        <LoginWindow />
-        <SignWindow />
+        <!-- LoginWindow / -->
+        <!-- SignWindow / -->
         <ImageFileView />
       </div>
     `;

@@ -5,7 +5,7 @@ import { CLICK } from "../../../util/Event";
 export default class SignWindow extends BaseWindow {
 
     getClassName() {
-        return 'export-window'
+        return 'sign-window'
     }
 
     getTitle() {

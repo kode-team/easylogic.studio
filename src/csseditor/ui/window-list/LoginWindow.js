@@ -6,7 +6,7 @@ import { editor } from "../../../editor/editor";
 export default class LoginWindow extends BaseWindow {
 
     getClassName() {
-        return 'export-window'
+        return 'login-window'
     }
 
     getTitle() {

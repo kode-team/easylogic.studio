@@ -3823,7 +3823,7 @@ html, body {
 }
 .csseditor .transition-list .transition-item .timing {
   border-radius: 3px;
-  background-color: #fc554f;
+  background-color: #435cb5;
   width: 100%;
   height: 30px;
   vertical-align: middle;
@@ -3877,7 +3877,7 @@ html, body {
 }
 .csseditor .animation-list .animation-item .timing {
   border-radius: 3px;
-  background-color: #fc554f;
+  background-color: #435cb5;
   width: 100%;
   height: 30px;
   vertical-align: middle;
@@ -13081,7 +13081,7 @@ html, body {
 }
 .csseditor[data-theme=light] .transition-list .transition-item .timing {
   border-radius: 3px;
-  background-color: #fc554f;
+  background-color: #435cb5;
   width: 100%;
   height: 30px;
   vertical-align: middle;
@@ -13135,7 +13135,7 @@ html, body {
 }
 .csseditor[data-theme=light] .animation-list .animation-item .timing {
   border-radius: 3px;
-  background-color: #fc554f;
+  background-color: #435cb5;
   width: 100%;
   height: 30px;
   vertical-align: middle;

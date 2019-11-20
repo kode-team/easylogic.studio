@@ -1,7 +1,5 @@
 import { EVENT } from "../../../util/UIElement";
 import { LOAD } from "../../../util/Event";
-
-import { Length } from "../../../editor/unit/Length";
 import GradientEditor from "../property-editor/GradientEditor";
 import { Gradient } from "../../../editor/image-resource/Gradient";
 import BasePopup from "./BasePopup";

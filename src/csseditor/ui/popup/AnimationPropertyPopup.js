@@ -8,11 +8,12 @@ import IterationCountEditor from "../property-editor/IterationCountEditor";
 import SelectEditor from "../property-editor/SelectEditor";
 import BasePopup from "./BasePopup";
 
+const i18n = editor.initI18n('animation.property.popup');
 
 export default class AnimationPropertyPopup extends BasePopup {
 
   getTitle() {
-    return 'Animation'
+    return i18n('title')
   }
 
   components() {
@@ -62,9 +63,9 @@ export default class AnimationPropertyPopup extends BasePopup {
   }
 
   templateForTimingFunction () {
-    return `
+    return /*html*/`
     <div class='timing-function'>
-      <label>Timing function</label>
+      <label>${i18n('timing.function')}</label>
       <CubicBezierEditor ref='$cubicBezierEditor' key="timingFunction" value="${this.state.timingFunction}" onChange='changeCubicBezier' />
     </div>
     `
@@ -72,9 +73,9 @@ export default class AnimationPropertyPopup extends BasePopup {
 
   templateForKeyframe() {
    
-    return `
+    return /*html*/`
       <div class='name'>
-        <label>Keyframe</label>
+        <label>${i18n('keyframe')}</label>
         <div class='input grid-1'>
           <select ref='$name'></select>
         </div>
@@ -95,7 +96,8 @@ export default class AnimationPropertyPopup extends BasePopup {
 
     return names.map(it => {
       var selected = it.value === this.name ? 'selected' : '';
-      return `<option value='${it.value}' ${selected}>${it.key}</option>`
+      var label = i18n(it.key);
+      return `<option value='${it.value}' ${selected}>${label}</option>`
     })
   }
 
@@ -104,14 +106,19 @@ export default class AnimationPropertyPopup extends BasePopup {
   }
 
   templateForDirection() {
-    return `
+
+    var options = 'normal,reverse,alternate,alternate-reverse'.split(',').map(it => {
+      return `${it}:${i18n(it)}`
+    }).join(',')
+
+    return /*html*/`
       <div class='direction'>
         <SelectEditor 
-            label='Direction'
+            label='${i18n('direction')}'
             ref='$direction' 
             key='direction' 
             value="${this.state.direction}"
-            options='${['normal', 'reverse', 'alternate', 'alternate-reverse']}'
+            options='${options}'
             onChange='changeSelect'
         /> 
       </div>
@@ -123,10 +130,10 @@ export default class AnimationPropertyPopup extends BasePopup {
   }
 
   templateForPlayState() {
-    return `
+    return /*html*/`
     <div class='play-state'>
       <SelectEditor 
-          label='Play State'
+          label='${i18n('play.state')}'
           ref='$playState' 
           key='playState' 
           value="${this.state.playState}"
@@ -138,14 +145,19 @@ export default class AnimationPropertyPopup extends BasePopup {
   }  
 
   templateForFillMode() {
-    return `
+
+    var options = 'none,forwards,backwards,both'.split(',').map(it=>{
+      return `${it}:${i18n(it)}`
+    }).join(',');
+
+    return /*html*/`
     <div class='fill-mode'>
       <SelectEditor 
-          label='Fill Mode'
+          label='${i18n('fill.mode')}'
           ref='$fillMode' 
           key='fillMode' 
           value="${this.state.fillMode}"
-          options='${['none', 'forwards', 'backwards', 'both']}'
+          options='${options}'
           onChange='changeSelect'
       /> 
     </div>
@@ -153,25 +165,32 @@ export default class AnimationPropertyPopup extends BasePopup {
   }
 
   templateForDelay () {
-    return `
+    return /*html*/`
     <div class='delay'>
-      <RangeEditor ref='$delay' label='Delay' calc='false' key='delay' value='${this.state.delay}' units='s,ms' onChange="changeRangeEditor" />
+      <RangeEditor 
+        ref='$delay' 
+        label='${i18n('delay')}' 
+        calc='false' 
+        key='delay' 
+        value='${this.state.delay}' 
+        units='s,ms' 
+        onChange="changeRangeEditor" />
     </div>
     `
   }
 
   templateForDuration () {
-    return `
+    return /*html*/`
     <div class='duration'>
-      <RangeEditor ref='$duration' label='Duration'  calc='false' key='duration' value='${this.state.duration}' units='s,ms' onChange="changeRangeEditor" />
+      <RangeEditor ref='$duration' label='${i18n('duration')}'  calc='false' key='duration' value='${this.state.duration}' units='s,ms' onChange="changeRangeEditor" />
     </div>
     `
   }
 
   templateForIterationCount () {
-    return `
+    return /*html*/`
       <div class='iteration-count'>
-        <IterationCountEditor ref='$iterationCount' label='Iteration' calc='false' key='iterationCount' value='${this.state.iterationCount}' units='normal,infinite' onChange="changeRangeEditor" />
+        <IterationCountEditor ref='$iterationCount' label='${i18n('iteration')}' calc='false' key='iterationCount' value='${this.state.iterationCount}' units='normal,infinite' onChange="changeRangeEditor" />
       </div>
     `
   }

@@ -156,7 +156,7 @@ export default class KeyFrameProperty extends BaseProperty {
     if (current) {
       current.createKeyframe();
       this.refresh();
-      this.emit('refreshStyleView', current);
+      this.emit('refreshStyleView', current, true);
     } else {
       alert('Please select a project.')
     }

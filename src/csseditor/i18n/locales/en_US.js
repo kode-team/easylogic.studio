@@ -102,7 +102,7 @@ export default {
     'transform.origin.property.title': 'Transform Origin',    
 
     'transition.property.title': 'CSS Transition',
-    'animation.property.title': 'CSS Animation',  
+
     'keyframe.property.title': 'CSS Keyframe',      
     'selector.property.title': 'Selector',
     'selector.property.none': 'None selector',    
@@ -248,5 +248,36 @@ export default {
     'css.item.scale3d': '3D Scale',
     'css.item.matrix': 'Matrix',
     'css.item.matrix3d': '3D Matrix',  
+
+    'animation.property.title': 'CSS Animation',  
+    'animation.property.direction': 'Direction',
+    'animation.property.play.state': 'Play State',
+    'animation.property.fill.mode': 'Fill Mode',
+    'animation.property.delay': 'Delay',
+    'animation.property.duration': 'Duration',
+    'animation.property.iteration.count': 'Iteration Count',
+    'animation.property.Select a keyframe' : 'Select a keyframe',        
+
+    'animation.property.popup.title': 'Animation',
+    'animation.property.popup.timing.function': 'Timing Function',
+    'animation.property.popup.keyframe': 'Keyframe',
+    'animation.property.popup.direction': 'Direction',
+    'animation.property.popup.play.state': 'Play State',
+    'animation.property.popup.fill.mode': 'Fill Mode',
+    'animation.property.popup.delay': 'Delay',
+    'animation.property.popup.duration': 'Duration',
+    'animation.property.popup.iteration': 'Iteration',
+    'animation.property.popup.normal': 'normal',
+    'animation.property.popup.reverse': 'reverse',
+    'animation.property.popup.alternate': 'alternate',
+    'animation.property.popup.alternate-reverse': 'alternate-reverse',
+    'animation.property.popup.none': 'none',
+    'animation.property.popup.forwards': 'forwards',
+    'animation.property.popup.backwards': 'backwards',
+    'animation.property.popup.both' : 'both',
+    'animation.property.popup.Select a keyframe' : 'Select a keyframe',        
+
+    'keyframe.popup.title': 'Keyframe',
     
+    'code.view.property.title': 'CodeView',
 }

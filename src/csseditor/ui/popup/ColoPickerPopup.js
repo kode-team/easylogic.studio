@@ -37,7 +37,7 @@ export default class ColorPickerPopup extends BasePopup {
  
 
   getBody() {
-    return `
+    return /*html*/`
       <div class="color-picker-popup">
         <div class='box'>
           <EmbedColorPicker ref='$color' value='${this.state.color}' onchange='changeColor' />
@@ -56,7 +56,7 @@ export default class ColorPickerPopup extends BasePopup {
     var colors = project.colors
 
     return colors.map(color => {
-      return `
+      return /*html*/`
       <div class='color-item' title='${color.name}'>
         <div class='color-view' data-color='${color.color}' style='background-color: ${color.color}'></div>
       </div>`
@@ -93,11 +93,8 @@ export default class ColorPickerPopup extends BasePopup {
     } else {
       this.refs.$assets.show()
     }
-    
 
     this.show(232);
-
-
   }
 
   [EVENT("hideColorPickerPopup")]() {

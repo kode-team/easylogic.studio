@@ -13,9 +13,11 @@ import { EVENT } from "../../../util/UIElement";
 import icon from "../icon/icon";
 import { getPredefinedCubicBezier } from "../../../util/functions/bezier";
 
+const i18n = editor.initI18n('animation.property');
+
 export default class AnimationProperty extends BaseProperty {
   getTitle() {
-    return editor.i18n('animation.property.title');
+    return i18n('title');
   }
   getBody() {
     return /*html*/`<div class='animation-list' ref='$animationList'></div>`;
@@ -48,15 +50,15 @@ export default class AnimationProperty extends BaseProperty {
             </div>
             <div class='name'>
               <div class='title' ref="animationName${index}">
-                ${it.name ? it.name : '&lt; select a keyframe &gt;'}
+                ${it.name ? it.name : `&lt; ${i18n('select a keyframe')} &gt;`}
               </div>
               <div class='labels'>
-                <label class='count' title='Iteration Count'><small>${it.iterationCount}</small></label>
-                <label class='delay' title='Delay'><small>${it.delay}</small></label>
-                <label class='duration' title='Duration'><small>${it.duration}</small></label>
-                <label class='direction' title='Direction'><small>${it.direction}</small></label>
-                <label class='fill-mode' title='Fill Mode'><small>${it.fillMode}</small></label>
-                <label class='play-state' title='Play State' data-index='${index}' data-play-state-selected-value="${it.playState}">
+                <label class='count' title='${i18n('iteration.count')}'><small>${it.iterationCount}</small></label>
+                <label class='delay' title='${i18n('delay')}'><small>${it.delay}</small></label>
+                <label class='duration' title='${i18n('duration')}'><small>${it.duration}</small></label>
+                <label class='direction' title='${i18n('direction')}'><small>${it.direction}</small></label>
+                <label class='fill-mode' title='${i18n('fill.mode')}'><small>${it.fillMode}</small></label>
+                <label class='play-state' title='${i18n('play.state')}' data-index='${index}' data-play-state-selected-value="${it.playState}">
                   <small data-play-state-value='running'>${icon.play}</small>
                   <small data-play-state-value='paused'>${icon.pause}</small>
                 </label>
