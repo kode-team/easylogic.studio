@@ -80,7 +80,8 @@
       .selection-tool-item[data-position="move"] {
         pointer-events: none;
       }
-    }
+    }  
+
 
     &.remove-move-area {
       .selection-tool-item[data-position="move"] {
@@ -99,16 +100,19 @@
     &.path,
     &.textpath,
     &.polygon {
-        .selection-tool-item[data-position="path"] {
-            top: -30px;
-            bottom: auto; 
-            left: 50%;
-            right: auto;
-            transform: translate(-50%, -50%);
-            background-color: rgba(white, 0.8);
-            border:1px solid $border-color;
-            opacity: 1;
-          } 
+      .selection-tool-item[data-position="move"] {
+        pointer-events: all !important;
+      }
+      .selection-tool-item[data-position="path"] {
+        top: -30px;
+        bottom: auto; 
+        left: 50%;
+        right: auto;
+        transform: translate(-50%, -50%);
+        background-color: rgba(white, 0.8);
+        border:1px solid $border-color;
+        opacity: 1;
+      } 
     }
 
     &[data-selected-movetype='move'] {

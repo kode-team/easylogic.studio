@@ -135,11 +135,6 @@ const SelectionToolEvent = class  extends UIElement {
     }    
 
 
-    [EVENT('updateRealTransform')] () {
-        this.parent.updateRealTransform()
-    }
-
-
     [EVENT('refreshSelectionTool', 'initSelectionTool')] () { 
         this.initSelectionTool();
     }
@@ -499,9 +494,6 @@ export default class SelectionToolView extends SelectionToolBind {
 
     }
 
-    // [DOUBLECLICK('$selectionTool .selection-tool-item[data-position="move"]')] (e) {
-    //     this.trigger('openPathEditor');
-    // }    
 
     [CLICK('$selectionTool .selection-tool-item[data-position="path"]')] (e) {
         this.trigger('openPathEditor');
@@ -801,8 +793,8 @@ export default class SelectionToolView extends SelectionToolBind {
                 this.bindData('$transformOrigin'); 
                 this.bindData('$pathMaker');                                                                        
             }
-            // this.bindData('$selectionPointer')            
-            this.emit('refreshStylePosition'); 
+
+            this.parent.updateRealPosition();                
 
         } else {
 
@@ -859,10 +851,8 @@ export default class SelectionToolView extends SelectionToolBind {
     
             this.refs.$selectionTool.attr('data-selected-position', '');
             this.refs.$selectionTool.attr('data-selected-movetype', '');
-            this.parent.trigger('removeRealPosition');                
     
             this.emit('refreshCanvasForPartial', null, false)
-            this.emit('refreshStylePosition');
             this.emit('removeGuideLine')
             this.refreshSelectionToolView(dx, dy);   
         }

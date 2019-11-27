@@ -335,56 +335,17 @@ export default class ElementView extends UIElement {
             var {x, y, width, height} = item.toBound();
             var cachedItem = this.cachedCurrentElement[item.id]
             if (cachedItem) {
-                cachedItem.cssText(`left: ${x};top:${y};width:${width};height:${height}`)
+                cachedItem.cssText(`left: ${x};top:${y};width:${width};height:${height}; transform: ${item.transform};`)
             }
         })
 
         this.emit('refreshRect');        
     }
-
-    updateRealTransform() {
-        editor.selection.items.forEach(item => {
-            var transform = item.transform;
-            var cachedItem = this.cachedCurrentElement[item.id]
-            if (cachedItem) {
-                cachedItem.css({transform})
-            }
-        })
-
-        this.emit('refreshTransform');        
-    }
-
-
-    updateRealTransformWillChange() {
-        editor.selection.items.forEach(item => {
-            var cachedItem = this.cachedCurrentElement[item.id]
-            if (cachedItem) {
-                cachedItem.css('will-change', 'transform')
-            }
-        })
-
-    }
-
-    [EVENT('removeRealPosition', 'removeRealTransform')] () {
-        editor.selection.items.forEach(item => {
-            var cachedItem = this.cachedCurrentElement[item.id]
-            if (cachedItem) {
-                cachedItem.cssText(``)
-
-                // TODO: 나중에 공통영역으로 처리 해야할 듯 하다. 
-                if (item.is('svg-path')) {
-                    cachedItem.firstChild().cssText('');
-                }
-            }
-        })
-    }
-
     [EVENT('refreshArtBoardName')] (id, title) {
         this.$el.$(`[data-id='${id}']`).attr('data-title', title);
     }
 
     calculateEndedElement (dx, dy) {
-        // console.log('end', dx, dy);
         this.children.$selectionTool.refreshSelectionToolView(dx, dy, 'move');
 
         var current = editor.selection.items.length === 1 ? editor.selection.current : null;
@@ -394,7 +355,6 @@ export default class ElementView extends UIElement {
         this.emit('refreshSelection');
 
         this.emit('removeGuideLine')        
-        this.trigger('removeRealPosition');   
 
     }
 

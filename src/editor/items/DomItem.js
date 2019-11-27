@@ -647,22 +647,22 @@ ${this.toSelectorString(prefix)}
   }
 
 
-  generateViewBoundCSS (prefix = '', appendCSS = '') {
-    var cssString = `
-${prefix} {  /* ${this.json.itemType} */
-    ${CSS_TO_STRING(this.toBoundCSS(), '\n')}; 
-}
+//   generateViewBoundCSS (prefix = '', appendCSS = '') {
+//     var cssString = `
+// ${prefix} {  /* ${this.json.itemType} */
+//     ${CSS_TO_STRING(this.toBoundCSS(), '\n')}; 
+// }
 
 
-${this.toNestedBoundCSS().map(it => {
-  return `${prefix} ${it.selector} { 
-      ${it.cssText ? it.cssText : CSS_TO_STRING(it.css || {}, '\n\t\t')}; 
-  }`
-}).join('\n')}
+// ${this.toNestedBoundCSS().map(it => {
+//   return `${prefix} ${it.selector} { 
+//       ${it.cssText ? it.cssText : CSS_TO_STRING(it.css || {}, '\n\t\t')}; 
+//   }`
+// }).join('\n')}
 
-`  
-    return cssString;
-  }
+// `  
+//     return cssString;
+//   }
 
 
   get html () {

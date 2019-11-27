@@ -53,22 +53,13 @@ export default class StyleView extends UIElement {
     }
 
     const cssString = item.generateView(`[data-id='${item.id}']`)
-    const boundCssString = item.generateViewBoundCSS(`[data-id='${item.id}']`)
     return /*html*/`
       <style type='text/css' data-id='${item.id}'>${cssString}</style>
-      <style type='text/css' data-id='${item.id}-move'>${boundCssString}</style>
     ` + item.layers.map(it => {
       return this.makeStyle(it);
     }).join('')
   }
 
-  makeStylePosition (item) {
-
-    const boundCssString = item.generateViewBoundCSS(`[data-id='${item.id}']`)
-    return /*html*/`
-      <style type='text/css' data-id='${item.id}-move'>${boundCssString}</style>
-      `
-  }
 
   refreshStyleHead () {
     var project = editor.selection.currentProject || new Project()
@@ -91,15 +82,6 @@ export default class StyleView extends UIElement {
 
   }
 
-  changeStyleHeadPosition (item) {
-    var $temp = Dom.create('div')        
-
-    $temp.html(this.makeStylePosition(item)).children().forEach($item => {
-      this.refs.$head.append($item);
-    })
-
-  }  
-
   refreshStyleHeadOne (item, isOnlyOne = false) {
     var list = [item]
     if (!isOnlyOne) {
@@ -116,17 +98,6 @@ export default class StyleView extends UIElement {
 
     this.changeStyleHead(item)
   }
-
-
-  refreshStyleHeadPositionOne (item) {
-    var selector = `style[data-id="${item.id}-move"]`
-
-    this.refs.$head.$$(selector).forEach(it => {
-      it.remove();
-    }) 
-
-    this.changeStyleHeadPosition(item)
-  }  
 
 
   makeSvg (project) {
@@ -164,12 +135,6 @@ export default class StyleView extends UIElement {
 
   [EVENT('refreshSVGArea')] () {
     this.load('$svgArea');
-  }
-
-  [EVENT('refreshStylePosition')] () {
-    editor.selection.each(item => {
-      this.refreshStyleHeadPositionOne(item);
-    })    
   }
 
   [EVENT('refreshSelectionStyleView')] () {
