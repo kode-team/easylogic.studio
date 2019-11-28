@@ -280,4 +280,14 @@ export default {
     'keyframe.popup.title': 'Keyframe',
     
     'code.view.property.title': 'CodeView',
+
+    'svg.filter.editor.tab.filter': 'Filter',
+    'svg.filter.editor.tab.preset': 'Preset',
+    'svg.filter.editor.tab.asset': 'Assets',
+    'svg.filter.editor.GRAPHIC REFERENCES': 'GRAPHIC REFERENCES',
+    'svg.filter.editor.SOURCES': 'SOURCES',
+    'svg.filter.editor.MODIFIER': 'MODIFIER',
+    'svg.filter.editor.LIGHTING': 'LIGHTING',
+    'svg.filter.editor.COMBINERS': 'COMBINERS',
+    'svg.filter.editor.Template': 'Template',
 }

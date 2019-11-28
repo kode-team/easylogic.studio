@@ -22,17 +22,6 @@ export default class SVGFilterPopup extends BasePopup {
     return 'transparent'
   }
 
-  // getTools() {
-  //   return `<button type="button" ref='$fullscreen'>${icon.fullscreen}</button>`
-  // }
-
-  [CLICK('$fullscreen')] () {
-    // this.$el.toggleClass('landscape');
-    // 이전 정보 저장 
-    // 레이어 전ㄴ체 사이즈로 올림 
-    // 내부 editor 사이트 때문에 안될려나. 
-  }
-
   initState() {
     return {
       changeEvent: 'changeSVGFilterPopup',

@@ -251,6 +251,13 @@
             pointer-events: none; 
             position: relative;
 
+            &[data-filter-type='Merge'],
+            &[data-filter-type='Composite'] {
+              svg {
+                transform: translate(-50%, -50%) rotate(90deg);
+              }
+            }
+
             @each $type, $color in $theme-colors {
               &[data-source-type="#{$type}"] {
                 path {

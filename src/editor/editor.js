@@ -47,9 +47,20 @@ export const editor = new class {
     return i18n.get(key, params, locale || this.locale)
   }
 
+  hasI18nkey (key, locale) {
+    return i18n.hasKey(key, locale || this.locale)
+  }
+
   initI18n (root = '') {
     return (key, params = {}, locale) => {
-      return this.i18n(`${root}.${key}`, params, locale)
+
+      const i18nKey  = `${root}.${key}`;
+      if (this.hasI18nkey(i18nKey, locale)) {
+        return this.i18n(`${root}.${key}`, params, locale)
+      } else {
+        return this.i18n(`${key}`, params, locale)
+      }
+
     }
   }
 

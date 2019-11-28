@@ -13,7 +13,7 @@ export default [
     {
         type: 'Morphology',
         id: 'morphology',
-        operator: 'delite',
+        operator: 'dilate',
         radius: '3 3',
         bound: { x: 100, y: 200},
         in: [

@@ -21,6 +21,10 @@ const i18n = {
             return newValue; 
         }
         
+    },
+
+    hasKey (key, lang = FALLBACK_LANG) {
+        return !!(locales[lang][key] || locales[FALLBACK_LANG][key]);
     }
 }
 

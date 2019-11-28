@@ -1,4 +1,4 @@
-import { isFunction, clone, OBJECT_TO_CLASS, mapjoin, keyMap, keyMapJoin, OBJECT_TO_PROPERTY } from "../../../util/functions/func";
+import { isFunction, clone, OBJECT_TO_CLASS, mapjoin, keyMap, keyMapJoin, OBJECT_TO_PROPERTY, repeat } from "../../../util/functions/func";
 import icon from "../icon/icon";
 import {
   LOAD,
@@ -29,7 +29,7 @@ import ColorMatrixEditor from "./ColorMatrixEditor";
 import svgFilterPreset from "./svg-filter-preset";
 import ImageSelectEditor from "./ImageSelectEditor";
 
-
+const i18n = editor.initI18n('svg.filter.editor');
 
 const filterTypes = [
   {label: 'GRAPHIC REFERENCES', items : [
@@ -91,9 +91,9 @@ const makeFilterSelect = () => {
 
     ${mapjoin(filterTypes, f => {
       return /*html*/`
-        <div class='group' label="${f.label}">
+        <div class='group' label="${i18n(f.label)}">
           ${mapjoin(f.items, i => {
-            return /*html*/ ` <div class='item' draggable="true" value="${i.value}">${getIcon(i.value)} ${i.label}</div>`
+            return /*html*/ ` <div class='item' draggable="true" value="${i.value}">${getIcon(i.value)} ${i18n(i.label)}</div>`
           })}
         </div>
       `
@@ -110,9 +110,9 @@ const makeFilterTemplateSelect = () => {
 
     ${mapjoin(SVGFilterTemplateList, f => {
       return /*html*/`
-        <div class='group' label="${f.label}">
+        <div class='group' label="${i18n(f.label)}">
           ${mapjoin(f.items, i => {
-            return /*html*/ ` <div class='item' draggable="true" value="${i.value}">${i.label}</div>`
+            return /*html*/ ` <div class='item' draggable="true" value="${i.value}">${i18n(i.label)}</div>`
           })}
         </div>
       `
@@ -146,8 +146,8 @@ function getIcon(type) {
   case 'Offset': return icon.transform;
   case 'Tile': return icon.view_comfy;
   case 'Blend': return icon.gradient;
-  case 'Composite': return icon.settings_input_component;
-  case 'Merge': return icon.merge;
+  case 'Composite': return icon.merge;
+  case 'Merge': return icon.settings_input_component;
   case 'DisplacementMap': return icon.texture;
   }
 
@@ -263,15 +263,15 @@ export default class SVGFilterEditor extends UIElement {
       <div class='svg-filter-editor filter-list'>
         <div class='left'>
           <div class="tab number-tab" data-selected-value="1" ref="$tab">
-            <div class="tab-header" ref="$header">
+            <div class="tab-header full" ref="$header">
               <div class="tab-item" data-value="1" title='Item'>
-                <label class='icon'>Filter</label>
+                <label class='icon'>${i18n('tab.filter')}</label>
               </div>
               <div class="tab-item" data-value="2" title="Preset">
-                <label class='icon'>Preset</label>
+                <label class='icon'>${i18n('tab.preset')}</label>
               </div>
               <div class="tab-item" data-value="3" title="Asset">
-                <label class='icon'>Asset</label>
+                <label class='icon'>${i18n('tab.asset')}</label>
               </div>
             </div>
             <div class="tab-body">
@@ -870,11 +870,11 @@ export default class SVGFilterEditor extends UIElement {
         <div class='filter-node ${OBJECT_TO_CLASS({
           'selected': index ===  this.state.selectedIndex
         })}' data-type="${it.type}" data-index="${index}" data-filter-id="${it.id}" style='left: ${it.bound.x}px;top: ${it.bound.y}px;'>
-          <div class='label'>${it.type}</div>
+          <div class='label'>${i18n(it.type)}</div>
           <div class='remove'>${icon.close}</div>
-          <div class='preview' data-source-type="${getSourceTypeString(it.type)}">${getIcon(it.type)}</div>
+          <div class='preview' data-source-type="${getSourceTypeString(it.type)}" data-filter-type='${it.type}'>${getIcon(it.type)}</div>
           <div class='in-list'>
-            ${[...Array(it.getInCount())].map((itIn, inIndex) => {
+            ${repeat(it.getInCount()).map((itIn, inIndex) => {
               return /*html*/`<div class='in' data-index='${inIndex}'></div>`
             }).join('')}
           </div>

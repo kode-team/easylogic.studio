@@ -281,4 +281,14 @@ export default {
     'keyframe.popup.title': '키프레임',
     
     'code.view.property.title': '코드뷰',    
+
+    'svg.filter.editor.tab.filter': '필터',
+    'svg.filter.editor.tab.preset': '프리셋',
+    'svg.filter.editor.tab.asset': '에셋',
+    'svg.filter.editor.GRAPHIC REFERENCES': '참조 그래픽',
+    'svg.filter.editor.SOURCES': '원본',
+    'svg.filter.editor.MODIFIER': '수정',
+    'svg.filter.editor.LIGHTING': '빛',
+    'svg.filter.editor.COMBINERS': '결합',
+    'svg.filter.editor.Template': '템플릿',     
 }
