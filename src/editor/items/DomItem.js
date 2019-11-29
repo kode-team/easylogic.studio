@@ -67,6 +67,9 @@ export class DomItem extends GroupItem {
       'offset-path': '',
       'offset-distance': '',
       'z-index': Length.auto,
+      'layout': 'default',
+      'flex-layout': 'display:flex;',
+      'grid-layout': 'display:grid;',
       outline: {},
       animations: [],
       transitions: [],
@@ -118,6 +121,8 @@ export class DomItem extends GroupItem {
       'mix-blend-mode': json['mix-blend-mode'],
       'opacity': json.opacity + "",
       'rotate': json.rotate + "",
+      'flex-layout': json['flex-layout'],      
+      'grid-layout': json['grid-layout'],                  
       outline: clone(json.outline),
 
       animations: json.animations.map(animation => animation.clone()),
@@ -305,10 +310,10 @@ export class DomItem extends GroupItem {
     return results;
   }
 
-  toPropertyCSS(list, isExport = false) {
+  toPropertyCSS(list) {
     var results = {};
     list.forEach(item => {
-      keyEach(item.toCSS(isExport), (key, value) => {
+      keyEach(item.toCSS(), (key, value) => {
         if (!results[key]) results[key] = [];
         results[key].push(value);
       });
@@ -321,9 +326,60 @@ export class DomItem extends GroupItem {
     return STRING_TO_CSS(this.json[field]);
   }
 
-  toBackgroundImageCSS(isExport = false) {
+  toBackgroundImageCSS() {
     return this.toStringPropertyCSS('background-image')
   }
+
+  toLayoutCSS () {
+
+    var layout = this.json.layout ;
+
+    if (this.enableHasChildren()) {
+      if (layout === 'flex') {
+        return this.toFlexLayoutCSS()
+      } else if  (layout === 'grid') {
+        return this.toGridLayoutCSS()
+      }
+    }
+
+
+    return {}
+  }
+
+  toLayoutItemCSS() {
+    var parentLayout =  this.json.parent['layout'];
+    var obj = {}
+    if (parentLayout === 'flex' || parentLayout === 'grid') {
+      // 부모가  layout 이  지정 됐을 때 자식item 들은 position: relative 기준으로 동작한다. , left, top 은  속성에서 삭제 
+      obj = {
+        position: 'relative',
+        left: 'auto !important',
+        top: 'auto !important',
+      }
+    }
+
+    if (parentLayout === 'flex') {
+      obj['flex'] = this.json['flex-layout-item']
+    } else if (parentLayout  === 'grid') {
+      obj['grid'] = this.json['grid-layout-item']
+    }
+
+    return obj;
+  }
+
+  toFlexLayoutCSS() {
+    return {
+      display: 'flex',
+      ...this.toStringPropertyCSS('flex-layout')
+    }
+  }  
+
+  toGridLayoutCSS() {
+    return {
+      display: 'grid',
+      ...this.toStringPropertyCSS('grid-layout')
+    }
+  }  
 
   toBorderCSS() {
     return this.toStringPropertyCSS('border')
@@ -415,7 +471,7 @@ export class DomItem extends GroupItem {
     )
   }
 
-  toDefaultCSS(isExport = false) {
+  toDefaultCSS() {
 
     var obj = {}
 
@@ -450,7 +506,7 @@ export class DomItem extends GroupItem {
 
   }
 
-  toDefaultSVGCSS(isExport = false) {
+  toDefaultSVGCSS() {
 
     var obj = {
       overflow: 'visible',
@@ -547,59 +603,45 @@ export class DomItem extends GroupItem {
     }
   }
 
-  toCSS(isExport = false) {
+  toCSS() {
 
     return {
       ...this.toVariableCSS(),
-      ...this.toDefaultCSS(isExport),
-      ...this.toClipPathCSS(),
-      ...this.toWebkitCSS(), 
-      ...this.toTextClipCSS(),      
-      ...this.toBoxModelCSS(),
-      ...this.toBorderCSS(),
-      ...this.toOutlineCSS(),      
-      // ...this.toTransformCSS(),      
-      // ...this.toBorderImageCSS(),
-      ...this.toBackgroundImageCSS(isExport),
-      ...this.toAnimationCSS(),
-      ...this.toTransitionCSS()
-    };
-  }
-
-  toSVGCSS(isExport = false) {
-
-    return {
-      ...this.toVariableCSS(),
-      ...this.toDefaultSVGCSS(isExport),
-      ...this.toClipPathCSS(),
-      ...this.toWebkitCSS(), 
-      ...this.toTextClipCSS(),      
-      ...this.toBoxModelCSS(),
-      ...this.toBorderCSS(),
-      ...this.toOutlineCSS(),      
-      // ...this.toTransformCSS(),      
-      // ...this.toBorderImageCSS(),
-      ...this.toBackgroundImageCSS(isExport),
-      ...this.toAnimationCSS(),
-      ...this.toTransitionCSS()
-    };
-  }
-
-  toEmbedCSS(isExport = false) {
-    return {
-      ...this.toVariableCSS(),      
       ...this.toDefaultCSS(),
       ...this.toClipPathCSS(),
-      ...this.toWebkitCSS(),
-      ...this.toTextClipCSS(),
+      ...this.toWebkitCSS(), 
+      ...this.toTextClipCSS(),      
       ...this.toBoxModelCSS(),
       ...this.toBorderCSS(),
-      ...this.toOutlineCSS(),
-      // ...this.toTransformCSS(),
+      ...this.toOutlineCSS(),      
+      // ...this.toTransformCSS(),      
       // ...this.toBorderImageCSS(),
+      ...this.toBackgroundImageCSS(),
+      ...this.toLayoutCSS(),
+      ...this.toLayoutItemCSS(),                  
       ...this.toAnimationCSS(),
-      ...this.toTransitionCSS(),      
-      ...this.toBackgroundImageCSS(isExport)
+      ...this.toTransitionCSS()
+    };
+  }
+
+  toSVGCSS() {
+
+    return {
+      ...this.toVariableCSS(),
+      ...this.toDefaultSVGCSS(),
+      ...this.toClipPathCSS(),
+      ...this.toWebkitCSS(), 
+      ...this.toTextClipCSS(),      
+      ...this.toBoxModelCSS(),
+      ...this.toBorderCSS(),
+      ...this.toOutlineCSS(),      
+      // ...this.toTransformCSS(),      
+      // ...this.toBorderImageCSS(),
+      ...this.toBackgroundImageCSS(),
+      ...this.toLayoutCSS(),      
+      ...this.toLayoutItemCSS(),            
+      ...this.toAnimationCSS(),
+      ...this.toTransitionCSS()
     };
   }
   
@@ -618,13 +660,6 @@ export class DomItem extends GroupItem {
   toNestedBoundCSS($prefix) {
     return []
   }  
-
-  generateEmbed () {
-    return {
-      css: this.toEmbedCSS(), 
-      selectorString: this.toSelectorString()
-    }
-  }
 
   generateView (prefix = '', appendCSS = '') {
 
@@ -645,25 +680,6 @@ ${this.toSelectorString(prefix)}
 `  
     return cssString;
   }
-
-
-//   generateViewBoundCSS (prefix = '', appendCSS = '') {
-//     var cssString = `
-// ${prefix} {  /* ${this.json.itemType} */
-//     ${CSS_TO_STRING(this.toBoundCSS(), '\n')}; 
-// }
-
-
-// ${this.toNestedBoundCSS().map(it => {
-//   return `${prefix} ${it.selector} { 
-//       ${it.cssText ? it.cssText : CSS_TO_STRING(it.css || {}, '\n\t\t')}; 
-//   }`
-// }).join('\n')}
-
-// `  
-//     return cssString;
-//   }
-
 
   get html () {
     var {elementType, id, name, layers, itemType} = this.json;

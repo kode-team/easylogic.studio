@@ -25,8 +25,6 @@ This project is [sapa](https://github.com/easylogic/sapa) based.
 * Image 
 * Cube 
 * Cylinder 
-
-
 * SVG Path 
 * SVG Rect with path 
 * SVG Circle with path 
@@ -76,8 +74,6 @@ This project is [sapa](https://github.com/easylogic/sapa) based.
 * SVG Filter 
 * Image 
 
-### Custom
-* Cube Layer 
 
 ### Theming  
 * dark

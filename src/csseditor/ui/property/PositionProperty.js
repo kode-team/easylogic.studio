@@ -16,7 +16,7 @@ export default class PositionProperty extends BaseProperty {
   }
 
   getBody() {
-    return `
+    return /*html*/`
       <div class="position-item" ref="$positionItem"></div>
     `;
   }
@@ -26,9 +26,10 @@ export default class PositionProperty extends BaseProperty {
     if (!current) return '';
 
     return /*html*/`
+      <!--
       <div class='property-item'>
         <SelectIconEditor ref='$position' icon="true" key='position' value='${current.position}' options='absolute,relative,fixed,static' onchange="changRangeEditor" />
-      </div>    
+      </div>    -->
       <div class='property-item animation-property-item'>
         <span class='add-timeline-property' data-property='x'></span>
         <RangeEditor ref='$x' label='X' key='x' value='${current.x}' min="-1000" max='1000' onchange='changRangeEditor' />

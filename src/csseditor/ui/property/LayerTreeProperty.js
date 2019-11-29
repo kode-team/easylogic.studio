@@ -304,7 +304,7 @@ export default class LayerTreeProperty extends BaseProperty {
       var id = $item.attr('data-layer-id');
 
       var item = artboard.searchById(id);
-      item.remove();
+      if (item) item.remove();
 
       this.emit('refreshAllSelectArtBoard');
       

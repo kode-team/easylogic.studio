@@ -54,10 +54,13 @@ import PolygonDataProperty from "./PolygonDataProperty";
 import SVGTextProperty from "./SVGTextProperty";
 import ExportProperty from "./ExportProperty";
 import ShapeInsideProperty from "./ShapeInsideProperty";
-
+import LayoutProperty from "./LayoutProperty";
+import FlexLayoutItemProperty from "./FlexLayoutItemProperty";
 
 
 export default {  
+  FlexLayoutItemProperty,
+  LayoutProperty,
   ShapeInsideProperty,
   ExportProperty,
   SVGTextProperty,

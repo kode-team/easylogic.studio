@@ -1,7 +1,7 @@
 import { editor } from "../editor"
 import { isArray, isObject, isString } from "../../util/functions/func";
 import AssetParser from "../parse/AssetParser";
-  
+
 export default class Resource {
     static getAllDropItems (e) {
         var items = []

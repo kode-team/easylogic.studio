@@ -210,7 +210,7 @@ export class CubeLayer extends Component {
   }
 
 
-  toDefaultCSS(isExport = false) {
+  toDefaultCSS() {
     var obj = {}
 
     if (this.json.x)  obj.left = this.json.x ;
@@ -227,16 +227,17 @@ export class CubeLayer extends Component {
 
   }  
 
-  toCSS(isExport = false) {
+  toCSS() {
 
     return {
       ...this.toVariableCSS(),
-      ...this.toDefaultCSS(isExport),
+      ...this.toDefaultCSS(),
       ...this.toWebkitCSS(),      
       ...this.toBoxModelCSS(),
       // ...this.toTransformCSS(),      
       ...this.toAnimationCSS(),
-      ...this.toTransitionCSS()
+      ...this.toTransitionCSS(),
+      ...this.toLayoutItemCSS(),
     };
   }
 

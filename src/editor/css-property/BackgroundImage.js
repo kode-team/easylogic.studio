@@ -162,10 +162,10 @@ export class BackgroundImage extends Property {
     return super.checkField(key, value);
   }
 
-  toBackgroundImageCSS(isExport = false) {
+  toBackgroundImageCSS() {
     if (!this.json.image) return {};
     return {
-      "background-image": this.json.image.toString(isExport)
+      "background-image": this.json.image.toString()
     };
   }
 
@@ -212,9 +212,9 @@ export class BackgroundImage extends Property {
     };
   }
 
-  toCSS(isExport = false) {
+  toCSS() {
     var results = {
-      ...this.toBackgroundImageCSS(isExport),
+      ...this.toBackgroundImageCSS(),
       ...this.toBackgroundPositionCSS(),
       ...this.toBackgroundSizeCSS(),
       ...this.toBackgroundRepeatCSS(),
@@ -378,10 +378,10 @@ export class BackgroundImage extends Property {
   }
 
 
-  static toPropertyCSS(list, isExport = false) {
+  static toPropertyCSS(list) {
     var results = {};
     list.forEach(item => {
-        keyEach(item.toCSS(isExport), (key, value) => {
+        keyEach(item.toCSS(), (key, value) => {
             if (!results[key]) results[key] = [];
             results[key].push(value);
         });

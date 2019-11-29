@@ -5,6 +5,7 @@ import icon from "../icon/icon";
 export default class SelectIconEditor extends UIElement {
 
     initState() {
+        var keyValueChar = this.props['key-value-char'] || ':'        
         var splitChar = this.props.split || ',';
         var options = (this.props.options || '').split(splitChar).map(it => it.trim());
         var icons = (this.props.icons || '').split(splitChar).map(it => it.trim());
@@ -12,6 +13,7 @@ export default class SelectIconEditor extends UIElement {
         var value = this.props.value || '';
 
         return {
+            keyValueChar,            
             label: this.props.label || '',
             options, icons, value
         }
@@ -68,16 +70,21 @@ export default class SelectIconEditor extends UIElement {
 
             var selected = it === this.state.value ? 'selected' : '' 
             var value = it; 
+            var label = it; 
+
+            if (value.includes(this.state.keyValueChar)) {
+                var [value, label] = value.split(this.state.keyValueChar)
+            }            
 
             if (it === '') {
                 var label = icon.close
             } else {
                 var iconKey = this.state.icons[index];
 
-                var label = icon[iconKey] || iconKey || it; 
+                label = label || icon[iconKey] || iconKey || it; 
             }
             
-            return `<div class='select-icon-item ${selected}' data-value="${value}" title='${value}'>${label}</div>`
+            return /*html*/`<div class='select-icon-item ${selected}' data-value="${value}" title='${value}'>${label}</div>`
         })
     }
 

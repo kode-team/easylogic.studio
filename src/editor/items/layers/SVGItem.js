@@ -66,6 +66,13 @@ export class SVGItem extends Layer {
     }
   }
 
+  /**
+   * @override
+   */
+  toLayoutCSS() {
+    return {}
+  }
+
   getDefaultTitle() {
     return "SVG";
   }

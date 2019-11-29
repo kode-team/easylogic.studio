@@ -4,11 +4,18 @@ import { DEBOUNCE } from "../../../util/Event";
 import { EVENT } from "../../../util/UIElement";
 import { blend_list } from "../../../editor/util/Resource";
 
+const blendI18n = editor.initI18n('blend')
 
 export default class BackgroundColorProperty extends BaseProperty {
 
   getTitle() {
     return editor.i18n('background.color.property.title');
+  }
+
+  getBlendList () {
+    return blend_list.split(',').map(it => {
+      return `${it}:${blendI18n(it)}`
+    }).join(',');
   }
 
   getBody() {
@@ -50,7 +57,7 @@ export default class BackgroundColorProperty extends BaseProperty {
             removable='true'
             key='mix-blend-mode' 
             icon="true" 
-            options="${blend_list}" 
+            options="${this.getBlendList()}" 
             onchange="changeSelect" />
         </div>        
       `;

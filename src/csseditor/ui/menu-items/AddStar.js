@@ -17,10 +17,6 @@ export default class AddStar extends MenuItem {
   }  
 
   clickButton(e) {
-    this.trigger('addStar')
-  }
-
-  [EVENT('addStar')] () {
     this.emit('hideSubEditor');    
     editor.selection.empty();
     this.emit('initSelectionTool');    

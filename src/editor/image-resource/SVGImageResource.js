@@ -81,7 +81,7 @@ export class SVGImageResource extends ImageResource {
   }
 
 
-  toString(isExport = false) {
+  toString() {
     var json = this.json;
     var {
       patternUnits, 
@@ -104,11 +104,7 @@ export class SVGImageResource extends ImageResource {
       imageHeight
     ].join(',').trim();
 
-    if (isExport) {
-      return `url(${editor.getFile(url)})`;
-    } else {
-      return `url(${url}#${string})`;
-    }
+    return `url(${url}#${string})`;
   }
 
   toSVGString(id) {

@@ -139,10 +139,10 @@ export class SVGTextItem extends SVGItem {
     ]
   }    
  
-  toSVGCSS(isExport = false) {
+  toSVGCSS() {
 
     return {
-      ...super.toSVGCSS(isExport),
+      ...super.toSVGCSS(),
       ...this.toShapeInsideCSS(),
     };
   }

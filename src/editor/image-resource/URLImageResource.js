@@ -53,14 +53,10 @@ export class URLImageResource extends ImageResource {
     return true;
   }
 
-  toString(isExport = false) {
+  toString() {
     var json = this.json;
 
-    if (isExport) {
-      return `url(${editor.getFile(json.url)})`;
-    } else {
-      return `url(${json.url})`;
-    }
+    return `url(${json.url})`;
   }
 
   static isImageFile(fileExt) {

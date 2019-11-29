@@ -39,7 +39,11 @@ export default class Inspector extends UIElement {
                 <!-- Default Property --> 
                 <PositionProperty />
                 <SizeProperty /> 
+                <LayoutProperty />
+                <FlexLayoutItemProperty />
                 <BoxModelProperty />
+
+                <!-- Appearance --> 
                 <BackgroundColorProperty />
                 <BackgroundImageProperty />                
                 <BorderNewProperty />

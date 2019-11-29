@@ -128,10 +128,10 @@ export class BorderImage extends Property {
     }).join(' ')
   }
 
-  toBorderImageCSS(isExport = false) {
+  toBorderImageCSS() {
     if (!this.json.image) return {};
 
-    var image = this.json.image.toString(isExport);
+    var image = this.json.image.toString();
 
     return {
       "border-image-source": `${image}`
@@ -176,9 +176,9 @@ export class BorderImage extends Property {
     }
   }
 
-  toCSS(isExport = false) {
+  toCSS() {
     var results = {
-      ...this.toBorderImageCSS(isExport),
+      ...this.toBorderImageCSS(),
       ...this.toBorderImageRepeatCSS(),
       ...this.toBorderImageSliceCSS(),
       ...this.toBorderImageWidthCSS(),

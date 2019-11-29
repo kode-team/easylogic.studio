@@ -217,7 +217,7 @@ export class CylinderLayer extends Component {
   }
 
 
-  toDefaultCSS(isExport = false) {
+  toDefaultCSS() {
     var obj = {}
 
     if (this.json.x)  obj.left = this.json.x ;
@@ -234,11 +234,11 @@ export class CylinderLayer extends Component {
 
   }  
 
-  toCSS(isExport = false) {
+  toCSS() {
 
     return {
       ...this.toVariableCSS(),
-      ...this.toDefaultCSS(isExport),
+      ...this.toDefaultCSS(),
       ...this.toWebkitCSS(),      
       ...this.toBoxModelCSS(),
       // ...this.toTransformCSS(),      

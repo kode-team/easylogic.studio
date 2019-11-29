@@ -76,11 +76,14 @@
       display: none !important;
     }    
 
-    &[data-selection-length="1"] {
-      .selection-tool-item[data-position="move"] {
-        pointer-events: none;
-      }
-    }  
+    // &[data-selection-length="1"] {
+    //   &:not(.artboard) {
+    //     .selection-tool-item[data-position="move"] {
+    //       pointer-events: none;
+    //     }
+    //   }
+
+    // }  
 
 
     &.remove-move-area {

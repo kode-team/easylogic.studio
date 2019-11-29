@@ -44,8 +44,10 @@ import SVGFilterSelectEditor from "./SVGFilterSelectEditor";
 import FuncFilterEditor from "./FuncFilterEditor";
 import ColorMatrixEditor from "./ColorMatrixEditor";
 import TextAreaEditor from "./TextAreaEditor";
+import FlexLayoutEditor from "./FlexLayoutEditor";
 
 export default {
+    FlexLayoutEditor,
     TextAreaEditor,
     ColorMatrixEditor,
     FuncFilterEditor,

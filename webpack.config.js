@@ -38,6 +38,7 @@ module.exports = {
     path: __dirname + "/docs"
   },
   mode: 'production',
+  // devtool: 'source-map',
   module: {
     rules: [
       {

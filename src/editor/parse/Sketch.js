@@ -146,10 +146,10 @@ export const SketchUtil = {
 
 
 
-  toPropertyCSS(list, isExport = false) {
+  toPropertyCSS(list) {
     var results = {};
     list.forEach(item => {
-        keyEach(item.toCSS(isExport), (key, value) => {
+        keyEach(item.toCSS(), (key, value) => {
             if (!results[key]) results[key] = [];
             results[key].push(value);
         });
