@@ -122,14 +122,6 @@ export default class CSSEditor extends UIElement {
     Dom.create(document.body).attr('data-theme', editor.theme);
   }
 
-  [CLICK('$toggleRight')] () {
-    this.trigger('toggleRightPanel');
-  }
-
-  [EVENT('toggleRightPanel')] () {
-    // editor.openRightPanel = !editor.openRightPanel
-    // this.refs.$middle.toggleClass('open-right', editor.openRightPanel);
-  }
 
   [EVENT('toggleFooter')] (isShow) {
     this.$el.toggleClass('show-footer', isShow);
@@ -155,11 +147,21 @@ export default class CSSEditor extends UIElement {
     this.emit('refreshLayerTreeView')    
     this.emit('refreshAllCanvas');
     this.emit('refreshStyleView');
+    this.emit('refreshElementBoundSize')   
+    editor.selection.each(it => {
+        if (it.isLayoutItem()) {
+            this.emit('refreshElementBoundSize', it.parent)   
+        }
+    })      
   }  
 
   [EVENT('refreshElement')] (current) {
     this.emit('refreshCanvas', current)
     this.emit('refreshStyleView', current)
+    this.emit('refreshElementBoundSize', current)   
+    if (current && current.isLayoutItem()) {
+        this.emit('refreshElementBoundSize', current.parent)   
+    }
   }
 
   [DRAGOVER('$middle') + PREVENT] (e) {}
@@ -171,57 +173,4 @@ export default class CSSEditor extends UIElement {
     this.emit('drop.items', items);
 
   }
-
-
-  // [DRAGOVER() + PREVENT] (e) {}
-
-  // [DROP() + PREVENT] (e) {
-  //   const files = [...e.dataTransfer.files]
-
-  //   if (files.length) {
-  //     JSZip.loadAsync(files[0]).then(zip => {
-  //       console.log(zip);
-  //       var len = Object.keys(zip.files).length
-  //       var sketchData = {}
-
-  //       const loadSketch = () => {
-  //         if (Object.keys(sketchData).length === len) {
-  //           this.emit('loadSketchData', sketchData);
-  //         }
-  //       }
-
-
-  //       Object.keys(zip.files).forEach(relativePath => {
-  //         var zipEntry = zip.files[relativePath]
-
-  //         if (relativePath.includes('.json')) {
-  //             zipEntry.async('string').then((content) => {
-  //               var page = JSON.parse(content)
-  //               sketchData[relativePath] = page; 
-
-  //               loadSketch()
-  //             },
-  //             function error (e) {
-  //               console.log(e)
-  //             })
-  //         } else if (relativePath.includes('.png')) {
-  //           zipEntry.async('base64').then((content) => {
-  //             var image = 'data:image/png;base64,' + content; 
-  //             relativePath = relativePath.replace('.png', '')
-  //             sketchData[relativePath] = image; 
-
-  //             loadSketch()              
-  //           },
-  //           function error (e) {
-  //             console.log(e)
-  //           })
-  //         }
-  //       })
-
-        
-  //     })
-  //   }
-
-
-  // }
 }

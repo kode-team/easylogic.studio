@@ -491,6 +491,7 @@ export default class SelectionToolView extends SelectionToolBind {
         }
 
         this.emit('refreshSelectionStyleView');
+        this.parent.updateRealPosition()
 
     }
 

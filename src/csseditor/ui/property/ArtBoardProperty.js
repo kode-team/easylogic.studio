@@ -32,8 +32,9 @@ export default class ArtBoardProperty extends BaseProperty {
 
     return project.artboards.map( (artboard, index) => {
       var selected = artboard === editor.selection.currentArtboard ? 'selected' : ''
+
       return /*html*/`
-        <div class='artboard-item ${selected}'>
+        <div class='artboard-item ${selected}' data-layout="${artboard.layout}" data-artboard-id='${artboard.id}'>
           <div class='preview'>${icon.doc}</div>
           <div class='detail'>
             <label data-index='${index}'>${artboard.name}</label>
@@ -119,6 +120,16 @@ export default class ArtBoardProperty extends BaseProperty {
 
   [EVENT('refreshArtBoardList')] () {
     this.refresh();
+  }
+
+  [EVENT('changeItemLayout')] () {
+    editor.selection.each((item, index) => {
+      var el = this.refs.$artboardList.$(`[data-artboard-id="${item.id}"]`)
+      if (el) {
+        el.attr('data-layout', item.layout)
+      }
+    })
+
   }
 
 }

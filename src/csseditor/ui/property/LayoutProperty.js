@@ -79,6 +79,8 @@ export default class LayoutProperty extends BaseProperty {
     this.refs.$layoutList.attr('data-selected-value', value);
 
     this.emit('refreshStyleView');  // 전체 새로 고침 
+    this.emit('refreshElementBoundSize');
+    this.emit('changeItemLayout')
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {

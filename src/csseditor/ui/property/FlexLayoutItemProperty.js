@@ -120,6 +120,9 @@ export default class FlexLayoutItemProperty extends BaseProperty {
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
-    this.refreshShowIsNot(['project', 'artboard']);
+    this.refreshShow(() => {
+      var current = editor.selection.current; 
+      return  current && current.isLayoutItem()
+    });
   }
 }

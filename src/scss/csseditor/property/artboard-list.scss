@@ -43,5 +43,43 @@
             @include title-background-2($list-item-selected-color, $list-item-selected-font-color);
         }
 
+        &[data-layout='flex'] {
+            .detail {
+                label {
+                    &:after {
+                        content: 'flex';
+                        text-transform: uppercase;
+                        background-color: green;
+                        color: white;
+                        border-radius: 3px;
+                        display: inline-block;
+                        vertical-align: middle;
+                        margin-left: 2px;
+                        padding: 1px 4px;
+                        font-size: 11px;
+                    }
+                }
+            }
+        }
+
+        &[data-layout='grid'] {
+            .detail {
+                label {
+                    &:after {
+                        content: 'grid';
+                        text-transform: uppercase;
+                        background-color: $selected-color;
+                        color: white;
+                        border-radius: 3px;
+                        display: inline-block;
+                        vertical-align: middle;
+                        margin-left: 2px;
+                        padding: 1px 4px;
+                        font-size: 11px;
+                    }
+                }
+            }
+        }
+
     }
 }

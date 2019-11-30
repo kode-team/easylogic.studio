@@ -84,7 +84,7 @@ export default class SelectIconEditor extends UIElement {
                 label = label || icon[iconKey] || iconKey || it; 
             }
             
-            return /*html*/`<div class='select-icon-item ${selected}' data-value="${value}" title='${value}'>${label}</div>`
+            return /*html*/`<div class='select-icon-item ${selected}' data-value="${value}" title='${label}'>${label}</div>`
         })
     }
 

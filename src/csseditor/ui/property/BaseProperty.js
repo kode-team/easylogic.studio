@@ -4,6 +4,7 @@ import UIElement from "../../../util/UIElement";
 import propertyEditor from "../property-editor";
 import { editor } from "../../../editor/editor";
 import Dom from "../../../util/Dom";
+import { isFunction } from "../../../util/functions/func";
 
 
 export default class BaseProperty extends UIElement {
@@ -137,14 +138,18 @@ export default class BaseProperty extends UIElement {
 
     var current = editor.selection.current;
     if (current) {
-      if (type.includes(current.itemType)) {
+
+      if  (isFunction(type) && type()) {
         this.show();
         if (isRefresh) this.refresh();
       } else {
-        this.hide();
-      }
-    } else {
-      
+        if (!isFunction(type) && type.includes(current.itemType)) {
+          this.show();
+          if (isRefresh) this.refresh();
+        } else {
+          this.hide();
+        }
+      } 
     } 
   }
 

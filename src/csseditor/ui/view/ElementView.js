@@ -527,5 +527,33 @@ export default class ElementView extends UIElement {
             // NOOP 
         }
     }
+
+    [EVENT('refreshElementBoundSize')] (obj ) {
+        var current = obj || editor.selection.current;
+
+        if (current) {
+
+            // 현재 선태된 item 이  부모가 layout 을 가진 것에 대한 자식이라면 
+            // 부모의 모든 자식들의 bound size 를 다시 계산한다. 
+            // 즉, 2번 한다.  부모 기준으로 한번, 내 기준으로 한번 
+
+            if (current.hasLayout()) {
+
+                current.layers.forEach(it => {
+                    var $el = this.getElement(it.id);
+                    const {x, y, width, height} = $el.offsetRect();
+
+                    it.reset({
+                        x: Length.px(x), 
+                        y: Length.px(y), 
+                        width: Length.px(width), 
+                        height: Length.px(height)
+                    })
+                })
+            } else {
+
+            }
+        }
+    }
     
 } 

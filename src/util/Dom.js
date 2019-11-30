@@ -416,6 +416,8 @@ export default class Dom {
 
   offsetRect() {
     return {
+      x: this.el.offsetLeft,
+      y: this.el.offsetTop,
       top: this.el.offsetTop,
       left: this.el.offsetLeft,
       width: this.el.offsetWidth,

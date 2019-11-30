@@ -142,7 +142,7 @@ export default class LayerTreeProperty extends BaseProperty {
         name = layer.text || layer.name 
       }
       return /*html*/`        
-      <div class='layer-item ${selected}' data-depth="${depth}" data-layer-id='${layer.id}' draggable="true">
+      <div class='layer-item ${selected}' data-depth="${depth}" data-layout='${layer.layout}' data-layer-id='${layer.id}' draggable="true">
         <div class='detail'>
           <label> 
             <span class='icon' data-item-type="${layer.itemType}">${this.getIcon(layer)}</span> 
@@ -415,5 +415,17 @@ export default class LayerTreeProperty extends BaseProperty {
   [EVENT('refreshLayerTreeView')] () {
     this.refresh();
   }
+
+
+  [EVENT('changeItemLayout')] () {
+    editor.selection.each((item, index) => {
+      var el = this.refs.$layerList.$(`[data-layer-id="${item.id}"]`)
+      if (el) {
+        el.attr('data-layout', item.layout)
+      }
+    })
+
+  }
+
 
 }
