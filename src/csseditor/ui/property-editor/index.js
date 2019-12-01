@@ -45,8 +45,15 @@ import FuncFilterEditor from "./FuncFilterEditor";
 import ColorMatrixEditor from "./ColorMatrixEditor";
 import TextAreaEditor from "./TextAreaEditor";
 import FlexLayoutEditor from "./FlexLayoutEditor";
+import GridLayoutEditor from "./GridLayoutEditor";
+import FlexLayoutItemEditor from "./FlexLayoutItemEditor";
+import GridBoxEditor from "./GridBoxEditor";
+
 
 export default {
+    GridBoxEditor,
+    FlexLayoutItemEditor,
+    GridLayoutEditor,
     FlexLayoutEditor,
     TextAreaEditor,
     ColorMatrixEditor,

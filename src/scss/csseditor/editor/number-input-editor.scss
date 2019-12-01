@@ -2,6 +2,7 @@
     display: grid;
     grid-template-columns: 1fr;
     grid-column-gap: 4px;
+    height: 24px;
 
     &.has-label {
         label {
@@ -29,6 +30,7 @@
             grid-template-columns: 1fr;
             grid-column-gap: 3px;
             font-size: 13px;
+            height: 100%;
             
             span {
                 padding: 1px;

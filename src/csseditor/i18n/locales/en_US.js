@@ -337,4 +337,14 @@ export default {
     'flex.layout.item.property.shrink': 'Flex Shrink',
     'flex.layout.item.property.basis': 'Flex Basis',
 
+    'grid.layout.editor.template.columns': 'Columns',
+    'grid.layout.editor.column.gap': 'Column Gap',
+    'grid.layout.editor.template.rows': 'Rows',
+    'grid.layout.editor.row.gap': 'Row Gap',
+
+    'grid.box.editor.box.title': 'Box',
+    'grid.box.editor.repeat': 'Type',
+    'grid.box.editor.count': 'Count',
+    'grid.box.editor.value': 'Size',
+
 }

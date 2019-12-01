@@ -47,14 +47,10 @@ export default class LayoutProperty extends BaseProperty {
       <div class='layout-list' ref='$layoutList' data-selected-value='${current.layout}'>
         <div data-value='none'>Default</div>
         <div data-value='flex'>
-          <FlexLayoutEditor ref='$flex' key='flex-layout' onchange='changeLayoutInfo'>
-            <property name="value" type="json">${JSON.stringify(current.flex || {})}</property>
-          </FlexLayoutEditor>
+          <FlexLayoutEditor ref='$flex' key='flex-layout' value="${current['flex-layout'] || ''}" onchange='changeLayoutInfo' />
         </div>
         <div data-value='grid'>
-          <GridLayoutEditor ref='$grid' key='grid-layout' onchange='changeLayoutInfo'>
-            <property name="value" type="json">${JSON.stringify(current.grid || {})}</property>
-          </GridLayoutEditor>
+          <GridLayoutEditor ref='$grid' key='grid-layout' value="${current['grid-layout'] || ''}" onchange='changeLayoutInfo' />
         </div>
       </div>
     `
@@ -65,9 +61,8 @@ export default class LayoutProperty extends BaseProperty {
       [key]: value
     })
 
-    console.log(key, value);
-
     this.emit('refreshStyleView');  // 전체 새로 고침 
+    this.emit('refreshAllElementBoundSize');    
   }
 
   [EVENT('changeLayoutType')] (key, value) {
@@ -79,11 +74,11 @@ export default class LayoutProperty extends BaseProperty {
     this.refs.$layoutList.attr('data-selected-value', value);
 
     this.emit('refreshStyleView');  // 전체 새로 고침 
-    this.emit('refreshElementBoundSize');
+    this.emit('refreshAllElementBoundSize');
     this.emit('changeItemLayout')
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
-    this.refreshShow(['layer', 'artboard']);
+    this.refreshShow(['layer', 'artboard'], true);
   }
 }

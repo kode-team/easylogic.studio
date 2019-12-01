@@ -32,8 +32,8 @@
             text-align: center;
             vertical-align: middle;
             padding: 6px 2px;
-            border:1px solid $selected-color;
-            color: $selected-color;
+            border:1px solid $select-icon-editor-border-color;
+            color: white;
             border-right: 0px;
             white-space: pre-wrap;
             word-break: break-all;
@@ -48,7 +48,7 @@
             }
 
             &:last-child {
-                border-right:1px solid $selected-color;                
+                border-right:1px solid $select-icon-editor-border-color;                
                 border-top-right-radius: 3px;
                 border-bottom-right-radius: 3px;
             }
@@ -63,7 +63,7 @@
             }
 
             &.selected {
-                background-color: $selected-color;
+                background-color: $select-icon-editor-selected-color;
                 // border-color: $selected-border-color;
 
                 color: white;

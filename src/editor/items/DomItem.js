@@ -334,7 +334,7 @@ export class DomItem extends GroupItem {
 
     var layout = this.json.layout ;
 
-    if (this.enableHasChildren()) {
+    if (this.hasLayout()) {
       if (layout === 'flex') {
         return this.toFlexLayoutCSS()
       } else if  (layout === 'grid') {
@@ -349,12 +349,21 @@ export class DomItem extends GroupItem {
   toLayoutItemCSS() {
     var parentLayout =  this.json.parent['layout'];
     var obj = {}
-    if (parentLayout === 'flex' || parentLayout === 'grid') {
+    if (parentLayout === 'flex') {
       // 부모가  layout 이  지정 됐을 때 자식item 들은 position: relative 기준으로 동작한다. , left, top 은  속성에서 삭제 
       obj = {
         position: 'relative',
         left: 'auto !important',
         top: 'auto !important',
+      }
+    } else if (parentLayout === 'grid') {
+      // 부모가  layout 이  지정 됐을 때 자식item 들은 position: relative 기준으로 동작한다. , left, top 은  속성에서 삭제 
+      obj = {
+        position: 'relative',
+        left: 'auto !important',
+        top: 'auto !important',
+        width: 'auto !important',
+        height: 'auto !important',        
       }
     }
 

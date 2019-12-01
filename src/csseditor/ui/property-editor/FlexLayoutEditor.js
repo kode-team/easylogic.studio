@@ -37,7 +37,7 @@ export default class FlexLayoutEditor extends UIElement {
 
     setValue (value) {
         this.setState({
-            ...STRING_TO_CSS(this.props.value),
+            ...STRING_TO_CSS(value),
         })
     }
 

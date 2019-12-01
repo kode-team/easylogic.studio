@@ -85,6 +85,7 @@ export default class ArtBoardProperty extends BaseProperty {
     }
 
     this.emit('refreshAllSelectArtBoard');
+    this.emit('refreshSelection')
   }
 
   [CLICK('$add')] (e) {

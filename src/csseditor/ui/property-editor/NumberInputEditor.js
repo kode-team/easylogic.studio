@@ -40,7 +40,7 @@ export default class NumberInputEditor extends UIElement {
 
         var realValue = (+value).toString();
         
-        return `
+        return /*html*/`
         <div class='number-input-editor ${hasLabel} ${layoutClass}' data-selected-type='${type}'>
             ${label ? `<label>${label}</label>` : '' }
             <div class='range-editor-type' data-type='range'>

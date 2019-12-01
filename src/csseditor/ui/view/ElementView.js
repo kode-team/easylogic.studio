@@ -528,31 +528,43 @@ export default class ElementView extends UIElement {
         }
     }
 
-    [EVENT('refreshElementBoundSize')] (obj ) {
-        var current = obj || editor.selection.current;
+    [EVENT('refreshAllElementBoundSize')] () {
 
-        if (current) {
+        var list = [...new Set(editor.selection.items.filter(it => it.is('artboard') ? it : it.parent))];
+
+        list.forEach(it => {
+            this.trigger('refreshElementBoundSize', it);
+        })
+    }
+
+    [EVENT('refreshElementBoundSize')] (parentObj) {
+        if (parentObj) {
 
             // 현재 선태된 item 이  부모가 layout 을 가진 것에 대한 자식이라면 
             // 부모의 모든 자식들의 bound size 를 다시 계산한다. 
-            // 즉, 2번 한다.  부모 기준으로 한번, 내 기준으로 한번 
 
-            if (current.hasLayout()) {
+            parentObj.layers.forEach(it => {
 
-                current.layers.forEach(it => {
+                if (it.isLayoutItem()) {
                     var $el = this.getElement(it.id);
                     const {x, y, width, height} = $el.offsetRect();
-
+    
                     it.reset({
                         x: Length.px(x), 
                         y: Length.px(y), 
                         width: Length.px(width), 
                         height: Length.px(height)
                     })
-                })
-            } else {
 
-            }
+                    if (it.is('component')) {
+                        this.emit('refreshStyleView', it, true);
+                    }
+    
+                }
+
+                this.trigger('refreshElementBoundSize', it);
+            })
+
         }
     }
     

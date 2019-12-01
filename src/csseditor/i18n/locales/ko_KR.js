@@ -341,4 +341,13 @@ export default {
     'flex.layout.item.property.auto': '자동',
     'flex.layout.item.property.value': '값',
 
+    'grid.layout.editor.template.columns': '열(Column)',
+    'grid.layout.editor.column.gap': '열 간격',
+    'grid.layout.editor.template.rows': '행',
+    'grid.layout.editor.row.gap': '행 간격',
+
+    'grid.box.editor.box.title': '영역',
+    'grid.box.editor.repeat': '타입',
+    'grid.box.editor.count': '반복',
+    'grid.box.editor.value': '크기',
 }

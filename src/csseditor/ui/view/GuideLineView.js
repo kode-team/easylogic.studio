@@ -1,8 +1,7 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
 import { isNotUndefined, OBJECT_TO_PROPERTY } from "../../../util/functions/func";
 import { Length } from "../../../editor/unit/Length";
-import { Layer } from "../../../editor/items/Layer";
-import { LOAD, BIND } from "../../../util/Event";
+import { BIND } from "../../../util/Event";
 
 
 const text = (x, y, text = '', className = 'base-line') => {

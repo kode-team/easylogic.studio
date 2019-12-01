@@ -68,14 +68,14 @@ export default class SelectIconEditor extends UIElement {
     [LOAD('$options')] () {
         return this.state.options.map((it, index) => {
 
-            var selected = it === this.state.value ? 'selected' : '' 
+
             var value = it; 
             var label = it; 
 
             if (value.includes(this.state.keyValueChar)) {
                 var [value, label] = value.split(this.state.keyValueChar)
             }            
-
+            var selected = value === this.state.value ? 'selected' : '' 
             if (it === '') {
                 var label = icon.close
             } else {

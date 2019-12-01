@@ -1,0 +1,29 @@
+.grid-box-editor {
+    .grid-box-editor-item {
+        .item {
+            display: grid;
+            grid-template-columns: 1fr 0.5fr 1fr 40px;
+            grid-column-gap: 4px;
+            margin-bottom: 4px;
+
+            &[data-repeat-type='auto'],
+            &[data-repeat-type='none']
+            {
+                > .value,
+                > .count {
+                    visibility: hidden;
+                }
+            }
+
+            &[data-repeat-type='length'] {
+                > .count {
+                    visibility: hidden;
+                }
+            }
+
+            .tools {
+                padding: 4px 0px;
+            }
+        }
+    }
+}

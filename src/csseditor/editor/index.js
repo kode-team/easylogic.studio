@@ -147,21 +147,13 @@ export default class CSSEditor extends UIElement {
     this.emit('refreshLayerTreeView')    
     this.emit('refreshAllCanvas');
     this.emit('refreshStyleView');
-    this.emit('refreshElementBoundSize')   
-    editor.selection.each(it => {
-        if (it.isLayoutItem()) {
-            this.emit('refreshElementBoundSize', it.parent)   
-        }
-    })      
+    this.emit('refreshAllElementBoundSize')   
   }  
 
   [EVENT('refreshElement')] (current) {
     this.emit('refreshCanvas', current)
     this.emit('refreshStyleView', current)
-    this.emit('refreshElementBoundSize', current)   
-    if (current && current.isLayoutItem()) {
-        this.emit('refreshElementBoundSize', current.parent)   
-    }
+    this.emit('refreshElementBoundSize', current.parent)
   }
 
   [DRAGOVER('$middle') + PREVENT] (e) {}
