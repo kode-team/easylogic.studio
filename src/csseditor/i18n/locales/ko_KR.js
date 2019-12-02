@@ -312,7 +312,7 @@ export default {
     'layout.property.title': '레이아웃',
     'layout.property.flex': '플렉스 박스',
     'layout.property.grid': '그리드',
-    'layout.property.default': '기본',    
+    'layout.property.default': '기본 좌표',    
 
     'flex.layout.editor.row': '행',
     'flex.layout.editor.column': '열',
@@ -346,8 +346,17 @@ export default {
     'grid.layout.editor.template.rows': '행',
     'grid.layout.editor.row.gap': '행 간격',
 
+
     'grid.box.editor.box.title': '영역',
     'grid.box.editor.repeat': '타입',
     'grid.box.editor.count': '반복',
     'grid.box.editor.value': '크기',
+
+    'grid.layout.item.property.title': '레이아웃 아이템',
+    'grid.layout.item.property.column': '열',
+    'grid.layout.item.property.row': '행',
+    'grid.layout.item.property.start': '시작',
+    'grid.layout.item.property.End': '끝',  
+    'grid.layout.item.property.none': '없음',
+    'grid.layout.item.property.value': '값',              
 }

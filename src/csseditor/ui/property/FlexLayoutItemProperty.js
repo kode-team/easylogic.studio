@@ -122,7 +122,7 @@ export default class FlexLayoutItemProperty extends BaseProperty {
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
     this.refreshShow(() => {
       var current = editor.selection.current; 
-      return  current && current.isLayoutItem()
+      return  current && current.isInFlex()
     });
   }
 }

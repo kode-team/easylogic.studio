@@ -41,6 +41,7 @@ export default class Inspector extends UIElement {
                 <SizeProperty /> 
                 <LayoutProperty />
                 <FlexLayoutItemProperty />
+                <GridLayoutItemProperty />
                 <BoxModelProperty />
 
                 <!-- Appearance --> 

@@ -336,6 +336,9 @@ export default {
     'flex.layout.item.property.grow': 'Flex Grow',
     'flex.layout.item.property.shrink': 'Flex Shrink',
     'flex.layout.item.property.basis': 'Flex Basis',
+    'flex.layout.item.property.none': 'none',
+    'flex.layout.item.property.auto': 'auto',
+    'flex.layout.item.property.value': 'value',    
 
     'grid.layout.editor.template.columns': 'Columns',
     'grid.layout.editor.column.gap': 'Column Gap',
@@ -346,5 +349,14 @@ export default {
     'grid.box.editor.repeat': 'Type',
     'grid.box.editor.count': 'Count',
     'grid.box.editor.value': 'Size',
+
+
+    'grid.layout.item.property.title': 'Layout Item Detail',
+    'grid.layout.item.property.column': 'Column',
+    'grid.layout.item.property.row': 'Row',
+    'grid.layout.item.property.start': 'Start',
+    'grid.layout.item.property.end': 'End',
+    'grid.layout.item.property.none': 'none',
+    'grid.layout.item.property.value': 'value',        
 
 }

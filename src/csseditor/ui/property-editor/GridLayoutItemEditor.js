@@ -4,20 +4,9 @@ import { CSS_TO_STRING, STRING_TO_CSS } from "../../../util/functions/func";
 import SelectIconEditor from "./SelectIconEditor";
 import { editor } from "../../../editor/editor";
 
-const i18n = editor.initI18n('flex.layout.item.editor')
+const i18n = editor.initI18n('grid.layout.item.editor')
 
-const makeOptionsFunction = (options) => {
-    return () => {
-        return options.split(',').map(it => {
-            return `${it}:${i18n(it)}`
-        }).join(',');
-    }
-}
-
-const getValueOptions = makeOptionsFunction('none,auto,value')
-
-
-export default class FlexLayoutItemEditor extends UIElement {
+export default class GridLayoutItemEditor extends UIElement {
 
     components() {
         return {
@@ -45,25 +34,25 @@ export default class FlexLayoutItemEditor extends UIElement {
 
     [LOAD('$body')] () {
         return /*html*/`
-            <div class='flex-layout-item'>
+            <div class='grid-layout-item'>
                 <div class='label'><label>${i18n('direction')}</label></div>
                 <SelectIconEditor 
-                    key='flex-direction'
-                    value="${this.state['flex-direction'] || 'row'}"
+                    key='grid-direction'
+                    value="${this.state['grid-direction'] || 'row'}"
                     options="${getDirectionOptions()}"
                     onchange='changeKeyValue'
                 />
             </div>
-            <div class='flex-layout-item'>
+            <div class='grid-layout-item'>
                 <div class='label'><label>${i18n('wrap')}</label></div>
                 <SelectIconEditor 
-                    key='flex-wrap'
-                    value="${this.state['flex-wrap'] || 'wrap'}"
+                    key='grid-wrap'
+                    value="${this.state['grid-wrap'] || 'wrap'}"
                     options="${getWrapOptions()}"
                     onchange='changeKeyValue'
                 />
             </div>
-            <div class='flex-layout-item'>
+            <div class='grid-layout-item'>
                 <div class='label'><label>${i18n('justify-content')}</label></div>
                 <SelectIconEditor 
                     key='justify-content'
@@ -72,7 +61,7 @@ export default class FlexLayoutItemEditor extends UIElement {
                     onchange='changeKeyValue'
                 />
             </div>
-            <div class='flex-layout-item'>
+            <div class='grid-layout-item'>
                 <div class='label'><label>${i18n('align-items')}</label></div>
                 <SelectIconEditor 
                     key='align-items'
@@ -81,7 +70,7 @@ export default class FlexLayoutItemEditor extends UIElement {
                     onchange='changeKeyValue'
                 />
             </div>
-            <div class='flex-layout-item'>
+            <div class='grid-layout-item'>
                 <div class='label'><label>${i18n('align-content')}</label></div>
                 <SelectIconEditor 
                     key='align-content'
@@ -95,7 +84,7 @@ export default class FlexLayoutItemEditor extends UIElement {
 
     template () {
         return /*html*/`
-            <div class='flex-layout-editor' ref='$body' ></div>
+            <div class='grid-layout-editor' ref='$body' ></div>
         `
     }
 

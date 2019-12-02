@@ -48,9 +48,13 @@ import FlexLayoutEditor from "./FlexLayoutEditor";
 import GridLayoutEditor from "./GridLayoutEditor";
 import FlexLayoutItemEditor from "./FlexLayoutItemEditor";
 import GridBoxEditor from "./GridBoxEditor";
+import GridLayoutItemEditor from "./GridLayoutItemEditor";
+import NumberInputEditor from "./NumberInputEditor";
 
 
 export default {
+    NumberInputEditor,
+    GridLayoutItemEditor,
     GridBoxEditor,
     FlexLayoutItemEditor,
     GridLayoutEditor,

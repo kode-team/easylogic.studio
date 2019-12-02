@@ -157,15 +157,7 @@ export const html = (strings, ...args) => {
             results = [results]
         }
 
-        results = results.map(r => {
-            if (isObject(r) && !isArray(r)) {
-                return Object.keys(r).map(key => {
-                    return `${key}="${r[key]}"`
-                }).join(' ')
-            }
-
-            return r
-        }).join('')
+        results = results.join('')
 
         return it + results;
     }).join('');

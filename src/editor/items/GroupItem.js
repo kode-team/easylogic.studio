@@ -12,4 +12,16 @@ export class GroupItem extends MovableItem {
         return layout_list.includes(this.json.layout)
     }
 
+    isInGrid () {
+        if  (!this.isLayoutItem()) return false; 
+                
+        return 'grid' === this.parent.layout; 
+    }
+
+    isInFlex () {
+        if  (!this.isLayoutItem()) return false; 
+
+        return 'flex' === this.parent.layout 
+    }
+
 }

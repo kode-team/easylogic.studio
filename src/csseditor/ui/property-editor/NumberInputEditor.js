@@ -53,7 +53,7 @@ export default class NumberInputEditor extends UIElement {
     }
 
     getValue() {
-        return this.state.value; 
+        return this.state.value || 0; 
     }
 
     setValue (value) {
