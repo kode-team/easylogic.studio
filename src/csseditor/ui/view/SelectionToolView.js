@@ -146,7 +146,13 @@ const SelectionToolEvent = class  extends UIElement {
         var drawList = this.guideView.calculate();
 
         this.makeSelectionTool();
-        this.emit('refreshGuideLine', this.calculateWorldPositionForGuideLine(drawList));                
+
+        if (editor.selection.length === 0){
+            this.emit('removeGuideLine');                
+        } else {
+            this.emit('refreshGuideLine', this.calculateWorldPositionForGuideLine(drawList));                
+        }
+
     }
 
 

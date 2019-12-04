@@ -226,7 +226,15 @@
     // background-color: $property-show-background-color;
     
     > .property-title {
-      border-bottom: 1px solid $property-border-color;  
+      border-bottom: 1px solid $property-border-color;
+      // background-color: black;  
+      > label {
+        &:after {
+          content:  "＞";
+          display: inline-block;
+          vertical-align: middle;
+        }
+      }
     }
 
     > .property-body {
@@ -290,6 +298,7 @@
       padding-left: 2px;
       padding-right: 5px;
       vertical-align: middle;
+      cursor: pointer;
     }
 
     > .tools {

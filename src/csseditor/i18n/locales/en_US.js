@@ -5,7 +5,7 @@ export default {
         return `${a}-${b}-${c}`
     },
     'app.lang.en_US': 'English',
-    'app.lang.ko_KR': 'Korean',
+    'app.lang.ko_KR': '한글',
     'app.label.lang': 'Language',
 
 
@@ -14,10 +14,6 @@ export default {
     'app.tab.title.libraries': 'Library',
     'app.tab.title.components': 'Components',
 
-
-
-
-
     'menu.item.download.title': 'Download',
     'menu.item.save.title': 'Save',
     'menu.item.export.title': 'Export',
@@ -25,7 +21,6 @@ export default {
     'menu.item.fullscreen.title': 'Screen',
     'menu.item.github.title': 'Github',
     'menu.item.learn.title': 'Learn',       
-
 
     'project.property.title' : 'Project',
     'project.information.property.title': 'Project information',   
@@ -359,4 +354,7 @@ export default {
     'grid.layout.item.property.none': 'none',
     'grid.layout.item.property.value': 'value',        
 
+    'box.model.property.title': 'Box Model',
+    'box.model.property.margin': 'Margin',
+    'box.model.property.padding': 'Padding',
 }

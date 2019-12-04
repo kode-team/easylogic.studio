@@ -5,6 +5,16 @@
             grid-template-columns: 1fr 0.5fr 1fr 40px;
             grid-column-gap: 4px;
             margin-bottom: 4px;
+            text-align: center;
+
+            .repeat {
+                button {
+                    background-color: $grid-box-editor-button-background-color;
+                    border-radius: 3px;
+                    width: 12px;
+                    height: 12px;
+                }
+            }
 
             &[data-repeat-type='auto'],
             &[data-repeat-type='none']

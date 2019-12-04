@@ -2,6 +2,7 @@ import BaseProperty from "./BaseProperty";
 import { editor } from "../../../editor/editor";
 import { DEBOUNCE, LOAD, BIND } from "../../../util/Event";
 import { EVENT } from "../../../util/UIElement";
+import { CSS_TO_STRING } from "../../../util/functions/func";
 
 const i18n = editor.initI18n('flex.layout.item.property');
 
@@ -88,7 +89,9 @@ export default class FlexLayoutItemProperty extends BaseProperty {
     shrink = this.getFlexItemValue(shrink);
     basis = this.getFlexItemValue(basis);
 
-    return [grow, shrink, basis].join(' ')
+    return CSS_TO_STRING({
+      flex: `${grow} ${shrink} ${basis}`
+    })
   }
 
   [EVENT('changeFlexItem')] (key, value) {

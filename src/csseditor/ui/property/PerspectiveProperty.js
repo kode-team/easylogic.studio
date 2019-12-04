@@ -14,6 +14,11 @@ export default class PerspectiveProperty extends BaseProperty {
     return true; 
   }
 
+
+  isFirstShow() {
+    return false; 
+  }  
+
   getKeyframeProperty () {
     return 'perspective'
   }

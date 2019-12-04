@@ -4,32 +4,32 @@ import { editor } from "../../../editor/editor";
 import { Length } from "../../../editor/unit/Length";
 import { EVENT } from "../../../util/UIElement";
 
-
-
 const fields = ["margin", "padding"];
 let styleKeys = [];
 fields.forEach(field => {
   styleKeys.push(...["-top", "-bottom", "-left", "-right"].map(it => field + it));
 });
 
+const i18n = editor.initI18n('box.model.property');
+
 export default class BoxModelProperty extends BaseProperty {
   getTitle() {
-    return "Box Model";
+    return i18n('title');
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
-    this.refreshShow('text');
+    this.refreshShowIsNot(['project']);
   }
 
   getBody() {
-    return `<div class="property-item box-model-item" ref="$boxModelItem"></div>`;
+    return /*html*/`<div class="property-item box-model-item" ref="$boxModelItem"></div>`;
   }
 
   templateInput(key, current) {
 
     var value = current[key] || Length.px(0)
 
-    return `<input type="number" ref="$${key}" value="${value.value}" />`;
+    return /*html*/`<input type="number" ref="$${key}" value="${value.value}" />`;
   }
 
   [LOAD("$boxModelItem")]() {
@@ -37,9 +37,9 @@ export default class BoxModelProperty extends BaseProperty {
 
     if (!current) return '';
 
-    return `
+    return /*html*/`
       <div>
-        <div class="margin">
+        <div class="margin" data-title="${i18n('margin')}">
           <div data-value="top">
             ${this.templateInput("margin-top", current)}
           </div>
@@ -53,7 +53,7 @@ export default class BoxModelProperty extends BaseProperty {
             ${this.templateInput("margin-right", current)}
           </div>
         </div>
-        <div class="padding">
+        <div class="padding" data-title="${i18n('padding')}">
           <div data-value="top">
             ${this.templateInput("padding-top", current)}
           </div>
@@ -66,6 +66,9 @@ export default class BoxModelProperty extends BaseProperty {
           <div data-value="right">
             ${this.templateInput("padding-right", current)}
           </div>
+        </div>
+        <div class='content' title='Content'>
+        
         </div>
       </div>
     `;
@@ -82,12 +85,9 @@ export default class BoxModelProperty extends BaseProperty {
       data[key] = Length.px(this.getRef("$", key).value);
     });
 
-    var current = editor.selection.current;
+    editor.selection.reset(data);
 
-    if (current) {
-      current.reset(data);
-
-      this.emit("refreshElement", current);
-    }
+    this.emit("refreshElement");
+    // this.emit('refreshAllElementBoundSize');    
   }
 }

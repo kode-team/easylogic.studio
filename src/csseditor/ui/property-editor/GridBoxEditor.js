@@ -9,16 +9,6 @@ import { isArray } from "../../../util/functions/func";
 
 const i18n = editor.initI18n('grid.box.editor')
 
-const makeOptionsFunction = (options) => {
-    return () => {
-        return options.split(',').map(it => {
-            return `${it}:${i18n(it)}`
-        }).join(',');
-    }
-}
-
-const getValueOptions = makeOptionsFunction('none,auto,value')
-
 const REG_CSS_UNIT = /(auto)|(repeat\([^\)]*\))|(([\d.]+)(px|pt|fr|r?em|deg|vh|vw|%))/gi;
 
 export default class GridBoxEditor extends UIElement {
@@ -33,6 +23,7 @@ export default class GridBoxEditor extends UIElement {
 
     initState() {
         return {
+            label: this.props.label,
             list: this.parseValue(this.props.value)
         }
     }
@@ -133,10 +124,13 @@ export default class GridBoxEditor extends UIElement {
             <div class='grid-box-editor' ref='$body' >
                 <div class='grid-box-editor-item'>
                     <div class='item'>
-                        <div class='repeat'>${i18n('repeat')}</div>
+                        <div class='repeat'>
+                            <label>${this.state.label} </label>
+                            <button type='button' ref='$add'>${icon.add}</button>
+                        </div>
                         <div class='count'>${i18n('count')}</div>
                         <div class='value'>${i18n('value')}</div>
-                        <div class='toosl'></div>
+                        <div class='tools'></div>
                     </div>
                     <div ref='$list'></div>
                 </div>

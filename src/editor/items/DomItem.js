@@ -368,7 +368,10 @@ export class DomItem extends GroupItem {
     }
 
     if (parentLayout === 'flex') {
-      obj['flex'] = this.json['flex-layout-item']
+      obj = {
+        ...obj, 
+        ...STRING_TO_CSS(this.json['flex-layout-item'])
+      }      
     } else if (parentLayout  === 'grid') {
       obj = {
         ...obj, 

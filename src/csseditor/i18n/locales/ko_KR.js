@@ -4,7 +4,7 @@ export default {
     'app.sample': (a, b, c) => {
         return `${a}-${b}-${c}`
     },
-    'app.lang.en_US': '영문',
+    'app.lang.en_US': 'English',
     'app.lang.ko_KR': '한글',    
     'app.label.lang': '언어',
 
@@ -341,7 +341,7 @@ export default {
     'flex.layout.item.property.auto': '자동',
     'flex.layout.item.property.value': '값',
 
-    'grid.layout.editor.template.columns': '열(Column)',
+    'grid.layout.editor.template.columns': '열',
     'grid.layout.editor.column.gap': '열 간격',
     'grid.layout.editor.template.rows': '행',
     'grid.layout.editor.row.gap': '행 간격',
@@ -358,5 +358,9 @@ export default {
     'grid.layout.item.property.start': '시작',
     'grid.layout.item.property.End': '끝',  
     'grid.layout.item.property.none': '없음',
-    'grid.layout.item.property.value': '값',              
+    'grid.layout.item.property.value': '값',  
+    
+    'box.model.property.title': '박스 모델',
+    'box.model.property.margin': '마진',
+    'box.model.property.padding': '패딩',    
 }

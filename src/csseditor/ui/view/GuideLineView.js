@@ -159,7 +159,9 @@ export default class GuideLineView extends UIElement {
     }
 
     removeGuideLine() {
-        this.$el.cssText('');
+        this.setState({
+            list: []
+        }) 
     }
 
     setGuideLine (list) {

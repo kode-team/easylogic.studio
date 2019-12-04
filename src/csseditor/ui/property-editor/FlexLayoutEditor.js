@@ -73,7 +73,7 @@ export default class FlexLayoutEditor extends UIElement {
                 <div class='label'><label>${i18n('justify-content')}</label></div>
                 <SelectIconEditor 
                     key='justify-content'
-                    value="${this.state['justify-content']}"
+                    value="${this.state['justify-content'] || 'flex-start'}"
                     options="${getJustifyContentOptions()}"
                     onchange='changeKeyValue'
                 />
@@ -82,7 +82,7 @@ export default class FlexLayoutEditor extends UIElement {
                 <div class='label'><label>${i18n('align-items')}</label></div>
                 <SelectIconEditor 
                     key='align-items'
-                    value="${this.state['align-items']}"
+                    value="${this.state['align-items'] || 'flex-start'}"
                     options="${getAlignItemsOptions()}"
                     onchange='changeKeyValue'
                 />
@@ -91,7 +91,7 @@ export default class FlexLayoutEditor extends UIElement {
                 <div class='label'><label>${i18n('align-content')}</label></div>
                 <SelectIconEditor 
                     key='align-content'
-                    value="${this.state['align-content']}"
+                    value="${this.state['align-content'] || 'flex-start'}"
                     options="${getAlignContentOptions()}"
                     onchange='changeKeyValue'
                 />

@@ -15,7 +15,7 @@
       border: 1px dashed rgba(255, 255, 255, 0.3);
 
       &:before {
-        content: "margin";
+        content: attr(data-title);
         position: absolute;
         left: 2px;
         top: 2px;
@@ -72,11 +72,11 @@
       top: 30px;
       right: 40px;
       bottom: 30px;
-      padding: 10px;
+      padding: 20px 30px;
       border: 1px dashed rgba(255, 255, 255, 0.3);
 
       &::before {
-        content: "padding";
+        content: attr(data-title);
         position: absolute;
         left: 2px;
         top: 2px;
@@ -134,7 +134,7 @@
       right: 75px;
       bottom: 54px;
       padding: 10px 0px;
-      border: 1px dashed $border-color;
+      border: 1px dashed rgba(255, 255, 255, 0.3);
 
       &:before {
         content: attr(title);

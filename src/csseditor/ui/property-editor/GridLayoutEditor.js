@@ -43,13 +43,8 @@ export default class GridLayoutEditor extends UIElement {
 
 
             <div class='grid-layout-item'>
-                <div class='label'>
-                    <label>${i18n('template.columns')}</label> 
-                    <span class='tools'>
-                        <button type='button' ref='$addColumn'>${icon.add}</button>
-                    </span>
-                </div>
                 <GridBoxEditor 
+                    label='${i18n('template.columns')}'
                     ref='$columnBox'
                     key='grid-template-columns'
                     value="${this.state['grid-template-columns'] || ''}"
@@ -65,13 +60,8 @@ export default class GridLayoutEditor extends UIElement {
                 />
             </div>            
             <div class='grid-layout-item'>
-                <div class='label'>
-                    <label>${i18n('template.rows')}</label>
-                    <span class='tools'>
-                        <button type='button' ref='$addRow'>${icon.add}</button>
-                    </span>
-                </div>
                 <GridBoxEditor 
+                    label='${i18n('template.rows')}'
                     ref='$rowBox'
                     key='grid-template-rows'
                     value="${this.state['grid-template-rows'] || ''}"
@@ -88,14 +78,6 @@ export default class GridLayoutEditor extends UIElement {
             </div>
         `
     }
-
-    [CLICK('$addColumn')] () {
-        this.children.$columnBox.trigger('add');
-    }
-
-    [CLICK('$addRow')] () {
-        this.children.$rowBox.trigger('add');
-    }    
 
     template () {
         return /*html*/`
