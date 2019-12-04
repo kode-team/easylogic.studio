@@ -229,10 +229,9 @@
       border-bottom: 1px solid $property-border-color;
       // background-color: black;  
       > label {
-        &:after {
-          content:  "＞";
+        .icon {
+          transform: rotate(90deg);
           display: inline-block;
-          vertical-align: middle;
         }
       }
     }
@@ -296,9 +295,14 @@
     label {
       cursor: pointer;
       padding-left: 2px;
-      padding-right: 5px;
       vertical-align: middle;
       cursor: pointer;
+      line-height: 2.4;
+
+      .icon {
+        display: inline-block;
+        transition: all linear 0.1s;
+      }
     }
 
     > .tools {

@@ -44,7 +44,7 @@ export default class FontProperty extends BaseProperty {
           ref='$size' 
           label='${i18n('size')}' 
           key="font-size" 
-          removable="true" 
+          
           onchange="changeRangeEditor" />
       </div>
       <div class='property-item animation-property-item'>
@@ -53,7 +53,7 @@ export default class FontProperty extends BaseProperty {
           ref='$stretch' 
           label='${i18n('stretch')}' 
           key="font-stretch" 
-          removable="true" 
+          
           units='%',
           onchange="changeRangeEditor" />
       </div>      
@@ -64,7 +64,7 @@ export default class FontProperty extends BaseProperty {
           ref='$weightRange' 
           label='${i18n('weight')}' 
           key='font-weight' 
-          removable="true"
+         
           value="400" 
           min="100"
           max="900"
@@ -79,8 +79,8 @@ export default class FontProperty extends BaseProperty {
           ref='$style' 
           label='${i18n('style')}' 
           key="font-style" 
-          options="normal,italic" 
-          icons='I,I'
+          options="normal:I,italic" 
+          icons='I,italic'
           onchange="changeRangeEditor" />
       </div>      
 

@@ -5,6 +5,7 @@ import propertyEditor from "../property-editor";
 import { editor } from "../../../editor/editor";
 import Dom from "../../../util/Dom";
 import { isFunction } from "../../../util/functions/func";
+import icon from "../icon/icon";
 
 
 export default class BaseProperty extends UIElement {
@@ -21,7 +22,11 @@ export default class BaseProperty extends UIElement {
             ${this.isHideHeader() ? ''
             : /*html*/`
             <div class='property-title' ref="$title">
-                <label> ${this.hasKeyframe() ? `<span class='add-timeline-property' data-property='${this.getKeyframeProperty()}'></span>` : ''} <span ref='$propertyTitle'>${this.getTitle()}</span></label>
+                <label> 
+                  ${this.hasKeyframe() ? `<span class='add-timeline-property' data-property='${this.getKeyframeProperty()}'></span>` : ''} 
+                  <span ref='$propertyTitle'>${this.getTitle()}</span>
+                  <span class='icon'>${icon.chevron_right}</span>
+                </label>
                 <span class="tools">${this.getTools()}</span>
             </div>`
             }

@@ -219,7 +219,7 @@ export class CubeLayer extends Component {
     return {
       ...obj,
       ...this.toKeyListCSS(
-        'position', 'right','bottom', 'width','height', 'opacity',
+        'position', 'right','bottom', 'width','height', 
         'transform-origin', 'transform', 'transform-style', 'perspective', 'perspective-origin',
         // 'filter',
       )
@@ -252,7 +252,7 @@ export class CubeLayer extends Component {
     var backfaceVisibility = json['backface-visibility']
     var css = {
       ...this.toKeyListCSS(
-        'filter', 'mix-blend-mode', 'border-radius', 'background-color',
+        'filter', 'mix-blend-mode', 'border-radius', 'background-color', 'opacity'
       ),      
       ...this.toClipPathCSS(),
       ...this.toBackgroundImageCSS(),

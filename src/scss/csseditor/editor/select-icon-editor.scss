@@ -67,9 +67,12 @@
                 // border-color: $selected-border-color;
 
                 color: white;
-
-               
             }
+
+            &.icon {
+                padding: 3px 2px;
+            }
+
             &[data-value=''] {
                 max-width: 20px;
             }

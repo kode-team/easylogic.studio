@@ -71,6 +71,8 @@ export default class SelectIconEditor extends UIElement {
 
             var value = it; 
             var label = it; 
+            var title = it; 
+            var iconClass = ''
 
             if (value.includes(this.state.keyValueChar)) {
                 var [value, label] = value.split(this.state.keyValueChar)
@@ -78,13 +80,20 @@ export default class SelectIconEditor extends UIElement {
             var selected = value === this.state.value ? 'selected' : '' 
             if (it === '') {
                 var label = icon.close
+                title = 'close'
             } else {
                 var iconKey = this.state.icons[index];
 
-                label = label || icon[iconKey] || iconKey || it; 
+                if (icon[iconKey]) {
+                    iconClass = 'icon' 
+                }
+
+                title = label 
+                label = icon[iconKey] || label || iconKey || it; 
+
             }
             
-            return /*html*/`<div class='select-icon-item ${selected}' data-value="${value}" title='${label}'>${label}</div>`
+            return /*html*/`<div class='select-icon-item ${selected} ${iconClass}' data-value="${value}" title='${title}'>${label}</div>`
         })
     }
 

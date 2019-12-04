@@ -43,8 +43,7 @@ export default class TextProperty extends BaseProperty {
           ref='$transform' 
           label='${i18n('transform')}' 
           key='text-transform' 
-          options="uppercase,lowercase,capitalize"
-          icons='A,a,Aa'
+          options="uppercase:A,lowercase:a,capitalize:Aa"
           onchange='changeTextValue' />                
       </div>        
       <div class="property-item">
@@ -52,8 +51,8 @@ export default class TextProperty extends BaseProperty {
           ref='$decoration' 
           label='${i18n('decoration')}' 
           key='text-decoration' 
-          options="none,underline,overline,line-through" 
-          icons="A,U,O,S"
+          options="none,underline,overline:O,line-through" 
+          icons="A,underline,O,strikethrough"
           onchange='changeTextValue' />        
       </div>                    
     `

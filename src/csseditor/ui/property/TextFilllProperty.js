@@ -30,11 +30,11 @@ export default class TextFillProperty extends BaseProperty {
     return /*html*/`
       <div class='property-item animation-property-item'>
         <span class='add-timeline-property' data-property='text-fill-color'></span>
-        <ColorViewEditor ref='$fillColor' label='${i18n('fill')}' removable="true" key='text-fill-color' onchange="changeColor" />
+        <ColorViewEditor ref='$fillColor' label='${i18n('fill')}' key='text-fill-color' onchange="changeColor" />
       </div>           
       <div class='property-item animation-property-item'>
         <span class='add-timeline-property' data-property='text-stroke-color'></span>
-        <ColorViewEditor ref='$strokeColor' label='${i18n('stroke')}' removable="true" key='text-stroke-color' onchange="changeColor" />
+        <ColorViewEditor ref='$strokeColor' label='${i18n('stroke')}' key='text-stroke-color' onchange="changeColor" />
       </div>                 
 
       <div class='property-item animation-property-item'>
@@ -43,7 +43,7 @@ export default class TextFillProperty extends BaseProperty {
           ref='$width' 
           label='${i18n('strokeWidth')}' 
           key="text-stroke-width" 
-          removable="true" 
+          
           max="50"
           onchange="changeRangeEditor" />
       </div>

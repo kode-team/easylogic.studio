@@ -12,7 +12,7 @@ export default class ToolMenu extends UIElement {
       <div class='tool-menu '>
         <div class='items'>
           <div class='draw-items' ref='$items'>
-            <!--<label>CSS</label>-->
+            <label class='sub-title'>CSS</label>
             <SelectTool />
             <AddRect />
             <AddCircle />         
@@ -22,7 +22,7 @@ export default class ToolMenu extends UIElement {
             <AddCylinder />
             <!-- AddSphere / -->
             <div class='split'></div>
-            <!--<label>SVG</label>-->
+            <label class='sub-title'>SVG</label>
             <AddPath />
             <AddSVGRect />
             <AddSVGCircle />            

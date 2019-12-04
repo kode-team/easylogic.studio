@@ -35,21 +35,20 @@ export default class FontSpacingProperty extends BaseProperty {
       <RangeEditor 
         ref='$lineHeight' 
         label='${i18n('lineHeight')}' 
-        removable="true" 
         key="line-height" 
         units=",px,%,em"
         onchange="changeRangeEditor" />
     </div>       
       <div class="property-item font-item">
-        <RangeEditor ref='$letter' label='${i18n('letterSpacing')}' removable='true' key="letter-spacing" onchange="changeRangeEditor" />
+        <RangeEditor ref='$letter' label='${i18n('letterSpacing')}' key="letter-spacing" onchange="changeRangeEditor" />
       </div>
 
       <div class="property-item font-item">
-        <RangeEditor ref='$word' label='${i18n('wordSpacing')}' removable='true' key="word-spacing" onchange="changeRangeEditor" />
+        <RangeEditor ref='$word' label='${i18n('wordSpacing')}' key="word-spacing" onchange="changeRangeEditor" />
       </div>
 
       <div class="property-item font-item">
-        <RangeEditor ref='$indent' label='${i18n('indent')}' removable='true' key="text-indent" onchange="changeRangeEditor" />
+        <RangeEditor ref='$indent' label='${i18n('indent')}' key="text-indent" onchange="changeRangeEditor" />
       </div>      
     `;
   }

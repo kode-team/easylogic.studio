@@ -108,6 +108,9 @@ import flip_camera from "./flip_camera";
 import device_hub from "./device_hub";
 import text_rotate from "./text_rotate";
 import cylinder from "./cylinder";
+import underline from "./underline";
+import strikethrough from "./strikethrough";
+import italic from "./italic";
 
 
 const alias = {
@@ -116,6 +119,9 @@ const alias = {
 
 export default {
   ...alias,
+  italic,
+  strikethrough,
+  underline,
   cylinder,
   text_rotate,
   device_hub,

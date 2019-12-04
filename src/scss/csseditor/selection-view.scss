@@ -76,16 +76,6 @@
       display: none !important;
     }    
 
-    // &[data-selection-length="1"] {
-    //   &:not(.artboard) {
-    //     .selection-tool-item[data-position="move"] {
-    //       pointer-events: none;
-    //     }
-    //   }
-
-    // }  
-
-
     &.remove-move-area {
       .selection-tool-item[data-position="move"] {
         width: 10px;
@@ -139,6 +129,10 @@
         opacity: 0;
       }
     }    
+
+    &[data-selected-position="rotate3d"] {
+      border-color: transparent;
+    }
   
     &[data-selected-position="move"] [data-position="move"] { &:before { opacity: 1; } }
     &[data-selected-position="rotate3d"] [data-position="rotate3d"] { &:before { opacity: 1; } }
