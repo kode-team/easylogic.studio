@@ -23,7 +23,11 @@ export default class BaseProperty extends UIElement {
             : /*html*/`
             <div class='property-title' ref="$title">
                 <label> 
-                  ${this.hasKeyframe() ? `<span class='add-timeline-property' data-property='${this.getKeyframeProperty()}'></span>` : ''} 
+                  ${
+                    this.hasKeyframe() ? 
+                    /*html*/`<span class='add-timeline-property' data-property='${this.getKeyframeProperty()}'></span>` 
+                    : ''
+                  } 
                   <span ref='$propertyTitle'>${this.getTitle()}</span>
                   <span class='icon'>${icon.chevron_right}</span>
                 </label>

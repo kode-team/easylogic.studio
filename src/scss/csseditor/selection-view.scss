@@ -145,6 +145,20 @@
     &[data-selected-position="to bottom left"] [data-position="to bottom left"] { &:before { opacity: 1; } }
     &[data-selected-position="to bottom right"] [data-position="to bottom right"] { &:before { opacity: 1; } }  
   
+    &[data-is-layout-item="true"][data-selection-length="1"] {
+      [data-position='move'],
+      [data-position='to top'],
+      [data-position='to top left'],
+      [data-position='to top right'],
+      [data-position='to bottom'],
+      [data-position='to bottom left'],
+      [data-position='to bottom right'],
+      [data-position='to left'],
+      [data-position='to right'] {
+        display: none;
+      }
+    }
+
     .selection-tool-item { 
       position: absolute;
       transform: translate(-50%, -50%);

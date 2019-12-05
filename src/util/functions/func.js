@@ -180,10 +180,10 @@ export function CSS_TO_STRING(style, postfix = '') {
       .filter(key => newStyle[key])
       .map(key => `${key}: ${newStyle[key]}`)
       .join(";" + postfix);
-  }
+}
   
 
-export function STRING_TO_CSS (str = '') {
+export function STRING_TO_CSS (str = '', splitChar = ';', keySplitChar = ':') {
 
     str = str + "";
 
@@ -191,10 +191,10 @@ export function STRING_TO_CSS (str = '') {
 
     if (str === '') return style;
 
-    str.split(';').forEach(it => {
-       var [key, ...value] = it.split(':').map(it => it.trim())
+    str.split(splitChar).forEach(it => {
+       var [key, ...value] = it.split(keySplitChar).map(it => it.trim())
        if (key != '') {
-        style[key] = value.join(':'); 
+        style[key] = value.join(keySplitChar); 
        }
     })
 

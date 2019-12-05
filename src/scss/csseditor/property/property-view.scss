@@ -222,12 +222,9 @@
     }
   }
 
-  &.show {
-    // background-color: $property-show-background-color;
-    
+  &.show {    
     > .property-title {
-      border-bottom: 1px solid $property-border-color;
-      // background-color: black;  
+      box-shadow: 0 1px 5px 0px black;
       > label {
         .icon {
           transform: rotate(90deg);
