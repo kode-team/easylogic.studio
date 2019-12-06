@@ -552,9 +552,9 @@ export default class ElementView extends UIElement {
                     const {x, y, width, height} = $el.offsetRect();
     
                     it.reset({
-                        x: Length.px(x), 
-                        y: Length.px(y), 
-                        width: Length.px(width), 
+                        x: Length.px(x),
+                        y: Length.px(y),
+                        width: Length.px(width),
                         height: Length.px(height)
                     })
 
@@ -564,15 +564,12 @@ export default class ElementView extends UIElement {
 
                     // svg 객체  path, polygon 은  크기가 바뀌면 내부 path도 같이 scale up/down  이 되어야 하는데 
                     // 이건 어떻게 적용하나 ....                     
-                    this.trigger('refreshSelectionStyleView', it, true);                    
-                    
-
+                    this.trigger('refreshSelectionStyleView', it, true);
                 }
 
                 this.trigger('refreshElementBoundSize', it);
             })
 
         }
-    }
-    
-} 
+    }   
+}

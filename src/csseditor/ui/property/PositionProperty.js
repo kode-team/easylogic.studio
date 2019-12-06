@@ -55,7 +55,6 @@ export default class PositionProperty extends BaseProperty {
       [key]: value
     })
 
-    this.emit('refreshSelectionStyleView');
-    // this.emit('change.property', key)        
+    this.emit('refreshSelectionStyleView'); 
   }
 }

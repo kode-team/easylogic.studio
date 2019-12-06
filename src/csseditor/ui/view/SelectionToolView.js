@@ -826,6 +826,11 @@ export default class SelectionToolView extends SelectionToolBind {
                     if (item.is('component')) {
                         this.emit('refreshStyleView', item);  
                     }
+
+                    if (item.hasLayout()) {
+                        this.trigger('refreshElementBoundSize', item);
+                    }
+
                 });
             }
 

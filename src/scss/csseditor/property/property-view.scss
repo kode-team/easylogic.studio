@@ -75,6 +75,8 @@
             }
 
             label {
+              vertical-align: middle;
+              padding-right: 10px;
               svg {
                 width: 16px;
                 height: 16px;
@@ -91,6 +93,7 @@
 
               input {
                 vertical-align: middle;
+                height: 20px;
               }
             }
 
@@ -153,6 +156,7 @@
 
             .direction-buttons {
               display: flex;
+              padding-top: 2px;
 
               @each $selectDirection in normal, alternate, reverse, alternate-reverse {
                   &[data-selected-direction="#{$selectDirection}"] [data-value="#{$selectDirection}"] {

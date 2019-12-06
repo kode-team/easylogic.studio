@@ -241,7 +241,7 @@ export default {
 
     'timeline.value.editor.value': '값',
     'timeline.value.editor.time': '시간',
-    'timeline.value.editor.timing': '시간곡선',    
+    'timeline.value.editor.timing': '타이밍 함수',    
 
     'svgfilter.popup.title': 'SVG 필터',    
 
@@ -333,7 +333,7 @@ export default {
     'flex.layout.editor.align-items': '아이템 정렬',
     'flex.layout.editor.align-content': '컨텐츠 정렬',
 
-    'flex.layout.item.property.title': '레이아웃 아이템',
+    'flex.layout.item.property.title': '플렉스 아이템 설정',
     'flex.layout.item.property.grow': '공간 비율',
     'flex.layout.item.property.shrink': '축소 비율',
     'flex.layout.item.property.basis': '초기 크기',
@@ -352,7 +352,7 @@ export default {
     'grid.box.editor.count': '반복',
     'grid.box.editor.value': '크기',
 
-    'grid.layout.item.property.title': '레이아웃 아이템',
+    'grid.layout.item.property.title': '그리드 아이템 설정',
     'grid.layout.item.property.column': '열',
     'grid.layout.item.property.row': '행',
     'grid.layout.item.property.start': '시작',

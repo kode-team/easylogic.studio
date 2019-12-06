@@ -4,7 +4,7 @@ import { CSS_TO_STRING, STRING_TO_CSS } from "../../../util/functions/func";
 import SelectIconEditor from "./SelectIconEditor";
 import { editor } from "../../../editor/editor";
 import GridBoxEditor from "./GridBoxEditor";
-import icon from "../icon/icon";
+import GridGapEditor from "./GridGapEditor";
 
 const i18n = editor.initI18n('grid.layout.editor')
 
@@ -14,7 +14,7 @@ export default class GridLayoutEditor extends UIElement {
         return {
             SelectIconEditor,
             GridBoxEditor,
-
+            GridGapEditor,
         }
     }
 
@@ -52,8 +52,8 @@ export default class GridLayoutEditor extends UIElement {
                 />
             </div>
             <div class='grid-layout-item'>
-                <div class='label'><label>${i18n('column.gap')}</label></div>
                 <GridGapEditor 
+                    label='${i18n('column.gap')}'
                     key='grid-column-gap'
                     value="${this.state['grid-column-gap'] || ''}"
                     onchange='changeKeyValue'
@@ -69,8 +69,8 @@ export default class GridLayoutEditor extends UIElement {
                 />
             </div>            
             <div class='grid-layout-item'>
-                <div class='label'><label>${i18n('row.gap')}</label></div>
                 <GridGapEditor 
+                    label='${i18n('row.gap')}'                
                     key='grid-row-gap'
                     value="${this.state['grid-row-gap'] || ''}"
                     onchange='changeKeyValue'
