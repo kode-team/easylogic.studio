@@ -1,7 +1,7 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
 
 import { editor } from "../../../editor/editor";
-import { CLICK, PREVENT, STOP } from "../../../util/Event";
+import { CLICK, PREVENT, STOP, DEBOUNCE } from "../../../util/Event";
 
 import icon from "../icon/icon";
 import NumberRangeEditor from "../property-editor/NumberRangeEditor";
@@ -37,17 +37,17 @@ export default class PageTools extends UIElement {
     this.emit('update.scale', scale/100);
   }
 
-  [EVENT('changeRangeEditor')] (key, scale) {
-    this.trigger('changeScaleValue', scale/100);
+  [EVENT('changeRangeEditor') + DEBOUNCE(1000)] (key, scale) {
+    this.trigger('changeScaleValue', Math.floor(scale/100));
   }
 
   [CLICK('$plus') + PREVENT + STOP] () {
 
-    this.trigger('changeScaleValue', editor.scale * 1.1);
+    this.trigger('changeScaleValue', editor.scale + 0.1);
   }
 
   [CLICK('$minus') + PREVENT + STOP] () {
-    this.trigger('changeScaleValue', editor.scale * 0.9);    
+    this.trigger('changeScaleValue', editor.scale - 0.1);    
   }
 
 }

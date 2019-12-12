@@ -3,8 +3,8 @@ import { BIND } from '../../../util/Event';
 
 export default class ColorView extends UIElement {
 
-    templateClass() {
-        return 'color'
+    template() {
+        return /*html*/`<div class='color'></div>`
     }
 
     [BIND('$el')] () {

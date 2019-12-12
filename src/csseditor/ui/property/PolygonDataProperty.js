@@ -55,9 +55,8 @@ export default class PolygonDataProperty extends BaseProperty {
 
 
   [EVENT('changeValue')] (key, value, params) {
-    editor.selection.reset({ 
-      [key]: value
+    this.emit("updatePolygonItem", {
+      [key]: value 
     })
-    this.emit("refreshSelectionStyleView");
   }
 }

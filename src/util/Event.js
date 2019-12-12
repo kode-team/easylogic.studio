@@ -6,45 +6,18 @@ export const makeEventChecker = (value, split = CHECK_SAPARATOR) => {
 }
 
 // event name regular expression
+export const CHECK_DOM_EVENT_PATTERN = /^dom (.*)/gi;
 export const CHECK_LOAD_PATTERN = /^load (.*)/gi;
 export const CHECK_BIND_PATTERN = /^bind (.*)/gi;
 
-const CHECK_CLICK_PATTERN = "click|dblclick";
-const CHECK_MOUSE_PATTERN = "mouse(down|up|move|over|out|enter|leave)";
-const CHECK_POINTER_PATTERN = "pointer(start|move|end)";
-const CHECK_TOUCH_PATTERN = "touch(start|move|end)";
-const CHECK_KEY_PATTERN = "key(down|up|press)";
-const CHECK_DRAGDROP_PATTERN = "drag|drop|drag(start|over|enter|leave|exit|end)";
-const CHECK_CONTEXT_PATTERN = "contextmenu";
-const CHECK_INPUT_PATTERN = "change|input|focus|blur|focus(in|out)";
-const CHECK_CLIPBOARD_PATTERN = "paste";
-const CHECK_BEHAVIOR_PATTERN = "resize|scroll|wheel|mousewheel|DOMMouseScroll";
-const CHECK_FORM_PATTERN = "submit";
-const CHECK_ANIMATION_PATTERN = 'animation(start|end|iteration)'
-const CHECK_TRANSITION_PATTERN = 'transition(start|end|cancel|run)'
 
-const CHECK_PATTERN_LIST = [
-  CHECK_CLICK_PATTERN,
-  CHECK_MOUSE_PATTERN,
-  CHECK_POINTER_PATTERN,
-  CHECK_TOUCH_PATTERN,
-  CHECK_KEY_PATTERN,
-  CHECK_DRAGDROP_PATTERN,
-  CHECK_CONTEXT_PATTERN,
-  CHECK_INPUT_PATTERN,
-  CHECK_CLIPBOARD_PATTERN,
-  CHECK_BEHAVIOR_PATTERN,
-  CHECK_FORM_PATTERN,
-  CHECK_ANIMATION_PATTERN,
-  CHECK_TRANSITION_PATTERN
-].join("|");
-
-export const CHECK_PATTERN = new RegExp(`^(${CHECK_PATTERN_LIST})`, "ig");
 
 export const NAME_SAPARATOR = ":";
 export const CHECK_SAPARATOR = "|";
+export const DOM_EVENT_SAPARATOR = "dom ";
 export const LOAD_SAPARATOR = "load ";
 export const BIND_SAPARATOR = "bind ";
+
 export const SAPARATOR = ' ';
 
 const refManager = {};
@@ -52,7 +25,7 @@ const refManager = {};
 const DOM_EVENT_MAKE = (...keys) => {
   var key = keys.join(NAME_SAPARATOR);
   return (...args) => {
-    return [key, ...args].join(SAPARATOR);
+    return DOM_EVENT_SAPARATOR + [key, ...args].join(SAPARATOR);
   };
 };
 

@@ -110,7 +110,7 @@ export class SVGPathItem extends SVGItem {
   }  
 
 
-  updateFunction (currentElement, isChangeFragment = true) {
+  updateFunction (currentElement, isChangeFragment = true, isLast = false) {
 
     var $path = currentElement.$('path');
     $path.attr('d', this.json.d);
@@ -125,7 +125,10 @@ export class SVGPathItem extends SVGItem {
 
     }
 
-    this.json.totalLength = $path.totalLength
+    if (isLast) {
+      this.json.totalLength = $path.totalLength
+    }
+
   }    
 
   get html () {

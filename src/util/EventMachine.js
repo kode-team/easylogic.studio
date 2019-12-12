@@ -1,5 +1,4 @@
 import Event, {
-  CHECK_PATTERN,
   NAME_SAPARATOR,
   CHECK_SAPARATOR,
   SAPARATOR,
@@ -10,7 +9,9 @@ import Event, {
   BIND_CHECK_DEFAULT_FUNCTION,
   BIND_CHECK_FUNCTION,
   LOAD,
-  VDOM
+  VDOM,
+  CHECK_DOM_EVENT_PATTERN,
+  DOM_EVENT_SAPARATOR
 } from "./Event";
 import Dom from "./Dom";
 import {
@@ -269,7 +270,9 @@ const getEventNames = eventName => {
 
 const parseEvent = (context, key) => {
   let checkMethodFilters = key.split(CHECK_SAPARATOR).map(it => it.trim());
-  var eventSelectorAndBehave = checkMethodFilters.shift();
+
+  var prefix = checkMethodFilters.shift()
+  var eventSelectorAndBehave = prefix.split(DOM_EVENT_SAPARATOR)[1];
 
   var [eventName, ...params] = eventSelectorAndBehave.split(SAPARATOR);
   var eventNames = getEventNames(eventName);
@@ -363,7 +366,6 @@ const expectMethod = {
   "load": true,
   "bindData": true,
   "template": true,
-  "templateClass": true,
   "eachChildren": true,
   "initializeEvent": true,
   "destroy": true,
@@ -422,7 +424,6 @@ export default class EventMachine {
   }
 
   _reload(props) {
-    // console.log(this, this.parent, this.parent.parent, props);
     this.props = props;
     this.setState(this.initState(), false);
     this.refresh(true);
@@ -441,7 +442,6 @@ export default class EventMachine {
     }
 
     this.load();
-    // this.parseComponent(false);
 
     this.afterRender();
   }
@@ -454,12 +454,6 @@ export default class EventMachine {
     return {};
   }
 
-  // ref 에 있는 객체를 좀 더 편하게 가지고 오고자 만들었다.
-  // 예를 들어 ref='$xxxRadius' 라고 했을 때
-  // this.refs[`$${type}Radius`] 처럼 이름을 재 구성하는 방식을 써야 하는데
-  // this.getRef('$', type, 'Radius') 형태로 끝낼 수 있다.
-  // 변수적용하기 좀 더 편해진다.
-  // 사용은 각자가 알아서 ㅋ
   getRef(...args) {
     const key = args.join('')
     return this.refs[key];
@@ -475,7 +469,6 @@ export default class EventMachine {
     const list = TEMP_DIV.html(html).children();
 
     list.forEach($el => {
-      // ref element 정리
       var ref = $el.attr(REFERENCE_PROPERTY)
       if (ref) {
         this.refs[ref] = $el;
@@ -530,13 +523,11 @@ export default class EventMachine {
       props[t.nodeName] = t.nodeValue;
     }
 
-    // property 태그는 속성으로 대체 
     $dom.$$('property').forEach($p => {
       const [name, value, type] = $p.attrs('name', 'value', 'type')
 
       let realValue = value || $p.text();
 
-      // JSON 타입이면 JSON.parse 로 객체를 복원해서 넘겨준다. 
       if (type === 'json') {            
         realValue = JSON.parse(realValue);
       }
@@ -653,7 +644,6 @@ export default class EventMachine {
           newTemplate = newTemplate.join('');
         }
 
-
         const fragment = this.parseTemplate(html`${newTemplate}`, true);
 
         if (isVdom) {
@@ -722,14 +712,7 @@ export default class EventMachine {
 
   // 기본 템플릿 지정
   template() {
-    var className = this.templateClass();
-    var classString = className ? `class="${className}"` : '';
-
-    return `<div ${classString}></div>`;
-  }
-
-  templateClass() {
-    return null;
+    return `<div></div>`;
   }
 
   eachChildren(callback) {
@@ -777,7 +760,7 @@ export default class EventMachine {
     this.destroyDomEvent();
 
     if (!this._domEvents) {
-      this._domEvents = this.filterProps(CHECK_PATTERN)
+      this._domEvents = this.filterProps(CHECK_DOM_EVENT_PATTERN)
     }
     this._domEvents.forEach(key => parseEvent(this, key));
   }

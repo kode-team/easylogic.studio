@@ -13,7 +13,7 @@ export default class TransformOriginProperty extends BaseProperty {
   }
 
   getTools() {
-    return `
+    return /*html*/`
         <button type="button" class="remove" ref='$remove'>${icon.remove}</button>
     `
   }
@@ -35,7 +35,7 @@ export default class TransformOriginProperty extends BaseProperty {
   }
 
   getBody() {
-    return `
+    return /*html*/`
       <div class="property-item full transform-origin-item" ref='$body'></div>
     `;
   }
@@ -48,7 +48,7 @@ export default class TransformOriginProperty extends BaseProperty {
   }
 
 
-  [EVENT('refreshSelection', 'refreshSelectionStyleView') + DEBOUNCE(100)]() {
+  [EVENT('refreshSelection', 'refreshRect') + DEBOUNCE(100)]() {
     this.refreshShowIsNot(['project', 'artboard']);
   }
 

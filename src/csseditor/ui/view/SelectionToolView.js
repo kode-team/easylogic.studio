@@ -107,7 +107,7 @@ const SelectionToolEvent = class  extends UIElement {
 
                 editor.selection.setRectCache();        
                     
-                this.emit('refreshSelectionStyleView')
+                this.emit('refreshSelectionStyleView', current, true, true);
 
             }
         }
@@ -119,15 +119,14 @@ const SelectionToolEvent = class  extends UIElement {
 
         var current = editor.selection.current;
         if (current) {
-            if (current.is('svg-polygon')) {
+            if (current.updatePolygonItem) {
                 current.updatePolygonItem(polygonObject);
 
                 this.parent.selectCurrent(...editor.selection.items)
 
                 editor.selection.setRectCache();        
     
-                this.emit('refreshSelectionStyleView')
-                this.emit('refreshCanvasForPartial', current);
+                this.emit('refreshSelectionStyleView', current, true, true);
 
             }
         }
@@ -869,7 +868,7 @@ export default class SelectionToolView extends SelectionToolBind {
             this.refs.$selectionTool.attr('data-selected-position', '');
             this.refs.$selectionTool.attr('data-selected-movetype', '');
     
-            this.emit('refreshCanvasForPartial', null, false)
+            this.emit('refreshCanvasForPartial', null, false, true)
             this.emit('removeGuideLine')
             this.refreshSelectionToolView(dx, dy);   
         }

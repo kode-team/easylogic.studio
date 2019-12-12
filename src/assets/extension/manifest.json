@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "version": "0.9.11",
   "name": "EasyLogic Studio",
-  "description": "Fantastic CSS+SVG Design Tool ",
+  "description": "Fantastic Web Design Tool ",
   "author": "easylogic",
   "background": {
     "scripts": ["background.js"],

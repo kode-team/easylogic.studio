@@ -15,6 +15,7 @@ export const EVENT = (...args) => {
 };
 
 export const COMMAND = EVENT
+export const ON = EVENT
 
 class UIElement extends EventMachine {
   constructor(opt, props = {}) {

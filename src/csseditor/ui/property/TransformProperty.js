@@ -96,7 +96,7 @@ export default class TransformProperty extends BaseProperty {
 
   }
 
-  [EVENT('refreshSelection', 'refreshSelectionStyleView', 'refreshStyleView') + DEBOUNCE(100)] () {
+  [EVENT('refreshSelection', 'refreshSelectionStyleView', 'refreshStyleView', 'refreshRect') + DEBOUNCE(100)] () {
     this.refreshShowIsNot(['project', 'artboard']);
   }
 

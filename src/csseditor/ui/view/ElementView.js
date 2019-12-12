@@ -478,17 +478,17 @@ export default class ElementView extends UIElement {
     }
 
     // 객체를 부분 업데이트 하기 위한 메소드 
-    [EVENT('refreshCanvasForPartial', 'refreshSelectionStyleView')] (obj, isChangeFragment = true) {
+    [EVENT('refreshCanvasForPartial', 'refreshSelectionStyleView')] (obj, isChangeFragment = true,  isLast = false) {
 
         var items = obj ? [obj] : editor.selection.items;
 
         items.forEach(current => {
-            this.updateElement(current, isChangeFragment);
+            this.updateElement(current, isChangeFragment, isLast);
         })
     }
 
-    updateElement (item, isChangeFragment = true) {
-        item.updateFunction(this.getElement(item.id), isChangeFragment);
+    updateElement (item, isChangeFragment = true, isLast = false) {
+        item.updateFunction(this.getElement(item.id), isChangeFragment, isLast);
     }
 
     [EVENT('playTimeline')] () {
