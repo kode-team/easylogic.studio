@@ -20,8 +20,8 @@ export default class ArtBoardProperty extends BaseProperty {
   }
 
   getBody() {
-    return `
-      <div class="artboard-list" ref="$artboardList"></div>
+    return /*html*/`
+      <div class="artboard-list scrollbar" ref="$artboardList"></div>
     `;
   }
 

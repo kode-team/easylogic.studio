@@ -36,7 +36,7 @@ export default class LayerTreeProperty extends BaseProperty {
 
   getBody() {
     return /*html*/`
-      <div class="layer-list" ref="$layerList"></div>
+      <div class="layer-list scrollbar" ref="$layerList"></div>
       <div class='drag-point' ref='$dragPointer'></div>
     `;
   }

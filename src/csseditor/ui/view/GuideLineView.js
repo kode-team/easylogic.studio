@@ -16,7 +16,7 @@ const hLine = (images, startX, minY, maxY) => {
 
     if (Math.abs(minY - maxY) === 0) return; 
 
-
+    startX = Math.floor(startX)
     // top 
     images.push(line(startX-2,   minY,             startX+2,    minY))
     images.push(line(startX,     minY,             startX,      maxY)) 
@@ -31,6 +31,8 @@ const hLine = (images, startX, minY, maxY) => {
 const vLine = (images, startY, minX, maxX) => {
 
     if (Math.abs(minX - maxX) === 0) return; 
+
+    startY = Math.floor(startY)
 
     // top 
     images.push(line(minX, startY-2,  minX,  startY+2))

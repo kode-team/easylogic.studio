@@ -27,8 +27,8 @@ export default class ProjectProperty extends BaseProperty {
   }
 
   getBody() {
-    return `
-      <div class="project-list" ref="$projectList"></div>
+    return /*html*/`
+      <div class="project-list scrollbar" ref="$projectList"></div>
     `;
   }
 

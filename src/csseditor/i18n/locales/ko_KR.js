@@ -348,8 +348,12 @@ export default {
 
 
     'grid.box.editor.box.title': '영역',
-    'grid.box.editor.repeat': '타입',
-    'grid.box.editor.count': '반복',
+    'grid.box.editor.type': '타입',
+    'grid.box.editor.repeat': '반복',
+    'grid.box.editor.length': '길이',
+    'grid.box.editor.none': '없음',
+    'grid.box.editor.auto': '자동',
+    'grid.box.editor.count': '개수',
     'grid.box.editor.value': '크기',
 
     'grid.layout.item.property.title': '그리드 아이템 설정',

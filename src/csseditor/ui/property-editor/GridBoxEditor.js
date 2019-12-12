@@ -11,6 +11,18 @@ const i18n = editor.initI18n('grid.box.editor')
 
 const REG_CSS_UNIT = /(auto)|(repeat\([^\)]*\))|(([\d.]+)(px|pt|fr|r?em|deg|vh|vw|%))/gi;
 
+
+const makeOptionsFunction = (options) => {
+    return () => {
+        return options.split(',').map(it => {
+            return `${it}:${i18n(it)}`
+        }).join(',');
+    }
+}
+
+const getLayoutItemOptions = makeOptionsFunction('none,auto,repeat,length')
+
+
 export default class GridBoxEditor extends UIElement {
 
     components() {
@@ -81,7 +93,7 @@ export default class GridBoxEditor extends UIElement {
                 <div class='repeat'>
                     <SelectEditor 
                         ref='$${index}-type' 
-                        options="none,auto,repeat,length" 
+                        options="${getLayoutItemOptions()}" 
                         key="type" 
                         value="${it.type || 'auto'}" 
                         params="${index}" 

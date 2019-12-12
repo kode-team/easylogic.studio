@@ -33,7 +33,7 @@ export default class Inspector extends UIElement {
             </div>
             <div class="tab-body" ref="$body">
 
-              <div class="tab-content" data-value="1">
+              <div class="tab-content scrollbar" data-value="1">
                 <AlignmentProperty />
 
                 <!-- Default Property --> 
@@ -72,7 +72,7 @@ export default class Inspector extends UIElement {
                 
                 <div class='empty'></div>
               </div>
-              <div class="tab-content" data-value="2">
+              <div class="tab-content scrollbar" data-value="2">
 
                 <!-- ArtBoard --> 
                 <ArtBoardSizeProperty />              
@@ -103,7 +103,7 @@ export default class Inspector extends UIElement {
 
                 <div class='empty'></div>                
               </div>              
-              <div class='tab-content' data-value='3'>
+              <div class='tab-content scrollbar' data-value='3'>
                 <MotionProperty />              
                 <!-- <RootVariableProperty /> -->
                 <!-- <VariableProperty /> -->

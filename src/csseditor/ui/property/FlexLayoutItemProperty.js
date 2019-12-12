@@ -62,10 +62,10 @@ export default class FlexLayoutItemProperty extends BaseProperty {
         <div data-value='auto'></div>
         <div data-value='value'>
           <div class='value-item'>
-            <RangeEditor ref='$grow' label='${i18n('grow')}' key="flex-grow" value="${arr[0]}" min='0' units=",auto" onchange='changeFlexItem' />
+            <RangeEditor ref='$grow' label='${i18n('grow')}' key="flex-grow" value="${arr[0]}" min='0' max='1' step='0.01' units=",auto" onchange='changeFlexItem' />
           </div>
           <div class='value-item'>
-            <RangeEditor ref='$shrink' label='${i18n('shrink')}' key="flex-shrink" value="${arr[1]}" min='0' units=",auto" onchange='changeFlexItem' />
+            <RangeEditor ref='$shrink' label='${i18n('shrink')}' key="flex-shrink" value="${arr[1]}" min='0' max='1' step='0.01' units=",auto" onchange='changeFlexItem' />
           </div>
           <div class='value-item'>
             <RangeEditor ref='$basis' label='${i18n('basis')}' key="flex-basis" value="${arr[2]}" min='0' units="px,em,%,auto" onchange='changeFlexItem' />

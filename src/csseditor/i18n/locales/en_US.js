@@ -341,7 +341,11 @@ export default {
     'grid.layout.editor.row.gap': 'Row Gap',
 
     'grid.box.editor.box.title': 'Box',
-    'grid.box.editor.repeat': 'Type',
+    'grid.box.editor.type': 'Type',
+    'grid.box.editor.repeat': 'Repeat',
+    'grid.box.editor.length': 'Length',
+    'grid.box.editor.none': 'None',
+    'grid.box.editor.auto': 'Auto',   
     'grid.box.editor.count': 'Count',
     'grid.box.editor.value': 'Size',
 

@@ -68,19 +68,19 @@ export default class GridLayoutItemProperty extends BaseProperty {
           <div class='value-item'>
             <label>${i18n('column')}</label>
             <div>
-              <NumberInputEditor ref='$columnStart' key="grid-column-start" value="${obj['grid-column-start'] || '0'}" min='1' onchange='changeGridItem' />
+              <NumberInputEditor ref='$columnStart' key="grid-column-start" value="${obj['grid-column-start'] || '0'}" min='0' onchange='changeGridItem' />
             </div>
             <div>
-              <NumberInputEditor ref='$columnEnd' key="grid-column-end" value="${obj['grid-column-end'] || '0'}" min='1' onchange='changeGridItem' />
+              <NumberInputEditor ref='$columnEnd' key="grid-column-end" value="${obj['grid-column-end'] || '0'}" min='0' onchange='changeGridItem' />
             </div>            
           </div>
           <div class='value-item'>
             <label>${i18n('row')}</label>
             <div>
-              <NumberInputEditor ref='$rowStart' key="grid-row-start" value="${obj['grid-row-start'] || '0'}" min='1' onchange='changeGridItem' />
+              <NumberInputEditor ref='$rowStart' key="grid-row-start" value="${obj['grid-row-start'] || '0'}" min='0' onchange='changeGridItem' />
             </div>
             <div>
-              <NumberInputEditor ref='$rowEnd' key="grid-row-end" value="${obj['grid-row-end'] || '0'}" min='1' onchange='changeGridItem' />
+              <NumberInputEditor ref='$rowEnd' key="grid-row-end" value="${obj['grid-row-end'] || '0'}" min='0' onchange='changeGridItem' />
             </div>            
           </div>          
         </div>

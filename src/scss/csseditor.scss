@@ -13,6 +13,25 @@ html,body {
     box-sizing: border-box;
 }
 
+body {
+    &.ua-window {
+        .scrollbar {
+            
+            &::-webkit-scrollbar {
+                width: 5px;
+                height: 8px;
+                background-color: #aaa;
+                /* or add it to the track */
+            }
+        
+            &::-webkit-scrollbar-thumb {
+                background: #000;
+            }
+        
+        }
+    }
+}
+
 .csseditor {
     width: 100%;
     height: 100%;
@@ -27,13 +46,8 @@ html,body {
     @import './csseditor/component.scss';
     @import './csseditor/layout.scss';        
 
-
-    &[data-theme='light'] {
-        @import './themes/csseditor/light.scss';
-
-        @import './csseditor/component.scss';
-        @import './csseditor/layout.scss';        
-    }      
+    
+    
 
 }
  

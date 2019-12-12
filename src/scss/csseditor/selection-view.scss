@@ -560,6 +560,7 @@
     height: 100%;
     pointer-events:none;
     overflow: visible;
+    transform: translate(0.5px, 0.5px);
 
     line {
       stroke-width: 1;

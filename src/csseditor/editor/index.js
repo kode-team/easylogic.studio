@@ -3,7 +3,7 @@ import CanvasView from "../ui/view/CanvasView";
 import ToolMenu from "../ui/view/ToolMenu";
 
 import UIElement, { EVENT } from "../../util/UIElement";
-import { CLICK, DRAGOVER, DROP, PREVENT, ANIMATIONEND, TRANSITIONEND } from "../../util/Event";
+import { DRAGOVER, DROP, PREVENT, TRANSITIONEND } from "../../util/Event";
 import Inspector from "../ui/control/Inspector";
 
 
@@ -23,16 +23,16 @@ import TimelineProperty from "../ui/control/TimelineProperty";
 import StatusBar from "../ui/view/StatusBar";
 import items from "../../editor/items";
 
-// import Lottie from "../../editor/parse/Lottie";
-
-
-// var JSZip = require('jszip')
-
 export default class CSSEditor extends UIElement {
   
   initialize () {
     super.initialize()
-    Dom.create(document.body).attr('data-theme', editor.theme);
+
+
+    var $body = Dom.create(document.body);
+    
+    $body.attr('data-theme', editor.theme);
+    $body.addClass(navigator.userAgent.includes('Windows') ? 'ua-window': '')
   }
 
   

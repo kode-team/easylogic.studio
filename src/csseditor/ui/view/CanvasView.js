@@ -31,7 +31,7 @@ export default class CanvasView extends UIElement {
     return/*html*/`
       <div class='page-container' tabIndex="-1">
         <div class='page-view'>
-          <div class='page-lock' ref='$lock'>
+          <div class='page-lock scrollbar' ref='$lock'>
             <ElementView ref='$elementView' />
           </div>
         </div>

@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
-import { BIND, POINTERSTART, MOVE, END, IF, KEYUP } from "../../../util/Event";
+import { BIND, POINTERSTART, MOVE, END, IF, KEYUP, DEBOUNCE } from "../../../util/Event";
 import { Length } from "../../../editor/unit/Length";
 
 import { editor } from "../../../editor/editor";
@@ -530,7 +530,7 @@ export default class ElementView extends UIElement {
         }
     }
 
-    [EVENT('refreshAllElementBoundSize')] () {
+    [EVENT('refreshAllElementBoundSize') + DEBOUNCE(100)] () {
 
         var list = [...new Set(editor.selection.items.filter(it => it.is('artboard') ? it : it.parent))];
 
