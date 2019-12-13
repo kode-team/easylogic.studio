@@ -32,7 +32,7 @@ export default class CSSEditor extends UIElement {
     var $body = Dom.create(document.body);
     
     $body.attr('data-theme', editor.theme);
-    $body.addClass(navigator.userAgent.includes('Windows') ? 'ua-window': '')
+    $body.addClass(navigator.userAgent.includes('Windows') ? 'ua-window': 'ua-default')
   }
 
   
