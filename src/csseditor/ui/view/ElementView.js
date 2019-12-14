@@ -173,12 +173,16 @@ export default class ElementView extends UIElement {
                     items = [] 
                 }                 
     
-                editor.selection.select(...items);
+                if (editor.selection.select(...items)) {
+                    this.selectCurrentForBackgroundView(...items)
+                }
 
-                this.selectCurrentForBackgroundView(...items)
             }
-            editor.selection.select(...items);    
-            this.emit('refreshSelection')
+
+            if (editor.selection.select(...items)) {
+                this.emit('refreshSelection')
+            }
+
         }
     }
 
@@ -227,9 +231,9 @@ export default class ElementView extends UIElement {
                     }
                 }
 
-                editor.selection.select(...items);
-
-                this.selectCurrentForBackgroundView(...items)
+                if (editor.selection.select(...items)) {
+                    this.selectCurrentForBackgroundView(...items)
+                }
     
                 if (items.length) {
                     this.emit('refreshSelection')
@@ -530,10 +534,11 @@ export default class ElementView extends UIElement {
         }
     }
 
-    [EVENT('refreshAllElementBoundSize') + DEBOUNCE(100)] () {
+    [EVENT('refreshAllElementBoundSize')] () {
 
-        var list = [...new Set(editor.selection.items.filter(it => it.is('artboard') ? it : it.parent))];
+        var selectionList = editor.selection.items.map(it => it.is('artboard') ? it : it.parent)
 
+        var list = [...new Set(selectionList)];
         list.forEach(it => {
             this.trigger('refreshElementBoundSize', it);
         })
@@ -541,16 +546,11 @@ export default class ElementView extends UIElement {
 
     [EVENT('refreshElementBoundSize')] (parentObj) {
         if (parentObj) {
-
-            // 현재 선태된 item 이  부모가 layout 을 가진 것에 대한 자식이라면 
-            // 부모의 모든 자식들의 bound size 를 다시 계산한다. 
-
             parentObj.layers.forEach(it => {
-
                 if (it.isLayoutItem()) {
                     var $el = this.getElement(it.id);
                     const {x, y, width, height} = $el.offsetRect();
-    
+
                     it.reset({
                         x: Length.px(x),
                         y: Length.px(y),
@@ -567,9 +567,8 @@ export default class ElementView extends UIElement {
                     this.trigger('refreshSelectionStyleView', it, true);
                 }
 
-                this.trigger('refreshElementBoundSize', it);
+                this.trigger('refreshElementBoundSize', it);  
             })
-
         }
     }   
 }

@@ -93,8 +93,36 @@ export class Selection {
     return item.position === 'relative'
   }
 
+  hasDifference (list) {
+
+    if (list.length != this.items.length) {
+      return true; 
+    }
+
+    var setA = new Set(list);
+    var setB = new Set(this.items);
+
+    var equalCount = 0; 
+    for (var elem of setB) {
+        if (setA.has(elem)) {
+          equalCount++;
+        }
+    }
+
+    return setB.size != equalCount;    
+  }
+
   select(...args) {
-    this.items = (args || []).filter(it => !it.lock && it.isAbsolute); 
+
+    var list = (args || []).filter(it => !it.lock && it.isAbsolute)
+
+
+    // 차이가 없다면 selection 을 다시 하지 않는다. 
+    if (this.hasDifference(list) === false) {
+      return false; 
+    }
+
+    this.items = list; 
 
     this.itemKeys = {}
     this.items.forEach(it => {
@@ -102,6 +130,8 @@ export class Selection {
     })
 
     this.setRectCache();
+
+    return true; 
   }
 
   reselect () {

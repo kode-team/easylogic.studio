@@ -8,11 +8,16 @@ import PathParser from "../../../../editor/parse/PathParser";
 export default class ObjectCommand extends UIElement {
 
     refreshSelection () {
-        this.emit('refreshAll')   
+
         this.emit('hideSubEditor');
-        this.emit('refreshSelection');        
-        this.emit('refreshSelectionTool')      
-        this.emit('noneSelectMenu') 
+        this.emit('noneSelectMenu')
+        this.emit('refreshAll')   
+
+        setTimeout(() => {
+            this.emit('refreshAllElementBoundSize');
+            this.emit('refreshSelection');
+            this.emit('refreshSelectionTool');    
+        }, 1000)
     }
 
     [COMMAND('add.type')] (type) {

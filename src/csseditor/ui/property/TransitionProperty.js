@@ -95,7 +95,6 @@ export default class TransitionProperty extends BaseProperty {
 
   [EVENT('refreshSelection')]() {
     this.refreshShowIsNot();
-    this.emit("hideTransitionPropertyPopup"); 
   }
 
   refresh() {
