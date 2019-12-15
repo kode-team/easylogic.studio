@@ -825,19 +825,11 @@ export default class SelectionToolView extends SelectionToolBind {
                     if (item.is('component')) {
                         this.emit('refreshStyleView', item);  
                     }
-
-                    if (item.hasLayout()) {
-                        this.trigger('refreshElementBoundSize', item);
-                    }
-
                 });
             }
 
-
-                
         }
     }
-
 
     end (dx, dy) {
 
@@ -871,6 +863,8 @@ export default class SelectionToolView extends SelectionToolBind {
             this.emit('refreshCanvasForPartial', null, false, true)
             this.emit('removeGuideLine')
             this.refreshSelectionToolView(dx, dy);   
+
+            this.emit('refreshAllElementBoundSize');            
         }
      
     }   
