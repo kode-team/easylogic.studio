@@ -384,10 +384,12 @@ const SelectionToolBind = class extends SelectionToolEvent {
         var current = editor.selection.current;
         var isLayoutItem = current && current.isLayoutItem()
         var hasLayout = current && current.hasLayout()
+        var layout = current && (current.layout || current.parent.layout);
 
         return {
             'data-is-layout-item': isLayoutItem,
             'data-is-layout-container': hasLayout,
+            'data-layout-container': layout,
             // 1개의 객체를 선택 했을 때 move 판은 이벤트를 걸지 않기 
             'data-selection-length': editor.selection.length
         }
@@ -873,16 +875,16 @@ export default class SelectionToolView extends SelectionToolBind {
 
     refreshSelectionToolView (dx, dy, type) {
         if (dx === 0 && dy === 0) {
-
+            // console.log(' not moved', dx, dy)
         } else {
             this.guideView.move(type || this.pointerType, dx / editor.scale,  dy / editor.scale )
+
+            var drawList = this.guideView.calculate();
+            this.emit('refreshGuideLine', this.calculateWorldPositionForGuideLine(drawList));            
         }
 
+        this.makeSelectionTool();        
 
-        var drawList = this.guideView.calculate();
-
-        this.makeSelectionTool();
-        this.emit('refreshGuideLine', this.calculateWorldPositionForGuideLine(drawList));        
     }
 
     getOriginalRect () {

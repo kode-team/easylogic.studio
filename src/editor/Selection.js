@@ -1,4 +1,4 @@
-import { isFunction } from "../util/functions/func";
+import { isFunction, isUndefined } from "../util/functions/func";
 import { Length } from "./unit/Length";
 import AreaItem from "./items/AreaItem";
 
@@ -236,13 +236,37 @@ export class Selection {
     this.select(...this.copyItems.map(item => item.copy()));
     this.copy()
   }
+
+  isInParent (item, parentItems = []) {
+
+    var prevItem = item; 
+    var parent = prevItem.parent; 
+    var hasParent = !prevItem.is('artboard') && parentItems.includes(parent); 
+
+    while(!hasParent) {
+      if (isUndefined(parent)) break; 
+      prevItem = parent; 
+      parent = parent.parent; 
+      hasParent = !prevItem.is('artboard') && parentItems.includes(parent); 
+    }
+
+    return hasParent; 
+  }
   
   move (dx, dy) {
     this.each ((item, cachedItem, ) => {
-      item.move( 
-        roundedLength(cachedItem.x.value + dx),
-        roundedLength(cachedItem.y.value + dy)
-      )
+
+      if (this.isInParent(item, this.items)) {
+        // noop 
+        // 부모가 있을 때는 dx, dy 로 위치를 옮기지 않는다. 
+        // 왜냐하면 이미부모로 부터 위치가 모두 옮겨졌기 때문에. 
+      } else {
+        item.move( 
+          roundedLength(cachedItem.x.value + dx),
+          roundedLength(cachedItem.y.value + dy)
+        )
+      }
+
     })
   }
 

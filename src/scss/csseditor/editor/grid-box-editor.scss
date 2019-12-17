@@ -7,6 +7,17 @@
             margin-bottom: 4px;
             text-align: center;
 
+
+            &.header {
+                height: 24px;
+
+                > * {
+                    padding: 4px 0px;                    
+                    border: 1px solid rgba(236, 236, 236, 0.18); 
+                    box-sizing: border-box;
+                }
+            }
+
             .repeat {
                 button {
                     background-color: $grid-box-editor-button-background-color;

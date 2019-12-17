@@ -80,6 +80,9 @@ export default class GuideLineView extends UIElement {
     
         var images = []
 
+        // 가이드 라인은 하나만 지원하는걸로 하자.
+        list = list.filter((_, index) => index === 0);
+
         list.forEach(it => {
     
             var target = it.B; 
@@ -125,7 +128,7 @@ export default class GuideLineView extends UIElement {
                     hLine(images, startX, it.A.screenY2.value, maxY.value);
                 }
     
-            } else {            // 가로 가이드 정의 
+            } else {            // 가로 가이드 정의 ( y 축 좌표 찾기 )
                 
                 var maxX = Length.max(target.screenX2, it.A.screenX2);
 

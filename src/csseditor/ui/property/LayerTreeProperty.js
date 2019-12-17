@@ -8,10 +8,11 @@ import { Layer } from "../../../editor/items/Layer";
 import Color from "../../../util/Color";
 import { Length } from "../../../editor/unit/Length";
 
+const i18n = editor.initI18n('layer.tree.property');
 
 export default class LayerTreeProperty extends BaseProperty {
   getTitle() {
-    return `<span>${icon.account_tree}</span> ${editor.i18n('layer.tree.property.title')}`;
+    return `<span>${icon.account_tree}</span> ${i18n('title')}`;
   }
 
   getClassName() {
@@ -141,10 +142,17 @@ export default class LayerTreeProperty extends BaseProperty {
       if (layer.is('text')) {
         name = layer.text || layer.name 
       }
+      var title = ''; 
+
+      if (layer.hasLayout()) {
+        title = i18n('layout.title.' + layer.layout)
+      }
+
+
       return /*html*/`        
       <div class='layer-item ${selected}' data-depth="${depth}" data-layout='${layer.layout}' data-layer-id='${layer.id}' draggable="true">
         <div class='detail'>
-          <label> 
+          <label data-layout-title='${title}'> 
             <span class='icon' data-item-type="${layer.itemType}">${this.getIcon(layer)}</span> 
             <span class='name'>${name}</span>
           </label>
@@ -407,8 +415,7 @@ export default class LayerTreeProperty extends BaseProperty {
 
   }  
 
-  [EVENT('refreshSelection', 'refreshStylePosition', 'refreshSelectionStyleView', 'refreshCanvasForPartial')] () {
-    
+  [EVENT('refreshSelection', 'refreshStylePosition', 'refreshSelectionStyleView', 'refreshCanvasForPartial')] () { 
     this.trigger('changeSelection')
   }
 
@@ -416,15 +423,8 @@ export default class LayerTreeProperty extends BaseProperty {
     this.refresh();
   }
 
-
   [EVENT('changeItemLayout')] () {
-    editor.selection.each((item, index) => {
-      var el = this.refs.$layerList.$(`[data-layer-id="${item.id}"]`)
-      if (el) {
-        el.attr('data-layout', item.layout)
-      }
-    })
-
+    this.refresh();
   }
 
 

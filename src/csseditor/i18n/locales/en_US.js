@@ -28,7 +28,12 @@ export default {
     'project.information.property.description': 'Description',    
 
     'artboard.property.title': 'ArtBoards',   
+    'artboard.property.layout.title.flex': 'Flex',
+    'artboard.property.layout.title.grid': 'Grid',
+
     'layer.tree.property.title': 'Layers',
+    'layer.tree.property.layout.title.flex': 'Flex',
+    'layer.tree.property.layout.title.grid': 'Grid',     
 
     'alignment.property.title': 'Alignment',
     'position.property.title': 'Position',
@@ -361,4 +366,6 @@ export default {
     'box.model.property.title': 'Box Model',
     'box.model.property.margin': 'Margin',
     'box.model.property.padding': 'Padding',
+
+
 }

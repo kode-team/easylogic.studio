@@ -29,7 +29,11 @@ export default {
     'project.information.property.description': '설명',     
     
     'artboard.property.title': '아트보드',   
+    'artboard.property.layout.title.flex': '플렉스',
+    'artboard.property.layout.title.grid': '그리드',
     'layer.tree.property.title': '레이어',
+    'layer.tree.property.layout.title.flex': '플렉스',
+    'layer.tree.property.layout.title.grid': '그리드',    
 
 
     'alignment.property.title': '정렬',
@@ -367,4 +371,5 @@ export default {
     'box.model.property.title': '박스 모델',
     'box.model.property.margin': '마진',
     'box.model.property.padding': '패딩',    
+
 }

@@ -1,6 +1,7 @@
 import UIElement from "../../../util/UIElement";
-import { LOAD, CLICK } from "../../../util/Event";
+import { LOAD, CLICK, VDOM } from "../../../util/Event";
 import icon from "../icon/icon";
+import { CSS_TO_STRING } from "../../../util/functions/func";
 
 export default class SelectIconEditor extends UIElement {
 
@@ -9,13 +10,17 @@ export default class SelectIconEditor extends UIElement {
         var splitChar = this.props.split || ',';
         var options = (this.props.options || '').split(splitChar).map(it => it.trim());
         var icons = (this.props.icons || '').split(splitChar).map(it => it.trim());
+        var colors = (this.props.colors || '').split(splitChar).map(it => it.trim());
 
         var value = this.props.value || '';
 
         return {
             keyValueChar,            
             label: this.props.label || '',
-            options, icons, value
+            options, 
+            icons, 
+            colors,
+            value
         }
     }
 
@@ -42,30 +47,13 @@ export default class SelectIconEditor extends UIElement {
     }
 
     setValue (value) {
-        this.state.value = value + ''; 
 
-        var $selectedItem = this.refs.$options.$(`[data-value="${this.state.value}"]`)
-
-        if ($selectedItem) {
-            $selectedItem.onlyOneClass('selected');
-        }
+        this.setState({
+            value
+        })
     }
 
-    refresh(reload = false) {
-
-        if (reload) {
-            var $selectedItem = this.refs.$options.$(`[data-value="${this.state.value}"]`)
-
-            if ($selectedItem) {
-                $selectedItem.onlyOneClass('selected');
-            }
-        } else {
-            this.load();
-        }
-
-    }
-
-    [LOAD('$options')] () {
+    [LOAD('$options') + VDOM] () {
         return this.state.options.map((it, index) => {
 
 
@@ -77,7 +65,8 @@ export default class SelectIconEditor extends UIElement {
             if (value.includes(this.state.keyValueChar)) {
                 var [value, label] = value.split(this.state.keyValueChar)
             }            
-            var selected = value === this.state.value ? 'selected' : '' 
+            var isSelected = value === this.state.value; 
+            var selected = isSelected ? 'selected' : '' 
             if (it === '') {
                 var label = icon.close
                 title = 'close'
@@ -92,8 +81,14 @@ export default class SelectIconEditor extends UIElement {
                 label = icon[iconKey] || label || iconKey || it; 
 
             }
+
+            var color = this.state.colors[index]
+            var css = {}
+            if (isSelected && color) {
+                css['background-color'] = color; 
+            }
             
-            return /*html*/`<div class='select-icon-item ${selected} ${iconClass}' data-value="${value}" title='${title}'>${label}</div>`
+            return /*html*/`<div class='select-icon-item ${selected} ${iconClass}' style='${CSS_TO_STRING(css)}' data-value="${value}" title='${title}'>${label}</div>`
         })
     }
 
@@ -101,11 +96,11 @@ export default class SelectIconEditor extends UIElement {
 
         var value = e.$delegateTarget.attr('data-value')
 
-        e.$delegateTarget.onlyOneClass('selected');
-
         this.updateData({
             value
         })
+
+        this.refresh();
     }
 
 

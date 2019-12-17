@@ -274,12 +274,13 @@ const parseEvent = (context, key) => {
   var prefix = checkMethodFilters.shift()
   var eventSelectorAndBehave = prefix.split(DOM_EVENT_SAPARATOR)[1];
 
-  var [eventName, ...params] = eventSelectorAndBehave.split(SAPARATOR);
-  var eventNames = getEventNames(eventName);
+  var arr = eventSelectorAndBehave.split(SAPARATOR);
+  var eventNames = getEventNames(arr[0]);
   var callback = context[key].bind(context);
 
   eventNames.forEach(eventName => {
-    bindingEvent(context, [eventName, ...params], checkMethodFilters, callback);
+    arr[0] = eventName
+    bindingEvent(context, arr, checkMethodFilters, callback);
   });
 };
 
@@ -508,7 +509,7 @@ export default class EventMachine {
   exists () {
 
     if (this.parent) {
-      if (this.parent.childrenIds) {
+      if (isFunction(this.parent.childrenIds)) {
         return this.parent.childrenIds().indexOf(this.id) > -1 
       }
     }

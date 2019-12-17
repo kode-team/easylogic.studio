@@ -187,7 +187,6 @@ export default class ElementView extends UIElement {
     }
 
     moveEndPointer (dx, dy) {
-
         var [x, y, width, height ] = this.refs.$dragAreaRect
                 .styles('left', 'top', 'width', 'height')
                 .map(it => Length.parse(it))
@@ -358,10 +357,9 @@ export default class ElementView extends UIElement {
 
         this.emit('refreshElement', current);
 
-        this.emit('refreshSelection');
-
-        this.emit('removeGuideLine')        
-
+        if (dx != 0 || dy != 0) {
+            this.emit('removeGuideLine')        
+        }
     }
 
     [BIND('$body')] () {

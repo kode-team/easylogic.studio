@@ -135,7 +135,7 @@ export default class GridBoxEditor extends UIElement {
         return /*html*/`
             <div class='grid-box-editor' ref='$body' >
                 <div class='grid-box-editor-item'>
-                    <div class='item'>
+                    <div class='item header'>
                         <div class='repeat'>
                             <label>${this.state.label} </label>
                             <button type='button' ref='$add'>${icon.add}</button>

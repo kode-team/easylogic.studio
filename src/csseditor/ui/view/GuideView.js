@@ -20,9 +20,17 @@ export default class GuideView {
         var artboard = editor.selection.currentArtboard;
         this.cachedExtraItems = [] 
         if (artboard) {
-            this.cachedExtraItems = artboard.allLayers.filter(it => {
-                return !editor.selection.check(it)
-            });
+
+            if (editor.selection.isArtBoard()) {
+                // 선택한 영역이 artboard 일 때는  다른 객체와 거리를 재지 않는다. 
+                // 하위 모든 것들이 artboard 안에 있기 때문이다. 
+                this.cachedExtraItems = [];
+            } else {
+                this.cachedExtraItems = artboard.allLayers.filter(it => {
+                    return !editor.selection.check(it) || (it.is('artboard') && editor.selection.currentArtboard != it); 
+                });
+            }
+
             this.rect = editor.selection.allRect ? editor.selection.allRect.clone() : null;
         }
         
@@ -155,6 +163,8 @@ export default class GuideView {
 
     compareX (A, B, dist = MAX_DIST) {
 
+        // source and target are an index 
+        // 0: start, 1 : center, 2 : end 
         var AX = [A.screenX.value, A.centerX.value, A.screenX2.value]
         var BX = [B.screenX.value, B.centerX.value, B.screenX2.value]
 
@@ -165,7 +175,7 @@ export default class GuideView {
 
                 if (isSnap) {
                     // ax -> bx <= dist 
-                    results.push({ A, B, source, target, ax, bx})
+                    results.push({ A, B, source, target, ax: bx, bx})
                 }
             })
         })
@@ -197,7 +207,7 @@ export default class GuideView {
 
                 if (isSnap) {
                     // aY -> bY <= dist 
-                    results.push({ A, B, source, target, ay, by})
+                    results.push({ A, B, source, target, ay: by, by})
                 }
             })
         })
@@ -331,13 +341,34 @@ export default class GuideView {
 
 
     recoverAll() {
-        editor.selection.items.forEach(item => {
-            // selection 기준으로 item 을 먼저 복구 하고 
-            this.recover(item)
+        // 좌표 복구 시스템 
+        if (Segment.isMove(this.pointerType)) {
 
-            // 개별 item 의 캐쉬를 기준으로 다시 복구한다. 
-            item.recover();
-        });
+            editor.selection.items.forEach(item => {
+
+                if (editor.selection.isInParent(item, editor.selection.items)) {
+                    // 부모가 있는 애들은 스스로를 복구 하지 않는다. 
+                    console.log(item, editor.selection.items);
+                } else {
+                    // selection 기준으로 item 을 먼저 복구 하고 
+                    this.recover(item)
+        
+                    // 개별 item 의 캐쉬를 기준으로 다시 복구한다. 
+                    item.recover();
+                }
+
+            });
+        } else {
+
+            editor.selection.items.forEach(item => {
+                // selection 기준으로 item 을 먼저 복구 하고 
+                this.recover(item)
+    
+                // 개별 item 의 캐쉬를 기준으로 다시 복구한다. 
+                item.recover();
+            });
+        }
+
     }
     
 } 

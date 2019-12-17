@@ -133,18 +133,23 @@
     &[data-selected-position="rotate3d"] {
       border-color: transparent;
     }
+
+
+    @each $moveType in move, rotate3d, 'to right', 'to left', 'to top', 'to bottom', 'to top left', 'to top right', 'to bottom left', 'to bottom right' {
+      &[data-selected-position="#{$moveType}"] [data-position="#{$moveType}"] { &:before { opacity: 1; } }
+    }    
   
-    &[data-selected-position="move"] [data-position="move"] { &:before { opacity: 1; } }
-    &[data-selected-position="rotate3d"] [data-position="rotate3d"] { &:before { opacity: 1; } }
-    &[data-selected-position="to right"] [data-position="to right"] { &:before { opacity: 1; } }
-    &[data-selected-position="to left"] [data-position="to left"] { &:before { opacity: 1; } }
-    &[data-selected-position="to top"] [data-position="to top"] { &:before { opacity: 1; } }
-    &[data-selected-position="to bottom"] [data-position="to bottom"] { &:before { opacity: 1; } }
-    &[data-selected-position="to top left"] [data-position="to top left"] { &:before { opacity: 1; } }
-    &[data-selected-position="to top right"] [data-position="to top right"] { &:before { opacity: 1; } }
-    &[data-selected-position="to bottom left"] [data-position="to bottom left"] { &:before { opacity: 1; } }
-    &[data-selected-position="to bottom right"] [data-position="to bottom right"] { &:before { opacity: 1; } }  
-  
+    &[data-is-layout-container="true"] {
+
+      &[data-layout-container='flex'] {
+        border:2px solid green;
+      }
+
+      &[data-layout-container='grid'] {
+        border:2px solid red;
+      }      
+    }    
+
     &[data-is-layout-item="true"][data-selection-length="1"][data-is-layout-container="false"]
     {
       [data-position='move'],

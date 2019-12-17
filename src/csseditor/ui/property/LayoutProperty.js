@@ -42,6 +42,7 @@ export default class LayoutProperty extends BaseProperty {
         icon="true" 
         value="${current.layout}"
         options="${getLayoutOptions()}"  
+        colors=",green,red"
         onchange="changeLayoutType" />
       </div>
       <div class='layout-list' ref='$layoutList' data-selected-value='${current.layout}'>

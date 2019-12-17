@@ -4,9 +4,11 @@ import { editor } from "../../../editor/editor";
 import icon from "../icon/icon";
 import { EVENT } from "../../../util/UIElement";
 
+const i18n = editor.initI18n('artboard.property');
+
 export default class ArtBoardProperty extends BaseProperty {
   getTitle() {
-    return editor.i18n('artboard.property.title');
+    return i18n('title');
   }
 
   getClassName() {
@@ -14,7 +16,7 @@ export default class ArtBoardProperty extends BaseProperty {
   }
 
   getTools() {
-    return `
+    return /*html*/`
       <button type='button' ref='$add' title="Add a artboard">${icon.add}</button>
     `
   }
@@ -32,12 +34,17 @@ export default class ArtBoardProperty extends BaseProperty {
 
     return project.artboards.map( (artboard, index) => {
       var selected = artboard === editor.selection.currentArtboard ? 'selected' : ''
+      var title = ''; 
+
+      if (artboard.hasLayout()) {
+        title = i18n('layout.title.' + artboard.layout)
+      }
 
       return /*html*/`
         <div class='artboard-item ${selected}' data-layout="${artboard.layout}" data-artboard-id='${artboard.id}'>
           <div class='preview'>${icon.doc}</div>
           <div class='detail'>
-            <label data-index='${index}'>${artboard.name}</label>
+            <label data-index='${index}' data-layout-title='${title}' >${artboard.name}</label>
             <div class="tools">
               <button type="button" class="remove" data-index="${index}" title='Remove'>${icon.remove2}</button>
             </div>
@@ -124,13 +131,7 @@ export default class ArtBoardProperty extends BaseProperty {
   }
 
   [EVENT('changeItemLayout')] () {
-    editor.selection.each((item, index) => {
-      var el = this.refs.$artboardList.$(`[data-artboard-id="${item.id}"]`)
-      if (el) {
-        el.attr('data-layout', item.layout)
-      }
-    })
-
+    this.refresh();
   }
 
 }
