@@ -425,6 +425,7 @@ export default class EventMachine {
 
   _reload(props) {
     this.props = props;
+    this.state = {}; 
     this.setState(this.initState(), false);
     this.refresh(true);
   }

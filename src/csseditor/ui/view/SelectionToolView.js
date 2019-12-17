@@ -382,10 +382,12 @@ const SelectionToolBind = class extends SelectionToolEvent {
     [BIND('$selectionTool')] () {
 
         var current = editor.selection.current;
-        var hasLayout = current && current.isLayoutItem()
+        var isLayoutItem = current && current.isLayoutItem()
+        var hasLayout = current && current.hasLayout()
 
         return {
-            'data-is-layout-item': hasLayout,
+            'data-is-layout-item': isLayoutItem,
+            'data-is-layout-container': hasLayout,
             // 1개의 객체를 선택 했을 때 move 판은 이벤트를 걸지 않기 
             'data-selection-length': editor.selection.length
         }

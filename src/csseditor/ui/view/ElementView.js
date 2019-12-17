@@ -161,7 +161,7 @@ export default class ElementView extends UIElement {
             rect.y2 = Length.px(rect.y.value + rect.height.value); 
 
             var artboard = editor.selection.currentArtboard;
-
+            var items = editor.selection.items; 
             if (artboard) {
                 Object.keys(rect).forEach(key => {
                     rect[key].div(editor.scale)
@@ -549,22 +549,25 @@ export default class ElementView extends UIElement {
             parentObj.layers.forEach(it => {
                 if (it.isLayoutItem()) {
                     var $el = this.getElement(it.id);
-                    const {x, y, width, height} = $el.offsetRect();
 
-                    it.reset({
-                        x: Length.px(x),
-                        y: Length.px(y),
-                        width: Length.px(width),
-                        height: Length.px(height)
-                    })
+                    if ($el) {
+                        const {x, y, width, height} = $el.offsetRect();
 
-                    if (it.is('component')) {
-                        this.emit('refreshStyleView', it, true);
+                        it.reset({
+                            x: Length.px(x),
+                            y: Length.px(y),
+                            width: Length.px(width),
+                            height: Length.px(height)
+                        })
+    
+                        if (it.is('component')) {
+                            this.emit('refreshStyleView', it, true);
+                        }
+    
+                        // svg 객체  path, polygon 은  크기가 바뀌면 내부 path도 같이 scale up/down  이 되어야 하는데 
+                        // 이건 어떻게 적용하나 ....                     
+                        this.trigger('refreshSelectionStyleView', it, true);
                     }
-
-                    // svg 객체  path, polygon 은  크기가 바뀌면 내부 path도 같이 scale up/down  이 되어야 하는데 
-                    // 이건 어떻게 적용하나 ....                     
-                    this.trigger('refreshSelectionStyleView', it, true);
                 }
 
                 this.trigger('refreshElementBoundSize', it);  

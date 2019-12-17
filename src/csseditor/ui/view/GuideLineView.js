@@ -61,7 +61,7 @@ const vLine = (images, startY, minX, maxX) => {
 export default class GuideLineView extends UIElement {
 
     template() {
-        return `<svg class='guide-line-view' width="100%" height="100%" ></svg>`
+        return /*html*/`<svg class='guide-line-view' width="100%" height="100%" ></svg>`
     }
 
     initState() {

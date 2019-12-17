@@ -73,6 +73,8 @@ export default class LayoutProperty extends BaseProperty {
     // 타입 변화에 따른 하위 아이템들의 설정을 바꿔야 한다. 
     this.refs.$layoutList.attr('data-selected-value', value);
 
+    this.refresh();
+
     this.emit('refreshStyleView');  // 전체 새로 고침 
     this.emit('refreshAllElementBoundSize');
     this.emit('changeItemLayout')

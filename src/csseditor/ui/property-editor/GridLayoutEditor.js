@@ -40,8 +40,6 @@ export default class GridLayoutEditor extends UIElement {
 
     [LOAD('$body')] () {
         return /*html*/`
-
-
             <div class='grid-layout-item'>
                 <GridBoxEditor 
                     label='${i18n('template.columns')}'
