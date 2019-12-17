@@ -12,20 +12,30 @@ const line = (x1, y1, x2, y2, className = 'base-line') => {
     return /*html*/`<line ${OBJECT_TO_PROPERTY({x1, y1, x2, y2 })} class='${className}' />`
 }
 
+const hasLine = (images, line) => {
+    return images.includes(line);
+}
+
+const addLine = (images, line) => {
+    if (!hasLine(images, line)) {
+        images.push(line);
+    }
+}
+
 const hLine = (images, startX, minY, maxY) => {
 
     if (Math.abs(minY - maxY) === 0) return; 
 
     startX = Math.floor(startX)
     // top 
-    images.push(line(startX-2,   minY,             startX+2,    minY))
-    images.push(line(startX,     minY,             startX,      maxY)) 
-    images.push(line(startX-2,   maxY,             startX+2,    maxY))
+    addLine(images, line(startX-2,   minY,             startX+2,    minY))
+    addLine(images, line(startX,     minY,             startX,      maxY)) 
+    addLine(images, line(startX-2,   maxY,             startX+2,    maxY))
 
     /* text */ 
     var centerY  = (maxY + minY)/2;
     var centerHeight = Math.floor(Math.abs(maxY - minY))                
-    images.push(text(startX+2, centerY, centerHeight))
+    addLine(images, text(startX+2, centerY, centerHeight))
 }
 
 const vLine = (images, startY, minX, maxX) => {
@@ -35,14 +45,14 @@ const vLine = (images, startY, minX, maxX) => {
     startY = Math.floor(startY)
 
     // top 
-    images.push(line(minX, startY-2,  minX,  startY+2))
-    images.push(line(minX, startY,  maxX,   startY)) 
-    images.push(line(maxX, startY-2, maxX,   startY+2))
+    addLine(images, line(minX, startY-2,  minX,  startY+2))
+    addLine(images, line(minX, startY,  maxX,   startY)) 
+    addLine(images, line(maxX, startY-2, maxX,   startY+2))
 
     /* text */ 
     var centerX  = (maxX + minX)/2;
     var centerWidth = Math.floor(Math.abs(maxX - minX))                
-    images.push(text(centerX, startY - 2, centerWidth, 'text-center'))
+    addLine(images, text(centerX, startY - 2, centerWidth, 'text-center'))
 }
 
 /**

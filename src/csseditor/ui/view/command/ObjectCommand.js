@@ -13,11 +13,9 @@ export default class ObjectCommand extends UIElement {
         this.emit('noneSelectMenu')
         this.emit('refreshAll')   
 
-        setTimeout(() => {
-            this.emit('refreshAllElementBoundSize');
-            this.emit('refreshSelection');
-            this.emit('refreshSelectionTool');    
-        }, 1000)
+        this.emit('refreshAllElementBoundSize');
+        this.emit('refreshSelection');
+        this.emit('refreshSelectionTool');    
     }
 
     [COMMAND('add.type')] (type) {

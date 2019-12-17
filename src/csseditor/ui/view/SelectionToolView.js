@@ -431,7 +431,7 @@ export default class SelectionToolView extends SelectionToolBind {
                     <div class='handle-top'></div>                    
                 </div>
                 <div class='translate' ref='$translateZ'>
-                    <div class='perspective-handle'></div>
+                    <div class='perspective-handle' style='display:none'></div>
                 </div>
 
             </div>                      

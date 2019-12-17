@@ -83,7 +83,7 @@ class UIElement extends EventMachine {
         .map(it => it.trim())
         .forEach(e => {
           var callback = this[key].bind(this);
-          callback.displayName = e;
+          callback.displayName = `${this.sourceName}.${e}`;
           callback.source = this.source;
           this.storeEvents[e] = callback;
           this.$store.on(e, this.storeEvents[e], this, debounceSecond);
