@@ -348,7 +348,7 @@ export default class GuideView {
 
                 if (editor.selection.isInParent(item, editor.selection.items)) {
                     // 부모가 있는 애들은 스스로를 복구 하지 않는다. 
-                    console.log(item, editor.selection.items);
+                    // console.log(item, editor.selection.items);
                 } else {
                     // selection 기준으로 item 을 먼저 복구 하고 
                     this.recover(item)

@@ -335,13 +335,17 @@ export default class ElementView extends UIElement {
         this.updateRealPosition();     
     }
 
+    updateRealPositionByItem (item) {
+        var {x, y, width, height} = item.toBound();
+        var cachedItem = this.cachedCurrentElement[item.id]
+        if (cachedItem) {
+            cachedItem.cssText(`left: ${x};top:${y};width:${width};height:${height}; transform: ${item.transform};`)
+        }
+    }
+
     updateRealPosition() {
         editor.selection.items.forEach(item => {
-            var {x, y, width, height} = item.toBound();
-            var cachedItem = this.cachedCurrentElement[item.id]
-            if (cachedItem) {
-                cachedItem.cssText(`left: ${x};top:${y};width:${width};height:${height}; transform: ${item.transform};`)
-            }
+            this.updateRealPositionByItem(item);
         })
 
         this.emit('refreshRect');        
@@ -491,6 +495,7 @@ export default class ElementView extends UIElement {
 
     updateElement (item, isChangeFragment = true, isLast = false) {
         item.updateFunction(this.getElement(item.id), isChangeFragment, isLast);
+        this.updateRealPositionByItem(item);
     }
 
     [EVENT('playTimeline')] () {
@@ -509,7 +514,6 @@ export default class ElementView extends UIElement {
         if (obj) {
 
             this.updateElement(obj);
-
         } else {
             this.trigger('addElement')
         }

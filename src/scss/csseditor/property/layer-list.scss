@@ -138,4 +138,15 @@
 
 
     }
+
+    .drag-start {
+        opacity: 0.3;
+    }
+
+    &+ .drag-point {
+        position: absolute;
+        border: 1px solid $selected-color;
+        pointer-events: none;
+    }
 }
+

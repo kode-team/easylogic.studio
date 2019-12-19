@@ -10,6 +10,8 @@ import { Length } from "../../../editor/unit/Length";
 
 const i18n = editor.initI18n('layer.tree.property');
 
+const DRAG_START_CLASS = 'drag-start'
+
 export default class LayerTreeProperty extends BaseProperty {
   getTitle() {
     return `<span>${icon.account_tree}</span> ${i18n('title')}`;
@@ -94,9 +96,7 @@ export default class LayerTreeProperty extends BaseProperty {
       style: {
         position: 'absolute',
         ...bound,
-        'display': this.state.hideDragPointer ? 'none':  'block',
-        'border': '1px solid blue',
-        'pointer-events': 'none'
+        'display': this.state.hideDragPointer ? 'none':  'block'
       }
     }
   }
@@ -179,11 +179,15 @@ export default class LayerTreeProperty extends BaseProperty {
     var artboard = editor.selection.currentArtboard;
     if (!artboard) return ''
 
-    return this.makeLayerList(artboard, 0)
+    return this.makeLayerList(artboard, 0) + /*html*/`
+      <div class='layer-item ' data-depth="0" data-is-last="true">
+      </div>
+    `
   }
 
   [DRAGSTART('$layerList .layer-item')] (e) {
     var layerId = e.$delegateTarget.attr('data-layer-id');
+    e.$delegateTarget.addClass(DRAG_START_CLASS);
     e.dataTransfer.setData('layer/id', layerId);
     this.state.rootRect = this.refs.$layerList.rect()
     this.state.itemRect = e.$delegateTarget.rect();
@@ -200,9 +204,13 @@ export default class LayerTreeProperty extends BaseProperty {
     }, false)
 
     this.bindData('$dragPointer');
+
+    this.refs.$layerList.$$(`.${DRAG_START_CLASS}`).forEach(it => {
+      it.removeClass(DRAG_START_CLASS);
+    })
   }
 
-  [DRAGOVER('$layerList .layer-item') + PREVENT] (e) {
+  [DRAGOVER(`$layerList .layer-item:not(.${DRAG_START_CLASS})`) + PREVENT] (e) {
     var targetLayerId = e.$delegateTarget.attr('data-layer-id') 
     // console.log({targetLayerId, x: e.offsetX, y: e.offsetY});
 
@@ -213,7 +221,7 @@ export default class LayerTreeProperty extends BaseProperty {
     this.bindData('$dragPointer')
 
   }
-  [DROP('$layerList .layer-item')] (e) {
+  [DROP(`$layerList .layer-item:not(.${DRAG_START_CLASS})`)] (e) {
     var targetLayerId = e.$delegateTarget.attr('data-layer-id')
     var sourceLayerId = e.dataTransfer.getData('layer/id');
 
