@@ -340,7 +340,7 @@
                     }
 
                     .timeline-object-row {
-                        height: 30px;
+                        height: 24px;
                         display: grid; 
                         grid-template-columns: 20px 1fr 50px; 
                         grid-column-gap: 2px;
@@ -362,7 +362,7 @@
 
                         .icon {
 
-                            padding: 5px;
+                            padding-top: 5px;
                             svg {
                                 width: 16px;
                                 height: 16px;
@@ -377,13 +377,13 @@
 
                         .title { 
                             vertical-align: middle;
-                            padding: 5px 0px;
+                            padding-top: 5px;
                             cursor: pointer;
                             color: $font-color;
                         }
 
                         .tools {
-                            padding: 5px 0px;
+                            padding-top: 3px;
                             text-align: right;
 
                             > * {
@@ -414,7 +414,7 @@
                                     background-color: rgba(lighten($border-color, 50%), 0.7);
                                     vertical-align: middle;
                                     cursor: pointer;
-                                    transform: translateX(-5px) translateY(2px) rotate(45deg);
+                                    transform: translateX(-4px) translateY(0px) rotate(45deg);
                                 
                                     &:hover {
                                       box-shadow: 0 0 0 2px rgba($selected-color, 0.5);
@@ -484,7 +484,7 @@
                     }
 
                     .timeline-keyframe-row {
-                        height: 30px;
+                        height: 24px;
                         
                         border-bottom: 1px solid $timeline-border-color;
                         position: relative;

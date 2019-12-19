@@ -497,7 +497,7 @@ export default class ElementView extends UIElement {
         this.updateRealPositionByItem(item);
     }
 
-    [EVENT('playTimeline')] () {
+    [EVENT('playTimeline', 'moveTimeline')] () {
 
         var artboard = editor.selection.currentArtboard;
 

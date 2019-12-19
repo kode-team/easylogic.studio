@@ -116,9 +116,7 @@ export default class TimelineKeyframeList extends UIElement {
             ${list.map(it => {
                 var selected = editor.timeline.checked(it.id);
 
-                return /*html*/`<div class='${OBJECT_TO_CLASS({
-                    'offset': true
-                })}' style='left: ${it.left}' ${OBJECT_TO_PROPERTY({
+                return /*html*/`<div class='offset' style='left: ${it.left}' ${OBJECT_TO_PROPERTY({
                     'data-selected': `${selected}`,
                     'data-offset-id': it.id,
                     'data-layer-id': layerId,
@@ -149,7 +147,9 @@ export default class TimelineKeyframeList extends UIElement {
         var times = Object.keys(key).map(it => +it);
 
         return /*html*/`
-        <div class='timeline-keyframe' data-timeline-layer-id="${obj.id}">
+        <div class='timeline-keyframe ${OBJECT_TO_CLASS({
+            collapsed: animation.collapsed
+        })}' data-timeline-layer-id="${obj.id}">
             <div class='timeline-keyframe-row layer'  ${OBJECT_TO_PROPERTY({
                 'data-row-index': this.state.rowIndex++,
                 "data-layer-id": obj.id 
@@ -432,7 +432,7 @@ export default class TimelineKeyframeList extends UIElement {
     [EVENT('toggleTimelineObjectRow')] (id, isToggle) {
         this.$el.$(`.timeline-keyframe[data-timeline-layer-id="${id}"]`).toggleClass('collapsed', isToggle);
     }
-
+    
     moveEndOffset () {
         var currentArtboard = editor.selection.currentArtboard;
         if (currentArtboard) {
@@ -448,7 +448,7 @@ export default class TimelineKeyframeList extends UIElement {
     }
 
     [EVENT('refreshTimeline', 'toggleFooterEnd')] () {
-        this.refresh();
+        this.refresh();        
     }
 
     [RESIZE('window') + DEBOUNCE(100)] () {

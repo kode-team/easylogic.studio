@@ -20,61 +20,6 @@ export default class TimelineObjectList extends UIElement {
         this.refresh();
     }
 
-
-    makePropertySelect() {
-        return /*html*/`
-          <select class='property-select'>
-            <optgroup label='--'>
-              <option value='var'>var</option>
-            </optgroup>            
-            <optgroup label='Motion'>
-              <option value='offset-distance'>offset-distance</option>
-            </optgroup>      
-            <optgroup label='Size'>
-              <option value='width'>width</option>
-              <option value='height'>height</option>
-            </optgroup>      
-            <optgroup label='Box Model'>
-              <option value='margin-left'>margin-left</option>
-              <option value='margin-right'>margin-right</option>
-              <option value='margin-bottom'>margin-bottom</option>
-              <option value='margin-top'>margin-top</option>
-              <option value='padding-left'>padding-left</option>
-              <option value='padding-right'>padding-right</option>
-              <option value='padding-bottom'>padding-bottom</option>
-              <option value='padding-top'>padding-top</option>       
-            </optgroup>
-            <optgroup label='Border'>
-              <option value='border'>border</option>
-              <option value='border-top'>border-top</option>
-              <option value='border-bottom'>border-bottom</option>
-              <option value='border-left'>border-left</option>
-              <option value='border-right'>border-right</option>
-            </optgroup>
-            <optgroup label='Border Radius'>
-              <option value='border-radius'>border-radius</option>
-            </optgroup>        
-            <optgroup label='Style'>
-              <option value='background-color'>background-color</option>
-              <option value='background-image'>background-image</option>
-              <option value='box-shadow'>box-shadow</option>
-              <option value='text-shadow'>text-shadow</option>
-              <option value='filter'>filter</option>      
-              <option value='backdrop-filter'>backdrop-filter</option>          
-            </optgroup>            
-            <optgroup label='Transform'>
-              <option value='transform'>transform</option>
-              <option value='transform-origin'>transform-origin</option>
-              <option value='perspective'>perspective</option>
-              <option value='perspective-origin'>perspective-origin</option>
-            </optgroup>
-            <optgroup label='Font'>
-              <option value='font-size'>font-size</option>
-            </optgroup>
-          </select>
-        `
-      }
-
     makeTimelineObjectRow (animation) {
         var artboard = editor.selection.currentArtboard;
 
@@ -93,7 +38,6 @@ export default class TimelineObjectList extends UIElement {
                 <div class='icon'>${icon.chevron_right}</div>
                 <div class='title'> ${obj.name}</div>
                 <div class='tools'>
-                    <!--${this.makePropertySelect()} -->
                     <button type="button" class='remove-timeline' data-layer-id='${obj.id}'>${icon.remove}</button>
                     <button type="button" class='empty'></button>                    
                 </div>
@@ -109,7 +53,6 @@ export default class TimelineObjectList extends UIElement {
                     <div class='current-value'>
                       ${property.property === 'd' ? layer.totalLength : ''}
                       ${property.property === 'points' ? layer.totalLength : ''}
-                      <!--<input type='text' data-property='${property.property}' data-layer-id="${obj.id}" value='' /> -->
                     </div>
                     <div class='tools'>
                         <button type="button" class='remove' data-layer-id='${obj.id}' data-property='${property.property}'>${icon.remove}</button>
@@ -161,11 +104,11 @@ export default class TimelineObjectList extends UIElement {
 
         var layerId = e.$delegateTarget.closest('timeline-object-row').attr('data-layer-id')
 
-        this.emit('toggleTimelineObjectRow', layerId, container.hasClass('collapsed'))
-
         editor.timeline.selectLayer(layerId)
+        editor.timeline.toggleLayerContainer(container.attr('data-timeline-animation-id'));
 
         this.refreshSelection();
+        this.emit('toggleTimelineObjectRow', layerId, container.hasClass('collapsed'))        
     }
 
     [CLICK('$el .timeline-object-row.layer .add-property')] (e) {

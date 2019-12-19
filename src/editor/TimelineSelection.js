@@ -52,10 +52,21 @@ export class TimelineSelection {
     this.currentArtBoard(artboard => {
       var list = artboard.getKeyframeListReturnArray().filter(it => {
         return it.layerId === layerId
-      });
+      })
       this.refreshCache(list);
     })
   }
+
+  toggleLayerContainer (animationId) {
+
+    this.currentArtBoard(artboard => {
+      artboard.getSelectedTimeline().animations.filter(it => {
+        return it.id === animationId
+      }).forEach(it => {
+        it.collapsed = !it.collapsed
+      })
+    })
+  }  
 
   selectProperty (layerId, property) {
     this.currentArtBoard(artboard => {
