@@ -61,6 +61,19 @@ export class Selection {
     return this.items.length;
   }
 
+  getRootItem (current) {
+    var rootItem = current || this.currentArtboard;
+    if (current) {
+      if (current.is('artboard')) {
+        rootItem = current; 
+      } else if (current.parent) {
+        rootItem = current.parent; 
+      }
+    }
+
+    return rootItem;
+  }
+
   selectColorStep (...args) {
     this.colorsteps = args; 
   }

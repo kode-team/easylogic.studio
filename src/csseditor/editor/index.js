@@ -152,16 +152,7 @@ export default class CSSEditor extends UIElement {
     this.emit('refreshCanvas', current)
     this.emit('refreshStyleView', current)
 
-    var rootItem = current || editor.selection.currentArtboard;
-    if (current) {
-      if (current.is('artboard')) {
-        rootItem = current; 
-      } else if (current.parent) {
-        rootItem = current.parent; 
-      }
-    }
-
-    this.emit('refreshElementBoundSize', rootItem)
+    this.emit('refreshElementBoundSize', editor.selection.getRootItem(current))
   }
 
   [DRAGOVER('$middle') + PREVENT] (e) {}
