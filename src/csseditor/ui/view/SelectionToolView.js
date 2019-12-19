@@ -865,12 +865,12 @@ export default class SelectionToolView extends SelectionToolBind {
             this.refs.$selectionTool.attr('data-selected-movetype', '');
     
             this.emit('refreshCanvasForPartial', null, false, true)
-            this.emit('removeGuideLine')
             this.refreshSelectionToolView(dx, dy);   
 
             this.emit('refreshAllElementBoundSize');            
         }
-     
+
+        this.emit('removeGuideLine')
     }   
 
     refreshSelectionToolView (dx, dy, type) {

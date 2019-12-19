@@ -226,6 +226,7 @@
                     height: 5px;
 
                     $back-color: $border-color;
+                    $handle-color: #ffff00;
              
                     .duration-handle-left {
                         position: absolute;
@@ -262,7 +263,7 @@
                             transform: translateX(-100%);
                             height: 100%;
                             width: 5px;
-                            background-color: $border-color;
+                            background-color: $handle-color;
                             cursor: ew-resize;                            
                         }
 
@@ -272,7 +273,7 @@
                             top: 0px;
                             height: 100%;
                             width: 5px;
-                            background-color: $border-color;
+                            background-color: $handle-color;
                             cursor: ew-resize;
                         }      
                         

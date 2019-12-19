@@ -239,12 +239,10 @@ export default class ElementView extends UIElement {
                 } else {
                     editor.selection.select();            
                     this.emit('emptySelection')
-                    this.emit('removeGuideLine')
                 }                
             } else {
                 editor.selection.select();                
-                this.emit('emptySelection')
-                this.emit('removeGuideLine')                
+                this.emit('emptySelection')            
             }
     
 
@@ -270,6 +268,7 @@ export default class ElementView extends UIElement {
         }
 
         this.sendHelpMessage();
+        this.emit('removeGuideLine')
     }
 
     sendHelpMessage () {
