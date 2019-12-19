@@ -9,7 +9,7 @@ export default class ToolMenu extends UIElement {
 
   template() {
     return /*html*/`
-      <div class='tool-menu '>
+      <div class='tool-menu center'>
         <div class='items'>
           <div class='draw-items' ref='$items'>
             <!--<label class='sub-title'>CSS</label> -->

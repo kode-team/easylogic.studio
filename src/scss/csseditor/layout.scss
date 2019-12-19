@@ -98,29 +98,6 @@
     pointer-events: all;
     
     border-bottom: 1px solid $border-color;
-
-    .logo {
-      position: absolute;
-      left: 0px;
-      top: 0px;
-      bottom: 0px;
-      width: $left-size;
-    }
-
-    .tool-menu {
-      position: absolute;
-      top: 0px;
-      bottom: 0px;
-      left: $left-size;
-    }
-
-    .external-tool-menu {
-      position: absolute;
-      top: 0px;
-      bottom: 0px;
-      right: 0px;
-    }    
-
   }
 
 

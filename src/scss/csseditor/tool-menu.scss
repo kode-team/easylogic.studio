@@ -1,7 +1,6 @@
 .logo {
+  text-align: center;
   padding: 0px 10px;
-  width: 260px;
-
   .image {
     display: inline-block;
     vertical-align: middle;
@@ -22,7 +21,7 @@
 
 
   .text { 
-    font-size: 30px;
+    font-size: 16px;
     display: inline-block;
     font-weight: 900;
     line-height: 1.6;
@@ -33,12 +32,12 @@
 
   .extra-text {
     z-index: 0;    
-    font-size: 30px;
+    font-size: 16px;
     display: inline-block;
     font-weight: 900;
     line-height: 1.6;
     vertical-align: middle;   
-    color: $logo-selected-font-color; 
+    color: $logo-selected-font-color;     
   }
 
   .site {
@@ -47,26 +46,37 @@
   }
 }
 
-.external-tool-menu {
-  padding-left: 10px;
+.menu-bar {
+  display: grid; 
+  grid-template-columns: $left-size 1fr $right-size;
+  grid-column-gap: 10px;
 }
 
 .tool-menu,
+.preview-tool-menu,
 .external-tool-menu {
   height: 100%;
   display: inline-block;
   color: $selected-font-color;
+  padding: 0px 10px;
 
+  &.right {
+    text-align: right;
+  }
+
+
+  &.center{
+    text-align: center;
+  }
 
   .items {
-    // flex: 1 1 auto;
     height: 100%;
     padding: 0px;
-    padding-top: 15px;
+    display: inline-block;
 
 
     .draw-items {
-      // background-color: $background-color;
+      padding-top: 5px;
       > * {
         display: inline-block;
       }
@@ -100,7 +110,6 @@
   
       .menu-item {
         text-align: center;
-        margin-top: 5px;
         color: $font-color;
         width: 30px;
         height: 48px;
@@ -108,7 +117,6 @@
         background-image: none;
         border:0px;
         box-shadow: none;
-        margin-bottom: 5px;
   
         &.selected {
           .icon {      
@@ -165,7 +173,7 @@
       vertical-align: middle;
       width: 3px;
       margin-right: 2px;
-      border-right: 1px solid $border-color;
+      border-right: 1px solid rgba(255, 255, 255, 0.3);
     }
 
     &.flex-2 {
@@ -178,9 +186,7 @@
       text-align: left;
     }
 
-    &.right {
-      text-align: right;
-    }
+
 
     form {
       display: inline-block;

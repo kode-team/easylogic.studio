@@ -22,6 +22,7 @@ import ImageFileView from "../ui/view/ImageFileView";
 import TimelineProperty from "../ui/control/TimelineProperty";
 import StatusBar from "../ui/view/StatusBar";
 import items from "../../editor/items";
+import PreviewToolMenu from "../ui/view/PreviewToolMenu";
 
 export default class CSSEditor extends UIElement {
   
@@ -49,8 +50,11 @@ export default class CSSEditor extends UIElement {
       <div class="layout-main">
         <div class="layout-header">
             <LogoView />
-            <ToolMenu />
-            <ExternalToolMenu />
+            <div class='menu-bar'>
+              <PreviewToolMenu />
+              <ToolMenu />
+              <ExternalToolMenu />
+            </div>
         </div>
         <div class="layout-middle" ref='$middle'>
           <div class="layout-body">
@@ -114,7 +118,8 @@ export default class CSSEditor extends UIElement {
       ExternalToolMenu,
       ImageFileView,
       StatusBar,
-      TimelineProperty
+      TimelineProperty,
+      PreviewToolMenu,
     };
   }
 
