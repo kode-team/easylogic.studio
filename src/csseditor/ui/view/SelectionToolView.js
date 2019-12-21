@@ -835,6 +835,27 @@ export default class SelectionToolView extends SelectionToolBind {
         }
     }
 
+    [EVENT('moveByKey')] (dx, dy) {
+
+        if (dx === 0 && dy === 0) {
+            return;  
+        }
+
+        this.pointerType = 'move'; 
+        editor.selection.move(dx, dy);
+        this.parent.selectCurrent(...editor.selection.items)
+
+        this.refs.$selectionTool.attr('data-selected-position', '');
+        this.refs.$selectionTool.attr('data-selected-movetype', '');
+
+        this.guideView.move(this.pointerType, dx,  dy)
+
+        var drawList = this.guideView.calculate();
+        this.emit('refreshGuideLine', this.calculateWorldPositionForGuideLine(drawList));                    
+
+        this.makeSelectionTool();           
+    }
+
     end (dx, dy) {
 
         if (this.pointerType === 'move') {
@@ -866,6 +887,7 @@ export default class SelectionToolView extends SelectionToolBind {
     
             this.emit('refreshCanvasForPartial', null, false, true)
             this.refreshSelectionToolView(dx, dy);   
+            editor.selection.setRectCache()
 
             this.emit('refreshAllElementBoundSize');            
         }

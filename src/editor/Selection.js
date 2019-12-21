@@ -281,6 +281,8 @@ export class Selection {
       }
 
     })
+
+    this.reselect()
   }
 
   moveRight (dx) {

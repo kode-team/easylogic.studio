@@ -1,7 +1,7 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
 
-import { editor, EDIT_MODE_SELECTION } from "../../../editor/editor";
-import { DEBOUNCE, PREVENT, STOP, WHEEL, ALT, THROTTLE, IF, KEYUP, CONTROL, KEY, DRAGOVER, DROP } from "../../../util/Event";
+import { editor } from "../../../editor/editor";
+import { DEBOUNCE, PREVENT, WHEEL, ALT, THROTTLE, IF, KEYUP, CONTROL, KEY, DRAGOVER, DROP, KEYPRESS, KEYDOWN } from "../../../util/Event";
 
 import ElementView from "./ElementView";
 import NumberRangeEditor from "../property-editor/NumberRangeEditor";
@@ -59,6 +59,10 @@ export default class CanvasView extends UIElement {
 
   isNumberKey(e) {
     return ((+e.key) + "") === e.key;
+  }
+  
+  isArrowKey(e) {
+    return e.key.includes('Arrow')
   }  
 
   isNotFormElement(e) {
@@ -67,9 +71,13 @@ export default class CanvasView extends UIElement {
     return ['input'].includes(tagName) === false;
   }
 
-  [KEYUP('$el') + IF('isNumberKey') + IF('isNotFormElement') + PREVENT+ STOP] (e) {
+  [KEYUP('$el') + IF('isNumberKey') + IF('isNotFormElement') + PREVENT] (e) {
     this.emit('keyup.canvas.view', e.key);
   }
+
+  [KEYDOWN('$el') + IF('isArrowKey') + IF('isNotFormElement')] (e) {
+    this.emit('arrow.keydown.canvas.view', e.key, e.altKey, e.shiftKey);
+  }  
 
   [WHEEL('$lock') + ALT + PREVENT + THROTTLE(10)] (e) {
 

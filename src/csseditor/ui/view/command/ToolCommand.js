@@ -21,9 +21,16 @@ const createItem = (obj) => {
 }
 
 export default class ToolCommand extends UIElement {
-    refreshSelection () {
-        this.emit('refreshAll')
+    refreshSelection (isSelectedItems = false) {
+        if (isSelectedItems) {
+            this.emit('refreshSelectionStyleView')
+        } else {
+            this.emit('refreshAll')
+        }
+
         this.emit('hideSubEditor');
+
+        this.emit('refreshAllElementBoundSize');        
         this.emit('refreshSelection');        
         this.emit('refreshSelectionTool')       
     }
@@ -131,8 +138,32 @@ export default class ToolCommand extends UIElement {
     [COMMAND('keyup.canvas.view')] (key) {
         var command = this.getAddCommand(key);
 
-        this.trigger(...command);
+        this.emit(...command);
     }
+
+    [COMMAND('arrow.keydown.canvas.view')] (key, isAlt = false, isShift = false) {
+        var dx = 0;
+        var dy = 0; 
+        var t = 1; 
+
+        if (isAlt) {
+            t = 5;
+        } else if (isShift) {
+            t = 10; 
+        }
+
+        switch(key) {
+        case 'ArrowDown': dy = 1; break; 
+        case 'ArrowUp': dy = -1; break; 
+        case 'ArrowLeft': dx = -1; break; 
+        case 'ArrowRight': dx = 1; break; 
+        }
+
+        editor.selection.move(dx * t, dy * t); 
+
+        this.refreshSelection(true);
+
+    }    
 
     getAddCommand (key) {
         switch(key) {
