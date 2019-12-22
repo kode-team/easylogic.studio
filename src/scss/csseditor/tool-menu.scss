@@ -1,24 +1,7 @@
 .logo {
   text-align: center;
   padding: 0px 10px;
-  .image {
-    display: inline-block;
-    vertical-align: middle;
-    height: 100%;
-    width: 30px;
-    line-height: 1.6;    
-    font-size: 30px;
-
-    svg {
-      width: 100%;
-      height: 100%;
-
-      path {
-        fill: $logo-selected-color;
-      }
-    }
-  }
-
+  background-color: rgba(255, 255, 255, 0.05);
 
   .text { 
     font-size: 16px;

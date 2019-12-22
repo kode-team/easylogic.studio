@@ -154,7 +154,7 @@ export default class CSSEditor extends UIElement {
   }  
 
   [EVENT('refreshElement')] (current) {
-    this.emit('refreshCanvas', current)
+    this.emit('refreshCanvasForPartial', current)
     this.emit('refreshStyleView', current)
 
     this.emit('refreshElementBoundSize', editor.selection.getRootItem(current))

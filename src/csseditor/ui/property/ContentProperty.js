@@ -47,7 +47,7 @@ export default class ContentProperty extends BaseProperty {
         content: this.refs.$contentItem.value
       }
       current.reset(data);
-      this.emit('refreshCanvas', {id: current.id, content: data.content, itemType: current.itemType });
+      this.emit('refreshCanvasForPartial', current);
     }
   }
 }

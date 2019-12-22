@@ -68,7 +68,7 @@ export default class CanvasView extends UIElement {
   isNotFormElement(e) {
     var tagName = e.target.tagName.toLowerCase();
 
-    return ['input'].includes(tagName) === false;
+    return ['input'].includes(tagName) === false && Dom.create(e.target).attr('contenteditable') !== 'true';
   }
 
   [KEYUP('$el') + IF('isNumberKey') + IF('isNotFormElement') + PREVENT] (e) {

@@ -13,7 +13,6 @@ import SameHeight from "./SameHeight";
 import SameWidth from "./SameWidth";
 import CopyItem from "./CopyItem";
 import AddText from "./AddText";
-import ToggleRightItem from "./ToggleRightItem";
 import AddPolygon from "./AddPolygon";
 import AddStar from "./AddStar";
 import ThemeSwitcher from "./ThemeSwitcher";
@@ -57,14 +56,13 @@ export default {
   ThemeSwitcher,
   AddStar,
   AddPolygon,
-  ToggleRightItem,
   AddText,
   CopyItem,
   SameHeight,
   SameWidth,
   TopAlign,
   BottomAlign,
-  MiddleAlign,
+  MiddleAlign, 
   CenterAlign,
   RightAlign,
   LeftAlign,

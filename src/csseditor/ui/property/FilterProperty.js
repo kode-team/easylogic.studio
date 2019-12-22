@@ -120,11 +120,6 @@ export default class FilterProperty extends BaseProperty {
 
   }
 
-  [EVENT('refreshCanvas') + DEBOUNCE(1000) ] () {
-    
-    this.load('$filterSelect')
-  }
-
   [EVENT('refreshSelection') + DEBOUNCE(100)] () {
     this.refreshShowIsNot('project')
   }

@@ -126,9 +126,4 @@ export default class BackdropFilterProperty extends BaseProperty {
   [EVENT('refreshSelection') + DEBOUNCE(100)] () {
     this.refreshShowIsNot(['project', 'artboard'])
   }  
-
-  [EVENT('refreshCanvas') + DEBOUNCE(1000) ] () {
-    
-    this.load('$filterSelect')
-  }
 }

@@ -413,10 +413,6 @@ export default class FilterEditor extends UIElement {
     this.modifyFilter();
   }
 
-  [EVENT('refreshCanvas') + DEBOUNCE(1000) ] () {
-    this.load('$filterSelect')
-  }
-
   [EVENT('refreshSVGArea') + DEBOUNCE(1000)] () {
     this.load('$filterSelect');
     this.load('$filterList');

@@ -368,7 +368,6 @@ export default class GuideView {
                 item.recover();
             });
         }
-
     }
     
 } 

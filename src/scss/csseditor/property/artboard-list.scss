@@ -47,17 +47,15 @@
         &[data-layout='grid']
         {
             .detail {
-                label {
+                [data-layout-title] {
                     &:after {
-                        content: attr(data-layout-title);
-                        text-transform: uppercase;
-                        color: white;
-                        border-radius: 3px;
+                        content: '';
                         display: inline-block;
+                        width: 10px;
+                        height: 10px;
                         vertical-align: middle;
-                        margin-left: 2px;
-                        padding: 1px 4px;
-                        font-size: 11px;
+                        margin-left: 5px;
+                        border-radius: 3px;
                     }
                 }
             }
@@ -65,9 +63,9 @@
 
         &[data-layout='flex'] {
             .detail {
-                label {
+                [data-layout-title] {
                     &:after {
-                        background-color: green;
+                        background-color: rgb(68, 163, 68);
                     }
                 }
             }
@@ -75,7 +73,7 @@
 
         &[data-layout='grid'] {
             .detail {
-                label {
+                [data-layout-title] {
                     &:after {
                         background-color: $selected-color;
                     }

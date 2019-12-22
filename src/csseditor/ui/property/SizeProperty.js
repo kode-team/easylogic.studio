@@ -51,13 +51,7 @@ export default class SizeProperty extends BaseProperty {
       [key]: value
     })
 
-    editor.selection.reselect();
-
     this.emit('refreshSelectionStyleView');
-    this.emit('refreshSelectionTool');
-    // this.emit('setSize')
-
-    // this.emit('change.property', key)    
-
+    this.emit('refreshAllElementBoundSize')
   }
 }

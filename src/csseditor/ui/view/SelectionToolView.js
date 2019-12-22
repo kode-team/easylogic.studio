@@ -142,23 +142,15 @@ const SelectionToolEvent = class  extends UIElement {
         if (isScale) {
             this.removeOriginalRect()   
         }
-        var drawList = this.guideView.calculate();
+        let drawList = this.guideView.calculate();
 
         this.makeSelectionTool();
 
         if (editor.selection.length === 0){
-            this.emit('removeGuideLine');                
-        } else {
-            this.emit('refreshGuideLine', this.calculateWorldPositionForGuideLine(drawList));                
+            drawList = []                
         }
 
-    }
-
-
-    [EVENT('refreshCanvas')] (obj = {}) {
-        editor.selection.setRectCache();
-
-        this.initSelectionTool();
+        this.emit('refreshGuideLine', this.calculateWorldPositionForGuideLine(drawList));
     }
 
     [EVENT('refreshSelectionStyleView')] () {

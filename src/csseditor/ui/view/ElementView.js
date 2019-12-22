@@ -27,6 +27,7 @@ export default class ElementView extends UIElement {
             top: Length.px(0),
             width: Length.px(10000),
             height: Length.px(10000),
+            cachedCurrentElement: {},
             html: ''
         }
     }
@@ -124,7 +125,7 @@ export default class ElementView extends UIElement {
 
             editor.selection.empty();
         
-            this.cachedCurrentElement = {}
+            this.state.cachedCurrentElement = {}
             this.$el.$$('.selected').forEach(it => it.removeClass('selected'))
     
             this.emit('initSelectionTool')        
@@ -336,7 +337,7 @@ export default class ElementView extends UIElement {
 
     updateRealPositionByItem (item) {
         var {x, y, width, height} = item.toBound();
-        var cachedItem = this.cachedCurrentElement[item.id]
+        var cachedItem = this.state.cachedCurrentElement[item.id]
         if (cachedItem) {
             cachedItem.cssText(`left: ${x};top:${y};width:${width};height:${height}; transform: ${item.transform};`)
         }
@@ -403,7 +404,7 @@ export default class ElementView extends UIElement {
     }
 
     selectCurrent (...args) {
-        this.cachedCurrentElement = {}
+        this.state.cachedCurrentElement = {}
         var $selectedElement = this.$el.$$('.selected');
 
         if ($selectedElement) {
@@ -417,7 +418,7 @@ export default class ElementView extends UIElement {
             var list = this.$el.$$(selector);
             
             list.forEach(it => {
-                this.cachedCurrentElement[it.attr('data-id')] = it; 
+                this.state.cachedCurrentElement[it.attr('data-id')] = it; 
                 it.addClass('selected')
             })
             
@@ -432,7 +433,7 @@ export default class ElementView extends UIElement {
 
 
     selectCurrentForBackgroundView (...args) {
-        this.cachedCurrentElement = {}
+        this.state.cachedCurrentElement = {}
         var $selectedElement = this.$el.$$('.selected');
 
         if ($selectedElement) {
@@ -446,7 +447,7 @@ export default class ElementView extends UIElement {
             var list = this.$el.$$(selector);
             
             list.forEach(it => {
-                this.cachedCurrentElement[it.attr('data-id')] = it; 
+                this.state.cachedCurrentElement[it.attr('data-id')] = it; 
                 it.addClass('selected')
             })
             
@@ -509,15 +510,16 @@ export default class ElementView extends UIElement {
         }
     }    
 
-    [EVENT('refreshCanvas')] (obj) {
-        if (obj) {
+    // @deprecated 
+    // [EVENT('refreshCanvas')] (obj) {
+    //     if (obj) {
 
-            this.updateElement(obj);
-        } else {
-            this.trigger('addElement')
-        }
+    //         this.updateElement(obj);
+    //     } else {
+    //         this.trigger('addElement')
+    //     }
 
-    }
+    // }
 
     [EVENT('refreshAllCanvas')] () {
         var artboard = editor.selection.currentArtboard || { html : ''} 
