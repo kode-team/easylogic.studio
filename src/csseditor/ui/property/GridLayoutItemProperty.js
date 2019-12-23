@@ -90,8 +90,6 @@ export default class GridLayoutItemProperty extends BaseProperty {
 
   getGridValue () {    
 
-    console.log(this.children.$columnStart.getValue())
-
     var obj = {
       'grid-column-start': this.children.$columnStart.getValue(),
       'grid-column-end': this.children.$columnEnd.getValue(),
@@ -111,6 +109,7 @@ export default class GridLayoutItemProperty extends BaseProperty {
     })
 
     this.emit('refreshSelectionStyleView');  // 전체 새로 고침 
+    this.emit('refreshAllElementBoundSize')
   }
 
   [EVENT('changeLayoutType')] (key, value) {
@@ -130,6 +129,7 @@ export default class GridLayoutItemProperty extends BaseProperty {
     this.refs.$layoutList.attr('data-selected-value', valueType);
 
     this.emit('refreshSelectionStyleView');  // 전체 새로 고침 
+    this.emit('refreshAllElementBoundSize')    
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {

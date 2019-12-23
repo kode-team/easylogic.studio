@@ -88,6 +88,6 @@ export default class BoxModelProperty extends BaseProperty {
     editor.selection.reset(data);
 
     this.emit("refreshElement");
-    // this.emit('refreshAllElementBoundSize');    
+    this.emit('refreshAllElementBoundSize');    
   }
 }

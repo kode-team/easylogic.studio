@@ -101,6 +101,7 @@ export default class FlexLayoutItemProperty extends BaseProperty {
     })
 
     this.emit('refreshSelectionStyleView');  // 전체 새로 고침 
+    this.emit('refreshAllElementBoundSize')    
   }
 
   [EVENT('changeLayoutType')] (key, value) {
@@ -120,6 +121,7 @@ export default class FlexLayoutItemProperty extends BaseProperty {
     this.refs.$layoutList.attr('data-selected-value', valueType);
 
     this.emit('refreshSelectionStyleView');  // 전체 새로 고침 
+    this.emit('refreshAllElementBoundSize')    
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {

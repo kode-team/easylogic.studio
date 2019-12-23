@@ -8,6 +8,8 @@ import SelectionToolView from "./SelectionToolView";
 import GuideLineView from "./GuideLineView";
 import PathEditorView from "./PathEditorView";
 import PolygonEditorView from "./PolygonEditorView";
+import GridLayoutLineView from "./GridLayoutLineView";
+
 
 export default class ElementView extends UIElement {
 
@@ -16,7 +18,8 @@ export default class ElementView extends UIElement {
             SelectionToolView,
             GuideLineView,
             PathEditorView,
-            PolygonEditorView
+            PolygonEditorView,
+            GridLayoutLineView,
         }
     }
 
@@ -37,7 +40,8 @@ export default class ElementView extends UIElement {
             <div class='element-view' ref='$body'>
                 <div class='canvas-view' ref='$view'></div>
                 <div class='drag-area-rect' ref='$dragAreaRect'></div>
-                <GuideLineView ref='$guideLineView' />                
+                <GuideLineView ref='$guideLineView' />
+                <GridLayoutLineView ref='$gridLayoutLineView' />
                 <SelectionToolView ref='$selectionTool' />
                 <PathEditorView ref='$pathEditorView' />
                 <PolygonEditorView ref='$polygonEditorView' />                             
@@ -545,6 +549,8 @@ export default class ElementView extends UIElement {
         list.forEach(it => {
             this.trigger('refreshElementBoundSize', it);
         })
+
+        editor.selection.setRectCache()
     }
 
     [EVENT('refreshElementBoundSize')] (parentObj) {

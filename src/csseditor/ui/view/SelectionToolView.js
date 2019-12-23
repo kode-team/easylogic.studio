@@ -879,7 +879,6 @@ export default class SelectionToolView extends SelectionToolBind {
     
             this.emit('refreshCanvasForPartial', null, false, true)
             this.refreshSelectionToolView(dx, dy);   
-            editor.selection.setRectCache()
 
             this.emit('refreshAllElementBoundSize');            
         }
