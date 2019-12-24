@@ -17,15 +17,11 @@ export default class GridLayoutLineView extends UIElement {
 
         var len = editor.selection.length;
 
-        console.log(len);
-
         if (len !== 1) {
             return /*html*/'<div></div>'; 
         }
 
         var current = editor.selection.current;
-
-        console.log(current.isInGrid())
 
         if (current.isInGrid()) {
             var layoutContainer = current.parent; 
@@ -47,7 +43,7 @@ export default class GridLayoutLineView extends UIElement {
     }
     
 
-    [EVENT('refreshGridLayoutLine', 'refreshSelectionTool', 'refreshSelection')] () {
+    [EVENT('refreshGridLayoutLine', 'refreshSelectionTool', 'refreshSelection')] () {        
         this.refresh();
     }
 } 
