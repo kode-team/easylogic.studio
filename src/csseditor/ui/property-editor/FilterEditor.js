@@ -28,21 +28,9 @@ import UIElement, { EVENT } from "../../../util/UIElement";
 import RangeEditor from "./RangeEditor";
 import ColorViewEditor from "./ColorViewEditor";
 import SelectEditor from "./SelectEditor";
+import { filter_list } from "../../../editor/util/Resource";
 
 
-var filterList = [
-  "blur",
-  "grayscale",
-  "hue-rotate",
-  "invert",
-  "brightness",
-  "contrast",
-  "drop-shadow",
-  "opacity",
-  "saturate",
-  "sepia",
-  'svg',
-];
 
 var specList = {
   blur: BlurFilter.spec,
@@ -57,6 +45,8 @@ var specList = {
   sepia: SepiaFilter.spec,
   svg: URLSvgFilter.spec
 };
+
+const i18n = editor.initI18n('filter.property');
 
 export default class FilterEditor extends UIElement {
 
@@ -91,7 +81,7 @@ export default class FilterEditor extends UIElement {
   }
 
   [LOAD('$filterSelect')] () {
-    var list = filterList.map(it => { 
+    var list = filter_list.map(it => { 
       return {title: it, value: it}
     })
 
@@ -126,7 +116,7 @@ export default class FilterEditor extends UIElement {
     return /*html*/`
       <div class="filter-item">
         <div class="title" draggable="true" data-index="${index}">
-          <label>Drop Shadow</label>
+          <label>${i18n('drop-shadow')}</label>
           <div class="filter-menu">
             <button type="button" class="del" data-index="${index}">
               ${icon.remove2}
@@ -212,19 +202,19 @@ export default class FilterEditor extends UIElement {
 
   makeOneFilterTemplate(spec, filter, index) {
 
-    var subtitle = filter.type === 'svg' ? ` - <span class='svg-filter-edit' data-index="${index}">${filter.value}</span>` : ''; 
+    var subtitle = filter.type === 'svg' ? /*html*/` - <span class='svg-filter-edit' data-index="${index}">${filter.value}</span>` : ''; 
 
     return /*html*/`
       <div class="filter-item" data-index="${index}">
         <div class="title" draggable="true" data-index="${index}">
-          <label>${spec.title}${subtitle}</label>
+          <label>${i18n(filter.type)}${subtitle}</label>
           <div class="filter-menu">
             <button type="button" class="del" data-index="${index}">
               ${icon.remove2}
             </button>
           </div>
         </div>
-        ${filter.type != 'svg' ? `
+        ${filter.type != 'svg' ? /*html*/`
           <div class="filter-ui">
             ${this.makeOneFilterEditor(index, filter, spec)}
           </div>

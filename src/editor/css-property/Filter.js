@@ -89,7 +89,6 @@ export class BlurFilter extends Filter {
 }
 
 BlurFilter.spec = {
-  title: "Blur",
   inputType: "range",
   min: 0,
   max: 100,
@@ -120,7 +119,6 @@ export class URLSvgFilter extends Filter {
 }
 
 URLSvgFilter.spec = {
-  title: "SVG",
   inputType: "select",
   defaultValue: ''
 };
@@ -142,7 +140,6 @@ export class GrayscaleFilter extends Filter {
 }
 
 GrayscaleFilter.spec = {
-  title: "Grayscale",
   inputType: "range",
   min: 0,
   max: 100,
@@ -162,7 +159,6 @@ export class HueRotateFilter extends Filter {
 }
 
 HueRotateFilter.spec = {
-  title: "Hue",
   inputType: "range",
   min: 0,
   max: 360,
@@ -182,7 +178,6 @@ export class InvertFilter extends Filter {
 }
 
 InvertFilter.spec = {
-  title: "Invert",
   inputType: "range",
   min: 0,
   max: 100,
@@ -202,7 +197,6 @@ export class BrightnessFilter extends Filter {
 }
 
 BrightnessFilter.spec = {
-  title: "Brightness",
   inputType: "range",
   min: 0,
   max: 200,
@@ -222,7 +216,6 @@ export class ContrastFilter extends Filter {
 }
 
 ContrastFilter.spec = {
-  title: "Contrast",
   inputType: "range",
   min: 0,
   max: 200,
@@ -242,7 +235,6 @@ export class OpacityFilter extends Filter {
 }
 
 OpacityFilter.spec = {
-  title: "Opacity",
   inputType: "range",
   min: 0,
   max: 100,
@@ -262,7 +254,6 @@ export class SaturateFilter extends Filter {
 }
 
 SaturateFilter.spec = {
-  title: "Saturate",
   inputType: "range",
   min: 0,
   max: 100,
@@ -282,7 +273,6 @@ export class SepiaFilter extends Filter {
 }
 
 SepiaFilter.spec = {
-  title: "Sepia",
   inputType: "range",
   min: 0,
   max: 100,

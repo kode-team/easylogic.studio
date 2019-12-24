@@ -278,6 +278,10 @@
     border-bottom: 0px solid $property-border-color;  
     background-color: $property-title-color;
 
+    &.filter {
+      grid-template-columns: 1fr 140px;
+    }
+
     svg  {
       width: 16px;
       height: 16px;

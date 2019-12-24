@@ -6,22 +6,9 @@ import {
 import { editor } from "../../../editor/editor";
 import { EVENT } from "../../../util/UIElement";
 import icon from "../icon/icon";
+import { filter_list } from "../../../editor/util/Resource";
 
-
-
-var filterList = [
-  "blur",
-  "grayscale",
-  "hue-rotate",
-  "invert",
-  "brightness",
-  "contrast",
-  "drop-shadow",
-  "opacity",
-  "saturate",
-  "sepia",
-  'svg',
-];
+const i18n = editor.initI18n('filter.property')
 
 export default class BackdropFilterProperty extends BaseProperty {
 
@@ -33,6 +20,12 @@ export default class BackdropFilterProperty extends BaseProperty {
   hasKeyframe () {
     return true; 
   }
+
+
+  getTitleClassName() {
+    return 'filter'
+  }
+
 
   getKeyframeProperty () {
     return 'backdrop-filter';
@@ -58,8 +51,8 @@ export default class BackdropFilterProperty extends BaseProperty {
   }
 
   [LOAD('$filterSelect')] () {
-    var list = filterList.map(it => { 
-      return {title: it, value: it}
+    var list = filter_list.map(it => { 
+      return {title: i18n(it), value: it}
     })
 
     var svgFilterList = this.getSVGFilterList()

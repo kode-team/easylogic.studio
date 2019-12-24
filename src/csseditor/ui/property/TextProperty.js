@@ -43,7 +43,7 @@ export default class TextProperty extends BaseProperty {
           ref='$transform' 
           label='${i18n('transform')}' 
           key='text-transform' 
-          options="uppercase:A,lowercase:a,capitalize:Aa"
+          options="none,uppercase:A,lowercase:a,capitalize:Aa"
           onchange='changeTextValue' />                
       </div>        
       <div class="property-item">

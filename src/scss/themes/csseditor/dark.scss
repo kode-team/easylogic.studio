@@ -29,8 +29,8 @@ $selected-color: #fc554f;
 $logo-selected-color: #fc554f;
 $logo-selected-font-color: white;
 
-$background-color: #16191e; 
-$header-background-color: #292f38;
+$background-color: #1f2024; 
+$header-background-color: #34353a;
 $selected-background-color: #535353; 
 $font-color: #ffffff;
 $selected-font-color: rgb(255, 255, 255);
@@ -38,8 +38,8 @@ $selected-font-color: rgb(255, 255, 255);
 // base 
 $button-front-color: $font-color;
 
-$select-background-color: #13161c;
-$select-border-color: #13161c;
+$select-background-color: #1f2024;
+$select-border-color: #1f2024;
 $select-border-radius: 3px;
 $select-font-color: $font-color;
 
@@ -52,16 +52,16 @@ $range-thumb-color:  $selected-color;
 $range-track-color:  rgb(97, 97, 97);
 $range-thumb-border-color: $range-thumb-color;
 
-$input-background-color: #13161c;
-$input-border-color:#13161c;
+$input-background-color: #1f2024;
+$input-border-color:#1f2024;
 $input-border-radius: 3px;
 $input-font-color: #ececec;
 
 // property 
-$property-title-color:  #292b35;
+$property-title-color:  #34353a;
 $property-border-color: rgba(0, 0, 0, 1);
-$property-background-color: #292b35; 
-$property-show-background-color: #292b35; 
+$property-background-color: #34353a; 
+$property-show-background-color: #34353a; 
 $property-font-color: $font-color;
 $property-input-border-color: rgb(107, 107, 107);
 
@@ -74,17 +74,17 @@ $list-border-color: #676767;
 $list-background-color: $border-color;
 
 // tab 
-$tab-background-color: #292b35; 
+$tab-background-color: #34353a; 
 $tab-header-background-color: $background-color; 
 $tab-header-font-color: $font-color; 
 $tab-font-color: $font-color;
-$tab-selected-color: #292b35; 
+$tab-selected-color: #34353a; 
 $tab-selected-font-color: $selected-font-color;
 $tab-selected-border-color: $border-color;
 $tab-border-color: $border-color;
 
 // popup 
-$popup-background-color: #292b35; 
+$popup-background-color: #34353a; 
 $popup-font-color: $font-color;
 $popup-selected-color: $selected-color; 
 $popup-border-color: $border-color;

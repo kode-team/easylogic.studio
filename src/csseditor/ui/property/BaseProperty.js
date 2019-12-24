@@ -21,7 +21,7 @@ export default class BaseProperty extends UIElement {
         <div class='property ${this.getClassName()} ${this.isFirstShow() ?  'show' : '' }'>
             ${this.isHideHeader() ? ''
             : /*html*/`
-            <div class='property-title' ref="$title">
+            <div class='property-title ${this.getTitleClassName()}' ref="$title">
                 <label> 
                   ${
                     this.hasKeyframe() ? 
@@ -59,6 +59,11 @@ export default class BaseProperty extends UIElement {
   getClassName() {
     return '';
   }
+
+  getTitleClassName() {
+    return '';
+  }
+
   getTitle() {
     return '';
   }

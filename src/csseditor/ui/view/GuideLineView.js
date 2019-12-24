@@ -107,8 +107,8 @@ export default class GuideLineView extends UIElement {
                 }
 
                 if (it.A.screenX.value - target.screenX.value > 0 
-                    && it.A.screenY.value <= it.B.screenY2.value 
-                    && it.A.screenY.value >= it.B.screenY.value 
+                    && it.A.screenY.value <= target.screenY2.value 
+                    && it.A.screenY.value >= target.screenY.value 
                 ) {
                     var centerY = (it.A.screenY.value + it.A.screenY2.value) /2;                    
                     vLine(images, centerY, target.screenX.value, it.A.screenX.value);
@@ -138,7 +138,7 @@ export default class GuideLineView extends UIElement {
                 if (it.A.screenX.value > it.B.screenX2.value) {
                     vLine(images, startY, it.B.screenX2.value, it.A.screenX.value);
                 } else {
-                    vLine(images, startY, it.A.screenX2.value, it.B.screenX.value);
+                    vLine(images, startY, it.A.screenX.value, it.B.screenX.value);
                 }
 
 
