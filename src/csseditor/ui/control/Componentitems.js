@@ -18,6 +18,7 @@ export default class ComponentItems extends UIElement {
           <label>${i18n('canvas')}</label>
           <div class='list'>
             <SelectTool title='Select' />
+            <AddArtboard title='Artboard' />            
           </div>
         </div>              
         <div class='group'>

@@ -32,11 +32,13 @@ import AddCylinder from "./AddCylinder";
 import AddSVGText from "./AddSVGText";
 import LoginButton from "./LoginButton";
 import SignButton from "./SignButton";
+import AddArtboard from "./AddArtboard";
 
 
 
 
 export default {
+  AddArtboard,  
   SignButton,
   LoginButton,
   AddSVGText,
