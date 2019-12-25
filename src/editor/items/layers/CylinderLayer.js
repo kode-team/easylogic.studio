@@ -5,8 +5,16 @@ import { Length } from "../../unit/Length";
 import { editor } from "../../editor";
 import icon from "../../../csseditor/ui/icon/icon";
 
+const customKeyValue = {
+  'count': true, 
+  'rate': true, 
+  'face': true 
+}
+
 const cssKeyValue = { 
   'position': true, 
+  'left': true,
+  'top': true,
   'right': true,
   'bottom': true, 
   'width': true,
@@ -120,6 +128,35 @@ export class CylinderLayer extends Component {
   setCustomKeyframes (keyframes, customProperty) {
 
 
+    if (customProperty.property === 'rate') {
+
+      var {width} = this.json;
+
+      var count = this.json.count.value; 
+      var w = width.value;
+      var r = w/2
+      var angle = 360 / count; 
+
+      var faceList = repeat(count).map((it, index) => {
+
+        var rotateY = index * angle; 
+  
+        return { 
+          selector: `[data-id="${this.json.id}"] .face[data-index="${index}"]`,
+          properties: [{
+            keyframes: customProperty.keyframes.map(({time, value, timing}) => {            
+              return {time, value: `rotateY(${rotateY}deg) translateZ(${r * value}px)`, timing} 
+            }), 
+            'property': 'transform',  // 흠 하나씩 나열해야할 듯 
+          }] 
+        }
+
+      })
+
+      keyframes.push(...faceList)      
+    }
+
+
     if (customProperty.property.includes('.color')) {
 
       var [_, index, _] = customProperty.property.split('.')
@@ -153,7 +190,8 @@ export class CylinderLayer extends Component {
     var nestedProperties = []
 
     properties.forEach(p => {
-      if (p.property.includes('face')) {
+
+      if (p.property.includes('face') || customKeyValue[p.property] ) {
         customProperties.push(p);
       } else if (cssKeyValue[p.property]) {
         cssProperties.push(p);

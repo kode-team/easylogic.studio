@@ -25,6 +25,8 @@ const customSelectorName = {
 
 const cssKeyValue = { 
   'position': true, 
+  'left': true,
+  'top': true,
   'right': true,
   'bottom': true, 
   'width': true,
@@ -173,7 +175,6 @@ export class CubeLayer extends Component {
         this.setCustomKeyframes(keyframes, c);
       })  
     }
-
     return keyframes
   }    
 
