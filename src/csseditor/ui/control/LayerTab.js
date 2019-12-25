@@ -6,7 +6,9 @@ import ProjectInformationProperty from "../property/ProjectInformationProperty";
 import LibraryItems from "./Libraryitems";
 import ComponentItems from "./Componentitems";
 import { editor } from "../../../editor/editor";
+import icon from "../icon/icon";
 
+const i18n = editor.initI18n('app.tab.title');
 
 export default class LayerTab extends UIElement {
   components() {
@@ -21,20 +23,21 @@ export default class LayerTab extends UIElement {
   template() {
     return /*html*/`
       <div class='layer-tab'>
-        <div class="tab number-tab" data-selected-value="2" ref="$tab">
+        <div class="tab number-tab side-tab side-tab-left" data-selected-value="4" ref="$tab">
           <div class="tab-header full" ref="$header">
-            <div class="tab-item" data-value="1">
-              <label>${editor.i18n('app.tab.title.projects')}</label>
+            <div class='tab-item' data-value='4' title='${i18n('components')}'>
+              <label>${icon.add}</label>
             </div>          
-            <div class="tab-item" data-value="2">
-              <label>${editor.i18n('app.tab.title.layers')}</label>
-            </div>
-            <div class='tab-item' data-value='3'>
-              <label>${editor.i18n('app.tab.title.libraries')}</label>
+            <div class="tab-item" data-value="2" title='${i18n('layers')}'>
+              <label>${icon.account_tree}</label>
+            </div>            
+            <div class="tab-item" data-value="1" title='${i18n('projects')}'>
+              <label>${icon.note}</label>
+            </div>         
+            <div class='tab-item' data-value='3' title='${i18n('libraries')}'>
+              <label>${icon.local_library}</label>
             </div>   
-            <div class='tab-item' data-value='4'>
-              <label>${editor.i18n('app.tab.title.components')}</label>
-            </div>
+
           </div>
           <div class="tab-body" ref="$body">
             <div class="tab-content project-content" data-value="1">

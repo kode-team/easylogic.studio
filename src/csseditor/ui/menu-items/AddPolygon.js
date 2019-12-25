@@ -6,7 +6,7 @@ export default class AddPolygon extends MenuItem {
     return icon.polygon;
   }
   getTitle() {
-    return "Polygon";
+    return this.props.title || "Polygon";
   }
 
   isHideTitle() {

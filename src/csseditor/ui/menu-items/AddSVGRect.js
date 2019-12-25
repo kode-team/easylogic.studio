@@ -6,7 +6,7 @@ export default class AddSVGRect extends MenuItem {
     return icon.rect;
   }
   getTitle() {
-    return "6. SVG Rect";
+    return this.props.title || "SVG Rect";
   }
  
 

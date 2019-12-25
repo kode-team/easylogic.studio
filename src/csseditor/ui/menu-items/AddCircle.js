@@ -6,7 +6,7 @@ export default class AddCircle extends MenuItem {
     return icon.circle
   }
   getTitle() {
-    return "2. Circle";
+    return this.props.title || "Circle";
   }
 
 

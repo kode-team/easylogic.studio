@@ -111,6 +111,7 @@ import cylinder from "./cylinder";
 import underline from "./underline";
 import strikethrough from "./strikethrough";
 import italic from "./italic";
+import local_library from "./local_library";
 
 
 const alias = {
@@ -119,6 +120,7 @@ const alias = {
 
 export default {
   ...alias,
+  local_library,
   italic,
   strikethrough,
   underline,

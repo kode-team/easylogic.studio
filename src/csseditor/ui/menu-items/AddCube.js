@@ -6,7 +6,7 @@ export default class AddCube extends MenuItem {
     return icon.cube;
   }
   getTitle() {
-    return "5. Cube";
+    return this.props.title || "Cube";
   }
 
   isHideTitle() {

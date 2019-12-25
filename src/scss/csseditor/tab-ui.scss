@@ -3,6 +3,7 @@ $tab-header-height: 35px;
 
 $tab-horizontal-header-width: 50px;
 $tab-horizontal-header-right-width: 60px;
+
 .tab {
   position: absolute;
   left: 0px;
@@ -13,6 +14,48 @@ $tab-horizontal-header-right-width: 60px;
   color: $tab-font-color; 
 
   &.number-tab { 
+
+
+    &.side-tab {
+      &.side-tab-left {
+        .tab-header {
+          left: 0px;
+          width: $tab-horizontal-header-width;
+          top: 0px;
+          bottom: 0px;
+          right: auto; 
+          height: auto;
+          display: block;
+
+          .tab-item {
+            height: $tab-horizontal-header-width;
+            width: 100%;
+
+            label {
+              padding: 13px;
+              svg {
+                transform: scale(1.2);
+              }
+            }
+          }
+        }
+
+        .tab-body {
+          left: $tab-horizontal-header-width;
+          top: 0px;
+          bottom: 0px;
+          right: 0px; 
+        }
+      }
+
+      @for $selectValue from 1 to 10 {
+        &[data-selected-value="#{$selectValue}"]
+          .tab-content[data-value="#{$selectValue}"] {
+          display: block;
+        }
+      }
+    }
+
     .tab-header {
       height: 34px;
       cursor: pointer;
@@ -102,55 +145,55 @@ $tab-horizontal-header-right-width: 60px;
       }
     }
 
-    @for $selectValue from 1 to 10 {
-      &[data-selected-value="#{$selectValue}"] .tab-item[data-value="#{$selectValue}"] {
-
-        // border-top: 1px solid $selected-color;        
-        // border-bottom: 1px solid transparent;        
-        background-color: $tab-selected-color;
-        color: $tab-selected-font-color;
-        &:before {
-          position: absolute;
-          content: '';
-          left:0px;
-          top:0px;
-          right:0px;
-          height:1px;
-          background-color: $selected-color;
-        }
-
-        label {
-          svg {
-            path {
-              stroke: $tab-background-color;
+    &:not(.side-tab) {
+      @for $selectValue from 1 to 10 {
+        &[data-selected-value="#{$selectValue}"] .tab-item[data-value="#{$selectValue}"] {
+          background-color: $tab-selected-color;
+          color: $tab-selected-font-color;
+          &:before {
+            position: absolute;
+            content: '';
+            left:0px;
+            top:0px;
+            right:0px;
+            height:1px;
+            background-color: $selected-color;
+          }
+  
+          label {
+            svg {
+              path {
+                stroke: $tab-background-color;
+              }
             }
           }
         }
-      }
-
-      &[data-selected-value="#{$selectValue}"]
-        .tab-content[data-value="#{$selectValue}"] {
-        display: block;
+  
+        &[data-selected-value="#{$selectValue}"]
+          .tab-content[data-value="#{$selectValue}"] {
+          display: block;
+        }
       }
     }
+
   }
 
-  &.inner {
-    top: 5px;
-    left: 5px;
-    right: 5px;
-    bottom: 5px;
+  // &.inner {
+  //   top: 5px;
+  //   left: 5px;
+  //   right: 5px;
+  //   bottom: 5px;
 
-    > .tab-header {
-      > .tab-item {
-        border: 0px;
-      }
-    }
+  //   > .tab-header {
+  //     > .tab-item {
+  //       border: 0px;
+  //     }
+  //   }
 
-    > .tab-body {
-      border: 0px;
-    }
-  }
+  //   > .tab-body {
+  //     border: 0px;
+  //   }
+  // }
 
   > .tab-header {
     position: absolute;
@@ -252,75 +295,75 @@ $tab-horizontal-header-right-width: 60px;
     }
   }
 
-  &.bottom {
-    > .tab-header {
-      top: auto;
-      bottom: 1px;
+  // &.bottom {
+  //   > .tab-header {
+  //     top: auto;
+  //     bottom: 1px;
 
-      > .tab-item {
-        &.selected {
-          border-top: 1px solid #ffffff;
-          border-bottom: 1px solid $tab-border-color;
-        }
-      }
-    }
+  //     > .tab-item {
+  //       &.selected {
+  //         border-top: 1px solid #ffffff;
+  //         border-bottom: 1px solid $tab-border-color;
+  //       }
+  //     }
+  //   }
 
-    > .tab-body {
-      top: 0px;
-      bottom: $tab-header-height;
-    }
-  }
+  //   > .tab-body {
+  //     top: 0px;
+  //     bottom: $tab-header-height;
+  //   }
+  // }
 
-  &.horizontal {
-    &.left {
-      > .tab-header {
-        left: 0px;
-        width: $tab-horizontal-header-width;
-        display: inline-block;
+  // &.horizontal {
+  //   &.left {
+  //     > .tab-header {
+  //       left: 0px;
+  //       width: $tab-horizontal-header-width;
+  //       display: inline-block;
 
-        > .tab-item {
-          height: $tab-horizontal-header-width;
-          overflow: auto;
-          line-height: 3;
-          min-width: $tab-horizontal-header-width;
-        }
-      }
+  //       > .tab-item {
+  //         height: $tab-horizontal-header-width;
+  //         overflow: auto;
+  //         line-height: 3;
+  //         min-width: $tab-horizontal-header-width;
+  //       }
+  //     }
 
-      > .tab-body {
-        left: $tab-horizontal-header-width;
-        right: 0px;
-        border-left: 1px solid $border-color;
-        border-right: 0px;
-      }
-    }
+  //     > .tab-body {
+  //       left: $tab-horizontal-header-width;
+  //       right: 0px;
+  //       border-left: 1px solid $border-color;
+  //       border-right: 0px;
+  //     }
+  //   }
 
-    > .tab-header {
-      left: auto;
-      top: 0px;
-      bottom: 0px;
-      width: $tab-horizontal-header-right-width;
-      height: auto;
-      display: inline-block;
+  //   > .tab-header {
+  //     left: auto;
+  //     top: 0px;
+  //     bottom: 0px;
+  //     width: $tab-horizontal-header-right-width;
+  //     height: auto;
+  //     display: inline-block;
 
-      > .tab-item {
-        border: 0px;
-        border-bottom: 1px solid $border-color;
-        text-align: center;
-        line-height: 3;
-        height: $tab-horizontal-header-right-width - 10px;
-        min-width: $tab-horizontal-header-right-width;
+  //     > .tab-item {
+  //       border: 0px;
+  //       border-bottom: 1px solid $border-color;
+  //       text-align: center;
+  //       line-height: 3;
+  //       height: $tab-horizontal-header-right-width - 10px;
+  //       min-width: $tab-horizontal-header-right-width;
 
-        &.selected {
-          background-color: rgba($tab-selected-color, 0.5);
-        }
-      }
-    }
+  //       &.selected {
+  //         background-color: rgba($tab-selected-color, 0.5);
+  //       }
+  //     }
+  //   }
 
-    > .tab-body {
-      top: 0px;
-      right: $tab-horizontal-header-right-width;
-      border: 0px;
-      border-right: 1px solid $border-color;
-    }
-  }
+  //   > .tab-body {
+  //     top: 0px;
+  //     right: $tab-horizontal-header-right-width;
+  //     border: 0px;
+  //     border-right: 1px solid $border-color;
+  //   }
+  // }
 }

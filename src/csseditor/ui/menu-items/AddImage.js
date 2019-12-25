@@ -8,7 +8,7 @@ export default class AddImage extends MenuItem {
   }
 
   getTitle() {
-    return "4. Image";
+    return this.props.title || "Image";
   }
 
   isHideTitle() {

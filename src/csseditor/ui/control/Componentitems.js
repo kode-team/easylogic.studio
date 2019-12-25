@@ -1,40 +1,64 @@
 import UIElement from "../../../util/UIElement";
-import { CLICK, LOAD } from "../../../util/Event";
+import menuItems from "../menu-items";
 import { editor } from "../../../editor/editor";
-var omit = ['project', 'artboard', 'component']
+import { CLICK } from "../../../util/Event";
+
+const i18n = editor.initI18n('component.items');
+
 export default class ComponentItems extends UIElement {
+
+  components() {
+    return menuItems
+  }
+
   template() {
     return /*html*/`
       <div class='component-items'>
         <div class='group'>
-          <div class='list' ref='$list'></div>
+          <label>${i18n('canvas')}</label>
+          <div class='list'>
+            <SelectTool title='Select' />
+          </div>
+        </div>              
+        <div class='group'>
+        <label>${i18n('layer')}</label>
+          <div class='list'>
+            <AddRect title='Rect' />
+            <AddCircle title='Circle' />         
+            <AddText title='Text' />
+            <AddImage title='Image' />
+          </div>
         </div>
+        <div class='group'>
+        <label>${i18n('3dlayer')}</label>
+          <div class='list'>            
+            <AddCube title='Cube' />
+            <AddCylinder title='Cylinder' />
+          </div>
+        </div>
+        <div class='group'>
+        <label>${i18n('drawing')}</label>
+          <div class='list'>            
+            <AddPath title='Path' />
+            <AddSVGRect title='Rect' />
+            <AddSVGCircle title='Circle' />
+            <AddSVGText title='Text' />
+            <AddSVGTextPath title='Text Path' />
+            <AddPolygon title='Polygon' />
+            <AddStar title='Star' />
+          </div>          
+        </div>        
       </div>
     `;
   }
 
-  afterRender() {
-    setTimeout(() => {
-      this.load('$list')
-    }, 1000)
-  }
 
-  [LOAD('$list')] () {
+  [CLICK('$el button')] (e) {
 
-    return Object.keys(editor.components).filter(key => omit.includes(key) === false).map(key => {
-      var icon = editor.getComponentClass(key).getIcon();
-      return /*html*/`
-      <div class='item' data-type='${key}'>
-        <div class='icon'>${icon}</div>
-        <div class='title'>${key}</div>
-      </div>`
-    })
-  }
+    var selected = this.refs.$el.$('.selected');
+    if (selected) selected.removeClass('selected');
 
-  [CLICK('$list .item')] (e) {
-    var type = e.$delegateTarget.attr('data-type')
-
-    this.emit('add.component', type);
-  }
+    e.$delegateTarget.addClass('selected');        
+  }  
 
 }

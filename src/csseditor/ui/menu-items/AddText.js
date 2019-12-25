@@ -6,7 +6,7 @@ export default class AddText extends MenuItem {
     return icon.title;
   }
   getTitle() { 
-    return "3. Text";
+    return this.props.title || "Text";
   }
 
   getClassName() {

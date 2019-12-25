@@ -6,7 +6,7 @@ export default class AddSVGCircle extends MenuItem {
     return icon.circle;
   }
   getTitle() {
-    return "6. SVG Circle";
+    return this.props.title || "SVG Circle";
   }
  
 

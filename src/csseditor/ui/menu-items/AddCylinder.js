@@ -6,7 +6,7 @@ export default class AddCylinder extends MenuItem {
     return icon.cylinder;
   }
   getTitle() {
-    return "5. Cylinder";
+    return this.props.title || "Cylinder";
   }
 
   getClassName() {

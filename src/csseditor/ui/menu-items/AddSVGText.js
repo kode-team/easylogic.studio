@@ -6,7 +6,7 @@ export default class AddSVGText extends MenuItem {
     return icon.title;
   }
   getTitle() {
-    return "SVG Text";
+    return this.props.title || "SVG Text";
   }
  
 

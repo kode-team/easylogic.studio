@@ -12,25 +12,16 @@ export default class ToolMenu extends UIElement {
       <div class='tool-menu center'>
         <div class='items'>
           <div class='draw-items' ref='$items'>
-            <!--<label class='sub-title'>CSS</label> -->
             <SelectTool />
             <AddRect />
             <AddCircle />         
             <AddText />
             <AddImage />
-            <AddCube />
-            <AddCylinder />
-            <!-- AddSphere / -->
             <div class='split'></div>
-            <!--<label class='sub-title'>SVG</label>-->
             <AddPath />
-            <AddSVGRect />
-            <AddSVGCircle />            
             <AddSVGText />
             <AddSVGTextPath />
             <AddPolygon />
-            <AddStar />
-            <!-- <AddRedGL /> -->
           </div>
         </div>
 

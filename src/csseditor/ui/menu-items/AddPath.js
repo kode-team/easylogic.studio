@@ -6,7 +6,7 @@ export default class AddPath extends MenuItem {
     return icon.edit;
   }
   getTitle() {
-    return "6. Path";
+    return this.props.title || "Path";
   }
 
 

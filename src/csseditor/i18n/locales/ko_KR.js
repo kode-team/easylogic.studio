@@ -383,4 +383,9 @@ export default {
     'box.model.property.margin': '마진',
     'box.model.property.padding': '패딩',    
 
+    'component.items.canvas': '캔버스',
+    'component.items.layer': '레이어',
+    'component.items.3dlayer': '3D 레이어',
+    'component.items.drawing': '그리기',
+
 }

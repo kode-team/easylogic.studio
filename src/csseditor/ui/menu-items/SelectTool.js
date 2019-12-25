@@ -9,7 +9,7 @@ export default class SelectTool extends MenuItem {
     return 'flipY'
   }
   getTitle() {
-    return "1. Select a item";
+    return this.props.title || "Select a item";
   }
 
 

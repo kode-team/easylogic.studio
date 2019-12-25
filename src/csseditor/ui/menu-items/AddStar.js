@@ -8,7 +8,7 @@ export default class AddStar extends MenuItem {
     return icon.star;
   }
   getTitle() {
-    return "Star";
+    return this.props.title || "Star";
   }
 
 

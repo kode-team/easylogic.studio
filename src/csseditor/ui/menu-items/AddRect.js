@@ -6,7 +6,7 @@ export default class AddRect extends MenuItem {
     return icon.rect;
   }
   getTitle() {
-    return "1. Rect";
+    return this.props.title || "Rect";
   }
 
 

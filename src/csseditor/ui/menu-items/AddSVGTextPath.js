@@ -6,7 +6,7 @@ export default class AddSVGTextPath extends MenuItem {
     return icon.text_rotate;
   }
   getTitle() {
-    return "10. SVG TextPath";
+    return this.props.title || "SVG TextPath";
   }
  
 

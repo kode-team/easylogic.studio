@@ -379,5 +379,9 @@ export default {
     'box.model.property.margin': 'Margin',
     'box.model.property.padding': 'Padding',
 
+    'component.items.canvas': 'Canvas',
+    'component.items.layer': 'Layer',
+    'component.items.3dlayer': '3D Layer',
+    'component.items.drawing': 'Drawing',
 
 }
