@@ -1,6 +1,6 @@
 .property {
   // padding: 6px 0px;
-  border-bottom: 1px solid $property-border-color;  
+  border-top: 1px solid $property-border-color;  
   background-color: $property-background-color;
   color: $property-font-color; 
   display: none; 
@@ -224,7 +224,7 @@
 
   &.show {    
     > .property-title {
-      box-shadow: 0 1px 5px 0px black;
+      // box-shadow: 0 1px 5px 0px black;      
       > label {
         .icon {
           transform: rotate(90deg);
@@ -238,6 +238,11 @@
       padding: 0px 6px 0px 6px;
     }
 
+    &.no-title {
+
+      border-top: 0px;
+
+    }
 
 
     &.background-image {
@@ -325,7 +330,7 @@
     display: none;
     padding: 0px;
     background-color: $property-show-background-color;
-    margin-top:-1px;
+
     // box-shadow: inset 0 0 5px 0px rgba(0, 0, 0, 1);
 
     .property-item {

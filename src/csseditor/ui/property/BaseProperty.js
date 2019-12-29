@@ -18,7 +18,7 @@ export default class BaseProperty extends UIElement {
 
   template() {
     return /*html*/`
-        <div class='property ${this.getClassName()} ${this.isFirstShow() ?  'show' : '' }'>
+        <div class='property ${this.isHideHeader() ? 'no-title' : ''} ${this.getClassName()} ${this.isFirstShow() ?  'show' : '' }'>
             ${this.isHideHeader() ? ''
             : /*html*/`
             <div class='property-title ${this.getTitleClassName()}' ref="$title">
