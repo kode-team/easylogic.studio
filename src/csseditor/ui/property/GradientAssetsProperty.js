@@ -42,12 +42,15 @@ export default class GradientAssetsProperty extends BaseProperty {
 
     var results = gradients.map( (item, index) => {
 
-      return `
+      return /*html*/`
         <div class='gradient-item' data-index="${index}" data-gradient='${item.gradient}'>
           <div class='preview' data-index="${index}">
             <div class='gradient-view' style='background-image: ${item.gradient};'></div>
           </div>
           <div class='title'>
+            <div>
+              <input type='text' class='value' data-key='value' value='${item.gradient}' placeholder="name" />
+            </div>          
             <div>
               <input type='text' class='name' data-key='name' value='${item.name}' placeholder="name" />
             </div>
@@ -132,12 +135,13 @@ export default class GradientAssetsProperty extends BaseProperty {
 
     this.state.$item = $item; 
     this.state.$el = e.$delegateTarget.$('.gradient-view');
+    this.state.$value = $item.$("[data-key='value']")
 
     this.emit("showGradientPickerPopup", {
       instance: this,
       changeEvent: 'changeGradientAssets',
       gradient
-    });
+    }, { index });
   }
 
 
@@ -147,6 +151,7 @@ export default class GradientAssetsProperty extends BaseProperty {
       project.setGradientValue(params.index, {image});
       this.state.$el.css('background-image', image);
       this.state.$item.attr('data-gradient', image);
+      this.state.$value.val(image)
     }, false)              
 
   }

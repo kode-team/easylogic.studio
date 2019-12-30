@@ -7,12 +7,20 @@ import LibraryItems from "./Libraryitems";
 import ComponentItems from "./Componentitems";
 import { editor } from "../../../editor/editor";
 import icon from "../icon/icon";
+import ImageAssetsProperty from "../property/ImageAssetsProperty";
+import GradientAssetsProperty from "../property/GradientAssetsProperty";
+import ColorAssetsProperty from "../property/ColorAssetsProperty";
+import SVGFilterAssetsProperty from "../property/SVGFilterAssetsProperty";
 
 const i18n = editor.initI18n('app.tab.title');
 
 export default class LayerTab extends UIElement {
   components() {
     return {
+      ImageAssetsProperty,
+      GradientAssetsProperty,
+      ColorAssetsProperty,
+      SVGFilterAssetsProperty,      
       ObjectItems, 
       ComponentItems,
       ProjectProperty,
@@ -34,10 +42,12 @@ export default class LayerTab extends UIElement {
             <div class="tab-item" data-value="1" title='${i18n('projects')}'>
               <label>${icon.note}</label>
             </div>         
-            <div class='tab-item' data-value='3' title='${i18n('libraries')}'>
+            <!--<div class='tab-item' data-value='3' title='${i18n('libraries')}'>
               <label>${icon.local_library}</label>
+            </div>   -->
+            <div class='tab-item' data-value='5' title='${i18n('assets')}'>
+              <label>${icon.view_list}</label>
             </div>   
-
           </div>
           <div class="tab-body" ref="$body">
             <div class="tab-content project-content" data-value="1">
@@ -52,7 +62,17 @@ export default class LayerTab extends UIElement {
             </div>
             <div class='tab-content' data-value='4'>
               <ComponentItems />
-            </div>            
+            </div>    
+            <div class='tab-content' data-value='5'>
+              <div class='assets'>
+                <ImageAssetsProperty />
+                <!--SVGProperty /-->              
+                <SVGFilterAssetsProperty />
+                <!-- SVGPathAssetsProperty /-->
+                <ColorAssetsProperty />
+                <GradientAssetsProperty />    
+              </div>
+            </div>
           </div>
         </div>
       </div>

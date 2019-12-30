@@ -24,9 +24,9 @@ export default class Inspector extends UIElement {
                 <label>${icon.flash_on}</label>
               </div>
               
-              <div class="tab-item" data-value="4" title='${i18n('tab.title.asset')}'>
+              <!--<div class="tab-item" data-value="4" title='${i18n('tab.title.asset')}'>
                 <label class='icon'>${icon.view_list}</label>
-              </div>                                     
+              </div>-->
               <div class="tab-item" data-value="5" title='${i18n('tab.title.code')}'>
                 <label class='icon'>${icon.code}</label>
               </div>                                     
@@ -59,16 +59,12 @@ export default class Inspector extends UIElement {
                 <!-- transform --> 
                 <TransformProperty />                  
                 <TransformOriginProperty /> 
-                <PerspectiveProperty />
-                <PerspectiveOriginProperty />                                
               
 
                 <!--BorderImageProperty /-->                
 
                 <!-- <OutlineProperty /> -->
                 <!-- <BackgroundClipProperty /> -->  
-
-                <ExportProperty />
                 
                 <div class='empty'></div>
               </div>
@@ -100,6 +96,12 @@ export default class Inspector extends UIElement {
                 <!-- <RootVariableProperty /> -->
                 <!-- <VariableProperty /> -->
 
+                <PerspectiveProperty />
+                <PerspectiveOriginProperty />                                
+
+
+                <ExportProperty />
+
 
                 <div class='empty'></div>                
               </div>              
@@ -114,16 +116,14 @@ export default class Inspector extends UIElement {
                 <SelectorProperty />                              
                 <div class='empty'></div>                
               </div>                        
-              <div class='tab-content' data-value='4'>
-                <ImageAssetsProperty />
-                <!--SVGProperty /-->              
+              <!--<div class='tab-content' data-value='4'>
+                <ImageAssetsProperty />       
                 <SVGFilterAssetsProperty />
-                <!-- SVGPathAssetsProperty /-->
                 <ColorAssetsProperty />
                 <GradientAssetsProperty />    
                 
                 <div class='empty'></div>                
-              </div>
+              </div> -->
               <div class="tab-content" data-value="5">
                 <CodeViewProperty />
                 <div class='empty'></div>                           

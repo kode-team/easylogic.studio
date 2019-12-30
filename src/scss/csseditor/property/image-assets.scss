@@ -49,6 +49,9 @@
                 height: 80px;
                 border: 1px solid rgba(255, 255, 255, 0.1);
                 border-radius: 2px;
+
+                margin-top: 10px;
+                margin-left: 10px;
                 
                 vertical-align: top;   
                 cursor: pointer;         
@@ -96,11 +99,13 @@
 
             .image-item {
                 display: inline-block;
-                width: 80px;
+                width: 100px;
                 position: relative;
                 // margin-right: 4px;
                 margin-bottom: 4px;
                 vertical-align: middle;
+
+                padding: 10px;
 
                 &:hover {
                     .tools {
@@ -131,8 +136,6 @@
                     width: 100%;
                     display: grid;
                     grid-template-columns: 1fr;
-                    grid-template-rows: repeat(2, 1fr);
-                    grid-row-gap: 4px;
                     padding: 4px 0px;
 
                     input {
