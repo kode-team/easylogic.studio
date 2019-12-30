@@ -72,6 +72,10 @@
                 content: 'X';
                 display: inline-block;
               }
+
+              input {
+                width: 100%;
+              }
             }
 
             label {
@@ -94,6 +98,7 @@
               input {
                 vertical-align: middle;
                 height: 20px;
+                width: 100%;
               }
             }
 
