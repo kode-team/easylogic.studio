@@ -153,223 +153,223 @@ const SelectionToolEvent = class  extends UIElement {
         this.emit('refreshGuideLine', this.calculateWorldPositionForGuideLine(drawList));
     }
 
-    [EVENT('refreshSelectionStyleView')] () {
-        this.bindData('$rotate3d');
-        this.bindData('$rotateArea');
-        this.bindData('$transformOrigin');        
-        this.bindData('$rotateZ');
-        this.bindData('$pathMaker');            
-    }
+    // [EVENT('refreshSelectionStyleView')] () {
+    //     // this.bindData('$rotate3d');
+    //     // this.bindData('$rotateArea');
+    //     // this.bindData('$transformOrigin');        
+    //     // this.bindData('$rotateZ');
+    //     // this.bindData('$pathMaker');            
+    // }
 
 }
 
 const SelectionToolBind = class extends SelectionToolEvent {
 
 
-    [BIND('$pathMaker')] () {
-        var current = editor.selection.current 
+    // [BIND('$pathMaker')] () {
+    //     var current = editor.selection.current 
 
-        if (current && current.is && current.is('artboard')) {
-            return {
-                style: {
-                    display: 'none'
-                }
-            }
-        } else if (editor.selection.length !== 1) {
-            return {
-                style: {
-                    display: 'none'
-                }
-            }
-        }
+    //     if (current && current.is && current.is('artboard')) {
+    //         return {
+    //             style: {
+    //                 display: 'none'
+    //             }
+    //         }
+    //     } else if (editor.selection.length !== 1) {
+    //         return {
+    //             style: {
+    //                 display: 'none'
+    //             }
+    //         }
+    //     }
 
-        var obj = {
-            translate: { x: 0, y: 0, z: 0 }
-        }
-        var x = 0, y = 0;
-        if (current) {
+    //     var obj = {
+    //         translate: { x: 0, y: 0, z: 0 }
+    //     }
+    //     var x = 0, y = 0;
+    //     if (current) {
 
 
-            var [left, top] = (current['transform-origin'] || '50% 50%').split(' ').map(it => {
-                return Length.parse(it || '50%');
-            })
+    //         var [left, top] = (current['transform-origin'] || '50% 50%').split(' ').map(it => {
+    //             return Length.parse(it || '50%');
+    //         })
     
-            left = left.toPx(current.screenWidth.value);
-            top = top.toPx(current.screenHeight.value);
+    //         left = left.toPx(current.screenWidth.value);
+    //         top = top.toPx(current.screenHeight.value);
 
-            var x = (current.screenX.value + left.value ) * editor.scale;
-            var y = (current.screenY.value + top.value ) * editor.scale;
+    //         var x = (current.screenX.value + left.value ) * editor.scale;
+    //         var y = (current.screenY.value + top.value ) * editor.scale;
 
-            var [tx, ty] = Transform.get(current['transform'], 'translate');
-            if (!tx) {
-                var [tx] = Transform.get(current['transform'], 'translateX');
-            }
-            if (!ty) {
-                var [ty] = Transform.get(current['transform'], 'translateY');
-            }            
-            tx = tx || Length.px(0)
-            ty = ty || Length.px(0)
-
-
-
-            obj.translate.x = x + tx.value * editor.scale ; 
-            obj.translate.y = y + ty.value * editor.scale; 
-
-        }
-
-        return {
-            style: {
-                display: 'block'
-            },
-            innerHTML: `
-                <path d="M${x}, ${y}L${obj.translate.x},${obj.translate.y}Z" fill="transparent" />
-            `
-        }
-    }    
+    //         var [tx, ty] = Transform.get(current['transform'], 'translate');
+    //         if (!tx) {
+    //             var [tx] = Transform.get(current['transform'], 'translateX');
+    //         }
+    //         if (!ty) {
+    //             var [ty] = Transform.get(current['transform'], 'translateY');
+    //         }            
+    //         tx = tx || Length.px(0)
+    //         ty = ty || Length.px(0)
 
 
-    [BIND('$rotate3d')] () {
-        var current = editor.selection.current || { 'transform-origin'  : '50% 50%' }
 
-        if (current && current.is && current.is('artboard')) {
-            return {
-                style: {
-                    display: 'none'
-                }
-            }
-        }
+    //         obj.translate.x = x + tx.value * editor.scale ; 
+    //         obj.translate.y = y + ty.value * editor.scale; 
 
-        var [left, top] = current['transform-origin'].split(' ').map(it => {
-            return Length.parse(it || '50%');
-        })
+    //     }
 
-        left = left || Length.percent(50)
-        top = top || Length.percent(50)
+    //     return {
+    //         style: {
+    //             display: 'block'
+    //         },
+    //         innerHTML: `
+    //             <path d="M${x}, ${y}L${obj.translate.x},${obj.translate.y}Z" fill="transparent" />
+    //         `
+    //     }
+    // }    
+
+
+    // [BIND('$rotate3d')] () {
+    //     var current = editor.selection.current || { 'transform-origin'  : '50% 50%' }
+
+    //     if (current && current.is && current.is('artboard')) {
+    //         return {
+    //             style: {
+    //                 display: 'none'
+    //             }
+    //         }
+    //     }
+
+    //     var [left, top] = current['transform-origin'].split(' ').map(it => {
+    //         return Length.parse(it || '50%');
+    //     })
+
+    //     left = left || Length.percent(50)
+    //     top = top || Length.percent(50)
         
-        return {
-            style: {
-                display: 'block',
-                left, top 
-            }
-        }
-    }
+    //     return {
+    //         style: {
+    //             display: 'block',
+    //             left, top 
+    //         }
+    //     }
+    // }
 
 
-    [BIND('$transformOrigin')] () {
-        var current = editor.selection.current || { 'transform-origin'  : '50% 50%' }
+    // [BIND('$transformOrigin')] () {
+    //     var current = editor.selection.current || { 'transform-origin'  : '50% 50%' }
 
-        if (current && current.is && current.is('artboard')) {
-            return {
-                style: {
-                    display: 'none'
-                }
-            }
-        }
+    //     if (current && current.is && current.is('artboard')) {
+    //         return {
+    //             style: {
+    //                 display: 'none'
+    //             }
+    //         }
+    //     }
 
-        var [left, top] = current['transform-origin'].split(' ').map(it => {
-            return Length.parse(it || '50%');
-        })
+    //     var [left, top] = current['transform-origin'].split(' ').map(it => {
+    //         return Length.parse(it || '50%');
+    //     })
 
-        left = left || Length.percent(50)
-        top = top || Length.percent(50)
+    //     left = left || Length.percent(50)
+    //     top = top || Length.percent(50)
         
-        return {
-            style: {
-                display: 'block',
-                left, top 
-            }
-        }
-    }
+    //     return {
+    //         style: {
+    //             display: 'block',
+    //             left, top 
+    //         }
+    //     }
+    // }
 
 
-    [BIND('$rotateArea')] () {
-        var current = editor.selection.current || { transform : '' }  
+    // [BIND('$rotateArea')] () {
+    //     var current = editor.selection.current || { transform : '' }  
 
 
-        if (current && current.is && current.is('artboard')) {
-            return {
-                style: {
-                    display: 'none'
-                }
-            }
-        }
+    //     if (current && current.is && current.is('artboard')) {
+    //         return {
+    //             style: {
+    //                 display: 'none'
+    //             }
+    //         }
+    //     }
 
 
-        var transform = Transform.join(Transform.parseStyle(current.transform).filter(it => {
-            switch(it.type) {
-            case 'rotateX':
-            case 'rotateY':
-                return true; 
-            }
+    //     var transform = Transform.join(Transform.parseStyle(current.transform).filter(it => {
+    //         switch(it.type) {
+    //         case 'rotateX':
+    //         case 'rotateY':
+    //             return true; 
+    //         }
 
-            return false; 
-        }))
-        return {
-            style: {
-                display: 'block',
-                transform: `${transform}`
-            }
-        }
-    }
+    //         return false; 
+    //     }))
+    //     return {
+    //         style: {
+    //             display: 'block',
+    //             transform: `${transform}`
+    //         }
+    //     }
+    // }
 
-    [BIND('$rotateZ')] () {
-        var current = editor.selection.current || { transform: '' }  
+    // [BIND('$rotateZ')] () {
+    //     var current = editor.selection.current || { transform: '' }  
 
-        if (current && current.is && current.is('artboard')) {
-            return {
-                style: {
-                    display: 'none'
-                }
-            }
-        }
+    //     if (current && current.is && current.is('artboard')) {
+    //         return {
+    //             style: {
+    //                 display: 'none'
+    //             }
+    //         }
+    //     }
 
-        var transform = Transform.join(Transform.parseStyle(current.transform).filter(it => {
-            switch(it.type) {
-            case 'rotate':
-            case 'rotateZ':
-                return true; 
-            }
+    //     var transform = Transform.join(Transform.parseStyle(current.transform).filter(it => {
+    //         switch(it.type) {
+    //         case 'rotate':
+    //         case 'rotateZ':
+    //             return true; 
+    //         }
 
-            return false; 
-        }))
-        return {
-            style: {
-                display: 'block',
-                transform
-            }
-        }
-    }
+    //         return false; 
+    //     }))
+    //     return {
+    //         style: {
+    //             display: 'block',
+    //             transform
+    //         }
+    //     }
+    // }
 
 
 
-    [BIND('$selectionPointer')] () {
+    // [BIND('$selectionPointer')] () {
 
-        var html = '<div></div>'
+    //     var html = '<div></div>'
 
-        var current = editor.selection.current || { id: ''}
-        var element = this.parent.getElement(current.id);
+    //     var current = editor.selection.current || { id: ''}
+    //     var element = this.parent.getElement(current.id);
 
-        if (element) {
-            var v = current.verties(element, this.parent.refs.$view.el);
-            // var offset = element.rect();
-            var screenX = current.screenX.value + current.width.value/ 2;
-            var screenY = current.screenY.value + current.height.value/2;
-            var str = ['a', 'b', 'c', 'd'].map((it, index) => {
-                var x = Length.px(v[it].x + screenX); 
-                var y = Length.px(v[it].y + screenY); 
-                var z = Length.px(v[it].z);
-                return `<div class='marker' data-index='${index+1}' style='transform:translate3d(${x},${y},${z})'></div>`    
-            }).join('')
+    //     if (element) {
+    //         var v = current.verties(element, this.parent.refs.$view.el);
+    //         // var offset = element.rect();
+    //         var screenX = current.screenX.value + current.width.value/ 2;
+    //         var screenY = current.screenY.value + current.height.value/2;
+    //         var str = ['a', 'b', 'c', 'd'].map((it, index) => {
+    //             var x = Length.px(v[it].x + screenX); 
+    //             var y = Length.px(v[it].y + screenY); 
+    //             var z = Length.px(v[it].z);
+    //             return `<div class='marker' data-index='${index+1}' style='transform:translate3d(${x},${y},${z})'></div>`    
+    //         }).join('')
             
-            html = `<div >${str}</div>`
+    //         html = `<div >${str}</div>`
 
-            // element.append(this.refs.$selectionPointer)
-        }
+    //         // element.append(this.refs.$selectionPointer)
+    //     }
 
-        return {
-            innerHTML: html 
-        }
-    }
+    //     return {
+    //         innerHTML: html 
+    //     }
+    // }
 
     [BIND('$selectionTool')] () {
 
@@ -404,33 +404,6 @@ export default class SelectionToolView extends SelectionToolBind {
     <div class='selection-view' ref='$selectionView' >
         <div class='selection-tool' ref='$selectionTool' style='left:-100px;top:-100px;'>
             <div class='selection-tool-item' data-position='move'></div>       
-            
-            <div class='selection-tool-item' data-position='transform-origin' ref='$transformOrigin'>
-                <div class='transform-origin' >
-                    <div class='handle handle-top' data-value='top'></div>
-                    <div class='handle handle-right' data-value='right'></div>
-                    <div class='handle handle-left' data-value='left'></div>
-                    <div class='handle handle-bottom' data-value='bottom'></div>
-                    <div class='handle handle-top-left' data-value='top-left'></div>
-                    <div class='handle handle-top-right' data-value='top-right'></div>
-                    <div class='handle handle-bottom-left' data-value='bottom-left'></div>
-                    <div class='handle handle-bottom-right' data-value='bottom-right'></div>
-                </div>                
-            </div>
-            <div class='selection-tool-item' data-position='rotate3d' ref='$rotate3d'>
-                <div class='rotate-area' ref='$rotateArea'>
-                    <div class='y'></div>                
-                    <div class='x'></div>
-                </div>            
-                <div class='z' ref='$rotateZ'>
-                    <div class='point'></div>                    
-                    <div class='handle-top'></div>                    
-                </div>
-                <div class='translate' ref='$translateZ'>
-                    <div class='perspective-handle' style='display:none'></div>
-                </div>
-
-            </div>                      
 
             <div class='selection-tool-item' data-position='to top'></div>
             <div class='selection-tool-item' data-position='to right'></div>
@@ -442,64 +415,63 @@ export default class SelectionToolView extends SelectionToolBind {
             <div class='selection-tool-item' data-position='to bottom left'></div>
         </div>
         <div class='selection-pointer' ref='$selectionPointer'></div>
-        <svg class='transform-translate' ref='$pathMaker'></svg>
     </div>`
     }
 
 
-    [DOUBLECLICK('$rotate3d')] (e) {
+    // [DOUBLECLICK('$rotate3d')] (e) {
 
-        if (e.altKey) {
-            editor.selection.each(item => {
-                item.reset({ 'transform-origin': '' })
-            })
-            this.bindData('$rotate3d')
-            this.bindData('$pathMaker');            
-        } else if (e.shiftKey) {
-            editor.selection.each(item => {
-                var transform = Transform.join(Transform.parseStyle(item.transform).filter(it => {
-                    switch(it.type) {
-                    case 'translate':
-                    case 'translateX':
-                    case 'translateY':
-                    case 'translateZ':
-                        return false; 
-                    }
-                    return true; 
-                }))
+    //     if (e.altKey) {
+    //         editor.selection.each(item => {
+    //             item.reset({ 'transform-origin': '' })
+    //         })
+    //         // this.bindData('$rotate3d')
+    //         // this.bindData('$pathMaker');            
+    //     } else if (e.shiftKey) {
+    //         editor.selection.each(item => {
+    //             var transform = Transform.join(Transform.parseStyle(item.transform).filter(it => {
+    //                 switch(it.type) {
+    //                 case 'translate':
+    //                 case 'translateX':
+    //                 case 'translateY':
+    //                 case 'translateZ':
+    //                     return false; 
+    //                 }
+    //                 return true; 
+    //             }))
     
-                item.reset({ transform })
-            })
-            this.bindData('$rotateZ')
-            this.bindData('$rotateArea')  
-            this.bindData('$transformOrigin');       
-            this.bindData('$pathMaker');                                       
-        } else {
-            editor.selection.each(item => {
-                var transform = Transform.join(Transform.parseStyle(item.transform).filter(it => {
-                    switch(it.type) {
-                    case 'rotate':
-                    case 'rotate3d':
-                    case 'rotateX':
-                    case 'rotateY':                    
-                    case 'rotateZ':
-                        return false; 
-                    }
-                    return true; 
-                }))
+    //             item.reset({ transform })
+    //         })
+    //         this.bindData('$rotateZ')
+    //         this.bindData('$rotateArea')  
+    //         this.bindData('$transformOrigin');       
+    //         this.bindData('$pathMaker');                                       
+    //     } else {
+    //         editor.selection.each(item => {
+    //             var transform = Transform.join(Transform.parseStyle(item.transform).filter(it => {
+    //                 switch(it.type) {
+    //                 case 'rotate':
+    //                 case 'rotate3d':
+    //                 case 'rotateX':
+    //                 case 'rotateY':                    
+    //                 case 'rotateZ':
+    //                     return false; 
+    //                 }
+    //                 return true; 
+    //             }))
     
-                item.reset({ transform })
-            })
-            this.bindData('$rotateZ')
-            this.bindData('$rotateArea')    
-            this.bindData('$transformOrigin');     
-            this.bindData('$pathMaker');                               
-        }
+    //             item.reset({ transform })
+    //         })
+    //         this.bindData('$rotateZ')
+    //         this.bindData('$rotateArea')    
+    //         this.bindData('$transformOrigin');     
+    //         this.bindData('$pathMaker');                               
+    //     }
 
-        this.emit('refreshSelectionStyleView');
-        this.parent.updateRealPosition()
+    //     this.emit('refreshSelectionStyleView');
+    //     this.parent.updateRealPosition()
 
-    }
+    // }
 
 
     [CLICK('$selectionTool .selection-tool-item[data-position="path"]')] (e) {
@@ -767,43 +739,43 @@ export default class SelectionToolView extends SelectionToolBind {
 
         var e = editor.config.get('bodyEvent');
 
-        if (this.pointerType === 'transform-origin') {
+        // if (this.pointerType === 'transform-origin') {
 
 
-        } else if (this.pointerType === 'rotate3d') {
+        // } else if (this.pointerType === 'rotate3d') {
 
-            if (this.hasRotateZ) {
+        //     if (this.hasRotateZ) {
 
-                this.modifyRotateZ(dx, dy);
-                this.bindData('$rotateZ')             
-                this.bindData('$pathMaker');            
-            } else if (this.hasPerspective) {
-                this.modifyPerspective(dx, dy);
+        //         this.modifyRotateZ(dx, dy);
+        //         this.bindData('$rotateZ')             
+        //         this.bindData('$pathMaker');            
+        //     } else if (this.hasPerspective) {
+        //         this.modifyPerspective(dx, dy);
                 
-                this.bindData('$rotate3d')
-                this.bindData('$rotateArea')   
-                this.bindData('$transformOrigin');    
-                this.bindData('$pathMaker');                                        
-            } else {
+        //         this.bindData('$rotate3d')
+        //         this.bindData('$rotateArea')   
+        //         this.bindData('$transformOrigin');    
+        //         this.bindData('$pathMaker');                                        
+        //     } else {
 
-                if (this.hasTransformOrigin) {
-                    this.modifyTransformOrigin(dx, dy);
-                } else if (this.hasTranslate) {
-                    this.modifyTranslate(dx, dy); 
-                } else if (this.hasTranslateZ) {
-                    this.modifyTranslateZ(dx, dy);
-                } else {
-                    this.modifyRotateXY (dx, dy);
-                }
-                this.bindData('$rotate3d')
-                this.bindData('$rotateArea')       
-                this.bindData('$transformOrigin'); 
-                this.bindData('$pathMaker');                                                                        
-            }
+        //         if (this.hasTransformOrigin) {
+        //             this.modifyTransformOrigin(dx, dy);
+        //         } else if (this.hasTranslate) {
+        //             this.modifyTranslate(dx, dy); 
+        //         } else if (this.hasTranslateZ) {
+        //             this.modifyTranslateZ(dx, dy);
+        //         } else {
+        //             this.modifyRotateXY (dx, dy);
+        //         }
+        //         this.bindData('$rotate3d')
+        //         this.bindData('$rotateArea')       
+        //         this.bindData('$transformOrigin'); 
+        //         this.bindData('$pathMaker');                                                                        
+        //     }
 
-            this.parent.updateRealPosition();                
+        //     this.parent.updateRealPosition();                
 
-        } else {
+        // } else {
 
             if (e.altKey) {
                 dy = dx; 
@@ -824,7 +796,7 @@ export default class SelectionToolView extends SelectionToolBind {
                 });
             }
 
-        }
+        // }
     }
 
     [EVENT('moveByKey')] (dx, dy) {
@@ -857,16 +829,16 @@ export default class SelectionToolView extends SelectionToolBind {
             }
         }
 
-        if (this.pointerType === 'transform-origin') {
-           editor.selection.reset({
-               'transform-origin': DEFINED_TRANFORM_ORIGIN[this.transformOriginValue] || '50% 50%'
-           }) 
+        // if (this.pointerType === 'transform-origin') {
+        //    editor.selection.reset({
+        //        'transform-origin': DEFINED_TRANFORM_ORIGIN[this.transformOriginValue] || '50% 50%'
+        //    }) 
 
-           this.bindData('$rotate3d');
-           this.bindData('$rotateArea');
-           this.bindData('$transformOrigin');  
-           this.bindData('$pathMaker');                                
-        } else {
+        //    this.bindData('$rotate3d');
+        //    this.bindData('$rotateArea');
+        //    this.bindData('$transformOrigin');  
+        //    this.bindData('$pathMaker');                                
+        // } else {
 
             var e = editor.config.get('bodyEvent');
 
@@ -881,7 +853,7 @@ export default class SelectionToolView extends SelectionToolBind {
             this.refreshSelectionToolView(dx, dy);   
 
             this.emit('refreshAllElementBoundSize');            
-        }
+        // }
 
         this.emit('removeGuideLine')
     }   
@@ -941,10 +913,10 @@ export default class SelectionToolView extends SelectionToolBind {
             this.$el.show();
         }
 
-        this.bindData('$rotateZ')
-        this.bindData('$rotateArea')
-        this.bindData('$transformOrigin');       
-        this.bindData('$pathMaker'); 
+        // this.bindData('$rotateZ')
+        // this.bindData('$rotateArea')
+        // this.bindData('$transformOrigin');       
+        // this.bindData('$pathMaker'); 
         this.bindData('$selectionTool')
 
         this.makeSelectionTool();
@@ -984,10 +956,10 @@ export default class SelectionToolView extends SelectionToolBind {
 
         this.refs.$selectionTool.css({ left, top, width, height })
         
-        this.bindData('$rotate3d');
-        this.bindData('$rotateArea');  
-        this.bindData('$transformOrigin');           
-        this.bindData('$pathMaker');            
+        // this.bindData('$rotate3d');
+        // this.bindData('$rotateArea');  
+        // this.bindData('$transformOrigin');           
+        // this.bindData('$pathMaker');            
         // this.bindData('$selectionPointer')
         
         this.refreshPositionText(x, y, width, height)
