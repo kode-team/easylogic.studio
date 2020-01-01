@@ -23,9 +23,10 @@
             transform: translate(-50%, -50%);
             width: 10px;
             height: 10px;
-            background-color: black;
+            background-color: $selected-color;
+            border:1px solid black;
             border-radius: 100%;
-            pointer-events: all;    
+            pointer-events: all;
             
             &:hover {
                 background-color: $selected-color;

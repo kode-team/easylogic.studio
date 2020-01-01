@@ -16,8 +16,9 @@ export default class RotateEditorView extends UIElement {
                     </div>
                 </div>
                 <div class='rotate-z' ref='$rotateZ'>
+                    <div class='handle-line'></div>                
                     <div class='handle' ref='$handle'></div>
-                    <div class='handle-line'></div>
+
                 </div>                
             </div>
         `
@@ -217,8 +218,7 @@ export default class RotateEditorView extends UIElement {
     }    
 
 
-    [EVENT('refreshSelection', 'refreshRect')] () {
-        console.log('aaa')
+    [EVENT('refreshSelection')] () {
         this.refresh();
     }
 }
