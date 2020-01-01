@@ -6,6 +6,7 @@
     top:0px;
     right:0px;
     bottom:0px;
+    // background-color: yellow;
 
     &.empty {
       > * {
@@ -456,6 +457,7 @@
         left: 0px;
         top: 0px;
         cursor: nwse-resize;
+        transform: translate(-100%, -100%);
   
         &:before {
           right: 100%;
@@ -468,6 +470,7 @@
         left: 100%;
         top: 0px;
         cursor: nesw-resize;      
+        transform: translate(0%, -100%);        
   
         &:before {
           left: 100%;
@@ -480,6 +483,7 @@
         left: 50%;
         top: 0px;
         cursor: ns-resize;
+        transform: translate(-50%, -100%);        
   
         &:before {
           left: 50%;
@@ -492,6 +496,7 @@
         left: 0px;
         top: 50%;
         cursor: ew-resize;
+        transform: translate(-100%, -50%);        
   
         &:before {
           top: 50%;
@@ -504,7 +509,7 @@
         left: 100%;
         top: 50%;
         cursor: ew-resize;
-  
+        transform: translate(0%, -50%);
   
         &:before {
           top: 50%;
@@ -517,7 +522,7 @@
         left: 50%;
         top: 100%;
         cursor: ns-resize;      
-  
+        transform: translate(-50%, 0%);
   
         &:before {
           top: 100%;
@@ -531,7 +536,7 @@
         left: 0px;
         top: 100%;
         cursor: nesw-resize;            
-  
+        transform: translate(-100%, 0%);
   
         &:before {
           top: 100%;
@@ -544,7 +549,8 @@
         left: 100%;
         top: 100%;
         cursor: nwse-resize;      
-  
+        transform: translate(0%, 0%);
+
         &:before {
           top: 100%;
           left: 100%;

@@ -34,16 +34,20 @@ var transformList = [
   'matrix3d',  
 ];
 
-const i18n = editor.initI18n('transform.property');
+const i18n = editor.initI18n('transform.tool.property');
 
-export default class TransformProperty extends BaseProperty {
+export default class TransformToolProperty extends BaseProperty {
 
   getTitle() {
     return i18n('title')
   }
 
+  isHideHeader() {
+    return true; 
+  }
+
   getBody() {
-    return `<div class='full transform-property' ref='$body'></div>`;
+    return `<div class='full' ref='$body'></div>`;
   }
 
   hasKeyframe() {
@@ -53,19 +57,6 @@ export default class TransformProperty extends BaseProperty {
   getKeyframeProperty () {
     return 'transform'
   }
-
-  getTools() {
-    return /*html*/`
-      <select ref="$transformSelect">
-      ${transformList.map(transform => {
-        var label = editor.i18n('css.item.' + transform)
-        return `<option value='${transform}'>${label}</option>`;
-      }).join('')}
-      </select>
-      <button type="button" ref="$add" title="add Filter">${icon.add}</button>
-    `
-  }
-  
 
   [CLICK("$add")]() {
     var transformType = this.refs.$transformSelect.value;

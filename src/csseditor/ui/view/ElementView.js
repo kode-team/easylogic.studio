@@ -44,7 +44,7 @@ export default class ElementView extends UIElement {
                 <GridLayoutLineView ref='$gridLayoutLineView' />
                 <SelectionToolView ref='$selectionTool' />
                 <PathEditorView ref='$pathEditorView' />
-                <PolygonEditorView ref='$polygonEditorView' />                             
+                <PolygonEditorView ref='$polygonEditorView' />                     
             </div>
         `
     }
@@ -342,6 +342,12 @@ export default class ElementView extends UIElement {
     updateRealPositionByItem (item) {
         var {x, y, width, height} = item.toBound();
         var cachedItem = this.state.cachedCurrentElement[item.id]
+
+        if (!cachedItem) {
+            this.state.cachedCurrentElement[item.id] = this.getElement(item.id);
+            cachedItem = this.state.cachedCurrentElement[item.id]
+        }
+
         if (cachedItem) {
             cachedItem.cssText(`left: ${x};top:${y};width:${width};height:${height}; transform: ${item.transform};`)
         }

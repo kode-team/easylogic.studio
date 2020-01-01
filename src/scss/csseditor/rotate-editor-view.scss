@@ -1,0 +1,96 @@
+.rotate-editor-view {
+    position: absolute;
+    left: 10px; 
+    bottom: 50px;
+    width: 150px;
+    height: 150px;
+    // background-color: yellow;
+    pointer-events: none;
+
+    .rotate-z {
+        position: absolute;
+        left: 10px;
+        right: 10px;
+        top: 10px;
+        bottom: 10px;
+        border: 1px solid black; 
+        border-radius: 100%;
+
+        .handle {
+            position: absolute;
+            left: 50%;
+            top: 0px;
+            transform: translate(-50%, -50%);
+            width: 10px;
+            height: 10px;
+            background-color: black;
+            border-radius: 100%;
+            pointer-events: all;    
+            
+            &:hover {
+                background-color: $selected-color;
+                cursor: pointer;
+                border: 1px solid rgba(0, 0, 0, 0.5);
+            }
+        }
+
+        .handle-line {
+            position: absolute;
+            left: 50%;
+            top: 0px;
+            height: 50%;
+            width: 1px;
+            transform: translate(-50%, 0%);
+            background-color: black;
+        }
+    }
+
+
+
+
+
+    .rotate-area {
+        position: absolute;
+        left: 20px;
+        right: 20px;
+        top: 20px;
+        bottom: 20px;
+        border: 1px solid rgba(0, 0, 0, 0.5); 
+        border-radius: 100%;
+        pointer-events: all;
+        cursor: move;
+
+        .rotate-container {
+            position: absolute;
+            left: 10px;
+            right: 10px;
+            top: 10px;
+            bottom: 10px;
+            transform-style: preserve-3d;     
+
+            pointer-events: none;                           
+        }
+
+
+
+        .rotate-item {
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            bottom: 0px;
+            right: 0px;
+            border-radius: 100%;
+        }
+
+        .rotate-x {
+
+            transform: rotateX(90deg) translateZ(0px);
+            border: 3px solid blue; 
+        }
+
+        .rotate-y {
+            transform: rotateY(90deg) translateZ(0px);
+            border: 3px solid green; 
+        }
+    }
+}

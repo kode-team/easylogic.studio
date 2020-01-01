@@ -1,5 +1,6 @@
 import { Length } from "../unit/Length";
 import { Property } from "../items/Property";
+import { isString } from "../../util/functions/func";
 
 const TRANSFORM_REG = /((matrix|translate(X|Y|Z|3d)?|scale(X|Y|Z|3d)?|rotate(X|Y|Z|3d)?|skew(X|Y)|matrix(3d)?|perspective)\(([^\)]*)\))/gi;
 
@@ -59,6 +60,21 @@ export class Transform extends Property {
 
   static parse (transform) {
     return new Transform(transform);
+  }
+
+  static remove (transform, type = []) {
+
+    if (isString(type)) {
+      type = [type]
+    }  
+
+    return Transform.filter(transform, it => {
+        return type.includes(it.type) === false;
+    })
+  }
+
+  static filter (transform, filterFunction) {
+    return Transform.join(Transform.parseStyle(transform).filter(it =>  filterFunction(it)))
   }
 
   static replace (transform, valueObject) {

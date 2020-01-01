@@ -9,6 +9,7 @@ import { Length } from "../../../editor/unit/Length";
 import Dom from "../../../util/Dom";
 import PageTools from "../view-items/PageTools";
 import PageSubEditor from "../view-items/PageSubEditor";
+import RotateEditorView from "./RotateEditorView";
 
 
 
@@ -19,7 +20,8 @@ export default class CanvasView extends UIElement {
       PageTools,
       NumberRangeEditor,
       ElementView,
-      PageSubEditor
+      PageSubEditor,
+      RotateEditorView
     }
   }
 
@@ -37,6 +39,7 @@ export default class CanvasView extends UIElement {
         </div>
         <PageSubEditor />
         <PageTools />
+        <RotateEditorView />
       </div>
     `;
   }
