@@ -1,9 +1,32 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
-import { POINTERSTART, MOVE, END, DOUBLECLICK, BIND } from "../../../util/Event";
+import { POINTERSTART, MOVE, END, DOUBLECLICK, BIND, CLICK } from "../../../util/Event";
 import { Length } from "../../../editor/unit/Length";
 import { editor } from "../../../editor/editor";
 import { Transform } from "../../../editor/css-property/Transform";
 import { calculateAngle } from "../../../util/functions/math";
+
+const directions = [
+    'top-left',
+    'top',
+    'top-right',
+    'left',
+    'right',
+    'bottom-left',
+    'bottom',
+    'bottom-right'
+]
+
+
+const DEFINED_ANGLES = {
+    "top": "0",
+    "top-right": "45",
+    "right": "90",
+    "bottom-right": "135",
+    "bottom": "180",
+    "bottom-left": "225",
+    "left": "270",
+    "top-left": "315"
+  };
 
 export default class RotateEditorView extends UIElement {
     template() {
@@ -18,10 +41,31 @@ export default class RotateEditorView extends UIElement {
                 <div class='rotate-z' ref='$rotateZ'>
                     <div class='handle-line'></div>                
                     <div class='handle' ref='$handle'></div>
-
                 </div>                
+
+                <div class='direction-area' ref='$directionArea'>
+                    ${directions.map(it => {
+                        return /*html*/`<div class='direction' data-value='${it}'></div>`
+                    }).join('')}
+                </div>
+
             </div>
         `
+    }
+
+    [CLICK('$directionArea .direction')] (e) {
+        var direction = e.$delegateTarget.attr('data-value');
+        var value = Length.deg(DEFINED_ANGLES[direction] || 0)
+        editor.selection.each(item => {
+            const transform = Transform.replace(item.transform, {  type: 'rotateZ', value: [value]})
+            item.reset({ transform})
+        })
+                 
+        this.bindData('$rotateZ')
+        this.emit('refreshCanvasForPartial', null, false, true)
+        editor.selection.setRectCache()
+        this.emit('refreshSelectionStyleView')
+
     }
 
     [BIND('$rotateContainer')] () {

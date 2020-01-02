@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
-import { BIND, POINTERSTART, MOVE, END, IF, KEYUP, DEBOUNCE } from "../../../util/Event";
+import { BIND, POINTERSTART, MOVE, END, IF, KEYUP, DEBOUNCE, PREVENT } from "../../../util/Event";
 import { Length } from "../../../editor/unit/Length";
 
 import { editor } from "../../../editor/editor";
@@ -99,7 +99,7 @@ export default class ElementView extends UIElement {
             && $el.attr('data-segment') !== 'true';
     }
 
-    [POINTERSTART('$el') + IF('checkEmptyElement') + MOVE('movePointer') + END('moveEndPointer')] (e) {
+    [POINTERSTART('$view') + IF('checkEmptyElement') + MOVE('movePointer') + END('moveEndPointer')] (e) {
 
         this.$target = Dom.create(e.target);
 
@@ -127,12 +127,12 @@ export default class ElementView extends UIElement {
     
             this.refs.$dragAreaRect.css(obj) 
 
-            editor.selection.empty();
+            // editor.selection.empty();
         
             this.state.cachedCurrentElement = {}
             this.$el.$$('.selected').forEach(it => it.removeClass('selected'))
     
-            this.emit('initSelectionTool')        
+            // this.emit('initSelectionTool')        
         } else {
             // add mode 
             // NOOP 
@@ -312,26 +312,18 @@ export default class ElementView extends UIElement {
         this.startXY = e.xy ; 
         this.$element = e.$delegateTarget;
 
-
         if (this.$element.hasClass('text') && this.$element.hasClass('selected')) {
             return false; 
         }
 
-        if (this.$element.hasClass('selected')) {
-            // NOOP 
-        } else {
+        var id = this.$element.attr('data-id')
+        editor.selection.selectById(id);    
 
-            var id = this.$element.attr('data-id')
-            editor.selection.selectById(id);    
-        }
 
-        if (editor.selection.isRelative) {
-            // console.log('relative')
-        } else {    
-            this.selectCurrent(...editor.selection.items)
-            this.emit('refreshSelection');
-            editor.selection.setRectCache()
-        }
+        this.selectCurrent(...editor.selection.items)
+        editor.selection.setRectCache()        
+        this.emit('refreshSelection');
+
     }
 
     calculateMovedElement (dx, dy) {

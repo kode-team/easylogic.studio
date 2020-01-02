@@ -178,7 +178,8 @@
         border-radius: 0px;
         background-color: transparent;
         border:0px;
-        // pointer-events: none;
+        pointer-events: none;
+        display: none;
   
         &:before {
           left: 0px;

@@ -18,10 +18,6 @@ export default class TransformOriginProperty extends BaseProperty {
     `
   }
 
-  isFirstShow() {
-    return false; 
-  }
-
   hasKeyframe () {
     return true; 
   }

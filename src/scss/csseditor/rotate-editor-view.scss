@@ -1,7 +1,7 @@
 .rotate-editor-view {
     position: absolute;
-    left: 10px; 
-    bottom: 50px;
+    left: 30px; 
+    bottom: 70px;
     width: 150px;
     height: 150px;
     // background-color: yellow;
@@ -13,13 +13,14 @@
         right: 10px;
         top: 10px;
         bottom: 10px;
-        border: 1px solid black; 
+        border: 3px solid black; 
         border-radius: 100%;
+        // background-color: rgba(yellow, 0.5);
 
         .handle {
             position: absolute;
             left: 50%;
-            top: 0px;
+            top: -1px;
             transform: translate(-50%, -50%);
             width: 10px;
             height: 10px;
@@ -38,14 +39,109 @@
         .handle-line {
             position: absolute;
             left: 50%;
-            top: 0px;
-            height: 50%;
+            top: -1px;
+            height: calc(50% + 1px);
             width: 1px;
             transform: translate(-50%, 0%);
             background-color: black;
         }
+
     }
 
+    .direction-area {
+        position: absolute;
+        left: -10px; 
+        bottom: -10px;
+        top: -10px;
+        right: -10px;
+        // background-color: yellow;
+        pointer-events: none;
+
+
+        .direction {
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            width: 20px;
+            height: 20px;
+            // transform: translate(-50%, -50%);
+            // background-color: black;
+            cursor: pointer;
+            pointer-events: all;
+            border-width: 3px;
+            border-color: $border-color; 
+
+            &:hover {
+                border-color: $selected-color;
+            }
+    
+            &[data-value='top-left'] {
+                border-top-style: solid;
+                border-left-style: solid;
+            }
+
+            &[data-value='top-right'] {
+                right: 0%;
+                left: auto;
+                // transform: translate(-50%, 0%);                                
+                border-top-style: solid;
+                border-right-style: solid;
+            }           
+            
+
+            &[data-value='bottom-left'] {
+                top: auto;
+                bottom: 0px;
+                border-bottom-style: solid;
+                border-left-style: solid;
+            }
+
+            &[data-value='bottom-right'] {
+                top: auto;
+                bottom: 0px;                
+                right: 0%;
+                left: auto;
+                // transform: translate(-50%, 0%);                                
+                border-bottom-style: solid;
+                border-right-style: solid;
+            }                       
+    
+            &[data-value='top'] {
+                left: 50%;
+                transform: translate(-50%, 0%);                
+                border-top-style: solid;
+                height: 10px;
+            }
+
+            &[data-value='left'] {
+                top: 50%;
+                transform: translate(0%, -50%);                
+                border-left-style: solid;
+                width: 10px;
+            }
+
+            &[data-value='right'] {
+                top: 50%;
+                left: auto;
+                right: 0px;
+                transform: translate(0%, -50%);                
+                border-right-style: solid;
+                width: 10px;
+            }            
+
+            &[data-value='bottom'] {
+                left: 50%;
+                transform: translate(-50%, 0%);                
+                border-bottom-style: solid;
+                bottom: 0px;
+                top: auto;
+                height: 10px;
+            }
+
+
+        }        
+
+    }
 
 
 
@@ -86,12 +182,12 @@
         .rotate-x {
 
             transform: rotateX(90deg) translateZ(0px);
-            border: 3px solid blue; 
+            border: 5px solid blue; 
         }
 
         .rotate-y {
             transform: rotateY(90deg) translateZ(0px);
-            border: 3px solid green; 
+            border: 5px solid green; 
         }
     }
 }
