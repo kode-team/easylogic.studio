@@ -316,10 +316,21 @@ export default class ElementView extends UIElement {
             return false; 
         }
 
-        var id = this.$element.attr('data-id')
-        editor.selection.selectById(id);    
+        var id = this.$element.attr('data-id')        
 
 
+        if (e.shiftKey) {
+            editor.selection.toggleById(id);
+        } else {
+
+            if (editor.selection.check({ id } )) {
+
+            } else {
+                editor.selection.selectById(id);    
+            }
+
+        }
+    
         this.selectCurrent(...editor.selection.items)
         editor.selection.setRectCache()        
         this.emit('refreshSelection');
@@ -362,6 +373,7 @@ export default class ElementView extends UIElement {
         var current = editor.selection.items.length === 1 ? editor.selection.current : null;
 
         this.emit('refreshElement', current);
+        editor.selection.setRectCache()                
 
         if (dx != 0 || dy != 0) {
             this.emit('removeGuideLine')        

@@ -147,10 +147,7 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
     }
 
     &.selected {
-
-      &:hover {
-        outline: none;
-      }
+      box-shadow: 0 0 3px 0 rgba(#0f72cf, 0.8);
     }
 
     &:hover {

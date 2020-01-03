@@ -171,6 +171,25 @@ export class Selection {
     this.select(... _traverse(this.artboard, id))
   }
 
+  addById(id) {
+
+    if (this.itemKeys[id]) return;
+
+    this.select(...this.items, ... _traverse(this.artboard, id))
+  }  
+
+  removeById(id) {
+    this.select(...this.items.filter(it => it.id != id))
+  }    
+
+  toggleById (id) {
+    if (this.itemKeys[id]) {
+      this.removeById(id);
+    } else {
+      this.addById(id);
+    }
+  }
+
   setRectCache (isCache = true) {
     
     this.cachedItems = this.items.map(it => {
