@@ -23,6 +23,7 @@ import TimelineProperty from "../ui/control/TimelineProperty";
 import StatusBar from "../ui/view/StatusBar";
 import items from "../../editor/items";
 import PreviewToolMenu from "../ui/view/PreviewToolMenu";
+import { Item } from "../../editor/items/Item";
 
 export default class CSSEditor extends UIElement {
   

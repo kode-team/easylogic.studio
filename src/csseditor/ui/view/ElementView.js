@@ -371,7 +371,7 @@ export default class ElementView extends UIElement {
 
     calculateEndedElement (dx, dy) {
 
-        var current = editor.selection.items.length === 1 ? editor.selection.current : {};
+        var current = editor.selection.items.length === 1 ? editor.selection.current : null;
 
 
         if (dx === 0 && dy === 0) {
@@ -514,7 +514,6 @@ export default class ElementView extends UIElement {
 
     // 객체를 부분 업데이트 하기 위한 메소드 
     [EVENT('refreshCanvasForPartial', 'refreshSelectionStyleView')] (obj, isChangeFragment = true,  isLast = false) {
-
         var items = obj ? [obj] : editor.selection.items;
 
         items.forEach(current => {
