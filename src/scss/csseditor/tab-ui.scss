@@ -33,9 +33,6 @@ $tab-horizontal-header-right-width: 60px;
 
             label {
               padding: 13px;
-              svg {
-                transform: scale(1.2);
-              }
             }
           }
         }
@@ -49,10 +46,20 @@ $tab-horizontal-header-right-width: 60px;
       }
 
       @for $selectValue from 1 to 10 {
-        &[data-selected-value="#{$selectValue}"]
+        &[data-selected-value="#{$selectValue}"] {
+          .tab-header {
+            .tab-item[data-value="#{$selectValue}"] {
+              svg {
+                path {
+                  fill: $selected-color;
+                }
+              }
+            }
+          }
           .tab-content[data-value="#{$selectValue}"] {
-          display: block;
-        }
+            display: block;
+          }
+        }    
       }
     }
 
@@ -85,12 +92,8 @@ $tab-horizontal-header-right-width: 60px;
         text-align: center;
         position: relative;
         padding: 0px 0px 0px 0px;
-        
-        // border-bottom: 1px solid $tab-background-color;
-        // border-top: 1px solid transparent;   
         height: 34px;
 
-        
         label {
           line-height: 2;
           
@@ -177,23 +180,6 @@ $tab-horizontal-header-right-width: 60px;
     }
 
   }
-
-  // &.inner {
-  //   top: 5px;
-  //   left: 5px;
-  //   right: 5px;
-  //   bottom: 5px;
-
-  //   > .tab-header {
-  //     > .tab-item {
-  //       border: 0px;
-  //     }
-  //   }
-
-  //   > .tab-body {
-  //     border: 0px;
-  //   }
-  // }
 
   > .tab-header {
     position: absolute;
@@ -295,75 +281,4 @@ $tab-horizontal-header-right-width: 60px;
     }
   }
 
-  // &.bottom {
-  //   > .tab-header {
-  //     top: auto;
-  //     bottom: 1px;
-
-  //     > .tab-item {
-  //       &.selected {
-  //         border-top: 1px solid #ffffff;
-  //         border-bottom: 1px solid $tab-border-color;
-  //       }
-  //     }
-  //   }
-
-  //   > .tab-body {
-  //     top: 0px;
-  //     bottom: $tab-header-height;
-  //   }
-  // }
-
-  // &.horizontal {
-  //   &.left {
-  //     > .tab-header {
-  //       left: 0px;
-  //       width: $tab-horizontal-header-width;
-  //       display: inline-block;
-
-  //       > .tab-item {
-  //         height: $tab-horizontal-header-width;
-  //         overflow: auto;
-  //         line-height: 3;
-  //         min-width: $tab-horizontal-header-width;
-  //       }
-  //     }
-
-  //     > .tab-body {
-  //       left: $tab-horizontal-header-width;
-  //       right: 0px;
-  //       border-left: 1px solid $border-color;
-  //       border-right: 0px;
-  //     }
-  //   }
-
-  //   > .tab-header {
-  //     left: auto;
-  //     top: 0px;
-  //     bottom: 0px;
-  //     width: $tab-horizontal-header-right-width;
-  //     height: auto;
-  //     display: inline-block;
-
-  //     > .tab-item {
-  //       border: 0px;
-  //       border-bottom: 1px solid $border-color;
-  //       text-align: center;
-  //       line-height: 3;
-  //       height: $tab-horizontal-header-right-width - 10px;
-  //       min-width: $tab-horizontal-header-right-width;
-
-  //       &.selected {
-  //         background-color: rgba($tab-selected-color, 0.5);
-  //       }
-  //     }
-  //   }
-
-  //   > .tab-body {
-  //     top: 0px;
-  //     right: $tab-horizontal-header-right-width;
-  //     border: 0px;
-  //     border-right: 1px solid $border-color;
-  //   }
-  // }
 }

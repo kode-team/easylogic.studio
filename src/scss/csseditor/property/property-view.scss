@@ -25,10 +25,6 @@
     }
   }
 
-  &.compact {
-    padding:0px;
-  }
-
   &.full { 
     height: 100%;
     display: flex;
@@ -248,30 +244,6 @@
       border-top: 0px;
 
     }
-
-
-    &.background-image {
-      > .property-body {
-        padding: 0px;
-      }   
-    }
-
-    &.size-property {
-      > .property-body {
-        display: grid;
-        grid-template-columns: 1fr 1fr; 
-        grid-column-gap: 3px;
-
-        .grid-item {
-          display: grid;
-          grid-template-columns: 30px 1fr;
-
-          > label {
-            padding: 2px 0px;
-          }
-        }
-      }
-    }
   }
 
   > .property-title {
@@ -343,7 +315,7 @@
       padding:3px 0px;
 
       &:first-child {
-        padding-top: 10px;
+        padding-top: 0px;
       }
 
       &:last-child {

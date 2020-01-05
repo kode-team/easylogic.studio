@@ -28,7 +28,8 @@ export default class GuideView {
             } else {
                 this.cachedExtraItems = artboard.allLayers.filter(it => {
                     return !editor.selection.check(it) || (it.is('artboard') && editor.selection.currentArtboard != it); 
-                });
+                })
+                
             }
 
             this.rect = editor.selection.allRect ? editor.selection.allRect.clone() : null;
