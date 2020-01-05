@@ -171,15 +171,13 @@
       &[data-position="move"] {
         left: 0px;
         top: 0px;
-        width: 100%;
-        height: 100%;
+        width: 14px;
+        height: 14px;
+        transform: translate(0%, -150%);
         cursor: move;
-        transform: none;
-        border-radius: 0px;
-        background-color: transparent;
-        border:0px;
-        pointer-events: none;
-        display: none;
+        border-radius: 5px;
+        background-color: rgba($selected-color, 0.5);
+        border: 1px solid $border-color;
   
         &:before {
           left: 0px;

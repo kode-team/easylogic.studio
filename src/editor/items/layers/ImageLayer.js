@@ -56,7 +56,12 @@ export class ImageLayer extends Layer {
         var $defs = $svg.$('defs');
         $defs.html(this.toDefInnerString)          
       } else {
-        currentElement.parent().prepend(Dom.createByHTML(this.toDefString));
+        var defString = this.toDefString
+        if (defString) {
+          var $el = Dom.createByHTML(defString);
+          currentElement.parent().prepend($el);
+        }
+
       }
 
     }

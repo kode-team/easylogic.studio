@@ -317,14 +317,16 @@ export default class ElementView extends UIElement {
         }
 
         var id = this.$element.attr('data-id')        
-
+        this.hasSVG = false;
 
         if (e.shiftKey) {
             editor.selection.toggleById(id);
         } else {
 
             if (editor.selection.check({ id } )) {
-
+                if (editor.selection.current.is('svg-path', 'svg-textpath', 'svg-polygon')) {
+                    this.hasSVG = true; 
+                }
             } else {
                 editor.selection.selectById(id);    
             }
@@ -357,7 +359,7 @@ export default class ElementView extends UIElement {
     }
 
     updateRealPosition() {
-        editor.selection.items.forEach(item => {
+        editor.selection.each(item => {
             this.updateRealPositionByItem(item);
         })
 
@@ -368,9 +370,22 @@ export default class ElementView extends UIElement {
     }
 
     calculateEndedElement (dx, dy) {
+
+        var current = editor.selection.items.length === 1 ? editor.selection.current : {};
+
+
+        if (dx === 0 && dy === 0) {
+
+            if (this.hasSVG) {
+                this.emit('openPathEditor');
+                return; 
+            }
+
+        }
+
+
         this.children.$selectionTool.refreshSelectionToolView(dx, dy, 'move');
 
-        var current = editor.selection.items.length === 1 ? editor.selection.current : null;
 
         this.emit('refreshElement', current);
         editor.selection.setRectCache()                

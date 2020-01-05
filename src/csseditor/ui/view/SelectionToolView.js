@@ -178,7 +178,7 @@ export default class SelectionToolView extends SelectionToolBind {
         return /*html*/`
     <div class='selection-view' ref='$selectionView' >
         <div class='selection-tool' ref='$selectionTool' style='left:-100px;top:-100px;'>
-            <div class='selection-tool-item' data-position='move'></div>       
+            <div class='selection-tool-item' data-position='move' title='move'></div>       
 
             <div class='selection-tool-item' data-position='to top'></div>
             <div class='selection-tool-item' data-position='to right'></div>
@@ -270,13 +270,6 @@ export default class SelectionToolView extends SelectionToolBind {
     }
 
     end (dx, dy) {
-
-        if (this.pointerType === 'move') {
-            if (dx === 0 && dy === 0) {
-                this.trigger('openPathEditor');
-                return; 
-            }
-        }
 
         var e = editor.config.get('bodyEvent');
 

@@ -345,7 +345,7 @@ export default class GuideView {
         // 좌표 복구 시스템 
         if (Segment.isMove(this.pointerType)) {
 
-            editor.selection.items.forEach(item => {
+            editor.selection.each(item => {
 
                 if (editor.selection.isInParent(item, editor.selection.items)) {
                     // 부모가 있는 애들은 스스로를 복구 하지 않는다. 
@@ -361,7 +361,7 @@ export default class GuideView {
             });
         } else {
 
-            editor.selection.items.forEach(item => {
+            editor.selection.each(item => {
                 // selection 기준으로 item 을 먼저 복구 하고 
                 this.recover(item)
     
