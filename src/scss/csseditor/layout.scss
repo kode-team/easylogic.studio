@@ -96,7 +96,8 @@
     color: $selected-font-color;
     z-index: 1;
     pointer-events: all;
-    
+    box-sizing: border-box;
+    padding: 3px;
     border-bottom: 1px solid $border-color;
   }
 

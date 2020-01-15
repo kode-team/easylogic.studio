@@ -20,13 +20,12 @@ export default class Inspector extends UIElement {
               <div class="tab-item" data-value="2" title="${i18n('tab.title.component')}">
                 <label class='icon'>${icon.cube}</label>
               </div>              
+              <div class="tab-item" data-value="4" title='${i18n('tab.title.text')}'>
+                <label class='icon'>${icon.title}</label>
+              </div>              
               <div class="tab-item" data-value="3" title="${i18n('tab.title.transition')}">
                 <label>${icon.flash_on}</label>
               </div>
-              
-              <!--<div class="tab-item" data-value="4" title='${i18n('tab.title.asset')}'>
-                <label class='icon'>${icon.view_list}</label>
-              </div>-->
               <div class="tab-item" data-value="5" title='${i18n('tab.title.code')}'>
                 <label class='icon'>${icon.code}</label>
               </div>                                     
@@ -85,14 +84,6 @@ export default class Inspector extends UIElement {
                 <!-- Image --> 
                 <ImageProperty />
 
-                <!-- Text -->
-                <!-- <ContentProperty /> -->    
-                <FontProperty />
-                <TextProperty />
-                <TextShadowProperty />
-                <TextFillProperty />
-                <FontSpacingProperty />
-                <TextClipProperty />
                 <!-- <RootVariableProperty /> -->
                 <!-- <VariableProperty /> -->
 
@@ -116,14 +107,18 @@ export default class Inspector extends UIElement {
                 <SelectorProperty />                              
                 <div class='empty'></div>                
               </div>                        
-              <!--<div class='tab-content' data-value='4'>
-                <ImageAssetsProperty />       
-                <SVGFilterAssetsProperty />
-                <ColorAssetsProperty />
-                <GradientAssetsProperty />    
+              <div class='tab-content' data-value='4'>
+                <!-- Text -->
+                <!-- <ContentProperty /> -->    
+                <FontProperty />
+                <TextProperty />
+                <TextShadowProperty />
+                <TextFillProperty />
+                <FontSpacingProperty />
+                <TextClipProperty />  
                 
                 <div class='empty'></div>                
-              </div> -->
+              </div>
               <div class="tab-content" data-value="5">
                 <CodeViewProperty />
                 <div class='empty'></div>                           

@@ -233,6 +233,7 @@ export default {
     'inspector.tab.title.component': '컴포넌트 속성',
     'inspector.tab.title.transition': '트랜지션과 애니메이션 속성',
     'inspector.tab.title.asset': '에셋 관리자',
+    'inspector.tab.title.text': '텍스트',    
     'inspector.tab.title.code': '코드',    
 
     'timeline.property.title': '타임라인',

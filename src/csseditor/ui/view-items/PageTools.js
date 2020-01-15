@@ -4,26 +4,26 @@ import { editor } from "../../../editor/editor";
 import { CLICK, PREVENT, STOP, DEBOUNCE } from "../../../util/Event";
 
 import icon from "../icon/icon";
-import NumberRangeEditor from "../property-editor/NumberRangeEditor";
 import { round } from "../../../util/functions/math";
+import NumberInputEditor from "../property-editor/NumberInputEditor";
 
 export default class PageTools extends UIElement {
 
   components() {
     return {
-      NumberRangeEditor
+      NumberInputEditor
     }
   }
 
   template() {
     return /*html*/`     
       <div class='page-tools'>
-        <button type='button' ref='$plus'>${icon.add}</button>
         <button type='button' ref='$minus'>${icon.remove2}</button>
         <div class='select'>
-          <NumberRangeEditor ref='$scale' min='10' max='240' step="1" key="scale" value="${editor.scale*100}" onchange="changeRangeEditor" />
+          <NumberInputEditor ref='$scale' min='10' max='240' step="1" key="scale" value="${editor.scale*100}" onchange="changeRangeEditor" />
         </div>
         <label>%</label>
+        <button type='button' ref='$plus'>${icon.add}</button>        
       </div>
 
     `;

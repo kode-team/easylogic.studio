@@ -13,7 +13,7 @@ export default class FontSpacingProperty extends BaseProperty {
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
-    this.refreshShow('text');
+    this.refreshShowIsNot(['project'])
   }
 
   refresh() {

@@ -173,11 +173,12 @@
         top: 0px;
         width: 14px;
         height: 14px;
-        transform: translate(0%, -150%);
+        transform: translate(0%, -100%);
         cursor: move;
-        border-radius: 5px;
+        border-radius: 1px;
         background-color: rgba($selected-color, 0.5);
-        border: 1px solid $border-color;
+        border: 0px; 
+        box-sizing: border-box;
   
         &:before {
           left: 0px;

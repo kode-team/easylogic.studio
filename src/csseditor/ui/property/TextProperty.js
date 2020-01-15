@@ -12,7 +12,7 @@ export default class TextProperty extends BaseProperty {
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
-    this.refreshShow(['text']);
+    this.refreshShowIsNot(['project']);
   }
 
   refresh() {

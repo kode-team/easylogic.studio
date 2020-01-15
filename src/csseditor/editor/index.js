@@ -50,7 +50,6 @@ export default class CSSEditor extends UIElement {
     return /*html*/`
       <div class="layout-main">
         <div class="layout-header">
-            <LogoView />
             <div class='menu-bar'>
               <PreviewToolMenu />
               <ToolMenu />

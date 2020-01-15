@@ -5,6 +5,9 @@
   color: $property-font-color; 
   display: none; 
 
+  &:first-child {
+    border-top: 0px;
+  }
 
   .add-timeline-property {
     display: inline-block;
