@@ -11,6 +11,7 @@ function startEditor() {
 }
 
 export default {
+  version: '@@VERSION@@',
   ...Util,
   ...ColorPicker,
   ...CSSEditor,

@@ -1,5 +1,6 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const pkg = require('./package.json')
 
 module.exports = {
   // Entry files for our popup and background pages
@@ -16,9 +17,17 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: {
-          loader: "babel-loader"
-        }
+        use: [  
+          {
+            loader: 'string-replace-loader',
+            options: {
+              search: '@@VERSION@@',
+              replace: pkg.version,
+            },
+          }, {
+            loader: "babel-loader"
+          }
+        ]
       },
       {
         test: /\.html$/,
