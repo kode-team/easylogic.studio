@@ -181,12 +181,8 @@ export default class ToolCommand extends UIElement {
 
     /* tools */ 
     
-    [COMMAND('switch.theme')] () {
-        if (editor.theme === 'dark') {
-            editor.changeTheme('light')
-        } else {
-            editor.changeTheme('dark')
-        }
+    [COMMAND('switch.theme')] ( theme ) {
+        editor.changeTheme(theme);
 
         this.emit('changeTheme')
     }

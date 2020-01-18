@@ -15,7 +15,6 @@ import CopyItem from "./CopyItem";
 import AddText from "./AddText";
 import AddPolygon from "./AddPolygon";
 import AddStar from "./AddStar";
-import ThemeSwitcher from "./ThemeSwitcher";
 import ExportView from "./ExportView";
 import Manual from "./Manual";
 import AddCube from "./AddCube";
@@ -33,9 +32,6 @@ import AddSVGText from "./AddSVGText";
 import LoginButton from "./LoginButton";
 import SignButton from "./SignButton";
 import AddArtboard from "./AddArtboard";
-
-
-
 
 export default {
   AddArtboard,  
@@ -55,7 +51,6 @@ export default {
   AddPath,
   Manual,
   ExportView,
-  ThemeSwitcher,
   AddStar,
   AddPolygon,
   AddText,

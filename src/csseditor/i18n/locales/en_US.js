@@ -8,6 +8,10 @@ export default {
     'app.lang.ko_KR': '한글',
     'app.label.lang': 'Language',
 
+    'app.theme.dark': 'Dark',
+    'app.theme.light': 'Light',
+    'app.label.theme': 'Theme',    
+
 
     'app.tab.title.projects': 'Projects',
     'app.tab.title.layers': 'Layers',

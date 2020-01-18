@@ -12,7 +12,7 @@
       right: 5px;
       bottom: 5px;
       padding: 10px;
-      border: 1px dashed rgba(255, 255, 255, 0.3);
+      border: 1px dashed rgb(170, 170, 170);
 
       &:before {
         content: attr(data-title);
@@ -73,7 +73,7 @@
       right: 40px;
       bottom: 30px;
       padding: 20px 30px;
-      border: 1px dashed rgba(255, 255, 255, 0.3);
+      border: 1px dashed rgb(170, 170, 170);
 
       &::before {
         content: attr(data-title);
@@ -134,7 +134,7 @@
       right: 75px;
       bottom: 54px;
       padding: 10px 0px;
-      border: 1px dashed rgba(255, 255, 255, 0.3);
+      border: 1px dashed rgb(170, 170, 170);
 
       &:before {
         content: attr(title);

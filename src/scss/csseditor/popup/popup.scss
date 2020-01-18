@@ -4,9 +4,8 @@
   
   z-index: 1000;
   background-color: $popup-background-color;
-  // border: 1px solid $border-color;
   border-radius: 3px;
-  filter: drop-shadow(rgba(0, 0, 0, 0.5) 0px 0px 1px) drop-shadow(rgba(0, 0, 0, 0.5) 0px 2px 4px) drop-shadow(rgba(0, 0, 0, 0.5) 0px 4px 12px);
+  box-shadow: 0px 1px 3px 0 rgba(0, 0, 0, 0.5);
   padding: 10px 10px;
   color: $popup-font-color;
 
@@ -18,15 +17,6 @@
       margin-bottom: 0px;
     }
   }
-
-  // &.transparent {
-  //   background-color: transparent;
-
-  //   .popup-title {
-  //     background-color: rgba($background-color,  0.5);
-  //   }
-  // }
-
 
   .popup-title {
     font-size: 12px;
@@ -51,9 +41,6 @@
 
   .popup-content {
     .popup-item {
-      // display: grid;
-      // grid-template-columns: 45px 1fr;
-      // height: 24px;
 
       label {
         font-size: 11px;

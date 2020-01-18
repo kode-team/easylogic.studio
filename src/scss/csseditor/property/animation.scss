@@ -39,23 +39,15 @@
       label {
         // border: 1px solid $border-color;
         background-color: $border-color;
-        padding: 1px 3px;
+        padding: 1px 2px;
         border-radius: 2px;
         color: $border-color;
         text-transform: uppercase;
         font-weight: bold;        
         small {
-          color: white;
+          color: $font-color;
           text-transform: lowercase;
         }      
-        
-        &.direction,
-        &.fill-mode,
-        &.play-state {
-          small {
-            color: $font-color;
-          }
-        }
 
         &.play-state {
           background-color: transparent;

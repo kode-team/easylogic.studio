@@ -50,41 +50,70 @@
     background-color: $selected-color;
     z-index: 1;
     pointer-events: all;
+    display: grid;
+    grid-template-columns: auto auto;
     
-    // border-top: 1px solid $border-color;
     color: white; 
 
-    > div {
-      display: flex; 
-      padding: 2px 10px;
+    .message-view {
+      padding: 2px 5px;
+    }
 
-      > * {
-        flex: 1 1 auto;
+    .tool-view {
+      text-align: right;
+      padding:2px 5px;
+      
+
+      text-align: right; 
+
+      > div {
+        display: inline-block;
+        background-color: blueviolet;
+        border-radius: 3px;
+        min-width: 50px;
+      }
+    }    
+
+
+    .language-selector {
+      display: inline-grid; 
+      text-align: left;
+      grid-template-columns: 50px 1fr;
+      padding-left: 5px;
+
+      > label {
+        display: inline-block;
       }
 
-      .tool-view {
-        text-align: right;
-      }
+      > .item {
+        display: inline-block;
 
-      .select-editor {
-        display: inline-grid;
-        width: 100px; 
-        height: auto;
-
-        select {
-          width: auto; 
-          height: auto;
-          background-color: transparent;
-          border-color: transparent;
-
-          &:hover {
-            background-color: $selected-color;
-          }
+        .select-editor {
+          height: 100%;
+          width: 50px;
         }
       }
     }
 
+    .theme-switcher {
+      display: inline-grid; 
+      text-align: left;
+      grid-template-columns: 50px 1fr;
+      padding-left: 5px;
 
+      > label {
+        display: inline-block;
+      }
+
+      > .item {
+        display: inline-block;
+
+        .select-editor {
+          height: 100%;
+          width: 50px;
+        }
+      }
+    }
   }
 
   .layout-header {
@@ -137,9 +166,7 @@
       
       display: flex;
       flex-direction: column;
-      // border-right: 1px solid $border-color;    
       transition: $show-timeline-animation;
-      // box-shadow: 0 10px 20px rgba(0,0,0,.19), 0 6px 6px rgba(0,0,0,.23);            
     }
 
     .layout-right {
@@ -153,10 +180,7 @@
       display: flex;
       flex-direction: column;
       overflow: auto;
-      // border-left: 1px solid $border-color;       
       transition: $show-timeline-animation;      
-      // box-shadow: 0 10px 20px rgba(0,0,0,.19), 0 6px 6px rgba(0,0,0,.23);      
-      // transition: right 0.1s linear;
     }
 
     .layout-body {
@@ -175,6 +199,7 @@
   &.inspector {
     position: relative;
     height: 100%;    
+    border-left: 1px solid $border-color;
 
     > div {
       position: relative;

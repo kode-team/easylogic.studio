@@ -8,7 +8,7 @@ $toggle-left-size: 80px;
 $right-size: 260px;
 $timeline-header-size: 40px;
 $timeline-size: 300px;
-$show-timeline-animation: all 0.15s linear;
+$show-timeline-animation: all 0.05s linear;
 $display-flex-color: #01a270;
 $display-grid-color: red;
 $footer-height: 30px;
@@ -119,6 +119,7 @@ $animation-item-background-color: #435cb5;
 $transition-item-background-color: #435cb5;
 
 // select icon editor 
+$select-icon-editor-item-color: rgb(80, 80, 80);
 $select-icon-editor-selected-color: #435cb5;
 $select-icon-editor-selected-shadow-color: black;
 $select-icon-editor-border-color: black;

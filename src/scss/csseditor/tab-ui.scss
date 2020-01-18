@@ -15,6 +15,11 @@ $tab-horizontal-header-right-width: 60px;
 
   &.number-tab { 
 
+    &.padding-5 {
+      .tab-content {
+        padding: 5px;
+      }
+    }
 
     &.side-tab {
       &.side-tab-left {
@@ -66,7 +71,6 @@ $tab-horizontal-header-right-width: 60px;
     .tab-header {
       height: 34px;
       cursor: pointer;
-      // border-bottom: 1px solid $tab-border-color;
       background-color: $tab-header-background-color;
       overflow: hidden;
       color: $tab-header-font-color;
@@ -104,6 +108,8 @@ $tab-horizontal-header-right-width: 60px;
           }
 
           svg {
+            width: 20px;
+            height: 20px;
             path  {
               fill: $tab-header-font-color;
               stroke: $tab-header-background-color;

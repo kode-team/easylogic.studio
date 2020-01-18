@@ -15,7 +15,6 @@
         bottom: 10px;
         border: 3px solid rgba(0, 0, 0, 0.5); 
         border-radius: 100%;
-        // background-color: rgba(yellow, 0.5);
 
         .handle {
             position: absolute;
@@ -165,10 +164,9 @@
             bottom: 10px;
             transform-style: preserve-3d;     
 
-            pointer-events: none;                           
+            pointer-events: none;     
+            perspective: 1000px;                      
         }
-
-
 
         .rotate-item {
             position: absolute;

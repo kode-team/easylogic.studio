@@ -75,9 +75,7 @@ export default class CSSEditor extends UIElement {
           </div>          
         </div>
         
-        <div class='status-bar'>
-          <StatusBar />
-        </div>
+        <StatusBar />
 
         <FillPopup />
         <ColorPickerPopup  />

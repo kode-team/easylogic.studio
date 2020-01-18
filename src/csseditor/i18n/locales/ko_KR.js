@@ -8,6 +8,10 @@ export default {
     'app.lang.ko_KR': '한글',    
     'app.label.lang': '언어',
 
+    'app.theme.dark': '어두운',
+    'app.theme.light': '밝은',
+    'app.label.theme': '테마', 
+
     'app.tab.title.projects': '프로젝트',
     'app.tab.title.layers': '레이어',
     'app.tab.title.libraries': '라이브러리',

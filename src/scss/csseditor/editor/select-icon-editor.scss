@@ -24,7 +24,7 @@
         background-color: transparent;
         height: 24px;
         border-radius: 5px;
-        background-color: rgb(80, 80, 80);
+        background-color: $select-icon-editor-item-color;
 
         cursor: pointer;
         display:flex;
@@ -54,7 +54,7 @@
             &.selected {
                 background-color: $select-icon-editor-selected-color;
                 // border-color: $selected-border-color;
-                box-shadow: 0px 0px 10px 0 $select-icon-editor-selected-shadow-color;
+                box-shadow: 0px 0px 5px 0 $select-icon-editor-selected-shadow-color;
                 border-radius: 5px;
                 color: white;
             }

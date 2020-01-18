@@ -134,11 +134,8 @@
         }
 
         .icon {
-          // width: 30px;
-          // height: 30px;
           display: inline-block;
           border-radius: 3px;
-          // padding: 3px;
 
           &.flipY {
             transform: rotateY(-180deg);
@@ -204,15 +201,13 @@
     .title {
       font-size: 10px;
       color: $font-color;
-      // display: none;
     }
 
 
     .icon {
       margin: 0 auto;
-      width: 24px;
-      height: 24px;
-      // background-color: rgba(206, 206, 206, 0.5);
+      width: 20px;
+      height: 20px;
       color: $font-color;      
 
       svg {
