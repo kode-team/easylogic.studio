@@ -112,6 +112,7 @@ import underline from "./underline";
 import strikethrough from "./strikethrough";
 import italic from "./italic";
 import local_library from "./local_library";
+import lens from "./lens";
 
 
 const alias = {
@@ -120,6 +121,7 @@ const alias = {
 
 export default {
   ...alias,
+  lens,
   local_library,
   italic,
   strikethrough,

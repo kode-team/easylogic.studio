@@ -3,7 +3,7 @@ import icon from "../icon/icon";
    
 export default class AddCircle extends MenuItem {
   getIconString() {
-    return icon.circle
+    return icon.lens
   }
   getTitle() {
     return this.props.title || "Circle";

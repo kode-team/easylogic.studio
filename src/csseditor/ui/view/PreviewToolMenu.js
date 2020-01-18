@@ -10,8 +10,7 @@ export default class PreviewToolMenu extends UIElement {
     return /*html*/`
       <div class='preview-tool-menu'>
         <div class='items'>
-          <Fullscreen />
-          <div class='split'></div>        
+          <Fullscreen />      
           <ExportView />
           <ExportCodePen />
           

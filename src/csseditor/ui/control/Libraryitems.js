@@ -1,5 +1,4 @@
 import UIElement from "../../../util/UIElement";
-import PathStringManager from "../../../editor/parse/PathStringManager";
 import { CLICK } from "../../../util/Event";
 import clipArt from "../clip-art";
 

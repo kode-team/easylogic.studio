@@ -12,10 +12,6 @@ export default class ExternalToolMenu extends UIElement {
         <div class='items'>
           <Download />
           <Save />
-          <!-- ExportJSFiddle / -->
-
-          <div class='split'></div>
-          
           <Github />
           <Manual />
           <!-- LoginButton /-->

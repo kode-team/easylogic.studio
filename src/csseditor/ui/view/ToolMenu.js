@@ -17,7 +17,6 @@ export default class ToolMenu extends UIElement {
             <AddCircle />         
             <AddText />
             <AddImage />
-            <div class='split'></div>
             <AddPath />
             <AddSVGText />
             <AddSVGTextPath />

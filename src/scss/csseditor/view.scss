@@ -154,7 +154,11 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
     }
 
     &:hover {
-      // outline: 1px double rgb(64, 64, 252);
+
+      &:not(.selected) {
+        outline: 1px double rgb(64, 64, 252);
+      }
+
 
       svg {
 
