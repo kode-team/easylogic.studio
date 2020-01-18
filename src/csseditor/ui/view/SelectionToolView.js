@@ -349,10 +349,6 @@ export default class SelectionToolView extends SelectionToolBind {
 
     }    
 
-    isNoMoveArea () {
-        return editor.selection.items.length === 1 && editor.selection.current.is('text')
-    }
-
     makeSelectionTool() {
 
         // selection 객체는 하나만 만든다. 
@@ -362,12 +358,6 @@ export default class SelectionToolView extends SelectionToolBind {
 
         if (this.guideView.rect) {
             var {x, y, width, height} = this.calculateWorldPosition(this.guideView.rect) ;
-        }
-
-        if (this.isNoMoveArea()) {
-            this.refs.$selectionTool.addClass('remove-move-area')
-        } else {
-            this.refs.$selectionTool.removeClass('remove-move-area')
         }
 
         if(x.is(0) && y.is(0) && width.is(0) && height.is(0)) {

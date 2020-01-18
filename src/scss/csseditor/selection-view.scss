@@ -76,26 +76,9 @@
       display: none !important;
     }    
 
-    &.remove-move-area {
-      .selection-tool-item[data-position="move"] {
-        width: 10px;
-        height: 10px;
-        top: -40px;
-        bottom: auto; 
-        left: 50%;
-        right: auto;
-        transform: translate(-50%, -50%);
-        background-color: rgba(white, 0.8);
-        border:1px solid $border-color;
-      }
-    }
-
     &.path,
     &.textpath,
     &.polygon {
-      .selection-tool-item[data-position="move"] {
-        pointer-events: all !important;
-      }
       .selection-tool-item[data-position="path"] {
         top: -30px;
         bottom: auto; 

@@ -50,7 +50,7 @@ export default class BaseStore {
   }
 
   sendMessage(source, event, $2, $3, $4, $5) {
-    setTimeout(() => {
+    Promise.resolve().then(() => {
       var list = this.getCachedCallbacks(event);
       if (list) {
         list
@@ -60,11 +60,11 @@ export default class BaseStore {
         });
       }
 
-    }, 0);
+    });
   }
 
   triggerMessage(source, event, $2, $3, $4, $5) {
-    setTimeout(() => {
+    Promise.resolve().then(() => {
       var list = this.getCachedCallbacks(event);
       if (list) {
         list
@@ -77,7 +77,7 @@ export default class BaseStore {
       }
 
 
-    }, 0);
+    });
   }
 
 
