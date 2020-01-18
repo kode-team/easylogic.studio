@@ -77,6 +77,7 @@ This project is [sapa](https://github.com/easylogic/sapa) based.
 
 ### Theming  
 * dark
+* light
 
 
 # Development 
