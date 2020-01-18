@@ -45,12 +45,8 @@ export default class CanvasView extends UIElement {
   }
 
   [EVENT('toggle.fullscreen')] () {
-    this.$el.fullscreen();
+    Dom.body().fullscreen();
   }
-
-  // [ANIMATIONITERATION()] (e) {
-  //   // console.log(e.elapsedTime, e);
-  // }
 
   [KEYUP('$el') + CONTROL + KEY('c')  + PREVENT ] (e) {
     this.emit('copy');
