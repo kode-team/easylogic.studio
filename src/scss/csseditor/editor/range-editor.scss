@@ -71,7 +71,8 @@ $border-radius: 3px;
         display: none;
         vertical-align: middle;
         grid-template-columns: 1fr 70px;     
-        grid-column-gap: 4px;           
+        grid-column-gap: 4px;
+        height: 24px;                   
 
         .area {
             display: grid; 

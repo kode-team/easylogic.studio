@@ -42,8 +42,7 @@ $range-thumb-width: 8px;
 $range-thumb-height: 8px;
 $range-track-height: 1px;
 $range-thumb-top: -4px;
-// $range-thumb-color:  rgb(243, 243, 243);
-$range-thumb-color:  #4075d6;
+$range-thumb-color:  #609de2;
 $range-track-color:  rgb(184, 184, 184);
 $range-thumb-border-color: $range-thumb-color;
 
@@ -119,8 +118,11 @@ $transition-item-background-color: #435cb5;
 
 // select icon editor 
 $select-icon-editor-item-color: rgb(192, 192, 192);
-$select-icon-editor-selected-color: #435cb5;
+$select-icon-editor-selected-color: #609de2;
 $select-icon-editor-selected-shadow-color: rgb(153, 153, 153);
 $select-icon-editor-border-color: black;
 
 $grid-box-editor-button-background-color: #435cb5;
+
+$status-bar-item-background-color: #101663;
+$status-bar-background-color: #609de2;

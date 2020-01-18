@@ -127,7 +127,6 @@ $tab-horizontal-header-right-width: 60px;
         }
 
         &:last-child {
-          // border-right: 0px;
 
           &:hover {
             label {
@@ -155,7 +154,7 @@ $tab-horizontal-header-right-width: 60px;
     }
 
     &:not(.side-tab) {
-      @for $selectValue from 1 to 10 {
+      @for $selectValue from 1 to 7 {
         &[data-selected-value="#{$selectValue}"] .tab-item[data-value="#{$selectValue}"] {
           background-color: $tab-selected-color;
           color: $tab-selected-font-color;
@@ -165,7 +164,7 @@ $tab-horizontal-header-right-width: 60px;
             left:0px;
             top:0px;
             right:0px;
-            height:1px;
+            height:2px;
             background-color: $selected-color;
           }
   

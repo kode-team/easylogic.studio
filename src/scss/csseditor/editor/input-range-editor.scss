@@ -49,13 +49,12 @@ $border-radius: 3px;
     
     .range-editor-type {
         vertical-align: middle;
-
+        height: 24px;
 
         .area {
             font-size: 13px;
             display: grid;
             grid-template-columns: 1fr 30px;
-            // grid-column-gap: 3px;
             height: 100%;
             
             span {
