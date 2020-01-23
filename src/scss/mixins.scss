@@ -98,17 +98,6 @@
     background-color: rgba($selected-border-color, 0.05);    
 }
 
-
-
-// @mixin title-background-2 () { 
-//     background-image: linear-gradient(
-//         to right,
-//         #d1d1ff,
-//         rgba(255, 255, 255, 0.282)
-//       );
-
-// }
-
 @mixin arrow_top ($pixel, $color) {
     width: 0; 
     height: 0; 
@@ -163,10 +152,7 @@
 
 @mixin button-style ($frontColor: #ececec) {
 
-    border-width: 0px;
-    // border-style: solid;
-    // border-color: #1d1e20 #111213 #0c0c0d;
-    // border-radius: 3px;       
+    border-width: 0px;    
     color: $frontColor; 
     width: 16px;
     height: 16px;

@@ -154,19 +154,24 @@
       &[data-position="move"] {
         left: 0px;
         top: 0px;
-        width: 14px;
-        height: 14px;
+        width: 16px;
+        height: 16px;
         transform: translate(0%, -100%);
         cursor: move;
-        border-radius: 1px;
-        background-color: rgba($selected-color, 0.5);
-        border: 0px; 
+        background-color: rgba(255, 255, 255, 0.7);
+        border: 1px solid $selected-color;
+        // border: 0px; 
         box-sizing: border-box;
   
         &:before {
           left: 0px;
           top: 0px;
           transform: translate(-100%, calc(-100% - 5px));
+        }        
+
+        svg {
+          width: 15px;
+          height: 15px;
         }
   
       }

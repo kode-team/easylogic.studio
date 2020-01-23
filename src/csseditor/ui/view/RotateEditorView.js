@@ -32,6 +32,11 @@ export default class RotateEditorView extends UIElement {
     template() {
         return /*html*/`
             <div class='rotate-editor-view'>
+                <div class='direction-area' ref='$directionArea'>
+                    ${directions.map(it => {
+                        return /*html*/`<div class='direction' data-value='${it}'></div>`
+                    }).join('')}
+                </div>            
                 <div class='rotate-area' ref='$rotateArea'>
                     <div class='rotate-container' ref='$rotateContainer'>
                         <div class='rotate-item rotate-x'></div>
@@ -42,12 +47,6 @@ export default class RotateEditorView extends UIElement {
                     <div class='handle-line'></div>                
                     <div class='handle' ref='$handle'></div>
                 </div>                
-
-                <div class='direction-area' ref='$directionArea'>
-                    ${directions.map(it => {
-                        return /*html*/`<div class='direction' data-value='${it}'></div>`
-                    }).join('')}
-                </div>
 
             </div>
         `

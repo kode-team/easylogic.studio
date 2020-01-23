@@ -69,7 +69,7 @@ export default {
     'blend.color': 'Color(색상) 모드',
     'blend.luminosity': 'Luminosity(광도) 모드 ',    
 
-    'background.image.property.title': '배경이미지',    
+    'background.image.property.title': '배경(그라디언트)',    
 
     'border.property.title': '외곽선',    
     'border.radius.property.title': '둥근 외곽선',    

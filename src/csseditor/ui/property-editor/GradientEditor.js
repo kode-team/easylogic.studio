@@ -356,7 +356,7 @@ export default class GradientEditor extends UIElement  {
       var selected = editor.selection.isSelectedColorStep(it.id) ? 'selected' : '';
 
       return /*html*/`
-      <div class='step ${selected}' data-id='${it.id}' style='left: ${it.percent}%;'>
+      <div class='step ${selected}' data-id='${it.id}' data-cut='${it.cut}' style='left: ${it.percent}%;'>
         <div class='color-view' style="background-color: ${it.color}"></div>
         <div class='arrow' style="background-color: ${it.color}"></div>
       </div>`

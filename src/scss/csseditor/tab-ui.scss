@@ -107,6 +107,19 @@ $tab-horizontal-header-right-width: 60px;
         padding: 0px 0px 0px 0px;
         height: 34px;
 
+
+        &:hover {
+          label {
+            svg {
+              path {
+                fill: $selected-color !important;
+              }
+            }            
+  
+          }
+
+        }        
+
         label {
           line-height: 2;
           
@@ -125,6 +138,7 @@ $tab-horizontal-header-right-width: 60px;
               stroke-width: 1px;
             }
           }
+  
         }
 
         &:first-child {

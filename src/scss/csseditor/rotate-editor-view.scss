@@ -53,46 +53,35 @@
         bottom: -10px;
         top: -10px;
         right: -10px;
-        // background-color: yellow;
+        background-color: rgba(#c3d3f1, 0.5);
         pointer-events: none;
-
 
         .direction {
             position: absolute;
             left: 0px;
             top: 0px;
-            width: 20px;
-            height: 20px;
+            width: 10px;
+            height: 10px;
             // transform: translate(-50%, -50%);
-            // background-color: black;
+            background-color: $selected-color;
             cursor: pointer;
             pointer-events: all;
-            border-width: 3px;
-            border-color: rgba(0, 0, 0, 0.5); 
+            // border-width: 3px;
+            // border-color: rgba(0, 0, 0, 0.5); 
 
             &:hover {
-                border-color: $selected-color;
+                border-color: darken($selected-color, 20%);
             }
     
-            &[data-value='top-left'] {
-                border-top-style: solid;
-                border-left-style: solid;
-            }
-
             &[data-value='top-right'] {
                 right: 0%;
                 left: auto;
-                // transform: translate(-50%, 0%);                                
-                border-top-style: solid;
-                border-right-style: solid;
             }           
             
 
             &[data-value='bottom-left'] {
                 top: auto;
                 bottom: 0px;
-                border-bottom-style: solid;
-                border-left-style: solid;
             }
 
             &[data-value='bottom-right'] {
@@ -100,22 +89,17 @@
                 bottom: 0px;                
                 right: 0%;
                 left: auto;
-                // transform: translate(-50%, 0%);                                
-                border-bottom-style: solid;
-                border-right-style: solid;
             }                       
     
             &[data-value='top'] {
                 left: 50%;
-                transform: translate(-50%, 0%);                
-                border-top-style: solid;
+                transform: translate(-50%, 0%);
                 height: 10px;
             }
 
             &[data-value='left'] {
                 top: 50%;
-                transform: translate(0%, -50%);                
-                border-left-style: solid;
+                transform: translate(0%, -50%);
                 width: 10px;
             }
 
@@ -123,15 +107,13 @@
                 top: 50%;
                 left: auto;
                 right: 0px;
-                transform: translate(0%, -50%);                
-                border-right-style: solid;
+                transform: translate(0%, -50%);
                 width: 10px;
             }            
 
             &[data-value='bottom'] {
                 left: 50%;
-                transform: translate(-50%, 0%);                
-                border-bottom-style: solid;
+                transform: translate(-50%, 0%);
                 bottom: 0px;
                 top: auto;
                 height: 10px;

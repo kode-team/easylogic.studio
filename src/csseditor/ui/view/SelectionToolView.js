@@ -4,10 +4,8 @@ import { Length } from "../../../editor/unit/Length";
 import { editor } from "../../../editor/editor";
 import { isNotUndefined } from "../../../util/functions/func";
 import GuideView from "./GuideView";
-import { Transform } from "../../../editor/css-property/Transform";
-import Dom from "../../../util/Dom";
-import { calculateAngle } from "../../../util/functions/math";
 import AreaItem from "../../../editor/items/AreaItem";
+import icon from "../icon/icon";
 
 var moveType = {
     'move': 'move',
@@ -178,7 +176,9 @@ export default class SelectionToolView extends SelectionToolBind {
         return /*html*/`
     <div class='selection-view' ref='$selectionView' >
         <div class='selection-tool' ref='$selectionTool' style='left:-100px;top:-100px;'>
-            <div class='selection-tool-item' data-position='move' title='move'></div>       
+            <div class='selection-tool-item' data-position='move' title='move'>
+                <span>${icon.flag}</span>
+            </div>       
 
             <div class='selection-tool-item' data-position='to top'></div>
             <div class='selection-tool-item' data-position='to right'></div>

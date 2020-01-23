@@ -153,22 +153,22 @@ export class ColorStep extends Item {
       }
 
       colorsteps.push(new ColorStep({ color, ...data }));
-    } else if (arr.length === 3) {
-      [1, 2].forEach(index => {
-        const len = Length.parse(arr[index]);
+    } else if (arr.length === 3) {  // 이전 객체와의 값이 지정됐을 때? 
 
-        let data = { unit: len.unit };
+      // cut 속성만 줄까? 
+      const len = Length.parse(arr[2]);
 
-        if (len.isPercent()) {
-          data.percent = len.value;
-        } else if (len.isPx()) {
-          data.px = len.value;
-        } else if (len.isEm()) {
-          data.em = len.value;
-        }
+      let data = { unit: len.unit };
 
-        colorsteps.push(new ColorStep({ color, ...data }));
-      });
+      if (len.isPercent()) {
+        data.percent = len.value;
+      } else if (len.isPx()) {
+        data.px = len.value;
+      } else if (len.isEm()) {
+        data.em = len.value;
+      }
+
+      colorsteps.push(new ColorStep({ color, cut: true, ...data }));
     }
 
     return colorsteps;

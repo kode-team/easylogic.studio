@@ -113,6 +113,7 @@ import strikethrough from "./strikethrough";
 import italic from "./italic";
 import local_library from "./local_library";
 import lens from "./lens";
+import flag from "./flag";
 
 
 const alias = {
@@ -121,6 +122,7 @@ const alias = {
 
 export default {
   ...alias,
+  flag,
   lens,
   local_library,
   italic,
