@@ -3,11 +3,12 @@ import { editor } from "../../../editor/editor";
 import { EVENT } from "../../../util/UIElement";
 import { DEBOUNCE } from "../../../util/Event";
 
+const i18n = editor.initI18n('svg.text.property');
 
 export default class SVGTextProperty extends BaseProperty {
 
   getTitle() {
-    return "Text Style";
+    return i18n('title');
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
@@ -49,7 +50,7 @@ export default class SVGTextProperty extends BaseProperty {
         <span class='add-timeline-property' data-property='text'></span>
         <TextAreaEditor 
           ref='$text' 
-          label='Text' 
+          label='${i18n('textarea')}' 
           key="text"
           onchange="changeTextValue" />
       </div>        
@@ -57,7 +58,7 @@ export default class SVGTextProperty extends BaseProperty {
         <span class='add-timeline-property' data-property='font-size'></span>
         <RangeEditor 
           ref='$font-size' 
-          label='Size' 
+          label='${i18n('size')}' 
           key="font-size" 
           min='0'
           max="1000" 
@@ -67,7 +68,7 @@ export default class SVGTextProperty extends BaseProperty {
         <span class='add-timeline-property' data-property='font-weight'></span>
         <NumberRangeEditor 
           ref='$font-weight' 
-          label='Weight' 
+          label='${i18n('weight')}' 
           key='font-weight' 
           value="400" 
           min="100"
@@ -81,7 +82,7 @@ export default class SVGTextProperty extends BaseProperty {
       <div class='property-item'>
         <SelectIconEditor 
           ref='$font-style' 
-          label='Style' 
+          label='${i18n('style')}' 
           key="font-style" 
           options="normal,italic" 
           icons='I,I'
@@ -90,7 +91,7 @@ export default class SVGTextProperty extends BaseProperty {
       <div class='property-item'>
         <SelectIconEditor 
           ref='$text-anchor' 
-          label='Text Anchor' 
+          label='${i18n('anchor')}' 
           key="text-anchor" 
           options="start,middle,end" 
           onchange="changeTextValue" />
@@ -100,7 +101,7 @@ export default class SVGTextProperty extends BaseProperty {
         <SelectEditor 
           ref='$font-family' 
           icon="true"
-          label='Family' 
+          label='${i18n('family')}' 
           key="font-family" 
           options=",serif,sans-serif,monospace,cursive,fantasy,system-ui" 
           onchange="changeTextValue" 
@@ -110,7 +111,7 @@ export default class SVGTextProperty extends BaseProperty {
         <span class='add-timeline-property' data-property='lengthAdjust'></span>
         <SelectEditor 
           ref='$lengthAdjust' 
-          label='lengthAdjust' 
+          label='${i18n('length.adjust')}' 
           key='lengthAdjust' 
           value='spacing' 
           options="spacing,spacingAndGlyphs" 
@@ -120,7 +121,7 @@ export default class SVGTextProperty extends BaseProperty {
         <span class='add-timeline-property' data-property='textLength'></span>
         <RangeEditor 
           ref='$textLength' 
-          label='textLength' 
+          label='${i18n('text.length')}' 
           key='textLength'
           min="0"
           max='1000'
@@ -131,7 +132,7 @@ export default class SVGTextProperty extends BaseProperty {
         <span class='add-timeline-property' data-property='startOffset'></span>
         <RangeEditor 
           ref='$startOffset' 
-          label='startOffset' 
+          label='${i18n('start.offset')}' 
           key='startOffset' 
           min="0"
           max='1000'

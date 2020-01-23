@@ -393,4 +393,17 @@ export default {
     'component.items.3dlayer': '3D 레이어',
     'component.items.drawing': '그리기',
 
+    'svg.text.property.title': "SVG Text 스타일",
+    'svg.text.property.textarea': "텍스트 입력",
+    'svg.text.property.size': "폰트 크기",
+    'svg.text.property.weight': "폰트 굵기",
+    'svg.text.property.style': "폰트 스타일",
+    'svg.text.property.anchor': "텍스트 위치",
+    'svg.text.property.family': "폰트 글꼴",
+    'svg.text.property.length.adjust': "길이 대응",
+    'svg.text.property.text.length': "텍스트 길이",
+    'svg.text.property.start.offset': "시작 지점",
+
+    'fill.picker.popup.title': 'SVG Fragment picker',    
+
 }

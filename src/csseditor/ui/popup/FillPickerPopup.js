@@ -7,10 +7,15 @@ import EmbedColorPicker from "../property-editor/EmbedColorPicker";
 import ImageAssetPicker from "../property/ImageAssetPicker";
 import FillEditor from "../property-editor/FillEditor";
 import { SVGStaticGradient } from "../../../editor/image-resource/SVGStaticGradient";
+import { editor } from "../../../editor/editor";
+
+const i18n = editor.initI18n('fill.picker.popup')
+
+
 export default class FillPickerPopup extends BasePopup {
 
   getTitle() {
-    return 'SVG Fragment picker'
+    return i18n('title')
   }
 
   components() {

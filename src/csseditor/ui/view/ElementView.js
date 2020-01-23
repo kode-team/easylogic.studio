@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
-import { BIND, POINTERSTART, MOVE, END, IF, KEYUP, DEBOUNCE, PREVENT } from "../../../util/Event";
+import { BIND, POINTERSTART, MOVE, END, IF, KEYUP } from "../../../util/Event";
 import { Length } from "../../../editor/unit/Length";
 
 import { editor } from "../../../editor/editor";
@@ -96,6 +96,7 @@ export default class ElementView extends UIElement {
             && $el.isTag('path') === false
             && $el.isTag('textPath') === false
             && $el.isTag('polygon') === false
+            && $el.isTag('text') === false
             && $el.attr('data-segment') !== 'true';
     }
 

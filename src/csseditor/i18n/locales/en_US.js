@@ -389,4 +389,19 @@ export default {
     'component.items.3dlayer': '3D Layer',
     'component.items.drawing': 'Drawing',
 
+
+    'svg.text.property.title': "SVG Text Style",
+    'svg.text.property.textarea': "Text Area",
+    'svg.text.property.size': "Font Size",
+    'svg.text.property.weight': "Font Weight",
+    'svg.text.property.style': "Font Style",
+    'svg.text.property.anchor': "Text Anchor",
+    'svg.text.property.family': "Font Family",
+    'svg.text.property.length.adjust': "Length Adjust",
+    'svg.text.property.text.length': "Text Length",
+    'svg.text.property.start.offset': "Start Offset",
+
+    'fill.picker.popup.title': 'SVG Fragment picker',
+
+
 }

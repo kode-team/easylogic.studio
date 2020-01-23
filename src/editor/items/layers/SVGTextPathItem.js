@@ -1,9 +1,8 @@
 import PathParser from "../../parse/PathParser";
 import { SVGItem } from "./SVGItem";
-import { OBJECT_TO_PROPERTY, OBJECT_TO_CLASS, CSS_TO_STRING } from "../../../util/functions/func";
+import { OBJECT_TO_PROPERTY, CSS_TO_STRING } from "../../../util/functions/func";
 import { hasSVGProperty, hasCSSProperty, hasSVGPathProperty } from "../../util/Resource";
 import { Length } from "../../unit/Length";
-import Dom from "../../../util/Dom";
 import { editor } from "../../editor";
 import icon from "../../../csseditor/ui/icon/icon";
 
