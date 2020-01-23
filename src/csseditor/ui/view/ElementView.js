@@ -4,11 +4,11 @@ import { Length } from "../../../editor/unit/Length";
 
 import { editor } from "../../../editor/editor";
 import Dom from "../../../util/Dom";
-import SelectionToolView from "./SelectionToolView";
-import GuideLineView from "./GuideLineView";
-import PathEditorView from "./PathEditorView";
-import PolygonEditorView from "./PolygonEditorView";
-import GridLayoutLineView from "./GridLayoutLineView";
+import SelectionToolView from "../view-items/SelectionToolView";
+import GuideLineView from "../view-items/GuideLineView";
+import PathEditorView from "../view-items/PathEditorView";
+import PolygonEditorView from "../view-items/PolygonEditorView";
+import GridLayoutLineView from "../view-items/GridLayoutLineView";
 
 
 export default class ElementView extends UIElement {

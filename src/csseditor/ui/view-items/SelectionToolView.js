@@ -3,7 +3,7 @@ import { POINTERSTART, MOVE, END, BIND, IF, CLICK } from "../../../util/Event";
 import { Length } from "../../../editor/unit/Length";
 import { editor } from "../../../editor/editor";
 import { isNotUndefined } from "../../../util/functions/func";
-import GuideView from "./GuideView";
+import GuideView from "../view/GuideView";
 import AreaItem from "../../../editor/items/AreaItem";
 import icon from "../icon/icon";
 

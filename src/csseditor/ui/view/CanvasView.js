@@ -9,7 +9,7 @@ import { Length } from "../../../editor/unit/Length";
 import Dom from "../../../util/Dom";
 import PageTools from "../view-items/PageTools";
 import PageSubEditor from "../view-items/PageSubEditor";
-import RotateEditorView from "./RotateEditorView";
+import RotateEditorView from "../view-items/RotateEditorView";
 
 
 
