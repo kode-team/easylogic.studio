@@ -2,9 +2,8 @@ import UIElement from "../../../util/UIElement";
 import { LOAD, INPUT, DEBOUNCE, CLICK } from "../../../util/Event";
 import PathParser from "../../../editor/parse/PathParser";
 
-export default class PathDataEditor extends UIElement {
 
-    
+export default class PathDataEditor extends UIElement {
 
     initState() { 
         var parser = new PathParser(this.props.value || '')
