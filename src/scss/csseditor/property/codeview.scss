@@ -29,6 +29,11 @@
             position: relative;
             border-radius: 5px;
             margin-top:0px;
+            font-size: 13px;
+
+            strong {
+                color: $selected-color;
+            }
         }
     }
 }

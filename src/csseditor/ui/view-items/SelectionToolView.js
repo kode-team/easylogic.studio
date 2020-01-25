@@ -177,7 +177,7 @@ export default class SelectionToolView extends SelectionToolBind {
     <div class='selection-view' ref='$selectionView' >
         <div class='selection-tool' ref='$selectionTool' style='left:-100px;top:-100px;'>
             <div class='selection-tool-item' data-position='move' title='move'>
-                <span>${icon.flag}</span>
+                <span>${icon.flag}</span><span ref='$selectionTitle'></span>
             </div>       
 
             <div class='selection-tool-item' data-position='to top'></div>
@@ -399,6 +399,16 @@ export default class SelectionToolView extends SelectionToolBind {
             }
             
             this.setPositionText(text);
+
+            var length = editor.selection.length;
+            var title = ''; 
+
+            if (length === 1) {
+                title = editor.selection.current.getDefaultTitle();
+            } else if (length >= 2) {
+                title = 'multi';
+            }
+            this.refs.$selectionTitle.text(title)
         }
     }
 

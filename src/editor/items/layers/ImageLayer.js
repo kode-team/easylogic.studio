@@ -48,18 +48,20 @@ export class ImageLayer extends Layer {
     var {src} = this.json;     
 
     if (isChangeFragment) {
-      currentElement.attr('src', src);
+      currentElement.$('img').attr('src', src);
 
-      var $svg = currentElement.parent().$(`[data-id="${this.innerSVGId}"]`);  
+      var $svg = currentElement;  
 
       if ($svg) {
         var $defs = $svg.$('defs');
-        $defs.html(this.toDefInnerString)          
+        if ($defs) {
+          $defs.html(this.toDefInnerString)
+        }
       } else {
         var defString = this.toDefString
         if (defString) {
           var $el = Dom.createByHTML(defString);
-          currentElement.parent().prepend($el);
+          currentElement.prepend($el);
         }
 
       }
@@ -68,11 +70,38 @@ export class ImageLayer extends Layer {
 
   }      
 
-  get html () {
-    var {id, src, itemType} = this.json;
 
-    return /*html*/`<img class='element-item ${itemType}' data-id="${id}" src='${src}' />`
+  toNestedCSS() {
+    var json = this.json; 
+
+    var css = {
+      ...this.toKeyListCSS(
+        'filter', 'mix-blend-mode', 'border-radius', 'background-color', 'opacity'
+      ),      
+      ...this.toClipPathCSS(),
+      ...this.toBackgroundImageCSS(),
+      ...this.toBorderCSS()
+    }
+
+    return [
+      { selector: 'img', cssText: `
+          width: 100%;
+          height: 100%;
+          pointer-events: none;
+        `.trim()
+      },
+    ]
   }
+
+  get html () {
+    var {id, itemType, src} = this.json;
+
+    return /*html*/`
+      <div class='element-item ${itemType}' data-id="${id}">
+        ${this.toDefString}
+        <img src='${src}' />
+      </div>`
+  } 
 
   get svg () {
     var x = this.json.x.value;

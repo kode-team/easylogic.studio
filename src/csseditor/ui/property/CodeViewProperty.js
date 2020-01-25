@@ -26,12 +26,12 @@ export default class CodeViewProperty extends BaseProperty {
     `;
   }
 
-  filterKeyName (str) {
+  filterKeyName (str, prefixPadding = '') {
     return str.split(';').filter(it => it.trim()).map(it => {
       it = it.trim();
       var [key, value] = it.split(':')
 
-      return `<strong>${key}</strong>:${value};\n` 
+      return `${prefixPadding}<strong>${key}</strong>:${value};\n` 
     }).join('').trim()
   }
 
@@ -55,7 +55,7 @@ export default class CodeViewProperty extends BaseProperty {
     var nestedCssCode = current ?  current.toNestedCSS().map(it => {
       var cssText = it.cssText ? it.cssText : CSS_TO_STRING(it.css)
       return `${it.selector} { 
-${this.filterKeyName(TAG_TO_STRING(cssText))}
+${this.filterKeyName(TAG_TO_STRING(cssText), '&nbsp;&nbsp;')}
 }`
     }) : []
     var svgPropertyCode = current ? TAG_TO_STRING(current.toExportSVGCode()) : '' 

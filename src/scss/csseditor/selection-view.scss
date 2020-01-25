@@ -154,14 +154,17 @@
       &[data-position="move"] {
         left: 0px;
         top: 0px;
-        width: 16px;
-        height: 16px;
+        width: auto;
+        height: 18px;
         transform: translate(0%, -100%);
         cursor: move;
         background-color: rgba(255, 255, 255, 0.7);
         border: 1px solid $selected-color;
         // border: 0px; 
         box-sizing: border-box;
+        display: inline-block;
+        vertical-align: middle;
+        padding-right: 5px;
   
         &:before {
           left: 0px;
@@ -172,6 +175,10 @@
         svg {
           width: 15px;
           height: 15px;
+        }
+
+        span {
+          vertical-align: middle;
         }
   
       }
