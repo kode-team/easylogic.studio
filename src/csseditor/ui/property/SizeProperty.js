@@ -1,6 +1,7 @@
 import BaseProperty from "./BaseProperty";
 import { editor } from "../../../editor/editor";
 import { EVENT } from "../../../util/UIElement";
+import { DEBOUNCE, THROTTLE } from "../../../util/Event";
 
 const i18n = editor.initI18n('size.property');
 
@@ -14,7 +15,11 @@ export default class SizeProperty extends BaseProperty {
     return i18n('title');
   }
 
-  [EVENT('refreshSelection', 'refreshRect')]() {
+  [EVENT('refreshSelection')]() {
+    this.refreshShowIsNot('project');
+  }
+
+  [EVENT('refreshRect') + THROTTLE(100)] () {
     this.refreshShowIsNot('project');
   }
 

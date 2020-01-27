@@ -129,12 +129,8 @@ export default class ElementView extends UIElement {
     
             this.refs.$dragAreaRect.css(obj) 
 
-            // editor.selection.empty();
-        
             this.state.cachedCurrentElement = {}
             this.$el.$$('.selected').forEach(it => it.removeClass('selected'))
-    
-            // this.emit('initSelectionTool')        
         } else {
             // add mode 
             // NOOP 
@@ -338,7 +334,7 @@ export default class ElementView extends UIElement {
         this.selectCurrent(...editor.selection.items)
         editor.selection.setRectCache()        
         this.emit('refreshSelection');
-
+        this.children.$selectionTool.initMoveType();
     }
 
     calculateMovedElement (dx, dy) {

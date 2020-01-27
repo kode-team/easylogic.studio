@@ -210,16 +210,25 @@ export default class SelectionToolView extends SelectionToolBind {
     }
 
     [POINTERSTART('$selectionView .selection-tool-item') + IF('checkEditMode') + MOVE() + END()] (e) {
-        this.$target = e.$delegateTarget;
-        this.pointerType = e.$delegateTarget.attr('data-position')
+        this.initMoveType(e.$delegateTarget);
 
-        this.refs.$selectionTool.attr('data-selected-position', this.pointerType);
-        this.refs.$selectionTool.attr('data-selected-movetype', moveType[this.pointerType]);        
         this.parent.selectCurrent(...editor.selection.items)
 
         editor.selection.setRectCache(this.pointerType === 'move' ? false: true);
 
         this.initSelectionTool();
+    }
+
+    initMoveType ($target) {
+
+        this.$target = $target || this.refs.$selectionTool.$('.selection-tool-item[data-position="move"]');
+
+        if (this.$target) {
+            this.pointerType = this.$target.attr('data-position')
+
+            this.refs.$selectionTool.attr('data-selected-position', this.pointerType);
+            this.refs.$selectionTool.attr('data-selected-movetype', moveType[this.pointerType]);
+        }
     }
 
     move (dx, dy) {
@@ -404,7 +413,8 @@ export default class SelectionToolView extends SelectionToolBind {
             var title = ''; 
 
             if (length === 1) {
-                title = editor.selection.current.getDefaultTitle();
+                var current = editor.selection.current
+                title = current.title || current.getDefaultTitle();
             } else if (length >= 2) {
                 title = 'multi';
             }

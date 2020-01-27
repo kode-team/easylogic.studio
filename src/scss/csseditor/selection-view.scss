@@ -158,8 +158,8 @@
         height: 18px;
         transform: translate(0%, -100%);
         cursor: move;
-        background-color: rgba(255, 255, 255, 0.7);
-        border: 1px solid $selected-color;
+        background-color: $selected-color;
+        border: 1px solid darken($selected-color, 20%);
         // border: 0px; 
         box-sizing: border-box;
         display: inline-block;
@@ -175,10 +175,15 @@
         svg {
           width: 15px;
           height: 15px;
+
+          path {
+            fill: $selected-font-color;
+          }
         }
 
         span {
           vertical-align: middle;
+          color: $selected-font-color;
         }
   
       }
