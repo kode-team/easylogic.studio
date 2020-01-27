@@ -250,7 +250,7 @@
   }
 
   > .property-title {
-    padding: 2px 6px 4px 6px;
+    padding: 2px 0px 4px 0px;
     height: 30px;
     line-height: 2;
     cursor: pointer;
@@ -294,6 +294,7 @@
     > .tools {
       text-align: right;
       vertical-align: middle;
+      line-height: 2.3;
 
       > * {
         flex: none;

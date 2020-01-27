@@ -12,7 +12,7 @@ export default class Inspector extends UIElement {
     return /*html*/`
       <div class="feature-control inspector">
         <div>
-          <div class="tab number-tab padding-5" data-selected-value="1" ref="$tab">
+          <div class="tab number-tab padding-10" data-selected-value="1" ref="$tab">
             <div class="tab-header" ref="$header">
               <div class="tab-item" data-value="1" title='${i18n('tab.title.style')}'>
                 <label class='icon'>${icon.brush}</label>

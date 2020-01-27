@@ -21,6 +21,12 @@ $tab-horizontal-header-right-width: 60px;
       }
     }
 
+    &.padding-10 {
+      .tab-content {
+        padding: 10px;
+      }
+    }    
+
     &.side-tab {
       &.side-tab-left {
         .tab-header {
