@@ -48,6 +48,7 @@
             &[data-selected-value="#{$selectType}"] button[data-value="#{$selectType}"] {
                 box-shadow: inset 0px 0px 3px 0px $selected-color !important;
                 background-color: $selected-color !important;
+                color: $selected-font-color !important;
             }
           }
 

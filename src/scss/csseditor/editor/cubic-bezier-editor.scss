@@ -83,7 +83,7 @@
             border-radius: 5px;
             margin-bottom: 5px;
             cursor:pointer;
-            background-color: $background-color;             
+            background-color: rgba($selected-color, 0.1);
             
             &:not(:first-child) {
                 border-top: 0px;

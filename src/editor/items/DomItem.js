@@ -41,6 +41,7 @@ export class DomItem extends GroupItem {
       'border': '',
       'border-radius': '',      
       'box-shadow': '',
+      'box-sizing': 'border-box',
       'text-shadow': '',
       'text-clip': '',      
       'clip-path': '',
@@ -501,7 +502,7 @@ export class DomItem extends GroupItem {
       ...obj,
       ...this.toKeyListCSS(
         
-        'position', 'right','bottom', 'width','height', 'overflow', 'z-index',
+        'position', 'right','bottom', 'width','height', 'overflow', 'z-index', 'box-sizing',
 
         'background-color', 'color',  'opacity', 'mix-blend-mode',
 
