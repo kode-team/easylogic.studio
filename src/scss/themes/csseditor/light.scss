@@ -99,8 +99,9 @@ $path-guide-color: rgba(0, 0, 0, 1);
 // timeline 
 $timeline-background-color: lighten($background-color, 5%);
 $timeline-border-color: $border-color;
-$timeline-gauge-background-color: #ee4b66;
-$timeline-offset-line-color: #ee4b66;
+$timeline-gauge-background-color: #435cb5;
+$timeline-gauge-handle-color: #748ff1;
+$timeline-offset-line-color: $selected-color;
 // $timeline-offset-line-color: #497594;
 // $timeline-row-selected-color: #353535;
 

@@ -155,7 +155,7 @@
         left: 0px;
         top: 0px;
         width: auto;
-        height: 18px;
+        height: 20px;
         transform: translate(0%, -100%);
         cursor: move;
         background-color: $selected-color;
@@ -184,6 +184,7 @@
         span {
           vertical-align: middle;
           color: $selected-font-color;
+          font-size: 11px;
         }
   
       }

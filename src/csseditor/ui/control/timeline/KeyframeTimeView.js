@@ -194,18 +194,22 @@ export default class KeyframeTimeView extends UIElement {
                 for(; startFrame < endFrame; startFrame += splitFrame) {
 
                     var startX = (second(fps, startFrame) - displayStartTime)/(displayEndTime - displayStartTime) * realWidth;
-                    this.drawOption({ fillStyle: '#ececec'})                                
+                    this.drawOption({ fillStyle: editor.themeValue('timeline_grid_font_color')})                                
                     this.drawText(startX + restX, y, framesToTimecode(fps, startFrame).replace(/00\:/g, '') + 'f')
                 }
 
 
-                this.drawOption({strokeStyle: 'black', lineWidth: 1})
+                this.drawOption({strokeStyle: editor.themeValue('timeline_timeview_bottom_color'), lineWidth: 1})
                 this.drawLine(0, rect.height-0.5, rect.width, rect.height);
 
                 var left =  (currentTime - displayStartTime)/(displayEndTime - displayStartTime) * realWidth;
                 var markTop = 10
                 var markWidth = 4
-                this.drawOption({strokeStyle: '#fc554f',fillStyle: '#fc554f', lineWidth: 1})
+                this.drawOption({
+                    strokeStyle: editor.themeValue('timeline_line_color'),
+                    fillStyle: editor.themeValue('timeline_line_color'), 
+                    lineWidth: 1
+                })
                 this.drawPath(
                     [left - markWidth + restX, rect.height - markTop],
                     [left + markWidth + restX, rect.height - markTop],

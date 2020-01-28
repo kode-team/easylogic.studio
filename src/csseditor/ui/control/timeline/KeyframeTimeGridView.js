@@ -46,7 +46,7 @@ export default class KeyframeTimeGridView extends UIElement {
                 var restX = 10;             
 
                 var left =  (currentTime - displayStartTime)/(displayEndTime - displayStartTime) * realWidth;
-                this.drawOption({strokeStyle: '#fc554f', lineWidth: 1})
+                this.drawOption({strokeStyle: editor.themeValue('timeline_line_color'), lineWidth: 1})
                 this.drawLine(left + restX, 0, left + restX, rect.height)
             })
         }

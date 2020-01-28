@@ -3,6 +3,7 @@ import { Selection } from "./Selection";
 import { TimelineSelection } from "./TimelineSelection";
 import i18n from "../csseditor/i18n";
 import { loadItem, saveItem } from "./util/Resource";
+import theme from "../csseditor/ui/theme";
  
 function blobToDataURL(blob) {
   return new Promise(function(resolve) {
@@ -97,6 +98,10 @@ export const editor = new class {
 
     this.theme =  theme || DEFAULT_THEME
     window.localStorage.setItem('easylogic.studio.theme', this.theme);
+  }
+
+  themeValue (key, defaultValue = '') {
+    return theme[this.theme][key] || defaultValue;
   }
 
   changeMode (mode = EDIT_MODE_SELECTION) {
