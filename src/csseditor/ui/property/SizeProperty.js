@@ -20,7 +20,7 @@ export default class SizeProperty extends BaseProperty {
   }
 
   [EVENT('refreshRect') + THROTTLE(100)] () {
-    this.refreshShowIsNot('project');
+    this.refresh();
   }
 
   refresh() {
