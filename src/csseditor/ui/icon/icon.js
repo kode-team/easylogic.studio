@@ -114,6 +114,14 @@ import italic from "./italic";
 import local_library from "./local_library";
 import lens from "./lens";
 import flag from "./flag";
+import left from "./left";
+import center from "./center";
+import right from "./right";
+import top from "./top";
+import bottom from "./bottom";
+import middle from "./middle";
+import same_width from "./same_width";
+import same_height from "./same_height";
 
 
 const alias = {
@@ -122,6 +130,14 @@ const alias = {
 
 export default {
   ...alias,
+  same_height,
+  same_width,
+  middle,
+  bottom,
+  top,
+  right,
+  center,
+  left,
   flag,
   lens,
   local_library,

@@ -1,5 +1,5 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, CLICK, DOUBLECLICK, FOCUSOUT, KEY, PREVENT, STOP, VDOM, KEYDOWN, DEBOUNCE } from "../../../util/Event";
+import { LOAD, CLICK, DOUBLECLICK, FOCUSOUT, KEY, PREVENT, STOP, VDOM, KEYDOWN, DEBOUNCE, ENTER } from "../../../util/Event";
 import { editor } from "../../../editor/editor";
 import icon from "../icon/icon";
 import { EVENT } from "../../../util/UIElement";
@@ -62,7 +62,7 @@ export default class TimelineAnimationProperty extends BaseProperty {
     });    
   }
 
-  [KEYDOWN('$timelineAnimationList .timeline-animation-item label') + KEY('Enter') + PREVENT + STOP] (e) {
+  [KEYDOWN('$timelineAnimationList .timeline-animation-item label') + ENTER + PREVENT + STOP] (e) {
     this.modifyDoneInputEditing(e.$delegateTarget);
   }
 

@@ -1,9 +1,10 @@
 import MenuItem from "./MenuItem";
 import Sort from "../../../editor/Sort";
+import icon from "../icon/icon";
    
 export default class MiddleAlign extends MenuItem {
-  getIcon() {
-    return 'middle';
+  getIconString() {
+    return icon.middle;
   }
   getTitle() {
     return "middle";

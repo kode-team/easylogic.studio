@@ -28,6 +28,10 @@ export class ImageLayer extends Layer {
     return "Image";
   }
 
+  getIcon() {
+    return icon.image;
+  }
+
   toCloneObject() {
     return {
       ...super.toCloneObject(),

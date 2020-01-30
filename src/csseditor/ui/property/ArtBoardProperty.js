@@ -1,5 +1,5 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, CLICK, DOUBLECLICK, FOCUSOUT, KEY, PREVENT, STOP, VDOM, KEYDOWN } from "../../../util/Event";
+import { LOAD, CLICK, DOUBLECLICK, FOCUSOUT, KEY, PREVENT, STOP, VDOM, KEYDOWN, ENTER } from "../../../util/Event";
 import { editor } from "../../../editor/editor";
 import icon from "../icon/icon";
 import { EVENT } from "../../../util/UIElement";
@@ -76,7 +76,7 @@ export default class ArtBoardProperty extends BaseProperty {
     });    
   }
 
-  [KEYDOWN('$artboardList .artboard-item label') + KEY('Enter') + PREVENT + STOP] (e) {
+  [KEYDOWN('$artboardList .artboard-item label') + ENTER + PREVENT + STOP] (e) {
     this.modifyDoneInputEditing(e.$delegateTarget);
   }
 

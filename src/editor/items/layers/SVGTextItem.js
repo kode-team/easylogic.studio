@@ -9,7 +9,7 @@ import icon from "../../../csseditor/ui/icon/icon";
 
 export class SVGTextItem extends SVGItem {
 
-  static getIcon () {
+  getIcon () {
     return icon.title;
   }  
   getDefaultObject(obj = {}) {

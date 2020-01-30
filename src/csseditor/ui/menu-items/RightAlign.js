@@ -1,9 +1,10 @@
 import MenuItem from "./MenuItem";
 import Sort from "../../../editor/Sort";
+import icon from "../icon/icon";
    
 export default class RightAlign extends MenuItem {
-  getIcon() {
-    return 'right';
+  getIconString() {
+    return icon.right;
   }
   getTitle() {
     return "Right";

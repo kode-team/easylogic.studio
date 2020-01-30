@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "../../../../util/UIElement";
-import { THROTTLE, IF, PREVENT, KEYDOWN, KEYUP, KEY } from "../../../../util/Event";
+import { THROTTLE, IF, PREVENT, KEYDOWN, KEYUP, KEY, ENTER } from "../../../../util/Event";
 import { editor } from "../../../../editor/editor";
 import icon from "../../icon/icon";
 
@@ -71,7 +71,7 @@ export default class KeyframeTimeControl extends UIElement {
         this.refresh();
     }
 
-    [KEYUP('$fps') + KEY('Enter')] (e) {
+    [KEYUP('$fps') + ENTER] (e) {
         var fps = +this.refs.$fps.val();
 
         var artboard = editor.selection.currentArtboard;
@@ -111,7 +111,7 @@ export default class KeyframeTimeControl extends UIElement {
         }
     }
 
-    [KEYUP('$currentTime') + KEY('Enter') + IF('checkNumberOrTimecode') + IF('hasCurrentTimeline') + PREVENT] (e) {
+    [KEYUP('$currentTime') + ENTER + IF('checkNumberOrTimecode') + IF('hasCurrentTimeline') + PREVENT] (e) {
         var frame = this.refs.$currentTime.value
         var artboard = editor.selection.currentArtboard;
 
@@ -133,7 +133,7 @@ export default class KeyframeTimeControl extends UIElement {
         }
     }
 
-    [KEYUP('$duration') + KEY('Enter') + IF('checkNumberOrTimecode') + IF('hasCurrentTimeline') + PREVENT] (e) {
+    [KEYUP('$duration') + ENTER + IF('checkNumberOrTimecode') + IF('hasCurrentTimeline') + PREVENT] (e) {
 
         var frame = this.refs.$duration.value
         var artboard = editor.selection.currentArtboard;

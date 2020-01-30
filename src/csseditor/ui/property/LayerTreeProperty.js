@@ -1,5 +1,5 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, CLICK, DOUBLECLICK, KEYUP, KEY, PREVENT, STOP, FOCUSOUT, VDOM, DRAGSTART, KEYDOWN, DRAGOVER, DROP, DRAG, BIND, DRAGEND } from "../../../util/Event";
+import { LOAD, CLICK, DOUBLECLICK, KEYUP, KEY, PREVENT, STOP, FOCUSOUT, VDOM, DRAGSTART, KEYDOWN, DRAGOVER, DROP, DRAG, BIND, DRAGEND, ENTER } from "../../../util/Event";
 import { editor } from "../../../editor/editor";
 import icon from "../icon/icon";
 import { EVENT } from "../../../util/UIElement";
@@ -274,7 +274,7 @@ export default class LayerTreeProperty extends BaseProperty {
     });    
   }
 
-  [KEYDOWN('$layerList .layer-item .name') + KEY('Enter') + PREVENT + STOP] (e) {
+  [KEYDOWN('$layerList .layer-item .name') + ENTER + PREVENT + STOP] (e) {
     this.modifyDoneInputEditing(e.$delegateTarget);
   }
 

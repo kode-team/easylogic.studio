@@ -1,6 +1,6 @@
 import UIElement, { EVENT } from "../../../../util/UIElement";
 import CubicBezierEditor from "../../property-editor/CubicBezierEditor";
-import { LOAD, CLICK, KEYDOWN, KEYUP, KEY, IF, PREVENT } from "../../../../util/Event";
+import { LOAD, CLICK, KEYDOWN, KEYUP, KEY, IF, PREVENT, ENTER } from "../../../../util/Event";
 import CSSPropertyEditor from "../../property-editor/CSSPropertyEditor";
 
 import { second, timecode } from "../../../../util/functions/time";
@@ -121,7 +121,7 @@ checkKey (e) {
     }
 }
 
-[KEYUP('$offsetTime') + KEY('Enter') + IF('checkNumberOrTimecode') + PREVENT] (e) {
+[KEYUP('$offsetTime') + ENTER + IF('checkNumberOrTimecode') + PREVENT] (e) {
     var frame = this.refs.$offsetTime.value
 
     var artboard = editor.selection.currentArtboard;

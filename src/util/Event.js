@@ -94,24 +94,13 @@ export const BEFORE = (value, split = CHECK_SAPARATOR) => {
 export const IF = CHECKER;
 export const KEY = CHECKER; 
 
-export const KEY_ALT = "ALT";
-export const KEY_SHIFT = "SHIFT";
-export const KEY_META = "META";
-export const KEY_CONTROL = "CONTROL";
-
-export const KEY_ARROW_UP = "ArrowUp";
-export const KEY_ARROW_DOWN = "ArrowDown";
-export const KEY_ARROW_LEFT = "ArrowLeft";
-export const KEY_ARROW_RIGHT = "ArrowRight";
-export const KEY_ENTER = "Enter";
-export const KEY_SPACE = "Space";
-
-export const ARROW_UP = CHECKER(KEY_ARROW_UP);
-export const ARROW_DOWN = CHECKER(KEY_ARROW_DOWN);
-export const ARROW_LEFT = CHECKER(KEY_ARROW_LEFT);
-export const ARROW_RIGHT = CHECKER(KEY_ARROW_RIGHT);
-export const ENTER = CHECKER(KEY_ENTER);
-export const SPACE = CHECKER(KEY_SPACE);
+export const ARROW_UP = CHECKER('ArrowUp');
+export const ARROW_DOWN = CHECKER('ArrowDown');
+export const ARROW_LEFT = CHECKER('ArrowLeft');
+export const ARROW_RIGHT = CHECKER('ArrowRight');
+export const ENTER = CHECKER('Enter');
+export const SPACE = CHECKER('Space');
+export const ESCAPE = CHECKER('Escape');
 
 export const ALT = CHECKER("isAltKey");
 export const SHIFT = CHECKER("isShiftKey");

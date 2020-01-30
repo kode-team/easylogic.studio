@@ -137,6 +137,7 @@ const HTML_TAG = {
     'line': true,
     'circle': true,
     'rect': true,
+    'path': true, 
     'polygon': true,
     'polyline': true,
     'use': true
@@ -162,7 +163,7 @@ export const html = (strings, ...args) => {
         return it + results;
     }).join('');
 
-    results = results.replace(short_tag_regexp, function (match, p1) {
+    results = results.replace(/\<(\w*)([^\>]*)\/\>/gim, function (match, p1) {
         if (HTML_TAG[p1.toLowerCase()]) {
             return match;
         } else {

@@ -1,9 +1,10 @@
 import MenuItem from "./MenuItem";
 import Sort from "../../../editor/Sort";
+import icon from "../icon/icon";
    
 export default class SameWidth extends MenuItem {
-  getIcon() {
-    return 'width';
+  getIconString() {
+    return icon.same_width;
   }
   getTitle() {
     return "width";

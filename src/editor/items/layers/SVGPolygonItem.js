@@ -9,7 +9,7 @@ import icon from "../../../csseditor/ui/icon/icon";
 
 export class SVGPolygonItem extends SVGItem {
 
-  static getIcon () {
+  getIcon () {
     return icon.polygon;
   }  
   getDefaultObject(obj = {}) {

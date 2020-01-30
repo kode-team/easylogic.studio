@@ -5,7 +5,7 @@ import icon from "../../../csseditor/ui/icon/icon";
 
 export class TextLayer extends Layer {
 
-  static getIcon () {
+  getIcon () {
     return icon.title;
   }  
   getDefaultObject(obj = {}) {
@@ -38,6 +38,14 @@ export class TextLayer extends Layer {
     element.updateDiff(content);
   }
 
+  toCSS() {
+
+    var css = super.toCSS()
+
+    css.margin = css.margin || '0px'
+
+    return css
+  }
 
   toNestedCSS() {
     
@@ -71,8 +79,6 @@ export class TextLayer extends Layer {
     if (css.position === 'absolute') {
       delete css.position; 
     }
-
-    css.margin = css.margin || '0px'
 
     return /*html*/`
     <g transform="translate(${x}, ${y})">

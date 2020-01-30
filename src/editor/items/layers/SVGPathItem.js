@@ -10,7 +10,7 @@ import icon from "../../../csseditor/ui/icon/icon";
 
 export class SVGPathItem extends SVGItem {
 
-  static getIcon () {
+  getIcon () {
     return icon.edit;
   }  
   getDefaultObject(obj = {}) {

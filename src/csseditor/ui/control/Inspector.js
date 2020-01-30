@@ -58,12 +58,6 @@ export default class Inspector extends UIElement {
                 <!-- transform --> 
                 <TransformProperty />                  
                 <TransformOriginProperty /> 
-              
-
-                <!--BorderImageProperty /-->                
-
-                <!-- <OutlineProperty /> -->
-                <!-- <BackgroundClipProperty /> -->  
                 
                 <div class='empty'></div>
               </div>
@@ -88,18 +82,13 @@ export default class Inspector extends UIElement {
                 <!-- <VariableProperty /> -->
 
                 <PerspectiveProperty />
-                <PerspectiveOriginProperty />                                
-
-
+                <PerspectiveOriginProperty />
                 <ExportProperty />
-
 
                 <div class='empty'></div>                
               </div>              
               <div class='tab-content scrollbar' data-value='3'>
-                <MotionProperty />              
-                <!-- <RootVariableProperty /> -->
-                <!-- <VariableProperty /> -->
+                <MotionProperty />
                 <!-- SelectorProperty /> --> 
                 <TransitionProperty />                            
                 <AnimationProperty />

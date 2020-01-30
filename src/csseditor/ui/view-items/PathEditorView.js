@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
-import { POINTERSTART, MOVE, END, BIND, POINTERMOVE, PREVENT, KEYUP, IF, STOP, CLICK, DOUBLECLICK, KEY, LOAD } from "../../../util/Event";
+import { POINTERSTART, MOVE, END, BIND, POINTERMOVE, PREVENT, KEYUP, IF, STOP, CLICK, DOUBLECLICK, KEY, LOAD, ENTER, ESCAPE } from "../../../util/Event";
 import { editor } from "../../../editor/editor";
 import PathGenerator from "../../../editor/parse/PathGenerator";
 import Dom from "../../../util/Dom";
@@ -228,7 +228,7 @@ export default class PathEditorView extends PathTransformEditor {
         }
     }
 
-    [KEYUP('document') + IF('isShow') + KEY('Escape') + KEY('Enter') + PREVENT + STOP] () {
+    [KEYUP('document') + IF('isShow') + ESCAPE + ENTER + PREVENT + STOP] () {
         if (this.state.current) {
             this.refreshPathLayer();
         } else {     

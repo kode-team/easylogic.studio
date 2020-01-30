@@ -68,6 +68,10 @@ export class Item {
     return "Item";
   }
 
+  getIcon () {
+    return '';
+  }
+
   isLeaf() {
     return true; 
   }

@@ -1,5 +1,5 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, CLICK, KEYUP, KEY, PREVENT, STOP, FOCUSOUT, DOUBLECLICK, VDOM, KEYDOWN } from "../../../util/Event";
+import { LOAD, CLICK, KEYUP, KEY, PREVENT, STOP, FOCUSOUT, DOUBLECLICK, VDOM, KEYDOWN, ENTER } from "../../../util/Event";
 import { editor } from "../../../editor/editor";
 import icon from "../icon/icon";
 import { Project } from "../../../editor/items/Project";
@@ -68,7 +68,7 @@ export default class ProjectProperty extends BaseProperty {
     });    
   }
 
-  [KEYDOWN('$projectList .project-item label') + KEY('Enter') + PREVENT + STOP] (e) {
+  [KEYDOWN('$projectList .project-item label') + ENTER + PREVENT + STOP] (e) {
     this.modifyDoneInputEditing(e.$delegateTarget);
     return false;
   }

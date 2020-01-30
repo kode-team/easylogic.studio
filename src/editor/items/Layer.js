@@ -23,6 +23,10 @@ export class Layer extends DomItem {
     return "Layer";
   } 
 
+  getIcon() {
+    return icon.rect;
+  }
+
 
   toCloneObject() {
     return {

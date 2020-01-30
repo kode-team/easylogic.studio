@@ -210,6 +210,10 @@ export class CubeLayer extends Component {
     return "Cube";
   }
 
+  getIcon() {
+    return icon.cube;
+  }
+
 
   toDefaultCSS() {
     var obj = {}

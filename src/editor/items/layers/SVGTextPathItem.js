@@ -8,7 +8,7 @@ import icon from "../../../csseditor/ui/icon/icon";
 
 export class SVGTextPathItem extends SVGItem {
 
-  static getIcon () {
+  getIcon () {
     return icon.text_rotate;
   }  
   getDefaultObject(obj = {}) {

@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
-import { POINTERSTART, MOVE, END, BIND, POINTERMOVE, PREVENT, KEYUP, IF, STOP, CLICK, KEY } from "../../../util/Event";
+import { POINTERSTART, MOVE, END, BIND, POINTERMOVE, PREVENT, KEYUP, IF, STOP, CLICK, KEY, ESCAPE, ENTER } from "../../../util/Event";
 import { editor } from "../../../editor/editor";
 import Dom from "../../../util/Dom";
 import PathParser from "../../../editor/parse/PathParser";
@@ -91,7 +91,7 @@ export default class PolygonEditorView extends UIElement {
     // svg 에는 키 이벤트를 줄 수 없어서 
     // document 전체에 걸어서 처리한다. 
     // 실행은 Polygon 에디터가 보일 때만 
-    [KEYUP('document') + IF('isShow') + KEY('Escape') + KEY('Enter') + PREVENT] (e) {
+    [KEYUP('document') + IF('isShow') + ESCAPE + ENTER + PREVENT] (e) {
 
         if (this.state.current) {
             this.refreshPolygonLayer();

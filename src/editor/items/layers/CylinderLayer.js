@@ -254,6 +254,10 @@ export class CylinderLayer extends Component {
     return "Cylinder";
   }
 
+  getIcon() {
+    return icon.cylinder;
+  }  
+
 
   toDefaultCSS() {
     var obj = {}

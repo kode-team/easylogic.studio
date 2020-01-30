@@ -1,9 +1,10 @@
 import MenuItem from "./MenuItem";
 import Sort from "../../../editor/Sort";
+import icon from "../icon/icon";
    
 export default class BottomAlign extends MenuItem {
-  getIcon() {
-    return 'bottom';
+  getIconString() {
+    return icon.bottom;
   }
   getTitle() {
     return "Bottom";
