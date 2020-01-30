@@ -1,4 +1,4 @@
-$tab-header-height: 35px;
+$tab-header-height: 30px;
  
 
 $tab-horizontal-header-width: 50px;
@@ -84,7 +84,7 @@ $tab-horizontal-header-right-width: 60px;
     }
 
     .tab-header {
-      height: 34px;
+      // height: 34px;
       cursor: pointer;
       background-color: $tab-header-background-color;
       overflow: hidden;
@@ -111,7 +111,7 @@ $tab-horizontal-header-right-width: 60px;
         text-align: center;
         position: relative;
         padding: 0px 0px 0px 0px;
-        height: 34px;
+        height: 100%;
 
 
         &:hover {
@@ -127,12 +127,13 @@ $tab-horizontal-header-right-width: 60px;
         }        
 
         label {
-          line-height: 2;
+          line-height: 1;
           
           height: 100%;
           display: inline-block;
+          vertical-align: middle;
           &.icon {
-            padding: 4px 10px 2px;
+            padding: 6px 10px 2px;
           }
 
           svg {
@@ -193,14 +194,6 @@ $tab-horizontal-header-right-width: 60px;
             right:0px;
             height:2px;
             background-color: $selected-color;
-          }
-  
-          label {
-            svg {
-              path {
-                stroke: $tab-background-color;
-              }
-            }
           }
         }
   
