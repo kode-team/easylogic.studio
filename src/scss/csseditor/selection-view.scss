@@ -125,14 +125,20 @@
       position: absolute;
       transform: translate(-50%, -50%);
       display: inline-block;
-      width: 8px;
-      height: 8px;
+      width: 10px;
+      height: 10px;
       background-color: white;
       
       border:1px solid $pointer-color;
       // border-radius: 100%;
       pointer-events: all;
       cursor: pointer;
+
+      &:not([data-position='move']) {
+        border-radius: 100%;
+        box-sizing: border-box;
+        border: 1px solid black; 
+      }
   
       &:before { 
         opacity: 0;
@@ -165,6 +171,7 @@
         display: inline-block;
         vertical-align: middle;
         padding-right: 5px;
+        overflow:hidden;
   
         &:before {
           left: 0px;
@@ -220,7 +227,7 @@
         left: 0px;
         top: 0px;
         cursor: nwse-resize;
-        transform: translate(-100%, -100%);
+        transform: translate(-50%, -50%);
   
         &:before {
           right: 100%;
@@ -233,7 +240,7 @@
         left: 100%;
         top: 0px;
         cursor: nesw-resize;      
-        transform: translate(0%, -100%);        
+        transform: translate(-50%, -50%);        
   
         &:before {
           left: 100%;
@@ -241,65 +248,12 @@
           transform: translate(-50%, -10px);
         }            
       }    
-  
-      &[data-position="to top"] {
-        left: 50%;
-        top: 0px;
-        cursor: ns-resize;
-        transform: translate(-50%, -100%);        
-  
-        &:before {
-          left: 50%;
-          bottom: 100%;
-          transform: translate(-50%, -10px);
-        }                  
-      }        
-  
-      &[data-position="to left"] {
-        left: 0px;
-        top: 50%;
-        cursor: ew-resize;
-        transform: translate(-100%, -50%);        
-  
-        &:before {
-          top: 50%;
-          right: 100%;
-          transform: translate(-10px, -50%);
-        }                        
-      }
-  
-      &[data-position="to right"] {
-        left: 100%;
-        top: 50%;
-        cursor: ew-resize;
-        transform: translate(0%, -50%);
-  
-        &:before {
-          top: 50%;
-          left: 100%;
-          transform: translate(10px, -50%);
-        }                              
-      }    
-  
-      &[data-position="to bottom"] {
-        left: 50%;
-        top: 100%;
-        cursor: ns-resize;      
-        transform: translate(-50%, 0%);
-  
-        &:before {
-          top: 100%;
-          left: 50%;
-          transform: translate(-50%, 10px);
-        }                              
-      }          
-      
       
       &[data-position="to bottom left"] {
         left: 0px;
         top: 100%;
         cursor: nesw-resize;            
-        transform: translate(-100%, 0%);
+        transform: translate(-50%, -50%);
   
         &:before {
           top: 100%;
@@ -312,7 +266,7 @@
         left: 100%;
         top: 100%;
         cursor: nwse-resize;      
-        transform: translate(0%, 0%);
+        transform: translate(-50%, -50%);
 
         &:before {
           top: 100%;

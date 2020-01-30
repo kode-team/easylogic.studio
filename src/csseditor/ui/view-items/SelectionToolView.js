@@ -176,14 +176,9 @@ export default class SelectionToolView extends SelectionToolBind {
         return /*html*/`
     <div class='selection-view' ref='$selectionView' >
         <div class='selection-tool' ref='$selectionTool' style='left:-100px;top:-100px;'>
-            <div class='selection-tool-item' data-position='move' title='move'>
+            <div class='selection-tool-item' data-position='move' ref='$selectionMove' title='move'>
                 <span>${icon.flag}</span><span ref='$selectionTitle'></span>
             </div>       
-
-            <div class='selection-tool-item' data-position='to top'></div>
-            <div class='selection-tool-item' data-position='to right'></div>
-            <div class='selection-tool-item' data-position='to bottom'></div>
-            <div class='selection-tool-item' data-position='to left'></div>
             <div class='selection-tool-item' data-position='to top right'></div>
             <div class='selection-tool-item' data-position='to bottom right'></div>
             <div class='selection-tool-item' data-position='to top left'></div>
@@ -397,10 +392,6 @@ export default class SelectionToolView extends SelectionToolBind {
             var text = ''
             switch(this.pointerType) {
             case 'move': text =  `X: ${newX}, Y: ${newY}`; break;
-            case 'to right': text =  `W: ${newWidth}`; break;
-            case 'to left': text =  `X: ${newX}, W: ${newWidth}`; break;
-            case 'to top': text =  `Y: ${newY}, H: ${newHeight}`; break;
-            case 'to bottom': text =  `H: ${newHeight}`; break;
             case 'to top right': text =  `X: ${newX}, Y: ${newY}, W: ${newWidth}, H: ${newHeight}`; break;
             case 'to top left': text =  `X: ${newX}, Y: ${newY}, W: ${newWidth}, H: ${newHeight}`; break;
             case 'to bottom right': text =  `W: ${newWidth}, H: ${newHeight}`; break;
@@ -419,6 +410,7 @@ export default class SelectionToolView extends SelectionToolBind {
                 title = 'multi';
             }
             this.refs.$selectionTitle.text(title)
+            this.refs.$selectionMove.attr('title', title)
         }
     }
 

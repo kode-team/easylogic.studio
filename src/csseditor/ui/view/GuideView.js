@@ -13,7 +13,6 @@ const MAX_DIST = 2;
  * 원보 아이템의 크기를 가지고 scale 이랑 조합해서 world 의 크기를 구하는게 기본 컨셉 
  */
 export default class GuideView {
- 
 
 
     makeGuideCache () {
