@@ -68,8 +68,9 @@
   }
   
   .selection-tool {
-    border: $pointer-color 1px solid;
+    border: rgb(214, 214, 214) 1px dashed;
     position:absolute;
+
     
     &.editing-path,
     &.editing-polygon {
@@ -127,7 +128,7 @@
       display: inline-block;
       width: 10px;
       height: 10px;
-      background-color: white;
+      background-color: $selected-color;
       
       border:1px solid $pointer-color;
       // border-radius: 100%;
@@ -137,7 +138,7 @@
       &:not([data-position='move']) {
         border-radius: 100%;
         box-sizing: border-box;
-        border: 1px solid black; 
+        border: 1px solid white; 
       }
   
       &:before { 
