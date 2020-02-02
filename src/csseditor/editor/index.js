@@ -1,3 +1,7 @@
+// 객체 로드용 절대로 지우지 마세요. 
+import items from "../../editor/items";
+// 객체 로드용 절대로 지우지 마세요. 
+
 
 import CanvasView from "../ui/view/CanvasView";
 import ToolMenu from "../ui/view/ToolMenu";
@@ -21,10 +25,8 @@ import windowList from "../ui/window-list";
 import ImageFileView from "../ui/view/ImageFileView";
 import TimelineProperty from "../ui/control/TimelineProperty";
 import StatusBar from "../ui/view/StatusBar";
-import items from "../../editor/items";
-import PreviewToolMenu from "../ui/view/PreviewToolMenu";
-import { Item } from "../../editor/items/Item";
 
+import PreviewToolMenu from "../ui/view/PreviewToolMenu";
 export default class CSSEditor extends UIElement {
   
   initialize () {

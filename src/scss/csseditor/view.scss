@@ -36,11 +36,6 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
     .element-view {
       &[data-mode='ADD'] {
         cursor: crosshair;
-
-        .drag-area-rect {
-          border: 0.5px dashed rgba(0, 0, 0, 0.4);
-          background-color: transparent;
-        }
       }
 
       .motion-based {
@@ -114,8 +109,8 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
 .drag-area-rect {
   pointer-events: none;
   position: absolute;
-  border: 0.5px solid rgba(62, 168, 255, 0.9);
-  background-color: rgba(107, 188, 255, 0.5);
+  border: 0.5px solid $drag-area-rect-border-color;
+  background-color: $drag-area-rect-background-color;
   box-sizing: border-box;
 
   left: -10000px;
@@ -148,7 +143,7 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
       // margin: 0px;
       outline: none;
     }
-    
+
     &:hover {
 
       &:not(.selected) {

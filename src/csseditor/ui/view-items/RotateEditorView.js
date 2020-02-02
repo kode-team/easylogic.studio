@@ -4,6 +4,7 @@ import { Length } from "../../../editor/unit/Length";
 import { editor } from "../../../editor/editor";
 import { Transform } from "../../../editor/css-property/Transform";
 import { calculateAngle } from "../../../util/functions/math";
+import icon from "../icon/icon";
 
 const directions = [
     'top-left',
@@ -31,21 +32,21 @@ const DEFINED_ANGLES = {
 export default class RotateEditorView extends UIElement {
     template() {
         return /*html*/`
-            <div class='rotate-editor-view'>
-                <div class='direction-area' ref='$directionArea'>
-                    ${directions.map(it => {
-                        return /*html*/`<div class='direction' data-value='${it}'></div>`
-                    }).join('')}
-                </div>            
+            <div class='rotate-editor-view'>            
                 <div class='rotate-area' ref='$rotateArea'>
                     <div class='rotate-container' ref='$rotateContainer'>
                         <div class='rotate-item rotate-x'></div>
                         <div class='rotate-item rotate-y'></div>
                     </div>
                 </div>
+                <div class='direction-area' ref='$directionArea'>
+                    ${directions.map(it => {
+                        return /*html*/`<div class='direction' data-value='${it}'></div>`
+                    }).join('')}
+                </div>                
                 <div class='rotate-z' ref='$rotateZ'>
                     <div class='handle-line'></div>                
-                    <div class='handle' ref='$handle'></div>
+                    <div class='handle' ref='$handle'>${icon.gps_fixed}</div>
                 </div>                
 
             </div>

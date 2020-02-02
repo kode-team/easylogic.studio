@@ -30,7 +30,7 @@
 
 .menu-bar {
   display: grid; 
-  grid-template-columns: $left-size 1fr $right-size;
+  grid-template-columns: 1fr 1fr 1fr;
   grid-column-gap: 10px;
 }
 
@@ -53,6 +53,7 @@
 
   .items {
     height: 100%;
+    width: 100%;
     padding: 0px;
     display: inline-block;
 
@@ -188,6 +189,7 @@
       background-image: none;
       border:0px;
       box-shadow: none;
+      display: inline-block;
       color: $selected-font-color;
 
       &[checked="checked"] {

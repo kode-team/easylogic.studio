@@ -113,8 +113,8 @@ $guide-line-color: $selected-color;
 $guide-font-color: black;
 $guide-line-rect-color: #435cb5;
 
-$page-view-color: rgba(17, 17, 17, 0.3); 
-$page-view-element-artboard-title-color: black;
+$page-view-color: rgba(33, 33, 33, 1); 
+$page-view-element-artboard-title-color: rgba(222, 222, 222, 1);
 
 $animation-item-background-color: #435cb5;
 $transition-item-background-color: #435cb5;
@@ -129,3 +129,10 @@ $grid-box-editor-button-background-color: #435cb5;
 
 $status-bar-item-background-color: #760e34;
 $status-bar-background-color: $selected-color;
+
+$drag-area-rect-border-color: rgba(62, 168, 255, 0.9);
+$drag-area-rect-background-color: rgba(107, 188, 255, 0.5);
+
+$rotate-area-border-color: $selected-color;
+$rotate-x-border-color: rgb(104, 104, 247);
+$rotate-y-border-color: rgb(112, 197, 112);

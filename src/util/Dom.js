@@ -556,7 +556,7 @@ export default class Dom {
     var currentHide = this.isHide();
 
     if (arguments.length == 1) {
-      if (currentHide && isForce) {
+      if (isForce) {
         return this.show();
       } else {
         return this.hide();
