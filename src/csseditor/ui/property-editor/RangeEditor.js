@@ -55,6 +55,14 @@ export default class RangeEditor extends UIElement {
 
         var realValue = (+value).toString();
 
+        var units = this.state.units.split(',').map(it => {
+            let description = it; 
+            if (description === 'number')  {
+                description = '';
+            }
+            return `${it}:${description}`
+        }).join(',');
+
         return /*html*/`
         <div ${OBJECT_TO_PROPERTY({
             'data-selected-type': type,
@@ -73,7 +81,7 @@ export default class RangeEditor extends UIElement {
                 <input type='range' ref='$property' value="${realValue}" min="${min}" max="${max}" step="${step}" /> 
                 <div class='area' ref='$rangeArea'>
                     <input type='number' ref='$propertyNumber' value="${realValue}" min="${min}" max="${max}" step="${step}" />
-                    <SelectEditor ref='$unit' key='unit' value="${this.state.selectedUnit || this.state.value.unit}" options="${this.state.units}" onchange='changeUnit' />
+                    <SelectEditor ref='$unit' key='unit' value="${this.state.selectedUnit || this.state.value.unit}" options="${units}" onchange='changeUnit' />
                 </div>
             </div>
             <div class='range-editor-type' data-type='calc'>

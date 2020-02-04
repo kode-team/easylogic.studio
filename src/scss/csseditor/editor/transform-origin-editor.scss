@@ -24,6 +24,7 @@
         display: inline-block;
         background-color: lighten($selected-color, 30%);
         cursor: pointer;
+        border-radius: 3px;
 
         &:before {
           pointer-events: none;
