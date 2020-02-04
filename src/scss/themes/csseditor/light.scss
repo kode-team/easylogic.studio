@@ -42,13 +42,14 @@ $range-thumb-width: 8px;
 $range-thumb-height: 8px;
 $range-track-height: 1px;
 $range-thumb-top: -4px;
+$range-thumb-border-radius: 10px;
 $range-thumb-color:  #609de2;
-$range-track-color:  rgb(184, 184, 184);
+$range-track-color:  rgb(207, 207, 207);
 $range-thumb-border-color: $range-thumb-color;
 
 $input-background-color: white;
 $input-border-color: $border-color;
-$input-border-radius: 3px;
+$input-border-radius: 0px;
 $input-font-color: black;
 
 // property 

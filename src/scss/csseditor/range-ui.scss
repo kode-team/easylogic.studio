@@ -22,11 +22,11 @@ input[type=range]::-webkit-slider-runnable-track {
 input[type=range]::-webkit-slider-thumb {
   height: $range-thumb-height;
   width: $range-thumb-width;
-  border-radius: 10px;
+  border-radius: $range-thumb-border-radius;
   background: $range-thumb-color;
   cursor: pointer;
   appearance: none;
-  border: 1px solid $range-thumb-border-color; 
+  border: 1px solid $range-thumb-border-color;  
   margin-top: $range-thumb-top;
 }
 input[type=range]:focus::-webkit-slider-runnable-track {
@@ -46,6 +46,7 @@ input[type=range]::-moz-range-thumb {
   height: $range-thumb-width;
   width: $range-thumb-height;
   border-radius: 9px;
+  border-radius: $range-thumb-border-radius;
   background: $range-thumb-color;
   cursor: pointer;
   margin-top: $range-thumb-top;  
