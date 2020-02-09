@@ -1,4 +1,5 @@
 // 객체 로드용 절대로 지우지 마세요. 
+// Please do not remove this statement absolutely.
 import items from "../../editor/items";
 // 객체 로드용 절대로 지우지 마세요. 
 

@@ -1,158 +1,29 @@
-import Event, {
-  NAME_SAPARATOR,
+import {
   CHECK_SAPARATOR,
-  SAPARATOR,
   CHECK_LOAD_PATTERN,
   LOAD_SAPARATOR,
-  BIND_SAPARATOR,
-  CHECK_BIND_PATTERN,
-  BIND_CHECK_DEFAULT_FUNCTION,
-  BIND_CHECK_FUNCTION,
   LOAD,
   VDOM,
-  CHECK_DOM_EVENT_PATTERN,
-  DOM_EVENT_SAPARATOR
 } from "./Event";
 import Dom from "./Dom";
 import {
-  debounce,
   isFunction,
   isArray,
   html,
   keyEach,
-  isNotUndefined,
-  isUndefined,
-  isString,
-  isObject,
   keyMap,
-  throttle,
-  isNotString
 } from "./functions/func";
 import {
   ADD_BODY_MOUSEMOVE,
   ADD_BODY_MOUSEUP
 } from "../csseditor/types/event";
 import { uuid } from "./functions/math";
-
+import DomEventHandler from "./handler/DomEventHandler";
+import BindHandler from "./handler/BindHandler";
 
 const REFERENCE_PROPERTY = "ref";
 const TEMP_DIV = Dom.create("div");
 const QUERY_PROPERTY = `[${REFERENCE_PROPERTY}]`;
-const ATTR_lIST = [REFERENCE_PROPERTY]
-
-const matchPath = (el, selector) => {
-  if (el) {
-    if (el.matches(selector)) {
-      return el;
-    }
-    return matchPath(el.parentElement, selector);
-  }
-  return null;
-};
-
-const hasDelegate = (e, eventObject) => {
-  return matchPath(e.target || e.srcElement, eventObject.delegate);
-};
-
-const makeCallback = (context, eventObject, callback) => {
-  if (eventObject.delegate) {
-    return makeDelegateCallback(context, eventObject, callback);
-  } else {
-    return makeDefaultCallback(context, eventObject, callback);
-  }
-};
-
-const makeDefaultCallback = (context, eventObject, callback) => {
-  return e => {
-    var returnValue = runEventCallback(context, e, eventObject, callback);
-    if (isNotUndefined(returnValue)) {
-      return returnValue;
-    }
-  };
-};
-
-const makeDelegateCallback = (context, eventObject, callback) => {
-  return e => {
-    const delegateTarget = hasDelegate(e, eventObject);
-
-    if (delegateTarget) {
-      // delegate target 이 있는 경우만 callback 실행
-      e.$delegateTarget = Dom.create(delegateTarget);      
-
-      var returnValue = runEventCallback(context, e, eventObject, callback);
-      if (isNotUndefined(returnValue)) {
-        return returnValue;
-      }
-    }
-  };
-};
-
-const runEventCallback = (context, e, eventObject, callback) => {
-  e.xy = Event.posXY(e);
-
-  if (eventObject.beforeMethods.length) {
-    eventObject.beforeMethods.every(before => {
-      return context[before.target].call(context, e, before.param);
-    });
-  }
-
-  if (checkEventType(context, e, eventObject)) {
-    var returnValue = callback(e, e.$delegateTarget, e.xy);
-
-    if (returnValue !== false && eventObject.afterMethods.length) {
-      eventObject.afterMethods.forEach(after =>
-        context[after.target].call(context, e, after.param)
-      );
-    }
-
-    return returnValue;
-  }
-};
-
-const checkEventType = (context, e, eventObject) => {
-  // 특정 keycode 를 가지고 있는지 체크
-  var hasKeyCode = true;
-  if (eventObject.codes.length) {
-    hasKeyCode =
-      (e.code ? eventObject.codes.indexOf(e.code.toLowerCase()) > -1 : false) ||
-      (e.key ? eventObject.codes.indexOf(e.key.toLowerCase()) > -1 : false);
-  }
-
-  // 체크 메소드들은 모든 메소드를 다 적용해야한다.
-  var isAllCheck = true;
-  if (eventObject.checkMethodList.length) {
-    isAllCheck = eventObject.checkMethodList.every(field => {
-      var fieldValue = context[field];    
-      if (isFunction(fieldValue) && fieldValue) {
-        // check method
-        return fieldValue.call(context, e);
-      } else if (isNotUndefined(fieldValue)) {
-
-        // check field value
-        return !!fieldValue;
-      }
-      return true;
-    });
-  }
-
-  return hasKeyCode && isAllCheck;
-};
-
-const getDefaultDomElement = (context, dom) => {
-  let el;
-
-  if (dom) {
-    el = context.refs[dom] || context[dom] || window[dom];
-  } else {
-    el = context.el || context.$el || context.$root;
-  }
-
-  if (el instanceof Dom) {
-    return el.getElement();
-  }
-
-  return el;
-};
 
 export const splitMethodByKeyword = (arr, keyword) => {
   var filterKeys = arr.filter(code => code.indexOf(`${keyword}(`) > -1);
@@ -167,168 +38,6 @@ export const splitMethodByKeyword = (arr, keyword) => {
   });
 
   return [filterKeys, filterMaps];
-};
-
-const getDefaultEventObject = (context, eventName, checkMethodFilters) => {
-  let arr = checkMethodFilters;
-
-  // context 에 속한 변수나 메소드 리스트 체크
-  const checkMethodList = arr.filter(code => !!context[code]);
-
-  // 이벤트 정의 시점에 적용 되어야 하는 것들은 모두 method() 화 해서 정의한다.
-  const [afters, afterMethods] = splitMethodByKeyword(arr, "after");
-  const [befores, beforeMethods] = splitMethodByKeyword(arr, "before");
-  const [debounces, debounceMethods] = splitMethodByKeyword(arr, "debounce");
-  const [throttles, throttleMethods] = splitMethodByKeyword(arr, "throttle");
-  const [captures] = splitMethodByKeyword(arr, "capture");
-
-  // 위의 5개 필터 이외에 있는 코드들은 keycode 로 인식한다.
-  const filteredList = [
-    ...checkMethodList,
-    ...afters,
-    ...befores,
-    ...debounces,
-    ...throttles,
-    ...captures
-  ];
-
-  var codes = arr
-    .filter(code => filteredList.indexOf(code) === -1)
-    .map(code => code.toLowerCase());
-
-  return {
-    eventName,
-    codes,
-    captures,
-    afterMethods,
-    beforeMethods,
-    debounceMethods,
-    throttleMethods,
-    checkMethodList
-  };
-};
-
-const scrollBlockingEvents = {
-  'touchstart': true,
-  'touchmove': true,
-  'mousedown': true,
-  'mouseup': true,
-  'mousemove': true, 
-  'wheel': true,
-  'mousewheel': true
-}
-
-const addEvent = (context, eventObject, callback) => {
-  eventObject.callback = makeCallback(context, eventObject, callback);
-  context.addBinding(eventObject);
-
-  var options = !!eventObject.captures.length
-
-  if (scrollBlockingEvents[eventObject.eventName]) {
-    options = {
-      passive: true,
-      capture: options  
-    }
-  }
-
-  Event.addEvent(
-    eventObject.dom,
-    eventObject.eventName,
-    eventObject.callback,
-    options
-  );
-};
-
-const bindingEvent = ( context, [eventName, dom, ...delegate], checkMethodFilters, callback ) => {
-  let eventObject = getDefaultEventObject( context, eventName, checkMethodFilters);
-
-  eventObject.dom = getDefaultDomElement(context, dom);
-  eventObject.delegate = delegate.join(SAPARATOR);
-
-  if (eventObject.debounceMethods.length) {
-    var debounceTime = +eventObject.debounceMethods[0].target;
-    callback = debounce(callback, debounceTime);
-  } else if (eventObject.throttleMethods.length) {
-    var throttleTime = +eventObject.throttleMethods[0].target;
-    callback = throttle(callback, throttleTime);
-  }
-
-  addEvent(context, eventObject, callback);
-};
-
-const getEventNames = eventName => {
-  let results = [];
-
-  eventName.split(NAME_SAPARATOR).forEach(e => {
-    var arr = e.split(NAME_SAPARATOR);
-
-    results.push(...arr);
-  });
-
-  return results;
-};
-
-const parseEvent = (context, key) => {
-  let checkMethodFilters = key.split(CHECK_SAPARATOR).map(it => it.trim());
-
-  var prefix = checkMethodFilters.shift()
-  var eventSelectorAndBehave = prefix.split(DOM_EVENT_SAPARATOR)[1];
-
-  var arr = eventSelectorAndBehave.split(SAPARATOR);
-  var eventNames = getEventNames(arr[0]);
-  var callback = context[key].bind(context);
-
-  eventNames.forEach(eventName => {
-    arr[0] = eventName
-    bindingEvent(context, arr, checkMethodFilters, callback);
-  });
-};
-
-const applyElementAttribute = ($element, key, value) => {
-
-  if (key === 'cssText') {
-    /**
-     * cssText: 'position:absolute'
-     */
-    $element.cssText(value);
-  } else if (key === "style") {
-    /**
-     * style: { key: value }
-     */
-    if (isNotString(value)) {
-      $element.css(value);
-    }
-
-    return;
-  } else if (key === "class") {
-    //  "class" : [ 'className', 'className' ] 
-    //  "class" : { key: true, key: false } 
-    //  "class" : 'string-class' 
-
-    if (isArray(value)) {
-      $element.addClass(...value);
-    } else if (isObject(value)) {
-      keyEach(value, (className, hasClass) => $element.toggleClass(className, hasClass));
-    } else {
-      $element.addClass(value);
-    }
-
-    return;
-  }
-
-  if (isUndefined(value)) {
-    $element.removeAttr(key);
-  } else {
-    if ($element.el.nodeName === "TEXTAREA" && key === "value") {
-      $element.text(value);
-    } else if (key === 'text' || key === 'textContent') {
-      $element.text(value);
-    } else if (key === 'innerHTML' || key === 'html') {
-      $element.html(value);
-    } else {
-      $element.attr(key, value);
-    }
-  }
 };
 
 // collectProps 에서 제외될 메소드 목록 
@@ -370,8 +79,6 @@ const expectMethod = {
   "eachChildren": true,
   "initializeEvent": true,
   "destroy": true,
-  "destroyDomEvent": true,
-  "initializeDomEvent": true,
   "collectProps": true,
   "filterProps": true,
   "self": true,
@@ -383,11 +90,6 @@ const expectMethod = {
   "stopPropagation": true,
   "bodyMouseMove": true,
   "bodyMouseUp": true,
-  "getBindings": true,
-  "addBinding": true,
-  "initBindings": true,
-  "removeEventAll": true,
-  "removeEvent": true
 }
 
 export default class EventMachine {
@@ -398,6 +100,7 @@ export default class EventMachine {
     this.children = {};
     this._bindings = [];
     this.id = uuid();    
+    this.handlers = this.initializeHandler()
 
     this.initComponents();
   }
@@ -410,6 +113,13 @@ export default class EventMachine {
       this.childComponentSet.set(key.toLowerCase(), key);
     })
     this.childComponentKeysString = [...this.childComponentSet.keys()].join(',');
+  }
+
+  initializeHandler () {
+    return [
+      new BindHandler(this),
+      new DomEventHandler(this)
+    ]
   }
 
   initState() {
@@ -654,7 +364,7 @@ export default class EventMachine {
           this.refs[elName].html(fragment);
         }
 
-        this.initializeDomEvent()
+        this.runHandlers('initialize');
       }
     });
 
@@ -664,52 +374,12 @@ export default class EventMachine {
     
   }
 
+  runHandlers(func = 'run', ...args) {
+    this.handlers.forEach(h => h[func](...args));
+  }
+
   bindData (...args) {
-    if (!this._bindMethods) {
-      this._bindMethods = this.filterProps(CHECK_BIND_PATTERN);
-    }
-    /**
-     * BIND 를 해보자.
-     * 이시점에 하는게 맞는지는 모르겠지만 일단은 해보자.
-     * BIND 는 특정 element 에 html 이 아닌 데이타를 업데이트하기 위한 간단한 로직이다.
-     */
-    this._bindMethods
-      .filter(originalCallbackName => {
-        if (!args.length) return true; 
-        var [callbackName, id] = originalCallbackName.split(CHECK_SAPARATOR);        
-
-        var [_, $bind] = callbackName.split(' ')
-
-        return args.indexOf($bind) >  -1 
-      })
-      .forEach(callbackName => {
-        const bindMethod = this[callbackName];
-        var [callbackName, id] = callbackName.split(CHECK_SAPARATOR);
-
-        const refObject = this.getRef(id);
-        let refCallback = BIND_CHECK_DEFAULT_FUNCTION;
-
-        if (refObject != '' && isString(refObject)) {
-          refCallback = BIND_CHECK_FUNCTION(refObject);
-        } else if (isFunction(refObject)) {
-          refCallback = refObject;
-        }
-
-        const elName = callbackName.split(BIND_SAPARATOR)[1];
-        let $element = this.refs[elName];
-
-        // isBindCheck 는 binding 하기 전에 변화된 지점을 찾아서 업데이트를 제한한다.
-        const isBindCheck = isFunction(refCallback) && refCallback.call(this);
-        if ($element && isBindCheck) {
-          const results = bindMethod.call(this, ...args);
-
-          if (!results) return;
-
-          keyEach(results, (key, value) => {
-            applyElementAttribute($element, key, value);
-          });
-        }
-      });
+    this.runHandlers('load', ...args);
   }
 
   // 기본 템플릿 지정
@@ -735,7 +405,7 @@ export default class EventMachine {
    * 이벤트를 초기화한다.
    */
   initializeEvent() {
-    this.initializeDomEvent();
+    this.runHandlers('initialize');
   }
 
   /**
@@ -747,24 +417,11 @@ export default class EventMachine {
       childComponent.destroy();
     });
 
-    this.destroyDomEvent();
+    this.runHandlers('destroy');
     this.$el.remove();
     this.$el = null; 
     this.refs = {} 
     this.children = {} 
-  }
-
-  destroyDomEvent() {
-    this.removeEventAll();
-  }
-
-  initializeDomEvent() {
-    this.destroyDomEvent();
-
-    if (!this._domEvents) {
-      this._domEvents = this.filterProps(CHECK_DOM_EVENT_PATTERN)
-    }
-    this._domEvents.forEach(key => parseEvent(this, key));
   }
 
   /**
@@ -842,30 +499,4 @@ export default class EventMachine {
     }
   }
 
-  getBindings() {
-    if (!this._bindings) {
-      this.initBindings();
-    }
-
-    return this._bindings;
-  }
-
-  addBinding(obj) {
-    this.getBindings().push(obj);
-  }
-
-  initBindings() {
-    this._bindings = [];
-  }
-
-  removeEventAll() {
-    this.getBindings().forEach(obj => {
-      this.removeEvent(obj);
-    });
-    this.initBindings();
-  }
-
-  removeEvent({ eventName, dom, callback }) {
-    Event.removeEvent(dom, eventName, callback);
-  }
 }

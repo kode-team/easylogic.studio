@@ -215,7 +215,7 @@
             cursor: move;
 
             &.curve {
-                stroke: black; 
+                stroke: $path-segment-stroke-color; 
             }
 
             &[data-is-first="true"] {
@@ -237,7 +237,8 @@
             }       
             
             &[data-selected='true'] {
-                fill: rgba(0, 0, 0, 1);
+                fill: $selected-color;
+                stroke: $selected-color;
             }
             
         }
@@ -251,15 +252,16 @@
 
         rect {
             &.segment {
-                stroke: $border-color;
+                stroke: $path-segment-stroke-color;
                 fill: white;
                 stroke-width: 1; 
                 width: 8px;
-                height: 8px;
+                height: 8px; 
                 cursor: pointer;
 
                 &[data-selected='true'] {
-                    fill: $border-color;
+                    fill: $selected-color;
+                    stroke: $selected-color;
                 }
             }
         }
