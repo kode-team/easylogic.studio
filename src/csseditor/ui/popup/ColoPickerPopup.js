@@ -1,4 +1,4 @@
-import { EVENT } from "../../../util/UIElement";
+import UIElement, { EVENT } from "../../../util/UIElement";
 import BasePopup from "./BasePopup";
 import EmbedColorPicker from "../property-editor/EmbedColorPicker";
 import { DEBOUNCE, LOAD, CLICK } from "../../../util/Event";
@@ -31,7 +31,10 @@ export default class ColorPickerPopup extends BasePopup {
   updateData(opt = {}) {
     this.setState(opt, false);
 
-    this.emit(this.state.changeEvent, this.state.color, this.params);
+    if (this.state.target) {
+      this.state.target.trigger(this.state.changeEvent, this.state.color, this.params);
+    }
+
   }
 
  
@@ -84,6 +87,11 @@ export default class ColorPickerPopup extends BasePopup {
 
   [EVENT("showColorPickerPopup")](data, params) {
     data.changeEvent = data.changeEvent || 'changeFillPopup'
+
+    if (!(data.target instanceof UIElement)) {
+      throw new Error('ColorPicker needs data.target');
+    }
+
     this.params = params;
     this.setState(data, false);
     this.children.$color.setValue(this.state.color);

@@ -55,18 +55,15 @@ export default class ColorSingleEditor extends UIElement {
 
     viewColorPicker() {
         this.emit("showColorPickerPopup", {
+            target: this,
             changeEvent: 'changeColorSingleEditor',
             color: this.state.color
-        }, {
-            id: this.id
         });
     }
 
 
     [EVENT("changeColorSingleEditor")](color, data) {
-        if (data.id === this.id) {
-            this.refs.$miniView.cssText(`background-color: ${color}`);
-            this.updateData({ color })
-        }
+        this.refs.$miniView.cssText(`background-color: ${color}`);
+        this.updateData({ color })
     }    
 }

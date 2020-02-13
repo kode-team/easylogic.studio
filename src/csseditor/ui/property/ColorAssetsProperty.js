@@ -132,23 +132,20 @@ export default class ColorAssetsProperty extends BaseProperty {
 
     this.emit("showColorPickerPopup", {
         hideColorAssets: true,
+        target: this, 
         changeEvent: 'changeColorAssets',
         color
     }, {
-        id: this.id,
         index
     });
   }
 
 
   [EVENT('changeColorAssets')] (color, params) {
-    if (params.id === this.id) {
-
       this.executeColor(project => {
         project.setColorValue(params.index, {color});      
         this.state.$el.css('background-color', color);
         this.state.$color.val(color);
       }, false)
-    }
   }
 }

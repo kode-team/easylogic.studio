@@ -31,8 +31,6 @@ export default class ColorViewEditor extends UIElement {
 
     changeColor (value) {
         this.setState({ value })
-        this.refs.$miniView.cssText(`background-color: ${value}`);
-        this.refs.$colorCode.val(value);
     }
 
     refresh () {
@@ -88,10 +86,9 @@ export default class ColorViewEditor extends UIElement {
 
     viewColorPicker() {
         this.emit("showColorPickerPopup", {
+            target: this, 
             changeEvent: 'changeColorViewEditor',
             color: this.state.value
-        }, {
-            id: this.id
         });
     }
 
@@ -107,13 +104,8 @@ export default class ColorViewEditor extends UIElement {
         this.updateData({ value: color })
     }
 
-    [EVENT("changeColorViewEditor")](color, data) {
-        if (data.id === this.id) {
-            this.refs.$miniView.cssText(`background-color: ${color}`);
-            this.refs.$colorCode.val(color);
-    
-            this.updateData({ value: color })
-        }
+    [EVENT("changeColorViewEditor")](color) {
+        this.updateData({ value: color })
     }
 
 }
