@@ -93,7 +93,7 @@ export const editor = new class {
     if (window.localStorage) {
       theme = window.localStorage.getItem('easylogic.studio.theme')
 
-      theme = theme === 'light' ? 'light' : DEFAULT_THEME;
+      theme = ['gray', 'light'].includes(theme) ? theme : DEFAULT_THEME;
     }
 
     this.theme =  theme || DEFAULT_THEME
@@ -127,7 +127,7 @@ export const editor = new class {
   }
 
   changeTheme (theme) {
-    theme = theme === 'light' ? 'light': 'dark';
+    theme = ['light', 'gray'].includes(theme) ? theme: 'dark';
 
     this.theme = theme; 
     window.localStorage.setItem('easylogic.studio.theme', theme);

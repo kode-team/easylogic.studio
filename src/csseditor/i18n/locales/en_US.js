@@ -10,6 +10,7 @@ export default {
 
     'app.theme.dark': 'Dark',
     'app.theme.light': 'Light',
+    'app.theme.gray': 'Gray',
     'app.label.theme': 'Theme',    
 
 

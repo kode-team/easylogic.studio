@@ -126,8 +126,19 @@
     border-right: 1px solid $border-color;
     border-top: 1px solid $border-color;
 
+    .property {
+        padding: 0px;
+    }
+
     .property-title {
-        height: $timeline-header-size !important;
+        height: ($timeline-header-size - 1px) !important;
+        padding-bottom: 0px;
+        padding-top: 0px;
+
+        label {
+            padding-left: 10px;
+
+        }
     }
 
     .property-body {
@@ -406,11 +417,11 @@
 
                             .tools {
                                 button.add {
-                                    width: 10px;
-                                    height: 10px;
+                                    width: 7px;
+                                    height: 7px;
                                     // border-radius: 50%;
                                     display: inline-block;
-                                    box-shadow: 0 0 0 2px rgba(darken($border-color, 10%), 0.3);
+                                    box-shadow: 0 0 0 1px rgba(darken($border-color, 10%), 1);
                                     background-color: rgba(lighten($border-color, 50%), 0.7);
                                     vertical-align: middle;
                                     cursor: pointer;
@@ -583,11 +594,140 @@
 
 }
 
+
+.timeline-play-control {
+    text-align: left;
+    display: grid;
+    grid-template-columns: 188px 120px 120px 1fr;
+    grid-column-gap: 5px;
+
+    .speed-number {
+      position: relative;
+      &:after {
+        position: absolute;
+        right: 14px;
+        top: 1px;
+        content: 'X';
+        display: inline-block;
+      }
+
+      input {
+        width: 100%;
+      }
+    }
+
+    label {
+      vertical-align: middle;
+      padding-right: 10px;
+      svg {
+        width: 16px;
+        height: 16px;
+        vertical-align: middle;
+
+        path {
+          fill: $font-color;
+        }
+      }
+    }
+
+    .input {
+      vertical-align: middle;
+
+      input {
+        vertical-align: middle;
+        height: 20px;
+        width: 100%;
+      }
+    }
+
+    .row {
+      display: flex;
+      
+      &:first-child{
+        text-align: center;
+      }
+    }
+
+    button {
+      display: inline-block;
+      vertical-align: middle;
+      width: 24px;
+      height: 24px;
+
+      &.play {
+
+        svg {
+          path {
+            fill: $selected-color;
+          }
+        }
+      }
+
+      &.pause {
+        display: none;
+        svg {
+          path {
+            fill: rgb(102, 119, 216);
+          }
+        }
+      }
+    }
+
+
+    .play-buttons {
+
+      &[data-status='play'] {
+        .pause {
+          display: inline-block;
+        }
+
+        .play {
+          display: none; 
+        }
+      }
+
+      &[data-status='pause'] {
+        .play {
+          display: inline-block;
+        }
+
+      }    
+      
+    }
+
+    
+
+    .direction-buttons {
+      display: flex;
+      padding-top: 2px;
+
+      @each $selectDirection in normal, alternate, reverse, alternate-reverse {
+          &[data-selected-direction="#{$selectDirection}"] [data-value="#{$selectDirection}"] {
+              background-color: $selected-background-color;
+
+              svg {
+                path {
+                  fill: $selected-color;
+                }
+              }
+          }
+      }        
+
+      button {
+          width: 20px;
+          height: 20px;
+          margin-right: 5px;
+          border-radius: 3px;
+      }
+  }
+
+  }
+
 .keyframe-time-control {
 
     .time-manager {
       display: grid;
-      grid-template-columns: 110px 65px 84px 10px;
+      grid-template-columns: 20px 90px 65px 84px 10px;
       grid-column-gap: 0px;
 
       label {
@@ -610,4 +750,5 @@
     input[type=text] {
       width: 80px;
     }
-  }
+  
+}

@@ -152,7 +152,8 @@
       z-index: 10000;
 
       .managed-tool {
-        background-color: $background-color;
+        background-color: $property-background-color;
+        padding: 2px 0px;
       }
     }    
 

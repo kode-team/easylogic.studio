@@ -10,6 +10,7 @@ export default {
 
     'app.theme.dark': '어두운',
     'app.theme.light': '밝은',
+    'app.theme.gray': '회색',    
     'app.label.theme': '테마', 
 
     'app.tab.title.projects': '프로젝트',

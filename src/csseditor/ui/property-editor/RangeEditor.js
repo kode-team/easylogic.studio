@@ -28,7 +28,6 @@ export default class RangeEditor extends UIElement {
             params: this.props.params || '',
             layout: this.props.layout || '',
             units,
-            type: (value.unit === 'calc' || value.unit === 'var') ? 'calc' : 'range',
             value
         }
     }
@@ -43,7 +42,7 @@ export default class RangeEditor extends UIElement {
 
     [LOAD('$body')] () {
 
-        var { min, max, step, label, calc, type, removable, layout } = this.state
+        var { min, max, step, label, removable, layout } = this.state
 
         var value = +this.state.value.value.toString()
 
@@ -65,30 +64,20 @@ export default class RangeEditor extends UIElement {
 
         return /*html*/`
         <div ${OBJECT_TO_PROPERTY({
-            'data-selected-type': type,
             'ref': '$range',
             'class': OBJECT_TO_CLASS({
                 'range-editor': true,
                 'has-label': !!label,
-                'has-calc': calc,
                 'is-removable': removable,
                 [layoutClass] : true 
             })
         })}>
             ${label ? `<label>${label}</label>` : '' }
-            <button type='button' class='type-button' ref='$toggleType'>${icon.autorenew}</button>
             <div class='range-editor-type' data-type='range'>
                 <input type='range' ref='$property' value="${realValue}" min="${min}" max="${max}" step="${step}" /> 
                 <div class='area' ref='$rangeArea'>
                     <input type='number' ref='$propertyNumber' value="${realValue}" min="${min}" max="${max}" step="${step}" />
                     <SelectEditor ref='$unit' key='unit' value="${this.state.selectedUnit || this.state.value.unit}" options="${units}" onchange='changeUnit' />
-                </div>
-            </div>
-            <div class='range-editor-type' data-type='calc'>
-                <div class='area'>
-                    <SelectEditor ref='$varType' key='varType' value="${this.state.value.unit}" options="calc,var" onchange='changeVarType' />
-
-                    <input type='text' ref='$calc' value='${this.state.value}' />
                 </div>
             </div>
             <button type='button' class='remove thin' ref='$remove' title='Remove'>${icon.remove}</button>
@@ -114,49 +103,15 @@ export default class RangeEditor extends UIElement {
         this.refs.$rangeArea.removeClass('focused');
     }    
 
-    [CLICK('$toggleType')] (e) {
-
-        var type = this.state.type === 'calc' ? 'range' : 'calc';
-        var value = '' 
-        if (type === 'calc') {
-            value = Length.calc(this.refs.$calc.value) 
-
-            var varType = value.unit;
-
-            this.children.$varType.setValue(varType);
-            
-        } else {
-            var value = this.getRef('$propertyNumber').value; 
-            var unit = this.children.$unit.getValue();
-            value = new Length(value, unit) 
-        }
-
-        this.updateData({
-            type, value 
-        }) 
-
-        this.refs.$range.attr('data-selected-type', type);
-    }
-
     [CLICK('$remove')] (e) {
         this.updateData({
             value: ''
         })
     }
 
-    [INPUT('$calc')] () {
-        this.updateData({ 
-            value: new Length(this.refs.$calc.value, this.children.$varType.getValue()) 
-        });
-    }
-
     updateData (data) {
         this.setState(data, false)
         this.parent.trigger(this.props.onchange, this.props.key, this.state.value, this.props.params)
-    }
-
-    updateCalc () {
-        this.refs.$calc.val(this.state.value);
     }
 
     initValue () {
@@ -177,7 +132,6 @@ export default class RangeEditor extends UIElement {
             value: new Length(value, this.children.$unit.getValue())
         });
 
-        this.updateCalc()
     }
 
 
@@ -191,7 +145,6 @@ export default class RangeEditor extends UIElement {
             value: new Length(value, this.children.$unit.getValue())
         });
 
-        this.updateCalc()
     }
 
     [EVENT('changeUnit')] (key, value) {
@@ -200,14 +153,6 @@ export default class RangeEditor extends UIElement {
 
         this.updateData({
             value: this.state.value.toUnit(value)
-        })
-
-        this.updateCalc()
-    }
-
-    [EVENT('changeVarType')] (key, unit) {
-        this.updateData({
-            value: new Length(this.refs.$calc.value, unit)
         })
     }
 }

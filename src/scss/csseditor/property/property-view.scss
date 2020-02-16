@@ -1,5 +1,5 @@
 .property {
-  // padding: 6px 0px;
+  padding: 2px 10px;
   border-top: 1px solid $property-border-color;  
   background-color: $property-background-color;
   color: $property-font-color; 
@@ -12,9 +12,9 @@
   .add-timeline-property {
     display: inline-block;
     margin-right: 5px;
-    width: 8px;
-    height: 8px;
-    box-shadow: 0 0 0 2px rgba(darken($border-color, 10%), 0.3);
+    width: 7px;
+    height: 7px;
+    box-shadow: 0 0 0 1px rgba(darken($border-color, 10%), 1);
     background-color: rgba(lighten($border-color, 50%), 0.7);
     // vertical-align: middle;
     line-height: 10px;
@@ -23,8 +23,8 @@
     transform: rotate(45deg);
 
     &:hover {
-      box-shadow: 0 0 0 2px rgba($selected-color, 0.5);
-      background-color: $selected-color;
+      box-shadow: 0 0 0 1px rgba($selected-color, 1);
+      background-color: rgba($selected-color, 0.5);
     }
   }
 
@@ -48,6 +48,10 @@
       > .property-title {
         grid-template-columns: ($left-size - 10px) 1fr;
 
+        label {
+          padding-left: 10px;
+        }
+
         .tools {
 
           text-align: left;
@@ -56,165 +60,6 @@
             flex: 1 1 auto;
           }
 
-          .timeline-play-control {
-            text-align: left;
-            display: grid;
-            grid-template-columns: 188px 120px 120px 1fr;
-            grid-column-gap: 5px;
-
-            .speed-number {
-              position: relative;
-              &:after {
-                position: absolute;
-                right: 14px;
-                top: 1px;
-                content: 'X';
-                display: inline-block;
-              }
-
-              input {
-                width: 100%;
-              }
-            }
-
-            label {
-              vertical-align: middle;
-              padding-right: 10px;
-              svg {
-                width: 16px;
-                height: 16px;
-                vertical-align: middle;
-
-                path {
-                  fill: $font-color;
-                }
-              }
-            }
-
-            .input {
-              vertical-align: middle;
-
-              input {
-                vertical-align: middle;
-                height: 20px;
-                width: 100%;
-              }
-            }
-
-            .row {
-              display: flex;
-              
-              &:first-child{
-                text-align: center;
-              }
-            }
-
-            button {
-              display: inline-block;
-              vertical-align: middle;
-              width: 24px;
-              height: 24px;
-
-              &.play {
-
-                svg {
-                  path {
-                    fill: $selected-color;
-                  }
-                }
-              }
-
-              &.pause {
-                display: none;
-                svg {
-                  path {
-                    fill: rgb(102, 119, 216);
-                  }
-                }
-              }
-            }
-
-
-            .play-buttons {
-
-              &[data-status='play'] {
-                .pause {
-                  display: inline-block;
-                }
-
-                .play {
-                  display: none; 
-                }
-              }
-  
-              &[data-status='pause'] {
-                .play {
-                  display: inline-block;
-                }
-
-              }    
-              
-            }
-
-            
-
-            .direction-buttons {
-              display: flex;
-              padding-top: 2px;
-
-              @each $selectDirection in normal, alternate, reverse, alternate-reverse {
-                  &[data-selected-direction="#{$selectDirection}"] [data-value="#{$selectDirection}"] {
-                      background-color: $selected-background-color;
-
-                      svg {
-                        path {
-                          fill: $selected-color;
-                        }
-                      }
-                  }
-              }        
-
-              button {
-                  width: 20px;
-                  height: 20px;
-                  margin-right: 5px;
-                  border-radius: 3px;
-              }
-          }
-
-          }
-
-          .keyframe-time-control {
-            flex: none; 
-            text-align: right;
-            width: 260px;
-
-            .time-manager {
-              display: grid;
-              grid-template-columns: 110px 65px 84px 10px;
-              grid-column-gap: 0px;
-
-              label {
-                padding-right:0px;
-
-                svg {
-                  width: 16px;
-                  height: 16px;
-                }
-              }
-            }
-
-            svg {
-              vertical-align: middle;
-              path {
-                fill: $font-color;
-              }
-            }
-
-            input[type=text] {
-              width: 80px;
-            }
-          }
         }
       }
     }

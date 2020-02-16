@@ -18,7 +18,6 @@ export default class InputRangeEditor extends UIElement {
         var value = Length.parse(this.props.value || Length.px(0));
         return {
             removable: this.props.removable === 'true',
-            calc:  this.props.calc === 'true'  ? true : false,
             label: this.props.label || '',
             min: +this.props.min || 0,
             max: +this.props.max || 100,
@@ -27,7 +26,6 @@ export default class InputRangeEditor extends UIElement {
             params: this.props.params || '',
             layout: this.props.layout || '',
             units,
-            type: (value.unit === 'calc' || value.unit === 'var') ? 'calc' : 'range',
             value
         }
     }
@@ -38,7 +36,7 @@ export default class InputRangeEditor extends UIElement {
 
     [LOAD('$body')] () {
 
-        var { min, max, step, label, calc, type, removable, layout } = this.state
+        var { min, max, step, label, removable, layout } = this.state
 
         var value = +this.state.value.value.toString()
 
@@ -52,12 +50,10 @@ export default class InputRangeEditor extends UIElement {
 
         return /*html*/`
         <div ${OBJECT_TO_PROPERTY({
-            'data-selected-type': type,
             'ref': '$range',
             'class': OBJECT_TO_CLASS({
                 'input-range-editor': true,
                 'has-label': !!label,
-                'has-calc': calc,
                 'is-removable': removable,
                 [layoutClass] : true 
             })

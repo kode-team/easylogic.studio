@@ -30,20 +30,6 @@ $border-radius: 3px;
         }
     }
 
-    &.has-calc {
-        grid-template-columns: 20px 1fr;
-
-        &.is-removable {
-            grid-template-columns: 20px 1fr 12px;
-        }
-
-        grid-column-gap: 2px;
-
-        .type-button {
-            display: inline-block;
-        }
-    }
-
     &.is-removable {
         grid-template-columns: 1fr 12px;        
         .remove {
@@ -52,23 +38,12 @@ $border-radius: 3px;
         }
     }
 
-    &.has-calc.has-label {
-        grid-template-columns: 60px 20px 1fr;
-        grid-column-gap: 2px;
-
-        &.is-removable {
-            grid-template-columns: 60px 20px 1fr 12px;
-        }
-
-    }
-
-    .type-button,
     .remove {
         display: none;        
     }
     
     .range-editor-type {
-        display: none;
+        display: grid;
         vertical-align: middle;
         grid-template-columns: 1fr 70px;     
         grid-column-gap: 4px;
@@ -76,7 +51,7 @@ $border-radius: 3px;
 
         .area {
             display: grid; 
-            grid-template-columns: 1fr 20px;
+            grid-template-columns: 1fr 24px;
             // grid-column-gap: 3px;
             font-size: 13px;
 
@@ -121,7 +96,8 @@ $border-radius: 3px;
                 background-color: $input-background-color;   
                 position: relative;             
                 border-bottom-right-radius: 3px;      
-                border-top-right-radius: 3px;                
+                border-top-right-radius: 3px;      
+                box-sizing: border-box;          
                 select {
                     position: absolute;
                     right:0px;
@@ -145,28 +121,5 @@ $border-radius: 3px;
                 }
             }
         }
-
-        &[data-type='calc'] {
-            .area {
-                height: 100%;
-                grid-template-columns: 60px 1fr;    
-
-                .select-editor {
-                    select {
-                        border-top-left-radius: 3px;
-                        border-bottom-left-radius: 3px;
-                        margin-left: 0px;
-                    }
-                }
-            }
-        }
     }
-
-    @each $display-type in calc, range {
-        &[data-selected-type="#{$display-type}"] {
-          .range-editor-type[data-type="#{$display-type}"] {
-            display: grid;
-          }
-        }
-      }
 } 

@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "../../../../util/UIElement";
-import { THROTTLE, IF, PREVENT, KEYDOWN, KEYUP, KEY, ENTER } from "../../../../util/Event";
+import { THROTTLE, IF, PREVENT, KEYDOWN, KEYUP, KEY, ENTER, CLICK } from "../../../../util/Event";
 import { editor } from "../../../../editor/editor";
 import icon from "../../icon/icon";
 
@@ -8,7 +8,8 @@ export default class KeyframeTimeControl extends UIElement {
         return /*html*/`
         <div class='keyframe-time-control'>
             <div class='time-manager'>
-                <label>${icon.timer} <input type="text" ref='$currentTime' /></label>
+                <button type="button" ref='$timer'>${icon.timer}</button>
+                <label><input type="text" ref='$currentTime' /></label>
                 <label>FPS <input type="number" ref='$fps' min="0" max="999" /></label>
                 <label><input type="text" ref='$duration' /></label>
             </div>
@@ -101,6 +102,17 @@ export default class KeyframeTimeControl extends UIElement {
         }
 
         return false; 
+    }
+
+    [CLICK('$timer')] () {
+        var artboard = editor.selection.currentArtboard;
+
+        if (artboard) {
+            artboard.seek(this.refs.$currentTime.value, (it => {
+                return true; 
+            }))
+            this.emit('playTimeline');
+        }
     }
 
     [KEYDOWN('$currentTime')] (e) {

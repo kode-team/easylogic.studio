@@ -12,7 +12,7 @@ export default class Inspector extends UIElement {
     return /*html*/`
       <div class="feature-control inspector">
         <div>
-          <div class="tab number-tab padding-10" data-selected-value="1" ref="$tab">
+          <div class="tab number-tab" data-selected-value="1" ref="$tab">
             <div class="tab-header" ref="$header">
               <div class="tab-item" data-value="1" title='${i18n('tab.title.style')}'>
                 <label class='icon'>${icon.palette}</label>
@@ -63,6 +63,10 @@ export default class Inspector extends UIElement {
               </div>
               <div class="tab-content scrollbar" data-value="2">
 
+                <PerspectiveProperty />
+                <PerspectiveOriginProperty />
+                <ExportProperty />
+                
                 <!-- ArtBoard --> 
                 <ArtBoardSizeProperty />              
 
@@ -73,17 +77,15 @@ export default class Inspector extends UIElement {
                 <PathDataProperty />
                 <PolygonDataProperty />
 
-                <ComponentProperty />
-
                 <!-- Image --> 
                 <ImageProperty />
 
                 <!-- <RootVariableProperty /> -->
                 <!-- <VariableProperty /> -->
 
-                <PerspectiveProperty />
-                <PerspectiveOriginProperty />
-                <ExportProperty />
+
+
+                <ComponentProperty />                
 
                 <div class='empty'></div>                
               </div>              
