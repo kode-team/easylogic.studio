@@ -50,11 +50,9 @@ export default class TransformOriginProperty extends BaseProperty {
 
   [EVENT('changeTransformOrigin')] (value) {
 
-    editor.selection.reset({ 
+    this.emit('SET_ATTRIBUTE', { 
       'transform-origin': value 
     })
-
-    this.emit("refreshSelectionStyleView");
   }
 
 }

@@ -72,19 +72,14 @@ export default class Inspector extends UIElement {
 
                 <!-- SVG Item --> 
                 <SVGTextProperty />        
-                <SVGItemProperty />
-                <!--ShapeInsideProperty /-->                
+                <SVGItemProperty />              
                 <PathDataProperty />
                 <PolygonDataProperty />
 
                 <!-- Image --> 
                 <ImageProperty />
 
-                <!-- <RootVariableProperty /> -->
-                <!-- <VariableProperty /> -->
-
-
-
+                <!-- Component -->
                 <ComponentProperty />                
 
                 <div class='empty'></div>                

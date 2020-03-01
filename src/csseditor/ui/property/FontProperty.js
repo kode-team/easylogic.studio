@@ -105,10 +105,8 @@ export default class FontProperty extends BaseProperty {
 
   [EVENT('changeRangeEditor')] (key, value) {
 
-    editor.selection.reset({ 
+    this.emit('SET_ATTRIBUTE', { 
       [key]: value
     })
-
-    this.emit("refreshSelectionStyleView");
   }
 }

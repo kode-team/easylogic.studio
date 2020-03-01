@@ -51,7 +51,12 @@ export default {
     'background.color.property.color': '배경색',
     'background.color.property.zindex': 'z-index',
     'background.color.property.opacity': '투명도',
-    'background.color.property.blend': '블렌드모드',    
+    'background.color.property.blend': '블렌드모드',   
+    'background.color.property.overflow': '오버플로우',
+    'background.color.property.overflow.visible': '보이기',
+    'background.color.property.overflow.hidden': '숨기기',
+    'background.color.property.overflow.scroll': '스크롤',
+    'background.color.property.overflow.auto': '자동',     
 
     'blend.normal': 'Normal(표준) 혼합모드',
     'blend.multiply': 'Multiply(곱하기) 모드',
@@ -406,5 +411,7 @@ export default {
     'svg.text.property.start.offset': "시작 지점",
 
     'fill.picker.popup.title': 'SVG Fragment picker',    
+
+    'gradient.editor.drag.message': '드래그 하면 중심점을 옮길 수 있습니다.',
 
 }

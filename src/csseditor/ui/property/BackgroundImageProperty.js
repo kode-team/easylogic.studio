@@ -59,13 +59,8 @@ export default class BackgroundImageProperty extends BaseProperty {
   }
 
   [EVENT('changeBackgroundImage') + DEBOUNCE(10)] (key, value) {
-    var current = editor.selection.current;
-    if (current) {
-      current.reset({
-        [key]: value 
-      })
-
-      this.emit("refreshElement", current);
-    }
+    this.emit('SET_ATTRIBUTE', {
+      [key]: value 
+    })
   }
 }

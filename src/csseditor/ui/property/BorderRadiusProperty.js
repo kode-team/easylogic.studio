@@ -42,11 +42,9 @@ export default class BorderRadiusProperty extends BaseProperty {
 
   [EVENT('changeBorderRadius')] (value) {
 
-    editor.selection.reset({
+    this.emit("SET_ATTRIBUTE", { 
       'border-radius': value 
     })
-
-    this.emit("refreshSelectionStyleView");
   }
 
 }

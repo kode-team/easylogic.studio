@@ -239,9 +239,8 @@ export default class SVGItemProperty extends BaseProperty {
   }
 
   [EVENT('changeValue')] (key, value, params) {
-    editor.selection.reset({ 
+    this.emit('SET_ATTRIBUTE', { 
       [key]: value
     })
-    this.emit("refreshSelectionStyleView");
   }
 }

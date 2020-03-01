@@ -56,11 +56,6 @@ export default class TextFillProperty extends BaseProperty {
   }
 
   [EVENT('changeRangeEditor')] (key, value) {
-
-    editor.selection.reset({ 
-      [key]: value
-    })
-
-    this.emit("refreshSelectionStyleView");
+    this.emit('SET_ATTRIBUTE', { [key]: value })
   }
 }

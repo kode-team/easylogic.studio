@@ -44,12 +44,9 @@ export default class BorderNewProperty extends BaseProperty {
   }  
 
   [EVENT('changeKeyValue')] (key, value) {
-
-    editor.selection.reset({
-      [key]: value 
+    this.emit("SET_ATTRIBUTE", { 
+      [key]: value
     })
-
-    this.emit("refreshSelectionStyleView");
   }
 
 }

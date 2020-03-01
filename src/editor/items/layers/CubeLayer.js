@@ -1,4 +1,4 @@
-import { CSS_TO_STRING, isObject, OBJECT_TO_PROPERTY } from "../../../util/functions/func";
+import { CSS_TO_STRING, OBJECT_TO_PROPERTY } from "../../../util/functions/func";
 import { Component } from "../Component";
 import { Length } from "../../unit/Length";
 import { editor } from "../../editor";
@@ -221,6 +221,8 @@ export class CubeLayer extends Component {
     if (this.json.x)  obj.left = this.json.x ;
     if (this.json.y)  obj.top = this.json.y ;    
 
+    obj.visibility = (this.json.visible) ? 'visible' : 'hidden';    
+
     return {
       ...obj,
       ...this.toKeyListCSS(
@@ -389,7 +391,7 @@ export class CubeLayer extends Component {
         <div xmlns="http://www.w3.org/1999/xhtml">
           <div style="${CSS_TO_STRING(css)}">
             ${faceKeys.map(key => {
-              return `<div class='front' style="${common};${keyCSS[key]}"></div>`
+              return `<div style="${common};${keyCSS[key]}"></div>`
             }).join('')}          
           </div>
         </div>

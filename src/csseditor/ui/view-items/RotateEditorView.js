@@ -62,9 +62,8 @@ export default class RotateEditorView extends UIElement {
         })
                  
         this.bindData('$rotateZ')
-        this.emit('refreshCanvasForPartial', null, false, true)
+        this.emit('refreshSelectionStyleView', null, false, true)
         editor.selection.setRectCache()
-        this.emit('refreshSelectionStyleView')
 
     }
 
@@ -104,8 +103,7 @@ export default class RotateEditorView extends UIElement {
         })
         this.bindData('$rotateContainer');
         editor.selection.setRectCache()        
-        this.emit('refreshCanvasForPartial', null, false, true)       
-        this.emit('refreshSelectionStyleView'); 
+        this.emit('refreshSelectionStyleView', null, false, true)       
     }
 
     [POINTERSTART('$rotateArea') + MOVE('moveRotateXY') + END('moveEndRotateXY')] () {
@@ -122,7 +120,7 @@ export default class RotateEditorView extends UIElement {
 
         this.bindData('$rotateContainer');
 
-        this.emit('refreshCanvasForPartial', null, false, true)
+        this.emit('refreshSelectionStyleView', null, false, true)
 
     }
 
@@ -162,8 +160,7 @@ export default class RotateEditorView extends UIElement {
         })
         this.bindData('$rotateZ');        
         editor.selection.setRectCache()        
-        this.emit('refreshCanvasForPartial', null, false, true)        
-        this.emit('refreshSelectionStyleView')        
+        this.emit('refreshSelectionStyleView', null, false, true)        
     }
 
     [POINTERSTART('$handle') + MOVE() + END()] () {
@@ -175,7 +172,7 @@ export default class RotateEditorView extends UIElement {
 
         this.bindData('$rotateZ');
 
-        this.emit('refreshCanvasForPartial', null, false, true)
+        this.emit('refreshSelectionStyleView', null, false, true)
 
     }
 

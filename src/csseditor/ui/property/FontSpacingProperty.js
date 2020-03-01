@@ -59,11 +59,9 @@ export default class FontSpacingProperty extends BaseProperty {
       value = Length.number(value.value)
     }
 
-    editor.selection.reset({ 
+    this.emit('SET_ATTRIBUTE', { 
       [key]: value
     })
-
-    this.emit("refreshSelectionStyleView");
   }
 
 }

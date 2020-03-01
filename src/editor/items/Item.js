@@ -218,7 +218,6 @@ export class Item {
    */
   getDefaultObject(obj = {}) {
     var id = uuidShort()
-    // console.log(id, this);
     return {
       id,
       visible: true,  // 보이기 여부 설정 

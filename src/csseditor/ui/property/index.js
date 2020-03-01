@@ -1,5 +1,4 @@
 import BackgroundColorProperty from "./BackgroundColorProperty";
-// import BorderProperty from "./BorderProperty";
 import BorderRadiusProperty from "./BorderRadiusProperty";
 import SizeProperty from "./SizeProperty";
 import BoxShadowProperty from "./BoxShadowProperty";
@@ -10,15 +9,12 @@ import TextShadowProperty from "./TextShadowProperty";
 import TextProperty from "./TextProperty";
 import FontSpacingProperty from "./FontSpacingProperty";
 import BorderImageProperty from "./BorderImageProperty";
-import OutlineProperty from "./OutlineProperty";
 import AnimationProperty from "./AnimationProperty";
 import KeyframeProperty from "./KeyframeProperty";
 import BackgroundImageProperty from "./BackgroundImageProperty";
 import FilterProperty from "./FilterProperty";
 import CodeViewProperty from "./CodeViewProperty";
 import BackdropFilterProperty from "./BackdropFilterProperty";
-import VariableProperty from "./VariableProperty";
-import RootVariableProperty from "./RootVariableProperty";
 import TransformProperty from "./TransformProperty";
 import ClipPathProperty from "./ClipPathProperty";
 import TransitionProperty from "./TransitionProperty";
@@ -53,7 +49,6 @@ import PathDataProperty from "./PathDataProperty";
 import PolygonDataProperty from "./PolygonDataProperty";
 import SVGTextProperty from "./SVGTextProperty";
 import ExportProperty from "./ExportProperty";
-import ShapeInsideProperty from "./ShapeInsideProperty";
 import LayoutProperty from "./LayoutProperty";
 import FlexLayoutItemProperty from "./FlexLayoutItemProperty";
 import GridLayoutItemProperty from "./GridLayoutItemProperty";
@@ -63,7 +58,6 @@ export default {
   GridLayoutItemProperty,
   FlexLayoutItemProperty,
   LayoutProperty,
-  ShapeInsideProperty,
   ExportProperty,
   SVGTextProperty,
   PolygonDataProperty,
@@ -97,8 +91,6 @@ export default {
   TransitionProperty,
   ClipPathProperty,
   TransformProperty,
-  RootVariableProperty,
-  VariableProperty,
   BackdropFilterProperty,
   CodeViewProperty,  
   FilterProperty,
@@ -106,7 +98,6 @@ export default {
   BackgroundImageProperty,
   KeyframeProperty,
   AnimationProperty,
-  OutlineProperty,
   BorderImageProperty,
   FontSpacingProperty,
   TextProperty,
@@ -117,6 +108,5 @@ export default {
   BoxShadowProperty,
   SizeProperty,
   BorderRadiusProperty,
-  // BorderProperty,
   BackgroundColorProperty,
 };

@@ -2,9 +2,35 @@ import BaseProperty from "./BaseProperty";
 import { editor } from "../../../editor/editor";
 import { DEBOUNCE } from "../../../util/Event";
 import { EVENT } from "../../../util/UIElement";
-import { blend_list } from "../../../editor/util/Resource";
 
 const blendI18n = editor.initI18n('blend')
+const overflowI18n = editor.initI18n('background.color.property.overflow')
+
+const blend_list = [
+  "normal",
+  "multiply",
+  "screen",
+  "overlay",
+  "darken",
+  "lighten",
+  "color-dodge",
+  "color-burn",
+  "hard-light",
+  "soft-light",
+  "difference",
+  "exclusion",
+  "hue",
+  "saturation",
+  "color",
+  "luminosity"
+];
+
+const overflow_list = [
+  'visible',
+  'hidden',
+  'scroll',
+  'auto'
+]
 
 export default class BackgroundColorProperty extends BaseProperty {
 
@@ -13,10 +39,16 @@ export default class BackgroundColorProperty extends BaseProperty {
   }
 
   getBlendList () {
-    return blend_list.split(',').map(it => {
+    return blend_list.map(it => {
       return `${it}:${blendI18n(it)}`
     }).join(',');
   }
+
+  getOverflowList () {
+    return overflow_list.map(it => {
+      return `${it}:${overflowI18n(it)}`
+    }).join(',');
+  }  
 
   getBody() {
     return /*html*/`
@@ -60,6 +92,18 @@ export default class BackgroundColorProperty extends BaseProperty {
             options="${this.getBlendList()}" 
             onchange="changeSelect" />
         </div>        
+
+        <div class='property-item animation-property-item'>
+          <span class='add-timeline-property' data-property='overflow'></span>
+          <SelectEditor 
+            label='${editor.i18n('background.color.property.overflow')}'
+            ref='$overflow' 
+            removable='true'
+            key='overflow' 
+            icon="true" 
+            options="${this.getOverflowList()}" 
+            onchange="changeSelect" />
+        </div>                
       `;
   }  
 
@@ -71,16 +115,15 @@ export default class BackgroundColorProperty extends BaseProperty {
       this.children.$zIndex.setValue(current['z-index'] || 0)
       this.children.$opacity.setValue(current.opacity || '1')
       this.children.$mixBlend.setValue(current['mix-blend-mode'])
+      this.children.$overflow.setValue(current['overflow'])
     }
   }
 
 
   [EVENT('changeSelect')] (key, value) {
-       editor.selection.reset({
-        [key]: value
-      })
- 
-    this.emit("refreshSelectionStyleView");
+    this.emit("SET_ATTRIBUTE", { 
+      [key]: value
+    })
   }
 
   [EVENT('changeColor')] (key, color) {

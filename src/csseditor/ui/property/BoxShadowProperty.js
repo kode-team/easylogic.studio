@@ -50,11 +50,9 @@ export default class BoxShadowProperty extends BaseProperty {
 
   [EVENT("changeBoxShadow")](boxshadow) {
 
-    editor.selection.reset({ 
+    this.emit('SET_ATTRIBUTE', { 
       'box-shadow': boxshadow
     })
-
-    this.emit("refreshSelectionStyleView");
 
   }
 }

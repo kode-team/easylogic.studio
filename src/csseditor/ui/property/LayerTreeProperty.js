@@ -351,10 +351,11 @@ export default class LayerTreeProperty extends BaseProperty {
       var id = $item.attr('data-layer-id');
 
       var item = artboard.searchById(id);      
-      item.toggle('visible')
-      e.$delegateTarget.attr('data-visible', item.visible);
+      e.$delegateTarget.attr('data-visible', !item.visible);
 
-      this.emit('refreshElement', item);
+      this.emit('SET_ATTRIBUTE', {
+        visible: !item.visible
+      }, item.id)
     }
   }
 
@@ -366,10 +367,12 @@ export default class LayerTreeProperty extends BaseProperty {
       var id = $item.attr('data-layer-id');
 
       var item = artboard.searchById(id);
-      item.toggle('lock')
-      e.$delegateTarget.attr('data-lock', item.lock);
+      
+      e.$delegateTarget.attr('data-lock', !item.lock);
 
-      this.emit('refreshElement', item);
+      this.emit('SET_ATTRIBUTE', {
+        lock: !item.lock
+      }, item.id)
     }
   }
 

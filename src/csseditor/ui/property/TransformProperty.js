@@ -8,8 +8,6 @@ import { EVENT } from "../../../util/UIElement";
 import icon from "../icon/icon";
 import { Transform } from "../../../editor/css-property/Transform";
 
-
-
 var transformList = [
 
   'rotate',
@@ -83,19 +81,11 @@ export default class TransformProperty extends BaseProperty {
   }
 
   [EVENT('changeTransformEditor')] (transform) {
-
-    editor.selection.reset({ 
-      transform
+    this.emit('SET_ATTRIBUTE', { 
+      transform: (item) => {
+        return Transform.replaceAll(item.transform, transform)
+      }
     })
-
-    editor.selection.each(item => {
-      item.reset({
-        transform: Transform.replaceAll(item.transform, transform)
-      })
-    })
-
-    this.emit("refreshSelectionStyleView");
-
   }
 
   [EVENT('refreshSelection', 'refreshSelectionStyleView', 'refreshStyleView', 'refreshRect') + DEBOUNCE(100)] () {

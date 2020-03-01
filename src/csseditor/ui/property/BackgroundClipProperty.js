@@ -3,15 +3,6 @@ import { editor } from "../../../editor/editor";
 import { LOAD, DEBOUNCE } from "../../../util/Event";
 import { EVENT } from "../../../util/UIElement";
 
-
-const clip_list = [
-  '',
-  "padding-box",
-  "border-box",
-  "content-box",
-  "text"
-];
-
 export default class BackgroundClipProperty extends BaseProperty {
   
   getTitle() {
@@ -34,22 +25,12 @@ export default class BackgroundClipProperty extends BaseProperty {
   }
 
   [EVENT('changeSelect')] (key, value) {
-    var current = editor.selection.current;
-
-    if (current) {
-      current.reset({
+      this.emit('SET_ATTRIBUTE', {
         [key]: value
       })
-
-      this.emit("refreshElement", current);
-    }
   }
 
-
-
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
-
     this.refreshShowIsNot('artboard')
-
   }  
 }

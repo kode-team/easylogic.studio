@@ -58,16 +58,15 @@ export default class LayoutProperty extends BaseProperty {
   }
 
   [EVENT('changeLayoutInfo')] (key, value) {
-    editor.selection.reset({
+    this.emit('SET_ATTRIBUTE', { 
       [key]: value
     })
 
-    this.emit('refreshStyleView');  // 전체 새로 고침 
     this.emit('refreshAllElementBoundSize');    
   }
 
   [EVENT('changeLayoutType')] (key, value) {
-    editor.selection.reset({
+    this.emit('SET_ATTRIBUTE', { 
       [key]: value
     })
 
@@ -76,7 +75,6 @@ export default class LayoutProperty extends BaseProperty {
 
     this.refresh();
 
-    this.emit('refreshStyleView');  // 전체 새로 고침 
     this.emit('refreshAllElementBoundSize');
     this.emit('changeItemLayout')
   }

@@ -51,11 +51,10 @@ export default class PositionProperty extends BaseProperty {
 
   [EVENT('changRangeEditor')] (key, value) {
 
-    editor.selection.reset({
+    this.emit('SET_ATTRIBUTE', { 
       [key]: value
     })
 
-    this.emit('refreshSelectionStyleView'); 
     this.emit('refreshAllElementBoundSize')    
   }
 }

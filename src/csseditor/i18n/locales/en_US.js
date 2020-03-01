@@ -51,6 +51,11 @@ export default {
     'background.color.property.zindex': 'z-index',
     'background.color.property.opacity': 'Opacity',
     'background.color.property.blend': 'Blend',
+    'background.color.property.overflow': 'Overflow',
+    'background.color.property.overflow.visible': 'Visible',
+    'background.color.property.overflow.hidden': 'Hidden',
+    'background.color.property.overflow.scroll': 'Scroll',
+    'background.color.property.overflow.auto': 'Auto',
 
     'blend.normal': 'normal',
     'blend.multiply': 'multiply',
@@ -404,5 +409,5 @@ export default {
 
     'fill.picker.popup.title': 'SVG Fragment picker',
 
-
+    'gradient.editor.drag.message': 'Drag if you want to move center pointer.',
 }

@@ -96,11 +96,10 @@ export default class FlexLayoutItemProperty extends BaseProperty {
 
   [EVENT('changeFlexItem')] (key, value) {
 
-    editor.selection.reset({
+    this.emit('SET_ATTRIBUTE', { 
       'flex-layout-item': this.getFlexValue()
     })
 
-    this.emit('refreshSelectionStyleView');  // 전체 새로 고침 
     this.emit('refreshAllElementBoundSize')    
   }
 
@@ -113,14 +112,13 @@ export default class FlexLayoutItemProperty extends BaseProperty {
       value = this.getFlexValue()
     }
 
-    editor.selection.reset({
+    this.emit('SET_ATTRIBUTE', { 
       'flex-layout-item': value
     })
 
     // 타입 변화에 따른 하위 아이템들의 설정을 바꿔야 한다. 
     this.refs.$layoutList.attr('data-selected-value', valueType);
 
-    this.emit('refreshSelectionStyleView');  // 전체 새로 고침 
     this.emit('refreshAllElementBoundSize')    
   }
 

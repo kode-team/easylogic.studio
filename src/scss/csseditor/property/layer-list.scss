@@ -36,7 +36,7 @@
 
                     path,polygon {
                         fill: transparent;
-                        stroke: $list-item-selected-font-color;
+                        stroke: $list-item-font-color;
                     }
                 }
             }            
@@ -92,7 +92,18 @@
         }
 
         &.selected {
-            @include title-background-2($list-item-selected-color, $list-item-selected-font-color);        
+            @include title-background-2($list-item-selected-color, $list-item-selected-font-color);   
+            
+            .detail {
+                span.icon {
+                    svg {
+                        path,polygon {
+                            fill: transparent;
+                            stroke: $list-item-selected-font-color;
+                        }
+                    }
+                }            
+            }
         }
 
         &[data-layout='flex'],

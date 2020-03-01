@@ -45,20 +45,19 @@ export default class ImageProperty extends BaseProperty {
   [EVENT('changeImageSize')] (key, value) {
     var [width, height] = value.split('x').map(it => Length.px(it))
 
-    editor.selection.reset({
+    this.emit('SET_ATTRIBUTE', { 
       width, height
     })
-
-    this.emit('refreshElement')
   }
 
   [CLICK('$resize')] () {
     var current = editor.selection.current;
 
     if (current) {
-      current.resize();
-
-      this.emit('refreshElement', current);        
+      this.emit('SET_ATTRIBUTE', { 
+        width: current.naturalWidth.clone(),
+        height: current.naturalHeight.clone()
+      }, current.id)
     }
 
   }
@@ -91,8 +90,12 @@ export default class ImageProperty extends BaseProperty {
         ...info
       })
 
-      this.emit('refreshElement', current);
       this.bindData('$sizeInfo')
+
+      this.emit('SET_ATTRIBUTE', {
+        src: value,
+        ...info
+      }, current.id);      
     }
   }
 

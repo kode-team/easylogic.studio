@@ -58,11 +58,9 @@ export default class PerspectiveOriginProperty extends BaseProperty {
 
   [EVENT('changePerspectiveOrigin')] (value) {
 
-    editor.selection.reset({ 
+    this.emit('SET_ATTRIBUTE', { 
       'perspective-origin': value 
     })
-
-    this.emit("refreshSelectionStyleView");
   }
 
 }

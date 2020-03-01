@@ -179,7 +179,6 @@ export default class SelectionToolView extends SelectionToolBind {
             <div class='selection-tool-item' data-position='move' ref='$selectionMove' title='move'>
                 <span ref='$selectionIcon'>${icon.flag}</span>
                 <span ref='$selectionTitle'></span>
-                <span ref='$selectionInfo'></span>
             </div>       
             <div class='selection-tool-item' data-position='to top right'></div>
             <div class='selection-tool-item' data-position='to bottom right'></div>
@@ -239,7 +238,7 @@ export default class SelectionToolView extends SelectionToolBind {
 
         this.refreshSelectionToolView(dx, dy);
         this.parent.updateRealPosition();    
-        this.emit('refreshCanvasForPartial', null, false)     
+        this.emit('refreshSelectionStyleView', null, false)     
         
 
         if (this.pointerType === 'move') {
@@ -286,7 +285,7 @@ export default class SelectionToolView extends SelectionToolBind {
         this.refs.$selectionTool.attr('data-selected-position', '');
         this.refs.$selectionTool.attr('data-selected-movetype', '');
 
-        this.emit('refreshCanvasForPartial', null, false, true)
+        this.emit('refreshSelectionStyleView', null, false, true)
         this.refreshSelectionToolView(dx, dy);   
 
         this.emit('refreshAllElementBoundSize');            
@@ -404,21 +403,17 @@ export default class SelectionToolView extends SelectionToolBind {
 
             var length = editor.selection.length;
             var title = ''; 
-            var info = '';
 
             if (length === 1) {
                 var current = editor.selection.current
                 title = current.title || current.getDefaultTitle();
                 this.refs.$selectionIcon.html(current.getIcon());  
-                info = `${current.width} x ${current.height}`;               
             } else if (length >= 2) {
-                title = 'multi';
-                info = `count : ${length}`;
+                title = `multi : ${length}`;
                 this.refs.$selectionIcon.html(icon.flag);                
             }
  
             this.refs.$selectionTitle.text(title)
-            this.refs.$selectionInfo.text(info)            
             this.refs.$selectionMove.attr('title', title)
         }
     }

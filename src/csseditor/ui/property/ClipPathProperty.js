@@ -83,15 +83,13 @@ export default class ClipPathProperty extends BaseProperty {
     var current = editor.selection.current;
     if (!current) return;
 
-    current['clip-path'] = '';
-
-    this.refresh();
-    
-    this.emit("refreshElement", current);
+    this.emit('SET_ATTRIBUTE', { 'clip-path': '' }, current.id);    
+    this.refresh();    
     this.emit('hideClipPathPopup');    
+
   }
 
-  [EVENT('refreshSelection', 'refreshSelectionStyleView') + DEBOUNCE(100)] () {
+  [EVENT('refreshSelection') + DEBOUNCE(100)] () {
     this.refreshShowIsNot(['project', 'artboard']);
   }
 
@@ -117,7 +115,10 @@ export default class ClipPathProperty extends BaseProperty {
     if (current) {
       current['clip-path'] = this.refs.$clipPathSelect.value;
 
-      this.emit("refreshElement", current);
+      
+      this.emit("SET_ATTRIBUTE", {
+        'clip-path':  this.refs.$clipPathSelect.value
+      }, current.id);
     }
 
     this.refresh();
@@ -164,11 +165,14 @@ export default class ClipPathProperty extends BaseProperty {
     if (!current) return;
 
     current.reset({
-      'clip-path': `path(${data.d})`
-    }); 
+      'clip-path': `path(${data.d})`      
+    })
 
     this.refresh();
-    this.emit("refreshElement", current);
+
+    this.emit('SET_ATTRIBUTE', {
+      'clip-path': `path(${data.d})`
+    }, current.id);            
   }
 
   [EVENT('changeClipPathPopup')] (data) {
@@ -179,7 +183,7 @@ export default class ClipPathProperty extends BaseProperty {
     current.reset(data); 
 
     this.refresh();
-    this.emit("refreshElement", current);
+    this.emit('SET_ATTRIBUTE', data, current.id);        
   }
 
 }

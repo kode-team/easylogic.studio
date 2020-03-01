@@ -60,11 +60,9 @@ export default class TextProperty extends BaseProperty {
 
   [EVENT('changeTextValue')] (key, value) {
 
-    editor.selection.reset({ 
+    this.emit('SET_ATTRIBUTE', { 
       [key]: value
     })
-
-    this.emit("refreshSelectionStyleView");
   }
 
 }

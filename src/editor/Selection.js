@@ -1,4 +1,4 @@
-import { isFunction, isUndefined } from "../util/functions/func";
+import { isFunction, isUndefined, isArray } from "../util/functions/func";
 import { Length } from "./unit/Length";
 import AreaItem from "./items/AreaItem";
 
@@ -15,7 +15,7 @@ function _traverse(obj, id) {
     results.push(..._traverse(it, id));
   })
 
-  if (obj.id === id) {
+  if (id.includes(obj.id)) {
     results.push(obj);
   }
 
@@ -165,6 +165,14 @@ export class Selection {
 
   empty () {
     this.select()
+  }
+
+  itemsByIds(ids = null) {
+    if (isArray(ids)) {
+      return _traverse(this.artboard, ids)
+    } else {
+      return this.items;
+    }
   }
 
   selectById(id) {

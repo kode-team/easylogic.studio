@@ -13,7 +13,7 @@ import { Gradient } from "../image-resource/Gradient";
 import { convertMatches, reverseMatches } from "../../util/functions/parser";
 
 
-const RepeatList = ["repeat", "no-repeat", "repeat-x", "repeat-y"];
+const RepeatList = ["repeat", "no-repeat", "repeat-x", "repeat-y", 'round', 'space'];
 const reg = /((linear\-gradient|repeating\-linear\-gradient|radial\-gradient|repeating\-radial\-gradient|conic\-gradient|repeating\-conic\-gradient|url)\(([^\)]*)\))/gi;
 
 export class BackgroundImage extends Property {

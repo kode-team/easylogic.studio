@@ -26,19 +26,15 @@ export default class TextClipProperty extends BaseProperty {
     var current = editor.selection.current || {};
 
     var clip = current['text-clip'] || ''
-    return `<SelectEditor ref='$1' key='text-clip' icon="true" value="${clip}" options=",text" onchange="changeSelect" />`;
+    return /*html*/`
+      <SelectEditor ref='$1' key='text-clip' icon="true" value="${clip}" options=",text" onchange="changeSelect" />
+    `;
   }
 
   [EVENT('changeSelect')] (key, value) {
-    var current = editor.selection.current;
-
-    if (current) {
-      current.reset({
+      this.emit('SET_ATTRIBUTE', {
         [key]: value
       })
-
-      this.emit("refreshElement", current);
-    }
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {

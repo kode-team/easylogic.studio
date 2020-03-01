@@ -381,9 +381,7 @@ export default class ElementView extends UIElement {
 
         }
 
-
         this.children.$selectionTool.refreshSelectionToolView(dx, dy, 'move');
-
 
         this.emit('refreshElement', current);
         editor.selection.setRectCache()                
@@ -451,8 +449,7 @@ export default class ElementView extends UIElement {
             
         } else {
             editor.selection.select(editor.selection.currentArtboard)
-        }
-        // this.emit('refreshSelection')           
+        }    
 
         this.emit('initSelectionTool')
 
@@ -493,8 +490,7 @@ export default class ElementView extends UIElement {
             this.trigger('addElement');
         }
 
-        // var current = editor.selection.current || { id : ''} 
-        // this.selectCurrent(current);        
+
         this.emit('initSelectionTool')
     }
 

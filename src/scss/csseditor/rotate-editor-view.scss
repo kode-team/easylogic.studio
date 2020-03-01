@@ -154,7 +154,21 @@
             transform-style: preserve-3d;     
 
             pointer-events: none;     
-            perspective: 1000px;                      
+            perspective: 1000px;         
+            
+            &[style=""] {
+                .rotate-x {
+                    transform: rotateX(89deg) translateZ(0px);
+                    border: 1px solid $font-color;
+                    border-radius: 0px;
+                }
+
+                .rotate-y {
+                    transform: rotateY(89deg) translateZ(0px);                    
+                    border:1px solid $font-color;
+                    border-radius: 0px;                    
+                }
+            }
         }
 
         .rotate-item {

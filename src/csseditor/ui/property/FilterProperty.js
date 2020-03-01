@@ -107,10 +107,9 @@ export default class FilterProperty extends BaseProperty {
 
   [EVENT('changeFilterEditor')] (filter) {
 
-    editor.selection.reset({ filter })
-
-    this.emit("refreshSelectionStyleView");
-
+    this.emit('SET_ATTRIBUTE', { 
+      filter 
+    })
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)] () {

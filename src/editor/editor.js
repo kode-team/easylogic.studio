@@ -4,18 +4,6 @@ import { TimelineSelection } from "./TimelineSelection";
 import i18n from "../csseditor/i18n";
 import { loadItem, saveItem } from "./util/Resource";
 import theme from "../csseditor/ui/theme";
- 
-function blobToDataURL(blob) {
-  return new Promise(function(resolve) {
-    var fileReader = new FileReader();
-    fileReader.onload = function(e) {
-      // ATTENTION: to have the same result than the Flash object we need to split
-      // our result to keep only the Base64 part
-      resolve(e.target.result);
-    };
-    fileReader.readAsDataURL(blob);
-  });
-}
 
 export const EDITOR_ID = "";
 

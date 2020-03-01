@@ -3,7 +3,7 @@ import UIElement, { EVENT } from "../../../util/UIElement";
 import { editor } from "../../../editor/editor";
 import { DEBOUNCE, LOAD } from "../../../util/Event";
 import Dom from "../../../util/Dom";
-import { CSS_TO_STRING } from "../../../util/functions/func";
+import { CSS_TO_STRING, isArray, isString } from "../../../util/functions/func";
 import { Project } from "../../../editor/items/Project";
 
 export default class StyleView extends UIElement {
@@ -137,8 +137,30 @@ export default class StyleView extends UIElement {
     this.load('$svgArea');
   }
 
-  [EVENT('refreshSelectionStyleView')] () {
-    editor.selection.each(item => {
+  /**
+   * 
+   * @param {String|Object|Array<string>|Array<object>} obj  ,  id 리스트를 만들기 위한 객체, 없으면 selection에 있는 객체 전체
+   */
+  [EVENT('refreshSelectionStyleView')] (obj = null) {
+    var ids = obj; 
+
+    if (isArray(obj)) {
+      ids = obj
+    } else if (obj !== null) {
+      ids = [obj]
+    }
+
+    let items = [] 
+
+    if (!ids) {
+      items = editor.selection.items
+    } else if (isString(ids[0])) {
+      items = editor.selection.itemsByIds(ids);
+    } else {
+      items = ids; 
+    }
+
+    items.forEach(item => {
       this.refreshStyleHeadOne(item, true);
     })
   }  

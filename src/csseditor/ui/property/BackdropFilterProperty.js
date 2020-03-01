@@ -107,11 +107,9 @@ export default class BackdropFilterProperty extends BaseProperty {
 
   [EVENT('changeFilterEditor')] (filter) {
 
-    editor.selection.reset({ 
+    this.emit("SET_ATTRIBUTE", { 
       'backdrop-filter' : filter 
     })
-
-    this.emit("refreshSelectionStyleView");
 
   }
 

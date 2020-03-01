@@ -143,13 +143,8 @@ export default class ComponentProperty extends BaseProperty {
 
   [EVENT('changeComponentProperty')] (key, value) {
 
-
-    editor.selection.each(item => {
-      if (item.is('component')) {
-        item.reset({ [key]: value })
-      }
-    })
-    this.emit('refreshSelectionStyleView', null, true);
-
+    this.emit("SET_ATTRIBUTE", {
+      [key]: value
+    }, null, true)
   }
 }

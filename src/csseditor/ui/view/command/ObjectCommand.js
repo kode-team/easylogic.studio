@@ -4,6 +4,7 @@ import { Length } from "../../../../editor/unit/Length";
 import Color from "../../../../util/Color";
 import PathStringManager from "../../../../editor/parse/PathStringManager";
 import PathParser from "../../../../editor/parse/PathParser";
+import { isFunction } from "../../../../util/functions/func";
 
 export default class ObjectCommand extends UIElement {
 
@@ -350,6 +351,39 @@ export default class ObjectCommand extends UIElement {
           editor.selection.select(current);
           this.refreshSelection();
         }
+    }
+
+    [COMMAND('refreshElement')] (current, isChangeFragment = false) {
+        // 화면 사이즈 조정         
+        this.emit('refreshSelectionStyleView', current, isChangeFragment, current && current.enableHasChildren() === false)
+
+        // 화면 레이아웃 재정렬 
+        this.emit('refreshElementBoundSize', editor.selection.getRootItem(current))
+    }
+    
+
+    /**
+     * 속성 변화 command 실행 
+     * 
+     * @param {Object} attrs 적용될 속성 객체 
+     * @param {Array<string>} ids 아이디 리스트 
+     * @param {Boolean} isChangeFragment 중간 색상 변화 여부 
+     */
+    [COMMAND('SET_ATTRIBUTE')] (attrs, ids = null, isChangeFragment = false) {
+        editor.selection.itemsByIds(ids).forEach(item => {
+
+            Object.keys(attrs).forEach(key => {
+                const value = attrs[key];
+                if (isFunction(value)) {
+                    value = value();
+                }
+
+                item.reset({ [key] : value });
+            })
+
+            this.trigger('refreshElement', item, isChangeFragment);
+        });
+        // { type: 'SET_ATTRIBUTE', attrs, ids, isChangeFragment}
     }
 
 }

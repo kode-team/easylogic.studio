@@ -57,6 +57,8 @@ var presetPosition = {
   'bottom right': [ '100%', '100%' ]
 }
 
+const i18n = editor.initI18n('gradient.editor');
+
 export default class GradientEditor extends UIElement  {
 
   components() {
@@ -99,7 +101,7 @@ export default class GradientEditor extends UIElement  {
     return /*html*/`
         <div class='gradient-editor' data-selected-editor='${type}'>
             <div class='gradient-preview'>
-              <div class='gradient-view' ref='$gradientView'></div>
+              <div class='gradient-view' ref='$gradientView' title='${i18n('drag.message')}'></div>
               <div class='drag-pointer' ref='$dragPosition'></div>
               <div class='preset-position'>
                 <div data-value='top' title='top'>${icon.chevron_right}</div>

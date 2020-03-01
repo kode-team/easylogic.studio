@@ -178,8 +178,7 @@ export default class ArtBoardSizeProperty extends BaseProperty {
       width = Length.px(width);
       height = Length.px(height);
 
-      current.reset({ width, height });
-      this.emit("refreshElement", current);
+      this.emit("SET_ATTRIBUTE", { width, height}, current.id)
     }
   }
 }

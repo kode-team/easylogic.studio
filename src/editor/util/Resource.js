@@ -44,7 +44,6 @@ export const filter_list = [
     'svg',
   ];
 
-
 export const blend_list = [
   "normal",
   "multiply",
