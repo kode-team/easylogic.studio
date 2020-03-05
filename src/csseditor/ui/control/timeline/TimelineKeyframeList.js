@@ -32,7 +32,10 @@ export default class TimelineKeyframeList extends UIElement {
             var artboard = editor.selection.currentArtboard;             
             var [id] = value.split(',').map(it =>it.trim());
             var pathLayer = artboard.searchById(id);
-            value = pathLayer.d; 
+            if (pathLayer) {
+                value = pathLayer.d; 
+            }
+
         } else {
             value = null; 
         }

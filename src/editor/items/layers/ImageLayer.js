@@ -113,30 +113,29 @@ export class ImageLayer extends Layer {
     return this.toSVG(x, y);
   }
 
-  toSVG (x, y) {
+  toSVG (x, y, isRoot = false) {
     var {width, height, src} = this.json;
     var css = this.toCSS();
 
-    delete css.left;
-    delete css.top;
-    if (css.position === 'absolute') {
-      delete css.position; 
+    if (isRoot) {
+
+      delete css.left;
+      delete css.top;      
+      if (css.position === 'absolute') {
+        delete css.position; 
+      }
+
+      return this.wrapperRootSVG(x, y, width, height, /*html*/`
+        <img style="${CSS_TO_STRING(css)}" src="${src} "/>
+      `)
+
+    } else {
+      return /*html*/ `
+        ${this.toDefString}      
+        <img style="${CSS_TO_STRING(css)}" src="${src} "/>
+      `
     }
 
-    return /*html*/`
-    <g transform="translate(${x}, ${y})">
-    ${this.toDefString}
-      <foreignObject ${OBJECT_TO_PROPERTY({ 
-        width: width.value,
-        height: height.value,
-        overflow: 'visible'
-      })}>
-        <div xmlns="http://www.w3.org/1999/xhtml">
-          <img style="${CSS_TO_STRING(css)}" src="${src} "/>
-        </div>
-      </foreignObject>    
-    </g>
-`
   }     
 
 }

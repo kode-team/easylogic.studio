@@ -12,8 +12,6 @@ export default class ExportProperty extends BaseProperty {
     return i18n('title');
   }
 
-
-
   [EVENT('refreshSelection', 'refreshContent') + DEBOUNCE(100)]() {
 
     this.refreshShowIsNot('project');

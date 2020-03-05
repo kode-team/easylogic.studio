@@ -1,8 +1,8 @@
-import { CSS_TO_STRING, OBJECT_TO_PROPERTY } from "../../../util/functions/func";
 import { Component } from "../Component";
 import { Length } from "../../unit/Length";
 import { editor } from "../../editor";
 import icon from "../../../csseditor/ui/icon/icon";
+import { CSS_TO_STRING } from "../../../util/functions/func";
 
 const faceKeys = [
   'front', 'back', 'left', 'right', 'bottom', 'top'
@@ -358,9 +358,15 @@ export class CubeLayer extends Component {
 
 
   get svg () {
-    var {width, height, x, y, src} = this.json;
-    x = x.value;
-    y = y.value;
+    var x = this.json.x.value; 
+    var y = this.json.y.value; 
+    return this.toSVG(x, y)
+  }    
+
+
+  toSVG (x, y, isRoot = false) {
+    var {width, height} = this.json;
+
     var css = this.toCSS();
     var nestedCSS = this.toNestedCSS();
 
@@ -374,31 +380,35 @@ export class CubeLayer extends Component {
       keyCSS[key] = keyCSS[key].cssText.replace(/\n/g, '');
     })
 
-    delete css.left;
-    delete css.top;
-    if (css.position === 'absolute') {
-      delete css.position; 
+    if (isRoot) {
+      
+      delete css.left;
+      delete css.top;      
+      if (css.position === 'absolute') {
+        delete css.position; 
+      }
+
+      return this.wrapperRootSVG(x, y, width, height, /*html*/`
+        <div style="${CSS_TO_STRING(css)}">
+          ${faceKeys.map(key => {
+            return `<div style="${common};${keyCSS[key]}"></div>`
+          }).join('')}          
+        </div>   
+      `)
+
+    } else {
+
+      return /*html*/`
+        ${this.toDefString}
+        <div style="${CSS_TO_STRING(css)}">
+          ${faceKeys.map(key => {
+            return `<div style="${common};${keyCSS[key]}"></div>`
+          }).join('')}          
+        </div>
+      `
     }
 
-    return /*html*/`
-    <g transform="translate(${x}, ${y})">
-    ${this.toDefString}
-      <foreignObject ${OBJECT_TO_PROPERTY({ 
-        width: width.value,
-        height: height.value,
-        overflow: 'visible'
-      })}>
-        <div xmlns="http://www.w3.org/1999/xhtml">
-          <div style="${CSS_TO_STRING(css)}">
-            ${faceKeys.map(key => {
-              return `<div style="${common};${keyCSS[key]}"></div>`
-            }).join('')}          
-          </div>
-        </div>
-      </foreignObject>    
-    </g>
-`
-  }    
+  }     
 
 }
 

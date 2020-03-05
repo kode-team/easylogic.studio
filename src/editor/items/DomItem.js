@@ -736,17 +736,7 @@ ${this.toSelectorString(prefix)}
     return this.toSVG(x, y)
   }  
 
-  toSVG (x = 0, y = 0) {
-    var {layers, width, height, elementType} = this.json;
-    var tagName = elementType || 'div'
-    var css = this.toCSS();
-
-    delete css.left;
-    delete css.top;
-    if (css.position === 'absolute') {
-      delete css.position; 
-    }
-
+  wrapperRootSVG (x, y, width, height, content) {
     return /*html*/`
     <g transform="translate(${x}, ${y})">
       ${this.toDefString}
@@ -755,16 +745,44 @@ ${this.toSelectorString(prefix)}
         height: height.value
       })}>
         <div xmlns="http://www.w3.org/1999/xhtml">
-          <${tagName} style="${CSS_TO_STRING(css)}" ></${tagName}>
+          ${content}
         </div>
       </foreignObject>    
-      ${layers.map(it => it.svg).join('\n\t')}      
+      
     </g>
     `
   }
 
+  toSVG (x = 0, y = 0, isRoot = false) {
+    var {layers, width, height, elementType} = this.json;
+    var tagName = elementType || 'div'
+    var css = this.toCSS();
+
+    if (isRoot) {
+
+      delete css.left;
+      delete css.top;      
+      if (css.position === 'absolute') {
+        delete css.position; 
+      }
+
+      return this.wrapperRootSVG(x, y, width, height, /*html*/`
+          <${tagName} style="${CSS_TO_STRING(css)}" >
+            ${layers.map(it => it.svg).join('\n\t')}      
+          </${tagName}>      
+      `)
+    } else {
+      return /*html*/`
+        ${this.toDefString}
+        <${tagName} style="${CSS_TO_STRING(css)}" >
+          ${layers.map(it => it.svg).join('\n\t')}      
+        </${tagName}>
+      `
+    }
+  }
+
   get rootSVG () {
-    return this.toSVG()
+    return this.toSVG(0, 0, true)
   }  
 
 
