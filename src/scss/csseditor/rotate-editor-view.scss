@@ -156,7 +156,8 @@
             pointer-events: none;     
             perspective: 1000px;         
             
-            &[style=""] {
+            &[style=""],
+            &:not([style]) {
                 .rotate-x {
                     transform: rotateX(89deg) translateZ(0px);
                     border: 1px solid $font-color;
