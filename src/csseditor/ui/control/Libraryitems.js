@@ -24,7 +24,7 @@ export default class LibraryItems extends UIElement {
   }
 
 [CLICK('$el .path-item')] (e) {
-  var $el = e.$delegateTarget;
+  var $el = e.$dt;
   var $svg = $el.$('svg');
   var $path = $svg.$('path');
 
@@ -33,7 +33,7 @@ export default class LibraryItems extends UIElement {
   var pathString = $path.attr('d');
   var rect = {x: +x, y: +y, width: +width, height: +height} 
 
-  this.emit('convert.path', pathString, rect);
+  this.emit('convertPath', pathString, rect);
 }
 
 }

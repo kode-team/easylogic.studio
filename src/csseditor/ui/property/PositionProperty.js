@@ -1,13 +1,10 @@
 import BaseProperty from "./BaseProperty";
 import { LOAD, DEBOUNCE } from "../../../util/Event";
-import { editor } from "../../../editor/editor";
 import { EVENT } from "../../../util/UIElement";
-
-const i18n = editor.initI18n('position.property')
 
 export default class PositionProperty extends BaseProperty {
   getTitle() {
-    return i18n('title');
+    return this.$i18n('position.property.title');
   }
 
   [EVENT('refreshSelection', 'refreshRect') + DEBOUNCE(100)]() {
@@ -27,7 +24,7 @@ export default class PositionProperty extends BaseProperty {
   }
 
   [LOAD("$positionItem")]() {
-    var current = editor.selection.current;
+    var current = this.$selection.current;
     if (!current) return '';
 
     return /*html*/`
@@ -42,8 +39,8 @@ export default class PositionProperty extends BaseProperty {
         </div>
       </div>
       <div style='display: grid;grid-template-columns: repeat(2, 1fr); grid-column-gap: 10px; text-align: center;padding: 4px 0px;'>
-        <span>${i18n('X')}</span>
-        <span>${i18n('Y')}</span>
+        <span>${this.$i18n('position.property.X')}</span>
+        <span>${this.$i18n('position.property.Y')}</span>
       </div>      
     `;
   }
@@ -51,7 +48,7 @@ export default class PositionProperty extends BaseProperty {
 
   [EVENT('changRangeEditor')] (key, value) {
 
-    this.emit('SET_ATTRIBUTE', { 
+    this.emit('setAttribute', { 
       [key]: value
     })
 

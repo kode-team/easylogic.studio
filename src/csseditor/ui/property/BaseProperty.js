@@ -2,7 +2,6 @@ import { CLICK, PREVENT, STOP } from "../../../util/Event";
 import UIElement from "../../../util/UIElement";
 
 import propertyEditor from "../property-editor";
-import { editor } from "../../../editor/editor";
 import Dom from "../../../util/Dom";
 import { isFunction } from "../../../util/functions/func";
 import icon from "../icon/icon";
@@ -79,7 +78,7 @@ export default class BaseProperty extends UIElement {
   }
 
   [CLICK("$title label")](e) {
-    var $dom = e.$delegateTarget.parent();
+    var $dom = e.$dt.parent();
 
     var isAddProperty = Dom.create(e.target).hasClass('add-timeline-property')
 
@@ -90,7 +89,7 @@ export default class BaseProperty extends UIElement {
   }
 
   [CLICK("$title .icon")](e) {
-    var $dom = e.$delegateTarget.parent();
+    var $dom = e.$dt.parent();
 
     if ($dom.hasClass("property-title")) {
       this.$el.toggleClass("show");
@@ -99,15 +98,15 @@ export default class BaseProperty extends UIElement {
   }
 
   [CLICK('$el .property-body .add-timeline-property') + PREVENT + STOP] (e) {
-    var property = e.$delegateTarget.attr('data-property')
-    var editor = e.$delegateTarget.attr('data-editor')
+    var property = e.$dt.attr('data-property')
+    var editor = e.$dt.attr('data-editor')
 
     this.emit('add.timeline.current.property', { property, editor })
   }
 
   [CLICK('$el .property-title .add-timeline-property') + PREVENT + STOP] (e) {
-    var property = e.$delegateTarget.attr('data-property')
-    var editor = e.$delegateTarget.attr('data-editor')
+    var property = e.$dt.attr('data-property')
+    var editor = e.$dt.attr('data-editor')
 
     this.emit('add.timeline.current.property', { property, editor })
   }  
@@ -134,7 +133,7 @@ export default class BaseProperty extends UIElement {
 
   refreshShowIsNot (type = '', isRefresh = true ) {
 
-    var current = editor.selection.current;
+    var current = this.$selection.current;
     if (current) {
       if (type.includes(current.itemType)) {
         this.hide();
@@ -150,7 +149,7 @@ export default class BaseProperty extends UIElement {
 
   refreshShow (type, isRefresh = true) {
 
-    var current = editor.selection.current;
+    var current = this.$selection.current;
     if (current) {
 
       if  (isFunction(type) && type()) {

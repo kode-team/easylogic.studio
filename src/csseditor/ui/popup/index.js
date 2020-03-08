@@ -7,7 +7,6 @@ import TransitionPropertyPopup from "./TransitionPropertyPopup";
 import SVGPropertyPopup from "./SVGPropertyPopup";
 import SelectorPopup from "./SelectorPopup";
 import ColorPickerPopup from "./ColoPickerPopup";
-// import FillPopup from "./FillPopup";
 import ImageSelectPopup from "./ImageSelectPopup";
 import GradientPickerPopup from "./GradientPickerPopup";
 import SVGFilterPopup from "./SVGFilterPopup";
@@ -23,7 +22,6 @@ export default {
   SVGFilterPopup,
   GradientPickerPopup,
   ImageSelectPopup,
-  // FillPopup,
   ColorPickerPopup,
   SelectorPopup,
   SVGPropertyPopup,

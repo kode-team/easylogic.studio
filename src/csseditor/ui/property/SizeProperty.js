@@ -1,9 +1,6 @@
 import BaseProperty from "./BaseProperty";
-import { editor } from "../../../editor/editor";
 import { EVENT } from "../../../util/UIElement";
-import { DEBOUNCE, THROTTLE } from "../../../util/Event";
-
-const i18n = editor.initI18n('size.property');
+import { THROTTLE } from "../../../util/Event";
 
 export default class SizeProperty extends BaseProperty {
 
@@ -12,7 +9,7 @@ export default class SizeProperty extends BaseProperty {
   }  
 
   getTitle() {
-    return i18n('title');
+    return this.$i18n('size.property.title');
   }
 
   [EVENT('refreshSelection')]() {
@@ -24,7 +21,7 @@ export default class SizeProperty extends BaseProperty {
   }
 
   refresh() {
-    var current = editor.selection.current;
+    var current = this.$selection.current;
     if (current) {
       this.children.$width.setValue(current.width);
       this.children.$height.setValue(current.height);
@@ -44,15 +41,15 @@ export default class SizeProperty extends BaseProperty {
         </div>      
       </div>
       <div style='display: grid;grid-template-columns: repeat(2, 1fr); grid-column-gap: 10px; text-align: center;padding: 4px 0px;'>
-        <span>${i18n('width')}</span>
-        <span>${i18n('height')}</span>
+        <span>${this.$i18n('size.property.width')}</span>
+        <span>${this.$i18n('size.property.height')}</span>
       </div>
     `;
   }
 
   [EVENT('changRangeEditor')] (key, value) {
 
-    this.emit('SET_ATTRIBUTE', { 
+    this.emit('setAttribute', { 
       [key]: value
     })
 

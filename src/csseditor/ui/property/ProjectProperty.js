@@ -1,15 +1,13 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, CLICK, KEYUP, KEY, PREVENT, STOP, FOCUSOUT, DOUBLECLICK, VDOM, KEYDOWN, ENTER } from "../../../util/Event";
-import { editor } from "../../../editor/editor";
+import { LOAD, CLICK, PREVENT, STOP, FOCUSOUT, DOUBLECLICK, VDOM, KEYDOWN, ENTER } from "../../../util/Event";
 import icon from "../icon/icon";
-import { Project } from "../../../editor/items/Project";
 
 import { EVENT } from "../../../util/UIElement";
 
 
 export default class ProjectProperty extends BaseProperty {
   getTitle() {
-    return editor.i18n('project.property.title');
+    return this.$i18n('project.property.title');
   }
 
   getClassName() {
@@ -17,13 +15,13 @@ export default class ProjectProperty extends BaseProperty {
   }
 
   getTools() {
-    return `
+    return /*html*/`
       <button type='button' ref='$add' title="Add a project">${icon.add}</button>
     `
   }
 
   [CLICK('$add')] () {
-    this.emit('add.project');
+    this.emit('addProject');
   }
 
   getBody() {
@@ -33,11 +31,11 @@ export default class ProjectProperty extends BaseProperty {
   }
 
   [LOAD("$projectList") + VDOM]() {
-    var projects = editor.projects || [];
+    var projects = this.$editor.projects || [];
     
 
     return projects.map( (project, index) => {
-      var selected = project === editor.selection.currentProject ? 'selected' : '';
+      var selected = project === this.$selection.currentProject ? 'selected' : '';
       return /*html*/`
         <div class='project-item ${selected}'>
           <div class='detail'>
@@ -53,13 +51,13 @@ export default class ProjectProperty extends BaseProperty {
 
 
   [DOUBLECLICK('$projectList .project-item')] (e) {
-    this.startInputEditing(e.$delegateTarget.$('label'))
+    this.startInputEditing(e.$dt.$('label'))
   }
 
   modifyDoneInputEditing (input) {
     this.endInputEditing(input, (index, text) => {
 
-      var project = editor.projects[index]
+      var project = this.$editor.projects[index]
       if (project) {
         project.reset({
           name: text
@@ -69,12 +67,12 @@ export default class ProjectProperty extends BaseProperty {
   }
 
   [KEYDOWN('$projectList .project-item label') + ENTER + PREVENT + STOP] (e) {
-    this.modifyDoneInputEditing(e.$delegateTarget);
+    this.modifyDoneInputEditing(e.$dt);
     return false;
   }
 
   [FOCUSOUT('$projectList .project-item label') + PREVENT  + STOP ] (e) {
-    this.modifyDoneInputEditing(e.$delegateTarget);
+    this.modifyDoneInputEditing(e.$dt);
   }
 
 
@@ -82,11 +80,11 @@ export default class ProjectProperty extends BaseProperty {
   selectProject (project) {
 
     if (project) {
-      editor.selection.selectProject(project)
+      this.$selection.selectProject(project)
 
       if (project.artboards.length) {
-        editor.selection.selectArtboard(project.artboards[0])
-        editor.selection.select();
+        this.$selection.selectArtboard(project.artboards[0])
+        this.$selection.select();
       }
     }
 
@@ -95,18 +93,18 @@ export default class ProjectProperty extends BaseProperty {
   }
 
   [CLICK('$projectList .project-item label')] (e) {
-    var index = +e.$delegateTarget.attr('data-index')
+    var index = +e.$dt.attr('data-index')
 
-    this.selectProject(editor.projects[index])
+    this.selectProject(this.$editor.projects[index])
   }
 
 
   [CLICK('$projectList .project-item .remove')] (e) {
-    var index = +e.$delegateTarget.attr('data-index')
+    var index = +e.$dt.attr('data-index')
 
-    editor.projects.splice(index);
+    this.$editor.projects.splice(index);
 
-    var project = editor.projects[index] || editor.projects[index - 1];
+    var project = this.$editor.projects[index] || this.$editor.projects[index - 1];
 
     this.selectProject(project);
   }

@@ -15,7 +15,7 @@ export default class AddSphere extends MenuItem {
 
   clickButton(e) {
 
-    this.emit('add.type', 'sphere');
+    this.emit('addComponentType', 'sphere');
   }
 
 }

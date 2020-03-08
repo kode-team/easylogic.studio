@@ -1,7 +1,6 @@
 import UIElement, { EVENT } from "../../../../util/UIElement";
-import { CLICK, LOAD, DEBOUNCE, VDOM, SCROLL } from "../../../../util/Event";
+import { CLICK, LOAD, DEBOUNCE, VDOM } from "../../../../util/Event";
 import icon from "../../icon/icon";
-import { editor } from "../../../../editor/editor";
 
 const PROPERTY_TITLE = {
   'stroke-dasharray': 'Stroke Dash Array',
@@ -21,7 +20,7 @@ export default class TimelineObjectList extends UIElement {
     }
 
     makeTimelineObjectRow (animation) {
-        var artboard = editor.selection.currentArtboard;
+        var artboard = this.$selection.currentArtboard;
 
         var obj =  artboard.searchById(animation.id)
 
@@ -29,7 +28,7 @@ export default class TimelineObjectList extends UIElement {
             return; 
         }
 
-        var selected = editor.timeline.checkLayer(obj.id);
+        var selected = this.$timeline.checkLayer(obj.id);
         var layer = artboard.searchById(obj.id)        
 
         return /*html*/`
@@ -44,7 +43,7 @@ export default class TimelineObjectList extends UIElement {
             </div>
 
             ${animation.properties.map(property => {
-                var selected = editor.timeline.checkProperty(obj.id, property.property)
+                var selected = this.$timeline.checkProperty(obj.id, property.property)
 
                 return /*html*/ `
                 <div class='timeline-object-row layer-property' data-selected='${selected}' data-layer-id='${obj.id}' data-property='${property.property}'>
@@ -72,7 +71,7 @@ export default class TimelineObjectList extends UIElement {
     
     [LOAD() + VDOM] () {
 
-        var artboard = editor.selection.currentArtboard;
+        var artboard = this.$selection.currentArtboard;
 
         if (!artboard) return '';
 
@@ -90,7 +89,7 @@ export default class TimelineObjectList extends UIElement {
         it.attr('data-selected', "false");
       })
 
-      editor.timeline.each(it => {
+      this.$timeline.each(it => {
         var $el = this.$el.$(`[data-layer-id="${it.layerId}"][data-property="${it.property}"]`)
         
         $el && $el.attr('data-selected', 'true')
@@ -98,34 +97,38 @@ export default class TimelineObjectList extends UIElement {
     }
 
     [CLICK('$el .timeline-object-row.layer .title')] (e) {
-        var container = e.$delegateTarget.closest('timeline-object');
+        var container = e.$dt.closest('timeline-object');
         
         container.toggleClass('collapsed')
 
-        var layerId = e.$delegateTarget.closest('timeline-object-row').attr('data-layer-id')
+        var layerId = e.$dt.closest('timeline-object-row').attr('data-layer-id')
 
-        editor.timeline.selectLayer(layerId)
-        editor.timeline.toggleLayerContainer(container.attr('data-timeline-animation-id'));
+        this.$timeline.selectLayer(layerId)
+        this.$timeline.toggleLayerContainer(container.attr('data-timeline-animation-id'));
 
         this.refreshSelection();
         this.emit('toggleTimelineObjectRow', layerId, container.hasClass('collapsed'))        
     }
 
     [CLICK('$el .timeline-object-row.layer .add-property')] (e) {
-        var $row = e.$delegateTarget.closest('timeline-object-row');
+        var $row = e.$dt.closest('timeline-object-row');
         var property = $row.$('.property-select').val()
-        var layerId = e.$delegateTarget.attr('data-layer-id')
+        var layerId = e.$dt.attr('data-layer-id')
 
 
         if (property) {
-            var current = editor.selection.current;
+            var current = this.$selection.current;
 
-            this.emit('add.timeline.property', {layerId, property, value: current[property]})
+            this.emit('add.timeline.property', {
+              layerId, 
+              property, 
+              value: current[property]
+            })
         }
     }
 
     [CLICK('$el .timeline-object-row.layer .remove-timeline')] (e) {
-      var layerId = e.$delegateTarget.attr('data-layer-id')
+      var layerId = e.$dt.attr('data-layer-id')
 
 
       if (layerId) {
@@ -134,8 +137,8 @@ export default class TimelineObjectList extends UIElement {
   }
 
     [CLICK('$el .timeline-object-row.layer-property .add')] (e) {
-      var layerId = e.$delegateTarget.attr('data-layer-id')
-      var property = e.$delegateTarget.attr('data-property')
+      var layerId = e.$dt.attr('data-layer-id')
+      var property = e.$dt.attr('data-property')
 
       if (property) {
         this.emit('copy.timeline.property', layerId, property)
@@ -143,8 +146,8 @@ export default class TimelineObjectList extends UIElement {
     }
 
     [CLICK('$el .timeline-object-row.layer-property .remove')] (e) {
-      var layerId = e.$delegateTarget.attr('data-layer-id')
-      var property = e.$delegateTarget.attr('data-property')
+      var layerId = e.$dt.attr('data-layer-id')
+      var property = e.$dt.attr('data-property')
 
       if (property) {
         this.emit('remove.timeline.property', layerId, property)
@@ -152,9 +155,9 @@ export default class TimelineObjectList extends UIElement {
     }    
 
     [CLICK('$el .timeline-object-row.layer-property .title')] (e) {
-      var [layerId, property] = e.$delegateTarget.closest('timeline-object-row').attrs('data-layer-id', 'data-property')
+      var [layerId, property] = e.$dt.closest('timeline-object-row').attrs('data-layer-id', 'data-property')
 
-      editor.timeline.selectProperty(layerId, property)
+      this.$timeline.selectProperty(layerId, property)
 
       this.refreshSelection();
 

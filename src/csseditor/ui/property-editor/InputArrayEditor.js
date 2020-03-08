@@ -13,7 +13,7 @@ export default class InputArrayEditor extends UIElement {
     }
 
     template () {
-        return `<div class='small-editor input-array-editor' ref='$body' ></div>`
+        return /*html*/`<div class='small-editor input-array-editor' ref='$body' ></div>`
     }
 
     [BIND('$body')] () {
@@ -49,7 +49,7 @@ export default class InputArrayEditor extends UIElement {
 
     [INPUT('$body input')] (e) {
 
-        var $el = e.$delegateTarget;
+        var $el = e.$dt;
         var index = +$el.attr('data-index')
         var value = +$el.value
 

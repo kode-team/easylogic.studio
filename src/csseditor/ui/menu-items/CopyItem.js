@@ -1,5 +1,4 @@
 import MenuItem from "./MenuItem";
-import { editor } from "../../../editor/editor";
 import { EVENT } from "../../../util/UIElement";
  
 export default class CopyItem extends MenuItem {
@@ -12,7 +11,7 @@ export default class CopyItem extends MenuItem {
 
   clickButton(e) {
 
-      editor.selection.copy();
+      this.$selection.copy();
 
       this.emit('refreshAll')
       this.emit('refreshSelection');

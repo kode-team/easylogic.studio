@@ -1,6 +1,5 @@
 import UIElement, { EVENT } from "../../../../util/UIElement";
 import { RESIZE, DEBOUNCE, THROTTLE } from "../../../../util/Event";
-import { editor } from "../../../../editor/editor";
 
 export default class KeyframeTimeGridView extends UIElement {
     template () {
@@ -16,7 +15,7 @@ export default class KeyframeTimeGridView extends UIElement {
     }
 
     currentTimeline () {
-        var currentArtboard = editor.selection.currentArtboard;
+        var currentArtboard = this.$selection.currentArtboard;
 
         if (currentArtboard) {
             return currentArtboard.getSelectedTimeline();
@@ -31,8 +30,8 @@ export default class KeyframeTimeGridView extends UIElement {
 
 
     refreshCanvas() {
-
-        var timeline = this.currentTimeline();
+        const strokeStyle = this.$theme('timeline_line_color'); 
+        const timeline = this.currentTimeline();
 
         if (timeline) {
             var originalRect = this.$el.rect()
@@ -46,7 +45,7 @@ export default class KeyframeTimeGridView extends UIElement {
                 var restX = 10;             
 
                 var left =  (currentTime - displayStartTime)/(displayEndTime - displayStartTime) * realWidth;
-                this.drawOption({strokeStyle: editor.themeValue('timeline_line_color'), lineWidth: 1})
+                this.drawOption({strokeStyle, lineWidth: 1})
                 this.drawLine(left + restX, 0, left + restX, rect.height)
             })
         }

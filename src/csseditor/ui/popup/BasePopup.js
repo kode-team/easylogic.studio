@@ -3,13 +3,11 @@ import { POINTERSTART, MOVE, END, CLICK } from "../../../util/Event";
 import { Length } from "../../../editor/unit/Length";
 import UIElement, { EVENT } from "../../../util/UIElement";
 import icon from "../icon/icon";
-import { editor } from "../../../editor/editor";
-
 
 export default class BasePopup extends UIElement {
 
   template() {
-    return `
+    return /*html*/`
         <div class='popup ${this.getClassName()}'>
             <div class='popup-title' ref="$title">
                 <label>${this.getTitle()}</label>
@@ -68,7 +66,7 @@ export default class BasePopup extends UIElement {
       .css({
         top: realTop,
         left: realLeft,
-        'z-index': editor.zIndex
+        'z-index': this.$editor.zIndex
       })
       .show("inline-block");
   }

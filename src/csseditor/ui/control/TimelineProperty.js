@@ -10,8 +10,6 @@ import TimelineValueEditor from "./timeline/TimelineValueEditor";
 import { EVENT } from "../../../util/UIElement";
 import TimelinePlayControl from "./timeline/TimelinePlayControl";
 import TimelineAnimationProperty from "../property/TimelineAnimationProperty";
-import { editor } from "../../../editor/editor";
-
 
 export default class TimelineProperty extends BaseProperty {
 
@@ -33,7 +31,7 @@ export default class TimelineProperty extends BaseProperty {
   }
 
   getTitle() {
-    return editor.i18n('timeline.property.title'); 
+    return this.$i18n('timeline.property.title'); 
   } 
 
   getTools() {

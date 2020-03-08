@@ -8,7 +8,7 @@ export default {
   createCSSEditor(opts = { type: "white" }) {
     return App.start({
       components: { CSSEditor },
-      template: `<CSSEditor ${opts.embed ? 'embed="true"' : ""} />`,
+      template: /*html*/`<CSSEditor ${opts.embed ? 'embed="true"' : ""} />`,
       ...opts
     });
   },

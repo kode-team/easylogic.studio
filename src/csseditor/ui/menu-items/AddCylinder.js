@@ -19,7 +19,7 @@ export default class AddCylinder extends MenuItem {
 
   clickButton(e) {
 
-    this.emit('add.type', 'cylinder');
+    this.emit('addComponentType', 'cylinder');
   }
 
 }

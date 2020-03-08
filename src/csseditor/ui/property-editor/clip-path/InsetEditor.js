@@ -163,8 +163,8 @@ export default class InsetEditor extends UIElement {
 
     [POINTERSTART('$area .clip-area-handle') + MOVE('moveClipArea')] (e) {
 
-        this.type = e.$delegateTarget.attr('data-type');
-        this.$target = e.$delegateTarget;
+        this.type = e.$dt.attr('data-type');
+        this.$target = e.$dt;
         this.areaRect = this.refs.$area.rect(); 
         this.startXY = e.xy; 
 
@@ -215,8 +215,8 @@ export default class InsetEditor extends UIElement {
 
     [POINTERSTART('$area .drag-pointer') + MOVE()] (e) {
 
-        this.type = e.$delegateTarget.attr('data-type');
-        this.$target = e.$delegateTarget;
+        this.type = e.$dt.attr('data-type');
+        this.$target = e.$dt;
         this.areaRect = this.refs.$area.rect(); 
         this.startXY = e.xy; 
     }

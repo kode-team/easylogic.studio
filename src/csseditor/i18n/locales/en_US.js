@@ -42,6 +42,8 @@ export default {
 
     'alignment.property.title': 'Alignment',
     'position.property.title': 'Position',
+    'position.property.X': 'X',
+    'position.property.Y': 'Y',
     'size.property.title': 'Size',
     'size.property.width': 'Width',
     'size.property.height': 'Height',

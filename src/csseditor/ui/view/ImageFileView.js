@@ -17,7 +17,7 @@ export default class ImageFileView extends UIElement {
         })
     }
 
-    [EVENT('addImage')] (rect) {
+    [EVENT('openImage')] (rect) {
         this.state.rect = rect; 
         this.refs.$file.click();
     }

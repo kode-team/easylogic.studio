@@ -94,7 +94,7 @@ export default class SelectIconEditor extends UIElement {
 
     [CLICK('$options .select-icon-item')] (e) {
 
-        var value = e.$delegateTarget.attr('data-value')
+        var value = e.$dt.attr('data-value')
 
         this.updateData({
             value

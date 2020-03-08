@@ -7,7 +7,6 @@ import SelectEditor from "../property-editor/SelectEditor";
 import InsetEditor from "../property-editor/clip-path/InsetEditor";
 import PolygonEditor from "../property-editor/clip-path/PolygonEditor";
 import BasePopup from "./BasePopup";
-import { editor } from "../../../editor/editor";
 import EllipseEditor from "../property-editor/clip-path/EllipseEditor";
 
 
@@ -55,7 +54,7 @@ export default class ClipPathPopup extends BasePopup {
   }
 
   [LOAD('$clippathType')] () {
-    return `
+    return /*html*/`
       <div>${this.state.type} Editor</div>
     `
   }
@@ -63,18 +62,18 @@ export default class ClipPathPopup extends BasePopup {
   [LOAD('$clippath')] () {
     switch(this.state.type) {
     case 'circle':
-      return `<CircleEditor ref='$circle' key='circle' value='${this.state.value}' onchange='changeClipPath' />`
+      return /*html*/`<CircleEditor ref='$circle' key='circle' value='${this.state.value}' onchange='changeClipPath' />`
     case 'ellipse':
-      return `<EllipseEditor ref='$ellipse' key='ellipse' value='${this.state.value}' onchange='changeClipPath' />`
+      return /*html*/`<EllipseEditor ref='$ellipse' key='ellipse' value='${this.state.value}' onchange='changeClipPath' />`
     case 'inset':
-      return `<InsetEditor ref='$inset' key='inset' value='${this.state.value}' onchange='changeClipPath' />`      
+      return /*html*/`<InsetEditor ref='$inset' key='inset' value='${this.state.value}' onchange='changeClipPath' />`      
     case 'polygon':
-      return `<PolygonEditor ref='$polygon' key='polygon' value='${this.state.value}' onchange='changeClipPath' />`            
+      return /*html*/`<PolygonEditor ref='$polygon' key='polygon' value='${this.state.value}' onchange='changeClipPath' />`            
     case 'path':
-      return `<PathEditor ref='$path' key='path' value='${this.state.value}' onchange='changeClipPath' />`
+      return /*html*/`<PathEditor ref='$path' key='path' value='${this.state.value}' onchange='changeClipPath' />`
     case 'svg':
 
-        var current = editor.selection.currentProject || {svg: []} 
+        var current = this.$selection.currentProject || {svg: []} 
 
         var options = current.svg.filter(it => it.type === 'clip-path').map(it => it.name).join(',')
         
@@ -82,9 +81,9 @@ export default class ClipPathPopup extends BasePopup {
           options = ',' + options
         }
 
-        return `<SelectEditor ref='$svg' key='svg' value='${this.state.value}' options='${options}' onchange='changeClipPath' />`
+        return /*html*/`<SelectEditor ref='$svg' key='svg' value='${this.state.value}' options='${options}' onchange='changeClipPath' />`
     default: 
-      return `<div class='type none'></div>`
+      return /*html*/`<div class='type none'></div>`
     }
     
   }

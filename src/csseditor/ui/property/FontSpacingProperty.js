@@ -1,15 +1,12 @@
 import BaseProperty from "./BaseProperty";
-import { editor } from "../../../editor/editor";
 import { EVENT } from "../../../util/UIElement";
 import { Length } from "../../../editor/unit/Length";
 import { DEBOUNCE } from "../../../util/Event";
 
-const i18n = editor.initI18n('font.spacing.property')
-
 export default class FontSpacingProperty extends BaseProperty {
 
   getTitle() {
-    return i18n('title');
+    return this.$i18n('font.spacing.property.title');
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
@@ -18,7 +15,7 @@ export default class FontSpacingProperty extends BaseProperty {
 
   refresh() {
     
-    var current = editor.selection.current;
+    var current = this.$selection.current;
 
     if (current) {
       this.children.$lineHeight.setValue(current['line-height'] || Length.number(1))
@@ -34,21 +31,21 @@ export default class FontSpacingProperty extends BaseProperty {
     <div class='property-item'>
       <RangeEditor 
         ref='$lineHeight' 
-        label='${i18n('lineHeight')}' 
+        label='${this.$i18n('font.spacing.property.lineHeight')}' 
         key="line-height" 
         units=",px,%,em"
         onchange="changeRangeEditor" />
     </div>       
       <div class="property-item font-item">
-        <RangeEditor ref='$letter' label='${i18n('letterSpacing')}' key="letter-spacing" onchange="changeRangeEditor" />
+        <RangeEditor ref='$letter' label='${this.$i18n('font.spacing.property.letterSpacing')}' key="letter-spacing" onchange="changeRangeEditor" />
       </div>
 
       <div class="property-item font-item">
-        <RangeEditor ref='$word' label='${i18n('wordSpacing')}' key="word-spacing" onchange="changeRangeEditor" />
+        <RangeEditor ref='$word' label='${this.$i18n('font.spacing.property.wordSpacing')}' key="word-spacing" onchange="changeRangeEditor" />
       </div>
 
       <div class="property-item font-item">
-        <RangeEditor ref='$indent' label='${i18n('indent')}' key="text-indent" onchange="changeRangeEditor" />
+        <RangeEditor ref='$indent' label='${this.$i18n('font.spacing.property.indent')}' key="text-indent" onchange="changeRangeEditor" />
       </div>      
     `;
   }
@@ -59,7 +56,7 @@ export default class FontSpacingProperty extends BaseProperty {
       value = Length.number(value.value)
     }
 
-    this.emit('SET_ATTRIBUTE', { 
+    this.emit('setAttribute', { 
       [key]: value
     })
   }

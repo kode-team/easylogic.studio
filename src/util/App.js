@@ -6,9 +6,8 @@ import {
 } from "../csseditor/types/event";
 import BaseStore from "./BaseStore";
 import UIElement, { EVENT } from "./UIElement";
-
-import { editor } from "../editor/editor";
 import { debounce } from "./functions/func";
+import { Editor } from "../editor/Editor";
 
 const EMPTY_POS = { x: 0, y: 0 };
 const DEFAULT_POS = { x: Number.MAX_SAFE_INTEGER, y: Number.MAX_SAFE_INTEGER };
@@ -23,7 +22,9 @@ export const start = opt => {
         modules: [...this.getModuleList(), ...modules]
       });
 
-      editor.setStore(this.$store);
+      this.$editor = new Editor({
+        $store: this.$store
+      })
 
       this.$container = Dom.create(this.getContainer());
       this.$container.addClass(this.getClassName());
@@ -43,13 +44,13 @@ export const start = opt => {
     }
 
     modifyBodyMoveSecond(ms = MOVE_CHECK_MS) {
-      editor.config.set("body.move.ms", ms);
-      this.funcBodyMoves = debounce(this.loopBodyMoves.bind(this), editor.config.get("body.move.ms"));
+      this.$config.set("body.move.ms", ms);
+      this.funcBodyMoves = debounce(this.loopBodyMoves.bind(this), this.$config.get("body.move.ms"));
     }
 
     loopBodyMoves() {
-      var pos = editor.config.get("pos");
-      var lastPos = editor.config.get("lastPos") || DEFAULT_POS;
+      var pos = this.$config.get("pos");
+      var lastPos = this.$config.get("lastPos") || DEFAULT_POS;
       var isNotEqualLastPos = !(lastPos.x === pos.x && lastPos.y === pos.y);
 
       if (isNotEqualLastPos && this.moves.size) {      
@@ -61,16 +62,18 @@ export const start = opt => {
           }
         });
 
-        editor.config.set('lastPos', pos);
+        this.$config.set('lastPos', pos);
       }
       requestAnimationFrame(this.funcBodyMoves);
     }
 
     removeBodyMoves() {
-      var pos = editor.config.get("pos");
-      this.ends.forEach(v => {
-        v.func.call(v.context, pos.x - v.xy.x, pos.y - v.xy.y, 'end');
-      });
+      var pos = this.$config.get("pos");
+      if (pos) {
+        this.ends.forEach(v => {
+          v.func.call(v.context, pos.x - v.xy.x, pos.y - v.xy.y, 'end');
+        });  
+      }
 
       this.moves.clear();
       this.ends.clear();
@@ -107,8 +110,8 @@ export const start = opt => {
     [POINTERMOVE("document")](e) {
       var newPos = e.xy || EMPTY_POS;
 
-      editor.config.set("bodyEvent", e);
-      editor.config.set("pos", newPos);
+      this.$config.set("bodyEvent", e);
+      this.$config.set("pos", newPos);
 
       if (!this.requestId) {
         this.requestId = requestAnimationFrame(this.funcBodyMoves);
@@ -117,7 +120,7 @@ export const start = opt => {
 
     [POINTEREND("document") + DEBOUNCE(30)](e) {
       // var newPos = e.xy || EMPTY_POS;
-      editor.config.set("bodyEvent", e);
+      this.$config.set("bodyEvent", e);
       this.removeBodyMoves();
       this.requestId = null;
     }

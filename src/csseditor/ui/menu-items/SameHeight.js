@@ -14,7 +14,7 @@ export default class SameHeight extends MenuItem {
     return true; 
   }
   clickButton(e) {
-    Sort.sameHeight();
+    Sort.sameHeight(this.$editor);
     this.emit('refreshSelectionStyleView')
     this.emit('refreshSelectionTool')
   }

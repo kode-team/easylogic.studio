@@ -3,8 +3,6 @@ import { Length } from "../../../editor/unit/Length";
 import icon from "../icon/icon";
 import UIElement, { EVENT } from "../../../util/UIElement";
 import RangeEditor from "./RangeEditor";
-import { editor } from "../../../editor/editor";
-
 
 const typeList = [
   { key: "perspective-origin-x", title: "X" },
@@ -80,7 +78,7 @@ export default class PerspectiveOriginEditor extends UIElement {
 
 
   [CLICK('$direction .pos')] (e) {
-    var direct = e.$delegateTarget.attr('data-value');
+    var direct = e.$dt.attr('data-value');
     
     this.state.isAll = false; 
     var [x, y] = origin[direct].split(' ')
@@ -126,7 +124,7 @@ export default class PerspectiveOriginEditor extends UIElement {
         <div class="radius-setting-box" ref="$radiusSettingBox">
           ${typeList.map(it => {
 
-            var label = editor.i18n(it.title)
+            var label = this.$i18n(it.title)
 
             return /*html*/`
               <div>
@@ -168,7 +166,7 @@ export default class PerspectiveOriginEditor extends UIElement {
   }
 
   [CLICK("$selector button")](e) {
-    var type = e.$delegateTarget.attr("data-value");
+    var type = e.$dt.attr("data-value");
     this.refs.$selector.attr("data-selected-value", type);
 
     if (type === "all") {

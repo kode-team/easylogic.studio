@@ -1,5 +1,4 @@
 import BaseProperty from "./BaseProperty";
-import { editor } from "../../../editor/editor";
 import { LOAD, CLICK, INPUT, DEBOUNCE } from "../../../util/Event";
 import { EVENT } from "../../../util/UIElement";
 import icon from "../icon/icon";
@@ -36,7 +35,7 @@ export default class GradientAssetsProperty extends BaseProperty {
   }
 
   [LOAD("$gradientList")]() {
-    var current = editor.selection.currentProject || { gradients: [] }
+    var current = this.$selection.currentProject || { gradients: [] }
 
     var gradients = current.gradients;
 
@@ -66,14 +65,14 @@ export default class GradientAssetsProperty extends BaseProperty {
       `
     })
 
-    results.push(`<div class='add-gradient-item'><butto type="button">${icon.add}</button></div>`)
+    results.push(/*html*/`<div class='add-gradient-item'><butto type="button">${icon.add}</button></div>`)
 
     return results
   }
 
  
   executeGradient (callback, isRefresh = true, isEmit = true ) {
-    var project = editor.selection.currentProject;
+    var project = this.$selection.currentProject;
 
     if(project) {
 
@@ -98,7 +97,7 @@ export default class GradientAssetsProperty extends BaseProperty {
   }
 
   [CLICK('$gradientList .remove')] (e) {
-    var $item = e.$delegateTarget.closest('gradient-item');
+    var $item = e.$dt.closest('gradient-item');
     var index = +$item.attr('data-index');
 
     this.executeGradient(project => {
@@ -109,7 +108,7 @@ export default class GradientAssetsProperty extends BaseProperty {
 
 
   [CLICK('$gradientList .copy')] (e) {
-    var $item = e.$delegateTarget.closest('gradient-item');
+    var $item = e.$dt.closest('gradient-item');
     var index = +$item.attr('data-index');
 
     this.executeGradient(project => {
@@ -118,9 +117,9 @@ export default class GradientAssetsProperty extends BaseProperty {
   }  
 
   [INPUT('$gradientList input')] (e) {
-    var $item = e.$delegateTarget.closest('gradient-item');
+    var $item = e.$dt.closest('gradient-item');
     var index = +$item.attr('data-index');
-    var obj = e.$delegateTarget.attrKeyValue('data-key');
+    var obj = e.$dt.attrKeyValue('data-key');
 
     this.executeGradient(project => {
       project.setGradientValue(index, obj);      
@@ -129,12 +128,12 @@ export default class GradientAssetsProperty extends BaseProperty {
   }
 
   [CLICK("$gradientList .preview")](e) {
-    var $item = e.$delegateTarget.closest('gradient-item');    
+    var $item = e.$dt.closest('gradient-item');    
     var index = +$item.attr('data-index')
     var gradient = $item.attr('data-gradient')
 
     this.state.$item = $item; 
-    this.state.$el = e.$delegateTarget.$('.gradient-view');
+    this.state.$el = e.$dt.$('.gradient-view');
     this.state.$value = $item.$("[data-key='value']")
 
     this.emit("showGradientPickerPopup", {

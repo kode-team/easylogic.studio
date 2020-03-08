@@ -1,15 +1,13 @@
 import BaseProperty from "./BaseProperty";
 import { LOAD, CLICK, DEBOUNCE } from "../../../util/Event";
-import { editor } from "../../../editor/editor";
 import { EVENT } from "../../../util/UIElement";
 
 import icon from "../icon/icon";
 
-
 export default class PerspectiveOriginProperty extends BaseProperty {
 
   getTitle() {
-    return editor.i18n('perspective.origin.property.title')
+    return this.$i18n('perspective.origin.property.title')
   }
 
   hasKeyframe () {
@@ -41,7 +39,7 @@ export default class PerspectiveOriginProperty extends BaseProperty {
   }
 
   [LOAD('$body')] () {
-    var current = editor.selection.current || {}; 
+    var current = this.$selection.current || {}; 
     var value = current['perspective-origin'] || ''
 
     return /*html*/`<PerspectiveOriginEditor 
@@ -58,7 +56,7 @@ export default class PerspectiveOriginProperty extends BaseProperty {
 
   [EVENT('changePerspectiveOrigin')] (value) {
 
-    this.emit('SET_ATTRIBUTE', { 
+    this.emit('setAttribute', { 
       'perspective-origin': value 
     })
   }

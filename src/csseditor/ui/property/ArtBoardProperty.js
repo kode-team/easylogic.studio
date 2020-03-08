@@ -1,14 +1,11 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, CLICK, DOUBLECLICK, FOCUSOUT, KEY, PREVENT, STOP, VDOM, KEYDOWN, ENTER } from "../../../util/Event";
-import { editor } from "../../../editor/editor";
+import { LOAD, CLICK, DOUBLECLICK, FOCUSOUT, PREVENT, STOP, VDOM, KEYDOWN, ENTER } from "../../../util/Event";
 import icon from "../icon/icon";
 import { EVENT } from "../../../util/UIElement";
 
-const i18n = editor.initI18n('artboard.property');
-
 export default class ArtBoardProperty extends BaseProperty {
   getTitle() {
-    return i18n('title');
+    return this.$i18n('artboard.property.title');
   }
 
   getClassName() {
@@ -29,15 +26,15 @@ export default class ArtBoardProperty extends BaseProperty {
 
   [LOAD("$artboardList") + VDOM]() {
 
-    var project = editor.selection.currentProject;    
+    var project = this.$selection.currentProject;    
     if (!project) return ''
 
     return project.artboards.map( (artboard, index) => {
-      var selected = artboard === editor.selection.currentArtboard ? 'selected' : ''
+      var selected = artboard === this.$selection.currentArtboard ? 'selected' : ''
       var title = ''; 
 
       if (artboard.hasLayout()) {
-        title = i18n('layout.title.' + artboard.layout)
+        title = this.$i18n('artboard.property.layout.title.' + artboard.layout)
       }
 
       return /*html*/`
@@ -56,13 +53,13 @@ export default class ArtBoardProperty extends BaseProperty {
 
 
   [DOUBLECLICK('$artboardList .artboard-item')] (e) {
-    this.startInputEditing(e.$delegateTarget.$('label'))
+    this.startInputEditing(e.$dt.$('label'))
   }
 
   modifyDoneInputEditing (input) {
     this.endInputEditing(input, (index, text) => {
 
-      var project = editor.selection.currentProject
+      var project = this.$selection.currentProject
       if (project) {
         var artboard = project.artboards[index]
   
@@ -77,18 +74,18 @@ export default class ArtBoardProperty extends BaseProperty {
   }
 
   [KEYDOWN('$artboardList .artboard-item label') + ENTER + PREVENT + STOP] (e) {
-    this.modifyDoneInputEditing(e.$delegateTarget);
+    this.modifyDoneInputEditing(e.$dt);
   }
 
   [FOCUSOUT('$artboardList .artboard-item label') + PREVENT  + STOP ] (e) {
-    this.modifyDoneInputEditing(e.$delegateTarget);
+    this.modifyDoneInputEditing(e.$dt);
   }
 
   selectArtboard(artboard) {
 
     if (artboard) {
-      editor.selection.selectArtboard(artboard)      
-      editor.selection.select(artboard)
+      this.$selection.selectArtboard(artboard)      
+      this.$selection.select(artboard)
     }
 
     this.emit('refreshAllSelectArtBoard');
@@ -96,13 +93,13 @@ export default class ArtBoardProperty extends BaseProperty {
   }
 
   [CLICK('$add')] (e) {
-    this.emit('add.artboard');
+    this.emit('addArtBoard');
   }
 
   [CLICK('$artboardList .artboard-item .remove')] (e) {
-    var project = editor.selection.currentProject
+    var project = this.$selection.currentProject
     if (project) {
-      var index = +e.$delegateTarget.attr('data-index')
+      var index = +e.$dt.attr('data-index')
 
       project.artboards.splice(index);
 
@@ -113,12 +110,12 @@ export default class ArtBoardProperty extends BaseProperty {
   }
 
   [CLICK('$artboardList .artboard-item label')] (e) {
-    var project = editor.selection.currentProject
+    var project = this.$selection.currentProject
     if (project) {
-      var $item = e.$delegateTarget.closest('artboard-item');
+      var $item = e.$dt.closest('artboard-item');
       $item.onlyOneClass('selected');
 
-      var index = +e.$delegateTarget.attr('data-index')
+      var index = +e.$dt.attr('data-index')
 
       var artboard = project.artboards[index]
 

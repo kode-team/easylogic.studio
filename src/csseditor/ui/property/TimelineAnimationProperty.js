@@ -1,12 +1,11 @@
 import BaseProperty from "./BaseProperty";
 import { LOAD, CLICK, DOUBLECLICK, FOCUSOUT, KEY, PREVENT, STOP, VDOM, KEYDOWN, DEBOUNCE, ENTER } from "../../../util/Event";
-import { editor } from "../../../editor/editor";
 import icon from "../icon/icon";
 import { EVENT } from "../../../util/UIElement";
 
 export default class TimelineAnimationProperty extends BaseProperty {
   getTitle() {
-    return editor.i18n('timeline.animation.property.title');
+    return this.$i18n('timeline.animation.property.title');
   }
 
   getClassName() {
@@ -14,20 +13,20 @@ export default class TimelineAnimationProperty extends BaseProperty {
   }
 
   getTools() {
-    return `
+    return /*html*/`
       <button type='button' ref='$add' title="Add an animation">${icon.add}</button>
     `
   }
 
   getBody() {
-    return `
+    return /*html*/`
       <div class="timeline-animation-list" ref="$timelineAnimationList"></div>
     `;
   }
 
   [LOAD("$timelineAnimationList") + VDOM]() {
 
-    var artboard = editor.selection.currentArtboard;    
+    var artboard = this.$selection.currentArtboard;    
     if (!artboard) return ''
 
     return artboard.timeline.map( (timeline, index) => {
@@ -48,14 +47,14 @@ export default class TimelineAnimationProperty extends BaseProperty {
 
 
   [DOUBLECLICK('$timelineAnimationList .timeline-animation-item')] (e) {
-    this.startInputEditing(e.$delegateTarget.$('label'))
+    this.startInputEditing(e.$dt.$('label'))
   }
 
   modifyDoneInputEditing (input) {
     this.endInputEditing(input, (index, text) => {
       var id = input.attr('data-id');
 
-      var artboard = editor.selection.currentArtboard
+      var artboard = this.$selection.currentArtboard
       if (artboard) {
         artboard.setTimelineTitle(id, text);
       }
@@ -63,11 +62,11 @@ export default class TimelineAnimationProperty extends BaseProperty {
   }
 
   [KEYDOWN('$timelineAnimationList .timeline-animation-item label') + ENTER + PREVENT + STOP] (e) {
-    this.modifyDoneInputEditing(e.$delegateTarget);
+    this.modifyDoneInputEditing(e.$dt);
   }
 
   [FOCUSOUT('$timelineAnimationList .timeline-animation-item label') + PREVENT  + STOP ] (e) {
-    this.modifyDoneInputEditing(e.$delegateTarget);
+    this.modifyDoneInputEditing(e.$dt);
   }
 
   [CLICK('$add')] (e) {
@@ -75,21 +74,21 @@ export default class TimelineAnimationProperty extends BaseProperty {
   }
 
   [CLICK('$timelineAnimationList .timeline-animation-item .remove')] (e) {
-    var id = e.$delegateTarget.attr('data-id');
+    var id = e.$dt.attr('data-id');
     this.emit('remove.animation', id);
     // this.refresh();
   }
 
   [CLICK('$timelineAnimationList .timeline-animation-item label')] (e) {
-    var id = e.$delegateTarget.attr('data-id');
+    var id = e.$dt.attr('data-id');
 
-    var artboard = editor.selection.currentArtboard;
+    var artboard = this.$selection.currentArtboard;
 
     if (artboard) {
       artboard.selectTimeline(id);                 
 
   
-      var $item = e.$delegateTarget.closest('timeline-animation-item');
+      var $item = e.$dt.closest('timeline-animation-item');
       $item.onlyOneClass('selected');
 
       this.emit('refreshTimeline');

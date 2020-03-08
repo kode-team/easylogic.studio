@@ -1,14 +1,11 @@
 import BaseProperty from "./BaseProperty";
-import { editor } from "../../../editor/editor";
 import { EVENT } from "../../../util/UIElement";
 import { DEBOUNCE } from "../../../util/Event";
-
-const i18n = editor.initI18n('text.fill.property')
 
 export default class TextFillProperty extends BaseProperty {
 
   getTitle() {
-    return i18n('title');
+    return this.$i18n('text.fill.property.title');
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
@@ -17,7 +14,7 @@ export default class TextFillProperty extends BaseProperty {
 
   refresh() {
     // update 를 어떻게 할지 고민 
-    var current = editor.selection.current;
+    var current = this.$selection.current;
 
     if (current) {
       this.children.$fillColor.setValue(current['text-fill-color'] || 'rgba(0, 0, 0, 1)')      
@@ -30,18 +27,18 @@ export default class TextFillProperty extends BaseProperty {
     return /*html*/`
       <div class='property-item animation-property-item'>
         <span class='add-timeline-property' data-property='text-fill-color'></span>
-        <ColorViewEditor ref='$fillColor' label='${i18n('fill')}' key='text-fill-color' onchange="changeColor" />
+        <ColorViewEditor ref='$fillColor' label='${this.$i18n('text.fill.property.fill')}' key='text-fill-color' onchange="changeColor" />
       </div>           
       <div class='property-item animation-property-item'>
         <span class='add-timeline-property' data-property='text-stroke-color'></span>
-        <ColorViewEditor ref='$strokeColor' label='${i18n('stroke')}' key='text-stroke-color' onchange="changeColor" />
+        <ColorViewEditor ref='$strokeColor' label='${this.$i18n('text.fill.property.stroke')}' key='text-stroke-color' onchange="changeColor" />
       </div>                 
 
       <div class='property-item animation-property-item'>
         <span class='add-timeline-property' data-property='text-stroke-width'></span>
         <RangeEditor 
           ref='$width' 
-          label='${i18n('strokeWidth')}' 
+          label='${this.$i18n('text.fill.property.strokeWidth')}' 
           key="text-stroke-width" 
           
           max="50"
@@ -56,6 +53,6 @@ export default class TextFillProperty extends BaseProperty {
   }
 
   [EVENT('changeRangeEditor')] (key, value) {
-    this.emit('SET_ATTRIBUTE', { [key]: value })
+    this.emit('setAttribute', { [key]: value })
   }
 }

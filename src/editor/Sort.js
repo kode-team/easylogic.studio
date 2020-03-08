@@ -1,14 +1,12 @@
-import { editor } from "./editor";
-
 export default class Sort {
 
-    static getContainer () {
+    static getContainer (editor) {
         return editor.selection.items.length === 1 ? editor.selection.currentArtboard : editor.selection.allRect;
     }
 
-    static left () {
+    static left (editor) {
 
-        var x =  Sort.getContainer().screenX.value
+        var x =  Sort.getContainer(editor).screenX.value
 
         editor.selection.each(item => {
             item.setScreenX(x);
@@ -17,8 +15,8 @@ export default class Sort {
         editor.selection.setRectCache();
     }
 
-    static top () {
-        var y =  Sort.getContainer().screenY.value
+    static top (editor) {
+        var y =  Sort.getContainer(editor).screenY.value
 
         editor.selection.each(item => {
             item.setScreenY(y);
@@ -27,8 +25,8 @@ export default class Sort {
         editor.selection.setRectCache();
     }
 
-    static center () {
-        var container = Sort.getContainer()        
+    static center (editor) {
+        var container = Sort.getContainer(editor)        
         var x = container.screenX.value + container.width.value / 2; 
 
         editor.selection.each(item => {
@@ -38,8 +36,8 @@ export default class Sort {
         editor.selection.setRectCache();
     }
 
-    static middle () {
-        var container = Sort.getContainer()        
+    static middle (editor) {
+        var container = Sort.getContainer(editor)        
         var y = container.screenY.value + container.height.value / 2;         
 
         editor.selection.each(item => {
@@ -49,8 +47,8 @@ export default class Sort {
         editor.selection.setRectCache();
     }    
 
-    static right () {
-        var container = Sort.getContainer()        
+    static right (editor) {
+        var container = Sort.getContainer(editor)        
         var x2 = container.screenX2.value;         
 
         editor.selection.each(item => {
@@ -61,8 +59,8 @@ export default class Sort {
     } 
 
 
-    static bottom () {
-        var container = Sort.getContainer()        
+    static bottom (editor) {
+        var container = Sort.getContainer(editor)        
         var y2 = container.screenY2.value;         
 
         editor.selection.each(item => {
@@ -72,7 +70,7 @@ export default class Sort {
         editor.selection.setRectCache();
     }     
 
-    static sameWidth () {
+    static sameWidth (editor) {
 
         var len = editor.selection.items.length ;
 
@@ -90,7 +88,7 @@ export default class Sort {
 
     }
 
-    static sameHeight () {
+    static sameHeight (editor) {
 
         var len = editor.selection.items.length ;
 

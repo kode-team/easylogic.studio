@@ -1,6 +1,5 @@
 import UIElement, { EVENT } from "../../../../util/UIElement";
-import { THROTTLE, IF, PREVENT, KEYDOWN, KEYUP, KEY, ENTER, CLICK } from "../../../../util/Event";
-import { editor } from "../../../../editor/editor";
+import { THROTTLE, IF, PREVENT, KEYDOWN, KEYUP, ENTER, CLICK } from "../../../../util/Event";
 import icon from "../../icon/icon";
 
 export default class KeyframeTimeControl extends UIElement {
@@ -23,7 +22,7 @@ export default class KeyframeTimeControl extends UIElement {
     }
 
     get currentTimeline () {
-        var currentArtboard = editor.selection.currentArtboard;
+        var currentArtboard = this.$selection.currentArtboard;
 
         if (currentArtboard) {
             return currentArtboard.getSelectedTimeline();
@@ -75,7 +74,7 @@ export default class KeyframeTimeControl extends UIElement {
     [KEYUP('$fps') + ENTER] (e) {
         var fps = +this.refs.$fps.val();
 
-        var artboard = editor.selection.currentArtboard;
+        var artboard = this.$selection.currentArtboard;
 
         if (artboard) {
             artboard.setFps(fps);
@@ -105,7 +104,7 @@ export default class KeyframeTimeControl extends UIElement {
     }
 
     [CLICK('$timer')] () {
-        var artboard = editor.selection.currentArtboard;
+        var artboard = this.$selection.currentArtboard;
 
         if (artboard) {
             artboard.seek(this.refs.$currentTime.value, (it => {
@@ -125,7 +124,7 @@ export default class KeyframeTimeControl extends UIElement {
 
     [KEYUP('$currentTime') + ENTER + IF('checkNumberOrTimecode') + IF('hasCurrentTimeline') + PREVENT] (e) {
         var frame = this.refs.$currentTime.value
-        var artboard = editor.selection.currentArtboard;
+        var artboard = this.$selection.currentArtboard;
 
         if (artboard) {
             artboard.setTimelineCurrentTime(frame);
@@ -148,7 +147,7 @@ export default class KeyframeTimeControl extends UIElement {
     [KEYUP('$duration') + ENTER + IF('checkNumberOrTimecode') + IF('hasCurrentTimeline') + PREVENT] (e) {
 
         var frame = this.refs.$duration.value
-        var artboard = editor.selection.currentArtboard;
+        var artboard = this.$selection.currentArtboard;
 
         if (artboard) {
             artboard.setTimelineTotalTime(frame);

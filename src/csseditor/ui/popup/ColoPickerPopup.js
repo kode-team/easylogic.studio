@@ -2,12 +2,11 @@ import UIElement, { EVENT } from "../../../util/UIElement";
 import BasePopup from "./BasePopup";
 import EmbedColorPicker from "../property-editor/EmbedColorPicker";
 import { DEBOUNCE, LOAD, CLICK } from "../../../util/Event";
-import { editor } from "../../../editor/editor";
 
 export default class ColorPickerPopup extends BasePopup {
 
   getTitle() {
-    return editor.i18n('colorpicker.popup.title')
+    return this.$i18n('colorpicker.popup.title')
   }
 
   getClassName() {
@@ -54,7 +53,7 @@ export default class ColorPickerPopup extends BasePopup {
   }
 
   [LOAD('$projectColors')] () {
-    var project = editor.selection.currentProject || {colors: []};
+    var project = this.$selection.currentProject || {colors: []};
 
     var colors = project.colors
 
@@ -68,7 +67,7 @@ export default class ColorPickerPopup extends BasePopup {
 
   [CLICK('$projectColors .color-view')] (e) {
     this.updateData({
-      color: e.$delegateTarget.attr('data-color')
+      color: e.$dt.attr('data-color')
     })
     this.children.$color.setValue(this.state.color);
   }

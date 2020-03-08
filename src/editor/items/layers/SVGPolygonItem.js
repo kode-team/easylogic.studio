@@ -2,10 +2,8 @@ import { SVGItem } from "./SVGItem";
 import { Length } from "../../unit/Length";
 import PolygonParser from "../../parse/PolygonParser";
 import { OBJECT_TO_PROPERTY, CSS_TO_STRING } from "../../../util/functions/func";
-import Dom from "../../../util/Dom";
-import { Deluanay } from "../../../util/functions/math";
-import { editor } from "../../editor";
 import icon from "../../../csseditor/ui/icon/icon";
+import { ComponentManager } from "../../ComponentManager";
 
 export class SVGPolygonItem extends SVGItem {
 
@@ -156,4 +154,4 @@ export class SVGPolygonItem extends SVGItem {
   }
 }
 
-editor.registerComponent('svg-polygon', SVGPolygonItem);
+ComponentManager.registerComponent('svg-polygon', SVGPolygonItem);

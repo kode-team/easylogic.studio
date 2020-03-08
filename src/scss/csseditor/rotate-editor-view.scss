@@ -4,7 +4,6 @@
     bottom: 70px;
     width: 100px;
     height: 100px;
-    // background-color: yellow;
     pointer-events: none;
 
     .rotate-z {
@@ -13,7 +12,6 @@
         right: 0px;
         top: 0px;
         bottom: 0px;
-        // border: 3px solid rgba(0, 0, 0, 0.5); 
         border-radius: 100%;
 
         .handle {
@@ -158,16 +156,17 @@
             
             &[style=""],
             &:not([style]) {
-                .rotate-x {
-                    transform: rotateX(89deg) translateZ(0px);
+
+                .rotate-item {
                     border: 1px solid $font-color;
                     border-radius: 0px;
                 }
+                .rotate-x {
+                    transform: rotateX(89deg) translateZ(0px);
+                }
 
                 .rotate-y {
-                    transform: rotateY(89deg) translateZ(0px);                    
-                    border:1px solid $font-color;
-                    border-radius: 0px;                    
+                    transform: rotateY(89deg) translateZ(0px);
                 }
             }
         }

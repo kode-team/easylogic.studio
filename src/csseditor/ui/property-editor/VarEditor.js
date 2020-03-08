@@ -20,7 +20,7 @@ export default class VarEditor extends UIElement {
 
     template() {
         var labelClass = this.state.hideLabel ? 'hide' : '';
-        return `
+        return /*html*/`
         <div class='var-editor var-list'>
             <div class='label ${labelClass}' >
                 <label>${this.props.title || ''}</label>
@@ -68,7 +68,7 @@ export default class VarEditor extends UIElement {
     }
 
     [CLICK('$varList .del')] (e) {
-        var index = +e.$delegateTarget.attr('data-index')
+        var index = +e.$dt.attr('data-index')
 
         this.state.values.splice(index, 1);
 
@@ -78,10 +78,10 @@ export default class VarEditor extends UIElement {
     }
 
     [INPUT('$varList input')] (e) {
-        var index = +e.$delegateTarget.attr('data-index')
-        var type = e.$delegateTarget.attr('data-type')
+        var index = +e.$dt.attr('data-index')
+        var type = e.$dt.attr('data-type')
 
-        this.state.values[index][type] = e.$delegateTarget.value; 
+        this.state.values[index][type] = e.$dt.value; 
 
         this.updateData()
     }

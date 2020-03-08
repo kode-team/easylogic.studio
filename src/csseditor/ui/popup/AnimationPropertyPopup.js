@@ -2,18 +2,15 @@ import { EVENT } from "../../../util/UIElement";
 import { Length } from "../../../editor/unit/Length";
 import { LOAD, CHANGE } from "../../../util/Event";
 import CubicBezierEditor from "../property-editor/CubicBezierEditor";
-import { editor } from "../../../editor/editor";
 import RangeEditor from "../property-editor/RangeEditor";
 import IterationCountEditor from "../property-editor/IterationCountEditor";
 import SelectEditor from "../property-editor/SelectEditor";
 import BasePopup from "./BasePopup";
 
-const i18n = editor.initI18n('animation.property.popup');
-
 export default class AnimationPropertyPopup extends BasePopup {
 
   getTitle() {
-    return i18n('title')
+    return this.$i18n('animation.property.popup.title')
   }
 
   components() {
@@ -44,11 +41,11 @@ export default class AnimationPropertyPopup extends BasePopup {
   }
 
   getBody() {
-    return `<div class='animation-property-popup' ref='$popup'></div>`;
+    return /*html*/`<div class='animation-property-popup' ref='$popup'></div>`;
   }
 
   [LOAD('$popup')] () {
-    return `
+    return /*html*/`
       <div class="box">
         ${this.templateForKeyframe()}
         ${this.templateForTimingFunction()}
@@ -65,7 +62,7 @@ export default class AnimationPropertyPopup extends BasePopup {
   templateForTimingFunction () {
     return /*html*/`
     <div class='timing-function'>
-      <label>${i18n('timing.function')}</label>
+      <label>${this.$i18n('animation.property.popup.timing.function')}</label>
       <CubicBezierEditor ref='$cubicBezierEditor' key="timingFunction" value="${this.state.timingFunction}" onChange='changeCubicBezier' />
     </div>
     `
@@ -75,7 +72,7 @@ export default class AnimationPropertyPopup extends BasePopup {
    
     return /*html*/`
       <div class='name'>
-        <label>${i18n('keyframe')}</label>
+        <label>${this.$i18n('animation.property.popup.keyframe')}</label>
         <div class='input grid-1'>
           <select ref='$name'></select>
         </div>
@@ -84,7 +81,7 @@ export default class AnimationPropertyPopup extends BasePopup {
   }
 
   [LOAD('$name')] () {
-    var current = editor.selection.currentProject;
+    var current = this.$selection.currentProject;
     var names = []
     if (current && current.keyframes) {
       names = current.keyframes.map(it => {
@@ -96,7 +93,7 @@ export default class AnimationPropertyPopup extends BasePopup {
 
     return names.map(it => {
       var selected = it.value === this.name ? 'selected' : '';
-      var label = i18n(it.key);
+      var label = this.$i18n(it.key);
       return `<option value='${it.value}' ${selected}>${label}</option>`
     })
   }
@@ -108,13 +105,13 @@ export default class AnimationPropertyPopup extends BasePopup {
   templateForDirection() {
 
     var options = 'normal,reverse,alternate,alternate-reverse'.split(',').map(it => {
-      return `${it}:${i18n(it)}`
+      return `${it}:${this.$i18n(it)}`
     }).join(',')
 
     return /*html*/`
       <div class='direction'>
         <SelectEditor 
-            label='${i18n('direction')}'
+            label='${this.$i18n('animation.property.popup.direction')}'
             ref='$direction' 
             key='direction' 
             value="${this.state.direction}"
@@ -133,7 +130,7 @@ export default class AnimationPropertyPopup extends BasePopup {
     return /*html*/`
     <div class='play-state'>
       <SelectEditor 
-          label='${i18n('play.state')}'
+          label='${this.$i18n('animation.property.popup.play.state')}'
           ref='$playState' 
           key='playState' 
           value="${this.state.playState}"
@@ -147,13 +144,13 @@ export default class AnimationPropertyPopup extends BasePopup {
   templateForFillMode() {
 
     var options = 'none,forwards,backwards,both'.split(',').map(it=>{
-      return `${it}:${i18n(it)}`
+      return `${it}:${this.$i18n(it)}`
     }).join(',');
 
     return /*html*/`
     <div class='fill-mode'>
       <SelectEditor 
-          label='${i18n('fill.mode')}'
+          label='${this.$i18n('animation.property.popup.fill.mode')}'
           ref='$fillMode' 
           key='fillMode' 
           value="${this.state.fillMode}"
@@ -169,7 +166,7 @@ export default class AnimationPropertyPopup extends BasePopup {
     <div class='delay'>
       <RangeEditor 
         ref='$delay' 
-        label='${i18n('delay')}' 
+        label='${this.$i18n('animation.property.popup.delay')}' 
         calc='false' 
         key='delay' 
         value='${this.state.delay}' 
@@ -182,7 +179,7 @@ export default class AnimationPropertyPopup extends BasePopup {
   templateForDuration () {
     return /*html*/`
     <div class='duration'>
-      <RangeEditor ref='$duration' label='${i18n('duration')}'  calc='false' key='duration' value='${this.state.duration}' units='s,ms' onChange="changeRangeEditor" />
+      <RangeEditor ref='$duration' label='${this.$i18n('animation.property.popup.duration')}'  calc='false' key='duration' value='${this.state.duration}' units='s,ms' onChange="changeRangeEditor" />
     </div>
     `
   }
@@ -190,7 +187,7 @@ export default class AnimationPropertyPopup extends BasePopup {
   templateForIterationCount () {
     return /*html*/`
       <div class='iteration-count'>
-        <IterationCountEditor ref='$iterationCount' label='${i18n('iteration')}' calc='false' key='iterationCount' value='${this.state.iterationCount}' units='normal,infinite' onChange="changeRangeEditor" />
+        <IterationCountEditor ref='$iterationCount' label='${this.$i18n('animation.property.popup.iteration')}' calc='false' key='iterationCount' value='${this.state.iterationCount}' units='normal,infinite' onChange="changeRangeEditor" />
       </div>
     `
   }

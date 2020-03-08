@@ -1,13 +1,9 @@
 import BaseProperty from "./BaseProperty";
 import { LOAD, DEBOUNCE } from "../../../util/Event";
-import { editor } from "../../../editor/editor";
 import { EVENT } from "../../../util/UIElement";
-
 
 import RangeEditor from "../property-editor/RangeEditor";
 import SelectEditor from "../property-editor/SelectEditor";
-
-
 
 export default class DisplayProperty extends BaseProperty {
   components() {
@@ -34,10 +30,10 @@ export default class DisplayProperty extends BaseProperty {
   }
 
   [LOAD("$positionItem")]() {
-    var current = editor.selection.current;
+    var current = this.$selection.current;
     if (!current) return '';
 
-    return `
+    return /*html*/`
       <div class='property-item'>
         <SelectEditor ref='$position' icon="true" label='position' key='position' value='${current.position}' options='absolute,relative,fixed,static' onchange="changRangeEditor" />
       </div>    
@@ -55,7 +51,7 @@ export default class DisplayProperty extends BaseProperty {
 
   [EVENT('changRangeEditor')] (key, value) {
 
-    this.emit('SET_ATTRIBUTE', { 
+    this.emit('setAttribute', { 
       [key]: value
     })
   }

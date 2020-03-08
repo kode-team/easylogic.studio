@@ -1,6 +1,5 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
 
-import { editor } from "../../../editor/editor";
 import { DEBOUNCE, LOAD } from "../../../util/Event";
 import Dom from "../../../util/Dom";
 import { CSS_TO_STRING, isArray, isString } from "../../../util/functions/func";
@@ -62,7 +61,7 @@ export default class StyleView extends UIElement {
 
 
   refreshStyleHead () {
-    var project = editor.selection.currentProject || new Project()
+    var project = this.$selection.currentProject || new Project()
 
     this.refs.$head.$$(`style`).forEach($style => $style.remove())
 
@@ -109,7 +108,7 @@ export default class StyleView extends UIElement {
 
   [LOAD('$svgArea')] () {
 
-    var project = editor.selection.currentProject || {  }
+    var project = this.$selection.currentProject || {  }
 
     return this.makeSvg(project)
   }   
@@ -153,9 +152,9 @@ export default class StyleView extends UIElement {
     let items = [] 
 
     if (!ids) {
-      items = editor.selection.items
+      items = this.$selection.items
     } else if (isString(ids[0])) {
-      items = editor.selection.itemsByIds(ids);
+      items = this.$selection.itemsByIds(ids);
     } else {
       items = ids; 
     }

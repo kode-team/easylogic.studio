@@ -1,5 +1,5 @@
 import { Layer } from "./Layer";
-import { editor } from "../editor";
+import { ComponentManager } from "../ComponentManager";
 
 /**
  * Complex Component with children 
@@ -15,12 +15,8 @@ export class Component extends Layer {
     }
 
     getProps () {
-        
-        return [
-            // 'label',s
-            // {key: 'color', defaultValue: Length.px(0), editor: 'ColorViewEditor', editorOptions: {} }
-        ] 
+        return [] 
     }
 }
 
-editor.registerComponent('component', Component);
+ComponentManager.registerComponent('component', Component);

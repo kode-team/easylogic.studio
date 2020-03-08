@@ -4,8 +4,8 @@ import { OBJECT_TO_PROPERTY, CSS_TO_STRING } from "../../../util/functions/func"
 import { hasSVGProperty, hasCSSProperty} from "../../util/Resource";
 import { Shape } from "../../css-property/Shape";
 import { Length } from "../../unit/Length";
-import { editor } from "../../editor";
 import icon from "../../../csseditor/ui/icon/icon";
+import { ComponentManager } from "../../ComponentManager";
 
 export class SVGTextItem extends SVGItem {
 
@@ -210,5 +210,5 @@ export class SVGTextItem extends SVGItem {
   }
 }
 
-editor.registerComponent('svg-text', SVGTextItem);
+ComponentManager.registerComponent('svgtext', SVGTextItem);
  

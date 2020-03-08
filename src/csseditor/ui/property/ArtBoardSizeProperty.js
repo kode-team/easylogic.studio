@@ -1,10 +1,6 @@
 import BaseProperty from "./BaseProperty";
 import { LOAD, DEBOUNCE, VDOM, CLICK } from "../../../util/Event";
-import { editor } from "../../../editor/editor";
 import { EVENT } from "../../../util/UIElement";
-
-
-import SelectEditor from "../property-editor/SelectEditor";
 import { Length } from "../../../editor/unit/Length";
 
 export default class ArtBoardSizeProperty extends BaseProperty {
@@ -134,9 +130,9 @@ export default class ArtBoardSizeProperty extends BaseProperty {
   }
 
   [CLICK('$list .device-item')] (e) {
-    var size = e.$delegateTarget.attr('data-size');
+    var size = e.$dt.attr('data-size');
 
-    this.emit('resize.artboard', size);
+    this.emit('resizeArtBoard', size);
   }
 
   makeGroup (group) {
@@ -168,7 +164,7 @@ export default class ArtBoardSizeProperty extends BaseProperty {
 
 
   [EVENT('changeBoardSize')] (key, value) {
-    var current = editor.selection.currentArtboard;
+    var current = this.$selection.currentArtboard;
     if (current && current.is('artboard')) {
 
       if (!value.trim()) return;
@@ -178,7 +174,7 @@ export default class ArtBoardSizeProperty extends BaseProperty {
       width = Length.px(width);
       height = Length.px(height);
 
-      this.emit("SET_ATTRIBUTE", { width, height}, current.id)
+      this.emit("setAttribute", { width, height}, current.id)
     }
   }
 }

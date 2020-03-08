@@ -1,7 +1,6 @@
 import BaseWindow from "./BaseWindow";
 import { EVENT } from "../../../util/UIElement";
 import { CLICK } from "../../../util/Event";
-import { editor } from "../../../editor/editor";
 import { CSS_TO_STRING } from "../../../util/functions/func";
 import ExportManager from "../../../editor/ExportManager";
 import Dom from "../../../util/Dom";
@@ -75,7 +74,7 @@ export default class ExportWindow extends BaseWindow {
     }
 
     refresh() {
-        var project = editor.selection.currentProject || { layers : [] }
+        var project = this.$selection.currentProject || { layers : [] }
 
         var css = `
 ${this.makeStyle(project)}
@@ -89,14 +88,14 @@ ${project.artboards.map(item => item.html).join('\n')}
 
         this.refs.$html.text(html);
 
-        var obj = ExportManager.generate();
+        var obj = ExportManager.generate(this.$editor);
 
         this.refs.$js.text(obj.js);
 
 
         // export svg image 
-        if (editor.selection.currentArtboard) {
-            var svgString = ExportManager.generateSVG(editor.selection.currentArtboard);
+        if (this.$selection.currentArtboard) {
+            var svgString = ExportManager.generateSVG(this.$editor, this.$selection.currentArtboard);
             this.refs.$svgimage.text(svgString);
             this.refs.$svgimagePreview.html(Dom.createByHTML(svgString));
         } else  {
@@ -136,6 +135,6 @@ ${project.artboards.map(item => item.html).join('\n')}
 
 
     [CLICK("$header .tab-item")](e) {
-        this.refs.$tab.attr("data-selected-value",e.$delegateTarget.attr("data-value"));
+        this.refs.$tab.attr("data-selected-value",e.$dt.attr("data-value"));
     }
 }

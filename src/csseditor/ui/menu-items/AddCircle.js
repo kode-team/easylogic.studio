@@ -16,7 +16,7 @@ export default class AddCircle extends MenuItem {
 
   clickButton(e) {
 
-    this.emit('add.type', 'circle');    
+    this.emit('addComponentType', 'circle');    
 
   }
 

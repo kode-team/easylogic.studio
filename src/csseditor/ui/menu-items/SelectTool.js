@@ -19,6 +19,6 @@ export default class SelectTool extends MenuItem {
 
   clickButton(e) {
 
-    this.emit('select.item');
+    this.emit('selectItem');
   }
 }

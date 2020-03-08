@@ -15,7 +15,7 @@ export default class RightAlign extends MenuItem {
   }  
 
   clickButton(e) {
-    Sort.right();
+    Sort.right(this.$editor);
     this.emit('refreshSelectionStyleView')
     this.emit('refreshSelectionTool')
   }

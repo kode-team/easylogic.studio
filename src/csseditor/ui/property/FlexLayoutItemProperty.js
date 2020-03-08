@@ -1,30 +1,23 @@
 import BaseProperty from "./BaseProperty";
-import { editor } from "../../../editor/editor";
-import { DEBOUNCE, LOAD, BIND } from "../../../util/Event";
+import { DEBOUNCE, LOAD } from "../../../util/Event";
 import { EVENT } from "../../../util/UIElement";
 import { CSS_TO_STRING } from "../../../util/functions/func";
-
-const i18n = editor.initI18n('flex.layout.item.property');
-
-const makeOptionsFunction = (options) => {
-    return () => {
-        return options.split(',').map(it => {
-            return `${it}:${i18n(it)}`
-        }).join(',');
-    }
-}
-
-const getLayoutOptions = makeOptionsFunction('none,auto,value')
 
 
 export default class FlexLayoutItemProperty extends BaseProperty {
 
   getTitle() {
-    return i18n('title');
+    return this.$i18n('flex.layout.item.property.title');
   }
 
   getClassName() {
     return 'flex-layout-item-property';
+  }
+
+  getLayoutOptions () {
+    return ['none', 'auto', 'value'].map(it => {
+        return `${it}:${this.$i18n(`flex.layout.item.property.${it}`)}`
+    }).join(',');
   }
 
   getBody() {
@@ -34,7 +27,7 @@ export default class FlexLayoutItemProperty extends BaseProperty {
   }  
 
   [LOAD('$body')] () {
-    var current = editor.selection.current || { 'flex-layout-item' : 'none' }
+    var current = this.$selection.current || { 'flex-layout-item' : 'none' }
 
     var valueType = current['flex-layout-item'] || 'none';
 
@@ -54,7 +47,7 @@ export default class FlexLayoutItemProperty extends BaseProperty {
         key='layout' 
         icon="true" 
         value="${valueType}"
-        options="${getLayoutOptions()}"  
+        options="${this.getLayoutOptions()}"  
         onchange="changeLayoutType" />
       </div>
       <div class='layout-list' ref='$layoutList' data-selected-value='${current.layout}'>
@@ -62,13 +55,13 @@ export default class FlexLayoutItemProperty extends BaseProperty {
         <div data-value='auto'></div>
         <div data-value='value'>
           <div class='value-item'>
-            <RangeEditor ref='$grow' label='${i18n('grow')}' key="flex-grow" value="${arr[0]}" min='0' max='1' step='0.01' units=",auto" onchange='changeFlexItem' />
+            <RangeEditor ref='$grow' label='${this.$i18n('flex.layout.item.property.grow')}' key="flex-grow" value="${arr[0]}" min='0' max='1' step='0.01' units=",auto" onchange='changeFlexItem' />
           </div>
           <div class='value-item'>
-            <RangeEditor ref='$shrink' label='${i18n('shrink')}' key="flex-shrink" value="${arr[1]}" min='0' max='1' step='0.01' units=",auto" onchange='changeFlexItem' />
+            <RangeEditor ref='$shrink' label='${this.$i18n('flex.layout.item.property.shrink')}' key="flex-shrink" value="${arr[1]}" min='0' max='1' step='0.01' units=",auto" onchange='changeFlexItem' />
           </div>
           <div class='value-item'>
-            <RangeEditor ref='$basis' label='${i18n('basis')}' key="flex-basis" value="${arr[2]}" min='0' units="px,em,%,auto" onchange='changeFlexItem' />
+            <RangeEditor ref='$basis' label='${this.$i18n('flex.layout.item.property.basis')}' key="flex-basis" value="${arr[2]}" min='0' units="px,em,%,auto" onchange='changeFlexItem' />
           </div>                    
         </div>
       </div>
@@ -96,7 +89,7 @@ export default class FlexLayoutItemProperty extends BaseProperty {
 
   [EVENT('changeFlexItem')] (key, value) {
 
-    this.emit('SET_ATTRIBUTE', { 
+    this.emit('setAttribute', { 
       'flex-layout-item': this.getFlexValue()
     })
 
@@ -112,7 +105,7 @@ export default class FlexLayoutItemProperty extends BaseProperty {
       value = this.getFlexValue()
     }
 
-    this.emit('SET_ATTRIBUTE', { 
+    this.emit('setAttribute', { 
       'flex-layout-item': value
     })
 
@@ -124,7 +117,7 @@ export default class FlexLayoutItemProperty extends BaseProperty {
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
     this.refreshShow(() => {
-      var current = editor.selection.current; 
+      var current = this.$selection.current; 
       return  current && current.isInFlex()
     });
   }

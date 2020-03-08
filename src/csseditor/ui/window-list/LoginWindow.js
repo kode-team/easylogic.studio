@@ -1,7 +1,6 @@
 import BaseWindow from "./BaseWindow";
 import { EVENT } from "../../../util/UIElement";
 import { CLICK } from "../../../util/Event";
-import { editor } from "../../../editor/editor";
 
 export default class LoginWindow extends BaseWindow {
 
@@ -29,7 +28,7 @@ export default class LoginWindow extends BaseWindow {
         var password = this.refs.$password.value; 
 
         firebase.auth().signInWithEmailAndPassword(email, password).then((user) => {
-            editor.setUser(user)
+            this.$editor.setUser(user)
             this.hide();
         }).catch(function(error) {
             // Handle Errors here.

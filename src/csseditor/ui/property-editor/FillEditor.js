@@ -1,11 +1,10 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
-import { LOAD, CLICK, POINTERSTART, MOVE, END, BIND, PREVENT, DOUBLECLICK, CHANGE } from "../../../util/Event";
+import { LOAD, CLICK, POINTERSTART, MOVE, BIND, CHANGE } from "../../../util/Event";
 import { Length } from "../../../editor/unit/Length";
 import RangeEditor from "./RangeEditor";
 
 import SelectEditor from "./SelectEditor";
 import InputRangeEditor from "./InputRangeEditor";
-import { editor } from "../../../editor/editor";
 import { Gradient } from "../../../editor/image-resource/Gradient";
 import icon from "../icon/icon";
 import { SVGFill } from "../../../editor/svg-property/SVGFill";
@@ -52,8 +51,6 @@ const rangeEditorList = [
   'patternWidth', 'patternHeight',
   'imageX', 'imageY', 'imageWidth', 'imageHeight'
 ]
-
-const i18n = editor.initI18n('fill.editor')
 
 export default class FillEditor extends UIElement  {
 
@@ -190,7 +187,7 @@ export default class FillEditor extends UIElement  {
   }
 
   [CHANGE('$file')] (e) {
-    var project = editor.selection.currentProject;
+    var project = this.$selection.currentProject;
     if (project) {
       [...e.target.files].forEach(item => {
         this.emit('update.asset.image', item, (local) => {
@@ -202,7 +199,7 @@ export default class FillEditor extends UIElement  {
 
 
   [CLICK('$el .preset-position [data-value]')] (e) {
-    var type = e.$delegateTarget.attr('data-value')
+    var type = e.$dt.attr('data-value')
 
     if (presetPosition[type]) {
       this.state.image.reset(presetPosition[type])
@@ -297,7 +294,7 @@ export default class FillEditor extends UIElement  {
   [POINTERSTART('$pointerDrawArea circle[data-type]') + MOVE('moveDragPointer')]  (e) {
     this.containerRect = this.refs.$pointerDrawArea.rect();
     this.startXY = e.xy; 
-    this.type = e.$delegateTarget.attr('data-type');
+    this.type = e.$dt.attr('data-type');
     this.state.cachedRect = null; 
   }
 
@@ -362,7 +359,7 @@ export default class FillEditor extends UIElement  {
   }
 
   [CLICK('$tab .picker-tab-item')] (e) {
-    var type = e.$delegateTarget.attr('data-editor')
+    var type = e.$dt.attr('data-editor')
     this.$el.attr('data-selected-editor', type);
     this.parent.trigger('changeTabType', type);
 
@@ -389,9 +386,9 @@ export default class FillEditor extends UIElement  {
     if (type === 'linear-gradient') {
       this.emit('addStatusBarMessage', '');
     } else if (type === 'url' || type === 'image-resource') {
-      this.emit('addStatusBarMessage', i18n('message.click.image'));
+      this.emit('addStatusBarMessage', this.$i18n('fill.editor.message.click.image'));
     } else {
-      this.emit('addStatusBarMessage', i18n('message.drag.position'));
+      this.emit('addStatusBarMessage', this.$i18n('fill.editor.message.drag.position'));
     }
   }
 
@@ -481,7 +478,7 @@ export default class FillEditor extends UIElement  {
     var colorsteps = this.state.image.colorsteps || [] 
     return colorsteps.map( (it, index) => {
 
-      var selected = editor.selection.isSelectedColorStep(it.id) ? 'selected' : '';
+      var selected = this.$selection.isSelectedColorStep(it.id) ? 'selected' : '';
 
       return /*html*/`
       <div class='step ${selected}' data-id='${it.id}' style='left: ${it.percent}%;'>
@@ -503,10 +500,10 @@ export default class FillEditor extends UIElement  {
   selectStep(id) {
     this.state.id = id; 
 
-    editor.selection.selectColorStep(id);
+    this.$selection.selectColorStep(id);
 
     if (this.state.image.colorsteps) {
-      this.currentStep = this.state.image.colorsteps.find( it => editor.selection.isSelectedColorStep(it.id))
+      this.currentStep = this.state.image.colorsteps.find( it => this.$selection.isSelectedColorStep(it.id))
       this.children.$range.setValue(Length.percent(this.currentStep.percent));
       this.parent.trigger('selectColorStep', this.currentStep.color)    
   
@@ -517,7 +514,7 @@ export default class FillEditor extends UIElement  {
   }
 
   [POINTERSTART('$stepList .step') + MOVE()] (e) {
-    var id = e.$delegateTarget.attr('data-id')
+    var id = e.$dt.attr('data-id')
 
     if (e.altKey) {
       this.removeStep(id);

@@ -1,6 +1,5 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
 
-import { editor } from "../../../editor/editor";
 import { DEBOUNCE, PREVENT, WHEEL, ALT, THROTTLE, IF, KEYUP, CONTROL, KEY, DRAGOVER, DROP, KEYPRESS, KEYDOWN } from "../../../util/Event";
 
 import ElementView from "./ElementView";
@@ -81,7 +80,7 @@ export default class CanvasView extends UIElement {
   [WHEEL('$lock') + ALT + PREVENT + THROTTLE(10)] (e) {
 
     var dt = e.deltaY < 0 ? 1.1 : 0.9;
-    this.emit('changeScaleValue', editor.scale * dt);
+    this.emit('changeScaleValue', this.$editor.scale * dt);
   }
 
   getScrollTop() {
@@ -145,7 +144,7 @@ export default class CanvasView extends UIElement {
     if ($target.attr('contenteditable')) {
 
     } else {
-      editor.selection.remove()
+      this.$selection.remove()
       this.emit('refreshAllSelectArtBoard')
     }
   }

@@ -1,5 +1,4 @@
 import BaseProperty from "./BaseProperty";
-import { editor } from "../../../editor/editor";
 import { LOAD, DEBOUNCE } from "../../../util/Event";
 import { EVENT } from "../../../util/UIElement";
 
@@ -7,7 +6,7 @@ import { EVENT } from "../../../util/UIElement";
 export default class TextClipProperty extends BaseProperty {
   
   getTitle() {
-    return editor.i18n('text.clip.property.title');
+    return this.$i18n('text.clip.property.title');
   }
 
   isFirstShow() {
@@ -23,7 +22,7 @@ export default class TextClipProperty extends BaseProperty {
   }  
 
   [LOAD("$textClip")]() {
-    var current = editor.selection.current || {};
+    var current = this.$selection.current || {};
 
     var clip = current['text-clip'] || ''
     return /*html*/`
@@ -32,7 +31,7 @@ export default class TextClipProperty extends BaseProperty {
   }
 
   [EVENT('changeSelect')] (key, value) {
-      this.emit('SET_ATTRIBUTE', {
+      this.emit('setAttribute', {
         [key]: value
       })
   }

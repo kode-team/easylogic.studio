@@ -7,7 +7,6 @@ import {
   PREVENT,
   DRAGOVER
 } from "../../../util/Event";
-import { editor } from "../../../editor/editor";
 import { EVENT } from "../../../util/UIElement";
 
 
@@ -16,7 +15,7 @@ import { getPredefinedCubicBezier } from "../../../util/functions/bezier";
 
 export default class TransitionProperty extends BaseProperty {
   getTitle() {
-    return editor.i18n('transition.property.title');
+    return this.$i18n('transition.property.title');
   }
 
   getBody() {
@@ -30,7 +29,7 @@ export default class TransitionProperty extends BaseProperty {
   }
 
   [LOAD("$transitionList")]() {
-    var current = editor.selection.current;
+    var current = this.$selection.current;
 
     if (!current) return '';
 
@@ -103,7 +102,7 @@ export default class TransitionProperty extends BaseProperty {
   }
 
   refreshTimingFunctionCanvas() {
-    var current = editor.selection.current;
+    var current = this.$selection.current;
 
     if (!current) return;
 
@@ -114,7 +113,7 @@ export default class TransitionProperty extends BaseProperty {
   }
 
   [CLICK("$add")](e) {
-    var current = editor.selection.current;
+    var current = this.$selection.current;
 
     if (current) {
       current.createTransition();
@@ -126,15 +125,15 @@ export default class TransitionProperty extends BaseProperty {
   }
 
   [DRAGSTART("$transitionList .transition-item")](e) {
-    this.startIndex = +e.$delegateTarget.attr("data-index");
+    this.startIndex = +e.$dt.attr("data-index");
   }
 
   // drop 이벤트를 걸 때 dragover 가 같이 선언되어 있어야 한다.
   [DRAGOVER("$transitionList .transition-item") + PREVENT](e) {}
 
   [DROP("$transitionList .transition-item") + PREVENT](e) {
-    var targetIndex = +e.$delegateTarget.attr("data-index");
-    var current = editor.selection.current;
+    var targetIndex = +e.$dt.attr("data-index");
+    var current = this.$selection.current;
     if (!current) return;
 
     this.selectItem(this.startIndex, true);
@@ -156,8 +155,8 @@ export default class TransitionProperty extends BaseProperty {
   }
 
   [CLICK("$transitionList .tools .del")](e) {
-    var removeIndex = e.$delegateTarget.attr("data-index");
-    var current = editor.selection.current;
+    var removeIndex = e.$dt.attr("data-index");
+    var current = this.$selection.current;
     if (!current) return;
 
     current.removeTransition(removeIndex);
@@ -169,15 +168,15 @@ export default class TransitionProperty extends BaseProperty {
   }
 
   [CLICK('$transitionList .play-state')] (e) {
-    var index = +e.$delegateTarget.attr("data-index");
-    var current = editor.selection.current;
+    var index = +e.$dt.attr("data-index");
+    var current = this.$selection.current;
     if (!current) return; 
 
     var transition = current.transitions[index]
     if (transition) {
       transition.togglePlayState();
 
-      e.$delegateTarget.attr('data-play-state-selected-value', transition.playState)
+      e.$dt.attr('data-play-state-selected-value', transition.playState)
 
       this.emit('refreshElement', current);
     }
@@ -206,7 +205,7 @@ export default class TransitionProperty extends BaseProperty {
 
     this.selectedIndex = +$preview.attr("data-index");
     this.selectItem(this.selectedIndex, true);
-    this.current = editor.selection.current;
+    this.current = this.$selection.current;
 
     if (!this.current) return;
     this.currentTransition = this.current.transitions[
@@ -217,7 +216,7 @@ export default class TransitionProperty extends BaseProperty {
   }
 
   viewTransitionPropertyPopup(position) {
-    this.current = editor.selection.current;
+    this.current = this.$selection.current;
 
     if (!this.current) return;
     this.currentTransition = this.current.transitions[
@@ -241,7 +240,7 @@ export default class TransitionProperty extends BaseProperty {
   }
 
   [CLICK("$transitionList .preview")](e) {
-    this.viewTransitionPicker(e.$delegateTarget);
+    this.viewTransitionPicker(e.$dt);
   }
 
   getRef(...args) {

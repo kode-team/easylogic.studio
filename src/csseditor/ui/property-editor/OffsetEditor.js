@@ -163,10 +163,10 @@ export default class OffsetEditor extends UIElement {
   [POINTERSTART('$offset .offset-item') + MOVE('moveOffset') + END('endOffset')] (e) {
     this.baseOffsetWidth = this.refs.$offset.width();
     this.baseOffsetArea = this.refs.$offset.offset();
-    this.currentOffsetleft =  Length.parse(e.$delegateTarget.css('left'))
+    this.currentOffsetleft =  Length.parse(e.$dt.css('left'))
 
-    this.currentOffset = e.$delegateTarget;
-    this.currentOffsetIndex = +e.$delegateTarget.attr('data-offset-index')
+    this.currentOffset = e.$dt;
+    this.currentOffsetIndex = +e.$dt.attr('data-offset-index')
     this.currentOffsetXY = e.xy;
     this.baseOffsetMin = this.baseOffsetArea.left;
     this.baseOffsetMax = this.baseOffsetArea.left + this.baseOffsetWidth;

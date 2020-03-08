@@ -15,7 +15,7 @@ export default class AddSVGText extends MenuItem {
   }  
 
   clickButton(e) {
-    this.emit('add.type', 'svgtext');
+    this.emit('addComponentType', 'svgtext');
   }
 
 }

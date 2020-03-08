@@ -32,7 +32,7 @@ export default class TextShadowPropertyPopup extends BasePopup {
   }
 
   getBody() {
-    return `<div class='text-shadow-property-popup' ref='$popup'></div>`;
+    return /*html*/`<div class='text-shadow-property-popup' ref='$popup'></div>`;
   }
 
   [LOAD("$popup")]() {

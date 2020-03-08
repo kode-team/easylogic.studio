@@ -19,7 +19,6 @@ import LogoView from "../ui/view/LogoView";
 import ExternalToolMenu from "../ui/view/ExternalToolMenu";
 import icon from "../ui/icon/icon";
 import CommandView from "../ui/view/CommandView";
-import { editor } from "../../editor/editor";
 import Dom from "../../util/Dom";
 import Resource from "../../editor/util/Resource";
 import windowList from "../ui/window-list";
@@ -36,7 +35,7 @@ export default class CSSEditor extends UIElement {
 
     var $body = Dom.create(document.body);
     
-    $body.attr('data-theme', editor.theme);
+    $body.attr('data-theme', this.$editor.theme);
     $body.addClass(navigator.userAgent.includes('Windows') ? 'ua-window': 'ua-default')
   }
 
@@ -125,7 +124,7 @@ export default class CSSEditor extends UIElement {
   }
 
   [EVENT('changeTheme')] () {
-    Dom.create(document.body).attr('data-theme', editor.theme);
+    Dom.create(document.body).attr('data-theme', this.$editor.theme);
   }
 
 

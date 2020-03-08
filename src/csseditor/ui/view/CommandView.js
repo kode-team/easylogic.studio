@@ -1,6 +1,6 @@
 import UIElement from "../../../util/UIElement";
 import TimelineCommand from "./command/TimelineCommand";
-import ObjectCommand from "./command/ObjectCommand";
+// import ObjectCommand from "./command/ObjectCommand";
 import ToolCommand from "./command/ToolCommand";
 
 export default class CommandView extends UIElement {
@@ -8,16 +8,15 @@ export default class CommandView extends UIElement {
     components() {
         return {
             TimelineCommand,
-            ObjectCommand,
+            // ObjectCommand,
             ToolCommand
         }
     }
 
     template() {
-        return `
+        return /*html*/`
         <div>
             <TimelineCommand />
-            <ObjectCommand />
             <ToolCommand />
         </div>
         `

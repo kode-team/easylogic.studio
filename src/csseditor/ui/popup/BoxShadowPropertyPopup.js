@@ -35,11 +35,11 @@ export default class BoxShadowPropertyPopup extends BasePopup {
   }
 
   getBody() {
-    return `<div class='box-shadow-property-popup' ref='$popup'></div>`;
+    return /*html*/`<div class='box-shadow-property-popup' ref='$popup'></div>`;
   }
 
   [LOAD("$popup")]() {
-    return `
+    return /*html*/`
       <div class='box'>
         <EmbedColorPicker ref='$colorpicker' value='${this.state.color}' onchange='changeColor' />
       </div>
@@ -81,7 +81,7 @@ export default class BoxShadowPropertyPopup extends BasePopup {
 
 
   [CLICK("$popup .select button")](e) {
-    var type = e.$delegateTarget.attr("data-value");
+    var type = e.$dt.attr("data-value");
 
     this.getRef("$type").attr("data-selected-value", type);
 

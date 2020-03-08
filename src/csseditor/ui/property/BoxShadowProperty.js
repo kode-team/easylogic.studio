@@ -1,6 +1,5 @@
 import BaseProperty from "./BaseProperty";
 import { LOAD, DEBOUNCE, CLICK } from "../../../util/Event";
-import { editor } from "../../../editor/editor";
 import { EVENT } from "../../../util/UIElement";
 import icon from "../icon/icon";
 
@@ -8,11 +7,11 @@ import icon from "../icon/icon";
 export default class BoxShadowProperty extends BaseProperty {
 
   getTitle () {
-    return editor.i18n('boxshadow.property.title');
+    return this.$i18n('boxshadow.property.title');
   }
 
   getBody() {
-    return `
+    return /*html*/`
       <div class="full box-shadow-item" ref="$shadowList"></div>
     `;
   }
@@ -27,15 +26,15 @@ export default class BoxShadowProperty extends BaseProperty {
 
 
   [LOAD("$shadowList")]() {
-    var current = editor.selection.current || {};
-    return `
+    var current = this.$selection.current || {};
+    return /*html*/`
       <BoxShadowEditor ref='$boxshadow' value="${current['box-shadow'] || ''}" hide-label="true" onChange="changeBoxShadow" />
     `
   }
 
 
   getTools() {
-    return `<button type="button" ref='$add'>${icon.add}</button>`
+    return /*html*/`<button type="button" ref='$add'>${icon.add}</button>`
   }
 
   [CLICK('$add')] () {
@@ -50,7 +49,7 @@ export default class BoxShadowProperty extends BaseProperty {
 
   [EVENT("changeBoxShadow")](boxshadow) {
 
-    this.emit('SET_ATTRIBUTE', { 
+    this.emit('setAttribute', { 
       'box-shadow': boxshadow
     })
 

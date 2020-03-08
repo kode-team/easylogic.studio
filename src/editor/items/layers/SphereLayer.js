@@ -1,8 +1,6 @@
 import { Layer } from "../Layer";
-import Color from "../../../util/Color";
 import { CSS_TO_STRING, repeat } from "../../../util/functions/func";
 import HueColor from "../../../util/HueColor";
-import { rgb } from "../../../util/functions/formatter";
 
 export class SphereLayer extends Layer {
   getDefaultObject(obj = {}) {

@@ -16,6 +16,6 @@ export default class AddBone extends MenuItem {
 
   clickButton(e) {
 
-    this.emit('add.type', 'bone');
+    this.emit('addComponentType', 'bone');
   }
 }

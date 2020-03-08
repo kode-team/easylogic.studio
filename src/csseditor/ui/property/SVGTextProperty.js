@@ -1,14 +1,11 @@
 import BaseProperty from "./BaseProperty";
-import { editor } from "../../../editor/editor";
 import { EVENT } from "../../../util/UIElement";
 import { DEBOUNCE } from "../../../util/Event";
-
-const i18n = editor.initI18n('svg.text.property');
 
 export default class SVGTextProperty extends BaseProperty {
 
   getTitle() {
-    return i18n('title');
+    return this.$i18n('svg.text.property.title');
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
@@ -17,7 +14,7 @@ export default class SVGTextProperty extends BaseProperty {
 
   refresh() {
    // TODO: 데이타 로드를 어떻게 해야할까? 
-    var current = editor.selection.current;
+    var current = this.$selection.current;
     if (current) {
 
       this.setAllValue([
@@ -36,7 +33,7 @@ export default class SVGTextProperty extends BaseProperty {
   }
 
   setAllValue(list = []) {
-    var current = editor.selection.current;
+    var current = this.$selection.current;
     if (!current) return; 
 
     list.forEach(key => {
@@ -50,7 +47,7 @@ export default class SVGTextProperty extends BaseProperty {
         <span class='add-timeline-property' data-property='text'></span>
         <TextAreaEditor 
           ref='$text' 
-          label='${i18n('textarea')}' 
+          label='${this.$i18n('svg.text.property.textarea')}' 
           key="text"
           onchange="changeTextValue" />
       </div>        
@@ -58,7 +55,7 @@ export default class SVGTextProperty extends BaseProperty {
         <span class='add-timeline-property' data-property='font-size'></span>
         <RangeEditor 
           ref='$font-size' 
-          label='${i18n('size')}' 
+          label='${this.$i18n('svg.text.property.size')}' 
           key="font-size" 
           min='0'
           max="1000" 
@@ -68,7 +65,7 @@ export default class SVGTextProperty extends BaseProperty {
         <span class='add-timeline-property' data-property='font-weight'></span>
         <NumberRangeEditor 
           ref='$font-weight' 
-          label='${i18n('weight')}' 
+          label='${this.$i18n('svg.text.property.weight')}' 
           key='font-weight' 
           value="400" 
           min="100"
@@ -82,7 +79,7 @@ export default class SVGTextProperty extends BaseProperty {
       <div class='property-item'>
         <SelectIconEditor 
           ref='$font-style' 
-          label='${i18n('style')}' 
+          label='${this.$i18n('svg.text.property.style')}' 
           key="font-style" 
           options="normal,italic" 
           icons='I,I'
@@ -91,7 +88,7 @@ export default class SVGTextProperty extends BaseProperty {
       <div class='property-item'>
         <SelectIconEditor 
           ref='$text-anchor' 
-          label='${i18n('anchor')}' 
+          label='${this.$i18n('svg.text.property.anchor')}' 
           key="text-anchor" 
           options="start,middle,end" 
           onchange="changeTextValue" />
@@ -101,7 +98,7 @@ export default class SVGTextProperty extends BaseProperty {
         <SelectEditor 
           ref='$font-family' 
           icon="true"
-          label='${i18n('family')}' 
+          label='${this.$i18n('svg.text.property.family')}' 
           key="font-family" 
           options=",serif,sans-serif,monospace,cursive,fantasy,system-ui" 
           onchange="changeTextValue" 
@@ -111,7 +108,7 @@ export default class SVGTextProperty extends BaseProperty {
         <span class='add-timeline-property' data-property='lengthAdjust'></span>
         <SelectEditor 
           ref='$lengthAdjust' 
-          label='${i18n('length.adjust')}' 
+          label='${this.$i18n('svg.text.property.length.adjust')}' 
           key='lengthAdjust' 
           value='spacing' 
           options="spacing,spacingAndGlyphs" 
@@ -121,7 +118,7 @@ export default class SVGTextProperty extends BaseProperty {
         <span class='add-timeline-property' data-property='textLength'></span>
         <RangeEditor 
           ref='$textLength' 
-          label='${i18n('text.length')}' 
+          label='${this.$i18n('svg.text.property.text.length')}' 
           key='textLength'
           min="0"
           max='1000'
@@ -132,7 +129,7 @@ export default class SVGTextProperty extends BaseProperty {
         <span class='add-timeline-property' data-property='startOffset'></span>
         <RangeEditor 
           ref='$startOffset' 
-          label='${i18n('start.offset')}' 
+          label='${this.$i18n('svg.text.property.start.offset')}' 
           key='startOffset' 
           min="0"
           max='1000'
@@ -144,7 +141,7 @@ export default class SVGTextProperty extends BaseProperty {
 
   [EVENT('changeTextValue')] (key, value) {
 
-    this.emit('SET_ATTRIBUTE', { 
+    this.emit('setAttribute', { 
       [key]: value
     })
   }

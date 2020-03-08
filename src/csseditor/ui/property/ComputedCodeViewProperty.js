@@ -1,6 +1,5 @@
 import BaseProperty from "./BaseProperty";
 import { LOAD, DEBOUNCE } from "../../../util/Event";
-import { editor } from "../../../editor/editor";
 
 import { EVENT } from "../../../util/UIElement";
 
@@ -48,7 +47,7 @@ export default class ComputedCodeViewProperty extends BaseProperty {
   }
 
   [LOAD('$body')] () {
-    var current = editor.selection.current;
+    var current = this.$selection.current;
 
     var currentExport = (current) ? current.toExport().replace(/;/gi, ";\n") : ''
 

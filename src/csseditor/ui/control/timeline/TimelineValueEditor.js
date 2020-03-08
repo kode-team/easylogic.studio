@@ -1,14 +1,11 @@
 import UIElement, { EVENT } from "../../../../util/UIElement";
 import CubicBezierEditor from "../../property-editor/CubicBezierEditor";
-import { LOAD, CLICK, KEYDOWN, KEYUP, KEY, IF, PREVENT, ENTER } from "../../../../util/Event";
+import { LOAD, CLICK, KEYDOWN, KEYUP, IF, PREVENT, ENTER } from "../../../../util/Event";
 import CSSPropertyEditor from "../../property-editor/CSSPropertyEditor";
 
 import { second, timecode } from "../../../../util/functions/time";
-import { editor } from "../../../../editor/editor";
 import { isUndefined } from "../../../../util/functions/func";
 import icon from "../../icon/icon";
-
-const  i18n = editor.initI18n('timeline.value.editor')
 
 export default class TimelineValueEditor extends UIElement {
   components() {
@@ -40,7 +37,7 @@ export default class TimelineValueEditor extends UIElement {
 
   refresh () {
 
-    var artboard = editor.selection.currentArtboard; 
+    var artboard = this.$selection.currentArtboard; 
     var code = '00:00:00:00';
     if (artboard) {
       var timeline = artboard.getSelectedTimeline();
@@ -62,10 +59,10 @@ export default class TimelineValueEditor extends UIElement {
         <div class="tab number-tab" data-selected-value="1" ref="$tab">
             <div class="tab-header full" ref="$header">
                 <div class="tab-item" data-value="1">
-                    <label>${i18n('value')}</label>
+                    <label>${this.$i18n('timeline.value.editor.value')}</label>
                 </div>          
                 <div class="tab-item" data-value="2">
-                    <label>${i18n('timing')}</label> 
+                    <label>${this.$i18n('timeline.value.editor.timing')}</label> 
                 </div>                            
             </div>
             <div class="tab-body" ref="$body">
@@ -86,7 +83,7 @@ export default class TimelineValueEditor extends UIElement {
   [CLICK("$header .tab-item:not(.empty-item)")](e) {
     this.refs.$tab.attr(
       "data-selected-value",
-      e.$delegateTarget.attr("data-value")
+      e.$dt.attr("data-value")
     );
     this.refresh();
   }
@@ -124,7 +121,7 @@ checkKey (e) {
 [KEYUP('$offsetTime') + ENTER + IF('checkNumberOrTimecode') + PREVENT] (e) {
     var frame = this.refs.$offsetTime.value
 
-    var artboard = editor.selection.currentArtboard;
+    var artboard = this.$selection.currentArtboard;
     if (artboard) {
       var timeline = artboard.getSelectedTimeline();
 
@@ -139,7 +136,7 @@ checkKey (e) {
   templateForOffset() {
     return /*html*/`
       <div class='offset-input'>
-        <label>${i18n('time')}</label>
+        <label>${this.$i18n('timeline.value.editor.time')}</label>
         <input type="text" ref='$offsetTime' />
         <button type="button" ref='$seek' title='Seek timeline'>${icon.gps_fixed}</button>
       </div>
@@ -147,7 +144,7 @@ checkKey (e) {
   }    
 
   [CLICK('$seek')] () {
-    var artboard = editor.selection.currentArtboard;
+    var artboard = this.$selection.currentArtboard;
 
     if (artboard) {
       artboard.seek(this.refs.$offsetTime.value, (it => {
@@ -163,7 +160,9 @@ checkKey (e) {
   }
 
   templateForProperty() {
-    return `<CSSPropertyEditor ref='$propertyEditor' hide-title='true' onchange='changePropertyEditor' />`
+    return /*html*/`
+      <CSSPropertyEditor ref='$propertyEditor' hide-title='true' onchange='changePropertyEditor' />
+    `
   }    
 
   [LOAD('$editor')] () {
@@ -180,7 +179,7 @@ checkKey (e) {
 
   [EVENT('refreshPropertyValue')] () {
 
-    var artboard = editor.selection.currentArtboard;
+    var artboard = this.$selection.currentArtboard;
     if (artboard) {
       var selectedLayer = artboard.searchById(this.state.layerId); 
 

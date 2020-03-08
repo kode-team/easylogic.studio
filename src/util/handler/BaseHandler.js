@@ -109,7 +109,7 @@ export default class BaseHandler {
             break;
         }
         const names = Object.getOwnPropertyNames(p).filter(name => {
-            return isFunction(context[name]) && !expectMethod[name];
+            return context && isFunction(context[name]) && !expectMethod[name];
         });
 
         results.push(...names);

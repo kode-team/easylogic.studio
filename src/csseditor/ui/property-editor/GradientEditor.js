@@ -6,7 +6,6 @@ import RangeEditor from "./RangeEditor";
 import SelectEditor from "./SelectEditor";
 import InputRangeEditor from "./InputRangeEditor";
 import { BackgroundImage } from "../../../editor/css-property/BackgroundImage";
-import { editor } from "../../../editor/editor";
 import { Gradient } from "../../../editor/image-resource/Gradient";
 import icon from "../icon/icon";
 import { clone } from "../../../util/functions/func";
@@ -57,8 +56,6 @@ var presetPosition = {
   'bottom right': [ '100%', '100%' ]
 }
 
-const i18n = editor.initI18n('gradient.editor');
-
 export default class GradientEditor extends UIElement  {
 
   components() {
@@ -101,7 +98,7 @@ export default class GradientEditor extends UIElement  {
     return /*html*/`
         <div class='gradient-editor' data-selected-editor='${type}'>
             <div class='gradient-preview'>
-              <div class='gradient-view' ref='$gradientView' title='${i18n('drag.message')}'></div>
+              <div class='gradient-view' ref='$gradientView' title='${this.$i18n('gradient.editor.drag.message')}'></div>
               <div class='drag-pointer' ref='$dragPosition'></div>
               <div class='preset-position'>
                 <div data-value='top' title='top'>${icon.chevron_right}</div>
@@ -154,7 +151,7 @@ export default class GradientEditor extends UIElement  {
   }
 
   [CHANGE('$file')] (e) {
-    var project = editor.selection.currentProject;
+    var project = this.$selection.currentProject;
     if (project) {
       [...e.target.files].forEach(item => {
         this.emit('update.asset.image', item, (local) => {
@@ -166,7 +163,7 @@ export default class GradientEditor extends UIElement  {
 
 
   [CLICK('$el .preset-position [data-value]')] (e) {
-    var type = e.$delegateTarget.attr('data-value')
+    var type = e.$dt.attr('data-value')
 
     if (presetPosition[type]) {
       this.state.image.radialPosition = clone(presetPosition[type])
@@ -219,7 +216,7 @@ export default class GradientEditor extends UIElement  {
   }
 
   [CLICK('$tab .picker-tab-item')] (e) {
-    var type = e.$delegateTarget.attr('data-editor')
+    var type = e.$dt.attr('data-editor')
     this.$el.attr('data-selected-editor', type);
     this.parent.trigger('changeTabType', type);
 
@@ -355,7 +352,7 @@ export default class GradientEditor extends UIElement  {
     var colorsteps = this.state.image.colorsteps || [] 
     return colorsteps.map( (it, index) => {
 
-      var selected = editor.selection.isSelectedColorStep(it.id) ? 'selected' : '';
+      var selected = this.$selection.isSelectedColorStep(it.id) ? 'selected' : '';
 
       return /*html*/`
       <div class='step ${selected}' data-id='${it.id}' data-cut='${it.cut}' style='left: ${it.percent}%;'>
@@ -386,10 +383,10 @@ export default class GradientEditor extends UIElement  {
   selectStep(id) {
     this.state.id = id; 
 
-    editor.selection.selectColorStep(id);
+    this.$selection.selectColorStep(id);
 
     if (this.state.image.colorsteps) {
-      this.currentStep = this.state.image.colorsteps.find( it => editor.selection.isSelectedColorStep(it.id))
+      this.currentStep = this.state.image.colorsteps.find( it => this.$selection.isSelectedColorStep(it.id))
       this.refs.$cut.checked(this.currentStep.cut);
       this.children.$range.setValue(Length.percent(this.currentStep.percent));
       this.parent.trigger('selectColorStep', this.currentStep.color)    
@@ -401,7 +398,7 @@ export default class GradientEditor extends UIElement  {
   }
 
   [POINTERSTART('$stepList .step') + MOVE()] (e) {
-    var id = e.$delegateTarget.attr('data-id')
+    var id = e.$dt.attr('data-id')
 
     if (e.altKey) {
       this.removeStep(id);

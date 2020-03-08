@@ -1,25 +1,17 @@
 import BaseProperty from "./BaseProperty";
-import { editor } from "../../../editor/editor";
-import { DEBOUNCE, LOAD, BIND } from "../../../util/Event";
+import { DEBOUNCE, LOAD} from "../../../util/Event";
 import { EVENT } from "../../../util/UIElement";
-
-const i18n = editor.initI18n('layout.property');
-
-const makeOptionsFunction = (options) => {
-    return () => {
-        return options.split(',').map(it => {
-            return `${it}:${i18n(it)}`
-        }).join(',');
-    }
-}
-
-const getLayoutOptions = makeOptionsFunction('default,flex,grid')
-
 
 export default class LayoutProperty extends BaseProperty {
 
   getTitle() {
-    return i18n('title');
+    return this.$i18n('layout.property.title');
+  }
+
+  getLayoutOptions () {
+    return ['default', 'flex', 'grid'].map(it => {
+        return `${it}:${this.$i18n(`layout.property.${it}`)}`
+    }).join(',');
   }
 
   getClassName() {
@@ -33,7 +25,7 @@ export default class LayoutProperty extends BaseProperty {
   }  
 
   [LOAD('$layoutType')] () {
-    var current = editor.selection.current || { layout : 'default' }
+    var current = this.$selection.current || { layout : 'default' }
     return /*html*/`
       <div class='layout-select'>
         <SelectIconEditor 
@@ -41,7 +33,7 @@ export default class LayoutProperty extends BaseProperty {
         key='layout' 
         icon="true" 
         value="${current.layout}"
-        options="${getLayoutOptions()}"  
+        options="${this.getLayoutOptions()}"  
         colors=",green,red"
         onchange="changeLayoutType" />
       </div>
@@ -58,7 +50,7 @@ export default class LayoutProperty extends BaseProperty {
   }
 
   [EVENT('changeLayoutInfo')] (key, value) {
-    this.emit('SET_ATTRIBUTE', { 
+    this.emit('setAttribute', { 
       [key]: value
     })
 
@@ -66,7 +58,7 @@ export default class LayoutProperty extends BaseProperty {
   }
 
   [EVENT('changeLayoutType')] (key, value) {
-    this.emit('SET_ATTRIBUTE', { 
+    this.emit('setAttribute', { 
       [key]: value
     })
 

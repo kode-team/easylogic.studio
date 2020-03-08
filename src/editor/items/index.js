@@ -10,9 +10,12 @@ import { SVGPolygonItem } from "./layers/SVGPolygonItem";
 import { SVGTextItem } from "./layers/SVGTextItem";
 import { SVGTextPathItem } from "./layers/SVGTextPathItem";
 import { TextLayer } from "./layers/TextLayer";
-
+import { RectLayer } from "./layers/RectLayer";
+import { CircleLayer } from "./layers/CircleLayer";
 
 export default {
+    RectLayer,
+    CircleLayer,    
     Layer,
     Project,
     ArtBoard,

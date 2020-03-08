@@ -1,14 +1,11 @@
 import BaseProperty from "./BaseProperty";
-import { editor } from "../../../editor/editor";
 import { EVENT } from "../../../util/UIElement";
 import { DEBOUNCE } from "../../../util/Event";
-
-const i18n = editor.initI18n('text.property')
 
 export default class TextProperty extends BaseProperty {
 
   getTitle() {
-    return i18n('title');
+    return this.$i18n('text.property.title');
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
@@ -17,7 +14,7 @@ export default class TextProperty extends BaseProperty {
 
   refresh() {
    // TODO: 데이타 로드를 어떻게 해야할까? 
-    var current = editor.selection.current;
+    var current = this.$selection.current;
     if (current) {
       this.children.$align.setValue(current['text-align']);
       this.children.$transform.setValue(current['text-transform']);
@@ -31,7 +28,7 @@ export default class TextProperty extends BaseProperty {
       <div class="property-item">
         <SelectIconEditor 
           ref='$align' 
-          label='${i18n('align')}' 
+          label='${this.$i18n('text.property.align')}' 
           key='text-align' 
           value='left' 
           options="left,center,right,justify" 
@@ -41,7 +38,7 @@ export default class TextProperty extends BaseProperty {
       <div class="property-item">
         <SelectIconEditor 
           ref='$transform' 
-          label='${i18n('transform')}' 
+          label='${this.$i18n('text.property.transform')}' 
           key='text-transform' 
           options="none,uppercase:A,lowercase:a,capitalize:Aa"
           onchange='changeTextValue' />                
@@ -49,7 +46,7 @@ export default class TextProperty extends BaseProperty {
       <div class="property-item">
         <SelectIconEditor 
           ref='$decoration' 
-          label='${i18n('decoration')}' 
+          label='${this.$i18n('text.property.decoration')}' 
           key='text-decoration' 
           options="none,underline,overline:O,line-through" 
           icons="A,underline,O,strikethrough"
@@ -60,7 +57,7 @@ export default class TextProperty extends BaseProperty {
 
   [EVENT('changeTextValue')] (key, value) {
 
-    this.emit('SET_ATTRIBUTE', { 
+    this.emit('setAttribute', { 
       [key]: value
     })
   }

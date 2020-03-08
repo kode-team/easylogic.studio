@@ -3,8 +3,8 @@ import { SVGItem } from "./SVGItem";
 import { OBJECT_TO_PROPERTY, CSS_TO_STRING } from "../../../util/functions/func";
 import { hasSVGProperty, hasCSSProperty, hasSVGPathProperty } from "../../util/Resource";
 import { Length } from "../../unit/Length";
-import { editor } from "../../editor";
 import icon from "../../../csseditor/ui/icon/icon";
+import { ComponentManager } from "../../ComponentManager";
 
 export class SVGTextPathItem extends SVGItem {
 
@@ -196,4 +196,4 @@ export class SVGTextPathItem extends SVGItem {
   }
 }
 
-editor.registerComponent('svg-textpath', SVGTextPathItem); 
+ComponentManager.registerComponent('svgtextpath', SVGTextPathItem); 

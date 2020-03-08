@@ -2,7 +2,6 @@ import BaseProperty from "./BaseProperty";
 import {
   LOAD, DEBOUNCE, CLICK
 } from "../../../util/Event";
-import { editor } from "../../../editor/editor";
 import { EVENT } from "../../../util/UIElement";
 import icon from "../icon/icon";
 
@@ -11,7 +10,7 @@ export default class BackgroundImageProperty extends BaseProperty {
 
   
   getTitle() {
-    return editor.i18n('background.image.property.title');
+    return this.$i18n('background.image.property.title');
   }
 
   hasKeyframe () {
@@ -42,7 +41,7 @@ export default class BackgroundImageProperty extends BaseProperty {
   }  
 
   [LOAD('$property')] () {
-    var current = editor.selection.current || {}; 
+    var current = this.$selection.current || {}; 
     var value = current['background-image'] || ''
 
     return /*html*/`<BackgroundImageEditor 
@@ -59,7 +58,7 @@ export default class BackgroundImageProperty extends BaseProperty {
   }
 
   [EVENT('changeBackgroundImage') + DEBOUNCE(10)] (key, value) {
-    this.emit('SET_ATTRIBUTE', {
+    this.emit('setAttribute', {
       [key]: value 
     })
   }

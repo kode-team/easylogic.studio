@@ -1,8 +1,8 @@
 import { Component } from "../Component";
 import { Length } from "../../unit/Length";
-import { editor } from "../../editor";
 import icon from "../../../csseditor/ui/icon/icon";
 import { CSS_TO_STRING } from "../../../util/functions/func";
+import { ComponentManager } from "../../ComponentManager";
 
 const faceKeys = [
   'front', 'back', 'left', 'right', 'bottom', 'top'
@@ -412,5 +412,5 @@ export class CubeLayer extends Component {
 
 }
 
-editor.registerComponent('cube', CubeLayer);
+ComponentManager.registerComponent('cube', CubeLayer);
  

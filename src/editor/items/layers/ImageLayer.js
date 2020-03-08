@@ -1,8 +1,8 @@
 import { Layer } from "../Layer";
 import Dom from "../../../util/Dom";
-import { OBJECT_TO_PROPERTY, CSS_TO_STRING } from "../../../util/functions/func";
-import { editor } from "../../editor";
+import { CSS_TO_STRING } from "../../../util/functions/func";
 import icon from "../../../csseditor/ui/icon/icon";
+import { ComponentManager } from "../../ComponentManager";
 
 export class ImageLayer extends Layer {
 
@@ -140,4 +140,4 @@ export class ImageLayer extends Layer {
 
 }
  
-editor.registerComponent('image', ImageLayer);
+ComponentManager.registerComponent('image', ImageLayer);

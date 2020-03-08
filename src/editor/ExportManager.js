@@ -1,8 +1,5 @@
 import { CSS_TO_STRING } from "../util/functions/func";
-import { editor } from "./editor";
-import { Length } from "./unit/Length";
 import AnimationExport from "./export/animation-export/AnimationExport";
-import { replaceLocalUrltoRealUrl } from "./util/Resource";
 
 export default {
 
@@ -41,7 +38,7 @@ export default {
     `
   },
 
-  generate () {
+  generate (editor) {
     var project = editor.selection.currentProject;
     var artboard = editor.selection.currentArtboard;
 
@@ -58,16 +55,16 @@ ${this.makeSvg(project)}
 
     var js = AnimationExport.generate(artboard, 'anipa')
 
-    html = replaceLocalUrltoRealUrl(html);
-    css = replaceLocalUrltoRealUrl(css);
-    js = replaceLocalUrltoRealUrl(js);
+    html = editor.replaceLocalUrltoRealUrl(html);
+    css = editor.replaceLocalUrltoRealUrl(css);
+    js = editor.replaceLocalUrltoRealUrl(js);
 
   
     return { html, css, js }
   },
 
-  generateSVG (rootItem) {
-    return replaceLocalUrltoRealUrl(rootItem.generateSVG(true));
+  generateSVG (editor, rootItem) {
+    return editor.replaceLocalUrltoRealUrl(rootItem.generateSVG(true));
   }
 
 }

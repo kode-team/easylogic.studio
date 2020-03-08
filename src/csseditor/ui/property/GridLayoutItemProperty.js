@@ -1,26 +1,20 @@
 import BaseProperty from "./BaseProperty";
-import { editor } from "../../../editor/editor";
 import { DEBOUNCE, LOAD } from "../../../util/Event";
 import { EVENT } from "../../../util/UIElement";
 import { CSS_TO_STRING, STRING_TO_CSS } from "../../../util/functions/func";
-
-const i18n = editor.initI18n('grid.layout.item.property');
-
-const makeOptionsFunction = (options) => {
-    return () => {
-        return options.split(',').map(it => {
-            return `${it}:${i18n(it)}`
-        }).join(',');
-    }
-}
-
-const getLayoutOptions = makeOptionsFunction('none,value')
 
 
 export default class GridLayoutItemProperty extends BaseProperty {
 
   getTitle() {
-    return i18n('title');
+    return this.$i18n('grid.layout.item.property.title');
+  }
+
+
+  getLayoutOptions () {
+    return ['none', 'value'].map(it => {
+        return `${it}:${this.$i18n(`grid.layout.item.property.${it}`)}`
+    }).join(',');
   }
 
   getClassName() {
@@ -34,7 +28,7 @@ export default class GridLayoutItemProperty extends BaseProperty {
   }  
 
   [LOAD('$body')] () {
-    var current = editor.selection.current || { 'grid-layout-item' : 'none' }
+    var current = this.$selection.current || { 'grid-layout-item' : 'none' }
 
     var valueType = current['grid-layout-item'] || 'none';
 
@@ -54,7 +48,7 @@ export default class GridLayoutItemProperty extends BaseProperty {
         key='layout' 
         icon="true" 
         value="${valueType}"
-        options="${getLayoutOptions()}"  
+        options="${this.getLayoutOptions()}"  
         onchange="changeLayoutType" />
       </div>
       <div class='layout-list' ref='$layoutList' data-selected-value='${valueType}'>
@@ -62,11 +56,11 @@ export default class GridLayoutItemProperty extends BaseProperty {
         <div data-value='value'>
           <div class='value-item'>
             <label></label>
-            <div>${i18n('start')}</div>
-            <div>${i18n('end')}</div>
+            <div>${this.$i18n('grid.layout.item.property.start')}</div>
+            <div>${this.$i18n('grid.layout.item.property.end')}</div>
           </div>
           <div class='value-item'>
-            <label>${i18n('column')}</label>
+            <label>${this.$i18n('grid.layout.item.property.column')}</label>
             <div>
               <NumberInputEditor ref='$columnStart' key="grid-column-start" value="${obj['grid-column-start'] || '0'}" min='0' onchange='changeGridItem' />
             </div>
@@ -75,7 +69,7 @@ export default class GridLayoutItemProperty extends BaseProperty {
             </div>            
           </div>
           <div class='value-item'>
-            <label>${i18n('row')}</label>
+            <label>${this.$i18n('grid.layout.item.property.row')}</label>
             <div>
               <NumberInputEditor ref='$rowStart' key="grid-row-start" value="${obj['grid-row-start'] || '0'}" min='0' onchange='changeGridItem' />
             </div>
@@ -104,7 +98,7 @@ export default class GridLayoutItemProperty extends BaseProperty {
 
   [EVENT('changeGridItem')] (key, value) {
 
-    this.emit('SET_ATTRIBUTE', { 
+    this.emit('setAttribute', { 
       'grid-layout-item': this.getGridValue()
     })
 
@@ -120,7 +114,7 @@ export default class GridLayoutItemProperty extends BaseProperty {
       value = this.getGridValue()
     }
 
-    this.emit('SET_ATTRIBUTE', { 
+    this.emit('setAttribute', { 
       'grid-layout-item': value
     })
 
@@ -132,7 +126,7 @@ export default class GridLayoutItemProperty extends BaseProperty {
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
     this.refreshShow(() => {
-      var current = editor.selection.current; 
+      var current = this.$selection.current; 
       return  current && current.isInGrid()
     });
   }

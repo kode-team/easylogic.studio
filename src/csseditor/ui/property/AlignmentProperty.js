@@ -1,7 +1,6 @@
 import BaseProperty from "./BaseProperty";
 import { EVENT } from "../../../util/UIElement";
 import { DEBOUNCE } from "../../../util/Event";
-import { editor } from "../../../editor/editor";
 import menuItems from "../menu-items";
 
 export default class AlignmentProperty extends BaseProperty {
@@ -14,7 +13,7 @@ export default class AlignmentProperty extends BaseProperty {
   }
 
   getTitle() {
-    return editor.i18n('alignment.property.title');
+    return this.$i18n('alignment.property.title');
   }
 
   isHideHeader() {

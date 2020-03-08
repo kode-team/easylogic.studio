@@ -1,5 +1,4 @@
 import BaseProperty from "./BaseProperty";
-import { editor } from "../../../editor/editor";
 import { LOAD, CLICK, INPUT, DEBOUNCE } from "../../../util/Event";
 import { EVENT } from "../../../util/UIElement";
 import icon from "../icon/icon";
@@ -31,7 +30,7 @@ export default class SVGPathAssetsProperty extends BaseProperty {
 
 
   [LOAD("$svgpathList")]() {
-    var current = editor.selection.currentProject || { svgpathsList: [] }
+    var current = this.$selection.currentProject || { svgpathsList: [] }
 
     var svgpathsList = current.svgpathsList;
 
@@ -68,7 +67,7 @@ export default class SVGPathAssetsProperty extends BaseProperty {
 
  
   executeSVGPath (callback, isRefresh = true, isEmit = true ) {
-    var project = editor.selection.currentProject;
+    var project = this.$selection.currentProject;
 
     if(project) {
 
@@ -90,7 +89,7 @@ export default class SVGPathAssetsProperty extends BaseProperty {
   }
 
   [CLICK('$svgpathList .remove')] (e) {
-    var $item = e.$delegateTarget.closest('svgpath-item');
+    var $item = e.$dt.closest('svgpath-item');
     var index = +$item.attr('data-index');
 
     this.executeSVGPath(project => {
@@ -101,7 +100,7 @@ export default class SVGPathAssetsProperty extends BaseProperty {
 
 
   [CLICK('$svgpathList .copy')] (e) {
-    var $item = e.$delegateTarget.closest('svgpath-item');
+    var $item = e.$dt.closest('svgpath-item');
     var index = +$item.attr('data-index');
 
     this.executeSVGPath(project => {
@@ -110,9 +109,9 @@ export default class SVGPathAssetsProperty extends BaseProperty {
   }  
 
   [INPUT('$svgpathList input')] (e) {
-    var $item = e.$delegateTarget.closest('svgpath-item');
+    var $item = e.$dt.closest('svgpath-item');
     var index = +$item.attr('data-index');
-    var obj = e.$delegateTarget.attrKeyValue('data-key');
+    var obj = e.$dt.attrKeyValue('data-key');
 
     this.executeSVGPath(project => {
       project.setSVGPathValue(index, obj);      
@@ -123,13 +122,13 @@ export default class SVGPathAssetsProperty extends BaseProperty {
   }
 
   [CLICK("$svgpathList .preview")](e) {
-    var $item = e.$delegateTarget.closest('svgpath-item');    
+    var $item = e.$dt.closest('svgpath-item');    
     var index = +$item.attr('data-index')
 
     this.state.$item = $item; 
-    this.state.$el = e.$delegateTarget.$('.svgpath-view');
+    this.state.$el = e.$dt.$('.svgpath-view');
 
-    var currentProject = editor.selection.currentProject || { svgpathList: [] } 
+    var currentProject = this.$selection.currentProject || { svgpathList: [] } 
 
     var svgpath = currentProject.svgpathList[index];
 

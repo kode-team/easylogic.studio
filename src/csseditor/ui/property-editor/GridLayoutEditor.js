@@ -1,12 +1,9 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
-import { LOAD, CLICK } from "../../../util/Event";
+import { LOAD } from "../../../util/Event";
 import { CSS_TO_STRING, STRING_TO_CSS } from "../../../util/functions/func";
 import SelectIconEditor from "./SelectIconEditor";
-import { editor } from "../../../editor/editor";
 import GridBoxEditor from "./GridBoxEditor";
 import GridGapEditor from "./GridGapEditor";
-
-const i18n = editor.initI18n('grid.layout.editor')
 
 export default class GridLayoutEditor extends UIElement {
 
@@ -42,7 +39,7 @@ export default class GridLayoutEditor extends UIElement {
         return /*html*/`
             <div class='grid-layout-item'>
                 <GridBoxEditor 
-                    label='${i18n('template.columns')}'
+                    label='${this.$i18n('grid.layout.editor.template.columns')}'
                     ref='$columnBox'
                     key='grid-template-columns'
                     value="${this.state['grid-template-columns'] || ''}"
@@ -51,7 +48,7 @@ export default class GridLayoutEditor extends UIElement {
             </div>
             <div class='grid-layout-item'>
                 <GridGapEditor 
-                    label='${i18n('column.gap')}'
+                    label='${this.$i18n('grid.layout.editor.column.gap')}'
                     key='grid-column-gap'
                     value="${this.state['grid-column-gap'] || ''}"
                     onchange='changeKeyValue'
@@ -59,7 +56,7 @@ export default class GridLayoutEditor extends UIElement {
             </div>            
             <div class='grid-layout-item'>
                 <GridBoxEditor 
-                    label='${i18n('template.rows')}'
+                    label='${this.$i18n('grid.layout.editor.template.rows')}'
                     ref='$rowBox'
                     key='grid-template-rows'
                     value="${this.state['grid-template-rows'] || ''}"
@@ -68,7 +65,7 @@ export default class GridLayoutEditor extends UIElement {
             </div>            
             <div class='grid-layout-item'>
                 <GridGapEditor 
-                    label='${i18n('row.gap')}'                
+                    label='${this.$i18n('grid.layout.editor.row.gap')}'                
                     key='grid-row-gap'
                     value="${this.state['grid-row-gap'] || ''}"
                     onchange='changeKeyValue'

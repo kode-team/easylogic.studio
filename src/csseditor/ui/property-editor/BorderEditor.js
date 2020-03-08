@@ -1,5 +1,4 @@
-import { CLICK, LOAD } from "../../../util/Event";
-import { editor } from "../../../editor/editor";
+import { LOAD } from "../../../util/Event";
 import UIElement, { EVENT } from "../../../util/UIElement";
 import BorderValueEditor from "./BorderValueEditor";
 import Border from "../../../editor/css-property/Border";
@@ -57,7 +56,7 @@ export default class BorderEditor extends UIElement {
     return borderTypeList.map(type => {
       var label = borderTypeTitle[type] || type; 
 
-      label = editor.i18n('border.editor.' + label);
+      label = this.$i18n('border.editor.' + label);
       return /*html*/`
       <div>
         <BorderValueEditor ref='$${type}' label='${label}' key="${type}" value="${this.state.borders[type]}" onchange="changeKeyValue" />
@@ -71,9 +70,9 @@ export default class BorderEditor extends UIElement {
       <div class="border-editor">
         <div class='header'>
           <div></div>
-          <label>${editor.i18n('border.editor.width')}</label>
-          <label>${editor.i18n('border.editor.style')}</label>
-          <label>${editor.i18n('border.editor.color')}</label>
+          <label>${this.$i18n('border.editor.width')}</label>
+          <label>${this.$i18n('border.editor.style')}</label>
+          <label>${this.$i18n('border.editor.color')}</label>
         </div>
         <div class='editor-area' ref='$editorArea'>
 

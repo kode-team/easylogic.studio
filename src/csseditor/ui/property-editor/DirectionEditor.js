@@ -101,7 +101,7 @@ export default class DirectionEditor extends UIElement {
   }
 
   [CLICK("$selector button")](e) {
-    var type = e.$delegateTarget.attr("data-value");
+    var type = e.$dt.attr("data-value");
     this.refs.$selector.attr("data-selected-value", type);
 
     if (type === "all") {

@@ -1,6 +1,5 @@
 import BaseProperty from "./BaseProperty";
 import { CLICK, CHANGE, LOAD } from "../../../util/Event";
-import { editor } from "../../../editor/editor";
 import { Position } from "../../../editor/unit/Length";
 import icon from "../icon/icon";
 
@@ -51,7 +50,7 @@ export default class BorderImageProperty extends BaseProperty {
   }
 
   getTools() {
-    var current = editor.selection.current || {} 
+    var current = this.$selection.current || {} 
 
     var appliedBorderImage = current.appliedBorderImage || false 
 
@@ -61,7 +60,7 @@ export default class BorderImageProperty extends BaseProperty {
   }
 
   [CLICK('$apply')] () {
-    var current = editor.selection.current;
+    var current = this.$selection.current;
     if (!current) return;
 
     var applyBorderImage = this.refs.$apply.checked()
@@ -99,7 +98,7 @@ export default class BorderImageProperty extends BaseProperty {
   }
 
   [LOAD('$borderImageView')] () {
-    var current  = editor.selection.current || {borderImage: { image: {}}} ;
+    var current  = this.$selection.current || {borderImage: { image: {}}} ;
     var borderImage = current.borderImage;
     
     var backgroundTypeName = borderImage.type ?  names[borderImage.type] : '';
@@ -135,7 +134,7 @@ export default class BorderImageProperty extends BaseProperty {
 
   getBody() {
 
-    var current  = editor.selection.current || {borderImage: { image: {}}} ;
+    var current  = this.$selection.current || {borderImage: { image: {}}} ;
   
 
     return `
@@ -187,9 +186,9 @@ export default class BorderImageProperty extends BaseProperty {
   [CLICK("$borderImageView .colorsteps .step")](e) {
 
     this.refs.$colorsteps.$(`[data-selected="true"]`).removeAttr('data-selected')
-    var selectColorStepId = e.$delegateTarget.attr("data-colorstep-id");
-    e.$delegateTarget.attr('data-selected', true);
-    var $preview = e.$delegateTarget.closest("border-image-item").$(".preview");
+    var selectColorStepId = e.$dt.attr("data-colorstep-id");
+    e.$dt.attr('data-selected', true);
+    var $preview = e.$dt.closest("border-image-item").$(".preview");
     this.viewFillPopup($preview, selectColorStepId);
   }
 
@@ -228,7 +227,7 @@ export default class BorderImageProperty extends BaseProperty {
 
   viewFillPopup($preview, selectColorStepId) {
 
-    var current = editor.selection.current;
+    var current = this.$selection.current;
 
     if (!current) return;
 
@@ -241,7 +240,7 @@ export default class BorderImageProperty extends BaseProperty {
   }
 
   viewChangeImage(data) {
-    var current = editor.selection.current;
+    var current = this.$selection.current;
     if (!current) return; 
 
     var borderImage = current.borderImage;
@@ -268,7 +267,7 @@ export default class BorderImageProperty extends BaseProperty {
 
   setImage(data) {
 
-    var current = editor.selection.current;
+    var current = this.$selection.current;
     if (!current) return; 
 
     current.borderImage.setImageUrl(data);
@@ -279,7 +278,7 @@ export default class BorderImageProperty extends BaseProperty {
   }
 
   viewChangeGradient(data) {
-    var current = editor.selection.current;
+    var current = this.$selection.current;
     if (!current) return; 
 
     var borderImage = current.borderImage;
@@ -307,7 +306,7 @@ export default class BorderImageProperty extends BaseProperty {
 
   setGradient(data) {
 
-    var current = editor.selection.current;
+    var current = this.$selection.current;
     if (!current) return; 
   
 
@@ -331,7 +330,7 @@ export default class BorderImageProperty extends BaseProperty {
   }
 
   setBorderImageProperty() {
-    var current = editor.selection.current;
+    var current = this.$selection.current;
     if (!current) return;
     var borderImage = current.borderImage;
 
@@ -359,7 +358,7 @@ export default class BorderImageProperty extends BaseProperty {
   }
 
   [CLICK("$selector button")](e) {
-    var type = e.$delegateTarget.attr("data-value");
+    var type = e.$dt.attr("data-value");
     this.refs.$selector.attr("data-selected-value", type);
 
     if (type === "all") {

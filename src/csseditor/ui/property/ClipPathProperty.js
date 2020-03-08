@@ -7,7 +7,6 @@ import {
   DEBOUNCE
 } from "../../../util/Event";
 
-import { editor } from "../../../editor/editor";
 import { EVENT } from "../../../util/UIElement";
 import { ClipPath } from "../../../editor/css-property/ClipPath";
 
@@ -24,7 +23,7 @@ var clipPathList = [
 
 export default class ClipPathProperty extends BaseProperty {
   getTitle() {
-    return editor.i18n('clippath.property.title');
+    return this.$i18n('clippath.property.title');
   }
 
   hasKeyframe () {
@@ -71,7 +70,7 @@ export default class ClipPathProperty extends BaseProperty {
   }
 
   [CLICK('$clippathList .clippath-item')] (e) {
-    var current = editor.selection.current;
+    var current = this.$selection.current;
     if (!current) return;
 
 
@@ -80,10 +79,10 @@ export default class ClipPathProperty extends BaseProperty {
   }
 
   [CLICK('$clippathList .del') + PREVENT] (e) {
-    var current = editor.selection.current;
+    var current = this.$selection.current;
     if (!current) return;
 
-    this.emit('SET_ATTRIBUTE', { 'clip-path': '' }, current.id);    
+    this.emit('setAttribute', { 'clip-path': '' }, current.id);    
     this.refresh();    
     this.emit('hideClipPathPopup');    
 
@@ -95,7 +94,7 @@ export default class ClipPathProperty extends BaseProperty {
 
 
   [LOAD("$clippathList")]() {
-    var current = editor.selection.current;
+    var current = this.$selection.current;
     if (!current) return '';
     if (!current['clip-path']) return ''
 
@@ -104,7 +103,7 @@ export default class ClipPathProperty extends BaseProperty {
 
   [CLICK("$add")]() {
 
-    var current = editor.selection.current;
+    var current = this.$selection.current;
 
     if (!current) return ;
     if (current['clip-path']) {
@@ -116,7 +115,7 @@ export default class ClipPathProperty extends BaseProperty {
       current['clip-path'] = this.refs.$clipPathSelect.value;
 
       
-      this.emit("SET_ATTRIBUTE", {
+      this.emit("setAttribute", {
         'clip-path':  this.refs.$clipPathSelect.value
       }, current.id);
     }
@@ -125,7 +124,7 @@ export default class ClipPathProperty extends BaseProperty {
   }
 
   viewClipPathPicker() {
-    var current = editor.selection.current;
+    var current = this.$selection.current;
     if (!current) return;
 
     var obj = ClipPath.parseStyle(current['clip-path'])
@@ -160,7 +159,7 @@ export default class ClipPathProperty extends BaseProperty {
   }
 
   [EVENT('updateClipPathString')] (data) {
-    var current = editor.selection.current;
+    var current = this.$selection.current;
 
     if (!current) return;
 
@@ -170,20 +169,20 @@ export default class ClipPathProperty extends BaseProperty {
 
     this.refresh();
 
-    this.emit('SET_ATTRIBUTE', {
+    this.emit('setAttribute', {
       'clip-path': `path(${data.d})`
     }, current.id);            
   }
 
   [EVENT('changeClipPathPopup')] (data) {
-    var current = editor.selection.current;
+    var current = this.$selection.current;
 
     if (!current) return;
 
     current.reset(data); 
 
     this.refresh();
-    this.emit('SET_ATTRIBUTE', data, current.id);        
+    this.emit('setAttribute', data, current.id);        
   }
 
 }

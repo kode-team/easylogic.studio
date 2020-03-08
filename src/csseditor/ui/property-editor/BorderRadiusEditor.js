@@ -3,7 +3,6 @@ import icon from "../icon/icon";
 import UIElement, { EVENT } from "../../../util/UIElement";
 import RangeEditor from "./RangeEditor";
 import BorderRadius from "../../../editor/css-property/BorderRadius";
-import { editor } from "../../../editor/editor";
 
 const typeList = [
   { key: "border-top-left-radius", title: "topLeft" },
@@ -13,8 +12,6 @@ const typeList = [
 ];
 
 const keyList = typeList.map(it => it.key);
-
-const i18n = editor.initI18n('border.radius.editor');
 
 export default class BorderRadiusEditor extends UIElement {
   components() {
@@ -67,7 +64,7 @@ export default class BorderRadiusEditor extends UIElement {
         <div class="radius-setting-box" ref="$radiusSettingBox">
           ${typeList.map(it => {
             var value = this.state[it.key]
-            var label = i18n(it.title);
+            var label = this.$i18n('border.radius.editor.' + it.title);
             return /*html*/`
               <div>
                   <RangeEditor ref='$${it.key}' label='${label}' key='${it.key}' value='${value}' onchange='changeBorderRadius' />
@@ -117,7 +114,7 @@ export default class BorderRadiusEditor extends UIElement {
   }
 
   [CLICK("$selector button")](e) {
-    var type = e.$delegateTarget.attr("data-value");
+    var type = e.$dt.attr("data-value");
     this.refs.$selector.attr("data-selected-value", type);
 
     if (type === "all") {

@@ -1,4 +1,4 @@
-import { uuidShort, uuid } from "../../util/functions/math";
+import { uuidShort } from "../../util/functions/math";
 import {
   isFunction,
   isUndefined
@@ -141,7 +141,7 @@ export class Item {
    * select item
    */
   // select() {
-  //   editor.selection.select(this.id);
+  //   this.$selection.select(this.id);
   // }
 
   /**

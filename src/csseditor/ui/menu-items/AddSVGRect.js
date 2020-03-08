@@ -15,7 +15,7 @@ export default class AddSVGRect extends MenuItem {
   }  
 
   clickButton(e) {
-    this.emit('add.type', 'svgrect');
+    this.emit('addComponentType', 'svgrect');
   }
 
 }

@@ -1,5 +1,5 @@
 import { EVENT } from "../../../util/UIElement";
-import { INPUT, LOAD, BIND } from "../../../util/Event";
+import { LOAD } from "../../../util/Event";
 import BasePopup from "./BasePopup";
 import SVGItemProperty from "../property/SVGItemProperty";
 
@@ -29,21 +29,18 @@ export default class SVGPathPopup extends BasePopup {
   }
 
   getBody() {
-    return `
-    <div class='svg-path-editor-popup' ref='$popup'>
-      <div class='box editor' ref='$editor'>
-
-      </div>    
-      <div class="box inspector">
-        <SVGItemProperty ref='$property' />
-      </div>
-
-    </div>`;
+    return /*html*/`
+      <div class='svg-path-editor-popup' ref='$popup'>
+        <div class='box editor' ref='$editor'></div>    
+        <div class="box inspector">
+          <SVGItemProperty ref='$property' />
+        </div>
+      </div>`;
   }
 
   [LOAD('$editor')] () {
 
-    return `
+    return /*html*/`
       <SVGPathEditor ref='$pathEditor' key="d" d="${this.state.d}" onchange='changeFilterEditor' />
     `
 

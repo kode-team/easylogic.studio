@@ -3,7 +3,6 @@ import {
   LOAD, DEBOUNCE, CLICK,
 } from "../../../util/Event";
 
-import { editor } from "../../../editor/editor";
 import { EVENT } from "../../../util/UIElement";
 import icon from "../icon/icon";
 import { Transform } from "../../../editor/css-property/Transform";
@@ -32,12 +31,10 @@ var transformList = [
   'matrix3d',  
 ];
 
-const i18n = editor.initI18n('transform.property');
-
 export default class TransformProperty extends BaseProperty {
 
   getTitle() {
-    return i18n('title')
+    return this.$i18n('transform.property.title')
   }
 
   getBody() {
@@ -56,7 +53,7 @@ export default class TransformProperty extends BaseProperty {
     return /*html*/`
       <select ref="$transformSelect">
       ${transformList.map(transform => {
-        var label = editor.i18n('css.item.' + transform)
+        var label = this.$i18n('transform.property.css.item.' + transform)
         return `<option value='${transform}'>${label}</option>`;
       }).join('')}
       </select>
@@ -72,7 +69,7 @@ export default class TransformProperty extends BaseProperty {
   }
 
   [LOAD('$body')] () {
-    var current = editor.selection.current || {} 
+    var current = this.$selection.current || {} 
     var value = current.transform;
 
     return /*html*/`
@@ -81,7 +78,7 @@ export default class TransformProperty extends BaseProperty {
   }
 
   [EVENT('changeTransformEditor')] (transform) {
-    this.emit('SET_ATTRIBUTE', { 
+    this.emit('setAttribute', { 
       transform: (item) => {
         return Transform.replaceAll(item.transform, transform)
       }

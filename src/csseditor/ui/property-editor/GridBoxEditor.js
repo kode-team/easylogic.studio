@@ -1,26 +1,11 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
 import { LOAD, CLICK } from "../../../util/Event";
-import { editor } from "../../../editor/editor";
 import icon from "../icon/icon";
 import SelectEditor from "./SelectEditor";
 import NumberInputEditor from "./NumberInputEditor";
 import InputRangeEditor from "./InputRangeEditor";
-import { isArray } from "../../../util/functions/func";
-
-const i18n = editor.initI18n('grid.box.editor')
 
 const REG_CSS_UNIT = /(auto)|(repeat\([^\)]*\))|(([\d.]+)(px|pt|fr|r?em|deg|vh|vw|%))/gi;
-
-
-const makeOptionsFunction = (options) => {
-    return () => {
-        return options.split(',').map(it => {
-            return `${it}:${i18n(it)}`
-        }).join(',');
-    }
-}
-
-const getLayoutItemOptions = makeOptionsFunction('none,auto,repeat,length')
 
 
 export default class GridBoxEditor extends UIElement {
@@ -31,6 +16,12 @@ export default class GridBoxEditor extends UIElement {
             NumberInputEditor,
             InputRangeEditor
         }
+    }
+
+    getLayoutItemOptions () {
+        return 'none,auto,repeat,length'.split(',').map(it => {
+            return `${it}:${this.$i18n(`grid.box.editor.${it}`)}`
+        }).join(',');
     }
 
     initState() {
@@ -93,7 +84,7 @@ export default class GridBoxEditor extends UIElement {
                 <div class='repeat'>
                     <SelectEditor 
                         ref='$${index}-type' 
-                        options="${getLayoutItemOptions()}" 
+                        options="${this.getLayoutItemOptions()}" 
                         key="type" 
                         value="${it.type || 'auto'}" 
                         params="${index}" 
@@ -140,8 +131,8 @@ export default class GridBoxEditor extends UIElement {
                             <label>${this.state.label} </label>
                             <button type='button' ref='$add'>${icon.add}</button>
                         </div>
-                        <div class='count'>${i18n('count')}</div>
-                        <div class='value'>${i18n('value')}</div>
+                        <div class='count'>${this.$i18n('grid.box.editor.count')}</div>
+                        <div class='value'>${this.$i18n('grid.box.editor.value')}</div>
                         <div class='tools'></div>
                     </div>
                     <div ref='$list'></div>
@@ -151,7 +142,7 @@ export default class GridBoxEditor extends UIElement {
     }
 
     [CLICK('$list .remove')] (e) {
-        var index = +e.$delegateTarget.closest('item').attr('data-index')
+        var index = +e.$dt.closest('item').attr('data-index')
         this.state.list.splice(index, 1);
 
         this.refresh();
@@ -160,7 +151,7 @@ export default class GridBoxEditor extends UIElement {
     }
 
     [CLICK('$list .copy')] (e) {
-        var index = +e.$delegateTarget.closest('item').attr('data-index')
+        var index = +e.$dt.closest('item').attr('data-index')
 
         var newObj = clone(this.state.list[index]);
         this.state.list.splice(index, 0, newObj);

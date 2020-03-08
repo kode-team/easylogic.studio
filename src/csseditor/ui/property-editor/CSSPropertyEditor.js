@@ -22,8 +22,6 @@ import PathDataEditor from "./PathDataEditor";
 import PolygonDataEditor from "./PolygonDataEditor";
 import OffsetPathListEditor from "./OffsetPathListEditor";
 import BorderEditor from "./BorderEditor";
-import { editor } from "../../../editor/editor";
-
 
 const blend_list = [
   '',
@@ -98,7 +96,7 @@ export default class CSSPropertyEditor extends UIElement {
         'hide-refresh': this.state.hideRefresh 
       })}'>
         <div class='title'>
-          <label>${editor.i18n('css.property.editor.properties')}</label>
+          <label>${this.$i18n('css.property.editor.properties')}</label>
           <div class='tools'>
             ${this.makePropertySelect()}
             <button type="button" ref='$addProperty'>${icon.add}</button>
@@ -155,7 +153,7 @@ export default class CSSPropertyEditor extends UIElement {
 
     var value = this.getPropertyDefaultValue(key)
 
-    var current = editor.selection.current;  
+    var current = this.$selection.current;  
 
     if (current) {
       value = current[key]
@@ -611,7 +609,7 @@ export default class CSSPropertyEditor extends UIElement {
   }
 
   [CLICK('$property .remove')] (e) {
-    var index = +e.$delegateTarget.attr('data-index')
+    var index = +e.$dt.attr('data-index')
 
     this.state.properties.splice(index, 1);
     this.refresh();

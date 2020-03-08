@@ -129,7 +129,7 @@ export default class PathDataEditor extends UIElement {
     }
 
     [CLICK('$data .command[data-toggle]')] (e) {
-        var [command, toggle] = e.$delegateTarget.attrs('data-command', 'data-toggle');
+        var [command, toggle] = e.$dt.attrs('data-command', 'data-toggle');
         if (command === 'Z') {
             if (toggle !== 'false') {
                 toggle = 'false'; 
@@ -137,7 +137,7 @@ export default class PathDataEditor extends UIElement {
                 toggle = 'true'
             }
 
-            e.$delegateTarget.attr('data-toggle', toggle);
+            e.$dt.attr('data-toggle', toggle);
 
             this.updateData();
         }

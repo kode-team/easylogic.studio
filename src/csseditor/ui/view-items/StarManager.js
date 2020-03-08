@@ -1,6 +1,6 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
 import icon from "../icon/icon";
-import { CLICK, BIND, CHANGE, CHANGEINPUT } from "../../../util/Event";
+import { CLICK, BIND, CHANGEINPUT } from "../../../util/Event";
 
 export default class StarManager extends UIElement {
 
@@ -48,7 +48,7 @@ export default class StarManager extends UIElement {
   }
 
   [CLICK('$c [data-type]')] (e) {
-    var type = e.$delegateTarget.attr('data-type')
+    var type = e.$dt.attr('data-type')
     var step = type === 'plus' ? 1 : -1; 
 
     this.updateData({
@@ -59,7 +59,7 @@ export default class StarManager extends UIElement {
 
 
   [CLICK('$r [data-type]')] (e) {
-    var type = e.$delegateTarget.attr('data-type')
+    var type = e.$dt.attr('data-type')
     var step = type === 'plus' ? 0.1 : -0.1; 
 
     this.updateData({

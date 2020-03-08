@@ -2,8 +2,12 @@ import { Config } from "./Config";
 import { Selection } from "./Selection";
 import { TimelineSelection } from "./TimelineSelection";
 import i18n from "../csseditor/i18n";
-import { loadItem, saveItem } from "./util/Resource";
 import theme from "../csseditor/ui/theme";
+import { ComponentManager } from "./ComponentManager";
+import AssetParser from "./parse/AssetParser";
+import { isArray, isObject, isString } from "../util/functions/func";
+import commands from "../csseditor/commands";
+import { CommandManager } from "./CommandManager";
 
 export const EDITOR_ID = "";
 
@@ -12,9 +16,11 @@ export const EDIT_MODE_ADD = 'ADD';
 
 const DEFAULT_THEME = 'dark' 
 
-export const editor = new class {
-  constructor() {
+
+export class Editor {
+  constructor(opt = {}) {
     this.config = new Config(this);
+    this.commands = new CommandManager(this);
     this.selection = new Selection();
     this.timeline = new TimelineSelection(this);
     this.projects = []     
@@ -24,12 +30,20 @@ export const editor = new class {
     this.images = {}
     this.openRightPanel = true; 
     this.mode = EDIT_MODE_SELECTION
-    this.addType = '' 
-    this.locale = loadItem('locale') || 'en_US'
+    this.addComponentType = '' 
+    this.locale = this.loadItem('locale') || 'en_US'
+    this.$store = opt.$store;
 
     this.components = {} 
 
     this.initTheme();
+    this.loadCommands();
+  }
+
+  loadCommands() {
+    Object.keys(commands).forEach(command => {
+      this.commands.registerCommand(command, commands[command]);
+    })
   }
 
   i18n (key, params = {}, locale) {
@@ -45,9 +59,9 @@ export const editor = new class {
 
       const i18nKey  = `${root}.${key}`;
       if (this.hasI18nkey(i18nKey, locale)) {
-        return this.i18n(`${root}.${key}`, params, locale)
+        return this.$i18n(`${root}.${key}`, params, locale)
       } else {
-        return this.i18n(`${key}`, params, locale)
+        return this.$i18n(`${key}`, params, locale)
       }
 
     }
@@ -55,20 +69,19 @@ export const editor = new class {
 
   setLocale (locale = 'en_US') {
     this.locale = locale; 
-    saveItem('locale', this.locale);    
+    this.saveItem('locale', this.locale);    
   }
 
   registerComponent (name, Component) {
-    this.components[name] = Component;
+    return ComponentManager.registerComponent(name, Component);
   }
 
   getComponentClass(name) {
-    return this.components[name]
+    return ComponentManager.getComponentClass(name);
   }
 
   createComponent (name, obj = {}) {
-    var ComponentClass = this.getComponentClass(name);
-    return new ComponentClass(obj);
+    return ComponentManager.createComponent(name, obj);
   }
 
   setUser (user) {
@@ -110,7 +123,7 @@ export const editor = new class {
 
   changeAddType (type = '', isComponent = false) {
     this.changeMode(EDIT_MODE_ADD);
-    this.addType = type;
+    this.addComponentType = type;
     this.isComponent = isComponent
   }
 
@@ -184,4 +197,129 @@ export const editor = new class {
     return this.projects[index];
   }
 
-}();
+
+  replaceLocalUrltoRealUrl (str) {
+
+    var project = this.selection.currentProject;
+    var images = {} 
+
+    project.images.forEach(a => {
+      if (str.indexOf(a.local) > -1) { 
+        images[a.local]  = a.original
+      }
+    })
+
+    Object.keys(images).forEach(local => {
+        if (str.indexOf(local) > -1) {
+            str = str.replace(new RegExp(local, 'g'), images[local])
+        }
+    })
+    
+    return str; 
+  }
+
+  replaceLocalUrltoId (str) {
+
+    var projects = editor.projects;
+    var images = {} 
+
+    projects.forEach(project => {
+
+        project.images.forEach(a => {
+            if (str.indexOf(a.local) > -1) { 
+                images[a.local]  = '#' + a.id
+            }
+        })
+    })
+
+
+    Object.keys(images).forEach(local => {
+        if (str.indexOf(local) > -1) {
+            str = str.replace(new RegExp(local, 'g'), images[local])
+        }
+    })
+
+    return str; 
+  }
+
+  makeResource (json) {
+    var result = JSON.stringify(json)
+
+    // image check 
+    result = this.replaceLocalUrltoId(result);
+
+    return result;
+  }
+
+
+  saveResource (key, value) {
+    window.localStorage.setItem(`easylogic.studio.${key}`, this.makeResource(value));
+  }
+
+  saveItem (key, value) {
+    window.localStorage.setItem(`easylogic.studio.${key}`, JSON.stringify(value));
+  }
+
+
+  /**
+   * 
+   * recover origin to local blob url for Asset 
+   * 
+   * @param {string} value JSON String for project list 
+   */
+  revokeResource (value) {
+    var json = JSON.parse(value || '[]');
+    var assets = {} 
+
+    json.forEach(project => {
+        project.images.forEach(it => {
+            assets[`#${it.id}`] = it; 
+        })
+    })
+
+    Object.keys(assets).map(idString => {
+        var a = assets[idString];
+        var info = AssetParser.parse(a.original, true);
+        a.local = info.local;
+    })
+
+    json.forEach(project => {
+        project.layers = this.applyAsset(project.layers, assets);
+    })
+
+    return json; 
+  }
+
+
+  applyAsset (json, assets) {
+    if (isArray(json)) {
+        json = json.map(it => this.applyAsset(it, assets))
+    } else if (isObject(json)) {
+        Object.keys(json).forEach(key => {
+            json[key] = this.applyAsset(json[key], assets);
+        }) 
+    } else if (isString(json)) {
+
+        Object.keys(assets).forEach(idString => {
+            var a = assets[idString]
+            if (json.indexOf(`#${a.id}`) > -1) {
+                json = json.replace(new RegExp(`#${a.id}`, 'g'), a.local);
+            }
+
+        })
+    }
+
+    return json; 
+  }
+
+
+  loadResource (key) {
+    return this.revokeResource(window.localStorage.getItem(`easylogic.studio.${key}`))
+  }
+
+  loadItem (key) {
+    return JSON.parse(window.localStorage.getItem(`easylogic.studio.${key}`) || JSON.stringify(""))
+  }  
+
+  
+}

@@ -2,9 +2,6 @@ import UIElement, { EVENT } from "../../../util/UIElement";
 import { LOAD } from "../../../util/Event";
 import { CSS_TO_STRING, STRING_TO_CSS } from "../../../util/functions/func";
 import SelectIconEditor from "./SelectIconEditor";
-import { editor } from "../../../editor/editor";
-
-const i18n = editor.initI18n('grid.layout.item.editor')
 
 export default class GridLayoutItemEditor extends UIElement {
 
@@ -35,7 +32,7 @@ export default class GridLayoutItemEditor extends UIElement {
     [LOAD('$body')] () {
         return /*html*/`
             <div class='grid-layout-item'>
-                <div class='label'><label>${i18n('direction')}</label></div>
+                <div class='label'><label>${this.$i18n('grid.layout.item.editor.direction')}</label></div>
                 <SelectIconEditor 
                     key='grid-direction'
                     value="${this.state['grid-direction'] || 'row'}"
@@ -44,7 +41,7 @@ export default class GridLayoutItemEditor extends UIElement {
                 />
             </div>
             <div class='grid-layout-item'>
-                <div class='label'><label>${i18n('wrap')}</label></div>
+                <div class='label'><label>${this.$i18n('grid.layout.item.editor.wrap')}</label></div>
                 <SelectIconEditor 
                     key='grid-wrap'
                     value="${this.state['grid-wrap'] || 'wrap'}"
@@ -53,7 +50,7 @@ export default class GridLayoutItemEditor extends UIElement {
                 />
             </div>
             <div class='grid-layout-item'>
-                <div class='label'><label>${i18n('justify-content')}</label></div>
+                <div class='label'><label>${this.$i18n('grid.layout.item.editor.justify-content')}</label></div>
                 <SelectIconEditor 
                     key='justify-content'
                     value="${this.state['justify-content']}"
@@ -62,7 +59,7 @@ export default class GridLayoutItemEditor extends UIElement {
                 />
             </div>
             <div class='grid-layout-item'>
-                <div class='label'><label>${i18n('align-items')}</label></div>
+                <div class='label'><label>${this.$i18n('grid.layout.item.editor.align-items')}</label></div>
                 <SelectIconEditor 
                     key='align-items'
                     value="${this.state['align-items']}"
@@ -71,7 +68,7 @@ export default class GridLayoutItemEditor extends UIElement {
                 />
             </div>
             <div class='grid-layout-item'>
-                <div class='label'><label>${i18n('align-content')}</label></div>
+                <div class='label'><label>${this.$i18n('grid.layout.item.editor.align-content')}</label></div>
                 <SelectIconEditor 
                     key='align-content'
                     value="${this.state['align-content']}"

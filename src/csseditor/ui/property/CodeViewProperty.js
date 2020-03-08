@@ -1,14 +1,12 @@
 import BaseProperty from "./BaseProperty";
 import { LOAD, DEBOUNCE } from "../../../util/Event";
-import { editor } from "../../../editor/editor";
 import { EVENT } from "../../../util/UIElement";
 import { CSS_TO_STRING, TAG_TO_STRING } from "../../../util/functions/func";
 
-const i18n = editor.initI18n('code.view.property');
 
 export default class CodeViewProperty extends BaseProperty {
   getTitle() {
-    return i18n('title');
+    return this.$i18n('code.view.property.title');
   }
 
   [EVENT(
@@ -41,7 +39,7 @@ export default class CodeViewProperty extends BaseProperty {
 
   [LOAD('$body')] () {
 
-    var currentProject = editor.selection.currentProject;
+    var currentProject = this.$selection.currentProject;
     var keyframeCode = currentProject ? currentProject.toKeyframeString() : ''
     var rootVariable = currentProject ? CSS_TO_STRING(currentProject.toRootVariableCSS()) : ''
     var svgCode = currentProject ? currentProject.toSVGString() : '';
@@ -50,7 +48,7 @@ export default class CodeViewProperty extends BaseProperty {
     keyframeCode = this.modifyNewLine(keyframeCode.trim());
     svgCode = svgCode.replace(/\</g, '&lt;').replace(/\>/g, '&gt;') 
 
-    var current = editor.selection.current;
+    var current = this.$selection.current;
     var cssCode = current ? TAG_TO_STRING(current.toExport()) : ''
     var nestedCssCode = current ?  current.toNestedCSS().map(it => {
       var cssText = it.cssText ? it.cssText : CSS_TO_STRING(it.css)
@@ -97,7 +95,7 @@ ${this.filterKeyName(TAG_TO_STRING(cssText), '&nbsp;&nbsp;')}
 
         ${keyframeCode ?         
           /*html*/`<div>
-          <pre title='${i18n('keyframe')}'>${keyframeCode}</pre>
+          <pre title='${this.$i18n('code.view.property.keyframe')}'>${keyframeCode}</pre>
         </div>` : ''}
         ${rootVariable ? 
           /*html*/`<div>

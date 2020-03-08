@@ -1,12 +1,12 @@
 import UIElement, { COMMAND } from "../../../../util/UIElement";
-import { editor, EDIT_MODE_SELECTION } from "../../../../editor/editor";
+import { EDIT_MODE_SELECTION } from "../../../../editor/Editor";
 import { Length } from "../../../../editor/unit/Length";
 import { uuidShort } from "../../../../util/functions/math";
 import AssetParser from "../../../../editor/parse/AssetParser";
-import { saveResource, loadResource } from "../../../../editor/util/Resource";
 import { isFunction } from "../../../../util/functions/func";
 import ExportManager from "../../../../editor/ExportManager";
 import Dom from "../../../../util/Dom";
+import { ComponentManager } from "../../../../editor/ComponentManager";
 
 
 const createItem = (obj) => {
@@ -15,7 +15,11 @@ const createItem = (obj) => {
         return createItem(it);
     })
 
-    var ComponentClass = editor.getComponentClass(obj.itemType)
+    var ComponentClass = ComponentManager.getComponentClass(obj.itemType)
+
+    if (!ComponentClass) {
+        throw new Error(`${obj.itemType} type is not valid.`)
+    }
 
     return new ComponentClass(obj);
 }
@@ -36,7 +40,7 @@ export default class ToolCommand extends UIElement {
     }
 
     [COMMAND('set.locale')] (locale) {
-        editor.setLocale(locale);
+        this.$editor.setLocale(locale);
         this.emit('changed.locale')
     }
 
@@ -51,14 +55,14 @@ export default class ToolCommand extends UIElement {
     }
 
     [COMMAND('download.json')] (filename) {
-        var json = JSON.stringify(editor.projects)
+        var json = JSON.stringify(this.$editor.projects)
         var datauri = 'data:application/json;base64,' + window.btoa(json);
 
         this.trigger('download.file', datauri, filename || 'easylogic.json')
     }
 
     [COMMAND('download.to.svg')] () {
-        var item = editor.selection.current || editor.selection.currentArtboard;
+        var item = this.$selection.current || this.$selection.currentArtboard;
 
         var svgString = ExportManager.generateSVG(item).trim();
         var datauri = 'data:image/svg+xml;base64,' + window.btoa(svgString);
@@ -77,7 +81,7 @@ export default class ToolCommand extends UIElement {
     }
 
     [COMMAND('download.to.png')] () {
-        var item = editor.selection.current || editor.selection.currentArtboard;
+        var item = this.$selection.current || this.$selection.currentArtboard;
 
         var svgString = ExportManager.generateSVG(item).trim();
         var datauri = 'data:image/svg+xml;base64,' + window.btoa(svgString);
@@ -91,12 +95,12 @@ export default class ToolCommand extends UIElement {
     }
 
     [COMMAND('save.json')] () {
-        saveResource('projects', editor.projects)
+        this.$editor.saveResource('projects', this.$editor.projects)
     }    
 
     [COMMAND('load.json')] (json) {
 
-        json = json || loadResource('projects', []);
+        json = json || this.$editor.loadResource('projects', []);
 
         var projects = json.map(p => createItem(p))
 
@@ -108,30 +112,30 @@ export default class ToolCommand extends UIElement {
 
         if (projects.length) {
             var project = projects[0]
-            editor.selection.selectProject(project)
+            this.$selection.selectProject(project)
             if (project.artboards.length) {
                 var artboard = project.artboards[0]
-                editor.selection.selectArtboard(artboard)
+                this.$selection.selectArtboard(artboard)
 
                 if (artboard.layers.length) {
-                    editor.selection.select(artboard.layers[0])
+                    this.$selection.select(artboard.layers[0])
                 } else {
-                    editor.selection.select(artboard);
+                    this.$selection.select(artboard);
                 }
             }
         }
 
 
-        editor.load(projects);
+        this.$editor.load(projects);
         this.refreshSelection()
     }
 
     [COMMAND('copy')] () {
-        editor.selection.copy();
+        this.$selection.copy();
     }
 
     [COMMAND('paste')] () {
-        editor.selection.paste();
+        this.$selection.paste();
         this.emit('refreshAll');
     }
 
@@ -159,7 +163,7 @@ export default class ToolCommand extends UIElement {
         case 'ArrowRight': dx = 1; break; 
         }
 
-        editor.selection.move(dx * t, dy * t); 
+        this.$selection.move(dx * t, dy * t); 
 
         this.refreshSelection(true);
 
@@ -167,22 +171,22 @@ export default class ToolCommand extends UIElement {
 
     getAddCommand (key) {
         switch(key) {
-        case '1': return ['add.type', 'rect'];
-        case '2': return ['add.type', 'circle'];
-        case '3': return ['add.type', 'text'];
-        case '4': return ['add.type', 'image'];
-        case '5': return ['add.type', 'cube'];
-        case '6': return ['add.type', 'svgrect'];
-        case '7': return ['add.path'];
-        case '8': return ['add.polygon'];
-        case '9': return ['add.star'];
+        case '1': return ['addComponentType', 'rect'];
+        case '2': return ['addComponentType', 'circle'];
+        case '3': return ['addComponentType', 'text'];
+        case '4': return ['addComponentType', 'image'];
+        case '5': return ['addComponentType', 'cube'];
+        case '6': return ['addComponentType', 'svgrect'];
+        case '7': return ['addPath'];
+        case '8': return ['addPolygon'];
+        case '9': return ['addStar'];
         }
     }
 
     /* tools */ 
     
     [COMMAND('switch.theme')] ( theme ) {
-        editor.changeTheme(theme);
+        this.$editor.changeTheme(theme);
 
         this.emit('changeTheme')
     }
@@ -192,7 +196,7 @@ export default class ToolCommand extends UIElement {
     }
 
     [COMMAND('update.scale')] (scale) {
-        editor.scale = scale;     
+        this.$editor.scale = scale;     
         this.emit('changeScale')
     }
 
@@ -205,9 +209,9 @@ export default class ToolCommand extends UIElement {
             // convert data or blob to local url 
         this.trigger('load.original.image', {local: imageUrl}, (info) => {
 
-            this.emit('add.image', {src: info.local, ...info });
-            editor.changeMode(EDIT_MODE_SELECTION);
-            this.emit('after.change.mode');                
+            this.emit('addImage', {src: info.local, ...info });
+            this.$editor.changeMode(EDIT_MODE_SELECTION);
+            this.emit('afterChangeMode');                
         });
     }
 
@@ -230,7 +234,7 @@ export default class ToolCommand extends UIElement {
     }
 
     [COMMAND('add.assets.image')] (obj, rect = {}) {
-        var project = editor.selection.currentProject;
+        var project = this.$selection.currentProject;
 
         if (project) {
 
@@ -240,9 +244,9 @@ export default class ToolCommand extends UIElement {
 
             // convert data or blob to local url 
             this.trigger('load.original.image', obj, (info) => {
-                this.emit('add.image', {src: obj.local, ...info, ...rect });
-                editor.changeMode(EDIT_MODE_SELECTION);
-                this.emit('after.change.mode');                
+                this.emit('addImage', {src: obj.local, ...info, ...rect });
+                this.$editor.changeMode(EDIT_MODE_SELECTION);
+                this.emit('afterChangeMode');                
             });
 
         }
@@ -250,7 +254,7 @@ export default class ToolCommand extends UIElement {
 
     [COMMAND('add.assets.svgfilter')] (callback) {
 
-        var project = editor.selection.currentProject;
+        var project = this.$selection.currentProject;
 
         if (project) {
             var id = uuidShort()
@@ -335,7 +339,7 @@ export default class ToolCommand extends UIElement {
             var datauri = e.target.result;
             var local = URL.createObjectURL(item);
 
-            var project = editor.selection.currentProject;
+            var project = this.$selection.currentProject;
 
             if (project) {
     
@@ -368,7 +372,7 @@ export default class ToolCommand extends UIElement {
             case 'text/plain':
             case 'text/html':
                 if (items.length) {
-                    this.trigger('add.text', {
+                    this.trigger('addText', {
                          content: item.data
                     });
                 }

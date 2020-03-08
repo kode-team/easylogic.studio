@@ -1,7 +1,6 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
 import { POINTERSTART, MOVE, END, BIND, IF, CLICK } from "../../../util/Event";
 import { Length } from "../../../editor/unit/Length";
-import { editor } from "../../../editor/editor";
 import { isNotUndefined } from "../../../util/functions/func";
 import GuideView from "../view/GuideView";
 import AreaItem from "../../../editor/items/AreaItem";
@@ -37,7 +36,7 @@ const SelectionToolEvent = class  extends UIElement {
     }
 
     [EVENT('openPathEditor')] () {
-        var current = editor.selection.current;
+        var current = this.$selection.current;
         if (current && current.is('svg-path', 'svg-textpath')) {
             this.toggleEditingPolygon(false);
             this.toggleEditingPath(true);
@@ -59,7 +58,7 @@ const SelectionToolEvent = class  extends UIElement {
 
 
     [EVENT('openPolygonEditor')] () {
-        var current = editor.selection.current;
+        var current = this.$selection.current;
         if (current && current.is('svg-polygon')) {
             this.toggleEditingPath(false);            
             this.toggleEditingPolygon(true);
@@ -85,14 +84,14 @@ const SelectionToolEvent = class  extends UIElement {
 
     [EVENT('updatePathItem')] (pathObject) {
 
-        var current = editor.selection.current;
+        var current = this.$selection.current;
         if (current) {
             if (current.updatePathItem) {
                 current.updatePathItem(pathObject);
 
-                this.parent.selectCurrent(...editor.selection.items)
+                this.parent.selectCurrent(...this.$selection.items)
 
-                editor.selection.setRectCache();        
+                this.$selection.setRectCache();        
                     
                 this.emit('refreshSelectionStyleView', current, true, true);
 
@@ -104,14 +103,14 @@ const SelectionToolEvent = class  extends UIElement {
 
     [EVENT('updatePolygonItem')] (polygonObject) {
 
-        var current = editor.selection.current;
+        var current = this.$selection.current;
         if (current) {
             if (current.updatePolygonItem) {
                 current.updatePolygonItem(polygonObject);
 
-                this.parent.selectCurrent(...editor.selection.items)
+                this.parent.selectCurrent(...this.$selection.items)
 
-                editor.selection.setRectCache();        
+                this.$selection.setRectCache();        
     
                 this.emit('refreshSelectionStyleView', current, true, true);
 
@@ -133,7 +132,7 @@ const SelectionToolEvent = class  extends UIElement {
 
         this.makeSelectionTool();
 
-        if (editor.selection.length === 0){
+        if (this.$selection.length === 0){
             drawList = []                
         }
 
@@ -146,7 +145,7 @@ const SelectionToolBind = class extends SelectionToolEvent {
 
     [BIND('$selectionTool')] () {
 
-        var current = editor.selection.current;
+        var current = this.$selection.current;
         var isLayoutItem = current && current.isLayoutItem()
         var hasLayout = current && current.hasLayout()
         var layout = current && (current.layout || current.parent.layout);
@@ -156,7 +155,7 @@ const SelectionToolBind = class extends SelectionToolEvent {
             'data-is-layout-container': hasLayout,
             'data-layout-container': layout,
             // 1개의 객체를 선택 했을 때 move 판은 이벤트를 걸지 않기 
-            'data-selection-length': editor.selection.length
+            'data-selection-length': this.$selection.length
         }
     }
 }
@@ -169,7 +168,7 @@ export default class SelectionToolView extends SelectionToolBind {
     initialize() {
         super.initialize();
 
-        this.guideView = new GuideView();
+        this.guideView = new GuideView(this.$editor);
     }
 
     template() {
@@ -202,15 +201,15 @@ export default class SelectionToolView extends SelectionToolBind {
     }   
     
     checkEditMode () {
-        return editor.isSelectionMode(); 
+        return this.$editor.isSelectionMode(); 
     }
 
     [POINTERSTART('$selectionView .selection-tool-item') + IF('checkEditMode') + MOVE() + END()] (e) {
-        this.initMoveType(e.$delegateTarget);
+        this.initMoveType(e.$dt);
 
-        this.parent.selectCurrent(...editor.selection.items)
+        this.parent.selectCurrent(...this.$selection.items)
 
-        editor.selection.setRectCache(this.pointerType === 'move' ? false: true);
+        this.$selection.setRectCache(this.pointerType === 'move' ? false: true);
 
         this.initSelectionTool();
     }
@@ -229,7 +228,7 @@ export default class SelectionToolView extends SelectionToolBind {
 
     move (dx, dy) {
 
-        var e = editor.config.get('bodyEvent');
+        var e = this.$config.get('bodyEvent');
 
 
         if (e.altKey) {
@@ -244,7 +243,7 @@ export default class SelectionToolView extends SelectionToolBind {
         if (this.pointerType === 'move') {
 
         } else {
-            editor.selection.each(item => {
+            this.$selection.each(item => {
                 if (item.is('component')) {
                     this.emit('refreshStyleView', item);  
                 }
@@ -260,8 +259,8 @@ export default class SelectionToolView extends SelectionToolBind {
         }
 
         this.pointerType = 'move'; 
-        editor.selection.move(dx, dy);
-        this.parent.selectCurrent(...editor.selection.items)
+        this.$selection.move(dx, dy);
+        this.parent.selectCurrent(...this.$selection.items)
 
         this.refs.$selectionTool.attr('data-selected-position', '');
         this.refs.$selectionTool.attr('data-selected-movetype', '');
@@ -276,7 +275,7 @@ export default class SelectionToolView extends SelectionToolBind {
 
     end (dx, dy) {
 
-        var e = editor.config.get('bodyEvent');
+        var e = this.$config.get('bodyEvent');
 
         if (e.altKey) {
             dy = dx; 
@@ -297,7 +296,7 @@ export default class SelectionToolView extends SelectionToolBind {
         if (dx === 0 && dy === 0) {
             // console.log(' not moved', dx, dy)
         } else {
-            this.guideView.move(type || this.pointerType, dx / editor.scale,  dy / editor.scale )
+            this.guideView.move(type || this.pointerType, dx / this.$editor.scale,  dy / this.$editor.scale )
 
             var drawList = this.guideView.calculate();
             this.emit('refreshGuideLine', this.calculateWorldPositionForGuideLine(drawList));            
@@ -335,7 +334,7 @@ export default class SelectionToolView extends SelectionToolBind {
 
         this.guideView.makeGuideCache();        
 
-        var current = editor.selection.current;
+        var current = this.$selection.current;
         if (current) {
             var isPath = current.is('svg-path', 'svg-textpath');
             this.refs.$selectionTool.toggleClass('path', isPath);            
@@ -344,7 +343,7 @@ export default class SelectionToolView extends SelectionToolBind {
             this.refs.$selectionTool.toggleClass('polygon', isPolygon);
         }
 
-        if (editor.isSelectionMode() && this.$el.isHide()) {
+        if (this.$editor.isSelectionMode() && this.$el.isHide()) {
             this.$el.show();
         }
 
@@ -368,7 +367,7 @@ export default class SelectionToolView extends SelectionToolBind {
         if(x.is(0) && y.is(0) && width.is(0) && height.is(0)) {
             x.add(-10000);
             y.add(-10000);       
-        } else if (!editor.selection.currentArtboard) {
+        } else if (!this.$selection.currentArtboard) {
             x.add(-10000);
             y.add(-10000);            
         }
@@ -384,11 +383,11 @@ export default class SelectionToolView extends SelectionToolBind {
 
     refreshPositionText (x, y, width, height) {
 
-        if (editor.selection.currentArtboard) {
-            var newX = Length.px(x.value - editor.selection.currentArtboard.x.value / editor.scale).round(1);
-            var newY = Length.px(y.value - editor.selection.currentArtboard.y.value / editor.scale).round(1);
-            var newWidth = Length.px(width.value / editor.scale).round(1);
-            var newHeight = Length.px(height.value / editor.scale).round(1);
+        if (this.$selection.currentArtboard) {
+            var newX = Length.px(x.value - this.$selection.currentArtboard.x.value / this.$editor.scale).round(1);
+            var newY = Length.px(y.value - this.$selection.currentArtboard.y.value / this.$editor.scale).round(1);
+            var newWidth = Length.px(width.value / this.$editor.scale).round(1);
+            var newHeight = Length.px(height.value / this.$editor.scale).round(1);
 
             var text = ''
             switch(this.pointerType) {
@@ -401,11 +400,11 @@ export default class SelectionToolView extends SelectionToolBind {
             
             this.setPositionText(text);
 
-            var length = editor.selection.length;
+            var length = this.$selection.length;
             var title = ''; 
 
             if (length === 1) {
-                var current = editor.selection.current
+                var current = this.$selection.current
                 title = current.title || current.getDefaultTitle();
                 this.refs.$selectionIcon.html(current.getIcon());  
             } else if (length >= 2) {
@@ -421,7 +420,7 @@ export default class SelectionToolView extends SelectionToolBind {
     setPositionText (text) {
         if (this.$target) {
 
-            if (editor.selection.current && editor.selection.current.is('artboard')) {
+            if (this.$selection.current && this.$selection.current.is('artboard')) {
                 text = text.split(',').filter(it => {
                     return !it.includes('X:') && !it.includes('Y:');
                 }).join(',');
@@ -441,10 +440,10 @@ export default class SelectionToolView extends SelectionToolBind {
 
             var ax, bx, ay, by; 
 
-            if (isNotUndefined(it.ax)) { ax = it.ax * editor.scale }
-            if (isNotUndefined(it.bx)) { bx = it.bx * editor.scale }
-            if (isNotUndefined(it.ay)) { ay = it.ay * editor.scale }
-            if (isNotUndefined(it.by)) { by = it.by * editor.scale }
+            if (isNotUndefined(it.ax)) { ax = it.ax * this.$editor.scale }
+            if (isNotUndefined(it.bx)) { bx = it.bx * this.$editor.scale }
+            if (isNotUndefined(it.ay)) { ay = it.ay * this.$editor.scale }
+            if (isNotUndefined(it.by)) { by = it.by * this.$editor.scale }
 
             return { A,  B, ax,  bx, ay, by}
         })
@@ -452,10 +451,10 @@ export default class SelectionToolView extends SelectionToolBind {
 
     calculateWorldPosition (item) {
         return {
-            x: Length.px(item.screenX.value * editor.scale),
-            y: Length.px(item.screenY.value * editor.scale),
-            width: Length.px(item.width.value  *  editor.scale),
-            height: Length.px(item.height.value  * editor.scale),
+            x: Length.px(item.screenX.value * this.$editor.scale),
+            y: Length.px(item.screenY.value * this.$editor.scale),
+            width: Length.px(item.width.value  *  this.$editor.scale),
+            height: Length.px(item.height.value  * this.$editor.scale),
             transform: item.transform
         }
     }

@@ -5,14 +5,12 @@ import ProjectProperty from "../property/ProjectProperty";
 import ProjectInformationProperty from "../property/ProjectInformationProperty";
 import LibraryItems from "./Libraryitems";
 import ComponentItems from "./Componentitems";
-import { editor } from "../../../editor/editor";
 import icon from "../icon/icon";
 import ImageAssetsProperty from "../property/ImageAssetsProperty";
 import GradientAssetsProperty from "../property/GradientAssetsProperty";
 import ColorAssetsProperty from "../property/ColorAssetsProperty";
 import SVGFilterAssetsProperty from "../property/SVGFilterAssetsProperty";
 
-const i18n = editor.initI18n('app.tab.title');
 
 export default class LayerTab extends UIElement {
   components() {
@@ -33,19 +31,19 @@ export default class LayerTab extends UIElement {
       <div class='layer-tab'>
         <div class="tab number-tab side-tab side-tab-left" data-selected-value="4" ref="$tab">
           <div class="tab-header full" ref="$header">
-            <div class='tab-item' data-value='4' title='${i18n('components')}'>
+            <div class='tab-item' data-value='4' title='${this.$i18n('app.tab.titlecomponents')}'>
               <label>${icon.add}</label>
             </div>          
-            <div class="tab-item" data-value="2" title='${i18n('layers')}'>
+            <div class="tab-item" data-value="2" title='${this.$i18n('app.tab.titlelayers')}'>
               <label>${icon.account_tree}</label>
             </div>            
-            <div class="tab-item" data-value="1" title='${i18n('projects')}'>
+            <div class="tab-item" data-value="1" title='${this.$i18n('app.tab.titleprojects')}'>
               <label>${icon.note}</label>
             </div>         
-            <!--<div class='tab-item' data-value='3' title='${i18n('libraries')}'>
+            <!--<div class='tab-item' data-value='3' title='${this.$i18n('app.tab.titlelibraries')}'>
               <label>${icon.local_library}</label>
             </div>   -->
-            <div class='tab-item' data-value='5' title='${i18n('assets')}'>
+            <div class='tab-item' data-value='5' title='${this.$i18n('app.tab.titleassets')}'>
               <label>${icon.view_list}</label>
             </div>   
           </div>
@@ -82,14 +80,14 @@ export default class LayerTab extends UIElement {
   [CLICK("$header .tab-item:not(.empty-item)")](e) {
     this.refs.$tab.attr(
       "data-selected-value",
-      e.$delegateTarget.attr("data-value")
+      e.$dt.attr("data-value")
     );
   }
 
   [CLICK("$extraHeader .tab-item:not(.empty-item)")](e) {
     this.refs.$extraTab.attr(
       "data-selected-value",
-      e.$delegateTarget.attr("data-value")
+      e.$dt.attr("data-value")
     );
   }
 }

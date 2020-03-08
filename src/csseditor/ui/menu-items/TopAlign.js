@@ -15,7 +15,7 @@ export default class TopAlign extends MenuItem {
   }  
 
   clickButton(e) {
-    Sort.top();
+    Sort.top(this.$editor);
     this.emit('refreshSelectionStyleView')
     this.emit('refreshSelectionTool')
   }

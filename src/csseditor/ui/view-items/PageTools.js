@@ -1,6 +1,5 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
 
-import { editor } from "../../../editor/editor";
 import { CLICK, PREVENT, STOP, DEBOUNCE } from "../../../util/Event";
 
 import icon from "../icon/icon";
@@ -20,7 +19,7 @@ export default class PageTools extends UIElement {
       <div class='page-tools'>
         <button type='button' ref='$minus'>${icon.remove2}</button>
         <div class='select'>
-          <NumberInputEditor ref='$scale' min='10' max='240' step="1" key="scale" value="${editor.scale*100}" onchange="changeRangeEditor" />
+          <NumberInputEditor ref='$scale' min='10' max='240' step="1" key="scale" value="${this.$editor.scale*100}" onchange="changeRangeEditor" />
         </div>
         <label>%</label>
         <button type='button' ref='$plus'>${icon.add}</button>        
@@ -43,11 +42,11 @@ export default class PageTools extends UIElement {
 
   [CLICK('$plus') + PREVENT + STOP] () {
 
-    this.trigger('changeScaleValue', editor.scale + 0.1);
+    this.trigger('changeScaleValue', this.$editor.scale + 0.1);
   }
 
   [CLICK('$minus') + PREVENT + STOP] () {
-    this.trigger('changeScaleValue', editor.scale - 0.1);    
+    this.trigger('changeScaleValue', this.$editor.scale - 0.1);    
   }
 
 }

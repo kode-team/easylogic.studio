@@ -41,9 +41,9 @@ test('Editor - removeChildren', () => {
 })
 
 test('Editor - config', () => {
-    editor.config.a = 'b';
+    this.$config.a = 'b';
 
-    expect(editor.config.a).toEqual('b')
+    expect(this.$config.a).toEqual('b')
 })
 
 test('Editor - clone', () => {

@@ -1,13 +1,12 @@
 import BaseProperty from "./BaseProperty";
 import { LOAD, DEBOUNCE } from "../../../util/Event";
-import { editor } from "../../../editor/editor";
 import { EVENT } from "../../../util/UIElement";
 
 
 export default class BorderRadiusProperty extends BaseProperty {
 
   getTitle() {
-    return editor.i18n('border.radius.property.title');  
+    return this.$i18n('border.radius.property.title');  
   }
 
 
@@ -24,7 +23,7 @@ export default class BorderRadiusProperty extends BaseProperty {
   }
 
   [LOAD('$body')] () {
-    var current = editor.selection.current || {}; 
+    var current = this.$selection.current || {}; 
     var value = current['border-radius'] || ''
 
     return /*html*/`
@@ -42,7 +41,7 @@ export default class BorderRadiusProperty extends BaseProperty {
 
   [EVENT('changeBorderRadius')] (value) {
 
-    this.emit("SET_ATTRIBUTE", { 
+    this.emit("setAttribute", { 
       'border-radius': value 
     })
   }

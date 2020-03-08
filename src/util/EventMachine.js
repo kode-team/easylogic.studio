@@ -93,7 +93,7 @@ const expectMethod = {
 }
 
 export default class EventMachine {
-  constructor() {
+  constructor(opt, props) {
     this.state = {};
     this.prevState = {};
     this.refs = {};
@@ -101,6 +101,8 @@ export default class EventMachine {
     this._bindings = [];
     this.id = uuid();    
     this.handlers = this.initializeHandler()
+
+    this.initializeProperty(opt, props);
 
     this.initComponents();
   }
@@ -439,7 +441,7 @@ export default class EventMachine {
         break;
       }
       const names = Object.getOwnPropertyNames(p).filter(name => {
-        return isFunction(this[name]) && !expectMethod[name];
+        return this && isFunction(this[name]) && !expectMethod[name];
       });
 
       results.push(...names);
@@ -458,7 +460,7 @@ export default class EventMachine {
   /* magic check method  */
 
   self(e) {
-    return e && e.$delegateTarget && e.$delegateTarget.is(e.target);
+    return e && e.$dt && e.$dt.is(e.target);
   }
   isAltKey(e) {
     return e.altKey;

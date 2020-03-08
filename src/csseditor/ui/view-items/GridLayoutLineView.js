@@ -1,8 +1,6 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
 import { CSS_TO_STRING } from "../../../util/functions/func";
 import { LOAD } from "../../../util/Event";
-import { editor } from "../../../editor/editor";
-
 
 /**
  * 객체와의 거리의 가이드 라인을 그려주는 컴포넌트
@@ -15,13 +13,13 @@ export default class GridLayoutLineView extends UIElement {
 
     [LOAD('$el')] () {
 
-        var len = editor.selection.length;
+        var len = this.$selection.length;
 
         if (len !== 1) {
             return /*html*/'<div></div>'; 
         }
 
-        var current = editor.selection.current;
+        var current = this.$selection.current;
 
         if (current.isInGrid()) {
             var layoutContainer = current.parent; 

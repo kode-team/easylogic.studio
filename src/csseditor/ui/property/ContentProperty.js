@@ -1,10 +1,7 @@
 import BaseProperty from "./BaseProperty";
 import { INPUT, BIND, DEBOUNCE } from "../../../util/Event";
-import { editor } from "../../../editor/editor";
 
 import { EVENT } from "../../../util/UIElement";
-
-
 
 export default class ContentProperty extends BaseProperty {
   getTitle() {
@@ -19,7 +16,7 @@ export default class ContentProperty extends BaseProperty {
   }  
 
   getBody() {
-    return `
+    return /*html*/`
       <div class="property-item content-item">
         <textarea ref="$contentItem"></textarea>
       </div>
@@ -27,7 +24,7 @@ export default class ContentProperty extends BaseProperty {
   }
 
   [BIND("$contentItem")]() {
-    var current = editor.selection.current;
+    var current = this.$selection.current;
 
     if (!current) return '';
 
@@ -41,7 +38,7 @@ export default class ContentProperty extends BaseProperty {
   }
 
   setContent() {
-    var current = editor.selection.current;
+    var current = this.$selection.current;
     if (current) {
       var data = {
         content: this.refs.$contentItem.value

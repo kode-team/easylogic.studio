@@ -9,7 +9,6 @@ import {
 } from "../../../util/Event";
 
 import { Transform } from "../../../editor/css-property/Transform";
-import { editor } from "../../../editor/editor";
 import UIElement, { EVENT } from "../../../util/UIElement";
 import RangeEditor from "./RangeEditor";
 import { Length } from "../../../editor/unit/Length";
@@ -76,7 +75,7 @@ export default class TransformEditor extends UIElement {
               <div class='tools'>
                 <select ref="$transformSelect">
                   ${transformList.map(transform => {
-                    var label = editor.i18n('css.item.' + transform)
+                    var label = this.$i18n('css.item.' + transform)
                     return `<option value='${transform}'>${label}</option>`;
                   }).join('')}
                 </select>
@@ -144,7 +143,7 @@ export default class TransformEditor extends UIElement {
     return /*html*/`
       <div class="transform-item" data-index="${index}">
         <div class="title" draggable="true" data-index="${index}">
-          <label><span>${(+index)+1}</span> ${editor.i18n('css.item.' + type)}</label>
+          <label><span>${(+index)+1}</span> ${this.$i18n('css.item.' + type)}</label>
           <div class="transform-menu">
             <button type="button" class="del" data-index="${index}">
               ${icon.remove2}
@@ -185,7 +184,7 @@ export default class TransformEditor extends UIElement {
     return /*html*/`
       <div class="transform-item" data-index="${index}">
         <div class="title" draggable="true" data-index="${index}">
-          <label><span>${(+index)+1}</span> ${editor.i18n('css.item.' + type)}</label>
+          <label><span>${(+index)+1}</span> ${this.$i18n('css.item.' + type)}</label>
           <div class="transform-menu">
             <button type="button" class="del" data-index="${index}">
               ${icon.remove2}
@@ -271,7 +270,7 @@ export default class TransformEditor extends UIElement {
   }
 
   [DRAGSTART("$transformList .transform-item .title")](e) {
-    this.startIndex = +e.$delegateTarget.attr("data-index");
+    this.startIndex = +e.$dt.attr("data-index");
   }
 
   [DRAGOVER("$transformList .transform-item") + PREVENT](e) {}
@@ -289,8 +288,8 @@ export default class TransformEditor extends UIElement {
   }
 
   [DROP("$transformList .transform-item") + PREVENT](e) {
-    var targetIndex = +e.$delegateTarget.attr("data-index");
-    var current = editor.selection.current;
+    var targetIndex = +e.$dt.attr("data-index");
+    var current = this.$selection.current;
     if (!current) return;
 
     this.sortTransform(this.startIndex, targetIndex);
@@ -389,7 +388,7 @@ export default class TransformEditor extends UIElement {
   }
 
   [CLICK("$transformList .transform-menu .del")](e) {
-    var index = +e.$delegateTarget.attr("data-index");
+    var index = +e.$dt.attr("data-index");
     this.state.transforms.splice(index, 1);
 
     this.refresh();

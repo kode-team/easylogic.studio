@@ -36,6 +36,6 @@ export default class ToolMenu extends UIElement {
   }
 
   [CLICK('$items button')] (e) {
-    e.$delegateTarget.onlyOneClass('selected');
+    e.$dt.onlyOneClass('selected');
   }
 }

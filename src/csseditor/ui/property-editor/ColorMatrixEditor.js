@@ -3,8 +3,6 @@ import { LOAD, INPUT, BIND, CLICK } from "../../../util/Event";
 import colormatrix from "./colormatrix";
 import { normalize } from "../../../util/functions/math";
 
-
-
 const COLUMN = 6; 
 
 const sampleList = Object.keys(colormatrix).map(it => {
@@ -49,7 +47,7 @@ export default class ColorMatrixEditor extends UIElement {
     }
 
     [CLICK('$sample .sample-item')] (e) {
-        var index = +e.$delegateTarget.attr('data-index')
+        var index = +e.$dt.attr('data-index')
         var sample = sampleList[index]
 
         this.updateData({
@@ -70,7 +68,7 @@ export default class ColorMatrixEditor extends UIElement {
             if (index % (COLUMN - 1) === 0) {
                 h = `<div>${text[Math.floor(index/(COLUMN-1))]}</div>`
             }
-            var result = `
+            var result = /*html*/`
                 ${h}
                 <div class='number-editor'>
                     <input type="number" value="${value}" step="0.01" data-index="${index}" />
@@ -80,7 +78,7 @@ export default class ColorMatrixEditor extends UIElement {
             return result; 
         })
 
-        var header = `
+        var header = /*html*/`
             <div></div>
             <div>R</div>
             <div>G</div>
@@ -99,7 +97,7 @@ export default class ColorMatrixEditor extends UIElement {
 
     [INPUT('$body input')] (e) {
 
-        var $el = e.$delegateTarget;
+        var $el = e.$dt;
         var index = +$el.attr('data-index')
         var value = +$el.value
 

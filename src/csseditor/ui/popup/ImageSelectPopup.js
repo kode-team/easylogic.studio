@@ -2,8 +2,6 @@ import { EVENT } from "../../../util/UIElement";
 import BasePopup from "./BasePopup";
 import { LOAD, CLICK, VDOM } from "../../../util/Event";
 import { Length } from "../../../editor/unit/Length";
-import { editor } from "../../../editor/editor";
-
 
 export default class ImageSelectPopup extends BasePopup {
 
@@ -46,7 +44,7 @@ export default class ImageSelectPopup extends BasePopup {
   }
 
   [LOAD('$imageBox') + VDOM] () {
-    var project = editor.selection.currentProject || { images: [] }
+    var project = this.$selection.currentProject || { images: [] }
 
     return project.images.map( (image, index) => {
       return /*html*/`<div class='image-item' ><img src= '${image.local}' /></div>`
@@ -54,7 +52,7 @@ export default class ImageSelectPopup extends BasePopup {
   }
 
   [CLICK('$imageBox .image-item')] (e) {
-    var $img = e.$delegateTarget.$('img');
+    var $img = e.$dt.$('img');
 
     this.updateData({
       value: $img.attr('src'),

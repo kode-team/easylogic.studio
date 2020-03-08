@@ -1,6 +1,5 @@
 import BaseProperty from "./BaseProperty";
 import { LOAD, CLICK, DEBOUNCE } from "../../../util/Event";
-import { editor } from "../../../editor/editor";
 import { EVENT } from "../../../util/UIElement";
 
 import icon from "../icon/icon";
@@ -9,7 +8,7 @@ import icon from "../icon/icon";
 export default class TransformOriginProperty extends BaseProperty {
 
   getTitle() {
-    return editor.i18n('transform.origin.property.title');  
+    return this.$i18n('transform.origin.property.title');  
   }
 
   getTools() {
@@ -37,7 +36,7 @@ export default class TransformOriginProperty extends BaseProperty {
   }
 
   [LOAD('$body')] () {
-    var current = editor.selection.current || {}; 
+    var current = this.$selection.current || {}; 
     var value = current['transform-origin'] || ''
 
     return /*html*/`<TransformOriginEditor ref='$1' value='${value}' onchange='changeTransformOrigin' />`
@@ -50,7 +49,7 @@ export default class TransformOriginProperty extends BaseProperty {
 
   [EVENT('changeTransformOrigin')] (value) {
 
-    this.emit('SET_ATTRIBUTE', { 
+    this.emit('setAttribute', { 
       'transform-origin': value 
     })
   }

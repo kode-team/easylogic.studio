@@ -31,7 +31,7 @@ export default class InputRangeEditor extends UIElement {
     }
 
     template () {
-        return `<div class='small-editor' ref='$body'></div>`
+        return /*html*/`<div class='small-editor' ref='$body'></div>`
     }
 
     [LOAD('$body')] () {

@@ -32,7 +32,7 @@ export default class SVGPropertyPopup extends BasePopup {
   }
 
   getBody() {
-    return `
+    return /*html*/`
     <div class='svg-property-editor-popup' ref='$popup'>
       <div class="box">
         ${this.templateForName()}

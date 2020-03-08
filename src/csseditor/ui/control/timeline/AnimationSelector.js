@@ -1,13 +1,12 @@
 import UIElement, { EVENT } from "../../../../util/UIElement";
 import { LOAD, CLICK, VDOM, CHANGE } from "../../../../util/Event";
-import { editor } from "../../../../editor/editor";
 import icon from "../../icon/icon";
 import { OBJECT_TO_PROPERTY } from "../../../../util/functions/func";
 
 export default class AnimationSelector extends UIElement {
 
     template () {
-        return `
+        return /*html*/`
         <div class='animation-selector'>
             <label>Animation</label>
             <select ref='$select'></select>
@@ -17,7 +16,7 @@ export default class AnimationSelector extends UIElement {
     }
 
     [LOAD('$select') + VDOM] () {
-        var artboard = editor.selection.currentArtboard;
+        var artboard = this.$selection.currentArtboard;
 
         if (!artboard) {
             return ''; 
@@ -25,7 +24,7 @@ export default class AnimationSelector extends UIElement {
 
         return artboard.timeline.map(it => {
             var selected = it.selected ? 'selected' : '' 
-            return `<option ${OBJECT_TO_PROPERTY({ value: it.id })} ${selected} >${it.title}</option>`
+            return /*html*/`<option value="${it.id}" ${selected} >${it.title}</option>`
         })
     }
 

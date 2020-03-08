@@ -1,6 +1,5 @@
 import MenuItem from "./MenuItem";
 import icon from "../icon/icon";
-import { editor } from "../../../../editor/editor";
 import { Length } from "../../../../editor/unit/Length";
 import { RedGLLayer } from "../../../../editor/items/layers/canvas/RedGLLayer";
  
@@ -13,7 +12,7 @@ export default class AddRedGL extends MenuItem {
   }
 
   clickButton(e) {
-    var artboard = editor.selection.currentArtboard
+    var artboard = this.$selection.currentArtboard
 
     if (artboard) {
       var layer = artboard.add(new RedGLLayer({
@@ -21,7 +20,7 @@ export default class AddRedGL extends MenuItem {
         height: Length.px(100)
       }))
 
-      editor.selection.select(layer);
+      this.$selection.select(layer);
 
       this.emit('refreshAll')
       this.emit('refreshSelection');

@@ -2,18 +2,14 @@ import BaseProperty from "./BaseProperty";
 import {
   LOAD, DEBOUNCE, CLICK,
 } from "../../../util/Event";
-
-import { editor } from "../../../editor/editor";
 import { EVENT } from "../../../util/UIElement";
 import icon from "../icon/icon";
 import { filter_list } from "../../../editor/util/Resource";
 
-const i18n = editor.initI18n('filter.property')
-
 export default class BackdropFilterProperty extends BaseProperty {
 
   getTitle() {
-    return editor.i18n('backdrop.filter.property.title');
+    return this.$i18n('backdrop.filter.property.title');
   }
 
 
@@ -52,7 +48,7 @@ export default class BackdropFilterProperty extends BaseProperty {
 
   [LOAD('$filterSelect')] () {
     var list = filter_list.map(it => { 
-      return {title: i18n(it), value: it}
+      return {title: this.$i18n(it), value: it}
     })
 
     var svgFilterList = this.getSVGFilterList()
@@ -81,7 +77,7 @@ export default class BackdropFilterProperty extends BaseProperty {
 
   getSVGFilterList () {
      
-    var current = editor.selection.currentProject;
+    var current = this.$selection.currentProject;
     var arr = [] 
 
     if (current) {
@@ -99,7 +95,7 @@ export default class BackdropFilterProperty extends BaseProperty {
 
 
   [LOAD('$body')] () {
-    var current = editor.selection.current || {} 
+    var current = this.$selection.current || {} 
     var value = current['backdrop-filter'];
 
     return /*html*/`<FilterEditor ref='$filterEditor' value='${value}' hide-label="true" onchange='changeFilterEditor' />`
@@ -107,7 +103,7 @@ export default class BackdropFilterProperty extends BaseProperty {
 
   [EVENT('changeFilterEditor')] (filter) {
 
-    this.emit("SET_ATTRIBUTE", { 
+    this.emit("setAttribute", { 
       'backdrop-filter' : filter 
     })
 

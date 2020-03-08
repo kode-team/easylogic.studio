@@ -42,7 +42,11 @@ export default {
 
 
     'alignment.property.title': '정렬',
+    
     'position.property.title': '위치',
+    'position.property.X': 'X',
+    'position.property.Y': 'Y',
+
     'size.property.title': '크기',
     'size.property.width': '넓이',
     'size.property.height': '높이',

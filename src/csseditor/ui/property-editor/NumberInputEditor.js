@@ -1,7 +1,6 @@
 import UIElement from "../../../util/UIElement";
 import { Length } from "../../../editor/unit/Length";
-import { LOAD, INPUT, CLICK } from "../../../util/Event";
-import icon from "../icon/icon";
+import { LOAD, INPUT } from "../../../util/Event";
 
 export default class NumberInputEditor extends UIElement {
 

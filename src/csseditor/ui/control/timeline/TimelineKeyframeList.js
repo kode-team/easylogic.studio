@@ -1,6 +1,5 @@
 import UIElement, { EVENT } from "../../../../util/UIElement";
 import { CLICK, LOAD, VDOM, DEBOUNCE, POINTERSTART, MOVE, IF, END, DOUBLECLICK, KEYUP, KEY, RESIZE, SCROLL } from "../../../../util/Event";
-import { editor } from "../../../../editor/editor";
 import { Length } from "../../../../editor/unit/Length";
 import { OBJECT_TO_PROPERTY, OBJECT_TO_CLASS, isUndefined } from "../../../../util/functions/func";
 import { timecode, second } from "../../../../util/functions/time";
@@ -29,7 +28,7 @@ export default class TimelineKeyframeList extends UIElement {
         var subOffset = [] 
 
         if (property === 'offset-path') {
-            var artboard = editor.selection.currentArtboard;             
+            var artboard = this.$selection.currentArtboard;             
             var [id] = value.split(',').map(it =>it.trim());
             var pathLayer = artboard.searchById(id);
             if (pathLayer) {
@@ -87,7 +86,7 @@ export default class TimelineKeyframeList extends UIElement {
                 var start = Length.px(it.left.value); 
                 var width = Length.px(next.left.value - it.left.value);
 
-                var selected = editor.timeline.checked(it.id) && editor.timeline.checked(next.id)
+                var selected = this.$timeline.checked(it.id) && this.$timeline.checked(next.id)
 
                 return /*html*/`
                     <div ${OBJECT_TO_PROPERTY({
@@ -117,7 +116,7 @@ export default class TimelineKeyframeList extends UIElement {
         <div class='keyframe'>
 
             ${list.map(it => {
-                var selected = editor.timeline.checked(it.id);
+                var selected = this.$timeline.checked(it.id);
 
                 return /*html*/`<div class='offset' style='left: ${it.left}' ${OBJECT_TO_PROPERTY({
                     'data-selected': `${selected}`,
@@ -134,7 +133,7 @@ export default class TimelineKeyframeList extends UIElement {
 
     makeTimelineKeyframeRow (timeline, animation) {
 
-        var artboard = editor.selection.currentArtboard;
+        var artboard = this.$selection.currentArtboard;
 
         var obj =  artboard.searchById(animation.id)
 
@@ -143,7 +142,9 @@ export default class TimelineKeyframeList extends UIElement {
         }
 
         var key = {} 
-        animation.properties.map(property => property.keyframes.map(it => it.time)).forEach(it => {
+        animation.properties.map(property => {
+            return property.keyframes.map(it => it.time)
+        }).forEach(it => {
             it.forEach(a => key[a] = true )
         })
 
@@ -229,7 +230,7 @@ export default class TimelineKeyframeList extends UIElement {
 
     getLayerList () {
         
-        var rowIndex = this.getRowIndex(Dom.create(editor.config.get('bodyEvent').target).attr('data-row-index'))
+        var rowIndex = this.getRowIndex(Dom.create(this.$config.get('bodyEvent').target).attr('data-row-index'))
 
         var startIndex = Math.min(rowIndex, this.startRowIndex);
         var endIndex = Math.max(rowIndex, this.startRowIndex);
@@ -256,7 +257,7 @@ export default class TimelineKeyframeList extends UIElement {
             if (this.doubleClicked) {
                 this.doubleClicked = false; 
             } else {
-                editor.timeline.empty()
+                this.$timeline.empty()
                 this.refresh();
             }
             return; 
@@ -269,7 +270,7 @@ export default class TimelineKeyframeList extends UIElement {
         var startTime = this.getTimeRateByPosition((this.left.value) / width );
         var endTime = this.getTimeRateByPosition((this.left.value + this.width.value) / width);
 
-        editor.timeline.selectBySearch(this.getLayerList(), startTime, endTime);
+        this.$timeline.selectBySearch(this.getLayerList(), startTime, endTime);
         this.refresh();
 
         this.startRowIndex = null; 
@@ -277,7 +278,7 @@ export default class TimelineKeyframeList extends UIElement {
 
     [LOAD('$keyframeList') + VDOM] () {
 
-        var artboard = editor.selection.currentArtboard
+        var artboard = this.$selection.currentArtboard
 
         if (!artboard) return '';
 
@@ -300,12 +301,12 @@ export default class TimelineKeyframeList extends UIElement {
     }
 
     [CLICK('$el .timeline-keyframe-row.layer .title')] (e) {
-        e.$delegateTarget.closest('timeline-keyframe').toggleClass('collapsed')
+        e.$dt.closest('timeline-keyframe').toggleClass('collapsed')
     }
 
 
     get currentTimeline () {
-        var currentArtboard = editor.selection.currentArtboard;
+        var currentArtboard = this.$selection.currentArtboard;
     
         if (currentArtboard) {
             return currentArtboard.getSelectedTimeline();
@@ -355,7 +356,7 @@ export default class TimelineKeyframeList extends UIElement {
 
     [DOUBLECLICK('$el .timeline-keyframe-row.layer-property')] (e) {
 
-        var [layerId, property] = e.$delegateTarget.attrs('data-layer-id', 'data-property')
+        var [layerId, property] = e.$dt.attrs('data-layer-id', 'data-property')
         var time = this.getTimeRateByPosition(this.getRealPosition(e).rate);
         this.emit('add.timeline.keyframe', {layerId, property, time});
 
@@ -368,7 +369,7 @@ export default class TimelineKeyframeList extends UIElement {
         + MOVE('moveOffset') 
         + END('moveEndOffset')] (e) {
 
-        this.$offset = e.$delegateTarget;
+        this.$offset = e.$dt;
 
         var id = this.$offset.attr('data-offset-id');
         var property = this.$offset.attr('data-property')
@@ -383,7 +384,7 @@ export default class TimelineKeyframeList extends UIElement {
             totalWidth, startX
         }
 
-        var currentArtboard = editor.selection.currentArtboard;
+        var currentArtboard = this.$selection.currentArtboard;
         if (currentArtboard) {
             this.offset = currentArtboard.getTimelineKeyframeById(layerId, property, id);
             this.layerId = layerId;
@@ -392,15 +393,15 @@ export default class TimelineKeyframeList extends UIElement {
         }
         this.timeline = this.currentTimeline;
         
-        if (editor.timeline.checked(id)) {
+        if (this.$timeline.checked(id)) {
             // NOOP , selection 변한 없음.
         } else {
-            editor.timeline.select(this.offset)
+            this.$timeline.select(this.offset)
         }
 
         this.cachedOffsetList = {}
         
-        editor.timeline.cachedList().forEach(it => {
+        this.$timeline.cachedList().forEach(it => {
             this.cachedOffsetList[it.id] = it.time; 
         })
 
@@ -416,7 +417,7 @@ export default class TimelineKeyframeList extends UIElement {
         var dxRate = Math.abs(dx) / this.rect.totalWidth; 
         var dxTime = dxRate * (displayEndTime - displayStartTime) 
 
-        editor.timeline.each(item => {
+        this.$timeline.each(item => {
             var newOffsetTime = this.cachedOffsetList[item.id] + dxTime * sign 
 
             newOffsetTime = Math.max(newOffsetTime, displayStartTime);
@@ -437,9 +438,9 @@ export default class TimelineKeyframeList extends UIElement {
     }
     
     moveEndOffset () {
-        var currentArtboard = editor.selection.currentArtboard;
+        var currentArtboard = this.$selection.currentArtboard;
         if (currentArtboard) {
-            editor.timeline.each(item => {
+            this.$timeline.each(item => {
                 currentArtboard.sortTimelineKeyframe(item.layerId, item.property)
             })
             this.refresh();                        

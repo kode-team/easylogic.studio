@@ -16,6 +16,6 @@ export default class AddArtboard extends MenuItem {
 
   clickButton(e) {
 
-    this.emit('add.type', 'artboard');
+    this.emit('addComponentType', 'artboard');
   }
 }

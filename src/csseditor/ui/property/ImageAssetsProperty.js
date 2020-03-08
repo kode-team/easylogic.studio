@@ -1,5 +1,4 @@
 import BaseProperty from "./BaseProperty";
-import { editor } from "../../../editor/editor";
 import { LOAD, CLICK, INPUT, DEBOUNCE, VDOM, DRAGSTART, CHANGE } from "../../../util/Event";
 import { EVENT } from "../../../util/UIElement";
 import icon from "../icon/icon";
@@ -8,7 +7,7 @@ import icon from "../icon/icon";
 export default class ImageAssetsProperty extends BaseProperty {
 
   getTitle() {
-    return editor.i18n('image.asset.property.title');
+    return this.$i18n('image.asset.property.title');
   }
 
   initState() {
@@ -35,7 +34,7 @@ export default class ImageAssetsProperty extends BaseProperty {
   }
 
   [LOAD("$imageList") + VDOM]() {
-    var current = editor.selection.currentProject || { images: [] }
+    var current = this.$selection.currentProject || { images: [] }
 
     var images = current.images;   
 
@@ -72,7 +71,7 @@ export default class ImageAssetsProperty extends BaseProperty {
   }
 
   executeImage (callback, isRefresh = true, isEmit = true ) {
-    var project = editor.selection.currentProject;
+    var project = this.$selection.currentProject;
 
     if(project) {
 
@@ -86,9 +85,9 @@ export default class ImageAssetsProperty extends BaseProperty {
   }
 
   [DRAGSTART('$imageList .preview img')] (e) { 
-    var index = +e.$delegateTarget.closest('image-item').attr('data-index');
+    var index = +e.$dt.closest('image-item').attr('data-index');
 
-    var project = editor.selection.currentProject;
+    var project = this.$selection.currentProject;
 
     if(project) {
       var imageInfo  =  project.images[index];
@@ -109,7 +108,7 @@ export default class ImageAssetsProperty extends BaseProperty {
   }
 
   [CLICK('$imageList .remove')] (e) {
-    var $item = e.$delegateTarget.closest('image-item');
+    var $item = e.$dt.closest('image-item');
     var index = +$item.attr('data-index');
 
     this.executeImage(project => {
@@ -120,7 +119,7 @@ export default class ImageAssetsProperty extends BaseProperty {
 
 
   [CLICK('$imageList .copy')] (e) {
-    var $item = e.$delegateTarget.closest('image-item');
+    var $item = e.$dt.closest('image-item');
     var index = +$item.attr('data-index');
 
     this.executeImage(project => {
@@ -130,9 +129,9 @@ export default class ImageAssetsProperty extends BaseProperty {
 
 
   [INPUT('$imageList input[type=text]')] (e) {
-    var $item = e.$delegateTarget.closest('image-item');
+    var $item = e.$dt.closest('image-item');
     var index = +$item.attr('data-index');
-    var obj = e.$delegateTarget.attrKeyValue('data-key');    
+    var obj = e.$dt.attrKeyValue('data-key');    
 
     this.executeImage(project => {
       project.setImageValue(index, obj);

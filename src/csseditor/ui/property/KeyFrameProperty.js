@@ -7,14 +7,13 @@ import {
   DEBOUNCE
 } from "../../../util/Event";
 
-import { editor } from "../../../editor/editor";
 import { EVENT } from "../../../util/UIElement";
 
 import { Keyframe } from "../../../editor/css-property/Keyframe";
 
 export default class KeyFrameProperty extends BaseProperty {
   getTitle() {
-    return editor.i18n('keyframe.property.title');
+    return this.$i18n('keyframe.property.title');
   }
   getBody() {
     return `<div class='keyframe-list' ref='$keyframeList'></div>`;
@@ -88,11 +87,11 @@ export default class KeyFrameProperty extends BaseProperty {
   }
 
   [CLICK('$keyframeList .keyframe-item .title .group button[data-type]')] (e) {
-    var $keyframeItem = e.$delegateTarget.closest('keyframe-item');
+    var $keyframeItem = e.$dt.closest('keyframe-item');
     var index  = +$keyframeItem.attr('data-index');
-    var type = e.$delegateTarget.attr('data-type');
+    var type = e.$dt.attr('data-type');
 
-    var current = editor.selection.currentProject;
+    var current = this.$selection.currentProject;
     if (!current) return;
 
     var currentKeyframe = current.keyframes[index];
@@ -108,9 +107,9 @@ export default class KeyFrameProperty extends BaseProperty {
   }
 
   [CLICK('$keyframeList .keyframe-item .offset-list')] (e) {
-    var index  = +e.$delegateTarget.closest('keyframe-item').attr('data-index');
+    var index  = +e.$dt.closest('keyframe-item').attr('data-index');
 
-    var current = editor.selection.currentProject;
+    var current = this.$selection.currentProject;
     if (!current) return;
 
 
@@ -119,8 +118,8 @@ export default class KeyFrameProperty extends BaseProperty {
   }
 
   [CLICK('$keyframeList .del') + PREVENT] (e) {
-    var removeIndex = e.$delegateTarget.attr("data-index");
-    var current = editor.selection.currentProject;
+    var removeIndex = e.$dt.attr("data-index");
+    var current = this.$selection.currentProject;
     if (!current) return;
 
     current.removeKeyframe(removeIndex);
@@ -136,7 +135,7 @@ export default class KeyFrameProperty extends BaseProperty {
 
 
   [LOAD("$keyframeList")]() {
-    var current = editor.selection.currentProject;
+    var current = this.$selection.currentProject;
 
     if (!current) return '';
 
@@ -152,7 +151,7 @@ export default class KeyFrameProperty extends BaseProperty {
 
   [CLICK("$add")]() {
 
-    var current = editor.selection.currentProject;
+    var current = this.$selection.currentProject;
     if (current) {
       current.createKeyframe();
       this.refresh();
@@ -170,7 +169,7 @@ export default class KeyFrameProperty extends BaseProperty {
 
     this.selectedIndex = +index;
     this.selectItem(this.selectedIndex, true);
-    this.current = editor.selection.currentProject;
+    this.current = this.$selection.currentProject;
 
     if (!this.current) return;
     this.currentKeyframe = this.current.keyframes[
@@ -197,7 +196,7 @@ export default class KeyFrameProperty extends BaseProperty {
   }  
 
   viewKeyframePropertyPopup(position) {
-    this.current = editor.selection.currentProject;
+    this.current = this.$selection.currentProject;
 
     if (!this.current) return;
     this.currentKeyframe = this.current.keyframes[
@@ -217,7 +216,7 @@ export default class KeyFrameProperty extends BaseProperty {
   }
 
   [EVENT('changeKeyframePopup')] (data) {
-    var project = editor.selection.currentProject;
+    var project = this.$selection.currentProject;
 
     if (!project) return;
     this.currentKeyframe = project.keyframes[

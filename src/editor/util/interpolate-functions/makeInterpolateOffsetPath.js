@@ -1,4 +1,3 @@
-import { editor } from "../../editor";
 import PathParser from "../../parse/PathParser";
 import makeInterpolateOffset from "./offset-path/makeInterpolateOffset";
 import { Length } from "../../unit/Length";
@@ -11,7 +10,7 @@ export function makeInterpolateOffsetPath(layer, property, startValue, endValue)
 
     var startObject = {id, distance: Length.parse(distance || '0%'), rotateStatus: rotateStatus || 'auto', rotate: Length.parse(rotate || '0deg') }
 
-    var artboard = editor.selection.currentArtboard
+    var artboard = this.$selection.currentArtboard
     var innerInterpolate = (rate, t) => {
         return { x, y }
     }

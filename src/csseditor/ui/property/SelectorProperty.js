@@ -10,12 +10,9 @@ import {
   DEBOUNCE,
   STOP
 } from "../../../util/Event";
-import { editor } from "../../../editor/editor";
 import { EVENT } from "../../../util/UIElement";
 
 import { Selector } from "../../../editor/css-property/Selector";
-
-const i18n = editor.initI18n('selector.property')
 
 const selectorList = [
   '',   // custom 
@@ -33,7 +30,7 @@ const selectorList = [
 export default class SelectorProperty extends BaseProperty {
 
   getTitle() {
-    return i18n('title');
+    return this.$i18n('selector.property.title');
   }
   getBody() {
     return `<div class='selector-list' ref='$selectorList'></div>`;
@@ -54,7 +51,7 @@ export default class SelectorProperty extends BaseProperty {
       <div class='selector-item' draggable='true' ref='$selectorIndex${index}' data-index='${index}'>
         <div class='title'>
           <div class='name'>
-            <span>${selector.selector || `&lt;${i18n('none')}&gt;`}</span>
+            <span>${selector.selector || `&lt;${this.$i18n('selector.property.none')}&gt;`}</span>
           </div>
           <div class='tools'>
               <button type="button" class="del" data-index="${index}">${icon.remove2}</button>
@@ -65,9 +62,9 @@ export default class SelectorProperty extends BaseProperty {
   }
 
   [CLICK('$selectorList .selector-item .name')] (e) {
-    var index  = +e.$delegateTarget.closest('selector-item').attr('data-index');
+    var index  = +e.$dt.closest('selector-item').attr('data-index');
 
-    var current = editor.selection.current;
+    var current = this.$selection.current;
     if (!current) return;
 
 
@@ -76,8 +73,8 @@ export default class SelectorProperty extends BaseProperty {
   }
 
   [CLICK('$selectorList .selector-item .del') + PREVENT + STOP] (e) {
-    var removeIndex = e.$delegateTarget.attr("data-index");
-    var current = editor.selection.current;
+    var removeIndex = e.$dt.attr("data-index");
+    var current = this.$selection.current;
     if (!current) return;
 
     current.removeSelector(removeIndex);
@@ -93,7 +90,7 @@ export default class SelectorProperty extends BaseProperty {
 
 
   [LOAD("$selectorList")]() {
-    var current = editor.selection.current;
+    var current = this.$selection.current;
 
     if (!current) return '';
 
@@ -111,15 +108,15 @@ export default class SelectorProperty extends BaseProperty {
   // 다른 ui 를 핸들링 할 수가 없어서
   // title  에만 dragstart 거는 걸로 ok ?
   [DRAGSTART("$selectorList .selector-item .title")](e) {
-    this.startIndex = +e.$delegateTarget.attr("data-index");
+    this.startIndex = +e.$dt.attr("data-index");
   }
 
   // drop 이벤트를 걸 때 dragover 가 같이 선언되어 있어야 한다.
   [DRAGOVER("$selectorList .selector-item") + PREVENT](e) {}
 
   [DROP("$selectorList .selector-item") + PREVENT](e) {
-    var targetIndex = +e.$delegateTarget.attr("data-index");
-    var current = editor.selection.current;
+    var targetIndex = +e.$dt.attr("data-index");
+    var current = this.$selection.current;
     if (!current) return;
 
     current.sortSelector(this.startIndex, targetIndex);
@@ -131,7 +128,7 @@ export default class SelectorProperty extends BaseProperty {
 
   [CLICK("$add")]() {
 
-    var current = editor.selection.current;
+    var current = this.$selection.current;
     if (current) {
 
       current.createSelector({
@@ -151,7 +148,7 @@ export default class SelectorProperty extends BaseProperty {
 
     this.selectedIndex = +index;
     this.selectItem(this.selectedIndex, true);
-    this.current = editor.selection.current;
+    this.current = this.$selection.current;
 
     if (!this.current) return;
     this.currentSelector = this.current.selectors[
@@ -179,7 +176,7 @@ export default class SelectorProperty extends BaseProperty {
   }  
 
   viewSelectorPropertyPopup(position) {
-    this.current = editor.selection.current;
+    this.current = this.$selection.current;
 
     if (!this.current) return;
     this.currentSelector = this.current.selectors[
@@ -199,7 +196,7 @@ export default class SelectorProperty extends BaseProperty {
   }
 
   [EVENT('changeSelectorPopup')] (data) {
-    this.current = editor.selection.current;
+    this.current = this.$selection.current;
 
     if (!this.current) return;
     this.currentselector = this.current.selectors[

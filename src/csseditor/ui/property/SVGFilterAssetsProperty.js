@@ -1,5 +1,4 @@
 import BaseProperty from "./BaseProperty";
-import { editor } from "../../../editor/editor";
 import { LOAD, CLICK, INPUT, DEBOUNCE } from "../../../util/Event";
 import { EVENT } from "../../../util/UIElement";
 import icon from "../icon/icon";
@@ -10,7 +9,7 @@ import { uuidShort } from "../../../util/functions/math";
 export default class SVGFilterAssetsProperty extends BaseProperty {
 
   getTitle() {
-    return editor.i18n('svgfilter.asset.property.title');
+    return this.$i18n('svgfilter.asset.property.title');
   }
 
   initState() {
@@ -37,7 +36,7 @@ export default class SVGFilterAssetsProperty extends BaseProperty {
   }
 
   [LOAD("$svgfilterList")]() {
-    var current = editor.selection.currentProject || { svgfilters: [] }
+    var current = this.$selection.currentProject || { svgfilters: [] }
 
     var svgfilters = current.svgfilters;
 
@@ -77,7 +76,7 @@ export default class SVGFilterAssetsProperty extends BaseProperty {
 
  
   executeSVGFilter (callback, isRefresh = true, isEmit = true ) {
-    var project = editor.selection.currentProject;
+    var project = this.$selection.currentProject;
 
     if(project) {
 
@@ -101,7 +100,7 @@ export default class SVGFilterAssetsProperty extends BaseProperty {
   }
 
   [CLICK('$svgfilterList .remove')] (e) {
-    var $item = e.$delegateTarget.closest('svgfilter-item');
+    var $item = e.$dt.closest('svgfilter-item');
     var index = +$item.attr('data-index');
 
     this.executeSVGFilter(project => {
@@ -112,7 +111,7 @@ export default class SVGFilterAssetsProperty extends BaseProperty {
 
 
   [CLICK('$svgfilterList .copy')] (e) {
-    var $item = e.$delegateTarget.closest('svgfilter-item');
+    var $item = e.$dt.closest('svgfilter-item');
     var index = +$item.attr('data-index');
 
     this.executeSVGFilter(project => {
@@ -121,9 +120,9 @@ export default class SVGFilterAssetsProperty extends BaseProperty {
   }  
 
   [INPUT('$svgfilterList input')] (e) {
-    var $item = e.$delegateTarget.closest('svgfilter-item');
+    var $item = e.$dt.closest('svgfilter-item');
     var index = +$item.attr('data-index');
-    var obj = e.$delegateTarget.attrKeyValue('data-key');
+    var obj = e.$dt.attrKeyValue('data-key');
 
     this.executeSVGFilter(project => {
       project.setSVGFilterValue(index, obj);      
@@ -134,13 +133,13 @@ export default class SVGFilterAssetsProperty extends BaseProperty {
   }
 
   [CLICK("$svgfilterList .preview")](e) {
-    var $item = e.$delegateTarget.closest('svgfilter-item');    
+    var $item = e.$dt.closest('svgfilter-item');    
     var index = +$item.attr('data-index')
 
     this.state.$item = $item; 
-    this.state.$el = e.$delegateTarget.$('.svgfilter-view');
+    this.state.$el = e.$dt.$('.svgfilter-view');
 
-    var currentProject = editor.selection.currentProject || { svgfilters: [] } 
+    var currentProject = this.$selection.currentProject || { svgfilters: [] } 
 
     var svgfilter = currentProject.svgfilters[index];
 

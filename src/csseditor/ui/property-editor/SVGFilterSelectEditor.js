@@ -1,9 +1,7 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
 import { LOAD, CHANGE, BIND, DEBOUNCE, CLICK } from "../../../util/Event";
 import icon from "../icon/icon";
-import { editor } from "../../../editor/editor";
 
-const i18n = editor.initI18n('svgfilter.select.editor')
 export default class SVGFilterSelectEditor extends UIElement {
 
     initState() {
@@ -40,7 +38,7 @@ export default class SVGFilterSelectEditor extends UIElement {
         var value = this.state.value;
 
         if (value.includes('id')) {
-            var currentProject = editor.selection.currentProject
+            var currentProject = this.$selection.currentProject
             var index = currentProject.getSVGFilterIndex(value)
 
             if (index > -1) {
@@ -71,7 +69,7 @@ export default class SVGFilterSelectEditor extends UIElement {
 
 
 
-        var current = editor.selection.currentProject;
+        var current = this.$selection.currentProject;
         var options = '' 
         
         if (current) {
@@ -114,9 +112,9 @@ export default class SVGFilterSelectEditor extends UIElement {
 
     sendMessage (type) {
         if (type === 'new') {
-            this.emit('addStatusBarMessage', i18n('message.create'));
+            this.emit('addStatusBarMessage', this.$i18n('svgfilter.select.editor.message.create'));
         } else if (type === '-') {
-            this.emit('addStatusBarMessage', i18n('message.select'));
+            this.emit('addStatusBarMessage', this.$i18n('svgfilter.select.editor.message.select'));
         } else {
             this.emit('addStatusBarMessage', '');
         }
@@ -159,7 +157,7 @@ export default class SVGFilterSelectEditor extends UIElement {
     [EVENT('openSVGFilterPopup')](index) {
         this.emit('refreshSVGFilterAssets');
         this.emit('refreshSVGArea');
-        var currentProject = editor.selection.currentProject || { svgfilters: [] } 
+        var currentProject = this.$selection.currentProject || { svgfilters: [] } 
     
         var svgfilter = currentProject.svgfilters[index];
     
@@ -173,7 +171,7 @@ export default class SVGFilterSelectEditor extends UIElement {
     
     
     [EVENT('changeSVGFilterEditorRealUpdate')] (params) {
-        var project = editor.selection.currentProject
+        var project = this.$selection.currentProject
     
         if (project) {
             project.setSVGFilterValue(params.index, {

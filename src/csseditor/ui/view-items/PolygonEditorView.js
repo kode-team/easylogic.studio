@@ -1,6 +1,5 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
 import { POINTERSTART, MOVE, END, BIND, POINTERMOVE, PREVENT, KEYUP, IF, STOP, CLICK, KEY, ESCAPE, ENTER } from "../../../util/Event";
-import { editor } from "../../../editor/editor";
 import Dom from "../../../util/Dom";
 import PathParser from "../../../editor/parse/PathParser";
 import { Length } from "../../../editor/unit/Length";
@@ -36,7 +35,7 @@ export default class PolygonEditorView extends UIElement {
     }
 
     get scale () {
-        return editor.scale;
+        return this.$editor.scale;
     }
 
     template() {
@@ -104,7 +103,7 @@ export default class PolygonEditorView extends UIElement {
     makePolygonLayer (pathRect) {
         var totalLength = this.refs.$view.$('polygon.object').totalLength
         var { points } = this.polygonGenerator.toPolygon(pathRect.x, pathRect.y, this.scale);
-        var artboard = editor.selection.currentArtboard
+        var artboard = this.$selection.currentArtboard
         var layer; 
 
         if (artboard) {
@@ -151,7 +150,7 @@ export default class PolygonEditorView extends UIElement {
         var rect = this.getViewRect()
         var layer = this.makePolygonLayer(rect)
         if (layer) {
-            editor.selection.select(layer);
+            this.$selection.select(layer);
 
             this.state.segments = [] 
             this.polygonParser.reset('')
@@ -269,7 +268,7 @@ export default class PolygonEditorView extends UIElement {
     }
 
     [CLICK('$view .split-path')] (e) {
-        var parser = new PathParser(e.$delegateTarget.attr('d'));
+        var parser = new PathParser(e.$dt.attr('d'));
         var clickPosition = {
             x: e.xy.x - this.state.rect.x, 
             y: e.xy.y - this.state.rect.y
@@ -366,20 +365,20 @@ export default class PolygonEditorView extends UIElement {
 
         if (this.isMode('star')) {
 
-            this.polygonGenerator.moveStar(dx, dy, editor.config.get('bodyEvent'));
+            this.polygonGenerator.moveStar(dx, dy, this.$config.get('bodyEvent'));
 
             this.bindData('$view');            
 
         } else if (this.isMode('segment-move')) {
 
-            this.polygonGenerator.move(dx, dy, editor.config.get('bodyEvent'));
+            this.polygonGenerator.move(dx, dy, this.$config.get('bodyEvent'));
 
             this.bindData('$view');            
 
             this.updatePolygonLayer();
 
         } else if (this.isMode('draw')) {
-            // var e = editor.config.get('bodyEvent');
+            // var e = this.$config.get('bodyEvent');
 
             // this.state.dragPoints = e.altKey ? false : true; 
         } else if (this.isMode('move')) {
@@ -390,7 +389,7 @@ export default class PolygonEditorView extends UIElement {
 
     end (dx, dy) {
 
-        if (this.state.$target.is(this.refs.$view) && editor.config.get('bodyEvent').altKey)  {
+        if (this.state.$target.is(this.refs.$view) && this.$config.get('bodyEvent').altKey)  {
             // 에디팅  종료 
             this.trigger('hidePolygonEditor')
             this.changeMode('modify');            

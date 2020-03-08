@@ -2,20 +2,6 @@ import UIElement, { EVENT } from "../../../util/UIElement";
 import { LOAD } from "../../../util/Event";
 import { CSS_TO_STRING, STRING_TO_CSS } from "../../../util/functions/func";
 import SelectIconEditor from "./SelectIconEditor";
-import { editor } from "../../../editor/editor";
-
-const i18n = editor.initI18n('flex.layout.item.editor')
-
-const makeOptionsFunction = (options) => {
-    return () => {
-        return options.split(',').map(it => {
-            return `${it}:${i18n(it)}`
-        }).join(',');
-    }
-}
-
-const getValueOptions = makeOptionsFunction('none,auto,value')
-
 
 export default class FlexLayoutItemEditor extends UIElement {
 
@@ -46,7 +32,7 @@ export default class FlexLayoutItemEditor extends UIElement {
     [LOAD('$body')] () {
         return /*html*/`
             <div class='flex-layout-item'>
-                <div class='label'><label>${i18n('direction')}</label></div>
+                <div class='label'><label>${this.$i18n('flex.layout.item.editor.direction')}</label></div>
                 <SelectIconEditor 
                     key='flex-direction'
                     value="${this.state['flex-direction'] || 'row'}"
@@ -55,7 +41,7 @@ export default class FlexLayoutItemEditor extends UIElement {
                 />
             </div>
             <div class='flex-layout-item'>
-                <div class='label'><label>${i18n('wrap')}</label></div>
+                <div class='label'><label>${this.$i18n('flex.layout.item.editor.wrap')}</label></div>
                 <SelectIconEditor 
                     key='flex-wrap'
                     value="${this.state['flex-wrap'] || 'wrap'}"
@@ -64,7 +50,7 @@ export default class FlexLayoutItemEditor extends UIElement {
                 />
             </div>
             <div class='flex-layout-item'>
-                <div class='label'><label>${i18n('justify-content')}</label></div>
+                <div class='label'><label>${this.$i18n('flex.layout.item.editor.justify-content')}</label></div>
                 <SelectIconEditor 
                     key='justify-content'
                     value="${this.state['justify-content']}"
@@ -73,7 +59,7 @@ export default class FlexLayoutItemEditor extends UIElement {
                 />
             </div>
             <div class='flex-layout-item'>
-                <div class='label'><label>${i18n('align-items')}</label></div>
+                <div class='label'><label>${this.$i18n('flex.layout.item.editor.align-items')}</label></div>
                 <SelectIconEditor 
                     key='align-items'
                     value="${this.state['align-items']}"
@@ -82,7 +68,7 @@ export default class FlexLayoutItemEditor extends UIElement {
                 />
             </div>
             <div class='flex-layout-item'>
-                <div class='label'><label>${i18n('align-content')}</label></div>
+                <div class='label'><label>${this.$i18n('flex.layout.item.editor.align-content')}</label></div>
                 <SelectIconEditor 
                     key='align-content'
                     value="${this.state['align-content']}"

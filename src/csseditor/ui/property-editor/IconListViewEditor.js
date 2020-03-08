@@ -11,7 +11,7 @@ export default class IconListViewEditor extends UIElement {
     }
 
     template() {
-        return `<div class='select-editor list-view-editor' ref='$body'></div>`
+        return /*html*/`<div class='select-editor list-view-editor' ref='$body'></div>`
     }
 
     [BIND('$body')] () {
@@ -25,7 +25,7 @@ export default class IconListViewEditor extends UIElement {
             var html = icon[key]
             var selected = key === this.state.value ? 'selected' : ''
 
-            return `<div class='list-view-item ${selected}'  data-key='${key}'>${html}</div>`
+            return /*html*/`<div class='list-view-item ${selected}'  data-key='${key}'>${html}</div>`
         })
     }
 
@@ -39,9 +39,9 @@ export default class IconListViewEditor extends UIElement {
     }
 
     [CLICK('$body .list-view-item')] (e) {
-        var key = e.$delegateTarget.attr('data-key');
+        var key = e.$dt.attr('data-key');
 
-        e.$delegateTarget.onlyOneClass('selected')
+        e.$dt.onlyOneClass('selected')
 
         this.updateData({
             value: key

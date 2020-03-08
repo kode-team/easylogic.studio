@@ -19,9 +19,7 @@ export const ON = EVENT
 
 class UIElement extends EventMachine {
   constructor(opt, props = {}) {
-    super(opt);
-
-    this.initializeProperty(opt, props)
+    super(opt, props);
 
     this.created();
 
@@ -45,6 +43,10 @@ class UIElement extends EventMachine {
     if (opt && opt.$store) {
       this.$store = opt.$store;
     }
+
+    if (opt && opt.$editor) {
+      this.$editor = opt.$editor; 
+    }
   }
 
   created() {}
@@ -62,7 +64,6 @@ class UIElement extends EventMachine {
    *
    */
   initializeStoreEvent() {
-    this.storeEvents = {};
 
     this.filterProps(REG_STORE_MULTI_PATTERN).forEach(key => {
       const events = this.getRealEventName(key, MULTI_PREFIX);
@@ -85,15 +86,13 @@ class UIElement extends EventMachine {
           var callback = this[key].bind(this);
           callback.displayName = `${this.sourceName}.${e}`;
           callback.source = this.source;
-          this.storeEvents[e] = callback;
-          this.$store.on(e, this.storeEvents[e], this, debounceSecond);
+          this.$store.on(e, callback, this, debounceSecond);
       });
     });
   }
 
   destoryStoreEvent() {
     this.$store.offAll(this);
-    this.storeEvents = {} 
   }
 
   destroy () {
@@ -128,6 +127,33 @@ class UIElement extends EventMachine {
 
   off (message, callback) {
     this.$store.off(message, callback);
+  }
+
+
+  // editor utility 
+
+  $i18n (key) {
+    return this.$editor.i18n(key);
+  }
+
+  $initI18n (key) {
+    return this.$editor.initI18n(key);
+  }
+
+  get $config () {
+    return this.$editor.config; 
+  }
+
+  get $selection () {
+    return this.$editor.selection; 
+  }
+
+  get $timeline () {
+    return this.$editor.timeline; 
+  }  
+
+  $theme (key) {
+    return this.$editor.themeValue(key);
   }
 }
 

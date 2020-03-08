@@ -1,5 +1,5 @@
 import { AssetItem } from "./AssetItem";
-import { editor } from "../editor";
+import { ComponentManager } from "../ComponentManager";
 
 export class Project extends AssetItem {
   getDefaultTitle() {
@@ -51,4 +51,4 @@ export class Project extends AssetItem {
   }
 }
 
-editor.registerComponent('project', Project);
+ComponentManager.registerComponent('project', Project);

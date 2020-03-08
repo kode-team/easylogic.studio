@@ -1,6 +1,5 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
 import { POINTERSTART, MOVE, END, BIND, POINTERMOVE, PREVENT, KEYUP, IF, STOP, CLICK, DOUBLECLICK, KEY, LOAD, ENTER, ESCAPE } from "../../../util/Event";
-import { editor } from "../../../editor/editor";
 import PathGenerator from "../../../editor/parse/PathGenerator";
 import Dom from "../../../util/Dom";
 import PathParser from "../../../editor/parse/PathParser";
@@ -22,7 +21,7 @@ function xy ([x, y]) {
 const SegmentConvertor = class extends UIElement {
 
     [DOUBLECLICK('$view [data-segment]')] (e) {
-        var index = +e.$delegateTarget.attr('data-index')
+        var index = +e.$dt.attr('data-index')
 
 
         this.pathGenerator.convertToCurve(index);
@@ -37,7 +36,7 @@ const PathCutter = class extends SegmentConvertor {
 
     [CLICK('$view .split-path')] (e) {
         this.initRect()
-        var parser = new PathParser(e.$delegateTarget.attr('d'));
+        var parser = new PathParser(e.$dt.attr('d'));
         var clickPosition = {
             x: e.xy.x - this.state.rect.x, 
             y: e.xy.y - this.state.rect.y
@@ -122,7 +121,7 @@ const PathTransformEditor = class extends PathCutter {
     }
         
     [POINTERSTART('$tool .transform-tool-item') + MOVE('moveTransformTool') + END('moveEndTransformTool')]  (e) {
-        this.transformMoveType = e.$delegateTarget.attr('data-position')
+        this.transformMoveType = e.$dt.attr('data-position')
 
         this.resetTransformZone()        
         this.pathGenerator.initTransform(this.state.transformZoneRect);
@@ -174,7 +173,7 @@ export default class PathEditorView extends PathTransformEditor {
     }
 
     get scale () {
-        return editor.scale; 
+        return this.$editor.scale; 
     }
 
     template() {
@@ -247,7 +246,7 @@ export default class PathEditorView extends PathTransformEditor {
 
     makePathLayer (pathRect) {
         var { d } = this.pathGenerator.toPath(pathRect.x, pathRect.y, this.scale);
-        var artboard = editor.selection.currentArtboard
+        var artboard = this.$selection.currentArtboard
         var layer; 
         if (artboard) {
 
@@ -321,7 +320,7 @@ export default class PathEditorView extends PathTransformEditor {
 
             var layer = this.makePathLayer(pathRect)
             if (layer) {
-                editor.selection.select(layer);
+                this.$selection.select(layer);
     
                 this.emit('refreshAll')
                 this.emit('refreshSelection');
@@ -635,7 +634,7 @@ export default class PathEditorView extends PathTransformEditor {
             this.renderSelectBox(this.state.dragXY, dx, dy);
 
         } else if (this.isMode('segment-move')) {
-            var e = editor.config.get('bodyEvent')
+            var e = this.$config.get('bodyEvent')
             this.pathGenerator.move(dx, dy, e);
 
             this.renderPath()      
@@ -643,7 +642,7 @@ export default class PathEditorView extends PathTransformEditor {
             this.updatePathLayer();
 
         } else if (this.isMode('draw')) {
-            var e = editor.config.get('bodyEvent');
+            var e = this.$config.get('bodyEvent');
 
             this.state.dragPoints = e.altKey ? false : true; 
         }

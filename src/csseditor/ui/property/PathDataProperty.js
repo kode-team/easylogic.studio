@@ -1,5 +1,4 @@
 import BaseProperty from "./BaseProperty";
-import { editor } from "../../../editor/editor";
 import { EVENT } from "../../../util/UIElement";
 import PathDataEditor from "../property-editor/PathDataEditor";
 import { DEBOUNCE } from "../../../util/Event";
@@ -8,7 +7,7 @@ import { DEBOUNCE } from "../../../util/Event";
 export default class PathDataProperty extends BaseProperty {
 
   getTitle() {
-    return editor.i18n('path.data.property.title');
+    return this.$i18n('path.data.property.title');
   }
 
   getClassName() {
@@ -39,12 +38,12 @@ export default class PathDataProperty extends BaseProperty {
   refresh() {
     // update 를 어떻게 할지 고민 
 
-    var current = editor.selection.current || {};
+    var current = this.$selection.current || {};
     this.children.$pathData.setValue(current.d);
   }
 
   getBody() {
-    var current = editor.selection.current || {};
+    var current = this.$selection.current || {};
 
     return /*html*/`
       <div>

@@ -1,8 +1,7 @@
 import BaseProperty from "./BaseProperty";
-import { editor } from "../../../editor/editor";
 import { EVENT } from "../../../util/UIElement";
 import { DEBOUNCE, LOAD } from "../../../util/Event";
-import { isString, OBJECT_TO_PROPERTY, isNotUndefined } from "../../../util/functions/func";
+import { isString, OBJECT_TO_PROPERTY } from "../../../util/functions/func";
 
 
 export default class ComponentProperty extends BaseProperty {
@@ -12,7 +11,7 @@ export default class ComponentProperty extends BaseProperty {
   }
 
   isShow () {
-    var current = editor.selection.current;
+    var current = this.$selection.current;
 
     if (current && current.is('component')) {
       return true; 
@@ -45,7 +44,7 @@ export default class ComponentProperty extends BaseProperty {
 
   refresh() {
     
-    var current = editor.selection.current;
+    var current = this.$selection.current;
 
     if (current && current.is('component')) {
       this.setTitle(current.itemType || current.name);
@@ -66,7 +65,7 @@ export default class ComponentProperty extends BaseProperty {
 
   initComponents() {
 
-    var current = editor.selection.current;
+    var current = this.$selection.current;
     var components = {} 
 
     if (current && current.is('component')) {
@@ -111,15 +110,13 @@ export default class ComponentProperty extends BaseProperty {
 
   [LOAD('$body')] () {
 
-    var current = editor.selection.current;
+    var current = this.$selection.current;
 
     if (!current) return ''; 
 
     if (current && !current.is('component')) {
       return ''; 
     }
-
-
 
     var self = current.getProps().map(it=> {
       if (isString(it)) {
@@ -143,7 +140,7 @@ export default class ComponentProperty extends BaseProperty {
 
   [EVENT('changeComponentProperty')] (key, value) {
 
-    this.emit("SET_ATTRIBUTE", {
+    this.emit("setAttribute", {
       [key]: value
     }, null, true)
   }

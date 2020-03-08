@@ -14,7 +14,7 @@ export default class AddPolygon extends MenuItem {
   }  
 
   clickButton(e) {
-    this.emit('add.polygon');
+    this.emit('addPolygon');
   }
 
 }

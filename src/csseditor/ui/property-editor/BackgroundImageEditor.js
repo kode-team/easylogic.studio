@@ -2,7 +2,7 @@ import UIElement, { EVENT } from "../../../util/UIElement";
 import { BackgroundImage } from "../../../editor/css-property/BackgroundImage";
 import { LOAD, CLICK, DRAGSTART, DRAGOVER, DROP, PREVENT, DEBOUNCE } from "../../../util/Event";
 import icon from "../icon/icon";
-import { keyEach, combineKeyArray, CSS_TO_STRING, STRING_TO_CSS, OBJECT_TO_PROPERTY } from "../../../util/functions/func";
+import { CSS_TO_STRING, STRING_TO_CSS, OBJECT_TO_PROPERTY } from "../../../util/functions/func";
 import BackgroundPositionEditor from "./BackgroundPositionEditor";
 import GradientSingleEditor from "./GradientSingleEditor";
 import { LinearGradient } from "../../../editor/image-resource/LinearGradient";
@@ -189,7 +189,7 @@ export default class BackgroundImageEditor extends UIElement {
 
 
     [DRAGSTART("$fillList .fill-item")](e) {
-        this.startIndex = +e.$delegateTarget.attr("data-index");
+        this.startIndex = +e.$dt.attr("data-index");
     }
 
     [DRAGOVER("$fillList .fill-item") + PREVENT](e) {}
@@ -208,7 +208,7 @@ export default class BackgroundImageEditor extends UIElement {
     }
 
     [DROP("$fillList .fill-item") + PREVENT](e) {
-        var targetIndex = +e.$delegateTarget.attr("data-index");
+        var targetIndex = +e.$dt.attr("data-index");
 
 
         this.selectItem(this.startIndex, true);
@@ -231,7 +231,7 @@ export default class BackgroundImageEditor extends UIElement {
 
 
     [CLICK("$fillList .tools .remove")](e) {
-        var removeIndex = +e.$delegateTarget.attr("data-index");
+        var removeIndex = +e.$dt.attr("data-index");
 
         this.state.images.splice(removeIndex, 1);
 

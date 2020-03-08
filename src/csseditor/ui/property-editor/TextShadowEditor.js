@@ -94,7 +94,7 @@ export default class TextShadowEditor extends UIElement {
   }
 
   [CLICK("$shadowList .remove")](e) {
-    var index = +e.$delegateTarget.attr("data-index");
+    var index = +e.$dt.attr("data-index");
 
     this.state.textShadows.splice(index, 1);
 
@@ -104,7 +104,7 @@ export default class TextShadowEditor extends UIElement {
   }
 
   [CLICK("$shadowList .shadow-item.real > div:not(.tools)")](e) {
-    var index = +e.$delegateTarget.closest('shadow-item').attr("data-index");
+    var index = +e.$dt.closest('shadow-item').attr("data-index");
 
     var shadow = this.state.textShadows[index]
 

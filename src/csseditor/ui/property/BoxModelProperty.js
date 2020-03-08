@@ -1,6 +1,5 @@
 import BaseProperty from "./BaseProperty";
 import { INPUT, LOAD, DEBOUNCE } from "../../../util/Event";
-import { editor } from "../../../editor/editor";
 import { Length } from "../../../editor/unit/Length";
 import { EVENT } from "../../../util/UIElement";
 
@@ -10,11 +9,10 @@ fields.forEach(field => {
   styleKeys.push(...["-top", "-bottom", "-left", "-right"].map(it => field + it));
 });
 
-const i18n = editor.initI18n('box.model.property');
 
 export default class BoxModelProperty extends BaseProperty {
   getTitle() {
-    return i18n('title');
+    return this.$i18n('box.model.property.title');
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
@@ -33,13 +31,13 @@ export default class BoxModelProperty extends BaseProperty {
   }
 
   [LOAD("$boxModelItem")]() {
-    var current = editor.selection.current;
+    var current = this.$selection.current;
 
     if (!current) return '';
 
     return /*html*/`
       <div>
-        <div class="margin" data-title="${i18n('margin')}">
+        <div class="margin" data-title="${this.$i18n('box.model.property.margin')}">
           <div data-value="top">
             ${this.templateInput("margin-top", current)}
           </div>
@@ -53,7 +51,7 @@ export default class BoxModelProperty extends BaseProperty {
             ${this.templateInput("margin-right", current)}
           </div>
         </div>
-        <div class="padding" data-title="${i18n('padding')}">
+        <div class="padding" data-title="${this.$i18n('box.model.property.padding')}">
           <div data-value="top">
             ${this.templateInput("padding-top", current)}
           </div>
@@ -85,6 +83,6 @@ export default class BoxModelProperty extends BaseProperty {
       data[key] = Length.px(this.getRef("$", key).value);
     });
 
-    this.emit("SET_ATTRIBUTE", data)    
+    this.emit("setAttribute", data)    
   }
 }

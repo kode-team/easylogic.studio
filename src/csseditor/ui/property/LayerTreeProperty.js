@@ -1,6 +1,5 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, CLICK, DOUBLECLICK, KEYUP, KEY, PREVENT, STOP, FOCUSOUT, VDOM, DRAGSTART, KEYDOWN, DRAGOVER, DROP, DRAG, BIND, DRAGEND, ENTER } from "../../../util/Event";
-import { editor } from "../../../editor/editor";
+import { LOAD, CLICK, DOUBLECLICK, PREVENT, STOP, FOCUSOUT, VDOM, DRAGSTART, KEYDOWN, DRAGOVER, DROP, BIND, DRAGEND, ENTER } from "../../../util/Event";
 import icon from "../icon/icon";
 import { EVENT } from "../../../util/UIElement";
 
@@ -8,13 +7,11 @@ import { Layer } from "../../../editor/items/Layer";
 import Color from "../../../util/Color";
 import { Length } from "../../../editor/unit/Length";
 
-const i18n = editor.initI18n('layer.tree.property');
-
 const DRAG_START_CLASS = 'drag-start'
 
 export default class LayerTreeProperty extends BaseProperty {
   getTitle() {
-    return `<span>${icon.account_tree}</span> ${i18n('title')}`;
+    return `<span>${icon.account_tree}</span> ${this.$i18n('layer.tree.property.title')}`;
   }
 
   getClassName() {
@@ -121,9 +118,9 @@ export default class LayerTreeProperty extends BaseProperty {
 
       switch (item.itemType) {
       case 'svg-path': 
-        return `<svg viewBox="0 0 ${item.width.value} ${item.height.value}"><path d="${item.d}" stroke-width="${strokeWidth}" /></svg>`;
+        return /*html*/`<svg viewBox="0 0 ${item.width.value} ${item.height.value}"><path d="${item.d}" stroke-width="${strokeWidth}" /></svg>`;
       case 'svg-polygon': 
-        return `<svg viewBox="0 0 ${item.width.value} ${item.height.value}"><polygon points="${item.points}" stroke-width="${strokeWidth}" /></svg>`;
+        return /*html*/`<svg viewBox="0 0 ${item.width.value} ${item.height.value}"><polygon points="${item.points}" stroke-width="${strokeWidth}" /></svg>`;
       }
 
     default: 
@@ -136,7 +133,7 @@ export default class LayerTreeProperty extends BaseProperty {
 
     return parentObject.layers.map( (layer, index) => {
 
-      var selected = editor.selection.check(layer) ? 'selected' : '';
+      var selected = this.$selection.check(layer) ? 'selected' : '';
       var name = layer.name; 
 
       if (layer.is('text')) {
@@ -145,7 +142,7 @@ export default class LayerTreeProperty extends BaseProperty {
       var title = ''; 
 
       if (layer.hasLayout()) {
-        title = i18n('layout.title.' + layer.layout)
+        title = this.$i18n('layer.tree.property.layout.title.' + layer.layout)
       }
 
 
@@ -176,7 +173,7 @@ export default class LayerTreeProperty extends BaseProperty {
 
   [LOAD("$layerList") + VDOM]() {
 
-    var artboard = editor.selection.currentArtboard;
+    var artboard = this.$selection.currentArtboard;
     if (!artboard) return ''
 
     return this.makeLayerList(artboard, 0) + /*html*/`
@@ -186,11 +183,11 @@ export default class LayerTreeProperty extends BaseProperty {
   }
 
   [DRAGSTART('$layerList .layer-item')] (e) {
-    var layerId = e.$delegateTarget.attr('data-layer-id');
-    e.$delegateTarget.addClass(DRAG_START_CLASS);
+    var layerId = e.$dt.attr('data-layer-id');
+    e.$dt.addClass(DRAG_START_CLASS);
     e.dataTransfer.setData('layer/id', layerId);
     this.state.rootRect = this.refs.$layerList.rect()
-    this.state.itemRect = e.$delegateTarget.rect();
+    this.state.itemRect = e.$dt.rect();
     this.setState({
       hideDragPointer: false 
     }, false)
@@ -211,22 +208,22 @@ export default class LayerTreeProperty extends BaseProperty {
   }
 
   [DRAGOVER(`$layerList .layer-item:not(.${DRAG_START_CLASS})`) + PREVENT] (e) {
-    var targetLayerId = e.$delegateTarget.attr('data-layer-id') 
+    var targetLayerId = e.$dt.attr('data-layer-id') 
     // console.log({targetLayerId, x: e.offsetX, y: e.offsetY});
 
     this.state.lastDragOverItemId = targetLayerId;
-    this.state.lastDragOverPosition = e.$delegateTarget.rect().top;
+    this.state.lastDragOverPosition = e.$dt.rect().top;
     this.state.lastDragOverOffset = e.offsetY;
 
     this.bindData('$dragPointer')
 
   }
   [DROP(`$layerList .layer-item:not(.${DRAG_START_CLASS})`)] (e) {
-    var targetLayerId = e.$delegateTarget.attr('data-layer-id')
+    var targetLayerId = e.$dt.attr('data-layer-id')
     var sourceLayerId = e.dataTransfer.getData('layer/id');
 
     if (targetLayerId === sourceLayerId) return; 
-    var artboard = editor.selection.currentArtboard
+    var artboard = this.$selection.currentArtboard
 
     if (artboard) {
       var targetItem = artboard.searchById(targetLayerId);
@@ -236,7 +233,7 @@ export default class LayerTreeProperty extends BaseProperty {
 
       targetItem.add(sourceItem, this.state.lastDragOverItemDirection);
 
-      editor.selection.select(sourceItem);
+      this.$selection.select(sourceItem);
 
       this.setState({
         hideDragPointer: true 
@@ -248,7 +245,7 @@ export default class LayerTreeProperty extends BaseProperty {
   }
 
   [DOUBLECLICK('$layerList .layer-item')] (e) {
-    this.startInputEditing(e.$delegateTarget.$('.name'))
+    this.startInputEditing(e.$dt.$('.name'))
   }
 
 
@@ -259,7 +256,7 @@ export default class LayerTreeProperty extends BaseProperty {
 
       var id = input.closest('layer-item').attr('data-layer-id');
 
-      var artboard = editor.selection.currentArtboard;
+      var artboard = this.$selection.currentArtboard;
       if (artboard) {
         var item = artboard.searchById(id)
         if (item) {
@@ -275,17 +272,17 @@ export default class LayerTreeProperty extends BaseProperty {
   }
 
   [KEYDOWN('$layerList .layer-item .name') + ENTER + PREVENT + STOP] (e) {
-    this.modifyDoneInputEditing(e.$delegateTarget);
+    this.modifyDoneInputEditing(e.$dt);
   }
 
   [FOCUSOUT('$layerList .layer-item .name') + PREVENT  + STOP ] (e) {
-    this.modifyDoneInputEditing(e.$delegateTarget);
+    this.modifyDoneInputEditing(e.$dt);
   }
 
   selectLayer(layer) {
 
     if (layer) {
-      editor.selection.select(layer)
+      this.$selection.select(layer)
     }
 
     this.refresh()
@@ -294,14 +291,14 @@ export default class LayerTreeProperty extends BaseProperty {
 
   addLayer (layer) {
     if (layer) {
-      editor.selection.select(layer);
+      this.$selection.select(layer);
 
       this.emit('refreshAllSelectArtBoard')
     }
   }
 
   [CLICK('$add')] (e) {
-    var artboard = editor.selection.currentArtboard;
+    var artboard = this.$selection.currentArtboard;
     if (artboard) {
       var layer = artboard.add(new Layer({
         'background-color': Color.random(),
@@ -314,9 +311,9 @@ export default class LayerTreeProperty extends BaseProperty {
   }
 
   [CLICK('$layerList .layer-item .remove')] (e) {
-    var artboard = editor.selection.currentArtboard
+    var artboard = this.$selection.currentArtboard
     if (artboard) {
-      var $item = e.$delegateTarget.closest('layer-item')
+      var $item = e.$dt.closest('layer-item')
       var id = $item.attr('data-layer-id');
 
       var item = artboard.searchById(id);
@@ -329,15 +326,15 @@ export default class LayerTreeProperty extends BaseProperty {
 
 
   [CLICK('$layerList .layer-item label')] (e) {
-    var artboard = editor.selection.currentArtboard
+    var artboard = this.$selection.currentArtboard
     if (artboard) {
 
-      var $item = e.$delegateTarget.closest('layer-item')
+      var $item = e.$dt.closest('layer-item')
       $item.onlyOneClass('selected');
 
       var id = $item.attr('data-layer-id');
       var item = artboard.searchById(id);
-      editor.selection.select(item)
+      this.$selection.select(item)
 
       this.emit('refreshSelection');      
 
@@ -345,15 +342,15 @@ export default class LayerTreeProperty extends BaseProperty {
   }
 
   [CLICK('$layerList .layer-item .visible')] (e) {
-    var artboard = editor.selection.currentArtboard
+    var artboard = this.$selection.currentArtboard
     if (artboard) {
-      var $item = e.$delegateTarget.closest('layer-item')
+      var $item = e.$dt.closest('layer-item')
       var id = $item.attr('data-layer-id');
 
       var item = artboard.searchById(id);      
-      e.$delegateTarget.attr('data-visible', !item.visible);
+      e.$dt.attr('data-visible', !item.visible);
 
-      this.emit('SET_ATTRIBUTE', {
+      this.emit('setAttribute', {
         visible: !item.visible
       }, item.id)
     }
@@ -361,16 +358,16 @@ export default class LayerTreeProperty extends BaseProperty {
 
 
   [CLICK('$layerList .layer-item .lock')] (e) {
-    var artboard = editor.selection.currentArtboard
+    var artboard = this.$selection.currentArtboard
     if (artboard) {
-      var $item = e.$delegateTarget.closest('layer-item')
+      var $item = e.$dt.closest('layer-item')
       var id = $item.attr('data-layer-id');
 
       var item = artboard.searchById(id);
       
-      e.$delegateTarget.attr('data-lock', !item.lock);
+      e.$dt.attr('data-lock', !item.lock);
 
-      this.emit('SET_ATTRIBUTE', {
+      this.emit('setAttribute', {
         lock: !item.lock
       }, item.id)
     }
@@ -378,15 +375,15 @@ export default class LayerTreeProperty extends BaseProperty {
 
 
   [CLICK('$layerList .layer-item .copy')] (e) {
-    var artboard = editor.selection.currentArtboard
+    var artboard = this.$selection.currentArtboard
     if (artboard) {
-      var $item = e.$delegateTarget.closest('layer-item')
+      var $item = e.$dt.closest('layer-item')
       var id = $item.attr('data-layer-id');
 
       var obj = artboard.searchById(id)
       var copyObject = obj.copy();
 
-      editor.selection.select(copyObject);
+      this.$selection.select(copyObject);
       this.refresh();
       this.emit('refreshElement');
     }
@@ -404,7 +401,7 @@ export default class LayerTreeProperty extends BaseProperty {
         it.removeClass('selected')
       })
 
-      var selector = editor.selection.items.map(it => {
+      var selector = this.$selection.items.map(it => {
         return `[data-layer-id="${it.id}"]`
       }).join(',')
 
@@ -413,7 +410,7 @@ export default class LayerTreeProperty extends BaseProperty {
 
           it.addClass('selected')
 
-          var item = editor.selection.itemKeys[it.attr('data-layer-id')]
+          var item = this.$selection.itemKeys[it.attr('data-layer-id')]
           if (item.is('svg-path', 'svg-polygon') ) {
             it.$('.icon').html(this.getIcon(item));
           }

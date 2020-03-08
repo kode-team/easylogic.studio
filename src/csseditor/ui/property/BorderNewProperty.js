@@ -1,6 +1,5 @@
 import BaseProperty from "./BaseProperty";
 import { LOAD, DEBOUNCE } from "../../../util/Event";
-import { editor } from "../../../editor/editor";
 import { EVENT } from "../../../util/UIElement";
 import BorderEditor from "../property-editor/BorderEditor";
 
@@ -12,7 +11,7 @@ export default class BorderNewProperty extends BaseProperty {
     }
   }
   getTitle() {
-    return editor.i18n('border.property.title');  
+    return this.$i18n('border.property.title');  
   }
 
 
@@ -29,7 +28,7 @@ export default class BorderNewProperty extends BaseProperty {
   }
 
   [LOAD('$body')] () {
-    var current = editor.selection.current || {}; 
+    var current = this.$selection.current || {}; 
     var value = current['border'] || ''
 
     return /*html*/`
@@ -44,7 +43,7 @@ export default class BorderNewProperty extends BaseProperty {
   }  
 
   [EVENT('changeKeyValue')] (key, value) {
-    this.emit("SET_ATTRIBUTE", { 
+    this.emit("setAttribute", { 
       [key]: value
     })
   }

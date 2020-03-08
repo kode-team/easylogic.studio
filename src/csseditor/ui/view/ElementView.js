@@ -2,7 +2,6 @@ import UIElement, { EVENT } from "../../../util/UIElement";
 import { BIND, POINTERSTART, MOVE, END, IF, KEYUP } from "../../../util/Event";
 import { Length } from "../../../editor/unit/Length";
 
-import { editor } from "../../../editor/editor";
 import Dom from "../../../util/Dom";
 import SelectionToolView from "../view-items/SelectionToolView";
 import GuideLineView from "../view-items/GuideLineView";
@@ -58,8 +57,8 @@ export default class ElementView extends UIElement {
         }
     }
 
-    [EVENT('after.change.mode')] () {
-        this.$el.attr('data-mode', editor.mode);
+    [EVENT('afterChangeMode')] () {
+        this.$el.attr('data-mode', this.$editor.mode);
     }
 
 
@@ -75,7 +74,7 @@ export default class ElementView extends UIElement {
     checkEmptyElement (e) {
         var $el = Dom.create(e.target)
 
-        if (editor.isAddMode()) {
+        if (this.$editor.isAddMode()) {
             return true; 
         }
 
@@ -118,7 +117,7 @@ export default class ElementView extends UIElement {
         this.dragXY.x -= this.rect.x
         this.dragXY.y -= this.rect.y
 
-        if (editor.isSelectionMode()) {
+        if (this.$editor.isSelectionMode()) {
 
             var obj = {
                 left: Length.px(this.dragXY.x),
@@ -149,7 +148,7 @@ export default class ElementView extends UIElement {
 
         this.refs.$dragAreaRect.css(obj)
 
-        if (editor.isSelectionMode()) {
+        if (this.$editor.isSelectionMode()) {
 
             var {left: x, top: y, width, height } = obj
 
@@ -163,11 +162,11 @@ export default class ElementView extends UIElement {
             rect.x2 = Length.px(rect.x.value + rect.width.value);
             rect.y2 = Length.px(rect.y.value + rect.height.value); 
 
-            var artboard = editor.selection.currentArtboard;
-            var items = editor.selection.items; 
+            var artboard = this.$selection.currentArtboard;
+            var items = this.$selection.items; 
             if (artboard) {
                 Object.keys(rect).forEach(key => {
-                    rect[key].div(editor.scale)
+                    rect[key].div(this.$editor.scale)
                 })
     
                 var items = artboard.checkInAreaForLayers(rect);
@@ -176,13 +175,13 @@ export default class ElementView extends UIElement {
                     items = [] 
                 }                 
     
-                if (editor.selection.select(...items)) {
+                if (this.$selection.select(...items)) {
                     this.selectCurrentForBackgroundView(...items)
                 }
 
             }
 
-            if (editor.selection.select(...items)) {
+            if (this.$selection.select(...items)) {
                 this.emit('refreshSelection')
             }
 
@@ -212,13 +211,13 @@ export default class ElementView extends UIElement {
         })
 
 
-        if (editor.isSelectionMode()) {
+        if (this.$editor.isSelectionMode()) {
 
-            var artboard = editor.selection.currentArtboard;
+            var artboard = this.$selection.currentArtboard;
             var items = [] 
             if (artboard) {
                 Object.keys(rect).forEach(key => {
-                    rect[key].div(editor.scale)
+                    rect[key].div(this.$editor.scale)
                 })
 
                 items = artboard.checkInAreaForLayers(rect);
@@ -233,39 +232,34 @@ export default class ElementView extends UIElement {
                     }
                 }
 
-                if (editor.selection.select(...items)) {
+                if (this.$selection.select(...items)) {
                     this.selectCurrentForBackgroundView(...items)
                 }
     
                 if (items.length) {
                     this.emit('refreshSelection')
                 } else {
-                    editor.selection.select();            
+                    this.$selection.select();            
                     this.emit('emptySelection')
                 }                
             } else {
-                editor.selection.select();                
+                this.$selection.select();                
                 this.emit('emptySelection')            
             }
     
 
         } else {
             var obj = {
-                x: Length.px(rect.x.value / editor.scale),
-                y: Length.px(rect.y.value / editor.scale),
-                width: Length.px(rect.width.value / editor.scale),
-                height: Length.px(rect.height.value / editor.scale)
+                x: Length.px(rect.x.value / this.$editor.scale),
+                y: Length.px(rect.y.value / this.$editor.scale),
+                width: Length.px(rect.width.value / this.$editor.scale),
+                height: Length.px(rect.height.value / this.$editor.scale)
             }
 
-            if (editor.addType === 'image') { 
-                this.emit('addImage', obj);
+            if (this.$editor.addComponentType === 'image') { 
+                this.emit('openImage', obj);
             } else {
-                if (editor.isComponent) {
-                    this.emit('new.component', editor.addType, obj);
-                } else {
-                    this.emit('new.layer', editor.addType, obj);
-                }
-
+                this.emit('newComponent', this.$editor.addComponentType, obj);
             }
 
         }
@@ -276,8 +270,8 @@ export default class ElementView extends UIElement {
 
     sendHelpMessage () {
 
-        if (editor.selection.length === 1) {
-            var current = editor.selection.current;
+        if (this.$selection.length === 1) {
+            var current = this.$selection.current;
 
             if (current.is('svg-path', 'svg-polygon', 'svg-textpath')) {
                 this.emit('addStatusBarMessage', 'Please click if you want to edit to path ');
@@ -289,12 +283,12 @@ export default class ElementView extends UIElement {
 
 
     [KEYUP('$view .element-item.text')] (e) {
-        var content = e.$delegateTarget.html()
-        var text = e.$delegateTarget.text().trim()
-        var id = e.$delegateTarget.attr('data-id');
+        var content = e.$dt.html()
+        var text = e.$dt.text().trim()
+        var id = e.$dt.attr('data-id');
 
         var arr = [] 
-        editor.selection.items.filter(it => it.id === id).forEach(it => {
+        this.$selection.items.filter(it => it.id === id).forEach(it => {
             it.reset({ content, text })
             arr.push({id:it.id, content, text})
         })
@@ -303,12 +297,12 @@ export default class ElementView extends UIElement {
     }
 
     checkEditMode () {
-        return editor.isSelectionMode()
+        return this.$editor.isSelectionMode()
     }
 
     [POINTERSTART('$view .element-item') + IF('checkEditMode')  + MOVE('calculateMovedElement') + END('calculateEndedElement')] (e) {
         this.startXY = e.xy ; 
-        this.$element = e.$delegateTarget;
+        this.$element = e.$dt;
 
         if (this.$element.hasClass('text') && this.$element.hasClass('selected')) {
             return false; 
@@ -318,21 +312,21 @@ export default class ElementView extends UIElement {
         this.hasSVG = false;
 
         if (e.shiftKey) {
-            editor.selection.toggleById(id);
+            this.$selection.toggleById(id);
         } else {
 
-            if (editor.selection.check({ id } )) {
-                if (editor.selection.current.is('svg-path', 'svg-textpath', 'svg-polygon')) {
+            if (this.$selection.check({ id } )) {
+                if (this.$selection.current.is('svg-path', 'svg-textpath', 'svg-polygon')) {
                     this.hasSVG = true; 
                 }
             } else {
-                editor.selection.selectById(id);    
+                this.$selection.selectById(id);    
             }
 
         }
     
-        this.selectCurrent(...editor.selection.items)
-        editor.selection.setRectCache()        
+        this.selectCurrent(...this.$selection.items)
+        this.$selection.setRectCache()        
         this.emit('refreshSelection');
         this.children.$selectionTool.initMoveType();
     }
@@ -357,7 +351,7 @@ export default class ElementView extends UIElement {
     }
 
     updateRealPosition() {
-        editor.selection.each(item => {
+        this.$selection.each(item => {
             this.updateRealPositionByItem(item);
         })
 
@@ -369,7 +363,7 @@ export default class ElementView extends UIElement {
 
     calculateEndedElement (dx, dy) {
 
-        var current = editor.selection.items.length === 1 ? editor.selection.current : null;
+        var current = this.$selection.items.length === 1 ? this.$selection.current : null;
 
 
         if (dx === 0 && dy === 0) {
@@ -384,7 +378,7 @@ export default class ElementView extends UIElement {
         this.children.$selectionTool.refreshSelectionToolView(dx, dy, 'move');
 
         this.emit('refreshElement', current);
-        editor.selection.setRectCache()                
+        this.$selection.setRectCache()                
 
         if (dx != 0 || dy != 0) {
             this.emit('removeGuideLine')        
@@ -396,7 +390,7 @@ export default class ElementView extends UIElement {
         var height = Length.px(10000);
 
         return {
-            'data-mode': editor.mode,
+            'data-mode': this.$editor.mode,
             style: {
                 'position': 'relative',
                 width,
@@ -411,14 +405,14 @@ export default class ElementView extends UIElement {
             style: {
                 // 'background-image': createGridLine(100),
                 // 'box-shadow': '0px 0px 5px 0px rgba(0, 0, 0, .5)',
-                transform: `scale(${editor.scale})`
+                transform: `scale(${this.$editor.scale})`
             },
             innerHTML: this.state.html
         }
     }    
 
     [EVENT('addElement')] () {
-        var artboard = editor.selection.currentArtboard || { html : ''} 
+        var artboard = this.$selection.currentArtboard || { html : ''} 
         var html = artboard.html;
 
         this.setState({ html }, false)
@@ -448,7 +442,7 @@ export default class ElementView extends UIElement {
             })
             
         } else {
-            editor.selection.select(editor.selection.currentArtboard)
+            this.$selection.select(this.$selection.currentArtboard)
         }    
 
         this.emit('initSelectionTool')
@@ -476,7 +470,7 @@ export default class ElementView extends UIElement {
             })
             
         } else {
-            // editor.selection.select()
+            // this.$selection.select()
         }
         this.emit('refreshSelection')           
 
@@ -496,7 +490,7 @@ export default class ElementView extends UIElement {
 
     modifyScale () {
         this.refs.$view.css({
-            transform: `scale(${editor.scale})`
+            transform: `scale(${this.$editor.scale})`
         })
 
         this.emit('makeSelectionTool', true);
@@ -508,7 +502,7 @@ export default class ElementView extends UIElement {
 
     // 객체를 부분 업데이트 하기 위한 메소드 
     [EVENT('refreshCanvasForPartial', 'refreshSelectionStyleView')] (obj, isChangeFragment = true,  isLast = false) {
-        var items = obj ? [obj] : editor.selection.items;
+        var items = obj ? [obj] : this.$selection.items;
 
         items.forEach(current => {
             this.updateElement(current, isChangeFragment, isLast);
@@ -522,7 +516,7 @@ export default class ElementView extends UIElement {
 
     [EVENT('playTimeline', 'moveTimeline')] () {
 
-        var artboard = editor.selection.currentArtboard;
+        var artboard = this.$selection.currentArtboard;
 
         if (artboard) {
             var timeline = artboard.getSelectedTimeline();
@@ -544,7 +538,7 @@ export default class ElementView extends UIElement {
     // }
 
     [EVENT('refreshAllCanvas')] () {
-        var artboard = editor.selection.currentArtboard || { html : ''} 
+        var artboard = this.$selection.currentArtboard || { html : ''} 
         var html = artboard.html
 
         this.setState({ html })
@@ -561,14 +555,14 @@ export default class ElementView extends UIElement {
 
     [EVENT('refreshAllElementBoundSize')] () {
 
-        var selectionList = editor.selection.items.map(it => it.is('artboard') ? it : it.parent)
+        var selectionList = this.$selection.items.map(it => it.is('artboard') ? it : it.parent)
 
         var list = [...new Set(selectionList)];
         list.forEach(it => {
             this.trigger('refreshElementBoundSize', it);
         })
 
-        editor.selection.setRectCache()
+        this.$selection.setRectCache()
     }
 
     [EVENT('refreshElementBoundSize')] (parentObj) {

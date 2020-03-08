@@ -8,16 +8,13 @@ import {
   DRAGOVER,
   DEBOUNCE
 } from "../../../util/Event";
-import { editor } from "../../../editor/editor";
 import { EVENT } from "../../../util/UIElement";
 import icon from "../icon/icon";
 import { getPredefinedCubicBezier } from "../../../util/functions/bezier";
 
-const i18n = editor.initI18n('animation.property');
-
 export default class AnimationProperty extends BaseProperty {
   getTitle() {
-    return i18n('title');
+    return this.$i18n('animation.property.title');
   }
   getBody() {
     return /*html*/`<div class='animation-list' ref='$animationList'></div>`;
@@ -30,7 +27,7 @@ export default class AnimationProperty extends BaseProperty {
   }
 
   [LOAD("$animationList")]() {
-    var current = editor.selection.current;
+    var current = this.$selection.current;
 
     if (!current) return '';
 
@@ -50,15 +47,15 @@ export default class AnimationProperty extends BaseProperty {
             </div>
             <div class='name'>
               <div class='title' ref="animationName${index}">
-                ${it.name ? it.name : `&lt; ${i18n('select a keyframe')} &gt;`}
+                ${it.name ? it.name : `&lt; ${this.$i18n('animation.property.select a keyframe')} &gt;`}
               </div>
               <div class='labels'>
-                <label class='count' title='${i18n('iteration.count')}'><small>${it.iterationCount}</small></label>
-                <label class='delay' title='${i18n('delay')}'><small>${it.delay}</small></label>
-                <label class='duration' title='${i18n('duration')}'><small>${it.duration}</small></label>
-                <label class='direction' title='${i18n('direction')}'><small>${it.direction}</small></label>
-                <label class='fill-mode' title='${i18n('fill.mode')}'><small>${it.fillMode}</small></label>
-                <label class='play-state' title='${i18n('play.state')}' data-index='${index}' data-play-state-selected-value="${it.playState}">
+                <label class='count' title='${this.$i18n('animation.property.iteration.count')}'><small>${it.iterationCount}</small></label>
+                <label class='delay' title='${this.$i18n('animation.property.delay')}'><small>${it.delay}</small></label>
+                <label class='duration' title='${this.$i18n('animation.property.duration')}'><small>${it.duration}</small></label>
+                <label class='direction' title='${this.$i18n('animation.property.direction')}'><small>${it.direction}</small></label>
+                <label class='fill-mode' title='${this.$i18n('animation.property.fill.mode')}'><small>${it.fillMode}</small></label>
+                <label class='play-state' title='${this.$i18n('animation.property.play.state')}' data-index='${index}' data-play-state-selected-value="${it.playState}">
                   <small data-play-state-value='running'>${icon.play}</small>
                   <small data-play-state-value='paused'>${icon.pause}</small>
                 </label>
@@ -112,7 +109,7 @@ export default class AnimationProperty extends BaseProperty {
   }
 
   refreshTimingFunctionCanvas() {
-    var current = editor.selection.current;
+    var current = this.$selection.current;
 
     if (!current) return;
 
@@ -123,7 +120,7 @@ export default class AnimationProperty extends BaseProperty {
   }
 
   [CLICK("$add")](e) {
-    var current = editor.selection.current;
+    var current = this.$selection.current;
 
     if (current) {
       current.createAnimation({
@@ -138,15 +135,15 @@ export default class AnimationProperty extends BaseProperty {
   }
 
   [DRAGSTART("$animationList .animation-item")](e) {
-    this.startIndex = +e.$delegateTarget.attr("data-index");
+    this.startIndex = +e.$dt.attr("data-index");
   }
 
   
   [DRAGOVER("$animationList .animation-item") + PREVENT](e) {}
 
   [DROP("$animationList .animation-item") + PREVENT](e) {
-    var targetIndex = +e.$delegateTarget.attr("data-index");
-    var current = editor.selection.current;
+    var targetIndex = +e.$dt.attr("data-index");
+    var current = this.$selection.current;
     if (!current) return;
 
     this.selectItem(this.startIndex, true);
@@ -165,8 +162,8 @@ export default class AnimationProperty extends BaseProperty {
   }
 
   [CLICK("$animationList .tools .del")](e) {
-    var removeIndex = e.$delegateTarget.attr("data-index");
-    var current = editor.selection.current;
+    var removeIndex = e.$dt.attr("data-index");
+    var current = this.$selection.current;
     if (!current) return;
 
     current.removeAnimation(removeIndex);
@@ -178,15 +175,15 @@ export default class AnimationProperty extends BaseProperty {
   }
 
   [CLICK('$animationList .play-state')] (e) {
-    var index = +e.$delegateTarget.attr("data-index");
-    var current = editor.selection.current;
+    var index = +e.$dt.attr("data-index");
+    var current = this.$selection.current;
     if (!current) return; 
 
     var animation = current.animations[index]
     if (animation) {
       animation.togglePlayState();
 
-      e.$delegateTarget.attr('data-play-state-selected-value', animation.playState)
+      e.$dt.attr('data-play-state-selected-value', animation.playState)
 
       this.emit("refreshElement", current);
     }
@@ -214,7 +211,7 @@ export default class AnimationProperty extends BaseProperty {
 
     this.selectedIndex = +$preview.attr("data-index");
     this.selectItem(this.selectedIndex, true);
-    this.current = editor.selection.current;
+    this.current = this.$selection.current;
 
     if (!this.current) return;
     this.currentAnimation = this.current.animations[
@@ -225,7 +222,7 @@ export default class AnimationProperty extends BaseProperty {
   }
 
   viewAnimationPropertyPopup(position) {
-    this.current = editor.selection.current;
+    this.current = this.$selection.current;
 
     if (!this.current) return;
     this.currentAnimation = this.current.animations[
@@ -258,7 +255,7 @@ export default class AnimationProperty extends BaseProperty {
   }
 
   [CLICK("$animationList .preview")](e) {
-    this.viewAnimationPicker(e.$delegateTarget);
+    this.viewAnimationPicker(e.$dt);
   }
 
   getRef(...args) {

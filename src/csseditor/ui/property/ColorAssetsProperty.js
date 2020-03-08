@@ -1,10 +1,8 @@
 import BaseProperty from "./BaseProperty";
-import { editor } from "../../../editor/editor";
-import { LOAD, BIND, CLICK, INPUT, DEBOUNCE } from "../../../util/Event";
+import { LOAD, CLICK, INPUT, DEBOUNCE } from "../../../util/Event";
 import { EVENT } from "../../../util/UIElement";
 import icon from "../icon/icon";
 import Color from "../../../util/Color";
-import AssetParser from "../../../editor/parse/AssetParser";
 
 
 export default class ColorAssetsProperty extends BaseProperty {
@@ -28,7 +26,7 @@ export default class ColorAssetsProperty extends BaseProperty {
   }
 
   getBody() {
-    return `
+    return /*html*/`
       <div class='property-item color-assets'>
         <div class='color-list' ref='$colorList' data-view-mode='${this.state.mode}'></div>
       </div>
@@ -36,7 +34,7 @@ export default class ColorAssetsProperty extends BaseProperty {
   }
 
   [LOAD("$colorList")]() {
-    var current = editor.selection.currentProject || { colors: [] }
+    var current = this.$selection.currentProject || { colors: [] }
 
     var colors = current.colors;   
 
@@ -70,7 +68,7 @@ export default class ColorAssetsProperty extends BaseProperty {
   }
 
   executeColor (callback, isRefresh = true, isEmit = true ) {
-    var project = editor.selection.currentProject;
+    var project = this.$selection.currentProject;
 
     if(project) {
 
@@ -95,7 +93,7 @@ export default class ColorAssetsProperty extends BaseProperty {
   }
 
   [CLICK('$colorList .remove')] (e) {
-    var $item = e.$delegateTarget.closest('color-item');
+    var $item = e.$dt.closest('color-item');
     var index = +$item.attr('data-index');
 
     this.executeColor(project => {
@@ -105,7 +103,7 @@ export default class ColorAssetsProperty extends BaseProperty {
 
 
   [CLICK('$colorList .copy')] (e) {
-    var $item = e.$delegateTarget.closest('color-item');
+    var $item = e.$dt.closest('color-item');
     var index = +$item.attr('data-index');
 
     this.executeColor(project => {
@@ -114,9 +112,9 @@ export default class ColorAssetsProperty extends BaseProperty {
   }  
 
   [INPUT('$colorList input')] (e) {
-    var $item = e.$delegateTarget.closest('color-item');
+    var $item = e.$dt.closest('color-item');
     var index = +$item.attr('data-index');
-    var obj = e.$delegateTarget.attrKeyValue('data-key');    
+    var obj = e.$dt.attrKeyValue('data-key');    
 
     this.executeColor(project => {
       project.setColorValue(index, obj);      
@@ -124,9 +122,9 @@ export default class ColorAssetsProperty extends BaseProperty {
   }
 
   [CLICK("$colorList .preview")](e) {
-    var $item = e.$delegateTarget.closest('color-item');    
+    var $item = e.$dt.closest('color-item');    
     var index = +$item.attr('data-index')
-    this.state.$el = e.$delegateTarget.$('.color-view');
+    this.state.$el = e.$dt.$('.color-view');
     this.state.$color = $item.$('.color');
     var color = this.state.$el.css('background-color')
 

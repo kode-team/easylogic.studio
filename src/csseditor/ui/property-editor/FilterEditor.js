@@ -23,14 +23,11 @@ import {
   Filter,
   URLSvgFilter
 } from "../../../editor/css-property/Filter";
-import { editor } from "../../../editor/editor";
 import UIElement, { EVENT } from "../../../util/UIElement";
 import RangeEditor from "./RangeEditor";
 import ColorViewEditor from "./ColorViewEditor";
 import SelectEditor from "./SelectEditor";
 import { filter_list } from "../../../editor/util/Resource";
-
-
 
 var specList = {
   blur: BlurFilter.spec,
@@ -45,8 +42,6 @@ var specList = {
   sepia: SepiaFilter.spec,
   svg: URLSvgFilter.spec
 };
-
-const i18n = editor.initI18n('filter.property');
 
 export default class FilterEditor extends UIElement {
 
@@ -116,7 +111,7 @@ export default class FilterEditor extends UIElement {
     return /*html*/`
       <div class="filter-item">
         <div class="title" draggable="true" data-index="${index}">
-          <label>${i18n('drop-shadow')}</label>
+          <label>${this.$i18n('filter.property.drop-shadow')}</label>
           <div class="filter-menu">
             <button type="button" class="del" data-index="${index}">
               ${icon.remove2}
@@ -149,7 +144,7 @@ export default class FilterEditor extends UIElement {
 
   getSVGFilterList () {
      
-    var current = editor.selection.currentProject;
+    var current = this.$selection.currentProject;
     var arr = [] 
 
     if (current) {
@@ -171,7 +166,7 @@ export default class FilterEditor extends UIElement {
 
       var options = ''
       
-      var current = editor.selection.currentProject;
+      var current = this.$selection.currentProject;
 
       if (current) {
         options = current.svgfilters.map(it => it.id)
@@ -207,7 +202,7 @@ export default class FilterEditor extends UIElement {
     return /*html*/`
       <div class="filter-item" data-index="${index}">
         <div class="title" draggable="true" data-index="${index}">
-          <label>${i18n(filter.type)}${subtitle}</label>
+          <label>${this.$i18n('filter.property.' + filter.type)}${subtitle}</label>
           <div class="filter-menu">
             <button type="button" class="del" data-index="${index}">
               ${icon.remove2}
@@ -248,7 +243,7 @@ export default class FilterEditor extends UIElement {
 
 
   [DRAGSTART("$filterList .filter-item .title")](e) {
-    this.startIndex = +e.$delegateTarget.attr("data-index");
+    this.startIndex = +e.$dt.attr("data-index");
   }
 
 
@@ -269,8 +264,8 @@ export default class FilterEditor extends UIElement {
   }
 
   [DROP("$filterList .filter-item") + PREVENT](e) {
-    var targetIndex = +e.$delegateTarget.attr("data-index");
-    var current = editor.selection.current;
+    var targetIndex = +e.$dt.attr("data-index");
+    var current = this.$selection.current;
     if (!current) return;
 
     this.sortFilter(this.startIndex, targetIndex);
@@ -291,11 +286,11 @@ export default class FilterEditor extends UIElement {
   }
 
   [CLICK('$filterList .svg-filter-edit')] (e) {
-    var index = +e.$delegateTarget.attr('data-index');
+    var index = +e.$dt.attr('data-index');
 
     var filter = this.state.filters[index];
 
-    var project = editor.selection.currentProject; 
+    var project = this.$selection.currentProject; 
     
     if (project) {
       var svgfilterIndex = project.getSVGFilterIndex(filter.value);
@@ -307,7 +302,7 @@ export default class FilterEditor extends UIElement {
 
 
   [EVENT('openSVGFilterPopup')](index) {
-    var currentProject = editor.selection.currentProject || { svgfilters: [] } 
+    var currentProject = this.$selection.currentProject || { svgfilters: [] } 
 
     var svgfilter = currentProject.svgfilters[index];
 
@@ -321,7 +316,7 @@ export default class FilterEditor extends UIElement {
 
 
   [EVENT('changeSVGFilterRealUpdate')] (params) {
-    var project = editor.selection.currentProject
+    var project = this.$selection.currentProject
 
     if (project) {
       project.setSVGFilterValue(params.index, {
@@ -369,7 +364,7 @@ export default class FilterEditor extends UIElement {
   }
 
   [CLICK("$filterList .filter-menu .del")](e) {
-    var index = +e.$delegateTarget.attr("data-index");
+    var index = +e.$dt.attr("data-index");
     this.state.filters.splice(index, 1);
 
     this.refresh();

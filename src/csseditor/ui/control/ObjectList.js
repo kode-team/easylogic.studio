@@ -3,9 +3,6 @@ import { CLICK } from "../../../util/Event";
 import menuItems from "../menu-items";
 import LayerTab from "./LayerTab";
 
-
-
-
 export default class ObjectList extends UIElement {
   components() {
     return {
@@ -38,7 +35,7 @@ export default class ObjectList extends UIElement {
   }
 
   [CLICK('$items button')] (e) {
-    e.$delegateTarget.onlyOneClass('selected');
+    e.$dt.onlyOneClass('selected');
   }
 
 }

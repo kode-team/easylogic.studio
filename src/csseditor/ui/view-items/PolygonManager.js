@@ -1,15 +1,13 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
 import { CLICK } from "../../../util/Event";
-import { editor } from "../../../editor/editor";
 
-const i18n = editor.initI18n('path.manager');
 
 export default class PolygonManager extends UIElement {
 
   initState() {
       return {
           mode: 'move',
-          msg: i18n('msg')
+          msg: this.$i18n('path.manager.msg')
       }
   }
 
@@ -26,7 +24,7 @@ export default class PolygonManager extends UIElement {
   }
 
   [CLICK('$el input[type="radio"]')] (e) {
-    var mode = e.$delegateTarget.value;
+    var mode = e.$dt.value;
 
     this.updateData({
         mode 

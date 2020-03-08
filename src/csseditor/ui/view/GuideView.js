@@ -1,4 +1,4 @@
-import { editor } from "../../../editor/editor";
+
 import { isNotUndefined } from "../../../util/functions/func";
 import { Segment } from "../../../editor/util/Segment";
 import { Length } from "../../../editor/unit/Length";
@@ -14,29 +14,36 @@ const MAX_DIST = 2;
  */
 export default class GuideView {
 
+    constructor (editor) {
+        this.$editor = editor; 
+    }
+
+    get $selection (){
+        return this.$editor.selection;
+    }
 
     makeGuideCache () {
-        var artboard = editor.selection.currentArtboard;
+        var artboard = this.$selection.currentArtboard;
         this.cachedExtraItems = [] 
         if (artboard) {
 
-            if (editor.selection.isArtBoard()) {
+            if (this.$selection.isArtBoard()) {
                 // 선택한 영역이 artboard 일 때는  다른 객체와 거리를 재지 않는다. 
                 // 하위 모든 것들이 artboard 안에 있기 때문이다. 
                 this.cachedExtraItems = [];
             } else {
                 this.cachedExtraItems = artboard.allLayers.filter(it => {
-                    return !editor.selection.check(it) || (it.is('artboard') && editor.selection.currentArtboard != it); 
+                    return !this.$selection.check(it) || (it.is('artboard') && this.$selection.currentArtboard != it); 
                 })
                 
             }
 
-            this.rect = editor.selection.allRect ? editor.selection.allRect.clone() : null;
+            this.rect = this.$selection.allRect ? this.$selection.allRect.clone() : null;
         }
         
         // Rect 안의 position 의  좌표 비율 미리 캐슁 
         this.cachedPosition = {}
-        editor.selection.items.map(item => {
+        this.$selection.items.map(item => {
             this.cachedPosition[item.id] = {
                 x : this.setupX(item),
                 y : this.setupY(item)
@@ -49,7 +56,7 @@ export default class GuideView {
 
     move (type, dx, dy) {
         /*  최초 캐쉬된 객체  */
-        var allRect = editor.selection.allRect;
+        var allRect = this.$selection.allRect;
 
         /* this.rect 는 실제 변화가 적용된 객체 */
         this.pointerType = type; 
@@ -129,7 +136,7 @@ export default class GuideView {
     }    
 
     setupX (cacheItem) {
-        var allRect = editor.selection.allRect;
+        var allRect = this.$selection.allRect;
         var minX = allRect.screenX.value; 
         var maxX = allRect.screenX2.value; 
         var width = maxX - minX; 
@@ -145,7 +152,7 @@ export default class GuideView {
     }    
 
     setupY (cacheItem) {
-        var allRect = editor.selection.allRect;        
+        var allRect = this.$selection.allRect;        
         var minY = allRect.screenY.value; 
         var maxY = allRect.screenY2.value; 
         var height = maxY - minY; 
@@ -344,11 +351,11 @@ export default class GuideView {
         // 좌표 복구 시스템 
         if (Segment.isMove(this.pointerType)) {
 
-            editor.selection.each(item => {
+            this.$selection.each(item => {
 
-                if (editor.selection.isInParent(item, editor.selection.items)) {
+                if (this.$selection.isInParent(item, this.$selection.items)) {
                     // 부모가 있는 애들은 스스로를 복구 하지 않는다. 
-                    // console.log(item, editor.selection.items);
+                    // console.log(item, this.$selection.items);
                 } else {
                     // selection 기준으로 item 을 먼저 복구 하고 
                     this.recover(item)
@@ -360,7 +367,7 @@ export default class GuideView {
             });
         } else {
 
-            editor.selection.each(item => {
+            this.$selection.each(item => {
                 // selection 기준으로 item 을 먼저 복구 하고 
                 this.recover(item)
     

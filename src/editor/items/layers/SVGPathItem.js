@@ -3,10 +3,8 @@ import { SVGItem } from "./SVGItem";
 import { clone, OBJECT_TO_CLASS, OBJECT_TO_PROPERTY, CSS_TO_STRING } from "../../../util/functions/func";
 import { hasSVGProperty, hasCSSProperty, hasSVGPathProperty } from "../../util/Resource";
 import { Length } from "../../unit/Length";
-import { SVGFill } from "../../svg-property/SVGFill";
-import Dom from "../../../util/Dom";
-import { editor } from "../../editor";
 import icon from "../../../csseditor/ui/icon/icon";
+import { ComponentManager } from "../../ComponentManager";
 
 export class SVGPathItem extends SVGItem {
 
@@ -176,4 +174,4 @@ export class SVGPathItem extends SVGItem {
   }
 }
 
-editor.registerComponent('svg-path', SVGPathItem)
+ComponentManager.registerComponent('svg-path', SVGPathItem)

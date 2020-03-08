@@ -85,7 +85,7 @@ export default class PolygonEditor extends UIElement {
     }
 
     [CLICK('$inputList .pointer-item .remove')] (e) {
-        var index = +e.$delegateTarget.attr('data-index')
+        var index = +e.$dt.attr('data-index')
 
         this.removeValue(index);
 
@@ -93,7 +93,7 @@ export default class PolygonEditor extends UIElement {
     }
 
     [CLICK('$inputList .pointer-item .copy')] (e) {
-        var index = +e.$delegateTarget.attr('data-index')
+        var index = +e.$dt.attr('data-index')
 
         this.copyValue(index);
 
@@ -121,7 +121,7 @@ export default class PolygonEditor extends UIElement {
     }
 
     [CLICK('$area .drag-pointer') + ALT + PREVENT] (e) {
-        var index = +e.$delegateTarget.attr('data-index');
+        var index = +e.$dt.attr('data-index');
 
         this.removeValue(index);
 
@@ -130,8 +130,8 @@ export default class PolygonEditor extends UIElement {
 
     [POINTERSTART('$area .drag-pointer') + MOVE()] (e) {
 
-        this.selectedIndex = +e.$delegateTarget.attr('data-index');
-        this.$target = e.$delegateTarget;
+        this.selectedIndex = +e.$dt.attr('data-index');
+        this.$target = e.$dt;
         this.areaRect = this.refs.$area.rect(); 
         this.startXY = e.xy; 
         

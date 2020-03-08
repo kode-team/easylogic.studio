@@ -98,7 +98,7 @@ export default class ColorViewEditor extends UIElement {
     }    
 
     [INPUT("$el .color-code input")](e) {
-        var color = e.$delegateTarget.value;
+        var color = e.$dt.value;
         this.refs.$miniView.cssText(`background-color: ${color}`);
 
         this.updateData({ value: color })

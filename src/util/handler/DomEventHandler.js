@@ -96,7 +96,7 @@ export default class DomEventHandler extends BaseHandler {
       
           if (delegateTarget) {
             // delegate target 이 있는 경우만 callback 실행
-            e.$delegateTarget = Dom.create(delegateTarget);      
+            e.$dt = Dom.create(delegateTarget);      
       
             var returnValue = this.runEventCallback(e, eventObject, callback);
             if (isNotUndefined(returnValue)) {
@@ -117,7 +117,7 @@ export default class DomEventHandler extends BaseHandler {
         }
       
         if (this.checkEventType(e, eventObject)) {
-          var returnValue = callback(e, e.$delegateTarget, e.xy);
+          var returnValue = callback(e, e.$dt, e.xy);
       
           if (returnValue !== false && eventObject.afterMethods.length) {
             eventObject.afterMethods.forEach(after =>

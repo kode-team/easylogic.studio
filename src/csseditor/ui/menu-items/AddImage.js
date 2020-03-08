@@ -16,7 +16,7 @@ export default class AddImage extends MenuItem {
   }
 
   clickButton() {
-    this.emit('add.type', 'image');
+    this.emit('addComponentType', 'image');
   }
 
 }

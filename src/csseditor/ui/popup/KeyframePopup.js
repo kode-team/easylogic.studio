@@ -2,12 +2,11 @@ import { EVENT } from "../../../util/UIElement";
 import OffsetEditor from "../property-editor/OffsetEditor";
 import { INPUT } from "../../../util/Event";
 import BasePopup from "./BasePopup";
-import { editor } from "../../../editor/editor";
 
 export default class KeyframePopup extends BasePopup {
 
   getTitle () {
-    return editor.i18n('keyframe.popup.title')
+    return this.$i18n('keyframe.popup.title')
   }
 
   components() {

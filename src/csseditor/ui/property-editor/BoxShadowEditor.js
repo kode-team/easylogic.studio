@@ -2,9 +2,6 @@ import { CLICK, LOAD } from "../../../util/Event";
 import UIElement, { EVENT } from "../../../util/UIElement";
 import icon from "../icon/icon";
 import { BoxShadow } from "../../../editor/css-property/BoxShadow";
-import { editor } from "../../../editor/editor";
-
-const i18n = editor.initI18n('boxshadow.editor')
 
 export default class BoxShadowEditor extends UIElement {
 
@@ -60,8 +57,8 @@ export default class BoxShadowEditor extends UIElement {
 
         <div class="offset-x">X</div>
         <div class="offset-y">Y</div>
-        <div class="blur-radius">${i18n('blur')}</div>
-        <div class="spread-radius">${i18n('spread')}</div>
+        <div class="blur-radius">${this.$i18n('boxshadow.editor.blur')}</div>
+        <div class="spread-radius">${this.$i18n('boxshadow.editor.spread')}</div>
         <div class="tools">
         </div>
       </div>
@@ -95,7 +92,7 @@ export default class BoxShadowEditor extends UIElement {
   }
 
   [CLICK("$shadowList .remove")](e) {
-    var index = +e.$delegateTarget.attr("data-index");
+    var index = +e.$dt.attr("data-index");
 
     this.state.boxShadows.splice(index, 1);
 
@@ -108,7 +105,7 @@ export default class BoxShadowEditor extends UIElement {
 
 
   [CLICK("$shadowList .shadow-item.real > div:not(.tools)")](e) {
-    var index = +e.$delegateTarget.closest('shadow-item').attr("data-index");
+    var index = +e.$dt.closest('shadow-item').attr("data-index");
 
     var shadow = this.state.boxShadows[index]
 

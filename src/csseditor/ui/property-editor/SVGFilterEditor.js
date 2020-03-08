@@ -11,7 +11,6 @@ import {
   DROP,
   DRAGSTART
 } from "../../../util/Event";
-import { editor } from "../../../editor/editor";
 import UIElement, { EVENT } from "../../../util/UIElement";
 import RangeEditor from "./RangeEditor";
 import ColorViewEditor from "./ColorViewEditor";
@@ -28,8 +27,6 @@ import PathStringManager from "../../../editor/parse/PathStringManager";
 import ColorMatrixEditor from "./ColorMatrixEditor";
 import svgFilterPreset from "./svg-filter-preset";
 import ImageSelectEditor from "./ImageSelectEditor";
-
-const i18n = editor.initI18n('svg.filter.editor');
 
 const filterTypes = [
   {label: 'GRAPHIC REFERENCES', items : [
@@ -82,45 +79,7 @@ const SVGFilterTemplateList = [
       {label: 'Dancing Stroke', value: 'dancingStroke'}
     ]
   }
-]
-
-const makeFilterSelect = () => {
-  return /*html*/`
-
-  <div class='filter-item-list' ref="$filterSelect">
-
-    ${mapjoin(filterTypes, f => {
-      return /*html*/`
-        <div class='group' label="${i18n(f.label)}">
-          ${mapjoin(f.items, i => {
-            return /*html*/ ` <div class='item' draggable="true" value="${i.value}">${getIcon(i.value)} ${i18n(i.label)}</div>`
-          })}
-        </div>
-      `
-    })}
-  </div>
-  `
-}
-
-
-const makeFilterTemplateSelect = () => {
-  return /*html*/`
-
-  <div class='filter-item-list' ref="$filterTemplateSelect">
-
-    ${mapjoin(SVGFilterTemplateList, f => {
-      return /*html*/`
-        <div class='group' label="${i18n(f.label)}">
-          ${mapjoin(f.items, i => {
-            return /*html*/ ` <div class='item' draggable="true" value="${i.value}">${i18n(i.label)}</div>`
-          })}
-        </div>
-      `
-    })}
-  </div>
-  `
-}
-
+];
 
 function getIcon(type) {
   switch(type) {
@@ -232,6 +191,8 @@ Object.keys(inYAxis).forEach(len => {
 
 export default class SVGFilterEditor extends UIElement {
 
+
+
   components() {
     return {
       ColorMatrixEditor,
@@ -245,6 +206,44 @@ export default class SVGFilterEditor extends UIElement {
       ImageSelectEditor
     }
   }
+
+  makeFilterSelect () {
+    return /*html*/`
+  
+    <div class='filter-item-list' ref="$filterSelect">
+  
+      ${mapjoin(filterTypes, f => {
+        return /*html*/`
+          <div class='group' label="${this.$i18n('svg.filter.editor.' + f.label)}">
+            ${mapjoin(f.items, i => {
+              return /*html*/ ` <div class='item' draggable="true" value="${i.value}">${getIcon(i.value)} ${this.$i18n('svg.filter.editor.' + i.label)}</div>`
+            })}
+          </div>
+        `
+      })}
+    </div>
+    `
+  }
+  
+  
+  makeFilterTemplateSelect () {
+    return /*html*/`
+  
+    <div class='filter-item-list' ref="$filterTemplateSelect">
+  
+      ${mapjoin(SVGFilterTemplateList, f => {
+        return /*html*/`
+          <div class='group' label="${this.$i18n('svg.filter.editor.' + f.label)}">
+            ${mapjoin(f.items, i => {
+              return /*html*/ ` <div class='item' draggable="true" value="${i.value}">${this.$i18n('svg.filter.editor.' + i.label)}</div>`
+            })}
+          </div>
+        `
+      })}
+    </div>
+    `
+  }
+  
 
   initState() {
     var filters = this.parseFilter(this.props.value || [])
@@ -265,21 +264,21 @@ export default class SVGFilterEditor extends UIElement {
           <div class="tab number-tab" data-selected-value="1" ref="$tab">
             <div class="tab-header full" ref="$header">
               <div class="tab-item" data-value="1" title='Item'>
-                <label class='icon'>${i18n('tab.filter')}</label>
+                <label class='icon'>${this.$i18n('svg.filter.editor.tab.filter')}</label>
               </div>
               <div class="tab-item" data-value="2" title="Preset">
-                <label class='icon'>${i18n('tab.preset')}</label>
+                <label class='icon'>${this.$i18n('svg.filter.editor.tab.preset')}</label>
               </div>
               <div class="tab-item" data-value="3" title="Asset">
-                <label class='icon'>${i18n('tab.asset')}</label>
+                <label class='icon'>${this.$i18n('svg.filter.editor.tab.asset')}</label>
               </div>
             </div>
             <div class="tab-body">
               <div class="tab-content" data-value="1">
-                ${makeFilterSelect()}
+                ${this.makeFilterSelect()}
               </div>
               <div class="tab-content" data-value="2">
-                ${makeFilterTemplateSelect()}
+                ${this.makeFilterTemplateSelect()}
               </div>
                      
             </div>
@@ -302,12 +301,12 @@ export default class SVGFilterEditor extends UIElement {
   [CLICK("$header .tab-item:not(.empty-item)")](e) {
     this.refs.$tab.attr(
       "data-selected-value",
-      e.$delegateTarget.attr("data-value")
+      e.$dt.attr("data-value")
     );
   }  
 
   [DRAGSTART('$filterSelect .item')] (e) {
-    var filter = e.$delegateTarget.attr('value');
+    var filter = e.$dt.attr('value');
 
     e.dataTransfer.setData('filter/type', filter);
   }
@@ -554,13 +553,13 @@ export default class SVGFilterEditor extends UIElement {
 
 
   [CLICK("$filterSelect .item[value]")](e) {
-    var filterType = e.$delegateTarget.attr('value');
+    var filterType = e.$dt.attr('value');
 
     this.makeFilterNode(filterType);
   }
 
   [CLICK("$filterTemplateSelect .item[value]")](e) {
-    var templateType = e.$delegateTarget.attr('value');
+    var templateType = e.$dt.attr('value');
 
     this.applyTemplate(templateType);
   }
@@ -583,7 +582,7 @@ export default class SVGFilterEditor extends UIElement {
   }
 
   [POINTERSTART('$graphPanel .filter-node') + MOVE()  + END()] (e) {
-    this.$target = e.$delegateTarget;
+    this.$target = e.$dt;
     this.$point = null; 
     this.pointType = 'object';
     this.pointIndex = 0; 
@@ -738,7 +737,7 @@ export default class SVGFilterEditor extends UIElement {
   }
 
   [CLICK('$connectedLinePanel .connected-remove-circle')] (e) {
-    var  [tid, sid] = e.$delegateTarget.attrs('data-target-id', 'data-source-id');
+    var  [tid, sid] = e.$dt.attrs('data-target-id', 'data-source-id');
 
     var filters = this.state.filters; 
     filters.filter(it => it.id === sid).forEach(it => {
@@ -779,7 +778,7 @@ export default class SVGFilterEditor extends UIElement {
       this.startXY.dy = dy; 
       var filter = this.state.selectedFilter;
 
-      var e = editor.config.get('bodyEvent')      
+      var e = this.$config.get('bodyEvent')      
 
       var $target = Dom.create(e.target);
       var $targetNode = $target.closest('filter-node');
@@ -870,7 +869,7 @@ export default class SVGFilterEditor extends UIElement {
         <div class='filter-node ${OBJECT_TO_CLASS({
           'selected': index ===  this.state.selectedIndex
         })}' data-type="${it.type}" data-index="${index}" data-filter-id="${it.id}" style='left: ${it.bound.x}px;top: ${it.bound.y}px;'>
-          <div class='label'>${i18n(it.type)}</div>
+          <div class='label'>${this.$i18n('svg.filter.editor.' + it.type)}</div>
           <div class='remove'>${icon.close}</div>
           <div class='preview' data-source-type="${getSourceTypeString(it.type)}" data-filter-type='${it.type}'>${getIcon(it.type)}</div>
           <div class='in-list'>
@@ -945,7 +944,7 @@ export default class SVGFilterEditor extends UIElement {
   }
 
   [CLICK('$graphPanel .filter-node .remove')] (e) {
-    var $target = e.$delegateTarget.closest('filter-node');
+    var $target = e.$dt.closest('filter-node');
     var index = +$target.attr('data-index');
     var f = this.state.filters[index]
 

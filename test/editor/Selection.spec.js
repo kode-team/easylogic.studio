@@ -22,7 +22,7 @@ test('Selection - select a layer', () => {
     
     layer.select()
 
-    expect(editor.selection.items.length).toEqual(1);
+    expect(this.$selection.items.length).toEqual(1);
 });
 
 test('Selection - select many layers', () => {
@@ -31,16 +31,16 @@ test('Selection - select many layers', () => {
         return artboard.add(new Layer());    
     }) 
     
-    editor.selection.select(...layers);
+    this.$selection.select(...layers);
 
-    expect(editor.selection.items.length).toEqual(10);
-    expect(editor.selection.ids.length).toEqual(10);
+    expect(this.$selection.items.length).toEqual(10);
+    expect(this.$selection.ids.length).toEqual(10);
 });
 
 test('Selection - change selection mode', () => {
-    editor.selection.mode = 'layer';
+    this.$selection.mode = 'layer';
     
-    expect(editor.selection.mode).toEqual('layer');
+    expect(this.$selection.mode).toEqual('layer');
 })
 
 test('Selection - select image resource', () => {
@@ -49,7 +49,7 @@ test('Selection - select image resource', () => {
     var image = backgroundImage.addImageResource(new URLImageResource({ url: 'yellow' }));
     image.select()
 
-    var currentImage = editor.selection.image; 
+    var currentImage = this.$selection.image; 
     expect(!!currentImage).toEqual(true);
 
     expect(currentImage.url).toEqual('yellow');

@@ -1,10 +1,6 @@
 import BaseProperty from "./BaseProperty";
-import { editor } from "../../../editor/editor";
 import { DEBOUNCE } from "../../../util/Event";
 import { EVENT } from "../../../util/UIElement";
-
-const blendI18n = editor.initI18n('blend')
-const overflowI18n = editor.initI18n('background.color.property.overflow')
 
 const blend_list = [
   "normal",
@@ -35,18 +31,18 @@ const overflow_list = [
 export default class BackgroundColorProperty extends BaseProperty {
 
   getTitle() {
-    return editor.i18n('background.color.property.title');
+    return this.$i18n('background.color.property.title');
   }
 
   getBlendList () {
     return blend_list.map(it => {
-      return `${it}:${blendI18n(it)}`
+      return `${it}:${this.$i18n(`blend.${it}`)}`
     }).join(',');
   }
 
   getOverflowList () {
     return overflow_list.map(it => {
-      return `${it}:${overflowI18n(it)}`
+      return `${it}:${this.$i18n(`background.color.property.overflow.${it}`)}`
     }).join(',');
   }  
 
@@ -54,7 +50,7 @@ export default class BackgroundColorProperty extends BaseProperty {
     return /*html*/`
         <div class='property-item animation-property-item'>
           <span class='add-timeline-property' data-property='background-color'></span>
-          <ColorViewEditor ref='$color' label="${editor.i18n('background.color.property.color')}" key='background-color' onchange="changeColor" />
+          <ColorViewEditor ref='$color' label="${this.$i18n('background.color.property.color')}" key='background-color' onchange="changeColor" />
         </div>
 
         <div class='property-item animation-property-item'>
@@ -62,7 +58,7 @@ export default class BackgroundColorProperty extends BaseProperty {
           <NumberRangeEditor 
             ref='$zIndex' 
             key='z-index' 
-            label='${editor.i18n('background.color.property.zindex')}'
+            label='${this.$i18n('background.color.property.zindex')}'
             min="-1"
             max="100000"
             step="1"
@@ -74,7 +70,7 @@ export default class BackgroundColorProperty extends BaseProperty {
           <NumberRangeEditor 
             ref='$opacity' 
             key='opacity' 
-            label='${editor.i18n('background.color.property.opacity')}'
+            label='${this.$i18n('background.color.property.opacity')}'
             min="0"
             max="1"
             step="0.01"
@@ -84,7 +80,7 @@ export default class BackgroundColorProperty extends BaseProperty {
         <div class='property-item animation-property-item'>
           <span class='add-timeline-property' data-property='mix-blend-mode'></span>
           <SelectEditor 
-            label='${editor.i18n('background.color.property.blend')}'
+            label='${this.$i18n('background.color.property.blend')}'
             ref='$mixBlend' 
             removable='true'
             key='mix-blend-mode' 
@@ -96,7 +92,7 @@ export default class BackgroundColorProperty extends BaseProperty {
         <div class='property-item animation-property-item'>
           <span class='add-timeline-property' data-property='overflow'></span>
           <SelectEditor 
-            label='${editor.i18n('background.color.property.overflow')}'
+            label='${this.$i18n('background.color.property.overflow')}'
             ref='$overflow' 
             removable='true'
             key='overflow' 
@@ -108,7 +104,7 @@ export default class BackgroundColorProperty extends BaseProperty {
   }  
 
   refresh () {
-    var current = editor.selection.current; 
+    var current = this.$selection.current; 
 
     if (current) {
       this.children.$color.setValue(current['background-color'] || 'rgba(0, 0, 0, 1)')
@@ -121,7 +117,7 @@ export default class BackgroundColorProperty extends BaseProperty {
 
 
   [EVENT('changeSelect')] (key, value) {
-    this.emit("SET_ATTRIBUTE", { 
+    this.emit("setAttribute", { 
       [key]: value
     })
   }

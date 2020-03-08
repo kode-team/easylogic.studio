@@ -11,7 +11,7 @@ export class TimelineSelection {
   }
 
   currentArtBoard (callback) {
-    var artboard = this.editor.selection.currentArtboard;
+    var artboard = this.this.$selection.currentArtboard;
 
     if (artboard) {
       callback && callback (artboard);

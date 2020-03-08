@@ -1,7 +1,7 @@
 import { Layer } from "../Layer";
 import { OBJECT_TO_PROPERTY, CSS_TO_STRING } from "../../../util/functions/func";
-import { editor } from "../../editor";
 import icon from "../../../csseditor/ui/icon/icon";
+import { ComponentManager } from "../../ComponentManager";
 
 export class TextLayer extends Layer {
 
@@ -98,4 +98,4 @@ export class TextLayer extends Layer {
 
 }
  
-editor.registerComponent('text', TextLayer); 
+ComponentManager.registerComponent('text', TextLayer); 

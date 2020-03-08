@@ -1,15 +1,14 @@
 import { EVENT } from "../../../util/UIElement";
-import { INPUT, LOAD, BIND, CLICK } from "../../../util/Event";
+import { LOAD } from "../../../util/Event";
 import SVGFilterEditor from "../property-editor/SVGFilterEditor";
 import BasePopup from "./BasePopup";
 import { SVGFilter } from "../../../editor/svg-property/SVGFilter";
 import { isNotUndefined } from "../../../util/functions/func";
-import { editor } from "../../../editor/editor";
 
 export default class SVGFilterPopup extends BasePopup {
 
   getTitle() {
-    return editor.i18n('svgfilter.popup.title');
+    return this.$i18n('svgfilter.popup.title');
   }
 
   components() {

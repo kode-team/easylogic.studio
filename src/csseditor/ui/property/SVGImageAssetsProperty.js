@@ -1,5 +1,4 @@
 import BaseProperty from "./BaseProperty";
-import { editor } from "../../../../../editor/editor";
 import { LOAD, CLICK, INPUT, DEBOUNCE } from "../../../../util/Event";
 import { EVENT } from "../../../../util/UIElement";
 import icon from "../icon/icon";
@@ -45,7 +44,7 @@ export default class SVGImageAssetsProperty extends BaseProperty {
   }
 
   [CLICK('$tool button')] (e) {
-    var mode = e.$delegateTarget.attr('data-value')
+    var mode = e.$dt.attr('data-value')
 
     this.setState({ mode }, false)
 
@@ -54,7 +53,7 @@ export default class SVGImageAssetsProperty extends BaseProperty {
   }
 
   [LOAD("$svgimageList")]() {
-    var current = editor.selection.currentProject || { svgimageList: [] }
+    var current = this.$selection.currentProject || { svgimageList: [] }
 
     var svgimages = current.svgimages;
 
@@ -87,7 +86,7 @@ export default class SVGImageAssetsProperty extends BaseProperty {
 
  
   executeSVGImage (callback, isRefresh = true, isEmit = true ) {
-    var project = editor.selection.currentProject;
+    var project = this.$selection.currentProject;
 
     if(project) {
 
@@ -109,7 +108,7 @@ export default class SVGImageAssetsProperty extends BaseProperty {
   }
 
   [CLICK('$svgimageList .remove')] (e) {
-    var $item = e.$delegateTarget.closest('svgimage-item');
+    var $item = e.$dt.closest('svgimage-item');
     var index = +$item.attr('data-index');
 
     this.executeSVGImage(project => {
@@ -119,7 +118,7 @@ export default class SVGImageAssetsProperty extends BaseProperty {
   }
 
   [CLICK('$svgimageList .copy')] (e) {
-    var $item = e.$delegateTarget.closest('svgimage-item');
+    var $item = e.$dt.closest('svgimage-item');
     var index = +$item.attr('data-index');
 
     this.executeSVGImage(project => {
@@ -128,9 +127,9 @@ export default class SVGImageAssetsProperty extends BaseProperty {
   }  
 
   [INPUT('$svgimageList input')] (e) {
-    var $item = e.$delegateTarget.closest('svgimage-item');
+    var $item = e.$dt.closest('svgimage-item');
     var index = +$item.attr('data-index');
-    var obj = e.$delegateTarget.attrKeyValue('data-key');
+    var obj = e.$dt.attrKeyValue('data-key');
 
     this.executeSVGImage(project => {
       project.setSVGImageValue(index, obj);      

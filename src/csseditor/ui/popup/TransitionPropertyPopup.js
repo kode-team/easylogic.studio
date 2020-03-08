@@ -111,11 +111,11 @@ export default class TransitionPropertyPopup extends BasePopup {
   }
 
   getBody() {
-    return `<div class='transition-property-popup' ref='$popup'></div>`;
+    return /*html*/`<div class='transition-property-popup' ref='$popup'></div>`;
   }
 
   [LOAD('$popup')] () {
-    return `
+    return /*html*/`
       <div class="box">
         ${this.templateForProperty()}
         ${this.templateForTimingFunction()}
@@ -126,7 +126,7 @@ export default class TransitionPropertyPopup extends BasePopup {
   }
 
   templateForTimingFunction () {
-    return `
+    return /*html*/`
     <div class='timing-function'>
       <label>Timing function</label>
       <CubicBezierEditor ref='$cubicBezierEditor' key="timingFunction" value="${this.state.timingFunction}" onChange='changeCubicBezier' />
@@ -142,7 +142,7 @@ export default class TransitionPropertyPopup extends BasePopup {
 
   templateForProperty() {
    
-    return `
+    return /*html*/`
       <div class='name'>
         <SelectEditor ref='$property' icon="true" label="Property" key='property' value="${this.state.property}" options="${property_list.join(',')}" onChange='changeTransition' /> 
       </div>
@@ -151,7 +151,7 @@ export default class TransitionPropertyPopup extends BasePopup {
   
 
   templateForDelay () {
-    return `
+    return /*html*/`
     <div class='delay'>
       <RangeEditor ref='$delay' label='Delay' calc='false' key='delay' value='${this.state.delay}' units='s,ms' onChange="changeRangeEditor" />
     </div>
@@ -159,7 +159,7 @@ export default class TransitionPropertyPopup extends BasePopup {
   }
 
   templateForDuration () {
-    return `
+    return /*html*/`
     <div class='duration'>
       <RangeEditor ref='$duration' label='Duration'  calc='false' key='duration' value='${this.state.duration}' units='s,ms' onChange="changeRangeEditor" />
     </div>

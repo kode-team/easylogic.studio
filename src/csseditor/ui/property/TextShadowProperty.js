@@ -1,6 +1,5 @@
 import BaseProperty from "./BaseProperty";
 import { LOAD, DEBOUNCE, CLICK } from "../../../util/Event";
-import { editor } from "../../../editor/editor";
 import { EVENT } from "../../../util/UIElement";
 import icon from "../icon/icon";
 
@@ -8,7 +7,7 @@ import icon from "../icon/icon";
 export default class TextShadowProperty extends BaseProperty {
 
   getTitle() {
-    return editor.i18n('text.shadow.property.title')
+    return this.$i18n('text.shadow.property.title')
   }
 
   getBody() {
@@ -34,7 +33,7 @@ export default class TextShadowProperty extends BaseProperty {
   }  
   
   [LOAD("$shadowList")]() {
-    var current = editor.selection.current || {};
+    var current = this.$selection.current || {};
     return /*html*/`
       <TextShadowEditor ref='$textshadow' value="${current['text-shadow'] || ''}" hide-label="true" onChange="changeTextShadow" />
     `
@@ -49,7 +48,7 @@ export default class TextShadowProperty extends BaseProperty {
 
   [EVENT("changeTextShadow")](textshadow) {
 
-    this.emit('SET_ATTRIBUTE', { 
+    this.emit('setAttribute', { 
       'text-shadow': textshadow
     })
   }

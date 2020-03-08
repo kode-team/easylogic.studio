@@ -1,5 +1,4 @@
 import BaseProperty from "./BaseProperty";
-import { editor } from "../../../editor/editor";
 import { LOAD, CLICK, DEBOUNCE } from "../../../util/Event";
 import { EVENT } from "../../../util/UIElement";
 import icon from "../icon/icon";
@@ -7,7 +6,7 @@ import icon from "../icon/icon";
 export default class PerspectiveProperty extends BaseProperty {
 
   getTitle() {
-    return editor.i18n('perspective.property.title')
+    return this.$i18n('perspective.property.title')
   }
 
   hasKeyframe() {
@@ -40,7 +39,7 @@ export default class PerspectiveProperty extends BaseProperty {
   }  
 
   [LOAD("$perspective")]() {
-    var current = editor.selection.current || {};
+    var current = this.$selection.current || {};
 
     var perspective = current['perspective'] || ''
     return /*html*/`
@@ -50,7 +49,7 @@ export default class PerspectiveProperty extends BaseProperty {
 
   [EVENT('changePerspective')] (key, value) {
 
-    this.emit('SET_ATTRIBUTE', { 
+    this.emit('setAttribute', { 
       [key]: value
     })
   }

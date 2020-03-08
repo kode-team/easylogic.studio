@@ -1,5 +1,4 @@
 import BaseProperty from "./BaseProperty";
-import { editor } from "../../../editor/editor";
 import { LOAD, CLICK, BIND, DEBOUNCE } from "../../../util/Event";
 import { EVENT } from "../../../util/UIElement";
 import icon from "../icon/icon";
@@ -15,8 +14,6 @@ const image_size = [
   '1024x762'
 ] 
 
-const i18n = editor.initI18n('image.property')
-
 export default class ImageProperty extends BaseProperty {
 
   getClassName() {
@@ -24,7 +21,7 @@ export default class ImageProperty extends BaseProperty {
   }
 
   getTitle() {
-    return i18n('title')
+    return this.$i18n('image.property.title')
   }
 
   getBody() {
@@ -34,10 +31,10 @@ export default class ImageProperty extends BaseProperty {
   getFooter() {
     return /*html*/`
       <div>
-        <label> ${i18n('origin')} </label> <span ref='$sizeInfo'></span> <button type="button" ref='$resize'>${icon.size}</button>
+        <label> ${this.$i18n('image.property.origin')} </label> <span ref='$sizeInfo'></span> <button type="button" ref='$resize'>${icon.size}</button>
       </div>
       <div>
-        <SelectEditor ref='$select' label="${i18n('size')}" key='size' value='' options='${image_size.join(',')}' onchange='changeImageSize' />
+        <SelectEditor ref='$select' label="${this.$i18n('image.property.size')}" key='size' value='' options='${image_size.join(',')}' onchange='changeImageSize' />
       </div>
     `
   }
@@ -45,16 +42,16 @@ export default class ImageProperty extends BaseProperty {
   [EVENT('changeImageSize')] (key, value) {
     var [width, height] = value.split('x').map(it => Length.px(it))
 
-    this.emit('SET_ATTRIBUTE', { 
+    this.emit('setAttribute', { 
       width, height
     })
   }
 
   [CLICK('$resize')] () {
-    var current = editor.selection.current;
+    var current = this.$selection.current;
 
     if (current) {
-      this.emit('SET_ATTRIBUTE', { 
+      this.emit('setAttribute', { 
         width: current.naturalWidth.clone(),
         height: current.naturalHeight.clone()
       }, current.id)
@@ -63,15 +60,15 @@ export default class ImageProperty extends BaseProperty {
   }
 
   [BIND('$sizeInfo')] () {
-    var current = editor.selection.current || {};
+    var current = this.$selection.current || {};
 
     return {
-      innerHTML: `${i18n('width')}: ${current.naturalWidth}, ${i18n('height')}: ${current.naturalHeight}`
+      innerHTML: `${this.$i18n('image.property.width')}: ${current.naturalWidth}, ${this.$i18n('image.property.height')}: ${current.naturalHeight}`
     }
   }
 
   [LOAD("$body")]() { 
-    var current = editor.selection.current || {};
+    var current = this.$selection.current || {};
 
     var src = current['src'] || ''
     return /*html*/`<ImageSelectEditor 
@@ -82,7 +79,7 @@ export default class ImageProperty extends BaseProperty {
   }
 
   [EVENT('changeSelect')] (key, value, info) {
-    var current = editor.selection.current;
+    var current = this.$selection.current;
 
     if (current) {
       current.reset({
@@ -92,7 +89,7 @@ export default class ImageProperty extends BaseProperty {
 
       this.bindData('$sizeInfo')
 
-      this.emit('SET_ATTRIBUTE', {
+      this.emit('setAttribute', {
         src: value,
         ...info
       }, current.id);      

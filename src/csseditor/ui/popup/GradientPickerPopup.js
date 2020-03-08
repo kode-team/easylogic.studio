@@ -5,12 +5,11 @@ import { Gradient } from "../../../editor/image-resource/Gradient";
 import BasePopup from "./BasePopup";
 import EmbedColorPicker from "../property-editor/EmbedColorPicker";
 import ImageAssetPicker from "../property/ImageAssetPicker";
-import { editor } from "../../../editor/editor";
 
 export default class GradientPickerPopup extends BasePopup {
 
   getTitle() {
-    return editor.i18n('gradient.picker.popup.title')
+    return this.$i18n('gradient.picker.popup.title')
   }
 
   components() {

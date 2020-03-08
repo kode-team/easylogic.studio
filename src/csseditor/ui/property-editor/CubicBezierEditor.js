@@ -103,7 +103,7 @@ export default class CubicBezierEditor extends UIElement {
     }
 
     [CLICK('$itemList .item')] (e) {
-        var bezierString = e.$delegateTarget.attr('data-bezier');
+        var bezierString = e.$dt.attr('data-bezier');
         this.refs.$itemList.attr('data-selected-value', bezierString)
 
         var currentBezier = getPredefinedCubicBezier(bezierString)

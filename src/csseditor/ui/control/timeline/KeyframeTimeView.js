@@ -1,6 +1,5 @@
 import UIElement, { EVENT } from "../../../../util/UIElement";
-import { RESIZE, DEBOUNCE, POINTERSTART, MOVE, THROTTLE, IF, PREVENT, KEYDOWN, KEYUP, KEY, END } from "../../../../util/Event";
-import { editor } from "../../../../editor/editor";
+import { RESIZE, DEBOUNCE, POINTERSTART, MOVE, THROTTLE, IF, END } from "../../../../util/Event";
 import { Length } from "../../../../editor/unit/Length";
 import { second, framesToTimecode } from "../../../../util/functions/time";
 
@@ -31,7 +30,7 @@ export default class KeyframeTimeView extends UIElement {
     }
 
     get currentTimeline () {
-        var currentArtboard = editor.selection.currentArtboard;
+        var currentArtboard = this.$selection.currentArtboard;
 
         if (currentArtboard) {
             return currentArtboard.getSelectedTimeline();
@@ -66,12 +65,12 @@ export default class KeyframeTimeView extends UIElement {
     [POINTERSTART('$start') + IF('hasCurrentTimeline') + MOVE('moveStartButton')] (e) {
         this.sliderRect = this.refs.$slider.rect();
         this.endX = Length.parse(this.refs.$end.css('left')).toPx(this.sliderRect.width);
-        this.artboard = editor.selection.currentArtboard;
+        this.artboard = this.$selection.currentArtboard;
 
     }
 
     moveStartButton () {
-        var currentX = editor.config.get('pos').x - this.sliderRect.x;
+        var currentX = this.$config.get('pos').x - this.sliderRect.x;
         var minX = 0; 
         var maxX =  this.endX; 
 
@@ -91,12 +90,12 @@ export default class KeyframeTimeView extends UIElement {
     [POINTERSTART('$end') + IF('hasCurrentTimeline') + MOVE('moveEndButton')] (e) {
         this.sliderRect = this.refs.$slider.rect();
         this.startX = Length.parse(this.refs.$start.css('left')).toPx(this.sliderRect.width);
-        this.artboard = editor.selection.currentArtboard;        
+        this.artboard = this.$selection.currentArtboard;        
 
     }
 
     moveEndButton () {
-        var currentX = editor.config.get('pos').x - this.sliderRect.x;
+        var currentX = this.$config.get('pos').x - this.sliderRect.x;
         var minX = this.startX; 
         var maxX =  this.sliderRect.width; 
 
@@ -118,7 +117,7 @@ export default class KeyframeTimeView extends UIElement {
         var {displayStartTime, displayEndTime} = this.currentTimeline;
         this.timelineStartTime = displayStartTime
         this.timelineEndTime = displayEndTime
-        this.artboard = editor.selection.currentArtboard;    
+        this.artboard = this.$selection.currentArtboard;    
     }
 
     moveGaugeButton (dx, dy) {
@@ -142,6 +141,10 @@ export default class KeyframeTimeView extends UIElement {
 
 
     refreshCanvas() {
+
+        var timeline_grid_font_color = this.$theme('timeline_grid_font_color')
+        var timeline_timeview_bottom_color = this.$theme('timeline_timeview_bottom_color')
+        var timeline_line_color = this.$theme('timeline_line_color')
 
         var timeline = this.currentTimeline;
 
@@ -194,20 +197,20 @@ export default class KeyframeTimeView extends UIElement {
                 for(; startFrame < endFrame; startFrame += splitFrame) {
 
                     var startX = (second(fps, startFrame) - displayStartTime)/(displayEndTime - displayStartTime) * realWidth;
-                    this.drawOption({ fillStyle: editor.themeValue('timeline_grid_font_color')})                                
+                    this.drawOption({ fillStyle: timeline_grid_font_color})
                     this.drawText(startX + restX, y, framesToTimecode(fps, startFrame).replace(/00\:/g, '') + 'f')
                 }
 
 
-                this.drawOption({strokeStyle: editor.themeValue('timeline_timeview_bottom_color'), lineWidth: 1})
+                this.drawOption({strokeStyle: timeline_timeview_bottom_color, lineWidth: 1})
                 this.drawLine(0, rect.height-0.5, rect.width, rect.height);
 
                 var left =  (currentTime - displayStartTime)/(displayEndTime - displayStartTime) * realWidth;
                 var markTop = 10
                 var markWidth = 4
                 this.drawOption({
-                    strokeStyle: editor.themeValue('timeline_line_color'),
-                    fillStyle: editor.themeValue('timeline_line_color'), 
+                    strokeStyle: timeline_line_color,
+                    fillStyle: timeline_line_color, 
                     lineWidth: 1
                 })
                 this.drawPath(
@@ -228,9 +231,9 @@ export default class KeyframeTimeView extends UIElement {
         this.selectedCanvasOffset = this.refs.$canvas.offset()
         this.originalRect = this.$el.rect()    
         this.width = this.originalRect.width - PADDING;     
-        this.artboard = editor.selection.currentArtboard
+        this.artboard = this.$selection.currentArtboard
         this.emit('hideSelectionToolView')
-        editor.selection.empty()
+        this.$selection.empty()
         this.emit('refreshSelection');
     }
 
@@ -239,7 +242,7 @@ export default class KeyframeTimeView extends UIElement {
         var totalWidth = this.width; 
         var minX = 0;
         var maxX = totalWidth;
-        var currentX = editor.config.get('pos').x - this.selectedCanvasOffset.left; 
+        var currentX = this.$config.get('pos').x - this.selectedCanvasOffset.left; 
 
         currentX = Math.max(currentX, minX);
         currentX = Math.min(currentX, maxX);
@@ -253,7 +256,7 @@ export default class KeyframeTimeView extends UIElement {
     }
 
     moveEndCurrentTime () {
-        editor.selection.setRectCache();
+        this.$selection.setRectCache();
         this.emit('refreshSelectionTool')
     }
 

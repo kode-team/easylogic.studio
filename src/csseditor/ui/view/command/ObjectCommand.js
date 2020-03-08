@@ -1,5 +1,5 @@
 import UIElement, { COMMAND } from "../../../../util/UIElement";
-import { editor, EDIT_MODE_SELECTION } from "../../../../editor/editor";
+import { EDIT_MODE_SELECTION, Editor } from "../../../../editor/Editor";
 import { Length } from "../../../../editor/unit/Length";
 import Color from "../../../../util/Color";
 import PathStringManager from "../../../../editor/parse/PathStringManager";
@@ -7,383 +7,383 @@ import PathParser from "../../../../editor/parse/PathParser";
 import { isFunction } from "../../../../util/functions/func";
 
 export default class ObjectCommand extends UIElement {
-
     refreshSelection () {
 
         this.emit('hideSubEditor');
         this.emit('noneSelectMenu')
-        this.emit('refreshAll')   
+        this.emit('refreshAll')    
 
         this.emit('refreshAllElementBoundSize');
         this.emit('refreshSelection');
         this.emit('refreshSelectionTool');    
     }
 
-    [COMMAND('add.type')] (type) {
+    // [COMMAND('addComponentType')] (type) {
 
-        // editor.selection.empty()
-        // this.emit('refreshSelection')
-        this.emit('hideSubEditor');
-        editor.changeAddType(type)
+    //     // this.$selection.empty()
+    //     // this.emit('refreshSelection')
+    //     this.emit('hideSubEditor');
+    //     this.$editor.changeAddType(type)
 
-        this.emit('after.change.mode');
-    }
+    //     this.emit('afterChangeMode');
+    // }
 
-    [COMMAND('add.component')] (type) {
+    // [COMMAND('add.component')] (type) {
 
-        // editor.selection.empty()
-        // this.emit('refreshSelection')
-        this.emit('hideSubEditor');
-        editor.changeAddType(type, true)
+    //     // this.$selection.empty()
+    //     // this.emit('refreshSelection')
+    //     this.emit('hideSubEditor');
+    //     this.$editor.changeAddType(type, true)
 
-        this.emit('after.change.mode');
-    }    
+    //     this.emit('afterChangeMode');
+    // }    
 
-    [COMMAND('new.layer')] (type, obj) {
-        this.trigger(`add.${type}`, obj);
-        editor.changeMode(EDIT_MODE_SELECTION);
+    // [COMMAND('new.layer')] (type, obj) {
+    //     this.trigger(`add.${type}`, obj);
+    //     this.$editor.changeMode(EDIT_MODE_SELECTION);
 
-        this.emit('after.change.mode');
-    }
+    //     this.emit('afterChangeMode');
+    // }
 
 
-    [COMMAND('new.component')] (type, obj) {
-        this.trigger('add.layer', editor.createComponent(type, {
-            ...obj,
-        }), obj)
+    // [COMMAND('newComponent')] (type, obj) {
+    //     this.emit('addLayer', this.$editor.createComponent(type, {
+    //         'background-color': Color.random(),
+    //         ...obj,
+    //     }), obj)
 
-        editor.changeMode(EDIT_MODE_SELECTION);
+    //     this.$editor.changeMode(EDIT_MODE_SELECTION);
 
-        this.emit('after.change.mode');
-    }    
+    //     this.emit('afterChangeMode');
+    // }    
 
-    [COMMAND('select.item')] () {
-        editor.changeMode(EDIT_MODE_SELECTION);
-        this.emit('after.change.mode');
-    }
+    // [COMMAND('selectItem')] () {
+    //     this.$editor.changeMode(EDIT_MODE_SELECTION);
+    //     this.emit('afterChangeMode');
+    // }
 
-    [COMMAND('add.layer')] (layer, rect = {}) {
+    // [COMMAND('addLayer')] (layer, rect = {}) {
 
-        var containerItem = editor.selection.current || editor.selection.currentArtboard
+    //     var containerItem = this.$selection.current || this.$selection.currentArtboard
     
-        if (containerItem) {
+    //     if (containerItem) {
 
-            if (!containerItem.enableHasChildren()) {
-                containerItem = containerItem.parent;
-            }
+    //         if (!containerItem.enableHasChildren()) {
+    //             containerItem = containerItem.parent;
+    //         }
 
-            containerItem.add(layer)
+    //         containerItem.add(layer)
 
-            if (rect.x) { layer.setScreenX(rect.x.value); }
-            if (rect.y) { layer.setScreenY(rect.y.value); }
+    //         if (rect.x) { layer.setScreenX(rect.x.value); }
+    //         if (rect.y) { layer.setScreenY(rect.y.value); }
 
-            editor.selection.select(layer);
+    //         this.$selection.select(layer);
     
-            this.refreshSelection()
-        } else {
-            this.trigger('add.artboard')
+    //         this.refreshSelection()
+    //     } else {
+    //         this.trigger('addArtBoard')
 
-            setTimeout(() => {
-                this.trigger('add.layer', layer, rect);
-            }, 50)
-        }
-    }
+    //         setTimeout(() => {
+    //             this.trigger('addLayer', layer, rect);
+    //         }, 50)
+    //     }
+    // }
 
-    [COMMAND('add.project')] (obj = {}) {
-        var project = editor.add(editor.createComponent('project', {
-            ...obj
-        }))
+    // [COMMAND('addProject')] (obj = {}) {
+    //     var project = this.$editor.add(this.$editor.createComponent('project', {
+    //         ...obj
+    //     }))
 
-        editor.selection.selectProject(project);
+    //     this.$selection.selectProject(project);
 
-        this.refreshSelection()
-    }
+    //     this.refreshSelection()
+    // }
 
-    [COMMAND('add.artboard')] (obj = {}) {
-        var project = editor.selection.currentProject;
-        if (!project) {
-            project = editor.add(editor.createComponent('project'))
+    // [COMMAND('addArtBoard')] (obj = {}) {
+    //     var project = this.$selection.currentProject;
+    //     if (!project) {
+    //         project = this.$editor.add(this.$editor.createComponent('project'))
     
-            editor.selection.selectProject(project);
-        }
+    //         this.$selection.selectProject(project);
+    //     }
 
-        var artboard = project.add(editor.createComponent('artboard', {
-            x: Length.px(300),
-            y: Length.px(300),
-            width: Length.px(300),
-            height: Length.px(600),
-            ...obj
-          }))
+    //     var artboard = project.add(this.$editor.createComponent('artboard', {
+    //         x: Length.px(300),
+    //         y: Length.px(300),
+    //         width: Length.px(300),
+    //         height: Length.px(600),
+    //         ...obj
+    //       }))
 
-          editor.selection.selectArtboard(artboard);
-          editor.selection.select(artboard);
+    //       this.$selection.selectArtboard(artboard);
+    //       this.$selection.select(artboard);
     
-          this.refreshSelection()
-    }
+    //       this.refreshSelection()
+    // }
 
-    [COMMAND('add.rect')] (rect = {}) {
+    // [COMMAND('add.rect')] (rect = {}) {
 
-        this.trigger('add.layer', editor.createComponent('layer', {
-            width: Length.px(100),
-            height: Length.px(100),
-            ...rect,
-            'background-color': Color.random()
-        }), rect)
+    //     this.trigger('addLayer', this.$editor.createComponent('layer', {
+    //         width: Length.px(100),
+    //         height: Length.px(100),
+    //         ...rect,
+    //         'background-color': Color.random()
+    //     }), rect)
 
-    }
+    // }
 
-    [COMMAND('add.svgrect')] (rect = {}) {
+    // [COMMAND('add.svgrect')] (rect = {}) {
 
-        this.trigger('add.layer', editor.createComponent('svg-path', {
-            width: Length.px(100),
-            height: Length.px(100),
-            d: PathStringManager.makeRect(0, 0, rect.width.value, rect.height.value),
-            ...rect
-        }), rect)
-    }        
+    //     this.trigger('addLayer', this.$editor.createComponent('svg-path', {
+    //         width: Length.px(100),
+    //         height: Length.px(100),
+    //         d: PathStringManager.makeRect(0, 0, rect.width.value, rect.height.value),
+    //         ...rect
+    //     }), rect)
+    // }        
 
-    [COMMAND('add.svgtextpath')] (rect = {}) {
+    // [COMMAND('add.svgtextpath')] (rect = {}) {
 
-        this.trigger('add.layer', editor.createComponent('svg-textpath', {
-            width: Length.px(100),
-            height: Length.px(100),
-            text: 'Insert a newText',
-            'font-size': Length.parse(rect.height),
-            textLength: '100%',
-            d: PathStringManager.makeLine(0, rect.height.value, rect.width.value, rect.height.value),
-            ...rect
-        }), rect)
-    }            
-
-
-    [COMMAND('add.svgtext')] (rect = {}) {
-
-        this.trigger('add.layer', editor.createComponent('svg-text', {
-            width: Length.px(100),
-            height: Length.px(100),
-            text: 'Insert a newText',
-            ...rect
-        }), rect)
-    }            
-
-    [COMMAND('add.svgcircle')] (rect = {}) {
-        this.trigger('add.layer', editor.createComponent('svg-path', {
-            width: Length.px(100),
-            height: Length.px(100),
-            d: PathStringManager.makeCircle(0, 0, rect.width.value, rect.height.value),
-            ...rect
-        }), rect)
-    }            
+    //     this.trigger('addLayer', this.$editor.createComponent('svg-textpath', {
+    //         width: Length.px(100),
+    //         height: Length.px(100),
+    //         text: 'Insert a newText',
+    //         'font-size': Length.parse(rect.height),
+    //         textLength: '100%',
+    //         d: PathStringManager.makeLine(0, rect.height.value, rect.width.value, rect.height.value),
+    //         ...rect
+    //     }), rect)
+    // }            
 
 
-    [COMMAND('add.circle')] (rect = {}) {
+    // [COMMAND('add.svgtext')] (rect = {}) {
 
-        this.trigger('add.layer', editor.createComponent('layer', {
-            width: Length.px(100),
-            height: Length.px(100),
-            ...rect,
-            'background-color': Color.random(),
-            'border-radius': Length.percent(100)
-        }), rect)
-    }
+    //     this.trigger('addLayer', this.$editor.createComponent('svg-text', {
+    //         width: Length.px(100),
+    //         height: Length.px(100),
+    //         text: 'Insert a newText',
+    //         ...rect
+    //     }), rect)
+    // }            
+
+    // [COMMAND('add.svgcircle')] (rect = {}) {
+    //     this.trigger('addLayer', this.$editor.createComponent('svg-path', {
+    //         width: Length.px(100),
+    //         height: Length.px(100),
+    //         d: PathStringManager.makeCircle(0, 0, rect.width.value, rect.height.value),
+    //         ...rect
+    //     }), rect)
+    // }            
+
+
+    // [COMMAND('add.circle')] (rect = {}) {
+
+    //     this.trigger('addLayer', this.$editor.createComponent('layer', {
+    //         width: Length.px(100),
+    //         height: Length.px(100),
+    //         ...rect,
+    //         'background-color': Color.random(),
+    //         'border-radius': Length.percent(100)
+    //     }), rect)
+    // }
 
 
 
-    [COMMAND('add.text')] (rect = {}) {
+    // [COMMAND('addText')] (rect = {}) {
     
-        this.trigger('add.layer', editor.createComponent('text', {
-            content: 'Insert a text',
-            width: Length.px(300),
-            height: Length.px(50),
-            ...rect,
-            'font-size': Length.px(30)
-        }),rect)
-    }
+    //     this.trigger('addLayer', this.$editor.createComponent('text', {
+    //         content: 'Insert a text',
+    //         width: Length.px(300),
+    //         height: Length.px(50),
+    //         ...rect,
+    //         'font-size': Length.px(30)
+    //     }),rect)
+    // }
 
 
-    [COMMAND('add.image')] (rect = {}) {
-        this.trigger('add.layer', editor.createComponent('image', {
-            ...rect 
-        }), rect)
+    // [COMMAND('addImage')] (rect = {}) {
+    //     this.trigger('addLayer', this.$editor.createComponent('image', {
+    //         ...rect 
+    //     }), rect)
 
-    }  
+    // }  
 
-    [COMMAND('add.cube')] (rect = {}) {
-        this.trigger('add.layer', editor.createComponent('cube', {
-            width: Length.px(100),
-            height: Length.px(100),
-            ...rect,
-            'background-color': Color.random()
-        }), rect)
+    // [COMMAND('add.cube')] (rect = {}) {
+    //     this.trigger('addLayer', this.$editor.createComponent('cube', {
+    //         width: Length.px(100),
+    //         height: Length.px(100),
+    //         ...rect,
+    //         'background-color': Color.random()
+    //     }), rect)
 
-    }
-
-
-    [COMMAND('add.cylinder')] (rect = {}) {
-        this.trigger('add.layer', editor.createComponent('cylinder', {
-            width: Length.px(100),
-            height: Length.px(100),
-            ...rect,
-            'background-color': Color.random()
-        }), rect)
-
-    }
+    // }
 
 
-    [COMMAND('convert.path')] (pathString, rect = null) {
-        var current = editor.selection.current;
+    // [COMMAND('add.cylinder')] (rect = {}) {
+    //     this.trigger('addLayer', this.$editor.createComponent('cylinder', {
+    //         width: Length.px(100),
+    //         height: Length.px(100),
+    //         ...rect,
+    //         'background-color': Color.random()
+    //     }), rect)
 
-        // clip path 가 path 일 때 
-        // path 속성을 가지고 있을 때 
-
-        if (current )  {
-            if (current.is('svg-path', 'svg-textpath')) {
-
-                var d = pathString;
-
-                if (rect) {
-                    var parser = new PathParser(pathString)
-                    parser.scale(current.width.value/rect.width, current.height.value/rect.height)
-
-                    d = parser.d; 
-                }
-
-                // path string 을 저걸로 맞추기 
-                current.updatePathItem({ d })
-
-                // selection 을 다시 해야 cache 를 다시 설정한다. 
-                // 이 구조를 바꿀려면 어떻게 해야할까?   
-                editor.selection.select(current);
-
-                this.emit('refreshSelectionStyleView');                        
-
-            } else if (current['clip-path'].includes('path')) {
-                var d = pathString;
-
-                if (rect) {
-                    var parser = new PathParser(pathString)
-                    parser.scale(current.width.value/rect.width, current.height.value/rect.height)
-
-                    d = parser.d; 
-                }
-
-                // path string 을 저걸로 맞추기 
-                current.reset({
-                    'clip-path': `path(${d})`
-                })
-
-                // selection 을 다시 해야 cache 를 다시 설정한다. 
-                // 이 구조를 바꿀려면 어떻게 해야할까?   
-                editor.selection.select(current);
-
-                this.emit('refreshSelectionStyleView');  
-            }
-        }
-    }
-
-    [COMMAND('add.path')] () {
-        this.emit('hideSubEditor');
-        editor.selection.empty();
-        this.emit('initSelectionTool');        
-        this.emit('showPathEditor', 'draw' );
-    } 
-
-    [COMMAND('open.polygon.editor')] (points = '', changeEvent = 'updatePolygonItem') {
-        var current = editor.selection.current;
-        if (current) {
-            this.emit('showPolygonEditor', 'draw', {
-                changeEvent,
-                current,
-                points,
-                screenX: current.screenX,
-                screenY: current.screenY,
-                screenWidth: current.screenWidth,
-                screenHeight: current.screenHeight,
-            }) 
-        }
-    }
-
-    [COMMAND('open.path.editor')] (d = '', changeEvent = 'updatePathItem') {
-        var current = editor.selection.current;
-        if (current) {
-            this.emit('showPathEditor', 'draw', {
-                changeEvent,
-                current,
-                d,
-                screenX: current.screenX,
-                screenY: current.screenY,
-                screenWidth: current.screenWidth,
-                screenHeight: current.screenHeight,
-            }) 
-        }
-    }
+    // }
 
 
-    [COMMAND('add.polygon')] (mode = 'draw') {
-        this.emit('hideSubEditor');    
-        editor.selection.empty();
-        this.emit('initSelectionTool');
-        this.emit('showPolygonEditor', mode );    
-    }    
+    // [COMMAND('convertPath')] (pathString, rect = null) {
+    //     var current = this.$selection.current;
 
-    [COMMAND('add.star')] () {
-        this.trigger('add.polygon', 'star')
-    }   
+    //     // clip path 가 path 일 때 
+    //     // path 속성을 가지고 있을 때 
 
-    [COMMAND('select.by.id')] (id) {
-        editor.selection.selectById(id);
+    //     if (current )  {
+    //         if (current.is('svg-path', 'svg-textpath')) {
+
+    //             var d = pathString;
+
+    //             if (rect) {
+    //                 var parser = new PathParser(pathString)
+    //                 parser.scale(current.width.value/rect.width, current.height.value/rect.height)
+
+    //                 d = parser.d; 
+    //             }
+
+    //             // path string 을 저걸로 맞추기 
+    //             current.updatePathItem({ d })
+
+    //             // selection 을 다시 해야 cache 를 다시 설정한다. 
+    //             // 이 구조를 바꿀려면 어떻게 해야할까?   
+    //             this.$selection.select(current);
+
+    //             this.emit('refreshSelectionStyleView');                        
+
+    //         } else if (current['clip-path'].includes('path')) {
+    //             var d = pathString;
+
+    //             if (rect) {
+    //                 var parser = new PathParser(pathString)
+    //                 parser.scale(current.width.value/rect.width, current.height.value/rect.height)
+
+    //                 d = parser.d; 
+    //             }
+
+    //             // path string 을 저걸로 맞추기 
+    //             current.reset({
+    //                 'clip-path': `path(${d})`
+    //             })
+
+    //             // selection 을 다시 해야 cache 를 다시 설정한다. 
+    //             // 이 구조를 바꿀려면 어떻게 해야할까?   
+    //             this.$selection.select(current);
+
+    //             this.emit('refreshSelectionStyleView');  
+    //         }
+    //     }
+    // }
+
+    // [COMMAND('addPath')] () {
+    //     this.emit('hideSubEditor');
+    //     this.$selection.empty();
+    //     this.emit('initSelectionTool');        
+    //     this.emit('showPathEditor', 'draw' );
+    // } 
+
+    // [COMMAND('open.polygon.editor')] (points = '', changeEvent = 'updatePolygonItem') {
+    //     var current = this.$selection.current;
+    //     if (current) {
+    //         this.emit('showPolygonEditor', 'draw', {
+    //             changeEvent,
+    //             current,
+    //             points,
+    //             screenX: current.screenX,
+    //             screenY: current.screenY,
+    //             screenWidth: current.screenWidth,
+    //             screenHeight: current.screenHeight,
+    //         }) 
+    //     }
+    // }
+
+    // [COMMAND('open.path.editor')] (d = '', changeEvent = 'updatePathItem') {
+    //     var current = this.$selection.current;
+    //     if (current) {
+    //         this.emit('showPathEditor', 'draw', {
+    //             changeEvent,
+    //             current,
+    //             d,
+    //             screenX: current.screenX,
+    //             screenY: current.screenY,
+    //             screenWidth: current.screenWidth,
+    //             screenHeight: current.screenHeight,
+    //         }) 
+    //     }
+    // }
+
+
+    // [COMMAND('addPolygon')] (mode = 'draw') {
+    //     this.emit('hideSubEditor');    
+    //     this.$selection.empty();
+    //     this.emit('initSelectionTool');
+    //     this.emit('showPolygonEditor', mode );    
+    // }    
+
+    // [COMMAND('addStar')] () {
+    //     this.trigger('addPolygon', 'star')
+    // }   
+
+    // [COMMAND('select.by.id')] (id) {
+    //     this.$selection.selectById(id);
     
-        this.refreshSelection()
-    }
+    //     this.refreshSelection()
+    // }
 
-    [COMMAND('resize.artboard')] (size = '') {
-        var current = editor.selection.currentArtboard;
-        if (current && current.is('artboard')) {
+    // [COMMAND('resizeArtBoard')] (size = '') {
+    //     var current = this.$selection.currentArtboard;
+    //     if (current && current.is('artboard')) {
     
-          if (!size.trim()) return;
+    //       if (!size.trim()) return;
     
-          var [width, height] = size.split('x')
+    //       var [width, height] = size.split('x')
     
-          width = Length.px(width);
-          height = Length.px(height);
+    //       width = Length.px(width);
+    //       height = Length.px(height);
     
-          current.reset({ width, height });
-          editor.selection.select(current);
-          this.refreshSelection();
-        }
-    }
+    //       current.reset({ width, height });
+    //       this.$selection.select(current);
+    //       this.refreshSelection();
+    //     }
+    // }
 
-    [COMMAND('refreshElement')] (current, isChangeFragment = false) {
-        // 화면 사이즈 조정         
-        this.emit('refreshSelectionStyleView', current, isChangeFragment, current && current.enableHasChildren() === false)
+    // [COMMAND('refreshElement')] (current, isChangeFragment = false) {
+    //     // 화면 사이즈 조정         
+    //     this.emit('refreshSelectionStyleView', current, isChangeFragment, current && current.enableHasChildren() === false)
 
-        // 화면 레이아웃 재정렬 
-        this.emit('refreshElementBoundSize', editor.selection.getRootItem(current))
-    }
+    //     // 화면 레이아웃 재정렬 
+    //     this.emit('refreshElementBoundSize', this.$selection.getRootItem(current))
+    // }
     
 
-    /**
-     * 속성 변화 command 실행 
-     * 
-     * @param {Object} attrs 적용될 속성 객체 
-     * @param {Array<string>} ids 아이디 리스트 
-     * @param {Boolean} isChangeFragment 중간 색상 변화 여부 
-     */
-    [COMMAND('SET_ATTRIBUTE')] (attrs, ids = null, isChangeFragment = false) {
-        editor.selection.itemsByIds(ids).forEach(item => {
+    // /**
+    //  * 속성 변화 command 실행 
+    //  * 
+    //  * @param {Object} attrs 적용될 속성 객체 
+    //  * @param {Array<string>} ids 아이디 리스트 
+    //  * @param {Boolean} isChangeFragment 중간 색상 변화 여부 
+    //  */
+    // [COMMAND('setAttribute')] (attrs, ids = null, isChangeFragment = false) {
+    //     this.$selection.itemsByIds(ids).forEach(item => {
 
-            Object.keys(attrs).forEach(key => {
-                const value = attrs[key];
-                if (isFunction(value)) {
-                    value = value();
-                }
+    //         Object.keys(attrs).forEach(key => {
+    //             const value = attrs[key];
+    //             if (isFunction(value)) {
+    //                 value = value();
+    //             }
 
-                item.reset({ [key] : value });
-            })
+    //             item.reset({ [key] : value });
+    //         })
 
-            this.trigger('refreshElement', item, isChangeFragment);
-        });
-        // { type: 'SET_ATTRIBUTE', attrs, ids, isChangeFragment}
-    }
+    //         this.$editor.emit('refreshElement', item, isChangeFragment);
+    //     });
+    //     // { type: 'setAttribute', attrs, ids, isChangeFragment}
+    // }
 
 }

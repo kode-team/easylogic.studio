@@ -1,8 +1,7 @@
 import UIElement, { COMMAND, EVENT } from "../../../../util/UIElement";
-import { editor } from "../../../../editor/editor";
 import { DEBOUNCE } from "../../../../util/Event";
 import { isArray, isUndefined } from "../../../../util/functions/func";
-import { makeTimer, second, timecode } from "../../../../util/functions/time";
+import { makeTimer, timecode } from "../../../../util/functions/time";
 
 export default class TimelineCommand extends UIElement {
 
@@ -34,7 +33,7 @@ export default class TimelineCommand extends UIElement {
     }
 
     [COMMAND('refresh.selected.offset')] () {
-        var offset = editor.timeline.items[0]
+        var offset = this.$timeline.items[0]
         if (offset) {
             this.emit('refreshOffsetValue', offset)
         }                    
@@ -64,7 +63,7 @@ export default class TimelineCommand extends UIElement {
                 }
             })
 
-            editor.timeline.select(...list);
+            this.$timeline.select(...list);
 
             this.emit('refreshTimeline');
             this.trigger('refresh.selected.offset');
@@ -77,7 +76,7 @@ export default class TimelineCommand extends UIElement {
 
         this.currentArtboard((artboard, timeline) => {
             var list = []
-            editor.selection.each(item => {
+            this.$selection.each(item => {
 
                 var keyframeObj = {
                     layerId: item.id,
@@ -94,7 +93,7 @@ export default class TimelineCommand extends UIElement {
                 }
             })
 
-            editor.timeline.select(...list);            
+            this.$timeline.select(...list);            
             this.emit('refreshTimeline');
             this.trigger('refresh.selected.offset');
         })        
@@ -102,11 +101,11 @@ export default class TimelineCommand extends UIElement {
 
     [COMMAND('delete.timeline.keyframe')] () {
         this.currentArtboard((artboard, timeline) => {
-            editor.timeline.each(item => {
+            this.$timeline.each(item => {
                 artboard.deleteTimelineKeyframe(item.layerId, item.property, item.id);
             })
 
-            editor.timeline.empty();
+            this.$timeline.empty();
             this.emit('refreshTimeline')
             this.trigger('refresh.selected.offset');            
         })
@@ -117,7 +116,7 @@ export default class TimelineCommand extends UIElement {
         this.currentArtboard((artboard, timeline) => {
             artboard.removeTimelineProperty(layerId, property);
 
-            editor.timeline.empty();
+            this.$timeline.empty();
             this.emit('refreshTimeline')
             this.trigger('refresh.selected.offset');            
         })
@@ -128,7 +127,7 @@ export default class TimelineCommand extends UIElement {
         this.currentArtboard((artboard, timeline) => {
             artboard.removeTimeline(layerId);
 
-            editor.timeline.empty();
+            this.$timeline.empty();
             this.emit('refreshTimeline')
             this.trigger('refresh.selected.offset');            
         })
@@ -140,7 +139,7 @@ export default class TimelineCommand extends UIElement {
         this.currentArtboard((artboard, timeline) => {
             artboard.removeAnimation(id);
 
-            editor.timeline.empty();
+            this.$timeline.empty();
             this.emit('refreshTimeline')
             this.emit('removeAnimation');
         })
@@ -160,7 +159,7 @@ export default class TimelineCommand extends UIElement {
                 editor: options.editor
             }
             var obj = artboard.addTimelineKeyframe(keyframeObj);
-            editor.timeline.select(obj);            
+            this.$timeline.select(obj);            
             this.emit('refreshTimeline');
             this.trigger('refresh.selected.offset');
         })        
@@ -177,7 +176,7 @@ export default class TimelineCommand extends UIElement {
 
     [COMMAND('change.property')] (key, value) {
         this.currentArtboard((artboard, timeline) => {
-            editor.selection.each(item => {
+            this.$selection.each(item => {
                 var newValue = isUndefined(value) ? item[key] : value
                 newValue = newValue + ""
                 artboard.setTimelineKeyframeOffsetValue(item.id, key, undefined, newValue )
@@ -208,7 +207,7 @@ export default class TimelineCommand extends UIElement {
     }
 
     currentArtboard (callback) {
-        var artboard = editor.selection.currentArtboard;
+        var artboard = this.$selection.currentArtboard;
 
         if (artboard) {
             var timeline = artboard.getSelectedTimeline();
@@ -225,8 +224,8 @@ export default class TimelineCommand extends UIElement {
             artboard.setTimelineCurrentTime(timecode(timeline.fps, lastTime));
             artboard.seek();
             this.emit('playTimeline');
-            editor.changeMode('SELECTION');
-            this.emit('after.change.mode')                                
+            this.$editor.changeMode('SELECTION');
+            this.emit('afterChangeMode')                                
         })
     }
 
@@ -238,8 +237,8 @@ export default class TimelineCommand extends UIElement {
             artboard.setTimelineCurrentTime(timecode(timeline.fps, nextTime));
             artboard.seek();
             this.emit('playTimeline');
-            editor.changeMode('SELECTION');
-            this.emit('after.change.mode')                                
+            this.$editor.changeMode('SELECTION');
+            this.emit('afterChangeMode')                                
         })
     }
 
@@ -252,8 +251,8 @@ export default class TimelineCommand extends UIElement {
             artboard.setTimelineCurrentTime(timecode(timeline.fps, firstTime));
             artboard.seek();
             this.emit('playTimeline');
-            editor.changeMode('SELECTION');
-            this.emit('after.change.mode')                                
+            this.$editor.changeMode('SELECTION');
+            this.emit('afterChangeMode')                                
         })
     }    
 
@@ -267,17 +266,17 @@ export default class TimelineCommand extends UIElement {
             artboard.seek();
 
             this.emit('playTimeline');
-            editor.changeMode('SELECTION');
-            this.emit('after.change.mode')                                
+            this.$editor.changeMode('SELECTION');
+            this.emit('afterChangeMode')                                
         })
     }    
 
     [COMMAND('play.timeline')] (speed = 1, iterationCount = 1, direction = 'normal') {
 
-        editor.selection.empty()
+        this.$selection.empty()
         this.emit('refreshSelection');
-        editor.changeMode('play');
-        this.emit('after.change.mode')
+        this.$editor.changeMode('play');
+        this.emit('afterChangeMode')
 
         this.currentArtboard((artboard, timeline) => {
           
@@ -309,8 +308,8 @@ export default class TimelineCommand extends UIElement {
                 last: (elapsed, timer) => {                 
                     this.emit('stopTimeline');
                     // artboard.setTimelineCurrentTime(0);
-                    editor.changeMode('SELECTION');
-                    this.emit('after.change.mode')                    
+                    this.$editor.changeMode('SELECTION');
+                    this.emit('afterChangeMode')                    
                 }
             })      
         })

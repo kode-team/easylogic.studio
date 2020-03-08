@@ -1,5 +1,4 @@
 import { ImageResource } from "./ImageResource";
-import { editor } from "../editor";
 import { OBJECT_TO_PROPERTY } from "../../util/functions/func";
 
 const IMAGE_LIST = ["jpg", "jpeg", "png", "gif", "svg"];

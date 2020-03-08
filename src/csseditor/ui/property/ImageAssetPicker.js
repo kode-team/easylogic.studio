@@ -1,4 +1,3 @@
-import { editor } from "../../../editor/editor";
 import { LOAD, VDOM, CLICK } from "../../../util/Event";
 import UIElement, { EVENT } from "../../../util/UIElement";
 
@@ -20,7 +19,7 @@ export default class ImageAssetPicker extends UIElement {
   }
 
   [LOAD("$imageList") + VDOM]() {
-    var current = editor.selection.currentProject || { images: [] }
+    var current = this.$selection.currentProject || { images: [] }
 
     var images = current.images;   
     var results = images.map( (image) => {
@@ -38,7 +37,7 @@ export default class ImageAssetPicker extends UIElement {
   }
 
   [CLICK('$imageList .image-item')] (e) {
-    var $img = e.$delegateTarget.$('img');
+    var $img = e.$dt.$('img');
     this.updateData($img.attr('src'));
   }
 

@@ -1,7 +1,6 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
 import { POINTERSTART, MOVE, END, DOUBLECLICK, BIND, CLICK } from "../../../util/Event";
 import { Length } from "../../../editor/unit/Length";
-import { editor } from "../../../editor/editor";
 import { Transform } from "../../../editor/css-property/Transform";
 import { calculateAngle } from "../../../util/functions/math";
 import icon from "../icon/icon";
@@ -54,22 +53,22 @@ export default class RotateEditorView extends UIElement {
     }
 
     [CLICK('$directionArea .direction')] (e) {
-        var direction = e.$delegateTarget.attr('data-value');
+        var direction = e.$dt.attr('data-value');
         var value = Length.deg(DEFINED_ANGLES[direction] || 0)
-        editor.selection.each(item => {
+        this.$selection.each(item => {
             const transform = Transform.replace(item.transform, {  type: 'rotateZ', value: [value]})
             item.reset({ transform})
         })
                  
         this.bindData('$rotateZ')
         this.emit('refreshSelectionStyleView', null, false, true)
-        editor.selection.setRectCache()
+        this.$selection.setRectCache()
 
     }
 
     [BIND('$rotateContainer')] () {
 
-        var current = editor.selection.current || {transform: ''};
+        var current = this.$selection.current || {transform: ''};
 
         var transform = Transform.filter(current.transform || '', it => {
             return it.type === 'rotateX' || it.type === 'rotateY'; 
@@ -84,7 +83,7 @@ export default class RotateEditorView extends UIElement {
 
     [BIND('$rotateZ')] () {
 
-        var current = editor.selection.current || {transform: ''};
+        var current = this.$selection.current || {transform: ''};
 
         var transform = Transform.filter(current.transform || '', it => {
             return it.type === 'rotate' || it.type === 'rotateZ'; 
@@ -98,11 +97,11 @@ export default class RotateEditorView extends UIElement {
     }
 
     [DOUBLECLICK('$rotateArea')] () {
-        editor.selection.each(item => {
+        this.$selection.each(item => {
             item.reset({ transform: Transform.remove(item.transform, ['rotateX', 'rotateY']) })
         })
         this.bindData('$rotateContainer');
-        editor.selection.setRectCache()        
+        this.$selection.setRectCache()        
         this.emit('refreshSelectionStyleView', null, false, true)       
     }
 
@@ -125,7 +124,7 @@ export default class RotateEditorView extends UIElement {
     }
 
     moveEndRotateXY (dx, dy) {
-        editor.selection.setRectCache()        
+        this.$selection.setRectCache()        
         this.emit('refreshSelectionStyleView')
     }
 
@@ -142,10 +141,10 @@ export default class RotateEditorView extends UIElement {
 
 
     modifyRotateXY (dx, dy) {
-        var rx = Length.deg(-dy / editor.scale)
-        var ry = Length.deg(dx / editor.scale)
+        var rx = Length.deg(-dy / this.$editor.scale)
+        var ry = Length.deg(dx / this.$editor.scale)
 
-        editor.selection.each((item, cachedItem) => {
+        this.$selection.each((item, cachedItem) => {
 
             this.modifyCacheItem(item, cachedItem, Length.deg(0), 'rotateX', rx)
             this.modifyCacheItem(item, cachedItem, Length.deg(0), 'rotateY', ry)
@@ -155,11 +154,11 @@ export default class RotateEditorView extends UIElement {
     }
 
     [DOUBLECLICK('$handle')] () {
-        editor.selection.each(item => {
+        this.$selection.each(item => {
             item.reset({ transform: Transform.remove(item.transform, ['rotateZ', 'rotate']) })
         })
         this.bindData('$rotateZ');        
-        editor.selection.setRectCache()        
+        this.$selection.setRectCache()        
         this.emit('refreshSelectionStyleView', null, false, true)        
     }
 
@@ -177,13 +176,13 @@ export default class RotateEditorView extends UIElement {
     }
 
     end () {
-        editor.selection.setRectCache()
+        this.$selection.setRectCache()
         this.emit('refreshSelectionStyleView')
     }
 
 
     modifyRotateZ(dx, dy) {
-        var e = editor.config.get('bodyEvent');
+        var e = this.$config.get('bodyEvent');
         var x = this.rotateZStart.x - this.rotateZCenter.x
         var y = this.rotateZStart.y - this.rotateZCenter.y
 
@@ -197,7 +196,7 @@ export default class RotateEditorView extends UIElement {
         var distAngle = Length.deg(angle - angle1);
 
        
-        editor.selection.each((item, cachedItem) => {
+        this.$selection.each((item, cachedItem) => {
             var tempRotateZ = Length.deg(0)
 
             if (cachedItem.rotateZ) { 
@@ -231,7 +230,7 @@ export default class RotateEditorView extends UIElement {
     }
 
     setCacheBaseTrasnform (...args) {
-        editor.selection.each((item, cachedItem) => {
+        this.$selection.each((item, cachedItem) => {
             item.transformObj = Transform.parseStyle(item.transform);
             cachedItem.transformObj = Transform.parseStyle(cachedItem.transform);
 

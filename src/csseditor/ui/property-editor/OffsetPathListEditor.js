@@ -1,10 +1,7 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
 import { LOAD, BIND } from "../../../util/Event";
 import SelectEditor from "./SelectEditor";
-import { editor } from "../../../editor/editor";
 import RangeEditor from "./RangeEditor";
-
-const i18n = editor.initI18n('offset.path.list.editor')
 
 export default class OffsetPathListEditor extends UIElement {
 
@@ -54,7 +51,7 @@ export default class OffsetPathListEditor extends UIElement {
     }
 
     getOptions () {
-        var artboard = editor.selection.currentArtboard;
+        var artboard = this.$selection.currentArtboard;
 
         var paths = {} 
         if (artboard) {
@@ -83,19 +80,19 @@ export default class OffsetPathListEditor extends UIElement {
         return /*html*/`
         <div>
             <div class='offset-path-item'>
-                <SelectEditor ref='$path' label='${i18n('path')}' key="id" value="${id}" options="${options}" onchange='changeRangeEditor' />
+                <SelectEditor ref='$path' label='${this.$i18n('offset.path.list.editor.path')}' key="id" value="${id}" options="${options}" onchange='changeRangeEditor' />
             </div>
             <div class='offset-path-item'>
-                <div>${i18n('totalLength')}: <span ref='$totalLength'>${paths[id] && paths[id].totalLength || 0}</span></div>
+                <div>${this.$i18n('offset.path.list.editor.totalLength')}: <span ref='$totalLength'>${paths[id] && paths[id].totalLength || 0}</span></div>
             </div>
             <div class='offset-path-item'>
-                <RangeEditor ref='$distance' label='${i18n('distance')}' min="0" max="100" value="${distance || '0%'}" key='distance' unit="%,px" onchange='changeRangeEditor' /> 
+                <RangeEditor ref='$distance' label='${this.$i18n('offset.path.list.editor.distance')}' min="0" max="100" value="${distance || '0%'}" key='distance' unit="%,px" onchange='changeRangeEditor' /> 
             </div>
             <div class='offset-path-item'>
-                <SelectEditor ref='$status' label='${i18n('direction')}' key='rotateStatus' value="${rotateStatus}" options="auto,auto angle,angle,reverse,element" onchange='changeRangeEditor' /> 
+                <SelectEditor ref='$status' label='${this.$i18n('offset.path.list.editor.direction')}' key='rotateStatus' value="${rotateStatus}" options="auto,auto angle,angle,reverse,element" onchange='changeRangeEditor' /> 
             </div>
             <div class='offset-path-item'>
-                <RangeEditor ref='$rotate' label='${i18n('rotate')}' min="0" max="2000" key='rotate' value='${rotate || '0deg'}' units="deg,turn" onchange='changeRangeEditor' /> 
+                <RangeEditor ref='$rotate' label='${this.$i18n('offset.path.list.editor.rotate')}' min="0" max="2000" key='rotate' value='${rotate || '0deg'}' units="deg,turn" onchange='changeRangeEditor' /> 
             </div>     
         </div>           
         `

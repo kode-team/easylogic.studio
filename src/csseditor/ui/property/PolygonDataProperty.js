@@ -1,5 +1,4 @@
 import BaseProperty from "./BaseProperty";
-import { editor } from "../../../editor/editor";
 import { EVENT } from "../../../util/UIElement";
 import { DEBOUNCE } from "../../../util/Event";
 import PolygonDataEditor from "../property-editor/PolygonDataEditor";
@@ -8,7 +7,7 @@ import PolygonDataEditor from "../property-editor/PolygonDataEditor";
 export default class PolygonDataProperty extends BaseProperty {
 
   getTitle() {
-    return editor.i18n('polygon.data.property.title');
+    return this.$i18n('polygon.data.property.title');
   }
 
   getClassName() {
@@ -39,12 +38,12 @@ export default class PolygonDataProperty extends BaseProperty {
   refresh() {
     // update 를 어떻게 할지 고민 
 
-    var current = editor.selection.current || {};
+    var current = this.$selection.current || {};
     this.children.$polygonData.setValue(current.points);
   }
 
   getBody() {
-    var current = editor.selection.current || {};
+    var current = this.$selection.current || {};
 
     return /*html*/`
       <div>
