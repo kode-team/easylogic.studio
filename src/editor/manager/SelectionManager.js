@@ -1,7 +1,6 @@
-import { isFunction, isUndefined, isArray } from "../util/functions/func";
-import { Length } from "./unit/Length";
-import AreaItem from "./items/AreaItem";
-
+import { isFunction, isUndefined, isArray } from "../../util/functions/func";
+import { Length } from "../unit/Length";
+import AreaItem from "../items/AreaItem";
 
 
 const roundedLength = (px, fixedRound = 1) => {
@@ -15,14 +14,16 @@ function _traverse(obj, id) {
     results.push(..._traverse(it, id));
   })
 
-  if (id.includes(obj.id)) {
+  if (id.id) {
+    results.push(obj);
+  } else if (id.includes(obj.id)) {
     results.push(obj);
   }
 
   return results; 
 }
 
-export class Selection {
+export class SelectionManager {
   constructor() {
 
     this.project = null;

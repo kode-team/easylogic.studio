@@ -1,6 +1,6 @@
 const config = new Map()
 
-export class Config {
+export class ConfigManager {
 
     constructor (editor) {
         this.editor = editor;

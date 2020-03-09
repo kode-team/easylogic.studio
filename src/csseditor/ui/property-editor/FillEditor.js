@@ -190,7 +190,7 @@ export default class FillEditor extends UIElement  {
     var project = this.$selection.currentProject;
     if (project) {
       [...e.target.files].forEach(item => {
-        this.emit('update.asset.image', item, (local) => {
+        this.emit('updateImageAssetItem', item, (local) => {
           this.trigger('setImageUrl', local);
         });
       })

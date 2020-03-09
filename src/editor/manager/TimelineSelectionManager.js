@@ -1,4 +1,4 @@
-export class TimelineSelection {
+export class TimelineSelectionManager {
   constructor(editor) {
     this.editor = editor;
     this.items = [];

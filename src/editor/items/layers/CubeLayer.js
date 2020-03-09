@@ -2,7 +2,7 @@ import { Component } from "../Component";
 import { Length } from "../../unit/Length";
 import icon from "../../../csseditor/ui/icon/icon";
 import { CSS_TO_STRING } from "../../../util/functions/func";
-import { ComponentManager } from "../../ComponentManager";
+import { ComponentManager } from "../../manager/ComponentManager";
 
 const faceKeys = [
   'front', 'back', 'left', 'right', 'bottom', 'top'

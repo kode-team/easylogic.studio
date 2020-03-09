@@ -70,12 +70,12 @@ export default class TimelineAnimationProperty extends BaseProperty {
   }
 
   [CLICK('$add')] (e) {
-    this.emit('add.timeline');
+    this.emit('addTimelineItem');
   }
 
   [CLICK('$timelineAnimationList .timeline-animation-item .remove')] (e) {
     var id = e.$dt.attr('data-id');
-    this.emit('remove.animation', id);
+    this.emit('removeAnimationItem', id);
     // this.refresh();
   }
 

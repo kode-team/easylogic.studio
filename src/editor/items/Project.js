@@ -1,5 +1,5 @@
 import { AssetItem } from "./AssetItem";
-import { ComponentManager } from "../ComponentManager";
+import { ComponentManager } from "../manager/ComponentManager";
 
 export class Project extends AssetItem {
   getDefaultTitle() {

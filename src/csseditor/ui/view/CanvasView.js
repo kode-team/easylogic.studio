@@ -26,7 +26,7 @@ export default class CanvasView extends UIElement {
 
   afterRender() {
 
-    this.emit('load.json');
+    this.emit('loadJSON');
   }
   template() {
     return/*html*/`
@@ -70,11 +70,11 @@ export default class CanvasView extends UIElement {
   }
 
   [KEYUP('$el') + IF('isNumberKey') + IF('isNotFormElement') + PREVENT] (e) {
-    this.emit('keyup.canvas.view', e.key);
+    this.emit('keyupCanvasView', e.key);
   }
 
   [KEYDOWN('$el') + IF('isArrowKey') + IF('isNotFormElement')] (e) {
-    this.emit('arrow.keydown.canvas.view', e.key, e.altKey, e.shiftKey);
+    this.emit('arrowKeydownCanvasView', e.key, e.altKey, e.shiftKey);
   }  
 
   [WHEEL('$lock') + ALT + PREVENT + THROTTLE(10)] (e) {
@@ -153,7 +153,7 @@ export default class CanvasView extends UIElement {
   [DROP() + PREVENT] (e) { 
     var imageUrl = e.dataTransfer.getData('image/info');
 
-    this.emit('drop.image.url', imageUrl)
+    this.emit('dropImageUrl', imageUrl)
   } 
 
   [EVENT('refreshComputedStyle') + DEBOUNCE(100)] (last) {

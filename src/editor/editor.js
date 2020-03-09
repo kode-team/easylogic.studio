@@ -1,13 +1,20 @@
-import { Config } from "./Config";
-import { Selection } from "./Selection";
-import { TimelineSelection } from "./TimelineSelection";
+
+
 import i18n from "../csseditor/i18n";
 import theme from "../csseditor/ui/theme";
-import { ComponentManager } from "./ComponentManager";
+
+import { TimelineSelectionManager } from "./manager/TimelineSelectionManager";
+import { SelectionManager } from "./manager/SelectionManager";
+import { ComponentManager } from "./manager/ComponentManager";
+import { CommandManager } from "./manager/CommandManager";
+import { ShortCutManager } from "./manager/ShortCutManager";
+import { ConfigManager } from "./manager/ConfigManager";
+
 import AssetParser from "./parse/AssetParser";
-import { isArray, isObject, isString } from "../util/functions/func";
+import { isArray, isObject, isString, isFunction } from "../util/functions/func";
 import commands from "../csseditor/commands";
-import { CommandManager } from "./CommandManager";
+import shortcuts from "../csseditor/shortcuts";
+
 
 export const EDITOR_ID = "";
 
@@ -19,10 +26,13 @@ const DEFAULT_THEME = 'dark'
 
 export class Editor {
   constructor(opt = {}) {
-    this.config = new Config(this);
+    this.config = new ConfigManager(this);
     this.commands = new CommandManager(this);
-    this.selection = new Selection();
-    this.timeline = new TimelineSelection(this);
+    this.shortcuts = new ShortCutManager(this);
+    this.selection = new SelectionManager(this);
+    this.timeline = new TimelineSelectionManager(this);
+    this.components = ComponentManager;
+
     this.projects = []     
     this.popupZIndex = 10000;
     this.scale = 1
@@ -34,17 +44,27 @@ export class Editor {
     this.locale = this.loadItem('locale') || 'en_US'
     this.$store = opt.$store;
 
-    this.components = {} 
-
     this.initTheme();
     this.loadCommands();
+    this.loadShortCuts();
   }
 
   loadCommands() {
     Object.keys(commands).forEach(command => {
-      this.commands.registerCommand(command, commands[command]);
+      if (isFunction(commands[command])) {
+        this.commands.registerCommand(command, commands[command]);
+      } else {
+        this.commands.registerCommand(commands[command])
+      }
+
     })
   }
+
+  loadShortCuts() {
+    shortcuts.forEach(shortcut => {
+      this.shortcuts.registerShortCut(shortcut);
+    })
+  }  
 
   i18n (key, params = {}, locale) {
     return i18n.get(key, params, locale || this.locale)
@@ -70,18 +90,6 @@ export class Editor {
   setLocale (locale = 'en_US') {
     this.locale = locale; 
     this.saveItem('locale', this.locale);    
-  }
-
-  registerComponent (name, Component) {
-    return ComponentManager.registerComponent(name, Component);
-  }
-
-  getComponentClass(name) {
-    return ComponentManager.getComponentClass(name);
-  }
-
-  createComponent (name, obj = {}) {
-    return ComponentManager.createComponent(name, obj);
   }
 
   setUser (user) {

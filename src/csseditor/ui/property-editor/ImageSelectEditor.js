@@ -40,7 +40,7 @@ export default class ImageSelectEditor extends UIElement {
         var files = [...e.target.files];
         
         if (files.length) {
-            this.emit('update.asset.image', files[0], local => {
+            this.emit('updateImageAssetItem', files[0], local => {
                 this.trigger('changeImageSelectEditor', local);
             });
         }

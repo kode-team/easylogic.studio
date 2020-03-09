@@ -33,6 +33,6 @@ export default class ThemeSwitcher extends UIElement {
     }
 
     [EVENT('changeItem')] (key, theme) {
-        this.emit('switch.theme', theme);
+        this.emit('switchTheme', theme);
     }
 }

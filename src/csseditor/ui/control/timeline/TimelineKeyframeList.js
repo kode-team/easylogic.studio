@@ -206,7 +206,7 @@ export default class TimelineKeyframeList extends UIElement {
     }
 
     [KEYUP('$el') + KEY('Backspace')] (e) {
-        this.emit('delete.timeline.keyframe');
+        this.emit('deleteTimelineKeyframe');
     }
 
     [POINTERSTART('$el') + IF('hasDragPlace') + MOVE('moveDragArea') + END('moveEndDragArea')] (e) {
@@ -358,7 +358,7 @@ export default class TimelineKeyframeList extends UIElement {
 
         var [layerId, property] = e.$dt.attrs('data-layer-id', 'data-property')
         var time = this.getTimeRateByPosition(this.getRealPosition(e).rate);
-        this.emit('add.timeline.keyframe', {layerId, property, time});
+        this.emit('addTimelineKeyframe', {layerId, property, time});
 
         this.refresh();
         this.doubleClicked = true; 

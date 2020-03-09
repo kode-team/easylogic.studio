@@ -1,15 +1,16 @@
 import _refreshSelection from "./_refreshSelection";
+import { Length } from "../../editor/unit/Length";
 
 export default function addArtBoard (editor, obj = {}) {
 
     var project = editor.selection.currentProject;
     if (!project) {
-        project = editor.add(editor.createComponent('project'))
+        project = editor.add(editor.components.createComponent('project'))
 
         editor.selection.selectProject(project);
     }
 
-    var artboard = project.add(editor.createComponent('artboard', {
+    var artboard = project.add(editor.components.createComponent('artboard', {
         x: Length.px(300),
         y: Length.px(300),
         width: Length.px(300),

@@ -10,6 +10,6 @@ export default class Save extends MenuItem {
   }
 
   clickButton(e) {
-    this.emit('save.json')
+    this.emit('saveJSON')
   }
 }

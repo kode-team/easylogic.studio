@@ -104,35 +104,35 @@ export default class TimelinePlayControl extends UIElement {
     }
 
     first () {
-        this.emit('first.timeline')
+        this.emit('firstTimelineItem')
         this.$editor.changeMode('SELECTION');
         this.emit('afterChangeMode')
     }
 
     prev () {
-        this.emit('prev.timeline')
+        this.emit('prevTimelineItem')
         this.$editor.changeMode('SELECTION');
         this.emit('afterChangeMode')
     }
     
     next () {
-        this.emit('next.timeline')
+        this.emit('nextTimelineItem')
         this.$editor.changeMode('SELECTION');
         this.emit('afterChangeMode')           
     }
     
     last () {
-        this.emit('last.timeline')
+        this.emit('lastTimelineItem')
         this.$editor.changeMode('SELECTION');
         this.emit('afterChangeMode')             
     }    
 
     play () {
-        this.emit('play.timeline', this.state.speed, this.state.iterationCount, this.state.direction);
+        this.emit('playTimelineItem', this.state.speed, this.state.iterationCount, this.state.direction);
     }
 
     pause () {
-        this.emit('pause.timeline');
+        this.emit('pauseTimelineItem');
         this.$editor.changeMode('SELECTION');
         this.emit('afterChangeMode')
     }

@@ -93,12 +93,12 @@ export default class TimelineProperty extends BaseProperty {
   }
 
   [EVENT('changeKeyframeValue')] (obj) {
-    this.emit('set.timeline.offset', obj);
+    this.emit('setTimelineOffset', obj);
   }
 
   [DRAGOVER('$area') + PREVENT] (e) { }
   [DROP('$area') + PREVENT] (e) {
-    this.emit('add.timeline', e.dataTransfer.getData('layer/id'));
+    this.emit('addTimelineItem', e.dataTransfer.getData('layer/id'));
   }
 
   onToggleShow() {

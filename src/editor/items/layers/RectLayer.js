@@ -1,6 +1,6 @@
 import { Layer } from "../Layer";
 import icon from "../../../csseditor/ui/icon/icon";
-import { ComponentManager } from "../../ComponentManager";
+import { ComponentManager } from "../../manager/ComponentManager";
 
 export class RectLayer extends Layer {
 

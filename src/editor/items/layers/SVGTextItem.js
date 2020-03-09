@@ -5,7 +5,7 @@ import { hasSVGProperty, hasCSSProperty} from "../../util/Resource";
 import { Shape } from "../../css-property/Shape";
 import { Length } from "../../unit/Length";
 import icon from "../../../csseditor/ui/icon/icon";
-import { ComponentManager } from "../../ComponentManager";
+import { ComponentManager } from "../../manager/ComponentManager";
 
 export class SVGTextItem extends SVGItem {
 

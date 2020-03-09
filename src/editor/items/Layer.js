@@ -1,8 +1,6 @@
 import { DomItem } from "./DomItem";
 import { Length } from "../unit/Length";
 import icon from "../../csseditor/ui/icon/icon";
-import { ComponentManager } from "../ComponentManager";
-
 
 export class Layer extends DomItem {
 
@@ -53,5 +51,3 @@ export class Layer extends DomItem {
   }  
 
 }
-
-ComponentManager.registerComponent('layer', Layer);

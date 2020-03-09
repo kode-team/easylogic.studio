@@ -29,11 +29,11 @@ export default class AnimationSelector extends UIElement {
     }
 
     [CLICK('$add')] () {
-        this.emit('add.timeline');        
+        this.emit('addTimelineItem');        
     }
 
     [CHANGE('$select')] (e) {
-        this.emit('select.timeline', this.refs.$select.value); 
+        this.emit('selectTimelineItem', this.refs.$select.value); 
     }
 
     [EVENT('addTimeline','refreshTimeline')] () {

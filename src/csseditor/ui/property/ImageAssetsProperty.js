@@ -2,6 +2,7 @@ import BaseProperty from "./BaseProperty";
 import { LOAD, CLICK, INPUT, DEBOUNCE, VDOM, DRAGSTART, CHANGE } from "../../../util/Event";
 import { EVENT } from "../../../util/UIElement";
 import icon from "../icon/icon";
+import revokeObjectUrl from "../../../editor/util/revokeObjectUrl";
 
 
 export default class ImageAssetsProperty extends BaseProperty {
@@ -100,7 +101,7 @@ export default class ImageAssetsProperty extends BaseProperty {
   [CHANGE('$imageList .add-image-item input[type=file]')] (e) {
     this.executeImage(project => {
       [...e.target.files].forEach(item => {
-        this.emit('update.asset.image', item);
+        this.emit('updateImageAssetItem', item);
       })
     })
 
@@ -113,7 +114,7 @@ export default class ImageAssetsProperty extends BaseProperty {
 
     this.executeImage(project => {
       project.removeImage(index);
-      this.emit('remove.asset.image', $item.$('.preview img').attr('src'))
+      revokeObjectUrl($item.$('.preview img').attr('src'))
     })
   }
 

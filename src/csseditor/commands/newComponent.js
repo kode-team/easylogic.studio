@@ -31,7 +31,7 @@ export default function newComponent (editor, type, obj) {
         }        
     }
 
-    editor.emit('addLayer', editor.createComponent(type, {
+    editor.emit('addLayer', editor.components.createComponent(type, {
         ...obj,
     }), obj)
 

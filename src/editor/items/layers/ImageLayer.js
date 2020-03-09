@@ -2,7 +2,7 @@ import { Layer } from "../Layer";
 import Dom from "../../../util/Dom";
 import { CSS_TO_STRING } from "../../../util/functions/func";
 import icon from "../../../csseditor/ui/icon/icon";
-import { ComponentManager } from "../../ComponentManager";
+import { ComponentManager } from "../../manager/ComponentManager";
 
 export class ImageLayer extends Layer {
 

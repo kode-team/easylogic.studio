@@ -3,7 +3,7 @@ import { Component } from "../Component";
 import { getXYInCircle, getDist } from "../../../util/functions/math";
 import { Length } from "../../unit/Length";
 import icon from "../../../csseditor/ui/icon/icon";
-import { ComponentManager } from "../../ComponentManager";
+import { ComponentManager } from "../../manager/ComponentManager";
 
 const customKeyValue = {
   'count': true, 

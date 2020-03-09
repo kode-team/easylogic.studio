@@ -1,7 +1,7 @@
 import { Layer } from "../Layer";
 import { OBJECT_TO_PROPERTY, CSS_TO_STRING } from "../../../util/functions/func";
 import icon from "../../../csseditor/ui/icon/icon";
-import { ComponentManager } from "../../ComponentManager";
+import { ComponentManager } from "../../manager/ComponentManager";
 
 export class TextLayer extends Layer {
 

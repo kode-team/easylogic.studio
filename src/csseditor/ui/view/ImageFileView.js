@@ -13,7 +13,7 @@ export default class ImageFileView extends UIElement {
 
     [CHANGE('$file')] (e) {
         this.refs.$file.files.forEach(item => {
-          this.emit('update.image', item, this.state.rect);
+          this.emit('updateImage', item, this.state.rect);
         })
     }
 

@@ -1,7 +1,7 @@
 import { Length } from "../unit/Length";
 import { TimelineItem } from "./TimelineItem";
 import icon from "../../csseditor/ui/icon/icon";
-import { ComponentManager } from "../ComponentManager";
+import { ComponentManager } from "../manager/ComponentManager";
 
 export class ArtBoard extends TimelineItem {
   getDefaultObject(obj = {}) {

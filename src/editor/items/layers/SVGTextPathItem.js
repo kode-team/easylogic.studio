@@ -4,7 +4,7 @@ import { OBJECT_TO_PROPERTY, CSS_TO_STRING } from "../../../util/functions/func"
 import { hasSVGProperty, hasCSSProperty, hasSVGPathProperty } from "../../util/Resource";
 import { Length } from "../../unit/Length";
 import icon from "../../../csseditor/ui/icon/icon";
-import { ComponentManager } from "../../ComponentManager";
+import { ComponentManager } from "../../manager/ComponentManager";
 
 export class SVGTextPathItem extends SVGItem {
 

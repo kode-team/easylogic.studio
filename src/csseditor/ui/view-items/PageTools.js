@@ -33,7 +33,7 @@ export default class PageTools extends UIElement {
     scale = round(scale * 100, 100)
 
     this.children.$scale.setValue(scale);
-    this.emit('update.scale', scale/100);
+    this.emit('updateScale', scale/100);
   }
 
   [EVENT('changeRangeEditor') + DEBOUNCE(1000)] (key, scale) {

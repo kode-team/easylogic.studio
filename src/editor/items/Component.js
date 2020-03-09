@@ -1,5 +1,5 @@
 import { Layer } from "./Layer";
-import { ComponentManager } from "../ComponentManager";
+import { ComponentManager } from "../manager/ComponentManager";
 
 /**
  * Complex Component with children 

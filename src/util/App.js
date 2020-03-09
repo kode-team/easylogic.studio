@@ -16,6 +16,14 @@ const MOVE_CHECK_MS = 10;
 export const start = opt => {
   class App extends UIElement {
 
+    get commands () {
+      return this.$editor.commands;
+    }
+
+    get shortcuts () {
+      return this.$editor.shortcuts;
+    }
+
     initialize(modules = []) {
 
       this.$store = new BaseStore({

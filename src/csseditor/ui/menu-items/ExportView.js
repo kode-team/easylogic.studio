@@ -10,6 +10,6 @@ export default class ExportView extends MenuItem {
   }
 
   clickButton(e) {
-    this.emit('show.exportView')
+    this.emit('showExportView')
   }
 }

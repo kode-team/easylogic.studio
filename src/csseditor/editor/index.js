@@ -18,7 +18,6 @@ import ObjectList from "../ui/control/ObjectList";
 import LogoView from "../ui/view/LogoView";
 import ExternalToolMenu from "../ui/view/ExternalToolMenu";
 import icon from "../ui/icon/icon";
-import CommandView from "../ui/view/CommandView";
 import Dom from "../../util/Dom";
 import Resource from "../../editor/util/Resource";
 import windowList from "../ui/window-list";
@@ -95,7 +94,6 @@ export default class CSSEditor extends UIElement {
         <FillPickerPopup />
         <SVGFilterPopup />
         <StyleView />    
-        <CommandView />    
         <ExportWindow />
         <!-- LoginWindow / -->
         <!-- SignWindow / -->
@@ -109,7 +107,6 @@ export default class CSSEditor extends UIElement {
       ...windowList,
       ...popup,
       ObjectList,
-      CommandView,
       Inspector,
       ToolMenu,
       CanvasView,
@@ -159,7 +156,7 @@ export default class CSSEditor extends UIElement {
 
     var items = Resource.getAllDropItems(e);
 
-    this.emit('drop.items', items);
+    this.emit('fileDropItems', items);
 
   }
 }

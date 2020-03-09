@@ -126,7 +126,7 @@ export default class SVGFilterSelectEditor extends UIElement {
 
         if (value == 'new') {
 
-            this.emit('add.assets.svgfilter', (index, id) => {
+            this.emit('addSVGFilterAssetItem', (index, id) => {
                 this.updateData({ value: id })
         
                 this.refresh();

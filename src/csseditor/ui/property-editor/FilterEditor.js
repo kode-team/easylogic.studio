@@ -333,7 +333,7 @@ export default class FilterEditor extends UIElement {
 
     if (filterType === 'svg') {
 
-      this.emit('add.assets.svgfilter', (index, id) => {
+      this.emit('addSVGFilterAssetItem', (index, id) => {
         this.state.filters.push(this.makeFilter(filterType, {
           value: id
         }))

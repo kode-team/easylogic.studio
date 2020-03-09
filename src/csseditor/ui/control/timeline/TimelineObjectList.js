@@ -119,7 +119,7 @@ export default class TimelineObjectList extends UIElement {
         if (property) {
             var current = this.$selection.current;
 
-            this.emit('add.timeline.property', {
+            this.emit('addTimelineProperty', {
               layerId, 
               property, 
               value: current[property]
@@ -132,7 +132,7 @@ export default class TimelineObjectList extends UIElement {
 
 
       if (layerId) {
-          this.emit('remove.timeline', layerId)
+          this.emit('removeTimeline', layerId)
       }
   }
 
@@ -141,7 +141,7 @@ export default class TimelineObjectList extends UIElement {
       var property = e.$dt.attr('data-property')
 
       if (property) {
-        this.emit('copy.timeline.property', layerId, property)
+        this.emit('copyTimelineProperty', layerId, property)
       }       
     }
 
@@ -150,7 +150,7 @@ export default class TimelineObjectList extends UIElement {
       var property = e.$dt.attr('data-property')
 
       if (property) {
-        this.emit('remove.timeline.property', layerId, property)
+        this.emit('removeTimelineProperty', layerId, property)
       }       
     }    
 
