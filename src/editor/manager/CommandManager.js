@@ -13,7 +13,8 @@ export class CommandManager {
             }
             callback.source = command;
             this.$editor.$store.on(command, callback, this, 0);
-        } else if (isObject(command)) {
+
+        } else if (isObject(command)) {     // command object { command, title, description, debounce, execute }
             const callback = (...args) => {
                 command.execute.call(command, this.$editor, ...args);
             }

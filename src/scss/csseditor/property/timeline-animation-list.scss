@@ -14,12 +14,11 @@
         cursor: pointer;
 
         .preview {
-            // height: 110px;
-            background-color: $background-color;
-            border-radius: 3px;
-            border:1px solid $border-color;            
-            cursor: pointer;            
-            // display: none;
+            svg {
+                vertical-align: middle;
+                width: 20px;
+                height: 20px;
+            }
         }
 
 
@@ -28,8 +27,10 @@
             grid-template-columns: 1fr 60px;
             grid-column-gap: 3px;
 
+
             label {
                 padding: 2px 0px;                
+                cursor: pointer;                
             }
 
 

@@ -122,6 +122,7 @@ import bottom from "./bottom";
 import middle from "./middle";
 import same_width from "./same_width";
 import same_height from "./same_height";
+import local_movie from "./local_movie";
 
 
 const alias = {
@@ -130,6 +131,7 @@ const alias = {
 
 export default {
   ...alias,
+  local_movie,
   same_height,
   same_width,
   middle,

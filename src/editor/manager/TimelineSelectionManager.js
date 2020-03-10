@@ -1,6 +1,6 @@
 export class TimelineSelectionManager {
   constructor(editor) {
-    this.editor = editor;
+    this.$editor = editor;
     this.items = [];
     this.itemKeys = {} 
   }
@@ -11,7 +11,7 @@ export class TimelineSelectionManager {
   }
 
   currentArtBoard (callback) {
-    var artboard = this.this.$selection.currentArtboard;
+    var artboard = this.$editor.selection.currentArtboard;
 
     if (artboard) {
       callback && callback (artboard);
