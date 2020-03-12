@@ -25,7 +25,7 @@ export default {
 
             editor.timeline.select(...list);
             editor.emit('refreshTimeline');
-            editor.trigger('refreshSelectedOffset');
+            editor.emit('refreshSelectedOffset');
         })        
     }
 }

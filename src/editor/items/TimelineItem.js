@@ -160,8 +160,6 @@ export class TimelineItem extends DomItem {
 
       var time = timeline.currentTime;
 
-      // console.log('-------------------------', time);
-
       this.searchTimelineOffset(time).filter(filterFunction).forEach(it => {
 
         if (it.property === 'offset-path') {
