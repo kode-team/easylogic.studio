@@ -6,7 +6,7 @@ export default {
 
         _currentArtboard(editor, (artboard, timeline) => {
             var list = []
-            this.$selection.each(item => {
+            editor.selection.each(item => {
 
                 var keyframeObj = {
                     layerId: item.id,
