@@ -35,13 +35,11 @@
   },
   "scripts": {
     "build:web": "webpack --mode=production --progress",
-    "build:ext": "webpack --mode=production --config=webpack.chrome-extension.config.js",
     "build:ext:whale": "webpack --mode=production --config=webpack.whale-extension.config.js",
     "build": "npm run build:web",
-    "build:all": "npm run build:web && npm run build:ext && npm run build:ext:whale && npm run zip",
-    "zip:ext": "zip -r chrome-extension/chrome-extension.zip chrome-extension",
+    "build:all": "npm run build:web && npm run build:ext:whale && npm run zip",
     "zip:ext:whale": "zip -r whale-extension/whale-extension.zip whale-extension",
-    "zip": "npm run zip:ext && npm run zip:ext:whale",
+    "zip": "npm run zip:ext:whale",
     "dev": "webpack-dev-server --config=webpack.dev.config.js --progress --open",
     "test": "NODE_ENV=test jest --watch"
   },
