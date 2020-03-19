@@ -8,7 +8,7 @@ export const ComponentManager = new class {
   }
 
   getComponentClass(name) {
-    return this.components[name]
+    return this.components[name] || this.components['rect']
   }
 
   createComponent (name, obj = {}) {
