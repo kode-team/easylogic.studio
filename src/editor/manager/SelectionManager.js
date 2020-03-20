@@ -1,4 +1,4 @@
-import { isFunction, isUndefined, isArray } from "../../util/functions/func";
+import { isFunction, isUndefined, isArray, isObject, isString } from "../../util/functions/func";
 import { Length } from "../unit/Length";
 import AreaItem from "../items/AreaItem";
 
@@ -171,6 +171,8 @@ export class SelectionManager {
   itemsByIds(ids = null) {
     if (isArray(ids)) {
       return _traverse(this.artboard, ids)
+    } else if (isString(ids) || isObject(ids)) {
+      return _traverse(this.artboard, [ids]);
     } else {
       return this.items;
     }

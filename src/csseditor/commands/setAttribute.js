@@ -9,7 +9,6 @@ import { isFunction } from "../../util/functions/func";
  * @param {Boolean} isChangeFragment 중간 색상 변화 여부 
  */
 export default function setAttribute (editor, attrs, ids = null, isChangeFragment = false) {
-
     editor.selection.itemsByIds(ids).forEach(item => {
 
         Object.keys(attrs).forEach(key => {
