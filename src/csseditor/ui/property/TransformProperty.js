@@ -53,7 +53,7 @@ export default class TransformProperty extends BaseProperty {
     return /*html*/`
       <select ref="$transformSelect">
       ${transformList.map(transform => {
-        var label = this.$i18n('transform.property.css.item.' + transform)
+        var label = this.$i18n('css.item.' + transform)
         return `<option value='${transform}'>${label}</option>`;
       }).join('')}
       </select>

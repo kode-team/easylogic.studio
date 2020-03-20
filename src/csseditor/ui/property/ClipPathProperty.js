@@ -171,7 +171,7 @@ export default class ClipPathProperty extends BaseProperty {
 
     this.emit('setAttribute', {
       'clip-path': `path(${data.d})`
-    }, current.id);            
+    }, null, true);
   }
 
   [EVENT('changeClipPathPopup')] (data) {

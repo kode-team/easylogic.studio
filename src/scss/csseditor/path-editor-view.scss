@@ -37,7 +37,7 @@
                 path {
                     &.object {
                         pointer-events: visibleStroke;
-                        stroke: rgb(124, 124, 124);
+                        stroke: #848484;
                     }
                 }
             }
@@ -70,7 +70,7 @@
                 path {
                     &.object {
                         pointer-events: visibleStroke;
-                        stroke: rgb(124, 124, 124);
+                        stroke: #848484;
                     }
                 }
             }
@@ -80,7 +80,7 @@
             svg {
                 path {
                     &.object {
-                        stroke: rgba($border-color, 0.5);
+                        stroke: #848484;
                     }                
                     &.split-path {
                         // stroke: $path-guide-color;
@@ -282,7 +282,7 @@
             
             &.object {
                 fill: transparent;
-                stroke: transparent;
+                stroke: #848484;
                 stroke-width: 1; 
             }       
             
