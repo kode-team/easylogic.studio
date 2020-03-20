@@ -35,6 +35,6 @@ export default class LanguageSelector extends UIElement {
     }
 
     [EVENT('changeLocale')] (key, locale) {
-        this.emit('set.locale', locale);
+        this.emit('setLocale', locale);
     }
 }
