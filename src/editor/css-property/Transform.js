@@ -1,6 +1,6 @@
 import { Length } from "../unit/Length";
 import { Property } from "../items/Property";
-import { isString } from "../../util/functions/func";
+import { isString, isFunction } from "../../util/functions/func";
 
 const TRANSFORM_REG = /((matrix|translate(X|Y|Z|3d)?|scale(X|Y|Z|3d)?|rotate(X|Y|Z|3d)?|skew(X|Y)|matrix(3d)?|perspective)\(([^\)]*)\))/gi;
 
@@ -133,7 +133,11 @@ export class Transform extends Property {
   static get (transform, type) {
     var arr = Transform.parseStyle(transform)
 
-    var arr = arr.find(it => it.type === type);
+    if (isFunction(type)) {
+      arr = arr.find(type);
+    } else {
+      arr = arr.find(it => it.type === type);
+    }
 
     if (arr) {
       return arr.value; 

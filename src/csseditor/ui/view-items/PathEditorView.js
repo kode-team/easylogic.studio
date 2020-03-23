@@ -182,6 +182,7 @@ export default class PathEditorView extends PathTransformEditor {
             <div class='path-container' ref='$view'></div>
             <div class='path-tool'>
                 <div class='transform-manager' ref='$tool'>
+                    <div class='transform-tool-item' data-position='to rotate'></div>                
                     <div class='transform-tool-item' data-position='to move'></div>
                     <div class='transform-tool-item' data-position='to top'></div>
                     <div class='transform-tool-item' data-position='to right'></div>

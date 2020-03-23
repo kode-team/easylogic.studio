@@ -36,9 +36,7 @@
             }
             
             &:hover {
-                // background-color: $selected-color;
                 cursor: pointer;
-                // border: 1px solid rgba(0, 0, 0, 0.5);
             }
         }
 
@@ -49,8 +47,8 @@
             height: calc(50% + 1px);
             width: 1px;
             transform: translate(-50%, 0%);
-            background-color: black;
-            display: none;
+            background-color: rgba(0, 0, 0, 0.5);
+            // display: none;
         }
 
     }
@@ -61,7 +59,6 @@
         bottom: 0px;
         top: 0px;
         right: 0px;
-        // background-color: rgba(#c3d3f1, 0.5);
         pointer-events: none;
         border-radius: 100%;
 
@@ -76,11 +73,7 @@
             cursor: pointer;
             pointer-events: all;
             border-radius: 100%;
-            // border-width: 3px;
-            // border-color: rgba(0, 0, 0, 0.5); 
             box-sizing: border-box;
-            // border: 1px solid rgba(#c3d3f1, 0.5);
-
 
             &:hover {
                 border-color: darken($selected-color, 20%);

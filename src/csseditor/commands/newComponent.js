@@ -14,13 +14,13 @@ export default function newComponent (editor, type, obj) {
     if (type === 'svgtextpath') {
         obj = {
             ...obj,
-            width: Length.px(100),
-            height: Length.px(100),
             text: 'Insert a newText',
             'font-size': Length.parse(obj.height),
             textLength: '100%',
             d: PathStringManager.makeLine(0, obj.height.value, obj.width.value, obj.height.value),
         }
+
+
     } else if (type === 'text') {
         obj = {
             ...obj,

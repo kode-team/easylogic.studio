@@ -2,7 +2,7 @@ import UIElement, { EVENT } from "../../../util/UIElement";
 import { POINTERSTART, MOVE, END, DOUBLECLICK, BIND, CLICK } from "../../../util/Event";
 import { Length } from "../../../editor/unit/Length";
 import { Transform } from "../../../editor/css-property/Transform";
-import { calculateAngle } from "../../../util/functions/math";
+import { calculateAnglePointDistance } from "../../../util/functions/math";
 import icon from "../icon/icon";
 
 const directions = [
@@ -47,7 +47,6 @@ export default class RotateEditorView extends UIElement {
                     <div class='handle-line'></div>                
                     <div class='handle' ref='$handle'>${icon.gps_fixed}</div>
                 </div>                
-
             </div>
         `
     }
@@ -157,7 +156,7 @@ export default class RotateEditorView extends UIElement {
         this.$selection.each(item => {
             item.reset({ transform: Transform.remove(item.transform, ['rotateZ', 'rotate']) })
         })
-        this.bindData('$rotateZ');        
+        this.bindData('$rotateZ');             
         this.$selection.setRectCache()        
         this.emit('refreshSelectionStyleView', null, false, true)        
     }
@@ -169,8 +168,7 @@ export default class RotateEditorView extends UIElement {
     move (dx, dy) {
         this.modifyRotateZ(dx, dy);
 
-        this.bindData('$rotateZ');
-
+        this.bindData('$rotateZ');            
         this.emit('refreshSelectionStyleView', null, false, true)
 
     }
@@ -183,17 +181,11 @@ export default class RotateEditorView extends UIElement {
 
     modifyRotateZ(dx, dy) {
         var e = this.$config.get('bodyEvent');
-        var x = this.rotateZStart.x - this.rotateZCenter.x
-        var y = this.rotateZStart.y - this.rotateZCenter.y
-
-        var angle1 = calculateAngle(x, y); 
-
-        var x = this.rotateZStart.x + dx - this.rotateZCenter.x
-        var y = this.rotateZStart.y + dy - this.rotateZCenter.y
-
-        var angle = calculateAngle(x, y);
-
-        var distAngle = Length.deg(angle - angle1);
+        var distAngle = Length.deg(Math.floor(calculateAnglePointDistance(
+            this.rotateZStart,
+            this.rotateZCenter,
+            {dx, dy}
+        )));
 
        
         this.$selection.each((item, cachedItem) => {

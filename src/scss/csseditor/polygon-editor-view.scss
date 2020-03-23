@@ -32,10 +32,9 @@
         line {
             stroke: $path-guide-color; 
             stroke-width: 1; 
-            // stroke-dasharray: 5 2; 
 
             &[data-guide='true'] {
-                stroke: purple;
+                stroke: $border-color;
                 pointer-events: none;
             }
         }

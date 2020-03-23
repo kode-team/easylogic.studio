@@ -1,6 +1,6 @@
 import SegmentManager from "./SegmentManager";
 import { clone, OBJECT_TO_PROPERTY } from "../../util/functions/func";
-import { getDist, calculateAngle, getXYInCircle, calculateAngle360, degreeToRadian, div } from "../../util/functions/math";
+import { getDist, calculateAngle, getXYInCircle, calculateAngle360, degreeToRadian, div, calculateAngleByPoints, calculateAnglePointDistance } from "../../util/functions/math";
 import Point from "./Point";
 import PathStringManager from "./PathStringManager";
 import matrix from "../../util/functions/matrix";
@@ -268,6 +268,8 @@ export default class PathGenerator {
     transform (type, dx = 0, dy = 0) {
 
         var {x, y, width, height} = this.transformRect;
+        var halfWidth = width/2;
+        var halfHeight = height/2;
 
         switch(type) {
         case 'flipX':
@@ -291,27 +293,37 @@ export default class PathGenerator {
         case 'to move': 
             this.applyTransform(matrix.matrix2d.translate(dx, dy)); 
             break; 
+        case 'to rotate': 
+
+            var angle = calculateAnglePointDistance(
+                {x: x + halfWidth, y: y}, 
+                {x: x+halfWidth, y: y + halfHeight}, 
+                {dx, dy}
+            )
+
+            this.applyTransform(
+                matrix.matrix2d.translate(-halfWidth, -halfHeight),                
+                matrix.matrix2d.rotate(degreeToRadian(-angle)),
+                matrix.matrix2d.translate(halfWidth, halfHeight),
+            ); 
+            break; 
         case 'to skewX': 
-            var hw = width/2;
-            var hh = height/2;
 
-            var a = calculateAngle(hw, hh)
-            var b = calculateAngle(hw + dx, hh)
+            var angle = calculateAngleByPoints({
+                x: halfWidth, y: halfHeight
+            },{
+                x: halfWidth + dx, y: halfHeight
+            });                
 
-            var xAngle = a - b;        
-            this.applyTransform(matrix.matrix2d.skewX(degreeToRadian(xAngle))); 
+            this.applyTransform(matrix.matrix2d.skewX(degreeToRadian(angle))); 
             break;             
         case 'to skewY': 
-            var hw = width/2;
-            var hh = height/2;
-
-            var a = calculateAngle(hw, hh)
-            var b = calculateAngle(hw, hh + dy)
-
-            var yAngle = b - a;        
-            this.applyTransform(
-                matrix.matrix2d.skewY(degreeToRadian(yAngle))
-            ); 
+            var angle = calculateAngleByPoints({
+                x: halfWidth, y: halfHeight
+            },{
+                x: halfWidth, y: halfHeight  + dy
+            });                
+            this.applyTransform(matrix.matrix2d.skewY(degreeToRadian(angle))); 
             break;                         
         case 'to bottom right':
 

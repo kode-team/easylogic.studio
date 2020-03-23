@@ -1,4 +1,3 @@
-
 const matrix2d = {
 
     multiply : function (a) {
@@ -10,7 +9,7 @@ const matrix2d = {
                 a[0][0] * x + a[0][1] * y +  a[0][2],
                 a[1][0] * x + a[1][1] * y +  a[1][2],
                 1
-            ];
+            ];            
         };
     },
 
@@ -24,7 +23,7 @@ const matrix2d = {
 
     rotate : function (angle) {
         return this.multiply([
-            [Math.cos(angle) , Math.sin(angle), 0]
+            [Math.cos(angle) , Math.sin(angle), 0],
             [-Math.sin(angle),  Math.cos(angle), 0],
             [0, 0, 1]
         ]);

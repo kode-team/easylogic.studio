@@ -143,7 +143,7 @@ export default class SVGTextProperty extends BaseProperty {
 
     this.emit('setAttribute', { 
       [key]: value
-    })
+    }, null, true)
   }
 
 }

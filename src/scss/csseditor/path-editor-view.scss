@@ -80,7 +80,7 @@
             svg {
                 path {
                     &.object {
-                        stroke: #848484;
+                        stroke: $border-color;
                     }                
                     &.split-path {
                         // stroke: $path-guide-color;
@@ -118,6 +118,14 @@
                 width: 8px;
                 height: 8px;
                 transform: translate(-50%, -50%);                            
+
+                &[data-position="to rotate"] {
+                    left: 50%;
+                    top: -20px;
+                    cursor: move;
+                    border-radius: 100%;
+                    background-color: rgba(255, 255, 255, 1);
+                }
 
                 &[data-position="to move"] {
                     left: 0px;
@@ -190,10 +198,9 @@
         line {
             stroke: $path-guide-color; 
             stroke-width: 1; 
-            // stroke-dasharray: 5 2; 
 
             &[data-guide='true'] {
-                stroke: rgb(145, 145, 145);
+                stroke: $border-color;
                 pointer-events: none;
             }
 
@@ -202,10 +209,6 @@
                 stroke-dasharray: 2 2;
                 pointer-events: none;
             }            
-
-            // &[data-segment="true"] {
-            //     stroke-dasharray: 2 2; 
-            // }
         }
 
         circle {

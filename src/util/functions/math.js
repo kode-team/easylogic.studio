@@ -61,6 +61,29 @@ export function calculateAngle (rx, ry) {
     return radianToDegree(Math.atan2(ry, rx))
 }
 
+export function calculateAngleByPoints(point1, point2) {
+    var a = calculateAngle(point1.x, point1.y)
+    var b = calculateAngle(point2.x, point2.y)
+    
+    var angle = a - b;                
+
+    return angle; 
+}
+
+export function calculateAnglePointDistance(point, center, dist) {
+    var x = point.x - center.x
+    var y = point.y - center.y
+
+    var angle1 = calculateAngle(x, y); 
+
+    var x = point.x + dist.dx - center.x
+    var y = point.y + dist.dy - center.y
+
+    var angle = calculateAngle(x, y) - angle1;
+    
+    return angle; 
+}
+
 export function calculateAngle360 (rx, ry) {
     return (radianToDegree(Math.atan2(ry, rx)) + 180) % 360
 }
