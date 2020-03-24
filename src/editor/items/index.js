@@ -6,7 +6,6 @@ import { CylinderLayer } from "./layers/CylinderLayer";
 import { ArtBoard } from "./ArtBoard";
 import { ImageLayer } from "./layers/ImageLayer";
 import { SVGPathItem } from "./layers/SVGPathItem";
-import { SVGPolygonItem } from "./layers/SVGPolygonItem";
 import { SVGTextItem } from "./layers/SVGTextItem";
 import { SVGTextPathItem } from "./layers/SVGTextPathItem";
 import { TextLayer } from "./layers/TextLayer";
@@ -24,7 +23,6 @@ export default {
     CylinderLayer,
     ImageLayer,
     SVGPathItem,
-    SVGPolygonItem,
     SVGTextItem,
     SVGTextPathItem,
     TextLayer

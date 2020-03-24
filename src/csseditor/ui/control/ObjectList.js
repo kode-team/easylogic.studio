@@ -26,8 +26,6 @@ export default class ObjectList extends UIElement {
           <label>SVG</label>
           <AddSVGRect />
           <AddPath />
-          <AddPolygon />
-          <AddStar />
           <!-- <AddRedGL /> -->
         </div>
       </div>

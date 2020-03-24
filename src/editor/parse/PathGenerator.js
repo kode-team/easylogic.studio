@@ -1238,8 +1238,8 @@ export default class PathGenerator {
         return /*html*/`
         <svg width="100%" height="100%" class='svg-editor-canvas'>
             ${this.makeSelectedSVGZone()}
-            ${this.guideLineManager.toString('guide')}
-            ${this.pathStringManager.toString('object')}
+            ${this.guideLineManager.toString('guide', this.state.isPolygon)}
+            ${this.pathStringManager.toString('object', this.state.isPolygon)}
             ${this.splitLines.join('')}
             ${this.makeSnapLines()}
             ${this.segmentManager.toString()}

@@ -42,8 +42,6 @@ export default class ComponentItems extends UIElement {
             <AddSVGCircle title='Circle' />
             <AddSVGText title='Text' />
             <AddSVGTextPath title='Text Path' />
-            <AddPolygon title='Polygon' />
-            <AddStar title='Star' />
           </div>          
         </div>        
       </div>

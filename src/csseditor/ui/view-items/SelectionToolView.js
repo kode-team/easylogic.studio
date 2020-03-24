@@ -37,8 +37,7 @@ const SelectionToolEvent = class  extends UIElement {
 
     [EVENT('openPathEditor')] () {
         var current = this.$selection.current;
-        if (current && current.is('svg-path', 'svg-textpath')) {
-            this.toggleEditingPolygon(false);
+        if (current && current.is('svg-path', 'svg-textpath', 'svg-polygon')) {
             this.toggleEditingPath(true);
 
             this.emit('showPathEditor', 'modify', {
@@ -51,8 +50,6 @@ const SelectionToolEvent = class  extends UIElement {
                 screenWidth: current.screenWidth,
                 screenHeight: current.screenHeight,
             }) 
-        } else if (current.is('svg-polygon')) {
-            this.trigger('openPolygonEditor');
         }
     }
 
@@ -77,10 +74,6 @@ const SelectionToolEvent = class  extends UIElement {
     [EVENT('finishPathEdit')] () {
         this.toggleEditingPath(false);
     }
-
-    [EVENT('finishPolygonEdit')] () {
-        this.toggleEditingPolygon(false);
-    }    
 
     [EVENT('updatePathItem')] (pathObject) {
 

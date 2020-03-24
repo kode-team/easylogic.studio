@@ -13,8 +13,6 @@ import SameHeight from "./SameHeight";
 import SameWidth from "./SameWidth";
 import CopyItem from "./CopyItem";
 import AddText from "./AddText";
-import AddPolygon from "./AddPolygon";
-import AddStar from "./AddStar";
 import ExportView from "./ExportView";
 import Manual from "./Manual";
 import AddCube from "./AddCube";
@@ -51,8 +49,6 @@ export default {
   AddPath,
   Manual,
   ExportView,
-  AddStar,
-  AddPolygon,
   AddText,
   CopyItem,
   SameHeight,

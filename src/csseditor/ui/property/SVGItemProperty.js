@@ -19,7 +19,7 @@ export default class SVGItemProperty extends BaseProperty {
   }
 
 
-  [EVENT('refreshPathLayer', 'refreshPolygonLayer', 'refreshStyleView')]() {
+  [EVENT('refreshPathLayer', 'refreshStyleView')]() {
 
     var current = this.$selection.current;
 

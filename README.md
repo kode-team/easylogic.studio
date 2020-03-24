@@ -30,8 +30,6 @@ This project is [sapa](https://github.com/easylogic/sapa) based.
 * SVG Circle with path 
 * SVG Text 
 * SVG TextPath
-* SVG Polygon 
-* SVG Polygon Star 
 
 
 ### Style

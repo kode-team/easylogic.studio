@@ -1,17 +1,13 @@
 import UIElement from "../../../util/UIElement";
 
-import StarManager from "./StarManager";
 import PathManager from "./PathManager";
-import PolygonManager from "./PolygonManager";
 
 
 export default class PageSubEditor extends UIElement {
 
   components() {
     return {
-      StarManager,
-      PathManager,
-      PolygonManager
+      PathManager
     }
   }
 
@@ -19,8 +15,6 @@ export default class PageSubEditor extends UIElement {
     return/*html*/`
       <div class='page-subeditor'>
         <PathManager />
-        <PolygonManager />
-        <StarManager />
         <SelectionManager />
       </div>
     `;

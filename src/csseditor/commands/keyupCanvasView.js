@@ -5,10 +5,7 @@ function getAddCommand (key) {
     case '3': return ['addComponentType', 'text'];
     case '4': return ['addComponentType', 'image'];
     case '5': return ['addComponentType', 'cube'];
-    case '6': return ['addComponentType', 'svgrect'];
     case '7': return ['addPath'];
-    case '8': return ['addPolygon'];
-    case '9': return ['addStar'];
     }
 }
 

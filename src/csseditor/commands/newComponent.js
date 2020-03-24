@@ -20,6 +20,21 @@ export default function newComponent (editor, type, obj) {
             d: PathStringManager.makeLine(0, obj.height.value, obj.width.value, obj.height.value),
         }
 
+    } else if (type === 'svg-circle') {
+        type = 'svg-path';
+        obj = {
+            ...obj,
+            'background-color': undefined,            
+            d: PathStringManager.makeCircle(0, 0, obj.width.value, obj.height.value),
+        }        
+
+    } else if (type === 'svg-rect') {
+        type = 'svg-path';
+        obj = {
+            ...obj,
+            'background-color': undefined,
+            d: PathStringManager.makeRect(0, 0, obj.width.value, obj.height.value),
+        }                
 
     } else if (type === 'text') {
         obj = {

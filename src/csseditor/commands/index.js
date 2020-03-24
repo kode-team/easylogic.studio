@@ -1,8 +1,6 @@
 import refreshElement from "./refreshElement";
 import setAttribute from "./setAttribute";
 import resizeArtBoard from "./resizeArtBoard";
-import addStar from "./addStar";
-import addPolygon from "./addPolygon";
 import addPath from "./addPath";
 import convertPath from "./convertPath";
 import addImage from "./addImage";
@@ -98,9 +96,7 @@ export default {
     addImage,
     addLayer,    
     addPath,
-    addPolygon,
     addProject,
-    addStar,
     convertPath,    
     newComponent,
     refreshElement,

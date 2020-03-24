@@ -46,7 +46,6 @@ import TimelineAnimationProperty from "./TimelineAnimationProperty";
 import BorderNewProperty from "./BorderNewProperty";
 import ProjectInformationProperty from "./ProjectInformationProperty";
 import PathDataProperty from "./PathDataProperty";
-import PolygonDataProperty from "./PolygonDataProperty";
 import SVGTextProperty from "./SVGTextProperty";
 import ExportProperty from "./ExportProperty";
 import LayoutProperty from "./LayoutProperty";
@@ -60,7 +59,6 @@ export default {
   LayoutProperty,
   ExportProperty,
   SVGTextProperty,
-  PolygonDataProperty,
   PathDataProperty,
   ProjectInformationProperty,
   BorderNewProperty,

@@ -6,7 +6,6 @@ import Dom from "../../../util/Dom";
 import SelectionToolView from "../view-items/SelectionToolView";
 import GuideLineView from "../view-items/GuideLineView";
 import PathEditorView from "../view-items/PathEditorView";
-import PolygonEditorView from "../view-items/PolygonEditorView";
 import GridLayoutLineView from "../view-items/GridLayoutLineView";
 
 
@@ -17,7 +16,6 @@ export default class ElementView extends UIElement {
             SelectionToolView,
             GuideLineView,
             PathEditorView,
-            PolygonEditorView,
             GridLayoutLineView,
         }
     }
@@ -43,7 +41,6 @@ export default class ElementView extends UIElement {
                 <GridLayoutLineView ref='$gridLayoutLineView' />
                 <SelectionToolView ref='$selectionTool' />
                 <PathEditorView ref='$pathEditorView' />
-                <PolygonEditorView ref='$polygonEditorView' />                     
             </div>
         `
     }
@@ -64,7 +61,6 @@ export default class ElementView extends UIElement {
 
     [EVENT('hideSubEditor')] (e) {
         this.children.$pathEditorView.$el.hide();
-        this.children.$polygonEditorView.$el.hide();
     }
 
     getElement (id) {
@@ -85,7 +81,6 @@ export default class ElementView extends UIElement {
         return $el.hasClass('element-item') === false 
             && $el.hasClass('selection-tool-item') === false 
             && $el.hasClass('path-editor-view') === false 
-            && $el.hasClass('polygon-editor-view') === false
             && $el.hasClass('point') === false
             && $el.hasClass('handle') === false            
             && $el.hasClass('perspective-handle') === false
