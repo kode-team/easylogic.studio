@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
-import { BIND, POINTERSTART, MOVE, END, IF, KEYUP } from "../../../util/Event";
+import { BIND, POINTERSTART, MOVE, END, IF, KEYUP, DROP, DRAGOVER, PREVENT } from "../../../util/Event";
 import { Length } from "../../../editor/unit/Length";
 
 import Dom from "../../../util/Dom";
@@ -7,6 +7,9 @@ import SelectionToolView from "../view-items/SelectionToolView";
 import GuideLineView from "../view-items/GuideLineView";
 import PathEditorView from "../view-items/PathEditorView";
 import GridLayoutLineView from "../view-items/GridLayoutLineView";
+import { BackgroundImage } from "../../../editor/css-property/BackgroundImage";
+import { STRING_TO_CSS, CSS_TO_STRING } from "../../../util/functions/func";
+import { LinearGradient } from "../../../editor/image-resource/LinearGradient";
 
 
 export default class ElementView extends UIElement {
@@ -590,4 +593,14 @@ export default class ElementView extends UIElement {
             })
         }
     }   
+
+    [DRAGOVER('view') + PREVENT] () {}
+    [DROP('$view') + PREVENT] (e) {
+
+        this.emit('dropAsset', {
+            gradient: e.dataTransfer.getData('text/gradient'),
+            color: e.dataTransfer.getData('text/color')
+        })
+
+    }
 }

@@ -49,9 +49,12 @@ import nextTimelineItem from "./nextTimelineItem";
 import lastTimelineItem from "./lastTimelineItem";
 import pauseTimelineItem from "./pauseTimelineItem";
 import addTimelineItem from "./addTimelineItem";
-
+import dropAsset from "./dropAsset";
+import addBackgroundImageGradient from "./addBackgroundImageGradient";
 
 export default {
+    dropAsset,
+    addBackgroundImageGradient,
     addTimelineItem,
     pauseTimelineItem,
     lastTimelineItem,

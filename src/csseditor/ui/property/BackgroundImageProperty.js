@@ -26,7 +26,7 @@ export default class BackgroundImageProperty extends BaseProperty {
   }
 
   getBody() {
-    return `
+    return /*html*/`
       <div class='full' ref='$property'></div>
     `;
   }

@@ -1,5 +1,5 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, CLICK, INPUT, DEBOUNCE } from "../../../util/Event";
+import { LOAD, CLICK, INPUT, DEBOUNCE, DRAGSTART, DRAG } from "../../../util/Event";
 import { EVENT } from "../../../util/UIElement";
 import icon from "../icon/icon";
 import { Gradient } from "../../../editor/image-resource/Gradient";
@@ -27,11 +27,23 @@ export default class GradientAssetsProperty extends BaseProperty {
   }
 
   getBody() {
-    return `
+    return /*html*/`
       <div class='property-item gradient-assets'>
         <div class='gradient-list' ref='$gradientList' data-view-mode='${this.state.mode}'></div>
       </div>
     `;
+  }
+
+  [DRAGSTART('$gradientList .preview')] (e) {
+    const index = e.$dt.attr('data-index');
+
+    var project = this.$selection.currentProject;
+
+    if(project) {
+      const gradient = project.getGradientIndex(+index);
+      e.dataTransfer.effectAllowed = "copy";
+      e.dataTransfer.setData("text/gradient", gradient.gradient);
+    }
   }
 
   [LOAD("$gradientList")]() {
@@ -39,11 +51,11 @@ export default class GradientAssetsProperty extends BaseProperty {
 
     var gradients = current.gradients;
 
-    var results = gradients.map( (item, index) => {
+    var results = gradients.map( (item, index) => { 
 
       return /*html*/`
         <div class='gradient-item' data-index="${index}" data-gradient='${item.gradient}'>
-          <div class='preview' data-index="${index}">
+          <div class='preview' data-index="${index}"  draggable="true">
             <div class='gradient-view' style='background-image: ${item.gradient};'></div>
           </div>
           <div class='title'>

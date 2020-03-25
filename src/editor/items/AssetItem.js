@@ -138,6 +138,10 @@ export class AssetItem extends Item {
     this.json.colors[index] = {...this.json.colors[index], ...value}
   }
 
+  getColorIndex (index) {
+    return this.json.colors[index]
+  }
+
   getColor (name) {
     return this.json.colors.filter(item => item.name === name)[0];
   }
@@ -199,6 +203,10 @@ export class AssetItem extends Item {
 
   setGradientValue(index, value) {
     this.json.gradients[index] = {...this.json.gradients[index], ...value}
+  }
+
+  getGradientIndex (index) {
+    return this.json.gradients[index]
   }
 
   getGradient (name) {

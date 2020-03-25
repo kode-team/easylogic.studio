@@ -17,7 +17,7 @@ export default class ExportCodePen extends UIElement {
   }
 
   [SUBMIT()]() {
-    var obj = ExportManager.generate();
+    var obj = ExportManager.generate(this.$editor);
     this.refs.$codepen.val(JSON.stringify({
       title: "sapa - editor.easylogic.studio",
       description: "https://editor.easylogic.studio",

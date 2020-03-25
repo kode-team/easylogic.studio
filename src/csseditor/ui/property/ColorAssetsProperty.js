@@ -1,5 +1,5 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, CLICK, INPUT, DEBOUNCE } from "../../../util/Event";
+import { LOAD, CLICK, INPUT, DEBOUNCE, DRAGSTART } from "../../../util/Event";
 import { EVENT } from "../../../util/UIElement";
 import icon from "../icon/icon";
 import Color from "../../../util/Color";
@@ -33,6 +33,19 @@ export default class ColorAssetsProperty extends BaseProperty {
     `;
   }
 
+
+  [DRAGSTART('$colorList .preview')] (e) {
+    const index = e.$dt.attr('data-index');
+
+    var project = this.$selection.currentProject;
+
+    if(project) {
+      const color = project.getColorIndex(+index);
+      e.dataTransfer.effectAllowed = "copy";
+      e.dataTransfer.setData("text/color", color.color);
+    }
+  }  
+
   [LOAD("$colorList")]() {
     var current = this.$selection.currentProject || { colors: [] }
 
@@ -42,7 +55,7 @@ export default class ColorAssetsProperty extends BaseProperty {
 
       return /*html*/`
         <div class='color-item' data-index="${index}">
-          <div class='preview' data-index="${index}"><div class='color-view' style='background-color: ${item.color};'></div></div>
+          <div class='preview' data-index="${index}" draggable="true"><div class='color-view' style='background-color: ${item.color};'></div></div>
           <div class='title'>
             <div>
               <input type='text' class='color' data-key='color' readonly value='${item.color}' placeholder="color" />

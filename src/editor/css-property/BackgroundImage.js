@@ -323,9 +323,7 @@ export class BackgroundImage extends Property {
         } else if (value.includes("url")) {
           image = URLImageResource.parse(value);
         }
-
-
-
+        
         backgroundImages[index] = new BackgroundImage({
           type: image.type,
           image
