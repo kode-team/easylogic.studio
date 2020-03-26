@@ -698,6 +698,16 @@ ${this.toSelectorString(prefix)}
     return cssString;
   }
 
+  generateDragView (prefix = '', appendCSS = '') {
+
+    //1. drag 를 위한 스타일 
+    //2. background-image 관련된 속성을 모두 지운다. 
+
+    const cssString = this.generateView(prefix, appendCSS).replace(/background\-/gi, '');
+
+    return cssString;
+  }  
+
   get html () {
     var {elementType, id, name, layers, itemType} = this.json;
 

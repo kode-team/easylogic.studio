@@ -46,11 +46,6 @@ export default class ImageAssetsProperty extends BaseProperty {
           <div class='preview' draggable="true">
             <img src="${image.local}" />
           </div>
-          <div class='title'>
-            <div>
-              <input type='text' class='name' data-key='name' value='${image.name}' placeholder="name" />
-            </div>
-          </div>
           <div class='tools'>
             <button type="button" class='copy'>${icon.copy}</button>          
             <button type="button" class='remove'>${icon.remove}</button>
@@ -127,17 +122,6 @@ export default class ImageAssetsProperty extends BaseProperty {
       project.copyImage(index);
     })
   }  
-
-
-  [INPUT('$imageList input[type=text]')] (e) {
-    var $item = e.$dt.closest('image-item');
-    var index = +$item.attr('data-index');
-    var obj = e.$dt.attrKeyValue('data-key');    
-
-    this.executeImage(project => {
-      project.setImageValue(index, obj);
-    }, false)
-  }
 
   [EVENT('addImageAsset')] () {
     this.refresh();

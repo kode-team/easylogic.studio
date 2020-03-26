@@ -118,7 +118,7 @@ export default class RotateEditorView extends UIElement {
 
         this.bindData('$rotateContainer');
 
-        this.emit('refreshSelectionStyleView', null, false, true)
+        this.emit('refreshSelectionDragStyleView', null, false, true)
 
     }
 
@@ -168,14 +168,14 @@ export default class RotateEditorView extends UIElement {
     move (dx, dy) {
         this.modifyRotateZ(dx, dy);
 
-        this.bindData('$rotateZ');            
-        this.emit('refreshSelectionStyleView', null, false, true)
+        this.bindData('$rotateZ');             
+        this.emit('refreshSelectionDragStyleView', null, false, true)
 
     }
 
     end () {
         this.$selection.setRectCache()
-        this.emit('refreshSelectionStyleView')
+        this.emit('refreshSelectionStyleView')        
     }
 
 

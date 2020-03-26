@@ -149,13 +149,6 @@ export default class CanvasView extends UIElement {
     }
   }
 
-  [DRAGOVER() + PREVENT] (e) { }
-  [DROP() + PREVENT] (e) { 
-    var imageUrl = e.dataTransfer.getData('image/info');
-
-    this.emit('dropImageUrl', imageUrl)
-  } 
-
   [EVENT('refreshComputedStyle') + DEBOUNCE(100)] (last) {
     var computedCSS = this.refs.$canvas.getComputedStyle(...last)
     

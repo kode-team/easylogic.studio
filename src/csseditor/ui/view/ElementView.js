@@ -499,7 +499,11 @@ export default class ElementView extends UIElement {
     }
 
     // 객체를 부분 업데이트 하기 위한 메소드 
-    [EVENT('refreshCanvasForPartial', 'refreshSelectionStyleView')] (obj, isChangeFragment = true,  isLast = false) {
+    [EVENT(
+        'refreshCanvasForPartial', 
+        'refreshSelectionStyleView', 
+        'refreshSelectionDragStyleView'     // tool 에서 드래그 할 때 변경 사항 적용 
+    )] (obj, isChangeFragment = true,  isLast = false) {
         var items = obj ? [obj] : this.$selection.items;
 
         items.forEach(current => {
@@ -523,17 +527,6 @@ export default class ElementView extends UIElement {
             })
         }
     }    
-
-    // @deprecated 
-    // [EVENT('refreshCanvas')] (obj) {
-    //     if (obj) {
-
-    //         this.updateElement(obj);
-    //     } else {
-    //         this.trigger('addElement')
-    //     }
-
-    // }
 
     [EVENT('refreshAllCanvas')] () {
         var artboard = this.$selection.currentArtboard || { html : ''} 
@@ -597,10 +590,29 @@ export default class ElementView extends UIElement {
     [DRAGOVER('view') + PREVENT] () {}
     [DROP('$view') + PREVENT] (e) {
 
-        this.emit('dropAsset', {
-            gradient: e.dataTransfer.getData('text/gradient'),
-            color: e.dataTransfer.getData('text/color')
-        })
+        const id = Dom.create(e.target).attr('data-id');
+
+        if (id) {
+
+            if (this.$selection.length) {
+                this.emit('dropAsset', {
+                    gradient: e.dataTransfer.getData('text/gradient'),
+                    color: e.dataTransfer.getData('text/color'),
+                    imageUrl: e.dataTransfer.getData('image/info')
+                })
+            } else {
+                this.emit('dropAsset', {
+                    gradient: e.dataTransfer.getData('text/gradient'),
+                    color: e.dataTransfer.getData('text/color'),
+                    imageUrl: e.dataTransfer.getData('image/info')
+                }, id)
+            }
+
+
+        } else {
+            const imageUrl = e.dataTransfer.getData('image/info')
+            this.emit('dropImageUrl', imageUrl)
+        }
 
     }
 }

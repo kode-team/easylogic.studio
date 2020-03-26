@@ -53,24 +53,6 @@ const SelectionToolEvent = class  extends UIElement {
         }
     }
 
-
-    [EVENT('openPolygonEditor')] () {
-        var current = this.$selection.current;
-        if (current && current.is('svg-polygon')) {
-            this.toggleEditingPath(false);            
-            this.toggleEditingPolygon(true);
-            this.emit('showPolygonEditor', 'modify', {
-                changeEvent: 'updatePolygonItem',
-                current,
-                points: current.points,
-                screenX: current.screenX,
-                screenY: current.screenY,
-                screenWidth: current.screenWidth,
-                screenHeight: current.screenHeight,
-            }) 
-        }
-    }    
-
     [EVENT('finishPathEdit')] () {
         this.toggleEditingPath(false);
     }
@@ -91,26 +73,7 @@ const SelectionToolEvent = class  extends UIElement {
             }
         }
 
-    }
-
-
-    [EVENT('updatePolygonItem')] (polygonObject) {
-
-        var current = this.$selection.current;
-        if (current) {
-            if (current.updatePolygonItem) {
-                current.updatePolygonItem(polygonObject);
-
-                this.parent.selectCurrent(...this.$selection.items)
-
-                this.$selection.setRectCache();        
-    
-                this.emit('refreshSelectionStyleView', current, true, true);
-
-            }
-        }
-
-    }    
+    } 
 
 
     [EVENT('refreshSelectionTool', 'initSelectionTool')] () { 
@@ -230,19 +193,7 @@ export default class SelectionToolView extends SelectionToolBind {
 
         this.refreshSelectionToolView(dx, dy);
         this.parent.updateRealPosition();    
-        this.emit('refreshSelectionStyleView', null, false)     
-        
-
-        if (this.pointerType === 'move') {
-
-        } else {
-            this.$selection.each(item => {
-                if (item.is('component')) {
-                    this.emit('refreshStyleView', item);  
-                }
-            });
-        }
-
+        this.emit('refreshSelectionDragStyleView', null, true)     
     }
 
     [EVENT('moveByKey')] (dx, dy) {
@@ -277,11 +228,10 @@ export default class SelectionToolView extends SelectionToolBind {
         this.refs.$selectionTool.attr('data-selected-position', '');
         this.refs.$selectionTool.attr('data-selected-movetype', '');
 
-        this.emit('refreshSelectionStyleView', null, false, true)
+        this.emit('refreshSelectionStyleView', null, true, true)
         this.refreshSelectionToolView(dx, dy);   
 
         this.emit('refreshAllElementBoundSize');            
-
         this.emit('removeGuideLine')
     }   
 

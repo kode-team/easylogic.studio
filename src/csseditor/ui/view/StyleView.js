@@ -59,6 +59,19 @@ export default class StyleView extends UIElement {
     }).join('')
   }
 
+  makeDragStyle (item) {
+    if (item.is('project')) {
+      return this.makeProjectStyle(item);
+    }
+
+    const cssString = item.generateDragView(`[data-id='${item.id}']`)
+    return /*html*/`
+      <style type='text/css' data-id='${item.id}-drag'>${cssString}</style>
+    ` + item.layers.map(it => {
+      return this.makeDragStyle(it);
+    }).join('')
+  }
+
 
   refreshStyleHead () {
     var project = this.$selection.currentProject || new Project()
@@ -81,6 +94,15 @@ export default class StyleView extends UIElement {
 
   }
 
+  changeDragStyleHead (item) {
+    var $temp = Dom.create('div')        
+
+    $temp.html(this.makeDragStyle(item)).children().forEach($item => {
+      this.refs.$head.append($item);
+    })
+
+  }  
+
   refreshStyleHeadOne (item, isOnlyOne = false) {
     var list = [item]
     if (!isOnlyOne) {
@@ -88,7 +110,7 @@ export default class StyleView extends UIElement {
     }
 
     var selector = list.map(it => {
-      return `style[data-id="${it.id}"],style[data-id="${it.id}-move"]`
+      return `style[data-id="${it.id}"],style[data-id="${it.id}-drag"]`
     }).join(',');
 
     this.refs.$head.$$(selector).forEach(it => {
@@ -97,6 +119,39 @@ export default class StyleView extends UIElement {
 
     this.changeStyleHead(item)
   }
+
+
+  refreshDragStyleHeadOne (item, isOnlyOne = false) {
+    var list = [item]
+    if (!isOnlyOne) {
+      list = [item, ...item.allLayers]
+    }
+
+    var selector = list.map(it => {
+      return `style[data-id="${it.id}-drag"]`
+    }).join(',');
+
+    this.refs.$head.$$(selector).forEach(it => {
+      it.remove();
+    })
+
+    this.changeDragStyleHead(item)
+  }  
+
+  removeDragStyleHeadOne (item, isOnlyOne = false) {
+    var list = [item]
+    if (!isOnlyOne) {
+      list = [item, ...item.allLayers]
+    }
+
+    var selector = list.map(it => {
+      return `style[data-id="${it.id}-drag"]`
+    }).join(',');
+
+    this.refs.$head.$$(selector).forEach(it => {
+      it.remove();
+    })
+  }    
 
 
   makeSvg (project) {
@@ -163,6 +218,58 @@ export default class StyleView extends UIElement {
       this.refreshStyleHeadOne(item, true);
     })
   }  
+
+  [EVENT('removeSelectionDragStyleView')] (obj = null) {
+    var ids = obj; 
+
+    if (isArray(obj)) {
+      ids = obj
+    } else if (obj !== null) {
+      ids = [obj]
+    }
+
+    let items = [] 
+
+    if (!ids) {
+      items = this.$selection.items
+    } else if (isString(ids[0])) {
+      items = this.$selection.itemsByIds(ids);
+    } else {
+      items = ids; 
+    }
+
+    items.forEach(item => {
+      this.removeDragStyleHeadOne(item, true);
+    })
+  }
+
+  /**
+   * 
+   * @param {String|Object|Array<string>|Array<object>} obj  ,  id 리스트를 만들기 위한 객체, 없으면 selection에 있는 객체 전체
+   */
+  [EVENT('refreshSelectionDragStyleView')] (obj = null) {
+    var ids = obj; 
+
+    if (isArray(obj)) {
+      ids = obj
+    } else if (obj !== null) {
+      ids = [obj]
+    }
+
+    let items = [] 
+
+    if (!ids) {
+      items = this.$selection.items
+    } else if (isString(ids[0])) {
+      items = this.$selection.itemsByIds(ids);
+    } else {
+      items = ids; 
+    }
+
+    items.forEach(item => {
+      this.refreshDragStyleHeadOne(item, true);
+    })
+  }    
 
   refresh() {
     this.load();
