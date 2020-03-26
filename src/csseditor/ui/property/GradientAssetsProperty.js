@@ -59,7 +59,7 @@ export default class GradientAssetsProperty extends BaseProperty {
             <div class='gradient-view' style='background-image: ${item.gradient};'></div>
           </div>
           <div class='title'>
-            <div>
+           <!-- <div>
               <input type='text' class='value' data-key='value' value='${item.gradient}' placeholder="name" />
             </div>          
             <div>
@@ -67,7 +67,7 @@ export default class GradientAssetsProperty extends BaseProperty {
             </div>
             <div>
               <input type='text' class='var' data-key='variable' value='${item.variable}' placeholder="--var" />
-            </div>
+            </div> -->
           </div>
           <div class='tools'>
             <button type="button" class='copy'>${icon.copy}</button>          

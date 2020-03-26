@@ -57,13 +57,13 @@ export default class ColorAssetsProperty extends BaseProperty {
         <div class='color-item' data-index="${index}">
           <div class='preview' data-index="${index}" draggable="true"><div class='color-view' style='background-color: ${item.color};'></div></div>
           <div class='title'>
-            <div>
+            <!--<div>
               <input type='text' class='color' data-key='color' readonly value='${item.color}' placeholder="color" />
             </div>
             <div>
               <input type='text' class='name' data-key='name' value='${item.name}' placeholder="name" />
             </div>
-            <!--<div>
+            <div>
               <input type='text' class='var' data-key='variable' value='${item.variable}' placeholder="--var" />
             </div>-->
           </div>
@@ -124,15 +124,15 @@ export default class ColorAssetsProperty extends BaseProperty {
     })
   }  
 
-  [INPUT('$colorList input')] (e) {
-    var $item = e.$dt.closest('color-item');
-    var index = +$item.attr('data-index');
-    var obj = e.$dt.attrKeyValue('data-key');    
+  // [INPUT('$colorList input')] (e) {
+  //   var $item = e.$dt.closest('color-item');
+  //   var index = +$item.attr('data-index');
+  //   var obj = e.$dt.attrKeyValue('data-key');    
 
-    this.executeColor(project => {
-      project.setColorValue(index, obj);      
-    }, false)
-  }
+  //   this.executeColor(project => {
+  //     project.setColorValue(index, obj);      
+  //   }, false)
+  // }
 
   [CLICK("$colorList .preview")](e) {
     var $item = e.$dt.closest('color-item');    
