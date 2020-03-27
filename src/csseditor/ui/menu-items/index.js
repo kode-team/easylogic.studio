@@ -1,6 +1,5 @@
 import Github from "./Github";
 import ExportCodePen from "./ExportCodePen";
-import ExportJSFiddle from "./ExportJSFiddle";
 import AddRect from "./AddRect";
 import AddCircle from "./AddCircle";
 import LeftAlign from "./LeftAlign";
@@ -61,7 +60,6 @@ export default {
   LeftAlign,
   AddCircle,
   AddRect,
-  ExportJSFiddle,
   ExportCodePen,
   Github
 };

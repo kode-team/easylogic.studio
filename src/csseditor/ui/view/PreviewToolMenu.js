@@ -13,8 +13,6 @@ export default class PreviewToolMenu extends UIElement {
           <Fullscreen />      
           <ExportView />
           <ExportCodePen />
-          
-          <!-- ExportJSFiddle / -->
         </div>                
       </div>
     `;

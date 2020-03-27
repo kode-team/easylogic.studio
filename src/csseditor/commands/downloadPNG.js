@@ -8,7 +8,7 @@ export default {
     execute: function (editor) {
         var item = editor.selection.current || editor.selection.currentArtboard;
 
-        var svgString = ExportManager.generateSVG(item).trim();
+        var svgString = ExportManager.generateSVG(editor, item).trim();
         var datauri = 'data:image/svg+xml;base64,' + window.btoa(svgString);
         var filename = item.id;
 
