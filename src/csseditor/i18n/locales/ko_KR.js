@@ -17,7 +17,7 @@ export default {
     'app.tab.title.layers': '레이어',
     'app.tab.title.libraries': '라이브러리',
     'app.tab.title.components': '컴포넌트',    
-
+    'app.tab.title.assets': '에셋',   
 
 
     'menu.item.download.title': '다운로드',

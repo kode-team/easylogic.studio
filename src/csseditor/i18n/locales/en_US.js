@@ -18,6 +18,7 @@ export default {
     'app.tab.title.layers': 'Layers',
     'app.tab.title.libraries': 'Library',
     'app.tab.title.components': 'Components',
+    'app.tab.title.assets': 'Assets',       
 
     'menu.item.download.title': 'Download',
     'menu.item.save.title': 'Save',

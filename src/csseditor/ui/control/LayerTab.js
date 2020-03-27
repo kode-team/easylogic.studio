@@ -10,6 +10,7 @@ import ImageAssetsProperty from "../property/ImageAssetsProperty";
 import GradientAssetsProperty from "../property/GradientAssetsProperty";
 import ColorAssetsProperty from "../property/ColorAssetsProperty";
 import SVGFilterAssetsProperty from "../property/SVGFilterAssetsProperty";
+import PreviewToolMenu from "../view/PreviewToolMenu";
 
 
 export default class LayerTab extends UIElement {
@@ -23,7 +24,8 @@ export default class LayerTab extends UIElement {
       ComponentItems,
       ProjectProperty,
       ProjectInformationProperty,
-      LibraryItems
+      LibraryItems,
+      PreviewToolMenu
     }
   }
   template() {
@@ -31,21 +33,29 @@ export default class LayerTab extends UIElement {
       <div class='layer-tab'>
         <div class="tab number-tab side-tab side-tab-left" data-selected-value="4" ref="$tab">
           <div class="tab-header full" ref="$header">
-            <div class='tab-item' data-value='4' title='${this.$i18n('app.tab.titlecomponents')}'>
+            <div class='logo-item'>
+              <label class='logo'></label>
+            </div>                  
+            <div class='tab-item' data-value='4' >
               <label>${icon.add}</label>
+              <div class='title'>${this.$i18n('app.tab.title.components')}</div>
             </div>          
-            <div class="tab-item" data-value="2" title='${this.$i18n('app.tab.titlelayers')}'>
+            <div class="tab-item" data-value="2">
               <label>${icon.account_tree}</label>
+              <div class='title'>${this.$i18n('app.tab.title.layers')}</div>
             </div>            
-            <div class="tab-item" data-value="1" title='${this.$i18n('app.tab.titleprojects')}'>
+            <div class="tab-item" data-value="1">
               <label>${icon.note}</label>
+              <div class='title'>${this.$i18n('app.tab.title.projects')}</div>
             </div>         
-            <!--<div class='tab-item' data-value='3' title='${this.$i18n('app.tab.titlelibraries')}'>
-              <label>${icon.local_library}</label>
-            </div>   -->
-            <div class='tab-item' data-value='5' title='${this.$i18n('app.tab.titleassets')}'>
+            <div class='tab-item' data-value='5'>
               <label>${icon.view_list}</label>
+              <div class='title'>${this.$i18n('app.tab.title.assets')}</div>
             </div>   
+
+            <div class='tab-item extra-item' >
+              <PreviewToolMenu />
+            </div>               
           </div>
           <div class="tab-body" ref="$body">
             <div class="tab-content project-content" data-value="1">
@@ -77,14 +87,14 @@ export default class LayerTab extends UIElement {
     `;
   }
 
-  [CLICK("$header .tab-item:not(.empty-item)")](e) {
+  [CLICK("$header .tab-item:not(.extra-item)")](e) {
     this.refs.$tab.attr(
       "data-selected-value",
       e.$dt.attr("data-value")
     );
   }
 
-  [CLICK("$extraHeader .tab-item:not(.empty-item)")](e) {
+  [CLICK("$extraHeader .tab-item:not(.extra-item)")](e) {
     this.refs.$extraTab.attr(
       "data-selected-value",
       e.$dt.attr("data-value")

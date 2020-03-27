@@ -5,7 +5,7 @@ import { CSS_TO_STRING } from "../../../util/functions/func";
 import { ComponentManager } from "../../manager/ComponentManager";
 
 const faceKeys = [
-  'front', 'back', 'left', 'right', 'bottom', 'top'
+  'front', 'back', 'left', 'right', 'top','bottom'
 ]
 
 const customSelectorName = {

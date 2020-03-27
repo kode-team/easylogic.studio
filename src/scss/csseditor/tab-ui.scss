@@ -38,12 +38,36 @@ $tab-horizontal-header-right-width: 60px;
           height: auto;
           display: block;
 
+          .logo-item {
+            padding: 10px 0px;
+            text-align: center;
+            label.logo {
+              display: inline-block;
+              width: 30px;
+              height: 30px;
+              background-image: url(./images/icon128.png);
+              background-size: contain;
+              border-radius: 2px;
+            }
+          }
+
           .tab-item {
-            height: $tab-horizontal-header-width;
+            display: block;
             width: 100%;
+            flex: none;
+            height: auto;
+            margin-bottom: 10px;
+
+            &.extra-item {
+              display: block;
+              position: absolute;
+              bottom: 0px;
+              left: 0px;
+              right: 0px;
+            }
 
             label {
-              padding: 13px;
+              padding: 4px 13px;
 
               svg {
                 width: 24px;
@@ -53,6 +77,12 @@ $tab-horizontal-header-right-width: 60px;
                   fill: lighten($font-color, 30%);
                 }
               }
+            }
+
+            .title {
+              padding-bottom: 5px;
+              font-size: 10px;
+              color: darken($font-color, 30%);
             }
           }
         }

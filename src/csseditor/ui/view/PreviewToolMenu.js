@@ -13,6 +13,11 @@ export default class PreviewToolMenu extends UIElement {
           <Fullscreen />      
           <ExportView />
           <ExportCodePen />
+          <div class='divdier'></div>
+          <Download />
+          <Save />
+          <Github />
+          <Manual />          
         </div>                
       </div>
     `;

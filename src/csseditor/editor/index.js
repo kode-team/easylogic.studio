@@ -50,14 +50,10 @@ export default class CSSEditor extends UIElement {
   templateForEditor() {
     return /*html*/`
       <div class="layout-main">
-        <div class="layout-header">
-            <div class='menu-bar'>
-              <PreviewToolMenu />
-              <ToolMenu />
-              <ExternalToolMenu />
-            </div>
-        </div>
         <div class="layout-middle" ref='$middle'>
+          <div class="layout-header">
+              <ToolMenu />          
+          </div>        
           <div class="layout-body">
             <CanvasView />        
           </div>                           

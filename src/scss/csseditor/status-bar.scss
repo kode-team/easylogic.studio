@@ -1,0 +1,74 @@
+
+  .status-bar {
+    flex: none; 
+    height: 30px;
+    overflow: hidden;
+    position: relative;
+    background-color: $status-bar-background-color; 
+    z-index: 1;
+    pointer-events: all;
+    display: grid;
+    grid-template-columns: auto auto;
+    
+    color: white; 
+
+    .message-view {
+      padding: 5px 5px;
+    }
+
+    .tool-view {
+      text-align: right;
+      padding:5px 5px;
+      
+
+      text-align: right; 
+
+      > div {
+        display: inline-block;
+        background-color: $status-bar-item-background-color;
+        border-radius: 3px;
+        min-width: 50px;
+      }
+    }    
+
+
+    .language-selector {
+      display: inline-grid; 
+      text-align: left;
+      grid-template-columns: 50px 1fr;
+      padding-left: 5px;
+
+      > label {
+        display: inline-block;
+      }
+
+      > .item {
+        display: inline-block;
+
+        .select-editor {
+          height: 100%;
+          width: 50px;
+        }
+      }
+    }
+
+    .theme-switcher {
+      display: inline-grid; 
+      text-align: left;
+      grid-template-columns: 50px 1fr;
+      padding-left: 5px;
+
+      > label {
+        display: inline-block;
+      }
+
+      > .item {
+        display: inline-block;
+
+        .select-editor {
+          height: 100%;
+          width: 50px;
+        }
+      }
+    }
+  }

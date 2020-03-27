@@ -28,24 +28,9 @@
   }
 }
 
-.menu-bar {
-  display: grid; 
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-column-gap: 10px;
-}
-
 .tool-menu,
-.preview-tool-menu,
-.external-tool-menu {
-  height: 100%;
-  display: inline-block;
+.preview-tool-menu{
   color: $selected-font-color;
-  padding: 0px 10px;
-
-  &.right {
-    text-align: right;
-  }
-
 
   &.center{
     text-align: center;
@@ -59,7 +44,6 @@
 
 
     .draw-items {
-      padding-top: 5px;
       > * {
         display: inline-block;
       }
@@ -104,8 +88,7 @@
         &.selected {
           .icon {      
             svg {
-              path {
-                stroke: $border-color;  
+              path {  
                 fill: $selected-color;
               }
             }
@@ -202,7 +185,7 @@
 
     .title {
       font-size: 10px;
-      color: $font-color;
+      color: darken($font-color, 30%);
     }
 
 
@@ -218,7 +201,6 @@
 
         path {
           fill : $font-color;
-          stroke-width: 1;
         }
       }
 
