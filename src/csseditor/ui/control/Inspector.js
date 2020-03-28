@@ -5,22 +5,29 @@ import property from "../property/index";
 import icon from "../icon/icon";
 
 export default class Inspector extends UIElement {
+
+  initState() {
+    return {
+      selectedIndex: 1
+    }
+  }
+
   template() {
     return /*html*/`
       <div class="feature-control inspector">
         <div>
-          <div class="tab number-tab" data-selected-value="1" ref="$tab">
+          <div class="tab number-tab" ref="$tab">
             <div class="tab-header" ref="$header">
-              <div class="tab-item" data-value="1" title='${this.$i18n('inspectortab.title.style')}'>
+              <div class="tab-item selected" data-value="1" title='${this.$i18n('inspector.tab.title.style')}'>
                 <label class='icon'>${icon.palette}</label>
               </div>
-              <div class="tab-item" data-value="2" title="${this.$i18n('inspectortab.title.component')}">
+              <div class="tab-item" data-value="2" title="${this.$i18n('inspector.tab.title.component')}">
                 <label class='icon'>${icon.cube}</label>
               </div>              
-              <div class="tab-item" data-value="4" title='${this.$i18n('inspectortab.title.text')}'>
+              <div class="tab-item" data-value="4" title='${this.$i18n('inspector.tab.title.text')}'>
                 <label class='icon'>${icon.title}</label>
               </div>              
-              <div class="tab-item" data-value="3" title="${this.$i18n('inspectortab.title.transition')}">
+              <div class="tab-item" data-value="3" title="${this.$i18n('inspector.tab.title.transition')}">
                 <label>${icon.flash_on}</label>
               </div>
               <div class="tab-item" data-value="5" title='${this.$i18n('inspectortab.title.code')}'>
@@ -29,7 +36,7 @@ export default class Inspector extends UIElement {
             </div>
             <div class="tab-body" ref="$body">
 
-              <div class="tab-content scrollbar" data-value="1">
+              <div class="tab-content selected scrollbar" data-value="1">
                 <AlignmentProperty />
 
                 <!-- Default Property --> 
@@ -117,16 +124,15 @@ export default class Inspector extends UIElement {
   }
 
   [CLICK("$header .tab-item:not(.empty-item)")](e) {
-    this.refs.$tab.attr(
-      "data-selected-value",
-      e.$dt.attr("data-value")
-    );
-  }
 
-  [CLICK("$extraHeader .tab-item(.empty-item)")](e) {
-    this.refs.$extraTab.attr(
-      "data-selected-value",
-      e.$dt.attr("data-value")
-    );
+    var selectedIndex = +e.$dt.attr('data-value')
+    if (this.state.selectedIndex === selectedIndex) {
+      return; 
+    }
+
+    this.$el.$$(`[data-value="${this.state.selectedIndex}"]`).forEach(it => it.removeClass('selected'))
+    this.$el.$$(`[data-value="${selectedIndex}"]`).forEach(it => it.addClass('selected'))
+    this.setState({ selectedIndex }, false);
+
   }
 }

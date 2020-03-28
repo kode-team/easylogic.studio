@@ -385,7 +385,7 @@ export default class LayerTreeProperty extends BaseProperty {
 
       this.$selection.select(copyObject);
       this.refresh();
-      this.emit('refreshElement');
+      this.emit('refreshElement', null, false, true);
     }
   }
 
@@ -395,8 +395,8 @@ export default class LayerTreeProperty extends BaseProperty {
     })
   }
 
-  [EVENT('changeSelection')] () {
-    if (this.refs.$layerList) {    
+  [EVENT('changeSelection')] (isSelection = false) {
+    if (isSelection && this.refs.$layerList) {    
       this.refs.$layerList.$$('.selected').forEach(it => {
         it.removeClass('selected')
       })
@@ -417,13 +417,14 @@ export default class LayerTreeProperty extends BaseProperty {
 
         })
       }
-
-
     }
-
   }  
 
-  [EVENT('refreshSelection', 'refreshStylePosition', 'refreshSelectionStyleView', 'refreshCanvasForPartial')] () { 
+  [EVENT('refreshSelection')] () { 
+    this.trigger('changeSelection', true)
+  }
+
+  [EVENT('refreshStylePosition', 'refreshSelectionStyleView', 'refreshCanvasForPartial')] () { 
     this.trigger('changeSelection')
   }
 

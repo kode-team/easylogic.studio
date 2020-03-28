@@ -1,5 +1,9 @@
 
-export function debounce (callback, delay) {
+export function debounce (callback, delay = 0) {
+
+    if (delay === 0) {
+        return callback;
+    }
 
     var t = undefined;
 

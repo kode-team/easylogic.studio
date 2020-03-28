@@ -186,8 +186,11 @@ export default class Dom {
 
   onlyOneClass(cls) {
     var parent = this.parent();
-    var selected = parent.$(`.${cls}`);
-    if (selected) selected.removeClass(cls);
+
+    parent.children().forEach(it => {
+      it.removeClass(cls);
+    })
+
     this.addClass(cls);
   }
 

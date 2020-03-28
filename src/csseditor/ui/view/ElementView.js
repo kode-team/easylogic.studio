@@ -375,7 +375,7 @@ export default class ElementView extends UIElement {
 
         this.children.$selectionTool.refreshSelectionToolView(dx, dy, 'move');
 
-        this.emit('refreshElement', current);
+        this.emit('refreshElement', current, false, true);
         this.$selection.setRectCache()                
 
         if (dx != 0 || dy != 0) {

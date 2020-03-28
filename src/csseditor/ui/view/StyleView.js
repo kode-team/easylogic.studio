@@ -214,9 +214,27 @@ export default class StyleView extends UIElement {
       items = ids; 
     }
 
+    const styleTags = [] 
+    const removeStyleSelector = []
+
     items.forEach(item => {
-      this.refreshStyleHeadOne(item, true);
+      var selector = item.allLayers.map(it => {
+        return `style[data-id="${it.id}"],style[data-id="${it.id}-drag"]`
+      }).join(',');
+
+      removeStyleSelector.push(selector);
+      styleTags.push(this.makeStyle(item))
     })
+
+    this.refs.$head.$$(removeStyleSelector).forEach(it => {
+      it.remove();
+    })
+
+    var $temp = Dom.create('div')        
+
+    var $fragment = $temp.html(styleTags.join('')).createChildrenFragment()
+
+    this.refs.$head.append($fragment);
   }  
 
   [EVENT('removeSelectionDragStyleView')] (obj = null) {

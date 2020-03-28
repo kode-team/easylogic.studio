@@ -473,19 +473,11 @@ export class DomItem extends GroupItem {
     var json = this.json;
     var obj = {};
 
-    args.forEach( it => {
-      if (isNotUndefined(json[it]) && json[it] !== '') {
-        obj[it] = json[it] + ''
-      }
+    args.filter(it => isNotUndefined(it) && json[it] !== '').forEach( it => {
+        obj[it] = json[it]
     })
 
     return obj;
-  }
-
-  toFontCSS() {
-    return this.toKeyListCSS(
-    
-    )
   }
 
   toDefaultCSS() {
@@ -622,44 +614,46 @@ export class DomItem extends GroupItem {
 
   toCSS() {
 
-    return {
-      ...this.toVariableCSS(),
-      ...this.toDefaultCSS(),
-      ...this.toClipPathCSS(),
-      ...this.toWebkitCSS(), 
-      ...this.toTextClipCSS(),      
-      ...this.toBoxModelCSS(),
-      ...this.toBorderCSS(),
-      ...this.toOutlineCSS(),      
+    return Object.assign(
+      {},
+      this.toVariableCSS(),
+      this.toDefaultCSS(),
+      this.toClipPathCSS(),
+      this.toWebkitCSS(), 
+      this.toTextClipCSS(),      
+      this.toBoxModelCSS(),
+      this.toBorderCSS(),
+      this.toOutlineCSS(),      
       // ...this.toTransformCSS(),      
       // ...this.toBorderImageCSS(),
-      ...this.toBackgroundImageCSS(),
-      ...this.toLayoutCSS(),
-      ...this.toLayoutItemCSS(),                  
-      ...this.toAnimationCSS(),
-      ...this.toTransitionCSS()
-    };
+      this.toBackgroundImageCSS(),
+      this.toLayoutCSS(),
+      this.toLayoutItemCSS(),                  
+      this.toAnimationCSS(),
+      this.toTransitionCSS()
+    );
   }
 
   toSVGCSS() {
 
-    return {
-      ...this.toVariableCSS(),
-      ...this.toDefaultSVGCSS(),
-      ...this.toClipPathCSS(),
-      ...this.toWebkitCSS(), 
-      ...this.toTextClipCSS(),      
-      ...this.toBoxModelCSS(),
-      ...this.toBorderCSS(),
-      ...this.toOutlineCSS(),      
+    return Object.assign(
+      {},
+      this.toVariableCSS(),
+      this.toDefaultSVGCSS(),
+      this.toClipPathCSS(),
+      this.toWebkitCSS(), 
+      this.toTextClipCSS(),      
+      this.toBoxModelCSS(),
+      this.toBorderCSS(),
+      this.toOutlineCSS(),      
       // ...this.toTransformCSS(),      
       // ...this.toBorderImageCSS(),
-      ...this.toBackgroundImageCSS(),
-      ...this.toLayoutCSS(),      
-      ...this.toLayoutItemCSS(),            
-      ...this.toAnimationCSS(),
-      ...this.toTransitionCSS()
-    };
+      this.toBackgroundImageCSS(),
+      this.toLayoutCSS(),      
+      this.toLayoutItemCSS(),            
+      this.toAnimationCSS(),
+      this.toTransitionCSS()
+    );
   }
   
  

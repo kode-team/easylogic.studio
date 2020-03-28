@@ -28,6 +28,13 @@ export default class LayerTab extends UIElement {
       PreviewToolMenu
     }
   }
+
+  initState() {
+    return {
+      selectedIndex: 4 
+    }
+  }
+
   template() {
     return /*html*/`
       <div class='layer-tab'>
@@ -36,7 +43,7 @@ export default class LayerTab extends UIElement {
             <div class='logo-item'>
               <label class='logo'></label>
             </div>                  
-            <div class='tab-item' data-value='4' >
+            <div class='tab-item selected' data-value='4' >
               <label>${icon.add}</label>
               <div class='title'>${this.$i18n('app.tab.title.components')}</div>
             </div>          
@@ -68,7 +75,7 @@ export default class LayerTab extends UIElement {
             <div class='tab-content' data-value='3'>
               <LibraryItems />
             </div>
-            <div class='tab-content' data-value='4'>
+            <div class='tab-content selected' data-value='4'>
               <ComponentItems />
             </div>    
             <div class='tab-content' data-value='5'>
@@ -88,16 +95,14 @@ export default class LayerTab extends UIElement {
   }
 
   [CLICK("$header .tab-item:not(.extra-item)")](e) {
-    this.refs.$tab.attr(
-      "data-selected-value",
-      e.$dt.attr("data-value")
-    );
-  }
 
-  [CLICK("$extraHeader .tab-item:not(.extra-item)")](e) {
-    this.refs.$extraTab.attr(
-      "data-selected-value",
-      e.$dt.attr("data-value")
-    );
+    var selectedIndex = +e.$dt.attr('data-value')
+    if (this.state.selectedIndex === selectedIndex) {
+      return; 
+    }
+
+    this.$el.$$(`[data-value="${this.state.selectedIndex}"]`).forEach(it => it.removeClass('selected'))
+    this.$el.$$(`[data-value="${selectedIndex}"]`).forEach(it => it.addClass('selected'))
+    this.setState({ selectedIndex }, false);
   }
 }

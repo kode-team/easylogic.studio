@@ -1,4 +1,4 @@
-$tab-header-height: 30px;
+$tab-header-height: 34px;
  
 
 $tab-horizontal-header-width: 50px;
@@ -94,23 +94,6 @@ $tab-horizontal-header-right-width: 60px;
           right: 0px; 
         }
       }
-
-      @for $selectValue from 1 to 8 {
-        &[data-selected-value="#{$selectValue}"] {
-          .tab-header {
-            .tab-item[data-value="#{$selectValue}"] {
-              svg {
-                path {
-                  fill: $selected-color;
-                }
-              }
-            }
-          }
-          .tab-content[data-value="#{$selectValue}"] {
-            display: block;
-          }
-        }    
-      }
     }
 
     .tab-header {
@@ -123,6 +106,10 @@ $tab-horizontal-header-right-width: 60px;
     }
     .tab-content {
       display: none;
+
+      &.selected {
+        display: block;
+      }
     }
 
     .tab-body {
@@ -142,6 +129,14 @@ $tab-horizontal-header-right-width: 60px;
         position: relative;
         padding: 0px 0px 0px 0px;
         height: 100%;
+
+        &.selected {
+          svg {
+            path {
+              fill: $selected-color;
+            }
+          }
+        }
 
 
         &:hover {
@@ -211,29 +206,6 @@ $tab-horizontal-header-right-width: 60px;
       }
     }
 
-    &:not(.side-tab) {
-      @for $selectValue from 1 to 7 {
-        &[data-selected-value="#{$selectValue}"] .tab-item[data-value="#{$selectValue}"] {
-          background-color: $tab-selected-color;
-          color: $tab-selected-font-color;
-          &:before {
-            position: absolute;
-            content: '';
-            left:0px;
-            top:0px;
-            right:0px;
-            height:2px;
-            background-color: $selected-color;
-          }
-        }
-  
-        &[data-selected-value="#{$selectValue}"]
-          .tab-content[data-value="#{$selectValue}"] {
-          display: block;
-        }
-      }
-    }
-
   }
 
   > .tab-header {
@@ -263,6 +235,11 @@ $tab-horizontal-header-right-width: 60px;
       
       &.small-font {
         font-size: 11px;
+      }
+
+      &.selected {
+        background-color: $tab-selected-color;
+        color: $tab-selected-font-color;        
       }
 
       &.select-reverse {

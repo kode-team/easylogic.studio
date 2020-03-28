@@ -1,5 +1,5 @@
 import Dom from "./Dom";
-import { POINTERMOVE, POINTEREND, DEBOUNCE } from "./Event";
+import { POINTERMOVE, POINTEREND } from "./Event";
 import {
   ADD_BODY_MOUSEMOVE,
   ADD_BODY_MOUSEUP
@@ -11,7 +11,7 @@ import { Editor } from "../editor/Editor";
 
 const EMPTY_POS = { x: 0, y: 0 };
 const DEFAULT_POS = { x: Number.MAX_SAFE_INTEGER, y: Number.MAX_SAFE_INTEGER };
-const MOVE_CHECK_MS = 10;
+const MOVE_CHECK_MS = 0;
 
 export const start = opt => {
   class App extends UIElement {
@@ -116,6 +116,7 @@ export const start = opt => {
     }
 
     [POINTERMOVE("document")](e) {
+      if (e.target.nodeName === 'INPUT' || e.target.nodeName === 'SELECT' || e.target.nodeName === 'TEXTAREA') return; 
       var newPos = e.xy || EMPTY_POS;
 
       this.$config.set("bodyEvent", e);
@@ -126,7 +127,8 @@ export const start = opt => {
       }
     }
 
-    [POINTEREND("document") + DEBOUNCE(30)](e) {
+    [POINTEREND("document")](e) {
+      if (e.target.nodeName === 'INPUT' || e.target.nodeName === 'SELECT' || e.target.nodeName === 'TEXTAREA') return;       
       // var newPos = e.xy || EMPTY_POS;
       this.$config.set("bodyEvent", e);
       this.removeBodyMoves();

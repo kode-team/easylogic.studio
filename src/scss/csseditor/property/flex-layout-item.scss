@@ -4,6 +4,10 @@
         
         > [data-value] {
             display: none;
+
+            &.selected {
+                display: block;
+            }
         }
 
         @each $selectType in none, auto, value {

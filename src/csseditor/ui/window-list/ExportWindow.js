@@ -15,11 +15,17 @@ export default class ExportWindow extends BaseWindow {
         return 'Export'
     }
 
+    initState() {
+        return {
+            selectedIndex: 1
+        }
+    }
+
     getBody() {
         return /*html*/`
-        <div class="tab number-tab" data-selected-value="1" ref="$tab">
+        <div class="tab number-tab" ref="$tab">
             <div class="tab-header full" ref="$header">
-                <div class="tab-item" data-value="1">
+                <div class="tab-item selected" data-value="1">
                     <label>HTML</label>
                 </div>
                 <div class="tab-item" data-value="2">
@@ -42,7 +48,7 @@ export default class ExportWindow extends BaseWindow {
                 </div>                        
             </div>
             <div class="tab-body" ref="$body">
-                <div class="tab-content" data-value="1">
+                <div class="tab-content selected" data-value="1">
                     <pre ref='$html'></pre>
                 </div>
                 <div class='tab-content' data-value='2'>
@@ -135,6 +141,14 @@ ${project.artboards.map(item => item.html).join('\n')}
 
 
     [CLICK("$header .tab-item")](e) {
-        this.refs.$tab.attr("data-selected-value",e.$dt.attr("data-value"));
+
+        var selectedIndex = +e.$dt.attr('data-value')
+        if (this.state.selectedIndex === selectedIndex) {
+          return; 
+        }
+    
+        this.$el.$$(`[data-value="${this.state.selectedIndex}"]`).forEach(it => it.removeClass('selected'))
+        this.$el.$$(`[data-value="${selectedIndex}"]`).forEach(it => it.addClass('selected'))
+        this.setState({ selectedIndex }, false);
     }
 }

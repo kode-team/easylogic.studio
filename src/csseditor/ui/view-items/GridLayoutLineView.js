@@ -33,7 +33,7 @@ export default class GridLayoutLineView extends UIElement {
                 ${layoutContainer.layers.map(it => {
                     var layoutItemCSS = it.toLayoutItemCSS()
                     return /*html*/`<div style='${CSS_TO_STRING({...layoutItemCSS, 'border': '1px solid dashed'})}'></div>`
-                })}
+                }).join('')}
             </div>`
         }
 

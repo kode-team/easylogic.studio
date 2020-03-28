@@ -137,7 +137,7 @@ export default class RangeEditor extends UIElement {
 
     [INPUT('$property')] (e) {
         var value = +this.getRef('$property').value; 
-        this.getRef('$propertyNumber').val(value);
+        this.ref.$propertyNumber.val(value);
 
         this.initValue();
 

@@ -37,12 +37,12 @@ export default class LayoutProperty extends BaseProperty {
         colors=",green,red"
         onchange="changeLayoutType" />
       </div>
-      <div class='layout-list' ref='$layoutList' data-selected-value='${current.layout}'>
-        <div data-value='none'>Default</div>
-        <div data-value='flex'>
+      <div class='layout-list' ref='$layoutList'>
+        <div data-value='default' class='${current.layout === 'default' ? 'selected': ''}'></div>
+        <div data-value='flex' class='${current.layout === 'flex' ? 'selected': ''}'>
           <FlexLayoutEditor ref='$flex' key='flex-layout' value="${current['flex-layout'] || ''}" onchange='changeLayoutInfo' />
         </div>
-        <div data-value='grid'>
+        <div data-value='grid' class='${current.layout === 'grid' ? 'selected': ''}'>
           <GridLayoutEditor ref='$grid' key='grid-layout' value="${current['grid-layout'] || ''}" onchange='changeLayoutInfo' />
         </div>
       </div>
@@ -52,18 +52,20 @@ export default class LayoutProperty extends BaseProperty {
   [EVENT('changeLayoutInfo')] (key, value) {
     this.emit('setAttribute', { 
       [key]: value
-    })
+    }, null, false, true)
 
     this.emit('refreshAllElementBoundSize');    
   }
 
   [EVENT('changeLayoutType')] (key, value) {
-    this.emit('setAttribute', { 
-      [key]: value
+
+    this.$selection.reset({
+      [key]: value 
     })
 
-    // 타입 변화에 따른 하위 아이템들의 설정을 바꿔야 한다. 
-    this.refs.$layoutList.attr('data-selected-value', value);
+    this.emit('setAttribute', { 
+      [key]: value
+    }, null, false, true)
 
     this.refresh();
 
