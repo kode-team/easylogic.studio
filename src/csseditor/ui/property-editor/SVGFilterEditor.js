@@ -214,9 +214,9 @@ export default class SVGFilterEditor extends UIElement {
   
       ${mapjoin(filterTypes, f => {
         return /*html*/`
-          <div class='group' label="${this.$i18n('svg.filter.editor.' + f.label)}">
+          <div class='group' label="${this.$i18n(f.label)}">
             ${mapjoin(f.items, i => {
-              return /*html*/ ` <div class='item' draggable="true" value="${i.value}">${getIcon(i.value)} ${this.$i18n('svg.filter.editor.' + i.label)}</div>`
+              return /*html*/ ` <div class='item' draggable="true" value="${i.value}">${getIcon(i.value)} ${this.$i18n(i.label)}</div>`
             })}
           </div>
         `
@@ -233,9 +233,9 @@ export default class SVGFilterEditor extends UIElement {
   
       ${mapjoin(SVGFilterTemplateList, f => {
         return /*html*/`
-          <div class='group' label="${this.$i18n('svg.filter.editor.' + f.label)}">
+          <div class='group' label="${this.$i18n(f.label)}">
             ${mapjoin(f.items, i => {
-              return /*html*/ ` <div class='item' draggable="true" value="${i.value}">${this.$i18n('svg.filter.editor.' + i.label)}</div>`
+              return /*html*/ ` <div class='item' draggable="true" value="${i.value}">${this.$i18n(i.label)}</div>`
             })}
           </div>
         `
@@ -250,6 +250,7 @@ export default class SVGFilterEditor extends UIElement {
 
     return {
       filters,
+      selectedTabIndex: 1,
       selectedIndex: -1,
       selectedFilter: null
     }
@@ -261,9 +262,9 @@ export default class SVGFilterEditor extends UIElement {
     return /*html*/`
       <div class='svg-filter-editor filter-list'>
         <div class='left'>
-          <div class="tab number-tab" data-selected-value="1" ref="$tab">
+          <div class="tab number-tab" ref="$tab">
             <div class="tab-header full" ref="$header">
-              <div class="tab-item" data-value="1" title='Item'>
+              <div class="tab-item selected" data-value="1" title='Item'>
                 <label class='icon'>${this.$i18n('svg.filter.editor.tab.filter')}</label>
               </div>
               <div class="tab-item" data-value="2" title="Preset">
@@ -274,7 +275,7 @@ export default class SVGFilterEditor extends UIElement {
               </div>
             </div>
             <div class="tab-body">
-              <div class="tab-content" data-value="1">
+              <div class="tab-content selected" data-value="1">
                 ${this.makeFilterSelect()}
               </div>
               <div class="tab-content" data-value="2">
@@ -299,10 +300,14 @@ export default class SVGFilterEditor extends UIElement {
 
 
   [CLICK("$header .tab-item:not(.empty-item)")](e) {
-    this.refs.$tab.attr(
-      "data-selected-value",
-      e.$dt.attr("data-value")
-    );
+    var selectedTabIndex = +e.$dt.attr('data-value')
+    if (this.state.selectedTabIndex === selectedTabIndex) {
+      return; 
+    }
+
+    this.$el.$$(`[data-value="${this.state.selectedTabIndex}"]`).forEach(it => it.removeClass('selected'))
+    this.$el.$$(`[data-value="${selectedTabIndex}"]`).forEach(it => it.addClass('selected'))
+    this.setState({ selectedTabIndex }, false);
   }  
 
   [DRAGSTART('$filterSelect .item')] (e) {
@@ -869,7 +874,7 @@ export default class SVGFilterEditor extends UIElement {
         <div class='filter-node ${OBJECT_TO_CLASS({
           'selected': index ===  this.state.selectedIndex
         })}' data-type="${it.type}" data-index="${index}" data-filter-id="${it.id}" style='left: ${it.bound.x}px;top: ${it.bound.y}px;'>
-          <div class='label'>${this.$i18n('svg.filter.editor.' + it.type)}</div>
+          <div class='label'>${this.$i18n(it.type)}</div>
           <div class='remove'>${icon.close}</div>
           <div class='preview' data-source-type="${getSourceTypeString(it.type)}" data-filter-type='${it.type}'>${getIcon(it.type)}</div>
           <div class='in-list'>
