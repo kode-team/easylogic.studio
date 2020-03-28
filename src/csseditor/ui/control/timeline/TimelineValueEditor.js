@@ -18,7 +18,9 @@ export default class TimelineValueEditor extends UIElement {
   initState() {
     return {
       time: 0,
-      timing: 'linear'
+      timing: 'linear',
+      selectedIndex: 1  
+
     };
   }
 
@@ -56,9 +58,9 @@ export default class TimelineValueEditor extends UIElement {
   template() {
     return /*html*/`
     <div class='timeline-value-editor'>
-        <div class="tab number-tab" data-selected-value="1" ref="$tab">
+        <div class="tab number-tab" ref="$tab">
             <div class="tab-header full" ref="$header">
-                <div class="tab-item" data-value="1">
+                <div class="tab-item selected" data-value="1">
                     <label>${this.$i18n('timeline.value.editor.value')}</label>
                 </div>          
                 <div class="tab-item" data-value="2">
@@ -66,7 +68,7 @@ export default class TimelineValueEditor extends UIElement {
                 </div>                            
             </div>
             <div class="tab-body" ref="$body">
-                <div class="tab-content padding-zero" data-value="1">
+                <div class="tab-content selected padding-zero" data-value="1">
                     ${this.templateForOffset()}  
                     ${this.templateForProperty()}  
                 </div>
@@ -80,11 +82,16 @@ export default class TimelineValueEditor extends UIElement {
   }
 
 
-  [CLICK("$header .tab-item:not(.empty-item)")](e) {
-    this.refs.$tab.attr(
-      "data-selected-value",
-      e.$dt.attr("data-value")
-    );
+  [CLICK("$header .tab-item")](e) {
+    var selectedIndex = +e.$dt.attr('data-value')
+    if (this.state.selectedIndex === selectedIndex) {
+      return; 
+    }
+
+    this.$el.$$(`[data-value="${this.state.selectedIndex}"]`).forEach(it => it.removeClass('selected'))
+    this.$el.$$(`[data-value="${selectedIndex}"]`).forEach(it => it.addClass('selected'))
+    this.setState({ selectedIndex }, false);
+
     this.refresh();
   }
 
