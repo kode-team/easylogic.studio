@@ -41,7 +41,7 @@ export default class LayerTab extends UIElement {
         <div class="tab number-tab side-tab side-tab-left" data-selected-value="4" ref="$tab">
           <div class="tab-header full" ref="$header">
             <div class='logo-item'>
-              <label class='logo'></label>
+              <label class='logo' title='EasyLogic Studio'></label>
             </div>                  
             <div class='tab-item selected' data-value='4' >
               <label>${icon.add}</label>

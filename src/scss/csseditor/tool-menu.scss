@@ -42,6 +42,11 @@
     padding: 0px;
     display: inline-block;
 
+    .empty {
+      width: 100%;
+      height: 48px;
+    }
+
 
     .draw-items {
       > * {
@@ -127,16 +132,6 @@
         }
       }
       
-    }
-
-
-    .split {
-      display: inline-block;
-      height: 20px;
-      vertical-align: middle;
-      width: 3px;
-      margin-right: 2px;
-      border-right: 1px solid rgba(255, 255, 255, 0.3);
     }
 
     &.flex-2 {

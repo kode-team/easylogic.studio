@@ -36,9 +36,12 @@ $tab-horizontal-header-right-width: 60px;
           bottom: 0px;
           right: auto; 
           height: auto;
-          display: block;
+          display: flex;
+          flex-direction: column;
 
           .logo-item {
+            flex: none;
+            display: block;
             padding: 10px 0px;
             text-align: center;
             label.logo {
@@ -59,15 +62,13 @@ $tab-horizontal-header-right-width: 60px;
             margin-bottom: 10px;
 
             &.extra-item {
-              display: block;
-              position: absolute;
-              bottom: 0px;
-              left: 0px;
-              right: 0px;
+              flex: 1 1 auto;
+              overflow: auto;
             }
 
             label {
               padding: 4px 13px;
+              height: auto;
 
               svg {
                 width: 24px;
