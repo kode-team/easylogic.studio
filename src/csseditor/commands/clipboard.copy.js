@@ -1,8 +1,8 @@
 export default {
-    command : 'copy',
+    command : 'clipboard.copy',
     title: 'Copy',
     description : 'Copy',
-    execute: function (editor) {
+    execute: function (editor, obj) {
         editor.selection.copy();
     }
 }

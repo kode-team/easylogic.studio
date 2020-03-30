@@ -10,8 +10,8 @@ import addLayer from "./addLayer";
 import selectItem from "./selectItem";
 import newComponent from "./newComponent";
 import addComponentType from "./addComponentType";
-import copy from "./copy";
-import paste from "./paste";
+import clipboardCopy from "./clipboard.copy";
+import clipboardPaste from "./clipboard.paste";
 import keyupCanvasView from "./keyupCanvasView";
 import arrowKeydownCanvasView from "./arrowKeydownCanvasView";
 import switchTheme from "./switchTheme";
@@ -52,8 +52,12 @@ import addTimelineItem from "./addTimelineItem";
 import dropAsset from "./dropAsset";
 import addBackgroundImageGradient from "./addBackgroundImageGradient";
 import addBackgroundImageAsset from "./addBackgroundImageAsset";
+import keymapKeydown from "./keymap.keydown";
+import keymapKeyup from "./keymap.keyup";
 
 export default {
+    keymapKeydown,
+    keymapKeyup,
     dropAsset,
     addBackgroundImageAsset,
     addBackgroundImageGradient,
@@ -94,8 +98,8 @@ export default {
     switchTheme,
     arrowKeydownCanvasView,
     keyupCanvasView,
-    paste,
-    copy,
+    clipboardPaste,
+    clipboardCopy,
     addComponentType,
     addArtBoard,
     addImage,

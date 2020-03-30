@@ -241,6 +241,8 @@ export default {
     'gradient.picker.popup.title': '그라디언트와 이미지',
 
     'image.asset.property.title': '이미지',
+    'color.asset.property.title': '색',
+    'gradient.asset.property.title': '그라디언트', 
     'svgfilter.asset.property.title': 'SVG 필터',     
     
     'inspector.tab.title.style': '스타일 속성',

@@ -220,4 +220,13 @@ export class Gradient extends ImageResource {
     var angle = Math.floor(Math.random() * 1000)%360;
     return `linear-gradient(${angle}deg, ${Color.random()} 0%, ${Color.random()} 100%)`
   }
+
+  static randomByCount (count = 1) {
+    let arr = []
+    for(var i = 0; i < count; i++) {
+        arr[arr.length] = Gradient.random();
+    }
+
+    return arr; 
+  }
 }

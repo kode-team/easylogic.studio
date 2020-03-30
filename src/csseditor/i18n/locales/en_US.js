@@ -235,6 +235,8 @@ export default {
 
     'gradient.picker.popup.title': 'Gradient & Image Picker',    
     'image.asset.property.title': 'Image',
+    'color.asset.property.title': 'Color',
+    'gradient.asset.property.title': 'Gradient',
     'svgfilter.asset.property.title': 'SVG Filter',
 
 

@@ -1,5 +1,7 @@
-import copy from "./copy";
+import clipboardCopy from "./clipboard.copy";
+import clipboardPaste from "./clipboard.paste";
 
 export default [
-    copy
+    clipboardCopy,
+    clipboardPaste
 ]

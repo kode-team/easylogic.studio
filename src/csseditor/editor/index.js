@@ -8,7 +8,7 @@ import CanvasView from "../ui/view/CanvasView";
 import ToolMenu from "../ui/view/ToolMenu";
 
 import UIElement, { EVENT } from "../../util/UIElement";
-import { DRAGOVER, DROP, PREVENT, TRANSITIONEND } from "../../util/Event";
+import { DRAGOVER, DROP, PREVENT, TRANSITIONEND, KEYDOWN, KEYUP } from "../../util/Event";
 import Inspector from "../ui/control/Inspector";
 
 
@@ -44,10 +44,6 @@ export default class CSSEditor extends UIElement {
   }
 
   template() {
-    return this.templateForEditor();
-  }
-
-  templateForEditor() {
     return /*html*/`
       <div class="layout-main">
         <div class="layout-middle" ref='$middle'>
@@ -154,5 +150,13 @@ export default class CSSEditor extends UIElement {
 
     this.emit('fileDropItems', items);
 
+  }
+
+  [KEYDOWN('document')] (e) {
+    this.emit('keymap.keydown', e);
+  }
+
+  [KEYUP('document')] (e) {
+    this.emit('keymap.keyup', e);
   }
 }

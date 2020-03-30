@@ -64,6 +64,8 @@ export class Editor {
     shortcuts.forEach(shortcut => {
       this.shortcuts.registerShortCut(shortcut);
     })
+
+    this.shortcuts.sort()
   }  
 
   i18n (key, params = {}, locale) {

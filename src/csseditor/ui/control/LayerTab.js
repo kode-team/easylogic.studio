@@ -80,12 +80,10 @@ export default class LayerTab extends UIElement {
             </div>    
             <div class='tab-content' data-value='5'>
               <div class='assets'>
-                <ImageAssetsProperty />
-                <!--SVGProperty /-->              
-                <SVGFilterAssetsProperty />
-                <!-- SVGPathAssetsProperty /-->
                 <ColorAssetsProperty />
                 <GradientAssetsProperty />    
+                <ImageAssetsProperty />       
+                <SVGFilterAssetsProperty />                
               </div>
             </div>
           </div>

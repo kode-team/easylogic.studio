@@ -4,11 +4,14 @@ import { EVENT } from "../../../util/UIElement";
 import icon from "../icon/icon";
 import { Gradient } from "../../../editor/image-resource/Gradient";
 
+const DEFINE_GRADIENTS = Gradient.randomByCount(20).map(gradient => {
+  return { gradient }
+})
 
 export default class GradientAssetsProperty extends BaseProperty {
 
   getTitle() {
-    return "Gradient";
+    return this.$i18n('gradient.asset.property.title');
   }
 
   initState() {
@@ -34,20 +37,14 @@ export default class GradientAssetsProperty extends BaseProperty {
     `;
   }
 
-  [DRAGSTART('$gradientList .preview')] (e) {
-    const index = e.$dt.attr('data-index');
-
-    var project = this.$selection.currentProject;
-
-    if(project) {
-      const gradient = project.getGradientIndex(+index);
-      e.dataTransfer.effectAllowed = "copy";
-      e.dataTransfer.setData("text/gradient", gradient.gradient);
-    }
+  [DRAGSTART('$gradientList .gradient-item')] (e) {
+    const gradient = e.$dt.attr('data-gradient');
+    e.dataTransfer.effectAllowed = "copy";
+    e.dataTransfer.setData("text/gradient", gradient);
   }
 
   [LOAD("$gradientList")]() {
-    var current = this.$selection.currentProject || { gradients: [] }
+    var current = this.$selection.currentProject || { gradients: DEFINE_GRADIENTS }
 
     var gradients = current.gradients;
 
@@ -55,19 +52,8 @@ export default class GradientAssetsProperty extends BaseProperty {
 
       return /*html*/`
         <div class='gradient-item' data-index="${index}" data-gradient='${item.gradient}'>
-          <div class='preview' data-index="${index}"  draggable="true">
+          <div class='preview' draggable="true">
             <div class='gradient-view' style='background-image: ${item.gradient};'></div>
-          </div>
-          <div class='title'>
-           <!-- <div>
-              <input type='text' class='value' data-key='value' value='${item.gradient}' placeholder="name" />
-            </div>          
-            <div>
-              <input type='text' class='name' data-key='name' value='${item.name}' placeholder="name" />
-            </div>
-            <div>
-              <input type='text' class='var' data-key='variable' value='${item.variable}' placeholder="--var" />
-            </div> -->
           </div>
           <div class='tools'>
             <button type="button" class='copy'>${icon.copy}</button>          
@@ -127,17 +113,6 @@ export default class GradientAssetsProperty extends BaseProperty {
       project.copyGradient(index);
     })    
   }  
-
-  [INPUT('$gradientList input')] (e) {
-    var $item = e.$dt.closest('gradient-item');
-    var index = +$item.attr('data-index');
-    var obj = e.$dt.attrKeyValue('data-key');
-
-    this.executeGradient(project => {
-      project.setGradientValue(index, obj);      
-    }, false)        
-    
-  }
 
   [CLICK("$gradientList .preview")](e) {
     var $item = e.$dt.closest('gradient-item');    

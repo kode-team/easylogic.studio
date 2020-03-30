@@ -26,10 +26,7 @@ export const start = opt => {
 
     initialize(modules = []) {
 
-      this.$store = new BaseStore({
-        modules: [...this.getModuleList(), ...modules]
-      });
-
+      this.$store = new BaseStore();
       this.$editor = new Editor({
         $store: this.$store
       })
@@ -93,10 +90,6 @@ export const start = opt => {
 
     [EVENT(ADD_BODY_MOUSEUP)](func, context, xy) {
       this.ends.add({ func, context, xy });
-    }
-
-    getModuleList() {
-      return opt.modules || [];
     }
 
     getClassName() {
