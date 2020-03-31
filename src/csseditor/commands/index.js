@@ -13,7 +13,7 @@ import addComponentType from "./addComponentType";
 import clipboardCopy from "./clipboard.copy";
 import clipboardPaste from "./clipboard.paste";
 import keyupCanvasView from "./keyupCanvasView";
-import arrowKeydownCanvasView from "./arrowKeydownCanvasView";
+// import arrowKeydownCanvasView from "./arrowKeydownCanvasView";
 import switchTheme from "./switchTheme";
 import showExportView from "./showExportView";
 import updateScale from "./updateScale";
@@ -54,8 +54,17 @@ import addBackgroundImageGradient from "./addBackgroundImageGradient";
 import addBackgroundImageAsset from "./addBackgroundImageAsset";
 import keymapKeydown from "./keymap.keydown";
 import keymapKeyup from "./keymap.keyup";
+import itemMoveLeft from "./item.move.left";
+import itemMoveRight from "./item.move.right";
+import itemMoveUp from "./item.move.up";
+import itemMoveDown from "./item.move.down";
+
 
 export default {
+    itemMoveRight,
+    itemMoveUp,
+    itemMoveDown,
+    itemMoveLeft,
     keymapKeydown,
     keymapKeyup,
     dropAsset,
@@ -96,7 +105,7 @@ export default {
     updateScale,
     showExportView,
     switchTheme,
-    arrowKeydownCanvasView,
+    // arrowKeydownCanvasView,
     keyupCanvasView,
     clipboardPaste,
     clipboardCopy,

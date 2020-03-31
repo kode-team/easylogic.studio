@@ -73,9 +73,9 @@ export default class CanvasView extends UIElement {
     this.emit('keyupCanvasView', e.key);
   }
 
-  [KEYDOWN('$el') + IF('isArrowKey') + IF('isNotFormElement')] (e) {
-    this.emit('arrowKeydownCanvasView', e.key, e.altKey, e.shiftKey);
-  }  
+  // [KEYDOWN('$el') + IF('isArrowKey') + IF('isNotFormElement')] (e) {
+  //   // this.emit('arrowKeydownCanvasView', e.key, e.altKey, e.shiftKey);
+  // }  
 
   [WHEEL('$lock') + ALT + PREVENT + THROTTLE(10)] (e) {
 

@@ -8,7 +8,7 @@ import CanvasView from "../ui/view/CanvasView";
 import ToolMenu from "../ui/view/ToolMenu";
 
 import UIElement, { EVENT } from "../../util/UIElement";
-import { DRAGOVER, DROP, PREVENT, TRANSITIONEND, KEYDOWN, KEYUP } from "../../util/Event";
+import { DRAGOVER, DROP, PREVENT, TRANSITIONEND, KEYDOWN, KEYUP, IF } from "../../util/Event";
 import Inspector from "../ui/control/Inspector";
 
 
@@ -26,6 +26,10 @@ import TimelineProperty from "../ui/control/TimelineProperty";
 import StatusBar from "../ui/view/StatusBar";
 
 import PreviewToolMenu from "../ui/view/PreviewToolMenu";
+
+
+const formElements = ['INPUT','SELECT','TEXTAREA']
+
 export default class CSSEditor extends UIElement {
   
   initialize () {
@@ -152,11 +156,17 @@ export default class CSSEditor extends UIElement {
 
   }
 
-  [KEYDOWN('document')] (e) {
+  isNotFormElement(e) {
+    var tagName = e.target.tagName;
+
+    return formElements.includes(tagName) === false && Dom.create(e.target).attr('contenteditable') !== 'true';
+  }  
+
+  [KEYDOWN('document') + IF('isNotFormElement')] (e) {
     this.emit('keymap.keydown', e);
   }
 
-  [KEYUP('document')] (e) {
+  [KEYUP('document') + IF('isNotFormElement')] (e) {
     this.emit('keymap.keyup', e);
   }
 }
