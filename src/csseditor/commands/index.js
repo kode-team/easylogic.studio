@@ -58,9 +58,10 @@ import itemMoveLeft from "./item.move.left";
 import itemMoveRight from "./item.move.right";
 import itemMoveUp from "./item.move.up";
 import itemMoveDown from "./item.move.down";
-
+import itemDelete from "./item.delete";
 
 export default {
+    itemDelete,
     itemMoveRight,
     itemMoveUp,
     itemMoveDown,

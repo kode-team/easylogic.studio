@@ -26,6 +26,9 @@
         right:0px;
         bottom:0px;
 
+        &.split-panel {
+            pointer-events: none;
+        }
 
         &.has-transform {
             background-color: $path-background-color;
@@ -82,9 +85,6 @@
                     &.object {
                         stroke: $border-color;
                     }                
-                    &.split-path {
-                        // stroke: $path-guide-color;
-                    }
                 }
             }
         }
@@ -97,12 +97,9 @@
         top:0px;
         right:0px;
         bottom:0px;        
-        // background-color: rgba(yellow, 0.1);
-
 
         .transform-manager {
             position: absolute;
-            // background-color: rgba($selected-color, 0.2);
             pointer-events: all;
             display: none;
 
@@ -200,7 +197,6 @@
             stroke-width: 1; 
 
             &[data-guide='true'] {
-                stroke: $border-color;
                 pointer-events: none;
             }
 
@@ -213,7 +209,7 @@
 
         circle {
             fill: white;
-            stroke: black; 
+            stroke: $path-guide-color; 
             stroke-width: 1;
             cursor: move;
 
@@ -222,19 +218,16 @@
             }
 
             &[data-is-first="true"] {
-                // fill: $selected-color;
                 stroke: $selected-color;
                 z-index: 1;
             }
 
             &[data-is-second="true"] {
-                // fill: darken($selected-color, 50%);
                 stroke: darken($selected-color, 50%);
                 z-index: 1;
             }            
 
             &[data-is-last="true"] {
-                // fill: blue;
                 stroke: blue;
                 z-index: 1;
             }       
@@ -244,6 +237,11 @@
                 stroke: $selected-color;
             }
             
+            &.split-circle {
+                fill: $selected-color;
+                stroke: $selected-color;
+                pointer-events: none;
+            }
         }
 
         .svg-canvas {
@@ -273,8 +271,7 @@
             &.guide {
                 fill: transparent;
                 stroke: $path-guide-color;
-                stroke-width: 1; 
-                // stroke-dasharray: 2 2;                 
+                stroke-width: 1;                
             }
 
             &.segment {

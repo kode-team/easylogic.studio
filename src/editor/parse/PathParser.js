@@ -22,6 +22,22 @@ const matrix = {
         };
     },
 
+    toPercent: function (w, h) { // pixel 로 되어 있던 것을 percent 로 복구 
+        return function (b, startIndex = 0) {
+            var x = +b[startIndex];
+            var y = +b[startIndex+1];            
+            return [x/w, y/h, 1]
+        }
+    },
+
+    toPixel: function (w, h) {  // percent 로 되어 있던 것을 pixel 로 복구 
+        return function (b, startIndex = 0) {
+            var x = +b[startIndex];
+            var y = +b[startIndex+1];            
+            return [x * w, y * h, 1]
+        }
+    },    
+
     translate : function (tx, ty) {
         return this.multiply([
             [1, 0, tx],
@@ -435,6 +451,16 @@ export default class PathParser {
 
     clone () {
         return new PathParser(this.joinPath());
+    }
+
+    toPercent(maxWidth, maxHeight) {
+        this._loop(matrix.toPercent(maxWidth, maxHeight));
+        return this;  
+    }
+
+    toPixel (maxWidth, maxHeight) {
+        this._loop(matrix.toPixel(maxWidth, maxHeight));
+        return this; 
     }
 
     translate (tx, ty) {

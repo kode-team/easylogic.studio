@@ -37,10 +37,12 @@ export default {
                     editor.selection.select(artboard);
                 }
             }
+
+            editor.load(projects);
+            _refreshSelection(editor)            
+        } else {
+            // 아무 것도 없을 때는 artboard 하나를 자동으로 만들어준다. 
+            editor.emit('addArtBoard');
         }
-
-
-        editor.load(projects);
-        _refreshSelection(editor)
     }
 }

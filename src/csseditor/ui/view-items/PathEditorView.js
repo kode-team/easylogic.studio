@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
-import { POINTERSTART, MOVE, END, BIND, POINTERMOVE, PREVENT, KEYUP, IF, STOP, CLICK, DOUBLECLICK, KEY, LOAD, ENTER, ESCAPE } from "../../../util/Event";
+import { POINTERSTART, MOVE, END, BIND, POINTERMOVE, PREVENT, KEYUP, IF, STOP, CLICK, DOUBLECLICK, ENTER, ESCAPE } from "../../../util/Event";
 import PathGenerator from "../../../editor/parse/PathGenerator";
 import Dom from "../../../util/Dom";
 import PathParser from "../../../editor/parse/PathParser";
@@ -23,7 +23,6 @@ const SegmentConvertor = class extends UIElement {
     [DOUBLECLICK('$view [data-segment]')] (e) {
         var index = +e.$dt.attr('data-index')
 
-
         this.pathGenerator.convertToCurve(index);
 
         this.renderPath()
@@ -33,6 +32,48 @@ const SegmentConvertor = class extends UIElement {
 }
 
 const PathCutter = class extends SegmentConvertor {
+
+    calculatePointOnLine (d, clickPosition) {
+        var parser = new PathParser(d);
+
+        if (parser.segments[1].command === 'C') {
+            var points = [
+                xy(parser.segments[0].values),
+                xy(parser.segments[1].values.slice(0, 2)),
+                xy(parser.segments[1].values.slice(2, 4)),
+                xy(parser.segments[1].values.slice(4, 6))
+            ]
+    
+            var curve = recoverBezier(...points, 200)
+            var t = curve(clickPosition.x, clickPosition.y);
+
+            return getBezierPoints(points, t).first[3]
+    
+        } else if (parser.segments[1].command === 'Q') {
+            var points = [
+                xy(parser.segments[0].values),
+                xy(parser.segments[1].values.slice(0, 2)),
+                xy(parser.segments[1].values.slice(2, 4))
+            ]
+    
+            var curve = recoverBezierQuard(...points, 200)
+            var t = curve(clickPosition.x, clickPosition.y);
+
+            return getBezierPointsQuard(points, t).first[2]
+        } else if (parser.segments[1].command === 'L') {
+            var points = [
+                xy(parser.segments[0].values),
+                xy(parser.segments[1].values.slice(0, 2))
+            ]
+
+            var curve = recoverBezierLine(...points, 200)
+            var t = curve(clickPosition.x, clickPosition.y);          
+        
+            return getBezierPointsLine(points, t).first[1]
+        }     
+        
+        return clickPosition;
+    }
 
     [CLICK('$view .split-path')] (e) {
         this.initRect()
@@ -178,8 +219,13 @@ export default class PathEditorView extends PathTransformEditor {
 
     template() {
         return /*html*/`
-        <div class='path-editor-view' tabIndex="-1" ref='$view'>
+        <div class='path-editor-view' tabIndex="-1">
             <div class='path-container' ref='$view'></div>
+            <div class='path-container split-panel'>
+                <svg width="100%" height="100%">
+                    <circle ref='$splitCircle' />
+                </svg>
+            </div>
             <div class='path-tool'>
                 <div class='transform-manager' ref='$tool'>
                     <div class='transform-tool-item' data-position='to rotate'></div>                
@@ -465,16 +511,23 @@ export default class PathEditorView extends PathTransformEditor {
         }
     }
 
+    [BIND('$splitCircle')] () {
+        if (this.state.splitXY) {
+            return {
+                cx: this.state.splitXY.x,
+                cy: this.state.splitXY.y,
+                r: 5
+            }
+        } else {
+            return {
+                r: 0
+            }
+        }
+
+    }
 
     refreshPathLayer () {
         this.updatePathLayer();
-    }
-
-    [BIND('$splitCircle')] () {
-        return {
-            cx: this.state.splitXY.x,
-            cy: this.state.splitXY.y
-        }
     }
 
     renderPath () {
@@ -517,16 +570,18 @@ export default class PathEditorView extends PathTransformEditor {
             this.renderPath()
         } else {
 
-            var isSplitPath = Dom.create(e.target).hasClass('split-path')
+            var $target = Dom.create(e.target)
+            var isSplitPath = $target.hasClass('split-path')
             if (isSplitPath) {
-                this.state.splitXY = {
+                this.state.splitXY = this.calculatePointOnLine($target.attr('d') ,{
                     x: e.xy.x - this.state.rect.x, 
                     y: e.xy.y - this.state.rect.y 
-                }; 
-    
-                this.bindData('$splitCircle');
+                }); 
+            } else {
+                this.state.splitXY = null; 
             }
 
+            this.bindData('$splitCircle');
 
             this.state.altKey = false; 
         }
@@ -545,7 +600,6 @@ export default class PathEditorView extends PathTransformEditor {
             y: e.xy.y - this.state.rect.y
         }; 
         this.state.isOnCanvas = false; 
-
 
         var $target = Dom.create(e.target);
 
@@ -647,7 +701,6 @@ export default class PathEditorView extends PathTransformEditor {
 
             this.state.dragPoints = e.altKey ? false : true; 
         }
-
     }
 
     end (dx, dy) {
@@ -671,8 +724,10 @@ export default class PathEditorView extends PathTransformEditor {
 
         } else if (this.isMode('segment-move')) {
 
-            this.changeMode('modify');           
-            this.renderPath()
+            this.changeMode('modify');      
+            // 마지막 지점에서 다시 renderpath 를 하게 되면 element 가 없어서 double 클릭을 인식 할 수가 없음. 
+            // 그래서 삭제하니 이코드는 주석으로 그대로 나두자.      
+            // this.renderPath()            
 
         } else if (this.isMode('draw')) {            
 
@@ -691,7 +746,6 @@ export default class PathEditorView extends PathTransformEditor {
                     this.trigger('hidePathEditor')
                 }
             } else {
-                // this.changeMode('modify');
 
                 this.pathGenerator.moveEnd(dx, dy);
                 this.state.clickCount++;

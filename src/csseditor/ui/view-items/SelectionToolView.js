@@ -32,7 +32,6 @@ const SelectionToolEvent = class  extends UIElement {
 
     [EVENT('hideSubEditor')] (e) {
         this.toggleEditingPath(false);
-        this.toggleEditingPolygon(false);
     }
 
     [EVENT('openPathEditor')] () {
@@ -151,10 +150,6 @@ export default class SelectionToolView extends SelectionToolBind {
     toggleEditingPath (isEditingPath) {
         this.refs.$selectionTool.toggleClass('editing-path', isEditingPath);
     }
-
-    toggleEditingPolygon (isEditingPolygon) {
-        this.refs.$selectionTool.toggleClass('editing-polygon', isEditingPolygon);
-    }   
     
     checkEditMode () {
         return this.$editor.isSelectionMode(); 

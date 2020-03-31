@@ -18,7 +18,6 @@ import BackdropFilterProperty from "./BackdropFilterProperty";
 import TransformProperty from "./TransformProperty";
 import ClipPathProperty from "./ClipPathProperty";
 import TransitionProperty from "./TransitionProperty";
-import ComputedCodeViewProperty from "./ComputedCodeViewProperty";
 import PerspectiveOriginProperty from "./PerspectiveOriginProperty";
 import PerspectiveProperty from "./PerspectiveProperty";
 import TransformOriginProperty from "./TransformOriginProperty";
@@ -85,7 +84,6 @@ export default {
   TransformOriginProperty,
   PerspectiveProperty,
   PerspectiveOriginProperty,
-  ComputedCodeViewProperty,
   TransitionProperty,
   ClipPathProperty,
   TransformProperty,

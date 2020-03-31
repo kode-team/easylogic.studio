@@ -61,11 +61,6 @@ export default class ElementView extends UIElement {
         this.$el.attr('data-mode', this.$editor.mode);
     }
 
-
-    [EVENT('hideSubEditor')] (e) {
-        this.children.$pathEditorView.$el.hide();
-    }
-
     getElement (id) {
         return this.refs.$view.$(`[data-id="${id}"]`);
     }

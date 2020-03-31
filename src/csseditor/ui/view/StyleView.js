@@ -1,6 +1,6 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
 
-import { DEBOUNCE, LOAD } from "../../../util/Event";
+import { LOAD } from "../../../util/Event";
 import Dom from "../../../util/Dom";
 import { CSS_TO_STRING, isArray, isString } from "../../../util/functions/func";
 import { Project } from "../../../editor/items/Project";
@@ -167,12 +167,6 @@ export default class StyleView extends UIElement {
 
     return this.makeSvg(project)
   }   
-
-  [EVENT('refreshComputedStyle') + DEBOUNCE(100)] (last) {
-    var computedCSS = this.refs.$canvas.getComputedStyle(...last)
-    
-    this.emit('refreshComputedStyleCode', computedCSS)
-  }
 
   // timeline 에서 테스트 할 때 이걸 활용할 수 있다. 
   // 움직이기 원하는 객체가 타임라인 전체라 
