@@ -26,7 +26,6 @@ export default class PathManager extends UIElement {
             <button type="button" data-value='draw' title='${this.$i18n('path.manager.mode.draw')}' > ${icon.control_point}</button>
             <button type="button" data-value='transform' title='${this.$i18n('path.manager.mode.transform')}' > ${icon.format_shapes}</button>
         </div>
-        <div class='split'></div>
         <div class='tools' ref='$flip'>
             <button type="button" data-value='flipX' title='${this.$i18n('path.manager.mode.flipX')}'>${icon.flip}</button>
             <button type="button" data-value='flipY' title='${this.$i18n('path.manager.mode.flipY')}'>${icon.flip}</button>

@@ -399,7 +399,7 @@ export default {
     'component.items.layer': 'Layer',
     'component.items.3dlayer': '3D Layer',
     'component.items.drawing': 'Drawing',
-
+    'component.items.custom': 'Custom Component',    
 
     'svg.text.property.title': "SVG Text Style",
     'svg.text.property.textarea': "Text Area",

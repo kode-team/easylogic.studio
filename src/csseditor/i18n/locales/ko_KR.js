@@ -404,6 +404,7 @@ export default {
     'component.items.layer': '레이어',
     'component.items.3dlayer': '3D 레이어',
     'component.items.drawing': '그리기',
+    'component.items.custom': '사용자 정의 컴포넌트',    
 
     'svg.text.property.title': "SVG Text 스타일",
     'svg.text.property.textarea': "텍스트 입력",

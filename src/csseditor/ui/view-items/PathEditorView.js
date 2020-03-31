@@ -223,7 +223,7 @@ export default class PathEditorView extends PathTransformEditor {
             <div class='path-container' ref='$view'></div>
             <div class='path-container split-panel'>
                 <svg width="100%" height="100%">
-                    <circle ref='$splitCircle' />
+                    <circle ref='$splitCircle' class='split-circle' />
                 </svg>
             </div>
             <div class='path-tool'>
