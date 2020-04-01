@@ -5,7 +5,7 @@ import BaseSlider from '../../BaseSlider';
 export default class Opacity extends BaseSlider {
 
     template () {
-        return `
+        return /*html*/`
         <div class="opacity">
             <div ref="$container" class="opacity-container">
                 <div ref="$colorbar" class="color-bar"></div>

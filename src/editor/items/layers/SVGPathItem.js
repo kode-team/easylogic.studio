@@ -15,6 +15,7 @@ export class SVGPathItem extends SVGItem {
     return super.getDefaultObject({
       itemType: 'svg-path',
       name: "New Path",   
+      'stroke-width': 3,
       d: '',        // 이건 최종 결과물로만 쓰고 나머지는 모두 segments 로만 사용한다. 
       segments: [],
       totalLength: 0,

@@ -25,7 +25,9 @@ export default class EmbedColorPicker extends UIElement {
   }
 
   template() {
-    return `<div ref="$color"></div>`;
+    return /*html*/`
+      <div ref="$color"></div>
+    `;
   }
 
   changeColor(color) {

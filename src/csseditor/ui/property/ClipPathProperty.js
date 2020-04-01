@@ -132,7 +132,7 @@ export default class ClipPathProperty extends BaseProperty {
     switch(obj.type) {
     case 'path':
       var d = obj.value.trim()
-      var mode = d ? 'modify' : 'draw'
+      var mode = d ? 'modify' : 'path'
 
       this.emit('showPathEditor', mode, {
         changeEvent: 'updateClipPathString',

@@ -7,9 +7,8 @@ import SelectionToolView from "../view-items/SelectionToolView";
 import GuideLineView from "../view-items/GuideLineView";
 import PathEditorView from "../view-items/PathEditorView";
 import GridLayoutLineView from "../view-items/GridLayoutLineView";
-import { BackgroundImage } from "../../../editor/css-property/BackgroundImage";
-import { STRING_TO_CSS, CSS_TO_STRING } from "../../../util/functions/func";
-import { LinearGradient } from "../../../editor/image-resource/LinearGradient";
+import PathDrawView from "../view-items/PathDrawView";
+
 
 
 export default class ElementView extends UIElement {
@@ -19,6 +18,7 @@ export default class ElementView extends UIElement {
             SelectionToolView,
             GuideLineView,
             PathEditorView,
+            PathDrawView,
             GridLayoutLineView,
         }
     }
@@ -44,6 +44,7 @@ export default class ElementView extends UIElement {
                 <GridLayoutLineView ref='$gridLayoutLineView' />
                 <SelectionToolView ref='$selectionTool' />
                 <PathEditorView ref='$pathEditorView' />
+                <PathDrawView ref='$pathDrawView' />
             </div>
         `
     }

@@ -155,6 +155,10 @@ function checkInArea (area, point) {
 
 export default class PathGenerator {
 
+    static generatorPathString (points, minX, minY, scale) {
+        return toPath(points, minX, minY, scale).d;
+    }
+
     constructor (pathEditor) {
         
         this.pathEditor = pathEditor;

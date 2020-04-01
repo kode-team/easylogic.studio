@@ -135,7 +135,6 @@ export default class PathParser {
     }
 
     parse () {
-
         var arr = this.pathString.match(REG_PARSE_NUMBER_FOR_PATH) || [];
 
         this.segments = arr.map(s => {

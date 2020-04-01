@@ -74,6 +74,6 @@ export default class LayoutProperty extends BaseProperty {
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
-    this.refreshShow(['layer', 'artboard'], true);
+    this.refreshShow(['rect', 'circle', 'artboard'], true);
   }
 }

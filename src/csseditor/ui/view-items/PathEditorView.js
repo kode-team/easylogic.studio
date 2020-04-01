@@ -180,9 +180,9 @@ const PathTransformEditor = class extends PathCutter {
     }
 
     moveEndTransformTool  (dx, dy) {
-        // this.pathGenerator.transform(this.transformMoveType, dx, dy);
+        this.transformMoveType = 'none'
 
-        // this.renderPath();
+        this.renderTransformTool();
     }
 }
 
@@ -201,7 +201,7 @@ export default class PathEditorView extends PathTransformEditor {
             isShow: false,
             points: [],
             hasTransform: false, 
-            mode: 'draw',
+            mode: 'path',
             $target: null, 
             clickCount: 0,
             isSegment: false,
@@ -250,6 +250,7 @@ export default class PathEditorView extends PathTransformEditor {
 
         return {
             'data-show': this.state.mode === 'transform',
+            'data-position': this.transformMoveType,
             style: {
                 left: Length.px(rect.x),
                 top: Length.px(rect.y),
@@ -429,29 +430,8 @@ export default class PathEditorView extends PathTransformEditor {
 
             var x = obj.screenX.value * this.scale
             var y = obj.screenY.value * this.scale
-            // var width = obj.screenWidth.value * this.scale
-            // var height = obj.screenHeight.value * this.scale
 
             this.pathParser.translate(x, y)
-
-            // var transform = Transform.parseStyle(obj.current.transform);
-            // var rotateValue = transform.find(it => it.type === 'rotateZ' || it.type === 'rotate');
-            // var transformRotate = 0; 
-
-            // if (rotateValue) {
-            //     transformRotate = rotateValue.value[0].value;
-            // }
-
-            // transformRotate = (transformRotate + 360) % 360
-            // this.pathParser.rotate(degreeToRadian(transformRotate), x + width/2, y + height/2)
-
-            // this.state.reverse = [
-            //     degreeToRadian(-transformRotate), 
-            //     x + width/2, 
-            //     y + height/2
-            // ]
-            // this.state.reverseXY = {x, y, width, height}
-
 
             this.state.points = this.pathParser.convertGenerator();      
             this.state.hasTransform = !!obj.current.transform;
@@ -464,7 +444,7 @@ export default class PathEditorView extends PathTransformEditor {
 
     }
 
-    [EVENT('showPathEditor')] (mode = 'draw', obj = {}) {
+    [EVENT('showPathEditor')] (mode = 'path', obj = {}) {
 
         if (mode === 'move') {
             obj.current = null;
@@ -500,7 +480,7 @@ export default class PathEditorView extends PathTransformEditor {
     [BIND('$view')] () {
         return {
             class: {
-                'draw': this.state.mode === 'draw',
+                'path': this.state.mode === 'path',
                 'modify': this.state.mode === 'modify',
                 'transform': this.state.mode === 'transform',
                 'box': this.state.box === 'box',
@@ -560,7 +540,7 @@ export default class PathEditorView extends PathTransformEditor {
 
     [POINTERMOVE('$view')] (e) {        
         this.initRect()
-        if (this.isMode('draw') && this.state.rect) {            
+        if (this.isMode('path') && this.state.rect) {            
             this.state.moveXY = {
                 x: e.xy.x - this.state.rect.x, 
                 y: e.xy.y - this.state.rect.y 
@@ -593,7 +573,7 @@ export default class PathEditorView extends PathTransformEditor {
         this.initRect();
 
         this.state.altKey = false; 
-        var isDrawMode = this.isMode('draw');
+        var isPathMode = this.isMode('path');
 
         this.state.dragXY = {
             x: e.xy.x - this.state.rect.x, 
@@ -603,7 +583,7 @@ export default class PathEditorView extends PathTransformEditor {
 
         var $target = Dom.create(e.target);
 
-        if ($target.hasClass('svg-editor-canvas') && !isDrawMode) {
+        if ($target.hasClass('svg-editor-canvas') && !isPathMode) {
             this.state.isOnCanvas = true; 
             // return false; 
         } else {
@@ -614,7 +594,7 @@ export default class PathEditorView extends PathTransformEditor {
             
         }
 
-        if (isDrawMode) {
+        if (isPathMode) {
 
             if (this.state.isFirstSegment) {
                 // 마지막 지점을 연결할 예정이기 때문에 
@@ -696,7 +676,7 @@ export default class PathEditorView extends PathTransformEditor {
 
             this.updatePathLayer();
 
-        } else if (this.isMode('draw')) {
+        } else if (this.isMode('path')) {
             var e = this.$config.get('bodyEvent');
 
             this.state.dragPoints = e.altKey ? false : true; 
@@ -729,7 +709,7 @@ export default class PathEditorView extends PathTransformEditor {
             // 그래서 삭제하니 이코드는 주석으로 그대로 나두자.      
             // this.renderPath()            
 
-        } else if (this.isMode('draw')) {            
+        } else if (this.isMode('path')) {            
 
 
             if (this.state.isFirstSegment) {

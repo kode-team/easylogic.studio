@@ -94,11 +94,6 @@ export default class PathDataEditor extends UIElement {
 
         var arr = segments.map(it => {
             var cls = it.command === 'M' ? 'm' : '';
-
-            // 마지막 체크 
-            // Z 인지 체크 
-            // Z 토글 
-            // 유령 Z 를 만들어두고 토글하기 
             return /*html*/`
                 <div class='segment ${cls}'>
                     <div class='command' data-command='${it.command}' data-toggle="${it.toggle}" title='Toggle'>${it.command}</div>
@@ -106,6 +101,10 @@ export default class PathDataEditor extends UIElement {
                         ${it.values.map(v => {
                             return /*html*/`<input type="number" value="${v}" />`
                         }).join('')}
+
+                        ${it.command === 'Z' ? (
+                            it.toggle === false ? "opened" : 'closed'
+                        ) : ''}
                     </div>
                 </div>
             `

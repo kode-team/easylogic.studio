@@ -37,6 +37,7 @@ export default class ComponentItems extends UIElement {
         <div class='group'>
          <label>${this.$i18n('component.items.drawing')}</label>
           <div class='list'>            
+            <AddDrawPath title='Draw' />
             <AddPath title='Path' />
             <AddSVGRect title='Rect' />
             <AddSVGCircle title='Circle' />

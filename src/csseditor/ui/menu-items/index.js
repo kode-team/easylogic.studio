@@ -29,8 +29,10 @@ import AddSVGText from "./AddSVGText";
 import LoginButton from "./LoginButton";
 import SignButton from "./SignButton";
 import AddArtboard from "./AddArtboard";
+import AddDrawPath from "./AddDrawPath";
 
 export default {
+  AddDrawPath,
   AddArtboard,  
   SignButton,
   LoginButton,

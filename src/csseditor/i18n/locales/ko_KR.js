@@ -208,13 +208,25 @@ export default {
 
     'fill.editor.message.click.image': '이미지를 선택하고 싶으면 프리뷰 영역을 클릭하세요.',
     'fill.editor.message.drag.position': '가운데 위치를 드래그 해보세요.',
+    'fill.editor.x1': '시작 X',
+    'fill.editor.x2': '끝 X',
+    'fill.editor.y1': '시작 Y',
+    'fill.editor.y2': '끝 Y',    
+    'fill.editor.spread': '확산',    
+    'fill.editor.offset': '위치',
+    'fill.editor.cx': '중심점 X',
+    'fill.editor.cy': '중심점 Y',    
+    'fill.editor.r': '끝 반지름',
+    'fill.editor.fx': '시작 X',
+    'fill.editor.fy': '시작 Y',
+    'fill.editor.fr': '시작 반지름',    
 
     'perspective.origin.editor.originX': '중심점 X',
     'perspective.origin.editor.originY': '중심점 Y',    
 
     'path.manager.msg': '편집을 종료할 때는 ESC 키나 Enter 키를 누르세요. 또는 화면을 클릭하시면 됩니다.',    
     'path.manager.mode.modify': '점 편집',
-    'path.manager.mode.draw': '점 추가',
+    'path.manager.mode.path': '점 추가',
     'path.manager.mode.transform': '변형',
     'path.manager.mode.flipX': 'X축 회전',    
     'path.manager.mode.flipY': 'Y축 회전',    
@@ -417,7 +429,7 @@ export default {
     'svg.text.property.text.length': "텍스트 길이",
     'svg.text.property.start.offset': "시작 지점",
 
-    'fill.picker.popup.title': 'SVG Fragment picker',    
+    'fill.picker.popup.title': '색 채우기',    
 
     'gradient.editor.drag.message': '드래그 하면 중심점을 옮길 수 있습니다.',
 

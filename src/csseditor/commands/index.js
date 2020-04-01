@@ -12,8 +12,6 @@ import newComponent from "./newComponent";
 import addComponentType from "./addComponentType";
 import clipboardCopy from "./clipboard.copy";
 import clipboardPaste from "./clipboard.paste";
-import keyupCanvasView from "./keyupCanvasView";
-// import arrowKeydownCanvasView from "./arrowKeydownCanvasView";
 import switchTheme from "./switchTheme";
 import showExportView from "./showExportView";
 import updateScale from "./updateScale";
@@ -59,8 +57,10 @@ import itemMoveRight from "./item.move.right";
 import itemMoveUp from "./item.move.up";
 import itemMoveDown from "./item.move.down";
 import itemDelete from "./item.delete";
+import addDrawPath from "./addDrawPath";
 
 export default {
+    addDrawPath,
     itemDelete,
     itemMoveRight,
     itemMoveUp,
@@ -106,8 +106,6 @@ export default {
     updateScale,
     showExportView,
     switchTheme,
-    // arrowKeydownCanvasView,
-    keyupCanvasView,
     clipboardPaste,
     clipboardCopy,
     addComponentType,

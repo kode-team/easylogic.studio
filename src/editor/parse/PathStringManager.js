@@ -1,5 +1,4 @@
 import PathParser from "./PathParser";
-import Point from "./Point";
 
 export default class PathStringManager {
     constructor () {
@@ -88,6 +87,21 @@ export default class PathStringManager {
         parser.translate(1, 1).scale(width/2, height/2).translate(x, y);
 
         return parser.toString();
+    }
+
+    static makePathByPoints (points = []) {
+        var manager = new PathStringManager()
+
+        for(var i = 0, len = points.length; i < len; i++) {
+            const point = points[i];
+            if (i === 0) {
+                manager.M(point)
+            } else {
+                manager.L(point);
+            }
+        }
+
+        return manager.d;
     }
 
 }

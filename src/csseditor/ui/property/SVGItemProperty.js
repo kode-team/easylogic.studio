@@ -196,16 +196,13 @@ export default class SVGItemProperty extends BaseProperty {
             onchange="changeValue" 
           />
         </div> 
-
         <div class='property-item animation-property-item'>
           <span class='add-timeline-property' data-property='stroke-linejoin'></span>      
-          <span>${this.$i18n('svg.item.property.lineJoin')}</span>
-        </div>
-        <div class='property-item'>
           <SelectIconEditor 
             ref='$strokeLineJoin' 
+            label='${this.$i18n('svg.item.property.lineJoin')}'             
             key="stroke-linejoin" 
-            options="miter,arcs,bevel,miter-clip,round" 
+            options="miter,bevel,round" 
             onchange="changeValue" 
           />
         </div>        

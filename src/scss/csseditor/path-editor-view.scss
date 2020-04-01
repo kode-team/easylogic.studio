@@ -34,7 +34,7 @@
             background-color: $path-background-color;
         }
 
-        &.draw {
+        &.path {
             cursor: crosshair;
             svg {
                 path {
@@ -106,6 +106,15 @@
             &[data-show="true"] {
                 display: inline-block;
             }            
+
+            &[data-position="to rotate"] {
+                box-shadow: none;
+
+            
+                .transform-tool-item:not([data-position="to rotate"]) {
+                    display: none;
+                }
+            }
 
             .transform-tool-item {
                 position: absolute;

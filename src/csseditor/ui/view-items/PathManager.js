@@ -5,7 +5,7 @@ import icon from "../icon/icon";
 const MODES = {
   'segment-move': 'modify',
   'modify': 'modify',
-  'draw': 'draw',
+  'path': 'path',
   'transform': 'transform',
 } 
 
@@ -23,7 +23,7 @@ export default class PathManager extends UIElement {
       <div class='path-manager'>
         <div class='tools' ref='$mode' data-selected-value='${this.state.mode}'>
             <button type="button" data-value='modify' title='${this.$i18n('path.manager.mode.modify')}' > ${icon.device_hub}</button>
-            <button type="button" data-value='draw' title='${this.$i18n('path.manager.mode.draw')}' > ${icon.control_point}</button>
+            <button type="button" data-value='path' title='${this.$i18n('path.manager.mode.path')}' > ${icon.control_point}</button>
             <button type="button" data-value='transform' title='${this.$i18n('path.manager.mode.transform')}' > ${icon.format_shapes}</button>
         </div>
         <div class='tools' ref='$flip'>
