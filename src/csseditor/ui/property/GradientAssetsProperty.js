@@ -1,12 +1,9 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, CLICK, INPUT, DEBOUNCE, DRAGSTART, DRAG } from "../../../util/Event";
+import { LOAD, CLICK, DEBOUNCE, DRAGSTART } from "../../../util/Event";
 import { EVENT } from "../../../util/UIElement";
 import icon from "../icon/icon";
 import { Gradient } from "../../../editor/image-resource/Gradient";
-
-const DEFINE_GRADIENTS = Gradient.randomByCount(20).map(gradient => {
-  return { gradient }
-})
+import gradients from "../../../editor/preset/gradients";
 
 export default class GradientAssetsProperty extends BaseProperty {
 
@@ -16,8 +13,27 @@ export default class GradientAssetsProperty extends BaseProperty {
 
   initState() {
     return {
-      mode: 'grid'
+      mode: 'grid',
+      preset: 'random'
     }
+  }
+
+  getTools() {
+
+    const options = gradients.map(it => `${it.key}:${it.title}`)
+
+    options.push(':none')
+
+    return /*html*/`
+      <SelectEditor key="preset" value="${this.state.preset}" options="${options}" onchange="changePreset"  />
+    `
+  }  
+
+  [EVENT('changePreset')] (key, value) {
+
+    this.setState({
+      [key]: value
+    })
   }
 
   getClassName() {
@@ -44,15 +60,17 @@ export default class GradientAssetsProperty extends BaseProperty {
   }
 
   [LOAD("$gradientList")]() {
-    var current = this.$selection.currentProject || { gradients: DEFINE_GRADIENTS }
+    var preset = gradients.find(it => it.key === this.state.preset);
 
-    var gradients = current.gradients;
+    if (!preset) {
+      return '';
+    }
 
-    var results = gradients.map( (item, index) => { 
+    var results = preset.execute().map( (item, index) => { 
 
       return /*html*/`
-        <div class='gradient-item' data-index="${index}" data-gradient='${item.gradient}'>
-          <div class='preview' draggable="true">
+        <div class='gradient-item' data-index="${index}" data-gradient='${item.gradient}' data-custom="${item.custom}">
+          <div class='preview' title="${item.gradient}" draggable="true">
             <div class='gradient-view' style='background-image: ${item.gradient};'></div>
           </div>
           <div class='tools'>
@@ -63,7 +81,9 @@ export default class GradientAssetsProperty extends BaseProperty {
       `
     })
 
-    results.push(/*html*/`<div class='add-gradient-item'><butto type="button">${icon.add}</button></div>`)
+    if (preset.edit) {
+      results.push(/*html*/`<div class='add-gradient-item'><butto type="button">${icon.add}</button></div>`)
+    }
 
     return results
   }

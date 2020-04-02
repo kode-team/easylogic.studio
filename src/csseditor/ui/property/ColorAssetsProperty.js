@@ -3,10 +3,7 @@ import { LOAD, CLICK, DEBOUNCE, DRAGSTART } from "../../../util/Event";
 import { EVENT } from "../../../util/UIElement";
 import icon from "../icon/icon";
 import Color from "../../../util/Color";
-
-const DEFINE_COLORS = Color.randomByCount(20).map(color => {
-  return { color }
-})
+import colors from "../../../editor/preset/colors";
 
 export default class ColorAssetsProperty extends BaseProperty {
 
@@ -16,8 +13,25 @@ export default class ColorAssetsProperty extends BaseProperty {
 
   initState() {
     return {
-      mode: 'grid'
+      mode: 'grid',
+      preset: 'random'
     }
+  }
+
+  getTools() {
+
+    const options = colors.map(it => `${it.key}:${it.title}`)
+
+    return /*html*/`
+      <SelectEditor key="preset" value="${this.state.preset}" options="${options}" onchange="changePreset"  />
+    `
+  }
+
+  [EVENT('changePreset')] (key, value) {
+
+    this.setState({
+      [key]: value
+    })
   }
 
   getClassName() {
@@ -44,15 +58,17 @@ export default class ColorAssetsProperty extends BaseProperty {
   }  
 
   [LOAD("$colorList")]() {
-    var current = this.$selection.currentProject || { colors: DEFINE_COLORS }
+    var preset = colors.find(it => it.key === this.state.preset);
 
-    var colors = current.colors;   
+    if (!preset) {
+      return '';
+    }
 
-    var results = colors.map( (item, index) => {
+    var results = preset.execute().map( (item, index) => {
 
       return /*html*/`
-        <div class='color-item' data-index="${index}" data-color="${item.color}">
-          <div class='preview' data-index="${index}" draggable="true"><div class='color-view' style='background-color: ${item.color};'></div></div>
+        <div class='color-item' data-index="${index}" data-color="${item.color}" data-custom="${item.custom}">
+          <div class='preview' title="${item.color}" data-index="${index}" draggable="true"><div class='color-view' style='background-color: ${item.color};'></div></div>
           <div class='tools'>
             <button type="button" class='copy'>${icon.copy}</button>          
             <button type="button" class='remove'>${icon.remove}</button>
@@ -61,7 +77,9 @@ export default class ColorAssetsProperty extends BaseProperty {
       `
     })
 
-    results.push(`<div class='add-color-item'><butto type="button">${icon.add}</button></div>`)
+    if (preset.edit) {
+      results.push(`<div class='add-color-item'><butto type="button">${icon.add}</button></div>`)
+    }
 
     return results
   }

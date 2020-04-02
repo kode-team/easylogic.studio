@@ -1,3 +1,4 @@
+$asset-item-size: 30px;
 .gradient-assets-property {
     .gradient-list-tools {
         display: grid;
@@ -39,21 +40,18 @@
         }
 
         &[data-view-mode="grid"] {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            grid-column-gap: 2px;
-            grid-row-gap: 2px;
-
+            display: block;
             .add-gradient-item {
                 display: inline-block;
-                width: 40px;
+                width: $asset-item-size;
                 position: relative;
-                height: 40px;
+                height: $asset-item-size;
                 border: 1px solid lighten($selected-color, 5%);
-                border-radius: 2px;
+                // border-radius: 2px;
+                vertical-align: top;                  
                 cursor: pointer;         
                 text-align: center;
-                padding-top: 5px;
+                padding-top: 2px;
 
                 svg {
                     path {
@@ -64,24 +62,27 @@
 
             .gradient-item {
                 display: inline-block;
-                width: 40px;
+                width: $asset-item-size;
                 position: relative;
                 vertical-align: middle;
-                margin-right: 2px;
-                margin-bottom: 4px;
+                margin-right: 1px;
+                margin-bottom: 1px;
                 
                 &:hover {
-                    .tools {
-                        display: inline-block;
+                    &[data-custom="true"] {
+                        .tools {
+                            display: inline-block;
+                        }
                     }
+
                 }
 
                 .preview {
                     position: relative;
                     width:100%;
-                    height: 40px;
-                    border: 1px solid #e6e6e6;
-                    border-radius: 2px;
+                    height: $asset-item-size;
+                    // border: 1px solid #e6e6e6;
+                    // border-radius: 2px;
                     
                     cursor: pointer;
                     @include transparent-background();
@@ -105,7 +106,14 @@
                     text-align: right;   
                     padding: 2px;
 
+                    button {
+                        width: 10px;
+                        height: 10px;
+                    }
+
                     svg {
+                        width: 100%; 
+                        height: 100%;
                         path {
                             fill: $selected-font-color;
                         }
