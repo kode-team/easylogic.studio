@@ -4,9 +4,9 @@ import { LinearGradient } from "../../editor/image-resource/LinearGradient";
 
 export default {
     command: 'addBackgroundImageGradient',
-    execute: function (editor, gradient) {
-
-        editor.selection.each(item => {
+    execute: function (editor, gradient, id = null) {
+        var items = editor.selection.itemsByIds(id);
+        items.forEach(item => {
             let images = BackgroundImage.parseStyle(STRING_TO_CSS(item['background-image']));
 
             images.unshift(new BackgroundImage({

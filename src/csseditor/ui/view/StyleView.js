@@ -220,9 +220,11 @@ export default class StyleView extends UIElement {
       styleTags.push(this.makeStyle(item))
     })
 
-    this.refs.$head.$$(removeStyleSelector).forEach(it => {
-      it.remove();
-    })
+    if (removeStyleSelector.length) {
+      this.refs.$head.$$(removeStyleSelector).forEach(it => {
+        it.remove();
+      })  
+    }
 
     var $temp = Dom.create('div')        
 

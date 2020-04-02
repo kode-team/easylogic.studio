@@ -4,9 +4,10 @@ import { URLImageResource } from "../../editor/image-resource/URLImageResource";
 
 export default {
     command: 'addBackgroundImageAsset',
-    execute: function (editor, url) {
+    execute: function (editor, url, id = null) {
+        var items = editor.selection.itemsByIds(id);
 
-        editor.selection.each(item => {
+        items.forEach(item => {
             let images = BackgroundImage.parseStyle(STRING_TO_CSS(item['background-image']));
 
             images.unshift(new BackgroundImage({

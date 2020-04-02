@@ -1,3 +1,5 @@
+import { clone } from "../../util/functions/func";
+
 export default class Point {
     static isEqual(a, b) {
         return a.x === b.x && a.y === b.y; 
@@ -5,6 +7,77 @@ export default class Point {
 
     static isFirst (point) {
         return point && point.command == 'M'
+    }
+
+
+    static DouglasPeuker(tolerance, points, start, last) {
+        if (last <= start + 1) return ;
+    
+        let maxdist2 = 0;
+        let breakIndex = start; 
+        const tol2 = tolerance * tolerance; // 임계점 설정 
+        const startPoint = points[start];
+        const lastPoint = points[last];
+    
+        for(var i = start + 1; i < last; i++) {
+            // 꼭지점 길이 찾기 
+            const dist2 = Point.segmentDistance2(points[i].x, points[i].y, startPoint, lastPoint);
+    
+            if (dist2 <= maxdist2) continue;
+    
+            breakIndex = i; 
+            maxdist2 = dist2;
+        }
+    
+        // 임계치를 넘어가면 분기 해서 다시 맞추기 
+        if (maxdist2 > tol2) {
+            points[breakIndex].mark = true;         // mark된 것만 점으로 출력 
+    
+            Point.DouglasPeuker(tolerance, points, start, breakIndex);
+            Point.DouglasPeuker(tolerance, points, breakIndex, last);
+        }
+    }    
+
+    static simply (points, tolerance) {
+
+        if (points.length <= 2) {
+            return points;
+        }
+
+        points = clone(points);
+
+        // 처음과 끝은 무조건 존재하는 걸로 
+        points[0].mark = true; 
+        points[points.length-1].mark = true; 
+
+        // 간소화 포인트 계산 
+        Point.DouglasPeuker(tolerance, points, 0, points.length-1);
+
+        return points.filter(it => Boolean(it.mark))
+    }
+
+    static segmentDistance2(x, y, A, B) {
+        let dx = B.x - A.x; 
+        let dy = B.y - A.y;
+    
+        let lenAB = dx * dx + dy * dy;
+    
+        let du = x - A.x; 
+        let dv = y - A.y;
+        let dot = dx * du + dy * dv; 
+    
+        if (lenAB === 0) return du * du + dv * dv; 
+    
+        if (dot <= 0) return du * du + dv * dv; 
+        else if (dot >= lenAB) {
+            du = x - B.x;
+            dv = y - B.y;
+    
+            return du * du + dv * dv;
+        } else {
+            const slash = du * dy - dv * dx; 
+            return slash * slash/lenAB;
+        }
     }
 
     // check whether C is in A->C line 

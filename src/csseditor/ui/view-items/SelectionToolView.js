@@ -212,21 +212,11 @@ export default class SelectionToolView extends SelectionToolBind {
         this.makeSelectionTool();           
     }
 
-    end (dx, dy) {
-
-        var e = this.$config.get('bodyEvent');
-
-        if (e.altKey) {
-            dy = dx; 
-        }
-
+    end () {
         this.refs.$selectionTool.attr('data-selected-position', '');
         this.refs.$selectionTool.attr('data-selected-movetype', '');
 
-        this.emit('refreshSelectionStyleView', null, true, true)
-        this.refreshSelectionToolView(dx, dy);   
-
-        this.emit('refreshAllElementBoundSize');            
+        this.emit('refreshAllElementBoundSize');
         this.emit('removeGuideLine')
     }   
 

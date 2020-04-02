@@ -357,24 +357,13 @@ export default class ElementView extends UIElement {
 
     calculateEndedElement (dx, dy) {
 
-        var current = this.$selection.items.length === 1 ? this.$selection.current : null;
-
-
         if (dx === 0 && dy === 0) {
-
             if (this.hasSVG) {
                 this.emit('openPathEditor');
                 return; 
             }
 
-        }
-
-        this.children.$selectionTool.refreshSelectionToolView(dx, dy, 'move');
-
-        this.emit('refreshElement', current, false, true);
-        this.$selection.setRectCache()                
-
-        if (dx != 0 || dy != 0) {
+        } else {
             this.emit('removeGuideLine')        
         }
     }

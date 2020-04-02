@@ -6,6 +6,7 @@ import { SVGPathItem } from "../../../editor/items/layers/SVGPathItem";
 import { Length } from "../../../editor/unit/Length";
 import PathStringManager from "../../../editor/parse/PathStringManager";
 import PathGenerator from "../../../editor/parse/PathGenerator";
+import Point from "../../../editor/parse/Point";
 
 
 export default class PathDrawView extends UIElement {
@@ -64,7 +65,8 @@ export default class PathDrawView extends UIElement {
             var height = pathRect.height / this.scale; 
 
             // rect 기준으로 상대 좌표로 다시 변환 
-            const parser = new PathParser(PathStringManager.makePathByPoints(this.state.points))
+            const simplyPoints = Point.simply(this.state.points, 2)
+            const parser = new PathParser(PathStringManager.makePathByPoints(simplyPoints))
             const d = PathGenerator.generatorPathString(parser.convertGenerator(), x, y, this.scale);
 
             layer = artboard.add(new SVGPathItem({
@@ -75,7 +77,7 @@ export default class PathDrawView extends UIElement {
             }))
 
             layer.setScreenX(x);
-            layer.setScreenY(y);
+            layer.setScreenY(y);      
         }
 
         return layer; 
