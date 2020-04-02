@@ -18,9 +18,11 @@ import materialDeeporange from "./material-deeporange"
 import materialBrown from "./material-brown"
 import materialGray from "./material-gray"
 import materialBluegray from "./material-bluegray"
+import opencolorGray from "./opencolor-gray"
 
 export default [
     random,
+    opencolorGray,
     materialRed,
     materialPink,
     materialPurple,

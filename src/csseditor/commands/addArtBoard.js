@@ -12,9 +12,9 @@ export default function addArtBoard (editor, obj = {}) {
 
     var artboard = project.add(editor.components.createComponent('artboard', {
         x: Length.px(300),
-        y: Length.px(300),
-        width: Length.px(300),
-        height: Length.px(600),
+        y: Length.px(200),
+        width: Length.px(375),
+        height: Length.px(667),
         ...obj
     }))
 
