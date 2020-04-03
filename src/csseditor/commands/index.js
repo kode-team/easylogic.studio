@@ -58,8 +58,10 @@ import itemMoveUp from "./item.move.up";
 import itemMoveDown from "./item.move.down";
 import itemDelete from "./item.delete";
 import addDrawPath from "./addDrawPath";
+import changeModeView from "./change.mode.view";
 
 export default {
+    changeModeView,
     addDrawPath,
     itemDelete,
     itemMoveRight,

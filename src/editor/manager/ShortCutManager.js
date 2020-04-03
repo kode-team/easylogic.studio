@@ -72,11 +72,21 @@ export class ShortCutManager {
         return this.commands[keyString]
     }
 
+    checkWhen(command) {
+        if (command.when === this.$editor.modeView) {
+            return true; 
+        } else if (command.when === '') {
+            return true; 
+        }
+
+        return false; 
+    }
+
     execute (e, eventType = 'keydown') {
         let commands = this.checkShortCut(this.makeKeyString(e))
 
         if (commands) {
-            commands.filter(it => it.eventType === eventType).forEach(it => {
+            commands.filter(it => it.eventType === eventType).filter(it => this.checkWhen(it)).forEach(it => {
                 this.$editor.emit(it.command, it.args);
             })
         }

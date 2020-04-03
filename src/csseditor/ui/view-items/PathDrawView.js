@@ -122,6 +122,8 @@ export default class PathDrawView extends UIElement {
         this.setState({
             ...obj
         }, false)    
+
+        this.emit('change.mode.view', 'PathDrawView');
     }
 
     getCurrentObject () {
@@ -154,6 +156,8 @@ export default class PathDrawView extends UIElement {
             'fill-opacity': this.state['fill-opacity'],
             'stroke-width': this.state['stroke-width'],
         });        
+
+
     }
 
     [EVENT('hidePathDrawEditor')] () {
@@ -163,6 +167,7 @@ export default class PathDrawView extends UIElement {
         this.$el.hide();
         this.emit('finishPathEdit')
         this.emit('hideDrawManager');
+        this.emit('change.mode.view');        
     }
 
 

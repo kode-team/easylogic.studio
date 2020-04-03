@@ -216,6 +216,9 @@ export default class SelectionToolView extends SelectionToolBind {
         this.refs.$selectionTool.attr('data-selected-position', '');
         this.refs.$selectionTool.attr('data-selected-movetype', '');
 
+
+        this.$selection.setRectCache();
+
         this.emit('refreshAllElementBoundSize');
         this.emit('removeGuideLine')
     }   

@@ -364,6 +364,7 @@ export default class ElementView extends UIElement {
             }
 
         } else {
+            this.$selection.setRectCache()                
             this.emit('removeGuideLine')        
         }
     }

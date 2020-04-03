@@ -165,10 +165,12 @@ export default class PathManager extends UIElement {
       this.$el.show();
 
       this.emit('addStatusBarMessage', this.state.msg)
+      this.emit('change.mode.view', 'PathEditorView');
   }
 
   [EVENT('hidePathManager')] () {
       this.$el.hide();
+      this.emit('change.mode.view');          
   }
 
   [EVENT('hideSubEditor')] () {

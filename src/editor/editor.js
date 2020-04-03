@@ -40,6 +40,7 @@ export class Editor {
     this.images = {}
     this.openRightPanel = true; 
     this.mode = EDIT_MODE_SELECTION
+    this.modeView = 'CanvasView';
     this.addComponentType = '' 
     this.locale = this.loadItem('locale') || 'en_US'
     this.$store = opt.$store;
@@ -117,6 +118,10 @@ export class Editor {
 
   changeMode (mode = EDIT_MODE_SELECTION) {
     this.mode = mode;   // add or selection  
+  }
+
+  changeModeView (modeView = 'CanvasView') {
+    this.modeView = modeView;
   }
 
   isMode (mode) {
