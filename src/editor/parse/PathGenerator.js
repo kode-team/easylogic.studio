@@ -670,21 +670,14 @@ export default class PathGenerator {
         return this.selectedPointList.length;
     }
 
-    moveSelectedSegment (dx, dy, isDirect = false) {
+    moveSelectedSegment (dx, dy) {
 
         // 선택된 포인터를 옮길 때 
         // curve 에 연결된 endPoint와 reversePoint 를 같이 책임 질 것인가? 
-
         this.selectedPointList.forEach(it => {
             var target = this.state.points[it.index][it.key]
-
-            if (isDirect) {
-                target.x = it.x = it.x + dx; 
-                target.y = it.y = it.y + dy; 
-            } else {
-                target.x = it.x + dx; 
-                target.y = it.y + dy; 
-            }
+            target.x = it.x + dx; 
+            target.y = it.y + dy; 
         })
     }
 
