@@ -1,13 +1,15 @@
 import UIElement from "../../../util/UIElement";
 
 import PathManager from "./PathManager";
+import DrawManager from "./DrawManager";
 
 
 export default class PageSubEditor extends UIElement {
 
   components() {
     return {
-      PathManager
+      PathManager,
+      DrawManager
     }
   }
 
@@ -15,6 +17,7 @@ export default class PageSubEditor extends UIElement {
     return/*html*/`
       <div class='page-subeditor'>
         <PathManager />
+        <DrawManager />
         <SelectionManager />
       </div>
     `;

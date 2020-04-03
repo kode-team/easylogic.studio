@@ -88,13 +88,11 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
   // text-align: center; 
   font-size: 12px;
   pointer-events: none;
-
-  @import './sub-editor/path-manager.scss';
-
 }
 
+@import './sub-editor/path-manager.scss';
+@import './sub-editor/draw-manager.scss';
 @import './rotate-editor-view.scss';
-
 
 
 .page-canvas {

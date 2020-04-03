@@ -7,7 +7,10 @@ import { Length } from "../../../editor/unit/Length";
 import PathStringManager from "../../../editor/parse/PathStringManager";
 import PathGenerator from "../../../editor/parse/PathGenerator";
 import Point from "../../../editor/parse/Point";
+import { OBJECT_TO_PROPERTY } from "../../../util/functions/func";
+import { SVGFill } from "../../../editor/svg-property/SVGFill";
 
+const FIELDS = ['fill', 'fill-opacity', 'stroke', 'stroke-width']
 
 export default class PathDrawView extends UIElement {
 
@@ -22,12 +25,24 @@ export default class PathDrawView extends UIElement {
             changeEvent: 'updatePathItem', 
             points: [],
             $target: null, 
+            fill: 'transparent',
+            stroke: 'black',
+            'fill-opacity': null,
+            'stroke-width': 2,
+            tolerance: 1,
             screenX: Length.px(0),
             screenY: Length.px(0),
             screenWidth: Length.px(0),
             screenHeight: Length.px(0)
         }
     }
+
+
+    [EVENT('changeDrawManager')] (obj) {
+        this.setState({ ...obj }, false);
+        this.renderPath()
+    }
+
 
     get scale () {
         return this.$editor.scale; 
@@ -65,7 +80,7 @@ export default class PathDrawView extends UIElement {
             var height = pathRect.height / this.scale; 
 
             // rect 기준으로 상대 좌표로 다시 변환 
-            const simplyPoints = Point.simply(this.state.points, 2)
+            const simplyPoints = Point.simply(this.state.points, this.state.tolerance)
             const parser = new PathParser(PathStringManager.makePathByPoints(simplyPoints))
             const d = PathGenerator.generatorPathString(parser.convertGenerator(), x, y, this.scale);
 
@@ -75,6 +90,10 @@ export default class PathDrawView extends UIElement {
                 d,
                 totalLength: this.totalPathLength
             }))
+
+            FIELDS.forEach(key => {
+                if (this.state[key]) layer.reset({ [key]: this.state[key] })    
+            });
 
             layer.setScreenX(x);
             layer.setScreenY(y);      
@@ -128,6 +147,13 @@ export default class PathDrawView extends UIElement {
 
         this.$el.show();
         this.$el.focus();
+
+        this.emit('showDrawManager', {
+            fill: this.state.fill,
+            stroke: this.state.stroke,
+            'fill-opacity': this.state['fill-opacity'],
+            'stroke-width': this.state['stroke-width'],
+        });        
     }
 
     [EVENT('hidePathDrawEditor')] () {
@@ -136,14 +162,73 @@ export default class PathDrawView extends UIElement {
         this.refs.$view.empty()
         this.$el.hide();
         this.emit('finishPathEdit')
-        this.emit('hidePathManager');
+        this.emit('hideDrawManager');
     }
 
+
+    getInnerId(postfix = '') {
+        return 'draw-manager-' + postfix;
+    }   
+    
+
+    get toFillSVG () {
+        return SVGFill.parseImage(this.state.fill || 'transparent').toSVGString(this.fillId);
+    }
+
+    get toStrokeSVG () {
+        return SVGFill.parseImage(this.state.stroke || 'black').toSVGString(this.strokeId);
+    }  
+
+    get toDefInnerString () {
+        return /*html*/`
+            ${this.toFillSVG}
+            ${this.toStrokeSVG}
+        `
+    }
+    
+    get toDefString () {
+
+        var str = this.toDefInnerString.trim();
+
+        // if (!str) return ''; 
+
+        return /*html*/`
+            <defs>
+            ${str}
+            </defs>
+        `
+    }    
+
+    get fillId () {
+        return this.getInnerId('fill')
+    }
+    
+    get strokeId () {
+        return this.getInnerId('stroke')
+    }
+
+    get toFillValue () {
+        return  SVGFill.parseImage(this.state.fill || 'transparent').toFillValue(this.fillId);
+    }
+    
+    get toStrokeValue () {
+        return  SVGFill.parseImage(this.state.stroke || 'black').toFillValue(this.strokeId);
+    }      
+
     [BIND('$view')] () {
+
         return {
             innerHTML: /*html*/`
             <svg width="100%" height="100%" class='svg-editor-canvas'>
-                <path class='object' d="${PathStringManager.makePathByPoints(this.state.points)}" />
+                ${this.toDefString}
+                <path class='object' 
+                    ${OBJECT_TO_PROPERTY({
+                        fill: this.toFillValue,
+                        stroke: this.toStrokeValue,
+                        'fill-opacity': this.state['fill-opacity'],
+                        'stroke-width': this.state['stroke-width'],
+                    })}
+                    d="${PathStringManager.makePathByPoints(this.state.points)}" />
             </svg>
             ` 
         }

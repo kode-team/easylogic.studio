@@ -1,0 +1,67 @@
+.draw-manager {
+    display: none; 
+    pointer-events: all;
+    outline: none;
+    border-top: 0px;
+    color: $font-color;
+    background-color: $background-color;  
+    height: 100%;
+    padding: 2px 5px;
+
+    .text { 
+        display: inline-block;
+    }
+
+
+    .split {
+        display: inline-block;
+        height: 20px;
+        vertical-align: middle;
+        width: 3px;
+        margin-right: 2px;
+        border-right: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .tools {
+        height: 100%;        
+        display: inline-block;
+
+        > div {
+          display: inline-block;
+
+          label {
+            text-align: right;
+            padding: 3px 2px;
+            line-height: 20px;
+          }
+
+          .number-input-editor {
+            display: inline-block;
+
+            .range-editor-type {
+              display: inline-block;
+
+              input[type=number] {
+                background-color: $border-color;
+                border-radius: 3px;
+              }
+            }
+          }
+
+          .fill-single-editor {
+            .preview {
+              width: 20px;
+              height: 20px;
+              border: 1px solid $selected-color;
+              border-radius: 5px;
+              overflow: hidden;
+            }
+          }
+        }
+    }
+
+    > * {
+        vertical-align: middle;
+    }
+
+}

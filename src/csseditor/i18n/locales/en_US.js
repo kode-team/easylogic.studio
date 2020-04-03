@@ -427,4 +427,6 @@ export default {
     'fill.picker.popup.title': 'SVG Fragment picker',
 
     'gradient.editor.drag.message': 'Drag if you want to move center pointer.',
+
+    'draw.manager.tolerance': 'Tolerance'
 }

@@ -15,6 +15,11 @@ const i18n = {
             return str(params)
         } else {
             var newValue = str; 
+
+            if (key === newValue) {
+                return key.split('.').pop();
+            } 
+
             keyEach(params, (key, value) => {
                 newValue = newValue.replace(new RegExp(`\{${key}\}`, 'ig'), value);
             })
