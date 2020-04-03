@@ -143,7 +143,7 @@ export default class BaseProperty extends UIElement {
         if (isRefresh) this.refresh();
       }
     } else {
-      
+      // this.show();
     }
   }
 
@@ -163,7 +163,9 @@ export default class BaseProperty extends UIElement {
           this.hide();
         }
       } 
-    } 
+    }  else {
+      this.hide();
+    }
   }
 
 

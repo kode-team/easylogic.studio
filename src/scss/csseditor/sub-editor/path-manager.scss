@@ -68,6 +68,39 @@
                 }
             }
         }
+
+        > div {
+          display: inline-block;
+
+          label {
+            text-align: right;
+            padding: 3px 2px;
+            line-height: 20px;
+          }
+
+          .number-input-editor {
+            display: inline-block;
+
+            .range-editor-type {
+              display: inline-block;
+
+              input[type=number] {
+                background-color: $border-color;
+                border-radius: 3px;
+              }
+            }
+          }
+
+          .fill-single-editor {
+            .preview {
+              width: 20px;
+              height: 20px;
+              border: 1px solid $selected-color;
+              border-radius: 5px;
+              overflow: hidden;
+            }
+          }
+        }
     }
 
     > * {

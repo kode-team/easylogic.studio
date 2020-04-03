@@ -157,7 +157,7 @@ export default {
 
 
     'svg.item.property.title': 'SVG Item',
-    'svg.item.property.isMotionPath': 'Is motion path?',    
+    'svg.item.property.isMotionPath': 'Motion Path',    
     'svg.item.property.fill': 'Fill',
     'svg.item.property.fillOpacity': 'Opacity',
     'svg.item.property.path': 'Path',

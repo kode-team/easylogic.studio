@@ -43,21 +43,17 @@ export default class LayerTab extends UIElement {
             <div class='logo-item'>
               <label class='logo' title='EasyLogic Studio'></label>
             </div>                  
-            <div class='tab-item selected' data-value='4' >
+            <div class='tab-item selected' data-value='4' title="${this.$i18n('app.tab.title.components')}">
               <label>${icon.add}</label>
-              <div class='title'>${this.$i18n('app.tab.title.components')}</div>
             </div>          
-            <div class="tab-item" data-value="2">
+            <div class="tab-item" data-value="2" title="${this.$i18n('app.tab.title.layers')}">
               <label>${icon.account_tree}</label>
-              <div class='title'>${this.$i18n('app.tab.title.layers')}</div>
             </div>            
-            <div class="tab-item" data-value="1">
+            <div class="tab-item" data-value="1" title="${this.$i18n('app.tab.title.projects')}">
               <label>${icon.note}</label>
-              <div class='title'>${this.$i18n('app.tab.title.projects')}</div>
             </div>         
-            <div class='tab-item' data-value='5'>
+            <div class='tab-item' data-value='5' title="${this.$i18n('app.tab.title.assets')}">
               <label>${icon.view_list}</label>
-              <div class='title'>${this.$i18n('app.tab.title.assets')}</div>
             </div>   
 
             <div class='tab-item extra-item' >

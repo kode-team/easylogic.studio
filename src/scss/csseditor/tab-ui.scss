@@ -60,6 +60,32 @@ $tab-horizontal-header-right-width: 60px;
             flex: none;
             height: auto;
             margin-bottom: 10px;
+            position: relative;
+
+            &.selected {
+              background-color: transparent;
+              &:before {
+                content: '';
+                background-color: $selected-color;
+                width: 2px;
+                position: absolute;
+                left:1px;
+                top:0px;
+                bottom:0px;
+              }
+
+
+            label {
+                padding: 4px 13px;
+                height: auto;
+
+                svg {
+                  path {
+                    fill: $selected-color;
+                  }
+                }
+              }
+            }
 
             &.extra-item {
               flex: 1 1 auto;

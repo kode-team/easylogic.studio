@@ -157,7 +157,7 @@ export default {
     'perspective.origin.property.title': '원근 중심점',                
 
     'svg.item.property.title': 'SVG 아이템',    
-    'svg.item.property.isMotionPath': '모션 패스 체크',
+    'svg.item.property.isMotionPath': '모션 패스',
     'svg.item.property.fill': '채우기',
     'svg.item.property.fillOpacity': '투명도',
     'svg.item.property.path': '패스',

@@ -46,6 +46,10 @@
         line-height: 2.2;
         margin-left: 2px;
 
+        &.simple {
+            display: none;
+        }
+
         .color {
             border:1px solid $font-color;
             display: inline-block;

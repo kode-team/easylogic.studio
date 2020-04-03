@@ -28,6 +28,16 @@
   }
 }
 
+.preview-tool-menu {
+  max-height: 300px;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  display: inline-block;
+  overflow: auto;
+}
+
 .tool-menu,
 .preview-tool-menu{
   color: $selected-font-color;

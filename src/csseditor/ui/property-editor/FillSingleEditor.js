@@ -7,7 +7,8 @@ export default class FillSingleEditor extends UIElement {
     initState() { 
         return {
             index: this.props.index,
-            label: this.props.label,            
+            label: this.props.label,      
+            simple: this.props.simple === 'true' ? true : false,       
             image: SVGFill.parseImage(this.props.image || 'transparent')
         }
     }
@@ -76,7 +77,7 @@ export default class FillSingleEditor extends UIElement {
     }
 
     template() {
-        var { label, removable } = this.state;
+        var { label, removable, simple } = this.state;
         var hasLabel = !!label ? 'has-label' : ''
 
         return /*html*/`
@@ -91,7 +92,7 @@ export default class FillSingleEditor extends UIElement {
                         </svg>
                     </div>
                 </div>
-                <div class='colors' ref='$colors'></div>
+                <div class='colors ${simple ? 'simple' : ''}' ref='$colors'></div>
             </div>
         `
     }

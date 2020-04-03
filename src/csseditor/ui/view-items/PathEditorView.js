@@ -186,6 +186,8 @@ const PathTransformEditor = class extends PathCutter {
     }
 }
 
+const FIELDS = ['fill', 'fill-opacity', 'stroke', 'stroke-width']
+
 export default class PathEditorView extends PathTransformEditor {
 
     initialize() {
@@ -308,7 +310,11 @@ export default class PathEditorView extends PathTransformEditor {
                 height: Length.px(height),
                 d,
                 totalLength: this.totalPathLength
-            }))
+            }));
+
+            FIELDS.forEach(key => {
+                if (this.state[key]) layer.reset({ [key]: this.state[key] })    
+            });
 
             layer.setScreenX(x);
             layer.setScreenY(y);
@@ -388,8 +394,8 @@ export default class PathEditorView extends PathTransformEditor {
         this.emit('changePathManager', this.state.mode );
     }
 
-    [EVENT('changePathManager')] (mode) {
-        this.setState({ mode, clickCount: 0 }, false);
+    [EVENT('changePathManager')] (obj) {
+        this.setState({ ...obj, clickCount: 0 }, false);
         this.renderPath()
     }
 

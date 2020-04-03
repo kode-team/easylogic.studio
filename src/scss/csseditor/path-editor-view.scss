@@ -245,6 +245,13 @@
                 fill: $selected-color;
                 stroke: $selected-color;
             }
+
+            &[data-segment-point="endPoint"],
+            &[data-segment-point="reversePoint"] {
+                &:not([data-selected='true']) {
+                    fill: $path-segment-fill-color;
+                }
+            }
             
             &.split-circle {
                 fill: $selected-color;

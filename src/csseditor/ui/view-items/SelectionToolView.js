@@ -36,7 +36,7 @@ const SelectionToolEvent = class  extends UIElement {
 
     [EVENT('openPathEditor')] () {
         var current = this.$selection.current;
-        if (current && current.is('svg-path', 'svg-textpath', 'svg-polygon')) {
+        if (current && current.is('svg-path', 'svg-textpath')) {
             this.toggleEditingPath(true);
 
             this.emit('showPathEditor', 'modify', {
@@ -266,9 +266,6 @@ export default class SelectionToolView extends SelectionToolBind {
         if (current) {
             var isPath = current.is('svg-path', 'svg-textpath');
             this.refs.$selectionTool.toggleClass('path', isPath);            
-
-            var isPolygon = current.is('svg-polygon');
-            this.refs.$selectionTool.toggleClass('polygon', isPolygon);
         }
 
         if (this.$editor.isSelectionMode() && this.$el.isHide()) {
