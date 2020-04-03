@@ -689,6 +689,19 @@ export default class PathEditorView extends PathTransformEditor {
         }
     }
 
+    [EVENT('moveSegment')] (dx, dy) {
+
+        // 선택된 세그먼트 옮기기 
+        if (this.pathGenerator.selectedLength) {
+            this.pathGenerator.moveSelectedSegment(dx, dy, true);
+
+            this.renderPath()      
+    
+            this.updatePathLayer();
+        }
+
+    }
+
     end (dx, dy) {
 
         if (this.state.isOnCanvas) {

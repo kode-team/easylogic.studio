@@ -59,8 +59,16 @@ import itemMoveDown from "./item.move.down";
 import itemDelete from "./item.delete";
 import addDrawPath from "./addDrawPath";
 import changeModeView from "./change.mode.view";
+import segmentMoveDown from "./segment.move.down";
+import segmentMoveUp from "./segment.move.up";
+import segmentMoveRight from "./segment.move.right";
+import segmentMoveLeft from "./segment.move.left";
 
 export default {
+    segmentMoveDown,
+    segmentMoveUp,
+    segmentMoveRight,
+    segmentMoveLeft,
     changeModeView,
     addDrawPath,
     itemDelete,

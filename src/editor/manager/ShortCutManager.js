@@ -86,7 +86,12 @@ export class ShortCutManager {
         let commands = this.checkShortCut(this.makeKeyString(e))
 
         if (commands) {
-            commands.filter(it => it.eventType === eventType).filter(it => this.checkWhen(it)).forEach(it => {
+            const filteredCommands = commands.filter(it => it.eventType === eventType)
+                                             .filter(it => this.checkWhen(it));
+            if (filteredCommands.length) {
+                e.preventDefault();
+            }
+            filteredCommands.forEach(it => {
                 this.$editor.emit(it.command, it.args);
             })
         }

@@ -19,6 +19,10 @@ import num3 from "./num.3";
 import num4 from "./num.4";
 import num5 from "./num.5";
 import num6 from "./num.6";
+import segmentMoveKeyDown from "./segment.move.key.down";
+import segmentMoveKeyUp from "./segment.move.key.up";
+import segmentMoveKeyRight from "./segment.move.key.right";
+import segmentMoveKeyLeft from "./segment.move.key.left";
 
 export default [
 
@@ -29,6 +33,12 @@ export default [
     num4,
     num5,
     num6,
+
+    // move segment by arrow key 
+    segmentMoveKeyDown,
+    segmentMoveKeyUp,
+    segmentMoveKeyRight,
+    segmentMoveKeyLeft,
 
     // move item by arrow key 
     itemMoveKeyLeft,
