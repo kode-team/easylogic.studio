@@ -40,6 +40,18 @@ body {
     left:0px;
     top: 0px; 
 
+   
+    $pointer-color: #4075d6;
+    $tool-size: 34px;
+    $left-size: 250px;
+    $left-layer-panel: 70px; 
+    $left-page-size: 70px;
+    $toggle-left-size: 80px;
+    $right-size: 260px;
+    $timeline-header-size: 40px;
+    $timeline-size: 300px;
+    $show-timeline-animation: all 0.05s linear;
+    $footer-height: 30px; 
 
     &[data-theme='dark'] {
         @import './themes/csseditor/dark.scss';

@@ -358,6 +358,7 @@ export default class EventMachine {
           newTemplate = newTemplate.join('');
         }
 
+        // create fragment 
         const fragment = this.parseTemplate(html`${newTemplate}`, true);
 
         if (isVdom) {

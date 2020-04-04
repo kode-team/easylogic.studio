@@ -7,6 +7,7 @@ import PathParser from "../../../editor/parse/PathParser";
 import { SVGPathItem } from "../../../editor/items/layers/SVGPathItem";
 import { Length } from "../../../editor/unit/Length";
 import { getBezierPoints, recoverBezier, recoverBezierQuard, getBezierPointsQuard, recoverBezierLine, getBezierPointsLine } from "../../../util/functions/bezier";
+import { isFunction } from "../../../util/functions/func";
 
 
 /**
@@ -689,22 +690,30 @@ export default class PathEditorView extends PathTransformEditor {
         }
     }
 
-    [EVENT('moveSegment')] (dx, dy) {
-
-        // 선택된 세그먼트 옮기기 
+    renderSegment (callback) {
         if (this.pathGenerator.selectedLength) {
-
             // reselect 로 이전 점들의 위치를 초기화 해줘야 한다. 꼭 
             this.pathGenerator.reselect()   
             // reselect 로 이전 점들의 위치를 초기화 해줘야 한다. 꼭 
 
-            this.pathGenerator.moveSelectedSegment(dx, dy);
+            if (isFunction(callback)) callback();
 
-            this.renderPath()      
-    
+            this.renderPath();
+
             this.updatePathLayer();
         }
+    }
 
+    [EVENT('deleteSegment')] () {
+        this.renderSegment(() => {
+            this.pathGenerator.removeSelectedSegment();
+        })
+    }
+
+    [EVENT('moveSegment')] (dx, dy) {
+        this.renderSegment(() => {
+            this.pathGenerator.moveSelectedSegment(dx, dy);
+        })
     }
 
     end (dx, dy) {

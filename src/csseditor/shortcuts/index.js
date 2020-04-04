@@ -23,6 +23,15 @@ import segmentMoveKeyDown from "./segment.move.key.down";
 import segmentMoveKeyUp from "./segment.move.key.up";
 import segmentMoveKeyRight from "./segment.move.key.right";
 import segmentMoveKeyLeft from "./segment.move.key.left";
+import segmentMoveShiftDown from "./segment.move.shift.down";
+import segmentMoveShiftUp from "./segment.move.shift.up";
+import segmentMoveShiftLeft from "./segment.move.shift.left";
+import segmentMoveAltDown from "./segment.move.alt.down";
+import segmentMoveAltUp from "./segment.move.alt.up";
+import segmentMoveAltLeft from "./segment.move.alt.left";
+import segmentMoveAltRight from "./segment.move.alt.right";
+import segmentMoveShiftRight from "./segment.move.shift.right";
+import segmentDelete from "./segment.delete";
 
 export default [
 
@@ -39,6 +48,18 @@ export default [
     segmentMoveKeyUp,
     segmentMoveKeyRight,
     segmentMoveKeyLeft,
+
+    segmentMoveShiftDown,
+    segmentMoveShiftUp,
+    segmentMoveShiftLeft,
+    segmentMoveShiftRight,
+
+    segmentMoveAltDown,
+    segmentMoveAltUp,
+    segmentMoveAltLeft,
+    segmentMoveAltRight,
+
+    segmentDelete,
 
     // move item by arrow key 
     itemMoveKeyLeft,

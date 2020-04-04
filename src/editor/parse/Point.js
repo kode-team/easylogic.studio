@@ -1,8 +1,12 @@
 import { clone } from "../../util/functions/func";
 
 export default class Point {
-    static isEqual(a, b) {
-        return a.x === b.x && a.y === b.y; 
+    static isEqual(a, b, c) {
+        if (arguments.length === 2) {
+            return a.x === b.x && a.y === b.y; 
+        } else if (arguments.length === 3) {
+            return Point.isEqual(a, b) && Point.isEqual(b, c);
+        }
     }
 
     static isFirst (point) {
@@ -219,4 +223,10 @@ export default class Point {
 
         return nextPoint;
     }       
+
+    static removePoint (points, pIndex, segment) {
+        if (segment === 'startPoint') {
+            return points.filter((_, index) => index !== pIndex)
+        }
+    }
 }

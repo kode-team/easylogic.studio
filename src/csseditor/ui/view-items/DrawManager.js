@@ -40,10 +40,10 @@ export default class DrawManager extends UIElement {
     return /*html*/`
       <div class='draw-manager'>
         <div class='tools'>   
-          <div >
+          <div >        
+            <label>${this.$i18n('draw.manager.tolerance')}</label>            
             <NumberInputEditor 
               ref='$tolerance' 
-              label='${this.$i18n('draw.manager.tolerance')}' 
               key='tolerance' 
               value="1" 
               min="0"
@@ -54,18 +54,14 @@ export default class DrawManager extends UIElement {
             />
           </div>              
           <div >
-            <FillSingleEditor ref='$fill' simple="true" value="${this.state.fill}" label='${this.$i18n('svg.item.property.fill')}' key='fill' onchange="changeValue" />
+            <label>${this.$i18n('svg.item.property.fill')}</label>
+            <FillSingleEditor ref='$fill' simple="true" value="${this.state.fill}" key='fill' onchange="changeValue" />
           </div>
 
-
           <div >
-            <FillSingleEditor ref='$stroke' simple="true" value="${this.state.stroke}"  label='${this.$i18n('svg.item.property.stroke')}' key='stroke' onchange="changeValue" />
-          </div>      
-
-          <div >
+            <label>${this.$i18n('svg.item.property.fillOpacity')}</label>          
             <NumberInputEditor 
               ref='$fillOpacity' 
-              label='${this.$i18n('svg.item.property.fillOpacity')}' 
               key='fill-opacity' 
               value="${this.state['fill-opacity']}"
               min="0"
@@ -76,11 +72,15 @@ export default class DrawManager extends UIElement {
               onchange="changeValue" 
               />
           </div>   
+          <div >
+            <label>${this.$i18n('svg.item.property.stroke')}</label>          
+            <FillSingleEditor ref='$stroke' simple="true" value="${this.state.stroke}" key='stroke' onchange="changeValue" />
+          </div>                
 
           <div >
+            <label>${this.$i18n('svg.item.property.strokeWidth')}</label>          
             <NumberInputEditor 
               ref='$strokeWidth' 
-              label='${this.$i18n('svg.item.property.strokeWidth')}' 
               key="stroke-width" 
               value="${this.state['stroke-width']}"              
               onchange="changeValue" />

@@ -63,8 +63,10 @@ import segmentMoveDown from "./segment.move.down";
 import segmentMoveUp from "./segment.move.up";
 import segmentMoveRight from "./segment.move.right";
 import segmentMoveLeft from "./segment.move.left";
+import segmentDelete from "./segment.delete";
 
 export default {
+    segmentDelete,
     segmentMoveDown,
     segmentMoveUp,
     segmentMoveRight,

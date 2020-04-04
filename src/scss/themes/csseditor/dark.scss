@@ -1,19 +1,4 @@
 
-$pointer-color: #4075d6;
-$tool-size: 34px;
-$left-size: 300px;
-$left-layer-panel: 70px; 
-$left-page-size: 70px;
-$toggle-left-size: 80px;
-$right-size: 260px;
-$timeline-header-size: 40px;
-$timeline-size: 300px;
-$show-timeline-animation: all 0.05s linear;
-$display-flex-color: #01a270;
-$display-grid-color: red;
-$footer-height: 30px;
-
-
 
 // common 
 $inner-border-color: #181818;
@@ -139,3 +124,7 @@ $drag-area-rect-background-color: rgba(107, 188, 255, 0.5);
 $rotate-area-border-color: $selected-color;
 $rotate-x-border-color: rgb(104, 104, 247);
 $rotate-y-border-color: rgb(112, 197, 112);
+
+
+// draw view 
+$draw-view-background-color: #34353a;

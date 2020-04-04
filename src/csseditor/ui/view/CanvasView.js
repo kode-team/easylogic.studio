@@ -23,7 +23,6 @@ export default class CanvasView extends UIElement {
   }
 
   afterRender() {
-
     this.emit('loadJSON');
   }
   template() {
@@ -44,6 +43,36 @@ export default class CanvasView extends UIElement {
   [EVENT('toggle.fullscreen')] () {
     Dom.body().fullscreen();
   }
+
+  [KEYUP('$el') + CONTROL + KEY('c')  + PREVENT ] (e) {
+    this.emit('copy');
+  }
+
+  [KEYUP('$el') + CONTROL + KEY('v') + PREVENT ] () {
+    this.emit('paste');
+  }  
+
+  isNumberKey(e) {
+    return ((+e.key) + "") === e.key;
+  }
+  
+  isArrowKey(e) {
+    return e.key.includes('Arrow')
+  }  
+
+  isNotFormElement(e) {
+    var tagName = e.target.tagName.toLowerCase();
+
+    return ['input'].includes(tagName) === false && Dom.create(e.target).attr('contenteditable') !== 'true';
+  }
+
+  [KEYUP('$el') + IF('isNumberKey') + IF('isNotFormElement') + PREVENT] (e) {
+    this.emit('keyupCanvasView', e.key);
+  }
+
+  [KEYDOWN('$el') + IF('isArrowKey') + IF('isNotFormElement')] (e) {
+    this.emit('arrowKeydownCanvasView', e.key, e.altKey, e.shiftKey);
+  }  
 
   [WHEEL('$lock') + ALT + PREVENT + THROTTLE(10)] (e) {
 
@@ -103,6 +132,24 @@ export default class CanvasView extends UIElement {
 
   [EVENT('focusCanvasView')] () {
     this.$el.focus()
+  }
+
+
+  // 단축키 적용하기 
+  [KEYUP() + IF('Backspace')] (e) {
+    var $target = Dom.create(e.target);
+    if ($target.attr('contenteditable')) {
+
+    } else {
+      this.$selection.remove()
+      this.emit('refreshAllSelectArtBoard')
+    }
+  }
+
+  [EVENT('refreshComputedStyle') + DEBOUNCE(100)] (last) {
+    var computedCSS = this.refs.$canvas.getComputedStyle(...last)
+    
+    this.emit('refreshComputedStyleCode', computedCSS)
   }
 
   // [EVENT('loadSketchData')] (sketchData) {

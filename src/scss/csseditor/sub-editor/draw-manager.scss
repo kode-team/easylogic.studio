@@ -4,7 +4,7 @@
     outline: none;
     border-top: 0px;
     color: $font-color;
-    background-color: $background-color;  
+    background-color: $draw-view-background-color;  
     height: 100%;
     padding: 2px 5px;
 
@@ -28,12 +28,19 @@
 
         > div {
           display: inline-block;
+          margin-left: 10px;
+
+          > * {
+            display: inline-block;
+            width: auto;
+          }
 
           label {
             text-align: right;
             padding: 3px 2px;
             line-height: 20px;
           }
+
 
           .number-input-editor {
             display: inline-block;
