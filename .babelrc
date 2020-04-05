@@ -4,10 +4,16 @@
       "presets": ["@babel/preset-env"]
     },
     "development": {
-      "presets": ["@babel/preset-env"]
+      "presets": [
+        [
+          "@babel/preset-env",{
+            "useBuiltIns": "entry"
+          }
+        ]
+      ]
     },
     "production": {
       "presets": ["@babel/preset-env"]
     }
   }
-}
+} 

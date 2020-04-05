@@ -5,7 +5,7 @@ const pkg = require('./package.json')
 module.exports = {
   // Entry files for our popup and background pages
   entry: {
-    main: "./src/index.js"
+    main: ['@babel/polyfill', "./src/index.js"]
   },
   output: {
     library: "EasylogicStudio",

@@ -235,7 +235,7 @@ export class Editor {
 
   replaceLocalUrltoId (str) {
 
-    var projects = editor.projects;
+    var projects = this.projects;
     var images = {} 
 
     projects.forEach(project => {
@@ -273,6 +273,10 @@ export class Editor {
 
   saveItem (key, value) {
     window.localStorage.setItem(`easylogic.studio.${key}`, JSON.stringify(value));
+  }
+
+  toJSON () {
+    return this.makeResource(this.projects);
   }
 
 
