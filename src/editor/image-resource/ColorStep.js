@@ -123,11 +123,11 @@ export class ColorStep extends Item {
 
   static parse(colorStepString) {
     let colorsteps = [];
-
     const results = convertMatches(colorStepString);
 
     var arr = results.str.split(' ').filter(it => it.trim());
     const colorIndex = +arr[0].replace("@", "");
+
     const color = results.matches[colorIndex].color;
 
     if (arr.length === 1) {

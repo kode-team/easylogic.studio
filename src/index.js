@@ -8,7 +8,7 @@ import CSSEditor from "./csseditor/index";
 let yorkieClient = null; 
 let yorkieDocument = null;
 
-async function createYorkie() {
+async function createYorkie(app) {
   try {
     // 01. create client with RPCAddr(envoy) then activate it.
     yorkieClient = yorkie.createClient('http://localhost:9000/api');
@@ -26,8 +26,15 @@ async function createYorkie() {
     yorkieDocument.subscribe((event) => {
       console.log(event);
 
+      if (event.name === 'remote-change') {
+
         // 여긴 받은 change 를 업데이트를 해야하는데 
-        console.log('a', yorkieDocument.toJSON());
+        const projects = JSON.parse(yorkieDocument.toJSON()).projects;
+        app.emit('loadJSON', projects);
+
+      } else {
+        console.log(yorkieDocument.toJSON())
+      }
     });
     await yorkieClient.sync();
 
@@ -65,7 +72,7 @@ async function startEditor() {
   })   
 
 
-  // await createYorkie();
+  await createYorkie(app);
 
 
   return app;

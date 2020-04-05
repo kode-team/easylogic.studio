@@ -48,9 +48,8 @@ export function matches (str) {
 
 export function convertMatches (str) {
     const m = matches(str); 
-
     m.forEach((it, index) => {
-        str = str.replace(it.color, '@' + index)
+        str = str.replace(it.color, '@' + index)   
     })
 
     return { str, matches: m }
