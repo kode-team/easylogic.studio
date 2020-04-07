@@ -46,10 +46,7 @@ async function createYorkie(app) {
 
           break;
         case 'moveItemByDrag': 
-          console.log(command.ids);
           traverseItem(command.ids, (id, item) => {
-
-            console.log(item.toJSON(), id);
             app.emit('setAttributeSync', JSON.parse(item.toJSON()), id);
           })
           break; 
@@ -159,12 +156,10 @@ async function startEditor() {
   
   app.commands.registerCommand({
     command: "moveItemByDrag",
-    debounce: 100,
     execute: (editor) => {
 
 
       const items = editor.selection.itemsByIds(null);
-
 
       yorkieDocument.update((root) => {
         items.forEach(item => {
