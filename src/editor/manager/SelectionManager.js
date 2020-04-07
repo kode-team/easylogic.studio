@@ -62,6 +62,10 @@ export class SelectionManager {
     return this.items.length;
   }
 
+  get ids () {
+    return Object.keys(this.itemKeys);
+  }
+
   getRootItem (current) {
     var rootItem = current || this.currentArtboard;
     if (current) {

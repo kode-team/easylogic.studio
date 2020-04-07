@@ -3,6 +3,7 @@ import "./scss/index.scss";
 import Util from "./util/index";
 import ColorPicker from "./colorpicker/index";
 import CSSEditor from "./csseditor/index";
+import { isFunction } from "./util/functions/func";
 
 
 let yorkieClient = null; 
@@ -24,16 +25,41 @@ async function createYorkie(app) {
       }
     }, 'init projects');
     yorkieDocument.subscribe((event) => {
-      console.log(event);
 
       if (event.name === 'remote-change') {
+        const [change] = event.value;
+        const command = JSON.parse(change.message);
+
+        switch(command.command) {
+        case 'newComponent': 
+          app.emit('loadJSON', JSON.parse(yorkieDocument.toJSON()).projects);
+          break; 
+        case 'setAttribute': 
+          traverseItem(command.ids, (id, item) => {
+            var newAttrs = {}
+            Object.keys(command.attrs).forEach(key => {
+              newAttrs[key] = item[key];
+            })
+
+            app.emit('setAttributeSync', newAttrs, id);
+          })
+
+          break;
+        case 'moveItemByDrag': 
+          console.log(command.ids);
+          traverseItem(command.ids, (id, item) => {
+
+            console.log(item.toJSON(), id);
+            app.emit('setAttributeSync', JSON.parse(item.toJSON()), id);
+          })
+          break; 
+        }
 
         // 여긴 받은 change 를 업데이트를 해야하는데 
-        const projects = JSON.parse(yorkieDocument.toJSON()).projects;
-        app.emit('loadJSON', projects);
+
 
       } else {
-        console.log(yorkieDocument.toJSON())
+        // console.log(yorkieDocument.toJSON())
       }
     });
     await yorkieClient.sync();
@@ -43,17 +69,37 @@ async function createYorkie(app) {
   }
 }
 
-function syncToYorkie (editor) {
-  const projectsJSON = JSON.parse(editor.toJSON())
+function traverseItem (ids, callback) {
+  const projects = yorkieDocument.getRootObject().projects;
 
-  if (yorkieDocument) {
-    yorkieDocument.update((root) => {
-      console.log(root);
-      root.projects = projectsJSON;
-    }, `update projects all items`);
+  ids.forEach(id => {
+    var item = searchItem(projects, id);
+
+    if (item) {
+      callback && callback(id, item);
+    }
+
+  })
+
+}
+
+function searchItem(list, id, attrs) {
+
+  for(var i = 0, len = list.length; i < len; i++) {
+    const item = list.getElementByIndex(i)
+    if (item.id === id) {
+      return item; 
+    } else {
+      var searchedItem = searchItem(item.layers, id);
+
+      if (searchedItem) {
+        return searchedItem;
+      }
+    }
   }
 
-} 
+  return null;
+}
 
 async function startEditor() {
 
@@ -62,14 +108,78 @@ async function startEditor() {
   app.commands.registerCommand({
     command: 'setAttribute',
     debounce: 100,
-    execute: syncToYorkie
+    execute: (editor, attrs, ids) => {
+
+      const items = editor.selection.itemsByIds(ids);
+
+
+      yorkieDocument.update((root) => {
+        const projects = root.projects;
+
+        if (!projects.length) {
+          const projectsJSON = JSON.parse(editor.toJSON())
+          root.projects = projectsJSON
+        } else {
+          items.forEach(item => {
+
+            Object.keys(attrs).forEach(key => {
+                const value = attrs[key];
+                if (isFunction(value)) {
+                    value = value();
+                }
+
+                const syncItem = searchItem(root.projects, item.id);
+                // 데이타 업데이트 
+                if (syncItem) {
+                  syncItem[key] = value;
+                }
+            })
+          });
+        }
+
+
+
+      }, JSON.stringify({command: 'setAttribute', attrs, ids: items.map(it => it.id)}));
+    }
   })
 
   app.commands.registerCommand({
     command: 'newComponent',
     debounce: 100,
-    execute: syncToYorkie
-  })   
+    execute: (editor, type) => {
+      const projectsJSON = JSON.parse(editor.toJSON())
+
+      if (yorkieDocument) {
+        yorkieDocument.update((root) => {
+          root.projects = projectsJSON;
+        }, JSON.stringify({command: 'newComponent', type}));
+      }
+    }
+  })  
+  
+  app.commands.registerCommand({
+    command: "moveItemByDrag",
+    debounce: 100,
+    execute: (editor) => {
+
+
+      const items = editor.selection.itemsByIds(null);
+
+
+      yorkieDocument.update((root) => {
+        items.forEach(item => {
+          const syncItem = searchItem(root.projects, item.id);
+          const json = item.toJSON();
+          Object.keys(json).forEach(key => {
+            syncItem[key] = json[key];
+          })
+
+        });
+
+      }, JSON.stringify({command: 'moveItemByDrag', ids: items.map(it => it.id)}));
+
+    }
+  })
 
 
   await createYorkie(app);

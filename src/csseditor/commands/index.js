@@ -64,6 +64,7 @@ import segmentMoveUp from "./segment.move.up";
 import segmentMoveRight from "./segment.move.right";
 import segmentMoveLeft from "./segment.move.left";
 import segmentDelete from "./segment.delete";
+import setAttributeSync from "./setAttributeSync";
 
 export default {
     segmentDelete,
@@ -132,4 +133,5 @@ export default {
     resizeArtBoard,
     selectItem,
     setAttribute,    
+    setAttributeSync,
 }

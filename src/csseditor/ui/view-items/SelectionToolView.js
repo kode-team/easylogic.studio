@@ -188,7 +188,8 @@ export default class SelectionToolView extends SelectionToolBind {
 
         this.refreshSelectionToolView(dx, dy);
         this.parent.updateRealPosition();    
-        this.emit('refreshSelectionDragStyleView', null, true)     
+        this.emit('refreshSelectionDragStyleView', null, true)  
+        this.emit('moveItemByDrag');   
     }
 
     [EVENT('moveByKey')] (dx, dy) {
