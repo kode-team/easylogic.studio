@@ -3,7 +3,6 @@ import "./scss/index.scss";
 import Util from "./util/index";
 import ColorPicker from "./colorpicker/index";
 import CSSEditor from "./csseditor/index";
-import { isFunction } from "./util/functions/func";
 
 
 let yorkieClient = null; 
@@ -120,15 +119,10 @@ async function startEditor() {
           items.forEach(item => {
 
             Object.keys(attrs).forEach(key => {
-                const value = attrs[key];
-                if (isFunction(value)) {
-                    value = value();
-                }
-
                 const syncItem = searchItem(root.projects, item.id);
                 // 데이타 업데이트 
                 if (syncItem) {
-                  syncItem[key] = value;
+                  syncItem[key] = attrs[key];
                 }
             })
           });
@@ -157,8 +151,6 @@ async function startEditor() {
   app.commands.registerCommand({
     command: "moveItemByDrag",
     execute: (editor) => {
-
-
       const items = editor.selection.itemsByIds(null);
 
       yorkieDocument.update((root) => {
