@@ -27,7 +27,7 @@ import downloadJSON from "./downloadJSON";
 import downloadSVG from "./downloadSVG";
 import downloadPNG from "./downloadPNG";
 import saveJSON from "./saveJSON";
-import loadJSON from "./loadJSON";
+import loadJSON from "./load.json";
 import setLocale from "./setLocale";
 import addTimelineProperty from "./addTimelineProperty";
 import refreshSelectedOffset from "./refreshSelectedOffset";
@@ -64,8 +64,10 @@ import segmentMoveUp from "./segment.move.up";
 import segmentMoveRight from "./segment.move.right";
 import segmentMoveLeft from "./segment.move.left";
 import segmentDelete from "./segment.delete";
+import toggleFullscreen from "./toggle.fullscreen";
 
 export default {
+    toggleFullscreen,
     segmentDelete,
     segmentMoveDown,
     segmentMoveUp,

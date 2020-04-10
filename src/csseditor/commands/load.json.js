@@ -11,7 +11,7 @@ const createItem = (editor, obj) => {
 
 
 export default {
-    command: 'loadJSON', 
+    command: 'load.json', 
     execute: function (editor, json) {
 
         json = json || editor.loadResource('projects', []);
