@@ -3,6 +3,11 @@ const HtmlWebPackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CompressionPlugin = require('compression-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+const ManifestPlugin = require('webpack-manifest-plugin');
+const WorkboxPlugin = require('workbox-webpack-plugin');
+const WebpackPwaManifest = require('webpack-pwa-manifest')
+const path = require('path');
+
 
 const pkg = require('./package.json')
 
@@ -125,19 +130,7 @@ module.exports = {
       }
     ]
   },
-  optimization: {
-    minimize: true,
-    minimizer: [new TerserPlugin({
-      sourceMap: true,
-      parallel: 4,
-    })],
-  },
   plugins: [
-    new webpack.BannerPlugin({
-      banner: LICENSE,
-      raw: true,
-      entryOnly: true,
-    }),
     new HtmlWebPackPlugin({
       inject: true,
       chunks: ["main"],
@@ -147,6 +140,29 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: "bundle.css"
     }),
-    new CompressionPlugin()
+    new webpack.BannerPlugin({
+      banner: LICENSE,
+      raw: true,
+      entryOnly: true,
+    }),    
+    new WorkboxPlugin.GenerateSW({
+      // these options encourage the ServiceWorkers to get in there fast
+      // and not allow any straggling "old" SWs to hang around
+      clientsClaim: true,
+      skipWaiting: true,
+    }),    
+    new WebpackPwaManifest({
+      name: 'EasyLogic Studio',
+      short_name: 'E',
+      description: 'Fantastic Web Design Tool',
+      background_color: '#ffffff',
+      crossorigin: 'use-credentials', //can be null, use-credentials or anonymous
+      icons: [
+        {
+          src: path.resolve('src/scss/images/icon128.png'),
+          sizes: [96, 128, 192, 256, 384, 512] // multiple sizes
+        }
+      ]
+    })
   ]
 };

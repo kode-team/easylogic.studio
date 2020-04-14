@@ -129,20 +129,10 @@ export default class ColorAssetsProperty extends BaseProperty {
   }  
 
   [CLICK("$colorList .preview")](e) {
-    var $item = e.$dt.closest('color-item');    
-    var index = +$item.attr('data-index')
-    this.state.$el = e.$dt.$('.color-view');
-    this.state.$color = $item.$('.color');
-    var color = this.state.$el.css('background-color')
 
-    this.emit("showColorPickerPopup", {
-        hideColorAssets: true,
-        target: this, 
-        changeEvent: 'changeColorAssets',
-        color
-    }, {
-        index
-    });
+    const color = e.$dt.$('.color-view').css('background-color');
+
+    this.emit('setAttribute', { 'background-color': color })
   }
 
 
