@@ -12,7 +12,7 @@
             &[data-depth="#{$selectValue}"] {
                 .detail {
                     label {
-                        padding-left: $selectValue * 20px;
+                        padding-left: $selectValue * 5px;
                     }
                 }
             }

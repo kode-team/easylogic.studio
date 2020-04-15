@@ -518,7 +518,9 @@ export default class ElementView extends UIElement {
         var artboard = this.$selection.currentArtboard || { html : ''} 
         var html = artboard.html
 
-        this.setState({ html })
+        this.setState({ html }, false)
+        // this.bindData('$view');
+        this.refs.$view.updateDiff(html)
 
         if (isRefreshSelectionTool) {
             this.emit('refreshSelectionTool')

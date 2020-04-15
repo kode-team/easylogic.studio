@@ -11,6 +11,7 @@ export class RectLayer extends Layer {
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
       itemType: 'rect',
+      name: 'New Rect',
       ...obj
     });
   }

@@ -298,16 +298,12 @@ export default class LayerTreeProperty extends BaseProperty {
   }
 
   [CLICK('$add')] (e) {
-    var artboard = this.$selection.currentArtboard;
-    if (artboard) {
-      var layer = artboard.add(new Layer({
-        'background-color': Color.random(),
-        width: Length.px(200),
-        height: Length.px(100)
-      }))
 
-      this.addLayer(layer);
-    }
+    this.emit('newComponent', 'rect', {
+      'background-color': Color.random(),
+      width: Length.px(200),
+      height: Length.px(100)
+    });
   }
 
   [CLICK('$layerList .layer-item .remove')] (e) {

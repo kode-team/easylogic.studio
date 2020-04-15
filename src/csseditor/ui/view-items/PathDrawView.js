@@ -115,7 +115,7 @@ export default class PathDrawView extends UIElement {
             var layer = this.makePathLayer(pathRect)
             if (layer) {
                 this.$selection.select(layer);
-                this.emit('refreshAllSelectArtBoard', false)
+                this.emit('refreshAll')
             }
         }
         

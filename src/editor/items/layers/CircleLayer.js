@@ -11,6 +11,7 @@ export class CircleLayer extends Layer {
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
       itemType: 'circle',
+      name: 'New Circle',      
       'border-radius': '100%',
       ...obj
     });
