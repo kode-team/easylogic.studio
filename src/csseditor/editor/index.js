@@ -139,9 +139,9 @@ export default class CSSEditor extends UIElement {
     this.trigger('refreshAllSelectArtBoard')
   }
 
-  [EVENT('refreshAllSelectArtBoard')] () {      
+  [EVENT('refreshAllSelectArtBoard')] (...args) {      
     this.emit('refreshLayerTreeView')    
-    this.emit('refreshAllCanvas');
+    this.emit('refreshAllCanvas', ...args);
     this.emit('refreshStyleView');
     this.emit('refreshAllElementBoundSize')   
   }  

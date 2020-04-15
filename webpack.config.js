@@ -1,9 +1,6 @@
 const webpack = require('webpack')
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const CompressionPlugin = require('compression-webpack-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
-const ManifestPlugin = require('webpack-manifest-plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest')
 const path = require('path');
@@ -39,7 +36,7 @@ const LICENSE = `
 module.exports = {
   // Entry files for our popup and background pages
   entry: {
-    main: "./src/index.js"
+    main: "./src/pwa.js"
   },
   output: {
     library: "EasylogicStudio",

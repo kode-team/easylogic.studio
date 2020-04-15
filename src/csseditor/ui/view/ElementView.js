@@ -514,12 +514,15 @@ export default class ElementView extends UIElement {
         }
     }    
 
-    [EVENT('refreshAllCanvas')] () {
+    [EVENT('refreshAllCanvas')] (isRefreshSelectionTool = true) {
         var artboard = this.$selection.currentArtboard || { html : ''} 
         var html = artboard.html
 
         this.setState({ html })
-        this.emit('refreshSelectionTool')        
+
+        if (isRefreshSelectionTool) {
+            this.emit('refreshSelectionTool')
+        }
     }
 
     refresh() {

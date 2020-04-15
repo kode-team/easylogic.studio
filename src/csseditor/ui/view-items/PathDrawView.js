@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
-import { POINTERSTART, MOVE, END, BIND} from "../../../util/Event";
+import { POINTERSTART, MOVE, END, BIND, KEYUP, IF, ESCAPE, ENTER, PREVENT, STOP} from "../../../util/Event";
 import PathParser from "../../../editor/parse/PathParser";
 
 import { SVGPathItem } from "../../../editor/items/layers/SVGPathItem";
@@ -61,6 +61,11 @@ export default class PathDrawView extends UIElement {
         }
     }
 
+    [KEYUP('document') + IF('isShow') + ESCAPE + ENTER + PREVENT + STOP] () {
+        this.trigger('hidePathDrawEditor');        
+    }
+
+
     get totalPathLength () {
         if (!this.refs.$view) return 0 
         var $obj = this.refs.$view.$('path.object');
@@ -110,9 +115,7 @@ export default class PathDrawView extends UIElement {
             var layer = this.makePathLayer(pathRect)
             if (layer) {
                 this.$selection.select(layer);
-    
-                this.emit('refreshAll')
-                this.emit('refreshSelection');
+                this.emit('refreshAllSelectArtBoard', false)
             }
         }
         
@@ -160,10 +163,14 @@ export default class PathDrawView extends UIElement {
 
     }
 
-    [EVENT('hidePathDrawEditor')] () {
+    [EVENT('initPathDrawEditor')] () {
         this.pathParser.reset('');
         this.setState(this.initState(), false)
         this.refs.$view.empty()
+    }
+
+    [EVENT('hidePathDrawEditor')] () {
+        this.trigger('initPathDrawEditor')
         this.$el.hide();
         this.emit('finishPathEdit')
         this.emit('hideDrawManager');
@@ -284,7 +291,7 @@ export default class PathDrawView extends UIElement {
 
     end (dx, dy) {
         this.addPathLayer(); 
-        this.trigger('hidePathDrawEditor')
+        this.trigger('initPathDrawEditor') 
     }   
 
 } 

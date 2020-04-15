@@ -42,6 +42,6 @@ export default class GridLayoutLineView extends UIElement {
     
 
     [EVENT('refreshGridLayoutLine', 'refreshSelectionTool', 'refreshSelection')] () {        
-        this.refresh();
+        this.refresh(); 
     }
 } 

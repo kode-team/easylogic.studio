@@ -138,6 +138,7 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
       outline: none;
     }
 
+
     &:hover {
 
       &:not(.selected) {
@@ -145,17 +146,20 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
       }
 
 
-      svg {
+    }
 
-        path{
+    > svg {
+
+      &:hover {
+        > path{
           stroke: rgb(64, 64, 252);
         }
 
-        text {
+        > text {
           fill: rgb(64, 64, 252);
         }
       }
-    }
+    }    
 
     &.artboard {
       &:before {
