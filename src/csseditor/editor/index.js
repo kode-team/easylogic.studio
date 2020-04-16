@@ -8,7 +8,7 @@ import CanvasView from "../ui/view/CanvasView";
 import ToolMenu from "../ui/view/ToolMenu";
 
 import UIElement, { EVENT } from "../../util/UIElement";
-import { DRAGOVER, DROP, PREVENT, TRANSITIONEND, KEYDOWN, KEYUP, IF } from "../../util/Event";
+import { DRAGOVER, DROP, PREVENT, TRANSITIONEND, KEYDOWN, KEYUP, IF, POINTERSTART, MOVE, END, BIND } from "../../util/Event";
 import Inspector from "../ui/control/Inspector";
 
 
@@ -26,6 +26,7 @@ import TimelineProperty from "../ui/control/TimelineProperty";
 import StatusBar from "../ui/view/StatusBar";
 
 import PreviewToolMenu from "../ui/view/PreviewToolMenu";
+import { Length } from "../../editor/unit/Length";
 
 
 const formElements = ['INPUT','SELECT','TEXTAREA']
@@ -42,6 +43,12 @@ export default class CSSEditor extends UIElement {
     $body.addClass(navigator.userAgent.includes('Windows') ? 'ua-window': 'ua-default')
   }
 
+  initState() {
+    return {
+      leftSize: 250,
+    }
+  }
+
   
   [EVENT('changed.locale')] () {
     this.rerender()
@@ -51,13 +58,13 @@ export default class CSSEditor extends UIElement {
     return /*html*/`
       <div class="layout-main">
         <div class="layout-middle" ref='$middle'>
-          <div class="layout-header">
+          <div class="layout-header" ref='$headerPanel'>
               <ToolMenu />          
           </div>        
-          <div class="layout-body">
+          <div class="layout-body" ref='$bodyPanel'>
             <CanvasView />        
           </div>                           
-          <div class='layout-left'>
+          <div class='layout-left' ref='$leftPanel'>
             <ObjectList />
           </div>
           <div class="layout-right">
@@ -69,7 +76,8 @@ export default class CSSEditor extends UIElement {
           </div>
           <div class='layout-footer'>
             <TimelineProperty />
-          </div>          
+          </div>   
+          <div class='splitter' ref='$splitter'></div>                 
         </div>
         
         <StatusBar />
@@ -98,6 +106,38 @@ export default class CSSEditor extends UIElement {
     `;
   }
 
+  [BIND('$headerPanel')] () {
+    return {
+      style: {
+        left: `${this.state.leftSize}px`
+      }
+    }
+  }
+
+  [BIND('$splitter')] () {
+    return {
+      style: {
+        left: `${this.state.leftSize}px`
+      }
+    }
+  }
+
+  [BIND('$leftPanel')] () {
+    return {
+      style: {
+        width: `${this.state.leftSize}px`
+      }
+    }
+  }  
+
+  [BIND('$bodyPanel')] () {
+    return {
+      style: {
+        left: `${this.state.leftSize}px`
+      }
+    }
+  }    
+
   components() {
     return {
       ...windowList,
@@ -114,6 +154,24 @@ export default class CSSEditor extends UIElement {
       TimelineProperty,
       PreviewToolMenu,
     };
+  }
+
+  [POINTERSTART('$splitter') + MOVE('moveSplitter') + END('moveEndSplitter')] () {
+
+    this.minSize = this.$theme('left_size');
+    this.maxSize = this.$theme('left_max_size');
+    this.leftSize = Length.parse(this.refs.$splitter.css('left')).value;
+  }
+
+  moveSplitter (dx) {
+    this.setState({
+      leftSize: Math.max(Math.min(this.leftSize + dx, this.maxSize), this.minSize)
+    }, false)
+
+    this.bindData('$splitter');
+    this.bindData('$headerPanel');    
+    this.bindData('$leftPanel');
+    this.bindData('$bodyPanel');        
   }
 
   [EVENT('changeTheme')] () {

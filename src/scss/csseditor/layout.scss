@@ -64,6 +64,14 @@
     height: 100%;
     position: relative;
 
+    > .splitter {
+      position: absolute;
+      left: $left-size;
+      width: 2px;
+      top: 0px;
+      bottom: 0px;
+      cursor: ew-resize;
+    }
 
     .layout-footer {
       position: absolute;
@@ -94,7 +102,7 @@
       
       display: flex;
       flex-direction: column;
-      transition: $show-timeline-animation;
+      transition: bottom 0.05s linear;
     }
 
     .layout-right {
@@ -108,7 +116,7 @@
       display: flex;
       flex-direction: column;
       overflow: auto;
-      transition: $show-timeline-animation;      
+      transition: bottom 0.05s linear;
     }
 
     .layout-body {
@@ -117,7 +125,7 @@
       right: $right-size;
       bottom: $footer-height;
       position: absolute;
-      transition: $show-timeline-animation;
+      transition: bottom 0.05s linear;
     }
   }
 }

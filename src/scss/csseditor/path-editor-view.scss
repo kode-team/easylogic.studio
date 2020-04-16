@@ -243,19 +243,21 @@
             
             &[data-selected='true'] {
                 fill: $selected-color;
-                stroke: $selected-color;
+                stroke: white;
+                r: 5;
+                stroke-width: 2;
             }
 
             &[data-segment-point="endPoint"],
             &[data-segment-point="reversePoint"] {
                 &:not([data-selected='true']) {
-                    fill: $path-segment-fill-color;
+                    r: 3;
                 }
             }
             
             &.split-circle {
                 fill: $selected-color;
-                stroke: $selected-color;
+                stroke: white;
                 pointer-events: none;
             }
         }

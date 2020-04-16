@@ -52,12 +52,6 @@ const applyElementAttribute = ($element, key, value) => {
 
 export default class BindHandler extends BaseHandler {
 
-
-    initialize() {
-      this._domEvents = null;
-      
-    }
-
     load (...args) {
       this.bindData(...args);
     }

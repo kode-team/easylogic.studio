@@ -27,38 +27,38 @@ export default class LoadHandler extends BaseHandler {
             this._loadMethods = this.filterProps(CHECK_LOAD_PATTERN);
         }
 
-        this._loadMethods
-            .filter(callbackName => {
-                const elName = callbackName.split(LOAD_SAPARATOR)[1].split(CHECK_SAPARATOR)[0];
-                if (!args.length) return true; 
-                return args.indexOf(elName) > -1
-            })
-            .forEach(callbackName => {
-                let methodName = callbackName.split(LOAD_SAPARATOR)[1];
-                var [elName, ...checker] = methodName.split(CHECK_SAPARATOR).map(it => it.trim())
+        const methods = this._loadMethods.filter(callbackName => {
+            const elName = callbackName.split(LOAD_SAPARATOR)[1].split(CHECK_SAPARATOR)[0];
+            if (!args.length) return true; 
+            return args.indexOf(elName) > -1
+        })
+ 
+        methods.forEach(callbackName => {
+            let methodName = callbackName.split(LOAD_SAPARATOR)[1];
+            var [elName, ...checker] = methodName.split(CHECK_SAPARATOR).map(it => it.trim())
 
-                checker = checker.map(it => it.trim())
+            checker = checker.map(it => it.trim())
 
-                var isVdom = checker.indexOf(VDOM.value) > -1;
+            var isVdom = checker.indexOf(VDOM.value) > -1;
+ 
+            if (this.refs[elName]) {
+                
+                var newTemplate = this[callbackName].call(this, ...args);
 
-                if (this.refs[elName]) {
-                    
-                    var newTemplate = this[callbackName].call(this, ...args);
-
-                    if (isArray(newTemplate)) {
-                        newTemplate = newTemplate.join('');
-                    }
-
-                    const fragment = this.context.parseTemplate(html`${newTemplate}`, true);
-
-                    if (isVdom) {
-                        this.refs[elName].htmlDiff(fragment);
-                    } else {
-                        this.refs[elName].html(fragment);
-                    }
-
+                if (isArray(newTemplate)) {
+                    newTemplate = newTemplate.join('');
                 }
-            });
+
+                const fragment = this.context.parseTemplate(html`${newTemplate}`, true);
+
+                if (isVdom) {
+                    this.refs[elName].htmlDiff(fragment);
+                } else {
+                    this.refs[elName].html(fragment);
+                }
+
+            }
+        });
 
         this.context.runHandlers('load');
         this.context.parseComponent();
