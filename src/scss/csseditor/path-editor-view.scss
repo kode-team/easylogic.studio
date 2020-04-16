@@ -267,22 +267,6 @@
             display: none;
         }
 
-        rect {
-            &.segment {
-                stroke: $path-segment-stroke-color;
-                fill: white;
-                stroke-width: 1; 
-                width: 8px;
-                height: 8px; 
-                cursor: pointer;
-
-                &[data-selected='true'] {
-                    fill: $selected-color;
-                    stroke: $selected-color;
-                }
-            }
-        }
-
         path {
             &.guide {
                 fill: transparent;
