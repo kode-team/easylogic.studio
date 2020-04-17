@@ -12,6 +12,8 @@ export default class DrawManager extends UIElement {
           stroke: 'black',
           'fill-opacity': null,
           'stroke-width': 2,
+          'stroke-linecap': 'round',
+          'stroke-linejoin': 'round',
           msg: this.$i18n('path.manager.msg')
       }
   }
@@ -84,7 +86,29 @@ export default class DrawManager extends UIElement {
               key="stroke-width" 
               value="${this.state['stroke-width']}"              
               onchange="changeValue" />
-          </div>              
+          </div>      
+          
+
+          <div>
+            <label>${this.$i18n('svg.item.property.lineCap')}</label>          
+            <SelectEditor
+              ref='$strokeLineCap' 
+              key="stroke-linecap" 
+              value="${this.state['stroke-linecap']}"                   
+              options="butt,round,square" 
+              onchange="changeValue" 
+            />
+          </div> 
+          <div>
+            <label>${this.$i18n('svg.item.property.lineJoin')}</label>          
+            <SelectEditor 
+              ref='$strokeLineJoin' 
+              key="stroke-linejoin" 
+              value="${this.state['stroke-linejoin']}"                                 
+              options="miter,bevel,round" 
+              onchange="changeValue" 
+            />
+          </div>
         </div>
       </div>    
     `;

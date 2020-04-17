@@ -15,7 +15,7 @@ export default class AddSVGTextPath extends MenuItem {
   }  
 
   clickButton(e) {
-    this.emit('addComponentType', 'svgtextpath');
+    this.emit('addComponentType', 'svg-textpath');
   }
 
 }

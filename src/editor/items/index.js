@@ -11,6 +11,7 @@ import { SVGTextPathItem } from "./layers/SVGTextPathItem";
 import { TextLayer } from "./layers/TextLayer";
 import { RectLayer } from "./layers/RectLayer";
 import { CircleLayer } from "./layers/CircleLayer";
+import { SVGBrushItem } from "./layers/SVGBrushItem";
 
 export default {
     RectLayer,
@@ -23,6 +24,7 @@ export default {
     CylinderLayer,
     ImageLayer,
     SVGPathItem,
+    SVGBrushItem,
     SVGTextItem,
     SVGTextPathItem,
     TextLayer

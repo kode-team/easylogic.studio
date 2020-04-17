@@ -7,7 +7,7 @@ export default function convertPath (editor, pathString, rect = null) {
     // path 속성을 가지고 있을 때 
 
     if (current )  {
-        if (current.is('svg-path', 'svg-textpath')) {
+        if (current.is('svg-path', 'svg-brush', 'svg-textpath')) {
 
             var d = pathString;
 

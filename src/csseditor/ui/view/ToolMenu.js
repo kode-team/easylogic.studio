@@ -17,6 +17,7 @@ export default class ToolMenu extends UIElement {
             <AddCircle />         
             <AddText />
             <AddImage />
+            <AddDrawBrush />
             <AddDrawPath />
             <AddPath />
             <AddSVGText />

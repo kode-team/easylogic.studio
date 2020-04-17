@@ -65,6 +65,7 @@ import segmentMoveRight from "./segment.move.right";
 import segmentMoveLeft from "./segment.move.left";
 import segmentDelete from "./segment.delete";
 import toggleFullscreen from "./toggle.fullscreen";
+import addDrawBrush from "./addDrawBrush";
 
 export default {
     toggleFullscreen,
@@ -74,6 +75,7 @@ export default {
     segmentMoveRight,
     segmentMoveLeft,
     changeModeView,
+    addDrawBrush,
     addDrawPath,
     itemDelete,
     itemMoveRight,

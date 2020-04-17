@@ -11,7 +11,7 @@ export default function newComponent (editor, type, obj) {
         obj['background-color'] = Color.random();
     } 
 
-    if (type === 'svgtextpath') {
+    if (type === 'svg-textpath') {
         obj = {
             ...obj,
             text: 'Insert a newText',

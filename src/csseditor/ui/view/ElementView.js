@@ -8,6 +8,7 @@ import GuideLineView from "../view-items/GuideLineView";
 import PathEditorView from "../view-items/PathEditorView";
 import GridLayoutLineView from "../view-items/GridLayoutLineView";
 import PathDrawView from "../view-items/PathDrawView";
+import BrushDrawView from "../view-items/BrushDrawView";
 
 
 
@@ -19,6 +20,7 @@ export default class ElementView extends UIElement {
             GuideLineView,
             PathEditorView,
             PathDrawView,
+            BrushDrawView,
             GridLayoutLineView,
         }
     }
@@ -45,6 +47,7 @@ export default class ElementView extends UIElement {
                 <SelectionToolView ref='$selectionTool' />
                 <PathEditorView ref='$pathEditorView' />
                 <PathDrawView ref='$pathDrawView' />
+                <BrushDrawView ref='$brushDrawView' />
             </div>
         `
     }
@@ -79,7 +82,6 @@ export default class ElementView extends UIElement {
 
         return $el.hasClass('element-item') === false 
             && $el.hasClass('selection-tool-item') === false 
-            && $el.hasClass('path-editor-view') === false 
             && $el.hasClass('point') === false
             && $el.hasClass('handle') === false            
             && $el.hasClass('perspective-handle') === false
@@ -267,7 +269,7 @@ export default class ElementView extends UIElement {
         if (this.$selection.length === 1) {
             var current = this.$selection.current;
 
-            if (current.is('svg-path', 'svg-polygon', 'svg-textpath')) {
+            if (current.is('svg-path', 'svg-brush', 'svg-polygon', 'svg-textpath')) {
                 this.emit('addStatusBarMessage', 'Please click if you want to edit to path ');
             }
 
@@ -310,7 +312,7 @@ export default class ElementView extends UIElement {
         } else {
 
             if (this.$selection.check({ id } )) {
-                if (this.$selection.current.is('svg-path', 'svg-textpath', 'svg-polygon')) {
+                if (this.$selection.current.is('svg-path', 'svg-brush', 'svg-textpath', 'svg-polygon')) {
                     this.hasSVG = true; 
                 }
             } else {

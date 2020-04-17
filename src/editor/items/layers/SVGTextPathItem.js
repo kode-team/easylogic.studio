@@ -196,4 +196,4 @@ export class SVGTextPathItem extends SVGItem {
   }
 }
 
-ComponentManager.registerComponent('svgtextpath', SVGTextPathItem); 
+ComponentManager.registerComponent('svg-textpath', SVGTextPathItem); 

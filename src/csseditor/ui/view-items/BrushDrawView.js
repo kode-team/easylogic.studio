@@ -9,10 +9,10 @@ import PathGenerator from "../../../editor/parse/PathGenerator";
 import Point from "../../../editor/parse/Point";
 import { OBJECT_TO_PROPERTY } from "../../../util/functions/func";
 import { SVGFill } from "../../../editor/svg-property/SVGFill";
+import { SVGBrushItem } from "../../../editor/items/layers/SVGBrushItem";
 
-const FIELDS = ['fill', 'fill-opacity', 'stroke', 'stroke-width', 'stroke-linecap', 'stroke-linejoin']
 
-export default class PathDrawView extends UIElement {
+export default class BrushDrawView extends UIElement {
 
     initialize() {
         super.initialize();
@@ -52,8 +52,8 @@ export default class PathDrawView extends UIElement {
 
     template() {
         return /*html*/`
-        <div class='path-draw-view' tabIndex="-1">
-            <div class='path-draw-container' ref='$view'></div>
+        <div class='brush-draw-view' tabIndex="-1">
+            <div class='brush-draw-container' ref='$view'></div>
         </div>`
     }
 
@@ -64,7 +64,7 @@ export default class PathDrawView extends UIElement {
     }
 
     [KEYUP('document') + IF('isShow') + ESCAPE + ENTER + PREVENT + STOP] () {
-        this.trigger('hidePathDrawEditor');        
+        this.trigger('hideBrushDrawEditor');        
     }
 
 
@@ -76,7 +76,7 @@ export default class PathDrawView extends UIElement {
         return $obj.totalLength
     }
 
-    makePathLayer (pathRect) {
+    makeBrushLayer (pathRect) {
         var artboard = this.$selection.currentArtboard
         var layer; 
         if (artboard) {
@@ -91,16 +91,12 @@ export default class PathDrawView extends UIElement {
             const parser = new PathParser(PathStringManager.makePathByPoints(simplyPoints))
             const d = PathGenerator.generatorPathString(parser.convertGenerator(), x, y, this.scale);
 
-            layer = artboard.add(new SVGPathItem({
+            layer = artboard.add(new SVGBrushItem({
                 width: Length.px(width),
                 height: Length.px(height),
                 d,
                 totalLength: this.totalPathLength
             }))
-
-            FIELDS.forEach(key => {
-                if (this.state[key]) layer.reset({ [key]: this.state[key] })    
-            });
 
             layer.setScreenX(x);
             layer.setScreenY(y);      
@@ -109,12 +105,12 @@ export default class PathDrawView extends UIElement {
         return layer; 
     }
 
-    addPathLayer() {
+    addBrushLayer() {
         var pathRect = this.getPathRect()
 
         if (pathRect.width !==  0 && pathRect.height !== 0) {
 
-            var layer = this.makePathLayer(pathRect)
+            var layer = this.makeBrushLayer(pathRect)
             if (layer) {
                 this.$selection.select(layer);
                 this.emit('refreshAll')
@@ -149,7 +145,7 @@ export default class PathDrawView extends UIElement {
         }
     }
 
-    [EVENT('showPathDrawEditor')] (obj = {}) {
+    [EVENT('showBrushDrawEditor')] (obj = {}) {
 
         this.changeMode(obj);
 
@@ -168,13 +164,13 @@ export default class PathDrawView extends UIElement {
 
     }
 
-    [EVENT('initPathDrawEditor')] () {
+    [EVENT('initBrushDrawEditor')] () {
         this.pathParser.reset('');
         this.refs.$view.empty()
     }
 
-    [EVENT('hidePathDrawEditor')] () {
-        this.trigger('initPathDrawEditor')
+    [EVENT('hideBrushDrawEditor')] () {
+        this.trigger('initBrushDrawEditor')
         this.$el.hide();
         this.emit('finishPathEdit')
         this.emit('hideDrawManager');
@@ -297,8 +293,8 @@ export default class PathDrawView extends UIElement {
     }
 
     end (dx, dy) {
-        this.addPathLayer(); 
-        this.trigger('initPathDrawEditor') 
+        this.addBrushLayer(); 
+        this.trigger('initBrushDrawEditor') 
     }   
 
 } 
