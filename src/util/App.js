@@ -55,6 +55,7 @@ export const start = opt => {
 
     loopBodyMoves() {
       var pos = this.$config.get("pos");
+      var e = this.$config.get('bodyEvent');
       var lastPos = this.$config.get("lastPos") || DEFAULT_POS;
       var isNotEqualLastPos = !(lastPos.x === pos.x && lastPos.y === pos.y);
 
@@ -63,7 +64,7 @@ export const start = opt => {
           var dx = pos.x - v.xy.x;
           var dy = pos.y - v.xy.y;
           if (dx != 0 || dy != 0) {
-            v.func.call(v.context, dx, dy, 'move');
+            v.func.call(v.context, dx, dy, 'move', e.pressure);
           }
         });
 
@@ -74,9 +75,10 @@ export const start = opt => {
 
     removeBodyMoves() {
       var pos = this.$config.get("pos");
+      var e = this.$config.get("bodyEvent");
       if (pos) {
         this.ends.forEach(v => {
-          v.func.call(v.context, pos.x - v.xy.x, pos.y - v.xy.y, 'end');
+          v.func.call(v.context, pos.x - v.xy.x, pos.y - v.xy.y, 'end', e.pressure);
         });  
       }
 

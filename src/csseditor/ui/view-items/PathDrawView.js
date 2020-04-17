@@ -279,11 +279,12 @@ export default class PathDrawView extends UIElement {
         this.state.points = [this.state.startXY]; 
     }
 
-    move (dx, dy) {
+    move (dx, dy, eventType, pressure) {
 
         this.state.points.push({
             x: this.state.startXY.x + dx,
             y: this.state.startXY.y + dy,
+            pressure
         })
 
         this.renderPath();
