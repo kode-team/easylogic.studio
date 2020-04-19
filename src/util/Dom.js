@@ -224,9 +224,14 @@ export default class Dom {
       this.html(childFragment)
     }
   }
-  updateDiff (html) {
-    DomDiff(this, Dom.create('div').html(html))
+  updateDiff (html, rootElement = 'div') {
+    DomDiff(this, Dom.create(rootElement).html(html))
   }
+
+  updateSVGDiff (html, rootElement = 'div') {
+
+    DomDiff(this, Dom.create(rootElement).html(`<svg>${html}</svg>`).firstChild)
+  }  
 
   find(selector) {
     return this.el.querySelector(selector);
@@ -650,7 +655,7 @@ export default class Dom {
     return $element;
   }
 
-  firstChild() {
+  get firstChild() {
     return Dom.create(this.el.firstElementChild);
   }
 

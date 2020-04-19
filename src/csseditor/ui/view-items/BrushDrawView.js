@@ -11,6 +11,7 @@ import { OBJECT_TO_PROPERTY } from "../../../util/functions/func";
 import { SVGFill } from "../../../editor/svg-property/SVGFill";
 import { SVGBrushItem } from "../../../editor/items/layers/SVGBrushItem";
 
+const FIELDS = ['fill', 'stroke-width']
 
 export default class BrushDrawView extends UIElement {
 
@@ -25,7 +26,7 @@ export default class BrushDrawView extends UIElement {
             changeEvent: 'updatePathItem', 
             points: [],
             $target: null, 
-            fill: 'transparent',
+            fill: 'black',
             stroke: 'black',
             'fill-opacity': null,
             'stroke-width': 2,
@@ -98,6 +99,10 @@ export default class BrushDrawView extends UIElement {
                 totalLength: this.totalPathLength
             }))
 
+            FIELDS.forEach(key => {
+                if (this.state[key]) layer.reset({ [key]: this.state[key] })    
+            });            
+
             layer.setScreenX(x);
             layer.setScreenY(y);      
         }
@@ -114,6 +119,7 @@ export default class BrushDrawView extends UIElement {
             if (layer) {
                 this.$selection.select(layer);
                 this.emit('refreshAll')
+                this.emit('refreshSelection');
             }
         }
         
@@ -235,12 +241,8 @@ export default class BrushDrawView extends UIElement {
                 ${this.toDefString}
                 <path class='object' 
                     ${OBJECT_TO_PROPERTY({
-                        fill: this.toFillValue,
-                        stroke: this.toStrokeValue,
-                        'fill-opacity': this.state['fill-opacity'],
-                        'stroke-width': this.state['stroke-width'],
-                        'stroke-linecap': this.state['stroke-linecap'],
-                        'stroke-linejoin': this.state['stroke-linejoin'],
+                        fill: 'transparent',
+                        stroke: this.toFillValue === 'transparent' ? 'black' : this.toFillValue
                     })}
                     d="${PathStringManager.makePathByPoints(this.state.points)}" />
             </svg>

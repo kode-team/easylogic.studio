@@ -1,6 +1,7 @@
 import { Layer } from "../Layer";
 import { SVGFill } from "../../svg-property/SVGFill";
 import Dom from "../../../util/Dom";
+import Color from "../../../util/Color";
 
 export class SVGItem extends Layer {
   getDefaultObject(obj = {}) {
@@ -128,6 +129,10 @@ export class SVGItem extends Layer {
   get toFillValue () {
     return  SVGFill.parseImage(this.json.fill || 'transparent').toFillValue(this.fillId);
   }
+
+  get toFillOpacityValue () {
+    return  Color.parse(this.json.fill || 'transparent').a;
+  }  
 
   get toStrokeValue () {
     return  SVGFill.parseImage(this.json.stroke || 'black').toFillValue(this.strokeId);

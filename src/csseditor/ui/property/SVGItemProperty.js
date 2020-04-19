@@ -15,7 +15,7 @@ export default class SVGItemProperty extends BaseProperty {
   }
 
   isSVGItem  (current) {
-    return current.is('svg-path', 'svg-polygon', 'svg-textpath', 'svg-text')
+    return current.is('svg-path', 'svg-brush', 'svg-polygon', 'svg-textpath', 'svg-text')
   }
 
 

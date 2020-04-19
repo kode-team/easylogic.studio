@@ -196,8 +196,16 @@ export const recoverBezierLine = (C1, C2, count = 100) => {
     return makeCurveFunction(createBezierLine(C1, C2), count)    
 }
 
-export const createBezierForPattern = (str) => {
-    var bezierList = parseCubicBezier(str);
+export const createBezierForPattern = (bezierString) => {
+
+
+    if (bezierString === 'linear') {
+        var C1 = { x : 0, y : 0 };
+        var C2 = { x : 1, y : 1 };        
+        return createBezierLine(C1, C2)
+    }
+
+    var bezierList = parseCubicBezier(bezierString);
 
     var C1 = { x : 0, y : 0 };
     var C2 = { x : bezierList[0], y : bezierList[1] };
@@ -222,6 +230,7 @@ export const getBezierPointOne = (points, t) => {
     var p2 = interpolate(points[2], points[3], t);
     var p3 = interpolate(p0, p1, t);
     var p4 = interpolate(p1, p2, t);
+
     return interpolate(p3, p4, t);
 }
 

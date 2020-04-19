@@ -8,7 +8,7 @@ export default class DrawManager extends UIElement {
   initState() {
       return {
           tolerance: 1,
-          fill: 'transparent',
+          fill: 'black',
           stroke: 'black',
           'fill-opacity': null,
           'stroke-width': 2,

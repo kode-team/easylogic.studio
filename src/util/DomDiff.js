@@ -106,11 +106,11 @@ export function DomDiff (A, B) {
     A = A.el || A; 
     B = B.el || B; 
 
-    var aC = children(A);
-    var bC = children(B); 
+    var childrenA = children(A);
+    var childrenB = children(B); 
 
-    var len = Math.max(aC.length, bC.length);
+    var len = Math.max(childrenA.length, childrenB.length);
     for (var i = 0; i < len; i++) {
-        updateElement(A, aC[i], bC[i], i);
+        updateElement(A, childrenA[i], childrenB[i], i);
     }
 }

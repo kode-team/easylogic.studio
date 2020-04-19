@@ -20,6 +20,7 @@ export class SVGBrushItem extends SVGItem {
       d: '',
       segments: [],
       totalLength: 0,
+      distance: 0,
       ...obj
     });
   }
@@ -112,24 +113,16 @@ export class SVGBrushItem extends SVGItem {
 
   updateFunction (currentElement, isChangeFragment = true, isLast = false) {
 
-    var $path = currentElement.$('path');
+    var $path = currentElement.$('path.svg-brush-item');
     $path.attr('d', this.json.d);
+
     if (isChangeFragment) {
-      $path.setAttr({
-        'filter': this.toFilterValue,
-        'fill': this.toFillValue,
-        'stroke': this.toStrokeValue
-      })
-
       this.updateDefString(currentElement)
-    
-      const useList = getXYListinPath(new PathParser(this.json.d), this.json.totalLength/10 * 2);
-
-      var $items = currentElement.$('.svg-brush-items');
-      $items.html(useList.map(xy => {
-          return `<use xlink:href='#${this.brushId}' x="${xy.x}" y="${xy.y}" />`
-      }).join(''))
-
+      const $items = currentElement.$('.svg-brush-items')
+      $items.attr('filter', this.toFilterValue);
+      $items.attr('fill', this.toFillValue);
+      $items.attr('fill-opacity', this.toFillOpacityValue);
+      $items.updateSVGDiff(this.makeBrushItem(this.json['stroke-width']));
     }
 
     if (isLast) {
@@ -141,13 +134,19 @@ export class SVGBrushItem extends SVGItem {
   get toDefInnerString () {
     return /*html*/`
         ${super.toDefInnerString}
-        ${this.toBrushSVG}
     `
   }  
 
-  get toBrushSVG () {
+  makeBrushShape (x, y, r = 1, t = 0) {
     return /*html*/`
-      <path id="${this.brushId}" d="M5,0L0,10L10,10 L5,0 Z" fill="black" />
+      <image ${OBJECT_TO_PROPERTY({
+        'xlink:href': 'http://www.tricedesigns.com/wp-content/uploads/2012/01/brush2.png',
+        x,
+        y,
+        width: `${r}px`,
+        height: `${r}px`,
+        transform: `rotate(${360*Math.random()}, ${x}, ${y})`
+      })}></image>
     `
   }
 
@@ -155,28 +154,40 @@ export class SVGBrushItem extends SVGItem {
     return this.getInnerId('brush');
   }
 
-  get html () {
-    var {id} = this.json; 
-
-    const xyList = getXYListinPath(new PathParser(this.json.d), this.json.totalLength/10 * 2);
-
-    var useList = xyList.map(xy => {
-        return `<use xlink:href='#${this.brushId}' x="${xy.x}" y="${xy.y}" />`
+  makeBrushItem (radius = 1) {
+    return this.makeBrushItemRate().map(xy => {
+      return this.makeBrushShape(xy.x, xy.y, radius * xy.scale, xy.t)
     }).join('');
+  }
+
+  makeBrushItemRate () {
+    var { d, totalLength, distance} = this.json; 
+
+    const xyList = getXYListinPath(new PathParser(d), totalLength, distance);
+    var useList = xyList.map(xy => {
+        let t = (xy.t > 0.5) ? 1 - xy.t : xy.t; 
+
+        return { ...xy, scale: t/0.4 * 1.3 }
+    });
+
+    return useList;
+  }
+
+  get html () {
+    var { id, d} = this.json; 
+
+    const useList = this.makeBrushItem(this.json['stroke-width']);
 
     return /*html*/`
-  <svg class='element-item brush'  ${OBJECT_TO_PROPERTY({
-    "xmlns": "http://www.w3.org/2000/svg"
-  })}  data-id="${id}" >
+  <svg class='element-item brush' data-id="${id}" >
     ${this.toDefString}
-    <path ${OBJECT_TO_PROPERTY({
-      'class': 'svg-brush-item',
-      d: this.json.d, 
-      filter: this.toFilterValue,
-      fill: this.toFillValue,
-      stroke: this.toStrokeValue
-    })} />
-    <g class='svg-brush-items' style='pointer-events:none;'>
+    <path class='svg-brush-item' d="${d}" fill="transparent" stroke="transparent" stroke-width="3" style='pointer-events: stroke;' />
+    <g class='svg-brush-items' style='pointer-events:none;' 
+        filter="${this.toFilterValue}" 
+        fill="${this.toFillValue}" 
+        stroke='transparent'
+        fill-opacity="${this.toFillOpacityValue}"
+      >
       ${useList}
     </g>
   </svg>`
