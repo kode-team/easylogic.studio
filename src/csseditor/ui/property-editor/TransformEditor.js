@@ -143,7 +143,7 @@ export default class TransformEditor extends UIElement {
     return /*html*/`
       <div class="transform-item" data-index="${index}">
         <div class="title" draggable="true" data-index="${index}">
-          <label><span>${(+index)+1}</span> ${this.$i18n('css.item.' + type)}</label>
+          <label>${this.$i18n('css.item.' + type)}</label>
           <div class="transform-menu">
             <button type="button" class="del" data-index="${index}">
               ${icon.remove2}
@@ -171,7 +171,7 @@ export default class TransformEditor extends UIElement {
                       units="${units}" 
                       onchange="changeRangeEditor" />
               </div>`
-          }).join('')}   
+            }).join('')}   
           </div>       
         </div>
       </div>
@@ -184,7 +184,7 @@ export default class TransformEditor extends UIElement {
     return /*html*/`
       <div class="transform-item" data-index="${index}">
         <div class="title" draggable="true" data-index="${index}">
-          <label><span>${(+index)+1}</span> ${this.$i18n('css.item.' + type)}</label>
+          <label>${this.$i18n('css.item.' + type)}</label>
           <div class="transform-menu">
             <button type="button" class="del" data-index="${index}">
               ${icon.remove2}

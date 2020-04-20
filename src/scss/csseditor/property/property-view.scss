@@ -1,6 +1,7 @@
 .property {
-  padding: 2px 10px;
-  border-top: 1px solid $property-border-color;  
+  padding: 10px 10px;
+  border-top: 1px solid $property-border-top-color;  
+  border-bottom: 1px solid $property-border-color;    
   background-color: $property-background-color;
   color: $property-font-color; 
   display: none; 
@@ -109,7 +110,7 @@
     background-color: $property-title-color;
 
     &.filter {
-      grid-template-columns: 1fr 140px;
+      grid-template-columns: 1fr 130px;
     }
 
     svg  {
@@ -128,7 +129,7 @@
       padding-left: 2px;
       vertical-align: middle;
       cursor: pointer;
-      line-height: 2.4;
+      line-height: 1;
 
       .icon {
         display: inline-block;
@@ -147,6 +148,7 @@
 
       select {
         min-width: 100px;
+        max-width: 100px;
       }
       
     }
@@ -165,10 +167,6 @@
 
       &:first-child {
         padding-top: 0px;
-      }
-
-      &:last-child {
-        padding-bottom: 10px; 
       }
 
       &.animation-property-item {
