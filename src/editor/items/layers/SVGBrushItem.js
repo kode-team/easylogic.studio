@@ -139,14 +139,12 @@ export class SVGBrushItem extends SVGItem {
 
   makeBrushShape (x, y, r = 1, t = 0) {
     return /*html*/`
-      <image ${OBJECT_TO_PROPERTY({
-        'xlink:href': 'http://www.tricedesigns.com/wp-content/uploads/2012/01/brush2.png',
-        x,
-        y,
-        width: `${r}px`,
-        height: `${r}px`,
+      <circle ${OBJECT_TO_PROPERTY({
+        cx: x,
+        cy: y,
+        r,
         transform: `rotate(${360*Math.random()}, ${x}, ${y})`
-      })}></image>
+      })}></circle>
     `
   }
 
