@@ -1,0 +1,41 @@
+{
+  "icons": [
+    {
+      "src": "icon_512x512.9f3f859a88480bc33977c6c04e19b815.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "icon_384x384.45d8d35acb8647ef8a29d812c9b33549.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "icon_256x256.9de941d162b47a9f0364c2cd2654530c.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "icon_192x192.074cfd375ac7aa2cef75e17291de1558.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon_128x128.cda893443ed60216695fc173fc3ff958.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "icon_96x96.bffb3851d85ee67cbb0bf2799368f70a.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    }
+  ],
+  "name": "EasyLogic Studio",
+  "short_name": "EasyLogic",
+  "orientation": "portrait",
+  "display": "standalone",
+  "start_url": ".",
+  "description": "Fantastic Web Design Tool",
+  "background_color": "#ffffff"
+}

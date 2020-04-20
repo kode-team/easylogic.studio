@@ -150,10 +150,14 @@ module.exports = {
     }),    
     new WebpackPwaManifest({
       name: 'EasyLogic Studio',
-      short_name: 'E',
+      short_name: 'EasyLogic',
       description: 'Fantastic Web Design Tool',
       background_color: '#ffffff',
       crossorigin: 'use-credentials', //can be null, use-credentials or anonymous
+      ios: {
+        'apple-mobile-web-app-title': 'EasyLogic Studio',
+        'apple-mobile-web-app-status-bar-style': 'black'
+      },      
       icons: [
         {
           src: path.resolve('src/scss/images/icon128.png'),
