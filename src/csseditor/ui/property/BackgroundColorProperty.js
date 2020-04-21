@@ -85,6 +85,7 @@ export default class BackgroundColorProperty extends BaseProperty {
             removable='true'
             key='mix-blend-mode' 
             icon="true" 
+            tabIndex="1"
             options="${this.getBlendList()}" 
             onchange="changeSelect" />
         </div>        
@@ -97,6 +98,7 @@ export default class BackgroundColorProperty extends BaseProperty {
             removable='true'
             key='overflow' 
             icon="true" 
+            tabIndex="1"
             options="${this.getOverflowList()}" 
             onchange="changeSelect" />
         </div>                

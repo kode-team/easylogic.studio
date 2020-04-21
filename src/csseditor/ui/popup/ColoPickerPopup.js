@@ -1,7 +1,7 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
 import BasePopup from "./BasePopup";
 import EmbedColorPicker from "../property-editor/EmbedColorPicker";
-import { DEBOUNCE, LOAD, CLICK } from "../../../util/Event";
+import { LOAD, CLICK } from "../../../util/Event";
 
 export default class ColorPickerPopup extends BasePopup {
 
@@ -44,10 +44,6 @@ export default class ColorPickerPopup extends BasePopup {
         <div class='box'>
           <EmbedColorPicker ref='$color' value='${this.state.color}' onchange='changeColor' />
         </div>
-        <div class='box assets' ref='$assets'>
-          <label>Assets</label>
-          <div class='project-color-list' ref='$projectColors'></div>
-        </div>
       </div>
     `;
   }
@@ -72,12 +68,6 @@ export default class ColorPickerPopup extends BasePopup {
     this.children.$color.setValue(this.state.color);
   }
 
-
-  [EVENT('refreshColorAssets') + DEBOUNCE(100)] () {
-    this.load('$projectColors')
-  }
-
-
   [EVENT('changeColor')] (color) {
     this.updateData({
       color
@@ -94,12 +84,6 @@ export default class ColorPickerPopup extends BasePopup {
     this.params = params;
     this.setState(data, false);
     this.children.$color.setValue(this.state.color);
-
-    if (data.hideColorAssets) {
-      this.refs.$assets.hide()
-    } else {
-      this.refs.$assets.show()
-    }
 
     this.show(232);
   }

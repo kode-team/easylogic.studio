@@ -76,7 +76,7 @@ export default class RangeEditor extends UIElement {
             <div class='range-editor-type' data-type='range'>
                 <input type='range' ref='$property' value="${realValue}" min="${min}" max="${max}" step="${step}" /> 
                 <div class='area' ref='$rangeArea'>
-                    <input type='number' ref='$propertyNumber' value="${realValue}" min="${min}" max="${max}" step="${step}" />
+                    <input type='number' ref='$propertyNumber' value="${realValue}" min="${min}" max="${max}" step="${step}" tabIndex="1" />
                     <SelectEditor ref='$unit' key='unit' value="${this.state.selectedUnit || this.state.value.unit}" options="${units}" onchange='changeUnit' />
                 </div>
             </div>

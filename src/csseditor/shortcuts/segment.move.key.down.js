@@ -1,7 +1,7 @@
 export default {
     key: 'ArrowDown',
     command: 'segment.move.down',
-    description: 'move segments to down',
+    description: 'move 1px to down',
     args: { dy: 1 },    
     when: 'PathEditorView'
 }

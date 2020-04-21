@@ -61,7 +61,7 @@ export default class InputRangeEditor extends UIElement {
             ${label ? `<label>${label}</label>` : '' }
             <div class='range-editor-type' data-type='range'>
                 <div class='area'>
-                    <input type='number' ref='$propertyNumber' value="${realValue}" min="${min}" max="${max}" step="${step}" />
+                    <input type='number' ref='$propertyNumber' value="${realValue}" min="${min}" max="${max}" step="${step}" tabIndex="1" />
                     
                     <SelectEditor ref='$unit' key='unit' value="${this.state.selectedUnit || this.state.value.unit}" options="${this.state.units}" onchange='changeUnit' />
                     

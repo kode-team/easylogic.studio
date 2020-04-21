@@ -14,7 +14,7 @@ export default class ColorWheel extends UIElement {
   }
 
   template() {
-    return `
+    return /*html*/`
         <div class="wheel">
             <canvas class="wheel-canvas" ref="$colorwheel" ></canvas>
             <div class="wheel-canvas" ref="$valuewheel" ></div>

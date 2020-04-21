@@ -1,7 +1,7 @@
 export default {
     key: 'Alt+ArrowDown',
     command: 'item.move.down',
-    description: 'move items to down by alt key',
+    description: 'move 5px to down',
     args: { dy: 5 },
     when: 'CanvasView'
 }

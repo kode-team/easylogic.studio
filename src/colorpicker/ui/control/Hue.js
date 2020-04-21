@@ -10,7 +10,7 @@ export default class Hue extends BaseSlider {
     }
 
     template () {
-        return `
+        return /*html*/`
             <div class="hue">
                 <div ref="$container" class="hue-container">
                     <div ref="$bar" class="drag-bar"></div>

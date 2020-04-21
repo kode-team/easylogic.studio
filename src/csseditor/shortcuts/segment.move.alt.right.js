@@ -1,7 +1,7 @@
 export default {
     key: 'Alt+ArrowRight',
     command: 'segment.move.right',
-    description: 'move segment to right by alt key',
+    description: 'move 5px to right',
     args: { dx: 5 },
     when: 'PathEditorView'
 }

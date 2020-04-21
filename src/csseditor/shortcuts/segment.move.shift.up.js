@@ -1,7 +1,7 @@
 export default {
     key: 'Shift+ArrowUp',
     command: 'segment.move.up',
-    description: 'move segment to up by shift key',
+    description: 'move 10px to up',
     args: { dy: 10 },    
     when: 'PathEditorView'
 }

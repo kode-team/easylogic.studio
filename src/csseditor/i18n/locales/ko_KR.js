@@ -18,7 +18,7 @@ export default {
     'app.tab.title.libraries': '라이브러리',
     'app.tab.title.components': '컴포넌트',    
     'app.tab.title.assets': '에셋',   
-
+    'app.tab.title.keyMap': '단축키',           
 
     'menu.item.download.title': '다운로드',
     'menu.item.save.title': '저장',

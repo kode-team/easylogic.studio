@@ -123,6 +123,7 @@ import middle from "./middle";
 import same_width from "./same_width";
 import same_height from "./same_height";
 import local_movie from "./local_movie";
+import keyboard from "./keyboard";
 
 
 const alias = {
@@ -131,6 +132,7 @@ const alias = {
 
 export default {
   ...alias,
+  keyboard,
   local_movie,
   same_height,
   same_width,

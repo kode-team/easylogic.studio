@@ -1,6 +1,6 @@
 export default {
     key: 'Backspace',
     command: 'item.delete',
-    description: 'delete selected items',
+    description: 'Delete selected items',
     when: 'CanvasView'
 }

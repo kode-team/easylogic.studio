@@ -141,7 +141,6 @@ export default class GradientAssetsProperty extends BaseProperty {
 
     this.state.$item = $item; 
     this.state.$el = e.$dt.$('.gradient-view');
-    this.state.$value = $item.$("[data-key='value']")
 
     this.emit("showGradientPickerPopup", {
       instance: this,
@@ -157,7 +156,6 @@ export default class GradientAssetsProperty extends BaseProperty {
       project.setGradientValue(params.index, {image});
       this.state.$el.css('background-image', image);
       this.state.$item.attr('data-gradient', image);
-      this.state.$value.val(image)
     }, false)              
 
   }

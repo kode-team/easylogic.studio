@@ -1,6 +1,6 @@
 export default {
     key: 'Backspace',
     command: 'segment.delete',
-    description: 'delete selected segment',
+    description: 'Delete selected segment',
     when: 'PathEditorView'
 }

@@ -1,7 +1,7 @@
 export default {
     key: 'Alt+ArrowUp',
     command: 'segment.move.up',
-    description: 'move segment to up by alt key',
+    description: 'move 5px to up ',
     args: { dy: 5 },
     when: 'PathEditorView'
 }

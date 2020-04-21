@@ -2,6 +2,6 @@ export default {
     key: '5',
     command: 'addComponentType', 
     args: 'cube',
-    description: 'add cube layer',
+    description: 'Add cube layer',
     when: 'CanvasView'
 }

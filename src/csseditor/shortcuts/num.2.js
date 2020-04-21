@@ -2,6 +2,6 @@ export default {
     key: '2',
     command: 'addComponentType', 
     args: 'circle',
-    description: 'add circle layer',
+    description: 'Add circle layer',
     when: 'CanvasView'
 }

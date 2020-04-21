@@ -51,7 +51,7 @@ export default class ColorViewEditor extends UIElement {
                     </div>
                 </div>
                 <div class='color-code'>
-                    <input type="text" ref='$colorCode' value='${this.state.value}' />
+                    <input type="text" ref='$colorCode' value='${this.state.value}' tabIndex="1" />
                 </div>
                 <button type='button' class='remove' ref='$remove' title='Remove'>${icon.remove}</button>                
             </div>

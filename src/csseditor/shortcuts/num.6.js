@@ -1,6 +1,6 @@
 export default {
     key: '6',
     command: 'addPath',
-    description: 'add svg path',
+    description: 'Add svg path',
     when: 'CanvasView'
 }

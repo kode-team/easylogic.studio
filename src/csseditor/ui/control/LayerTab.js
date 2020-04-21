@@ -11,11 +11,13 @@ import GradientAssetsProperty from "../property/GradientAssetsProperty";
 import ColorAssetsProperty from "../property/ColorAssetsProperty";
 import SVGFilterAssetsProperty from "../property/SVGFilterAssetsProperty";
 import PreviewToolMenu from "../view/PreviewToolMenu";
+import ShortCutItems from "./ShortCutItems";
 
 
 export default class LayerTab extends UIElement {
   components() {
     return {
+      ShortCutItems,
       ImageAssetsProperty,
       GradientAssetsProperty,
       ColorAssetsProperty,
@@ -55,7 +57,9 @@ export default class LayerTab extends UIElement {
             <div class='tab-item' data-value='5' title="${this.$i18n('app.tab.title.assets')}">
               <label>${icon.view_list}</label>
             </div>   
-
+            <div class='tab-item' data-value='6' title="${this.$i18n('app.tab.title.keyMap')}">
+              <label>${icon.keyboard}</label>
+            </div>               
             <div class='tab-item extra-item' >
               <PreviewToolMenu />
             </div>               
@@ -73,7 +77,10 @@ export default class LayerTab extends UIElement {
             </div>
             <div class='tab-content selected' data-value='4'>
               <ComponentItems />
-            </div>    
+            </div>
+            <div class='tab-content' data-value='6'>
+              <ShortCutItems />
+            </div>                
             <div class='tab-content' data-value='5'>
               <div class='assets'>
                 <ColorAssetsProperty />

@@ -19,6 +19,7 @@ export default {
     'app.tab.title.libraries': 'Library',
     'app.tab.title.components': 'Object',
     'app.tab.title.assets': 'Assets',       
+    'app.tab.title.keyMap': 'KeyMap',           
 
     'menu.item.download.title': 'Download',
     'menu.item.save.title': 'Save',

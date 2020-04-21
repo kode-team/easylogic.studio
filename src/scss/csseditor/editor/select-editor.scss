@@ -5,6 +5,12 @@
     position: relative;
     height: 24px;
 
+    select {
+        &:focus-within {
+            border: 1px solid $selected-color;
+        }
+    }
+
     &.has-label {
         grid-template-columns: 60px 1fr;
         grid-column-gap: 2px;

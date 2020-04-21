@@ -1,7 +1,7 @@
 export default {
     key: 'Alt+ArrowUp',
     command: 'item.move.up',
-    description: 'move items to up by alt key',
+    description: 'move 5px to up',
     args: { dy: 5 },
     when: 'CanvasView'
 }

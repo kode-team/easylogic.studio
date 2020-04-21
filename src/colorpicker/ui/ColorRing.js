@@ -12,7 +12,7 @@ export default class ColorRing extends ColorWheel {
   }
 
   template() {
-    return `<div class="wheel" data-type="ring">
+    return /*html*/`<div class="wheel" data-type="ring">
             <canvas class="wheel-canvas" ref="$colorwheel" ></canvas>
             <div class="drag-pointer" ref="$drag_pointer"></div>
         </div>`;
@@ -60,6 +60,7 @@ export default class ColorRing extends ColorWheel {
         type: "hsv",
         h: hue
       });
+      this.emit('changeColor');      
     }
   }
 }

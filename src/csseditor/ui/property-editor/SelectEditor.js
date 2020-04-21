@@ -9,22 +9,26 @@ export default class SelectEditor extends UIElement {
         var options = (this.props.options || '').split(splitChar).map(it => it.trim());
 
         var value = this.props.value;
+        var tabIndex = this.props.tabindex;
 
         return {
             keyValueChar,
             splitChar,
             label: this.props.label || '',
-            options, value
+            options, 
+            value,
+            tabIndex
         }
     }
 
     template() {
-        var { label } = this.state; 
+        var { label, tabIndex } = this.state; 
         var hasLabel = !!label ? 'has-label' : ''
+        var hasTabIndex = !!tabIndex ? 'tabIndex="1"' : ''
         return /*html*/`
             <div class='select-editor ${hasLabel}'>
                 ${label ? `<label>${label}</label>` : '' }
-                <select ref='$options'></select>
+                <select ref='$options' ${hasTabIndex}></select>
             </div>
         `
     }

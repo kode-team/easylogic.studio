@@ -27,7 +27,7 @@ export default class BoxModelProperty extends BaseProperty {
 
     var value = current[key] || Length.px(0)
 
-    return /*html*/`<input type="number" ref="$${key}" value="${value.value}" />`;
+    return /*html*/`<input type="number" ref="$${key}" value="${value.value}" tabIndex="1" />`;
   }
 
   [LOAD("$boxModelItem")]() {

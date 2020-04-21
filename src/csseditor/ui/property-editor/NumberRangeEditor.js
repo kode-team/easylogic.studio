@@ -47,7 +47,7 @@ export default class NumberRangeEditor extends UIElement {
             <div class='range-editor-type' data-type='range'>
                 <div class='area'>
                     <input type='range' ref='$property' value="${realValue}" min="${min}" max="${max}" step="${step}" />
-                    <input type='number' ref='$propertyNumber' value="${realValue}" min="${min}" max="${max}" step="${step}" />
+                    <input type='number' ref='$propertyNumber' value="${realValue}" min="${min}" max="${max}" step="${step}" tabIndex="1" />
                 </div>
             </div>
             <button type='button' class='remove' ref='$remove' title='Remove'>${icon.remove}</button>
