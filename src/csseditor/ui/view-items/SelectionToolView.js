@@ -134,6 +134,10 @@ export default class SelectionToolView extends SelectionToolBind {
                 <span ref='$selectionIcon'>${icon.flag}</span>
                 <span ref='$selectionTitle'></span>
             </div>       
+            <div class='selection-tool-item' data-position='to top'></div>            
+            <div class='selection-tool-item' data-position='to bottom'></div>            
+            <div class='selection-tool-item' data-position='to left'></div>            
+            <div class='selection-tool-item' data-position='to right'></div>
             <div class='selection-tool-item' data-position='to top right'></div>
             <div class='selection-tool-item' data-position='to bottom right'></div>
             <div class='selection-tool-item' data-position='to top left'></div>
@@ -148,7 +152,7 @@ export default class SelectionToolView extends SelectionToolBind {
     }        
 
     toggleEditingPath (isEditingPath) {
-        this.refs.$selectionTool.toggleClass('editing-path', isEditingPath);
+        // this.refs.$selectionTool.toggleClass('editing-path', isEditingPath);
     }
     
     checkEditMode () {
@@ -319,11 +323,15 @@ export default class SelectionToolView extends SelectionToolBind {
 
             var text = ''
             switch(this.pointerType) {
-            case 'move': text =  `X: ${newX}, Y: ${newY}`; break;
-            case 'to top right': text =  `X: ${newX}, Y: ${newY}, W: ${newWidth}, H: ${newHeight}`; break;
-            case 'to top left': text =  `X: ${newX}, Y: ${newY}, W: ${newWidth}, H: ${newHeight}`; break;
-            case 'to bottom right': text =  `W: ${newWidth}, H: ${newHeight}`; break;
-            case 'to bottom left': text =  `X: ${newX}, Y: ${newY}, W: ${newWidth}, H: ${newHeight}`; break;
+                case 'move': text =  `X: ${newX}, Y: ${newY}`; break;
+                case 'to top': text =  `Y: ${newY}, H: ${newHeight}`; break;         
+                case 'to bottom': text =  `Y: ${newY}, H: ${newHeight}`; break;
+                case 'to left': text =  `X: ${newX}, W: ${newWidth}`; break;
+                case 'to right': text =  `X: ${newX}, W: ${newWidth}`; break;
+                case 'to top right': text =  `X: ${newX}, Y: ${newY}, W: ${newWidth}, H: ${newHeight}`; break;
+                case 'to top left': text =  `X: ${newX}, Y: ${newY}, W: ${newWidth}, H: ${newHeight}`; break;
+                case 'to bottom right': text =  `W: ${newWidth}, H: ${newHeight}`; break;
+                case 'to bottom left': text =  `X: ${newX}, Y: ${newY}, W: ${newWidth}, H: ${newHeight}`; break;
             }
             
             this.setPositionText(text);

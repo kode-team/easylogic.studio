@@ -7,7 +7,8 @@ import BackgroundPositionEditor from "./BackgroundPositionEditor";
 import GradientSingleEditor from "./GradientSingleEditor";
 import { LinearGradient } from "../../../editor/image-resource/LinearGradient";
 import { ColorStep } from "../../../editor/image-resource/ColorStep";
-
+import { blend_list } from "../../../editor/util/Resource";
+import SelectEditor from "./SelectEditor";
 
 const names = {
     'image-resource': "Image",
@@ -40,6 +41,7 @@ export default class BackgroundImageEditor extends UIElement {
 
     components() {
         return {
+            SelectEditor,
             GradientSingleEditor,
             BackgroundPositionEditor
         }
@@ -80,32 +82,32 @@ export default class BackgroundImageEditor extends UIElement {
     }
 
 
-    getColorStepList(image) {
-        switch (image.type) {
-          case "static-gradient":
-          case "linear-gradient":
-          case "repeating-linear-gradient":
-          case "radial-gradient":
-          case "repeating-radial-gradient":
-          case "conic-gradient":
-          case "repeating-conic-gradient":
-            return this.getColorStepString(image.colorsteps);
-        }
-    
-        return '';
+    getBlendList () {
+        return blend_list.split(',').map(it => {
+            return `${it}:${this.$i18n(`blend.${it}`)}`
+        }).join(',');
     }
 
-    getColorStepString(colorsteps) {
-        return colorsteps
-            .map((step, index) => {
-                return /*html*/`
-                    <div class='step' data-index="${index}" data-cut="${step.cut}" data-selected='${step.selected}'>
-                        <div class='color-view' style='background-color:${step.color};'></div>
-                    </div>
-                `;
-            })
-            .join('');
-    }
+    templateForBlendMode(index, blendMode) {
+
+        if (!this.state.blendListString) {
+            this.state.blendListString = this.getBlendList();
+        }
+
+
+        return /*html*/`
+        <div class='popup-item'>
+          <SelectEditor 
+                ref='$blend_${index}' 
+                key='blendMode' 
+                value="${blendMode}" 
+                params="${index}" 
+                options="${this.state.blendListString}" 
+                onchange="changeRangeEditor" 
+            />
+        </div>
+        `;
+    }    
     
 
     [LOAD('$fillList')] () {
@@ -146,8 +148,8 @@ export default class BackgroundImageEditor extends UIElement {
                 <div class='fill-info'>
                   <div class='gradient-info'>
                     <div class='fill-title' ref="fillTitle${index}">${backgroundTypeName}</div>
-                    <div class='colorsteps' ref="colorsteps${index}">
-                      ${this.getColorStepList(image)}
+                    <div class='blend'>
+                      ${this.templateForBlendMode(index, it.blendMode)}
                     </div>
                     <div class='tools'>
                       <button type="button" class='remove' data-index='${index}'>${icon.remove2}</button>
@@ -258,6 +260,10 @@ export default class BackgroundImageEditor extends UIElement {
         var typeName = types[type];
         var $fillItem = this.refs[`fillIndex${this.selectedIndex}`];
         $fillItem.attr("data-fill-type", typeName);
+    }
+
+    [EVENT('changeRangeEditor')] (key, value, params) {
+        this.trigger('changePattern', key, {[key]: value}, params);
     }
 
     [EVENT('changePattern')] (key, value, params) {

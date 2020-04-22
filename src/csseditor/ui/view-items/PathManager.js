@@ -107,6 +107,22 @@ export default class PathManager extends UIElement {
     `;
   }
 
+
+  [EVENT('setColorAsset')] ({ color }) {
+
+    if (this.$el.isShow()) {
+      this.setState({
+        stroke: color
+      }, false)
+      this.children.$stroke.setValue(color);
+      this.updateData({
+        stroke: color
+      })      
+      this.emit('setAttribute', { stroke: color }, null, true)    
+    }
+
+  }
+
   [CLICK('$motionBased')] () {
     this.emit('setAttribute', { 
       'motion-based': this.refs.$motionBased.checked()
@@ -172,9 +188,5 @@ export default class PathManager extends UIElement {
       this.$el.hide();
       this.emit('change.mode.view');          
   }
-
-  [EVENT('hideSubEditor')] () {
-    this.trigger('hidePathManager');
-  }  
 
 }

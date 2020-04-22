@@ -224,17 +224,59 @@
       }
   
   
+      &[data-position="to top"] {
+        left: 0px;
+        top: -2px;
+        right:0px;
+        height: 2px;
+        width: auto;
+        transform: none;
+        background-color: transparent;
+        border: 0px;
+        cursor: ns-resize;
+      }
+
+      &[data-position="to bottom"] {
+        left: 0px;
+        bottom: -2px;
+        right:0px;
+        height: 2px;
+        width: auto;
+        transform: none;
+        background-color: transparent;
+        border: 0px;
+        cursor: ns-resize;
+      }      
+
+      &[data-position="to right"] {
+        bottom: 0px;
+        right: -2px;
+        top:0px;
+        height: auto;
+        width: 2px;
+        transform: none;
+        background-color: transparent;
+        border: 0px;
+        cursor: ew-resize;
+      }      
+
+      &[data-position="to left"] {
+        bottom: 0px;
+        left: -2px;
+        top:0px;
+        height: auto;
+        width: 2px;
+        transform: none;
+        background-color: transparent;
+        border: 0px;
+        cursor: ew-resize;
+      }            
+
       &[data-position="to top left"] {
         left: 0px;
         top: 0px;
         cursor: nwse-resize;
         transform: translate(-50%, -50%);
-  
-        &:before {
-          right: 100%;
-          bottom: 100%;
-          transform: translate(50%, -10px);
-        }      
       }
   
       &[data-position="to top right"] {
@@ -242,38 +284,20 @@
         top: 0px;
         cursor: nesw-resize;      
         transform: translate(-50%, -50%);        
-  
-        &:before {
-          left: 100%;
-          bottom: 100%;
-          transform: translate(-50%, -10px);
-        }            
       }    
       
       &[data-position="to bottom left"] {
         left: 0px;
         top: 100%;
         cursor: nesw-resize;            
-        transform: translate(-50%, -50%);
-  
-        &:before {
-          top: 100%;
-          right: 100%;
-          transform: translate(50%, 10px);
-        }                              
+        transform: translate(-50%, -50%);       
       }
   
       &[data-position="to bottom right"] {
         left: 100%;
         top: 100%;
         cursor: nwse-resize;      
-        transform: translate(-50%, -50%);
-
-        &:before {
-          top: 100%;
-          left: 100%;
-          transform: translate(-50%, 10px);
-        }              
+        transform: translate(-50%, -50%);  
       }    
                             
     }

@@ -47,7 +47,7 @@ import nextTimelineItem from "./nextTimelineItem";
 import lastTimelineItem from "./lastTimelineItem";
 import pauseTimelineItem from "./pauseTimelineItem";
 import addTimelineItem from "./addTimelineItem";
-import dropAsset from "./dropAsset";
+import dropAsset from "./drop.asset";
 import addBackgroundImageGradient from "./addBackgroundImageGradient";
 import addBackgroundImageAsset from "./addBackgroundImageAsset";
 import keymapKeydown from "./keymap.keydown";

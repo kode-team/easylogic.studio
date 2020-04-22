@@ -8,8 +8,6 @@ import {
 import { DomDiff } from "./DomDiff";
 import { Length } from "../editor/unit/Length";
 
-let cached = [];
-
 export default class Dom {
   constructor(tag, className, attr) {
     if (isNotString(tag)) {
@@ -558,6 +556,10 @@ export default class Dom {
 
   isHide () {
     return this.css("display") == "none"
+  }
+
+  isShow () {
+    return !this.isHide();
   }
 
   toggle(isForce) {

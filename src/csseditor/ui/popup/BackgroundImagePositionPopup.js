@@ -7,25 +7,7 @@ import RangeEditor from "../property-editor/RangeEditor";
 import SelectEditor from "../property-editor/SelectEditor";
 import BasePopup from "./BasePopup";
 import EmbedColorPicker from "../property-editor/EmbedColorPicker";
-
-const blend_list = [
-  "normal",
-  "multiply",
-  "screen",
-  "overlay",
-  "darken",
-  "lighten",
-  "color-dodge",
-  "color-burn",
-  "hard-light",
-  "soft-light",
-  "difference",
-  "exclusion",
-  "hue",
-  "saturation",
-  "color",
-  "luminosity"
-];
+import { blend_list } from "../../../editor/util/Resource";
 
 
 export default class BackgroundImagePositionPopup extends BasePopup {
@@ -162,7 +144,7 @@ export default class BackgroundImagePositionPopup extends BasePopup {
   templateForBlendMode() {
     return /*html*/`
     <div class='popup-item'>
-      <SelectEditor label="${this.$i18n('background.image.position.popup.blend')}" ref='$blend' key='blendMode' value="${this.state.blendMode}" options="${blend_list.join(',')}" onchange="changeRangeEditor" />
+      <SelectEditor label="${this.$i18n('background.image.position.popup.blend')}" ref='$blend' key='blendMode' value="${this.state.blendMode}" options="${blend_list}" onchange="changeRangeEditor" />
     </div>
     `;
   }
@@ -181,7 +163,6 @@ export default class BackgroundImagePositionPopup extends BasePopup {
             ${this.templateForWidth()}
             ${this.templateForHeight()}
             ${this.templateForRepeat()}
-            ${this.templateForBlendMode()}
           </div>
         </div>
       </div>

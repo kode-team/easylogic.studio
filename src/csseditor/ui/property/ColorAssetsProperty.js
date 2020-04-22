@@ -132,7 +132,12 @@ export default class ColorAssetsProperty extends BaseProperty {
 
     const color = e.$dt.$('.color-view').css('background-color');
 
-    this.emit('setAttribute', { 'background-color': color })
+    // view 에 따라 다른 속성을 가진다. 
+    if (this.$editor.modeView === 'CanvasView') { 
+      this.emit('setAttribute', { 'background-color': color })
+    } else {
+      this.emit('setColorAsset', { color })
+    }
   }
 
 

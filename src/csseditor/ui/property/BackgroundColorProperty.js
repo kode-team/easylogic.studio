@@ -48,10 +48,6 @@ export default class BackgroundColorProperty extends BaseProperty {
 
   getBody() {
     return /*html*/`
-        <div class='property-item animation-property-item'>
-          <span class='add-timeline-property' data-property='background-color'></span>
-          <ColorViewEditor ref='$color' label="${this.$i18n('background.color.property.color')}" key='background-color' onchange="changeColor" />
-        </div>
 
         <div class='property-item animation-property-item'>
           <span class='add-timeline-property' data-property='z-index'></span>
@@ -109,7 +105,6 @@ export default class BackgroundColorProperty extends BaseProperty {
     var current = this.$selection.current; 
 
     if (current) {
-      this.children.$color.setValue(current['background-color'] || 'rgba(0, 0, 0, 1)')
       this.children.$zIndex.setValue(current['z-index'] || 0)
       this.children.$opacity.setValue(current.opacity || '1')
       this.children.$mixBlend.setValue(current['mix-blend-mode'])
@@ -122,10 +117,6 @@ export default class BackgroundColorProperty extends BaseProperty {
     this.emit("setAttribute", { 
       [key]: value
     })
-  }
-
-  [EVENT('changeColor')] (key, color) {
-    this.trigger('changeSelect', key, color);
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {

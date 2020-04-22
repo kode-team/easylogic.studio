@@ -8,9 +8,7 @@ export default class DrawManager extends UIElement {
   initState() {
       return {
           tolerance: 1,
-          fill: 'black',
           stroke: 'black',
-          'fill-opacity': null,
           'stroke-width': 2,
           'stroke-linecap': 'round',
           'stroke-linejoin': 'round',
@@ -30,13 +28,24 @@ export default class DrawManager extends UIElement {
     var current = this.$selection.current;
 
     if (current) {
-      this.children.$fill.setValue(current['fill'] || 'rgba(0, 0, 0, 0)')
       this.children.$stroke.setValue(current['stroke'] || 'rgba(0, 0, 0, 1)')
-      this.children.$fillOpacity.setValue(current['fill-opacity'] || Length.number(1))
       this.children.$strokeWidth.setValue(current['stroke-width'] || Length.number(1))
     }
 
   }  
+
+  [EVENT('setColorAsset')] ({ color }) {
+
+    if (this.$el.isShow()) {
+      this.setState({
+        stroke: color
+      }, false)
+      this.children.$stroke.setValue(color);
+      this.updateData({
+        stroke: color
+      })    
+    }
+  }
 
   template() {
     return /*html*/`
@@ -56,32 +65,13 @@ export default class DrawManager extends UIElement {
             />
           </div>              
           <div >
-            <label>${this.$i18n('svg.item.property.fill')}</label>
-            <FillSingleEditor ref='$fill' simple="true" value="${this.state.fill}" key='fill' onchange="changeValue" />
-          </div>
-
-          <div >
-            <label>${this.$i18n('svg.item.property.fillOpacity')}</label>          
-            <NumberInputEditor 
-              ref='$fillOpacity' 
-              key='fill-opacity' 
-              value="${this.state['fill-opacity']}"
-              min="0"
-              max="1"
-              step="0.01"
-              calc="false"
-              unit="number" 
-              onchange="changeValue" 
-              />
-          </div>   
-          <div >
             <label>${this.$i18n('svg.item.property.stroke')}</label>          
             <FillSingleEditor ref='$stroke' simple="true" value="${this.state.stroke}" key='stroke' onchange="changeValue" />
           </div>                
 
           <div >
             <label>${this.$i18n('svg.item.property.strokeWidth')}</label>          
-            <NumberInputEditor 
+            <NumberRangeEditor 
               ref='$strokeWidth' 
               key="stroke-width" 
               value="${this.state['stroke-width']}"              
@@ -115,10 +105,6 @@ export default class DrawManager extends UIElement {
   }
 
   [EVENT('changeValue')] (key, value, params) {
-    this.emit('setAttribute', { 
-      [key]: value
-    }, null, true)
-
     this.updateData({
       [key]: value
     })
@@ -127,7 +113,7 @@ export default class DrawManager extends UIElement {
   updateData(obj = {}) {
 
     this.setState(obj, false)
-    this.emit(this.state.changeEvent, obj);
+    this.state.instance.trigger(this.state.changeEvent, obj);
   }
 
   [EVENT('changePathManager')] (mode) {
@@ -145,9 +131,5 @@ export default class DrawManager extends UIElement {
   [EVENT('hideDrawManager')] () {
       this.$el.hide();
   }
-
-  [EVENT('hideSubEditor')] () {
-    this.trigger('hideDrawManager');
-  }  
 
 }

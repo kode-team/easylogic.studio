@@ -588,13 +588,13 @@ export default class ElementView extends UIElement {
         if (id) {
 
             if (this.$selection.length) {
-                this.emit('dropAsset', {
+                this.emit('drop.asset', {
                     gradient: e.dataTransfer.getData('text/gradient'),
                     color: e.dataTransfer.getData('text/color'),
                     imageUrl: e.dataTransfer.getData('image/info')
                 })
             } else {
-                this.emit('dropAsset', {
+                this.emit('drop.asset', {
                     gradient: e.dataTransfer.getData('text/gradient'),
                     color: e.dataTransfer.getData('text/color'),
                     imageUrl: e.dataTransfer.getData('image/info')

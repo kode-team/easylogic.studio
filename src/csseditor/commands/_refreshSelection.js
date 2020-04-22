@@ -1,6 +1,6 @@
 export default function _refreshSelection (editor, isSelectedItems = false) {
 
-    editor.emit('hideSubEditor');
+    // editor.emit('hideSubEditor');
     editor.emit('noneSelectMenu')
     if (isSelectedItems) {
         editor.emit('refreshSelectionStyleView')

@@ -22,7 +22,6 @@ export default class PathDrawView extends UIElement {
 
     initState() {
         return {
-            changeEvent: 'updatePathItem', 
             points: [],
             $target: null, 
             fill: 'transparent',
@@ -42,7 +41,6 @@ export default class PathDrawView extends UIElement {
 
     [EVENT('changeDrawManager')] (obj) {
         this.setState({ ...obj }, false);
-        this.renderPath()
     }
 
 
@@ -116,7 +114,7 @@ export default class PathDrawView extends UIElement {
 
             var layer = this.makePathLayer(pathRect)
             if (layer) {
-                this.$selection.select(layer);
+                // this.$selection.select(layer);
                 this.emit('refreshAll')
             }
         }
@@ -128,8 +126,6 @@ export default class PathDrawView extends UIElement {
             ...this.initState(),
             ...obj
         }, false)    
-
-        this.emit('change.mode.view', 'PathDrawView');
     }
 
     getCurrentObject () {
@@ -157,6 +153,7 @@ export default class PathDrawView extends UIElement {
         this.$el.focus();
 
         this.emit('showDrawManager', {
+            instance: this,
             fill: this.state.fill,
             stroke: this.state.stroke,
             'fill-opacity': this.state['fill-opacity'],
@@ -165,7 +162,7 @@ export default class PathDrawView extends UIElement {
             'stroke-linejoin': this.state['stroke-linejoin'],            
         });        
 
-
+        this.emit('change.mode.view', 'PathDrawView');
     }
 
     [EVENT('initPathDrawEditor')] () {
@@ -254,6 +251,10 @@ export default class PathDrawView extends UIElement {
 
     renderPath () {
         this.bindData('$view');
+    }
+
+    [EVENT('resizeEditor')] () {
+        this.initRect(true);
     }
 
     getPathRect () {

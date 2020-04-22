@@ -1,7 +1,7 @@
 import _refreshSelection from "./_refreshSelection"
 
 export default {
-    command: 'dropAsset',
+    command: 'drop.asset',
     execute: function (editor, obj, id = null) {
 
         if (obj.color) {

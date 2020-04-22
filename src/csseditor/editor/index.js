@@ -171,7 +171,9 @@ export default class CSSEditor extends UIElement {
     this.bindData('$splitter');
     this.bindData('$headerPanel');    
     this.bindData('$leftPanel');
-    this.bindData('$bodyPanel');        
+    this.bindData('$bodyPanel');    
+    
+    this.emit('resizeEditor');
   }
 
   [EVENT('changeTheme')] () {

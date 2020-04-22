@@ -55,7 +55,7 @@ export default class LayerTab extends UIElement {
               <label>${icon.note}</label>
             </div>         
             <div class='tab-item' data-value='5' title="${this.$i18n('app.tab.title.assets')}">
-              <label>${icon.view_list}</label>
+              <label>${icon.apps}</label>
             </div>   
             <div class='tab-item' data-value='6' title="${this.$i18n('app.tab.title.keyMap')}">
               <label>${icon.keyboard}</label>
