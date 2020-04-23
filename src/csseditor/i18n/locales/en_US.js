@@ -250,6 +250,7 @@ export default {
     'image.asset.property.title': 'Image',
     'color.asset.property.title': 'Color',
     'gradient.asset.property.title': 'Gradient',
+    'pattern.asset.property.title': 'Pattern',
     'svgfilter.asset.property.title': 'SVG Filter',
 
 

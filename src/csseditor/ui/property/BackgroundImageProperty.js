@@ -27,11 +27,11 @@ export default class BackgroundImageProperty extends BaseProperty {
 
   getBody() {
     return /*html*/`
-      <div class='full' ref='$property'></div>
       <div class='property-item animation-property-item'>
         <span class='add-timeline-property' data-property='background-color'></span>
         <ColorViewEditor ref='$color' label="${this.$i18n('background.color.property.color')}" key='background-color' onchange="changeColor" />
       </div>      
+      <div class='full' ref='$property'></div>      
     `;
   }
 

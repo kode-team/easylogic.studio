@@ -6,6 +6,10 @@ import { isString, isNumber } from './func';
 
 const color_regexp = /(#(?:[\da-f]{3}){1,2}|rgb\((?:\s*\d{1,3},\s*){2}\d{1,3}\s*\)|rgba\((?:\s*\d{1,3},\s*){3}\d*\.?\d+\s*\)|hsl\(\s*\d{1,3}(?:,\s*\d{1,3}%){2}\s*\)|hsla\(\s*\d{1,3}(?:,\s*\d{1,3}%){2},\s*\d*\.?\d+\s*\)|([\w_\-]+))/gi;
 
+export function getColorIndexString(it, prefix = '@' ) {
+    return `${prefix}${it.startIndex}`.padEnd(10, '0');
+}
+
 export function isColor (str) {
     const results = matches(str);
 
@@ -49,8 +53,8 @@ export function matches (str) {
 export function convertMatches (str) {
     const m = matches(str); 
 
-    m.forEach((it, index) => {
-        str = str.replace(it.color, '@' + index)
+    m.forEach(it => {
+        str = str.replace(it.color, getColorIndexString(it))
     })
 
     return { str, matches: m }
@@ -63,7 +67,7 @@ export function convertMatchesArray (str, splitStr = ',') {
         it = trim(it);
 
         if (ret.matches[index]) {
-            it = it.replace('@' + index, ret.matches[index].color)
+            it = it.replace(getColorIndexString(ret.matches[index]), ret.matches[index].color)
         }
 
         return it 
@@ -71,8 +75,8 @@ export function convertMatchesArray (str, splitStr = ',') {
 }
 
 export function reverseMatches (str, matches) {
-    matches.forEach((it, index) => {
-        str = str.replace('@' + index, it.color)
+    matches.forEach(it => {
+        str = str.replace(getColorIndexString(it), it.color)
     })
 
     return str;

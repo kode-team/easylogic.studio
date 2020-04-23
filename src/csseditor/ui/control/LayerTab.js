@@ -12,6 +12,7 @@ import ColorAssetsProperty from "../property/ColorAssetsProperty";
 import SVGFilterAssetsProperty from "../property/SVGFilterAssetsProperty";
 import PreviewToolMenu from "../view/PreviewToolMenu";
 import ShortCutItems from "./ShortCutItems";
+import PatternAssetsProperty from "../property/PatternAssetsProperty";
 
 
 export default class LayerTab extends UIElement {
@@ -19,6 +20,7 @@ export default class LayerTab extends UIElement {
     return {
       ShortCutItems,
       ImageAssetsProperty,
+      PatternAssetsProperty,
       GradientAssetsProperty,
       ColorAssetsProperty,
       SVGFilterAssetsProperty,      
@@ -85,6 +87,7 @@ export default class LayerTab extends UIElement {
               <div class='assets'>
                 <ColorAssetsProperty />
                 <GradientAssetsProperty />    
+                <PatternAssetsProperty />    
                 <ImageAssetsProperty />       
                 <SVGFilterAssetsProperty />                
               </div>

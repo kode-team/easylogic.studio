@@ -255,6 +255,7 @@ export default {
     'image.asset.property.title': '이미지',
     'color.asset.property.title': '색',
     'gradient.asset.property.title': '그라디언트', 
+    'pattern.asset.property.title': '패턴', 
     'svgfilter.asset.property.title': 'SVG 필터',     
     
     'inspector.tab.title.style': '스타일 속성',

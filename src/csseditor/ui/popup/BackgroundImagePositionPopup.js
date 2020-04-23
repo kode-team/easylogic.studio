@@ -1,5 +1,5 @@
 import { EVENT } from "../../../util/UIElement";
-import { CLICK } from "../../../util/Event";
+import { CLICK, LOAD } from "../../../util/Event";
 
 import { Length } from "../../../editor/unit/Length";
 import GradientEditor from "../property-editor/GradientEditor";
@@ -41,7 +41,7 @@ export default class BackgroundImagePositionPopup extends BasePopup {
   updateData(opt = {}) {
     this.setState(opt, false);
 
-    this.emit(this.state.changeEvent, opt, this.params);
+    this.emit(this.state.changeEvent, opt, this.state.params);
   }
 
  
@@ -152,28 +152,33 @@ export default class BackgroundImagePositionPopup extends BasePopup {
 
   getBody() {
     return /*html*/`
-      <div class="background-image-position-picker">
+      <div class="background-image-position-picker" ref='$picker'></div>
+    `;
+  }
 
-        <div class='box'>
+  [LOAD('$picker')] () {
+    return /*html*/`
+      
+      <div class='box'>
 
-          <div class='background-property'>
-            ${this.templateForSize()}        
-            ${this.templateForX()}
-            ${this.templateForY()}
-            ${this.templateForWidth()}
-            ${this.templateForHeight()}
-            ${this.templateForRepeat()}
-          </div>
+        <div class='background-property'>
+          ${this.templateForSize()}        
+          ${this.templateForX()}
+          ${this.templateForY()}
+          ${this.templateForWidth()}
+          ${this.templateForHeight()}
+          ${this.templateForRepeat()}
         </div>
       </div>
-    `;
+    `
   }
 
 
   [EVENT("showBackgroundImagePositionPopup")](data, params) {
-    data.changeEvent = data.changeEvent || 'changeFillPopup'
-    this.params = params; 
-    this.setState(data);
+    this.state.changeEvent = data.changeEvent || 'changeFillPopup'
+    this.state.params = params; 
+
+    this.setState(data.data);
 
     this.show(460);
   }

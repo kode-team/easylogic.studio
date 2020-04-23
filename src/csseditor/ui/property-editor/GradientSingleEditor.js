@@ -30,7 +30,8 @@ export default class GradientSingleEditor extends UIElement {
         return {
             style: {
                 'background-image': this.state.image, 
-                'background-size': 'cover'
+                'background-size': 'cover',
+                'color': this.props.color,
             }
         }
     }

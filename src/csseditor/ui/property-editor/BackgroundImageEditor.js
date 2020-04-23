@@ -111,6 +111,10 @@ export default class BackgroundImageEditor extends UIElement {
     
 
     [LOAD('$fillList')] () {
+
+        const current = this.$selection.current || {color: 'black'};
+
+
         return this.state.images.map((it, index) => {
             var image = it.image;
 
@@ -139,8 +143,9 @@ export default class BackgroundImageEditor extends UIElement {
                 })} onchange='changePattern' />
                 <GradientSingleEditor ${OBJECT_TO_PROPERTY({
                     index,
-                    ref: `$gse${index}`,                    
+                    ref: `$gse${index}`,         
                     image: it.image,
+                    color: current.color,
                     key: 'background-image'
                 })} onchange='changePattern'
 
