@@ -18,6 +18,8 @@ import { Selector } from "../css-property/Selector";
 
 import { ClipPath } from "../css-property/ClipPath";
 import Dom from "../../util/Dom";
+import { Pattern } from "../css-property/Pattern";
+import { BackgroundImage } from "../css-property/BackgroundImage";
 
 export class DomItem extends GroupItem {
   getDefaultObject(obj = {}) {
@@ -37,6 +39,7 @@ export class DomItem extends GroupItem {
       'background-color': '',      
       'background-clip': '',
       'background-image': '',      
+      'pattern': '',
       'border': '',
       'border-radius': '',      
       'box-shadow': '',
@@ -329,7 +332,16 @@ export class DomItem extends GroupItem {
   }
 
   toBackgroundImageCSS() {
-    return this.toStringPropertyCSS('background-image')
+
+    let list = [];
+
+    Pattern.parseStyle(this.json.pattern).forEach(it => {
+     list.push(...BackgroundImage.parseStyle(STRING_TO_CSS(it.toCSS())))
+    });
+
+    list.push(...BackgroundImage.parseStyle(STRING_TO_CSS(this.json['background-image'])))
+
+    return BackgroundImage.joinCSS(list);
   }
 
   toLayoutCSS () {

@@ -391,4 +391,8 @@ export class BackgroundImage extends Property {
   static join (list) {
     return CSS_TO_STRING(BackgroundImage.toPropertyCSS(list.map(it => BackgroundImage.parse(it))))
   }
+
+  static joinCSS (list) {
+    return BackgroundImage.toPropertyCSS(list.map(it => BackgroundImage.parse(it)))
+  }  
 }

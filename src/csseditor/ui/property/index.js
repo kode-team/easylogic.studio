@@ -49,9 +49,11 @@ import ExportProperty from "./ExportProperty";
 import LayoutProperty from "./LayoutProperty";
 import FlexLayoutItemProperty from "./FlexLayoutItemProperty";
 import GridLayoutItemProperty from "./GridLayoutItemProperty";
+import PatternProperty from "./PatternProperty";
 
 
 export default {  
+  PatternProperty,
   GridLayoutItemProperty,
   FlexLayoutItemProperty,
   LayoutProperty,

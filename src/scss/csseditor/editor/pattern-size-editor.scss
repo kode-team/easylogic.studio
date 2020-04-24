@@ -1,0 +1,18 @@
+.pattern-size-editor {
+    text-align: center;
+    width: 100%;
+    
+    .preview {
+        height: 100%;
+
+        .mini-view {
+            height: 100%;
+
+            .color-view {
+                cursor:pointer;
+                height: 100%;
+                border-radius: 3px;
+            }
+        }
+    }
+}

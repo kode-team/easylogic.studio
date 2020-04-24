@@ -40,6 +40,16 @@ export const filter_list = [
     'svg',
   ];
 
+  export const pattern_list = [
+    'check',
+    'grid',
+    'dot',
+    'cross-dot',
+    'diagonal-line',
+    'vertical-line',
+    'horizontal-line',
+  ];  
+
 export const blend_list = [
   "normal",
   "multiply",

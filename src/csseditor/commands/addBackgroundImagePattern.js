@@ -1,27 +1,17 @@
 import { BackgroundImage } from "../../editor/css-property/BackgroundImage";
 import { STRING_TO_CSS, CSS_TO_STRING } from "../../util/functions/func";
 import _refreshSelection from "./_refreshSelection";
+import { Pattern } from "../../editor/css-property/Pattern";
 
 export default {
     command: 'addBackgroundImagePattern',
-    execute: function (editor, {pattern, color, backgroundColor}, id = null) {
-
-        let attrs = {}
-
-        if (color) attrs.color = color; 
-        if (backgroundColor) attrs['background-color'] = backgroundColor; 
+    execute: function (editor, pattern, id = null) {
 
         var items = editor.selection.itemsByIds(id);
         items.forEach(item => {
-
-
-            let images = BackgroundImage.parseStyle(STRING_TO_CSS(item['background-image']));
-            let targetImages = BackgroundImage.parseStyle(STRING_TO_CSS(pattern));
-
-            const value = CSS_TO_STRING(BackgroundImage.toPropertyCSS([...targetImages, ...images])) 
-
-            attrs['background-image'] = value; 
-            editor.emit('setAttribute', attrs, item.id)
+            editor.emit('setAttribute', {
+                pattern: Pattern.join([...Pattern.parseStyle(pattern), ...Pattern.parseStyle(item.pattern)])
+            }, item.id)
             
         })
 

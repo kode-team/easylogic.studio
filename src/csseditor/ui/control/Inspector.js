@@ -50,6 +50,7 @@ export default class Inspector extends UIElement {
                 <!-- Appearance --> 
                 <BackgroundColorProperty />
                 <BackgroundImageProperty />                
+                <PatternProperty />
                 <BorderNewProperty />
                 <BorderRadiusProperty />
 

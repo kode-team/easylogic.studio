@@ -434,6 +434,7 @@ export default {
 
     'gradient.editor.drag.message': '드래그 하면 중심점을 옮길 수 있습니다.',
 
-    'draw.manager.tolerance': '포인트 허용 오차'
+    'draw.manager.tolerance': '포인트 허용 오차',
 
+    'pattern.property.title': '패턴'
 }

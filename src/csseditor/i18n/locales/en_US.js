@@ -430,5 +430,7 @@ export default {
 
     'gradient.editor.drag.message': 'Drag if you want to move center pointer.',
 
-    'draw.manager.tolerance': 'Tolerance'
+    'draw.manager.tolerance': 'Tolerance',
+
+    'pattern.property.title': 'Pattern'
 }

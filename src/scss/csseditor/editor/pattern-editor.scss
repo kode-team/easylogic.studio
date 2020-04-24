@@ -1,0 +1,43 @@
+.pattern-editor {
+  .label {
+    height: 20px;
+    margin-top: 2px;
+
+    &.hide {
+      display: none; 
+    }
+    label {
+      font-size: 12px;
+      padding-left: 5px;
+      vertical-align: middle;
+   
+    }
+  }
+
+  .tools {
+      vertical-align: middle;
+      text-align: right;
+      float:right;
+  }
+
+    .pattern-list {
+        display: grid;
+        grid-template-columns: 1fr;
+        font-size: 12px;
+      
+        .pattern-item {
+          // margin-top: 5px;
+          display: grid;
+          grid-template-columns: 24px 24px 24px 1fr 16px;
+          grid-column-gap: 5px;
+          text-align: center;
+          
+          padding: 6px 6px;
+
+          &.selected {
+            background-color: rgba($border-color, 0.5);
+          }
+        }
+      }
+      
+}
