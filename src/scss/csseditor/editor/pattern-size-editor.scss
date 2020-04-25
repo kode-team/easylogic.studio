@@ -1,17 +1,18 @@
 .pattern-size-editor {
     text-align: center;
-    width: 100%;
+    width: 80px;
+    height: 80px;
     
     .preview {
         height: 100%;
 
         .mini-view {
             height: 100%;
+            background-color: white; 
 
             .color-view {
                 cursor:pointer;
                 height: 100%;
-                border-radius: 3px;
             }
         }
     }

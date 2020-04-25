@@ -9,11 +9,14 @@
 
         .mini-view {
             height: 100%;
+            @include transparent-background();
+            border: 1px solid $border-color;
 
             .color-view {
                 cursor:pointer;
                 height: 100%;
                 border-radius: 3px;
+
             }
         }
     }

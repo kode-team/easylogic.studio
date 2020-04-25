@@ -22,20 +22,37 @@
 
     .pattern-list {
         display: grid;
-        grid-template-columns: 1fr;
-        font-size: 12px;
+        grid-template-columns: 80px 80px 80px;
+        grid-column-gap: 1px;
+        grid-row-gap: 1px;
       
         .pattern-item {
           // margin-top: 5px;
-          display: grid;
-          grid-template-columns: 24px 24px 24px 1fr 16px;
-          grid-column-gap: 5px;
-          text-align: center;
-          
-          padding: 6px 6px;
+          display: inline-block;
+          position: relative;
 
           &.selected {
             background-color: rgba($border-color, 0.5);
+          }
+
+          &:hover {
+            .tools {
+              display: inline-block;
+            }
+          }
+
+          .tools {
+            display: none;
+            position: absolute;
+            right: 0px;
+            top: 0px;
+            background-color: rgba(255, 255, 255, 0.9);
+
+            svg {
+              path {
+                fill: $selected-color;
+              }
+            }
           }
         }
       }

@@ -1,18 +1,22 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
 import { CLICK, BIND } from "../../../util/Event";
 import { Pattern } from "../../../editor/css-property/Pattern";
+import { Length } from "../../../editor/unit/Length";
 
 export default class PatternSizeEditor extends UIElement {
 
     initState() { 
         return {
             index: this.props.index,
-            x: this.props.x,
-            y: this.props.y,
-            width: this.props.width,
-            height: this.props.height,
-            backColor: this.props.backColor,
-            foreColor: this.props.foreColor,
+            x: Length.parse(this.props.x),
+            y: Length.parse(this.props.y),
+            width: Length.parse(this.props.width),
+            height: Length.parse(this.props.height),
+            lineWidth: Length.parse(this.props.linewidth),
+            lineHeight: Length.parse(this.props.lineheight),            
+            backColor: this.props.backcolor,
+            foreColor: this.props.forecolor,
+            blendMode: this.props.blendmode,
             type: this.props.type,
         }
     }
@@ -34,7 +38,22 @@ export default class PatternSizeEditor extends UIElement {
 
     [BIND('$miniView')] () {
 
-        const pattern = Pattern.parse(this.state);
+        let obj = {
+            ...this.state,
+        }        
+
+        if (this.state.width.value > 80) {
+            obj.width = Length.px(80);
+            obj.x = Length.px(obj.x.value / this.state.width.value/80)
+        }
+
+        if (this.state.height.value > 80) {
+            obj.height = Length.px(80);
+            obj.y = Length.px(this.state.y.value / this.state.height.value/80)
+        }        
+
+
+        const pattern = Pattern.parse(obj);
 
         return {
             cssText: pattern.toCSS()
@@ -60,18 +79,16 @@ export default class PatternSizeEditor extends UIElement {
     }
 
     viewBackgroundPositionPopup() {
-        this.emit("showBackgroundImagePositionPopup", {
-            changeEvent: 'changeBackgroundPositionPattern',
-            data: this.state 
-        }, {
-            id: this.id
+        this.emit("showPatternInfoPopup", {
+            changeEvent: 'changePatternInfo',
+            data: this.state,
+            instance: this
         });
     }
 
 
-    [EVENT("changeBackgroundPositionPattern")](pattern, params) {
-        if (params.id === this.id) {
-            this.updateData({ ...pattern })
-        }
+    [EVENT("changePatternInfo")](pattern) {
+
+        this.updateData({ ...pattern })
     }    
 }

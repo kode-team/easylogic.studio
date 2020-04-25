@@ -96,6 +96,7 @@ export default class CSSEditor extends UIElement {
         <ImageSelectPopup />
         <GradientPickerPopup />
         <FillPickerPopup />
+        <PatternInfoPopup />
         <SVGFilterPopup />
         <StyleView />    
         <ExportWindow />

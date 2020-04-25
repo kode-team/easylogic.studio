@@ -432,5 +432,15 @@ export default {
 
     'draw.manager.tolerance': 'Tolerance',
 
-    'pattern.property.title': 'Pattern'
+    'pattern.property.title': 'Pattern',
+
+    'pattern.info.popup.title': 'Pattern Info',
+    'pattern.info.popup.width': 'Width',
+    'pattern.info.popup.height': 'Height',
+    'pattern.info.popup.lineWidth': 'Line Width',
+    'pattern.info.popup.lineHeight': 'Line Height',
+    'pattern.info.popup.rotate': 'Rotate',
+    'pattern.info.popup.blend': 'Blend Mode',
+    'pattern.info.popup.foreColor': 'Fore',    
+    'pattern.info.popup.backColor': 'Back',        
 }

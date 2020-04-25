@@ -436,5 +436,15 @@ export default {
 
     'draw.manager.tolerance': '포인트 허용 오차',
 
-    'pattern.property.title': '패턴'
+    'pattern.property.title': '패턴',
+
+    'pattern.info.popup.title': '패턴 정보',    
+    'pattern.info.popup.width': '넓이',
+    'pattern.info.popup.height': '높이',
+    'pattern.info.popup.lineWidth': '선 넓이',
+    'pattern.info.popup.lineHeight': '선 높이',
+    'pattern.info.popup.rotate': '회전',
+    'pattern.info.popup.blend': '블렌드',    
+    'pattern.info.popup.foreColor': '패턴색',    
+    'pattern.info.popup.backColor': '배경색',    
 }

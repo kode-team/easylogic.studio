@@ -10,6 +10,7 @@ const applyElementAttribute = ($element, key, value) => {
      * cssText: 'position:absolute'
      */
     $element.cssText(value);
+    return; 
   } else if (key === "style") {
     /**
      * style: { key: value }
@@ -44,6 +45,8 @@ const applyElementAttribute = ($element, key, value) => {
       $element.text(value);
     } else if (key === 'innerHTML' || key === 'html') {
       $element.html(value);
+    } else if (key === 'value') {
+      $element.val(value);
     } else {
       $element.attr(key, value);
     }
