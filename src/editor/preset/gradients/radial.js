@@ -2,7 +2,7 @@ import { repeat } from "../../../util/functions/func";
 import { ColorStep } from "../../image-resource/ColorStep";
 
 export default { 
-    title: 'Raidal', 
+    title: 'Radial', 
     key: 'radial', 
     execute: function (count = 42) {
         return repeat(count).map(it => {
