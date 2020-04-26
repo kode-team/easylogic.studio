@@ -3,6 +3,9 @@ $asset-item-size: 60px;
     
     .pattern-list {
         padding: 5px;
+        max-height: 240px;
+        overflow: auto;
+
         .pattern-view {
             pointer-events: none;
         }
@@ -29,12 +32,9 @@ $asset-item-size: 60px;
             }
 
             .pattern-item {
-                display: inline-block;
-                width: $asset-item-size;
+                display: block;
                 position: relative;
-                vertical-align: middle;
-                margin-right: 1px;
-                margin-bottom: 1px;
+                margin-bottom: 3px;
                 
                 &:hover {
                     &[data-custom="true"] {

@@ -6,6 +6,7 @@
   grid-template-columns: 150px 1fr 200px;
   grid-column-gap:10px;
   height: 100%;
+  position: relative;
 
 
   .label {
@@ -102,7 +103,7 @@
       box-sizing: border-box;
       border: 1px solid $selected-color;
       position: relative;
-      height: 540px;
+      height: 100%;
 
       .connected-line-panel {
         width: 1000px;

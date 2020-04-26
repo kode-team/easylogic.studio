@@ -1,18 +1,18 @@
 
   .svg-property-editor-popup {
 
-    width: 900px;
-    height: 550px;
-
-    display: grid;
-    grid-template-columns: 1fr; 
-    // grid-column-gap: 10px;
+    width: 800px;
+    height: 450px;
+    position: relative;
 
     .box {
       margin-bottom: 10px;
+      height: 100%;
+      position: relative;
 
-      > div {
+      > .editor {
         height: 100%;
+        position: relative;
       }
 
       .property {

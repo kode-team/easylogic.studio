@@ -23,27 +23,6 @@ import PolygonDataEditor from "./PolygonDataEditor";
 import OffsetPathListEditor from "./OffsetPathListEditor";
 import BorderEditor from "./BorderEditor";
 
-const blend_list = [
-  '',
-  "normal",
-  "multiply",
-  "screen",
-  "overlay",
-  "darken",
-  "lighten",
-  "color-dodge",
-  "color-burn",
-  "hard-light",
-  "soft-light",
-  "difference",
-  "exclusion",
-  "hue",
-  "saturation",
-  "color",
-  "luminosity"
-].join(',');
-
-
 export default class CSSPropertyEditor extends UIElement {
 
   components() {
@@ -284,13 +263,12 @@ export default class CSSPropertyEditor extends UIElement {
         </div>
       `             
     } else if (property.key === 'mix-blend-mode') {
-      return `
+      return /*html*/`
         <div class='property-editor'>
-          <SelectEditor 
+          <BlendSelectEditor 
           ref='$mixBlendMode${index}' 
           key='mix-blend-mode' 
           icon="true" 
-          options="${blend_list}" 
           value="${property.value}"
           onchange="changeSelect" />
         </div>

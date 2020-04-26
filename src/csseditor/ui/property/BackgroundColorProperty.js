@@ -2,25 +2,6 @@ import BaseProperty from "./BaseProperty";
 import { DEBOUNCE } from "../../../util/Event";
 import { EVENT } from "../../../util/UIElement";
 
-const blend_list = [
-  "normal",
-  "multiply",
-  "screen",
-  "overlay",
-  "darken",
-  "lighten",
-  "color-dodge",
-  "color-burn",
-  "hard-light",
-  "soft-light",
-  "difference",
-  "exclusion",
-  "hue",
-  "saturation",
-  "color",
-  "luminosity"
-];
-
 const overflow_list = [
   'visible',
   'hidden',
@@ -32,12 +13,6 @@ export default class BackgroundColorProperty extends BaseProperty {
 
   getTitle() {
     return this.$i18n('background.color.property.title');
-  }
-
-  getBlendList () {
-    return blend_list.map(it => {
-      return `${it}:${this.$i18n(`blend.${it}`)}`
-    }).join(',');
   }
 
   getOverflowList () {
@@ -75,14 +50,13 @@ export default class BackgroundColorProperty extends BaseProperty {
         
         <div class='property-item animation-property-item'>
           <span class='add-timeline-property' data-property='mix-blend-mode'></span>
-          <SelectEditor 
+          <BlendSelectEditor 
             label='${this.$i18n('background.color.property.blend')}'
             ref='$mixBlend' 
             removable='true'
             key='mix-blend-mode' 
             icon="true" 
             tabIndex="1"
-            options="${this.getBlendList()}" 
             onchange="changeSelect" />
         </div>        
 

@@ -23,8 +23,6 @@ export default class PatternAssetsProperty extends BaseProperty {
 
     const options = patterns.map(it => `${it.key}:${it.title}`)
 
-    options.push(':none')
-
     return /*html*/`
       <SelectEditor key="preset" value="${this.state.preset}" options="${options}" onchange="changePreset"  />
     `

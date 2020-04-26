@@ -2,6 +2,9 @@ import { Item } from "../items/Item";
 import { Length } from "../unit/Length";
 
 import { convertMatches } from "../../util/functions/parser";
+import { repeat } from "../../util/functions/func";
+import { randomNumber } from "../../util/functions/create";
+import Color from "../../util/Color";
 export class ColorStep extends Item {
   getDefaultObject() {
     return super.getDefaultObject({
@@ -173,4 +176,27 @@ export class ColorStep extends Item {
 
     return colorsteps;
   }
+
+  static createColorStep (maxCount = 2, maxValue = 100, unitType = '%') { 
+
+    var colorStepCount = randomNumber(2, maxCount);
+    var unitValue = maxValue/colorStepCount;
+
+    var colorsteps = repeat(colorStepCount).map((_, index) => {
+        return `${Color.random()} ${index * unitValue}${unitType}`
+    }).join(',');
+
+    return colorsteps;
+  }
+
+  static createRepeatColorStep (maxCount = 2, unitValue = Length.px(1)) { 
+
+    var colorStepCount = randomNumber(2, maxCount);
+
+    var colorsteps = repeat(colorStepCount).map((_, index) => {
+        return `${Color.random()} ${Length.parse(unitValue).mul(index+1)}`
+    }).join(',');
+
+    return colorsteps;
+  }  
 }

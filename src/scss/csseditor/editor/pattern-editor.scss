@@ -22,7 +22,7 @@
 
     .pattern-list {
         display: grid;
-        grid-template-columns: 80px 80px 80px;
+        grid-template-columns: 60px 60px 60px 60px;
         grid-column-gap: 1px;
         grid-row-gap: 1px;
       
@@ -30,6 +30,7 @@
           // margin-top: 5px;
           display: inline-block;
           position: relative;
+          text-align: center;
 
           &.selected {
             background-color: rgba($border-color, 0.5);

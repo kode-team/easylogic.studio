@@ -1,3 +1,4 @@
+import { randomNumber } from "./create";
 
 export function debounce (callback, delay = 0) {
 
@@ -128,6 +129,10 @@ export function combineKeyArray (obj) {
 
 export function repeat (count) {
     return [...Array(count)];
+}
+
+export function randomItem (...args) {
+    return args[randomNumber(0, args.length-1)];
 }
 
 

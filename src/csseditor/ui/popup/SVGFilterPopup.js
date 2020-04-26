@@ -58,8 +58,6 @@ export default class SVGFilterPopup extends BasePopup {
     this.updateData({
       filters
     })
-
-    this.bindData('$sampleFilter');
   }
 
   refresh() {

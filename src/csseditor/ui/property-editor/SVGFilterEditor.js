@@ -27,6 +27,7 @@ import PathStringManager from "../../../editor/parse/PathStringManager";
 import ColorMatrixEditor from "./ColorMatrixEditor";
 import svgFilterPreset from "./svg-filter-preset";
 import ImageSelectEditor from "./ImageSelectEditor";
+import { BlendSelectEditor } from "./BlendSelectEditor";
 
 const filterTypes = [
   {label: 'GRAPHIC REFERENCES', items : [
@@ -189,12 +190,15 @@ Object.keys(inYAxis).forEach(len => {
 
 
 
+
+
 export default class SVGFilterEditor extends UIElement {
 
 
 
   components() {
     return {
+      BlendSelectEditor,
       ColorMatrixEditor,
       InputArrayEditor,
       NumberRangeEditor,
@@ -392,26 +396,40 @@ export default class SVGFilterEditor extends UIElement {
         </div>
         `
 
-    } else if (s.inputType === 'select') {
-
-      var options = s.options
-
-      if (isFunction(s.options)){
-        options = s.options(this.state.filters)
-      }
+    } else if (s.inputType === 'blend') {
 
       return /*html*/`
         <div>
-          <SelectEditor 
-            ref='$select${objectId}' 
+          <BlendSelectEditor 
+            ref='$blend${objectId}' 
             label="${s.title}"
-            options='${options}' 
             key="${key}"
             value='${filter[key].toString()}' 
             onchange="changeRangeEditor"             
           />
         </div>
         `
+
+    } else if (s.inputType === 'select') {
+
+        var options = s.options
+  
+        if (isFunction(s.options)){
+          options = s.options(this.state.filters)
+        }
+  
+        return /*html*/`
+          <div>
+            <SelectEditor 
+              ref='$select${objectId}' 
+              label="${s.title}"
+              options='${options}' 
+              key="${key}"
+              value='${filter[key].toString()}' 
+              onchange="changeRangeEditor"             
+            />
+          </div>
+          `        
     } else if (s.inputType === 'text') {
       return /*html*/`
         <div>

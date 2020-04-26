@@ -53,9 +53,11 @@ import NumberInputEditor from "./NumberInputEditor";
 import GridGapEditor from "./GridGapEditor";
 import PatternEditor from "./PatternEditor";
 import PatternSizeEditor from "./PatternSizeEditor";
+import { BlendSelectEditor } from "./BlendSelectEditor";
 
 
 export default {
+    BlendSelectEditor,
     PatternEditor,
     PatternSizeEditor,
     GridGapEditor,

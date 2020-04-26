@@ -263,11 +263,11 @@ export class BackgroundImage extends Property {
         image = LinearGradient.parse(value);
       } else if (value.includes("repeating-radial-gradient")) {
         image = RepeatingRadialGradient.parse(value);
-      } else if (value.includes("radial")) {
+      } else if (value.includes("radial-gradient")) {
         image = RadialGradient.parse(value);
       } else if (value.includes("repeating-conic-gradient")) {
         image = RepeatingConicGradient.parse(value);
-      } else if (value.includes("conic")) {
+      } else if (value.includes("conic-gradient")) {
         image = ConicGradient.parse(value);
       } else if (value.includes("url")) {
         image = URLImageResource.parse(value);

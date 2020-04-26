@@ -2,12 +2,8 @@ import { EVENT } from "../../../util/UIElement";
 import { CLICK, LOAD } from "../../../util/Event";
 
 import { Length } from "../../../editor/unit/Length";
-import RangeEditor from "../property-editor/RangeEditor";
-import SelectEditor from "../property-editor/SelectEditor";
 import BasePopup from "./BasePopup";
-import ColorViewEditor from "../property-editor/ColorViewEditor";
-import { blend_list } from "../../../editor/util/Resource";
-
+import propertyEditor from "../property-editor";
 
 
 export default class PatternInfoPopup extends BasePopup {
@@ -17,11 +13,7 @@ export default class PatternInfoPopup extends BasePopup {
   }
 
   components() {
-    return {
-      RangeEditor,
-      SelectEditor,
-      ColorViewEditor,
-    }
+    return propertyEditor
   }
 
   initState() {
@@ -208,27 +200,16 @@ export default class PatternInfoPopup extends BasePopup {
     `
   }
 
-  getBlendList () {
-    return blend_list.split(',').map(it => {
-        return `${it}:${this.$i18n(`blend.${it}`)}`
-    }).join(',');
-}  
 
   templateForBlendMode() {
 
-    if (!this.state.blendListString) {
-        this.state.blendListString = this.getBlendList();
-    }
-
-
     return /*html*/`
     <div class='popup-item'>
-      <SelectEditor 
+      <BlendSelectEditor 
             ref='$blend' 
             key='blendMode' 
             label="${this.$i18n('pattern.info.popup.blend')}"
             value="${this.state.blendMode}" 
-            options="${this.state.blendListString}" 
             onchange="changeRangeEditor" 
         />
     </div>

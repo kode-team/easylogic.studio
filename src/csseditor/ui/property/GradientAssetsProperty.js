@@ -14,15 +14,13 @@ export default class GradientAssetsProperty extends BaseProperty {
   initState() {
     return {
       mode: 'grid',
-      preset: 'random'
+      preset: 'linear'
     }
   }
 
   getTools() {
 
     const options = gradients.map(it => `${it.key}:${it.title}`)
-
-    options.push(':none')
 
     return /*html*/`
       <SelectEditor key="preset" value="${this.state.preset}" options="${options}" onchange="changePreset"  />
@@ -136,17 +134,9 @@ export default class GradientAssetsProperty extends BaseProperty {
 
   [CLICK("$gradientList .preview")](e) {
     var $item = e.$dt.closest('gradient-item');    
-    var index = +$item.attr('data-index')
     var gradient = $item.attr('data-gradient')
 
-    this.state.$item = $item; 
-    this.state.$el = e.$dt.$('.gradient-view');
-
-    this.emit("showGradientPickerPopup", {
-      instance: this,
-      changeEvent: 'changeGradientAssets',
-      gradient
-    }, { index });
+    this.emit('drop.asset', { gradient })    
   }
 
 

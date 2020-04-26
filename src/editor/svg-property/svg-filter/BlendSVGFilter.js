@@ -32,8 +32,7 @@ export class BlendSVGFilter extends BaseSVGFilter {
 BlendSVGFilter.spec = {
   mode: {
     title: 'mode',
-    inputType: 'select',
-    options: blend_list,
+    inputType: 'blend',
     defaultValue: 'normal'
   }
 };

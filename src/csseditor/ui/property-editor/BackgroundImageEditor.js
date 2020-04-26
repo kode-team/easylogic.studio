@@ -1,14 +1,11 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
 import { BackgroundImage } from "../../../editor/css-property/BackgroundImage";
-import { LOAD, CLICK, DRAGSTART, DRAGOVER, DROP, PREVENT, DEBOUNCE } from "../../../util/Event";
+import { LOAD, CLICK, DRAGSTART, DRAGOVER, DROP, PREVENT } from "../../../util/Event";
 import icon from "../icon/icon";
 import { CSS_TO_STRING, STRING_TO_CSS, OBJECT_TO_PROPERTY } from "../../../util/functions/func";
-import BackgroundPositionEditor from "./BackgroundPositionEditor";
-import GradientSingleEditor from "./GradientSingleEditor";
 import { LinearGradient } from "../../../editor/image-resource/LinearGradient";
 import { ColorStep } from "../../../editor/image-resource/ColorStep";
-import { blend_list } from "../../../editor/util/Resource";
-import SelectEditor from "./SelectEditor";
+import propertyEditor from ".";
 
 const names = {
     'image-resource': "Image",
@@ -40,11 +37,7 @@ const names = {
 export default class BackgroundImageEditor extends UIElement {
 
     components() {
-        return {
-            SelectEditor,
-            GradientSingleEditor,
-            BackgroundPositionEditor
-        }
+        return propertyEditor
     }
 
     initState() {
@@ -81,28 +74,14 @@ export default class BackgroundImageEditor extends UIElement {
         `
     }
 
-
-    getBlendList () {
-        return blend_list.split(',').map(it => {
-            return `${it}:${this.$i18n(`blend.${it}`)}`
-        }).join(',');
-    }
-
     templateForBlendMode(index, blendMode) {
-
-        if (!this.state.blendListString) {
-            this.state.blendListString = this.getBlendList();
-        }
-
-
         return /*html*/`
         <div class='popup-item'>
-          <SelectEditor 
+          <BlendSelectEditor 
                 ref='$blend_${index}' 
                 key='blendMode' 
                 value="${blendMode}" 
                 params="${index}" 
-                options="${this.state.blendListString}" 
                 onchange="changeRangeEditor" 
             />
         </div>
