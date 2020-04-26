@@ -4,6 +4,8 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const WorkboxPlugin = require('workbox-webpack-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest')
 const path = require('path');
+const CopyPlugin = require('copy-webpack-plugin');
+
 
 
 const pkg = require('./package.json')
@@ -41,7 +43,8 @@ module.exports = {
   output: {
     library: "EasylogicStudio",
     libraryTarget: "umd",
-    path: __dirname + "/docs"
+    path: __dirname + "/docs",
+    filename: '[name].[contenthash].js'
   },
   mode: 'production',
   // devtool: 'source-map',
@@ -135,8 +138,11 @@ module.exports = {
       filename: "./index.html"
     }),
     new MiniCssExtractPlugin({
-      filename: "bundle.css"
+      filename: "[name].[contenthash].css"
     }),
+    new CopyPlugin([
+      { from: 'public', to: '.' },
+    ]),    
     new webpack.BannerPlugin({
       banner: LICENSE,
       raw: true,
