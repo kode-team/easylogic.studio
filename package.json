@@ -36,7 +36,8 @@
     "workbox-webpack-plugin": "^5.1.2"
   },
   "scripts": {
-    "build:web": "rm -rf docs/ && webpack --mode=production --progress",
+    "copy:resource": "cp CNAME docs/",
+    "build:web": "rm -rf docs/ && webpack --mode=production --progress && npm run copy:resource",
     "build:ext:whale": "webpack --mode=production --config=webpack.whale-extension.config.js",
     "build": "npm run build:web",
     "build:all": "npm run build:web && npm run build:ext:whale && npm run zip",
