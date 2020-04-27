@@ -739,12 +739,12 @@ export default class PathGenerator {
 
             } else if (e.altKey) {  
                 this.moveSegment(segmentKey, dx, dy);
+                
+                // 상대편 rotate 하는데 
+                this.rotateSegment(segmentKey);                
             } else {    // Curve 만 움직이기 
                 // 해당 segment 먼저 움직이고 
                 this.moveSegment(segmentKey, dx, dy);
-                
-                // 상대편 rotate 하는데 
-                this.rotateSegment(segmentKey);
             }
         } else {
             this.moveSegment('startPoint', dx, dy);

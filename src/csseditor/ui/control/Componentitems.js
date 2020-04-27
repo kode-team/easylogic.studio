@@ -28,13 +28,6 @@ export default class ComponentItems extends UIElement {
           </div>
         </div>
         <div class='group'>
-        <label>${this.$i18n('component.items.3dlayer')}</label>
-          <div class='list'>            
-            <AddCube title='Cube' />
-            <AddCylinder title='Cylinder' />
-          </div>
-        </div>
-        <div class='group'>
          <label>${this.$i18n('component.items.drawing')}</label>
           <div class='list'>            
             <!--<AddDrawBrush title='Brush' />-->
@@ -45,10 +38,12 @@ export default class ComponentItems extends UIElement {
             <AddSVGText title='Text' />
             <AddSVGTextPath title='Text Path' />
           </div>          
-        </div>  
+        </div>
         <div class='group'>
          <label>${this.$i18n('component.items.custom')}</label>
           <div class='list'>            
+            <AddCube title='Cube' />
+            <AddCylinder title='Cylinder' />          
           </div>          
         </div>          
       </div>

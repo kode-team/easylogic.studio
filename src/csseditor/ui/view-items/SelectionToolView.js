@@ -152,7 +152,7 @@ export default class SelectionToolView extends SelectionToolBind {
     }        
 
     toggleEditingPath (isEditingPath) {
-        // this.refs.$selectionTool.toggleClass('editing-path', isEditingPath);
+        this.refs.$selectionTool.toggleClass('editing-path', isEditingPath);
     }
     
     checkEditMode () {

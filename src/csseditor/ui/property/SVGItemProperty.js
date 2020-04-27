@@ -40,22 +40,6 @@ export default class SVGItemProperty extends BaseProperty {
         this.$el.show();
       }
 
-      if (current.is('svg-path', 'svg-textpath')) {
-        this.refs.$path.show();
-        this.refs.$totalLength.show();
-        this.refs.$polygon.hide();        
-
-      } else if (current.is('svg-polygon')) {
-        this.refs.$path.hide();
-        this.refs.$polygon.show();
-        this.refs.$totalLength.show();        
-
-      } else {
-        this.refs.$path.hide();
-        this.refs.$polygon.hide();
-        this.refs.$totalLength.hide();        
-      }
-
       this.refs.$length.text(current.totalLength);
       this.children.$fill.setValue(current['fill'] || 'rgba(0, 0, 0, 0)')
       this.children.$stroke.setValue(current['stroke'] || 'rgba(0, 0, 0, 1)')
@@ -102,18 +86,8 @@ export default class SVGItemProperty extends BaseProperty {
       <div ref='$svgProperty'>
         <div class='property-item animation-property-item' ref='$path'>
           <span class='add-timeline-property' data-property='d'></span>      
-          <label>${this.$i18n('svg.item.property.path')} - d </label>
+          <label>${this.$i18n('svg.item.property.path')} - <span ref='$length'></span> </label>
         </div>      
-
-
-        <div class='property-item animation-property-item' ref='$polygon'>
-          <span class='add-timeline-property' data-property='points'></span>      
-          <label>${this.$i18n('svg.item.property.polygon')} - points </label>
-        </div>         
-
-        <div class='property-item label' ref='$totalLength'>
-          <label>${this.$i18n('svg.item.property.totalLength')} <span ref='$length'></span></label>
-        </div>
 
         <div class='property-item animation-property-item'>
           <span class='add-timeline-property' data-property='fill'></span>
