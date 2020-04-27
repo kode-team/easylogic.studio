@@ -45,7 +45,7 @@ export default class CSSEditor extends UIElement {
 
   initState() {
     return {
-      leftSize: 250,
+      leftSize: 280,
     }
   }
 
