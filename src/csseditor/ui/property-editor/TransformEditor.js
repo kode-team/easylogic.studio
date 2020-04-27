@@ -144,35 +144,35 @@ export default class TransformEditor extends UIElement {
       <div class="transform-item" data-index="${index}">
         <div class="title" draggable="true" data-index="${index}">
           <label>${this.$i18n('css.item.' + type)}</label>
+          <div class="transform-ui ${type}">
+            <div class='${type}'>
+            ${transform.value.map( (it, tindex) => {
+
+              var label = this.getLabel(type, tindex);
+              var {min, max, step, units} = this.getRange(type);
+
+              return /*html*/`
+                <div>
+                  <RangeEditor 
+                        ref='$range_${type}_${index}_${tindex}' 
+                        min="${min}" 
+                        max="${max}" 
+                        step="${step}" 
+                        label="${label}"
+                        key="${index}" 
+                        params='${tindex}' 
+                        value="${it}" 
+                        units="${units}" 
+                        onchange="changeRangeEditor" />
+                </div>`
+              }).join('')}   
+            </div>       
+          </div>
           <div class="transform-menu">
             <button type="button" class="del" data-index="${index}">
               ${icon.remove2}
             </button>
           </div>
-        </div>
-        <div class="transform-ui ${type}">
-          <div class='${type}'>
-          ${transform.value.map( (it, tindex) => {
-
-            var label = this.getLabel(type, tindex);
-            var {min, max, step, units} = this.getRange(type);
-
-            return /*html*/`
-              <div>
-                <RangeEditor 
-                      ref='$range_${type}_${index}_${tindex}' 
-                      min="${min}" 
-                      max="${max}" 
-                      step="${step}" 
-                      label="${label}"
-                      key="${index}" 
-                      params='${tindex}' 
-                      value="${it}" 
-                      units="${units}" 
-                      onchange="changeRangeEditor" />
-              </div>`
-            }).join('')}   
-          </div>       
         </div>
       </div>
     `;
@@ -185,6 +185,7 @@ export default class TransformEditor extends UIElement {
       <div class="transform-item" data-index="${index}">
         <div class="title" draggable="true" data-index="${index}">
           <label>${this.$i18n('css.item.' + type)}</label>
+          <div></div>
           <div class="transform-menu">
             <button type="button" class="del" data-index="${index}">
               ${icon.remove2}

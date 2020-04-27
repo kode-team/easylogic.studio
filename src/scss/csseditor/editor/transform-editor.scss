@@ -38,7 +38,7 @@
   
       .title {
         display: grid;
-        grid-template-columns: 1fr 30px;
+        grid-template-columns: 60px 1fr 30px;
         svg {
           path {
             fill: $selected-color;
@@ -46,13 +46,15 @@
         }
 
         border-radius: 3px;
-        margin: 5px 0px;        
+        margin: 3px 0px;        
   
         label {
           font-size: 12px;
-          padding: 2px 5px;
+          padding: 6px 5px;
           cursor: move;          
           color: $selected-color;
+          vertical-align: middle;
+          display: inline-block;          
 
             span {
               font-weight: bold;
@@ -67,13 +69,12 @@
   
         .transform-menu {
           text-align: right;
+          padding: 5px 0px;
         }
       }
   
       .transform-ui {
-        display: grid;
-        grid-template-columns: 1fr;
-        grid-row-gap: 2px;
+        display: block;
         margin-bottom: 2px;
         margin-top: 2px;
 

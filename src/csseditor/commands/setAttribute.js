@@ -12,7 +12,7 @@ export default function setAttribute (editor, attrs, ids = null, isChangeFragmen
     editor.selection.itemsByIds(ids).forEach(item => {
 
         Object.keys(attrs).forEach(key => {
-            const value = attrs[key];
+            let value = attrs[key];
             if (isFunction(value)) {
                 value = value();
             }
