@@ -44,7 +44,7 @@ export default class TransformOriginProperty extends BaseProperty {
 
 
   [EVENT('refreshSelection', 'refreshRect') + DEBOUNCE(100)]() {
-    this.refreshShow(['artboard', 'rect', 'circle', 'text', 'svg-path', 'svg-text', 'svg-textpath', 'svg-tspan']);
+    this.refreshShowIsNot(['project']);
   }
 
   [EVENT('changeTransformOrigin')] (value) {

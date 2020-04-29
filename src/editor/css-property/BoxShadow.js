@@ -1,7 +1,7 @@
 
 import { Length } from "../unit/Length";
 import { Property } from "../items/Property";
-import { convertMatches } from "../../util/functions/parser";
+import { convertMatches, reverseMatches } from "../../util/functions/parser";
 
 export class BoxShadow extends Property {
   static parse(obj) {
@@ -23,7 +23,7 @@ export class BoxShadow extends Property {
         var colors = values
           .filter(it => it.includes("@"))
           .map(it => {
-            return results.matches[+it.replace("@", "")].color;
+            return reverseMatches(it, results.matches);
           });
 
         var numbers = values.filter(it => {

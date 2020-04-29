@@ -34,7 +34,7 @@ export default class BorderRadiusProperty extends BaseProperty {
 
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
-    this.refreshShow(['rect', 'circle', 'text']);
+    this.refreshShow(['rect', 'circle', 'text', 'cube', 'cylinder']);
   }  
 
   [EVENT('changeBorderRadius')] (value) {

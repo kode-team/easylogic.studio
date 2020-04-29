@@ -7,7 +7,7 @@ import { randomNumber } from "../../util/functions/create";
 import Color from "../../util/Color";
 export class ColorStep extends Item {
   getDefaultObject() {
-    return super.getDefaultObject({
+    return {
       cut: false,
       percent: 0,
       unit: "%",
@@ -15,12 +15,11 @@ export class ColorStep extends Item {
       em: 0,
       color: "rgba(0, 0, 0, 0)",
       prevColorStep: null
-    });
+    };
   }
 
   toCloneObject() {
     return {
-      ...super.toCloneObject(),
       cut: this.json.cut,
       percent: this.json.percent,
       unit: this.json.unit,

@@ -54,7 +54,7 @@ export default class TextShadowEditor extends UIElement {
     });
 
     if (arr.length) {
-      arr.push(`
+      arr.push(/*html*/`
       <div class="shadow-item desc">
             <div class="color"></div>
             <div class="offset-x">X</div>
@@ -120,7 +120,6 @@ export default class TextShadowEditor extends UIElement {
   }
 
   viewTextShadowPropertyPopup(shadow) {
-    console.log(shadow);
     this.emit("showTextShadowPropertyPopup", {
       changeEvent: 'changeTextShadowEditorPopup',
       color: shadow.color,

@@ -49,16 +49,13 @@ export default class TextShadowPropertyPopup extends BasePopup {
           ></div>
         </div>
         <div>
-          <label>Offset X</label>
-          <RangeEditor ref='$offsetX' calc='false' key='offsetX' min="-100" max='100' value='${this.state.offsetX}' onchange='changeShadow' />
+          <RangeEditor ref='$offsetX' label='Offset X' key='offsetX' min="-100" max='100' value='${this.state.offsetX}' onchange='changeShadow' />
         </div>
         <div>
-          <label>Offset Y</label>      
-          <RangeEditor ref='$offsetY' calc='false' key='offsetY' min="-100" max='100' value='${this.state.offsetY}' onchange='changeShadow' />
+          <RangeEditor ref='$offsetY' label="Offset Y" key='offsetY' min="-100" max='100' value='${this.state.offsetY}' onchange='changeShadow' />
         </div>
         <div>
-          <label>Blur Radius</label>
-          <RangeEditor ref='$blurRadius' calc='false' key='blurRadius' value='${this.state.blurRadius}' onchange='changeShadow' />
+          <RangeEditor ref='$blurRadius' label="Blur Radius" key='blurRadius' value='${this.state.blurRadius}' onchange='changeShadow' />
         </div>
       </div>
     `;

@@ -86,7 +86,7 @@ export default class TransformProperty extends BaseProperty {
   }
 
   [EVENT('refreshSelection')] () {
-    this.refreshShow(['artboard', 'rect', 'circle', 'text', 'svg-path', 'svg-text', 'svg-textpath', 'svg-tspan']);
+    this.refreshShowIsNot(['project']);
   }
 
   [EVENT('refreshSelectionStyleView', 'refreshStyleView', 'refreshRect') + DEBOUNCE(100)] () {

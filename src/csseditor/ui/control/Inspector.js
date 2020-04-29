@@ -50,14 +50,6 @@ export default class Inspector extends UIElement {
 
                 <!-- Component -->
                 <ComponentProperty />                
-
-                <!-- <ContentProperty /> -->    
-                <FontProperty />
-                <TextProperty />
-                <TextShadowProperty />
-                <TextFillProperty />
-                <FontSpacingProperty />
-                <TextClipProperty />  
                 
                 <!-- Appearance --> 
                 <BackgroundColorProperty />
@@ -70,6 +62,14 @@ export default class Inspector extends UIElement {
                 <LayoutProperty />
                 <FlexLayoutItemProperty />
                 <GridLayoutItemProperty />      
+
+                <!-- <ContentProperty /> -->    
+                <FontProperty />
+                <TextProperty />
+                <TextShadowProperty />
+                <TextFillProperty />
+                <FontSpacingProperty />
+                <TextClipProperty />  
 
                 <!-- effect -->
                 <BoxShadowProperty />

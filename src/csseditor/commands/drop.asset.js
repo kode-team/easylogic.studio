@@ -13,6 +13,5 @@ export default {
         }
 
         _refreshSelection(editor, true);
-
     }
 }

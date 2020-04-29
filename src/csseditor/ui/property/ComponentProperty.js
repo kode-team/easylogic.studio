@@ -32,13 +32,11 @@ export default class ComponentProperty extends BaseProperty {
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
 
-    if (this.isShow()) {
-      this.show();
-      this.refresh()
-    } else {
-      this.hide();
-      
-    }
+    this.refreshShow((type) => {
+      const current = this.$selection.current;
+
+      return current && current.is('component');
+    })
 
   }
 
@@ -47,7 +45,7 @@ export default class ComponentProperty extends BaseProperty {
     var current = this.$selection.current;
 
     if (current && current.is('component')) {
-      this.setTitle(current.itemType || current.name);
+      this.setTitle(current.getDefaultTitle() || current.itemType || current.name);
       this.load();
       current.getProps().forEach(it => {
         if (this.children[it.key]) {

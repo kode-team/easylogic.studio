@@ -151,9 +151,12 @@ export class Item {
    */
   convert(json) {
 
-    json.layers.forEach(layer => {
-      layer.parent = this.ref; 
-    })
+    if (json.layers) {
+      json.layers.forEach(layer => {
+        layer.parent = this.ref; 
+      })
+  
+    }
 
     return json;
   }

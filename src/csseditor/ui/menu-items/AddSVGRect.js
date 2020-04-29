@@ -3,7 +3,7 @@ import icon from "../icon/icon";
  
 export default class AddSVGRect extends MenuItem {
   getIconString() {
-    return icon.rect;
+    return icon.outline_rect;
   }
   getTitle() {
     return this.props.title || "SVG Rect";
