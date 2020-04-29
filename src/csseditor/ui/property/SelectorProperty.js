@@ -85,7 +85,7 @@ export default class SelectorProperty extends BaseProperty {
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)] () {
-    this.refreshShowIsNot('project');    
+    this.refreshShowIsNot(['project', 'svg-path', 'svg-brush', 'svg-textpath', 'svg-text']);    
   }
 
 

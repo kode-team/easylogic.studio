@@ -89,7 +89,7 @@ export default class ClipPathProperty extends BaseProperty {
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)] () {
-    this.refreshShowIsNot(['project', 'artboard']);
+    this.refreshShowIsNot(['artboard', 'rect', 'circle', 'text']);
   }
 
 

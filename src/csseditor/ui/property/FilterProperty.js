@@ -110,7 +110,7 @@ export default class FilterProperty extends BaseProperty {
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)] () {
-    this.refreshShowIsNot('project')
+    this.refreshShow(['artboard', 'rect', 'circle', 'text', 'svg-path', 'svg-text', 'svg-textpath', 'svg-tspan']);
   }
 
   [EVENT('refreshSVGArea') + DEBOUNCE(1000)] () {

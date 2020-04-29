@@ -43,7 +43,7 @@ export default class BoxShadowProperty extends BaseProperty {
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
 
-    this.refreshShowIsNot('artboard')
+    this.refreshShow(['artboard', 'rect', 'circle', 'text'])
 
   }  
 

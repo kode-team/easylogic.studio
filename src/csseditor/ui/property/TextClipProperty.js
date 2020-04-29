@@ -37,6 +37,6 @@ export default class TextClipProperty extends BaseProperty {
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
-    this.refreshShow('project')
+    this.refreshShow(['text']);
   }  
 }

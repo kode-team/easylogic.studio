@@ -23,10 +23,7 @@ export default class Inspector extends UIElement {
               </div>
               <div class="tab-item" data-value="2" title="${this.$i18n('inspector.tab.title.component')}">
                 <label class='icon'>${icon.cube}</label>
-              </div>              
-              <div class="tab-item" data-value="4" title='${this.$i18n('inspector.tab.title.text')}'>
-                <label class='icon'>${icon.title}</label>
-              </div>              
+              </div>
               <div class="tab-item" data-value="3" title="${this.$i18n('inspector.tab.title.transition')}">
                 <label>${icon.flash_on}</label>
               </div>
@@ -42,38 +39,6 @@ export default class Inspector extends UIElement {
                 <!-- Default Property --> 
                 <PositionProperty />
                 <SizeProperty /> 
-                <LayoutProperty />
-                <FlexLayoutItemProperty />
-                <GridLayoutItemProperty />
-                <BoxModelProperty />
-
-                <!-- Appearance --> 
-                <BackgroundColorProperty />
-                <BackgroundImageProperty />                
-                <PatternProperty />
-                <BorderNewProperty />
-                <BorderRadiusProperty />
-
-                <!-- effect -->
-                <BoxShadowProperty />
-                <FilterProperty />
-                <BackdropFilterProperty />
-                <ClipPathProperty />       
-
-                <!-- transform --> 
-                <TransformProperty />                  
-                <TransformOriginProperty /> 
-                
-                <div class='empty'></div>
-              </div>
-              <div class="tab-content scrollbar" data-value="2">
-
-                <PerspectiveProperty />
-                <PerspectiveOriginProperty />
-                <ExportProperty />
-                
-                <!-- ArtBoard --> 
-                <ArtBoardSizeProperty />              
 
                 <!-- SVG Item --> 
                 <SVGTextProperty />        
@@ -86,6 +51,47 @@ export default class Inspector extends UIElement {
                 <!-- Component -->
                 <ComponentProperty />                
 
+                <!-- <ContentProperty /> -->    
+                <FontProperty />
+                <TextProperty />
+                <TextShadowProperty />
+                <TextFillProperty />
+                <FontSpacingProperty />
+                <TextClipProperty />  
+                
+                <!-- Appearance --> 
+                <BackgroundColorProperty />
+                <BackgroundImageProperty />                
+                <PatternProperty />
+                <BorderNewProperty />
+                <BorderRadiusProperty />
+
+                <BoxModelProperty />                
+                <LayoutProperty />
+                <FlexLayoutItemProperty />
+                <GridLayoutItemProperty />      
+
+                <!-- effect -->
+                <BoxShadowProperty />
+                <FilterProperty />
+                <BackdropFilterProperty />
+                <ClipPathProperty />       
+
+                <!-- transform --> 
+                <TransformProperty />                  
+                <TransformOriginProperty /> 
+
+                <!-- ArtBoard --> 
+                <ArtBoardSizeProperty />                        
+                
+                <div class='empty'></div>
+              </div>
+              <div class="tab-content scrollbar" data-value="2">
+
+                <PerspectiveProperty />
+                <PerspectiveOriginProperty />
+                <ExportProperty />
+
                 <div class='empty'></div>                
               </div>              
               <div class='tab-content scrollbar' data-value='3'>
@@ -97,18 +103,6 @@ export default class Inspector extends UIElement {
                 <SelectorProperty />                              
                 <div class='empty'></div>                
               </div>                        
-              <div class='tab-content' data-value='4'>
-                <!-- Text -->
-                <!-- <ContentProperty /> -->    
-                <FontProperty />
-                <TextProperty />
-                <TextShadowProperty />
-                <TextFillProperty />
-                <FontSpacingProperty />
-                <TextClipProperty />  
-                
-                <div class='empty'></div>                
-              </div>
               <div class="tab-content" data-value="5">
                 <CodeViewProperty />
                 <div class='empty'></div>                           

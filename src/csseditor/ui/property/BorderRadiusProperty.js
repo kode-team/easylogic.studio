@@ -34,9 +34,7 @@ export default class BorderRadiusProperty extends BaseProperty {
 
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
-
-    this.refreshShowIsNot('artboard')
-
+    this.refreshShow(['rect', 'circle', 'text']);
   }  
 
   [EVENT('changeBorderRadius')] (value) {

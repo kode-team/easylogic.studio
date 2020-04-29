@@ -98,7 +98,7 @@ export default class ImageProperty extends BaseProperty {
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
 
-    this.refreshShow('image')
+    this.refreshShow(['image'])
 
   }
 }

@@ -10,7 +10,7 @@ export default class ArtBoardSizeProperty extends BaseProperty {
   }
 
   [EVENT('refreshSelection')] () {
-    this.refreshShow('artboard');
+    this.refreshShow(['project', 'artboard']);
   }
 
   initState() {
@@ -105,13 +105,6 @@ export default class ArtBoardSizeProperty extends BaseProperty {
     this.state.selectedIndex = selectedIndex;
 
     this.refresh();
-  }
-
-
-  [EVENT('refreshSelection') + DEBOUNCE(100)]() {
-
-    this.refreshShow('artboard')
-
   }
 
   getBody() {

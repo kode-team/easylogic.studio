@@ -219,7 +219,7 @@ export default class ElementView extends UIElement {
                 items = artboard.checkInAreaForLayers(rect);
 
                 if (rect.width.value === 0 && rect.height.value === 0) {
-                    items = [] 
+                    items = [artboard] 
                 } 
 
                 if (items.length === 0) {
@@ -235,7 +235,7 @@ export default class ElementView extends UIElement {
                 if (items.length) {
                     this.emit('refreshSelection')
                 } else {
-                    this.$selection.select();            
+                    this.$selection.select();
                     this.emit('emptySelection')
                 }                
             } else {

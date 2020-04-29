@@ -78,7 +78,7 @@ export default class PatternProperty extends BaseProperty {
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)] () {
-    this.refreshShowIsNot('project')
+    this.refreshShow(['artboard', 'rect', 'circle', 'text']);
   }
 
   [EVENT('refreshSVGArea') + DEBOUNCE(1000)] () {

@@ -9,7 +9,7 @@ export default class PositionProperty extends BaseProperty {
 
   [EVENT('refreshSelection', 'refreshRect') + DEBOUNCE(100)]() {
 
-    this.refreshShowIsNot('artboard')
+    this.refreshShowIsNot(['project', 'artboard'])
 
   }
 

@@ -37,9 +37,7 @@ export default class BorderNewProperty extends BaseProperty {
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
-
-    this.refreshShowIsNot('artboard')
-
+    this.refreshShow(['artboard', 'rect', 'circle', 'text']);
   }  
 
   [EVENT('changeKeyValue')] (key, value) {

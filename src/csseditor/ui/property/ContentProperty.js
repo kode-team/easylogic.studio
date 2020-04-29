@@ -11,7 +11,7 @@ export default class ContentProperty extends BaseProperty {
 
   [EVENT('refreshSelection', 'refreshContent') + DEBOUNCE(100)]() {
 
-    this.refreshShowIsNot('artboard');
+    this.refreshShow(['text'])
 
   }  
 

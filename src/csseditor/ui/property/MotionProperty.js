@@ -17,7 +17,7 @@ export default class MotionProperty extends BaseProperty {
   }
 
   [EVENT('refreshSelection', 'refreshRect') + DEBOUNCE(100)]() {
-    this.refreshShowIsNot('project');
+    this.refreshShowIsNot(['project']);
   }
 
   refresh() {

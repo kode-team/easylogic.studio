@@ -9,7 +9,7 @@ export default class TextFillProperty extends BaseProperty {
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
-    this.refreshShowIsNot('project');
+    this.refreshShow(['artboard', 'rect', 'circle', 'text']);
   }
 
   refresh() {

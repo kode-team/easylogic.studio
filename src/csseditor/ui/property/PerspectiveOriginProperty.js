@@ -51,7 +51,7 @@ export default class PerspectiveOriginProperty extends BaseProperty {
 
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
-    this.refreshShowIsNot('project');
+    this.refreshShowIsNot(['project']);
   }
 
   [EVENT('changePerspectiveOrigin')] (value) {

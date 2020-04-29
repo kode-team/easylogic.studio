@@ -13,7 +13,7 @@ export default class FontProperty extends BaseProperty {
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
-    this.refreshShowIsNot(['project'])
+    this.refreshShow(['artboard', 'rect', 'circle', 'text', 'svg-text', 'svg-textpath']);
   }
 
   refresh() {

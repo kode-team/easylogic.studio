@@ -30,6 +30,6 @@ export default class BackgroundClipProperty extends BaseProperty {
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
-    this.refreshShowIsNot('artboard')
+    this.refreshShow(['rect', 'circle', 'text']);
   }  
 }
