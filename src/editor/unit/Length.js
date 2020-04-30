@@ -446,6 +446,10 @@ export class Length {
     return new Length(round(this.value, k), this.unit)
   }
 
+  floor () {
+    return new Length(Math.floor(this.value), this.unit);
+  }
+
   equals (t) {
     return this.is(t.value) && this.isUnitType(t.unit); 
   }

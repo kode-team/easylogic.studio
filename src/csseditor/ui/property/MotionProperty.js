@@ -31,7 +31,9 @@ export default class MotionProperty extends BaseProperty {
     var current = this.$selection.current || {'offset-path': ''};
     return /*html*/`
       <div class='property-item animation-property-item'>
-        <span class='add-timeline-property' data-property='offset-path'></span>
+        <div class='group'>
+          <span class='add-timeline-property' data-property='offset-path'></span>
+        </div>
         <OffsetPathListEditor ref="$offsetPathList" key="offset-path" value="${current['offset-path']}" onchange="changRangeEditor" />
       </div>
     `;

@@ -480,7 +480,6 @@ export default class FillEditor extends UIElement  {
     return colorsteps.map( (it, index) => {
 
       var selected = this.$selection.isSelectedColorStep(it.id) ? 'selected' : '';
-
       return /*html*/`
       <div class='step ${selected}' data-id='${it.id}' style='left: ${it.percent}%;'>
         <div class='color-view' style="background-color: ${it.color}"></div>

@@ -32,11 +32,15 @@ export default class SizeProperty extends BaseProperty {
     return /*html*/`
       <div style='display: grid;grid-template-columns: repeat(2, 1fr); grid-column-gap: 10px; padding-top: 10px;'>
         <div class='property-item animation-property-item' style='padding:0px'>
-          <span class='add-timeline-property' data-property='width'></span>
+          <div class='group'>
+            <span class='add-timeline-property' data-property='width'></span>
+          </div>
           <InputRangeEditor ref='$width' key='width' min="0" max='3000' onchange='changRangeEditor' />
         </div>
         <div class='property-item animation-property-item' style='padding:0px'>
-          <span class='add-timeline-property' data-property='height'></span>      
+          <div class='group'>
+            <span class='add-timeline-property' data-property='height'></span>      
+          </div>
           <InputRangeEditor ref='$height' key='height' min="0" max='3000' onchange='changRangeEditor' />
         </div>      
       </div>

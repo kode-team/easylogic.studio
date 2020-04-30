@@ -125,7 +125,9 @@ export default class ComponentProperty extends BaseProperty {
       } else {
         return /*html*/`
           <div class='property-item animation-property-item'> 
-            <span class='add-timeline-property' data-property='${it.key}' data-type="${current.itemType}" data-editor="${it.editor}"></span>
+            <div class='group'>
+              <span class='add-timeline-property' data-property='${it.key}' data-type="${current.itemType}" data-editor="${it.editor}"></span>
+            </div>
             ${this.getPropertyEditor(it.key, current[it.key] || it.defaultVallue, it.editor, it.editorOptions)}
           </div>
         `

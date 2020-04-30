@@ -32,11 +32,15 @@ export default class FontProperty extends BaseProperty {
   getBody() {
     return /*html*/`
       <div class='property-item animation-property-item'>
-        <span class='add-timeline-property' data-property='color'></span>
+        <div class='group'>
+          <span class='add-timeline-property' data-property='color'></span>
+        </div>
         <ColorViewEditor ref='$color' label='${this.$i18n('font.property.color')}' key='color' onchange="changeColor" />
       </div>      
       <div class='property-item animation-property-item'>
-        <span class='add-timeline-property' data-property='font-size'></span>
+        <div class='group'>
+          <span class='add-timeline-property' data-property='font-size'></span>
+        </div>
         <RangeEditor 
           ref='$size' 
           label='${this.$i18n('font.property.size')}' 
@@ -45,7 +49,9 @@ export default class FontProperty extends BaseProperty {
           onchange="changeRangeEditor" />
       </div>
       <div class='property-item animation-property-item'>
-        <span class='add-timeline-property' data-property='font-stretch'></span>
+        <div class='group'>
+          <span class='add-timeline-property' data-property='font-stretch'></span>
+        </div>
         <RangeEditor 
           ref='$stretch' 
           label='${this.$i18n('font.property.stretch')}' 
@@ -56,7 +62,9 @@ export default class FontProperty extends BaseProperty {
       </div>      
  
       <div class='property-item animation-property-item'>
-        <span class='add-timeline-property' data-property='font-weight'></span>
+        <div class='group'>
+          <span class='add-timeline-property' data-property='font-weight'></span>
+        </div>
         <NumberRangeEditor 
           ref='$weightRange' 
           label='${this.$i18n('font.property.weight')}' 

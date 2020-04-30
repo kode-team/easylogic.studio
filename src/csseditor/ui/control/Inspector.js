@@ -43,7 +43,6 @@ export default class Inspector extends UIElement {
                 <!-- SVG Item --> 
                 <SVGTextProperty />        
                 <SVGItemProperty />              
-                <PathDataProperty />
 
                 <!-- Image --> 
                 <ImageProperty />
@@ -82,7 +81,10 @@ export default class Inspector extends UIElement {
                 <TransformOriginProperty /> 
 
                 <!-- ArtBoard --> 
-                <ArtBoardSizeProperty />                        
+                <ArtBoardSizeProperty />    
+                
+                <!-- SVG -->
+                <PathDataProperty />                
                 
                 <div class='empty'></div>
               </div>

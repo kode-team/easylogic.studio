@@ -442,5 +442,7 @@ export default {
     'pattern.info.popup.rotate': 'Rotate',
     'pattern.info.popup.blend': 'Blend Mode',
     'pattern.info.popup.foreColor': 'Fore',    
-    'pattern.info.popup.backColor': 'Back',        
+    'pattern.info.popup.backColor': 'Back',      
+    
+    'stroke.dasharray.editor.add': 'Add Dash',
 }

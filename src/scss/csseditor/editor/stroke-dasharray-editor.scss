@@ -1,5 +1,23 @@
 .stroke-dasharray-editor {
-    > div {
-        padding-bottom: 3px;
+    .dasharray-item {
+        margin-bottom: 3px;   
+
     }
+
+
+    > .tools {
+        label {
+
+            svg {
+                width: 16px;
+                height: 16px;
+                vertical-align: middle;
+
+                path {
+                    fill: $font-color;
+                }
+            }
+        }
+    }
+
 }

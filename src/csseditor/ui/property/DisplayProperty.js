@@ -38,11 +38,15 @@ export default class DisplayProperty extends BaseProperty {
         <SelectEditor ref='$position' icon="true" label='position' key='position' value='${current.position}' options='absolute,relative,fixed,static' onchange="changRangeEditor" />
       </div>    
       <div class='property-item animation-property-item'>
-        <span class='add-timeline-property' data-property='x'></span>
+        <div class='group'>
+          <span class='add-timeline-property' data-property='x'></span>
+        </div>
         <RangeEditor ref='$x' label='X' key='x' removable="true" value='${current.x}' min="-1000" max='1000' onchange='changRangeEditor' />
       </div>
       <div class='property-item animation-property-item'>
-        <span class='add-timeline-property' data-property='y'></span>
+        <div class='group'>
+          <span class='add-timeline-property' data-property='y'></span>
+        </div>
         <RangeEditor ref='$y' label='Y' key='y' removable="true" value='${current.y}' min="-1000" max='1000' onchange='changRangeEditor' />
       </div>
     `;

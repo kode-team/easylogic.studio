@@ -30,11 +30,15 @@ export default class PositionProperty extends BaseProperty {
     return /*html*/`
       <div style='display: grid;grid-template-columns: repeat(2, 1fr); grid-column-gap: 10px;'>
         <div class='property-item animation-property-item' style='padding: 0px;'>
-          <span class='add-timeline-property' data-property='x'></span>
+          <div class='group'>
+            <span class='add-timeline-property' data-property='x'></span>
+          </div>
           <InputRangeEditor ref='$x' key='x' value='${current.x}' min="-1000" max='1000' onchange='changRangeEditor' />
         </div>
         <div class='property-item animation-property-item' style='padding: 0px;'>
-          <span class='add-timeline-property' data-property='y'></span>
+          <div class='group'>
+            <span class='add-timeline-property' data-property='y'></span>
+          </div>
           <InputRangeEditor ref='$y' key='y' value='${current.y}' min="-1000" max='1000' onchange='changRangeEditor' />
         </div>
       </div>

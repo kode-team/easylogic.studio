@@ -246,10 +246,10 @@ export default class ElementView extends UIElement {
 
         } else {
             var obj = {
-                x: Length.px(rect.x.value / this.$editor.scale),
-                y: Length.px(rect.y.value / this.$editor.scale),
-                width: Length.px(rect.width.value / this.$editor.scale),
-                height: Length.px(rect.height.value / this.$editor.scale)
+                x: Length.px(rect.x.value / this.$editor.scale).floor(),
+                y: Length.px(rect.y.value / this.$editor.scale).floor(),
+                width: Length.px(rect.width.value / this.$editor.scale).floor(),
+                height: Length.px(rect.height.value / this.$editor.scale).floor()
             }
 
             if (this.$editor.addComponentType === 'image') { 

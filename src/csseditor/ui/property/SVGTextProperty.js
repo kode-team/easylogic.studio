@@ -44,7 +44,9 @@ export default class SVGTextProperty extends BaseProperty {
   getBody() {
     return /*html*/`
       <div class='property-item animation-property-item'>
-        <span class='add-timeline-property' data-property='text'></span>
+        <div class='group'>
+          <span class='add-timeline-property' data-property='text'></span>
+        </div>
         <TextAreaEditor 
           ref='$text' 
           label='${this.$i18n('svg.text.property.textarea')}' 
@@ -52,7 +54,9 @@ export default class SVGTextProperty extends BaseProperty {
           onchange="changeTextValue" />
       </div>        
       <div class='property-item animation-property-item'>
-        <span class='add-timeline-property' data-property='font-size'></span>
+        <div class='group'>
+          <span class='add-timeline-property' data-property='font-size'></span>
+        </div>
         <RangeEditor 
           ref='$font-size' 
           label='${this.$i18n('svg.text.property.size')}' 
@@ -62,7 +66,9 @@ export default class SVGTextProperty extends BaseProperty {
           onchange="changeTextValue" />
       </div>    
       <div class='property-item animation-property-item'>
-        <span class='add-timeline-property' data-property='font-weight'></span>
+        <div class='group'>
+          <span class='add-timeline-property' data-property='font-weight'></span>
+        </div>
         <NumberRangeEditor 
           ref='$font-weight' 
           label='${this.$i18n('svg.text.property.weight')}' 
@@ -105,7 +111,9 @@ export default class SVGTextProperty extends BaseProperty {
         />
       </div>       
       <div class='property-item animation-property-item'>
-        <span class='add-timeline-property' data-property='lengthAdjust'></span>
+        <div class='group'>
+          <span class='add-timeline-property' data-property='lengthAdjust'></span>
+        </div>
         <SelectEditor 
           ref='$lengthAdjust' 
           label='${this.$i18n('svg.text.property.length.adjust')}' 
@@ -115,7 +123,9 @@ export default class SVGTextProperty extends BaseProperty {
           onchange='changeTextValue' />        
       </div>        
       <div class='property-item animation-property-item'>
-        <span class='add-timeline-property' data-property='textLength'></span>
+        <div class='group'>
+          <span class='add-timeline-property' data-property='textLength'></span>
+        </div>
         <RangeEditor 
           ref='$textLength' 
           label='${this.$i18n('svg.text.property.text.length')}' 
@@ -126,7 +136,9 @@ export default class SVGTextProperty extends BaseProperty {
           onchange='changeTextValue' />                
       </div>        
       <div class='property-item animation-property-item'>
-        <span class='add-timeline-property' data-property='startOffset'></span>
+        <div class='group'>
+          <span class='add-timeline-property' data-property='startOffset'></span>
+        </div>
         <RangeEditor 
           ref='$startOffset' 
           label='${this.$i18n('svg.text.property.start.offset')}' 

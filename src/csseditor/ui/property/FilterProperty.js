@@ -109,7 +109,7 @@ export default class FilterProperty extends BaseProperty {
     })
   }
 
-  [EVENT('refreshSelection') + DEBOUNCE(100)] () {
+  [EVENT('refreshSelection')] () {
     this.refreshShowIsNot(['project']);
   }
 

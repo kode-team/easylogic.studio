@@ -506,6 +506,20 @@ export default class Dom {
     return this;
   }
 
+  matches (selector) {
+    if (this.el) {
+
+      if (!this.el.matches) return null;
+
+      if (this.el.matches(selector)) {
+        return this;
+      }
+      return this.parent().matches(selector);
+    }
+
+    return null;
+}  
+
 
   get value() {
     return this.el.value;

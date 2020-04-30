@@ -144,8 +144,8 @@ export default {
     'text.fill.property.stroke':  '윤곽선',
     'text.fill.property.strokeWidth':  '윤곽선 굵기',
 
-    'transform.property.title': '변형',
-    'transform.origin.property.title': '변형 중심점',    
+    'transform.property.title': '트랜스폼',
+    'transform.origin.property.title': '트랜스폼 Origin',    
 
     'transition.property.title': 'CSS 트랜지션',
 
@@ -447,4 +447,6 @@ export default {
     'pattern.info.popup.blend': '블렌드',    
     'pattern.info.popup.foreColor': '패턴색',    
     'pattern.info.popup.backColor': '배경색',    
+
+    'stroke.dasharray.editor.add': '점 추가',    
 }

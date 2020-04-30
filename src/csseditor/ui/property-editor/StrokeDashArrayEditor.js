@@ -1,7 +1,8 @@
-import { LOAD } from "../../../util/Event";
+import { LOAD, CLICK } from "../../../util/Event";
 import UIElement, { EVENT } from "../../../util/UIElement";
 import NumberRangeEditor from "./NumberRangeEditor";
 import { isArray } from "../../../util/functions/func";
+import icon from "../icon/icon";
 
 export default class StrokeDashArrayEditor extends UIElement {
   components() {
@@ -21,7 +22,14 @@ export default class StrokeDashArrayEditor extends UIElement {
   }
 
   template() {
-    return `<div class='stroke-dasharray-editor' ref='$body'></div>`
+    return /*html*/`
+      <div class='stroke-dasharray-editor'>
+        <div ref='$body'></div>
+        <div class='tools'>
+          <label ref='$add'>${icon.add} ${this.$i18n('stroke.dasharray.editor.add')}</label>
+        </div>
+      </div>
+    `
   }
 
   toStringValue () {
@@ -50,8 +58,8 @@ export default class StrokeDashArrayEditor extends UIElement {
 
     return this.state.value.map( (it, index) =>  {
       var num = index + 1; 
-      return `
-        <div>
+      return /*html*/`
+        <div class='dasharray-item'>
           <NumberRangeEditor 
             ref='$${num}' 
             label='${num}' 
@@ -60,13 +68,11 @@ export default class StrokeDashArrayEditor extends UIElement {
             min="0"
             max="1000"
             step="1"
-            calc="false"
-            unit="number" 
             onchange="changeRangeEditor" 
           />
         </div>
       `
-    }).join(' ');
+    });
   }
 
   [EVENT('changeRangeEditor')] (key, value) {
@@ -74,6 +80,12 @@ export default class StrokeDashArrayEditor extends UIElement {
     this.state.value[index] = value 
 
     this.modifyStrokeDashArray();
+  }
+
+  [CLICK('$add')] () {
+    this.state.value.push(0);
+
+    this.refresh();
   }
 
 
