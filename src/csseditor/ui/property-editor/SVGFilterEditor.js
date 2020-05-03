@@ -220,7 +220,12 @@ export default class SVGFilterEditor extends UIElement {
         return /*html*/`
           <div class='group' label="${this.$i18n(f.label)}">
             ${mapjoin(f.items, i => {
-              return /*html*/ ` <div class='item' draggable="true" value="${i.value}">${getIcon(i.value)} ${this.$i18n(i.label)}</div>`
+              return /*html*/ `
+                <div class='item' draggable="true" value="${i.value}">
+                  <span class='icon'>${getIcon(i.value)}</span>
+                  ${this.$i18n(i.label)}
+                </div>
+                `
             })}
           </div>
         `

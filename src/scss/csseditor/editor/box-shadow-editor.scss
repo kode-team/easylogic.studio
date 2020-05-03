@@ -68,21 +68,14 @@
     }
 
     .inset {
+      color: $background-color;
       svg {
         width: 16px;
         height: 16px;
-
-        path {
-          fill: $background-color;
-        }
       }
 
       &[data-value="true"] {
-        svg {
-          path {
-            fill: $selected-color;
-          }
-        }
+        color: $selected-color;
       }
     }
 

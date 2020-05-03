@@ -10,7 +10,6 @@
         grid-column-gap: 2px;
         text-align: left;
         margin-bottom: 10px;
-        @include svg-button-inline(auto, 24px);
 
         button {
             padding: 2px 10px;
@@ -24,11 +23,6 @@
                     border-color: $selected-border-color;
                     background-image: none;
                     color: $selected-font-color;
-                    svg {
-                        path {
-                            fill: $selected-font-color;
-                        }
-                    }
                 }
             }
         }  
@@ -62,13 +56,14 @@
                 cursor: pointer;         
                 text-align: center;
                 padding: 20px;
-
-                svg {
-                    path {
-                        fill: $font-color;
+                color: $font-color; 
+                
+                button {
+                    svg {
+                        width: 20px;
+                        height: 20px;
                     }
                 }
-                
             }
 
             .svgfilter-item {
@@ -117,13 +112,7 @@
                     right: 0px;
                     text-align: right;   
                     padding: 2px;
-
-
-                    svg {
-                        path {
-                            fill: $selected-font-color;
-                        }
-                    }
+                    color: $selected-font-color;
                 }
             }
         }

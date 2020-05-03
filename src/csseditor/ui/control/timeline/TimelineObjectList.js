@@ -47,7 +47,7 @@ export default class TimelineObjectList extends UIElement {
 
                 return /*html*/ `
                 <div class='timeline-object-row layer-property' data-selected='${selected}' data-layer-id='${obj.id}' data-property='${property.property}'>
-                <div class='icon'></div>                    
+                  <div class='icon'></div>                    
                     <div class='title'>${getPropertyTitle(property.property)}</div>
                     <div class='current-value'>
                       ${property.property === 'd' ? layer.totalLength : ''}

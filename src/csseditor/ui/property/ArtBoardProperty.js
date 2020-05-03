@@ -39,7 +39,7 @@ export default class ArtBoardProperty extends BaseProperty {
 
       return /*html*/`
         <div class='artboard-item ${selected}' data-layout="${artboard.layout}" data-artboard-id='${artboard.id}'>
-          <div class='preview'>${icon.doc}</div>
+          <div class='preview icon'>${icon.doc}</div>
           <div class='detail'>
             <label data-index='${index}' data-layout-title='${title}' >${artboard.name}</label>
             <div class="tools">

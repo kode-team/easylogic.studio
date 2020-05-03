@@ -23,12 +23,7 @@ $asset-item-size: 60px;
                 cursor: pointer;         
                 text-align: center;
                 padding-top: 2px;
-
-                svg {
-                    path {
-                        fill: $font-color;
-                    }
-                }
+                color: $font-color; 
             }
 
             .pattern-item {
@@ -71,19 +66,7 @@ $asset-item-size: 60px;
                     // display: grid;
                     text-align: right;   
                     padding: 2px;
-
-                    button {
-                        width: 10px;
-                        height: 10px;
-                    }
-
-                    svg {
-                        width: 100%; 
-                        height: 100%;
-                        path {
-                            fill: $selected-font-color;
-                        }
-                    }
+                    color: $selected-font-color;
                 }
             }
 

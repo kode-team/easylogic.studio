@@ -20,11 +20,7 @@
         &[data-selected-value="#{$type}"] {
           button[data-type="#{$type}"] {
             background-color: $selected-color;
-            svg {
-              path {
-                fill: $border-color;
-              }
-            }
+            color: $border-color; 
           }
 
           .keyframe-code[data-type="#{$type}"] {

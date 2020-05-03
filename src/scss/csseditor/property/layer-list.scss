@@ -10,10 +10,8 @@
 
         @for $selectValue from 0 to 40 {
             &[data-depth="#{$selectValue}"] {
-                .detail {
-                    label {
-                        padding-left: $selectValue * 5px;
-                    }
+                label {
+                    padding-left: $selectValue * 5px;
                 }
             }
         }  
@@ -27,12 +25,8 @@
             span.icon {
                 vertical-align: middle;
                 display: inline-block;
-                width: 20px;
-                height: 20px;
                 position: relative;
                 svg {
-                    width: 100%;
-                    height: 100%;
 
                     path,polygon {
                         fill: transparent;
@@ -57,34 +51,18 @@
                 text-align: right;
 
                 .visible {
-                    svg {
-                        path {
-                            fill: $border-color;
-                        }
-                    }
+                    color: $border-color;
 
                     &[data-visible='true'] {
-                        svg {
-                            path {
-                                fill: $font-color;
-                            }
-                        }   
+                        color: $font-color; 
                     }
                 }
 
                 .lock {
-                    svg {
-                        path {
-                            fill: $font-color;
-                        }
-                    }
+                    color: $font-color; 
 
                     &[data-lock='true'] {
-                        svg {
-                            path {
-                                fill: $border-color;
-                            }
-                        }   
+                        color: $border-color; 
                     }
                 }
             }

@@ -75,15 +75,9 @@ $tab-horizontal-header-right-width: 60px;
               }
 
 
-            label {
+              label {
                 padding: 4px 13px;
                 height: auto;
-
-                svg {
-                  path {
-                    fill: $selected-color;
-                  }
-                }
               }
             }
 
@@ -99,10 +93,6 @@ $tab-horizontal-header-right-width: 60px;
               svg {
                 width: 24px;
                 height: 24px;
-
-                path {
-                  fill: lighten($font-color, 30%);
-                }
               }
             }
 
@@ -157,33 +147,21 @@ $tab-horizontal-header-right-width: 60px;
         padding: 0px 0px 0px 0px;
         height: 100%;
 
-        &.selected {
-          svg {
-            path {
-              fill: $selected-color;
-            }
-          }
-        }
-
-
+        &.selected,
         &:hover {
           label {
-            svg {
-              path {
-                fill: $selected-color !important;
-              }
-            }            
-  
+            color: $selected-color; 
           }
 
-        }        
+        }
 
         label {
-          line-height: 1;
+          line-height: 24px;
           
           height: 100%;
           display: inline-block;
           vertical-align: middle;
+          color: $tab-header-font-color;
           &.icon {
             padding: 6px 10px 2px;
           }
@@ -191,9 +169,6 @@ $tab-horizontal-header-right-width: 60px;
           svg {
             width: 20px;
             height: 20px;
-            path  {
-              fill: $tab-header-font-color;
-            }
           }
   
         }

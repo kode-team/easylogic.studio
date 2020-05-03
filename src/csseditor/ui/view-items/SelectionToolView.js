@@ -131,7 +131,7 @@ export default class SelectionToolView extends SelectionToolBind {
     <div class='selection-view' ref='$selectionView' >
         <div class='selection-tool' ref='$selectionTool' style='left:-100px;top:-100px;'>
             <div class='selection-tool-item' data-position='move' ref='$selectionMove' title='move'>
-                <span ref='$selectionIcon'>${icon.flag}</span>
+                <span class='icon' ref='$selectionIcon'>${icon.flag}</span>
                 <span ref='$selectionTitle'></span>
             </div>       
             <div class='selection-tool-item' data-position='to top'></div>            

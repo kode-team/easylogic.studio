@@ -119,11 +119,7 @@
         &[data-selected-value="#{$borderRadiusType}"] {
           button[data-value="#{$borderRadiusType}"] {
             background-color: $selected-color;
-            svg {
-              path {
-                fill: $border-color;
-              }
-            }
+            color: $border-color;
           }
         }
       }

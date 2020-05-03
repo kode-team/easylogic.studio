@@ -15,6 +15,7 @@ export default class TimelineKeyframeList extends UIElement {
         return this.parent.state[key];
     }
 
+
     calculateTimeToPosition (offsetTime, startTime, endTime) {
         
         var rate =  (offsetTime - startTime) / (endTime - startTime);
@@ -209,6 +210,10 @@ export default class TimelineKeyframeList extends UIElement {
         this.emit('deleteTimelineKeyframe');
     }
 
+    isNotMoved(dx, dy) {
+        return dx === 0 && dy === 0;
+    }
+
     [POINTERSTART('$el') + IF('hasDragPlace') + MOVE('moveDragArea') + END('moveEndDragArea')] (e) {
         this.dragXY = this.getRealPosition(e)
         this.startRowIndex = this.getRowIndex(Dom.create(e.target).attr('data-row-index'))
@@ -217,6 +222,7 @@ export default class TimelineKeyframeList extends UIElement {
     }
 
     moveDragArea (dx, dy) {
+        if (this.isNotMoved(dx, dy)) return; 
         var left = dx < 0 ? Length.px(this.dragXY.x + dx) : Length.px(this.dragXY.x);
         var top = dy < 0 ? Length.px(this.dragXY.y + dy) : Length.px(this.dragXY.y);
         var width = Length.px(Math.abs(dx)) 
@@ -252,6 +258,7 @@ export default class TimelineKeyframeList extends UIElement {
     }
 
     moveEndDragArea (dx, dy) {
+        // if (this.isNotMoved(dx, dy)) return;      
         if (!this.left) {
 
             if (this.doubleClicked) {
@@ -410,7 +417,7 @@ export default class TimelineKeyframeList extends UIElement {
     }
 
     moveOffset (dx, dy) {
-
+        if (this.isNotMoved(dx, dy)) return; 
         var {displayStartTime, displayEndTime, fps} = this.timeline
 
         var sign = dx < 0 ? -1 : 1; 
@@ -437,7 +444,8 @@ export default class TimelineKeyframeList extends UIElement {
         this.$el.$(`.timeline-keyframe[data-timeline-layer-id="${id}"]`).toggleClass('collapsed', isToggle);
     }
     
-    moveEndOffset () {
+    moveEndOffset (dx, dy) {
+        if (this.isNotMoved(dx, dy)) return;        
         var currentArtboard = this.$selection.currentArtboard;
         if (currentArtboard) {
             this.$timeline.each(item => {

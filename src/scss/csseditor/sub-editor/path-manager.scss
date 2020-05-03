@@ -27,15 +27,9 @@
 
         @each $modeType in modify, draw, transform {
             &[data-selected-value="#{$modeType}"] {
-              button[data-value="#{$modeType}"] {
-                svg {
-                  path {
-                    fill: $selected-color;
-                  }
-                }
-              }
+              color: $selected-color;
             }
-          }        
+        }
 
         button {
             font-size: 13px;

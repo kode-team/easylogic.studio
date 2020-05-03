@@ -69,7 +69,7 @@ export default class SVGFilterAssetsProperty extends BaseProperty {
       `
     })
 
-    results.push(`<div class='add-svgfilter-item'><butto type="button">${icon.add}</button></div>`)
+    results.push(`<div class='add-svgfilter-item'><button type="button">${icon.add}</button></div>`)
 
     return results
   }

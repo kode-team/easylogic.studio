@@ -39,12 +39,7 @@
       .title {
         display: grid;
         grid-template-columns: 60px 1fr 30px;
-        svg {
-          path {
-            fill: $selected-color;
-          }
-        }
-
+        color: $selected-color;
         border-radius: 3px;
         margin: 3px 0px;        
   

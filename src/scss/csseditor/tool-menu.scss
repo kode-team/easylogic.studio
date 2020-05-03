@@ -102,11 +102,7 @@
   
         &.selected {
           .icon {      
-            svg {
-              path {  
-                fill: $selected-color;
-              }
-            }
+            color: $selected-color; 
           }
   
         }
@@ -203,10 +199,6 @@
       svg {
         width: 100%;
         height: 100%;
-
-        path {
-          fill : $font-color;
-        }
       }
 
       &.export,

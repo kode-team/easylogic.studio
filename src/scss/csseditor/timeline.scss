@@ -59,12 +59,6 @@
 
                     &:hover {
                         color: $selected-color;
-
-                        svg {
-                            path {
-                                fill: $selected-color;
-                            }
-                        }
                     }
 
                 }
@@ -355,11 +349,12 @@
                         display: grid; 
                         grid-template-columns: 20px 1fr 50px; 
                         grid-column-gap: 2px;
-                        
+                        color: $font-color;
                         border-bottom: 1px solid $timeline-border-color;
 
                         &[data-selected="true"] {
                             background-color: $timeline-row-selected-color;
+                            color: $selected-font-color;
                         }
 
                         .current-value {
@@ -372,17 +367,12 @@
                         }
 
                         .icon {
-
                             padding-top: 5px;
                             svg {
                                 width: 16px;
                                 height: 16px;
                                 transform: rotate(90deg);
                                 transition: transform 0.2s ease;
-
-                                path {
-                                    fill: $font-color;
-                                }
                             }
                         }
 
@@ -579,7 +569,7 @@
                                 top: 50%;
                                 display: inline-block;
                                 width: 2px;
-                                height: 10px;
+                                height: 6px;
                                 background-color: #0bc4e4;
                                 transform: translate(-50%, -50%);
                                 
@@ -619,14 +609,11 @@
     label {
       vertical-align: middle;
       padding-right: 10px;
+      color: $font-color;
       svg {
         width: 16px;
         height: 16px;
         vertical-align: middle;
-
-        path {
-          fill: $font-color;
-        }
       }
     }
 
@@ -655,22 +642,13 @@
       height: 24px;
 
       &.play {
-
-        svg {
-          path {
-            fill: $selected-color;
-          }
-        }
+        color: $selected-color;
       }
 
-      &.pause {
-        display: none;
-        svg {
-          path {
-            fill: rgb(102, 119, 216);
-          }
+        &.pause {
+            display: none;
+            color: rgb(102, 119, 216);
         }
-      }
     }
 
 
@@ -704,12 +682,7 @@
       @each $selectDirection in normal, alternate, reverse, alternate-reverse {
           &[data-selected-direction="#{$selectDirection}"] [data-value="#{$selectDirection}"] {
               background-color: $selected-background-color;
-
-              svg {
-                path {
-                  fill: $selected-color;
-                }
-              }
+              color: $selected-color; 
           }
       }        
 
@@ -739,14 +712,6 @@
         }
       }
     }
-
-    svg {
-      vertical-align: middle;
-      path {
-        fill: $font-color;
-      }
-    }
-
     input[type=text] {
       width: 80px;
     }

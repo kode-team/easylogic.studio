@@ -7,15 +7,10 @@
 
     > .tools {
         label {
-
+            color: $font-color;
             svg {
                 width: 16px;
                 height: 16px;
-                vertical-align: middle;
-
-                path {
-                    fill: $font-color;
-                }
             }
         }
     }

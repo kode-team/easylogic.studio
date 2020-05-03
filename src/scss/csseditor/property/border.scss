@@ -106,14 +106,8 @@
     @each $borderRadiusType in all, partitial {
       &[data-selected-value="#{$borderRadiusType}"] {
         button[data-value="#{$borderRadiusType}"] {
-          //   background-color: white;
-          // border-color: black;
+          color: white;
           background-color: black;
-          svg {
-            path {
-              fill: white;
-            }
-          }
         }
       }
     }
@@ -133,14 +127,11 @@
       outline: none;
       padding: 0px;
       border: 0px;
+      color: $border-color;
 
       svg {
         width: 100%;
         height: 100%;
-
-        path {
-          fill: $border-color;
-        }
       }
     }
   }

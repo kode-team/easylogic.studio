@@ -120,13 +120,8 @@
             font-size: 14px;
             font-weight:bold;
             cursor: pointer;
-            vertical-align: middle;      
-            
-            svg {
-                path {
-                    fill: $font-color;
-                }
-            }
+            vertical-align: middle;    
+            color: $font-color;  
         }
 
         .predefined-text {

@@ -12,15 +12,6 @@
         grid-template-columns: 20px 1fr;
         grid-column-gap: 4px;
 
-        .preview {
-            cursor: pointer;            
-            svg {
-                width: 16px;
-                height: 16px;
-            }
-        }
-
-
         .detail {
             display: grid;
             grid-template-columns: 1fr 60px;

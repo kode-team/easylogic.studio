@@ -15,24 +15,6 @@
     }
   }
 
-
-  .transform-translate {
-    position: absolute;
-    left:0px;
-    top:0px;
-    width:100%;
-    height:100%;
-    display: block;
-    pointer-events: none;
-
-    path {
-      stroke: $border-color; 
-      stroke-width: 0.5;
-      stroke-dasharray: 1 2;
-    }
-  }
-
-
   .selection-pointer {
     position: absolute;
     left:0px;
@@ -173,6 +155,7 @@
         vertical-align: middle;
         padding-right: 5px;
         overflow:hidden;
+        color: $selected-font-color;
   
         &:before {
           left: 0px;
@@ -183,10 +166,6 @@
         svg {
           width: 15px;
           height: 15px;
-
-          path {
-            fill: $selected-font-color;
-          }
         }
 
         span {

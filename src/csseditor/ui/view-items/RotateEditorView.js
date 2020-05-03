@@ -45,7 +45,7 @@ export default class RotateEditorView extends UIElement {
                 </div>                
                 <div class='rotate-z' ref='$rotateZ'>
                     <div class='handle-line'></div>                
-                    <div class='handle' ref='$handle'>${icon.gps_fixed}</div>
+                    <div class='handle icon' ref='$handle'>${icon.gps_fixed}</div>
                 </div>                
             </div>
         `

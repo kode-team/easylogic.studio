@@ -113,6 +113,7 @@
     cursor: pointer;
     border-bottom: 0px solid $property-border-color;  
     background-color: $property-title-color;
+    color: $font-color;
 
     &.filter {
       grid-template-columns: 1fr 130px;
@@ -121,11 +122,6 @@
     svg  {
       width: 16px;
       height: 16px;
-      vertical-align: middle;
-
-      path {
-        fill: $font-color;
-      }
     }
 
     label {

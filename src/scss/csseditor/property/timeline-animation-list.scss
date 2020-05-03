@@ -13,15 +13,6 @@
         grid-column-gap: 4px;
         cursor: pointer;
 
-        .preview {
-            svg {
-                vertical-align: middle;
-                width: 20px;
-                height: 20px;
-            }
-        }
-
-
         .detail {
             display: grid;
             grid-template-columns: 1fr 60px;

@@ -55,25 +55,18 @@
           cursor: pointer;
           padding: 2px 10px;
           vertical-align: middle;
+          color: $font-color;
 
           svg {
-            vertical-align: middle;
             width: 20px;
             height: 20px;
-            path {
-              fill: $font-color; 
-            }
           }
 
           &[value="SourceGraphic"],
           &[value="BackgroundImage"], 
           &[value="FillPaint"]
           {
-            svg {
-              path {
-                fill: $selected-color;
-              }
-            }
+            color: $selected-color;
           }
 
           &:hover {
@@ -261,9 +254,7 @@
 
             @each $type, $color in $theme-colors {
               &[data-source-type="#{$type}"] {
-                path {
-                  fill: $color; 
-                }
+                color: $color; 
               }
             }  
             
@@ -342,6 +333,7 @@
           }              
           
           .in,.out {
+            color: white; 
 
             svg {
               pointer-events: none;
@@ -350,10 +342,6 @@
               position: absolute;
               top: 50%;
               transform: translateX(-50%) translateY(-50%);
-              
-              path {
-                fill: white;
-              }
             }
           }
 
@@ -410,12 +398,7 @@
   
         .filter-menu {
           text-align: right;
-
-          svg {
-            path {
-              fill: $selected-font-color;
-            }
-          }
+          color: $selected-font-color; 
         }
       }
   

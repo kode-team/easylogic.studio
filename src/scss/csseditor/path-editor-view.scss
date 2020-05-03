@@ -200,6 +200,8 @@
 
 
     svg {
+        width: 100%;
+        height: 100%;
 
         line {
             stroke: $path-guide-color; 
@@ -270,6 +272,8 @@
         }
 
         path {
+            fill: transparent;
+
             &.guide {
                 fill: transparent;
                 stroke: $path-guide-color;

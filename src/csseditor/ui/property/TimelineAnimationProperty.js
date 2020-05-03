@@ -33,7 +33,7 @@ export default class TimelineAnimationProperty extends BaseProperty {
       var selected = timeline.selected ? 'selected' : ''
       return /*html*/`
         <div class='timeline-animation-item ${selected}'>
-          <div class='preview'>
+          <div class='preview icon'>
             ${icon.local_movie}
           </div>
           <div class='detail'>

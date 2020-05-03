@@ -32,3 +32,14 @@ input[type=file] {
 .add-image-button {
     display: none;
 }
+
+.icon, button, label {
+    svg {    
+        width: 16px;
+        height: 16px;
+        vertical-align: middle;
+        path {
+            fill: currentColor;
+        }
+    }
+}
