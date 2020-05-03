@@ -42,27 +42,34 @@
     }
   }
 
-
-  .layout-header {
-    top: 0px;
-    left: $left-size;
-    right: $right-size;
-    height: $tool-size;
-    position: absolute;
-    background-color: $header-background-color;
-    color: $selected-font-color;
-    pointer-events: all;
-    box-sizing: border-box;
-    padding: 3px;
-    border-bottom: 1px solid $border-color;
+  .layout-top {
+    display: block;
+    flex: 1 1 $top-size; 
+    height: $top-size;
+    background-color: yellow;
   }
-
 
   .layout-middle {
     flex: 1 1 auto;
     display: flex;
     height: 100%;
     position: relative;
+    box-sizing: border-box;
+
+    .layout-header {
+      top: 0px;
+      left: $left-size;
+      right: $right-size;
+      height: $tool-size;
+      position: absolute;
+      background-color: $header-background-color;
+      color: $selected-font-color;
+      pointer-events: all;
+      box-sizing: border-box;
+      padding: 3px;
+      border-bottom: 1px solid $border-color;
+    }
+  
 
     > .splitter {
       position: absolute;

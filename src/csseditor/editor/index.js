@@ -57,6 +57,9 @@ export default class CSSEditor extends UIElement {
   template() {
     return /*html*/`
       <div class="layout-main">
+        <div class='layout-top' ref='$top'>
+
+        </div>
         <div class="layout-middle" ref='$middle'>
           <div class="layout-header" ref='$headerPanel'>
               <ToolMenu />          
