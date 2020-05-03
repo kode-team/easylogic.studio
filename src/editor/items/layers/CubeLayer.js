@@ -96,7 +96,7 @@ export class CubeLayer extends Component {
         refresh: true, 
         defaultValue: this.json['backface-visibility'] 
       },                  
-      'Color',
+      'Background Color',
       ...faceKeys.map(key => {
         return       {
           key: `${key}.color`, editor: 'ColorViewEditor', 
@@ -107,7 +107,7 @@ export class CubeLayer extends Component {
           defaultValue: 'rgba(0, 0, 0, 1)' 
         }
       }),      
-      'Background',
+      'Background Image',
       ...faceKeys.map(key => {
         return       {
           key: `${key}.background`, 

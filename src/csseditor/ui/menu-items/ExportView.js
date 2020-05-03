@@ -3,7 +3,7 @@ import icon from "../icon/icon";
 
 export default class ExportView extends MenuItem {
   getIconString() {
-    return icon.publish;
+    return icon.launch;
   }
   getTitle() {
     return this.$i18n('menu.item.export.title');

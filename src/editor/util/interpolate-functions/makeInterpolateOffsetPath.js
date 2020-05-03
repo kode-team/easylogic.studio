@@ -4,13 +4,12 @@ import { Length } from "../../unit/Length";
 import { calculateAngle } from "../../../util/functions/math";
 import { Transform } from "../../css-property/Transform";
 
-export function makeInterpolateOffsetPath(layer, property, startValue, endValue) {
+export function makeInterpolateOffsetPath(layer, property, startValue, endValue, artboard) {
 
     var [id, distance, rotateStatus, rotate] = startValue.split(',').map(it =>it.trim());
 
     var startObject = {id, distance: Length.parse(distance || '0%'), rotateStatus: rotateStatus || 'auto', rotate: Length.parse(rotate || '0deg') }
 
-    var artboard = this.$selection.currentArtboard
     var innerInterpolate = (rate, t) => {
         return { x, y }
     }
@@ -41,11 +40,15 @@ export function makeInterpolateOffsetPath(layer, property, startValue, endValue)
 
     if (artboard) {
         var pathLayer = artboard.searchById(startObject.id);
-        screenX = pathLayer.screenX.value
-        screenY = pathLayer.screenY.value        
+
+        if (pathLayer) {
+            screenX = pathLayer.screenX.value
+            screenY = pathLayer.screenY.value        
+        }
+
 
         innerInterpolate = (rate, t, timing) => {
-            var parser = new PathParser(pathLayer.d);            
+            var parser = new PathParser(pathLayer.d || '');            
             var {totalLength, interpolateList} = makeInterpolateOffset(parser.segments); 
 
             var distance = startObject.distance.toPx(totalLength)
@@ -105,16 +108,21 @@ export function makeInterpolateOffsetPath(layer, property, startValue, endValue)
             // NOOP 
         } else {
             var current = obj
-            var next = innerInterpolate(rate + 1/obj.totalLength, t + 1/obj.totalLength, timing); 
+            var distValue = 0; 
+
+            if (t < 1) {
+                distValue = 1/obj.totalLength
+            }
+            var next = innerInterpolate(rate + distValue, t + distValue, timing); 
             var angle = calculateAngle(next.x - current.x, next.y - current.y)
 
-            if (!isNaN(angle)) {
-                var newAngle = Length.deg(innerInterpolateAngle(startObject.rotateStatus, angle))
 
-                layer.reset({
-                    transform: Transform.rotate(layer.transform, newAngle)
-                })
-            }
+            var newAngle = Length.deg(innerInterpolateAngle(startObject.rotateStatus, angle))
+
+            layer.reset({
+                transform: Transform.rotate(layer.transform, newAngle)
+            })
+
         }
 
 

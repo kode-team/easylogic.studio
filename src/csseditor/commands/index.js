@@ -67,8 +67,10 @@ import segmentDelete from "./segment.delete";
 import toggleFullscreen from "./toggle.fullscreen";
 import addDrawBrush from "./addDrawBrush";
 import addBackgroundImagePattern from "./addBackgroundImagePattern";
+import addBackgroundColor from "./addBackgroundColor";
 
 export default {
+    addBackgroundColor,
     addBackgroundImagePattern,
     toggleFullscreen,
     segmentDelete,

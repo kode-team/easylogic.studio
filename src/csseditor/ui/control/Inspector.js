@@ -79,6 +79,8 @@ export default class Inspector extends UIElement {
                 <!-- transform --> 
                 <TransformProperty />                  
                 <TransformOriginProperty /> 
+                <PerspectiveProperty />
+                <PerspectiveOriginProperty />
 
                 <!-- ArtBoard --> 
                 <ArtBoardSizeProperty />    
@@ -90,8 +92,6 @@ export default class Inspector extends UIElement {
               </div>
               <div class="tab-content scrollbar" data-value="2">
 
-                <PerspectiveProperty />
-                <PerspectiveOriginProperty />
                 <ExportProperty />
 
                 <div class='empty'></div>                

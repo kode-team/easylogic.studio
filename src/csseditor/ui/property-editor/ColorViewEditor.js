@@ -1,12 +1,10 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
 import { CLICK, INPUT, BIND, FOCUS, BLUR } from "../../../util/Event";
-import icon from "../icon/icon";
 
 export default class ColorViewEditor extends UIElement {
 
     initState() {
         return {
-            removable: this.props.removable === 'true',            
             label: this.props.label,
             value: this.props.value || 'rgba(0, 0, 0, 1)'
         }
@@ -39,11 +37,10 @@ export default class ColorViewEditor extends UIElement {
     }
 
     template() {
-        var { label, removable } = this.state;
+        var { label } = this.state;
         var hasLabel = !!label ? 'has-label' : ''
-        var isRemovable = removable ? 'is-removable' : '';        
         return /*html*/`
-            <div class='color-view-editor ${hasLabel} ${isRemovable}'>
+            <div class='color-view-editor ${hasLabel}'>
                 ${label ? `<label>${label}</label>` : '' }            
                 <div class='preview' ref='$preview'>
                     <div class='mini-view'>
@@ -53,7 +50,6 @@ export default class ColorViewEditor extends UIElement {
                 <div class='color-code'>
                     <input type="text" ref='$colorCode' value='${this.state.value}' tabIndex="1" />
                 </div>
-                <button type='button' class='remove' ref='$remove' title='Remove'>${icon.remove}</button>                
             </div>
         ` 
     }

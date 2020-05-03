@@ -95,6 +95,7 @@ export class TimelineItem extends DomItem {
 
   compiledTimingFunction (layerId, property) {
 
+    var artboard = this; 
     var p = this.getTimelineProperty(layerId, property);
     var layer = this.searchById(layerId);
     var key = `${layerId}.${property}`
@@ -125,7 +126,7 @@ export class TimelineItem extends DomItem {
         startValue: offset.value,
         endValue: nextOffset.value,
         timing: offset.timing,
-        interpolateFunction: createInterpolateFunction(layer, p.property, offset.value, nextOffset.value, offset.editor),
+        interpolateFunction: createInterpolateFunction(layer, p.property, offset.value, nextOffset.value, offset.editor, artboard),
         timingFunction: createTimingFunction(offset.timing)
       }
 

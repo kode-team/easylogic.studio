@@ -58,7 +58,7 @@ $border-radius: 3px;
 
             &.focused {
                 box-shadow: 0 0 0 1px $selected-color;
-                border-radius: 3px;
+                // border-radius: 3px;
             }            
             
             span {
@@ -79,11 +79,7 @@ $border-radius: 3px;
 
             input[type=number] {         
                 padding: 2px 2px;      
-                border-right: 0px;
-                border-top-right-radius: 0px;
-                border-bottom-right-radius: 0px;
-                border-top-left-radius: 3px;
-                border-bottom-left-radius: 3px;                
+                border-right: 0px;         
                 border-bottom: 1px solid $input-border-color;
                 border-left: 1px solid $input-border-color;
                 border-top: 1px solid $input-border-color;
@@ -95,8 +91,6 @@ $border-radius: 3px;
                 text-align: right;
                 background-color: $input-background-color;   
                 position: relative;             
-                border-bottom-right-radius: 3px;      
-                border-top-right-radius: 3px;      
                 box-sizing: border-box;          
                 select {
                     position: absolute;
@@ -110,10 +104,6 @@ $border-radius: 3px;
                     height: 100%;
                     color: $font-color;
                     
-                    border-top-left-radius: 0px;
-                    border-bottom-left-radius: 0px;  
-                    border-bottom-right-radius: 3px;      
-                    border-top-right-radius: 3px;
                     background-color: transparent;
                     border-bottom: 1px solid $input-border-color;
                     border-top: 1px solid $input-border-color;

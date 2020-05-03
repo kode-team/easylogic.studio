@@ -127,6 +127,7 @@ import keyboard from "./keyboard";
 import apps from "./apps";
 import outline_rect from "./outline_rect";
 import outline_circle from "./outline_circle";
+import launch from "./launch";
 
 
 
@@ -136,6 +137,7 @@ const alias = {
 
 export default {
   ...alias,
+  launch,
   apps,
   outline_rect,
   outline_circle,

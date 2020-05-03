@@ -61,7 +61,7 @@ function makeInterpolateCustom (property) {
 }
 
 
-function makeInterpolate (layer, property, startValue, endValue, editorString) {
+function makeInterpolate (layer, property, startValue, endValue, editorString, artboard) {
 
     var checkField = editorString || property
 
@@ -109,15 +109,15 @@ function makeInterpolate (layer, property, startValue, endValue, editorString) {
     var func = makeInterpolateCustom(checkField)
 
     if (func) {
-        return func(layer, property, startValue, endValue)
+        return func(layer, property, startValue, endValue, artboard)
     }
 
     return DEFAULT_FUCTION
 }
 
 
-export function createInterpolateFunction (layer, property, startValue, endValue, editorString) {
-    return makeInterpolate(layer, property, startValue, endValue, editorString);
+export function createInterpolateFunction (layer, property, startValue, endValue, editorString, artboard) {
+    return makeInterpolate(layer, property, startValue, endValue, editorString, artboard);
 }
 
 

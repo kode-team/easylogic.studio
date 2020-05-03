@@ -2,17 +2,14 @@ $border-radius: 3px;
 .input-range-editor {
     display: grid;
     grid-template-columns: 1fr;
-    // grid-column-gap: 4px;
     height: 24px;
 
     &.focused {
         box-shadow: 0 0 0 1px $selected-color;
-        border-radius: 3px;
     }
 
     &.has-label {
         grid-template-columns: 60px 1fr;
-        // grid-column-gap: 2px;
         &.is-removable {
             grid-template-columns: 60px 1fr 12px;
         }
@@ -69,21 +66,16 @@ $border-radius: 3px;
 
             input[type=number] {         
                 padding: 2px 2px;      
-                border-top-right-radius: 0px;
-                border-bottom-right-radius: 0px;           
                 border-right: 0px;
             }
 
             .select-editor {
                 select {
-                    // margin-left: -3px;
                     appearance: none;
                     text-align: center;
                     height: 100%;
                     
                     padding: 0px 4px;             
-                    border-top-left-radius: 0px;
-                    border-bottom-left-radius: 0px;     
                     border-left:0px;
                 }
             }

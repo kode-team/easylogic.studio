@@ -86,7 +86,6 @@
 
               input[type=number] {
                 background-color: $border-color;
-                border-radius: 3px;
               }
             }
           }
@@ -96,7 +95,6 @@
               width: 20px;
               height: 20px;
               border: 1px solid $selected-color;
-              border-radius: 5px;
               overflow: hidden;
             }
           }
