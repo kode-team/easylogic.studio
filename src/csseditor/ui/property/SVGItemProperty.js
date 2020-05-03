@@ -36,7 +36,7 @@ export default class SVGItemProperty extends BaseProperty {
 
     if (current && this.isSVGItem(current)) {
 
-      if (this.$el.css('display') === 'none') {
+      if (this.$el.isHide()) {
         this.$el.show();
       }
 
