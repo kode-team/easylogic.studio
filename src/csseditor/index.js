@@ -1,8 +1,11 @@
 import CSSEditor from "./editor/index";
-import * as App from "../util/App";
+import * as App from '../util/App'
 import cssProperty from "../editor/css-property";
 import imageResource from "../editor/image-resource";
-import parse from "../editor/parse";
+import items from '../editor/items';
+import parse from '../editor/parse';
+import { Length } from "../editor/unit/Length";
+
 
 export default {
   createCSSEditor(opts = { type: "white" }) {
@@ -15,5 +18,7 @@ export default {
   CSSEditor,
   ...cssProperty,
   ...imageResource,
-  ...parse
+  ...items,
+  ...parse,
+  Length
 };
