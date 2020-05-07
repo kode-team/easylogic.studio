@@ -5,7 +5,7 @@ import { ComponentManager } from "../../manager/ComponentManager";
 export class CircleLayer extends Layer {
 
   getIcon () {
-    return icon.circle;
+    return icon.lens;
   }  
 
   getDefaultObject(obj = {}) {

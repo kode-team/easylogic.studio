@@ -288,7 +288,6 @@ export default class EventMachine {
         this.children[refName || instance.id] = instance;
 
         instance.render();
-        instance.initializeEvent();  
       }
       
       $dom.replace(instance.$el);      
@@ -367,14 +366,15 @@ export default class EventMachine {
           this.refs[elName].html(fragment);
         }
 
-        this.runHandlers('initialize');
       }
     });
+
+    this.runHandlers('initialize');
 
     this.bindData();
 
     this.parseComponent();
-    
+
   }
 
   runHandlers(func = 'run', ...args) {
@@ -405,11 +405,15 @@ export default class EventMachine {
   }
 
   /**
+   * @deprecated 
+   * render 이후에 부를려고 했는데  이미 Dom Event 는 render 이후에 자동으로 불리게 되어 있다. 
+   * 현재는 DomEvent, Bind 기준으로만 작성하도록 한다. 
+   * 나머지 라이프 사이클은 다음에 고민해보자. 
    * 이벤트를 초기화한다.
    */
-  initializeEvent() {
-    this.runHandlers('initialize');
-  }
+  // initializeEvent() {
+  //   this.runHandlers('initialize');
+  // }
 
   /**
    * 자원을 해제한다.

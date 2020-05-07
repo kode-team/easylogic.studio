@@ -53,7 +53,7 @@ export class Item {
       json = json.toJSON();
     }
 
-    this.json = this.convert({ ...this.getDefaultObject(), ...json });
+    this.json = this.convert(Object.assign(this.getDefaultObject(), json));
 
     return this.ref; 
   }
@@ -211,7 +211,7 @@ export class Item {
       obj = obj.toJSON();
     }
 
-    this.json = this.convert({ ...this.json, ...obj });
+    this.json = this.convert(Object.assign(this.json, obj));
   }
 
   /**

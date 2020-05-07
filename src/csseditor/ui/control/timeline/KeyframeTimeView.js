@@ -260,7 +260,7 @@ export default class KeyframeTimeView extends UIElement {
         this.emit('refreshSelectionTool')
     }
 
-    [RESIZE('window') + DEBOUNCE(100)] () {    
+    [EVENT('resize.window') + DEBOUNCE(100)] () {
         this.refresh();
     }
 

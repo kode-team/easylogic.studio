@@ -52,7 +52,7 @@ export default class KeyframeTimeGridView extends UIElement {
 
     }
 
-    [RESIZE('window') + DEBOUNCE(100)] () {    
+    [EVENT('resize.window') + DEBOUNCE(100)] () { 
         this.refresh();
     }
 

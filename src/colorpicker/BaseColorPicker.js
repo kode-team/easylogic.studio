@@ -79,8 +79,6 @@ export default class BaseColorPicker extends UIElement {
 
         this.initColorWithoutChangeEvent(this.opt.color);
 
-        // 이벤트 연결 
-        this.initializeEvent();           
 
     }
 
@@ -144,6 +142,7 @@ export default class BaseColorPicker extends UIElement {
 
     changeColor(newColor, format) {
         this.manager.changeColor(newColor, format);
+        this.emit('changeColor');        
     }
 
     /**

@@ -463,7 +463,7 @@ export default class TimelineKeyframeList extends UIElement {
         this.refresh();        
     }
 
-    [RESIZE('window') + DEBOUNCE(100)] () {
+    [EVENT('resize.window') + DEBOUNCE(100)] () {
         this.refresh();
     }
 }

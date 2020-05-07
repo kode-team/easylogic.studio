@@ -1,5 +1,5 @@
 import Dom from "./Dom";
-import { POINTERMOVE, POINTEREND } from "./Event";
+import { POINTERMOVE, POINTEREND, DEBOUNCE, RESIZE } from "./Event";
 import {
   ADD_BODY_MOUSEMOVE,
   ADD_BODY_MOUSEUP
@@ -35,8 +35,6 @@ export const start = opt => {
       this.$container.addClass(this.getClassName());
 
       this.render(this.$container);
-
-      this.initializeEvent();
 
       this.initBodyMoves();
     }
@@ -128,6 +126,10 @@ export const start = opt => {
       this.$config.set("bodyEvent", e);
       this.removeBodyMoves();
       this.requestId = null;
+    }
+
+    [RESIZE('window') + DEBOUNCE(100)] () {
+      this.emit('resize.window');
     }
   }
 

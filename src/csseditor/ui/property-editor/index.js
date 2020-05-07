@@ -4,7 +4,6 @@ import BorderRadiusEditor from "./BorderRadiusEditor";
 import ColorSingleEditor from "./ColorSingleEditor";
 import ColorViewEditor from "./ColorViewEditor";
 import CubicBezierEditor from "./CubicBezierEditor";
-// import FillPopup from "../popup/FillPopup";
 import FilterEditor from "./FilterEditor";
 import GradientEditor from "./GradientEditor";
 import IterationCountEditor from "./IterationCountEditor";
@@ -13,7 +12,6 @@ import CSSPropertyEditor from "./CSSPropertyEditor";
 import PerspectiveOriginEditor from "./PerspectiveOriginEditor";
 import RangeEditor from "./RangeEditor";
 import SelectEditor from "./SelectEditor";
-import SingleRangeEditor from "./SingleRangeEditor";
 import TextShadowEditor from "./TextShadowEditor";
 import TransformEditor from "./TransformEditor";
 import TransformOriginEditor from "./TransformOriginEditor";
@@ -99,7 +97,6 @@ export default {
     ColorSingleEditor,
     ColorViewEditor,
     CubicBezierEditor,
-    // FillPopup,
     FilterEditor,
     GradientEditor,
     IterationCountEditor,
@@ -108,7 +105,6 @@ export default {
     PerspectiveOriginEditor,
     RangeEditor,
     SelectEditor,
-    SingleRangeEditor,
     TextShadowEditor,
     TransformEditor,
     TransformOriginEditor,

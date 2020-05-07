@@ -824,14 +824,23 @@ ${this.toSelectorString(prefix)}
       var $svg = currentElement.$(`[data-id="${this.innerSVGId}"]`);  
 
       if ($svg) {
-        var $defs = $svg.$('defs');
-        $defs.html(this.toDefInnerString)          
-      } else {
-        var a = Dom.createByHTML(this.toDefString);
-        if (a) {
-          currentElement.prepend(a);
+
+        const defInnerString = this.toDefInnerString.trim();
+
+        if (defInnerString) {
+          var $defs = $svg.$('defs');
+          $defs.html(this.defInnerString)          
         }
 
+      } else {
+        const defString = this.toDefString.trim();
+
+        if (defString) {
+          var a = Dom.createByHTML(defString);
+          if (a) {
+            currentElement.prepend(a);
+          }
+        }
       }
 
     }
@@ -863,13 +872,13 @@ ${this.toSelectorString(prefix)}
   get toDefString () {
     var str = this.toDefInnerString.trim()
 
-    return str && /*html*/`
+    return str ? /*html*/`
     <svg class='inner-svg-element' data-id="${this.innerSVGId}" width="0" height="0">
       <defs>
         ${str}
       </defs>
     </svg>
-    `
+    ` : ''
   }
 
   get clipPathId () {

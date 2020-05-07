@@ -15,7 +15,7 @@ const getPropertyTitle = (key, defaultTitle = '') => {
 export default class TimelineObjectList extends UIElement {
 
 
-    [EVENT('refreshCanvas', 'refreshSelection', 'refreshSelectionStyleView') + DEBOUNCE(1000)] () {
+    [EVENT('refreshCanvas', 'refreshSelection') + DEBOUNCE(1000)] () {
         this.refresh();
     }
 

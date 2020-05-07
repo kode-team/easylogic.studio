@@ -431,7 +431,7 @@ export default class ElementView extends UIElement {
             this.$selection.select(this.$selection.currentArtboard)
         }    
 
-        this.emit('initSelectionTool')
+        this.emit('refreshSelectionTool')
 
     }
 
@@ -460,7 +460,7 @@ export default class ElementView extends UIElement {
         }
         this.emit('refreshSelection')           
 
-        this.emit('initSelectionTool')
+        this.emit('refreshSelectionTool')
 
     }    
     
@@ -471,7 +471,7 @@ export default class ElementView extends UIElement {
         }
 
 
-        this.emit('initSelectionTool')
+        this.emit('refreshSelectionTool')
     }
 
     modifyScale () {

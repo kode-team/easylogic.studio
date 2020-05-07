@@ -5,9 +5,17 @@ import { convertMatches } from "../../util/functions/parser";
 import { repeat } from "../../util/functions/func";
 import { randomNumber } from "../../util/functions/create";
 import Color from "../../util/Color";
+
+let colorStepIds = 10000000000; 
+
+function getColorStepId() {
+  return colorStepIds++;
+} 
+
 export class ColorStep extends Item {
   getDefaultObject() {
-    return super.getDefaultObject({
+    return {
+      id: 'c' + getColorStepId(),
       cut: false,
       percent: 0,
       unit: "%",
@@ -15,7 +23,7 @@ export class ColorStep extends Item {
       em: 0,
       color: "rgba(0, 0, 0, 0)",
       prevColorStep: null
-    });
+    };
   }
 
   toCloneObject() {

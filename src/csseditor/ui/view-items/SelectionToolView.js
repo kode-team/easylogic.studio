@@ -21,6 +21,17 @@ var moveType = {
     'rotate3d': 'transform'
 }
 
+var iconType = {
+    'artboard': 'artboard',
+    'rect': 'rect',
+    'circle': 'lens',
+    'text': 'title',
+    'image': 'image',
+    'svg-path': 'edit',
+    'svg-textpath': 'text_rotate',
+    'svg-text': 'title',
+}
+
 const SelectionToolEvent = class  extends UIElement {
 
     [EVENT('hideSelectionToolView')] () {
@@ -75,7 +86,7 @@ const SelectionToolEvent = class  extends UIElement {
     } 
 
 
-    [EVENT('refreshSelectionTool', 'initSelectionTool')] () { 
+    [EVENT('refreshSelectionTool')] () { 
         this.initSelectionTool();
     }
 
@@ -342,7 +353,8 @@ export default class SelectionToolView extends SelectionToolBind {
             if (length === 1) {
                 var current = this.$selection.current
                 title = current.title || current.getDefaultTitle();
-                this.refs.$selectionIcon.html(current.getIcon());  
+                const iconString = icon[iconType[current.itemType] || iconType.rect]
+                this.refs.$selectionIcon.html(iconString);  
             } else if (length >= 2) {
                 title = `multi : ${length}`;
                 this.refs.$selectionIcon.html(icon.flag);                
