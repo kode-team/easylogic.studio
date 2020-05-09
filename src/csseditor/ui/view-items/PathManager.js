@@ -1,7 +1,6 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
 import { CLICK, BIND } from "../../../util/Event";
 import icon from "../icon/icon";
-import SVGItemEditor from './SVGItemEditor';
 import propertyEditor from "../property-editor";
 import { OBJECT_TO_PROPERTY } from "../../../util/functions/func";
 import { Length } from "../../../editor/unit/Length";
@@ -29,10 +28,7 @@ export default class PathManager extends UIElement {
   }
 
   components() {
-    return {
-      SVGItemEditor,
-      ...propertyEditor
-    }
+    return propertyEditor
   }
 
 

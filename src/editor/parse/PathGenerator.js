@@ -690,32 +690,29 @@ export default class PathGenerator {
             target.removed = true; 
         })
 
-        let newPoints = []
-        let points = this.state.points;
-        points.forEach((p, index) => {
-            if (!p.startPoint.removed) {
+        const pointGroup = Point.splitPoints(this.state.points)
 
-                if (p.endPoint.removed) { p.endPoint = clone(p.startPoint) }
-                if (p.reversePoint.removed) { p.reversePoint = clone(p.startPoint) }
+        // console.log(pointGroup)
 
+        const newPoints = Point.recoverPoints(pointGroup.map(points => {
+            return points.filter(p => !p.startPoint.removed).map(p => {
+
+                if (p.endPoint.removed) { p.endPoint = clone(p.startPoint)} 
+                if (p.reversePoint.removed) { p.reversePoint = clone(p.startPoint)}
 
                 if (Point.isEqual(p.endPoint, p.startPoint, p.reversePoint)) {
                     p.command = 'L';
                     p.curve = false; 
                 }
 
-                newPoints.push(p);
-            }
-        })
+                return p
+            })
+        }))
 
-        // index 재생성 
-        newPoints.forEach((p, index) => {
-            if (index == 0) p.command = 'M';
-            p.index = index;
-        })
+        // console.log(Point.splitPoints(newPoints));
 
         this.state.points = newPoints;
-
+// 
         this.select();
     }    
 

@@ -46,7 +46,7 @@ export default class BaseColorPicker extends UIElement {
 
 
         this.$body = Dom.create(this.getContainer());
-        this.$root = Dom.create('div', 'codemirror-colorpicker');
+        this.$root = Dom.create('div', 'colorpicker');
 
         //  append colorpicker to container (ex : body)
         if (this.opt.position == 'inline') {
@@ -302,7 +302,7 @@ export default class BaseColorPicker extends UIElement {
     checkColorPickerClass(el) {
         var $el = Dom.create(el);
         var hasColorView = $el.closest('codemirror-colorview');
-        var hasColorPicker = $el.closest('codemirror-colorpicker');
+        var hasColorPicker = $el.closest('colorpicker');
         var hasCodeMirror = $el.closest('CodeMirror');
         var IsInHtml = el.nodeName == 'HTML';
 

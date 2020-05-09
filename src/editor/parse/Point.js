@@ -229,4 +229,47 @@ export default class Point {
             return points.filter((_, index) => index !== pIndex)
         }
     }
+
+    static splitPoints (points) {
+
+        let splitedPointGroup = [] 
+        let lastPoints = [] 
+
+        points.forEach(p => {
+            if (Point.isFirst(p)) {
+                lastPoints = [p];
+                splitedPointGroup.push(lastPoints)
+            } else {
+                lastPoints.push(p);
+            }
+        })
+
+        return splitedPointGroup;
+    }
+
+    static recoverPoints (pointGroup) {
+        const newPoints = [] 
+
+        // group 을 루프를 돈다. 
+        pointGroup.forEach(points => {
+
+            // group 은 points 리스트이다. 
+            points.forEach((p, index) => {
+                // point 중 첫번째는 command 가 M 이다. 
+                if (index === 0) {
+                    p.command = 'M';
+                    p.originalCommand = 'M';
+                }
+            })
+
+            newPoints.push(...points);
+        })
+
+        // 그런 다음 전체 인덱스를 재조정한다. 
+        newPoints.forEach((p, index) => {
+            p.index = index
+        })
+
+        return newPoints
+    }
 }
