@@ -35,6 +35,8 @@ export class Editor {
 
     this.projects = []     
     this.popupZIndex = 10000;
+    this.canvasWidth = 100000;
+    this.canvasHeight = 100000;
     this.scale = 1
     this.symbols = {}
     this.images = {}

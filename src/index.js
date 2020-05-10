@@ -25,4 +25,4 @@ export default {
   startEditor
 };
 
-window.editor = startEditor();
+window.EasylogicEditor = startEditor();

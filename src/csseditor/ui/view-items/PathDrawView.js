@@ -162,6 +162,7 @@ export default class PathDrawView extends UIElement {
             'stroke-linejoin': this.state['stroke-linejoin'],            
         });        
 
+        this.emit('hidePathEditor');
         this.emit('change.mode.view', 'PathDrawView');
     }
 
@@ -171,11 +172,15 @@ export default class PathDrawView extends UIElement {
     }
 
     [EVENT('hidePathDrawEditor')] () {
-        this.trigger('initPathDrawEditor')
-        this.$el.hide();
-        this.emit('finishPathEdit')
-        this.emit('hideDrawManager');
-        this.emit('change.mode.view');        
+
+        if (this.$el.isShow()) {
+            this.trigger('initPathDrawEditor')
+            this.$el.hide();
+            this.emit('finishPathEdit')
+            this.emit('hideDrawManager');
+            this.emit('change.mode.view');        
+        }
+
     }
 
 

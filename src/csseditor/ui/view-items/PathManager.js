@@ -91,13 +91,6 @@ export default class PathManager extends UIElement {
               key="stroke-width" 
               onchange="changeValue" />
           </div>
-
-          <div> 
-            <label>
-              <input type='checkbox' ref='$motionBased' ${OBJECT_TO_PROPERTY({ checked: !!current['motion-based']})} /> 
-              ${this.$i18n('svg.item.property.isMotionPath')}
-            </label>
-          </div>               
         </div>
       </div>    
     `;
@@ -117,12 +110,6 @@ export default class PathManager extends UIElement {
       this.emit('setAttribute', { stroke: color }, null, true)    
     }
 
-  }
-
-  [CLICK('$motionBased')] () {
-    this.emit('setAttribute', { 
-      'motion-based': this.refs.$motionBased.checked()
-    })      
   }
 
   [EVENT('changeValue')] (key, value, params) {
@@ -181,8 +168,7 @@ export default class PathManager extends UIElement {
   }
 
   [EVENT('hidePathManager')] () {
-      this.$el.hide();
-      this.emit('change.mode.view');          
+      this.$el.hide();       
   }
 
 }

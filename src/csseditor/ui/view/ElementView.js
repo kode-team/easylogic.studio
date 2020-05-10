@@ -322,7 +322,7 @@ export default class ElementView extends UIElement {
         }
     
         this.selectCurrent(...this.$selection.items)
-        this.$selection.setRectCache()        
+        this.$selection.setRectCache()
         this.emit('refreshSelection');
         this.children.$selectionTool.initMoveType();
     }
@@ -372,8 +372,8 @@ export default class ElementView extends UIElement {
     }
 
     [BIND('$body')] () {
-        var width = Length.px(10000);
-        var height = Length.px(10000);
+        var width = Length.px(this.$editor.canvasWidth);
+        var height = Length.px(this.$editor.canvasHeight);
 
         return {
             'data-mode': this.$editor.mode,

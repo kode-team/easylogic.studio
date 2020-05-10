@@ -25,7 +25,7 @@ export default {
   startEditor
 };
 
-window.editor = startEditor();
+window.EasylogicEditor = startEditor();
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {

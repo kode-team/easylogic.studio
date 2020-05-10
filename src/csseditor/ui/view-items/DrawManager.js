@@ -126,6 +126,7 @@ export default class DrawManager extends UIElement {
       this.$el.show();
 
       this.emit('addStatusBarMessage', this.state.msg)
+      this.emit('hidePathManager');
   }
 
   [EVENT('hideDrawManager')] () {

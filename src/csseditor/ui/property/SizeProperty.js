@@ -53,10 +53,15 @@ export default class SizeProperty extends BaseProperty {
 
   [EVENT('changRangeEditor')] (key, value) {
 
+    this.$selection.reset({
+      [key]: value
+    })
+    this.$selection.setRectCache();
+
     this.emit('setAttribute', { 
       [key]: value
     })
 
-    this.emit('refreshAllElementBoundSize')
+    this.emit('refreshSelectionTool')
   }
 }

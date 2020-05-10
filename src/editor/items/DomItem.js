@@ -753,7 +753,7 @@ ${this.toSelectorString(prefix)}
 
   wrapperRootSVG (x, y, width, height, content) {
     return /*html*/`
-    <g transform="translate(${x}, ${y})">
+    <g>
       ${this.toDefString}
       ${content}
     </g>
@@ -774,6 +774,7 @@ ${this.toSelectorString(prefix)}
       }
 
       return this.wrapperRootSVG(x, y, width, height, /*html*/`
+        <g transform="translate(${x}, ${y})">      
           <foreignObject ${OBJECT_TO_PROPERTY({ 
             width: width.value,
             height: height.value
@@ -782,7 +783,8 @@ ${this.toSelectorString(prefix)}
               <${tagName} style="${CSS_TO_STRING(css)}" ></${tagName}>      
             </div>
           </foreignObject>    
-          ${layers.map(it => it.svg).join('\n\t')}                
+        </g>
+        ${layers.map(it => it.svg).join('\n\t')}
       `)
     } else {
       return /*html*/`

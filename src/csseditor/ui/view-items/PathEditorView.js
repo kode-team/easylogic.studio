@@ -473,15 +473,21 @@ export default class PathEditorView extends PathTransformEditor {
         this.$el.focus();
 
         this.emit('showPathManager', { mode: this.state.mode });
+        this.emit('hidePathDrawEditor');
+        this.emit('change.mode.view', 'PathEditorView');        
     }
 
     [EVENT('hidePathEditor')] () {
-        this.pathParser.reset('');
-        this.setState(this.initState(), false)
-        this.refs.$view.empty()
-        this.$el.hide();
-        this.emit('finishPathEdit')
-        this.emit('hidePathManager');
+
+        if (this.$el.isShow()) {
+            this.pathParser.reset('');
+            this.setState(this.initState(), false)
+            this.refs.$view.empty()
+            this.$el.hide();
+            this.emit('finishPathEdit')
+            this.emit('hidePathManager');
+        }
+
     }
 
     [BIND('$view')] () {

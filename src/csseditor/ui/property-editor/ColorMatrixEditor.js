@@ -35,7 +35,7 @@ export default class ColorMatrixEditor extends UIElement {
                 grid-template-columns: repeat(${COLUMN}, 1fr);
                 grid-column-gap: 2px;
                 grid-row-gap: 2px;
-                text-align: center; 
+                text-align: left; 
             `
         }
     }
