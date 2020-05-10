@@ -71,7 +71,14 @@ import addBackgroundColor from "./addBackgroundColor";
 import scaleMinus from "./scale.minus";
 import scalePlus from "./scale.plus";
 import resetSelection from "./resetSelection";
-
+import sortCenter from "./sort.center";
+import sortLeft from "./sort.left";
+import sortMiddle from "./sort.middle";
+import sortBottom from "./sort.bottom";
+import sortTop from "./sort.top";
+import sortRight from "./sort.right";
+import sameWidth from "./same.width";
+import sameHeight from "./same.height";
 
 
 export default {
@@ -147,5 +154,14 @@ export default {
     refreshElement,
     resizeArtBoard,
     selectItem,
-    setAttribute,    
+    setAttribute,  
+    sortBottom,
+    sortCenter,
+    sortLeft,
+    sortMiddle,
+    sortBottom,
+    sortTop,
+    sortRight,
+    sameWidth,
+    sameHeight,      
 }

@@ -15,9 +15,6 @@ export default class CenterAlign extends MenuItem {
   } 
 
   clickButton(e) {
-    // Sort 도 다 커맨드 형태로 바꿔야함. 
-    Sort.center(this.$editor);
-    this.emit('refreshSelectionStyleView')
-    this.emit('refreshSelectionTool')
+    this.emit('sort.center');
   }
 }

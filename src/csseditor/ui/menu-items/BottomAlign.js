@@ -15,10 +15,6 @@ export default class BottomAlign extends MenuItem {
   }  
 
   clickButton(e) {
-    //FIXME: 여기는 command 로 어떻게 만들지, 최종은 reset 이긴 한데 
-    // 중간 로직을 여기다 둬야 하는게 맞는 것인가? 
-    Sort.bottom(this.$editor);
-    this.emit('refreshSelectionStyleView')
-    this.emit('refreshSelectionTool')
+    this.emit('sort.bottom');
   }
 }

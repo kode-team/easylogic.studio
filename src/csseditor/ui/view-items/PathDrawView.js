@@ -87,7 +87,7 @@ export default class PathDrawView extends UIElement {
             // rect 기준으로 상대 좌표로 다시 변환 
             const simplyPoints = Point.simply(this.state.points, this.state.tolerance)
             const parser = new PathParser(PathStringManager.makePathByPoints(simplyPoints))
-            const d = PathGenerator.generatorPathString(parser.convertGenerator(), x, y, this.scale);
+            const d = PathGenerator.generatorPathString(parser.convertGenerator(), pathRect.x, pathRect.y, this.scale);
 
             layer = artboard.add(new SVGPathItem({
                 width: Length.px(width),

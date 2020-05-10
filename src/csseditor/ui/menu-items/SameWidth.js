@@ -16,7 +16,6 @@ export default class SameWidth extends MenuItem {
 
   clickButton(e) {
     Sort.sameWidth(this.$editor);
-    this.emit('refreshSelectionStyleView')
-    this.emit('refreshSelectionTool')
+    this.emit('resetSelection');
   }
 }

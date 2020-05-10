@@ -256,8 +256,7 @@ export default class KeyframeTimeView extends UIElement {
     }
 
     moveEndCurrentTime () {
-        this.$selection.setRectCache();
-        this.emit('refreshSelectionTool')
+        this.emit('resetSelection');
     }
 
     [EVENT('resize.window') + DEBOUNCE(100)] () {

@@ -8,6 +8,6 @@ import { isFunction } from "../../util/functions/func";
 export default function resetSelection (editor) {
     editor.selection.setRectCache();
 
-    editor.emit('setAttribute', {});
+    editor.emit('setAttribute');
     editor.emit('refreshSelectionTool');
 }

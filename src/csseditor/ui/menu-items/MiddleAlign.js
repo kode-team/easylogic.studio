@@ -15,8 +15,6 @@ export default class MiddleAlign extends MenuItem {
   }
 
   clickButton(e) {
-    Sort.middle(this.$editor);
-    this.emit('refreshSelectionStyleView')
-    this.emit('refreshSelectionTool')
+    this.emit('sort.middle');
   }
 }
