@@ -42,11 +42,11 @@ export default class PageTools extends UIElement {
 
   [CLICK('$plus') + PREVENT + STOP] () {
 
-    this.trigger('changeScaleValue', this.$editor.scale + 0.1);
+    this.trigger('changeScaleValue', this.$editor.scale + 0.25);
   }
 
   [CLICK('$minus') + PREVENT + STOP] () {
-    this.trigger('changeScaleValue', this.$editor.scale - 0.1);    
+    this.trigger('changeScaleValue', this.$editor.scale - 0.25);    
   }
 
 }

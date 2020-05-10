@@ -21,9 +21,6 @@ export default class Inspector extends UIElement {
               <div class="tab-item selected" data-value="1" title='${this.$i18n('inspector.tab.title.style')}'>
                 <label class='icon'>${icon.palette}</label>
               </div>
-              <div class="tab-item" data-value="2" title="${this.$i18n('inspector.tab.title.component')}">
-                <label class='icon'>${icon.cube}</label>
-              </div>
               <div class="tab-item" data-value="3" title="${this.$i18n('inspector.tab.title.transition')}">
                 <label>${icon.flash_on}</label>
               </div>
@@ -87,15 +84,13 @@ export default class Inspector extends UIElement {
                 
                 <!-- SVG -->
                 <PathDataProperty />                
-                
-                <div class='empty'></div>
-              </div>
-              <div class="tab-content scrollbar" data-value="2">
 
+                <!-- tool -->                
                 <ExportProperty />
 
-                <div class='empty'></div>                
-              </div>              
+
+                <div class='empty'></div>
+              </div>     
               <div class='tab-content scrollbar' data-value='3'>
                 <MotionProperty />
                 <!-- SelectorProperty /> --> 

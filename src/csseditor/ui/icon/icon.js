@@ -128,6 +128,8 @@ import apps from "./apps";
 import outline_rect from "./outline_rect";
 import outline_circle from "./outline_circle";
 import launch from "./launch";
+import pentool from "./pentool";
+
 
 
 
@@ -137,6 +139,7 @@ const alias = {
 
 export default {
   ...alias,
+  pentool,
   launch,
   apps,
   outline_rect,

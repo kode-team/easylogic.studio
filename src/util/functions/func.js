@@ -220,13 +220,12 @@ export function OBJECT_TO_PROPERTY (obj) {
             }
         }
 
-        if (isBoolean(obj[key])) {
+        if (isBoolean(obj[key]) || isUndefined(obj[key]) || obj[key] === 'undefined') {
             if (obj[key]) {
                 return key;
             } else {
                 return '';
             }
-
         } 
 
         return `${key}="${obj[key]}"`

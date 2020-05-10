@@ -143,6 +143,7 @@
                     background-color: transparent;
                     cursor: move;
                     transform: none;
+                    box-shadow: 0 0 0 1px $selected-color;
                 }
 
                 &[data-position="to top left"] {

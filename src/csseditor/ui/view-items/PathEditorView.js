@@ -705,12 +705,15 @@ export default class PathEditorView extends PathTransformEditor {
     }
 
     [EVENT('deleteSegment')] () {
+        // 특정 세그먼트만 삭제하기 
         this.renderSegment(() => {
             this.pathGenerator.removeSelectedSegment();
         })
     }
 
     [EVENT('moveSegment')] (dx, dy) {
+
+        // segment 만 움직이기 
         this.renderSegment(() => {
             this.pathGenerator.moveSelectedSegment(dx, dy);
         })

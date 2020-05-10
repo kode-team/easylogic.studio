@@ -48,7 +48,7 @@ export default class BackdropFilterProperty extends BaseProperty {
 
   [LOAD('$filterSelect')] () {
     var list = filter_list.map(it => { 
-      return {title: this.$i18n(it), value: it}
+      return {title: this.$i18n(`filter.property.${it}`), value: it}
     })
 
     var svgFilterList = this.getSVGFilterList()

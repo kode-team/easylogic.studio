@@ -3,7 +3,7 @@ import icon from "../icon/icon";
  
 export default class AddPath extends MenuItem {
   getIconString() {
-    return icon.edit;
+    return icon.pentool;
   }
   getTitle() {
     return this.props.title || "Path";

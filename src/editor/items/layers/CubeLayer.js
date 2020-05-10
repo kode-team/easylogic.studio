@@ -1,7 +1,7 @@
 import { Component } from "../Component";
 import { Length } from "../../unit/Length";
 import icon from "../../../csseditor/ui/icon/icon";
-import { CSS_TO_STRING } from "../../../util/functions/func";
+import { CSS_TO_STRING, OBJECT_TO_PROPERTY } from "../../../util/functions/func";
 import { ComponentManager } from "../../manager/ComponentManager";
 
 const faceKeys = [
@@ -389,22 +389,39 @@ export class CubeLayer extends Component {
       }
 
       return this.wrapperRootSVG(x, y, width, height, /*html*/`
-        <div style="${CSS_TO_STRING(css)}">
-          ${faceKeys.map(key => {
-            return `<div style="${common};${keyCSS[key]}"></div>`
-          }).join('')}          
-        </div>   
+        <foreignObject ${OBJECT_TO_PROPERTY({ 
+          width: width.value,
+          height: height.value,
+          overflow: 'visible'
+        })}>
+          <div xmlns="http://www.w3.org/1999/xhtml">
+            <div style="${CSS_TO_STRING(css)}">
+            ${faceKeys.map(key => {
+              return `<div style="${common};${keyCSS[key]}"></div>`
+            }).join('')}          
+          </div>   
+          </div>
+        </foreignObject>          
+
       `)
 
     } else {
 
       return /*html*/`
         ${this.toDefString}
-        <div style="${CSS_TO_STRING(css)}">
-          ${faceKeys.map(key => {
-            return `<div style="${common};${keyCSS[key]}"></div>`
-          }).join('')}          
-        </div>
+        <foreignObject ${OBJECT_TO_PROPERTY({ 
+          width: width.value,
+          height: height.value,
+          overflow: 'visible'
+        })}>
+          <div xmlns="http://www.w3.org/1999/xhtml">
+            <div style="${CSS_TO_STRING(css)}">
+              ${faceKeys.map(key => {
+                return `<div style="${common};${keyCSS[key]}"></div>`
+              }).join('')}          
+            </div>   
+          </div>
+        </foreignObject>          
       `
     }
 

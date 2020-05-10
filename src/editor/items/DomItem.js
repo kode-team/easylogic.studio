@@ -755,15 +755,7 @@ ${this.toSelectorString(prefix)}
     return /*html*/`
     <g transform="translate(${x}, ${y})">
       ${this.toDefString}
-      <foreignObject ${OBJECT_TO_PROPERTY({ 
-        width: width.value,
-        height: height.value
-      })}>
-        <div xmlns="http://www.w3.org/1999/xhtml">
-          ${content}
-        </div>
-      </foreignObject>    
-      
+      ${content}
     </g>
     `
   }
@@ -782,16 +774,31 @@ ${this.toSelectorString(prefix)}
       }
 
       return this.wrapperRootSVG(x, y, width, height, /*html*/`
-          <${tagName} style="${CSS_TO_STRING(css)}" >
-            ${layers.map(it => it.svg).join('\n\t')}      
-          </${tagName}>      
+          <foreignObject ${OBJECT_TO_PROPERTY({ 
+            width: width.value,
+            height: height.value
+          })}>
+            <div xmlns="http://www.w3.org/1999/xhtml">
+              <${tagName} style="${CSS_TO_STRING(css)}" ></${tagName}>      
+            </div>
+          </foreignObject>    
+          ${layers.map(it => it.svg).join('\n\t')}                
       `)
     } else {
       return /*html*/`
         ${this.toDefString}
-        <${tagName} style="${CSS_TO_STRING(css)}" >
-          ${layers.map(it => it.svg).join('\n\t')}      
-        </${tagName}>
+        <g transform="translate(${x}, ${y})">
+          <foreignObject ${OBJECT_TO_PROPERTY({ 
+            width: width.value,
+            height: height.value
+          })}>
+            <div xmlns="http://www.w3.org/1999/xhtml">
+              <${tagName} style="${CSS_TO_STRING(css)}" ></${tagName}>      
+            </div>
+          </foreignObject>    
+          
+        </g>             
+        ${layers.map(it => it.svg).join('\n\t')}           
       `
     }
   }
