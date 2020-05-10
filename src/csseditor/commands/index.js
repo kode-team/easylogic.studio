@@ -68,6 +68,9 @@ import toggleFullscreen from "./toggle.fullscreen";
 import addDrawBrush from "./addDrawBrush";
 import addBackgroundImagePattern from "./addBackgroundImagePattern";
 import addBackgroundColor from "./addBackgroundColor";
+import scaleMinus from "./scale.minus";
+import scalePlus from "./scale.plus";
+
 
 export default {
     addBackgroundColor,
@@ -88,6 +91,8 @@ export default {
     itemMoveLeft,
     keymapKeydown,
     keymapKeyup,
+    scaleMinus,
+    scalePlus, 
     dropAsset,
     addBackgroundImageAsset,
     addBackgroundImageGradient,

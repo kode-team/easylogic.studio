@@ -14,7 +14,9 @@ const keyUnitCode = {
   'arrowup': '↑',
   'arrowleft': '←',
   'arrowright': '→',
-  'backspace': 'Delete'
+  'backspace': 'Delete',
+  'minus': '-',
+  'equal': '+'
 }
 
 function convertKeyString(key) {

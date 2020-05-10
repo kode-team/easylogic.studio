@@ -30,6 +30,10 @@ export default class PageTools extends UIElement {
 
   [EVENT('changeScaleValue')] (scale) {
 
+    if (scale <= 0) {
+      scale = 0.01;
+    }
+
     scale = round(scale * 100, 100)
 
     this.children.$scale.setValue(scale);

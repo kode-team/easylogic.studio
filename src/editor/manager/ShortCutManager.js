@@ -68,8 +68,18 @@ export class ShortCutManager {
         )
     }
 
-    checkShortCut (keyString) {
-        return this.commands[keyString]
+    makeCodeString(e) {
+        return joinKeys(
+            e.altKey    ? 'ALT'     : '',
+            e.ctrlKey   ? 'CTRL'    : '',
+            e.shiftKey  ? 'SHIFT'   : '',
+            e.metaKey   ? 'META'    : '',
+            e.code.toUpperCase()
+        )
+    }    
+
+    checkShortCut (keyString, codeString) {
+        return this.commands[keyString] || this.commands[codeString]
     }
 
     checkWhen(command) {
@@ -83,7 +93,7 @@ export class ShortCutManager {
     }
 
     execute (e, eventType = 'keydown') {
-        let commands = this.checkShortCut(this.makeKeyString(e))
+        let commands = this.checkShortCut(this.makeKeyString(e), this.makeCodeString(e))
 
         if (commands) {
             const filteredCommands = commands.filter(it => it.eventType === eventType)

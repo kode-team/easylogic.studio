@@ -32,6 +32,8 @@ import segmentMoveAltLeft from "./segment.move.alt.left";
 import segmentMoveAltRight from "./segment.move.alt.right";
 import segmentMoveShiftRight from "./segment.move.shift.right";
 import segmentDelete from "./segment.delete";
+import scaleMinus from "./scale.minus";
+import scalePlus from "./scale.plus";
 
 export default [
 
@@ -81,6 +83,10 @@ export default [
 
     // 
     itemDelete,
+
+    // zoom
+    scaleMinus,
+    scalePlus,    
 
     // clipboard 
     clipboardCopy,
