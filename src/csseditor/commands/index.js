@@ -70,9 +70,12 @@ import addBackgroundImagePattern from "./addBackgroundImagePattern";
 import addBackgroundColor from "./addBackgroundColor";
 import scaleMinus from "./scale.minus";
 import scalePlus from "./scale.plus";
+import resetSelection from "./resetSelection";
+
 
 
 export default {
+    resetSelection,
     addBackgroundColor,
     addBackgroundImagePattern,
     toggleFullscreen,

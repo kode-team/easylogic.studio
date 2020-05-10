@@ -56,12 +56,7 @@ export default class SizeProperty extends BaseProperty {
     this.$selection.reset({
       [key]: value
     })
-    this.$selection.setRectCache();
-
-    this.emit('setAttribute', { 
-      [key]: value
-    })
-
-    this.emit('refreshSelectionTool')
+    
+    this.emit('resetSelection');
   }
 }

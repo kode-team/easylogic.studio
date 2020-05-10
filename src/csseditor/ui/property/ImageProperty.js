@@ -56,11 +56,8 @@ export default class ImageProperty extends BaseProperty {
         width: current.naturalWidth.clone(),
         height: current.naturalHeight.clone()
       })
-      this.$selection.setRectCache();
 
-      this.emit('setAttribute', {}, current.id)
-      this.emit('refreshSelectionTool');
-
+      this.emit('resetSelection');
     }
 
   }
