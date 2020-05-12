@@ -153,8 +153,8 @@ export default {
     'selector.property.title': 'CSS 셀렉터', 
     'selector.property.none': '선택자 없음',
 
-    'perspective.property.title': 'Perspective',        
-    'perspective.origin.property.title': 'Perspective Origin',                
+    'perspective.property.title': '투영(perspective)',
+    'perspective.origin.property.title': '투영 중심점',                
 
     'svg.item.property.title': 'SVG',    
     'svg.item.property.isMotionPath': '모션 패스',
