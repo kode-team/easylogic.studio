@@ -6,13 +6,9 @@ export default class AddSVGRect extends MenuItem {
     return icon.outline_rect;
   }
   getTitle() {
-    return this.props.title || "SVG Rect";
+    return this.props.title || "Rect";
   }
  
-
-  isHideTitle() {
-    return true; 
-  }  
 
   clickButton(e) {
     this.emit('addComponentType', 'svg-rect');

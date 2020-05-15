@@ -54,11 +54,13 @@ $border-radius: 3px;
             grid-template-columns: 1fr 24px;
             // grid-column-gap: 3px;
             font-size: 13px;
+            border-radius: $border-radius;
+            border: 1px solid transparent;
 
 
             &.focused {
-                box-shadow: 0 0 0 1px $selected-color;
-                // border-radius: 3px;
+                border: 1px solid $selected-color;
+                border-radius: $border-radius;
             }            
             
             span {
@@ -85,6 +87,8 @@ $border-radius: 3px;
                 border-top: 1px solid $input-border-color;
                 text-align: left;
                 background-color: $input-background-color;
+                border-top-left-radius: $border-radius;
+                border-bottom-left-radius: $border-radius;
             }
 
             .select-editor {
@@ -92,6 +96,8 @@ $border-radius: 3px;
                 background-color: $input-background-color;   
                 position: relative;             
                 box-sizing: border-box;          
+                border-top-right-radius: $border-radius;
+                border-bottom-right-radius: $border-radius;                        
                 select {
                     position: absolute;
                     right:0px;
@@ -102,12 +108,14 @@ $border-radius: 3px;
                     padding:0px;
                     width:24px;
                     height: 100%;
-                    color: $font-color;
+                    color: #7a7a7a;
                     
                     background-color: transparent;
                     border-bottom: 1px solid $input-border-color;
                     border-top: 1px solid $input-border-color;
                     border-right: 1px solid $input-border-color; 
+                    border-top-right-radius: $border-radius;
+                    border-bottom-right-radius: $border-radius;                    
                 }
             }
         }

@@ -11,10 +11,6 @@ export default class AddImage extends MenuItem {
     return this.props.title || "Image";
   }
 
-  isHideTitle() {
-    return true; 
-  }
-
   clickButton() {
     this.emit('addComponentType', 'image');
   }

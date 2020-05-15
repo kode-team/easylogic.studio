@@ -9,13 +9,8 @@ export default class SelectTool extends MenuItem {
     return 'flipY'
   }
   getTitle() {
-    return this.props.title || "Select a item";
+    return this.props.title || "Select";
   }
-
-
-  isHideTitle() {
-    return true; 
-  }  
 
   clickButton(e) {
 

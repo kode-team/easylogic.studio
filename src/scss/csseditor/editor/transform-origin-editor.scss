@@ -117,15 +117,18 @@
       @each $borderRadiusType in all, partitial {
         &[data-selected-value="#{$borderRadiusType}"] {
           button[data-value="#{$borderRadiusType}"] {
-            background-color: $selected-color;
-            color: $border-color; 
+            background-color: $transform-origin-selected-color;
+            color: $selected-font-color; 
           }
         }
       }
   
       button {
         background-image: none;
-        margin: 4px;
+        margin: 2px;
+        width: 20px;
+        height: 20px;
+        border-radius: 3px;
       }
     }
 

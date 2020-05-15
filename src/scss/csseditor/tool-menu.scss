@@ -93,7 +93,7 @@
       .menu-item {
         text-align: center;
         color: $font-color;
-        width: 30px;
+        width: 48px;
         height: 48px;
         background-color: transparent;
         background-image: none;
@@ -103,6 +103,10 @@
         &.selected {
           .icon {      
             color: $selected-color; 
+          }
+
+          .title {
+            color: $selected-color;
           }
   
         }

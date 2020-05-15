@@ -3,6 +3,7 @@ $border-radius: 3px;
     display: grid;
     grid-template-columns: 1fr;
     height: 24px;
+    border-radius: $border-radius;
 
     &.focused {
         box-shadow: 0 0 0 1px $selected-color;
@@ -67,16 +68,23 @@ $border-radius: 3px;
             input[type=number] {         
                 padding: 2px 2px;      
                 border-right: 0px;
+                border-top-left-radius: $border-radius;
+                border-bottom-left-radius: $border-radius;
             }
 
             .select-editor {
+
                 select {
+                    border-top-right-radius: $border-radius;
+                    border-bottom-right-radius: $border-radius;                    
+                    background-color: $input-background-color;                    
                     appearance: none;
                     text-align: center;
                     height: 100%;
                     
                     padding: 0px 4px;             
                     border-left:0px;
+                    color: #7a7a7a;
                 }
             }
         }

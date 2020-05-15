@@ -9,10 +9,6 @@ export default class AddPath extends MenuItem {
     return this.props.title || "Path";
   }
 
-  isHideTitle() {
-    return true; 
-  }  
-
   clickButton(e) {
     this.emit('addPath')
   }

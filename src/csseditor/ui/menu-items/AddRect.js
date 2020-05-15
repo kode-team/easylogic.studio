@@ -9,11 +9,6 @@ export default class AddRect extends MenuItem {
     return this.props.title || "Rect";
   }
 
-
-  isHideTitle() {
-    return true; 
-  }  
-
   clickButton(e) {
 
     this.emit('addComponentType', 'rect');

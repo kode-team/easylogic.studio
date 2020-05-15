@@ -6,12 +6,9 @@ export default class AddSVGCircle extends MenuItem {
     return icon.outline_circle;
   }
   getTitle() {
-    return this.props.title || "SVG Circle";
+    return this.props.title || "Circle";
   }
  
-  isHideTitle() {
-    return true; 
-  }  
 
   clickButton(e) {
     this.emit('addComponentType', 'svg-circle');

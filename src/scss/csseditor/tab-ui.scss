@@ -38,6 +38,7 @@ $tab-horizontal-header-right-width: 60px;
           height: auto;
           display: flex;
           flex-direction: column;
+          border-right: 1px solid $border-color;
 
           .logo-item {
             flex: none;
@@ -68,6 +69,7 @@ $tab-horizontal-header-right-width: 60px;
                 content: '';
                 background-color: $selected-color;
                 width: 2px;
+                height: auto;
                 position: absolute;
                 left:1px;
                 top:0px;
@@ -119,6 +121,7 @@ $tab-horizontal-header-right-width: 60px;
       background-color: $tab-header-background-color;
       overflow: hidden;
       color: $tab-header-font-color;
+      // border-bottom: 1px solid $border-color;      
       
     }
     .tab-content {
@@ -146,6 +149,19 @@ $tab-horizontal-header-right-width: 60px;
         position: relative;
         padding: 0px 0px 0px 0px;
         height: 100%;
+
+        &.selected {
+          &:before {
+            content: '';
+            background-color: $selected-color;
+            height: 2px;
+            position: absolute;
+            left:0px;
+            right: 0px;
+            top:0px;
+          }
+
+        }
 
         &.selected,
         &:hover {
@@ -240,7 +256,7 @@ $tab-horizontal-header-right-width: 60px;
       }
 
       &.selected {
-        background-color: $tab-selected-color;
+        // background-color: transparent;
         color: $tab-selected-font-color;        
       }
 

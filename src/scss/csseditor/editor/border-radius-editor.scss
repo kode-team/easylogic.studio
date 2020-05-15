@@ -17,14 +17,17 @@
       @each $borderRadiusType in all, partitial {
         &[data-selected-value="#{$borderRadiusType}"] {
           button[data-value="#{$borderRadiusType}"] {
-            background-color: $selected-color;
+            background-color: $border-radius-selected-color;
             color: $selected-font-color;
           }
         }
       }
 
       button {
-        margin: 4px;
+        margin: 2px;
+        width: 20px;
+        height: 20px;
+        border-radius: 3px;        
       }
     }
 

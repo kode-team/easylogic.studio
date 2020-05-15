@@ -60,7 +60,7 @@
                 width: 100%;
 
                 &[type='number'] {
-                    
+                    border-radius: 3px;
                     &.focused {
                         box-shadow: 0 0 0 1px $selected-color;
                     }                
@@ -71,6 +71,7 @@
 
             select {
                 width: 100%;
+                color: #7a7a7a;
             }
         }
     }

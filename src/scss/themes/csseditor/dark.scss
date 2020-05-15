@@ -2,7 +2,7 @@
 
 // common 
 $inner-border-color: #181818;
-$border-color: rgb(17, 17, 17);
+$border-color: rgb(49, 49, 49);
 $border-color-2: #737373;
 $selected-border-color: #609de2;
 $selected-color: #3a89f0;
@@ -11,15 +11,16 @@ $logo-selected-color: #fc554f;
 $logo-selected-font-color: white;
 
 $background-color: #1f2024; 
-$header-background-color: #34353a;
+$header-background-color: #111111;
 $selected-background-color: #535353; 
 $font-color: #ffffff;
 $selected-font-color: rgb(255, 255, 255);
 
+
 // base 
 $button-front-color: $font-color;
 
-$select-background-color: #1f2024;
+$select-background-color: #2b2b2b;
 $select-border-color: #1f2024;
 $select-border-radius: 3px;
 $select-font-color: $font-color;
@@ -34,17 +35,17 @@ $range-thumb-color:  $selected-color;
 $range-track-color:  rgb(97, 97, 97);
 $range-thumb-border-color: $range-thumb-color;
 
-$input-background-color: #1f2024;
-$input-border-color:#1f2024;
+$input-background-color: #2b2b2b;
+$input-border-color:#2b2b2b;
 $input-border-radius: 3px;
 $input-font-color: #ececec;
 
 // property 
-$property-title-color:  #34353a;
+$property-title-color:  #111111;
 $property-border-color: rgba(0, 0, 0, 1);
 $property-border-top-color: #4a4a4a;
-$property-background-color: #34353a; 
-$property-show-background-color: #34353a; 
+$property-background-color: #111111; 
+$property-show-background-color: #111111; 
 $property-font-color: $font-color;
 $property-input-border-color: rgb(107, 107, 107);
 
@@ -57,8 +58,8 @@ $list-border-color: #676767;
 $list-background-color: $border-color;
 
 // tab 
-$tab-background-color: #34353a; 
-$tab-header-background-color: $background-color; 
+$tab-background-color: #111111; 
+$tab-header-background-color: #111111; 
 $tab-header-font-color: $font-color; 
 $tab-font-color: $font-color;
 $tab-selected-color: #34353a; 
@@ -110,8 +111,8 @@ $animation-item-background-color: #435cb5;
 $transition-item-background-color: #435cb5;
 
 // select icon editor 
-$select-icon-editor-item-color: rgb(80, 80, 80);
-$select-icon-editor-selected-color: #435cb5;
+$select-icon-editor-item-color: #2b2b2b;
+$select-icon-editor-selected-color: #555555;
 $select-icon-editor-selected-shadow-color: #051e77;
 $select-icon-editor-border-color: black;
 
@@ -130,3 +131,7 @@ $rotate-y-border-color: rgb(112, 197, 112);
 
 // draw view 
 $draw-view-background-color: #34353a;
+
+$color-view-background-color: #2b2b2b;
+$transform-origin-selected-color: #2b2b2b;
+$border-radius-selected-color: #2b2b2b;

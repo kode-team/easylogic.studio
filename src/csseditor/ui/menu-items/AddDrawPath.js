@@ -6,12 +6,8 @@ export default class AddDrawPath extends MenuItem {
     return icon.edit;
   }
   getTitle() {
-    return this.props.title || "draw a path";
+    return this.props.title || "Draw";
   }
-
-  isHideTitle() {
-    return true; 
-  }  
 
   clickButton(e) {
     this.emit('addDrawPath')

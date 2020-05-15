@@ -39,7 +39,7 @@
       .title {
         display: grid;
         grid-template-columns: 60px 1fr 30px;
-        color: $selected-color;
+        color: $font-color;
         border-radius: 3px;
         margin: 3px 0px;        
   
@@ -47,7 +47,7 @@
           font-size: 12px;
           padding: 6px 5px;
           cursor: move;          
-          color: $selected-color;
+          color: $font-color;
           vertical-align: middle;
           display: inline-block;          
 

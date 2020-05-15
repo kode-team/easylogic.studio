@@ -13,10 +13,6 @@ export default class AddText extends MenuItem {
     return 'text'
   }
 
-  isHideTitle() {
-    return true; 
-  }
-
   clickButton(e) {
     this.emit('addComponentType', 'text');
   }

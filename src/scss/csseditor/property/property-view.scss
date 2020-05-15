@@ -109,7 +109,7 @@
     font-size: 11px;
     font-weight: 400;
     display: grid;
-    grid-template-columns: 1fr 122px;
+    grid-template-columns: 1fr 100px;
     cursor: pointer;
     border-bottom: 0px solid $property-border-color;  
     background-color: $property-title-color;
@@ -150,8 +150,8 @@
       }
 
       select {
-        min-width: 100px;
-        max-width: 100px;
+        min-width: 80px;
+        max-width: 80px;
       }
       
     }

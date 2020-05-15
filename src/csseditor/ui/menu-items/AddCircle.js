@@ -9,11 +9,6 @@ export default class AddCircle extends MenuItem {
     return this.props.title || "Circle";
   }
 
-
-  isHideTitle() {
-    return true; 
-  }  
-
   clickButton(e) {
 
     this.emit('addComponentType', 'circle');    

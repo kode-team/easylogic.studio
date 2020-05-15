@@ -35,22 +35,22 @@ export default class LayerTab extends UIElement {
 
   initState() {
     return {
-      selectedIndex: 4 
+      selectedIndex: 2
     }
   }
 
   template() {
     return /*html*/`
       <div class='layer-tab'>
-        <div class="tab number-tab side-tab side-tab-left" data-selected-value="4" ref="$tab">
+        <div class="tab number-tab side-tab side-tab-left" data-selected-value="2" ref="$tab">
           <div class="tab-header full" ref="$header">
             <div class='logo-item'>
               <label class='logo' title='EasyLogic Studio'></label>
             </div>                  
-            <div class='tab-item selected' data-value='4' title="${this.$i18n('app.tab.title.components')}">
+            <div class='tab-item' data-value='4' title="${this.$i18n('app.tab.title.components')}">
               <label>${icon.add}</label>
             </div>          
-            <div class="tab-item" data-value="2" title="${this.$i18n('app.tab.title.layers')}">
+            <div class="tab-item selected" data-value="2" title="${this.$i18n('app.tab.title.layers')}">
               <label>${icon.account_tree}</label>
             </div>            
             <div class="tab-item" data-value="1" title="${this.$i18n('app.tab.title.projects')}">
@@ -71,13 +71,13 @@ export default class LayerTab extends UIElement {
               <ProjectProperty />
               <ProjectInformationProperty />
             </div>
-            <div class="tab-content" data-value="2">
+            <div class="tab-content selected" data-value="2">
               <ObjectItems />
             </div>
             <div class='tab-content' data-value='3'>
               <LibraryItems />
             </div>
-            <div class='tab-content selected' data-value='4'>
+            <div class='tab-content' data-value='4'>
               <ComponentItems />
             </div>
             <div class='tab-content' data-value='6'>

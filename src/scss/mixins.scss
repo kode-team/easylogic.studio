@@ -75,8 +75,11 @@
     padding: 0px 4px;
     line-height: 1.6;
     cursor: pointer;
+    height: 100%;
 
     @include input-style($background-color, $border-color, $border-radius, $fontColor);
+    border: 0px;
+    border-radius: 3px;    
 }
  
 
