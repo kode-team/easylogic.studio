@@ -12,10 +12,8 @@ export default class StrokeDashArrayEditor extends UIElement {
   }
   initState() {
 
-    var value = this.props.value || ' '
+    var value = this.generateValue(this.props.value || '')
     
-    value = value.split(' ').map(it => +it);
-
     return {
       value
     }
@@ -40,12 +38,16 @@ export default class StrokeDashArrayEditor extends UIElement {
     return this.toStringValue()
   }
 
+  generateValue (value) {
+    return value.split(" ").filter(Boolean).map(it => +it);
+  }
+
   setValue (value) {
 
     if (isArray(value)) {
 
     } else {
-      value = value.split(" ").map(it => +it);
+      value = this.generateValue(value);
     }
 
     this.setState({
