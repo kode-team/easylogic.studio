@@ -7,10 +7,16 @@ export default class PositionProperty extends BaseProperty {
     return this.$i18n('position.property.title');
   }
 
-  [EVENT('refreshSelection', 'refreshRect') + DEBOUNCE(100)]() {
-
+  [EVENT('refreshSelection') + DEBOUNCE(100)]() {
     this.refreshShowIsNot(['project', 'artboard'])
+  }
 
+  [EVENT('refreshRect')] () {
+    var current = this.$selection.current;
+    if (!current) return '';
+
+    this.children.$x.setValue(current.x);
+    this.children.$y.setValue(current.y);
   }
 
   isHideHeader() {

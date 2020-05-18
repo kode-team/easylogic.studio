@@ -69,21 +69,21 @@ export default class Dom {
     return Dom.create(document.body)
   }
 
-  data (key, value) {
+  // data (key, value) {
 
-    var newKey = key.split('-').map( (it, index) => {
-      if (index === 0) { return it }
+  //   var newKey = key.split('-').map( (it, index) => {
+  //     if (index === 0) { return it }
 
-      return it.substr(0, 1).toUpperCase() + it.substr(1);
-    }).join(''); 
+  //     return it.substr(0, 1).toUpperCase() + it.substr(1);
+  //   }).join(''); 
 
-    if (arguments.length === 1) {
-      return this.el.dataset(newKey);
-    } else {
-      this.el.dataset(newKey, value);
-    }
+  //   if (arguments.length === 1) {
+  //     return this.el.dataset(newKey);
+  //   } else {
+  //     this.el.dataset(newKey, value);
+  //   }
     
-  }
+  // }
 
   setAttr (obj) {
     Object.keys(obj).forEach(key => {
@@ -245,8 +245,9 @@ export default class Dom {
   }
 
   $$(selector) {
-    return [...this.findAll(selector)].map(node => {
-      return Dom.create(node);
+    var arr = this.findAll(selector);
+    return Object.keys(arr).map(key => {
+      return Dom.create(arr[key]);
     });
   }
 

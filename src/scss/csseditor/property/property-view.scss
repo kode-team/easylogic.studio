@@ -1,7 +1,7 @@
 .property {
   padding: 10px 10px;
   border-top: 1px solid $property-border-top-color;  
-  border-bottom: 1px solid $property-border-color;    
+  // border-bottom: 1px solid $property-border-color;    
   background-color: $property-background-color;
   color: $property-font-color; 
   display: none; 
@@ -91,12 +91,6 @@
     > .property-body {
       display: block;
       padding: 0px 0px 0px 0px;
-    }
-
-    &.no-title {
-
-      border-top: 0px;
-
     }
   }
 
