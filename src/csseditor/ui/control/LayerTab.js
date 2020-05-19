@@ -4,7 +4,7 @@ import { CLICK } from "../../../util/Event";
 import ProjectProperty from "../property/ProjectProperty";
 import ProjectInformationProperty from "../property/ProjectInformationProperty";
 import LibraryItems from "./Libraryitems";
-import ComponentItems from "./Componentitems";
+import ComponentItems from "./ComponentItems";
 import icon from "../icon/icon";
 import ImageAssetsProperty from "../property/ImageAssetsProperty";
 import GradientAssetsProperty from "../property/GradientAssetsProperty";

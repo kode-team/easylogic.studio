@@ -76,7 +76,9 @@ $border-radius: 3px;
 
                 select {
                     border-top-right-radius: $border-radius;
-                    border-bottom-right-radius: $border-radius;                    
+                    border-bottom-right-radius: $border-radius;
+                    border-top-left-radius: 0px;
+                    border-bottom-left-radius: 0px;                    
                     background-color: $input-background-color;                    
                     appearance: none;
                     text-align: center;
@@ -85,6 +87,9 @@ $border-radius: 3px;
                     padding: 0px 4px;             
                     border-left:0px;
                     color: #7a7a7a;
+                    border-bottom: 1px solid $input-border-color;
+                    border-top: 1px solid $input-border-color;
+                    border-right: 1px solid $input-border-color;                     
                 }
             }
         }

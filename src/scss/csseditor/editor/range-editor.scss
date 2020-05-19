@@ -97,7 +97,10 @@ $border-radius: 3px;
                 position: relative;             
                 box-sizing: border-box;          
                 border-top-right-radius: $border-radius;
-                border-bottom-right-radius: $border-radius;                        
+                border-bottom-right-radius: $border-radius;       
+                border-top-left-radius: 0px;
+                border-bottom-left-radius: 0px;             
+
                 select {
                     position: absolute;
                     right:0px;
@@ -111,11 +114,13 @@ $border-radius: 3px;
                     color: #7a7a7a;
                     
                     background-color: transparent;
+                    border-top-right-radius: $border-radius;
+                    border-bottom-right-radius: $border-radius;
+                    border-top-left-radius: 0px;
+                    border-bottom-left-radius: 0px;                                        
                     border-bottom: 1px solid $input-border-color;
                     border-top: 1px solid $input-border-color;
-                    border-right: 1px solid $input-border-color; 
-                    border-top-right-radius: $border-radius;
-                    border-bottom-right-radius: $border-radius;                    
+                    border-right: 1px solid $input-border-color;                     
                 }
             }
         }

@@ -32,7 +32,6 @@
                 svg {
 
                     path,polygon {
-                        fill: transparent;
                         stroke: $list-item-font-color;
                     }
                 }
@@ -79,7 +78,6 @@
                 span.icon {
                     svg {
                         path,polygon {
-                            fill: transparent;
                             stroke: $list-item-selected-font-color;
                         }
                     }

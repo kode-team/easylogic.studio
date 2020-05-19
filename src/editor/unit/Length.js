@@ -19,19 +19,6 @@ Position.BOTTOM = "bottom";
 
 const REG_CSS_UNIT = /([\d.]+)(px|pt|fr|r?em|deg|vh|vw|m?s|%|g?rad|turn)/gi;
 
-const UNIT_FUNCTION = {
-  '%': 'percent',
-  'percent': 'percent',
-  "px": 'px',
-  "em": 'em',
-  "deg": 'deg',
-  "turn": 'turn',
-  "s": 's',
-  "ms": 'ms',
-  "number": 'number',
-  "--": 'var'
-}
-
 export class Length {
   constructor(value = "", unit = "") {
     this.value = value;
@@ -128,10 +115,6 @@ export class Length {
     return new Length(str, "calc");
   }
 
-  static getFunction (unit = '') {
-    return UNIT_FUNCTION[unit] || 'string';
-  }
-
   static parse(obj) {
     obj = obj || Length.number(0)
 
@@ -149,14 +132,107 @@ export class Length {
     if (obj instanceof Length) {
       return obj;
     } else if (obj.unit) {
+      if (obj.unit == "%" || obj.unit == "percent") {
+        var value = 0;
 
-      const func = Length.getFunction(obj.unit);
+        if (isNotUndefined(obj.percent)) {
+          value = obj.percent;
+        } else if (isNotUndefined(obj.value)) {
+          value = obj.value;
+        }
 
-      if (func === 'string') {
-        Length.string(obj.value || "");
+        return Length.percent(value);
+      } else if (obj.unit == "px") {
+        var value = 0;
+
+        if (isNotUndefined(obj.px)) {
+          value = obj.px;
+        } else if (isNotUndefined(obj.value)) {
+          value = obj.value;
+        }
+
+        return Length.px(value);
+      } else if (obj.unit == "em") {
+        var value = 0;
+
+        if (isNotUndefined(obj.em)) {
+          value = obj.em;
+        } else if (isNotUndefined(obj.value)) {
+          value = obj.value;
+        }
+
+        return Length.em(value);
+      } else if (obj.unit == "deg") {
+        var value = 0;
+
+        if (isNotUndefined(obj.deg)) {
+          value = obj.deg;
+        } else if (isNotUndefined(obj.value)) {
+          value = obj.value;
+        }
+
+        return Length.deg(value);
+      } else if (obj.unit == "turn") {
+        var value = 0;
+
+        if (isNotUndefined(obj.deg)) {
+          value = obj.turn;
+        } else if (isNotUndefined(obj.value)) {
+          value = obj.value;
+        }
+
+        return Length.turn(value);        
+      } else if (obj.unit == "s") {
+        var value = 0;
+
+        if (isNotUndefined(obj.second)) {
+          value = obj.second;
+        } else if (isNotUndefined(obj.value)) {
+          value = obj.value;
+        }
+
+        return Length.second(value);
+      } else if (obj.unit == "ms") {
+        var value = 0;
+
+        if (isNotUndefined(obj.ms)) {
+          value = obj.ms;
+        } else if (isNotUndefined(obj.value)) {
+          value = obj.value;
+        }
+
+        return Length.ms(value);       
+        
+      } else if (obj.unit == "number") {
+        var value = 0;
+
+        if (isNotUndefined(obj.value)) {
+          value = obj.value;
+        }
+
+        return Length.number(value);
+        
+      } else if (obj.unit == "--") {
+        var value = 0;
+
+        if (isNotUndefined(obj.value)) {
+          value = obj.value;
+        }
+
+        return Length.var(value);        
+      } else if (obj.unit === "" || obj.unit === "string") {
+        var value = "";
+
+        if (isNotUndefined(obj.str)) {
+          value = obj.str;
+        } else if (isNotUndefined(obj.value)) {
+          value = obj.value;
+        }
+
+
+
+        return Length.string(value);
       }
-
-      return Length[func](obj.value || 0);
     }
 
     return Length.string(obj);

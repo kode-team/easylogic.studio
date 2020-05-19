@@ -3,7 +3,6 @@ import { LOAD, CLICK, DOUBLECLICK, PREVENT, STOP, FOCUSOUT, VDOM, DRAGSTART, KEY
 import icon from "../icon/icon";
 import { EVENT } from "../../../util/UIElement";
 
-import { Layer } from "../../../editor/items/Layer";
 import Color from "../../../util/Color";
 import { Length } from "../../../editor/unit/Length";
 
@@ -103,26 +102,20 @@ export default class LayerTreeProperty extends BaseProperty {
 
     switch(item.itemType) {
     case 'circle': 
-      return icon.circle;
-    case 'image': return icon.photo;
+      return icon.lens;
+    case 'image': 
+      return icon.image;
     case 'text': 
+    case 'svg-text':
+      return icon.title;    
     case 'svg-textpath':
-      return icon.title;
-
+      return icon.text_rotate;
+    case 'svg-path': 
+      return icon.pentool      
     case 'cube' : 
       return icon.cube;
-    case 'svg-path': 
-    case 'svg-polygon': 
-      var rate = item.width.value === 0 ? 0 : (24/item.width.value);    
-      var strokeWidth = rate > 1 ? 1: 1/(rate === 0 ? 1 : rate);       
-
-      switch (item.itemType) {
-      case 'svg-path': 
-        return /*html*/`<svg viewBox="0 0 ${item.width.value} ${item.height.value}"><path d="${item.d}" stroke-width="${strokeWidth}" /></svg>`;
-      case 'svg-polygon': 
-        return /*html*/`<svg viewBox="0 0 ${item.width.value} ${item.height.value}"><polygon points="${item.points}" stroke-width="${strokeWidth}" /></svg>`;
-      }
-
+    case 'cylinder':
+      return icon.cylinder;
     default: 
       return icon.rect
     }
