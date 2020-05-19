@@ -25,15 +25,15 @@ $select-border-color: #1f2024;
 $select-border-radius: 3px;
 $select-font-color: $font-color;
 
-$range-thumb-width: 8px;
-$range-thumb-height: 8px;
-$range-track-height: 1px;
+$range-thumb-width: 10px;
+$range-thumb-height: 10px;
+$range-track-height: 2px;
 $range-thumb-top: -4px;
 $range-thumb-border-radius: 5px;
 // $range-thumb-color:  rgb(243, 243, 243);
-$range-thumb-color:  $selected-color;
+$range-thumb-color:  rgb(255, 255, 255);
 $range-track-color:  rgb(97, 97, 97);
-$range-thumb-border-color: $range-thumb-color;
+$range-thumb-border-color: rgba(0, 0, 0, 0.8);
 
 $input-background-color: #2b2b2b;
 $input-border-color:#2b2b2b;
