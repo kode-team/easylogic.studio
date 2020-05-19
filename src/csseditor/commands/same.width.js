@@ -9,9 +9,10 @@ export default {
         if (len == 1) {
             // artboard 랑 크기를 맞출지 고민해보자. 
         } else if (len > 1) {
+            const rect = editor.selection.allRect;
             editor.selection.each(item => {
-                item.setScreenX(editor.selection.allRect.x.value);
-                item.width.set( editor.selection.allRect.width.value);
+                item.setScreenX(rect.x.value);
+                item.width.set(rect.width.value);
             })
 
         }
