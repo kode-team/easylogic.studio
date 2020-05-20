@@ -6,7 +6,7 @@
     color: $font-color;
     background-color: $draw-view-background-color;  
     height: 100%;
-    padding: 2px 5px;
+    padding: 5px 5px;
 
     .text { 
         display: inline-block;
@@ -29,6 +29,9 @@
         > div {
           display: inline-block;
           margin-left: 10px;
+          height: 100%;
+          vertical-align: middle;
+          padding: 5px 0px;          
 
           > * {
             display: inline-block;

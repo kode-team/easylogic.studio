@@ -29,7 +29,7 @@ export default class CanvasView extends UIElement {
             <ElementView ref='$elementView' />
           </div>
         </div>
-        <PageSubEditor />
+        <!--<PageSubEditor /> -->
         <PageTools />
         <RotateEditorView />
       </div>

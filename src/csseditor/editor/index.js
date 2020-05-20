@@ -27,7 +27,7 @@ import StatusBar from "../ui/view/StatusBar";
 
 import PreviewToolMenu from "../ui/view/PreviewToolMenu";
 import { Length } from "../../editor/unit/Length";
-
+import PageSubEditor from "../ui/view-items/PageSubEditor";
 
 const formElements = ['INPUT','SELECT','TEXTAREA']
 
@@ -62,7 +62,8 @@ export default class CSSEditor extends UIElement {
         </div>
         <div class="layout-middle" ref='$middle'>
           <div class="layout-header" ref='$headerPanel'>
-              <ToolMenu />          
+              <ToolMenu />    
+              <PageSubEditor />      
           </div>        
           <div class="layout-body" ref='$bodyPanel'>
             <CanvasView />        
@@ -149,6 +150,7 @@ export default class CSSEditor extends UIElement {
       ObjectList,
       Inspector,
       ToolMenu,
+      PageSubEditor,
       CanvasView,
       StyleView,
       LogoView,

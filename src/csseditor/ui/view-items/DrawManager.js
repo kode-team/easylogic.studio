@@ -71,7 +71,7 @@ export default class DrawManager extends UIElement {
 
           <div >
             <label>${this.$i18n('svg.item.property.strokeWidth')}</label>          
-            <NumberRangeEditor 
+            <NumberInputEditor 
               ref='$strokeWidth' 
               key="stroke-width" 
               value="${this.state['stroke-width']}"              
