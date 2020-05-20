@@ -22,6 +22,8 @@
                 position: relative;
                 line-height: 24px;
                 border-radius: 3px;
+                text-align: left;
+                padding: 0px 5px;
 
                 &:hover {
                     background-color: lighten($selected-color, 10%);
@@ -33,13 +35,8 @@
                 }        
 
                 .icon {
-                    position: absolute;
                     display: inline-block;
-                    width: 20px;
-                    height: 20px;
-                    left: 5px;
-                    top: 5px;
-                    bottom: 0px;
+                    vertical-align: middle;
 
                     &.flipY {
                         transform: rotateY(-180deg);
@@ -47,15 +44,11 @@
                 }   
 
                 .title {
-                    position: absolute;
                     display: inline-block;
-                    right: 0px;
-                    left: 20px;
-                    top: 0px;
-                    bottom: 0px;
                     text-align: left;
-                    padding-left: 20px;
+                    padding-left: 10px;
                     padding-top: 2px;
+                    vertical-align: middle;
                 }
             }
 

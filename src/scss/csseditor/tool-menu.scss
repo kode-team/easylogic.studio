@@ -72,11 +72,12 @@
         vertical-align: top;
       }
 
-      .split {
+      .divider {
         border: 0px;
         border-right: 1px solid rgba(255, 255, 255, 0.3);
         // margin: 5px 10px;
         height: 20px;
+        vertical-align: middle;
       }
   
       > label {
