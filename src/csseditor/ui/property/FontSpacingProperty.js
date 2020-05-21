@@ -28,7 +28,10 @@ export default class FontSpacingProperty extends BaseProperty {
   getBody() {
     return /*html*/`
 
-    <div class='property-item'>
+    <div class='property-item animation-property-item'>
+      <div class='group'>
+        <span class='add-timeline-property' data-property='line-height'></span>
+      </div>
       <RangeEditor 
         ref='$lineHeight' 
         label='${this.$i18n('font.spacing.property.lineHeight')}' 
@@ -36,15 +39,24 @@ export default class FontSpacingProperty extends BaseProperty {
         units=",px,%,em"
         onchange="changeRangeEditor" />
     </div>       
-      <div class="property-item font-item">
+      <div class='property-item animation-property-item'>
+        <div class='group'>
+          <span class='add-timeline-property' data-property='letter-spacing'></span>
+        </div>
         <RangeEditor ref='$letter' label='${this.$i18n('font.spacing.property.letterSpacing')}' key="letter-spacing" onchange="changeRangeEditor" />
       </div>
 
-      <div class="property-item font-item">
+      <div class='property-item animation-property-item'>
+        <div class='group'>
+          <span class='add-timeline-property' data-property='word-spacing'></span>
+        </div>
         <RangeEditor ref='$word' label='${this.$i18n('font.spacing.property.wordSpacing')}' key="word-spacing" onchange="changeRangeEditor" />
       </div>
 
-      <div class="property-item font-item">
+      <div class='property-item animation-property-item'>
+        <div class='group'>
+          <span class='add-timeline-property' data-property='text-indent'></span>
+        </div>      
         <RangeEditor ref='$indent' label='${this.$i18n('font.spacing.property.indent')}' key="text-indent" onchange="changeRangeEditor" />
       </div>      
     `;

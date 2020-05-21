@@ -110,7 +110,7 @@ export default class FilterEditor extends UIElement {
   makeDropShadowFilterTemplate(spec, filter, index) {
     return /*html*/`
       <div class="filter-item">
-        <div class="title" draggable="true" data-index="${index}">
+        <div class="title drop-shadow" draggable="true" data-index="${index}">
           <label>${this.$i18n('filter.property.drop-shadow')}</label>
           <div class="filter-menu">
             <button type="button" class="del" data-index="${index}">
@@ -120,17 +120,20 @@ export default class FilterEditor extends UIElement {
         </div>
 
         <div class="filter-ui drop-shadow-color">
-          <label>${spec.color.title}</label>
-          <ColorViewEditor ref='$dropShadowColorView${index}' params="${index}" value="${filter.color}" onChange="changeDropShadowColor" />
+          <ColorViewEditor 
+            label="${this.$i18n(`filter.property.drop-shadow.color`)}" 
+            ref='$dropShadowColorView${index}' 
+            params="${index}" 
+            value="${filter.color}" 
+            onChange="changeDropShadowColor" />
         </div>
 
         ${["offsetX", "offsetY", "blurRadius"].map(key => {
           return /*html*/`        
             <div class="filter-ui drop-shadow">
-                <label>${spec[key].title}</label>
-
                 <RangeEditor 
                   ref='$${key}${index}' 
+                  label="${this.$i18n(`filter.property.drop-shadow.${key}`)}"
                   key="${index}" 
                   min="${spec[key].min}"
                   min="${spec[key].max}"
@@ -198,23 +201,22 @@ export default class FilterEditor extends UIElement {
   makeOneFilterTemplate(spec, filter, index) {
 
     var subtitle = filter.type === 'svg' ? /*html*/` - <span class='svg-filter-edit' data-index="${index}">${filter.value}</span>` : ''; 
-
+    var title = `${this.$i18n('filter.property.' + filter.type)}${subtitle}`
     return /*html*/`
       <div class="filter-item" data-index="${index}">
-        <div class="title" draggable="true" data-index="${index}">
-          <label>${this.$i18n('filter.property.' + filter.type)}${subtitle}</label>
+        <div class="title" >
+          <label draggable="true" data-index="${index}" title="${title}">${title}</label>
+          ${filter.type != 'svg' ? /*html*/`
+          <div class="filter-ui">
+            ${this.makeOneFilterEditor(index, filter, spec)}
+          </div>
+        `: '<div></div>'}          
           <div class="filter-menu">
             <button type="button" class="del" data-index="${index}">
               ${icon.remove2}
             </button>
           </div>
         </div>
-        ${filter.type != 'svg' ? /*html*/`
-          <div class="filter-ui">
-            ${this.makeOneFilterEditor(index, filter, spec)}
-          </div>
-        `: ''}
-        
       </div>
     `;
   }
@@ -242,12 +244,12 @@ export default class FilterEditor extends UIElement {
   }
 
 
-  [DRAGSTART("$filterList .filter-item .title")](e) {
+  [DRAGSTART("$filterList .filter-item .title label")](e) {
     this.startIndex = +e.$dt.attr("data-index");
   }
 
 
-  [DRAGOVER("$filterList .filter-item") + PREVENT](e) {}
+  [DRAGOVER("$filterList .filter-item .title label") + PREVENT](e) {}
 
 
 

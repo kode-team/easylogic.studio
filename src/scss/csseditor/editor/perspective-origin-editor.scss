@@ -3,7 +3,7 @@
 
     .perspective-origin-item {
       display: grid; 
-      grid-template-columns: 62px 1fr;
+      grid-template-columns: 80px 1fr;
 
       &.full {
         grid-template-columns: 1fr;
@@ -118,14 +118,18 @@
       @each $borderRadiusType in all, partitial {
         &[data-selected-value="#{$borderRadiusType}"] {
           button[data-value="#{$borderRadiusType}"] {
-            background-color: $selected-color;
-            color: $border-color;
+            background-color: $transform-origin-selected-color;
+            color: $selected-font-color; 
           }
         }
       }
   
       button {
         background-image: none;
+        margin: 2px;
+        width: 20px;
+        height: 20px;
+        border-radius: 3px;
       }
     }
 

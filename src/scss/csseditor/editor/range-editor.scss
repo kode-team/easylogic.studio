@@ -6,10 +6,10 @@ $border-radius: 3px;
     height: 24px;
 
     &.has-label {
-        grid-template-columns: 80px 1fr;
+        grid-template-columns: 60px 1fr;
         grid-column-gap: 2px;
         &.is-removable {
-            grid-template-columns: 80px 1fr 12px;
+            grid-template-columns: 60px 1fr 12px;
         }
 
         label {

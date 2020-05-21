@@ -42,13 +42,20 @@
   
       .title {
         display: grid;
-        grid-template-columns: 1fr 30px;
+        grid-template-columns: 70px 1fr 18px;
+
+        &.drop-shadow {
+          grid-template-columns: 1fr 18px;
+        }
   
         label {
           font-size: 12px;
-          padding: 2px 3px;
+          padding: 5px 3px;
           cursor: move;
-          
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          vertical-align: middle;
+          overflow: hidden;
         }
 
         .svg-filter-edit {
@@ -72,27 +79,24 @@
       }
   
       .filter-ui {
-        margin-top: 5px;
-        display: grid;
-        grid-template-columns: 1fr;
+        vertical-align: middle;
         margin-bottom: 5px;
+
+        label {
+          font-size: 11px;
+          color: darken($font-color, 30);
+        }
+
   
         &.drop-shadow {
           grid-template-columns: 50px  1fr;
           grid-column-gap: 1px;
   
-          label {
-            font-size: 10px;
-          }
         }
   
         &.drop-shadow-color {
           grid-template-columns: 50px 1fr;
           grid-column-gap: 2px;
-  
-          label {
-            font-size: 12px;
-          }
 
         }
       }

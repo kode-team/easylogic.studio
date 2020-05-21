@@ -1,9 +1,7 @@
 .color-view-editor {
     display: grid;
-    height: 20px;
     grid-template-columns: 40px 1fr;
     grid-column-gap: 5px;
-    margin-bottom: 5px;
     text-align: center;
 
     &.has-label {
