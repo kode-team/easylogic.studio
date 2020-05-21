@@ -831,14 +831,13 @@ ${this.toSelectorString(prefix)}
 
     if (isChangeFragment) {
       var $svg = currentElement.$(`[data-id="${this.innerSVGId}"]`);  
-
       if ($svg) {
 
         const defInnerString = this.toDefInnerString.trim();
 
         if (defInnerString) {
           var $defs = $svg.$('defs');
-          $defs.html(this.defInnerString)          
+          $defs.html(defInnerString)
         }
 
       } else {

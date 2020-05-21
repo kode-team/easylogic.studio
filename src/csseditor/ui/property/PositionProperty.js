@@ -7,7 +7,7 @@ export default class PositionProperty extends BaseProperty {
     return this.$i18n('position.property.title');
   }
 
-  [EVENT('refreshSelection') + DEBOUNCE(100)]() {
+  [EVENT('refreshSelection')]() {
     this.refreshShowIsNot(['project', 'artboard'])
   }
 
@@ -15,8 +15,8 @@ export default class PositionProperty extends BaseProperty {
     var current = this.$selection.current;
     if (!current) return '';
 
-    this.children.$x.setValue(current.x);
-    this.children.$y.setValue(current.y);
+    if (this.children.$x)  this.children.$x.setValue(current.x);
+    if (this.children.$y)  this.children.$y.setValue(current.y);
   }
 
   isHideHeader() {

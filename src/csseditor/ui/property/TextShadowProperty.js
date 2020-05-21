@@ -40,7 +40,7 @@ export default class TextShadowProperty extends BaseProperty {
   }
 
 
-  [EVENT('refreshSelection') + DEBOUNCE(100)]() {
+  [EVENT('refreshSelection')]() {
 
     this.refreshShow(['text']);
 

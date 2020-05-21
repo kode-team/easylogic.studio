@@ -70,10 +70,6 @@ export default class TextShadowEditor extends UIElement {
     return arr.join('');
   }
 
-  [EVENT('refreshSelection')]() {
-    this.refresh();
-  }
-
   modifyTextShadow () {
     var value = this.state.textShadows.join(', ');
 
