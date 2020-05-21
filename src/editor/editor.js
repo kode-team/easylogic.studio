@@ -237,7 +237,7 @@ export class Editor {
 
   replaceLocalUrltoId (str) {
 
-    var projects = editor.projects;
+    var projects = this.projects;
     var images = {} 
 
     projects.forEach(project => {
