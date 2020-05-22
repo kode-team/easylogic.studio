@@ -258,7 +258,7 @@ export default class TimelineKeyframeList extends UIElement {
     }
 
     moveEndDragArea (dx, dy) {
-        // if (this.isNotMoved(dx, dy)) return;      
+        if (this.isNotMoved(dx, dy)) return; 
         if (!this.left) {
 
             if (this.doubleClicked) {
@@ -361,17 +361,18 @@ export default class TimelineKeyframeList extends UIElement {
         return 0; 
     }
 
-    [DOUBLECLICK('$el .timeline-keyframe-row.layer-property')] (e) {
+    [DOUBLECLICK('$el .layer-property')] (e) {
 
         var [layerId, property] = e.$dt.attrs('data-layer-id', 'data-property')
         var time = this.getTimeRateByPosition(this.getRealPosition(e).rate);
         this.emit('addTimelineKeyframe', {layerId, property, time});
 
-        this.refresh();
         this.doubleClicked = true; 
+        this.refresh();
+
     }
 
-    [POINTERSTART('$el .timeline-keyframe-row.layer-property .offset') 
+    [POINTERSTART('$el .layer-property .offset') 
         + IF('hasCurrentTimeline') 
         + MOVE('moveOffset') 
         + END('moveEndOffset')] (e) {

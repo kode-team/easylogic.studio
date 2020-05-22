@@ -500,8 +500,11 @@ export default class ElementView extends UIElement {
     }
 
     updateElement (item, isChangeFragment = true, isLast = false) {
-        item.updateFunction(this.getElement(item.id), isChangeFragment, isLast);
-        this.updateRealPositionByItem(item);
+        if (item) {
+            item.updateFunction(this.getElement(item.id), isChangeFragment, isLast);
+            this.updateRealPositionByItem(item);
+        }
+
     }
 
     [EVENT('playTimeline', 'moveTimeline')] () {

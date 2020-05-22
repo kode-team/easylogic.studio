@@ -168,7 +168,8 @@ export class TimelineItem extends DomItem {
           // 객체 속성은 function 안에서 변경한다. 
           it.func(time)
 
-        } else {
+        } else if (it.layer) {
+
           it.layer.reset({
             [it.property]: it.func(time) 
           })
@@ -650,7 +651,7 @@ export class TimelineItem extends DomItem {
       var times = p.keyframes.filter(it => it.time < time); 
       var value = this.getDefaultPropertyValue(property);
       var timing = 'linear';
-      var edtior = ''; 
+      var editor = ''; 
       if (times.length) {
 
         times.sort((a, b) => {
@@ -660,6 +661,7 @@ export class TimelineItem extends DomItem {
         value = times[0].value + "";
         timing = times[0].timing + ""
         editor = times[0].editor
+
       }
 
       this.addTimelineKeyframe({layerId, property, value, timing, editor});

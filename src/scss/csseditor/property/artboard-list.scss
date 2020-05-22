@@ -11,6 +11,7 @@
         display: grid;
         grid-template-columns: 20px 1fr;
         grid-column-gap: 4px;
+        border-radius: 4px;
 
         .detail {
             display: grid;
