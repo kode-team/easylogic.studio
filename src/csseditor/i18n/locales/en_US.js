@@ -115,7 +115,7 @@ export default {
     'font.spacing.property.wordSpacing': 'Word spacing',
     'font.spacing.property.indent': 'Indent',
 
-    'backdrop.filter.property.title': 'Backdrop Filter',        
+    'backdrop.filter.property.title': 'Backdrop',        
     'clippath.property.title': 'Clip Path',
 
     'export.property.title': 'Export',    
