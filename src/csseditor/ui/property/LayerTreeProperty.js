@@ -10,7 +10,7 @@ const DRAG_START_CLASS = 'drag-start'
 
 export default class LayerTreeProperty extends BaseProperty {
   getTitle() {
-    return `<span>${icon.account_tree}</span> ${this.$i18n('layer.tree.property.title')}`;
+    return this.$i18n('layer.tree.property.title')
   }
 
   getClassName() {
