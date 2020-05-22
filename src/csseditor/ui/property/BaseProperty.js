@@ -21,7 +21,7 @@ export default class BaseProperty extends UIElement {
             ${this.isHideHeader() ? ''
             : /*html*/`
             <div class='property-title ${this.getTitleClassName()}' ref="$title">
-                <label class="${this.hasKeyframe() ? 'has-keyframe': ''}""> 
+                <label class="${this.hasKeyframe() ? 'has-keyframe': ''}" title="${this.getTitle()}"> 
                   ${
                     this.hasKeyframe() ? 
                     /*html*/`
