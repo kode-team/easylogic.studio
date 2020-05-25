@@ -485,7 +485,8 @@ export default class PathEditorView extends PathTransformEditor {
             this.refs.$view.empty()
             this.$el.hide();
             this.emit('finishPathEdit')
-            this.emit('hidePathManager');
+            this.emit('hidePathManager');            
+            this.emit('change.mode.view');               
         }
 
     }

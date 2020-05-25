@@ -7,6 +7,8 @@
     background-color: $path-view-background-color;
     height: 100%;
     padding: 7px 0px;
+    overflow: hidden;
+    white-space: nowrap;
 
     .text {
         display: inline-block;

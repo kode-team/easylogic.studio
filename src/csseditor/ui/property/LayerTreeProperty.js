@@ -149,8 +149,6 @@ export default class LayerTreeProperty extends BaseProperty {
           <div class="tools">
             <button type="button" class="lock" data-lock="${layer.lock}" title='Lock'>${layer.lock ? icon.lock : icon.lock_open}</button>
             <button type="button" class="visible" data-visible="${layer.visible}" title='Visible'>${icon.visible}</button>
-            <button type="button" class="copy" title='Copy'>${icon.copy}</button>
-            <button type="button" class="remove" title='Remove'>${icon.remove2}</button>
           </div>
         </div>
       </div>
@@ -299,19 +297,19 @@ export default class LayerTreeProperty extends BaseProperty {
     });
   }
 
-  [CLICK('$layerList .layer-item .remove')] (e) {
-    var artboard = this.$selection.currentArtboard
-    if (artboard) {
-      var $item = e.$dt.closest('layer-item')
-      var id = $item.attr('data-layer-id');
+  // [CLICK('$layerList .layer-item .remove')] (e) {
+  //   var artboard = this.$selection.currentArtboard
+  //   if (artboard) {
+  //     var $item = e.$dt.closest('layer-item')
+  //     var id = $item.attr('data-layer-id');
 
-      var item = artboard.searchById(id);
-      if (item) item.remove();
+  //     var item = artboard.searchById(id);
+  //     if (item) item.remove();
 
-      this.emit('refreshAllSelectArtBoard');
+  //     this.emit('refreshAllSelectArtBoard');
       
-    }
-  }
+  //   }
+  // }
 
 
   [CLICK('$layerList .layer-item label')] (e) {
@@ -363,20 +361,20 @@ export default class LayerTreeProperty extends BaseProperty {
   }
 
 
-  [CLICK('$layerList .layer-item .copy')] (e) {
-    var artboard = this.$selection.currentArtboard
-    if (artboard) {
-      var $item = e.$dt.closest('layer-item')
-      var id = $item.attr('data-layer-id');
+  // [CLICK('$layerList .layer-item .copy')] (e) {
+  //   var artboard = this.$selection.currentArtboard
+  //   if (artboard) {
+  //     var $item = e.$dt.closest('layer-item')
+  //     var id = $item.attr('data-layer-id');
 
-      var obj = artboard.searchById(id)
-      var copyObject = obj.copy();
+  //     var obj = artboard.searchById(id)
+  //     var copyObject = obj.copy();
 
-      this.$selection.select(copyObject);
-      this.refresh();
-      this.emit('refreshElement', null, false, true);
-    }
-  }
+  //     this.$selection.select(copyObject);
+  //     this.refresh();
+  //     this.emit('refreshElement', null, false, true);
+  //   }
+  // }
 
   [EVENT('emptySelection')] () {
     this.refs.$layerList.$$('.selected').forEach(it => {
