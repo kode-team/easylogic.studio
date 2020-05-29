@@ -124,7 +124,8 @@ export default class KeyFrameProperty extends BaseProperty {
 
     current.removeKeyframe(removeIndex);
 
-    this.emit('refreshStyleView', current);
+    // project 는 항상 최상위이기 때문에  true 옵션을 줘서 혼자서 갱신 해야함 
+    this.emit('refreshProject', current)
 
     this.refresh();
   }
@@ -155,7 +156,7 @@ export default class KeyFrameProperty extends BaseProperty {
     if (current) {
       current.createKeyframe();
       this.refresh();
-      this.emit('refreshStyleView', current, true);
+      this.emit('refreshProject', current)
     } else {
       alert('Please select a project.')
     }
@@ -228,7 +229,7 @@ export default class KeyFrameProperty extends BaseProperty {
     }
 
     this.refresh();
-    this.emit('refreshStyleView', project);
+    this.emit('refreshProject', current)
   }
 
 }

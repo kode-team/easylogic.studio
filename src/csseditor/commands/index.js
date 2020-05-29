@@ -1,4 +1,5 @@
 import refreshElement from "./refreshElement";
+import refreshProject from './refreshProject';
 import setAttribute from "./setAttribute";
 import resizeArtBoard from "./resizeArtBoard";
 import addPath from "./addPath";
@@ -152,6 +153,7 @@ export default {
     convertPath,    
     newComponent,
     refreshElement,
+    refreshProject,
     resizeArtBoard,
     selectItem,
     setAttribute,  
