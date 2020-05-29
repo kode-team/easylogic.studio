@@ -1,6 +1,6 @@
 {
   "name": "@easylogic/editor",
-  "version": "0.9.45",
+  "version": "0.9.46",
   "description": "Fantastic Web Design Tool ",
   "main": "./dist/editor.js",
   "directories": {
@@ -37,13 +37,13 @@
   "scripts": {
     "copy:resource": "cp CNAME docs/",
     "build:web": "rm -rf docs/ && webpack --mode=production --progress && npm run copy:resource",
-    "build:dist": "webpack --mode=production --progress --config=webpack.dist.config.js",    
+    "build:dist": "webpack --mode=production --progress --config=webpack.dist.config.js",
     "build:ext:chrome": "webpack --mode=production --config=webpack.chrome-extension.config.js",
     "build:ext:whale": "webpack --mode=production --config=webpack.whale-extension.config.js",
     "build": "npm run build:web",
     "build:all": "npm run build:web && npm run build:dist && npm run build:ext:chrome && npm run build:ext:whale && npm run zip",
     "zip:ext:chrome": "zip -r chrome-extension/chrome-extension.zip chrome-extension",
-    "zip:ext:whale": "zip -r whale-extension/whale-extension.zip whale-extension",    
+    "zip:ext:whale": "zip -r whale-extension/whale-extension.zip whale-extension",
     "zip": "npm run zip:ext:chrome && npm run zip:ext:whale",
     "dev": "webpack-dev-server --config=webpack.dev.config.js --progress --open",
     "test": "NODE_ENV=test jest --watch"
