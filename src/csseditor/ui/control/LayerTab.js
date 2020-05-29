@@ -3,7 +3,7 @@ import ObjectItems from "./ObjectItems";
 import { CLICK } from "../../../util/Event";
 import ProjectProperty from "../property/ProjectProperty";
 import ProjectInformationProperty from "../property/ProjectInformationProperty";
-import LibraryItems from "./Libraryitems";
+import LibraryItems from "./LibraryItems";
 import ComponentItems from "./ComponentItems";
 import icon from "../icon/icon";
 import ImageAssetsProperty from "../property/ImageAssetsProperty";
