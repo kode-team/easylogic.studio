@@ -9,6 +9,7 @@ import addArtBoard from "./addArtBoard";
 import addProject from "./addProject";
 import addLayer from "./addLayer";
 import selectItem from "./selectItem";
+import selectArtboard from './selectArtboard';
 import newComponent from "./newComponent";
 import addComponentType from "./addComponentType";
 import clipboardCopy from "./clipboard.copy";
@@ -80,9 +81,11 @@ import sortTop from "./sort.top";
 import sortRight from "./sort.right";
 import sameWidth from "./same.width";
 import sameHeight from "./same.height";
+import refreshArtboard from "./refreshArtboard";
 
 
 export default {
+    refreshArtboard,
     resetSelection,
     addBackgroundColor,
     addBackgroundImagePattern,
@@ -156,6 +159,7 @@ export default {
     refreshProject,
     resizeArtBoard,
     selectItem,
+    selectArtboard,
     setAttribute,  
     sortBottom,
     sortCenter,

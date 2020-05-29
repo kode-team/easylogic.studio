@@ -230,7 +230,7 @@ export default class LayerTreeProperty extends BaseProperty {
         hideDragPointer: true 
       })
 
-      this.emit('refreshAllSelectArtBoard')      
+      this.emit('refreshArtboard')      
 
     }
   }
@@ -284,7 +284,7 @@ export default class LayerTreeProperty extends BaseProperty {
     if (layer) {
       this.$selection.select(layer);
 
-      this.emit('refreshAllSelectArtBoard')
+      this.emit('refreshArtboard')
     }
   }
 
@@ -296,21 +296,6 @@ export default class LayerTreeProperty extends BaseProperty {
       height: Length.px(100)
     });
   }
-
-  // [CLICK('$layerList .layer-item .remove')] (e) {
-  //   var artboard = this.$selection.currentArtboard
-  //   if (artboard) {
-  //     var $item = e.$dt.closest('layer-item')
-  //     var id = $item.attr('data-layer-id');
-
-  //     var item = artboard.searchById(id);
-  //     if (item) item.remove();
-
-  //     this.emit('refreshAllSelectArtBoard');
-      
-  //   }
-  // }
-
 
   [CLICK('$layerList .layer-item label')] (e) {
     var artboard = this.$selection.currentArtboard
