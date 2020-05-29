@@ -98,7 +98,7 @@ module.exports = {
     new HtmlWebPackPlugin({
       inject: true,
       chunks: ["main"],
-      template: "./src/index.html",
+      template: "./src/dev-index.html",
       filename: "./index.html"
     }),
     new MiniCssExtractPlugin({

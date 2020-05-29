@@ -45,7 +45,7 @@
     "zip:ext:chrome": "zip -r chrome-extension/chrome-extension.zip chrome-extension",
     "zip:ext:whale": "zip -r whale-extension/whale-extension.zip whale-extension",
     "zip": "npm run zip:ext:chrome && npm run zip:ext:whale",
-    "dev": "webpack-dev-server --config=webpack.dev.config.js --progress --open",
+    "dev": "webpack-dev-server --port 8081 --config=webpack.dev.config.js --progress --open",
     "test": "NODE_ENV=test jest --watch"
   },
   "repository": {
