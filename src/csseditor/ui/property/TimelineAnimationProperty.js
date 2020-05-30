@@ -103,7 +103,7 @@ export default class TimelineAnimationProperty extends BaseProperty {
     this.refresh();
   }
     
-  [EVENT('refreshTimeline', 'refreshSelection', 'refreshAllSelectArtBoard') + DEBOUNCE(100)] () {
+  [EVENT('refreshTimeline', 'refreshSelection', 'refreshArtboard') + DEBOUNCE(100)] () {
     this.refresh();
   }
 }

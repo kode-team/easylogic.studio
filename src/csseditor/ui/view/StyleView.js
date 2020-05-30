@@ -88,7 +88,9 @@ export default class StyleView extends UIElement {
   changeStyleHead (item) {
     var $temp = Dom.create('div')        
 
-    $temp.html(this.makeStyle(item)).children().forEach($item => {
+    const styleTag = this.makeStyle(item)
+
+    $temp.html(styleTag).children().forEach($item => {
       this.refs.$head.append($item);
     })
 
@@ -106,7 +108,7 @@ export default class StyleView extends UIElement {
   refreshStyleHeadOne (item, isOnlyOne = false) {
     var list = [item]
     if (!isOnlyOne) {
-      list = [item, ...item.allLayers]
+      list = item.allLayers
     }
 
     var selector = list.map(it => {

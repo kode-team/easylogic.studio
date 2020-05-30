@@ -202,15 +202,15 @@ export default class CSSEditor extends UIElement {
 
   [EVENT('refreshAllSelectProject')] () {      
     this.emit('refreshArtBoardList')    
-    this.trigger('refreshAllSelectArtBoard')
+    this.emit('refreshArtboard')
   }
 
-  [EVENT('refreshAllSelectArtBoard')] (...args) {      
-    this.emit('refreshLayerTreeView')    
-    this.emit('refreshAllCanvas', ...args);
-    this.emit('refreshStyleView');
-    this.emit('refreshAllElementBoundSize')   
-  }  
+  // [EVENT('refreshAllSelectArtBoard')] (...args) {      
+  //   this.emit('refreshLayerTreeView')    
+  //   this.emit('refreshAllCanvas', ...args);
+  //   this.emit('refreshStyleView');
+  //   this.emit('refreshAllElementBoundSize')   
+  // }  
 
   [DRAGOVER('$middle') + PREVENT] (e) {}
 

@@ -81,16 +81,6 @@ export default class ArtBoardProperty extends BaseProperty {
     this.modifyDoneInputEditing(e.$dt);
   }
 
-  selectArtboard(artboard) {
-
-    if (artboard) {
-      this.$selection.selectArtboard(artboard)      
-      this.$selection.select(artboard)
-    }
-
-    this.emit('refreshAllSelectArtBoard');
-    this.emit('refreshSelection')
-  }
 
   [CLICK('$add')] (e) {
     this.emit('addArtBoard');
@@ -105,7 +95,7 @@ export default class ArtBoardProperty extends BaseProperty {
 
       var artboard = project.artboards[index] || project.artboards[index - 1];
 
-      this.selectArtboard(artboard);
+      this.emit('selectArtboard', artboard);
     }
   }
 
@@ -119,7 +109,7 @@ export default class ArtBoardProperty extends BaseProperty {
 
       var artboard = project.artboards[index]
 
-      this.selectArtboard(artboard);
+      this.emit('selectArtboard', artboard);
     }
   }
 
