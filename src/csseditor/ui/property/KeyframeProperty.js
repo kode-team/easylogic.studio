@@ -229,7 +229,7 @@ export default class KeyFrameProperty extends BaseProperty {
     }
 
     this.refresh();
-    this.emit('refreshProject', current)
+    this.emit('refreshProject', project)
   }
 
 }
