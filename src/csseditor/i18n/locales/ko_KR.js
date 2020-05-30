@@ -129,6 +129,12 @@ export default {
     'image.property.width': '넓이',    
     'image.property.height': '높이',    
 
+    'video.property.title': '비디오',
+    'video.property.origin': '원본',    
+    'video.property.size': '크기',    
+    'video.property.width': '넓이',    
+    'video.property.height': '높이',            
+
     'motion.property.title': '모션',
 
     'path.data.property.title': '패스 정보',

@@ -127,6 +127,12 @@ export default {
     'image.property.width': 'Width',    
     'image.property.height': 'height',    
 
+    'video.property.title': 'Video',
+    'video.property.origin': 'Origin',    
+    'video.property.size': 'Size',    
+    'video.property.width': 'Width',    
+    'video.property.height': 'height',        
+
     'motion.property.title': 'Motion',
 
     'text.property.title': 'Text Style',

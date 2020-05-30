@@ -25,6 +25,7 @@ export default class ComponentItems extends UIElement {
             <AddCircle title='Circle' />         
             <AddText title='Text' />
             <AddImage title='Image' />
+            <AddVideo title='Video' />
           </div>
         </div>
         <div class='group'>

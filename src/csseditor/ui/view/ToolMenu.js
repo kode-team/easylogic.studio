@@ -17,6 +17,7 @@ export default class ToolMenu extends UIElement {
             <AddCircle />         
             <AddText />
             <AddImage />
+            <AddVideo />
             <div class='divider'></div>
             <AddDrawPath />
             <AddPath />

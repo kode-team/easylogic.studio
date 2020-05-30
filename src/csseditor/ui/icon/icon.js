@@ -129,6 +129,7 @@ import outline_rect from "./outline_rect";
 import outline_circle from "./outline_circle";
 import launch from "./launch";
 import pentool from "./pentool";
+import video from "./video";
 
 
 
@@ -136,6 +137,7 @@ import pentool from "./pentool";
 const alias = {
   fullscreen:  border_inner
 }
+
 
 export default {
   ...alias,
@@ -245,6 +247,7 @@ export default {
   border_all,
   border_inner,
   check,
+  video,
   arrowRight,
   screen,
   repeat,
