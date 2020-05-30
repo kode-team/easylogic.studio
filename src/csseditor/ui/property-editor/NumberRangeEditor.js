@@ -43,7 +43,7 @@ export default class NumberRangeEditor extends UIElement {
         
         return /*html*/`
         <div class='number-range-editor ${hasLabel} ${isRemovable} ${layoutClass}' data-selected-type='${type}'>
-            ${label ? `<label>${label}</label>` : '' }
+            ${label ? `<label title="${label}">${label}</label>` : '' }
             <div class='range-editor-type' data-type='range'>
                 <div class='area'>
                     <input type='range' ref='$property' value="${realValue}" min="${min}" max="${max}" step="${step}" />

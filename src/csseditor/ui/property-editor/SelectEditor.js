@@ -27,7 +27,7 @@ export default class SelectEditor extends UIElement {
         var hasTabIndex = !!tabIndex ? 'tabIndex="1"' : ''
         return /*html*/`
             <div class='select-editor ${hasLabel}'>
-                ${label ? `<label>${label}</label>` : '' }
+                ${label ? `<label title="${label}">${label}</label>` : '' }
                 <select ref='$options' ${hasTabIndex}></select>
             </div>
         `

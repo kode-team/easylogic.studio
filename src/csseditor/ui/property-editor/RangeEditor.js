@@ -72,7 +72,7 @@ export default class RangeEditor extends UIElement {
                 [layoutClass] : true 
             })
         })}>
-            ${label ? `<label>${label}</label>` : '' }
+            ${label ? `<label title="${label}">${label}</label>` : '' }
             <div class='range-editor-type' data-type='range'>
                 <input type='range' ref='$property' value="${realValue}" min="${min}" max="${max}" step="${step}" /> 
                 <div class='area' ref='$rangeArea'>

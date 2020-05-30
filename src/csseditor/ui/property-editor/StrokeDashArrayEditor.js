@@ -64,7 +64,7 @@ export default class StrokeDashArrayEditor extends UIElement {
         <div class='dasharray-item'>
           <NumberRangeEditor 
             ref='$${num}' 
-            label='${num}' 
+            label='${num}'
             key='${index}' 
             value="0" 
             min="0"
@@ -72,6 +72,7 @@ export default class StrokeDashArrayEditor extends UIElement {
             step="1"
             onchange="changeRangeEditor" 
           />
+          <button type="button" data-index="${index}" class='delete'>${icon.remove2}</button>
         </div>
       `
     });
@@ -88,6 +89,15 @@ export default class StrokeDashArrayEditor extends UIElement {
     this.state.value.push(0);
 
     this.refresh();
+  }
+
+  [CLICK('$body .delete')] (e) {
+    const index = +e.$dt.attr('data-index');
+
+    this.state.value.splice(index, 1);
+
+    this.refresh();
+    this.modifyStrokeDashArray();    
   }
 
 

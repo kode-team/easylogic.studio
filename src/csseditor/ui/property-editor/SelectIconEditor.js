@@ -29,7 +29,7 @@ export default class SelectIconEditor extends UIElement {
         var hasLabel = !!label ? 'has-label' : ''
         return /*html*/`
             <div class='select-icon-editor ${hasLabel}'>
-                ${label ? `<label>${label}</label>` : '' }
+                ${label ? `<label title="${label}">${label}</label>` : '' }
                 <div class='items' ref='$options'></div>
             </div>
         `

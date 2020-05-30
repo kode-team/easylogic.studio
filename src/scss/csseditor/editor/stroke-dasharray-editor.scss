@@ -1,17 +1,18 @@
 .stroke-dasharray-editor {
     .dasharray-item {
         margin-bottom: 3px;   
+        display:grid;
+        grid-template-columns: 1fr 20px;
+        grid-column-gap: 2px;
 
     }
 
 
     > .tools {
         label {
-            color: $font-color;
-            svg {
-                width: 16px;
-                height: 16px;
-            }
+            color: $selected-font-color;
+            vertical-align: middle;
+            cursor: pointer;
         }
     }
 

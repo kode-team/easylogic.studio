@@ -19,8 +19,10 @@ $border-radius: 3px;
             text-align: left;
             vertical-align: middle;
             padding: 2px 0px 2px 0px;
-            
             font-size: 11px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;            
         }
 
         &.block {

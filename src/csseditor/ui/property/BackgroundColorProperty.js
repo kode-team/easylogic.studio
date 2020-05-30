@@ -32,8 +32,8 @@ export default class BackgroundColorProperty extends BaseProperty {
             ref='$zIndex' 
             key='z-index' 
             label='${this.$i18n('background.color.property.zindex')}'
-            min="-1"
-            max="100000"
+            min="-1000"
+            max="1000"
             step="1"
             onchange="changeSelect" />
         </div>

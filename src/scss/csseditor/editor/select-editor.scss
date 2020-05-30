@@ -20,6 +20,9 @@
             vertical-align: middle;
             padding: 6px 4px 2px 0px;
             font-size: 11px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
             
         }
 
