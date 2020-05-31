@@ -13,6 +13,8 @@ export class AssetItem extends Item {
       svgimages: [],
       keyframes: [],      
       images: [],     //  { id: xxxx, url : '' }
+      videos: [],     //  { id: xxxx, url : '' }
+      audios: [],     //  { id: xxxx, url : '' }
       ...obj
     });
   }
@@ -185,7 +187,38 @@ export class AssetItem extends Item {
     return this.addImage(data)
   }  
 
-  /* color assets manage */ 
+
+
+  /* video assets manage */ 
+
+  removeVideo(removeIndex) {
+    this.removePropertyList(this.json.videos, removeIndex);
+  }      
+
+
+  copyVideo(index) {
+    this.copyPropertyList(this.json.videos, index);
+  }        
+
+  sortVideo(startIndex, targetIndex) {
+    this.sortItem(this.json.videos, startIndex, targetIndex);
+  }    
+
+
+  setVideoValue(index, value = {}) {
+    this.json.videos[index] = {...this.json.videos[index], ...value}
+  }  
+
+  addVideo(obj) {
+    this.json.videos.push(obj)
+    return obj; 
+  }
+
+  createVideo(data = {}) {
+    return this.addVideo(data)
+  }    
+
+  /* gradient assets manage */ 
 
 
   removeGradient(removeIndex) {

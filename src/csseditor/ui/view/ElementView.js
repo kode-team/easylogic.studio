@@ -9,6 +9,7 @@ import PathEditorView from "../view-items/PathEditorView";
 import GridLayoutLineView from "../view-items/GridLayoutLineView";
 import PathDrawView from "../view-items/PathDrawView";
 import BrushDrawView from "../view-items/BrushDrawView";
+import { isFunction } from "../../../util/functions/func";
 
 
 
@@ -63,6 +64,10 @@ export default class ElementView extends UIElement {
 
     [EVENT('afterChangeMode')] () {
         this.$el.attr('data-mode', this.$editor.mode);
+    }
+
+    [EVENT('refElement')] (id, callback) {
+        isFunction(callback) && callback(this.getElement(id))
     }
 
     getElement (id) {
@@ -252,10 +257,10 @@ export default class ElementView extends UIElement {
                 height: Length.px(rect.height.value / this.$editor.scale).floor()
             }
 
-            if (this.$editor.addComponentType === 'image') { 
-                this.emit('openImage', obj);
-            } else {
-                this.emit('newComponent', this.$editor.addComponentType, obj);
+            switch(this.$editor.addComponentType) {
+            case 'image': this.emit('openImage', obj); break;
+            case 'video': this.emit('openVideo', obj); break;
+            default: this.emit('newComponent', this.$editor.addComponentType, obj); break;
             }
 
         }

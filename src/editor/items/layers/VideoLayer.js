@@ -14,9 +14,24 @@ export class VideoLayer extends Layer {
       itemType: 'video',
       name: "New Video",
       elementType: 'video',
+
+      /** source property */
       src: '',
       srcType: 'video/mp4',
+
+      /** video property */
       controls: false,
+      preload: "auto",  // none, metadata
+      poster: "",
+      autoplay: false,
+      buffered: false, 
+      crossorigin: 'anonymous',   // or "use-credentials"
+      loop: false,
+      muted: false, 
+      played: false,
+
+
+
       ...obj
     });
   }
@@ -77,14 +92,30 @@ export class VideoLayer extends Layer {
   }
 
   get html () {
-    var {id, itemType, src, srcType, controls} = this.json;
+    var {
+      id, 
+      itemType, 
+      src, 
+      controls,
+      muted,
+      poster,
+      loop,
+      crossorigin,
+      autoplay
+    } = this.json;
 
     return /*html*/`
       <div class='element-item ${itemType}' data-id="${id}">
         ${this.toDefString}
-        <video ${OBJECT_TO_PROPERTY({ controls: true })} width="250">
-          <source src="${src}"
-                  type="${srcType}">
+        <video ${OBJECT_TO_PROPERTY({ 
+          controls,
+          src,
+          muted,
+          poster,
+          loop,
+          crossorigin,
+          autoplay
+        })}>
           Sorry, your browser doesn't support embedded videos.
         </video>
       </div>`
@@ -119,9 +150,7 @@ export class VideoLayer extends Layer {
     } else {
       return /*html*/ `
         ${this.toDefString}      
-        <video controls width="250" style="${CSS_TO_STRING(css)}" >
-          <source src="${src}"
-                  type="${srcType}">
+        <video src="${src}" controls width="250" style="${CSS_TO_STRING(css)}" >
           Sorry, your browser doesn't support embedded videos.
         </video>      
       `

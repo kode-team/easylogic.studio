@@ -258,6 +258,7 @@ export default {
 
     'gradient.picker.popup.title': 'Gradient & Image Picker',    
     'image.asset.property.title': 'Image',
+    'video.asset.property.title': 'Video',    
     'color.asset.property.title': 'Color',
     'gradient.asset.property.title': 'Gradient',
     'pattern.asset.property.title': 'Pattern',

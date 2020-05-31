@@ -1,38 +1,61 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, CLICK, BIND } from "../../../util/Event";
+import { LOAD, CLICK, BIND, DEBOUNCE } from "../../../util/Event";
 import { EVENT } from "../../../util/UIElement";
 import icon from "../icon/icon";
 import { Length } from "../../../editor/unit/Length";
 
+const video_dom_property = [
+  'audioTracks',
+  'autoplay',
+  'buffered',
+  'controller',
+  'controls',
+  'controlsList',
+  'crossOrigin',
+  'currentSrc',
+  'currentTime',
+  'defaultMuted',
+  'defaultPlaybackRate',
+  'duration',
+  'ended',
+  'error',
+  'initialTime',
+  'loop',
+  'mediaGroup',
+  'muted',
+  'networkState',
+  'onerror',
+  'paused',
+  'playbackRate',
+  'readyState',
+  'seekable',
+  'sinkId',
+  'src',
+  'srcObject',
+  'textTracks',
+  'videoTracks',
+  'volume'
+]
+
 export default class VideoProperty extends BaseProperty {
 
   getClassName() {
-    return 'item'
+    return 'item video-property'
   }
 
   getTitle() {
     return this.$i18n('video.property.title')
   }
 
+  initState() {
+    return {
+      $video: {el: {}}
+    }
+  }
+
   getBody() {
-    return `<div ref='$body' style='padding-top: 3px;'></div>`;
+    return /*html*/`<div ref='$body' style='padding-top: 3px;'></div>`;
   }  
-
-  getFooter() {
-    return /*html*/`
-      <div>
-        <label> ${this.$i18n('video.property.origin')} </label> <span ref='$sizeInfo'></span> <button type="button" ref='$resize'>${icon.size}</button>
-      </div>
-    `
-  }
-
-  [EVENT('changeImageSize')] (key, value) {
-    var [width, height] = value.split('x').map(it => Length.px(it))
-
-    this.emit('setAttribute', { 
-      width, height
-    })
-  }
 
   [CLICK('$resize')] () {
     var current = this.$selection.current;
@@ -49,23 +72,28 @@ export default class VideoProperty extends BaseProperty {
 
   }
 
-  [BIND('$sizeInfo')] () {
-    var current = this.$selection.current || {};
-
-    return {
-      innerHTML: `${this.$i18n('video.property.width')}: ${current.naturalWidth}, ${this.$i18n('video.property.height')}: ${current.naturalHeight}`
-    }
+  makeVideoInfo() {
+    return video_dom_property.map(p => {
+      return /*html*/`
+        <div class='video-info-item'>
+          <label>${p}</label><span>${this.state.$video.el[p]}</span>
+        </div>
+      `
+    }).join('');
   }
 
   [LOAD("$body")]() { 
     var current = this.$selection.current || {};
 
     var src = current['src'] || ''
-    return /*html*/`<ImageSelectEditor 
-              ref='$1' 
-              key='src' 
-              value="${src}" 
-              onchange="changeSelect" />`;
+    return /*html*/`
+      <div>
+        <ImageSelectEditor ref='$1'  key='src' value="${src}" onchange="changeSelect" />
+        <div class='video-info'>
+          ${this.makeVideoInfo()}
+        </div>
+      </div>
+      `;
   }
 
   [EVENT('changeSelect')] (key, value, info) {
@@ -77,8 +105,6 @@ export default class VideoProperty extends BaseProperty {
         ...info
       })
 
-      this.bindData('$sizeInfo')
-
       this.emit('setAttribute', {
         src: value,
         ...info
@@ -86,9 +112,22 @@ export default class VideoProperty extends BaseProperty {
     }
   }
 
-  [EVENT('refreshSelection')]() {
-
+  [EVENT('refreshSelection') + DEBOUNCE(100)]() {
+    const current = this.$selection.current;
     this.refreshShow(['video'])
+
+    if (current.itemType === 'video') {
+      this.emit('refElement', current.id, ($el) => {
+        const $video = $el.$('video');
+
+        this.state.$video = $video; 
+
+        console.log(this.state.$video);
+
+        this.load('$body');
+      })
+  
+    }
 
   }
 }

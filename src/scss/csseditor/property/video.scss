@@ -1,0 +1,13 @@
+.video-property {
+    .video-info {
+        
+        .video-info-item {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-column-gap: 2px;
+            label {
+                font-weight: bold;
+            }
+        }
+    }
+}

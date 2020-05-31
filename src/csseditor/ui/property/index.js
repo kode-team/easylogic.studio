@@ -39,6 +39,7 @@ import SVGFilterAssetsProperty from "./SVGFilterAssetsProperty";
 import AlignmentProperty from "./AlignmentProperty";
 import MotionProperty from "./MotionProperty";
 import ImageAssetsProperty from "./ImageAssetsProperty";
+import VideoAssetsProperty from "./VideoAssetsProperty";
 import ComponentProperty from "./ComponentProperty";
 import TimelineAnimationProperty from "./TimelineAnimationProperty";
 import BorderNewProperty from "./BorderNewProperty";
@@ -67,6 +68,7 @@ export default {
   TimelineAnimationProperty,
   ComponentProperty,
   ImageAssetsProperty,
+  VideoAssetsProperty,
   MotionProperty,
   AlignmentProperty,
   SVGFilterAssetsProperty,

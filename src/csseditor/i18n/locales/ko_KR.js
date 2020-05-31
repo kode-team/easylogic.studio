@@ -263,6 +263,7 @@ export default {
     'gradient.picker.popup.title': '그라디언트와 이미지',
 
     'image.asset.property.title': '이미지',
+    'video.asset.property.title': '비디오',    
     'color.asset.property.title': '색',
     'gradient.asset.property.title': '그라디언트', 
     'pattern.asset.property.title': '패턴', 

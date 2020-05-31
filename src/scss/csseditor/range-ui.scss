@@ -20,7 +20,7 @@ input[type=range]::-webkit-slider-runnable-track {
 input[type=range]::-webkit-slider-thumb {
   height: $range-thumb-height;
   width: $range-thumb-width;
-  border-radius: $range-thumb-border-radius;
+  border-radius: 100%;
   background: $range-thumb-color;
   cursor: pointer;
   appearance: none;
