@@ -112,6 +112,8 @@ export default class CSSPropertyEditor extends UIElement {
           return '';
         case 'opacity':
           return 1; 
+        case 'currentTime':
+          return 0; 
         default: 
           return Length.px(0);
       }
@@ -202,31 +204,31 @@ export default class CSSPropertyEditor extends UIElement {
         </div>
       `            
     } else if (property.key === 'var') {
-      return `
+      return /*html*/`
         <div class='property-editor'>
           <VarEditor ref='$var${index}' value="${property.value}" onChange="changeVar" />
         </div>
       `       
     } else if (property.key === 'transform') {
-      return `
+      return /*html*/`
         <div class='property-editor'>
           <TransformEditor ref='$transform${index}' value="${property.value}" onChange="changeTransform" />
         </div>
       `                  
     } else if (property.key === 'transform-origin') {
-      return `
+      return /*html*/`
         <div class='property-editor'>
           <TransformOriginEditor ref='$transformOrigin${index}' value="${property.value}" onChange="changeTransformOrigin" />
         </div>
       `                  
     } else if (property.key === 'perspective-origin') {
-      return `
+      return /*html*/`
         <div class='property-editor'>
           <PerspectiveOriginEditor ref='$perspectiveOrigin${index}' value="${property.value}" onChange="changePerspectiveOrigin" />
         </div>
       `               
     } else if (property.key === 'fill-rule') {
-      return `
+      return /*html*/`
         <div class='property-editor'>
           <SelectEditor 
           ref='$fillRule${index}' 
@@ -238,7 +240,7 @@ export default class CSSPropertyEditor extends UIElement {
         </div>
       `       
     } else if (property.key === 'stroke-linecap') {
-      return `
+      return /*html*/`
         <div class='property-editor'>
           <SelectEditor 
           ref='$strokeLinecap${index}' 
@@ -251,7 +253,7 @@ export default class CSSPropertyEditor extends UIElement {
       `       
       
     } else if (property.key === 'stroke-linejoin') {
-      return `
+      return /*html*/`
         <div class='property-editor'>
           <SelectEditor 
           ref='$strokeLinejoin${index}' 
@@ -274,7 +276,7 @@ export default class CSSPropertyEditor extends UIElement {
         </div>
       `   
     } else if (property.key === 'stroke-dasharray') {
-      return `
+      return /*html*/`
         <StrokeDashArrayEditor 
           ref='$strokeDashArray${index}' 
           key='stroke-dasharray'
@@ -283,7 +285,7 @@ export default class CSSPropertyEditor extends UIElement {
         />
       `      
     } else if (property.key === 'border-radius') {
-      return `
+      return /*html*/`
         <BorderRadiusEditor 
           ref='$borderRadius${index}' 
           key='border-radius'
@@ -292,7 +294,7 @@ export default class CSSPropertyEditor extends UIElement {
         />
       `
     } else if (property.key === 'border') {
-      return `
+      return /*html*/`
         <BorderEditor 
           ref='$border${index}' 
           key='border'
@@ -301,7 +303,7 @@ export default class CSSPropertyEditor extends UIElement {
         />
       `      
     } else if (property.key === 'clip-path') {
-      return `
+      return /*html*/`
         <ClipPathEditor 
           ref='$clipPath${index}' 
           key='clip-path'
@@ -323,7 +325,7 @@ export default class CSSPropertyEditor extends UIElement {
       `             
     }
 
-    return `
+    return /*html*/`
       <div class='property-editor'>
         ???
 
@@ -430,14 +432,24 @@ export default class CSSPropertyEditor extends UIElement {
       case 'fill-opacity':        
       case 'stroke-dashoffset':
       case 'offset-distance':
+      case 'currentTime':
+
+        let min = 0;
+        let max = 1; 
+        let step = 0.01; 
+
+        if (property.key === 'currentTime') {
+          max = 100; // 실제 레이어 데이타로 업데이트 해야함. 
+        }
+
         return /*html*/`
           <div class='property-editor'>
             <NumberRangeEditor 
               ref='$opacity${index}' 
               key='${property.key}' 
-              min="0"
-              max="1"
-              step="0.01"
+              min="${min}"
+              max="${max}"
+              step="${step}"
               value="${property.value || 1}"
               selected-unit='number'
               removable="true"

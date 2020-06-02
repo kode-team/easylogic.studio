@@ -87,13 +87,52 @@ export default class VideoProperty extends BaseProperty {
 
     var src = current['src'] || ''
     return /*html*/`
-      <div>
         <ImageSelectEditor ref='$1'  key='src' value="${src}" onchange="changeSelect" />
+        <div>
+          <button type="button" ref='$play'>Play</button>
+        </div>
+        <div class='property-item animation-property-item'>
+          <div class='group'>
+            <span class='add-timeline-property' data-property='currentTime'></span>
+          </div>
+          <NumberRangeEditor 
+            ref='$currentTime' 
+            key='currentTime' 
+            label='Current Time'
+            min="0"
+            max="${this.state.$video.el.duration}"
+            step="${16/1000}"
+            onchange="changeValue" />
+        </div>
+        <div class='property-item animation-property-item'>
+          <div class='group'>
+            <span class='add-timeline-property' data-property='playbackRate'></span>
+          </div>
+          <NumberRangeEditor 
+            ref='$playbackRate' 
+            key='playbackRate' 
+            label='Playback Rate'
+            min="0"
+            max="1"
+            step="0.001"
+            onchange="changeValue" />
+        </div>        
         <div class='video-info'>
           ${this.makeVideoInfo()}
         </div>
-      </div>
       `;
+  }
+
+  [CLICK('$play')] () {
+    if (this.state.$video) {
+      this.state.$video.el.play();
+    }
+  }
+
+  [EVENT('changeValue') + DEBOUNCE(100)] (key, value) {
+    if (!this.state.$video) return;
+
+    this.emit('setAttribute', { [key]: value }, null, true);
   }
 
   [EVENT('changeSelect')] (key, value, info) {
@@ -116,13 +155,11 @@ export default class VideoProperty extends BaseProperty {
     const current = this.$selection.current;
     this.refreshShow(['video'])
 
-    if (current.itemType === 'video') {
+    if (current && current.is('video')) {
       this.emit('refElement', current.id, ($el) => {
         const $video = $el.$('video');
 
         this.state.$video = $video; 
-
-        console.log(this.state.$video);
 
         this.load('$body');
       })

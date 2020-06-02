@@ -3,6 +3,7 @@ import Dom from "../../../util/Dom";
 import { CSS_TO_STRING, OBJECT_TO_PROPERTY } from "../../../util/functions/func";
 import icon from "../../../csseditor/ui/icon/icon";
 import { ComponentManager } from "../../manager/ComponentManager";
+import { round } from "../../../util/functions/math";
 
 export class VideoLayer extends Layer {
 
@@ -29,9 +30,8 @@ export class VideoLayer extends Layer {
       loop: false,
       muted: false, 
       played: false,
-
-
-
+      currentTime: 0,
+      playbackRate: 1.0,
       ...obj
     });
   }
@@ -65,16 +65,22 @@ export class VideoLayer extends Layer {
   }
 
 
-  updateFunction (currentElement, isChangeFragment = true) {
-    var {src} = this.json;     
+  updateFunction (currentElement, isChangeFragment = true, isLast = false, context = null) {
+    var {src, currentTime} = this.json;     
 
     if (isChangeFragment) {
       //TODO: video 속성들 재설정 할 수 있게 기능 추가 해야함 
-      // currentElement.$('video source').attr('src', src);
+      // 여기는 속성만 존재해야함. 
 
+      // 드래그 할 때 이쪽으로 들어옴. 
+      // 전체 사이즈가 바뀌기 때문에 내부에 영역을 바꿔야 하는 애들은 이걸 활용을 해야함. 
+      // 비디오 태그는 이 상태가 필요 없으니 그냥 아무것도 안 하면 됨. 
+
+      console.log({currentElement, isChangeFragment})      
     }
 
-    super.updateFunction(currentElement, isChangeFragment);
+    // 다만 여기는 해야함. filter 같은게 적용될 수도 있으니.. 구조를 맞춰야 할 듯 
+    super.updateFunction(currentElement, isChangeFragment, isLast, context);
 
   }      
 

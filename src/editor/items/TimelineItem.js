@@ -3,6 +3,7 @@ import { uuidShort } from "../../util/functions/math";
 import { isUndefined, isNotUndefined, clone } from "../../util/functions/func";
 import { second, timecode, framesToTimecode } from "../../util/functions/time";
 import { createInterpolateFunction, createTimingFunction } from "../util/interpolate";
+import Dom from "../../util/Dom";
 
 export class TimelineItem extends DomItem {
   getDefaultObject(obj = {}) {
@@ -104,6 +105,7 @@ export class TimelineItem extends DomItem {
       return ;
     }
 
+    let layerElement = Dom.body().$(`[data-id="${layerId}"]`);
     let editorString = p.keyframes.map(it => it.editor)[0];
     this.json.compiledTimeline[key] = p.keyframes.map( (offset, index) => {
 
@@ -126,7 +128,7 @@ export class TimelineItem extends DomItem {
         startValue: offset.value,
         endValue: nextOffset.value,
         timing: offset.timing,
-        interpolateFunction: createInterpolateFunction(layer, p.property, offset.value, nextOffset.value, offset.editor, artboard),
+        interpolateFunction: createInterpolateFunction(layer, p.property, offset.value, nextOffset.value, offset.editor, artboard, layerElement),
         timingFunction: createTimingFunction(offset.timing)
       }
 
@@ -145,7 +147,7 @@ export class TimelineItem extends DomItem {
         t = (time - it.startTime)/totalT;
       }
 
-      return it.interpolateFunction(it.timingFunction(t), t, it.timingFunction);
+      return it.interpolateFunction(it.timingFunction(t), t, totalT, it.timingFunction);
     }
   }
 
@@ -162,8 +164,8 @@ export class TimelineItem extends DomItem {
       var time = timeline.currentTime;
 
       this.searchTimelineOffset(time).filter(filterFunction).forEach(it => {
-
-        if (it.property === 'offset-path') {
+        // play 속성 (video, audio) , 원하는 구간을 play 하고 멈춘다. 
+        if (it.property === 'offset-path' || it.property === 'play') {
 
           // 객체 속성은 function 안에서 변경한다. 
           it.func(time)

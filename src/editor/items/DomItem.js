@@ -827,7 +827,7 @@ ${this.toSelectorString(prefix)}
 
 
 
-  updateFunction (currentElement, isChangeFragment = true) {
+  updateFunction (currentElement, isChangeFragment = true, isLast = false, context = null) {
 
     if (isChangeFragment) {
       var $svg = currentElement.$(`[data-id="${this.innerSVGId}"]`);  

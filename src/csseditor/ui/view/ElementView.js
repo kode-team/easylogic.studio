@@ -328,7 +328,7 @@ export default class ElementView extends UIElement {
     
         this.selectCurrent(...this.$selection.items)
         this.$selection.setRectCache()
-        this.emit('refreshSelection');
+        this.emit('resetSelection');
         this.children.$selectionTool.initMoveType();
     }
 
@@ -506,11 +506,20 @@ export default class ElementView extends UIElement {
 
     updateElement (item, isChangeFragment = true, isLast = false) {
         if (item) {
-            item.updateFunction(this.getElement(item.id), isChangeFragment, isLast);
+            item.updateFunction(this.getElement(item.id), isChangeFragment, isLast, this);
             this.updateRealPositionByItem(item);
         }
 
     }
+
+    timeupdate (e) {
+        console.log(e.target.currentTime);
+    }
+
+    seeked (e) {
+        console.log('seeked', e.target.currentTime);
+    }
+
 
     [EVENT('playTimeline', 'moveTimeline')] () {
 

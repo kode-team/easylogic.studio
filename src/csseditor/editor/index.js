@@ -8,7 +8,7 @@ import CanvasView from "../ui/view/CanvasView";
 import ToolMenu from "../ui/view/ToolMenu";
 
 import UIElement, { EVENT } from "../../util/UIElement";
-import { DRAGOVER, DROP, PREVENT, TRANSITIONEND, KEYDOWN, KEYUP, IF, POINTERSTART, MOVE, END, BIND } from "../../util/Event";
+import { DRAGOVER, DROP, PREVENT, TRANSITIONEND, KEYDOWN, KEYUP, IF, POINTERSTART, MOVE, END, BIND, CUSTOM } from "../../util/Event";
 import Inspector from "../ui/control/Inspector";
 
 
