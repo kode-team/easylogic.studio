@@ -2,7 +2,7 @@ import SelectEditor from "./SelectEditor";
 import { blend_list } from "../../../editor/util/Resource";
 
 
-export class BlendSelectEditor extends SelectEditor {
+export default class BlendSelectEditor extends SelectEditor {
 
     getBlendList () {
         return blend_list.split(',').map(it => {

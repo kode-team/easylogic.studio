@@ -1,0 +1,48 @@
+.media-progress-editor {
+
+    height: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background-color: rgba(0, 0, 0, 0.3);
+    position: relative; 
+    padding: 0px 10px;
+
+    .progress-bar {
+        height: 2px;
+        display: block;
+        background-color: $font-color;
+        position: absolute;
+        left: 0px;
+        width: 100%;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .bar {
+        height: 2px;
+        position: absolute;
+        display: inline-block;        
+        left: 10%;
+        width: 50%;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: $selected-color;
+    }
+
+    .drag-item {
+        position: absolute;
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 100%;
+        background-color: $selected-color;        
+        cursor: pointer;        
+        transform: translate(-50%, -50%);       
+        top: 50%; 
+
+        &.end {
+            background-color: yellow;
+        }
+    }
+
+}

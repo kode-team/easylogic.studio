@@ -87,7 +87,9 @@ export default class VideoProperty extends BaseProperty {
 
     var src = current['src'] || ''
     return /*html*/`
-        <ImageSelectEditor ref='$1'  key='src' value="${src}" onchange="changeSelect" />
+        <div>
+          <MediaProgressEditor ref='$progress'  key='play' value="${current.play}" onchange="changeSelect" />
+        </div>
         <div>
           <button type="button" ref='$play'>Play</button>
         </div>

@@ -27,7 +27,7 @@ import PathStringManager from "../../../editor/parse/PathStringManager";
 import ColorMatrixEditor from "./ColorMatrixEditor";
 import svgFilterPreset from "./svg-filter-preset";
 import ImageSelectEditor from "./ImageSelectEditor";
-import { BlendSelectEditor } from "./BlendSelectEditor";
+import BlendSelectEditor from "./BlendSelectEditor";
 
 const filterTypes = [
   {label: 'GRAPHIC REFERENCES', items : [

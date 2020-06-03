@@ -32,6 +32,9 @@ export class VideoLayer extends Layer {
       played: false,
       currentTime: 0,
       playbackRate: 1.0,
+
+      //
+      play: '0:1',      // 0 is first,  1 is last
       ...obj
     });
   }
@@ -76,7 +79,7 @@ export class VideoLayer extends Layer {
       // 전체 사이즈가 바뀌기 때문에 내부에 영역을 바꿔야 하는 애들은 이걸 활용을 해야함. 
       // 비디오 태그는 이 상태가 필요 없으니 그냥 아무것도 안 하면 됨. 
 
-      console.log({currentElement, isChangeFragment})      
+      // console.log({currentElement, isChangeFragment})      
     }
 
     // 다만 여기는 해야함. filter 같은게 적용될 수도 있으니.. 구조를 맞춰야 할 듯 
