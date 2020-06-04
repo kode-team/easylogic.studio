@@ -19,7 +19,7 @@ import { makeInterpolatePath } from "./interpolate-functions/svg/makeInterpolate
 import { makeInterpolatePolygon } from "./interpolate-functions/svg/makeInterpolatePolygon";
 import { makeInterpolateOffsetPath } from "./interpolate-functions/makeInterpolateOffsetPath";
 import { makeInterpolateText } from "./interpolate-functions/makeInterpolateText";
-import { makeInterpolatePlay } from "./interpolate-functions/makeInterpolatePlay";
+import { makeInterpolatePlayTime } from "./interpolate-functions/makeInterpolatePlayTime";
 
 const DEFAULT_FUCTION = () => (rate, t) => { } 
 
@@ -58,8 +58,8 @@ function makeInterpolateCustom (property) {
         return makeInterpolateOffsetPath
     case 'text': 
         return makeInterpolateText
-    case 'play':
-        return makeInterpolatePlay
+    case 'playTime':
+        return makeInterpolatePlayTime
     }
 }
 

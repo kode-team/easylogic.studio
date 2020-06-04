@@ -22,6 +22,7 @@ import PathDataEditor from "./PathDataEditor";
 import PolygonDataEditor from "./PolygonDataEditor";
 import OffsetPathListEditor from "./OffsetPathListEditor";
 import BorderEditor from "./BorderEditor";
+import MediaProgressEditor from './MediaProgressEditor';
 
 export default class CSSPropertyEditor extends UIElement {
 
@@ -45,7 +46,8 @@ export default class CSSPropertyEditor extends UIElement {
       ClipPathEditor,
       PathDataEditor,
       PolygonDataEditor,
-      OffsetPathListEditor
+      OffsetPathListEditor,
+      MediaProgressEditor
     }
   }
 
@@ -103,6 +105,7 @@ export default class CSSPropertyEditor extends UIElement {
         case 'transform':          
         case 'transform-origin':
         case 'perspective-origin':
+        case 'playTime':
           return Length.string('');          
         case 'offset-distance': 
           return Length.percent(0);
@@ -112,8 +115,6 @@ export default class CSSPropertyEditor extends UIElement {
           return '';
         case 'opacity':
           return 1; 
-        case 'currentTime':
-          return 0; 
         default: 
           return Length.px(0);
       }
@@ -322,7 +323,11 @@ export default class CSSPropertyEditor extends UIElement {
     } else if (property.key === 'offset-path') {
       return /*html*/`
         <OffsetPathListEditor ref='$offsetPathList${index}' key='offset-path' value='${property.value}' onchange='changeSelect' />
-      `             
+      `         
+    } else if (property.key === 'playTime') {
+      return /*html*/`
+        <MediaProgressEditor ref='$playTime${index}'  key='playTime' value="${property.value}" onchange="changeSelect" />      
+      `                   
     }
 
     return /*html*/`
@@ -420,6 +425,7 @@ export default class CSSPropertyEditor extends UIElement {
       case 'd':
       case 'points':
       case 'offset-path':
+      case 'playTime':
         return this.makeIndivisualPropertyEditor(property, index);
       case 'color':
       case 'background-color':
@@ -432,15 +438,10 @@ export default class CSSPropertyEditor extends UIElement {
       case 'fill-opacity':        
       case 'stroke-dashoffset':
       case 'offset-distance':
-      case 'currentTime':
 
         let min = 0;
         let max = 1; 
         let step = 0.01; 
-
-        if (property.key === 'currentTime') {
-          max = 100; // 실제 레이어 데이타로 업데이트 해야함. 
-        }
 
         return /*html*/`
           <div class='property-editor'>

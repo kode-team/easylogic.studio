@@ -1,16 +1,23 @@
 .media-progress-editor {
 
-    height: 10px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    background-color: rgba(0, 0, 0, 0.3);
-    position: relative; 
-    padding: 0px 10px;
+    > * {
+        margin-bottom: 2px;
+    }
+
+    .drag-area {
+        height: 10px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        background-color: rgba(0, 0, 0, 0.3);
+        position: relative; 
+        padding: 0px 10px;
+    }
+
 
     .progress-bar {
         height: 2px;
         display: block;
-        background-color: $font-color;
+        background-color: #2b2b2b;
         position: absolute;
         left: 0px;
         width: 100%;

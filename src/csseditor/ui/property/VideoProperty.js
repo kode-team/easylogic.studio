@@ -5,35 +5,35 @@ import icon from "../icon/icon";
 import { Length } from "../../../editor/unit/Length";
 
 const video_dom_property = [
-  'audioTracks',
-  'autoplay',
-  'buffered',
-  'controller',
-  'controls',
-  'controlsList',
-  'crossOrigin',
-  'currentSrc',
-  'currentTime',
-  'defaultMuted',
-  'defaultPlaybackRate',
+  // 'audioTracks',
+  // 'autoplay',
+  // 'buffered',
+  // 'controller',
+  // 'controls',
+  // 'controlsList',
+  // 'crossOrigin',
+  // 'currentSrc',
+  // 'currentTime',
+  // 'defaultMuted',
+  // 'defaultPlaybackRate',
   'duration',
-  'ended',
-  'error',
-  'initialTime',
-  'loop',
-  'mediaGroup',
-  'muted',
-  'networkState',
-  'onerror',
-  'paused',
-  'playbackRate',
-  'readyState',
-  'seekable',
-  'sinkId',
-  'src',
-  'srcObject',
-  'textTracks',
-  'videoTracks',
+  // 'ended',
+  // 'error',
+  // 'initialTime',
+  // 'loop',
+  // 'mediaGroup',
+  // 'muted',
+  // 'networkState',
+  // 'onerror',
+  // 'paused',
+  // 'playbackRate',
+  // 'readyState',
+  // 'seekable',
+  // 'sinkId',
+  // 'src',
+  // 'srcObject',
+  // 'textTracks',
+  // 'videoTracks',
   'volume'
 ]
 
@@ -74,6 +74,7 @@ export default class VideoProperty extends BaseProperty {
 
   makeVideoInfo() {
     return video_dom_property.map(p => {
+      console.log(p, this.state.$video.el)
       return /*html*/`
         <div class='video-info-item'>
           <label>${p}</label><span>${this.state.$video.el[p]}</span>
@@ -84,41 +85,17 @@ export default class VideoProperty extends BaseProperty {
 
   [LOAD("$body")]() { 
     var current = this.$selection.current || {};
-
-    var src = current['src'] || ''
     return /*html*/`
-        <div>
-          <MediaProgressEditor ref='$progress'  key='play' value="${current.play}" onchange="changeSelect" />
+        <div class='property-item animation-property-item full'>
+          <div class='group'>
+            <span class='add-timeline-property' data-property='playTime'></span>
+            Play Time
+          </div>
+          <MediaProgressEditor ref='$progress'  key='play' value="${current.playTime}" onchange="changeSelect" />
         </div>
         <div>
           <button type="button" ref='$play'>Play</button>
         </div>
-        <div class='property-item animation-property-item'>
-          <div class='group'>
-            <span class='add-timeline-property' data-property='currentTime'></span>
-          </div>
-          <NumberRangeEditor 
-            ref='$currentTime' 
-            key='currentTime' 
-            label='Current Time'
-            min="0"
-            max="${this.state.$video.el.duration}"
-            step="${16/1000}"
-            onchange="changeValue" />
-        </div>
-        <div class='property-item animation-property-item'>
-          <div class='group'>
-            <span class='add-timeline-property' data-property='playbackRate'></span>
-          </div>
-          <NumberRangeEditor 
-            ref='$playbackRate' 
-            key='playbackRate' 
-            label='Playback Rate'
-            min="0"
-            max="1"
-            step="0.001"
-            onchange="changeValue" />
-        </div>        
         <div class='video-info'>
           ${this.makeVideoInfo()}
         </div>
@@ -137,31 +114,30 @@ export default class VideoProperty extends BaseProperty {
     this.emit('setAttribute', { [key]: value }, null, true);
   }
 
-  [EVENT('changeSelect')] (key, value, info) {
-    var current = this.$selection.current;
 
-    if (current) {
-      current.reset({
-        src: value,
-        ...info
-      })
-
-      this.emit('setAttribute', {
-        src: value,
-        ...info
-      }, current.id);      
-    }
+  [EVENT('changeSelect')] (key, value) {
+    this.emit('setAttribute', {
+      [key]: value,
+    });
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
     const current = this.$selection.current;
     this.refreshShow(['video'])
 
+
+    console.log(current);
+
     if (current && current.is('video')) {
       this.emit('refElement', current.id, ($el) => {
         const $video = $el.$('video');
 
         this.state.$video = $video; 
+        let [start, end ] = current.playTime.split(":")
+
+        current.reset({
+          playTime: `${start}:${end}:${$video.el.duration}`
+        })
 
         this.load('$body');
       })

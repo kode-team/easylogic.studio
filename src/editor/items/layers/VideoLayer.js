@@ -34,7 +34,7 @@ export class VideoLayer extends Layer {
       playbackRate: 1.0,
 
       //
-      play: '0:1',      // 0 is first,  1 is last
+      playTime: '0:1',      // 0 is first,  1 is last
       ...obj
     });
   }

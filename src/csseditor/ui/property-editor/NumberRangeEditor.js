@@ -55,6 +55,18 @@ export default class NumberRangeEditor extends UIElement {
     `
     }
 
+    setMin (value) {
+        this.setState({
+            min: Length.parse(value)
+        })
+    }
+
+    setMax (value) {
+        this.setState({
+            max: Length.parse(value)
+        })
+    }    
+
     getValue() {
         return this.state.value; 
     }
