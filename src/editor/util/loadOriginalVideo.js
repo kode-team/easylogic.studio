@@ -9,10 +9,15 @@ export default function loadOriginalVideo(obj, callback) {
             naturalWidth: Length.px(video.videoWidth),
             naturalHeight: Length.px(video.videoHeight), 
             width: Length.px(video.videoWidth),
-            height: Length.px(video.videoHeight)
+            height: Length.px(video.videoHeight),
+            duration: video.duration,
+            playTime: `0:1:${video.duration}`,
+            volume: video.volume,
+            muted: video.muted
         }
 
         callback && callback(info, video);
     }
+
     video.src = obj.local; 
 }

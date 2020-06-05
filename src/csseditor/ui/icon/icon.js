@@ -130,8 +130,9 @@ import outline_circle from "./outline_circle";
 import launch from "./launch";
 import pentool from "./pentool";
 import video from "./video";
-
-
+import volume_down from "./volume_down";
+import volume_up from "./volume_up";
+import volume_off from "./volume_off";
 
 
 const alias = {
@@ -141,6 +142,9 @@ const alias = {
 
 export default {
   ...alias,
+  volume_down,
+  volume_up,
+  volume_off,
   pentool,
   launch,
   apps,
