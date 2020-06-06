@@ -130,10 +130,12 @@ export default {
     'image.property.height': '높이',    
 
     'video.property.title': '비디오',
-    'video.property.origin': '원본',    
-    'video.property.size': '크기',    
-    'video.property.width': '넓이',    
-    'video.property.height': '높이',            
+    'video.property.play': '시작',    
+    'video.property.pause': '멈춤',    
+    'video.property.volume': '볼륨',    
+    'video.property.playbackRate': '빠르기',        
+    'video.property.currentTime': '현재 시간',     
+    'video.property.playTime': '플레이 시간 간격',     
 
     'motion.property.title': '모션',
 

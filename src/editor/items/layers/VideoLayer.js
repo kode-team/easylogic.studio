@@ -34,7 +34,7 @@ export class VideoLayer extends Layer {
       playbackRate: 1.0,
 
       //
-      playTime: '0:1',      // 0 is first,  1 is last
+      playTime: '0:1:1',      // 0 is first,  1 is last
       ...obj
     });
   }
@@ -67,9 +67,15 @@ export class VideoLayer extends Layer {
 
   }
 
+  // 중복 업데이트 방지 
+  updateDiff ($video, key) {
+    if ($video.el[key] != this.json[key]) {
+      $video.el[key] = this.json[key]
+    }
+  }
 
   updateFunction (currentElement, isChangeFragment = true, isLast = false, context = null) {
-    var {src, currentTime} = this.json;     
+    var {src, currentTime, playbackRate} = this.json;     
 
     if (isChangeFragment) {
       //TODO: video 속성들 재설정 할 수 있게 기능 추가 해야함 
@@ -80,6 +86,14 @@ export class VideoLayer extends Layer {
       // 비디오 태그는 이 상태가 필요 없으니 그냥 아무것도 안 하면 됨. 
 
       // console.log({currentElement, isChangeFragment})      
+      const $video = currentElement.$('video')
+
+      if ($video) {
+
+        this.updateDiff($video, 'currentTime');
+        this.updateDiff($video, 'playbackRate');
+        this.updateDiff($video, 'volume');
+      }
     }
 
     // 다만 여기는 해야함. filter 같은게 적용될 수도 있으니.. 구조를 맞춰야 할 듯 

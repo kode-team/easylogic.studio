@@ -80,20 +80,20 @@ export default class VideoProperty extends BaseProperty {
 
   [LOAD("$body")]() { 
     var current = this.$selection.current || {playTime: "0:1:1"};
-    var duration = current.playTime.split(":").pop()
+    var duration = (current.playTime || '0:1:1').split(":").pop()
     return /*html*/`
         <div ref='$tools' class='play-control' data-selected-value="${this.state.status}">
-          <button type="button" data-value="play" >${icon.play} Play</button>
-          <button type="button" data-value="pause">${icon.pause} Pause</button>      
+          <button type="button" data-value="play" >${icon.play} ${this.$i18n('video.property.play')}</button>
+          <button type="button" data-value="pause">${icon.pause}  ${this.$i18n('video.property.pause')}</button>      
           <div>
             <NumberRangeEditor ref='$currentTime' min="0" max="${duration}" value="0" step="0.001" onchange="changeCurrentTime" />
           </div>
         </div>    
-
+        <div class='divider'></div>
         <div class='property-item animation-property-item has-label'>        
           <div class='group'>
             <span class='add-timeline-property' data-property='volume'></span>
-            Volume
+            ${this.$i18n('video.property.volume')}
           </div>
           <div ref='$volume_control' class='volume-control' data-selected-value='${this.volumeStatus}'>
             <span data-value='muted'>${icon.volume_off}</span>
@@ -102,32 +102,42 @@ export default class VideoProperty extends BaseProperty {
             <input type="range" ref='$volume' min="0" max="1" step="0.001" value="${this.state.volume}" />
           </div>          
         </div>
+        <div class='property-item animation-property-item has-label'>        
+          <div class='group'>
+            <span class='add-timeline-property' data-property='playbackRate'></span>
+            ${this.$i18n('video.property.playbackRate')}
+          </div>
+          <div>
+            <NumberRangeEditor ref='$playbackRate' min="0.1" max="10" clamp="true" value="${this.state.playbackRate}" step="0.001" onchange="changePlaybackRate" />
+          </div>
+        </div>        
         <div class='property-item animation-property-item full'>
           <div class='group'>
             <span class='add-timeline-property' data-property='playTime'></span>
-            Play Time
+            ${this.$i18n('video.property.playTime')}
           </div>
           <MediaProgressEditor ref='$progress'  key='play' value="${current.playTime}" onchange="changeSelect" />
         </div>
       `;
   }
 
-  [EVENT('changeCurrentTime')] (key, value) {
-    this.setState({ currentTime: value}, false)
-    this.video.currentTime = this.state.currentTime;
-    this.$selection.reset({
-      currentTime: this.state.currentTime
-    });
-    
+  [EVENT('changeCurrentTime')] (key, currentTime) {
+    this.setState({ currentTime}, false)
+    // this.video.currentTime = currentTime;
+    this.emit('setAttribute', { currentTime }, null, true);
+  }
+
+  [EVENT('changePlaybackRate')] (key, playbackRate) {
+    this.setState({ playbackRate}, false)
+    // this.video.playbackRate = playbackRate;
+    this.emit('setAttribute', { playbackRate }, null, true);
   }
 
   [CHANGEINPUT('$volume')] (e) {
-    this.setState({ volume: Number(this.refs.$volume.value)}, false)
-    this.video.volume = this.state.volume;
+    const volume = Number(this.refs.$volume.value)
+    this.setState({ volume }, false)
     this.bindData('$volume_control')
-    this.$selection.reset({
-      volume: this.state.volume
-    });
+    this.emit('setAttribute', { volume }, null, true);
   }
 
   [BIND('$volume_control')] () {
@@ -179,8 +189,10 @@ export default class VideoProperty extends BaseProperty {
         currentTime: this.video.currentTime
       }, false)
       this.bindData('$tools');
-      this.children.$currentTime.setValue(this.video.currentTime)
     }
+
+    this.children.$currentTime.setValue(this.video.currentTime)
+    // this.emit('setAttribute', { currentTime: this.video.currentTime }, null, true);
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
@@ -194,7 +206,8 @@ export default class VideoProperty extends BaseProperty {
         this.state.$video = $video; 
 
         this.setState({
-          volume: current.volume
+          volume: current.volume,
+          playbackRate: current.playbackRate
         }, false)
 
         this.video.ontimeupdate = (e) => {

@@ -13,7 +13,8 @@ export default function loadOriginalVideo(obj, callback) {
             duration: video.duration,
             playTime: `0:1:${video.duration}`,
             volume: video.volume,
-            muted: video.muted
+            muted: video.muted,
+            placebackRate: video.playbackRate
         }
 
         callback && callback(info, video);

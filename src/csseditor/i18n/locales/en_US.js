@@ -128,10 +128,12 @@ export default {
     'image.property.height': 'height',    
 
     'video.property.title': 'Video',
-    'video.property.origin': 'Origin',    
-    'video.property.size': 'Size',    
-    'video.property.width': 'Width',    
-    'video.property.height': 'height',        
+    'video.property.play': 'Play',    
+    'video.property.pause': 'Pause',    
+    'video.property.volume': 'Volume',    
+    'video.property.playbackRate': 'Playback Rate',        
+    'video.property.currentTime': 'Current Time',  
+    'video.property.playTime': 'Play Time Distance',               
 
     'motion.property.title': 'Motion',
 

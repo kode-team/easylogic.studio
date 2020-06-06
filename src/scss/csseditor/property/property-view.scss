@@ -175,10 +175,11 @@
         grid-column-gap: 2px; 
 
         &.has-label {
-          grid-template-columns: 60px 1fr;
+          grid-template-columns: 100px 1fr;
 
           .group {
             padding-left: 12px;
+            padding-top: 5px;
             vertical-align: middle;
           }
         }
