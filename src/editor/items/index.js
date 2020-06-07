@@ -12,20 +12,23 @@ import { TextLayer } from "./layers/TextLayer";
 import { RectLayer } from "./layers/RectLayer";
 import { CircleLayer } from "./layers/CircleLayer";
 import { SVGBrushItem } from "./layers/SVGBrushItem";
+import { VideoLayer } from "./layers/VideoLayer";
+
 
 export default {
-    RectLayer,
-    CircleLayer,    
-    Layer,
     Project,
     ArtBoard,
-    Component,
-    CubeLayer,
-    CylinderLayer,
+    Layer,    
+    RectLayer,
+    CircleLayer,        
     ImageLayer,
+    TextLayer,
+    VideoLayer,
     SVGPathItem,
     SVGBrushItem,
     SVGTextItem,
-    SVGTextPathItem,
-    TextLayer
+    SVGTextPathItem,    
+    Component,    
+    CubeLayer,
+    CylinderLayer,    
 }

@@ -9,6 +9,7 @@ import PathEditorView from "../view-items/PathEditorView";
 import GridLayoutLineView from "../view-items/GridLayoutLineView";
 import PathDrawView from "../view-items/PathDrawView";
 import BrushDrawView from "../view-items/BrushDrawView";
+import { isFunction } from "../../../util/functions/func";
 
 
 
@@ -63,6 +64,10 @@ export default class ElementView extends UIElement {
 
     [EVENT('afterChangeMode')] () {
         this.$el.attr('data-mode', this.$editor.mode);
+    }
+
+    [EVENT('refElement')] (id, callback) {
+        isFunction(callback) && callback(this.getElement(id))
     }
 
     getElement (id) {
@@ -252,10 +257,10 @@ export default class ElementView extends UIElement {
                 height: Length.px(rect.height.value / this.$editor.scale).floor()
             }
 
-            if (this.$editor.addComponentType === 'image') { 
-                this.emit('openImage', obj);
-            } else {
-                this.emit('newComponent', this.$editor.addComponentType, obj);
+            switch(this.$editor.addComponentType) {
+            case 'image': this.emit('openImage', obj); break;
+            case 'video': this.emit('openVideo', obj); break;
+            default: this.emit('newComponent', this.$editor.addComponentType, obj); break;
             }
 
         }
@@ -507,6 +512,15 @@ export default class ElementView extends UIElement {
 
     }
 
+    // 타임라인에서 객체를 업데이트 할 때 발생함. 
+    updateTimelineElement (item, isChangeFragment = true, isLast = false) {
+        if (item) {
+            item.updateFunction(this.getElement(item.id), isChangeFragment, isLast, this, true);
+            this.updateRealPositionByItem(item);
+        }
+
+    }    
+
     [EVENT('playTimeline', 'moveTimeline')] () {
 
         var artboard = this.$selection.currentArtboard;
@@ -514,7 +528,12 @@ export default class ElementView extends UIElement {
         if (artboard) {
             var timeline = artboard.getSelectedTimeline();
             timeline.animations.map(it => artboard.searchById(it.id)).forEach(current => {
-                this.updateElement(current);
+                // 레이어 업데이트 사항 중에 updateFunction 으로 업데이트 되는 부분 
+                // currentTime 도 매번 업데이트 되기 때문에 
+                // playbackRate 도 매번 업데이트 되고
+                // 그래서 막는게 필요하다.                 
+                // timeline 에서 실행되는것에 따라서  layer 에서 각자 알아서 업데이트 한다. 
+                this.updateTimelineElement(current, true, false);
             })
         }
     }    

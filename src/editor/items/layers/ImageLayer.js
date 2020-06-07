@@ -53,24 +53,9 @@ export class ImageLayer extends Layer {
 
     if (isChangeFragment) {
       currentElement.$('img').attr('src', src);
-
-      var $svg = currentElement;  
-
-      if ($svg) {
-        var $defs = $svg.$('defs');
-        if ($defs) {
-          $defs.html(this.toDefInnerString)
-        }
-      } else {
-        var defString = this.toDefString
-        if (defString) {
-          var $el = Dom.createByHTML(defString);
-          currentElement.prepend($el);
-        }
-
-      }
-
     }
+
+    super.updateFunction(currentElement, isChangeFragment);
 
   }      
 

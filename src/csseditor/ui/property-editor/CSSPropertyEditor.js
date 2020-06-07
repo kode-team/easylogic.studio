@@ -22,6 +22,7 @@ import PathDataEditor from "./PathDataEditor";
 import PolygonDataEditor from "./PolygonDataEditor";
 import OffsetPathListEditor from "./OffsetPathListEditor";
 import BorderEditor from "./BorderEditor";
+import MediaProgressEditor from './MediaProgressEditor';
 
 export default class CSSPropertyEditor extends UIElement {
 
@@ -45,7 +46,8 @@ export default class CSSPropertyEditor extends UIElement {
       ClipPathEditor,
       PathDataEditor,
       PolygonDataEditor,
-      OffsetPathListEditor
+      OffsetPathListEditor,
+      MediaProgressEditor
     }
   }
 
@@ -103,6 +105,7 @@ export default class CSSPropertyEditor extends UIElement {
         case 'transform':          
         case 'transform-origin':
         case 'perspective-origin':
+        case 'playTime':
           return Length.string('');          
         case 'offset-distance': 
           return Length.percent(0);
@@ -202,31 +205,31 @@ export default class CSSPropertyEditor extends UIElement {
         </div>
       `            
     } else if (property.key === 'var') {
-      return `
+      return /*html*/`
         <div class='property-editor'>
           <VarEditor ref='$var${index}' value="${property.value}" onChange="changeVar" />
         </div>
       `       
     } else if (property.key === 'transform') {
-      return `
+      return /*html*/`
         <div class='property-editor'>
           <TransformEditor ref='$transform${index}' value="${property.value}" onChange="changeTransform" />
         </div>
       `                  
     } else if (property.key === 'transform-origin') {
-      return `
+      return /*html*/`
         <div class='property-editor'>
           <TransformOriginEditor ref='$transformOrigin${index}' value="${property.value}" onChange="changeTransformOrigin" />
         </div>
       `                  
     } else if (property.key === 'perspective-origin') {
-      return `
+      return /*html*/`
         <div class='property-editor'>
           <PerspectiveOriginEditor ref='$perspectiveOrigin${index}' value="${property.value}" onChange="changePerspectiveOrigin" />
         </div>
       `               
     } else if (property.key === 'fill-rule') {
-      return `
+      return /*html*/`
         <div class='property-editor'>
           <SelectEditor 
           ref='$fillRule${index}' 
@@ -238,7 +241,7 @@ export default class CSSPropertyEditor extends UIElement {
         </div>
       `       
     } else if (property.key === 'stroke-linecap') {
-      return `
+      return /*html*/`
         <div class='property-editor'>
           <SelectEditor 
           ref='$strokeLinecap${index}' 
@@ -251,7 +254,7 @@ export default class CSSPropertyEditor extends UIElement {
       `       
       
     } else if (property.key === 'stroke-linejoin') {
-      return `
+      return /*html*/`
         <div class='property-editor'>
           <SelectEditor 
           ref='$strokeLinejoin${index}' 
@@ -274,7 +277,7 @@ export default class CSSPropertyEditor extends UIElement {
         </div>
       `   
     } else if (property.key === 'stroke-dasharray') {
-      return `
+      return /*html*/`
         <StrokeDashArrayEditor 
           ref='$strokeDashArray${index}' 
           key='stroke-dasharray'
@@ -283,7 +286,7 @@ export default class CSSPropertyEditor extends UIElement {
         />
       `      
     } else if (property.key === 'border-radius') {
-      return `
+      return /*html*/`
         <BorderRadiusEditor 
           ref='$borderRadius${index}' 
           key='border-radius'
@@ -292,7 +295,7 @@ export default class CSSPropertyEditor extends UIElement {
         />
       `
     } else if (property.key === 'border') {
-      return `
+      return /*html*/`
         <BorderEditor 
           ref='$border${index}' 
           key='border'
@@ -301,7 +304,7 @@ export default class CSSPropertyEditor extends UIElement {
         />
       `      
     } else if (property.key === 'clip-path') {
-      return `
+      return /*html*/`
         <ClipPathEditor 
           ref='$clipPath${index}' 
           key='clip-path'
@@ -320,10 +323,14 @@ export default class CSSPropertyEditor extends UIElement {
     } else if (property.key === 'offset-path') {
       return /*html*/`
         <OffsetPathListEditor ref='$offsetPathList${index}' key='offset-path' value='${property.value}' onchange='changeSelect' />
-      `             
+      `         
+    } else if (property.key === 'playTime') {
+      return /*html*/`
+        <MediaProgressEditor ref='$playTime${index}'  key='playTime' value="${property.value}" onchange="changeSelect" />      
+      `                   
     }
 
-    return `
+    return /*html*/`
       <div class='property-editor'>
         ???
 
@@ -418,6 +425,7 @@ export default class CSSPropertyEditor extends UIElement {
       case 'd':
       case 'points':
       case 'offset-path':
+      case 'playTime':
         return this.makeIndivisualPropertyEditor(property, index);
       case 'color':
       case 'background-color':
@@ -430,14 +438,19 @@ export default class CSSPropertyEditor extends UIElement {
       case 'fill-opacity':        
       case 'stroke-dashoffset':
       case 'offset-distance':
+
+        let min = 0;
+        let max = 1; 
+        let step = 0.01; 
+
         return /*html*/`
           <div class='property-editor'>
             <NumberRangeEditor 
               ref='$opacity${index}' 
               key='${property.key}' 
-              min="0"
-              max="1"
-              step="0.01"
+              min="${min}"
+              max="${max}"
+              step="${step}"
               value="${property.value || 1}"
               selected-unit='number'
               removable="true"

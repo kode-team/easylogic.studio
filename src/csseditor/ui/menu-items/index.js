@@ -31,8 +31,11 @@ import SignButton from "./SignButton";
 import AddArtboard from "./AddArtboard";
 import AddDrawPath from "./AddDrawPath";
 import AddDrawBrush from "./AddDrawBrush";
+import AddVideo from "./AddVideo";
+
 
 export default {
+  AddVideo,
   AddDrawBrush,  
   AddDrawPath,
   AddArtboard,  

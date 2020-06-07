@@ -827,7 +827,7 @@ ${this.toSelectorString(prefix)}
 
 
 
-  updateFunction (currentElement, isChangeFragment = true) {
+  updateFunction (currentElement, isChangeFragment = true, isLast = false, context = null) {
 
     if (isChangeFragment) {
       var $svg = currentElement.$(`[data-id="${this.innerSVGId}"]`);  
@@ -856,7 +856,9 @@ ${this.toSelectorString(prefix)}
   }    
 
   get toDefInnerString () {
-    return /*html*/`${this.toClipPath}`
+    return /*html*/`
+      ${this.toClipPath}
+    `
   }
 
   get toClipPath() {

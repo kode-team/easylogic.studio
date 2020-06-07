@@ -200,17 +200,22 @@ export default class FilterEditor extends UIElement {
 
   makeOneFilterTemplate(spec, filter, index) {
 
-    var subtitle = filter.type === 'svg' ? /*html*/` - <span class='svg-filter-edit' data-index="${index}">${filter.value}</span>` : ''; 
-    var title = `${this.$i18n('filter.property.' + filter.type)}${subtitle}`
+    var isSVG = filter.type === 'svg'
+    var title = `${this.$i18n('filter.property.' + filter.type)}`
+
     return /*html*/`
       <div class="filter-item" data-index="${index}">
         <div class="title" >
-          <label draggable="true" data-index="${index}" title="${title}">${title}</label>
+          <label draggable="true" data-index="${index}" title="${isSVG ? '' : title}">${title}</label>
           ${filter.type != 'svg' ? /*html*/`
           <div class="filter-ui">
             ${this.makeOneFilterEditor(index, filter, spec)}
           </div>
-        `: '<div></div>'}          
+        `: /*html*/`
+          <div>
+            <span class='svg-filter-edit' data-index="${index}">${filter.value}</span>
+          </div>
+        `}          
           <div class="filter-menu">
             <button type="button" class="del" data-index="${index}">
               ${icon.remove2}

@@ -51,10 +51,12 @@ import NumberInputEditor from "./NumberInputEditor";
 import GridGapEditor from "./GridGapEditor";
 import PatternEditor from "./PatternEditor";
 import PatternSizeEditor from "./PatternSizeEditor";
-import { BlendSelectEditor } from "./BlendSelectEditor";
+import BlendSelectEditor from "./BlendSelectEditor";
+import MediaProgressEditor from "./MediaProgressEditor";
 
 
 export default {
+    MediaProgressEditor,
     BlendSelectEditor,
     PatternEditor,
     PatternSizeEditor,

@@ -31,8 +31,7 @@
           grid-template-columns: 24px 24px 1fr;
           grid-column-gap: 5px;
           text-align: center;
-          
-          padding: 6px 6px;
+          padding: 6px 0px;
 
           &.selected {
             background-color: rgba($border-color, 0.5);

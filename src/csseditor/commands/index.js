@@ -5,6 +5,7 @@ import resizeArtBoard from "./resizeArtBoard";
 import addPath from "./addPath";
 import convertPath from "./convertPath";
 import addImage from "./addImage";
+import addVideo from "./addVideo";
 import addArtBoard from "./addArtBoard";
 import addProject from "./addProject";
 import addLayer from "./addLayer";
@@ -20,10 +21,13 @@ import updateScale from "./updateScale";
 import fileDropItems from "./fileDropItems";
 import updateResource from "./updateResource";
 import updateImage from "./updateImage";
+import updateVideo from "./updateVideo";
 import addImageAssetItem from "./addImageAssetItem";
+import addVideoAssetItem from "./addVideoAssetItem";
 import dropImageUrl from "./dropImageUrl";
 import addSVGFilterAssetItem from "./addSVGFilterAssetItem";
 import updateImageAssetItem from "./updateImageAssetItem";
+import updateVideoAssetItem from "./updateVideoAssetItem";
 import updateUriList from "./updateUriList";
 import downloadJSON from "./downloadJSON";
 import downloadSVG from "./downloadSVG";
@@ -136,10 +140,13 @@ export default {
     downloadJSON,
     updateUriList,
     updateImageAssetItem,
+    updateVideoAssetItem,
     addSVGFilterAssetItem,
     dropImageUrl,
     addImageAssetItem,
+    addVideoAssetItem,
     updateImage,
+    updateVideo,
     updateResource,
     fileDropItems,
     updateScale,
@@ -150,6 +157,7 @@ export default {
     addComponentType,
     addArtBoard,
     addImage,
+    addVideo,
     addLayer,    
     addPath,
     addProject,

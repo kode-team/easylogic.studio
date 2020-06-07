@@ -172,10 +172,6 @@ checkKey (e) {
     `
   }    
 
-  [LOAD('$editor')] () {
-      return ''
-  }
-
   templateForTimingFunction () {
     return /*html*/`
     <div class='timing-function'>

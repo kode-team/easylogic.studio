@@ -99,7 +99,7 @@ export default class BindHandler extends BaseHandler {
           const isBindCheck = isFunction(refCallback) && refCallback.call(this.context);
           if ($element && isBindCheck) {
             const results = bindMethod.call(this.context, ...args);
-  
+
             if (!results) return;
   
             keyEach(results, (key, value) => {

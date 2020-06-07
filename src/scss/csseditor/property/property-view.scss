@@ -173,6 +173,24 @@
         display: grid;
         grid-template-columns: 14px 1fr;
         grid-column-gap: 2px; 
+
+        &.has-label {
+          grid-template-columns: 100px 1fr;
+
+          .group {
+            padding-left: 12px;
+            padding-top: 5px;
+            vertical-align: middle;
+          }
+        }
+
+        &.full {
+          display: block;
+          .group {
+            padding-left: 14px;
+            vertical-align: middle;
+          }
+        }
       }
 
       &.label {
