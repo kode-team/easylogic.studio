@@ -11,17 +11,14 @@ export function makeInterpolatePlayTime(layer, property, startValue, endValue, a
 
     const duration = +(durationTime || 1);
     const startTime = +(sTime || 0) * duration;
-    const endTime = +(eTime || 1) * duration;
-    const maxTime = Math.abs(endTime - startTime); 
 
-    return (rate, t, totalT) => {
+    return (rate, t) => {
         if (t === 0) {
             // 레이어 업데이트 사항 중에 updateFunction 으로 업데이트 되는 부분 
             // currentTime 도 매번 업데이트 되기 때문에 
             // playbackRate 도 매번 업데이트 되고
             // 그래서 막는게 필요하다. 
             mediaElement.currentTime = startTime; 
-            mediaElement.playbackRate = maxTime /  totalT ; 
             mediaElement.play(); 
         } else if (t === 1) {
             layer.reset({
