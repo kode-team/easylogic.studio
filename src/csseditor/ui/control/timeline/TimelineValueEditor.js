@@ -47,7 +47,7 @@ export default class TimelineValueEditor extends UIElement {
         code = timecode(timeline.fps, this.state.time)
       }
     }
-    
+
     this.refs.$offsetTime.val(code)
     this.children.$propertyEditor.trigger('showCSSPropertyEditor', this.getProperties());      
     this.children.$cubicBezierEditor.trigger('showCubicBezierEditor', {

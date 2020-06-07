@@ -118,7 +118,7 @@ export class TimelineItem extends DomItem {
       if (!nextOffset) {
         nextOffset = { time: offset.time, value: offset.value + ''};
       }
-
+      
       var it = {
         layer,
         property: p.property,
@@ -165,7 +165,7 @@ export class TimelineItem extends DomItem {
 
       this.searchTimelineOffset(time).filter(filterFunction).forEach(it => {
         // play 속성 (video, audio) , 원하는 구간을 play 하고 멈춘다. 
-        if (it.property === 'offset-path' || it.property === 'play') {
+        if (it.property === 'offset-path' || it.property === 'playTime') {
 
           // 객체 속성은 function 안에서 변경한다. 
           it.func(time)

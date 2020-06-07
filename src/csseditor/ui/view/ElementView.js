@@ -328,7 +328,7 @@ export default class ElementView extends UIElement {
     
         this.selectCurrent(...this.$selection.items)
         this.$selection.setRectCache()
-        this.emit('resetSelection');
+        this.emit('refreshSelection');
         this.children.$selectionTool.initMoveType();
     }
 
@@ -506,20 +506,20 @@ export default class ElementView extends UIElement {
 
     updateElement (item, isChangeFragment = true, isLast = false) {
         if (item) {
-            item.updateFunction(this.getElement(item.id), isChangeFragment, isLast, this);
+            item.updateFunction(this.getElement(item.id), isChangeFragment, isLast);
             this.updateRealPositionByItem(item);
         }
 
     }
 
-    timeupdate (e) {
-        console.log(e.target.currentTime);
-    }
+    // 타임라인에서 객체를 업데이트 할 때 발생함. 
+    updateTimelineElement (item, isChangeFragment = true, isLast = false) {
+        if (item) {
+            item.updateFunction(this.getElement(item.id), isChangeFragment, isLast, this, true);
+            this.updateRealPositionByItem(item);
+        }
 
-    seeked (e) {
-        console.log('seeked', e.target.currentTime);
-    }
-
+    }    
 
     [EVENT('playTimeline', 'moveTimeline')] () {
 
@@ -528,7 +528,12 @@ export default class ElementView extends UIElement {
         if (artboard) {
             var timeline = artboard.getSelectedTimeline();
             timeline.animations.map(it => artboard.searchById(it.id)).forEach(current => {
-                this.updateElement(current);
+                // 레이어 업데이트 사항 중에 updateFunction 으로 업데이트 되는 부분 
+                // currentTime 도 매번 업데이트 되기 때문에 
+                // playbackRate 도 매번 업데이트 되고
+                // 그래서 막는게 필요하다.                 
+                // timeline 에서 실행되는것에 따라서  layer 에서 각자 알아서 업데이트 한다. 
+                this.updateTimelineElement(current, true, false);
             })
         }
     }    

@@ -856,7 +856,9 @@ ${this.toSelectorString(prefix)}
   }    
 
   get toDefInnerString () {
-    return /*html*/`${this.toClipPath}`
+    return /*html*/`
+      ${this.toClipPath}
+    `
   }
 
   get toClipPath() {

@@ -74,7 +74,7 @@ export class VideoLayer extends Layer {
     }
   }
 
-  updateFunction (currentElement, isChangeFragment = true, isLast = false, context = null) {
+  updateFunction (currentElement, isChangeFragment = true, isLast = false, context = null, isRunOnTimeline) {
     var {src, currentTime, playbackRate} = this.json;     
 
     if (isChangeFragment) {
@@ -90,9 +90,12 @@ export class VideoLayer extends Layer {
 
       if ($video) {
 
-        this.updateDiff($video, 'currentTime');
-        this.updateDiff($video, 'playbackRate');
-        this.updateDiff($video, 'volume');
+        if (isRunOnTimeline === false) {
+          this.updateDiff($video, 'currentTime');
+          this.updateDiff($video, 'playbackRate');
+          this.updateDiff($video, 'volume');
+        }
+
       }
     }
 

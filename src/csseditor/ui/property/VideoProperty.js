@@ -80,13 +80,14 @@ export default class VideoProperty extends BaseProperty {
 
   [LOAD("$body")]() { 
     var current = this.$selection.current || {playTime: "0:1:1"};
+    var currentTime = current.currentTime || 0;
     var duration = (current.playTime || '0:1:1').split(":").pop()
     return /*html*/`
         <div ref='$tools' class='play-control' data-selected-value="${this.state.status}">
           <button type="button" data-value="play" >${icon.play} ${this.$i18n('video.property.play')}</button>
           <button type="button" data-value="pause">${icon.pause}  ${this.$i18n('video.property.pause')}</button>      
           <div>
-            <NumberRangeEditor ref='$currentTime' min="0" max="${duration}" value="0" step="0.001" onchange="changeCurrentTime" />
+            <NumberRangeEditor ref='$currentTime' min="0" max="${duration}" value="${currentTime}" step="0.001" onchange="changeCurrentTime" />
           </div>
         </div>    
         <div class='divider'></div>
@@ -116,7 +117,7 @@ export default class VideoProperty extends BaseProperty {
             <span class='add-timeline-property' data-property='playTime'></span>
             ${this.$i18n('video.property.playTime')}
           </div>
-          <MediaProgressEditor ref='$progress'  key='play' value="${current.playTime}" onchange="changeSelect" />
+          <MediaProgressEditor ref='$progress'  key='playTime' value="${current.playTime}" onchange="changeSelect" />
         </div>
       `;
   }
@@ -155,7 +156,6 @@ export default class VideoProperty extends BaseProperty {
   [CLICK('$tools button')] (e) {
     var playType = e.$dt.attr('data-value');
 
-    var target = 'play';
     switch(playType) {
     case 'play': 
       this.setState({ status: 'pause' }, false)
@@ -207,6 +207,7 @@ export default class VideoProperty extends BaseProperty {
 
         this.setState({
           volume: current.volume,
+          currentTime: current.currentTime,
           playbackRate: current.playbackRate
         }, false)
 
