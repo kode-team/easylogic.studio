@@ -6,6 +6,7 @@
     height: 24px;
 
     select {
+        font-size: 11px;
         &:focus-within {
             border: 1px solid $selected-color;
         }
