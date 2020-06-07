@@ -19,11 +19,12 @@ export function makeInterpolatePlayTime(layer, property, startValue, endValue, a
             // playbackRate 도 매번 업데이트 되고
             // 그래서 막는게 필요하다. 
             mediaElement.currentTime = startTime; 
-            mediaElement.play(); 
+            if (mediaElement.paused) {
+                mediaElement.play(); 
+            }
         } else if (t === 1) {
             layer.reset({
                 currentTime: mediaElement.currentTime,
-                playbackRate: mediaElement.playbackRate
             })            
             mediaElement.pause();
         }
