@@ -164,6 +164,7 @@ export function makeTimer (opt) {
         if (isFunction(opt.end)) timer.endCallback = opt.end;
         if (isFunction(opt.first)) timer.firstCallback = opt.first;
         if (isFunction(opt.last)) timer.lastCallback = opt.last;
+        if (isFunction(opt.stop)) timer.stopCallback = opt.stop;
 
         timer.firstCallback(timer.elapsed, timer);
         frameStart();
@@ -171,7 +172,7 @@ export function makeTimer (opt) {
 
 
     const stop = () => {
-        // console.table(timer.log);
+        timer.stopCallback(timer.elapsed, timer);
         cancelAnimationFrame(timer.id);
     }
 

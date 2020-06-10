@@ -121,6 +121,7 @@ export class TimelineItem extends DomItem {
       
       var it = {
         layer,
+        layerElement,
         property: p.property,
         isOnlyTime: currentOffset.time === nextOffset.time,
         startTime: offset.time,
@@ -148,6 +149,29 @@ export class TimelineItem extends DomItem {
       }
 
       return it.interpolateFunction(it.timingFunction(t), t, totalT, it.timingFunction);
+    }
+  }
+
+  stop (frameOrCode) {
+    var timeline = this.getSelectedTimeline();
+
+    if (timeline) {
+
+      var time = timeline.currentTime;
+
+      // 중간 멈추는 영역이 되면 
+      // 비디오의 플레이를 멈춘다.  다시 시작하면 그 시점에 다시 시작한다. 
+      this.searchTimelineOffset(time).forEach(it => {
+        // play 속성 (video, audio) , 원하는 구간을 play 하고 멈춘다. 
+        if (it.property === 'playTime') {   // 멈춘다. 
+          const $video = it.layerElement.$('video');
+          if ($video) {
+            $video.el.pause();
+          }
+        }
+
+      });
+
     }
   }
 

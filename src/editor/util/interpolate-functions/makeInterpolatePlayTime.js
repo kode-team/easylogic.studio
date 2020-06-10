@@ -27,6 +27,10 @@ export function makeInterpolatePlayTime(layer, property, startValue, endValue, a
                 currentTime: mediaElement.currentTime,
             })            
             mediaElement.pause();
+        } else {
+            if (mediaElement.paused) {
+                mediaElement.play(); 
+            }
         }
     }
 }

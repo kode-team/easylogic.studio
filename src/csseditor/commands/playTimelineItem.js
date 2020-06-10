@@ -42,6 +42,13 @@ export default {
                     // artboard.setTimelineCurrentTime(0);
                     editor.changeMode('SELECTION');
                     editor.emit('afterChangeMode')
+                },
+                stop: (elapsed, timer) => {
+                    artboard.stop(timecode(timeline.fps, elapsed / 1000)) 
+                    editor.emit('stopTimeline');
+                    // artboard.setTimelineCurrentTime(0);
+                    editor.changeMode('SELECTION');
+                    editor.emit('afterChangeMode')
                 }
             })      
         })
