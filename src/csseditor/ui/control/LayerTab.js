@@ -1,33 +1,21 @@
 import UIElement from "../../../util/UIElement";
 import ObjectItems from "./ObjectItems";
 import { CLICK } from "../../../util/Event";
-import ProjectProperty from "../property/ProjectProperty";
-import ProjectInformationProperty from "../property/ProjectInformationProperty";
 import LibraryItems from "./LibraryItems";
 import ComponentItems from "./ComponentItems";
 import icon from "../icon/icon";
-import ImageAssetsProperty from "../property/ImageAssetsProperty";
-import GradientAssetsProperty from "../property/GradientAssetsProperty";
-import ColorAssetsProperty from "../property/ColorAssetsProperty";
-import SVGFilterAssetsProperty from "../property/SVGFilterAssetsProperty";
 import PreviewToolMenu from "../view/PreviewToolMenu";
 import ShortCutItems from "./ShortCutItems";
-import PatternAssetsProperty from "../property/PatternAssetsProperty";
+import property from "../property";
 
 
 export default class LayerTab extends UIElement {
   components() {
     return {
       ShortCutItems,
-      ImageAssetsProperty,
-      PatternAssetsProperty,
-      GradientAssetsProperty,
-      ColorAssetsProperty,
-      SVGFilterAssetsProperty,      
+      ...property,
       ObjectItems, 
       ComponentItems,
-      ProjectProperty,
-      ProjectInformationProperty,
       LibraryItems,
       PreviewToolMenu
     }
@@ -88,7 +76,8 @@ export default class LayerTab extends UIElement {
                 <ColorAssetsProperty />
                 <GradientAssetsProperty />    
                 <PatternAssetsProperty />    
-                <ImageAssetsProperty />       
+                <ImageAssetsProperty />      
+                <VideoAssetsProperty />       
                 <SVGFilterAssetsProperty />                
               </div>
             </div>

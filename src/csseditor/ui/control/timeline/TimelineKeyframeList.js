@@ -446,7 +446,11 @@ export default class TimelineKeyframeList extends UIElement {
     }
     
     moveEndOffset (dx, dy) {
-        if (this.isNotMoved(dx, dy)) return;        
+        if (this.isNotMoved(dx, dy)) {
+            this.refresh();        
+            this.emit('refreshOffsetValue', this.offset)              
+            return; 
+        }
         var currentArtboard = this.$selection.currentArtboard;
         if (currentArtboard) {
             this.$timeline.each(item => {

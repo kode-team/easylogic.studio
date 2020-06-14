@@ -71,10 +71,6 @@ export default class GradientAssetsProperty extends BaseProperty {
           <div class='preview' title="${item.gradient}" draggable="true">
             <div class='gradient-view' style='background-image: ${item.gradient};'></div>
           </div>
-          <div class='tools'>
-            <button type="button" class='copy'>${icon.copy}</button>          
-            <button type="button" class='remove'>${icon.remove}</button>
-          </div>
         </div>
       `
     })
@@ -111,26 +107,6 @@ export default class GradientAssetsProperty extends BaseProperty {
       })
     })
   }
-
-  [CLICK('$gradientList .remove')] (e) {
-    var $item = e.$dt.closest('gradient-item');
-    var index = +$item.attr('data-index');
-
-    this.executeGradient(project => {
-      project.removeGradient(index);
-    })    
-
-  }
-
-
-  [CLICK('$gradientList .copy')] (e) {
-    var $item = e.$dt.closest('gradient-item');
-    var index = +$item.attr('data-index');
-
-    this.executeGradient(project => {
-      project.copyGradient(index);
-    })    
-  }  
 
   [CLICK("$gradientList .preview")](e) {
     var $item = e.$dt.closest('gradient-item');    

@@ -19,6 +19,7 @@ import { makeInterpolatePath } from "./interpolate-functions/svg/makeInterpolate
 import { makeInterpolatePolygon } from "./interpolate-functions/svg/makeInterpolatePolygon";
 import { makeInterpolateOffsetPath } from "./interpolate-functions/makeInterpolateOffsetPath";
 import { makeInterpolateText } from "./interpolate-functions/makeInterpolateText";
+import { makeInterpolatePlayTime } from "./interpolate-functions/makeInterpolatePlayTime";
 
 const DEFAULT_FUCTION = () => (rate, t) => { } 
 
@@ -57,11 +58,13 @@ function makeInterpolateCustom (property) {
         return makeInterpolateOffsetPath
     case 'text': 
         return makeInterpolateText
+    case 'playTime':
+        return makeInterpolatePlayTime
     }
 }
 
 
-function makeInterpolate (layer, property, startValue, endValue, editorString, artboard) {
+function makeInterpolate (layer, property, startValue, endValue, editorString, artboard, layerElement) {
 
     var checkField = editorString || property
 
@@ -84,6 +87,7 @@ function makeInterpolate (layer, property, startValue, endValue, editorString, a
     case 'fill-opacity':
     case 'opacity':
     case 'stroke-dashoffset':
+    case 'currentTime':
     case 'NumberRangeEditor':
         return makeInterpolateNumber(layer, property, +startValue, +endValue);
     case 'background-color':
@@ -109,15 +113,15 @@ function makeInterpolate (layer, property, startValue, endValue, editorString, a
     var func = makeInterpolateCustom(checkField)
 
     if (func) {
-        return func(layer, property, startValue, endValue, artboard)
+        return func(layer, property, startValue, endValue, artboard, layerElement)
     }
 
     return DEFAULT_FUCTION
 }
 
 
-export function createInterpolateFunction (layer, property, startValue, endValue, editorString, artboard) {
-    return makeInterpolate(layer, property, startValue, endValue, editorString, artboard);
+export function createInterpolateFunction (layer, property, startValue, endValue, editorString, artboard, layerElement) {
+    return makeInterpolate(layer, property, startValue, endValue, editorString, artboard, layerElement);
 }
 
 

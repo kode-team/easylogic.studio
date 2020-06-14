@@ -13,7 +13,24 @@
         .empty {
           height: 100px;
         }
+
+        > .tab {
+          > .tab-header {
+            height: $tool-size;
+
+            .tab-item {
+              padding: 8px 0px;
+            }
+          }
+          
+    
+          > .tab-body {
+            top: $tool-size;
+          }
+        }
       }
+
+
     }
   
   

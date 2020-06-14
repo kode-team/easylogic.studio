@@ -268,8 +268,8 @@
         .svg-canvas {
             fill: transparent;
             stroke: $selected-border-color;
-            stroke-width: 0.5;
-            display: none;
+            stroke-width: 1;
+            // display: none;
         }
 
         path {

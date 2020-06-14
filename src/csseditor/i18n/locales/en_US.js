@@ -127,6 +127,14 @@ export default {
     'image.property.width': 'Width',    
     'image.property.height': 'height',    
 
+    'video.property.title': 'Video',
+    'video.property.play': 'Play',    
+    'video.property.pause': 'Pause',    
+    'video.property.volume': 'Volume',    
+    'video.property.playbackRate': 'Playback Rate',        
+    'video.property.currentTime': 'Current Time',  
+    'video.property.playTime': 'Play Time Distance',               
+
     'motion.property.title': 'Motion',
 
     'text.property.title': 'Text Style',
@@ -252,6 +260,7 @@ export default {
 
     'gradient.picker.popup.title': 'Gradient & Image Picker',    
     'image.asset.property.title': 'Image',
+    'video.asset.property.title': 'Video',    
     'color.asset.property.title': 'Color',
     'gradient.asset.property.title': 'Gradient',
     'pattern.asset.property.title': 'Pattern',

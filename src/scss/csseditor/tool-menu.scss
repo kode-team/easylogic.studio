@@ -74,7 +74,7 @@
 
       .divider {
         border: 0px;
-        border-right: 1px solid rgba(255, 255, 255, 0.3);
+        border-right: 1px solid $divider-color;
         // margin: 5px 10px;
         height: 20px;
         vertical-align: middle;

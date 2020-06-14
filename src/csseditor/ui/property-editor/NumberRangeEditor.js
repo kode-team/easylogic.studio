@@ -10,6 +10,7 @@ export default class NumberRangeEditor extends UIElement {
         value = value.toUnit('number');
         return {
             removable: this.props.removable === 'true',
+            clamp: this.props.clamp === 'true',
             label: this.props.label || '',
             min: +this.props.min || 0,
             max: +this.props.max || 100,
@@ -55,7 +56,24 @@ export default class NumberRangeEditor extends UIElement {
     `
     }
 
+    setMin (value) {
+        this.setState({
+            min: Length.parse(value)
+        })
+    }
+
+    setMax (value) {
+        this.setState({
+            max: Length.parse(value)
+        })
+    }    
+
     getValue() {
+
+        if (this.state.clamp) {
+            return this.state.value.clamp(this.state.min, this.state.max);
+        }
+        
         return this.state.value; 
     }
 
@@ -81,7 +99,7 @@ export default class NumberRangeEditor extends UIElement {
 
     updateData (data) {
         this.setState(data, false)
-        this.parent.trigger(this.props.onchange, this.props.key, this.state.value, this.props.params)
+        this.parent.trigger(this.props.onchange, this.props.key, this.getValue(), this.props.params)
     }
 
     [INPUT('$propertyNumber')] (e) {

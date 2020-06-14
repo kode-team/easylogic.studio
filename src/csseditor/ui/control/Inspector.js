@@ -44,6 +44,9 @@ export default class Inspector extends UIElement {
                 <!-- Image --> 
                 <ImageProperty />
 
+                <!-- Video --> 
+                <VideoProperty />
+
                 <!-- Component -->
                 <ComponentProperty />                
                 

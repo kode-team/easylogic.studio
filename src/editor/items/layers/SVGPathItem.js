@@ -38,14 +38,14 @@ export class SVGPathItem extends SVGItem {
       this.json.path.resetSegment(obj.segments);
     }
 
-    if (obj.rect) {
+    // if (obj.rect) {
 
-      this.json.width = Length.px(obj.rect.width);
-      this.json.height = Length.px(obj.rect.height);
+    //   this.json.width = Length.px(obj.rect.width);
+    //   this.json.height = Length.px(obj.rect.height);
   
-      this.setScreenX(Length.px(obj.rect.x))
-      this.setScreenY(Length.px(obj.rect.y))
-    }
+    //   this.setScreenX(Length.px(obj.rect.x))
+    //   this.setScreenY(Length.px(obj.rect.y))
+    // }
 
   }
   

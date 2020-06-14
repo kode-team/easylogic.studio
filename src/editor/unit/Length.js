@@ -453,6 +453,10 @@ export class Length {
   is (value) {
     return this.value === value 
   }
+
+  clamp (min, max) {
+    return new Length(Math.max(min, Math.min(max, this.value)), this.unit);
+  }
 }
 
 Length.auto = Length.string("auto");

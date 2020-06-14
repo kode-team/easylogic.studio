@@ -129,6 +129,14 @@ export default {
     'image.property.width': '넓이',    
     'image.property.height': '높이',    
 
+    'video.property.title': '비디오',
+    'video.property.play': '시작',    
+    'video.property.pause': '멈춤',    
+    'video.property.volume': '볼륨',    
+    'video.property.playbackRate': '빠르기',        
+    'video.property.currentTime': '현재 시간',     
+    'video.property.playTime': '플레이 시간 간격',     
+
     'motion.property.title': '모션',
 
     'path.data.property.title': '패스 정보',
@@ -257,6 +265,7 @@ export default {
     'gradient.picker.popup.title': '그라디언트와 이미지',
 
     'image.asset.property.title': '이미지',
+    'video.asset.property.title': '비디오',    
     'color.asset.property.title': '색',
     'gradient.asset.property.title': '그라디언트', 
     'pattern.asset.property.title': '패턴', 
