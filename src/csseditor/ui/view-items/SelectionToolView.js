@@ -50,11 +50,15 @@ const SelectionToolEvent = class  extends UIElement {
         if (current && current.is('svg-path', 'svg-brush', 'svg-textpath')) {
             this.toggleEditingPath(true);
 
+            // box 모드 
+            // box - x, y, width, height 고정된 상태로  path 정보만 변경 
+            // canvas - x, y, width, height 를 path 좌표로 재구성 
             this.emit('showPathEditor', 'modify', {
                 changeEvent: 'updatePathItem',
                 current,
                 d: current.d,
-                box: current.is('svg-textpath') ? 'box': 'canvas', 
+                // box: current.is('svg-textpath') ? 'box': 'canvas', 
+                box: 'box',
                 screenX: current.screenX,
                 screenY: current.screenY,
                 screenWidth: current.screenWidth,
