@@ -160,7 +160,7 @@ export default {
     'transition.property.title': 'Transition CSS',
 
     'keyframe.property.title': 'Image clé CSS',      
-    'selector.property.title': 'sélécteur',
+    'selector.property.title': 'Sélécteur',
     'selector.property.none': 'Aucun sélécteur',    
 
     'path.data.property.title': 'Information Chemin',
@@ -421,7 +421,7 @@ export default {
 
     'box.model.property.title': 'Modèle',
     'box.model.property.margin': 'Marge',
-    'box.model.property.padding': 'Espacement',
+    'box.model.property.padding': 'Espace',
 
     'component.items.canvas': 'Toile',
     'component.items.layer': 'Objet',
