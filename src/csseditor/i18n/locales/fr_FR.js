@@ -7,7 +7,7 @@ export default {
     'app.lang.en_US': 'English',
     'app.lang.ko_KR': '한국어',
     'app.lang.fr_FR': 'Français',
-    'app.label.lang': 'Language',
+    'app.label.lang': 'Langue',
 
     'app.theme.dark': 'Sombre',
     'app.theme.light': 'Clair',
