@@ -17,7 +17,7 @@ export default function addLayer (editor, layer, rect = {}) {
 
         editor.selection.select(layer);
 
-        _refreshSelection(editor)
+        _refreshSelection(editor,false, 500)
     } else {
         editor.emit('addArtBoard')
 
