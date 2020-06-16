@@ -5,7 +5,8 @@ export default {
         return `${a}-${b}-${c}`
     },
     'app.lang.en_US': 'English',
-    'app.lang.ko_KR': '한국어',    
+    'app.lang.ko_KR': '한국어',
+    'app.lang.fr_FR': 'Français',    
     'app.label.lang': '언어',
 
     'app.theme.dark': '어두운',
