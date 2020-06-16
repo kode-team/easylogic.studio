@@ -28,6 +28,8 @@ import StatusBar from "../ui/view/StatusBar";
 import PreviewToolMenu from "../ui/view/PreviewToolMenu";
 import { Length } from "../../editor/unit/Length";
 import PageSubEditor from "../ui/view-items/PageSubEditor";
+import NotificationView from "../ui/view/NotificationView";
+
 
 const formElements = ['INPUT','SELECT','TEXTAREA']
 
@@ -107,6 +109,7 @@ export default class CSSEditor extends UIElement {
         <!-- LoginWindow / -->
         <!-- SignWindow / -->
         <ImageFileView />
+        <NotificationView />
       </div>
     `;
   }
@@ -159,6 +162,7 @@ export default class CSSEditor extends UIElement {
       StatusBar,
       TimelineProperty,
       PreviewToolMenu,
+      NotificationView,
     };
   }
 

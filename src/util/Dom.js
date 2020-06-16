@@ -32,7 +32,7 @@ export default class Dom {
   static create (tag, className, attr) {
     return new Dom(tag, className, attr);
   }
-
+ 
   static createByHTML (htmlString) {
     var div = Dom.create('div')
     var list = div.html(htmlString).children();
@@ -276,10 +276,20 @@ export default class Dom {
     return this;    
   }
 
+  prependHTML(html) {
+    var $dom = Dom.create("div").html(html);
+
+    this.prepend($dom.createChildrenFragment());
+
+    return $dom;
+  }
+
   appendHTML(html) {
     var $dom = Dom.create("div").html(html);
 
     this.append($dom.createChildrenFragment());
+
+    return $dom;
   }
 
   /**
