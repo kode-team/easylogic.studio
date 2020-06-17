@@ -431,7 +431,26 @@ export default class Dom {
     return this.el.getBoundingClientRect();
   }
 
+  isSVG () {
+    return this.el.tagName.toUpperCase() === 'SVG';
+  }
+
   offsetRect() {
+
+    if (this.isSVG()) {
+      const parentBox = this.parent().rect();
+      const box = this.rect();
+
+      return {
+        x: box.x - parentBox.x,
+        y: box.y - parentBox.y,
+        top: box.x - parentBox.x,
+        left: box.y - parentBox.y,
+        width: box.width,
+        height: box.height
+      }
+    }
+
     return {
       x: this.el.offsetLeft,
       y: this.el.offsetTop,
