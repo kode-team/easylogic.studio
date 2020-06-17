@@ -187,7 +187,7 @@ export default class CSSEditor extends UIElement {
   }
 
   [EVENT('changeTheme')] () {
-    Dom.create(document.body).attr('data-theme', this.$editor.theme);
+    Dom.body().attr('data-theme', this.$editor.theme);
   }
 
 

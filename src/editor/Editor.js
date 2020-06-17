@@ -107,7 +107,7 @@ export class Editor {
     if (window.localStorage) {
       theme = window.localStorage.getItem('easylogic.studio.theme')
 
-      theme = ['gray', 'light'].includes(theme) ? theme : DEFAULT_THEME;
+      theme = ['dark', 'light', 'toon'].includes(theme) ? theme : DEFAULT_THEME;
     }
 
     this.theme =  theme || DEFAULT_THEME
@@ -145,7 +145,7 @@ export class Editor {
   }
 
   changeTheme (theme) {
-    theme = ['light', 'gray'].includes(theme) ? theme: 'dark';
+    theme = ['light', 'toon'].includes(theme) ? theme: 'dark';
 
     this.theme = theme; 
     window.localStorage.setItem('easylogic.studio.theme', theme);

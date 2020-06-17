@@ -78,7 +78,8 @@
     height: 100%;
 
     @include input-style($background-color, $border-color, $border-radius, $fontColor);
-    border: 0px;
+    // border: 0px;
+    font-size: 12px;
     border-radius: 3px;    
 }
  

@@ -65,5 +65,11 @@ body {
         @import './csseditor/component.scss';
         @import './csseditor/layout.scss';        
     }    
+
+    &[data-theme='toon'] {
+        @import './themes/csseditor/toon.scss';
+        @import './csseditor/component.scss';
+        @import './csseditor/layout.scss';        
+    }        
 }
  

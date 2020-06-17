@@ -1,7 +1,7 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
 import SelectEditor from "../property-editor/SelectEditor";
 
-const theme_list = ['dark', 'light'/*, 'gray' */]
+const theme_list = ['dark', 'light', 'toon', /*, 'gray' */]
 
 export default class ThemeSwitcher extends UIElement {
     components() {

@@ -1,10 +1,10 @@
 import dark from "./dark"
 import light from "./light"
-import gray from './gray';
+import toon from "./toon";
 
 
 export default {
     dark,
     light,
-    gray
+    toon
 }
