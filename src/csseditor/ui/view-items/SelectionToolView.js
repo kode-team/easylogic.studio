@@ -201,7 +201,7 @@ export default class SelectionToolView extends SelectionToolBind {
         var e = this.$config.get('bodyEvent');
 
 
-        if (e.altKey) {
+        if (e.shiftKey) {
             dy = dx; 
         }
 

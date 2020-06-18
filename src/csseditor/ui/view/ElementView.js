@@ -139,6 +139,11 @@ export default class ElementView extends UIElement {
     }
 
     movePointer (dx, dy) {
+        const isShiftKey = this.$config.get('bodyEvent').shiftKey;
+
+        if (isShiftKey) {
+            dy = dx; 
+        }
 
         var obj = {
             left: Length.px(this.dragXY.x + (dx < 0 ? dx : 0)),
