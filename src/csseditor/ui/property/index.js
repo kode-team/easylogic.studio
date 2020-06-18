@@ -52,9 +52,11 @@ import FlexLayoutItemProperty from "./FlexLayoutItemProperty";
 import GridLayoutItemProperty from "./GridLayoutItemProperty";
 import PatternProperty from "./PatternProperty";
 import VideoProperty from "./VideoProperty";
+import PatternAssetsProperty from "./PatternAssetsProperty";
 
 
 export default {  
+  PatternAssetsProperty,
   VideoProperty,
   PatternProperty,
   GridLayoutItemProperty,

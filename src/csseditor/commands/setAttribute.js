@@ -13,8 +13,9 @@ export default function setAttribute (editor, attrs = {}, ids = null, isChangeFr
 
         Object.keys(attrs).forEach(key => {
             let value = attrs[key];
+
             if (isFunction(value)) {
-                value = value();
+                value = value(item);
             }
 
             item.reset({ [key] : value });

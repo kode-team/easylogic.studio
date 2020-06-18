@@ -270,8 +270,8 @@ export default class TransformEditor extends UIElement {
     });
   }
 
-  [DRAGSTART("$transformList .transform-item .title")](e) {
-    this.startIndex = +e.$dt.attr("data-index");
+  [DRAGSTART("$transformList .transform-item .title label")](e) {
+    this.startIndex = +e.$dt.parent().attr("data-index");
   }
 
   [DRAGOVER("$transformList .transform-item") + PREVENT](e) {}

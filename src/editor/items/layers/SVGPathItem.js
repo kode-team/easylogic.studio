@@ -111,6 +111,7 @@ export class SVGPathItem extends SVGItem {
 
   updateFunction (currentElement, isChangeFragment = true, isLast = false) {
 
+    if (!currentElement) return; 
     var $path = currentElement.$('path');
     $path.attr('d', this.json.d);
     if (isChangeFragment) {

@@ -270,6 +270,7 @@
             stroke: $selected-border-color;
             stroke-width: 1;
             // display: none;
+            pointer-events: none;
         }
 
         path {
