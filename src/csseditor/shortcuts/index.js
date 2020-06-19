@@ -34,8 +34,29 @@ import segmentMoveShiftRight from "./segment.move.shift.right";
 import segmentDelete from "./segment.delete";
 import scaleMinus from "./scale.minus";
 import scalePlus from "./scale.plus";
+import addRect from "./add.rect";
+import selectView from "./select.view";
+import addRectM from "./add.rect.m";
+import addCircle from "./add.circle";
+import addCircleL from "./add.circle.l";
+import addText from "./add.text";
+import addPath from "./add.path";
+import addBrush from "./add.brush";
+import selectArtboard from "./select.artboard";
+
+
 
 export default [
+    // add layer 
+    selectView,
+    selectArtboard,
+    addRect,
+    addRectM,
+    addCircle,
+    addCircleL,
+    addText,
+    addPath,
+    addBrush,
 
     // check number key 
     num1,

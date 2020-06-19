@@ -585,7 +585,7 @@ export default class ElementView extends UIElement {
                     if ($el) {
                         const {x, y, width, height} = $el.offsetRect();
 
-                        console.log(x, y, width, height, $el, it);
+                        // console.log(x, y, width, height, $el, it);
 
                         it.reset({
                             x: Length.px(x),

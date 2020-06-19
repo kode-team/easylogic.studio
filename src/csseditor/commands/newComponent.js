@@ -38,10 +38,10 @@ export default function newComponent (editor, type, obj) {
 
     } else if (type === 'text') {
         obj = {
+            width: Length.px(300),
+            height: Length.px(50),            
             ...obj,
             content: 'Insert a text',
-            width: Length.px(300),
-            height: Length.px(50),
             'font-size': Length.px(30)
         }        
     }
