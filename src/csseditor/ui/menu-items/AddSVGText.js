@@ -10,7 +10,7 @@ export default class AddSVGText extends MenuItem {
   }
  
   clickButton(e) {
-    this.emit('addComponentType', 'svgtext');
+    this.emit('addLayerView', 'svg-text');
   }
 
 }

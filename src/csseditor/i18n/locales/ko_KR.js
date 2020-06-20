@@ -9,6 +9,11 @@ export default {
     'app.lang.fr_FR': 'Français',    
     'app.label.lang': '언어',
 
+    'app.layout.all': '전체',
+    'app.layout.css': 'CSS',
+    'app.layout.svg': 'SVG',
+    'app.label.layout': '메뉴구성',    
+
     'app.theme.dark': '어두운',
     'app.theme.light': '밝은',
     'app.theme.toon': '그리기',    

@@ -59,6 +59,25 @@
 
 
     .draw-items {
+
+      &[data-selected-value="svg"] {
+        [data-item="css"] {
+          display: none;
+        }
+        [data-item="svg"] {         
+          .divider {
+            display: none; 
+          }
+        }
+      }
+
+      &[data-selected-value="css"] {
+        [data-item="svg"] {
+          display: none;
+        }
+      } 
+
+
       > * {
         display: inline-block;
       }
@@ -78,17 +97,7 @@
         // margin: 5px 10px;
         height: 20px;
         vertical-align: middle;
-      }
-  
-      > label {
-        font-size: 9px;
-        &:first-child {
-          margin-top: 5px;
-        }
-        color: $font-color;
-        padding: 5px;
-        text-align: center;
-        // display: block;
+        display: inline-block;
       }
   
       .menu-item {
@@ -100,6 +109,7 @@
         background-image: none;
         border:0px;
         box-shadow: none;
+        display: inline-block;
   
         &.selected {
           .icon {      

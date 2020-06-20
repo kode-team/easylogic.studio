@@ -22,10 +22,10 @@ export default class BoxShadowPropertyPopup extends BasePopup {
     return {
       color: 'rgba(0, 0, 0, 1)',
       inset: false,
-      offsetX: Length.px(0),
-      offsetY: Length.px(0),
-      blurRadius: Length.px(0),
-      spreadRadius: Length.px(0)
+      offsetX: Length.z(),
+      offsetY: Length.z(),
+      blurRadius: Length.z(),
+      spreadRadius: Length.z()
     };
   }
 

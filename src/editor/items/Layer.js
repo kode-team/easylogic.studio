@@ -39,7 +39,7 @@ export class Layer extends DomItem {
         return Length.px( this.json.parent.screenX.value + (this.json.x || zero).value )
     }
 
-    return this.json.x || Length.px(0) 
+    return this.json.x || Length.z() 
   }
   get screenY () { 
 
@@ -47,7 +47,7 @@ export class Layer extends DomItem {
           return Length.px( this.json.parent.screenY.value + (this.json.y || zero).value )
       }
 
-      return this.json.y || Length.px(0) 
+      return this.json.y || Length.z() 
   }  
 
 }

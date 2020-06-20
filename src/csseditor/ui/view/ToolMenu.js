@@ -11,26 +11,35 @@ export default class ToolMenu extends UIElement {
     return /*html*/`
       <div class='tool-menu center'>
         <div class='items'>
-          <div class='draw-items' ref='$items'>
+          <div class='draw-items' ref='$items' data-selected-value="${this.$editor.layout}">
+
             <SelectTool />
-            <AddRect />
-            <AddCircle />         
-            <AddText />
-            <AddImage />
-            <AddVideo />
-            <div class='divider'></div>
-            <AddDrawPath />
-            <AddPath />
-            <AddSVGRect />
-            <AddSVGCircle />            
-            <AddSVGText />
-            <AddSVGTextPath />
-            <AddPolygon />
+            <span data-item='css'>
+              <AddRect />
+              <AddCircle />         
+              <AddText />
+              <AddImage />
+              <AddVideo />
+            </span>            
+            <span data-item='svg'>
+              <div class='divider'></div>
+              <AddDrawPath />
+              <AddPath />
+              <AddSVGRect />
+              <AddSVGCircle />            
+              <!-- <AddSVGText /> -->
+              <AddSVGTextPath />
+              <AddPolygon />
+            </span>
           </div>
         </div>
 
       </div>
     `;
+  }
+
+  [EVENT('changedEditorlayout')] () {
+    this.refs.$items.attr('data-selected-value', this.$editor.layout)
   }
 
   [EVENT('noneSelectMenu')] () {

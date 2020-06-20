@@ -11,6 +11,6 @@ export default class AddRect extends MenuItem {
 
   clickButton(e) {
 
-    this.emit('addComponentType', 'rect');
+    this.emit('addLayerView', 'rect');
   }
 }

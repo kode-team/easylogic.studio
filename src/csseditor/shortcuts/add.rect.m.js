@@ -1,6 +1,6 @@
 export default {
     key: 'm',
-    command: 'addComponentType', 
+    command: 'addLayerView', 
     args: 'rect',
     description: 'Add rect layer',
     when: 'CanvasView'

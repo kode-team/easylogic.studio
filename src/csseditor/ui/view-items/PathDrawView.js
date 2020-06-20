@@ -31,10 +31,10 @@ export default class PathDrawView extends UIElement {
             'stroke-linecap': 'round',
             'stroke-linejoin': 'round',
             tolerance: 1,
-            screenX: Length.px(0),
-            screenY: Length.px(0),
-            screenWidth: Length.px(0),
-            screenHeight: Length.px(0)
+            screenX: Length.z(),
+            screenY: Length.z(),
+            screenWidth: Length.z(),
+            screenHeight: Length.z()
         }
     }
 
@@ -267,7 +267,7 @@ export default class PathDrawView extends UIElement {
 
         var $obj = this.refs.$view.$('path.object')
 
-        var pathRect = {x: Length.px(0), y: Length.px(0),  width: Length.px(0), height: Length.px(0)}
+        var pathRect = {x: Length.z(), y: Length.z(),  width: Length.z(), height: Length.z()}
         if ($obj) {
 
             pathRect = $obj.rect()

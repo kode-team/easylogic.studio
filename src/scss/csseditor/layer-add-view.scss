@@ -1,0 +1,27 @@
+.layer-add-view {
+    display:none;
+    position:absolute;
+    left:0px;
+    top:0px;
+    right:0px;
+    bottom:0px;
+    cursor: crosshair;
+    background-color: transparent;
+    pointer-events: all;
+
+    .area {
+        position: absolute;
+        display: inline-block; 
+        // background-color: rgba(0, 0, 255, 0.5);
+        pointer-events: none;
+
+        .draw-item {
+            position: absolute;
+            left: 0px;
+            right: 0px;
+            top: 0px;
+            bottom: 0px;
+            pointer-events: none;
+        }
+    }
+}

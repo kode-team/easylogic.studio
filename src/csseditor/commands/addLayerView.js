@@ -1,6 +1,6 @@
-export default function addPath (editor) {
+export default function addLayerView (editor, type) {
     // editor.emit('hideSubEditor');
     editor.selection.empty();
     editor.emit('refreshSelectionTool');        
-    editor.emit('showPathEditor', 'path' );
+    editor.emit('showLayerAppendView', type );
 }

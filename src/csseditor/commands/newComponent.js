@@ -5,9 +5,9 @@ import PathStringManager from "../../editor/parse/PathStringManager";
 
 
 
-export default function newComponent (editor, type, obj) {
+export default function newComponent (editor, type, obj, isSelected = true) {
 
-    if (!type.includes('text')) {
+    if (!type.includes('text') && !obj['background-color']) {
         obj['background-color'] = Color.random();
     } 
 
@@ -48,7 +48,7 @@ export default function newComponent (editor, type, obj) {
 
     editor.emit('addLayer', editor.components.createComponent(type, {
         ...obj,
-    }), obj)
+    }), obj, isSelected)
 
     editor.changeMode(EDIT_MODE_SELECTION);
     editor.emit('afterChangeMode');

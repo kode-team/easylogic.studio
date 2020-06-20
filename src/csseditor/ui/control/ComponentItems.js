@@ -36,7 +36,7 @@ export default class ComponentItems extends UIElement {
             <AddPath title='Path' />
             <AddSVGRect title='Rect' />
             <AddSVGCircle title='Circle' />
-            <AddSVGText title='Text' />
+            <!-- <AddSVGText title='Text' /> -->
             <AddSVGTextPath title='Text Path' />
           </div>          
         </div>

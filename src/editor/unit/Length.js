@@ -104,6 +104,10 @@ export class Length {
     return new Length(value+'', '--')
   }
 
+  static z () {
+    return Length.px(0);
+  }
+
   /**
    * return calc()  css fuction string
    *

@@ -15,7 +15,7 @@ export default class AddCube extends MenuItem {
 
   clickButton(e) {
 
-    this.emit('addComponentType', 'cube');
+    this.emit('addLayerView', 'cube');
   }
 
 }

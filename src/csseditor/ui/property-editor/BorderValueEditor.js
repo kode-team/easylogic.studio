@@ -58,7 +58,7 @@ export default class BorderValueEditor extends UIElement {
 
   refresh () {
 
-    this.children.$width.setValue(this.state.value.width || Length.px(0))
+    this.children.$width.setValue(this.state.value.width || Length.z())
     this.children.$style.setValue(this.state.value.style || 'none')
     this.children.$color.setValue(this.state.value.color || 'rgba(0, 0, 0, 1)')
   }

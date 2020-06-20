@@ -312,7 +312,7 @@ export default class TransformEditor extends UIElement {
       case 'translateX': 
       case 'translateY': 
       case 'translateZ': 
-        return [Length.px(0)]            
+        return [Length.z()]            
       case 'rotateX': 
       case 'rotateY': 
       case 'rotateZ': 
@@ -322,9 +322,9 @@ export default class TransformEditor extends UIElement {
       case 'perspective':
         return [Length.deg(0)]            
       case 'translate': 
-        return [Length.px(0),Length.px(0)]
+        return [Length.z(),Length.z()]
       case 'translate3d': 
-        return [Length.px(0),Length.px(0), Length.px(0)]        
+        return [Length.z(),Length.z(), Length.z()]        
       case 'scale': 
         return [Length.number(1),Length.number(1)]
       case 'scaleX': 

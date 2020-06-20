@@ -13,12 +13,6 @@ import itemMoveAltDown from "./item.move.alt.down";
 import itemMoveAltRight from "./item.move.alt.right";
 import itemMoveAltUp from "./item.move.alt.up";
 import itemDelete from "./item.delete";
-import num1 from "./num.1";
-import num2 from "./num.2";
-import num3 from "./num.3";
-import num4 from "./num.4";
-import num5 from "./num.5";
-import num6 from "./num.6";
 import segmentMoveKeyDown from "./segment.move.key.down";
 import segmentMoveKeyUp from "./segment.move.key.up";
 import segmentMoveKeyRight from "./segment.move.key.right";
@@ -57,14 +51,6 @@ export default [
     addText,
     addPath,
     addBrush,
-
-    // check number key 
-    num1,
-    num2,
-    num3,
-    num4,
-    num5,
-    num6,
 
     // move segment by arrow key 
     segmentMoveKeyDown,

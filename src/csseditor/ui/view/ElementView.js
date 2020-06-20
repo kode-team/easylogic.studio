@@ -5,12 +5,12 @@ import { Length } from "../../../editor/unit/Length";
 import Dom from "../../../util/Dom";
 import SelectionToolView from "../view-items/SelectionToolView";
 import GuideLineView from "../view-items/GuideLineView";
+import LayerAppendView from "../view-items/LayerAppendView";
 import PathEditorView from "../view-items/PathEditorView";
 import GridLayoutLineView from "../view-items/GridLayoutLineView";
 import PathDrawView from "../view-items/PathDrawView";
 import BrushDrawView from "../view-items/BrushDrawView";
 import { isFunction } from "../../../util/functions/func";
-
 
 
 export default class ElementView extends UIElement {
@@ -21,6 +21,7 @@ export default class ElementView extends UIElement {
             GuideLineView,
             PathEditorView,
             PathDrawView,
+            LayerAppendView,
             BrushDrawView,
             GridLayoutLineView,
         }
@@ -29,8 +30,8 @@ export default class ElementView extends UIElement {
     initState() {
         return {
             mode: 'selection',
-            left: Length.px(0),
-            top: Length.px(0),
+            left: Length.z(),
+            top: Length.z(),
             width: Length.px(10000),
             height: Length.px(10000),
             cachedCurrentElement: {},
@@ -46,6 +47,7 @@ export default class ElementView extends UIElement {
                 <GuideLineView ref='$guideLineView' />
                 <GridLayoutLineView ref='$gridLayoutLineView' />
                 <SelectionToolView ref='$selectionTool' />
+                <LayerAppendView ref='$objectAddView' />
                 <PathEditorView ref='$pathEditorView' />
                 <PathDrawView ref='$pathDrawView' />
                 <BrushDrawView ref='$brushDrawView' />
@@ -76,10 +78,6 @@ export default class ElementView extends UIElement {
 
     checkEmptyElement (e) {
         var $el = Dom.create(e.target)
-
-        if (this.$editor.isAddMode()) {
-            return true; 
-        }
 
         if (this.state.mode !== 'selection') {
             return false; 
@@ -123,17 +121,14 @@ export default class ElementView extends UIElement {
             var obj = {
                 left: Length.px(this.dragXY.x),
                 top: Length.px(this.dragXY.y),
-                width: Length.px(0),
-                height: Length.px(0)
+                width: Length.z(),
+                height: Length.z()
             }        
     
             this.refs.$dragAreaRect.css(obj) 
 
             this.state.cachedCurrentElement = {}
             this.$el.$$('.selected').forEach(it => it.removeClass('selected'))
-        } else {
-            // add mode 
-            // NOOP 
         }
 
     }
@@ -190,7 +185,6 @@ export default class ElementView extends UIElement {
             if (this.$selection.select(...items)) {
                 this.emit('refreshSelection')
             }
-
         }
     }
 
@@ -211,9 +205,9 @@ export default class ElementView extends UIElement {
 
         this.refs.$dragAreaRect.css({
             left: Length.px(-10000),
-            top: Length.px(0),
-            width: Length.px(0),
-            height: Length.px(0)
+            top: Length.z(),
+            width: Length.z(),
+            height: Length.z()
         })
 
 
@@ -252,22 +246,6 @@ export default class ElementView extends UIElement {
                 this.$selection.select();                
                 this.emit('emptySelection')            
             }
-    
-
-        } else {
-            var obj = {
-                x: Length.px(rect.x.value / this.$editor.scale).floor(),
-                y: Length.px(rect.y.value / this.$editor.scale).floor(),
-                width: Length.px(rect.width.value / this.$editor.scale).floor(),
-                height: Length.px(rect.height.value / this.$editor.scale).floor()
-            }
-
-            switch(this.$editor.addComponentType) {
-            case 'image': this.emit('openImage', obj); break;
-            case 'video': this.emit('openVideo', obj); break;
-            default: this.emit('newComponent', this.$editor.addComponentType, obj); break;
-            }
-
         }
 
         this.sendHelpMessage();

@@ -117,14 +117,14 @@ export class MovableItem extends Item {
             return Length.px(this.json.parent.screenX.value + this.json.x.value); 
         }
 
-        return this.json.x || Length.px(0) 
+        return this.json.x || Length.z() 
     }
     get screenY () { 
 
         if (this.isChild) {
             return Length.px(this.json.parent.screenY.value + this.json.y.value); 
         }        
-        return this.json.y || Length.px(0) 
+        return this.json.y || Length.z() 
     }
     get screenX2 () { 
         return Length.px(this.screenX.value + this.json.width.value) 

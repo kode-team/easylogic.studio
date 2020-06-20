@@ -2,10 +2,12 @@ import UIElement, { EVENT } from "../../../util/UIElement";
 import { BIND } from "../../../util/Event";
 import LanguageSelector from "../status-bar-items/LanguageSelector";
 import ThemeSwitcher from "../status-bar-items/ThemeSwitcher";
+import LayoutSelector from "../status-bar-items/LayoutSelector";
 
 export default class StatusBar extends UIElement {
     components() {
         return {
+            LayoutSelector,
             LanguageSelector,
             ThemeSwitcher,
         }
@@ -15,6 +17,7 @@ export default class StatusBar extends UIElement {
             <div class='status-bar'>
                 <div class='message-view' ref='$msg'></div>
                 <div class='tool-view' ref='$tool'>
+                    <LayoutSelector />
                     <ThemeSwitcher />
                     <LanguageSelector />
                 </div>

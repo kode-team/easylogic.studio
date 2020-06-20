@@ -1,6 +1,6 @@
 export default {
     key: 't',
-    command: 'addComponentType', 
+    command: 'addLayerView', 
     args: 'text',
     description: 'Add text layer',
     when: 'CanvasView'

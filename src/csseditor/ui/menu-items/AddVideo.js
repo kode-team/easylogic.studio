@@ -12,7 +12,7 @@ export default class AddVideo extends MenuItem {
   }
 
   clickButton() {
-    this.emit('addComponentType', 'video');
+    this.emit('addLayerView', 'video');
   }
 
 }

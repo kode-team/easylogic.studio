@@ -12,7 +12,7 @@ export default class AddImage extends MenuItem {
   }
 
   clickButton() {
-    this.emit('addComponentType', 'image');
+    this.emit('addLayerView', 'image');
   }
 
 }

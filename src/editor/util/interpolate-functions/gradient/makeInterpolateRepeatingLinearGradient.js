@@ -12,8 +12,6 @@ export function makeInterpolateRepeatingLinearGradient (layer, property, s, e) {
             colorsteps: obj.colorsteps
         })
 
-        console.log(results); 
-
         return results
     } 
 }

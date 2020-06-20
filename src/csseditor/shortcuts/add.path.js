@@ -1,6 +1,6 @@
 export default {
     key: 'p',
-    command: 'addPath', 
+    command: 'addPathView', 
     description: 'Add SVG Path layer',
     when: 'CanvasView'
 }

@@ -45,6 +45,7 @@ export class Editor {
     this.modeView = 'CanvasView';
     this.addComponentType = '' 
     this.locale = this.loadItem('locale') || 'en_US'
+    this.layout = this.loadItem('layout') || 'all'    
     this.$store = opt.$store;
 
     this.initTheme();
@@ -96,6 +97,11 @@ export class Editor {
     this.locale = locale; 
     this.saveItem('locale', this.locale);    
   }
+
+  setLayout (layout = 'all') {
+    this.layout = layout; 
+    this.saveItem('layout', this.layout);    
+  }  
 
   setUser (user) {
     this.user = user; 

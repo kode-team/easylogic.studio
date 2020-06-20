@@ -14,7 +14,7 @@ export default class AddText extends MenuItem {
   }
 
   clickButton(e) {
-    this.emit('addComponentType', 'text');
+    this.emit('addLayerView', 'text');
   }
 
 }

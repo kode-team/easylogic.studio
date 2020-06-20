@@ -39,8 +39,6 @@ export default class BorderRadiusProperty extends BaseProperty {
 
   [EVENT('changeBorderRadius')] (value) {
 
-    console.log(value);
-
     this.emit("setAttribute", { 
       'border-radius': value 
     })

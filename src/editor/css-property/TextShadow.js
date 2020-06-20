@@ -42,9 +42,9 @@ export class TextShadow extends Property {
   getDefaultObject() {
     return super.getDefaultObject({
       itemType: "text-shadow",
-      offsetX: Length.px(0),
-      offsetY: Length.px(0),
-      blurRadius: Length.px(0),
+      offsetX: Length.z(),
+      offsetY: Length.z(),
+      blurRadius: Length.z(),
       color: "rgba(0, 0, 0, 1)"
     });
   }

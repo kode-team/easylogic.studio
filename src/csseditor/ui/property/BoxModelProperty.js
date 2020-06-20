@@ -25,7 +25,7 @@ export default class BoxModelProperty extends BaseProperty {
 
   templateInput(key, current) {
 
-    var value = current[key] || Length.px(0)
+    var value = current[key] || Length.z()
 
     return /*html*/`<input type="number" ref="$${key}" value="${value.value}" tabIndex="1" />`;
   }

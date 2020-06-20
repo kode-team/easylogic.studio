@@ -34,9 +34,9 @@ export default class PerspectiveOriginEditor extends UIElement {
 
     var obj = {
       isAll: true,
-      'perspective-origin': Length.px(0),
-      'perspective-origin-x': Length.px(0),
-      'perspective-origin-y': Length.px(0)      
+      'perspective-origin': Length.z(),
+      'perspective-origin-x': Length.z(),
+      'perspective-origin-y': Length.z()      
     }
 
     if (this.props.value) {

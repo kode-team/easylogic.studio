@@ -5,11 +5,11 @@ export default class BorderRadius {
         
         var obj = {
             isAll: true,
-            'border-radius': Length.px(0),
-            'border-top-left-radius': Length.px(0),
-            'border-top-right-radius': Length.px(0),
-            'border-bottom-right-radius': Length.px(0),
-            'border-bottom-left-radius': Length.px(0)
+            'border-radius': Length.z(),
+            'border-top-left-radius': Length.z(),
+            'border-top-right-radius': Length.z(),
+            'border-bottom-right-radius': Length.z(),
+            'border-bottom-left-radius': Length.z()
         }
 
         var temp = {} 

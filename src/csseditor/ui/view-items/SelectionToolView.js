@@ -305,7 +305,7 @@ export default class SelectionToolView extends SelectionToolBind {
         // selection 객체는 하나만 만든다. 
         this.guideView.recoverAll();
 
-        var x = Length.px(0), y = Length.px(0), width = Length.px(0), height = Length.px(0);
+        var x = Length.z(), y = Length.z(), width = Length.z(), height = Length.z();
 
         if (this.guideView.rect) {
             var {x, y, width, height} = this.calculateWorldPosition(this.guideView.rect) ;

@@ -1,6 +1,6 @@
 export default {
     key: 'l',
-    command: 'addComponentType', 
+    command: 'addLayerView', 
     args: 'circle',
     description: 'Add circle layer',
     when: 'CanvasView'

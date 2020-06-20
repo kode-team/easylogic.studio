@@ -11,7 +11,7 @@ export default class AddSVGCircle extends MenuItem {
  
 
   clickButton(e) {
-    this.emit('addComponentType', 'svg-circle');
+    this.emit('addLayerView', 'svg-circle');
   }
 
 }

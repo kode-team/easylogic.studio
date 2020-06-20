@@ -25,8 +25,8 @@ export class DomItem extends GroupItem {
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
       'position': 'absolute',
-      'x': Length.px(0),
-      'y': Length.px(0),
+      'x': Length.z(),
+      'y': Length.z(),
       'right': '',
       'bottom': '',
       'width': Length.px(300),
@@ -812,8 +812,8 @@ ${this.toSelectorString(prefix)}
 
   toBound () {
     var obj = {
-      x: this.json.x ? this.json.x.clone() : Length.px(0),
-      y: this.json.y ? this.json.y.clone() : Length.px(0),
+      x: this.json.x ? this.json.x.clone() : Length.z(),
+      y: this.json.y ? this.json.y.clone() : Length.z(),
       width: this.json.width.clone(),
       height: this.json.height.clone(),
     }

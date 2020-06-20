@@ -2,7 +2,7 @@ import refreshElement from "./refreshElement";
 import refreshProject from './refreshProject';
 import setAttribute from "./setAttribute";
 import resizeArtBoard from "./resizeArtBoard";
-import addPath from "./addPath";
+import addPathView from "./addPathView";
 import convertPath from "./convertPath";
 import addImage from "./addImage";
 import addVideo from "./addVideo";
@@ -86,9 +86,12 @@ import sortRight from "./sort.right";
 import sameWidth from "./same.width";
 import sameHeight from "./same.height";
 import refreshArtboard from "./refreshArtboard";
+import addLayerView from "./addLayerView";
+import setEditorLayout from "./setEditorLayout";
 
 
 export default {
+    setEditorLayout,
     refreshArtboard,
     resetSelection,
     addBackgroundColor,
@@ -159,7 +162,8 @@ export default {
     addImage,
     addVideo,
     addLayer,    
-    addPath,
+    addPathView,
+    addLayerView,
     addProject,
     convertPath,    
     newComponent,

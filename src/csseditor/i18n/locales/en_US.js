@@ -9,6 +9,12 @@ export default {
     'app.lang.fr_FR': 'Français',
     'app.label.lang': 'Language',
 
+    'app.layout.all': 'All',
+    'app.layout.css': 'CSS',
+    'app.layout.svg': 'SVG',
+    'app.label.layout': 'Menu Layout',
+
+
     'app.theme.dark': 'Dark',
     'app.theme.light': 'Light',
     'app.theme.toon': 'Toon',

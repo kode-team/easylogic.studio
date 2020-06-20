@@ -20,9 +20,9 @@ export default class TextShadowPropertyPopup extends BasePopup {
   initState() {
     return {
       color: 'rgba(0, 0, 0, 1)',  
-      offsetX: Length.px(0),
-      offsetY: Length.px(0),
-      blurRadius: Length.px(0)
+      offsetX: Length.z(),
+      offsetY: Length.z(),
+      blurRadius: Length.z()
     };
   }
 

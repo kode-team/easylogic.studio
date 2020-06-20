@@ -30,10 +30,10 @@ export default class BackgroundImagePositionPopup extends BasePopup {
     return {
       size: this.props.size || 'auto',
       repeat: this.props.repeat || 'repeat',
-      x: this.props.x || Length.px(0),
-      y: this.props.y || Length.px(0),
-      width: this.props.width || Length.px(0),
-      height: this.props.height || Length.px(0),
+      x: this.props.x || Length.z(),
+      y: this.props.y || Length.z(),
+      width: this.props.width || Length.z(),
+      height: this.props.height || Length.z(),
       blendMode: this.props.blendMode,
     }
   }

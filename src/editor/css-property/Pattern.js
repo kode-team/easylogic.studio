@@ -79,8 +79,8 @@ export class BasePattern extends Pattern {
   getDefaultObject() {
     return super.getDefaultObject({
       type: "base",
-      x: Length.px(0),
-      y: Length.px(0),
+      x: Length.z(),
+      y: Length.z(),
       width: Length.px(20),
       height: Length.px(20),
       lineWidth: Length.px(1),

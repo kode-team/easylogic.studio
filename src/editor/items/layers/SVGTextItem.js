@@ -36,24 +36,6 @@ export class SVGTextItem extends SVGItem {
 
 
 
-  toShapeInsideCSS () {
-    var str = this.json['shape-inside']
-    var obj = Shape.parseStyle(str)
-
-    switch (obj.type) {
-    case 'path': 
-    case 'svg': 
-      str = `url(#${this.shapeInsideId})`
-      break; 
-    }
-
-    return {
-      'shape-inside': str,
-      'inline-size': this.json.width
-    }
-  }  
-
-
   updatePathItem (obj) {
 
     // shape-inside 
@@ -118,8 +100,7 @@ export class SVGTextItem extends SVGItem {
       $text.setAttr({
         filter: this.toFilterValue,
         fill: this.toFillValue,
-        stroke: this.toStrokeValue,
-        y: this.json['font-size'] || '13px',        
+        stroke: this.toStrokeValue,   
         textLength: this.json.textLength,
         lengthAdjust: this.json.lengthAdjust
       })
@@ -128,42 +109,10 @@ export class SVGTextItem extends SVGItem {
     }
   }    
 
-
-  toNestedCSS() {
-    
-    return [
-      { selector: '> text', css : {
-          ...this.toShapeInsideCSS()
-        }
-      }
-    ]
-  }    
- 
-  toSVGCSS() {
-
-    return {
-      ...super.toSVGCSS(),
-      ...this.toShapeInsideCSS(),
-    };
-  }
-
-  get toShapeInside() {
-
-    var obj = Shape.parseStyle(this.json['shape-inside']);
-    var value = obj.value; 
-    switch (obj.type) {
-    case 'path':
-      return /*html*/`<path d="${value}" id="${this.shapeInsideId}" />`
-    }
-
-    return ``
-  }  
-
   get toDefInnerString () {
     return /*html*/`
         ${this.toFillSVG}
         ${this.toStrokeSVG}
-        ${this.toShapeInside}
     `
   }
 
@@ -181,7 +130,6 @@ export class SVGTextItem extends SVGItem {
         'class': 'svg-text-item',
         textLength,
         lengthAdjust,
-        y: this.json['font-size'] || '13px',        
       })} >${this.json.text}</text>
   </svg>`
   }
@@ -203,7 +151,6 @@ export class SVGTextItem extends SVGItem {
         ...this.toSVGAttribute(),        
         textLength,
         lengthAdjust,        
-        y: this.json['font-size'] || '13px',
         style: CSS_TO_STRING(this.toSVGCSS())
       })} >${this.json.text}</text>
     </g>`

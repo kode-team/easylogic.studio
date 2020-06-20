@@ -15,7 +15,7 @@ export default class InputRangeEditor extends UIElement {
 
     initState() {
         var units = this.props.units || 'px,em,%';
-        var value = Length.parse(this.props.value || Length.px(0));
+        var value = Length.parse(this.props.value || Length.z());
         return {
             removable: this.props.removable === 'true',
             label: this.props.label || '',

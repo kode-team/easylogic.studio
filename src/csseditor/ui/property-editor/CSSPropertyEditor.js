@@ -116,7 +116,7 @@ export default class CSSPropertyEditor extends UIElement {
         case 'opacity':
           return 1; 
         default: 
-          return Length.px(0);
+          return Length.z();
       }
   }
 
