@@ -4,7 +4,7 @@
     &.inspector {
       position: relative;
       height: 100%;    
-      border-left: 1px solid $border-color;
+      border-left: 1px solid var(--border-color);;
   
       > div {
         position: relative;
@@ -36,7 +36,7 @@
   
     &.object-list {
       position: relative;
-      border-right: 1px solid $border-color;      
+      border-right: 1px solid var(--border-color);;      
       box-sizing: border-box;
       height: 100%;
       .property {
@@ -75,7 +75,7 @@
           }      
     
           &:not(:first-child) {
-            border-top: 1px solid $border-color;
+            border-top: 1px solid var(--border-color);;
             
           }
     
@@ -106,7 +106,7 @@
           }      
     
           &:not(:first-child) {
-            border-top: 1px solid $border-color;
+            border-top: 1px solid var(--border-color);
             
           }
     

@@ -34,7 +34,7 @@
           padding: 6px 0px;
 
           &.selected {
-            background-color: rgba($border-color, 0.5);
+            background-color: var(--border-color);
           }
       
           .gradient-info {
@@ -58,7 +58,7 @@
           }
 
           .pattern {
-            background-color: $border-color;
+            background-color: var(--border-color);
             border-radius: 3px;
           }
       
@@ -114,7 +114,7 @@
             padding-top: 6px;
       
             .step {
-              border: 1px solid $selected-color;
+              border: 1px solid var(--selected-color);
               display: inline-block;
               margin-left: -6px;
               width: 12px;

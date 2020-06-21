@@ -6,7 +6,7 @@
     bottom:0px;
     z-index: 10000;
     right:0px;
-    background-color: $window-background-color;
+    background-color: var(--window-background-color);
 
   
     .window {
@@ -18,11 +18,11 @@
         transform: translate(-50%, -50%);
         
         z-index: 1000;
-        background-color: $background-color;
-        border: 1px solid $border-color;
-        box-shadow: 0 0 1px 0px $border-color;
+        background-color: var(--background-color);
+        border: 1px solid var(--border-color);
+        box-shadow: 0 0 1px 0px var(--border-color);
         padding: 14px;
-        color: $popup-font-color;
+        color: var(--font-color);
 
         .window-title {
             position: absolute;

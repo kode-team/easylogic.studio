@@ -12,17 +12,17 @@
     background-color: transparent;
 
     input {
-      color: $font-color !important;
+      color: var(--font-color) !important;
       text-transform: uppercase;
       border:1px solid rgba(221, 221, 221, 0.4) !important;
     }
 
     .title {
-      color: $font-color !important;
+      color: var(--font-color) !important;
     }
 
     .colorsets {
-      border-top: 1px solid $border-color !important;
+      border-top: 1px solid var(--border-color) !important;
     }
   }
 

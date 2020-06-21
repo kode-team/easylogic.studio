@@ -4,7 +4,7 @@
     height: 30px;
     overflow: hidden;
     position: relative;
-    background-color: $status-bar-background-color; 
+    background-color: var(--status-bar-background-color); 
     z-index: 1;
     pointer-events: all;
     display: grid;
@@ -25,14 +25,14 @@
 
       > div {
         display: inline-block;
-        background-color: $status-bar-item-background-color;
+        background-color: var(--status-bar-item-background-color);
         border-radius: 3px;
         min-width: 50px;
       }
     }    
 
 
-    .language-selector {
+    .status-selector {
       display: inline-grid; 
       text-align: left;
       grid-template-columns: 50px 1fr;
@@ -48,26 +48,8 @@
         .select-editor {
           height: 100%;
           width: 50px;
-        }
-      }
-    }
-
-    .theme-switcher {
-      display: inline-grid; 
-      text-align: left;
-      grid-template-columns: 50px 1fr;
-      padding-left: 5px;
-
-      > label {
-        display: inline-block;
-      }
-
-      > .item {
-        display: inline-block;
-
-        .select-editor {
-          height: 100%;
-          width: 50px;
+          background-color: var(--background-color);
+          color: var(--font-color);          
         }
       }
     }

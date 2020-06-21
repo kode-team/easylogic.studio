@@ -24,7 +24,7 @@
         line-height: 1;
         background-color: transparent;
         height: 24px;
-        background-color: $select-icon-editor-item-color;
+        background-color: var(--select-icon-editor-item-color);
         box-sizing: border-box;
         padding: 2px;
         border-radius: 3px;
@@ -46,7 +46,7 @@
             text-transform: uppercase;
             line-height: 1.6;
             border-radius: 3px;            
-            color: $selected-font-color;            
+            color: var(--selected-font-color);            
 
             svg {
                 width: 16px;
@@ -55,9 +55,8 @@
             }
 
             &.selected {
-                background-color: $select-icon-editor-selected-color;
-                // box-shadow: 0px 0px 5px 1px $select-icon-editor-selected-shadow-color;
-                color: $selected-font-color;
+                background-color: var(--select-icon-editor-selected-color);
+                color: var(--selected-font-color);
             }
 
             &.icon {

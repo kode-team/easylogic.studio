@@ -10,8 +10,8 @@ $tab-horizontal-header-right-width: 60px;
   right: 0px;
   bottom: 0px;
   top: 0px;
-  background-color: $tab-background-color;
-  color: $tab-font-color; 
+  background-color: var(--background-color);
+  color: var(--font-color);
 
   &.number-tab { 
 
@@ -38,7 +38,7 @@ $tab-horizontal-header-right-width: 60px;
           height: auto;
           display: flex;
           flex-direction: column;
-          border-right: 1px solid $border-color;
+          border-right: 1px solid var(--border-color);
 
           .logo-item {
             flex: none;
@@ -67,7 +67,7 @@ $tab-horizontal-header-right-width: 60px;
               background-color: transparent;
               &:before {
                 content: '';
-                background-color: $selected-color;
+                background-color: var(--selected-color);
                 width: 2px;
                 height: auto;
                 position: absolute;
@@ -101,7 +101,7 @@ $tab-horizontal-header-right-width: 60px;
             .title {
               padding-bottom: 5px;
               font-size: 10px;
-              color: darken($font-color, 30%);
+              color: var(--font-color);
             }
           }
         }
@@ -116,12 +116,9 @@ $tab-horizontal-header-right-width: 60px;
     }
 
     .tab-header {
-      // height: 34px;
       cursor: pointer;
-      background-color: $tab-header-background-color;
       overflow: hidden;
-      color: $tab-header-font-color;
-      // border-bottom: 1px solid $border-color;      
+      color: var(--font-color);
       
     }
     .tab-content {
@@ -153,7 +150,7 @@ $tab-horizontal-header-right-width: 60px;
         &.selected {
           &:before {
             content: '';
-            background-color: $selected-color;
+            background-color: var(--selected-color);
             height: 2px;
             position: absolute;
             left:0px;
@@ -166,7 +163,7 @@ $tab-horizontal-header-right-width: 60px;
         &.selected,
         &:hover {
           label {
-            color: $selected-color; 
+            color: var(--selected-color); 
           }
 
         }
@@ -177,7 +174,7 @@ $tab-horizontal-header-right-width: 60px;
           height: 100%;
           display: inline-block;
           vertical-align: middle;
-          color: $tab-header-font-color;
+          color: var(--font-color);
           &.icon {
             padding: 6px 10px 2px;
           }
@@ -257,18 +254,7 @@ $tab-horizontal-header-right-width: 60px;
 
       &.selected {
         // background-color: transparent;
-        color: $tab-selected-font-color;        
-      }
-
-      &.select-reverse {
-        &:not(.selected) {
-          background-color: rgba($tab-selected-color, 0.5);
-          color: black;
-        }
-
-        &.selected {
-          background-color: $tab-background-color;
-        }
+        color: var(--selected-font-color);
       }
     }
   }
@@ -279,7 +265,6 @@ $tab-horizontal-header-right-width: 60px;
     right: 0px;
     top: $tab-header-height;
     bottom: 0px;
-    // border: 1px solid $tab-border-color;
 
     &.no-border {
       border: 0px;
@@ -319,7 +304,7 @@ $tab-horizontal-header-right-width: 60px;
           right: 0px;
           height: 30px;
           display: none;
-          background-color: $background-color;
+          background-color: var(--background-color);
           font-size: 12px;
           font-weight: bold;
           padding: 8px 5px !important;

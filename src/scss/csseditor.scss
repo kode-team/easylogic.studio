@@ -53,23 +53,157 @@ body {
     $timeline-size: 300px;
     $show-timeline-animation: all 0.05s linear;
     $footer-height: 30px; 
+    // base 
+    $range-thumb-width: 10px;
+    $range-thumb-height: 10px;
+    $range-track-height: 2px;
+    $range-thumb-top: -4px;
+    $range-thumb-border-radius: 5px;
 
     &[data-theme='dark'] {
-        @import './themes/csseditor/dark.scss';
-        @import './csseditor/component.scss';
-        @import './csseditor/layout.scss';        
-    }
+        @import './themes/csseditor/dark.scss'; 
+        --range-thumb-color: #{$range-thumb-color};
+        --range-track-color: #{$range-track-color};
+        --range-thumb-border-color: #{$range-thumb-border-color};
+        --input-background-color: #{$input-background-color};
+        --input-border-color: #{$input-border-color};       
+        --input-font-color: #{$input-font-color};         
+        --border-color: #{$border-color};
+        --selected-color: #{$selected-color};
+        --selected-border-color: #{$selected-border-color};
+        --background-color: #{$background-color};      
+        --header-background-color: #{$header-background-color};  
+        --selected-background-color: #{$selected-background-color};
+        --font-color: #{$font-color};
+        --selected-font-color: #{$selected-font-color};
+        --divider-color: #{$divider-color};
+        --property-border-color: #{$property-border-color};
+        --list-item-font-color: #{$list-item-font-color};
+        --list-item-selected-color: #{$list-item-selected-color};
+        --popup-background-color: #{$popup-background-color};
+        --window-background-color: #{$window-background-color};
+        --path-background-color: #{$path-background-color};
+        --path-guide-color: #{$path-guide-color};
+        --path-segment-stroke-color: #{$path-segment-stroke-color};
+        --timeline-gauge-background-color: #{$timeline-gauge-background-color};
+        --timeline-gauge-handle-color: #{$timeline-gauge-handle-color};
+        --timeline-row-selected-color: #{$timeline-row-selected-color};
+        --guide-font-color: #{guide-font-color};
+        --guide-line-rect-color: #{$guide-line-rect-color};
+        --page-view-color: #{$page-view-color};
+        --page-view-element-artboard-title-color: #{$page-view-element-artboard-title-color};
+        --animation-item-background-color: #{$animation-item-background-color};
+        --select-icon-editor-item-color: #{$select-icon-editor-item-color};
+        --select-icon-editor-selected-color: #{$select-icon-editor-selected-color};
+        --grid-box-editor-button-background-color: #{$grid-box-editor-button-background-color};
+        --status-bar-item-background-color: #{$status-bar-item-background-color};
+        --status-bar-background-color: #{$status-bar-background-color};
+        --drag-area-rect-border-color: #{$drag-area-rect-border-color};
+        --drag-area-rect-background-color: #{$drag-area-rect-background-color};
+        --rotate-x-border-color: #{$rotate-x-border-color};
+        --rotate-y-border-color: #{$rotate-y-border-color};
+        --color-view-background-color: #{$color-view-background-color};
+        --transform-origin-selected-color: #{$transform-origin-selected-color};
+        --border-radius-selected-color: #{$border-radius-selected-color};        
+    }   
 
     &[data-theme='light'] {
         @import './themes/csseditor/light.scss';
-        @import './csseditor/component.scss';
-        @import './csseditor/layout.scss';        
+        --range-thumb-color: #{$range-thumb-color};
+        --range-track-color: #{$range-track-color};
+        --range-thumb-border-color: #{$range-thumb-border-color};        
+        --input-background-color: #{$input-background-color};
+        --input-border-color: #{$input-border-color};       
+        --input-font-color: #{$input-font-color};         
+        --border-color: #{$border-color};
+        --selected-color: #{$selected-color};
+        --selected-border-color: #{$selected-border-color};
+        --background-color: #{$background-color};      
+        --header-background-color: #{$header-background-color};  
+        --selected-background-color: #{$selected-background-color};
+        --font-color: #{$font-color};
+        --selected-font-color: #{$selected-font-color};
+        --divider-color: #{$divider-color};
+        --property-border-color: #{$property-border-color};
+        --list-item-font-color: #{$list-item-font-color};
+        --list-item-selected-color: #{$list-item-selected-color};
+        --popup-background-color: #{$popup-background-color};
+        --window-background-color: #{$window-background-color};
+        --path-background-color: #{$path-background-color};
+        --path-guide-color: #{$path-guide-color};
+        --path-segment-stroke-color: #{$path-segment-stroke-color};
+        --timeline-gauge-background-color: #{$timeline-gauge-background-color};
+        --timeline-gauge-handle-color: #{$timeline-gauge-handle-color};
+        --timeline-row-selected-color: #{$timeline-row-selected-color};
+        --guide-font-color: #{guide-font-color};
+        --guide-line-rect-color: #{$guide-line-rect-color};
+        --page-view-color: #{$page-view-color};
+        --page-view-element-artboard-title-color: #{$page-view-element-artboard-title-color};
+        --animation-item-background-color: #{$animation-item-background-color};
+        --select-icon-editor-item-color: #{$select-icon-editor-item-color};
+        --select-icon-editor-selected-color: #{$select-icon-editor-selected-color};
+        --grid-box-editor-button-background-color: #{$grid-box-editor-button-background-color};
+        --status-bar-item-background-color: #{$status-bar-item-background-color};
+        --status-bar-background-color: #{$status-bar-background-color};
+        --drag-area-rect-border-color: #{$drag-area-rect-border-color};
+        --drag-area-rect-background-color: #{$drag-area-rect-background-color};
+        --rotate-x-border-color: #{$rotate-x-border-color};
+        --rotate-y-border-color: #{$rotate-y-border-color};
+        --color-view-background-color: #{$color-view-background-color};
+        --transform-origin-selected-color: #{$transform-origin-selected-color};
+        --border-radius-selected-color: #{$border-radius-selected-color};                 
     }    
 
     &[data-theme='toon'] {
-        @import './themes/csseditor/toon.scss';
-        @import './csseditor/component.scss';
-        @import './csseditor/layout.scss';        
+        @import './themes/csseditor/toon.scss';      
+        --range-thumb-color: #{$range-thumb-color};
+        --range-track-color: #{$range-track-color};
+        --range-thumb-border-color: #{$range-thumb-border-color};        
+        --input-background-color: #{$input-background-color};
+        --input-border-color: #{$input-border-color};       
+        --input-font-color: #{$input-font-color};         
+        --border-color: #{$border-color};
+        --selected-color: #{$selected-color};
+        --selected-border-color: #{$selected-border-color};
+        --background-color: #{$background-color};      
+        --header-background-color: #{$header-background-color};  
+        --selected-background-color: #{$selected-background-color};
+        --font-color: #{$font-color};
+        --selected-font-color: #{$selected-font-color};
+        --divider-color: #{$divider-color};
+        --property-border-color: #{$property-border-color};
+        --list-item-font-color: #{$list-item-font-color};
+        --list-item-selected-color: #{$list-item-selected-color};
+        --popup-background-color: #{$popup-background-color};
+        --window-background-color: #{$window-background-color};
+        --path-background-color: #{$path-background-color};
+        --path-guide-color: #{$path-guide-color};
+        --path-segment-stroke-color: #{$path-segment-stroke-color};
+        --timeline-gauge-background-color: #{$timeline-gauge-background-color};
+        --timeline-gauge-handle-color: #{$timeline-gauge-handle-color};
+        --timeline-row-selected-color: #{$timeline-row-selected-color};
+        --guide-font-color: #{guide-font-color};
+        --guide-line-rect-color: #{$guide-line-rect-color};
+        --page-view-color: #{$page-view-color};
+        --page-view-element-artboard-title-color: #{$page-view-element-artboard-title-color};
+        --animation-item-background-color: #{$animation-item-background-color};
+        --select-icon-editor-item-color: #{$select-icon-editor-item-color};
+        --select-icon-editor-selected-color: #{$select-icon-editor-selected-color};
+        --grid-box-editor-button-background-color: #{$grid-box-editor-button-background-color};
+        --status-bar-item-background-color: #{$status-bar-item-background-color};
+        --status-bar-background-color: #{$status-bar-background-color};
+        --drag-area-rect-border-color: #{$drag-area-rect-border-color};
+        --drag-area-rect-background-color: #{$drag-area-rect-background-color};
+        --rotate-x-border-color: #{$rotate-x-border-color};
+        --rotate-y-border-color: #{$rotate-y-border-color};
+        --color-view-background-color: #{$color-view-background-color};
+        --transform-origin-selected-color: #{$transform-origin-selected-color};
+        --border-radius-selected-color: #{$border-radius-selected-color};       
     }        
+
+    @import './csseditor/component.scss';
+    @import './csseditor/layout.scss';          
+
+    
 }
  

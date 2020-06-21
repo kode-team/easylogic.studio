@@ -6,8 +6,7 @@ $border-color: rgb(226, 226, 226);
 $border-color-2: #609de2;
 $selected-border-color: #609de2;
 $selected-color: #4778d4;
-$logo-selected-color: #fc554f;
-$logo-selected-font-color: white;
+
 
 $background-color: white; 
 $header-background-color: white;
@@ -93,8 +92,6 @@ $timeline-background-color: lighten($background-color, 5%);
 $timeline-border-color: $border-color;
 $timeline-gauge-background-color: #435cb5;
 $timeline-gauge-handle-color: #748ff1;
-$timeline-offset-line-color: $selected-color;
-// $timeline-offset-line-color: #497594;
 $timeline-row-selected-color: #609de2;
 
 

@@ -22,7 +22,8 @@
         }        
 
         &.selected {      
-            @include title-background-2($list-item-selected-color, $list-item-selected-font-color);
+            background-color: var(--list-item-selected-color);
+            color: var(--selected-font-color);            
         }
     }
 }

@@ -7,7 +7,7 @@
             font-weight: bold;
             display: block;
             padding: 10px 0px;
-            color: $selected-color;
+            color: var(--selected-color);
         }
 
         .list {
@@ -26,12 +26,12 @@
                 padding: 0px 5px;
 
                 &:hover {
-                    background-color: lighten($selected-color, 10%);
-                    color: $selected-font-color;
+                    background-color: var(--selected-color);
+                    color: var(--selected-font-color);
                 }
 
                 &.selected {
-                    color: $selected-color; 
+                    color: var(--selected-color); 
                 }        
 
                 .icon {
@@ -58,8 +58,8 @@
                 cursor: pointer;
                 text-align: center;
                 box-sizing: border-box;
-                border: 1px solid rgba($font-color, 0.1);
-                color: $font-color; 
+                border: 1px solid var(--font-color);
+                color: var(--font-color); 
 
                 .icon {
                     width: 50px;

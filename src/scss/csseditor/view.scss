@@ -21,7 +21,7 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
   right: 0px;
   bottom: 0px;
   top: 0px;
-  background-color: $page-view-color;
+  background-color: var(--page-view-color);
 
   .page-lock {
     position: absolute;
@@ -53,9 +53,9 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
   display: inline-block;
   padding: 5px 10px;
   border-radius: 3px;
-  border: 1px solid $border-color;
-  color: $font-color;
-  background-color: $background-color;
+  border: 1px solid var(--border-color);
+  color: var(--font-color);
+  background-color: var(--background-color);
 
   >label {
     vertical-align: middle;
@@ -73,7 +73,7 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
     display: inline-block;
     width: 50px;
     border-radius: 5px;
-    border:1px solid rgba($selected-color, 0.5);
+    border:1px solid rgba(var(--selected-color), 0.5);
   }
 }
 
@@ -104,8 +104,8 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
 .drag-area-rect {
   pointer-events: none;
   position: absolute;
-  border: 0.5px solid $drag-area-rect-border-color;
-  background-color: $drag-area-rect-background-color;
+  border: 0.5px solid var(--drag-area-rect-border-color);
+  background-color: var(--drag-area-rect-background-color);
   box-sizing: border-box;
 
   left: -10000px;
@@ -169,7 +169,7 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
         left: 0px;
         top: -15px;
         font-size: 12px;
-        color: $page-view-element-artboard-title-color;
+        color: var(--page-view-element-artboard-title-color);
         display: inline-block;
       }
 

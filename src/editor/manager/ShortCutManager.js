@@ -1,4 +1,5 @@
 import { isArray } from "../../util/functions/func";
+import { os } from "../../util/functions/detect";
 
 function joinKeys (...args) {
     return args.filter(Boolean).join('+')
@@ -12,13 +13,16 @@ export class ShortCutManager {
     }
 
     registerShortCut (shortcut) {
+
+        const OSName = os()
+
         this.list.push({
             key: '',
             command: '',
             args: [],
             eventType: 'keydown',
             ...shortcut, 
-            checkKeyString: this.splitShortCut(shortcut.key)
+            checkKeyString: this.splitShortCut(shortcut[OSName] || shortcut.key)
         });
 
     }
@@ -45,7 +49,7 @@ export class ShortCutManager {
             if (key.includes('ALT')) isAlt = true; 
             else if (key.includes('CTRL')) isControl = true; 
             else if (key.includes('SHIFT')) isShift = true; 
-            else if (key.includes('CMD') || key.includes('WIN')) isMeta = true; 
+            else if (key.includes('CMD') || key.includes('WIN') || key.includes('META')) isMeta = true; 
             else restKeys.push(key);
         })
 

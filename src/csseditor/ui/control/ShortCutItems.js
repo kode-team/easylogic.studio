@@ -1,6 +1,7 @@
 import UIElement from "../../../util/UIElement";
 import { LOAD } from "../../../util/Event";
 import shortcuts from "../../shortcuts";
+import { os } from "../../../util/functions/detect";
 
 const keyUnitCode = {
   'option': '⌥',
@@ -34,12 +35,13 @@ export default class ShortCutItems extends UIElement {
   }
 
   [LOAD('$el')] () {
+    const name = os()
     return shortcuts.map(it => {
       return /*html*/`
         <div class='shortcut-item'>
           <div class='command'>
             <label>${it.description}</label>
-            <span><kbd>${convertKeyString(it.key)}</kbd></span>
+            <span><kbd>${convertKeyString(it[name] || it.key)}</kbd></span>
           </div>
           <div class='when'>${it.when}</div>
         </div>

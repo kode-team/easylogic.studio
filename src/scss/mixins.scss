@@ -13,30 +13,10 @@
     background-position: 0 0, 0 $half, $half (-1 * $half), (-1 * $half) 0px;
 }
 
-@mixin hue-background () {
-    background-image: linear-gradient(
-        to right,
-        rgba($selected-border-color, 0.5) 0%,
-        $selected-border-color 50%,
-        #ff00ff 83%,
-        blue 100%
-      );
-
-}
 
 @mixin title-background () {
-    background-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, $selected-color 10%, rgba($selected-color, 0) 60%);
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, var(--selected-color) 10%, rgba(var(--selected-color), 0) 60%);
     color: white; 
-}
-
-
-@mixin title-background-2 ($background-color: $selected-color, $font-color: $selected-font-color) {
-    background-color: $background-color;
-    color: $font-color; 
-}
-
-@mixin tab-title-background () {
-    background-color: rgba($selected-border-color, 0.05);    
 }
 
 @mixin arrow_top ($pixel, $color) {
@@ -55,63 +35,4 @@
     border-right: $pixel solid transparent;    
     border-top: $pixel solid $color;
     pointer-events: none;
-}
-
-@mixin input-style ($background-color: #434b50, $border-color: #0c0c0d, $border-radius: 3px, $fontColor: #ececec) {
-    background-color: $background-color;
-    // box-shadow: 0 1px 0 0 hsla(0,0%,100%,.05), inset 0 1px 0 0 hsla(0,0%,100%,.05);
-    border: 1px solid $border-color;
-    border-radius: 0px;
-    color: $fontColor; 
-    outline: none;
-    vertical-align: middle;
-    width: 100%;
-    
-}
-
-@mixin select-style ($background-color: #434b50, $border-color: #0c0c0d, $border-radius: 3px, $fontColor: #ececec) {
-    appearance: none;
-    outline: none;
-    padding: 0px 4px;
-    line-height: 1.6;
-    cursor: pointer;
-    height: 100%;
-
-    @include input-style($background-color, $border-color, $border-radius, $fontColor);
-    // border: 0px;
-    font-size: 12px;
-    border-radius: 3px;    
-}
- 
-
-@mixin input-text-style ($background-color: #373e42, $border-color: #0c0c0d, $border-radius: 3px, $fontColor: #ececec) {
-    background-color: $background-color;
-    // background-color: rgb(75, 75, 75);
-    // box-shadow: 0 1px 0 0 hsla(0,0%,100%,.05), inset 0 1px 0 0 hsla(0,0%,100%,.05);
-    border: 1px solid $border-color;
-    // border-radius: $border-radius;       
-    color: $fontColor; 
-    outline: none;
-    
-}
-
-
-@mixin button-style ($frontColor: #ececec) {
-
-    border-width: 0px;    
-    color: $frontColor; 
-    width: 16px;
-    height: 16px;
-    vertical-align: middle;
-    appearance: none;
-    background-color: transparent;
-    outline: none;
-    display: inline-block;
-    cursor: pointer;
-    padding: 0px;
-
-    svg {
-        width: 100%;
-        height: 100%;
-    }
 }

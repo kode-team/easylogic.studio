@@ -4,11 +4,13 @@
     grid-column-gap: 4px;
     position: relative;
     height: 24px;
+    box-sizing: border-box;
 
     select {
         font-size: 11px;
+        border: 1px solid var(--border-color);
         &:focus-within {
-            border: 1px solid $selected-color;
+            border: 1px solid var(--selected-color);
         }
     }
 

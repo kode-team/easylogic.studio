@@ -3,8 +3,8 @@
     pointer-events: all;
     outline: none;
     border-top: 0px;
-    color: $font-color;
-    background-color: $draw-view-background-color;  
+    color: var(--font-color);
+    background-color: var(--background-color);  
     height: 100%;
     padding: 5px 5px;
 
@@ -52,7 +52,7 @@
               display: inline-block;
 
               input[type=number] {
-                background-color: $border-color;
+                background-color: var(--border-color);
               }
             }
           }
@@ -61,7 +61,7 @@
             .preview {
               width: 20px;
               height: 20px;
-              border: 1px solid $selected-color;
+              border: 1px solid var(--selected-color);
               overflow: hidden;
             }
           }

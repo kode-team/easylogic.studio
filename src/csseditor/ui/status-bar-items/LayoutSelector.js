@@ -16,7 +16,7 @@ export default class LayoutSelector extends UIElement {
 
 
         return /*html*/`
-            <div class='language-selector'>
+            <div class='status-selector'>
                 <label>${this.$i18n('app.label.layout')}</label>
                 <div class='item'>
                     <SelectEditor 

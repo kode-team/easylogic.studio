@@ -4,7 +4,7 @@
     // grid-column-gap: 4px;
 
     &.focused {
-        box-shadow: 0 0 0 1px $selected-color;
+        box-shadow: 0 0 0 1px var(--selected-color);
         border-radius: 3px;
     }
 

@@ -4,7 +4,7 @@
     padding:0px;
     margin:0px !important;
     .layer-item {
-        color: $list-item-font-color;
+        color: var(--list-item-font-color);
         padding: 5px 7px !important; 
         margin-bottom: 0px !important;
         border-radius: 4px;
@@ -34,7 +34,7 @@
                 svg {
 
                     path,polygon {
-                        stroke: $list-item-font-color;
+                        stroke: var(--list-item-font-color);
                     }
                 }
             }            
@@ -55,18 +55,18 @@
                 text-align: right;
 
                 .visible {
-                    color: $border-color;
+                    color: var(--border-color);
 
                     &[data-visible='true'] {
-                        color: $font-color; 
+                        color: var(--font-color); 
                     }
                 }
 
                 .lock {
-                    color: $font-color; 
+                    color: var(--font-color); 
 
                     &[data-lock='true'] {
-                        color: $border-color; 
+                        color: var(--border-color); 
                     }
                 }
             }
@@ -74,13 +74,14 @@
         }
 
         &.selected {
-            @include title-background-2($list-item-selected-color, $list-item-selected-font-color);   
+            background-color: var(--list-item-selected-color);
+            color: var(--selected-font-color);
             
             .detail {
                 span.icon {
                     svg {
                         path,polygon {
-                            stroke: $list-item-selected-font-color;
+                            stroke: var(--selected-font-color);
                         }
                     }
                 }            
@@ -120,7 +121,7 @@
             .detail {
                 [data-layout-title] {
                     &:after {
-                        background-color: $selected-color;
+                        background-color: var(--selected-color);
                     }
                 }
             }
@@ -135,7 +136,7 @@
 
     &+ .drag-point {
         position: absolute;
-        border: 1px solid $selected-color;
+        border: 1px solid var(--selected-color);
         pointer-events: none;
     }
 }

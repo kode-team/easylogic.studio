@@ -2,7 +2,7 @@
 
     .title {
         padding: 5px 0px;
-        color: $selected-color;
+        color: var(--selected-color);
     }
 
     .color-matrix-template {
@@ -10,7 +10,7 @@
         max-height: 383px;
         overflow: auto; 
         box-sizing: border-box;
-        border:1px solid rgba($border-color, 0.5);
+        border:1px solid var(--border-color);
 
         input, select {
             width: 100%;
@@ -22,7 +22,7 @@
 
             &:hover {
                 background-color: rgba(255, 255, 255, 0.2);
-                color: $selected-color;
+                color: var(--selected-color);
             }
         }
     }

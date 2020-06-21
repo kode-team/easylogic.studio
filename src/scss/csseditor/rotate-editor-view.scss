@@ -21,11 +21,11 @@
             transform: translate(-50%, -50%);
             width: 20px;
             height: 20px;
-            background-color: rgba($selected-color, 0.5);
-            border:1px solid $selected-font-color;
+            background-color: rgba(var(--selected-color), 0.5);
+            border:1px solid var(--selected-font-color);
             border-radius: 100%;
             pointer-events: all;
-            color: $selected-font-color;
+            color: var(--selected-font-color);
 
             svg {
                 width: 100%;
@@ -66,14 +66,14 @@
             width: 10px;
             height: 10px;
             transform: translate(-50%, -50%);
-            background-color: $selected-color;
+            background-color: var(--selected-color);
             cursor: pointer;
             pointer-events: all;
             border-radius: 100%;
             box-sizing: border-box;
 
             &:hover {
-                border-color: darken($selected-color, 20%);
+                border-color: var(--selected-color);
             }
 
             &[data-value='top-left'] {
@@ -128,7 +128,7 @@
         right: 0px;
         top: 0px;
         bottom: 0px;
-        border: 1px solid $rotate-area-border-color; 
+        border: 1px solid var(--selected-color); 
         border-radius: 100%; 
         pointer-events: all;
         cursor: move;
@@ -148,7 +148,7 @@
             &:not([style]) {
 
                 .rotate-item {
-                    border: 1px solid $font-color;
+                    border: 1px solid var(--font-color);
                     border-radius: 0px;
                 }
                 .rotate-x {
@@ -174,12 +174,12 @@
         .rotate-x {
 
             transform: rotateX(90deg) translateZ(0px);
-            border: 5px solid $rotate-x-border-color; 
+            border: 5px solid var(--rotate-x-border-color); 
         }
 
         .rotate-y { 
             transform: rotateY(90deg) translateZ(0px);
-            border: 5px solid $rotate-y-border-color; 
+            border: 5px solid var(--rotate-y-border-color); 
         }
     }
 }

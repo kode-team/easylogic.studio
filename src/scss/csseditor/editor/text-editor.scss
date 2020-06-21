@@ -15,6 +15,6 @@
     }
 
     input[type="text"] {
-        border: 1px solid $border-color;
+        border: 1px solid var(--border-color);
     }
 }

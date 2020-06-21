@@ -13,11 +13,11 @@
             text-align: right;
 
             label {
-                color: $selected-color;
+                color: var(--selected-color);
             }
 
             input {
-                color: $font-color;
+                color: var(--font-color);
                 width: 80px;
             }
 

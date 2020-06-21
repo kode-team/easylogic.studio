@@ -5,14 +5,14 @@
       display: grid; 
       grid-template-columns: 1fr; 
       grid-column-gap: 4px;
-      // border: 1px solid $border-color;
+      // border: 1px solid var(--border-color);
       margin-bottom: 5px;
       padding: 5px 6px;  
       cursor: pointer;
 
       &.selected,
       &:hover {
-        background-color: $selected-color;
+        background-color: var(--selected-color);
       }
 
       .title {
@@ -36,7 +36,7 @@
           
         .container {
             position: relative;
-            background-image: linear-gradient(to right, $border-color, black);
+            background-image: linear-gradient(to right, var(--border-color), black);
             background-size: 100% 2px;
             background-repeat: no-repeat;
             background-position: 0px center;

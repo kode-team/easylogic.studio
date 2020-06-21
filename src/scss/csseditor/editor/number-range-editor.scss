@@ -64,7 +64,7 @@
                 &[type='number'] {
                     border-radius: 3px;
                     &.focused {
-                        box-shadow: 0 0 0 1px $selected-color;
+                        box-shadow: 0 0 0 1px var(--selected-color);
                     }                
                 }
 

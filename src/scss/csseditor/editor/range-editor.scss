@@ -27,7 +27,7 @@ $border-radius: 3px;
 
             label {
                 display: block; 
-                color: $font-color;
+                color: var(--font-color);
             }
         }
     }
@@ -61,7 +61,7 @@ $border-radius: 3px;
 
 
             &.focused {
-                border: 1px solid $selected-color;
+                border: 1px solid var(--selected-color);
                 border-radius: $border-radius;
             }            
             
@@ -84,18 +84,18 @@ $border-radius: 3px;
             input[type=number] {         
                 padding: 2px 2px;      
                 border-right: 0px;         
-                border-bottom: 1px solid $input-border-color;
-                border-left: 1px solid $input-border-color;
-                border-top: 1px solid $input-border-color;
+                border-bottom: 1px solid var(--input-border-color);
+                border-left: 1px solid var(--input-border-color);
+                border-top: 1px solid var(--input-border-color);
                 text-align: left;
-                background-color: $input-background-color;
+                background-color: var(--input-background-color);
                 border-top-left-radius: $border-radius;
                 border-bottom-left-radius: $border-radius;
             }
 
             .select-editor {
                 text-align: right;
-                background-color: $input-background-color;   
+                background-color: var(--input-background-color);   
                 position: relative;             
                 box-sizing: border-box;          
                 border-top-right-radius: $border-radius;
@@ -120,9 +120,9 @@ $border-radius: 3px;
                     border-bottom-right-radius: $border-radius;
                     border-top-left-radius: 0px;
                     border-bottom-left-radius: 0px;                                        
-                    border-bottom: 1px solid $input-border-color;
-                    border-top: 1px solid $input-border-color;
-                    border-right: 1px solid $input-border-color;                     
+                    border-bottom: 1px solid var(--input-border-color);
+                    border-top: 1px solid var(--input-border-color);
+                    border-right: 1px solid var(--input-border-color);                     
                 }
             }
         }

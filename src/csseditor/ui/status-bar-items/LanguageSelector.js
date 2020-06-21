@@ -19,7 +19,7 @@ export default class LanguageSelector extends UIElement {
         });
 
         return /*html*/`
-            <div class='language-selector'>
+            <div class='status-selector'>
                 <label>${this.$i18n('app.label.lang')}</label>
                 <div class='item'>
                     <SelectEditor 

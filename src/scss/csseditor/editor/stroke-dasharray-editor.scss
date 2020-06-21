@@ -10,7 +10,7 @@
 
     > .tools {
         label {
-            color: $selected-font-color;
+            color: var(--selected-font-color);
             vertical-align: middle;
             cursor: pointer;
         }

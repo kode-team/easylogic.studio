@@ -2,10 +2,10 @@
     padding: 10px;
 
     .shortcut-item {
-        border: 1px solid $selected-color;
+        border: 1px solid var(--selected-color);
         margin-bottom: 10px;
         border-radius: 4px;
-        background-color: $border-color;
+        background-color: var(--border-color);
         padding: 5px;
 
         .command {
@@ -13,6 +13,10 @@
             grid-template-columns: 1fr auto;
 
             label {
+                font-size: 11px;
+            }
+
+            span {
                 font-size: 11px;
             }
 

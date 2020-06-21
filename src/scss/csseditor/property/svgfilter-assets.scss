@@ -13,16 +13,16 @@
 
         button {
             padding: 2px 10px;
-            border: 1px solid $border-color;            
+            border: 1px solid var(--border-color);            
         }
 
         @each $listType in list, grid {
             &[data-view-mode="#{$listType}"] {
                 button[data-value='#{$listType}'] {
-                    background-color: $selected-border-color;
-                    border-color: $selected-border-color;
+                    background-color: var(--selected-border-color);
+                    border-color: var(--selected-border-color);
                     background-image: none;
-                    color: $selected-font-color;
+                    color: var(--selected-font-color);
                 }
             }
         }  
@@ -49,14 +49,14 @@
                 width: 66px;
                 position: relative;
                 height: 66px;
-                border: 1px solid lighten($selected-color, 5%);
+                border: 1px solid var(--selected-color);
                 border-radius: 2px;
                 
                 vertical-align: top;   
                 cursor: pointer;         
                 text-align: center;
                 padding: 20px;
-                color: $font-color; 
+                color: var(--font-color); 
                 
                 button {
                     svg {
@@ -112,7 +112,7 @@
                     right: 0px;
                     text-align: right;   
                     padding: 2px;
-                    color: $selected-font-color;
+                    color: var(--selected-font-color);
                 }
             }
         }

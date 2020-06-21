@@ -7,7 +7,7 @@
     display: inline-block;
     font-weight: 900;
     line-height: 1.6;
-    color: $logo-selected-color;
+    color: var(--selected-color);
     z-index: 1;
     vertical-align: middle; 
   }
@@ -19,12 +19,12 @@
     font-weight: 900;
     line-height: 1.6;
     vertical-align: middle;   
-    color: $logo-selected-font-color;     
+    color: var(--selected-font-color);     
   }
 
   .site {
     font-size: 14px;
-    color: $border-color;
+    color: var(--border-color);
   }
 }
 
@@ -40,7 +40,7 @@
 
 .tool-menu,
 .preview-tool-menu{
-  color: $selected-font-color;
+  color: var(--selected-font-color);
 
   &.center{
     text-align: center;
@@ -93,7 +93,7 @@
 
       .divider {
         border: 0px;
-        border-right: 1px solid $divider-color;
+        border-right: 1px solid var(--divider-color);
         // margin: 5px 10px;
         height: 20px;
         vertical-align: middle;
@@ -102,7 +102,7 @@
   
       .menu-item {
         text-align: center;
-        color: $font-color;
+        color: var(--font-color);
         width: 48px;
         height: 48px;
         background-color: transparent;
@@ -113,11 +113,11 @@
   
         &.selected {
           .icon {      
-            color: $selected-color; 
+            color: var(--selected-color); 
           }
 
           .title {
-            color: $selected-color;
+            color: var(--selected-color);
           }
   
         }
@@ -189,19 +189,19 @@
       border:0px;
       box-shadow: none;
       display: inline-block;
-      color: $selected-font-color;
+      color: var(--selected-font-color);
 
       &[checked="checked"] {
         .icon {
           background-color: rgba(255, 255, 255, 0.1);
-          color: $selected-font-color;          
+          color: var(--selected-font-color);          
         }
       }
     }
 
     .title {
       font-size: 10px;
-      color: darken($font-color, 30%);
+      color: var(--font-color);
     }
 
 
@@ -209,7 +209,7 @@
       margin: 0 auto;
       width: 20px;
       height: 20px;
-      color: $font-color;      
+      color: var(--font-color);      
 
       svg {
         width: 100%;

@@ -48,7 +48,7 @@
 
           &[data-type="filter"] {
             border-radius: 5px;
-            background-color: $selected-color;
+            background-color: var(--selected-color);
           }
 
           &[data-type="clip-path"] {

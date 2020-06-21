@@ -26,7 +26,7 @@
         text-align: right;
         padding: 3px;
         border-radius: 2px;
-        background-color: $color-view-background-color;
+        background-color: var(--color-view-background-color);
 
         .mini-view {
             width: 100%;
@@ -60,7 +60,7 @@
             border-radius: 3px;
 
             &.focused {
-                box-shadow: 0 0 0 1px $selected-color;
+                box-shadow: 0 0 0 1px var(--selected-color);
             }
 
         }

@@ -1,7 +1,7 @@
 
 .svg-filter-editor {
 
-  color: $font-color;
+  color: var(--font-color);
   display: grid;
   grid-template-columns: 150px 1fr 200px;
   grid-column-gap:10px;
@@ -45,7 +45,7 @@
         &:before {
           content: attr(label);
           display: block; 
-          color: $selected-color;
+          color: var(--selected-color);
           font-size: 11px;
         }
 
@@ -55,7 +55,7 @@
           cursor: pointer;
           padding: 2px 10px;
           vertical-align: middle;
-          color: $font-color;
+          color: var(--font-color);
 
           svg {
             width: 20px;
@@ -66,7 +66,7 @@
           &[value="BackgroundImage"], 
           &[value="FillPaint"]
           {
-            color: $selected-color;
+            color: var(--selected-color);
           }
 
           &:hover {
@@ -82,7 +82,7 @@
   $theme-colors: (
     "graphic" : #a6a6ff,
     'source': yellowgreen,
-    'modifier': $selected-color,
+    'modifier': var(--selected-color),
     'lighting': #e6ff00,
     'combiner': #ff9bff
   );          
@@ -94,7 +94,7 @@
     .graph {
       overflow: auto; 
       box-sizing: border-box;
-      border: 1px solid $selected-color;
+      border: 1px solid var(--selected-color);
       position: relative;
       height: 100%;
 
@@ -112,7 +112,7 @@
 
           path {
             fill: transparent;
-            stroke: $selected-color;
+            stroke: var(--selected-color);
             stroke-width: 1;
             pointer-events: none;            
 
@@ -126,9 +126,9 @@
           }          
 
           circle {
-            fill: $selected-color;
+            fill: var(--selected-color);
             r: 4;
-            stroke: rgba($selected-color,  0.5);
+            stroke: rgba(var(--selected-color),  0.5);
             stroke-width:0;
             pointer-events: all;
             cursor: pointer;
@@ -160,7 +160,7 @@
           height: 100%;
 
           path {
-            stroke: $selected-color;
+            stroke: var(--selected-color);
             stroke-width: 1;            
           }
         }
@@ -179,7 +179,7 @@
           top: 10px;
           width: 40px;
           height: 40px;
-          background-color: $background-color; 
+          background-color: var(--background-color); 
           border-radius: 10px;
           pointer-events: all;
           cursor: pointer;
@@ -214,7 +214,7 @@
             left: 50%;
             transform: translateX(-50%);
             font-size: 11px;
-            color: $font-color;
+            color: var(--font-color);
           }
 
           > .remove {
@@ -224,17 +224,17 @@
             left: 50%;
             transform: translateX(-50%);
             font-size: 11px;
-            color: $font-color;
+            color: var(--font-color);
             height: 12px;
             width: 12px;
             border-radius: 100%;
-            background-color: $selected-color;
+            background-color: var(--selected-color);
 
             svg {
               width: 100%;
               height: 100%;
               path  {
-                fill: $font-color;
+                fill: var(--font-color);
               }
             }
           }          
@@ -363,7 +363,7 @@
 
           box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.3), 0 0 0 3px #777777;
           &.selected {
-            box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.3), 0 0 0 3px $selected-color;
+            box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.3), 0 0 0 3px var(--selected-color);
           }
         }
       }
@@ -390,7 +390,7 @@
         display: grid;
         grid-template-columns: 1fr 30px;
         margin-left: -20px;
-        color: $selected-color;
+        color: var(--selected-color);
         border-radius: 3px;
         margin: 5px 0px;
 
@@ -402,7 +402,7 @@
   
         .filter-menu {
           text-align: right;
-          color: $selected-font-color; 
+          color: var(--selected-font-color); 
         }
       }
   

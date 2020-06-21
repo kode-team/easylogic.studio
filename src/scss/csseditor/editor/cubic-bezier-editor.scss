@@ -10,8 +10,8 @@
         height:150px;
         top:30px;
         left:60px;
-        border:1px solid $border-color;
-        background-color: $background-color;
+        border:1px solid var(--border-color);
+        background-color: var(--background-color);
 
         .bezier-canvas {
             position: absolute;
@@ -35,8 +35,8 @@
                 transform: translateX(-50%) translateY(-50%);
                 border-radius:100%;
                 cursor: pointer;
-                background-color: $selected-color;
-                border:1px solid $selected-color;
+                background-color: var(--selected-color);
+                border:1px solid var(--selected-color);
                 // box-sizing:border-box;
             }
         
@@ -83,7 +83,7 @@
             border-radius: 5px;
             margin-bottom: 5px;
             cursor:pointer;
-            background-color: rgba($selected-color, 0.1);
+            background-color: rgba(var(--selected-color), 0.1);
             
             &:not(:first-child) {
                 border-top: 0px;
@@ -121,13 +121,13 @@
             font-weight:bold;
             cursor: pointer;
             vertical-align: middle;    
-            color: $font-color;  
+            color: var(--font-color);  
         }
 
         .predefined-text {
             vertical-align: middle;
             padding:4px;
-            color: $font-color;
+            color: var(--font-color);
         }
     
     }

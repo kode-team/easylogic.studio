@@ -3,11 +3,11 @@
   display: none;
   
   z-index: 1000;
-  background-color: $popup-background-color;
+  background-color: var(--popup-background-color);
   border-radius: 3px;
   box-shadow: 0px 1px 5px 0 rgba(0, 0, 0, 0.5);
   padding: 10px 10px;
-  color: $popup-font-color;
+  color: var(--font-color);
 
   &.compact {
     padding: 0px;
@@ -79,13 +79,13 @@
         outline: none;
         
         width: 50px;
-        background-color: rgba($border-color, 0.5);
+        background-color: var(--border-color);
       }
 
       &[data-value="contain"] button[value="contain"],
       &[data-value="cover"] button[value="cover"],
       &[data-value="auto"] button[value="auto"] {
-        background-color: $border-color;
+        background-color: var(--border-color);
         font-weight: bold;
       }
     }
@@ -101,7 +101,7 @@
         width: 20px;
         height: 20px;
         appearance: none;
-        border: 1px solid $border-color;
+        border: 1px solid var(--border-color);
         background-color: white;
         outline: none;
         cursor: pointer;
@@ -179,7 +179,7 @@
       &[data-value="repeat-y"] button[value="repeat-y"],
       &[data-value="space"] button[value="space"],
       &[data-value="round"] button[value="round"] {
-        background-color: $border-color;
+        background-color: var(--border-color);
         box-shadow: 0 0 1px 1px black;
       }
     }

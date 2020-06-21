@@ -10,11 +10,11 @@
     .colorpicker {
       box-shadow: none;
       border-radius: 0px;
-      background-color: $popup-background-color;
-      border-color: $popup-background-color;
+      background-color: var(--popup-background-color);
+      border-color: var(--popup-background-color);
 
       input {
-        color: $font-color !important;
+        color: var(--font-color) !important;
         text-transform: uppercase;
         border:0px !important;
       }
@@ -24,11 +24,11 @@
       }
   
       .title {
-        color: $font-color !important;
+        color: var(--font-color) !important;
       }
   
       .colorsets {
-        border-top: 0px solid $border-color !important;
+        border-top: 0px solid var(--border-color) !important;
       }
     }
     .box {
@@ -46,9 +46,9 @@
 
           @each $selectType in inset, outset {
             &[data-selected-value="#{$selectType}"] button[data-value="#{$selectType}"] {
-                box-shadow: inset 0px 0px 3px 0px $selected-color !important;
-                background-color: $selected-color !important;
-                color: $selected-font-color !important;
+                box-shadow: inset 0px 0px 3px 0px var(--selected-color) !important;
+                background-color: var(--selected-color) !important;
+                color: var(--selected-font-color) !important;
             }
           }
 
@@ -65,19 +65,19 @@
       }
 
       .drag-board {
-        // background-color: $selected-color;
+        // background-color: var(--selected-color);
         
-        border: 1px solid $border-color;
+        border: 1px solid var(--border-color);
         margin-bottom: 2px;        
         height: 204px;
         position: relative;
         // pointer-events: none;
         background-image: linear-gradient(
             to right,
-            $border-color,
-            $border-color
+            var(--border-color),
+            var(--border-color)
           ),
-          linear-gradient(to right, $border-color, $border-color);
+          linear-gradient(to right, var(--border-color), var(--border-color));
         background-size: 100% 1px, 1px 100%;
         background-position: 0px center, center 0px;
         background-repeat: no-repeat;
@@ -88,7 +88,7 @@
           width: 10px;
           height: 10px;
           transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
-          background-color: $selected-color;
+          background-color: var(--selected-color);
           border-radius: 100%;
         }
       }

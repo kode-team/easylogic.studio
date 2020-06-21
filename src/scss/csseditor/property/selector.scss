@@ -5,7 +5,7 @@
       display: grid; 
       grid-template-columns: 1fr; 
       grid-column-gap: 4px;
-      // border: 1px solid $border-color;
+      // border: 1px solid var(--border-color);
       margin-bottom: 5px;
       padding: 5px;  
       cursor: pointer;
@@ -17,7 +17,7 @@
       }
 
       &.selected {
-        background-color: rgba($border-color, 0.5);
+        background-color: var(--border-color);
       }
 
       .title {
@@ -32,7 +32,8 @@
               padding: 2px 4px;
               font-weight: bold;
               border-radius: 3px;
-              @include title-background-2($selected-color, $selected-font-color);
+              background-color: var(--selected-color);
+              color: var(--selected-font-color);                          
             }
         }
 

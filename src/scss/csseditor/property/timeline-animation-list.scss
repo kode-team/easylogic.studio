@@ -4,7 +4,7 @@
     padding:0px;
     margin:0px !important;
     .timeline-animation-item {
-        color: $list-item-font-color;
+        color: var(--list-item-font-color);
 
         padding: 2px 7px !important; 
         margin-bottom: 0px !important;
@@ -32,7 +32,8 @@
         }
 
         &.selected {
-            @include title-background-2($list-item-selected-color, $list-item-selected-font-color);
+            background-color: var(--list-item-selected-color);
+            color: var(--selected-font-color);
         }
 
     }

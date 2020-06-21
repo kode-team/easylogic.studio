@@ -18,7 +18,7 @@ export default class ThemeSwitcher extends UIElement {
         });
 
         return /*html*/`
-            <div class='theme-switcher'>
+            <div class='status-selector'>
                 <label>${this.$i18n('app.label.theme')}</label>
                 <div class='item'>
                     <SelectEditor 

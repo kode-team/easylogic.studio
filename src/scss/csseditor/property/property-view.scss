@@ -1,9 +1,8 @@
 .property {
   padding: 10px 10px;
-  border-top: 1px solid $property-border-top-color;  
-  // border-bottom: 1px solid $property-border-color;    
-  background-color: $property-background-color;
-  color: $property-font-color; 
+  border-top: 1px solid var(--property-border-color);  
+  background-color: var(--background-color);
+  color: var(--font-color); 
   display: none; 
 
   &:first-child {
@@ -23,14 +22,14 @@
 
     width: 7px;
     height: 7px;
-    box-shadow: 0 0 0 1px rgba(darken($border-color, 10%), 1);
-    background-color: rgba(lighten($border-color, 50%), 0.7);
+    box-shadow: 0 0 0 1px var(--border-color);
+    background-color: var(--border-color);
     cursor: pointer;
     transform: translateY(-50%) rotate(45deg);
 
     &:hover {
-      box-shadow: 0 0 0 1px rgba($selected-color, 1);
-      background-color: rgba($selected-color, 0.5);
+      box-shadow: 0 0 0 1px var(--selected-color);
+      background-color: var(--selected-color);
     }
   }
 
@@ -105,9 +104,8 @@
     display: grid;
     grid-template-columns: 1fr 100px;
     cursor: pointer;
-    border-bottom: 0px solid $property-border-color;  
-    background-color: $property-title-color;
-    color: $font-color;
+    border-bottom: 0px solid var(--property-border-color);  
+    color: var(--font-color);
 
     &.filter {
       grid-template-columns: 1fr 130px;
@@ -157,7 +155,7 @@
   > .property-body {
     display: none;
     padding: 0px;
-    background-color: $property-show-background-color;
+    background-color: var(--background-color);
 
     // box-shadow: inset 0 0 5px 0px rgba(0, 0, 0, 1);
 
@@ -196,7 +194,7 @@
       &.label {
         label {
           font-weight: 900;
-          text-shadow: 2px 2px 3px $border-color;
+          text-shadow: 2px 2px 3px var(--border-color);
         }
       }
 

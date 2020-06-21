@@ -23,7 +23,7 @@
         height: 20px;
         display: inline-block;
         background-color: transparent;
-        border: $border-color 1px solid;
+        border: var(--border-color) 1px solid;
         cursor: pointer;
         vertical-align: middle;
         position: relative;
@@ -31,7 +31,7 @@
         &:before {
           pointer-events: none;
           content: '';
-          background-color: $selected-color;
+          background-color: var(--selected-color);
           width: 6px;
           height: 6px;
           display: inline-block;
@@ -118,8 +118,8 @@
       @each $borderRadiusType in all, partitial {
         &[data-selected-value="#{$borderRadiusType}"] {
           button[data-value="#{$borderRadiusType}"] {
-            background-color: $transform-origin-selected-color;
-            color: $selected-font-color; 
+            background-color: var(--transform-origin-selected-color);
+            color: var(--selected-font-color); 
           }
         }
       }

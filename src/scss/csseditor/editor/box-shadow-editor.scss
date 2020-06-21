@@ -44,7 +44,7 @@
     }
 
     &.desc {
-      color: $font-color;
+      color: var(--font-color);
       .color {
         visibility: hidden;
       }
@@ -52,7 +52,7 @@
     .color {
       cursor: pointer;
       height: 20px;
-      border: 1px solid $border-color;
+      border: 1px solid var(--border-color);
       // border-radius: 100%;
       position: relative;
       @include transparent-background();
@@ -68,14 +68,14 @@
     }
 
     .inset {
-      color: $background-color;
+      color: var(--background-color);
       svg {
         width: 16px;
         height: 16px;
       }
 
       &[data-value="true"] {
-        color: $selected-color;
+        color: var(--selected-color);
       }
     }
 

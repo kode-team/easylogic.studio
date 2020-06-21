@@ -30,7 +30,7 @@
         margin: 0 auto;
         width: 24px;
         height: 24px;
-        color: $selected-color !important;        
+        color: var(--selected-color) !important;        
   
         svg {
           width: 100%;

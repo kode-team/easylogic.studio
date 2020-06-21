@@ -1,16 +1,11 @@
 
 
 // common 
-$inner-border-color: #181818;
 $border-color: rgb(49, 49, 49);
-$border-color-2: #737373;
 $selected-border-color: #3a89f0;
-$selected-color: #3a89f0;
 $selected-color: #fc554f;
-$logo-selected-color: #fc554f;
-$logo-selected-font-color: white;
 
-$background-color: #1f2024; 
+$background-color: #111111; 
 $header-background-color: #111111;
 $selected-background-color: #535353; 
 $font-color: #ffffff;
@@ -18,91 +13,42 @@ $selected-font-color: rgb(255, 255, 255);
 
 
 // base 
-$button-front-color: $font-color;
-
-$select-background-color: #2b2b2b;
-$select-border-color: #1f2024;
-$select-border-radius: 3px;
-$select-font-color: $font-color;
-
-$range-thumb-width: 10px;
-$range-thumb-height: 10px;
-$range-track-height: 2px;
-$range-thumb-top: -4px;
-$range-thumb-border-radius: 5px;
-// $range-thumb-color:  rgb(243, 243, 243);
 $range-thumb-color:  rgb(255, 255, 255);
 $range-track-color:  rgb(97, 97, 97);
 $range-thumb-border-color: rgba(0, 0, 0, 0.8);
 
 $input-background-color: #2b2b2b;
 $input-border-color:#2b2b2b;
-$input-border-radius: 3px;
 $input-font-color: #ececec;
 
 $divider-color:  rgb(97, 97, 97);
 
 // property 
-$property-title-color:  #111111;
 $property-border-color: #4a4a4a;
-$property-border-top-color: #4a4a4a;
-$property-background-color: #111111; 
-$property-show-background-color: #111111; 
-$property-font-color: $font-color;
-$property-input-border-color: rgb(107, 107, 107);
 
 // list 
-$list-font-color: white;
 $list-item-font-color: #999;
 $list-item-selected-color: #435cb5;
-$list-item-selected-font-color: white; 
-$list-border-color: #676767;
-$list-background-color: $border-color;
 
-// tab 
-$tab-background-color: #111111; 
-$tab-header-background-color: #111111; 
-$tab-header-font-color: $font-color; 
-$tab-font-color: $font-color;
-$tab-selected-color: #34353a; 
-$tab-selected-font-color: $selected-font-color;
-$tab-selected-border-color: $border-color;
-$tab-border-color: $border-color;
 
 // popup 
 $popup-background-color: #1f1f1f; 
-$popup-font-color: $font-color;
-$popup-selected-color: $selected-color; 
-$popup-border-color: $border-color;
 
 // window 
 $window-background-color: rgba(255, 255, 255, 0.5);
-$window-color: $background-color;
-
-// cubic-bezier-editor 
-$bezier-background-color: white; 
-$bezier-sample-background-color: white;
-
 
 // path guide 
 $path-background-color: rgba(255, 255, 255, 0.7);
 $path-guide-color: rgb(92, 92, 92);
-$path-last-guide-color: rgb(72, 121, 255);
 $path-segment-stroke-color: $border-color;
-$path-segment-fill-color: #414141;
 
 // timeline 
-$timeline-background-color: $background-color;
-$timeline-border-color: $border-color;
 $timeline-gauge-background-color: #ee4b66;
 $timeline-gauge-handle-color: lighten(#fff67c, 10%);
-$timeline-offset-line-color: #ee4b66;
-// $timeline-offset-line-color: #497594; 
 $timeline-row-selected-color: rgba(#435cb5, 0.4);
 
 
 // guide line 
-$guide-line-color: $selected-color;
 $guide-font-color: black;
 $guide-line-rect-color: #435cb5;
 
@@ -110,14 +56,10 @@ $page-view-color: #919191;
 $page-view-element-artboard-title-color: rgba(222, 222, 222, 1);
 
 $animation-item-background-color: #435cb5;
-$transition-item-background-color: #435cb5;
 
 // select icon editor 
 $select-icon-editor-item-color: #2b2b2b;
 $select-icon-editor-selected-color: #555555;
-$select-icon-editor-selected-shadow-color: #051e77;
-$select-icon-editor-border-color: black;
-$select-icon-editor-font-color: white;
 
 $grid-box-editor-button-background-color: #435cb5;
 
@@ -127,14 +69,9 @@ $status-bar-background-color: $selected-color;
 $drag-area-rect-border-color: rgba(62, 168, 255, 0.9);
 $drag-area-rect-background-color: rgba(107, 188, 255, 0.5);
 
-$rotate-area-border-color: $selected-color;
 $rotate-x-border-color: rgb(104, 104, 247);
 $rotate-y-border-color: rgb(112, 197, 112);
 
-
-// draw view 
-$draw-view-background-color: #111111;
-$path-view-background-color: #111111;
 
 $color-view-background-color: #2b2b2b;
 $transform-origin-selected-color: #2b2b2b;

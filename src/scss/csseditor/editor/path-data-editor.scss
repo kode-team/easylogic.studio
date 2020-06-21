@@ -24,7 +24,7 @@
         }
 
         .command {
-            color: $selected-color; 
+            color: var(--selected-color); 
             cursor: pointer;
 
             &[data-toggle="false"] {

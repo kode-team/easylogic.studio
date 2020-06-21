@@ -11,16 +11,16 @@ $asset-item-size: 25px;
 
         button {
             padding: 2px 10px;
-            border: 1px solid $border-color;            
+            border: 1px solid var(--border-color);            
         }
 
         @each $listType in list, grid {
             &[data-view-mode="#{$listType}"] {
                 button[data-value='#{$listType}'] {
-                    background-color: $selected-border-color;
-                    border-color: $selected-border-color;
+                    background-color: var(--selected-border-color);
+                    border-color: var(--selected-border-color);
                     background-image: none;
-                    color: $selected-font-color;
+                    color: var(--selected-font-color);
                 }
             }
         }  
@@ -43,8 +43,8 @@ $asset-item-size: 25px;
                 height: $asset-item-size;                
                 position: relative;
 
-                border: 1px solid lighten($selected-color, 5%);
-                color: $font-color;
+                border: 1px solid var(--selected-color);
+                color: var(--font-color);
                 
                 vertical-align: top;   
                 cursor: pointer;         
@@ -94,12 +94,12 @@ $asset-item-size: 25px;
                     top: 0px;
                     right: 0px; 
                     padding: 2px;
-                    color: $selected-font-color;    
+                    color: var(--selected-font-color);    
 
                     button {
                         width: 10px;
                         height: 10px;
-                        color: $selected-font-color;                        
+                        color: var(--selected-font-color);                        
                     }
 
                     svg {

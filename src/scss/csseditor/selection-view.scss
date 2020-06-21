@@ -35,16 +35,16 @@
       border-radius: 100%;
 
       &[data-index='1'] {
-        background-color:rgba($selected-color, 0.5);
+        background-color:var(--selected-color);
       }
       &[data-index='2'] {
-        background-color:rgba($border-color, 0.6);
+        background-color:var(--border-color);
       }
       &[data-index='3'] {
-        background-color:rgba($border-color, 0.8);
+        background-color:var(--border-color);
       }
       &[data-index='4'] {
-        background-color:rgba($border-color, 0.9);
+        background-color:var(--border-color);
       }                  
     }
   }
@@ -69,7 +69,7 @@
         right: auto;
         transform: translate(-50%, -50%);
         background-color: rgba(white, 0.8);
-        border:1px solid $border-color;
+        border:1px solid var(--border-color);;
         opacity: 1;
       } 
     }
@@ -110,7 +110,7 @@
       display: inline-block;
       width: 10px;
       height: 10px;
-      background-color: $selected-color;
+      background-color: var(--selected-color);
       
       border:1px solid $pointer-color;
       // border-radius: 100%;
@@ -132,7 +132,7 @@
         text-align: center;
         background-color: rgba(#333, 0.8);
         border-radius: 3px;
-        border: $border-color;
+        border: var(--border-color);;
         transition: opacity 0.3s linear;
         
         padding: 4px 10px;
@@ -147,15 +147,15 @@
         height: 20px;
         transform: translate(0%, -100%);
         cursor: move;
-        background-color: $selected-color;
-        border: 1px solid darken($selected-color, 20%);
+        background-color: var(--selected-color);
+        border: 1px solid var(--selected-color);
         // border: 0px; 
         box-sizing: border-box;
         display: inline-block;
         vertical-align: middle;
         padding-right: 5px;
         overflow:hidden;
-        color: $selected-font-color;
+        color: var(--selected-font-color);
   
         &:before {
           left: 0px;
@@ -170,7 +170,7 @@
 
         span {
           vertical-align: middle;
-          color: $selected-font-color;
+          color: var(--selected-font-color);
           font-size: 11px;
         }
   
@@ -296,17 +296,17 @@
       stroke-width: 1;
 
       &.base-line {
-        stroke: $guide-line-color;
+        stroke: var(--selected-color);
       }
 
       &.base-rect  {
-        stroke: $guide-line-rect-color;
+        stroke: var(--guide-line-rect-color);
       }
     }
 
     text {
       font-size: 10px;
-      fill: $guide-font-color;
+      fill: var(--guide-font-color);
       text-shadow: 0px 2px 2px rgba(183, 183, 183, 0.5);
 
       &.text-center {

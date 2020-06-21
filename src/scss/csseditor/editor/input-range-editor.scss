@@ -6,7 +6,7 @@ $border-radius: 3px;
     border-radius: $border-radius;
 
     &.focused {
-        box-shadow: 0 0 0 1px $selected-color;
+        box-shadow: 0 0 0 1px var(--selected-color);
     }
 
     &.has-label {
@@ -81,7 +81,7 @@ $border-radius: 3px;
                     border-bottom-right-radius: $border-radius;
                     border-top-left-radius: 0px;
                     border-bottom-left-radius: 0px;                    
-                    background-color: $input-background-color;                    
+                    background-color: var(--input-background-color);
                     appearance: none;
                     text-align: center;
                     height: 100%;
@@ -89,9 +89,9 @@ $border-radius: 3px;
                     padding: 0px 4px;             
                     border-left:0px;
                     color: #7a7a7a;
-                    border-bottom: 1px solid $input-border-color;
-                    border-top: 1px solid $input-border-color;
-                    border-right: 1px solid $input-border-color;                     
+                    border-bottom: 1px solid var(--input-border-color);
+                    border-top: 1px solid var(--input-border-color);
+                    border-right: 1px solid var(--input-border-color);                     
                 }
             }
         }
