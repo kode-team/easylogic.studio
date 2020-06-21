@@ -17,10 +17,10 @@ select {
     cursor: pointer;
     height: 100%;
 
-    background-color: var(--select-background-color);
-    border: 1px solid var(--select-border-color);
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
     border-radius: 0px;
-    color: var(--select-font-color); 
+    color: var(--font-color); 
     outline: none;
     vertical-align: middle;
     width: 100%;
