@@ -37,6 +37,8 @@ import addText from "./add.text";
 import addPath from "./add.path";
 import addBrush from "./add.brush";
 import selectArtboard from "./select.artboard";
+import itemMoveDepthUp from "./item.move.depth.up";
+import itemMoveDepthDown from "./item.move.depth.down";
 
 
 
@@ -87,6 +89,9 @@ export default [
     itemMoveAltDown,
     itemMoveAltRight,
     itemMoveAltUp,
+
+    itemMoveDepthUp,
+    itemMoveDepthDown,    
 
     // 
     itemDelete,

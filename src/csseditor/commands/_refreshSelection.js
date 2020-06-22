@@ -3,7 +3,7 @@ export default function _refreshSelection (editor, isSelectedItems = false, dela
     // editor.emit('hideSubEditor');
     editor.emit('noneSelectMenu')
 
-    editor.emit('refreshAll')
+    editor.emit('refreshArtboard')
 
     setTimeout(() => {
         editor.emit('refreshAllElementBoundSize');

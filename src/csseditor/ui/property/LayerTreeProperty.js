@@ -97,6 +97,7 @@ export default class LayerTreeProperty extends BaseProperty {
     }
   }
 
+  //FIXME: 개별 객체가 아이콘을 리턴 할 수 있도록 구조를 맞춰보자. 
   getIcon (item) {
     // return '';
 
@@ -220,7 +221,7 @@ export default class LayerTreeProperty extends BaseProperty {
       var targetItem = artboard.searchById(targetLayerId);
       var sourceItem = artboard.searchById(sourceLayerId);
 
-      if (targetItem.hasParent(sourceItem.id)) return; 
+      if (targetItem && targetItem.hasParent(sourceItem.id)) return; 
 
       targetItem.add(sourceItem, this.state.lastDragOverItemDirection);
 

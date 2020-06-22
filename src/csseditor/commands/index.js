@@ -88,7 +88,8 @@ import sameHeight from "./same.height";
 import refreshArtboard from "./refreshArtboard";
 import addLayerView from "./addLayerView";
 import setEditorLayout from "./setEditorLayout";
-
+import itemMoveDepthDown from "./item.move.depth.down";
+import itemMoveDepthUp from "./item.move.depth.up";
 
 export default {
     setEditorLayout,
@@ -110,6 +111,8 @@ export default {
     itemMoveUp,
     itemMoveDown,
     itemMoveLeft,
+    itemMoveDepthDown,
+    itemMoveDepthUp,    
     keymapKeydown,
     keymapKeyup,
     scaleMinus,

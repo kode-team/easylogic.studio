@@ -337,4 +337,121 @@ export class MovableItem extends Item {
 
     return items; 
   }
+
+  /** order by  */
+
+  getIndex () {
+    var parentLayers = this.json.parent.layers;    
+    var startIndex = -1; 
+    for(var i = 0, len = parentLayers.length; i < len; i++) {
+      if (parentLayers[i] === this.ref) {
+        startIndex = i; 
+        break;
+      }
+    }
+
+    return startIndex;
+  }
+
+  setOrder (targetIndex) {
+    var parent = this.json.parent; 
+
+    var startIndex = this.getIndex()
+
+    if (startIndex > -1) {
+      parent.layers[startIndex] = parent.layers[targetIndex]
+      parent.layers[targetIndex] = this.ref; 
+    }
+  }
+
+  // get next sibiling item 
+  next () {
+    if (this.isLast()) {
+      return this.ref; 
+    }
+
+    const index = this.getIndex();
+
+    return this.json.parent.layers[index+1];
+  }
+
+  // get prev sibiling item   
+  prev () {
+    if (this.isFirst()) {
+      return this.ref; 
+    }
+
+    const index = this.getIndex();
+
+    return this.json.parent.layers[index-1];    
+  }
+
+  /**
+   * 레이어를 현재의 다음으로 보낸다. 
+   * 즉, 화면상에 렌더링 영역에서 올라온다. 
+   */
+  orderNext() {   
+
+    if (this.isLast()) {
+      // 마지막 일 때는  
+      // parent 의 next 의 첫번째 요소가 된다. 
+      if (this.json.parent.is('artboard')) {    // 부모가 artboard 이면  더이상 갈 곳이 없다. 
+        return; 
+      }
+
+      this.json.parent.next().add(this, 'prepend')
+      return; 
+    }
+
+    var startIndex = this.getIndex();
+    if (startIndex > -1) {
+        this.setOrder(startIndex + 1);
+    }
+  }
+
+  isFirst () {
+    return this.getIndex() === 0;
+  }
+
+  isLast () {
+    return this.getIndex() === this.json.parent.layers.length-1
+  }
+
+  /**
+   * 레이어를 현재의 이전으로 보낸다. 
+   * 즉, 화면상에 렌더링 영역에서 내려간다.
+   */  
+  orderPrev () {
+    if (this.isFirst()) {
+      // 처음 일 때는  
+      // parent 의 prev 의 마지막 요소가 된다.
+
+      if (this.json.parent.is('artboard')) {    // 부모가 artboard 이면  더이상 갈 곳이 없다. 
+        return; 
+      }
+
+      this.json.parent.prev().add(this)
+      return; 
+    }
+
+    var startIndex = this.getIndex();
+    if (startIndex > 0) {
+      this.setOrder(startIndex - 1);
+    }
+  }
+
+  // 부모의 처음으로 보내기 
+  orderFirst () {
+    this.setOrder(0)
+  }
+
+  // 부모의 마지막으로 보내기 
+  orderLast () {
+    this.setOrder(this.json.parent.layers.length-1)
+  }
+
+  //TODO: 전체중에 처음으로 보내기 
+  orderTop() {}
+  //TODO: 전체중에 마지막으로 보내기 
+  orderBottom () {}
 }

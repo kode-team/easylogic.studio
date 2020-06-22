@@ -231,35 +231,37 @@ export class Item {
     };
   }
 
-
-
   add (layer, direction = 'self') {
 
+    // 객체를 추가할 때는  layer 의 절대 값을 기준으로 객체를 움직인다. 
+    let rect = {} 
     if (layer.parent) {
+      rect = layer.screenRect;
       layer.remove();
     }
 
-    if (direction === 'self') {
+    if (direction === 'self') {   // layer 를  자식으로 추가 
+      layer.parent = this.ref;         
+
       this.json.layers.push(layer);
-      layer.parent = this.ref;   
-    } else if (direction === 'before') {
+    } else if (direction === 'before') {  // layer 를 나의 앞으로 추가 
       // 현재 객체 앞으로 넣기 
       layer.parent = this.parent.ref; 
 
       var list  = []
-      
       this.parent.layers.forEach(it => {
         if (it === this.ref) {
           list.push(layer);
         }                
-        list.push(it);        
+        list.push(it);
       }) 
 
       this.parent.layers = list;       
 
-    } else if (direction === 'after') {
+    } else if (direction === 'after') {  // layer 를 나의 뒤로 추가 
       // 현재 객체 뒤로 넣기 
-      layer.parent = this.parent.ref;       
+      layer.parent = this.parent.ref;   
+
       var list  = []
       
       this.parent.layers.forEach(it => {
@@ -273,6 +275,8 @@ export class Item {
       
     }
 
+    if (rect.left) layer.setScreenX(rect.left.value);
+    if (rect.top) layer.setScreenY(rect.top.value);    
 
     return layer;
   }
@@ -373,53 +377,6 @@ export class Item {
 
   get allLayers () {
     return [..._traverse(this.ref)]
-  }
-
-  getIndex () {
-    var parent = this.json.parent;    
-    var startIndex = -1; 
-    for(var i = 0, len = parent.layers.length; i < len; i++) {
-      if (layers[i] === this.ref) {
-        startIndex = i; 
-        break;
-      }
-    }
-
-    return startIndex;
-  }
-
-  setOrder (targetIndex) {
-    var parent = this.json.parent; 
-
-    var startIndex = this.getIndex()
-
-    parent.layers.splice(
-      targetIndex + (startIndex < targetIndex ? -1 : 0),
-      0,
-      ...arr.splice(startIndex, 1)
-    )
-  }
-
-  orderNext() {
-    var startIndex = this.getIndex();
-    if (startIndex > -1) {
-      this.setOrder(startIndex + 1);
-    }
-  }
-
-  orderPrev () {
-    var startIndex = this.getIndex();
-    if (startIndex > 0) {
-      this.setOrder(startIndex - 1);
-    }
-  }
-
-  orderFirst () {
-    this.setOrder(0)
-  }
-
-  orderLast () {
-    this.setOrder(this.json.parent.layers.length-1)
   }
 
   searchById (id) {

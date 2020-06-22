@@ -21,18 +21,26 @@ const removeBooleanProp = (node, name) => {
     node.removeAttribute(name);
     node[name] = false;
 };
+
+const removeUndefinedProp = (node, name) => {
+    node.removeAttribute(name);
+}
   
 const removeProp = (node, name, value) => {
     if (typeof value === 'boolean') {
         removeBooleanProp(node, name);
+    } else if (name) {
+        removeUndefinedProp(node, name);
     }
 };
   
 
 const updateProp = (node, name, newValue, oldValue) => {
     if (!newValue) {
+        console.log(node, name, newValue);        
       removeProp(node, name, oldValue);
     } else if (!oldValue || newValue !== oldValue) {
+      console.log(node, name, newValue);
       setProp(node, name, newValue);
     }
   };
