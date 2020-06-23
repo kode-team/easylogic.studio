@@ -37,8 +37,8 @@ export default class LayerAppendView extends UIElement {
         const containerRect = this.$el.rect();
 
         this.state.dragXY = {
-            x: x - containerRect.x,
-            y: y - containerRect.y,
+            x: Math.floor(x - containerRect.x),
+            y: Math.floor(y - containerRect.y),
         }; 
 
         this.state.color = Color.random()

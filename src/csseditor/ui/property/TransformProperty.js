@@ -6,6 +6,7 @@ import {
 import { EVENT } from "../../../util/UIElement";
 import icon from "../icon/icon";
 import { Transform } from "../../../editor/css-property/Transform";
+import RotateEditorView from "../view-items/RotateEditorView";
 
 var transformList = [
 
@@ -31,14 +32,25 @@ var transformList = [
   'matrix3d',  
 ];
 
+
 export default class TransformProperty extends BaseProperty {
+
+  components() {
+    return {
+      ...super.components(),
+      RotateEditorView
+    }
+  }
 
   getTitle() {
     return this.$i18n('transform.property.title')
   }
 
   getBody() {
-    return `<div class='full transform-property' ref='$body'></div>`;
+    return `
+      <RotateEditorView />
+      <div class='full transform-property' ref='$body'></div>
+    `;
   }
 
   hasKeyframe() {
@@ -89,7 +101,7 @@ export default class TransformProperty extends BaseProperty {
     this.refreshShowIsNot(['project']);
   }
 
-  [EVENT('refreshSelectionStyleView', 'refreshStyleView', 'refreshRect') + DEBOUNCE(100)] () {
+  [EVENT('refreshSelectionStyleView', 'refreshSelectionDragStyleView', 'refreshStyleView', 'refreshRect')] () {
     this.refresh();
   }
 

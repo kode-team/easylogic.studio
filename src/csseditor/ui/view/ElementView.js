@@ -11,12 +11,14 @@ import GridLayoutLineView from "../view-items/GridLayoutLineView";
 import PathDrawView from "../view-items/PathDrawView";
 import BrushDrawView from "../view-items/BrushDrawView";
 import { isFunction } from "../../../util/functions/func";
+import StyleView from "./StyleView";
 
 
 export default class ElementView extends UIElement {
 
     components() {
         return {
+            StyleView,
             SelectionToolView,
             GuideLineView,
             PathEditorView,
@@ -44,6 +46,7 @@ export default class ElementView extends UIElement {
             <div class='element-view' ref='$body'>
                 <div class='canvas-view' ref='$view'></div>
                 <div class='drag-area-rect' ref='$dragAreaRect'></div>
+                <StyleView ref='$styleView' />
                 <GuideLineView ref='$guideLineView' />
                 <GridLayoutLineView ref='$gridLayoutLineView' />
                 <SelectionToolView ref='$selectionTool' />

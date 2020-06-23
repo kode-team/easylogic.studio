@@ -5,7 +5,6 @@ import { PREVENT, WHEEL, ALT, THROTTLE,  } from "../../../util/Event";
 import ElementView from "./ElementView";
 import PageTools from "../view-items/PageTools";
 import PageSubEditor from "../view-items/PageSubEditor";
-import RotateEditorView from "../view-items/RotateEditorView";
 
 export default class CanvasView extends UIElement {
 
@@ -14,7 +13,6 @@ export default class CanvasView extends UIElement {
       PageTools,
       ElementView,
       PageSubEditor,
-      RotateEditorView
     }
   }
 
@@ -31,7 +29,6 @@ export default class CanvasView extends UIElement {
         </div>
         <!--<PageSubEditor /> -->
         <PageTools />
-        <RotateEditorView />
       </div>
     `;
   }

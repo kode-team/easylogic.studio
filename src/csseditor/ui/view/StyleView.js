@@ -53,7 +53,7 @@ export default class StyleView extends UIElement {
 
     const cssString = item.generateView(`[data-id='${item.id}']`)
     return /*html*/`
-      <style type='text/css' data-id='${item.id}'>${cssString}</style>
+      <style type='text/css' data-id='${item.id}' data-timestamp='${item.timestamp}'>${cssString}</style>
     ` + item.layers.map(it => {
       return this.makeStyle(it);
     }).join('')
@@ -66,7 +66,7 @@ export default class StyleView extends UIElement {
 
     const cssString = item.generateDragView(`[data-id='${item.id}']`)
     return /*html*/`
-      <style type='text/css' data-id='${item.id}-drag'>${cssString}</style>
+      <style type='text/css' data-id='${item.id}-drag' data-timestamp='${item.timestamp}'>${cssString}</style>
     ` + item.layers.map(it => {
       return this.makeDragStyle(it);
     }).join('')
@@ -115,11 +115,19 @@ export default class StyleView extends UIElement {
       return `style[data-id="${it.id}"],style[data-id="${it.id}-drag"]`
     }).join(',');
 
+    let isChanged = false; 
     this.refs.$head.$$(selector).forEach(it => {
-      it.remove();
+      console.log(it.attr('data-timestamp'));
+      if (item.isChanged(it.attr('data-timestamp'))) {
+        isChanged = true;       
+        it.remove();
+      }
     })
 
-    this.changeStyleHead(item)
+    if (isChanged) {
+      this.changeStyleHead(item)
+    }
+
   }
 
 
@@ -134,10 +142,11 @@ export default class StyleView extends UIElement {
     }).join(',');
 
     this.refs.$head.$$(selector).forEach(it => {
-      it.remove();
+        it.remove();
     })
 
     this.changeDragStyleHead(item)
+
   }  
 
   removeDragStyleHeadOne (item, isOnlyOne = false) {

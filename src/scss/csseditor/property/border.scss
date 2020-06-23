@@ -77,7 +77,7 @@
 
 .border-value-editor {
   display: grid;
-  grid-template-columns: repeat(3, 1fr) 24px;
+  grid-template-columns: 40px 1fr 1fr 24px;
   grid-column-gap: 4px;
 
   label {

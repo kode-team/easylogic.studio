@@ -38,9 +38,16 @@ export class Item {
         // if (value && value.realVal && isFunction(value.realVal)) {
         //   value = value.realVal();
         // }
-
         if (this.checkField(key, value)) {
+
+          const isDiff = target.json[key] != value; 
+
           target.json[key] = value;
+
+          if (isDiff) {
+            this.changed()
+          }
+
         } else {
           throw new Error(`${value} is invalid as ${key} property value.`);
         }
@@ -81,6 +88,14 @@ export class Item {
    */
   isAttribute() {
     return false;
+  }
+
+  isChanged(timestamp) {
+    return this.json.timestamp != Number(timestamp);
+  }
+
+  changed() {
+    this.json.timestamp = Date.now();
   }
 
   /***********************************
@@ -212,6 +227,7 @@ export class Item {
     }
 
     this.json = this.convert(Object.assign(this.json, obj));
+    this.changed();
   }
 
   /**

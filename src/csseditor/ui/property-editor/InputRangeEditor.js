@@ -79,7 +79,10 @@ export default class InputRangeEditor extends UIElement {
     setValue (value) {
         this.setState({
             value: Length.parse(value)
-        })
+        }, false)
+
+        this.refs.$propertyNumber.val(this.state.value.value); 
+        this.refs.$unit.val(this.state.value.unit)
     }
 
     [FOCUS('$propertyNumber')] (e) {

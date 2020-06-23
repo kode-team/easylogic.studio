@@ -13,7 +13,6 @@ import Inspector from "../ui/control/Inspector";
 
 
 import popup from "../ui/popup";  
-import StyleView from "../ui/view/StyleView";
 import ObjectList from "../ui/control/ObjectList";
 import LogoView from "../ui/view/LogoView";
 import ExternalToolMenu from "../ui/view/ExternalToolMenu";
@@ -104,7 +103,6 @@ export default class CSSEditor extends UIElement {
         <FillPickerPopup />
         <PatternInfoPopup />
         <SVGFilterPopup />
-        <StyleView />    
         <ExportWindow />
         <!-- LoginWindow / -->
         <!-- SignWindow / -->
@@ -155,7 +153,6 @@ export default class CSSEditor extends UIElement {
       ToolMenu,
       PageSubEditor,
       CanvasView,
-      StyleView,
       LogoView,
       ExternalToolMenu,
       ImageFileView,

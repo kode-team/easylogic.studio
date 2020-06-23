@@ -61,6 +61,7 @@ export class MovableItem extends Item {
         }
 
         this.json.x.set(value - absoluteX);
+        this.changed();
     }
 
     setScreenX2(value) {
@@ -70,6 +71,7 @@ export class MovableItem extends Item {
         }
 
         this.json.x.set(value - this.json.width.value - absoluteX + 1);
+        this.changed();        
     }    
 
     setScreenY2(value) {
@@ -79,6 +81,7 @@ export class MovableItem extends Item {
         }
 
         this.json.y.set(value - this.json.height.value - absoluteY + 1);
+        this.changed();        
     }        
 
 
@@ -89,6 +92,7 @@ export class MovableItem extends Item {
         }
 
         this.json.x.set(value - (this.json.width.value/2) - absoluteX + 1);
+        this.changed();        
     }        
 
 
@@ -100,6 +104,7 @@ export class MovableItem extends Item {
         }
 
         this.json.y.set(value - (this.json.height.value/2) - absoluteY + 1);
+        this.changed();        
     }            
 
 
@@ -109,6 +114,7 @@ export class MovableItem extends Item {
             absoluteY = this.json.parent.screenY.value; 
         }
         this.json.y.set(value - absoluteY);
+        this.changed();        
     }    
 
     get screenX () { 
