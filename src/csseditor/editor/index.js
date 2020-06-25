@@ -8,7 +8,7 @@ import CanvasView from "../ui/view/CanvasView";
 import ToolMenu from "../ui/view/ToolMenu";
 
 import UIElement, { EVENT } from "../../util/UIElement";
-import { DRAGOVER, DROP, PREVENT, TRANSITIONEND, KEYDOWN, KEYUP, IF, POINTERSTART, MOVE, END, BIND, CUSTOM } from "../../util/Event";
+import { DRAGOVER, DROP, PREVENT, TRANSITIONEND, KEYDOWN, KEYUP, IF, POINTERSTART, MOVE, END, BIND, CUSTOM, CLICK } from "../../util/Event";
 import Inspector from "../ui/control/Inspector";
 
 
@@ -46,7 +46,10 @@ export default class CSSEditor extends UIElement {
 
   initState() {
     return {
-      leftSize: 280,
+      hideLeftPanel: false,
+      hideRightPanel: false,
+      leftSize: 270,
+      rightSize: 240,
     }
   }
 
@@ -72,17 +75,16 @@ export default class CSSEditor extends UIElement {
           <div class='layout-left' ref='$leftPanel'>
             <ObjectList />
           </div>
-          <div class="layout-right">
+          <div class="layout-right" ref='$rightPanel'>
             <Inspector />
           </div>
 
-          <div class='layout-tools'>
-            <button ref='$toggleRight'>${icon.dahaze}</button>
-          </div>
           <div class='layout-footer'>
             <TimelineProperty />
           </div>   
-          <div class='splitter' ref='$splitter'></div>                 
+          <div class='splitter' ref='$splitter'></div>
+          <button type="button" class='toggleLeft' ref='$toggleLeftButton'></button>
+          <button type="button" class='toggleRight' ref='$toggleRightButton'></button>
         </div>
         
         <StatusBar />
@@ -113,34 +115,98 @@ export default class CSSEditor extends UIElement {
   }
 
   [BIND('$headerPanel')] () {
+
+    let left = `${this.state.leftSize}px`
+    let right = `${this.state.rightSize}px`
+
+    if (this.state.hideLeftPanel) {
+      left = `0px`
+    }
+
+    if (this.state.hideRightPanel) {
+      right = `0px`
+    }
+
     return {
-      style: {
-        left: `${this.state.leftSize}px`
-      }
+      style: { left, right }
     }
   }
 
   [BIND('$splitter')] () {
+    let left = `${this.state.leftSize}px`    
+    if (this.state.hideLeftPanel) {
+      left = `0px`
+    }
+
     return {
-      style: {
-        left: `${this.state.leftSize}px`
-      }
+      style: { left }
     }
   }
 
   [BIND('$leftPanel')] () {
+    let left = `0px`    
+    let width = Length.px(this.state.leftSize);
+    if (this.state.hideLeftPanel) {
+      left = `-${this.state.leftSize}px`    
+    }
+
     return {
-      style: {
-        width: `${this.state.leftSize}px`
-      }
+      style: { left, width }
     }
   }  
 
-  [BIND('$bodyPanel')] () {
+  [BIND('$toggleLeftButton')] () {
+    let left = '0px';
+    let iconString = icon.arrowRight
+    if (this.state.hideLeftPanel === false) {
+      left = `${this.state.leftSize}px`
+      iconString = icon.arrowLeft
+    }    
     return {
-      style: {
-        left: `${this.state.leftSize}px`
-      }
+      style : { left },
+      html: iconString
+    }
+  }
+
+  [BIND('$toggleRightButton')] () {
+    let right = '0px';
+    let iconString = icon.arrowLeft    
+    if (this.state.hideRightPanel === false) {
+      right = `${this.state.rightSize}px`
+      iconString = icon.arrowRight
+    }    
+    return {
+      style : { right },
+      html: iconString
+    }
+  }  
+
+  [BIND('$rightPanel')] () {
+    let right = `0px`    
+    if (this.state.hideRightPanel) {
+      right = `-${this.state.rightSize}px`    
+    }
+
+    return {
+      style: { right }
+    }
+  }    
+
+  [BIND('$bodyPanel')] () {
+   
+    let left = `${this.state.leftSize}px`
+    let right = `${this.state.rightSize}px`
+
+    if (this.state.hideLeftPanel) {
+      left = `0px`
+    }
+
+    if (this.state.hideRightPanel) {
+      right = `0px`
+    }
+ 
+    return {
+      style: { left, right }
     }
   }    
 
@@ -173,15 +239,35 @@ export default class CSSEditor extends UIElement {
   moveSplitter (dx) {
     this.setState({
       leftSize: Math.max(Math.min(this.leftSize + dx, this.maxSize), this.minSize)
-    }, false)
+    })
+
+  }
+
+  refresh () {
 
     this.bindData('$splitter');
     this.bindData('$headerPanel');    
     this.bindData('$leftPanel');
+    this.bindData('$rightPanel');
+    this.bindData('$toggleRightButton');
+    this.bindData('$toggleLeftButton');            
     this.bindData('$bodyPanel');    
     
     this.emit('resizeEditor');
   }
+
+  [CLICK('$toggleRightButton')] () {
+    this.setState({
+      hideRightPanel: !this.state.hideRightPanel
+    });
+
+  }
+
+  [CLICK('$toggleLeftButton')] () {
+    this.setState({
+      hideLeftPanel: !this.state.hideLeftPanel
+    });
+  }  
 
   [EVENT('changeTheme')] () {
     Dom.body().attr('data-theme', this.$editor.theme);

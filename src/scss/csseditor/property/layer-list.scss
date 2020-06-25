@@ -27,17 +27,12 @@
             grid-column-gap: 3px;
 
 
-            span.icon {
-                vertical-align: middle;
-                display: inline-block;
-                position: relative;
-                svg {
+            svg {
 
-                    path,polygon {
-                        stroke: var(--list-item-font-color);
-                    }
+                path {
+                    fill: var(--list-item-font-color);
                 }
-            }            
+            }
 
             label {
                 padding: 2px 0px;                
@@ -78,13 +73,11 @@
             color: var(--selected-font-color);
             
             .detail {
-                span.icon {
-                    svg {
-                        path,polygon {
-                            stroke: var(--selected-font-color);
-                        }
+                svg {
+                    path {
+                        fill: var(--selected-font-color);
                     }
-                }            
+                }        
             }
         }
 

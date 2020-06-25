@@ -12,11 +12,9 @@ export default {
                 break; 
             case 'text/plain':
             case 'text/html':
-                if (items.length) {
-                    editor.emit('addText', {
-                         content: item.data
-                    });
-                }
+                editor.emit('addText', {
+                    content: item.data
+                });
                 // this.trigger('update.string', item);
                 break;
             case 'text/uri-list':

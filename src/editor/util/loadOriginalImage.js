@@ -5,6 +5,7 @@ export default function loadOriginalImage(obj, callback) {
     img.onload = () => {
 
         var info = {
+            id: obj.id,
             local: obj.local,
             naturalWidth: Length.px(img.naturalWidth),
             naturalHeight: Length.px(img.naturalHeight), 

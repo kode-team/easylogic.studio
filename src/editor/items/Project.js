@@ -10,6 +10,9 @@ export class Project extends AssetItem {
     return false;
   }  
 
+  get parent () {
+    return null;
+  }
 
   toRootVariableCSS () {
     var obj = {}

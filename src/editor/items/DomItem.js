@@ -547,10 +547,6 @@ export class DomItem extends GroupItem {
 
   }
 
-  // toTransformCSS() {
-  //   return this.toKeyListCSS('transform')
-  // }
-
   toVariableCSS () {
     var obj = {}
     this.json.variable.split(';').filter(it => it.trim()).forEach(it => {
@@ -636,7 +632,6 @@ export class DomItem extends GroupItem {
       this.toBoxModelCSS(),
       this.toBorderCSS(),
       this.toOutlineCSS(),      
-      // ...this.toTransformCSS(),      
       // ...this.toBorderImageCSS(),
       this.toBackgroundImageCSS(),
       this.toLayoutCSS(),
@@ -658,7 +653,6 @@ export class DomItem extends GroupItem {
       this.toBoxModelCSS(),
       this.toBorderCSS(),
       this.toOutlineCSS(),      
-      // ...this.toTransformCSS(),      
       // ...this.toBorderImageCSS(),
       this.toBackgroundImageCSS(),
       this.toLayoutCSS(),      

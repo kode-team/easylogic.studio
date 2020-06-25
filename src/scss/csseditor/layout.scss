@@ -79,6 +79,28 @@
       cursor: ew-resize;
     }
 
+    > button {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      top: 24px;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: var(--font-color);        
+      
+      svg {
+        transform: scale(1.5);
+      }
+    }
+
+    > .toggleLeft {
+      left: $left-size;
+    }
+
+    > .toggleRight {
+      right: $right-size;
+    }    
+
     .layout-footer {
       position: absolute;
       left: 0px;

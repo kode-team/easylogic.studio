@@ -123,6 +123,20 @@ export class Item {
     return this.json.parent;
   }
 
+  get top () {
+    if (!this.parent) return this.ref; 
+
+    let localParent = this.parent; 
+    do {
+      if (!localParent.parent) {
+        return localParent; 
+      }
+
+      localParent = localParent.parent; 
+
+    } while(localParent);
+  }
+
   getInnerId(postfix = '') {
     return this.json.id + postfix;
   }
