@@ -759,14 +759,13 @@ ${this.toSelectorString(prefix)}
     var tagName = elementType || 'div'
     var css = this.toCSS();
 
+    delete css.left;
+    delete css.top;      
+    if (css.position === 'absolute') {
+      delete css.position; 
+    }
+
     if (isRoot) {
-
-      delete css.left;
-      delete css.top;      
-      if (css.position === 'absolute') {
-        delete css.position; 
-      }
-
       return this.wrapperRootSVG(x, y, width, height, /*html*/`
         <g transform="translate(${x}, ${y})">      
           <foreignObject ${OBJECT_TO_PROPERTY({ 
