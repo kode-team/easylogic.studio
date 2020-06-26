@@ -777,8 +777,9 @@ ${this.toSelectorString(prefix)}
               <${tagName} style="${CSS_TO_STRING(css)}" ></${tagName}>      
             </div>
           </foreignObject>    
+          ${layers.map(it => it.svg).join('\n\t')}          
         </g>
-        ${layers.map(it => it.svg).join('\n\t')}
+
       `)
     } else {
       return /*html*/`
@@ -792,9 +793,9 @@ ${this.toSelectorString(prefix)}
               <${tagName} style="${CSS_TO_STRING(css)}" ></${tagName}>      
             </div>
           </foreignObject>    
-          
+          ${layers.map(it => it.svg).join('\n\t')}                
         </g>             
-        ${layers.map(it => it.svg).join('\n\t')}           
+     
       `
     }
   }

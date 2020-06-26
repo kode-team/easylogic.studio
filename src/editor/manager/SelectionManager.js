@@ -254,6 +254,17 @@ export class SelectionManager {
 
   }
 
+  map (callback) {
+
+    if (isFunction (callback)) {
+      return this.items.map( (item, index) => {
+        return callback (item, this.cachedItems[index]);
+      })
+    }
+
+    return this.items; 
+  }
+
   reset (obj) {
     this.each(item => item.reset(obj))
   }
@@ -313,35 +324,5 @@ export class SelectionManager {
     })
 
     this.reselect()
-  }
-
-  moveRight (dx) {
-    this.each ((item, cachedItem, ) => {
-      item.resizeWidth(roundedLength(cachedItem.width.value + dx))
-    })
-  }
-
-  moveLeft (dx) {
-    this.each ((item, cachedItem, ) => {
-      if (cachedItem.width.value - dx >= 0) {
-          item.moveX( roundedLength(cachedItem.x.value + dx) )
-          item.resizeWidth( roundedLength(cachedItem.width.value - dx) )
-      }
-    })    
-  }
-
-  moveBottom (dy) {
-    this.each ((item, cachedItem, ) => {
-      item.resizeHeight( roundedLength(cachedItem.height.value + dy) )
-    })    
-  }
-
-  moveTop (dy) {
-    this.each ((item, cachedItem, ) => {
-      if ( cachedItem.height.value - dy >= 0 ) {
-          item.moveY( roundedLength(cachedItem.y.value + dy) )                                
-          item.resizeHeight( roundedLength(cachedItem.height.value - dy) )    
-      }
-    })
   }
 }

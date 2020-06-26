@@ -101,6 +101,10 @@ export default class LayerTreeProperty extends BaseProperty {
   getIcon (item) {
     // return '';
 
+    if (item.isGroup) {
+      return icon.group
+    }
+
     switch(item.itemType) {
     case 'circle': 
       return icon.lens;
@@ -125,7 +129,7 @@ export default class LayerTreeProperty extends BaseProperty {
   makeLayerList (parentObject, depth = 0) {
     if (!parentObject.layers) return '';
 
-    return parentObject.layers.map( (layer, index) => {
+    return [...parentObject.layers].reverse().map( (layer, index) => {
 
       var selected = this.$selection.check(layer) ? 'selected' : '';
       var name = layer.name; 
@@ -143,8 +147,8 @@ export default class LayerTreeProperty extends BaseProperty {
       return /*html*/`        
       <div class='layer-item ${selected}' data-depth="${depth}" data-layout='${layer.layout}' data-layer-id='${layer.id}' draggable="true">
         <div class='detail'>
-          <label data-layout-title='${title}'> 
-            <span class='icon' data-item-type="${layer.itemType}">${this.getIcon(layer)}</span> 
+          <label data-layout-title='${title}' > 
+            <span class='icon' data-item-type="${layer.itemType}" style='color: ${layer['background-color']};'>${this.getIcon(layer)}</span> 
             <span class='name'>${name}</span>
           </label>
           <div class="tools">

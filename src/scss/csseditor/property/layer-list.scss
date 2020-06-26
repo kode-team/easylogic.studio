@@ -43,6 +43,12 @@
                 white-space: nowrap;
                 font-size: 12px;
                 vertical-align: middle;
+
+                svg {
+                    path {
+                        fill: currentColor;
+                    }
+                }
             }
 
 
@@ -70,14 +76,21 @@
 
         &.selected {
             background-color: var(--list-item-selected-color);
-            color: var(--selected-font-color);
+
             
             .detail {
-                svg {
-                    path {
-                        fill: var(--selected-font-color);
-                    }
-                }        
+                .name {
+                    color: var(--selected-font-color);
+                }
+
+                .tools {
+                    svg {
+                        path {
+                            fill: var(--selected-font-color);
+                        }
+                    }        
+                }
+
             }
         }
 

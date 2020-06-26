@@ -90,8 +90,12 @@ import addLayerView from "./addLayerView";
 import setEditorLayout from "./setEditorLayout";
 import itemMoveDepthDown from "./item.move.depth.down";
 import itemMoveDepthUp from "./item.move.depth.up";
+import groupItem from "./group.item";
+import ungroupItem from "./ungroup.item";
 
 export default {
+    groupItem,
+    ungroupItem,
     setEditorLayout,
     refreshArtboard,
     resetSelection,

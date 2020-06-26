@@ -123,6 +123,15 @@ export class Item {
     return this.json.parent;
   }
 
+  /**
+   * 객체 깊이를 동적으로 계산 
+   */
+  get depth () {
+    if (!this.parent) return 1; 
+
+    return this.parent.depth + 1; 
+  }
+
   get top () {
     if (!this.parent) return this.ref; 
 
@@ -166,12 +175,14 @@ export class Item {
    *
    **********************************/
 
-  /**
-   * select item
-   */
-  // select() {
-  //   this.$selection.select(this.id);
-  // }
+
+  generateListNumber () {
+    this.layers.forEach((it, index) => {
+      it.no = index; 
+
+      it.generateListNumber();
+    })    
+  }
 
   /**
    * when json is loaded, json object is be a new instance

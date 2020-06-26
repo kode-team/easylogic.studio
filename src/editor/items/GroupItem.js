@@ -4,6 +4,10 @@ const layout_list  = ['flex', 'grid']
 
 export class GroupItem extends MovableItem {   
 
+    get isGroup () {
+        return Boolean(this.layers.length);
+    }
+
     isLayoutItem () {
         return layout_list.includes(this.parent.layout);
     }

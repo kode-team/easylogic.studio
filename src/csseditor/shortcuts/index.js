@@ -39,6 +39,9 @@ import addBrush from "./add.brush";
 import selectArtboard from "./select.artboard";
 import itemMoveDepthUp from "./item.move.depth.up";
 import itemMoveDepthDown from "./item.move.depth.down";
+import itemDeleteShift from "./item.delete.shift";
+import groupItem from "./group.item";
+import ungroupItem from "./ungroup.item";
 
 
 
@@ -53,6 +56,9 @@ export default [
     addText,
     addPath,
     addBrush,
+
+    groupItem,
+    ungroupItem,
 
     // move segment by arrow key 
     segmentMoveKeyDown,
@@ -95,6 +101,7 @@ export default [
 
     // 
     itemDelete,
+    itemDeleteShift,
 
     // zoom
     scaleMinus,

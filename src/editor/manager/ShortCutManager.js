@@ -187,7 +187,7 @@ export class ShortCutManager {
             e.shiftKey  ? 'SHIFT'   : '',
             e.metaKey   ? 'META'    : '',
             e.code.toUpperCase()
-        )
+        )   
     }    
 
     makeKeyCodeString(e) {
