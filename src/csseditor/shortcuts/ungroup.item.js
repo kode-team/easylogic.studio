@@ -1,4 +1,5 @@
 export default {
+    category: 'Group',        
     key: 'shift+cmd+g',
     win: 'shift+ctrl+g',
     command: 'ungroup.item',

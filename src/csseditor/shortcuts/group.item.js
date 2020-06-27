@@ -1,4 +1,5 @@
 export default {
+    category: 'Group',    
     key: 'cmd+g',
     win: 'ctrl+g',
     command: 'group.item',

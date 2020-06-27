@@ -1,4 +1,5 @@
 export default {
+    category: 'Layer',            
     key: 'Alt+ArrowLeft',
     command: 'item.move.left',
     description: 'move 5px to left',

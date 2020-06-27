@@ -1,4 +1,5 @@
 export default {
+    category: 'Tool',
     key: 't',
     command: 'addLayerView', 
     args: 'text',

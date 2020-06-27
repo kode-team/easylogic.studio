@@ -1,4 +1,5 @@
 export default {
+    category: 'Tool',    
     key: 'l',
     command: 'addLayerView', 
     args: 'circle',

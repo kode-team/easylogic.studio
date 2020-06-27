@@ -1,4 +1,5 @@
 export default {
+    category: 'Path',        
     key: 'ArrowRight',
     command: 'segment.move.right',
     description: 'move 1px to right',

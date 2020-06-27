@@ -1,4 +1,5 @@
 export default {
+    category: 'Path',        
     key: 'Shift+ArrowLeft',
     command: 'segment.move.left',
     description: 'move 10px to left',

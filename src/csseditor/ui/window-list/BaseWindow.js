@@ -47,9 +47,4 @@ export default class BaseWindow extends UIElement {
   hide () {
     this.$el.hide();
   }
-
-  [EVENT('showExportWindow')] () {
-    this.show();
-    this.refresh();
-  }
 }

@@ -1,4 +1,5 @@
 export default {
+    category: 'Path',        
     key: 'ArrowUp',
     command: 'segment.move.up',
     description: 'move 1px to up',

@@ -1,4 +1,5 @@
 export default {
+    category: 'Tool',    
     key: 'r',
     command: 'addLayerView', 
     args: 'rect',

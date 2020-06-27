@@ -151,4 +151,9 @@ ${project.artboards.map(item => item.html).join('\n')}
         this.$el.$$(`[data-value="${selectedIndex}"]`).forEach(it => it.addClass('selected'))
         this.setState({ selectedIndex }, false);
     }
+
+    [EVENT('showExportWindow')] () {
+        this.show();
+        this.refresh();
+    }    
 }

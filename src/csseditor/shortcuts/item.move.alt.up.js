@@ -1,4 +1,5 @@
 export default {
+    category: 'Layer',            
     key: 'Alt+ArrowUp',
     command: 'item.move.up',
     description: 'move 5px to up',

@@ -34,6 +34,7 @@ export default {
     'menu.item.export.title': 'Export',
     'menu.item.codepen.title': 'CodePen',
     'menu.item.fullscreen.title': 'Screen',
+    'menu.item.shortcuts.title': 'ShortCuts',
     'menu.item.github.title': 'Github',
     'menu.item.learn.title': 'Learn',       
 

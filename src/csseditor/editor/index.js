@@ -106,6 +106,7 @@ export default class CSSEditor extends UIElement {
         <PatternInfoPopup />
         <SVGFilterPopup />
         <ExportWindow />
+        <ShortcutWindow />
         <!-- LoginWindow / -->
         <!-- SignWindow / -->
         <ImageFileView />
