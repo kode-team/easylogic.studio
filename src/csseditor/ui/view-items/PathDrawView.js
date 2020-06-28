@@ -183,6 +183,11 @@ export default class PathDrawView extends UIElement {
 
     }
 
+    [EVENT('hideAddViewLayer')] () {   
+        this.$el.hide();
+        this.emit('hideDrawManager');        
+    }
+
 
     getInnerId(postfix = '') {
         return 'draw-manager-' + postfix;

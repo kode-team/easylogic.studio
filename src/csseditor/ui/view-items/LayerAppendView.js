@@ -182,6 +182,13 @@ export default class LayerAppendView extends UIElement {
         case 'text': 
         case 'svg-text':
         case 'svg-textpath': 
+
+            if (rect.width.value === 0) rect.width.set(200);
+            if (rect.height.value === 0) rect.height.set(50);
+
+            rect.x2 = Length.px(rect.x.value + rect.width.value);
+            rect.y2 = Length.px(rect.y.value + rect.height.value);
+            
             delete rect['background-color']; 
             break;         
         default: 
@@ -212,7 +219,7 @@ export default class LayerAppendView extends UIElement {
         this.refs.$area.empty()
         this.$el.show();
         this.$el.focus();
-        this.emit('change.mode.view', 'LayerAppendView');
+        this.emit('change.mode.view', 'CanvasView');
     }
 
     [EVENT('hideLayerAppendView')] () {
@@ -225,6 +232,12 @@ export default class LayerAppendView extends UIElement {
         }
 
     }
+
+    [EVENT('hideAddViewLayer')] () {
+        this.state.isShow = false;
+        this.$el.hide();
+    }
+
 
     isShow () {
         return this.state.isShow

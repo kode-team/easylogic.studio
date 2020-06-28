@@ -1,5 +1,6 @@
 import MenuItem from "./MenuItem";
 import icon from "../icon/icon";
+import { EVENT } from "../../../util/UIElement";
  
 export default class AddPath extends MenuItem {
   getIconString() {
@@ -10,7 +11,10 @@ export default class AddPath extends MenuItem {
   }
 
   clickButton(e) {
-    this.emit('addPathView')
+    this.emit('addLayerView', 'path')
   }
 
+  [EVENT('addLayerView')] (type) {
+    this.setSelected(type === 'path');
+  }    
 }

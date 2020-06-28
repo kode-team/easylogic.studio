@@ -1,7 +1,7 @@
 export default {
     category: 'Tool',
     key: 'b',
-    command: 'addDrawPath', 
+    command: 'addLayerView', 
+    args: 'brush',
     description: 'Add SVG Path',
-    when: 'CanvasView'
 }

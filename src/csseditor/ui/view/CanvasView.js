@@ -33,10 +33,4 @@ export default class CanvasView extends UIElement {
     `;
   }
 
-  [WHEEL('$lock') + ALT + PREVENT + THROTTLE(10)] (e) {
-
-    var dt = e.deltaY < 0 ? 1.1 : 0.9;
-    this.emit('changeScaleValue', this.$editor.scale * dt);
-  }
-
 }

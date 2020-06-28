@@ -2,14 +2,12 @@ import refreshElement from "./refreshElement";
 import refreshProject from './refreshProject';
 import setAttribute from "./setAttribute";
 import resizeArtBoard from "./resizeArtBoard";
-import addPathView from "./addPathView";
 import convertPath from "./convertPath";
 import addImage from "./addImage";
 import addVideo from "./addVideo";
 import addArtBoard from "./addArtBoard";
 import addProject from "./addProject";
 import addLayer from "./addLayer";
-import selectItem from "./selectItem";
 import selectArtboard from './selectArtboard';
 import newComponent from "./newComponent";
 import addComponentType from "./addComponentType";
@@ -63,7 +61,6 @@ import itemMoveRight from "./item.move.right";
 import itemMoveUp from "./item.move.up";
 import itemMoveDown from "./item.move.down";
 import itemDelete from "./item.delete";
-import addDrawPath from "./addDrawPath";
 import changeModeView from "./change.mode.view";
 import segmentMoveDown from "./segment.move.down";
 import segmentMoveUp from "./segment.move.up";
@@ -71,7 +68,6 @@ import segmentMoveRight from "./segment.move.right";
 import segmentMoveLeft from "./segment.move.left";
 import segmentDelete from "./segment.delete";
 import toggleFullscreen from "./toggle.fullscreen";
-import addDrawBrush from "./addDrawBrush";
 import addBackgroundImagePattern from "./addBackgroundImagePattern";
 import addBackgroundColor from "./addBackgroundColor";
 import scaleMinus from "./scale.minus";
@@ -108,8 +104,6 @@ export default {
     segmentMoveRight,
     segmentMoveLeft,
     changeModeView,
-    addDrawBrush,
-    addDrawPath,
     itemDelete,
     itemMoveRight,
     itemMoveUp,
@@ -169,7 +163,6 @@ export default {
     addImage,
     addVideo,
     addLayer,    
-    addPathView,
     addLayerView,
     addProject,
     convertPath,    
@@ -177,7 +170,6 @@ export default {
     refreshElement,
     refreshProject,
     resizeArtBoard,
-    selectItem,
     selectArtboard,
     setAttribute,  
     sortBottom,

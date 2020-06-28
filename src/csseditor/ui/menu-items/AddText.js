@@ -1,5 +1,6 @@
 import MenuItem from "./MenuItem";
 import icon from "../icon/icon";
+import { EVENT } from "../../../util/UIElement";
  
 export default class AddText extends MenuItem {
   getIconString() {
@@ -16,5 +17,9 @@ export default class AddText extends MenuItem {
   clickButton(e) {
     this.emit('addLayerView', 'text');
   }
+
+  [EVENT('addLayerView')] (type) {
+    this.setSelected(type === 'text');
+  }    
 
 }

@@ -142,8 +142,8 @@ export default class TransformEditor extends UIElement {
   makeOneTransformTemplate(type, transform, index) {
     return /*html*/`
       <div class="transform-item" data-index="${index}">
-        <div class="title" draggable="true" data-index="${index}">
-          <label>${this.$i18n('css.item.' + type)}</label>
+        <div class="title" data-index="${index}">
+          <label draggable="true" >${this.$i18n('css.item.' + type)}</label>
           <div class="transform-ui ${type}">
             <div class='${type}'>
             ${transform.value.map( (it, tindex) => {
@@ -183,8 +183,8 @@ export default class TransformEditor extends UIElement {
   makeMultiTransformTemplate(type, transform, index) {
     return /*html*/`
       <div class="transform-item" data-index="${index}">
-        <div class="title" draggable="true" data-index="${index}">
-          <label>${this.$i18n('css.item.' + type)}</label>
+        <div class="title" data-index="${index}">
+          <label draggable="true" >${this.$i18n('css.item.' + type)}</label>
           <div></div>
           <div class="transform-menu">
             <button type="button" class="del" data-index="${index}">

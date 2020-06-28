@@ -26,6 +26,10 @@ export default class MenuItem extends UIElement {
         return DEFAULT_CHECKED; 
     }
 
+    setSelected (isSelected) {
+        this.$el.toggleClass('selected', isSelected)
+    }
+
     getTitle () {
         return DEFAULT_TITLE;
     }

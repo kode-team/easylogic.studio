@@ -10,7 +10,7 @@ export default class AddDrawPath extends MenuItem {
   }
 
   clickButton(e) {
-    this.emit('addDrawPath')
+    this.emit('addLayerView', 'brush')
   }
 
 }

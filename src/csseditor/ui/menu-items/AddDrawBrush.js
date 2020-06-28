@@ -1,5 +1,6 @@
 import MenuItem from "./MenuItem";
 import icon from "../icon/icon";
+import { EVENT } from "../../../util/UIElement";
  
 export default class AddDrawBrush extends MenuItem {
   getIconString() {
@@ -14,7 +15,10 @@ export default class AddDrawBrush extends MenuItem {
   }  
 
   clickButton(e) {
-    this.emit('addDrawBrush')
+    this.emit('addLayerView', 'brush')
   }
 
+  [EVENT('addLayerView')] (type) {
+    this.setSelected(type === 'brush');
+  }    
 }

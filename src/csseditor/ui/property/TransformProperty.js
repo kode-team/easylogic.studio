@@ -101,7 +101,7 @@ export default class TransformProperty extends BaseProperty {
     this.refreshShowIsNot(['project']);
   }
 
-  [EVENT('refreshSelectionStyleView', 'refreshSelectionDragStyleView', 'refreshStyleView', 'refreshRect')] () {
+  [EVENT('refreshRect')] () {
     this.refresh();
   }
 

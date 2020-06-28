@@ -130,9 +130,21 @@ export class ShortCutManager {
             args: [],
             eventType: 'keydown',
             ...shortcut, 
-            checkKeyString: this.splitShortCut(shortcut[OSName] || shortcut.key)
+            checkKeyString: this.splitShortCut(shortcut[OSName] || shortcut.key),
+            whenFunction: this.makeWhenFunction(shortcut.command, shortcut.when || "true") 
         });
 
+    }
+
+    makeWhenFunction(command, when) {
+        return (new Function ('editor', `
+            return function () {
+                const CanvasView = editor.modeView === 'CanvasView';
+                const PathEditorView = editor.modeView === 'PathEditorView';                
+
+                return (${when});
+            }
+        `)) (this.$editor)
     }
 
     sort() {
@@ -205,13 +217,7 @@ export class ShortCutManager {
     }
 
     checkWhen(command) {
-        if (command.when === this.$editor.modeView) {
-            return true; 
-        } else if (command.when === '') {
-            return true; 
-        }
-
-        return false; 
+        return command.whenFunction();
     }
 
     execute (e, eventType = 'keydown') {

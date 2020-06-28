@@ -278,14 +278,32 @@ export default class PathEditorView extends PathTransformEditor {
         }
     }
 
-    [KEYUP('document') + IF('isShow') + ESCAPE + ENTER + PREVENT + STOP] () {
+    [KEYUP('document') + IF('isShow') + ENTER + PREVENT + STOP] () {
+        if (this.state.current) {
+            this.refreshPathLayer();
+            this.trigger('hidePathEditor');
+        } else {     
+            this.addPathLayer(); 
+        }
+
+        if (!this.state.current && this.state.points.length) {
+            this.trigger('initPathEditorView');
+        } else {
+            this.trigger('hidePathEditor');
+        }
+
+
+    }
+
+    [KEYUP('document') + IF('isShow') + ESCAPE + PREVENT + STOP] () {
         if (this.state.current) {
             this.refreshPathLayer();
         } else {     
             this.addPathLayer(); 
         }
-        this.trigger('hidePathEditor');        
-    }
+
+        this.trigger('hidePathEditor');
+    }    
 
     get totalPathLength () {
         if (!this.refs.$view) return 0 
@@ -371,14 +389,14 @@ export default class PathEditorView extends PathTransformEditor {
 
         this.changeMode('modify');
 
-        if (pathRect.width !==  0 && pathRect.height !== 0) {
+        if (pathRect.width >  0 && pathRect.height > 0) {
 
             var layer = this.makePathLayer(pathRect)
             if (layer) {
-                this.$selection.select(layer);
+                // this.$selection.empty(layer);
     
                 this.emit('refreshAll')
-                this.emit('refreshSelection');
+                // this.emit('refreshSelection');
             }
         }
         
@@ -491,6 +509,16 @@ export default class PathEditorView extends PathTransformEditor {
 
     }
 
+
+    [EVENT('hideAddViewLayer')] () {
+        this.state.isShow = false;        
+        this.pathParser.reset('');
+        this.setState(this.initState(), false)        
+        this.refs.$view.empty()
+        this.$el.hide();
+        this.emit('hidePathManager');        
+    }
+
     [BIND('$view')] () {
         return {
             class: {
@@ -535,7 +563,7 @@ export default class PathEditorView extends PathTransformEditor {
 
         var $obj = this.refs.$view.$('path.object')
 
-        var pathRect = {x: Length.z(), y: Length.z(),  width: Length.z(), height: Length.z()}
+        var pathRect = {x: 0, y: 0,  width: 0, height: 0}
         if ($obj) {
 
             pathRect = $obj.rect()
@@ -726,6 +754,15 @@ export default class PathEditorView extends PathTransformEditor {
         })
     }
 
+
+    [EVENT('initPathEditorView')] () {
+        this.pathParser.reset('');
+        this.setState(this.initState(), false)
+        this.state.isShow = true; 
+        this.refs.$view.empty()
+        this.$el.focus();
+    }
+
     end (dx, dy) {
 
         if (this.state.isOnCanvas) {
@@ -766,7 +803,7 @@ export default class PathEditorView extends PathTransformEditor {
                 } else {
                  
                     this.addPathLayer(); 
-                    this.trigger('hidePathEditor')
+                    this.trigger('initPathEditorView')
                 }
             } else {
 

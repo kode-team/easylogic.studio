@@ -1,5 +1,6 @@
 import MenuItem from "./MenuItem";
 import icon from "../icon/icon";
+import { EVENT } from "../../../util/UIElement";
  
 export default class SelectTool extends MenuItem {
   getIconString() {
@@ -13,7 +14,10 @@ export default class SelectTool extends MenuItem {
   }
 
   clickButton(e) {
-
-    this.emit('selectItem');
+    this.emit('addLayerView', 'select');
   }
+
+  [EVENT('addLayerView')] (type) {
+    this.setSelected(type === 'select');
+  }      
 }

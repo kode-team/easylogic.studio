@@ -1,7 +1,7 @@
 export default {
     category: 'Tool',    
     key: 'v',
-    command: 'selectItem', 
+    command: 'addLayerView', 
+    args: 'select',
     description: 'Selection',
-    when: 'CanvasView'
 }

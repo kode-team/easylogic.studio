@@ -6,7 +6,7 @@ export default class AssetParser {
 
         content = content.join(',');
 
-        return { 
+        return {  
             mimeType, 
             local: enableParselocal && AssetParser.getLink(mimeType, encoding, content)
         }
