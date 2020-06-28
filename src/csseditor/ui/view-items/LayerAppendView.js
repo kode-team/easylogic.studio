@@ -10,6 +10,7 @@ export default class LayerAppendView extends UIElement {
         return /*html*/`
         <div class='layer-add-view'>
             <div class='area' ref='$area'></div>
+            <div class='area-rect' ref='$areaRect'></div>
         </div>
         `
     }
@@ -23,6 +24,7 @@ export default class LayerAppendView extends UIElement {
             height: 0,
             color: Color.random(),
             fontSize: 30,
+            showRectInfo: false, 
             content: 'Insert a text'
         }
     }
@@ -49,6 +51,7 @@ export default class LayerAppendView extends UIElement {
         this.state.height = 0; 
 
         this.bindData('$area');
+        this.bindData('$areaRect');
 
 
     }
@@ -118,6 +121,20 @@ export default class LayerAppendView extends UIElement {
         }
     }
 
+    [BIND('$areaRect')] () {
+
+        const { x, y, width, height, showRectInfo} = this.state; 
+
+        return {
+            style: {
+                display: showRectInfo ? 'inline-block' : 'none',
+                left: Length.px(x + width),
+                top: Length.px(y + height),
+            },
+            innerHTML: `${width} x ${height}`
+        }
+    }
+
     move (dx, dy) {
         const isShiftKey = this.$config.get('bodyEvent').shiftKey;
 
@@ -136,8 +153,10 @@ export default class LayerAppendView extends UIElement {
         this.state.y = obj.top.value;
         this.state.width = obj.width.value;
         this.state.height = obj.height.value;
+        this.state.showRectInfo = true; 
 
         this.bindData('$area');
+        this.bindData('$areaRect'); 
     }
 
     end (dx, dy) {
@@ -181,6 +200,9 @@ export default class LayerAppendView extends UIElement {
         if (!isAltKey) {
             this.trigger('hideLayerAppendView')
         }
+
+        this.state.showRectInfo = false; 
+        this.bindData('$areaRect');         
     }    
 
     [EVENT('showLayerAppendView')] (type) {
