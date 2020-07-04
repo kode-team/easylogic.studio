@@ -12,10 +12,6 @@ export default class PatternInfoPopup extends BasePopup {
     return this.$i18n('pattern.info.popup.title')
   }
 
-  components() {
-    return propertyEditor
-  }
-
   initState() {
 
     return {

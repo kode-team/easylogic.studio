@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
-import { BIND, POINTERSTART, MOVE, END, IF, KEYUP, DROP, DRAGOVER, PREVENT } from "../../../util/Event";
+import { BIND, POINTERSTART, MOVE, END, IF, KEYUP, DROP, DRAGOVER, PREVENT, FOCUSIN, BLUR } from "../../../util/Event";
 import { Length } from "../../../editor/unit/Length";
 
 import Dom from "../../../util/Dom";
@@ -263,19 +263,36 @@ export default class ElementView extends UIElement {
 
     }
 
+    [FOCUSIN('$view .element-item.text')] (e) {
+        e.$dt.css('height', 'auto');
+    }
+
+    [BLUR('$view .element-item.text')] (e) {
+        e.$dt.css('height', undefined)
+    }
+
 
     [KEYUP('$view .element-item.text')] (e) {
         var content = e.$dt.html()
         var text = e.$dt.text().trim()
         var id = e.$dt.attr('data-id');
+        const rect = e.$dt.rect()
 
         var arr = [] 
         this.$selection.items.filter(it => it.id === id).forEach(it => {
-            it.reset({ content, text })
-            arr.push({id:it.id, content, text})
+            it.reset({ 
+                content, 
+                text,
+                height: Length.px(rect.height)
+            })
+            arr.push({id:it.id, content, text})            
         })
 
         this.emit('refreshContent', arr);
+
+        this.$selection.setRectCache()
+        this.children.$selectionTool.initMoveType();
+        this.emit('refreshSelectionTool');        
     }
 
     checkEditMode () {
@@ -504,19 +521,17 @@ export default class ElementView extends UIElement {
 
     [EVENT('playTimeline', 'moveTimeline')] () {
 
-        var artboard = this.$selection.currentArtboard;
+        var project = this.$selection.currentProject;
 
-        if (artboard) {
-            var timeline = artboard.getSelectedTimeline();
-            timeline.animations.map(it => artboard.searchById(it.id)).forEach(current => {
-                // 레이어 업데이트 사항 중에 updateFunction 으로 업데이트 되는 부분 
-                // currentTime 도 매번 업데이트 되기 때문에 
-                // playbackRate 도 매번 업데이트 되고
-                // 그래서 막는게 필요하다.                 
-                // timeline 에서 실행되는것에 따라서  layer 에서 각자 알아서 업데이트 한다. 
-                this.updateTimelineElement(current, true, false);
-            })
-        }
+        var timeline = artboard.getSelectedTimeline();
+        timeline.animations.map(it => project.searchById(it.id)).forEach(current => {
+            // 레이어 업데이트 사항 중에 updateFunction 으로 업데이트 되는 부분 
+            // currentTime 도 매번 업데이트 되기 때문에 
+            // playbackRate 도 매번 업데이트 되고
+            // 그래서 막는게 필요하다.                 
+            // timeline 에서 실행되는것에 따라서  layer 에서 각자 알아서 업데이트 한다. 
+            this.updateTimelineElement(current, true, false);
+        })
     }    
 
     [EVENT('refreshAllCanvas')] (isRefreshSelectionTool = true) {

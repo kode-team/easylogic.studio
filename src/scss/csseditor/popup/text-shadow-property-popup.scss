@@ -1,47 +1,23 @@
 
   .text-shadow-property-popup {
-    width: 432px;
+    width: 200px;
     
-    display: grid;
-    grid-template-columns: 224px 1fr; 
-    grid-column-gap: 4px;
-
-    .colorpicker {
-      box-shadow: none;
-      border-radius: 0px;
-      background-color: var(--popup-background-color);
-
-      input {
-        color: var(--font-color) !important;
-        text-transform: uppercase;
-        border:0px !important;
-      }
-
-      .color-panel {
-        margin-top: 0px;
-      }
-  
-      .title {
-        color: var(--font-color) !important;
-      }
-  
-      .colorsets {
-        border-top: 0px solid var(--border-color) !important;
-      }      
-    }
-
     .box {
 
       label {
         font-size: 11px;
       }
 
+      .popup-item {
+        margin-top: 5px;
+      }
+
       .drag-board {
 
         // background-color: var(--selected-color);
-        
+        width: 200px;
         border: 1px solid var(--border-color);
-        height: 202px;
+        height: 200px;
         position: relative;
         margin-bottom :10px;
         // pointer-events: none;
@@ -60,7 +36,7 @@
           position: absolute;
           width: 10px;
           height: 10px;
-          transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
+          transform: translateX(calc(100px - 5px)) translateY(calc(100px - 5px));
           background-color: var(--selected-color);
           border-radius: 100%;
         }

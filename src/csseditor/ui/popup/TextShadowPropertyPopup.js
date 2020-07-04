@@ -1,9 +1,7 @@
 import { EVENT } from "../../../util/UIElement";
 import { Length } from "../../../editor/unit/Length";
 import { LOAD, POINTERSTART, MOVE } from "../../../util/Event";
-import RangeEditor from "../property-editor/RangeEditor";
 import BasePopup from "./BasePopup";
-import EmbedColorPicker from "../property-editor/EmbedColorPicker";
 
 export default class TextShadowPropertyPopup extends BasePopup {
 
@@ -11,12 +9,6 @@ export default class TextShadowPropertyPopup extends BasePopup {
     return 'Text Shadow Editor'
   }
 
-  components() {
-    return {
-      EmbedColorPicker,
-      RangeEditor
-    }
-  }
   initState() {
     return {
       color: 'rgba(0, 0, 0, 1)',  
@@ -38,9 +30,6 @@ export default class TextShadowPropertyPopup extends BasePopup {
   [LOAD("$popup")]() {
     return /*html*/`
       <div class='box'>
-        <EmbedColorPicker ref='$colorpicker' value='${this.state.color}' onchange='changeColor' />
-      </div>
-      <div class='box'>
         <div class="drag-board" ref="$dragBoard">
           <div
             class="pointer"
@@ -48,15 +37,23 @@ export default class TextShadowPropertyPopup extends BasePopup {
             style="left: ${this.state.offsetX};top: ${this.state.offsetY}"
           ></div>
         </div>
-        <div>
+        <div class='popup-item'>
           <RangeEditor ref='$offsetX' label='Offset X' key='offsetX' min="-100" max='100' value='${this.state.offsetX}' onchange='changeShadow' />
         </div>
-        <div>
+        <div class='popup-item'>
           <RangeEditor ref='$offsetY' label="Offset Y" key='offsetY' min="-100" max='100' value='${this.state.offsetY}' onchange='changeShadow' />
         </div>
-        <div>
+        <div class='popup-item'>
           <RangeEditor ref='$blurRadius' label="Blur Radius" key='blurRadius' value='${this.state.blurRadius}' onchange='changeShadow' />
         </div>
+        <div class='popup-item'>
+          <ColorViewEditor 
+              ref='$foreColor' 
+              label="color" 
+              key='color' 
+              value="${this.state.color}"
+              onchange="changeShadow" />
+        </div>        
       </div>
     `;
   }
@@ -70,10 +67,6 @@ export default class TextShadowPropertyPopup extends BasePopup {
       this.refreshPointer();
     }
 
-  }
-
-  [EVENT('changeColor')] (value) {
-    this.trigger('changeShadow', 'color', value);
   }
 
   [POINTERSTART("$popup .drag-board") + MOVE("movePointer")](e) {

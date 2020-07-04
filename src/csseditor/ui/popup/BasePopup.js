@@ -3,8 +3,15 @@ import { POINTERSTART, MOVE, END, CLICK } from "../../../util/Event";
 import { Length } from "../../../editor/unit/Length";
 import UIElement, { EVENT } from "../../../util/UIElement";
 import icon from "../icon/icon";
+import propertyEditor from "../property-editor";
+
+
 
 export default class BasePopup extends UIElement {
+
+  components() {
+    return propertyEditor
+  }
 
   template() {
     return /*html*/`

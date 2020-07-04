@@ -2,7 +2,7 @@ import _refreshSelection from "./_refreshSelection";
 
 const createItem = (editor, obj) => {
 
-    obj.layers = obj.layers.map(it => {
+    obj.layers = (obj.layers || []).map(it => {
         return createItem(editor, it);
     })
 
@@ -18,7 +18,16 @@ export default {
 
         // 값이 아무것도 없을 때 project 를 설정해준다. 
         if (json.length === 0) {
-            json = [{itemType: 'project', layers: []}]
+            json = [{itemType: 'project', layers: [{
+                itemType: 'artboard',
+                name: "New ArtBoard",
+                x: '300px',
+                y: '200px',
+                width: '375px',
+                height: '667px',
+                'background-color': 'white',
+                layer: []
+            }]}]
         }
 
         var projects = json.map(p => createItem(editor, p))
