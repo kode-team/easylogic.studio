@@ -211,16 +211,7 @@ export default class Dom {
   }
 
   htmlDiff(fragment) {
-    if (!this.fragment) {
-      this.empty().append(fragment);
-      this.fragment = true;
-    } else {
-      var childFragment = this.createChildrenFragment();
-
-      DomDiff(childFragment, fragment);
-
-      this.html(childFragment)
-    }
+    DomDiff(this, fragment);
   }
   updateDiff (html, rootElement = 'div') {
     DomDiff(this, Dom.create(rootElement).html(html))

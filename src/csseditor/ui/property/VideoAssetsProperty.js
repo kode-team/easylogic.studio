@@ -21,9 +21,8 @@ export default class VideoAssetsProperty extends BaseProperty {
     return 'video-assets-property'
   }
 
-  [EVENT('refreshSelection') + DEBOUNCE(1000)] () {
+  afterRender() {
     this.show();
-    this.refresh();
   }
 
   getBody() {

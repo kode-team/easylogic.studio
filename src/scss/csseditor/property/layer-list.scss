@@ -14,18 +14,43 @@
             &[data-depth="#{$selectValue}"] {
                 .detail {
                     label {
-                        padding-left: $selectValue * 5px;
+                        padding-left: $selectValue * 10px;
                     }
                 }
 
             }
         }  
 
+        &[data-is-hide="true"] {
+            display: none; 
+        }
+
+
+
+        &[data-is-group="true"] {
+            .detail {
+                .folder {
+                    display: inline-block;
+                    vertical-align: middle;
+                    transition: transform 0.3s linear ;
+                    transform: rotate(90deg);
+
+                    &.collapsed {
+                        transform: rotate(0deg);
+                    }
+                }
+            }
+        }
+
         .detail {
             display: grid;
             grid-template-columns: 1fr 80px;
             grid-column-gap: 3px;
 
+            .folder {
+                display: none;
+
+            }
 
             svg {
 
@@ -132,7 +157,6 @@
                 }
             }
         }
-
 
     }
 

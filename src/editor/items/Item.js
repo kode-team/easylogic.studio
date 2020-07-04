@@ -336,6 +336,23 @@ export class Item {
     }
   }
 
+  isTreeItemHide () {
+
+    let currentParent = this.parent;
+    let collapsedList = [] 
+    do {
+      if (currentParent.is('project')) break;
+      else if (currentParent.is('artboard')) break;
+
+      collapsedList.push(Boolean(currentParent.collapsed))
+      currentParent = currentParent.parent; 
+    } while (currentParent)
+
+    // 부모중에 하나라도 collapsed 가 있으면 여긴 트리에서 숨김 
+    return Boolean(collapsedList.filter(Boolean).length);
+
+  }
+
   expectJSON (key) {
     if (key === 'parent') return false; 
     if (this.json[key] === '') return false; 
