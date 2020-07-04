@@ -400,17 +400,6 @@ export default class ElementView extends UIElement {
         }
     }    
 
-    [EVENT('addElement')] () {
-        var artboard = this.$selection.currentArtboard || { html : ''} 
-        var html = artboard.html;
-
-        this.setState({ html }, false)
-        // this.bindData('$view');
-        this.refs.$view.updateDiff(html)
-
-        this.emit('refreshSelectionTool')
-    }
-
     selectCurrent (...args) {
         this.state.cachedCurrentElement = {}
         var $selectedElement = this.$el.$$('.selected');
@@ -466,16 +455,6 @@ export default class ElementView extends UIElement {
         this.emit('refreshSelectionTool')
 
     }    
-    
-    [EVENT('refreshSelection')] () {
-
-        if (!this.state.html) {
-            this.trigger('addElement');
-        }
-
-
-        this.emit('refreshSelectionTool')
-    }
 
     modifyScale () {
         this.refs.$view.css({
