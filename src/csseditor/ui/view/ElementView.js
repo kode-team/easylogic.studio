@@ -167,7 +167,6 @@ export default class ElementView extends UIElement {
             rect.y2 = Length.px(rect.y.value + rect.height.value); 
 
             var artboard = this.$selection.currentArtboard;
-            var items = this.$selection.items; 
             if (artboard) {
                 Object.keys(rect).forEach(key => {
                     rect[key].div(this.$editor.scale)
@@ -183,10 +182,6 @@ export default class ElementView extends UIElement {
                     this.selectCurrentForBackgroundView(...items)
                 }
 
-            }
-
-            if (this.$selection.select(...items)) {
-                this.emit('refreshSelection')
             }
         }
     }

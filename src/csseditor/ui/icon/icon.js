@@ -135,6 +135,8 @@ import volume_up from "./volume_up";
 import volume_off from "./volume_off";
 import arrowLeft from "./arrowLeft";
 import group from "./group";
+import arrow_right from "./arrow_right";
+
 
 
 const alias = {
@@ -144,6 +146,7 @@ const alias = {
 
 export default {
   ...alias,
+  arrow_right,  
   group,
   volume_down,
   arrowLeft,

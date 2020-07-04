@@ -21,9 +21,8 @@ export default class ImageAssetsProperty extends BaseProperty {
     return 'image-assets-property'
   }
 
-  [EVENT('refreshSelection') + DEBOUNCE(1000)] () {
+  afterRender() {
     this.show();
-    this.refresh();
   }
 
   getBody() {

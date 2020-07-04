@@ -143,11 +143,13 @@ export default class LayerTreeProperty extends BaseProperty {
         title = this.$i18n('layer.tree.property.layout.title.' + layer.layout)
       }
 
+      const isHide = layer.isTreeItemHide()
 
       return /*html*/`        
-      <div class='layer-item ${selected}' data-depth="${depth}" data-layout='${layer.layout}' data-layer-id='${layer.id}' draggable="true">
+      <div class='layer-item ${selected}' data-is-group="${layer.isGroup}" data-depth="${depth}" data-layout='${layer.layout}' data-layer-id='${layer.id}' data-is-hide="${isHide}"  draggable="true">
         <div class='detail'>
           <label data-layout-title='${title}' > 
+            <div class='folder ${layer.collapsed ? 'collapsed' : ''}'>${icon.arrow_right}</div>
             <span class='icon' data-item-type="${layer.itemType}" style='color: ${layer['background-color']};'>${this.getIcon(layer)}</span> 
             <span class='name'>${name}</span>
           </label>
@@ -302,7 +304,7 @@ export default class LayerTreeProperty extends BaseProperty {
     });
   }
 
-  [CLICK('$layerList .layer-item label')] (e) {
+  [CLICK('$layerList .layer-item label .name')] (e) {
     var artboard = this.$selection.currentArtboard
     if (artboard) {
 
@@ -317,6 +319,21 @@ export default class LayerTreeProperty extends BaseProperty {
 
     }
   }
+
+  [CLICK('$layerList .layer-item label .folder')] (e) {
+    const project = this.$selection.currentProject;
+
+    var $item = e.$dt.closest('layer-item')
+    var id = $item.attr('data-layer-id');
+    var item = project.searchById(id);
+
+    item.reset({
+      collapsed: !item.collapsed
+    })
+
+    this.refresh();
+
+  }  
 
   [CLICK('$layerList .layer-item .visible')] (e) {
     var artboard = this.$selection.currentArtboard
