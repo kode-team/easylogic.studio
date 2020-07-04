@@ -48,7 +48,7 @@ export default class CSSEditor extends UIElement {
     return {
       hideLeftPanel: false,
       hideRightPanel: false,
-      leftSize: 300,
+      leftSize: 340,
       rightSize: 240,
     }
   }
