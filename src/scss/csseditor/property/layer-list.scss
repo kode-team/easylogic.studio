@@ -7,8 +7,6 @@
         color: var(--list-item-font-color);
         padding: 5px 7px !important; 
         margin-bottom: 0px !important;
-        border-radius: 4px;
-
 
         @for $selectValue from 0 to 40 {
             &[data-depth="#{$selectValue}"] {
@@ -32,7 +30,7 @@
                 .folder {
                     display: inline-block;
                     vertical-align: middle;
-                    transition: transform 0.3s linear ;
+                    transition: transform 0.1s linear ;
                     transform: rotate(90deg);
 
                     &.collapsed {
