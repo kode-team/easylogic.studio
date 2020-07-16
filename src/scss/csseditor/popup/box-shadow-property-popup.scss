@@ -1,38 +1,18 @@
 
 
   .box-shadow-property-popup {
-    width: 432px;
+    width: 200px;
     
-    display: grid;
-    grid-template-columns: 224px 1fr; 
-    grid-column-gap: 4px;
-
-    .colorpicker {
-      box-shadow: none;
-      border-radius: 0px;
-      background-color: var(--popup-background-color);
-      border-color: var(--popup-background-color);
-
-      input {
-        color: var(--font-color) !important;
-        text-transform: uppercase;
-        border:0px !important;
-      }
-
-      .color-panel {
-        margin-top: 0px;
-      }
-  
-      .title {
-        color: var(--font-color) !important;
-      }
-  
-      .colorsets {
-        border-top: 0px solid var(--border-color) !important;
-      }
-    }
     .box {
 
+      label {
+        font-size: 11px;
+      }
+
+      .popup-item {
+        margin-top: 5px;
+      }
+      
       .type {
         display: grid;
         grid-template-columns: 50px 1fr;

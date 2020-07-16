@@ -15,10 +15,10 @@ export default class KeyframeTimeGridView extends UIElement {
     }
 
     currentTimeline () {
-        var currentArtboard = this.$selection.currentArtboard;
+        var project = this.$selection.currentProject;
 
-        if (currentArtboard) {
-            return currentArtboard.getSelectedTimeline();
+        if (project) {
+            return project.getSelectedTimeline();
         }
     }    
 

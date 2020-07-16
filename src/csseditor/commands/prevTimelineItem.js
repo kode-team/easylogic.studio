@@ -1,15 +1,15 @@
-import _currentArtboard from "./_currentArtBoard";
+import _currentProject from "./_currentProject";
 import { timecode } from "../../util/functions/time";
 
 export default {
     command: 'prevTimelineItem',
     execute: function (editor) {
 
-        _currentArtboard(editor, (artboard, timeline) => {
-            var prevTime = artboard.getSelectedTimelinePrevTime();
+        _currentProject(editor, (project, timeline) => {
+            var prevTime = project.getSelectedTimelinePrevTime();
 
-            artboard.setTimelineCurrentTime(timecode(timeline.fps, prevTime));
-            artboard.seek();
+            project.setTimelineCurrentTime(timecode(timeline.fps, prevTime));
+            project.seek();
 
             editor.emit('playTimeline');
             editor.changeMode('SELECTION');

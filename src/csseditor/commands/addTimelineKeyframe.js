@@ -1,10 +1,10 @@
-import _currentArtboard from "./_currentArtBoard";
+import _currentProject from "./_currentProject";
 
 export default {
     command: 'addTimelineKeyframe',
     execute: function (editor, options = {timing : 'linear'}) {
-        _currentArtboard(editor, (artboard, timeline) => {
-            var item = artboard.searchById(options.layerId);
+        _currentProject(editor, (project, timeline) => {
+            var item = project.searchById(options.layerId);
 
             var keyframeObj = {
                 layerId: options.layerId,
@@ -14,7 +14,7 @@ export default {
                 timing: options.timing,
                 editor: options.editor
             }
-            var obj = artboard.addTimelineKeyframe(keyframeObj);
+            var obj = project.addTimelineKeyframe(keyframeObj);
             editor.timeline.select(obj);            
             editor.emit('refreshTimeline');
             editor.emit('refreshSelectedOffset');

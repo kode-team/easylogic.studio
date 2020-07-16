@@ -21,6 +21,9 @@ export default class Inspector extends UIElement {
               <div class="tab-item selected" data-value="1" title='${this.$i18n('inspector.tab.title.style')}'>
                 <label class='icon'>${icon.palette}</label>
               </div>
+              <div class="tab-item" data-value="2" title='${this.$i18n('inspector.tab.title.text')}'>
+                <label class='icon'>${icon.title}</label>
+              </div>              
               <div class="tab-item" data-value="3" title="${this.$i18n('inspector.tab.title.transition')}">
                 <label>${icon.flash_on}</label>
               </div>
@@ -36,9 +39,9 @@ export default class Inspector extends UIElement {
                 <!-- Default Property --> 
                 <PositionProperty />
                 <SizeProperty /> 
-
+                <BackgroundColorProperty />
+                
                 <!-- SVG Item --> 
-                <SVGTextProperty />        
                 <SVGItemProperty />              
 
                 <!-- Image --> 
@@ -51,7 +54,7 @@ export default class Inspector extends UIElement {
                 <ComponentProperty />                
                 
                 <!-- Appearance --> 
-                <BackgroundColorProperty />
+
                 <BackgroundImageProperty />                
                 <PatternProperty />
                 <BorderNewProperty />
@@ -62,14 +65,6 @@ export default class Inspector extends UIElement {
                 <FlexLayoutItemProperty />
                 <GridLayoutItemProperty />      
 
-                <!-- <ContentProperty /> -->    
-                <FontProperty />
-                <TextProperty />
-                <TextShadowProperty />
-                <TextFillProperty />
-                <FontSpacingProperty />
-                <TextClipProperty />  
-
                 <!-- effect -->
                 <BoxShadowProperty />
                 <FilterProperty />
@@ -79,8 +74,8 @@ export default class Inspector extends UIElement {
                 <!-- transform --> 
                 <TransformProperty />                  
                 <TransformOriginProperty /> 
-                <PerspectiveProperty />
-                <PerspectiveOriginProperty />
+                <!-- <PerspectiveProperty /> -->
+                <!-- <PerspectiveOriginProperty /> --> 
 
                 <!-- ArtBoard --> 
                 <ArtBoardSizeProperty />    
@@ -94,6 +89,18 @@ export default class Inspector extends UIElement {
 
                 <div class='empty'></div>
               </div>     
+              <div class="tab-content scrollbar" data-value="2">
+
+                <!-- <ContentProperty /> -->    
+                <SVGTextProperty />                        
+                <FontProperty />
+                <TextProperty />
+                <TextShadowProperty />
+                <TextFillProperty />
+                <FontSpacingProperty />
+                <TextClipProperty />  
+                <div class='empty'></div>
+              </div>                   
               <div class='tab-content scrollbar' data-value='3'>
                 <MotionProperty />
                 <!-- SelectorProperty /> --> 

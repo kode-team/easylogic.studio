@@ -67,17 +67,17 @@ export default class TimelinePlayControl extends UIElement {
 
     getSelectedTimeline () {
 
-        var artboard = this.$selection.currentArtboard;
-        if (artboard) {
-            return artboard.getSelectedTimeline();
+        var project = this.$selection.currentProject;
+        if (project) {
+            return project.getSelectedTimeline();
         }
     }
 
     updateData(obj) {
         this.setState(obj, false);
-        var artboard = this.$selection.currentArtboard;
-        if (artboard) {
-            artboard.setTimelineInfo(obj);
+        var project = this.$selection.currentProject;
+        if (project) {
+            project.setTimelineInfo(obj);
         }
     }
 

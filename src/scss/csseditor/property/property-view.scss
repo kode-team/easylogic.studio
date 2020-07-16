@@ -51,7 +51,7 @@
 
     &.managed-tool {
       > .property-title {
-        grid-template-columns: ($left-size - 10px) 1fr;
+        grid-template-columns: ($timeline-animation-size - 10px) 1fr;
 
         label {
           padding-left: 10px;

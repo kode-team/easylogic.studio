@@ -12,8 +12,12 @@ export default class FontProperty extends BaseProperty {
     return 'item'
   }
 
+  afterRender() {
+    this.show();
+  }
+
   [EVENT('refreshSelection')]() {
-    this.refreshShow(['text', 'svg-text', 'svg-textpath']);
+    this.refresh();
   }
 
   refresh() {

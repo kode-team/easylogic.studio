@@ -14,8 +14,9 @@ const MAX_DIST = 2;
  */
 export default class GuideView {
 
-    constructor (editor) {
+    constructor (editor, selectionToolView) {
         this.$editor = editor; 
+        this.$selectionToolView = selectionToolView;
     }
 
     get $selection (){
@@ -23,6 +24,7 @@ export default class GuideView {
     }
 
     makeGuideCache () {
+
         var artboard = this.$selection.currentArtboard;
         this.cachedExtraItems = [] 
         if (artboard) {

@@ -33,7 +33,7 @@ export default class ArtBoardProperty extends BaseProperty {
       var selected = artboard === this.$selection.currentArtboard ? 'selected' : ''
       var title = ''; 
 
-      if (artboard.hasLayout()) {
+      if (artboard && artboard.hasLayout()) {
         title = this.$i18n('artboard.property.layout.title.' + artboard.layout)
       }
 
@@ -109,7 +109,10 @@ export default class ArtBoardProperty extends BaseProperty {
 
       var artboard = project.artboards[index]
 
-      this.emit('selectArtboard', artboard);
+      if (artboard) {
+        this.emit('selectArtboard', artboard);
+      }
+
     }
   }
 

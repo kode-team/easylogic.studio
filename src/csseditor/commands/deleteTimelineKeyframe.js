@@ -1,11 +1,11 @@
-import _currentArtboard from "./_currentArtBoard";
+import _currentProject from "./_currentProject";
 
 export default {
     command: 'deleteTimelineKeyframe',
     execute: function (editor) {
-        _currentArtboard(editor, (artboard, timeline) => {
+        _currentProject(editor, (project, timeline) => {
             editor.timeline.each(item => {
-                artboard.deleteTimelineKeyframe(item.layerId, item.property, item.id);
+                project.deleteTimelineKeyframe(item.layerId, item.property, item.id);
             })
 
             editor.timeline.empty();

@@ -518,15 +518,11 @@ export default class CSSPropertyEditor extends UIElement {
   makePropertySelect() {
     return /*html*/`
       <select class='property-select' ref='$propertySelect'>
-        <optgroup label='--'>
-          <option value='var'>var</option>
-        </optgroup>            
-        <optgroup label='Motion'>
-          <option value='offset-distance'>offset-distance</option>
-        </optgroup>      
-        <optgroup label='Size'>
+        <optgroup label='Position'>
           <option value='x'>x</option>
           <option value='y'>y</option>        
+        </optgroup>
+        <optgroup label='Size'>
           <option value='width'>width</option>
           <option value='height'>height</option>
         </optgroup>      

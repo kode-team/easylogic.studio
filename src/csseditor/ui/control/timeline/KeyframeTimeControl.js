@@ -22,10 +22,10 @@ export default class KeyframeTimeControl extends UIElement {
     }
 
     get currentTimeline () {
-        var currentArtboard = this.$selection.currentArtboard;
+        var currentProject = this.$selection.currentProject;
 
-        if (currentArtboard) {
-            return currentArtboard.getSelectedTimeline();
+        if (currentProject) {
+            return currentProject.getSelectedTimeline();
         }
 
         return null; 
@@ -74,10 +74,10 @@ export default class KeyframeTimeControl extends UIElement {
     [KEYUP('$fps') + ENTER] (e) {
         var fps = +this.refs.$fps.val();
 
-        var artboard = this.$selection.currentArtboard;
+        var project = this.$selection.currentProject;
 
-        if (artboard) {
-            artboard.setFps(fps);
+        if (project) {
+            project.setFps(fps);
             this.emit('moveTimeline');            
         }
     }
@@ -104,10 +104,10 @@ export default class KeyframeTimeControl extends UIElement {
     }
 
     [CLICK('$timer')] () {
-        var artboard = this.$selection.currentArtboard;
+        var project = this.$selection.currentProject;
 
-        if (artboard) {
-            artboard.seek(this.refs.$currentTime.value, (it => {
+        if (project) {
+            project.seek(this.refs.$currentTime.value, (it => {
                 return true; 
             }))
             this.emit('playTimeline');
@@ -124,10 +124,10 @@ export default class KeyframeTimeControl extends UIElement {
 
     [KEYUP('$currentTime') + ENTER + IF('checkNumberOrTimecode') + IF('hasCurrentTimeline') + PREVENT] (e) {
         var frame = this.refs.$currentTime.value
-        var artboard = this.$selection.currentArtboard;
+        var project = this.$selection.currentProject;
 
-        if (artboard) {
-            artboard.setTimelineCurrentTime(frame);
+        if (project) {
+            project.setTimelineCurrentTime(frame);
         }
 
         this.refresh();
@@ -147,10 +147,10 @@ export default class KeyframeTimeControl extends UIElement {
     [KEYUP('$duration') + ENTER + IF('checkNumberOrTimecode') + IF('hasCurrentTimeline') + PREVENT] (e) {
 
         var frame = this.refs.$duration.value
-        var artboard = this.$selection.currentArtboard;
+        var project = this.$selection.currentProject;
 
-        if (artboard) {
-            artboard.setTimelineTotalTime(frame);
+        if (project) {
+            project.setTimelineTotalTime(frame);
         }
 
         this.refresh();

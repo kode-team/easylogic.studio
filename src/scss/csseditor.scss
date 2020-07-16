@@ -48,7 +48,9 @@ body {
     $left-layer-panel: 70px; 
     $left-page-size: 70px;
     $toggle-left-size: 80px;
-    $right-size: 240px;
+    $right-size: 260px;
+    $timeline-animation-size: 200px;
+    $timeline-property-size: 270px;
     $timeline-header-size: 40px;
     $timeline-size: 300px;
     $show-timeline-animation: all 0.05s linear;
@@ -104,7 +106,9 @@ body {
         --rotate-y-border-color: #{$rotate-y-border-color};
         --color-view-background-color: #{$color-view-background-color};
         --transform-origin-selected-color: #{$transform-origin-selected-color};
-        --border-radius-selected-color: #{$border-radius-selected-color};        
+        --border-radius-selected-color: #{$border-radius-selected-color};    
+        --transform-item-background-color: #{$transform-item-background-color};
+        --transform-item-border-color: #{$transform-item-border-color};
     }   
 
     &[data-theme='light'] {
@@ -151,7 +155,9 @@ body {
         --rotate-y-border-color: #{$rotate-y-border-color};
         --color-view-background-color: #{$color-view-background-color};
         --transform-origin-selected-color: #{$transform-origin-selected-color};
-        --border-radius-selected-color: #{$border-radius-selected-color};                 
+        --border-radius-selected-color: #{$border-radius-selected-color};    
+        --transform-item-background-color: #{$transform-item-background-color};
+        --transform-item-border-color: #{$transform-item-border-color};                     
     }    
 
     &[data-theme='toon'] {
@@ -198,7 +204,9 @@ body {
         --rotate-y-border-color: #{$rotate-y-border-color};
         --color-view-background-color: #{$color-view-background-color};
         --transform-origin-selected-color: #{$transform-origin-selected-color};
-        --border-radius-selected-color: #{$border-radius-selected-color};       
+        --border-radius-selected-color: #{$border-radius-selected-color};   
+        --transform-item-background-color: #{$transform-item-background-color};
+        --transform-item-border-color: #{$transform-item-border-color};            
     }        
 
     @import './csseditor/component.scss';

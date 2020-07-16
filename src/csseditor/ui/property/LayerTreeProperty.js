@@ -156,6 +156,7 @@ export default class LayerTreeProperty extends BaseProperty {
           <div class="tools">
             <button type="button" class="lock" data-lock="${layer.lock}" title='Lock'>${layer.lock ? icon.lock : icon.lock_open}</button>
             <button type="button" class="visible" data-visible="${layer.visible}" title='Visible'>${icon.visible}</button>
+            <button type="button" class="remove" title='Remove'>${icon.remove2}</button>            
           </div>
         </div>
       </div>
@@ -337,6 +338,22 @@ export default class LayerTreeProperty extends BaseProperty {
         visible: !item.visible
       }, item.id)
   }
+
+  [CLICK('$layerList .layer-item .remove')] (e) {
+    var project = this.$selection.currentProject
+
+      var $item = e.$dt.closest('layer-item')
+      var id = $item.attr('data-layer-id');
+
+      this.$selection.removeById(id);
+
+      var item = project.searchById(id);   
+      item.remove();
+      
+      this.refresh();
+
+      this.emit('refreshArtboard');
+  }  
 
 
   [CLICK('$layerList .layer-item .lock')] (e) {

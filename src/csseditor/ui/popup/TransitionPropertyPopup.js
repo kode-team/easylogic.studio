@@ -57,8 +57,6 @@ const property_list = [
   'min-width',
   'opacity',
   
-  'outline',
-  
   'padding',
   'padding-bottom',
   'padding-left',

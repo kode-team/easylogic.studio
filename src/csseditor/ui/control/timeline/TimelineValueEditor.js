@@ -39,10 +39,10 @@ export default class TimelineValueEditor extends UIElement {
 
   refresh () {
 
-    var artboard = this.$selection.currentArtboard; 
+    var project = this.$selection.currentProject; 
     var code = '00:00:00:00';
-    if (artboard) {
-      var timeline = artboard.getSelectedTimeline();
+    if (project) {
+      var timeline = project.getSelectedTimeline();
       if (timeline) {
         code = timecode(timeline.fps, this.state.time)
       }
@@ -128,9 +128,9 @@ checkKey (e) {
 [KEYUP('$offsetTime') + ENTER + IF('checkNumberOrTimecode') + PREVENT] (e) {
     var frame = this.refs.$offsetTime.value
 
-    var artboard = this.$selection.currentArtboard;
-    if (artboard) {
-      var timeline = artboard.getSelectedTimeline();
+    var project = this.$selection.currentProject;
+    if (project) {
+      var timeline = project.getSelectedTimeline();
 
       this.updateData({
         time: second(timeline.fps, frame)
@@ -151,10 +151,10 @@ checkKey (e) {
   }    
 
   [CLICK('$seek')] () {
-    var artboard = this.$selection.currentArtboard;
+    var project = this.$selection.currentProject;
 
-    if (artboard) {
-      artboard.seek(this.refs.$offsetTime.value, (it => {
+    if (project) {
+      project.seek(this.refs.$offsetTime.value, (it => {
 
         if ( it.layer.id === this.state.layerId && it.property === this.state.property) {
           return true; 
@@ -182,9 +182,9 @@ checkKey (e) {
 
   [EVENT('refreshPropertyValue')] () {
 
-    var artboard = this.$selection.currentArtboard;
-    if (artboard) {
-      var selectedLayer = artboard.searchById(this.state.layerId); 
+    var project = this.$selection.currentProject;
+    if (project) {
+      var selectedLayer = project.searchById(this.state.layerId); 
 
       if (selectedLayer) {
         var value = selectedLayer[this.state.property] + ''

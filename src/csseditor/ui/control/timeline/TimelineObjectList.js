@@ -20,16 +20,16 @@ export default class TimelineObjectList extends UIElement {
     }
 
     makeTimelineObjectRow (animation) {
-        var artboard = this.$selection.currentArtboard;
+        var project = this.$selection.currentProject;
 
-        var obj =  artboard.searchById(animation.id)
+        var obj =  project.searchById(animation.id)
 
         if (!obj) {
             return; 
         }
 
         var selected = this.$timeline.checkLayer(obj.id);
-        var layer = artboard.searchById(obj.id)        
+        var layer = project.searchById(obj.id)        
 
         return /*html*/`
         <div class='timeline-object' data-timeline-animation-id="${obj.id}">
@@ -71,11 +71,11 @@ export default class TimelineObjectList extends UIElement {
     
     [LOAD() + VDOM] () {
 
-        var artboard = this.$selection.currentArtboard;
+        var project = this.$selection.currentProject;
 
-        if (!artboard) return '';
+        if (!project) return '';
 
-        var selectedTimeline = artboard.getSelectedTimeline();
+        var selectedTimeline = project.getSelectedTimeline();
 
         if (!selectedTimeline) return ''; 
 

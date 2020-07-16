@@ -31,7 +31,7 @@ import LayerTreeProperty from "./LayerTreeProperty";
 import ArtBoardSizeProperty from "./ArtBoardSizeProperty";
 import ImageProperty from "./ImageProperty";
 import ColorAssetsProperty from "./ColorAssetsProperty";
-import TextFillProperty from "./TextFilllProperty";
+import TextFillProperty from "./TextFillProperty";
 import GradientAssetsProperty from "./GradientAssetsProperty";
 import SVGItemProperty from "./SVGItemProperty";
 import TextClipProperty from "./TextClipProperty";

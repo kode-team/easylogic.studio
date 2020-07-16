@@ -28,7 +28,7 @@ export default class SelectorPopup extends BasePopup {
   }
 
   getBody() {
-    return `
+    return /*html*/`
     <div class='selector-popup' ref='$popup'>
       <div class="box">
         ${this.templateForSelector()}

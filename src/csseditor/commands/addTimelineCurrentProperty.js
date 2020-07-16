@@ -1,10 +1,10 @@
-import _currentArtboard from "./_currentArtBoard"
+import _currentProject from "./_currentProject"
 
 export default {
     command: 'addTimelineCurrentProperty',
     execute: function (editor, options = {timing: 'linear'}) {
 
-        _currentArtboard(editor, (artboard, timeline) => {
+        _currentProject(editor, (project, timeline) => {
             var list = []
             editor.selection.each(item => {
 
@@ -16,7 +16,7 @@ export default {
                     editor: options.editor
                 }
 
-                var obj = artboard.addTimelineKeyframe(keyframeObj);
+                var obj = project.addTimelineKeyframe(keyframeObj);
 
                 if (obj) {
                     list.push(obj);

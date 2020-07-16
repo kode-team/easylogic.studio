@@ -98,7 +98,7 @@ export default class TransformProperty extends BaseProperty {
   }
 
   [EVENT('refreshSelection')] () {
-    this.refreshShowIsNot(['project']);
+    this.refreshShowIsNot(['project', 'artboard']);
   }
 
   [EVENT('refreshRect')] () {

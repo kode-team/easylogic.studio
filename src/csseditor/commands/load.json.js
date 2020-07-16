@@ -33,9 +33,7 @@ export default {
         var projects = json.map(p => createItem(editor, p))
 
         projects.forEach(p => {
-            p.artboards.forEach(artboard => {
-                artboard.selectTimeline()
-            })
+            p.selectTimeline()
         })
 
         if (projects.length) {

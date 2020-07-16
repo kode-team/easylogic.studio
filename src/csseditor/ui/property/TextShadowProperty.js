@@ -39,11 +39,12 @@ export default class TextShadowProperty extends BaseProperty {
     `
   }
 
+  afterRender() {
+    this.show();
+  }
 
   [EVENT('refreshSelection')]() {
-
-    this.refreshShow(['text']);
-
+    this.refresh();
   }  
 
   [EVENT("changeTextShadow")](textshadow) {

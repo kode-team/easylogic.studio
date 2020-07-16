@@ -48,6 +48,11 @@
 
     .css-property-item {
       
+      border: 1px solid var(--selected-color); 
+      border-radius: 4px;
+      margin-top: 5px;
+      box-sizing: border-box;
+      padding: 2px;
 
       > .title {
         grid-template-columns: 1fr 30px;

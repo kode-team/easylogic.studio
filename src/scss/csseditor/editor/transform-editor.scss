@@ -34,7 +34,13 @@
   
     .transform-item {
       display: block;
-      // margin-top: 5px;
+      background-color: var(--transform-item-background-color);
+      margin-top: 10px;
+      border: 1px solid var(--transform-item-border-color);
+      box-sizing: border-box;
+      padding: 0px 2px;
+      border-radius: 4px;
+      box-shadow: 0 0 3px 0 rgba(255, 255, 255, 0.1);
   
       .title {
         display: grid;

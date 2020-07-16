@@ -49,9 +49,9 @@ export default class TransitionProperty extends BaseProperty {
             </div>
             <div class='name'>
               <div class='labels'>
-                <label class='property' title='Property'>${it.property}</label>                              
-                <label class='duration' title='Duration'><small>Duration: ${it.duration}</small></label>
-                <label class='delay' title='Delay'><small>Delay: ${it.delay}</small></label>                
+                <span class='property-name' title='Property'>${it.property}</span>
+                <span class='duration' title='Duration'><small>Duration: ${it.duration}</small></span>
+                <span class='delay' title='Delay'><small>Delay: ${it.delay}</small></span>
               </div>
             </div>
             <div class='tools'>

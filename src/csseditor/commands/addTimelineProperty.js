@@ -1,10 +1,10 @@
-import _currentArtboard from "./_currentArtBoard"
+import _currentProject from "./_currentProject"
 import { isArray } from "../../util/functions/func"
 
 export default {
     command: 'addTimelineProperty',
     execute:  function (editor, layerList, options = {timing: 'linear'}) {
-        _currentArtboard(editor, (artboard, timeline) => {
+        _currentProject(editor, (project, timeline) => {
 
             if (isArray(layerList) === false) {
                 layerList = [layerList]
@@ -19,7 +19,7 @@ export default {
                     timing: options.timing,
                     editor: options.editor
                 }
-                var obj = artboard.addTimelineKeyframe(keyframeObj);
+                var obj = project.addTimelineKeyframe(keyframeObj);
 
                 if (obj) {
                     list.push(obj);

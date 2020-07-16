@@ -2,6 +2,7 @@ import { CLICK, LOAD } from "../../../util/Event";
 import UIElement, { EVENT } from "../../../util/UIElement";
 import icon from "../icon/icon";
 import { BoxShadow } from "../../../editor/css-property/BoxShadow";
+import { Length } from "../../../editor/unit/Length";
 
 export default class BoxShadowEditor extends UIElement {
 
@@ -80,7 +81,12 @@ export default class BoxShadowEditor extends UIElement {
   }
 
   [EVENT('add')] () {
-    this.state.boxShadows.push(new BoxShadow())
+    this.state.boxShadows.push(new BoxShadow({
+      offsetX: Length.px(2),
+      offsetY: Length.px(2),
+      blurRadius: Length.px(3),
+      spreadRadius: Length.px(1)
+    }))
 
     this.refresh();
 

@@ -42,7 +42,7 @@ export class Selector extends Property {
         return p.value.toString() + ';';
     }
 
-    return p.value.toString() + ';'; 
+    return p.value.toString() + ' !important;'; 
   }
 
   toPropertyString () {
@@ -59,7 +59,7 @@ export class Selector extends Property {
           if (key === 'x') key = 'left';
           else if (key === 'y') key = 'top';
 
-          return `${key}: ${value};`
+          return `${key}: ${value} !important;`
         } else {
           return '';
         }

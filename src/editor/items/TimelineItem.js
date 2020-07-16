@@ -1,11 +1,11 @@
-import { DomItem } from "./DomItem";
 import { uuidShort } from "../../util/functions/math";
 import { isUndefined, isNotUndefined, clone } from "../../util/functions/func";
 import { second, timecode, framesToTimecode } from "../../util/functions/time";
 import { createInterpolateFunction, createTimingFunction } from "../util/interpolate";
 import Dom from "../../util/Dom";
+import { AssetItem } from "./AssetItem";
 
-export class TimelineItem extends DomItem {
+export class TimelineItem extends AssetItem {
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
       timeline: [

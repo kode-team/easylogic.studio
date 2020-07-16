@@ -138,7 +138,7 @@ export default class SelectionToolView extends SelectionToolBind {
     initialize() {
         super.initialize();
 
-        this.guideView = new GuideView(this.$editor);
+        this.guideView = new GuideView(this.$editor, this);
     }
 
     template() {
@@ -254,6 +254,12 @@ export default class SelectionToolView extends SelectionToolBind {
 
         this.makeSelectionTool();        
 
+    }
+
+    getSelectedElements() {
+        const elements = this.$selection.ids.map(id => this.parent.state.cachedCurrentElement[id])
+        
+        return elements;
     }
 
     getOriginalRect () {

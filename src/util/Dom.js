@@ -232,14 +232,12 @@ export default class Dom {
   }
 
   findAll(selector) {
-    return this.el.querySelectorAll(selector);
+    return [...this.el.querySelectorAll(selector)];
   }
 
   $$(selector) {
     var arr = this.findAll(selector);
-    return Object.keys(arr).map(key => {
-      return Dom.create(arr[key]);
-    });
+    return arr.map(node => Dom.create(node));
   }
 
   empty() {

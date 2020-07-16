@@ -1,4 +1,4 @@
-import _currentArtboard from "./_currentArtBoard";
+import _currentProject from "./_currentProject";
 import { makeTimer, timecode } from "../../util/functions/time";
 
 export default {
@@ -10,9 +10,9 @@ export default {
         editor.changeMode('play');
         editor.emit('afterChangeMode')
 
-        _currentArtboard(editor, (artboard, timeline) => {
+        _currentProject(editor, (project, timeline) => {
           
-            var lastTime = artboard.getSelectedTimelineLastTime();
+            var lastTime = project.getSelectedTimelineLastTime();
 
             if (editor.timer) {
                 editor.timer.stop()
@@ -34,19 +34,19 @@ export default {
                 direction,
                 tick: (elapsed, timer) => {
                     // console.log(timecode(timeline.fps, elapsed / 1000), elapsed, elapsed/1000);
-                    artboard.seek(timecode(timeline.fps, elapsed / 1000))
+                    project.seek(timecode(timeline.fps, elapsed / 1000))
                     editor.emit('playTimeline');
                 },
                 last: (elapsed, timer) => {                 
                     editor.emit('stopTimeline');
-                    // artboard.setTimelineCurrentTime(0);
+                    // project.setTimelineCurrentTime(0);
                     editor.changeMode('SELECTION');
                     editor.emit('afterChangeMode')
                 },
                 stop: (elapsed, timer) => {
-                    artboard.stop(timecode(timeline.fps, elapsed / 1000)) 
+                    project.stop(timecode(timeline.fps, elapsed / 1000)) 
                     editor.emit('stopTimeline');
-                    // artboard.setTimelineCurrentTime(0);
+                    // project.setTimelineCurrentTime(0);
                     editor.changeMode('SELECTION');
                     editor.emit('afterChangeMode')
                 }

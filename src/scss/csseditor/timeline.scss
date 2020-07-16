@@ -110,7 +110,7 @@
 
 .timeline-animation-area {
     position: absolute;
-    width: $left-size;
+    width: $timeline-animation-size;
     left: 0px;
     top: 0px;
     bottom: 0px;
@@ -142,7 +142,7 @@
 
 .timeline-area {
     position: absolute;
-    left: $left-size;
+    left: $timeline-animation-size;
     right: $right-size;
     top: 0px;
     bottom: 0px;
@@ -163,7 +163,7 @@
             left: 0px;
             top: 0px;
             bottom: 0px;
-            width: $left-size;     
+            width: $timeline-property-size;     
             border-right: 1px solid var(--border-color);        
             border-bottom: 1px solid var(--border-color);    
             
@@ -214,7 +214,7 @@
             top: 0px;
             right: 0px;
             bottom: 0px;
-            left: $left-size;
+            left: $timeline-property-size;
 
             .keyframe-time-view {
                 position: absolute;
@@ -321,7 +321,7 @@
             left: 0px;
             top: 0px;
             bottom: 0px;
-            width: $left-size;
+            width: $timeline-property-size;
             overflow: auto;
             border-right: 1px solid var(--border-color);
             
@@ -436,7 +436,7 @@
             top: 0px;
             right: 0px;
             bottom: 0px;
-            left: $left-size;
+            left: $timeline-property-size;
             pointer-events: none;
 
             canvas {

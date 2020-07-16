@@ -1,6 +1,5 @@
 import BaseProperty from "./BaseProperty";
 import { EVENT } from "../../../util/UIElement";
-import { DEBOUNCE } from "../../../util/Event";
 
 export default class TextProperty extends BaseProperty {
 
@@ -8,8 +7,12 @@ export default class TextProperty extends BaseProperty {
     return this.$i18n('text.property.title');
   }
 
-  [EVENT('refreshSelection') + DEBOUNCE(100)]() {
-    this.refreshShow(['text', 'svg-text', 'svg-textpath', 'svg-tspan']);
+  afterRender() {
+    this.show();
+  }
+
+  [EVENT('refreshSelection') ]() {
+    this.refresh();
   }
 
   refresh() {

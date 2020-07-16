@@ -1,15 +1,15 @@
-import _currentArtboard from "./_currentArtBoard";
+import _currentProject from "./_currentProject";
 import { timecode } from "../../util/functions/time";
 
 export default {
     command: 'lastTimelineItem',
     execute: function (editor) {
 
-        _currentArtboard(editor, (artboard, timeline) => {
-            var lastTime = artboard.getSelectedTimelineLastTime();
+        _currentProject(editor, (project, timeline) => {
+            var lastTime = project.getSelectedTimelineLastTime();
 
-            artboard.setTimelineCurrentTime(timecode(timeline.fps, lastTime));
-            artboard.seek();
+            project.setTimelineCurrentTime(timecode(timeline.fps, lastTime));
+            project.seek();
             editor.emit('playTimeline');
             editor.changeMode('SELECTION');
             editor.emit('afterChangeMode')

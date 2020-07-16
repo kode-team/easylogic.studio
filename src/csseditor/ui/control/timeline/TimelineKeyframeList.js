@@ -29,9 +29,8 @@ export default class TimelineKeyframeList extends UIElement {
         var subOffset = [] 
 
         if (property === 'offset-path') {
-            var artboard = this.$selection.currentArtboard;             
             var [id] = value.split(',').map(it =>it.trim());
-            var pathLayer = artboard.searchById(id);
+            var pathLayer = this.$selection.currentProject.searchById(id);
             if (pathLayer) {
                 value = pathLayer.d; 
             }
@@ -134,9 +133,7 @@ export default class TimelineKeyframeList extends UIElement {
 
     makeTimelineKeyframeRow (timeline, animation) {
 
-        var artboard = this.$selection.currentArtboard;
-
-        var obj =  artboard.searchById(animation.id)
+        var obj =  this.$selection.currentProject.searchById(animation.id)
 
         if (!obj) {
             return; 
@@ -285,11 +282,11 @@ export default class TimelineKeyframeList extends UIElement {
 
     [LOAD('$keyframeList') + VDOM] () {
 
-        var artboard = this.$selection.currentArtboard
+        var project = this.$selection.currentProject
 
-        if (!artboard) return '';
+        if (!project) return '';
 
-        var selectedTimeline = artboard.getSelectedTimeline();
+        var selectedTimeline = project.getSelectedTimeline();
 
         if (!selectedTimeline) return ''; 
 
@@ -313,10 +310,10 @@ export default class TimelineKeyframeList extends UIElement {
 
 
     get currentTimeline () {
-        var currentArtboard = this.$selection.currentArtboard;
+        var project = this.$selection.currentProject;
     
-        if (currentArtboard) {
-            return currentArtboard.getSelectedTimeline();
+        if (project) {
+            return project.getSelectedTimeline();
         }
     }    
 
@@ -392,9 +389,9 @@ export default class TimelineKeyframeList extends UIElement {
             totalWidth, startX
         }
 
-        var currentArtboard = this.$selection.currentArtboard;
-        if (currentArtboard) {
-            this.offset = currentArtboard.getTimelineKeyframeById(layerId, property, id);
+        var project = this.$selection.currentProject;
+        if (project) {
+            this.offset = project.getTimelineKeyframeById(layerId, property, id);
             this.layerId = layerId;
             this.property = property;
             this.cachedOffsetTime = this.offset.time; 
@@ -451,10 +448,10 @@ export default class TimelineKeyframeList extends UIElement {
             this.emit('refreshOffsetValue', this.offset)              
             return; 
         }
-        var currentArtboard = this.$selection.currentArtboard;
-        if (currentArtboard) {
+        var project = this.$selection.currentProject
+        if (project) {
             this.$timeline.each(item => {
-                currentArtboard.sortTimelineKeyframe(item.layerId, item.property)
+                project.sortTimelineKeyframe(item.layerId, item.property)
             })
             this.refresh();                        
         }

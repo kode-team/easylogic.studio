@@ -26,10 +26,10 @@ export default class TimelineAnimationProperty extends BaseProperty {
 
   [LOAD("$timelineAnimationList") + VDOM]() {
 
-    var artboard = this.$selection.currentArtboard;    
-    if (!artboard) return ''
+    var project = this.$selection.currentProject;    
+    if (!project) return ''
 
-    return artboard.timeline.map( (timeline, index) => {
+    return project.timeline.map( (timeline, index) => {
       var selected = timeline.selected ? 'selected' : ''
       return /*html*/`
         <div class='timeline-animation-item ${selected}'>
@@ -56,9 +56,9 @@ export default class TimelineAnimationProperty extends BaseProperty {
     this.endInputEditing(input, (index, text) => {
       var id = input.attr('data-id');
 
-      var artboard = this.$selection.currentArtboard
-      if (artboard) {
-        artboard.setTimelineTitle(id, text);
+      var project = this.$selection.currentProject
+      if (project) {
+        project.setTimelineTitle(id, text);
       }
     });    
   }
@@ -84,10 +84,10 @@ export default class TimelineAnimationProperty extends BaseProperty {
   [CLICK('$timelineAnimationList .timeline-animation-item label')] (e) {
     var id = e.$dt.attr('data-id');
 
-    var artboard = this.$selection.currentArtboard;
+    var project = this.$selection.currentProject;
 
-    if (artboard) {
-      artboard.selectTimeline(id);                 
+    if (project) {
+      project.selectTimeline(id);                 
 
   
       var $item = e.$dt.closest('timeline-animation-item');

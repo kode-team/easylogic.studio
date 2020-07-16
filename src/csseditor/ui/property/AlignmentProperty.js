@@ -8,8 +8,8 @@ export default class AlignmentProperty extends BaseProperty {
     return menuItems
   }
 
-  [EVENT('refreshSelection') + DEBOUNCE(100)] () {
-    this.refreshShowIsNot(['project', 'artboard']);
+  afterRender() {
+    this.show();
   }
 
   getTitle() {

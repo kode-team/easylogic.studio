@@ -1,13 +1,13 @@
-import _currentArtboard from "./_currentArtBoard";
+import _currentProject from "./_currentProject";
 
 export default {
     command: 'addTimelineItem',
     execute: function (editor, layerId) {
-        _currentArtboard(editor, (artboard, timeline) => {
+        _currentProject(editor, (project, timeline) => {
             if (layerId) {
-                artboard.addTimelineLayer(layerId);
+                project.addTimelineLayer(layerId);
             } else {
-                artboard.addTimeline();                
+                project.addTimeline();                
             }
             editor.emit('refreshTimeline');
             editor.emit('addTimeline');

@@ -1,6 +1,5 @@
 import BaseProperty from "./BaseProperty";
 import { EVENT } from "../../../util/UIElement";
-import { DEBOUNCE } from "../../../util/Event";
 
 export default class TextFillProperty extends BaseProperty {
 
@@ -8,8 +7,12 @@ export default class TextFillProperty extends BaseProperty {
     return this.$i18n('text.fill.property.title');
   }
 
-  [EVENT('refreshSelection') + DEBOUNCE(100)]() {
-    this.refreshShow(['text']);
+  afterRender() {
+    this.show();
+  }
+
+  [EVENT('refreshSelection')]() {
+    this.refresh();
   }
 
   refresh() {

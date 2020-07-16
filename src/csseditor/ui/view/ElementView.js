@@ -12,6 +12,7 @@ import PathDrawView from "../view-items/PathDrawView";
 import BrushDrawView from "../view-items/BrushDrawView";
 import { isFunction } from "../../../util/functions/func";
 import StyleView from "./StyleView";
+import { computeVertextData } from "../../../util/functions/matrix";
 
 
 export default class ElementView extends UIElement {
@@ -37,7 +38,7 @@ export default class ElementView extends UIElement {
             width: Length.px(10000),
             height: Length.px(10000),
             cachedCurrentElement: {},
-            html: ''
+            html: '',
         }
     }
 
@@ -46,6 +47,7 @@ export default class ElementView extends UIElement {
             <div class='element-view' ref='$body'>
                 <div class='canvas-view' ref='$view'></div>
                 <div class='drag-area-rect' ref='$dragAreaRect'></div>
+                <div class='pointer-rect' ref='$pointerRect' style='display:none'></div>
                 <StyleView ref='$styleView' />
                 <GuideLineView ref='$guideLineView' />
                 <GridLayoutLineView ref='$gridLayoutLineView' />
@@ -299,6 +301,29 @@ export default class ElementView extends UIElement {
         return this.$editor.isSelectionMode()
     }
 
+    getPointer (pointer, number) {
+        return `<div class='pointer' data-number="${number}" style="transform: translate3d( calc(${pointer.x}px - 10px), calc(${pointer.y}px - 10px), 0px)" ></div>`
+    }
+
+    getPointerRect (pointers) {
+        const { x, y} = pointers.a;
+        return `
+        <svg overflow="visible" style='position: absolute; transform: translate3d(${x}px, ${y}px, 0px)'>
+            <path fill="transparent" stroke="black" stroke-width="3" d="M ${pointers.a.x - x}, ${pointers.a.y - y} L ${pointers.b.x - x}, ${pointers.b.y - y} L ${pointers.c.x - x}, ${pointers.c.y - y} L ${pointers.d.x - x}, ${pointers.d.y - y} Z" />
+        </svg>`
+    }    
+
+    getRenderPointers(pointers) {
+        console.log(pointers.center)
+        return [
+            this.getPointer (pointers.a, 1),
+            this.getPointer (pointers.b, 2),
+            this.getPointer (pointers.c, 3),
+            this.getPointer (pointers.d, 4),
+            this.getPointer (pointers.center, 5),
+        ].join('') + this.getPointerRect(pointers);
+    }
+
     [POINTERSTART('$view .element-item') + IF('checkEditMode')  + MOVE('calculateMovedElement') + END('calculateEndedElement')] (e) {
         this.startXY = e.xy ; 
         this.$element = e.$dt;
@@ -323,16 +348,29 @@ export default class ElementView extends UIElement {
             }
 
         }
-    
+
+        // this.renderPointers(this.$element.el);
+
         this.selectCurrent(...this.$selection.items)
         this.$selection.setRectCache()
         this.emit('refreshSelection');
         this.children.$selectionTool.initMoveType();
     }
 
+    renderPointers () {
+
+        const html = this.refs.$view.findAll('.element-item').map(el => {
+            return this.getRenderPointers(computeVertextData(el, this.refs.$view.el))
+        }).join('');
+
+        this.refs.$pointerRect.updateDiff(html)
+    }
+
     calculateMovedElement (dx, dy) {
         this.children.$selectionTool.refreshSelectionToolView(dx, dy, 'move');
-        this.updateRealPosition();     
+        this.updateRealPosition();   
+
+        // this.renderPointers();
     }
 
     updateRealPositionByItem (item) {
@@ -479,6 +517,8 @@ export default class ElementView extends UIElement {
         items.forEach(current => {
             this.updateElement(current, isChangeFragment, isLast);
         })
+
+        // this.renderPointers();        
     }
 
     updateElement (item, isChangeFragment = true, isLast = false) {
@@ -502,7 +542,7 @@ export default class ElementView extends UIElement {
 
         var project = this.$selection.currentProject;
 
-        var timeline = artboard.getSelectedTimeline();
+        var timeline = project.getSelectedTimeline();
         timeline.animations.map(it => project.searchById(it.id)).forEach(current => {
             // 레이어 업데이트 사항 중에 updateFunction 으로 업데이트 되는 부분 
             // currentTime 도 매번 업데이트 되기 때문에 
@@ -524,6 +564,8 @@ export default class ElementView extends UIElement {
         if (isRefreshSelectionTool) {
             this.emit('refreshSelectionTool')
         }
+
+        // this.renderPointers();
     }
 
     refresh() {

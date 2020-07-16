@@ -30,10 +30,10 @@ export default class KeyframeTimeView extends UIElement {
     }
 
     get currentTimeline () {
-        var currentArtboard = this.$selection.currentArtboard;
+        var currentProject = this.$selection.currentProject;
 
-        if (currentArtboard) {
-            return currentArtboard.getSelectedTimeline();
+        if (currentProject) {
+            return currentProject.getSelectedTimeline();
         }
 
         return null; 
@@ -65,8 +65,6 @@ export default class KeyframeTimeView extends UIElement {
     [POINTERSTART('$start') + IF('hasCurrentTimeline') + MOVE('moveStartButton')] (e) {
         this.sliderRect = this.refs.$slider.rect();
         this.endX = Length.parse(this.refs.$end.css('left')).toPx(this.sliderRect.width);
-        this.artboard = this.$selection.currentArtboard;
-
     }
 
     moveStartButton () {
@@ -79,7 +77,7 @@ export default class KeyframeTimeView extends UIElement {
 
         var displayTimeRate = currentX / this.sliderRect.width;
 
-        this.artboard.setDisplayStartTimeRate(displayTimeRate);
+        this.$selection.currentProject.setDisplayStartTimeRate(displayTimeRate);
 
         this.refreshTimeDisplay();
         this.refreshCanvas();        
@@ -89,8 +87,7 @@ export default class KeyframeTimeView extends UIElement {
 
     [POINTERSTART('$end') + IF('hasCurrentTimeline') + MOVE('moveEndButton')] (e) {
         this.sliderRect = this.refs.$slider.rect();
-        this.startX = Length.parse(this.refs.$start.css('left')).toPx(this.sliderRect.width);
-        this.artboard = this.$selection.currentArtboard;        
+        this.startX = Length.parse(this.refs.$start.css('left')).toPx(this.sliderRect.width);     
 
     }
 
@@ -104,7 +101,7 @@ export default class KeyframeTimeView extends UIElement {
 
         var displayTimeRate = currentX / this.sliderRect.width;
 
-        this.artboard.setDisplayEndTimeRate(displayTimeRate);
+        this.$selection.currentProject.setDisplayEndTimeRate(displayTimeRate);
 
         this.refreshTimeDisplay();
         this.refreshCanvas();        
@@ -117,14 +114,13 @@ export default class KeyframeTimeView extends UIElement {
         var {displayStartTime, displayEndTime} = this.currentTimeline;
         this.timelineStartTime = displayStartTime
         this.timelineEndTime = displayEndTime
-        this.artboard = this.$selection.currentArtboard;    
     }
 
     moveGaugeButton (dx, dy) {
 
         var dxRate = dx / this.sliderRect.width; 
 
-        this.artboard.setDisplayTimeDxRate(dxRate, this.timelineStartTime, this.timelineEndTime);
+        this.$selection.currentProject.setDisplayTimeDxRate(dxRate, this.timelineStartTime, this.timelineEndTime);
 
         this.refreshTimeDisplay();
         this.refreshCanvas();
@@ -231,7 +227,6 @@ export default class KeyframeTimeView extends UIElement {
         this.selectedCanvasOffset = this.refs.$canvas.offset()
         this.originalRect = this.$el.rect()    
         this.width = this.originalRect.width - PADDING;     
-        this.artboard = this.$selection.currentArtboard
         this.emit('hideSelectionToolView')
         this.$selection.empty()
         this.emit('refreshSelection');
@@ -247,10 +242,10 @@ export default class KeyframeTimeView extends UIElement {
         currentX = Math.max(currentX, minX);
         currentX = Math.min(currentX, maxX);
 
-        this.artboard.setTimelineCurrentTimeRate(currentX / totalWidth);
+        this.$selection.currentProject.setTimelineCurrentTimeRate(currentX / totalWidth);
 
         this.refresh();
-        this.artboard.seek();
+        this.$selection.currentProject.seek();
 
         this.emit('moveTimeline')
     }

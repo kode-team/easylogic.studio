@@ -68,10 +68,15 @@
     }
 
     .inset {
-      color: var(--background-color);
+      color: var(--font-color);
+
       svg {
         width: 16px;
         height: 16px;
+
+        path {
+          fill: currentColor;
+        }
       }
 
       &[data-value="true"] {

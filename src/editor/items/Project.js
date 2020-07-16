@@ -1,7 +1,7 @@
-import { AssetItem } from "./AssetItem";
 import { ComponentManager } from "../manager/ComponentManager";
+import { TimelineItem } from "./TimelineItem";
 
-export class Project extends AssetItem {
+export class Project extends TimelineItem {
   getDefaultTitle() {
     return "New Project";
   }

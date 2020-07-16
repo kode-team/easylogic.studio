@@ -9,7 +9,7 @@ export default class StyleView extends UIElement {
 
   template() {
     return /*html*/`
-    <div class='style-view' style='position: absolute;display:inline-block;left:-1000px;'>
+    <div class='style-view' style='pointer-events: none; position: absolute;display:inline-block;left:-1000px;'>
       <div ref='$svgArea'></div>
       <svg width="0" height="0">
         <defs>
@@ -51,7 +51,7 @@ export default class StyleView extends UIElement {
       return this.makeProjectStyle(item);
     }
 
-    const cssString = item.generateView(`[data-id='${item.id}']`)
+    const cssString = item.generateView(`.element-item[data-id='${item.id}']`)
     return /*html*/`
       <style type='text/css' data-id='${item.id}' data-timestamp='${item.timestamp}'>${cssString}</style>
     ` + item.layers.map(it => {
@@ -64,7 +64,7 @@ export default class StyleView extends UIElement {
       return this.makeProjectStyle(item);
     }
 
-    const cssString = item.generateDragView(`[data-id='${item.id}']`)
+    const cssString = item.generateDragView(`.element-item[data-id='${item.id}']`)
     return /*html*/`
       <style type='text/css' data-id='${item.id}-drag' data-timestamp='${item.timestamp}'>${cssString}</style>
     ` + item.layers.map(it => {
@@ -117,7 +117,6 @@ export default class StyleView extends UIElement {
 
     let isChanged = false; 
     this.refs.$head.$$(selector).forEach(it => {
-      console.log(it.attr('data-timestamp'));
       if (item.isChanged(it.attr('data-timestamp'))) {
         isChanged = true;       
         it.remove();

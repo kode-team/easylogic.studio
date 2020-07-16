@@ -1,7 +1,6 @@
 import BaseProperty from "./BaseProperty";
 import { EVENT } from "../../../util/UIElement";
 import { Length } from "../../../editor/unit/Length";
-import { DEBOUNCE } from "../../../util/Event";
 
 export default class FontSpacingProperty extends BaseProperty {
 
@@ -9,8 +8,12 @@ export default class FontSpacingProperty extends BaseProperty {
     return this.$i18n('font.spacing.property.title');
   }
 
-  [EVENT('refreshSelection') + DEBOUNCE(100)]() {
-    this.refreshShow(['text', 'svg-text', 'svg-textpath']);
+  afterRender() {
+    this.show();
+  }
+
+  [EVENT('refreshSelection')]() {
+    this.refresh();
   }
 
   refresh() {
