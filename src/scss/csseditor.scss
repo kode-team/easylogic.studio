@@ -40,6 +40,10 @@ body {
     left:0px;
     top: 0px; 
 
+    [contenteditable] {
+        user-select: text;
+    }    
+
    
     $pointer-color: #4075d6;
     $top-size: 0px;

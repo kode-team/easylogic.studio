@@ -67,7 +67,8 @@ $border-radius: 3px;
                 width: 100%;
             }
 
-            input[type=number] {         
+            input[type=number] {        
+                height: 100%;                 
                 padding: 2px 2px;      
                 border-right: 0px;
                 border-top-left-radius: $border-radius;
