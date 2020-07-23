@@ -1,9 +1,23 @@
-import { isObject } from "../../util/functions/func";
+import { isObject, isFunction } from "../../util/functions/func";
+import commands from "../../csseditor/commands";
 
 export class CommandManager {
     constructor (editor) {
         this.$editor = editor;
+
+        this.loadCommands();
     }
+
+
+    loadCommands() {
+        Object.keys(commands).forEach(command => {
+          if (isFunction(commands[command])) {
+            this.registerCommand(command, commands[command]);
+          } else {
+            this.registerCommand(commands[command])
+          }
+        })
+    }    
 
     registerCommand (command, commandCallback) {
 

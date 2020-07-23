@@ -1,5 +1,6 @@
 import { isArray } from "../../util/functions/func";
 import { os } from "../../util/functions/detect";
+import shortcuts from "../../csseditor/shortcuts";
 
 
 const KEY_CODE = {
@@ -116,9 +117,20 @@ function generateKeyCode (code) {
 export class ShortCutManager {
     constructor (editor) {
         this.$editor = editor;
-        this.list = []
-        this.commands = {}
+
+        this.loadShortCuts();
     }
+
+   
+    loadShortCuts() {
+        this.list = []
+        this.commands = {}        
+        shortcuts.forEach(shortcut => {
+            this.registerShortCut(shortcut);
+        })
+
+        this.sort()
+    }   
 
     registerShortCut (shortcut) {
 

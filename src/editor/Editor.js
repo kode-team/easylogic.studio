@@ -14,6 +14,7 @@ import AssetParser from "./parse/AssetParser";
 import { isArray, isObject, isString, isFunction } from "../util/functions/func";
 import commands from "../csseditor/commands";
 import shortcuts from "../csseditor/shortcuts";
+import { HistoryManager } from "./manager/HistoryManager";
 
 
 export const EDITOR_ID = "";
@@ -26,13 +27,8 @@ const DEFAULT_THEME = 'dark'
 
 export class Editor {
   constructor(opt = {}) {
-    this.config = new ConfigManager(this);
-    this.commands = new CommandManager(this);
-    this.shortcuts = new ShortCutManager(this);
-    this.selection = new SelectionManager(this);
-    this.timeline = new TimelineSelectionManager(this);
-    this.components = ComponentManager;
 
+    this.$store = opt.$store;
     this.projects = []     
     this.popupZIndex = 10000;
     this.canvasWidth = 100000;
@@ -46,31 +42,24 @@ export class Editor {
     this.addComponentType = '' 
     this.locale = this.loadItem('locale') || 'en_US'
     this.layout = this.loadItem('layout') || 'all'    
-    this.$store = opt.$store;
 
-    this.initTheme();
-    this.loadCommands();
-    this.loadShortCuts();
+
+    this.loadManager();
+
   }
 
-  loadCommands() {
-    Object.keys(commands).forEach(command => {
-      if (isFunction(commands[command])) {
-        this.commands.registerCommand(command, commands[command]);
-      } else {
-        this.commands.registerCommand(commands[command])
-      }
+  loadManager () {
 
-    })
+    this.config = new ConfigManager(this);
+    this.commands = new CommandManager(this);
+    this.shortcuts = new ShortCutManager(this);
+    this.selection = new SelectionManager(this);
+    this.timeline = new TimelineSelectionManager(this);
+    this.history = new HistoryManager(this);
+    this.components = ComponentManager;
+
+    this.initTheme();    
   }
-
-  loadShortCuts() {
-    shortcuts.forEach(shortcut => {
-      this.shortcuts.registerShortCut(shortcut);
-    })
-
-    this.shortcuts.sort()
-  }  
 
   i18n (key, params = {}, locale) {
     return i18n.get(key, params, locale || this.locale)
