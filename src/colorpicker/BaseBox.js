@@ -44,6 +44,7 @@ export default class BaseBox extends UIElement {
 
   /* called when mouse is ended move  */
   onDragEnd(e) {
+    this.emit('lastUpdateColor');
     this.isDown = false;
   }
 

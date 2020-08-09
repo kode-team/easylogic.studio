@@ -1,4 +1,4 @@
-import _refreshSelection from "./_refreshSelection";
+import _doForceRefreshSelection from "./_doForceRefreshSelection";
 
 export default {
     command : 'item.move.down',
@@ -6,6 +6,6 @@ export default {
         const dy = +obj.dy;
         editor.selection.move(0, dy); 
 
-        _refreshSelection(editor, true);
+        _doForceRefreshSelection(editor, true);
     }
 }

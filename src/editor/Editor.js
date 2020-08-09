@@ -152,6 +152,11 @@ export class Editor {
     return this.popupZIndex++
   }
 
+  get isPointerUp () {
+    if (!this.config.get('bodyEvent')) return false; 
+    return this.config.get('bodyEvent').type === 'pointerup'
+  }
+
   getFile (url) {
     return this.images[url] || url;
   }
@@ -160,16 +165,18 @@ export class Editor {
     this.$store = $store;
   }
 
-  send(...args) {
-    this.emit(...args);
-  }
-
   emit(...args) {
     if (this.$store) {
       this.$store.source = "EDITOR_ID";
       this.$store.emit(...args);
     }
   }
+
+  nextTick (callback) {
+    if (this.$store) {
+      this.$store.nextTick(callback);
+    }
+  }  
 
   load (projects = []) {
     this.projects = projects
@@ -208,6 +215,7 @@ export class Editor {
   get(index) {
     return this.projects[index];
   }
+
 
 
   replaceLocalUrltoRealUrl (str) {

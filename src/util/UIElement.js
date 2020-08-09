@@ -1,5 +1,6 @@
 import { uuid } from "./functions/math";
-import EventMachine, { splitMethodByKeyword } from "./EventMachine";
+import EventMachine from "./EventMachine";
+import { splitMethodByKeyword } from "./functions/func";
 
 const REG_STORE_MULTI_PATTERN = /^ME@/;
 
@@ -56,6 +57,16 @@ class UIElement extends EventMachine {
     return e.substr(startIndex < 0 ? 0 : startIndex + s.length);
   }
 
+  splitMethod (events, keyword, defaultValue = 0) {
+    var [methods, params] = splitMethodByKeyword(events.split(SPLITTER), keyword);
+
+    return [
+      methods.length ? +params[0].target : defaultValue,
+      methods, 
+      params
+    ]
+  }
+
   /**
    * initialize store event
    *
@@ -69,24 +80,23 @@ class UIElement extends EventMachine {
       const events = this.getRealEventName(key, MULTI_PREFIX);
 
       // support deboounce for store event 
-      var [methods, params] = splitMethodByKeyword(events.split(SPLITTER), 'debounce');
-
-      var debounceSecond = 0 
-      if (methods.length) {
-        debounceSecond = +params[0].target || 0 
-      }
+      var [debounceSecond, debounceMethods] = this.splitMethod(events, 'debounce');
+      var [throttleSecond, throttleMethods] = this.splitMethod(events, 'throttle');      
 
       events
         .split(SPLITTER)
         .filter(it => {
-          return methods.indexOf(it) === -1
+          return (
+              debounceMethods.indexOf(it) === -1 && 
+              throttleMethods.indexOf(it) === -1
+          )
         })
         .map(it => it.trim())
         .forEach(e => {
           var callback = this[key].bind(this);
           callback.displayName = `${this.sourceName}.${e}`;
           callback.source = this.source;
-          this.$store.on(e, callback, this, debounceSecond);
+          this.$store.on(e, callback, this, debounceSecond, throttleSecond);
       });
     });
   }
@@ -114,6 +124,10 @@ class UIElement extends EventMachine {
     this.$store.source = this.source;
     this.$store.sourceContext = this; 
     this.$store.emit($1, $2, $3, $4, $5);
+  }
+
+  nextTick (callback) {
+    this.$store.nextTick(callback);
   }
 
   trigger($1, $2, $3, $4, $5) {
@@ -151,6 +165,17 @@ class UIElement extends EventMachine {
   get $timeline () {
     return this.$editor.timeline; 
   }  
+
+  get $history () {
+    return this.$editor.history; 
+  }
+
+  // history 가 필요한 커맨드는 command 함수를 사용하자. 
+  // 마우스 업 상태에 따라서 자동으로 history 커맨드로 분기해준다. 
+  // 기존 emit 과 거의 동일하게 사용할 수 있다.   
+  command ($1, $2, $3, $4, $5) {
+    return this.emit(this.$editor.history.createCommand($1), $2, $3, $4, $5);
+  }
 
   $theme (key) {
     return this.$editor.themeValue(key);

@@ -59,8 +59,8 @@ export const start = opt => {
 
       if (isNotEqualLastPos && this.moves.size) {      
         this.moves.forEach(v => {
-          var dx = pos.x - v.xy.x;
-          var dy = pos.y - v.xy.y;
+          var dx = Math.floor(pos.x - v.xy.x);
+          var dy = Math.floor(pos.y - v.xy.y);
           if (dx != 0 || dy != 0) {
             v.func.call(v.context, dx, dy, 'move', e.pressure);
           }
@@ -101,7 +101,7 @@ export const start = opt => {
     }
 
     template() {
-      return `<div>${opt.template}</div>`;
+      return opt.template || '<div></div>';
     }
 
     components() {
@@ -109,7 +109,6 @@ export const start = opt => {
     }
 
     [POINTERMOVE("document")](e) {
-      if (e.target.nodeName === 'INPUT' || e.target.nodeName === 'SELECT' || e.target.nodeName === 'TEXTAREA') return; 
       var newPos = e.xy || EMPTY_POS;
 
       this.$config.set("bodyEvent", e);
@@ -121,7 +120,7 @@ export const start = opt => {
     }
 
     [POINTEREND("document")](e) {
-      if (e.target.nodeName === 'INPUT' || e.target.nodeName === 'SELECT' || e.target.nodeName === 'TEXTAREA') return;       
+
       // var newPos = e.xy || EMPTY_POS;
       this.$config.set("bodyEvent", e);
       this.removeBodyMoves();

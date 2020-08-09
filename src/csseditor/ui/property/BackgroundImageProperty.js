@@ -67,21 +67,24 @@ export default class BackgroundImageProperty extends BaseProperty {
     this.load();
     var current = this.$selection.current; 
     if (current) {
+      const backgroundColor = current['background-color'] || 'rgba(0, 0, 0, 1)'
       this.children.$color.setValue(current['background-color'] || 'rgba(0, 0, 0, 1)')
+      this.state.backgroundColor = backgroundColor;
     }
   }
 
 
   [EVENT('changeColor')] (key, color) {
-    this.emit("setAttribute", { 
+    this.command('setAttribute', { 
       [key]: color
     })
   }
 
-
   [EVENT('changeBackgroundImage') + DEBOUNCE(10)] (key, value) {
-    this.emit('setAttribute', {
-      [key]: value 
+
+    this.command('setAttribute', { 
+      [key]: value
     })
   }
+
 }

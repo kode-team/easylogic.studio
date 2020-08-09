@@ -65,7 +65,7 @@ export default class CubicBezierEditor extends UIElement {
     }
 
     modifyCubicBezier () {
-        this.emit(this.props.onchange, this.state.key, formatCubicBezier(this.state.currentBezier))
+        this.parent.trigger(this.props.onchange, this.state.key, formatCubicBezier(this.state.currentBezier))
     }
 
     [CLICK('$left')] () {
@@ -357,8 +357,8 @@ export default class CubicBezierEditor extends UIElement {
 
     }
 
-    [EVENT('showCubicBezierEditor')] (data) {
-        var currentBezier = getPredefinedCubicBezier(data.timingFunction || this.state.currentBezier)
+    [EVENT('showCubicBezierEditor')] (timingFunction) {
+        var currentBezier = getPredefinedCubicBezier(timingFunction || this.state.currentBezier)
         this.setState({ currentBezier })
         this.refresh();
         this.drawBezierCanvas(this.refs.$item1Canvas, 'ease')

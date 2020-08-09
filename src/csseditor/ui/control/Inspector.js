@@ -34,6 +34,7 @@ export default class Inspector extends UIElement {
             <div class="tab-body" ref="$body">
 
               <div class="tab-content selected scrollbar" data-value="1">
+                <HistoryProperty />
                 <AlignmentProperty />
 
                 <!-- Default Property --> 

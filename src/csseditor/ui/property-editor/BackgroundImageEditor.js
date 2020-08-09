@@ -1,6 +1,6 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
 import { BackgroundImage } from "../../../editor/css-property/BackgroundImage";
-import { LOAD, CLICK, DRAGSTART, DRAGOVER, DROP, PREVENT } from "../../../util/Event";
+import { LOAD, CLICK, DRAGSTART, DRAGOVER, DROP, PREVENT, DEBOUNCE } from "../../../util/Event";
 import icon from "../icon/icon";
 import { CSS_TO_STRING, STRING_TO_CSS, OBJECT_TO_PROPERTY } from "../../../util/functions/func";
 import { LinearGradient } from "../../../editor/image-resource/LinearGradient";
@@ -250,12 +250,13 @@ export default class BackgroundImageEditor extends UIElement {
         this.trigger('changePattern', key, {[key]: value}, params);
     }
 
-    [EVENT('changePattern')] (key, value, params) {
+    [EVENT('changePattern') + DEBOUNCE(10)] (key, value, params) {
         var index = +params;
         var image = this.state.images[index];
 
         image.reset(value);
 
+        console.log(this.$config.get('bodyEvent'))
         this.modifyBackgroundImage();
         this.refresh();
     }

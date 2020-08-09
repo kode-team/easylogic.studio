@@ -1,6 +1,5 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
 import { isNotUndefined, OBJECT_TO_PROPERTY } from "../../../util/functions/func";
-import { Length } from "../../../editor/unit/Length";
 import { BIND } from "../../../util/Event";
 
 
@@ -89,8 +88,8 @@ export default class GuideLineView extends UIElement {
     
             if (isNotUndefined(it.ax)) {  // 세로 가이드 정의  (x축 좌표 찾기)
 
-                var minY = Length.min(target.screenY, it.A.screenY);
-                var maxY = Length.max(target.screenY2, it.A.screenY2);
+                var minY = Math.min(target.y, it.A.y);
+                var maxY = Math.max(target.y + target.height, it.A.y + it.A.height);
 
 
                 // it.bx : x 좌표 
@@ -100,70 +99,70 @@ export default class GuideLineView extends UIElement {
                 // it.A.screenY2 : 객체 위치 
                 var startX = it.bx; 
 
-                if (it.A.screenY.value > it.B.screenY2.value) {
-                    hLine(images, startX, it.B.screenY2.value, it.A.screenY.value);
+                if (it.A.y > it.B.y + it.B.height) {
+                    hLine(images, startX, it.B.y + it.B.height, it.A.y);
                 } else {
-                    hLine(images, startX, minY.value, it.A.screenY.value);
+                    hLine(images, startX, minY, it.A.y);
                 }
 
-                if (it.A.screenX.value - target.screenX.value > 0 
-                    && it.A.screenY.value <= target.screenY2.value 
-                    && it.A.screenY.value >= target.screenY.value 
+                if (it.A.x - target.x > 0 
+                    && it.A.y <= (target.y + target.height)
+                    && it.A.y >= target.y
                 ) {
-                    var centerY = (it.A.screenY.value + it.A.screenY2.value) /2;                    
-                    vLine(images, centerY, target.screenX.value, it.A.screenX.value);
+                    var centerY = it.A.y + it.A.height /2;                    
+                    vLine(images, centerY, target.x, it.A.x);
                 }
 
-                if (target.screenX2.value - it.A.screenX2.value > 0
-                    && it.A.screenY.value <= it.B.screenY2.value 
-                    && it.A.screenY.value >= it.B.screenY.value 
+                if ((target.x + target.width) - (it.A.x + it.A.width) > 0
+                    && it.A.y <= (it.B.y + it.B.height)
+                    && it.A.y >= it.B.y 
                 ) {
-                    var centerY = (it.A.screenY.value + it.A.screenY2.value) /2;
-                    vLine(images, centerY, it.A.screenX2.value, target.screenX2.value);
+                    var centerY = it.A.y + it.A.height/2;
+                    vLine(images, centerY, it.A.x + it.A.width, target.x + target.width);
                 }                
 
-                if (it.A.screenY2.value < it.B.screenY.value) {
-                    hLine(images, startX, it.A.screenY2.value, it.B.screenY.value);
+                if ((it.A.y + it.A.height) < it.B.y) {
+                    hLine(images, startX, it.A.y + it.A.height, it.B.y);
                 } else {
-                    hLine(images, startX, it.A.screenY2.value, maxY.value);
+                    hLine(images, startX, (it.A.y + it.A.height), maxY);
                 }
     
             } else {            // 가로 가이드 정의 ( y 축 좌표 찾기 )
                 
-                var maxX = Length.max(target.screenX2, it.A.screenX2);
+                var maxX = Math.max(target.x + target.width, it.A.x + it.A.width);
 
                 var startY = it.by; 
     
 
-                if (it.A.screenX.value > it.B.screenX2.value) {
-                    vLine(images, startY, it.B.screenX2.value, it.A.screenX.value);
+                if (it.A.x > (it.B.x + it.B.width)) {
+                    vLine(images, startY, (it.B.x + it.B.width), it.A.x);
                 } else {
-                    vLine(images, startY, it.A.screenX.value, it.B.screenX.value);
+                    vLine(images, startY, it.A.x, it.B.x);
                 }
 
 
 
-                if (it.A.screenY.value - target.screenY.value > 0
-                    && it.A.screenX.value <= it.B.screenX2.value 
-                    && it.A.screenX.value >= it.B.screenX.value 
+                if (it.A.y - target.y > 0
+                    && it.A.x <= (it.B.x + it.B.width) 
+                    && it.A.x >= it.B.x 
                 ) {
-                    var centerX = (it.A.screenX.value + it.A.screenX2.value) /2;
-                    hLine(images, centerX, it.B.screenY.value, it.A.screenY.value);
+                    var centerX = (it.A.x + (it.A.x + it.A.width)) /2;
+                    hLine(images, centerX, it.B.y, it.A.y);
                 }
 
-                if (target.screenY2.value - it.A.screenY2.value > 0
-                    && it.A.screenX.value <= it.B.screenX2.value 
-                    && it.A.screenX.value >= it.B.screenX.value 
+                if ((target.y + target.height) - (it.A.y + it.A.height) > 0
+                    && it.A.x <= (it.B.x + it.B.width) 
+                    && it.A.x >= it.B.x 
                 ) {
-                    var centerX = (it.A.screenX.value + it.A.screenX2.value) /2;
-                    hLine(images, centerX, it.A.screenY2.value, it.B.screenY2.value);
+                    var centerX = (it.A.x + (it.A.x + it.A.width)) /2;
+                    hLine(images, centerX, (it.A.y + it.A.height), (it.B.y + it.B.height));
                 }                
 
                 
-                if (it.A.screenX2.value < it.B.screenX.value) {
-                    vLine(images, startY, it.A.screenX2.value, it.B.screenX.value);
+                if ((it.A.x + it.A.width) < it.B.x) {
+                    vLine(images, startY, (it.A.x + it.A.width), it.B.x);
                 } else {
-                    vLine(images, startY, it.A.screenX2.value, maxX.value);
+                    vLine(images, startY, (it.A.x + it.A.width), maxX);
                 }
             }
     

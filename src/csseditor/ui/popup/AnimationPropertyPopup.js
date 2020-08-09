@@ -24,20 +24,17 @@ export default class AnimationPropertyPopup extends BasePopup {
 
   initState() {
     return {
-      name: 'none',
-      direction: 'normal',
-      duration: Length.second(0),
-      timingFunction: 'ease',
-      delay: Length.second(0),
-      iterationCount: 0,
-      playState: 'running',
-      fillMode: 'none'
+      changeEvent: '', 
+      instance: {}, 
+      data: {} 
     };
   }
 
   updateData(opt) {
-    this.setState(opt, false); 
-    this.emit("changeAnimationPropertyPopup", opt);
+    this.state.data = {...this.state.data, ...opt} 
+    if (this.state.instance) {
+      this.state.instance.trigger(this.state.changeEvent, this.state.data);
+    }
   }
 
   getBody() {
@@ -63,7 +60,7 @@ export default class AnimationPropertyPopup extends BasePopup {
     return /*html*/`
     <div class='timing-function'>
       <label>${this.$i18n('animation.property.popup.timing.function')}</label>
-      <CubicBezierEditor ref='$cubicBezierEditor' key="timingFunction" value="${this.state.timingFunction}" onChange='changeCubicBezier' />
+      <CubicBezierEditor ref='$cubicBezierEditor' key="timingFunction" value="${this.state.data.timingFunction}" onChange='changeCubicBezier' />
     </div>
     `
   }
@@ -114,7 +111,7 @@ export default class AnimationPropertyPopup extends BasePopup {
             label='${this.$i18n('animation.property.popup.direction')}'
             ref='$direction' 
             key='direction' 
-            value="${this.state.direction}"
+            value="${this.state.data.direction}"
             options='${options}'
             onChange='changeSelect'
         /> 
@@ -133,7 +130,7 @@ export default class AnimationPropertyPopup extends BasePopup {
           label='${this.$i18n('animation.property.popup.play.state')}'
           ref='$playState' 
           key='playState' 
-          value="${this.state.playState}"
+          value="${this.state.data.playState}"
           options='${['paused', 'running']}'
           onChange='changeSelect'
       /> 
@@ -153,7 +150,7 @@ export default class AnimationPropertyPopup extends BasePopup {
           label='${this.$i18n('animation.property.popup.fill.mode')}'
           ref='$fillMode' 
           key='fillMode' 
-          value="${this.state.fillMode}"
+          value="${this.state.data.fillMode}"
           options='${options}'
           onChange='changeSelect'
       /> 
@@ -169,7 +166,7 @@ export default class AnimationPropertyPopup extends BasePopup {
         label='${this.$i18n('animation.property.popup.delay')}' 
         calc='false' 
         key='delay' 
-        value='${this.state.delay}' 
+        value='${this.state.data.delay}' 
         units='s,ms' 
         onChange="changeRangeEditor" />
     </div>
@@ -179,7 +176,13 @@ export default class AnimationPropertyPopup extends BasePopup {
   templateForDuration () {
     return /*html*/`
     <div class='duration'>
-      <RangeEditor ref='$duration' label='${this.$i18n('animation.property.popup.duration')}'  calc='false' key='duration' value='${this.state.duration}' units='s,ms' onChange="changeRangeEditor" />
+      <RangeEditor 
+        ref='$duration' 
+        label='${this.$i18n('animation.property.popup.duration')}'  
+        key='duration' 
+        value='${this.state.data.duration}' 
+        units='s,ms' 
+        onChange="changeRangeEditor" />
     </div>
     `
   }
@@ -187,7 +190,14 @@ export default class AnimationPropertyPopup extends BasePopup {
   templateForIterationCount () {
     return /*html*/`
       <div class='iteration-count'>
-        <IterationCountEditor ref='$iterationCount' label='${this.$i18n('animation.property.popup.iteration')}' calc='false' key='iterationCount' value='${this.state.iterationCount}' units='normal,infinite' onChange="changeRangeEditor" />
+        <IterationCountEditor 
+          ref='$iterationCount' 
+          label='${this.$i18n('animation.property.popup.iteration')}' 
+          key='iterationCount' 
+          value='${this.state.iterationCount || '0'}' 
+          units='normal,infinite' 
+          onChange="changeRangeEditor" 
+        />
       </div>
     `
   }
@@ -213,7 +223,7 @@ export default class AnimationPropertyPopup extends BasePopup {
 
     this.show(250)
 
-    this.emit('showCubicBezierEditor', data)    
+    this.children.$cubicBezierEditor.trigger('showCubicBezierEditor', data.data.timingFunction)        
   }
 
   [EVENT("hideAnimationPropertyPopup")]() {

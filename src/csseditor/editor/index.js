@@ -30,7 +30,7 @@ import PageSubEditor from "../ui/view-items/PageSubEditor";
 import NotificationView from "../ui/view/NotificationView";
 
 
-const formElements = ['INPUT','SELECT','TEXTAREA']
+const formElements = ['TEXTAREA']
 
 export default class CSSEditor extends UIElement {
   
@@ -313,7 +313,11 @@ export default class CSSEditor extends UIElement {
   isNotFormElement(e) {
     var tagName = e.target.tagName;
 
-    return formElements.includes(tagName) === false && Dom.create(e.target).attr('contenteditable') !== 'true';
+    if (formElements.includes(tagName)) return false; 
+    else if (Dom.create(e.target).attr('contenteditable') === 'true') return false; 
+    else if (tagName === 'INPUT' && e.target.type === 'text') return false; 
+    
+    return true;
   }  
 
   [KEYDOWN('document') + IF('isNotFormElement')] (e) {

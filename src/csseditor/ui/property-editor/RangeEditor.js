@@ -1,6 +1,6 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
 import { Length } from "../../../editor/unit/Length";
-import { LOAD, INPUT, CLICK, FOCUS, BLUR } from "../../../util/Event";
+import { LOAD, INPUT, CLICK, FOCUS, BLUR, POINTERSTART, MOVE, END, DEBOUNCE, THROTTLE } from "../../../util/Event";
 import icon from "../icon/icon";
 import SelectEditor from "./SelectEditor";
 import { OBJECT_TO_CLASS, OBJECT_TO_PROPERTY, isUndefined } from "../../../util/functions/func";
@@ -33,7 +33,7 @@ export default class RangeEditor extends UIElement {
     }
 
     template () {
-        return `<div class='small-editor' ref='$body'></div>`
+        return /*html*/`<div class='small-editor' ref='$body'></div>`
     }
 
     refresh() {
@@ -135,7 +135,15 @@ export default class RangeEditor extends UIElement {
     }
 
 
-    [INPUT('$property')] (e) {
+    [POINTERSTART('$property') + MOVE('moveRange') + END('moveRange')] () {
+
+    }
+
+    moveRange () {
+        this.trigger('changeValue');
+    }
+
+    [EVENT('changeValue') + THROTTLE(100)] () {
         var value = +this.getRef('$property').value; 
         this.refs.$propertyNumber.val(value);
 
@@ -144,7 +152,6 @@ export default class RangeEditor extends UIElement {
         this.updateData({ 
             value: new Length(value, this.children.$unit.getValue())
         });
-
     }
 
     [EVENT('changeUnit')] (key, value) {

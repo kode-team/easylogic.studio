@@ -78,7 +78,12 @@ export default class ColorPalette extends UIElement {
   }
 
   [POINTEREND("document")](e) {
-    this.isDown = false;
+    if (this.isDown) {
+      this.isDown = false;
+      this.setMainColor(e);      
+      // this.parent.lastUpdateColor();
+    }
+
   }
 
   [POINTERMOVE("document")](e) {
@@ -89,10 +94,6 @@ export default class ColorPalette extends UIElement {
 
   [POINTERSTART()](e) {
     this.isDown = true;
-    this.setMainColor(e);
-  }
-
-  [POINTEREND()](e) {
-    this.isDown = false;
+    // this.setMainColor(e);
   }
 }

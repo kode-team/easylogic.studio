@@ -1,4 +1,4 @@
-import { debounce } from "./functions/func";
+import { debounce, throttle } from "./functions/func";
 
 export default class BaseStore {
   constructor(opt = {}) {
@@ -19,8 +19,11 @@ export default class BaseStore {
     this.callbacks[event] = list; 
   }
 
-  on(event, originalCallback, context, delay = 0) {
-    var callback = delay > 0 ? debounce(originalCallback, delay) : originalCallback;
+  on(event, originalCallback, context, debounceDelay = 0, throttleDelay = 0) {
+    var callback = originalCallback;
+    
+    if (debounceDelay > 0)  callback = debounce(originalCallback, debounceDelay);
+    else if (throttleDelay > 0)  callback = throttle(originalCallback, throttleDelay);
 
     this.getCallbacks(event).push({ event, callback, context, originalCallback });
   }
@@ -63,6 +66,12 @@ export default class BaseStore {
     });
   }
 
+  nextSendMessage(source, callback, $2, $3, $4, $5) {
+    Promise.resolve().then(() => {
+      callback($2, $3, $4, $5)
+    });
+  }
+
   triggerMessage(source, event, $2, $3, $4, $5) {
     Promise.resolve().then(() => {
       var list = this.getCachedCallbacks(event);
@@ -85,6 +94,10 @@ export default class BaseStore {
 
   emit($1, $2, $3, $4, $5) {
     this.sendMessage(this.source, $1, $2, $3, $4, $5);
+  }
+
+  nextTick ($1, $2, $3, $4, $5) {
+    this.nextSendMessage(this.source, $1, $2, $3, $4, $5);
   }
 
   trigger($1, $2, $3, $4, $5) {

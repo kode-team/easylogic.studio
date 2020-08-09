@@ -179,7 +179,11 @@ export default class SelectionToolView extends SelectionToolBind {
 
         this.parent.selectCurrent(...this.$selection.items)
 
-        this.$selection.setRectCache(this.pointerType === 'move' ? false: true);
+        this.$selection.setRectCache();
+
+        if (this.pointerType != 'move') {   // 크기가 바뀔 때는 영역을 미리 캐슁해둔다. 
+            this.$selection.doCache();
+        }
 
         this.initSelectionTool();
     }
@@ -311,24 +315,27 @@ export default class SelectionToolView extends SelectionToolBind {
         // selection 객체는 하나만 만든다. 
         this.guideView.recoverAll();
 
-        var x = Length.z(), y = Length.z(), width = Length.z(), height = Length.z();
+        var x = 0, y = 0, width = 0, height = 0;
 
         if (this.guideView.rect) {
             var {x, y, width, height} = this.calculateWorldPosition(this.guideView.rect) ;
         }
 
-        if(x.is(0) && y.is(0) && width.is(0) && height.is(0)) {
-            x.add(-10000);
-            y.add(-10000);       
+        if(x === 0 && y === 0 && width === 0 && height === 0) {
+            x = -10000
+            y = -10000
         } else if (!this.$selection.currentArtboard) {
-            x.add(-10000);
-            y.add(-10000);            
+            x = -10000
+            y = -10000
         }
 
-        var left = x, top = y;
+        this.refs.$selectionTool.css({ 
+            left: Length.px(x), 
+            top: Length.px(y), 
+            width: Length.px(width), 
+            height: Length.px(height) 
+        })
 
-        this.refs.$selectionTool.css({ left, top, width, height })
-        
         this.refreshPositionText(x, y, width, height)
 
     }
@@ -337,10 +344,10 @@ export default class SelectionToolView extends SelectionToolBind {
     refreshPositionText (x, y, width, height) {
 
         if (this.$selection.currentArtboard) {
-            var newX = Length.px(x.value - this.$selection.currentArtboard.x.value / this.$editor.scale).round(1);
-            var newY = Length.px(y.value - this.$selection.currentArtboard.y.value / this.$editor.scale).round(1);
-            var newWidth = Length.px(width.value / this.$editor.scale).round(1);
-            var newHeight = Length.px(height.value / this.$editor.scale).round(1);
+            var newX = Length.px(x - this.$selection.currentArtboard.x.value / this.$editor.scale).round(1);
+            var newY = Length.px(y - this.$selection.currentArtboard.y.value / this.$editor.scale).round(1);
+            var newWidth = Length.px(width / this.$editor.scale).round(1);
+            var newHeight = Length.px(height / this.$editor.scale).round(1);
 
             var text = ''
             switch(this.pointerType) {
@@ -393,8 +400,8 @@ export default class SelectionToolView extends SelectionToolBind {
     calculateWorldPositionForGuideLine (list = []) {
         return list.map(it => {
 
-            var A = new AreaItem(this.calculateWorldPosition(it.A))
-            var B = new AreaItem(this.calculateWorldPosition(it.B))
+            var A = this.calculateWorldPosition(it.A)
+            var B = this.calculateWorldPosition(it.B)
 
             var ax, bx, ay, by; 
 
@@ -409,11 +416,10 @@ export default class SelectionToolView extends SelectionToolBind {
 
     calculateWorldPosition (item) {
         return {
-            x: Length.px(item.screenX.value * this.$editor.scale),
-            y: Length.px(item.screenY.value * this.$editor.scale),
-            width: Length.px(item.width.value  *  this.$editor.scale),
-            height: Length.px(item.height.value  * this.$editor.scale),
-            transform: item.transform
+            x: item.x * this.$editor.scale,
+            y: item.y * this.$editor.scale,
+            width: item.width  *  this.$editor.scale,
+            height: item.height  * this.$editor.scale,
         }
     }
 

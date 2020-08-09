@@ -1,4 +1,4 @@
-import _refreshSelection from "./_refreshSelection";
+import _doForceRefreshSelection from "./_doForceRefreshSelection";
 
 export default function addLayer (editor, layer, rect = {}, isSelected = true) {
 
@@ -19,7 +19,7 @@ export default function addLayer (editor, layer, rect = {}, isSelected = true) {
             editor.selection.select(layer);
         }
 
-        _refreshSelection(editor,true, 10)
+        _doForceRefreshSelection(editor,true, 10)
     } else {
         editor.emit('addArtBoard')
 

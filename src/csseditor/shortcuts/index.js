@@ -41,10 +41,15 @@ import itemMoveDepthDown from "./item.move.depth.down";
 import itemDeleteShift from "./item.delete.shift";
 import groupItem from "./group.item";
 import ungroupItem from "./ungroup.item";
-
+import historyUndo from "./history.undo";
+import historyRedo from "./history.redo";
 
 
 export default [
+    // history 
+    historyUndo,
+    historyRedo,
+    
     // add layer 
     selectView,
     addRect,

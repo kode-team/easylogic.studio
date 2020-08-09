@@ -1,4 +1,4 @@
-import _refreshSelection from "./_refreshSelection";
+import _doForceRefreshSelection from "./_doForceRefreshSelection";
 import { Length } from "../../editor/unit/Length";
 
 export default function resizeArtBoard (editor, size = '') {
@@ -15,6 +15,6 @@ export default function resizeArtBoard (editor, size = '') {
         current.reset({ width, height });
         editor.selection.select(current);
 
-        _refreshSelection(editor);
+        _doForceRefreshSelection(editor);
     }
 }

@@ -122,6 +122,12 @@
             cursor: pointer;
             vertical-align: middle;    
             color: var(--font-color);  
+
+            svg {
+                path {
+                    fill: currentColor;
+                }
+            }
         }
 
         .predefined-text {

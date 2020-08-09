@@ -12,8 +12,6 @@ import {
   OBJECT_TO_PROPERTY,
   OBJECT_TO_CLASS
 } from "../../util/functions/func";
-import { Animation } from "../css-property/Animation";
-import { Transition } from "../css-property/Transition";
 import { Selector } from "../css-property/Selector";
 
 import { ClipPath } from "../css-property/ClipPath";
@@ -29,59 +27,21 @@ export class DomItem extends GroupItem {
       'y': Length.z(),
       'right': '',
       'bottom': '',
+      'rootVariable': '',
+      'variable': '',      
       'width': Length.px(300),
       'height': Length.px(300),
-      'rootVariable': '',
-      'variable': '',
-      'transform': '',
-      'filter': '',
-      'backdrop-filter': '',
-      'background-color': '',      
-      'background-clip': '',
-      'background-image': '',      
-      'pattern': '',
-      'border': '',
-      'border-radius': '',      
-      'box-shadow': '',
-      'box-sizing': 'border-box',
-      'text-shadow': '',
-      'text-clip': '',      
-      'clip-path': '',
       'color': "black",
       'font-size': Length.px(13),
-      'font-stretch': '',
-      'line-height': '',
-      'text-align': '',
-      'text-transform': '',
-      'text-decoration': '',
-      'letter-spacing': '', 
-      'word-spacing': '', 
-      'text-indent': '',      
-      'perspective-origin': '',
-      'transform-origin': '',
-      'transform-style': '',
-      'perspective': '',
-      'mix-blend-mode': '',
       'overflow': 'visible',
-      'opacity': '',
-      'rotate': '',    
-      'text-fill-color': '',
-      'text-stroke-color': '',
-      'text-stroke-width': '',  
-      'offset-path': '',
-      'offset-distance': '',
       'z-index': Length.auto,
       'layout': 'default',
       'flex-layout': 'display:flex;',
       'grid-layout': 'display:grid;',
-      outline: {},
-      animations: [],
-      transitions: [],
       // 'keyframe': 'sample 0% --aaa 100px | sample 100% width 200px | sample2 0.5% background-image background-image:linear-gradient(to right, black, yellow 100%)',
       // keyframes: [],
       selectors: [],
       svg: [],
-      // display: Display.parse({ display: "block" }),      
       ...obj
     });
   }
@@ -127,11 +87,9 @@ export class DomItem extends GroupItem {
       'opacity': json.opacity + "",
       'rotate': json.rotate + "",
       'flex-layout': json['flex-layout'],      
-      'grid-layout': json['grid-layout'],                  
-      outline: clone(json.outline),
-
-      animations: json.animations.map(animation => animation.clone()),
-      transitions: json.transitions.map(transition => transition.clone()),
+      'grid-layout': json['grid-layout'],         
+      'animation': json['animation'],      
+      'transition': json['transition'],               
       // 'keyframe': 'sample 0% --aaa 100px | sample 100% width 200px | sample2 0.5% background-image background-image:linear-gradient(to right, black, yellow 100%)',
       // keyframes: json.keyframes.map(keyframe => keyframe.clone()),
       selectors: json.selectors.map(selector => selector.clone()),
@@ -145,30 +103,11 @@ export class DomItem extends GroupItem {
     return json;
   }
 
-  addAnimation(animation) {
-    this.json.animations.push(animation);
-    return animation;
-  }  
-
-  addTransition(transition) {
-    this.json.transitions.push(transition);
-    return transition;
-  }    
 
   addSelector(selector) {
     this.json.selectors.push(selector);
     return selector;
   }      
-
-  createAnimation(data = {}) {
-    return this.addAnimation(
-      new Animation({
-        checked: true,
-        ...data
-      })
-    );
-  }  
-  
 
   createSelector(data = {}) {
     return this.addSelector(
@@ -179,31 +118,13 @@ export class DomItem extends GroupItem {
     );
   }    
 
-  createTransition(data = {}) {
-    return this.addTransition(
-      new Transition({
-        checked: true,
-        ...data
-      })
-    );
-  }  
-
   removePropertyList(arr, removeIndex) {
     arr.splice(removeIndex, 1);
   }
-
-  removeAnimation(removeIndex) {
-    this.removePropertyList(this.json.animations, removeIndex);
-  }  
-
   
   removeSelector(removeIndex) {
     this.removePropertyList(this.json.selectors, removeIndex);
   }    
-
-  removeTransition(removeIndex) {
-    this.removePropertyList(this.json.transitions, removeIndex);
-  }  
 
   enableHasChildren() {
     return true; 
@@ -216,25 +137,6 @@ export class DomItem extends GroupItem {
       ...arr.splice(startIndex, 1)
     );
   }
-
-  
-  sortAnimation(startIndex, targetIndex) {
-    this.sortItem(this.json.animations, startIndex, targetIndex);
-  }  
-
-  sortTransition(startIndex, targetIndex) {
-    this.sortItem(this.json.transitions, startIndex, targetIndex);
-  }  
-
-  
-  updateAnimation(index, data = {}) {
-    this.json.animations[+index].reset(data);
-  }  
-
-  updateTransition(index, data = {}) {
-    this.json.transitions[+index].reset(data);
-  }    
-
 
   updateSelector(index, data = {}) {
     this.json.selectors[+index].reset(data);
@@ -279,13 +181,6 @@ export class DomItem extends GroupItem {
 
   getBorder (type) {
     return this.json.border[type] || {}
-  }
-
-  setOutline (obj) {
-    this.json.outline = { 
-      ...this.json.outline, 
-      ...obj 
-    }
   }
 
   setBorderRadius(type, data) {
@@ -414,19 +309,7 @@ export class DomItem extends GroupItem {
     return this.toStringPropertyCSS('border')
   }
 
-  toOutlineCSS () {
-    var outline = this.json.outline;
 
-    if (!outline) return {} ;
-
-    if (Object.keys(outline).length === 0) {
-      return {}
-    }
-
-    return {
-      outline: `${outline.color} ${outline.style} ${outline.width}`
-    }
-  }
 
   toKeyCSS (key) {
     if (!this.json[key]) return {} 
@@ -441,14 +324,6 @@ export class DomItem extends GroupItem {
       { selector: `[data-id="${this.json.id}"]`, properties }
     ] 
   }
-
-  toAnimationCSS() {
-    return this.toPropertyCSS(this.json.animations);
-  }
-
-  toTransitionCSS() {
-    return this.toPropertyCSS(this.json.transitions);
-  }  
 
   toString() {
     return CSS_TO_STRING(this.toCSS());
@@ -497,8 +372,12 @@ export class DomItem extends GroupItem {
     var obj = {}
 
     if (this.isAbsolute) {
-      if (this.json.x)  obj.left = this.json.x ;
-      if (this.json.y)  obj.top = this.json.y ;
+      if (this.json.x)  {
+        obj.left = this.json.x ;
+      }
+      if (this.json.y)  {
+        obj.top = this.json.y ;
+      }
     }
 
     obj.visibility = (this.json.visible) ? 'visible' : 'hidden';
@@ -521,7 +400,9 @@ export class DomItem extends GroupItem {
 
         'filter', 'backdrop-filter', 'box-shadow', 'text-shadow',
 
-        'offset-path'
+        'offset-path', 
+
+        'animation',  'transition',
       )
     }
 
@@ -631,13 +512,10 @@ export class DomItem extends GroupItem {
       this.toTextClipCSS(),      
       this.toBoxModelCSS(),
       this.toBorderCSS(),
-      this.toOutlineCSS(),      
       // ...this.toBorderImageCSS(),
       this.toBackgroundImageCSS(),
       this.toLayoutCSS(),
-      this.toLayoutItemCSS(),                  
-      this.toAnimationCSS(),
-      this.toTransitionCSS()
+      this.toLayoutItemCSS()
     );
   }
 
@@ -652,13 +530,10 @@ export class DomItem extends GroupItem {
       this.toTextClipCSS(),      
       this.toBoxModelCSS(),
       this.toBorderCSS(),
-      this.toOutlineCSS(),      
       // ...this.toBorderImageCSS(),
       this.toBackgroundImageCSS(),
       this.toLayoutCSS(),      
-      this.toLayoutItemCSS(),            
-      this.toAnimationCSS(),
-      this.toTransitionCSS()
+      this.toLayoutItemCSS()
     );
   }
   

@@ -1,6 +1,8 @@
 import { Length } from "../unit/Length";
 import { Property } from "../items/Property";
+import { customParseConvertMatches, customParseReverseMatches } from "../../util/functions/customParser";
 
+const ANIMATION_TIMING_REG = /((cubic-bezier|steps)\(([^\)]*)\))/gi;
 
 export class Animation extends Property {
   static parse(obj) {
@@ -8,18 +10,18 @@ export class Animation extends Property {
   }
 
   getDefaultObject() {
-    return super.getDefaultObject({
+    return {
       itemType: "animation",
       checked: true, 
       name: 'none',
       direction: 'normal',
       duration: Length.second(0),
-      timingFunction: 'ease',
+      timingFunction: 'linear',
       delay: Length.second(0),
       iterationCount: Length.string('infinite'),
       playState: 'running',
       fillMode: 'none'
-    });
+    };
   }
 
   convert(json) {
@@ -33,8 +35,6 @@ export class Animation extends Property {
   toCloneObject() {
     var json = this.json; 
     return {
-      ...super.toCloneObject(),
-      checked: json.checked, 
       name: json.name,
       direction: json.direction,
       duration: json.duration+'',
@@ -71,14 +71,106 @@ export class Animation extends Property {
     var json = this.json;
 
     return [
-      json.name,
       json.duration,
       json.timingFunction,
       json.delay,
       json.iterationCount,
       json.direction,
       json.fillMode,
-      json.playState
+      json.playState,
+      json.name
     ].join(' ')
   }
+
+  static join (list) {
+    return list.map(it => new Animation(it).toString()).join(',')
+  }
+
+  static add (animation, item = {}) {
+    const list = Animation.parseStyle(animation);
+    list.push(Animation.parse(item))
+
+    return Animation.join(list); 
+  }
+
+  static remove (animation, removeIndex) {
+    return Animation.filter(animation, (it, index) => {
+        return removeIndex != index; 
+    })
+  }
+
+  static filter (animation, filterFunction) {
+    return Animation.join(Animation.parseStyle(animation).filter(it => filterFunction(it)))
+  }
+
+  static replace (animation, replaceIndex, valueObject) {
+
+    var list = Animation.parseStyle(animation)
+
+    if (list[replaceIndex]) {
+      list[replaceIndex] = valueObject;
+    } else {
+      list.push(valueObject);
+    }
+
+    return Animation.join(list);
+  }
+
+  static get (animation, index) {
+    var arr = Animation.parseStyle(animation)
+
+    return arr[index];
+  }   
+
+
+  static parseStyle (animation) {
+
+    var list = [];
+
+    if (!animation) return list;
+
+
+    const result = customParseConvertMatches(animation, ANIMATION_TIMING_REG)
+    list = result.str.split(',').map(it => {
+
+      const fields = it.split(' ').filter(Boolean);
+
+      if (fields.length >= 7 ) {
+          /* @keyframes duration | timing-function | delay | 
+          iteration-count | direction | fill-mode | play-state | name */
+          //animation: 3s ease-in 1s 2 reverse both paused slidein;        
+        return {
+          duration: Length.parse(fields[0]),          
+          timingFunction: customParseReverseMatches(fields[1], result.matches),          
+          delay: Length.parse(fields[2]),          
+          iterationCount: fields[3] === 'infinite' ? Length.string('infinite') : Length.parse(fields[3]),          
+          direction: fields[4],
+          fillMode: fields[5],
+          playState: fields[6],
+          name: fields[7]
+        }
+      } else if (fields.length >= 3) {
+        /* @keyframes duration | timing-function | delay | name */
+        //animation: 3s linear 1s slidein;        
+        return {
+          duration: Length.parse(fields[0]),          
+          timingFunction: customParseReverseMatches(fields[1], result.matches),
+          delay: Length.parse(fields[2]),          
+          name: fields[3]
+        }
+      } else if (fields.length >= 1) {
+        /* @keyframes duration | name */
+        //animation: 3s slidein;        
+        return {
+          duration: Length.parse(fields[0]),          
+          name: fields[1]
+        }
+      } else {
+        return {}
+      }
+    })
+
+    return list.map(it => Animation.parse(it));
+  }  
+
 }

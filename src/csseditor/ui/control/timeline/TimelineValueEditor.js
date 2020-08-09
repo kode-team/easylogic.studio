@@ -50,9 +50,7 @@ export default class TimelineValueEditor extends UIElement {
 
     this.refs.$offsetTime.val(code)
     this.children.$propertyEditor.trigger('showCSSPropertyEditor', this.getProperties());      
-    this.children.$cubicBezierEditor.trigger('showCubicBezierEditor', {
-      timingFunction: this.state.timing
-    });
+    this.children.$cubicBezierEditor.trigger('showCubicBezierEditor', this.state.timing);
   }
 
   template() {

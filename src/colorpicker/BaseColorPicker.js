@@ -41,8 +41,13 @@ export default class BaseColorPicker extends UIElement {
             this.callbackChangeValue()
         }
 
+        this.callbackLastUpdate = () => {
+            this.callbackLastUpdateColorValue()
+        }                   
+
         this.colorpickerShowCallback = function () { };
-        this.colorpickerHideCallback = function () { };           
+        this.colorpickerHideCallback = function () { };
+        this.colorpickerLastUpdateCallback = function () { };                         
 
 
         this.$body = Dom.create(this.getContainer());
@@ -101,7 +106,7 @@ export default class BaseColorPicker extends UIElement {
      * @param {Function} showCallback  it is called when colorpicker is shown
      * @param {Function} hideCallback  it is called once when colorpicker is hidden
      */
-    show(opt, color, showCallback, hideCallback) {
+    show(opt, color, showCallback, hideCallback, lastUpdateCallback) {
 
         // 매번 이벤트를 지우고 다시 생성할 필요가 없어서 초기화 코드는 지움. 
         // this.destroy();
@@ -109,6 +114,7 @@ export default class BaseColorPicker extends UIElement {
         // define colorpicker callback
         this.colorpickerShowCallback = showCallback;
         this.colorpickerHideCallback = hideCallback;        
+        this.colorpickerLastUpdateCallback = lastUpdateCallback
         this.$root.css(this.getInitalizePosition()).show();
 
         this.definePosition(opt);
@@ -141,7 +147,7 @@ export default class BaseColorPicker extends UIElement {
     }
 
     changeColor(newColor, format) {
-        this.manager.changeColor(newColor, format);
+        this.manager.changeColor(newColor, format);        
         this.emit('changeColor');        
     }
 
@@ -283,6 +289,19 @@ export default class BaseColorPicker extends UIElement {
         }        
     }
 
+    callbackLastUpdateColorValue(color) {
+        color = color || this.getCurrentColor();
+
+        if (isFunction(this.opt.onLastUpdate)) {
+            this.opt.onLastUpdate.call(this, color);
+        }
+
+        if (isFunction(this.colorpickerLastUpdateCallback)) {
+            this.colorpickerLastUpdateCallback(color);
+        }                
+    }
+
+
     callbackHideValue(color) {
         color = color || this.getCurrentColor();
         if (isFunction(this.opt.onHide)) {
@@ -315,6 +334,10 @@ export default class BaseColorPicker extends UIElement {
         return IsInHtml;
     }
 
+    lastUpdateColor () {
+        this.callbackLastUpdate();
+    }
+
     initializeStoreEvent () {
         super.initializeStoreEvent()
 
@@ -326,7 +349,7 @@ export default class BaseColorPicker extends UIElement {
         super.destroy();
 
         this.$store.off('changeColor', this.callbackChange);
-        this.$store.off('changeFormat', this.callbackChange);
+        this.$store.off('changeFormat', this.callbackChange);                      
 
         this.callbackChange = undefined; 
 

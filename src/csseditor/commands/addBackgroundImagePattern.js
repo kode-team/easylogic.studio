@@ -1,6 +1,6 @@
 import { BackgroundImage } from "../../editor/css-property/BackgroundImage";
 import { STRING_TO_CSS, CSS_TO_STRING } from "../../util/functions/func";
-import _refreshSelection from "./_refreshSelection";
+import _doForceRefreshSelection from "./_doForceRefreshSelection";
 import { Pattern } from "../../editor/css-property/Pattern";
 
 export default {
@@ -15,6 +15,6 @@ export default {
             
         })
 
-        _refreshSelection(editor, true);
+        _doForceRefreshSelection(editor, true);
     }
 }

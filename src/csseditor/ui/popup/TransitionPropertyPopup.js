@@ -96,16 +96,23 @@ export default class TransitionPropertyPopup extends BasePopup {
 
   initState() {
     return {
-      property: 'all',
-      duration: Length.second(0),
-      timingFunction: 'ease',
-      delay: Length.second(0)
+      changeEvent: '', 
+      instance: {}, 
+      data: {
+        timingFunction: 'linear',
+        duration: '0s',
+        delay: '0s',
+        name: 'all'
+      } 
     };
   }
 
+
   updateData(opt) {
-    this.setState(opt, false); 
-    this.emit("changeTransitionPropertyPopup", opt);
+    this.state.data = {...this.state.data, ...opt} 
+    if (this.state.instance) {
+      this.state.instance.trigger(this.state.changeEvent, this.state.data);
+    }
   }
 
   getBody() {
@@ -127,7 +134,7 @@ export default class TransitionPropertyPopup extends BasePopup {
     return /*html*/`
     <div class='timing-function'>
       <label>Timing function</label>
-      <CubicBezierEditor ref='$cubicBezierEditor' key="timingFunction" value="${this.state.timingFunction}" onChange='changeCubicBezier' />
+      <CubicBezierEditor ref='$cubicBezierEditor' key="timingFunction" value="${this.state.data.timingFunction}" onChange='changeCubicBezier' />
     </div>
     `
   }
@@ -142,7 +149,7 @@ export default class TransitionPropertyPopup extends BasePopup {
    
     return /*html*/`
       <div class='name'>
-        <SelectEditor ref='$property' icon="true" label="Property" key='property' value="${this.state.property}" options="${property_list.join(',')}" onChange='changeTransition' /> 
+        <SelectEditor ref='$property' icon="true" label="Property" key='name' value="${this.state.data.name}" options="${property_list.join(',')}" onChange='changeTransition' /> 
       </div>
     `
   }
@@ -151,7 +158,7 @@ export default class TransitionPropertyPopup extends BasePopup {
   templateForDelay () {
     return /*html*/`
     <div class='delay'>
-      <RangeEditor ref='$delay' label='Delay' calc='false' key='delay' value='${this.state.delay}' units='s,ms' onChange="changeRangeEditor" />
+      <RangeEditor ref='$delay' label='Delay' calc='false' key='delay' value='${this.state.data.delay}' units='s,ms' onChange="changeRangeEditor" />
     </div>
     `
   }
@@ -159,7 +166,7 @@ export default class TransitionPropertyPopup extends BasePopup {
   templateForDuration () {
     return /*html*/`
     <div class='duration'>
-      <RangeEditor ref='$duration' label='Duration'  calc='false' key='duration' value='${this.state.duration}' units='s,ms' onChange="changeRangeEditor" />
+      <RangeEditor ref='$duration' label='Duration'  calc='false' key='duration' value='${this.state.data.duration}' units='s,ms' onChange="changeRangeEditor" />
     </div>
     `
   }
@@ -174,11 +181,10 @@ export default class TransitionPropertyPopup extends BasePopup {
 
   [EVENT("showTransitionPropertyPopup")](data) {
     this.setState(data);
-    this.refresh();
 
     this.show(250)
 
-    this.emit('showCubicBezierEditor', data)    
+    this.children.$cubicBezierEditor.trigger('showCubicBezierEditor', data.data.timingFunction)        
   }
 
   [EVENT("hideTransitionPropertyPopup")]() {

@@ -14,6 +14,9 @@ export default class EmbedColorPicker extends UIElement {
       color: this.props.value || defaultColor,
       onChange: c => {
         this.changeColor(c);
+      },
+      onLastUpdate: c => {
+        this.changeEndColor(c);
       }
 
     });
@@ -34,6 +37,10 @@ export default class EmbedColorPicker extends UIElement {
   changeColor(color) {
     this.parent.trigger(this.props.onchange, color);
   }
+
+  changeEndColor(color) {
+    this.parent.trigger(this.props.onchangeend, color);
+  }  
 
   setValue (color) {
     this.colorPicker.initColorWithoutChangeEvent(color);

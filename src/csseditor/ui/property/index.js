@@ -53,9 +53,10 @@ import GridLayoutItemProperty from "./GridLayoutItemProperty";
 import PatternProperty from "./PatternProperty";
 import VideoProperty from "./VideoProperty";
 import PatternAssetsProperty from "./PatternAssetsProperty";
-
+import HistoryProperty from "./HistoryProperty";
 
 export default {  
+  HistoryProperty,
   PatternAssetsProperty,
   VideoProperty,
   PatternProperty,

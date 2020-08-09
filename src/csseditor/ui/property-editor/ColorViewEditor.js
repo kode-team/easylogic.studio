@@ -15,6 +15,11 @@ export default class ColorViewEditor extends UIElement {
         this.modifyColor();
     }
 
+    updateEndData(opt = {}) {
+        this.setState(opt);
+        this.modifyEndColor();
+    }    
+
     getValue () {
         return this.state.value; 
     }
@@ -26,6 +31,11 @@ export default class ColorViewEditor extends UIElement {
     modifyColor() {
         this.parent.trigger(this.props.onchange, this.props.key, this.state.value, this.props.params);
     }
+
+    modifyEndColor() {
+        this.parent.trigger(this.props.onchangeend, this.props.key, this.state.value, this.props.params);
+    }
+
 
     changeColor (value) {
         this.setState({ value })
@@ -84,6 +94,7 @@ export default class ColorViewEditor extends UIElement {
         this.emit("showColorPickerPopup", {
             target: this, 
             changeEvent: 'changeColorViewEditor',
+            changeEndEvent: 'changeEndColorViewEditor',
             color: this.state.value
         });
     }
@@ -103,5 +114,9 @@ export default class ColorViewEditor extends UIElement {
     [EVENT("changeColorViewEditor")](color) {
         this.updateData({ value: color })
     }
+
+    [EVENT("changeEndColorViewEditor")](color) {
+        this.updateEndData({ value: color })
+    }    
 
 }

@@ -1,4 +1,4 @@
-import _refreshSelection from "./_refreshSelection";
+import _doForceRefreshSelection from "./_doForceRefreshSelection";
 
 export default {
     command : 'scale.minus',

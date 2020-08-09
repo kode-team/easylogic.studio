@@ -1,6 +1,6 @@
 import { BackgroundImage } from "../../editor/css-property/BackgroundImage";
 import { STRING_TO_CSS } from "../../util/functions/func";
-import _refreshSelection from "./_refreshSelection";
+import _doForceRefreshSelection from "./_doForceRefreshSelection";
 
 export default {
     command: 'addBackgroundImageGradient',
@@ -16,6 +16,6 @@ export default {
             editor.emit('setAttribute', { 'background-image': BackgroundImage.join(images) }, item.id)
         })
 
-        _refreshSelection(editor, true);
+        _doForceRefreshSelection(editor, true);
     }
 }

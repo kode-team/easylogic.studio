@@ -1,11 +1,7 @@
 
-import { isNotUndefined } from "../../../util/functions/func";
+import { isNotUndefined, clone } from "../../../util/functions/func";
 import { Segment } from "../../../editor/util/Segment";
 import { Length } from "../../../editor/unit/Length";
-
-const roundedLength = (px, fixedRound = 1) => {
-    return Length.px(px).round(fixedRound);
-}
 
 const MAX_DIST = 2;
 
@@ -36,146 +32,109 @@ export default class GuideView {
             } else {
                 this.cachedExtraItems = artboard.allLayers.filter(it => {
                     return !this.$selection.check(it) || (it.is('artboard') && this.$selection.currentArtboard != it); 
+                }).map(it => {
+                    return {
+                        x: it.screenX.value,
+                        y: it.screenY.value,
+                        width: it.width.value,
+                        height: it.height.value
+                    }
                 })
                 
             }
 
-            this.rect = this.$selection.allRect ? this.$selection.allRect.clone() : null;
+            this.rect = this.$selection.allRect ? clone(this.$selection.allRect) : null;
         }
         
         // Rect 안의 position 의  좌표 비율 미리 캐슁 
         this.cachedPosition = {}
-        this.$selection.items.map(item => {
+        this.$selection.each(item => {
             this.cachedPosition[item.id] = {
-                x : this.setupX(item),
-                y : this.setupY(item)
+                x : item.x.value,
+                y : item.y.value,
+                width: item.width.value, 
+                height: item.height.value,
+                screenX: item.screenX.value,
+                screenY: item.screenY.value,
             }
-        })   
+        })  
 
         return this.rect; 
     }
 
 
+    // 그룹의 각 엣지별로 움직인 간격을  지정한다. 
+    // 나중에 matrix 연산을 도입하는게 좋을 듯 하다. 
+    // 최종적으로 group 이 변한 상태를 기록한다. 
+    // allRect 는 초기 값 
+    // rect 는 최종 값 
+    // dx, dy 는 변화값 
+    // rect is equals to plus both allRect and  (type, dx, dy).
     move (type, dx, dy) {
         /*  최초 캐쉬된 객체  */
         var allRect = this.$selection.allRect;
 
         /* this.rect 는 실제 변화가 적용된 객체 */
         this.pointerType = type; 
+        this.dx = dx; 
+        this.dy = dy; 
 
         if (type === 'move') {
-            this.rect.move( 
-                roundedLength(allRect.x.value + dx),
-                roundedLength(allRect.y.value + dy)
-            )
-
+            this.rect.x = allRect.x + dx; 
+            this.rect.y = allRect.y + dy; 
         } else {
 
             if (Segment.isRight(type)) {
-                this.rect.resizeWidth(roundedLength(allRect.width.value + dx))
-
+                this.rect.width = allRect.width + dx; 
             } else if (Segment.isLeft(type)) {
-                if (allRect.width.value - dx >= 0) {
-                    this.rect.moveX( roundedLength(allRect.x.value + dx) )
-                    this.rect.resizeWidth( roundedLength(allRect.width.value - dx) )
-                }                
+                this.rect.x = allRect.x + dx
+                this.rect.width = allRect.width - dx; 
             } 
     
             if (Segment.isBottom(type)) {      // 밑으로 향하는 애들 
-                this.rect.resizeHeight( roundedLength(allRect.height.value + dy) )                
+                this.rect.height = allRect.height + dy;
             } else if (Segment.isTop(type)) {
-                if ( allRect.height.value - dy >= 0 ) {
-                    this.rect.moveY( roundedLength(allRect.y.value + dy) )                                
-                    this.rect.resizeHeight( roundedLength(allRect.height.value - dy) )    
-                }
+                this.rect.height = allRect.height - dy;                 
+                this.rect.y = allRect.y + dy; 
             }                      
         }
     }
 
 
+    // 해당 item 의 위치를 복구한다. 
+    // 이 때 rect, allRect 의 비율에 따라 달라진다. 
+    // dx, dy 는 translate 
+    // width, height 는 scale 로 정의를 하면 좀 더 쉬워진다. 
+    // item.[x,y] = (dx, dy) * scale 
+    // item.[width,height] = (width, height) * scale 
     recover (item) {
 
         if (!this.rect) return; 
-
-        const {xDistRate, x2DistRate} = this.cachedPosition[item.id].x
-        const {yDistRate, y2DistRate} = this.cachedPosition[item.id].y
-
-        const minX = this.rect.screenX.value; 
-        const maxX = this.rect.screenX2.value; 
-        const minY = this.rect.screenY.value; 
-        const maxY = this.rect.screenY2.value; 
-
-        const totalWidth = maxX - minX; 
-        const xr = totalWidth * xDistRate;
-        const x2r = totalWidth * x2DistRate; 
-
-        const totalHeight = maxY - minY; 
-        const yr = totalHeight * yDistRate;
-        const y2r = totalHeight * y2DistRate;
-
-        this.setX(item, minX, maxX, xr, x2r);
-        this.setY(item, minY, maxY, yr, y2r);
-    }
-
-
-    setY (item, minY, maxY, yrate, y2rate) {
-        var distY = Math.round(yrate);
-        var distY2 = Math.round(y2rate);
-        var height = distY2 - distY;
-
-        item.height.set(height )        
-        item.setScreenY(distY + minY)
-    }
-
-
-    setX (item, minX, maxX, xrate, x2rate) {
-        var distX = Math.round(xrate);
-        var distX2 = Math.round(x2rate);
-        var width = distX2 - distX;
-
-        item.width.set(width )        
-        item.setScreenX(distX + minX) 
-    }    
-
-    setupX (cacheItem) {
         var allRect = this.$selection.allRect;
-        var minX = allRect.screenX.value; 
-        var maxX = allRect.screenX2.value; 
-        var width = maxX - minX; 
 
-        if (width === 0) {
-            return {xDistRate: 0, x2DistRate: 1}
-        } else {
-            var xDistRate = (cacheItem.screenX.value - minX) / width;
-            var x2DistRate = (cacheItem.screenX2.value - minX) / width;
-    
-            return {xDistRate, x2DistRate}
-        }
-    }    
+        const scaleX = this.rect.width/ allRect.width ;
+        const scaleY = this.rect.height/ allRect.height ;
+        const cachedItem = this.cachedPosition[item.id];
 
-    setupY (cacheItem) {
-        var allRect = this.$selection.allRect;        
-        var minY = allRect.screenY.value; 
-        var maxY = allRect.screenY2.value; 
-        var height = maxY - minY; 
+        // screenX, screenY 
+        const realX = this.rect.x + this.rect.width * ((cachedItem.screenX - allRect.x) / allRect.width);
+        const realY = this.rect.y + this.rect.height * ((cachedItem.screenY - allRect.y) / allRect.height);
 
-        if (height === 0) {
-            return {yDistRate: 0, y2DistRate: 1}
-        } else {
-            var yDistRate = (cacheItem.screenY.value - minY) / height;
-            var y2DistRate = (cacheItem.screenY2.value - minY) / height;
-    
-            return {yDistRate, y2DistRate}
-        }
+        item.reset({
+            x: Length.px(cachedItem.x + (realX - cachedItem.screenX) ).round(),
+            y: Length.px(cachedItem.y + (realY - cachedItem.screenY)).round(),
+            width: Length.px(cachedItem.width * scaleX).round(),
+            height: Length.px(cachedItem.height * scaleY).round()
+        })
 
-    }
+    } 
 
     compareX (A, B, dist = MAX_DIST) {
 
         // source and target are an index 
         // 0: start, 1 : center, 2 : end 
-        var AX = [A.screenX.value, A.centerX.value, A.screenX2.value]
-        var BX = [B.screenX.value, B.centerX.value, B.screenX2.value]
+        var AX = [A.x, Math.floor(A.x + A.width/2), A.x + A.width]
+        var BX = [B.x, Math.floor(B.x + B.width/2), B.x + B.width]
 
         var results = []
         AX.forEach( (ax, source) => {
@@ -205,8 +164,8 @@ export default class GuideView {
     }
 
     compareY (A, B, dist = MAX_DIST) {
-        var AY = [A.screenY.value, A.centerY.value, A.screenY2.value]
-        var BY = [B.screenY.value, B.centerY.value, B.screenY2.value]
+        var AY = [A.y, Math.floor(A.y + A.height/2), A.y + A.height]
+        var BY = [B.y, Math.floor(B.y + B.height/2), B.y + B.height]
 
         var results = []
 
@@ -258,7 +217,7 @@ export default class GuideView {
             ypoints.push(...obj.y);
         })
 
-        return [xpoints[0], ypoints[0]].filter(it => isNotUndefined(it))
+        return [xpoints[0], ypoints[0]].filter(isNotUndefined)
 
     } 
 
@@ -277,19 +236,10 @@ export default class GuideView {
 
      sizeSnap(it) {
 
-        // selection area 에 대한 정확한 정의가 필요하다. 
-        // 클릭한 걸 기준으로 할지 
-        // 아니면 전체 멀티 선택한 영역 자체를 기준으로 하고  그 영역 안에서 사이즈를 조절할지 
-        // 고민을 다시 해봐야할 듯 하다. 
-
         if (isNotUndefined(it.ax)) {
-            var minX, maxX, width; 
             switch(it.source) {
-            case 2: 
-                minX = this.rect.screenX.value; 
-                maxX = it.bx;
-                width = maxX - minX;   
-                this.rect.width.set(width);                            
+            case 2:    
+                this.rect.width = it.bx - this.rect.x;          
                 break;
             // case 1: 
             //     minX = this.rect.screenX.value; 
@@ -297,25 +247,17 @@ export default class GuideView {
             //     this.rect.width.set(width);                            
             //     break;                
             case 0: 
-                minX = it.bx; 
-                maxX = this.rect.screenX2.value;
-                width = maxX - minX;   
-                this.rect.x.set(minX);
-                this.rect.width.set(width);                            
+                this.rect.width = this.rect.x + this.rect.width - it.bx;
+                this.rect.x = it.bx;
+
                 break; 
             }
 
 
         } else {
-            var minY, maxY, height; 
-
             switch(it.source) {
             case 2: 
-                minY = this.rect.screenY.value; 
-                maxY = it.by;
-                height = maxY - minY;   
-                this.rect.y.set(minY);
-                this.rect.height.set(height);                
+                this.rect.height = it.by - this.rect.y; 
                 break;
 
             // case 1: 
@@ -324,11 +266,8 @@ export default class GuideView {
             //     this.rect.height.set(height);
             //     break;       
             case 0: 
-                minY = it.by; 
-                maxY = this.rect.screenY2.value;
-                height = maxY - minY;   
-                this.rect.y.set(minY);
-                this.rect.height.set(height);                
+                this.rect.height = this.rect.y + this.rect.height - it.by;             
+                this.rect.y = it.by
                 break; 
             }
 
@@ -337,13 +276,13 @@ export default class GuideView {
 
     moveSnap(it) {
         if (isNotUndefined(it.ax)) {
-            var distX = Math.round(this.rect.width.value / 2 * it.source);
+            var distX = Math.round(this.rect.width / 2 * it.source);
             var minX = it.bx - distX;             
-            this.rect.x.set(minX);       
+            this.rect.x = minX
         } else if (isNotUndefined(it.ay)) {
-            var distY = Math.round(this.rect.height.value / 2 * it.source);
+            var distY = Math.round(this.rect.height / 2 * it.source);
             var minY = it.by - distY;             
-            this.rect.y.set(minY);              
+            this.rect.y = minY
         }
 
     }

@@ -12,6 +12,15 @@ $border-radius: 3px;
             grid-template-columns: 60px 1fr 12px;
         }
 
+        &.block {
+            display: block;
+            height: auto;
+
+            > label {
+                display: block; 
+            }
+        }
+
         label {
             text-align: left;
             vertical-align: middle;

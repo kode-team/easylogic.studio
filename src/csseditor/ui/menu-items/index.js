@@ -10,7 +10,7 @@ import BottomAlign from "./BottomAlign";
 import MiddleAlign from "./MiddleAlign";
 import SameHeight from "./SameHeight";
 import SameWidth from "./SameWidth";
-import CopyItem from "./CopyItem";
+// import CopyItem from "./CopyItem";
 import AddText from "./AddText";
 import ExportView from "./ExportView";
 import Manual from "./Manual";
@@ -58,7 +58,7 @@ export default {
   Manual,
   ExportView,
   AddText,
-  CopyItem,
+  // CopyItem,
   SameHeight,
   SameWidth,
   TopAlign,

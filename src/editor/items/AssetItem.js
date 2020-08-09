@@ -1,4 +1,4 @@
-import { SVGFilter } from "../svg-property/SVGFilter";
+
 import { clone } from "../../util/functions/func";
 import { Item } from "./Item";
 import { Keyframe } from "../css-property/Keyframe";
@@ -83,24 +83,6 @@ export class AssetItem extends Item {
   copyPropertyList(arr, index) {
     var copyObject = {...arr[index]};
     arr.splice(index, 0, copyObject);
-  }
- 
-  toSVGString () {
-
-    var filterString = this.json.svgfilters.map(svgfilter => {
-
-      var filters = svgfilter.filters.map(filter => {
-        return SVGFilter.parse(filter);
-      })
-
-      return /*html*/`<filter id='${svgfilter.id}'>
-  ${filters.join('\n')}
-</filter>
-`
-
-    }).join('\n\n')
-
-    return filterString
   }
 
   toCloneObject() {

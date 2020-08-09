@@ -155,7 +155,7 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
 
   .element-item {
 
-    outline: 1px double var(--selected-color);
+    // outline: 1px double var(--selected-color);
 
     &[contenteditable="true"] {
       // margin: 0px;

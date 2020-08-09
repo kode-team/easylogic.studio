@@ -1,4 +1,4 @@
-import _refreshSelection from "./_refreshSelection"
+import _doForceRefreshSelection from "./_doForceRefreshSelection"
 import { isArray } from "../../util/functions/func";
 
 export default function selectArtboard (editor, artboard) {

@@ -1,6 +1,6 @@
-import UIElement from "../../../util/UIElement";
+import UIElement, { EVENT } from "../../../util/UIElement";
 import { Length } from "../../../editor/unit/Length";
-import { LOAD, INPUT, CLICK, FOCUS, BLUR } from "../../../util/Event";
+import { LOAD, INPUT, CLICK, FOCUS, BLUR, POINTERSTART, MOVE, END, THROTTLE } from "../../../util/Event";
 import icon from "../icon/icon";
 
 export default class NumberRangeEditor extends UIElement {
@@ -114,7 +114,15 @@ export default class NumberRangeEditor extends UIElement {
     }
 
 
-    [INPUT('$property')] (e) {
+    [POINTERSTART('$property') + MOVE('moveRange') + END('moveRange')] () {
+
+    }
+
+    moveRange () {
+        this.trigger('changeValue');
+    }
+
+    [EVENT('changeValue') + THROTTLE(100)] () {
         var value = +this.getRef('$property').value; 
         this.getRef('$propertyNumber').val(value);
 
@@ -125,5 +133,5 @@ export default class NumberRangeEditor extends UIElement {
         this.updateData({ 
             value: this.state.value.set(value)
         });
-    }
+    }    
 }

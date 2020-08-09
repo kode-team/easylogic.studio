@@ -1,4 +1,4 @@
-import _refreshSelection from "./_refreshSelection";
+import _doForceRefreshSelection from "./_doForceRefreshSelection";
 
 export default {
     command : 'item.move.depth.up',
@@ -9,6 +9,6 @@ export default {
             current.orderNext();
         }
 
-        _refreshSelection(editor, true);
+        _doForceRefreshSelection(editor, true);
     }
 }

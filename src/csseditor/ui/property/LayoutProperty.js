@@ -73,7 +73,7 @@ export default class LayoutProperty extends BaseProperty {
     this.emit('changeItemLayout')
   }
 
-  [EVENT('refreshSelection') + DEBOUNCE(1000)]() {
+  [EVENT('refreshSelection')]() {
     this.refreshShow(['rect', 'circle', 'artboard'], true);
   }
 }

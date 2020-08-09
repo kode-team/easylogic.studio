@@ -10,11 +10,11 @@ export class TimelineSelectionManager {
     this.itemKeys = {} 
   }
 
-  currentArtBoard (callback) {
-    var artboard = this.$editor.selection.currentArtboard;
+  currentProject (callback) {
+    var project = this.$editor.selection.currentProject;
 
-    if (artboard) {
-      callback && callback (artboard);
+    if (project) {
+      callback && callback (project);
     }
   }
 
@@ -49,8 +49,8 @@ export class TimelineSelectionManager {
 
   selectLayer (layerId) {
 
-    this.currentArtBoard(artboard => {
-      var list = artboard.getKeyframeListReturnArray().filter(it => {
+    this.currentProject(project =>  {
+      var list = project.getKeyframeListReturnArray().filter(it => {
         return it.layerId === layerId
       })
       this.refreshCache(list);
@@ -59,8 +59,8 @@ export class TimelineSelectionManager {
 
   toggleLayerContainer (animationId) {
 
-    this.currentArtBoard(artboard => {
-      artboard.getSelectedTimeline().animations.filter(it => {
+    this.currentProject(project =>  {
+      project.getSelectedTimeline().animations.filter(it => {
         return it.id === animationId
       }).forEach(it => {
         it.collapsed = !it.collapsed
@@ -69,8 +69,8 @@ export class TimelineSelectionManager {
   }  
 
   selectProperty (layerId, property) {
-    this.currentArtBoard(artboard => {
-      var list = artboard.getKeyframeListReturnArray().filter(it => {
+    this.currentProject(project =>  {
+      var list = project.getKeyframeListReturnArray().filter(it => {
         return it.layerId === layerId && it.property === property;
       })
 
@@ -83,7 +83,7 @@ export class TimelineSelectionManager {
   }
 
   selectBySearch (list, startTime, endTime) {
-    this.currentArtBoard(artboard => {
+    this.currentProject(project =>  {
 
       var totalList = []
 
@@ -91,14 +91,14 @@ export class TimelineSelectionManager {
         var results = []  
         if (it.property) {
 
-          var p = artboard.getTimelineProperty(it.layerId, it.property)
+          var p = project.getTimelineProperty(it.layerId, it.property)
 
           results = p.keyframes.filter(keyframe => {
             return startTime <= keyframe.time && keyframe.time <= endTime; 
           })
         } else {
 
-          var p = artboard.getTimelineObject(it.layerId)
+          var p = project.getTimelineObject(it.layerId)
 
           p.properties.filter(property => {
             return property.property === it.property

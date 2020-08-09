@@ -370,11 +370,11 @@ export default class LayerTreeProperty extends BaseProperty {
     }, item.id)
   }
 
-  [EVENT('emptySelection')] () {
-    this.refs.$layerList.$$('.selected').forEach(it => {
-      it.removeClass('selected')
-    })
-  }
+  // [EVENT('emptySelection')] () {
+  //   this.refs.$layerList.$$('.selected').forEach(it => {
+  //     it.removeClass('selected')
+  //   })
+  // }
 
   [EVENT('changeSelection')] (isSelection = false) {
     if (isSelection && this.refs.$layerList) {    
@@ -401,7 +401,7 @@ export default class LayerTreeProperty extends BaseProperty {
     }
   }  
 
-  [EVENT('refreshSelection')] () { 
+  [EVENT('refreshSelection', 'history.refreshSelection')] () { 
     this.trigger('changeSelection', true)
   }
 

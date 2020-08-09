@@ -94,6 +94,7 @@ export default class ColorInformation extends UIElement {
         this.initFormat();
 
         this.parent.manager.changeFormat(this.format)
+        this.emit('lastUpdateColor');        
     }
 
     goToFormat(to_format) {
@@ -117,6 +118,7 @@ export default class ColorInformation extends UIElement {
             b : this.refs.$rgb_b.int(),
             a : this.refs.$rgb_a.float()
         })
+        this.emit('lastUpdateColor')
     }
 
     changeHslColor () {
@@ -127,6 +129,7 @@ export default class ColorInformation extends UIElement {
             l : this.refs.$hsl_l.int(),
             a : this.refs.$hsl_a.float()
         })        
+        this.emit('lastUpdateColor')        
     }    
 
     [EVENT('changeColor', 'initColor')] () {
@@ -148,11 +151,12 @@ export default class ColorInformation extends UIElement {
     
         if(code.charAt(0) == '#' && (code.length == 7 || code.length === 9)) {
             this.parent.initColor(code)
+            this.emit('lastUpdateColor')
         }
     }
     
     [CLICK('$formatChangeButton')] (e) {
-        this.nextFormat();
+        this.nextFormat();        
     }
 
     [CLICK('$el .information-item.hex .input-field .title')] (e) {

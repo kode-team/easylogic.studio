@@ -1,4 +1,4 @@
-export default function _refreshSelection (editor, isSelectedItems = false, delay = 0) {
+export default function _doForceRefreshSelection (editor, isSelectedItems = false, delay = 0) {
 
     // editor.emit('hideSubEditor');
     editor.emit('noneSelectMenu')
@@ -11,7 +11,7 @@ export default function _refreshSelection (editor, isSelectedItems = false, dela
 
     setTimeout(() => {
         editor.emit('refreshSelection');
-        editor.emit('refreshSelectionTool');        
+        editor.emit('refreshSelectionTool');       
     }, delay + delay)    
 
 }

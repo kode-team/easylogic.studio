@@ -1,4 +1,5 @@
 import { randomNumber } from "./create";
+import { getPredefinedCubicBezier } from "./bezier";
 
 export function debounce (callback, delay = 0) {
 
@@ -244,4 +245,37 @@ export function TAG_TO_STRING (str) {
 
 export function mapjoin(arr, callback, joinString = '') {
     return arr.map(callback).join(joinString);
+}
+
+export function isArrayEquals (A, B) {
+    const s = new Set([...A, ...B])
+
+    return s.size === A.length && s.size === B.length;
+}
+
+export const splitMethodByKeyword = (arr, keyword) => {
+    var filterKeys = arr.filter(code => code.indexOf(`${keyword}(`) > -1);
+    var filterMaps = filterKeys.map(code => {
+      var [target, param] = code
+        .split(`${keyword}(`)[1]
+        .split(")")[0]
+        .trim()
+        .split(" ");
+  
+      return { target, param };
+    });
+  
+    return [filterKeys, filterMaps];
+};
+
+export const curveToPath = (timingFunction, width, height) => {
+    const currentBezier = getPredefinedCubicBezier(timingFunction)
+    
+    return `
+        M0 30 
+        C 
+        ${currentBezier[0] * width} ${currentBezier[1] == 0 ? height : (1 - currentBezier[1]) * height},
+        ${currentBezier[2] * width} ${currentBezier[3] == 1 ? 0 : (1 - currentBezier[3] ) * height},
+        ${width} 0
+    `
 }

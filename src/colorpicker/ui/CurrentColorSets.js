@@ -6,7 +6,7 @@ import { html } from '../../util/functions/func';
 export default class CurrentColorSets extends UIElement {
 
     template() {
-        return `
+        return /*html*/`
             <div class="colorsets">
                 <div class="menu" title="Open Color Palettes">
                     <button ref="$colorSetsChooseButton" type="button" class="color-sets-choose-btn arrow-button"></button>
@@ -75,6 +75,7 @@ export default class CurrentColorSets extends UIElement {
 
     [CLICK('$colorSetsColorList .color-item')] (e, $dt) {
         this.parent.initColor($dt.attr('data-color'));
+        this.parent.lastUpdateColor()
     }
 
 }

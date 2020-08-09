@@ -25,20 +25,6 @@ const REFERENCE_PROPERTY = "ref";
 const TEMP_DIV = Dom.create("div");
 const QUERY_PROPERTY = `[${REFERENCE_PROPERTY}]`;
 
-export const splitMethodByKeyword = (arr, keyword) => {
-  var filterKeys = arr.filter(code => code.indexOf(`${keyword}(`) > -1);
-  var filterMaps = filterKeys.map(code => {
-    var [target, param] = code
-      .split(`${keyword}(`)[1]
-      .split(")")[0]
-      .trim()
-      .split(" ");
-
-    return { target, param };
-  });
-
-  return [filterKeys, filterMaps];
-};
 
 // collectProps 에서 제외될 메소드 목록 
 const expectMethod = {
@@ -337,7 +323,9 @@ export default class EventMachine {
 
     this._loadMethods
     .filter(callbackName => {
-      const elName = callbackName.split(LOAD_SAPARATOR)[1].split(CHECK_SAPARATOR)[0];
+      const elName = callbackName.split(LOAD_SAPARATOR)[1]
+                                 .split(CHECK_SAPARATOR)
+                                 .map(it => it.trim())[0];
       if (!args.length) return true; 
       return args.indexOf(elName) > -1
     })

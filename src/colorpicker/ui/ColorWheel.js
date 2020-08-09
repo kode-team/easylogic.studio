@@ -194,6 +194,7 @@ export default class ColorWheel extends UIElement {
   // Event Bindings
   [POINTEREND("document")](e) {
     this.isDown = false;
+
   }
 
   [POINTERMOVE("document")](e) {

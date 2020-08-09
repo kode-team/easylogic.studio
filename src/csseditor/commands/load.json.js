@@ -1,4 +1,4 @@
-import _refreshSelection from "./_refreshSelection";
+import _doForceRefreshSelection from "./_doForceRefreshSelection";
 
 const createItem = (editor, obj) => {
 
@@ -51,7 +51,7 @@ export default {
             }
 
             editor.load(projects);
-            _refreshSelection(editor)            
+            _doForceRefreshSelection(editor)
         } else {
             // 아무 것도 없을 때는 artboard 하나를 자동으로 만들어준다. 
             editor.emit('addArtBoard');

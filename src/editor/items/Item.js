@@ -211,7 +211,7 @@ export class Item {
     return true;
   }
 
-  toCloneObject () {
+  toCloneObject (isDeep = true) {
     var json = {
       itemType: this.json.itemType,
       elementType: this.json.elementType,
@@ -219,7 +219,10 @@ export class Item {
       visible: this.json.visible,  // 보이기 여부 설정 
       lock: this.json.lock,    // 편집을 막고 
       selected: this.json.selected,  // 선택 여부 체크 
-      layers: this.json.layers.map(layer => layer.clone())
+    }
+
+    if (isDeep) {
+      json.layers = this.json.layers.map(layer => layer.cloneItem(isDeep))
     }
 
     return json; 
@@ -228,14 +231,14 @@ export class Item {
   /**
    * clone Item
    */
-  clone() {
+  cloneItem(isDeep = true) {
 
     var ItemClass = this.constructor;
 
 
     // 클론을 할 때 꼭 부모 참조를 넘겨줘야 한다. 
     // 그렇지 않으면 screenX, Y 에 대한 값을 계산할 수가 없다. 
-    var item =  new ItemClass(this.toCloneObject());
+    var item =  new ItemClass(this.toCloneObject(isDeep));
     item.parent =   this.json.parent
 
     return item; 

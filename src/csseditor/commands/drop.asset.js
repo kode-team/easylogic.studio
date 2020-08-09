@@ -1,4 +1,4 @@
-import _refreshSelection from "./_refreshSelection"
+import _doForceRefreshSelection from "./_doForceRefreshSelection"
 
 export default {
     command: 'drop.asset',
@@ -12,6 +12,6 @@ export default {
             editor.emit('addBackgroundImageAsset', obj.imageUrl, id)
         }
 
-        _refreshSelection(editor, true);
+        _doForceRefreshSelection(editor, true);
     }
 }

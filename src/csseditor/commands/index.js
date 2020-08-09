@@ -88,11 +88,26 @@ import itemMoveDepthDown from "./item.move.depth.down";
 import itemMoveDepthUp from "./item.move.depth.up";
 import groupItem from "./group.item";
 import ungroupItem from "./ungroup.item";
+import historySetAttribute from "./history.setAttribute";
+import historyRedo from "./history.redo";
+import historyUndo from "./history.undo";
+import refreshSelection from "./refreshSelection";
+import historyRefreshSelection from "./history.refreshSelection";
+
+
 
 export default {
+    // history + command  
+    historySetAttribute,
+    historyRefreshSelection,
+    historyRedo,
+    historyUndo,
+
+    // command 
     groupItem,
     ungroupItem,
     setEditorLayout,
+    refreshSelection,
     refreshArtboard,
     resetSelection,
     addBackgroundColor,

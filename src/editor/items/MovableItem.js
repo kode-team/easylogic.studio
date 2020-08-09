@@ -27,13 +27,17 @@ export class MovableItem extends Item {
         return false; 
     }
 
-    toCloneObject() {
+    toCloneObject(isDeep = true) {
         return {
-            ...super.toCloneObject(),
+            ...super.toCloneObject(isDeep),
             x: this.json.x + '',
             y: this.json.y + '',
             width: this.json.width + '',
-            height: this.json.height + ''
+            height: this.json.height + '',
+            screenX: this.screenX,
+            screenY: this.screenY,
+            screenWidth: this.screenWidth,
+            screenHeight: this.screenHeight
         }
     }
 

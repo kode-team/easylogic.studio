@@ -237,15 +237,16 @@ export default class ElementView extends UIElement {
                 }
     
                 if (items.length) {
-                    this.emit('refreshSelection')
+                    // this.emit('refreshSelection')
                 } else {
                     this.$selection.select();
-                    this.emit('emptySelection')
+                    // this.emit('emptySelection')
                 }                
             } else {
                 this.$selection.select();                
-                this.emit('emptySelection')            
+                // this.emit('emptySelection')            
             }
+            this.emit('history.refreshSelection')
         }
 
         this.sendHelpMessage();
@@ -353,7 +354,7 @@ export default class ElementView extends UIElement {
 
         this.selectCurrent(...this.$selection.items)
         this.$selection.setRectCache()
-        this.emit('refreshSelection');
+        this.emit('history.refreshSelection');
         this.children.$selectionTool.initMoveType();
     }
 

@@ -1,6 +1,6 @@
 import UIElement, { EVENT } from "../../../util/UIElement";
 
-import { LOAD } from "../../../util/Event";
+import { LOAD, VDOM } from "../../../util/Event";
 import Dom from "../../../util/Dom";
 import { CSS_TO_STRING, isArray, isString } from "../../../util/functions/func";
 import { Project } from "../../../editor/items/Project";
@@ -171,7 +171,7 @@ export default class StyleView extends UIElement {
     `
   }
 
-  [LOAD('$svgArea')] () {
+  [LOAD('$svgArea') + VDOM] () {
 
     var project = this.$selection.currentProject || {  }
 

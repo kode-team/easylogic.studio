@@ -1,5 +1,6 @@
 import { ComponentManager } from "../manager/ComponentManager";
 import { TimelineItem } from "./TimelineItem";
+import { SVGFilter } from "../svg-property/SVGFilter";
 
 export class Project extends TimelineItem {
   getDefaultTitle() {
@@ -52,6 +53,25 @@ export class Project extends TimelineItem {
   get html () {
     return this.artboards.map(it => it.html).join('\n\n');
   }
+
+ 
+  toSVGString () {
+
+    var filterString = this.json.svgfilters.map(svgfilter => {
+
+      var filters = svgfilter.filters.map(filter => {
+        return SVGFilter.parse(filter);
+      })
+
+      return /*html*/`<filter id='${svgfilter.id}'>
+  ${filters.join('\n')}
+</filter>
+`
+
+    }).join('\n\n')
+
+    return filterString
+  }  
 }
 
 ComponentManager.registerComponent('project', Project);

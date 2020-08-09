@@ -453,6 +453,7 @@ export default class SVGFilterEditor extends UIElement {
           <NumberRangeEditor 
             ref='$numberrange${objectId}' 
             label="${s.title}" 
+            layout='block'             
             min="${s.min}"
             max="${s.max}"
             step="${s.step}"

@@ -36,13 +36,20 @@ export default class ColorPickerPopup extends BasePopup {
 
   }
 
- 
+  updateEndData(opt = {}) {
+    this.setState(opt, false);
+
+    if (this.state.target) {
+      this.state.target.trigger(this.state.changeEndEvent, this.state.color, this.params);
+    }
+
+  }
 
   getBody() {
     return /*html*/`
       <div class="color-picker-popup">
         <div class='box'>
-          <EmbedColorPicker ref='$color' value='${this.state.color}' onchange='changeColor' />
+          <EmbedColorPicker ref='$color' value='${this.state.color}' onchange='changeColor' onchangeend="changeEndColor" />
         </div>
       </div>
     `;
@@ -73,6 +80,12 @@ export default class ColorPickerPopup extends BasePopup {
       color
     })
   }
+
+  [EVENT('changeEndColor')] (color) {
+    this.updateEndData({
+      color
+    })
+  }  
 
   [EVENT("showColorPickerPopup")](data, params) {
     data.changeEvent = data.changeEvent || 'changeFillPopup'

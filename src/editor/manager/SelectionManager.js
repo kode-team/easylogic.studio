@@ -24,8 +24,9 @@ function _traverse(obj, id) {
 }
 
 export class SelectionManager {
-  constructor() {
+  constructor(editor) {
 
+    this.$editor = editor; 
     this.project = null;
     this.artboard = null;
     this.items = [];
@@ -41,6 +42,13 @@ export class SelectionManager {
     this.itemKeys = {} 
     this.ids = []; 
     this.idsString = '';   
+  }
+
+  snapshot() {
+    const selection = new SelectionManager(this.$editor);
+    selection.select(this.cachedItems);
+
+    this.$editor.history.add('selection', 'selection', { selection })
   }
 
   /**
@@ -172,23 +180,27 @@ export class SelectionManager {
 
   itemsByIds(ids = null) {
     if (isArray(ids)) {
-      return _traverse(this.artboard, ids)
+      return _traverse(this.project, ids)
     } else if (isString(ids) || isObject(ids)) {
-      return _traverse(this.artboard, [ids]);
+      return _traverse(this.project, [ids]);
     } else {
       return this.items;
     }
   }
 
+  /**
+   * 
+   * @param {Item|Item[]} id 
+   */
   selectById(id) {
-    this.select(... _traverse(this.artboard, id))
+    this.select(... _traverse(this.project, id))
   }
 
   addById(id) {
 
     if (this.itemKeys[id]) return;
 
-    this.select(...this.items, ... _traverse(this.artboard, id))
+    this.select(...this.items, ... _traverse(this.project, id))
   }  
 
   removeById(id) {
@@ -203,17 +215,48 @@ export class SelectionManager {
     }
   }
 
-  setRectCache (isCache = true) {
+  doCache () {
+    this.items.forEach(item => {
+      item.setCache();
+    })
+  }
+
+  setRectCache () {
     
     this.cachedItems = this.items.map(it => {
-      // Layer 마다 캐쉬 할게 있으면 캐쉬 하고 
-      if (isCache) it.setCache();
       // 최종 결과물을 clone 한다. 
       // 이렇게 하는 이유는 복합 객체의 넓이 , 높이르 바꿀 때 실제 path 의 각각의 point 도 바뀌어야 하기 때문이다. 
-      return it.clone()
+      return it.toCloneObject()
     })
 
     this.setAllRectCache();
+  }
+
+  // 객체 속성만 클론 
+  // 부모, 자식은 클론하지 않음. 
+  // 부모 자식은, 객체가 추가 삭제시만 필요 
+  toCloneObject () {
+    let data = {};
+
+    this.each(item => {
+      data[item.id] = item.toCloneObject(false);
+    })
+
+    return data;     
+  }
+
+  cloneValue (...keys) {
+    let data = {};
+
+    this.each(item => {
+      data[item.id] = {}
+
+      keys.forEach(key => {
+        data[item.id][key] = item[key];
+      })
+    })
+
+    return data; 
   }
 
   setAllRectCache () {
@@ -228,8 +271,8 @@ export class SelectionManager {
       minX = Math.min(it.screenX.value, minX);
       minY = Math.min(it.screenY.value, minY);
 
-      maxX = Math.max(it.screenX2.value, maxX);
-      maxY = Math.max(it.screenY2.value, maxY);      
+      maxX = Math.max(it.screenX.value + it.screenWidth.value, maxX);
+      maxY = Math.max(it.screenY.value + it.screenHeight.value, maxY);      
     })
 
     if (minX === Number.MAX_SAFE_INTEGER) minX = 0;
@@ -237,12 +280,12 @@ export class SelectionManager {
     if (maxX === Number.MIN_SAFE_INTEGER) maxX = 0;
     if (maxY === Number.MIN_SAFE_INTEGER) maxY = 0;
 
-    this.allRect = new AreaItem({
-      x: Length.px(minX),
-      y: Length.px(minY),
-      width: Length.px(maxX - minX),
-      height: Length.px(maxY - minY)
-    })
+    this.allRect = {
+      x: minX,
+      y: minY,
+      width: maxX - minX,
+      height: maxY - minY
+    }
 
   }
 

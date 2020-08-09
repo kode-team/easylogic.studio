@@ -1,6 +1,4 @@
 import BaseProperty from "./BaseProperty";
-import { EVENT } from "../../../util/UIElement";
-import { DEBOUNCE } from "../../../util/Event";
 import menuItems from "../menu-items";
 
 export default class AlignmentProperty extends BaseProperty {

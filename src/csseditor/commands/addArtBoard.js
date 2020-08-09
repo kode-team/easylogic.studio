@@ -1,4 +1,4 @@
-import _refreshSelection from "./_refreshSelection";
+import _doForceRefreshSelection from "./_doForceRefreshSelection";
 import { Length } from "../../editor/unit/Length";
 
 export default function addArtBoard (editor, obj = {}) {
@@ -21,6 +21,6 @@ export default function addArtBoard (editor, obj = {}) {
     editor.selection.selectArtboard(artboard);
     editor.selection.select(artboard);
 
-    _refreshSelection(editor)
+    _doForceRefreshSelection(editor)
 
 }

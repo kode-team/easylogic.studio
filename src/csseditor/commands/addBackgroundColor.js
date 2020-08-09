@@ -1,4 +1,4 @@
-import _refreshSelection from "./_refreshSelection";
+import _doForceRefreshSelection from "./_doForceRefreshSelection";
 
 export default {
     command: 'addBackgroundColor',
@@ -8,6 +8,6 @@ export default {
             editor.emit('setAttribute', { 'background-color': color }, item.id)
         })
 
-        _refreshSelection(editor, true);
+        _doForceRefreshSelection(editor, true);
     }
 }

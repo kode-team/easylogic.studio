@@ -2,15 +2,13 @@ import BaseProperty from "./BaseProperty";
 import {
   LOAD,
   CLICK,
-  DROP,
-  DRAGSTART,
-  PREVENT,
-  DRAGOVER,
-  DEBOUNCE
+  DEBOUNCE,
+  VDOM
 } from "../../../util/Event";
 import { EVENT } from "../../../util/UIElement";
 import icon from "../icon/icon";
-import { getPredefinedCubicBezier } from "../../../util/functions/bezier";
+import { Animation } from "../../../editor/css-property/Animation";
+import { curveToPath } from "../../../util/functions/func";
 
 export default class AnimationProperty extends BaseProperty {
   getTitle() {
@@ -26,24 +24,27 @@ export default class AnimationProperty extends BaseProperty {
     `;
   }
 
-  [LOAD("$animationList")]() {
+
+  [LOAD("$animationList") + VDOM]() {
     var current = this.$selection.current;
 
     if (!current) return '';
 
-    return current.animations.map((it, index) => {
+    return Animation.parseStyle(current.animation).map((it, index) => {
 
-      const selectedClass = it.selected ? "selected" : "";
-
-      if (it.selected) {
-        this.selectedIndex = index;
-      }
+      const selectedClass = this.state.selectedIndex === index ? "selected" : "";
+      const path = curveToPath(it.timingFunction, 30, 30)
 
       return /*html*/`
       <div class='animation-group-item'>
-        <div class='animation-item ${selectedClass}' data-index='${index}' ref="animationIndex${index}" draggable='true' >
+        <div class='animation-item ${selectedClass}' 
+             data-index='${index}' 
+             ref="animationIndex${index}" 
+          >
             <div class='timing preview' data-index='${index}' ref='$preview${index}'>
-              <canvas class='item-canvas' ref='$itemCanvas${index}' width="30px" height="30px"></canvas>
+              <svg class='item-canvas' width="30" height="30" viewBox="0 0 30 30">
+                <path d="${path}" stroke="white" stroke-width="1" fill='none' />
+              </svg>
             </div>
             <div class='name'>
               <div class='title' ref="animationName${index}">
@@ -72,93 +73,24 @@ export default class AnimationProperty extends BaseProperty {
     });
   }
 
-  drawBezierCanvas($canvas, currentBezier) {
-
-    currentBezier = getPredefinedCubicBezier(currentBezier)
-
-    $canvas.update(() => {
-        var width = $canvas.width();
-        var height = $canvas.height();
-        var context = $canvas.context();
-
-        context.lineWidth = 2;
-        context.strokeStyle = 'white';
-
-        context.beginPath();
-        context.moveTo(0,height);   
-        context.bezierCurveTo( 
-            currentBezier[0] * width, 
-            currentBezier[1] == 0 ? height : (1 - currentBezier[1]) * height, 
-            currentBezier[2] * width, 
-            currentBezier[3] == 1 ? 0 : (1 - currentBezier[3] ) * height, 
-            width, 
-            0
-        );
-        context.stroke();
-    })
-}
-
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
     this.refreshShowIsNot('project');
     this.emit("hideAnimationPropertyPopup");
-  }
-
-  refresh() {
-    this.load();
-    this.refreshTimingFunctionCanvas()
-  }
-
-  refreshTimingFunctionCanvas() {
-    var current = this.$selection.current;
-
-    if (!current) return;
-
-    current.animations.forEach( (it, index) => {
-      var $canvas = this.getRef('$itemCanvas', index);
-      this.drawBezierCanvas($canvas, it.timingFunction);
-    })
   }
 
   [CLICK("$add")](e) {
     var current = this.$selection.current;
 
     if (current) {
-      current.createAnimation({
-        name: null
-      });
+
+      current.reset({
+        animation: Animation.add(current.animation, { name: null })
+      })
+
       this.emit("refreshElement", current);
     }
 
     this.refresh();
-
-    this.emit('refreshInspector');
-  }
-
-  [DRAGSTART("$animationList .animation-item")](e) {
-    this.startIndex = +e.$dt.attr("data-index");
-  }
-
-  
-  [DRAGOVER("$animationList .animation-item") + PREVENT](e) {}
-
-  [DROP("$animationList .animation-item") + PREVENT](e) {
-    var targetIndex = +e.$dt.attr("data-index");
-    var current = this.$selection.current;
-    if (!current) return;
-
-    this.selectItem(this.startIndex, true);
-    current.sortAnimation(this.startIndex, targetIndex);
-
-    this.emit("refreshElement", current);
-
-    this.refresh();
-
-    
-    this.viewAnimationPicker(this.getRef('$preview', this.selectedIndex));
-  }
-
-  getCurrentAnimation() {
-    return this.current.animations[this.selectedIndex];
   }
 
   [CLICK("$animationList .tools .del")](e) {
@@ -166,7 +98,9 @@ export default class AnimationProperty extends BaseProperty {
     var current = this.$selection.current;
     if (!current) return;
 
-    current.removeAnimation(removeIndex);
+    current.reset({
+      animation: Animation.remove(current.animation, removeIndex)
+    })  
 
     this.emit("refreshElement", current);
 
@@ -179,11 +113,16 @@ export default class AnimationProperty extends BaseProperty {
     var current = this.$selection.current;
     if (!current) return; 
 
-    var animation = current.animations[index]
+    const list = Animation.parseStyle(current.animation);
+    var animation = list[index]
     if (animation) {
       animation.togglePlayState();
 
       e.$dt.attr('data-play-state-selected-value', animation.playState)
+
+      current.reset({
+        animation: Animation.join(list)
+      })
 
       this.emit("refreshElement", current);
     }
@@ -196,12 +135,6 @@ export default class AnimationProperty extends BaseProperty {
     } else {
       this.refs[`animationIndex${selectedIndex}`].removeClass("selected");
     }
-
-    if (this.current) {
-      this.current.animations.forEach((it, index) => {
-        it.selected = index === selectedIndex;
-      });
-    }
   }
 
   viewAnimationPicker($preview) {
@@ -210,47 +143,22 @@ export default class AnimationProperty extends BaseProperty {
     }
 
     this.selectedIndex = +$preview.attr("data-index");
-    this.selectItem(this.selectedIndex, true);
     this.current = this.$selection.current;
 
     if (!this.current) return;
-    this.currentAnimation = this.current.animations[
-      this.selectedIndex
-    ];
+    this.currentAnimation = Animation.get(this.current.animation, this.selectedIndex);
 
     this.viewAnimationPropertyPopup();
   }
 
-  viewAnimationPropertyPopup(position) {
-    this.current = this.$selection.current;
+  viewAnimationPropertyPopup() {
+    if (!this.currentAnimation) return;
 
-    if (!this.current) return;
-    this.currentAnimation = this.current.animations[
-      this.selectedIndex
-    ];
-
-    const back = this.currentAnimation;
-
-   
-    const name = back.name
-    const direction = back.direction
-    const duration = back.duration
-    const timingFunction = back.timingFunction
-    const delay = back.delay
-    const iterationCount = back.iterationCount
-    const playState = back.playState
-    const fillMode = back.fillMode
-
+    const animation = this.currentAnimation;
     this.emit("showAnimationPropertyPopup", {
-      name,
-      position,
-      direction,
-      duration,
-      timingFunction,
-      delay,
-      iterationCount,
-      playState,
-      fillMode
+      changeEvent: 'changeAnimationPropertyPopup',
+      data: animation.toCloneObject(),
+      instance: this  
     });
   }
 
@@ -262,39 +170,20 @@ export default class AnimationProperty extends BaseProperty {
     return this.refs[args.join("")];
   }
 
-  refreshAnimationPropertyInfo(image, data) {
-    if (data.name) {
-      var $element = this.getRef(`animationName`, this.selectedIndex);
-      $element.text(data.name);
-    } else if (data.width || data.height || data.size) {
-      var $element = this.getRef(`size`, this.selectedIndex);
-
-      switch (image.size) {
-        case "contain":
-        case "cover":
-          var text = image.size;
-          break;
-        default:
-          var text = `${image.width}/${image.height}`;
-          break;
-      }
-      $element.text(text);
-    } else if (data.repeat) {
-      var $element = this.getRef(`repeat`, this.selectedIndex);
-      $element.text(data.repeat);
-    } else if (data.timingFunction) {
-      this.drawBezierCanvas(this.getRef('$itemCanvas', this.selectedIndex), data.timingFunction);
-    }
-  }
-
   [EVENT("changeAnimationPropertyPopup")](data) {
+
     if (this.currentAnimation) {
+
       this.currentAnimation.reset({ ...data });
 
       if (this.current) {
+
+        this.current.reset({
+          animation: Animation.replace(this.current.animation, this.selectedIndex, this.currentAnimation)
+        })
+
         this.emit("refreshElement", this.current);        
         this.refresh();
-
       }
     }
   }
