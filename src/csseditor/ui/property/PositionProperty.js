@@ -58,7 +58,7 @@ export default class PositionProperty extends BaseProperty {
 
   [EVENT('changRangeEditor')] (key, value) {
 
-    this.emit('setAttribute', { 
+    this.command('setAttribute', { 
       [key]: value
     })
 

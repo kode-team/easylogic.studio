@@ -49,7 +49,7 @@ export default class TextShadowProperty extends BaseProperty {
 
   [EVENT("changeTextShadow")](textshadow) {
 
-    this.emit('setAttribute', { 
+    this.command('setAttribute', { 
       'text-shadow': textshadow
     })
   }

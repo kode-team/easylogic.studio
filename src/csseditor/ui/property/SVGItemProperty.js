@@ -213,13 +213,13 @@ export default class SVGItemProperty extends BaseProperty {
   }
 
   [CLICK('$motionBased')] () {
-    this.emit('setAttribute', { 
+    this.command('setAttribute', { 
       'motion-based': this.refs.$motionBased.checked()
     })      
   }
 
   [EVENT('changeValue')] (key, value, params) {
-    this.emit('setAttribute', { 
+    this.command('setAttribute', { 
       [key]: value
     }, null, true)
   }

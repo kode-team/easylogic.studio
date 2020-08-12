@@ -49,7 +49,7 @@ export default class PerspectiveProperty extends BaseProperty {
 
   [EVENT('changePerspective')] (key, value) {
 
-    this.emit('setAttribute', { 
+    this.command('setAttribute', { 
       [key]: value
     })
   }

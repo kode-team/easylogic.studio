@@ -1,6 +1,3 @@
-import { BackgroundImage } from "../../editor/css-property/BackgroundImage";
-import { STRING_TO_CSS, CSS_TO_STRING } from "../../util/functions/func";
-import _doForceRefreshSelection from "./_doForceRefreshSelection";
 import { Pattern } from "../../editor/css-property/Pattern";
 
 export default {
@@ -8,13 +5,18 @@ export default {
     execute: function (editor, pattern, id = null) {
 
         var items = editor.selection.itemsByIds(id);
+        let itemsMap = {} 
         items.forEach(item => {
-            editor.emit('setAttribute', {
-                pattern: Pattern.join([...Pattern.parseStyle(pattern), ...Pattern.parseStyle(item.pattern)])
-            }, item.id)
-            
+
+            itemsMap[item.id] = {
+                pattern: Pattern.join([
+                    ...Pattern.parseStyle(pattern), 
+                    ...Pattern.parseStyle(item.pattern)
+                ])
+            }
         })
 
-        _doForceRefreshSelection(editor, true);
+        editor.emit('history.setAttributeForMulti', itemsMap);     
+
     }
 }

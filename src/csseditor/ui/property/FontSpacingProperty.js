@@ -71,7 +71,7 @@ export default class FontSpacingProperty extends BaseProperty {
       value = Length.number(value.value)
     }
 
-    this.emit('setAttribute', { 
+    this.command('setAttribute', { 
       [key]: value
     })
   }

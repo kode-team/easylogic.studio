@@ -49,7 +49,7 @@ export default class TransformOriginProperty extends BaseProperty {
 
   [EVENT('changeTransformOrigin')] (value) {
 
-    this.emit('setAttribute', { 
+    this.command('setAttribute', { 
       'transform-origin': value 
     })
   }

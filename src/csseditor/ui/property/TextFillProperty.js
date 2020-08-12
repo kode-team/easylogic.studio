@@ -62,6 +62,6 @@ export default class TextFillProperty extends BaseProperty {
   }
 
   [EVENT('changeRangeEditor')] (key, value) {
-    this.emit('setAttribute', { [key]: value })
+    this.command('setAttribute', { [key]: value })
   }
 }

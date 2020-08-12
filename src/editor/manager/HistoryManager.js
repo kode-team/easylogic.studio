@@ -40,6 +40,27 @@ export class HistoryManager {
         return result;
     }
 
+    getUndoValuesForMulti (multiAttrs = {}) {
+        let result = {}
+        const items = this.$editor.selection.itemsByIds(Object.keys(multiAttrs));
+
+        let itemsMap = {} 
+        items.forEach(it => {
+            itemsMap[it.id] = it; 
+        })
+
+        Object.keys(multiAttrs).forEach(id => {
+            result[id] = {}
+            const attrs = multiAttrs[id]
+
+            Object.keys(attrs).forEach(key => {
+                result[id][key] = itemsMap[id][key]
+            })
+        })
+
+        return result;
+    }    
+
     add (message, command, data) {
         this.undoHistories.push({ message, command, data })
         this.currentIndex++; 

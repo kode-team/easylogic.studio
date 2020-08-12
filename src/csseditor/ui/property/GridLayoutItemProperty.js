@@ -98,11 +98,14 @@ export default class GridLayoutItemProperty extends BaseProperty {
 
   [EVENT('changeGridItem')] (key, value) {
 
-    this.emit('setAttribute', { 
+    this.command('setAttribute', { 
       'grid-layout-item': this.getGridValue()
     })
 
-    this.emit('refreshAllElementBoundSize')
+    this.nextTick(() => {
+      this.emit('refreshAllElementBoundSize')
+    })
+
   }
 
   [EVENT('changeLayoutType')] (key, value) {
@@ -114,14 +117,17 @@ export default class GridLayoutItemProperty extends BaseProperty {
       value = this.getGridValue()
     }
 
-    this.emit('setAttribute', { 
+    this.command('setAttribute', { 
       'grid-layout-item': value
     })
 
     // 타입 변화에 따른 하위 아이템들의 설정을 바꿔야 한다. 
     this.refs.$layoutList.attr('data-selected-value', valueType);
 
-    this.emit('refreshAllElementBoundSize')    
+    this.nextTick(() => {
+      this.emit('refreshAllElementBoundSize')    
+    })
+
   }
 
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {

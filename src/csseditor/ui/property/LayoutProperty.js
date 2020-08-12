@@ -50,11 +50,14 @@ export default class LayoutProperty extends BaseProperty {
   }
 
   [EVENT('changeLayoutInfo')] (key, value) {
-    this.emit('setAttribute', { 
+    this.command('setAttribute', { 
       [key]: value
     }, null, false, true)
 
-    this.emit('refreshAllElementBoundSize');    
+    this.nextTick(() => {
+      this.emit('refreshAllElementBoundSize');    
+    })
+
   }
 
   [EVENT('changeLayoutType')] (key, value) {
@@ -63,14 +66,17 @@ export default class LayoutProperty extends BaseProperty {
       [key]: value 
     })
 
-    this.emit('setAttribute', { 
+    this.command('setAttribute', { 
       [key]: value
     }, null, false, true)
 
     this.refresh();
 
-    this.emit('refreshAllElementBoundSize');
-    this.emit('changeItemLayout')
+    this.nextTick(() => {
+      this.emit('refreshAllElementBoundSize');
+      this.emit('changeItemLayout')
+    })
+
   }
 
   [EVENT('refreshSelection')]() {

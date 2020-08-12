@@ -1,13 +1,12 @@
-import _doForceRefreshSelection from "./_doForceRefreshSelection";
-
 export default {
     command: 'addBackgroundColor',
     execute: function (editor, color, id = null) {
         var items = editor.selection.itemsByIds(id);
+        let itemsMap = {} 
         items.forEach(item => {
-            editor.emit('setAttribute', { 'background-color': color }, item.id)
+            itemsMap[item.id] = {'background-color': color}
         })
 
-        _doForceRefreshSelection(editor, true);
+        editor.emit('history.setAttributeForMulti', itemsMap);
     }
 }

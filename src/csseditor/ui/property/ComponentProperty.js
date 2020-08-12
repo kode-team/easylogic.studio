@@ -140,7 +140,7 @@ export default class ComponentProperty extends BaseProperty {
 
   [EVENT('changeComponentProperty')] (key, value) {
 
-    this.emit("setAttribute", {
+    this.command("setAttribute", {
       [key]: value
     }, null, true)
   }

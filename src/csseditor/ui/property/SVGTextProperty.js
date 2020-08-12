@@ -98,7 +98,7 @@ export default class SVGTextProperty extends BaseProperty {
 
   [EVENT('changeTextValue')] (key, value) {
 
-    this.emit('setAttribute', { 
+    this.command('setAttribute', { 
       [key]: value
     }, null, true)
   }

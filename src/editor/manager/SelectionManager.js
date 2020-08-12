@@ -1,4 +1,4 @@
-import { isFunction, isUndefined, isArray, isObject, isString } from "../../util/functions/func";
+import { isFunction, isUndefined, isArray, isObject, isString, clone } from "../../util/functions/func";
 import { Length } from "../unit/Length";
 import AreaItem from "../items/AreaItem";
 
@@ -186,6 +186,15 @@ export class SelectionManager {
     } else {
       return this.items;
     }
+  }
+
+  makeItemMap (attrs) {
+    let itemMap = {} 
+    this.ids.forEach(id => {
+      itemMap[id] = clone(attrs)
+    })
+
+    return itemMap;
   }
 
   /**

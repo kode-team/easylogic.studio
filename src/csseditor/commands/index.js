@@ -93,12 +93,15 @@ import historyRedo from "./history.redo";
 import historyUndo from "./history.undo";
 import refreshSelection from "./refreshSelection";
 import historyRefreshSelection from "./history.refreshSelection";
+import setAttributeForMulti from "./setAttributeForMulti";
+import historySetAttributeForMulti from "./history.setAttributeForMulti";
 
 
 
 export default {
     // history + command  
     historySetAttribute,
+    historySetAttributeForMulti,    
     historyRefreshSelection,
     historyRedo,
     historyUndo,
@@ -187,6 +190,7 @@ export default {
     resizeArtBoard,
     selectArtboard,
     setAttribute,  
+    setAttributeForMulti,
     sortBottom,
     sortCenter,
     sortLeft,

@@ -104,7 +104,7 @@ export default class FilterProperty extends BaseProperty {
 
   [EVENT('changeFilterEditor')] (filter) {
 
-    this.emit('setAttribute', { 
+    this.command('setAttribute', { 
       filter 
     })
   }

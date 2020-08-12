@@ -6,6 +6,7 @@ export default {
     command: 'addBackgroundImageGradient',
     execute: function (editor, gradient, id = null) {
         var items = editor.selection.itemsByIds(id);
+        let itemsMap = {} 
         items.forEach(item => {
             let images = BackgroundImage.parseStyle(STRING_TO_CSS(item['background-image']));
 
@@ -13,9 +14,11 @@ export default {
                 image: BackgroundImage.parseImage(gradient)
             }))
 
-            editor.emit('setAttribute', { 'background-image': BackgroundImage.join(images) }, item.id)
+            itemsMap[item.id] = {
+                'background-image': BackgroundImage.join(images)
+            }
         })
 
-        _doForceRefreshSelection(editor, true);
+        editor.emit('history.setAttributeForMulti', itemsMap);              
     }
 }

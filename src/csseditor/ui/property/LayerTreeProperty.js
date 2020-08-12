@@ -334,7 +334,7 @@ export default class LayerTreeProperty extends BaseProperty {
       var item = project.searchById(id);      
       e.$dt.attr('data-visible', !item.visible);
 
-      this.emit('setAttribute', {
+      this.command('setAttribute', {
         visible: !item.visible
       }, item.id)
   }
@@ -345,6 +345,7 @@ export default class LayerTreeProperty extends BaseProperty {
       var $item = e.$dt.closest('layer-item')
       var id = $item.attr('data-layer-id');
 
+      // 객체 지우기 command 로 만들어야 함 
       this.$selection.removeById(id);
 
       var item = project.searchById(id);   
@@ -365,16 +366,10 @@ export default class LayerTreeProperty extends BaseProperty {
     
     e.$dt.attr('data-lock', !item.lock);
 
-    this.emit('setAttribute', {
+    this.command('setAttribute', {
       lock: !item.lock
     }, item.id)
   }
-
-  // [EVENT('emptySelection')] () {
-  //   this.refs.$layerList.$$('.selected').forEach(it => {
-  //     it.removeClass('selected')
-  //   })
-  // }
 
   [EVENT('changeSelection')] (isSelection = false) {
     if (isSelection && this.refs.$layerList) {    

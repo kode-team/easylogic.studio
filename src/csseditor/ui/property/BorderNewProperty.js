@@ -41,7 +41,7 @@ export default class BorderNewProperty extends BaseProperty {
   }  
 
   [EVENT('changeKeyValue')] (key, value) {
-    this.emit("setAttribute", { 
+    this.command("setAttribute", { 
       [key]: value
     })
   }

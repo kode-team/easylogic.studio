@@ -72,12 +72,12 @@ export default class PatternProperty extends BaseProperty {
 
   [EVENT('changePatternEditor')] (key, pattern) {
 
-    this.emit('setAttribute', { 
+    this.command('setAttribute', { 
       pattern 
     })
   }
 
-  [EVENT('refreshSelection') + DEBOUNCE(100)] () {
+  [EVENT('refreshSelection')] () {
     this.refreshShow(['artboard', 'rect', 'circle', 'text', 'cube', 'cylinder']);
   }
 

@@ -60,7 +60,7 @@ export default class TextProperty extends BaseProperty {
 
   [EVENT('changeTextValue')] (key, value) {
 
-    this.emit('setAttribute', { 
+    this.command('setAttribute', { 
       [key]: value
     })
   }

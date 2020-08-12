@@ -103,8 +103,8 @@ export default class BackdropFilterProperty extends BaseProperty {
 
   [EVENT('changeFilterEditor')] (filter) {
 
-    this.emit("setAttribute", { 
-      'backdrop-filter' : filter 
+    this.command("setAttribute", {
+      'backdrop-filter': filter
     })
 
   }

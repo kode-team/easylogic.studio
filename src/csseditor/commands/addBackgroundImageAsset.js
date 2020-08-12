@@ -1,13 +1,13 @@
 import { BackgroundImage } from "../../editor/css-property/BackgroundImage";
 import { STRING_TO_CSS, CSS_TO_STRING } from "../../util/functions/func";
 import { URLImageResource } from "../../editor/image-resource/URLImageResource";
-import _doForceRefreshSelection from "./_doForceRefreshSelection";
 
 export default {
     command: 'addBackgroundImageAsset',
     execute: function (editor, url, id = null) {
+        
         var items = editor.selection.itemsByIds(id);
-
+        let itemsMap = {} 
         items.forEach(item => {
             let images = BackgroundImage.parseStyle(STRING_TO_CSS(item['background-image']));
 
@@ -15,11 +15,12 @@ export default {
                 image: new URLImageResource({ url })
             }))
 
-            const value = CSS_TO_STRING(BackgroundImage.toPropertyCSS(images)) 
-
-            editor.emit('setAttribute', { 'background-image': value }, item.id)
+            itemsMap[item.id] = {
+                'background-image': BackgroundImage.join(images)
+            }
         })
 
-        _doForceRefreshSelection(editor, true);        
+        editor.emit('history.setAttributeForMulti', itemsMap);        
+
     }
 }

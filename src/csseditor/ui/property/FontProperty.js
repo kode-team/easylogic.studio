@@ -114,7 +114,7 @@ export default class FontProperty extends BaseProperty {
 
   [EVENT('changeRangeEditor')] (key, value) {
 
-    this.emit('setAttribute', { 
+    this.command('setAttribute', { 
       [key]: value
     })
   }

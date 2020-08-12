@@ -83,6 +83,6 @@ export default class BoxModelProperty extends BaseProperty {
       data[key] = Length.px(this.getRef("$", key).value);
     });
 
-    this.emit("setAttribute", data)    
+    this.command("setAttribute", data)    
   }
 }

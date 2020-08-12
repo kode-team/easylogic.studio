@@ -107,13 +107,13 @@ export default class PathManager extends UIElement {
       this.updateData({
         stroke: color
       })      
-      this.emit('setAttribute', { stroke: color }, null, true)    
+      this.command('setAttribute', { stroke: color }, null, true)    
     }
 
   }
 
   [EVENT('changeValue')] (key, value, params) {
-    this.emit('setAttribute', { 
+    this.command('setAttribute', { 
       [key]: value
     }, null, true)
 
