@@ -56,7 +56,7 @@ export default class PerspectiveOriginProperty extends BaseProperty {
 
   [EVENT('changePerspectiveOrigin')] (value) {
 
-    this.command('setAttribute', { 
+    this.command('setAttribute',  'change perspective origin', { 
       'perspective-origin': value 
     })
   }

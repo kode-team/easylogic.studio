@@ -89,7 +89,7 @@ export default class FlexLayoutItemProperty extends BaseProperty {
 
   [EVENT('changeFlexItem')] (key, value) {
 
-    this.command('setAttribute', { 
+    this.command('setAttribute', 'change flex layout', { 
       'flex-layout-item': this.getFlexValue()
     })
 
@@ -107,7 +107,7 @@ export default class FlexLayoutItemProperty extends BaseProperty {
       value = this.getFlexValue()
     }
 
-    this.command('setAttribute', { 
+    this.command('setAttribute', 'change flex layout', { 
       'flex-layout-item': value
     })
 

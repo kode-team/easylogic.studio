@@ -82,7 +82,7 @@ export default class ClipPathProperty extends BaseProperty {
     var current = this.$selection.current;
     if (!current) return;
 
-    this.command('setAttribute', { 'clip-path': '' }, current.id);    
+    this.command('setAttribute', 'delete clip-path', { 'clip-path': '' }, current.id);    
     this.refresh();    
     this.emit('hideClipPathPopup');    
 
@@ -115,7 +115,7 @@ export default class ClipPathProperty extends BaseProperty {
       current['clip-path'] = this.refs.$clipPathSelect.value;
 
       
-      this.command("setAttribute", {
+      this.command("setAttribute", 'change clip-path', {
         'clip-path':  this.refs.$clipPathSelect.value
       }, current.id);
     }
@@ -169,7 +169,7 @@ export default class ClipPathProperty extends BaseProperty {
 
     this.refresh();
 
-    this.command('setAttribute', {
+    this.command('setAttribute', 'change clip-path', {
       'clip-path': `path(${data.d})`
     }, null, true);
   }
@@ -182,7 +182,7 @@ export default class ClipPathProperty extends BaseProperty {
     current.reset(data); 
 
     this.refresh();
-    this.command('setAttribute', data, current.id);        
+    this.command('setAttribute', 'change clip-path', data, current.id);        
   }
 
 }

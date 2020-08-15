@@ -55,7 +55,7 @@ export default class DisplayProperty extends BaseProperty {
 
   [EVENT('changRangeEditor')] (key, value) {
 
-    this.command('setAttribute', { 
+    this.command('setAttribute', 'change display', { 
       [key]: value
     })
   }

@@ -233,8 +233,6 @@ export class SelectionManager {
   setRectCache () {
     
     this.cachedItems = this.items.map(it => {
-      // 최종 결과물을 clone 한다. 
-      // 이렇게 하는 이유는 복합 객체의 넓이 , 높이르 바꿀 때 실제 path 의 각각의 point 도 바뀌어야 하기 때문이다. 
       return it.toCloneObject()
     })
 

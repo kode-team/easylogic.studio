@@ -1,10 +1,10 @@
 export default {
     command : 'history.setAttributeForMulti',
-    execute: function (editor, multiAttrs = {}, isChangeFragment = false, isBoundSize = false) {
+    execute: function (editor, message, multiAttrs = {}, isChangeFragment = false, isBoundSize = false) {
 
         editor.emit('setAttributeForMulti', multiAttrs, isChangeFragment, isBoundSize)
 
-        editor.history.add('set attribute for multi', this, {
+        editor.history.add(message, this, {
             currentValues: [multiAttrs, isChangeFragment, isBoundSize],
             undoValues: editor.history.getUndoValuesForMulti(multiAttrs)
         })
@@ -17,7 +17,8 @@ export default {
     redo: function (editor, {currentValues}) {
         editor.emit('setAttributeForMulti', ...currentValues)
         editor.nextTick(() => {
-            editor.emit('refreshAll');
+            editor.selection.reselect();            
+            editor.emit('refreshAll');         
         })
 
     },
@@ -29,6 +30,8 @@ export default {
         items.forEach(item => {
             item.reset(undoValues[item.id]);
         })
+        editor.selection.reselect();
+
         editor.nextTick(() => {
             editor.emit('refreshAll');
         })

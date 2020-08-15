@@ -6,8 +6,12 @@
  */
 export default function refreshArtboard (editor) {
     editor.emit('refreshLayerTreeView')    
-    editor.emit('refreshAllCanvas', true);
+    editor.emit('refreshAllCanvas');
     editor.emit('refreshStyleView');
     editor.emit('refreshAllElementBoundSize')   
     editor.emit('refreshSelection');
+    editor.nextTick(() => {
+        editor.emit('refreshSelectionTool');
+    })
+
 }

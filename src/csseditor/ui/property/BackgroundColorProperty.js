@@ -120,7 +120,7 @@ export default class BackgroundColorProperty extends BaseProperty {
   [EVENT('changeRotate')] (key, rotate) {
     const current = this.$selection.current; 
     if (current && current.is('artboard') === false) {
-      this.command('setAttribute', {
+      this.command('setAttribute', "change transform for rotate", {
         transform: (item) => {
           return Transform.replace(item.transform, { 
             type: 'rotateZ', value: [Length.deg(rotate)]
@@ -156,7 +156,7 @@ export default class BackgroundColorProperty extends BaseProperty {
 
 
   [EVENT('changeSelect')] (key, value) {
-    this.command("setAttribute", { 
+    this.command("setAttribute", `change attribute : ${key}`, { 
       [key]: value
     })
   }

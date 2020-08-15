@@ -122,6 +122,12 @@ export default class EventMachine {
     }
   }
 
+  toggleState(key, isLoad = true) {
+    this.setState({
+      [key]: !(this.state[key])
+    }, isLoad)
+  }
+
   _reload(props) {
     this.props = props;
     this.state = {}; 

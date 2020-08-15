@@ -24,7 +24,7 @@ export default class BackgroundClipProperty extends BaseProperty {
   }
 
   [EVENT('changeSelect')] (key, value) {
-      this.command('setAttribute', {
+      this.command('setAttribute', "change background clip", {
         [key]: value
       })
   }

@@ -98,7 +98,7 @@ export default class GridLayoutItemProperty extends BaseProperty {
 
   [EVENT('changeGridItem')] (key, value) {
 
-    this.command('setAttribute', { 
+    this.command('setAttribute', 'change grid layout item', { 
       'grid-layout-item': this.getGridValue()
     })
 
@@ -117,7 +117,7 @@ export default class GridLayoutItemProperty extends BaseProperty {
       value = this.getGridValue()
     }
 
-    this.command('setAttribute', { 
+    this.command('setAttribute', 'change grid layout item', { 
       'grid-layout-item': value
     })
 

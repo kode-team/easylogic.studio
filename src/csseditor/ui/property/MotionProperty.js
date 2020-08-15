@@ -41,7 +41,7 @@ export default class MotionProperty extends BaseProperty {
 
   [EVENT('changRangeEditor')] (key, value) {
     
-    this.command('setAttribute', { 
+    this.command('setAttribute', `change motion attribute : ${key}`, { 
       [key]: value 
     })
 

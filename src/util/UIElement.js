@@ -173,8 +173,15 @@ class UIElement extends EventMachine {
   // history 가 필요한 커맨드는 command 함수를 사용하자. 
   // 마우스 업 상태에 따라서 자동으로 history 커맨드로 분기해준다. 
   // 기존 emit 과 거의 동일하게 사용할 수 있다.   
-  command ($1, $2, $3, $4, $5) {
-    return this.emit(this.$editor.history.createCommand($1), $2, $3, $4, $5);
+  command (command, message, $3, $4, $5, $6) {
+
+    if (this.$editor.isPointerUp) {
+      return this.emit(`history.${command}`, message, $3, $4, $5, $6);
+    } else {
+      return this.emit(command, $3, $4, $5, $6);
+    }
+
+
   }
 
   $theme (key) {

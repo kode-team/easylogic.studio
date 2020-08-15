@@ -61,7 +61,6 @@ export default class RotateEditorView extends UIElement {
                  
         this.bindData('$rotateZ')
         this.emit('refreshSelectionStyleView', null, false, true)
-        this.$selection.setRectCache()
         this.emit('refreshRect');        
 
     }
@@ -100,8 +99,7 @@ export default class RotateEditorView extends UIElement {
         this.$selection.each(item => {
             item.reset({ transform: Transform.remove(item.transform, ['rotateX', 'rotateY']) })
         })
-        this.bindData('$rotateContainer');
-        this.$selection.setRectCache()        
+        this.bindData('$rotateContainer');   
         this.emit('refreshSelectionStyleView', null, false, true)       
         this.emit('refreshRect');        
     }
@@ -125,8 +123,7 @@ export default class RotateEditorView extends UIElement {
 
     }
 
-    moveEndRotateXY (dx, dy) {
-        this.$selection.setRectCache()        
+    moveEndRotateXY (dx, dy) {    
         this.emit('refreshSelectionStyleView')
         this.emit('refreshRect');        
     }
@@ -160,8 +157,7 @@ export default class RotateEditorView extends UIElement {
         this.$selection.each(item => {
             item.reset({ transform: Transform.remove(item.transform, ['rotateZ', 'rotate']) })
         })
-        this.bindData('$rotateZ');             
-        this.$selection.setRectCache()        
+        this.bindData('$rotateZ');               
         this.emit('refreshSelectionStyleView', null, false, true)     
         this.emit('refreshRect');           
     }
@@ -180,7 +176,6 @@ export default class RotateEditorView extends UIElement {
     }
 
     end () {
-        this.$selection.setRectCache()
         this.emit('refreshSelectionStyleView')        
         this.emit('refreshRect');        
     }

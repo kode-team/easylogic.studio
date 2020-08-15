@@ -1,12 +1,10 @@
 export default {
     command : 'history.setAttribute',
-    execute: function (editor, attrs = {}, ids = null, isChangeFragment = false, isBoundSize = false) {
-
-        console.log(attrs);
+    execute: function (editor, message, attrs = {}, ids = null, isChangeFragment = false, isBoundSize = false) {
 
         editor.emit('setAttribute', attrs, ids, isChangeFragment, isBoundSize)
 
-        editor.history.add('set attribute', this, {
+        editor.history.add(message, this, {
             currentValues: [attrs, ids, isChangeFragment, isBoundSize],
             undoValues: editor.history.getUndoValues(attrs)
         })

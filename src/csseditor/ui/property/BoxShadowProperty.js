@@ -49,7 +49,7 @@ export default class BoxShadowProperty extends BaseProperty {
 
   [EVENT("changeBoxShadow")](boxshadow) {
 
-    this.command('setAttribute', { 
+    this.command('setAttribute', 'change box shadow', { 
       'box-shadow': boxshadow
     })
 

@@ -258,16 +258,11 @@ export default class CSSEditor extends UIElement {
   }
 
   [CLICK('$toggleRightButton')] () {
-    this.setState({
-      hideRightPanel: !this.state.hideRightPanel
-    });
-
+    this.toggleState('hideRightPanel');
   }
 
   [CLICK('$toggleLeftButton')] () {
-    this.setState({
-      hideLeftPanel: !this.state.hideLeftPanel
-    });
+    this.toggleState('hideLeftPanel');
   }  
 
   [EVENT('changeTheme')] () {
@@ -293,21 +288,9 @@ export default class CSSEditor extends UIElement {
     this.emit('refreshArtboard')
   }
 
-  // [EVENT('refreshAllSelectArtBoard')] (...args) {      
-  //   this.emit('refreshLayerTreeView')    
-  //   this.emit('refreshAllCanvas', ...args);
-  //   this.emit('refreshStyleView');
-  //   this.emit('refreshAllElementBoundSize')   
-  // }  
-
   [DRAGOVER('$middle') + PREVENT] (e) {}
-
   [DROP('$middle') + PREVENT] (e) {
-
-    var items = Resource.getAllDropItems(e);
-
-    this.emit('fileDropItems', items);
-
+    this.emit('fileDropItems', Resource.getAllDropItems(e));
   }
 
   isNotFormElement(e) {
@@ -316,7 +299,7 @@ export default class CSSEditor extends UIElement {
     if (formElements.includes(tagName)) return false; 
     else if (Dom.create(e.target).attr('contenteditable') === 'true') return false; 
     else if (tagName === 'INPUT' && e.target.type === 'text') return false; 
-    
+
     return true;
   }  
 

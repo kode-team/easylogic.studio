@@ -49,12 +49,12 @@ export default class PerspectiveProperty extends BaseProperty {
 
   [EVENT('changePerspective')] (key, value) {
 
-    this.command('setAttribute', { 
+    this.command('setAttribute', 'change perspective', { 
       [key]: value
     })
   }
 
-  [EVENT('refreshSelection') + DEBOUNCE(100)]() {
+  [EVENT('refreshSelection')]() {
     this.refreshShowIsNot(['project']);
   }
 }

@@ -50,7 +50,7 @@ export default class LayoutProperty extends BaseProperty {
   }
 
   [EVENT('changeLayoutInfo')] (key, value) {
-    this.command('setAttribute', { 
+    this.command('setAttribute', 'change layout info', { 
       [key]: value
     }, null, false, true)
 
@@ -66,7 +66,7 @@ export default class LayoutProperty extends BaseProperty {
       [key]: value 
     })
 
-    this.command('setAttribute', { 
+    this.command('setAttribute', 'change layout type', { 
       [key]: value
     }, null, false, true)
 

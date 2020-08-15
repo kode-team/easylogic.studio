@@ -90,7 +90,7 @@ export default class TransformProperty extends BaseProperty {
   }
 
   [EVENT('changeTransformEditor')] (transform) {
-    this.command('setAttribute', { 
+    this.command('setAttribute', 'change transform property', { 
       transform: (item) => {
         return Transform.replaceAll(item.transform, transform)
       }

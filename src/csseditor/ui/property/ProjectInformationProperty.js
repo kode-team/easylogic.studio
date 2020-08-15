@@ -37,7 +37,7 @@ export default class ProjectInformationProperty extends BaseProperty {
     `;
   }
 
-  [EVENT('refreshProjectList', 'refreshAllSelectProject')] () {
+  [EVENT('refreshProjectList')] () {
     this.refresh();
   }
 

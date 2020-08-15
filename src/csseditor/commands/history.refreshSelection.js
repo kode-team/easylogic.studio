@@ -25,7 +25,11 @@ export default {
         editor.nextTick(() => {
             editor.history.saveSelection()
             editor.emit('refreshSelection');
-            editor.emit('refreshSelectionTool');            
+
+            editor.nextTick(() => {
+                editor.emit('refreshSelectionTool');
+            })
+
         })
     },
 

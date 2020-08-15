@@ -79,9 +79,6 @@ const SelectionToolEvent = class  extends UIElement {
                 current.updatePathItem(pathObject);
 
                 this.parent.selectCurrent(...this.$selection.items)
-
-                this.$selection.setRectCache();        
-                    
                 this.emit('refreshSelectionStyleView', current, true, true);
 
             }
@@ -179,11 +176,7 @@ export default class SelectionToolView extends SelectionToolBind {
 
         this.parent.selectCurrent(...this.$selection.items)
 
-        this.$selection.setRectCache();
-
-        if (this.pointerType != 'move') {   // 크기가 바뀔 때는 영역을 미리 캐슁해둔다. 
-            this.$selection.doCache();
-        }
+        this.$selection.doCache();
 
         this.initSelectionTool();
     }
@@ -239,11 +232,18 @@ export default class SelectionToolView extends SelectionToolBind {
         this.refs.$selectionTool.attr('data-selected-position', '');
         this.refs.$selectionTool.attr('data-selected-movetype', '');
 
-
-        this.$selection.setRectCache();
-
         this.emit('refreshAllElementBoundSize');
         this.emit('removeGuideLine')
+
+
+        this.nextTick(() => {
+            this.command(
+                'setAttributeForMulti', 
+                'move selection pointer',
+                this.$selection.cloneValue('x', 'y', 'width', 'height')
+            );  
+        })
+
     }   
 
     refreshSelectionToolView (dx, dy, type) {
@@ -289,6 +289,7 @@ export default class SelectionToolView extends SelectionToolBind {
     }
 
     initSelectionTool() {
+        this.$selection.reselect();
 
         this.removeOriginalRect();
 

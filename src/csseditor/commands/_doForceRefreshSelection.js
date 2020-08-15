@@ -5,13 +5,8 @@ export default function _doForceRefreshSelection (editor, isSelectedItems = fals
 
     editor.emit('refreshAll')    
 
-    setTimeout(() => {
-        editor.emit('refreshAllElementBoundSize');
-    }, delay)
-
-    setTimeout(() => {
-        editor.emit('refreshSelection');
+    editor.nextTick(() => {
         editor.emit('refreshSelectionTool');       
-    }, delay + delay)    
+    })    
 
 }

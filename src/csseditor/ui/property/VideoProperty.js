@@ -125,20 +125,20 @@ export default class VideoProperty extends BaseProperty {
   [EVENT('changeCurrentTime')] (key, currentTime) {
     this.setState({ currentTime}, false)
     // this.video.currentTime = currentTime;
-    this.command('setAttribute', { currentTime }, null, true);
+    this.command('setAttribute', 'change video property', { currentTime }, null, true);
   }
 
   [EVENT('changePlaybackRate')] (key, playbackRate) {
     this.setState({ playbackRate}, false)
     // this.video.playbackRate = playbackRate;
-    this.command('setAttribute', { playbackRate }, null, true);
+    this.command('setAttribute', 'change video property', { playbackRate }, null, true);
   }
 
   [CHANGEINPUT('$volume')] (e) {
     const volume = Number(this.refs.$volume.value)
     this.setState({ volume }, false)
     this.bindData('$volume_control')
-    this.command('setAttribute', { volume }, null, true);
+    this.command('setAttribute', 'change video property',{ volume }, null, true);
   }
 
   [BIND('$volume_control')] () {
@@ -173,11 +173,11 @@ export default class VideoProperty extends BaseProperty {
   [EVENT('changeValue') + DEBOUNCE(100)] (key, value) {
     if (!this.state.$video) return;
 
-    this.command('setAttribute', { [key]: value }, null, true);
+    this.command('setAttribute', 'change video property',{ [key]: value }, null, true);
   }
 
   [EVENT('changeSelect')] (key, value) {
-    this.command('setAttribute', {
+    this.command('setAttribute', 'change video property',{
       [key]: value,
     });
   }

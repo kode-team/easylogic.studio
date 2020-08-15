@@ -167,7 +167,7 @@ export default class ArtBoardSizeProperty extends BaseProperty {
       width = Length.px(width);
       height = Length.px(height);
 
-      this.command("setAttributeForMulti", { 
+      this.command("setAttributeForMulti", "resize artboard", { 
         [current.id] : { width, height} 
       })
     }

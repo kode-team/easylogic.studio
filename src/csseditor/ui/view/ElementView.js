@@ -292,9 +292,8 @@ export default class ElementView extends UIElement {
         })
 
         this.emit('refreshContent', arr);
-
-        this.$selection.setRectCache()
         this.children.$selectionTool.initMoveType();
+
         this.emit('refreshSelectionTool');        
     }
 
@@ -353,9 +352,9 @@ export default class ElementView extends UIElement {
         // this.renderPointers(this.$element.el);
 
         this.selectCurrent(...this.$selection.items)
-        this.$selection.setRectCache()
-        this.emit('history.refreshSelection');
         this.children.$selectionTool.initMoveType();
+
+        this.emit('history.refreshSelection');        
     }
 
     renderPointers () {
@@ -371,6 +370,7 @@ export default class ElementView extends UIElement {
         this.children.$selectionTool.refreshSelectionToolView(dx, dy, 'move');
         this.updateRealPosition();   
 
+        // TODO: DOM 위치 산정은 나중에 하자 
         // this.renderPointers();
     }
 
@@ -407,37 +407,39 @@ export default class ElementView extends UIElement {
                 return; 
             }
 
-        } else {
-            this.$selection.setRectCache()                
-            this.emit('removeGuideLine')        
+        } else {           
+            this.emit('removeGuideLine')      
+    
+            this.nextTick(() => {
+                this.command(
+                    'setAttributeForMulti',
+                    "move item",                    
+                    this.$selection.cloneValue('x', 'y', 'width', 'height')
+                );  
+            })
         }
     }
 
     [BIND('$body')] () {
-        var width = Length.px(this.$editor.canvasWidth);
-        var height = Length.px(this.$editor.canvasHeight);
+        const { canvasWidth, canvasHeight, mode} = this.$editor;
+        var width = Length.px(canvasWidth);
+        var height = Length.px(canvasHeight);
 
         return {
-            'data-mode': this.$editor.mode,
-            style: {
-                'position': 'relative',
-                width,
-                height
-            }
+            'data-mode': mode,
+            style: { position: 'relative', width, height }
         }
     }
 
 
-    [BIND('$view')] () {
-        return {
-            style: {
-                // 'background-image': createGridLine(100),
-                // 'box-shadow': '0px 0px 5px 0px rgba(0, 0, 0, .5)',
-                transform: `scale(${this.$editor.scale})`
-            },
-            innerHTML: this.state.html
-        }
-    }    
+    // [BIND('$view')] () {
+    //     return {
+    //         style: {
+    //             transform: `scale(${this.$editor.scale})`
+    //         },
+    //         innerHTML: this.state.html
+    //     }
+    // }    
 
     selectCurrent (...args) {
         this.state.cachedCurrentElement = {}
@@ -555,26 +557,17 @@ export default class ElementView extends UIElement {
     }    
 
     [EVENT('refreshAllCanvas')] (isRefreshSelectionTool = true) {
+
+        // 나중에 project 기반으로 바꿔야 함 
         var artboard = this.$selection.currentArtboard || { html : ''} 
         var html = artboard.html
 
         this.setState({ html }, false)
-        // this.bindData('$view');
         this.refs.$view.updateDiff(html)
 
-        if (isRefreshSelectionTool) {
-            this.emit('refreshSelectionTool')
-        }
 
+        // TODO: 선택영역 잡는 부분은 다음에 적용 하는 걸로 
         // this.renderPointers();
-    }
-
-    refresh() {
-        if (this.state.html != this.prevState.html) {
-            this.load();
-        } else {
-            // NOOP 
-        }
     }
 
     [EVENT('refreshAllElementBoundSize')] () {
@@ -585,8 +578,6 @@ export default class ElementView extends UIElement {
         list.forEach(it => {
             this.trigger('refreshElementBoundSize', it);
         })
-
-        this.$selection.setRectCache()
     }
 
     [EVENT('refreshElementBoundSize')] (parentObj) {

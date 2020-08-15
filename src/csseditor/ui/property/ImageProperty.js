@@ -42,7 +42,7 @@ export default class ImageProperty extends BaseProperty {
   [EVENT('changeImageSize')] (key, value) {
     var [width, height] = value.split('x').map(it => Length.px(it))
 
-    this.command('setAttribute', { 
+    this.command('setAttribute', 'resize image', { 
       width, height
     })
   }
@@ -57,7 +57,7 @@ export default class ImageProperty extends BaseProperty {
         height: current.naturalHeight.clone()
       }
 
-      this.command('setAttribute', data)
+      this.command('setAttribute', 'resize image', data)
     }
 
   }
@@ -92,7 +92,7 @@ export default class ImageProperty extends BaseProperty {
 
       this.bindData('$sizeInfo')
 
-      this.command('setAttribute', {
+      this.command('setAttribute', 'change image', {
         src: value,
         ...info
       }, current.id);      

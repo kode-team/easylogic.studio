@@ -72,7 +72,7 @@ export default class PatternProperty extends BaseProperty {
 
   [EVENT('changePatternEditor')] (key, pattern) {
 
-    this.command('setAttribute', { 
+    this.command('setAttribute', 'change pattern', { 
       pattern 
     })
   }

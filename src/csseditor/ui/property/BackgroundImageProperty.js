@@ -75,14 +75,14 @@ export default class BackgroundImageProperty extends BaseProperty {
 
 
   [EVENT('changeColor')] (key, color) {
-    this.command('setAttribute', { 
+    this.command('setAttribute', 'change background color', { 
       [key]: color
     })
   }
 
   [EVENT('changeBackgroundImage') + DEBOUNCE(10)] (key, value) {
 
-    this.command('setAttribute', { 
+    this.command('setAttribute', 'change background image', { 
       [key]: value
     })
   }

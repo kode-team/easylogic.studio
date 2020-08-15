@@ -334,7 +334,7 @@ export default class LayerTreeProperty extends BaseProperty {
       var item = project.searchById(id);      
       e.$dt.attr('data-visible', !item.visible);
 
-      this.command('setAttribute', {
+      this.command('setAttribute', 'change visible for layer', {
         visible: !item.visible
       }, item.id)
   }
@@ -366,7 +366,7 @@ export default class LayerTreeProperty extends BaseProperty {
     
     e.$dt.attr('data-lock', !item.lock);
 
-    this.command('setAttribute', {
+    this.command('setAttribute', 'change lock for layer', {
       lock: !item.lock
     }, item.id)
   }
