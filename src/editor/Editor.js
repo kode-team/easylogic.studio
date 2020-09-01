@@ -12,8 +12,6 @@ import { ConfigManager } from "./manager/ConfigManager";
 
 import AssetParser from "./parse/AssetParser";
 import { isArray, isObject, isString, isFunction } from "../util/functions/func";
-import commands from "../csseditor/commands";
-import shortcuts from "../csseditor/shortcuts";
 import { HistoryManager } from "./manager/HistoryManager";
 
 
@@ -169,6 +167,15 @@ export class Editor {
     if (this.$store) {
       this.$store.source = "EDITOR_ID";
       this.$store.emit(...args);
+    }
+  }
+
+  command (command, message, $3, $4, $5, $6) {
+
+    if (this.isPointerUp) {
+      return this.$store.emit(`history.${command}`, message, $3, $4, $5, $6);
+    } else {
+      return this.$store.emit(command, $3, $4, $5, $6);
     }
   }
 

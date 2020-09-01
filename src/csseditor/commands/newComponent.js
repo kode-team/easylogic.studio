@@ -46,7 +46,7 @@ export default function newComponent (editor, type, obj, isSelected = true) {
         }        
     }
 
-    editor.emit('addLayer', editor.components.createComponent(type, {
+    editor.command('addLayer', `add layer - ${type}`, editor.components.createComponent(type, {
         ...obj,
     }), obj, isSelected)
 

@@ -1,6 +1,4 @@
-export default function _doForceRefreshSelection (editor, isSelectedItems = false, delay = 0) {
-
-    // editor.emit('hideSubEditor');
+export default function _doForceRefreshSelection (editor) {
     editor.emit('noneSelectMenu')
 
     editor.emit('refreshAll')    

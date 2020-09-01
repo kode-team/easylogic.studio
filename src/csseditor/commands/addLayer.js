@@ -1,8 +1,10 @@
 import _doForceRefreshSelection from "./_doForceRefreshSelection";
 
-export default function addLayer (editor, layer, rect = {}, isSelected = true) {
+export default function addLayer (editor, layer, rect = {}, isSelected = true, containerItem) {
 
-    var containerItem = editor.selection.current || editor.selection.currentArtboard
+    if (!containerItem) {
+        containerItem = editor.selection.current || editor.selection.currentArtboard
+    }
 
     if (containerItem) {
 
@@ -23,8 +25,8 @@ export default function addLayer (editor, layer, rect = {}, isSelected = true) {
     } else {
         editor.emit('addArtBoard')
 
-        setTimeout(() => {
+        editor.nextTick(() => {
             addLayer(editor, layer, rect);
-        }, 50)
+        })
     }
 }
