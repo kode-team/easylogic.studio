@@ -1,7 +1,7 @@
 export default {
     category: 'Layer',        
     key: 'Backspace',
-    command: 'item.delete',
+    command: 'removeLayer',
     description: 'Delete selected items',
     when: 'CanvasView'
 }

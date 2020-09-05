@@ -60,7 +60,7 @@ import itemMoveLeft from "./item.move.left";
 import itemMoveRight from "./item.move.right";
 import itemMoveUp from "./item.move.up";
 import itemMoveDown from "./item.move.down";
-import itemDelete from "./item.delete";
+import removeLayer from "./removeLayer";
 import changeModeView from "./change.mode.view";
 import segmentMoveDown from "./segment.move.down";
 import segmentMoveUp from "./segment.move.up";
@@ -124,7 +124,7 @@ export default {
     segmentMoveRight,
     segmentMoveLeft,
     changeModeView,
-    itemDelete,
+    removeLayer,
     itemMoveRight,
     itemMoveUp,
     itemMoveDown,

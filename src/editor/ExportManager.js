@@ -53,7 +53,7 @@ ${artboard.html}
 ${this.makeSvg(project)}
     `
 
-    var js = AnimationExport.generate(artboard, 'anipa')
+    var js = AnimationExport.generate(project, artboard, 'anipa')
 
     html = editor.replaceLocalUrltoRealUrl(html);
     css = editor.replaceLocalUrltoRealUrl(css);

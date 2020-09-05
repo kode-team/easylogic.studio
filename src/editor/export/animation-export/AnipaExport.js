@@ -1,20 +1,20 @@
 export default class AnipaExport {
-    constructor (artboard) {
+    constructor (project, artboard) {
+        this.project = project 
         this.artboard = artboard 
     }
 
     generateCode () {
 
-
-        var lastTime = this.artboard.getSelectedTimelineLastTime();
-        var timeline = this.artboard.getSelectedTimeline();
+        var lastTime = this.project.getSelectedTimelineLastTime();
+        var timeline = this.project.getSelectedTimeline();
         var animations = [] 
         var options = {} 
 
 
         if (timeline) {
             timeline.animations.forEach (animation => {
-                var item = this.artboard.searchById(animation.id);
+                var item = this.project.searchById(animation.id);
 
                 var properties = animation.properties.map(p => {
                     var property = p.property;

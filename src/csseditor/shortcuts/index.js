@@ -12,7 +12,7 @@ import itemMoveAltLeft from "./item.move.alt.left";
 import itemMoveAltDown from "./item.move.alt.down";
 import itemMoveAltRight from "./item.move.alt.right";
 import itemMoveAltUp from "./item.move.alt.up";
-import itemDelete from "./item.delete";
+import removeLayer from "./removeLayer";
 import segmentMoveKeyDown from "./segment.move.key.down";
 import segmentMoveKeyUp from "./segment.move.key.up";
 import segmentMoveKeyRight from "./segment.move.key.right";
@@ -38,7 +38,7 @@ import addPath from "./add.path";
 import addBrush from "./add.brush";
 import itemMoveDepthUp from "./item.move.depth.up";
 import itemMoveDepthDown from "./item.move.depth.down";
-import itemDeleteShift from "./item.delete.shift";
+import removeLayerShift from "./removeLayerShift";
 import groupItem from "./group.item";
 import ungroupItem from "./ungroup.item";
 import historyUndo from "./history.undo";
@@ -103,8 +103,8 @@ export default [
     itemMoveDepthDown,    
 
     // 
-    itemDelete,
-    itemDeleteShift,
+    removeLayer,
+    removeLayerShift,
 
     // zoom
     scaleMinus,

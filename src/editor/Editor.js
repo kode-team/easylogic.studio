@@ -11,8 +11,9 @@ import { ShortCutManager } from "./manager/ShortCutManager";
 import { ConfigManager } from "./manager/ConfigManager";
 
 import AssetParser from "./parse/AssetParser";
-import { isArray, isObject, isString, isFunction } from "../util/functions/func";
+import { isArray, isObject, isString } from "../util/functions/func";
 import { HistoryManager } from "./manager/HistoryManager";
+import { uuid } from "../util/functions/math";
 
 
 export const EDITOR_ID = "";
@@ -26,6 +27,7 @@ const DEFAULT_THEME = 'dark'
 export class Editor {
   constructor(opt = {}) {
 
+    this.EDITOR_ID = uuid();
     this.$store = opt.$store;
     this.projects = []     
     this.popupZIndex = 10000;
