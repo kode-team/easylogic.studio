@@ -384,7 +384,7 @@ export default class ElementView extends UIElement {
         }
 
         if (cachedItem) {
-            cachedItem.cssText(`left: ${x};top:${y};width:${width};height:${height}; transform: ${item.transform};`)
+            cachedItem.cssText(`left: ${x};top:${y};width:${width};height:${height}; transform: ${item.toTransformCSS().transform};`)
         }
     }
 
@@ -547,16 +547,11 @@ export default class ElementView extends UIElement {
 
         var timeline = project.getSelectedTimeline();
         timeline.animations.map(it => project.searchById(it.id)).forEach(current => {
-            // 레이어 업데이트 사항 중에 updateFunction 으로 업데이트 되는 부분 
-            // currentTime 도 매번 업데이트 되기 때문에 
-            // playbackRate 도 매번 업데이트 되고
-            // 그래서 막는게 필요하다.                 
-            // timeline 에서 실행되는것에 따라서  layer 에서 각자 알아서 업데이트 한다. 
             this.updateTimelineElement(current, true, false);
         })
     }    
 
-    [EVENT('refreshAllCanvas')] (isRefreshSelectionTool = true) {
+    [EVENT('refreshAllCanvas')] () {
 
         // 나중에 project 기반으로 바꿔야 함 
         var artboard = this.$selection.currentArtboard || { html : ''} 

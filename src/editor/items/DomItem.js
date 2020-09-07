@@ -18,6 +18,7 @@ import { ClipPath } from "../css-property/ClipPath";
 import Dom from "../../util/Dom";
 import { Pattern } from "../css-property/Pattern";
 import { BackgroundImage } from "../css-property/BackgroundImage";
+import { Transform } from "../css-property/Transform";
 
 export class DomItem extends GroupItem {
   getDefaultObject(obj = {}) {
@@ -34,6 +35,8 @@ export class DomItem extends GroupItem {
       'color': "black",
       'font-size': Length.px(13),
       'overflow': 'visible',
+      'rotate': Length.deg(0),
+      'opacity': 1,
       'z-index': Length.auto,
       'layout': 'default',
       'flex-layout': 'display:flex;',
@@ -84,8 +87,8 @@ export class DomItem extends GroupItem {
       'perspective': json.perspective + "",
       'mix-blend-mode': json['mix-blend-mode'],
       'overflow': json['overflow'],
-      'opacity': json.opacity + "",
-      'rotate': json.rotate + "",
+      'opacity': json.opacity || 1,
+      'rotate': json.rotate,
       'flex-layout': json['flex-layout'],      
       'grid-layout': json['grid-layout'],         
       'animation': json['animation'],      
@@ -390,7 +393,7 @@ export class DomItem extends GroupItem {
 
         'background-color', 'color',  'opacity', 'mix-blend-mode',
 
-        'transform-origin', 'transform', 'transform-style', 'perspective', 'perspective-origin',
+        'transform-origin', 'transform-style', 'perspective', 'perspective-origin',
 
         'font-size', 'font-stretch', 'line-height', 'font-weight', 'font-family', 'font-style',
         'text-align', 'text-transform', 'text-decoration',
@@ -417,8 +420,6 @@ export class DomItem extends GroupItem {
     return {
       ...obj,
       ...this.toKeyListCSS(
-
-        'transform', 
 
         'font-size', 'font-stretch', 'line-height', 'font-weight', 'font-family', 'font-style',
         'text-align', 'text-transform', 'text-decoration',
@@ -485,6 +486,15 @@ export class DomItem extends GroupItem {
     return results;
   }  
 
+  toTransformCSS() {
+
+    var results = {
+      transform: Transform.rotate(this.json['transform'], this.json['rotate'])
+    } 
+
+    return results;
+  }    
+
   toClipPathCSS () {
     var str = this.json['clip-path']
     var obj = ClipPath.parseStyle(str)
@@ -515,6 +525,7 @@ export class DomItem extends GroupItem {
       // ...this.toBorderImageCSS(),
       this.toBackgroundImageCSS(),
       this.toLayoutCSS(),
+      this.toTransformCSS(),                  
       this.toLayoutItemCSS()
     );
   }
@@ -533,6 +544,7 @@ export class DomItem extends GroupItem {
       // ...this.toBorderImageCSS(),
       this.toBackgroundImageCSS(),
       this.toLayoutCSS(),      
+      this.toTransformCSS(),            
       this.toLayoutItemCSS()
     );
   }

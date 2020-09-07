@@ -116,7 +116,7 @@ export class TimelineItem extends AssetItem {
 
 
       if (!nextOffset) {
-        nextOffset = { time: offset.time, value: offset.value + ''};
+        nextOffset = { time: offset.time, value: offset.value };
       }
       
       var it = {

@@ -109,6 +109,8 @@ export default class CSSPropertyEditor extends UIElement {
           return Length.string('');          
         case 'offset-distance': 
           return Length.percent(0);
+        case 'rotate':
+          return Length.deg(0);
         case 'mix-blend-mode': 
           return 'normal';
         case 'clip-path':
@@ -457,19 +459,19 @@ export default class CSSPropertyEditor extends UIElement {
               onchange="changeRangeEditor" />
           </div>
         `
-      // case 'rotate':
-      //   return /*html*/`
-      //     <div class='property-editor'>
-      //       <RangeEditor 
-      //         ref='rangeEditor${index}' 
-      //         key='${property.key}' 
-      //         value='${property.value}'  
-      //         min="-2000"
-      //         max="2000"
-      //         units="deg" 
-      //         onChange="changeRangeEditor" />
-      //     </div>
-      //   `
+      case 'rotate':
+        return /*html*/`
+          <div class='property-editor'>
+            <RangeEditor 
+              ref='rangeEditor${index}' 
+              key='${property.key}' 
+              value='${property.value}'  
+              min="-2000"
+              max="2000"
+              units="deg" 
+              onChange="changeRangeEditor" />
+          </div>
+        `
       case 'left': 
       case 'margin-top': 
       case 'margin-bottom': 

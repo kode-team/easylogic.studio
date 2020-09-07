@@ -1,16 +1,12 @@
 import { Length } from "../../unit/Length";
 
-function getRealAttributeValue (layer, property, value) {
-    return value.toDeg(); 
-}
-
 export function makeInterpolateRotate(layer, property, startNumber, endNumber) {
-    var s = Length.parse(startNumber);
-    var e = Length.parse(endNumber);
+    var startValue = Length.parse(startNumber);
+    var endValue = Length.parse(endNumber);
 
     return (rate, t) => {
-        var realStartValue = getRealAttributeValue(layer, property, s);
-        var realEndValue = getRealAttributeValue(layer, property, e);
+        var realStartValue = startValue.value;
+        var realEndValue = endValue.value;
 
         if (t === 0) {
             return realStartValue;
@@ -18,6 +14,6 @@ export function makeInterpolateRotate(layer, property, startNumber, endNumber) {
             return realEndValue;
         }
 
-        return Length.deg(realStartValue.value + (realEndValue.value - realStartValue.value) * rate).to(s.unit);
+        return Length.deg(realStartValue + (realEndValue - realStartValue) * rate).to(startValue.unit);
     }
 }

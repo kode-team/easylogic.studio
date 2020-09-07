@@ -12,11 +12,11 @@ export function makeInterpolateTransformRotate (layer, property, startValue, end
     var max = Math.max(startValue.value.length, endValue.value.length);
 
     for(var i = 0; i < max; i++) {
-        var s = startValue.value[i]
-        var e = endValue.value[i];
+        var tempStartValue = startValue.value[i]
+        var tempEndValue = endValue.value[i];
 
-        if (s && e) {
-            value.push(makeInterpolateRotate(layer, property, s, e))
+        if (tempStartValue && tempEndValue) {
+            value.push(makeInterpolateRotate(layer, property, tempStartValue, tempEndValue))
         } else {
             value.push(
                 makeInterpolateRotate(

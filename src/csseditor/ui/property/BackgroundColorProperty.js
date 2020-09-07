@@ -107,11 +107,11 @@ export default class BackgroundColorProperty extends BaseProperty {
 
   [EVENT('refreshRect')] () {
     const current = this.$selection.current; 
-    if (current && current.is('artboard') === false) {
-      const rotate = Transform.get(current.transform, 'rotateZ');
+    if (current) {
+      const rotate = current.rotate;
 
       if (rotate) {
-        this.children.$rotate.setValue(rotate[0]);
+        this.children.$rotate.setValue(rotate);
       }
 
     }
@@ -119,19 +119,8 @@ export default class BackgroundColorProperty extends BaseProperty {
 
   [EVENT('changeRotate')] (key, rotate) {
     const current = this.$selection.current; 
-    if (current && current.is('artboard') === false) {
-      this.command('setAttribute', "change transform for rotate", {
-        transform: (item) => {
-          return Transform.replace(item.transform, { 
-            type: 'rotateZ', value: [Length.deg(rotate)]
-          })
-        }
-      })
-
-      this.nextTick(() => {
-        this.emit('refreshRect');
-      })
-
+    if (current) {
+      this.command('setAttribute', "change rotate", { rotate }, true, true)
     }
 
   }
@@ -145,10 +134,10 @@ export default class BackgroundColorProperty extends BaseProperty {
       this.children.$mixBlend.setValue(current['mix-blend-mode'])
       this.children.$overflow.setValue(current['overflow']);
       
-      const rotate = Transform.get(current.transform, 'rotateZ');
+      const rotate = current.rotate;
 
       if (rotate) {
-        this.children.$rotate.setValue(rotate[0]);
+        this.children.$rotate.setValue(rotate);
       }
 
     }

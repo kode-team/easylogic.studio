@@ -18,7 +18,7 @@ export class SVGItem extends Layer {
       'fill-opacity': '',
       'stroke-linecap': '',
       'stroke-linejoin': '',      
-      'stroke-dashoffset': '', 
+      'stroke-dashoffset': 0, 
       'stroke-dasharray': ' ',
       'text-anchor': 'start',
       'motion-based': false,
