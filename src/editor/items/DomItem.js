@@ -363,7 +363,7 @@ export class DomItem extends GroupItem {
     var json = this.json;
     var obj = {};
 
-    args.filter(it => isNotUndefined(it) && json[it] !== '').forEach( it => {
+    args.filter(it => isNotUndefined(json[it])).forEach( it => {
         obj[it] = json[it]
     })
 

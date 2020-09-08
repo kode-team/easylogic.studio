@@ -188,7 +188,7 @@ export function CSS_TO_STRING(style, postfix = '') {
     var newStyle = style;
   
     return Object.keys(newStyle)
-      .filter(key => newStyle[key])
+      .filter(key => isNotUndefined(newStyle[key]))
       .map(key => `${key}: ${newStyle[key]}`)
       .join(";" + postfix);
 }
