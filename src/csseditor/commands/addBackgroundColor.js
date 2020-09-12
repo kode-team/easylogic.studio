@@ -7,6 +7,6 @@ export default {
             itemsMap[item.id] = {'background-color': color}
         })
 
-        editor.emit('history.setAttributeForMulti', itemsMap);
+        editor.emit('history.setAttributeForMulti', 'add background color', itemsMap);
     }
 }

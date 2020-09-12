@@ -3,18 +3,18 @@ import loadOriginalImage from "../../editor/util/loadOriginalImage";
 
 export default {
     command: 'addImageAssetItem',
-    execute: function (editor, obj, rect = {}) {
+    execute: function (editor, imageObject, rect = {}) {
         var project = editor.selection.currentProject;
 
         if (project) {
 
             // append image asset 
-            project.createImage(obj);
+            project.createImage(imageObject);
             editor.emit('addImageAsset');
 
             // convert data or blob to local url 
-            loadOriginalImage(obj, (info) => {
-                editor.emit('addImage', {src: obj.local, ...info, ...rect });
+            loadOriginalImage(imageObject, (info) => {
+                editor.emit('addImage', {src: imageObject.id, ...info, ...rect });
                 editor.changeMode(EDIT_MODE_SELECTION);
                 editor.emit('afterChangeMode');                
             });

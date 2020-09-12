@@ -50,12 +50,15 @@ export class SVGPathItem extends SVGItem {
   }
   
   setCache () {
-    this.rect = this.clone();
+    this.rect = this.clone(false);
     this.cachePath = this.json.path.clone()
 
   }
 
   recover () {
+
+    // 캐쉬가 없는 상태에서는 초기 캐쉬를 생성해준다. 
+    if (!this.rect) this.setCache();
 
     var baseWidth = this.rect.width.value
     if (baseWidth === 0) baseWidth = 1; 

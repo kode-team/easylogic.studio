@@ -1,14 +1,17 @@
 export default {
     command : 'removeLayer',
-    execute: function (editor) {
+    execute: function (editor, ids = undefined) {
 
-
-        editor.selection.itemsByIds(editor.selection.ids).forEach(item => {
+        // console.log(removeLayer);
+        editor.selection.itemsByIds(ids || editor.selection.ids).forEach(item => {
             item.remove();
         })
 
         editor.selection.empty();
 
-        editor.emit('refreshArtboard')
+        editor.nextTick(() => {
+            editor.emit('refreshAll')
+        })
+
     }
 }

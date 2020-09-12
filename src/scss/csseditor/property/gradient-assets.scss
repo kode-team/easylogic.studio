@@ -68,10 +68,7 @@ $asset-item-size: 25px;
                 .preview {
                     position: relative;
                     width:100%;
-                    height: $asset-item-size;
-                    // border: 1px solid #e6e6e6;
-                    // border-radius: 2px;
-                    
+                    height: $asset-item-size;                    
                     cursor: pointer;
                     @include transparent-background();
 

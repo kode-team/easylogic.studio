@@ -44,11 +44,14 @@ export class Editor {
     this.layout = this.loadItem('layout') || 'all'    
 
 
-    this.loadManager();
+    this.loadManagers();
 
   }
 
-  loadManager () {
+  /**
+   * 에디터에서 공통으로 필요한 Manager 들을 로드 한다. 
+   */
+  loadManagers () {
 
     this.config = new ConfigManager(this);
     this.commands = new CommandManager(this);
@@ -280,6 +283,87 @@ export class Editor {
     return result;
   }
 
+  /** 
+   * item 목록을 json 으로  를 한다. 
+   * 
+   * 이때 parent는  parentId 로 치환된다. 
+   * 
+   * deserialize 할 때 parentId 에 맞는 parent 를 복구 시켜준다. 
+   */
+  serialize (items = []) {
+
+    const newItems = []
+
+    items.forEach (it => {
+      let json = it.toJSON();
+      json.parentId = it.parent ? it.parent.id : undefined;
+
+      newItems.push(json)
+    })
+
+    return JSON.stringify(newItems);
+  }
+
+  /**
+   * itemObject (객체)를 가지고 itemType 에 따른  실제 Component 객체를 생성해준다. 
+   * 
+   * @param {*} itemObject 
+   */
+  createItem (itemObject) {
+
+
+    if (itemObject.parentId) {
+      itemObject.parent = this.searchItem(itemObject.parentId); 
+      delete itemObject.parentId;
+    }
+
+    itemObject.layers = (itemObject.layers || []).map(it => {
+        return this.createItem(it);
+    })
+
+    return this.components.createComponent(itemObject.itemType, itemObject);
+  }
+
+  /**
+   * id 로 객체를 탐색한다. 
+   * 모든 프로젝트를 탐색하도록 한다. 
+   * 
+   * // TODO: 객체 생성시 ID 를 캐슁하는 방법을 연구해보자. 
+   * // 아무래도 메모리 데이타베이스 같은 느낌의 뭔가가 필요할지도 모르겠다. 
+   * @param {*} id 
+   */
+  searchItem (id) {
+    let ids = []
+    if (isString(id)) {
+      ids.push(id);
+    } else if (isArray(id)) {
+      ids = [...id]; 
+    }
+
+    let results = [];
+    this.projects.forEach(it => {
+      ids.forEach(id => {
+        results.push(it.searchById(id))
+      })
+    })
+
+    results.filter(Boolean);
+
+    return results[0]
+  }
+
+  deserialize (jsonString) {
+    let items = JSON.parse(jsonString) || [];
+
+    // 이미지 에셋을 다시 복구 하기가 만만치 않으니 
+    // 이미지 로딩 하는 방법을 바꾸자. 
+    // project 안에서 다른 리소스도 가지고 올 수 있도록 
+    // 문제는 이렇게 되도 , 멀티유저가 되면 결국은 클라우드에 이미지를 넣어 두는 수 밖에 없다. 
+    // 서비스를 만들어내는 수 밖에 없음. 흠 
+    // 일단은 프로젝트에 있는 이미지 로드 할 수 있도록 id 베이스로 구조를 맞추자. 
+
+    return items.map(it => this.createItem(it));
+  }
 
   saveResource (key, value) {
     window.localStorage.setItem(`easylogic.studio.${key}`, this.makeResource(value));

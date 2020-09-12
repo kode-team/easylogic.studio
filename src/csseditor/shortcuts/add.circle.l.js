@@ -2,6 +2,6 @@ export default {
     category: 'Tool',    
     key: 'l',
     command: 'addLayerView', 
-    args: 'circle',
+    args: ['circle'],
     description: 'Add circle layer',
 }

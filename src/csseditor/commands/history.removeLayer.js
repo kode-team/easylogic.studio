@@ -1,11 +1,20 @@
 export default {
     command : 'history.removeLayer',
     description: 'remove layer',
-    execute: function (editor, message, ids = []) {
+    execute: function (editor, message, ids) {
 
 
         // // 지우기 전 객체를 모두 clone 한다. 
-        // // var items = editor.selection.itemsByIds(ids || editor.selection.ids)
+        const items = editor.selection.itemsByIds(ids || editor.selection.ids);
+        
+        
+        const serializedObjectList = editor.serialize(items);
+
+        console.log(serializedObjectList)
+
+        console.log(editor.deserialize(serializedObjectList));
+
+        console.log(message);
 
         // // 클론 
         // // var cloneList = editor.clone(items)        

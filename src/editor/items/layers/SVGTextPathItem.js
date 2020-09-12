@@ -43,11 +43,14 @@ export class SVGTextPathItem extends SVGItem {
   }
   
   setCache () {
-    this.rect = this.clone();
+    this.rect = this.clone(false);
     this.cachePath = this.json.path.clone()
   }
 
   recover () {
+
+    if (!this.rect) this.setCache();
+
     var sx = this.json.width.value / this.rect.width.value 
     var sy = this.json.height.value / this.rect.height.value 
 

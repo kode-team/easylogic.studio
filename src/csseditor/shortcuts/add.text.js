@@ -2,6 +2,6 @@ export default {
     category: 'Tool',
     key: 't',
     command: 'addLayerView', 
-    args: 'text',
+    args: ['text'],
     description: 'Add text layer',
 }

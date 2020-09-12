@@ -2,6 +2,6 @@ export default {
     category: 'Tool',
     key: 'b',
     command: 'addLayerView', 
-    args: 'brush',
+    args: ['brush'],
     description: 'Add SVG Path',
 }

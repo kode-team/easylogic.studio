@@ -19,6 +19,6 @@ export default {
             }
         })
 
-        editor.emit('history.setAttributeForMulti', itemsMap);              
+        editor.emit('history.setAttributeForMulti', 'add gradient', itemsMap);              
     }
 }

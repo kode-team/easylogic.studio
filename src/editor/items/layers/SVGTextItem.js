@@ -51,7 +51,7 @@ export class SVGTextItem extends SVGItem {
   }
   
   setCache () {
-    this.rect = this.clone();
+    this.rect = this.clone(false);
   }
 
 

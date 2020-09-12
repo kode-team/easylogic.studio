@@ -96,12 +96,14 @@ import historyRefreshSelection from "./history.refreshSelection";
 import setAttributeForMulti from "./setAttributeForMulti";
 import historySetAttributeForMulti from "./history.setAttributeForMulti";
 import historyAddLayer from "./history.addLayer";
+import historyRemoveLayer from "./history.removeLayer";
 
 
 
 export default {
     // history + command  
     historyAddLayer,
+    historyRemoveLayer,
     historySetAttribute,
     historySetAttributeForMulti,    
     historyRefreshSelection,

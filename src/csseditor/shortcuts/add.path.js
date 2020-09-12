@@ -2,6 +2,6 @@ export default {
     category: 'Tool',    
     key: 'p',
     command: 'addLayerView', 
-    args: 'path',
+    args: ['path'],
     description: 'Add SVG Path layer',
 }

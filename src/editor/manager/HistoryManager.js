@@ -46,7 +46,7 @@ export class HistoryManager {
         Object.keys(multiAttrs).forEach(id => {
             result[id] = {}
 
-            const selectedObject = this.selection[id];
+            const selectedObject = this.selection[id] || this.$editor.selection.itemsByIds(id)[0];
             const attrs = multiAttrs[id];
 
             Object.keys(attrs).forEach(key => {
@@ -78,11 +78,13 @@ export class HistoryManager {
 
         if (this.currentIndex < -1) return; 
 
-        const commandObject  = this.undoHistories[this.currentIndex--]
+        this.currentIndex--
+        const commandObject  = this.undoHistories.pop()
 
         if (commandObject && commandObject.command) {
             commandObject.command.undo(this.$editor, commandObject.data)   
         }
+
         this.$editor.nextTick(() => {
             this.$editor.emit('refreshHistory');     
         })

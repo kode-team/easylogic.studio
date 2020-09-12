@@ -3,6 +3,6 @@ export default {
     key: 'Alt+ArrowDown',
     command: 'item.move.down',
     description: 'move 5px to down',
-    args: { dy: 5 },
+    args: [{ dy: 5 }],
     when: 'CanvasView'
 }

@@ -13,6 +13,7 @@ export class AssetItem extends Item {
       svgimages: [],
       keyframes: [],      
       images: [],     //  { id: xxxx, url : '' }
+      imageKeys: [],
       videos: [],     //  { id: xxxx, url : '' }
       audios: [],     //  { id: xxxx, url : '' }
       ...obj
@@ -144,11 +145,13 @@ export class AssetItem extends Item {
 
   removeImage(removeIndex) {
     this.removePropertyList(this.json.images, removeIndex);
+    this.refreshImageKeys();
   }      
 
 
   copyImage(index) {
     this.copyPropertyList(this.json.images, index);
+    this.refreshImageKeys();
   }        
 
   sortImage(startIndex, targetIndex) {
@@ -158,10 +161,30 @@ export class AssetItem extends Item {
 
   setImageValue(index, value = {}) {
     this.json.images[index] = {...this.json.images[index], ...value}
+    this.refreshImageKeys();
   }  
+
+  getImageValueById (id) {
+    const image = this.json.imageKeys[id]
+    if (!image) return undefined;
+
+    return image.local;
+  }
+
+  refreshImageKeys() {
+    let imageKeys = {}
+    this.json.images.forEach(it => {
+      imageKeys[it.id] = it; 
+    })
+
+    this.reset({
+      imageKeys
+    })
+  }
 
   addImage(obj) {
     this.json.images.push(obj)
+    this.refreshImageKeys();
     return obj; 
   }
 

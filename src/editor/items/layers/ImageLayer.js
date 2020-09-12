@@ -47,12 +47,19 @@ export class ImageLayer extends Layer {
 
   }
 
+  get url () {
+    var {src} = this.json;     
+    var project = this.top;
+    
+    return project.getImageValueById(src);
+  }
 
   updateFunction (currentElement, isChangeFragment = true) {
-    var {src} = this.json;     
-
     if (isChangeFragment) {
-      currentElement.$('img').attr('src', src);
+      const $image = currentElement.$('img')
+      if ($image.attr('src') != this.url) {
+        $image.attr('src', this.url);
+      }
     }
 
     super.updateFunction(currentElement, isChangeFragment);
@@ -83,12 +90,12 @@ export class ImageLayer extends Layer {
   }
 
   get html () {
-    var {id, itemType, src} = this.json;
+    var {id, itemType} = this.json;
 
     return /*html*/`
       <div class='element-item ${itemType}' data-id="${id}">
         ${this.toDefString}
-        <img src='${src}' />
+        <img src='${this.url}' />
       </div>`
   } 
 
@@ -99,7 +106,7 @@ export class ImageLayer extends Layer {
   }
 
   toSVG (x, y, isRoot = false) {
-    var {width, height, src} = this.json;
+    var {width, height} = this.json;
     var css = this.toCSS();
 
     if (isRoot) {
@@ -111,13 +118,13 @@ export class ImageLayer extends Layer {
       }
 
       return this.wrapperRootSVG(x, y, width, height, /*html*/`
-        <img style="${CSS_TO_STRING(css)}" src="${src} "/>
+        <img style="${CSS_TO_STRING(css)}" src="${this.url} "/>
       `)
 
     } else {
       return /*html*/ `
         ${this.toDefString}      
-        <img style="${CSS_TO_STRING(css)}" src="${src} "/>
+        <img style="${CSS_TO_STRING(css)}" src="${this.url} "/>
       `
     }
 

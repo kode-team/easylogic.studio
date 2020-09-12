@@ -1,15 +1,5 @@
 import _doForceRefreshSelection from "./_doForceRefreshSelection";
 
-const createItem = (editor, obj) => {
-
-    obj.layers = (obj.layers || []).map(it => {
-        return createItem(editor, it);
-    })
-
-    return editor.components.createComponent(obj.itemType, obj);
-}
-
-
 export default {
     command: 'load.json', 
     execute: function (editor, json) {
@@ -25,12 +15,12 @@ export default {
                 y: '200px',
                 width: '375px',
                 height: '667px',
-                'background-color': 'white',
+                'background-color': 'white', 
                 layer: []
             }]}]
         }
 
-        var projects = json.map(p => createItem(editor, p))
+        var projects = json.map(p => editor.createItem(p))
 
         projects.forEach(p => {
             p.selectTimeline()

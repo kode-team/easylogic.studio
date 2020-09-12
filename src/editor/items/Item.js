@@ -222,7 +222,7 @@ export class Item {
     }
 
     if (isDeep) {
-      json.layers = this.json.layers.map(layer => layer.cloneItem(isDeep))
+      json.layers = this.json.layers.map(layer => layer.clone(isDeep))
     }
 
     return json; 
@@ -231,7 +231,7 @@ export class Item {
   /**
    * clone Item
    */
-  cloneItem(isDeep = true) {
+  clone(isDeep = true) {
 
     var ItemClass = this.constructor;
 
@@ -358,7 +358,7 @@ export class Item {
 
   expectJSON (key) {
     if (key === 'parent') return false; 
-    if (this.json[key] === '') return false; 
+    if (isUndefined(this.json[key])) return false; 
 
     return true; 
   }
@@ -368,11 +368,11 @@ export class Item {
    * 
    */
   toJSON() {
-    var a = this.json; 
+    const json = this.json; 
 
-    var newJSON = {}
-    Object.keys(a).filter(key => this.expectJSON(key)).forEach(key => {
-      newJSON[key] = a[key]; 
+    let newJSON = {}
+    Object.keys(json).filter(key => this.expectJSON(key)).forEach(key => {
+      newJSON[key] = json[key]; 
     })
 
     return newJSON;

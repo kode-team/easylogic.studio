@@ -2,6 +2,6 @@ export default {
     category: 'Tool',    
     key: 'm',
     command: 'addLayerView', 
-    args: 'rect',
+    args: ['rect'],
     description: 'Add rect layer',
 }

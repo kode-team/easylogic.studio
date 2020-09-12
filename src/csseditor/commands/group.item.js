@@ -30,7 +30,8 @@ export default {
             const rect = editor.selection.allRect;
 
             // 객체 생성             
-            const groupLayer = editor.components.createComponent('rect', {
+            const groupLayer = editor.createItem({
+                itemType: 'rect',
                 x: rect.x,
                 y: rect.y,
                 width: rect.width,
