@@ -305,6 +305,7 @@ export default {
     'timeline.value.editor.value': 'Value',
     'timeline.value.editor.time': 'Time',    
     'timeline.value.editor.timing': 'Timing',
+    'timeline.value.editor.offset.message': 'Please input enter key to change time offset.',    
 
     'svgfilter.popup.title': 'SVG Filter',
 

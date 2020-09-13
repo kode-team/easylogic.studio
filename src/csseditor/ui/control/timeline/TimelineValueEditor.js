@@ -142,7 +142,9 @@ checkKey (e) {
     return /*html*/`
       <div class='offset-input'>
         <label>${this.$i18n('timeline.value.editor.time')}</label>
-        <input type="text" ref='$offsetTime' />
+        <div class='input-area'>
+          <input type="text" ref='$offsetTime' title="${this.$i18n('timeline.value.editor.offset.message')}" />
+        </div>
         <button type="button" ref='$seek' title='Seek timeline'>${icon.gps_fixed}</button>
       </div>
     `

@@ -14,7 +14,8 @@ import AssetParser from "./parse/AssetParser";
 import { isArray, isObject, isString } from "../util/functions/func";
 import { HistoryManager } from "./manager/HistoryManager";
 import { uuid } from "../util/functions/math";
-
+import { Item } from "./items/Item";
+import BaseStore from "../util/BaseStore";
 
 export const EDITOR_ID = "";
 
@@ -25,9 +26,19 @@ const DEFAULT_THEME = 'dark'
 
 
 export class Editor {
+
+  /**
+   * 
+   * @param {object} [opt={}] 
+   * @param {BaseStore} opt.$store  Message 처리기 
+   */
   constructor(opt = {}) {
 
     this.EDITOR_ID = uuid();
+
+    /**
+     * @property {BaseStore} $store  메세지 처리기
+     */
     this.$store = opt.$store;
     this.projects = []     
     this.popupZIndex = 10000;
@@ -155,6 +166,11 @@ export class Editor {
     return this.popupZIndex++
   }
 
+  /**
+   * 현재 Mouse Up 상태인지 체크 
+   * 
+   * @returns {boolean}
+   */
   get isPointerUp () {
     if (!this.config.get('bodyEvent')) return false; 
     return this.config.get('bodyEvent').type === 'pointerup'
@@ -184,6 +200,11 @@ export class Editor {
     }
   }
 
+  /**
+   * $store 의 nextTick 을 실행한다. 
+   * 
+   * @param {Function} callback 
+   */
   nextTick (callback) {
     if (this.$store) {
       this.$store.nextTick(callback);
@@ -215,14 +236,15 @@ export class Editor {
     this.projects.splice(index, 1);
   }
 
+
   clear() {
     this.projects = [];
   }
 
   /**
-   * get item
+   * get project 
    *
-   * @param {String} key
+   * @param {number} index
    */
   get(index) {
     return this.projects[index];
@@ -289,6 +311,9 @@ export class Editor {
    * 이때 parent는  parentId 로 치환된다. 
    * 
    * deserialize 할 때 parentId 에 맞는 parent 를 복구 시켜준다. 
+   * 
+   * @param {Item[]} items
+   * @returns string
    */
   serialize (items = []) {
 
@@ -296,7 +321,12 @@ export class Editor {
 
     items.forEach (it => {
       let json = it.toJSON();
-      json.parentId = it.parent ? it.parent.id : undefined;
+
+      // parent 객체를 id 로 치환 
+      json._parentId = it.parent ? it.parent.id : undefined;
+
+      // parent 안에서 나의 위치 저장 (z-index 관련해서 순서를 지켜야함)
+      json._positionInParent = it.positionInParent;
 
       newItems.push(json)
     })
@@ -307,30 +337,36 @@ export class Editor {
   /**
    * itemObject (객체)를 가지고 itemType 에 따른  실제 Component 객체를 생성해준다. 
    * 
-   * @param {*} itemObject 
+   * @param {object} itemObject 
+   * @param {Boolean} isRecoverPosition 
    */
-  createItem (itemObject) {
+  createItem (itemObject, isRecoverPosition = false) {
 
 
-    if (itemObject.parentId) {
-      itemObject.parent = this.searchItem(itemObject.parentId); 
-      delete itemObject.parentId;
+    if (itemObject._parentId) {
+      itemObject.parent = this.searchItem(itemObject._parentId); 
+      delete itemObject._parentId;
     }
 
     itemObject.layers = (itemObject.layers || []).map(it => {
         return this.createItem(it);
     })
 
-    return this.components.createComponent(itemObject.itemType, itemObject);
+    const item = this.components.createComponent(itemObject.itemType, itemObject);
+
+    if (isRecoverPosition) {
+      item.parent.setPositionInPlace(itemObject._positionInParent, item);
+    }
+
+    return item; 
   }
 
   /**
    * id 로 객체를 탐색한다. 
    * 모든 프로젝트를 탐색하도록 한다. 
    * 
-   * // TODO: 객체 생성시 ID 를 캐슁하는 방법을 연구해보자. 
-   * // 아무래도 메모리 데이타베이스 같은 느낌의 뭔가가 필요할지도 모르겠다. 
-   * @param {*} id 
+   * @param {string|string[]} id 
+   * @return {string} JSON 문자열 
    */
   searchItem (id) {
     let ids = []
@@ -352,17 +388,17 @@ export class Editor {
     return results[0]
   }
 
-  deserialize (jsonString) {
+  /**
+   * JSON 형태로 serialize 된 객체를 실제 Item 객체로 복원한다. 
+   * 
+   * @param {string} jsonString 
+   * @param {Boolean} isRecoverPosition 객체를 복구 시킬 때 parent 상에서 위치도 같이 복구할지 결정, true 는 위치 복구 
+   * @returns {Item[]}
+   */
+  deserialize (jsonString, isRecoverPosition = false) {
     let items = JSON.parse(jsonString) || [];
 
-    // 이미지 에셋을 다시 복구 하기가 만만치 않으니 
-    // 이미지 로딩 하는 방법을 바꾸자. 
-    // project 안에서 다른 리소스도 가지고 올 수 있도록 
-    // 문제는 이렇게 되도 , 멀티유저가 되면 결국은 클라우드에 이미지를 넣어 두는 수 밖에 없다. 
-    // 서비스를 만들어내는 수 밖에 없음. 흠 
-    // 일단은 프로젝트에 있는 이미지 로드 할 수 있도록 id 베이스로 구조를 맞추자. 
-
-    return items.map(it => this.createItem(it));
+    return items.map(it => this.createItem(it, isRecoverPosition));
   }
 
   saveResource (key, value) {

@@ -64,7 +64,7 @@ body {
     $range-thumb-height: 10px;
     $range-track-height: 2px;
     $range-thumb-top: -4px;
-    $range-thumb-border-radius: 5px;
+    $range-thumb-border-radius: 5px; 
 
     &[data-theme='dark'] {
         @import './themes/csseditor/dark.scss'; 
@@ -74,6 +74,7 @@ body {
         --input-background-color: #{$input-background-color};
         --input-border-color: #{$input-border-color};       
         --input-font-color: #{$input-font-color};         
+        --input-sub-font-color: #{$input-sub-font-color};
         --border-color: #{$border-color};
         --selected-color: #{$selected-color};
         --selected-color-2: #{$selected-color-2};
@@ -124,6 +125,7 @@ body {
         --input-background-color: #{$input-background-color};
         --input-border-color: #{$input-border-color};       
         --input-font-color: #{$input-font-color};         
+        --input-sub-font-color: #{$input-sub-font-color};        
         --border-color: #{$border-color};
         --selected-color: #{$selected-color};
         --selected-color-2: #{$selected-color-2};        
@@ -174,6 +176,7 @@ body {
         --input-background-color: #{$input-background-color};
         --input-border-color: #{$input-border-color};       
         --input-font-color: #{$input-font-color};         
+        --input-sub-font-color: #{$input-sub-font-color};        
         --border-color: #{$border-color};
         --selected-color: #{$selected-color};
         --selected-border-color: #{$selected-border-color};

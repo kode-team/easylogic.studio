@@ -8,9 +8,13 @@ export default class KeyframeTimeControl extends UIElement {
         <div class='keyframe-time-control'>
             <div class='time-manager'>
                 <button type="button" ref='$timer'>${icon.timer}</button>
-                <label><input type="text" ref='$currentTime' /></label>
+                <label>
+                    <input type="text" ref='$currentTime' />
+                </label>
                 <label>FPS <input type="number" ref='$fps' min="0" max="999" /></label>
-                <label><input type="text" ref='$duration' /></label>
+                <label>
+                    <input type="text" ref='$duration' />
+                </label>
             </div>
         </div>`
     }

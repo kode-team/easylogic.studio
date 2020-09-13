@@ -104,8 +104,16 @@ export class Item {
    *
    **********************************/
 
+  /**
+   * title 속성 
+   */
   get title() {
     return this.json.name || this.getDefaultTitle();
+  }
+
+
+  get allLayers () {
+    return [..._traverse(this.ref)]
   }
 
   /**
@@ -115,16 +123,26 @@ export class Item {
     return this.json.id;
   }
 
+  /**
+   * 자식 객체 리스트
+   * 
+   * @returns {Item[]}
+   */
   get layers () {
     return this.json.layers; 
   }
 
+  /**
+   * @returns {Item}
+   */
   get parent () {
     return this.json.parent;
   }
 
   /**
    * 객체 깊이를 동적으로 계산 
+   * 
+   * @returns {number}
    */
   get depth () {
     if (!this.parent) return 1; 
@@ -132,6 +150,11 @@ export class Item {
     return this.parent.depth + 1; 
   }
 
+  /**
+   * 최상위 컴포넌트 찾기 
+   * 
+   * @returns {Item}
+   */
   get top () {
     if (!this.parent) return this.ref; 
 
@@ -146,6 +169,45 @@ export class Item {
     } while(localParent);
   }
 
+  /**
+   * 상속 구조 안에서 id 리스트 
+   * 
+   * @returns {string[]}
+   */
+  get path () {
+
+    if (!this.parent) return [ this.id ];
+
+    return [...this.parent.path, this.id];
+  }
+
+  /**
+   * 부모의 자식들 중 나의 위치 찾기 
+   * 
+   * @returns {number}  나이 위치 index 
+   */
+  get positionInParent () {
+
+    if (!this.parent) return -1; 
+
+    const layers = this.parent.layers;
+
+    let index = -1; 
+    for(var i = 0, len = layers.length; i < len; i++) {
+      if (layers[i] === this.ref) {
+        index = i; 
+        break; 
+      }
+    }
+
+    return index;
+  }
+
+  /**
+   * id 기반 문자열 id 생성
+   * 
+   * @param {string} postfix 
+   */
   getInnerId(postfix = '') {
     return this.json.id + postfix;
   }
@@ -326,6 +388,17 @@ export class Item {
   }
 
   /**
+   * 특정한 위치에 자식 객체로 Item 을 추가 한다. 
+   * set position in layers 
+   * 
+   * @param {Number} position 
+   * @param {Item} item 
+   */
+  setPositionInPlace (position, item) {
+    this.layers.splice(position, 0, item);
+  }
+
+  /**
    * toggle item's attribute
    *
    * @param {*} field
@@ -436,9 +509,6 @@ export class Item {
     return isParent; 
   }
 
-  get allLayers () {
-    return [..._traverse(this.ref)]
-  }
 
   searchById (id) {
 

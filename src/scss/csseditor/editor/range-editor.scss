@@ -123,7 +123,7 @@ $border-radius: 3px;
                     padding:0px;
                     width:24px;
                     height: 100%;
-                    color: #7a7a7a;
+                    color: var(--input-sub-font-color);
                     
                     background-color: transparent;
                     border-top-right-radius: $border-radius;

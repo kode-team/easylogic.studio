@@ -1,6 +1,6 @@
 import { isFunction, isUndefined, isArray, isObject, isString, clone } from "../../util/functions/func";
+import { Item } from "../items/Item";
 import { Length } from "../unit/Length";
-import AreaItem from "../items/AreaItem";
 
 
 const roundedLength = (px, fixedRound = 1) => {
@@ -26,9 +26,15 @@ function _traverse(obj, id) {
 export class SelectionManager {
   constructor(editor) {
 
+    /**
+     * @property {Editor} $editor Editor
+     */    
     this.$editor = editor; 
     this.project = null;
     this.artboard = null;
+    /**
+     * @property {Item[]} items Item List
+     */
     this.items = [];
     this.itemKeys = {} 
     this.ids = [];
@@ -170,14 +176,27 @@ export class SelectionManager {
     return this.itemKeys[id];
   }
 
+  /**
+   * 현재 선택된 Item 이 ArtBoard 인지 체크 한다. 
+   */
   isArtBoard () {
     return this.items.length ?  this.current.is('artboard') : false;
   }
 
+  /**
+   * selection 상태를 비운다. 
+   */
   empty () {
     this.select()
   }
 
+  /**
+   * id 기반으로 객체를 검색한다. 
+   * id 가 없으면 현재 선택된 객체 리스트를 반환한다. 
+   * 
+   * @param {string[]|null} ids 
+   * @returns {Item[]}
+   */
   itemsByIds(ids = null) {
     if (isArray(ids)) {
       return _traverse(this.project, ids)

@@ -1,8 +1,10 @@
 import _currentProject from "./_currentProject";
 import { makeTimer, timecode } from "../../util/functions/time";
 
+
 export default {
     command: 'playTimelineItem',
+    description: 'Play button action',
     execute: function (editor, speed = 1, iterationCount = 1, direction = 'normal') {
 
         editor.selection.empty()
@@ -33,17 +35,24 @@ export default {
                 iterationCount,
                 direction,
                 tick: (elapsed, timer) => {
-                    // console.log(timecode(timeline.fps, elapsed / 1000), elapsed, elapsed/1000);
+                    // console.log('tick', timecode(timeline.fps, elapsed / 1000), elapsed, elapsed/1000);
                     project.seek(timecode(timeline.fps, elapsed / 1000))
                     editor.emit('playTimeline');
                 },
                 last: (elapsed, timer) => {                 
-                    editor.emit('stopTimeline');
-                    // project.setTimelineCurrentTime(0);
-                    editor.changeMode('SELECTION');
-                    editor.emit('afterChangeMode')
+                    // console.log('last', timecode(timeline.fps, elapsed / 1000), elapsed, elapsed/1000);
+                    project.seek(timecode(timeline.fps, elapsed / 1000))
+                    editor.emit('playTimeline');
+                    editor.nextTick(() => {
+                        editor.emit('stopTimeline');
+                        // project.setTimelineCurrentTime(0);
+                        editor.changeMode('SELECTION');
+                        editor.emit('afterChangeMode')                        
+                    })
+
                 },
                 stop: (elapsed, timer) => {
+                    // console.log('stop', timecode(timeline.fps, elapsed / 1000), elapsed, elapsed/1000);                    
                     project.stop(timecode(timeline.fps, elapsed / 1000)) 
                     editor.emit('stopTimeline');
                     // project.setTimelineCurrentTime(0);

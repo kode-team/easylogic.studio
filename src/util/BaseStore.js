@@ -19,6 +19,15 @@ export default class BaseStore {
     this.callbacks[event] = list; 
   }
 
+  /**
+   * 메세지 등록 
+   * 
+   * @param {string} event 
+   * @param {*} originalCallback 
+   * @param {*} context 
+   * @param {*} debounceDelay 
+   * @param {*} throttleDelay 
+   */
   on(event, originalCallback, context, debounceDelay = 0, throttleDelay = 0) {
     var callback = originalCallback;
     
@@ -28,6 +37,12 @@ export default class BaseStore {
     this.getCallbacks(event).push({ event, callback, context, originalCallback });
   }
 
+  /**
+   * 메세지 해제
+   * 
+   * @param {string} event 
+   * @param {*} originalCallback 
+   */
   off(event, originalCallback) {
 
     if (arguments.length == 1) {
@@ -96,8 +111,13 @@ export default class BaseStore {
     this.sendMessage(this.source, $1, $2, $3, $4, $5);
   }
 
-  nextTick ($1, $2, $3, $4, $5) {
-    this.nextSendMessage(this.source, $1, $2, $3, $4, $5);
+  /**
+   * 마이크로 Task 를 실행 
+   * 
+   * @param {Function} callback  마이크로Task 형식으로 실행될 함수 
+   */
+  nextTick (callback) {
+    this.nextSendMessage(this.source, callback);
   }
 
   trigger($1, $2, $3, $4, $5) {

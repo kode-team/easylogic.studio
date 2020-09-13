@@ -57,6 +57,12 @@ export class HistoryManager {
         return result;
     }    
 
+    /**
+     * 
+     * @param {string} message 
+     * @param {CommandObject} command 
+     * @param {{currentValues: any, undoValues: any, redoValues: any}} data 
+     */
     add (message, command, data) {
         const historyObject = { message, command, data }
         this.undoHistories.push(historyObject)
@@ -68,12 +74,20 @@ export class HistoryManager {
         return historyObject;
     }
 
+    /**
+     * undo, redo 히스토리 리스트를 만든다. 
+     * 
+     * @param {Function} callback 
+     */
     map (callback) {
         let results = [...this.undoHistories.map(callback), '-', ...this.redoHistories.map(callback)].reverse()
 
         return results; 
     }
 
+    /**
+     * undo 를 수행한다. 
+     */
     undo () {
 
         if (this.currentIndex < -1) return; 
@@ -91,6 +105,9 @@ export class HistoryManager {
 
     }
 
+    /**
+     * redo를 수행한다.
+     */
     redo () {
 
         if (this.currentIndex >= this.length) return; 

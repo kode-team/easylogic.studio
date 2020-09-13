@@ -308,6 +308,7 @@ export default {
     'timeline.value.editor.value': '값',
     'timeline.value.editor.time': '시간',
     'timeline.value.editor.timing': '타이밍 함수',    
+    'timeline.value.editor.offset.message': 'Enter키를 입력하면 적용됩니다.',    
 
     'svgfilter.popup.title': 'SVG 필터',    
 

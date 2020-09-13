@@ -57,6 +57,11 @@ export function framesToTimecode(fps, frames, start = null) {
     return timecode(fps, second(fps, frames) - second(fps, start));
 }
 
+/**
+ * make a timer for timeline animation 
+ * 
+ * @param {*} opt 
+ */
 export function makeTimer (opt) {
 
     var timer = {

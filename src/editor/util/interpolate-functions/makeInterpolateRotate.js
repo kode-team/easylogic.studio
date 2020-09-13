@@ -9,9 +9,9 @@ export function makeInterpolateRotate(layer, property, startNumber, endNumber) {
         var realEndValue = endValue.value;
 
         if (t === 0) {
-            return realStartValue;
+            return Length.deg(realStartValue);
         } else if (t === 1) {
-            return realEndValue;
+            return Length.deg(realEndValue);
         }
 
         return Length.deg(realStartValue + (realEndValue - realStartValue) * rate).to(startValue.unit);

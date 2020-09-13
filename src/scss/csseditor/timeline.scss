@@ -35,7 +35,32 @@
             }
 
             .offset-input {
-                padding-top: 10px;
+                padding-top: 20px;
+
+                .input-area {
+                    position: relative;
+                    display: inline-block;
+                    vertical-align: middle;
+                    width: 120px;
+                    height: 24px;
+
+                    > input {
+                        width: 100%;
+                        height: 100%;
+                        box-sizing: border-box;
+                        padding: 2px 2px;
+                    }
+
+                    &:after {
+                        position: absolute;
+                        bottom: 100%;
+                        content: 'Hour:Minute:Second:Frame';
+                        box-sizing: border-box;
+                        padding-left: 2px;
+                        color: var(--input-sub-font-color);
+                        left: 0px;
+                    }
+                }
             }
 
             .css-property-item {

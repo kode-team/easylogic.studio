@@ -195,7 +195,6 @@ export class TimelineItem extends AssetItem {
           it.func(time)
 
         } else if (it.layer) {
-
           it.layer.reset({
             [it.property]: it.func(time) 
           })

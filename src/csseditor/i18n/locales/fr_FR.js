@@ -303,6 +303,7 @@ export default {
     'timeline.value.editor.value': 'Valeur',
     'timeline.value.editor.time': 'Temps',    
     'timeline.value.editor.timing': 'Calage temps',
+    'timeline.value.editor.offset.message': 'Please input enter key to change time offset.',        
 
     'svgfilter.popup.title': 'Filtre SVG',
 
