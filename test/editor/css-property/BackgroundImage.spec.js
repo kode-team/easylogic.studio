@@ -1,5 +1,5 @@
-import { Length, Position } from "../../../src/editor/unit/Length";
-import { BackgroundImage } from "../../../src/editor/css-property/BackgroundImage";
+import { Length, Position } from "../../../src/unit/Length";
+import { BackgroundImage } from "../../../src/editor/property-parser/BackgroundImage";
 import { LinearGradient } from "../../../src/editor/image-resource/LinearGradient";
 import { ColorStep } from "../../../src/editor/image-resource/ColorStep";
 import { RadialGradient } from "../../../src/editor/image-resource/RadialGradient";

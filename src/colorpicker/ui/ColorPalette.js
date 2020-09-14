@@ -1,5 +1,5 @@
-import UIElement, { EVENT } from "../../util/UIElement";
-import Event, { POINTERSTART, POINTEREND, POINTERMOVE } from "../../util/Event";
+import UIElement, { EVENT } from "@core/UIElement";
+import Event, { POINTERSTART, POINTEREND, POINTERMOVE } from "@core/Event";
 
 export default class ColorPalette extends UIElement {
   template() {

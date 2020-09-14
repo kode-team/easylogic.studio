@@ -1,5 +1,5 @@
 
-import Color from '../../../util/Color'
+import Color from '@core/Color'
 import VerticalSlider from '../../VerticalSlider';
 
 export default class VerticalOpacity extends VerticalSlider {

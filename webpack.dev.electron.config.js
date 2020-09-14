@@ -1,6 +1,7 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const pkg = require('./package.json')
+const alias = require('./alias');
 
 module.exports = {
   // Entry files for our popup and background pages
@@ -12,6 +13,7 @@ module.exports = {
     libraryTarget: "umd",
     path: __dirname + "/electron"
   },
+  resolve: { alias },  
   target: 'electron-renderer',
   module: {
     rules: [

@@ -1,10 +1,10 @@
-import Dom from '../util/Dom'
-import { MOUSEUP } from '../util/Event';
-import { defaultValue, isFunction } from '../util/functions/func';
-import UIElement from '../util/UIElement';
-import BaseStore from '../util/BaseStore';
-import { Length } from '../editor/unit/Length';
-import ColorManager from '../util/ColorManager';
+import Dom from '@core/Dom'
+import { MOUSEUP } from '@core/Event';
+import { defaultValue, isFunction } from '@core/functions/func';
+import UIElement from '@core/UIElement';
+import BaseStore from '@core/BaseStore';
+import { Length } from '@unit/Length';
+import ColorManager from '@core/ColorManager';
 
 export default class BaseColorPicker extends UIElement {
 

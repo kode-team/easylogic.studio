@@ -1,6 +1,6 @@
 import { editor } from "../../../src/editor/editor";
-import { Length } from "../../../src/editor/unit/Length";
-import { BlockDisplay, InlineBlockDisplay, InlineDisplay, GridDisplay, FlexDisplay } from "../../../src/editor/css-property/Display";
+import { Length } from "../../../src/unit/Length";
+import { BlockDisplay, InlineBlockDisplay, InlineDisplay, GridDisplay, FlexDisplay } from "../../../src/editor/property-parser/Display";
 
 beforeEach(() => {
 

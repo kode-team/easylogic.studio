@@ -1,8 +1,8 @@
 import { editor } from "../../src/editor/editor";
-import { Project } from "../../src/editor/items/Project";
-import { ArtBoard } from "../../src/editor/items/ArtBoard";ㄴ
-import { Layer } from "../../src/editor/items/Layer";
-import { Length } from "../../src/editor/unit/Length";
+import { Project } from "../../src/items/Project";
+import { ArtBoard } from "../../src/items/ArtBoard";ㄴ
+import { Layer } from "../../src/items/Layer";
+import { Length } from "../../src/unit/Length";
 
 let project, artboard, layer;
 

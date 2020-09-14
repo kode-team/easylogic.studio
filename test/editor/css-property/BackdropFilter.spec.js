@@ -1,5 +1,5 @@
-import { BackdropBlurFilter, BackdropGrayscaleFilter, BackdropHueRotateFilter, BackdropInvertFilter, BackdropBrightnessFilter, BackdropContrastFilter, BackdropDropshadowFilter } from "../../../src/editor/css-property/BackdropFilter";
-import { Length } from "../../../src/editor/unit/Length";
+import { BackdropBlurFilter, BackdropGrayscaleFilter, BackdropHueRotateFilter, BackdropInvertFilter, BackdropBrightnessFilter, BackdropContrastFilter, BackdropDropshadowFilter } from "../../../src/editor/property-parser/BackdropFilter";
+import { Length } from "../../../src/unit/Length";
 
 beforeEach(() => {
 

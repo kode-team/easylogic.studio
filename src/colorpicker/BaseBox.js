@@ -1,5 +1,5 @@
-import UIElement, { EVENT } from "../util/UIElement";
-import { POINTERSTART, POINTERMOVE, POINTEREND } from "../util/Event";
+import UIElement, { EVENT } from "@core/UIElement";
+import { POINTERSTART, POINTERMOVE, POINTEREND } from "@core/Event";
 
 export default class BaseBox extends UIElement {
   refresh() {}

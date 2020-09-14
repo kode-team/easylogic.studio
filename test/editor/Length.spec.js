@@ -1,4 +1,4 @@
-import { Length, Position } from "../../src/editor/unit/Length";
+import { Length, Position } from "../../src/unit/Length";
 
 beforeEach(() => {
     

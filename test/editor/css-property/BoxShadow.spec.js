@@ -1,5 +1,5 @@
-import { BoxShadow } from "../../../src/editor/css-property/BoxShadow";
-import { Length } from "../../../src/editor/unit/Length";
+import { BoxShadow } from "../../../src/editor/property-parser/BoxShadow";
+import { Length } from "../../../src/unit/Length";
 
 test('BoxShadow - new BoxShadow', () => {
     var box = new BoxShadow();

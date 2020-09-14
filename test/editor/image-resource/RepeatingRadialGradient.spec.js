@@ -1,7 +1,7 @@
 import { editor } from "../../../src/editor/editor";
 import { RepeatingRadialGradient } from "../../../src/editor/image-resource/RepeatingRadialGradient";
 import { ColorStep } from "../../../src/editor/image-resource/ColorStep";
-import { Length } from "../../../src/editor/unit/Length";
+import { Length } from "../../../src/unit/Length";
 
 beforeEach(() => {
     editor.clear();

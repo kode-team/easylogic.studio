@@ -1,9 +1,9 @@
 import { editor } from "../../src/editor/editor";
-import { Project } from "../../src/editor/items/Project";
-import { ArtBoard } from "../../src/editor/items/ArtBoard";
-import { Layer } from "../../src/editor/items/Layer";
-import { Directory } from "../../src/editor/items/Directory";
-import { Length } from "../../src/editor/unit/Length";
+import { Project } from "../../src/items/Project";
+import { ArtBoard } from "../../src/items/ArtBoard";
+import { Layer } from "../../src/items/Layer";
+import { Directory } from "../../src/items/Directory";
+import { Length } from "../../src/unit/Length";
 
 var project, artboard, directory;
 

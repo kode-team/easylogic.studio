@@ -7,7 +7,7 @@ import CurrentColorSets from '../ui/CurrentColorSets'
 import ContextMenu from '../ui/CurrentColorSetsContextMenu'
 import Hue from '../ui/control/VerticalHue'
 import Opacity from '../ui/control/VerticalOpacity'
-import { CLICK } from '../../util/Event';
+import { CLICK } from '@core/Event';
 
 export default class XDTabColorPicker extends BaseColorPicker {
 

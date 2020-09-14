@@ -1,5 +1,5 @@
-import { Length } from "../../../src/editor/unit/Length";
-import { TextShadow } from "../../../src/editor/css-property/TextShadow";
+import { Length } from "../../../src/unit/Length";
+import { TextShadow } from "../../../src/editor/property-parser/TextShadow";
 
 test('TextShadow - new TextShadow', () => {
     var box = new TextShadow();

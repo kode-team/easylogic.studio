@@ -1,5 +1,6 @@
+import { calculateAngle } from "@core/functions/math";
 import ColorWheel from "./ColorWheel";
-import { calculateAngle } from "../../util/functions/math";
+
 
 export default class ColorRing extends ColorWheel {
   initialize() {

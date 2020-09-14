@@ -1,8 +1,9 @@
-import Color from "../../util/Color";
-import Dom from "../../util/Dom";
-import Event, { POINTERSTART, POINTERMOVE, POINTEREND } from "../../util/Event";
-import UIElement, { EVENT } from "../../util/UIElement";
-import { getXYInCircle, calculateAngle } from "../../util/functions/math";
+import { calculateAngle, getXYInCircle } from "@core/functions/math";
+import Color from "@core/Color";
+import Dom from "@core/Dom";
+import Event, { POINTERSTART, POINTERMOVE, POINTEREND } from "@core/Event";
+import UIElement, { EVENT } from "@core/UIElement";
+
 
 export default class ColorWheel extends UIElement {
   initialize() {

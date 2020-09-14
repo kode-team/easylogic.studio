@@ -1,5 +1,5 @@
 
-import Color from '../../../util/Color'
+import Color from '@core/Color'
 import BaseSlider from '../../BaseSlider';
 
 export default class Opacity extends BaseSlider {

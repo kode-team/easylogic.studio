@@ -1,9 +1,9 @@
 import { editor } from "../../src/editor/editor";
-import { ArtBoard } from "../../src/editor/items/ArtBoard";
-import { Project } from "../../src/editor/items/Project";
-import { Layer } from "../../src/editor/items/Layer";
+import { ArtBoard } from "../../src/items/ArtBoard";
+import { Project } from "../../src/items/Project";
+import { Layer } from "../../src/items/Layer";
 import { URLImageResource } from "../../src/editor/image-resource/URLImageResource";
-import { BackgroundImage } from "../../src/editor/css-property/BackgroundImage";
+import { BackgroundImage } from "../../src/editor/property-parser/BackgroundImage";
 
 
 var project, artboard;

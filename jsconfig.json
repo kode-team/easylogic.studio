@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+      "baseUrl": ".",
+      "paths": {
+        "@assets/*": ["./src/assets/*"],
+        "@colorpicker/*": ["./src/colorpicker/*"],
+        "@commands/*": ["./src/commands/*"],
+        "@core/*": ["./src/core/*"],
+        "@csseditor/*": ["./src/csseditor/*"],
+        "@exporter/*": ["./src/exporter/*"],
+        "@i18n/*": ["./src/i18n/*"],
+        "@icon/*": ["./src/icon/*"],
+        "@image-resource/*": ["src/property-parser/image-resource/*"],
+        "@interpolate/*": ["./src/interpolate/*"],
+        "@items/*": ["./src/items/*"],
+        "@manager/*": ["./src/manager/*"],
+        "@parser/*": ["./src/parser/*"],
+        "@preset/*": ["./src/preset/*"],
+        "@property-parser/*": ["./src/property-parser/*"],
+        "@shortcuts/*": ["./src/shortcuts/*"],
+        "@types/*": ["./src/types/*"],
+        "@ui/*": ["./src/ui/*"],
+        "@unit/*": ["./src/unit/*"],
+        "@util/*": ["./src/util/*"]
+      }
+    }
+}

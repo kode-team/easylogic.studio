@@ -9,7 +9,7 @@ import CurrentColorSets from '../ui/CurrentColorSets'
 import ContextMenu from '../ui/CurrentColorSetsContextMenu'
 import ColorRing from '../ui/ColorRing';
 import Palette from '../ui/ColorPalette';
-import { CLICK } from '../../util/Event';
+import { CLICK } from '@core/Event';
 
 export default class RingTabColorPicker extends BaseColorPicker {
     template () {

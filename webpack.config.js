@@ -5,7 +5,7 @@ const WorkboxPlugin = require('workbox-webpack-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest')
 const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
-
+const alias = require('./alias');
 
 
 const pkg = require('./package.json')
@@ -46,6 +46,7 @@ module.exports = {
     path: __dirname + "/docs",
     filename: '[name].[contenthash].js'
   },
+  resolve: { alias },  
   mode: 'production',
   // devtool: 'source-map',
   module: {

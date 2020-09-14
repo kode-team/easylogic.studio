@@ -1,7 +1,7 @@
 
-import Event from '../util/Event'
+import Event from '@core/Event'
 import BaseBox from './BaseBox';
-import { Length } from '../editor/unit/Length';
+import { Length } from '@unit/Length';
 
 export default class BaseSlider extends BaseBox {
 

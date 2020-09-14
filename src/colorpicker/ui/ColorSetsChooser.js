@@ -1,6 +1,5 @@
-import UIElement, { EVENT } from '../../util/UIElement';
-import { CLICK, LOAD } from '../../util/Event';
-import { html } from '../../util/functions/func';
+import UIElement, { EVENT } from '@core/UIElement';
+import { CLICK, LOAD } from '@core/Event';
 
 const DATA_COLORSETS_INDEX = 'data-colorsets-index';
 

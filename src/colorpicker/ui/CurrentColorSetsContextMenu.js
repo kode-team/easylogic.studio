@@ -1,11 +1,12 @@
-import Event, { CLICK } from '../../util/Event'
-import UIElement, { EVENT } from '../../util/UIElement';
-import { isUndefined } from '../../util/functions/func';
+import { isUndefined } from '@core/functions/func';
+import Event, { CLICK } from '@core/Event'
+import UIElement, { EVENT } from '@core/UIElement';
+
 
 export default class CurrentColorSetsContextMenu extends UIElement {
 
     template () {
-        return `
+        return /*html*/`
             <ul class="colorsets-contextmenu">
                 <li class="menu-item small-hide" data-type="remove-color">Remove color</li>
                 <li class="menu-item small-hide" data-type="remove-all-to-the-right">Remove all to the right</li>

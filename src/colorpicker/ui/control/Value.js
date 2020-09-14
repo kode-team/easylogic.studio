@@ -1,10 +1,10 @@
 import BaseSlider from '../../BaseSlider';
-import { BIND } from '../../../util/Event';
+import { BIND } from '@core/Event';
 
 export default class Value extends BaseSlider {
 
     template () {
-        return `
+        return /*html*/`
             <div class="value">
                 <div ref="$container" class="value-container">
                     <div ref="$bar" class="drag-bar"></div>

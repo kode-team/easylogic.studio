@@ -1,4 +1,4 @@
-import Event from '../util/Event'
+import Event from '@core/Event'
 import BaseSlider from "./BaseSlider";
 
 export default class VerticalSlider extends BaseSlider {

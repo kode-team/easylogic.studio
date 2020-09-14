@@ -1,10 +1,10 @@
-import CSSEditor from "./editor/index";
-import * as App from '../util/App'
-import cssProperty from "../editor/css-property";
-import imageResource from "../editor/image-resource";
-import items from '../editor/items';
-import parse from '../editor/parse';
-import { Length } from "../editor/unit/Length";
+import CSSEditor from "./CSSEditor";
+import * as App from '@core/App'
+import cssProperty from "../property-parser";
+import imageResource from "../property-parser/image-resource";
+import items from '@items';
+import parse from '@parser';
+import { Length } from "@unit/Length";
 
 
 export default {

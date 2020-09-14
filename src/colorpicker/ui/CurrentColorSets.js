@@ -1,7 +1,6 @@
-import Dom from '../../util/Dom'
-import UIElement, { EVENT } from '../../util/UIElement';
-import { CLICK, CONTEXTMENU, LOAD } from '../../util/Event';
-import { html } from '../../util/functions/func';
+import Dom from '@core/Dom'
+import UIElement, { EVENT } from '@core/UIElement';
+import { CLICK, CONTEXTMENU, LOAD } from '@core/Event';
 
 export default class CurrentColorSets extends UIElement {
 

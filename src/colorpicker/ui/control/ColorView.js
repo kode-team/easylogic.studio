@@ -1,5 +1,5 @@
-import UIElement, { EVENT } from '../../../util/UIElement';
-import { BIND } from '../../../util/Event';
+import UIElement, { EVENT } from '@core/UIElement';
+import { BIND } from '@core/Event';
 
 export default class ColorView extends UIElement {
 

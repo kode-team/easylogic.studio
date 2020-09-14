@@ -1,6 +1,6 @@
 import "./scss/index.scss";
 
-import Util from "./util/index";
+import Util from "./core/index";
 import ColorPicker from "./colorpicker/index";
 import CSSEditor from "./csseditor/index";
 

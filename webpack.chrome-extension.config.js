@@ -1,7 +1,7 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
-
+const alias = require('./alias');
 module.exports = {
   // Entry files for our popup and background pages
   entry: {
@@ -10,6 +10,7 @@ module.exports = {
   output: {
     path: __dirname + "/chrome-extension"
   },
+  resolve: { alias },  
   module: {
     rules: [
       {
