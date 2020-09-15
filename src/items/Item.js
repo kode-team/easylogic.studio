@@ -17,6 +17,12 @@ function _traverse(obj) {
   return results; 
 }
 
+/**
+ * Item , 그리기를 위한 기본 모델 
+ * 유니크한 아이디를 가진다. 
+ * 
+ * @class
+ */
 export class Item {
   constructor(json = {}) {
 

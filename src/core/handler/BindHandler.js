@@ -63,7 +63,7 @@ export default class BindHandler extends BaseHandler {
     // this.runHandle('bind', ...);
     bindData (...args) {
       if (!this._bindMethods) {
-        this._bindMethods = this.filterProps(CHECK_BIND_PATTERN);
+        this._bindMethods = this.context.filterProps(CHECK_BIND_PATTERN);
       }
       /**
        * BIND 를 해보자.

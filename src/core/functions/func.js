@@ -1,6 +1,36 @@
 import { randomNumber } from "./create";
 import { getPredefinedCubicBezier } from "./bezier";
 
+
+/**
+ * property 수집하기
+ * 상위 클래스의 모든 property 를 수집해서 리턴한다.
+ * 
+ * @param {Object} root  상속관계에 있는 인스턴스 
+ * @param {Object} expectMethod 제외될 필드 리스트 { [field]: true }
+ * @returns {string[]} 나의 상위 모든 메소드를 수집해서 리턴한다. 
+ */
+export function collectProps(root, expectMethod = {}) {
+
+    let p = root.__proto__;
+    let results = [];
+    do {
+      const isObject = p instanceof Object;
+
+      if (isObject === false) {
+        break;
+      }
+      const names = Object.getOwnPropertyNames(p).filter(name => {
+        return root && isFunction(root[name]) && !expectMethod[name];
+      });
+
+      results.push(...names);
+      p = p.__proto__;
+    } while (p);
+
+    return results;
+  }
+
 export function debounce (callback, delay = 0) {
 
     if (delay === 0) {
@@ -253,10 +283,16 @@ export function isArrayEquals (A, B) {
     return s.size === A.length && s.size === B.length;
 }
 
+/**
+ * 전체 문자열에서 특정 키워드 함수를 사용하는 패턴을 찾아 리턴해준다. 
+ * 
+ * @param {string[]} arr 
+ * @param {string} keyword 
+ */
 export const splitMethodByKeyword = (arr, keyword) => {
-    var filterKeys = arr.filter(code => code.indexOf(`${keyword}(`) > -1);
-    var filterMaps = filterKeys.map(code => {
-      var [target, param] = code
+    const filterKeys = arr.filter(code => code.indexOf(`${keyword}(`) > -1);
+    const filterMaps = filterKeys.map(code => {
+      const [target, param] = code
         .split(`${keyword}(`)[1]
         .split(")")[0]
         .trim()

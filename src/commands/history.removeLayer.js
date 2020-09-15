@@ -1,3 +1,4 @@
+import { Item } from "@items/Item";
 import { Editor } from "@manager/Editor";
 
 /**
@@ -51,7 +52,6 @@ export default {
         items.forEach(item => item.remove())
         if (!ids) {
             editor.selection.empty()
-
         }
 
         editor.history.add(message, this, {

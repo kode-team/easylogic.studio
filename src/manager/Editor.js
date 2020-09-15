@@ -143,6 +143,9 @@ export class Editor {
     return this.isMode(EDIT_MODE_ADD)
   }
 
+  /**
+   * editor 의 모드를 
+   */
   isSelectionMode () {
     return this.isMode(EDIT_MODE_SELECTION);
   }
@@ -153,6 +156,11 @@ export class Editor {
     this.isComponent = isComponent
   }
 
+  /**
+   * Theme 을 변경한다. 
+   * 
+   * @param {string} theme 
+   */
   changeTheme (theme) {
     theme = ['light', 'toon'].includes(theme) ? theme: 'dark';
 
@@ -184,6 +192,10 @@ export class Editor {
     this.$store = $store;
   }
 
+  /**
+   * 메세지를 실행한다. 
+   * 나 자신은 제외하고 실행한다. 
+   **/
   emit(...args) {
     if (this.$store) {
       this.$store.source = "EDITOR_ID";
@@ -211,6 +223,11 @@ export class Editor {
     }
   }  
 
+  /**
+   * project 리스트를 설정한다. 
+   * 
+   * @param {Item[]} projects 
+   */
   load (projects = []) {
     this.projects = projects
   }

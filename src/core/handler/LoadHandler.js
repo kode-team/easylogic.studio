@@ -24,7 +24,7 @@ export default class LoadHandler extends BaseHandler {
 
     load(...args) {
         if (!this._loadMethods) {
-            this._loadMethods = this.filterProps(CHECK_LOAD_PATTERN);
+            this._loadMethods = this.context.filterProps(CHECK_LOAD_PATTERN);
         }
 
         const methods = this._loadMethods.filter(callbackName => {

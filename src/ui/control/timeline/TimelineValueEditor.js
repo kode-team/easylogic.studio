@@ -1,14 +1,15 @@
 import UIElement, { EVENT } from "@core/UIElement";
-import CubicBezierEditor from "../../property-editor/CubicBezierEditor";
-import { LOAD, CLICK, KEYDOWN, KEYUP, IF, PREVENT, ENTER } from "@core/Event";
-import CSSPropertyEditor from "../../property-editor/CSSPropertyEditor";
+import { CLICK, KEYDOWN, KEYUP, IF, PREVENT, ENTER } from "@core/Event";
+
+import CubicBezierEditor from "@ui/property-editor/CubicBezierEditor";
+import CSSPropertyEditor from "@ui/property-editor/CSSPropertyEditor";
 
 import { second, timecode } from "@core/functions/time";
 import { isUndefined } from "@core/functions/func";
 import icon from "@icon/icon";
 
 export default class TimelineValueEditor extends UIElement {
-  components() {
+  components() { 
     return {
       CSSPropertyEditor,
       CubicBezierEditor

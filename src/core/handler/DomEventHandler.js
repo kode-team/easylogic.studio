@@ -1,6 +1,6 @@
 import BaseHandler from "./BaseHandler";
 import Event, { CHECK_SAPARATOR, DOM_EVENT_SAPARATOR, SAPARATOR, NAME_SAPARATOR, CHECK_DOM_EVENT_PATTERN } from "../Event";
-import { debounce, throttle, isNotUndefined, isFunction } from "../functions/func";
+import { debounce, throttle, isNotUndefined, isFunction, splitMethodByKeyword } from "../functions/func";
 import Dom from "../Dom";
 
 
@@ -21,7 +21,7 @@ export default class DomEventHandler extends BaseHandler {
         this.destroy();
 
         if (!this._domEvents) {
-          this._domEvents = this.filterProps(CHECK_DOM_EVENT_PATTERN)
+          this._domEvents = this.context.filterProps(CHECK_DOM_EVENT_PATTERN)
         }
         this._domEvents.forEach(key => this.parseEvent(key));
     }
@@ -184,11 +184,11 @@ export default class DomEventHandler extends BaseHandler {
         const checkMethodList = arr.filter(code => !!context[code]);
       
         // 이벤트 정의 시점에 적용 되어야 하는 것들은 모두 method() 화 해서 정의한다.
-        const [afters, afterMethods] = this.splitMethodByKeyword(arr, "after");
-        const [befores, beforeMethods] = this.splitMethodByKeyword(arr, "before");
-        const [debounces, debounceMethods] = this.splitMethodByKeyword(arr, "debounce");
-        const [throttles, throttleMethods] = this.splitMethodByKeyword(arr, "throttle");
-        const [captures] = this.splitMethodByKeyword(arr, "capture");
+        const [afters, afterMethods] = splitMethodByKeyword(arr, "after");
+        const [befores, beforeMethods] = splitMethodByKeyword(arr, "before");
+        const [debounces, debounceMethods] = splitMethodByKeyword(arr, "debounce");
+        const [throttles, throttleMethods] = splitMethodByKeyword(arr, "throttle");
+        const [captures] = splitMethodByKeyword(arr, "capture");
       
         // 위의 5개 필터 이외에 있는 코드들은 keycode 로 인식한다.
         const filteredList = [

@@ -110,7 +110,6 @@ export default class BaseColorPicker extends UIElement {
 
         // 매번 이벤트를 지우고 다시 생성할 필요가 없어서 초기화 코드는 지움. 
         // this.destroy();
-        // this.initializeEvent();
         // define colorpicker callback
         this.colorpickerShowCallback = showCallback;
         this.colorpickerHideCallback = hideCallback;        

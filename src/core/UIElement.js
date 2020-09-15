@@ -18,6 +18,14 @@ export const EVENT = (...args) => {
 export const COMMAND = EVENT
 export const ON = EVENT
 
+/**
+ * UI 를 만드는 기본 단위 
+ * 
+ * dom handler, 
+ * bind handler, 
+ * store handler 를 가진다. 
+ * 
+ */
 class UIElement extends EventMachine {
   constructor(opt, props = {}) {
     super(opt, props);
@@ -50,6 +58,10 @@ class UIElement extends EventMachine {
     }
   }
 
+  /**
+   * UIElement 가 생성될 때 호출되는 메소드 
+   * @protected
+   */
   created() {}
 
   getRealEventName(e, s = MULTI_PREFIX) {
@@ -101,6 +113,9 @@ class UIElement extends EventMachine {
     });
   }
 
+  /**
+   * 현재 UIElement 와 연결된 모든 메세지를 해제한다. 
+   */
   destoryStoreEvent() {
     this.$store.offAll(this);
   }
@@ -111,6 +126,11 @@ class UIElement extends EventMachine {
     this.destoryStoreEvent();
   }
 
+  /**
+   * UIElement 를 다시 그린다. 
+   * 
+   * template 정의 부터  메세지 이벤트 정의까지 모두 다시 한다. 
+   */
   rerender() {
     super.rerender();
 
@@ -120,19 +140,39 @@ class UIElement extends EventMachine {
   }
 
 
-  emit($1, $2, $3, $4, $5) {
+  /**
+   * UIElement 기반으로 메세지를 호출 한다. 
+   * 나 이외의 객체들에게 메세지를 전달한다. 
+   * 
+   * @param {string} messageName
+   * @param {any[]} args 
+   */
+  emit(messageName, ...args) {
     this.$store.source = this.source;
     this.$store.sourceContext = this; 
-    this.$store.emit($1, $2, $3, $4, $5);
+    this.$store.emit(messageName, ...args);
   }
 
+  /**
+   * MicroTask 를 수행한다. 
+   * 
+   * @param {Function} callback 
+   */
   nextTick (callback) {
     this.$store.nextTick(callback);
   }
 
-  trigger($1, $2, $3, $4, $5) {
+  /**
+   * 
+   * UIElement 자신의 메세지를 수행한다. 
+   * emit 은 나외의 객체에게 메세지를 보내고 
+   * 
+   * @param {string} messageName 
+   * @param {any[]} args 
+   */
+  trigger(messageName, ...args) {
     this.$store.source = this.source;
-    this.$store.trigger($1, $2, $3, $4, $5);
+    this.$store.trigger(messageName, ...args);
   }
 
   on (message, callback) {
@@ -146,6 +186,12 @@ class UIElement extends EventMachine {
 
   // editor utility 
 
+  /**
+   * i18n 텍스트를 리턴한다. 
+   * 
+   * @param {string} key 
+   * @returns {string} i18n 텍스트 
+   */
   $i18n (key) {
     return this.$editor.i18n(key);
   }
@@ -170,15 +216,22 @@ class UIElement extends EventMachine {
     return this.$editor.history; 
   }
 
-  // history 가 필요한 커맨드는 command 함수를 사용하자. 
-  // 마우스 업 상태에 따라서 자동으로 history 커맨드로 분기해준다. 
-  // 기존 emit 과 거의 동일하게 사용할 수 있다.   
-  command (command, message, $3, $4, $5, $6) {
+  /**
+   * history 가 필요한 커맨드는 command 함수를 사용하자. 
+   * 마우스 업 상태에 따라서 자동으로 history 커맨드로 분기해준다. 
+   * 기존 emit 과 거의 동일하게 사용할 수 있다.   
+   * 
+   * @param {string} command 
+   * @param {string} description 
+   * @param {any[]} args 
+   */
+
+  command (command, description, ...args) {
 
     if (this.$editor.isPointerUp) {
-      return this.emit(`history.${command}`, message, $3, $4, $5, $6);
+      return this.emit(`history.${command}`, description, ...args);
     } else {
-      return this.emit(command, $3, $4, $5, $6);
+      return this.emit(command, ...args);
     }
 
 

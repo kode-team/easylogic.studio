@@ -12,8 +12,9 @@ import {
   html,
   keyEach,
   keyMap,
+  collectProps
 } from "./functions/func";
-import {
+import { 
   ADD_BODY_MOUSEMOVE,
   ADD_BODY_MOUSEUP
 } from "../types/event";
@@ -63,7 +64,6 @@ const expectMethod = {
   "bindData": true,
   "template": true,
   "eachChildren": true,
-  "initializeEvent": true,
   "destroy": true,
   "collectProps": true,
   "filterProps": true,
@@ -110,10 +110,22 @@ export default class EventMachine {
     ]
   }
 
+  /**
+   * state 를 초기화 한것을 리턴한다. 
+   * 
+   * @protected
+   * @returns {Object} 
+   */
   initState() {
     return {};
   }
 
+  /**
+   * state 를 변경한다. 
+   * 
+   * @param {Object} state  새로운 state 
+   * @param {Boolean} isLoad  다시 로드 할 것인지 체크 , true 면 state 변경후 다시 로드 
+   */
   setState(state = {}, isLoad = true) {
     this.prevState = this.state;
     this.state = Object.assign({}, this.state, state );
@@ -122,12 +134,25 @@ export default class EventMachine {
     }
   }
 
+  /**
+   * state 에 있는 key 필드의 값을 토글한다. 
+   * Boolean 형태의 값만 동작한다. 
+   * 
+   * @param {string} key 
+   * @param {Boolean} isLoad 
+   */
   toggleState(key, isLoad = true) {
     this.setState({
       [key]: !(this.state[key])
     }, isLoad)
   }
 
+  /**
+   * 객체를 다시 그릴 때 사용한다. 
+   * 
+   * @param {*} props 
+   * @protected
+   */
   _reload(props) {
     this.props = props;
     this.state = {}; 
@@ -135,6 +160,11 @@ export default class EventMachine {
     this.refresh(true);
   }
 
+  /**
+   * template 을 렌더링 한다. 
+   * 
+   * @param {Dom} $container  컴포넌트가 그려질 대상 
+   */
   render($container) {
     this.$el = this.parseTemplate(
       html`
@@ -147,24 +177,52 @@ export default class EventMachine {
       $container.append(this.$el);
     }
 
+    // LOAD 로 정의된 것들을 수행한다. 
     this.load();
 
+    // render 이후에 실행될 콜백을 정의한다. 
     this.afterRender();
   }
 
   initialize() {
     this.state = this.initState();
   }
+
+  /**
+   * render 이후에 실행될 함수 
+   * dom 이 실제로 생성된 이후에 수행할 작업들을 정의한다. 
+   * 
+   * @protected
+   */
   afterRender() {}
+
+  /**
+   * 하위에 연결될 객체들을 정의한다 
+   * 
+   * @protected
+   * @returns {Object}
+   */
   components() {
     return {};
   }
 
+  /**
+   * ref 이름을 가진 Component 를 가지고 온다. 
+   * 
+   * @param  {any[]} args 
+   * @returns {EventMachine}
+   */
   getRef(...args) {
     const key = args.join('')
     return this.refs[key];
   }
 
+  /**
+   * template() 함수의 결과물을 파싱해서 dom element 를 생성한다. 
+   * 
+   * @param {string} html 
+   * @param {Boolean} [isLoad=false] 
+   */
   parseTemplate(html, isLoad) {
 
     if (isArray(html)) {
@@ -210,6 +268,11 @@ export default class EventMachine {
     })
   }
 
+  /**
+   * 실제 나의 instance 가 해당 부모의 자식으로 있는지 체크한다. 
+   * 
+   * @returns {Boolean}
+   */
   exists () {
 
     if (this.parent) {
@@ -398,19 +461,9 @@ export default class EventMachine {
   }
 
   /**
-   * @deprecated 
-   * render 이후에 부를려고 했는데  이미 Dom Event 는 render 이후에 자동으로 불리게 되어 있다. 
-   * 현재는 DomEvent, Bind 기준으로만 작성하도록 한다. 
-   * 나머지 라이프 사이클은 다음에 고민해보자. 
-   * 이벤트를 초기화한다.
-   */
-  // initializeEvent() {
-  //   this.runHandlers('initialize');
-  // }
-
-  /**
    * 자원을 해제한다.
    * 이것도 역시 자식 컴포넌트까지 제어하기 때문에 가장 최상위 부모에서 한번만 호출되도 된다.
+   * 
    */
   destroy() {
     this.eachChildren(childComponent => {
@@ -427,26 +480,11 @@ export default class EventMachine {
   /**
    * property 수집하기
    * 상위 클래스의 모든 property 를 수집해서 리턴한다.
+   * 
+   * @returns {string[]} 나의 상위 모든 메소드를 수집해서 리턴한다. 
    */
   collectProps() {
-
-    var p = this.__proto__;
-    var results = [];
-    do {
-      var isObject = p instanceof Object;
-
-      if (isObject === false) {
-        break;
-      }
-      const names = Object.getOwnPropertyNames(p).filter(name => {
-        return this && isFunction(this[name]) && !expectMethod[name];
-      });
-
-      results.push(...names);
-      p = p.__proto__;
-    } while (p);
-
-    return results;
+    return collectProps(this, expectMethod);
   }
 
   filterProps(pattern) {
