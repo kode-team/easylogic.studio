@@ -50,7 +50,7 @@
   }
   
   .selection-tool {
-    border: rgb(214, 214, 214) 1px dashed;
+    border: var(--selection-tool-border-color) 0.5px solid;
     position:absolute;
 
     
@@ -108,9 +108,9 @@
       position: absolute;
       transform: translate(-50%, -50%);
       display: inline-block;
-      width: 10px;
-      height: 10px;
-      background-color: var(--selected-color);
+      width: 8px;
+      height: 8px;
+      background-color: var(--selection-tool-border-color);
       
       border:1px solid $pointer-color;
       // border-radius: 100%;
@@ -118,9 +118,10 @@
       cursor: pointer;
 
       &:not([data-position='move']) {
-        border-radius: 100%;
+        // border-radius: 100%;
         box-sizing: border-box;
-        border: 1px solid white; 
+        background-color: white; 
+        border: 1px solid var(--selection-tool-border-color); 
       }
   
       &:before { 

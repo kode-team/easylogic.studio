@@ -9,6 +9,7 @@
     padding: 7px 0px;
     overflow: hidden;
     white-space: nowrap;
+    text-align: center;
 
     .text {
         display: inline-block;
@@ -94,9 +95,17 @@
           }
 
           .fill-single-editor {
+            display: inline-block;
+            vertical-align: middle;
+            font-size: 16px;
+
+            label {
+              font-size: 16px !important;
+              vertical-align: middle;
+            }
             .preview {
-              width: 20px;
-              height: 20px;
+              width: 18px;
+              height: 18px;
               border: 1px solid var(--selected-color);
               overflow: hidden;
             }

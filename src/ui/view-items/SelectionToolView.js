@@ -1,7 +1,7 @@
 import UIElement, { EVENT } from "@core/UIElement";
 import { POINTERSTART, MOVE, END, BIND, IF, CLICK } from "@core/Event";
 import { Length } from "@unit/Length";
-import { isNotUndefined } from "@core/functions/func";
+import { isFunction, isNotUndefined } from "@core/functions/func";
 import GuideView from "../view/GuideView";
 import AreaItem from "@items/AreaItem";
 import icon from "@icon/icon";
@@ -52,12 +52,10 @@ const SelectionToolEvent = class  extends UIElement {
 
             // box 모드 
             // box - x, y, width, height 고정된 상태로  path 정보만 변경 
-            // canvas - x, y, width, height 를 path 좌표로 재구성 
             this.emit('showPathEditor', 'modify', {
                 changeEvent: 'updatePathItem',
                 current,
                 d: current.d,
-                // box: current.is('svg-textpath') ? 'box': 'canvas', 
                 box: 'box',
                 screenX: current.screenX,
                 screenY: current.screenY,
@@ -75,12 +73,12 @@ const SelectionToolEvent = class  extends UIElement {
 
         var current = this.$selection.current;
         if (current) {
-            if (current.updatePathItem) {
+            if (isFunction(current.updatePathItem)) {
+                // path data 설정 
                 current.updatePathItem(pathObject);
 
-                this.parent.selectCurrent(...this.$selection.items)
+                // 정해진 컴포넌트를 다시 그린다. 
                 this.emit('refreshSelectionStyleView', current, true, true);
-
             }
         }
 
@@ -205,27 +203,6 @@ export default class SelectionToolView extends SelectionToolBind {
         this.refreshSelectionToolView(dx, dy);
         this.parent.updateRealPosition();    
         this.emit('refreshSelectionDragStyleView', null, true)     
-    }
-
-    [EVENT('moveByKey')] (dx, dy) {
-
-        if (dx === 0 && dy === 0) {
-            return;  
-        }
-
-        this.pointerType = 'move'; 
-        this.$selection.move(dx, dy);
-        this.parent.selectCurrent(...this.$selection.items)
-
-        this.refs.$selectionTool.attr('data-selected-position', '');
-        this.refs.$selectionTool.attr('data-selected-movetype', '');
-
-        this.guideView.move(this.pointerType, dx,  dy)
-
-        var drawList = this.guideView.calculate();
-        this.emit('refreshGuideLine', this.calculateWorldPositionForGuideLine(drawList));                    
-
-        this.makeSelectionTool();           
     }
 
     end () {

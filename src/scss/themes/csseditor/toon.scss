@@ -8,6 +8,8 @@ $selected-border-color: #609de2;
 $selected-color: black; //#4778d4;
 $selected-color-2: rgba(0, 0, 0, 0.555);
 
+$selection-tool-border-color: #3a89f0;
+
 $background-color: white; 
 $header-background-color: white;
 $selected-background-color: #d8d8d8; 
@@ -96,7 +98,7 @@ $timeline-gauge-handle-color: #748ff1;
 $timeline-offset-line-color: $selected-color;
 // $timeline-offset-line-color: #497594;
 $timeline-row-selected-color: #609de2;
-
+$timeline-property-add-background-color: #747474;
 
 // guide line 
 $guide-line-color: $selected-color;

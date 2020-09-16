@@ -85,17 +85,46 @@ export default class GuideView {
         } else {
 
             if (Segment.isRight(type)) {
+
                 this.rect.width = allRect.width + dx; 
+
+                // 원래 x 보다 작은 영역으로 크기가 줄어 든다면 
+                // 줄어든 만큼 x 를 옮기고 
+                // width 를 줄어든 크기만큼 만든다. 
+                if (this.rect.width < 0) {
+                    this.rect.x = allRect.x + this.rect.width; 
+                    this.rect.width = Math.abs(this.rect.width);
+                }
+
             } else if (Segment.isLeft(type)) {
                 this.rect.x = allRect.x + dx
                 this.rect.width = allRect.width - dx; 
+
+                // 중심축 기준으로 옮겨서 그림                 
+                if (this.rect.width < 0) {
+                    this.rect.x = allRect.x + allRect.width; 
+                    this.rect.width = Math.abs(this.rect.width);
+                }
             } 
     
             if (Segment.isBottom(type)) {      // 밑으로 향하는 애들 
                 this.rect.height = allRect.height + dy;
+
+                // 중심축 기준으로 옮겨서 그림                 
+                if (this.rect.height < 0) {
+                    this.rect.y = allRect.y + this.rect.height; 
+                    this.rect.height = Math.abs(this.rect.height);
+                }
+
             } else if (Segment.isTop(type)) {
                 this.rect.height = allRect.height - dy;                 
                 this.rect.y = allRect.y + dy; 
+
+                // 중심축 기준으로 옮겨서 그림 
+                if (this.rect.height < 0) {
+                    this.rect.y = allRect.y + allRect.height; 
+                    this.rect.height = Math.abs(this.rect.height);
+                }                
             }                      
         }
     }

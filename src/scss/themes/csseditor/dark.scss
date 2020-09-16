@@ -6,6 +6,8 @@ $selected-border-color: #3a89f0;
 $selected-color: #fc554f;
 $selected-color-2: #fc554f81;
 
+$selection-tool-border-color: #3a89f0;
+
 $background-color: #1b1b20; 
 $header-background-color: #1b1b20;
 $selected-background-color: #535353; 
@@ -49,13 +51,14 @@ $timeline-gauge-background-color: #ee4b66;
 $timeline-gauge-handle-color: lighten(#fff67c, 10%);
 $timeline-row-selected-color: rgba(#435cb5, 0.4);
 
+$timeline-property-add-background-color: #666666;
 
 // guide line 
 $guide-font-color: black;
 $guide-line-rect-color: #435cb5;
 
-$page-view-color: #919191; 
-$page-view-element-artboard-title-color: rgba(222, 222, 222, 1);
+$page-view-color: #c9c9c9; 
+$page-view-element-artboard-title-color: rgb(92, 92, 92);
 
 $animation-item-background-color: #435cb5;
 
@@ -75,9 +78,9 @@ $rotate-x-border-color: rgb(104, 104, 247);
 $rotate-y-border-color: rgb(112, 197, 112);
 
 
-$color-view-background-color: #2b2b2b;
-$transform-origin-selected-color: #2b2b2b;
-$border-radius-selected-color: #2b2b2b;
+$color-view-background-color: #5c5c5c;
+$transform-origin-selected-color: #5c5c5c;
+$border-radius-selected-color: #5c5c5c;
 
 $transform-item-background-color: rgba(255, 255, 255, 0.03);
 $transform-item-border-color: #2b2b2b;

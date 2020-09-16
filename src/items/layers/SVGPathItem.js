@@ -1,10 +1,10 @@
 import PathParser from "@parser/PathParser";
-import { SVGItem } from "./SVGItem";
 import { clone, OBJECT_TO_CLASS, OBJECT_TO_PROPERTY, CSS_TO_STRING } from "@core/functions/func";
 import { hasSVGProperty, hasCSSProperty, hasSVGPathProperty } from "@util/Resource";
-import { Length } from "@unit/Length";
 import icon from "@icon/icon";
 import { ComponentManager } from "@manager/ComponentManager";
+import Dom from "@core/Dom";
+import { SVGItem } from "./SVGItem";
 
 export class SVGPathItem extends SVGItem {
 
@@ -28,25 +28,24 @@ export class SVGPathItem extends SVGItem {
   }
  
 
+  /**
+   * 
+   * @param {Object} obj 
+   * @param {string} obj.d  svg path 문자열
+   * @param {number} obj.totalLength  svg path 전체 길이 
+   */
   updatePathItem (obj) {
 
-    this.json.d = obj.d; 
-    this.json.totalLength = obj.totalLength;
-    this.json.path = new PathParser(obj.d);
+    // d 속성 (path 문자열) 을 설정한다. 
+    this.reset({
+      d: obj.d,
+      totalLength: obj.totalLength
+    })
 
+    this.json.path = new PathParser(obj.d);
     if(obj.segments) {
       this.json.path.resetSegment(obj.segments);
     }
-
-    // if (obj.rect) {
-
-    //   this.json.width = Length.px(obj.rect.width);
-    //   this.json.height = Length.px(obj.rect.height);
-  
-    //   this.setScreenX(Length.px(obj.rect.x))
-    //   this.setScreenY(Length.px(obj.rect.y))
-    // }
-
   }
   
   setCache () {
@@ -112,11 +111,18 @@ export class SVGPathItem extends SVGItem {
   }  
 
 
+  /**
+   * 
+   * @param {Dom} currentElement 
+   * @param {Boolean} isChangeFragment 
+   * @param {Boolean} isLast 
+   */
   updateFunction (currentElement, isChangeFragment = true, isLast = false) {
 
     if (!currentElement) return; 
     var $path = currentElement.$('path');
     $path.attr('d', this.json.d);
+
     if (isChangeFragment) {
       $path.setAttr({
         'filter': this.toFilterValue,
