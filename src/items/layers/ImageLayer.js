@@ -54,15 +54,14 @@ export class ImageLayer extends Layer {
     return project.getImageValueById(src);
   }
 
-  updateFunction (currentElement, isChangeFragment = true) {
-    if (isChangeFragment) {
-      const $image = currentElement.$('img')
-      if ($image.attr('src') != this.url) {
-        $image.attr('src', this.url);
-      }
+  updateFunction (currentElement) {
+
+    const $image = currentElement.$('img')
+    if ($image) {
+      $image.attr('src', this.url);
     }
 
-    super.updateFunction(currentElement, isChangeFragment);
+    super.updateFunction(currentElement);
 
   }      
 

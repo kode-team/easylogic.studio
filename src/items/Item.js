@@ -101,7 +101,7 @@ export class Item {
   }
 
   changed() {
-    this.json.timestamp = Date.now();
+    this.json.timestamp = this.json._timestamp + performance.now();
   }
 
   /***********************************
@@ -335,6 +335,8 @@ export class Item {
     var id = uuidShort()
     return {
       id,
+      _timestamp: Date.now(),
+      _time: performance.now(),
       visible: true,  // 보이기 여부 설정 
       lock: false,    // 편집을 막고 
       selected: false,  // 선택 여부 체크 
@@ -539,6 +541,13 @@ export class Item {
     return null;
   }
 
-
+  /**
+   * 외부에서 Dom 을 직접적으로 업데이트 할 때 사용 
+   * Root 객체부터 다시 만들지 않는다. 
+   * 
+   * @param {Dom} element 
+   * @public
+   * @override
+   */
   updateFunction (element) {}
 }

@@ -371,17 +371,8 @@ export default class PathEditorView extends PathTransformEditor {
 
         this.emit(this.state.changeEvent, {
             d: parser.toString(), 
-            totalLength: this.totalPathLength, 
-            rect: {
-                x: rect.x === 0? 0 : rect.x/this.scale,
-                y: rect.y === 0? 0 : rect.y/this.scale,
-                width: rect.width === 0? 0 : rect.width / this.scale,     // scale 이전의 크기 계산 
-                height: rect.height === 0? 0 : rect.height / this.scale    // scale 이전의 실제 크기 계산 
-            }
+            totalLength: this.totalPathLength
         })
-
-
-        this.emit('refreshPathLayer')   // 외부 데이타 변경 시점 정의 
     }
 
     addPathLayer() {

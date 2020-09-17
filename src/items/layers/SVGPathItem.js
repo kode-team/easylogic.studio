@@ -28,28 +28,13 @@ export class SVGPathItem extends SVGItem {
   }
  
 
-  /**
-   * 
-   * @param {Object} obj 
-   * @param {string} obj.d  svg path 문자열
-   * @param {number} obj.totalLength  svg path 전체 길이 
-   */
-  updatePathItem (obj) {
-
-    // d 속성 (path 문자열) 을 설정한다. 
-    this.reset({
-      d: obj.d,
-      totalLength: obj.totalLength
-    })
-
-    this.json.path = new PathParser(obj.d);
-    if(obj.segments) {
-      this.json.path.resetSegment(obj.segments);
-    }
-  }
-  
   setCache () {
     this.rect = this.clone(false);
+
+    if (!this.json.path) {
+      this.json.path = new PathParser(this.json.d);
+    }
+
     this.cachePath = this.json.path.clone()
 
   }
@@ -114,25 +99,23 @@ export class SVGPathItem extends SVGItem {
   /**
    * 
    * @param {Dom} currentElement 
-   * @param {Boolean} isChangeFragment 
-   * @param {Boolean} isLast 
    */
-  updateFunction (currentElement, isChangeFragment = true, isLast = false) {
+  updateFunction (currentElement) {
 
     if (!currentElement) return; 
-    var $path = currentElement.$('path');
-    $path.attr('d', this.json.d);
 
-    if (isChangeFragment) {
+    var $path = currentElement.$('path');
+
+    if ($path) {
       $path.setAttr({
+        'd':  this.json.d,
         'filter': this.toFilterValue,
         'fill': this.toFillValue,
         'stroke': this.toStrokeValue
-      })
-
-      this.updateDefString(currentElement)
-
+      })  
     }
+
+    this.updateDefString(currentElement)
 
     if (isLast) {
       this.json.totalLength = $path.totalLength

@@ -18,8 +18,7 @@ export default function convertPath (editor, pathString, rect = null) {
                 d = parser.d; 
             }
 
-            // path string 을 저걸로 맞추기 
-            current.updatePathItem({ d })
+            editor.command('setAttribute', 'set attribute -d', { d }, current)
 
         } else if (current['clip-path'].includes('path')) {
             var d = pathString;
@@ -32,11 +31,7 @@ export default function convertPath (editor, pathString, rect = null) {
             }
 
             // path string 을 저걸로 맞추기 
-            current.reset({
-                'clip-path': `path(${d})`
-            })
+            editor.command('setAttribute', 'change clip path', { 'clip-path': `path(${d})` }, current)
         }
-
-        editor.emit('refreshElement', current);          
     }
 }

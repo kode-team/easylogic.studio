@@ -112,8 +112,8 @@ export default class LayerAppendView extends UIElement {
     [BIND('$area')] () {
         return {
             style: {
-                left: Length.px(this.state.dragXY.x),
-                top: Length.px(this.state.dragXY.y),
+                left: Length.px(this.state.x),
+                top: Length.px(this.state.y),
                 width: Length.px(this.state.width),
                 height: Length.px(this.state.height)
             },

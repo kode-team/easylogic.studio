@@ -376,23 +376,21 @@ export class CylinderLayer extends Component {
     }
   }
 
-  updateFunction (currentElement, isChangeFragment = true) {
+  updateFunction (currentElement) {
 
-    super.updateFunction(currentElement, isChangeFragment);
+    super.updateFunction(currentElement);
 
-    if (isChangeFragment) {
-      var count = +currentElement.attr('data-count');
-      if (count !== this.json.count.value) {
-        currentElement.$$('.face').forEach(it => it.remove())
 
-        var string = repeat(this.json.count.value).map((it, index) => {
-          return /*html*/`<div class='face' data-index="${index}"></div>`
-        }).join('')
+    var count = +currentElement.attr('data-count');
+    if (count !== this.json.count.value) {
+      currentElement.$$('.face').forEach(it => it.remove())
 
-        currentElement.appendHTML(string);
-        currentElement.attr('data-count', this.json.count);
-      }
+      var string = repeat(this.json.count.value).map((it, index) => {
+        return /*html*/`<div class='face' data-index="${index}"></div>`
+      }).join('')
 
+      currentElement.appendHTML(string);
+      currentElement.attr('data-count', this.json.count);
     }
 
   }    

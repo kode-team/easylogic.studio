@@ -13,6 +13,7 @@ import BrushDrawView from "../view-items/BrushDrawView";
 import { isFunction } from "@core/functions/func";
 import StyleView from "./StyleView";
 import { computeVertextData } from "@core/functions/matrix";
+import { DomItem } from "@items/DomItem";
 
 
 export default class ElementView extends UIElement {
@@ -78,7 +79,12 @@ export default class ElementView extends UIElement {
     }
 
     getElement (id) {
-        return this.refs.$view.$(`[data-id="${id}"]`);
+
+        if (!this.state.cachedCurrentElement[id]) {
+            this.state.cachedCurrentElement[id] = this.refs.$view.$(`[data-id="${id}"]`);
+        }
+
+        return this.state.cachedCurrentElement[id];
     }
 
     checkEmptyElement (e) {
@@ -374,14 +380,14 @@ export default class ElementView extends UIElement {
         // this.renderPointers();
     }
 
+    /**
+     * item 의  Rectangle 을 업데이트 한다. 
+     * 
+     * @param {DomItem} item 
+     */
     updateRealPositionByItem (item) {
         var {x, y, width, height} = item.toBound();
-        var cachedItem = this.state.cachedCurrentElement[item.id]
-
-        if (!cachedItem) {
-            this.state.cachedCurrentElement[item.id] = this.getElement(item.id);
-            cachedItem = this.state.cachedCurrentElement[item.id]
-        }
+        var cachedItem = this.getElement(item.id)
 
         if (cachedItem) {
             cachedItem.cssText(`left: ${x};top:${y};width:${width};height:${height}; transform: ${item.toTransformCSS().transform};`)
@@ -514,28 +520,26 @@ export default class ElementView extends UIElement {
         'refreshCanvasForPartial', 
         'refreshSelectionStyleView', 
         'refreshSelectionDragStyleView'     // tool 에서 드래그 할 때 변경 사항 적용 
-    )] (obj, isChangeFragment = true,  isLast = false) {
+    )] (obj) {
         var items = obj ? [obj] : this.$selection.items;
 
         items.forEach(current => {
-            this.updateElement(current, isChangeFragment, isLast);
+            this.updateElement(current);
         })
-
-        // this.renderPointers();        
     }
 
-    updateElement (item, isChangeFragment = true, isLast = false) {
+    updateElement (item) {
         if (item) {
-            item.updateFunction(this.getElement(item.id), isChangeFragment, isLast);
+            item.updateFunction(this.getElement(item.id));
             this.updateRealPositionByItem(item);
         }
 
     }
 
     // 타임라인에서 객체를 업데이트 할 때 발생함. 
-    updateTimelineElement (item, isChangeFragment = true, isLast = false) {
+    updateTimelineElement (item) {
         if (item) {
-            item.updateFunction(this.getElement(item.id), isChangeFragment, isLast, this, true);
+            item.updateFunction(this.getElement(item.id));
             this.updateRealPositionByItem(item);
         }
 

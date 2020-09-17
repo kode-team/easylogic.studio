@@ -97,8 +97,8 @@ import setAttributeForMulti from "./setAttributeForMulti";
 import historySetAttributeForMulti from "./history.setAttributeForMulti";
 import historyAddLayer from "./history.addLayer";
 import historyRemoveLayer from "./history.removeLayer";
-
-
+import updatePathItem from "./updatePathItem";
+import updateClipPath from "./updateClipPath";
 
 export default {
     // history + command  
@@ -204,4 +204,6 @@ export default {
     sortRight,
     sameWidth,
     sameHeight,      
+    updatePathItem,
+    updateClipPath
 }

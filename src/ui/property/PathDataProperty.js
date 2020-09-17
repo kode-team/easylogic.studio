@@ -25,7 +25,7 @@ export default class PathDataProperty extends BaseProperty {
   }
 
 
-  [EVENT('refreshPathLayer', 'refreshStyleView', 'refreshRect') + DEBOUNCE(100)]() {
+  [EVENT('refreshStyleView', 'refreshRect') + DEBOUNCE(100)]() {
     this.refresh();
   }  
 
@@ -36,8 +36,6 @@ export default class PathDataProperty extends BaseProperty {
   }
 
   refresh() {
-    // update 를 어떻게 할지 고민 
-
     var current = this.$selection.current || {};
     this.children.$pathData.setValue(current.d);
   }
@@ -54,7 +52,7 @@ export default class PathDataProperty extends BaseProperty {
 
 
   [EVENT('changeValue')] (key, value, params) {
-    this.emit("updatePathItem", {
+    this.emit("updatePathItem", this.$selection.current, {
       [key]: value 
     })
     

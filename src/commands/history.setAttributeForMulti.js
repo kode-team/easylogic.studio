@@ -1,11 +1,11 @@
 export default {
     command : 'history.setAttributeForMulti',
-    execute: function (editor, message, multiAttrs = {}, isChangeFragment = false, isBoundSize = false) {
+    execute: function (editor, message, multiAttrs = {}) {
 
-        editor.emit('setAttributeForMulti', multiAttrs, isChangeFragment, isBoundSize)
+        editor.emit('setAttributeForMulti', multiAttrs)
 
         editor.history.add(message, this, {
-            currentValues: [multiAttrs, isChangeFragment, isBoundSize],
+            currentValues: [multiAttrs],
             undoValues: editor.history.getUndoValuesForMulti(multiAttrs)
         })
 

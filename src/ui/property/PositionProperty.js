@@ -11,7 +11,7 @@ export default class PositionProperty extends BaseProperty {
     this.refreshShowIsNot(['project', 'artboard'])
   }
 
-  [EVENT('refreshRect')] () {
+  [EVENT('refreshRect') + DEBOUNCE(100)] () {
     var current = this.$selection.current;
     if (!current) return '';
 

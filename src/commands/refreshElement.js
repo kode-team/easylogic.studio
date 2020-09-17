@@ -4,13 +4,10 @@
  * @param {Editor} editor - editor instance 
  * @param {Array} args - command parameters 
  */
-export default function refreshElement (editor, current, isChangeFragment = false, isBoundSize = false) {
+export default function refreshElement (editor, current) {
     // 화면 사이즈 조정         
-    editor.emit('refreshSelectionStyleView', current, isChangeFragment, current && current.enableHasChildren() === false)
+    editor.emit('refreshSelectionStyleView', current)
 
-    if (isBoundSize === true) {
-        // 화면 레이아웃 재정렬 
-        editor.emit('refreshElementBoundSize', editor.selection.getRootItem(current))
-    }
-
+    // 화면 레이아웃 재정렬 
+    editor.emit('refreshElementBoundSize', editor.selection.getRootItem(current))
 }

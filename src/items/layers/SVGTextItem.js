@@ -6,6 +6,7 @@ import { Shape } from "../../property-parser/Shape";
 import { Length } from "@unit/Length";
 import icon from "@icon/icon";
 import { ComponentManager } from "@manager/ComponentManager";
+import Dom from "@core/Dom";
 
 export class SVGTextItem extends SVGItem {
 
@@ -34,26 +35,9 @@ export class SVGTextItem extends SVGItem {
     return false; 
   }
 
-
-
-  updatePathItem (obj) {
-
-    // shape-inside 
-    // shape-subtract 
-
-    this.json.d = obj.d; 
-    this.json.totalLength = obj.totalLength;
-    this.json.path = new PathParser(obj.d);
-
-    if(obj.segments) {
-      this.json.path.resetSegment(obj.segments);
-    }
-  }
-  
   setCache () {
     this.rect = this.clone(false);
   }
-
 
   convert(json) {
     json = super.convert(json);
@@ -91,11 +75,14 @@ export class SVGTextItem extends SVGItem {
     ] 
   }  
 
+  /**
+   * 
+   * @param {Dom} currentElement 
+   */
+  updateFunction (currentElement) {
+    var $text = currentElement.$('text'); 
 
-  updateFunction (currentElement, isChangeFragment = true) {
-
-    if (isChangeFragment) {
-      var $text = currentElement.$('text'); 
+    if ($text) {
       $text.text(this.json.text)
       $text.setAttr({
         filter: this.toFilterValue,
@@ -104,9 +91,11 @@ export class SVGTextItem extends SVGItem {
         textLength: this.json.textLength,
         lengthAdjust: this.json.lengthAdjust
       })
-
-      this.updateDefString(currentElement)
+  
     }
+
+    this.updateDefString(currentElement)
+
   }    
 
   get toDefInnerString () {

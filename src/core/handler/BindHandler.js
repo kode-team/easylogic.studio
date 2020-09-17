@@ -1,8 +1,14 @@
 import BaseHandler from "./BaseHandler";
 import { keyEach, isUndefined, isFunction, isString, isNotString, isArray, isObject } from "../functions/func";
 import { CHECK_BIND_PATTERN, BIND_CHECK_FUNCTION, CHECK_SAPARATOR, BIND_CHECK_DEFAULT_FUNCTION, BIND_SAPARATOR } from "../Event";
+import Dom from "@core/Dom";
 
-
+/**
+ * 
+ * @param {Dom} $element 
+ * @param {string} key 
+ * @param {any} value 
+ */
 const applyElementAttribute = ($element, key, value) => {
 
   if (key === 'cssText') {

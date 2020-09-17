@@ -53,7 +53,7 @@ const SelectionToolEvent = class  extends UIElement {
             // box 모드 
             // box - x, y, width, height 고정된 상태로  path 정보만 변경 
             this.emit('showPathEditor', 'modify', {
-                changeEvent: 'updatePathItem',
+                // changeEvent: 'updatePathItem',
                 current,
                 d: current.d,
                 box: 'box',
@@ -69,20 +69,20 @@ const SelectionToolEvent = class  extends UIElement {
         this.toggleEditingPath(false);
     }
 
-    [EVENT('updatePathItem')] (pathObject) {
+    // [EVENT('updatePathItem')] (pathObject) {
 
-        var current = this.$selection.current;
-        if (current) {
-            if (isFunction(current.updatePathItem)) {
-                // path data 설정 
-                current.updatePathItem(pathObject);
+    //     var current = this.$selection.current;
+    //     if (current) {
+    //         if (isFunction(current.updatePathItem)) {
+    //             // path data 설정 
+    //             current.updatePathItem(pathObject);
 
-                // 정해진 컴포넌트를 다시 그린다. 
-                this.emit('refreshSelectionStyleView', current, true, true);
-            }
-        }
+    //             // 정해진 컴포넌트를 다시 그린다. 
+    //             this.emit('refreshSelectionStyleView', current, true, true);
+    //         }
+    //     }
 
-    } 
+    // } 
 
 
     [EVENT('refreshSelectionTool')] () { 
@@ -201,8 +201,8 @@ export default class SelectionToolView extends SelectionToolBind {
         }
 
         this.refreshSelectionToolView(dx, dy);
-        this.parent.updateRealPosition();    
-        this.emit('refreshSelectionDragStyleView', null, true)     
+        // this.parent.updateRealPosition();    
+        this.emit('refreshCanvasForPartial', null, true)     
     }
 
     end () {

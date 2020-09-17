@@ -69,25 +69,19 @@ export default class Dom {
     return Dom.create(document.body)
   }
 
-  // data (key, value) {
-
-  //   var newKey = key.split('-').map( (it, index) => {
-  //     if (index === 0) { return it }
-
-  //     return it.substr(0, 1).toUpperCase() + it.substr(1);
-  //   }).join(''); 
-
-  //   if (arguments.length === 1) {
-  //     return this.el.dataset(newKey);
-  //   } else {
-  //     this.el.dataset(newKey, value);
-  //   }
-    
-  // }
-
   setAttr (obj) {
     Object.keys(obj).forEach(key => {
       this.attr(key, obj[key])
+    })
+    return this;  
+  }
+
+  setProp (obj) {
+    Object.keys(obj).forEach(key => {
+      // 동일한 값을 갱신하지 않는다. 
+      if (this.el[key] != obj[key]) {
+        this.el[key] = obj[key];
+      }
     })
     return this;  
   }
@@ -97,7 +91,10 @@ export default class Dom {
       return this.el.getAttribute(key);
     }
 
-    this.el.setAttribute(key, value);
+    // 동일한 속성 값이 있다면 변경하지 않는다. 
+    if (this.el.getAttribute(key) != value) {
+      this.el.setAttribute(key, value);
+    }
 
     return this;
   }
@@ -314,6 +311,11 @@ export default class Dom {
     return this; 
   }
 
+  /**
+   * 
+   * @param {string} value 
+   * @returns {string} 파라미터가 없을 때  textContent 를 리턴한다. 
+   */
   text(value) {
     if (isUndefined(value)) {
       return this.el.textContent;
@@ -324,7 +326,11 @@ export default class Dom {
         tempText = value.text();
       }
 
-      this.el.textContent = tempText;
+      // 값의 변경 사항이 없으면 업데이트 하지 않는다. 
+      if (this.el.textContent !== tempText) {
+        this.el.textContent = tempText;
+      }
+
       return this;
     }
   }

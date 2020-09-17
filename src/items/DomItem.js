@@ -8,7 +8,6 @@ import {
   isNotUndefined,
   CSS_TO_STRING,
   STRING_TO_CSS,
-  clone,
   OBJECT_TO_PROPERTY,
   OBJECT_TO_CLASS
 } from "@core/functions/func";
@@ -488,8 +487,15 @@ export class DomItem extends GroupItem {
 
   toTransformCSS() {
 
+    const key = [this.json['transform'], this.json['rotate']].join(":::");
+
+    if (key != this._transformCacheKey) {
+      this._transformCache = Transform.rotate(this.json['transform'], this.json['rotate'])
+      this._transformCacheKey = key; 
+    }
+
     var results = {
-      transform: Transform.rotate(this.json['transform'], this.json['rotate'])
+      transform: this._transformCache
     } 
 
     return results;
@@ -706,32 +712,38 @@ ${this.toSelectorString(prefix)}
   }
 
 
+  /**
+   * 
+   * @param {Dom} currentElement 
+   */
 
+  updateFunction (currentElement) {
 
-  updateFunction (currentElement, isChangeFragment = true, isLast = false, context = null) {
+    let $svg = currentElement.el.$svg;
 
-    if (isChangeFragment) {
-      var $svg = currentElement.$(`[data-id="${this.innerSVGId}"]`);  
-      if ($svg) {
+    if (!$svg) { 
+      currentElement.el.$svg = currentElement.$(`[data-id="${this.innerSVGId}"]`);  
+      $svg = currentElement.el.$svg
+    }
 
-        const defInnerString = this.toDefInnerString.trim();
+    if ($svg) {
 
-        if (defInnerString) {
-          var $defs = $svg.$('defs');
-          $defs.html(defInnerString)
-        }
+      const defInnerString = this.toDefInnerString.trim();
 
-      } else {
-        const defString = this.toDefString.trim();
-
-        if (defString) {
-          var a = Dom.createByHTML(defString);
-          if (a) {
-            currentElement.prepend(a);
-          }
-        }
+      if (defInnerString) {
+        var $defs = $svg.$('defs');
+        $defs.html(defInnerString)
       }
 
+    } else {
+      const defString = this.toDefString.trim();
+
+      if (defString) {
+        var a = Dom.createByHTML(defString);
+        if (a) {
+          currentElement.prepend(a);
+        }
+      }
     }
 
   }    

@@ -29,31 +29,14 @@ export class SVGBrushItem extends SVGItem {
   enableHasChildren() {
     return false; 
   }
- 
-
-  updatePathItem (obj) {
-
-    this.json.d = obj.d; 
-    this.json.totalLength = obj.totalLength;
-    this.json.path = new PathParser(obj.d);
-
-    if(obj.segments) {
-      this.json.path.resetSegment(obj.segments);
-    }
-
-    if (obj.rect) {
-
-      this.json.width = Length.px(obj.rect.width);
-      this.json.height = Length.px(obj.rect.height);
-  
-      this.setScreenX(Length.px(obj.rect.x))
-      this.setScreenY(Length.px(obj.rect.y))
-    }
-
-  }
   
   setCache () {
     this.rect = this.clone();
+
+    if (!this.json.path) {
+      this.json.path = new PathParser(this.json.d);
+    }
+
     this.cachePath = this.json.path.clone()
 
   }
@@ -112,24 +95,29 @@ export class SVGBrushItem extends SVGItem {
   }  
 
 
-  updateFunction (currentElement, isChangeFragment = true, isLast = false) {
+  updateFunction (currentElement) {
 
     var $path = currentElement.$('path.svg-brush-item');
-    $path.attr('d', this.json.d);
 
-    if (isChangeFragment) {
-      this.updateDefString(currentElement)
-      const $items = currentElement.$('.svg-brush-items')
-      $items.attr('filter', this.toFilterValue);
-      $items.attr('fill', this.toFillValue);
-      $items.attr('fill-opacity', this.toFillOpacityValue);
-      $items.updateSVGDiff(this.makeBrushItem(this.json['stroke-width']));
+    if ($path.attr('d') !== this.json.d) {
+      $path.attr('d', this.json.d);
     }
 
-    if (isLast) {
-      this.json.totalLength = $path.totalLength
+    this.updateDefString(currentElement)
+    const $items = currentElement.$('.svg-brush-items')
+    if ($items) {
+      $items.setAttr({
+        filter: this.toFilterValue,
+        fill: this.toFillValue,
+        'fill-opacity': this.toFillOpacityValue,
+      })
+
+      $items.updateSVGDiff(this.makeBrushItem(this.json['stroke-width']));      
     }
 
+    this.reset({
+      totalLength: $path.totalLength
+    })
   }    
 
   get toDefInnerString () {

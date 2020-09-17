@@ -32,18 +32,13 @@ export class SVGTextPathItem extends SVGItem {
   }
  
 
-  updatePathItem (obj) {
-    this.json.d = obj.d; 
-    this.json.totalLength = obj.totalLength;
-    this.json.path = new PathParser(obj.d);
-
-    if(obj.segments) {
-      this.json.path.resetSegment(obj.segments);
-    }
-  }
-  
   setCache () {
     this.rect = this.clone(false);
+
+    if (!this.json.path) {
+      this.json.path = new PathParser(this.json.d);
+    }
+
     this.cachePath = this.json.path.clone()
   }
 
@@ -106,13 +101,16 @@ export class SVGTextPathItem extends SVGItem {
   }  
 
 
-  updateFunction (currentElement, isChangeFragment = true) {
+  updateFunction (currentElement) {
 
     var $path = currentElement.$('path');
-    $path.attr('d', this.json.d);
 
-    if (isChangeFragment) {
-      var $textPath = currentElement.$('textPath'); 
+    if ($path) {
+      $path.attr('d', this.json.d);
+    }
+
+    var $textPath = currentElement.$('textPath'); 
+    if ($textPath) {
       $textPath.text(this.json.text)
       $textPath.setAttr({
         filter: this.toFilterValue,
@@ -122,10 +120,10 @@ export class SVGTextPathItem extends SVGItem {
         lengthAdjust: this.json.lengthAdjust,
         startOffset: this.json.startOffset
       })
-
-      this.updateDefString(currentElement)
-
+  
     }
+
+    this.updateDefString(currentElement)
 
     this.json.totalLength = $path.totalLength
   }    

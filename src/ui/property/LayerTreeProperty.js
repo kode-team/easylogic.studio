@@ -150,7 +150,7 @@ export default class LayerTreeProperty extends BaseProperty {
         <div class='detail'>
           <label data-layout-title='${title}' > 
             <div class='folder ${layer.collapsed ? 'collapsed' : ''}'>${icon.arrow_right}</div>
-            <span class='icon' data-item-type="${layer.itemType}" style='color: ${layer['background-color']};'>${this.getIcon(layer)}</span> 
+            <span class='icon' data-item-type="${layer.itemType}">${this.getIcon(layer)}</span> 
             <span class='name'>${name}</span>
           </label>
           <div class="tools">
@@ -400,7 +400,7 @@ export default class LayerTreeProperty extends BaseProperty {
     this.trigger('changeSelection', true)
   }
 
-  [EVENT('refreshStylePosition', 'refreshSelectionStyleView', 'refreshCanvasForPartial')] () { 
+  [EVENT('refreshStylePosition')] () { 
     this.trigger('changeSelection')
   }
 

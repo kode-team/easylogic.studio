@@ -1,8 +1,14 @@
 import { isFunction } from "@core/functions/func";
+import { Editor } from "@manager/Editor";
 
 export default {
     command : 'setAttributeForMulti',
-    execute: function (editor, multiAttrs = {}, isChangeFragment = false, isBoundSize = false) {
+    /**
+     * 
+     * @param {Editor} editor 
+     * @param {object} multiAttrs  아이디 기반의 속성 리스트  { [id] : { key: value }, .... }
+     */
+    execute: function (editor, multiAttrs = {}) {
 
         Object.keys(multiAttrs).forEach(id => {
             const attrs = multiAttrs[id];
@@ -18,7 +24,7 @@ export default {
                     item.reset({ [key] : value });
                 })
         
-                editor.emit('refreshElement', item, isChangeFragment, isBoundSize);
+                editor.emit('refreshElement', item);
             });
         })
 

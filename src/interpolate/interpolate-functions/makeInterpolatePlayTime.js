@@ -14,10 +14,6 @@ export function makeInterpolatePlayTime(layer, property, startValue, endValue, a
 
     return (rate, t) => {
         if (t === 0) {
-            // 레이어 업데이트 사항 중에 updateFunction 으로 업데이트 되는 부분 
-            // currentTime 도 매번 업데이트 되기 때문에 
-            // playbackRate 도 매번 업데이트 되고
-            // 그래서 막는게 필요하다. 
             mediaElement.currentTime = startTime; 
             if (mediaElement.paused) {
                 mediaElement.play(); 

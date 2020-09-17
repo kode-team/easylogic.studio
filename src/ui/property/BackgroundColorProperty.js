@@ -105,7 +105,7 @@ export default class BackgroundColorProperty extends BaseProperty {
       `;
   }  
 
-  [EVENT('refreshRect')] () {
+  [EVENT('refreshRect') + DEBOUNCE(100)] () {
     const current = this.$selection.current; 
     if (current) {
       const rotate = current.rotate;

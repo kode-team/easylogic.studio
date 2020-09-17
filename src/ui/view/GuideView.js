@@ -242,8 +242,8 @@ export default class GuideView {
 
         layers.forEach(B => {
             const obj = this.compare(this.rect, B, dist);
-            xpoints.push(...obj.x);
-            ypoints.push(...obj.y);
+            xpoints.push(obj.x[0]);
+            ypoints.push(obj.y[0]);
         })
 
         return [xpoints[0], ypoints[0]].filter(isNotUndefined)

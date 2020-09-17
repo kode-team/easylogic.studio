@@ -67,41 +67,20 @@ export class VideoLayer extends Layer {
 
   }
 
-  // 중복 업데이트 방지 
-  updateDiff ($video, key) {
-    if ($video.el[key] != this.json[key]) {
-      $video.el[key] = this.json[key]
-    }
-  }
+  updateFunction (currentElement) {
+    var {currentTime, playbackRate, volume } = this.json;     
 
-  updateFunction (currentElement, isChangeFragment = true, isLast = false, context = null, isRunOnTimeline = false) {
-    var {src, currentTime, playbackRate} = this.json;     
-
-    if (isChangeFragment) {
-      //TODO: video 속성들 재설정 할 수 있게 기능 추가 해야함 
-      // 여기는 속성만 존재해야함. 
-
-      // 드래그 할 때 이쪽으로 들어옴. 
-      // 전체 사이즈가 바뀌기 때문에 내부에 영역을 바꿔야 하는 애들은 이걸 활용을 해야함. 
-      // 비디오 태그는 이 상태가 필요 없으니 그냥 아무것도 안 하면 됨. 
-
-      // console.log({currentElement, isChangeFragment})      
-      const $video = currentElement.$('video')
-
-      if ($video) {
-
-        if (!isRunOnTimeline) {
-          this.updateDiff($video, 'currentTime');
-          this.updateDiff($video, 'playbackRate');
-          this.updateDiff($video, 'volume');
-        }
-
-      }
+    // select 하는 부분을 완전히 뺄 수 있을까? 
+    const $video = currentElement.$('video')
+    if ($video) {
+      $video.setProps({
+        currentTime,
+        playbackRate,
+        volume
+      })
     }
 
-    // 다만 여기는 해야함. filter 같은게 적용될 수도 있으니.. 구조를 맞춰야 할 듯 
-    super.updateFunction(currentElement, isChangeFragment, isLast, context);
-
+    super.updateFunction(currentElement);
   }      
 
 
