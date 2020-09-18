@@ -1,8 +1,8 @@
 export default {
     category: 'Layer',            
     key: 'Alt+ArrowDown',
-    command: 'item.move.down',
+    command: 'moveLayer',
     description: 'move 5px to down',
-    args: [{ dy: 5 }],
+    args: [0, 5],
     when: 'CanvasView'
 }

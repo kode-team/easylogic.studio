@@ -110,12 +110,16 @@ export class HistoryManager {
      */
     redo () {
 
-        if (this.currentIndex >= this.length) return; 
+        if (this.currentIndex > this.length) return; 
 
         // currentIndex 가 -1 부터 시작하기 때문에 ++this.currentIndex 로 index 를 하나 올리고 시작한다. 
-        const commandObject  = this.undoHistories[++this.currentIndex]
+        if (this.currentIndex < 0) {
+            this.currentIndex++;
+        }
+        const commandObject  = this.undoHistories[this.currentIndex]
         if (commandObject && commandObject.command) {
             commandObject.command.redo(this.$editor, commandObject.data)
+            this.$editor.debug(commandObject)
         }
         this.$editor.nextTick(() => {
             this.$editor.emit('refreshHistory');     

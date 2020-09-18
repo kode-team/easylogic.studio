@@ -378,6 +378,11 @@ export class SelectionManager {
     return hasParent; 
   }
   
+  /**
+   * 
+   * @param {number} dx 
+   * @param {number} dy 
+   */
   move (dx, dy) {
     this.each ((item, cachedItem, ) => {
 

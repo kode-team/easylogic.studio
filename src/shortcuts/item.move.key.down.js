@@ -1,8 +1,8 @@
 export default {
     category: 'Layer',            
     key: 'ArrowDown',
-    command: 'item.move.down',
+    command: 'moveLayer',
     description: 'move 1px to down',
-    args: [{ dy: 1 }],    
+    args: [0, 1],    
     when: 'CanvasView'
 }

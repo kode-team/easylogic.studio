@@ -30,16 +30,12 @@ export class Editor {
   /**
    * 
    * @param {object} [opt={}] 
-   * @param {BaseStore} opt.$store  Message 처리기 
+   * @param {BaseStore} opt.store  Message 처리기 
    */
   constructor(opt = {}) {
 
     this.EDITOR_ID = uuid();
 
-    /**
-     * @property {BaseStore} $store  메세지 처리기
-     */
-    this.$store = opt.$store;
     this.projects = []     
     this.popupZIndex = 10000;
     this.canvasWidth = 100000;
@@ -54,7 +50,6 @@ export class Editor {
     this.locale = this.loadItem('locale') || 'en_US'
     this.layout = this.loadItem('layout') || 'all'    
 
-
     this.loadManagers();
 
   }
@@ -64,6 +59,7 @@ export class Editor {
    */
   loadManagers () {
 
+    this.store = new BaseStore(this);
     this.config = new ConfigManager(this);
     this.commands = new CommandManager(this);
     this.shortcuts = new ShortCutManager(this);
@@ -71,6 +67,7 @@ export class Editor {
     this.timeline = new TimelineSelectionManager(this);
     this.history = new HistoryManager(this);
     this.components = ComponentManager;
+
 
     this.initTheme();    
   }
@@ -188,8 +185,8 @@ export class Editor {
     return this.images[url] || url;
   }
 
-  setStore($store) {
-    this.$store = $store;
+  setStore(store) {
+    this.store = store;
   }
 
   /**
@@ -197,29 +194,47 @@ export class Editor {
    * 나 자신은 제외하고 실행한다. 
    **/
   emit(...args) {
-    if (this.$store) {
-      this.$store.source = "EDITOR_ID";
-      this.$store.emit(...args);
+
+    this.store.source = "EDITOR_ID";
+    this.store.emit(...args);
+
+  }
+
+  on (...args) {
+    this.store.on(...args);
+  }
+
+  off (...args) {
+    this.store.off(...args);
+  }
+
+  offAll (...args) {
+    this.store.offAll(...args);
+  }
+
+  debug (...args) {
+    if (this.config.get('debug')) {
+      console.log(...args );
     }
   }
 
   command (command, message, $3, $4, $5, $6) {
 
     if (this.isPointerUp) {
-      return this.$store.emit(`history.${command}`, message, $3, $4, $5, $6);
+      return this.store.emit(`history.${command}`, message, $3, $4, $5, $6);
     } else {
-      return this.$store.emit(command, $3, $4, $5, $6);
+      return this.store.emit(command, $3, $4, $5, $6);
     }
   }
 
   /**
-   * $store 의 nextTick 을 실행한다. 
+   * store 의 nextTick 을 실행한다. 
    * 
    * @param {Function} callback 
    */
   nextTick (callback) {
-    if (this.$store) {
-      this.$store.nextTick(callback);
+    if (this.store) {
+      this.store.nextTick(callback);
     }
   }  
 

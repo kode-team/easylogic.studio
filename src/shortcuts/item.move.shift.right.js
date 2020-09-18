@@ -1,8 +1,8 @@
 export default {
     category: 'Layer',            
     key: 'Shift+ArrowRight',
-    command: 'item.move.right',
+    command: 'moveLayer',
     description: 'move 10px to right',
-    args: [{ dx: 10 }],    
+    args: [10, 0],    
     when: 'CanvasView'
 }

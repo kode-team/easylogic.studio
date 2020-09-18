@@ -44,18 +44,17 @@ export default {
         // items 중에  자식/부모의 관게의 객체가 있으면 자식은 필터링 한다. 
         items = filterChildren(items);
 
+        const filtedIds = items.map(it => it.id);
+
         
         // 지워야 하는 객체를 serialize 한다. 
         const serializedObjectList = editor.serialize(items);
 
         //전체 삭제 
         items.forEach(item => item.remove())
-        if (!ids) {
-            editor.selection.empty()
-        }
 
         editor.history.add(message, this, {
-            currentValues: [ids],
+            currentValues: [filtedIds],
             undoValues: serializedObjectList,
         })
 
@@ -78,9 +77,6 @@ export default {
 
         //전체 삭제 
         items.forEach(item => item.remove())
-        if (!ids) {
-            editor.selection.empty()
-        }
 
         editor.nextTick(() => {
             editor.emit('refreshAll');
@@ -93,7 +89,7 @@ export default {
      * 
      * @param {Editor} editor 
      * @param {Object} param1 
-     * @param {object[]} param1.undoValues
+     * @param {string} param1.undoValues  JSON serialize 된 문자열 
      */
     undo: function (editor, { undoValues }) {
         editor.deserialize(undoValues, true)

@@ -1,8 +1,8 @@
 export default {
     category: 'Layer',            
     key: 'Shift+ArrowUp',
-    command: 'item.move.up',
+    command: 'moveLayer',
     description: 'move 10px to up',
-    args: [{ dy: 10 }],    
+    args: [0, -10],    
     when: 'CanvasView'
 }

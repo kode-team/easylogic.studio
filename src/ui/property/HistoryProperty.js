@@ -1,6 +1,7 @@
 import BaseProperty from "./BaseProperty";
 import { EVENT } from "@core/UIElement";
 import { LOAD, VDOM } from "@core/Event";
+import icon from "@icon/icon";
 
 export default class HistoryProperty extends BaseProperty {
 
@@ -25,7 +26,7 @@ export default class HistoryProperty extends BaseProperty {
       }  
       return /*html*/`
         <div class='history-item'>
-          <span>${index === (this.$editor.history.currentIndex) ? '->' : ''}</span>
+          <span>${index === (this.$editor.history.currentIndex) ? icon.arrowRight : ''}</span>
           <span>${it.message}</span>
         </div>
       `

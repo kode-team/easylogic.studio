@@ -24,16 +24,18 @@ export class CommandManager {
         if (arguments.length === 2) {
             const callback = (...args) => {
                 commandCallback.call(this, this.$editor, ...args);
+                this.$editor.debug('command execute', this, ...args)                
             }
             callback.source = command;
-            this.$editor.$store.on(command, callback, this, 0);
+            this.$editor.on(command, callback, this, 0);
 
         } else if (isObject(command)) {     // command object { command, title, description, debounce, execute }
             const callback = (...args) => {
                 command.execute.call(command, this.$editor, ...args);
+                this.$editor.debug('command execute', command, ...args)
             }
             callback.source = command.command;
-            this.$editor.$store.on(command.command, callback, this, command.debounce || 0);
+            this.$editor.on(command.command, callback, this, command.debounce || 0);
         }
 
     }

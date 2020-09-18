@@ -1,10 +1,12 @@
+import { Editor } from "@manager/Editor";
 import { debounce, throttle } from "./functions/func";
 
 export default class BaseStore {
-  constructor(opt = {}) {
+  constructor(editor) {
     this.cachedCallback = {};
     this.callbacks = {};
     this.commandes = [];
+    this.editor = editor;
   }
 
   getCallbacks(event) {
@@ -17,6 +19,13 @@ export default class BaseStore {
 
   setCallbacks(event, list = []) {
     this.callbacks[event] = list; 
+  }
+
+  debug (...args) {
+    if (this.editor && this.editor.config.get('debug')) {
+      console.log(...args );
+    }
+
   }
 
   /**
@@ -35,6 +44,9 @@ export default class BaseStore {
     else if (throttleDelay > 0)  callback = throttle(originalCallback, throttleDelay);
 
     this.getCallbacks(event).push({ event, callback, context, originalCallback });
+
+    this.debug('add message event', event, context.sourceName );
+
   }
 
   /**
@@ -44,6 +56,8 @@ export default class BaseStore {
    * @param {*} originalCallback 
    */
   off(event, originalCallback) {
+
+    this.debug('off message event', event );
 
     if (arguments.length == 1) {
       this.setCallbacks(event);
@@ -61,6 +75,7 @@ export default class BaseStore {
         return f.context !== context;  
       }))
     })
+    this.debug('off all message', context.sourceName );
   }
 
   getCachedCallbacks (event) {

@@ -26,10 +26,8 @@ export const start = opt => {
 
     initialize(modules = []) {
 
-      this.$store = new BaseStore();
-      this.$editor = new Editor({
-        $store: this.$store
-      })
+      this.$editor = new Editor()
+      this.$store = this.$editor.store; 
 
       this.$container = Dom.create(this.getContainer());
       this.$container.addClass(this.getClassName());

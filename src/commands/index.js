@@ -56,10 +56,6 @@ import addBackgroundImageGradient from "./addBackgroundImageGradient";
 import addBackgroundImageAsset from "./addBackgroundImageAsset";
 import keymapKeydown from "./keymap.keydown";
 import keymapKeyup from "./keymap.keyup";
-import itemMoveLeft from "./item.move.left";
-import itemMoveRight from "./item.move.right";
-import itemMoveUp from "./item.move.up";
-import itemMoveDown from "./item.move.down";
 import removeLayer from "./removeLayer";
 import changeModeView from "./change.mode.view";
 import segmentMoveDown from "./segment.move.down";
@@ -99,9 +95,11 @@ import historyAddLayer from "./history.addLayer";
 import historyRemoveLayer from "./history.removeLayer";
 import updatePathItem from "./updatePathItem";
 import updateClipPath from "./updateClipPath";
+import moveLayer from "./moveLayer";
+
 
 export default {
-    // history + command  
+    // history + command   
     historyAddLayer,
     historyRemoveLayer,
     historySetAttribute,
@@ -109,6 +107,8 @@ export default {
     historyRefreshSelection,
     historyRedo,
     historyUndo,
+
+    moveLayer,
 
     // command 
     groupItem,
@@ -127,10 +127,6 @@ export default {
     segmentMoveLeft,
     changeModeView,
     removeLayer,
-    itemMoveRight,
-    itemMoveUp,
-    itemMoveDown,
-    itemMoveLeft,
     itemMoveDepthDown,
     itemMoveDepthUp,    
     keymapKeydown,
