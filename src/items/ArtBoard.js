@@ -15,10 +15,6 @@ export class ArtBoard extends DomItem {
     });
   }
 
-  isLeaf() {
-    return false; 
-  }
-
   toCloneObject() {
     return {
       ...super.toCloneObject(),
@@ -32,13 +28,6 @@ export class ArtBoard extends DomItem {
 
   getIcon() {
     return icon.artboard;
-  }
-
-  toDefaultCSS() {
-    return {
-      ...super.toDefaultCSS(),
-      // 'overflow': 'hidden'
-    }
   }
 
 }

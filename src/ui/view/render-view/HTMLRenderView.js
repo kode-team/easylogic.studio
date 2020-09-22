@@ -3,20 +3,21 @@ import { BIND, POINTERSTART, MOVE, END, IF, KEYUP, DROP, DRAGOVER, PREVENT, FOCU
 import { Length } from "@unit/Length";
 
 import Dom from "@core/Dom";
-import SelectionToolView from "../view-items/SelectionToolView";
-import GuideLineView from "../view-items/GuideLineView";
-import LayerAppendView from "../view-items/LayerAppendView";
-import PathEditorView from "../view-items/PathEditorView";
-import GridLayoutLineView from "../view-items/GridLayoutLineView";
-import PathDrawView from "../view-items/PathDrawView";
-import BrushDrawView from "../view-items/BrushDrawView";
-import { isFunction } from "@core/functions/func";
+import { DomItem } from "@items/DomItem";
 import StyleView from "./StyleView";
 import { computeVertextData } from "@core/functions/matrix";
-import { DomItem } from "@items/DomItem";
+
+import HTMLRenderer from '@renderer/HTMLRenderer';
+import SelectionToolView from "@ui/view-items/SelectionToolView";
+import GuideLineView from "@ui/view-items/GuideLineView";
+import PathEditorView from "@ui/view-items/PathEditorView";
+import PathDrawView from "@ui/view-items/PathDrawView";
+import LayerAppendView from "@ui/view-items/LayerAppendView";
+import BrushDrawView from "@ui/view-items/BrushDrawView";
+import GridLayoutLineView from "@ui/view-items/GridLayoutLineView";
 
 
-export default class ElementView extends UIElement {
+export default class HTMLRenderView extends UIElement {
 
     components() {
         return {
@@ -390,7 +391,13 @@ export default class ElementView extends UIElement {
         var cachedItem = this.getElement(item.id)
 
         if (cachedItem) {
-            cachedItem.cssText(`left: ${x};top:${y};width:${width};height:${height}; transform: ${item.toTransformCSS().transform};`)
+            cachedItem.cssText(`
+                left: ${x};
+                top:${y};
+                width:${width};
+                height:${height}; 
+                transform: ${HTMLRenderer.toTransformCSS(item).transform};
+            `)
         }
     }
 
@@ -436,16 +443,6 @@ export default class ElementView extends UIElement {
             style: { position: 'relative', width, height }
         }
     }
-
-
-    // [BIND('$view')] () {
-    //     return {
-    //         style: {
-    //             transform: `scale(${this.$editor.scale})`
-    //         },
-    //         innerHTML: this.state.html
-    //     }
-    // }    
 
     selectCurrent (...args) {
         this.state.cachedCurrentElement = {}
@@ -519,7 +516,6 @@ export default class ElementView extends UIElement {
     [EVENT(
         'refreshCanvasForPartial', 
         'refreshSelectionStyleView', 
-        'refreshSelectionDragStyleView'     // tool 에서 드래그 할 때 변경 사항 적용 
     )] (obj) {
         var items = obj ? [obj] : this.$selection.items;
 
@@ -529,8 +525,8 @@ export default class ElementView extends UIElement {
     }
 
     updateElement (item) {
-        if (item) {
-            item.updateFunction(this.getElement(item.id));
+        if (item) { 
+            HTMLRenderer.update(item, this.getElement(item.id))
             this.updateRealPositionByItem(item);
         }
 
@@ -539,7 +535,7 @@ export default class ElementView extends UIElement {
     // 타임라인에서 객체를 업데이트 할 때 발생함. 
     updateTimelineElement (item) {
         if (item) {
-            item.updateFunction(this.getElement(item.id));
+            HTMLRenderer.update(item, this.getElement(item.id))
             this.updateRealPositionByItem(item);
         }
 
@@ -558,8 +554,8 @@ export default class ElementView extends UIElement {
     [EVENT('refreshAllCanvas')] () {
 
         // 나중에 project 기반으로 바꿔야 함 
-        var artboard = this.$selection.currentArtboard || { html : ''} 
-        var html = artboard.html
+        var artboard = this.$selection.currentArtboard
+        var html = HTMLRenderer.render(artboard) || '';
 
         this.setState({ html }, false)
         this.refs.$view.updateDiff(html)

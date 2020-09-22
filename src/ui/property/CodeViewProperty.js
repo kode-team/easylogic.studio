@@ -39,6 +39,8 @@ export default class CodeViewProperty extends BaseProperty {
 
   [LOAD('$body')] () {
 
+    return '';
+
     var currentProject = this.$selection.currentProject;
     var keyframeCode = currentProject ? currentProject.toKeyframeString() : ''
     var rootVariable = currentProject ? CSS_TO_STRING(currentProject.toRootVariableCSS()) : ''
@@ -49,7 +51,7 @@ export default class CodeViewProperty extends BaseProperty {
     svgCode = svgCode.replace(/\</g, '&lt;').replace(/\>/g, '&gt;') 
 
     var current = this.$selection.current;
-    var cssCode = current ? TAG_TO_STRING(current.toExport()) : ''
+    var cssCode = current ? TAG_TO_STRING(  current.toExport()) : ''
     var nestedCssCode = current ?  current.toNestedCSS().map(it => {
       var cssText = it.cssText ? it.cssText : CSS_TO_STRING(it.css)
       return `${it.selector} { 

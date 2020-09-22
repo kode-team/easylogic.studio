@@ -1,20 +1,20 @@
 import { rgb } from "@core/functions/formatter";
-import { LinearGradient } from "../property-parser/image-resource/LinearGradient";
-import { ColorStep } from "../property-parser/image-resource/ColorStep";
-import { RadialGradient } from "../property-parser/image-resource/RadialGradient";
+import { LinearGradient } from "../../property-parser/image-resource/LinearGradient";
+import { ColorStep } from "../../property-parser/image-resource/ColorStep";
+import { RadialGradient } from "../../property-parser/image-resource/RadialGradient";
 import { Length } from "@unit/Length";
-import { ConicGradient } from "../property-parser/image-resource/ConicGradient";
+import { ConicGradient } from "../../property-parser/image-resource/ConicGradient";
 import { Project } from "@items/Project";
 import { ArtBoard } from "@items/ArtBoard";
 import { Layer } from "@items/Layer";
-import { BackgroundImage } from "../property-parser/BackgroundImage";
-import { FileImageResource } from "../property-parser/image-resource/URLImageResource";
+import { BackgroundImage } from "../../property-parser/BackgroundImage";
+import { FileImageResource } from "../../property-parser/image-resource/URLImageResource";
 import { CSS_TO_STRING, keyEach, combineKeyArray, isString } from "@core/functions/func";
 import { calculateAngle } from "@core/functions/math";
-import { SVGLayer } from "@items/layers/SVGLayer";
 import { SVGPathItem } from "@items/layers/SVGPathItem";
 import { SVGRectLayer } from "@items/layers/SVGRectLayer";
 import { SVGEllipseLayer } from "@items/layers/SVGEllipseLayer";
+import { SVGItem } from "@items/layers/SVGItem";
 
 export const Sketch = {
   Style: {
@@ -327,7 +327,7 @@ export const SketchUtil = {
     var LayerClass = Layer;
 
     if (layer._class === 'shapeGroup') {
-      LayerClass = SVGLayer;
+      LayerClass = SVGItem;
     } else if (layer._class === 'shapePath') {
       LayerClass = SVGPathItem;
     } else if (layer._class === 'rectangle') {

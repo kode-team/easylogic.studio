@@ -1,7 +1,4 @@
 import { Layer } from "../Layer";
-import { SVGFill } from "@property-parser/SVGFill";
-import Dom from "@core/Dom";
-import Color from "@core/Color";
 
 export class SVGItem extends Layer {
   getDefaultObject(obj = {}) {
@@ -47,15 +44,6 @@ export class SVGItem extends Layer {
     }
   }
 
-  toDefaultCSS() {
-    return {
-      ...super.toDefaultCSS(),
-      ...this.toKeyListCSS(
-        'stroke-width', 'stroke-linecap', 'stroke-linejoin', 'stroke-dasharray', 'stroke-dashoffset',
-        'fill-opacity', 'fill-rule', 'text-anchor'
-      )
-    }
-  }
 
   toSVGAttribute () {
     return {
@@ -67,85 +55,10 @@ export class SVGItem extends Layer {
     }
   }
 
-  /**
-   * @override
-   */
-  toLayoutCSS() {
-    return {}
-  }
-
   getDefaultTitle() {
     return "SVG";
   }
 
-
-  updateDefString (currentElement) {
-
-    var $defs = currentElement.$('defs');
-    if ($defs) {
-      $defs.html(this.toDefInnerString)          
-    } else {
-      var str = this.toDefString.trim();
-      currentElement.prepend(Dom.createByHTML(str));
-    }      
-  }  
-
-  get toDefInnerString () {
-    return /*html*/`
-        ${this.toFillSVG}
-        ${this.toStrokeSVG}
-    `
-  }
-
-  get toDefString () {
-
-    var str = this.toDefInnerString.trim();
-
-    // if (!str) return ''; 
-
-    return /*html*/`
-      <defs>
-        ${str}
-      </defs>
-    `
-  }
-
-  get fillId () {
-    return this.getInnerId('fill')
-  }
-
-  get strokeId () {
-    return this.getInnerId('stroke')
-  }
-
-  get toFillSVG () {
-    return SVGFill.parseImage(this.json.fill || 'transparent').toSVGString(this.fillId);
-  }
-
-  get toStrokeSVG () {
-    return SVGFill.parseImage(this.json.stroke || 'black').toSVGString(this.strokeId);
-  }  
-
-  get toFillValue () {
-    return  SVGFill.parseImage(this.json.fill || 'transparent').toFillValue(this.fillId);
-  }
-
-  get toFillOpacityValue () {
-    return  Color.parse(this.json.fill || 'transparent').a;
-  }  
-
-  get toStrokeValue () {
-    return  SVGFill.parseImage(this.json.stroke || 'black').toFillValue(this.strokeId);
-  }  
-
-  get toFilterValue () {
-
-    if (!this.json.svgfilter) {
-      return '';
-    }
-
-    return `url(#${this.json.svgfilter})`
-  }
 
   toExportSVGCode () {
     return `

@@ -32,11 +32,6 @@ export class TextLayer extends Layer {
     }
   }
 
-  updateFunction (element) {
-    var {content} = this.json;
-
-    element.updateDiff(content);
-  }
 
   toCSS() {
 
@@ -56,12 +51,6 @@ export class TextLayer extends Layer {
       }
     ]
   }  
-
-  get html () {
-    var {id, itemType, content} = this.json;
-
-    return /*html*/`<p class='element-item ${itemType}' contenteditable="true" tabIndex="-1" data-id="${id}">${content}</p>`
-  }
 
 
   get svg () {

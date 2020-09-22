@@ -2,22 +2,11 @@
 import { Length } from "@unit/Length";
 import { GroupItem } from "./GroupItem";
 import {
-  keyEach,
-  combineKeyArray,
-  isUndefined,
-  isNotUndefined,
   CSS_TO_STRING,
-  STRING_TO_CSS,
   OBJECT_TO_PROPERTY,
-  OBJECT_TO_CLASS
 } from "@core/functions/func";
 import { Selector } from "../property-parser/Selector";
 
-import { ClipPath } from "../property-parser/ClipPath";
-import Dom from "@core/Dom";
-import { Pattern } from "../property-parser/Pattern";
-import { BackgroundImage } from "../property-parser/BackgroundImage";
-import { Transform } from "../property-parser/Transform";
 
 export class DomItem extends GroupItem {
   getDefaultObject(obj = {}) {
@@ -144,50 +133,6 @@ export class DomItem extends GroupItem {
     this.json.selectors[+index].reset(data);
   }        
 
-  setSize(data) {
-    this.reset(data);
-  }
-
-  // 현재 선택된 border 의 속성을 지정한다.
-  // type 에 따라 다른데
-  // type is all 일 때, 나머지 속성 필드 값은 모두 지운다.
-  // type is not all 일 때는 해당 속성만 설정하고 all 값이 존재하면 지운다.
-  setBorder(type, data = undefined) {
-    var border = this.json.border;
-    if (type === "all") {
-      if (data) {
-        this.json.border = { all: data };
-      } else {
-        ["top", "right", "bottom", "left"].forEach(type => {
-          delete this.json.border[type];
-        });
-      }
-    } else {
-      if (border.all && isUndefined(data)) {
-        var newObject = { ...border.all };
-        border.top = { ...newObject };
-        border.bottom = { ...newObject };
-        border.left = { ...newObject };
-        border.right = { ...newObject };
-      }
-
-      if (border.all) {
-        delete border.all;
-      }
-
-      if (data) {
-        this.json.border[type] = data;
-      }
-    }
-  }
-
-  getBorder (type) {
-    return this.json.border[type] || {}
-  }
-
-  setBorderRadius(type, data) {
-    this.json.borderRadius = data;
-  }
 
   traverse(item, results, hasLayoutItem) {
     // var parentItemType = item.parent().itemType;
@@ -212,113 +157,15 @@ export class DomItem extends GroupItem {
     return results;
   }
 
-  toPropertyCSS(list) {
-    var results = {};
-    list.forEach(item => {
-      keyEach(item.toCSS(), (key, value) => {
-        if (!results[key]) results[key] = [];
-        results[key].push(value);
-      });
-    });
-
-    return combineKeyArray(results);
-  }
-
-  toStringPropertyCSS (field) {
-    return STRING_TO_CSS(this.json[field]);
-  }
-
-  toBackgroundImageCSS() {
-
-    let list = [];
-
-    Pattern.parseStyle(this.json.pattern).forEach(it => {
-     list.push(...BackgroundImage.parseStyle(STRING_TO_CSS(it.toCSS())))
-    });
-
-    list.push(...BackgroundImage.parseStyle(STRING_TO_CSS(this.json['background-image'])))
-
-    return BackgroundImage.joinCSS(list);
-  }
-
-  toLayoutCSS () {
-
-    var layout = this.json.layout ;
-
-    if (this.hasLayout()) {
-      if (layout === 'flex') {
-        return this.toFlexLayoutCSS()
-      } else if  (layout === 'grid') {
-        return this.toGridLayoutCSS()
-      }
-    }
-
-
-    return {}
-  }
-
-  toLayoutItemCSS() {
-    var parentLayout =  this.json.parent['layout'];
-    var obj = {}
-    if (parentLayout === 'flex') {
-      // 부모가  layout 이  지정 됐을 때 자식item 들은 position: relative 기준으로 동작한다. , left, top 은  속성에서 삭제 
-      obj = {
-        position: 'relative',
-        left: 'auto !important',
-        top: 'auto !important',
-      }
-    } else if (parentLayout === 'grid') {
-      // 부모가  layout 이  지정 됐을 때 자식item 들은 position: relative 기준으로 동작한다. , left, top 은  속성에서 삭제 
-      obj = {
-        position: 'relative',
-        left: 'auto !important',
-        top: 'auto !important',
-        width: 'auto !important',
-        height: 'auto !important',        
-      }
-    }
-
-    if (parentLayout === 'flex') {
-      obj = {
-        ...obj, 
-        ...STRING_TO_CSS(this.json['flex-layout-item'])
-      }      
-    } else if (parentLayout  === 'grid') {
-      obj = {
-        ...obj, 
-        ...STRING_TO_CSS(this.json['grid-layout-item'])
-      }
-    }
-
-    return obj;
-  }
-
-  toFlexLayoutCSS() {
-    return {
-      display: 'flex',
-      ...this.toStringPropertyCSS('flex-layout')
-    }
-  }  
-
-  toGridLayoutCSS() {
-    return {
-      display: 'grid',
-      ...this.toStringPropertyCSS('grid-layout')
-    }
-  }  
-
-  toBorderCSS() {
-    return this.toStringPropertyCSS('border')
-  }
 
 
 
-  toKeyCSS (key) {
-    if (!this.json[key]) return {} 
-    return {
-      [key] : this.json[key]
-    };
-  }
+  // toKeyCSS (key) {
+  //   if (!this.json[key]) return {} 
+  //   return {
+  //     [key] : this.json[key]
+  //   };
+  // }
   
   // export animation keyframe
   toAnimationKeyframes (properties) {
@@ -339,202 +186,7 @@ export class DomItem extends GroupItem {
     return ''; 
   }
 
-  toBoxModelCSS() {
-    var json = this.json;
-    var obj = {};
 
-    if (json['margin-top']) obj["margin-top"] = json['margin-top'];
-    if (json['margin-bottom']) obj["margin-bottom"] = json['margin-bottom'];
-    if (json['margin-left']) obj["margin-left"] = json['margin-left'];
-    if (json['margin-right']) obj["margin-right"] = json['margin-right'];
-
-
-    if (json['padding-top']) obj["padding-top"] = json['padding-top'];
-    if (json['padding-bottom']) obj["padding-bottom"] = json['padding-bottom'];
-    if (json['padding-left']) obj["padding-left"] = json['padding-left'];
-    if (json['padding-right']) obj["padding-right"] = json['padding-right'];
-
-
-    return obj;
-  }
-
-  toKeyListCSS (...args) {
-    var json = this.json;
-    var obj = {};
-
-    args.filter(it => isNotUndefined(json[it])).forEach( it => {
-        obj[it] = json[it]
-    })
-
-    return obj;
-  }
-
-  toDefaultCSS() {
-
-    var obj = {}
-
-    if (this.isAbsolute) {
-      if (this.json.x)  {
-        obj.left = this.json.x ;
-      }
-      if (this.json.y)  {
-        obj.top = this.json.y ;
-      }
-    }
-
-    obj.visibility = (this.json.visible) ? 'visible' : 'hidden';
-
-    return {
-      ...obj,
-      ...this.toKeyListCSS(
-        
-        'position', 'right','bottom', 'width','height', 'overflow', 'z-index', 'box-sizing',
-
-        'background-color', 'color',  'opacity', 'mix-blend-mode',
-
-        'transform-origin', 'transform-style', 'perspective', 'perspective-origin',
-
-        'font-size', 'font-stretch', 'line-height', 'font-weight', 'font-family', 'font-style',
-        'text-align', 'text-transform', 'text-decoration',
-        'letter-spacing', 'word-spacing', 'text-indent',
-
-        'border-radius',
-
-        'filter', 'backdrop-filter', 'box-shadow', 'text-shadow',
-
-        'offset-path', 
-
-        'animation',  'transition',
-      )
-    }
-
-  }
-
-  toDefaultSVGCSS() {
-
-    var obj = {
-      overflow: 'visible',
-    }
-
-    return {
-      ...obj,
-      ...this.toKeyListCSS(
-
-        'font-size', 'font-stretch', 'line-height', 'font-weight', 'font-family', 'font-style',
-        'text-align', 'text-transform', 'text-decoration',
-        'letter-spacing', 'word-spacing', 'text-indent'
-      )
-    }
-
-  }
-
-  toVariableCSS () {
-    var obj = {}
-    this.json.variable.split(';').filter(it => it.trim()).forEach(it => {
-      var [key, value] = it.split(':')
-
-      obj[`--${key}`] = value; 
-    })
-    return obj;
-  }
-
-  toRootVariableCSS () {
-    var obj = {}
-    this.json.rootVariable.split(';').filter(it => it.trim()).forEach(it => {
-      var [key, value] = it.split(':')
-
-      obj[`--${key}`] = value; 
-    })
-
-    return obj;
-  }
-
-  toRootVariableString () {
-    return CSS_TO_STRING(this.toRootVariableCSS())
-  }
-
-  // convert to only webket css property 
-  toWebkitCSS() {
-    var obj = this.toKeyListCSS(
-      'text-fill-color', 
-      'text-stroke-color', 
-      'text-stroke-width', 
-      'background-clip'
-    )
-
-    var results = {}
-    keyEach(obj, (key, value) => {
-      results[`-webkit-${key}`] = value; 
-    })
-
-    return results;
-  }
-
-
-  // convert to only webket css property 
-  toTextClipCSS() {
-
-    var results = {} 
-
-    if (this.json['text-clip'] === 'text') {
-      results['-webkit-background-clip'] = 'text'
-      results['-webkit-text-fill-color'] = 'transparent';   
-      results['color'] = 'transparent';
-    }
-
-    return results;
-  }  
-
-  toTransformCSS() {
-
-    const key = [this.json['transform'], this.json['rotate']].join(":::");
-
-    if (key != this._transformCacheKey) {
-      this._transformCache = Transform.rotate(this.json['transform'], this.json['rotate'])
-      this._transformCacheKey = key; 
-    }
-
-    var results = {
-      transform: this._transformCache
-    } 
-
-    return results;
-  }    
-
-  toClipPathCSS () {
-    var str = this.json['clip-path']
-    var obj = ClipPath.parseStyle(str)
-
-    switch (obj.type) {
-    case 'path': 
-    case 'svg': 
-      str = `url(#${this.clipPathId})`
-      break; 
-    }
-
-    return {
-      'clip-path': str
-    }
-  }
-
-  toCSS() {
-
-    return Object.assign(
-      {},
-      this.toVariableCSS(),
-      this.toDefaultCSS(),
-      this.toClipPathCSS(),
-      this.toWebkitCSS(), 
-      this.toTextClipCSS(),      
-      this.toBoxModelCSS(),
-      this.toBorderCSS(),
-      // ...this.toBorderImageCSS(),
-      this.toBackgroundImageCSS(),
-      this.toLayoutCSS(),
-      this.toTransformCSS(),                  
-      this.toLayoutItemCSS()
-    );
-  }
 
   toSVGCSS() {
 
@@ -555,68 +207,11 @@ export class DomItem extends GroupItem {
     );
   }
   
- 
-  toSelectorString (prefix = '') {
-    return this.json.selectors
-              .map(selector => selector.toString(prefix))
-              .join('\n\n')
-  }
-
-
-  toNestedCSS($prefix) {
-    return []
-  }
 
   toNestedBoundCSS($prefix) {
     return []
   }  
 
-  generateView (prefix = '', appendCSS = '') {
-
-    //1. 원본 객체의 css 를 생성 
-    //2. 원본이 하나의 객체가 아니라 복합 객체일때 중첩 CSS 를 자체 정의해서 생성 
-    //3. 이외에 selector 로 생성할 수 있는 css 를 생성 (:hover, :active 등등 )
-    var cssString = `
-${prefix} {  /* ${this.json.itemType} */
-    ${CSS_TO_STRING(this.toCSS(), '\n    ')}; 
-    ${appendCSS}
-}
-${this.toNestedCSS().map(it => {
-  return `${prefix} ${it.selector} { 
-      ${it.cssText ? it.cssText : CSS_TO_STRING(it.css || {}, '\n\t\t')}; 
-  }`
-}).join('\n')}
-${this.toSelectorString(prefix)}
-`  
-    return cssString;
-  }
-
-  generateDragView (prefix = '', appendCSS = '') {
-
-    //1. drag 를 위한 스타일 
-    //2. background-image 관련된 속성을 모두 지운다. 
-
-    const cssString = this.generateView(prefix, appendCSS).replace(/background\-/gi, '');
-
-    return cssString;
-  }  
-
-  get html () {
-    var {elementType, id, name, layers, itemType} = this.json;
-
-    const tagName = elementType || 'div'
-
-    return /*html*/`<${tagName} class="${OBJECT_TO_CLASS({
-      'element-item': true,
-      [itemType]: true 
-    })}" ${OBJECT_TO_PROPERTY({
-      'data-id': id,
-      'data-title': name 
-    })}>
-    ${this.toDefString}
-  ${layers.map(it => it.html).join('\n\t')}
-</${tagName}>`
-  }
 
   generateSVG (isRoot = false) {
     if (isRoot) {
@@ -711,80 +306,4 @@ ${this.toSelectorString(prefix)}
     return obj
   }
 
-
-  /**
-   * 
-   * @param {Dom} currentElement 
-   */
-
-  updateFunction (currentElement) {
-
-    let $svg = currentElement.el.$svg;
-
-    if (!$svg) { 
-      currentElement.el.$svg = currentElement.$(`[data-id="${this.innerSVGId}"]`);  
-      $svg = currentElement.el.$svg
-    }
-
-    if ($svg) {
-
-      const defInnerString = this.toDefInnerString.trim();
-
-      if (defInnerString) {
-        var $defs = $svg.$('defs');
-        $defs.html(defInnerString)
-      }
-
-    } else {
-      const defString = this.toDefString.trim();
-
-      if (defString) {
-        var a = Dom.createByHTML(defString);
-        if (a) {
-          currentElement.prepend(a);
-        }
-      }
-    }
-
-  }    
-
-  get toDefInnerString () {
-    return /*html*/`
-      ${this.toClipPath}
-    `
-  }
-
-  get toClipPath() {
-
-    var obj = ClipPath.parseStyle(this.json['clip-path']);
-    var value = obj.value; 
-    switch (obj.type) {
-    case 'path':
-      return /*html*/`<clipPath id="${this.clipPathId}"><path d="${value}" /></clipPath>`
-    case 'svg': 
-      return /*html*/`<clipPath id="${this.clipPathId}">${value}</clipPath>`
-    }
-
-    return ``
-  }
-
-  get innerSVGId() {
-    return this.json.id + 'inner-svg'
-  }
-
-  get toDefString () {
-    var str = this.toDefInnerString.trim()
-
-    return str ? /*html*/`
-    <svg class='inner-svg-element' data-id="${this.innerSVGId}" width="0" height="0">
-      <defs>
-        ${str}
-      </defs>
-    </svg>
-    ` : ''
-  }
-
-  get clipPathId () {
-    return this.json.id + 'clip-path'
-  }  
 }

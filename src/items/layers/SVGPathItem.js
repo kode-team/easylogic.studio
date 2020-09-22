@@ -1,9 +1,8 @@
 import PathParser from "@parser/PathParser";
-import { clone, OBJECT_TO_CLASS, OBJECT_TO_PROPERTY, CSS_TO_STRING } from "@core/functions/func";
+import { clone, OBJECT_TO_PROPERTY, CSS_TO_STRING } from "@core/functions/func";
 import { hasSVGProperty, hasCSSProperty, hasSVGPathProperty } from "@util/Resource";
 import icon from "@icon/icon";
 import { ComponentManager } from "@manager/ComponentManager";
-import Dom from "@core/Dom";
 import { SVGItem } from "./SVGItem";
 
 export class SVGPathItem extends SVGItem {
@@ -94,55 +93,6 @@ export class SVGPathItem extends SVGItem {
       { selector: `[data-id="${this.json.id}"] path`, properties: svgProperties }
     ] 
   }  
-
-
-  /**
-   * 
-   * @param {Dom} currentElement 
-   */
-  updateFunction (currentElement) {
-
-    if (!currentElement) return; 
-
-    var $path = currentElement.$('path');
-
-    if ($path) {
-      $path.setAttr({
-        'd':  this.json.d,
-        'filter': this.toFilterValue,
-        'fill': this.toFillValue,
-        'stroke': this.toStrokeValue
-      })  
-    }
-
-    this.updateDefString(currentElement)
-
-    if (isLast) {
-      this.json.totalLength = $path.totalLength
-    }
-
-  }    
-
-  get html () {
-    var {id} = this.json; 
-    var p = {'motion-based': this.json['motion-based'] }
-
-    return /*html*/`
-  <svg class='element-item path ${OBJECT_TO_CLASS(p)}'  ${OBJECT_TO_PROPERTY({
-    'motion-based': this.json['motion-based'],
-    "xmlns": "http://www.w3.org/2000/svg"
-  })}  data-id="${id}" >
-    ${this.toDefString}
-    <path ${OBJECT_TO_PROPERTY({
-      'class': 'svg-path-item',
-      d: this.json.d, 
-      filter: this.toFilterValue,
-      fill: this.toFillValue,
-      stroke: this.toStrokeValue
-    })} />
-  </svg>`
-  }
-
 
   get svg () {
     var x = this.json.x.value;

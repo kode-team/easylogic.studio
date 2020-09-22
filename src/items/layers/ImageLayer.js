@@ -54,17 +54,6 @@ export class ImageLayer extends Layer {
     return project.getImageValueById(src);
   }
 
-  updateFunction (currentElement) {
-
-    const $image = currentElement.$('img')
-    if ($image) {
-      $image.attr('src', this.url);
-    }
-
-    super.updateFunction(currentElement);
-
-  }      
-
 
   toNestedCSS() {
     var json = this.json; 
@@ -88,15 +77,6 @@ export class ImageLayer extends Layer {
     ]
   }
 
-  get html () {
-    var {id, itemType} = this.json;
-
-    return /*html*/`
-      <div class='element-item ${itemType}' data-id="${id}">
-        ${this.toDefString}
-        <img src='${this.url}' />
-      </div>`
-  } 
 
   get svg () {
     var x = this.json.x.value;

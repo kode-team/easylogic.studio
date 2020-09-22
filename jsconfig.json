@@ -13,6 +13,7 @@
         "@image-resource/*": ["src/property-parser/image-resource/*"],
         "@interpolate/*": ["./src/interpolate/*"],
         "@items/*": ["./src/items/*"],
+        "@renderer/*": ["./src/renderer/*"],
         "@manager/*": ["./src/manager/*"],
         "@parser/*": ["./src/parser/*"],
         "@preset/*": ["./src/preset/*"],

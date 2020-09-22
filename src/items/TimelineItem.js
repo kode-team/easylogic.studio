@@ -721,6 +721,7 @@ export class TimelineItem extends AssetItem {
     }
   }
 
+
   setFps (fps) {
     var timeline = this.getSelectedTimeline();
 

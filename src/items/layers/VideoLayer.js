@@ -1,9 +1,7 @@
 import { Layer } from "../Layer";
-import Dom from "@core/Dom";
 import { CSS_TO_STRING, OBJECT_TO_PROPERTY } from "@core/functions/func";
 import icon from "@icon/icon";
 import { ComponentManager } from "@manager/ComponentManager";
-import { round } from "@core/functions/math";
 
 export class VideoLayer extends Layer {
 
@@ -67,23 +65,6 @@ export class VideoLayer extends Layer {
 
   }
 
-  updateFunction (currentElement) {
-    var {currentTime, playbackRate, volume } = this.json;     
-
-    // select 하는 부분을 완전히 뺄 수 있을까? 
-    const $video = currentElement.$('video')
-    if ($video) {
-      $video.setProps({
-        currentTime,
-        playbackRate,
-        volume
-      })
-    }
-
-    super.updateFunction(currentElement);
-  }      
-
-
   toNestedCSS() {
 
     return [
@@ -95,36 +76,6 @@ export class VideoLayer extends Layer {
       },
     ]
   }
-
-  get html () {
-    var {
-      id, 
-      itemType, 
-      src, 
-      controls,
-      muted,
-      poster,
-      loop,
-      crossorigin,
-      autoplay
-    } = this.json;
-
-    return /*html*/`
-      <div class='element-item ${itemType}' data-id="${id}">
-        ${this.toDefString}
-        <video ${OBJECT_TO_PROPERTY({ 
-          controls,
-          src,
-          muted,
-          poster,
-          loop,
-          crossorigin,
-          autoplay
-        })}>
-          Sorry, your browser doesn't support embedded videos.
-        </video>
-      </div>`
-  } 
 
   get svg () {
     var x = this.json.x.value;

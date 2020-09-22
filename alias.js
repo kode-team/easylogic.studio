@@ -12,6 +12,7 @@ module.exports = {
     '@image-resource': path.resolve(__dirname, "./src/image-resource"),
     '@interpolate': path.resolve(__dirname, "./src/interpolate"),
     '@items': path.resolve(__dirname, "./src/items"),
+    '@renderer': path.resolve(__dirname, "./src/renderer"),
     '@manager': path.resolve(__dirname, "./src/manager"),
     '@parser': path.resolve(__dirname, "./src/parser"),
     '@preset': path.resolve(__dirname, "./src/preset"),

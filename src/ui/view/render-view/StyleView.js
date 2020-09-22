@@ -4,6 +4,8 @@ import { LOAD, VDOM } from "@core/Event";
 import Dom from "@core/Dom";
 import { CSS_TO_STRING, isArray, isString } from "@core/functions/func";
 import { Project } from "@items/Project";
+import HTMLRenderer from "@renderer/HTMLRenderer";
+
 
 export default class StyleView extends UIElement {
 
@@ -31,47 +33,9 @@ export default class StyleView extends UIElement {
     this.refs.$head = Dom.create(document.head)
   }
 
-  makeProjectStyle (item) {
-
-    const keyframeString = item.toKeyframeString();
-    const rootVariable = item.toRootVariableCSS()
-    
-    return /*html*/`<style type='text/css' data-id='${item.id}'>
-      :root {
-        ${CSS_TO_STRING(rootVariable)}
-      }
-      /* keyframe */
-      ${keyframeString}
-    </style>
-    `
-  }  
-
   makeStyle (item) {
-    if (item.is('project')) {
-      return this.makeProjectStyle(item);
-    }
-
-    const cssString = item.generateView(`.element-item[data-id='${item.id}']`)
-    return /*html*/`
-      <style type='text/css' data-id='${item.id}' data-timestamp='${item.timestamp}'>${cssString}</style>
-    ` + item.layers.map(it => {
-      return this.makeStyle(it);
-    }).join('')
+    return HTMLRenderer.toStyle(item);
   }
-
-  makeDragStyle (item) {
-    if (item.is('project')) {
-      return this.makeProjectStyle(item);
-    }
-
-    const cssString = item.generateDragView(`.element-item[data-id='${item.id}']`)
-    return /*html*/`
-      <style type='text/css' data-id='${item.id}-drag' data-timestamp='${item.timestamp}'>${cssString}</style>
-    ` + item.layers.map(it => {
-      return this.makeDragStyle(it);
-    }).join('')
-  }
-
 
   refreshStyleHead () {
     var project = this.$selection.currentProject || new Project()
@@ -96,15 +60,6 @@ export default class StyleView extends UIElement {
 
   }
 
-  changeDragStyleHead (item) {
-    var $temp = Dom.create('div')        
-
-    $temp.html(this.makeDragStyle(item)).children().forEach($item => {
-      this.refs.$head.append($item);
-    })
-
-  }  
-
   refreshStyleHeadOne (item, isOnlyOne = false) {
     var list = [item]
     if (!isOnlyOne) {
@@ -112,7 +67,7 @@ export default class StyleView extends UIElement {
     }
 
     var selector = list.map(it => {
-      return `style[data-id="${it.id}"],style[data-id="${it.id}-drag"]`
+      return `style[data-id="${it.id}"]`
     }).join(',');
 
     let isChanged = false; 
@@ -128,40 +83,6 @@ export default class StyleView extends UIElement {
     }
 
   }
-
-
-  refreshDragStyleHeadOne (item, isOnlyOne = false) {
-    var list = [item]
-    if (!isOnlyOne) {
-      list = [item, ...item.allLayers]
-    }
-
-    var selector = list.map(it => {
-      return `style[data-id="${it.id}-drag"]`
-    }).join(',');
-
-    this.refs.$head.$$(selector).forEach(it => {
-        it.remove();
-    })
-
-    this.changeDragStyleHead(item)
-
-  }  
-
-  removeDragStyleHeadOne (item, isOnlyOne = false) {
-    var list = [item]
-    if (!isOnlyOne) {
-      list = [item, ...item.allLayers]
-    }
-
-    var selector = list.map(it => {
-      return `style[data-id="${it.id}-drag"]`
-    }).join(',');
-
-    this.refs.$head.$$(selector).forEach(it => {
-      it.remove();
-    })
-  }    
 
 
   makeSvg (project) {
@@ -242,58 +163,6 @@ export default class StyleView extends UIElement {
 
     this.refs.$head.append($fragment);
   }  
-
-  [EVENT('removeSelectionDragStyleView')] (obj = null) {
-    var ids = obj; 
-
-    if (isArray(obj)) {
-      ids = obj
-    } else if (obj !== null) {
-      ids = [obj]
-    }
-
-    let items = [] 
-
-    if (!ids) {
-      items = this.$selection.items
-    } else if (isString(ids[0])) {
-      items = this.$selection.itemsByIds(ids);
-    } else {
-      items = ids; 
-    }
-
-    items.forEach(item => {
-      this.removeDragStyleHeadOne(item, true);
-    })
-  }
-
-  /**
-   * 
-   * @param {String|Object|Array<string>|Array<object>} obj  ,  id 리스트를 만들기 위한 객체, 없으면 selection에 있는 객체 전체
-   */
-  [EVENT('refreshSelectionDragStyleView')] (obj = null) {
-    var ids = obj; 
-
-    if (isArray(obj)) {
-      ids = obj
-    } else if (obj !== null) {
-      ids = [obj]
-    }
-
-    let items = [] 
-
-    if (!ids) {
-      items = this.$selection.items
-    } else if (isString(ids[0])) {
-      items = this.$selection.itemsByIds(ids);
-    } else {
-      items = ids; 
-    }
-
-    items.forEach(item => {
-      this.refreshDragStyleHeadOne(item, true);
-    })
-  }    
 
   refresh() {
     this.load();

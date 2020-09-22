@@ -2,7 +2,6 @@ import PathParser from "@parser/PathParser";
 import { SVGItem } from "./SVGItem";
 import { OBJECT_TO_PROPERTY, CSS_TO_STRING } from "@core/functions/func";
 import { hasSVGProperty, hasCSSProperty} from "@util/Resource";
-import { Shape } from "../../property-parser/Shape";
 import { Length } from "@unit/Length";
 import icon from "@icon/icon";
 import { ComponentManager } from "@manager/ComponentManager";
@@ -74,55 +73,6 @@ export class SVGTextItem extends SVGItem {
       { selector: `[data-id="${this.json.id}"] text`, properties: svgProperties }
     ] 
   }  
-
-  /**
-   * 
-   * @param {Dom} currentElement 
-   */
-  updateFunction (currentElement) {
-    var $text = currentElement.$('text'); 
-
-    if ($text) {
-      $text.text(this.json.text)
-      $text.setAttr({
-        filter: this.toFilterValue,
-        fill: this.toFillValue,
-        stroke: this.toStrokeValue,   
-        textLength: this.json.textLength,
-        lengthAdjust: this.json.lengthAdjust
-      })
-  
-    }
-
-    this.updateDefString(currentElement)
-
-  }    
-
-  get toDefInnerString () {
-    return /*html*/`
-        ${this.toFillSVG}
-        ${this.toStrokeSVG}
-    `
-  }
-
-  get shapeInsideId () {
-    return this.getInnerId('shape-inside')
-  }    
-
-  get html () {
-    var {id, textLength, lengthAdjust} = this.json; 
-
-    return /*html*/`
-  <svg class='element-item textpath' data-id="${id}">
-    ${this.toDefString}
-      <text ${OBJECT_TO_PROPERTY({
-        'class': 'svg-text-item',
-        textLength,
-        lengthAdjust,
-      })} >${this.json.text}</text>
-  </svg>`
-  }
-
 
 
   get svg () {
