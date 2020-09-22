@@ -50,13 +50,6 @@
 
             }
 
-            svg {
-
-                path {
-                    fill: var(--list-item-font-color);
-                }
-            }
-
             label {
                 padding: 2px 0px;                
                 cursor: pointer;
@@ -79,7 +72,7 @@
                 text-align: right;
 
                 .visible {
-                    color: var(--border-color);
+                    color: var(--list-item-disable-font-color);
 
                     &[data-visible='true'] {
                         color: var(--font-color); 
@@ -87,10 +80,10 @@
                 }
 
                 .lock {
-                    color: var(--font-color); 
+                    color: var(--list-item-disable-font-color); 
 
                     &[data-lock='true'] {
-                        color: var(--border-color); 
+                        color: var(--font-color); 
                     }
                 }
             }
@@ -104,14 +97,6 @@
             .detail {
                 .name {
                     color: var(--selected-font-color);
-                }
-
-                .tools {
-                    svg {
-                        path {
-                            fill: var(--selected-font-color);
-                        }
-                    }        
                 }
 
             }

@@ -88,7 +88,7 @@ export default class ProjectProperty extends BaseProperty {
       }
     }
 
-    // this.refresh()       
+    this.refresh()       
     this.emit('refreshAllSelectProject');    
   }
 

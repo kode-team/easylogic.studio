@@ -231,6 +231,10 @@ export class SelectionManager {
     this.select(...this.items, ... _traverse(this.project, id))
   }  
 
+  /**
+   * 
+   * @param {string} id 
+   */
   removeById(id) {
     this.select(...this.items.filter(it => it.id != id))
   }    
