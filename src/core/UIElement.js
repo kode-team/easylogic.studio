@@ -1,6 +1,7 @@
 import { uuid } from "./functions/math";
 import EventMachine from "./EventMachine";
 import { splitMethodByKeyword } from "./functions/func";
+import { SelectionManager } from "@manager/SelectionManager";
 
 const REG_STORE_MULTI_PATTERN = /^ME@/;
 
@@ -84,6 +85,7 @@ class UIElement extends EventMachine {
    *
    * you can define '@xxx' method(event) in UIElement
    *
+   * Store Event 를 초기화 한다. 
    *
    */
   initializeStoreEvent() {
@@ -204,6 +206,9 @@ class UIElement extends EventMachine {
     return this.$editor.config; 
   }
 
+  /**
+   * @type {SelectionManager} $selection
+   */
   get $selection () {
     return this.$editor.selection; 
   }

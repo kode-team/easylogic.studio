@@ -3,8 +3,9 @@ import { isArrayEquals } from "@core/functions/func";
 
 export default {
     command: 'history.refreshSelection',
-    description: 'save selection in history ',
-    execute: function (editor) {
+    description: `save selection in history `,
+    description_ko: 'Selection 정보를 갱신하면서 History 에 저장한다',
+    execute: function (editor, message = 'selection') {
         const currentValues = editor.selection.ids; 
         const undoValues = editor.history.selectedIds
 
@@ -13,7 +14,7 @@ export default {
             return;
         }
 
-        editor.history.add('selection', this, {
+        editor.history.add(message, this, {
             currentValues,
             undoValues
         })

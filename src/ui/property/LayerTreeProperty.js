@@ -307,7 +307,7 @@ export default class LayerTreeProperty extends BaseProperty {
       var item = this.$selection.currentProject.searchById(id);
       this.$selection.select(item)
 
-      this.emit('refreshSelection');      
+      this.emit('history.refreshSelection');   
   }
 
   [CLICK('$layerList .layer-item label .folder')] (e) {
@@ -363,11 +363,16 @@ export default class LayerTreeProperty extends BaseProperty {
     var id = $item.attr('data-layer-id');
 
     var item = project.searchById(id);
-    
-    e.$dt.attr('data-lock', !item.lock);
+    var lastLock = !item.lock;
+    e.$dt.attr('data-lock', lastLock);
+
+    if (lastLock) {
+      this.$selection.removeById(id);
+      this.emit('history.refreshSelection');         
+    }
 
     this.command('setAttribute', 'change lock for layer', {
-      lock: !item.lock
+      lock: lastLock
     }, item.id)
   }
 
