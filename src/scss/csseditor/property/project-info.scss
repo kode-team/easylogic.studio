@@ -1,18 +1,30 @@
 .project-info {
     margin: 0px !important;
-    padding: 10px 0px;
+    padding: 10px 5px;
 
     .project-info-item {
-        margin-bottom: 5px;
+        margin-bottom: 15px;
+
+        > label {
+            display: block;
+            padding-bottom: 5px;
+            text-transform: uppercase;
+        }
     }
 
     input, textarea {
+        display: block;
         width: 100%;
+        border-radius: 4px;
+        font-size: 12px;
     }
 
-    .input {
-        input {
-            height: 24px;
-        }
+    input {
+        height: 30px;
     }
+
+    textarea {
+        height: 100px;
+    }
+
 }

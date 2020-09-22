@@ -1,5 +1,6 @@
 import BaseProperty from "./BaseProperty";
 import { EVENT } from "@core/UIElement";
+import { CHANGEINPUT } from "@core/Event";
 
 export default class ProjectInformationProperty extends BaseProperty {
   getTitle() {
@@ -25,7 +26,9 @@ export default class ProjectInformationProperty extends BaseProperty {
       <div class="project-info" ref="$info">
         <div class='project-info-item'>
           <label>${this.$i18n('project.information.property.name')}</label>
-          <div class='input'><input type='text' value='${project.name}' ref='$name' /></div>
+          <div class='input'>
+            <input type='text' value='${project.name}' ref='$name' />
+          </div>
         </div>
         <div class='project-info-item'>
           <label>${this.$i18n('project.information.property.description')}</label>
@@ -39,6 +42,20 @@ export default class ProjectInformationProperty extends BaseProperty {
 
   [EVENT('refreshProjectList')] () {
     this.refresh();
+  }
+
+  [CHANGEINPUT('$name')] () {
+    const currentProject = this.$selection.currentProject
+    if (currentProject) {
+      currentProject.name = this.refs.$name.value; 
+    }
+  }
+
+  [CHANGEINPUT('$description')] () {
+    const currentProject = this.$selection.currentProject
+    if (currentProject) {
+      currentProject.description = this.refs.$description.value; 
+    }
   }
 
 }
