@@ -28,14 +28,19 @@ export class SVGPathItem extends SVGItem {
  
 
   setCache () {
-    this.rect = this.clone(false);
-
+    this.rect = {
+      width: this.json.width.clone(),
+      height: this.json.height.clone()
+    }
     if (!this.json.path) {
       this.json.path = new PathParser(this.json.d);
     }
 
-    this.cachePath = this.json.path.clone()
-
+    if (!this.cachePath) {
+      this.cachePath = this.json.path.clone()
+    } else if (this.json.path.d !== this.cachePath.d) {
+      this.cachePath = this.json.path.clone()
+    }
   }
 
   recover () {
@@ -93,6 +98,55 @@ export class SVGPathItem extends SVGItem {
       { selector: `[data-id="${this.json.id}"] path`, properties: svgProperties }
     ] 
   }  
+
+
+  /**
+   * 
+   * @param {Dom} currentElement 
+   */
+  updateFunction (currentElement) {
+
+    if (!currentElement) return; 
+
+    var $path = currentElement.$('path');
+
+    if ($path) {
+      $path.setAttr({
+        'd':  this.json.d,
+        'filter': this.toFilterValue,
+        'fill': this.toFillValue,
+        'stroke': this.toStrokeValue
+      })  
+    }
+
+    this.updateDefString(currentElement)
+
+    if ($path.totalLength != this.json.totalLength) {
+      this.json.totalLength = $path.totalLength
+    }
+
+  }    
+
+  get html () {
+    var {id} = this.json; 
+    var p = {'motion-based': this.json['motion-based'] }
+
+    return /*html*/`
+  <svg class='element-item path ${OBJECT_TO_CLASS(p)}'  ${OBJECT_TO_PROPERTY({
+    'motion-based': this.json['motion-based'],
+    "xmlns": "http://www.w3.org/2000/svg"
+  })}  data-id="${id}" >
+    ${this.toDefString}
+    <path ${OBJECT_TO_PROPERTY({
+      'class': 'svg-path-item',
+      d: this.json.d, 
+      filter: this.toFilterValue,
+      fill: this.toFillValue,
+      stroke: this.toStrokeValue
+    })} />
+  </svg>`
+  }
+
 
   get svg () {
     var x = this.json.x.value;
