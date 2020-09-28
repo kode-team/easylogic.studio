@@ -29,14 +29,19 @@ export class SVGPathItem extends SVGItem {
  
 
   setCache () {
-    this.rect = this.clone(false);
-
+    this.rect = {
+      width: this.json.width.clone(),
+      height: this.json.height.clone()
+    }
     if (!this.json.path) {
       this.json.path = new PathParser(this.json.d);
     }
 
-    this.cachePath = this.json.path.clone()
-
+    if (!this.cachePath) {
+      this.cachePath = this.json.path.clone()
+    } else if (this.json.path.d !== this.cachePath.d) {
+      this.cachePath = this.json.path.clone()
+    }
   }
 
   recover () {
