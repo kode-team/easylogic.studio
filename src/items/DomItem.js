@@ -1,10 +1,6 @@
 
 import { Length } from "@unit/Length";
 import { GroupItem } from "./GroupItem";
-import {
-  CSS_TO_STRING,
-  OBJECT_TO_PROPERTY,
-} from "@core/functions/func";
 import { Selector } from "../property-parser/Selector";
 
 
@@ -156,16 +152,6 @@ export class DomItem extends GroupItem {
 
     return results;
   }
-
-
-
-
-  // toKeyCSS (key) {
-  //   if (!this.json[key]) return {} 
-  //   return {
-  //     [key] : this.json[key]
-  //   };
-  // }
   
   // export animation keyframe
   toAnimationKeyframes (properties) {
@@ -173,124 +159,6 @@ export class DomItem extends GroupItem {
       { selector: `[data-id="${this.json.id}"]`, properties }
     ] 
   }
-
-  toString() {
-    return CSS_TO_STRING(this.toCSS());
-  }
-
-  toExport() {
-    return CSS_TO_STRING(this.toCSS(true));
-  }
-
-  toExportSVGCode () {
-    return ''; 
-  }
-
-
-
-  toSVGCSS() {
-
-    return Object.assign(
-      {},
-      this.toVariableCSS(),
-      this.toDefaultSVGCSS(),
-      this.toClipPathCSS(),
-      this.toWebkitCSS(), 
-      this.toTextClipCSS(),      
-      this.toBoxModelCSS(),
-      this.toBorderCSS(),
-      // ...this.toBorderImageCSS(),
-      this.toBackgroundImageCSS(),
-      this.toLayoutCSS(),      
-      this.toTransformCSS(),            
-      this.toLayoutItemCSS()
-    );
-  }
-  
-
-  toNestedBoundCSS($prefix) {
-    return []
-  }  
-
-
-  generateSVG (isRoot = false) {
-    if (isRoot) {
-      var width = this.json.width.value;
-      var height = this.json.height.value; 
-      return /*html*/`
-<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink= "http://www.w3.org/1999/xlink">
-  ${this.rootSVG}
-</svg>`
-    }
-
-    return this.svg; 
-  }
-
-  get svg () {
-    var {x, y} = this.json;    
-    x = x.value;
-    y = y.value;    
-    return this.toSVG(x, y)
-  }  
-
-  wrapperRootSVG (x, y, width, height, content) {
-    return /*html*/`
-    <g>
-      ${this.toDefString}
-      ${content}
-    </g>
-    `
-  }
-
-  toSVG (x = 0, y = 0, isRoot = false) {
-    var {layers, width, height, elementType} = this.json;
-    var tagName = elementType || 'div'
-    var css = this.toCSS();
-
-    delete css.left;
-    delete css.top;      
-    if (css.position === 'absolute') {
-      delete css.position; 
-    }
-
-    if (isRoot) {
-      return this.wrapperRootSVG(x, y, width, height, /*html*/`
-        <g transform="translate(${x}, ${y})">      
-          <foreignObject ${OBJECT_TO_PROPERTY({ 
-            width: width.value,
-            height: height.value
-          })}>
-            <div xmlns="http://www.w3.org/1999/xhtml">
-              <${tagName} style="${CSS_TO_STRING(css)}" ></${tagName}>      
-            </div>
-          </foreignObject>    
-          ${layers.map(it => it.svg).join('\n\t')}          
-        </g>
-
-      `)
-    } else {
-      return /*html*/`
-        ${this.toDefString}
-        <g transform="translate(${x}, ${y})">
-          <foreignObject ${OBJECT_TO_PROPERTY({ 
-            width: width.value,
-            height: height.value
-          })}>
-            <div xmlns="http://www.w3.org/1999/xhtml">
-              <${tagName} style="${CSS_TO_STRING(css)}" ></${tagName}>      
-            </div>
-          </foreignObject>    
-          ${layers.map(it => it.svg).join('\n\t')}                
-        </g>             
-     
-      `
-    }
-  }
-
-  get rootSVG () {
-    return this.toSVG(0, 0, true)
-  }  
-
 
   toBound () {
     var obj = {

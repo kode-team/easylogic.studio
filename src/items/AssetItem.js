@@ -15,6 +15,7 @@ export class AssetItem extends Item {
       images: [],     //  { id: xxxx, url : '' }
       imageKeys: [],
       videos: [],     //  { id: xxxx, url : '' }
+      videoKeys: [],      
       audios: [],     //  { id: xxxx, url : '' }
       ...obj
     });
@@ -198,11 +199,13 @@ export class AssetItem extends Item {
 
   removeVideo(removeIndex) {
     this.removePropertyList(this.json.videos, removeIndex);
+    this.refreshVideoKeys()    
   }      
 
 
   copyVideo(index) {
     this.copyPropertyList(this.json.videos, index);
+    this.refreshVideoKeys()    
   }        
 
   sortVideo(startIndex, targetIndex) {
@@ -214,8 +217,27 @@ export class AssetItem extends Item {
     this.json.videos[index] = {...this.json.videos[index], ...value}
   }  
 
+  getVideoValueById (id) {
+    const video = this.json.videoKeys[id]
+    if (!video) return undefined;
+
+    return video.local;
+  }
+
+  refreshVideoKeys() {
+    let videoKeys = {}
+    this.json.videos.forEach(it => {
+      videoKeys[it.id] = it; 
+    })
+
+    this.reset({
+      videoKeys
+    })
+  } 
+
   addVideo(obj) {
     this.json.videos.push(obj)
+    this.refreshVideoKeys()
     return obj; 
   }
 

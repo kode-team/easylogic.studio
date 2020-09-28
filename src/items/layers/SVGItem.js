@@ -44,26 +44,7 @@ export class SVGItem extends Layer {
     }
   }
 
-
-  toSVGAttribute () {
-    return {
-      ...this.toDefaultSVGCSS(),
-      ...this.toKeyListCSS(
-        'stroke-width', 'stroke-linecap', 'stroke-linejoin', 'stroke-dasharray', 'stroke-dashoffset',
-        'fill-opacity', 'fill-rule', 'text-anchor'
-      )
-    }
-  }
-
   getDefaultTitle() {
     return "SVG";
-  }
-
-
-  toExportSVGCode () {
-    return `
-      ${this.toFillSVG}
-      ${this.toStrokeSVG}
-    `
   }
 }

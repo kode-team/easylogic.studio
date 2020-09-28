@@ -160,7 +160,7 @@ export default class DomRender extends ItemRender {
    * @param {Item} item 
    * @param {string[]} parameters 표현될 속성 리스트   
    */
-  toKeyListCSS (item, args) {
+  toKeyListCSS (item, args = []) {
     let obj = {};
 
     args.filter(it => isNotUndefined(item[it])).forEach( it => {
@@ -193,8 +193,8 @@ export default class DomRender extends ItemRender {
       ...obj,
       ...this.toKeyListCSS(item, [
         'position', 
-        'right',
-        'bottom', 
+        // 'right',
+        // 'bottom', 
         'width',
         'height', 
         'overflow', 
@@ -325,6 +325,10 @@ export default class DomRender extends ItemRender {
     const results = {
       transform: this._transformCache
     } 
+
+    if (results.transform === 'rotate(0deg)') {
+      delete results.transform;
+    }
 
     return results;
   }     
@@ -510,6 +514,10 @@ export default class DomRender extends ItemRender {
         }).join('\n\t')}
       </${tagName}>
     `
+  }
+
+  renderSVG (item, renderer) {
+    
   }
 
   /**

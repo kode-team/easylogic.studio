@@ -31,15 +31,14 @@ export default class SVGPathRender extends SVGItemRender {
 
 
   render (item) {
-    var {id} = item; 
-
     var p = {'motion-based': item['motion-based'] }
 
     return /*html*/`
         <svg class='element-item path ${OBJECT_TO_CLASS(p)}'  ${OBJECT_TO_PROPERTY({
           'motion-based': item['motion-based'],
-          "xmlns": "http://www.w3.org/2000/svg"
-        })}  data-id="${id}" >
+          "xmlns": "http://www.w3.org/2000/svg",
+          'data-id': item.id 
+        })}>
             ${this.toDefString(item)}
             <path ${OBJECT_TO_PROPERTY({
               'class': 'svg-path-item',

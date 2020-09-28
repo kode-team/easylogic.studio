@@ -55,6 +55,15 @@ export default {
         }
     },
 
+    renderSVG (item, renderer) {
+
+        const currentRenderer = renderers[item.itemType];
+
+        if (currentRenderer) {
+            return currentRenderer.renderSVG(item, renderer || this);
+        }
+    },
+
     /**
      * 
      * @param {Item} item 
@@ -131,7 +140,7 @@ export default {
         const currentProject = item.top;
         let keyframeCode = modifyNewLine(filterKeyName(currentProject ? currentProject.toKeyframeString() : ''))
         let rootVariable = currentProject ? CSS_TO_STRING(currentProject.toRootVariableCSS()) : ''
-        let svgCode = currentProject ? currentProject.toSVGString() : '';
+        let svgCode = this.renderSVG(currentProject);
         svgCode = svgCode.replace(/\</g, '&lt;').replace(/\>/g, '&gt;') 
     
         const current = item;
@@ -171,7 +180,6 @@ export default {
               <pre>${rootVariable}</pre>
               </div>` : ''
             }
-            ${svgCode && /*html*/`<div><pre title='SVG'>${svgCode}</pre></div>`}
     
           </div>
         `

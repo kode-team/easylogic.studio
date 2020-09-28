@@ -95,27 +95,4 @@ export default class SVGItemRender extends SVGLayerRender {
         return {}
     }
 
-    /**
-     * 
-     * @param {Item} item 
-     */
-    toDefaultCSS(item) {
-        return {
-            ...super.toDefaultCSS(item),
-            ...this.toKeyListCSS(item, [
-                'stroke-width', 'stroke-linecap', 'stroke-linejoin', 'stroke-dasharray', 'stroke-dashoffset',
-                'fill-opacity', 'fill-rule', 'text-anchor'
-            ])
-        }
-    }
-
-    toSVGAttribute () {
-        return {
-            ...this.toDefaultSVGCSS(),
-            ...this.toKeyListCSS(
-                'stroke-width', 'stroke-linecap', 'stroke-linejoin', 'stroke-dasharray', 'stroke-dashoffset',
-                'fill-opacity', 'fill-rule', 'text-anchor'
-            )
-        }
-    }
 }

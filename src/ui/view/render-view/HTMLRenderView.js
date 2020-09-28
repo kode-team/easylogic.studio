@@ -13,8 +13,8 @@ import GuideLineView from "@ui/view-items/GuideLineView";
 import PathEditorView from "@ui/view-items/PathEditorView";
 import PathDrawView from "@ui/view-items/PathDrawView";
 import LayerAppendView from "@ui/view-items/LayerAppendView";
-import BrushDrawView from "@ui/view-items/BrushDrawView";
 import GridLayoutLineView from "@ui/view-items/GridLayoutLineView";
+import { isFunction } from "@core/functions/func";
 
 
 export default class HTMLRenderView extends UIElement {
@@ -27,7 +27,6 @@ export default class HTMLRenderView extends UIElement {
             PathEditorView,
             PathDrawView,
             LayerAppendView,
-            BrushDrawView,
             GridLayoutLineView,
         }
     }
@@ -57,7 +56,6 @@ export default class HTMLRenderView extends UIElement {
                 <LayerAppendView ref='$objectAddView' />
                 <PathEditorView ref='$pathEditorView' />
                 <PathDrawView ref='$pathDrawView' />
-                <BrushDrawView ref='$brushDrawView' />
             </div>
         `
     }

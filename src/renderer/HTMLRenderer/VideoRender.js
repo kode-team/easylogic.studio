@@ -1,6 +1,7 @@
 import Dom from "@core/Dom";
 import { OBJECT_TO_PROPERTY } from "@core/functions/func";
 import { Item } from "@items/Item";
+import { Project } from "@items/Project";
 import LayerRender from "./LayerRender";
 
 export default class VideoRender extends LayerRender {
@@ -25,13 +26,13 @@ export default class VideoRender extends LayerRender {
 
     /**
      * 
-     * @param {Item} item 
+     * @param {Project} item 
      */
     getUrl (item) {
         var {src} = item;     
         var project = item.top;
         
-        return project.getImageValueById(src);
+        return project.getVideoValueById(src);
     }
 
     /**
@@ -55,7 +56,7 @@ export default class VideoRender extends LayerRender {
             ${this.toDefString(item)}
             <video ${OBJECT_TO_PROPERTY({ 
                 controls,
-                src,
+                src: this.getUrl(item),
                 muted,
                 poster,
                 loop,
@@ -79,13 +80,13 @@ export default class VideoRender extends LayerRender {
         // select 하는 부분을 완전히 뺄 수 있을까? 
         const $video = currentElement.$('video')
         if ($video) {
-          $video.setProps({
+          $video.setProp({
             currentTime,
             playbackRate,
             volume
           })
         }
     
-        super.updateFunction(item, currentElement);
+        super.update(item, currentElement);
     } 
 }

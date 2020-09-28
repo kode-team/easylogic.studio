@@ -15,5 +15,8 @@ export default function loadOriginalImage(obj, callback) {
 
         callback && callback(info, img);
     }
+    img.onerror = (e) => {
+        console.log(e, e.message);
+    }
     img.src = obj.local; 
 }

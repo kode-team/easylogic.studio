@@ -49,29 +49,6 @@ export class Project extends TimelineItem {
   get artboards () {
     return this.json.layers || [];
   }
-
-  get html () {
-    return this.artboards.map(it => it.html).join('\n\n');
-  }
-
- 
-  toSVGString () {
-
-    var filterString = this.json.svgfilters.map(svgfilter => {
-
-      var filters = svgfilter.filters.map(filter => {
-        return SVGFilter.parse(filter);
-      })
-
-      return /*html*/`<filter id='${svgfilter.id}'>
-  ${filters.join('\n')}
-</filter>
-`
-
-    }).join('\n\n')
-
-    return filterString
-  }  
 }
 
 ComponentManager.registerComponent('project', Project);

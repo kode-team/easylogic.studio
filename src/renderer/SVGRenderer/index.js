@@ -9,6 +9,7 @@ import SVGPathRender from './SVGPathRender';
 import SVGTextPathRender from './SVGTextPathRender';
 import SVGTextRender from './SVGTextRender';
 import TextRender from './TextRender';
+import VideoRender from './VideoRender';
 
 const renderers = {
     'project': new ProjectRender(),
@@ -16,6 +17,7 @@ const renderers = {
     'rect': new RectRender(),
     'circle': new CircleRender(),
     'image': new ImageRender(),
+    'video': new VideoRender(),
     'text': new TextRender(),
     'svg-path': new SVGPathRender(),
     'svg-text': new SVGTextRender(),
@@ -27,11 +29,11 @@ export default {
      * 
      * @param {Item} item 
      */
-    render (item, renderer) {
+    render (item, renderer, encoding = false) {
         const currentRenderer = renderers[item.itemType];
 
         if (currentRenderer) {
-            return currentRenderer.render(item, renderer || this);
+            return currentRenderer.render(item, renderer || this, encoding);
         }
     },
 
@@ -84,5 +86,26 @@ export default {
         if (currentRenderer) {
             return currentRenderer.update(item, currentElement);
         }
+    },    
+
+    /**
+     * 코드 뷰용 HTML 코드를 렌더링 한다. 
+     * @param {Item} item 
+     */
+    codeview (item) {
+
+        if (!item) {
+            return '';
+        }
+
+        let svgCode = this.render(item);
+        svgCode = svgCode.replace(/\</g, '&lt;').replace(/\>/g, '&gt;') 
+    
+        return /*html*/`
+          <div class='svg-code'>
+            ${svgCode && /*html*/`<div><pre title='SVG'>${svgCode}</pre></div>`}
+          </div>
+        `
+    
     }    
 }

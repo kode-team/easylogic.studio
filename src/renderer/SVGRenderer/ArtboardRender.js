@@ -10,7 +10,8 @@ export default class ArtboardRender extends SVGRender {
             this.toDefaultCSS(item),
             this.toClipPathCSS(item),
             this.toWebkitCSS(item), 
-            this.toTextClipCSS(item)
+            this.toTextClipCSS(item),
+            this.toBackgroundImageCSS(item),            
         );
 
         delete css.left;
@@ -26,16 +27,16 @@ export default class ArtboardRender extends SVGRender {
      * @param {Item} item 
      * @param {SVGRenderer} renderer 
      */
-    render(item, renderer) {
+    render(item, renderer, encoding = true) {
 
         const {x, y, width, height} = item;
 
         let css = this.toCSS(item);
 
         return /*html*/`
+${encoding ? `<?xml version="1.0"?>` : ''}
 <svg ${OBJECT_TO_PROPERTY({ 
-    x: x.value, 
-    y: y.value, 
+    xmlns: "http://www.w3.org/2000/svg",
     width: width.value, 
     height: height.value,
     viewBox: `0 0 ${width.value} ${height.value}`,

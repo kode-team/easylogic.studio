@@ -1,5 +1,6 @@
 import { CSS_TO_STRING } from "@core/functions/func";
 import { Project } from "@items/Project";
+import { SVGFilter } from "@property-parser/SVGFilter";
 import DomRender from "./DomRender";
 
 export default class ProjectRender extends DomRender {
@@ -60,5 +61,38 @@ export default class ProjectRender extends DomRender {
         return item.artboards.map(it => {
             return renderer.render(it)
         });
+    }
+
+    renderSVGFilter (item) {
+
+        var filterString = item.svgfilters.map(svgfilter => {
+
+            var filters = svgfilter.filters.map(filter => SVGFilter.parse(filter))
+    
+            return /*html*/`
+<filter id='${svgfilter.id}'>
+    ${filters.join('\n')}
+</filter>
+    `  
+        }).join('\n\n')
+    
+        return filterString
+    }
+
+    /**
+     * 프로젝트에서 관리하는 SVG 객체를 출력한다. 
+     * 
+     * @param {Item} item 
+     * @param {HTMLRenderer} renderer 
+     */
+    renderSVG (item, renderer) {
+        const filterString = this.renderSVGFilter(item);
+
+        return /*html*/`
+<svg width="0" height="0">
+    <title>SVG Properties</title>
+    ${filterString}
+</svg>
+`
     }
 }

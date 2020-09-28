@@ -34,7 +34,8 @@ export default class SVGRender extends DomRender {
             this.toWebkitCSS(item), 
             this.toTextClipCSS(item),      
             this.toTransformCSS(item),            
-            this.toLayoutItemCSS(item)
+            this.toLayoutItemCSS(item),
+            this.toBackgroundImageCSS(item),
         );
 
         delete css.left;
@@ -80,6 +81,7 @@ export default class SVGRender extends DomRender {
                 'y': y.value,
                 'width': width.value,
                 'height': height.value,
+                'overflow': 'visible',
             })}>
                 ${this.toDefString(item)}
                 ${isFunction(callback) && callback()}

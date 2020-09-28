@@ -84,19 +84,11 @@ export default class StyleView extends UIElement {
 
   }
 
-
-  makeSvg (project) {
-    const SVGString = project.toSVGString ? project.toSVGString() : ''
-    return `
-      ${SVGString ? `<svg width="0" height="0">${SVGString}</svg>` : ''}
-    `
-  }
-
   [LOAD('$svgArea') + VDOM] () {
 
     var project = this.$selection.currentProject || {  }
 
-    return this.makeSvg(project)
+    return HTMLRenderer.renderSVG(project);
   }   
 
   // timeline 에서 테스트 할 때 이걸 활용할 수 있다. 

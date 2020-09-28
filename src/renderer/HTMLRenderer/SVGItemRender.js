@@ -109,13 +109,11 @@ export default class SVGItemRender extends LayerRender {
         }
     }
 
-    toSVGAttribute () {
-        return {
-            ...this.toDefaultSVGCSS(),
-            ...this.toKeyListCSS(
-                'stroke-width', 'stroke-linecap', 'stroke-linejoin', 'stroke-dasharray', 'stroke-dashoffset',
-                'fill-opacity', 'fill-rule', 'text-anchor'
-            )
-        }
+    /**
+     * 
+     * @param {Item} item 
+     */
+    toSVGAttribute (item) {
+        return this.toDefaultCSS(item);
     }
 }

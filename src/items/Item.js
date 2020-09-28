@@ -1,6 +1,7 @@
 import { uuidShort } from "@core/functions/math";
 import {
   isFunction,
+  isNotUndefined,
   isUndefined
 } from "@core/functions/func";
 
@@ -485,26 +486,37 @@ export class Item {
     return child;
   }
 
+  /**
+   * 부모 객체에서 나를 지운다. 
+   * remove self in parent 
+   */
   remove () {
     this.json.parent.removeItem(this.ref);
   }
 
+  /**
+   * remote child item 
+   * 
+   * @param {Item} childItem 
+   */
   removeItem (childItem) {
     var layers = this.json.layers;
 
-    var childIndex = -1; 
     for(var i = 0, len = layers.length; i < len; i++) {
       if (layers[i] === childItem) {
-        childIndex = i; 
+        layers[i] = undefined;
         break;
       }
     }
 
-    if (childIndex > -1) {
-      this.json.layers.splice(childIndex, 1);
-    }
+    this.json.layers = this.json.layers.filter(it => isNotUndefined(it))
   }
 
+  /**
+   * 부모 아이디를 가지고 있는지 체크 한다. 
+   * 
+   * @param {string} parentId 
+   */
   hasParent (parentId) {
     var isParent = this.json.parent.id === parentId
 
@@ -513,7 +525,12 @@ export class Item {
     return isParent; 
   }
 
-
+  /**
+   * 하위 자식 객체 중에 id를 가진 Item 을 리턴한다. 
+   * 
+   * @param {string} id 
+   * @returns {Item|null} 검색된 Item 객체 
+   */
   searchById (id) {
 
     if (this.id === id) {
@@ -536,14 +553,4 @@ export class Item {
 
     return null;
   }
-
-  /**
-   * 외부에서 Dom 을 직접적으로 업데이트 할 때 사용 
-   * Root 객체부터 다시 만들지 않는다. 
-   * 
-   * @param {Dom} element 
-   * @public
-   * @override
-   */
-  updateFunction (element) {}
 }

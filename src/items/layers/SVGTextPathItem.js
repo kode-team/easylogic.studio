@@ -1,6 +1,5 @@
 import PathParser from "@parser/PathParser";
 import { SVGItem } from "./SVGItem";
-import { OBJECT_TO_PROPERTY, CSS_TO_STRING } from "@core/functions/func";
 import { hasSVGProperty, hasCSSProperty, hasSVGPathProperty } from "@util/Resource";
 import { Length } from "@unit/Length";
 import icon from "@icon/icon";
@@ -100,30 +99,6 @@ export class SVGTextPathItem extends SVGItem {
     ] 
   }  
 
-  get svg () {
-    var x = this.json.x.value;
-    var y = this.json.y.value;
-    return this.toSVG(x, y);
-  }
-  toSVG (x = 0, y = 0) {
-    var {textLength, lengthAdjust, startOffset} = this.json; 
-    return /*html*/`
-    <g transform="translate(${x}, ${y})">    
-      ${this.toDefString}
-      <text ${OBJECT_TO_PROPERTY({
-        'class': 'svg-textpath-item',
-        ...this.toSVGAttribute(),        
-        style: CSS_TO_STRING(this.toSVGCSS())
-      })} >
-        <textPath ${OBJECT_TO_PROPERTY({
-          'xlink:href' :`#${this.toPathId}`,
-          textLength,
-          lengthAdjust,
-          startOffset
-        })} >${this.json.text}</textPath>
-      </text>
-    </g>`
-  }
 }
 
 ComponentManager.registerComponent('svg-textpath', SVGTextPathItem); 
