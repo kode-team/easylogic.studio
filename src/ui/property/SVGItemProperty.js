@@ -2,7 +2,7 @@ import BaseProperty from "./BaseProperty";
 import { EVENT } from "@core/UIElement";
 import { Length } from "@unit/Length";
 import { OBJECT_TO_PROPERTY } from "@core/functions/func";
-import { BIND, CLICK } from "@core/Event";
+import { BIND, CLICK, THROTTLE } from "@core/Event";
 
 export default class SVGItemProperty extends BaseProperty {
 
@@ -19,13 +19,13 @@ export default class SVGItemProperty extends BaseProperty {
   }
 
 
-  [EVENT('refreshStyleView')]() {
+  [EVENT('refreshStyleView', 'refreshRect', 'refreshCanvasForPartial', 'updatePathItem') + THROTTLE(100)]() {
 
     var current = this.$selection.current;
 
     if (current && this.isSVGItem(current)) {
 
-      this.refs.$length.text(current.totalLength || '');
+      this.refs.$length.text(Math.floor(current.totalLength) || '');
     }
 
   }  

@@ -117,7 +117,7 @@ export class SVGPathItem extends SVGItem {
 
     this.updateDefString(currentElement)
 
-    if (isLast) {
+    if ($path.totalLength != this.json.totalLength) {
       this.json.totalLength = $path.totalLength
     }
 

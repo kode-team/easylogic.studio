@@ -1,9 +1,8 @@
 import UIElement, { EVENT } from "@core/UIElement";
 import { POINTERSTART, MOVE, END, BIND, IF, CLICK } from "@core/Event";
 import { Length } from "@unit/Length";
-import { isFunction, isNotUndefined } from "@core/functions/func";
+import { isNotUndefined } from "@core/functions/func";
 import GuideView from "../view/GuideView";
-import AreaItem from "@items/AreaItem";
 import icon from "@icon/icon";
 
 var moveType = {
