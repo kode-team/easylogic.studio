@@ -5,6 +5,8 @@ import { CSS_TO_STRING } from "@core/functions/func";
 
 import Dom from "@core/Dom";
 import ExportManager from "@manager/ExportManager";
+import HTMLRenderer from "@renderer/HTMLRenderer";
+import SVGRenderer from "@renderer/SVGRenderer";
 
 export default class ExportWindow extends BaseWindow {
 
@@ -81,28 +83,28 @@ export default class ExportWindow extends BaseWindow {
     }
 
     refresh() {
-        var project = this.$selection.currentProject || { layers : [] }
+//         var project = this.$selection.currentProject || { layers : [] }
 
-        var css = `
-${this.makeStyle(project)}
-${project.artboards.map(item => this.makeStyle(item).replace(/\n/g, '\n\t')).join('\n')}
-`
-        this.refs.$css.text(css);
+//         var css = `
+// ${this.makeStyle(project)}
+// ${project.artboards.map(item => this.makeStyle(item).replace(/\n/g, '\n\t')).join('\n')}
+// `
+//         this.refs.$css.text(css);
 
-        var html = `
-${project.artboards.map(item => item.html).join('\n')}
-        `
+//         var html = `
+// ${project.artboards.map(item => item.html).join('\n')}
+//         `
 
-        this.refs.$html.text(html);
+//         this.refs.$html.text(html);
 
-        var obj = ExportManager.generate(this.$editor);
+//         var obj = ExportManager.generate(this.$editor);
 
-        this.refs.$js.text(obj.js);
+//         this.refs.$js.text(obj.js);
 
 
         // export svg image 
         if (this.$selection.currentArtboard) {
-            var svgString = ExportManager.generateSVG(this.$editor, this.$selection.currentArtboard);
+            var svgString = SVGRenderer.render(this.$selection.currentArtboard);
             this.refs.$svgimage.text(svgString);
             this.refs.$svgimagePreview.html(Dom.createByHTML(svgString));
         } else  {
@@ -127,17 +129,7 @@ ${project.artboards.map(item => item.html).join('\n')}
     }  
 
     makeStyle (item) {
-
-        if (item.is('project')) {
-            return this.makeProjectStyle(item);
-        }
-
-        const cssString = item.generateView(`[data-id='${item.id}']`)
-        return `
-        ${cssString}
-        ` + item.layers.map(it => {
-        return this.makeStyle(it);
-        }).join('')
+        return HTMLRenderer.toStyle(item);
     }
 
 

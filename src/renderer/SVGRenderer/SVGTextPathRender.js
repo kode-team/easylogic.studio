@@ -1,5 +1,5 @@
 import Dom from "@core/Dom";
-import { OBJECT_TO_PROPERTY } from "@core/functions/func";
+import { CSS_TO_STRING, OBJECT_TO_PROPERTY } from "@core/functions/func";
 import { Item } from "@items/Item";
 import SVGItemRender from "./SVGItemRender";
 
@@ -40,9 +40,9 @@ export default class SVGTextPathRender extends SVGItemRender {
 
   toDefInnerString (item) {
     return /*html*/`
-        ${this.toPathSVG(item)}
-        ${this.toFillSVG(item)}
-        ${this.toStrokeSVG(item)}
+      ${this.toPathSVG(item)}
+      ${this.toFillSVG(item)}
+      ${this.toStrokeSVG(item)}
     `
   }
 
@@ -52,33 +52,32 @@ export default class SVGTextPathRender extends SVGItemRender {
 
   toPathSVG (item) {
     return /*html*/`
-    <path ${OBJECT_TO_PROPERTY({
-      'class': 'svg-path-item',
-      id: this.toPathId(item),
-      d: item.d,
-      fill: 'none'
-    })} />
+      <path ${OBJECT_TO_PROPERTY({
+        'class': 'svg-path-item',
+        id: this.toPathId(item),
+        d: item.d,
+        fill: 'none'
+      })} />
     `
   }
 
   render (item) {
-    var {id, textLength, lengthAdjust, startOffset} = item; 
 
-    return /*html*/`
-      <svg class='element-item textpath' data-id="${id}">
-        ${this.toDefString(item)}
-          <text ${OBJECT_TO_PROPERTY({
-            'class': 'svg-textpath-item'
-          })} >
-            <textPath ${OBJECT_TO_PROPERTY({
-              'xlink:href' :`#${this.toPathId(item)}`,
-              textLength,
-              lengthAdjust,
-              startOffset
-            })} >${item.text}</textPath>
-        </text>
-      </svg>
-    `
+    return this.wrappedRender(item, () => {
+      return /*html*/`
+        <textPath ${OBJECT_TO_PROPERTY({
+          'xlink:href' :`#${this.toPathId(item)}`,
+          textLength,
+          lengthAdjust,
+          startOffset,
+          filter: this.toFilterValue(item),
+          fill: this.toFillValue(item),
+          stroke: this.toStrokeValue(item),
+          ...this.toSVGAttribute(item),
+          style: CSS_TO_STRING(this.toCSS(item))   
+        })} >${item.text}</textPath>
+      `
+    })
   }
 
 

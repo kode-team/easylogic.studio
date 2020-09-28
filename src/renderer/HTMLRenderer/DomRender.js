@@ -488,10 +488,11 @@ export default class DomRender extends ItemRender {
    * 처음 렌더링 할 때 
    * 
    * @param {Item} item 
+   * @param {Renderer} renderer
    * @override
    */
   render (item, renderer) {
-    var {elementType, id, name, layers, itemType} = item;
+    var {elementType, id, name, itemType} = item;
   
     const tagName = elementType || 'div'
   

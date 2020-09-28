@@ -1,7 +1,8 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, DEBOUNCE } from "@core/Event";
+import { LOAD, DEBOUNCE, VDOM } from "@core/Event";
 import { EVENT } from "@core/UIElement";
 import { CSS_TO_STRING, TAG_TO_STRING } from "@core/functions/func";
+import HTMLRenderer from "@renderer/HTMLRenderer";
 
 
 export default class CodeViewProperty extends BaseProperty {
@@ -37,9 +38,9 @@ export default class CodeViewProperty extends BaseProperty {
     return str.replace(/;/gi, ";\n").trim()
   }
 
-  [LOAD('$body')] () {
+  [LOAD('$body') + VDOM] () {
 
-    return '';
+    return HTMLRenderer.codeview(this.$selection.current);
 
     var currentProject = this.$selection.currentProject;
     var keyframeCode = currentProject ? currentProject.toKeyframeString() : ''
