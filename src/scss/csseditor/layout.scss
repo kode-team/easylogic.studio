@@ -24,6 +24,18 @@
       .layout-footer { 
         height: $timeline-size - 1px;
 
+        .footer-splitter {
+          position: absolute;
+          left: 0px;
+          top: 0px;
+          right: 0px;
+          height: 4px;
+          cursor: ns-resize;
+          // background-color: rgba(255, 255, 255, 0.123);
+          display: block;
+          z-index: 1000000000;
+        }        
+
         .managed-tool {
           > .property-title {
             > .tools {
@@ -110,9 +122,13 @@
       overflow: hidden;
       border-top: 1px solid var(--border-color);
       background-color: var(--background-color);
-      transition: $show-timeline-animation;
+      // transition: $show-timeline-animation;
       pointer-events: all;
       z-index: 10000;
+
+      .footer-splitter {
+        display: none;
+      }
 
       .managed-tool {
         background-color: var(--background-color);
@@ -130,7 +146,7 @@
       
       display: flex;
       flex-direction: column;
-      transition: bottom 0.05s linear;
+      // transition: bottom 0.05s linear;
     }
 
     .layout-right {
@@ -144,7 +160,7 @@
       display: flex;
       flex-direction: column;
       overflow: auto;
-      transition: bottom 0.05s linear;
+      // transition: bottom 0.05s linear;
     }
 
     .layout-body {
@@ -153,7 +169,7 @@
       right: $right-size;
       bottom: $footer-height;
       position: absolute;
-      transition: bottom 0.05s linear;
+      // transition: bottom 0.05s linear;
     }
   }
 }

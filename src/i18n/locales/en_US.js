@@ -286,6 +286,7 @@ export default {
 
 
     'timeline.property.title': 'Timeline',
+    'timeline.property.resize': 'Drag if you want to resize timeline height.',    
     'timeline.animation.property.title': 'Animations',    
 
     'timeline.play.control.play': 'Play',
