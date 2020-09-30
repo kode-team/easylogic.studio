@@ -6,7 +6,7 @@ import "@items";
 
 import Dom from "@core/Dom";
 import UIElement, { EVENT } from "@core/UIElement";
-import { DRAGOVER, DROP, PREVENT, TRANSITIONEND, KEYDOWN, KEYUP, IF, POINTERSTART, MOVE, END, BIND, CLICK } from "@core/Event";
+import { DRAGOVER, DROP, PREVENT, TRANSITIONEND, KEYDOWN, KEYUP, IF, POINTERSTART, MOVE, END, BIND, CLICK, THROTTLE } from "@core/Event";
 
 import icon from "@icon/icon";
 import { Length } from "@unit/Length";
@@ -51,6 +51,8 @@ export default class CSSEditor extends UIElement {
       hideRightPanel: false,
       leftSize: 340,
       rightSize: 260,
+      bottomSize: 30,
+      lastBottomSize: 150
     }
   }
 
@@ -80,7 +82,8 @@ export default class CSSEditor extends UIElement {
             <Inspector />
           </div>
 
-          <div class='layout-footer'>
+          <div class='layout-footer' ref='$footerPanel'>
+            <div class='footer-splitter' ref='$footerSplitter' title="${this.$i18n('timeline.property.resize')}"></div>
             <TimelineProperty />
           </div>   
           <div class='splitter' ref='$splitter'></div>
@@ -148,12 +151,13 @@ export default class CSSEditor extends UIElement {
   [BIND('$leftPanel')] () {
     let left = `0px`    
     let width = Length.px(this.state.leftSize);
+    let bottom = Length.px(this.state.bottomSize);
     if (this.state.hideLeftPanel) {
       left = `-${this.state.leftSize}px`    
     }
 
     return {
-      style: { left, width }
+      style: { left, width, bottom }
     }
   }  
 
@@ -185,12 +189,13 @@ export default class CSSEditor extends UIElement {
 
   [BIND('$rightPanel')] () {
     let right = `0px`    
+    let bottom = Length.px(this.state.bottomSize);    
     if (this.state.hideRightPanel) {
       right = `-${this.state.rightSize}px`    
     }
 
     return {
-      style: { right }
+      style: { right, bottom }
     }
   }    
 
@@ -198,6 +203,7 @@ export default class CSSEditor extends UIElement {
    
     let left = `${this.state.leftSize}px`
     let right = `${this.state.rightSize}px`
+    let bottom = `${this.state.bottomSize}px`
 
     if (this.state.hideLeftPanel) {
       left = `0px`
@@ -206,9 +212,21 @@ export default class CSSEditor extends UIElement {
     if (this.state.hideRightPanel) {
       right = `0px`
     }
+
+
  
     return {
-      style: { left, right }
+      style: { left, right, bottom }
+    }
+  }  
+  
+
+  [BIND('$footerPanel')] () {
+   
+    let height = Length.px(this.state.bottomSize);
+ 
+    return {
+      style: { height }
     }
   }    
 
@@ -231,7 +249,7 @@ export default class CSSEditor extends UIElement {
     };
   }
 
-  [POINTERSTART('$splitter') + MOVE('moveSplitter') + END('moveEndSplitter')] () {
+  [POINTERSTART('$splitter') + MOVE('moveSplitter')] () {
 
     this.minSize = this.$theme('left_size');
     this.maxSize = this.$theme('left_max_size');
@@ -245,6 +263,27 @@ export default class CSSEditor extends UIElement {
 
   }
 
+  [POINTERSTART('$footerSplitter') + MOVE('moveFooterSplitter')] () {
+
+    this.minFooterSize = this.$theme('bottom_size');
+    this.maxFooterSize = this.$theme('bottom_max_size');
+    this.bottomSize = Length.parse(this.refs.$footerPanel.css('height')).value;
+  }
+
+  moveFooterSplitter (_, dy) {
+    const bottomSize = Math.max(Math.min(this.bottomSize - dy , this.maxFooterSize), this.minFooterSize)
+    this.setState({
+      bottomSize,
+      lastBottomSize: bottomSize      
+    })
+
+    this.trigger('changeTimelineHeight');
+  }  
+
+  [EVENT('changeTimelineHeight') + THROTTLE(100)] () {
+    this.emit('refreshTimeline')
+  }
+
   refresh () {
 
     this.bindData('$splitter');
@@ -253,7 +292,8 @@ export default class CSSEditor extends UIElement {
     this.bindData('$rightPanel');
     this.bindData('$toggleRightButton');
     this.bindData('$toggleLeftButton');            
-    this.bindData('$bodyPanel');    
+    this.bindData('$bodyPanel');  
+    this.bindData('$footerPanel');        
     
     this.emit('resizeEditor');
   }
@@ -273,6 +313,17 @@ export default class CSSEditor extends UIElement {
 
   [EVENT('toggleFooter')] (isShow) {
     this.$el.toggleClass('show-footer', isShow);
+
+    if (this.$el.hasClass('show-footer')) {
+      if (this.state.bottomSize === 30) {
+        this.state.bottomSize = this.state.lastBottomSize || this.$theme('bottom_size');
+      }
+    } else {
+      this.state.bottomSize = 30
+    }
+
+    this.refresh();
+
   }
 
   [TRANSITIONEND('$el .layout-footer')] (e) {

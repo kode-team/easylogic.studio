@@ -288,6 +288,7 @@ export default {
     'inspector.tab.title.history': '기록',
 
     'timeline.property.title': '타임라인',
+    'timeline.property.resize': '타임라인 높이를 변경합니다. 드래그 해주세요.',        
     'timeline.animation.property.title': '애니메이션',    
 
 

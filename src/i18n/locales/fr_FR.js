@@ -284,6 +284,7 @@ export default {
 
 
     'timeline.property.title': 'Chronologie',
+    'timeline.property.resize': 'Drag if you want to resize timeline height.',        
     'timeline.animation.property.title': 'Animations',    
 
     'timeline.play.control.play': 'Jouer',
