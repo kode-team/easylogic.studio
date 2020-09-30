@@ -275,6 +275,8 @@ export default class SelectionToolView extends SelectionToolBind {
         if (current) {
             var isPath = current.is('svg-path', 'svg-brush', 'svg-textpath');
             this.refs.$selectionTool.toggleClass('path', isPath);            
+        } else {
+            this.refs.$selectionTool.toggleClass('path', false);            
         }
 
         if (this.$editor.isSelectionMode() && this.$el.isHide()) {
@@ -351,7 +353,8 @@ export default class SelectionToolView extends SelectionToolBind {
                 this.refs.$selectionIcon.html(iconString);  
             } else if (length >= 2) {
                 title = `multi : ${length}`;
-                this.refs.$selectionIcon.html(icon.flag);                
+                this.refs.$selectionIcon.html(icon.flag);        
+                this.refs.$selectionTool.toggleClass('path', false);        
             }
  
             this.refs.$selectionTitle.text(title)

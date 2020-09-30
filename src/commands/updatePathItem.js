@@ -1,8 +1,11 @@
 import { Editor } from "@manager/Editor";
 import PathParser from "@parser/PathParser";
 
+
 export default {
     command: 'updatePathItem',
+
+    description: 'Update path string for selected svg path item',
 
     /**
      * 
@@ -16,8 +19,9 @@ export default {
         editor.emit('setAttribute', {
             d: pathObject.d,
             totalLength: pathObject.totalLength,
-            path: new PathParser(pathObject.d)
+            path: new PathParser(pathObject.d),
         })
+
     }
 
 }
