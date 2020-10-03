@@ -60,7 +60,7 @@ export default class AnimationPropertyPopup extends BasePopup {
     return /*html*/`
     <div class='timing-function'>
       <label>${this.$i18n('animation.property.popup.timing.function')}</label>
-      <CubicBezierEditor ref='$cubicBezierEditor' key="timingFunction" value="${this.state.data.timingFunction}" onChange='changeCubicBezier' />
+      <CubicBezierEditor ref='$cubicBezierEditor' key="timingFunction" value="${this.state.data.timingFunction || 'linear'}" onChange='changeCubicBezier' />
     </div>
     `
   }

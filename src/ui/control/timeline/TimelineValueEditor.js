@@ -176,7 +176,7 @@ checkKey (e) {
   templateForTimingFunction () {
     return /*html*/`
     <div class='timing-function'>
-      <CubicBezierEditor ref='$cubicBezierEditor' key="timing" value="${this.state.timingFunction}" onChange='changeCubicBezier' />
+      <CubicBezierEditor ref='$cubicBezierEditor' key="timing" value="${this.state.timingFunction || 'linear'}" onChange='changeCubicBezier' />
     </div>
     `
   }

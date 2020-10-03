@@ -14,24 +14,21 @@
         background-color: var(--background-color);
 
         .bezier-canvas {
-            position: absolute;
-            left:-25px;
-            top:-25px;
             pointer-events: none;
         }
 
         .control {
             position: absolute;
-            left:5px;
-            right:5px;
-            bottom:5px;
-            top:5px;
+            left:0px;
+            right:0px;
+            bottom:0px;
+            top:0px;
 
             .pointer1, .pointer2
             {
                 position: absolute;
-                width: 10px;
-                height:10px;
+                width: 9px;
+                height:9px;
                 transform: translateX(-50%) translateY(-50%);
                 border-radius:100%;
                 cursor: pointer;
@@ -72,7 +69,7 @@
 
         @each $selectType in ease, ease-in, ease-out {
             &[data-selected-value="#{$selectType}"] .item[data-bezier="#{$selectType}"] {
-                background-color: rgba(0, 0, 0, 0.2);
+                background-color: var(--selected-color);
             }
         }        
 
@@ -80,10 +77,11 @@
             position: relative;
             width: 40px;
             height: 40px; 
-            border-radius: 5px;
+            border-radius: 2px;
             margin-bottom: 5px;
+            overflow: hidden;            
             cursor:pointer;
-            background-color: rgba(var(--selected-color), 0.1);
+
             
             &:not(:first-child) {
                 border-top: 0px;
@@ -96,10 +94,13 @@
 
             .item-canvas {
                 position: absolute;
-                top:5px;
-                left:5px;
-                width:30px;
-                height:30px;
+                top:1px;
+                left:1px;
+                width:38px;
+                height:38px;
+                background-color: rgba(0, 0, 0, 1);
+                border-radius: 2px;
+
             }
         }
     }

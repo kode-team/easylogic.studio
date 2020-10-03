@@ -1,9 +1,10 @@
 import UIElement, { EVENT } from "@core/UIElement";
 import icon from "@icon/icon";
-import { CLICK, POINTERSTART, MOVE, END } from "@core/Event";
+import { CLICK, POINTERSTART, MOVE, END, BIND } from "@core/Event";
 import { Length } from "@unit/Length";
 import { formatCubicBezier, createBezierForPattern, bezierList, getPredefinedCubicBezier } from "@core/functions/bezier";
 import { div } from "@core/functions/math";
+import { curveToPath, curveToPointLine } from "@core/functions/func";
 
 
 export default class CubicBezierEditor extends UIElement {
@@ -21,6 +22,16 @@ export default class CubicBezierEditor extends UIElement {
     }
 
     template () {
+
+        const linearCurve = curveToPath(this.state.currentBezier, 150, 150)
+        const linearCurvePoint = curveToPointLine(this.state.currentBezier, 150, 150)
+        const easeCurve = curveToPath('ease', 30, 30)
+        const easeCurvePoint = curveToPointLine('ease', 30, 30)
+        const easeInCurve = curveToPath('ease-in', 30, 30)
+        const easeInCurvePoint = curveToPointLine('ease-in', 30, 30)
+        const easeOutCurve = curveToPath('ease-out', 30, 30)
+        const easeOutCurvePoint = curveToPointLine('ease-out', 30, 30)
+
         return /*html*/`
             <div class='cubic-bezier-editor'>
                 <div class='predefined'>
@@ -39,16 +50,29 @@ export default class CubicBezierEditor extends UIElement {
                 </div>
                 <div class='item-list' ref='$itemList' data-selected-value=''>
                     <div class='item' data-bezier='ease' title='ease'>
-                        <canvas class='item-canvas' ref='$item1Canvas' width="30px" height="30px"></canvas>
+                        <svg class='item-canvas' width="30" height="30" viewBox="0 0 30 30">
+                            <path d="${easeCurve}" stroke="white" stroke-width="1" fill='none' />
+                            <path d="${easeCurvePoint}" stroke="gray" stroke-width="1" fill='none' />
+                        </svg>
                     </div>
                     <div class='item' data-bezier='ease-in' title='ease-in'>
-                        <canvas class='item-canvas' ref='$item2Canvas' width="30px" height="30px"></canvas>
+                        <svg class='item-canvas' width="30" height="30" viewBox="0 0 30 30">
+                            <path d="${easeInCurve}" stroke="white" stroke-width="1" fill='none' />
+                            <path d="${easeInCurvePoint}" stroke="gray" stroke-width="1" fill='none' /> 
+                        </svg>
                     </div>
                     <div class='item' data-bezier='ease-out' title='ease-out'>
-                        <canvas class='item-canvas' ref='$item3Canvas' width="30px" height="30px"></canvas>
+                        <svg class='item-canvas' width="30" height="30" viewBox="0 0 30 30">
+                            <path d="${easeOutCurve}" stroke="white" stroke-width="1" fill='none' />
+                            <path d="${easeOutCurvePoint}" stroke="gray" stroke-width="1" fill='none' />
+                        </svg>
                     </div>
                 </div>
                 <div class='bezier'>
+                    <svg class='bezier-canvas' width="150" height="150" viewBox="0 0 150 150" overflow="visible">
+                        <path d="${linearCurve}" stroke="white" stroke-width="1" fill='none' ref='$bezierCanvas' />
+                        <path d="${linearCurvePoint}" stroke="gray" stroke-width="1" fill='none' ref='$bezierCanvasPoint' />
+                    </svg>                
                     <canvas class='bezier-canvas' ref='$canvas' width='200px' height="200px"></canvas>
                     <div class='control' ref='$control'>
                         <div class='pointer1' ref='$pointer1'></div>
@@ -58,6 +82,18 @@ export default class CubicBezierEditor extends UIElement {
             </div>
         `
     }
+
+    [BIND('$bezierCanvas')] () {
+        return {
+            d: curveToPath(this.state.currentBezier, 150, 150)
+        }
+    }
+
+    [BIND('$bezierCanvasPoint')] () {
+        return {
+            d: curveToPointLine(this.state.currentBezier, 150, 150)
+        }
+    }    
 
     updateData(opt = {}) {
         this.setState(opt);
@@ -115,73 +151,16 @@ export default class CubicBezierEditor extends UIElement {
     }
 
     refresh() {
-        this.refreshPointer()
         this.refreshEasingText();
         this.refreshBezierCanvas();
     }
 
     refreshBezierCanvas () {
-        this.drawBezierCanvas(this.refs.$canvas, this.state.currentBezier, true)
-    }
 
-    drawBezierCanvas($canvas, currentBezier, isDrawPointer = false) {
-        currentBezier = getPredefinedCubicBezier(currentBezier)
-        $canvas.update(() => {
-            var left = isDrawPointer ? 30 : 0; 
-            var top = isDrawPointer ? 30 : 0; 
-            var width = $canvas.width() - left * 2;
-            var height = $canvas.height() - top * 2;
-            var context = $canvas.context();
-
-            context.lineWidth = 1;
-            context.strokeStyle = this.state.baseLineColor;
-    
-            context.beginPath();
-            context.moveTo(left, height + top);
-            context.lineTo(width + left, top);
-            context.stroke();
-            context.closePath();
-    
-            context.strokeStyle = this.state.selectedColor;
-    
-            context.beginPath();
-            context.moveTo(left, height + top);
-            context.lineTo(
-                currentBezier[0] * width + left, 
-                (currentBezier[1] == 0 ? height : (1 - currentBezier[1]) * height) + top
-            );
-            context.moveTo(width + left, top);
-            context.lineTo(
-                currentBezier[2] * width + left, 
-                (currentBezier[3] == 1 ? 0 : (1 - currentBezier[3] ) * height) + top
-            );
-            context.stroke();
-            context.closePath();
-    
-            context.lineWidth = 2;
-            context.strokeStyle = this.state.curveColor;
-            
-            var x1 = currentBezier[0] * width
-            var y1 = currentBezier[1] == 0 ? height : (1 - currentBezier[1]) * height 
-            var x2 = currentBezier[2] * width
-            var y2 = currentBezier[3] == 1 ? 0 : (1 - currentBezier[3] ) * height
-            var x = width
-            var y = 0
-
-            context.beginPath();
-            context.moveTo(left , top + height);   
-            context.bezierCurveTo( 
-                left + x1, top + y1,
-                left + x2, top + y2, 
-                left + x, top + y 
-            );
-            context.stroke();
-        })
-
-        if (isDrawPointer) {
-            this.drawPoint()
-        }
-
+        this.bindData('$bezierCanvas');
+        this.bindData('$bezierCanvasPoint');
+        this.refreshPointer();
+        this.drawPoint()
     }
 
     refreshEasingText() {
@@ -197,16 +176,16 @@ export default class CubicBezierEditor extends UIElement {
         var top = (1 - currentBezier[1]) * height;
 
         this.refs.$pointer1.css({
-            left: Length.px(left),
-            top : Length.px(top)
+            left: Length.px(left).round(),
+            top : Length.px(top).round()
         });
 
         left = currentBezier[2] * width ;
         top = (1 - currentBezier[3]) * height;
 
         this.refs.$pointer2.css({
-            left: Length.px(left),
-            top : Length.px(top)
+            left: Length.px(left).round(),
+            top : Length.px(top).round()
         })
     }
 
@@ -272,7 +251,7 @@ export default class CubicBezierEditor extends UIElement {
     }
 
 
-    setPosition($pointer, e) {
+    setPosition(e) {
         var width = this.refs.$control.width();
         var height = this.refs.$control.height();
 
@@ -307,10 +286,10 @@ export default class CubicBezierEditor extends UIElement {
 
         y -= minY;
 
-        $pointer.css({
-            left: x + 'px',
-            top : y + 'px'
-        });
+        // $pointer.css({
+        //     left: x + 'px',
+        //     top : y + 'px'
+        // });
 
         return { 
             x : div(x, width), 
@@ -324,7 +303,7 @@ export default class CubicBezierEditor extends UIElement {
     }
 
     movePointer1 (dx, dy) {
-        var pos = this.setPosition(this.refs.$pointer1, {
+        var pos = this.setPosition({
             x: this.clientX + dx,
             y: this.clientY + dy 
         });
@@ -343,7 +322,7 @@ export default class CubicBezierEditor extends UIElement {
     }
     movePointer2(dx, dy) {
 
-        var pos = this.setPosition(this.refs.$pointer2, {
+        var pos = this.setPosition({
             x: this.clientX + dx,
             y: this.clientY + dy 
         });
@@ -361,8 +340,5 @@ export default class CubicBezierEditor extends UIElement {
         var currentBezier = getPredefinedCubicBezier(timingFunction || this.state.currentBezier)
         this.setState({ currentBezier })
         this.refresh();
-        this.drawBezierCanvas(this.refs.$item1Canvas, 'ease')
-        this.drawBezierCanvas(this.refs.$item2Canvas, 'ease-in')
-        this.drawBezierCanvas(this.refs.$item3Canvas, 'ease-out')
     }
 }
