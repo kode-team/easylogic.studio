@@ -25,8 +25,8 @@ export function makeInterpolateTransform(layer, property, startValue, endValue) 
             list.push(makeInterpolateBoolean(layer, property, s, e))
         } else {
             switch(s.type) {
-            case 'skewX': 
-            case 'skewY': 
+            // case 'skewX': 
+            // case 'skewY': 
             case 'translate': 
             case 'translateX': 
             case 'translateY': 

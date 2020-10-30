@@ -15,37 +15,42 @@
     }
   }
 
-  .selection-pointer {
-    position: absolute;
-    left:0px;
-    top:0px;
-    width:100%;
-    height:100%;
+
+  .pointer-rect {
     pointer-events: none;
-    .marker {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    box-sizing: border-box;
+
+    .pointer {
+      display: inline-block;
       position: absolute;
-      // pointer-events: all;
-      left:0px;
-      top:0px;
+      left: 0px;
+      top: 0px;
       width: 10px;
       height: 10px;
-      margin-left: -5px;
-      margin-top: -5px;
-      background-color: black;
+      box-sizing: border-box;
+      background-color: white; 
+      box-sizing: border-box;
+      border: 1px solid gray;
       border-radius: 100%;
+      cursor: pointer;
+      pointer-events: all;
+      // &[data-number="1"] { background-color: rgb(255, 185, 185); }
+      // &[data-number="p1"] { background-color: rgb(255, 185, 185); }
+    }
 
-      &[data-index='1'] {
-        background-color:var(--selected-color);
-      }
-      &[data-index='2'] {
-        background-color:var(--border-color);
-      }
-      &[data-index='3'] {
-        background-color:var(--border-color);
-      }
-      &[data-index='4'] {
-        background-color:var(--border-color);
-      }                  
+    .line {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+
+      stroke: gray;
+      fill: transparent;
+      stroke-width: 1;
     }
   }
   
@@ -63,7 +68,7 @@
     &.textpath,
     &.polygon {
 
-      display: none;
+      // display: none;
 
       .selection-tool-item[data-position="path"] {
         top: -30px;

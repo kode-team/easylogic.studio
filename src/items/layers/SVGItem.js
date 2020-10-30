@@ -47,4 +47,8 @@ export class SVGItem extends Layer {
   getDefaultTitle() {
     return "SVG";
   }
+
+  isSVG() {
+    return true; 
+  }
 }

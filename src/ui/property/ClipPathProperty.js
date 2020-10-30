@@ -131,14 +131,14 @@ export default class ClipPathProperty extends BaseProperty {
 
     switch(obj.type) {
     case 'path':
-      var d = obj.value.trim()
+      var d = current.accumulatedPath(obj.value.trim()).d
       var mode = d ? 'modify' : 'path'
 
       this.emit('showPathEditor', mode, {
         changeEvent: 'updateClipPathString',
         current,
         d,
-        box: 'box',
+        // box: 'box',
         screenX: current.screenX,
         screenY: current.screenY,
         screenWidth: current.screenWidth,
@@ -162,6 +162,8 @@ export default class ClipPathProperty extends BaseProperty {
     var current = this.$selection.current;
 
     if (!current) return;
+
+    data.d = current.invertPathString(data.d);
 
     current.reset({
       'clip-path': `path(${data.d})`      

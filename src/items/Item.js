@@ -115,8 +115,12 @@ export class Item {
   }
 
 
+  /**
+   * 
+   * @return {Item[]} 자신을 포함안 하위 모든 자식을 조회 
+   */
   get allLayers () {
-    return [..._traverse(this.ref)]
+    return _traverse(this.ref)
   }
 
   /**
@@ -173,15 +177,15 @@ export class Item {
   }
 
   /**
-   * 상속 구조 안에서 id 리스트 
+   * 상속 구조 안에서 instance 리스트
    * 
-   * @returns {string[]}
+   * @returns {Item[]}
    */
   get path () {
 
-    if (!this.parent) return [ this.id ];
+    if (!this.parent) return [ this.ref ];
 
-    return [...this.parent.path, this.id];
+    return [...this.parent.path, this.ref];
   }
 
   /**
@@ -232,6 +236,10 @@ export class Item {
 
   isNot (...itemType) {
     return this.is(...itemType) === false;
+  }
+
+  isSVG() {
+    return false; 
   }
 
   /***********************************

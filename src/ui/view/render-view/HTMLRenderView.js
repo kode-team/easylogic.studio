@@ -15,6 +15,7 @@ import PathDrawView from "@ui/view-items/PathDrawView";
 import LayerAppendView from "@ui/view-items/LayerAppendView";
 import GridLayoutLineView from "@ui/view-items/GridLayoutLineView";
 import { isFunction } from "@core/functions/func";
+import { rectToVerties } from "@core/functions/collision";
 
 
 export default class HTMLRenderView extends UIElement {
@@ -48,7 +49,6 @@ export default class HTMLRenderView extends UIElement {
             <div class='element-view' ref='$body'>
                 <div class='canvas-view' ref='$view'></div>
                 <div class='drag-area-rect' ref='$dragAreaRect'></div>
-                <div class='pointer-rect' ref='$pointerRect' style='display:none'></div>
                 <StyleView ref='$styleView' />
                 <GuideLineView ref='$guideLineView' />
                 <GridLayoutLineView ref='$gridLayoutLineView' />
@@ -93,13 +93,10 @@ export default class HTMLRenderView extends UIElement {
             return false; 
         }
 
-        return $el.hasClass('element-item') === false 
+        return ($el.hasClass('element-item') === false || $el.hasClass('artboard'))
             && $el.hasClass('selection-tool-item') === false 
-            && $el.hasClass('point') === false
+            && $el.hasClass('pointer') === false
             && $el.hasClass('handle') === false            
-            && $el.hasClass('perspective-handle') === false
-            && $el.hasClass('transform-tool-item') === false
-            && $el.hasClass('transform-tool') === false            
             && $el.isTag('svg') === false 
             && $el.isTag('path') === false
             && $el.isTag('textPath') === false
@@ -137,7 +134,7 @@ export default class HTMLRenderView extends UIElement {
     
             this.refs.$dragAreaRect.css(obj) 
 
-            this.state.cachedCurrentElement = {}
+            this.state.cachedCurrentElement = {}       
             this.$el.$$('.selected').forEach(it => it.removeClass('selected'))
         }
 
@@ -162,26 +159,20 @@ export default class HTMLRenderView extends UIElement {
         if (this.$editor.isSelectionMode()) {
 
             var {left: x, top: y, width, height } = obj
-
             var rect = {
-                x: Length.px(x.value -  this.canvasPosition.x), 
-                y: Length.px(y.value - this.canvasPosition.y), 
-                width, 
-                height
+                x: (x.value -  this.canvasPosition.x) * this.$editor.scale, 
+                y: (y.value - this.canvasPosition.y) * this.$editor.scale, 
+                width: (width.value) * this.$editor.scale, 
+                height: (height.value) * this.$editor.scale
             }
-
-            rect.x2 = Length.px(rect.x.value + rect.width.value);
-            rect.y2 = Length.px(rect.y.value + rect.height.value); 
+    
+            var areaVerties = rectToVerties(rect.x, rect.y, rect.width, rect.height)        
 
             var artboard = this.$selection.currentArtboard;
-            if (artboard) {
-                Object.keys(rect).forEach(key => {
-                    rect[key].div(this.$editor.scale)
-                })
-    
-                var items = artboard.checkInAreaForLayers(rect);
+            if (artboard) {    
+                var items = artboard.checkInAreaForLayers(areaVerties);
 
-                if (rect.width.value === 0 && rect.height.value === 0) {
+                if (rect.width === 0 && rect.height === 0) {
                     items = [] 
                 }                 
     
@@ -199,14 +190,13 @@ export default class HTMLRenderView extends UIElement {
                 .map(it => Length.parse(it))
 
         var rect = {
-            x: Length.px(x.value -  this.canvasPosition.x), 
-            y: Length.px(y.value - this.canvasPosition.y), 
-            width, 
-            height
+            x: (x.value -  this.canvasPosition.x) * this.$editor.scale, 
+            y: (y.value - this.canvasPosition.y) * this.$editor.scale, 
+            width: (width.value) * this.$editor.scale, 
+            height: (height.value) * this.$editor.scale
         }
 
-        rect.x2 = Length.px(rect.x.value + rect.width.value);
-        rect.y2 = Length.px(rect.y.value + rect.height.value);
+        var areaVerties = rectToVerties(rect.x, rect.y, rect.width, rect.height)
 
         this.refs.$dragAreaRect.css({
             left: Length.px(-10000),
@@ -221,21 +211,14 @@ export default class HTMLRenderView extends UIElement {
             var artboard = this.$selection.currentArtboard;
             var items = [] 
             if (artboard) {
-                Object.keys(rect).forEach(key => {
-                    rect[key].div(this.$editor.scale)
-                })
 
-                items = artboard.checkInAreaForLayers(rect);
+                items = artboard.checkInAreaForLayers(areaVerties);
 
-                if (rect.width.value === 0 && rect.height.value === 0) {
-                    items = [artboard] 
-                } 
+                console.log(items);
 
-                if (items.length === 0) {
-                    if (artboard.checkInArea(rect)) {
-                        items = [artboard]
-                    }
-                }
+                if (rect.width === 0 && rect.height === 0) {
+                    items = [] 
+                }                 
 
                 if (this.$selection.select(...items)) {
                     this.selectCurrentForBackgroundView(...items)
@@ -306,55 +289,22 @@ export default class HTMLRenderView extends UIElement {
         return this.$editor.isSelectionMode()
     }
 
-    getPointer (pointer, number) {
-        return `<div class='pointer' data-number="${number}" style="transform: translate3d( calc(${pointer.x}px - 10px), calc(${pointer.y}px - 10px), 0px)" ></div>`
-    }
-
-    getPointerRect (pointers) {
-        const { x, y} = pointers.a;
-        return `
-        <svg overflow="visible" style='position: absolute; transform: translate3d(${x}px, ${y}px, 0px)'>
-            <path fill="transparent" stroke="black" stroke-width="3" d="M ${pointers.a.x - x}, ${pointers.a.y - y} L ${pointers.b.x - x}, ${pointers.b.y - y} L ${pointers.c.x - x}, ${pointers.c.y - y} L ${pointers.d.x - x}, ${pointers.d.y - y} Z" />
-        </svg>`
-    }    
-
-    getRenderPointers(pointers) {
-        console.log(pointers.center)
-        return [
-            this.getPointer (pointers.a, 1),
-            this.getPointer (pointers.b, 2),
-            this.getPointer (pointers.c, 3),
-            this.getPointer (pointers.d, 4),
-            this.getPointer (pointers.center, 5),
-        ].join('') + this.getPointerRect(pointers);
-    }
 
     [POINTERSTART('$view .element-item') + IF('checkEditMode')  + MOVE('calculateMovedElement') + END('calculateEndedElement')] (e) {
         this.startXY = e.xy ; 
         this.$element = e.$dt;
 
-        if (this.$element.hasClass('text') && this.$element.hasClass('selected')) {
+        if (this.$element.hasClass('text')  || this.$element.hasClass('artboard') || this.$element.hasClass('selected')) {
             return false; 
         }
 
         var id = this.$element.attr('data-id')        
-        this.hasSVG = false;
 
         if (e.shiftKey) {
             this.$selection.toggleById(id);
         } else {
-
-            if (this.$selection.check({ id } )) {
-                if (this.$selection.current.is('svg-path', 'svg-brush', 'svg-textpath', 'svg-polygon')) {
-                    this.hasSVG = true; 
-                }
-            } else {
-                this.$selection.selectById(id);    
-            }
-
+            this.$selection.selectById(id);
         }
-
-        // this.renderPointers(this.$element.el);
 
         this.selectCurrent(...this.$selection.items)
         this.children.$selectionTool.initMoveType();
@@ -362,21 +312,11 @@ export default class HTMLRenderView extends UIElement {
         this.emit('history.refreshSelection');        
     }
 
-    renderPointers () {
 
-        const html = this.refs.$view.findAll('.element-item').map(el => {
-            return this.getRenderPointers(computeVertextData(el, this.refs.$view.el))
-        }).join('');
-
-        this.refs.$pointerRect.updateDiff(html)
-    }
 
     calculateMovedElement (dx, dy) {
         this.children.$selectionTool.refreshSelectionToolView(dx, dy, 'move');
         this.updateRealPosition();   
-
-        // TODO: DOM 위치 산정은 나중에 하자 
-        // this.renderPointers();
     }
 
     /**
@@ -413,12 +353,15 @@ export default class HTMLRenderView extends UIElement {
     calculateEndedElement (dx, dy) {
 
         if (dx === 0 && dy === 0) {
-            if (this.hasSVG) {
+            if (this.$selection.current.isSVG()) {
                 this.emit('openPathEditor');
                 return; 
             }
 
         } else {           
+
+            this.$selection.setRectCache();
+
             this.emit('removeGuideLine')      
     
             this.nextTick(() => {
@@ -557,10 +500,6 @@ export default class HTMLRenderView extends UIElement {
 
         this.setState({ html }, false)
         this.refs.$view.updateDiff(html)
-
-
-        // TODO: 선택영역 잡는 부분은 다음에 적용 하는 걸로 
-        // this.renderPointers();
     }
 
     [EVENT('refreshAllElementBoundSize')] () {

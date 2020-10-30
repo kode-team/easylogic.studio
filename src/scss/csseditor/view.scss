@@ -111,28 +111,6 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
   left: -10000px;
 }
 
-.pointer-rect {
-  pointer-events: none;
-  position: absolute;
-  left: 0px;
-  right: 0px;
-  top: 0px;
-  bottom: 0px;
-  box-sizing: border-box;
-
-  .pointer {
-    display: inline-block;
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    box-sizing: border-box;
-    background-color: black; 
-    border-radius: 100%;
-
-    &[data-number="1"] { background-color: red; }
-  }
-}
-
 .canvas-view {
   position: absolute;
   transform-origin: left top;

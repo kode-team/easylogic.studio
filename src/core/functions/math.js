@@ -1,3 +1,4 @@
+import { vec2, vec3 } from "gl-matrix";
 import { isUndefined } from "./func";
 import { Vect3 } from "./matrix";
 
@@ -8,7 +9,7 @@ export function round (n, k) {
 
 
 export function degreeToRadian (degrees) {
-    return degrees * Math.PI / 180;
+    return degrees * (Math.PI / 180);
 }
 
 export function div(num, divNum = 1) {
@@ -23,7 +24,7 @@ export function div(num, divNum = 1) {
  * @returns {Number} 0..360
  */
 export function radianToDegree(radian) {
-    var angle =  radian * 180 / Math.PI;
+    var angle =  radian * (180 / Math.PI);
 
 
     if (angle < 0) {   
@@ -50,24 +51,11 @@ export function getXYInCircle (angle, radius, centerX = 0, centerY = 0) {
 }
 
 export function getDist (x, y, centerX = 0, centerY = 0) {
-    return Math.sqrt( 
-        Math.pow(Math.abs(centerX - x), 2) 
-        + 
-        Math.pow(Math.abs(centerY - y), 2) 
-    )
+    return vec2.distance([x, y], [centerX, centerY])
 }
 
 export function calculateAngle (rx, ry) {
-    return radianToDegree(Math.atan2(ry, rx))
-}
-
-export function calculateAngleByPoints(point1, point2) {
-    var a = calculateAngle(point1.x, point1.y)
-    var b = calculateAngle(point2.x, point2.y)
-    
-    var angle = a - b;                
-
-    return angle; 
+    return radianToDegree(Math.atan2(ry, rx))    
 }
 
 export function calculateAnglePointDistance(point, center, dist) {
@@ -76,16 +64,16 @@ export function calculateAnglePointDistance(point, center, dist) {
 
     var angle1 = calculateAngle(x, y); 
 
-    var x = point.x + dist.dx - center.x
-    var y = point.y + dist.dy - center.y
+    var x2 = point.x + dist.dx - center.x
+    var y2 = point.y + dist.dy - center.y
 
-    var angle = calculateAngle(x, y) - angle1;
-    
+    var angle = calculateAngle(x2, y2) - angle1;
+
     return angle; 
 }
 
 export function calculateAngle360 (rx, ry) {
-    return (radianToDegree(Math.atan2(ry, rx)) + 180) % 360
+    return (calculateAngle(rx, ry) + 180) % 360
 }
 
 const UUID_REG = /[xy]/g

@@ -43,7 +43,7 @@
             height: calc(50% + 1px);
             width: 1px;
             transform: translate(-50%, 0%);
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: var(--selected-color);
             // display: none;
         }
 

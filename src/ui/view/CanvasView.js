@@ -3,6 +3,8 @@ import UIElement from "@core/UIElement";
 import HTMLRenderView from "./render-view/HTMLRenderView";
 import PageTools from "../view-items/PageTools";
 import PageSubEditor from "../view-items/PageSubEditor";
+import { mat4, vec2, vec3 } from "gl-matrix";
+import { calculateAngle, degreeToRadian, radianToDegree } from "@core/functions/math";
 
 export default class CanvasView extends UIElement {
 

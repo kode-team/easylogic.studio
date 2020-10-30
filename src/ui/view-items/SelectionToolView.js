@@ -1,9 +1,14 @@
 import UIElement, { EVENT } from "@core/UIElement";
-import { POINTERSTART, MOVE, END, BIND, IF, CLICK } from "@core/Event";
+import { POINTERSTART, MOVE, END, BIND, IF, CLICK, DEBOUNCE, THROTTLE } from "@core/Event";
 import { Length } from "@unit/Length";
 import { isNotUndefined } from "@core/functions/func";
 import GuideView from "../view/GuideView";
 import icon from "@icon/icon";
+import { rectToVerties } from "@core/functions/collision";
+import { mat4, quat, vec3 } from "gl-matrix";
+import { Transform } from "@property-parser/Transform";
+import { TransformOrigin } from "@property-parser/TransformOrigin";
+import { calculateAngle, calculateAngle360, calculateAnglePointDistance, degreeToRadian, radianToDegree } from "@core/functions/math";
 
 var moveType = {
     'move': 'move',
@@ -18,6 +23,13 @@ var moveType = {
     'translate': 'transform',
     'transform-origin': 'transform',
     'rotate3d': 'transform'
+}
+
+var directionType = {
+    1: 'to top left',
+    2: 'to top right',
+    3: 'to bottom right',
+    4: 'to bottom left',
 }
 
 var iconType = {
@@ -46,20 +58,14 @@ const SelectionToolEvent = class  extends UIElement {
 
     [EVENT('openPathEditor')] () {
         var current = this.$selection.current;
-        if (current && current.is('svg-path', 'svg-brush', 'svg-textpath')) {
+        if (current && current.isSVG() && current.d) {
             this.toggleEditingPath(true);
 
             // box 모드 
             // box - x, y, width, height 고정된 상태로  path 정보만 변경 
             this.emit('showPathEditor', 'modify', {
-                // changeEvent: 'updatePathItem',
                 current,
-                d: current.d,
-                box: 'box',
-                screenX: current.screenX,
-                screenY: current.screenY,
-                screenWidth: current.screenWidth,
-                screenHeight: current.screenHeight,
+                d: current.accumulatedPath().d,
             }) 
         }
     }
@@ -67,21 +73,6 @@ const SelectionToolEvent = class  extends UIElement {
     [EVENT('finishPathEdit')] () {
         this.toggleEditingPath(false);
     }
-
-    // [EVENT('updatePathItem')] (pathObject) {
-
-    //     var current = this.$selection.current;
-    //     if (current) {
-    //         if (isFunction(current.updatePathItem)) {
-    //             // path data 설정 
-    //             current.updatePathItem(pathObject);
-
-    //             // 정해진 컴포넌트를 다시 그린다. 
-    //             this.emit('refreshSelectionStyleView', current, true, true);
-    //         }
-    //     }
-
-    // } 
 
 
     [EVENT('refreshSelectionTool')] () { 
@@ -138,7 +129,7 @@ export default class SelectionToolView extends SelectionToolBind {
     template() {
         return /*html*/`
     <div class='selection-view' ref='$selectionView' >
-        <div class='selection-tool' ref='$selectionTool' style='left:-100px;top:-100px;'>
+        <div class='selection-tool' ref='$selectionTool' style='left:-100px;top:-100px;display:none;'>
             <div class='selection-tool-item' data-position='move' ref='$selectionMove' title='move'>
                 <span class='icon' ref='$selectionIcon'>${icon.flag}</span>
                 <span ref='$selectionTitle'></span>
@@ -152,7 +143,7 @@ export default class SelectionToolView extends SelectionToolBind {
             <div class='selection-tool-item' data-position='to top left'></div>
             <div class='selection-tool-item' data-position='to bottom left'></div>
         </div>
-        <div class='selection-pointer' ref='$selectionPointer'></div>
+        <div class='pointer-rect' ref='$pointerRect'></div>        
     </div>`
     }
 
@@ -166,6 +157,112 @@ export default class SelectionToolView extends SelectionToolBind {
     
     checkEditMode () {
         return this.$editor.isSelectionMode(); 
+    }
+
+    [POINTERSTART('$pointerRect .pointer') + MOVE('moveVertext') + END('moveEndVertext')] (e) {
+        const num = +e.$dt.attr('data-number')
+        const direction =  directionType[`${num}`];
+        this.state.moveType = direction; 
+        this.state.moveTarget = num; 
+
+    }
+
+    moveVertext (dx, dy) {
+        const item = this.$selection.cachedItemVerties[0]
+        if (item) {
+
+            // 움직인 vertext 에서 실제로 움직이는 형태를 만든다. 
+            // rotate 된 이후에도 적용할 수 있도록 matrix 연산을 한다. 
+
+
+            // 1. 현재 vertext 를 구한다. 
+            const currentVertext = item.verties[this.state.moveTarget-1]
+
+            // 2. dx, dy 만큼 옮긴 vertext 를 구한다.             
+            const nextVertext = [currentVertext[0] + dx, currentVertext[1] + dy, currentVertext[2] + 0 ]
+
+            // 3. invert matrix 를 실행해서  기본 좌표로 복귀한다.             
+            var currentResult = vec3.transformMat4([], [currentVertext[0], currentVertext[1], currentVertext[2]], item.accumulatedMatrixInverse); 
+            var nextResult = vec3.transformMat4([], [nextVertext[0], nextVertext[1], nextVertext[2]], item.accumulatedMatrixInverse); 
+
+            // 4. 복귀한 좌표에서 차이점을 구한다. 
+            var realDx = (nextResult[0] - currentResult[0])/this.$editor.scale
+            var realDy = (nextResult[1] - currentResult[1])/this.$editor.scale
+
+            if (this.state.moveType === 'to bottom right') {        // 2
+
+                // 1. 반대쪽 점을 고정한다. 
+                const topLeft = item.verties[0];    // top left 
+                // 2. 그러기 위해서는  반대쪽 점과  움직인 점과의 중심점을 구하고 
+                const [ transformOriginX, transformOriginY]= TransformOrigin.parseStyle(item.originalTransformOrigin);
+
+                // 2.1. 중심점은 transform origin 을 유지 해야하기 때문에 그걸 기준으로 맞춘다. 
+                const center = [
+                    transformOriginX.unit === '%' ? (topLeft[0] + (nextResult[0] - topLeft[0])*(transformOriginX.rate()) ) : transformOriginX.value,
+                    transformOriginY.unit === '%' ? (topLeft[1] + (nextResult[1] - topLeft[1])*(transformOriginY.rate()) ) : transformOriginY.value,
+                    0
+                ]
+                // 3. angle 을 구하고 , radian 을 리턴 
+                const angle = quat.getAxisAngle([0, 0, 1], mat4.getRotation([], item.localMatrix))
+
+                console.log(angle, radianToDegree(angle));
+
+                // 4. 그 각도의 역으로 반대점의 원래 자리를 구한다. 
+                const [newX, newY, newZ] = vec3.rotateZ([], topLeft, center, -angle)
+                console.log('newPosition', [newX, newY, newZ], topLeft, currentVertext, -angle)
+
+                // 5. newX, newY, newZ 는 리얼 월드의 좌표, 실제로는 offset 형태의 좌표로 변형해야함. 
+                const rotateMatrix = mat4.create();
+                mat4.translate(rotateMatrix, rotateMatrix, [
+                    transformOriginX.toPx(item.width + realDx).value,
+                    transformOriginY.toPx(item.height + realDy).value,
+                    0,
+                ])
+                mat4.rotateZ(rotateMatrix, rotateMatrix, -angle);
+                mat4.translate(rotateMatrix, rotateMatrix, [
+                    -transformOriginX.toPx(item.width + realDx).value,
+                    -transformOriginY.toPx(item.height + realDy).value,
+                    0,
+                ])
+
+                const temp = mat4.create()
+                // mat4.multiply(temp, temp,  item.localMatrixInverse)                
+                mat4.multiply(temp, temp, item.localMatrixInverse)
+                // mat4.translate(temp, temp, [-item.x, -item.y, 0])                                
+                mat4.multiply(temp, temp, item.parentMatrixInverse);
+            
+
+                
+                console.log(item.x, item.y, item.parentMatrixInverse, temp);
+                
+                const [localX, localY, localZ] = vec3.transformMat4([], [newX, newY, newZ], temp)
+
+
+                // 5. 그런 다음 width, height 를 설정해준다. 
+                console.log(topLeft, center, angle, item.width + realDx, item.height + realDy, [newX, newY, newZ]);
+
+
+                const currentItem = this.$selection.current;
+                console.log(currentItem, localX, item.x, localY, item.y);
+                if (currentItem) {
+                    currentItem.reset({
+                        x: Length.px(localX),
+                        y: Length.px(localY),
+                        width: Length.px(item.width + realDx),
+                        height: Length.px(item.height + realDy),
+                        transform: Transform.rotateZ(item.transform, Length.deg(radianToDegree(angle)))
+                    })
+                }
+
+            } else if (this.state.moveType === 'to top right') {
+                
+                // this.$selection.items[0]['transform-origin'] = item.transformOrigin
+            }
+
+            // this.refreshSelectionToolView(dx, dy);
+            // this.parent.updateRealPosition();    
+            this.emit('refreshCanvasForPartial', null, true)            
+        }
     }
 
     [POINTERSTART('$selectionView .selection-tool-item') + IF('checkEditMode') + MOVE() + END()] (e) {
@@ -287,7 +384,7 @@ export default class SelectionToolView extends SelectionToolBind {
 
         this.makeSelectionTool();
 
-    }    
+    }      
 
     makeSelectionTool() {
 
@@ -316,6 +413,8 @@ export default class SelectionToolView extends SelectionToolBind {
         })
 
         this.refreshPositionText(x, y, width, height)
+
+        this.renderPointers();
 
     }
 
@@ -403,5 +502,73 @@ export default class SelectionToolView extends SelectionToolBind {
         }
     }
 
+    /**
+     * 선택영역 컴포넌트 그리기 
+     */
+    renderPointers () {
+
+        if (this.$selection.isOne) {    // 하나 일 때랑 
+            const lines = []
+            const points = [] 
+            this.$selection.each(item => {
+                const {line, point} = this.createRenderPointers(item.verties())
+                lines.push(line)
+                points.push(point);
+            })
+            this.refs.$pointerRect.updateDiff(lines.join('') + points.join(''))            
+        } else {        // 여러개를 선택했을 때량 동작이 다르다. 
+
+            let minX = Number.MAX_SAFE_INTEGER;
+            let minY = Number.MAX_SAFE_INTEGER;
+            let maxX = Number.MIN_SAFE_INTEGER;
+            let maxY = Number.MIN_SAFE_INTEGER;
+
+            this.$selection.each(item => {
+
+                item.verties().forEach(vector => {
+                    if (minX > vector[0]) minX = vector[0]
+                    if (minY > vector[1]) minY = vector[1]
+                    if (maxX < vector[0]) maxX = vector[0]
+                    if (maxY > vector[1]) maxY = vector[1]
+                });
+
+            })
+            const {line, point} = this.createRenderPointers(rectToVerties(minX, minY, maxX - minX, maxY - minY))
+            this.refs.$pointerRect.updateDiff(line + point)
+        }
+
+    }
+
+
+    createPointer (pointer, number) {
+        return /*html*/`
+            <div class='pointer' data-number="${number}" style="transform: translate3d( calc(${pointer[0]}px - 50%), calc(${pointer[1]}px - 50%), 0px)" >
+            </div>
+        `
+    }
+
+    createPointerRect (pointers) {
+        return /*html*/`
+        <svg class='line' overflow="visible">
+            <path 
+                    d="M ${pointers[0][0]}, ${pointers[0][1]} L ${pointers[1][0]}, ${pointers[1][1]} L ${pointers[2][0]}, ${pointers[2][1]} L ${pointers[3][0]}, ${pointers[3][1]} Z" />
+        </svg>`
+    }    
+
+    createRenderPointers(pointers) {
+        return {
+            line: this.createPointerRect(pointers), 
+            point: [
+                this.createPointer (pointers[0], 1),
+                this.createPointer (pointers[1], 2),
+                this.createPointer (pointers[2], 3),
+                this.createPointer (pointers[3], 4),
+            ].join('')
+        }
+    }
+
+    [EVENT('refreshSelectionStyleView')] () {
+        this.renderPointers()
+    }
     
 } 

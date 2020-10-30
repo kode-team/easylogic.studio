@@ -9,11 +9,21 @@ export default class SVGRender extends DomRender {
         return {
             overflow: 'visible',
             ...this.toKeyListCSS(item, [
-                'font-size', 'font-stretch', 'line-height', 'font-weight', 'font-family', 'font-style',
-                'text-align', 'text-transform', 'text-decoration',
-                'letter-spacing', 'word-spacing', 'text-indent',
-
-                'background-color', 'border-radius'
+                'font-size', 
+                'font-stretch', 
+                'line-height', 
+                'font-weight', 
+                'font-family', 
+                'font-style',
+                'text-align', 
+                'text-transform', 
+                'text-decoration',
+                'letter-spacing', 
+                'word-spacing', 
+                'text-indent',
+                'background-color', 
+                'border-radius',
+                'transform-style',
             ])
         }
     

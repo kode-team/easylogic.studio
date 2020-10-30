@@ -32,35 +32,27 @@ export class SVGTextPathItem extends SVGItem {
  
 
   setCache () {
-    this.rect = this.clone(false);
-
-    if (!this.json.path) {
-      this.json.path = new PathParser(this.json.d);
-    }
-
-    this.cachePath = this.json.path.clone()
+    // 캐쉬 할 때는  0~1 사이 값으로 가지고 있다가 
+    this.cachePath = new PathParser(this.json.d)
+    this.cachePath.scale(1/this.json.width.value, 1/this.json.height.value)
   }
 
   recover () {
 
-    if (!this.rect) this.setCache();
+    // 캐쉬가 없는 상태에서는 초기 캐쉬를 생성해준다. 
+    if (!this.cachePath) this.setCache();
 
-    var sx = this.json.width.value / this.rect.width.value 
-    var sy = this.json.height.value / this.rect.height.value 
+    var sx = this.json.width.value
+    var sy = this.json.height.value
 
-    this.scale(sx, sy);
-  }
-
-  scale (sx, sy) {
+    // 마지막 크기(width, height) 기준으로 다시 확대한다. 
     this.json.d = this.cachePath.clone().scaleTo(sx, sy)
-    this.json.path.reset(this.json.d)
+
   }
+
 
   convert(json) {
     json = super.convert(json);
-    // if (json.d)  {
-      json.path = new PathParser(json.d);
-    // }
 
     json.textLength = Length.parse(json.textLength);
     json.startOffset = Length.parse(json.startOffset);
@@ -98,6 +90,7 @@ export class SVGTextPathItem extends SVGItem {
       { selector: `[data-id="${this.json.id}"] path`, properties: svgPathProperties }
     ] 
   }  
+
 
 }
 

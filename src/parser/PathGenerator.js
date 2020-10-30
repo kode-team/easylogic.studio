@@ -1,9 +1,10 @@
 import SegmentManager from "./SegmentManager";
 import { clone, OBJECT_TO_PROPERTY } from "@core/functions/func";
-import { getDist, calculateAngle, getXYInCircle, calculateAngle360, degreeToRadian, div, calculateAngleByPoints, calculateAnglePointDistance } from "@core/functions/math";
+import { getDist, calculateAngle, getXYInCircle, calculateAngle360, degreeToRadian, div, calculateAnglePointDistance } from "@core/functions/math";
 import Point from "./Point";
 import PathStringManager from "./PathStringManager";
 import matrix from "@core/functions/matrix";
+import { mat4, vec3 } from "gl-matrix";
 
 const SEGMENT_DIRECTION = ['startPoint', 'endPoint', 'reversePoint']
 
@@ -241,168 +242,167 @@ export default class PathGenerator {
         return this.selectedPointKeys[key]
     }
 
-    applyMatrix (p, ...mat) {
+    commitTransformMatrix (point, transformMatrix) {
+        var result = vec3.transformMat4([], [point.x, point.y, 0], transformMatrix)
 
-        var {x, y} = p; 
-
-        mat.forEach(m => {
-            if (m) {
-                [x, y] = m([x, y], 0)
-            }
-        })
-
-        return {x, y}
+        return {x: result[0], y: result[1] }
     }
 
-    applyTransform (...mat) {
-
-        var first = matrix.matrix2d.translate(-this.transformRect.x, -this.transformRect.y);
-        var second = matrix.matrix2d.translate(this.transformRect.x, this.transformRect.y);
+    transformMat4 (transformMatrix) {
 
         this.transformPoints.forEach((p, index) => {
             var realPoint = this.state.points[index];
 
-            Object.assign(realPoint.startPoint, this.applyMatrix(p.startPoint, first, ...mat, second)) ;
-            Object.assign(realPoint.endPoint, this.applyMatrix(p.endPoint, first, ...mat, second)) ;
-            Object.assign(realPoint.reversePoint, this.applyMatrix(p.reversePoint, first, ...mat, second)) ;
+            Object.assign(realPoint.startPoint, this.commitTransformMatrix(p.startPoint, transformMatrix));
+            Object.assign(realPoint.endPoint, this.commitTransformMatrix(p.endPoint, transformMatrix));
+            Object.assign(realPoint.reversePoint, this.commitTransformMatrix(p.reversePoint, transformMatrix));
         })
-
     }
+
 
     transform (type, dx = 0, dy = 0) {
 
         var {x, y, width, height} = this.transformRect;
-        var halfWidth = width/2;
-        var halfHeight = height/2;
+
+
+        var view = mat4.create()
+        mat4.translate(view, view, [x, y, 0]);          // 4. 다시 원래 위치로 옮긴다. 
 
         switch(type) {
-        case 'flipX':
-            this.applyTransform(
-                matrix.matrix2d.translate(-dx, 0),
-                matrix.matrix2d.flipX()
-            ); 
+        case 'flipX':           // 내부 패스 변환 구현을 해야함 ,  순서를 안 맞추면 전혀 엉뚱한 결과값이 나오니 순서를 잘 맞춰줘요 
+            mat4.scale(view, view, [-1, 1, 1]);             // 3. x 축 반전 시키고 
+            mat4.translate(view, view, [-width, 0, 0]);     // 2. width 만큼 옮기고        
             break; 
         case 'flipY':
-            this.applyTransform(
-                matrix.matrix2d.translate(0, -dy),
-                matrix.matrix2d.flipY()
-            ); 
+            mat4.scale(view, view, [1, -1, 1]);             // 3. y 축 반전 시키고 
+            mat4.translate(view, view, [0, -height, 0]);     // 2. height 만큼 옮기고        
             break;      
         case 'flip':
-            this.applyTransform(
-                matrix.matrix2d.translate(-dx, -dy),
-                matrix.matrix2d.flip()
-            ); 
+다. 
+            mat4.scale(view, view, [-1, -1, 1]);             // 3. x, y 축 반전 시키고 
+            mat4.translate(view, view, [-width, -height, 0]);     // 2. width, height 만큼 옮기고        
             break;                         
         case 'to move': 
-            this.applyTransform(matrix.matrix2d.translate(dx, dy)); 
+            mat4.translate(view, view, [dx, dy, 0]);        // 2. x, y 를 옮긴다. 
             break; 
         case 'to rotate': 
-
+            var halfWidth = width/2;
+            var halfHeight = height/2;
             var angle = calculateAnglePointDistance(
                 {x: x + halfWidth, y: y}, 
                 {x: x+halfWidth, y: y + halfHeight}, 
                 {dx, dy}
             )
 
-            this.applyTransform(
-                matrix.matrix2d.translate(-halfWidth, -halfHeight),                
-                matrix.matrix2d.rotate(degreeToRadian(-angle)),
-                matrix.matrix2d.translate(halfWidth, halfHeight),
-            ); 
+            mat4.translate(view, view, [halfWidth, halfHeight, 0])
+            mat4.rotate(view, view, degreeToRadian(angle), [0, 0, 1])      // z 축으로 회전 
+            mat4.translate(view, view, [-halfWidth, -halfHeight, 0])
+
             break; 
         case 'to skewX': 
+            var halfWidth = width/2;
+            var halfHeight = height/2;
+            var angle = -1 * calculateAnglePointDistance(
+                {x: x + halfWidth, y: y}, 
+                {x: x+halfWidth, y: y + halfHeight}, 
+                {dx, dy: 0}
+            )
 
-            var angle = calculateAngleByPoints({
-                x: halfWidth, y: halfHeight
-            },{
-                x: halfWidth + dx, y: halfHeight
-            });                
+            mat4.translate(view, view, [halfWidth, halfHeight, 0])
+            mat4.multiply(view, view, mat4.fromValues(          // Y축 기준으로  X 축만 움직이기 
+                1, 0, 0, 0,
+                Math.tan(degreeToRadian(angle)), 1, 0, 0,
+                0, 0, 1, 0,
+                0, 0, 0, 1
+            ))
+            mat4.translate(view, view, [-halfWidth, -halfHeight, 0])
 
-            this.applyTransform(matrix.matrix2d.skewX(degreeToRadian(angle))); 
-            break;             
+            break; 
         case 'to skewY': 
-            var angle = calculateAngleByPoints({
-                x: halfWidth, y: halfHeight
-            },{
-                x: halfWidth, y: halfHeight  + dy
-            });                
-            this.applyTransform(matrix.matrix2d.skewY(degreeToRadian(angle))); 
-            break;                         
+            var halfWidth = width/2;
+            var halfHeight = height/2;
+            var angle = calculateAnglePointDistance(
+                {x: x, y: y + halfHeight}, 
+                {x: x+halfWidth, y: y + halfHeight}, 
+                {dx: 0, dy}
+            )
+
+            mat4.translate(view, view, [halfWidth, halfHeight, 0])
+            mat4.multiply(view, view, mat4.fromValues(          // X축 기준으로  Y 축만 움직이기 
+                1, Math.tan(degreeToRadian(angle)), 0, 0,
+                0, 1, 0, 0,
+                0, 0, 1, 0,
+                0, 0, 0, 1
+            ))
+            mat4.translate(view, view, [-halfWidth, -halfHeight, 0])
+
+            break;             
         case 'to bottom right':
 
             var sx =  div(width + dx, width);
             var sy =  div(height + dy, height);
 
-            this.applyTransform(
-                matrix.matrix2d.scale(sx, sy)
-            ); 
+            mat4.scale(view, view, [sx, sy, 1]);            // 2. x, y 축 확대한다. 
             break; 
         case 'to right':
 
             var sx =  div(width + dx, width)
 
-            this.applyTransform(
-                matrix.matrix2d.scale(sx, 1)
-            ); 
+            mat4.scale(view, view, [sx, 1, 1]);             // 2. x축 확대한다. 
             break;             
         case 'to bottom':
-                var sy =  div(height + dy, height)
+            var sy =  div(height + dy, height)
 
-                this.applyTransform(
-                    matrix.matrix2d.scale(1, sy)
-                ); 
-                break;             
+            mat4.scale(view, view, [1, sy, 1]);             // 2. y축 확대한다. 
+            break;             
 
         case 'to top right':
 
             var sx =  div(width + dx, width)
             var sy =  div(height - dy, height)
 
-            this.applyTransform(
-                matrix.matrix2d.scale(sx, sy),
-                matrix.matrix2d.translate(0, dy)
-            ); 
+            mat4.translate(view, view, [0, dy, 0]);         // 3. y 축을 이동한다. 
+            mat4.scale(view, view, [sx, sy, 1]);            // 2. x, y 축 확대한다.
+
             break;             
         case 'to top left':
 
             var sx =  div(width - dx, width)
             var sy =  div(height - dy, height)
 
-            this.applyTransform(
-                matrix.matrix2d.scale(sx, sy),
-                matrix.matrix2d.translate(dx, dy)
-            ); 
+            mat4.translate(view, view, [dx, dy, 0]);         // 3. y 축을 이동한다. 
+            mat4.scale(view, view, [sx, sy, 1]);            // 2. x, y 축 확대한다.
+
             break;    
         case 'to left':
 
             var sx =  div(width - dx, width)
 
-            this.applyTransform(
-                matrix.matrix2d.scale(sx, 1),
-                matrix.matrix2d.translate(dx, 0)
-            ); 
+            mat4.translate(view, view, [dx, 0, 0]);         // 3. y 축을 이동한다. 
+            mat4.scale(view, view, [sx, 1, 1]);            // 2. x, y 축 확대한다.
+            
             break;                      
         case 'to top':
 
             var sy =  div(height - dy, height)
 
-            this.applyTransform(
-                matrix.matrix2d.scale(1, sy),
-                matrix.matrix2d.translate(0, dy)
-            ); 
+            mat4.translate(view, view, [0, dy, 0]);         // 3. y 축을 이동한다. 
+            mat4.scale(view, view, [1, sy, 1]);            // 2. x, y 축 확대한다.
+
             break;          
         case 'to bottom left':
 
             var sx =  div(width - dx, width)
             var sy =  div(height + dy, height)
 
-            this.applyTransform(
-                matrix.matrix2d.scale(sx, sy),
-                matrix.matrix2d.translate(dx, 0)
-            ); 
+            mat4.translate(view, view, [dx, 0, 0]);         // 3. y 축을 이동한다. 
+            mat4.scale(view, view, [sx, sy, 1]);            // 2. x, y 축 확대한다.
+
             break;                                     
         }
+
+        mat4.translate(view, view, [-x, -y, 0]);        // 1. 원점으로 맞추고 
+        this.transformMat4(view);           
     }
 
     initTransform (rect) {

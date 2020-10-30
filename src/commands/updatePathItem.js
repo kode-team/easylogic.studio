@@ -15,12 +15,18 @@ export default {
      */
     execute: function (editor, pathObject) {
 
-        // d 속성 (path 문자열) 을 설정한다. 
-        editor.emit('setAttribute', {
-            d: pathObject.d,
-            totalLength: pathObject.totalLength,
-            path: new PathParser(pathObject.d),
-        })
+        
+        const current = editor.selection.current;
+        if (current) {
+
+            console.log(current.invertPathString(pathObject.d));
+            // d 속성 (path 문자열) 을 설정한다. 
+            editor.emit('setAttribute', {
+                d: current.invertPathString(pathObject.d),
+                totalLength: pathObject.totalLength,
+            })
+        }
+
 
     }
 

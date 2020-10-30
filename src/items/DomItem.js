@@ -2,6 +2,8 @@
 import { Length } from "@unit/Length";
 import { GroupItem } from "./GroupItem";
 import { Selector } from "../property-parser/Selector";
+import { ClipPath } from "@property-parser/ClipPath";
+import PathParser from "@parser/PathParser";
 
 
 export class DomItem extends GroupItem {
@@ -22,6 +24,7 @@ export class DomItem extends GroupItem {
       'rotate': Length.deg(0),
       'opacity': 1,
       'z-index': Length.auto,
+      'transform-style': 'preserve-3d',
       'layout': 'default',
       'flex-layout': 'display:flex;',
       'grid-layout': 'display:grid;',
@@ -172,6 +175,36 @@ export class DomItem extends GroupItem {
     obj.y2 = Length.px(obj.y.value + obj.height.value);
 
     return obj
+  }
+
+
+  setCache () {
+
+    var obj = ClipPath.parseStyle(this.json['clip-path'])
+
+    if (obj.type === 'path') {
+      // 캐쉬 할 때는  0~1 사이 값으로 가지고 있다가 
+      this.cacheClipPath = new PathParser(obj.value.trim())
+      this.cacheClipPath.scale(1/this.json.width.value, 1/this.json.height.value)
+    } else {
+      this.cacheClipPath = undefined;
+    }
+
+  }
+
+  recover () {
+
+    if (this.cacheClipPath) {
+      var sx = this.json.width.value
+      var sy = this.json.height.value
+  
+      // 마지막 크기(width, height) 기준으로 다시 확대한다. 
+      this.reset({
+        'clip-path': `path(${this.cacheClipPath.clone().scaleTo(sx, sy)})`
+      })
+    }
+
+
   }
 
 }

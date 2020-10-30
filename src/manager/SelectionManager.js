@@ -1,6 +1,9 @@
 import { isFunction, isUndefined, isArray, isObject, isString, clone } from "@core/functions/func";
+import { ArtBoard } from "@items/ArtBoard";
 import { Item } from "@items/Item";
+import { TransformOrigin } from "@property-parser/TransformOrigin";
 import { Length } from "@unit/Length";
+import { mat4 } from "gl-matrix";
 
 
 const roundedLength = (px, fixedRound = 1) => {
@@ -40,6 +43,7 @@ export class SelectionManager {
     this.ids = [];
     this.idsString = '';    
     this.colorsteps = []
+    this.cachedItemVerties = {}    
   }
 
   initialize() {
@@ -48,6 +52,7 @@ export class SelectionManager {
     this.itemKeys = {} 
     this.ids = []; 
     this.idsString = '';   
+    this.cachedItemVerties = {}    
   }
 
   snapshot() {
@@ -68,6 +73,10 @@ export class SelectionManager {
     return this.project;
   }
 
+  /**
+   * 
+   * @returns {ArtBoard}
+   */
   get currentArtboard () {
     return this.artboard;
   }
@@ -76,9 +85,14 @@ export class SelectionManager {
     return !this.length 
   }
 
+  get isOne () {
+    return this.length === 1; 
+  }
+
   get length () {
     return this.items.length;
   }
+
 
   getRootItem (current) {
     var rootItem = current || this.currentArtboard;
@@ -257,6 +271,38 @@ export class SelectionManager {
     
     this.cachedItems = this.items.map(it => {
       return it.toCloneObject()
+    })
+
+    this.cachedItemVerties = this.items.map(it => {
+
+      const width = it.screenWidth.value;
+      const height = it.screenHeight.value; 
+
+      const parentMatrix = isFunction(it.parent.getAccumulatedMatrix) ? it.parent.getAccumulatedMatrix() : mat4.create()
+      const parentMatrixInverse = mat4.invert([], parentMatrix);
+      const localMatrix = it.getTransformMatrix()
+      const localMatrixInverse = mat4.invert([], localMatrix)
+      const accumulatedMatrix = it.getAccumulatedMatrix();
+      const accumulatedMatrixInverse = mat4.invert([], accumulatedMatrix);
+
+      return {
+        originalX: it.offsetX.value,
+        originalY: it.offsetY.value,
+        x: it.offsetX.value,
+        y: it.offsetY.value,
+        width: width,
+        height: height,
+        transform: it.transform,
+        originalTransformOrigin: clone(it['transform-origin'] || '50% 50% 0%'),        
+        transformOrigin: TransformOrigin.toPx(it['transform-origin'], width, height),
+        verties: it.verties(),
+        parentMatrix,   // 부모의 matrix 
+        parentMatrixInverse,
+        localMatrix,    // 자기 자신의 matrix 
+        localMatrixInverse,    
+        accumulatedMatrix,  // parentMatrix * offset translate * localMatrix , 축적된 matrix 
+        accumulatedMatrixInverse,
+      }      
     })
 
     this.setAllRectCache();

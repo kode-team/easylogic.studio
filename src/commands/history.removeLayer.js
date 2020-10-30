@@ -16,8 +16,8 @@ function filterChildren(items = []) {
     return items.filter(item => {
 
         let total = 0;
-        item.path.forEach(id => {
-            total += items.filter(it => it.id === id).length ? 1 : 0
+        item.path.forEach(treeItem => {
+            total += items.filter(it => it.id === treeItem.id).length ? 1 : 0
         })
 
         return total === 1
@@ -37,7 +37,6 @@ export default {
      */
     execute: function (editor, message, ids) {
 
-
         // // 지우기 전 객체를 모두 clone 한다. 
         let items = editor.selection.itemsByIds(ids || editor.selection.ids);
 
@@ -45,7 +44,6 @@ export default {
         items = filterChildren(items);
 
         const filtedIds = items.map(it => it.id);
-
         
         // 지워야 하는 객체를 serialize 한다. 
         const serializedObjectList = editor.serialize(items);
@@ -60,6 +58,7 @@ export default {
 
 
         editor.nextTick(() =>  {
+            editor.selection.removeById(items.map(it => it.id))
             editor.emit('refreshAll')
             editor.nextTick(() => {
                 editor.history.saveSelection()  

@@ -4,6 +4,7 @@ import { hasSVGProperty, hasCSSProperty, hasSVGPathProperty } from "@util/Resour
 import icon from "@icon/icon";
 import { ComponentManager } from "@manager/ComponentManager";
 import { SVGItem } from "./SVGItem";
+import { vec3 } from "gl-matrix";
 
 export class SVGPathItem extends SVGItem {
 
@@ -14,9 +15,8 @@ export class SVGPathItem extends SVGItem {
     return super.getDefaultObject({
       itemType: 'svg-path',
       name: "New Path",   
-      'stroke-width': 5,
+      'stroke-width': 1,
       d: '',        // 이건 최종 결과물로만 쓰고 나머지는 모두 segments 로만 사용한다. 
-      segments: [],
       totalLength: 0,
       ...obj
     });
@@ -28,51 +28,29 @@ export class SVGPathItem extends SVGItem {
  
 
   setCache () {
-    this.rect = {
-      width: this.json.width.clone(),
-      height: this.json.height.clone()
-    }
-    if (!this.json.path) {
-      this.json.path = new PathParser(this.json.d);
-    }
 
-    if (!this.cachePath) {
-      this.cachePath = this.json.path.clone()
-    } else if (this.json.path.d !== this.cachePath.d) {
-      this.cachePath = this.json.path.clone()
-    }
+    super.setCache();
+
+    // 캐쉬 할 때는  0~1 사이 값으로 가지고 있다가 
+    this.cachePath = new PathParser(this.json.d)
+    this.cachePath.scale(1/this.json.width.value, 1/this.json.height.value)
   }
 
   recover () {
 
+    super.recover();
+
     // 캐쉬가 없는 상태에서는 초기 캐쉬를 생성해준다. 
-    if (!this.rect) this.setCache();
+    if (!this.cachePath) this.setCache();
 
-    var baseWidth = this.rect.width.value
-    if (baseWidth === 0) baseWidth = 1; 
+    var sx = this.json.width.value
+    var sy = this.json.height.value
 
-    var baseHeight = this.rect.height.value
-    if (baseHeight === 0) baseHeight = 1;     
-
-    var sx = this.json.width.value / baseWidth 
-    var sy = this.json.height.value / baseHeight
-
-    this.scale(sx, sy);
-  }
-
-  scale (sx, sy) {
+    // 마지막 크기(width, height) 기준으로 다시 확대한다. 
     this.json.d = this.cachePath.clone().scaleTo(sx, sy)
-    this.json.path.reset(this.json.d)
+
   }
 
-  convert(json) {
-    json = super.convert(json);
-    if (json.d)  {
-      json.path = new PathParser(json.d);
-    }
-
-    return json;
-  }
 
   toCloneObject() {
     var json = this.json; 
@@ -80,7 +58,6 @@ export class SVGPathItem extends SVGItem {
       ...super.toCloneObject(),
       totalLength: json.totalLength,
       d: json.d,
-      segments: clone(this.json.segments)
     }
   }
 

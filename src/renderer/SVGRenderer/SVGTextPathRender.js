@@ -64,6 +64,9 @@ export default class SVGTextPathRender extends SVGItemRender {
   render (item) {
 
     return this.wrappedRender(item, () => {
+
+      const {textLength, lengthAdjust, startOffset} = item; 
+
       return /*html*/`
         <textPath ${OBJECT_TO_PROPERTY({
           'xlink:href' :`#${this.toPathId(item)}`,
