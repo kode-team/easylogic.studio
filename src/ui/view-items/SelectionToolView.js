@@ -167,13 +167,13 @@ export default class SelectionToolView extends SelectionToolBind {
 
     }
 
-    calculateNewOffsetMatrixInverse (vertextOffset, width, height, origin, centerRate, itemMatrix) {
+    calculateNewOffsetMatrixInverse (vertextOffset, width, height, origin, itemMatrix) {
 
-        const center = TransformOrigin.scale(origin,width, height)
-
-        center[0] *= centerRate[0];
-        center[1] *= centerRate[1];
-        center[2] *= centerRate[2];
+        const center = vec3.add(
+            [], 
+            TransformOrigin.scale(origin,width, height), 
+            vec3.negate([], vertextOffset)
+        );
 
         const view = mat4.create();
         mat4.translate(view, view, vertextOffset);            
@@ -223,7 +223,6 @@ export default class SelectionToolView extends SelectionToolBind {
                 [0, 0, 0], 
                 newWidth, newHeight, 
                 item.originalTransformOrigin, 
-                [1,1,1], 
                 item.itemMatrix
             ));
 
@@ -262,7 +261,6 @@ export default class SelectionToolView extends SelectionToolBind {
                 [0, newHeight, 0], 
                 newWidth, newHeight, 
                 item.originalTransformOrigin, 
-                [1,-1,1], 
                 item.itemMatrix
             ));            
 
@@ -302,7 +300,6 @@ export default class SelectionToolView extends SelectionToolBind {
                 [newWidth, newHeight, 0], 
                 newWidth, newHeight, 
                 item.originalTransformOrigin, 
-                [-1,-1,1], 
                 item.itemMatrix
             ));                        
 
@@ -341,7 +338,6 @@ export default class SelectionToolView extends SelectionToolBind {
                 [newWidth, 0, 0], 
                 newWidth, newHeight, 
                 item.originalTransformOrigin, 
-                [-1,1,1], 
                 item.itemMatrix
             ));                    
 
