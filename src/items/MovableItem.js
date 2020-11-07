@@ -317,38 +317,12 @@ export class MovableItem extends Item {
         return view; 
     }
 
-    /**
-     * refer to https://www.w3.org/TR/css-transforms-2/
-     * 
-     * 1. Start with the identity matrix.
-     * 2. Translate by the computed X, Y and Z of transform-origin
-     * 3. Multiply by each of the transform functions in transform property from left to right
-     * 4. Translate by the negated computed X, Y and Z values of transform-origin
-     */    
-    getTransformMatrix () {
-        let [
-            transformOriginX = Length.percent(50), 
-            transformOriginY = Length.percent(50), 
-            transformOriginZ = Length.z()
-        ] = TransformOrigin.parseStyle(this.json['transform-origin'])
+    getItemTransformMatrix () {
 
-        const width = this.screenWidth.value;
-        const height = this.screenHeight.value
-        // console.log({transformOriginX, transformOriginY, width, height})
-
-        transformOriginX = transformOriginX.toPx(width).value
-        transformOriginY = transformOriginY.toPx(height).value
-        transformOriginZ = transformOriginZ.value
-
-        // console.log({transformOriginX, transformOriginY, width, height})
-
-        const list = Transform.parseStyle(Transform.rotate(this.json['transform'], this.json['rotate']));
-        
+        const list = Transform.parseStyle(Transform.rotate(this.json['transform'], this.json['rotate']));        
+         
         // start with the identity matrix 
         const view = mat4.create();
-
-        // 2. Translate by the computed X, Y and Z of transform-origin        
-        mat4.translate(view, view, [transformOriginX, transformOriginY, transformOriginZ]);
 
         // 3. Multiply by each of the transform functions in transform property from left to right        
         list.forEach(it => {
@@ -422,6 +396,40 @@ export class MovableItem extends Item {
             //     break;
             }
         })
+
+        return view;
+    }
+
+    /**
+     * refer to https://www.w3.org/TR/css-transforms-2/
+     * 
+     * 1. Start with the identity matrix.
+     * 2. Translate by the computed X, Y and Z of transform-origin
+     * 3. Multiply by each of the transform functions in transform property from left to right
+     * 4. Translate by the negated computed X, Y and Z values of transform-origin
+     */    
+    getTransformMatrix () {
+        let [
+            transformOriginX = Length.percent(50), 
+            transformOriginY = Length.percent(50), 
+            transformOriginZ = Length.z()
+        ] = TransformOrigin.parseStyle(this.json['transform-origin'])
+
+        const width = this.screenWidth.value;
+        const height = this.screenHeight.value
+
+        transformOriginX = transformOriginX.toPx(width).value
+        transformOriginY = transformOriginY.toPx(height).value
+        transformOriginZ = transformOriginZ.value
+        
+        // start with the identity matrix 
+        const view = mat4.create();
+
+        // 2. Translate by the computed X, Y and Z of transform-origin        
+        mat4.translate(view, view, [transformOriginX, transformOriginY, transformOriginZ]);
+
+        // 3. Multiply by each of the transform functions in transform property from left to right        
+        mat4.multiply(view, view, this.getItemTransformMatrix())        
 
         // 4. Translate by the negated computed X, Y and Z values of transform-origin        
         mat4.translate(view, view, [-transformOriginX, -transformOriginY, -transformOriginZ]);

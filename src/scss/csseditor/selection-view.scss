@@ -39,7 +39,10 @@
       border-radius: 100%;
       cursor: pointer;
       pointer-events: all;
-      // &[data-number="1"] { background-color: rgb(255, 185, 185); }
+      &[data-number="1"] { background-color: rgb(255, 185, 185); }
+      &[data-number="2"] { background-color: rgb(255, 0, 0); }
+      &[data-number="3"] { background-color: rgb(115, 255, 0); }
+      &[data-number="4"] { background-color: rgb(75, 62, 255); }
       // &[data-number="p1"] { background-color: rgb(255, 185, 185); }
     }
 

@@ -167,100 +167,115 @@ export default class SelectionToolView extends SelectionToolBind {
 
     }
 
-    moveVertext (dx, dy) {
+    moveBottomRightVertext (dx, dy) {
         const item = this.$selection.cachedItemVerties[0]
         if (item) {
 
-            // 움직인 vertext 에서 실제로 움직이는 형태를 만든다. 
-            // rotate 된 이후에도 적용할 수 있도록 matrix 연산을 한다. 
-
-
-            // 1. 현재 vertext 를 구한다. 
-            const currentVertext = item.verties[this.state.moveTarget-1]
+            // 1. 움직이는 vertext 를 구한다. 
+            const currentVertext = item.verties[2]
 
             // 2. dx, dy 만큼 옮긴 vertext 를 구한다.             
-            const nextVertext = [currentVertext[0] + dx, currentVertext[1] + dy, currentVertext[2] + 0 ]
+            const nextVertext = vec3.add([], currentVertext, [dx, dy, 0]);
 
             // 3. invert matrix 를 실행해서  기본 좌표로 복귀한다.             
-            var currentResult = vec3.transformMat4([], [currentVertext[0], currentVertext[1], currentVertext[2]], item.accumulatedMatrixInverse); 
-            var nextResult = vec3.transformMat4([], [nextVertext[0], nextVertext[1], nextVertext[2]], item.accumulatedMatrixInverse); 
+            var currentResult = vec3.transformMat4([], currentVertext, item.accumulatedMatrixInverse); 
+            var nextResult = vec3.transformMat4([], nextVertext, item.accumulatedMatrixInverse); 
 
             // 4. 복귀한 좌표에서 차이점을 구한다. 
             var realDx = (nextResult[0] - currentResult[0])/this.$editor.scale
             var realDy = (nextResult[1] - currentResult[1])/this.$editor.scale
 
+            // 변형되는 넓이 높이 구하기 
+            const newWidth = item.width + realDx;
+            const newHeight = item.height + realDy;
+
+            // 2. 그러기 위해서는  반대쪽 점과  움직인 점과의 중심점을 구하고 
+            const newCenter = TransformOrigin.scale(item.originalTransformOrigin, newWidth, newHeight);
+
+            // 마지막 offset x, y 를 구해보자. 
+            const view = mat4.create();
+            mat4.translate(view, view, [item.x, item.y, 0]);
+            mat4.multiply(view, view, item.localMatrix);
+            mat4.multiply(view, view, mat4.invert([], mat4.fromTranslation([], vec3.negate([], newCenter))))                             
+            mat4.multiply(view, view, item.itemMatrixInverse)
+            mat4.multiply(view, view, mat4.invert([], mat4.fromTranslation([], newCenter) ))                
+
+            const lastStartVertext = mat4.getTranslation([], view);
+
+            const instance = this.$selection.items[0];
+            instance.reset({
+                x: Length.px(lastStartVertext[0]),
+                y: Length.px(lastStartVertext[1]),
+                width: Length.px(newWidth),
+                height: Length.px(newHeight),
+            })            
+        }
+    }
+
+
+    moveTopRightVertext (dx, dy) {
+        const item = this.$selection.cachedItemVerties[0]
+        if (item) {
+
+            // 1. 움직이는 vertext 를 구한다. 
+            const currentVertext = item.verties[1]
+
+            // 2. dx, dy 만큼 옮긴 vertext 를 구한다.             
+            const nextVertext = vec3.add([], currentVertext, [dx, dy, 0]);
+
+            // 3. invert matrix 를 실행해서  기본 좌표로 복귀한다.             
+            var currentResult = vec3.transformMat4([], currentVertext, item.accumulatedMatrixInverse); 
+            var nextResult = vec3.transformMat4([], nextVertext, item.accumulatedMatrixInverse); 
+
+            // 4. 복귀한 좌표에서 차이점을 구한다. 
+            var realDx = (nextResult[0] - currentResult[0])/this.$editor.scale
+            var realDy = (nextResult[1] - currentResult[1])/this.$editor.scale
+
+            // 변형되는 넓이 높이 구하기 
+            const newWidth = item.width + realDx;
+            const newHeight = item.height - realDy;
+
+
+            // 2. 그러기 위해서는  반대쪽 점과  움직인 점과의 중심점을 구하고 
+            const newCenter = TransformOrigin.scale(item.originalTransformOrigin, newWidth, newHeight);
+
+            console.log(newWidth, newHeight, newCenter);
+
+            // 마지막 offset x, y 를 구해보자. 
+            const view = mat4.create();
+            mat4.translate(view, view, [item.x, item.y, 0]);
+            mat4.translate(view, view, [0, item.height, 0]);
+            mat4.multiply(view, view, item.localMatrix);
+            mat4.multiply(view, view, mat4.invert([], mat4.fromTranslation([], vec3.negate([], newCenter))))                             
+            mat4.multiply(view, view, item.itemMatrixInverse)
+            mat4.multiply(view, view, mat4.invert([], mat4.fromTranslation([], newCenter) ))                
+            mat4.multiply(view, view, mat4.invert([], mat4.fromTranslation([], [0, newHeight, 0]) ))    
+
+            // 중심으로 가는 방향에 따라 다른가? 
+            // offset * translate(y) * localMatrix = newOffset * translate(y) * translateorigin() * itemMatrix * transformOrigin(-1)            
+
+            const lastStartVertext = mat4.getTranslation([], view);         
+
+            const instance = this.$selection.items[0];
+            instance.reset({
+                x: Length.px(lastStartVertext[0]),
+                y: Length.px(lastStartVertext[1]),
+                width: Length.px(newWidth),
+                height: Length.px(newHeight),
+            })            
+        }
+    }
+
+
+    moveVertext (dx, dy) {
+        const item = this.$selection.cachedItemVerties[0]
+        if (item) {
             if (this.state.moveType === 'to bottom right') {        // 2
-
-                // 1. 반대쪽 점을 고정한다. 
-                const topLeft = item.verties[0];    // top left 
-                // 2. 그러기 위해서는  반대쪽 점과  움직인 점과의 중심점을 구하고 
-                const [ transformOriginX, transformOriginY]= TransformOrigin.parseStyle(item.originalTransformOrigin);
-
-                // 2.1. 중심점은 transform origin 을 유지 해야하기 때문에 그걸 기준으로 맞춘다. 
-                const center = [
-                    transformOriginX.unit === '%' ? (topLeft[0] + (nextResult[0] - topLeft[0])*(transformOriginX.rate()) ) : transformOriginX.value,
-                    transformOriginY.unit === '%' ? (topLeft[1] + (nextResult[1] - topLeft[1])*(transformOriginY.rate()) ) : transformOriginY.value,
-                    0
-                ]
-                // 3. angle 을 구하고 , radian 을 리턴 
-                const angle = quat.getAxisAngle([0, 0, 1], mat4.getRotation([], item.localMatrix))
-
-                console.log(angle, radianToDegree(angle));
-
-                // 4. 그 각도의 역으로 반대점의 원래 자리를 구한다. 
-                const [newX, newY, newZ] = vec3.rotateZ([], topLeft, center, -angle)
-                console.log('newPosition', [newX, newY, newZ], topLeft, currentVertext, -angle)
-
-                // 5. newX, newY, newZ 는 리얼 월드의 좌표, 실제로는 offset 형태의 좌표로 변형해야함. 
-                const rotateMatrix = mat4.create();
-                mat4.translate(rotateMatrix, rotateMatrix, [
-                    transformOriginX.toPx(item.width + realDx).value,
-                    transformOriginY.toPx(item.height + realDy).value,
-                    0,
-                ])
-                mat4.rotateZ(rotateMatrix, rotateMatrix, -angle);
-                mat4.translate(rotateMatrix, rotateMatrix, [
-                    -transformOriginX.toPx(item.width + realDx).value,
-                    -transformOriginY.toPx(item.height + realDy).value,
-                    0,
-                ])
-
-                const temp = mat4.create()
-                // mat4.multiply(temp, temp,  item.localMatrixInverse)                
-                mat4.multiply(temp, temp, item.localMatrixInverse)
-                // mat4.translate(temp, temp, [-item.x, -item.y, 0])                                
-                mat4.multiply(temp, temp, item.parentMatrixInverse);
-            
-
-                
-                console.log(item.x, item.y, item.parentMatrixInverse, temp);
-                
-                const [localX, localY, localZ] = vec3.transformMat4([], [newX, newY, newZ], temp)
-
-
-                // 5. 그런 다음 width, height 를 설정해준다. 
-                console.log(topLeft, center, angle, item.width + realDx, item.height + realDy, [newX, newY, newZ]);
-
-
-                const currentItem = this.$selection.current;
-                console.log(currentItem, localX, item.x, localY, item.y);
-                if (currentItem) {
-                    currentItem.reset({
-                        x: Length.px(localX),
-                        y: Length.px(localY),
-                        width: Length.px(item.width + realDx),
-                        height: Length.px(item.height + realDy),
-                        transform: Transform.rotateZ(item.transform, Length.deg(radianToDegree(angle)))
-                    })
-                }
-
+                this.moveBottomRightVertext(dx, dy);
             } else if (this.state.moveType === 'to top right') {
-                
-                // this.$selection.items[0]['transform-origin'] = item.transformOrigin
+                this.moveTopRightVertext(dx, dy);
             }
 
-            // this.refreshSelectionToolView(dx, dy);
-            // this.parent.updateRealPosition();    
             this.emit('refreshCanvasForPartial', null, true)            
         }
     }

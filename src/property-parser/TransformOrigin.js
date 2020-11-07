@@ -34,10 +34,11 @@ export class TransformOrigin {
       transformOriginZ
     ] = TransformOrigin.parseStyle(transformOrigin)
 
-    transformOriginX = transformOriginX.toPx(width)
-    transformOriginY = transformOriginY.toPx(height)
+    const originX = transformOriginX.toPx(width).value
+    const originY = transformOriginY.toPx(height).value
+    const originZ = transformOriginZ.value; 
 
-    return `${transformOriginX} ${transformOriginY} ${transformOriginZ}`
+    return [originX, originY, originZ]
   }
 
   static toPx (transformOrigin, width, height, distance = 0) {

@@ -282,6 +282,8 @@ export class SelectionManager {
       const parentMatrixInverse = mat4.invert([], parentMatrix);
       const localMatrix = it.getTransformMatrix()
       const localMatrixInverse = mat4.invert([], localMatrix)
+      const itemMatrix = it.getItemTransformMatrix()
+      const itemMatrixInverse = mat4.invert([], itemMatrix)      
       const accumulatedMatrix = it.getAccumulatedMatrix();
       const accumulatedMatrixInverse = mat4.invert([], accumulatedMatrix);
 
@@ -298,8 +300,10 @@ export class SelectionManager {
         verties: it.verties(),
         parentMatrix,   // 부모의 matrix 
         parentMatrixInverse,
-        localMatrix,    // 자기 자신의 matrix 
+        localMatrix,    // 자기 자신의 matrix with transform origin 
         localMatrixInverse,    
+        itemMatrix,     // 자기 자신의 matrix without transform origin 
+        itemMatrixInverse,
         accumulatedMatrix,  // parentMatrix * offset translate * localMatrix , 축적된 matrix 
         accumulatedMatrixInverse,
       }      
