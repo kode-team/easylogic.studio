@@ -396,9 +396,9 @@ export function polyPoly (verties = [], targetVerties = []) {
 
 export function rectToVerties (x, y, width, height) {
     return [
-        [x, y, 0],
-        [x + width, y, 0],
-        [x + width, y + height, 0],
-        [x, y + height, 0],
+        [x, y, 0],  // top , left 
+        [x + width, y, 0],  // top , right 
+        [x + width, y + height, 0], // bottom , right 
+        [x, y + height, 0], // bottom , left 
     ]
 }

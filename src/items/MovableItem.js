@@ -437,6 +437,52 @@ export class MovableItem extends Item {
         return view; 
     }      
 
+    /**
+     * 방향에 따른 matrix 구하기 
+     * 
+     * @param {ReadOnlyVec3} vertextOffset 
+     * @param {ReadOnlyVec3} center 
+     */
+    getDirectionTransformMatrix (vertextOffset, centerRate) {
+        const x = this.offsetX.value;
+        const y = this.offsetY.value; 
+
+        const center = TransformOrigin.scale(
+            this.json['transform-origin'] || '50% 50% 0px', 
+            this.screenWidth.value, 
+            this.screenHeight.value
+        )
+
+        center[0] *= centerRate[0];
+        center[1] *= centerRate[1];
+        center[2] *= centerRate[2];
+
+        const view = mat4.create();
+        mat4.translate(view, view, [x, y, 0]);
+        mat4.translate(view, view, vertextOffset);            
+        mat4.multiply(view, view, mat4.fromTranslation([], center) )        
+        mat4.multiply(view, view, this.getItemTransformMatrix())        
+        mat4.multiply(view, view, mat4.fromTranslation([], vec3.negate([], center)))            
+
+        return view; 
+    }
+
+    getDirectionTopLeftMatrix () {
+        return this.getDirectionTransformMatrix([0, 0, 0], [1, 1, 1])
+    }
+
+    getDirectionBottomLeftMatrix () {
+        return this.getDirectionTransformMatrix([0, this.screenHeight.value, 0], [1, -1, 1])
+    }    
+
+    getDirectionTopRightMatrix () {
+        return this.getDirectionTransformMatrix([this.screenWidth.value, 0, 0], [-1, 1, 1])
+    }        
+
+    getDirectionBottomRightMatrix () {
+        return this.getDirectionTransformMatrix([this.screenWidth.value, this.screenHeight.value, 0], [-1, -1, 1])
+    }            
+
 
     getAccumulatedMatrix () {
         let transform = mat4.create();

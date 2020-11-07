@@ -214,8 +214,6 @@ export default class HTMLRenderView extends UIElement {
 
                 items = artboard.checkInAreaForLayers(areaVerties);
 
-                console.log(items);
-
                 if (rect.width === 0 && rect.height === 0) {
                     items = [] 
                 }                 

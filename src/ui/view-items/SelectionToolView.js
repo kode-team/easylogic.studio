@@ -167,38 +167,65 @@ export default class SelectionToolView extends SelectionToolBind {
 
     }
 
+    calculateNewOffsetMatrixInverse (vertextOffset, width, height, origin, centerRate, itemMatrix) {
+
+        const center = TransformOrigin.scale(origin,width, height)
+
+        center[0] *= centerRate[0];
+        center[1] *= centerRate[1];
+        center[2] *= centerRate[2];
+
+        const view = mat4.create();
+        mat4.translate(view, view, vertextOffset);            
+        mat4.translate(view, view, center )        
+        mat4.multiply(view, view, itemMatrix)        
+        mat4.translate(view, view, vec3.negate([], center))            
+
+        return mat4.invert([], view); 
+    }
+
+    calculateDistance (vertext, dx, dy, reverseMatrix) {
+        // 1. 움직이는 vertext 를 구한다. 
+        const currentVertext = vec3.clone(vertext);
+
+        // 2. dx, dy 만큼 옮긴 vertext 를 구한다.             
+        const nextVertext = vec3.add([], currentVertext, [dx, dy, 0]);
+
+        // 3. invert matrix 를 실행해서  기본 좌표로 복귀한다.             
+        var currentResult = vec3.transformMat4([], currentVertext, reverseMatrix); 
+        var nextResult = vec3.transformMat4([], nextVertext, reverseMatrix); 
+
+        // 4. 복귀한 좌표에서 차이점을 구한다. 
+        var realDx = (nextResult[0] - currentResult[0])/this.$editor.scale
+        var realDy = (nextResult[1] - currentResult[1])/this.$editor.scale
+        
+        return [realDx, realDy, 0]
+    }
+
     moveBottomRightVertext (dx, dy) {
         const item = this.$selection.cachedItemVerties[0]
         if (item) {
 
-            // 1. 움직이는 vertext 를 구한다. 
-            const currentVertext = item.verties[2]
-
-            // 2. dx, dy 만큼 옮긴 vertext 를 구한다.             
-            const nextVertext = vec3.add([], currentVertext, [dx, dy, 0]);
-
-            // 3. invert matrix 를 실행해서  기본 좌표로 복귀한다.             
-            var currentResult = vec3.transformMat4([], currentVertext, item.accumulatedMatrixInverse); 
-            var nextResult = vec3.transformMat4([], nextVertext, item.accumulatedMatrixInverse); 
-
-            // 4. 복귀한 좌표에서 차이점을 구한다. 
-            var realDx = (nextResult[0] - currentResult[0])/this.$editor.scale
-            var realDy = (nextResult[1] - currentResult[1])/this.$editor.scale
+            const [realDx, realDy] = this.calculateDistance(
+                item.verties[2],    // bottom right 
+                dx, dy, 
+                item.accumulatedMatrixInverse
+            );
 
             // 변형되는 넓이 높이 구하기 
             const newWidth = item.width + realDx;
             const newHeight = item.height + realDy;
 
-            // 2. 그러기 위해서는  반대쪽 점과  움직인 점과의 중심점을 구하고 
-            const newCenter = TransformOrigin.scale(item.originalTransformOrigin, newWidth, newHeight);
-
             // 마지막 offset x, y 를 구해보자. 
             const view = mat4.create();
-            mat4.translate(view, view, [item.x, item.y, 0]);
-            mat4.multiply(view, view, item.localMatrix);
-            mat4.multiply(view, view, mat4.invert([], mat4.fromTranslation([], vec3.negate([], newCenter))))                             
-            mat4.multiply(view, view, item.itemMatrixInverse)
-            mat4.multiply(view, view, mat4.invert([], mat4.fromTranslation([], newCenter) ))                
+            mat4.multiply(view, view, item.directionMatrix['to top left']);
+            mat4.multiply(view, view, this.calculateNewOffsetMatrixInverse (
+                [0, 0, 0], 
+                newWidth, newHeight, 
+                item.originalTransformOrigin, 
+                [1,1,1], 
+                item.itemMatrix
+            ));
 
             const lastStartVertext = mat4.getTranslation([], view);
 
@@ -217,42 +244,106 @@ export default class SelectionToolView extends SelectionToolBind {
         const item = this.$selection.cachedItemVerties[0]
         if (item) {
 
-            // 1. 움직이는 vertext 를 구한다. 
-            const currentVertext = item.verties[1]
 
-            // 2. dx, dy 만큼 옮긴 vertext 를 구한다.             
-            const nextVertext = vec3.add([], currentVertext, [dx, dy, 0]);
-
-            // 3. invert matrix 를 실행해서  기본 좌표로 복귀한다.             
-            var currentResult = vec3.transformMat4([], currentVertext, item.accumulatedMatrixInverse); 
-            var nextResult = vec3.transformMat4([], nextVertext, item.accumulatedMatrixInverse); 
-
-            // 4. 복귀한 좌표에서 차이점을 구한다. 
-            var realDx = (nextResult[0] - currentResult[0])/this.$editor.scale
-            var realDy = (nextResult[1] - currentResult[1])/this.$editor.scale
+            const [realDx, realDy] = this.calculateDistance(
+                item.verties[1],    // top right 
+                dx, dy, 
+                item.accumulatedMatrixInverse
+            );
 
             // 변형되는 넓이 높이 구하기 
             const newWidth = item.width + realDx;
             const newHeight = item.height - realDy;
 
+            // 마지막 offset x, y 를 구해보자. 
+            const view = mat4.create();
+            mat4.multiply(view, view, item.directionMatrix['to bottom left']);
+            mat4.multiply(view, view, this.calculateNewOffsetMatrixInverse (
+                [0, newHeight, 0], 
+                newWidth, newHeight, 
+                item.originalTransformOrigin, 
+                [1,-1,1], 
+                item.itemMatrix
+            ));            
 
-            // 2. 그러기 위해서는  반대쪽 점과  움직인 점과의 중심점을 구하고 
-            const newCenter = TransformOrigin.scale(item.originalTransformOrigin, newWidth, newHeight);
 
-            console.log(newWidth, newHeight, newCenter);
+            const lastStartVertext = mat4.getTranslation([], view);         
+
+            const instance = this.$selection.items[0];
+            instance.reset({
+                x: Length.px(lastStartVertext[0]),
+                y: Length.px(lastStartVertext[1]),
+                width: Length.px(newWidth),
+                height: Length.px(newHeight),
+            })            
+        }
+    }
+
+
+    moveTopLeftVertext (dx, dy) {
+        const item = this.$selection.cachedItemVerties[0]
+        if (item) {
+
+
+            const [realDx, realDy] = this.calculateDistance(
+                item.verties[0],    // top left 
+                dx, dy, 
+                item.accumulatedMatrixInverse
+            );
+
+            // 변형되는 넓이 높이 구하기 
+            const newWidth = item.width - realDx;
+            const newHeight = item.height - realDy;            
 
             // 마지막 offset x, y 를 구해보자. 
             const view = mat4.create();
-            mat4.translate(view, view, [item.x, item.y, 0]);
-            mat4.translate(view, view, [0, item.height, 0]);
-            mat4.multiply(view, view, item.localMatrix);
-            mat4.multiply(view, view, mat4.invert([], mat4.fromTranslation([], vec3.negate([], newCenter))))                             
-            mat4.multiply(view, view, item.itemMatrixInverse)
-            mat4.multiply(view, view, mat4.invert([], mat4.fromTranslation([], newCenter) ))                
-            mat4.multiply(view, view, mat4.invert([], mat4.fromTranslation([], [0, newHeight, 0]) ))    
+            mat4.multiply(view, view, item.directionMatrix['to bottom right']);
+            mat4.multiply(view, view, this.calculateNewOffsetMatrixInverse (
+                [newWidth, newHeight, 0], 
+                newWidth, newHeight, 
+                item.originalTransformOrigin, 
+                [-1,-1,1], 
+                item.itemMatrix
+            ));                        
 
-            // 중심으로 가는 방향에 따라 다른가? 
-            // offset * translate(y) * localMatrix = newOffset * translate(y) * translateorigin() * itemMatrix * transformOrigin(-1)            
+
+            const lastStartVertext = mat4.getTranslation([], view);         
+
+            const instance = this.$selection.items[0];
+            instance.reset({
+                x: Length.px(lastStartVertext[0]),
+                y: Length.px(lastStartVertext[1]),
+                width: Length.px(newWidth),
+                height: Length.px(newHeight),
+            })            
+        }
+    }
+
+
+    moveBottomLeftVertext (dx, dy) {
+        const item = this.$selection.cachedItemVerties[0]
+        if (item) {
+
+            const [realDx, realDy] = this.calculateDistance(
+                item.verties[3],    // bottom left
+                dx, dy, 
+                item.accumulatedMatrixInverse
+            );
+
+            // 변형되는 넓이 높이 구하기 
+            const newWidth = item.width - realDx;
+            const newHeight = item.height + realDy;
+
+            // 마지막 offset x, y 를 구해보자. 
+            const view = mat4.create();
+            mat4.multiply(view, view, item.directionMatrix['to top right']);    // 고정점 
+            mat4.multiply(view, view, this.calculateNewOffsetMatrixInverse (
+                [newWidth, 0, 0], 
+                newWidth, newHeight, 
+                item.originalTransformOrigin, 
+                [-1,1,1], 
+                item.itemMatrix
+            ));                    
 
             const lastStartVertext = mat4.getTranslation([], view);         
 
@@ -274,6 +365,10 @@ export default class SelectionToolView extends SelectionToolBind {
                 this.moveBottomRightVertext(dx, dy);
             } else if (this.state.moveType === 'to top right') {
                 this.moveTopRightVertext(dx, dy);
+            } else if (this.state.moveType === 'to top left') {
+                this.moveTopLeftVertext(dx, dy);
+            } else if (this.state.moveType === 'to bottom left') {
+                this.moveBottomLeftVertext(dx, dy);                                
             }
 
             this.emit('refreshCanvasForPartial', null, true)            

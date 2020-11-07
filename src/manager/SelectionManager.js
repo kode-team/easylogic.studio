@@ -275,9 +275,11 @@ export class SelectionManager {
 
     this.cachedItemVerties = this.items.map(it => {
 
+      const x =  it.offsetX.value;
+      const y = it.offsetY.value;
       const width = it.screenWidth.value;
       const height = it.screenHeight.value; 
-
+      const originalTransformOrigin = it['transform-origin'] || '50% 50% 0%';
       const parentMatrix = isFunction(it.parent.getAccumulatedMatrix) ? it.parent.getAccumulatedMatrix() : mat4.create()
       const parentMatrixInverse = mat4.invert([], parentMatrix);
       const localMatrix = it.getTransformMatrix()
@@ -287,17 +289,19 @@ export class SelectionManager {
       const accumulatedMatrix = it.getAccumulatedMatrix();
       const accumulatedMatrixInverse = mat4.invert([], accumulatedMatrix);
 
+      const directionMatrix = {
+        'to top left': it.getDirectionTopLeftMatrix(),
+        'to top right': it.getDirectionTopRightMatrix(),
+        'to bottom left': it.getDirectionBottomLeftMatrix(),
+        'to bottom right': it.getDirectionBottomRightMatrix(),
+      }
+
       return {
-        originalX: it.offsetX.value,
-        originalY: it.offsetY.value,
-        x: it.offsetX.value,
-        y: it.offsetY.value,
-        width: width,
-        height: height,
+        x, y, width, height,
         transform: it.transform,
-        originalTransformOrigin: clone(it['transform-origin'] || '50% 50% 0%'),        
-        transformOrigin: TransformOrigin.toPx(it['transform-origin'], width, height),
+        originalTransformOrigin,        
         verties: it.verties(),
+        directionMatrix,
         parentMatrix,   // 부모의 matrix 
         parentMatrixInverse,
         localMatrix,    // 자기 자신의 matrix with transform origin 
