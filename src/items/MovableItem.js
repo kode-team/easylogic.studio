@@ -443,19 +443,15 @@ export class MovableItem extends Item {
      * @param {ReadOnlyVec3} vertextOffset 
      * @param {ReadOnlyVec3} center 
      */
-    getDirectionTransformMatrix (vertextOffset, centerRate) {
+    getDirectionTransformMatrix (vertextOffset) {
         const x = this.offsetX.value;
         const y = this.offsetY.value; 
 
-        const center = TransformOrigin.scale(
+        const center = vec3.add([], TransformOrigin.scale(
             this.json['transform-origin'] || '50% 50% 0px', 
             this.screenWidth.value, 
             this.screenHeight.value
-        )
-
-        center[0] *= centerRate[0];
-        center[1] *= centerRate[1];
-        center[2] *= centerRate[2];
+        ), vec3.negate([], vertextOffset));
 
         const view = mat4.create();
         mat4.translate(view, view, [x, y, 0]);
@@ -468,19 +464,19 @@ export class MovableItem extends Item {
     }
 
     getDirectionTopLeftMatrix () {
-        return this.getDirectionTransformMatrix([0, 0, 0], [1, 1, 1])
+        return this.getDirectionTransformMatrix([0, 0, 0])
     }
 
     getDirectionBottomLeftMatrix () {
-        return this.getDirectionTransformMatrix([0, this.screenHeight.value, 0], [1, -1, 1])
+        return this.getDirectionTransformMatrix([0, this.screenHeight.value, 0])
     }    
 
     getDirectionTopRightMatrix () {
-        return this.getDirectionTransformMatrix([this.screenWidth.value, 0, 0], [-1, 1, 1])
+        return this.getDirectionTransformMatrix([this.screenWidth.value, 0, 0])
     }        
 
     getDirectionBottomRightMatrix () {
-        return this.getDirectionTransformMatrix([this.screenWidth.value, this.screenHeight.value, 0], [-1, -1, 1])
+        return this.getDirectionTransformMatrix([this.screenWidth.value, this.screenHeight.value, 0])
     }            
 
 
