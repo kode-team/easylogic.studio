@@ -230,10 +230,10 @@ export default class SelectionToolView extends SelectionToolBind {
 
             const instance = this.$selection.items[0];
             instance.reset({
-                x: Length.px(lastStartVertext[0]),
-                y: Length.px(lastStartVertext[1]),
-                width: Length.px(newWidth),
-                height: Length.px(newHeight),
+                x: Length.px(lastStartVertext[0] + (newWidth < 0 ? newWidth : 0)),
+                y: Length.px(lastStartVertext[1] + (newHeight < 0 ? newHeight : 0)),
+                width: Length.px(Math.abs(newWidth)),
+                height: Length.px(Math.abs(newHeight)),
             })            
         }
     }
@@ -269,10 +269,10 @@ export default class SelectionToolView extends SelectionToolBind {
 
             const instance = this.$selection.items[0];
             instance.reset({
-                x: Length.px(lastStartVertext[0]),
-                y: Length.px(lastStartVertext[1]),
-                width: Length.px(newWidth),
-                height: Length.px(newHeight),
+                x: Length.px(lastStartVertext[0] + (newWidth < 0 ? newWidth : 0)),
+                y: Length.px(lastStartVertext[1] + (newHeight < 0 ? newHeight : 0)),
+                width: Length.px(Math.abs(newWidth)),
+                height: Length.px(Math.abs(newHeight)),
             })            
         }
     }
@@ -308,10 +308,10 @@ export default class SelectionToolView extends SelectionToolBind {
 
             const instance = this.$selection.items[0];
             instance.reset({
-                x: Length.px(lastStartVertext[0]),
-                y: Length.px(lastStartVertext[1]),
-                width: Length.px(newWidth),
-                height: Length.px(newHeight),
+                x: Length.px(lastStartVertext[0] + (newWidth < 0 ? newWidth : 0)),
+                y: Length.px(lastStartVertext[1] + (newHeight < 0 ? newHeight : 0)),
+                width: Length.px(Math.abs(newWidth)),
+                height: Length.px(Math.abs(newHeight)),
             })            
         }
     }
@@ -345,10 +345,10 @@ export default class SelectionToolView extends SelectionToolBind {
 
             const instance = this.$selection.items[0];
             instance.reset({
-                x: Length.px(lastStartVertext[0]),
-                y: Length.px(lastStartVertext[1]),
-                width: Length.px(newWidth),
-                height: Length.px(newHeight),
+                x: Length.px(lastStartVertext[0] + (newWidth < 0 ? newWidth : 0)),
+                y: Length.px(lastStartVertext[1] + (newHeight < 0 ? newHeight : 0)),
+                width: Length.px(Math.abs(newWidth)),
+                height: Length.px(Math.abs(newHeight)),
             })            
         }
     }
