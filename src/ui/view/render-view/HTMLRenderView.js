@@ -5,10 +5,10 @@ import { Length } from "@unit/Length";
 import Dom from "@core/Dom";
 import { DomItem } from "@items/DomItem";
 import StyleView from "./StyleView";
-import { computeVertextData } from "@core/functions/matrix";
 
 import HTMLRenderer from '@renderer/HTMLRenderer';
 import SelectionToolView from "@ui/view-items/SelectionToolView";
+import GroupSelectionToolView from "@ui/view-items/GroupSelectionToolView";
 import GuideLineView from "@ui/view-items/GuideLineView";
 import PathEditorView from "@ui/view-items/PathEditorView";
 import PathDrawView from "@ui/view-items/PathDrawView";
@@ -24,6 +24,7 @@ export default class HTMLRenderView extends UIElement {
         return {
             StyleView,
             SelectionToolView,
+            GroupSelectionToolView,
             GuideLineView,
             PathEditorView,
             PathDrawView,
@@ -53,6 +54,7 @@ export default class HTMLRenderView extends UIElement {
                 <GuideLineView ref='$guideLineView' />
                 <GridLayoutLineView ref='$gridLayoutLineView' />
                 <SelectionToolView ref='$selectionTool' />
+                <GroupSelectionToolView ref='$groupSelectionTool' />
                 <LayerAppendView ref='$objectAddView' />
                 <PathEditorView ref='$pathEditorView' />
                 <PathDrawView ref='$pathDrawView' />
@@ -67,6 +69,10 @@ export default class HTMLRenderView extends UIElement {
             left: this.refs.$body.scrollLeft(),
             top: this.refs.$body.scrollTop()
         }
+    }
+
+    get selectionToolView () {
+        return this.$selection.isOne ? this.children.$selectionTool : this.children.$groupSelectionTool;
     }
 
     [EVENT('afterChangeMode')] () {
@@ -177,8 +183,10 @@ export default class HTMLRenderView extends UIElement {
                 }                 
     
                 if (this.$selection.select(...items)) {
-                    this.selectCurrentForBackgroundView(...items)
+                    this.selectCurrent(...items)
                 }
+
+                this.emit('refreshSelectionTool');
 
             }
         }
@@ -219,20 +227,16 @@ export default class HTMLRenderView extends UIElement {
                 }                 
 
                 if (this.$selection.select(...items)) {
-                    this.selectCurrentForBackgroundView(...items)
+                    this.selectCurrent(...items)
                 }
-    
-                if (items.length) {
-                    // this.emit('refreshSelection')
-                } else {
-                    this.$selection.select();
-                    // this.emit('emptySelection')
-                }                
+
             } else {
-                this.$selection.select();                
-                // this.emit('emptySelection')            
+                this.$selection.select();
             }
+            this.$selection.resetMatrix();            
             this.emit('history.refreshSelection')
+            this.emit('refreshSelectionTool');            
+
         }
 
         this.sendHelpMessage();
@@ -278,7 +282,6 @@ export default class HTMLRenderView extends UIElement {
         })
 
         this.emit('refreshContent', arr);
-        this.children.$selectionTool.initMoveType();
 
         this.emit('refreshSelectionTool');        
     }
@@ -292,7 +295,8 @@ export default class HTMLRenderView extends UIElement {
         this.startXY = e.xy ; 
         this.$element = e.$dt;
 
-        if (this.$element.hasClass('text')  || this.$element.hasClass('artboard') || this.$element.hasClass('selected')) {
+        // text, artboard 는 선택하지 않음. 
+        if (this.$element.hasClass('text')  || this.$element.hasClass('artboard')) {
             return false; 
         }
 
@@ -301,19 +305,23 @@ export default class HTMLRenderView extends UIElement {
         if (e.shiftKey) {
             this.$selection.toggleById(id);
         } else {
-            this.$selection.selectById(id);
+            if (this.$selection.check({ id })) {    // 이미 선택되어 있으면 선택하지 않음. 
+                // NOOP
+            } else {
+                this.$selection.selectById(id);
+            }
         }
 
         this.selectCurrent(...this.$selection.items)
-        this.children.$selectionTool.initMoveType();
 
         this.emit('history.refreshSelection');        
+        this.emit('refreshSelectionTool');
     }
 
 
-
     calculateMovedElement (dx, dy) {
-        this.children.$selectionTool.refreshSelectionToolView(dx, dy, 'move');
+        this.$selection.reselect();
+        this.selectionToolView.refreshSelectionToolView(dx, dy, 'move');
         this.updateRealPosition();   
     }
 
@@ -410,41 +418,12 @@ export default class HTMLRenderView extends UIElement {
 
     }
 
-
-    selectCurrentForBackgroundView (...args) {
-        this.state.cachedCurrentElement = {}
-        var $selectedElement = this.$el.$$('.selected');
-
-        if ($selectedElement) {
-            $selectedElement.forEach(it => it.removeClass('selected'))
-        }
-
-        if(args.length) {
-
-            var selector = args.map(it => `[data-id='${it.id}']`).join(',')
-
-            var list = this.$el.$$(selector);
-            
-            list.forEach(it => {
-                this.state.cachedCurrentElement[it.attr('data-id')] = it; 
-                it.addClass('selected')
-            })
-            
-        } else {
-            // this.$selection.select()
-        }
-        this.emit('refreshSelection')           
-
-        this.emit('refreshSelectionTool')
-
-    }    
-
     modifyScale () {
         this.refs.$view.css({
             transform: `scale(${this.$editor.scale})`
         })
 
-        this.emit('makeSelectionTool', true);
+        this.emit('refreshSelectionTool');
     }
 
     [EVENT('changeScale')] () {

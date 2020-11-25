@@ -1,14 +1,12 @@
 import { Item } from "./Item";
 import { Length } from "@unit/Length";
 import { Transform } from "../property-parser/Transform";
-import matrix from "@core/functions/matrix";
-import Dom from "@core/Dom";
 import { TransformOrigin } from "@property-parser/TransformOrigin";
-import { mat3, mat4, vec3 } from "gl-matrix";
-import { degreeToRadian } from "@core/functions/math";
+import { mat4, vec3 } from "gl-matrix";
+import { degreeToRadian, vertiesMap } from "@core/functions/math";
 import { isFunction } from "@core/functions/func";
 import PathParser from "@parser/PathParser";
-import { pointRect, polyPoly, rectToVerties } from "@core/functions/collision";
+import { polyPoly, rectToVerties } from "@core/functions/collision";
 
 export class MovableItem extends Item {
 
@@ -202,71 +200,17 @@ export class MovableItem extends Item {
             width: this.screenWidth,
             height: this.screenHeight
         }
-    }
+    } 
 
-    get centerX () { 
-        var half = 0; 
-        if (this.json.width.value != 0) {
-            half = Math.floor(this.json.width.value / 2)
-        }
-        return Length.px(this.screenX.value + half) 
-    }
-    get centerY () { 
-        var half = 0; 
-        if (this.json.height.value != 0) {
-            half = Math.floor(this.json.height.value / 2)
-        }
-        
-        return Length.px(this.screenY.value + half) 
-    }    
-
-
+    /**
+     * 충돌 체크 
+     * 
+     * polygon : ploygon 형태로 충돌 체크를 한다. 
+     * 
+     * @param {*} areaVerties 
+     */
     checkInArea (areaVerties) {
         return polyPoly(areaVerties, this.verties())        
-    }
-
-    move (x, y) {
-        this.reset({ x, y })
-        return this;         
-    }
-
-    moveX (x) {
-        this.reset ( { x })
-        return this;         
-    }
-
-    moveY (y) {
-        this.reset ({ y })
-
-        return this; 
-    }
-
-    resize (width, height) {
-        if (width.value >= 0 && height.value >= 0) {
-            this.reset ({ width, height })
-        }
-
-        return this; 
-    }
-
-    resizeWidth (width) {
-        if (width.value >= 0) {
-            this.reset ({ width })
-        }
-
-        return this; 
-    }
-
-    resizeHeight ( height ) {
-        if (height.value >= 0) {
-            this.reset ({ height })
-        }
-
-        return this;
-    }
-
-    get screenTransform () {
-        return Transform.addTransform(this.json.parent.screenTransform, this.json.transform);
     }
 
     getPerspectiveMatrix () {
@@ -409,30 +353,23 @@ export class MovableItem extends Item {
      * 4. Translate by the negated computed X, Y and Z values of transform-origin
      */    
     getTransformMatrix () {
-        let [
-            transformOriginX = Length.percent(50), 
-            transformOriginY = Length.percent(50), 
-            transformOriginZ = Length.z()
-        ] = TransformOrigin.parseStyle(this.json['transform-origin'])
+        const origin = TransformOrigin.scale(
+            this.json['transform-origin'] || '50% 50% 0px', 
+            this.screenWidth.value, 
+            this.screenHeight.value
+        )
 
-        const width = this.screenWidth.value;
-        const height = this.screenHeight.value
-
-        transformOriginX = transformOriginX.toPx(width).value
-        transformOriginY = transformOriginY.toPx(height).value
-        transformOriginZ = transformOriginZ.value
-        
         // start with the identity matrix 
         const view = mat4.create();
 
         // 2. Translate by the computed X, Y and Z of transform-origin        
-        mat4.translate(view, view, [transformOriginX, transformOriginY, transformOriginZ]);
+        mat4.translate(view, view, origin);
 
         // 3. Multiply by each of the transform functions in transform property from left to right        
         mat4.multiply(view, view, this.getItemTransformMatrix())        
 
         // 4. Translate by the negated computed X, Y and Z values of transform-origin        
-        mat4.translate(view, view, [-transformOriginX, -transformOriginY, -transformOriginZ]);
+        mat4.translate(view, view, vec3.negate([], origin));
 
         return view; 
     }      
@@ -456,9 +393,9 @@ export class MovableItem extends Item {
         const view = mat4.create();
         mat4.translate(view, view, [x, y, 0]);
         mat4.translate(view, view, vertextOffset);            
-        mat4.multiply(view, view, mat4.fromTranslation([], center) )        
+        mat4.translate(view, view, center)        
         mat4.multiply(view, view, this.getItemTransformMatrix())        
-        mat4.multiply(view, view, mat4.fromTranslation([], vec3.negate([], center)))            
+        mat4.translate(view, view, vec3.negate([], center))            
 
         return view; 
     }
@@ -514,17 +451,57 @@ export class MovableItem extends Item {
 
     verties () {
 
-        const width = this.screenWidth.value;
-        const height = this.screenHeight.value;
+        let model = rectToVerties(0, 0, this.screenWidth.value, this.screenHeight.value, this.json['transform-origin']);
 
-        let model = rectToVerties(0, 0, width, height);
-
-        const transform = this.getAccumulatedMatrix();
-
-        return model.map(vertext => {
-            return vec3.transformMat4(vertext, vertext, transform)
-        }) 
+        return vertiesMap(model, this.getAccumulatedMatrix())
     }
+
+
+    get matrix () {
+        const id = this.id; 
+        const x =  this.offsetX.value;
+        const y = this.offsetY.value;
+        const width = this.screenWidth.value;
+        const height = this.screenHeight.value; 
+        const originalTransform = this.json.transform;
+        const originalTransformOrigin = this.json['transform-origin'] || '50% 50% 0%';
+        const parentMatrix = isFunction(this.parent.getAccumulatedMatrix) ? this.parent.getAccumulatedMatrix() : mat4.create()
+        const parentMatrixInverse = mat4.invert([], parentMatrix);
+        const localMatrix = this.getTransformMatrix()
+        const localMatrixInverse = mat4.invert([], localMatrix)
+        const itemMatrix = this.getItemTransformMatrix()
+        const itemMatrixInverse = mat4.invert([], itemMatrix)      
+        const accumulatedMatrix = this.getAccumulatedMatrix();
+        const accumulatedMatrixInverse = mat4.invert([], accumulatedMatrix);
+
+        const directionMatrix = {
+            'to top left': this.getDirectionTopLeftMatrix(),
+            'to top right': this.getDirectionTopRightMatrix(),
+            'to bottom left': this.getDirectionBottomLeftMatrix(),
+            'to bottom right': this.getDirectionBottomRightMatrix(),
+        }
+
+        return {
+            id, 
+            x, 
+            y, 
+            width, 
+            height,
+            transform: originalTransform,
+            originalTransformOrigin,        
+            verties: this.verties(),
+            directionMatrix,
+            parentMatrix,   // 부모의 matrix 
+            parentMatrixInverse,
+            localMatrix,    // 자기 자신의 matrix with transform origin 
+            localMatrixInverse,    
+            itemMatrix,     // 자기 자신의 matrix without transform origin 
+            itemMatrixInverse,
+            accumulatedMatrix,  // parentMatrix * offset translate * localMatrix , 축적된 matrix 
+            accumulatedMatrixInverse,
+        }
+    }
+
 
     /**
      * 
@@ -562,6 +539,11 @@ export class MovableItem extends Item {
         return path; 
     }
 
+    /**
+     * pathString 의 좌표를 기준 좌표로 돌린다. 
+     * 
+     * @param {string} pathString   svg path string 
+     */
     invertPathString (pathString = '') {
         return this.invertPath(pathString).d;
     }

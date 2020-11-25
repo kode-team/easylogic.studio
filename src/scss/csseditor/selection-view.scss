@@ -25,7 +25,8 @@
     bottom: 0px;
     box-sizing: border-box;
 
-    .pointer {
+    .pointer,
+    .rotate-pointer {
       display: inline-block;
       position: absolute;
       left: 0px;
@@ -39,11 +40,18 @@
       border-radius: 100%;
       cursor: pointer;
       pointer-events: all;
-      &[data-number="1"] { background-color: rgb(255, 185, 185); }
-      &[data-number="2"] { background-color: rgb(255, 0, 0); }
-      &[data-number="3"] { background-color: rgb(115, 255, 0); }
-      &[data-number="4"] { background-color: rgb(75, 62, 255); }
+      // &[data-number="1"] { background-color: rgb(255, 185, 185); }
+      // &[data-number="2"] { background-color: rgb(255, 0, 0); }
+      // &[data-number="3"] { background-color: rgb(115, 255, 0); }
+      // &[data-number="4"] { background-color: rgb(75, 62, 255); }
       // &[data-number="p1"] { background-color: rgb(255, 185, 185); }
+    }
+    .rotate-pointer {
+      width: 14px;
+      height: 14px;      
+      background-color: yellow;
+      border-radius: 100%;
+      cursor: alias;
     }
 
     .line {

@@ -1,4 +1,4 @@
-import { vec2, vec3 } from "gl-matrix";
+import { mat4, vec2, vec3 } from "gl-matrix";
 import { isUndefined } from "./func";
 import { Vect3 } from "./matrix";
 
@@ -54,8 +54,44 @@ export function getDist (x, y, centerX = 0, centerY = 0) {
     return vec2.distance([x, y], [centerX, centerY])
 }
 
+export function vertiesMap (verties, transformView) {
+    return verties.map(v => {
+        return vec3.transformMat4([], v, transformView); 
+    })
+}
+
 export function calculateAngle (rx, ry) {
     return radianToDegree(Math.atan2(ry, rx))    
+}
+
+export function calculateAngleForVec3 (point, center, dist) {
+    return calculateAnglePointDistance( 
+        {x: point[0], y : point[1] },
+        {x: center[0], y : center[1] },   // origin 
+        {dx: dist[0], dy: dist[1]}
+    )
+}
+
+export function calculateRotationOriginMat4 (angle, origin) {
+    const view = mat4.create();
+    mat4.translate(view, view, origin);    // move origin 
+    mat4.rotateZ(view, view, degreeToRadian(angle));    // rotate
+    mat4.translate(view, view, vec3.negate([], origin));    // move origin * -1  
+
+    return view;
+}
+
+export function calculateMatrix(...args) {
+    const view = mat4.create();
+    args.forEach(v => {
+        mat4.multiply(view, view, v);
+    })
+
+    return view; 
+}
+
+export function calculateMatrixInverse(...args) {
+    return mat4.invert([], calculateMatrix(...args));
 }
 
 export function calculateAnglePointDistance(point, center, dist) {

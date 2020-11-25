@@ -189,11 +189,12 @@ const PathTransformEditor = class extends PathCutter {
 
 const FIELDS = ['fill', 'fill-opacity', 'stroke', 'stroke-width']
 
+/**
+ * @property {PathGenerator} pathGenerator
+ * @property {PathParser} pathParser
+ */
 export default class PathEditorView extends PathTransformEditor {
-    /**
-     * @property {PathGenerator} pathGenerator
-     * @property {PathParser} pathParser
-     */
+
 
     initialize() {
         super.initialize();

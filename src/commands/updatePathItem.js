@@ -18,8 +18,6 @@ export default {
         
         const current = editor.selection.current;
         if (current) {
-
-            console.log(current.invertPathString(pathObject.d));
             // d 속성 (path 문자열) 을 설정한다. 
             editor.emit('setAttribute', {
                 d: current.invertPathString(pathObject.d),

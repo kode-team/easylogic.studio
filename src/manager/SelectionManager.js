@@ -1,9 +1,12 @@
+import { rectToVerties } from "@core/functions/collision";
 import { isFunction, isUndefined, isArray, isObject, isString, clone } from "@core/functions/func";
+import { degreeToRadian } from "@core/functions/math";
 import { ArtBoard } from "@items/ArtBoard";
 import { Item } from "@items/Item";
+import { MovableItem } from "@items/MovableItem";
 import { TransformOrigin } from "@property-parser/TransformOrigin";
 import { Length } from "@unit/Length";
-import { mat4 } from "gl-matrix";
+import { mat4, vec3 } from "gl-matrix";
 
 
 const roundedLength = (px, fixedRound = 1) => {
@@ -44,6 +47,13 @@ export class SelectionManager {
     this.idsString = '';    
     this.colorsteps = []
     this.cachedItemVerties = {}    
+    this.selectionCamera = new MovableItem({
+      parent: this.currentProject,
+      x: Length.px(0), 
+      y: Length.px(0),
+      width: Length.px(0),
+      height: Length.px(0)
+    });
   }
 
   initialize() {
@@ -61,6 +71,7 @@ export class SelectionManager {
 
     this.$editor.history.add('selection', 'selection', { selection })
   }
+
 
   /**
    * get first item instance
@@ -88,6 +99,10 @@ export class SelectionManager {
   get isOne () {
     return this.length === 1; 
   }
+
+  get isMany () {
+    return this.length > 1; 
+  }  
 
   get length () {
     return this.items.length;
@@ -274,46 +289,41 @@ export class SelectionManager {
     })
 
     this.cachedItemVerties = this.items.map(it => {
-
-      const x =  it.offsetX.value;
-      const y = it.offsetY.value;
-      const width = it.screenWidth.value;
-      const height = it.screenHeight.value; 
-      const originalTransformOrigin = it['transform-origin'] || '50% 50% 0%';
-      const parentMatrix = isFunction(it.parent.getAccumulatedMatrix) ? it.parent.getAccumulatedMatrix() : mat4.create()
-      const parentMatrixInverse = mat4.invert([], parentMatrix);
-      const localMatrix = it.getTransformMatrix()
-      const localMatrixInverse = mat4.invert([], localMatrix)
-      const itemMatrix = it.getItemTransformMatrix()
-      const itemMatrixInverse = mat4.invert([], itemMatrix)      
-      const accumulatedMatrix = it.getAccumulatedMatrix();
-      const accumulatedMatrixInverse = mat4.invert([], accumulatedMatrix);
-
-      const directionMatrix = {
-        'to top left': it.getDirectionTopLeftMatrix(),
-        'to top right': it.getDirectionTopRightMatrix(),
-        'to bottom left': it.getDirectionBottomLeftMatrix(),
-        'to bottom right': it.getDirectionBottomRightMatrix(),
-      }
-
-      return {
-        x, y, width, height,
-        transform: it.transform,
-        originalTransformOrigin,        
-        verties: it.verties(),
-        directionMatrix,
-        parentMatrix,   // 부모의 matrix 
-        parentMatrixInverse,
-        localMatrix,    // 자기 자신의 matrix with transform origin 
-        localMatrixInverse,    
-        itemMatrix,     // 자기 자신의 matrix without transform origin 
-        itemMatrixInverse,
-        accumulatedMatrix,  // parentMatrix * offset translate * localMatrix , 축적된 matrix 
-        accumulatedMatrixInverse,
-      }      
+      return it.matrix;
     })
 
     this.setAllRectCache();
+  }
+
+  resetMatrix () {
+
+    this.cachedMatrixVerties = this.verties;  
+    this.reselect();
+  }
+
+  get verties () {
+
+    if (this.isOne) {    // 하나 일 때랑 
+      return this.current.verties()
+    } else {
+      let minX = Number.MAX_SAFE_INTEGER;
+      let minY = Number.MAX_SAFE_INTEGER;
+      let maxX = Number.MIN_SAFE_INTEGER;
+      let maxY = Number.MIN_SAFE_INTEGER;
+
+      this.each(item => {
+
+          item.verties().filter((it, index) => index < 4).forEach(vector => {
+              minX = Math.min(minX, vector[0]);
+              minY = Math.min(minY, vector[1]);
+              maxX = Math.max(maxX, vector[0]);
+              maxY = Math.max(maxY, vector[1]);
+          });
+
+      })
+
+      return rectToVerties(minX, minY, maxX - minX, maxY - minY);
+    }
   }
 
   // 객체 속성만 클론 
@@ -344,7 +354,6 @@ export class SelectionManager {
   }
 
   setAllRectCache () {
-
     var minX = Number.MAX_SAFE_INTEGER;
     var minY = Number.MAX_SAFE_INTEGER;
 
@@ -436,27 +445,4 @@ export class SelectionManager {
     return hasParent; 
   }
   
-  /**
-   * 
-   * @param {number} dx 
-   * @param {number} dy 
-   */
-  move (dx, dy) {
-    this.each ((item, cachedItem, ) => {
-
-      if (this.isInParent(item, this.items)) {
-        // noop 
-        // 부모가 있을 때는 dx, dy 로 위치를 옮기지 않는다. 
-        // 왜냐하면 이미부모로 부터 위치가 모두 옮겨졌기 때문에. 
-      } else {
-        item.move( 
-          roundedLength(cachedItem.x.value + dx),
-          roundedLength(cachedItem.y.value + dy)
-        )
-      }
-
-    })
-
-    this.reselect()
-  }
 }
