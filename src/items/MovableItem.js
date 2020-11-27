@@ -449,6 +449,10 @@ export class MovableItem extends Item {
         return transform;
     }
 
+    getAccumulatedMatrixInverse () {
+        return mat4.invert([], this.getAccumulatedMatrix());
+    }
+
     verties () {
 
         let model = rectToVerties(0, 0, this.screenWidth.value, this.screenHeight.value, this.json['transform-origin']);
@@ -472,7 +476,7 @@ export class MovableItem extends Item {
         const itemMatrix = this.getItemTransformMatrix()
         const itemMatrixInverse = mat4.invert([], itemMatrix)      
         const accumulatedMatrix = this.getAccumulatedMatrix();
-        const accumulatedMatrixInverse = mat4.invert([], accumulatedMatrix);
+        const accumulatedMatrixInverse = this.getAccumulatedMatrixInverse();
 
         const directionMatrix = {
             'to top left': this.getDirectionTopLeftMatrix(),
@@ -534,7 +538,7 @@ export class MovableItem extends Item {
     // svg container 의 matrix 의 inverse matrix 를 곱해서 재계산 한다.     
     invertPath (pathString = '') {
         const path = new PathParser(pathString)
-        path.invert(this.getAccumulatedMatrix())    
+        path.transformMat4(this.getAccumulatedMatrixInverse())    
     
         return path; 
     }

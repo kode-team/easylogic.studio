@@ -1,5 +1,7 @@
+import { rectToVerties } from "@core/functions/collision";
+import { vertiesMap } from "@core/functions/math";
 import { Editor } from "@manager/Editor";
-import PathParser from "@parser/PathParser";
+import { Length } from "@unit/Length";
 
 
 export default {
@@ -14,14 +16,12 @@ export default {
      * @param {string} pathObject.d    svg path 문자열 
      */
     execute: function (editor, pathObject) {
-
-        
         const current = editor.selection.current;
         if (current) {
+
             // d 속성 (path 문자열) 을 설정한다. 
             editor.emit('setAttribute', {
                 d: current.invertPathString(pathObject.d),
-                totalLength: pathObject.totalLength,
             })
         }
 

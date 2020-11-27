@@ -16,6 +16,7 @@ import { HistoryManager } from "./HistoryManager";
 import { uuid } from "@core/functions/math";
 import { Item } from "@items/Item";
 import BaseStore from "@core/BaseStore";
+import { mat4 } from "gl-matrix";
 
 export const EDITOR_ID = "";
 
@@ -50,6 +51,7 @@ export class Editor {
     this.locale = this.loadItem('locale') || 'en_US'
     this.layout = this.loadItem('layout') || 'all'    
 
+    this.resetWorldMatrix();
     this.loadManagers();
 
   }
@@ -187,6 +189,11 @@ export class Editor {
 
   setStore(store) {
     this.store = store;
+  }
+
+  resetWorldMatrix () {
+    this.matrix = mat4.fromScaling([], [this.scale, this.scale, 1])
+    this.matrixInverse = mat4.invert([], this.matrix)
   }
 
   /**

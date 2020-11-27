@@ -2,7 +2,6 @@ import UIElement, { EVENT } from "@core/UIElement";
 import { POINTERSTART, MOVE, END, IF } from "@core/Event";
 import { Length } from "@unit/Length";
 import { clone, isNotUndefined } from "@core/functions/func";
-import GuideView from "../view/GuideView";
 import { mat4, vec3 } from "gl-matrix";
 import { Transform } from "@property-parser/Transform";
 import { TransformOrigin } from "@property-parser/TransformOrigin";
@@ -47,8 +46,8 @@ const SelectionToolEvent = class  extends UIElement {
     }
 
 
-    [EVENT('refreshSelectionTool')] () { 
-        this.initSelectionTool();
+    [EVENT('refreshSelectionTool')] (isInitializeMatrix = false) { 
+        this.initSelectionTool(isInitializeMatrix);
     }
 
 }
@@ -57,12 +56,6 @@ const SelectionToolEvent = class  extends UIElement {
  * 원보 아이템의 크기를 가지고 scale 이랑 조합해서 world 의 크기를 구하는게 기본 컨셉 
  */
 export default class GroupSelectionToolView extends SelectionToolEvent {
-
-    initialize() {
-        super.initialize();
-
-        this.guideView = new GuideView(this.$editor, this);
-    }
 
     template() {
         return /*html*/`
@@ -147,7 +140,13 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         // 개별 verties 의 캐쉬를 다시 한다. 
         this.$selection.reselect();   
 
-        //TODO: history 업데이트 필요해요.
+        this.nextTick(() => {
+            this.command(
+                'setAttributeForMulti', 
+                'rotate selection pointer',
+                this.$selection.cloneValue('x', 'y', 'width', 'height', 'transform')
+            );  
+        })                
     }
 
 
@@ -156,6 +155,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         this.state.moveType = directionType[`${num}`]; 
 
         // cache matrix 
+        this.$selection.doCache();
         this.$selection.reselect();
         this.cachedGroupItem = this.groupItem.matrix;
     }
@@ -194,20 +194,6 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         return [realDx, realDy, 0]
     }
 
-    moveItem (instance, lastStartVertext, newWidth, newHeight) {
-
-        if (instance) {
-            instance.reset({
-                x: Length.px(lastStartVertext[0] + (newWidth < 0 ? newWidth : 0)),
-                y: Length.px(lastStartVertext[1] + (newHeight < 0 ? newHeight : 0)),
-                width: Length.px(Math.abs(newWidth)),
-                height: Length.px(Math.abs(newHeight)),
-            })    
-            instance.recover();     
-        }
-
-    }
-
     moveGroupItem (lastStartVertext, newWidth, newHeight) {
 
         this.groupItem.reset({
@@ -239,20 +225,26 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
                 width: Length.px(newWidth),
                 height: Length.px(newHeight)
             })
+            instance.recover();              
         }            
     }
 
-    recoverItemForGroup (scaleX, scaleY, realDx = 0, realDy = 0) {
-        const groupItem = this.cachedGroupItem;
+    recoverItemForGroup (groupItem, scaleX, scaleY, realDx = 0, realDy = 0) {
+
+        const accumulatedMatrix = groupItem.accumulatedMatrix;
+        const accumulatedMatrixInverse = groupItem.accumulatedMatrixInverse;
 
         this.$selection.cachedItemVerties.forEach(it => {
 
-            const localView = mat4.create();
-            mat4.multiply(localView, localView, it.parentMatrixInverse);            // 5. 해당 객체의 parent 를 기준으로 좌표를 만들면 된다. 
-            mat4.multiply(localView, localView, groupItem.accumulatedMatrix)        // 4. 원래의 좌표로 다시 만들고 
-            mat4.translate(localView, localView, [realDx, realDy, 0]);              // 3. dx, dy 가 - 일 경우 실제로 움직이고 
-            mat4.scale(localView, localView, [scaleX, scaleY, 1])                   // 2. scale 을 먼저 실행한다음 
-            mat4.multiply(localView, localView, groupItem.accumulatedMatrixInverse) // 1. 기본 좌표로 돌리고 
+            const localView = calculateMatrix(
+                it.parentMatrixInverse,         // 5. 해당 객체의 parent 를 기준으로 좌표를 만들면 된다. 
+                accumulatedMatrix,    // 4. 원래의 좌표로 다시 만들고 
+                mat4.fromTranslation([], [realDx, realDy, 0]),      // 3. dx, dy 가 - 일 경우 실제로 움직이고
+                mat4.fromScaling([], [scaleX, scaleY, 1]),  // 2. scale 을 먼저 실행한다음 
+                accumulatedMatrixInverse          // 1. 기본 좌표로 돌리고 
+            )
+
+
 
             const newVerties = vertiesMap(it.verties, localView);
 
@@ -278,23 +270,26 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
         const scaleX = newWidth / groupItem.width;
         const scaleY = newHeight / groupItem.height;
+        if (scaleX >= 0 && scaleY >= 0) {
 
-        // 마지막 offset x, y 를 구해보자. 
-        const view = calculateMatrix(
-            groupItem.directionMatrix['to top left'],
-            this.calculateNewOffsetMatrixInverse (
-                [0, 0, 0], 
-                newWidth, newHeight, 
-                groupItem.originalTransformOrigin, 
-                groupItem.itemMatrix
-            )
-        );
+            // 마지막 offset x, y 를 구해보자. 
+            const view = calculateMatrix(
+                groupItem.directionMatrix['to top left'],
+                this.calculateNewOffsetMatrixInverse (
+                    [0, 0, 0], 
+                    newWidth, newHeight, 
+                    groupItem.originalTransformOrigin, 
+                    groupItem.itemMatrix
+                )
+            );
 
-        const lastStartVertext = mat4.getTranslation([], view);
+            const lastStartVertext = mat4.getTranslation([], view);
 
-        this.moveGroupItem (lastStartVertext, newWidth, newHeight);
+            this.moveGroupItem (lastStartVertext, newWidth, newHeight);
 
-        this.recoverItemForGroup(scaleX, scaleY, 0, 0);
+            this.recoverItemForGroup(groupItem,scaleX, scaleY, 0, 0 );
+        }
+
     }
 
 
@@ -314,42 +309,47 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         const scaleX = newWidth / groupItem.width;
         const scaleY = newHeight / groupItem.height;
 
-        // 마지막 offset x, y 를 구해보자. 
-        const view = calculateMatrix(
-            groupItem.directionMatrix['to bottom left'],
-            this.calculateNewOffsetMatrixInverse (
-                [0, newHeight, 0], 
-                newWidth, newHeight, 
-                groupItem.originalTransformOrigin, 
-                groupItem.itemMatrix
-            )
-        );        
+        if (scaleX >= 0 && scaleY >= 0) {
+            // 마지막 offset x, y 를 구해보자. 
+            const view = calculateMatrix(
+                groupItem.directionMatrix['to bottom left'],
+                this.calculateNewOffsetMatrixInverse (
+                    [0, newHeight, 0], 
+                    newWidth, newHeight, 
+                    groupItem.originalTransformOrigin, 
+                    groupItem.itemMatrix
+                )
+            );        
 
 
-        const lastStartVertext = mat4.getTranslation([], view);
+            const lastStartVertext = mat4.getTranslation([], view);
 
-        this.moveGroupItem (lastStartVertext, newWidth, newHeight);
+            this.moveGroupItem (lastStartVertext, newWidth, newHeight);
 
-        this.recoverItemForGroup(scaleX, scaleY, 0, realDy);
+            this.recoverItemForGroup(groupItem, scaleX, scaleY, 0, realDy);
+        }
     }
 
 
     //TODO: 
     moveTopLeftVertext (dx, dy) {
-        const item = this.$selection.cachedItemVerties[0]
-        if (item) {
 
+        const groupItem = this.cachedGroupItem;
 
-            const [realDx, realDy] = this.calculateDistance(
-                item.verties[0],    // top left 
-                dx, dy, 
-                item.accumulatedMatrixInverse
-            );
+        const [realDx, realDy] = this.calculateDistance(
+            groupItem.verties[0],    // top left 
+            dx, dy, 
+            groupItem.accumulatedMatrixInverse
+        );
 
-            // 변형되는 넓이 높이 구하기 
-            const newWidth = item.width - realDx;
-            const newHeight = item.height - realDy;            
+        // 변형되는 넓이 높이 구하기 
+        const newWidth = groupItem.width - realDx;
+        const newHeight = groupItem.height - realDy;
 
+        const scaleX = newWidth / groupItem.width;
+        const scaleY = newHeight / groupItem.height;
+
+        if (scaleX >= 0 && scaleY >= 0) {
             // 마지막 offset x, y 를 구해보자. 
             const view = calculateMatrix(
                 groupItem.directionMatrix['to bottom right'],
@@ -359,44 +359,56 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
                     groupItem.originalTransformOrigin, 
                     groupItem.itemMatrix
                 )
-            );                                  
-                    
+            );        
 
-            const lastStartVertext = mat4.getTranslation([], view);         
 
-            this.moveItem (this.$selection.items[0], lastStartVertext, newWidth, newHeight);
+            const lastStartVertext = mat4.getTranslation([], view);
+
+            this.moveGroupItem (lastStartVertext, newWidth, newHeight);
+
+            this.recoverItemForGroup(groupItem, scaleX, scaleY, realDx, realDy);
         }
     }
 
     //TODO: 
     moveBottomLeftVertext (dx, dy) {
-        const item = this.$selection.cachedItemVerties[0]
-        if (item) {
 
-            const [realDx, realDy] = this.calculateDistance(
-                item.verties[3],    // bottom left
-                dx, dy, 
-                item.accumulatedMatrixInverse
-            );
 
-            // 변형되는 넓이 높이 구하기 
-            const newWidth = item.width - realDx;
-            const newHeight = item.height + realDy;
+        const groupItem = this.cachedGroupItem;
 
+        const [realDx, realDy] = this.calculateDistance(
+            groupItem.verties[3],    // top left 
+            dx, dy, 
+            groupItem.accumulatedMatrixInverse
+        );
+
+        // 변형되는 넓이 높이 구하기 
+        const newWidth = groupItem.width - realDx;
+        const newHeight = groupItem.height + realDy;
+
+        const scaleX = newWidth / groupItem.width;
+        const scaleY = newHeight / groupItem.height;
+
+        if (scaleX >= 0 && scaleY >= 0) {
             // 마지막 offset x, y 를 구해보자. 
-            const view = mat4.create();
-            mat4.multiply(view, view, item.directionMatrix['to top right']);    // 고정점 
-            mat4.multiply(view, view, this.calculateNewOffsetMatrixInverse (
-                [newWidth, 0, 0], 
-                newWidth, newHeight, 
-                item.originalTransformOrigin, 
-                item.itemMatrix
-            ));                    
+            const view = calculateMatrix(
+                groupItem.directionMatrix['to top right'],
+                this.calculateNewOffsetMatrixInverse (
+                    [newWidth, 0, 0], 
+                    newWidth, newHeight, 
+                    groupItem.originalTransformOrigin, 
+                    groupItem.itemMatrix
+                )
+            );        
 
-            const lastStartVertext = mat4.getTranslation([], view);         
 
-            this.moveItem (this.$selection.items[0], lastStartVertext, newWidth, newHeight);            
+            const lastStartVertext = mat4.getTranslation([], view);
+
+            this.moveGroupItem (lastStartVertext, newWidth, newHeight);
+
+            this.recoverItemForGroup(groupItem, scaleX, scaleY, realDx, 0);
         }
+
     }
 
 
@@ -418,57 +430,35 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
     moveEndVertext (dx, dy) {
         this.$selection.reselect();
-    }
-
-    [POINTERSTART('$selectionView .selection-tool-item') + IF('checkEditMode') + MOVE() + END()] (e) {
-        this.$selection.doCache();
-
-        this.initSelectionTool();
-    }
-
-    move (dx, dy) {
-
-        var e = this.$config.get('bodyEvent');
-
-
-        if (e.shiftKey) {
-            dy = dx; 
-        }
-
-        this.refreshSelectionToolView(dx, dy);
-        this.emit('refreshCanvasForPartial', null, true)     
-    }
-
-    end () {
-        this.refs.$selectionTool.attr('data-selected-position', '');
-        this.refs.$selectionTool.attr('data-selected-movetype', '');
-
-        this.emit('refreshAllElementBoundSize');
-        this.emit('removeGuideLine')
-
 
         this.nextTick(() => {
             this.command(
                 'setAttributeForMulti', 
                 'move selection pointer',
-                this.$selection.cloneValue('x', 'y', 'width', 'height')
+                this.$selection.cloneValue('x', 'y', 'width', 'height', 'transform')
             );  
+        })        
+    }
+
+    refreshSelectionToolView (dx, dy) {
+
+        const newDist = vec3.transformMat4([], [dx, dy, 0], this.$editor.matrixInverse);
+
+        this.groupItem.reset({
+            x: Length.px(this.cachedGroupItem.x.value + newDist[0]),
+            y: Length.px(this.cachedGroupItem.y.value + newDist[1])
         })
 
-    }   
+        this.$selection.cachedItemVerties.forEach(it => {
+            const instance = this.$selection.get(it.id)
 
-    refreshSelectionToolView (dx, dy, type) {
-        if (dx === 0 && dy === 0) {
-            // console.log(' not moved', dx, dy)
-        } else {
-            this.guideView.move(type || this.pointerType, dx / this.$editor.scale,  dy / this.$editor.scale )
-
-            var drawList = this.guideView.calculate();
-            this.emit('refreshGuideLine', this.calculateWorldPositionForGuideLine(drawList));            
-        }
-
-        this.makeSelectionTool();        
-
+            if (instance) {
+                instance.reset({
+                    x: Length.px(it.x + newDist[0]), 
+                    y: Length.px(it.y + newDist[1]),
+                })
+            }                        
+        })        
     }
 
     getSelectedElements() {
@@ -477,10 +467,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         return elements;
     }
 
-    initSelectionTool() {
-        this.$selection.reselect();
-
-        this.guideView.makeGuideCache();        
+    initSelectionTool(isInitializeMatrix = false) {
 
         if (this.$editor.isSelectionMode() && this.$el.isHide() && this.$selection.isMany) {
             this.$el.show();
@@ -488,8 +475,10 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
             if (this.$el.isShow() && this.$selection.isOne) this.$el.hide();
         }
 
+        if (isInitializeMatrix) this.initMatrix();
+
         this.makeSelectionTool();
-        this.initMatrix();
+
 
     }      
 
@@ -516,39 +505,8 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
     makeSelectionTool() {
 
-        // selection 객체는 하나만 만든다. 
-        this.guideView.recoverAll();
-
         this.renderPointers();
 
-    }
-
-    
-
-    calculateWorldPositionForGuideLine (list = []) {
-        return list.map(it => {
-
-            var A = this.calculateWorldPosition(it.A)
-            var B = this.calculateWorldPosition(it.B)
-
-            var ax, bx, ay, by; 
-
-            if (isNotUndefined(it.ax)) { ax = it.ax * this.$editor.scale }
-            if (isNotUndefined(it.bx)) { bx = it.bx * this.$editor.scale }
-            if (isNotUndefined(it.ay)) { ay = it.ay * this.$editor.scale }
-            if (isNotUndefined(it.by)) { by = it.by * this.$editor.scale }
-
-            return { A,  B, ax,  bx, ay, by}
-        })
-    }
-
-    calculateWorldPosition (item) {
-        return {
-            x: item.x * this.$editor.scale,
-            y: item.y * this.$editor.scale,
-            width: item.width  *  this.$editor.scale,
-            height: item.height  * this.$editor.scale,
-        }
     }
 
     /**
@@ -561,7 +519,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         if (!verties) return; 
         if (!this.groupItem) return;
 
-        const {line, point} = this.createRenderPointers(this.groupItem.verties());
+        const {line, point} = this.createRenderPointers(vertiesMap(this.groupItem.verties(), this.$editor.matrix));
         this.refs.$pointerRect.updateDiff(line + point)
     }
 

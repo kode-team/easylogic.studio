@@ -5,11 +5,10 @@ import { isString, isFunction } from "@core/functions/func";
 const TRANSFORM_REG = /((matrix|translate(X|Y|Z|3d)?|scale(X|Y|Z|3d)?|rotate(X|Y|Z|3d)?|skew(X|Y)|matrix(3d)?|perspective)\(([^\)]*)\))/gi;
 
 export class Transform extends Property {
-  getDefaultObject(obj = {}) {
+  getDefaultObject() {
     return { 
       itemType: "transform", 
       value: [],
-      ...obj 
     };
   }
 
@@ -22,21 +21,6 @@ export class Transform extends Property {
 
   toString() {
     return `${this.json.type}(${this.json.value.join(', ') || ""})`;
-  }
-
-
-
-  convert(json) {
-
-    json = super.convert(json);
-
-    if (json.type.includes('matrix') || json.type.includes('scale')) {
-      json.value = json.value.map(it => Length.number(it))
-    } else {
-      json.value = json.value.map(it => Length.parse(it))
-    }
-
-    return json 
   }
 
 

@@ -1,12 +1,11 @@
 import UIElement, { EVENT } from "@core/UIElement";
 import { POINTERSTART, MOVE, END, IF } from "@core/Event";
 import { Length } from "@unit/Length";
-import { clone, isNotUndefined } from "@core/functions/func";
-import GuideView from "../view/GuideView";
+import { clone} from "@core/functions/func";
 import { mat4, vec3 } from "gl-matrix";
 import { Transform } from "@property-parser/Transform";
 import { TransformOrigin } from "@property-parser/TransformOrigin";
-import { calculateAngle, calculateAngleForVec3, calculateAnglePointDistance, calculateMatrix, calculateMatrixInverse, degreeToRadian, radianToDegree } from "@core/functions/math";
+import { calculateAngleForVec3, calculateMatrix, calculateMatrixInverse, vertiesMap } from "@core/functions/math";
 
 
 var directionType = {
@@ -17,10 +16,6 @@ var directionType = {
 }
 
 const SelectionToolEvent = class  extends UIElement {
-
-    [EVENT('hideSelectionToolView')] () {
-        
-    }
 
     [EVENT('hideSubEditor')] (e) {
         this.toggleEditingPath(false);
@@ -55,12 +50,6 @@ const SelectionToolEvent = class  extends UIElement {
  */
 export default class SelectionToolView extends SelectionToolEvent {
 
-    initialize() {
-        super.initialize();
-
-        this.guideView = new GuideView(this.$editor, this);
-    }
-
     template() {
         return /*html*/`
     <div class='selection-view one-selection-view' ref='$selectionView' style='display:none' >
@@ -69,7 +58,7 @@ export default class SelectionToolView extends SelectionToolEvent {
     }
 
     toggleEditingPath (isEditingPath) {
-        this.refs.$selectionTool.toggleClass('editing-path', isEditingPath);
+        this.$el.toggleClass('editing-path', isEditingPath);
     }
     
     checkEditMode () {
@@ -113,6 +102,14 @@ export default class SelectionToolView extends SelectionToolEvent {
 
         // 마지막 변경 시점 업데이트 
         this.verties = null;
+
+        this.nextTick(() => {
+            this.command(
+                'setAttributeForMulti', 
+                'move selection pointer',
+                this.$selection.cloneValue('x', 'y', 'width', 'height')
+            );  
+        })        
     }
 
 
@@ -330,37 +327,6 @@ export default class SelectionToolView extends SelectionToolEvent {
 
     moveEndVertext (dx, dy) {
         this.$selection.reselect();
-    }
-
-    [POINTERSTART('$selectionView .selection-tool-item') + IF('checkEditMode') + MOVE() + END()] (e) {
-        // this.parent.selectCurrent(...this.$selection.items)
-
-        this.$selection.doCache();
-
-        this.initSelectionTool();
-    }
-
-    move (dx, dy) {
-
-        var e = this.$config.get('bodyEvent');
-
-
-        if (e.shiftKey) {
-            dy = dx; 
-        }
-
-        this.refreshSelectionToolView(dx, dy);
-        // this.parent.updateRealPosition();    
-        this.emit('refreshCanvasForPartial', null, true)     
-    }
-
-    end () {
-        this.refs.$selectionTool.attr('data-selected-position', '');
-        this.refs.$selectionTool.attr('data-selected-movetype', '');
-
-        this.emit('refreshAllElementBoundSize');
-        this.emit('removeGuideLine')
-
 
         this.nextTick(() => {
             this.command(
@@ -368,21 +334,23 @@ export default class SelectionToolView extends SelectionToolEvent {
                 'move selection pointer',
                 this.$selection.cloneValue('x', 'y', 'width', 'height')
             );  
-        })
+        })        
+    }
 
-    }   
+    refreshSelectionToolView (dx, dy) {
 
-    refreshSelectionToolView (dx, dy, type) {
-        if (dx === 0 && dy === 0) {
-            // console.log(' not moved', dx, dy)
-        } else {
-            this.guideView.move(type || this.pointerType, dx / this.$editor.scale,  dy / this.$editor.scale )
-
-            var drawList = this.guideView.calculate();
-            this.emit('refreshGuideLine', this.calculateWorldPositionForGuideLine(drawList));            
-        }
+        const newDist = vec3.transformMat4([], [dx, dy, 0], this.$editor.matrixInverse);
  
-        this.makeSelectionTool();        
+        this.$selection.cachedItemVerties.forEach(it => {
+            const instance = this.$selection.get(it.id)
+
+            if (instance) {
+                instance.reset({
+                    x: Length.px(it.x + newDist[0]), 
+                    y: Length.px(it.y + newDist[1]),
+                })
+            }                        
+        }) 
 
     }
 
@@ -393,10 +361,6 @@ export default class SelectionToolView extends SelectionToolEvent {
     }
 
     initSelectionTool() {
-        this.$selection.reselect();
-
-
-        this.guideView.makeGuideCache();        
 
         if (this.$editor.isSelectionMode() && this.$el.isHide() && this.$selection.isOne) {
             this.$el.show();
@@ -409,38 +373,7 @@ export default class SelectionToolView extends SelectionToolEvent {
     }      
 
     makeSelectionTool() {
-
-        // selection 객체는 하나만 만든다. 
-        this.guideView.recoverAll();
-
         this.renderPointers();
-
-    }
-    
-    calculateWorldPositionForGuideLine (list = []) {
-        return list.map(it => {
-
-            var A = this.calculateWorldPosition(it.A)
-            var B = this.calculateWorldPosition(it.B)
-
-            var ax, bx, ay, by; 
-
-            if (isNotUndefined(it.ax)) { ax = it.ax * this.$editor.scale }
-            if (isNotUndefined(it.bx)) { bx = it.bx * this.$editor.scale }
-            if (isNotUndefined(it.ay)) { ay = it.ay * this.$editor.scale }
-            if (isNotUndefined(it.by)) { by = it.by * this.$editor.scale }
-
-            return { A,  B, ax,  bx, ay, by}
-        })
-    }
-
-    calculateWorldPosition (item) {
-        return {
-            x: item.x * this.$editor.scale,
-            y: item.y * this.$editor.scale,
-            width: item.width  *  this.$editor.scale,
-            height: item.height  * this.$editor.scale,
-        }
     }
 
     /**
@@ -450,7 +383,7 @@ export default class SelectionToolView extends SelectionToolEvent {
 
         const verties = this.$selection.verties;
     
-        const {line, point} = this.createRenderPointers(verties);
+        const {line, point} = this.createRenderPointers(vertiesMap(verties, this.$editor.matrix));
         this.refs.$pointerRect.updateDiff(line + point)
     }
 
@@ -479,6 +412,10 @@ export default class SelectionToolView extends SelectionToolEvent {
     }    
 
     createRenderPointers(pointers) {
+
+        const current = this.$selection.current; 
+        const isArtBoard = current && current.is('artboard');
+
         return {
             line: this.createPointerRect(pointers), 
             point: [
@@ -486,7 +423,7 @@ export default class SelectionToolView extends SelectionToolEvent {
                 this.createPointer (pointers[1], 2),
                 this.createPointer (pointers[2], 3),
                 this.createPointer (pointers[3], 4),
-                this.createRotatePointer (pointers[4], 5),                
+                isArtBoard ? undefined : this.createRotatePointer (pointers[4], 5),                
             ].join('')
         }
     }

@@ -8,6 +8,13 @@
     bottom:0px;
     // background-color: yellow;
 
+
+    
+    &.editing-path,
+    &.editing-polygon {
+      display: none !important;
+    }        
+
     &.empty {
       > * {
         display: none;
@@ -69,11 +76,6 @@
     border: var(--selection-tool-border-color) 0.5px solid;
     position:absolute;
 
-    
-    &.editing-path,
-    &.editing-polygon {
-      display: none !important;
-    }    
 
     &.path,
     &.textpath,

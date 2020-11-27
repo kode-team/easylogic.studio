@@ -1,17 +1,9 @@
 import { rectToVerties } from "@core/functions/collision";
 import { isFunction, isUndefined, isArray, isObject, isString, clone } from "@core/functions/func";
-import { degreeToRadian } from "@core/functions/math";
 import { ArtBoard } from "@items/ArtBoard";
 import { Item } from "@items/Item";
 import { MovableItem } from "@items/MovableItem";
-import { TransformOrigin } from "@property-parser/TransformOrigin";
 import { Length } from "@unit/Length";
-import { mat4, vec3 } from "gl-matrix";
-
-
-const roundedLength = (px, fixedRound = 1) => {
-  return Length.px(px).round(fixedRound);
-}
 
 function _traverse(obj, id) {
   var results = [] 
@@ -293,12 +285,6 @@ export class SelectionManager {
     })
 
     this.setAllRectCache();
-  }
-
-  resetMatrix () {
-
-    this.cachedMatrixVerties = this.verties;  
-    this.reselect();
   }
 
   get verties () {

@@ -530,10 +530,7 @@ export default class PathParser {
     }
 
     invert (transformMatrix) {
-        const view = mat4.create();
-        mat4.invert(view, transformMatrix)
-
-        this.transformMat4(view);
+        this.transformMat4(mat4.invert([], transformMatrix));
     }
 
     get verties () {

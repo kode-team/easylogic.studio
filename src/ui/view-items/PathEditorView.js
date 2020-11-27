@@ -377,7 +377,7 @@ export default class PathEditorView extends PathTransformEditor {
         var parser = new PathParser(d);
 
         this.emit(this.state.changeEvent, {
-            d: parser.toString(), 
+            d: parser.d, 
             totalLength: this.totalPathLength,
             rect: {
                 x: rect.x / this.scale,             // 실제 스크린의 크기를  scale 에 맞게 다시 맞춘다. 
@@ -399,10 +399,7 @@ export default class PathEditorView extends PathTransformEditor {
 
             var layer = this.makePathLayer(pathRect)
             if (layer) {
-                // this.$selection.empty(layer);
-    
                 this.emit('refreshAll')
-                // this.emit('refreshSelection');
             }
         }
         
@@ -440,7 +437,12 @@ export default class PathEditorView extends PathTransformEditor {
             this.pathParser.reset(obj.d)
             this.pathParser.scale(this.scale, this.scale);
 
-            this.state.points = this.pathParser.convertGenerator();      
+            this.state.points = this.pathParser.convertGenerator();   
+            
+            if (obj.current) {
+                this.state.currentMatrix = obj.current.matrix; 
+            }
+
         }
 
         this.pathGenerator.initializeSelect();

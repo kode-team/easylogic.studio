@@ -16,6 +16,7 @@ import LayerAppendView from "@ui/view-items/LayerAppendView";
 import GridLayoutLineView from "@ui/view-items/GridLayoutLineView";
 import { isFunction } from "@core/functions/func";
 import { rectToVerties } from "@core/functions/collision";
+import { vertiesMap } from "@core/functions/math";
 
 
 export default class HTMLRenderView extends UIElement {
@@ -99,7 +100,7 @@ export default class HTMLRenderView extends UIElement {
             return false; 
         }
 
-        return ($el.hasClass('element-item') === false || $el.hasClass('artboard'))
+        return ($el.hasClass('element-item') === false)
             && $el.hasClass('selection-tool-item') === false 
             && $el.hasClass('pointer') === false
             && $el.hasClass('handle') === false            
@@ -166,13 +167,13 @@ export default class HTMLRenderView extends UIElement {
 
             var {left: x, top: y, width, height } = obj
             var rect = {
-                x: (x.value -  this.canvasPosition.x) * this.$editor.scale, 
-                y: (y.value - this.canvasPosition.y) * this.$editor.scale, 
-                width: (width.value) * this.$editor.scale, 
-                height: (height.value) * this.$editor.scale
+                x: x.value -  this.canvasPosition.x, 
+                y: y.value - this.canvasPosition.y, 
+                width: width.value,
+                height: height.value
             }
     
-            var areaVerties = rectToVerties(rect.x, rect.y, rect.width, rect.height)        
+            var areaVerties = vertiesMap(rectToVerties(rect.x, rect.y, rect.width, rect.height), this.$editor.matrixInverse);
 
             var artboard = this.$selection.currentArtboard;
             if (artboard) {    
@@ -186,25 +187,29 @@ export default class HTMLRenderView extends UIElement {
                     this.selectCurrent(...items)
                 }
 
-                this.emit('refreshSelectionTool');
+                this.emit('refreshSelectionTool', true);
 
             }
         }
     }
 
     moveEndPointer (dx, dy) {
+
+
+        console.log(dx, dy);
+
         var [x, y, width, height ] = this.refs.$dragAreaRect
                 .styles('left', 'top', 'width', 'height')
                 .map(it => Length.parse(it))
 
         var rect = {
-            x: (x.value -  this.canvasPosition.x) * this.$editor.scale, 
-            y: (y.value - this.canvasPosition.y) * this.$editor.scale, 
-            width: (width.value) * this.$editor.scale, 
-            height: (height.value) * this.$editor.scale
+            x: (x.value -  this.canvasPosition.x), 
+            y: (y.value - this.canvasPosition.y), 
+            width: width.value, 
+            height: height.value
         }
 
-        var areaVerties = rectToVerties(rect.x, rect.y, rect.width, rect.height)
+        var areaVerties = vertiesMap(rectToVerties(rect.x, rect.y, rect.width, rect.height), this.$editor.matrixInverse);
 
         this.refs.$dragAreaRect.css({
             left: Length.px(-10000),
@@ -214,30 +219,26 @@ export default class HTMLRenderView extends UIElement {
         })
 
 
-        if (this.$editor.isSelectionMode()) {
+        var artboard = this.$selection.currentArtboard;
+        var items = [] 
+        if (artboard) {
 
-            var artboard = this.$selection.currentArtboard;
-            var items = [] 
-            if (artboard) {
+            items = artboard.checkInAreaForLayers(areaVerties);
 
-                items = artboard.checkInAreaForLayers(areaVerties);
+            if (rect.width === 0 && rect.height === 0) {
+                items = [] 
+            }                 
 
-                if (rect.width === 0 && rect.height === 0) {
-                    items = [] 
-                }                 
-
-                if (this.$selection.select(...items)) {
-                    this.selectCurrent(...items)
-                }
-
-            } else {
-                this.$selection.select();
+            if (this.$selection.select(...items)) {
+                this.selectCurrent(...items)
             }
-            this.$selection.resetMatrix();            
-            this.emit('history.refreshSelection')
-            this.emit('refreshSelectionTool');            
 
+        } else {
+            this.$selection.select();
         }
+        this.emit('history.refreshSelection')
+        this.emit('refreshSelectionTool', true);            
+
 
         this.sendHelpMessage();
         this.emit('removeGuideLine')
@@ -296,11 +297,11 @@ export default class HTMLRenderView extends UIElement {
         this.$element = e.$dt;
 
         // text, artboard 는 선택하지 않음. 
-        if (this.$element.hasClass('text')  || this.$element.hasClass('artboard')) {
+        if (this.$element.hasClass('text')) {
             return false; 
         }
 
-        var id = this.$element.attr('data-id')        
+        var id = this.$element.attr('data-id')    
 
         if (e.shiftKey) {
             this.$selection.toggleById(id);
@@ -313,16 +314,16 @@ export default class HTMLRenderView extends UIElement {
         }
 
         this.selectCurrent(...this.$selection.items)
-
+        this.$selection.reselect();
         this.emit('history.refreshSelection');        
-        this.emit('refreshSelectionTool');
+        this.emit('refreshSelectionTool', true);
     }
 
 
     calculateMovedElement (dx, dy) {
-        this.$selection.reselect();
-        this.selectionToolView.refreshSelectionToolView(dx, dy, 'move');
+        this.selectionToolView.refreshSelectionToolView(dx, dy, 'move');        
         this.updateRealPosition();   
+        this.emit('refreshSelectionTool');        
     }
 
     /**
@@ -363,13 +364,7 @@ export default class HTMLRenderView extends UIElement {
                 this.emit('openPathEditor');
                 return; 
             }
-
-        } else {           
-
-            this.$selection.setRectCache();
-
-            this.emit('removeGuideLine')      
-    
+        } else {               
             this.nextTick(() => {
                 this.command(
                     'setAttributeForMulti',
@@ -409,13 +404,7 @@ export default class HTMLRenderView extends UIElement {
                 this.state.cachedCurrentElement[it.attr('data-id')] = it; 
                 it.addClass('selected')
             })
-            
-        } else {
-            this.$selection.select(this.$selection.currentArtboard)
         }    
-
-        this.emit('refreshSelectionTool')
-
     }
 
     modifyScale () {
