@@ -1,4 +1,5 @@
 
+import { getBezierPointOneQuard, getCurveBBox } from "@core/functions/bezier";
 import { isNotUndefined, clone } from "@core/functions/func";
 import { degreeToRadian } from "@core/functions/math";
 import { mat4, vec3 } from "gl-matrix";
@@ -299,8 +300,8 @@ export default class PathParser {
 
     each (callback, isReturn = false) {
 
-        var newSegments = this.segments.map(segment => {
-            return callback.call(this, segment);
+        var newSegments = this.segments.map((segment, index) => {
+            return callback.call(this, segment, index);
         })
 
         if (isReturn) {
@@ -480,7 +481,91 @@ export default class PathParser {
                 true
             )
         )
-    }     
+    }    
+    
+    normalize () {
+
+    }
+
+    getBBox () {
+
+        let minX = Number.MAX_SAFE_INTEGER, minY = Number.MAX_SAFE_INTEGER;
+        let maxX = Number.MIN_SAFE_INTEGER, maxY = Number.MIN_SAFE_INTEGER;
+
+        this.each(function(segment, index) {
+            var v = segment.values;
+            var c = segment.command;
+            const prevSegment = this.segments[index-1];
+            const accurancy = 1/10000;
+
+            switch(c) {
+            case 'M': 
+            case 'L':
+
+                minX = Math.min(minX, v[0])
+                maxX = Math.max(maxX, v[0])
+
+                minY = Math.min(minY, v[1])
+                maxY = Math.max(maxY, v[1])
+                break; 
+            case 'V':
+                minX = Math.min(minX, v[0])
+                maxX = Math.max(maxX, v[0])
+                break;
+            case 'H':
+                minY = Math.min(minY, v[1])
+                maxY = Math.max(maxY, v[1])                
+                break; 
+            case 'C':
+
+                getCurveBBox([
+                    [prevSegment.values[prevSegment.values.length-2], prevSegment.values[prevSegment.values.length-1], 0],
+                    [v[0], v[1], 0],
+                    [v[2], v[3], 0],
+                    [v[4], v[5], 0],
+                ]).forEach(p => {
+                    minX = Math.min(minX, p[0])
+                    maxX = Math.max(maxX, p[0])
+    
+                    minY = Math.min(minY, p[1])
+                    maxY = Math.max(maxY, p[1])
+                })
+                break;
+            case 'Q':
+
+                const newPoints = [
+                    [prevSegment.values[prevSegment.values.length-2], prevSegment.values[prevSegment.values.length-1], 0],
+                    [v[0], v[1], 0],
+                    [v[2], v[3], 0],
+                ].map(p => {
+                    return {x: p[0], y: p[1]}
+                })
+                for(var i = 0; i <= 1; i += accurancy) {
+                    const {x, y} = getBezierPointOneQuard(newPoints, i);
+
+                    minX = Math.min(minX, x)
+                    maxX = Math.max(maxX, x)
+    
+                    minY = Math.min(minY, y)
+                    maxY = Math.max(maxY, y)
+                }
+                break;                
+            case 'A':
+
+                break; 
+            }
+
+            return segment;
+        });
+
+
+        return [
+            [minX, minY, 0],
+            [maxX, minY, 0],
+            [maxX, maxY, 0],
+            [minX, maxY, 0],
+        ]
+    }
     
     get d () {
         return this.toString()

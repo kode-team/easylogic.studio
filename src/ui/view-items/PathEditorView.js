@@ -384,7 +384,8 @@ export default class PathEditorView extends PathTransformEditor {
                 y: rect.y / this.scale,
                 width: rect.width / this.scale,
                 height: rect.height / this.scale,
-            }
+            },
+            bbox: rect.bbox
         })
 
         // console.log(this.state.rect);

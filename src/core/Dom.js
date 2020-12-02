@@ -426,6 +426,10 @@ export default class Dom {
     return this.el.getBoundingClientRect();
   }
 
+  bbox () {
+    return this.el.getBBox();
+  }
+
   isSVG () {
     return this.el.tagName.toUpperCase() === 'SVG';
   }
