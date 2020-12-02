@@ -391,8 +391,6 @@ export function polyPoly (verties = [], targetVerties = []) {
 
         return false; 
     })
-
-    return false; 
 }
 
 export function rectToVerties (x, y, width, height, origin = '50% 50% 0px') {

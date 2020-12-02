@@ -38,12 +38,12 @@
       position: absolute;
       left: 0px;
       top: 0px;
-      width: 10px;
-      height: 10px;
+      width: 12px;
+      height: 12px;
       box-sizing: border-box;
       background-color: white; 
       box-sizing: border-box;
-      border: 1px solid gray;
+      border: 1px solid var(--selection-tool-border-color);
       border-radius: 100%;
       cursor: pointer;
       pointer-events: all;
@@ -66,7 +66,7 @@
       left: 0px;
       top: 0px;
 
-      stroke: gray;
+      stroke: var(--selection-tool-border-color);
       fill: transparent;
       stroke-width: 1;
     }

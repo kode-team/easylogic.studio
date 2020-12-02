@@ -27,20 +27,6 @@ const SelectionToolEvent = class  extends UIElement {
         this.toggleEditingPath(false);
     }
 
-    // [EVENT('openPathEditor')] () {
-    //     var current = this.$selection.current;
-    //     if (current && current.isSVG() && current.d) {
-    //         this.toggleEditingPath(true);
-
-    //         // box 모드 
-    //         // box - x, y, width, height 고정된 상태로  path 정보만 변경 
-    //         this.emit('showPathEditor', 'modify', {
-    //             current,
-    //             d: current.accumulatedPath().d,
-    //         }) 
-    //     }
-    // }
-
     [EVENT('finishPathEdit')] () {
         this.toggleEditingPath(false);
     }
@@ -65,7 +51,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     }
 
     toggleEditingPath (isEditingPath) {
-        this.refs.$selectionTool.toggleClass('editing-path', isEditingPath);
+        this.refs.$selectionView.toggleClass('editing-path', isEditingPath);
     }
     
     checkEditMode () {

@@ -101,6 +101,7 @@ export default class HTMLRenderView extends UIElement {
         }
 
         return ($el.hasClass('element-item') === false)
+            && $el.hasClass('artboard-title') === false 
             && $el.hasClass('selection-tool-item') === false 
             && $el.hasClass('pointer') === false
             && $el.hasClass('handle') === false            
@@ -177,7 +178,15 @@ export default class HTMLRenderView extends UIElement {
 
             var artboard = this.$selection.currentArtboard;
             if (artboard) {    
-                var items = artboard.checkInAreaForLayers(areaVerties);
+
+                let items = []
+                // 드래그 영역이 artboard 를 완전히 감싸면 artboard 만 선택된다. 
+                if (artboard.isIncludeByArea(areaVerties)) {        
+                    items = [artboard]
+                } else {
+                    // 포함관계가 아닐 때는 충돌검사를 한다. 
+                    items = artboard.checkInAreaForLayers(areaVerties);
+                }
 
                 if (rect.width === 0 && rect.height === 0) {
                     items = [] 
@@ -194,9 +203,6 @@ export default class HTMLRenderView extends UIElement {
     }
 
     moveEndPointer (dx, dy) {
-
-
-        console.log(dx, dy);
 
         var [x, y, width, height ] = this.refs.$dragAreaRect
                 .styles('left', 'top', 'width', 'height')
@@ -223,7 +229,13 @@ export default class HTMLRenderView extends UIElement {
         var items = [] 
         if (artboard) {
 
-            items = artboard.checkInAreaForLayers(areaVerties);
+            // 드래그 영역이 artboard 를 완전히 감싸면 artboard 만 선택된다. 
+            if (artboard.isIncludeByArea(areaVerties)) {        
+                items = [artboard]
+            } else {
+                // 포함관계가 아닐 때는 충돌검사를 한다. 
+                items = artboard.checkInAreaForLayers(areaVerties);
+            }
 
             if (rect.width === 0 && rect.height === 0) {
                 items = [] 
@@ -303,13 +315,19 @@ export default class HTMLRenderView extends UIElement {
 
         var id = this.$element.attr('data-id')    
 
-        if (e.shiftKey) {
-            this.$selection.toggleById(id);
+        // artboard title 인 경우는 artboard 를 선택한다.         
+        if (Dom.create(e.target).hasClass('artboard-title')) {      
+            this.$selection.selectById(id);
         } else {
-            if (this.$selection.check({ id })) {    // 이미 선택되어 있으면 선택하지 않음. 
-                // NOOP
+            // shift key 는 selection 을 토글한다. 
+            if (e.shiftKey) {
+                this.$selection.toggleById(id);
             } else {
-                this.$selection.selectById(id);
+                if (this.$selection.check({ id })) {    // 이미 선택되어 있으면 선택하지 않음. 
+                    // NOOP
+                } else {
+                    this.$selection.selectById(id);
+                }
             }
         }
 
@@ -353,8 +371,14 @@ export default class HTMLRenderView extends UIElement {
 
         this.emit('refreshRect');        
     }
+
+    /**
+     * ArtBoard title 변경하기 
+     * @param {string} id 
+     * @param {string} title 
+     */
     [EVENT('refreshArtBoardName')] (id, title) {
-        this.$el.$(`[data-id='${id}']`).attr('data-title', title);
+        this.$el.$(`[data-id='${id}'] > .artboard-title`).html(title);
     }
 
     calculateEndedElement (dx, dy) {
@@ -486,8 +510,6 @@ export default class HTMLRenderView extends UIElement {
 
                     if ($el) {
                         const {x, y, width, height} = $el.offsetRect();
-
-                        // console.log(x, y, width, height, $el, it);
 
                         it.reset({
                             x: Length.px(x),

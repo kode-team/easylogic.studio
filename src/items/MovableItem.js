@@ -6,7 +6,7 @@ import { mat4, vec3 } from "gl-matrix";
 import { degreeToRadian, vertiesMap } from "@core/functions/math";
 import { isFunction } from "@core/functions/func";
 import PathParser from "@parser/PathParser";
-import { polyPoly, rectToVerties } from "@core/functions/collision";
+import { polyPoint, polyPoly, rectToVerties } from "@core/functions/collision";
 
 export class MovableItem extends Item {
 
@@ -211,6 +211,19 @@ export class MovableItem extends Item {
      */
     checkInArea (areaVerties) {
         return polyPoly(areaVerties, this.verties())        
+    }
+
+
+    /**
+     * areaVerties 안에 Layer 가 포함된 경우 
+     * 
+     * @param {vec3[]} areaVerties 
+     */
+    isIncludeByArea (areaVerties) {
+
+        return this.rectVerties().map(vector => {
+            return polyPoint(areaVerties, ...vector);
+        }).filter(Boolean).length === 4;
     }
 
     getPerspectiveMatrix () {
@@ -460,6 +473,13 @@ export class MovableItem extends Item {
         return vertiesMap(model, this.getAccumulatedMatrix())
     }
 
+    rectVerties () {
+
+        let model = rectToVerties(0, 0, this.screenWidth.value, this.screenHeight.value, this.json['transform-origin']);
+
+        return vertiesMap(model, this.getAccumulatedMatrix()).filter((_, index) => index < 4)
+    }    
+
 
     get matrix () {
         const id = this.id; 
@@ -552,6 +572,12 @@ export class MovableItem extends Item {
         return this.invertPath(pathString).d;
     }
 
+    /**
+     * area 에 속하는지 충돌 체크, 
+     * 
+     * @param {vec3[]} areaVerties 
+     * @returns {Item[]}  충돌 체크된 선택된 객체 리스트 
+     */
     checkInAreaForLayers(areaVerties) {
         var items = [] 
         this.layers.forEach(layer => {
