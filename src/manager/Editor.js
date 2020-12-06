@@ -17,6 +17,7 @@ import { uuid } from "@core/functions/math";
 import { Item } from "@items/Item";
 import BaseStore from "@core/BaseStore";
 import { mat4 } from "gl-matrix";
+import { SnapManager } from "./SnapManager";
 
 export const EDITOR_ID = "";
 
@@ -63,6 +64,7 @@ export class Editor {
 
     this.store = new BaseStore(this);
     this.config = new ConfigManager(this);
+    this.snapManager = new SnapManager(this);
     this.commands = new CommandManager(this);
     this.shortcuts = new ShortCutManager(this);
     this.selection = new SelectionManager(this);

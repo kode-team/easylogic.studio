@@ -2,6 +2,7 @@ import { rectToVerties } from "@core/functions/collision";
 import { isFunction, isUndefined, isArray, isObject, isString, clone } from "@core/functions/func";
 import { ArtBoard } from "@items/ArtBoard";
 import { Item } from "@items/Item";
+import { Project } from "@items/Project";
 import { MovableItem } from "@items/MovableItem";
 import { Length } from "@unit/Length";
 
@@ -28,6 +29,10 @@ export class SelectionManager {
      * @property {Editor} $editor Editor
      */    
     this.$editor = editor; 
+
+    /**
+     * @property {Project} project Project Item 
+     */
     this.project = null;
     this.artboard = null;
     /**
@@ -49,7 +54,7 @@ export class SelectionManager {
   }
 
   initialize() {
-    this.colorsteps = []    
+    // this.colorsteps = []    
     this.items = [];
     this.itemKeys = {} 
     this.ids = []; 
@@ -57,12 +62,12 @@ export class SelectionManager {
     this.cachedItemVerties = {}    
   }
 
-  snapshot() {
-    const selection = new SelectionManager(this.$editor);
-    selection.select(this.cachedItems);
+  // snapshot() {
+  //   const selection = new SelectionManager(this.$editor);
+  //   selection.select(this.cachedItems);
 
-    this.$editor.history.add('selection', 'selection', { selection })
-  }
+  //   this.$editor.history.add('selection', 'selection', { selection })
+  // }
 
 
   /**
@@ -100,6 +105,22 @@ export class SelectionManager {
     return this.items.length;
   }
 
+  /**
+   * snap to object 에 사용될 target item 리스트 
+   * 
+   * @returns {Item[]}
+   */
+  get snapTargetLayers () {
+
+    if (!this.currentProject) return [];
+
+    return this.currentProject.allLayers.filter((item) => {
+      // project item 은 제외 
+      if (item.is('project')) return false; 
+
+      return !this.check(item); 
+    });
+  }
 
   getRootItem (current) {
     var rootItem = current || this.currentArtboard;
@@ -146,31 +167,15 @@ export class SelectionManager {
     return item.position === 'relative'
   }
 
-  hasDifference (list) {
-
-    if (list.length != this.items.length) {
-      return true; 
-    }
-
-    const listA = list.map(it => it.id);
-    listA.sort();
-
-    const isDifferent = listA.join(',') != this.idsString;
-
-    return isDifferent;
-  }
-
   select(...args) {
 
     var list = (args || []).filter(it => !it.lock && it.isAbsolute)
 
-
-    // 차이가 없다면 selection 을 다시 하지 않는다. 
-    if (this.hasDifference(list) === false) {
-      return false; 
-    }
-
-    this.items = list; 
+    // 부모, 자식간에 동시에 selection 이 되어 있으면 
+    // 자식은 제외한다. 
+    this.items = list.filter(it => {
+      return it.path.filter(element => list.includes(element)).length < 2;
+    }); 
 
     this.itemKeys = {}
     this.items.forEach(it => {
@@ -276,15 +281,15 @@ export class SelectionManager {
 
   setRectCache () {
     
-    this.cachedItems = this.items.map(it => {
-      return it.toCloneObject()
-    })
+    // this.cachedItems = this.items.map(it => {
+    //   return it.toCloneObject()
+    // })
 
     this.cachedItemVerties = this.items.map(it => {
       return it.matrix;
     })
 
-    this.setAllRectCache();
+    // this.setAllRectCache();
   }
 
   get verties () {
@@ -339,40 +344,40 @@ export class SelectionManager {
     return data; 
   }
 
-  setAllRectCache () {
-    var minX = Number.MAX_SAFE_INTEGER;
-    var minY = Number.MAX_SAFE_INTEGER;
+  // setAllRectCache () {
+  //   var minX = Number.MAX_SAFE_INTEGER;
+  //   var minY = Number.MAX_SAFE_INTEGER;
 
-    var maxX = Number.MIN_SAFE_INTEGER;    
-    var maxY = Number.MIN_SAFE_INTEGER;
+  //   var maxX = Number.MIN_SAFE_INTEGER;    
+  //   var maxY = Number.MIN_SAFE_INTEGER;
 
-    this.cachedItems.forEach(it => {
-      minX = Math.min(it.screenX.value, minX);
-      minY = Math.min(it.screenY.value, minY);
+  //   this.cachedItems.forEach(it => {
+  //     minX = Math.min(it.screenX.value, minX);
+  //     minY = Math.min(it.screenY.value, minY);
 
-      maxX = Math.max(it.screenX.value + it.screenWidth.value, maxX);
-      maxY = Math.max(it.screenY.value + it.screenHeight.value, maxY);      
-    })
+  //     maxX = Math.max(it.screenX.value + it.screenWidth.value, maxX);
+  //     maxY = Math.max(it.screenY.value + it.screenHeight.value, maxY);      
+  //   })
 
-    if (minX === Number.MAX_SAFE_INTEGER) minX = 0;
-    if (minY === Number.MAX_SAFE_INTEGER) minY = 0;
-    if (maxX === Number.MIN_SAFE_INTEGER) maxX = 0;
-    if (maxY === Number.MIN_SAFE_INTEGER) maxY = 0;
+  //   if (minX === Number.MAX_SAFE_INTEGER) minX = 0;
+  //   if (minY === Number.MAX_SAFE_INTEGER) minY = 0;
+  //   if (maxX === Number.MIN_SAFE_INTEGER) maxX = 0;
+  //   if (maxY === Number.MIN_SAFE_INTEGER) maxY = 0;
 
-    this.allRect = {
-      x: minX,
-      y: minY,
-      width: maxX - minX,
-      height: maxY - minY
-    }
+  //   this.allRect = {
+  //     x: minX,
+  //     y: minY,
+  //     width: maxX - minX,
+  //     height: maxY - minY
+  //   }
 
-  }
+  // }
 
   each (callback) {
 
     if ( isFunction(callback)) {
       this.items.forEach( (item, index) => {
-        callback (item, this.cachedItems[index]);
+        callback (item);
       })
     }
 
@@ -382,7 +387,7 @@ export class SelectionManager {
 
     if (isFunction (callback)) {
       return this.items.map( (item, index) => {
-        return callback (item, this.cachedItems[index]);
+        return callback (item);
       })
     }
 

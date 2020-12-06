@@ -52,6 +52,18 @@
       // &[data-number="3"] { background-color: rgb(115, 255, 0); }
       // &[data-number="4"] { background-color: rgb(75, 62, 255); }
       // &[data-number="p1"] { background-color: rgb(255, 185, 185); }
+
+      &:before {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 6px;
+        height: 6px;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        background-color: var(--selection-tool-border-color);
+      }
     }
     .rotate-pointer {
       width: 14px;

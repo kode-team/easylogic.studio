@@ -38,10 +38,6 @@ export class MovableItem extends Item {
             y: this.json.y + '',
             width: this.json.width + '',
             height: this.json.height + '',
-            screenX: this.screenX,
-            screenY: this.screenY,
-            screenWidth: this.screenWidth,
-            screenHeight: this.screenHeight
         }
     }
 
@@ -505,6 +501,10 @@ export class MovableItem extends Item {
             'to bottom right': this.getDirectionBottomRightMatrix(),
         }
 
+        const verties = this.verties();
+        const xList = verties.map(it => it[0])
+        const yList = verties.map(it => it[1])
+
         return {
             id, 
             x, 
@@ -513,7 +513,9 @@ export class MovableItem extends Item {
             height,
             transform: originalTransform,
             originalTransformOrigin,        
-            verties: this.verties(),
+            verties,
+            xList,
+            yList,
             directionMatrix,
             parentMatrix,   // 부모의 matrix 
             parentMatrixInverse,

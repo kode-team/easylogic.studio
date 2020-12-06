@@ -340,14 +340,27 @@ export default class SelectionToolView extends SelectionToolEvent {
     refreshSelectionToolView (dx, dy) {
 
         const newDist = vec3.transformMat4([], [dx, dy, 0], this.$editor.matrixInverse);
- 
+        
         this.$selection.cachedItemVerties.forEach(it => {
+
+            const snap = this.$snapManager.check(it.verties.map(v => {
+                return vec3.add([], v, newDist)
+            }), 3);
+
+            let realDx = newDist[0];
+            let realDy = newDist[1];
+
+            if (snap[0]) {
+                realDx += snap[0][0];
+                realDy += snap[0][1]; 
+            }
+
             const instance = this.$selection.get(it.id)
 
             if (instance) {
                 instance.reset({
-                    x: Length.px(it.x + newDist[0]), 
-                    y: Length.px(it.y + newDist[1]),
+                    x: Length.px(it.x + realDx), 
+                    y: Length.px(it.y + realDy),
                 })
             }                        
         }) 

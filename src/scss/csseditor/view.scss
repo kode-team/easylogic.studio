@@ -93,14 +93,6 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
 @import './sub-editor/draw-manager.scss';
 @import './rotate-editor-view.scss';
 
-
-.page-canvas {
-  position: absolute;
-  width: 500px;
-  height: 400px;
-  background-color: white;
-}
-
 .drag-area-rect {
   pointer-events: none;
   position: absolute;
@@ -183,7 +175,7 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
       }
 
       &:hover {
-        outline: none;
+        outline: none !important;
       }
     }
   }

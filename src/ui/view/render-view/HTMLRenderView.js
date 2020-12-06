@@ -100,7 +100,12 @@ export default class HTMLRenderView extends UIElement {
             return false; 
         }
 
-        return ($el.hasClass('element-item') === false)
+        // artboard 에서 드래그 할 수 있도록 예외 처리 
+        if ($el.hasClass('artboard')) {
+            return true; 
+        }
+
+        return $el.hasClass('element-item') === false
             && $el.hasClass('artboard-title') === false 
             && $el.hasClass('selection-tool-item') === false 
             && $el.hasClass('pointer') === false
@@ -296,7 +301,7 @@ export default class HTMLRenderView extends UIElement {
 
         this.emit('refreshContent', arr);
 
-        this.emit('refreshSelectionTool');        
+        this.emit('refreshSelectionTool', false);        
     }
 
     checkEditMode () {
@@ -307,11 +312,16 @@ export default class HTMLRenderView extends UIElement {
     [POINTERSTART('$view .element-item') + IF('checkEditMode')  + MOVE('calculateMovedElement') + END('calculateEndedElement')] (e) {
         this.startXY = e.xy ; 
         this.$element = e.$dt;
+        this.$target = Dom.create(e.target);
 
         // text, artboard 는 선택하지 않음. 
         if (this.$element.hasClass('text')) {
             return false; 
         }
+
+        if (this.$element.hasClass('artboard') && this.$target.hasClass('artboard-title') === false) {
+            return false; 
+        }        
 
         var id = this.$element.attr('data-id')    
 
@@ -333,15 +343,17 @@ export default class HTMLRenderView extends UIElement {
 
         this.selectCurrent(...this.$selection.items)
         this.$selection.reselect();
+        this.$snapManager.clear();
+
         this.emit('history.refreshSelection');        
-        this.emit('refreshSelectionTool', true);
+        this.emit('refreshSelectionTool');
     }
 
 
     calculateMovedElement (dx, dy) {
         this.selectionToolView.refreshSelectionToolView(dx, dy, 'move');        
         this.updateRealPosition();   
-        this.emit('refreshSelectionTool');        
+        this.emit('refreshSelectionTool', false);        
     }
 
     /**
@@ -388,7 +400,8 @@ export default class HTMLRenderView extends UIElement {
                 this.emit('openPathEditor');
                 return; 
             }
-        } else {               
+        } else {              
+            this.$selection.reselect(); 
             this.nextTick(() => {
                 this.command(
                     'setAttributeForMulti',
@@ -436,7 +449,7 @@ export default class HTMLRenderView extends UIElement {
             transform: `scale(${this.$editor.scale})`
         })
 
-        this.emit('refreshSelectionTool');
+        this.emit('refreshSelectionTool', false);
     }
 
     [EVENT('changeScale')] () {

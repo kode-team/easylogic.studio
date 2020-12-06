@@ -1,5 +1,5 @@
 import { TransformOrigin } from "@property-parser/TransformOrigin";
-import { vec2, vec3, vec4 } from "gl-matrix";
+import { vec3 } from "gl-matrix";
 
 /**
  * 포인트 충돌 체크 
@@ -11,6 +11,28 @@ import { vec2, vec3, vec4 } from "gl-matrix";
  */
 export function pointPoint (x1, y1, x2, y2) {
     return x1 === x2 && y1 === y2
+}
+
+/**
+ * 점간의 대략적인 거리의 위치 지정 
+ * 
+ * @param {vec3} s source vertext 
+ * @param {vec3} t target vertext 
+ * @param {number} [dist=0] check distance
+ */
+export function pointPointDist (s, t, dist = 0) {
+    let targetX = Infinity; 
+    let targetY = Infinity; 
+
+    if (Math.abs(s[0] - t[0]) <= dist) {
+        targetX = t[0];
+    }
+
+    if (Math.abs(s[1] - t[1]) <= dist) {
+        targetY = t[1];
+    }
+
+    return { targetX, targetY }
 }
 
 /**

@@ -31,8 +31,7 @@ const SelectionToolEvent = class  extends UIElement {
         this.toggleEditingPath(false);
     }
 
-
-    [EVENT('refreshSelectionTool')] (isInitializeMatrix = false) { 
+    [EVENT('refreshSelectionTool')] (isInitializeMatrix = true) { 
         this.initSelectionTool(isInitializeMatrix);
     }
 
@@ -62,6 +61,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         this.state.moveType = 'rotate'; 
 
         // cache matrix 
+        this.$selection.reselect();        
         this.verties = this.groupItem.verties();        
     }
 
@@ -125,7 +125,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
         // 개별 verties 의 캐쉬를 다시 한다. 
         this.$selection.reselect();   
-
+        this.initMatrix(true);
         this.nextTick(() => {
             this.command(
                 'setAttributeForMulti', 
@@ -430,9 +430,21 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
         const newDist = vec3.transformMat4([], [dx, dy, 0], this.$editor.matrixInverse);
 
+        const snap = this.$snapManager.check(this.cachedGroupItem.verties.map(v => {
+            return vec3.add([], v, newDist)
+        }), 3);
+
+        let realDx = newDist[0];
+        let realDy = newDist[1];
+
+        if (snap[0]) {
+            realDx += snap[0][0];
+            realDy += snap[0][1]; 
+        }
+
         this.groupItem.reset({
-            x: Length.px(this.cachedGroupItem.x.value + newDist[0]),
-            y: Length.px(this.cachedGroupItem.y.value + newDist[1])
+            x: Length.px(this.cachedGroupItem.x + realDx),
+            y: Length.px(this.cachedGroupItem.y + realDy)
         })
 
         this.$selection.cachedItemVerties.forEach(it => {
@@ -440,8 +452,8 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
             if (instance) {
                 instance.reset({
-                    x: Length.px(it.x + newDist[0]), 
-                    y: Length.px(it.y + newDist[1]),
+                    x: Length.px(it.x + realDx), 
+                    y: Length.px(it.y + realDy),
                 })
             }                        
         })        
@@ -461,7 +473,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
             if (this.$el.isShow() && this.$selection.isOne) this.$el.hide();
         }
 
-        if (isInitializeMatrix) this.initMatrix();
+        this.initMatrix(isInitializeMatrix);
 
         this.makeSelectionTool();
 
@@ -480,13 +492,25 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         })
     }
 
-    initMatrix() {
-        // matrix 초기화 
-        this.verties = clone(this.$selection.verties);
-        this.angle = 0;
-        this.localAngle = this.angle;
-        this.groupItem = this.item;     
-        this.cachedGroupItem = this.item;     
+    initMatrix(isInitializeMatrix = false) {
+
+        if (isInitializeMatrix) {
+            // matrix 초기화 
+            this.verties = clone(this.$selection.verties);
+            this.angle = 0;
+            this.localAngle = this.angle;
+            this.groupItem = this.item;     
+            this.cachedGroupItem = this.item.matrix;     
+        } else {
+            // 초기화 옵션이 없으면 아무것도 변경하지 않는다. 
+            // matrix 초기화 
+            // this.verties = clone(this.$selection.verties);
+            // this.angle = 0;
+            // this.localAngle = this.angle;
+            // this.groupItem = this.item;     
+            // this.cachedGroupItem = this.item.matrix;     
+        }
+
     }
 
     makeSelectionTool() {

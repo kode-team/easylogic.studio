@@ -213,6 +213,10 @@ class UIElement extends EventMachine {
     return this.$editor.selection; 
   }
 
+  get $snapManager () {
+    return this.$editor.snapManager;
+  }
+
   get $timeline () {
     return this.$editor.timeline; 
   }  
