@@ -133,6 +133,14 @@ export function isNumber (value) {
     return typeof value == 'number';
 }
 
+export function isZero (num) {
+    return num === 0;
+}
+
+export function isNotZero (num) {
+    return !isZero(num);
+}
+
 export function clone (obj) {
     return JSON.parse(JSON.stringify(obj));
 }

@@ -121,7 +121,8 @@ export default class SelectionToolView extends SelectionToolEvent {
 
         this.$selection.doCache();
 
-        this.$selection.reselect();            
+        this.$selection.reselect();        
+        this.$snapManager.clear();            
         this.verties = this.$selection.verties;
 
     }
@@ -142,22 +143,30 @@ export default class SelectionToolView extends SelectionToolEvent {
         );        
     }
 
-    calculateDistance (vertext, dx, dy, reverseMatrix) {
+    calculateDistance (vertext, distVector, reverseMatrix) {
+
         // 1. 움직이는 vertext 를 구한다. 
         const currentVertext = vec3.clone(vertext);
 
-        // 2. dx, dy 만큼 옮긴 vertext 를 구한다.             
-        const nextVertext = vec3.add([], currentVertext, [dx, dy, 0]);
+        // 2. dx, dy 만큼 옮긴 vertext 를 구한다.        
+        // - dx, dy 를 계산하기 전에 먼저 snap 을 실행한 다음 최종 dx, dy 를 구한다      
+        const snap = this.$snapManager.check([
+            vec3.add([], currentVertext, distVector)
+        ]);
+
+        const nextVertext = vec3.add([], currentVertext, vec3.add([], distVector, snap ));
 
         // 3. invert matrix 를 실행해서  기본 좌표로 복귀한다.             
         var currentResult = vec3.transformMat4([], currentVertext, reverseMatrix); 
         var nextResult = vec3.transformMat4([], nextVertext, reverseMatrix); 
 
         // 4. 복귀한 좌표에서 차이점을 구한다. 
-        var realDx = (nextResult[0] - currentResult[0])/this.$editor.scale
-        var realDy = (nextResult[1] - currentResult[1])/this.$editor.scale
-        
-        return [realDx, realDy, 0]
+        const realDist = vec3.transformMat4([], 
+            vec3.add([], nextResult, vec3.negate([], currentResult)),
+            this.$editor.matrixInverse
+        )
+
+        return realDist
     }
 
     moveItem (instance, lastStartVertext, newWidth, newHeight) {
@@ -174,14 +183,14 @@ export default class SelectionToolView extends SelectionToolEvent {
 
     }
 
-    moveBottomRightVertext (dx, dy) {
+    moveBottomRightVertext (distVector) {
         const verties = this.verties;
         if (verties) {
 
             this.$selection.cachedItemVerties.forEach(item => {
                 const [realDx, realDy] = this.calculateDistance(
                     item.verties[2],    // bottom right 
-                    dx, dy, 
+                    distVector, 
                     item.accumulatedMatrixInverse
                 );
     
@@ -210,14 +219,14 @@ export default class SelectionToolView extends SelectionToolEvent {
     }
 
 
-    moveTopRightVertext (dx, dy) {
+    moveTopRightVertext (distVector) {
         const item = this.$selection.cachedItemVerties[0]
         if (item) {
 
 
             const [realDx, realDy] = this.calculateDistance(
                 item.verties[1],    // top right 
-                dx, dy, 
+                distVector, 
                 item.accumulatedMatrixInverse
             );
 
@@ -243,14 +252,14 @@ export default class SelectionToolView extends SelectionToolEvent {
     }
 
 
-    moveTopLeftVertext (dx, dy) {
+    moveTopLeftVertext (distVector) {
         const item = this.$selection.cachedItemVerties[0]
         if (item) {
 
 
             const [realDx, realDy] = this.calculateDistance(
                 item.verties[0],    // top left 
-                dx, dy, 
+                distVector, 
                 item.accumulatedMatrixInverse
             );
 
@@ -276,13 +285,13 @@ export default class SelectionToolView extends SelectionToolEvent {
     }
 
 
-    moveBottomLeftVertext (dx, dy) {
+    moveBottomLeftVertext (distVector) {
         const item = this.$selection.cachedItemVerties[0]
         if (item) {
 
             const [realDx, realDy] = this.calculateDistance(
                 item.verties[3],    // bottom left
-                dx, dy, 
+                distVector, 
                 item.accumulatedMatrixInverse
             );
 
@@ -311,14 +320,16 @@ export default class SelectionToolView extends SelectionToolEvent {
 
     moveVertext (dx, dy) {
 
+        const distVector = vec3.transformMat4([], [dx, dy, 0], this.$editor.matrixInverse);
+
         if (this.state.moveType === 'to bottom right') {        // 2
-            this.moveBottomRightVertext(dx, dy);
+            this.moveBottomRightVertext(distVector);
         } else if (this.state.moveType === 'to top right') {
-            this.moveTopRightVertext(dx, dy);
+            this.moveTopRightVertext(distVector);
         } else if (this.state.moveType === 'to top left') {
-            this.moveTopLeftVertext(dx, dy);
+            this.moveTopLeftVertext(distVector);
         } else if (this.state.moveType === 'to bottom left') {
-            this.moveBottomLeftVertext(dx, dy);                                
+            this.moveBottomLeftVertext(distVector);                                
         }    
 
         this.renderPointers();
@@ -339,28 +350,23 @@ export default class SelectionToolView extends SelectionToolEvent {
 
     refreshSelectionToolView (dx, dy) {
 
-        const newDist = vec3.transformMat4([], [dx, dy, 0], this.$editor.matrixInverse);
+        const distVector = [dx, dy, 0]
+        const newDist = vec3.transformMat4([], distVector, this.$editor.matrixInverse);
         
         this.$selection.cachedItemVerties.forEach(it => {
 
             const snap = this.$snapManager.check(it.verties.map(v => {
                 return vec3.add([], v, newDist)
-            }), 3);
+            }));
 
-            let realDx = newDist[0];
-            let realDy = newDist[1];
-
-            if (snap[0]) {
-                realDx += snap[0][0];
-                realDy += snap[0][1]; 
-            }
+            const localDist = vec3.add([], newDist, snap);
 
             const instance = this.$selection.get(it.id)
 
             if (instance) {
                 instance.reset({
-                    x: Length.px(it.x + realDx), 
-                    y: Length.px(it.y + realDy),
+                    x: Length.px(it.x + localDist[0]), 
+                    y: Length.px(it.y + localDist[1]),
                 })
             }                        
         }) 

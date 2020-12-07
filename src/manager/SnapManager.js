@@ -1,6 +1,9 @@
-import { pointPointDist } from "@core/functions/collision";
+import { isNotZero } from "@core/functions/func";
 import { vec3 } from "gl-matrix";
 import { Editor } from "./Editor";
+
+const MAX_SNAP_DISTANCE = 3; 
+const DEFAULT_DIST_VECTOR = vec3.fromValues(0, 0, 0)
 
 /**
  * 드래그 하는 시점에 객체의 verties 를 캐쉬해두는 역할을 한다. 
@@ -13,10 +16,11 @@ export class SnapManager {
      * 
      * @param {Editor} editor 
      */
-    constructor (editor) {
+    constructor (editor, snapDistance = MAX_SNAP_DISTANCE) {
         this.editor = editor;
         this.map = new Map();
         this.snapTargetLayers = []
+        this.snapDistance = snapDistance;
     }
 
     /**
@@ -81,24 +85,21 @@ export class SnapManager {
      * 
      * @param {vec3[]} sourceVerties 
      */
-    check (sourceVerties, dist = 0) {
+    check (sourceVerties) {
         const snaps = []
-
+        const dist = this.snapDistance;
         const sourceXList = sourceVerties.map(it => it[0])
         const sourceYList = sourceVerties.map(it => it[1])
-
 
         this.snapTargetLayers.forEach(target => {
 
             const x = this.checkX(target.xList, sourceXList, dist)[0];
             const y = this.checkY(target.yList, sourceYList, dist)[0];
 
-            snaps.push([x ? x.dx : 0, y ? y.dy : 0])
+            snaps.push(vec3.fromValues(x ? x.dx : 0, y ? y.dy : 0, 0))
         })
 
-        return snaps.filter(it => {
-            return it[0] !== 0 || it[1] !== 0
-        })
+        return snaps.find(it => isNotZero(it[0]) || isNotZero(it[1])) || DEFAULT_DIST_VECTOR
     }
 
 }
