@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "@core/UIElement";
-import Event, { POINTERSTART, POINTEREND, POINTERMOVE } from "@core/Event";
+import Event, { POINTERSTART, POINTEREND, POINTERMOVE, PREVENT } from "@core/Event";
 
 export default class ColorPalette extends UIElement {
   template() {
@@ -86,7 +86,7 @@ export default class ColorPalette extends UIElement {
 
   }
 
-  [POINTERMOVE("document")](e) {
+  [POINTERMOVE("document") + PREVENT](e) {
     if (this.isDown) {
       this.setMainColor(e);
     }

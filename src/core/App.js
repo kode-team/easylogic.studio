@@ -1,5 +1,5 @@
 import Dom from "./Dom";
-import { POINTERMOVE, POINTEREND, DEBOUNCE, RESIZE } from "./Event";
+import { POINTERMOVE, POINTEREND, DEBOUNCE, RESIZE, PREVENT } from "./Event";
 import {
   ADD_BODY_MOUSEMOVE,
   ADD_BODY_MOUSEUP
@@ -117,7 +117,7 @@ export const start = opt => {
       }
     }
 
-    [POINTEREND("document")](e) {
+    [POINTEREND("document") + PREVENT](e) {
 
       // var newPos = e.xy || EMPTY_POS;
       this.$config.set("bodyEvent", e);

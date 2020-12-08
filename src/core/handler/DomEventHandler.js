@@ -9,7 +9,7 @@ const scrollBlockingEvents = {
     'touchmove': true,
     'mousedown': true,
     'mouseup': true,
-    'mousemove': true, 
+    'mousemove': true,
     'wheel': true,
     'mousewheel': true
 }
