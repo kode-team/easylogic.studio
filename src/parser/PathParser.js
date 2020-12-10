@@ -1,118 +1,20 @@
 
+import { getBezierPointOneQuard, getCurveBBox } from "@core/functions/bezier";
 import { isNotUndefined, clone } from "@core/functions/func";
+import { degreeToRadian } from "@core/functions/math";
+import { mat4, vec3 } from "gl-matrix";
 import Point from "./Point";
 
 const REG_PARSE_NUMBER_FOR_PATH = /([mMlLvVhHcCsSqQtTaAzZ]([^mMlLvVhHcCsSqQtTaAzZ]*))/g;
 const splitReg = /[\b\t \,]/g;
 var numberReg = /-?[0-9]*\.?[0-9]+(?:e[-+]?\d+)?/ig
-
-const matrix = {
-
-    multiply : function (a) {
-
-        return function (b, startIndex = 0) {
-            var x = +b[startIndex];
-            var y = +b[startIndex+1];
-
-            return [
-                a[0][0] * x + a[0][1] * y +  a[0][2],
-                a[1][0] * x + a[1][1] * y +  a[1][2],
-                1
-            ];
-        };
-    },
-
-    toPercent: function (w, h) { // pixel 로 되어 있던 것을 percent 로 복구 
-        return function (b, startIndex = 0) {
-            var x = +b[startIndex];
-            var y = +b[startIndex+1];            
-            return [x/w, y/h, 1]
-        }
-    },
-
-    toPixel: function (w, h) {  // percent 로 되어 있던 것을 pixel 로 복구 
-        return function (b, startIndex = 0) {
-            var x = +b[startIndex];
-            var y = +b[startIndex+1];            
-            return [x * w, y * h, 1]
-        }
-    },    
-
-    translate : function (tx, ty) {
-        return this.multiply([
-            [1, 0, tx],
-            [0, 1, ty],
-            [0, 0, 1]
-        ]);
-    },
-
-    rotate : function (angle) {
-        return this.multiply([
-            [Math.cos(angle) , -Math.sin(angle), 0],
-            [Math.sin(angle),  Math.cos(angle), 0],
-            [0, 0, 1]
-        ]);
-    },
-
-    rotateCenter : function (angle, cx, cy) {
-        return this.multiply([
-            [Math.cos(angle) , -Math.sin(angle), -cx * Math.cos(angle) + cy * Math.sin(angle) + cx],
-            [Math.sin(angle),  Math.cos(angle), -cx * Math.sin(angle) - cy * Math.cos(angle) + cy],
-            [0, 0, 1]
-        ])
-    },
-
-    scale : function (sx, sy) {
-        return this.multiply([
-            [sx, 0, 0],
-            [0, sy, 0],
-            [0, 0, 1]
-        ]);
-    },
-
-    skewX : function (x) {
-        return this.multiply([
-            [1, x, 0],
-            [0, 1, 0],
-            [0, 0, 1]
-        ]);
-    },
-
-    skewY : function (y) {
-        return this.multiply([
-            [1, 0, 0],
-            [y, 1, 0],
-            [0, 0, 1]
-        ]);
-    },
-
-    reflectionOrigin : function () {
-        return this.multiply([
-            [-1, 0, 0],
-            [0, -1, 0],
-            [0, 0, 1]
-        ]);
-    },
-
-    flipX : function () {
-        return this.multiply([
-            [1, 0, 0],
-            [0, -1, 0],
-            [0, 0, 1]
-        ]);
-    },
-
-    flipY : function () {
-        return this.multiply([
-            [-1, 0, 0],
-            [0, 1, 0],
-            [0, 0, 1]
-        ]);
-    }
-};
  
 export default class PathParser {
 
+    /**
+     * 
+     * @param {string} pathString  SVG Path 문자열
+     */
     constructor (pathString = '') {
         this.reset(pathString);
     }
@@ -398,8 +300,8 @@ export default class PathParser {
 
     each (callback, isReturn = false) {
 
-        var newSegments = this.segments.map(segment => {
-            return callback.call(this, segment);
+        var newSegments = this.segments.map((segment, index) => {
+            return callback.call(this, segment, index);
         })
 
         if (isReturn) {
@@ -452,94 +354,218 @@ export default class PathParser {
         return new PathParser(this.joinPath());
     }
 
-    toPercent(maxWidth, maxHeight) {
-        this._loop(matrix.toPercent(maxWidth, maxHeight));
-        return this;  
-    }
-
-    toPixel (maxWidth, maxHeight) {
-        this._loop(matrix.toPixel(maxWidth, maxHeight));
-        return this; 
-    }
-
     translate (tx, ty) {
-        this._loop(matrix.translate(tx, ty));
+        this.transformMat4(mat4.fromTranslation([], [tx, ty, 0]));
         return this;
     }
 
     translateTo (tx, ty) {
-        return this.joinPath(this._loop(matrix.translate(tx, ty), true))
+        return this.joinPath(this.transformMat4(mat4.fromTranslation([], [tx, ty, 0]), true));
     }    
 
     scale (sx, sy) {
-        this._loop(matrix.scale(sx, sy));
-        return this;        
+        this.transformMat4(mat4.fromScaling([], [sx, sy, 1]));
+        return this;
     }
 
     scaleTo (sx, sy) {
-        return this.joinPath(this._loop(matrix.scale(sx, sy), true))
+        return this.joinPath(this.transformMat4(mat4.fromScaling([], [sx, sy, 1]), true));        
     }    
 
     rotate (angle, centerX, centerY) {
 
-        if (isNotUndefined(centerX) && isNotUndefined(centerY)) {
-            this._loop(matrix.rotateCenter(angle, centerX, centerY));   
-        } else {    
-            this._loop(matrix.rotate(angle));
-        }
+        this.transformMat4(mat4.fromRotation([], degreeToRadian(angle), [centerX || 0, centerY || 0, 0]));
         return this;        
     }
 
     rotateTo (angle) {
-        return this.joinPath(this._loop(matrix.rotate(angle), true))
+        return this.joinPath(
+                this.transformMat4(
+                    mat4.fromRotation([], degreeToRadian(angle), [centerX || 0, centerY || 0, 0]), 
+                    true
+                )
+            )
     }        
 
-    reflectionOrigin (angle) {
-        this._loop(matrix.reflectionOrigin(angle));
+    reflectionOrigin () {
+        this.transformMat4(mat4.fromScaling([], [-1, -1, 0]))
         return this;        
     }
 
-    reflectionOriginTo (angle) {
-        return this.joinPath(this._loop(matrix.reflectionOrigin(angle), true))
+    reflectionOriginTo () {
+        return this.joinPath(
+                    this.transformMat4(
+                        mat4.fromScaling([], [-1, -1, 0]), 
+                        true
+                    )
+                )
     }            
 
-    flipX (angle) {
-        this._loop(matrix.flipX(angle));
+    flipX () {
+        this.transformMat4(mat4.fromScaling([], [1, -1, 0]))
+        return this;         
+    }
+
+    flipXTo () {
+        return this.joinPath(
+                    this.transformMat4(
+                        mat4.fromScaling([], [1, -1, 0]), 
+                        true
+                    )
+                )
+    }    
+
+    flipY () {
+        this.transformMat4(mat4.fromScaling([], [-1, 1, 0]))
         return this;        
     }
 
-    flipXTo (angle) {
-        return this.joinPath(this._loop(matrix.flipX(angle), true))
-    }    
-
-    flipY (angle) {
-        this._loop(matrix.flipY(angle));
-        return this;        
-    }
-
-    flipYTo (angle) {
-        return this.joinPath(this._loop(matrix.flipY(angle), true))
+    flipYTo () {
+        return this.joinPath(
+                this.transformMat4(
+                    mat4.fromScaling([], [-1, 1, 0]), 
+                    true
+                )
+            )
     }    
 
 
-    skewX (sx) {
-        this._loop(matrix.skewX(sx));
+    skewX (angle) {
+        this.transformMat4(
+            mat4.fromValues(
+                1, Math.tan(degreeToRadian(angle)), 0, 0,
+                0, 1, 0, 0,
+                0, 0, 1, 0,
+                0, 0, 0, 1
+            )
+        )
         return this;        
     }
 
 
     skewXTo (angle) {
-        return this.joinPath(this._loop(matrix.skewX(angle), true))
+        return this.joinPath(        
+                    this.transformMat4(
+                        mat4.fromValues(
+                            1, Math.tan(degreeToRadian(angle)), 0, 0,
+                            0, 1, 0, 0,
+                            0, 0, 1, 0,
+                            0, 0, 0, 1
+                        ),
+                        true
+                    )
+                )
     }        
 
-    skewY (sy) {
-        this._loop(matrix.skewY(sy));
+    skewY (angle) {
+        this.transformMat4(
+            mat4.fromValues(
+                1, 0, 0, 0,
+                Math.tan(degreeToRadian(angle)), 1, 0, 0,
+                0, 0, 1, 0,
+                0, 0, 0, 1
+            )
+        )
         return this;        
     }
 
     skewYTo (angle) {
-        return this.joinPath(this._loop(matrix.skewY(angle), true))
-    }     
+        return this.joinPath(        
+            this.transformMat4(
+                mat4.fromValues(
+                    1, 0, 0, 0,
+                    Math.tan(degreeToRadian(angle)), 1, 0, 0,
+                    0, 0, 1, 0,
+                    0, 0, 0, 1
+                ),
+                true
+            )
+        )
+    }    
+    
+    normalize () {
+
+    }
+
+    getBBox () {
+
+        let minX = Number.MAX_SAFE_INTEGER, minY = Number.MAX_SAFE_INTEGER;
+        let maxX = Number.MIN_SAFE_INTEGER, maxY = Number.MIN_SAFE_INTEGER;
+
+        this.each(function(segment, index) {
+            var v = segment.values;
+            var c = segment.command;
+            const prevSegment = this.segments[index-1];
+            const accurancy = 1/10000;
+
+            switch(c) {
+            case 'M': 
+            case 'L':
+
+                minX = Math.min(minX, v[0])
+                maxX = Math.max(maxX, v[0])
+
+                minY = Math.min(minY, v[1])
+                maxY = Math.max(maxY, v[1])
+                break; 
+            case 'V':
+                minX = Math.min(minX, v[0])
+                maxX = Math.max(maxX, v[0])
+                break;
+            case 'H':
+                minY = Math.min(minY, v[1])
+                maxY = Math.max(maxY, v[1])                
+                break; 
+            case 'C':
+
+                getCurveBBox([
+                    [prevSegment.values[prevSegment.values.length-2], prevSegment.values[prevSegment.values.length-1], 0],
+                    [v[0], v[1], 0],
+                    [v[2], v[3], 0],
+                    [v[4], v[5], 0],
+                ]).forEach(p => {
+                    minX = Math.min(minX, p[0])
+                    maxX = Math.max(maxX, p[0])
+    
+                    minY = Math.min(minY, p[1])
+                    maxY = Math.max(maxY, p[1])
+                })
+                break;
+            case 'Q':
+
+                const newPoints = [
+                    [prevSegment.values[prevSegment.values.length-2], prevSegment.values[prevSegment.values.length-1], 0],
+                    [v[0], v[1], 0],
+                    [v[2], v[3], 0],
+                ].map(p => {
+                    return {x: p[0], y: p[1]}
+                })
+                for(var i = 0; i <= 1; i += accurancy) {
+                    const {x, y} = getBezierPointOneQuard(newPoints, i);
+
+                    minX = Math.min(minX, x)
+                    maxX = Math.max(maxX, x)
+    
+                    minY = Math.min(minY, y)
+                    maxY = Math.max(maxY, y)
+                }
+                break;                
+            case 'A':
+
+                break; 
+            }
+
+            return segment;
+        });
+
+
+        return [
+            [minX, minY, 0],
+            [maxX, minY, 0],
+            [maxX, maxY, 0],
+            [minX, maxY, 0],
+        ]
+    }
     
     get d () {
         return this.toString()
@@ -547,5 +573,88 @@ export default class PathParser {
 
     toString() {
         return this.joinPath()
+    }
+
+    transformMat4(transformMatrix, isReturn = false ) {
+        return this.each(function(segment) {
+            var v = segment.values;
+            var c = segment.command;
+
+            switch(c) {
+            case 'M':
+            case 'L':
+                var result = vec3.transformMat4([], [v[0], v[1], 0], transformMatrix); 
+                segment.values = [result[0], result[1]]
+                break; 
+            case 'V':
+                var result = vec3.transformMat4([], [+v[0], 0, 0], transformMatrix)
+                segment.values = [result[0]];
+                break;
+            case 'H':
+                var result = vec3.transformMat4([], [0, +v[0], 0], transformMatrix)
+                segment.values = [result[1]];                
+                break; 
+            case 'C':
+            case 'S':
+            case 'T':
+            case 'Q':
+                for(var i = 0, len = v.length; i < len; i+=2) {
+                    var result = vec3.transformMat4([], [v[i], v[i+1], 0], transformMatrix)
+                    segment.values[i] = result[0];
+                    segment.values[i+1] = result[1];
+                }
+                break; 
+            case 'A':
+
+                break; 
+            }
+
+            return segment;
+
+        }, isReturn);
+    }
+
+    invert (transformMatrix) {
+        this.transformMat4(mat4.invert([], transformMatrix));
+    }
+
+    get verties () {
+        let arr = []
+
+        let lastValues = []
+        this.each(function(segment) {
+            var v = segment.values;
+            var c = segment.command;
+
+            switch(c) {
+            case 'M':
+            case 'L':
+                arr.push([...segment.values, 0])
+                break; 
+            case 'V':
+                arr.push([ v[0], lastValues.pop(), 0 ])            
+                break;
+            case 'H':
+                lastValues.pop()
+                arr.push([ lastValues.pop(),  v[0], 0 ])                            
+                break; 
+            case 'C':
+            case 'S':
+            case 'T':
+            case 'Q':
+                for(var i = 0, len = v.length; i < len; i+=2) {
+                    arr.push([v[i], v[i+1], 0]);
+                }
+                break; 
+            case 'A':
+
+                break; 
+            }
+
+            lastValues = v; 
+
+        });
+
+        return arr;
     }
 }

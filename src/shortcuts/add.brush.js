@@ -3,5 +3,5 @@ export default {
     key: 'b',
     command: 'addLayerView', 
     args: ['brush'],
-    description: 'Add SVG Path',
+    description: 'Draw SVG Path',
 }

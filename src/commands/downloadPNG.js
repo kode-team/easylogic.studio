@@ -12,7 +12,6 @@ export default {
         var svgString = ExportManager.generateSVG(editor, item).trim();
         var datauri = 'data:image/svg+xml;base64,' + window.btoa(svgString);
         var filename = item.id;
-
         loadOriginalImage({local: datauri}, (info, img) => {
             createImagePng(img, (pngDataUri) => {
                 downloadFile(pngDataUri, filename)

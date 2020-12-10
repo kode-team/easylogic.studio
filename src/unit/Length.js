@@ -321,8 +321,13 @@ export class Length {
     return this.toString(); // { value: this.value, unit: this.unit };
   }
 
-  rate(value) {
-    return value / this.value;
+  /**
+   * unit 이 '%' 타입일 때 x/100 를 구한다. 
+   * 
+   * @param {Number} maxValue 
+   */
+  rate(maxValue = 100) {
+    return this.value / maxValue;
   }
 
   stringToPercent() {

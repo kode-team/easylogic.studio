@@ -149,13 +149,18 @@ export class ShortCutManager {
     }
 
     makeWhenFunction(command, when) {
-        return (new Function ('editor', `
+        return (new Function ('editor', /*jsx*/`
+            /////////////////////////////////
+            ////////Custom Function///////////
+
             return function () {
                 const CanvasView = editor.modeView === 'CanvasView';
                 const PathEditorView = editor.modeView === 'PathEditorView';                
 
                 return (${when});
             }
+            ////////Custom Function///////////
+            /////////////////////////////////
         `)) (this.$editor)
     }
 

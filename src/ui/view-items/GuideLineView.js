@@ -1,14 +1,20 @@
 import UIElement, { EVENT } from "@core/UIElement";
 import { isNotUndefined, OBJECT_TO_PROPERTY } from "@core/functions/func";
 import { BIND } from "@core/Event";
+import { vec3 } from "gl-matrix";
 
 
 const text = (x, y, text = '', className = 'base-line') => {
     return /*html*/`<text x="${x}" y="${y}" class='${className}'>${text}</text>`
 }
 
-const line = (x1, y1, x2, y2, className = 'base-line') => {
-    return /*html*/`<line ${OBJECT_TO_PROPERTY({x1, y1, x2, y2 })} class='${className}' />`
+const line = (source, target, className = 'base-line') => {
+    return /*html*/`<line ${OBJECT_TO_PROPERTY({
+        x1: source[0], 
+        y1: source[1], 
+        x2: target[0], 
+        y2: target[1] 
+    })} class='${className}' />`
 }
 
 const hasLine = (images, line) => {
@@ -21,37 +27,14 @@ const addLine = (images, line) => {
     }
 }
 
-const hLine = (images, startX, minY, maxY) => {
+const hLine = (target) => {
 
-    if (Math.abs(minY - maxY) === 0) return; 
-
-    startX = Math.floor(startX)
-    // top 
-    addLine(images, line(startX-2,   minY,             startX+2,    minY))
-    addLine(images, line(startX,     minY,             startX,      maxY)) 
-    addLine(images, line(startX-2,   maxY,             startX+2,    maxY))
-
-    /* text */ 
-    var centerY  = (maxY + minY)/2;
-    var centerHeight = Math.floor(Math.abs(maxY - minY))                
-    addLine(images, text(startX+2, centerY, centerHeight))
+    return line([target[0], 0, 0], [target[0], 10000, 0]);
 }
 
-const vLine = (images, startY, minX, maxX) => {
+const vLine = (target) => {
 
-    if (Math.abs(minX - maxX) === 0) return; 
-
-    startY = Math.floor(startY)
-
-    // top 
-    addLine(images, line(minX, startY-2,  minX,  startY+2))
-    addLine(images, line(minX, startY,  maxX,   startY)) 
-    addLine(images, line(maxX, startY-2, maxX,   startY+2))
-
-    /* text */ 
-    var centerX  = (maxX + minX)/2;
-    var centerWidth = Math.floor(Math.abs(maxX - minX))                
-    addLine(images, text(centerX, startY - 2, centerWidth, 'text-center'))
+    return line([0, target[1], 0], [10000, target[1], 0]);
 }
 
 /**
@@ -79,97 +62,25 @@ export default class GuideLineView extends UIElement {
     
         var images = []
 
-        // 가이드 라인은 하나만 지원하는걸로 하자.
-        list = list.filter((_, index) => index === 0);
-
         list.forEach(it => {
-    
-            var target = it.B; 
-    
-            if (isNotUndefined(it.ax)) {  // 세로 가이드 정의  (x축 좌표 찾기)
+            
+            const [source, target, axis] = it;
 
-                var minY = Math.min(target.y, it.A.y);
-                var maxY = Math.max(target.y + target.height, it.A.y + it.A.height);
+            const localSourceVertext = vec3.transformMat4([], source, this.$editor.matrix);
+            const localTargetVertext = vec3.transformMat4([], target, this.$editor.matrix);            
 
-
-                // it.bx : x 좌표 
-                // minY : container 위치 
-                // maxY : container 위치 
-                // it.A.screenY : 객체 위치 
-                // it.A.screenY2 : 객체 위치 
-                var startX = it.bx; 
-
-                if (it.A.y > it.B.y + it.B.height) {
-                    hLine(images, startX, it.B.y + it.B.height, it.A.y);
-                } else {
-                    hLine(images, startX, minY, it.A.y);
-                }
-
-                if (it.A.x - target.x > 0 
-                    && it.A.y <= (target.y + target.height)
-                    && it.A.y >= target.y
-                ) {
-                    var centerY = it.A.y + it.A.height /2;                    
-                    vLine(images, centerY, target.x, it.A.x);
-                }
-
-                if ((target.x + target.width) - (it.A.x + it.A.width) > 0
-                    && it.A.y <= (it.B.y + it.B.height)
-                    && it.A.y >= it.B.y 
-                ) {
-                    var centerY = it.A.y + it.A.height/2;
-                    vLine(images, centerY, it.A.x + it.A.width, target.x + target.width);
-                }                
-
-                if ((it.A.y + it.A.height) < it.B.y) {
-                    hLine(images, startX, it.A.y + it.A.height, it.B.y);
-                } else {
-                    hLine(images, startX, (it.A.y + it.A.height), maxY);
-                }
-    
-            } else {            // 가로 가이드 정의 ( y 축 좌표 찾기 )
-                
-                var maxX = Math.max(target.x + target.width, it.A.x + it.A.width);
-
-                var startY = it.by; 
-    
-
-                if (it.A.x > (it.B.x + it.B.width)) {
-                    vLine(images, startY, (it.B.x + it.B.width), it.A.x);
-                } else {
-                    vLine(images, startY, it.A.x, it.B.x);
-                }
-
-
-
-                if (it.A.y - target.y > 0
-                    && it.A.x <= (it.B.x + it.B.width) 
-                    && it.A.x >= it.B.x 
-                ) {
-                    var centerX = (it.A.x + (it.A.x + it.A.width)) /2;
-                    hLine(images, centerX, it.B.y, it.A.y);
-                }
-
-                if ((target.y + target.height) - (it.A.y + it.A.height) > 0
-                    && it.A.x <= (it.B.x + it.B.width) 
-                    && it.A.x >= it.B.x 
-                ) {
-                    var centerX = (it.A.x + (it.A.x + it.A.width)) /2;
-                    hLine(images, centerX, (it.A.y + it.A.height), (it.B.y + it.B.height));
-                }                
-
-                
-                if ((it.A.x + it.A.width) < it.B.x) {
-                    vLine(images, startY, (it.A.x + it.A.width), it.B.x);
-                } else {
-                    vLine(images, startY, (it.A.x + it.A.width), maxX);
-                }
+            if (axis === 'x') {
+                images.push(hLine(localTargetVertext))
+            } 
+            
+            if (axis === 'y') {
+                images.push(vLine(localTargetVertext))
             }
-    
+
+
         })
     
-    
-        return images.join('');
+        return [...new Set(images)].join('');
     }
 
     removeGuideLine() {
@@ -182,7 +93,6 @@ export default class GuideLineView extends UIElement {
         this.setState({
             list
         })
-        // this.$el.cssText(CSS_TO_STRING(this.createGuideLine(list)));
     }
 
     [EVENT('removeGuideLine')] () {

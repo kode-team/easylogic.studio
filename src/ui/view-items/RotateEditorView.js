@@ -61,7 +61,8 @@ export default class RotateEditorView extends UIElement {
                  
         this.bindData('$rotateZ')
         this.emit('refreshSelectionStyleView', null, false, true)
-        this.emit('refreshRect');        
+        this.emit('refreshRect');       
+        this.$selection.setRectCache();         
 
     }
 
@@ -88,6 +89,7 @@ export default class RotateEditorView extends UIElement {
             return it.type === 'rotate' || it.type === 'rotateZ'; 
         });
 
+
         return {
             style: {
                 transform
@@ -99,58 +101,50 @@ export default class RotateEditorView extends UIElement {
         this.$selection.each(item => {
             item.reset({ transform: Transform.remove(item.transform, ['rotateX', 'rotateY']) })
         })
+        this.$selection.setRectCache();
         this.bindData('$rotateContainer');   
         this.emit('refreshSelectionStyleView', null, false, true)       
         this.emit('refreshRect');        
     }
 
     [POINTERSTART('$rotateArea') + MOVE('moveRotateXY') + END('moveEndRotateXY')] () {
-        this.setCacheRotateXY () 
+        // this.setCacheRotateXY () 
+
+
+        this.state.rotateCache = this.$selection.map(item => {
+            return {
+                item,
+                rotateX: Transform.get(item['transform'], 'rotateX')[0] || Length.deg(0),
+                rotateY: Transform.get(item['transform'], 'rotateY')[0] || Length.deg(0),
+            }
+        })
     }
 
-
-    setCacheRotateXY () {
-        this.setCacheBaseTrasnform('rotateX', 'rotateY');        
-    }    
-
     moveRotateXY (dx, dy) {
-        this.modifyRotateXY (dx, dy);
+        var rx = Length.deg(-dy)
+        var ry = Length.deg(dx)
+
+
+        this.state.rotateCache.forEach(cache => {
+
+            let transform = cache.item.transform
+            transform = Transform.rotateX(transform, Length.deg(cache.rotateX.value + rx.value)) 
+            transform = Transform.rotateY(transform, Length.deg(cache.rotateY.value + ry.value)) 
+
+            cache.item.transform = transform;
+        })
 
         this.bindData('$rotateContainer');
 
-        this.emit('refreshSelectionDragStyleView', null, false, true)
+        this.emit('refreshSelectionStyleView', null, false, true)
         this.emit('refreshRect');        
 
     }
 
     moveEndRotateXY (dx, dy) {    
         this.emit('refreshSelectionStyleView')
-        this.emit('refreshRect');        
-    }
-
-    modifyCacheItem (item, cachedItem, tempValue, key, dt) {
-        
-        if (cachedItem[key]) { 
-            tempValue.set(cachedItem[key].value[0].value);
-        } 
-
-        tempValue.add(dt);
-
-        this.setTransformValue(item, key, tempValue);
-    }    
-
-
-    modifyRotateXY (dx, dy) {
-        var rx = Length.deg(-dy / this.$editor.scale)
-        var ry = Length.deg(dx / this.$editor.scale)
-
-        this.$selection.each((item, cachedItem) => {
-
-            this.modifyCacheItem(item, cachedItem, Length.deg(0), 'rotateX', rx)
-            this.modifyCacheItem(item, cachedItem, Length.deg(0), 'rotateY', ry)
-
-            item.transform = Transform.join(item.transformObj);
-        })
+        this.emit('refreshRect');     
+        this.$selection.setRectCache();           
     }
 
     [DOUBLECLICK('$handle')] () {
@@ -163,21 +157,37 @@ export default class RotateEditorView extends UIElement {
     }
 
     [POINTERSTART('$handle') + MOVE() + END()] () {
-        this.setCacheRotateZ();
+        var pointerRect = this.refs.$handle.rect();
+        var targetRect = this.refs.$rotateZ.rect();
+        this.rotateZCenter = {
+            x: targetRect.x + targetRect.width/2, 
+            y: targetRect.y + targetRect.height/2
+        }
+        this.rotateZStart = {
+            x: pointerRect.x + pointerRect.width/2, 
+            y: pointerRect.y + pointerRect.height/2 
+        }        
+        this.state.rotateCache = this.$selection.map(item => {
+            return {
+                item,
+                rotateZ: Transform.get(item['transform'], 'rotateZ')[0] || Length.deg(0),
+            }
+        })
     }
 
     move (dx, dy) {
         this.modifyRotateZ(dx, dy);
 
         this.bindData('$rotateZ');             
-        this.emit('refreshSelectionDragStyleView', null, false, true)
+        this.emit('refreshSelectionStyleView', null, false, true)
         this.emit('refreshRect');
 
     }
 
     end () {
         this.emit('refreshSelectionStyleView')        
-        this.emit('refreshRect');        
+        this.emit('refreshRect');  
+        this.$selection.setRectCache();              
     }
 
 
@@ -189,68 +199,15 @@ export default class RotateEditorView extends UIElement {
             {dx, dy}
         )));
 
-       
-        this.$selection.each((item, cachedItem) => {
-            var tempRotateZ = Length.deg(0)
+        this.state.rotateCache.forEach(cache => {
 
-            if (cachedItem.rotateZ) { 
-                tempRotateZ.set(cachedItem.rotateZ.value[0].value);
-            } else if (cachedItem.rotate) {
-                tempRotateZ.set(cachedItem.rotate.value[0].value);
-            }
+            let transform = cache.item.transform
+            transform = Transform.rotateZ(transform, Length.deg(cache.rotateZ.value + distAngle.value)) 
 
-            tempRotateZ.add(distAngle.value);
-
-            if (e.altKey) {
-                tempRotateZ.add(- (tempRotateZ.value % 10)) 
-            }
-
-
-            this.setTransformValue(item, 'rotateZ', tempRotateZ);
-
-            item.transform = Transform.join(item.transformObj);
+            cache.item.transform = transform;
         })
+
     }
-
-
-    setTransformValue (item, type, value) {
-
-        var obj = item.transformObj.filter(it => it.type === type)[0]
-        if (obj) {
-            obj.value[0] = value.clone();
-        } else {
-            item.transformObj.push({ type: type, value: [value.clone()] })
-        }    
-    }
-
-    setCacheBaseTrasnform (...args) {
-        this.$selection.each((item, cachedItem) => {
-            item.transformObj = Transform.parseStyle(item.transform);
-            cachedItem.transformObj = Transform.parseStyle(cachedItem.transform);
-
-            args.forEach(key => {
-                cachedItem[key] = cachedItem.transformObj.filter(it => it.type === key)[0];    
-            })
-
-        })
-    }
-
-
-    setCacheRotateZ () {
-        var pointerRect = this.refs.$handle.rect();
-        var targetRect = this.refs.$rotateZ.rect();
-        this.rotateZCenter = {
-            x: targetRect.x + targetRect.width/2, 
-            y: targetRect.y + targetRect.height/2
-        }
-        this.rotateZStart = {
-            x: pointerRect.x + pointerRect.width/2, 
-            y: pointerRect.y + pointerRect.height/2 
-        }
-
-        this.setCacheBaseTrasnform('rotateZ', 'rotate');
-    }    
-
 
     [EVENT('refreshSelection')] () {
         this.refresh();

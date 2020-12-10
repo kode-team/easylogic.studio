@@ -1,10 +1,10 @@
 import PathParser from "@parser/PathParser";
-import { clone, OBJECT_TO_CLASS, OBJECT_TO_PROPERTY, CSS_TO_STRING } from "@core/functions/func";
+import { clone } from "@core/functions/func";
 import { hasSVGProperty, hasCSSProperty, hasSVGPathProperty } from "@util/Resource";
 import icon from "@icon/icon";
 import { ComponentManager } from "@manager/ComponentManager";
-import Dom from "@core/Dom";
 import { SVGItem } from "./SVGItem";
+import { vec3 } from "gl-matrix";
 
 export class SVGPathItem extends SVGItem {
 
@@ -15,9 +15,8 @@ export class SVGPathItem extends SVGItem {
     return super.getDefaultObject({
       itemType: 'svg-path',
       name: "New Path",   
-      'stroke-width': 5,
+      'stroke-width': 1,
       d: '',        // 이건 최종 결과물로만 쓰고 나머지는 모두 segments 로만 사용한다. 
-      segments: [],
       totalLength: 0,
       ...obj
     });
@@ -29,51 +28,29 @@ export class SVGPathItem extends SVGItem {
  
 
   setCache () {
-    this.rect = {
-      width: this.json.width.clone(),
-      height: this.json.height.clone()
-    }
-    if (!this.json.path) {
-      this.json.path = new PathParser(this.json.d);
-    }
 
-    if (!this.cachePath) {
-      this.cachePath = this.json.path.clone()
-    } else if (this.json.path.d !== this.cachePath.d) {
-      this.cachePath = this.json.path.clone()
-    }
+    super.setCache();
+
+    // 캐쉬 할 때는  0~1 사이 값으로 가지고 있다가 
+    this.cachePath = new PathParser(this.json.d)
+    this.cachePath.scale(1/this.json.width.value, 1/this.json.height.value)
   }
 
   recover () {
 
+    super.recover();
+
     // 캐쉬가 없는 상태에서는 초기 캐쉬를 생성해준다. 
-    if (!this.rect) this.setCache();
+    if (!this.cachePath) this.setCache();
 
-    var baseWidth = this.rect.width.value
-    if (baseWidth === 0) baseWidth = 1; 
+    var sx = this.json.width.value
+    var sy = this.json.height.value
 
-    var baseHeight = this.rect.height.value
-    if (baseHeight === 0) baseHeight = 1;     
-
-    var sx = this.json.width.value / baseWidth 
-    var sy = this.json.height.value / baseHeight
-
-    this.scale(sx, sy);
-  }
-
-  scale (sx, sy) {
+    // 마지막 크기(width, height) 기준으로 다시 확대한다. 
     this.json.d = this.cachePath.clone().scaleTo(sx, sy)
-    this.json.path.reset(this.json.d)
+
   }
 
-  convert(json) {
-    json = super.convert(json);
-    if (json.d)  {
-      json.path = new PathParser(json.d);
-    }
-
-    return json;
-  }
 
   toCloneObject() {
     var json = this.json; 
@@ -81,7 +58,6 @@ export class SVGPathItem extends SVGItem {
       ...super.toCloneObject(),
       totalLength: json.totalLength,
       d: json.d,
-      segments: clone(this.json.segments)
     }
   }
 
@@ -100,77 +76,6 @@ export class SVGPathItem extends SVGItem {
     ] 
   }  
 
-
-  /**
-   * 
-   * @param {Dom} currentElement 
-   */
-  updateFunction (currentElement) {
-
-    if (!currentElement) return; 
-
-    var $path = currentElement.$('path');
-
-    if ($path) {
-      $path.setAttr({
-        'd':  this.json.d,
-        'filter': this.toFilterValue,
-        'fill': this.toFillValue,
-        'stroke': this.toStrokeValue
-      })  
-    }
-
-    this.updateDefString(currentElement)
-
-    if ($path.totalLength != this.json.totalLength) {
-      this.json.totalLength = $path.totalLength
-    }
-
-  }    
-
-  get html () {
-    var {id} = this.json; 
-    var p = {'motion-based': this.json['motion-based'] }
-
-    return /*html*/`
-  <svg class='element-item path ${OBJECT_TO_CLASS(p)}'  ${OBJECT_TO_PROPERTY({
-    'motion-based': this.json['motion-based'],
-    "xmlns": "http://www.w3.org/2000/svg"
-  })}  data-id="${id}" >
-    ${this.toDefString}
-    <path ${OBJECT_TO_PROPERTY({
-      'class': 'svg-path-item',
-      d: this.json.d, 
-      filter: this.toFilterValue,
-      fill: this.toFillValue,
-      stroke: this.toStrokeValue
-    })} />
-  </svg>`
-  }
-
-
-  get svg () {
-    var x = this.json.x.value;
-    var y = this.json.y.value;
-    return this.toSVG(x, y);
-  }
-
-  toSVG(x = 0, y = 0) {
-    return /*html*/`
-      <g transform="translate(${x}, ${y})">
-      ${this.toDefString}
-      <path ${OBJECT_TO_PROPERTY({
-        'class': 'svg-path-item',
-        d: this.json.d, 
-        filter: this.toFilterValue,
-        fill: this.toFillValue,
-        stroke: this.toStrokeValue,
-        ...this.toSVGAttribute(),
-        style: CSS_TO_STRING(this.toSVGCSS())      
-      })} />
-    </g>
-  `
-  }
 }
 
 ComponentManager.registerComponent('svg-path', SVGPathItem)

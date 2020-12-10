@@ -163,7 +163,7 @@ export default class EventMachine {
   /**
    * template 을 렌더링 한다. 
    * 
-   * @param {Dom} $container  컴포넌트가 그려질 대상 
+   * @param {Dom|undefined} $container  컴포넌트가 그려질 대상 
    */
   render($container) {
     this.$el = this.parseTemplate(
@@ -334,10 +334,14 @@ export default class EventMachine {
       // create component 
       let refName = $dom.attr(REFERENCE_PROPERTY);
       var instance = null; 
+
+      // 동일한 refName 의 EventMachine 이 존재하면  해당 컴포넌트는 다시 그려진다. 
+      // 루트 element 는 변경되지 않는다. 
       if (this.children[refName]) {
         instance = this.children[refName] 
         instance._reload(props);
       } else {
+        // 기존의 refName 이 존재하지 않으면 Component 를 생성해서 element 를 교체한다. 
         instance = new Component(this, props);
 
         this.children[refName || instance.id] = instance;

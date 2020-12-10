@@ -1,44 +1,21 @@
 import UIElement, { EVENT } from "@core/UIElement";
-import { POINTERSTART, MOVE, END, BIND, IF, CLICK } from "@core/Event";
+import { POINTERSTART, MOVE, END, IF } from "@core/Event";
 import { Length } from "@unit/Length";
-import { isNotUndefined } from "@core/functions/func";
-import GuideView from "../view/GuideView";
-import icon from "@icon/icon";
+import { clone} from "@core/functions/func";
+import { mat4, vec3 } from "gl-matrix";
+import { Transform } from "@property-parser/Transform";
+import { TransformOrigin } from "@property-parser/TransformOrigin";
+import { calculateAngleForVec3, calculateMatrix, calculateMatrixInverse, vertiesMap } from "@core/functions/math";
 
-var moveType = {
-    'move': 'move',
-    'to top': 'move',    
-    'to top right': 'move',
-    'to top left': 'move',
-    'to bottom': 'move',    
-    'to bottom right': 'move',
-    'to bottom left': 'move',
-    'to left': 'move',    
-    'to right': 'move',
-    'translate': 'transform',
-    'transform-origin': 'transform',
-    'rotate3d': 'transform'
-}
 
-var iconType = {
-    'artboard': 'artboard',
-    'rect': 'rect',
-    'circle': 'lens',
-    'text': 'title',
-    'image': 'image',
-    'svg-path': 'edit',
-    'svg-textpath': 'text_rotate',
-    'svg-text': 'title',
+var directionType = {
+    1: 'to top left',
+    2: 'to top right',
+    3: 'to bottom right',
+    4: 'to bottom left',
 }
 
 const SelectionToolEvent = class  extends UIElement {
-
-    [EVENT('hideSelectionToolView')] () {
-        this.refs.$selectionTool.css({
-            left: '-10000px',
-            top: '-10000px'
-        })
-    }
 
     [EVENT('hideSubEditor')] (e) {
         this.toggleEditingPath(false);
@@ -46,20 +23,14 @@ const SelectionToolEvent = class  extends UIElement {
 
     [EVENT('openPathEditor')] () {
         var current = this.$selection.current;
-        if (current && current.is('svg-path', 'svg-brush', 'svg-textpath')) {
+        if (current && current.isSVG() && current.d) {
             this.toggleEditingPath(true);
 
             // box 모드 
             // box - x, y, width, height 고정된 상태로  path 정보만 변경 
             this.emit('showPathEditor', 'modify', {
-                // changeEvent: 'updatePathItem',
                 current,
-                d: current.d,
-                box: 'box',
-                screenX: current.screenX,
-                screenY: current.screenY,
-                screenWidth: current.screenWidth,
-                screenHeight: current.screenHeight,
+                d: current.accumulatedPath().d,
             }) 
         }
     }
@@ -68,149 +39,69 @@ const SelectionToolEvent = class  extends UIElement {
         this.toggleEditingPath(false);
     }
 
-    // [EVENT('updatePathItem')] (pathObject) {
-
-    //     var current = this.$selection.current;
-    //     if (current) {
-    //         if (isFunction(current.updatePathItem)) {
-    //             // path data 설정 
-    //             current.updatePathItem(pathObject);
-
-    //             // 정해진 컴포넌트를 다시 그린다. 
-    //             this.emit('refreshSelectionStyleView', current, true, true);
-    //         }
-    //     }
-
-    // } 
-
 
     [EVENT('refreshSelectionTool')] () { 
         this.initSelectionTool();
-    }
-
-    [EVENT('makeSelectionTool')] (isScale) {
-        if (isScale) {
-            this.removeOriginalRect()   
-        }
-        let drawList = this.guideView.calculate();
-
-        this.makeSelectionTool();
-
-        if (this.$selection.length === 0){
-            drawList = []                
-        }
-
-        this.emit('refreshGuideLine', this.calculateWorldPositionForGuideLine(drawList));
-    }
-
-}
-
-const SelectionToolBind = class extends SelectionToolEvent {
-
-    [BIND('$selectionTool')] () {
-
-        var current = this.$selection.current;
-        var isLayoutItem = current && current.isLayoutItem()
-        var hasLayout = current && current.hasLayout()
-        var layout = current && (current.layout || current.parent.layout);
-
-        return {
-            'data-is-layout-item': isLayoutItem,
-            'data-is-layout-container': hasLayout,
-            'data-layout-container': layout,
-            // 1개의 객체를 선택 했을 때 move 판은 이벤트를 걸지 않기 
-            'data-selection-length': this.$selection.length
-        }
     }
 }
 
 /**
  * 원보 아이템의 크기를 가지고 scale 이랑 조합해서 world 의 크기를 구하는게 기본 컨셉 
  */
-export default class SelectionToolView extends SelectionToolBind {
-
-    initialize() {
-        super.initialize();
-
-        this.guideView = new GuideView(this.$editor, this);
-    }
+export default class SelectionToolView extends SelectionToolEvent {
 
     template() {
         return /*html*/`
-    <div class='selection-view' ref='$selectionView' >
-        <div class='selection-tool' ref='$selectionTool' style='left:-100px;top:-100px;'>
-            <div class='selection-tool-item' data-position='move' ref='$selectionMove' title='move'>
-                <span class='icon' ref='$selectionIcon'>${icon.flag}</span>
-                <span ref='$selectionTitle'></span>
-            </div>       
-            <div class='selection-tool-item' data-position='to top'></div>            
-            <div class='selection-tool-item' data-position='to bottom'></div>            
-            <div class='selection-tool-item' data-position='to left'></div>            
-            <div class='selection-tool-item' data-position='to right'></div>
-            <div class='selection-tool-item' data-position='to top right'></div>
-            <div class='selection-tool-item' data-position='to bottom right'></div>
-            <div class='selection-tool-item' data-position='to top left'></div>
-            <div class='selection-tool-item' data-position='to bottom left'></div>
-        </div>
-        <div class='selection-pointer' ref='$selectionPointer'></div>
+    <div class='selection-view one-selection-view' ref='$selectionView' style='display:none' >
+        <div class='pointer-rect' ref='$pointerRect'></div>        
     </div>`
     }
 
-    [CLICK('$selectionTool .selection-tool-item[data-position="path"]')] (e) {
-        this.trigger('openPathEditor');
-    }        
-
     toggleEditingPath (isEditingPath) {
-        this.refs.$selectionTool.toggleClass('editing-path', isEditingPath);
+        this.$el.toggleClass('editing-path', isEditingPath);
     }
     
     checkEditMode () {
         return this.$editor.isSelectionMode(); 
     }
 
-    [POINTERSTART('$selectionView .selection-tool-item') + IF('checkEditMode') + MOVE() + END()] (e) {
-        this.initMoveType(e.$dt);
+    [POINTERSTART('$pointerRect .rotate-pointer') + MOVE('rotateVertext') + END('rotateEndVertext')] (e) {
+        this.state.moveType = 'rotate'; 
 
-        this.parent.selectCurrent(...this.$selection.items)
+        // 혼자 돌 때랑 
+        // 그룹으로 돌 때랑 구조가 다르다.  
+        // 어떻게 맞추나 
 
         this.$selection.doCache();
 
-        this.initSelectionTool();
+        this.$selection.reselect();            
+        this.verties = clone(this.$selection.verties);
+        this.$snapManager.clear();
     }
 
-    initMoveType ($target) {
+    rotateVertext (dx, dy) {
 
-        this.$target = $target || this.refs.$selectionTool.$('.selection-tool-item[data-position="move"]');
+        var distAngle = Math.floor(calculateAngleForVec3(this.verties[4], this.verties[5], [dx, dy, 0]));
 
-        if (this.$target) {
-            this.pointerType = this.$target.attr('data-position')
+        this.$selection.cachedItemVerties.forEach(item => {
+            const instance = this.$selection.get(item.id)
 
-            this.refs.$selectionTool.attr('data-selected-position', this.pointerType);
-            this.refs.$selectionTool.attr('data-selected-movetype', moveType[this.pointerType]);
-        }
+            if (instance) {
+                instance.reset({
+                    transform: Transform.addTransform(item.transform, `rotateZ(${Length.deg(distAngle)})`) 
+                })
+            }
+
+        })
+
+        this.renderPointers();
+        this.emit('refreshCanvasForPartial', null, true)                
     }
 
-    move (dx, dy) {
+    rotateEndVertext (dx, dy) {
 
-        var e = this.$config.get('bodyEvent');
-
-
-        if (e.shiftKey) {
-            dy = dx; 
-        }
-
-        this.refreshSelectionToolView(dx, dy);
-        // this.parent.updateRealPosition();    
-        this.emit('refreshCanvasForPartial', null, true)     
-    }
-
-    end () {
-        this.refs.$selectionTool.attr('data-selected-position', '');
-        this.refs.$selectionTool.attr('data-selected-movetype', '');
-
-        this.emit('refreshAllElementBoundSize');
-        this.emit('removeGuideLine')
-
+        // 마지막 변경 시점 업데이트 
+        this.verties = null;
 
         this.nextTick(() => {
             this.command(
@@ -218,22 +109,276 @@ export default class SelectionToolView extends SelectionToolBind {
                 'move selection pointer',
                 this.$selection.cloneValue('x', 'y', 'width', 'height')
             );  
-        })
+        })        
+    }
 
-    }   
 
-    refreshSelectionToolView (dx, dy, type) {
-        if (dx === 0 && dy === 0) {
-            // console.log(' not moved', dx, dy)
-        } else {
-            this.guideView.move(type || this.pointerType, dx / this.$editor.scale,  dy / this.$editor.scale )
+    [POINTERSTART('$pointerRect .pointer') + MOVE('moveVertext') + END('moveEndVertext')] (e) {
+        const num = +e.$dt.attr('data-number')
+        const direction =  directionType[`${num}`];
+        this.state.moveType = direction; 
+        this.state.moveTarget = num; 
 
-            var drawList = this.guideView.calculate();
-            this.emit('refreshGuideLine', this.calculateWorldPositionForGuideLine(drawList));            
+        this.$selection.doCache();
+
+        this.$selection.reselect();        
+        this.$snapManager.clear();            
+        this.verties = this.$selection.verties;
+
+    }
+
+    calculateNewOffsetMatrixInverse (vertextOffset, width, height, origin, itemMatrix) {
+
+        const center = vec3.add(
+            [], 
+            TransformOrigin.scale(origin,width, height), 
+            vec3.negate([], vertextOffset)
+        );
+
+        return calculateMatrixInverse(
+            mat4.fromTranslation([], vertextOffset),
+            mat4.fromTranslation([], center),
+            itemMatrix,
+            mat4.fromTranslation([], vec3.negate([], center)),
+        );        
+    }
+
+    calculateDistance (vertext, distVector, reverseMatrix) {
+
+        // 1. 움직이는 vertext 를 구한다. 
+        const currentVertext = vec3.clone(vertext);
+
+        // 2. dx, dy 만큼 옮긴 vertext 를 구한다.        
+        // - dx, dy 를 계산하기 전에 먼저 snap 을 실행한 다음 최종 dx, dy 를 구한다      
+        const snap = this.$snapManager.check([
+            vec3.add([], currentVertext, distVector)
+        ]);
+
+        const nextVertext = vec3.add([], currentVertext, vec3.add([], distVector, snap ));
+
+        // 3. invert matrix 를 실행해서  기본 좌표로 복귀한다.             
+        var currentResult = vec3.transformMat4([], currentVertext, reverseMatrix); 
+        var nextResult = vec3.transformMat4([], nextVertext, reverseMatrix); 
+
+        // 4. 복귀한 좌표에서 차이점을 구한다. 
+        const realDist = vec3.transformMat4([], 
+            vec3.add([], nextResult, vec3.negate([], currentResult)),
+            this.$editor.matrixInverse
+        )
+
+        return realDist
+    }
+
+    moveItem (instance, lastStartVertext, newWidth, newHeight) {
+
+        if (instance) {
+            instance.reset({
+                x: Length.px(lastStartVertext[0] + (newWidth < 0 ? newWidth : 0)),
+                y: Length.px(lastStartVertext[1] + (newHeight < 0 ? newHeight : 0)),
+                width: Length.px(Math.abs(newWidth)),
+                height: Length.px(Math.abs(newHeight)),
+            })    
+            instance.recover();     
         }
 
-        this.makeSelectionTool();        
+    }
 
+    moveBottomRightVertext (distVector) {
+        const verties = this.verties;
+        if (verties) {
+
+            this.$selection.cachedItemVerties.forEach(item => {
+                const [realDx, realDy] = this.calculateDistance(
+                    item.verties[2],    // bottom right 
+                    distVector, 
+                    item.accumulatedMatrixInverse
+                );
+    
+                // 변형되는 넓이 높이 구하기 
+                const newWidth = item.width + realDx;
+                const newHeight = item.height + realDy;
+    
+                // 마지막 offset x, y 를 구해보자. 
+                const view = calculateMatrix(
+                    item.directionMatrix['to top left'],
+                    this.calculateNewOffsetMatrixInverse (
+                        [0, 0, 0], 
+                        newWidth, newHeight, 
+                        item.originalTransformOrigin, 
+                        item.itemMatrix
+                    )
+                );
+    
+                const lastStartVertext = mat4.getTranslation([], view);
+    
+                this.moveItem (this.$selection.get(item.id), lastStartVertext, newWidth, newHeight);
+            })
+
+
+        }
+    }
+
+
+    moveTopRightVertext (distVector) {
+        const item = this.$selection.cachedItemVerties[0]
+        if (item) {
+
+
+            const [realDx, realDy] = this.calculateDistance(
+                item.verties[1],    // top right 
+                distVector, 
+                item.accumulatedMatrixInverse
+            );
+
+            // 변형되는 넓이 높이 구하기 
+            const newWidth = item.width + realDx;
+            const newHeight = item.height - realDy;
+
+            // 마지막 offset x, y 를 구해보자. 
+            const view = calculateMatrix(
+                item.directionMatrix['to bottom left'],
+                this.calculateNewOffsetMatrixInverse (
+                    [0, newHeight, 0], 
+                    newWidth, newHeight, 
+                    item.originalTransformOrigin, 
+                    item.itemMatrix
+                )
+            );            
+
+            const lastStartVertext = mat4.getTranslation([], view);         
+
+            this.moveItem (this.$selection.items[0], lastStartVertext, newWidth, newHeight);                
+        }
+    }
+
+
+    moveTopLeftVertext (distVector) {
+        const item = this.$selection.cachedItemVerties[0]
+        if (item) {
+
+
+            const [realDx, realDy] = this.calculateDistance(
+                item.verties[0],    // top left 
+                distVector, 
+                item.accumulatedMatrixInverse
+            );
+
+            // 변형되는 넓이 높이 구하기 
+            const newWidth = item.width - realDx;
+            const newHeight = item.height - realDy;            
+
+            // 마지막 offset x, y 를 구해보자. 
+            const view = calculateMatrix(
+                item.directionMatrix['to bottom right'],
+                this.calculateNewOffsetMatrixInverse (
+                    [newWidth, newHeight, 0], 
+                    newWidth, newHeight, 
+                    item.originalTransformOrigin, 
+                    item.itemMatrix
+                )
+            );            
+
+            const lastStartVertext = mat4.getTranslation([], view);         
+
+            this.moveItem (this.$selection.items[0], lastStartVertext, newWidth, newHeight);
+        }
+    }
+
+
+    moveBottomLeftVertext (distVector) {
+        const item = this.$selection.cachedItemVerties[0]
+        if (item) {
+
+            const [realDx, realDy] = this.calculateDistance(
+                item.verties[3],    // bottom left
+                distVector, 
+                item.accumulatedMatrixInverse
+            );
+
+            // 변형되는 넓이 높이 구하기 
+            const newWidth = item.width - realDx;
+            const newHeight = item.height + realDy;
+
+
+            // 마지막 offset x, y 를 구해보자. 
+            const view = calculateMatrix(
+                item.directionMatrix['to top right'],
+                this.calculateNewOffsetMatrixInverse (
+                    [newWidth, 0, 0], 
+                    newWidth, newHeight, 
+                    item.originalTransformOrigin, 
+                    item.itemMatrix
+                )
+            );            
+
+            const lastStartVertext = mat4.getTranslation([], view);         
+
+            this.moveItem (this.$selection.items[0], lastStartVertext, newWidth, newHeight);            
+        }
+    }
+
+
+    moveVertext (dx, dy) {
+
+        const distVector = vec3.transformMat4([], [dx, dy, 0], this.$editor.matrixInverse);
+
+        if (this.state.moveType === 'to bottom right') {        // 2
+            this.moveBottomRightVertext(distVector);
+        } else if (this.state.moveType === 'to top right') {
+            this.moveTopRightVertext(distVector);
+        } else if (this.state.moveType === 'to top left') {
+            this.moveTopLeftVertext(distVector);
+        } else if (this.state.moveType === 'to bottom left') {
+            this.moveBottomLeftVertext(distVector);                                
+        }    
+
+        this.renderPointers();
+        this.refreshSmartGuides();        
+        this.emit('refreshCanvasForPartial', null, true)                
+    }
+
+    moveEndVertext (dx, dy) {
+        this.$selection.reselect();
+
+        this.nextTick(() => {
+            this.command(
+                'setAttributeForMulti', 
+                'move selection pointer',
+                this.$selection.cloneValue('x', 'y', 'width', 'height')
+            );  
+        })        
+    }
+
+    refreshSelectionToolView (dx, dy) {
+
+        const distVector = [dx, dy, 0]
+        const newDist = vec3.transformMat4([], distVector, this.$editor.matrixInverse);
+        
+        this.$selection.cachedItemVerties.forEach(it => {
+
+            const snap = this.$snapManager.check(it.verties.map(v => {
+                return vec3.add([], v, newDist)
+            }));
+
+            const localDist = vec3.add([], newDist, snap);
+
+            const instance = this.$selection.get(it.id)
+
+            if (instance) {
+                instance.reset({
+                    x: Length.px(it.x + localDist[0]), 
+                    y: Length.px(it.y + localDist[1]),
+                })
+            }                        
+        }) 
+
+        this.refreshSmartGuides();
+    }
+
+    refreshSmartGuides () {
+        // 가이드 라인 수정하기 
+        const guides = this.$snapManager.findGuide(this.$selection.current.guideVerties());
+        this.emit('refreshGuideLine', guides);             
     }
 
     getSelectedElements() {
@@ -242,163 +387,76 @@ export default class SelectionToolView extends SelectionToolBind {
         return elements;
     }
 
-    getOriginalRect () {
-        if (!this.originalRect) {
-            this.originalRect = this.parent.$el.rect();
-        }
-
-        return this.originalRect;
-    }
-
-    getOriginalArtboardRect () {
-        if (!this.originalArtboardRect) {
-            this.originalArtboardRect = this.parent.refs.$view.rect();
-        }
-
-        return this.originalArtboardRect;
-    }    
-
-
-    removeOriginalRect () {
-        this.originalArtboardRect = null
-        this.originalRect = null
-    }
-
     initSelectionTool() {
-        this.$selection.reselect();
 
-        this.removeOriginalRect();
-
-        this.guideView.makeGuideCache();        
-
-        var current = this.$selection.current;
-        if (current) {
-            var isPath = current.is('svg-path', 'svg-brush', 'svg-textpath');
-            this.refs.$selectionTool.toggleClass('path', isPath);            
-        }
-
-        if (this.$editor.isSelectionMode() && this.$el.isHide()) {
+        if (this.$editor.isSelectionMode() && this.$el.isHide() && this.$selection.isOne) {
             this.$el.show();
+        } else {
+            if (this.$el.isShow() && this.$selection.isMany) this.$el.hide();
         }
-
-        this.bindData('$selectionTool')
 
         this.makeSelectionTool();
 
-    }    
+    }      
 
     makeSelectionTool() {
-
-        // selection 객체는 하나만 만든다. 
-        this.guideView.recoverAll();
-
-        var x = 0, y = 0, width = 0, height = 0;
-
-        if (this.guideView.rect) {
-            var {x, y, width, height} = this.calculateWorldPosition(this.guideView.rect) ;
-        }
-
-        if(x === 0 && y === 0 && width === 0 && height === 0) {
-            x = -10000
-            y = -10000
-        } else if (!this.$selection.currentArtboard) {
-            x = -10000
-            y = -10000
-        }
-
-        this.refs.$selectionTool.css({ 
-            left: Length.px(x), 
-            top: Length.px(y), 
-            width: Length.px(width), 
-            height: Length.px(height) 
-        })
-
-        this.refreshPositionText(x, y, width, height)
-
+        this.renderPointers();
     }
 
+    /**
+     * 선택영역 컴포넌트 그리기 
+     */
+    renderPointers () {
 
-    refreshPositionText (x, y, width, height) {
-
-        if (this.$selection.currentArtboard) {
-            var newX = Length.px(x - this.$selection.currentArtboard.x.value / this.$editor.scale).round(1);
-            var newY = Length.px(y - this.$selection.currentArtboard.y.value / this.$editor.scale).round(1);
-            var newWidth = Length.px(width / this.$editor.scale).round(1);
-            var newHeight = Length.px(height / this.$editor.scale).round(1);
-
-            var text = ''
-            switch(this.pointerType) {
-                case 'move': text =  `X: ${newX}, Y: ${newY}`; break;
-                case 'to top': text =  `Y: ${newY}, H: ${newHeight}`; break;         
-                case 'to bottom': text =  `Y: ${newY}, H: ${newHeight}`; break;
-                case 'to left': text =  `X: ${newX}, W: ${newWidth}`; break;
-                case 'to right': text =  `X: ${newX}, W: ${newWidth}`; break;
-                case 'to top right': text =  `X: ${newX}, Y: ${newY}, W: ${newWidth}, H: ${newHeight}`; break;
-                case 'to top left': text =  `X: ${newX}, Y: ${newY}, W: ${newWidth}, H: ${newHeight}`; break;
-                case 'to bottom right': text =  `W: ${newWidth}, H: ${newHeight}`; break;
-                case 'to bottom left': text =  `X: ${newX}, Y: ${newY}, W: ${newWidth}, H: ${newHeight}`; break;
-            }
-            
-            this.setPositionText(text);
-
-            var length = this.$selection.length;
-            var title = ''; 
-
-            if (length === 1) {
-                var current = this.$selection.current
-                title = current.title || current.getDefaultTitle();
-                const iconString = icon[iconType[current.itemType] || iconType.rect]
-                this.refs.$selectionIcon.html(iconString);  
-            } else if (length >= 2) {
-                title = `multi : ${length}`;
-                this.refs.$selectionIcon.html(icon.flag);                
-            }
- 
-            this.refs.$selectionTitle.text(title)
-            this.refs.$selectionMove.attr('title', title)
-        }
-    }
-
-    setPositionText (text) {
-        if (this.$target) {
-
-            if (this.$selection.current && this.$selection.current.is('artboard')) {
-                text = text.split(',').filter(it => {
-                    return !it.includes('X:') && !it.includes('Y:');
-                }).join(',');
-            }
-
-            this.$target.attr('data-position-text', text);
-        }
-
-    }
+        const verties = this.$selection.verties;
     
-
-    calculateWorldPositionForGuideLine (list = []) {
-        return list.map(it => {
-
-            var A = this.calculateWorldPosition(it.A)
-            var B = this.calculateWorldPosition(it.B)
-
-            var ax, bx, ay, by; 
-
-            if (isNotUndefined(it.ax)) { ax = it.ax * this.$editor.scale }
-            if (isNotUndefined(it.bx)) { bx = it.bx * this.$editor.scale }
-            if (isNotUndefined(it.ay)) { ay = it.ay * this.$editor.scale }
-            if (isNotUndefined(it.by)) { by = it.by * this.$editor.scale }
-
-            return { A,  B, ax,  bx, ay, by}
-        })
+        const {line, point} = this.createRenderPointers(vertiesMap(verties, this.$editor.matrix));
+        this.refs.$pointerRect.updateDiff(line + point)
     }
 
-    calculateWorldPosition (item) {
+
+    createPointer (pointer, number) {
+        return /*html*/`
+        <div class='pointer' data-number="${number}" style="transform: translate3d( calc(${pointer[0]}px - 50%), calc(${pointer[1]}px - 50%), 0px)" ></div>
+        `
+    }
+
+    createRotatePointer (pointer, number) {
+        if (pointer.length === 0) return '';        
+        return /*html*/`
+        <div class='rotate-pointer' data-number="${number}" style="transform: translate3d( calc(${pointer[0]}px - 50%), calc(${pointer[1]}px - 50%), 0px)" ></div>
+        `
+    }    
+
+    createPointerRect (pointers) {
+        if (pointers.length === 0) return '';
+
+        return /*html*/`
+        <svg class='line' overflow="visible">
+            <path 
+                d="M ${pointers[0][0]}, ${pointers[0][1]} L ${pointers[1][0]}, ${pointers[1][1]} L ${pointers[2][0]}, ${pointers[2][1]} L ${pointers[3][0]}, ${pointers[3][1]} Z" />
+        </svg>`
+    }    
+
+    createRenderPointers(pointers) {
+
+        const current = this.$selection.current; 
+        const isArtBoard = current && current.is('artboard');
+
         return {
-            x: item.x * this.$editor.scale,
-            y: item.y * this.$editor.scale,
-            width: item.width  *  this.$editor.scale,
-            height: item.height  * this.$editor.scale,
+            line: this.createPointerRect(pointers), 
+            point: [
+                this.createPointer (pointers[0], 1),
+                this.createPointer (pointers[1], 2),
+                this.createPointer (pointers[2], 3),
+                this.createPointer (pointers[3], 4),
+                isArtBoard ? undefined : this.createRotatePointer (pointers[4], 5),                
+            ].join('')
         }
     }
 
+    [EVENT('refreshSelectionStyleView')] () {
+        this.renderPointers()
+    }
     
 } 

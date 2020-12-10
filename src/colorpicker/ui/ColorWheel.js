@@ -1,7 +1,7 @@
 import { calculateAngle, getXYInCircle } from "@core/functions/math";
 import Color from "@core/Color";
 import Dom from "@core/Dom";
-import Event, { POINTERSTART, POINTERMOVE, POINTEREND } from "@core/Event";
+import Event, { POINTERSTART, POINTERMOVE, POINTEREND, PREVENT } from "@core/Event";
 import UIElement, { EVENT } from "@core/UIElement";
 
 
@@ -198,7 +198,7 @@ export default class ColorWheel extends UIElement {
 
   }
 
-  [POINTERMOVE("document")](e) {
+  [POINTERMOVE("document") + PREVENT](e) {
     if (this.isDown) {
       this.setHueColor(e);
     }

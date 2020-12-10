@@ -8,6 +8,13 @@
     bottom:0px;
     // background-color: yellow;
 
+
+    
+    &.editing-path,
+    &.editing-polygon {
+      display: none !important;
+    }        
+
     &.empty {
       > * {
         display: none;
@@ -15,37 +22,65 @@
     }
   }
 
-  .selection-pointer {
-    position: absolute;
-    left:0px;
-    top:0px;
-    width:100%;
-    height:100%;
-    pointer-events: none;
-    .marker {
-      position: absolute;
-      // pointer-events: all;
-      left:0px;
-      top:0px;
-      width: 10px;
-      height: 10px;
-      margin-left: -5px;
-      margin-top: -5px;
-      background-color: black;
-      border-radius: 100%;
 
-      &[data-index='1'] {
-        background-color:var(--selected-color);
+  .pointer-rect {
+    pointer-events: none;
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    box-sizing: border-box;
+
+    .pointer,
+    .rotate-pointer {
+      display: inline-block;
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      width: 12px;
+      height: 12px;
+      box-sizing: border-box;
+      background-color: white; 
+      box-sizing: border-box;
+      border: 1px solid var(--selection-tool-border-color);
+      border-radius: 100%;
+      cursor: pointer;
+      pointer-events: all;
+      // &[data-number="1"] { background-color: rgb(255, 185, 185); }
+      // &[data-number="2"] { background-color: rgb(255, 0, 0); }
+      // &[data-number="3"] { background-color: rgb(115, 255, 0); }
+      // &[data-number="4"] { background-color: rgb(75, 62, 255); }
+      // &[data-number="p1"] { background-color: rgb(255, 185, 185); }
+
+      &:before {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 6px;
+        height: 6px;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        background-color: var(--selection-tool-border-color);
       }
-      &[data-index='2'] {
-        background-color:var(--border-color);
-      }
-      &[data-index='3'] {
-        background-color:var(--border-color);
-      }
-      &[data-index='4'] {
-        background-color:var(--border-color);
-      }                  
+    }
+    .rotate-pointer {
+      width: 14px;
+      height: 14px;      
+      background-color: yellow;
+      border-radius: 100%;
+      cursor: alias;
+    }
+
+    .line {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+
+      stroke: var(--selection-tool-border-color);
+      fill: transparent;
+      stroke-width: 1;
     }
   }
   
@@ -53,15 +88,13 @@
     border: var(--selection-tool-border-color) 0.5px solid;
     position:absolute;
 
-    
-    &.editing-path,
-    &.editing-polygon {
-      display: none !important;
-    }    
 
     &.path,
     &.textpath,
     &.polygon {
+
+      // display: none;
+
       .selection-tool-item[data-position="path"] {
         top: -30px;
         bottom: auto; 

@@ -93,14 +93,6 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
 @import './sub-editor/draw-manager.scss';
 @import './rotate-editor-view.scss';
 
-
-.page-canvas {
-  position: absolute;
-  width: 500px;
-  height: 400px;
-  background-color: white;
-}
-
 .drag-area-rect {
   pointer-events: none;
   position: absolute;
@@ -109,28 +101,6 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
   box-sizing: border-box;
 
   left: -10000px;
-}
-
-.pointer-rect {
-  pointer-events: none;
-  position: absolute;
-  left: 0px;
-  right: 0px;
-  top: 0px;
-  bottom: 0px;
-  box-sizing: border-box;
-
-  .pointer {
-    display: inline-block;
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    box-sizing: border-box;
-    background-color: black; 
-    border-radius: 100%;
-
-    &[data-number="1"] { background-color: red; }
-  }
 }
 
 .canvas-view {
@@ -155,7 +125,9 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
 
   .element-item {
 
-    // outline: 1px double var(--selected-color);
+    &.selected {
+      // outline: 1px solid rgb(64, 64, 252);
+    }
 
     &[contenteditable="true"] {
       // margin: 0px;
@@ -165,10 +137,17 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
 
     &:hover {
 
-      &:not(.selected) {
+      &:not(.selected):not(.path) {
         outline: 1px double rgb(64, 64, 252);
       }
 
+      &:not(.selected).path {
+
+        path {
+          outline: 1px solid rgb(64, 64, 252);
+        }
+
+      }
 
     }
 
@@ -186,8 +165,7 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
     }    
 
     &.artboard {
-      &:before {
-        content: attr(data-title);
+      > .artboard-title {
         position: absolute;
         left: 0px;
         top: -15px;
@@ -197,7 +175,7 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
       }
 
       &:hover {
-        outline: none;
+        outline: none !important;
       }
     }
   }

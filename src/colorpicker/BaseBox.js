@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "@core/UIElement";
-import { POINTERSTART, POINTERMOVE, POINTEREND } from "@core/Event";
+import { POINTERSTART, POINTERMOVE, POINTEREND, PREVENT } from "@core/Event";
 
 export default class BaseBox extends UIElement {
   refresh() {}
@@ -17,7 +17,7 @@ export default class BaseBox extends UIElement {
     this.onDragEnd(e);
   }
 
-  [POINTERMOVE("document")](e) {
+  [POINTERMOVE("document") + PREVENT](e) {
     this.onDragMove(e);
   }
 

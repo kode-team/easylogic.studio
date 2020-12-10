@@ -27,12 +27,6 @@ export default class LayerTreeProperty extends BaseProperty {
     }
   }
 
-  getTools() {
-    return /*html*/`
-      <button type='button' ref='$add' title="Add a layer">${icon.add}</button>
-    `
-  }
-
   getBody() {
     return /*html*/`
       <div class="layer-list scrollbar" ref="$layerList"></div>

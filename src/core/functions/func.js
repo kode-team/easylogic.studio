@@ -133,6 +133,14 @@ export function isNumber (value) {
     return typeof value == 'number';
 }
 
+export function isZero (num) {
+    return num === 0;
+}
+
+export function isNotZero (num) {
+    return !isZero(num);
+}
+
 export function clone (obj) {
     return JSON.parse(JSON.stringify(obj));
 }
@@ -304,14 +312,25 @@ export const splitMethodByKeyword = (arr, keyword) => {
     return [filterKeys, filterMaps];
 };
 
-export const curveToPath = (timingFunction, width, height) => {
+export const curveToPath = (timingFunction, width = 30, height = 30) => {
     const currentBezier = getPredefinedCubicBezier(timingFunction)
     
     return `
-        M0 30 
+        M0 ${width} 
         C 
         ${currentBezier[0] * width} ${currentBezier[1] == 0 ? height : (1 - currentBezier[1]) * height},
         ${currentBezier[2] * width} ${currentBezier[3] == 1 ? 0 : (1 - currentBezier[3] ) * height},
         ${width} 0
+    `
+}
+
+export const curveToPointLine = (timingFunction, width = 30, height = 30) => {
+    const currentBezier = getPredefinedCubicBezier(timingFunction)
+    
+    return `
+        M 0 ${width} 
+        L ${currentBezier[0] * width} ${currentBezier[1] == 0 ? height : (1 - currentBezier[1]) * height}
+        M ${width} 0
+        L ${currentBezier[2] * width} ${currentBezier[3] == 1 ? 0 : (1 - currentBezier[3] ) * height}
     `
 }

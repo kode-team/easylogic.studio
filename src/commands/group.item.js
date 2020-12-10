@@ -1,3 +1,4 @@
+//TODO: matrix 개념으로 다시 구현해야함 
 export default {
     command : 'group.item',
     execute: function (editor) {

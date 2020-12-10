@@ -40,7 +40,7 @@
                 path {
                     &.object {
                         pointer-events: visibleStroke;
-                        stroke: #848484;
+                        // stroke: #848484;
                     }
                 }
             }
@@ -73,7 +73,7 @@
                 path {
                     &.object {
                         pointer-events: visibleStroke;
-                        stroke: #848484;
+                        stroke: transparent;
                     }
                 }
             }
@@ -132,6 +132,27 @@
                     border-radius: 100%;
                     background-color: rgba(255, 255, 255, 1);
                 }
+                &[data-position="to skewX"] {
+                    left: calc(50% - 20px);
+                    top: -20px;
+                    cursor: move;
+                    background-color: rgba(255, 255, 255, 1);
+                    transform: skewX(10deg);
+                }
+                &[data-position="to skewY"] {
+                    left: calc(50% + 20px);
+                    top: -20px;
+                    cursor: move;
+                    background-color: rgba(255, 255, 255, 1);
+                    transform: skewY(10deg);
+                }                
+                &[data-position="to rotate"] {
+                    left: 50%;
+                    top: -20px;
+                    cursor: move;
+                    border-radius: 100%;
+                    background-color: rgba(255, 255, 255, 1);
+                }                                
 
                 &[data-position="to move"] {
                     left: 0px;
@@ -269,7 +290,7 @@
             fill: transparent;
             stroke: var(--selected-border-color);
             stroke-width: 1;
-            // display: none;
+            display: none;
             pointer-events: none;
         }
 

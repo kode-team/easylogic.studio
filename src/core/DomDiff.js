@@ -76,7 +76,7 @@ function updateElement (parentElement, oldEl, newEl, i) {
         parentElement.removeChild(oldEl);
     } else if (changed(newEl, oldEl)) {
         parentElement.replaceChild(newEl.cloneNode(true), oldEl);
-    } else if (newEl.nodeType !== Node.TEXT_NODE) {
+    } else if (newEl.nodeType !== Node.TEXT_NODE && newEl.toString() !== "[object HTMLUnknownElement]") {
         updateProps(oldEl, getProps(newEl.attributes), getProps(oldEl.attributes)); // added        
         var oldChildren = children(oldEl);
         var newChildren = children(newEl);

@@ -189,7 +189,12 @@ const PathTransformEditor = class extends PathCutter {
 
 const FIELDS = ['fill', 'fill-opacity', 'stroke', 'stroke-width']
 
+/**
+ * @property {PathGenerator} pathGenerator
+ * @property {PathParser} pathParser
+ */
 export default class PathEditorView extends PathTransformEditor {
+
 
     initialize() {
         super.initialize();
@@ -203,9 +208,7 @@ export default class PathEditorView extends PathTransformEditor {
             changeEvent: 'updatePathItem', 
             isShow: false,
             points: [],
-            hasTransform: false, 
             mode: 'path',
-            $target: null, 
             clickCount: 0,
             isSegment: false,
             isFirstSegment: false,
@@ -231,7 +234,9 @@ export default class PathEditorView extends PathTransformEditor {
             </div>
             <div class='path-tool'>
                 <div class='transform-manager' ref='$tool'>
-                    <div class='transform-tool-item' data-position='to rotate'></div>                
+                    <div class='transform-tool-item' data-position='to rotate'></div>
+                    <div class='transform-tool-item' data-position='to skewX'></div>
+                    <div class='transform-tool-item' data-position='to skewY'></div>
                     <div class='transform-tool-item' data-position='to move'></div>
                     <div class='transform-tool-item' data-position='to top'></div>
                     <div class='transform-tool-item' data-position='to right'></div>
@@ -349,8 +354,10 @@ export default class PathEditorView extends PathTransformEditor {
     updatePathLayer () {
         var rect = this.getPathRect()
 
-        var minX = rect.x;
-        var minY = rect.y; 
+        // 원본 크기를 주기 위해서 minX, minY 는 0 으로 설정 한다. 
+        // 이유는 matrix 연산으로 path 의 마지막 위치를 맞추기 위해서이다.
+        var minX = 0; //rect.x;     
+        var minY = 0; //rect.y; 
         
         var item = this.state.current;
 
@@ -370,9 +377,18 @@ export default class PathEditorView extends PathTransformEditor {
         var parser = new PathParser(d);
 
         this.emit(this.state.changeEvent, {
-            d: parser.toString(), 
-            totalLength: this.totalPathLength
+            d: parser.d, 
+            totalLength: this.totalPathLength,
+            rect: {
+                x: rect.x / this.scale,             // 실제 스크린의 크기를  scale 에 맞게 다시 맞춘다. 
+                y: rect.y / this.scale,
+                width: rect.width / this.scale,
+                height: rect.height / this.scale,
+            },
+            bbox: rect.bbox
         })
+
+        // console.log(this.state.rect);
     }
 
     addPathLayer() {
@@ -384,10 +400,7 @@ export default class PathEditorView extends PathTransformEditor {
 
             var layer = this.makePathLayer(pathRect)
             if (layer) {
-                // this.$selection.empty(layer);
-    
                 this.emit('refreshAll')
-                // this.emit('refreshSelection');
             }
         }
         
@@ -419,40 +432,18 @@ export default class PathEditorView extends PathTransformEditor {
 
     }
 
-    getCurrentObject () {
-        var current = this.state.current; 
-
-        if (!current) {
-            return null;
-        }
-
-        return {
-            current,
-            d: current.d,
-            screenX: current.screenX,
-            screenY: current.screenY,
-            screenWidth: current.screenWidth,
-            screenHeight: current.screenHeight,
-        }
-    }
-
     refresh (obj) {
-
-        obj = obj || this.getCurrentObject();
 
         if (obj && obj.d) {
             this.pathParser.reset(obj.d)
             this.pathParser.scale(this.scale, this.scale);
 
-            var x = obj.screenX.value * this.scale
-            var y = obj.screenY.value * this.scale
+            this.state.points = this.pathParser.convertGenerator();   
+            
+            if (obj.current) {
+                this.state.currentMatrix = obj.current.matrix; 
+            }
 
-            this.pathParser.translate(x, y)
-
-            this.state.points = this.pathParser.convertGenerator();      
-            this.state.hasTransform = !!obj.current.transform;
-        } else {
-            this.state.hasTransform = false;        
         }
 
         this.pathGenerator.initializeSelect();
@@ -517,7 +508,6 @@ export default class PathEditorView extends PathTransformEditor {
                 'modify': this.state.mode === 'modify',
                 'transform': this.state.mode === 'transform',
                 'box': this.state.box === 'box',
-                'has-transform': !!this.state.hasTransform,
                 'segment-move': this.state.mode === 'segment-move',         
             },
             innerHTML: this.pathGenerator.makeSVGPath()

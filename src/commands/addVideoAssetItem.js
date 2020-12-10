@@ -3,18 +3,18 @@ import loadOriginalVideo from "@util/loadOriginalVideo";
 
 export default {
     command: 'addVideoAssetItem',
-    execute: function (editor, obj, rect = {}) {
+    execute: function (editor, videoObject, rect = {}) {
         var project = editor.selection.currentProject;
 
         if (project) {
 
             // append image asset 
-            project.createVideo(obj);
+            project.createVideo(videoObject);
             editor.emit('addVideoAsset');
 
             // convert data or blob to local url 
-            loadOriginalVideo(obj, (info) => {
-                editor.emit('addVideo', {src: obj.local, ...info, ...rect });
+            loadOriginalVideo(videoObject, (info) => {
+                editor.emit('addVideo', {src: videoObject.id, ...info, ...rect });
                 editor.changeMode(EDIT_MODE_SELECTION);
                 editor.emit('afterChangeMode');                
             });

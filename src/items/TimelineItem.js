@@ -8,7 +8,7 @@ import { AssetItem } from "./AssetItem";
 export class TimelineItem extends AssetItem {
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
-      timeline: [
+      timeline: [ 
         /*{ id: "xxx", 
           title: "xxxx", 
           currentTimecode: '00:00:00:00',
@@ -720,6 +720,7 @@ export class TimelineItem extends AssetItem {
       this.compiledTimingFunction(layerId, property);      
     }
   }
+
 
   setFps (fps) {
     var timeline = this.getSelectedTimeline();

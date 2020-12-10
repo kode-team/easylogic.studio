@@ -134,7 +134,7 @@ export default class TransitionPropertyPopup extends BasePopup {
     return /*html*/`
     <div class='timing-function'>
       <label>Timing function</label>
-      <CubicBezierEditor ref='$cubicBezierEditor' key="timingFunction" value="${this.state.data.timingFunction}" onChange='changeCubicBezier' />
+      <CubicBezierEditor ref='$cubicBezierEditor' key="timingFunction" value="${this.state.data.timingFunction || 'linear'}" onChange='changeCubicBezier' />
     </div>
     `
   }

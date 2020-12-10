@@ -1,8 +1,12 @@
 import { Item } from "./Item";
 import { Length } from "@unit/Length";
 import { Transform } from "../property-parser/Transform";
-import matrix from "@core/functions/matrix";
-import Dom from "@core/Dom";
+import { TransformOrigin } from "@property-parser/TransformOrigin";
+import { mat4, vec3 } from "gl-matrix";
+import { degreeToRadian, vertiesMap } from "@core/functions/math";
+import { isFunction } from "@core/functions/func";
+import PathParser from "@parser/PathParser";
+import { polyPoint, polyPoly, rectToVerties } from "@core/functions/collision";
 
 export class MovableItem extends Item {
 
@@ -34,10 +38,6 @@ export class MovableItem extends Item {
             y: this.json.y + '',
             width: this.json.width + '',
             height: this.json.height + '',
-            screenX: this.screenX,
-            screenY: this.screenY,
-            screenWidth: this.screenWidth,
-            screenHeight: this.screenHeight
         }
     }
 
@@ -144,9 +144,44 @@ export class MovableItem extends Item {
     }    
 
 
-    get screenWidth () { return this.json.width;  }
+    get offsetX () { 
+        if (!this.parent) {
+            return this.json.x;
+        }        
+        return this.json.x.toPx(this.screenWidth.value);  
+    }
 
-    get screenHeight () { return this.json.height;  }    
+    get offsetY () { 
+        if (!this.parent) {
+            return this.json.y;
+        }        
+        return this.json.y.toPx(this.screenHeight.value);  
+    }
+    
+    get screenWidth () { 
+        if (!this.parent) {             // project 는 0px 
+            return Length.z();
+        }        
+
+        if (!this.parent.parent) {      // artboard 는 자기 자신 
+            return this.json.width;
+        }
+
+        return this.json.width.toPx(this.parent.screenWidth.value);  
+    }    
+
+    get screenHeight () { 
+        if (!this.parent) {             // project 는 0px 
+            return this.json.height;
+        }
+
+
+        if (!this.parent.parent) {      // artboard 는 자기 자신 
+            return this.json.height;
+        }
+
+        return this.json.height.toPx(this.parent.screenHeight.value);  
+    }    
 
     /**
      * 화면상의 순수 위치 (left, top, width, height)
@@ -161,307 +196,518 @@ export class MovableItem extends Item {
             width: this.screenWidth,
             height: this.screenHeight
         }
+    } 
+
+    /**
+     * 충돌 체크 
+     * 
+     * polygon : ploygon 형태로 충돌 체크를 한다. 
+     * 
+     * @param {*} areaVerties 
+     */
+    checkInArea (areaVerties) {
+        return polyPoly(areaVerties, this.verties())        
     }
 
-    get centerX () { 
-        var half = 0; 
-        if (this.json.width.value != 0) {
-            half = Math.floor(this.json.width.value / 2)
-        }
-        return Length.px(this.screenX.value + half) 
+
+    /**
+     * areaVerties 안에 Layer 가 포함된 경우 
+     * 
+     * @param {vec3[]} areaVerties 
+     */
+    isIncludeByArea (areaVerties) {
+
+        return this.rectVerties().map(vector => {
+            return polyPoint(areaVerties, ...vector);
+        }).filter(Boolean).length === 4;
     }
-    get centerY () { 
-        var half = 0; 
-        if (this.json.height.value != 0) {
-            half = Math.floor(this.json.height.value / 2)
-        }
+
+    getPerspectiveMatrix () {
+        let [
+            perspectiveOriginX = Length.percent(50), 
+            perspectiveOriginY = Length.percent(50), 
+        ] = TransformOrigin.parseStyle(this.json['perspective-origin'])
+
+        const width = this.screenWidth.value;
+        const height = this.screenHeight.value
+
+        perspectiveOriginX = perspectiveOriginX.toPx(width).value
+        perspectiveOriginY = perspectiveOriginY.toPx(height).value
+
+        // 1. Start with the identity matrix.
+        const view = mat4.create();
+
+        // 2. Translate by the computed X and Y values of perspective-origin     
+        mat4.translate(view, view, [perspectiveOriginX, perspectiveOriginY, 0]);        
         
-        return Length.px(this.screenY.value + half) 
-    }    
 
+        // 3. Multiply by the matrix that would be obtained from the perspective() transform function, 
+        // where the length is provided by the value of the perspective property
+        const perspective = Transform.get(this.json['transform'], 'perspective')
+        let hasPerspective = true;
 
-    checkInArea (area) {
-        if (area.x2.value < this.screenX.value) { return false; }
-        if (area.y2.value < this.screenY.value) { return false; }
-        if (area.x.value > this.screenX2.value) { return false; }
-        if (area.y.value > this.screenY2.value) { return false; }
-
-        return true;
-    }
-
-    toBoundCSS() {
-        var {
-            x: left, 
-            y: top, 
-            width, 
-            height, 
-            transform,
-            'transform-origin': transformOrigin
-        } = this.json; 
-        return {
-            top,left,width, height, transform, 'transform-origin': transformOrigin
+        if (perspective.length) {
+            mat4.multiply(view, view, mat4.fromValues(
+                1, 0, 0, 0,
+                0, 1, 0, 0,
+                0, 0, 1, 0,
+                0, 0, -1/perspective[0].value, 1 
+            ))
+        } else if (this.json['perspective'] && this.json['perspective'] != 'none' ) {
+            mat4.multiply(view, view, mat4.fromValues(
+                1, 0, 0, 0,
+                0, 1, 0, 0,
+                0, 0, 1, 0,
+                0, 0, -1/Length.parse(this.json['perspective']).value, 1 
+            ))            
+        } else {
+            return undefined;
         }
+
+        // 4. Translate by the negated computed X and Y values of perspective-origin
+        mat4.translate(view, view, [-perspectiveOriginX, -perspectiveOriginY, 0]);                
+
+        return view; 
     }
 
-    get transformOrigin () {
-        var [left, top] = (this.json['transform-origin'] || '50% 50%').split(' ').map(it => {
-            return Length.parse(it || '50%');
+    getItemTransformMatrix () {
+
+        const list = Transform.parseStyle(Transform.rotate(this.json['transform'], this.json['rotate']));        
+         
+        // start with the identity matrix 
+        const view = mat4.create();
+
+        // 3. Multiply by each of the transform functions in transform property from left to right        
+        list.forEach(it => {
+
+            switch (it.type) {
+            case 'translate': 
+            case 'translateX': 
+            case 'translateY': 
+            case 'translateZ': 
+                var values = it.value
+                if (it.type === 'translate') {
+                    values = [values[0].toPx(width).value, values[1].toPx(height).value, 0];
+                } else if (it.type === 'translateX') {
+                    values = [values[0].toPx(width).value, 0, 0];
+                } else if (it.type === 'translateY') {
+                    values = [0, values[0].toPx(height).value, 0];
+                } else if (it.type === 'translateZ') {
+                    values = [0, 0, values[0].toPx().value];
+                }                    
+
+                mat4.translate(view, view, values); 
+                break;
+            case 'rotate': 
+            case 'rotateZ':             
+                // console.log('rotateZ', it.value);
+                mat4.rotateZ(view, view, degreeToRadian(it.value[0].value)); 
+                break;
+            case 'rotateX': 
+                mat4.rotateX(view, view, degreeToRadian(it.value[0].value)); 
+                break;
+            case 'rotateY': 
+                mat4.rotateY(view, view, degreeToRadian(it.value[0].value)); 
+                break;
+            case 'rotate3d':             
+                var values = it.value
+                mat4.rotate(view, view, degreeToRadian(it.value[3].value), [
+                    values[0].value,
+                    values[1].value,
+                    values[2].value,
+                ]); 
+                break;
+            case 'scale': 
+                mat4.scale(view, view, [it.value[0].value, it.value[1].value, 1]); 
+                break;
+            case 'scaleX': 
+                mat4.scale(view, view, [it.value[0].value, 1, 1]); 
+                break;
+            case 'scaleY': 
+                mat4.scale(view, view, [1, it.value[0].value, 1]); 
+                break;
+            case 'scaleZ': 
+                mat4.scale(view, view, [1, 1, it.value[0].value]); 
+                break;
+            case 'matrix': 
+                var values = it.value;
+                values = [
+                    values[0].value, values[1].value, 0, 0, 
+                    values[2].value, values[3].value, 0, 0, 
+                    0, 0, 1, 0, 
+                    values[4].value, values[5].value, 0, 1
+                ]
+                mat4.multiply(view, view, values);
+                break;
+            case 'matrix3d': 
+                var values = it.value.map(it => it.value);
+                mat4.multiply(view, view, values);
+                break;
+            // case 'perspective': 
+            //     var values = it.value;
+            //     mat4.perspective(view, Math.PI * 0.5, width/height, 1, values[0].value);
+            //     break;
+            }
         })
 
-        left = left.toPx(this.screenWidth.value);
-        top = top.toPx(this.screenHeight.value);
-
-        return {left, top}
+        return view;
     }
 
-    move (x, y) {
-        this.reset({ x, y })
-        return this;         
+    /**
+     * refer to https://www.w3.org/TR/css-transforms-2/
+     * 
+     * 1. Start with the identity matrix.
+     * 2. Translate by the computed X, Y and Z of transform-origin
+     * 3. Multiply by each of the transform functions in transform property from left to right
+     * 4. Translate by the negated computed X, Y and Z values of transform-origin
+     */    
+    getTransformMatrix () {
+        const origin = TransformOrigin.scale(
+            this.json['transform-origin'] || '50% 50% 0px', 
+            this.screenWidth.value, 
+            this.screenHeight.value
+        )
+
+        // start with the identity matrix 
+        const view = mat4.create();
+
+        // 2. Translate by the computed X, Y and Z of transform-origin        
+        mat4.translate(view, view, origin);
+
+        // 3. Multiply by each of the transform functions in transform property from left to right        
+        mat4.multiply(view, view, this.getItemTransformMatrix())        
+
+        // 4. Translate by the negated computed X, Y and Z values of transform-origin        
+        mat4.translate(view, view, vec3.negate([], origin));
+
+        return view; 
+    }      
+
+    /**
+     * 방향에 따른 matrix 구하기 
+     * 
+     * @param {ReadOnlyVec3} vertextOffset 
+     * @param {ReadOnlyVec3} center 
+     */
+    getDirectionTransformMatrix (vertextOffset) {
+        const x = this.offsetX.value;
+        const y = this.offsetY.value; 
+
+        const center = vec3.add([], TransformOrigin.scale(
+            this.json['transform-origin'] || '50% 50% 0px', 
+            this.screenWidth.value, 
+            this.screenHeight.value
+        ), vec3.negate([], vertextOffset));
+
+        const view = mat4.create();
+        mat4.translate(view, view, [x, y, 0]);
+        mat4.translate(view, view, vertextOffset);            
+        mat4.translate(view, view, center)        
+        mat4.multiply(view, view, this.getItemTransformMatrix())        
+        mat4.translate(view, view, vec3.negate([], center))            
+
+        return view; 
     }
 
-    moveX (x) {
-        this.reset ( { x })
-        return this;         
+    getDirectionTopLeftMatrix () {
+        return this.getDirectionTransformMatrix([0, 0, 0])
     }
 
-    moveY (y) {
-        this.reset ( { y })
-
-        return this; 
-    }
-
-    resize (width, height) {
-        if (width.value >= 0 && height.value >= 0) {
-            this.reset ({ width, height })
-        }
-
-        return this; 
-    }
-
-    resizeWidth (width) {
-        if (width.value >= 0) {
-            this.reset ({ width })
-        }
-
-        return this; 
-    }
-
-    resizeHeight ( height ) {
-        if (height.value >= 0) {
-            this.reset ({ height })
-        }
-
-        return this;
-    }
-
-    get screenTransform () {
-        return Transform.addTransform(this.json.parent.screenTransform, this.json.transform);
-    }
-
-    getTransform (element) {
-        var list = Transform.parseStyle(Dom.create(element).css('transform'));
-
-        var m = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
-        if (list.length) {
-            m = list[0].value.map(it => +it);
-
-        } else {
-            return {
-                rotate : {x: 0, y: 0, z: 0},
-                translate: {x: 0, y: 0, z: 0}
-            }
-        }
-
-        var m11 = m[0],  m21 = m[1],  m31 = m[2], m41 = m[3];
-        var m12 = m[4],  m22 = m[5],  m32 = m[6], m42 = m[7];
-        var m13 = m[8],  m23 = m[9],  m33 = m[10], m43 = m[11];
-        var m14 = m[12], m24 = m[13], m34 = m[14], m44 = m[15];
-        
-
-        var rotateY = Math.asin(-m13);
-        var rotateX;
-        var rotateZ;
-     
-        if (Math.cos(rotateY) !== 0) {
-            rotateX = Math.atan2(m23, m33);
-            rotateZ = Math.atan2(m12, m11);
-        } else {
-            rotateX = Math.atan2(m31, m22);
-            rotateZ = 0;
-        }
-
-        var translateX = m14;
-        var translateY = m24;
-        var translateZ = m34;
-
-
-        return {
-            rotate: { x: rotateX, y: rotateY, z: rotateZ },
-            translate: { x: translateX, y: translateY, z: translateZ }
-        };
+    getDirectionBottomLeftMatrix () {
+        return this.getDirectionTransformMatrix([0, this.screenHeight.value, 0])
     }    
 
-    verties ($el, rootElement) {
+    getDirectionTopRightMatrix () {
+        return this.getDirectionTransformMatrix([this.screenWidth.value, 0, 0])
+    }        
 
-        var {height: offsetHeight, width: offsetWidth} = $el.offsetRect()
+    getDirectionBottomRightMatrix () {
+        return this.getDirectionTransformMatrix([this.screenWidth.value, this.screenHeight.value, 0])
+    }            
 
-        var w = offsetWidth / 2;
-        var h = offsetHeight / 2;
 
-        var v = {
-            a: {x: -w, y: -h, z: 0},
-            b: {x: w, y: -h, z: 0},
-            c: {x: w, y: h, z: 0},
-            d: {x: -w, y: h, z: 0}
-        };
+    getAccumulatedMatrix () {
+        let transform = mat4.create();
 
-        var transform = this.getTransform($el.el);
-        while ($el.el) {
-            transform = this.getTransform($el.el);
 
-            v.a = matrix.addVector(matrix.rotateVector(v.a, transform.rotate), transform.translate);
-            v.b = matrix.addVector(matrix.rotateVector(v.b, transform.rotate), transform.translate);
-            v.c = matrix.addVector(matrix.rotateVector(v.c, transform.rotate), transform.translate);
-            v.d = matrix.addVector(matrix.rotateVector(v.d, transform.rotate), transform.translate);
+        let path = this.path;
 
-            $el = $el.parent();
-            if ($el.el === rootElement) {
-                break; 
+        path.forEach(current => {
+            if (current.parent) {
+                // multiply parent perspective 
+                if (current.parent && isFunction(current.parent.getPerspectiveMatrix)) {
+                    const perspectiveMatrix = current.parent.getPerspectiveMatrix();
+                    if (perspectiveMatrix) {
+                        console.log(perspectiveMatrix)
+                        mat4.multiply(transform, transform, perspectiveMatrix)
+                    }
+                }       
+                
+                const offsetX = current.offsetX.value;
+                const offsetY = current.offsetY.value; 
+        
+                // 5. Translate by offset x, y
+                mat4.translate(transform, transform, [offsetX, offsetY, 0]);                   
+                        
+
+                mat4.multiply(transform, transform, current.getTransformMatrix())
+
             }
-        }        
+        })
 
-        return v; 
+        return transform;
+    }
+
+    getAccumulatedMatrixInverse () {
+        return mat4.invert([], this.getAccumulatedMatrix());
+    }
+
+    verties () {
+
+        let model = rectToVerties(0, 0, this.screenWidth.value, this.screenHeight.value, this.json['transform-origin']);
+
+        return vertiesMap(model, this.getAccumulatedMatrix())
+    }
+
+    rectVerties () {
+        return this.verties().filter((_, index) => index < 4)
+    }    
+
+    guideVerties () {
+        return this.verties().filter((_, index) => index != 4)
+    }        
+
+    get matrix () {
+        const id = this.id; 
+        const x =  this.offsetX.value;
+        const y = this.offsetY.value;
+        const width = this.screenWidth.value;
+        const height = this.screenHeight.value; 
+        const originalTransform = this.json.transform;
+        const originalTransformOrigin = this.json['transform-origin'] || '50% 50% 0%';
+        const parentMatrix = isFunction(this.parent.getAccumulatedMatrix) ? this.parent.getAccumulatedMatrix() : mat4.create()
+        const parentMatrixInverse = mat4.invert([], parentMatrix);
+        const localMatrix = this.getTransformMatrix()
+        const localMatrixInverse = mat4.invert([], localMatrix)
+        const itemMatrix = this.getItemTransformMatrix()
+        const itemMatrixInverse = mat4.invert([], itemMatrix)      
+        const accumulatedMatrix = this.getAccumulatedMatrix();
+        const accumulatedMatrixInverse = this.getAccumulatedMatrixInverse();
+
+        const directionMatrix = {
+            'to top left': this.getDirectionTopLeftMatrix(),
+            'to top right': this.getDirectionTopRightMatrix(),
+            'to bottom left': this.getDirectionBottomLeftMatrix(),
+            'to bottom right': this.getDirectionBottomRightMatrix(),
+        }
+
+        const verties = this.verties();
+        const xList = verties.map(it => it[0])
+        const yList = verties.map(it => it[1])
+
+        return {
+            id, 
+            x, 
+            y, 
+            width, 
+            height,
+            transform: originalTransform,
+            originalTransformOrigin,        
+            verties,
+            xList,
+            yList,
+            directionMatrix,
+            parentMatrix,   // 부모의 matrix 
+            parentMatrixInverse,
+            localMatrix,    // 자기 자신의 matrix with transform origin 
+            localMatrixInverse,    
+            itemMatrix,     // 자기 자신의 matrix without transform origin 
+            itemMatrixInverse,
+            accumulatedMatrix,  // parentMatrix * offset translate * localMatrix , 축적된 matrix 
+            accumulatedMatrixInverse,
+        }
     }
 
 
-  checkInAreaForLayers(area) {
-    var items = [] 
-    this.layers.forEach(layer => {
-
-      items.push(...layer.checkInAreaForLayers(area));
-
-      if (layer.checkInArea(area)) {
-        items.push(layer);
-      }
-    })
-
-    return items; 
-  }
-
-  /** order by  */
-
-  getIndex () {
-    var parentLayers = this.json.parent.layers;    
-    var startIndex = -1; 
-    for(var i = 0, len = parentLayers.length; i < len; i++) {
-      if (parentLayers[i] === this.ref) {
-        startIndex = i; 
-        break;
-      }
+    /**
+     * 
+     * @returns {vec3[]} 패스의 verties 
+     */
+    pathVerties () {
+        return this.accumulatedPath().verties; 
     }
 
-    return startIndex;
-  }
+    /**
+     * 중첩된 matrix 적용한 path segment 
+     * 
+     * @returns {PathParser} 
+     */
+    accumulatedPath (pathString = '') {
 
-  setOrder (targetIndex) {
-    var parent = this.json.parent; 
+        const d = pathString || this.json.d;
 
-    var startIndex = this.getIndex()
+        const pathParser = new PathParser(d);
 
-    if (startIndex > -1) {
-      parent.layers[startIndex] = parent.layers[targetIndex]
-      parent.layers[targetIndex] = this.ref; 
-    }
-  }
 
-  // get next sibiling item 
-  next () {
-    if (this.isLast()) {
-      return this.ref; 
-    }
+        const transform = this.getAccumulatedMatrix();
 
-    const index = this.getIndex();
+        pathParser.transformMat4(transform);
 
-    return this.json.parent.layers[index+1];
-  }
+        return pathParser; 
+    }    
 
-  // get prev sibiling item   
-  prev () {
-    if (this.isFirst()) {
-      return this.ref; 
+    // 전체 캔버스에 그려진 path 의 개별 verties 를 
+    // svg container 의 matrix 의 inverse matrix 를 곱해서 재계산 한다.     
+    invertPath (pathString = '') {
+        const path = new PathParser(pathString)
+        path.transformMat4(this.getAccumulatedMatrixInverse())    
+    
+        return path; 
     }
 
-    const index = this.getIndex();
+    /**
+     * pathString 의 좌표를 기준 좌표로 돌린다. 
+     * 
+     * @param {string} pathString   svg path string 
+     */
+    invertPathString (pathString = '') {
+        return this.invertPath(pathString).d;
+    }
 
-    return this.json.parent.layers[index-1];    
-  }
+    /**
+     * area 에 속하는지 충돌 체크, 
+     * 
+     * @param {vec3[]} areaVerties 
+     * @returns {Item[]}  충돌 체크된 선택된 객체 리스트 
+     */
+    checkInAreaForLayers(areaVerties) {
+        var items = [] 
+        this.layers.forEach(layer => {
 
-  /**
-   * 레이어를 현재의 다음으로 보낸다. 
-   * 즉, 화면상에 렌더링 영역에서 올라온다. 
-   */
-  orderNext() {   
+            items.push(...layer.checkInAreaForLayers(areaVerties));
 
-    if (this.isLast()) {
-      // 마지막 일 때는  
-      // parent 의 next 의 첫번째 요소가 된다. 
-      if (this.json.parent.is('artboard')) {    // 부모가 artboard 이면  더이상 갈 곳이 없다. 
+            if (layer.checkInArea(areaVerties)) {
+                items.push(layer);
+            }
+        })
+
+        return items; 
+    }
+
+    /** order by  */
+
+    getIndex () {
+        var parentLayers = this.json.parent.layers;    
+        var startIndex = -1; 
+        for(var i = 0, len = parentLayers.length; i < len; i++) {
+        if (parentLayers[i] === this.ref) {
+            startIndex = i; 
+            break;
+        }
+        }
+
+        return startIndex;
+    }
+
+    setOrder (targetIndex) {
+        var parent = this.json.parent; 
+
+        var startIndex = this.getIndex()
+
+        if (startIndex > -1) {
+        parent.layers[startIndex] = parent.layers[targetIndex]
+        parent.layers[targetIndex] = this.ref; 
+        }
+    }
+
+    // get next sibiling item 
+    next () {
+        if (this.isLast()) {
+        return this.ref; 
+        }
+
+        const index = this.getIndex();
+
+        return this.json.parent.layers[index+1];
+    }
+
+    // get prev sibiling item   
+    prev () {
+        if (this.isFirst()) {
+        return this.ref; 
+        }
+
+        const index = this.getIndex();
+
+        return this.json.parent.layers[index-1];    
+    }
+
+    /**
+     * 레이어를 현재의 다음으로 보낸다. 
+     * 즉, 화면상에 렌더링 영역에서 올라온다. 
+     */
+    orderNext() {   
+
+        if (this.isLast()) {
+        // 마지막 일 때는  
+        // parent 의 next 의 첫번째 요소가 된다. 
+        if (this.json.parent.is('artboard')) {    // 부모가 artboard 이면  더이상 갈 곳이 없다. 
+            return; 
+        }
+
+        this.json.parent.next().add(this, 'prepend')
         return; 
-      }
+        }
 
-      this.json.parent.next().add(this, 'prepend')
-      return; 
+        var startIndex = this.getIndex();
+        if (startIndex > -1) {
+            this.setOrder(startIndex + 1);
+        }
     }
 
-    var startIndex = this.getIndex();
-    if (startIndex > -1) {
-        this.setOrder(startIndex + 1);
+    isFirst () {
+        return this.getIndex() === 0;
     }
-  }
 
-  isFirst () {
-    return this.getIndex() === 0;
-  }
+    isLast () {
+        return this.getIndex() === this.json.parent.layers.length-1
+    }
 
-  isLast () {
-    return this.getIndex() === this.json.parent.layers.length-1
-  }
+    /**
+     * 레이어를 현재의 이전으로 보낸다. 
+     * 즉, 화면상에 렌더링 영역에서 내려간다.
+     */  
+    orderPrev () {
+        if (this.isFirst()) {
+        // 처음 일 때는  
+        // parent 의 prev 의 마지막 요소가 된다.
 
-  /**
-   * 레이어를 현재의 이전으로 보낸다. 
-   * 즉, 화면상에 렌더링 영역에서 내려간다.
-   */  
-  orderPrev () {
-    if (this.isFirst()) {
-      // 처음 일 때는  
-      // parent 의 prev 의 마지막 요소가 된다.
+        if (this.json.parent.is('artboard')) {    // 부모가 artboard 이면  더이상 갈 곳이 없다. 
+            return; 
+        }
 
-      if (this.json.parent.is('artboard')) {    // 부모가 artboard 이면  더이상 갈 곳이 없다. 
+        this.json.parent.prev().add(this)
         return; 
-      }
+        }
 
-      this.json.parent.prev().add(this)
-      return; 
+        var startIndex = this.getIndex();
+        if (startIndex > 0) {
+        this.setOrder(startIndex - 1);
+        }
     }
 
-    var startIndex = this.getIndex();
-    if (startIndex > 0) {
-      this.setOrder(startIndex - 1);
+    // 부모의 처음으로 보내기 
+    orderFirst () {
+        this.setOrder(0)
     }
-  }
 
-  // 부모의 처음으로 보내기 
-  orderFirst () {
-    this.setOrder(0)
-  }
+    // 부모의 마지막으로 보내기 
+    orderLast () {
+        this.setOrder(this.json.parent.layers.length-1)
+    }
 
-  // 부모의 마지막으로 보내기 
-  orderLast () {
-    this.setOrder(this.json.parent.layers.length-1)
-  }
-
-  //TODO: 전체중에 처음으로 보내기 
-  orderTop() {}
-  //TODO: 전체중에 마지막으로 보내기 
-  orderBottom () {}
+    //TODO: 전체중에 처음으로 보내기 
+    orderTop() {}
+    //TODO: 전체중에 마지막으로 보내기 
+    orderBottom () {}
 }

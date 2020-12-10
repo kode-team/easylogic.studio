@@ -1,3 +1,4 @@
+import { vec3 } from "gl-matrix";
 import { getDist } from "./math";
 
 export const predefinedBezier = {
@@ -280,4 +281,134 @@ export const getBezierPointsLine = (points, t) => {
         first: [ points[0], p0 ],
         second: [ p0, points[1] ]
     }
+}
+
+
+export const calculateA = (points) => {
+    // a = 3 * (-p0 + 3*p1 - 3*p2 + p3)
+    const a1 = vec3.negate([], points[0]);
+    const a2 = vec3.multiply([], [3, 3, 3], points[1])
+    const a3 = vec3.multiply([], [-3, -3, -3], points[2])
+    const a4 = points[3]
+
+    const newP = vec3.add(
+        [],
+        vec3.add([], a1, a2),
+        vec3.add([], a3, a4),
+    )
+        
+    return vec3.multiply([], [3, 3, 3], newP) 
+}
+
+export const calculateB = (points) => {
+    // b = 6 * (p0 - 2*p1 + p2);
+    const b1 = points[0]
+    const b2 = vec3.multiply([], [-2, -2, -2], points[1])
+    const b3 = points[2]
+
+    const newP = vec3.add([],vec3.add([], b1, b2), b3)
+        
+    return vec3.multiply([], [6, 6, 6], newP)     
+}
+
+export const calculateC = (points) => {
+    // c = 3 * (p1 - p0);
+    const newP = vec3.add(
+        [],
+        points[1], 
+        vec3.negate([], points[0])
+    )
+
+    return vec3.multiply([], [3, 3, 3], newP)         
+}
+
+
+export const findRootForCurve = (points) => {
+    // Vector2 a = 3 * (-p0 + 3*p1 - 3*p2 + p3);
+    // Vector2 b = 6 * (p0 - 2*p1 + p2);
+    //Vector2 c = 3 * (p1 - p0);
+
+    const a = calculateA(points);
+    const b = calculateB(points);
+    const c = calculateC(points);
+
+    const roots = []
+
+    // x 
+    const distX = b[0] * b[0] - 4 * a[0] * c[0];
+    if (distX < 0) {
+        // NOOP
+    } else if (distX === 0) {
+        const rootX = (-b[0]) / (2 * a[0])
+        if (0 <= rootX && rootX <= 1) {
+            roots.push(rootX);
+        }
+    } else if (distX > 0) {
+        const rootX1 = (-b[0] + Math.sqrt(distX)) / (2 * a[0]);
+        const rootX2 = (-b[0] - Math.sqrt(distX)) / (2 * a[0]);
+
+        if (0 <= rootX1 && rootX1 <= 1) {
+            roots.push(rootX1);
+        }
+
+        if (0 <= rootX2 && rootX2 <= 1) {
+            roots.push(rootX2);
+        }        
+    }
+    
+    // y 
+    const distY = b[1] * b[1] - 4 * a[1] * c[1];
+    if (distY < 0) {
+        // NOOP
+    } else if (distY === 0) {
+        const rootY = (-b[1]) / (2 * a[1])
+        if (0 <= rootY && rootY <= 1) {
+            roots.push(rootY);
+        }
+    } else if (distY > 0) {
+        const rootY1 = (-b[1] + Math.sqrt(distY)) / (2 * a[1]);
+        const rootY2 = (-b[1] - Math.sqrt(distY)) / (2 * a[1]);
+
+        if (0 <= rootY1 && rootY1 <= 1) {
+            roots.push(rootY1);
+        }
+
+        if (0 <= rootY2 && rootY2 <= 1) {
+            roots.push(rootY2);
+        }        
+    }
+
+    return roots; 
+}
+
+/**
+ * get bezier curve bounding box 
+ * 벡터 배열 넘기기 
+ * 
+ * @param {vec3[]} points 
+ */
+export const getCurveBBox = (points) => {
+    const roots = findRootForCurve(points);
+
+    const xyPoints = points.map(p => {
+        return {x: p[0], y: p[1]}
+    })
+
+    return roots.map(t => {
+        const {x, y} = getBezierPointOne(xyPoints, t);
+        return [x, y, 0]
+    })
+}
+
+export const getQuardCurveBBox = (points) => {
+    const roots = findRootForQuardCurve(points);
+
+    const xyPoints = points.map(p => {
+        return {x: p[0], y: p[1]}
+    })
+
+    return roots.map(t => {
+        const {x, y} = getBezierPointOneQuard(xyPoints, t);
+        return [x, y, 0]
+    })
 }

@@ -11,12 +11,9 @@ export class ArtBoard extends DomItem {
       width: Length.px(1000),
       height: Length.px(1000),
       'background-color': 'white',
+      'transform-style': 'flat',
       ...obj
     });
-  }
-
-  isLeaf() {
-    return false; 
   }
 
   toCloneObject() {
@@ -32,13 +29,6 @@ export class ArtBoard extends DomItem {
 
   getIcon() {
     return icon.artboard;
-  }
-
-  toDefaultCSS() {
-    return {
-      ...super.toDefaultCSS(),
-      // 'overflow': 'hidden'
-    }
   }
 
 }

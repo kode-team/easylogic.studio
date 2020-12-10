@@ -1,6 +1,5 @@
 import PathParser from "@parser/PathParser";
 import { SVGItem } from "./SVGItem";
-import { OBJECT_TO_PROPERTY, CSS_TO_STRING } from "@core/functions/func";
 import { hasSVGProperty, hasCSSProperty, hasSVGPathProperty } from "@util/Resource";
 import { Length } from "@unit/Length";
 import icon from "@icon/icon";
@@ -33,35 +32,27 @@ export class SVGTextPathItem extends SVGItem {
  
 
   setCache () {
-    this.rect = this.clone(false);
-
-    if (!this.json.path) {
-      this.json.path = new PathParser(this.json.d);
-    }
-
-    this.cachePath = this.json.path.clone()
+    // 캐쉬 할 때는  0~1 사이 값으로 가지고 있다가 
+    this.cachePath = new PathParser(this.json.d)
+    this.cachePath.scale(1/this.json.width.value, 1/this.json.height.value)
   }
 
   recover () {
 
-    if (!this.rect) this.setCache();
+    // 캐쉬가 없는 상태에서는 초기 캐쉬를 생성해준다. 
+    if (!this.cachePath) this.setCache();
 
-    var sx = this.json.width.value / this.rect.width.value 
-    var sy = this.json.height.value / this.rect.height.value 
+    var sx = this.json.width.value
+    var sy = this.json.height.value
 
-    this.scale(sx, sy);
-  }
-
-  scale (sx, sy) {
+    // 마지막 크기(width, height) 기준으로 다시 확대한다. 
     this.json.d = this.cachePath.clone().scaleTo(sx, sy)
-    this.json.path.reset(this.json.d)
+
   }
+
 
   convert(json) {
     json = super.convert(json);
-    // if (json.d)  {
-      json.path = new PathParser(json.d);
-    // }
 
     json.textLength = Length.parse(json.textLength);
     json.startOffset = Length.parse(json.startOffset);
@@ -101,100 +92,6 @@ export class SVGTextPathItem extends SVGItem {
   }  
 
 
-  updateFunction (currentElement) {
-
-    var $path = currentElement.$('path');
-
-    if ($path) {
-      $path.attr('d', this.json.d);
-    }
-
-    var $textPath = currentElement.$('textPath'); 
-    if ($textPath) {
-      $textPath.text(this.json.text)
-      $textPath.setAttr({
-        filter: this.toFilterValue,
-        fill: this.toFillValue,
-        stroke: this.toStrokeValue,
-        textLength: this.json.textLength,
-        lengthAdjust: this.json.lengthAdjust,
-        startOffset: this.json.startOffset
-      })
-  
-    }
-
-    this.updateDefString(currentElement)
-
-    this.json.totalLength = $path.totalLength
-  }    
-
-  get toDefInnerString () {
-    return /*html*/`
-        ${this.toPathSVG}
-        ${this.toFillSVG}
-        ${this.toStrokeSVG}
-    `
-  }
-
-  get toPathId () {
-    return this.getInnerId('path')
-  }
-
-  get toPathSVG () {
-    return /*html*/`
-    <path ${OBJECT_TO_PROPERTY({
-      'class': 'svg-path-item',
-      id: this.toPathId,
-      d: this.json.d,
-      fill: 'none'
-    })} />
-    `
-  }
-
-  get html () {
-    var {id, textLength, lengthAdjust, startOffset} = this.json; 
-
-    return /*html*/`
-  <svg class='element-item textpath' data-id="${id}">
-    ${this.toDefString}
-      <text ${OBJECT_TO_PROPERTY({
-        'class': 'svg-textpath-item'
-      })} >
-        <textPath ${OBJECT_TO_PROPERTY({
-          'xlink:href' :`#${this.toPathId}`,
-          textLength,
-          lengthAdjust,
-          startOffset
-        })} >${this.json.text}</textPath>
-    </text>
-  </svg>`
-  }
-
-
-  get svg () {
-    var x = this.json.x.value;
-    var y = this.json.y.value;
-    return this.toSVG(x, y);
-  }
-  toSVG (x = 0, y = 0) {
-    var {textLength, lengthAdjust, startOffset} = this.json; 
-    return /*html*/`
-    <g transform="translate(${x}, ${y})">    
-      ${this.toDefString}
-      <text ${OBJECT_TO_PROPERTY({
-        'class': 'svg-textpath-item',
-        ...this.toSVGAttribute(),        
-        style: CSS_TO_STRING(this.toSVGCSS())
-      })} >
-        <textPath ${OBJECT_TO_PROPERTY({
-          'xlink:href' :`#${this.toPathId}`,
-          textLength,
-          lengthAdjust,
-          startOffset
-        })} >${this.json.text}</textPath>
-      </text>
-    </g>`
-  }
 }
 
 ComponentManager.registerComponent('svg-textpath', SVGTextPathItem); 

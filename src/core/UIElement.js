@@ -2,6 +2,7 @@ import { uuid } from "./functions/math";
 import EventMachine from "./EventMachine";
 import { splitMethodByKeyword } from "./functions/func";
 import { SelectionManager } from "@manager/SelectionManager";
+import { SnapManager } from "@manager/SnapManager";
 
 const REG_STORE_MULTI_PATTERN = /^ME@/;
 
@@ -211,6 +212,13 @@ class UIElement extends EventMachine {
    */
   get $selection () {
     return this.$editor.selection; 
+  }
+
+  /**
+   * @type {SnapManager} $snapManager
+   */
+  get $snapManager () {
+    return this.$editor.snapManager;
   }
 
   get $timeline () {
