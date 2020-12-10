@@ -470,12 +470,12 @@ export class MovableItem extends Item {
     }
 
     rectVerties () {
-
-        let model = rectToVerties(0, 0, this.screenWidth.value, this.screenHeight.value, this.json['transform-origin']);
-
-        return vertiesMap(model, this.getAccumulatedMatrix()).filter((_, index) => index < 4)
+        return this.verties().filter((_, index) => index < 4)
     }    
 
+    guideVerties () {
+        return this.verties().filter((_, index) => index != 4)
+    }        
 
     get matrix () {
         const id = this.id; 

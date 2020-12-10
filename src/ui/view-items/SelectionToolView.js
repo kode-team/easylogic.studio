@@ -76,7 +76,7 @@ export default class SelectionToolView extends SelectionToolEvent {
 
         this.$selection.reselect();            
         this.verties = clone(this.$selection.verties);
-
+        this.$snapManager.clear();
     }
 
     rotateVertext (dx, dy) {
@@ -333,6 +333,7 @@ export default class SelectionToolView extends SelectionToolEvent {
         }    
 
         this.renderPointers();
+        this.refreshSmartGuides();        
         this.emit('refreshCanvasForPartial', null, true)                
     }
 
@@ -371,6 +372,13 @@ export default class SelectionToolView extends SelectionToolEvent {
             }                        
         }) 
 
+        this.refreshSmartGuides();
+    }
+
+    refreshSmartGuides () {
+        // 가이드 라인 수정하기 
+        const guides = this.$snapManager.findGuide(this.$selection.current.guideVerties());
+        this.emit('refreshGuideLine', guides);             
     }
 
     getSelectedElements() {

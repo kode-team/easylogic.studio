@@ -352,7 +352,8 @@ export default class HTMLRenderView extends UIElement {
 
     calculateMovedElement (dx, dy) {
         this.selectionToolView.refreshSelectionToolView(dx, dy, 'move');        
-        this.updateRealPosition();   
+        this.updateRealPosition();  
+
         this.emit('refreshSelectionTool', false);        
     }
 
@@ -401,6 +402,7 @@ export default class HTMLRenderView extends UIElement {
                 return; 
             }
         } else {              
+            this.emit('removeGuideLine');
             this.$selection.reselect(); 
             this.nextTick(() => {
                 this.command(

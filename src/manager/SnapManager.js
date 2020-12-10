@@ -4,6 +4,21 @@ import { Editor } from "./Editor";
 
 const MAX_SNAP_DISTANCE = 3; 
 const DEFAULT_DIST_VECTOR = vec3.fromValues(0, 0, 0)
+const AXIS_X = 'x';
+const AXIS_Y = 'y';
+
+function checkXAxis (sourceVertext, targetVertext) {
+    return Math.abs(sourceVertext[0] - targetVertext[0]) < 1; 
+}
+
+function checkYAxis (sourceVertext, targetVertext) {
+    return Math.abs(sourceVertext[1] - targetVertext[1]) < 1; 
+}
+
+function checkZAxis (sourceVertext, targetVertext) {
+    return Math.abs(sourceVertext[2] - targetVertext[2]) < 1; 
+}
+
 
 /**
  * 드래그 하는 시점에 객체의 verties 를 캐쉬해두는 역할을 한다. 
@@ -34,11 +49,11 @@ export class SnapManager {
 
 
     convertMatrix (item) {
-        const verties  = item.verties();
+        const verties  = item.guideVerties();
         const xList = verties.map(it => it[0]) ;
         const yList = verties.map(it => it[1]) ;
 
-        return {id: item.id, xList, yList}
+        return {id: item.id, xList, yList, verties}
     }
 
     checkX (targetXList, sourceXList, dist = 0) {
@@ -100,6 +115,52 @@ export class SnapManager {
         })
 
         return snaps.find(it => isNotZero(it[0]) || isNotZero(it[1])) || DEFAULT_DIST_VECTOR
+    }
+
+    getGuidesByPointPoint (sourceVerties, targetVerties) {
+        const points = []
+
+        sourceVerties.forEach((sourceVertext) => {
+            targetVerties.forEach((targetVertext) => {
+                
+                if (checkXAxis(sourceVertext, targetVertext)) {        // x 좌표가 같을 때 , y 는 다를 때 
+                    points.push([ sourceVertext, targetVertext, AXIS_X])
+                } 
+
+                if (checkYAxis(sourceVertext, targetVertext)) {        // x 좌표가 같을 때 , y 는 다를 때 
+                    points.push([ sourceVertext, targetVertext, AXIS_Y])
+                }                 
+
+            })            
+        })
+
+        return points;
+    }
+
+    findGuide (sourceVerties) {
+        const guides = []
+
+        this.snapTargetLayers.forEach(target => {
+
+            // vertext 대 vertext 를 기준으로 좌표 설정 
+            const points = this.getGuidesByPointPoint(sourceVerties, target.verties);
+
+
+            guides.push(...points);
+        })
+
+        return guides;
+        // sourceVerties 는 항상 최신 좌표를 지정한다. 
+        // guide 라인을 찾을 대상을 맞춰보자. 
+
+        // 1. layer 
+        // 레이어와 verties 를 비교할 때 나타낼 수 있는 표시 
+        // 각 레이어의 verties 와 source verties 을 비교한다. 
+        // vertext 끼리 비교하는거 하나 
+        // 소스 레이어의 vector 와  target 레이어의 vector 를 비교 
+        // 느슷한 관계를 표시. 
+        // source verties 의 점과  target 레이어의 vector 비교 
+        // 2. artboard 
     }
 
 }
