@@ -63,19 +63,18 @@ export default class SVGTextPathRender extends SVGItemRender {
 
   render (item) {
     var {id, textLength, lengthAdjust, startOffset} = item; 
-
+    const pathId = `#${this.toPathId(item)}`
     return /*html*/`
       <svg class='element-item textpath' data-id="${id}">
         ${this.toDefString(item)}
-          <text ${OBJECT_TO_PROPERTY({
-            'class': 'svg-textpath-item'
-          })} >
-            <textPath ${OBJECT_TO_PROPERTY({
-              'xlink:href' :`#${this.toPathId(item)}`,
-              textLength,
-              lengthAdjust,
-              startOffset
-            })} >${item.text}</textPath>
+        <text class="svg-textpath-item">
+          <textPath ${OBJECT_TO_PROPERTY({
+            'xlink:href' : pathId,
+            textLength,
+            lengthAdjust,
+            startOffset
+          })} >${item.text}</textPath>
+          <use href="${pathId}" />
         </text>
       </svg>
     `

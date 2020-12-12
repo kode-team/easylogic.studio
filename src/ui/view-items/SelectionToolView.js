@@ -26,9 +26,12 @@ const SelectionToolEvent = class  extends UIElement {
         if (current && current.isSVG() && current.d) {
             this.toggleEditingPath(true);
 
+            const box = current.is('svg-textpath') ? 'box' : 'canvas';
+
             // box 모드 
             // box - x, y, width, height 고정된 상태로  path 정보만 변경 
             this.emit('showPathEditor', 'modify', {
+                box,
                 current,
                 d: current.accumulatedPath().d,
             }) 

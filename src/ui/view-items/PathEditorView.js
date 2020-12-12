@@ -358,21 +358,6 @@ export default class PathEditorView extends PathTransformEditor {
     }
 
     updatePathLayer () {
-
-        // 원본 크기를 주기 위해서 minX, minY 는 0 으로 설정 한다. 
-        // 이유는 matrix 연산으로 path 의 마지막 위치를 맞추기 위해서이다.
-        var minX = 0; //rect.x;     
-        var minY = 0; //rect.y; 
-        
-        var item = this.state.current;
-
-        // 객체 내부에 포함된 패스는 box 를 기준으로 재설정 
-        if (item && this.isBoxMode) {
-            var minX = item.screenX.value / this.scale 
-            var minY = item.screenY.value / this.scale 
-        }
-
-
         var { d } = this.pathGenerator.toPath();
 
         var parser = new PathParser(d);
@@ -380,10 +365,9 @@ export default class PathEditorView extends PathTransformEditor {
 
         this.emit(this.state.changeEvent, {
             d: parser.d, 
+            box: this.state.box,
             totalLength: this.totalPathLength,
         })
-
-        // console.log(this.state.rect);
     }
 
     /**

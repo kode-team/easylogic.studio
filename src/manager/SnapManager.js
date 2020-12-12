@@ -49,7 +49,7 @@ export class SnapManager {
 
 
     convertMatrix (item) {
-        const verties  = item.guideVerties();
+        const verties  = this.convertGuideAndPathMatrix(item);
         const xList = verties.map(it => it[0]) ;
         const yList = verties.map(it => it[1]) ;
 
@@ -177,17 +177,6 @@ export class SnapManager {
         })
 
         return guides;
-        // sourceVerties 는 항상 최신 좌표를 지정한다. 
-        // guide 라인을 찾을 대상을 맞춰보자. 
-
-        // 1. layer 
-        // 레이어와 verties 를 비교할 때 나타낼 수 있는 표시 
-        // 각 레이어의 verties 와 source verties 을 비교한다. 
-        // vertext 끼리 비교하는거 하나 
-        // 소스 레이어의 vector 와  target 레이어의 vector 를 비교 
-        // 느슷한 관계를 표시. 
-        // source verties 의 점과  target 레이어의 vector 비교 
-        // 2. artboard 
     }
 
 }

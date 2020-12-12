@@ -42,6 +42,16 @@ export default function newComponent (editor, itemType, obj, isSelected = true) 
             content: 'Insert a text',
             'font-size': Length.px(30)
         }        
+    } else if (itemType === 'rect') {
+        obj = {
+            ...obj,
+            border: 'border:1px solid black',
+        }        
+    } else if (itemType === 'circle') {
+        obj = {
+            ...obj,
+            border: 'border:1px solid black',
+        }                
     }
 
     editor.command('addLayer', `add layer - ${itemType}`, editor.createItem({

@@ -1,22 +1,28 @@
 import UIElement, { EVENT } from "@core/UIElement";
-import { POINTERSTART, BIND, MOVE, END, KEYUP, IF, ESCAPE, ENTER, PREVENT, STOP } from "@core/Event";
+import { POINTERSTART, BIND, MOVE, END, KEYUP, IF, ESCAPE, ENTER, PREVENT, STOP, POINTERMOVE } from "@core/Event";
 import Color from "@core/Color";
 import { Length } from "@unit/Length";
 import PathStringManager from "@parser/PathStringManager";
 import { OBJECT_TO_PROPERTY } from "@core/functions/func";
+import { rectToVerties } from "@core/functions/collision";
+import { vertiesMap } from "@core/functions/math";
+import { vec3 } from "gl-matrix";
 
 export default class LayerAppendView extends UIElement {
+
     template() {
         return /*html*/`
         <div class='layer-add-view'>
             <div class='area' ref='$area'></div>
             <div class='area-rect' ref='$areaRect'></div>
+            <div class='area-pointer' ref='$mousePointer'></div>
         </div>
         `
     }
 
     initState() {
         return {
+            dragStart: false, 
             dragXY: { x: -10000, y : 0},
             x: 0,
             y: 0,
@@ -25,24 +31,59 @@ export default class LayerAppendView extends UIElement {
             color: Color.random(),
             fontSize: 30,
             showRectInfo: false, 
-            content: 'Insert a text'
+            content: 'Insert a text',
+            pathManager: new PathStringManager()
         }
     }
 
     get scale () {
         return this.$editor.scale; 
-    }    
+    }  
+
+    checkNotDragStart () {
+        return Boolean(this.state.dragStart) === false;
+    }
+    
+    [POINTERMOVE('$el') + IF('checkNotDragStart')] (e) {
+        const {x, y} = e.xy; 
+        const containerRect = this.$el.rect();
+
+
+        const vertext = [
+            Math.floor(x - containerRect.x),
+            Math.floor(y - containerRect.y),
+            0
+        ]
+
+        // 영역 드래그 하면서 snap 하기 
+        const verties = vertiesMap([vertext], this.$editor.matrixInverse);
+        const snap = this.$snapManager.check(verties);
+
+        if (snap) {
+            this.state.target = vec3.add([], vertext, snap);
+            this.state.targetGuides = this.$snapManager.findGuide([this.state.target]);
+        } else {
+            this.state.target = null; 
+            this.state.targetGuides = [];
+        }
+
+        this.bindData('$mousePointer')
+    }
 
     [POINTERSTART('$el') + MOVE() + END()] (e) {
 
         const {x, y} = e.xy; 
         const containerRect = this.$el.rect();
 
-        this.state.dragXY = {
+        this.state.dragXY = this.state.target ? {
+            x: this.state.target[0],
+            y: this.state.target[1]
+        } : {
             x: Math.floor(x - containerRect.x),
             y: Math.floor(y - containerRect.y),
         }; 
 
+        this.state.dragStart = true;
         this.state.color = Color.random()
         this.state.text = 'Insert a text';
         this.state.x = this.state.dragXY.x;
@@ -53,16 +94,15 @@ export default class LayerAppendView extends UIElement {
         this.bindData('$area');
         this.bindData('$areaRect');
 
-
     }
 
     createLayerTemplate () {
         const { type, text, color, width, height } = this.state;
         switch(type) {
         case 'rect':
-            return /*html*/`<div class='draw-item' style='background-color: ${color}'></div>`
+            return /*html*/`<div class='draw-item' style='background-color: ${color};border:1px solid black;'></div>`
         case 'circle':
-            return /*html*/`<div class='draw-item' style='background-color: ${color}; border-radius: 100%;'></div>`
+            return /*html*/`<div class='draw-item' style='background-color: ${color}; border-radius: 100%;border:1px solid black;'></div>`
         case 'video':
         case 'audio':
         case 'image':            
@@ -135,12 +175,53 @@ export default class LayerAppendView extends UIElement {
         }
     }
 
+    makeMousePointer () {
+
+        const target = this.state.target 
+
+        if (!target) return '';
+
+        const guides = this.state.targetGuides || []
+
+        return /*html*/`
+        <svg width="100%" height="100%">
+            ${guides.map(guide => {
+                this.state.pathManager.reset();
+
+                return this.state.pathManager
+                            .M({x: guide[0][0], y: guide[0][1]})
+                            .L({x: guide[1][0], y: guide[1][1]})
+                            .X({x: guide[1][0], y: guide[1][1]})
+                            .toString('layer-add-snap-pointer')
+            }).join('\n')}
+        </svg>
+    `
+    }
+
+    [BIND('$mousePointer')] () {
+
+        const html = this.makeMousePointer()
+        
+        if (html === '') return;
+
+        return {
+            innerHTML: html
+        }
+    }
+
     move (dx, dy) {
         const isShiftKey = this.$config.get('bodyEvent').shiftKey;
 
         if (isShiftKey) {
             dy = dx; 
         }
+
+        // 영역 드래그 하면서 snap 하기 
+        const verties = vertiesMap(rectToVerties(this.state.dragXY.x,this.state.dragXY.y, dx, dy), this.$editor.matrixInverse);
+        const snap = this.$snapManager.check(verties);
+
+        dx += snap[0];
+        dy += snap[1];
 
         var obj = {
             left: Length.px(this.state.dragXY.x + (dx < 0 ? dx : 0)),
@@ -154,6 +235,7 @@ export default class LayerAppendView extends UIElement {
         this.state.width = obj.width.value;
         this.state.height = obj.height.value;
         this.state.showRectInfo = true; 
+
 
         this.bindData('$area');
         this.bindData('$areaRect'); 
@@ -206,6 +288,7 @@ export default class LayerAppendView extends UIElement {
             this.trigger('hideLayerAppendView')
         }
 
+        this.state.dragStart = false;        
         this.state.showRectInfo = false; 
         this.bindData('$areaRect');         
     }    
@@ -217,6 +300,7 @@ export default class LayerAppendView extends UIElement {
         this.refs.$area.empty()
         this.$el.show();
         this.$el.focus();
+        this.$snapManager.clear();        
         this.emit('change.mode.view', 'CanvasView');
     }
 
