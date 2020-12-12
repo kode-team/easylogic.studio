@@ -1,7 +1,6 @@
-import { rectToVerties } from "@core/functions/collision";
-import { vertiesMap } from "@core/functions/math";
 import { Editor } from "@manager/Editor";
 import { Length } from "@unit/Length";
+import { vec3 } from "gl-matrix";
 
 
 export default {
@@ -21,10 +20,10 @@ export default {
             const newPath = current.invertPath(pathObject.d);
             const bbox = newPath.getBBox();
 
-            const newX = current.offsetX.value + bbox[0][0]
-            const newY = current.offsetY.value + bbox[0][1]
-            const newWidth = bbox[1][0] - bbox[0][0]
-            const newHeight = bbox[3][1] - bbox[0][1]
+            const newX = current.offsetX.value + bbox[0][0];
+            const newY = current.offsetY.value + bbox[0][1];
+            const newWidth = vec3.distance(bbox[1], bbox[0]);
+            const newHeight = vec3.distance(bbox[3], bbox[0]);
 
             newPath.translate(-bbox[0][0], -bbox[0][1])
 

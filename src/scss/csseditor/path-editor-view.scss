@@ -226,10 +226,10 @@
         height: 100%;
 
         line {
-            stroke: var(--path-guide-color); 
             stroke-width: 1; 
 
             &[data-guide='true'] {
+                stroke: var(--path-guide-color);                 
                 pointer-events: none;
             }
 
@@ -261,7 +261,7 @@
             }            
 
             &[data-is-last="true"] {
-                stroke: blue;
+                stroke: var(--selected-color);
                 z-index: 1;
             }       
             

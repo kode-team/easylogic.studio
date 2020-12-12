@@ -8,6 +8,7 @@ import { SVGPathItem } from "@items/layers/SVGPathItem";
 import { Length } from "@unit/Length";
 import { getBezierPoints, recoverBezier, recoverBezierQuard, getBezierPointsQuard, recoverBezierLine, getBezierPointsLine } from "@core/functions/bezier";
 import { isFunction } from "@core/functions/func";
+import { mat4, vec3 } from "gl-matrix";
 
 
 /**
@@ -318,30 +319,35 @@ export default class PathEditorView extends PathTransformEditor {
         return $obj.totalLength
     }
 
-    makePathLayer (pathRect) {
-        var { d } = this.pathGenerator.toPath(pathRect.x, pathRect.y, this.scale);
+    makePathLayer () {
         var artboard = this.$selection.currentArtboard
         var layer; 
         if (artboard) {
 
-            var x = pathRect.x / this.scale;
-            var y = pathRect.y / this.scale;
-            var width = pathRect.width / this.scale;
-            var height = pathRect.height / this.scale; 
+            const newPath = new PathParser(this.pathGenerator.toPath().d);
+            newPath.transformMat4(this.$editor.matrixInverse);
+            const bbox = newPath.getBBox();
 
-            layer = artboard.add(new SVGPathItem({
-                width: Length.px(width),
-                height: Length.px(height),
-                d,
+            const newWidth = vec3.distance(bbox[1], bbox[0]);
+            const newHeight = vec3.distance(bbox[3], bbox[0]);
+
+            newPath.translate(-bbox[0][0], -bbox[0][1])
+
+            const pathItem = {
+                x: Length.px(bbox[0][0]),
+                y: Length.px(bbox[0][1]),
+                width: Length.px(newWidth),
+                height: Length.px(newHeight),
+                d: newPath.d,
                 totalLength: this.totalPathLength
-            }));
+            }
 
             FIELDS.forEach(key => {
-                if (this.state[key]) layer.reset({ [key]: this.state[key] })    
-            });
+                if (this.state[key]) Object.assign(pathItem, {[key]: this.state[key] })    
+            });            
 
-            layer.setScreenX(x);
-            layer.setScreenY(y);
+            layer = artboard.appendChildItem(new SVGPathItem(pathItem));
+
         }
 
         return layer; 
@@ -352,7 +358,6 @@ export default class PathEditorView extends PathTransformEditor {
     }
 
     updatePathLayer () {
-        var rect = this.getPathRect()
 
         // 원본 크기를 주기 위해서 minX, minY 는 0 으로 설정 한다. 
         // 이유는 matrix 연산으로 path 의 마지막 위치를 맞추기 위해서이다.
@@ -368,41 +373,36 @@ export default class PathEditorView extends PathTransformEditor {
         }
 
 
-        var { d } = this.pathGenerator.toPath(
-            minX, 
-            minY, 
-            this.scale
-        );
+        var { d } = this.pathGenerator.toPath();
 
         var parser = new PathParser(d);
+        parser.transformMat4(this.$editor.matrixInverse)
 
         this.emit(this.state.changeEvent, {
             d: parser.d, 
             totalLength: this.totalPathLength,
-            rect: {
-                x: rect.x / this.scale,             // 실제 스크린의 크기를  scale 에 맞게 다시 맞춘다. 
-                y: rect.y / this.scale,
-                width: rect.width / this.scale,
-                height: rect.height / this.scale,
-            },
-            bbox: rect.bbox
         })
 
         // console.log(this.state.rect);
     }
 
+    /**
+     * ArtBoard 에 path layer 추가하기 
+     * 
+     * @param {number} dx 
+     * @param {number} dy 
+     */
     addPathLayer() {
-        var pathRect = this.getPathRect()
-
         this.changeMode('modify');
 
-        if (pathRect.width >  0 && pathRect.height > 0) {
+        var layer = this.makePathLayer()
+        if (layer && layer.totalLength) {
 
-            var layer = this.makePathLayer(pathRect)
-            if (layer) {
-                this.emit('refreshAll')
-            }
+            this.$selection.select(layer);
+            this.trigger('hidePathEditor')
+            this.emit('refreshAll')
         }
+
         
     }
 
@@ -426,24 +426,28 @@ export default class PathEditorView extends PathTransformEditor {
         return this.state.mode === mode; 
     }
 
-    [EVENT('changeScale')] () {
+    [EVENT('changeScale')] (newScale, oldScale) {
 
-        this.refresh();
+        if (this.$el.isShow()) {
 
+            // 이전 scale 로 복구 한 다음 새로운 path 를 설정한다. 
+
+            const { d } = this.pathGenerator.toPath()
+
+            const pathParser = new PathParser(d);
+            pathParser.transformMat4(mat4.invert([], mat4.fromScaling([], [oldScale, oldScale, 1])))
+
+            this.refresh({ d: pathParser.d })
+        } 
     }
 
     refresh (obj) {
 
         if (obj && obj.d) {
             this.pathParser.reset(obj.d)
-            this.pathParser.scale(this.scale, this.scale);
+            this.pathParser.transformMat4(this.$editor.matrix);
 
             this.state.points = this.pathParser.convertGenerator();   
-            
-            if (obj.current) {
-                this.state.currentMatrix = obj.current.matrix; 
-            }
-
         }
 
         this.pathGenerator.initializeSelect();
@@ -638,7 +642,8 @@ export default class PathEditorView extends PathTransformEditor {
             } else if (this.state.isSegment) {
                 this.changeMode('segment-move');
                 var [index, segmentKey] = $target.attrs('data-index', 'data-segment-point')
-                this.pathGenerator.setCachePoint(+index, segmentKey);
+
+                this.pathGenerator.setCachePoint(+index, segmentKey, this.$snapManager.getSnapPoints());
 
                 this.pathGenerator.selectKeyIndex(segmentKey, index)
             }

@@ -156,7 +156,7 @@ function checkInArea (area, point) {
 
 export default class PathGenerator {
 
-    static generatorPathString (points, minX, minY, scale) {
+    static generatorPathString (points, minX = 0, minY = 0, scale = 1) {
         return toPath(points, minX, minY, scale).d;
     }
 
@@ -278,7 +278,6 @@ export default class PathGenerator {
             mat4.translate(view, view, [0, -height, 0]);     // 2. height 만큼 옮기고        
             break;      
         case 'flip':
-다. 
             mat4.scale(view, view, [-1, -1, 1]);             // 3. x, y 축 반전 시키고 
             mat4.translate(view, view, [-width, -height, 0]);     // 2. width, height 만큼 옮기고        
             break;                         
@@ -442,7 +441,14 @@ export default class PathGenerator {
         state.points.push(point);
     }
 
-    setCachePoint (index, segmentKey) {
+    /**
+     * 패스의 segment 를 드래그 하기 전에 snap 이 될 좌표를 캐쉬한다. 
+     * 
+     * @param {number} index 
+     * @param {string} segmentKey 
+     * @param {vec3[]} verties 
+     */
+    setCachePoint (index, segmentKey, verties = []) {
 
         var state = this.state; 
         var { points } = state; 
@@ -484,6 +490,11 @@ export default class PathGenerator {
         points.filter(p => p && p != state.segment).forEach(p => {
             state.cachedPoints.push(p.startPoint, p.reversePoint, p.endPoint)
         })
+
+        state.cachedPoints.push(...verties.map(it => {
+            const [x, y, z] = it; 
+            return {x, y, z}
+        }))
 
     }
 
@@ -720,7 +731,7 @@ export default class PathGenerator {
         var state = this.state;
         var { isCurveSegment, segmentKey, connectedPoint} = state 
 
-        var { dx, dy, snapPointList} = this.calculateSnap(segmentKey, dx, dy, 2);
+        var { dx, dy, snapPointList} = this.calculateSnap(segmentKey, dx, dy, 3);
     
         this.snapPointList = snapPointList || []
 
@@ -845,7 +856,7 @@ export default class PathGenerator {
 
     }
 
-    toPath (minX, minY, scale = 1) {
+    toPath (minX = 0, minY = 0, scale = 1) {
         return toPath(this.clonePoints, minX, minY, scale)
     }
 
@@ -1186,7 +1197,7 @@ export default class PathGenerator {
             var { 
                 snapPointList: movePointSnapPointList, 
                 moveXY: newMoveXY 
-            } = calculateMovePointSnap(points, moveXY, 2); 
+            } = calculateMovePointSnap(points, moveXY, 3); 
             snapPointList.push(...movePointSnapPointList);
 
             state.moveXY = newMoveXY;
@@ -1279,6 +1290,7 @@ export default class PathGenerator {
                 return snapPath
                         .M(snapPoint.startPoint)
                         .L(snapPoint.endPoint)
+                        .X(snapPoint.startPoint)
                         .toString('snap-path');
             })
         }

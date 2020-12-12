@@ -9,25 +9,16 @@ export default {
         if (current) {
 
             let groupLayer = current;
+            let layers = [...groupLayer.layers];
 
-            do {
-                if (groupLayer.is('artboard')) {
-                    groupLayer = undefined;
-                    break;
-                }
-                if (groupLayer.isGroup) break; 
-                groupLayer = groupLayer.parent;
-            } while (true);
+            layers.reverse();
 
-            let lastChild = groupLayer;  
-            [...groupLayer.layers].forEach(child => {
-                lastChild.add(child, 'after');
-                lastChild = child; 
+            layers.forEach(child => {
+                groupLayer.appendAfter(child);
             })
-            groupLayer.remove();
 
-            editor.selection.empty();
-            editor.emit('refreshArtboard')            
+            editor.selection.selection(...layers);
+            editor.emit('refreshAll')            
         }
 
     }

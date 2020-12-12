@@ -12,10 +12,7 @@ export default function addLayer (editor, layer, rect = {}, isSelected = true, c
             containerItem = containerItem.parent;
         }
 
-        containerItem.add(layer)
-
-        if (rect.x) { layer.setScreenX(rect.x.value); }
-        if (rect.y) { layer.setScreenY(rect.y.value); }
+        containerItem.appendChildItem(layer)
 
         if (isSelected) {
             editor.selection.select(layer);

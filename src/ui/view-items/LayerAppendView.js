@@ -171,8 +171,6 @@ export default class LayerAppendView extends UIElement {
 
         var rect = { 
             x,  y, width,  height, 
-            x2: Length.px(x.value + width.value),
-            y2: Length.px(y.value + height.value),
             'background-color': color,
             'content': text,
             'font-size': fontSize,

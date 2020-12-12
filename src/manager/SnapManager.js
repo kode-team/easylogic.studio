@@ -56,6 +56,33 @@ export class SnapManager {
         return {id: item.id, xList, yList, verties}
     }
 
+    /**
+     * 가이드, path 포인트 구하기 
+     * 
+     * @param {MovableItem} item 
+     * @returns {vec3[]}
+     */
+    convertGuideAndPathMatrix (item) {
+        const guideVerties  = item.guideVerties();
+        const pathVerties  = item.pathVerties();
+
+        return [...guideVerties, ...pathVerties];
+    }    
+
+    /**
+     * snap 포인트 모으기 
+     * 
+     * @returns {vec3[]}
+     */
+    getSnapPoints () {
+        const points = []
+        this.editor.selection.snapTargetLayersWithSelection.forEach(it => {
+            points.push(...this.convertGuideAndPathMatrix(it));
+        });
+
+        return points;
+    }
+
     checkX (targetXList, sourceXList, dist = 0) {
 
         const checkXList = []

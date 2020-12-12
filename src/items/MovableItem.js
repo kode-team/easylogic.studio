@@ -3,7 +3,7 @@ import { Length } from "@unit/Length";
 import { Transform } from "../property-parser/Transform";
 import { TransformOrigin } from "@property-parser/TransformOrigin";
 import { mat4, vec3 } from "gl-matrix";
-import { degreeToRadian, vertiesMap } from "@core/functions/math";
+import { calculateMatrix, degreeToRadian, vertiesMap } from "@core/functions/math";
 import { isFunction } from "@core/functions/func";
 import PathParser from "@parser/PathParser";
 import { polyPoint, polyPoly, rectToVerties } from "@core/functions/collision";
@@ -353,6 +353,10 @@ export class MovableItem extends Item {
         return view;
     }
 
+    getItemTransformMatrixInverse () {
+        return mat4.invert([], this.getItemTransformMatrix());
+    }
+
     /**
      * refer to https://www.w3.org/TR/css-transforms-2/
      * 
@@ -382,6 +386,10 @@ export class MovableItem extends Item {
 
         return view; 
     }      
+
+    getTransformMatrixInverse () {
+        return mat4.invert([], this.getTransformMatrix());
+    }
 
     /**
      * 방향에 따른 matrix 구하기 
@@ -433,26 +441,23 @@ export class MovableItem extends Item {
         let path = this.path;
 
         path.forEach(current => {
-            if (current.parent) {
-                // multiply parent perspective 
-                if (current.parent && isFunction(current.parent.getPerspectiveMatrix)) {
-                    const perspectiveMatrix = current.parent.getPerspectiveMatrix();
-                    if (perspectiveMatrix) {
-                        console.log(perspectiveMatrix)
-                        mat4.multiply(transform, transform, perspectiveMatrix)
-                    }
-                }       
-                
-                const offsetX = current.offsetX.value;
-                const offsetY = current.offsetY.value; 
-        
-                // 5. Translate by offset x, y
-                mat4.translate(transform, transform, [offsetX, offsetY, 0]);                   
-                        
 
-                mat4.multiply(transform, transform, current.getTransformMatrix())
+            // multiply parent perspective 
+            if (current.parent && isFunction(current.parent.getPerspectiveMatrix)) {
+                const perspectiveMatrix = current.parent.getPerspectiveMatrix();
+                if (perspectiveMatrix) {
+                    console.log(perspectiveMatrix)
+                    mat4.multiply(transform, transform, perspectiveMatrix)
+                }
+            }       
+            
+            const offsetX = current.offsetX.value;
+            const offsetY = current.offsetY.value; 
+            // 5. Translate by offset x, y
+            mat4.translate(transform, transform, [offsetX, offsetY, 0]);                   
+                    
 
-            }
+            mat4.multiply(transform, transform, current.getTransformMatrix())
         })
 
         return transform;
@@ -485,12 +490,12 @@ export class MovableItem extends Item {
         const height = this.screenHeight.value; 
         const originalTransform = this.json.transform;
         const originalTransformOrigin = this.json['transform-origin'] || '50% 50% 0%';
-        const parentMatrix = isFunction(this.parent.getAccumulatedMatrix) ? this.parent.getAccumulatedMatrix() : mat4.create()
+        const parentMatrix = (this.parent && isFunction(this.parent.getAccumulatedMatrix)) ? this.parent.getAccumulatedMatrix() : mat4.create()
         const parentMatrixInverse = mat4.invert([], parentMatrix);
         const localMatrix = this.getTransformMatrix()
-        const localMatrixInverse = mat4.invert([], localMatrix)
+        const localMatrixInverse = this.getTransformMatrixInverse();
         const itemMatrix = this.getItemTransformMatrix()
-        const itemMatrixInverse = mat4.invert([], itemMatrix)      
+        const itemMatrixInverse = this.getItemTransformMatrixInverse();
         const accumulatedMatrix = this.getAccumulatedMatrix();
         const accumulatedMatrixInverse = this.getAccumulatedMatrixInverse();
 
@@ -519,9 +524,9 @@ export class MovableItem extends Item {
             directionMatrix,
             parentMatrix,   // 부모의 matrix 
             parentMatrixInverse,
-            localMatrix,    // 자기 자신의 matrix with transform origin 
+            localMatrix,    // 자기 자신의 matrix with translate offset(x,y)
             localMatrixInverse,    
-            itemMatrix,     // 자기 자신의 matrix without transform origin 
+            itemMatrix,     // 자기 자신의 matrix without translate offset(x,y)
             itemMatrixInverse,
             accumulatedMatrix,  // parentMatrix * offset translate * localMatrix , 축적된 matrix 
             accumulatedMatrixInverse,
@@ -592,6 +597,29 @@ export class MovableItem extends Item {
         })
 
         return items; 
+    }
+
+
+    /**
+     * 부모를 기준으로 childItem 의 transform 을 맞춘다. 
+     * 
+     * [newParentInverse] * [childMatrix] * [childItemMatrixInverse] = translate; 
+     * 
+     * @param {Item} childItem 
+     */
+    resetMatrix (childItem) {
+
+        const [x, y] = mat4.getTranslation([], calculateMatrix(
+            this.getAccumulatedMatrixInverse(),
+            childItem.getAccumulatedMatrix(),
+            childItem.getTransformMatrixInverse()
+        ));
+
+        childItem.reset({
+            x: Length.px(x),
+            y: Length.px(y),
+        })
+
     }
 
     /** order by  */

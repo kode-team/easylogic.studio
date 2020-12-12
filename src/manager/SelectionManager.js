@@ -2,9 +2,9 @@ import { rectToVerties } from "@core/functions/collision";
 import { isFunction, isUndefined, isArray, isObject, isString, clone } from "@core/functions/func";
 import { ArtBoard } from "@items/ArtBoard";
 import { Item } from "@items/Item";
-import { Project } from "@items/Project";
 import { MovableItem } from "@items/MovableItem";
 import { Length } from "@unit/Length";
+import { vec3 } from "gl-matrix";
 
 function _traverse(obj, id) {
   var results = [] 
@@ -119,6 +119,18 @@ export class SelectionManager {
       if (item.is('project')) return false; 
 
       return !this.check(item); 
+    });
+  }
+
+  get snapTargetLayersWithSelection () {
+
+    if (!this.currentProject) return [];
+
+    return this.currentProject.allLayers.filter((item) => {
+      // project item 은 제외 
+      if (item.is('project')) return false; 
+
+      return true; 
     });
   }
 
@@ -317,6 +329,22 @@ export class SelectionManager {
     }
   }
 
+  /**
+   * Item Rect 만들기 
+   * 멀티 selection 일 때만 사용하자 
+   * 
+   * @returns {ItemRect} 
+   */
+  get itemRect () {
+    const verties = this.verties;
+    return {
+      x: Length.px(verties[0][0]),
+      y: Length.px(verties[0][1]),
+      width: Length.px(vec3.distance(verties[0], verties[1])),
+      height: Length.px(vec3.distance(verties[0], verties[3])),      
+    }
+  } 
+
   // 객체 속성만 클론 
   // 부모, 자식은 클론하지 않음. 
   // 부모 자식은, 객체가 추가 삭제시만 필요 
@@ -343,35 +371,6 @@ export class SelectionManager {
 
     return data; 
   }
-
-  // setAllRectCache () {
-  //   var minX = Number.MAX_SAFE_INTEGER;
-  //   var minY = Number.MAX_SAFE_INTEGER;
-
-  //   var maxX = Number.MIN_SAFE_INTEGER;    
-  //   var maxY = Number.MIN_SAFE_INTEGER;
-
-  //   this.cachedItems.forEach(it => {
-  //     minX = Math.min(it.screenX.value, minX);
-  //     minY = Math.min(it.screenY.value, minY);
-
-  //     maxX = Math.max(it.screenX.value + it.screenWidth.value, maxX);
-  //     maxY = Math.max(it.screenY.value + it.screenHeight.value, maxY);      
-  //   })
-
-  //   if (minX === Number.MAX_SAFE_INTEGER) minX = 0;
-  //   if (minY === Number.MAX_SAFE_INTEGER) minY = 0;
-  //   if (maxX === Number.MIN_SAFE_INTEGER) maxX = 0;
-  //   if (maxY === Number.MIN_SAFE_INTEGER) maxY = 0;
-
-  //   this.allRect = {
-  //     x: minX,
-  //     y: minY,
-  //     width: maxX - minX,
-  //     height: maxY - minY
-  //   }
-
-  // }
 
   each (callback) {
 

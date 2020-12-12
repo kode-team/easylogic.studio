@@ -26,6 +26,24 @@ export default class PathStringManager {
         return this.makeString('L', values);
     }    
 
+    /**
+     * x 표 그리기 
+     * 
+     * @param  {Point[]} values 
+     */
+    X (...values) {
+
+        const dist = 2; 
+        const point = values[0]
+
+        const topLeft = {x: point.x - dist, y: point.y - dist}
+        const topRight = {x: point.x + dist, y: point.y - dist}
+        const bottomLeft = {x: point.x - dist, y: point.y + dist}
+        const bottomRight = {x: point.x + dist, y: point.y + dist}
+
+        return this.M(topLeft).L(bottomRight).M(topRight).L(bottomLeft);
+    }        
+
     Q (...values) {
         return this.makeString('Q', values);
     }    

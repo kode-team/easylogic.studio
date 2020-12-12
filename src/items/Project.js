@@ -1,7 +1,11 @@
 import { ComponentManager } from "../manager/ComponentManager";
 import { TimelineItem } from "./TimelineItem";
 import { SVGFilter } from "@property-parser/SVGFilter";
+import { mat4 } from "gl-matrix";
+import { Length } from "@unit/Length";
 
+const OFFSET_X = Length.z();
+const OFFSET_Y = Length.z();
 export class Project extends TimelineItem {
   getDefaultTitle() {
     return "New Project";
@@ -48,6 +52,18 @@ export class Project extends TimelineItem {
 
   get artboards () {
     return this.json.layers || [];
+  }
+
+  get offsetX () {
+    return OFFSET_X;
+  }
+
+  get offsetY () {
+    return OFFSET_Y;
+  }  
+
+  getTransformMatrix () {
+    return mat4.create();
   }
 }
 

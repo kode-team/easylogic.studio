@@ -28,7 +28,7 @@ export default class PageTools extends UIElement {
     `;
   }  
 
-  [EVENT('changeScaleValue')] (scale) {
+  [EVENT('changeScaleValue')] (scale, oldScale) {
 
     if (scale <= 0) {
       scale = 0.01;
@@ -41,16 +41,16 @@ export default class PageTools extends UIElement {
   }
 
   [EVENT('changeRangeEditor') + DEBOUNCE(1000)] (key, scale) {
-    this.trigger('changeScaleValue', Math.floor(scale/100));
+    this.trigger('changeScaleValue', Math.floor(scale/100), this.$editor.scale);
   }
 
   [CLICK('$plus') + PREVENT + STOP] () {
 
-    this.trigger('changeScaleValue', this.$editor.scale + 0.25);
+    this.trigger('changeScaleValue', this.$editor.scale + 0.25, this.$editor.scale);
   }
 
   [CLICK('$minus') + PREVENT + STOP] () {
-    this.trigger('changeScaleValue', this.$editor.scale - 0.25);    
+    this.trigger('changeScaleValue', this.$editor.scale - 0.25, this.$editor.scale);    
   }
 
 }

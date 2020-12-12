@@ -9,6 +9,7 @@ import PathGenerator from "@parser/PathGenerator";
 import Point from "@parser/Point";
 import { OBJECT_TO_PROPERTY } from "@core/functions/func";
 import { SVGFill } from "@property-parser/SVGFill";
+import { vec3 } from "gl-matrix";
 
 const FIELDS = ['fill', 'fill-opacity', 'stroke', 'stroke-width', 'stroke-linecap', 'stroke-linejoin']
 
@@ -79,29 +80,34 @@ export default class PathDrawView extends UIElement {
         var layer; 
         if (artboard) {
 
-            var x = pathRect.x / this.scale;
-            var y = pathRect.y / this.scale;
-            var width = pathRect.width / this.scale;
-            var height = pathRect.height / this.scale; 
 
             // rect 기준으로 상대 좌표로 다시 변환 
             const simplyPoints = Point.simply(this.state.points, this.state.tolerance)
-            const parser = new PathParser(PathStringManager.makePathByPoints(simplyPoints))
-            const d = PathGenerator.generatorPathString(parser.convertGenerator(), pathRect.x, pathRect.y, this.scale);
+            const drawParser = new PathParser(PathStringManager.makePathByPoints(simplyPoints))
+            const newPath = new PathParser(PathGenerator.generatorPathString(drawParser.convertGenerator()));
 
-            layer = artboard.add(new SVGPathItem({
-                width: Length.px(width),
-                height: Length.px(height),
-                d,
+            newPath.transformMat4(this.$editor.matrixInverse);
+            const bbox = newPath.getBBox();
+
+            const newWidth = vec3.distance(bbox[1], bbox[0]);
+            const newHeight = vec3.distance(bbox[3], bbox[0]);
+
+            newPath.translate(-bbox[0][0], -bbox[0][1])
+
+            const pathItem = {
+                x: Length.px(bbox[0][0]),
+                y: Length.px(bbox[0][1]),
+                width: Length.px(newWidth),
+                height: Length.px(newHeight),
+                d: newPath.d,
                 totalLength: this.totalPathLength
-            }))
+            }
 
             FIELDS.forEach(key => {
-                if (this.state[key]) layer.reset({ [key]: this.state[key] })    
-            });
+                if (this.state[key]) Object.assign(pathItem, {[key]: this.state[key] })    
+            });            
 
-            layer.setScreenX(x);
-            layer.setScreenY(y);      
+            layer = artboard.appendChildItem(new SVGPathItem(pathItem));             
         }
 
         return layer; 
@@ -114,7 +120,8 @@ export default class PathDrawView extends UIElement {
 
             var layer = this.makePathLayer(pathRect)
             if (layer) {
-                // this.$selection.select(layer);
+                this.$selection.select(layer);
+                this.trigger('hidePathDrawEditor')
                 this.emit('refreshAll')
             }
         }

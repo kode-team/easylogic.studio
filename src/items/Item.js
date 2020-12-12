@@ -1,4 +1,4 @@
-import { uuidShort } from "@core/functions/math";
+import { uuidShort, vertiesMap } from "@core/functions/math";
 import {
   isFunction,
   isNotUndefined,
@@ -144,6 +144,10 @@ export class Item {
    */
   get parent () {
     return this.json.parent;
+  }
+
+  setParent (otherParent) {
+    this.json.parent = otherParent;
   }
 
   /**
@@ -350,55 +354,97 @@ export class Item {
     };
   }
 
-  add (layer, direction = 'self') {
+  /**
+   * 자식으로 추가한다. 
+   * 
+   * @param {Item} layer 
+   */
+  appendChildItem (layer) {
+    this.resetMatrix(layer);
 
     // 객체를 추가할 때는  layer 의 절대 값을 기준으로 객체를 움직인다. 
-    let rect = {} 
     if (layer.parent) {
-      rect = layer.screenRect;
       layer.remove();
     }
 
-    if (direction === 'self') {   // layer 를  자식으로 추가 
-      layer.parent = this.ref;         
 
-      this.json.layers.push(layer);
-    } else if (direction === 'before') {  // layer 를 나의 앞으로 추가 
-      // 현재 객체 앞으로 넣기 
-      layer.parent = this.parent.ref; 
+    layer.setParent(this.ref);
 
-      var list  = []
-      this.parent.layers.forEach(it => {
-        if (it === this.ref) {
-          list.push(layer);
-        }                
-        list.push(it);
-      }) 
+    this.json.layers.push(layer);
 
-      this.parent.layers = list;       
+    return layer; 
+  }
 
-    } else if (direction === 'after') {  // layer 를 나의 뒤로 추가 
-      // 현재 객체 뒤로 넣기 
-      layer.parent = this.parent.ref;   
-
-      var list  = []
-      
-      this.parent.layers.forEach(it => {
-        list.push(it);        
-        if (it === this.ref) {
-          list.push(layer);
-        }        
-      }) 
-
-      this.parent.layers = list; 
-      
+  /**
+   * 자식중에 맨앞에 추가한다. 
+   * 
+   * @param {Item} layer 
+   */
+  prependChildItem (layer) {
+    this.resetMatrix(layer);
+    // 객체를 추가할 때는  layer 의 절대 값을 기준으로 객체를 움직인다. 
+    if (layer.parent) {
+      layer.remove();
     }
 
-    if (rect.left) layer.setScreenX(rect.left.value);
-    if (rect.top) layer.setScreenY(rect.top.value);    
+    layer.setParent(this.ref);
 
-    return layer;
+    this.json.layers.unshift(layer);
+
+    return layer;     
   }
+
+  /**
+   * 특정 index 에 자식을 추가한다. 
+   * 
+   * @param {Item} layer 
+   * @param {number} index 
+   */
+  insertChildItem (layer, index = 0) {
+
+    if (index < 0) return;
+
+    this.resetMatrix(layer);
+
+    // 객체를 추가할 때는  layer 의 절대 값을 기준으로 객체를 움직인다. 
+    if (layer.parent) {
+      layer.remove();
+    }
+
+    layer.setParent(this.ref);
+    this.json.layers.splice(index, 0, layer);
+
+    return layer;     
+  }
+
+  /**
+   * 현재 Item 의 그 다음 순서로 추가한다. 
+   * 
+   * @param {Item} layer 
+   */
+  appendAfter (layer) {
+
+    const index = this.parent.findIndex(this);
+
+    this.parent.insertChildItem(layer, index);
+
+    return layer;     
+  }
+
+
+  /**
+   * 현재 Item 의 이전 순서로 추가한다. 
+   * 
+   * @param {Item} layer 
+   */
+  appendBefore (layer) {
+
+    const index = this.parent.findIndex(this);
+
+    this.parent.insertChildItem(layer, index-1);
+
+    return layer;     
+  }  
 
   /**
    * 특정한 위치에 자식 객체로 Item 을 추가 한다. 
@@ -470,6 +516,10 @@ export class Item {
     return this.json.parent.copyItem(this.ref);
   }
 
+  findIndex (item) {
+    return this.json.layers.indexOf(item.ref);
+  }
+
   copyItem (childItem, dist = 10 ) {
      // clone 을 어떻게 해야하나? 
 
@@ -478,15 +528,7 @@ export class Item {
     child.x.add(dist);
     child.y.add(dist);
 
-    var layers = this.json.layers;
-
-    var childIndex = -1; 
-    for(var i = 0, len = layers.length; i < len; i++) {
-      if (layers[i] === childItem) {
-        childIndex = i; 
-        break;
-      }
-    }
+    var childIndex = this.findIndex(childItem); 
 
     if (childIndex > -1) {
       this.json.layers.splice(childIndex+1, 0, child);
@@ -508,16 +550,13 @@ export class Item {
    * @param {Item} childItem 
    */
   removeItem (childItem) {
-    var layers = this.json.layers;
 
-    for(var i = 0, len = layers.length; i < len; i++) {
-      if (layers[i] === childItem) {
-        layers[i] = undefined;
-        break;
-      }
+    const index = this.findIndex(childItem);
+
+    if (index > -1) {
+      this.json.layers.splice(index, 1);
     }
 
-    this.json.layers = this.json.layers.filter(it => isNotUndefined(it))
   }
 
   /**

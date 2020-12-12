@@ -3,8 +3,6 @@ import Color from "@core/Color";
 import { Length } from "@unit/Length";
 import PathStringManager from "@parser/PathStringManager";
 
-
-
 export default function newComponent (editor, itemType, obj, isSelected = true) {
 
     if (!itemType.includes('text') && !obj['background-color']) {
