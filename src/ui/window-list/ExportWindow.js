@@ -84,20 +84,12 @@ ${HTMLRenderer.render(project)}
 
         this.refs.$html.text(html);
 
-        // var obj = ExportManager.generate(this.$editor);
-
-        // this.refs.$js.text(obj.js);
-
-
         // export svg image 
-        if (this.$selection.currentArtboard) {
-            var svgString = SVGRenderer.render(this.$selection.currentArtboard);
-            this.refs.$svgimage.text(svgString);
-            this.refs.$svgimagePreview.html(Dom.createByHTML(svgString));
-        } else  {
-            this.refs.$svgimage.empty();
-            this.refs.$svgimagePreview.empty();
-        }
+
+        var svgString = SVGRenderer.render(this.$selection.current);
+        this.refs.$svgimage.text(svgString);
+        this.refs.$svgimagePreview.html(Dom.createByHTML(svgString));
+
     }
 
     makeStyle (item) {

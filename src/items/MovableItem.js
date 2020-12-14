@@ -8,6 +8,7 @@ import { isFunction } from "@core/functions/func";
 import PathParser from "@parser/PathParser";
 import { polyPoint, polyPoly, rectToVerties } from "@core/functions/collision";
 
+const ZERO = Length.z()
 export class MovableItem extends Item {
 
 
@@ -146,39 +147,47 @@ export class MovableItem extends Item {
 
     get offsetX () { 
         if (!this.parent) {
-            return this.json.x;
+            return this.json.x || ZERO;
         }        
         return this.json.x.toPx(this.screenWidth.value);  
     }
 
     get offsetY () { 
         if (!this.parent) {
-            return this.json.y;
+            return this.json.y || ZERO;
         }        
         return this.json.y.toPx(this.screenHeight.value);  
     }
     
     get screenWidth () { 
-        if (!this.parent) {             // project 는 0px 
-            return Length.z();
-        }        
+        if (this.is('project') || !this.parent) {
+            return ZERO;  
+        }
 
-        if (!this.parent.parent) {      // artboard 는 자기 자신 
-            return this.json.width;
+        if (this.parent.is('project')) {
+            return this.json.width.toPx();  
+        }
+
+        if (this.is('artboard')) {
+            return this.json.width.toPx();  
         }
 
         return this.json.width.toPx(this.parent.screenWidth.value);  
     }    
 
     get screenHeight () { 
-        if (!this.parent) {             // project 는 0px 
-            return this.json.height;
+        if (this.is('project') || !this.parent) {
+            return ZERO;  
         }
 
-
-        if (!this.parent.parent) {      // artboard 는 자기 자신 
-            return this.json.height;
+        if (this.parent.is('project')) {
+            return this.json.height.toPx();  
         }
+
+        if (this.is('artboard')) {
+            return this.json.height.toPx();  
+        }
+
 
         return this.json.height.toPx(this.parent.screenHeight.value);  
     }    
@@ -209,6 +218,10 @@ export class MovableItem extends Item {
         return polyPoly(areaVerties, this.verties())        
     }
 
+    hasPoint (x, y) {
+        return polyPoint(this.verties(), x, y)
+    }
+
 
     /**
      * areaVerties 안에 Layer 가 포함된 경우 
@@ -223,6 +236,13 @@ export class MovableItem extends Item {
     }
 
     getPerspectiveMatrix () {
+
+        const hasPerspective = this.json['perspective'] || Transform.get(this.json['transform'], 'perspective')
+
+        if (!hasPerspective) {
+            return undefined;
+        }
+
         let [
             perspectiveOriginX = Length.percent(50), 
             perspectiveOriginY = Length.percent(50), 
@@ -244,7 +264,6 @@ export class MovableItem extends Item {
         // 3. Multiply by the matrix that would be obtained from the perspective() transform function, 
         // where the length is provided by the value of the perspective property
         const perspective = Transform.get(this.json['transform'], 'perspective')
-        let hasPerspective = true;
 
         if (perspective.length) {
             mat4.multiply(view, view, mat4.fromValues(
@@ -438,7 +457,7 @@ export class MovableItem extends Item {
         let transform = mat4.create();
 
 
-        let path = this.path;
+        let path = this.path.filter(p => p.is('project') === false);
 
         path.forEach(current => {
 
@@ -580,6 +599,28 @@ export class MovableItem extends Item {
     }
 
     /**
+     * 나를 포함한 모든 layer 에 대해서 체크한다. 
+     * 
+     * project, artboard 를 제외 
+     * 
+     * @param {vec3[]} areaVerties 
+     */
+    checkInAreaForAll (areaVerties) {
+        const items = [...this.checkInAreaForLayers(areaVerties)];
+
+        if (this.is('artboard')) return items;
+        if (this.is('project')) return items;
+
+        if (this.checkInArea(areaVerties)) {
+            // ref 를 넘겨야 proxy 기능을 그대로 사용 할 수 있다. 
+            // 그렇지 않으면 일반적인 객체에 접근 하는 것 밖에 안된다. 즉, json 을 사용할 수가 없다. 
+            items.push(this.ref);       
+        }
+
+        return items; 
+    }
+
+    /**
      * area 에 속하는지 충돌 체크, 
      * 
      * @param {vec3[]} areaVerties 
@@ -628,10 +669,10 @@ export class MovableItem extends Item {
         var parentLayers = this.json.parent.layers;    
         var startIndex = -1; 
         for(var i = 0, len = parentLayers.length; i < len; i++) {
-        if (parentLayers[i] === this.ref) {
-            startIndex = i; 
-            break;
-        }
+            if (parentLayers[i] === this.ref) {
+                startIndex = i; 
+                break;
+            }
         }
 
         return startIndex;

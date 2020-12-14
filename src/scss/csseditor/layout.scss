@@ -6,6 +6,7 @@
   bottom: 0px;
   display: flex;
   flex-direction: column;
+  background-color: var(--header-background-color);  
 
   &.show-footer {
 
@@ -58,7 +59,8 @@
     display: block;
     flex: 1 1 $top-size; 
     height: $top-size;
-    background-color: yellow;
+    border-bottom: 1px solid var(--border-color);
+    box-sizing: border-box;    
   }
 
   .layout-middle {
@@ -69,6 +71,7 @@
     box-sizing: border-box;
 
     .layout-header {
+      display: none;
       top: 0px;
       left: $left-size;
       right: $right-size;
@@ -200,6 +203,7 @@
 // timeline 
 @import './timeline.scss';
 
+@import './logo.scss';
 @import './status-bar.scss';
 @import './feature-control.scss';
 @import './notification-view.scss';

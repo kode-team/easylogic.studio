@@ -23,28 +23,17 @@ export default {
         var projects = json.map(p => editor.createItem(p))
 
         projects.forEach(p => {
-            p.selectTimeline()
+            p.artboards.forEach(artboard => {
+                p.selectTimeline(artboard.id)
+            })
         })
 
         if (projects.length) {
             var project = projects[0]
             editor.selection.selectProject(project)
-            if (project.artboards.length) {
-                var artboard = project.artboards[0]
-                editor.selection.selectArtboard(artboard)
-
-                if (artboard.layers.length) {
-                    editor.selection.select(artboard.layers[0])
-                } else {
-                    editor.selection.select(artboard);
-                }
-            }
 
             editor.load(projects);
             _doForceRefreshSelection(editor)
-        } else {
-            // 아무 것도 없을 때는 artboard 하나를 자동으로 만들어준다. 
-            editor.emit('addArtBoard');
         }
     }
 }

@@ -223,7 +223,7 @@ export const html = (strings, ...args) => {
 }
 
 export function CSS_TO_STRING(style, postfix = '') {
-    var newStyle = style;
+    var newStyle = style || {};
   
     return Object.keys(newStyle)
       .filter(key => isNotUndefined(newStyle[key]))

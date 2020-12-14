@@ -17,7 +17,6 @@ export default function newComponent (editor, itemType, obj, isSelected = true) 
             textLength: '100%',
             d: PathStringManager.makeLine(0, obj.height.value, obj.width.value, obj.height.value),
         }
-
     } else if (itemType === 'svg-circle') {
         itemType = 'svg-path';
         obj = {

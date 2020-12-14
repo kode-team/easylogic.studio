@@ -60,7 +60,7 @@ export default class ProjectRender extends DomRender {
     render (item, renderer) {
         return item.artboards.map(it => {
             return renderer.render(it)
-        });
+        }).join('');
     }
 
     renderSVGFilter (item) {

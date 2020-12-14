@@ -27,6 +27,10 @@ const selectorList = [
   ':focus'
 ].join(',')
 
+/**
+ * 객체별 class, selector 를 줄 수 있는 개념을 다시 만들자. 
+ * @deprecated
+ */
 export default class SelectorProperty extends BaseProperty {
 
   getTitle() {
@@ -99,7 +103,7 @@ export default class SelectorProperty extends BaseProperty {
     current.selector = ''
     current.selectors = selectors;
 
-    return selectors.map((selector, index) => {
+    return (selectors || []).map((selector, index) => {
       return this.makeSelectorTemplate(selector, index);
     });
   }

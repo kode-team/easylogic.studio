@@ -1,4 +1,3 @@
-import { Layer } from "./Layer";
 import { Project } from "./Project";
 import { Component } from "./Component";
 import { CubeLayer } from "./layers/CubeLayer";
@@ -16,8 +15,7 @@ import { VideoLayer } from "./layers/VideoLayer";
 
 export default {
     Project,
-    ArtBoard,
-    Layer,    
+    ArtBoard, 
     RectLayer,
     CircleLayer,        
     ImageLayer,

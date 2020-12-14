@@ -48,6 +48,7 @@ export default {
      * @param {Item} item 
      */
     render (item, renderer) {
+        if (!item) return;
         const currentRenderer = renderers[item.itemType];
 
         if (currentRenderer) {
@@ -86,6 +87,8 @@ export default {
         if (currentRenderer) {
             return currentRenderer.toNestedCSS(item);
         }
+
+        return [];
     },    
 
     /**
@@ -98,6 +101,8 @@ export default {
         if (currentRenderer) {
             return currentRenderer.toTransformCSS(item);
         }
+
+        return {}
     },    
 
     /**
@@ -163,7 +168,7 @@ export default {
               return /*html*/`<div><pre title='CSS'>${it}</pre></div>`
             }).join('')}
     
-            ${selectorCode.length ? 
+            ${(selectorCode || []).length ? 
               /*html*/`<div>
                 ${selectorCode.map(selector => {
                   return `<pre title='${selector.selector}'>${selector.toPropertyString()}</pre>`

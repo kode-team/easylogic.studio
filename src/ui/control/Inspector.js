@@ -109,8 +109,7 @@ export default class Inspector extends UIElement {
                 <!-- SelectorProperty /> --> 
                 <TransitionProperty />                            
                 <AnimationProperty />
-                <KeyframeProperty />    
-                <SelectorProperty />                              
+                <KeyframeProperty />                          
                 <div class='empty'></div>                
               </div>                        
               <div class="tab-content" data-value="5">

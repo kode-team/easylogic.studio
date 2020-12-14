@@ -1,4 +1,6 @@
 
+$tab-height: 40px;
+
 .feature-control {
 
     &.inspector {
@@ -16,7 +18,7 @@
 
         > .tab {
           > .tab-header {
-            height: $tool-size;
+            height: $tab-height;
 
             .tab-item {
               padding: 8px 0px;
@@ -25,7 +27,7 @@
           
     
           > .tab-body {
-            top: $tool-size;
+            top: $tab-height;
           }
         }
       }
@@ -85,35 +87,17 @@
             height: auto !important;
           }
         }
+        
       }
   
   
       .object-items {
-  
+        width: 100%;
+        height: 100%;
   
         > div {
-          position: absolute;
-          left: 5px;
-          right: 5px;      
-          &:first-child {
-            top: 0px;
-            height: 150px;
-          }
-    
-          &:nth-child(1) {
-            top: 0px;
-            height: 150px;
-          }      
-    
-          &:not(:first-child) {
-            border-top: 1px solid var(--border-color);
-            
-          }
-    
-          &:last-child {
-            top: 150px;
-            bottom : 0px;
-          }
+          position: relative;
+          height: 100%;
         }
       }
   

@@ -1,4 +1,4 @@
-import { isNotUndefined, isString, isNumber } from "@core/functions/func";
+import { isNotUndefined, isString, isNumber, isUndefined } from "@core/functions/func";
 import { round } from "@core/functions/math";
 
 const stringToPercent = {

@@ -24,7 +24,6 @@ export default function addArtBoard (editor, obj = {}) {
         ...obj
     }))
 
-    editor.selection.selectArtboard(artboard);
     editor.selection.select(artboard);
 
     _doForceRefreshSelection(editor)

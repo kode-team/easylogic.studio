@@ -1,6 +1,7 @@
 import BaseProperty from "./BaseProperty";
 import { EVENT } from "@core/UIElement";
 import { THROTTLE } from "@core/Event";
+import { Length } from "@unit/Length";
 
 export default class SizeProperty extends BaseProperty {
 
@@ -10,6 +11,10 @@ export default class SizeProperty extends BaseProperty {
 
   getTitle() {
     return this.$i18n('size.property.title');
+  }
+
+  afterRender() {
+    this.show();
   }
 
   [EVENT('refreshSelection')]() {
@@ -23,8 +28,8 @@ export default class SizeProperty extends BaseProperty {
   refresh() {
     var current = this.$selection.current;
     if (current) {
-      this.children.$width.setValue(current.width);
-      this.children.$height.setValue(current.height);
+      this.children.$width.setValue(current.width || Length.z());
+      this.children.$height.setValue(current.height || Length.z());
     }
   }
 

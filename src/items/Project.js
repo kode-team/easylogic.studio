@@ -1,6 +1,5 @@
 import { ComponentManager } from "../manager/ComponentManager";
 import { TimelineItem } from "./TimelineItem";
-import { SVGFilter } from "@property-parser/SVGFilter";
 import { mat4 } from "gl-matrix";
 import { Length } from "@unit/Length";
 

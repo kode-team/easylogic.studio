@@ -42,12 +42,16 @@ export default class TransformProperty extends BaseProperty {
     }
   }
 
+  afterRender () {
+    this.show();
+  }
+
   getTitle() {
     return this.$i18n('transform.property.title')
   }
 
   getBody() {
-    return `
+    return /*html*/`
       <RotateEditorView />
       <div class='full transform-property' ref='$body'></div>
     `;

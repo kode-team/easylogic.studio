@@ -1,7 +1,6 @@
 import BaseProperty from "./BaseProperty";
 import { LOAD, DEBOUNCE, VDOM } from "@core/Event";
 import { EVENT } from "@core/UIElement";
-import { CSS_TO_STRING, TAG_TO_STRING } from "@core/functions/func";
 import HTMLRenderer from "@renderer/HTMLRenderer";
 import SVGRenderer from "@renderer/SVGRenderer";
 

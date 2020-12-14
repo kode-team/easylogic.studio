@@ -43,6 +43,7 @@ import groupItem from "./group.item";
 import ungroupItem from "./ungroup.item";
 import historyUndo from "./history.undo";
 import historyRedo from "./history.redo";
+import addArtboard from "./add.artboard";
 
 
 export default [
@@ -52,6 +53,7 @@ export default [
     
     // add layer 
     selectView,
+    addArtboard,
     addRect,
     addRectM,
     addCircle,

@@ -366,7 +366,12 @@ export default class DomRender extends ItemRender {
 
 
   toClipPathCSS (item) {
-    var str = item['clip-path']
+    const str = item['clip-path']
+
+    if (Boolean(str) === false) {
+      return null;
+    }
+    
     var obj = ClipPath.parseStyle(str)
 
     switch (obj.type) {

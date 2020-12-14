@@ -1,21 +1,21 @@
 import MenuItem from "./MenuItem";
 import icon from "@icon/icon";
+import { EVENT } from "@core/UIElement";
  
 export default class AddArtboard extends MenuItem {
   getIconString() {
     return icon.artboard;
   }
   getTitle() {
-    return this.props.title || "Artboard";
+    return this.props.title || "ArtBoard";
   }
-
-
-  isHideTitle() {
-    return true; 
-  }  
 
   clickButton(e) {
-
-    this.emit('addArtBoard');
+    this.selSelected(true);
+    this.emit('addLayerView', 'artboard');
   }
+
+  [EVENT('addLayerView')] (type) {
+    this.setSelected(type === 'artboard');
+  }  
 }

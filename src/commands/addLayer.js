@@ -3,12 +3,12 @@ import _doForceRefreshSelection from "./_doForceRefreshSelection";
 export default function addLayer (editor, layer, rect = {}, isSelected = true, containerItem) {
 
     if (!containerItem) {
-        containerItem = editor.selection.current || editor.selection.currentArtboard
+        containerItem = editor.selection.current || editor.selection.currentProject
     }
 
     if (containerItem) {
 
-        if (!containerItem.enableHasChildren()) {
+        if (!containerItem.is('project') && !containerItem.enableHasChildren()) {
             containerItem = containerItem.parent;
         }
 
@@ -19,11 +19,5 @@ export default function addLayer (editor, layer, rect = {}, isSelected = true, c
         }
 
         _doForceRefreshSelection(editor,true, 10)
-    } else {
-        editor.emit('addArtBoard')
-
-        editor.nextTick(() => {
-            addLayer(editor, layer, rect);
-        })
     }
 }

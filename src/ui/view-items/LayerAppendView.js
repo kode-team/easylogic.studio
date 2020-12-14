@@ -99,6 +99,8 @@ export default class LayerAppendView extends UIElement {
     createLayerTemplate () {
         const { type, text, color, width, height } = this.state;
         switch(type) {
+        case 'artboard':
+            return /*html*/`<div class='draw-item' style='background-color: white;'></div>`;
         case 'rect':
             return /*html*/`<div class='draw-item' style='background-color: ${color};border:1px solid black;'></div>`
         case 'circle':
@@ -116,7 +118,7 @@ export default class LayerAppendView extends UIElement {
             return /*html*/`
             <div class='draw-item'>
                 <svg width="${width}" height="${height}" style="width:100%; height:100%;" overflow="visible">
-                    <path d="${PathStringManager.makeRect(0, 0, width, height)}" stroke-width="5" stroke="black" fill="transparent" />
+                    <path d="${PathStringManager.makeRect(0, 0, width, height)}" stroke-width="1" stroke="black" fill="transparent" />
                 </svg>
             </div>
             `
@@ -124,7 +126,7 @@ export default class LayerAppendView extends UIElement {
             return /*html*/`
             <div class='draw-item'>
                 <svg width="${width}" height="${height}" style="width:100%; height:100%;" overflow="visible">
-                    <path d="${PathStringManager.makeCircle(0, 0, width, height)}" stroke-width="5" stroke="black" fill="transparent" />
+                    <path d="${PathStringManager.makeCircle(0, 0, width, height)}" stroke-width="1" stroke="black" fill="transparent" />
                 </svg>
             </div>
             `
@@ -189,9 +191,10 @@ export default class LayerAppendView extends UIElement {
                 this.state.pathManager.reset();
 
                 return this.state.pathManager
-                            .M({x: guide[0][0], y: guide[0][1]})
+                            .M({x: guide[0][0], y: guide[0][1]})                            
                             .L({x: guide[1][0], y: guide[1][1]})
-                            .X({x: guide[1][0], y: guide[1][1]})
+                            .X({x: guide[0][0], y: guide[0][1]})
+                            .X({x: guide[1][0], y: guide[1][1]})                            
                             .toString('layer-add-snap-pointer')
             }).join('\n')}
         </svg>
@@ -280,7 +283,7 @@ export default class LayerAppendView extends UIElement {
         case 'image': this.emit('openImage', rect); break;
         case 'video': this.emit('openVideo', rect); break; 
         case 'audio': this.emit('openAudio', rect); break;             
-        default: this.emit('newComponent', this.state.type, rect, /* isSelected */ false );break;
+        default: this.emit('newComponent', this.state.type, rect, /* isSelected */ true );break;
         }
         
 
@@ -290,6 +293,7 @@ export default class LayerAppendView extends UIElement {
 
         this.state.dragStart = false;        
         this.state.showRectInfo = false; 
+        this.state.target = null;
         this.bindData('$areaRect');         
     }    
 

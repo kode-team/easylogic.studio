@@ -76,9 +76,9 @@ export default class BrushDrawView extends UIElement {
     }
 
     makeBrushLayer (pathRect) {
-        var artboard = this.$selection.currentArtboard
+        var project = this.$selection.currentProject
         var layer; 
-        if (artboard) {
+        if (project) {
 
             var x = pathRect.x / this.scale;
             var y = pathRect.y / this.scale;
@@ -90,7 +90,7 @@ export default class BrushDrawView extends UIElement {
             const parser = new PathParser(PathStringManager.makePathByPoints(simplyPoints))
             const d = PathGenerator.generatorPathString(parser.convertGenerator(), x, y, this.scale);
 
-            layer = artboard.add(new SVGBrushItem({
+            layer = project.add(new SVGBrushItem({
                 width: Length.px(width),
                 height: Length.px(height),
                 d,

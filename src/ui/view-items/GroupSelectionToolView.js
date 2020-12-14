@@ -420,12 +420,11 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
         this.renderPointers();
         this.refreshSmartGuides();        
-        this.emit('refreshCanvasForPartial', null, true)                
+        this.emit('refreshCanvasForPartial', null, true)                   
     }
 
     moveEndVertext (dx, dy) {
         this.$selection.reselect();
-
         this.nextTick(() => {
             this.command(
                 'setAttributeForMulti', 

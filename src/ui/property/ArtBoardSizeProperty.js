@@ -1,5 +1,5 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, DEBOUNCE, VDOM, CLICK } from "@core/Event";
+import { LOAD, VDOM, CLICK } from "@core/Event";
 import { EVENT } from "@core/UIElement";
 import { Length } from "@unit/Length";
 
@@ -10,7 +10,7 @@ export default class ArtBoardSizeProperty extends BaseProperty {
   }
 
   [EVENT('refreshSelection')] () {
-    this.refreshShow(['project', 'artboard']);
+    this.refreshShow(['artboard']);
   }
 
   initState() {
@@ -157,7 +157,7 @@ export default class ArtBoardSizeProperty extends BaseProperty {
 
 
   [EVENT('changeBoardSize')] (key, value) {
-    var current = this.$selection.currentArtboard;
+    var current = this.$selection.current;
     if (current && current.is('artboard')) {
 
       if (!value.trim()) return;

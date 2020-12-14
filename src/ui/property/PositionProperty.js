@@ -7,8 +7,12 @@ export default class PositionProperty extends BaseProperty {
     return this.$i18n('position.property.title');
   }
 
+  afterRender() {
+    this.show();
+  }
+
   [EVENT('refreshSelection')]() {
-    this.refreshShowIsNot(['project', 'artboard'])
+    this.refreshShowIsNot(['project'])
   }
 
   [EVENT('refreshRect') + DEBOUNCE(100)] () {
@@ -31,6 +35,7 @@ export default class PositionProperty extends BaseProperty {
 
   [LOAD("$positionItem")]() {
     var current = this.$selection.current;
+
     if (!current) return '';
 
     return /*html*/`

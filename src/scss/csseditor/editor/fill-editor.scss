@@ -97,6 +97,7 @@
                 stroke: white; 
                 stroke-width: 1;
             }
+
         }
     
         .gradient-view {
@@ -140,6 +141,11 @@
                 svg {
                     width: 100%;
                     height: 100%;
+
+                    path {
+                        fill: var(--font-color);
+                        stroke: var(--font-color);
+                    }
                 }
             }
 

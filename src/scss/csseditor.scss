@@ -46,8 +46,8 @@ body {
 
    
     $pointer-color: #4075d6;
-    $top-size: 0px;
-    $tool-size: 50px;
+    $top-size: 50px;
+    $tool-size: 0px;
     $left-size: 340px;
     $left-layer-panel: 70px; 
     $left-page-size: 70px;
@@ -84,6 +84,7 @@ body {
         --header-background-color: #{$header-background-color};  
         --selected-background-color: #{$selected-background-color};
         --font-color: #{$font-color};
+        --menu-item-title-font-color: #{$menu-item-title-font-color};
         --selected-font-color: #{$selected-font-color};
         --divider-color: #{$divider-color};
         --property-border-color: #{$property-border-color};
@@ -138,6 +139,7 @@ body {
         --header-background-color: #{$header-background-color};  
         --selected-background-color: #{$selected-background-color};
         --font-color: #{$font-color};
+        --menu-item-title-font-color: #{$menu-item-title-font-color};        
         --selected-font-color: #{$selected-font-color};
         --divider-color: #{$divider-color};
         --property-border-color: #{$property-border-color};
@@ -191,6 +193,7 @@ body {
         --header-background-color: #{$header-background-color};  
         --selected-background-color: #{$selected-background-color};
         --font-color: #{$font-color};
+        --menu-item-title-font-color: #{$menu-item-title-font-color};        
         --selected-font-color: #{$selected-font-color};
         --divider-color: #{$divider-color};
         --property-border-color: #{$property-border-color};

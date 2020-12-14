@@ -1,0 +1,17 @@
+
+.logo-item {
+    position: absolute;
+    left: 15px;
+    top: 0px;
+    display: block;
+    padding: 10px 0px;
+    text-align: center;
+    label.logo {
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        background-image: url(./images/icon128.png);
+        background-size: contain;
+        border-radius: 2px;
+    }
+}

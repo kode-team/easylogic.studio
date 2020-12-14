@@ -303,9 +303,9 @@ export function getClosestPointBylineRect(x1, y1, x2, y2, rectX, rectY, width, h
 /**
  * 폴리곤에 점 비교 
  * 
- * @param {[x, y][]} verties 
- * @param {*} px 
- * @param {*} py 
+ * @param {vec3[]} verties 
+ * @param {number} px 
+ * @param {number} py 
  */
 export function polyPoint (verties = [], px, py) {
     let isCollision = false; 

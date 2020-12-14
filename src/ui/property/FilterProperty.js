@@ -19,6 +19,10 @@ export default class FilterProperty extends BaseProperty {
     return true; 
   }
 
+  afterRender() {
+    this.show();
+  }
+
   getKeyframeProperty () {
     return 'filter';
   }

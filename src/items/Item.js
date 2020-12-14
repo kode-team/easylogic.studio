@@ -394,6 +394,10 @@ export class Item {
     return layer;     
   }
 
+  resetMatrix (item) {
+
+  }
+
   /**
    * 특정 index 에 자식을 추가한다. 
    * 

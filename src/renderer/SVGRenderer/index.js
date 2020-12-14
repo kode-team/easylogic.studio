@@ -35,6 +35,8 @@ export default {
         if (currentRenderer) {
             return currentRenderer.render(item, renderer || this, encoding);
         }
+
+        return '';
     },
 
     /**

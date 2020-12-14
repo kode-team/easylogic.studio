@@ -65,12 +65,15 @@ export default class CSSEditor extends UIElement {
     return /*html*/`
       <div class="layout-main">
         <div class='layout-top' ref='$top'>
-
+          <div class='logo-item'>
+            <label class='logo' title='EasyLogic Studio'></label>
+          </div>                       
+          <ToolMenu />    
+          <PageSubEditor />    
         </div>
         <div class="layout-middle" ref='$middle'>
           <div class="layout-header" ref='$headerPanel'>
-              <ToolMenu />    
-              <PageSubEditor />      
+  
           </div>        
           <div class="layout-body" ref='$bodyPanel'>
             <CanvasView />        

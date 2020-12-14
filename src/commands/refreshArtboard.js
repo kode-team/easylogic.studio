@@ -11,7 +11,7 @@ export default function refreshArtboard (editor) {
     editor.emit('refreshAllElementBoundSize')   
     editor.emit('refreshSelection');
     editor.nextTick(() => {
-        editor.emit('refreshSelectionTool');
+        editor.emit('refreshSelectionTool', true);
     })
 
 }

@@ -76,9 +76,9 @@ export default class PathDrawView extends UIElement {
     }
 
     makePathLayer (pathRect) {
-        var artboard = this.$selection.currentArtboard
+        var project = this.$selection.currentProject
         var layer; 
-        if (artboard) {
+        if (project) {
 
 
             // rect 기준으로 상대 좌표로 다시 변환 
@@ -107,7 +107,7 @@ export default class PathDrawView extends UIElement {
                 if (this.state[key]) Object.assign(pathItem, {[key]: this.state[key] })    
             });            
 
-            layer = artboard.appendChildItem(new SVGPathItem(pathItem));             
+            layer = project.appendChildItem(new SVGPathItem(pathItem));             
         }
 
         return layer; 

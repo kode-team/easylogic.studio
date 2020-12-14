@@ -34,7 +34,6 @@ export class SelectionManager {
      * @property {Project} project Project Item 
      */
     this.project = null;
-    this.artboard = null;
     /**
      * @property {Item[]} items Item List
      */
@@ -79,14 +78,6 @@ export class SelectionManager {
 
   get currentProject () {
     return this.project;
-  }
-
-  /**
-   * 
-   * @returns {ArtBoard}
-   */
-  get currentArtboard () {
-    return this.artboard;
   }
 
   get isEmpty () {
@@ -135,13 +126,9 @@ export class SelectionManager {
   }
 
   getRootItem (current) {
-    var rootItem = current || this.currentArtboard;
-    if (current) {
-      if (current.is('artboard')) {
-        rootItem = current; 
-      } else if (current.parent) {
+    var rootItem = current;
+    if (current && current.parent) {
         rootItem = current.parent; 
-      }
     }
 
     return rootItem;
@@ -157,20 +144,6 @@ export class SelectionManager {
 
   selectProject (project) {
     this.project = project;
-    this.artboard = null;
-    if (this.project.artboards.length) {
-      this.selectArtboard(this.project.artboards[0]);
-    }
-  }
-
-  selectArtboard (artboard) {
-    this.artboard = artboard;
-
-    this.items = [];
-    if (this.artboard.layers.length) {
-      this.select(this.artboard.layers[0]);
-    }
-
   }
 
   get isRelative () {
@@ -212,13 +185,6 @@ export class SelectionManager {
 
   get (id) {
     return this.itemKeys[id];
-  }
-
-  /**
-   * 현재 선택된 Item 이 ArtBoard 인지 체크 한다. 
-   */
-  isArtBoard () {
-    return this.items.length ?  this.current.is('artboard') : false;
   }
 
   /**
@@ -271,10 +237,21 @@ export class SelectionManager {
 
   /**
    * 
-   * @param {string} id 
+   * id 로 선택된 객체 지우기 
+   * 
+   * @param {string|string[]} id 
    */
   removeById(id) {
-    this.select(...this.items.filter(it => it.id != id))
+
+    let ids = id; 
+
+    if (isString(id)) {
+      ids = [id];
+    }
+
+    const filteredItems = this.items.filter(it => ids.includes(it.id) === false)
+
+    this.select(...filteredItems)
   }    
 
   toggleById (id) {
@@ -315,7 +292,6 @@ export class SelectionManager {
       let maxY = Number.MIN_SAFE_INTEGER;
 
       this.each(item => {
-
           item.verties().filter((it, index) => index < 4).forEach(vector => {
               minX = Math.min(minX, vector[0]);
               minY = Math.min(minY, vector[1]);
@@ -362,9 +338,10 @@ export class SelectionManager {
     let data = {};
 
     this.each(item => {
+
       data[item.id] = {}
 
-      keys.forEach(key => {
+      keys.forEach(key => {     
         data[item.id][key] = item[key];
       })
     })
@@ -423,13 +400,13 @@ export class SelectionManager {
 
     var prevItem = item; 
     var parent = prevItem.parent; 
-    var hasParent = !prevItem.is('artboard') && parentItems.includes(parent); 
+    var hasParent = parentItems.includes(parent); 
 
     while(!hasParent) {
       if (isUndefined(parent)) break; 
       prevItem = parent; 
       parent = parent.parent; 
-      hasParent = !prevItem.is('artboard') && parentItems.includes(parent); 
+      hasParent = parentItems.includes(parent); 
     }
 
     return hasParent; 

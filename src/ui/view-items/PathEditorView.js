@@ -254,6 +254,10 @@ export default class PathEditorView extends PathTransformEditor {
     }
 
     [BIND('$tool')] () {
+
+        // transform 이 아닐때는 업데이트 하지 않는다. 
+        if (this.state.mode !== 'transform') return; 
+
         this.resetTransformZone();
         var rect = this.state.transformZoneRect;
 
@@ -320,9 +324,9 @@ export default class PathEditorView extends PathTransformEditor {
     }
 
     makePathLayer () {
-        var artboard = this.$selection.currentArtboard
+        var project = this.$selection.currentProject
         var layer; 
-        if (artboard) {
+        if (project) {
 
             const newPath = new PathParser(this.pathGenerator.toPath().d);
             newPath.transformMat4(this.$editor.matrixInverse);
@@ -346,7 +350,7 @@ export default class PathEditorView extends PathTransformEditor {
                 if (this.state[key]) Object.assign(pathItem, {[key]: this.state[key] })    
             });            
 
-            layer = artboard.appendChildItem(new SVGPathItem(pathItem));
+            layer = project.appendChildItem(new SVGPathItem(pathItem));
 
         }
 

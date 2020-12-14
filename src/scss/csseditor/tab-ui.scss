@@ -40,21 +40,6 @@ $tab-horizontal-header-right-width: 60px;
           flex-direction: column;
           border-right: 1px solid var(--border-color);
 
-          .logo-item {
-            flex: none;
-            display: block;
-            padding: 10px 0px;
-            text-align: center;
-            label.logo {
-              display: inline-block;
-              width: 30px;
-              height: 30px;
-              background-image: url(./images/icon128.png);
-              background-size: contain;
-              border-radius: 2px;
-            }
-          }
-
           .tab-item {
             display: block;
             width: 100%;

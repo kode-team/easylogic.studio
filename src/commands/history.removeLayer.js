@@ -60,6 +60,7 @@ export default {
         editor.nextTick(() =>  {
             editor.selection.removeById(items.map(it => it.id))
             editor.emit('refreshAll')
+            editor.emit('removeGuideLine');
             editor.nextTick(() => {
                 editor.history.saveSelection()  
             })

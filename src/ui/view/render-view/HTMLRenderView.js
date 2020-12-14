@@ -17,6 +17,7 @@ import GridLayoutLineView from "@ui/view-items/GridLayoutLineView";
 import { isFunction } from "@core/functions/func";
 import { rectToVerties } from "@core/functions/collision";
 import { vertiesMap } from "@core/functions/math";
+import { vec3 } from "gl-matrix";
 
 
 export default class HTMLRenderView extends UIElement {
@@ -52,13 +53,14 @@ export default class HTMLRenderView extends UIElement {
                 <div class='canvas-view' ref='$view'></div>
                 <div class='drag-area-rect' ref='$dragAreaRect'></div>
                 <StyleView ref='$styleView' />
-                <GuideLineView ref='$guideLineView' />
+                <GuideLineView ref='$guideLineView' />                      
                 <GridLayoutLineView ref='$gridLayoutLineView' />
                 <SelectionToolView ref='$selectionTool' />
                 <GroupSelectionToolView ref='$groupSelectionTool' />
                 <LayerAppendView ref='$objectAddView' />
                 <PathEditorView ref='$pathEditorView' />
                 <PathDrawView ref='$pathDrawView' />
+          
             </div>
         `
     }
@@ -149,8 +151,48 @@ export default class HTMLRenderView extends UIElement {
 
             this.state.cachedCurrentElement = {}       
             this.$el.$$('.selected').forEach(it => it.removeClass('selected'))
+
+
+            // 클릭하는 시점에  item 인스턴스와 , verties() 를 초기화 한다. 
+            // 그 이후에 조회 하는 객체에 대해서 verties() 를 맞춘다. 
+            // 드래그가 끝날 때까지 쓴다. 
+            // this.$selection.currentProject.initCacheVerties();
+
         }
 
+    }
+
+    getSelectedItems (rect, areaVerties) {
+
+        var project = this.$selection.currentProject;
+        let items = []
+        let selectedArtboard = []        
+        if (project) {    
+
+            if (rect.width === 0 && rect.height === 0) {
+                items = [] 
+            } else {
+                // 프로젝트 내에 있는 모든 객체 검색 
+
+                project.layers.forEach(layer => {
+
+                    if (layer.is('artboard') && layer.isIncludeByArea(areaVerties)) {        
+                        selectedArtboard.push(layer);
+                    } else if (layer.is('artboard') && layer.checkInArea(areaVerties)) {        
+                        items.push(layer);                            
+                    } else {
+                        items.push(...layer.checkInAreaForAll(areaVerties))
+                    }
+                })
+
+                if (items.length > 1) {
+                    items = items.filter(it => it.is('artboard') === false);
+                }
+            }   
+        }
+        const selectedItems = selectedArtboard.length ? selectedArtboard : items; 
+
+        return selectedItems;
     }
 
     movePointer (dx, dy) {
@@ -181,24 +223,12 @@ export default class HTMLRenderView extends UIElement {
     
             var areaVerties = vertiesMap(rectToVerties(rect.x, rect.y, rect.width, rect.height), this.$editor.matrixInverse);
 
-            var artboard = this.$selection.currentArtboard;
-            if (artboard) {    
+            var project = this.$selection.currentProject;
+            if (project) {    
+                const selectedItems = this.getSelectedItems(rect, areaVerties)
 
-                let items = []
-                // 드래그 영역이 artboard 를 완전히 감싸면 artboard 만 선택된다. 
-                if (artboard.isIncludeByArea(areaVerties)) {        
-                    items = [artboard]
-                } else {
-                    // 포함관계가 아닐 때는 충돌검사를 한다. 
-                    items = artboard.checkInAreaForLayers(areaVerties);
-                }
-
-                if (rect.width === 0 && rect.height === 0) {
-                    items = [] 
-                }                 
-    
-                if (this.$selection.select(...items)) {
-                    this.selectCurrent(...items)
+                if (this.$selection.select( ...selectedItems)) {
+                    this.selectCurrent(...selectedItems)
                 }
 
                 this.emit('refreshSelectionTool', true);
@@ -229,25 +259,13 @@ export default class HTMLRenderView extends UIElement {
             height: Length.z()
         })
 
+        var project = this.$selection.currentProject;
+        if (project) {
+    
+            const selectedItems = this.getSelectedItems(rect, areaVerties)
 
-        var artboard = this.$selection.currentArtboard;
-        var items = [] 
-        if (artboard) {
-
-            // 드래그 영역이 artboard 를 완전히 감싸면 artboard 만 선택된다. 
-            if (artboard.isIncludeByArea(areaVerties)) {        
-                items = [artboard]
-            } else {
-                // 포함관계가 아닐 때는 충돌검사를 한다. 
-                items = artboard.checkInAreaForLayers(areaVerties);
-            }
-
-            if (rect.width === 0 && rect.height === 0) {
-                items = [] 
-            }                 
-
-            if (this.$selection.select(...items)) {
-                this.selectCurrent(...items)
+            if (this.$selection.select(...selectedItems)) {
+                this.selectCurrent(...selectedItems)
             }
 
         } else {
@@ -308,11 +326,15 @@ export default class HTMLRenderView extends UIElement {
         return this.$editor.isSelectionMode()
     }
 
+    findArtBoard (point) {
+        return this.$selection.currentProject.artboards.find(artboard => artboard.hasPoint(point.x, point.y))
+    }
 
     [POINTERSTART('$view .element-item') + IF('checkEditMode')  + MOVE('calculateMovedElement') + END('calculateEndedElement')] (e) {
         this.startXY = e.xy ; 
         this.$element = e.$dt;
         this.$target = Dom.create(e.target);
+        this.rect = this.refs.$body.rect();               
 
         // text, artboard 는 선택하지 않음. 
         if (this.$element.hasClass('text')) {
@@ -487,21 +509,21 @@ export default class HTMLRenderView extends UIElement {
 
     }    
 
-    [EVENT('playTimeline', 'moveTimeline')] () {
+    [EVENT('playTimeline', 'moveTimeline')] (artboard) {
 
-        var project = this.$selection.currentProject;
-
-        var timeline = project.getSelectedTimeline();
+        var timeline = artboard.getSelectedTimeline();
         timeline.animations.map(it => project.searchById(it.id)).forEach(current => {
             this.updateTimelineElement(current, true, false);
         })
     }    
 
+    /**
+     * canvas 전체 다시 그리기 
+     */
     [EVENT('refreshAllCanvas')] () {
 
-        // 나중에 project 기반으로 바꿔야 함 
-        var artboard = this.$selection.currentArtboard
-        var html = HTMLRenderer.render(artboard) || '';
+        const project = this.$selection.currentProject
+        const html = HTMLRenderer.render(project) || '';
 
         this.setState({ html }, false)
         this.refs.$view.updateDiff(html)

@@ -17,6 +17,10 @@ export default class BackgroundImageProperty extends BaseProperty {
     return true; 
   }
 
+  afterRender () {
+    this.show();
+  }
+
   getKeyframeProperty () {
     return 'background-image';
   }

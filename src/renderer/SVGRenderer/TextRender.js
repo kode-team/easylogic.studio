@@ -27,7 +27,7 @@ export default class TextRender extends SVGLayerRender {
 
         return this.wrappedRender(item, () => {
           return /*html*/`
-            <foreignObject ${OBJECT_TO_PROPERTY({  width: width.value, height: height.value})}>
+            <foreignObject width="${width.value}" height="${height.value}">
                 <p xmlns="http://www.w3.org/1999/xhtml" style="${CSS_TO_STRING(css)}">${content}</p>
             </foreignObject>              
           `  

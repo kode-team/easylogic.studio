@@ -95,11 +95,13 @@ export default class LayerTreeProperty extends BaseProperty {
   getIcon (item) {
     // return '';
 
-    if (item.isGroup) {
+    if (item.isGroup && item.is('artboard') === false) {
       return icon.group
     }
 
     switch(item.itemType) {
+    case 'artboard':
+      return icon.artboard;
     case 'circle': 
       return icon.lens;
     case 'image': 
@@ -166,10 +168,10 @@ export default class LayerTreeProperty extends BaseProperty {
 
   [LOAD("$layerList") + VDOM]() {
 
-    var artboard = this.$selection.currentArtboard;
-    if (!artboard) return ''
+    var project = this.$selection.currentProject;
+    if (!project) return ''
 
-    return this.makeLayerList(artboard, 0) + /*html*/`
+    return this.makeLayerList(project, 0) + /*html*/`
       <div class='layer-item ' data-depth="0" data-is-last="true">
       </div>
     `
