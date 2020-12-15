@@ -115,7 +115,8 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         })
 
         this.renderPointers();
-        this.emit('refreshCanvasForPartial', null, true)                
+        this.emit('refreshCanvasForPartial', null, true)  
+        this.emit('refreshSelectionStyleView');                      
     }
 
     rotateEndVertext (dx, dy) {
@@ -420,11 +421,13 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
         this.renderPointers();
         this.refreshSmartGuides();        
-        this.emit('refreshCanvasForPartial', null, true)                   
+        this.emit('refreshCanvasForPartial', null, true)  
+        this.emit('refreshSelectionStyleView');                         
     }
 
-    moveEndVertext (dx, dy) {
+    moveEndVertext (dx, dy) {        
         this.$selection.reselect();
+        this.emit('refreshSelectionStyleView');           
         this.nextTick(() => {
             this.command(
                 'setAttributeForMulti', 

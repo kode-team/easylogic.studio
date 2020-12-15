@@ -58,7 +58,7 @@ export default class ProjectRender extends DomRender {
      * @param {HTMLRenderer} renderer 
      */
     render (item, renderer) {
-        return item.artboards.map(it => {
+        return item.layers.map(it => {
             return renderer.render(it)
         }).join('');
     }
@@ -69,11 +69,7 @@ export default class ProjectRender extends DomRender {
 
             var filters = svgfilter.filters.map(filter => SVGFilter.parse(filter))
     
-            return /*html*/`
-<filter id='${svgfilter.id}'>
-    ${filters.join('\n')}
-</filter>
-    `  
+            return /*html*/`<filter id='${svgfilter.id}'>${filters.join('\n')}</filter>`  
         }).join('\n\n')
     
         return filterString

@@ -338,7 +338,6 @@ export default class CSSEditor extends UIElement {
   }
 
   [EVENT('refreshAllSelectProject')] () {      
-    this.emit('refreshArtBoardList')    
     this.emit('refreshArtboard')
   }
 

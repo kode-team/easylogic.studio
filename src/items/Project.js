@@ -2,6 +2,7 @@ import { ComponentManager } from "../manager/ComponentManager";
 import { TimelineItem } from "./TimelineItem";
 import { mat4 } from "gl-matrix";
 import { Length } from "@unit/Length";
+import { calculateMatrix } from "@core/functions/math";
 
 const OFFSET_X = Length.z();
 const OFFSET_Y = Length.z();
@@ -50,7 +51,7 @@ export class Project extends TimelineItem {
   }
 
   get artboards () {
-    return this.json.layers || [];
+    return (this.json.layers || []).filter(it => it.is('artboard'));
   }
 
   get offsetX () {
@@ -64,6 +65,27 @@ export class Project extends TimelineItem {
   getTransformMatrix () {
     return mat4.create();
   }
+  /**
+   * 부모를 기준으로 childItem 의 transform 을 맞춘다. 
+   * 
+   * [newParentInverse] * [childMatrix] * [childItemMatrixInverse] = translate; 
+   * 
+   * @param {Item} childItem 
+   */
+  resetMatrix (childItem) {
+
+    const [x, y] = mat4.getTranslation([], calculateMatrix(
+        childItem.getAccumulatedMatrix(),
+        childItem.getTransformMatrixInverse()
+    ));
+
+    childItem.reset({
+        x: Length.px(x),
+        y: Length.px(y),
+    })
+
+  }
+
 }
 
 ComponentManager.registerComponent('project', Project);

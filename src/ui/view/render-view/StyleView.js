@@ -46,7 +46,7 @@ export default class StyleView extends UIElement {
     this.changeStyleHead(project)
 
     // artboard setting 
-    project.artboards.forEach(item => this.changeStyleHead(item))
+    project.layers.forEach(item => this.changeStyleHead(item))
   }
 
   changeStyleHead (item) {

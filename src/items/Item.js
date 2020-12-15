@@ -360,13 +360,17 @@ export class Item {
    * @param {Item} layer 
    */
   appendChildItem (layer) {
+
+    if (layer.parent === this.ref) {
+      return layer;
+    }
+
     this.resetMatrix(layer);
 
     // 객체를 추가할 때는  layer 의 절대 값을 기준으로 객체를 움직인다. 
     if (layer.parent) {
       layer.remove();
     }
-
 
     layer.setParent(this.ref);
 

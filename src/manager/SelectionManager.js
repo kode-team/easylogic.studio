@@ -1,4 +1,4 @@
-import { rectToVerties } from "@core/functions/collision";
+import { polyPoint, polyPoly, rectToVerties } from "@core/functions/collision";
 import { isFunction, isUndefined, isArray, isObject, isString, clone } from "@core/functions/func";
 import { ArtBoard } from "@items/ArtBoard";
 import { Item } from "@items/Item";
@@ -262,6 +262,35 @@ export class SelectionManager {
     }
   }
 
+  changeArtBoard () {
+
+    this.each(instance => {
+
+      if (instance.is('artboard') === false) {
+
+        const instanceVerties = instance.verties().filter((_, index) => index < 4);
+  
+        const selectedArtBoard = this.cachedArtBoardVerties.find(artboard => {
+          const artboardVerties = artboard.matrix.verties.filter((_, index) => index < 4);
+          return polyPoint(artboardVerties, instanceVerties[0][0],instanceVerties[0][1]) || polyPoly(instanceVerties, artboardVerties) 
+        })
+  
+        // artboard 가 있고 artboard 가 나의 부모가 아니면 
+        if (selectedArtBoard) {
+          if (selectedArtBoard.item !== instance.parent) {
+            selectedArtBoard.item.appendChildItem(instance);
+          } else {
+            // 동일한 artboard 를 부모로 가지고 있으면 
+            // 아무것도 하지 않는다. 
+          }
+        } else {
+            this.currentProject.appendChildItem(instance);        
+        }
+      }
+    })
+
+  }
+
   doCache () {
     this.items.forEach(item => {
       item.setCache();
@@ -275,7 +304,12 @@ export class SelectionManager {
     // })
 
     this.cachedItemVerties = this.items.map(it => {
+      it.fakeParent = undefined;
       return it.matrix;
+    })
+
+    this.cachedArtBoardVerties = this.currentProject.artboards.map(item => {
+      return { item, matrix: item.matrix};
     })
 
     // this.setAllRectCache();

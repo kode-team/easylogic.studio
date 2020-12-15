@@ -254,6 +254,11 @@ export default class LayerTreeProperty extends BaseProperty {
         item.reset({
           name: text
         })
+
+        if (item.is('artboard')) {
+          this.emit('refreshArtBoardName', item.id, item.name)
+        }
+        
       }
 
     });    

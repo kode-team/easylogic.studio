@@ -51,6 +51,11 @@ export default function newComponent (editor, itemType, obj, isSelected = true) 
             ...obj,
             border: 'border:1px solid black',
         }                
+    } else if (itemType === 'artboard') {
+        obj = {
+            ...obj,
+            'background-color': 'white'
+        }        
     }
 
     editor.command('addLayer', `add layer - ${itemType}`, editor.createItem({

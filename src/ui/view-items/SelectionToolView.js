@@ -6,6 +6,7 @@ import { mat4, vec3 } from "gl-matrix";
 import { Transform } from "@property-parser/Transform";
 import { TransformOrigin } from "@property-parser/TransformOrigin";
 import { calculateAngleForVec3, calculateMatrix, calculateMatrixInverse, vertiesMap } from "@core/functions/math";
+import { polyPoly } from "@core/functions/collision";
 
 
 var directionType = {
@@ -98,7 +99,8 @@ export default class SelectionToolView extends SelectionToolEvent {
         })
 
         this.renderPointers();
-        this.emit('refreshCanvasForPartial', null, true)                
+        this.emit('refreshCanvasForPartial', null, true)   
+        this.emit('refreshSelectionStyleView');                     
     }
 
     rotateEndVertext (dx, dy) {
@@ -337,7 +339,8 @@ export default class SelectionToolView extends SelectionToolEvent {
 
         this.renderPointers();
         this.refreshSmartGuides();        
-        this.emit('refreshCanvasForPartial', null, true)                
+        this.emit('refreshCanvasForPartial', null, true)       
+        this.emit('refreshSelectionStyleView');
     }
 
     moveEndVertext (dx, dy) {
@@ -359,9 +362,11 @@ export default class SelectionToolView extends SelectionToolEvent {
         
         this.$selection.cachedItemVerties.forEach(it => {
 
-            const snap = this.$snapManager.check(it.verties.map(v => {
+            const verties = it.verties.map(v => {
                 return vec3.add([], v, newDist)
-            }));
+            })
+
+            const snap = this.$snapManager.check(verties);
 
             const localDist = vec3.add([], newDist, snap);
 
@@ -372,7 +377,7 @@ export default class SelectionToolView extends SelectionToolEvent {
                     x: Length.px(it.x + localDist[0]), 
                     y: Length.px(it.y + localDist[1]),
                 })
-            }                        
+            }
         }) 
 
         this.refreshSmartGuides();

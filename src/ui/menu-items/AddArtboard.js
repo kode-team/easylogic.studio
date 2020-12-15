@@ -11,7 +11,6 @@ export default class AddArtboard extends MenuItem {
   }
 
   clickButton(e) {
-    this.selSelected(true);
     this.emit('addLayerView', 'artboard');
   }
 

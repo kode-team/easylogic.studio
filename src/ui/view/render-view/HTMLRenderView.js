@@ -364,48 +364,54 @@ export default class HTMLRenderView extends UIElement {
         }
 
         this.selectCurrent(...this.$selection.items)
+        this.initializeDragSelection();
+        this.emit('history.refreshSelection');        
+    }
+
+    initializeDragSelection() {
         this.$selection.reselect();
         this.$snapManager.clear();
 
-        this.emit('history.refreshSelection');        
         this.emit('refreshSelectionTool');
     }
 
 
     calculateMovedElement (dx, dy) {
         this.selectionToolView.refreshSelectionToolView(dx, dy, 'move');        
-        this.updateRealPosition();  
 
+        this.emit('refreshSelectionStyleView');
         this.emit('refreshSelectionTool', false);        
     }
 
     /**
      * item 의  Rectangle 을 업데이트 한다. 
      * 
+     * @deprecated
      * @param {DomItem} item 
      */
-    updateRealPositionByItem (item) {
-        var {x, y, width, height} = item.toBound();
-        var cachedItem = this.getElement(item.id)
+    // updateRealPositionByItem (item) {
+    //     return;
+    //     var {x, y, width, height} = item.toBound();
+    //     var cachedItem = this.getElement(item.id)
 
-        if (cachedItem) {
-            cachedItem.cssText(`
-                left: ${x};
-                top:${y};
-                width:${width};
-                height:${height}; 
-                transform: ${HTMLRenderer.toTransformCSS(item).transform};
-            `)
-        }
-    }
+    //     if (cachedItem) {
+    //         cachedItem.cssText(`
+    //             left: ${x};
+    //             top:${y};
+    //             width:${width};
+    //             height:${height}; 
+    //             transform: ${HTMLRenderer.toTransformCSS(item).transform};
+    //         `)
+    //     }
+    // // }
 
-    updateRealPosition() {
-        this.$selection.each(item => {
-            this.updateRealPositionByItem(item);
-        })
+    // updateRealPosition() {
+    //     // this.$selection.each(item => {
+    //     //     this.updateRealPositionByItem(item);
+    //     // })
 
-        this.emit('refreshRect');        
-    }
+    //     this.emit('refreshRect');        
+    // }
 
     /**
      * ArtBoard title 변경하기 
@@ -425,6 +431,14 @@ export default class HTMLRenderView extends UIElement {
             }
         } else {              
             this.emit('removeGuideLine');
+
+            // 최종 위치에서 ArtBoard 변경하기 
+            this.$selection.changeArtBoard();
+            // ArtBoard 변경 이후에 LayerTreeView 업데이트
+            this.emit('refreshLayerTreeView')            
+
+            // 로컬 html 업데이트 
+            this.trigger('refreshAllCanvas');
             this.$selection.reselect(); 
             this.nextTick(() => {
                 this.command(
@@ -495,7 +509,7 @@ export default class HTMLRenderView extends UIElement {
     updateElement (item) {
         if (item) { 
             HTMLRenderer.update(item, this.getElement(item.id))
-            this.updateRealPositionByItem(item);
+            // this.updateRealPositionByItem(item);
         }
 
     }
@@ -504,7 +518,7 @@ export default class HTMLRenderView extends UIElement {
     updateTimelineElement (item) {
         if (item) {
             HTMLRenderer.update(item, this.getElement(item.id))
-            this.updateRealPositionByItem(item);
+            // this.updateRealPositionByItem(item);
         }
 
     }    
