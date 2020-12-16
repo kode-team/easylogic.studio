@@ -264,6 +264,8 @@ export class SelectionManager {
 
   changeArtBoard () {
 
+    const checkedParentChange = []
+
     this.each(instance => {
 
       if (instance.is('artboard') === false) {
@@ -279,16 +281,25 @@ export class SelectionManager {
         if (selectedArtBoard) {
           if (selectedArtBoard.item !== instance.parent) {
             selectedArtBoard.item.appendChildItem(instance);
+            checkedParentChange.push(true);
           } else {
             // 동일한 artboard 를 부모로 가지고 있으면 
             // 아무것도 하지 않는다. 
           }
         } else {
-            this.currentProject.appendChildItem(instance);        
+          if (instance.parent !== this.currentProject) {
+            this.currentProject.appendChildItem(instance);       
+            checkedParentChange.push(true);             
+          } else {
+            // 동일한 project 를  부모로 가지고 있으면 
+            // 아무 것도 하지 않는다. 
+          }
+
         }
       }
     })
 
+    return checkedParentChange.filter(Boolean).length > 0;
   }
 
   doCache () {

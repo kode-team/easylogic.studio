@@ -332,23 +332,23 @@ export default class HTMLRenderView extends UIElement {
 
     [POINTERSTART('$view .element-item') + IF('checkEditMode')  + MOVE('calculateMovedElement') + END('calculateEndedElement')] (e) {
         this.startXY = e.xy ; 
-        this.$element = e.$dt;
-        this.$target = Dom.create(e.target);
+        const $element = e.$dt;
+        const $target = Dom.create(e.target);
         this.rect = this.refs.$body.rect();               
 
         // text, artboard 는 선택하지 않음. 
-        if (this.$element.hasClass('text')) {
+        if ($element.hasClass('text')) {
             return false; 
         }
 
-        if (this.$element.hasClass('artboard') && this.$target.hasClass('artboard-title') === false) {
+        if ($element.hasClass('artboard') && $target.hasClass('artboard-title') === false) {
             return false; 
         }        
 
-        var id = this.$element.attr('data-id')    
+        var id = $element.attr('data-id')    
 
         // artboard title 인 경우는 artboard 를 선택한다.         
-        if (Dom.create(e.target).hasClass('artboard-title')) {      
+        if ($target.hasClass('artboard-title')) {      
             this.$selection.selectById(id);
         } else {
             // shift key 는 selection 을 토글한다. 
@@ -377,7 +377,23 @@ export default class HTMLRenderView extends UIElement {
 
 
     calculateMovedElement (dx, dy) {
-        this.selectionToolView.refreshSelectionToolView(dx, dy, 'move');        
+        const targetXY = this.$config.get('bodyEvent').xy;
+
+        const realDx = targetXY.x - this.startXY.x;
+        const realDy = targetXY.y - this.startXY.y;
+
+        this.selectionToolView.refreshSelectionToolView(realDx, realDy, 'move');       
+        
+        // 최종 위치에서 ArtBoard 변경하기 
+        if (this.$selection.changeArtBoard()) {
+            this.startXY = targetXY;
+            this.$selection.reselect();
+            this.$snapManager.clear();    
+            this.trigger('refreshAllCanvas')
+
+            // ArtBoard 변경 이후에 LayerTreeView 업데이트
+            this.emit('refreshLayerTreeView')                        
+        }
 
         this.emit('refreshSelectionStyleView');
         this.emit('refreshSelectionTool', false);        
@@ -423,8 +439,12 @@ export default class HTMLRenderView extends UIElement {
     }
 
     calculateEndedElement (dx, dy) {
+        const targetXY = this.$config.get('bodyEvent').xy;
 
-        if (dx === 0 && dy === 0) {
+        const realDx = targetXY.x - this.startXY.x;
+        const realDy = targetXY.y - this.startXY.y;
+
+        if (realDx === 0 && realDy === 0) {
             if (this.$selection.current.isSVG()) {
                 this.emit('openPathEditor');
                 return; 
@@ -432,14 +452,6 @@ export default class HTMLRenderView extends UIElement {
         } else {              
             this.emit('removeGuideLine');
 
-            // 최종 위치에서 ArtBoard 변경하기 
-            this.$selection.changeArtBoard();
-            // ArtBoard 변경 이후에 LayerTreeView 업데이트
-            this.emit('refreshLayerTreeView')            
-
-            // 로컬 html 업데이트 
-            this.trigger('refreshAllCanvas');
-            this.$selection.reselect(); 
             this.nextTick(() => {
                 this.command(
                     'setAttributeForMulti',
