@@ -16,6 +16,12 @@ export default class TimelineKeyframeList extends UIElement {
     }
 
 
+    initState () {
+        return {
+            rect: null 
+        }
+    }
+
     calculateTimeToPosition (offsetTime, startTime, endTime) {
         
         var rate =  (offsetTime - startTime) / (endTime - startTime);
@@ -290,7 +296,12 @@ export default class TimelineKeyframeList extends UIElement {
 
         if (!selectedTimeline) return ''; 
 
-        var {width} = this.$el.rect();
+
+        if (!this.state.rect) {
+            this.state.rect = this.$el.rect();
+        }
+
+        var {width} = this.state.rect;
         var totalWidth = width - PADDING; 
         var startX = PADDING/2; 
         this.rect = {

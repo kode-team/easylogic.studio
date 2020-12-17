@@ -26,11 +26,13 @@ export default class VideoRender extends LayerRender {
 
     /**
      * 
+     * Resource URL 얻어오기
+     * 
      * @param {Project} item 
      */
     getUrl (item) {
         var {src} = item;     
-        var project = item.top;
+        var project = item.project;
         
         return project.getVideoValueById(src);
     }
@@ -42,7 +44,6 @@ export default class VideoRender extends LayerRender {
     render (item) {
         var {
             id, 
-            src, 
             controls,
             muted,
             poster,

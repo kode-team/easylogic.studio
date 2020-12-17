@@ -7,6 +7,15 @@ import { Pattern } from "@property-parser/Pattern";
 import { Transform } from "@property-parser/Transform";
 import ItemRender from "./ItemRender";
 
+const ZERO_CONFIG = {}
+
+const WEBKIT_ATTRIBUTE_FOR_CSS = [
+  'text-fill-color', 
+  'text-stroke-color', 
+  'text-stroke-width', 
+  'background-clip'
+]
+
 export default class DomRender extends ItemRender {
     
 
@@ -24,6 +33,10 @@ export default class DomRender extends ItemRender {
    * @param {Item} item 
    */
   toBackgroundImageCSS(item) {
+
+    if (item['background-image'] === '' && item.pattern === '') {
+      return ZERO_CONFIG
+    }
 
     let list = [];
 
@@ -276,16 +289,9 @@ export default class DomRender extends ItemRender {
    * @param {*} item 
    */
   toWebkitCSS(item) {
-    var obj = this.toKeyListCSS(item, [
-      'text-fill-color', 
-      'text-stroke-color', 
-      'text-stroke-width', 
-      'background-clip'
-    ])
-
     var results = {}
-    keyEach(obj, (key, value) => {
-      results[`-webkit-${key}`] = value; 
+    WEBKIT_ATTRIBUTE_FOR_CSS.forEach(key => {
+      results[`-webkit-${key}`] = item[key]; 
     })
 
     return results;
@@ -314,6 +320,13 @@ export default class DomRender extends ItemRender {
    * @param {Item} item 
    */
   toTransformCSS(item) {
+
+    // transform 이 없을 때는 공백 리턴 
+    if (item.rotate === '0deg' && item.transform === '') {
+      return ZERO_CONFIG;
+    } else if (item.rotate.value === 0 && item.transform === '') {
+      return ZERO_CONFIG;
+    }
 
     const key = [item['transform'], item['rotate']].join(":::");
 

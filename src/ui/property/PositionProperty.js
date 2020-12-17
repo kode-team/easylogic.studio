@@ -7,12 +7,8 @@ export default class PositionProperty extends BaseProperty {
     return this.$i18n('position.property.title');
   }
 
-  afterRender() {
-    this.show();
-  }
-
   [EVENT('refreshSelection')]() {
-    this.refreshShowIsNot(['project'])
+    this.refreshShowIsNot(['project', 'artboard'])
   }
 
   [EVENT('refreshRect') + DEBOUNCE(100)] () {

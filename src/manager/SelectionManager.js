@@ -277,24 +277,16 @@ export class SelectionManager {
           return polyPoint(artboardVerties, instanceVerties[0][0],instanceVerties[0][1]) || polyPoly(instanceVerties, artboardVerties) 
         })
   
-        // artboard 가 있고 artboard 가 나의 부모가 아니면 
+
         if (selectedArtBoard) {
-          if (selectedArtBoard.item !== instance.parent) {
+          // artboard 가 있고 artboard 가 나의 부모가 아니면           
+          if (selectedArtBoard.item !== instance.artboard) {
             selectedArtBoard.item.appendChildItem(instance);
             checkedParentChange.push(true);
-          } else {
-            // 동일한 artboard 를 부모로 가지고 있으면 
-            // 아무것도 하지 않는다. 
           }
         } else {
-          if (instance.parent !== this.currentProject) {
-            this.currentProject.appendChildItem(instance);       
-            checkedParentChange.push(true);             
-          } else {
-            // 동일한 project 를  부모로 가지고 있으면 
-            // 아무 것도 하지 않는다. 
-          }
-
+          this.currentProject.appendChildItem(instance);       
+          checkedParentChange.push(true);
         }
       }
     })

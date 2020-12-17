@@ -10,7 +10,7 @@ export default class VideoRender extends SVGLayerRender {
      */
     getUrl (item) {
         var {src} = item;     
-        var project = item.top;
+        var project = item.project;
         
         return project.getVideoValueById(src);
     }    

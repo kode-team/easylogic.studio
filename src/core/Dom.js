@@ -86,6 +86,15 @@ export default class Dom {
     return this;  
   }
 
+  /**
+   * Dom attribute 얻기 또는 설정 
+   * 
+   * get ->  Dom.create(targetElement).attr('key');
+   * set -> Dom.create(targetElement).attr('key', value);
+   * 
+   * @param {string} key 
+   * @param {[string]} value 
+   */
   attr(key, value) {
     if (arguments.length == 1) {
       return this.el.getAttribute(key);
@@ -347,7 +356,7 @@ export default class Dom {
 
   css(key, value) {
     if (isNotUndefined(key) && isNotUndefined(value)) {
-      Object.assign(this.el.style, {[key]: value});
+      this.el.style[key] = value;
     } else if (isNotUndefined(key)) {
       if (isString(key)) {
         return getComputedStyle(this.el)[key];  
@@ -590,15 +599,19 @@ export default class Dom {
   }
 
   show(displayType = "block") {
-    return this.css("display", displayType != "none" ? displayType : "block");
+    this.el.style.display = displayType != "none" ? displayType : "block"
+
+    return this; 
   }
 
   hide() {
-    return this.css("display", "none");
+    this.el.style.display = 'none';
+
+    return this; 
   }
 
   isHide () {
-    return this.css("display") == "none"
+    return this.el.style.display  === "none"
   }
 
   isShow () {
@@ -826,7 +839,6 @@ export default class Dom {
 
   drawOption(option = {}) {
     var ctx = this.context();
-
     Object.assign(ctx, option);
   }
 

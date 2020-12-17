@@ -7,11 +7,13 @@ export default class ImageRender extends SVGLayerRender {
 
     /**
      * 
+     * resource url 얻어오기 
+     * 
      * @param {Item} item 
      */
     getUrl (item) {
         var {src} = item;     
-        var project = item.top;
+        var project = item.project;
         
         return project.getImageValueById(src);
     }

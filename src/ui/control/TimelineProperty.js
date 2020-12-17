@@ -103,6 +103,7 @@ export default class TimelineProperty extends BaseProperty {
 
   onToggleShow() {
     this.emit('toggleFooter', this.isPropertyShow())    
+    this.emit('timeline.view', this.isPropertyShow())    
   }
 
 }

@@ -45,16 +45,22 @@ const updateProp = (node, name, newValue, oldValue) => {
 
 
 const updateProps = (node, newProps = {}, oldProps = {}) => {
-    const props = {...newProps,...oldProps};
+    const props = new Set([...Object.keys(newProps), ...Object.keys(oldProps)])
   
-    Object.keys(props).forEach((name) => {
+    props.forEach((name) => {
       updateProp(node, name, newProps[name], oldProps[name]);
     });
 };
 
+/**
+ * TEXT_NODE 일 때   둘 다 공백일 때는  비교하지 않는다. 
+ * 
+ * @param {*} node1 
+ * @param {*} node2 
+ */
 function changed(node1, node2) {
     return (
-        (node1.nodeType === Node.TEXT_NODE && node1 !== node2) 
+        (node1.nodeType === Node.TEXT_NODE && node1.textContent !== node2.textContent) 
         || node1.nodeName !== node2.nodeName
     ) 
 }

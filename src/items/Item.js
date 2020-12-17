@@ -1,10 +1,8 @@
-import { uuidShort, vertiesMap } from "@core/functions/math";
+import { uuidShort } from "@core/functions/math";
 import {
   isFunction,
-  isNotUndefined,
   isUndefined
 } from "@core/functions/func";
-
 
 function _traverse(obj) {
   var results = [] 
@@ -178,6 +176,24 @@ export class Item {
       localParent = localParent.parent; 
 
     } while(localParent);
+  }
+
+  /**
+   * 최상위 project 구하기 
+   * 
+   * @returns {Project}
+   */
+  get project () {
+    return this.path.find(it => it.is('project'))
+  }
+
+  /**
+   * 최상위 artboard 구하기 
+   * 
+   * @returns {ArtBoard}
+   */
+  get artboard () {
+    return this.path.find(it => it.is('project'))
   }
 
   /**
