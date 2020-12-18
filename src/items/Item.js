@@ -371,6 +371,15 @@ export class Item {
   }
 
   /**
+   * 자식을 가지고 있는지 체크 
+   * 
+   * @returns {boolean}
+   */
+  hasChildren () {
+    return this.layers.length > 0;
+  }
+
+  /**
    * 자식으로 추가한다. 
    * 
    * @param {Item} layer 
@@ -595,6 +604,8 @@ export class Item {
 
     return isParent; 
   }
+
+
 
   /**
    * 하위 자식 객체 중에 id를 가진 Item 을 리턴한다. 

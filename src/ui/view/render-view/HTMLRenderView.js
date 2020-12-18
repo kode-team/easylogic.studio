@@ -177,7 +177,7 @@ export default class HTMLRenderView extends UIElement {
 
                     if (layer.is('artboard') && layer.isIncludeByArea(areaVerties)) {        
                         selectedArtboard.push(layer);
-                    } else if (layer.is('artboard') && layer.checkInArea(areaVerties)) {        
+                    } else if (layer.is('artboard') && layer.checkInArea(areaVerties) && layer.hasChildren() === false) {        
                         items.push(layer);                            
                     } else {
                         items.push(...layer.checkInAreaForAll(areaVerties))
