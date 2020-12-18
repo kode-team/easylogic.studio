@@ -14,7 +14,7 @@ export default {
             if (project) {
     
                 // append image asset 
-                project.createImage({
+                const image = project.createImage({
                     id: uuidShort(),
                     type: item.type,
                     name: item.name, 
@@ -22,7 +22,7 @@ export default {
                     local
                 });
                 editor.emit('addImageAsset');
-                isFunction(callback) && callback (local);
+                isFunction(callback) && callback (image.id);
             }
         }
 

@@ -47,7 +47,7 @@ export default class ImageSelectPopup extends BasePopup {
     var project = this.$selection.currentProject || { images: [] }
 
     return project.images.map( (image, index) => {
-      return /*html*/`<div class='image-item' ><img src= '${image.local}' /></div>`
+      return /*html*/`<div class='image-item' ><img src='${image.local}' data-id="${image.id}" /></div>`
     })
   }
 
@@ -55,7 +55,7 @@ export default class ImageSelectPopup extends BasePopup {
     var $img = e.$dt.$('img');
 
     this.updateData({
-      value: $img.attr('src'),
+      value: $img.attr('data-id'),
       naturalWidth: Length.px($img.naturalWidth),
       naturalHeight: Length.px($img.naturalHeight), 
       width: Length.px($img.naturalWidth),

@@ -11,6 +11,7 @@ html,body {
 *:before,
 *:after {
     box-sizing: border-box;
+    touch-action: pinch-zoom;       
 }
 
 body {
@@ -52,7 +53,7 @@ body {
     $left-layer-panel: 70px; 
     $left-page-size: 70px;
     $toggle-left-size: 80px;
-    $right-size: 260px;
+    $right-size: 300px;
     $timeline-animation-size: 200px;
     $timeline-property-size: 270px;
     $timeline-header-size: 40px;
@@ -60,11 +61,11 @@ body {
     $show-timeline-animation: all 0.05s linear;
     $footer-height: 30px; 
     // base 
-    $range-thumb-width: 10px;
-    $range-thumb-height: 10px;
-    $range-track-height: 2px;
-    $range-thumb-top: -4px;
-    $range-thumb-border-radius: 5px; 
+    $range-thumb-width: 12px;
+    $range-thumb-height: 12px;
+    $range-track-height: 1px;
+    $range-thumb-top: -5px;
+    $range-thumb-border-radius: 6px; 
 
     &[data-theme='dark'] {
         @import './themes/csseditor/dark.scss'; 

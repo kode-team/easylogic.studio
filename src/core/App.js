@@ -106,7 +106,7 @@ export const start = opt => {
       return opt.components || {};
     }
 
-    [POINTERMOVE("document")](e) {
+    [POINTERMOVE("document") + PREVENT](e) {
       var newPos = e.xy || EMPTY_POS;
 
       this.$config.set("bodyEvent", e);
@@ -122,6 +122,7 @@ export const start = opt => {
       // var newPos = e.xy || EMPTY_POS;
       this.$config.set("bodyEvent", e);
       this.removeBodyMoves();
+      cancelAnimationFrame(this.requestId);
       this.requestId = null;
     }
 

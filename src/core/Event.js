@@ -77,6 +77,7 @@ export const TRANSITIONSTART = DOM_EVENT_MAKE('transitionstart');
 export const TRANSITIONEND = DOM_EVENT_MAKE('transitionend');
 export const TRANSITIONRUN = DOM_EVENT_MAKE('transitionrun');
 export const TRANSITIONCANCEL = DOM_EVENT_MAKE('transitioncancel');
+export const DOUBLETAB = CUSTOM('doubletab')
 
 // Predefined CHECKER
 export const CHECKER = (value, split = CHECK_SAPARATOR) => {
@@ -115,6 +116,10 @@ export const VDOM = CHECKER('vdom');
 // event config method
 export const DEBOUNCE = (t = 100) => {
   return CHECKER(`debounce(${t})`);
+};
+
+export const DELAY = (t = 300) => {
+  return CHECKER(`delay(${t})`);
 };
 
 export const D1000 = DEBOUNCE(1000)

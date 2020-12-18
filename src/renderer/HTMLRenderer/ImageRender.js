@@ -27,7 +27,7 @@ export default class ImageRender extends LayerRender {
      */
     getUrl (item) {
         var {src} = item;     
-        var project = item.top;
+        var project = item.project;
         
         return project.getImageValueById(src);
     }

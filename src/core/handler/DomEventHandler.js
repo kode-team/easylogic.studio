@@ -14,6 +14,14 @@ const scrollBlockingEvents = {
     'mousewheel': true
 }
 
+const eventConverts = {
+  'doubletab': 'touchend'
+}
+
+const customEventNames = {
+  'doubletab': true 
+}
+
 export default class DomEventHandler extends BaseHandler {
 
 
@@ -117,7 +125,7 @@ export default class DomEventHandler extends BaseHandler {
         }
       
         if (this.checkEventType(e, eventObject)) {
-          var returnValue = callback(e, e.$dt, e.xy);
+          var returnValue = callback(e, e.$dt, e.xy); 
       
           if (returnValue !== false && eventObject.afterMethods.length) {
             eventObject.afterMethods.forEach(after =>
@@ -176,6 +184,21 @@ export default class DomEventHandler extends BaseHandler {
         return el;
     };
       
+    getRealEventName (eventName) {
+      return eventConverts[eventName] || eventName;
+    }
+
+    getCustomEventName (eventName) {
+      return customEventNames[eventName] ? eventName:  '';
+    }
+
+    /**
+     * 
+     * doubletab -> touchend 로 바뀜 
+     * 
+     * @param {string} eventName  이벤트 이름 
+     * @param {array} checkMethodFilters 매직 필터 목록  
+     */
     getDefaultEventObject (eventName, checkMethodFilters) {
         const context = this.context;
         let arr = checkMethodFilters;
@@ -187,6 +210,7 @@ export default class DomEventHandler extends BaseHandler {
         const [afters, afterMethods] = splitMethodByKeyword(arr, "after");
         const [befores, beforeMethods] = splitMethodByKeyword(arr, "before");
         const [debounces, debounceMethods] = splitMethodByKeyword(arr, "debounce");
+        const [delays, delayMethods] = splitMethodByKeyword(arr, "delay");        
         const [throttles, throttleMethods] = splitMethodByKeyword(arr, "throttle");
         const [captures] = splitMethodByKeyword(arr, "capture");
       
@@ -195,6 +219,7 @@ export default class DomEventHandler extends BaseHandler {
           ...checkMethodList,
           ...afters,
           ...befores,
+          ...delays,
           ...debounces,
           ...throttles,
           ...captures
@@ -205,11 +230,13 @@ export default class DomEventHandler extends BaseHandler {
           .map(code => code.toLowerCase());
       
         return {
-          eventName,
+          eventName: this.getRealEventName(eventName),
+          customEventName: this.getCustomEventName(eventName), 
           codes,
           captures,
           afterMethods,
           beforeMethods,
+          delayMethods,
           debounceMethods,
           throttleMethods,
           checkMethodList
@@ -237,6 +264,34 @@ export default class DomEventHandler extends BaseHandler {
           options
         );
     }
+
+    makeCustomEventCallback (eventObject, callback) {
+
+      if (eventObject.customEventName === 'doubletab') {
+        var delay = 300;
+        
+        if (eventObject.delayMethods.length) {
+          delay = +eventObject.delayMethods[0].target;
+        }
+        return (...args) => {
+
+          if (!this.doubleTab) {
+            this.doubleTab = {
+                time: performance.now(),
+            }
+          } else {
+            if (performance.now() - this.doubleTab.time < delay) {
+              callback(...args);
+            }
+
+            this.doubleTab = null;
+          }
+        }
+
+      } 
+
+      return callback; 
+    }
       
     bindingEvent ( [eventName, dom, ...delegate], checkMethodFilters, callback ) {
         const context = this.context;
@@ -244,7 +299,8 @@ export default class DomEventHandler extends BaseHandler {
       
         eventObject.dom = this.getDefaultDomElement(dom);
         eventObject.delegate = delegate.join(SAPARATOR);
-      
+
+        
         if (eventObject.debounceMethods.length) {
           var debounceTime = +eventObject.debounceMethods[0].target;
           callback = debounce(callback, debounceTime);
@@ -252,9 +308,12 @@ export default class DomEventHandler extends BaseHandler {
           var throttleTime = +eventObject.throttleMethods[0].target;
           callback = throttle(callback, throttleTime);
         }
+
+        // custom event callback 만들기 
+        callback = this.makeCustomEventCallback(eventObject, callback)
       
         this.addEvent(eventObject, callback);
-      };
+    };
       
     getEventNames (eventName) {
         let results = [];
@@ -267,7 +326,12 @@ export default class DomEventHandler extends BaseHandler {
         
         return results;
     }
-      
+    
+    /**
+     * 이벤트 문자열 파싱하기 
+     * 
+     * @param {string} key 
+     */
     parseEvent (key) {
         const context = this.context;
         let checkMethodFilters = key.split(CHECK_SAPARATOR).map(it => it.trim());

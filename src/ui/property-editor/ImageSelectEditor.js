@@ -24,9 +24,14 @@ export default class ImageSelectEditor extends UIElement {
     }
 
     [LOAD('$body')] () {
+
+        const project = this.$selection.currentProject;
+
+        if (!project) return;
+
         return /*html*/`
             <div class='preview-container'>
-                <img src="${this.state.value}" />
+                <img src="${project.getImageValueById(this.state.value)}" />
                 <input type='file' ref='$file' accept="image/*" />
             </div>
             <div class='select-container'>
@@ -40,8 +45,8 @@ export default class ImageSelectEditor extends UIElement {
         var files = [...e.target.files];
         
         if (files.length) {
-            this.emit('updateImageAssetItem', files[0], local => {
-                this.trigger('changeImageSelectEditor', local);
+            this.emit('updateImageAssetItem', files[0], imageId => {
+                this.trigger('changeImageSelectEditor', imageId);
             });
         }
 
@@ -57,6 +62,7 @@ export default class ImageSelectEditor extends UIElement {
     }
 
     [EVENT('changeImageSelectEditor')] (value) {
+
         this.updateData({ value })
         this.refresh();
     }

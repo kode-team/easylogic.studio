@@ -6,8 +6,6 @@ import { mat4, vec3 } from "gl-matrix";
 import { Transform } from "@property-parser/Transform";
 import { TransformOrigin } from "@property-parser/TransformOrigin";
 import { calculateAngleForVec3, calculateMatrix, calculateMatrixInverse, vertiesMap } from "@core/functions/math";
-import { polyPoly } from "@core/functions/collision";
-
 
 var directionType = {
     1: 'to top left',
@@ -85,7 +83,7 @@ export default class SelectionToolView extends SelectionToolEvent {
 
     rotateVertext (dx, dy) {
 
-        var distAngle = Math.floor(calculateAngleForVec3(this.verties[4], this.verties[5], [dx, dy, 0]));
+        var distAngle = Math.floor(calculateAngleForVec3(this.verties[0], this.verties[5], [dx, dy, 0]));
 
         this.$selection.cachedItemVerties.forEach(item => {
             const instance = this.$selection.get(item.id)

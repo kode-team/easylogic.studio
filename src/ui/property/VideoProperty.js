@@ -1,8 +1,8 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, CLICK, BIND, DEBOUNCE, INPUT, CHANGEINPUT } from "@core/Event";
+import { LOAD, CLICK, BIND, DEBOUNCE, CHANGEINPUT } from "@core/Event";
 import { EVENT } from "@core/UIElement";
 import icon from "@icon/icon";
-import { Length } from "@unit/Length";
+// import { Length } from "@unit/Length";
 
 const video_dom_property = [
   // 'audioTracks',
@@ -90,7 +90,6 @@ export default class VideoProperty extends BaseProperty {
             <NumberRangeEditor ref='$currentTime' min="0" max="${duration}" value="${currentTime}" step="0.001" onchange="changeCurrentTime" />
           </div>
         </div>    
-        <div class='divider'></div>
         <div class='property-item animation-property-item has-label'>        
           <div class='group'>
             <span class='add-timeline-property' data-property='volume'></span>

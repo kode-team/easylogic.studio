@@ -17,7 +17,7 @@ $menu-item-title-font-color: #949494;
 
 
 // base 
-$range-thumb-color:  rgb(255, 255, 255);
+$range-thumb-color:  $selected-color;
 $range-track-color:  rgb(97, 97, 97);
 $range-thumb-border-color: rgba(0, 0, 0, 0.8);
 

@@ -31,7 +31,9 @@ export default class ImageProperty extends BaseProperty {
   getFooter() {
     return /*html*/`
       <div>
-        <label> ${this.$i18n('image.property.origin')} </label> <span ref='$sizeInfo'></span> <button type="button" ref='$resize'>${icon.size}</button>
+        <label> ${this.$i18n('image.property.origin')} </label> 
+        <span ref='$sizeInfo'></span> 
+        <button type="button" ref='$resize'>${icon.size}</button>
       </div>
       <div>
         <SelectEditor ref='$select' label="${this.$i18n('image.property.size')}" key='size' value='' options='${image_size.join(',')}' onchange='changeImageSize' />
@@ -73,7 +75,7 @@ export default class ImageProperty extends BaseProperty {
   [LOAD("$body")]() { 
     var current = this.$selection.current || {};
 
-    var src = current.url || ''
+    var src = current.src || ''
     return /*html*/`<ImageSelectEditor 
               ref='$1' 
               key='src' 

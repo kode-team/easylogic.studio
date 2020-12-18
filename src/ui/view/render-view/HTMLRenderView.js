@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "@core/UIElement";
-import { BIND, POINTERSTART, MOVE, END, IF, KEYUP, DROP, DRAGOVER, PREVENT, FOCUSIN, BLUR } from "@core/Event";
+import { BIND, POINTERSTART, MOVE, END, IF, KEYUP, DROP, DRAGOVER, PREVENT, FOCUSIN, BLUR, TOUCHSTART, WHEEL } from "@core/Event";
 import { Length } from "@unit/Length";
 
 import Dom from "@core/Dom";
@@ -122,7 +122,6 @@ export default class HTMLRenderView extends UIElement {
     }
 
     [POINTERSTART('$view') + IF('checkEmptyElement') + MOVE('movePointer') + END('moveEndPointer')] (e) {
-
         this.$target = Dom.create(e.target);
 
         this.dragXY = {x: e.xy.x, y: e.xy.y}; 

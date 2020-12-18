@@ -488,6 +488,7 @@ export class MovableItem extends Item {
 
     verties () {
 
+        //TODO: rectVerties 를 생성할 때 ,  중심에서 뻗어나가는 verties 를 어떻게 해야할까?
         let model = rectToVerties(0, 0, this.screenWidth.value, this.screenHeight.value, this.json['transform-origin']);
 
         return vertiesMap(model, this.getAccumulatedMatrix())

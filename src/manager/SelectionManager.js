@@ -3,6 +3,7 @@ import { isFunction, isUndefined, isArray, isObject, isString, clone } from "@co
 import { ArtBoard } from "@items/ArtBoard";
 import { Item } from "@items/Item";
 import { MovableItem } from "@items/MovableItem";
+import { Project } from "@items/Project";
 import { Length } from "@unit/Length";
 import { vec3 } from "gl-matrix";
 
@@ -76,18 +77,31 @@ export class SelectionManager {
     return this.items[0]
   }
 
+  /**
+   * 
+   * @returns {Project}
+   */
   get currentProject () {
     return this.project;
   }
 
+  /**
+   * @returns {boolean}
+   */
   get isEmpty () {
     return !this.length 
   }
 
+  /**
+   * @returns {boolean}
+   */
   get isOne () {
     return this.length === 1; 
   }
 
+  /**
+   * @returns {boolean}
+   */  
   get isMany () {
     return this.length > 1; 
   }  

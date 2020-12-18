@@ -64,6 +64,13 @@ export function calculateAngle (rx, ry) {
     return radianToDegree(Math.atan2(ry, rx))    
 }
 
+/**
+ * center 를 기준으로 point 에서 dist 만큼 이동한 후 angle 를 구함 
+ * 
+ * @param {vec3} point 
+ * @param {vec3} center 
+ * @param {vec3} dist 
+ */
 export function calculateAngleForVec3 (point, center, dist) {
     return calculateAnglePointDistance( 
         {x: point[0], y : point[1] },

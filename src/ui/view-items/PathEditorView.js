@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "@core/UIElement";
-import { POINTERSTART, MOVE, END, BIND, POINTERMOVE, PREVENT, KEYUP, IF, STOP, CLICK, DOUBLECLICK, ENTER, ESCAPE } from "@core/Event";
+import { POINTERSTART, MOVE, END, BIND, POINTERMOVE, PREVENT, KEYUP, IF, STOP, CLICK, DOUBLECLICK, ENTER, ESCAPE, DOUBLETAB, DELAY } from "@core/Event";
 import PathGenerator from "@parser/PathGenerator";
 import Dom from "@core/Dom";
 import PathParser from "@parser/PathParser";
@@ -22,8 +22,8 @@ function xy ([x, y]) {
 
 const SegmentConvertor = class extends UIElement {
 
-    [DOUBLECLICK('$view [data-segment]')] (e) {
-        var index = +e.$dt.attr('data-index')
+
+    convertToCurve (index) {
 
         this.pathGenerator.convertToCurve(index);
 
@@ -31,6 +31,22 @@ const SegmentConvertor = class extends UIElement {
 
         this.refreshPathLayer()
     }
+
+    [DOUBLECLICK('$view [data-segment]')] (e) {
+        var index = +e.$dt.attr('data-index')
+
+        this.convertToCurve(index);
+    }
+
+    /**
+     * Touch 용 에디팅을 위한 이벤트 
+     * 
+     * @param {TouchEvent} e 
+     */
+    [DOUBLETAB('$view [data-segment]') + PREVENT + DELAY(300)] (e) {
+        var index = +e.$dt.attr('data-index')
+        this.convertToCurve(index);           
+    } 
 }
 
 const PathCutter = class extends SegmentConvertor {
