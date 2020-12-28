@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "@core/UIElement";
-import { BIND, POINTERSTART, MOVE, END, IF, KEYUP, DROP, DRAGOVER, PREVENT, FOCUSIN, BLUR, TOUCHSTART, WHEEL } from "@core/Event";
+import { BIND, POINTERSTART, MOVE, END, IF, KEYUP, DROP, DRAGOVER, PREVENT, FOCUSIN, BLUR } from "@core/Event";
 import { Length } from "@unit/Length";
 
 import Dom from "@core/Dom";
@@ -17,8 +17,8 @@ import GridLayoutLineView from "@ui/view-items/GridLayoutLineView";
 import { isFunction } from "@core/functions/func";
 import { rectToVerties } from "@core/functions/collision";
 import { vertiesMap } from "@core/functions/math";
+import { KEY_CODE } from "@types/key";
 import { vec3 } from "gl-matrix";
-
 
 export default class HTMLRenderView extends UIElement {
 
@@ -38,8 +38,8 @@ export default class HTMLRenderView extends UIElement {
     initState() {
         return {
             mode: 'selection',
-            left: Length.z(),
-            top: Length.z(),
+            x: Length.z(),
+            y: Length.z(),
             width: Length.px(10000),
             height: Length.px(10000),
             cachedCurrentElement: {},
@@ -98,6 +98,11 @@ export default class HTMLRenderView extends UIElement {
     checkEmptyElement (e) {
         var $el = Dom.create(e.target)
 
+        const code = this.$shortcuts.getGeneratedKeyCode(KEY_CODE.space);
+        if (this.$keyboardManager.check(code)) {        // space 키가 눌러져있을 때는 실행하지 않는다. 
+            return false;
+        }
+
         if (this.state.mode !== 'selection') {
             return false; 
         }
@@ -121,17 +126,17 @@ export default class HTMLRenderView extends UIElement {
             && $el.attr('data-segment') !== 'true';
     }
 
-    [POINTERSTART('$view') + IF('checkEmptyElement') + MOVE('movePointer') + END('moveEndPointer')] (e) {
+    [POINTERSTART('$body') + IF('checkEmptyElement') + MOVE('movePointer') + END('moveEndPointer')] (e) {
         this.$target = Dom.create(e.target);
 
-        this.dragXY = {x: e.xy.x, y: e.xy.y}; 
+        this.dragXY =  {x: e.xy.x, y: e.xy.y}; 
 
         this.rect = this.refs.$body.rect();            
         this.canvasOffset = this.refs.$view.rect();
 
         this.canvasPosition = {
-            x: this.canvasOffset.left - this.rect.x,
-            y: this.canvasOffset.top - this.rect.y
+            x: this.canvasOffset.left,
+            y: this.canvasOffset.top
         }
 
         this.dragXY.x -= this.rect.x
@@ -214,13 +219,14 @@ export default class HTMLRenderView extends UIElement {
 
             var {left: x, top: y, width, height } = obj
             var rect = {
-                x: x.value -  this.canvasPosition.x, 
-                y: y.value - this.canvasPosition.y, 
+                x: x.value, 
+                y: y.value, 
                 width: width.value,
                 height: height.value
             }
     
-            var areaVerties = vertiesMap(rectToVerties(rect.x, rect.y, rect.width, rect.height), this.$editor.matrixInverse);
+            var areaVerties = vertiesMap(rectToVerties(rect.x, rect.y, rect.width, rect.height), this.$viewport.matrixInverse);
+
 
             var project = this.$selection.currentProject;
             if (project) {    
@@ -243,13 +249,13 @@ export default class HTMLRenderView extends UIElement {
                 .map(it => Length.parse(it))
 
         var rect = {
-            x: (x.value -  this.canvasPosition.x), 
-            y: (y.value - this.canvasPosition.y), 
+            x: x.value, 
+            y: y.value, 
             width: width.value, 
             height: height.value
         }
 
-        var areaVerties = vertiesMap(rectToVerties(rect.x, rect.y, rect.width, rect.height), this.$editor.matrixInverse);
+        var areaVerties = vertiesMap(rectToVerties(rect.x, rect.y, rect.width, rect.height), this.$viewport.matrixInverse);
 
         this.refs.$dragAreaRect.css({
             left: Length.px(-10000),
@@ -333,7 +339,6 @@ export default class HTMLRenderView extends UIElement {
         this.startXY = e.xy ; 
         const $element = e.$dt;
         const $target = Dom.create(e.target);
-        this.rect = this.refs.$body.rect();               
 
         // text, artboard 는 선택하지 않음. 
         if ($element.hasClass('text')) {
@@ -381,7 +386,10 @@ export default class HTMLRenderView extends UIElement {
         const realDx = targetXY.x - this.startXY.x;
         const realDy = targetXY.y - this.startXY.y;
 
-        this.selectionToolView.refreshSelectionToolView(realDx, realDy, 'move');       
+        const distVector = [realDx, realDy, 0]
+        const newDist = vec3.transformMat4([], distVector, this.$viewport.scaleMatrixInverse);
+
+        this.selectionToolView.refreshSelectionToolView(newDist);       
         
         // 최종 위치에서 ArtBoard 변경하기 
         if (this.$selection.changeArtBoard()) {
@@ -463,14 +471,40 @@ export default class HTMLRenderView extends UIElement {
 
     [BIND('$body')] () {
         const { canvasWidth, canvasHeight, mode} = this.$editor;
+
         var width = Length.px(canvasWidth);
         var height = Length.px(canvasHeight);
 
         return {
             'data-mode': mode,
-            style: { position: 'relative', width, height }
+            'tabIndex': -1,
+            style: { 
+                width, 
+                height, 
+            }
         }
     }
+
+    [BIND('$view')] () {
+
+        const { translate, transformOrigin: origin, scale} = this.$viewport;      
+        
+        const transform =  `translate(${translate[0]}px, ${translate[1]}px) scale(${scale || 1})`;
+        const transformOrigin = `${origin[0]}px ${origin[1]}px`
+
+        this.refs.$view.$$('.artboard-title').forEach($title => {
+            $title.css('transform-origin', `bottom left`)
+            $title.css('transform', `scale(${1/scale})`)
+        })
+
+        return {
+            style: { 
+                'transform-origin': transformOrigin,
+                transform
+            }
+        }
+    }    
+
 
     selectCurrent (...args) {
         this.state.cachedCurrentElement = {}
@@ -491,18 +525,6 @@ export default class HTMLRenderView extends UIElement {
                 it.addClass('selected')
             })
         }    
-    }
-
-    modifyScale () {
-        this.refs.$view.css({
-            transform: `scale(${this.$editor.scale})`
-        })
-
-        this.emit('refreshSelectionTool', false);
-    }
-
-    [EVENT('changeScale')] () {
-       this.modifyScale();
     }
 
     // 객체를 부분 업데이트 하기 위한 메소드 
@@ -624,4 +646,9 @@ export default class HTMLRenderView extends UIElement {
         }
 
     }
+
+    [EVENT('updateViewport')] () {
+        this.bindData('$view');        
+    }
+
 }

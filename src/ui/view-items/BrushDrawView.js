@@ -46,7 +46,7 @@ export default class BrushDrawView extends UIElement {
 
 
     get scale () {
-        return this.$editor.scale; 
+        return this.$viewport.scale; 
     }
 
     template() {

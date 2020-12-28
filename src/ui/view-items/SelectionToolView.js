@@ -45,6 +45,10 @@ const SelectionToolEvent = class  extends UIElement {
     [EVENT('refreshSelectionTool')] () { 
         this.initSelectionTool();
     }
+
+    [EVENT('updateViewport')] () { 
+        this.initSelectionTool();
+    }    
 }
 
 /**
@@ -82,8 +86,9 @@ export default class SelectionToolView extends SelectionToolEvent {
     }
 
     rotateVertext (dx, dy) {
+        const distVector = vec3.transformMat4([], [dx, dy, 0], this.$viewport.scaleMatrixInverse);
 
-        var distAngle = Math.floor(calculateAngleForVec3(this.verties[0], this.verties[5], [dx, dy, 0]));
+        var distAngle = Math.floor(calculateAngleForVec3(this.verties[0], this.verties[5], distVector));
 
         this.$selection.cachedItemVerties.forEach(item => {
             const instance = this.$selection.get(item.id)
@@ -164,10 +169,7 @@ export default class SelectionToolView extends SelectionToolEvent {
         var nextResult = vec3.transformMat4([], nextVertext, reverseMatrix); 
 
         // 4. 복귀한 좌표에서 차이점을 구한다. 
-        const realDist = vec3.transformMat4([], 
-            vec3.add([], nextResult, vec3.negate([], currentResult)),
-            this.$editor.matrixInverse
-        )
+        const realDist = vec3.add([], nextResult, vec3.negate([], currentResult))
 
         return realDist
     }
@@ -323,7 +325,7 @@ export default class SelectionToolView extends SelectionToolEvent {
 
     moveVertext (dx, dy) {
 
-        const distVector = vec3.transformMat4([], [dx, dy, 0], this.$editor.matrixInverse);
+        const distVector = vec3.transformMat4([], [dx, dy, 0], this.$viewport.scaleMatrixInverse);
 
         if (this.state.moveType === 'to bottom right') {        // 2
             this.moveBottomRightVertext(distVector);
@@ -353,11 +355,8 @@ export default class SelectionToolView extends SelectionToolEvent {
         })        
     }
 
-    refreshSelectionToolView (dx, dy) {
+    refreshSelectionToolView (newDist) {
 
-        const distVector = [dx, dy, 0]
-        const newDist = vec3.transformMat4([], distVector, this.$editor.matrixInverse);
-        
         this.$selection.cachedItemVerties.forEach(it => {
 
             const verties = it.verties.map(v => {
@@ -372,8 +371,8 @@ export default class SelectionToolView extends SelectionToolEvent {
 
             if (instance) {
                 instance.reset({
-                    x: Length.px(it.x + localDist[0]), 
-                    y: Length.px(it.y + localDist[1]),
+                    x: Length.px(it.x + localDist[0]).round(),          // 1px 단위로 위치 설정 
+                    y: Length.px(it.y + localDist[1]).round(),
                 })
             }
         }) 
@@ -414,10 +413,34 @@ export default class SelectionToolView extends SelectionToolEvent {
      */
     renderPointers () {
 
-        const verties = this.$selection.verties;
+        if (this.refs.$pointerRect.isHide()) {
+
+            if (this.$selection.isEmpty) {
+                // NOOP , 
+                // 숨겨진 상태에서 선택도 아니면 모두 보여주지 않음 
+            } else {
+                this.refs.$pointerRect.show();
+
+                const verties = this.$selection.verties;
+        
+                const {line, point} = this.createRenderPointers(vertiesMap(verties, this.$viewport.matrix));
+                this.refs.$pointerRect.updateDiff(line + point)
+            }
+
+        } else {
+            if (this.$selection.isEmpty) {
+                this.refs.$pointerRect.hide();
+                // NOOP , 
+                // 숨겨진 상태에서 선택도 아니면 모두 보여주지 않음                 
+            } else {
+                const verties = this.$selection.verties;
     
-        const {line, point} = this.createRenderPointers(vertiesMap(verties, this.$editor.matrix));
-        this.refs.$pointerRect.updateDiff(line + point)
+                const {line, point} = this.createRenderPointers(vertiesMap(verties, this.$viewport.matrix));
+                this.refs.$pointerRect.updateDiff(line + point)
+            }
+        }
+
+
     }
 
 

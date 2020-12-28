@@ -66,8 +66,8 @@ export default class GuideLineView extends UIElement {
             
             const [source, target, axis] = it;
 
-            const localSourceVertext = vec3.transformMat4([], source, this.$editor.matrix);
-            const localTargetVertext = vec3.transformMat4([], target, this.$editor.matrix);            
+            const localSourceVertext = vec3.transformMat4([], source, this.$viewport.matrix);
+            const localTargetVertext = vec3.transformMat4([], target, this.$viewport.matrix);            
 
             if (axis === 'x') {
                 images.push(hLine(localTargetVertext))

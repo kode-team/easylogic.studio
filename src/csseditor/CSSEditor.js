@@ -302,10 +302,12 @@ export default class CSSEditor extends UIElement {
 
   [CLICK('$toggleRightButton')] () {
     this.toggleState('hideRightPanel');
+    this.emit('resizeCanvas');
   }
 
   [CLICK('$toggleLeftButton')] () {
     this.toggleState('hideLeftPanel');
+    this.emit('resizeCanvas');    
   }  
 
   [EVENT('changeTheme')] () {

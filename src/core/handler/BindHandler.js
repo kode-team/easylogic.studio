@@ -40,6 +40,11 @@ const applyElementAttribute = ($element, key, value) => {
     }
 
     return;
+  } else if (key === 'callback') {
+    if (isFunction(value)) {
+      value ();
+      return; 
+    }
   }
 
   if (isUndefined(value)) {

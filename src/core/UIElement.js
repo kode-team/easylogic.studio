@@ -3,6 +3,9 @@ import EventMachine from "./EventMachine";
 import { splitMethodByKeyword } from "./functions/func";
 import { SelectionManager } from "@manager/SelectionManager";
 import { SnapManager } from "@manager/SnapManager";
+import { KeyBoardManager } from "@manager/KeyboardManager";
+import { ShortCutManager } from "@manager/ShortCutManager";
+import { ViewportManager } from "@manager/ViewportManager";
 
 const REG_STORE_MULTI_PATTERN = /^ME@/;
 
@@ -27,6 +30,7 @@ export const ON = EVENT
  * bind handler, 
  * store handler 를 가진다. 
  * 
+ * @property {Editor} $editor 
  */
 class UIElement extends EventMachine {
   constructor(opt, props = {}) {
@@ -56,6 +60,9 @@ class UIElement extends EventMachine {
     }
 
     if (opt && opt.$editor) {
+      /**
+       * @property {Editor} $editor
+       */
       this.$editor = opt.$editor; 
     }
   }
@@ -215,6 +222,13 @@ class UIElement extends EventMachine {
   }
 
   /**
+   * @type {ViewportManager} $viewport
+   */
+  get $viewport () {
+    return this.$editor.viewport; 
+  }
+
+  /**
    * @type {SnapManager} $snapManager
    */
   get $snapManager () {
@@ -227,6 +241,20 @@ class UIElement extends EventMachine {
 
   get $history () {
     return this.$editor.history; 
+  }
+
+  /**
+   * @type {ShortCutManager} $shortcuts
+   */
+  get $shortcuts() {
+    return this.$editor.shortcuts;
+  }
+
+  /**
+   * @type {KeyBoardManager} $keyboardManager
+   */
+  get $keyboardManager () {
+    return this.$editor.keyboardManager;
   }
 
   /**

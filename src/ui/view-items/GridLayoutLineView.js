@@ -16,7 +16,7 @@ export default class GridLayoutLineView extends UIElement {
         var len = this.$selection.length;
 
         if (len !== 1) {
-            return /*html*/'<div></div>'; 
+            return /*html*/''; 
         }
 
         var current = this.$selection.current;
@@ -43,5 +43,9 @@ export default class GridLayoutLineView extends UIElement {
 
     [EVENT('refreshGridLayoutLine', 'refreshSelectionTool', 'refreshSelection')] () {        
         this.refresh(); 
+    }
+
+    [EVENT('updateViewport')] () {
+        this.refresh();
     }
 } 

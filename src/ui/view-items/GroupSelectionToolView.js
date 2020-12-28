@@ -35,6 +35,10 @@ const SelectionToolEvent = class  extends UIElement {
         this.initSelectionTool(isInitializeMatrix);
     }
 
+    [EVENT('updateViewport')] (isInitializeMatrix = true) {
+        this.initSelectionTool(isInitializeMatrix);
+    }
+
 }
 
 /**
@@ -180,10 +184,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         var nextResult = vec3.transformMat4([], nextVertext, reverseMatrix); 
 
         // 4. 복귀한 좌표에서 차이점을 구한다. 
-        const realDist = vec3.transformMat4([], 
-            vec3.add([], nextResult, vec3.negate([], currentResult)),
-            this.$editor.matrixInverse
-        )
+        const realDist = vec3.add([], nextResult, vec3.negate([], currentResult))
 
         return realDist
     }
@@ -407,7 +408,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
 
     moveVertext (dx, dy) {
-        let distVector = vec3.transformMat4([], [dx, dy, 0], this.$editor.matrixInverse);
+        let distVector = vec3.transformMat4([], [dx, dy, 0], this.$viewport.scaleMatrixInverse);
 
         if (this.state.moveType === 'to bottom right') {        // 2
             this.moveBottomRightVertext(distVector);
@@ -437,16 +438,14 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         })        
     }
 
-    refreshSelectionToolView (dx, dy) {
-
-        let distVector = vec3.transformMat4([], [dx, dy, 0], this.$editor.matrixInverse);
+    refreshSelectionToolView (newDist) {
 
         //////  snap 체크 하기 
         const snap = this.$snapManager.check(this.cachedGroupItem.verties.map(v => {
-            return vec3.add([], v, distVector)
+            return vec3.add([], v, newDist)
         }), 3);
 
-        const localDist = vec3.add([], distVector, snap);
+        const localDist = vec3.add([], snap, newDist);
 
         this.groupItem.reset({
             x: Length.px(this.cachedGroupItem.x + localDist[0]),
@@ -458,8 +457,8 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
             if (instance) {
                 instance.reset({
-                    x: Length.px(it.x + localDist[0]), 
-                    y: Length.px(it.y + localDist[1]),
+                    x: Length.px(it.x + localDist[0]).round(),       // 1px 단위로 위치 설정 
+                    y: Length.px(it.y + localDist[1]).round(),
                 })
             }                        
         })        
@@ -543,7 +542,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         if (!verties) return; 
         if (!this.groupItem) return;
 
-        const {line, point} = this.createRenderPointers(vertiesMap(this.groupItem.verties(), this.$editor.matrix));
+        const {line, point} = this.createRenderPointers(vertiesMap(this.groupItem.verties(), this.$viewport.matrix));
         this.refs.$pointerRect.updateDiff(line + point)
     }
 

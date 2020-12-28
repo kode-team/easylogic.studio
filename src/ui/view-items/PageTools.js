@@ -3,8 +3,8 @@ import UIElement, { EVENT } from "@core/UIElement";
 import { CLICK, PREVENT, STOP, DEBOUNCE } from "@core/Event";
 
 import icon from "@icon/icon";
-import { round } from "@core/functions/math";
 import NumberInputEditor from "../property-editor/NumberInputEditor";
+import { itemsToRectVerties } from "@core/functions/collision";
 
 export default class PageTools extends UIElement {
 
@@ -19,38 +19,54 @@ export default class PageTools extends UIElement {
       <div class='page-tools'>
         <button type='button' ref='$minus'>${icon.remove2}</button>
         <div class='select'>
-          <NumberInputEditor ref='$scale' min='10' max='240' step="1" key="scale" value="${this.$editor.scale*100}" onchange="changeRangeEditor" />
+          <NumberInputEditor ref='$scale' min='10' max='240' step="1" key="scale" value="${this.$viewport.scale*100}" onchange="changeRangeEditor" />
         </div>
         <label>%</label>
         <button type='button' ref='$plus'>${icon.add}</button>        
+        <button type='button' ref='$center'>${icon.gps_fixed}</button>                
       </div>
 
     `;
   }  
 
-  [EVENT('changeScaleValue')] (scale, oldScale) {
 
-    if (scale <= 0) {
-      scale = 0.01;
-    }
-
-    scale = round(scale * 100, 100)
+  [EVENT('updateViewport')] () {
+    const scale = Math.floor(this.$viewport.scale * 100)
 
     this.children.$scale.setValue(scale);
-    this.emit('updateScale', scale/100);
   }
 
   [EVENT('changeRangeEditor') + DEBOUNCE(1000)] (key, scale) {
-    this.trigger('changeScaleValue', Math.floor(scale/100), this.$editor.scale);
+    this.$viewport.setScale(scale/100);
+    this.emit('updateViewport');    
+    this.trigger('updateViewport');    
   }
 
   [CLICK('$plus') + PREVENT + STOP] () {
-
-    this.trigger('changeScaleValue', this.$editor.scale + 0.25, this.$editor.scale);
+    const oldScale = this.$viewport.scale
+    this.$viewport.setScale(oldScale + 0.01);
+    this.emit('updateViewport');
+    this.trigger('updateViewport');    
   }
 
   [CLICK('$minus') + PREVENT + STOP] () {
-    this.trigger('changeScaleValue', this.$editor.scale - 0.25, this.$editor.scale);    
+    const oldScale = this.$viewport.scale
+    this.$viewport.setScale(oldScale - 0.01);
+    this.emit('updateViewport');
+    this.trigger('updateViewport');    
+  }
+
+  [CLICK('$center') + PREVENT + STOP] () {
+
+    let areaVerties = []
+
+    if (this.$selection.isEmpty) {
+      areaVerties = this.$selection.currentProject.rectVerties;
+    } else {
+      areaVerties = itemsToRectVerties(this.$selection.selectedArtboards);
+    }
+
+    this.emit('moveToCenter', areaVerties);
   }
 
 }

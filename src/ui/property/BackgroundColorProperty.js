@@ -1,8 +1,6 @@
 import BaseProperty from "./BaseProperty";
 import { DEBOUNCE } from "@core/Event";
 import { EVENT } from "@core/UIElement";
-import { Transform } from "@property-parser/Transform";
-import { Length } from "@unit/Length";
 
 const overflow_list = [
   'visible',
@@ -36,7 +34,7 @@ export default class BackgroundColorProperty extends BaseProperty {
         </div>
         <RangeEditor 
           ref='$rotate' 
-          key='rotate' 
+          key='rotateZ' 
           label='${this.$i18n('background.color.property.rotate')}'
           min="0"
           max="360"

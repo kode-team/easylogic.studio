@@ -3,6 +3,7 @@ import { TimelineItem } from "./TimelineItem";
 import { mat4 } from "gl-matrix";
 import { Length } from "@unit/Length";
 import { calculateMatrix } from "@core/functions/math";
+import { itemsToRectVerties } from "@core/functions/collision";
 
 const OFFSET_X = Length.z();
 const OFFSET_Y = Length.z();
@@ -84,6 +85,10 @@ export class Project extends TimelineItem {
         y: Length.px(y),
     })
 
+  }
+
+  get rectVerties () {
+    return itemsToRectVerties(this.layers)
   }
 
 }

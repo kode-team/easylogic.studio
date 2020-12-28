@@ -428,3 +428,27 @@ export function rectToVerties (x, y, width, height, origin = '50% 50% 0px') {
         [x + center[0], y + center[1], 0],  // transform origin 
     ]
 }
+
+export function itemsToRectVerties (items = []) {
+    let minX = Number.MAX_SAFE_INTEGER;
+    let minY = Number.MAX_SAFE_INTEGER;
+    let maxX = Number.MIN_SAFE_INTEGER;
+    let maxY = Number.MIN_SAFE_INTEGER;
+
+    items.forEach(item => {
+        item.verties().filter((it, index) => index < 4).forEach(vector => {
+            minX = Math.min(minX, vector[0]);
+            minY = Math.min(minY, vector[1]);
+            maxX = Math.max(maxX, vector[0]);
+            maxY = Math.max(maxY, vector[1]);
+        });
+
+    })
+
+    if (minX === Number.MAX_SAFE_INTEGER) minX = 0;
+    if (minY === Number.MAX_SAFE_INTEGER) minY = 0;
+    if (maxX === Number.MIN_SAFE_INTEGER) maxX = 0;
+    if (maxY === Number.MIN_SAFE_INTEGER) maxY = 0;
+
+    return rectToVerties(minX, minY, maxX - minX, maxY - minY);
+}

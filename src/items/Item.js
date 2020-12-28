@@ -193,7 +193,7 @@ export class Item {
    * @returns {ArtBoard}
    */
   get artboard () {
-    return this.path.find(it => it.is('project'))
+    return this.path.find(it => it.is('artboard'))
   }
 
   /**

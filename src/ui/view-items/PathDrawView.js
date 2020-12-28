@@ -46,7 +46,7 @@ export default class PathDrawView extends UIElement {
 
 
     get scale () {
-        return this.$editor.scale; 
+        return this.$viewport.scale; 
     }
 
     template() {
@@ -86,7 +86,7 @@ export default class PathDrawView extends UIElement {
             const drawParser = new PathParser(PathStringManager.makePathByPoints(simplyPoints))
             const newPath = new PathParser(PathGenerator.generatorPathString(drawParser.convertGenerator()));
 
-            newPath.transformMat4(this.$editor.matrixInverse);
+            newPath.transformMat4(this.$viewport.matrixInverse);
             const bbox = newPath.getBBox();
 
             const newWidth = vec3.distance(bbox[1], bbox[0]);

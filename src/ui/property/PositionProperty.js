@@ -1,17 +1,22 @@
 import BaseProperty from "./BaseProperty";
 import { LOAD, DEBOUNCE } from "@core/Event";
 import { EVENT } from "@core/UIElement";
+import { Length } from "@unit/Length";
 
 export default class PositionProperty extends BaseProperty {
   getTitle() {
     return this.$i18n('position.property.title');
   }
 
-  [EVENT('refreshSelection')]() {
-    this.refreshShowIsNot(['project', 'artboard'])
+  afterRender() {
+    this.show();
   }
 
-  [EVENT('refreshRect') + DEBOUNCE(100)] () {
+  [EVENT('refreshSelection')]() {
+    this.refreshShowIsNot(['project'])
+  }
+
+  [EVENT('refreshRect')] () {
     var current = this.$selection.current;
     if (!current) return '';
 
@@ -30,9 +35,7 @@ export default class PositionProperty extends BaseProperty {
   }
 
   [LOAD("$positionItem")]() {
-    var current = this.$selection.current;
-
-    if (!current) return '';
+    var current = this.$selection.current || {x: Length.z(), y: Length.z()};
 
     return /*html*/`
       <div style='display: grid;grid-template-columns: repeat(2, 1fr); grid-column-gap: 10px;'>

@@ -16,8 +16,9 @@ import { HistoryManager } from "./HistoryManager";
 import { uuid } from "@core/functions/math";
 import { Item } from "@items/Item";
 import BaseStore from "@core/BaseStore";
-import { mat4 } from "gl-matrix";
 import { SnapManager } from "./SnapManager";
+import { KeyBoardManager } from "./KeyboardManager";
+import { ViewportManager } from "./ViewportManager";
 
 export const EDITOR_ID = "";
 
@@ -42,7 +43,6 @@ export class Editor {
     this.popupZIndex = 10000;
     this.canvasWidth = 100000;
     this.canvasHeight = 100000;
-    this.scale = 1
     this.symbols = {}
     this.images = {}
     this.openRightPanel = true; 
@@ -52,7 +52,6 @@ export class Editor {
     this.locale = this.loadItem('locale') || 'en_US'
     this.layout = this.loadItem('layout') || 'all'    
 
-    this.resetWorldMatrix();
     this.loadManagers();
 
   }
@@ -70,6 +69,8 @@ export class Editor {
     this.selection = new SelectionManager(this);
     this.timeline = new TimelineSelectionManager(this);
     this.history = new HistoryManager(this);
+    this.keyboardManager = new KeyBoardManager(this);
+    this.viewport = new ViewportManager(this);    
     this.components = ComponentManager;
 
 
@@ -193,10 +194,6 @@ export class Editor {
     this.store = store;
   }
 
-  resetWorldMatrix () {
-    this.matrix = mat4.fromScaling([], [this.scale, this.scale, 1])
-    this.matrixInverse = mat4.invert([], this.matrix)
-  }
 
   /**
    * 메세지를 실행한다. 

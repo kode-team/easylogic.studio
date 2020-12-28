@@ -4,8 +4,6 @@
   top: 0px;
   right: 0px;
   bottom: 0px;
-  display: flex;
-  flex-direction: column;
   background-color: var(--header-background-color);  
 
   &.show-footer {
@@ -56,18 +54,22 @@
   }
 
   .layout-top {
-    display: block;
-    flex: 1 1 $top-size; 
     height: $top-size;
     border-bottom: 1px solid var(--border-color);
     box-sizing: border-box;    
+    z-index: 100;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    right: 0px;
   }
 
   .layout-middle {
-    flex: 1 1 auto;
-    display: flex;
-    height: 100%;
-    position: relative;
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: $top-size;
+    bottom: $status-bar-height;
     box-sizing: border-box;
 
     .layout-header {

@@ -1,6 +1,5 @@
-import { polyPoint, polyPoly, rectToVerties } from "@core/functions/collision";
+import { itemsToRectVerties, polyPoint, polyPoly} from "@core/functions/collision";
 import { isFunction, isUndefined, isArray, isObject, isString, clone } from "@core/functions/func";
-import { ArtBoard } from "@items/ArtBoard";
 import { Item } from "@items/Item";
 import { MovableItem } from "@items/MovableItem";
 import { Project } from "@items/Project";
@@ -137,6 +136,10 @@ export class SelectionManager {
 
       return true; 
     });
+  }
+
+  get selectedArtboards () {
+    return [...new Set(this.items.map(it => it.artboard))]
   }
 
   getRootItem (current) {
@@ -335,25 +338,14 @@ export class SelectionManager {
   get verties () {
 
     if (this.isOne) {    // 하나 일 때랑 
-      return this.current.verties()
+      return this.current.verties();
     } else {
-      let minX = Number.MAX_SAFE_INTEGER;
-      let minY = Number.MAX_SAFE_INTEGER;
-      let maxX = Number.MIN_SAFE_INTEGER;
-      let maxY = Number.MIN_SAFE_INTEGER;
-
-      this.each(item => {
-          item.verties().filter((it, index) => index < 4).forEach(vector => {
-              minX = Math.min(minX, vector[0]);
-              minY = Math.min(minY, vector[1]);
-              maxX = Math.max(maxX, vector[0]);
-              maxY = Math.max(maxY, vector[1]);
-          });
-
-      })
-
-      return rectToVerties(minX, minY, maxX - minX, maxY - minY);
+      return this.rectVerties;
     }
+  }
+
+  get rectVerties () {
+    return itemsToRectVerties(this.items)
   }
 
   /**

@@ -180,6 +180,33 @@ export const BIND = (value = "$el", checkFieldOrCallback = '') => {
   );
 };
 
+export function normalizeWheelEvent (e) {
+  let dx = e.deltaX;
+  let dy = e.deltaY;
+
+
+  if (dx === 0 && e.shiftKey) {
+    [dy, dx] = [dx, dy];
+  }  
+
+  if (e.deltaMode === WheelEvent.DOM_DELTA_LINE) {
+    dy *= 8;
+  } else if (e.deltaMode === WheelEvent.DOM_DELTA_PAGE) {
+    dy *= 24; 
+  }
+
+
+  return [
+    limit(dx, 24), 
+    limit(dy, 24), 
+    0
+  ]
+}
+
+function limit (delta, maxDelta) {
+  return Math.sign(delta) * Math.min( maxDelta, Math.abs(delta))
+}
+
 export default {
   addEvent(dom, eventName, callback, useCapture = false) {
     if (dom) {

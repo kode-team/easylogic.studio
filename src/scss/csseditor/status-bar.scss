@@ -1,9 +1,11 @@
 
   .status-bar {
-    flex: none; 
-    height: 30px;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    height: $status-bar-height;
     overflow: hidden;
-    position: relative;
     background-color: var(--status-bar-background-color); 
     z-index: 1;
     pointer-events: all;

@@ -1,7 +1,14 @@
+import { Editor } from "@manager/Editor";
 import _doForceRefreshSelection from "./_doForceRefreshSelection";
 
 export default {
     command: 'load.json', 
+
+    /**
+     * 
+     * @param {Editor} editor 
+     * @param {*} json 
+     */
     execute: function (editor, json) {
 
         json = json || editor.loadResource('projects', []);
@@ -34,6 +41,10 @@ export default {
 
             editor.load(projects);
             _doForceRefreshSelection(editor)
+            editor.nextTick(() => {
+                editor.emit('reloadProject');
+            })
+
         }
     }
 }

@@ -237,7 +237,7 @@ export default class PathEditorView extends PathTransformEditor {
     }
 
     get scale () {
-        return this.$editor.scale; 
+        return this.$viewport.scale; 
     }
 
     template() {
@@ -345,7 +345,7 @@ export default class PathEditorView extends PathTransformEditor {
         if (project) {
 
             const newPath = new PathParser(this.pathGenerator.toPath().d);
-            newPath.transformMat4(this.$editor.matrixInverse);
+            newPath.transformMat4(this.$viewport.matrixInverse);
             const bbox = newPath.getBBox();
 
             const newWidth = vec3.distance(bbox[1], bbox[0]);
@@ -381,7 +381,7 @@ export default class PathEditorView extends PathTransformEditor {
         var { d } = this.pathGenerator.toPath();
 
         var parser = new PathParser(d);
-        parser.transformMat4(this.$editor.matrixInverse)
+        parser.transformMat4(this.$viewport.matrixInverse)
 
         this.emit(this.state.changeEvent, {
             d: parser.d, 
@@ -430,7 +430,7 @@ export default class PathEditorView extends PathTransformEditor {
         return this.state.mode === mode; 
     }
 
-    [EVENT('changeScale')] (newScale, oldScale) {
+    [EVENT('updateViewport')] (newScale, oldScale) {
 
         if (this.$el.isShow()) {
 
@@ -439,7 +439,7 @@ export default class PathEditorView extends PathTransformEditor {
             const { d } = this.pathGenerator.toPath()
 
             const pathParser = new PathParser(d);
-            pathParser.transformMat4(mat4.invert([], mat4.fromScaling([], [oldScale, oldScale, 1])))
+            pathParser.transformMat4(this.state.cachedMatrixInverse)
 
             this.refresh({ d: pathParser.d })
         } 
@@ -449,7 +449,8 @@ export default class PathEditorView extends PathTransformEditor {
 
         if (obj && obj.d) {
             this.pathParser.reset(obj.d)
-            this.pathParser.transformMat4(this.$editor.matrix);
+            this.pathParser.transformMat4(this.$viewport.matrix);
+            this.state.cachedMatrixInverse = this.$viewport.matrixInverse; 
 
             this.state.points = this.pathParser.convertGenerator();   
         }

@@ -37,7 +37,7 @@ export default class LayerAppendView extends UIElement {
     }
 
     get scale () {
-        return this.$editor.scale; 
+        return this.$viewport.scale; 
     }  
 
     checkNotDragStart () {
@@ -56,7 +56,7 @@ export default class LayerAppendView extends UIElement {
         ]
 
         // 영역 드래그 하면서 snap 하기 
-        const verties = vertiesMap([vertext], this.$editor.matrixInverse);
+        const verties = vertiesMap([vertext], this.$viewport.matrixInverse);
         const snap = this.$snapManager.check(verties);
 
         if (snap) {
@@ -220,7 +220,7 @@ export default class LayerAppendView extends UIElement {
         }
 
         // 영역 드래그 하면서 snap 하기 
-        const verties = vertiesMap(rectToVerties(this.state.dragXY.x,this.state.dragXY.y, dx, dy), this.$editor.matrixInverse);
+        const verties = vertiesMap(rectToVerties(this.state.dragXY.x,this.state.dragXY.y, dx, dy), this.$viewport.matrixInverse);
         const snap = this.$snapManager.check(verties);
 
         dx += snap[0];
@@ -249,10 +249,12 @@ export default class LayerAppendView extends UIElement {
         let { x, y, width, height, color, text, fontSize} = this.state; 
 
 
-        x = Length.px(x).div(this.scale).floor();
-        y = Length.px(y).div(this.scale).floor();
-        width = Length.px(width).div(this.scale).floor();
-        height = Length.px(height).div(this.scale).floor();
+        const verties = vertiesMap(rectToVerties(x, y, width, height), this.$viewport.matrixInverse)
+
+        x = Length.px(verties[0][0]).floor();
+        y = Length.px(verties[0][1]).floor();
+        width = Length.px(vec3.dist(verties[0], verties[1])).floor();
+        height = Length.px(vec3.dist(verties[0], verties[3])).floor();
 
         var rect = { 
             x,  y, width,  height, 
@@ -265,13 +267,6 @@ export default class LayerAppendView extends UIElement {
         case 'text': 
         case 'svg-text':
         case 'svg-textpath': 
-
-            if (rect.width.value === 0) rect.width.set(200);
-            if (rect.height.value === 0) rect.height.set(50);
-
-            rect.x2 = Length.px(rect.x.value + rect.width.value);
-            rect.y2 = Length.px(rect.y.value + rect.height.value);
-            
             delete rect['background-color']; 
             break;         
         default: 

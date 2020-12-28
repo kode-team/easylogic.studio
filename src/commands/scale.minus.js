@@ -3,6 +3,11 @@ import _doForceRefreshSelection from "./_doForceRefreshSelection";
 export default {
     command : 'scale.minus',
     execute: function (editor) {
-        editor.emit('changeScaleValue', editor.scale - 0.25, editor.scale);
+
+        const oldScale = editor.viewport.scale;
+
+        editor.viewport.setScale(editor.viewport.scale - 0.25)
+
+        editor.emit('updateViewport', editor.viewport.scale, oldScale);
     }
 }

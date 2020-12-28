@@ -10,8 +10,8 @@ const scrollBlockingEvents = {
     'mousedown': true,
     'mouseup': true,
     'mousemove': true,
-    'wheel': true,
-    'mousewheel': true
+    // 'wheel': true,
+    // 'mousewheel': true
 }
 
 const eventConverts = {

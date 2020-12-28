@@ -860,11 +860,6 @@ export default class PathGenerator {
         return toPath(this.clonePoints, minX, minY, scale)
     }
 
-    changeScale () {
-
-        this.pathEditor.scale; 
-    }
-
     makeSVGPath() {
 
         this.initialize();
