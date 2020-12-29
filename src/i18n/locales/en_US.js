@@ -470,4 +470,6 @@ export default {
     'pattern.info.popup.backColor': 'Back',      
     
     'stroke.dasharray.editor.add': 'Add Dash',
+
+    'viewport.panning.enable': 'You can move the area by holding down space key and dragging the screen.',    
 }

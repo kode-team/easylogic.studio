@@ -468,4 +468,6 @@ export default {
     'pattern.info.popup.backColor': 'Arrière',      
     
     'stroke.dasharray.editor.add': 'Ajout tiret',
+
+    'viewport.panning.enable': 'You can move the area by holding down space and dragging the screen.',        
 }

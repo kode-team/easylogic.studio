@@ -3,8 +3,12 @@ import UIElement, { EVENT } from "@core/UIElement";
 import HTMLRenderView from "./render-view/HTMLRenderView";
 import PageTools from "../view-items/PageTools";
 import PageSubEditor from "../view-items/PageSubEditor";
-import { BIND, normalizeWheelEvent, PREVENT, WHEEL } from "@core/Event";
+import { BIND, IF, MOVE, normalizeWheelEvent, POINTERSTART, PREVENT, WHEEL } from "@core/Event";
 import { vec3 } from "gl-matrix";
+import { KEY_CODE } from "@types/key";
+
+
+const MOVE_DRAG_RATIO = vec3.fromValues(1, 1, 1);
 
 export default class CanvasView extends UIElement {
 
@@ -13,17 +17,6 @@ export default class CanvasView extends UIElement {
       PageTools,
       HTMLRenderView,
       PageSubEditor,
-    }
-  }
-
-  initState() {
-    return {
-      zoomFactor: 0,
-      cachedViewportMatrix: {
-        origin: vec3.create(),
-        mouse: vec3.create(),
-        scale: 1, 
-      }
     }
   }
 
@@ -49,8 +42,6 @@ export default class CanvasView extends UIElement {
   makeViewportConsole () {
 
     if (!this.$viewport.verties) return '';
-    const {cachedViewportMatrix} = this.state;
-
     const mouse = this.$viewport.pos;
 
     return /*html*/`
@@ -72,6 +63,25 @@ export default class CanvasView extends UIElement {
     `
   }
 
+  // space 키가 눌러져 있을 때만 실행한다. 
+  checkSpace () {
+    return this.$keyboardManager.check(this.$shortcuts.getGeneratedKeyCode(KEY_CODE.space))
+  }
+
+  [POINTERSTART('$lock') + IF('checkSpace') + MOVE('movePan')] (e) {
+    this.lastDist = vec3.create()
+    this.emit('addStatusBarMessage', this.$i18n('viewport.panning.enable'));
+  }
+
+  movePan (dx, dy) {
+    const currentDist = vec3.fromValues(dx, dy, 0);
+    this.$viewport.pan(...vec3.transformMat4(
+      [], 
+      vec3.subtract([], this.lastDist, currentDist), 
+      this.$viewport.scaleMatrixInverse
+    ))
+    this.lastDist = currentDist
+  }
 
   /** viewport 디버그 용  */
   [BIND('$viewport')] () {

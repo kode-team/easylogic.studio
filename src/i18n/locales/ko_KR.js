@@ -473,4 +473,6 @@ export default {
     'pattern.info.popup.backColor': '배경색',    
 
     'stroke.dasharray.editor.add': '점 추가',    
+
+    'viewport.panning.enable': 'space 를 누른채 화면을 드래그 하면 영역을 움직일 수 있습니다.',
 }

@@ -1,4 +1,5 @@
 import { rectToVerties } from "@core/functions/collision";
+import { clone } from "@core/functions/func";
 import { calculateMatrix, vertiesMap } from "@core/functions/math";
 import { mat4, vec3 } from "gl-matrix";
 
@@ -135,7 +136,11 @@ export class ViewportManager {
      * 
      */
     refresh () {
-        this.verties = vertiesMap(this.cachedViewport, this.matrixInverse);
+
+        if (this.cachedViewport) {
+            this.verties = vertiesMap(this.cachedViewport, this.matrixInverse);
+        }
+
     }
 
     setMousePoint (x, y) {

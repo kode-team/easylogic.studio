@@ -328,6 +328,12 @@ export default class HTMLRenderView extends UIElement {
     }
 
     checkEditMode () {
+
+        const code = this.$shortcuts.getGeneratedKeyCode(KEY_CODE.space);
+        if (this.$keyboardManager.check(code)) {        // space 키가 눌러져있을 때는 실행하지 않는다. 
+            return false;
+        }
+
         return this.$editor.isSelectionMode()
     }
 
