@@ -1,15 +1,31 @@
-import Sort from "@manager/Sort";
+import { getVertiesCenterX } from "@core/functions/math";
 
 export default {
     command : 'sort.center',
     execute: function (editor) {
-        var container = Sort.getContainer(editor)        
-        var x = container.screenX.value + container.width.value / 2; 
+       
+        if (editor.selection.isOne) {
 
-        editor.selection.each(item => {
-            item.setScreenXCenter(x);
-        })
+            const current = editor.selection.current; 
 
-        editor.emit('resetSelection');
+            if (current.parent.is('project')) {
+                // 상위 객체가 project 이면 움직이지 않는다. 
+            } else if (current.artboard) {
+                // 선택된 객체가 하나이고 artboard 가 존재하면 artboard 를 기준으로 잡는다. 
+                const distX = getVertiesCenterX(current.artboard.verties()) - getVertiesCenterX(editor.selection.verties);
+                editor.emit('moveLayer', distX, 0);
+            }
+
+        } else if (editor.selection.isMany) {
+            let maxRightX = getVertiesCenterX(editor.selection.verties);
+
+            editor.emit('moveLayerForItems', editor.selection.map(item => {
+                let itemRightX = getVertiesCenterX(item.verties());
+
+                return { item, dist: [maxRightX - itemRightX, 0, 0]}
+
+            }));            
+
+        }
     }
 }

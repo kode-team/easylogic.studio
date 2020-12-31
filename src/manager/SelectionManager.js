@@ -406,7 +406,7 @@ export class SelectionManager {
 
     if (isFunction (callback)) {
       return this.items.map( (item, index) => {
-        return callback (item);
+        return callback (item, index);
       })
     }
 

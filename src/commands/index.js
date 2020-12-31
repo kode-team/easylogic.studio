@@ -96,6 +96,7 @@ import updatePathItem from "./updatePathItem";
 import updateClipPath from "./updateClipPath";
 import moveLayer from "./moveLayer";
 import moveToCenter from './moveToCenter';
+import moveLayerForItems from "./moveLayerForItems";
 
 
 export default {
@@ -109,6 +110,7 @@ export default {
     historyUndo,
 
     moveLayer,
+    moveLayerForItems,
     moveToCenter,
 
     // command 

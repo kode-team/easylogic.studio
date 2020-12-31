@@ -1,15 +1,32 @@
+import { getVertiesMaxY } from "@core/functions/math";
 import Sort from "@manager/Sort";
 
 export default {
     command : 'sort.bottom',
     execute: function (editor) {
-        var container = Sort.getContainer(editor)        
-        var y2 = container.screenY2.value;         
+        
+        if (editor.selection.isOne) {
 
-        editor.selection.each(item => {
-            item.setScreenY2(y2);
-        })
+            const current = editor.selection.current; 
 
-        editor.emit('resetSelection');
+            if (current.parent.is('project')) {
+                // 상위 객체가 project 이면 움직이지 않는다. 
+            } else if (current.artboard) {
+                // 선택된 객체가 하나이고 artboard 가 존재하면 artboard 를 기준으로 잡는다. 
+                const distY = getVertiesMaxY(current.artboard.verties()) - getVertiesMaxY(editor.selection.verties);
+                editor.emit('moveLayer', 0, distY);
+            }
+
+        } else if (editor.selection.isMany) {
+            let maxRightY = getVertiesMaxY(editor.selection.verties);
+
+            editor.emit('moveLayerForItems', editor.selection.map(item => {
+                let itemRightY = getVertiesMaxY(item.verties());
+
+                return { item, dist: [0, maxRightY - itemRightY, 0, 0]}
+
+            }));            
+
+        }
     }
 }

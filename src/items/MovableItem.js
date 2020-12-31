@@ -68,51 +68,6 @@ export class MovableItem extends Item {
         this.json.x.set(value - absoluteX);
         this.changed();
     }
-
-    setScreenX2(value) {
-        var absoluteX = 0;
-        if (this.isChild) {
-            absoluteX = this.json.parent.screenX.value; 
-        }
-
-        this.json.x.set(value - this.json.width.value - absoluteX + 1);
-        this.changed();        
-    }    
-
-    setScreenY2(value) {
-        var absoluteY = 0;
-        if (this.isChild) {
-            absoluteY = this.json.parent.screenY.value; 
-        }
-
-        this.json.y.set(value - this.json.height.value - absoluteY + 1);
-        this.changed();        
-    }        
-
-
-    setScreenXCenter(value) {
-        var absoluteX = 0;
-        if (this.isChild) {
-            absoluteX = this.json.parent.screenX.value; 
-        }
-
-        this.json.x.set(value - (this.json.width.value/2) - absoluteX + 1);
-        this.changed();        
-    }        
-
-
-
-    setScreenYMiddle(value) {
-        var absoluteY = 0;
-        if (this.isChild) {
-            absoluteY = this.json.parent.screenY.value; 
-        }
-
-        this.json.y.set(value - (this.json.height.value/2) - absoluteY + 1);
-        this.changed();        
-    }            
-
-
     setScreenY(value) {
         var absoluteY = 0;
         if (this.isChild) {
@@ -137,12 +92,6 @@ export class MovableItem extends Item {
         }        
         return this.json.y || Length.z() 
     }
-    get screenX2 () { 
-        return Length.px(this.screenX.value + this.json.width.value) 
-    }
-    get screenY2 () { 
-        return Length.px(this.screenY.value + this.json.height.value) 
-    }    
 
 
     get offsetX () { 
@@ -192,20 +141,17 @@ export class MovableItem extends Item {
         return this.json.height.toPx(this.parent.screenHeight.value);  
     }    
 
-    /**
-     * 화면상의 순수 위치 (left, top, width, height)
-     * 
-     * 상위 Layer 가 flex, grid 를 가지면 하위는 dom 기준으로 자동으로 연산 ..  
-     * 
-     */
-    get screenRect () {
-        return {
-            left: this.screenX,
-            top: this.screenY,
-            width: this.screenWidth,
-            height: this.screenHeight
-        }
-    } 
+    move (distVector = [0, 0, 0]) {
+
+        const x = this.offsetX;
+        x.add(Math.round(distVector[0]));
+
+        const y = this.offsetY;
+        y.add(Math.round(distVector[1]));        
+
+        this.reset({x, y})
+    }
+
 
     /**
      * 충돌 체크 

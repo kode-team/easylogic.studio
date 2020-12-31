@@ -2,11 +2,7 @@ export default {
     command : 'same.width',
     execute: function (editor) {
 
-        var len = editor.selection.items.length ;
-
-        if (len == 1) {
-            // artboard 랑 크기를 맞출지 고민해보자. 
-        } else if (len > 1) {
+        if (editor.selection.isMany) {
             const rect = editor.selection.allRect;
             editor.selection.each(item => {
                 item.setScreenX(rect.x.value);
@@ -14,7 +10,5 @@ export default {
             })
 
         }
-        
-        editor.emit('resetSelection');
     }
 }

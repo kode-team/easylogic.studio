@@ -60,6 +60,66 @@ export function vertiesMap (verties, transformView) {
     })
 }
 
+export function getVertiesMaxX (verties) {
+    let maxValue = Number.MIN_SAFE_INTEGER;
+    verties.forEach(v =>{
+        maxValue = Math.max(v[0], maxValue)
+    })
+
+    return maxValue;
+}
+
+export function getVertiesMaxY (verties) {
+    let maxValue = Number.MIN_SAFE_INTEGER;
+    verties.forEach(v =>{
+        maxValue = Math.max(v[1], maxValue)
+    })
+
+    return maxValue;
+}
+
+export function getVertiesMinX (verties) {
+    let maxValue = Number.MAX_SAFE_INTEGER;
+    verties.forEach(v =>{
+        maxValue = Math.min(v[0], maxValue)
+    })
+
+    return maxValue;
+}
+
+export function getVertiesCenterX (verties) {
+    let minX = Number.MAX_SAFE_INTEGER;
+    let maxX = Number.MIN_SAFE_INTEGER;
+    verties.forEach(v =>{
+        minX = Math.min(v[0], minX)
+        maxX = Math.max(v[0], maxX)
+    })
+
+    return Math.round((minX + maxX)/2);
+}
+
+export function getVertiesMinY (verties) {
+    let maxValue = Number.MAX_SAFE_INTEGER;
+    verties.forEach(v =>{
+        maxValue = Math.min(v[1], maxValue)
+    })
+
+    return maxValue;
+}
+
+
+export function getVertiesCenterY (verties) {
+    let minY = Number.MAX_SAFE_INTEGER;
+    let maxY = Number.MIN_SAFE_INTEGER;
+    verties.forEach(v =>{
+        minY = Math.min(v[1], minY)
+        maxY = Math.max(v[1], maxY)
+    })
+
+    return Math.round((minY + maxY)/2);
+}
+
+
 export function calculateAngle (rx, ry) {
     return radianToDegree(Math.atan2(ry, rx))    
 }

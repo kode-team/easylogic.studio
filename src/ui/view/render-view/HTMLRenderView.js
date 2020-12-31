@@ -398,6 +398,7 @@ export default class HTMLRenderView extends UIElement {
         this.selectionToolView.refreshSelectionToolView(newDist);       
         
         // 최종 위치에서 ArtBoard 변경하기 
+        // TODO: 부모가 바뀔 때 selection tool 은 그대로 유지 해야함 
         if (this.$selection.changeArtBoard()) {
             this.startXY = targetXY;
             this.$selection.reselect();
@@ -411,36 +412,6 @@ export default class HTMLRenderView extends UIElement {
         this.emit('refreshSelectionStyleView');
         this.emit('refreshSelectionTool', false);        
     }
-
-    /**
-     * item 의  Rectangle 을 업데이트 한다. 
-     * 
-     * @deprecated
-     * @param {DomItem} item 
-     */
-    // updateRealPositionByItem (item) {
-    //     return;
-    //     var {x, y, width, height} = item.toBound();
-    //     var cachedItem = this.getElement(item.id)
-
-    //     if (cachedItem) {
-    //         cachedItem.cssText(`
-    //             left: ${x};
-    //             top:${y};
-    //             width:${width};
-    //             height:${height}; 
-    //             transform: ${HTMLRenderer.toTransformCSS(item).transform};
-    //         `)
-    //     }
-    // // }
-
-    // updateRealPosition() {
-    //     // this.$selection.each(item => {
-    //     //     this.updateRealPositionByItem(item);
-    //     // })
-
-    //     this.emit('refreshRect');        
-    // }
 
     /**
      * ArtBoard title 변경하기 
