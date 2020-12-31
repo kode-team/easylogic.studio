@@ -1,4 +1,5 @@
 import Dom from "@core/Dom";
+import { CSS_TO_STRING } from "@core/functions/func";
 import SVGLayerRender from "./SVGLayerRender";
 
 export default class TextRender extends SVGLayerRender {

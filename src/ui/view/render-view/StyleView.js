@@ -2,7 +2,7 @@ import UIElement, { EVENT } from "@core/UIElement";
 
 import { LOAD, VDOM } from "@core/Event";
 import Dom from "@core/Dom";
-import { CSS_TO_STRING, isArray, isString } from "@core/functions/func";
+import { isArray, isString } from "@core/functions/func";
 import { Project } from "@items/Project";
 import HTMLRenderer from "@renderer/HTMLRenderer";
 
