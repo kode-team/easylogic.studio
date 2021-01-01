@@ -424,7 +424,7 @@ export function rectToVerties (x, y, width, height, origin = '50% 50% 0px') {
         [x + width, y, 0],  // top , right 
         [x + width, y + height, 0], // bottom , right 
         [x, y + height, 0], // bottom , left
-        [x + width/2, y - 30 , 0], // rotate, top, center 
+        [x + center[0], y - 30 , 0], // rotate, top, center 
         [x + center[0], y + center[1], 0],  // transform origin 
     ]
 }

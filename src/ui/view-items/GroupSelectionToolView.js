@@ -15,6 +15,10 @@ var directionType = {
     2: 'to top right',
     3: 'to bottom right',
     4: 'to bottom left',
+    11: 'to top',
+    12: 'to right',
+    13: 'to bottom',
+    14: 'to left',    
 }
 
 const SelectionToolEvent = class  extends UIElement {
@@ -67,11 +71,14 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         // cache matrix 
         this.$selection.reselect();        
         this.verties = this.groupItem.verties();        
+        this.rotateTargetNumber = (+e.$dt.attr('data-number')); 
     }
 
     rotateVertext (dx, dy) {
 
-        var distAngle = Math.floor(calculateAngleForVec3(this.verties[4], this.verties[5], [dx, dy, 0]));
+        // this.verties[4] 는 origin 기준으로 y 가 0 인 좌표인데 
+        // 나중에  다른 방향에서 돌릴 수 있게 되면 해당 영역의 vertext 를 지정해야 각도를 맞출 수 있다. 
+        var distAngle = Math.floor(calculateAngleForVec3(this.verties[this.rotateTargetNumber], this.verties[5], [dx, dy, 0]));
 
         // 실제 움직인 angle 
         this.localAngle = this.angle + distAngle;
@@ -189,6 +196,15 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         return realDist
     }
 
+   
+    calculateRealDist (item, distVector) {
+        return this.calculateDistance(
+            item.verties[0],    // top center 
+            distVector, 
+            item.accumulatedMatrixInverse
+        );
+    } 
+
     moveGroupItem (lastStartVertext, newWidth, newHeight) {
 
         this.groupItem.reset({
@@ -253,93 +269,30 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
         const groupItem = this.cachedGroupItem;
 
-        const [realDx, realDy] = this.calculateDistance(
-            groupItem.verties[2],    // bottom right 
-            distVector, 
-            groupItem.accumulatedMatrixInverse
-        );
+        const [realDx, realDy] = this.calculateRealDist(groupItem, distVector);
 
         // 변형되는 넓이 높이 구하기 
         const newWidth = groupItem.width + realDx;
         const newHeight = groupItem.height + realDy;
 
-        const scaleX = newWidth / groupItem.width;
-        const scaleY = newHeight / groupItem.height;
-        if (scaleX >= 0 && scaleY >= 0) {
-
-            // 마지막 offset x, y 를 구해보자. 
-            const view = calculateMatrix(
-                groupItem.directionMatrix['to top left'],
-                this.calculateNewOffsetMatrixInverse (
-                    [0, 0, 0], 
-                    newWidth, newHeight, 
-                    groupItem.originalTransformOrigin, 
-                    groupItem.itemMatrix
-                )
-            );
-
-            const lastStartVertext = mat4.getTranslation([], view);
-
-            this.moveGroupItem (lastStartVertext, newWidth, newHeight);
-
-            this.recoverItemForGroup(groupItem,scaleX, scaleY, 0, 0 );
-        }
-
+        this.moveDirectionVertext(groupItem, 0, 0, newWidth, newHeight, 'to top left', [0, 0, 0])                
     }
 
 
     moveTopRightVertext (distVector) {
         const groupItem = this.cachedGroupItem;
 
-        const [realDx, realDy] = this.calculateDistance(
-            groupItem.verties[1],    // top right 
-            distVector, 
-            groupItem.accumulatedMatrixInverse
-        );
+        const [realDx, realDy] = this.calculateRealDist(groupItem, distVector);
 
         // 변형되는 넓이 높이 구하기 
         const newWidth = groupItem.width + realDx;
         const newHeight = groupItem.height - realDy;
 
-        const scaleX = newWidth / groupItem.width;
-        const scaleY = newHeight / groupItem.height;
-
-        if (scaleX >= 0 && scaleY >= 0) {
-            // 마지막 offset x, y 를 구해보자. 
-            const view = calculateMatrix(
-                groupItem.directionMatrix['to bottom left'],
-                this.calculateNewOffsetMatrixInverse (
-                    [0, newHeight, 0], 
-                    newWidth, newHeight, 
-                    groupItem.originalTransformOrigin, 
-                    groupItem.itemMatrix
-                )
-            );        
-
-
-            const lastStartVertext = mat4.getTranslation([], view);
-
-            this.moveGroupItem (lastStartVertext, newWidth, newHeight);
-
-            this.recoverItemForGroup(groupItem, scaleX, scaleY, 0, realDy);
-        }
+        this.moveDirectionVertext(groupItem, 0, realDy, newWidth, newHeight, 'to bottom left', [0, newHeight, 0])        
     }
 
 
-    //TODO: 
-    moveTopLeftVertext (distVector) {
-
-        const groupItem = this.cachedGroupItem;
-
-        const [realDx, realDy] = this.calculateDistance(
-            groupItem.verties[0],    // top left 
-            distVector, 
-            groupItem.accumulatedMatrixInverse
-        );
-
-        // 변형되는 넓이 높이 구하기 
-        const newWidth = groupItem.width - realDx;
-        const newHeight = groupItem.height - realDy;
+    moveDirectionVertext(groupItem, realDx, realDy, newWidth, newHeight, direction, directionNewVector) {
 
         const scaleX = newWidth / groupItem.width;
         const scaleY = newHeight / groupItem.height;
@@ -347,9 +300,9 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         if (scaleX >= 0 && scaleY >= 0) {
             // 마지막 offset x, y 를 구해보자. 
             const view = calculateMatrix(
-                groupItem.directionMatrix['to bottom right'],
+                groupItem.directionMatrix[direction],
                 this.calculateNewOffsetMatrixInverse (
-                    [newWidth, newHeight, 0], 
+                    directionNewVector, 
                     newWidth, newHeight, 
                     groupItem.originalTransformOrigin, 
                     groupItem.itemMatrix
@@ -365,45 +318,85 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         }
     }
 
-    //TODO: 
+    moveTopVertext (distVector) {
+        const groupItem = this.cachedGroupItem;
+
+        const [realDx, realDy] = this.calculateRealDist(groupItem, distVector);
+
+        // 변형되는 넓이 높이 구하기 
+        const newWidth = groupItem.width;
+        const newHeight = groupItem.height - realDy;
+
+        this.moveDirectionVertext(groupItem, 0, realDy, newWidth, newHeight, 'to bottom', [newWidth/2, newHeight, 0])
+    }    
+
+
+    moveBottomVertext (distVector) {
+        const groupItem = this.cachedGroupItem;
+
+        const [realDx, realDy] = this.calculateRealDist(groupItem, distVector);
+
+        // 변형되는 넓이 높이 구하기 
+        const newWidth = groupItem.width;
+        const newHeight = groupItem.height + realDy;
+
+        this.moveDirectionVertext(groupItem, 0, 0, newWidth, newHeight, 'to top', [newWidth/2, 0, 0])        
+    }        
+
+    moveTopLeftVertext (distVector) {
+
+        const groupItem = this.cachedGroupItem;
+
+        const [realDx, realDy] = this.calculateRealDist(groupItem, distVector);
+
+        // 변형되는 넓이 높이 구하기 
+        const newWidth = groupItem.width - realDx;
+        const newHeight = groupItem.height - realDy;
+
+        this.moveDirectionVertext(groupItem, realDx, realDy, newWidth, newHeight, 'to bottom right', [newWidth, newHeight, 0])                        
+    }
+
+
+    moveLeftVertext (distVector) {
+
+        const groupItem = this.cachedGroupItem;
+
+        const [realDx, realDy] = this.calculateRealDist(groupItem, distVector);
+
+        // 변형되는 넓이 높이 구하기 
+        const newWidth = groupItem.width - realDx;
+        const newHeight = groupItem.height;
+
+        this.moveDirectionVertext(groupItem, realDx, 0, newWidth, newHeight, 'to right', [newWidth, newHeight/2, 0])
+    }   
+    
+
+    moveRightVertext (distVector) {
+
+        const groupItem = this.cachedGroupItem;
+
+        const [realDx, realDy] = this.calculateRealDist(groupItem, distVector);
+
+        // 변형되는 넓이 높이 구하기 
+        const newWidth = groupItem.width + realDx;
+        const newHeight = groupItem.height;
+
+
+        this.moveDirectionVertext(groupItem, 0, 0, newWidth, newHeight, 'to left', [0, newHeight/2, 0])        
+    }       
+
     moveBottomLeftVertext (distVector) {
 
 
         const groupItem = this.cachedGroupItem;
 
-        const [realDx, realDy] = this.calculateDistance(
-            groupItem.verties[3],    // top left 
-            distVector, 
-            groupItem.accumulatedMatrixInverse
-        );
+        const [realDx, realDy] = this.calculateRealDist(groupItem, distVector);
 
         // 변형되는 넓이 높이 구하기 
         const newWidth = groupItem.width - realDx;
         const newHeight = groupItem.height + realDy;
 
-        const scaleX = newWidth / groupItem.width;
-        const scaleY = newHeight / groupItem.height;
-
-        if (scaleX >= 0 && scaleY >= 0) {
-            // 마지막 offset x, y 를 구해보자. 
-            const view = calculateMatrix(
-                groupItem.directionMatrix['to top right'],
-                this.calculateNewOffsetMatrixInverse (
-                    [newWidth, 0, 0], 
-                    newWidth, newHeight, 
-                    groupItem.originalTransformOrigin, 
-                    groupItem.itemMatrix
-                )
-            );        
-
-
-            const lastStartVertext = mat4.getTranslation([], view);
-
-            this.moveGroupItem (lastStartVertext, newWidth, newHeight);
-
-            this.recoverItemForGroup(groupItem, scaleX, scaleY, realDx, 0);
-        }
-
+        this.moveDirectionVertext(groupItem, realDx, 0, newWidth, newHeight, 'to top right', [newWidth, 0, 0])
     }
 
 
@@ -417,7 +410,15 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         } else if (this.state.moveType === 'to top left') {
             this.moveTopLeftVertext(distVector);
         } else if (this.state.moveType === 'to bottom left') {
-            this.moveBottomLeftVertext(distVector);                                
+            this.moveBottomLeftVertext(distVector); 
+        } else if (this.state.moveType === 'to top') {
+            this.moveTopVertext(distVector);
+        } else if (this.state.moveType === 'to left') {
+            this.moveLeftVertext(distVector);
+        } else if (this.state.moveType === 'to right') {
+            this.moveRightVertext(distVector);
+        } else if (this.state.moveType === 'to bottom') {
+            this.moveBottomVertext(distVector);
         }    
 
         this.renderPointers();
@@ -553,8 +554,16 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         `
     }
 
-    createRotatePointer (pointer, number) {
+    createRotatePointer (pointer, number, direction = 'center center') {
+
         if (pointer.length === 0) return '';        
+
+        if (number < 4) {
+            return /*html*/`
+            <div class='rotate-pointer no-fill' data-number="${number}" style="transform: translate3d( calc(${pointer[0]}px - 50%), calc(${pointer[1]}px - 50%), 0px) scale(1.8); transform-origin: ${direction};" ></div>
+            `            
+        }        
+
         return /*html*/`
         <div class='rotate-pointer' data-number="${number}" style="transform: translate3d( calc(${pointer[0]}px - 50%), calc(${pointer[1]}px - 50%), 0px)" ></div>
         `
@@ -574,11 +583,19 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         return {
             line: this.createPointerRect(pointers), 
             point: [
+                this.createRotatePointer (pointers[0], 0, 'bottom right'),
+                this.createRotatePointer (pointers[1], 1, 'bottom left'),
+                this.createRotatePointer (pointers[2], 2, 'top left'),
+                this.createRotatePointer (pointers[3], 3, 'top right'),
+                this.createRotatePointer (pointers[4], 4, 'center center'),                
                 this.createPointer (pointers[0], 1),
                 this.createPointer (pointers[1], 2),
                 this.createPointer (pointers[2], 3),
                 this.createPointer (pointers[3], 4),
-                this.createRotatePointer (pointers[4], 5),                
+                this.createPointer (vec3.multiply([], vec3.add([], pointers[0], pointers[1]), [0.5, 0.5, 1]), 11),
+                this.createPointer (vec3.multiply([], vec3.add([], pointers[1], pointers[2]), [0.5, 0.5, 1]), 12),
+                this.createPointer (vec3.multiply([], vec3.add([], pointers[2], pointers[3]), [0.5, 0.5, 1]), 13),
+                this.createPointer (vec3.multiply([], vec3.add([], pointers[3], pointers[0]), [0.5, 0.5, 1]), 14),                             
             ].join('')
         }
     }

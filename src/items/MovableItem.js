@@ -142,14 +142,10 @@ export class MovableItem extends Item {
     }    
 
     move (distVector = [0, 0, 0]) {
-
-        const x = this.offsetX;
-        x.add(Math.round(distVector[0]));
-
-        const y = this.offsetY;
-        y.add(Math.round(distVector[1]));        
-
-        this.reset({x, y})
+        this.reset({
+            x: Length.px(this.offsetX.value + distVector[0]).round(),          // 1px 단위로 위치 설정 
+            y: Length.px(this.offsetY.value + distVector[1]).round(),
+        })
     }
 
 
@@ -386,6 +382,15 @@ export class MovableItem extends Item {
         return this.getDirectionTransformMatrix([0, 0, 0])
     }
 
+    getDirectionLeftMatrix () {
+        return this.getDirectionTransformMatrix([0, this.screenHeight.value/2, 0])
+    }            
+ 
+
+    getDirectionTopMatrix () {
+        return this.getDirectionTransformMatrix([this.screenWidth.value/2, 0, 0])
+    }    
+
     getDirectionBottomLeftMatrix () {
         return this.getDirectionTransformMatrix([0, this.screenHeight.value, 0])
     }    
@@ -394,10 +399,17 @@ export class MovableItem extends Item {
         return this.getDirectionTransformMatrix([this.screenWidth.value, 0, 0])
     }        
 
+    getDirectionRightMatrix () {
+        return this.getDirectionTransformMatrix([this.screenWidth.value, this.screenHeight.value/2, 0])
+    }        
+
     getDirectionBottomRightMatrix () {
         return this.getDirectionTransformMatrix([this.screenWidth.value, this.screenHeight.value, 0])
     }            
 
+    getDirectionBottomMatrix () {
+        return this.getDirectionTransformMatrix([this.screenWidth.value/2, this.screenHeight.value, 0])
+    }            
 
     getAccumulatedMatrix () {
         let transform = mat4.create();
@@ -467,9 +479,13 @@ export class MovableItem extends Item {
 
         const directionMatrix = {
             'to top left': this.getDirectionTopLeftMatrix(),
+            'to top': this.getDirectionTopMatrix(),            
             'to top right': this.getDirectionTopRightMatrix(),
+            'to right': this.getDirectionRightMatrix(),                        
             'to bottom left': this.getDirectionBottomLeftMatrix(),
+            'to bottom': this.getDirectionBottomMatrix(),                        
             'to bottom right': this.getDirectionBottomRightMatrix(),
+            'to left': this.getDirectionLeftMatrix(),                        
         }
 
         const verties = this.verties();
@@ -483,7 +499,7 @@ export class MovableItem extends Item {
             width, 
             height,
             transform: originalTransform,
-            originalTransformOrigin,        
+            originalTransformOrigin,      
             verties,
             xList,
             yList,

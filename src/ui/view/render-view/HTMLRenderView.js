@@ -116,6 +116,7 @@ export default class HTMLRenderView extends UIElement {
             && $el.hasClass('artboard-title') === false 
             && $el.hasClass('selection-tool-item') === false 
             && $el.hasClass('pointer') === false
+            && $el.hasClass('rotate-pointer') === false            
             && $el.hasClass('handle') === false            
             && $el.isTag('svg') === false 
             && $el.isTag('path') === false
@@ -407,10 +408,15 @@ export default class HTMLRenderView extends UIElement {
 
             // ArtBoard 변경 이후에 LayerTreeView 업데이트
             this.emit('refreshLayerTreeView')                        
+            this.emit('refreshSelectionTool', true);                    
         }
 
-        this.emit('refreshSelectionStyleView');
-        this.emit('refreshSelectionTool', false);        
+        this.nextTick(() => {
+
+            this.emit('refreshSelectionStyleView');
+            this.emit('refreshSelectionTool', false);        
+        })
+
     }
 
     /**

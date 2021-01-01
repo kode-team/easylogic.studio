@@ -68,9 +68,19 @@
     .rotate-pointer {
       width: 14px;
       height: 14px;      
-      background-color: yellow;
+      background-color: white; 
       border-radius: 100%;
       cursor: alias;
+
+      &.no-fill {
+        background-color: transparent;
+        border:none;
+
+        &::before {
+          display: none;
+
+        }
+      }
     }
 
     .line {
