@@ -185,9 +185,9 @@ export default class SelectionToolView extends SelectionToolEvent {
         return realDist
     }
 
-    calculateRealDist (item, distVector) {
+    calculateRealDist (item, vertextIndex, distVector) {
         return this.calculateDistance(
-            item.verties[0],    // top center 
+            item.verties[vertextIndex],    // top center 
             distVector, 
             item.accumulatedMatrixInverse
         );
@@ -231,7 +231,7 @@ export default class SelectionToolView extends SelectionToolEvent {
 
             this.$selection.cachedItemVerties.forEach(item => {
 
-                const [realDx, realDy] = this.calculateRealDist(item, distVector)
+                const [realDx, realDy] = this.calculateRealDist(item, 2, distVector)
     
                 // 변형되는 넓이 높이 구하기 
                 const newWidth = item.width + realDx;
@@ -249,7 +249,7 @@ export default class SelectionToolView extends SelectionToolEvent {
         const item = this.$selection.cachedItemVerties[0]
         if (item) {
 
-            const [realDx, realDy] = this.calculateRealDist(item, distVector)
+            const [realDx, realDy] = this.calculateRealDist(item, 1, distVector)
             // 변형되는 넓이 높이 구하기 
             const newWidth = item.width + realDx;
             const newHeight = item.height - realDy;
@@ -262,7 +262,7 @@ export default class SelectionToolView extends SelectionToolEvent {
     moveTopLeftVertext (distVector) {
         const item = this.$selection.cachedItemVerties[0]
         if (item) {
-            const [realDx, realDy] = this.calculateRealDist(item, distVector)
+            const [realDx, realDy] = this.calculateRealDist(item, 0, distVector)
 
             // 변형되는 넓이 높이 구하기 
             const newWidth = item.width - realDx;
@@ -277,7 +277,7 @@ export default class SelectionToolView extends SelectionToolEvent {
         const item = this.$selection.cachedItemVerties[0]
         if (item) {
 
-            const [realDx, realDy] = this.calculateRealDist(item, distVector)
+            const [realDx, realDy] = this.calculateRealDist(item, 0, distVector)
 
             // 변형되는 넓이 높이 구하기 
             const newWidth = item.width;
@@ -293,7 +293,7 @@ export default class SelectionToolView extends SelectionToolEvent {
         const item = this.$selection.cachedItemVerties[0]
         if (item) {
 
-            const [realDx, realDy] = this.calculateRealDist(item, distVector)
+            const [realDx, realDy] = this.calculateRealDist(item, 3, distVector)
 
             // 변형되는 넓이 높이 구하기 
             const newWidth = item.width;
@@ -308,7 +308,7 @@ export default class SelectionToolView extends SelectionToolEvent {
         const item = this.$selection.cachedItemVerties[0]
         if (item) {
 
-            const [realDx, realDy] = this.calculateRealDist(item, distVector)
+            const [realDx, realDy] = this.calculateRealDist(item, 1, distVector)
 
             // 변형되는 넓이 높이 구하기 
             const newWidth = item.width + realDx;
@@ -322,7 +322,7 @@ export default class SelectionToolView extends SelectionToolEvent {
         const item = this.$selection.cachedItemVerties[0]
         if (item) {
 
-            const [realDx, realDy] = this.calculateRealDist(item, distVector)
+            const [realDx, realDy] = this.calculateRealDist(item, 0, distVector)
 
             // 변형되는 넓이 높이 구하기 
             const newWidth = item.width - realDx;
@@ -337,7 +337,7 @@ export default class SelectionToolView extends SelectionToolEvent {
         const item = this.$selection.cachedItemVerties[0]
         if (item) {
 
-            const [realDx, realDy] = this.calculateRealDist(item, distVector)
+            const [realDx, realDy] = this.calculateRealDist(item, 3, distVector)
 
             // 변형되는 넓이 높이 구하기 
             const newWidth = item.width - realDx;
@@ -374,6 +374,7 @@ export default class SelectionToolView extends SelectionToolEvent {
         this.refreshSmartGuides();        
         this.emit('refreshCanvasForPartial', null, true)       
         this.emit('refreshSelectionStyleView');
+        this.emit('refreshRect');
     }
 
     moveEndVertext (dx, dy) {
@@ -458,7 +459,7 @@ export default class SelectionToolView extends SelectionToolEvent {
                 const verties = this.$selection.verties;
         
                 const {line, point} = this.createRenderPointers(vertiesMap(verties, this.$viewport.matrix));
-                this.refs.$pointerRect.updateDiff(line + point)
+                this.refs.$pointerRect.html(line + point)
             }
 
         } else {
@@ -470,7 +471,7 @@ export default class SelectionToolView extends SelectionToolEvent {
                 const verties = this.$selection.verties;
     
                 const {line, point} = this.createRenderPointers(vertiesMap(verties, this.$viewport.matrix));
-                this.refs.$pointerRect.updateDiff(line + point)
+                this.refs.$pointerRect.html(line + point)
             }
         }
 

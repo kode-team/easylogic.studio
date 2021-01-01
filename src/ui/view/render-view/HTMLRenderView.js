@@ -414,7 +414,8 @@ export default class HTMLRenderView extends UIElement {
         this.nextTick(() => {
 
             this.emit('refreshSelectionStyleView');
-            this.emit('refreshSelectionTool', false);        
+            this.emit('refreshSelectionTool', false);       
+            this.emit('refreshRect'); 
         })
 
     }

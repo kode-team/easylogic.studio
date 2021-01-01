@@ -231,85 +231,100 @@ export class MovableItem extends Item {
         return view; 
     }
 
+    getCachedTransformValue () {
+        const key = `${this.json['transform']}-${this.json['rotateZ']}`;
+
+        if (!this.cachedValue) {
+            this.cachedValue = {}
+        }
+
+        if (!this.cachedValue[key]) {
+            this.cachedValue[key] = Transform.parseStyle(Transform.rotate(this.json['transform'], this.json['rotateZ']));
+        }
+
+        return this.cachedValue[key];
+    }
+
     getItemTransformMatrix () {
 
-        const list = Transform.parseStyle(Transform.rotate(this.json['transform'], this.json['rotate']));        
+        const list = this.getCachedTransformValue();        
          
         // start with the identity matrix 
         const view = mat4.create();
 
-        // 3. Multiply by each of the transform functions in transform property from left to right        
-        list.forEach(it => {
+        // 3. Multiply by each of the transform functions in transform property from left to right     
+        for(let i = 0, len = list.length; i < len; i++) {
+            const it = list[i];
 
             switch (it.type) {
-            case 'translate': 
-            case 'translateX': 
-            case 'translateY': 
-            case 'translateZ': 
-                var values = it.value
-                if (it.type === 'translate') {
-                    values = [values[0].toPx(width).value, values[1].toPx(height).value, 0];
-                } else if (it.type === 'translateX') {
-                    values = [values[0].toPx(width).value, 0, 0];
-                } else if (it.type === 'translateY') {
-                    values = [0, values[0].toPx(height).value, 0];
-                } else if (it.type === 'translateZ') {
-                    values = [0, 0, values[0].toPx().value];
-                }                    
-
-                mat4.translate(view, view, values); 
-                break;
-            case 'rotate': 
-            case 'rotateZ':             
-                // console.log('rotateZ', it.value);
-                mat4.rotateZ(view, view, degreeToRadian(it.value[0].value)); 
-                break;
-            case 'rotateX': 
-                mat4.rotateX(view, view, degreeToRadian(it.value[0].value)); 
-                break;
-            case 'rotateY': 
-                mat4.rotateY(view, view, degreeToRadian(it.value[0].value)); 
-                break;
-            case 'rotate3d':             
-                var values = it.value
-                mat4.rotate(view, view, degreeToRadian(it.value[3].value), [
-                    values[0].value,
-                    values[1].value,
-                    values[2].value,
-                ]); 
-                break;
-            case 'scale': 
-                mat4.scale(view, view, [it.value[0].value, it.value[1].value, 1]); 
-                break;
-            case 'scaleX': 
-                mat4.scale(view, view, [it.value[0].value, 1, 1]); 
-                break;
-            case 'scaleY': 
-                mat4.scale(view, view, [1, it.value[0].value, 1]); 
-                break;
-            case 'scaleZ': 
-                mat4.scale(view, view, [1, 1, it.value[0].value]); 
-                break;
-            case 'matrix': 
-                var values = it.value;
-                values = [
-                    values[0].value, values[1].value, 0, 0, 
-                    values[2].value, values[3].value, 0, 0, 
-                    0, 0, 1, 0, 
-                    values[4].value, values[5].value, 0, 1
-                ]
-                mat4.multiply(view, view, values);
-                break;
-            case 'matrix3d': 
-                var values = it.value.map(it => it.value);
-                mat4.multiply(view, view, values);
-                break;
-            // case 'perspective': 
-            //     var values = it.value;
-            //     mat4.perspective(view, Math.PI * 0.5, width/height, 1, values[0].value);
-            //     break;
+                case 'translate': 
+                case 'translateX': 
+                case 'translateY': 
+                case 'translateZ': 
+                    var values = it.value
+                    if (it.type === 'translate') {
+                        values = [values[0].toPx(width).value, values[1].toPx(height).value, 0];
+                    } else if (it.type === 'translateX') {
+                        values = [values[0].toPx(width).value, 0, 0];
+                    } else if (it.type === 'translateY') {
+                        values = [0, values[0].toPx(height).value, 0];
+                    } else if (it.type === 'translateZ') {
+                        values = [0, 0, values[0].toPx().value];
+                    }                    
+    
+                    mat4.translate(view, view, values); 
+                    break;
+                case 'rotate': 
+                case 'rotateZ':             
+                    // console.log('rotateZ', it.value);
+                    mat4.rotateZ(view, view, degreeToRadian(it.value[0].value)); 
+                    break;
+                case 'rotateX': 
+                    mat4.rotateX(view, view, degreeToRadian(it.value[0].value)); 
+                    break;
+                case 'rotateY': 
+                    mat4.rotateY(view, view, degreeToRadian(it.value[0].value)); 
+                    break;
+                case 'rotate3d':             
+                    var values = it.value
+                    mat4.rotate(view, view, degreeToRadian(it.value[3].value), [
+                        values[0].value,
+                        values[1].value,
+                        values[2].value,
+                    ]); 
+                    break;
+                case 'scale': 
+                    mat4.scale(view, view, [it.value[0].value, it.value[1].value, 1]); 
+                    break;
+                case 'scaleX': 
+                    mat4.scale(view, view, [it.value[0].value, 1, 1]); 
+                    break;
+                case 'scaleY': 
+                    mat4.scale(view, view, [1, it.value[0].value, 1]); 
+                    break;
+                case 'scaleZ': 
+                    mat4.scale(view, view, [1, 1, it.value[0].value]); 
+                    break;
+                case 'matrix': 
+                    var values = it.value;
+                    values = [
+                        values[0].value, values[1].value, 0, 0, 
+                        values[2].value, values[3].value, 0, 0, 
+                        0, 0, 1, 0, 
+                        values[4].value, values[5].value, 0, 1
+                    ]
+                    mat4.multiply(view, view, values);
+                    break;
+                case 'matrix3d': 
+                    var values = it.value.map(it => it.value);
+                    mat4.multiply(view, view, values);
+                    break;
+                // case 'perspective': 
+                //     var values = it.value;
+                //     mat4.perspective(view, Math.PI * 0.5, width/height, 1, values[0].value);
+                //     break;
             }
-        })
+        }   
 
         return view;
     }

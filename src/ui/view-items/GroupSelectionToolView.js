@@ -197,9 +197,9 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     }
 
    
-    calculateRealDist (item, distVector) {
+    calculateRealDist (item, vertextIndex, distVector) {
         return this.calculateDistance(
-            item.verties[0],    // top center 
+            item.verties[vertextIndex],    // top center 
             distVector, 
             item.accumulatedMatrixInverse
         );
@@ -269,7 +269,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
         const groupItem = this.cachedGroupItem;
 
-        const [realDx, realDy] = this.calculateRealDist(groupItem, distVector);
+        const [realDx, realDy] = this.calculateRealDist(groupItem, 2, distVector);
 
         // 변형되는 넓이 높이 구하기 
         const newWidth = groupItem.width + realDx;
@@ -282,7 +282,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     moveTopRightVertext (distVector) {
         const groupItem = this.cachedGroupItem;
 
-        const [realDx, realDy] = this.calculateRealDist(groupItem, distVector);
+        const [realDx, realDy] = this.calculateRealDist(groupItem, 1, distVector);
 
         // 변형되는 넓이 높이 구하기 
         const newWidth = groupItem.width + realDx;
@@ -321,7 +321,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     moveTopVertext (distVector) {
         const groupItem = this.cachedGroupItem;
 
-        const [realDx, realDy] = this.calculateRealDist(groupItem, distVector);
+        const [realDx, realDy] = this.calculateRealDist(groupItem, 0, distVector);
 
         // 변형되는 넓이 높이 구하기 
         const newWidth = groupItem.width;
@@ -334,7 +334,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     moveBottomVertext (distVector) {
         const groupItem = this.cachedGroupItem;
 
-        const [realDx, realDy] = this.calculateRealDist(groupItem, distVector);
+        const [realDx, realDy] = this.calculateRealDist(groupItem, 2, distVector);
 
         // 변형되는 넓이 높이 구하기 
         const newWidth = groupItem.width;
@@ -347,7 +347,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
         const groupItem = this.cachedGroupItem;
 
-        const [realDx, realDy] = this.calculateRealDist(groupItem, distVector);
+        const [realDx, realDy] = this.calculateRealDist(groupItem, 0, distVector);
 
         // 변형되는 넓이 높이 구하기 
         const newWidth = groupItem.width - realDx;
@@ -361,7 +361,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
         const groupItem = this.cachedGroupItem;
 
-        const [realDx, realDy] = this.calculateRealDist(groupItem, distVector);
+        const [realDx, realDy] = this.calculateRealDist(groupItem, 0, distVector);
 
         // 변형되는 넓이 높이 구하기 
         const newWidth = groupItem.width - realDx;
@@ -375,7 +375,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
         const groupItem = this.cachedGroupItem;
 
-        const [realDx, realDy] = this.calculateRealDist(groupItem, distVector);
+        const [realDx, realDy] = this.calculateRealDist(groupItem, 2, distVector);
 
         // 변형되는 넓이 높이 구하기 
         const newWidth = groupItem.width + realDx;
@@ -390,7 +390,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
         const groupItem = this.cachedGroupItem;
 
-        const [realDx, realDy] = this.calculateRealDist(groupItem, distVector);
+        const [realDx, realDy] = this.calculateRealDist(groupItem, 3, distVector);
 
         // 변형되는 넓이 높이 구하기 
         const newWidth = groupItem.width - realDx;
@@ -544,7 +544,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         if (!this.groupItem) return;
 
         const {line, point} = this.createRenderPointers(vertiesMap(this.groupItem.verties(), this.$viewport.matrix));
-        this.refs.$pointerRect.updateDiff(line + point)
+        this.refs.$pointerRect.html(line + point)
     }
 
 
