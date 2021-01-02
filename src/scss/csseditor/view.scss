@@ -146,18 +146,13 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
 
     &:hover {
 
-      &:not(.selected):not(.path) {
+      &:not(.selected) {
         outline: 1px double rgb(64, 64, 252);
-      }
-
-      &:not(.selected).path {
 
         path {
           outline: 1px solid rgb(64, 64, 252);
-        }
-
+        }        
       }
-
     }
 
     > svg {

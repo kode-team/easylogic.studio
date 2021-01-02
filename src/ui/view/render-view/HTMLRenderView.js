@@ -3,7 +3,6 @@ import { BIND, POINTERSTART, MOVE, END, IF, KEYUP, DROP, DRAGOVER, PREVENT, FOCU
 import { Length } from "@unit/Length";
 
 import Dom from "@core/Dom";
-import { DomItem } from "@items/DomItem";
 import StyleView from "./StyleView";
 
 import HTMLRenderer from '@renderer/HTMLRenderer';
@@ -15,8 +14,6 @@ import PathDrawView from "@ui/view-items/PathDrawView";
 import LayerAppendView from "@ui/view-items/LayerAppendView";
 import GridLayoutLineView from "@ui/view-items/GridLayoutLineView";
 import { isFunction } from "@core/functions/func";
-import { rectToVerties } from "@core/functions/collision";
-import { vertiesMap } from "@core/functions/math";
 import { KEY_CODE } from "@types/key";
 import { vec3 } from "gl-matrix";
 
@@ -117,6 +114,7 @@ export default class HTMLRenderView extends UIElement {
             && $el.hasClass('selection-tool-item') === false 
             && $el.hasClass('pointer') === false
             && $el.hasClass('rotate-pointer') === false            
+            && $el.hasClass('layer-add-view') === false                        
             && $el.hasClass('handle') === false            
             && $el.isTag('svg') === false 
             && $el.isTag('path') === false
@@ -155,7 +153,7 @@ export default class HTMLRenderView extends UIElement {
             this.refs.$dragAreaRect.css(obj) 
 
             this.state.cachedCurrentElement = {}       
-            this.$el.$$('.selected').forEach(it => it.removeClass('selected'))
+            // this.$el.$$('.selected').forEach(it => it.removeClass('selected'))
 
 
             // 클릭하는 시점에  item 인스턴스와 , verties() 를 초기화 한다. 
@@ -226,18 +224,17 @@ export default class HTMLRenderView extends UIElement {
                 height: height.value
             }
     
-            var areaVerties = vertiesMap(rectToVerties(rect.x, rect.y, rect.width, rect.height), this.$viewport.matrixInverse);
-
+            var areaVerties = this.$viewport.createAreaVerties(rect.x, rect.y, rect.width, rect.height);
 
             var project = this.$selection.currentProject;
             if (project) {    
                 const selectedItems = this.getSelectedItems(rect, areaVerties)
 
                 if (this.$selection.select( ...selectedItems)) {
-                    this.selectCurrent(...selectedItems)
+                    this.selectCurrent(...selectedItems);
+                    this.emit('refreshSelectionTool', true);
                 }
 
-                this.emit('refreshSelectionTool', true);
 
             }
         }
@@ -256,7 +253,7 @@ export default class HTMLRenderView extends UIElement {
             height: height.value
         }
 
-        var areaVerties = vertiesMap(rectToVerties(rect.x, rect.y, rect.width, rect.height), this.$viewport.matrixInverse);
+        var areaVerties = this.$viewport.createAreaVerties(rect.x, rect.y, rect.width, rect.height);
 
         this.refs.$dragAreaRect.css({
             left: Length.px(-10000),
@@ -408,7 +405,7 @@ export default class HTMLRenderView extends UIElement {
 
             // ArtBoard 변경 이후에 LayerTreeView 업데이트
             this.emit('refreshLayerTreeView')                        
-            this.emit('refreshSelectionTool', true);                    
+            this.emit('refreshSelectionTool', true);         
         }
 
         this.nextTick(() => {
@@ -494,20 +491,24 @@ export default class HTMLRenderView extends UIElement {
         this.state.cachedCurrentElement = {}
         var $selectedElement = this.$el.$$('.selected');
 
-        if ($selectedElement) {
+        if ($selectedElement.length) {
             $selectedElement.forEach(it => it.removeClass('selected'))
         }
+
 
         if(args.length) {
 
             var selector = args.map(it => `[data-id='${it.id}']`).join(',')
 
             var list = this.$el.$$(selector);
-            
-            list.forEach(it => {
-                this.state.cachedCurrentElement[it.attr('data-id')] = it; 
-                it.addClass('selected')
-            })
+
+            if (list.length) {
+                list.forEach(it => {
+                    this.state.cachedCurrentElement[it.attr('data-id')] = it; 
+                    it.addClass('selected')
+                })
+            }
+
         }    
     }
 
@@ -521,6 +522,8 @@ export default class HTMLRenderView extends UIElement {
         items.forEach(current => {
             this.updateElement(current);
         })
+
+        this.selectCurrent(...items);
     }
 
     updateElement (item) {

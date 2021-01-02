@@ -21,12 +21,6 @@ const hasLine = (images, line) => {
     return images.includes(line);
 }
 
-const addLine = (images, line) => {
-    if (!hasLine(images, line)) {
-        images.push(line);
-    }
-}
-
 const hLine = (target) => {
 
     return line([target[0], 0, 0], [target[0], 10000, 0]);

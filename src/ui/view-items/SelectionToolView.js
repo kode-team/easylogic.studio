@@ -51,7 +51,9 @@ const SelectionToolEvent = class  extends UIElement {
     }
 
     [EVENT('updateViewport')] () { 
-        this.initSelectionTool();
+        if (this.$selection.isOne) {        
+            this.initSelectionTool();
+        }
     }    
 }
 
@@ -393,7 +395,7 @@ export default class SelectionToolView extends SelectionToolEvent {
 
         this.$selection.cachedItemVerties.forEach(it => {
 
-            const verties = it.verties.map(v => {
+            const verties = it.rectVerties.map(v => {
                 return vec3.add([], v, newDist)
             })
 
@@ -432,7 +434,7 @@ export default class SelectionToolView extends SelectionToolEvent {
         if (this.$editor.isSelectionMode() && this.$el.isHide() && this.$selection.isOne) {
             this.$el.show();
         } else {
-            if (this.$el.isShow() && this.$selection.isMany) this.$el.hide();
+            if (this.$el.isShow() && this.$selection.isOne === false) this.$el.hide();
         }
 
         this.makeSelectionTool();
@@ -536,7 +538,11 @@ export default class SelectionToolView extends SelectionToolEvent {
     }
 
     [EVENT('refreshSelectionStyleView')] () {
-        this.renderPointers()
+
+        if (this.$selection.isOne) {
+            this.renderPointers()
+        }
+
     }
     
 } 

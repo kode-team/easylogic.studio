@@ -429,6 +429,15 @@ export function rectToVerties (x, y, width, height, origin = '50% 50% 0px') {
     ]
 }
 
+export function rectToVertiesForArea (x, y, width, height) {
+    return [
+        [x, y, 0],  // top , left 
+        [x + width, y, 0],  // top , right 
+        [x + width, y + height, 0], // bottom , right 
+        [x, y + height, 0], // bottom , left
+    ]
+}
+
 export function itemsToRectVerties (items = []) {
     let minX = Number.MAX_SAFE_INTEGER;
     let minY = Number.MAX_SAFE_INTEGER;

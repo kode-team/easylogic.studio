@@ -1,4 +1,4 @@
-import { rectToVerties } from "@core/functions/collision";
+import { rectToVerties, rectToVertiesForArea } from "@core/functions/collision";
 import { clone } from "@core/functions/func";
 import { calculateMatrix, vertiesMap } from "@core/functions/math";
 import { mat4, vec3 } from "gl-matrix";
@@ -238,6 +238,11 @@ export class ViewportManager {
         const mouseY = (this.mouse[1] - this.verties[0][1])/(this.verties[2][1] - this.verties[0][1]) * 100;
 
         return [mouseX, mouseY, 0]
+    }
+
+
+    createAreaVerties (x, y, width, height) {
+        return vertiesMap(rectToVertiesForArea(x, y, width, height), this.matrixInverse);
     }
 
 }

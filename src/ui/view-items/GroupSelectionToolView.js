@@ -40,7 +40,9 @@ const SelectionToolEvent = class  extends UIElement {
     }
 
     [EVENT('updateViewport')] (isInitializeMatrix = true) {
-        this.initSelectionTool(isInitializeMatrix);
+        if (this.$selection.isMany) {        
+            this.initSelectionTool(isInitializeMatrix);
+        }
     }
 
 }
@@ -442,7 +444,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     refreshSelectionToolView (newDist) {
 
         //////  snap 체크 하기 
-        const snap = this.$snapManager.check(this.cachedGroupItem.verties.map(v => {
+        const snap = this.$snapManager.check(this.cachedGroupItem.rectVerties.map(v => {
             return vec3.add([], v, newDist)
         }), 3);
 
@@ -484,7 +486,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         if (this.$editor.isSelectionMode() && this.$el.isHide() && this.$selection.isMany) {
             this.$el.show();
         } else {
-            if (this.$el.isShow() && this.$selection.isOne) this.$el.hide();
+            if (this.$el.isShow() && this.$selection.isMany === false) this.$el.hide();
         }
 
         this.initMatrix(isInitializeMatrix);
@@ -497,18 +499,23 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     get item () {
         const verties = this.verties || rectToVerties(0, 0, 0, 0);
 
-        return new ArtBoard({
+        if (!this.state.newArtBoard) {
+            this.state.newArtBoard = new ArtBoard()
+        } 
+
+        this.state.newArtBoard.reset({
             parent: this.$selection.currentProject,
             x: Length.px(verties[0][0]),
             y: Length.px(verties[0][1]),
             width: Length.px(verties[2][0] - verties[0][0]),
             height: Length.px(verties[2][1] - verties[0][1]),
         })
+
+        return this.state.newArtBoard; 
     }
 
     initMatrix(isInitializeMatrix = false) {
-
-        if (isInitializeMatrix) {
+        if (isInitializeMatrix && this.$selection.isMany) {
             // matrix 초기화 
             this.verties = clone(this.$selection.verties);
             this.angle = 0;
@@ -601,7 +608,11 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     }
 
     [EVENT('refreshSelectionStyleView')] () {
-        this.renderPointers()
+
+        if (this.$selection.isMany) {
+            this.renderPointers()
+        }
+
     }
     
 } 

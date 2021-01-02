@@ -169,16 +169,38 @@ export class SelectionManager {
     return item.position === 'relative'
   }
 
+  isSameIds (newIds) {
+
+    if (this.ids.length != newIds.length) {
+      return false; 
+    }
+
+    // 동일한 selection 을 가지고 있으면 더 이상 select 를 진행하지 않는다. 
+    if (this.ids.filter(id => newIds.includes(id)).length === this.ids.length) {
+      return true; 
+    }
+
+    return false; 
+  }
+
   select(...args) {
 
     var list = (args || []).filter(it => !it.lock && it.isAbsolute)
 
     // 부모, 자식간에 동시에 selection 이 되어 있으면 
     // 자식은 제외한다. 
-    this.items = list.filter(it => {
+    const newSelectedItems = list.filter(it => {
       return it.path.filter(element => list.includes(element)).length < 2;
     }); 
 
+    const newSelectedIds = newSelectedItems.map(it => it.id);
+
+    // 동일한 selection 을 가지고 있으면 더 이상 select 를 진행하지 않는다. 
+    if (this.isSameIds(newSelectedIds)) {
+      return false; 
+    }
+
+    this.items = newSelectedItems;
     this.itemKeys = {}
     this.items.forEach(it => {
       this.itemKeys[it.id] = it; 
@@ -281,7 +303,7 @@ export class SelectionManager {
 
   changeArtBoard () {
 
-    const checkedParentChange = []
+    let checkedParentChange = false
 
     this.each(instance => {
 
@@ -296,19 +318,23 @@ export class SelectionManager {
   
 
         if (selectedArtBoard) {
-          // artboard 가 있고 artboard 가 나의 부모가 아니면           
+          // 부모 artboard 가 다르면  artboard 를 교체한다.            
           if (selectedArtBoard.item !== instance.artboard) {
+            console.log('aaaaaa');
             selectedArtBoard.item.appendChildItem(instance);
-            checkedParentChange.push(true);
+            checkedParentChange = true;
           }
         } else {
-          this.currentProject.appendChildItem(instance);       
-          checkedParentChange.push(true);
+          if (instance.artboard) {
+            this.currentProject.appendChildItem(instance);       
+            checkedParentChange = true;
+          }
+
         }
       }
     })
 
-    return checkedParentChange.filter(Boolean).length > 0;
+    return checkedParentChange;
   }
 
   doCache () {

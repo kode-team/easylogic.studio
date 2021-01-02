@@ -116,11 +116,7 @@ export default class BackgroundColorProperty extends BaseProperty {
   }
 
   [EVENT('changeRotate')] (key, rotate) {
-    const current = this.$selection.current; 
-    if (current) {
-      this.command('setAttribute', "change rotate", { rotate }, true, true)
-    }
-
+    this.command('setAttribute', "change rotate", { rotate }, true, true)
   }
 
   refresh () {
@@ -128,7 +124,7 @@ export default class BackgroundColorProperty extends BaseProperty {
 
     if (current) {
       this.children.$zIndex.setValue(current['z-index'] || 0)
-      this.children.$opacity.setValue(current.opacity || '1')
+      this.children.$opacity.setValue(current['opacity'] || '1')
       this.children.$mixBlend.setValue(current['mix-blend-mode'])
       this.children.$overflow.setValue(current['overflow']);
       

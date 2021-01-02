@@ -1,6 +1,9 @@
 import { Length } from "@unit/Length";
 import { Property } from "@items/Property";
 import { isString, isFunction } from "@core/functions/func";
+import { mat4, vec3 } from "gl-matrix";
+import { degreeToRadian } from "@core/functions/math";
+import { TransformCache } from "./TransformCache";
 
 const TRANSFORM_REG = /((matrix|translate(X|Y|Z|3d)?|scale(X|Y|Z|3d)?|rotate(X|Y|Z|3d)?|skew(X|Y)|matrix(3d)?|perspective)\(([^\)]*)\))/gi;
 
@@ -135,20 +138,31 @@ export class Transform extends Property {
     return [] 
   } 
 
-  static rotate (transform, angle) {
-    return Transform.replace(transform, { type: 'rotate', value: [angle] })
+  static createRotateKey(transform, angle, field) {
+    return `${transform}:::${field}(${angle})`
+  }
+
+  static rotate (transform, angle, field = 'rotate') {
+
+    const key = Transform.createRotateKey(transform, angle, field);
+
+    if (TransformCache.has(key)) return TransformCache.get(key);
+
+    TransformCache.set(key, Transform.replace(transform, { type: field, value: [angle] }));
+
+    return TransformCache.get(key);
   }
 
   static rotateZ (transform, angle) {
-    return Transform.replace(transform, { type: 'rotateZ', value: [angle] })
+    return Transform.rotate(transform, angle, 'rotateZ')
   }  
 
   static rotateX (transform, angle) {
-    return Transform.replace(transform, { type: 'rotateX', value: [angle] })
+    return Transform.rotate(transform, angle, 'rotateX')
   }  
   
   static rotateY (transform, angle) {
-    return Transform.replace(transform, { type: 'rotateY', value: [angle] })
+    return Transform.rotate(transform, angle, 'rotateY')
   }    
 
   /**
@@ -161,6 +175,10 @@ export class Transform extends Property {
     var transforms = [];
 
     if (!transform) return transforms;
+
+    if (TransformCache.has(transform)) {
+      return TransformCache.get(transform);
+    }
 
     var matches = (transform.match(TRANSFORM_REG) || []);
     matches.forEach((value, index) => {
@@ -182,6 +200,99 @@ export class Transform extends Property {
       });
 
     });
+
+    TransformCache.set(transform, transforms);
+
     return transforms;
+  }
+
+  /**
+   * Transform 정보를 기준으로 mat4 행렬값으로 변환 
+   * 
+   * 
+   * @param {Transform[]} parsedTransformList 파싱된 Transform 리스트 
+   * @param {number} width Layer 의 실제 넓이 
+   * @param {number} height Layer 의 실제 높이 
+   */
+  static createTransformMatrix (parsedTransformList, width, height) {
+
+    // start with the identity matrix 
+    const view = mat4.create();
+
+    // 3. Multiply by each of the transform functions in transform property from left to right     
+    for(let i = 0, len = parsedTransformList.length; i < len; i++) {
+        const it = parsedTransformList[i];
+
+        switch (it.type) {
+            case 'translate': 
+            case 'translateX': 
+            case 'translateY': 
+            case 'translateZ': 
+                var values = it.value
+                if (it.type === 'translate') {
+                    values = [values[0].toPx(width).value, values[1].toPx(height).value, 0];
+                } else if (it.type === 'translateX') {
+                    values = [values[0].toPx(width).value, 0, 0];
+                } else if (it.type === 'translateY') {
+                    values = [0, values[0].toPx(height).value, 0];
+                } else if (it.type === 'translateZ') {
+                    values = [0, 0, values[0].toPx().value];
+                }                    
+
+                mat4.translate(view, view, values); 
+                break;
+            case 'rotate': 
+            case 'rotateZ':             
+                // console.log('rotateZ', it.value);
+                mat4.rotateZ(view, view, degreeToRadian(it.value[0].value)); 
+                break;
+            case 'rotateX': 
+                mat4.rotateX(view, view, degreeToRadian(it.value[0].value)); 
+                break;
+            case 'rotateY': 
+                mat4.rotateY(view, view, degreeToRadian(it.value[0].value)); 
+                break;
+            case 'rotate3d':             
+                var values = it.value
+                mat4.rotate(view, view, degreeToRadian(it.value[3].value), [
+                    values[0].value,
+                    values[1].value,
+                    values[2].value,
+                ]); 
+                break;
+            case 'scale': 
+                mat4.scale(view, view, [it.value[0].value, it.value[1].value, 1]); 
+                break;
+            case 'scaleX': 
+                mat4.scale(view, view, [it.value[0].value, 1, 1]); 
+                break;
+            case 'scaleY': 
+                mat4.scale(view, view, [1, it.value[0].value, 1]); 
+                break;
+            case 'scaleZ': 
+                mat4.scale(view, view, [1, 1, it.value[0].value]); 
+                break;
+            case 'matrix': 
+                var values = it.value;
+                values = [
+                    values[0].value, values[1].value, 0, 0, 
+                    values[2].value, values[3].value, 0, 0, 
+                    0, 0, 1, 0, 
+                    values[4].value, values[5].value, 0, 1
+                ]
+                mat4.multiply(view, view, values);
+                break;
+            case 'matrix3d': 
+                var values = it.value.map(it => it.value);
+                mat4.multiply(view, view, values);
+                break;
+            // case 'perspective': 
+            //     var values = it.value;
+            //     mat4.perspective(view, Math.PI * 0.5, width/height, 1, values[0].value);
+            //     break;
+        }
+    }   
+
+    return view;
   }
 }

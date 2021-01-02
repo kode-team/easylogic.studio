@@ -1,6 +1,7 @@
 import { transform } from "@babel/core";
 import TransformOriginProperty from "@ui/property/TransformOriginProperty";
 import { Length } from "@unit/Length";
+import { TransformOriginCache } from "./TransformOriginCache";
 
 export class TransformOrigin {
 
@@ -15,16 +16,27 @@ export class TransformOrigin {
    * @param {string} transformOrigin 
    */
   static parseStyle (transformOrigin = '50% 50% 0%') {
+
+    if (TransformOriginCache.has(transformOrigin)) {
+      return TransformOriginCache.get(transformOrigin);
+    }
+
     const origins = transformOrigin
                       .trim()
                       .split(' ')
                       .filter(it => it.trim())
 
+    let parsedTransformOrigin = null;
+
     if (origins.length === 1) {
-      return [origins[0], origins[0]].map(it => Length.parse(it))
+      parsedTransformOrigin = [origins[0], origins[0]].map(it => Length.parse(it))
+    } else {
+      parsedTransformOrigin = origins.map(it => Length.parse(it))
     } 
 
-    return origins.map(it => Length.parse(it))
+    TransformOriginCache.set(transformOrigin, parsedTransformOrigin);
+
+    return parsedTransformOrigin;
   }
 
   static scale (transformOrigin, width, height)  {
