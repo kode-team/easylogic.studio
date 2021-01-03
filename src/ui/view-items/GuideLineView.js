@@ -1,12 +1,7 @@
 import UIElement, { EVENT } from "@core/UIElement";
-import { isNotUndefined, OBJECT_TO_PROPERTY } from "@core/functions/func";
+import { OBJECT_TO_PROPERTY } from "@core/functions/func";
 import { BIND } from "@core/Event";
 import { vec3 } from "gl-matrix";
-
-
-const text = (x, y, text = '', className = 'base-line') => {
-    return /*html*/`<text x="${x}" y="${y}" class='${className}'>${text}</text>`
-}
 
 const line = (source, target, className = 'base-line') => {
     return /*html*/`<line ${OBJECT_TO_PROPERTY({
@@ -17,9 +12,6 @@ const line = (source, target, className = 'base-line') => {
     })} class='${className}' />`
 }
 
-const hasLine = (images, line) => {
-    return images.includes(line);
-}
 
 const hLine = (target) => {
 

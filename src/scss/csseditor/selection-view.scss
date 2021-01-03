@@ -340,7 +340,7 @@
       stroke-width: 1;
 
       &.base-line {
-        stroke: var(--selected-color);
+        stroke: var(--guide-line-color);
       }
 
       &.base-rect  {

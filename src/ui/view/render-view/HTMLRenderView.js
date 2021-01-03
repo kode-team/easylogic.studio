@@ -358,17 +358,14 @@ export default class HTMLRenderView extends UIElement {
 
         var id = $element.attr('data-id')    
 
-        if (e.metaKey) {
-            // FIXME:  metaKey 밀고 다른 옵션을 넣어야 할 듯 
-            // ctrl + pointerstart 시점에 Layer 카피하기 
+        // alt(option) + pointerstart 시점에 Layer 카피하기         
+        if (e.altKey) {
             // artboard-title 을 선택하고 드래그 할 때 artboard 전체를 copy 한다. 
             if ($target.hasClass('artboard-title')) {      
                 this.$selection.selectById(id);
             } else {
-                // shift key 는 selection 을 토글한다. 
-                if (this.$selection.check({ id })) {    // 이미 선택되어 있으면 선택하지 않음. 
-                    // NOOP
-                } else {
+                if (this.$selection.check({ id }) === false) { 
+                    // 선택된게 없으면 id 로 선택 
                     this.$selection.selectById(id);
                 }
             }

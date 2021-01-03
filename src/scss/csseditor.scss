@@ -102,7 +102,8 @@ body {
         --timeline-gauge-handle-color: #{$timeline-gauge-handle-color};
         --timeline-row-selected-color: #{$timeline-row-selected-color};
         --timeline-property-add-background-color: #{$timeline-property-add-background-color};        
-        --guide-font-color: #{guide-font-color};
+        --guide-line-color: #{$guide-line-color};                
+        --guide-font-color: #{$guide-font-color};
         --guide-line-rect-color: #{$guide-line-rect-color};
         --page-view-color: #{$page-view-color};
         --page-view-element-artboard-title-color: #{$page-view-element-artboard-title-color};
@@ -157,7 +158,8 @@ body {
         --timeline-gauge-handle-color: #{$timeline-gauge-handle-color};
         --timeline-row-selected-color: #{$timeline-row-selected-color};
         --timeline-property-add-background-color: #{$timeline-property-add-background-color};        
-        --guide-font-color: #{guide-font-color};
+        --guide-line-color: #{$guide-line-color};                
+        --guide-font-color: #{$guide-font-color};
         --guide-line-rect-color: #{$guide-line-rect-color};
         --page-view-color: #{$page-view-color};
         --page-view-element-artboard-title-color: #{$page-view-element-artboard-title-color};
@@ -211,7 +213,8 @@ body {
         --timeline-gauge-handle-color: #{$timeline-gauge-handle-color};
         --timeline-row-selected-color: #{$timeline-row-selected-color};
         --timeline-property-add-background-color: #{$timeline-property-add-background-color};        
-        --guide-font-color: #{guide-font-color};
+        --guide-line-color: #{$guide-line-color};        
+        --guide-font-color: #{$guide-font-color};
         --guide-line-rect-color: #{$guide-line-rect-color};
         --page-view-color: #{$page-view-color};
         --page-view-element-artboard-title-color: #{$page-view-element-artboard-title-color};

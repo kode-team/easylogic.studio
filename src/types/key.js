@@ -6,7 +6,7 @@ export const KEY_CODE = {
     'enter':        0x0D, // 13 
     'escape':       0x1B, // 27 
     'space':        0x20, // 32 
-    'pageup':       0x21, // 33)	
+    'pageup':       0x21, // 33
     'pagedown':     0x22, // 34
     'end':          0x23, // 35
     'home':         0x24, // 36
