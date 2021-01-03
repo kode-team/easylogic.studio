@@ -20,11 +20,7 @@ export class SVGLinearGradient extends SVGGradient {
   toCloneObject() {
     return {
       ...super.toCloneObject(),
-      x1: this.json.x1,
-      y1: this.json.y1,
-      x2: this.json.x2,
-      y2: this.json.y2,
-      spreadMethod: this.json.spreadMethod
+      ...this.attrs('x1', 'y1', 'x2', 'y2', 'spreadMethod')
     }
   }
 

@@ -18,7 +18,7 @@ export class Shape extends Property {
     toCloneObject() {
         return {
             ...super.toCloneObject(),
-            value: this.json.value
+            ...this.attrs('value')
         }
     }
 

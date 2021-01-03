@@ -47,12 +47,13 @@ export class SVGTextItem extends SVGItem {
     var json = this.json; 
     return {
       ...super.toCloneObject(),
-      totalLength: json.totalLength,
-      text: json.text, 
-      textLength: `${json.textLength}`,
-      lengthAdjust: json.lengthAdjust,      
-      'shape-inside': json['shape-inside']
-      // segments: clone(this.json.segments)
+      ...this.attrs(
+        'totalLength',
+        'text', 
+        'textLength',
+        'lengthAdjust',      
+        'shape-inside'
+      )
     }
   }
 

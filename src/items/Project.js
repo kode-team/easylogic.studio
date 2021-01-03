@@ -42,12 +42,9 @@ export class Project extends TimelineItem {
   }
 
   toCloneObject() {
-    var { name, description, rootVariable } = this.json;
     return {
       ...super.toCloneObject(),
-      name,
-      description, 
-      rootVariable
+      ...this.attrs('name', 'description', 'rootVariable')
     }
   }
 

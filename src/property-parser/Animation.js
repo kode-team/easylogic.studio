@@ -33,16 +33,18 @@ export class Animation extends Property {
   }
 
   toCloneObject() {
-    var json = this.json; 
     return {
-      name: json.name,
-      direction: json.direction,
-      duration: json.duration+'',
-      timingFunction: json.timingFunction,
-      delay: json.delay,
-      iterationCount: json.iterationCount + "",
-      playState: json.playState,
-      fillMode: json.fillMode
+      ...this.attrs(
+        'name',
+        'direction',
+        'duration',
+        'timingFunction',
+        'delay',
+        'iterationCount',
+        'playState',
+        'fillMode'
+      )
+
     }
   }
 

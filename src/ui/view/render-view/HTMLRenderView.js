@@ -98,7 +98,7 @@ export default class HTMLRenderView extends UIElement {
         const code = this.$shortcuts.getGeneratedKeyCode(KEY_CODE.space);
         if (this.$keyboardManager.check(code)) {        // space 키가 눌러져있을 때는 실행하지 않는다. 
             return false;
-        }
+        } 
 
         if (this.state.mode !== 'selection') {
             return false; 
@@ -335,10 +335,13 @@ export default class HTMLRenderView extends UIElement {
         return this.$editor.isSelectionMode()
     }
 
-    findArtBoard (point) {
-        return this.$selection.currentProject.artboards.find(artboard => artboard.hasPoint(point.x, point.y))
-    }
-
+    /**
+     * 드래그 해서 객체 옮기기 
+     *
+     * ctrl + pointerstart 하는  시점에 카피해보자.  
+     * 
+     * @param {PointerEvent} e 
+     */
     [POINTERSTART('$view .element-item') + IF('checkEditMode')  + MOVE('calculateMovedElement') + END('calculateEndedElement')] (e) {
         this.startXY = e.xy ; 
         const $element = e.$dt;
@@ -355,25 +358,55 @@ export default class HTMLRenderView extends UIElement {
 
         var id = $element.attr('data-id')    
 
-        // artboard title 인 경우는 artboard 를 선택한다.         
-        if ($target.hasClass('artboard-title')) {      
-            this.$selection.selectById(id);
-        } else {
-            // shift key 는 selection 을 토글한다. 
-            if (e.shiftKey) {
-                this.$selection.toggleById(id);
+        if (e.metaKey) {
+            // FIXME:  metaKey 밀고 다른 옵션을 넣어야 할 듯 
+            // ctrl + pointerstart 시점에 Layer 카피하기 
+            // artboard-title 을 선택하고 드래그 할 때 artboard 전체를 copy 한다. 
+            if ($target.hasClass('artboard-title')) {      
+                this.$selection.selectById(id);
             } else {
+                // shift key 는 selection 을 토글한다. 
                 if (this.$selection.check({ id })) {    // 이미 선택되어 있으면 선택하지 않음. 
                     // NOOP
                 } else {
                     this.$selection.selectById(id);
                 }
             }
-        }
+            
+            if (this.$selection.isEmpty === false) {
+                // 선택된 모든 객체 카피하기 
+                this.$selection.selectAfterCopy();
+                this.trigger('refreshAllCanvas')         
+                this.emit('refreshLayerTreeView')         
 
-        this.selectCurrent(...this.$selection.items)
-        this.initializeDragSelection();
-        this.emit('history.refreshSelection');        
+                this.selectCurrent(...this.$selection.items)
+                this.initializeDragSelection();
+                this.emit('history.refreshSelection');                    
+            }
+
+        } else {
+
+            // artboard title 인 경우는 artboard 를 선택한다.         
+            if ($target.hasClass('artboard-title')) {      
+                this.$selection.selectById(id);
+            } else {
+                // shift key 는 selection 을 토글한다. 
+                if (e.shiftKey) {
+                    this.$selection.toggleById(id);
+                } else {
+                    if (this.$selection.check({ id })) {    // 이미 선택되어 있으면 선택하지 않음. 
+                        // NOOP
+                    } else {
+                        this.$selection.selectById(id);
+                    }
+                }
+            }
+
+            this.selectCurrent(...this.$selection.items)
+            this.initializeDragSelection();
+            this.emit('history.refreshSelection');      
+        }
+  
     }
 
     initializeDragSelection() {

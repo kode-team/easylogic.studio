@@ -26,8 +26,10 @@ export class RadialGradient extends Gradient {
   toCloneObject() {
     return {
       ...super.toCloneObject(),
-      radialType: this.json.radialType,
-      radialPosition: clone(this.json.radialPosition)
+      ...this.attrs(
+        'radialType',
+        'radialPosition'
+      )
     }
   }
 

@@ -19,10 +19,7 @@ export class Selector extends Property {
   toCloneObject() {
     return {
       ...super.toCloneObject(),
-      selector: this.json.selector,
-      properties: this.json.properties.map(p => {
-        return clone(p)
-      })
+      ...this.attrs('selector', 'properties')
     }
   }
 

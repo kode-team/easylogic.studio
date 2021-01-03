@@ -19,10 +19,10 @@ export class SVGRadialGradient extends SVGGradient {
   }
 
   toCloneObject() {
-    var {cx, cy, r, fx, fy, fr,spreadMethod} = this.json; 
     return {
       ...super.toCloneObject(),
-      cx, cy, r, fx, fy, fr,spreadMethod
+      ...this.attrs('cx', 'cy', 'r', 'fx', 'fy', 'fr','spreadMethod')
+      
     }
   }
 

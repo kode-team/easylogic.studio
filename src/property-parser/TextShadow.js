@@ -52,10 +52,7 @@ export class TextShadow extends Property {
   toCloneObject() {
     return {
       ...super.toCloneObject(),
-      offsetX: this.json.offsetX + "",
-      offsetY: this.json.offsetY + "",
-      blurRadius: this.json.blurRadius + "",
-      color: this.json.color
+      ...this.attrs('offsetX', 'offsetY', 'blurRadius', 'color')
     }
   }
 

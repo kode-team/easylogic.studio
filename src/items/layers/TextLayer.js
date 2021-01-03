@@ -27,7 +27,7 @@ export class TextLayer extends Layer {
   toCloneObject() {
     return {
       ...super.toCloneObject(),
-      content: this.json.content
+      ...this.attrs('content'),
     }
   }
 }

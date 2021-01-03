@@ -36,8 +36,8 @@ export class URLImageResource extends ImageResource {
   toCloneObject() {
     return {
       ...super.toCloneObject(),
-      url: this.json.url,
-      datauri: this.json.datauri
+      ...this.attrs('url', 'datauri')
+
     }
   }
 

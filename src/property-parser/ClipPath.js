@@ -18,7 +18,7 @@ export class ClipPath extends Property {
     toCloneObject() {
         return {
             ...super.toCloneObject(),
-            value: this.json.value
+            ...this.attrs('value')
         }
     }
 

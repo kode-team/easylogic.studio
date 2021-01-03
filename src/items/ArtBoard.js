@@ -19,7 +19,7 @@ export class ArtBoard extends DomItem {
   toCloneObject() {
     return {
       ...super.toCloneObject(),
-      name: this.json.name
+      ...this.attrs('name'),
     }
   }  
 

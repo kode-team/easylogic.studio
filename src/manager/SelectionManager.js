@@ -267,6 +267,10 @@ export class SelectionManager {
     this.select(... _traverse(this.project, id))
   }
 
+  selectAfterCopy () {
+    this.select(...this.items.map(it => it.copy()));
+  }
+
   addById(id) {
 
     if (this.itemKeys[id]) return;
@@ -320,7 +324,6 @@ export class SelectionManager {
         if (selectedArtBoard) {
           // 부모 artboard 가 다르면  artboard 를 교체한다.            
           if (selectedArtBoard.item !== instance.artboard) {
-            console.log('aaaaaa');
             selectedArtBoard.item.appendChildItem(instance);
             checkedParentChange = true;
           }

@@ -17,8 +17,7 @@ export class Transform extends Property {
 
   toCloneObject() {
     return {
-      ...super.toCloneObject(),
-      value: JSON.parse( JSON.stringify(this.json.value) )
+      ...this.attrs('itemType', 'type', 'value')
     }
   }
 
@@ -135,7 +134,7 @@ export class Transform extends Property {
       return arr.value; 
     }
 
-    return [] 
+    return undefined;
   } 
 
   static createRotateKey(transform, angle, field) {

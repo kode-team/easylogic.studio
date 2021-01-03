@@ -28,7 +28,7 @@ export class Layer extends DomItem {
   toCloneObject() {
     return {
       ...super.toCloneObject(),
-      tagName: this.json.tagName
+      ...this.attrs('tagName'),
     }
   }
 

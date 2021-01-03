@@ -19,11 +19,7 @@ export class Offset extends Property {
   toCloneObject() {
     return {
       ...super.toCloneObject(),
-      offset: this.json.offset + "",
-      color: this.json.color,
-      properties: this.json.properties.map(p => {
-        return clone(p)
-      })
+      ...this.attrs('offset', 'color', 'properties'),
     }
   }
 

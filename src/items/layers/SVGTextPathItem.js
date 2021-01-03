@@ -61,16 +61,16 @@ export class SVGTextPathItem extends SVGItem {
   }
 
   toCloneObject() {
-    var json = this.json; 
     return {
       ...super.toCloneObject(),
-      totalLength: json.totalLength,
-      d: json.d,
-      text: json.text, 
-      textLength: `${json.textLength}`,
-      lengthAdjust: json.lengthAdjust,
-      startOffset: `${json.startOffset}`
-      // segments: clone(this.json.segments)
+      ...this.attrs(
+        'totalLength',
+        'd',
+        'text', 
+        'textLength',
+        'lengthAdjust',
+        'startOffset'        
+      )
     }
   }
 

@@ -120,14 +120,16 @@ export class BackgroundImage extends Property {
     var json = this.json; 
     return {
       ...super.toCloneObject(),
-      checked: json.checked,
-      blendMode: json.blendMode,
-      size: json.size,
-      repeat: json.repeat,
-      width: json.width + '',
-      height: json.height + '',
-      x: json.x + '',
-      y: json.y + '',
+      ...this.attrs(
+        'checked',
+        'blendMode',
+        'size',
+        'repeat',
+        'width',
+        'height',
+        'x',
+        'y',
+      ),
       image: json.image.clone()
     }
   }

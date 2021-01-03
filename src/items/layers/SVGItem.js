@@ -25,22 +25,24 @@ export class SVGItem extends Layer {
 
 
   toCloneObject() {
-    var json = this.json; 
     return {
       ...super.toCloneObject(),
-      overflow: json.overflow,
-      stroke: json.stroke,
-      'stroke-width': json['stroke-width'],
-      svgfilter: json.svgfilter,
-      fill: json.fill,
-      'fill-rule': json['fill-rule'],
-      'fill-opacity': json['fill-opacity'],
-      'stroke-linecap': json['stroke-linecap'],
-      'stroke-linejoin': json['stroke-linejoin'],
-      'stroke-dashoffset': json['stroke-dashoffset'],
-      'stroke-dasharray': json['stroke-dasharray'],
-      'text-anchor': json['text-anchor'],
-      'motion-based': json['motion-based']
+      ...this.attrs(
+        'overflow',
+        'stroke',
+        'stroke-width',
+        'svgfilter',
+        'fill',
+        'fill-rule',
+        'fill-opacity',
+        'stroke-linecap',
+        'stroke-linejoin',
+        'stroke-dashoffset',
+        'stroke-dasharray',
+        'text-anchor',
+        'motion-based'
+      )
+
     }
   }
 

@@ -1,5 +1,6 @@
 import { uuidShort } from "@core/functions/math";
 import {
+  clone,
   isFunction,
   isUndefined
 } from "@core/functions/func";
@@ -305,14 +306,9 @@ export class Item {
   }
 
   toCloneObject (isDeep = true) {
-    var json = {
-      itemType: this.json.itemType,
-      elementType: this.json.elementType,
-      type: this.json.type,
-      visible: this.json.visible,  // 보이기 여부 설정 
-      lock: this.json.lock,    // 편집을 막고 
-      selected: this.json.selected,  // 선택 여부 체크 
-    }
+    var json = this.attrs(
+      'itemType', 'elementType', 'type', 'visible', 'lock', 'selected'
+    )
 
     if (isDeep) {
       json.layers = this.json.layers.map(layer => layer.clone(isDeep))
@@ -332,7 +328,7 @@ export class Item {
     // 클론을 할 때 꼭 부모 참조를 넘겨줘야 한다. 
     // 그렇지 않으면 screenX, Y 에 대한 값을 계산할 수가 없다. 
     var item =  new ItemClass(this.toCloneObject(isDeep));
-    item.parent =   this.json.parent
+    item.setParent(this.json.parent)
 
     return item; 
   }
@@ -343,9 +339,9 @@ export class Item {
    * @param {object} obj
    */
   reset(obj) {
-    if (obj instanceof Item) {
-      obj = obj.toJSON();
-    }
+    // if (obj instanceof Item) {
+    //   obj = obj.toJSON();
+    // }
 
     this.json = this.convert(Object.assign(this.json, obj));
     this.changed();
@@ -368,6 +364,21 @@ export class Item {
       layers: [],   // 하위 객체를 저장한다. 
       ...obj
     };
+  }
+
+  /**
+   * 지정된 필드의 값을 object 형태로 리턴한다. 
+   * 
+   * @param  {...string} args 필드 리스트 
+   */
+  attrs (...args) {
+    const result = {}
+
+    args.forEach(field => {
+      result[field] = clone(this.json[field])
+    })
+
+    return result;
   }
 
   /**
@@ -545,8 +556,13 @@ export class Item {
 
   resize () {}
 
-  copy () {
-    return this.json.parent.copyItem(this.ref);
+  /**
+   * Item 복사하기 
+   * 
+   * @param {number} dist 
+   */
+  copy (dist = 0) {
+    return this.json.parent.copyItem(this.ref, dist);
   }
 
   findIndex (item) {
@@ -557,9 +573,7 @@ export class Item {
      // clone 을 어떻게 해야하나? 
 
     var child = childItem.clone()  
-
-    child.x.add(dist);
-    child.y.add(dist);
+    child.move([dist, dist, 0])
 
     var childIndex = this.findIndex(childItem); 
 

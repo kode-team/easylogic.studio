@@ -33,7 +33,7 @@ export class ImageLayer extends Layer {
   toCloneObject() {
     return {
       ...super.toCloneObject(),
-      src: this.json.src + ''
+      ...this.attrs('src'),
     }
   }
 

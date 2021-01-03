@@ -53,11 +53,9 @@ export class SVGPathItem extends SVGItem {
 
 
   toCloneObject() {
-    var json = this.json; 
     return {
       ...super.toCloneObject(),
-      totalLength: json.totalLength,
-      d: json.d,
+      ...this.attrs('d')
     }
   }
 

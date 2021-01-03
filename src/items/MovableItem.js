@@ -4,7 +4,7 @@ import { Transform } from "../property-parser/Transform";
 import { TransformOrigin } from "@property-parser/TransformOrigin";
 import { mat4, vec3 } from "gl-matrix";
 import { calculateMatrix, degreeToRadian, vertiesMap } from "@core/functions/math";
-import { isFunction } from "@core/functions/func";
+import { isArray, isFunction } from "@core/functions/func";
 import PathParser from "@parser/PathParser";
 import { polyPoint, polyPoly, rectToVerties } from "@core/functions/collision";
 import { TransformCache } from "@property-parser/TransformCache";
@@ -36,10 +36,7 @@ export class MovableItem extends Item {
     toCloneObject(isDeep = true) {
         return {
             ...super.toCloneObject(isDeep),
-            x: this.json.x + '',
-            y: this.json.y + '',
-            width: this.json.width + '',
-            height: this.json.height + '',
+            ...this.attrs('x', 'y', 'width', 'height')
         }
     }
 
@@ -142,6 +139,11 @@ export class MovableItem extends Item {
         return this.json.height.toPx(this.parent.screenHeight.value);  
     }    
 
+    /**
+     * Item 이동하기 
+     *  
+     * @param {vec3} distVector 
+     */
     move (distVector = [0, 0, 0]) {
         this.reset({
             x: Length.px(this.offsetX.value + distVector[0]).round(),          // 1px 단위로 위치 설정 
@@ -344,13 +346,13 @@ export class MovableItem extends Item {
 
         let path = this.path.filter(p => p.is('project') === false);
 
+
         path.forEach(current => {
 
             // multiply parent perspective 
             if (current.parent && isFunction(current.parent.getPerspectiveMatrix)) {
                 const perspectiveMatrix = current.parent.getPerspectiveMatrix();
                 if (perspectiveMatrix) {
-                    console.log(perspectiveMatrix)
                     mat4.multiply(transform, transform, perspectiveMatrix)
                 }
             }       

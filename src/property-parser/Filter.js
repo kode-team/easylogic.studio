@@ -83,7 +83,7 @@ export class BlurFilter extends Filter {
   toCloneObject() {
     return {
       ...super.toCloneObject(),
-      value: Length.parse(this.json.value)
+      ...this.attrs('value')
     }
   }
 }
@@ -109,7 +109,7 @@ export class URLSvgFilter extends Filter {
   toCloneObject() {
     return {
       ...super.toCloneObject(),
-      value: Length.parse(this.json.value) 
+      ...this.attrs('value')
     }
   }
 
@@ -134,7 +134,7 @@ export class GrayscaleFilter extends Filter {
   toCloneObject() {
     return {
       ...super.toCloneObject(),
-      value: Length.parse(this.json.value) 
+      ...this.attrs('value')
     }
   }
 }

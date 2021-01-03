@@ -63,12 +63,15 @@ export class BoxShadow extends Property {
     var json = this.json; 
     return {
       ...super.toCloneObject(),
-      inset: json.inset,
-      offsetX: json.offsetX + "",
-      offsetY: json.offsetY + "",
-      blurRadius: json.blurRadius + "",
-      spreadRadius: json.spreadRadius + "",
-      color: json.color 
+      ...this.attrs(
+        'inset',
+        'offsetX',
+        'offsetY',
+        'blurRadius',
+        'spreadRadius',
+        'color'
+      )
+
     }
   }
 

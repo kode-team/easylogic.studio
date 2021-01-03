@@ -81,10 +81,7 @@ export class BaseSVGFilter extends Property {
   toCloneObject() {
     return {
       ...super.toCloneObject(),
-      id: this.json.id,
-      in: clone(this.json.in),
-      bound: clone(this.json.bound),
-      connected: clone(this.json.connected)
+      ...this.attrs('id', 'in', 'bound', 'connected')
     }
   }
 

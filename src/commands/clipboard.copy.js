@@ -3,6 +3,6 @@ export default {
     title: 'Copy',
     description : 'Copy',
     execute: function (editor, obj) {
-        editor.selection.copy();
+        editor.selection.copy(10);
     }
 }

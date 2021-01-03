@@ -16,10 +16,13 @@ export class DiffuseLightingSVGFilter extends BaseSVGFilter {
   toCloneObject () {
     return {
       ...super.toCloneObject(),
-      surfaceScale: this.json.surfaceScale,      
-      lightingColor: this.json.lightingColor,      
-      diffuseConstant: this.json.diffuseConstant,
-      lightInfo: this.json.lightInfo
+      ...this.attrs(
+        'surfaceScale',      
+        'lightingColor',      
+        'diffuseConstant',
+        'lightInfo',
+      )
+
     }
   }  
 

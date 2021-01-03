@@ -97,8 +97,7 @@ export class Keyframe extends Property {
     var {name, selectedType, offsets} = this.json; 
     return {
       ...super.toCloneObject(),
-      name,
-      selectedType,
+      ...this.attrs('name', 'selectedType'),
       offsets: offsets.map(offset => offset.clone())
     }
   }

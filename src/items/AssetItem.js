@@ -91,12 +91,15 @@ export class AssetItem extends Item {
     var json = this.json; 
     return {
       ...super.toCloneObject(),
-      colors: clone(json.colors),
-      gradients: clone(json.gradients),
-      svgfilters: clone(json.svgfilters),
-      svgimages: clone(json.svgimages),
-      images: clone(json.images),
-      keyframes: json.keyframes.map(keyframe => keyframe.clone()),      
+      ...this.attrs(
+        'colors',
+        'gradients',
+        'svgfilters',
+        'svgimages',
+        'images',
+        'keyframes',      
+      )
+
     }
   }
 

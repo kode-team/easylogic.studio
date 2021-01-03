@@ -142,6 +142,7 @@ export function isNotZero (num) {
 }
 
 export function clone (obj) {
+    if (isUndefined(obj)) return undefined;
     return JSON.parse(JSON.stringify(obj));
 }
 

@@ -18,11 +18,14 @@ export class SpecularLightingSVGFilter extends BaseSVGFilter {
   toCloneObject () {
     return {
       ...super.toCloneObject(),
-      surfaceScale: this.json.surfaceScale,      
-      lightingColor: this.json.lightingColor,      
-      specularConstant: this.json.specularConstant,
-      specularExponent: this.json.specularExponent,
-      lightInfo: ''
+      ...this.attrs(
+        'surfaceScale',      
+        'lightingColor',
+        'specularConstant',
+        'specularExponent',
+        'lightInfo'
+      )
+
     }
   }
 

@@ -44,15 +44,18 @@ export class SVGImageResource extends ImageResource {
   toCloneObject() {
     return {
       ...super.toCloneObject(),
-      url: this.json.url,
-      datauri: this.json.datauri,
-      patternUnits: this.json.patternUnits, 
-      patternWidth: this.json.patternWidth, 
-      patternHeight: this.json.patternHeight, 
-      imageX: this.json.imageX, 
-      imageY: this.json.imageY, 
-      imageWidth: this.json.imageWidth, 
-      imageHeight: this.json.imageHeight, 
+      ...this.attrs(
+        'url',
+        'datauri',
+        'patternUnits',
+        'patternWidth',
+        'patternHeight',
+        'imageX',
+        'imageY',
+        'imageWidth',
+        'imageHeight',
+      )
+
     }
   }
 
