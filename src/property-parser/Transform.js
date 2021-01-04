@@ -96,7 +96,7 @@ export class Transform extends Property {
   }
 
   static addTransform (oldTransform, newTransform) {
-    var oldT = Transform.parseStyle(oldTransform)
+    var oldT = Transform.parseStyle(oldTransform, false)
     var newT = Transform.parseStyle(newTransform)
 
     for(var i = 0, len = newT.length; i < len ;i++) {
@@ -165,17 +165,19 @@ export class Transform extends Property {
   }    
 
   /**
+   * css transform 문자열을 파싱한다. 
    * 
    * @param {string} transform 
+   * @param {boolean} [doCache=true] 캐쉬 적용할지 여부 결정 
    * @returns {Transform[]} 트랜스폼 리스트 
    */
-  static parseStyle (transform) {
+  static parseStyle (transform, doCache = true) {
 
     var transforms = [];
 
     if (!transform) return transforms;
 
-    if (TransformCache.has(transform)) {
+    if (doCache && TransformCache.has(transform)) {
       return TransformCache.get(transform);
     }
 
@@ -200,7 +202,9 @@ export class Transform extends Property {
 
     });
 
-    TransformCache.set(transform, transforms);
+    if (doCache) {
+      TransformCache.set(transform, transforms);
+    }
 
     return transforms;
   }

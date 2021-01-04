@@ -73,7 +73,6 @@ export default class CubicBezierEditor extends UIElement {
                         <path d="${linearCurve}" stroke="white" stroke-width="1" fill='none' ref='$bezierCanvas' />
                         <path d="${linearCurvePoint}" stroke="gray" stroke-width="1" fill='none' ref='$bezierCanvasPoint' />
                     </svg>                
-                    <canvas class='bezier-canvas' ref='$canvas' width='200px' height="200px"></canvas>
                     <div class='control' ref='$control'>
                         <div class='pointer1' ref='$pointer1'></div>
                         <div class='pointer2' ref='$pointer2'></div>

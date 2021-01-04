@@ -325,12 +325,30 @@ export default class HTMLRenderView extends UIElement {
         this.emit('refreshSelectionTool', false);        
     }
 
-    checkEditMode () {
+    /**
+     * 레이어를 움직이기 위한 이벤트 실행 여부 체크 
+     * 
+     * @param {PointerEvent} e 
+     */
+    checkEditMode (e) {
 
         const code = this.$shortcuts.getGeneratedKeyCode(KEY_CODE.space);
         if (this.$keyboardManager.check(code)) {        // space 키가 눌러져있을 때는 실행하지 않는다. 
             return false;
         }
+
+        const $element = e.$dt;        
+        const $target = Dom.create(e.target);
+
+        // text, artboard 는 선택하지 않음. 
+        if ($element.hasClass('text')) {
+            return false; 
+        }
+
+        if ($element.hasClass('artboard') && $target.hasClass('artboard-title') === false) {
+            return false; 
+        }        
+
 
         return this.$editor.isSelectionMode()
     }
@@ -346,15 +364,6 @@ export default class HTMLRenderView extends UIElement {
         this.startXY = e.xy ; 
         const $element = e.$dt;
         const $target = Dom.create(e.target);
-
-        // text, artboard 는 선택하지 않음. 
-        if ($element.hasClass('text')) {
-            return false; 
-        }
-
-        if ($element.hasClass('artboard') && $target.hasClass('artboard-title') === false) {
-            return false; 
-        }        
 
         var id = $element.attr('data-id')    
 

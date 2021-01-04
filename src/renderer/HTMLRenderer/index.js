@@ -177,7 +177,7 @@ export default {
               </div>` : ''
             }
     
-            ${keyframeCode && /*html*/`<div><pre title='${this.$i18n('code.view.property.keyframe')}'>${keyframeCode}</pre></div>`}
+            ${keyframeCode && /*html*/`<div><pre title='Keyframe'>${keyframeCode}</pre></div>`}
 
             ${rootVariable ? 
               /*html*/`<div>
