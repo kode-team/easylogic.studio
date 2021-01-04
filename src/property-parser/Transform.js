@@ -59,12 +59,12 @@ export class Transform extends Property {
   }
 
   static filter (transform, filterFunction) {
-    return Transform.join(Transform.parseStyle(transform).filter(it =>  filterFunction(it)))
+    return Transform.join(Transform.parseStyle(transform, false).filter(it =>  filterFunction(it)))
   }
 
   static replace (transform, valueObject) {
 
-    var obj = Transform.parseStyle(transform)
+    var obj = Transform.parseStyle(transform, false)
 
     var tObject = obj.find(t => t.type === valueObject.type);
 
@@ -78,7 +78,7 @@ export class Transform extends Property {
   }
 
   static replaceAll (oldTransform, newTransform) {
-    var oldT = Transform.parseStyle(oldTransform)
+    var oldT = Transform.parseStyle(oldTransform, false)
     var newT = Transform.parseStyle(newTransform)
 
     for(var i = 0, len = newT.length; i < len ;i++) {

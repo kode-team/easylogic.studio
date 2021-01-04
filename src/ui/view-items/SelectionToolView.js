@@ -526,6 +526,7 @@ export default class SelectionToolView extends SelectionToolEvent {
                     L ${pointers[1][0]}, ${pointers[1][1]} 
                     L ${pointers[2][0]}, ${pointers[2][1]} 
                     L ${pointers[3][0]}, ${pointers[3][1]} 
+                    L ${pointers[0][0]}, ${pointers[0][1]}
                     ${line}
                     Z
                 " />

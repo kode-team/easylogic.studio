@@ -134,12 +134,10 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
     rotateEndVertext (dx, dy) {
 
-        // 마지막 변경 시점 업데이트 
-        this.angle = this.localAngle; 
-
         // 개별 verties 의 캐쉬를 다시 한다. 
         this.$selection.reselect();   
         this.initMatrix(true);
+        this.renderPointers();        
         this.nextTick(() => {
             this.command(
                 'setAttributeForMulti', 
@@ -507,8 +505,9 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
             parent: this.$selection.currentProject,
             x: Length.px(verties[0][0]),
             y: Length.px(verties[0][1]),
-            width: Length.px(verties[2][0] - verties[0][0]),
-            height: Length.px(verties[2][1] - verties[0][1]),
+            width: Length.px(vec3.dist(verties[0], verties[1])),
+            height: Length.px(vec3.dist(verties[0], verties[3])),
+            transform: '', // 새로운 그룹을 지정할 때는 transform 은 항상 초기화 된다. 
         })
 
         return this.state.newArtBoard; 
@@ -579,11 +578,27 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     createPointerRect (pointers) {
         if (pointers.length === 0) return '';
 
+
+        const rotatePointer = vec3.multiply([], vec3.add([], pointers[0], pointers[1]), [0.5, 0.5, 1]);            
+        const line = `
+            M ${rotatePointer[0]},${rotatePointer[1]} 
+            L ${pointers[4][0]}, ${pointers[4][1]} 
+        `
+
+
         return /*html*/`
         <svg class='line' overflow="visible">
             <path 
-                d="M ${pointers[0][0]}, ${pointers[0][1]} L ${pointers[1][0]}, ${pointers[1][1]} L ${pointers[2][0]}, ${pointers[2][1]} L ${pointers[3][0]}, ${pointers[3][1]} Z" />
-        </svg>`
+                d="
+                    M ${pointers[0][0]}, ${pointers[0][1]} 
+                    L ${pointers[1][0]}, ${pointers[1][1]} 
+                    L ${pointers[2][0]}, ${pointers[2][1]} 
+                    L ${pointers[3][0]}, ${pointers[3][1]} 
+                    L ${pointers[0][0]}, ${pointers[0][1]}
+                    ${line}
+                    Z
+                " />
+        </svg>`        
     }    
 
     createRenderPointers(pointers) {
