@@ -219,7 +219,7 @@ export class SelectionManager {
   }
 
   check (item) {
-    return this.itemKeys[item.id]
+    return !!this.itemKeys[item.id]
   }
 
   get (id) {

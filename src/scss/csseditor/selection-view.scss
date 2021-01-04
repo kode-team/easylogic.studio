@@ -32,8 +32,7 @@
     bottom: 0px;
     box-sizing: border-box;
 
-    .pointer,
-    .rotate-pointer {
+    .pointer{
       display: inline-block;
       position: absolute;
       left: 0px;
@@ -66,13 +65,24 @@
       }
     }
     .rotate-pointer {
-      width: 14px;
-      height: 14px;      
+      display: inline-block;
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      width: 12px;
+      height: 12px;
+      box-sizing: border-box;
       background-color: white; 
+      box-sizing: border-box;
+      border: 1px solid var(--selection-tool-border-color);
       border-radius: 100%;
       cursor: alias;
+      pointer-events: all;
+      overflow: hidden;
 
       &.no-fill {
+        width: 14px;
+        height: 14px;              
         background-color: transparent;
         border:none;
 

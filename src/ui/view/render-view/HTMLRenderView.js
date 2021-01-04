@@ -72,7 +72,7 @@ export default class HTMLRenderView extends UIElement {
     }
 
     get selectionToolView () {
-        return this.$selection.isOne ? this.children.$selectionTool : this.children.$groupSelectionTool;
+        return this.$selection.isMany ? this.children.$groupSelectionTool : this.children.$selectionTool;
     }
 
     [EVENT('afterChangeMode')] () {
@@ -104,8 +104,19 @@ export default class HTMLRenderView extends UIElement {
             return false; 
         }
 
+        // altKey 를 누르고 있으면 동작하지 않음 
+        // altKey 는 복제용도로 사용함 
+        if (e.altKey) {
+            return false; 
+        }
+
         // artboard 에서 드래그 할 수 있도록 예외 처리 
         if ($el.hasClass('artboard')) {
+            if (this.$selection.check({ id: $el.attr('data-id') })) {
+                // selection 이 이미 되어 있는 상태면 선택 영역을 그리지 않는다. 
+                return false; 
+            }
+
             return true; 
         }
 
@@ -339,15 +350,25 @@ export default class HTMLRenderView extends UIElement {
 
         const $element = e.$dt;        
         const $target = Dom.create(e.target);
+        var id = $element.attr('data-id')            
 
         // text, artboard 는 선택하지 않음. 
         if ($element.hasClass('text')) {
             return false; 
         }
 
-        if ($element.hasClass('artboard') && $target.hasClass('artboard-title') === false) {
-            return false; 
-        }        
+
+        // altKey 눌러서 copy 하지 않고 드랙그만 하게 되면  
+        if (e.altKey === false) {
+            if ($element.hasClass('artboard')) {
+                const artboard = this.$selection.currentProject.searchById(id);
+    
+                if (artboard && artboard.hasChildren() && $target.hasClass('artboard-title') === false) {
+                    return false; 
+                }
+            }        
+    
+        }
 
 
         return this.$editor.isSelectionMode()
@@ -387,7 +408,7 @@ export default class HTMLRenderView extends UIElement {
 
                 this.selectCurrent(...this.$selection.items)
                 this.initializeDragSelection();
-                this.emit('history.refreshSelection');                    
+                this.emit('history.refreshSelection');         
             }
 
         } else {
@@ -400,9 +421,8 @@ export default class HTMLRenderView extends UIElement {
                 if (e.shiftKey) {
                     this.$selection.toggleById(id);
                 } else {
-                    if (this.$selection.check({ id })) {    // 이미 선택되어 있으면 선택하지 않음. 
-                        // NOOP
-                    } else {
+                    // 선택이 안되어 있으면 선택 
+                    if (this.$selection.check({ id }) === false) { 
                         this.$selection.selectById(id);
                     }
                 }

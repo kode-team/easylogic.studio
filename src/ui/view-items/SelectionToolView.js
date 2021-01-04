@@ -419,8 +419,11 @@ export default class SelectionToolView extends SelectionToolEvent {
 
     refreshSmartGuides () {
         // 가이드 라인 수정하기 
-        const guides = this.$snapManager.findGuide(this.$selection.current.guideVerties());
-        this.emit('refreshGuideLine', guides);             
+        if (this.$selection.current) {
+            const guides = this.$snapManager.findGuide(this.$selection.current.guideVerties());
+            this.emit('refreshGuideLine', guides);             
+        }
+
     }
 
     getSelectedElements() {
@@ -504,10 +507,28 @@ export default class SelectionToolView extends SelectionToolEvent {
     createPointerRect (pointers) {
         if (pointers.length === 0) return '';
 
+        const current = this.$selection.current;         
+        const isArtBoard = current && current.is('artboard');
+        let line = '';
+        if (!isArtBoard) {
+            const rotatePointer = vec3.multiply([], vec3.add([], pointers[0], pointers[1]), [0.5, 0.5, 1]);            
+            line = `
+                M ${rotatePointer[0]},${rotatePointer[1]} 
+                L ${pointers[4][0]}, ${pointers[4][1]} 
+            `
+        }
+
         return /*html*/`
         <svg class='line' overflow="visible">
             <path 
-                d="M ${pointers[0][0]}, ${pointers[0][1]} L ${pointers[1][0]}, ${pointers[1][1]} L ${pointers[2][0]}, ${pointers[2][1]} L ${pointers[3][0]}, ${pointers[3][1]} Z" />
+                d="
+                    M ${pointers[0][0]}, ${pointers[0][1]} 
+                    L ${pointers[1][0]}, ${pointers[1][1]} 
+                    L ${pointers[2][0]}, ${pointers[2][1]} 
+                    L ${pointers[3][0]}, ${pointers[3][1]} 
+                    ${line}
+                    Z
+                " />
         </svg>`
     }    
 
