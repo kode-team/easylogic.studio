@@ -7,9 +7,6 @@ import { BIND, IF, MOVE, normalizeWheelEvent, POINTERSTART, PREVENT, WHEEL } fro
 import { vec3 } from "gl-matrix";
 import { KEY_CODE } from "@types/key";
 
-
-const MOVE_DRAG_RATIO = vec3.fromValues(1, 1, 1);
-
 export default class CanvasView extends UIElement {
 
   components() {
@@ -23,6 +20,9 @@ export default class CanvasView extends UIElement {
   afterRender() {
     this.emit('load.json');
     this.trigger('resizeCanvas');    
+    this.nextTick(() => {
+      this.emit('moveSelectionToCenter');
+    })
   }
   template() {
     return/*html*/`
@@ -88,17 +88,17 @@ export default class CanvasView extends UIElement {
 
     return '';
 
-    return {
-      style: {
-        position: 'absolute',
-        left: '0px',
-        top: '0px',
-        right: '0px',
-        bottom: '0px',
-        'pointer-events': 'none'
-      },
-      innerHTML : this.makeViewportConsole()
-    }
+    // return {
+    //   style: {
+    //     position: 'absolute',
+    //     left: '0px',
+    //     top: '0px',
+    //     right: '0px',
+    //     bottom: '0px',
+    //     'pointer-events': 'none'
+    //   },
+    //   innerHTML : this.makeViewportConsole()
+    // }
   }
 
     /**

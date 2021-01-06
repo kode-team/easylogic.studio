@@ -40,13 +40,22 @@ export default class DomRender extends ItemRender {
 
     let list = [];
 
-    Pattern.parseStyle(item.pattern).forEach(it => {
-     list.push(...BackgroundImage.parseStyle(STRING_TO_CSS(it.toCSS())))
-    });
+    if (item.pattern) {
+      const patternList = Pattern.parseStyle(item.pattern);
+      for(var i = 0, len = patternList.length; i < len; i++)   {
+        list.push(...BackgroundImage.parseStyle(STRING_TO_CSS(patternList[i].toCSS())))
+      }
+    }
 
-    list.push(...BackgroundImage.parseStyle(STRING_TO_CSS(item['background-image'])))
+    if (item['background-image']) {
+      list.push(...BackgroundImage.parseStyle(STRING_TO_CSS(item['background-image'])))
+    }
 
-    return BackgroundImage.joinCSS(list);
+    if (list.length) {
+      return BackgroundImage.joinCSS(list);
+    }
+
+    return {}; 
   }
 
   /**

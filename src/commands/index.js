@@ -97,6 +97,7 @@ import updateClipPath from "./updateClipPath";
 import moveLayer from "./moveLayer";
 import moveToCenter from './moveToCenter';
 import moveLayerForItems from "./moveLayerForItems";
+import moveSelectionToCenter from "./moveSelectionToCenter";
 
 
 export default {
@@ -112,6 +113,7 @@ export default {
     moveLayer,
     moveLayerForItems,
     moveToCenter,
+    moveSelectionToCenter,
 
     // command 
     groupItem,

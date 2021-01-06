@@ -57,16 +57,7 @@ export default class PageTools extends UIElement {
   }
 
   [CLICK('$center') + PREVENT + STOP] () {
-
-    let areaVerties = []
-
-    if (this.$selection.isEmpty) {
-      areaVerties = this.$selection.currentProject.rectVerties;
-    } else {
-      areaVerties = itemsToRectVerties(this.$selection.selectedArtboards);
-    }
-
-    this.emit('moveToCenter', areaVerties);
+    this.emit('moveSelectionToCenter');
   }
 
 }

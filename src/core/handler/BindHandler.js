@@ -34,7 +34,13 @@ const applyElementAttribute = ($element, key, value) => {
     if (isArray(value)) {
       $element.addClass(...value);
     } else if (isObject(value)) {
-      keyEach(value, (className, hasClass) => $element.toggleClass(className, hasClass));
+      const keys = Object.keys(value);
+      for(var i = 0, len = keys.length; i < len; i++) {
+        const className = keys[i];
+        const hasClass = value[className];
+
+        $element.toggleClass(className, hasClass);
+      }
     } else {
       $element.addClass(value);
     }
@@ -113,9 +119,13 @@ export default class BindHandler extends BaseHandler {
 
             if (!results) return;
   
-            keyEach(results, (key, value) => {
+            const keys = Object.keys(results);
+            for(var elementKeyIndex = 0, len = keys.length; elementKeyIndex < len; elementKeyIndex++) {
+              const key = keys[elementKeyIndex];
+              const value = results[key];
+
               applyElementAttribute($element, key, value);
-            });
+            }
           }
         });
     }    

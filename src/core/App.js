@@ -1,10 +1,13 @@
+//////// Do not remove /////////////////
+import BaseStore from "./BaseStore";
+//////// Do not remove /////////////////
+
 import Dom from "./Dom";
 import { POINTERMOVE, POINTEREND, DEBOUNCE, RESIZE, PREVENT } from "./Event";
 import {
   ADD_BODY_MOUSEMOVE,
   ADD_BODY_MOUSEUP
 } from "../types/event";
-import BaseStore from "./BaseStore";
 import UIElement, { EVENT } from "./UIElement";
 import { debounce } from "./functions/func";
 import { Editor } from "../manager/Editor";
@@ -46,7 +49,13 @@ export const start = opt => {
 
     modifyBodyMoveSecond(ms = MOVE_CHECK_MS) {
       this.$config.set("body.move.ms", ms);
-      this.funcBodyMoves = debounce(this.loopBodyMoves.bind(this), this.$config.get("body.move.ms"));
+
+      const callback = ms === 0 
+                        ? this.loopBodyMoves.bind(this) 
+                        : debounce(this.loopBodyMoves.bind(this), this.$config.get("body.move.ms"));
+
+
+      this.funcBodyMoves = callback;
     }
 
     loopBodyMoves() {

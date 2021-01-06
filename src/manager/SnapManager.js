@@ -146,10 +146,13 @@ export class SnapManager {
 
     getGuidesByPointPoint (sourceVerties, targetVerties) {
         const points = []
+        let sourceVertext, targetVertext;
+        for (let sourceIndex = 0, sourceLength = sourceVerties.length; sourceIndex < sourceLength; sourceIndex++) {
+            sourceVertext = sourceVerties[sourceIndex];
 
-        sourceVerties.forEach((sourceVertext) => {
-            targetVerties.forEach((targetVertext) => {
-                
+            for (let targetIndex = 0, targetLength = targetVerties.length; targetIndex < targetLength; targetIndex++) {
+                targetVertext = targetVerties[targetIndex];
+
                 if (checkXAxis(sourceVertext, targetVertext)) {        // x 좌표가 같을 때 , y 는 다를 때 
                     points.push([ sourceVertext, targetVertext, AXIS_X])
                 } 
@@ -157,9 +160,8 @@ export class SnapManager {
                 if (checkYAxis(sourceVertext, targetVertext)) {        // x 좌표가 같을 때 , y 는 다를 때 
                     points.push([ sourceVertext, targetVertext, AXIS_Y])
                 }                 
-
-            })            
-        })
+            }
+        }
 
         return points;
     }

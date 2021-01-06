@@ -47,10 +47,9 @@ export default class GuideLineView extends UIElement {
     createGuideLine (list) {
     
         var images = []
-
-        list.forEach(it => {
-            
-            const [source, target, axis] = it;
+        for(var i = 0, len = list.length; i< len; i++) {
+        
+            const [source, target, axis] = list[i];
 
             const localSourceVertext = vec3.transformMat4([], source, this.$viewport.matrix);
             const localTargetVertext = vec3.transformMat4([], target, this.$viewport.matrix);            
@@ -62,9 +61,8 @@ export default class GuideLineView extends UIElement {
             if (axis === 'y') {
                 images.push(vLine(localTargetVertext))
             }
-
-
-        })
+    
+        }
     
         return [...new Set(images)].join('');
     }
