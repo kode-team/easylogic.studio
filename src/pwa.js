@@ -2,12 +2,12 @@ import "./scss/index.scss";
 
 import Util from "./core/index";
 import ColorPicker from "./colorpicker/index";
-import CSSEditor from "./csseditor/index";
+import EasyLogic from "./designeditor/index";
 
 function startEditor() {
 
   // 시작 지점을 고쳐보자. 
-  var app = new CSSEditor.createCSSEditor();
+  var app = new EasyLogic.createDesignEditor();
   // app.commands.registerCommand('sample.ok', () => {
   //   alert('샘플 ok');
   // })
@@ -21,7 +21,7 @@ export default {
   version: '@@VERSION@@',
   ...Util,
   ...ColorPicker,
-  ...CSSEditor,
+  ...EasyLogic,
   startEditor
 };
 

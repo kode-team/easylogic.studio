@@ -6,7 +6,7 @@
         "@colorpicker/*": ["./src/colorpicker/*"],
         "@commands/*": ["./src/commands/*"],
         "@core/*": ["./src/core/*"],
-        "@csseditor/*": ["./src/csseditor/*"],
+        "@csseditor/*": ["src/designeditor/*"],
         "@exporter/*": ["./src/exporter/*"],
         "@i18n/*": ["./src/i18n/*"],
         "@icon/*": ["./src/icon/*"],

@@ -2,14 +2,13 @@ import "./scss/index.scss";
 
 import Util from "./core/index";
 import ColorPicker from "./colorpicker/index";
-import CSSEditor from "./csseditor/index";
+import EasyLogic from "./designeditor/index";
 
 const CSS = {
   version: '@@VERSION@@',  
   ...Util,
   ...ColorPicker,
-  ...CSSEditor
+  ...EasyLogic,  
 };
 
-new CSS.createCSSEditor({
-});
+new EasyLogic.createDesignEditor();

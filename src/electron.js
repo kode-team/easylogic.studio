@@ -2,10 +2,10 @@ import "./scss/index.scss";
 
 import Util from "./core/index";
 import ColorPicker from "./colorpicker/index";
-import CSSEditor from "./csseditor/index";
+import EasyLogic from "./designeditor/index";
 
 function startEditor() {
-  var editor = new CSSEditor.createCSSEditor();
+  var editor = new EasyLogic.createDesignEditor();
 
   return editor;
 }
@@ -14,7 +14,7 @@ export default {
   version: '@@VERSION@@',
   ...Util,
   ...ColorPicker,
-  ...CSSEditor,
+  ...EasyLogic,
   startEditor
 };
 

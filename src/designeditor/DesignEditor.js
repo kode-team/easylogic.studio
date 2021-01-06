@@ -6,7 +6,7 @@ import "@items";
 
 import Dom from "@core/Dom";
 import UIElement, { EVENT } from "@core/UIElement";
-import { DRAGOVER, DROP, PREVENT, TRANSITIONEND, KEYDOWN, KEYUP, IF, POINTERSTART, MOVE, END, BIND, CLICK, THROTTLE } from "@core/Event";
+import { DRAGOVER, DROP, PREVENT, TRANSITIONEND, KEYDOWN, KEYUP, IF, POINTERSTART, MOVE, BIND, CLICK, THROTTLE } from "@core/Event";
 
 import icon from "@icon/icon";
 import { Length } from "@unit/Length";
@@ -33,7 +33,7 @@ import windowList from "@ui/window-list";
 
 const formElements = ['TEXTAREA', 'INPUT', 'SELECT']
 
-export default class CSSEditor extends UIElement {
+export default class DesignEditor extends UIElement {
   
   initialize () {
     super.initialize()

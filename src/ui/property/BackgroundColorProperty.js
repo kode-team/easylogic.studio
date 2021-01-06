@@ -27,7 +27,12 @@ export default class BackgroundColorProperty extends BaseProperty {
 
   getBody() {
     return /*html*/`
-
+      <div class='property-item animation-property-item'>
+        <div class='group'>
+          <span class='add-timeline-property' data-property='background-color'></span>
+        </div>
+        <ColorViewEditor ref='$color' label="${this.$i18n('background.color.property.color')}" key='background-color' onchange="changeColor" />
+      </div>   
       <div class='property-item animation-property-item'>
         <div class='group'>
           <span class='add-timeline-property' data-property='rotate'></span>
@@ -115,6 +120,12 @@ export default class BackgroundColorProperty extends BaseProperty {
     }
   }
 
+  [EVENT('changeColor')] (key, color) {
+    this.command('setAttribute', 'change background color', { 
+      [key]: color
+    })
+  }  
+
   [EVENT('changeRotate')] (key, rotate) {
     this.command('setAttribute', "change rotate", { rotate }, true, true)
   }
@@ -127,6 +138,7 @@ export default class BackgroundColorProperty extends BaseProperty {
       this.children.$opacity.setValue(current['opacity'] || '1')
       this.children.$mixBlend.setValue(current['mix-blend-mode'])
       this.children.$overflow.setValue(current['overflow']);
+      this.children.$color.setValue(current['background-color'] || 'rgba(0, 0, 0, 1)')
       
       const rotate = current.rotate;
 

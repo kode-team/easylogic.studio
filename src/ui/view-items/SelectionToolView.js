@@ -233,7 +233,11 @@ export default class SelectionToolView extends SelectionToolEvent {
 
             this.$selection.cachedItemVerties.forEach(item => {
 
-                const [realDx, realDy] = this.calculateRealDist(item, 2, distVector)
+                let [realDx, realDy] = this.calculateRealDist(item, 2, distVector)
+
+                if (this.$config.get('bodyEvent').shiftKey) {
+                    realDy = realDx;
+                }                
     
                 // 변형되는 넓이 높이 구하기 
                 const newWidth = item.width + realDx;
@@ -251,7 +255,12 @@ export default class SelectionToolView extends SelectionToolEvent {
         const item = this.$selection.cachedItemVerties[0]
         if (item) {
 
-            const [realDx, realDy] = this.calculateRealDist(item, 1, distVector)
+            let [realDx, realDy] = this.calculateRealDist(item, 1, distVector)
+
+            if (this.$config.get('bodyEvent').shiftKey) {
+                realDy = -realDx;
+            }
+
             // 변형되는 넓이 높이 구하기 
             const newWidth = item.width + realDx;
             const newHeight = item.height - realDy;
@@ -264,7 +273,11 @@ export default class SelectionToolView extends SelectionToolEvent {
     moveTopLeftVertext (distVector) {
         const item = this.$selection.cachedItemVerties[0]
         if (item) {
-            const [realDx, realDy] = this.calculateRealDist(item, 0, distVector)
+            let [realDx, realDy] = this.calculateRealDist(item, 0, distVector)
+
+            if (this.$config.get('bodyEvent').shiftKey) {
+                realDy = realDx;
+            }
 
             // 변형되는 넓이 높이 구하기 
             const newWidth = item.width - realDx;
@@ -339,7 +352,11 @@ export default class SelectionToolView extends SelectionToolEvent {
         const item = this.$selection.cachedItemVerties[0]
         if (item) {
 
-            const [realDx, realDy] = this.calculateRealDist(item, 3, distVector)
+            let [realDx, realDy] = this.calculateRealDist(item, 3, distVector)
+
+            if (this.$config.get('bodyEvent').shiftKey) {
+                realDy = -realDx;
+            }            
 
             // 변형되는 넓이 높이 구하기 
             const newWidth = item.width - realDx;
@@ -352,7 +369,7 @@ export default class SelectionToolView extends SelectionToolEvent {
 
     moveVertext (dx, dy) {
 
-        const distVector = vec3.transformMat4([], [dx, dy, 0], this.$viewport.scaleMatrixInverse);
+        const distVector = vec3.floor([], vec3.transformMat4([], [dx, dy, 0], this.$viewport.scaleMatrixInverse));
 
         if (this.state.moveType === 'to top left') {                // 1
             this.moveTopLeftVertext(distVector);        
