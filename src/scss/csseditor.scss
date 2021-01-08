@@ -2,7 +2,7 @@ html,body {
     font-size: 13px;
     padding:0px;
     margin:0px;
-    overflow: hidden;
+    // overflow: hidden;
     box-sizing: border-box;    
     font-family: sans-serif;
 }
@@ -44,7 +44,6 @@ body {
     [contenteditable] {
         user-select: text;
     }    
-
    
     $pointer-color: #4075d6;
     $top-size: 50px;

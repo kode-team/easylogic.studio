@@ -1,0 +1,44 @@
+import { Item } from '@items/Item';
+import ArtBoardRender from './ArtBoardRender';
+import CircleRender from './CircleRender';
+import ImageRender from './ImageRender';
+import ProjectRender from './ProjectRender';
+import RectRender from './RectRender';
+import SVGPathRender from './SVGPathRender';
+import SVGTextPathRender from './SVGTextPathRender';
+import SVGTextRender from './SVGTextRender';
+import TextRender from './TextRender';
+import VideoRender from './VideoRender';
+
+const renderers = {
+    'project': new ProjectRender(),
+    'artboard': new ArtBoardRender(),
+    'rect': new RectRender(),
+    'circle': new CircleRender(),
+    'image': new ImageRender(),
+    'text': new TextRender(),
+    'video': new VideoRender(),
+    'svg-path': new SVGPathRender(),
+    'svg-text': new SVGTextRender(),
+    'svg-textpath': new SVGTextPathRender(),
+}
+
+export default {
+    /**
+     * 
+     * @param {Item} item 
+     */
+    render (item, renderer) {
+        if (!item) return;
+        const currentRenderer = renderers[item.itemType];
+
+        if (currentRenderer) {
+            return currentRenderer.render(item, renderer || this);
+        }
+    },
+
+    getResourceDataURI (item, renderer) {
+        
+    }
+
+}

@@ -7,6 +7,7 @@ import icon from "@icon/icon";
 import PreviewToolMenu from "../view/PreviewToolMenu";
 import ShortCutItems from "./ShortCutItems";
 import property from "../property";
+import ArtboardItems from "./ArtboardItems";
 
 
 export default class LayerTab extends UIElement {
@@ -17,7 +18,8 @@ export default class LayerTab extends UIElement {
       ObjectItems, 
       ComponentItems,
       LibraryItems,
-      PreviewToolMenu
+      PreviewToolMenu,
+      ArtboardItems
     }
   }
 
@@ -32,11 +34,8 @@ export default class LayerTab extends UIElement {
       <div class='layer-tab'>
         <div class="tab number-tab side-tab side-tab-left" data-selected-value="2" ref="$tab">
           <div class="tab-header full" ref="$header">   
-            <div class='tab-item' data-value='4' title="${this.$i18n('app.tab.title.components')}">
-              <label>${icon.add}</label>
-            </div>          
             <div class="tab-item selected" data-value="2" title="${this.$i18n('app.tab.title.layers')}">
-              <label>${icon.account_tree}</label>
+              <label>${icon.layers}</label>
             </div>            
             <div class="tab-item" data-value="1" title="${this.$i18n('app.tab.title.projects')}">
               <label>${icon.note}</label>
@@ -44,6 +43,13 @@ export default class LayerTab extends UIElement {
             <div class='tab-item' data-value='5' title="${this.$i18n('app.tab.title.assets')}">
               <label>${icon.apps}</label>
             </div>   
+            <div class='tab-item' data-value='6' title="${this.$i18n('app.tab.title.artboards')}">
+              <label>${icon.artboard}</label>
+            </div>            
+            <div class='tab-item' data-value='4' title="${this.$i18n('app.tab.title.components')}">
+              <label>${icon.add}</label>
+            </div>
+
             <div class='tab-item extra-item' >
               <PreviewToolMenu />
             </div>               
@@ -58,7 +64,7 @@ export default class LayerTab extends UIElement {
             </div>
             <div class='tab-content' data-value='3'>
               <LibraryItems />
-            </div>
+            </div>            
             <div class='tab-content' data-value='4'>
               <ComponentItems />
             </div>    
@@ -71,6 +77,9 @@ export default class LayerTab extends UIElement {
                 <VideoAssetsProperty />       
                 <SVGFilterAssetsProperty />                
               </div>
+            </div>
+            <div class='tab-content' data-value='6'>
+              <ArtboardItems />
             </div>
           </div>
         </div>

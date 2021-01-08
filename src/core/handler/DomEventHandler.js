@@ -82,11 +82,11 @@ export default class DomEventHandler extends BaseHandler {
     }
       
     makeCallback (eventObject, callback) {
-        if (eventObject.delegate) {
-          return this.makeDelegateCallback(eventObject, callback);
-        } else {
-          return this.makeDefaultCallback(eventObject, callback);
-        }
+      if (eventObject.delegate) {
+        return this.makeDelegateCallback(eventObject, callback);
+      } else {
+        return this.makeDefaultCallback(eventObject, callback);
+      }
     }
       
     makeDefaultCallback (eventObject, callback) {

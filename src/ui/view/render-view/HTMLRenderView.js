@@ -16,6 +16,7 @@ import GridLayoutLineView from "@ui/view-items/GridLayoutLineView";
 import { isFunction } from "@core/functions/func";
 import { KEY_CODE } from "@types/key";
 import { vec3 } from "gl-matrix";
+import Resource from "@util/Resource";
 
 export default class HTMLRenderView extends UIElement {
 
@@ -621,6 +622,8 @@ export default class HTMLRenderView extends UIElement {
 
         this.setState({ html }, false)
         this.refs.$view.updateDiff(html)
+
+        this.bindData('$view');
     }
 
     [EVENT('refreshAllElementBoundSize')] () {
@@ -667,28 +670,45 @@ export default class HTMLRenderView extends UIElement {
     [DRAGOVER('view') + PREVENT] () {}
     [DROP('$view') + PREVENT] (e) {
 
-        const id = Dom.create(e.target).attr('data-id');
+        if (e.dataTransfer.getData('text/artboard')) {
 
-        if (id) {
 
-            if (this.$selection.length) {
-                this.emit('drop.asset', {
-                    gradient: e.dataTransfer.getData('text/gradient'),
-                    color: e.dataTransfer.getData('text/color'),
-                    imageUrl: e.dataTransfer.getData('image/info')
-                })
-            } else {
-                this.emit('drop.asset', {
-                    gradient: e.dataTransfer.getData('text/gradient'),
-                    color: e.dataTransfer.getData('text/color'),
-                    imageUrl: e.dataTransfer.getData('image/info')
-                }, id)
+            this.dragXY =  {x: e.xy.x, y: e.xy.y}; 
+
+            this.rect = this.refs.$body.rect();            
+            this.canvasOffset = this.refs.$view.rect();
+    
+            this.canvasPosition = {
+                x: this.canvasOffset.left,
+                y: this.canvasOffset.top
             }
+    
+            this.dragXY.x -= this.rect.x
+            this.dragXY.y -= this.rect.y
 
+            const newVertex = this.$viewport.createVertex([this.dragXY.x, this.dragXY.y, 0])
+            
+            this.emit('drop.asset', {
+                artboard: { id: e.dataTransfer.getData('text/artboard'), center: newVertex }
+            })
 
         } else {
-            const imageUrl = e.dataTransfer.getData('image/info')
-            this.emit('dropImageUrl', imageUrl)
+            const files = Resource.getAllDropItems(e)
+            console.log(files);
+            const id = Dom.create(e.target).attr('data-id');
+
+            if (id) {
+                this.emit('drop.asset', {
+                    gradient: e.dataTransfer.getData('text/gradient'),
+                    pattern: e.dataTransfer.getData('text/pattern'),
+                    color: e.dataTransfer.getData('text/color'),
+                    imageUrl: e.dataTransfer.getData('image/info'),
+                }, id)
+            } else {
+                const imageUrl = e.dataTransfer.getData('image/info')
+                this.emit('dropImageUrl', imageUrl)
+            }
+    
         }
 
     }

@@ -8,8 +8,17 @@ export default {
             editor.emit('addBackgroundColor', obj.color, id)            
         } else if (obj.gradient) {
             editor.emit('addBackgroundImageGradient', obj.gradient, id)
+        } else if (obj.pattern) {
+            editor.emit('addBackgroundImagePattern', obj.pattern, id)            
         } else if (obj.imageUrl) {
             editor.emit('addBackgroundImageAsset', obj.imageUrl, id)
+        } else if (obj.artboard) {
+
+            const artboardData = editor.storageManager.getArtBoard(obj.artboard.id);
+            if (artboardData) {
+                editor.emit('addArtBoard', artboardData, obj.artboard.center)
+            }
+
         }
 
         _doForceRefreshSelection(editor, true);

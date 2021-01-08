@@ -198,7 +198,7 @@ export default class ColorWheel extends UIElement {
 
   }
 
-  [POINTERMOVE("document") + PREVENT](e) {
+  [POINTERMOVE("document")](e) {
     if (this.isDown) {
       this.setHueColor(e);
     }

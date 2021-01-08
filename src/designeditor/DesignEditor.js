@@ -343,10 +343,10 @@ export default class DesignEditor extends UIElement {
     this.emit('refreshArtboard')
   }
 
+  /** 드랍존 설정을 위해서 남겨놔야함 */
   [DRAGOVER('$middle') + PREVENT] (e) {}
-  [DROP('$middle') + PREVENT] (e) {
-    this.emit('fileDropItems', Resource.getAllDropItems(e));
-  }
+  [DROP('$middle') + PREVENT] (e) {}
+  /** 드랍존 설정을 위해서 남겨놔야함 */  
 
   isNotFormElement(e) {
     var tagName = e.target.tagName;

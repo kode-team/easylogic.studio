@@ -136,6 +136,7 @@ import volume_off from "./volume_off";
 import arrowLeft from "./arrowLeft";
 import group from "./group";
 import arrow_right from "./arrow_right";
+import layers from "./layers";
 
 
 
@@ -161,6 +162,7 @@ export default {
   local_movie,
   same_height,
   same_width,
+  layers,
   middle,
   bottom,
   top,

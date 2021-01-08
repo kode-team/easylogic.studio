@@ -256,7 +256,6 @@ export default class BackgroundImageEditor extends UIElement {
 
         image.reset(value);
 
-        console.log(this.$config.get('bodyEvent'))
         this.modifyBackgroundImage();
         this.refresh();
     }

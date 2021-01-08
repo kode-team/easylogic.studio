@@ -6,7 +6,7 @@ import ExportManager from "@manager/ExportManager";
 
 export default {
     command: 'downloadPNG',
-    execute: function (editor) {
+    execute: function (editor, callbackCommand = '') {
         const item = editor.selection.current;
 
         if (item) {
@@ -16,6 +16,10 @@ export default {
             loadOriginalImage({local: datauri}, (info, img) => {
                 createImagePng(img, (pngDataUri) => {
                     downloadFile(pngDataUri, filename)
+
+                    if (callbackCommand) {
+                        editor.emit(callbackCommand, pngDataUri);
+                    }
                 })
             })
         }

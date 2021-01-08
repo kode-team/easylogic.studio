@@ -68,7 +68,9 @@ export default class ColorAssetsProperty extends BaseProperty {
 
       return /*html*/`
         <div class='color-item' data-index="${index}" data-color="${item.color}" data-custom="${item.custom}">
-          <div class='preview' title="${item.color}" data-index="${index}" draggable="true"><div class='color-view' style='background-color: ${item.color};'></div></div>
+          <div class='preview' draggable="true" title="${item.color}" data-index="${index}">
+            <div class='color-view' style='background-color: ${item.color};'></div>
+          </div>
           <div class='tools'>
             <button type="button" class='copy'>${icon.copy}</button>          
             <button type="button" class='remove'>${icon.remove}</button>

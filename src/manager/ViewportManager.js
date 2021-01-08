@@ -245,4 +245,12 @@ export class ViewportManager {
         return vertiesMap(rectToVertiesForArea(x, y, width, height), this.matrixInverse);
     }
 
+    /**
+     * 
+     * @param {vec3} point 
+     */
+    createVertex (point) {
+        return vec3.transformMat4([], point, this.matrixInverse)
+    }
+
 }

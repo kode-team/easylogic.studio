@@ -6,6 +6,7 @@ import { SnapManager } from "@manager/SnapManager";
 import { KeyBoardManager } from "@manager/KeyboardManager";
 import { ShortCutManager } from "@manager/ShortCutManager";
 import { ViewportManager } from "@manager/ViewportManager";
+import { StorageManager } from "@manager/StorageManager";
 
 const REG_STORE_MULTI_PATTERN = /^ME@/;
 
@@ -255,6 +256,13 @@ class UIElement extends EventMachine {
    */
   get $keyboardManager () {
     return this.$editor.keyboardManager;
+  }
+
+  /**
+   * @type {StorageManager} $storageManager
+   */
+  get $storageManager () {
+    return this.$editor.storageManager;
   }
 
   /**

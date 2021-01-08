@@ -27,9 +27,10 @@ $asset-item-size: 60px;
             }
 
             .pattern-item {
-                display: block;
+                display: inline-block;
                 position: relative;
                 margin-bottom: 3px;
+                margin-right: 3px;
                 
                 &:hover {
                     &[data-custom="true"] {
@@ -42,7 +43,7 @@ $asset-item-size: 60px;
 
                 .preview {
                     position: relative;
-                    width:100%;
+                    width: $asset-item-size;
                     height: $asset-item-size;
                     
                     cursor: pointer;

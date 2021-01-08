@@ -2,7 +2,13 @@ import UIElement from "@core/UIElement";
 import ColorPickerUI from "@colorpicker/";
 
 export default class EmbedColorPicker extends UIElement {
-  afterRender() {
+
+
+  show () {
+
+    if (this.colorPicker) {
+      return;
+    }
 
     var defaultColor = "rgba(0, 0, 0, 1)";
 
@@ -43,6 +49,7 @@ export default class EmbedColorPicker extends UIElement {
   }  
 
   setValue (color) {
+    this.show();
     this.colorPicker.initColorWithoutChangeEvent(color);
   }
 

@@ -86,7 +86,7 @@ export default class ColorPalette extends UIElement {
 
   }
 
-  [POINTERMOVE("document") + PREVENT](e) {
+  [POINTERMOVE("document")](e) {
     if (this.isDown) {
       this.setMainColor(e);
     }

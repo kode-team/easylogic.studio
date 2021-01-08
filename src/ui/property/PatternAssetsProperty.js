@@ -54,7 +54,7 @@ export default class PatternAssetsProperty extends BaseProperty {
   }
 
   [DRAGSTART('$patternList .pattern-item')] (e) {
-    const pattern = patterns[+e.$dt.attr('data-index')].execute();
+    const pattern = e.$dt.attr('data-pattern');
     e.dataTransfer.effectAllowed = "copy";
     e.dataTransfer.setData("text/pattern", pattern);
   }

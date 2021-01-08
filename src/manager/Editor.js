@@ -19,6 +19,7 @@ import BaseStore from "@core/BaseStore";
 import { SnapManager } from "./SnapManager";
 import { KeyBoardManager } from "./KeyboardManager";
 import { ViewportManager } from "./ViewportManager";
+import { StorageManager } from "./StorageManager";
 
 export const EDITOR_ID = "";
 
@@ -71,6 +72,7 @@ export class Editor {
     this.history = new HistoryManager(this);
     this.keyboardManager = new KeyBoardManager(this);
     this.viewport = new ViewportManager(this);    
+    this.storageManager = new StorageManager(this);
     this.components = ComponentManager;
 
 

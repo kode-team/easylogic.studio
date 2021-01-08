@@ -14,11 +14,18 @@ export default class BaseBox extends UIElement {
 
   // Event Bindings
   [POINTEREND("document")](e) {
-    this.onDragEnd(e);
+    if (this.isDown) {
+      this.onDragEnd(e);
+      this.isDown = false; 
+    }
+
   }
 
-  [POINTERMOVE("document") + PREVENT](e) {
-    this.onDragMove(e);
+  [POINTERMOVE("document")](e) {
+    if (this.isDown) {
+      this.onDragMove(e);
+    }
+
   }
 
   [POINTERSTART("$bar")](e) {

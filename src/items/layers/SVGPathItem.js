@@ -1,10 +1,8 @@
 import PathParser from "@parser/PathParser";
-import { clone } from "@core/functions/func";
 import { hasSVGProperty, hasCSSProperty, hasSVGPathProperty } from "@util/Resource";
 import icon from "@icon/icon";
 import { ComponentManager } from "@manager/ComponentManager";
 import { SVGItem } from "./SVGItem";
-import { vec3 } from "gl-matrix";
 
 export class SVGPathItem extends SVGItem {
 

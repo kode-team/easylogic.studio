@@ -3,11 +3,10 @@ import { Length } from "@unit/Length";
 import { Transform } from "../property-parser/Transform";
 import { TransformOrigin } from "@property-parser/TransformOrigin";
 import { mat4, vec3 } from "gl-matrix";
-import { calculateMatrix, degreeToRadian, vertiesMap } from "@core/functions/math";
-import { isArray, isFunction } from "@core/functions/func";
+import { calculateMatrix, vertiesMap } from "@core/functions/math";
+import { isFunction } from "@core/functions/func";
 import PathParser from "@parser/PathParser";
 import { polyPoint, polyPoly, rectToVerties } from "@core/functions/collision";
-import { TransformCache } from "@property-parser/TransformCache";
 
 const ZERO = Length.z()
 export class MovableItem extends Item {
@@ -148,6 +147,16 @@ export class MovableItem extends Item {
         this.reset({
             x: Length.px(this.offsetX.value + distVector[0]).round(),          // 1px 단위로 위치 설정 
             y: Length.px(this.offsetY.value + distVector[1]).round(),
+        })
+    }
+
+    moveByCenter (newCenter = [0, 0, 0]) {
+        const matrix = this.matrix;
+
+
+        this.reset({
+            x: Length.px(newCenter[0] - matrix.width/2),
+            y: Length.px(newCenter[1] - matrix.height/2)
         })
     }
 

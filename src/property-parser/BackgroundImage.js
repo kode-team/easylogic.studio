@@ -11,6 +11,7 @@ import { ConicGradient } from "./image-resource/ConicGradient";
 import { RepeatingConicGradient } from "./image-resource/RepeatingConicGradient";
 import { Gradient } from "./image-resource/Gradient";
 import { convertMatches, reverseMatches } from "@core/functions/parser";
+import { BackgroundImageCache } from "./BackgroundImageCache";
 
 
 const RepeatList = ["repeat", "no-repeat", "repeat-x", "repeat-y", 'round', 'space'];
@@ -63,7 +64,6 @@ export class BackgroundImage extends Property {
     switch (data.type) {
       case "static-gradient":
         return new StaticGradient({ ...json, colorsteps });
-        break;
       case "linear-gradient":
         return new LinearGradient({ ...json, colorsteps, angle });
       case "repeating-linear-gradient":
@@ -101,6 +101,8 @@ export class BackgroundImage extends Property {
     return new Gradient();
   }
 
+  // 기본 image 를 생성하지 않는다. 
+  // 매번 StaticGradient 를 생성 했더니  변환에 너무 많은 비용이 들어간다. 
   getDefaultObject() {
     return super.getDefaultObject({
       itemType: "background-image",
@@ -112,7 +114,6 @@ export class BackgroundImage extends Property {
       height: Length.percent(100),
       x: Length.percent(0),
       y: Length.percent(0),
-      image: new StaticGradient()
     });
   }
 
@@ -303,6 +304,11 @@ export class BackgroundImage extends Property {
 
   static parseStyle(style) {
     var backgroundImages = [];
+    const key = JSON.stringify(style);
+
+    if (BackgroundImageCache.has(key)) {
+      return BackgroundImageCache.get(key);
+    }
 
     if (style["background-image"]) {
       var results = convertMatches(style["background-image"]);
@@ -373,6 +379,8 @@ export class BackgroundImage extends Property {
         }
       });
     }
+
+    BackgroundImageCache.set(key, backgroundImages)
 
     return backgroundImages;
   }

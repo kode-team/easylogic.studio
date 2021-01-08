@@ -24,6 +24,7 @@ export default {
     'app.tab.title.layers': 'Objets',
     'app.tab.title.libraries': 'Librarie',
     'app.tab.title.components': 'Objet',
+    'app.tab.title.artboards': 'Artboard',        
     'app.tab.title.assets': 'Elements',       
     'app.tab.title.keyMap': 'Clavier',           
 

@@ -115,7 +115,7 @@ export const start = opt => {
       return opt.components || {};
     }
 
-    [POINTERMOVE("document") + PREVENT](e) {
+    [POINTERMOVE("document")](e) {
       var newPos = e.xy || EMPTY_POS;
 
       this.$config.set("bodyEvent", e);
@@ -126,7 +126,7 @@ export const start = opt => {
       }
     }
 
-    [POINTEREND("document") + PREVENT](e) {
+    [POINTEREND("document")](e) {
 
       // var newPos = e.xy || EMPTY_POS;
       this.$config.set("bodyEvent", e);

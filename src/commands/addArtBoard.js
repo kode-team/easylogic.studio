@@ -5,8 +5,9 @@ import { Editor } from "@manager/Editor";
  * 
  * @param {Editor} editor 
  * @param {*} obj 
+ * @param {vec3} [center=null] center를 지정하고 artboard 를 재배치 
  */
-export default function addArtBoard (editor, obj = {}) {
+export default function addArtBoard (editor, obj = {}, center = null) {
 
     var project = editor.selection.currentProject;
     if (!project) {
@@ -15,7 +16,7 @@ export default function addArtBoard (editor, obj = {}) {
         editor.selection.selectProject(project);
     }
 
-    var artboard = project.add(editor.createItem({
+    var artboard = project.appendChildItem(editor.createItem({
         itemType: 'artboard',
         x: Length.px(300),
         y: Length.px(200),
@@ -23,6 +24,14 @@ export default function addArtBoard (editor, obj = {}) {
         height: Length.px(667),
         ...obj
     }))
+
+    if (center) {
+        artboard.reset({
+            x: Length.px(0),
+            y: Length.px(0),
+        })
+        artboard.moveByCenter(center);
+    }
 
     editor.selection.select(artboard);
 

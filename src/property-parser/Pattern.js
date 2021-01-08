@@ -3,6 +3,7 @@ import { Property } from "@items/Property";
 import { convertMatches, reverseMatches } from "@core/functions/parser";
 import { BackgroundImage } from "./BackgroundImage";
 import { STRING_TO_CSS } from "@core/functions/func";
+import { PatternCache } from "./PatternCache";
 const PATTERN_REG = /((check|grid|dot|cross\-dot|diagonal\-line|vertical\-line|horizontal\-line|)\(([^\)]*)\))/gi;
 
 export class Pattern extends Property {
@@ -31,6 +32,11 @@ export class Pattern extends Property {
 
     if (!pattern) return patterns;
 
+    if (PatternCache.has(pattern)) {
+      return PatternCache.get(pattern);
+    }
+
+
     var results = convertMatches(pattern);
 
     var matches = (results.str.match(PATTERN_REG) || []);
@@ -57,6 +63,8 @@ export class Pattern extends Property {
           lineHeight: Length.parse(lineHeight || '1px'),
         });
     });
+
+    PatternCache.set(pattern, patterns);
 
     return patterns;
   }

@@ -324,9 +324,7 @@ export class Item {
 
     var ItemClass = this.constructor;
 
-
-    // 클론을 할 때 꼭 부모 참조를 넘겨줘야 한다. 
-    // 그렇지 않으면 screenX, Y 에 대한 값을 계산할 수가 없다. 
+    // 부모를 넘겨줘야 상대 주소를 맞출 수 있다. 
     var item =  new ItemClass(this.toCloneObject(isDeep));
     item.setParent(this.json.parent)
 

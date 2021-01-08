@@ -31,9 +31,6 @@ $asset-item-size: 25px;
         padding: 5px;
         overflow: auto;
         max-height: 300px;
-        .color-view {
-            pointer-events: none;
-        }
 
         &[data-view-mode="grid"] {
             display: block;
