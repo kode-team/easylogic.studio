@@ -2,7 +2,7 @@ import _doForceRefreshSelection from "./_doForceRefreshSelection"
 
 export default {
     command: 'drop.asset',
-    execute: function (editor, obj, id = null) {
+    execute: async function (editor, obj, id = null) {
 
         if (obj.color) {
             editor.emit('addBackgroundColor', obj.color, id)            
@@ -14,7 +14,7 @@ export default {
             editor.emit('addBackgroundImageAsset', obj.imageUrl, id)
         } else if (obj.artboard) {
 
-            const artboardData = editor.storageManager.getArtBoard(obj.artboard.id);
+            const artboardData = await editor.storageManager.getArtBoard(obj.artboard.id);
             if (artboardData) {
                 editor.emit('addArtBoard', artboardData, obj.artboard.center)
             }

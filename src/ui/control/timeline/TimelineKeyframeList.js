@@ -1,7 +1,7 @@
 import UIElement, { EVENT } from "@core/UIElement";
 import { CLICK, LOAD, VDOM, DEBOUNCE, POINTERSTART, MOVE, IF, END, DOUBLECLICK, KEYUP, KEY, } from "@core/Event";
 import { Length } from "@unit/Length";
-import { OBJECT_TO_PROPERTY, OBJECT_TO_CLASS, isUndefined } from "@core/functions/func";
+import { OBJECT_TO_CLASS, isUndefined } from "@core/functions/func";
 import { timecode, second } from "@core/functions/time";
 import Dom from "@core/Dom";
 import makeInterpolateOffset from "@interpolate/interpolate-functions/offset-path/makeInterpolateOffset";
@@ -78,10 +78,10 @@ export default class TimelineKeyframeList extends UIElement {
 
 
         return /*html*/`
-        <div class='keyframe-back'${OBJECT_TO_PROPERTY({
-            'data-layer-id': layerId,
-            'data-property': property.property
-        })}>
+        <div class='keyframe-back' 
+            data-layer-id="${layerId}"
+            data-property="${property.property}"
+        >
 
             ${list.map((it, index) => {
 
@@ -95,24 +95,24 @@ export default class TimelineKeyframeList extends UIElement {
                 var selected = this.$timeline.checked(it.id) && this.$timeline.checked(next.id)
 
                 return /*html*/`
-                    <div ${OBJECT_TO_PROPERTY({
-                        'data-selected': `${selected}`,
-                        'class': {
-                            'offset-line': true
-                        }
-                    })} style='left: ${start}; width: ${width}'} ></div>
+                    <div 
+                        data-selected="${selected}"
+                        class="offset-line"
+                        style='left: ${start}; width: ${width}'} ></div>
 
                     ${it.subOffset.map((subOffset, subOffsetIndex) => {
                         var subOffsetLeft = Length.px(it.left.value +  (subOffset.length / subOffset.totalLength) * width.value)
                         return /*html*/`
-                        <div class='${OBJECT_TO_CLASS({
-                            'sub-offset': true
-                        })}' style='left: ${subOffsetLeft}' ${OBJECT_TO_PROPERTY({
-                            'data-offset-id': it.id,
-                            'data-layer-id': layerId,
-                            'data-property': property.property,
-                            'data-suboffset-index': subOffsetIndex
-                        })} ></div>
+                        <div 
+                            class='${OBJECT_TO_CLASS({
+                                'sub-offset': true
+                            })}'    
+                            style='left: ${subOffsetLeft}'
+                            data-offset-id="${it.id}"
+                            data-layer-id="${layerId}"
+                            data-property="${property.property}"
+                            data-suboffset-index="${subOffsetIndex}"
+                        ></div>
         
                         `
                     }).join('')}
@@ -124,13 +124,13 @@ export default class TimelineKeyframeList extends UIElement {
             ${list.map(it => {
                 var selected = this.$timeline.checked(it.id);
 
-                return /*html*/`<div class='offset' style='left: ${it.left}' ${OBJECT_TO_PROPERTY({
-                    'data-selected': `${selected}`,
-                    'data-offset-id': it.id,
-                    'data-layer-id': layerId,
-                    'data-property': property.property,
-                    'data-offset-index': it.index
-                })} ></div>
+                return /*html*/`<div class='offset' style='left: ${it.left}'
+                    data-selected="${selected}"
+                    data-offset-id="${it.id}"
+                    data-layer-id="${layerId}"
+                    data-property="${property.property}"
+                    data-offset-index="${it.index}"
+                ></div>
 
                 `
             }).join('')}
@@ -158,10 +158,11 @@ export default class TimelineKeyframeList extends UIElement {
         <div class='timeline-keyframe ${OBJECT_TO_CLASS({
             collapsed: animation.collapsed
         })}' data-timeline-layer-id="${obj.id}">
-            <div class='timeline-keyframe-row layer'  ${OBJECT_TO_PROPERTY({
-                'data-row-index': this.state.rowIndex++,
-                "data-layer-id": obj.id 
-            })} >
+            <div 
+                class='timeline-keyframe-row layer' 
+                data-row-index="${this.state.rowIndex++}"
+                data-layer-id="${obj.id}"
+            >
                 <div class='keyframe-shadow'>
                 ${times.map(time => {
                     var left = this.calculateTimeToPosition(time, timeline.displayStartTime, timeline.displayEndTime);
@@ -172,11 +173,12 @@ export default class TimelineKeyframeList extends UIElement {
 
             ${animation.properties.map(property => {
                 return /*html*/ `
-                <div class='timeline-keyframe-row layer-property' ${OBJECT_TO_PROPERTY({
-                    'data-row-index': this.state.rowIndex++,
-                    "data-property": property.property,
-                    "data-layer-id": obj.id 
-                })} >
+                <div 
+                    class='timeline-keyframe-row layer-property'
+                    data-row-index="${this.state.rowIndex++}"
+                    data-property="${property.property}"
+                    data-layer-id="${obj.id}"
+                >
                     ${property.keyframes.length ? this.makeKeyframe(obj.id, timeline, property) : ''}
                 </div>`
             }).join('')}                                                      

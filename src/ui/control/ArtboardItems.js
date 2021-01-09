@@ -18,27 +18,44 @@ export default class ArtboardItems extends UIElement {
     `;
   }
 
-  [LOAD('$list')] () {
-    return this.$storageManager.getArtboardList().map(it => {
+  async [LOAD('$list')] () {
+    const data = await this.$storageManager.getArtboardList()
+    return data.map(it => {
       return /*html*/`
-        <div class='artboard-preview' draggable="true" data-preview-artboard-id="${it.id}">
+        <div class='artboard-preview' draggable="true" data-preview-id="${it.id}">
           <div class='thumbnail'><img src='${it.preview}' /></div>
-          <div class='title'>${it.artboard.name}</div>
+          <div class='tools'>
+            <div class='title'>${it.artboard.name}</div>
+            <div class='buttons'>
+              <button type="button" class='remove-artboard-preview' data-preview-id="${it.id}">${icon.remove}</button>
+            </div>
+          </div>
         </div>
       `
     })
   }
 
+  async [CLICK('$list .remove-artboard-preview')] (e) {
+
+    if (confirm(this.$i18n('app.confirm.message.artboard.items.removeArtboard'))) {
+
+      const id = e.$dt.data('preview-id');
+
+      await this.$storageManager.removeArtboard(id);
+      this.refresh();
+    }
+
+  }
+
   [DRAGSTART('$list .artboard-preview')] (e) {
-    const id = e.$dt.attr('data-preview-artboard-id');
+    const id = e.$dt.data('preview-id');
     e.dataTransfer.effectAllowed = "copy";
     e.dataTransfer.setData("text/artboard", id);
   }
 
-  [EVENT('afterSaveArtboard')] (datauri) {
-    this.$storageManager.saveArtboard(datauri);
-
-    this.load('$list');
+  async [EVENT('afterSaveArtboard')] (datauri) {
+    await this.$storageManager.saveArtboard(datauri);
+    this.refresh();
   }
 
   [CLICK('$addArtboard')] (e) {

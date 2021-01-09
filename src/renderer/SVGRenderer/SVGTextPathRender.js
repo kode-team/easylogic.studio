@@ -52,12 +52,12 @@ export default class SVGTextPathRender extends SVGItemRender {
 
   toPathSVG (item) {
     return /*html*/`
-      <path ${OBJECT_TO_PROPERTY({
-        'class': 'svg-path-item',
-        id: this.toPathId(item),
-        d: item.d,
-        fill: 'none'
-      })} />
+      <path 
+        class="svg-path-item"
+        id="${this.toPathId(item)}"
+        d="${item.d}"
+        fill="none"
+      />
     `
   }
 

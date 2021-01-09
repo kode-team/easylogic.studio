@@ -1,9 +1,9 @@
 import UIElement, { EVENT } from "@core/UIElement";
 import { Length } from "@unit/Length";
-import { LOAD, INPUT, CLICK, FOCUS, BLUR, POINTERSTART, MOVE, END, DEBOUNCE, THROTTLE } from "@core/Event";
+import { LOAD, INPUT, CLICK, FOCUS, BLUR, POINTERSTART, MOVE, END, THROTTLE } from "@core/Event";
 import icon from "@icon/icon";
 import SelectEditor from "./SelectEditor";
-import { OBJECT_TO_CLASS, OBJECT_TO_PROPERTY, isUndefined } from "@core/functions/func";
+import { OBJECT_TO_CLASS } from "@core/functions/func";
 
 export default class RangeEditor extends UIElement {
 
@@ -63,15 +63,15 @@ export default class RangeEditor extends UIElement {
         }).join(',');
 
         return /*html*/`
-        <div ${OBJECT_TO_PROPERTY({
-            'ref': '$range',
-            'class': OBJECT_TO_CLASS({
+        <div 
+            ref="$range"
+            class="${OBJECT_TO_CLASS({
                 'range-editor': true,
                 'has-label': !!label,
                 'is-removable': removable,
                 [layoutClass] : true 
-            })
-        })}>
+            })}"
+        >
             ${label ? `<label title="${label}">${label}</label>` : '' }
             <div class='range-editor-type' data-type='range'>
                 <input type='range' ref='$property' value="${realValue}" min="${min}" max="${max}" step="${step}" /> 

@@ -87,6 +87,24 @@ export default class Dom {
   }
 
   /**
+   * data-xxx 속성을 관리한다. 
+   * 
+   * @param {string} key 
+   * @param {any} value 
+   */
+  data (key, value) {
+    if (arguments.length === 1) {
+      return this.attr('data-' + key);
+    } else if (arguments.length === 2) {
+      return this.attr('data-' + key, value);
+    }
+
+    //TODO:  data 속성을 모두 {[key]: value} 형태로 리턴하기 
+
+    return this; 
+  }
+
+  /**
    * Dom attribute 얻기 또는 설정 
    * 
    * get ->  Dom.create(targetElement).attr('key');

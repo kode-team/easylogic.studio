@@ -2,7 +2,7 @@ import UIElement, { EVENT } from "@core/UIElement";
 import { BackgroundImage } from "@property-parser/BackgroundImage";
 import { LOAD, CLICK, DRAGSTART, DRAGOVER, DROP, PREVENT, DEBOUNCE } from "@core/Event";
 import icon from "@icon/icon";
-import { CSS_TO_STRING, STRING_TO_CSS, OBJECT_TO_PROPERTY } from "@core/functions/func";
+import { CSS_TO_STRING, STRING_TO_CSS } from "@core/functions/func";
 import { LinearGradient } from "@property-parser/image-resource/LinearGradient";
 import { ColorStep } from "@property-parser/image-resource/ColorStep";
 import propertyEditor from ".";
@@ -108,25 +108,25 @@ export default class BackgroundImageEditor extends UIElement {
       
             return /*html*/`
             <div class='fill-item ${selectedClass}' data-index='${index}' ref="fillIndex${index}"  draggable='true' data-fill-type="${backgroundType}" >
-                <BackgroundPositionEditor ${OBJECT_TO_PROPERTY({
-                    key: 'background-position',
-                    index,
-                    ref: `$bp${index}`,
-                    x: it.x,
-                    y: it.y,
-                    width: it.width,
-                    height: it.height,
-                    repeat: it.repeat,
-                    size: it.size,
-                    blendMode: it.blendMode     
-                })} onchange='changePattern' />
-                <GradientSingleEditor ${OBJECT_TO_PROPERTY({
-                    index,
-                    ref: `$gse${index}`,         
-                    image: it.image,
-                    color: current.color,
-                    key: 'background-image'
-                })} onchange='changePattern'
+                <BackgroundPositionEditor 
+                    key="background-position"
+                    index="${index}"
+                    ref="$bp${index}"
+                    x="${it.x}"
+                    y="${it.y}"
+                    width="${it.width}"
+                    height="${it.height}"
+                    repeat="${it.repeat}"
+                    size="${it.size}"
+                    blendMode="${it.blendMode}"     
+                    onchange='changePattern' />
+                <GradientSingleEditor 
+                    index="${index}"
+                    ref="$gse${index}"
+                    image="${it.image}"
+                    color="${current.color}"
+                    key="background-image"
+                onchange='changePattern'
 
                 />
                 <div class='fill-info'>

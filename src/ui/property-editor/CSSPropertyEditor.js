@@ -11,7 +11,7 @@ import VarEditor from "./VarEditor";
 import TransformEditor from "./TransformEditor";
 import TransformOriginEditor from "./TransformOriginEditor";
 import PerspectiveOriginEditor from "./PerspectiveOriginEditor";
-import { OBJECT_TO_CLASS, OBJECT_TO_PROPERTY } from "@core/functions/func";
+import { OBJECT_TO_CLASS } from "@core/functions/func";
 import SelectEditor from "./SelectEditor";
 import NumberRangeEditor from "./NumberRangeEditor";
 import BorderRadiusEditor from "./BorderRadiusEditor";
@@ -164,12 +164,12 @@ export default class CSSPropertyEditor extends UIElement {
   makeCustomePropertyEditor (property, index) {
     return /*html*/`
       <div class='property-editor'>
-        <${property.editor} ${OBJECT_TO_PROPERTY({
-          onchange: 'changeSelect',
-          ref: `$customProperty${index}`,
-          key: property.key,
-          value: property.value
-        })} />
+        <${property.editor} 
+          onchange="changeSelect"
+          ref="$customProperty${index}"
+          key="${property.key}"
+          value="${property.value}"
+        />
       </div>
     `
   }

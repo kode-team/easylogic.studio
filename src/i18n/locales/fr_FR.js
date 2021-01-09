@@ -26,7 +26,9 @@ export default {
     'app.tab.title.components': 'Objet',
     'app.tab.title.artboards': 'Artboard',        
     'app.tab.title.assets': 'Elements',       
-    'app.tab.title.keyMap': 'Clavier',           
+    'app.tab.title.keyMap': 'Clavier',        
+    
+    'app.confirm.message.artboard.items.removeArtboard' : 'Do you remove an artboard preview really?',    
 
     'menu.item.download.title': 'Télécharger',
     'menu.item.save.title': 'Enregistrer',

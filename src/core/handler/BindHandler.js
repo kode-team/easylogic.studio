@@ -78,7 +78,7 @@ export default class BindHandler extends BaseHandler {
 
     // 어떻게 실행하는게 좋을까? 
     // this.runHandle('bind', ...);
-    bindData (...args) {
+    async bindData (...args) {
       if (!this._bindMethods) {
         this._bindMethods = this.context.filterProps(CHECK_BIND_PATTERN);
       }
@@ -87,7 +87,7 @@ export default class BindHandler extends BaseHandler {
        * 이시점에 하는게 맞는지는 모르겠지만 일단은 해보자.
        * BIND 는 특정 element 에 html 이 아닌 데이타를 업데이트하기 위한 간단한 로직이다.
        */
-      this._bindMethods
+      await this._bindMethods
         .filter(originalCallbackName => {
           if (!args.length) return true; 
           var [callbackName, id] = originalCallbackName.split(CHECK_SAPARATOR);        
@@ -96,7 +96,7 @@ export default class BindHandler extends BaseHandler {
   
           return args.indexOf($bind) >  -1 
         })
-        .forEach(callbackName => {
+        .forEach(async (callbackName) => {
           const bindMethod = this.context[callbackName];
           var [callbackName, id] = callbackName.split(CHECK_SAPARATOR);
   
@@ -115,7 +115,7 @@ export default class BindHandler extends BaseHandler {
           // isBindCheck 는 binding 하기 전에 변화된 지점을 찾아서 업데이트를 제한한다.
           const isBindCheck = isFunction(refCallback) && refCallback.call(this.context);
           if ($element && isBindCheck) {
-            const results = bindMethod.call(this.context, ...args);
+            const results = await bindMethod.call(this.context, ...args);
 
             if (!results) return;
   

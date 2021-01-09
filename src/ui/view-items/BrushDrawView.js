@@ -5,7 +5,6 @@ import { Length } from "@unit/Length";
 import PathStringManager from "@parser/PathStringManager";
 import PathGenerator from "@parser/PathGenerator";
 import Point from "@parser/Point";
-import { OBJECT_TO_PROPERTY } from "@core/functions/func";
 import { SVGFill } from "@property-parser/SVGFill";
 import { SVGBrushItem } from "@items/layers/SVGBrushItem";
 
@@ -238,10 +237,8 @@ export default class BrushDrawView extends UIElement {
             <svg width="100%" height="100%" class='svg-editor-canvas'>
                 ${this.toDefString}
                 <path class='object' 
-                    ${OBJECT_TO_PROPERTY({
-                        fill: 'transparent',
-                        stroke: this.toFillValue === 'transparent' ? 'black' : this.toFillValue
-                    })}
+                    fill="transparent"
+                    stroke="${this.toFillValue === 'transparent' ? 'black' : this.toFillValue}"
                     d="${PathStringManager.makePathByPoints(this.state.points)}" />
             </svg>
             ` 

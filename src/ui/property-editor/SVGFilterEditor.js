@@ -1,4 +1,4 @@
-import { isFunction, clone, OBJECT_TO_CLASS, mapjoin, keyMap, keyMapJoin, OBJECT_TO_PROPERTY, repeat } from "@core/functions/func";
+import { isFunction, clone, OBJECT_TO_CLASS, mapjoin, keyMapJoin, repeat } from "@core/functions/func";
 import icon from "@icon/icon";
 import {
   LOAD,
@@ -660,12 +660,16 @@ export default class SVGFilterEditor extends UIElement {
       var {x, y, dx, dy } = this.startXY;
       return /*html*/`
       <svg>
-        <path ${OBJECT_TO_PROPERTY({
-          'class': 'drag-line',
-          'fill': 'transparent',
-          'stroke-width': 1,
-          d: `M${x},${y}L${x + dx},${y + dy}Z`
-        })} />
+        <path 
+          class="drag-line"
+          fill="transparent"
+          stroke-width="1"
+          d="
+            M${x},${y}
+            L${x + dx},${y + dy} 
+            Z
+          "
+        />
       </svg>
       `
     } else {
@@ -741,21 +745,21 @@ export default class SVGFilterEditor extends UIElement {
             var sourceType = getSourceTypeString(it.type);
 
             return /*html*/`
-              <path ${OBJECT_TO_PROPERTY({
-                'class': 'connected-line',
-                'data-source-type': sourceType,
-                d: this.makeConnectedPath(path)
-              })} />
+              <path 
+                class="connected-line"
+                data-source-type="${sourceType}"
+                d="${this.makeConnectedPath(path)}"
+              />
 
               ${path.length && /*html*/`
-                <circle ${OBJECT_TO_PROPERTY({
-                  'data-source-type': sourceType,
-                  'data-target-id': connectedItem.id,
-                  'data-source-id': it.id,
-                  'class': 'connected-remove-circle',
-                  'cx': (path[0].x + path[1].x) / 2 ,
-                  'cy': (path[0].y + path[1].y) / 2,
-                })} />
+                <circle 
+                  data-source-type="${sourceType}"
+                  data-target-id="${connectedItem.id}"
+                  data-source-id="${it.id}"
+                  class="connected-remove-circle"
+                  cx="${(path[0].x + path[1].x) / 2}"
+                  cy="${(path[0].y + path[1].y) / 2}"
+                />
               `}
               
             `

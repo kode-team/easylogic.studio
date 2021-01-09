@@ -2,9 +2,9 @@ import MovableRender from "./MovableRender";
 
 export default class DomRender extends MovableRender {
   
-  toCloneObject (item, renderer) {
+  async toCloneObject (item, renderer) {
     return {
-      ...super.toCloneObject(item, renderer),
+      ...(await super.toCloneObject(item, renderer)),
       ...item.attrs(
         'position',
         'right',

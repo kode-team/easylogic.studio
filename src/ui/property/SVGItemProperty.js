@@ -1,7 +1,6 @@
 import BaseProperty from "./BaseProperty";
 import { EVENT } from "@core/UIElement";
 import { Length } from "@unit/Length";
-import { OBJECT_TO_PROPERTY } from "@core/functions/func";
 import { BIND, CLICK, THROTTLE } from "@core/Event";
 
 export default class SVGItemProperty extends BaseProperty {
@@ -78,7 +77,7 @@ export default class SVGItemProperty extends BaseProperty {
 
       <div class='property-item'> 
         <label>
-          <input type='checkbox' ref='$motionBased' ${OBJECT_TO_PROPERTY({ checked: !!current['motion-based']})} /> 
+          <input type='checkbox' ref='$motionBased' checked="${!!current['motion-based']}" /> 
           ${this.$i18n('svg.item.property.isMotionPath')}
         </label>
       </div>      

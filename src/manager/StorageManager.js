@@ -11,7 +11,7 @@ export class StorageManager {
         this.editor = editor; 
     }
 
-    getArtboardList () {
+    async getArtboardList () {
         let isNew = false; 
         const artboards = (this.editor.loadItem("artboards") || []).map(it => {
             if (!it.id) {
@@ -22,18 +22,19 @@ export class StorageManager {
         })
 
         if (isNew) {
-            this.setArtboardList(artboards);
+            await this.setArtboardList(artboards);
         }
 
         return artboards; 
     }
 
-    setArtboardList (list) {
+    async setArtboardList (list) {
         this.editor.saveItem('artboards', list);
     }
 
-    getArtBoard (id) {
-        const it = this.getArtboardList().find(it => it.id === id);
+    async getArtBoard (id) {
+        const artboardList = await this.getArtboardList()
+        const it = artboardList.find(it => it.id === id);
 
         if (it && it.artboard) {
             return it.artboard;
@@ -47,19 +48,31 @@ export class StorageManager {
      * 
      * @param {string} datauri  image datauri 
      */
-    saveArtboard(datauri = '') {
+    async saveArtboard(datauri = '') {
         const current = this.editor.selection.current;
 
         if (current) {
-            const json = JSONRenderer.render(current);
+            const artboardList = await this.getArtboardList();
+            const json = await JSONRenderer.render(current);
+
             json.x = "0px"
             json.y = "0px"
-            this.setArtboardList([...this.getArtboardList(), {
-                id: uuid(),
-                preview: datauri,
-                artboard: json 
-            }]);
+            await this.setArtboardList([
+                ...artboardList, 
+                {
+                    id: uuid(),
+                    preview: datauri,
+                    artboard: json 
+                }
+            ]);
         }
+    }
+
+    async removeArtboard (id) {
+        const artboardList = await this.getArtboardList();
+        await this.setArtboardList(artboardList.filter(it => {
+            return it.id !== id
+        }));
     }
 
 }

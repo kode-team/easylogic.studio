@@ -1,4 +1,4 @@
-import { CSS_TO_STRING, OBJECT_TO_PROPERTY } from "@core/functions/func";
+import { CSS_TO_STRING } from "@core/functions/func";
 import SVGLayerRender from "./SVGLayerRender";
 
 export default class VideoRender extends SVGLayerRender {
@@ -34,16 +34,21 @@ export default class VideoRender extends SVGLayerRender {
 
         return this.wrappedRender(item, ()=> {
             return /*html*/`
-            <foreignObject ${OBJECT_TO_PROPERTY({  width: width.value, height: height.value, overflow: 'visible'})}>
-                <video xmlns="http://www.w3.org/1999/xhtml" ${OBJECT_TO_PROPERTY({ 
-                    controls,
-                    src: this.getUrl(item),
-                    muted,
-                    poster,
-                    loop,
-                    crossorigin,
-                    autoplay
-                })} style="${CSS_TO_STRING(css)};width:100%;height:100%;"></video>
+            <foreignObject 
+                width="${width.value}"
+                height="${height.value}"
+                overflow="visible"
+            >
+                <video 
+                    xmlns="http://www.w3.org/1999/xhtml"
+                    controls="${controls}"
+                    src="${this.getUrl(item)}"
+                    muted="${muted}"
+                    poster="${poster}"
+                    loop="${loop}"
+                    crossorigin="${crossorigin}"
+                    autoplay="${autoplay}"
+                    style="${CSS_TO_STRING(css)};width:100%;height:100%;"></video>
             </foreignObject>    
             `            
         })

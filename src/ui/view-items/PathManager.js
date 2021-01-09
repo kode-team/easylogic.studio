@@ -2,7 +2,6 @@ import UIElement, { EVENT } from "@core/UIElement";
 import { CLICK, BIND } from "@core/Event";
 import icon from "@icon/icon";
 import propertyEditor from "../property-editor";
-import { OBJECT_TO_PROPERTY } from "@core/functions/func";
 import { Length } from "@unit/Length";
 
 const MODES = {

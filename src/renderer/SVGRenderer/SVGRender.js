@@ -1,4 +1,4 @@
-import { CSS_TO_STRING, isFunction, OBJECT_TO_PROPERTY } from "@core/functions/func";
+import { CSS_TO_STRING, isFunction } from "@core/functions/func";
 import { Item } from "@items/Item";
 import DomRender from "@renderer/HTMLRenderer/DomRender";
 
@@ -84,15 +84,15 @@ export default class SVGRender extends DomRender {
 
         return /*html*/`
 
-            <svg class='svg-element-item ${itemType}'  ${OBJECT_TO_PROPERTY({
-                "xmlns": "http://www.w3.org/2000/svg",
-                'data-id': id,
-                'x': x.value,
-                'y': y.value,
-                'width': width.value,
-                'height': height.value,
-                'overflow': 'visible',
-            })}>
+            <svg class='svg-element-item ${itemType}'
+                xmlns="http://www.w3.org/2000/svg"
+                data-id="${id}"
+                x="${x.value}"
+                y="${y.value}"
+                width="${width.value}"
+                height="${height.value}"
+                overflow="visible"
+            >
                 ${this.toDefString(item)}
                 ${isFunction(callback) && callback()}
             </svg>
@@ -112,7 +112,11 @@ export default class SVGRender extends DomRender {
 
         return this.wrappedRender(item, ()=> {
             return /*html*/`
-                <foreignObject ${OBJECT_TO_PROPERTY({  width: width.value, height: height.value, overflow: 'visible'})}>
+                <foreignObject 
+                    width="${width.value}"
+                    height="${height.value}"
+                    overflow="visible"
+                >
                     <${tagName} xmlns="http://www.w3.org/1999/xhtml" style="${CSS_TO_STRING(css)};width:100%;height:100%;"></${tagName}>
                 </foreignObject>    
                 ${item.layers.map(it => {

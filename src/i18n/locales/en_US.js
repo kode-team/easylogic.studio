@@ -28,7 +28,9 @@ export default {
     'app.tab.title.components': 'Object',
     'app.tab.title.artboards': 'Artboard',    
     'app.tab.title.assets': 'Assets',       
-    'app.tab.title.keyMap': 'KeyMap',           
+    'app.tab.title.keyMap': 'KeyMap',       
+    
+    'app.confirm.message.artboard.items.removeArtboard' : 'Do you remove an artboard preview really?',
 
     'menu.item.download.title': 'Download',
     'menu.item.save.title': 'Save',
@@ -38,6 +40,8 @@ export default {
     'menu.item.shortcuts.title': 'ShortCuts',
     'menu.item.github.title': 'Github',
     'menu.item.learn.title': 'Learn',       
+
+
 
     'project.property.title' : 'Project',
     'project.information.property.title': 'Project information',   

@@ -32,7 +32,7 @@
         display: grid;
         grid-template-columns: 1fr 1fr;
         grid-column-gap: 10px;
-        grid-auto-rows: minmax(10px, 180px);  
+        grid-auto-rows: minmax(10px, 190px);  
         grid-row-gap: 10px;      
         box-sizing: border-box;
         padding: 10px 10px;        
@@ -40,9 +40,24 @@
         .artboard-preview {
             padding-top: 10px;
 
-            .title {
-                text-align: center;
+            .tools {
+                display: grid;
+                grid-template-columns: 1fr 20px;
+                grid-column-gap: 2px;
+                padding: 0px 2px 2px;
+                box-sizing: border-box;
+
+                .title {
+                    text-align: left;
+                    vertical-align: middle;                    
+                }
+
+                .buttons {
+                    text-align: right;
+                    vertical-align: middle;
+                }
             }
+
             &:hover {
                 background-color: var(--selected-color);
             }

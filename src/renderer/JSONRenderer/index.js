@@ -28,16 +28,16 @@ export default {
      * 
      * @param {Item} item 
      */
-    render (item, renderer) {
+    async render (item, renderer) {
         if (!item) return;
         const currentRenderer = renderers[item.itemType];
 
         if (currentRenderer) {
-            return currentRenderer.render(item, renderer || this);
+            return await currentRenderer.render(item, renderer || this);
         }
     },
 
-    getResourceDataURI (item, renderer) {
+    async getResourceDataURI (item, renderer) {
         
     }
 

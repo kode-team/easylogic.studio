@@ -13,15 +13,6 @@ export default class LoadHandler extends BaseHandler {
         this._loadMethods = undefined;
     }
 
-
-    /**
-     * 특정 load 함수를 실행한다.  문자열을 그대로 return 한다. 
-     * @param  {...any} args 
-     */
-    loadTemplate (...args) {
-        return this[LOAD(args.join(''))].call(this)
-    }
-
     load(...args) {
         if (!this._loadMethods) {
             this._loadMethods = this.context.filterProps(CHECK_LOAD_PATTERN);

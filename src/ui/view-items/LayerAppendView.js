@@ -3,7 +3,6 @@ import { POINTERSTART, BIND, MOVE, END, KEYUP, IF, ESCAPE, ENTER, PREVENT, STOP,
 import Color from "@core/Color";
 import { Length } from "@unit/Length";
 import PathStringManager from "@parser/PathStringManager";
-import { OBJECT_TO_PROPERTY } from "@core/functions/func";
 import { rectToVerties } from "@core/functions/collision";
 import { vertiesMap } from "@core/functions/math";
 import { vec3 } from "gl-matrix";
@@ -138,12 +137,12 @@ export default class LayerAppendView extends UIElement {
                         <path id='layer-add-path' d="${PathStringManager.makeLine(0, height, width, height)}" />
                     </defs>
                     <text>
-                        <textPath ${OBJECT_TO_PROPERTY({
-                          'xlink:href' :`#layer-add-path`,
-                          textLength: Length.percent(100),
-                          lengthAdjust: 'spacingAndGlyphs',
-                          startOffset: Length.em(0),
-                        })} >${text}</textPath>
+                        <textPath 
+                          xlink:href="#layer-add-path"
+                          textLength="100%"
+                          lengthAdjust="spacingAndGlyphs"
+                          startOffset="0em"
+                        >${text}</textPath>
                     </text>
                 </svg>
             </div>

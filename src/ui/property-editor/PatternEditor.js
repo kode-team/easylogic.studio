@@ -1,7 +1,6 @@
 import UIElement, { EVENT } from "@core/UIElement";
 import { LOAD, CLICK, DRAGSTART, DRAGOVER, DROP, PREVENT, DEBOUNCE } from "@core/Event";
 import icon from "@icon/icon";
-import { OBJECT_TO_PROPERTY } from "@core/functions/func";
 import PatternSizeEditor from "./PatternSizeEditor";
 import SelectEditor from "./SelectEditor";
 import { Pattern } from "@property-parser/Pattern";
@@ -65,21 +64,21 @@ export default class PatternEditor extends UIElement {
 
             return /*html*/`
             <div class='pattern-item ${selectedClass}' data-index='${index}' ref="fillIndex${index}"  draggable='true'>
-                <PatternSizeEditor ${OBJECT_TO_PROPERTY({
-                    key: 'pattern-size',
-                    ref: `$bp${index}`,
-                    type: it.type,
-                    x: it.x,
-                    y: it.y,
-                    width: it.width,
-                    height: it.height,
-                    index,
-                    foreColor: it.foreColor,
-                    backColor: it.backColor,
-                    blendMode: it.blendMode,
-                    lineWidth: it.lineWidth,
-                    lineHeight: it.lineHeight
-                })} onchange='changePatternSizeInfo' />
+                <PatternSizeEditor 
+                    key="pattern-size"
+                    ref="$bp${index}"
+                    type="${it.type}"
+                    x="${it.x}"
+                    y="${it.y}"
+                    width="${it.width}"
+                    height="${it.height}"
+                    index="${index}"
+                    foreColor="${it.foreColor}"
+                    backColor="${it.backColor}"
+                    blendMode="${it.blendMode}"
+                    lineWidth="${it.lineWidth}"
+                    lineHeight="${it.lineHeight}"
+                    onchange='changePatternSizeInfo' />
                 <div class='tools'>
                     <button type="button" class='remove' title='Remove a pattern' data-index='${index}'>${icon.remove}</button>
                 </div>

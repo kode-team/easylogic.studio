@@ -1,15 +1,9 @@
 import UIElement, { EVENT } from "@core/UIElement";
-import { OBJECT_TO_PROPERTY } from "@core/functions/func";
 import { BIND } from "@core/Event";
 import { vec3 } from "gl-matrix";
 
 const line = (source, target, className = 'base-line') => {
-    return /*html*/`<line ${OBJECT_TO_PROPERTY({
-        x1: source[0], 
-        y1: source[1], 
-        x2: target[0], 
-        y2: target[1] 
-    })} class='${className}' />`
+    return /*html*/`<line x1="${source[0]}" y1="${source[1]}" x2="${target[0]}" y2="${target[1]}" class='${className}' />`
 }
 
 
@@ -51,7 +45,8 @@ export default class GuideLineView extends UIElement {
         
             const [source, target, axis] = list[i];
 
-            const localSourceVertext = vec3.transformMat4([], source, this.$viewport.matrix);
+            // 시작점 기준으로 맞출때가 필요하면 localSourceVertext 를 활용하자. 아직은 없음. 
+            // const localSourceVertext = vec3.transformMat4([], source, this.$viewport.matrix);
             const localTargetVertext = vec3.transformMat4([], target, this.$viewport.matrix);            
 
             if (axis === 'x') {

@@ -1,7 +1,5 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, DEBOUNCE } from "@core/Event";
 import { EVENT } from "@core/UIElement";
-import { Length } from "@unit/Length";
 
 export default class PositionProperty extends BaseProperty {
   getTitle() {
@@ -30,33 +28,36 @@ export default class PositionProperty extends BaseProperty {
 
   getBody() {
     return /*html*/`
-      <div class="position-item" ref="$positionItem"></div>
+      <div class="position-item" ref="$positionItem">
+        <div style='display: grid;grid-template-columns: repeat(2, 1fr); grid-column-gap: 10px;'>
+          <div class='property-item animation-property-item' style='padding: 0px;'>
+            <div class='group'>
+              <span class='add-timeline-property' data-property='x'></span>
+            </div>
+            <InputRangeEditor ref='$x' key='x' min="-1000" max='1000' onchange='changRangeEditor' />
+          </div>
+          <div class='property-item animation-property-item' style='padding: 0px;'>
+            <div class='group'>
+              <span class='add-timeline-property' data-property='y'></span>
+            </div>
+            <InputRangeEditor ref='$y' key='y' min="-1000" max='1000' onchange='changRangeEditor' />
+          </div>
+        </div>
+        <div style='display: grid;grid-template-columns: repeat(2, 1fr); grid-column-gap: 10px; text-align: center;padding: 4px 0px;'>
+          <span>${this.$i18n('position.property.X')}</span>
+          <span>${this.$i18n('position.property.Y')}</span>
+        </div>    
+      </div>
     `;
   }
 
-  [LOAD("$positionItem")]() {
-    var current = this.$selection.current || {x: Length.z(), y: Length.z()};
+  async refresh () {
+    const current = this.$selection.current;
+    if (current) {
+      this.children.$x.setValue(current.x);
+      this.children.$y.setValue(current.y);      
+    }
 
-    return /*html*/`
-      <div style='display: grid;grid-template-columns: repeat(2, 1fr); grid-column-gap: 10px;'>
-        <div class='property-item animation-property-item' style='padding: 0px;'>
-          <div class='group'>
-            <span class='add-timeline-property' data-property='x'></span>
-          </div>
-          <InputRangeEditor ref='$x' key='x' value='${current.x}' min="-1000" max='1000' onchange='changRangeEditor' />
-        </div>
-        <div class='property-item animation-property-item' style='padding: 0px;'>
-          <div class='group'>
-            <span class='add-timeline-property' data-property='y'></span>
-          </div>
-          <InputRangeEditor ref='$y' key='y' value='${current.y}' min="-1000" max='1000' onchange='changRangeEditor' />
-        </div>
-      </div>
-      <div style='display: grid;grid-template-columns: repeat(2, 1fr); grid-column-gap: 10px; text-align: center;padding: 4px 0px;'>
-        <span>${this.$i18n('position.property.X')}</span>
-        <span>${this.$i18n('position.property.Y')}</span>
-      </div>      
-    `;
   }
 
 

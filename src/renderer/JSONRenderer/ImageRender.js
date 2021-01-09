@@ -1,10 +1,11 @@
 import LayerRender from "./LayerRender";
 
 export default class ImageRender extends LayerRender {
-    toCloneObject(item, renderer) {
+    async toCloneObject(item, renderer) {
+        const src = item.src; 
         return {
-            ...super.toCloneObject(item, renderer),
-            ...item.attrs('src')
+            ...(await super.toCloneObject(item, renderer)),
+            src: src
         }
     }
 }

@@ -7,7 +7,6 @@ import { Length } from "@unit/Length";
 import PathStringManager from "@parser/PathStringManager";
 import PathGenerator from "@parser/PathGenerator";
 import Point from "@parser/Point";
-import { OBJECT_TO_PROPERTY } from "@core/functions/func";
 import { SVGFill } from "@property-parser/SVGFill";
 import { vec3 } from "gl-matrix";
 
@@ -251,16 +250,16 @@ export default class PathDrawView extends UIElement {
             innerHTML: /*html*/`
             <svg width="100%" height="100%" class='svg-editor-canvas'>
                 ${this.toDefString}
-                <path class='object' 
-                    ${OBJECT_TO_PROPERTY({
-                        fill: this.toFillValue,
-                        stroke: this.toStrokeValue,
-                        'fill-opacity': this.state['fill-opacity'],
-                        'stroke-width': this.state['stroke-width'],
-                        'stroke-linecap': this.state['stroke-linecap'],
-                        'stroke-linejoin': this.state['stroke-linejoin'],
-                    })}
-                    d="${PathStringManager.makePathByPoints(this.state.points)}" />
+                <path 
+                    class='object' 
+                    fill="${this.toFillValue}"
+                    stroke="${this.toStrokeValue}"
+                    fill-opacity="${this.state['fill-opacity']}"
+                    stroke-width="${this.state['stroke-width']}"
+                    stroke-linecap="${this.state['stroke-linecap']}"
+                    stroke-linejoin="${this.state['stroke-linejoin']}"
+                    d="${PathStringManager.makePathByPoints(this.state.points)}" 
+                />
             </svg>
             ` 
         }

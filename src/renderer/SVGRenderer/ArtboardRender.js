@@ -1,4 +1,4 @@
-import { CSS_TO_STRING, OBJECT_TO_PROPERTY } from "@core/functions/func";
+import { CSS_TO_STRING } from "@core/functions/func";
 import SVGRender from "./SVGRender";
 
 export default class ArtboardRender extends SVGRender {
@@ -35,13 +35,13 @@ export default class ArtboardRender extends SVGRender {
 
         return /*html*/`
 ${encoding ? `<?xml version="1.0"?>` : ''}
-<svg ${OBJECT_TO_PROPERTY({ 
-    xmlns: "http://www.w3.org/2000/svg",
-    width: width.value, 
-    height: height.value,
-    viewBox: `0 0 ${width.value} ${height.value}`,
-    style: CSS_TO_STRING(css)
-})}>
+<svg 
+    xmlns="http://www.w3.org/2000/svg"
+    width="${width.value}"
+    height="${height.value}"
+    viewBox="0 0 ${width.value} ${height.value}"
+    style="${CSS_TO_STRING(css)}"
+>
     ${this.toDefString(item)}
     ${item.layers.map(it => {
         return renderer.render(it, renderer)
