@@ -1,6 +1,6 @@
 import SegmentManager from "./SegmentManager";
 import { clone, OBJECT_TO_PROPERTY } from "@core/functions/func";
-import { getDist, calculateAngle, getXYInCircle, calculateAngle360, degreeToRadian, div, calculateAnglePointDistance } from "@core/functions/math";
+import { getDist, getXYInCircle, calculateAngle360, degreeToRadian, div, calculateAnglePointDistance } from "@core/functions/math";
 import Point from "./Point";
 import PathStringManager from "./PathStringManager";
 import matrix from "@core/functions/matrix";

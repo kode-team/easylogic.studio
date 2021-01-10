@@ -1,5 +1,4 @@
 import Dom from "@core/Dom";
-import { OBJECT_TO_PROPERTY } from "@core/functions/func";
 import { Item } from "@items/Item";
 import SVGItemRender from "./SVGItemRender";
 
@@ -39,11 +38,7 @@ export default class SVGTextRender extends SVGItemRender {
     return /*html*/`
   <svg class='element-item textpath' data-id="${id}">
     ${this.toDefString(item)}
-      <text ${OBJECT_TO_PROPERTY({
-        'class': 'svg-text-item',
-        textLength,
-        lengthAdjust,
-      })} >${item.text}</text>
+      <text class="svg-text-item" textLength="${textLength}" lengthAdjust="${lengthAdjust}">${item.text}</text>
   </svg>`
   }
 

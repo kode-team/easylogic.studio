@@ -44,7 +44,7 @@ module.exports = {
     library: "EasylogicStudio",
     libraryTarget: "umd",
     path: __dirname + "/docs",
-    filename: '[name].[contenthash].js'
+    filename: '[name].js?[contenthash]'
   },
   resolve: { alias },  
   mode: 'production',
@@ -139,7 +139,7 @@ module.exports = {
       filename: "./index.html"
     }),
     new MiniCssExtractPlugin({
-      filename: "[name].[contenthash].css"
+      filename: "[name].css?[contenthash]"
     }),
     new CopyPlugin([
       { from: 'public', to: '.' },

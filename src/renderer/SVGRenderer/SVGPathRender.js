@@ -1,5 +1,5 @@
 import Dom from "@core/Dom";
-import { CSS_TO_STRING, OBJECT_TO_CLASS, OBJECT_TO_PROPERTY } from "@core/functions/func";
+import { CSS_TO_STRING, OBJECT_TO_PROPERTY } from "@core/functions/func";
 import { Item } from "@items/Item";
 import SVGItemRender from "./SVGItemRender";
 

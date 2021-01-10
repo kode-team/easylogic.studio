@@ -1,5 +1,4 @@
 import Dom from "@core/Dom";
-import { OBJECT_TO_PROPERTY } from "@core/functions/func";
 import { Item } from "@items/Item";
 import SVGItemRender from "./SVGItemRender";
 
@@ -52,12 +51,7 @@ export default class SVGTextPathRender extends SVGItemRender {
 
   toPathSVG (item) {
     return /*html*/`
-    <path ${OBJECT_TO_PROPERTY({
-      'class': 'svg-path-item',
-      id: this.toPathId(item),
-      d: item.d,
-      fill: 'none'
-    })} />
+    <path class="svg-path-item" id="${this.toPathId(item)}" d="${item.d}" fill="none" />
     `
   }
 
@@ -68,12 +62,12 @@ export default class SVGTextPathRender extends SVGItemRender {
       <svg class='element-item textpath' data-id="${id}">
         ${this.toDefString(item)}
         <text class="svg-textpath-item">
-          <textPath ${OBJECT_TO_PROPERTY({
-            'xlink:href' : pathId,
-            textLength,
-            lengthAdjust,
-            startOffset
-          })} >${item.text}</textPath>
+          <textPath 
+            xlink:href="${pathId}"
+            textLength="${textLength}"
+            lengthAdjust="${lengthAdjust}"
+            startOffset="${startOffset}"
+          >${item.text}</textPath>
           <use href="${pathId}" />
         </text>
       </svg>

@@ -1,4 +1,3 @@
-import { OBJECT_TO_PROPERTY } from "@core/functions/func";
 import { convertMatches, reverseMatches } from "@core/functions/parser";
 import { ColorStep } from "./ColorStep";
 import { SVGGradient } from "./SVGGradient";
@@ -44,11 +43,18 @@ export class SVGLinearGradient extends SVGGradient {
       var {x1, y1, x2, y2, spreadMethod} = this.json;    
 
       return /*html*/`
-<linearGradient ${OBJECT_TO_PROPERTY({ id, x1, x2, y1, y2, spreadMethod })} >
-  ${this.colorsteps.map(it => {
-    return /*html*/`<stop offset="${it.percent}%"  stop-color="${it.color}" ></stop>`
-  }).join('\n')}
-</linearGradient>
+        <linearGradient 
+            id="${id}"
+            x1="${x1}"
+            x2="${x2}"
+            y1="${y1}"
+            y2="${y2}"
+            spreadMethod="${spreadMethod}"
+          >
+          ${this.colorsteps.map(it => {
+            return /*html*/`<stop offset="${it.percent}%"  stop-color="${it.color}" ></stop>`
+          }).join('\n')}
+        </linearGradient>
       `
   }
 

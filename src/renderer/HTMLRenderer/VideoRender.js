@@ -1,5 +1,4 @@
 import Dom from "@core/Dom";
-import { OBJECT_TO_PROPERTY } from "@core/functions/func";
 import { Item } from "@items/Item";
 import { Project } from "@items/Project";
 import LayerRender from "./LayerRender";
@@ -55,15 +54,15 @@ export default class VideoRender extends LayerRender {
         return /*html*/`
         <div class='element-item video' data-id="${id}">
             ${this.toDefString(item)}
-            <video ${OBJECT_TO_PROPERTY({ 
-                controls,
-                src: this.getUrl(item),
-                muted,
-                poster,
-                loop,
-                crossorigin,
-                autoplay
-            })}>
+            <video 
+                controls="${controls}"
+                src="${this.getUrl(item)}
+                muted="${muted}"
+                poster="${poster}"
+                loop="${loop}"
+                crossorigin="${crossorigin}"
+                autoplay="${autoplay}"
+            >
                 Sorry, your browser doesn't support embedded videos.
             </video>
         </div>`
