@@ -264,7 +264,10 @@ export class SelectionManager {
    * @param {Item|Item[]} id 
    */
   selectById(id) {
-    this.select(... _traverse(this.project, id))
+    if (id) {
+      this.select(... _traverse(this.project, id))
+    }
+
   }
 
   selectAfterCopy () {
