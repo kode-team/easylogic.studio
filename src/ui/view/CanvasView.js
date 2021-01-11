@@ -3,9 +3,11 @@ import UIElement, { EVENT } from "@core/UIElement";
 import HTMLRenderView from "./render-view/HTMLRenderView";
 import PageTools from "../view-items/PageTools";
 import PageSubEditor from "../view-items/PageSubEditor";
-import { BIND, IF, MOVE, normalizeWheelEvent, POINTERSTART, PREVENT, WHEEL } from "@core/Event";
+import { BIND, DRAGOVER, DROP, IF, MOVE, normalizeWheelEvent, POINTERSTART, PREVENT, WHEEL } from "@core/Event";
 import { vec3 } from "gl-matrix";
 import { KEY_CODE } from "@types/key";
+import Resource from "@util/Resource";
+import Dom from "@core/Dom";
 
 export default class CanvasView extends UIElement {
 
@@ -100,6 +102,37 @@ export default class CanvasView extends UIElement {
     //   innerHTML : this.makeViewportConsole()
     // }
   }
+
+
+  [DRAGOVER('$lock') + PREVENT] () {}
+  [DROP('$lock') + PREVENT] (e) {
+
+    if (e.dataTransfer.getData('text/artboard')) {
+      const newCenter = this.$viewport.createWorldPosition(e.clientX, e.clientY);
+      
+      this.emit('drop.asset', {
+          artboard: { id: e.dataTransfer.getData('text/artboard'), center: newCenter }
+      })
+
+    } else {
+      const files = Resource.getAllDropItems(e)
+      console.log(files);
+      const id = Dom.create(e.target).attr('data-id');
+
+      if (id) {
+        this.emit('drop.asset', {
+          gradient: e.dataTransfer.getData('text/gradient'),
+          pattern: e.dataTransfer.getData('text/pattern'),
+          color: e.dataTransfer.getData('text/color'),
+          imageUrl: e.dataTransfer.getData('image/info'),
+        }, id)
+      } else {
+        const imageUrl = e.dataTransfer.getData('image/info')
+        this.emit('dropImageUrl', imageUrl)
+      }
+    }
+
+  }  
 
     /**
      * wheel 은 제어 할 수 있다. 

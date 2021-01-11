@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "@core/UIElement";
-import { BIND, POINTERSTART, MOVE, END, IF, KEYUP, DROP, DRAGOVER, PREVENT, FOCUSIN, BLUR } from "@core/Event";
+import { BIND, POINTERSTART, MOVE, END, IF, KEYUP, DOUBLECLICK, FOCUSOUT } from "@core/Event";
 import { Length } from "@unit/Length";
 
 import Dom from "@core/Dom";
@@ -96,6 +96,7 @@ export default class HTMLRenderView extends UIElement {
     checkEmptyElement (e) {
         var $el = Dom.create(e.target)
 
+        const mousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);        
         const code = this.$shortcuts.getGeneratedKeyCode(KEY_CODE.space);
         if (this.$keyboardManager.check(code)) {        // space 키가 눌러져있을 때는 실행하지 않는다. 
             return false;
@@ -118,8 +119,20 @@ export default class HTMLRenderView extends UIElement {
                 return false; 
             }
 
+            // select된 객체에 포지션이 있으면  움직일 수 있도록 한다. 
+            if (this.$selection.hasPoint(mousePoint)) {
+                return false;
+            }            
+
             return true; 
         }
+
+
+        // select된 객체에 포지션이 있으면  움직일 수 있도록 한다. 
+        if (this.$selection.hasPoint(mousePoint)) {
+            return false;
+        }            
+
 
         return $el.hasClass('element-item') === false
             && $el.hasClass('artboard-title') === false 
@@ -307,20 +320,29 @@ export default class HTMLRenderView extends UIElement {
 
     }
 
-    [FOCUSIN('$view .element-item.text')] (e) {
+    // text 의 경우 doubleclick 을 해야 포커스를 줄 수 있고 
+    // 그 이후에 편집이 가능하다. 
+    [DOUBLECLICK('$view .element-item.text')] (e) {
         e.$dt.css('height', 'auto');
+        e.$dt.addClass('focused');
+        e.$dt.attr('contenteditable', 'true');
+        e.$dt.focus();
+        e.$dt.select();
     }
 
-    [BLUR('$view .element-item.text')] (e) {
+    [FOCUSOUT('$view .element-item.text')] (e) {
         e.$dt.css('height', undefined)
+        e.$dt.removeAttr('contenteditable');
+        e.$dt.removeClass('focused');
     }
-
 
     [KEYUP('$view .element-item.text')] (e) {
         var content = e.$dt.html()
         var text = e.$dt.text().trim()
         var id = e.$dt.attr('data-id');
         const rect = e.$dt.rect()
+
+        //FIXME: matrix에 기반한 좌표 연산이 필요하다. 
 
         var arr = [] 
         this.$selection.items.filter(it => it.id === id).forEach(it => {
@@ -344,31 +366,41 @@ export default class HTMLRenderView extends UIElement {
      */
     checkEditMode (e) {
 
+
+        const mousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);
+            
+        if (this.$selection.hasPoint(mousePoint)) {
+            return true;            
+        }
+
         const code = this.$shortcuts.getGeneratedKeyCode(KEY_CODE.space);
         if (this.$keyboardManager.check(code)) {        // space 키가 눌러져있을 때는 실행하지 않는다. 
             return false;
         }
 
-        const $element = e.$dt;        
         const $target = Dom.create(e.target);
-        var id = $element.attr('data-id')            
+        const $element = $target.closest('element-item');
 
-        // text, artboard 는 선택하지 않음. 
-        if ($element.hasClass('text')) {
-            return false; 
-        }
+        if ($element) {
+            // text 에 focus 가 가있는 경우는 움직이지 않는다. 
+            if ($element.hasClass('focused')) {
+                return false; 
+            }
 
+            var id = $element.attr('data-id')            
 
-        // altKey 눌러서 copy 하지 않고 드랙그만 하게 되면  
-        if (e.altKey === false) {
-            if ($element.hasClass('artboard')) {
-                const artboard = this.$selection.currentProject.searchById(id);
-    
-                if (artboard && artboard.hasChildren() && $target.hasClass('artboard-title') === false) {
-                    return false; 
-                }
-            }        
-    
+            // altKey 눌러서 copy 하지 않고 드랙그만 하게 되면  
+            if (e.altKey === false) {
+                if ($element.hasClass('artboard')) {
+                    const artboard = this.$selection.currentProject.searchById(id);
+        
+                    if (artboard && artboard.hasChildren() && $target.hasClass('artboard-title') === false) {
+                        return false; 
+                    }
+                }        
+        
+            }
+
         }
 
 
@@ -382,10 +414,10 @@ export default class HTMLRenderView extends UIElement {
      * 
      * @param {PointerEvent} e 
      */
-    [POINTERSTART('$view .element-item') + IF('checkEditMode')  + MOVE('calculateMovedElement') + END('calculateEndedElement')] (e) {
+    [POINTERSTART('$view') + IF('checkEditMode')  + MOVE('calculateMovedElement') + END('calculateEndedElement')] (e) {
         this.startXY = e.xy ; 
-        const $element = e.$dt;
         const $target = Dom.create(e.target);
+        const $element = $target.closest('element-item');
 
         var id = $element.attr('data-id')    
 
@@ -424,7 +456,14 @@ export default class HTMLRenderView extends UIElement {
                 } else {
                     // 선택이 안되어 있으면 선택 
                     if (this.$selection.check({ id }) === false) { 
-                        this.$selection.selectById(id);
+
+                        const current = this.$selection.currentProject.searchById(id);
+                        if (current && current.is('artboard') && current.hasChildren()) {
+                            // NOOP
+                        } else {
+                            this.$selection.selectById(id);
+                        }
+
                     }
                 }
             }
@@ -498,7 +537,7 @@ export default class HTMLRenderView extends UIElement {
                 return; 
             }
         } else {              
-            this.emit('removeGuideLine');
+            // this.emit('removeGuideLine');
 
             this.nextTick(() => {
                 this.command(
@@ -666,52 +705,6 @@ export default class HTMLRenderView extends UIElement {
             })
         }
     }   
-
-    [DRAGOVER('view') + PREVENT] () {}
-    [DROP('$view') + PREVENT] (e) {
-
-        if (e.dataTransfer.getData('text/artboard')) {
-
-
-            this.dragXY =  {x: e.xy.x, y: e.xy.y}; 
-
-            this.rect = this.refs.$body.rect();            
-            this.canvasOffset = this.refs.$view.rect();
-    
-            this.canvasPosition = {
-                x: this.canvasOffset.left,
-                y: this.canvasOffset.top
-            }
-    
-            this.dragXY.x -= this.rect.x
-            this.dragXY.y -= this.rect.y
-
-            const newVertex = this.$viewport.createVertex([this.dragXY.x, this.dragXY.y, 0])
-            
-            this.emit('drop.asset', {
-                artboard: { id: e.dataTransfer.getData('text/artboard'), center: newVertex }
-            })
-
-        } else {
-            const files = Resource.getAllDropItems(e)
-            console.log(files);
-            const id = Dom.create(e.target).attr('data-id');
-
-            if (id) {
-                this.emit('drop.asset', {
-                    gradient: e.dataTransfer.getData('text/gradient'),
-                    pattern: e.dataTransfer.getData('text/pattern'),
-                    color: e.dataTransfer.getData('text/color'),
-                    imageUrl: e.dataTransfer.getData('image/info'),
-                }, id)
-            } else {
-                const imageUrl = e.dataTransfer.getData('image/info')
-                this.emit('dropImageUrl', imageUrl)
-            }
-    
-        }
-
-    }
 
     [EVENT('updateViewport')] () {
         this.bindData('$view');        

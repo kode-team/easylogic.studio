@@ -65,7 +65,6 @@ export default class PathDataEditor extends UIElement {
 
     [LOAD('$data')] () {
 
-
         var  segments = []
         
         this.state.parser.segments.forEach((it, index) => {
@@ -88,9 +87,6 @@ export default class PathDataEditor extends UIElement {
         if (last && last.command !== 'Z') {
             segments.push({command: 'Z', toggle: false, values: [] })
         }
-
-
-
 
         var arr = segments.map(it => {
             var cls = it.command === 'M' ? 'm' : '';

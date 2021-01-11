@@ -26,29 +26,42 @@ export class ViewportManager {
         this.resetWorldMatrix();            
     }
 
-
+    /**
+     * transform origin 을 설정 
+     * 
+     * @param {vec3} originVec 
+     */
     setTransformOrigin (originVec) {
         this.transformOrigin = originVec;
         this.resetWorldMatrix()
     }
 
+    /**
+     * transformOrigin 을 설정하면서 translate 로 화면까지 옮김 
+     * 
+     * @param {vec3} newOrigin 
+     */
     setTransformOriginWithTranslate (newOrigin) {
         const oldOrigin = vec3.clone(this.transformOrigin);
         this.setTransformOrigin(newOrigin);
-        this.setTranslate(
-            vec3.add(
-                [], 
-                this.translate, 
-                vec3.add([], oldOrigin, vec3.negate([], newOrigin))
-            )
-        );
+        this.setTranslate(vec3.add([], this.translate, vec3.subtract([], oldOrigin, newOrigin)));
     } 
 
+    /**
+     * scale 설정 
+     * 
+     * @param {number} scale 0.3...5
+     */
     setScale (scale) {
         this.scale = Math.min(Math.max(this.minScale, scale), this.maxScale); 
         this.resetWorldMatrix()    
     } 
     
+    /**
+     * viewport 이동 
+     * 
+     * @param {vec3} translate 
+     */
     setTranslate (translate) {
         this.translate = translate;
         this.resetWorldMatrix()    
@@ -59,7 +72,6 @@ export class ViewportManager {
      * 
      * 1. world matrix 
      * 2. scale matrix - 이동 간격을 계산할 때 주로 사용 
-     * 
      * 
      */
     resetWorldMatrix () {
@@ -106,14 +118,12 @@ export class ViewportManager {
             }
         
             this.cachedViewport = rectToVerties(0, 0, this.canvasSize.width, this.canvasSize.height)
-    
-            this.setTransformOriginWithTranslate(
-                vec3.multiply(
-                    [],
-                    this.transformOrigin,
-                    [this.canvasSize.width/oldCanvasSize.width,this.canvasSize.height/oldCanvasSize.height,1 ]
-                )
-            )
+            const newTransformOrigin = vec3.multiply(
+                [],
+                this.transformOrigin,
+                [this.canvasSize.width/oldCanvasSize.width,this.canvasSize.height/oldCanvasSize.height,1 ]
+            )    
+            this.setTransformOriginWithTranslate(newTransformOrigin)
     
         } else {
             this.canvasSize = {
@@ -143,21 +153,35 @@ export class ViewportManager {
 
     }
 
-    setMousePoint (x, y) {
+    /**
+     * mousePoint{x, y} 를 가지고 실제 좌표를 구한다. 
+     * 
+     * @param {number} x 
+     * @param {number} y 
+     */
+    createWorldPosition(x, y) {
         const origin = {
             x: x - this.canvasSize.x,
             y: y - this.canvasSize.y,
         }
 
-        // this.state.cachedViewport = clone(this.verties);
-        const newOrigin = vec3.lerp([], this.verties[0], this.verties[2], 0.5);
-
         const mouseX = this.verties[0][0] + (this.verties[2][0] - this.verties[0][0]) * (origin.x/this.canvasSize.width);
         const mouseY = this.verties[0][1] + (this.verties[2][1] - this.verties[0][1]) * (origin.y/this.canvasSize.height);
 
-        this.mouse = [mouseX, mouseY, 0]
+        return [mouseX, mouseY, 0]
+    }
 
-        this.setTransformOriginWithTranslate(newOrigin)
+    /**
+     * 마우스 point{x, y} 를 기준으로 viewport 를 다시 맞춤 
+     * 
+     * @param {number} x 
+     * @param {number} y 
+     */
+    setMousePoint (x, y) {
+
+        this.mouse = this.createWorldPosition(x, y);
+
+        this.setTransformOriginWithTranslate(vec3.lerp([], this.verties[0], this.verties[2], 0.5))
 
         this.editor.emit('updateViewport')        
     }
@@ -233,6 +257,12 @@ export class ViewportManager {
         this.editor.emit('updateViewport')        
     }
 
+    /**
+     * 현재 mouse 포인트를 x, y 로 변환해서 넘겨준다. 
+     * 
+     * @type {number}
+     * @returns {vec3}
+     */
     get pos () {
         const mouseX = (this.mouse[0] - this.verties[0][0])/(this.verties[2][0] - this.verties[0][0]) * 100;
         const mouseY = (this.mouse[1] - this.verties[0][1])/(this.verties[2][1] - this.verties[0][1]) * 100;

@@ -484,4 +484,13 @@ export class SelectionManager {
     return hasParent; 
   }
   
+  /**
+   * 특정 위치가 selection 영역에 있는지 여부 체크 
+   * 
+   * @param {vec3} point 
+   * @param {number} y 
+   */
+  hasPoint (point) {
+    return polyPoint(this.rectVerties, point[0], point[1]);
+  }
 }

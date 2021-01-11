@@ -17,6 +17,22 @@ const vLine = (target) => {
     return line([0, target[1], 0], [10000, target[1], 0]);
 }
 
+const point = (target) => {
+
+    return /*html*/`
+        <path 
+            stroke="red"
+            stroke-width="1"
+            d="
+                M ${target[0]-2} ${target[1]-2}
+                L ${target[0]+2} ${target[1]+2}
+                M ${target[0]-2} ${target[1]+2}
+                L ${target[0]+2} ${target[1]-2}
+            " 
+        />
+    `;
+}
+
 /**
  * 객체와의 거리의 가이드 라인을 그려주는 컴포넌트
  */
@@ -46,16 +62,21 @@ export default class GuideLineView extends UIElement {
             const [source, target, axis] = list[i];
 
             // 시작점 기준으로 맞출때가 필요하면 localSourceVertext 를 활용하자. 아직은 없음. 
-            // const localSourceVertext = vec3.transformMat4([], source, this.$viewport.matrix);
+            const localSourceVertext = vec3.transformMat4([], source, this.$viewport.matrix);
             const localTargetVertext = vec3.transformMat4([], target, this.$viewport.matrix);            
 
             if (axis === 'x') {
-                images.push(hLine(localTargetVertext))
+                images.push(hLine(localTargetVertext))        
+                images.push(point([localTargetVertext[0], localSourceVertext[1], localSourceVertext[2]]))
             } 
             
             if (axis === 'y') {
                 images.push(vLine(localTargetVertext))
+                images.push(point([localSourceVertext[0], localTargetVertext[1], localSourceVertext[2]]))
             }
+
+            // images.push(point(localSourceVertext))
+            images.push(point(localTargetVertext))                
     
         }
     

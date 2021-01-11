@@ -37,7 +37,7 @@ export default class TextRender extends LayerRender {
     render (item) {
         var {id, content} = item;
 
-        return /*html*/`<p class='element-item text' contenteditable="true" tabIndex="-1" data-id="${id}">${content}</p>`
+        return /*html*/`<p class='element-item text' tabIndex="-1" data-id="${id}">${content}</p>`
     }
 
     /**

@@ -172,6 +172,12 @@ export class MovableItem extends Item {
         return polyPoly(areaVerties, this.verties())        
     }
 
+    /**
+     * 특정 위치가 객체를 가리키고 있는데 체크한다. 
+     * 
+     * @param {number} x 
+     * @param {number} y 
+     */
     hasPoint (x, y) {
         return polyPoint(this.verties(), x, y)
     }

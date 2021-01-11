@@ -390,7 +390,7 @@ export default class DomRender extends ItemRender {
 
 
   toClipPathCSS (item) {
-    const str = item['clip-path']
+    let str = item['clip-path']
 
     if (Boolean(str) === false) {
       return null;

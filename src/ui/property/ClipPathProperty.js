@@ -163,7 +163,7 @@ export default class ClipPathProperty extends BaseProperty {
 
     if (!current) return;
 
-    data.d = current.invertPathString(data.d);
+    data.d = current.invertPath(data.d).round(1000).d;
 
     current.reset({
       'clip-path': `path(${data.d})`      

@@ -199,10 +199,10 @@ export default class SelectionToolView extends SelectionToolEvent {
 
         if (instance) {
             instance.reset({
-                x: Length.px(lastStartVertext[0] + (newWidth < 0 ? newWidth : 0)),
-                y: Length.px(lastStartVertext[1] + (newHeight < 0 ? newHeight : 0)),
-                width: Length.px(Math.abs(newWidth)),
-                height: Length.px(Math.abs(newHeight)),
+                x: Length.px(lastStartVertext[0] + (newWidth < 0 ? newWidth : 0)).round(1000),
+                y: Length.px(lastStartVertext[1] + (newHeight < 0 ? newHeight : 0)).round(1000),
+                width: Length.px(Math.abs(newWidth)).round(1000),
+                height: Length.px(Math.abs(newHeight)).round(1000),
             })    
             instance.recover();     
         }
@@ -425,8 +425,8 @@ export default class SelectionToolView extends SelectionToolEvent {
             if (instance) {
 
                 instance.reset({
-                    x: Length.px(it.x + localDist[0]).round(),          // 1px 단위로 위치 설정 
-                    y: Length.px(it.y + localDist[1]).round(),
+                    x: Length.px(it.x + localDist[0]).round(1000),          // 1px 단위로 위치 설정 
+                    y: Length.px(it.y + localDist[1]).round(1000),
                 })
             }
         }) 

@@ -1,7 +1,7 @@
 
 import { getBezierPointOneQuard, getCurveBBox } from "@core/functions/bezier";
 import { isNotUndefined, clone } from "@core/functions/func";
-import { degreeToRadian } from "@core/functions/math";
+import { degreeToRadian, round } from "@core/functions/math";
 import { mat4, vec3 } from "gl-matrix";
 import Point from "./Point";
 
@@ -616,6 +616,16 @@ export default class PathParser {
 
     invert (transformMatrix) {
         this.transformMat4(mat4.invert([], transformMatrix));
+    }
+
+    round (k = 1) {
+        this.each(function(segment) {
+            segment.values = segment.values.map(it => round(it, k));
+
+            return segment;
+        });
+
+        return this; 
     }
 
     get verties () {

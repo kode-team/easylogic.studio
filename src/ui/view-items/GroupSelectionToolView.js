@@ -458,8 +458,8 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
             if (instance) {
                 instance.reset({
-                    x: Length.px(it.x + localDist[0]).round(),       // 1px 단위로 위치 설정 
-                    y: Length.px(it.y + localDist[1]).round(),
+                    x: Length.px(it.x + localDist[0]).round(1000),       // 1px 단위로 위치 설정 
+                    y: Length.px(it.y + localDist[1]).round(1000),
                 })
             }                        
         })        

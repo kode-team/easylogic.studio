@@ -242,8 +242,7 @@ export default class Dom {
   }
 
   updateSVGDiff (html, rootElement = 'div') {
-
-    DomDiff(this, Dom.create(rootElement).html(`<svg>${html}</svg>`).firstChild)
+    DomDiff(this, Dom.create(rootElement).html(`<svg>${html}</svg>`).firstChild.firstChild)
   }  
 
   find(selector) {
@@ -795,18 +794,22 @@ export default class Dom {
   }
 
   select() {
-    this.el.select();
+    // contenteditable 의 경우 selection api 를 사용해서 select() 를 수행한다.
+    if (this.attr('contenteditable') === 'true') {
+      var range = document.createRange();
+      range.selectNodeContents(this.el);
+      var sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    } else {
+      this.el.select();
+    }
+
     return this;
   }
 
   blur() {
     this.el.blur();
-
-    return this;
-  }
-
-  select() {
-    this.el.select();
 
     return this;
   }

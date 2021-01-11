@@ -17,7 +17,7 @@ export default class SVGItemRender extends LayerRender {
 
         var $defs = currentElement.$('defs');
         if ($defs) {
-            $defs.html(this.toDefInnerString(item))          
+            $defs.updateSVGDiff(`<defs>${this.toDefInnerString(item)}</defs>`)
         } else {
             var str = this.toDefString(item).trim();
             currentElement.prepend(Dom.createByHTML(str));

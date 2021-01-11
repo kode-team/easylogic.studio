@@ -174,7 +174,6 @@ export class SnapManager {
             // vertext 대 vertext 를 기준으로 좌표 설정 
             const points = this.getGuidesByPointPoint(sourceVerties, target.verties);
 
-
             guides.push(...points);
         })
 
