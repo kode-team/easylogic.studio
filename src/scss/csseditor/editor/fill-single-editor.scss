@@ -5,7 +5,7 @@
 
 
     &.has-label {
-        grid-template-columns: 60px 24px 1fr;
+        grid-template-columns: 70px 40px 1fr;
         grid-column-gap: 2px;
 
         label {
@@ -18,25 +18,39 @@
     }       
     
     .preview {
-        height: 22px;
-        width: 22px;
         display: inline-block;
+        
         vertical-align: middle;
+        cursor: pointer;
+        text-align: right;
+        padding: 3px;
+        height: 24px;
+        border-radius: 2px;
+        background-color: var(--color-view-background-color);
 
         .mini-view {
+            width: 100%;
             height: 100%;
-            width:100%;
             display: inline-block;
+            position: relative; 
+            
             vertical-align: middle;
-            @include transparent-background();
-            cursor:pointer;
+            border-radius: 2px;           
+            overflow: hidden; 
+            @include transparent-background();  
+            // box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
 
             .color-view {
-                width: 100%;
-                height: 100%;
-            }
+                position: absolute;
+                left: 0px;
+                top: 0px;
+                right: 0px;
+                bottom: 0px;
+            } 
+
         }
     }
+
 
     .colors {
         display: inline-block; 

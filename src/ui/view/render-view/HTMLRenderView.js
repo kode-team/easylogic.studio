@@ -419,7 +419,7 @@ export default class HTMLRenderView extends UIElement {
         const $target = Dom.create(e.target);
         const $element = $target.closest('element-item');
 
-        var id = $element.attr('data-id')    
+        var id = $element && $element.attr('data-id');
 
         // alt(option) + pointerstart 시점에 Layer 카피하기         
         if (e.altKey) {

@@ -1,12 +1,12 @@
 .select-icon-editor {
     display: grid;
     grid-template-columns: 1fr;
-    grid-column-gap: 2px;
+    grid-column-gap: 5px;
 
 
     &.has-label {
-        grid-template-columns: 60px 1fr;
-        grid-column-gap: 2px;
+        grid-template-columns: 70px 1fr;
+        grid-column-gap: 5px;
 
         label {
             text-align: left;
