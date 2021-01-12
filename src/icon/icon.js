@@ -143,6 +143,7 @@ import align_horizontal_right from "./align_horizontal_right";
 import align_vertical_bottom from "./align_vertical_bottom";
 import align_vertical_center from "./align_vertical_center";
 import align_vertical_top from "./align_vertical_top";
+import swap_horiz from "./swap_horiz";
 
 
 const alias = {
@@ -158,6 +159,7 @@ export default {
   align_vertical_bottom,
   align_vertical_center,
   align_vertical_top,  
+  swap_horiz,  
   arrow_right,  
   group,
   volume_down,

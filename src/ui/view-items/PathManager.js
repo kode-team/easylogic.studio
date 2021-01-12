@@ -51,19 +51,21 @@ export default class PathManager extends UIElement {
         <div class='tools' ref='$mode' data-selected-value='${this.state.mode}'>
             <button type="button" data-value='modify' title='${this.$i18n('path.manager.mode.modify')}' > ${icon.device_hub}</button>
             <button type="button" data-value='path' title='${this.$i18n('path.manager.mode.path')}' > ${icon.control_point}</button>
-            <button type="button" data-value='transform' title='${this.$i18n('path.manager.mode.transform')}' > ${icon.format_shapes}</button>
+            <button type="button" data-value='transform' title='${this.$i18n('path.manager.mode.transform')}' >${icon.format_shapes}</button>
         </div>
         <div class='tools' ref='$flip'>
             <button type="button" data-value='flipX' title='${this.$i18n('path.manager.mode.flipX')}'>${icon.flip}</button>
             <button type="button" data-value='flipY' title='${this.$i18n('path.manager.mode.flipY')}'>${icon.flip}</button>
             <button type="button" data-value='flip' title='${this.$i18n('path.manager.mode.flipOrigin')}'>${icon.flip}</button>
         </div>
+
+        <div class='tools' ref='$util'>
+            <button type="button" data-value='reverse' title='${this.$i18n('path.manager.mode.transform')}' >${icon.swap_horiz}</button>
+        </div>        
         <div class='tools'>      
           <div >
             <FillSingleEditor ref='$fill' simple="true" label='${this.$i18n('svg.item.property.fill')}' key='fill' onchange="changeValue" />
           </div>
-
-
           <div >
             <FillSingleEditor ref='$stroke' simple="true"  label='${this.$i18n('svg.item.property.stroke')}' key='stroke' onchange="changeValue" />
           </div>      
@@ -136,6 +138,12 @@ export default class PathManager extends UIElement {
 
     this.emit('changePathTransform', transformType);    
   }
+
+  [CLICK('$util button')] (e) {
+    var utilType = e.$dt.attr('data-value');
+
+    this.emit('changePathUtil', utilType);    
+  }  
 
   [CLICK('$mode button')] (e) {
     var mode = e.$dt.attr('data-value');

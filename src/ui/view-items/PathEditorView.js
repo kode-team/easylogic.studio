@@ -169,14 +169,30 @@ const PathTransformEditor = class extends PathCutter {
             this.pathGenerator.transform('flipY', 0, height)    
             break;        
         case 'flip':
-            this.pathGenerator.transform('flip', width, height)    
-            break;                         
+            this.pathGenerator.transform('flip', width, height)                          
         }
         
 
         this.renderPath()
 
         this.refreshPathLayer();        
+    }
+
+
+    [EVENT('changePathUtil')] (utilType) {
+        switch(utilType) {
+        case 'reverse':
+            // 이전 scale 로 복구 한 다음 새로운 path 를 설정한다. 
+
+            const { d } = this.pathGenerator.toPath()
+
+            const pathParser = new PathParser(d);
+            pathParser.reverse();
+            pathParser.transformMat4(this.state.cachedMatrixInverse)
+
+            this.refresh({ d: pathParser.d }) 
+            break;
+        }    
     }
         
     [POINTERSTART('$tool .transform-tool-item') + MOVE('moveTransformTool') + END('moveEndTransformTool')]  (e) {

@@ -628,6 +628,54 @@ export default class PathParser {
         return this; 
     }
 
+    reverse () {
+
+
+        const newSegments = [];
+        let lastIndex = this.segments.length-1;
+        for(var i = lastIndex; i > 0; i--) {
+            const segment = this.segments[i];
+            const v = segment.values;
+            const c = segment.command;
+            const prevSegment = this.segments[i-1];
+            const lastX = prevSegment.values[prevSegment.values.length-2];
+            const lastY = prevSegment.values[prevSegment.values.length-1];
+
+            switch(c) {
+            case 'L':
+
+                if (i === lastIndex) {        // last 일 경우 
+                    newSegments.push({command: 'M',values: [v[0], v[1]]})
+                }
+
+                newSegments.push({command: 'L',values: [lastX, lastY]})
+                break;                
+            case 'C':
+
+                if (i === lastIndex) {        // last 일 경우 
+                    newSegments.push({command: 'M',values: [v[4], v[5]]})
+                }
+
+                newSegments.push({command: 'C',values: [v[2], v[3], v[0], v[1], lastX, lastY]})
+                break;
+            case 'Q':
+
+                if (i === lastIndex) {        // last 일 경우 
+                    newSegments.push({command: 'M',values: [v[2], v[3]]})
+                }
+
+                newSegments.push({command: 'Q',values: [v[0], v[1], lastX, lastY]})
+                break;
+            case 'Z':
+                newSegments.push(segment);
+                lastIndex = i - 1; 
+                break;
+            }
+        }
+
+        this.segments = newSegments;
+    }
+
     get verties () {
         let arr = []
 

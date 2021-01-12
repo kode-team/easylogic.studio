@@ -742,9 +742,6 @@ export default class PathGenerator {
             if (e.shiftKey) {   
                 // 상대편 길이 동일하게 curve 움직이기 
                 this.moveSegment(segmentKey, dx, dy);
-                var targetSegmentKey = segmentKey === 'endPoint' ? 'reversePoint' : 'endPoint'
-                state.segment[targetSegmentKey] = Point.getReversePoint(state.segment.startPoint, state.segment[segmentKey]);                
-
             } else if (e.altKey) {  
                 this.moveSegment(segmentKey, dx, dy);
                 
@@ -753,6 +750,8 @@ export default class PathGenerator {
             } else {    // Curve 만 움직이기 
                 // 해당 segment 먼저 움직이고 
                 this.moveSegment(segmentKey, dx, dy);
+                var targetSegmentKey = segmentKey === 'endPoint' ? 'reversePoint' : 'endPoint'
+                state.segment[targetSegmentKey] = Point.getReversePoint(state.segment.startPoint, state.segment[segmentKey]);                
             }
         } else {
             this.moveSegment('startPoint', dx, dy);
