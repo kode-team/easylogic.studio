@@ -116,7 +116,6 @@ export default class CanvasView extends UIElement {
 
     } else {
       const files = Resource.getAllDropItems(e)
-      console.log(files);
       const id = Dom.create(e.target).attr('data-id');
 
       if (id) {

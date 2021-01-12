@@ -8,22 +8,9 @@
         padding: 5px !important; 
         margin-bottom: 0px !important;
 
-        @for $selectValue from 0 to 40 {
-            &[data-depth="#{$selectValue}"] {
-                .detail {
-                    label {
-                        padding-left: $selectValue * 20px;
-                    }
-                }
-
-            }
-        }  
-
         &[data-is-hide="true"] {
             display: none; 
         }
-
-
 
         &[data-is-group="true"] {
             .detail {
