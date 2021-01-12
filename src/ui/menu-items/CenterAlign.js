@@ -3,7 +3,7 @@ import icon from "@icon/icon";
    
 export default class CenterAlign extends MenuItem {
   getIconString() {
-    return icon.center;
+    return icon.align_horizontal_center;
   }
   getTitle() {
     return "Center";

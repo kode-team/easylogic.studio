@@ -137,7 +137,12 @@ import arrowLeft from "./arrowLeft";
 import group from "./group";
 import arrow_right from "./arrow_right";
 import layers from "./layers";
-
+import align_horizontal_center from "./align_horizontal_center";
+import align_horizontal_left from "./align_horizontal_left";
+import align_horizontal_right from "./align_horizontal_right";
+import align_vertical_bottom from "./align_vertical_bottom";
+import align_vertical_center from "./align_vertical_center";
+import align_vertical_top from "./align_vertical_top";
 
 
 const alias = {
@@ -147,6 +152,12 @@ const alias = {
 
 export default {
   ...alias,
+  align_horizontal_center,
+  align_horizontal_left,
+  align_horizontal_right,
+  align_vertical_bottom,
+  align_vertical_center,
+  align_vertical_top,  
   arrow_right,  
   group,
   volume_down,

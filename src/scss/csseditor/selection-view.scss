@@ -74,11 +74,24 @@
       box-sizing: border-box;
       background-color: white; 
       box-sizing: border-box;
-      border: 1px solid var(--selection-tool-border-color);
+      border: 1px solid orange;
       border-radius: 100%;
       cursor: alias;
       pointer-events: all;
       overflow: hidden;
+
+
+      &:before {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 6px;
+        height: 6px;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        background-color: orange;
+      }      
 
       &.no-fill {
         width: 14px;
@@ -100,7 +113,7 @@
 
       stroke: var(--selection-tool-border-color);
       fill: transparent;
-      stroke-width: 1;
+      stroke-width: 0.5;
     }
   }
   

@@ -3,7 +3,7 @@ import icon from "@icon/icon";
    
 export default class LeftAlign extends MenuItem {
   getIconString() {
-    return icon.left;
+    return icon.align_horizontal_left;
   }
   getTitle() {
     return "Left";

@@ -3,7 +3,7 @@ import icon from "@icon/icon";
    
 export default class BottomAlign extends MenuItem {
   getIconString() {
-    return icon.bottom;
+    return icon.align_vertical_bottom;
   }
   getTitle() {
     return "Bottom";

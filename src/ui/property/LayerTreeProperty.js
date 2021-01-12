@@ -140,11 +140,12 @@ export default class LayerTreeProperty extends BaseProperty {
       }
 
       const isHide = layer.isTreeItemHide()
+      const depthPadding = Length.px(depth * 24);
 
       return /*html*/`        
       <div class='layer-item ${selected}' data-is-group="${layer.isGroup}" data-depth="${depth}" data-layout='${layer.layout}' data-layer-id='${layer.id}' data-is-hide="${isHide}"  draggable="true">
         <div class='detail'>
-          <label data-layout-title='${title}' > 
+          <label data-layout-title='${title}' style='padding-left: ${depthPadding}' > 
             <div class='folder ${layer.collapsed ? 'collapsed' : ''}'>${icon.arrow_right}</div>
             <span class='icon' data-item-type="${layer.itemType}">${this.getIcon(layer)}</span> 
             <span class='name'>${name}</span>
@@ -225,7 +226,17 @@ export default class LayerTreeProperty extends BaseProperty {
 
     if (targetItem && targetItem.hasParent(sourceItem.id)) return; 
 
-    targetItem.add(sourceItem, this.state.lastDragOverItemDirection);
+    switch(this.state.lastDragOverItemDirection) {
+    case 'self': 
+      targetItem.appendChildItem(sourceItem);
+      break; 
+    case 'before':
+      targetItem.appendBefore(sourceItem);
+      break; 
+    case 'after':
+      targetItem.appendAfter(sourceItem);
+      break;       
+    }
 
     this.$selection.select(sourceItem);
 

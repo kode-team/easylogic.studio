@@ -210,8 +210,8 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         this.groupItem.reset({
             x: Length.px(lastStartVertext[0] + (newWidth < 0 ? newWidth : 0)),
             y: Length.px(lastStartVertext[1] + (newHeight < 0 ? newHeight : 0)),
-            width: Length.px(Math.abs(newWidth)),
-            height: Length.px(Math.abs(newHeight)),
+            width: Length.px(Math.abs(newWidth)).round(),
+            height: Length.px(Math.abs(newHeight)).round(),
         })    
     }   
     
@@ -458,8 +458,8 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
             if (instance) {
                 instance.reset({
-                    x: Length.px(it.x + localDist[0]).round(1000),       // 1px 단위로 위치 설정 
-                    y: Length.px(it.y + localDist[1]).round(1000),
+                    x: Length.px(it.x + localDist[0]).round(),       // 1px 단위로 위치 설정 
+                    y: Length.px(it.y + localDist[1]).round(),
                 })
             }                        
         })        
@@ -550,7 +550,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         if (!this.groupItem) return;
 
         const {line, point} = this.createRenderPointers(vertiesMap(this.groupItem.verties(), this.$viewport.matrix));
-        this.refs.$pointerRect.html(line + point)
+        this.refs.$pointerRect.updateDiff(line + point)
     }
 
 

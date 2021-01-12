@@ -41,12 +41,19 @@ $tab-height: 40px;
       border-right: 1px solid var(--border-color);;      
       box-sizing: border-box;
       height: 100%;
+
       .property {
         margin: 0px;
         height: 100%;
         border:0px;
         padding: 0px 0px;
   
+        .property-title {
+          > * {
+            padding: 0px 10px;
+          }
+        }
+
         .property-body {
           padding: 0px;
         }

@@ -365,10 +365,7 @@ export default class HTMLRenderView extends UIElement {
      * @param {PointerEvent} e 
      */
     checkEditMode (e) {
-
-
         const mousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);
-            
         if (this.$selection.hasPoint(mousePoint)) {
             return true;            
         }
@@ -401,6 +398,9 @@ export default class HTMLRenderView extends UIElement {
         
             }
 
+        } else {
+            // 움직일 수 있는 영역이 아니기 때문에 false 리턴해서 드래그를 막는다. 
+            return false; 
         }
 
 
@@ -416,6 +416,8 @@ export default class HTMLRenderView extends UIElement {
      */
     [POINTERSTART('$view') + IF('checkEditMode')  + MOVE('calculateMovedElement') + END('calculateEndedElement')] (e) {
         this.startXY = e.xy ; 
+        const mousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);
+        const isInSelectedArea = this.$selection.hasPoint(mousePoint)
         const $target = Dom.create(e.target);
         const $element = $target.closest('element-item');
 
@@ -423,13 +425,19 @@ export default class HTMLRenderView extends UIElement {
 
         // alt(option) + pointerstart 시점에 Layer 카피하기         
         if (e.altKey) {
-            // artboard-title 을 선택하고 드래그 할 때 artboard 전체를 copy 한다. 
-            if ($target.hasClass('artboard-title')) {      
-                this.$selection.selectById(id);
+
+
+            if (isInSelectedArea) {
+                // 이미 selection 영역안에 있으면 그대로 드래그 할 수 있도록 맞춘다. 
             } else {
-                if (this.$selection.check({ id }) === false) { 
-                    // 선택된게 없으면 id 로 선택 
+                // artboard-title 을 선택하고 드래그 할 때 artboard 전체를 copy 한다. 
+                if ($target.hasClass('artboard-title')) {      
                     this.$selection.selectById(id);
+                } else {
+                    if (this.$selection.check({ id }) === false) { 
+                        // 선택된게 없으면 id 로 선택 
+                        this.$selection.selectById(id);
+                    }
                 }
             }
             
@@ -446,27 +454,33 @@ export default class HTMLRenderView extends UIElement {
 
         } else {
 
-            // artboard title 인 경우는 artboard 를 선택한다.         
-            if ($target.hasClass('artboard-title')) {      
-                this.$selection.selectById(id);
+            if (isInSelectedArea) {
+                // 이미 selection 영역안에 있으면 그대로 드래그 할 수 있도록 맞춘다. 
             } else {
-                // shift key 는 selection 을 토글한다. 
-                if (e.shiftKey) {
-                    this.$selection.toggleById(id);
+
+                // artboard title 인 경우는 artboard 를 선택한다.         
+                if ($target.hasClass('artboard-title')) {      
+                    this.$selection.selectById(id);
                 } else {
-                    // 선택이 안되어 있으면 선택 
-                    if (this.$selection.check({ id }) === false) { 
+                    // shift key 는 selection 을 토글한다. 
+                    if (e.shiftKey) {
+                        this.$selection.toggleById(id);
+                    } else {
+                        // 선택이 안되어 있으면 선택 
+                        if (this.$selection.check({ id }) === false) { 
 
-                        const current = this.$selection.currentProject.searchById(id);
-                        if (current && current.is('artboard') && current.hasChildren()) {
-                            // NOOP
-                        } else {
-                            this.$selection.selectById(id);
+                            const current = this.$selection.currentProject.searchById(id);
+                            if (current && current.is('artboard') && current.hasChildren()) {
+                                // NOOP
+                            } else {
+                                this.$selection.selectById(id);
+                            }
+
                         }
-
                     }
                 }
             }
+
 
             this.selectCurrent(...this.$selection.items)
             this.initializeDragSelection();

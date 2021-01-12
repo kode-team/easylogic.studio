@@ -201,8 +201,8 @@ export default class SelectionToolView extends SelectionToolEvent {
             instance.reset({
                 x: Length.px(lastStartVertext[0] + (newWidth < 0 ? newWidth : 0)).round(1000),
                 y: Length.px(lastStartVertext[1] + (newHeight < 0 ? newHeight : 0)).round(1000),
-                width: Length.px(Math.abs(newWidth)).round(1000),
-                height: Length.px(Math.abs(newHeight)).round(1000),
+                width: Length.px(Math.abs(newWidth)).round(),
+                height: Length.px(Math.abs(newHeight)).round(),
             })    
             instance.recover();     
         }
@@ -425,8 +425,8 @@ export default class SelectionToolView extends SelectionToolEvent {
             if (instance) {
 
                 instance.reset({
-                    x: Length.px(it.x + localDist[0]).round(1000),          // 1px 단위로 위치 설정 
-                    y: Length.px(it.y + localDist[1]).round(1000),
+                    x: Length.px(it.x + localDist[0]).round(),          // 1px 단위로 위치 설정 
+                    y: Length.px(it.y + localDist[1]).round(),
                 })
             }
         }) 
@@ -481,7 +481,7 @@ export default class SelectionToolView extends SelectionToolEvent {
                 const verties = this.$selection.verties;
         
                 const {line, point} = this.createRenderPointers(vertiesMap(verties, this.$viewport.matrix));
-                this.refs.$pointerRect.html(line + point)
+                this.refs.$pointerRect.updateDiff(line + point)
             }
 
         } else {
@@ -493,7 +493,7 @@ export default class SelectionToolView extends SelectionToolEvent {
                 const verties = this.$selection.verties;
     
                 const {line, point} = this.createRenderPointers(vertiesMap(verties, this.$viewport.matrix));
-                this.refs.$pointerRect.html(line + point)
+                this.refs.$pointerRect.updateDiff(line + point)
             }
         }
 

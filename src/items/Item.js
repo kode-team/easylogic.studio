@@ -444,8 +444,6 @@ export class Item {
    */
   insertChildItem (layer, index = 0) {
 
-    if (index < 0) return;
-
     this.resetMatrix(layer);
 
     // 객체를 추가할 때는  layer 의 절대 값을 기준으로 객체를 움직인다. 
@@ -519,7 +517,6 @@ export class Item {
     let collapsedList = [] 
     do {
       if (currentParent.is('project')) break;
-      else if (currentParent.is('artboard')) break;
 
       collapsedList.push(Boolean(currentParent.collapsed))
       currentParent = currentParent.parent; 

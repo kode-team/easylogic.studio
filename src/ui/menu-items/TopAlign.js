@@ -3,7 +3,7 @@ import icon from "@icon/icon";
    
 export default class TopAlign extends MenuItem {
   getIconString() {
-    return icon.top;
+    return icon.align_vertical_top;
   }
   getTitle() {
     return "Top";
