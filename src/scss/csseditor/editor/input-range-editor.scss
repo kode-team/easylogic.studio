@@ -11,6 +11,11 @@ $border-radius: 3px;
 
     &.has-label {
         grid-template-columns: 60px 1fr;
+
+        &.compact {
+            grid-template-columns: 30px 1fr;
+        }
+
         &.is-removable {
             grid-template-columns: 60px 1fr 12px;
         }
@@ -18,11 +23,11 @@ $border-radius: 3px;
         label {
             text-align: left;
             vertical-align: middle;
-            padding: 2px 0px 2px 0px;
-            font-size: 11px;
+            padding: 4px 0px 2px 0px;
+            font-size: 13px;
             white-space: nowrap;
             text-overflow: ellipsis;
-            overflow: hidden;            
+            overflow: hidden;
         }
 
         &.block {

@@ -18,8 +18,10 @@ export default class PositionProperty extends BaseProperty {
     var current = this.$selection.current;
     if (!current) return '';
 
-    if (this.children.$x)  this.children.$x.setValue(current.x);
-    if (this.children.$y)  this.children.$y.setValue(current.y);
+    this.children.$x.setValue(current.x || Length.z());
+    this.children.$y.setValue(current.y || Length.z());
+    this.children.$width.setValue(current.width || Length.z());
+    this.children.$height.setValue(current.height || Length.z());    
   }
 
   isHideHeader() {
@@ -28,25 +30,35 @@ export default class PositionProperty extends BaseProperty {
 
   getBody() {
     return /*html*/`
-      <div class="position-item" ref="$positionItem">
+      <div class="position-item" ref="$positionItem" style='padding: 5px 0px;'>
         <div style='display: grid;grid-template-columns: repeat(2, 1fr); grid-column-gap: 10px;'>
           <div class='property-item animation-property-item' style='padding: 0px;'>
             <div class='group'>
               <span class='add-timeline-property' data-property='x'></span>
             </div>
-            <InputRangeEditor ref='$x' key='x' min="-1000" max='1000' onchange='changRangeEditor' />
+            <InputRangeEditor ref='$x' label="X" compact="true"  key='x' min="-1000" max='1000' onchange='changRangeEditor' />
           </div>
           <div class='property-item animation-property-item' style='padding: 0px;'>
             <div class='group'>
               <span class='add-timeline-property' data-property='y'></span>
             </div>
-            <InputRangeEditor ref='$y' key='y' min="-1000" max='1000' onchange='changRangeEditor' />
+            <InputRangeEditor ref='$y' label="Y" compact="true"  key='y' min="-1000" max='1000' onchange='changRangeEditor' />
           </div>
         </div>
-        <div style='display: grid;grid-template-columns: repeat(2, 1fr); grid-column-gap: 10px; text-align: center;padding: 4px 0px;'>
-          <span>${this.$i18n('position.property.X')}</span>
-          <span>${this.$i18n('position.property.Y')}</span>
-        </div>    
+        <div style='display: grid;grid-template-columns: repeat(2, 1fr); grid-column-gap: 10px; padding-top: 10px;'>
+          <div class='property-item animation-property-item' style='padding:0px'>
+            <div class='group'>
+              <span class='add-timeline-property' data-property='width'></span>
+            </div>
+            <InputRangeEditor ref='$width' label="W" compact="true" key='width' min="0" max='3000' onchange='changRangeEditor' />
+          </div>
+          <div class='property-item animation-property-item' style='padding:0px'>
+            <div class='group'>
+              <span class='add-timeline-property' data-property='height'></span>      
+            </div>
+            <InputRangeEditor ref='$height' label="H" compact="true" key='height' min="0" max='3000' onchange='changRangeEditor' />
+          </div>      
+        </div>        
       </div>
     `;
   }
@@ -56,6 +68,8 @@ export default class PositionProperty extends BaseProperty {
     if (current) {
       this.children.$x.setValue(current.x);
       this.children.$y.setValue(current.y);      
+      this.children.$width.setValue(current.width);
+      this.children.$height.setValue(current.height);         
     }
 
   }
@@ -63,7 +77,7 @@ export default class PositionProperty extends BaseProperty {
 
   [EVENT('changRangeEditor')] (key, value) {
 
-    this.command('setAttribute', 'change position', { 
+    this.command('setAttribute', 'change position or size', { 
       [key]: value
     })
 

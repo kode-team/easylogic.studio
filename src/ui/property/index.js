@@ -1,6 +1,5 @@
 import AppearanceProperty from "./AppearanceProperty";
 import BorderRadiusProperty from "./BorderRadiusProperty";
-import SizeProperty from "./SizeProperty";
 import BoxShadowProperty from "./BoxShadowProperty";
 import BoxModelProperty from "./BoxModelProperty";
 import ContentProperty from "./ContentProperty"; 
@@ -107,7 +106,6 @@ export default {
   ContentProperty,
   BoxModelProperty,
   BoxShadowProperty,
-  SizeProperty,
   BorderRadiusProperty,
   AppearanceProperty,
 };

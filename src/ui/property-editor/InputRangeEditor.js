@@ -19,6 +19,7 @@ export default class InputRangeEditor extends UIElement {
         return {
             removable: this.props.removable === 'true',
             label: this.props.label || '',
+            compact: this.props.compact === 'true',
             min: +this.props.min || 0,
             max: +this.props.max || 100,
             step: +this.props.step || 1,
@@ -36,7 +37,7 @@ export default class InputRangeEditor extends UIElement {
 
     [LOAD('$body')] () {
 
-        var { min, max, step, label, removable, layout } = this.state
+        var { min, max, step, label, compact, removable, layout } = this.state
 
         var value = +this.state.value.value.toString()
 
@@ -54,6 +55,7 @@ export default class InputRangeEditor extends UIElement {
             class="${OBJECT_TO_CLASS({
                 'input-range-editor': true,
                 'has-label': !!label,
+                'compact': !!compact,
                 'is-removable': removable,
                 [layoutClass] : true 
             })}"
