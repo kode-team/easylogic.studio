@@ -20,7 +20,7 @@ export default class AlignmentProperty extends BaseProperty {
 
   getBody() {
     return /*html*/`
-      <div class="alignment-item" ref="$positionItem">
+      <div class="alignment-item">
         <LeftAlign />
         <CenterAlign />
         <RightAlign />

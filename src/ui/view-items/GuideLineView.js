@@ -102,4 +102,8 @@ export default class GuideLineView extends UIElement {
     [EVENT('refreshGuideLine')] (list) {
         this.setGuideLine(list);
     }
+
+    [EVENT('updateViewport')] () {
+        this.refresh();
+    }
 } 

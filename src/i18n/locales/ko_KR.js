@@ -179,7 +179,7 @@ export default {
     'perspective.property.title': '투영(perspective)',
     'perspective.origin.property.title': '투영 중심점',                
 
-    'svg.item.property.title': 'SVG',    
+    'svg.item.property.title': '보이기',    
     'svg.item.property.isMotionPath': '모션 패스',
     'svg.item.property.fill': '채우기',
     'svg.item.property.fillOpacity': '투명도',

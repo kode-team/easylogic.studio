@@ -49,6 +49,7 @@ export default class SVGItemProperty extends BaseProperty {
       this.children.$strokeDashArray.setValue(current['stroke-dasharray'] || ' ')
       this.children.$strokeLineCap.setValue(current['stroke-linecap'] || 'butt')
       this.children.$strokeLineJoin.setValue(current['stroke-linejoin'] || 'miter')
+      this.children.$mixBlend.setValue(current['mix-blend-mode'])      
 
     } else {
       this.$el.hide();
@@ -60,28 +61,10 @@ export default class SVGItemProperty extends BaseProperty {
     // update 를 어떻게 할지 고민 
   }
 
-  [BIND('$svgProperty')] () {
-    var current = this.$selection.current || {};
-    var isMotionBased = !!current['motion-based']
-    return {
-      style: {
-        display: isMotionBased ? 'none': 'block'
-      }
-    }
-  }
-
   getBody() {
     var current = this.$selection.current || {};
 
     return /*html*/`
-
-      <div class='property-item'> 
-        <label>
-          <input type='checkbox' ref='$motionBased' checked="${!!current['motion-based']}" /> 
-          ${this.$i18n('svg.item.property.isMotionPath')}
-        </label>
-      </div>      
-
       <div ref='$svgProperty'>
         <div class='property-item animation-property-item' ref='$path'>
           <div class='group'>
@@ -194,7 +177,20 @@ export default class SVGItemProperty extends BaseProperty {
             options="miter,bevel,round" 
             onchange="changeValue" 
           />
-        </div>        
+        </div>       
+        <div class='property-item animation-property-item'>
+          <div class='group'>
+            <span class='add-timeline-property' data-property='mix-blend-mode'></span>
+          </div>
+          <BlendSelectEditor 
+            label='${this.$i18n('background.color.property.blend')}'
+            ref='$mixBlend' 
+            removable='true'
+            key='mix-blend-mode' 
+            icon="true" 
+            tabIndex="1"
+            onchange="changeSelect" />
+        </div>                 
         <div class='property-item animation-property-item'>
           <div class='group'>        
             <span class='add-timeline-property' data-property='svgfilter'></span>      
@@ -211,15 +207,15 @@ export default class SVGItemProperty extends BaseProperty {
     `;
   }
 
-  [CLICK('$motionBased')] () {
-    this.command('setAttribute', 'set motion base', { 
-      'motion-based': this.refs.$motionBased.checked()
-    })      
-  }
-
   [EVENT('changeValue')] (key, value, params) {
     this.command('setAttribute', `change svg item property : ${key}`, { 
       [key]: value
-    }, null, true)
+    })
+  }
+
+  [EVENT('changeSelect')] (key, value) {
+    this.command("setAttribute", `change attribute : ${key}`, { 
+      [key]: value
+    })
   }
 }

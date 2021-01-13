@@ -194,30 +194,6 @@ const PathTransformEditor = class extends PathCutter {
             break;
         }    
     }
-        
-    [POINTERSTART('$tool .transform-tool-item') + MOVE('moveTransformTool') + END('moveEndTransformTool')]  (e) {
-        this.transformMoveType = e.$dt.attr('data-position')
-
-        this.resetTransformZone()        
-        this.pathGenerator.initTransform(this.state.transformZoneRect);
-        this.startXY = e.xy; 
-    }
-
-    moveTransformTool (dx, dy) {
-
-      
-        this.pathGenerator.transform(this.transformMoveType, dx, dy);
-
-        this.renderPath()
-
-        this.refreshPathLayer();
-    }
-
-    moveEndTransformTool  (dx, dy) {
-        this.transformMoveType = 'none'
-
-        this.renderTransformTool();
-    }
 }
 
 const FIELDS = ['fill', 'fill-opacity', 'stroke', 'stroke-width']
@@ -265,49 +241,8 @@ export default class PathEditorView extends PathTransformEditor {
                     <circle ref='$splitCircle' class='split-circle' />
                 </svg>
             </div>
-            <div class='path-tool'>
-                <div class='transform-manager' ref='$tool'>
-                    <div class='transform-tool-item' data-position='to rotate'></div>
-                    <div class='transform-tool-item' data-position='to skewX'></div>
-                    <div class='transform-tool-item' data-position='to skewY'></div>
-                    <div class='transform-tool-item' data-position='to move'></div>
-                    <div class='transform-tool-item' data-position='to top'></div>
-                    <div class='transform-tool-item' data-position='to right'></div>
-                    <div class='transform-tool-item' data-position='to bottom'></div>
-                    <div class='transform-tool-item' data-position='to left'></div>
-                    <div class='transform-tool-item' data-position='to top right'></div>
-                    <div class='transform-tool-item' data-position='to bottom right'></div>
-                    <div class='transform-tool-item' data-position='to top left'></div>
-                    <div class='transform-tool-item' data-position='to bottom left'></div>  
-                </div>
-            </div>
             <div class='segment-box' ref='$segmentBox'></div>
         </div>`
-    }
-
-    [BIND('$tool')] () {
-
-        // transform 이 아닐때는 업데이트 하지 않는다. 
-        if (this.state.mode !== 'transform') return; 
-
-        this.resetTransformZone();
-        var rect = this.state.transformZoneRect;
-
-        return {
-            'data-show': this.state.mode === 'transform',
-            'data-position': this.transformMoveType,
-            style: {
-                left: Length.px(rect.x),
-                top: Length.px(rect.y),
-                width: Length.px(rect.width),
-                height: Length.px(rect.height)
-            }
-
-        }
-    }
-
-    renderTransformTool () {
-        this.bindData('$tool')
     }
 
     isShow () {
@@ -531,7 +466,6 @@ export default class PathEditorView extends PathTransformEditor {
             class: {
                 'path': this.state.mode === 'path',
                 'modify': this.state.mode === 'modify',
-                'transform': this.state.mode === 'transform',
                 'box': this.state.box === 'box',
                 'segment-move': this.state.mode === 'segment-move',         
             },
@@ -561,7 +495,6 @@ export default class PathEditorView extends PathTransformEditor {
     renderPath () {
         this.bindData('$view');
 
-        this.renderTransformTool()
     }
 
     getPathRect () {
@@ -586,7 +519,7 @@ export default class PathEditorView extends PathTransformEditor {
         this.state.transformZoneRect = rect; 
     }
 
-    [POINTERMOVE('$view')] (e) {        
+    [POINTERMOVE('$view') + PREVENT] (e) {        
         this.initRect()
         if (this.isMode('path') && this.state.rect) {            
             this.state.moveXY = {
@@ -617,7 +550,7 @@ export default class PathEditorView extends PathTransformEditor {
    
     }
 
-    [POINTERSTART('$view :not(.split-path)') + MOVE() + END()] (e) {
+    [POINTERSTART('$view :not(.split-path)') + PREVENT + STOP + MOVE() + END()] (e) {
         this.initRect();
 
         this.state.altKey = false; 

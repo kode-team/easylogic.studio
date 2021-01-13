@@ -42,7 +42,7 @@ export default class Inspector extends UIElement {
                 <!-- Default Property --> 
                 <PositionProperty />
                 <SizeProperty /> 
-                <BackgroundColorProperty />
+                <AppearanceProperty />
                 
                 <!-- SVG Item --> 
                 <SVGItemProperty />              

@@ -58,7 +58,7 @@ export default class BackgroundImageProperty extends BaseProperty {
   }
 
   [EVENT('refreshSelection')]() {
-    this.refreshShowIsNot(['project']);
+    this.refreshShow(['artboard', 'rect', 'circle', 'text', 'image', 'video']);
   }
 
   refresh() {

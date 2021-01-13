@@ -57,7 +57,6 @@ export default class OffsetPathListEditor extends UIElement {
         if (project) {
             project.allLayers
               .filter(it => it.is('svg-path', 'svg-polygon'))
-              .filter(it => it['motion-based'])
               .forEach(it => {
                 paths[it.id] = it 
               });    

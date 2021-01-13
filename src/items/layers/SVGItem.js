@@ -18,7 +18,6 @@ export class SVGItem extends Layer {
       'stroke-dashoffset': 0, 
       'stroke-dasharray': ' ',
       'text-anchor': 'start',
-      'motion-based': false,
       ...obj
     });
   }
@@ -40,7 +39,6 @@ export class SVGItem extends Layer {
         'stroke-dashoffset',
         'stroke-dasharray',
         'text-anchor',
-        'motion-based'
       )
 
     }

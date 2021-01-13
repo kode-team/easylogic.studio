@@ -19,7 +19,7 @@ export class ViewportManager {
         this.scale = 1
         this.translate = vec3.create(),
         this.transformOrigin = vec3.create(),    
-        this.maxScale = 5; 
+        this.maxScale = 10; 
         this.minScale = 0.25;  
         this.zoomFactor = 1; 
 
@@ -116,14 +116,16 @@ export class ViewportManager {
                 width: rect.width,
                 height: rect.height
             }
-        
             this.cachedViewport = rectToVerties(0, 0, this.canvasSize.width, this.canvasSize.height)
             const newTransformOrigin = vec3.multiply(
                 [],
                 this.transformOrigin,
                 [this.canvasSize.width/oldCanvasSize.width,this.canvasSize.height/oldCanvasSize.height,1 ]
             )    
-            this.setTransformOriginWithTranslate(newTransformOrigin)
+
+            this.setTransformOriginWithTranslate(newTransformOrigin)        
+
+
     
         } else {
             this.canvasSize = {

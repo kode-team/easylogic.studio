@@ -9,14 +9,10 @@ const overflow_list = [
   'auto'
 ]
 
-export default class BackgroundColorProperty extends BaseProperty {
+export default class AppearanceProperty extends BaseProperty {
 
   getTitle() {
     return this.$i18n('background.color.property.title');
-  }
-
-  isHideHeader() {
-    return true; 
   }
 
   getOverflowList () {
@@ -161,6 +157,6 @@ export default class BackgroundColorProperty extends BaseProperty {
   }
 
   [EVENT('refreshSelection')]() {
-    this.refresh();
+    this.refreshShow(['artboard', 'rect', 'circle', 'image', 'video', 'text']);
   }
 }

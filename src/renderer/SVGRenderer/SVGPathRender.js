@@ -36,8 +36,7 @@ export default class SVGPathRender extends SVGItemRender {
     return this.wrappedRender(item, () => {
       return /*html*/`
         <path ${OBJECT_TO_PROPERTY({
-          'class': 'svg-path-item',
-          'motion-based': item['motion-based'],          
+          'class': 'svg-path-item', 
           d, 
           filter: this.toFilterValue(item),
           fill: this.toFillValue(item),

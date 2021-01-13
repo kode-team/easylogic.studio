@@ -8,7 +8,6 @@ const MODES = {
   'segment-move': 'modify',
   'modify': 'modify',
   'path': 'path',
-  'transform': 'transform',
 } 
 
 
@@ -51,7 +50,6 @@ export default class PathManager extends UIElement {
         <div class='tools' ref='$mode' data-selected-value='${this.state.mode}'>
             <button type="button" data-value='modify' title='${this.$i18n('path.manager.mode.modify')}' > ${icon.device_hub}</button>
             <button type="button" data-value='path' title='${this.$i18n('path.manager.mode.path')}' > ${icon.control_point}</button>
-            <button type="button" data-value='transform' title='${this.$i18n('path.manager.mode.transform')}' >${icon.format_shapes}</button>
         </div>
         <div class='tools' ref='$flip'>
             <button type="button" data-value='flipX' title='${this.$i18n('path.manager.mode.flipX')}'>${icon.flip}</button>

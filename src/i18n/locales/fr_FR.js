@@ -179,7 +179,7 @@ export default {
     'perspective.origin.property.title': 'Origine Perspective',       
 
 
-    'svg.item.property.title': 'SVG',
+    'svg.item.property.title': 'Appearance',
     'svg.item.property.isMotionPath': 'Chemin de mouvement',    
     'svg.item.property.fill': 'Remplissage',
     'svg.item.property.fillOpacity': 'Opacité',

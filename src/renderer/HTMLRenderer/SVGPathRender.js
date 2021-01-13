@@ -31,12 +31,9 @@ export default class SVGPathRender extends SVGItemRender {
 
 
   render (item) {
-    var p = {'motion-based': item['motion-based'] }
-
     return /*html*/`
         <svg 
-          class='element-item path ${OBJECT_TO_CLASS(p)}'  
-          motion-based="${item['motion-based']}"
+          class='element-item path'  
           xmlns="http://www.w3.org/2000/svg"
           data-id="${item.id}"
         >

@@ -17,7 +17,6 @@ export default class SVGItemRender extends LayerRender {
               'stroke-dashoffset',
               'stroke-dasharray',
               'text-anchor',
-              'motion-based'
             )
       
           }        
