@@ -29,7 +29,7 @@ export default class ImageRender extends LayerRender {
         var {src} = item;     
         var project = item.project;
         
-        return project.getImageValueById(src);
+        return project.getImageValueById(src) || src;
     }
 
     /**

@@ -111,21 +111,15 @@ export class ViewportManager {
             const oldCanvasSize = clone(this.canvasSize);
     
             this.canvasSize = {
-                x: rect.x,
-                y: rect.y,
-                width: rect.width,
-                height: rect.height
+                x: this.canvasSize.x,
+                y: this.canvasSize.y,
+                width: rect.width / this.scale,
+                height: rect.height / this.scale 
             }
+
             this.cachedViewport = rectToVerties(0, 0, this.canvasSize.width, this.canvasSize.height)
-            const newTransformOrigin = vec3.multiply(
-                [],
-                this.transformOrigin,
-                [this.canvasSize.width/oldCanvasSize.width,this.canvasSize.height/oldCanvasSize.height,1 ]
-            )    
-
-            this.setTransformOriginWithTranslate(newTransformOrigin)        
-
-
+            this.resetWorldMatrix()
+            this.setTransformOrigin(this.verties[5])
     
         } else {
             this.canvasSize = {

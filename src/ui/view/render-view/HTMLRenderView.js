@@ -417,11 +417,16 @@ export default class HTMLRenderView extends UIElement {
     [POINTERSTART('$view') + IF('checkEditMode')  + MOVE('calculateMovedElement') + END('calculateEndedElement')] (e) {
         this.startXY = e.xy ; 
         const mousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);
-        const isInSelectedArea = this.$selection.hasPoint(mousePoint)
+        let isInSelectedArea = this.$selection.hasPoint(mousePoint)
         const $target = Dom.create(e.target);
         const $element = $target.closest('element-item');
 
         var id = $element && $element.attr('data-id');
+
+        // 선택한 영역이 있지만 artboard 가 아닌 경우 객체 선택으로 한다. 
+        if (isInSelectedArea && $element.hasClass('artboard') === false) {
+            isInSelectedArea = false; 
+        }
 
         // alt(option) + pointerstart 시점에 Layer 카피하기         
         if (e.altKey) {

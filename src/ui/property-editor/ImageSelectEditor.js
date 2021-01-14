@@ -31,7 +31,7 @@ export default class ImageSelectEditor extends UIElement {
 
         return /*html*/`
             <div class='preview-container'>
-                <img src="${project.getImageValueById(this.state.value)}" />
+                <img src="${project.getImageValueById(this.state.value) || this.state.value}" />
                 <input type='file' ref='$file' accept="image/*" />
             </div>
             <div class='select-container'>

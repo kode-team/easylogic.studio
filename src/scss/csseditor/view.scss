@@ -139,7 +139,7 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
     }    
 
     &.artboard {
-      box-shadow: 0 0 0 0 rgb(64, 64, 252);
+      box-shadow: 0 8px 6px -6px black;      
     }
 
     &:hover {

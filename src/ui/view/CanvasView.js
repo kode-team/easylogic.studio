@@ -90,17 +90,17 @@ export default class CanvasView extends UIElement {
 
     return '';
 
-    // return {
-    //   style: {
-    //     position: 'absolute',
-    //     left: '0px',
-    //     top: '0px',
-    //     right: '0px',
-    //     bottom: '0px',
-    //     'pointer-events': 'none'
-    //   },
-    //   innerHTML : this.makeViewportConsole()
-    // }
+    return {
+      style: {
+        position: 'absolute',
+        left: '0px',
+        top: '0px',
+        right: '0px',
+        bottom: '0px',
+        'pointer-events': 'none'
+      },
+      innerHTML : this.makeViewportConsole()
+    }
   }
 
 
@@ -185,6 +185,10 @@ export default class CanvasView extends UIElement {
 
   [EVENT('resize.window', 'resizeCanvas')] () {
     this.refreshCanvasSize();
+  }
+
+  [EVENT('updateViewport')] () {
+    this.bindData('$viewport');
   }
 
 }
