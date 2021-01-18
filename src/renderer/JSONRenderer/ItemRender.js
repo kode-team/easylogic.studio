@@ -1,3 +1,5 @@
+import { uuid } from "@core/functions/math";
+
 export default class ItemRender {
 
   async render (item, renderer) {
@@ -9,7 +11,16 @@ export default class ItemRender {
       'itemType', 'elementType', 'type', 'visible', 'lock', 'selected'
     )
 
-    json.layers = await Promise.all(item.layers.map(async (layer) => await renderer.render(layer, renderer)))
+    json.referenceId = item.id; 
+    json.newTargetId = uuid();
+
+    let layers = []
+
+    for(var i = 0, len = item.layers.length; i < len; i++) {
+      layers.push(await renderer.render(item.layers[i], renderer));
+    }
+
+    json.layers = layers;
 
     return json; 
   }

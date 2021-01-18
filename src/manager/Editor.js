@@ -20,6 +20,8 @@ import { SnapManager } from "./SnapManager";
 import { KeyBoardManager } from "./KeyboardManager";
 import { ViewportManager } from "./ViewportManager";
 import { StorageManager } from "./StorageManager";
+import { CursorManager } from "./CursorManager";
+
 
 export const EDITOR_ID = "";
 
@@ -73,6 +75,7 @@ export class Editor {
     this.keyboardManager = new KeyBoardManager(this);
     this.viewport = new ViewportManager(this);    
     this.storageManager = new StorageManager(this);
+    this.cursorManager = new CursorManager(this);
     this.components = ComponentManager;
 
 
@@ -184,9 +187,14 @@ export class Editor {
    * @returns {boolean}
    */
   get isPointerUp () {
-    if (!this.config.get('bodyEvent')) return false; 
+    if (!this.config.get('bodyEvent')) return true; 
     return this.config.get('bodyEvent').type === 'pointerup'
   }
+
+  get isPointerMove () {
+    if (!this.config.get('bodyEvent')) return false; 
+    return this.config.get('bodyEvent').type === 'pointermove'
+  }  
 
   getFile (url) {
     return this.images[url] || url;
@@ -200,12 +208,12 @@ export class Editor {
   /**
    * 메세지를 실행한다. 
    * 나 자신은 제외하고 실행한다. 
+   * 
+   * FIXME: command 는 자신과 동일한 command 를 재귀적으로 날릴 수 없다. (구현해야할듯 )
    **/
   emit(...args) {
-
     this.store.source = "EDITOR_ID";
     this.store.emit(...args);
-
   }
 
   on (...args) {

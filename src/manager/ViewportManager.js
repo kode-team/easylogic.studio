@@ -108,18 +108,19 @@ export class ViewportManager {
         
         if (this.canvasSize) {
 
-            const oldCanvasSize = clone(this.canvasSize);
+            // console.log(rect);
     
             this.canvasSize = {
-                x: this.canvasSize.x,
-                y: this.canvasSize.y,
-                width: rect.width / this.scale,
-                height: rect.height / this.scale 
+                x: rect.x ,
+                y: rect.y ,
+                width: rect.width,
+                height: rect.height 
             }
 
             this.cachedViewport = rectToVerties(0, 0, this.canvasSize.width, this.canvasSize.height)
-            this.resetWorldMatrix()
-            this.setTransformOrigin(this.verties[5])
+            this.setTransformOrigin(this.transformOrigin)
+
+            // console.log(this.cachedViewport, this.canvasSize, this.verties);
     
         } else {
             this.canvasSize = {
@@ -266,17 +267,16 @@ export class ViewportManager {
         return [mouseX, mouseY, 0]
     }
 
-
-    createAreaVerties (x, y, width, height) {
-        return vertiesMap(rectToVertiesForArea(x, y, width, height), this.matrixInverse);
+    applyVerties (verties) {
+        return vertiesMap(verties, this.matrix);
     }
 
-    /**
-     * 
-     * @param {vec3} point 
-     */
-    createVertex (point) {
-        return vec3.transformMat4([], point, this.matrixInverse)
+    applyVertiesInverse (verties) {
+        return vertiesMap(verties, this.matrixInverse);
+    }    
+
+    createAreaVerties (x, y, width, height) {
+        return this.applyVertiesInverse(rectToVertiesForArea(x, y, width, height));
     }
 
 }

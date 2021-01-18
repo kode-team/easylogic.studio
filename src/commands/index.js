@@ -99,9 +99,13 @@ import moveToCenter from './moveToCenter';
 import moveLayerForItems from "./moveLayerForItems";
 import moveSelectionToCenter from "./moveSelectionToCenter";
 import savePNG from "./savePNG";
-
+import refreshCursor from "./refreshCursor";
+import recoverCursor from "./recoverCursor";
 
 export default {
+    refreshCursor,
+    recoverCursor,
+
     // history + command   
     historyAddLayer,
     historyRemoveLayer,

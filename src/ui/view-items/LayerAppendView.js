@@ -55,7 +55,7 @@ export default class LayerAppendView extends UIElement {
         ]
 
         // 영역 드래그 하면서 snap 하기 
-        const verties = vertiesMap([vertext], this.$viewport.matrixInverse);
+        const verties = this.$viewport.applyVertiesInverse([vertext]);
         const snap = this.$snapManager.check(verties);
 
         if (snap) {
@@ -219,7 +219,7 @@ export default class LayerAppendView extends UIElement {
         }
 
         // 영역 드래그 하면서 snap 하기 
-        const verties = vertiesMap(rectToVerties(this.state.dragXY.x,this.state.dragXY.y, dx, dy), this.$viewport.matrixInverse);
+        const verties = this.$viewport.createAreaVerties(this.state.dragXY.x,this.state.dragXY.y, dx, dy);
         const snap = this.$snapManager.check(verties);
 
         dx += snap[0];
@@ -248,7 +248,7 @@ export default class LayerAppendView extends UIElement {
         let { x, y, width, height, color, text, fontSize} = this.state; 
 
 
-        const verties = vertiesMap(rectToVerties(x, y, width, height), this.$viewport.matrixInverse)
+        const verties = this.$viewport.createAreaVerties(x, y, width, height);
 
         x = Length.px(verties[0][0]).floor();
         y = Length.px(verties[0][1]).floor();

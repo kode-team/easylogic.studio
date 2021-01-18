@@ -59,13 +59,15 @@ export default {
     'position.property.Y': 'Y',
 
     'size.property.title': '크기',
-    'size.property.width': '넓이',
-    'size.property.height': '높이',
+    'position.property.width': '넓이',
+    'position.property.height': '높이',
+    'position.property.rotate': '회전',
+    'position.property.opacity': '투명',
 
     'background.color.property.title': '표시',
     'background.color.property.color': '배경색',
     'background.color.property.zindex': 'z-index',
-    'background.color.property.opacity': '투명도',
+
     'background.color.property.blend': '블렌드모드',   
     'background.color.property.overflow': '오버플로우',
     'background.color.property.overflow.visible': '보이기',
@@ -90,7 +92,7 @@ export default {
     'blend.color': 'Color(색상) 모드',
     'blend.luminosity': 'Luminosity(광도) 모드 ',    
 
-    'background.image.property.title': '배경(그라디언트)',    
+    'background.image.property.title': '채우기',    
 
     'border.property.title': '외곽선',    
     'border.radius.property.title': '둥근 외곽선',    

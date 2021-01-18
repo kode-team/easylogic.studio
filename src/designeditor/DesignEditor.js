@@ -302,12 +302,16 @@ export default class DesignEditor extends UIElement {
 
   [CLICK('$toggleRightButton')] () {
     this.toggleState('hideRightPanel');
-    this.emit('resizeCanvas');
+    setTimeout(() => {
+      this.emit('resizeCanvas'); 
+    }, 100)
   }
 
   [CLICK('$toggleLeftButton')] () {
     this.toggleState('hideLeftPanel');
-    this.emit('resizeCanvas');    
+    setTimeout(() => {
+      this.emit('resizeCanvas'); 
+    }, 100)
   }  
 
   [EVENT('changeTheme')] () {

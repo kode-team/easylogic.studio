@@ -1,11 +1,11 @@
 import UIElement, { EVENT } from "@core/UIElement";
-import { POINTERSTART, MOVE, END, IF } from "@core/Event";
+import { POINTERSTART, POINTEROUT, POINTEROVER, MOVE, END, IF, PREVENT } from "@core/Event";
 import { Length } from "@unit/Length";
 import { clone, isNotUndefined } from "@core/functions/func";
 import { mat4, vec3 } from "gl-matrix";
 import { Transform } from "@property-parser/Transform";
 import { TransformOrigin } from "@property-parser/TransformOrigin";
-import { calculateAngle, calculateAngleForVec3, calculateMatrix, calculateMatrixInverse, calculateRotationOriginMat4, vertiesMap } from "@core/functions/math";
+import { calculateAngle, calculateAngle360, calculateAngleForVec3, calculateMatrix, calculateMatrixInverse, calculateRotationOriginMat4, vertiesMap } from "@core/functions/math";
 import { ArtBoard } from "@items/ArtBoard";
 import { rectToVerties } from "@core/functions/collision";
 
@@ -69,18 +69,25 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
     [POINTERSTART('$pointerRect .rotate-pointer') + MOVE('rotateVertext') + END('rotateEndVertext')] (e) {
         this.state.moveType = 'rotate'; 
+        this.initMousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);        
 
         // cache matrix 
         this.$selection.reselect();        
         this.verties = this.groupItem.verties();        
         this.rotateTargetNumber = (+e.$dt.attr('data-number')); 
+
+        this.refreshRotatePointerIcon()
+        this.state.dragging = true;    
     }
 
-    rotateVertext (dx, dy) {
+    rotateVertext () {
+        const e = this.$config.get('bodyEvent')
+        const targetMousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);
+        const distVector = vec3.subtract([], targetMousePoint, this.initMousePoint);
 
         // this.verties[4] 는 origin 기준으로 y 가 0 인 좌표인데 
         // 나중에  다른 방향에서 돌릴 수 있게 되면 해당 영역의 vertext 를 지정해야 각도를 맞출 수 있다. 
-        var distAngle = Math.floor(calculateAngleForVec3(this.verties[this.rotateTargetNumber], this.verties[5], [dx, dy, 0]));
+        var distAngle = Math.floor(calculateAngleForVec3(this.verties[this.rotateTargetNumber], this.verties[5], distVector));
 
         // 실제 움직인 angle 
         this.localAngle = this.angle + distAngle;
@@ -127,12 +134,17 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
         })
 
+        this.state.dragging = true;        
         this.renderPointers();
         this.emit('refreshCanvasForPartial', null, true)  
-        this.emit('refreshSelectionStyleView');                      
+        this.emit('refreshSelectionStyleView');     
+        this.emit('refreshRect');                 
     }
 
-    rotateEndVertext (dx, dy) {
+    rotateEndVertext () {
+
+        this.state.dragging = false;        
+        this.emit('recoverCursor');
 
         // 개별 verties 의 캐쉬를 다시 한다. 
         this.$selection.reselect();   
@@ -148,9 +160,51 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     }
 
 
-    [POINTERSTART('$pointerRect .pointer') + MOVE('moveVertext') + END('moveEndVertext')] (e) {
+    refreshRotatePointerIcon (e) {
+        this.emit('refreshCursor', 'rotate')
+    }
+
+    refreshPointerIcon (e) {
+
+        const dataPointer = e.$dt.data('pointer');
+
+        if (dataPointer) {
+
+            const pointer = dataPointer.split(',').map(it => Number(it))
+
+            const diff = vec3.subtract([], pointer, this.state.renderPointerList[0][5]);
+            const angle = calculateAngle360(diff[0], diff[1]);
+            let iconAngle = Math.floor(angle)  - 135
+            this.emit('refreshCursor', 'open_in_full', `rotate(${iconAngle} 12 12)`)
+        } else {
+            this.emit('recoverCursor');
+        }
+
+    }
+
+    checkPointerIsNotMoved (e) {
+        return Boolean(this.state.dragging) === false;
+    }
+
+    [POINTEROVER('$pointerRect .rotate-pointer') + IF('checkPointerIsNotMoved') + PREVENT] (e) {
+        this.refreshRotatePointerIcon(e);
+    }
+
+    [POINTEROVER('$pointerRect .pointer') + IF('checkPointerIsNotMoved') + PREVENT] (e) {
+        this.refreshPointerIcon(e);            
+    }
+
+    [POINTEROUT('$pointerRect .pointer,.rotate-pointer') + IF('checkPointerIsNotMoved') + PREVENT] (e) {
+        this.emit('recoverCursor');
+    }    
+
+
+    [POINTERSTART('$pointerRect .pointer') + PREVENT + MOVE('moveVertext') + END('moveEndVertext')] (e) {
+        this.refreshPointerIcon(e);
+        this.state.dragging = true; 
         const num = +e.$dt.attr('data-number')
         this.state.moveType = directionType[`${num}`]; 
+        this.initMousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);        
 
         // cache matrix 
         this.$selection.doCache();
@@ -400,8 +454,10 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     }
 
 
-    moveVertext (dx, dy) {
-        let distVector = vec3.transformMat4([], [dx, dy, 0], this.$viewport.scaleMatrixInverse);
+    moveVertext () {
+        const e = this.$config.get('bodyEvent')
+        const targetMousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);
+        const distVector = vec3.subtract([], targetMousePoint, this.initMousePoint);        
 
         if (this.state.moveType === 'to bottom right') {        // 2
             this.moveBottomRightVertext(distVector);
@@ -421,6 +477,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
             this.moveBottomVertext(distVector);
         }    
 
+        this.state.dragging = true; 
         this.renderPointers();
         this.refreshSmartGuides();        
         this.emit('refreshCanvasForPartial', null, true)  
@@ -428,6 +485,8 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     }
 
     moveEndVertext (dx, dy) {        
+        this.state.dragging = false;         
+        this.emit('recoverCursor');   
         this.$selection.reselect();
         this.emit('refreshSelectionStyleView');           
         this.nextTick(() => {
@@ -544,19 +603,31 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
      */
     renderPointers () {
 
-        const verties = this.verties;
-    
-        if (!verties) return; 
         if (!this.groupItem) return;
 
-        const {line, point} = this.createRenderPointers(vertiesMap(this.groupItem.verties(), this.$viewport.matrix));
+        const verties = this.groupItem.verties();
+        const selectionVerties = this.groupItem.selectionVerties();
+
+        this.state.renderPointerList = [
+            this.$viewport.applyVerties(verties),
+            this.$viewport.applyVerties(selectionVerties)
+        ]
+
+        const {line, point} = this.createRenderPointers(...this.state.renderPointerList);
         this.refs.$pointerRect.updateDiff(line + point)
     }
 
 
     createPointer (pointer, number) {
         return /*html*/`
-        <div class='pointer' data-number="${number}" style="transform: translate3d( calc(${pointer[0]}px - 50%), calc(${pointer[1]}px - 50%), 0px)" ></div>
+        <div    
+            class='pointer' 
+            data-number="${number}" 
+            data-pointer="${pointer}" 
+            style="
+                transform: translate3d( calc(${pointer[0]}px - 50%), calc(${pointer[1]}px - 50%), 0px)
+            " 
+        ></div>
         `
     }
 
@@ -566,7 +637,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
         if (number < 4) {
             return /*html*/`
-            <div class='rotate-pointer no-fill' data-number="${number}" style="transform: translate3d( calc(${pointer[0]}px - 50%), calc(${pointer[1]}px - 50%), 0px) scale(1.8); transform-origin: ${direction};" ></div>
+            <div class='rotate-pointer no-fill' data-number="${number}" style="transform: translate3d( calc(${pointer[0]}px - 50%), calc(${pointer[1]}px - 50%), 0px) scale(1.8);" ></div>
             `            
         }        
 
@@ -601,14 +672,15 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         </svg>`        
     }    
 
-    createRenderPointers(pointers) {
+    createRenderPointers(pointers, selectionPointers) {
         return {
             line: this.createPointerRect(pointers), 
             point: [
-                this.createRotatePointer (pointers[0], 0, 'bottom right'),
-                this.createRotatePointer (pointers[1], 1, 'bottom left'),
-                this.createRotatePointer (pointers[2], 2, 'top left'),
-                this.createRotatePointer (pointers[3], 3, 'top right'),
+                // 4모서리에서도 rotate 할 수 있도록 맞춤 
+                // this.createRotatePointer (selectionPointers[0], 0, 'bottom right'),
+                // this.createRotatePointer (selectionPointers[1], 1, 'bottom left'),
+                // this.createRotatePointer (selectionPointers[2], 2, 'top left'),
+                // this.createRotatePointer (selectionPointers[3], 3, 'top right'),
                 this.createRotatePointer (pointers[4], 4, 'center center'),                
                 this.createPointer (pointers[0], 1),
                 this.createPointer (pointers[1], 2),

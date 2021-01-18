@@ -5,12 +5,21 @@
     height: 24px;
 
     &.has-label {
+        grid-template-columns: 60px 1fr;
+        grid-column-gap: 4px;
+
+        &.compact {
+            grid-template-columns: 30px 1fr;
+        }
+
         label {
             text-align: left;
             vertical-align: middle;
             padding: 2px 4px 2px 0px;
-            
-            font-size: 12px;
+            font-size: 13px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
         }
 
         &.block {
@@ -40,6 +49,12 @@
 
             input {
                 width: 100%;
+                &[type='number'] {
+                    border-radius: 3px;
+                    &.focused {
+                        box-shadow: 0 0 0 1px var(--selected-color);
+                    }                
+                }                
             }
 
             select {

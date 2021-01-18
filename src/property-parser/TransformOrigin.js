@@ -1,6 +1,7 @@
 import { transform } from "@babel/core";
 import TransformOriginProperty from "@ui/property/TransformOriginProperty";
 import { Length } from "@unit/Length";
+import { vec3 } from "gl-matrix";
 import { TransformOriginCache } from "./TransformOriginCache";
 
 export class TransformOrigin {
@@ -40,15 +41,11 @@ export class TransformOrigin {
   }
 
   static scale (transformOrigin, width, height)  {
-    let [
-      transformOriginX, 
-      transformOriginY, 
-      transformOriginZ
-    ] = TransformOrigin.parseStyle(transformOrigin)
+    let parsedTransformOrigin = TransformOrigin.parseStyle(transformOrigin)
 
-    const originX = transformOriginX.toPx(width).value
-    const originY = transformOriginY.toPx(height).value
-    const originZ = transformOriginZ.value; 
+    const originX = parsedTransformOrigin[0].toPx(width).value
+    const originY = parsedTransformOrigin[1].toPx(height).value
+    const originZ = parsedTransformOrigin[2].value; 
 
     return [originX, originY, originZ]
   }

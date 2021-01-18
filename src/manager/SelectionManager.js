@@ -389,6 +389,16 @@ export class SelectionManager {
     }
   }
 
+  get selectionVerties () {
+
+    if (this.isOne) {    // 하나 일 때랑 
+      return this.current.selectionVerties();
+    } else {
+      return this.rectVerties;
+    }
+  }
+
+
   get rectVerties () {
     return itemsToRectVerties(this.items)
   }

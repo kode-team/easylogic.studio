@@ -1,5 +1,3 @@
-
-import { clone } from "@core/functions/func";
 import { Item } from "./Item";
 import { Keyframe } from "../property-parser/Keyframe";
 

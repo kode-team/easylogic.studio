@@ -37,14 +37,14 @@
       position: absolute;
       left: 0px;
       top: 0px;
-      width: 10px;
-      height: 10px;
+      width: 9px;
+      height: 9px;
       box-sizing: border-box;
       background-color: white; 
       box-sizing: border-box;
-      border: 1px solid var(--selection-tool-border-color);
-      border-radius: 100%;
-      cursor: pointer;
+      border: 0.5px solid var(--selection-tool-border-color);
+      // border-radius: 100%;
+      // cursor: pointer;
       pointer-events: all;
       // &[data-number="1"] { background-color: rgb(255, 185, 185); }
       // &[data-number="2"] { background-color: rgb(255, 0, 0); }
@@ -52,17 +52,17 @@
       // &[data-number="4"] { background-color: rgb(75, 62, 255); }
       // &[data-number="p1"] { background-color: rgb(255, 185, 185); }
 
-      &:before {
-        content: '';
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        width: 5px;
-        height: 5px;
-        transform: translate(-50%, -50%);
-        border-radius: 50%;
-        background-color: var(--selection-tool-border-color);
-      }
+      // &:before {
+      //   content: '';
+      //   position: absolute;
+      //   left: 50%;
+      //   top: 50%;
+      //   width: 5px;
+      //   height: 5px;
+      //   transform: translate(-50%, -50%);
+      //   border-radius: 50%;
+      //   background-color: var(--selection-tool-border-color);
+      // }
     }
     .rotate-pointer {
       display: inline-block;
@@ -76,7 +76,7 @@
       box-sizing: border-box;
       border: 1px solid orange;
       border-radius: 100%;
-      cursor: alias;
+      // cursor: alias;
       pointer-events: all;
       overflow: hidden;
 
@@ -99,9 +99,12 @@
         background-color: transparent;
         border:none;
 
+        &:hover {
+          // background-color: var(--selected-color);
+        }
+
         &::before {
           display: none;
-
         }
       }
     }
@@ -181,7 +184,7 @@
       border:1px solid $pointer-color;
       // border-radius: 100%;
       pointer-events: all;
-      cursor: pointer;
+      // cursor: pointer;
 
       &:not([data-position='move']) {
         // border-radius: 100%;

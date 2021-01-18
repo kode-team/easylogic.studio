@@ -10,6 +10,7 @@ export default class NumberInputEditor extends UIElement {
         value = value.toUnit('number');
         return {
             label: this.props.label || '',
+            compact: this.props.compact === 'true',            
             min: +this.props.min || 0,
             max: +this.props.max || 100,
             step: +this.props.step || 1,
@@ -26,7 +27,7 @@ export default class NumberInputEditor extends UIElement {
 
     [LOAD('$body')] () {
 
-        var { min, max, step, label, type, layout } = this.state
+        var { min, max, step, label, type, layout, compact } = this.state
 
         var value = +this.state.value.value.toString()
 
@@ -35,12 +36,13 @@ export default class NumberInputEditor extends UIElement {
         }
 
         var hasLabel = !!label ? 'has-label' : ''
+        var hasCompact = !!compact ? 'compact' : ''        
         var layoutClass = layout;
 
         var realValue = (+value).toString();
         
         return /*html*/`
-        <div class='number-input-editor ${hasLabel} ${layoutClass}' data-selected-type='${type}'>
+        <div class='number-input-editor ${hasLabel} ${hasCompact} ${layoutClass}' data-selected-type='${type}'>
             ${label ? `<label>${label}</label>` : '' }
             <div class='range-editor-type' data-type='range'>
                 <div class='area'>

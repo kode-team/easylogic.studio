@@ -6,7 +6,11 @@ $border-radius: 3px;
     border-radius: $border-radius;
 
     &.focused {
-        box-shadow: 0 0 0 1px var(--selected-color);
+
+        .area {
+            box-shadow: 0 0 0 1px var(--selected-color);
+        }
+
     }
 
     &.has-label {
@@ -28,6 +32,12 @@ $border-radius: 3px;
             white-space: nowrap;
             text-overflow: ellipsis;
             overflow: hidden;
+
+            svg {
+                width: 20px;
+                height: 20px;
+                vertical-align: middle;
+            }
         }
 
         &.block {
@@ -61,6 +71,7 @@ $border-radius: 3px;
             display: grid;
             grid-template-columns: 1fr 30px;
             height: 100%;
+            border-radius: 3px;
             
             span {
                 padding: 1px;

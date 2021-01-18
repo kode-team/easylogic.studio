@@ -89,20 +89,25 @@
     > .splitter {
       position: absolute;
       left: $left-size;
-      width: 2px;
+      width: 8px;
       top: 0px;
       bottom: 0px;
       cursor: ew-resize;
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.2);
+      }
+
     }
 
     > button {
       position: absolute;
-      width: 16px;
-      height: 16px;
-      top: 24px;
-      transform: translateY(-50%);
+      width: 12px;
+      height: 12px;
+      top: 50%;
+      transform: translateY(-50%) translateX(-25%);
       cursor: pointer;
-      color: var(--font-color);        
+      color: var(--font-color);       
       
       svg {
         transform: scale(1.5);

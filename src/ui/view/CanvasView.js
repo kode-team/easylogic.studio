@@ -3,7 +3,7 @@ import UIElement, { EVENT } from "@core/UIElement";
 import HTMLRenderView from "./render-view/HTMLRenderView";
 import PageTools from "../view-items/PageTools";
 import PageSubEditor from "../view-items/PageSubEditor";
-import { BIND, DRAGOVER, DROP, IF, MOVE, normalizeWheelEvent, POINTERSTART, PREVENT, WHEEL } from "@core/Event";
+import { BIND, DEBOUNCE, DRAGOVER, DROP, IF, MOVE, normalizeWheelEvent, POINTERSTART, PREVENT, WHEEL } from "@core/Event";
 import { vec3 } from "gl-matrix";
 import { KEY_CODE } from "@types/key";
 import Resource from "@util/Resource";
@@ -19,6 +19,13 @@ export default class CanvasView extends UIElement {
     }
   }
 
+  initState () {
+    return {
+      cursor: 'auto',
+      cursorArgs: []
+    }
+  }
+
   afterRender() {
     this.emit('load.json');
     this.trigger('resizeCanvas');    
@@ -28,7 +35,7 @@ export default class CanvasView extends UIElement {
   }
   template() {
     return/*html*/`
-      <div class='page-container' tabIndex="-1">
+      <div class='page-container' tabIndex="-1" ref='$container'>
         <div class='page-view'>
           <div class='page-lock scrollbar' ref='$lock'>
             <HTMLRenderView ref='$elementView' />
@@ -100,6 +107,15 @@ export default class CanvasView extends UIElement {
         'pointer-events': 'none'
       },
       innerHTML : this.makeViewportConsole()
+    }
+  }
+
+  async [BIND('$container')] () {
+    const cursor = await this.$editor.cursorManager.load(this.state.cursor, ...(this.state.cursorArgs || []))
+    return {
+      style: {
+        cursor
+      }
     }
   }
 
@@ -189,6 +205,17 @@ export default class CanvasView extends UIElement {
 
   [EVENT('updateViewport')] () {
     this.bindData('$viewport');
+  }
+
+  [EVENT('changeIconView')] (cursor, ...args) {
+
+    if (`${this.state.cursor} ${this.state.cursorArgs}` === `${cursor} ${args}`) {
+      return;
+    }
+
+    this.state.cursor = cursor; 
+    this.state.cursorArgs = args; 
+    this.bindData('$container')
   }
 
 }

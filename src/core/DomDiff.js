@@ -45,7 +45,12 @@ const updateProp = (node, name, newValue, oldValue) => {
 
 
 const updateProps = (node, newProps = {}, oldProps = {}) => {
-    const props = new Set([...Object.keys(newProps), ...Object.keys(oldProps)])
+
+    const keyList = [];
+    keyList.push.apply(keyList, Object.keys(newProps))
+    keyList.push.apply(keyList, Object.keys(oldProps))
+
+    const props = new Set(keyList)
   
     props.forEach((name) => {
       updateProp(node, name, newProps[name], oldProps[name]);
@@ -67,8 +72,10 @@ function changed(node1, node2) {
 
 function getProps (attributes) {
     var results = {}
-    for(var t of attributes) {
-        results[t.name] = t.value;
+    const len = attributes.length;
+    for(let i = 0; i < len; i++) {
+        const t = attributes[i];
+        results[t.name] = t.value;        
     }
 
     return results;

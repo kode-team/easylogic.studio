@@ -144,6 +144,9 @@ import align_vertical_bottom from "./align_vertical_bottom";
 import align_vertical_center from "./align_vertical_center";
 import align_vertical_top from "./align_vertical_top";
 import swap_horiz from "./swap_horiz";
+import rotate_left from "./rotate_left";
+import open_in_full from "./open_in_full";
+import rotate from "./rotate";
 
 
 const alias = {
@@ -153,12 +156,15 @@ const alias = {
 
 export default {
   ...alias,
+  open_in_full,
+  rotate,
   align_horizontal_center,
   align_horizontal_left,
   align_horizontal_right,
   align_vertical_bottom,
   align_vertical_center,
   align_vertical_top,  
+  rotate_left,
   swap_horiz,  
   arrow_right,  
   group,

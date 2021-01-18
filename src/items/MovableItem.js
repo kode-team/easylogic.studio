@@ -358,11 +358,10 @@ export class MovableItem extends Item {
     getAccumulatedMatrix () {
         let transform = mat4.create();
 
-
         let path = this.path.filter(p => p.is('project') === false);
 
-
-        path.forEach(current => {
+        for(let i = 0, len = path.length; i < len; i++) {
+            const current = path[i];
 
             // multiply parent perspective 
             if (current.parent && isFunction(current.parent.getPerspectiveMatrix)) {
@@ -377,9 +376,8 @@ export class MovableItem extends Item {
             // 5. Translate by offset x, y
             mat4.translate(transform, transform, [offsetX, offsetY, 0]);                   
                     
-
-            mat4.multiply(transform, transform, current.getTransformMatrix())
-        })
+            mat4.multiply(transform, transform, current.getTransformMatrix())            
+        }
 
         return transform;
     }
@@ -395,6 +393,14 @@ export class MovableItem extends Item {
 
         return vertiesMap(model, this.getAccumulatedMatrix())
     }
+
+    selectionVerties () {
+
+        //TODO: rectVerties 를 생성할 때 ,  중심에서 뻗어나가는 verties 를 어떻게 해야할까?
+        let selectionModel = rectToVerties(-6, -6, this.screenWidth.value+12, this.screenHeight.value+12, this.json['transform-origin']);
+        
+        return vertiesMap(selectionModel, this.getAccumulatedMatrix())
+    }    
 
     rectVerties () {
         return this.verties().filter((_, index) => index < 4)

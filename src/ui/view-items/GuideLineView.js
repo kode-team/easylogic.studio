@@ -62,8 +62,8 @@ export default class GuideLineView extends UIElement {
             const [source, target, axis] = list[i];
 
             // 시작점 기준으로 맞출때가 필요하면 localSourceVertext 를 활용하자. 아직은 없음. 
-            const localSourceVertext = vec3.transformMat4([], source, this.$viewport.matrix);
-            const localTargetVertext = vec3.transformMat4([], target, this.$viewport.matrix);            
+            const localSourceVertext = this.$viewport.applyVerties([source])[0];
+            const localTargetVertext = this.$viewport.applyVerties([target])[0];            
 
             if (axis === 'x') {
                 images.push(hLine(localTargetVertext))        

@@ -57,8 +57,10 @@ export default {
     'position.property.X': 'X',
     'position.property.Y': 'Y',
     'size.property.title': 'Taille',
-    'size.property.width': 'Largeur',
-    'size.property.height': 'Hauteur',
+    'position.property.width': 'Largeur',
+    'position.property.height': 'Hauteur',
+    'position.property.opacity': 'Opacity',
+    'position.property.rotate': 'Rotate',            
 
     'background.color.property.title': 'Apparance',
     'background.color.property.color': 'Couleur',

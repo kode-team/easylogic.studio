@@ -416,8 +416,8 @@ export default class HTMLRenderView extends UIElement {
      */
     [POINTERSTART('$view') + IF('checkEditMode')  + MOVE('calculateMovedElement') + END('calculateEndedElement')] (e) {
         this.startXY = e.xy ; 
-        const mousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);
-        let isInSelectedArea = this.$selection.hasPoint(mousePoint)
+        this.initMousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);
+        let isInSelectedArea = this.$selection.hasPoint(this.initMousePoint)
         const $target = Dom.create(e.target);
         const $element = $target.closest('element-item');
 
@@ -502,21 +502,17 @@ export default class HTMLRenderView extends UIElement {
     }
 
 
-    calculateMovedElement (dx, dy) {
-        const targetXY = this.$config.get('bodyEvent').xy;
+    calculateMovedElement () {
+        const e = this.$config.get('bodyEvent')
+        const targetMousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);
 
-        const realDx = targetXY.x - this.startXY.x;
-        const realDy = targetXY.y - this.startXY.y;
-
-        const distVector = [realDx, realDy, 0]
-        const newDist = vec3.transformMat4([], distVector, this.$viewport.scaleMatrixInverse);
+        const newDist = vec3.subtract([], targetMousePoint, this.initMousePoint);
 
         this.selectionToolView.refreshSelectionToolView(newDist);       
         
         // 최종 위치에서 ArtBoard 변경하기 
-        // TODO: 부모가 바뀔 때 selection tool 은 그대로 유지 해야함 
         if (this.$selection.changeArtBoard()) {
-            this.startXY = targetXY;
+            this.initMousePoint = targetMousePoint;
             this.$selection.reselect();
             this.$snapManager.clear();    
             this.trigger('refreshAllCanvas')
