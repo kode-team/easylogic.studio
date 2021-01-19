@@ -1,7 +1,4 @@
-import { transform } from "@babel/core";
-import TransformOriginProperty from "@ui/property/TransformOriginProperty";
 import { Length } from "@unit/Length";
-import { vec3 } from "gl-matrix";
 import { TransformOriginCache } from "./TransformOriginCache";
 
 export class TransformOrigin {

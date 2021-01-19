@@ -1,6 +1,6 @@
 import { rectToVerties, rectToVertiesForArea } from "@core/functions/collision";
 import { clone } from "@core/functions/func";
-import { calculateMatrix, vertiesMap } from "@core/functions/math";
+import { calculateMatrix, calculateMatrixInverse, vertiesMap } from "@core/functions/math";
 import { mat4, vec3 } from "gl-matrix";
 
 /**
@@ -19,7 +19,7 @@ export class ViewportManager {
         this.scale = 1
         this.translate = vec3.create(),
         this.transformOrigin = vec3.create(),    
-        this.maxScale = 10; 
+        this.maxScale = 25; 
         this.minScale = 0.25;  
         this.zoomFactor = 1; 
 
@@ -107,8 +107,6 @@ export class ViewportManager {
     refreshCanvasSize (rect) {
         
         if (this.canvasSize) {
-
-            // console.log(rect);
     
             this.canvasSize = {
                 x: rect.x ,
@@ -118,9 +116,33 @@ export class ViewportManager {
             }
 
             this.cachedViewport = rectToVerties(0, 0, this.canvasSize.width, this.canvasSize.height)
-            this.setTransformOrigin(this.transformOrigin)
+            const newVerties = vec3.transformMat4(
+                [], 
+                [this.canvasSize.width, this.canvasSize.height, 0], 
+                this.scaleMatrixInverse
+            );
 
-            // console.log(this.cachedViewport, this.canvasSize, this.verties);
+            const newTransformOrigin = vec3.add(
+                [], 
+                this.verties[0], 
+                [newVerties[0]/2, newVerties[1]/2, 0]
+            )
+
+            // translate * translateOrigin * scale * -translateOrigin = translate? * translateOrigin * scale * translateOrigin
+            // matrix = translate? * translateOrigin * scale * -translateOrigin
+            // matrix = translate? * newTransformOriginMatrix
+            // matrix * -newTransformOriginMatrix = translate 
+            const newTranslate = mat4.getTranslation([], calculateMatrix(
+                this.matrix, 
+                calculateMatrixInverse(
+                    mat4.fromTranslation([], newTransformOrigin),
+                    this.scaleMatrix,
+                    mat4.invert([], mat4.fromTranslation([], newTransformOrigin)),
+                )
+            ))
+
+            this.setTranslate(newTranslate)            
+            this.setTransformOrigin(newTransformOrigin)            
     
         } else {
             this.canvasSize = {
@@ -132,7 +154,11 @@ export class ViewportManager {
         
             this.cachedViewport = rectToVerties(0, 0, this.canvasSize.width, this.canvasSize.height)
     
-            this.setTransformOrigin([this.canvasSize.width/2,this.canvasSize.height/2,0 ])
+            this.setTransformOrigin([
+                this.canvasSize.width/2,
+                this.canvasSize.height/2,0,
+                0
+            ])
         }
         this.editor.emit('updateViewport')        
     }
@@ -218,7 +244,6 @@ export class ViewportManager {
      */
     pan (x, y, z = 0)  {
 
-        // console.log(this.$editor.transformOrigin, [newDx, newDy, 0]);
         this.setTransformOriginWithTranslate(
           vec3.add([], this.transformOrigin, [x, y, 0])
         );

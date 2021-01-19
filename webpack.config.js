@@ -62,7 +62,10 @@ module.exports = {
               replace: pkg.version,
             },
           }, {
-            loader: "babel-loader"
+            loader: "babel-loader",
+            options: {
+              cacheDirectory: true 
+            }
           }
         ]
       },
