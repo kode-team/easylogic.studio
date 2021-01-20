@@ -650,7 +650,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         if (pointers.length === 0) return '';
 
 
-        const rotatePointer = vec3.multiply([], vec3.add([], pointers[0], pointers[1]), [0.5, 0.5, 1]);            
+        const rotatePointer = vec3.lerp([], pointers[0], pointers[1], 0.5);            
         const line = `
             M ${rotatePointer[0]},${rotatePointer[1]} 
             L ${pointers[4][0]}, ${pointers[4][1]} 
@@ -673,6 +673,12 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     }    
 
     createRenderPointers(pointers, selectionPointers) {
+
+        const topPointer = vec3.lerp([], pointers[0], pointers[1], 0.5);
+        const bottomPointer = vec3.lerp([], pointers[2], pointers[3], 0.5);
+
+        pointers[4] = vec3.lerp([], bottomPointer, topPointer, 1 + 30/vec3.dist(topPointer, bottomPointer))
+
         return {
             line: this.createPointerRect(pointers), 
             point: [
@@ -686,10 +692,10 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
                 this.createPointer (pointers[1], 2),
                 this.createPointer (pointers[2], 3),
                 this.createPointer (pointers[3], 4),
-                this.createPointer (vec3.multiply([], vec3.add([], pointers[0], pointers[1]), [0.5, 0.5, 1]), 11),
-                this.createPointer (vec3.multiply([], vec3.add([], pointers[1], pointers[2]), [0.5, 0.5, 1]), 12),
-                this.createPointer (vec3.multiply([], vec3.add([], pointers[2], pointers[3]), [0.5, 0.5, 1]), 13),
-                this.createPointer (vec3.multiply([], vec3.add([], pointers[3], pointers[0]), [0.5, 0.5, 1]), 14),                             
+                this.createPointer (vec3.lerp([], pointers[0], pointers[1], 0.5), 11),
+                this.createPointer (vec3.lerp([], pointers[1], pointers[2], 0.5), 12),
+                this.createPointer (vec3.lerp([], pointers[2], pointers[3], 0.5), 13),
+                this.createPointer (vec3.lerp([], pointers[3], pointers[0], 0.5), 14),
             ].join('')
         }
     }

@@ -296,8 +296,16 @@ export class ViewportManager {
         return vertiesMap(verties, this.matrix);
     }
 
+    applyScaleVerties (verties) {
+        return vertiesMap(verties, this.scaleMatrix);
+    }
+
     applyVertiesInverse (verties) {
         return vertiesMap(verties, this.matrixInverse);
+    }
+    
+    applyScaleVertiesInverse (verties) {
+        return vertiesMap(verties, this.scaleMatrixInverse);
     }    
 
     createAreaVerties (x, y, width, height) {

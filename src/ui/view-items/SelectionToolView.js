@@ -5,7 +5,7 @@ import { clone} from "@core/functions/func";
 import { mat4, vec3 } from "gl-matrix";
 import { Transform } from "@property-parser/Transform";
 import { TransformOrigin } from "@property-parser/TransformOrigin";
-import { calculateAngle360, calculateAngleForVec3, calculateMatrix, calculateMatrixInverse, vertiesMap } from "@core/functions/math";
+import { calculateAngle, calculateAngle360, calculateAngleForVec3, calculateMatrix, calculateMatrixInverse, degreeToRadian, vertiesMap } from "@core/functions/math";
 
 var directionType = {
     1: 'to top left',
@@ -538,6 +538,7 @@ export default class SelectionToolView extends SelectionToolEvent {
                     this.$viewport.applyVerties(verties),
                     this.$viewport.applyVerties(selectionVerties)
                 ]
+
                 const {line, point} = this.createRenderPointers(...this.state.renderPointerList);
                 this.refs.$pointerRect.updateDiff(line + point)
             }
@@ -554,7 +555,8 @@ export default class SelectionToolView extends SelectionToolEvent {
                 this.state.renderPointerList = [
                     this.$viewport.applyVerties(verties),
                     this.$viewport.applyVerties(selectionVerties)
-                ]
+                ]             
+
                 const {line, point} = this.createRenderPointers(...this.state.renderPointerList);
                 this.refs.$pointerRect.updateDiff(line + point)
             }
@@ -591,7 +593,7 @@ export default class SelectionToolView extends SelectionToolEvent {
         const isArtBoard = current && current.is('artboard');
         let line = '';
         if (!isArtBoard) {
-            const rotatePointer = vec3.multiply([], vec3.add([], pointers[0], pointers[1]), [0.5, 0.5, 1]);            
+            const rotatePointer = vec3.lerp([], pointers[0], pointers[1], 0.5);            
             line = `
                 M ${rotatePointer[0]},${rotatePointer[1]} 
                 L ${pointers[4][0]}, ${pointers[4][1]} 
@@ -620,6 +622,12 @@ export default class SelectionToolView extends SelectionToolEvent {
 
         const rotate = Transform.get(current.transform, 'rotateZ');
 
+        const topPointer = vec3.lerp([], pointers[0], pointers[1], 0.5);
+        const bottomPointer = vec3.lerp([], pointers[2], pointers[3], 0.5);
+
+        pointers[4] = vec3.lerp([], bottomPointer, topPointer, 1 + 30/vec3.dist(topPointer, bottomPointer))
+
+
         return {
             line: this.createPointerRect(pointers), 
             point: [
@@ -634,10 +642,10 @@ export default class SelectionToolView extends SelectionToolEvent {
                 this.createPointer (pointers[2], 3, rotate),
                 this.createPointer (pointers[3], 4, rotate),
 
-                this.createPointer (vec3.multiply([], vec3.add([], pointers[0], pointers[1]), [0.5, 0.5, 1]), 11, rotate),
-                this.createPointer (vec3.multiply([], vec3.add([], pointers[1], pointers[2]), [0.5, 0.5, 1]), 12, rotate),
-                this.createPointer (vec3.multiply([], vec3.add([], pointers[2], pointers[3]), [0.5, 0.5, 1]), 13, rotate),
-                this.createPointer (vec3.multiply([], vec3.add([], pointers[3], pointers[0]), [0.5, 0.5, 1]), 14, rotate),
+                this.createPointer (vec3.lerp([], pointers[0], pointers[1], 0.5), 11, rotate),
+                this.createPointer (vec3.lerp([], pointers[1], pointers[2], 0.5), 12, rotate),
+                this.createPointer (vec3.lerp([], pointers[2], pointers[3], 0.5), 13, rotate),
+                this.createPointer (vec3.lerp([], pointers[3], pointers[0], 0.5), 14, rotate),
             ].join('')
         }
     }
