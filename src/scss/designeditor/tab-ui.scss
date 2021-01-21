@@ -62,6 +62,10 @@ $tab-horizontal-header-right-width: 60px;
               }
 
 
+              &:after {
+                color: var(--selected-color);
+              }              
+
               label {
                 padding: 4px 13px;
                 height: auto;
@@ -87,6 +91,15 @@ $tab-horizontal-header-right-width: 60px;
               padding-bottom: 5px;
               font-size: 10px;
               color: var(--font-color);
+            }
+
+            &:after {
+              content: attr(title);
+              display: block;
+              text-align: center;
+              color: var(--font-color);
+              font-size: 12px;
+              font-weight: 400;
             }
           }
         }

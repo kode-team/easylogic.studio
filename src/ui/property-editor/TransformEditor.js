@@ -144,8 +144,27 @@ export default class TransformEditor extends UIElement {
       <div class="transform-item" data-index="${index}">
         <div class="title" data-index="${index}">
           <label draggable="true" >${this.$i18n('css.item.' + type)}</label>
-          <div class="transform-ui">
+          <div class="transform-ui ${type}">
+            ${transform.value.map( (it, tindex) => {
 
+              var label = this.getLabel(type, tindex);
+              var {min, max, step, units} = this.getRange(type);
+
+              return /*html*/`
+                <div>
+                  <RangeEditor 
+                        ref='$range_${type}_${index}_${tindex}' 
+                        min="${min}" 
+                        max="${max}" 
+                        step="${step}" 
+                        label="${label}"
+                        key="${index}" 
+                        params='${tindex}' 
+                        value="${it}" 
+                        units="${units}" 
+                        onchange="changeRangeEditor" />
+                </div>`
+              }).join('')}      
           </div>
           <div class="transform-menu">
             <button type="button" class="del" data-index="${index}">
@@ -153,28 +172,7 @@ export default class TransformEditor extends UIElement {
             </button>
           </div>
         </div>
-        <div class="transform-ui ${type}">
-          ${transform.value.map( (it, tindex) => {
 
-            var label = this.getLabel(type, tindex);
-            var {min, max, step, units} = this.getRange(type);
-
-            return /*html*/`
-              <div>
-                <RangeEditor 
-                      ref='$range_${type}_${index}_${tindex}' 
-                      min="${min}" 
-                      max="${max}" 
-                      step="${step}" 
-                      label="${label}"
-                      key="${index}" 
-                      params='${tindex}' 
-                      value="${it}" 
-                      units="${units}" 
-                      onchange="changeRangeEditor" />
-              </div>`
-            }).join('')}      
-        </div>
       </div>
     `;
   }

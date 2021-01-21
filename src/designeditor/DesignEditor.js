@@ -10,7 +10,6 @@ import { DRAGOVER, DROP, PREVENT, TRANSITIONEND, KEYDOWN, KEYUP, IF, POINTERSTAR
 
 import icon from "@icon/icon";
 import { Length } from "@unit/Length";
-import Resource from "@util/Resource";
 
 import TimelineProperty from "@ui/control/TimelineProperty";
 import Inspector from "@ui/control/Inspector";
@@ -29,7 +28,7 @@ import NotificationView from "@ui/view/NotificationView";
 import PageSubEditor from "@ui/view-items/PageSubEditor";
 
 import windowList from "@ui/window-list";
-
+ 
 
 const formElements = ['TEXTAREA', 'INPUT', 'SELECT']
 
@@ -305,7 +304,7 @@ export default class DesignEditor extends UIElement {
     setTimeout(() => {
       this.emit('resizeCanvas'); 
     }, 100)
-  }
+  } 
 
   [CLICK('$toggleLeftButton')] () {
     this.toggleState('hideLeftPanel');

@@ -9,13 +9,14 @@
     select {
         font-size: 11px;
         border: 1px solid var(--border-color);
+        background-color: var(--input-background-color);        
         &:focus-within {
             border: 1px solid var(--selected-color);
         }
     }
 
     &.has-label {
-        grid-template-columns: 60px 1fr;
+        grid-template-columns: 70px 1fr;
         grid-column-gap: 2px;
 
         label {

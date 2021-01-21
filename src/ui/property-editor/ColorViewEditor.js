@@ -52,12 +52,12 @@ export default class ColorViewEditor extends UIElement {
         return /*html*/`
             <div class='color-view-editor ${hasLabel}'>
                 ${label ? `<label>${label}</label>` : '' }            
-                <div class='preview' ref='$preview'>
-                    <div class='mini-view'>
-                        <div class='color-view' style="background-color: ${this.state.value}" ref='$miniView'></div>
-                    </div>
-                </div>
                 <div class='color-code'>
+                    <div class='preview' ref='$preview'>
+                        <div class='mini-view'>
+                            <div class='color-view' style="background-color: ${this.state.value}" ref='$miniView'></div>
+                        </div>
+                    </div>                
                     <input type="text" ref='$colorCode' value='${this.state.value}' tabIndex="1" />
                 </div>
             </div>

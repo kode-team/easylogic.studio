@@ -24,7 +24,7 @@ export default class DisplayProperty extends BaseProperty {
   }
 
   getBody() {
-    return `
+    return /*html*/`
       <div class="position-item" ref="$positionItem"></div>
     `;
   }

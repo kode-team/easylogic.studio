@@ -3,8 +3,7 @@
 // common 
 $border-color: rgb(49, 49, 49);
 $selected-border-color: #3a89f0;
-$selected-color: #fc554f;
-$selected-color-2: #fc554f81;
+$selected-color: #03a9f4;
 
 $selection-tool-border-color: #3a89f0;
 
@@ -21,7 +20,7 @@ $range-thumb-color:  $selected-color;
 $range-track-color:  rgb(97, 97, 97);
 $range-thumb-border-color: rgba(0, 0, 0, 0.8);
 
-$input-background-color: #2b2b2b;
+$input-background-color: rgb(35, 41, 55);
 $input-border-color:#2b2b2b;
 $input-font-color: #ececec;
 $input-sub-font-color: #7a7a7a;
@@ -30,6 +29,7 @@ $divider-color:  rgb(97, 97, 97);
 
 // property 
 $property-border-color: #4a4a4a;
+$property-background-color: #131313;
 
 // list 
 $list-item-font-color: rgb(255, 255, 255);
@@ -67,8 +67,8 @@ $page-view-element-artboard-title-color: rgb(92, 92, 92);
 $animation-item-background-color: #435cb5;
 
 // select icon editor 
-$select-icon-editor-item-color: #2b2b2b;
-$select-icon-editor-selected-color: #555555;
+$select-icon-editor-item-color: rgb(35, 41, 55);
+$select-icon-editor-selected-color: $list-item-selected-color;
 
 $grid-box-editor-button-background-color: #435cb5;
 

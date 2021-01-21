@@ -1,8 +1,10 @@
 .property {
   padding: 5px 10px;
-  border-top: 1px solid var(--property-border-color);  
-  background-color: var(--background-color);
-  color: var(--font-color); 
+  // border-top: 1px solid var(--property-border-color);  
+  // background-color: rgb(32, 32, 32);
+  margin: 0px 5px;
+  border-radius: 4px;
+  // color: var(--font-color); 
   display: none; 
 
   &:first-child {
@@ -156,9 +158,22 @@
   > .property-body {
     display: none;
     padding: 0px;
-    background-color: var(--background-color);
+    position: relative;
+    // background-color: var(--background-color);
 
     // box-shadow: inset 0 0 5px 0px rgba(0, 0, 0, 1);
+
+    &:after {
+      position: absolute;
+      content: '';
+      display: block;
+      height: 1px;
+      background-color: rgb(48, 48, 48);
+      width: 95%;
+      left: 50%;
+      bottom: -5px;
+      transform: translateX(-50%);
+    }
 
     .property-item {
       font-size: 11px;

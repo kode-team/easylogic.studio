@@ -6,6 +6,7 @@ import { isArray, isString } from "@core/functions/func";
 import { Project } from "@items/Project";
 import HTMLRenderer from "@renderer/HTMLRenderer";
 
+const TEMP_DIV = Dom.create('div')     
 
 export default class StyleView extends UIElement {
 
@@ -13,16 +14,6 @@ export default class StyleView extends UIElement {
     return /*html*/`
     <div class='style-view' style='pointer-events: none; position: absolute;display:inline-block;left:-1000px;'>
       <div ref='$svgArea'></div>
-      <svg width="0" height="0">
-        <defs>
-          <marker id="start" markerWidth="8" markerHeight="8" refX="5" refY="5">
-              <circle cx="5" cy="5" r="3" style="stroke: none; fill:#000000;"/>
-          </marker>
-          <marker id="head" orient="auto" markerWidth="10" markerHeight="10" refX=".5" refY="3">
-            <path d="M0,0 V6 L5,3 Z" fill="red"></path>
-          </marker>
-        </defs>
-      </svg>
     </div>
     `;
   }
@@ -134,14 +125,16 @@ export default class StyleView extends UIElement {
     const styleTags = [] 
     const removeStyleSelector = []
 
-    items.forEach(item => {
+
+    for(let i = 0, len = items.length; i < len; i++) {
+      const item = items[i];
       var selector = item.allLayers.map(it => {
-        return `style[data-id="${it.id}"],style[data-id="${it.id}-drag"]`
+        return `style[data-id="${it.id}"]`
       }).join(',');
 
       removeStyleSelector.push(selector);
       styleTags.push(this.makeStyle(item))
-    })
+    }
 
     if (removeStyleSelector.length) {
       this.refs.$head.$$(removeStyleSelector).forEach(it => {
@@ -149,9 +142,9 @@ export default class StyleView extends UIElement {
       })  
     }
 
-    var $temp = Dom.create('div')        
+   
 
-    var $fragment = $temp.html(styleTags.join('')).createChildrenFragment()
+    var $fragment = TEMP_DIV.html(styleTags.join('')).createChildrenFragment()
 
     this.refs.$head.append($fragment);
   }  

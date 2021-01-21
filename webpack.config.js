@@ -46,6 +46,11 @@ module.exports = {
     path: __dirname + "/docs",
     filename: '[name].js?[contenthash]'
   },
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+    },
+  },
   resolve: { alias },  
   mode: 'production',
   // devtool: 'source-map',
@@ -137,7 +142,6 @@ module.exports = {
   plugins: [
     new HtmlWebPackPlugin({
       inject: true,
-      chunks: ["main"],
       template: "./src/index.html",
       filename: "./index.html"
     }),

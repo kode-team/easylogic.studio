@@ -9,7 +9,14 @@ const DEFAULT_CHECKED = false;
 export default class MenuItem extends UIElement {
     template () {
         return /*html*/`
-        <button type="button" class='menu-item ${this.getClassName()}' data-no-title="${this.isHideTitle()}" ${this.isHideTitle() ? `title="${this.getTitle()}"` : '' } checked="${this.getChecked() ? 'checked' : ''}">
+        <button 
+            type="button" 
+            class='menu-item ${this.getClassName()}' 
+            data-no-title="${this.isHideTitle()}" 
+            ${this.isHideTitle() ? `title="${this.getTitle()}"` : '' } 
+            checked="${this.getChecked() ? 'checked' : ''}"
+            ${this.isDisabled() ? 'disabled' : ''}
+        >
             <div class="icon ${this.getIcon()}">${this.getIconString()}</div>
             <div class="title">${this.getTitle()}</div>
         </button>
@@ -24,6 +31,10 @@ export default class MenuItem extends UIElement {
 
     getChecked () {
         return DEFAULT_CHECKED; 
+    }
+
+    isDisabled () {
+        return false;
     }
 
     setSelected (isSelected) {

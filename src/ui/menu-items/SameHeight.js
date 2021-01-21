@@ -3,8 +3,9 @@ import icon from "@icon/icon";
    
 export default class SameHeight extends MenuItem {
   getIconString() {
-    return icon.same_height;
+    return icon.vertical_distribute;
   }
+
   getTitle() {
     return "height";
   }
@@ -12,6 +13,11 @@ export default class SameHeight extends MenuItem {
   isHideTitle () {
     return true; 
   }
+
+  isDisabled () {
+    return true; 
+  }
+
   clickButton(e) {
     this.emit('same.height');
   }

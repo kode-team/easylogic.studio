@@ -14,6 +14,11 @@ module.exports = {
     libraryTarget: "umd",
     path: __dirname + "/docs"
   },
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+    },
+  },  
   resolve: { alias },
   module: {
     rules: [
@@ -103,7 +108,6 @@ module.exports = {
   plugins: [
     new HtmlWebPackPlugin({
       inject: true,
-      chunks: ["main"],
       template: "./src/dev-index.html",
       filename: "./index.html"
     }),

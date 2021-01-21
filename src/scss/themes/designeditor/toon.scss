@@ -2,19 +2,17 @@
 
 // common 
 $inner-border-color: #181818;
-$border-color: rgb(226, 226, 226);
+$border-color: #333333;//rgb(226, 226, 226);
 $border-color-2: #609de2;
 $selected-border-color: #609de2;
-$selected-color: #4778d4;
-$selected-color-2: #4778d48e;
+$selected-color: black; //#4778d4;
 
 $selection-tool-border-color: #3a89f0;
-
 
 $background-color: white; 
 $header-background-color: white;
 $selected-background-color: #d8d8d8; 
-$font-color: rgb(97, 97, 97);
+$font-color: #333333;
 $selected-font-color: rgb(255, 255, 255);
 $menu-item-title-font-color: #949494;
 
@@ -27,7 +25,7 @@ $select-border-radius: 3px;
 $select-font-color: $font-color;
 
 $range-thumb-border-radius: 10px;
-$range-thumb-color:  #609de2;
+$range-thumb-color:  #333333;//#609de2;
 $range-track-color:  rgb(207, 207, 207);
 $range-thumb-border-color: $range-thumb-color;
 
@@ -42,8 +40,8 @@ $input-sub-font-color: #7a7a7a;
 // property 
 $property-title-color:  white;
 $property-border-color: $border-color;
-$property-border-top-color: $border-color;
-$property-background-color: $background-color; 
+$property-background-color: $background-color;
+$property-border-top-color: $border-color; 
 $property-show-background-color: white; 
 $property-font-color: $font-color;
 $property-input-border-color: $border-color;
@@ -52,7 +50,7 @@ $property-input-border-color: $border-color;
 $list-font-color: black;
 $list-item-font-color: black;
 $list-item-disable-font-color: rgb(163, 163, 163);
-$list-item-selected-color: #609de2; 
+$list-item-selected-color: $border-color; //#609de2; 
 $list-item-selected-font-color: white; 
 $list-border-color: black;
 $list-background-color: $border-color;
@@ -74,7 +72,7 @@ $popup-selected-color: $selected-color;
 $popup-border-color: $border-color;
 
 // window 
-$window-background-color: #2a2a2a7a;
+$window-background-color: white;
 $window-color: $background-color;
 
 // cubic-bezier-editor 
@@ -94,6 +92,8 @@ $timeline-background-color: lighten($background-color, 5%);
 $timeline-border-color: $border-color;
 $timeline-gauge-background-color: #435cb5;
 $timeline-gauge-handle-color: #748ff1;
+$timeline-offset-line-color: $selected-color;
+// $timeline-offset-line-color: #497594;
 $timeline-row-selected-color: #609de2;
 $timeline-property-add-background-color: #747474;
 
@@ -110,9 +110,10 @@ $transition-item-background-color: #435cb5;
 
 // select icon editor 
 $select-icon-editor-item-color: rgb(192, 192, 192);
-$select-icon-editor-selected-color: #609de2;
+$select-icon-editor-selected-color: $list-item-selected-color;
 $select-icon-editor-selected-shadow-color: rgb(153, 153, 153);
 $select-icon-editor-border-color: black;
+$select-icon-editor-font-color: white;
 
 $grid-box-editor-button-background-color: #435cb5;
 
@@ -130,9 +131,9 @@ $rotate-y-border-color: rgb(139, 223, 139);
 $draw-view-background-color: $background-color;
 $path-view-background-color: $background-color;
 
-$color-view-background-color: #d8d8d8;
+$color-view-background-color: #333333;//#d8d8d8;
 $transform-origin-selected-color: $selected-color;
-$border-radius-selected-color: $background-color;
+$border-radius-selected-color: $border-color;
 
 $transform-item-background-color: rgba(0, 0, 0, 0.1);
 $transform-item-border-color: #2b2b2b;

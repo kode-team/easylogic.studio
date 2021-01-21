@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.12.5",
+    "array-organizer": "^1.2.0",
     "gl-matrix": "^3.3.0"
   },
   "devDependencies": {

@@ -1,6 +1,6 @@
 .alignment-item {
     display: grid; 
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(8, 1fr);
     grid-column-gap: 2px;
     height: 26px;
 
@@ -28,8 +28,8 @@
   
       .icon {
         margin: 0 auto;
-        width: 20px;
-        height: 20px;
+        width: 16px;
+        height: 16px;
         color: var(--selected-color) !important;        
   
         svg {

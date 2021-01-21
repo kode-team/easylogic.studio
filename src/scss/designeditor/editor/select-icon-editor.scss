@@ -46,9 +46,15 @@
             text-transform: uppercase;
             line-height: 1.6;
             border-radius: 3px;            
-            color: var(--selected-font-color);            
+            color: var(--selected-font-color);   
+            position: relative;         
 
             svg {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                display: inline-block;
+                transform: translate(-50%, -50%);
                 width: 16px;
                 height: 16px;
                 vertical-align: middle;

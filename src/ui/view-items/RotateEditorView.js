@@ -112,10 +112,14 @@ export default class RotateEditorView extends UIElement {
 
 
         this.state.rotateCache = this.$selection.map(item => {
+
+            const rotateX = Transform.get(item['transform'], 'rotateX')
+            const rotateY = Transform.get(item['transform'], 'rotateY')
+
             return {
                 item,
-                rotateX: Transform.get(item['transform'], 'rotateX')[0] || Length.deg(0),
-                rotateY: Transform.get(item['transform'], 'rotateY')[0] || Length.deg(0),
+                rotateX: rotateX ? rotateX[0] : Length.deg(0),
+                rotateY: rotateY ? rotateY[0] : Length.deg(0),
             }
         })
     }
@@ -168,9 +172,10 @@ export default class RotateEditorView extends UIElement {
             y: pointerRect.y + pointerRect.height/2 
         }        
         this.state.rotateCache = this.$selection.map(item => {
+            const rotateZ = Transform.get(item['transform'], 'rotateZ')
             return {
                 item,
-                rotateZ: Transform.get(item['transform'], 'rotateZ')[0] || Length.deg(0),
+                rotateZ: rotateZ ? rotateZ[0] : Length.deg(0),
             }
         })
     }

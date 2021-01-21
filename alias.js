@@ -5,7 +5,7 @@ module.exports = {
     '@colorpicker': path.resolve(__dirname, "./src/colorpicker"),
     '@commands': path.resolve(__dirname, "./src/commands"),
     '@core': path.resolve(__dirname, "./src/core"),
-    '@csseditor': path.resolve(__dirname, "./src/csseditor"),
+    '@designeditor': path.resolve(__dirname, "./src/designeditor"),
     '@exporter': path.resolve(__dirname, "./src/exporter"),
     '@i18n': path.resolve(__dirname, "./src/i18n"),
     '@icon': path.resolve(__dirname, "./src/icon"),

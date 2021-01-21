@@ -29,8 +29,8 @@ export default class AlignmentProperty extends BaseProperty {
         <MiddleAlign />
         <BottomAlign />  
 
-        <!--<SameWidth />-->
-        <!--<SameHeight />-->
+        <SameWidth />
+        <SameHeight />
       </div>
     `;
   }

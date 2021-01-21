@@ -147,6 +147,8 @@ import swap_horiz from "./swap_horiz";
 import rotate_left from "./rotate_left";
 import open_in_full from "./open_in_full";
 import rotate from "./rotate";
+import vertical_distribute from "./vertical_distribute";
+import horizontal_distribute from "./horizontal_distribute";
 
 
 const alias = {
@@ -164,6 +166,8 @@ export default {
   align_vertical_bottom,
   align_vertical_center,
   align_vertical_top,  
+  vertical_distribute,
+  horizontal_distribute,
   rotate_left,
   swap_horiz,  
   arrow_right,  

@@ -153,7 +153,7 @@ export default class SelectionToolView extends SelectionToolEvent {
 
             const diff = vec3.subtract([], pointer, this.state.renderPointerList[0][5]);
             const angle = calculateAngle360(diff[0], diff[1]);
-            let iconAngle = Math.floor(angle)  - 135
+            let iconAngle = Math.floor(angle)  - 130
             this.emit('refreshCursor', 'open_in_full', `rotate(${iconAngle} 12 12)`)
         } else {
             this.emit('recoverCursor');

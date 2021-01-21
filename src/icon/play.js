@@ -1,1 +1,3 @@
-export default `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>`
+import _icon_template from "./_icon_template";
+
+export default _icon_template(`<path d="M8 5v14l11-7z"/>`);
