@@ -64,6 +64,19 @@
       //   background-color: var(--selection-tool-border-color);
       // }
     }
+
+    .size-pointer {
+      display: inline-block;
+      position: absolute;
+      left: 0px;
+      top: 0px;      
+      background-color: var(--selected-color);
+      color: var(--selected-font-color);
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+
+
     .rotate-pointer {
       display: inline-block;
       position: absolute;

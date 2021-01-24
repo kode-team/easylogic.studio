@@ -128,8 +128,12 @@ export default class GradientEditor extends UIElement  {
                 </div>
             </div>
             <div class='tools' data-editor='tools'>
-              <label>Offset <input type='checkbox' ref='$cut' checked />  connected</label>
+              <label>Offset</label>
               <InputRangeEditor ref='$range' calc="false" key='length' onchange='changeColorStepOffset' />
+            </div>
+            <div class='tools' data-editor='tools'>
+              <label for='gradientConnected${this.id}'>connected </label>
+              <input type='checkbox'  id='gradientConnected${this.id}' ref='$cut' checked />
             </div>
             <div class='sub-editor' ref='$subEditor'> 
               <div data-editor='angle'>

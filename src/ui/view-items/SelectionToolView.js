@@ -539,8 +539,8 @@ export default class SelectionToolView extends SelectionToolEvent {
                     this.$viewport.applyVerties(selectionVerties)
                 ]
 
-                const {line, point} = this.createRenderPointers(...this.state.renderPointerList);
-                this.refs.$pointerRect.updateDiff(line + point)
+                const {line, point, size} = this.createRenderPointers(...this.state.renderPointerList);
+                this.refs.$pointerRect.updateDiff(line + point + size)
             }
 
         } else {
@@ -557,8 +557,8 @@ export default class SelectionToolView extends SelectionToolEvent {
                     this.$viewport.applyVerties(selectionVerties)
                 ]             
 
-                const {line, point} = this.createRenderPointers(...this.state.renderPointerList);
-                this.refs.$pointerRect.updateDiff(line + point)
+                const {line, point, size} = this.createRenderPointers(...this.state.renderPointerList);
+                this.refs.$pointerRect.updateDiff(line + point + size)
             }
         }
 
@@ -615,6 +615,42 @@ export default class SelectionToolView extends SelectionToolEvent {
         </svg>`
     }    
 
+    createSize (pointers) {
+        const top = vec3.lerp([], pointers[0], pointers[1], 0.5);
+        const right = vec3.lerp([], pointers[1], pointers[2], 0.5);
+        const bottom = vec3.lerp([], pointers[2], pointers[3], 0.5);
+        const left = vec3.lerp([], pointers[3], pointers[0], 0.5);
+
+        const list = [
+            { start: top, end: bottom}, 
+            { start: right, end: left },
+            { start: bottom, end: top }, 
+            { start: left, end: right }
+        ].map((it, index) => { 
+            return { index, data: it }
+        })
+
+        list.sort((a, b) => {
+            return a.data.start[1] > b.data.start[1] ? -1 : 1; 
+        })
+
+        const item = list[0];
+
+        const newPointer  = vec3.lerp([], item.data.end, item.data.start, 1 + 16/vec3.dist(item.data.start, item.data.end))
+        const width = this.$selection.current.width.value
+        const height = this.$selection.current.height.value
+        const diff = vec3.subtract([], item.data.start, item.data.end);
+        const angle = calculateAngle360(diff[0], diff[1]) + 90;
+
+
+
+        return /*html*/`
+            <div class='size-pointer' style="transform: translate3d( calc(${newPointer[0]}px - 50%), calc(${newPointer[1]}px - 50%), 0px) rotateZ(${angle}deg)" >
+               ${width} x ${height}
+            </div>
+        `
+    }
+
     createRenderPointers(pointers, selectionPointers) {
 
         const current = this.$selection.current; 
@@ -625,11 +661,12 @@ export default class SelectionToolView extends SelectionToolEvent {
         const topPointer = vec3.lerp([], pointers[0], pointers[1], 0.5);
         const bottomPointer = vec3.lerp([], pointers[2], pointers[3], 0.5);
 
-        pointers[4] = vec3.lerp([], bottomPointer, topPointer, 1 + 30/vec3.dist(topPointer, bottomPointer))
+        pointers[4] = vec3.lerp([], bottomPointer, topPointer, 1 + 34/vec3.dist(topPointer, bottomPointer))
 
 
         return {
             line: this.createPointerRect(pointers), 
+            size: this.createSize(pointers),
             point: [
                 // 4 모서리에서도 rotate 가 가능하도록 맞춤 
                 // isArtBoard ? undefined : this.createRotatePointer (selectionPointers[0], 0),

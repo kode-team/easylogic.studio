@@ -3,7 +3,6 @@
       "baseUrl": ".",
       "paths": {
         "@assets/*": ["./src/assets/*"],
-        "@colorpicker/*": ["./src/colorpicker/*"],
         "@commands/*": ["./src/commands/*"],
         "@core/*": ["./src/core/*"],
         "@designeditor/*": ["src/designeditor/*"],

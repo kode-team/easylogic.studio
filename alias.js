@@ -2,7 +2,6 @@ var path = require('path');
 
 module.exports = {
     '@assets': path.resolve(__dirname, "./src/assets"),
-    '@colorpicker': path.resolve(__dirname, "./src/colorpicker"),
     '@commands': path.resolve(__dirname, "./src/commands"),
     '@core': path.resolve(__dirname, "./src/core"),
     '@designeditor': path.resolve(__dirname, "./src/designeditor"),
