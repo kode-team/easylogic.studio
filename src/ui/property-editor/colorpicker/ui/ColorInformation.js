@@ -56,6 +56,10 @@ export default class ColorInformation extends UIElement {
         </div>
         `
     }
+
+    get manager () {
+        return this.parent.manager;
+    }
     
     setCurrentFormat (format) {
         this.format = format
@@ -93,8 +97,7 @@ export default class ColorInformation extends UIElement {
 
         this.initFormat();
 
-        this.parent.manager.changeFormat(this.format)
-        this.emit('lastUpdateColor');        
+        this.parent.changeFormat(this.format)
     }
 
     goToFormat(to_format) {
@@ -103,7 +106,7 @@ export default class ColorInformation extends UIElement {
             this.initFormat();
         }
 
-        this.parent.manager.changeFormat(this.format)
+        this.parent.changeFormat(this.format)        
     }    
     
     getFormat () {
@@ -111,30 +114,24 @@ export default class ColorInformation extends UIElement {
     }
 
     changeRgbColor () {
-        this.parent.changeColor({
+        this.parent.lastUpdateColor({
             type: 'rgb',
             r : this.refs.$rgb_r.int(),
             g : this.refs.$rgb_g.int(),
             b : this.refs.$rgb_b.int(),
             a : this.refs.$rgb_a.float()
         })
-        this.emit('lastUpdateColor')
     }
 
     changeHslColor () {
-        this.parent.changeColor({
+        this.parent.lastUpdateColor({
             type: 'hsl',
             h : this.refs.$hsl_h.int(),
             s : this.refs.$hsl_s.int(),
             l : this.refs.$hsl_l.int(),
             a : this.refs.$hsl_a.float()
         })        
-        this.emit('lastUpdateColor')        
     }    
-
-    [EVENT('changeColor', 'initColor')] () {
-        this.refresh()
-    }
 
     [INPUT('$rgb_r')] (e) {  this.changeRgbColor(); }
     [INPUT('$rgb_g')] (e) {  this.changeRgbColor(); }
@@ -172,25 +169,29 @@ export default class ColorInformation extends UIElement {
     }        
 
     setRGBInput() {
-        this.refs.$rgb_r.val(this.parent.rgb.r);
-        this.refs.$rgb_g.val(this.parent.rgb.g);
-        this.refs.$rgb_b.val(this.parent.rgb.b);
-        this.refs.$rgb_a.val(this.parent.alpha);
+        this.refs.$rgb_r.val(this.manager.rgb.r);
+        this.refs.$rgb_g.val(this.manager.rgb.g);
+        this.refs.$rgb_b.val(this.manager.rgb.b);
+        this.refs.$rgb_a.val(this.manager.alpha);
     }
     
     setHSLInput() {
-        this.refs.$hsl_h.val(this.parent.hsl.h);
-        this.refs.$hsl_s.val(this.parent.hsl.s);
-        this.refs.$hsl_l.val(this.parent.hsl.l);
-        this.refs.$hsl_a.val(this.parent.alpha);
+        this.refs.$hsl_h.val(this.manager.hsl.h);
+        this.refs.$hsl_s.val(this.manager.hsl.s);
+        this.refs.$hsl_l.val(this.manager.hsl.l);
+        this.refs.$hsl_a.val(this.manager.alpha);
     }    
 
     setHexInput () {
-        this.refs.$hexCode.val(this.parent.manager.toString('hex'));
+        this.refs.$hexCode.val(this.manager.toString('hex'));
+    }
+
+    setValue () {
+        this.refresh();
     }
 
     refresh () {
-        this.setCurrentFormat(this.parent.format);
+        this.setCurrentFormat(this.manager.format);
         this.setRGBInput();
         this.setHSLInput();
         this.setHexInput();

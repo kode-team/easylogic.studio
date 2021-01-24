@@ -49,7 +49,16 @@ export function hex(obj) {
     var b = obj.b.toString(16);
     if (obj.b < 16) b = "0" + b;
 
-    return `#${r}${g}${b}`;
+
+    if (obj.a == 1 || isUndefined(obj.a)) {
+        return `#${r}${g}${b}`;
+    } else {
+        const alpha = Math.ceil(obj.a * 255);
+        var a = alpha.toString(16);
+        if (alpha < 16) a = "0" + a;
+  
+        return `#${r}${g}${b}${a}`;        
+    }
 }
 
 export function rgb (obj, defaultColor = 'rgba(0, 0, 0, 0)') {

@@ -4,7 +4,7 @@ import { RGBtoHSL } from './fromRGB'
 import { HSLtoRGB } from './fromHSL'
 import { isString, isNumber } from './func';
 
-const color_regexp = /(#(?:[\da-f]{3}){1,2}|rgb\((?:\s*\d{1,3},\s*){2}\d{1,3}\s*\)|rgba\((?:\s*\d{1,3},\s*){3}\d*\.?\d+\s*\)|hsl\(\s*\d{1,3}(?:,\s*\d{1,3}%){2}\s*\)|hsla\(\s*\d{1,3}(?:,\s*\d{1,3}%){2},\s*\d*\.?\d+\s*\)|([\w_\-]+))/gi;
+const color_regexp = /(#(?:[\da-f]{3}){1,2}|#(?:[\da-f]{8})|rgb\((?:\s*\d{1,3},\s*){2}\d{1,3}\s*\)|rgba\((?:\s*\d{1,3},\s*){3}\d*\.?\d+\s*\)|hsl\(\s*\d{1,3}(?:,\s*\d{1,3}%){2}\s*\)|hsla\(\s*\d{1,3}(?:,\s*\d{1,3}%){2},\s*\d*\.?\d+\s*\)|([\w_\-]+))/gi;
 
 export function getColorIndexString(it, prefix = '@' ) {
     return `${prefix}${it.startIndex}`.padEnd(10, '0');
@@ -93,6 +93,7 @@ export function trim (str) {
  * parse string to rgb color
  *
  * 		color.parse("#FF0000") === { r : 255, g : 0, b : 0 }
+ * 		color.parse("#FF0000FF") === { r : 255, g : 0, b : 0, a: 1 }
  *
  * 		color.parse("rgb(255, 0, 0)") == { r : 255, g : 0, b :0 }
  * 		color.parse(0xff0000) == { r : 255, g : 0, b : 0 }
@@ -170,20 +171,26 @@ export function parse(str) {
         } else if (str.indexOf("#") == 0) {
 
             str = str.replace("#", "");
-
             var arr = [];
+            var a = 1; 
             if (str.length == 3) {
                 for (var i = 0, len = str.length; i < len; i++) {
                     var char = str.substr(i, 1);
                     arr.push(parseInt(char + char, 16));
                 }
+            } else if (str.length === 8) {
+                for (var i = 0, len = str.length; i < len; i += 2) {
+                    arr.push(parseInt(str.substr(i, 2), 16));
+                }
+
+                a = arr.pop() / 255             
             } else {
                 for (var i = 0, len = str.length; i < len; i += 2) {
                     arr.push(parseInt(str.substr(i, 2), 16));
                 }
             }
 
-            var obj = { type: 'hex', r: arr[0], g: arr[1], b: arr[2], a: 1 };
+            var obj = { type: 'hex', r: arr[0], g: arr[1], b: arr[2], a };
 
             obj = {...obj, ...RGBtoHSL(obj)};
 

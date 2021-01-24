@@ -1,60 +1,50 @@
-import UIElement from "@core/UIElement";
-import ColorPickerUI from "@colorpicker/";
+import UIElement, { EVENT } from "@core/UIElement";
+import ColorPickerEditor from "./ColorPickerEditor";
+
 
 export default class EmbedColorPicker extends UIElement {
 
-
-  show () {
-
-    if (this.colorPicker) {
-      return;
-    }
-
-    var defaultColor = "rgba(0, 0, 0, 1)";
-
-    this.colorPicker = ColorPickerUI.create({
-      $editor: this.$editor,
-      type: 'sketch',
-      position: "inline",
-      container: this.refs.$color.el,
-      color: this.props.value || defaultColor,
-      onChange: c => {
-        this.changeColor(c);
-      },
-      onLastUpdate: c => {
-        this.changeEndColor(c);
+    components () {
+      return {
+        ColorPickerEditor
       }
-
-    });
-  }
-
-  initState() {
-    return {
-      color: 'rgba(0, 0, 0, 1)'
     }
-  }
 
-  template() {
-    return /*html*/`
-      <div ref="$color"></div>
-    `;
-  }
+    initState() {
+      return {
+        value: this.props.value || 'rgba(0, 0, 0, 1)'
+      }
+    }
 
-  changeColor(color) {
-    this.parent.trigger(this.props.onchange, color);
-  }
+    template () {
+      return /*html*/`
+        <div class='embed-color-picker'>
+          <ColorPickerEditor 
+            ref='$colorpicker' 
+            key="colorpicker" 
+            value="${this.state.value}" 
+            onchange='localChangeColor' 
+            onchangeend='localLastUpdate' 
+          />        
+        </div>
+      `
+    }
 
-  changeEndColor(color) {
-    this.parent.trigger(this.props.onchangeend, color);
-  }  
+    [EVENT('localChangeColor')](key, color) {
+      this.parent.trigger(this.props.onchange, color);
+    }
 
-  setValue (color) {
-    this.show();
-    this.colorPicker.initColorWithoutChangeEvent(color);
-  }
+    [EVENT('localLastUpdate')](key, color) {
+      this.parent.trigger(this.props.onchangeend, color);
+    }  
 
-  refresh() {
-    this.colorPicker.initColorWithoutChangeEvent(this.state.color);
-  }
+    setValue (color) {
+      this.state.value = color; 
+      this.children.$colorpicker.initColor(color);
+    }
+
+    refresh() {
+      this.children.$colorpicker.initColor(this.props.value);
+    }
 
 }

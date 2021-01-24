@@ -3,7 +3,7 @@ import { round } from './math'
 import { format } from './formatter' 
 import { RGBtoHSV } from './fromRGB'
 import { HSVtoRGB } from './fromHSV'
-import { isString } from './func';
+import { isString, isUndefined } from './func';
 
 /**
  * @deprecated 
@@ -17,16 +17,18 @@ import { isString } from './func';
 export function interpolateRGB(startColor, endColor, t = 0.5, exportFormat = 'hex') {
     var obj = interpolateRGBObject(startColor, endColor, t);
 
-    return format(obj, obj.a < 1 ? 'rgb' : exportFormat);
+    return format(obj, exportFormat);
 
 }
 
 export function interpolateRGBObject(startColor, endColor, t = 0.5) {
+    const startColorAlpha = isUndefined(startColor.a) ? 1 : startColor.a;
+    const endColorAlpha = isUndefined(endColor.a) ? 1 : endColor.a;
     return {
         r: round(startColor.r + (endColor.r - startColor.r) * t),
         g: round(startColor.g + (endColor.g - startColor.g) * t),
         b: round(startColor.b + (endColor.b - startColor.b) * t),
-        a: round(startColor.a + (endColor.a - startColor.a) * t, 100 )
+        a: round(startColorAlpha + (endColorAlpha - startColorAlpha) * t, 100 )
     };  
 }
 

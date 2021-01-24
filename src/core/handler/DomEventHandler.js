@@ -294,7 +294,6 @@ export default class DomEventHandler extends BaseHandler {
     }
       
     bindingEvent ( [eventName, dom, ...delegate], checkMethodFilters, callback ) {
-        const context = this.context;
         let eventObject = this.getDefaultEventObject(eventName, checkMethodFilters);
       
         eventObject.dom = this.getDefaultDomElement(dom);
@@ -343,9 +342,9 @@ export default class DomEventHandler extends BaseHandler {
         var eventNames = this.getEventNames(arr[0]);
         var callback = context[key].bind(context);
         
-        eventNames.forEach(eventName => {
-            arr[0] = eventName
-            this.bindingEvent(arr, checkMethodFilters, callback);
-        });
+        for(let i = 0, len = eventNames.length; i< len; i++) {
+          arr[0] = eventNames[i];
+          this.bindingEvent(arr, checkMethodFilters, callback);
+        }
     }  
 }

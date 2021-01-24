@@ -62,6 +62,8 @@
             padding: 0px 3px;
             border-radius: 3px;
 
+            // font-family: monospace;
+
             &.focused {
                 box-shadow: 0 0 0 1px var(--selected-color);
             }

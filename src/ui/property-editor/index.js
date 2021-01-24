@@ -24,7 +24,7 @@ import SVGClipPathEditor from "./SVGClipPathEditor";
 import DirectionEditor from "./DirectionEditor";
 import InputArrayEditor from "./InputArrayEditor";
 import IconListViewEditor from "./IconListViewEditor";
-import EmbedColorPicker from "./EmbedColorPicker";
+// import EmbedColorPicker from "./EmbedColorPicker";
 import ImageSelectEditor from "./ImageSelectEditor";
 import SelectIconEditor from "./SelectIconEditor";
 import InputRangeEditor from "./InputRangeEditor";
@@ -84,7 +84,7 @@ export default {
     InputRangeEditor,
     SelectIconEditor,
     ImageSelectEditor,
-    EmbedColorPicker,
+    // EmbedColorPicker,
     IconListViewEditor,
     InputArrayEditor,
     DirectionEditor,
