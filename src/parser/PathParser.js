@@ -628,16 +628,14 @@ export default class PathParser {
         return this; 
     }
 
-    reverse () {
-
-
+    reverseSegments (segments) {
         const newSegments = [];
-        let lastIndex = this.segments.length-1;
+        let lastIndex = segments.length-1;
         for(var i = lastIndex; i > 0; i--) {
-            const segment = this.segments[i];
+            const segment = segments[i];
             const v = segment.values;
             const c = segment.command;
-            const prevSegment = this.segments[i-1];
+            const prevSegment = segments[i-1];
             const lastX = prevSegment.values[prevSegment.values.length-2];
             const lastY = prevSegment.values[prevSegment.values.length-1];
 
@@ -672,6 +670,47 @@ export default class PathParser {
                 break;
             }
         }
+
+        // z가 가장 먼저 올 때는 z 를 다시 뒤로 돌려보낸다. 
+        if (newSegments[0].command === 'Z') {
+            newSegments.push(newSegments.shift());
+        }
+
+        return newSegments;
+    }
+
+    /**
+     * segments 를 M 기준으로 분리 시킨다. 
+     */
+    splitSegments () {
+
+        const groupSegments = []
+        let newSegments = []
+        this.segments.forEach(s => {
+            if (s.command === 'M') {
+                newSegments = [s]
+                groupSegments.push(newSegments);
+            } else {
+                newSegments.push(s);
+            }
+        })
+
+        return groupSegments;
+    }
+
+    /**
+     * path 의 segment 들을 역순으로 정렬한다. 
+     * 
+     * M이 여러개일 경우는  group 별로 역순으로 정렬하고 합친다. 
+     */
+    reverse () {
+
+        const groupSegments = this.splitSegments();
+        const newSegments = []
+
+        groupSegments.forEach(segments => {
+            newSegments.push(...this.reverseSegments(segments));
+        })
 
         this.segments = newSegments;
     }

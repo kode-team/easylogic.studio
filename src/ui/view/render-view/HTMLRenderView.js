@@ -16,7 +16,6 @@ import GridLayoutLineView from "@ui/view-items/GridLayoutLineView";
 import { isFunction } from "@core/functions/func";
 import { KEY_CODE } from "@types/key";
 import { vec3 } from "gl-matrix";
-import Resource from "@util/Resource";
 
 export default class HTMLRenderView extends UIElement {
 
@@ -141,6 +140,7 @@ export default class HTMLRenderView extends UIElement {
             && $el.hasClass('rotate-pointer') === false            
             && $el.hasClass('layer-add-view') === false                        
             && $el.hasClass('handle') === false            
+            && $el.hasClass('path-draw-container') === false
             && $el.isTag('svg') === false 
             && $el.isTag('path') === false
             && $el.isTag('textPath') === false
@@ -424,7 +424,7 @@ export default class HTMLRenderView extends UIElement {
         var id = $element && $element.attr('data-id');
 
         // 선택한 영역이 있지만 artboard 가 아닌 경우 객체 선택으로 한다. 
-        if (isInSelectedArea && $element.hasClass('artboard') === false) {
+        if (isInSelectedArea && $element && $element.hasClass('artboard') === false) {
             isInSelectedArea = false; 
         }
 

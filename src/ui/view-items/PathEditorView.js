@@ -8,7 +8,7 @@ import { SVGPathItem } from "@items/layers/SVGPathItem";
 import { Length } from "@unit/Length";
 import { getBezierPoints, recoverBezier, recoverBezierQuard, getBezierPointsQuard, recoverBezierLine, getBezierPointsLine } from "@core/functions/bezier";
 import { isFunction } from "@core/functions/func";
-import { mat4, vec3 } from "gl-matrix";
+import { vec3 } from "gl-matrix";
 
 
 /**

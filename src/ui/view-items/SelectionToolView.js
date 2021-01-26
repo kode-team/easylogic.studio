@@ -5,7 +5,8 @@ import { clone} from "@core/functions/func";
 import { mat4, vec3 } from "gl-matrix";
 import { Transform } from "@property-parser/Transform";
 import { TransformOrigin } from "@property-parser/TransformOrigin";
-import { calculateAngle, calculateAngle360, calculateAngleForVec3, calculateMatrix, calculateMatrixInverse, degreeToRadian, vertiesMap } from "@core/functions/math";
+import { calculateAngle360, calculateAngleForVec3, calculateMatrix, calculateMatrixInverse, round } from "@core/functions/math";
+import { getRotatePointer } from "@core/functions/collision";
 
 var directionType = {
     1: 'to top left',
@@ -88,7 +89,8 @@ export default class SelectionToolView extends SelectionToolEvent {
         this.$snapManager.clear();
         this.rotateTargetNumber = (+e.$dt.attr('data-number'));       
         this.refreshRotatePointerIcon()  
-        this.state.dragging = true;         
+        this.state.dragging = true;  
+        this.state.isRotate = true;       
     }
 
     rotateVertext () {
@@ -96,11 +98,11 @@ export default class SelectionToolView extends SelectionToolEvent {
         const targetMousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);
         const distVector = vec3.subtract([], targetMousePoint, this.initMousePoint);
 
-        // this.verties[4] 는 origin 기준으로 y 가 0 인 좌표인데 
-        // 나중에  다른 방향에서 돌릴 수 있게 되면 해당 영역의 vertext 를 지정해야 각도를 맞출 수 있다.         
+        const targetRotatePointer = this.rotateTargetNumber === 4 ?  getRotatePointer(this.verties, 34) : this.verties[this.rotateTargetNumber];
+
         var distAngle = Math.floor(calculateAngleForVec3(
-            this.verties[this.rotateTargetNumber], 
-            this.verties[5], 
+            targetRotatePointer, 
+            this.verties[4], 
             distVector
         ));
 
@@ -123,7 +125,8 @@ export default class SelectionToolView extends SelectionToolEvent {
     }
 
     rotateEndVertext () {
-        this.state.dragging = false;        
+        this.state.dragging = false;     
+        this.state.isRotate = false;           
         this.emit('recoverCursor');
         
         // 마지막 변경 시점 업데이트 
@@ -151,7 +154,7 @@ export default class SelectionToolView extends SelectionToolEvent {
 
             const pointer = dataPointer.split(',').map(it => Number(it))
 
-            const diff = vec3.subtract([], pointer, this.state.renderPointerList[0][5]);
+            const diff = vec3.subtract([], pointer, this.state.renderPointerList[0][4]);
             const angle = calculateAngle360(diff[0], diff[1]);
             let iconAngle = Math.floor(angle)  - 130
             this.emit('refreshCursor', 'open_in_full', `rotate(${iconAngle} 12 12)`)
@@ -586,17 +589,17 @@ export default class SelectionToolView extends SelectionToolEvent {
         `
     }    
 
-    createPointerRect (pointers) {
+    createPointerRect (pointers, rotatePointer) {
         if (pointers.length === 0) return '';
 
         const current = this.$selection.current;         
         const isArtBoard = current && current.is('artboard');
         let line = '';
         if (!isArtBoard) {
-            const rotatePointer = vec3.lerp([], pointers[0], pointers[1], 0.5);            
+            const centerPointer = vec3.lerp([], pointers[0], pointers[1], 0.5);            
             line = `
-                M ${rotatePointer[0]},${rotatePointer[1]} 
-                L ${pointers[4][0]}, ${pointers[4][1]} 
+                M ${centerPointer[0]},${centerPointer[1]} 
+                L ${rotatePointer[0]},${rotatePointer[1]} 
             `
         }
 
@@ -642,11 +645,21 @@ export default class SelectionToolView extends SelectionToolEvent {
         const diff = vec3.subtract([], item.data.start, item.data.end);
         const angle = calculateAngle360(diff[0], diff[1]) + 90;
 
+        let text = `${round(width, 100)} x ${round(height, 100)}`;
 
+        if (this.state.isRotate) {
+            const rotateZ = Transform.get(this.$selection.current.transform, 'rotateZ')
+
+            if (rotateZ) {
+                text = `${rotateZ[0].value}°`
+            }
+        }
 
         return /*html*/`
-            <div class='size-pointer' style="transform: translate3d( calc(${newPointer[0]}px - 50%), calc(${newPointer[1]}px - 50%), 0px) rotateZ(${angle}deg)" >
-               ${width} x ${height}
+            <div 
+                class='size-pointer' 
+                style="transform: translate3d( calc(${newPointer[0]}px - 50%), calc(${newPointer[1]}px - 50%), 0px) rotateZ(${angle}deg)" >
+               ${text}
             </div>
         `
     }
@@ -658,14 +671,10 @@ export default class SelectionToolView extends SelectionToolEvent {
 
         const rotate = Transform.get(current.transform, 'rotateZ');
 
-        const topPointer = vec3.lerp([], pointers[0], pointers[1], 0.5);
-        const bottomPointer = vec3.lerp([], pointers[2], pointers[3], 0.5);
-
-        pointers[4] = vec3.lerp([], bottomPointer, topPointer, 1 + 34/vec3.dist(topPointer, bottomPointer))
-
+        const rotatePointer = getRotatePointer(pointers, 34)
 
         return {
-            line: this.createPointerRect(pointers), 
+            line: this.createPointerRect(pointers, rotatePointer), 
             size: this.createSize(pointers),
             point: [
                 // 4 모서리에서도 rotate 가 가능하도록 맞춤 
@@ -673,7 +682,7 @@ export default class SelectionToolView extends SelectionToolEvent {
                 // isArtBoard ? undefined : this.createRotatePointer (selectionPointers[1], 1),
                 // isArtBoard ? undefined : this.createRotatePointer (selectionPointers[2], 2),
                 // isArtBoard ? undefined : this.createRotatePointer (selectionPointers[3], 3),
-                isArtBoard ? undefined : this.createRotatePointer (pointers[4], 4, 'center center'),
+                isArtBoard ? undefined : this.createRotatePointer (rotatePointer, 4, 'center center'),
                 this.createPointer (pointers[0], 1, rotate),
                 this.createPointer (pointers[1], 2, rotate),
                 this.createPointer (pointers[2], 3, rotate),

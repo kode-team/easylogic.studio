@@ -1,13 +1,13 @@
 import UIElement, { EVENT } from "@core/UIElement";
 import { POINTERSTART, POINTEROUT, POINTEROVER, MOVE, END, IF, PREVENT } from "@core/Event";
 import { Length } from "@unit/Length";
-import { clone, isNotUndefined } from "@core/functions/func";
+import { clone } from "@core/functions/func";
 import { mat4, vec3 } from "gl-matrix";
 import { Transform } from "@property-parser/Transform";
 import { TransformOrigin } from "@property-parser/TransformOrigin";
-import { calculateAngle, calculateAngle360, calculateAngleForVec3, calculateMatrix, calculateMatrixInverse, calculateRotationOriginMat4, vertiesMap } from "@core/functions/math";
+import { calculateAngle, calculateAngle360, calculateAngleForVec3, calculateMatrix, calculateMatrixInverse, calculateRotationOriginMat4, round, vertiesMap } from "@core/functions/math";
 import { ArtBoard } from "@items/ArtBoard";
-import { rectToVerties } from "@core/functions/collision";
+import { getRotatePointer, rectToVerties } from "@core/functions/collision";
 
 
 var directionType = {
@@ -78,6 +78,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
         this.refreshRotatePointerIcon()
         this.state.dragging = true;    
+        this.state.isRotate = true; 
     }
 
     rotateVertext () {
@@ -85,9 +86,13 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         const targetMousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);
         const distVector = vec3.subtract([], targetMousePoint, this.initMousePoint);
 
-        // this.verties[4] 는 origin 기준으로 y 가 0 인 좌표인데 
-        // 나중에  다른 방향에서 돌릴 수 있게 되면 해당 영역의 vertext 를 지정해야 각도를 맞출 수 있다. 
-        var distAngle = Math.floor(calculateAngleForVec3(this.verties[this.rotateTargetNumber], this.verties[5], distVector));
+        const targetRotatePointer = this.rotateTargetNumber === 4 ?  getRotatePointer(this.verties, 34) : this.verties[this.rotateTargetNumber];        
+
+        var distAngle = Math.floor(calculateAngleForVec3(
+            targetRotatePointer, 
+            this.verties[4], 
+            distVector
+        ));
 
         // 실제 움직인 angle 
         this.localAngle = this.angle + distAngle;
@@ -96,7 +101,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
             transform: Transform.rotateZ(this.groupItem.transform, Length.deg(this.localAngle) ) 
         })
 
-        const selectionMatrix = calculateRotationOriginMat4(distAngle, this.verties[5])
+        const selectionMatrix = calculateRotationOriginMat4(distAngle, this.verties[4])
 
         // angle 을 움직였으니 어떻게 움직이지 ?  
         this.$selection.cachedItemVerties.forEach(item => {
@@ -110,16 +115,18 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
                     selectionMatrix
                 )
             );      // 아이템을 먼저 그룹으로 회전을 하고 
+    
+            const rotatePointer = getRotatePointer(newVerties, 34)
 
             var lastAngle = calculateAngle(
-                newVerties[4][0] - newVerties[5][0],
-                newVerties[4][1] - newVerties[5][1],
+                rotatePointer[0] - newVerties[4][0],
+                rotatePointer[1] - newVerties[4][1],
             ) - 270
             
             const newTranslate = vec3.transformMat4(
                 [], 
                 newVerties[0], 
-                calculateRotationOriginMat4(-lastAngle, newVerties[5])
+                calculateRotationOriginMat4(-lastAngle, newVerties[4])
             );
 
             const instance = this.$selection.get(item.id)
@@ -144,6 +151,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     rotateEndVertext () {
 
         this.state.dragging = false;        
+        this.state.isRotate = false;         
         this.emit('recoverCursor');
 
         // 개별 verties 의 캐쉬를 다시 한다. 
@@ -172,7 +180,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
             const pointer = dataPointer.split(',').map(it => Number(it))
 
-            const diff = vec3.subtract([], pointer, this.state.renderPointerList[0][5]);
+            const diff = vec3.subtract([], pointer, this.state.renderPointerList[0][4]);
             const angle = calculateAngle360(diff[0], diff[1]);
             let iconAngle = Math.floor(angle)  - 135
             this.emit('refreshCursor', 'open_in_full', `rotate(${iconAngle} 12 12)`)
@@ -272,9 +280,9 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     moveItemForGroup (it, newVerties, realDx = 0, realDy = 0) {
 
         const transformViewInverse = calculateMatrixInverse(
-            mat4.fromTranslation([], newVerties[5]),
+            mat4.fromTranslation([], newVerties[4]),
             it.itemMatrix,
-            mat4.fromTranslation([], vec3.negate([], newVerties[5])),
+            mat4.fromTranslation([], vec3.negate([], newVerties[4])),
         );
 
         const [newX, newY] = vec3.transformMat4([], newVerties[0], transformViewInverse);
@@ -613,8 +621,8 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
             this.$viewport.applyVerties(selectionVerties)
         ]
 
-        const {line, point} = this.createRenderPointers(...this.state.renderPointerList);
-        this.refs.$pointerRect.updateDiff(line + point)
+        const {line, point, size} = this.createRenderPointers(...this.state.renderPointerList);
+        this.refs.$pointerRect.updateDiff(line + point + size)
     }
 
 
@@ -646,14 +654,14 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         `
     }    
 
-    createPointerRect (pointers) {
+    createPointerRect (pointers, rotatePointer) {
         if (pointers.length === 0) return '';
 
 
-        const rotatePointer = vec3.lerp([], pointers[0], pointers[1], 0.5);            
+        const centerPointer = vec3.lerp([], pointers[0], pointers[1], 0.5);            
         const line = `
-            M ${rotatePointer[0]},${rotatePointer[1]} 
-            L ${pointers[4][0]}, ${pointers[4][1]} 
+            M ${centerPointer[0]},${centerPointer[1]} 
+            L ${rotatePointer[0]}, ${rotatePointer[1]} 
         `
 
 
@@ -672,22 +680,67 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         </svg>`        
     }    
 
+
+    createSize (pointers) {
+        const top = vec3.lerp([], pointers[0], pointers[1], 0.5);
+        const right = vec3.lerp([], pointers[1], pointers[2], 0.5);
+        const bottom = vec3.lerp([], pointers[2], pointers[3], 0.5);
+        const left = vec3.lerp([], pointers[3], pointers[0], 0.5);
+
+        const list = [
+            { start: top, end: bottom}, 
+            { start: right, end: left },
+            { start: bottom, end: top }, 
+            { start: left, end: right }
+        ].map((it, index) => { 
+            return { index, data: it }
+        })
+
+        list.sort((a, b) => {
+            return a.data.start[1] > b.data.start[1] ? -1 : 1; 
+        })
+
+        const item = list[0];
+
+        const newPointer  = vec3.lerp([], item.data.end, item.data.start, 1 + 16/vec3.dist(item.data.start, item.data.end))
+        const width = this.groupItem.width.value
+        const height = this.groupItem.height.value
+        const diff = vec3.subtract([], item.data.start, item.data.end);
+        const angle = calculateAngle360(diff[0], diff[1]) + 90;
+
+        let text = `${round(width, 100)} x ${round(height, 100)}`;
+
+        if (this.state.isRotate) {
+            const rotateZ = Transform.get(this.groupItem.transform, 'rotateZ')
+
+            if (rotateZ) {
+                text = `${rotateZ[0].value}°`
+            }
+        }
+
+        return /*html*/`
+            <div 
+                class='size-pointer' 
+                style="transform: translate3d( calc(${newPointer[0]}px - 50%), calc(${newPointer[1]}px - 50%), 0px) rotateZ(${angle}deg)" >
+               ${text}
+            </div>
+        `
+    }    
+
     createRenderPointers(pointers, selectionPointers) {
 
-        const topPointer = vec3.lerp([], pointers[0], pointers[1], 0.5);
-        const bottomPointer = vec3.lerp([], pointers[2], pointers[3], 0.5);
-
-        pointers[4] = vec3.lerp([], bottomPointer, topPointer, 1 + 30/vec3.dist(topPointer, bottomPointer))
+        const rotatePointer = getRotatePointer(pointers)
 
         return {
-            line: this.createPointerRect(pointers), 
+            line: this.createPointerRect(pointers, rotatePointer), 
+            size: this.createSize(pointers),
             point: [
                 // 4모서리에서도 rotate 할 수 있도록 맞춤 
                 // this.createRotatePointer (selectionPointers[0], 0, 'bottom right'),
                 // this.createRotatePointer (selectionPointers[1], 1, 'bottom left'),
                 // this.createRotatePointer (selectionPointers[2], 2, 'top left'),
                 // this.createRotatePointer (selectionPointers[3], 3, 'top right'),
-                this.createRotatePointer (pointers[4], 4, 'center center'),                
+                this.createRotatePointer (rotatePointer, 4, 'center center'),                
                 this.createPointer (pointers[0], 1),
                 this.createPointer (pointers[1], 2),
                 this.createPointer (pointers[2], 3),

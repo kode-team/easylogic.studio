@@ -1,5 +1,4 @@
 import { rectToVerties, rectToVertiesForArea } from "@core/functions/collision";
-import { clone } from "@core/functions/func";
 import { calculateMatrix, calculateMatrixInverse, vertiesMap } from "@core/functions/math";
 import { mat4, vec3 } from "gl-matrix";
 
@@ -257,23 +256,24 @@ export class ViewportManager {
      */
     moveLayerToCenter (areaVerties, scaleRate = -0.2) {
 
-        const centerX = (areaVerties[0][0] + areaVerties[2][0])/2;
-        const centerY = (areaVerties[0][1] + areaVerties[2][1])/2;
+        const areaCenter = vec3.lerp([], areaVerties[0], areaVerties[2], 0.5);
         const width = vec3.dist(areaVerties[0], areaVerties[1])
         const height = vec3.dist(areaVerties[0], areaVerties[3])
 
-        const viewportCenterX = (this.verties[0][0] + this.verties[2][0])/2;
-        const viewportCenterY = (this.verties[0][1] + this.verties[2][1])/2;
+        const viewportCenter = vec3.lerp([], this.verties[0], this.verties[2], 0.5);        
         const viewportWidth = vec3.dist(this.verties[0], this.verties[1])
         const viewportHeight = vec3.dist(this.verties[0], this.verties[3])
 
         const minRate = Math.min(viewportWidth/width, viewportHeight/height) + scaleRate;
 
-        const dx = viewportCenterX - centerX;
-        const dy = viewportCenterY - centerY;
-
-        this.setTranslate(vec3.add([], this.translate, [dx, dy, 0]))
-        this.setTransformOrigin(vec3.fromValues(centerX, centerY, 0))
+        this.setTranslate(
+            vec3.add(
+                [], 
+                this.translate, 
+                vec3.subtract([], viewportCenter, areaCenter)
+            )
+        )
+        this.setTransformOrigin(areaCenter)
         this.setScale(this.scale * minRate)
 
         this.editor.emit('updateViewport')        

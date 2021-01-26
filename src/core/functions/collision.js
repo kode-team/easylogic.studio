@@ -1,5 +1,6 @@
 import { TransformOrigin } from "@property-parser/TransformOrigin";
 import { vec3 } from "gl-matrix";
+import { getPointBetweenVerties } from "./math";
 
 /**
  * 포인트 충돌 체크 
@@ -424,18 +425,20 @@ export function rectToVerties (x, y, width, height, origin = '50% 50% 0px') {
         [x + width, y, 0],  // top , right 
         [x + width, y + height, 0], // bottom , right 
         [x, y + height, 0], // bottom , left
-        [x + center[0], y - 30 , 0], // rotate, top, center 
         [x + center[0], y + center[1], 0],  // transform origin 
     ]
 }
 
+export function getRotatePointer(verties, dist = 0) {
+    const topPointer = vec3.lerp([], verties[0], verties[1], 0.5);
+    const bottomPointer = vec3.lerp([], verties[2], verties[3], 0.5);
+    const rotatePointer = getPointBetweenVerties(bottomPointer, topPointer, dist)
+    
+    return rotatePointer;
+}
+
 export function rectToVertiesForArea (x, y, width, height) {
-    return [
-        [x, y, 0],  // top , left 
-        [x + width, y, 0],  // top , right 
-        [x + width, y + height, 0], // bottom , right 
-        [x, y + height, 0], // bottom , left
-    ]
+    return rectToVerties(x, y, width, height);
 }
 
 export function itemsToRectVerties (items = []) {

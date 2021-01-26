@@ -54,6 +54,19 @@ export function getDist (x, y, centerX = 0, centerY = 0) {
     return vec2.distance([x, y], [centerX, centerY])
 }
 
+/**
+ * 
+ * start 벡터에서 end 벡터로 이어질 때  
+ * end에서 pointDist 만큼의 거리를 이동한 벡터를 구한다. 
+ * 
+ * @param {vec3} start 
+ * @param {vec3} end 
+ * @param {number} pointDist 
+ */
+export function getPointBetweenVerties(start, end, pointDist = 0) {
+    return vec3.lerp([], start, end, 1 + pointDist/vec3.dist(start, end))
+}
+
 export function vertiesMap (verties, transformView) {
     return verties.map(v => {
         return vec3.transformMat4([], v, transformView); 
