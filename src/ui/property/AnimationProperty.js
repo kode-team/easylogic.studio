@@ -3,7 +3,7 @@ import {
   LOAD,
   CLICK,
   DEBOUNCE,
-  VDOM
+  DOMDIFF
 } from "@core/Event";
 import { EVENT } from "@core/UIElement";
 import icon from "@icon/icon";
@@ -25,7 +25,7 @@ export default class AnimationProperty extends BaseProperty {
   }
 
 
-  [LOAD("$animationList") + VDOM]() {
+  [LOAD("$animationList") + DOMDIFF]() {
     var current = this.$selection.current;
 
     if (!current) return '';

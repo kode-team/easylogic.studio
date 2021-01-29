@@ -1,6 +1,6 @@
 import { EVENT } from "@core/UIElement";
 import BasePopup from "./BasePopup";
-import { LOAD, CLICK, VDOM } from "@core/Event";
+import { LOAD, CLICK, DOMDIFF } from "@core/Event";
 import { Length } from "@unit/Length";
 
 export default class ImageSelectPopup extends BasePopup {
@@ -43,7 +43,7 @@ export default class ImageSelectPopup extends BasePopup {
     `;
   }
 
-  [LOAD('$imageBox') + VDOM] () {
+  [LOAD('$imageBox') + DOMDIFF] () {
     var project = this.$selection.currentProject || { images: [] }
 
     return project.images.map( (image, index) => {

@@ -2,7 +2,7 @@ import BaseProperty from "./BaseProperty";
 import {
   LOAD,
   CLICK,
-  VDOM,
+  DOMDIFF,
 } from "@core/Event";
 import { EVENT } from "@core/UIElement";
 
@@ -26,7 +26,7 @@ export default class TransitionProperty extends BaseProperty {
     `;
   }
 
-  [LOAD("$transitionList") + VDOM]() {
+  [LOAD("$transitionList") + DOMDIFF]() {
     var current = this.$selection.current;
 
     if (!current) return '';

@@ -26,9 +26,11 @@ import StatusBar from "@ui/view/StatusBar";
 import PreviewToolMenu from "@ui/view/PreviewToolMenu";
 import NotificationView from "@ui/view/NotificationView";
 import PageSubEditor from "@ui/view-items/PageSubEditor";
-
 import windowList from "@ui/window-list";
+import HorizontalRuler from "@ui/view/HorizontalRuler";
+import VerticalRuler from "@ui/view/VerticalRuler";
  
+
 
 const formElements = ['TEXTAREA', 'INPUT', 'SELECT']
 
@@ -75,6 +77,8 @@ export default class DesignEditor extends UIElement {
   
           </div>        
           <div class="layout-body" ref='$bodyPanel'>
+            <HorizontalRuler />
+            <VerticalRuler />
             <CanvasView />        
           </div>                           
           <div class='layout-left' ref='$leftPanel'>
@@ -247,6 +251,8 @@ export default class DesignEditor extends UIElement {
       TimelineProperty,
       PreviewToolMenu,
       NotificationView,
+      HorizontalRuler,
+      VerticalRuler
     };
   }
 

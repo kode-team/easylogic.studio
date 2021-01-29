@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "@core/UIElement";
-import { CLICK, LOAD, VDOM, DEBOUNCE, POINTERSTART, MOVE, IF, END, DOUBLECLICK, KEYUP, KEY, } from "@core/Event";
+import { CLICK, LOAD, DOMDIFF, DEBOUNCE, POINTERSTART, MOVE, IF, END, DOUBLECLICK, KEYUP, KEY, } from "@core/Event";
 import { Length } from "@unit/Length";
 import { OBJECT_TO_CLASS, isUndefined } from "@core/functions/func";
 import { timecode, second } from "@core/functions/time";
@@ -288,7 +288,7 @@ export default class TimelineKeyframeList extends UIElement {
         this.startRowIndex = null; 
     }
 
-    [LOAD('$keyframeList') + VDOM] () {
+    [LOAD('$keyframeList') + DOMDIFF] () {
 
         var project = this.$selection.currentProject
 

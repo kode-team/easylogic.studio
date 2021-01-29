@@ -1,4 +1,4 @@
-import { LOAD, VDOM, CLICK } from "@core/Event";
+import { LOAD, DOMDIFF, CLICK } from "@core/Event";
 import UIElement, { EVENT } from "@core/UIElement";
 
 
@@ -18,7 +18,7 @@ export default class ImageAssetPicker extends UIElement {
     `;
   }
 
-  [LOAD("$imageList") + VDOM]() {
+  [LOAD("$imageList") + DOMDIFF]() {
     var current = this.$selection.currentProject || { images: [] }
 
     var images = current.images;   

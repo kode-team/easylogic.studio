@@ -1,6 +1,6 @@
 import UIElement, { EVENT } from "@core/UIElement";
 
-import { LOAD, VDOM } from "@core/Event";
+import { LOAD, DOMDIFF } from "@core/Event";
 import Dom from "@core/Dom";
 import { isArray, isString } from "@core/functions/func";
 import { Project } from "@items/Project";
@@ -75,7 +75,7 @@ export default class StyleView extends UIElement {
 
   }
 
-  [LOAD('$svgArea') + VDOM] () {
+  [LOAD('$svgArea') + DOMDIFF] () {
 
     var project = this.$selection.currentProject || {  }
 

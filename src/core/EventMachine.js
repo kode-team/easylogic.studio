@@ -2,8 +2,7 @@ import {
   CHECK_SAPARATOR,
   CHECK_LOAD_PATTERN,
   LOAD_SAPARATOR,
-  LOAD,
-  VDOM,
+  DOMDIFF,
 } from "./Event";
 import Dom from "./Dom";
 import {
@@ -407,7 +406,7 @@ export default class EventMachine {
 
         checker = checker.map(it => it.trim())
         
-        const isVdom = Boolean(checker.filter(it => VDOM.includes(it)).length);
+        const isVdom = Boolean(checker.filter(it => DOMDIFF.includes(it)).length);
 
         if (this.refs[elName]) {        
           var newTemplate = await this[callbackName].call(this, ...args);

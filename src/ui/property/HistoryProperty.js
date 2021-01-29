@@ -1,6 +1,6 @@
 import BaseProperty from "./BaseProperty";
 import { EVENT } from "@core/UIElement";
-import { LOAD, VDOM } from "@core/Event";
+import { LOAD, DOMDIFF } from "@core/Event";
 import icon from "@icon/icon";
 
 export default class HistoryProperty extends BaseProperty {
@@ -19,7 +19,7 @@ export default class HistoryProperty extends BaseProperty {
     `;
   }
 
-  [LOAD('$body') + VDOM] () {
+  [LOAD('$body') + DOMDIFF] () {
     return this.$editor.history.map((it, index) => {
       if (it === '-') {
         return /*html*/`<div class='divider'>-</div>`

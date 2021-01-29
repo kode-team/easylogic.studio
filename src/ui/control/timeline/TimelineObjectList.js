@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "@core/UIElement";
-import { CLICK, LOAD, DEBOUNCE, VDOM } from "@core/Event";
+import { CLICK, LOAD, DEBOUNCE, DOMDIFF } from "@core/Event";
 import icon from "@icon/icon";
 
 const PROPERTY_TITLE = {
@@ -69,7 +69,7 @@ export default class TimelineObjectList extends UIElement {
         `
     }
     
-    [LOAD() + VDOM] () {
+    [LOAD() + DOMDIFF] () {
 
         var project = this.$selection.currentProject;
 

@@ -1,5 +1,5 @@
 import UIElement from "@core/UIElement";
-import { LOAD, CLICK, VDOM } from "@core/Event";
+import { LOAD, CLICK, DOMDIFF } from "@core/Event";
 import icon from "@icon/icon";
 import { CSS_TO_STRING } from "@core/functions/func";
 
@@ -53,7 +53,7 @@ export default class SelectIconEditor extends UIElement {
         })
     }
 
-    [LOAD('$options') + VDOM] () {
+    [LOAD('$options') + DOMDIFF] () {
         return this.state.options.map((it, index) => {
 
 

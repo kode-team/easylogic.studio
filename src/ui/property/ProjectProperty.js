@@ -1,5 +1,5 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, CLICK, PREVENT, STOP, FOCUSOUT, DOUBLECLICK, VDOM, KEYDOWN, ENTER } from "@core/Event";
+import { LOAD, CLICK, PREVENT, STOP, FOCUSOUT, DOUBLECLICK, DOMDIFF, KEYDOWN, ENTER } from "@core/Event";
 import icon from "@icon/icon";
 
 import { EVENT } from "@core/UIElement";
@@ -30,7 +30,7 @@ export default class ProjectProperty extends BaseProperty {
     `;
   }
 
-  [LOAD("$projectList") + VDOM]() {
+  [LOAD("$projectList") + DOMDIFF]() {
     var projects = this.$editor.projects || [];
     
 

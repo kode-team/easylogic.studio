@@ -1,5 +1,5 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, CLICK, DOUBLECLICK, PREVENT, STOP, FOCUSOUT, VDOM, DRAGSTART, KEYDOWN, DRAGOVER, DROP, BIND, DRAGEND, ENTER } from "@core/Event";
+import { LOAD, CLICK, DOUBLECLICK, PREVENT, STOP, FOCUSOUT, DOMDIFF, DRAGSTART, KEYDOWN, DRAGOVER, DROP, BIND, DRAGEND, ENTER } from "@core/Event";
 import icon from "@icon/icon";
 import { EVENT } from "@core/UIElement";
 
@@ -167,7 +167,7 @@ export default class LayerTreeProperty extends BaseProperty {
     this.refresh();
   }
 
-  [LOAD("$layerList") + VDOM]() {
+  [LOAD("$layerList") + DOMDIFF]() {
 
     var project = this.$selection.currentProject;
     if (!project) return ''

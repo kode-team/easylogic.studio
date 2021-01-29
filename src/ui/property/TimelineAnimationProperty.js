@@ -1,5 +1,5 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, CLICK, DOUBLECLICK, FOCUSOUT, KEY, PREVENT, STOP, VDOM, KEYDOWN, DEBOUNCE, ENTER } from "@core/Event";
+import { LOAD, CLICK, DOUBLECLICK, FOCUSOUT, KEY, PREVENT, STOP, DOMDIFF, KEYDOWN, DEBOUNCE, ENTER } from "@core/Event";
 import icon from "@icon/icon";
 import { EVENT } from "@core/UIElement";
 
@@ -24,7 +24,7 @@ export default class TimelineAnimationProperty extends BaseProperty {
     `;
   }
 
-  [LOAD("$timelineAnimationList") + VDOM]() {
+  [LOAD("$timelineAnimationList") + DOMDIFF]() {
 
     var project = this.$selection.currentProject;    
     if (!project) return ''

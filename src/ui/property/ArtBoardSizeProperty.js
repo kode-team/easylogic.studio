@@ -1,5 +1,5 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, VDOM, CLICK } from "@core/Event";
+import { LOAD, DOMDIFF, CLICK } from "@core/Event";
 import { EVENT } from "@core/UIElement";
 import artboardSize from "@preset/artboards/artboard.size";
 
@@ -90,7 +90,7 @@ export default class ArtBoardSizeProperty extends BaseProperty {
     `
   }
 
-  [LOAD('$list') + VDOM] () {
+  [LOAD('$list') + DOMDIFF] () {
     var category = artboardSize[this.state.selectedIndex]
     return category.groups.map(group => this.makeGroup(group))
   }

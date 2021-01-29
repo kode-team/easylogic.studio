@@ -3,12 +3,41 @@ $editor-line-color: rgba($editor-button-color, 0.3);
 $editor-resizer-width: 8px;
 $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
 
-.page-container {
+.horizontal-ruler {
+  position: absolute;
+  top: 0px;
+  left: 30px;
+  right: 0px;
+  height: 30px;
+  background-color: var(--background-color);
+
+  .horizontal-ruler-container {
+    height: 100%;
+    width: 100%;
+  }  
+}
+
+.vertical-ruler {
   position: absolute;
   left: 0px;
+  width: 30px;
+  top: 30px;
+  bottom: 0px;
+  background-color: var(--background-color);
+  box-sizing: border-box;
+
+  .vertical-ruler-container {
+    height: 100%;
+    width: 100%;
+  }
+}
+
+.page-container {
+  position: absolute;
+  left: 30px;
   right: 0px;
   bottom: 0px;
-  top: 0px;
+  top: 30px;
   pointer-events: all;
   outline: none;
   background-color: white; 

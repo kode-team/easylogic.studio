@@ -1,5 +1,5 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, DEBOUNCE, VDOM } from "@core/Event";
+import { LOAD, DEBOUNCE, DOMDIFF } from "@core/Event";
 import { EVENT } from "@core/UIElement";
 import HTMLRenderer from "@renderer/HTMLRenderer";
 import SVGRenderer from "@renderer/SVGRenderer";
@@ -25,7 +25,7 @@ export default class CodeViewProperty extends BaseProperty {
     `;
   }
 
-  [LOAD('$body') + VDOM] () {
+  [LOAD('$body') + DOMDIFF] () {
     return [
       HTMLRenderer.codeview(this.$selection.current),
       SVGRenderer.codeview(this.$selection.current)

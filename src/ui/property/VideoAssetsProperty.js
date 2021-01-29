@@ -1,5 +1,5 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, CLICK, INPUT, DEBOUNCE, VDOM, DRAGSTART, CHANGE } from "@core/Event";
+import { LOAD, CLICK, DOMDIFF, DRAGSTART, CHANGE } from "@core/Event";
 import { EVENT } from "@core/UIElement";
 import icon from "@icon/icon";
 import revokeObjectUrl from "@util/revokeObjectUrl";
@@ -33,7 +33,7 @@ export default class VideoAssetsProperty extends BaseProperty {
     `;
   }
 
-  [LOAD("$videoList") + VDOM]() {
+  [LOAD("$videoList") + DOMDIFF]() {
     var current = this.$selection.currentProject || { videos: [] }
 
     var videos = current.videos;   
