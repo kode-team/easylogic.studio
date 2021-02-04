@@ -42,7 +42,7 @@ export class SelectionManager {
     this.ids = [];
     this.idsString = '';    
     this.colorsteps = []
-    this.cachedItemVerties = {}    
+    this.cachedItemVerties = []    
     this.selectionCamera = new MovableItem({
       parent: this.currentProject,
       x: Length.px(0), 
@@ -517,6 +517,10 @@ export class SelectionManager {
    * @param {number} y 
    */
   hasPoint (point) {
-    return polyPoint(this.rectVerties, point[0], point[1]);
+
+    return this.cachedItemVerties.some((it) => {
+      return polyPoint(it.verties, point[0], point[1]);
+    })
+    
   }
 }

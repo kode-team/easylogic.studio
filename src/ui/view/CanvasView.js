@@ -57,15 +57,14 @@ export default class CanvasView extends UIElement {
       <div style='background-color: rgba(0, 0, 0, 0.5); color: white;position:absolute;left:0px;top:0px;bottom:0px;right:0px;pointer-events:none;'>
         <div style='position:absolute;width:1px;height:100%;top:0px;left:50%;transform:translateX(-50%);background-color:black;'></div>  
         <div style='position:absolute;height:1px;width:100%;top:50%;transform:translateY(-50%);background-color:black;'></div>                
-        <div style='position:absolute;display:inline-block;left:0px;top:50%;transform:translateY(-50%);'>${Math.floor(this.$viewport.verties[0][0])}</div>
-        <div style='position:absolute;display:inline-block;right:0px;top:50%;transform:translateY(-50%);'>${Math.floor(this.$viewport.verties[2][0])}</div>
-        <div style='position:absolute;display:inline-block;left:50%;top:0px;transform:translateX(-50%)'>${Math.floor(this.$viewport.verties[0][1])}</div>
-        <div style='position:absolute;display:inline-block;left:50%;bottom:0px;transform:translateX(-50%)'>${Math.floor(this.$viewport.verties[2][1])}</div>
+        <div style='position:absolute;display:inline-block;left:0px;top:50%;transform:translateY(-50%);'>${Math.floor(this.$viewport.minX)}</div>
+        <div style='position:absolute;display:inline-block;right:0px;top:50%;transform:translateY(-50%);'>${Math.floor(this.$viewport.maxX)}</div>
+        <div style='position:absolute;display:inline-block;left:50%;top:0px;transform:translateX(-50%)'>${Math.floor(this.$viewport.minY)}</div>
+        <div style='position:absolute;display:inline-block;left:50%;bottom:0px;transform:translateX(-50%)'>${Math.floor(this.$viewport.maxY)}</div>
         <div style='position:absolute;top:50%;left:50%;display:inline-block;'>${this.$viewport.transformOrigin.map(it => Math.floor(it)).join(', ')}</div>
         <div style='position:absolute;left:${mouse[0]}%;top:${mouse[1]}%;display:inline-block;'>
           mouse: ${this.$viewport.mouse.map(it => Math.floor(it)).join(', ')} <br />
           translate: ${this.$viewport.translate.join(', ')} <br />          
-          origin: ${vec3.lerp([], this.$viewport.verties[0], this.$viewport.verties[2], 0.5).join(', ')} <br />
           zoom : ${this.$viewport.zoomFactor} <br />
         </div>                  
 

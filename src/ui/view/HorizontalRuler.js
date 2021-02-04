@@ -78,18 +78,17 @@ export default class HorizontalRuler extends UIElement {
 
         const verties = currentArtboard.verties();
 
-        const minX = this.$viewport.verties[0][0]
-        const maxX = this.$viewport.verties[2][0];
+        const {minX, maxX, width: realWidth} = this.$viewport;
         const width = this.state.rect.width;
 
-        const firstX = ((verties[0][0] - minX)/(maxX - minX)) * width; 
-        const secondX = ((verties[2][0] - minX)/(maxX - minX)) * width; 
+        const firstX = ((verties[0][0] - minX)/realWidth) * width; 
+        const secondX = ((verties[2][0] - minX)/realWidth) * width; 
 
         return `
-            M ${firstX} 0 
+            M ${firstX} 20 
             L ${firstX} 30 
             L ${secondX} 30 
-            L ${secondX} 0 
+            L ${secondX} 20 
             Z
         `
     }
@@ -99,29 +98,32 @@ export default class HorizontalRuler extends UIElement {
 
         if (!current) return '';
 
-        const verties = this.$selection.verties;
 
-        const minX = this.$viewport.verties[0][0]
-        const maxX = this.$viewport.verties[2][0];
+        // current
+        const verties = this.$selection.verties;
+        const xList = verties.map(it => it[0]);
+        const currentMinX = Math.min(...xList);
+        const currentMaxX = Math.max(...xList);
+
+        // viewport 
+        const {minX, width: realWidth} = this.$viewport;
         const width = this.state.rect.width;
 
-        const firstX = ((verties[0][0] - minX)/(maxX - minX)) * width; 
-        const secondX = ((verties[2][0] - minX)/(maxX - minX)) * width; 
+        const firstX = ((currentMinX - minX)/realWidth) * width; 
+        const secondX = ((currentMaxX - minX)/realWidth) * width; 
 
         return `
-            M ${firstX} 0 
+            M ${firstX} 20 
             L ${firstX} 30 
             L ${secondX} 30 
-            L ${secondX} 0 
+            L ${secondX} 20 
             Z
         `
     }
 
     makeRuler () {
 
-        const minX = this.$viewport.verties[0][0]
-        const maxX = this.$viewport.verties[2][0];
-        const realWidth = maxX - minX;
+        const {minX,maxX, width: realWidth} = this.$viewport;
         const width = this.state.rect.width;
 
         pathString = []
@@ -140,9 +142,7 @@ export default class HorizontalRuler extends UIElement {
 
     makeRulerText () {
 
-        const minX = this.$viewport.verties[0][0]
-        const maxX = this.$viewport.verties[2][0];
-        const realWidth = maxX - minX;
+        const {minX,maxX, width: realWidth} = this.$viewport;
         const width = this.state.rect.width;
 
         return [

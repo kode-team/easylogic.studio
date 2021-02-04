@@ -253,8 +253,8 @@ export default class SelectionToolView extends SelectionToolEvent {
             instance.reset({
                 x: Length.px(lastStartVertext[0] + (newWidth < 0 ? newWidth : 0)).round(1000),
                 y: Length.px(lastStartVertext[1] + (newHeight < 0 ? newHeight : 0)).round(1000),
-                width: Length.px(Math.abs(newWidth)).round(),
-                height: Length.px(Math.abs(newHeight)).round(),
+                width: Length.px(Math.abs(newWidth)).round(1000),
+                height: Length.px(Math.abs(newHeight)).round(1000),
             })    
             instance.recover();     
         }
@@ -482,8 +482,8 @@ export default class SelectionToolView extends SelectionToolEvent {
             if (instance) {
 
                 instance.reset({
-                    x: Length.px(it.x + localDist[0]).round(),          // 1px 단위로 위치 설정 
-                    y: Length.px(it.y + localDist[1]).round(),
+                    x: Length.px(it.x + localDist[0]),          // 1px 단위로 위치 설정 
+                    y: Length.px(it.y + localDist[1]),
                 })
             }
         }) 
@@ -669,9 +669,11 @@ export default class SelectionToolView extends SelectionToolEvent {
         const current = this.$selection.current; 
         const isArtBoard = current && current.is('artboard');
 
-        const rotate = Transform.get(current.transform, 'rotateZ');
+        const diff = vec3.subtract([], vec3.lerp([], pointers[0], pointers[1], 0.5), pointers[4]);
+        const rotate = Length.deg(calculateAngle360(diff[0], diff[1]) + 90);
 
         const rotatePointer = getRotatePointer(pointers, 34)
+        const dist = vec3.dist(pointers[0], pointers[2]);
 
         return {
             line: this.createPointerRect(pointers, rotatePointer), 
@@ -688,10 +690,10 @@ export default class SelectionToolView extends SelectionToolEvent {
                 this.createPointer (pointers[2], 3, rotate),
                 this.createPointer (pointers[3], 4, rotate),
 
-                this.createPointer (vec3.lerp([], pointers[0], pointers[1], 0.5), 11, rotate),
-                this.createPointer (vec3.lerp([], pointers[1], pointers[2], 0.5), 12, rotate),
-                this.createPointer (vec3.lerp([], pointers[2], pointers[3], 0.5), 13, rotate),
-                this.createPointer (vec3.lerp([], pointers[3], pointers[0], 0.5), 14, rotate),
+                dist < 20 ? undefined : this.createPointer (vec3.lerp([], pointers[0], pointers[1], 0.5), 11, rotate),
+                dist < 20 ? undefined : this.createPointer (vec3.lerp([], pointers[1], pointers[2], 0.5), 12, rotate),
+                dist < 20 ? undefined : this.createPointer (vec3.lerp([], pointers[2], pointers[3], 0.5), 13, rotate),
+                dist < 20 ? undefined : this.createPointer (vec3.lerp([], pointers[3], pointers[0], 0.5), 14, rotate),
             ].join('')
         }
     }

@@ -292,6 +292,16 @@ export class ViewportManager {
         return [mouseX, mouseY, 0]
     }
 
+    get minX () { return this.verties[0][0]; }
+    get maxX () { return this.verties[2][0]; }
+    get minY () { return this.verties[0][1]; }
+    get maxY () { return this.verties[2][1]; }    
+
+    get height () { return this.maxY - this.minY; }
+    get width () { return this.maxX - this.minX; }
+
+
+
     applyVerties (verties) {
         return vertiesMap(verties, this.matrix);
     }
@@ -311,5 +321,7 @@ export class ViewportManager {
     createAreaVerties (x, y, width, height) {
         return this.applyVertiesInverse(rectToVertiesForArea(x, y, width, height));
     }
+
+
 
 }

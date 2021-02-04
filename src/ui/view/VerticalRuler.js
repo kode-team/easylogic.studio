@@ -79,18 +79,17 @@ export default class VerticalRuler extends UIElement {
 
         const verties = currentArtboard.verties();
 
-        const minY = this.$viewport.verties[0][1]
-        const maxY = this.$viewport.verties[2][1];
+        const {minY,maxY, height: realHeight} = this.$viewport;
         const height = this.state.rect.height;
 
-        const firstY = ((verties[0][1] - minY)/(maxY - minY)) * height; 
-        const secondY = ((verties[2][1] - minY)/(maxY - minY)) * height; 
+        const firstY = ((verties[0][1] - minY)/realHeight) * height; 
+        const secondY = ((verties[2][1] - minY)/realHeight) * height; 
 
         return `
-            M 0 ${firstY}
+            M 20 ${firstY}
             L 30 ${firstY}
             L 30 ${secondY}
-            L 0 ${secondY}
+            L 20 ${secondY}
             Z
         `
     }
@@ -100,29 +99,31 @@ export default class VerticalRuler extends UIElement {
 
         if (!current) return '';
 
-        const verties = this.$selection.verties;
-
-        const minY = this.$viewport.verties[0][1]
-        const maxY = this.$viewport.verties[2][1];
+        // viewport 
+        const {minY,maxY, height: realHeight} = this.$viewport;
         const height = this.state.rect.height;
 
-        const firstY = ((verties[0][1] - minY)/(maxY - minY)) * height; 
-        const secondY = ((verties[2][1] - minY)/(maxY - minY)) * height; 
+        // current
+        const verties = this.$selection.verties;
+        const yList = verties.map(it => it[1]);
+        const currentMinY = Math.min(...yList);
+        const currentMaxY = Math.max(...yList);
+
+        const firstY = ((currentMinY - minY)/realHeight) * height; 
+        const secondY = ((currentMaxY - minY)/realHeight) * height; 
 
         return `
-            M 0 ${firstY}
+            M 20 ${firstY}
             L 30 ${firstY}
             L 30 ${secondY}
-            L 0 ${secondY}
+            L 20 ${secondY}
             Z
         `
     }
 
     makeRuler () {
 
-        const minY = this.$viewport.verties[0][1]
-        const maxY = this.$viewport.verties[2][1];
-        const realHeight = maxY - minY;
+        const {minY,maxY, height: realHeight} = this.$viewport;
         const height = this.state.rect.height;
 
         pathString = []
@@ -140,9 +141,7 @@ export default class VerticalRuler extends UIElement {
 
     makeRulerText () {
 
-        const minY = this.$viewport.verties[0][1]
-        const maxY = this.$viewport.verties[2][1];
-        const realHeight = maxY - minY;
+        const {minY,maxY, height: realHeight} = this.$viewport;
         const height = this.state.rect.height;
 
         return [

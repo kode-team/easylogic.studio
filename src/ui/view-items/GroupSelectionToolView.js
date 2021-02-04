@@ -270,10 +270,10 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     moveGroupItem (lastStartVertext, newWidth, newHeight) {
 
         this.groupItem.reset({
-            x: Length.px(lastStartVertext[0] + (newWidth < 0 ? newWidth : 0)),
-            y: Length.px(lastStartVertext[1] + (newHeight < 0 ? newHeight : 0)),
-            width: Length.px(Math.abs(newWidth)).round(),
-            height: Length.px(Math.abs(newHeight)).round(),
+            x: Length.px(lastStartVertext[0] + (newWidth < 0 ? newWidth : 0)).round(1000),
+            y: Length.px(lastStartVertext[1] + (newHeight < 0 ? newHeight : 0)).round(1000),
+            width: Length.px(Math.abs(newWidth)).round(1000),
+            height: Length.px(Math.abs(newHeight)).round(1000),
         })    
     }   
     
@@ -525,8 +525,8 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
             if (instance) {
                 instance.reset({
-                    x: Length.px(it.x + localDist[0]).round(),       // 1px 단위로 위치 설정 
-                    y: Length.px(it.y + localDist[1]).round(),
+                    x: Length.px(it.x + localDist[0]).round(1000),       // 1px 단위로 위치 설정 
+                    y: Length.px(it.y + localDist[1]).round(1000),
                 })
             }                        
         })        
@@ -728,8 +728,8 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     }    
 
     createRenderPointers(pointers, selectionPointers) {
-
-        const rotatePointer = getRotatePointer(pointers)
+        const rotatePointer = getRotatePointer(pointers, 30)
+        const dist = vec3.dist(pointers[0], pointers[2]);        
 
         return {
             line: this.createPointerRect(pointers, rotatePointer), 
@@ -745,10 +745,10 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
                 this.createPointer (pointers[1], 2),
                 this.createPointer (pointers[2], 3),
                 this.createPointer (pointers[3], 4),
-                this.createPointer (vec3.lerp([], pointers[0], pointers[1], 0.5), 11),
-                this.createPointer (vec3.lerp([], pointers[1], pointers[2], 0.5), 12),
-                this.createPointer (vec3.lerp([], pointers[2], pointers[3], 0.5), 13),
-                this.createPointer (vec3.lerp([], pointers[3], pointers[0], 0.5), 14),
+                dist < 20 ? undefined : this.createPointer (vec3.lerp([], pointers[0], pointers[1], 0.5), 11),
+                dist < 20 ? undefined : this.createPointer (vec3.lerp([], pointers[1], pointers[2], 0.5), 12),
+                dist < 20 ? undefined : this.createPointer (vec3.lerp([], pointers[2], pointers[3], 0.5), 13),
+                dist < 20 ? undefined : this.createPointer (vec3.lerp([], pointers[3], pointers[0], 0.5), 14),
             ].join('')
         }
     }
