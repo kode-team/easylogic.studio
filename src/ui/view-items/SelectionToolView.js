@@ -549,9 +549,11 @@ export default class SelectionToolView extends SelectionToolEvent {
 
                 const verties = this.$selection.verties;
                 const selectionVerties = this.$selection.selectionVerties;
+                const parentVector = mat4.getTranslation([], this.$selection.cachedItemVerties[0].parentMatrix);                
                 this.state.renderPointerList = [
                     this.$viewport.applyVerties(verties),
-                    this.$viewport.applyVerties(selectionVerties)
+                    this.$viewport.applyVerties(selectionVerties),
+                    this.$viewport.applyVerties([parentVector])
                 ]
 
                 const {line, point, size} = this.createRenderPointers(...this.state.renderPointerList);
@@ -566,10 +568,11 @@ export default class SelectionToolView extends SelectionToolEvent {
             } else {
                 const verties = this.$selection.verties;
                 const selectionVerties = this.$selection.selectionVerties;
-        
+                const parentVector = mat4.getTranslation([], this.$selection.cachedItemVerties[0].parentMatrix);
                 this.state.renderPointerList = [
                     this.$viewport.applyVerties(verties),
-                    this.$viewport.applyVerties(selectionVerties)
+                    this.$viewport.applyVerties(selectionVerties),
+                    this.$viewport.applyVerties([parentVector])
                 ]             
 
                 const {line, point, size} = this.createRenderPointers(...this.state.renderPointerList);
@@ -601,7 +604,7 @@ export default class SelectionToolView extends SelectionToolEvent {
         `
     }    
 
-    createPointerRect (pointers, rotatePointer) {
+    createPointerRect (pointers, rotatePointer, parentVector) {
         if (pointers.length === 0) return '';
 
         const current = this.$selection.current;         
@@ -609,11 +612,18 @@ export default class SelectionToolView extends SelectionToolEvent {
         let line = '';
         if (!isArtBoard) {
             const centerPointer = vec3.lerp([], pointers[0], pointers[1], 0.5);            
-            line = `
+            line += `
                 M ${centerPointer[0]},${centerPointer[1]} 
                 L ${rotatePointer[0]},${rotatePointer[1]} 
             `
         }
+
+        // if (parentVector) {
+        //     line += `
+        //         M ${parentVector[0]},${parentVector[1]} 
+        //         L ${pointers[0][0]},${pointers[0][1]} 
+        //     `
+        // }
 
         return /*html*/`
         <svg class='line' overflow="visible">
@@ -676,7 +686,7 @@ export default class SelectionToolView extends SelectionToolEvent {
         `
     }
 
-    createRenderPointers(pointers, selectionPointers) {
+    createRenderPointers(pointers, selectionPointers, parentVector) {
 
         const current = this.$selection.current; 
         const isArtBoard = current && current.is('artboard');
@@ -688,7 +698,7 @@ export default class SelectionToolView extends SelectionToolEvent {
         const dist = vec3.dist(pointers[0], pointers[2]);
 
         return {
-            line: this.createPointerRect(pointers, rotatePointer), 
+            line: this.createPointerRect(pointers, rotatePointer, parentVector[0]), 
             size: this.createSize(pointers),
             point: [
                 // 4 모서리에서도 rotate 가 가능하도록 맞춤 
