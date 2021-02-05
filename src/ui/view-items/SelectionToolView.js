@@ -465,25 +465,37 @@ export default class SelectionToolView extends SelectionToolEvent {
         })        
     }
 
-    refreshSelectionToolView (newDist) {
+    refreshSelectionToolView (distVector) {
 
         this.$selection.cachedItemVerties.forEach(it => {
 
-            const verties = it.rectVerties.map(v => {
-                return vec3.add([], v, newDist)
+            // 절대 좌표를 snap 기준으로 움직이고 
+            const snap = this.$snapManager.check(it.rectVerties.map(v => {
+                return vec3.add([], v, distVector)
+            }));
+
+            // snap 거리만큼 조정해서 실제로 움직인 좌표로 만들고 
+            const localDist = vec3.add([], distVector, snap);
+            // newVerties 에 실제 움직인 좌표로 넣고 
+            const newVerties = it.rectVerties.map(v => {
+                return vec3.add([], v, localDist)
             })
 
-            const snap = this.$snapManager.check(verties);
-
-            const localDist = vec3.add([], newDist, snap);
-
+            // 첫번째 좌표 it.rectVerties[0] 과 
+            // 마지막 좌표 newVerties[0] 를 
+            // parentMatrixInverse 기준으로 다시 원복하고 거리를 잰다 
+            // 그게 실제적인 distance 이다. 
+            const newDist = vec3.subtract(
+                [], 
+                vec3.transformMat4([], newVerties[0], it.parentMatrixInverse), 
+                vec3.transformMat4([], it.rectVerties[0], it.parentMatrixInverse)
+            )
             const instance = this.$selection.get(it.id)
-
+            
             if (instance) {
-
                 instance.reset({
-                    x: Length.px(it.x + localDist[0]),          // 1px 단위로 위치 설정 
-                    y: Length.px(it.y + localDist[1]),
+                    x: Length.px(it.x + newDist[0]),          // 1px 단위로 위치 설정 
+                    y: Length.px(it.y + newDist[1]),
                 })
             }
         }) 

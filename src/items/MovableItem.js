@@ -2,8 +2,8 @@ import { Item } from "./Item";
 import { Length } from "@unit/Length";
 import { Transform } from "../property-parser/Transform";
 import { TransformOrigin } from "@property-parser/TransformOrigin";
-import { mat4, vec3 } from "gl-matrix";
-import { calculateMatrix, vertiesMap } from "@core/functions/math";
+import { mat4, quat, vec3 } from "gl-matrix";
+import { calculateMatrix, radianToDegree, vertiesMap } from "@core/functions/math";
 import { isFunction } from "@core/functions/func";
 import PathParser from "@parser/PathParser";
 import { polyPoint, polyPoly, rectToVerties } from "@core/functions/collision";
@@ -565,21 +565,34 @@ export class MovableItem extends Item {
     /**
      * 부모를 기준으로 childItem 의 transform 을 맞춘다. 
      * 
+     * childItem 에 [parentMatrixInverse] 를 곱하고 
+     * 
      * [newParentInverse] * [childMatrix] * [childItemMatrixInverse] = translate; 
      * 
      * @param {Item} childItem 
      */
     resetMatrix (childItem) {
 
-        const [x, y] = mat4.getTranslation([], calculateMatrix(
+        const matrix = calculateMatrix(
             this.getAccumulatedMatrixInverse(),
             childItem.getAccumulatedMatrix(),
             childItem.getTransformMatrixInverse()
-        ));
+        )
+        const [x, y, z] = mat4.getTranslation([], matrix);
+        const q = mat4.getRotation([], matrix);
+        const axis = []
+        const rad = quat.getAxisAngle(axis, q)
+
+        const rotate = [
+            { angle : axis[0] ? radianToDegree(rad * axis[0]) : 0, type: 'rotateX' },
+            { angle : axis[1] ? radianToDegree(rad * axis[1]) : 0, type: 'rotateY' },
+            { angle : axis[2] ? radianToDegree(rad * axis[2]) : 0, type: 'rotateZ' },
+        ].filter(it => it.angle !== 0).map(it => `${it.type}(${it.angle}deg)`).join(' ');
 
         childItem.reset({
             x: Length.px(x),
             y: Length.px(y),
+            transform: `${rotate}`
         })
 
     }
