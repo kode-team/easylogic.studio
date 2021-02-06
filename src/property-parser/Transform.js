@@ -298,4 +298,16 @@ export class Transform extends Property {
 
     return view;
   }
+  static fromScale (scale) {
+    if (scale[0] === 1 && scale[1] === 1) {
+      return ''; 
+    }
+
+    const list = [];
+    if (scale[0] != 1) list.push(`scaleX(${scale[0]})`);
+    if (scale[1] != 1) list.push(`scaleY(${scale[1]})`);
+    if (scale[2] != 1) list.push(`scaleZ(${scale[2]})`);
+
+    return list.join(' ');
+  }
 }

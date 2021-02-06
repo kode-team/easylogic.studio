@@ -111,7 +111,7 @@ export default class SelectionToolView extends SelectionToolEvent {
 
             if (instance) {
                 instance.reset({
-                    transform: Transform.addTransform(item.transform, `rotateZ(${Length.deg(distAngle)})`) 
+                    transform: Transform.addTransform(item.transform, `rotateZ(${Length.deg(distAngle).round(1000)})`) 
                 })
             }
 
@@ -673,7 +673,7 @@ export default class SelectionToolView extends SelectionToolEvent {
             const rotateZ = Transform.get(this.$selection.current.transform, 'rotateZ')
 
             if (rotateZ) {
-                text = `${rotateZ[0].value}°`
+                text = `${round(rotateZ[0].value, 1000)}°`
             }
         }
 
@@ -692,7 +692,7 @@ export default class SelectionToolView extends SelectionToolEvent {
         const isArtBoard = current && current.is('artboard');
 
         const diff = vec3.subtract([], vec3.lerp([], pointers[0], pointers[1], 0.5), pointers[4]);
-        const rotate = Length.deg(calculateAngle360(diff[0], diff[1]) + 90);
+        const rotate = Length.deg(calculateAngle360(diff[0], diff[1]) + 90).round(1000);
 
         const rotatePointer = getRotatePointer(pointers, 34)
         const dist = vec3.dist(pointers[0], pointers[2]);

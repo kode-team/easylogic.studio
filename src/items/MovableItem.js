@@ -3,7 +3,7 @@ import { Length } from "@unit/Length";
 import { Transform } from "../property-parser/Transform";
 import { TransformOrigin } from "@property-parser/TransformOrigin";
 import { mat4, quat, vec3 } from "gl-matrix";
-import { calculateMatrix, radianToDegree, vertiesMap } from "@core/functions/math";
+import { calculateMatrix, calculateMatrixInverse, radianToDegree, round, vertiesMap } from "@core/functions/math";
 import { isFunction } from "@core/functions/func";
 import PathParser from "@parser/PathParser";
 import { polyPoint, polyPoly, rectToVerties } from "@core/functions/collision";
@@ -561,38 +561,85 @@ export class MovableItem extends Item {
         return items; 
     }
 
+    getTransformOriginMatrix () {
+        return mat4.fromTranslation([], TransformOrigin.scale(
+            this.json['transform-origin'] || '50% 50% 0px', 
+            this.screenWidth.value, 
+            this.screenHeight.value
+        ))
+    }
+
+    getTransformOriginMatrixInverse () {
+        return mat4.invert([], this.getTransformOriginMatrix())
+    }    
 
     /**
-     * 부모를 기준으로 childItem 의 transform 을 맞춘다. 
+     * 새로운 부모를 기준으로 childItem 의 transform 을 맞춘다. 
      * 
-     * childItem 에 [parentMatrixInverse] 를 곱하고 
+     * 1. childItem 의 accumulatedMatrix 를 구한다. 
+     * 2. 새로운 부모를 기준으로 좌표를 다시 맞춘다.   parentItem.accumulatedMatrixInverse 
      * 
-     * [newParentInverse] * [childMatrix] * [childItemMatrixInverse] = translate; 
+     * childItem 의 좌표를 새로운 parent 로 맞출 때는  
+     * itemMatrix (rotateZ) 를 먼저 구하고 offset 을 다시 구하는 순서로 간다. 
      * 
      * @param {Item} childItem 
      */
     resetMatrix (childItem) {
 
+        // 새로운 offset 좌표는 아래와 같이 구한다. 
+        // [newParentMatrix] * [newTranslate] * [newItemTransform] = [newAccumulatedMatrix]
+
+        // [newTranslate] * [newItemTransform] = [newParentMatrix * -1] * [newAccumulatedMatrix]
         const matrix = calculateMatrix(
             this.getAccumulatedMatrixInverse(),
             childItem.getAccumulatedMatrix(),
-            childItem.getTransformMatrixInverse()
         )
-        const [x, y, z] = mat4.getTranslation([], matrix);
+
+        // scale 구하기 
+        const newScaleTransform = Transform.fromScale(mat4.getScaling([], matrix).map(it => round(it, 1000)));
+
+        // 회전 영역 먼저 구하기 
         const q = mat4.getRotation([], matrix);
         const axis = []
         const rad = quat.getAxisAngle(axis, q)
 
-        const rotate = [
+        const newRotateTransform = [
             { angle : axis[0] ? radianToDegree(rad * axis[0]) : 0, type: 'rotateX' },
             { angle : axis[1] ? radianToDegree(rad * axis[1]) : 0, type: 'rotateY' },
             { angle : axis[2] ? radianToDegree(rad * axis[2]) : 0, type: 'rotateZ' },
-        ].filter(it => it.angle !== 0).map(it => `${it.type}(${it.angle}deg)`).join(' ');
+        ]
+        .filter(it => it.angle !== 0)
+        .map(it => `${it.type}(${Length.deg(it.angle % 360).round(1000)})`).join(' ');
+
+        // 새로 변환될 item transform 정의 
+        const newChildItemTransform = Transform.replaceAll(childItem.transform, `${newScaleTransform} ${newRotateTransform}`)
+
+        const list = Transform.parseStyle(newChildItemTransform);
+        const width = childItem.screenWidth.value;
+        const height = childItem.screenHeight.value;
+
+        const newTransformMatrix = Transform.createTransformMatrix(list, width, height);
+
+        // 새로 변환될 item transform 정의 
+        // [newLocalMatrix] * [
+        //     [origin] * [newTransformMatrix] * [origin * -1]
+        //      * -1 
+        // ]
+        // 
+        const [x, y, z] = mat4.getTranslation([], calculateMatrix(
+            matrix,
+            calculateMatrixInverse(
+                childItem.getTransformOriginMatrix(),
+                newTransformMatrix,
+                childItem.getTransformOriginMatrixInverse(),
+            )
+        ));
+
 
         childItem.reset({
             x: Length.px(x),
             y: Length.px(y),
-            transform: `${rotate}`
+            transform: newChildItemTransform
         })
 
     }
