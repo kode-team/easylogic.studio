@@ -155,7 +155,7 @@ export class ViewportManager {
     
             this.setTransformOrigin([
                 this.canvasSize.width/2,
-                this.canvasSize.height/2,0,
+                this.canvasSize.height/2,
                 0
             ])
         }
