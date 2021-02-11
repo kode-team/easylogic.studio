@@ -1,5 +1,5 @@
 
-.selection-view {
+.hover-view {
     pointer-events:none;
     position:absolute;
     left:0px;
@@ -22,7 +22,7 @@
     }
   }
 
-  .pointer-rect {
+  .hover-rect {
     pointer-events: none;
     position: absolute;
     left: 0px;
@@ -111,6 +111,10 @@
         background-color: transparent;
         border:none;
 
+        &:hover {
+          // background-color: var(--selected-color);
+        }
+
         &::before {
           display: none;
         }
@@ -150,6 +154,10 @@
         opacity: 1;
       } 
     }
+
+    @each $moveType in move, rotate3d, 'to right', 'to left', 'to top', 'to bottom', 'to top left', 'to top right', 'to bottom left', 'to bottom right' {
+      &[data-selected-position="#{$moveType}"] [data-position="#{$moveType}"] { &:before { opacity: 1; } }
+    }    
   
     &[data-is-layout-container="true"] {
 
@@ -353,38 +361,5 @@
         transform: translate(-50%, -50%);  
       }    
                             
-    }
-  }
-  
-  .guide-line-view {
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    width: 100%;
-    height: 100%;
-    pointer-events:none;
-    overflow: visible;
-    transform: translate(0.5px, 0.5px);
-
-    line {
-      stroke-width: 1;
-
-      &.base-line {
-        stroke: var(--guide-line-color);
-      }
-
-      &.base-rect  {
-        stroke: var(--guide-line-rect-color);
-      }
-    }
-
-    text {
-      font-size: 10px;
-      fill: var(--guide-font-color);
-      text-shadow: 0px 2px 2px rgba(183, 183, 183, 0.5);
-
-      &.text-center {
-        text-anchor: middle;
-      }
     }
   }

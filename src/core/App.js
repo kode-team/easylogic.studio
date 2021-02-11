@@ -3,7 +3,7 @@ import BaseStore from "./BaseStore";
 //////// Do not remove /////////////////
 
 import Dom from "./Dom";
-import { POINTERMOVE, POINTEREND, DEBOUNCE, RESIZE, PREVENT } from "./Event";
+import { POINTERMOVE, POINTEREND, DEBOUNCE, RESIZE } from "./Event";
 import {
   ADD_BODY_MOUSEMOVE,
   ADD_BODY_MOUSEUP

@@ -24,11 +24,16 @@ export class ConfigManager {
     }
 
     set (key, value) {
-        this.config[key] = value; 
+        const oldValue = this.config[key]
+        if (oldValue != value) {
+            this.config[key] = value; 
+            this.editor.emit("config:" + key);            
+        }
     }
 
     remove (key) {
         delete this.config[key];
+        this.editor.emit("config:" + key);        
     }
 
 }

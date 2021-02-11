@@ -7,6 +7,7 @@ import { Transform } from "@property-parser/Transform";
 import { TransformOrigin } from "@property-parser/TransformOrigin";
 import { calculateAngle360, calculateAngleForVec3, calculateMatrix, calculateMatrixInverse, round } from "@core/functions/math";
 import { getRotatePointer } from "@core/functions/collision";
+import Dom from "@core/Dom";
 
 var directionType = {
     1: 'to top left',
@@ -66,7 +67,7 @@ export default class SelectionToolView extends SelectionToolEvent {
     template() {
         return /*html*/`
     <div class='selection-view one-selection-view' ref='$selectionView' style='display:none' >
-        <div class='pointer-rect' ref='$pointerRect'></div>        
+        <div class='pointer-rect' ref='$pointerRect'></div>
     </div>`
     }
 
@@ -234,7 +235,7 @@ export default class SelectionToolView extends SelectionToolEvent {
         var nextResult = vec3.transformMat4([], nextVertext, reverseMatrix); 
 
         // 4. 복귀한 좌표에서 차이점을 구한다. 
-        const realDist = vec3.add([], nextResult, vec3.negate([], currentResult))
+        const realDist = vec3.floor([], vec3.add([], nextResult, vec3.negate([], currentResult)))
 
         return realDist
     }
@@ -465,7 +466,7 @@ export default class SelectionToolView extends SelectionToolEvent {
         })        
     }
 
-    refreshSelectionToolView (distVector) {
+    moveTo (distVector) {
 
         this.$selection.cachedItemVerties.forEach(it => {
 
@@ -533,6 +534,7 @@ export default class SelectionToolView extends SelectionToolEvent {
     makeSelectionTool() {
         this.renderPointers();
     }
+
 
     /**
      * 선택영역 컴포넌트 그리기 
@@ -727,5 +729,5 @@ export default class SelectionToolView extends SelectionToolEvent {
         }
 
     }
-    
+
 } 

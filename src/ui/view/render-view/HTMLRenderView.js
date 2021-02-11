@@ -13,15 +13,19 @@ import PathEditorView from "@ui/view-items/PathEditorView";
 import PathDrawView from "@ui/view-items/PathDrawView";
 import LayerAppendView from "@ui/view-items/LayerAppendView";
 import GridLayoutLineView from "@ui/view-items/GridLayoutLineView";
+import HoverView from "@ui/view-items/HoverView";
+
 import { isFunction } from "@core/functions/func";
 import { KEY_CODE } from "@types/key";
 import { vec3 } from "gl-matrix";
+
 
 export default class HTMLRenderView extends UIElement {
 
     components() {
         return {
             StyleView,
+            HoverView,
             SelectionToolView,
             GroupSelectionToolView,
             GuideLineView,
@@ -50,7 +54,8 @@ export default class HTMLRenderView extends UIElement {
                 <div class='canvas-view' ref='$view'></div>
                 <div class='drag-area-rect' ref='$dragAreaRect'></div>
                 <StyleView ref='$styleView' />
-                <GuideLineView ref='$guideLineView' />                      
+                <GuideLineView ref='$guideLineView' />
+                <HoverView ref='$hoverView' />                
                 <GridLayoutLineView ref='$gridLayoutLineView' />
                 <SelectionToolView ref='$selectionTool' />
                 <GroupSelectionToolView ref='$groupSelectionTool' />
@@ -506,9 +511,9 @@ export default class HTMLRenderView extends UIElement {
         const e = this.$config.get('bodyEvent')
         const targetMousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);
 
-        const newDist = vec3.subtract([], targetMousePoint, this.initMousePoint);
+        const newDist = vec3.floor([], vec3.subtract([], targetMousePoint, this.initMousePoint));
 
-        this.selectionToolView.refreshSelectionToolView(newDist);       
+        this.selectionToolView.moveTo(newDist);       
         
         // 최종 위치에서 ArtBoard 변경하기 
         if (this.$selection.changeArtBoard()) {

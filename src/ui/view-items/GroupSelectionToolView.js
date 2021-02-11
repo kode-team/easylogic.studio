@@ -8,6 +8,7 @@ import { TransformOrigin } from "@property-parser/TransformOrigin";
 import { calculateAngle, calculateAngle360, calculateAngleForVec3, calculateMatrix, calculateMatrixInverse, calculateRotationOriginMat4, round, vertiesMap } from "@core/functions/math";
 import { ArtBoard } from "@items/ArtBoard";
 import { getRotatePointer, rectToVerties } from "@core/functions/collision";
+import Dom from "@core/Dom";
 
 
 var directionType = {
@@ -253,7 +254,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         var nextResult = vec3.transformMat4([], nextVertext, reverseMatrix); 
 
         // 4. 복귀한 좌표에서 차이점을 구한다. 
-        const realDist = vec3.add([], nextResult, vec3.negate([], currentResult))
+        const realDist = vec3.floor([], vec3.add([], nextResult, vec3.negate([], currentResult)))
 
         return realDist
     }
@@ -506,7 +507,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         })        
     }
 
-    refreshSelectionToolView (newDist) {
+    moveTo (newDist) {
 
         //////  snap 체크 하기 
         const snap = this.$snapManager.check(this.cachedGroupItem.rectVerties.map(v => {
@@ -760,5 +761,4 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         }
 
     }
-    
 } 

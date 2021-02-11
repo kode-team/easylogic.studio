@@ -171,13 +171,6 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
       box-shadow: 0 8px 6px -6px black;      
     }
 
-    &:hover {
-
-      &:not(.selected) {
-        outline: 1px double rgb(64, 64, 252);
-      }
-    }
-
     > svg {
 
       &:hover {
@@ -199,10 +192,6 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
         font-size: 12px;
         color: var(--page-view-element-artboard-title-color);
         display: inline-block;
-      }
-
-      &:hover {
-        outline: none !important;
       }
     }
   }

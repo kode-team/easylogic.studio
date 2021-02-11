@@ -39,10 +39,13 @@ export class SelectionManager {
      */
     this.items = [];
     this.itemKeys = {} 
+    this.hoverId = ''; 
+    this.hoverItems = []    
     this.ids = [];
     this.idsString = '';    
     this.colorsteps = []
     this.cachedItemVerties = []    
+    this.cachedArtBoardVerties = []
     this.selectionCamera = new MovableItem({
       parent: this.currentProject,
       x: Length.px(0), 
@@ -518,9 +521,46 @@ export class SelectionManager {
    */
   hasPoint (point) {
 
-    return this.cachedItemVerties.some((it) => {
-      return polyPoint(it.verties, point[0], point[1]);
-    })
+    if (this.isMany) {
+      // 멀티 selection 일 때는  사각형 영역에서 체크 
+      return polyPoint(this.rectVerties, point[0], point[1]);
+    } else {
+      return this.cachedItemVerties.some((it) => {
+        return polyPoint(it.verties, point[0], point[1]);
+      })  
+    }
     
+  }
+
+  setHoverId (id) {
+    let isChanged = false; 
+    if (!id || this.itemKeys[id]) {
+
+      if (this.hoverId != '') {
+        isChanged = true; 
+      }
+
+      this.hoverId = ''; 
+      this.hoverItems = []      
+    } else if (this.cachedArtBoardVerties.find(it => it.item.id === id)) {
+      if (this.hoverId != '') {
+        isChanged = true; 
+      }
+      this.hoverId = ''; 
+      this.hoverItems = []
+    } else {
+      if (this.hoverId != id) {
+        isChanged = true; 
+      }      
+      this.hoverId = id; 
+      this.hoverItems = this.itemsByIds([id]).filter(it => it.is('artboard') === false);
+
+      if (this.hoverItems.length === 0) {
+        this.hoverId = ''; 
+        isChanged = true; 
+      }
+    }
+
+    return isChanged;
   }
 }
