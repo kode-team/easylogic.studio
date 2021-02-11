@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "version": "0.10.4",
+  "version": "0.10.5",
   "name": "EasyLogic Studio",
   "description": "Fantastic Web Design Tool ",
   "author": "easylogic",
@@ -24,5 +24,6 @@
     "128": "images/icon128.png"
   },
   "offline_enabled": true,
-  "permissions": ["tabs", "storage"]
+  "permissions": ["tabs", "storage"],
+  "content_security_policy": "script-src 'unsafe-eval' 'self';script-src-elem 'unsafe-eval' 'self' ; object-src 'self' "
 }
