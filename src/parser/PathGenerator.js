@@ -1,9 +1,8 @@
 import SegmentManager from "./SegmentManager";
 import { clone, OBJECT_TO_PROPERTY } from "@core/functions/func";
-import { getDist, getXYInCircle, calculateAngle360, degreeToRadian, div, calculateAnglePointDistance } from "@core/functions/math";
+import { getDist, getXYInCircle, calculateAngle360 } from "@core/functions/math";
 import Point from "./Point";
 import PathStringManager from "./PathStringManager";
-import matrix from "@core/functions/matrix";
 import { mat4, vec3 } from "gl-matrix";
 
 const SEGMENT_DIRECTION = ['startPoint', 'endPoint', 'reversePoint']
@@ -17,8 +16,9 @@ function calculateSnapPoint (points, sourceKey, target, distanceValue, dist) {
         return {dist: Math.abs(p[sourceKey] - target), point: p}
     })
 
+    // 점과의 거래가 작은게 우선순위가 높다 
     checkedPointList.sort( (a, b) => {
-        return a.dist > b.dist ? -1 : 1; 
+        return a.dist < b.dist ? -1 : 1; 
     })
 
     var point = null; 

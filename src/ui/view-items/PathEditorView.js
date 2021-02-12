@@ -597,7 +597,7 @@ export default class PathEditorView extends PathTransformEditor {
                 this.changeMode('segment-move');
                 var [index, segmentKey] = $target.attrs('data-index', 'data-segment-point')
 
-                this.pathGenerator.setCachePoint(+index, segmentKey, this.$snapManager.getSnapPoints());
+                this.pathGenerator.setCachePoint(+index, segmentKey, this.$viewport.applyVerties(this.$snapManager.getSnapPoints()));
 
                 this.pathGenerator.selectKeyIndex(segmentKey, index)
             }
