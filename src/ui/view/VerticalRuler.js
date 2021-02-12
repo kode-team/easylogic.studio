@@ -38,8 +38,7 @@ export default class VerticalRuler extends UIElement {
 
             const y = Math.floor(((i - minY)/realHeight) * height);
 
-            pathString.push(`M ${30 - lineWidth} ${y}`);
-            pathString.push(`L 30 ${y}`);
+            pathString.push(`M ${30 - lineWidth} ${y} L 30 ${y}`);
         }
 
     }    
@@ -62,7 +61,7 @@ export default class VerticalRuler extends UIElement {
 
             const y = Math.floor(((i - minY)/realHeight) * height);
 
-            text.push(`<text x="${1}" y="${y}" dy="-2" text-anchor="start" fill="white" font-size="8" alignment-baseline="bottom" >${i}</text>`)
+            text.push(`<text x="${1}" y="${y}" dy="-2"  alignment-baseline="bottom">${i}</text>`)
         }
 
         return text.join('');
@@ -106,8 +105,8 @@ export default class VerticalRuler extends UIElement {
         // current
         const verties = this.$selection.verties;
         const yList = verties.map(it => it[1]);
-        const currentMinY = Math.min(...yList);
-        const currentMaxY = Math.max(...yList);
+        const currentMinY = Math.min.apply(Math, yList);
+        const currentMaxY = Math.max.apply(Math, yList);
 
         const firstY = ((currentMinY - minY)/realHeight) * height; 
         const secondY = ((currentMaxY - minY)/realHeight) * height; 

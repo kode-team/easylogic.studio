@@ -302,14 +302,14 @@ export class MovableItem extends Item {
      * @param {ReadOnlyVec3} vertextOffset 
      * @param {ReadOnlyVec3} center 
      */
-    getDirectionTransformMatrix (vertextOffset) {
+    getDirectionTransformMatrix (vertextOffset, width, height) {
         const x = this.offsetX.value;
         const y = this.offsetY.value; 
 
         const center = vec3.add([], TransformOrigin.scale(
             this.json['transform-origin'] || '50% 50% 0px', 
-            this.screenWidth.value, 
-            this.screenHeight.value
+            width, 
+            height
         ), vec3.negate([], vertextOffset));
 
         const view = mat4.create();
@@ -322,37 +322,37 @@ export class MovableItem extends Item {
         return view; 
     }
 
-    getDirectionTopLeftMatrix () {
-        return this.getDirectionTransformMatrix([0, 0, 0])
+    getDirectionTopLeftMatrix (width, height) {
+        return this.getDirectionTransformMatrix([0, 0, 0], width, height)
     }
 
-    getDirectionLeftMatrix () {
-        return this.getDirectionTransformMatrix([0, this.screenHeight.value/2, 0])
+    getDirectionLeftMatrix (width, height) {
+        return this.getDirectionTransformMatrix([0, height/2, 0], width, height)
     }            
  
 
-    getDirectionTopMatrix () {
-        return this.getDirectionTransformMatrix([this.screenWidth.value/2, 0, 0])
+    getDirectionTopMatrix (width, height) {
+        return this.getDirectionTransformMatrix([width/2, 0, 0], width, height)
     }    
 
-    getDirectionBottomLeftMatrix () {
-        return this.getDirectionTransformMatrix([0, this.screenHeight.value, 0])
+    getDirectionBottomLeftMatrix (width, height) {
+        return this.getDirectionTransformMatrix([0, height, 0], width, height)
     }    
 
-    getDirectionTopRightMatrix () {
-        return this.getDirectionTransformMatrix([this.screenWidth.value, 0, 0])
+    getDirectionTopRightMatrix (width, height) {
+        return this.getDirectionTransformMatrix([width, 0, 0], width, height)
     }        
 
-    getDirectionRightMatrix () {
-        return this.getDirectionTransformMatrix([this.screenWidth.value, this.screenHeight.value/2, 0])
+    getDirectionRightMatrix (width, height) {
+        return this.getDirectionTransformMatrix([width, height/2, 0], width, height)
     }        
 
-    getDirectionBottomRightMatrix () {
-        return this.getDirectionTransformMatrix([this.screenWidth.value, this.screenHeight.value, 0])
+    getDirectionBottomRightMatrix (width, height) {
+        return this.getDirectionTransformMatrix([width, height, 0], width, height)
     }            
 
-    getDirectionBottomMatrix () {
-        return this.getDirectionTransformMatrix([this.screenWidth.value/2, this.screenHeight.value, 0])
+    getDirectionBottomMatrix (width, height) {
+        return this.getDirectionTransformMatrix([width/2, height, 0], width, height)
     }            
 
     getAccumulatedMatrix () {
@@ -386,17 +386,13 @@ export class MovableItem extends Item {
         return mat4.invert([], this.getAccumulatedMatrix());
     }
 
-    verties () {
-
-        //TODO: rectVerties 를 생성할 때 ,  중심에서 뻗어나가는 verties 를 어떻게 해야할까?
-        let model = rectToVerties(0, 0, this.screenWidth.value, this.screenHeight.value, this.json['transform-origin']);
+    verties (width, height) {
+        let model = rectToVerties(0, 0, width || this.screenWidth.value, height || this.screenHeight.value, this.json['transform-origin']);
 
         return vertiesMap(model, this.getAccumulatedMatrix())
     }
 
     selectionVerties () {
-
-        //TODO: rectVerties 를 생성할 때 ,  중심에서 뻗어나가는 verties 를 어떻게 해야할까?
         let selectionModel = rectToVerties(-6, -6, this.screenWidth.value+12, this.screenHeight.value+12, this.json['transform-origin']);
         
         return vertiesMap(selectionModel, this.getAccumulatedMatrix())
@@ -428,17 +424,17 @@ export class MovableItem extends Item {
         const accumulatedMatrixInverse = this.getAccumulatedMatrixInverse();
 
         const directionMatrix = {
-            'to top left': this.getDirectionTopLeftMatrix(),
-            'to top': this.getDirectionTopMatrix(),            
-            'to top right': this.getDirectionTopRightMatrix(),
-            'to right': this.getDirectionRightMatrix(),                        
-            'to bottom left': this.getDirectionBottomLeftMatrix(),
-            'to bottom': this.getDirectionBottomMatrix(),                        
-            'to bottom right': this.getDirectionBottomRightMatrix(),
-            'to left': this.getDirectionLeftMatrix(),                        
+            'to top left': this.getDirectionTopLeftMatrix(width, height),
+            'to top': this.getDirectionTopMatrix(width, height),            
+            'to top right': this.getDirectionTopRightMatrix(width, height),
+            'to right': this.getDirectionRightMatrix(width, height),                        
+            'to bottom left': this.getDirectionBottomLeftMatrix(width, height),
+            'to bottom': this.getDirectionBottomMatrix(width, height),                        
+            'to bottom right': this.getDirectionBottomRightMatrix(width, height),
+            'to left': this.getDirectionLeftMatrix(width, height),                        
         }
 
-        const verties = this.verties();
+        const verties = this.verties(width, height);
         const xList = verties.map(it => it[0])
         const yList = verties.map(it => it[1])
 
@@ -551,7 +547,7 @@ export class MovableItem extends Item {
         var items = [] 
         this.layers.forEach(layer => {
 
-            items.push(...layer.checkInAreaForLayers(areaVerties));
+            items.push.apply(items, layer.checkInAreaForLayers(areaVerties));
 
             if (layer.checkInArea(areaVerties)) {
                 items.push(layer);

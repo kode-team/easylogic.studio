@@ -374,7 +374,7 @@ export default class PathGenerator {
             state.cachedPoints.push(p.startPoint, p.reversePoint, p.endPoint)
         })
 
-        state.cachedPoints.push(...verties.map(it => {
+        state.cachedPoints.push.apply(state.cachedPoints, verties.map(it => {
             const [x, y, z] = it; 
             return {x, y, z}
         }))
@@ -1075,7 +1075,7 @@ export default class PathGenerator {
                 snapPointList: movePointSnapPointList, 
                 moveXY: newMoveXY 
             } = calculateMovePointSnap(points, moveXY, 3); 
-            snapPointList.push(...movePointSnapPointList);
+            snapPointList.push.apply(snapPointList, movePointSnapPointList);
 
             state.moveXY = newMoveXY;
             moveXY = newMoveXY

@@ -89,6 +89,10 @@
             }
         }
 
+        &:not(.selected).hovered {
+            box-shadow: inset 0 0 0 1px var(--list-item-selected-color);
+        }
+
         &[data-layout='flex'],
         &[data-layout='grid']
          {

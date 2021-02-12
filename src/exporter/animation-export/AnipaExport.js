@@ -33,8 +33,7 @@ export default class AnipaExport {
                     };
                 })
 
-
-                animations.push(...item.toAnimationKeyframes(properties).filter(it => {
+                animations.push.apply(animations, item.toAnimationKeyframes(properties).filter(it => {
                     return it.properties.length
                 })) 
 

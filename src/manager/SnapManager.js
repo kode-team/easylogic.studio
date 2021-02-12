@@ -77,7 +77,7 @@ export class SnapManager {
     getSnapPoints () {
         const points = []
         this.editor.selection.snapTargetLayersWithSelection.forEach(it => {
-            points.push(...this.convertGuideAndPathMatrix(it));
+            points.push.apply(points, this.convertGuideAndPathMatrix(it));
         });
 
         return points;
@@ -174,7 +174,7 @@ export class SnapManager {
             // vertext 대 vertext 를 기준으로 좌표 설정 
             const points = this.getGuidesByPointPoint(sourceVerties, target.verties);
 
-            guides.push(...points);
+            guides.push.apply(guides, points);
         })
 
         return guides;

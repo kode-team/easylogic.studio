@@ -99,7 +99,7 @@ export default class PatternEditor extends UIElement {
 
         if (pattern) {
 
-            this.state.patterns.push(...Pattern.parseStyle(pattern.execute()[0].pattern));
+            this.state.patterns.push.apply(this.state.patterns, Pattern.parseStyle(pattern.execute()[0].pattern));
 
             this.refresh();
     

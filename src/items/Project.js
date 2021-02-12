@@ -8,6 +8,51 @@ import { itemsToRectVerties } from "@core/functions/collision";
 const OFFSET_X = Length.z();
 const OFFSET_Y = Length.z();
 export class Project extends TimelineItem {
+
+
+  createIndexItemMap () {
+    if (!this.indexedMap) {
+      this.indexedMap = new Map();
+    }
+
+    return this.indexedMap;
+  }
+
+  get indexed () {
+
+    this.createIndexItemMap();
+
+    return this.indexedMap;
+  }
+
+  removeIndexItem (item) {
+    this.indexed.delete(item.id);
+  }
+
+  getIndexItem (id) {
+    return this.indexed.get(id);
+  }
+
+  /**
+   * item 캐쉬 설정 
+   * 
+   * @param {Item} item 
+   */
+  addIndexItem (item) {
+    if (this.hasIndexItem(item.id) === false)  {
+      this.indexed.set(item.id, item.ref);
+    }
+  }
+
+  /**
+   * id 로 캐쉬된 아이템 찾기 
+   * 
+   * @param {string} id 
+   */
+  hasIndexItem (id) {
+    return this.indexed.has(id);
+  }
+
   getDefaultTitle() {
     return "New Project";
   }

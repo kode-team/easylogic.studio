@@ -76,7 +76,7 @@ export class Pattern extends Property {
   static toCSS(str) {
     let list = [];
     Pattern.parseStyle(str).forEach(it => {
-     list.push(...BackgroundImage.parseStyle(STRING_TO_CSS(it.toCSS())))
+     list.push.apply(list, BackgroundImage.parseStyle(STRING_TO_CSS(it.toCSS())))
     });
 
     return BackgroundImage.joinCSS(list);

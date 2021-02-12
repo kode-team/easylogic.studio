@@ -153,7 +153,7 @@ export class CylinderLayer extends Component {
 
       })
 
-      keyframes.push(...faceList)      
+      keyframes.push.apply(keyframes, faceList)      
     }
 
 

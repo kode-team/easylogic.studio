@@ -100,7 +100,6 @@ export default class GradientPickerPopup extends BasePopup {
     this.setState(data);
 
     this.show(432);
-    this.children.$color.show();
   }
 
   [EVENT("selectColorStep")](color) {

@@ -1,4 +1,4 @@
-import { itemsToRectVerties, polyPoint, polyPoly} from "@core/functions/collision";
+import { itemsToRectVerties, polyPoint, polyPoly, rectToVerties} from "@core/functions/collision";
 import { isFunction, isUndefined, isArray, isObject, isString, clone } from "@core/functions/func";
 import { Item } from "@items/Item";
 import { MovableItem } from "@items/MovableItem";
@@ -6,16 +6,16 @@ import { Project } from "@items/Project";
 import { Length } from "@unit/Length";
 import { vec3 } from "gl-matrix";
 
-function _traverse(obj, id) {
+function _traverse(obj, idList) {
   var results = [] 
 
   obj.layers.length && obj.layers.forEach(it => {
-    results.push(..._traverse(it, id));
+    results.push.apply(results, _traverse(it, idList));
   })
 
-  if (id.id) {
+  if (idList.id) {
     results.push(obj);
-  } else if (id.includes(obj.id)) {
+  } else if (idList.includes(obj.id)) {
     results.push(obj);
   }
 
@@ -46,6 +46,7 @@ export class SelectionManager {
     this.colorsteps = []
     this.cachedItemVerties = []    
     this.cachedArtBoardVerties = []
+    this.cachedVerties = rectToVerties(0, 0, 0, 0, '50% 50% 0px');
     this.selectionCamera = new MovableItem({
       parent: this.currentProject,
       x: Length.px(0), 
@@ -244,10 +245,41 @@ export class SelectionManager {
    * @returns {Item[]}
    */
   itemsByIds(ids = null) {
+
+    let itemIdList = [];
+
     if (isArray(ids)) {
-      return _traverse(this.project, ids)
+      itemIdList = ids; 
     } else if (isString(ids) || isObject(ids)) {
-      return _traverse(this.project, [ids]);
+      itemIdList = [ids];
+    }
+
+    /**
+     * 주어진 id 리스트가 있을 때 project 에 캐쉬된 item 을 먼저 조회 하도록 한다. 
+     */
+    if (itemIdList.length) {
+
+      const project = this.project;
+      const newItems = []
+      const expectIdList = []
+
+      itemIdList.forEach(id => {
+        if (project.hasIndexItem(id)) {
+          newItems.push(project.getIndexItem(id));
+        } else {
+          expectIdList.push(id);
+        }
+      })
+
+      const searchItems = _traverse(this.project, expectIdList);
+
+      searchItems.forEach(it => {
+        project.addIndexItem(it);
+      })
+
+       newItems.push.apply(newItems, searchItems);
+
+       return newItems;
     } else {
       return this.items;
     }
@@ -370,6 +402,8 @@ export class SelectionManager {
     // this.cachedItems = this.items.map(it => {
     //   return it.toCloneObject()
     // })
+
+    this.cachedVerties = this.verties;
 
     this.cachedItemVerties = this.items.map(it => {
       it.fakeParent = undefined;
@@ -532,6 +566,14 @@ export class SelectionManager {
     
   }
 
+  checkHover (itemOrId) {
+    if (isString(itemOrId)) {
+      return this.hoverId === itemOrId; 
+    } else {
+      return this.hoverItems.findIndex((it) => it.id === itemOrId.id) > -1; 
+    }
+  }
+
   setHoverId (id) {
     let isChanged = false; 
     if (!id || this.itemKeys[id]) {
@@ -559,6 +601,10 @@ export class SelectionManager {
         this.hoverId = ''; 
         isChanged = true; 
       }
+    }
+
+    if (isChanged) {
+      this.$editor.emit('changeHoverItem');
     }
 
     return isChanged;

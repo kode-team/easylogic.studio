@@ -24,7 +24,7 @@ export function collectProps(root, expectMethod = {}) {
         return root && isFunction(root[name]) && !expectMethod[name];
       });
 
-      results.push(...names);
+      results.push.apply(results, names);
       p = p.__proto__;
     } while (p);
 

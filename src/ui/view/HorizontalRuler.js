@@ -7,6 +7,7 @@ export default class HorizontalRuler extends UIElement {
     template () {
         return /*html*/`
             <div class="horizontal-ruler">
+                <div class='horizontal-ruler-container' ref='$layerRuler'></div>                            
                 <div class='horizontal-ruler-container' ref='$ruler'></div>
             </div>
         `
@@ -37,8 +38,7 @@ export default class HorizontalRuler extends UIElement {
 
             const x = Math.floor(((i - minX)/realWidth) * width);
 
-            pathString.push(`M ${x} ${30 - lineWidth}`);
-            pathString.push(`L ${x} 30 `);
+            pathString.push(`M ${x} ${30 - lineWidth} L ${x} 30 `);
         }
 
     }     
@@ -61,7 +61,7 @@ export default class HorizontalRuler extends UIElement {
 
             const x = Math.floor(((i - minX)/realWidth) * width);
 
-            text.push(`<text x="${x}" y="${0}" dx="2" dy="8" text-anchor="start" fill="#ececec" font-size="8" alignment-baseline="bottom" >${i}</text>`)
+            text.push(`<text x="${x}" y="${0}" dx="2" dy="8" alignment-baseline="bottom" >${i}</text>`)
         }
 
         return text.join('');
@@ -162,17 +162,33 @@ export default class HorizontalRuler extends UIElement {
 
         return /*html*/`
             <svg width="100%" width="100%" overflow="hidden">
-                <path d="${this.makeRulerForCurrentArtboard()}" fill="rgba(100, 100, 255, 0.6)" />
-                <path d="${this.makeRulerForCurrent()}" fill="rgba(100, 255, 255, 0.5)" />
                 <path d="${this.makeRuler()}" fill="transparent" stroke-width="0.5" stroke="white" transform="translate(0.5, 0)" />
                 ${this.makeRulerText()}                
             </svg>
         `
     }
 
-    [EVENT('updateViewport', 'refreshSelection', 'refreshRect')] () {
+    [LOAD('$layerRuler')] () { 
+
+        if (!this.state.rect || this.state.rect.width == 0) {
+            this.state.rect = this.$el.rect();
+        }
+
+        return /*html*/`
+            <svg width="100%" width="100%" overflow="hidden">
+                <path d="${this.makeRulerForCurrentArtboard()}" fill="rgba(100, 100, 255, 0.6)" />
+                <path d="${this.makeRulerForCurrent()}" fill="rgba(100, 255, 255, 0.5)" />
+            </svg>
+        `
+    }    
+
+    [EVENT('updateViewport')] () {
         this.refresh();      
     }
+
+    [EVENT('refreshSelection', 'refreshRect')] () {
+        this.load('$layerRuler');      
+    }    
 
     [EVENT('resize.window', 'resizeCanvas')] () {
         this.refreshCanvasSize();

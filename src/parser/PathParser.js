@@ -709,7 +709,7 @@ export default class PathParser {
         const newSegments = []
 
         groupSegments.forEach(segments => {
-            newSegments.push(...this.reverseSegments(segments));
+            newSegments.push.apply(newSegments, this.reverseSegments(segments));
         })
 
         this.segments = newSegments;

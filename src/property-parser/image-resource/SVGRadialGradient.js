@@ -72,7 +72,7 @@ export class SVGRadialGradient extends SVGGradient {
           // color 복원
           newValue = reverseMatches(newValue, results.matches);
 
-          colorsteps.push(...ColorStep.parse(newValue));
+          colorsteps.push.apply(colorsteps, ColorStep.parse(newValue));
         } else {
 
           var [cx, cy, r, fx, fy, fr,spreadMethod] = newValue.split(' ');        

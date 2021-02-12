@@ -262,7 +262,7 @@ export default class Point {
                 }
             })
 
-            newPoints.push(...points);
+            newPoints.push.apply(newPoints, points);
         })
 
         // 그런 다음 전체 인덱스를 재조정한다. 

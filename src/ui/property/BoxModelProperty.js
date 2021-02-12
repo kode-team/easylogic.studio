@@ -6,7 +6,7 @@ import { EVENT } from "@core/UIElement";
 const fields = ["margin", "padding"];
 let styleKeys = [];
 fields.forEach(field => {
-  styleKeys.push(...["-top", "-bottom", "-left", "-right"].map(it => field + it));
+  styleKeys.push.apply(styleKeys, ["-top", "-bottom", "-left", "-right"].map(it => field + it));
 });
 
 

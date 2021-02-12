@@ -223,7 +223,7 @@ export class TimelineItem extends AssetItem {
 
       timeline.animations.forEach(a => {
         a.properties.forEach(p => {
-          keyframes.push(...p.keyframes);
+          keyframes.push.apply(keyframes, p.keyframes);
         })
       })
     }

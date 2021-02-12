@@ -103,13 +103,13 @@ export class TimelineSelectionManager {
           p.properties.filter(property => {
             return property.property === it.property
           }).forEach(property => {
-            results.push(...property.keyframes.filter(keyframe => {
+            results.push.apply(results, property.keyframes.filter(keyframe => {
               return startTime <= keyframe.time && keyframe.time <= endTime; 
             }))
           }) 
         }
 
-        totalList.push(...results);
+        totalList.push.apply(totalList, results);
 
       })
 

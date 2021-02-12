@@ -320,7 +320,7 @@ export default class DomEventHandler extends BaseHandler {
         eventName.split(NAME_SAPARATOR).forEach(e => {
             var arr = e.split(NAME_SAPARATOR);
         
-            results.push(...arr);
+            results.push.apply(results, arr);
         });
         
         return results;

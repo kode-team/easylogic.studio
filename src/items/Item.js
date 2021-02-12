@@ -9,7 +9,7 @@ function _traverse(obj) {
   var results = [] 
 
   obj.layers.length && obj.layers.forEach(it => {
-    results.push(..._traverse(it));
+    results.push.apply(results, _traverse(it));
   })
 
   results.push(obj);
@@ -206,7 +206,11 @@ export class Item {
 
     if (!this.parent) return [ this.ref ];
 
-    return [...this.parent.path, this.ref];
+    const list = this.parent.path;
+
+    list.push(this.ref);
+
+    return list;
   }
 
   /**
@@ -250,13 +254,13 @@ export class Item {
 
   }
 
-  is (...itemType) {
+  is (checkItemType) {
     if (!this.json) return false;
-    return itemType.indexOf(this.json.itemType) > -1;
+    return checkItemType === this.json.itemType;
   }
 
-  isNot (...itemType) {
-    return this.is(...itemType) === false;
+  isNot (checkItemType) {
+    return this.is(checkItemType) === false;
   }
 
   isSVG() {
@@ -409,6 +413,7 @@ export class Item {
     layer.setParent(this.ref);
 
     this.json.layers.push(layer);
+    this.project.addIndexItem(layer);
 
     return layer; 
   }
@@ -428,6 +433,7 @@ export class Item {
     layer.setParent(this.ref);
 
     this.json.layers.unshift(layer);
+    this.project.addIndexItem(layer);
 
     return layer;     
   }
@@ -453,6 +459,7 @@ export class Item {
 
     layer.setParent(this.ref);
     this.json.layers.splice(index, 0, layer);
+    this.project.addIndexItem(layer);
 
     return layer;     
   }
@@ -467,7 +474,7 @@ export class Item {
     const index = this.parent.findIndex(this);
 
     this.parent.insertChildItem(layer, index);
-
+    this.project.addIndexItem(layer);
     return layer;     
   }
 
@@ -482,7 +489,7 @@ export class Item {
     const index = this.parent.findIndex(this);
 
     this.parent.insertChildItem(layer, index-1);
-
+    this.project.addIndexItem(layer);
     return layer;     
   }  
 
@@ -574,6 +581,7 @@ export class Item {
 
     if (childIndex > -1) {
       this.json.layers.splice(childIndex+1, 0, child);
+      this.project.addIndexItem(child);      
     }
     return child;
   }
@@ -584,6 +592,8 @@ export class Item {
    */
   remove () {
     this.json.parent.removeItem(this.ref);
+
+    this.project.removeIndexItem(this.ref);
   }
 
   /**
@@ -625,13 +635,17 @@ export class Item {
   searchById (id) {
 
     if (this.id === id) {
+      project.addIndexItem(this.ref);      
       return this.ref; 
     }
+
+    const project = this.project;
 
     for(var i = 0, len = this.layers.length; i < len; i++) {
       const item = this.layers[i]
 
       if (item.id === id) {
+        project.addIndexItem(item);        
         return item; 
       } else {
         var searchedItem = item.searchById(id);

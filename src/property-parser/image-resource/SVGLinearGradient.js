@@ -89,7 +89,7 @@ export class SVGLinearGradient extends SVGGradient {
 
           newValue = reverseMatches(newValue, results.matches);
 
-          colorsteps.push(...ColorStep.parse(newValue));
+          colorsteps.push.apply(colorsteps, ColorStep.parse(newValue));
         } else {
 
           var [x1, y1, x2, y2, spreadMethod] = newValue.split(' ')

@@ -103,7 +103,7 @@ export class LinearGradient extends Gradient {
 
           newValue = reverseMatches(newValue, results.matches);
 
-          colorsteps.push(...ColorStep.parse(newValue));
+          colorsteps.push.apply(colorsteps, ColorStep.parse(newValue));
         } else {
 
           angle = isUndefined(DEFINED_ANGLES[newValue])

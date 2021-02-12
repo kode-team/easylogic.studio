@@ -12,9 +12,19 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
   background-color: var(--background-color);
 
   .horizontal-ruler-container {
+    position: absolute;
+    left:0px;
+    top:0px;
     height: 100%;
     width: 100%;
   }  
+  svg {
+    text {
+      text-anchor: start;
+      fill: var(--font-color); 
+      font-size: 8px;
+    }
+  }
 }
 
 .vertical-ruler {
@@ -29,6 +39,14 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
   .vertical-ruler-container {
     height: 100%;
     width: 100%;
+  }
+
+  svg {
+    text {
+      text-anchor: start;
+      fill: var(--font-color); 
+      font-size: 8px;
+    }
   }
 }
 

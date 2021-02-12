@@ -69,7 +69,7 @@ export class RadialGradient extends Gradient {
           // color 복원
           newValue = reverseMatches(newValue, results.matches);
 
-          colorsteps.push(...ColorStep.parse(newValue));
+          colorsteps.push.apply(colorsteps, ColorStep.parse(newValue));
         } else {
           // direction
           if (newValue.includes("at")) {

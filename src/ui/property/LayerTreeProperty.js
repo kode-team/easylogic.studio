@@ -80,14 +80,10 @@ export default class LayerTreeProperty extends BaseProperty {
       this.state.lastDragOverItemDirection = 'self';      
     }
 
-    
+    bound.display = this.state.hideDragPointer ? 'none':  'block';
 
     return {
-      style: {
-        position: 'absolute',
-        ...bound,
-        'display': this.state.hideDragPointer ? 'none':  'block'
-      }
+      style: bound
     }
   }
 
@@ -125,9 +121,13 @@ export default class LayerTreeProperty extends BaseProperty {
   makeLayerList (parentObject, depth = 0) {
     if (!parentObject.layers) return '';
 
-    return [...parentObject.layers].reverse().map( (layer, index) => {
+    const layers = parentObject.layers
+    const data = []
 
+    for(var last = layers.length - 1; last > -1; last-- ) {
+      var layer = layers[last];
       var selected = this.$selection.check(layer) ? 'selected' : '';
+      var hovered = this.$selection.checkHover(layer) ? 'hovered' : '';
       var name = layer.name; 
 
       if (layer.is('text')) {
@@ -142,25 +142,27 @@ export default class LayerTreeProperty extends BaseProperty {
       const isHide = layer.isTreeItemHide()
       const depthPadding = Length.px(depth * 24);
 
-      return /*html*/`        
-      <div class='layer-item ${selected}' data-is-group="${layer.isGroup}" data-depth="${depth}" data-layout='${layer.layout}' data-layer-id='${layer.id}' data-is-hide="${isHide}"  draggable="true">
-        <div class='detail'>
-          <label data-layout-title='${title}' style='padding-left: ${depthPadding}' > 
-            <div class='folder ${layer.collapsed ? 'collapsed' : ''}'>${icon.arrow_right}</div>
-            <span class='icon' data-item-type="${layer.itemType}">${this.getIcon(layer)}</span> 
-            <span class='name'>${name}</span>
-          </label>
-          <div class="tools">
-            <button type="button" class="lock" data-lock="${layer.lock}" title='Lock'>${layer.lock ? icon.lock : icon.lock_open}</button>
-            <button type="button" class="visible" data-visible="${layer.visible}" title='Visible'>${icon.visible}</button>
-            <button type="button" class="remove" title='Remove'>${icon.remove2}</button>            
+      data.push(/*html*/`        
+        <div class='layer-item ${selected} ${hovered}' data-is-group="${layer.isGroup}" data-depth="${depth}" data-layout='${layer.layout}' data-layer-id='${layer.id}' data-is-hide="${isHide}"  draggable="true">
+          <div class='detail'>
+            <label data-layout-title='${title}' style='padding-left: ${depthPadding}' > 
+              <div class='folder ${layer.collapsed ? 'collapsed' : ''}'>${icon.arrow_right}</div>
+              <span class='icon' data-item-type="${layer.itemType}">${this.getIcon(layer)}</span> 
+              <span class='name'>${name}</span>
+            </label>
+            <div class="tools">
+              <button type="button" class="lock" data-lock="${layer.lock}" title='Lock'>${layer.lock ? icon.lock : icon.lock_open}</button>
+              <button type="button" class="visible" data-visible="${layer.visible}" title='Visible'>${icon.visible}</button>
+              <button type="button" class="remove" title='Remove'>${icon.remove2}</button>            
+            </div>
           </div>
         </div>
-      </div>
 
-      ${this.makeLayerList(layer, depth+1)}
-    `
-    }).join('')
+        ${this.makeLayerList(layer, depth+1)}
+      `)
+    }
+
+    return data.join(' ');
   }
 
   [EVENT('refreshContent')] (arr) {
@@ -387,6 +389,24 @@ export default class LayerTreeProperty extends BaseProperty {
       lock: lastLock
     }, item.id)
   }
+
+
+  [EVENT('changeHoverItem')] () {
+    this.refs.$layerList.$$('.hovered').forEach(it => {
+      it.removeClass('hovered')
+    })    
+
+
+    if (this.$selection.hoverItems.length) {
+      var selector = this.$selection.hoverItems.map(it => {
+        return `[data-layer-id="${it.id}"]`
+      }).join(',')
+      this.refs.$layerList.$$(selector).forEach(it => {
+        it.addClass('hovered')
+      })
+    }
+  }
+
 
   [EVENT('changeSelection')] (isSelection = false) {
     if (isSelection && this.refs.$layerList) {    
