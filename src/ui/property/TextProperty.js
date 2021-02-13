@@ -43,7 +43,8 @@ export default class TextProperty extends BaseProperty {
           ref='$transform' 
           label='${this.$i18n('text.property.transform')}' 
           key='text-transform' 
-          options="none,uppercase:A,lowercase:a,capitalize:Aa"
+          options="none,uppercase:AG,lowercase:ag,capitalize:Ag"
+          icons="horizontal_rule"
           onchange='changeTextValue' />                
       </div>        
       <div class="property-item">
@@ -52,7 +53,7 @@ export default class TextProperty extends BaseProperty {
           label='${this.$i18n('text.property.decoration')}' 
           key='text-decoration' 
           options="none,underline,overline:O,line-through" 
-          icons="A,underline,O,strikethrough"
+          icons="horizontal_rule,underline,O,strikethrough"
           onchange='changeTextValue' />        
       </div>                    
     `

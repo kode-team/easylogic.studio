@@ -17,6 +17,7 @@ export default class SelectIconEditor extends UIElement {
         return {
             keyValueChar,            
             label: this.props.label || '',
+            compact: this.props.compact === 'true',
             options, 
             icons, 
             colors,
@@ -25,12 +26,13 @@ export default class SelectIconEditor extends UIElement {
     }
 
     template() {
-        var { label } = this.state; 
+        var { label, compact } = this.state; 
         var hasLabel = !!label ? 'has-label' : ''
+        var hasCompact = !!compact ? 'compact': '';
         return /*html*/`
             <div class='select-icon-editor ${hasLabel}'>
                 ${label ? `<label title="${label}">${label}</label>` : '' }
-                <div class='items' ref='$options'></div>
+                <div class='items ${hasCompact}' ref='$options'></div>
             </div>
         `
     }

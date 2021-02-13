@@ -328,7 +328,6 @@ export default class HTMLRenderView extends UIElement {
     // text 의 경우 doubleclick 을 해야 포커스를 줄 수 있고 
     // 그 이후에 편집이 가능하다. 
     [DOUBLECLICK('$view .element-item.text')] (e) {
-        e.$dt.css('height', 'auto');
         e.$dt.addClass('focused');
         e.$dt.attr('contenteditable', 'true');
         e.$dt.focus();
@@ -336,17 +335,14 @@ export default class HTMLRenderView extends UIElement {
     }
 
     [FOCUSOUT('$view .element-item.text')] (e) {
-        e.$dt.css('height', undefined)
         e.$dt.removeAttr('contenteditable');
         e.$dt.removeClass('focused');
     }
 
     [KEYUP('$view .element-item.text')] (e) {
         var content = e.$dt.html()
-        var text = e.$dt.text().trim()
+        var text = e.$dt.text();
         var id = e.$dt.attr('data-id');
-        const rect = e.$dt.rect()
-
         //FIXME: matrix에 기반한 좌표 연산이 필요하다. 
 
         var arr = [] 
@@ -354,7 +350,6 @@ export default class HTMLRenderView extends UIElement {
             it.reset({ 
                 content, 
                 text,
-                height: Length.px(rect.height)
             })
             arr.push({id:it.id, content, text})            
         })

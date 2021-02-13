@@ -149,6 +149,8 @@ import open_in_full from "./open_in_full";
 import rotate from "./rotate";
 import vertical_distribute from "./vertical_distribute";
 import horizontal_distribute from "./horizontal_distribute";
+import delete_forever from "./delete_forever";
+import horizontal_rule from "./horizontal_rule";
 
 
 const alias = {
@@ -158,6 +160,8 @@ const alias = {
 
 export default {
   ...alias,
+  delete_forever,
+  horizontal_rule,
   open_in_full,
   rotate,
   align_horizontal_center,

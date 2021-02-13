@@ -73,7 +73,7 @@ input[type=file] {
         width: 16px;
         height: 16px;
         vertical-align: middle;
-        path,polygon {
+        path,polygon,rect {
             fill: currentColor;
         }
     }

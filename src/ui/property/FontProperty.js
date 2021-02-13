@@ -1,6 +1,5 @@
 import BaseProperty from "./BaseProperty";
 import { EVENT } from "@core/UIElement";
-import { DEBOUNCE } from "@core/Event";
 
 export default class FontProperty extends BaseProperty {
 
@@ -87,9 +86,10 @@ export default class FontProperty extends BaseProperty {
         <SelectIconEditor 
           ref='$style' 
           label='${this.$i18n('font.property.style')}' 
-          key="font-style" 
-          options="normal:I,italic" 
-          icons='I,italic'
+          key="font-style"
+          compact="true"
+          options="normal,italic" 
+          icons='title,italic'
           onchange="changeRangeEditor" />
       </div>      
 
