@@ -1,12 +1,12 @@
 import { EDIT_MODE_SELECTION } from "@manager/Editor";
-import Color from "@core/Color";
+// import Color from "@core/Color";
 import { Length } from "@unit/Length";
 import PathStringManager from "@parser/PathStringManager";
 
 export default function newComponent (editor, itemType, obj, isSelected = true) {
 
     if (!itemType.includes('text') && !obj['background-color']) {
-        obj['background-color'] = Color.random();
+        obj['background-color'] = '#c4c4c4'; //Color.random();
     } 
 
     if (itemType === 'svg-textpath') {
@@ -44,12 +44,10 @@ export default function newComponent (editor, itemType, obj, isSelected = true) 
     } else if (itemType === 'rect') {
         obj = {
             ...obj,
-            border: 'border:1px solid black',
         }        
     } else if (itemType === 'circle') {
         obj = {
             ...obj,
-            border: 'border:1px solid black',
         }                
     } else if (itemType === 'artboard') {
         obj = {

@@ -403,7 +403,7 @@ export class MovableItem extends Item {
     }    
 
     guideVerties () {
-        return this.verties().filter((_, index) => index != 4)
+        return this.verties();
     }        
 
     get matrix () {

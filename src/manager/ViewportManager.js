@@ -301,6 +301,13 @@ export class ViewportManager {
     get width () { return this.maxX - this.minX; }
 
 
+    applyVertex (vertex) {
+        return vec3.transformMat4([], vertex, this.matrix);
+    }
+
+    applyVertexInverse (vertex) {
+        return vec3.transformMat4([], vertex, this.matrixInverse);
+    }    
 
     applyVerties (verties) {
         return vertiesMap(verties, this.matrix);
@@ -318,6 +325,15 @@ export class ViewportManager {
         return vertiesMap(verties, this.scaleMatrixInverse);
     }    
 
+    /**
+     * viewport 좌표로 변환 
+     * 
+     * @param {number} x 
+     * @param {number} y 
+     * @param {number} width 
+     * @param {number} height 
+     * @returns {vec3[]}
+     */
     createAreaVerties (x, y, width, height) {
         return this.applyVertiesInverse(rectToVertiesForArea(x, y, width, height));
     }

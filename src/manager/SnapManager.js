@@ -144,6 +144,18 @@ export class SnapManager {
         return snaps.find(it => isNotZero(it[0]) || isNotZero(it[1])) || DEFAULT_DIST_VECTOR
     }
 
+    checkPoint (sourceVertex) {
+        const snap = this.check([sourceVertex])
+        return vec3.add([], sourceVertex, snap);
+    }
+
+    /**
+     * 점을 기준으로 가이드 라인 포인트 얻기 
+     * 
+     * @param {vec3[]} sourceVerties 
+     * @param {vec3[]} targetVerties 
+     * @returns {Array} [sourceVertex, targetVertex, AXIS_X or AXIS_Y ]
+     */
     getGuidesByPointPoint (sourceVerties, targetVerties) {
         const points = []
         let sourceVertext, targetVertext;
@@ -178,6 +190,10 @@ export class SnapManager {
         })
 
         return guides;
+    }
+
+    findGuideOne (sourceVerties) {
+        return [this.findGuide(sourceVerties)[0]]
     }
 
 }

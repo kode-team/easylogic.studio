@@ -1,4 +1,5 @@
 import { TransformOrigin } from "@property-parser/TransformOrigin";
+import { Length } from "@unit/Length";
 import { vec3 } from "gl-matrix";
 import { getPointBetweenVerties } from "./math";
 
@@ -468,4 +469,13 @@ export function itemsToRectVerties (items = []) {
     if (maxY === Number.MIN_SAFE_INTEGER) maxY = 0;    
 
     return rectToVerties(minX, minY, maxX - minX, maxY - minY);
+}
+
+export function vertiesToRectangle (verties) {
+    const x = Length.px(verties[0][0]).floor();
+    const y = Length.px(verties[0][1]).floor();
+    const width = Length.px(vec3.dist(verties[0], verties[1])).floor();
+    const height = Length.px(vec3.dist(verties[0], verties[3])).floor();
+
+    return {x, left: x, y, top: y, width, height}
 }

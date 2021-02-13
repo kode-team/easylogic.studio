@@ -28,12 +28,11 @@
     .area-rect {
         position: absolute;
         display: inline-block;
-        padding: 5px 20px;
-        border-radius: 10px;
-        background-color: var(--border-color);
-        color: var(--selected-font-color);
-        min-width: 50px;
         transform: translate(5px, 5px);
+        background-color: var(--selected-color);
+        color: var(--selected-font-color);
+        padding: 2px 4px;
+        border-radius: 4px;        
     }
 
     .area-pointer {

@@ -3,8 +3,7 @@ import { POINTERSTART, BIND, MOVE, END, KEYUP, IF, ESCAPE, ENTER, PREVENT, STOP,
 import Color from "@core/Color";
 import { Length } from "@unit/Length";
 import PathStringManager from "@parser/PathStringManager";
-import { rectToVerties } from "@core/functions/collision";
-import { vertiesMap } from "@core/functions/math";
+import { rectToVerties, vertiesToRectangle } from "@core/functions/collision";
 import { vec3 } from "gl-matrix";
 
 export default class LayerAppendView extends UIElement {
@@ -22,14 +21,12 @@ export default class LayerAppendView extends UIElement {
     initState() {
         return {
             dragStart: false, 
-            dragXY: { x: -10000, y : 0},
-            x: 0,
-            y: 0,
             width: 0,
             height: 0,
             color: Color.random(),
             fontSize: 30,
-            showRectInfo: false, 
+            showRectInfo: false,          
+            areaVerties: rectToVerties(0, 0, 0, 0),
             content: 'Insert a text',
             pathManager: new PathStringManager()
         }
@@ -44,26 +41,21 @@ export default class LayerAppendView extends UIElement {
     }
     
     [POINTERMOVE('$el') + IF('checkNotDragStart')] (e) {
-        const {x, y} = e.xy; 
-        const containerRect = this.$el.rect();
 
-
-        const vertext = [
-            Math.floor(x - containerRect.x),
-            Math.floor(y - containerRect.y),
-            0
-        ]
+        const vertex = this.$viewport.createWorldPosition(e.clientX, e.clientY);        
 
         // 영역 드래그 하면서 snap 하기 
-        const verties = this.$viewport.applyVertiesInverse([vertext]);
-        const snap = this.$snapManager.check(verties);
+        const newVertex = this.$snapManager.checkPoint(vertex);
 
-        if (snap) {
-            this.state.target = vec3.add([], vertext, snap);
-            this.state.targetGuides = this.$snapManager.findGuide([this.state.target]);
+        if (vec3.equals(newVertex, vertex) === false) {
+            this.state.target = newVertex;
+            this.state.targetVertex = this.$viewport.applyVertex(this.state.target);
+            this.state.targetPositionVertext = vec3.clone(this.state.target);            
+            this.state.targetGuides = this.$snapManager.findGuideOne([this.state.target]);
         } else {
             this.state.target = null; 
             this.state.targetGuides = [];
+            this.state.targetPositionVertext = null;
         }
 
         this.bindData('$mousePointer')
@@ -71,39 +63,27 @@ export default class LayerAppendView extends UIElement {
 
     [POINTERSTART('$el') + MOVE() + END()] (e) {
 
-        const {x, y} = e.xy; 
-        const containerRect = this.$el.rect();
-
-        this.state.dragXY = this.state.target ? {
-            x: this.state.target[0],
-            y: this.state.target[1]
-        } : {
-            x: Math.floor(x - containerRect.x),
-            y: Math.floor(y - containerRect.y),
-        }; 
+        this.initMousePoint = this.state.targetPositionVertext ? this.state.targetPositionVertext : this.$viewport.createWorldPosition(e.clientX, e.clientY);
 
         this.state.dragStart = true;
-        this.state.color = Color.random()
+        this.state.color = '#C4C4C4'; //Color.random()
         this.state.text = 'Insert a text';
-        this.state.x = this.state.dragXY.x;
-        this.state.y = this.state.dragXY.y; 
-        this.state.width = 0;
-        this.state.height = 0; 
+        this.state.areaVerties = rectToVerties(0, 0, 0, 0);
 
         this.bindData('$area');
         this.bindData('$areaRect');
 
     }
 
-    createLayerTemplate () {
-        const { type, text, color, width, height } = this.state;
+    createLayerTemplate (width, height) {
+        const { type, text, color } = this.state;
         switch(type) {
         case 'artboard':
             return /*html*/`<div class='draw-item' style='background-color: white;'></div>`;
         case 'rect':
-            return /*html*/`<div class='draw-item' style='background-color: ${color};border:1px solid black;'></div>`
+            return /*html*/`<div class='draw-item' style='background-color: ${color};'></div>`
         case 'circle':
-            return /*html*/`<div class='draw-item' style='background-color: ${color}; border-radius: 100%;border:1px solid black;'></div>`
+            return /*html*/`<div class='draw-item' style='background-color: ${color}; border-radius: 100%;'></div>`
         case 'video':
         case 'audio':
         case 'image':            
@@ -151,28 +131,32 @@ export default class LayerAppendView extends UIElement {
     }
 
     [BIND('$area')] () {
+
+        const { areaVerties } = this.state;
+
+        const {left, top, width, height } = vertiesToRectangle(areaVerties);
+
         return {
-            style: {
-                left: Length.px(this.state.x),
-                top: Length.px(this.state.y),
-                width: Length.px(this.state.width),
-                height: Length.px(this.state.height)
-            },
-            innerHTML : this.createLayerTemplate()
+            style: { left, top, width, height },
+            innerHTML : this.createLayerTemplate(width.value, height.value)
         }
     }
 
     [BIND('$areaRect')] () {
 
-        const { x, y, width, height, showRectInfo} = this.state; 
+        const { areaVerties, showRectInfo} = this.state; 
+
+        const newVerties = this.$viewport.applyVertiesInverse(areaVerties);
+
+        const {width, height } = vertiesToRectangle(newVerties);
 
         return {
             style: {
                 display: showRectInfo ? 'inline-block' : 'none',
-                left: Length.px(x + width),
-                top: Length.px(y + height),
+                left: Length.px(areaVerties[2][0]),
+                top: Length.px(areaVerties[2][1]),
             },
-            innerHTML: `${width} x ${height}`
+            innerHTML: `${width.value} x ${height.value}`
         }
     }
 
@@ -189,6 +173,8 @@ export default class LayerAppendView extends UIElement {
             ${guides.map(guide => {
                 this.state.pathManager.reset();
 
+                guide = this.$viewport.applyVerties([ guide[0], guide[1] ])
+
                 return this.state.pathManager
                             .M({x: guide[0][0], y: guide[0][1]})                            
                             .L({x: guide[1][0], y: guide[1][1]})
@@ -204,56 +190,63 @@ export default class LayerAppendView extends UIElement {
 
         const html = this.makeMousePointer()
         
-        if (html === '') return;
+        // if (html === '') return;
 
         return {
             innerHTML: html
         }
     }
 
-    move (dx, dy) {
-        const isShiftKey = this.$config.get('bodyEvent').shiftKey;
+    move () {
+        const e = this.$config.get('bodyEvent');
+        const targetMousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);     
+        const newMousePoint = this.$snapManager.checkPoint(targetMousePoint);
+
+        if (vec3.equals(newMousePoint, targetMousePoint) === false) {
+            this.state.target = newMousePoint;
+            this.state.targetVertex = this.$viewport.applyVertex(newMousePoint);
+            this.state.targetGuides = this.$snapManager.findGuideOne([newMousePoint]);
+        } else {
+            this.state.target = null; 
+            this.state.targetGuides = [];
+        }
+
+        const isShiftKey = e.shiftKey;
+
+        const minX = Math.min(newMousePoint[0], this.initMousePoint[0]);
+        const minY = Math.min(newMousePoint[1], this.initMousePoint[1]);
+
+        const maxX = Math.max(newMousePoint[0], this.initMousePoint[0]);
+        const maxY = Math.max(newMousePoint[1], this.initMousePoint[1]);        
+        
+        let dx = maxX - minX;
+        let dy = maxY - minY; 
 
         if (isShiftKey) {
             dy = dx; 
         }
 
         // 영역 드래그 하면서 snap 하기 
-        const verties = this.$viewport.createAreaVerties(this.state.dragXY.x,this.state.dragXY.y, dx, dy);
-        const snap = this.$snapManager.check(verties);
+        const verties = rectToVerties(minX, minY, dx, dy);                
+        this.state.areaVerties = this.$viewport.applyVerties(verties);
 
-        dx += snap[0];
-        dy += snap[1];
-
-        var obj = {
-            left: Length.px(this.state.dragXY.x + (dx < 0 ? dx : 0)),
-            top: Length.px(this.state.dragXY.y + (dy < 0 ? dy : 0)),
-            width: Length.px(Math.abs(dx)).floor(),
-            height: Length.px(Math.abs(dy)).floor()
-        }        
-
-        this.state.x = obj.left.value;
-        this.state.y = obj.top.value;
-        this.state.width = obj.width.value;
-        this.state.height = obj.height.value;
         this.state.showRectInfo = true; 
 
 
         this.bindData('$area');
         this.bindData('$areaRect'); 
+        this.bindData('$mousePointer')
+
     }
 
     end (dx, dy) {
         const isAltKey = this.$config.get('bodyEvent').altKey;        
-        let { x, y, width, height, color, text, fontSize} = this.state; 
+        let { color, text, fontSize, areaVerties} = this.state; 
 
+        // viewport 좌표를 world 좌표로 변환 
+        const rectVerties = this.$viewport.applyVertiesInverse(areaVerties);
 
-        const verties = this.$viewport.createAreaVerties(x, y, width, height);
-
-        x = Length.px(verties[0][0]).floor();
-        y = Length.px(verties[0][1]).floor();
-        width = Length.px(vec3.dist(verties[0], verties[1])).floor();
-        height = Length.px(vec3.dist(verties[0], verties[3])).floor();
+        const {x, y, width, height } = vertiesToRectangle(rectVerties);
 
         var rect = { 
             x,  y, width,  height, 
