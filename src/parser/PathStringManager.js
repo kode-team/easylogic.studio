@@ -33,7 +33,7 @@ export default class PathStringManager {
      */
     X (...values) {
 
-        const dist = 2; 
+        const dist = 3; 
         const point = values[0]
 
         const topLeft = {x: point.x - dist, y: point.y - dist}

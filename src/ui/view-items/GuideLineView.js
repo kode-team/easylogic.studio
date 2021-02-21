@@ -17,17 +17,17 @@ const vLine = (target) => {
     return line([0, target[1], 0], [10000, target[1], 0]);
 }
 
-const point = (target) => {
+const point = (target, dist = 3) => {
 
     return /*html*/`
         <path 
             stroke="red"
             stroke-width="1"
             d="
-                M ${target[0]-2} ${target[1]-2}
-                L ${target[0]+2} ${target[1]+2}
-                M ${target[0]-2} ${target[1]+2}
-                L ${target[0]+2} ${target[1]-2}
+                M ${target[0]-dist} ${target[1]-dist}
+                L ${target[0]+dist} ${target[1]+dist}
+                M ${target[0]-dist} ${target[1]+dist}
+                L ${target[0]+dist} ${target[1]-dist}
             " 
         />
     `;
