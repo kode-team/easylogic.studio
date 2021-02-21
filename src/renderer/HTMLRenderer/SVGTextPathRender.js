@@ -21,7 +21,7 @@ export default class SVGTextPathRender extends SVGItemRender {
     var $textPath = currentElement.$('textPath'); 
     if ($textPath) {
       $textPath.text(item.text)
-      $textPath.setAttr({
+      $textPath.setAttrNS({
         filter: this.toFilterValue(item),
         fill: this.toFillValue(item),
         stroke: this.toStrokeValue(item),

@@ -16,8 +16,9 @@ export default class SVGPathRender extends SVGItemRender {
     var $path = currentElement.$('path');
 
     if ($path) {
-      $path.setAttr({
+      $path.setAttrNS({
         'd':  item.d,
+        'fill-rule': item['fill-rule'] || 'nonezero',
         'filter': this.toFilterValue(item),
         'fill': this.toFillValue(item),
         'stroke': this.toStrokeValue(item)
@@ -41,6 +42,7 @@ export default class SVGPathRender extends SVGItemRender {
             <path 
               class="svg-path-item"
               d="${item.d}"
+              fill-rule="${item['fill-rule']}"
               filter="${this.toFilterValue(item)}"
               fill="${this.toFillValue(item)}"
               stroke="${this.toStrokeValue(item)}"

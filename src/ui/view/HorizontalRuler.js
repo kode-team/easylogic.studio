@@ -61,7 +61,7 @@ export default class HorizontalRuler extends UIElement {
 
             const x = Math.floor(((i - minX)/realWidth) * width);
 
-            text.push(`<text x="${x}" y="${0}" dx="2" dy="8" alignment-baseline="bottom" >${i}</text>`)
+            text.push(`<text x="${x}" y="${0}" dx="2" dy="8" text-anchor="middle" alignment-baseline="bottom" >${i}</text>`)
         }
 
         return text.join('');
@@ -113,10 +113,10 @@ export default class HorizontalRuler extends UIElement {
         const secondX = ((currentMaxX - minX)/realWidth) * width; 
 
         return `
-            M ${firstX} 20 
-            L ${firstX} 30 
-            L ${secondX} 30 
+            M ${firstX} 10 
+            L ${firstX} 20 
             L ${secondX} 20 
+            L ${secondX} 10 
             Z
         `
     }
@@ -128,13 +128,13 @@ export default class HorizontalRuler extends UIElement {
 
         pathString = []
     
-        this.makeLine(pathString, 200, minX, maxX, realWidth, width, 5, 30, 10000);        
-        this.makeLine(pathString, 100, minX, maxX, realWidth,width, 5, 30, 200);
-        this.makeLine(pathString, 50, minX, maxX, realWidth,width, 5, 20, 100);
-        this.makeLine(pathString, 10, minX, maxX, realWidth,width, 5, 15, 50);
-        this.makeLine(pathString, 5, minX, maxX, realWidth,width, 5, 13, 10);
-        this.makeLine(pathString, 1, minX, maxX, realWidth,width, 5, 10, 5);        
-        this.makeLine(pathString, 0.5, minX, maxX, realWidth,width, 5, 6, 1);
+        this.makeLine(pathString, 200, minX, maxX, realWidth, width, 10, 20, 10000);        
+        this.makeLine(pathString, 100, minX, maxX, realWidth,width, 10, 20, 200);
+        this.makeLine(pathString, 50, minX, maxX, realWidth,width, 10, 20, 100);
+        this.makeLine(pathString, 10, minX, maxX, realWidth,width, 10, 20, 50);
+        this.makeLine(pathString, 5, minX, maxX, realWidth,width, 10, 20, 10);
+        this.makeLine(pathString, 1, minX, maxX, realWidth,width, 10, 20, 5);        
+        this.makeLine(pathString, 0.5, minX, maxX, realWidth,width, 10, 20, 1);
 
         return pathString.join('');
     }    
@@ -149,12 +149,13 @@ export default class HorizontalRuler extends UIElement {
             this.makeLineText(200, minX, maxX, realWidth, width, 5, 25, 10000),
             this.makeLineText(100, minX, maxX, realWidth,width, 5, 20, 200),
             this.makeLineText(50, minX, maxX, realWidth,width, 20, 18, 100),
-            this.makeLineText(10, minX, maxX, realWidth,width, 40, 15, 50),
-            this.makeLineText(5, minX, maxX, realWidth,width, 60, 13, 10),           
+            this.makeLineText(10, minX, maxX, realWidth,width, 20, 15, 50),
+            this.makeLineText(5, minX, maxX, realWidth,width, 20, 13, 10),    
+            this.makeLineText(1, minX, maxX, realWidth,width, 20, 20, 5),
         ].join('');
     }    
 
-    [LOAD('$ruler')] () { 
+    [LOAD('$ruler') + DOMDIFF] () { 
 
         if (!this.state.rect || this.state.rect.width == 0) {
             this.state.rect = this.$el.rect();
@@ -168,7 +169,7 @@ export default class HorizontalRuler extends UIElement {
         `
     }
 
-    [LOAD('$layerRuler')] () { 
+    [LOAD('$layerRuler') + DOMDIFF] () { 
 
         if (!this.state.rect || this.state.rect.width == 0) {
             this.state.rect = this.$el.rect();
@@ -176,7 +177,6 @@ export default class HorizontalRuler extends UIElement {
 
         return /*html*/`
             <svg width="100%" width="100%" overflow="hidden">
-                <path d="${this.makeRulerForCurrentArtboard()}" fill="rgba(100, 100, 255, 0.6)" />
                 <path d="${this.makeRulerForCurrent()}" fill="rgba(100, 255, 255, 0.5)" />
             </svg>
         `

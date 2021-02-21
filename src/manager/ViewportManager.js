@@ -18,8 +18,8 @@ export class ViewportManager {
         this.scale = 1
         this.translate = vec3.create(),
         this.transformOrigin = vec3.create(),    
-        this.maxScale = 25; 
-        this.minScale = 0.25;  
+        this.maxScale = 250; 
+        this.minScale = 0.2;  
         this.zoomFactor = 1; 
 
         this.resetWorldMatrix();            

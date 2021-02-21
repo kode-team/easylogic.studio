@@ -76,6 +76,13 @@ export default class Dom {
     return this;  
   }
 
+  setAttrNS (obj, namespace = 'http://www.w3.org/2000/svg') {
+    Object.keys(obj).forEach(key => {
+      this.attr(key, obj[key], namespace)
+    })
+    return this;  
+  }  
+
   setProp (obj) {
     Object.keys(obj).forEach(key => {
       // 동일한 값을 갱신하지 않는다. 
@@ -125,6 +132,19 @@ export default class Dom {
 
     return this;
   }
+
+  attrNS(key, value, namespace = 'http://www.w3.org/2000/svg') {
+    if (arguments.length == 1) {
+      return this.el.getAttributeNS(namespace, key);
+    }
+
+    // 동일한 속성 값이 있다면 변경하지 않는다. 
+    if (this.el.getAttributeNS(namespace, key) != value) {
+      this.el.setAttributeNS(namespace, key, value);
+    }
+
+    return this;
+  }  
 
   attrKeyValue(keyField) {
     return {

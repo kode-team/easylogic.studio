@@ -14,7 +14,7 @@ export default class SVGTextRender extends SVGItemRender {
 
     if ($text) {
       $text.text(item.text)
-      $text.setAttr({
+      $text.setAttrNS({
         filter: this.toFilterValue(item),
         fill: this.toFillValue(item),
         stroke: this.toStrokeValue(item),   
