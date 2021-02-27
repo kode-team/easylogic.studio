@@ -1,8 +1,3 @@
-// 객체 로드용 절대로 지우지 마세요. 
-// Please do not remove this statement absolutely.
-import "@items";
-// 객체 로드용 절대로 지우지 마세요. 
-
 
 import Dom from "@core/Dom";
 import UIElement, { EVENT } from "@core/UIElement";
@@ -21,7 +16,6 @@ import CanvasView from "@ui/view/CanvasView";
 import ToolMenu from "@ui/view/ToolMenu";
 import LogoView from "@ui/view/LogoView";
 import ExternalToolMenu from "@ui/view/ExternalToolMenu";
-import ImageFileView from "@ui/view/ImageFileView";
 import StatusBar from "@ui/view/StatusBar";
 import PreviewToolMenu from "@ui/view/PreviewToolMenu";
 import NotificationView from "@ui/view/NotificationView";
@@ -118,7 +112,7 @@ export default class DesignEditor extends UIElement {
         <ShortcutWindow />
         <!-- LoginWindow / -->
         <!-- SignWindow / -->
-        <ImageFileView />
+        <!-- ImageFileView / -->
         <NotificationView />
       </div>
     `;
@@ -246,7 +240,6 @@ export default class DesignEditor extends UIElement {
       CanvasView,
       LogoView,
       ExternalToolMenu,
-      ImageFileView,
       StatusBar,
       TimelineProperty,
       PreviewToolMenu,

@@ -191,6 +191,10 @@ export default class Point {
         return point
     }
 
+    static getConnectedPoint (points, index) {
+        
+    }
+
     static getPrevPoint (points, index) {
         var prevIndex = index - 1; 
 

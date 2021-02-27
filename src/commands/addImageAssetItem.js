@@ -3,7 +3,7 @@ import loadOriginalImage from "@util/loadOriginalImage";
 
 export default {
     command: 'addImageAssetItem',
-    execute: function (editor, imageObject, rect = {}) {
+    execute: function (editor, imageObject, rect = {}, containerItem = undefined) {
         var project = editor.selection.currentProject;
 
         if (project) {
@@ -14,7 +14,7 @@ export default {
 
             // convert data or blob to local url 
             loadOriginalImage(imageObject, (info) => {
-                editor.emit('addImage', {src: imageObject.id, ...info, ...rect });
+                editor.emit('addImage', {src: imageObject.id, ...info, ...rect }, containerItem);
                 editor.changeMode(EDIT_MODE_SELECTION);
                 editor.emit('afterChangeMode');                
             });

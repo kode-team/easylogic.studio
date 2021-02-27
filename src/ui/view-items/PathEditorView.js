@@ -93,62 +93,89 @@ const PathCutter = class extends SegmentConvertor {
         return clickPosition;
     }
 
-    [CLICK('$view .split-path')] (e) {
+    [POINTERSTART('$view .split-path') + MOVE() + END()] (e) {
         this.initRect()
         var parser = new PathParser(e.$dt.attr('d'));
         var clickPosition = {
             x: e.xy.x - this.state.rect.x, 
             y: e.xy.y - this.state.rect.y
         }; 
+        var selectedSegmentIndex = -1;
 
-        if (parser.segments[1].command === 'C') {
-            var points = [
-                xy(parser.segments[0].values),
-                xy(parser.segments[1].values.slice(0, 2)),
-                xy(parser.segments[1].values.slice(2, 4)),
-                xy(parser.segments[1].values.slice(4, 6))
-            ]
-    
-            var curve = recoverBezier(...points, 200)
-            var t = curve(clickPosition.x, clickPosition.y);
-    
-            this.changeMode('modify');
-    
-            this.pathGenerator.setPoint(getBezierPoints(points, t))        
-    
-        } else if (parser.segments[1].command === 'Q') {
-            var points = [
-                xy(parser.segments[0].values),
-                xy(parser.segments[1].values.slice(0, 2)),
-                xy(parser.segments[1].values.slice(2, 4))
-            ]
-    
-            var curve = recoverBezierQuard(...points, 200)
-            var t = curve(clickPosition.x, clickPosition.y);
-    
-            this.changeMode('modify');
-    
-            this.pathGenerator.setPointQuard(getBezierPointsQuard(points, t))        
-        } else if (parser.segments[1].command === 'L') {
-            var points = [
-                xy(parser.segments[0].values),
-                xy(parser.segments[1].values.slice(0, 2))
-            ]
+        if (this.state.mode === 'path') {
 
-            var curve = recoverBezierLine(...points, 200)
-            var t = curve(clickPosition.x, clickPosition.y);          
+            // this.changeMode('modify');
+            this.state.dragXY = {
+                x: e.xy.x - this.state.rect.x, 
+                y: e.xy.y - this.state.rect.y
+            }; 
+            this.state.startPoint = this.state.dragXY;
+            this.pathGenerator.setLastPoint(this.state.startPoint);
+            this.state.isSplitPath = true; 
+        
+            this.renderPath()
+               
+            if (this.state.current) {
+                this.refreshPathLayer();
+            } else {
+                this.addPathLayer(); 
+                this.trigger('initPathEditorView')
+            }            
 
-            this.changeMode('modify');
+            return; 
+        } else {
+
+            if (parser.segments[1].command === 'C') {
+                var points = [
+                    xy(parser.segments[0].values),
+                    xy(parser.segments[1].values.slice(0, 2)),
+                    xy(parser.segments[1].values.slice(2, 4)),
+                    xy(parser.segments[1].values.slice(4, 6))
+                ]
+        
+                var curve = recoverBezier(...points, 200)
+                var t = curve(clickPosition.x, clickPosition.y);
+        
+                selectedSegmentIndex = this.pathGenerator.setPoint(getBezierPoints(points, t))        
+        
+            } else if (parser.segments[1].command === 'Q') {
+                var points = [
+                    xy(parser.segments[0].values),
+                    xy(parser.segments[1].values.slice(0, 2)),
+                    xy(parser.segments[1].values.slice(2, 4))
+                ]
+        
+                var curve = recoverBezierQuard(...points, 200)
+                var t = curve(clickPosition.x, clickPosition.y);
+        
+                selectedSegmentIndex = this.pathGenerator.setPointQuard(getBezierPointsQuard(points, t))        
+            } else if (parser.segments[1].command === 'L') {
+                var points = [
+                    xy(parser.segments[0].values),
+                    xy(parser.segments[1].values.slice(0, 2))
+                ]
     
-            this.pathGenerator.setPointLine(getBezierPointsLine(points, t))
+                var curve = recoverBezierLine(...points, 200)
+                var t = curve(clickPosition.x, clickPosition.y);          
+        
+                selectedSegmentIndex = this.pathGenerator.setPointLine(getBezierPointsLine(points, t))
+            }
+    
+    
+            this.renderPath()
+    
+            this.refreshPathLayer();
+    
+            // segment 모드로 변경 
+            this.changeMode('segment-move');
+    
+            // segment 캐쉬 
+            this.pathGenerator.setCachePoint(selectedSegmentIndex, 'startPoint', this.$viewport.applyVerties(this.$snapManager.getSnapPoints()));
+    
+            // segment 선택 하기 
+            this.pathGenerator.selectKeyIndex('startPoint', selectedSegmentIndex)
         }
 
-
-
-
-        this.renderPath()
-
-        this.refreshPathLayer();
 
     }
 }
@@ -310,14 +337,20 @@ export default class PathEditorView extends PathTransformEditor {
                 width: Length.px(newWidth),
                 height: Length.px(newHeight),
                 d: newPath.d,
-                totalLength: this.totalPathLength
+                totalLength: this.totalPathLength,
+                fill: `#C4C4C4`
             }
 
             FIELDS.forEach(key => {
-                if (this.state[key]) Object.assign(pathItem, {[key]: this.state[key] })    
-            });            
+                if (this.state[key]) {
+                    pathItem[key] = this.state[key];
+                }
+            });  
+            
+            const containerItem = this.$selection.getArtboardByPoint(bbox[0]) || project;
 
-            layer = project.appendChildItem(new SVGPathItem(pathItem));
+
+            layer = containerItem.appendChildItem(new SVGPathItem(pathItem));
 
         }
 
@@ -416,10 +449,6 @@ export default class PathEditorView extends PathTransformEditor {
         if (mode === 'move') {
             obj.current = null;
             obj.points = [] 
-        } else {
-            if (!obj.current) {
-                obj.current = null; 
-            }
         }
 
         obj.box = obj.box || 'canvas'
@@ -741,18 +770,20 @@ export default class PathEditorView extends PathTransformEditor {
                 if (this.state.current) {
                     this.refreshPathLayer();
                 } else {
-                 
                     this.addPathLayer(); 
                     this.trigger('initPathEditorView')
-                }
+                }                
             } else {
-
-                this.pathGenerator.moveEnd(dx, dy);
-                this.state.clickCount++;
-
-                this.renderPath()
+                if ( this.state.isSplitPath) {
+                    // NOOP 
+                } else {
+                    this.pathGenerator.moveEnd(dx, dy);
+                    this.state.clickCount++;
+    
+                    this.renderPath()
+                }
             }
-
+            this.state.isSplitPath = false; 
         }
 
     }   

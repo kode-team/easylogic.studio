@@ -3,7 +3,15 @@ import { EDIT_MODE_SELECTION } from "@manager/Editor";
 import { Length } from "@unit/Length";
 import PathStringManager from "@parser/PathStringManager";
 
-export default function newComponent (editor, itemType, obj, isSelected = true) {
+/**
+ * 
+ * @param {*} editor 
+ * @param {*} itemType 
+ * @param {*} obj 
+ * @param {*} isSelected 
+ * @param {Item} [containerItem=undefined]  상위 부모 객체 
+ */
+export default function newComponent (editor, itemType, obj, isSelected = true, containerItem = undefined) {
 
     if (!itemType.includes('text') && !obj['background-color']) {
         obj['background-color'] = '#c4c4c4'; //Color.random();
@@ -22,6 +30,7 @@ export default function newComponent (editor, itemType, obj, isSelected = true) 
         obj = {
             ...obj,
             'background-color': undefined,            
+            fill: `#C4C4C4`,            
             d: PathStringManager.makeCircle(0, 0, obj.width.value, obj.height.value),
         }        
 
@@ -30,6 +39,7 @@ export default function newComponent (editor, itemType, obj, isSelected = true) 
         obj = {
             ...obj,
             'background-color': undefined,
+            fill: `#C4C4C4`,            
             d: PathStringManager.makeRect(0, 0, obj.width.value, obj.height.value),
         }                
 
@@ -56,10 +66,11 @@ export default function newComponent (editor, itemType, obj, isSelected = true) 
         }        
     }
 
+
     editor.command('addLayer', `add layer - ${itemType}`, editor.createItem({
         itemType, 
         ...obj,
-    }), obj, isSelected)
+    }), obj, isSelected, containerItem)
 
     editor.changeMode(EDIT_MODE_SELECTION);
     editor.emit('afterChangeMode');

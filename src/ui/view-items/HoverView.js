@@ -5,9 +5,10 @@ export default class HoverView extends UIElement {
 
     template() {
         return /*html*/`
-    <div class='hover-view'>
-        <div class='hover-rect' ref='$hoverRect'></div>            
-    </div>`
+            <div class='hover-view'>
+                <div class='hover-rect' ref='$hoverRect'></div>            
+            </div>
+        `
     }
 
     
@@ -60,7 +61,7 @@ export default class HoverView extends UIElement {
                     L ${pointers[0][0]}, ${pointers[0][1]}
                     Z
                 " 
-                stroke-width="3"
+                stroke-width="2"
                 />
         </svg>`
     }    

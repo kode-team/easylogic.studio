@@ -5,6 +5,7 @@ export class AssetItem extends Item {
 
   getDefaultObject(obj = {}) { 
     return super.getDefaultObject({
+      comments: [],   // { id: xxxx, pos: [0, 0, 0], comments: [ { userId: '', message: '', createdAt: '', updatedAt : '' } ] }
       colors: [],
       gradients: [],
       svgfilters: [],

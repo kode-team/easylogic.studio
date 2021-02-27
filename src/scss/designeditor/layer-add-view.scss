@@ -48,4 +48,8 @@
             stroke-width: 1;
         }
     }
+
+    input[type=file] {
+        display: none;
+    }
 }

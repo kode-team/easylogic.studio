@@ -33,6 +33,20 @@ export class Project extends TimelineItem {
     return this.indexed.get(id);
   }
 
+  getSearchedIndexItem (id) {
+    if(this.hasIndexItem(id)) {        // 검색시에 id 로 된 index 가 존재하면 해당 item 을 리턴한다. 
+      return this.getIndexItem(id);
+    } else {                              // 그렇지 않으면 검색하기 
+      return this.searchById(id);
+    }
+  }
+
+  getSearchedIndexItemList (...ids) {
+    return ids.map(id => {
+      return project.getSearchedIndexItem(id);
+    })
+  }
+
   /**
    * item 캐쉬 설정 
    * 

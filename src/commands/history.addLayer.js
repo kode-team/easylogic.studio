@@ -3,9 +3,9 @@ import _doForceRefreshSelection from "./_doForceRefreshSelection";
 export default {
     command: 'history.addLayer',
     description: 'add layer in history ',
-    execute: function (editor, message, layer, rect = {}, isSelected = true) {
+    execute: function (editor, message, layer, rect = {}, isSelected = true, containerItem) {
 
-        editor.emit('addLayer', layer, rect, isSelected)
+        editor.emit('addLayer', layer, rect, isSelected, containerItem)
 
         editor.nextTick(() => {
             editor.history.add(message, this, {

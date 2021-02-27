@@ -50,11 +50,7 @@ class UIElement extends EventMachine {
    */
   initializeProperty (opt, props = {}) {
 
-    this.opt = opt || {};
-    this.parent = this.opt;
-    this.props = props;
-    this.source = uuid();
-    this.sourceName = this.constructor.name;
+    super.initializeProperty(opt, props);
 
     if (opt && opt.$store) {
       this.$store = opt.$store;

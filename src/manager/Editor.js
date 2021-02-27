@@ -10,8 +10,7 @@ import { CommandManager } from "./CommandManager";
 import { ShortCutManager } from "./ShortCutManager";
 import { ConfigManager } from "./ConfigManager";
 
-import AssetParser from "@parser/AssetParser";
-import { isArray, isObject, isString } from "@core/functions/func";
+import { isArray, isString } from "@core/functions/func";
 import { HistoryManager } from "./HistoryManager";
 import { uuid } from "@core/functions/math";
 import { Item } from "@items/Item";
@@ -21,6 +20,7 @@ import { KeyBoardManager } from "./KeyboardManager";
 import { ViewportManager } from "./ViewportManager";
 import { StorageManager } from "./StorageManager";
 import { CursorManager } from "./CursorManager";
+import { AssetManager } from "./AssetManager";
 
 
 export const EDITOR_ID = "";
@@ -76,6 +76,7 @@ export class Editor {
     this.viewport = new ViewportManager(this);    
     this.storageManager = new StorageManager(this);
     this.cursorManager = new CursorManager(this);
+    this.assetManager = new AssetManager(this);
     this.components = ComponentManager;
 
 
@@ -234,12 +235,12 @@ export class Editor {
     }
   }
 
-  command (command, message, $3, $4, $5, $6) {
+  command (command, message, ...args) {
 
     if (this.isPointerUp) {
-      return this.store.emit(`history.${command}`, message, $3, $4, $5, $6);
+      return this.store.emit(`history.${command}`, message, ...args);
     } else {
-      return this.store.emit(command, $3, $4, $5, $6);
+      return this.store.emit(command, ...args);
     }
   }
 
@@ -424,15 +425,8 @@ export class Editor {
       ids = [...id]; 
     }
 
-    let results = [];
-    this.projects.forEach(it => {
-      ids.forEach(id => {
-        results.push(it.searchById(id))
-      })
-    })
-
-    results.filter(Boolean);
-
+    const project = this.selection.currentProject;
+    let results = project.getSearchedIndexItemList(ids).filter(Boolean);
     return results[0]
   }
 
@@ -457,61 +451,8 @@ export class Editor {
     window.localStorage.setItem(`easylogic.studio.${key}`, JSON.stringify(value));
   }
 
-
-  /**
-   * 
-   * recover origin to local blob url for Asset 
-   * 
-   * @param {string} value JSON String for project list 
-   */
-  revokeResource (value) {
-    var json = JSON.parse(value || '[]');
-    var assets = {} 
-
-    json.forEach(project => {
-        project.images.forEach(it => {
-            assets[`#${it.id}`] = it; 
-        })
-    })
-
-    Object.keys(assets).map(idString => {
-        var a = assets[idString];
-        var info = AssetParser.parse(a.original, true);
-        a.local = info.local;
-    })
-
-    json.forEach(project => {
-        project.layers = this.applyAsset(project.layers, assets);
-    })
-
-    return json; 
-  }
-
-
-  applyAsset (json, assets) {
-    if (isArray(json)) {
-        json = json.map(it => this.applyAsset(it, assets))
-    } else if (isObject(json)) {
-        Object.keys(json).forEach(key => {
-            json[key] = this.applyAsset(json[key], assets);
-        }) 
-    } else if (isString(json)) {
-
-        Object.keys(assets).forEach(idString => {
-            var a = assets[idString]
-            if (json.indexOf(`#${a.id}`) > -1) {
-                json = json.replace(new RegExp(`#${a.id}`, 'g'), a.local);
-            }
-
-        })
-    }
-
-    return json; 
-  }
-
-
   loadResource (key) {
-    return this.revokeResource(window.localStorage.getItem(`easylogic.studio.${key}`))
+    return this.assetManager.revokeResource(window.localStorage.getItem(`easylogic.studio.${key}`))
   }
 
   loadItem (key) {

@@ -3,7 +3,7 @@
   
     .clippath-item {
       display: grid; 
-      grid-template-columns: 1fr; 
+      grid-template-columns: 1fr 20px; 
       grid-column-gap: 4px;
       margin-bottom: 5px;
       padding: 5px 6px;  
@@ -15,19 +15,15 @@
       }
 
       .title {
-          display: grid;
-          grid-template-columns: 1fr 20px;
-
         .name {
             padding: 2px 0px;
         }
-
-        .tools {
-            vertical-align: middle;
-            text-align: right;
-        } 
       }
 
+      .tools {
+        vertical-align: middle;
+        text-align: right;
+      } 
 
       .offset-list {
           padding: 0px 10px;

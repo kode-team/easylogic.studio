@@ -12,8 +12,12 @@ module.exports = {
   output: {
     library: "EasylogicStudio",
     libraryTarget: "umd",
-    path: __dirname + "/docs"
+    path: __dirname + "/docs",
+    publicPath: '/'
   },
+  devServer: {
+    historyApiFallback: true,
+  },  
   optimization: {
     splitChunks: {
       chunks: 'all',

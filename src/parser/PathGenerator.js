@@ -311,7 +311,6 @@ export default class PathGenerator {
             state.reversePoint = Point.getReversePoint(state.startPoint, endPoint);
         }
 
-
         var point = {
             startPoint: state.startPoint,
             endPoint: endPoint,
@@ -323,6 +322,25 @@ export default class PathGenerator {
 
         state.points.push(point);
     }
+
+    setLastPoint (startPoint) {
+        var state = this.state
+
+        var endPoint = clone(startPoint)
+        var reversePoint = clone(startPoint)
+
+        var point = {
+            startPoint: startPoint,
+            endPoint: endPoint,
+            curve: false,
+            reversePoint: reversePoint,
+            connected: false, 
+            close: false 
+        }   
+
+        state.points.push(point);
+    }
+
 
     /**
      * 패스의 segment 를 드래그 하기 전에 snap 이 될 좌표를 캐쉬한다. 
@@ -691,7 +709,8 @@ export default class PathGenerator {
         allPoints.splice(firstIndex, 2, ...newPoints);
 
         this.state.points = allPoints;
-
+        
+        return firstIndex + 1; 
     }
 
     setPointQuard (obj) {
@@ -702,20 +721,40 @@ export default class PathGenerator {
         var allPoints = this.clonePoints
 
         var firstItem = Point.getPoint(allPoints, p0)
+        var secondItem = Point.getPoint(allPoints, p1)
 
-        var fx = firstItem.startPoint.x + (firstItem.endPoint.x - firstItem.startPoint.x) / 3 
-        var fy = firstItem.startPoint.y + (firstItem.endPoint.y - firstItem.startPoint.y) / 3 
+        // console.log(firstItem, secondItem);
 
-        var newPoints = [
-            {...firstItem, endPoint: {x: fx, y : fy }},
-            {startPoint: obj.first[2], reversePoint: obj.first[1], curve: true , endPoint: obj.second[1]}
-        ]
+        // var fx = firstItem.startPoint.x + (firstItem.endPoint.x - firstItem.startPoint.x) / 3 
+        // var fy = firstItem.startPoint.y + (firstItem.endPoint.y - firstItem.startPoint.y) / 3 
 
-        var firstIndex = Point.getIndex(allPoints, p0); 
+        if (firstItem.curve && secondItem.curve === false) {
 
-        allPoints.splice(firstIndex, 1, ...newPoints);
+            var newPoints = [
+                { ...firstItem, endPoint: firstItem.startPoint },
+                {startPoint: obj.first[2], reversePoint: obj.first[1], curve: true , endPoint: obj.second[1] },
+            ]
+
+            var firstIndex = Point.getIndex(allPoints, p0); 
+
+            allPoints.splice(firstIndex, 1, ...newPoints);
+    
+    
+        } else {
+            var newPoints = [
+                { ...firstItem},
+                {startPoint: obj.first[2], reversePoint: obj.first[1], curve: true , endPoint: obj.second[1] },
+                { ...secondItem, reversePoint: obj.second[1], curve: true },                
+            ]
+
+            var firstIndex = Point.getIndex(allPoints, p0); 
+
+            allPoints.splice(firstIndex, 2, ...newPoints);
+        }
 
         this.state.points = allPoints;
+
+        return firstIndex + 1;         
 
     }
 
@@ -735,6 +774,8 @@ export default class PathGenerator {
         allPoints.splice(firstIndex+1, 0, ...newPoints);
 
         this.state.points = allPoints;
+
+        return firstIndex + 1; 
 
     }
 
@@ -1032,13 +1073,18 @@ export default class PathGenerator {
             var prevPoint = Point.getPrevPoint(points, index);
 
             if (prevPoint && prevPoint.command === 'M') {
-                current.startPoint.isSecond = true; 
-            }
+                if (current.startPoint) {
+                    current.startPoint.isSecond = true; 
+                }
 
-            if (nextPoint ) {
-                current.startPoint.isLast = nextPoint.command === 'M';                 
-            } else {
-                current.startPoint.isLast = index === len - 1; 
+            }
+            if (current.startPoint) {
+                if (nextPoint ) {
+                    current.startPoint.isLast = nextPoint.command === 'M';                 
+                } else {
+                    current.startPoint.isLast = index === len - 1; 
+                }
+    
             }
 
             current.selected = selectedIndex === index;

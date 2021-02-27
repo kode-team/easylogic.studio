@@ -82,34 +82,34 @@ export default class BaseStore {
     return this.getCallbacks(event);
   }
 
-  sendMessage(source, event, $2, $3, $4, $5) {
+  sendMessage(source, event, ...args) {
     Promise.resolve().then(() => {
       var list = this.getCachedCallbacks(event);
       if (list) {
         list
         .filter(f => f.originalCallback.source !== source)
         .forEach(f => {
-          f.callback($2, $3, $4, $5)
+          f.callback(...args)
         });
       }
 
     });
   }
 
-  nextSendMessage(source, callback, $2, $3, $4, $5) {
+  nextSendMessage(source, callback, ...args) {
     Promise.resolve().then(() => {
-      callback($2, $3, $4, $5)
+      callback(...args)
     });
   }
 
-  triggerMessage(source, event, $2, $3, $4, $5) {
+  triggerMessage(source, event, ...args) {
     Promise.resolve().then(() => {
       var list = this.getCachedCallbacks(event);
       if (list) {
         list
           .filter(f => f.originalCallback.source === source)
           .forEach(f => {      
-            f.callback($2, $3, $4, $5)
+            f.callback(...args)
           });
       } else {
         console.warn(event, ' is not valid event');
@@ -122,8 +122,8 @@ export default class BaseStore {
 
 
 
-  emit($1, $2, $3, $4, $5) {
-    this.sendMessage(this.source, $1, $2, $3, $4, $5);
+  emit(...args) {
+    this.sendMessage(this.source, ...args);
   }
 
   /**
@@ -135,11 +135,7 @@ export default class BaseStore {
     this.nextSendMessage(this.source, callback);
   }
 
-  trigger($1, $2, $3, $4, $5) {
-    this.triggerMessage(this.source, $1, $2, $3, $4, $5);
-  }
-
-  execute($1, $2, $3, $4, $5){
-    this.runCommand(this.source, $1, $2, $3, $4, $5);
+  trigger(...args) {
+    this.triggerMessage(this.source, ...args);
   }
 }

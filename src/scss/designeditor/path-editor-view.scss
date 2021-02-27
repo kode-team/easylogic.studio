@@ -26,6 +26,13 @@
         right:0px;
         bottom:0px;
 
+        &:not(.modify),
+        &:not(.segment-move) {
+            path.object {
+                stroke: #848484;
+            }
+        }
+
         &.split-panel {
             pointer-events: none;
         }
@@ -311,7 +318,7 @@
             
             &.object {
                 fill: transparent;
-                stroke: #848484;
+                // stroke: #848484;
                 stroke-width: 1; 
             }       
             
@@ -339,6 +346,7 @@
             stroke: var(--selected-color);
             stroke-width: 0.5;
             pointer-events: none;
+            display: none;
         }
     }
 }

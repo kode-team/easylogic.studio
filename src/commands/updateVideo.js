@@ -2,7 +2,7 @@ import { uuidShort } from "@core/functions/math";
 
 export default {
     command: 'updateVideo',
-    execute: function (editor, item, rect) {
+    execute: function (editor, item, rect, containerItem = undefined) {
         var reader = new FileReader();
         reader.onload = (e) => {
             var datauri = e.target.result;
@@ -14,7 +14,7 @@ export default {
                 name: item.name, 
                 original: datauri, 
                 local
-            }, rect)
+            }, rect, containerItem)
         }
 
         reader.readAsDataURL(item);

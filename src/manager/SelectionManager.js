@@ -343,6 +343,15 @@ export class SelectionManager {
     }
   }
 
+  getArtboardByPoint (vec) {
+    const selectedArtBoard = this.currentProject.artboards.find(artboard => {
+      const artboardVerties = artboard.matrix.verties.filter((_, index) => index < 4);
+      return polyPoint(artboardVerties, vec[0], vec[1]) 
+    })
+
+    return selectedArtBoard;
+  }
+
   changeArtBoard () {
 
     let checkedParentChange = false

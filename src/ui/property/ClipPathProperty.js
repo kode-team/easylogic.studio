@@ -59,17 +59,15 @@ export default class ClipPathProperty extends BaseProperty {
       <div class='clippath-item'>
         <div class='title'>
           <div class='name'>${clippath}</div>
-          <div class='tools'>
-              <button type="button" class="del">
-                ${icon.remove2}
-              </button>
-          </div>
         </div>
+        <div class='tools'>
+          <button type="button" class="del">${icon.remove2}</button>
+        </div>        
       </div>
     `
   }
 
-  [CLICK('$clippathList .clippath-item')] (e) {
+  [CLICK('$clippathList .clippath-item .title')] (e) {
     var current = this.$selection.current;
     if (!current) return;
 
@@ -83,9 +81,11 @@ export default class ClipPathProperty extends BaseProperty {
     if (!current) return;
 
     this.command('setAttribute', 'delete clip-path', { 'clip-path': '' }, current.id);    
-    this.refresh();    
     this.emit('hideClipPathPopup');    
 
+    setTimeout(() => {
+      this.refresh();
+    }, 100)
   }
 
   [EVENT('refreshSelection')] () {
@@ -98,7 +98,7 @@ export default class ClipPathProperty extends BaseProperty {
     if (!current) return '';
     if (!current['clip-path']) return ''
 
-    return this.makeClipPathTemplate(current['clip-path']);
+    return this.makeClipPathTemplate(current['clip-path'].split('(')[0]);
   }
 
   [CLICK("$add")]() {

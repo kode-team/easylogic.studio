@@ -39,6 +39,9 @@ export default class FontSpacingProperty extends BaseProperty {
         ref='$lineHeight' 
         label='${this.$i18n('font.spacing.property.lineHeight')}' 
         key="line-height" 
+        min="0"
+        max="10"
+        step="0.01"
         units=",px,%,em"
         onchange="changeRangeEditor" />
     </div>       

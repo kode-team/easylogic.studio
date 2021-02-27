@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "@core/UIElement";
-import { POINTERSTART, BIND, MOVE, END, KEYUP, IF, ESCAPE, ENTER, PREVENT, STOP, POINTERMOVE } from "@core/Event";
+import { POINTERSTART, BIND, MOVE, END, KEYUP, IF, ESCAPE, ENTER, PREVENT, STOP, POINTERMOVE, CHANGE } from "@core/Event";
 import Color from "@core/Color";
 import { Length } from "@unit/Length";
 import PathStringManager from "@parser/PathStringManager";
@@ -14,6 +14,8 @@ export default class LayerAppendView extends UIElement {
             <div class='area' ref='$area'></div>
             <div class='area-rect' ref='$areaRect'></div>
             <div class='area-pointer' ref='$mousePointer'></div>
+            <input type='file' accept='image/*' multiple="true" ref='$file' class='embed-file-input'/>
+            <input type='file' accept='video/*' multiple="true" ref='$video' class='embed-video-input'/>            
         </div>
         `
     }
@@ -28,7 +30,9 @@ export default class LayerAppendView extends UIElement {
             showRectInfo: false,          
             areaVerties: rectToVerties(0, 0, 0, 0),
             content: 'Insert a text',
-            pathManager: new PathStringManager()
+            pathManager: new PathStringManager(),
+            rect: {},
+            containerItem: undefined
         }
     }
 
@@ -246,6 +250,8 @@ export default class LayerAppendView extends UIElement {
         // viewport 좌표를 world 좌표로 변환 
         const rectVerties = this.$viewport.applyVertiesInverse(areaVerties);
 
+        const parentArtBoard = this.$selection.getArtboardByPoint(rectVerties[0]);
+
         const {x, y, width, height } = vertiesToRectangle(rectVerties);
 
         var rect = { 
@@ -267,10 +273,10 @@ export default class LayerAppendView extends UIElement {
         }
 
         switch(this.state.type) {
-        case 'image': this.emit('openImage', rect); break;
-        case 'video': this.emit('openVideo', rect); break; 
-        case 'audio': this.emit('openAudio', rect); break;             
-        default: this.emit('newComponent', this.state.type, rect, /* isSelected */ true );break;
+        case 'image': this.trigger('openImage', rect, parentArtBoard); break;
+        case 'video': this.trigger('openVideo', rect, parentArtBoard); break; 
+        case 'audio': this.trigger('openAudio', rect, parentArtBoard); break;             
+        default: this.emit('newComponent', this.state.type, rect, /* isSelected */ true, parentArtBoard );break;
         }
         
 
@@ -319,4 +325,28 @@ export default class LayerAppendView extends UIElement {
     [KEYUP('document') + IF('isShow') + ESCAPE + ENTER + PREVENT + STOP] () {
         this.trigger('hideLayerAppendView');        
     }    
+
+
+    [CHANGE('$file')] (e) {
+        this.refs.$file.files.forEach(item => {
+          this.emit('updateImage', item, this.state.rect, this.state.containerItem);
+        })
+    }
+    [CHANGE('$video')] (e) {
+        this.refs.$video.files.forEach(item => {
+          this.emit('updateVideo', item, this.state.rect, this.state.containerItem);
+        })
+    }    
+
+    [EVENT('openImage')] (rect, containerItem) {
+        this.state.rect = rect; 
+        this.state.containerItem = containerItem;
+        this.refs.$file.click();
+    }
+
+    [EVENT('openVideo')] (rect, containerItem) {
+        this.state.rect = rect; 
+        this.state.containerItem = containerItem;        
+        this.refs.$video.click();
+    }        
 } 

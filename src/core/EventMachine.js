@@ -91,8 +91,27 @@ export default class EventMachine {
     this.initComponents();
   }
 
+
+  /**
+   * UIElement instance 에 필요한 기본 속성 설정 
+   */
+  initializeProperty (opt, props = {}) {
+
+    this.opt = opt || {};
+    this.parent = this.opt;
+    this.props = props;
+    this.source = uuid();
+    this.sourceName = this.constructor.name;  
+
+  }
+
   initComponents() {
-    this.childComponents = this.components();
+    const parentComponents = isFunction(this.parent.components) ? this.parent.components() : this.parent.components;
+
+    this.childComponents = {
+      ...parentComponents, 
+      ...this.components() 
+    };
     this.childComponentKeys = Object.keys(this.childComponents)
     this.childComponentSet = new Map();
     this.childComponentKeys.forEach(key => {
@@ -325,7 +344,7 @@ export default class EventMachine {
     targets.forEach($dom => {
       var tagName = $dom.el.tagName.toLowerCase();
       var ComponentName = this.childComponentSet.get(tagName);
-      var Component = this.childComponents[ComponentName];
+      var EventMachineComponent = this.childComponents[ComponentName];
       let props = this.parseProperty($dom);
 
       // create component 
@@ -339,7 +358,7 @@ export default class EventMachine {
         instance._reload(props);
       } else {
         // 기존의 refName 이 존재하지 않으면 Component 를 생성해서 element 를 교체한다. 
-        instance = new Component(this, props);
+        instance = new EventMachineComponent(this, props);
 
         this.children[refName || instance.id] = instance;
 

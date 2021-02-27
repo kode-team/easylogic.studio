@@ -10,7 +10,9 @@ import { Length } from "@unit/Length";
 export default {
   createDesignEditor(opts = { type: "white" }) {
     return App.start({
-      components: { DesignEditor },
+      components: { 
+        DesignEditor 
+      },
       className: 'designeditor',
       container: document.getElementById('app'),
       template: /*html*/`
