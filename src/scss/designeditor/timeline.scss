@@ -728,9 +728,22 @@
       grid-template-columns: 20px 90px 70px 84px 10px;
       grid-column-gap: 0px;
 
+
+      button {
+        color: var(--font-color);
+
+        svg {
+            path {
+                fill: currentColor;
+            }      
+        }
+      }
+
+
       label {
         padding-right:0px;
 
+        color: var(--font-color);
         svg {
           width: 16px;
           height: 16px;

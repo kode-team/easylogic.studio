@@ -661,9 +661,13 @@ export default class HTMLRenderView extends UIElement {
 
         const project = this.$selection.currentProject;
         var timeline = project.getSelectedTimeline();
-        timeline.animations.map(it => project.searchById(it.id)).forEach(current => {
-            this.updateTimelineElement(current, true, false);
-        })
+
+        if (timeline) {
+            timeline.animations.map(it => project.searchById(it.id)).forEach(current => {
+                this.updateTimelineElement(current, true, false);
+            })
+        }
+
     }    
 
     /**

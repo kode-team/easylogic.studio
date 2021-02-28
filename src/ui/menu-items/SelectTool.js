@@ -4,11 +4,9 @@ import { EVENT } from "@core/UIElement";
  
 export default class SelectTool extends MenuItem {
   getIconString() {
-    return icon.near_me;
+    return icon.navigation;
   }
-  getIcon() {
-    return 'flipY'
-  }
+  
   getTitle() {
     return this.props.title || "Select";
   }
