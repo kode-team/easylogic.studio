@@ -35,7 +35,7 @@ export default class FontSpacingProperty extends BaseProperty {
       <div class='group'>
         <span class='add-timeline-property' data-property='line-height'></span>
       </div>
-      <span refClass="RangeEditor"  
+      <object refClass="RangeEditor"  
         ref='$lineHeight' 
         label='${this.$i18n('font.spacing.property.lineHeight')}' 
         key="line-height" 
@@ -49,21 +49,21 @@ export default class FontSpacingProperty extends BaseProperty {
         <div class='group'>
           <span class='add-timeline-property' data-property='letter-spacing'></span>
         </div>
-        <span refClass="RangeEditor"  ref='$letter' label='${this.$i18n('font.spacing.property.letterSpacing')}' key="letter-spacing" min="-100" max="100" onchange="changeRangeEditor" />
+        <object refClass="RangeEditor"  ref='$letter' label='${this.$i18n('font.spacing.property.letterSpacing')}' key="letter-spacing" min="-100" max="100" onchange="changeRangeEditor" />
       </div>
 
       <div class='property-item animation-property-item'>
         <div class='group'>
           <span class='add-timeline-property' data-property='word-spacing'></span>
         </div>
-        <span refClass="RangeEditor"  ref='$word' label='${this.$i18n('font.spacing.property.wordSpacing')}' key="word-spacing"  min="-100" max="100" onchange="changeRangeEditor" />
+        <object refClass="RangeEditor"  ref='$word' label='${this.$i18n('font.spacing.property.wordSpacing')}' key="word-spacing"  min="-100" max="100" onchange="changeRangeEditor" />
       </div>
 
       <div class='property-item animation-property-item'>
         <div class='group'>
           <span class='add-timeline-property' data-property='text-indent'></span>
         </div>      
-        <span refClass="RangeEditor"  ref='$indent' label='${this.$i18n('font.spacing.property.indent')}' key="text-indent"  min="-100" max="100" onchange="changeRangeEditor" />
+        <object refClass="RangeEditor"  ref='$indent' label='${this.$i18n('font.spacing.property.indent')}' key="text-indent"  min="-100" max="100" onchange="changeRangeEditor" />
       </div>      
     `;
   }

@@ -29,7 +29,7 @@ export default class TextProperty extends BaseProperty {
   getBody() {
     return /*html*/`
       <div class="property-item">
-        <span refClass="SelectIconEditor" 
+        <object refClass="SelectIconEditor" 
           ref='$align' 
           label='${this.$i18n('text.property.align')}' 
           key='text-align' 
@@ -39,7 +39,7 @@ export default class TextProperty extends BaseProperty {
           onchange='changeTextValue' />        
       </div>        
       <div class="property-item">
-        <span refClass="SelectIconEditor" 
+        <object refClass="SelectIconEditor" 
           ref='$transform' 
           label='${this.$i18n('text.property.transform')}' 
           key='text-transform' 
@@ -48,7 +48,7 @@ export default class TextProperty extends BaseProperty {
           onchange='changeTextValue' />                
       </div>        
       <div class="property-item">
-        <span refClass="SelectIconEditor" 
+        <object refClass="SelectIconEditor" 
           ref='$decoration' 
           label='${this.$i18n('text.property.decoration')}' 
           key='text-decoration' 

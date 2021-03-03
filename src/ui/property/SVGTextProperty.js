@@ -41,14 +41,14 @@ export default class SVGTextProperty extends BaseProperty {
         <div class='group'>
           <span class='add-timeline-property' data-property='text'></span>
         </div>
-        <span refClass="TextAreaEditor" 
+        <object refClass="TextAreaEditor" 
           ref='$text' 
           label='${this.$i18n('svg.text.property.textarea')}' 
           key="text"
           onchange="changeTextValue" />
       </div>        
       <div class='property-item'>
-        <span refClass="SelectIconEditor" 
+        <object refClass="SelectIconEditor" 
           ref='$text-anchor' 
           label='${this.$i18n('svg.text.property.anchor')}' 
           key="text-anchor" 
@@ -59,7 +59,7 @@ export default class SVGTextProperty extends BaseProperty {
         <div class='group'>
           <span class='add-timeline-property' data-property='lengthAdjust'></span>
         </div>
-        <span refClass="SelectEditor"  
+        <object refClass="SelectEditor"  
           ref='$lengthAdjust' 
           label='${this.$i18n('svg.text.property.length.adjust')}' 
           key='lengthAdjust' 
@@ -71,7 +71,7 @@ export default class SVGTextProperty extends BaseProperty {
         <div class='group'>
           <span class='add-timeline-property' data-property='textLength'></span>
         </div>
-        <span refClass="RangeEditor"  
+        <object refClass="RangeEditor"  
           ref='$textLength' 
           label='${this.$i18n('svg.text.property.text.length')}' 
           key='textLength'
@@ -84,7 +84,7 @@ export default class SVGTextProperty extends BaseProperty {
         <div class='group'>
           <span class='add-timeline-property' data-property='startOffset'></span>
         </div>
-        <span refClass="RangeEditor"  
+        <object refClass="RangeEditor"  
           ref='$startOffset' 
           label='${this.$i18n('svg.text.property.start.offset')}' 
           key='startOffset' 

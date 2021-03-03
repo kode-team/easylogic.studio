@@ -152,7 +152,7 @@ export default class TransformEditor extends UIElement {
 
               return /*html*/`
                 <div>
-                  <span refClass="RangeEditor"  
+                  <object refClass="RangeEditor"  
                         ref='$range_${type}_${index}_${tindex}' 
                         min="${min}" 
                         max="${max}" 
@@ -224,7 +224,7 @@ export default class TransformEditor extends UIElement {
 
             return /*html*/`
               <div>
-                <span refClass="NumberInputEditor"  
+                <object refClass="NumberInputEditor"  
                       ref='$range_${type}_${index}_${tindex}' 
                       min="${min}" 
                       max="${max}" 

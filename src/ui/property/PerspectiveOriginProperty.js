@@ -42,7 +42,7 @@ export default class PerspectiveOriginProperty extends BaseProperty {
     var current = this.$selection.current || {}; 
     var value = current['perspective-origin'] || ''
 
-    return /*html*/`<span refClass="PerspectiveOriginEditor" 
+    return /*html*/`<object refClass="PerspectiveOriginEditor" 
               ref='$1' 
               value='${value}' 
               onchange='changePerspectiveOrigin' 

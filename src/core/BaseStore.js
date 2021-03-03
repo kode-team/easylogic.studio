@@ -1,4 +1,3 @@
-import { Editor } from "@manager/Editor";
 import { debounce, throttle } from "./functions/func";
 
 export default class BaseStore {
@@ -86,11 +85,13 @@ export default class BaseStore {
     Promise.resolve().then(() => {
       var list = this.getCachedCallbacks(event);
       if (list) {
-        list
-        .filter(f => f.originalCallback.source !== source)
-        .forEach(f => {
-          f.callback(...args)
-        });
+
+        for(var i = 0, len = list.length; i < len; i++) {
+          const f = list[i];
+          if (f.originalCallback.source !== source) {
+            f.callback.apply(f.context, args)  
+          }
+        }
       }
 
     });
@@ -106,11 +107,12 @@ export default class BaseStore {
     Promise.resolve().then(() => {
       var list = this.getCachedCallbacks(event);
       if (list) {
-        list
-          .filter(f => f.originalCallback.source === source)
-          .forEach(f => {      
-            f.callback(...args)
-          });
+        for(var i = 0, len = list.length; i < len; i++) {
+          const f = list[i];
+          if (f.originalCallback.source === source) {
+            f.callback.apply(f.context, args)  
+          }
+        }
       } else {
         console.warn(event, ' is not valid event');
       }

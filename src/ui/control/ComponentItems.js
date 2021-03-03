@@ -14,37 +14,37 @@ export default class ComponentItems extends UIElement {
         <div class='group'>
           <label>${this.$i18n('component.items.canvas')}</label>
           <div class='list'>
-            <span refclass="SelectTool" title='Select' />
-            <span refclass="AddArtboard" title='Artboard' />            
+            <object refClass="SelectTool" title='Select' />
+            <object refClass="AddArtboard" title='Artboard' />            
           </div>
         </div>              
         <div class='group'>
         <label>${this.$i18n('component.items.layer')}</label>
           <div class='list'>
-            <span refclass="AddRect" title='Rect' />
-            <span refclass="AddCircle" title='Circle' />         
-            <span refclass="AddText" title='Text' />
-            <span refclass="AddImage" title='Image' />
-            <span refclass="AddVideo" title='Video' />
+            <object refClass="AddRect" title='Rect' />
+            <object refClass="AddCircle" title='Circle' />         
+            <object refClass="AddText" title='Text' />
+            <object refClass="AddImage" title='Image' />
+            <object refClass="AddVideo" title='Video' />
           </div>
         </div>
         <div class='group'>
          <label>${this.$i18n('component.items.drawing')}</label>
           <div class='list'>            
             <!--<AddDrawBrush title='Brush' />-->
-            <span refclass="AddDrawPath" title='Draw' />
-            <span refclass="AddPath" title='Path' />
-            <span refclass="AddSVGRect" title='Rect' />
-            <span refclass="AddSVGCircle" title='Circle' />
+            <object refClass="AddDrawPath" title='Draw' />
+            <object refClass="AddPath" title='Path' />
+            <object refClass="AddSVGRect" title='Rect' />
+            <object refClass="AddSVGCircle" title='Circle' />
             <!-- <AddSVGText title='Text' /> -->
-            <span refclass="AddSVGTextPath" title='Text Path' />
+            <object refClass="AddSVGTextPath" title='Text Path' />
           </div>          
         </div>
         <div class='group'>
          <label>${this.$i18n('component.items.custom')}</label>
           <div class='list'>            
-            <span refClass="AddCube" title='Cube' />
-            <span refClass="AddCylinder" title='Cylinder' />          
+            <object refClass="AddCube" title='Cube' />
+            <object refClass="AddCylinder" title='Cylinder' />          
           </div>          
         </div>          
       </div>

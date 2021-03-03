@@ -39,7 +39,7 @@ export default class SelectorPopup extends BasePopup {
 
 
   templateForProperty() {
-    return /*html*/`<span refClass="CSSPropertyEditor" ref='$propertyEditor' onchange='changePropertyEditor' />`
+    return /*html*/`<object refClass="CSSPropertyEditor" ref='$propertyEditor' onchange='changePropertyEditor' />`
   }    
 
 

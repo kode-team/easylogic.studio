@@ -51,35 +51,35 @@ export default class LayerTab extends UIElement {
             </div>
 
             <div class='tab-item extra-item' >
-              <span refClass="PreviewToolMenu" />
+              <object refClass="PreviewToolMenu" />
             </div>               
           </div>
           <div class="tab-body" ref="$body">
             <div class="tab-content project-content" data-value="1">
-              <span refClass="ProjectProperty" />
-              <span refClass="ProjectInformationProperty" />
+              <object refClass="ProjectProperty" />
+              <object refClass="ProjectInformationProperty" />
             </div>
             <div class="tab-content selected" data-value="2">
-              <span refClass="ObjectItems" />
+              <object refClass="ObjectItems" />
             </div>
             <div class='tab-content' data-value='3'>
-              <span refClass="LibraryItems" />
+              <object refClass="LibraryItems" />
             </div>            
             <div class='tab-content' data-value='4'>
-              <span refClass="ComponentItems" />
+              <object refClass="ComponentItems" />
             </div>    
             <div class='tab-content' data-value='5'>
               <div class='assets'>
-                <span refClass="ColorAssetsProperty" />
-                <span refClass="GradientAssetsProperty" />    
-                <span refClass="PatternAssetsProperty" />    
-                <span refClass="ImageAssetsProperty" />      
-                <span refClass="VideoAssetsProperty" />       
-                <span refClass="SVGFilterAssetsProperty" />                
+                <object refClass="ColorAssetsProperty" />
+                <object refClass="GradientAssetsProperty" />    
+                <object refClass="PatternAssetsProperty" />    
+                <object refClass="ImageAssetsProperty" />      
+                <object refClass="VideoAssetsProperty" />       
+                <object refClass="SVGFilterAssetsProperty" />                
               </div>
             </div>
             <div class='tab-content' data-value='6'>
-              <span refClass="ArtboardItems" />
+              <object refClass="ArtboardItems" />
             </div>
           </div>
         </div>

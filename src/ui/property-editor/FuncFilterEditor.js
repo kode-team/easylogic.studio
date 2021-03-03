@@ -53,19 +53,19 @@ export default class FuncFilterEditor extends UIElement {
         var hasLabel = !!label ? 'has-label' : ''
 
         return /*html*/`
-        <span refClass="SelectEditor"  label="${label}" key="type" value="${this.state.type}" options="identity,table,discrete,linear,gamma" onchange="changeType" />
+        <object refClass="SelectEditor"  label="${label}" key="type" value="${this.state.type}" options="identity,table,discrete,linear,gamma" onchange="changeType" />
         <div class='func-filter-editor ${hasLabel}' ref='$container' data-selected-type='${type}'>
             ${label ? `<label></label>` : '' }
             <div data-type='identity'>
             </div>
             <div data-type='table'>
-                <span refClass="TextEditor" label='tableValues' ref='$values' key='values' value="${this.state.values.join(' ')}" onchange="changeValues" />
+                <object refClass="TextEditor" label='tableValues' ref='$values' key='values' value="${this.state.values.join(' ')}" onchange="changeValues" />
             </div>
             <div data-type='linear'>
                 ${['slop', 'intercept'].map(it => {
                     return /*html*/`
                         <div>
-                            <span refClass="NumberRangeEditor"  label='${it}' ref='$${it}' key='${it}' value="${this.state[it]}" onchange="changeLinear" />
+                            <object refClass="NumberRangeEditor"  label='${it}' ref='$${it}' key='${it}' value="${this.state[it]}" onchange="changeLinear" />
                         </div>                    
                     `
                 }).join('')}
@@ -74,7 +74,7 @@ export default class FuncFilterEditor extends UIElement {
                 ${['amplitude', 'exponent', 'offset'].map(it => {
                     return /*html*/`
                         <div>
-                            <span refClass="NumberRangeEditor"  label='${it}' ref='$${it}' key='${it}' value="${this.state[it]}" onchange="changeGamma" />
+                            <object refClass="NumberRangeEditor"  label='${it}' ref='$${it}' key='${it}' value="${this.state[it]}" onchange="changeGamma" />
                         </div>                    
                     `
                 }).join('')}            

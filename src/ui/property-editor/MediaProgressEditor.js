@@ -45,7 +45,7 @@ export default class MediaProgressEditor extends UIElement {
                     <div class='drag-item end' ref='$end'></div>
                 </div>
                 <div class='item'>
-                    <span refClass="NumberRangeEditor"  
+                    <object refClass="NumberRangeEditor"  
                         ref='$s' 
                         label='Start' 
                         key='start' 
@@ -57,7 +57,7 @@ export default class MediaProgressEditor extends UIElement {
                     />
                 </div>
                 <div class='item'>
-                    <span refClass="NumberRangeEditor"  
+                    <object refClass="NumberRangeEditor"  
                         ref='$e' 
                         label='End' 
                         key='end' 

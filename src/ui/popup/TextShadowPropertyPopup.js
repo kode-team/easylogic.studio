@@ -38,16 +38,16 @@ export default class TextShadowPropertyPopup extends BasePopup {
           ></div>
         </div>
         <div class='popup-item'>
-          <span refClass="RangeEditor"  ref='$offsetX' label='Offset X' key='offsetX' min="-100" max='100' value='${this.state.offsetX}' onchange='changeShadow' />
+          <object refClass="RangeEditor"  ref='$offsetX' label='Offset X' key='offsetX' min="-100" max='100' value='${this.state.offsetX}' onchange='changeShadow' />
         </div>
         <div class='popup-item'>
-          <span refClass="RangeEditor"  ref='$offsetY' label="Offset Y" key='offsetY' min="-100" max='100' value='${this.state.offsetY}' onchange='changeShadow' />
+          <object refClass="RangeEditor"  ref='$offsetY' label="Offset Y" key='offsetY' min="-100" max='100' value='${this.state.offsetY}' onchange='changeShadow' />
         </div>
         <div class='popup-item'>
-          <span refClass="RangeEditor"  ref='$blurRadius' label="Blur Radius" key='blurRadius' value='${this.state.blurRadius}' onchange='changeShadow' />
+          <object refClass="RangeEditor"  ref='$blurRadius' label="Blur Radius" key='blurRadius' value='${this.state.blurRadius}' onchange='changeShadow' />
         </div>
         <div class='popup-item'>
-          <span refClass="ColorViewEditor" 
+          <object refClass="ColorViewEditor" 
               ref='$foreColor' 
               label="color" 
               key='color' 

@@ -61,57 +61,57 @@ export default class DesignEditor extends UIElement {
           <div class='logo-item'>
             <label class='logo' title='EasyLogic Studio'></label>
           </div>      
-          <span refclass="ToolMenu" />
-          <span refClass='PageSubEditor' />    
+          <object refClass="ToolMenu" />
+          <object refClass='PageSubEditor' />    
         </div>
         <div class="layout-middle" ref='$middle'>
           <div class="layout-header" ref='$headerPanel'>
   
           </div>        
           <div class="layout-body" ref='$bodyPanel'>
-            <span refClass='HorizontalRuler' />
-            <span refClass='VerticalRuler' />
-            <span refClass='CanvasView' />        
+            <object refClass='HorizontalRuler' />
+            <object refClass='VerticalRuler' />
+            <object refClass='CanvasView' />        
           </div>                           
           <div class='layout-left' ref='$leftPanel'>
-            <span refClass='ObjectList' />
+            <object refClass='ObjectList' />
           </div>
           <div class="layout-right" ref='$rightPanel'>
-            <span refClass='Inspector' />
+            <object refClass='Inspector' />
           </div>
 
           <div class='layout-footer' ref='$footerPanel'>
             <div class='footer-splitter' ref='$footerSplitter' title="${this.$i18n('timeline.property.resize')}"></div>
-            <span refClass='TimelineProperty' />
+            <object refClass='TimelineProperty' />
           </div>   
           <div class='splitter' ref='$splitter'></div>
           <button type="button" class='toggleLeft' ref='$toggleLeftButton'></button>
           <button type="button" class='toggleRight' ref='$toggleRightButton'></button>
         </div>
         
-        <span refClass='StatusBar' />
-        <span refClass='Test' />
-        <span refClass='ColorPickerPopup' />
-        <span refClass='BoxShadowPropertyPopup' />
-        <span refClass='BackgroundImagePositionPopup' />
-        <span refClass='TextShadowPropertyPopup' />
-        <span refClass='AnimationPropertyPopup' />
-        <span refClass='TransitionPropertyPopup' />
-        <span refClass='KeyframePopup' />
-        <span refClass='ClipPathPopup' />
-        <span refClass='SVGPropertyPopup' />
-        <span refClass='SelectorPopup' />
-        <span refClass='ImageSelectPopup' />
-        <span refClass='GradientPickerPopup' />
-        <span refClass='FillPickerPopup' />
-        <span refClass='PatternInfoPopup' />
-        <span refClass='SVGFilterPopup' />
-        <span refClass='ExportWindow' />
-        <span refClass='ShortcutWindow' />
+        <object refClass='StatusBar' />
+        <object refClass='Test' />
+        <object refClass='ColorPickerPopup' />
+        <object refClass='BoxShadowPropertyPopup' />
+        <object refClass='BackgroundImagePositionPopup' />
+        <object refClass='TextShadowPropertyPopup' />
+        <object refClass='AnimationPropertyPopup' />
+        <object refClass='TransitionPropertyPopup' />
+        <object refClass='KeyframePopup' />
+        <object refClass='ClipPathPopup' />
+        <object refClass='SVGPropertyPopup' />
+        <object refClass='SelectorPopup' />
+        <object refClass='ImageSelectPopup' />
+        <object refClass='GradientPickerPopup' />
+        <object refClass='FillPickerPopup' />
+        <object refClass='PatternInfoPopup' />
+        <object refClass='SVGFilterPopup' />
+        <object refClass='ExportWindow' />
+        <object refClass='ShortcutWindow' />
         <!-- LoginWindow / -->
         <!-- SignWindow / -->
         <!-- ImageFileView / -->
-        <span refClass='NotificationView' />
+        <object refClass='NotificationView' />
       </div>
     `;
   }

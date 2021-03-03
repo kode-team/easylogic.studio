@@ -53,15 +53,15 @@ export default class HTMLRenderView extends UIElement {
             <div class='element-view' ref='$body'>
                 <div class='canvas-view' ref='$view'></div>
                 <div class='drag-area-rect' ref='$dragAreaRect'></div>
-                <span refClass='StyleView' ref='$styleView' />
-                <span refClass='GuideLineView' ref='$guideLineView' />
-                <span refClass='HoverView' ref='$hoverView' />                
-                <span refClass='GridLayoutLineView' ref='$gridLayoutLineView' />
-                <span refClass='SelectionToolView' ref='$selectionTool' />
-                <span refClass='GroupSelectionToolView' ref='$groupSelectionTool' />
-                <span refClass='LayerAppendView' ref='$objectAddView' />
-                <span refClass='PathEditorView' ref='$pathEditorView' />
-                <span refClass='PathDrawView' ref='$pathDrawView' />
+                <object refClass='StyleView' ref='$styleView' />
+                <object refClass='GuideLineView' ref='$guideLineView' />
+                <object refClass='HoverView' ref='$hoverView' />                
+                <object refClass='GridLayoutLineView' ref='$gridLayoutLineView' />
+                <object refClass='SelectionToolView' ref='$selectionTool' />
+                <object refClass='GroupSelectionToolView' ref='$groupSelectionTool' />
+                <object refClass='LayerAppendView' ref='$objectAddView' />
+                <object refClass='PathEditorView' ref='$pathEditorView' />
+                <object refClass='PathDrawView' ref='$pathDrawView' />
           
             </div>
         `

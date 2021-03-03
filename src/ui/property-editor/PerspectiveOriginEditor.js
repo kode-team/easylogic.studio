@@ -113,7 +113,7 @@ export default class PerspectiveOriginEditor extends UIElement {
           </button>
         </div>
         <div class="radius-value">
-          <span refClass="RangeEditor"  ref='$all' key='perspective-origin' value="${perspectiveOrigin}" onchange='changePerspectiveOrigin' />
+          <object refClass="RangeEditor"  ref='$all' key='perspective-origin' value="${perspectiveOrigin}" onchange='changePerspectiveOrigin' />
         </div>
       </div>
       <div
@@ -128,7 +128,7 @@ export default class PerspectiveOriginEditor extends UIElement {
 
             return /*html*/`
               <div>
-                  <span refClass="RangeEditor"  ref='$${it.key}' label='${label}' key='${it.key}' value="${this.state[it.key]}" onchange='changePerspectiveOrigin' />
+                  <object refClass="RangeEditor"  ref='$${it.key}' label='${label}' key='${it.key}' value="${this.state[it.key]}" onchange='changePerspectiveOrigin' />
               </div>  
             `;
           }).join('')}

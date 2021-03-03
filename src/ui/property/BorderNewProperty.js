@@ -32,7 +32,7 @@ export default class BorderNewProperty extends BaseProperty {
     var value = current['border'] || ''
 
     return /*html*/`
-      <span refClass='BorderEditor' ref='$1' key='border' value='${value}' onchange='changeKeyValue' />
+      <object refClass='BorderEditor' ref='$1' key='border' value='${value}' onchange='changeKeyValue' />
     `
   }
 

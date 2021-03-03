@@ -51,7 +51,7 @@ export default class OffsetEditor extends UIElement {
         <div class='title'>
           <label>Offset</label>
           <div class='tools'>
-            <span refClass="InputRangeEditor" 
+            <object refClass="InputRangeEditor" 
               key='offset' 
               min='0' 
               max='100' 
@@ -77,7 +77,7 @@ export default class OffsetEditor extends UIElement {
   }
 
   templateForProperty() {
-    return /*html*/`<span refClass="CSSPropertyEditor" ref='$offsetPropertyEditor' hide-refresh="true" onchange='changeCSSPropertyEditor' />`
+    return /*html*/`<object refClass="CSSPropertyEditor" ref='$offsetPropertyEditor' hide-refresh="true" onchange='changeCSSPropertyEditor' />`
   }  
 
   templateForOffset () {

@@ -136,15 +136,15 @@ export default class ColorPickerEditor extends UIElement {
         return /*html*/`
         <div class='colorpicker sketch inline'>
             <div class='colorpicker-body'>
-                <span refClass="Palette" ref='$palette' />
+                <object refClass="Palette" ref='$palette' />
                 <div class="control">
-                    <span refClass="Hue" ref='$hue' />
-                    <span refClass="Opacity" ref='$opacity' />
+                    <object refClass="Hue" ref='$hue' />
+                    <object refClass="Opacity" ref='$opacity' />
                     <div class="empty"></div>
-                    <span refClass="ColorView" ref='$colorview' />
+                    <object refClass="ColorView" ref='$colorview' />
                 </div>
-                <span refClass="ColorInformation" ref='$information' />
-                <span refClass="ColorAssetsEditor" ref='$colorAsset' key="colorAssets" onchange="selectColorAssets" /> 
+                <object refClass="ColorInformation" ref='$information' />
+                <object refClass="ColorAssetsEditor" ref='$colorAsset' key="colorAssets" onchange="selectColorAssets" /> 
             </div>
         </div>
       `;

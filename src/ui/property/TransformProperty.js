@@ -52,7 +52,7 @@ export default class TransformProperty extends BaseProperty {
 
   getBody() {
     return /*html*/`
-      <span refClass="RotateEditorView" />
+      <object refClass="RotateEditorView" />
       <div class='full transform-property' ref='$body'></div>
     `;
   }
@@ -89,7 +89,7 @@ export default class TransformProperty extends BaseProperty {
     var value = current.transform;
 
     return /*html*/`
-      <span refClass="TransformEditor" ref='$transformEditor' value='${value}' hide-label="true" onchange='changeTransformEditor' />
+      <object refClass="TransformEditor" ref='$transformEditor' value='${value}' hide-label="true" onchange='changeTransformEditor' />
     `
   }
 

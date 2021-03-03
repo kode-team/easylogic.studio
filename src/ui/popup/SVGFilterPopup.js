@@ -47,7 +47,7 @@ export default class SVGFilterPopup extends BasePopup {
   [LOAD('$editor')] () {
 
     return /*html*/`
-      <div refClass="SVGFilterEditor" ref='$filter' title='Filter Type' key="filter" onchange='changeFilterEditor'>
+      <object refClass="SVGFilterEditor" ref='$filter' title='Filter Type' key="filter" onchange='changeFilterEditor'>
         <property name="value" type="json">${JSON.stringify(this.state.filters)}</property>
       </div>
     `

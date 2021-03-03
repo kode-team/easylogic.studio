@@ -22,7 +22,7 @@ export default class LanguageSelector extends UIElement {
             <div class='status-selector'>
                 <label>${this.$i18n('app.label.lang')}</label>
                 <div class='item'>
-                    <span refClass="SelectEditor"  
+                    <object refClass="SelectEditor"  
                         ref='$locale' 
                         options="${languages.join(',')}" 
                         value="${this.$editor.locale}" 

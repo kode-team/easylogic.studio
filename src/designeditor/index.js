@@ -17,7 +17,7 @@ export default {
       container: document.getElementById('app'),
       template: /*html*/`
         <div>
-          <span refClass="DesignEditor" />
+          <object refClass="DesignEditor" />
         </div>
       `,
       ...opts

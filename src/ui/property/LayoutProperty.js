@@ -28,7 +28,7 @@ export default class LayoutProperty extends BaseProperty {
     var current = this.$selection.current || { layout : 'default' }
     return /*html*/`
       <div class='layout-select'>
-        <span refClass="SelectIconEditor" 
+        <object refClass="SelectIconEditor" 
           ref='$layout' 
           key='layout' 
           icon="true" 
@@ -40,10 +40,10 @@ export default class LayoutProperty extends BaseProperty {
       <div class='layout-list' ref='$layoutList'>
         <div data-value='default' class='${current.layout === 'default' ? 'selected': ''}'></div>
         <div data-value='flex' class='${current.layout === 'flex' ? 'selected': ''}'>
-          <span refClass="FlexLayoutEditor" ref='$flex' key='flex-layout' value="${current['flex-layout'] || ''}" onchange='changeLayoutInfo' />
+          <object refClass="FlexLayoutEditor" ref='$flex' key='flex-layout' value="${current['flex-layout'] || ''}" onchange='changeLayoutInfo' />
         </div>
         <div data-value='grid' class='${current.layout === 'grid' ? 'selected': ''}'>
-          <span refClass="GridLayoutEditor" ref='$grid' key='grid-layout' value="${current['grid-layout'] || ''}" onchange='changeLayoutInfo' />
+          <object refClass="GridLayoutEditor" ref='$grid' key='grid-layout' value="${current['grid-layout'] || ''}" onchange='changeLayoutInfo' />
         </div>
       </div>
     `

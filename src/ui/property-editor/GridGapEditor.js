@@ -41,7 +41,7 @@ export default class GridGapEditor extends UIElement {
         return /*html*/`
             <div class='item'>
                 <div class='value'>
-                    <span refClass="RangeEditor" 
+                    <object refClass="RangeEditor" 
                         label='${this.state.label}' 
                         ref='$value' 
                         key="value" 

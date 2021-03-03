@@ -212,11 +212,11 @@ export const html = (strings, ...args) => {
         return it + results;
     }).join('');
 
-    results = results.replace(/\<(\w*)([^\>]*)\/\>/gim, function (match, p1) {
+    results = results.replace(short_tag_regexp, function (match, p1) {
         if (HTML_TAG[p1.toLowerCase()]) {
             return match;
         } else {
-            return match.replace('/>', ` refclass="${p1}"></${p1}>`)
+            return match.replace('/>', `></${p1}>`)
         }
     })
 

@@ -10,7 +10,7 @@ export default class TimelineTopToolbar extends UIElement {
     template() {
         return /*html*/`
             <div class='timeline-top-toolbar'>
-                <span refClass="KeyframeTimeControl" />
+                <object refClass="KeyframeTimeControl" />
             </div>
         `
     }

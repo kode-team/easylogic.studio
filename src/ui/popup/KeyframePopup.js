@@ -40,7 +40,7 @@ export default class KeyframePopup extends BasePopup {
   templateForOffset () {
     return /*html*/`
       <div>
-        <span refClass="OffsetEditor" ref='$offsetEditor' />
+        <object refClass="OffsetEditor" ref='$offsetEditor' />
       </div>
     `
   }

@@ -19,7 +19,7 @@ export default class LayoutSelector extends UIElement {
             <div class='status-selector'>
                 <label>${this.$i18n('app.label.layout')}</label>
                 <div class='item'>
-                    <span refClass="SelectEditor"  
+                    <object refClass="SelectEditor"  
                         ref='$locale' 
                         options="${layouts}" 
                         value="${this.$editor.layout}" 

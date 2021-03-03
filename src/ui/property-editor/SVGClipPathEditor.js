@@ -32,7 +32,7 @@ export default class SVGClipPathEditor extends UIElement {
             <label>Fit to size <input type='checkbox' ref='$fit' ${checked}  /> </label>
           </div>
           <div>
-            <span refClass="IconListViewEditor" ref='$svg' key='svg' value="${this.state.icon}" column="6" onchange='changeClipPath' />
+            <object refClass="IconListViewEditor" ref='$svg' key='svg' value="${this.state.icon}" column="6" onchange='changeClipPath' />
           </div>
       </div>`;
   }

@@ -62,7 +62,7 @@ export default class StrokeDashArrayEditor extends UIElement {
       var num = index + 1; 
       return /*html*/`
         <div class='dasharray-item'>
-          <span refClass="NumberRangeEditor"  
+          <object refClass="NumberRangeEditor"  
             ref='$${num}' 
             label='${num}'
             key='${index}' 

@@ -23,7 +23,7 @@ export default class GradientAssetsProperty extends BaseProperty {
     const options = gradients.map(it => `${it.key}:${it.title}`)
 
     return /*html*/`
-      <span refClass="SelectEditor"  key="preset" value="${this.state.preset}" options="${options}" onchange="changePreset"  />
+      <object refClass="SelectEditor"  key="preset" value="${this.state.preset}" options="${options}" onchange="changePreset"  />
     `
   }  
 

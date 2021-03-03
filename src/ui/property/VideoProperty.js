@@ -87,7 +87,7 @@ export default class VideoProperty extends BaseProperty {
           <button type="button" data-value="play" >${icon.play} ${this.$i18n('video.property.play')}</button>
           <button type="button" data-value="pause">${icon.pause}  ${this.$i18n('video.property.pause')}</button>      
           <div>
-            <span refClass="NumberRangeEditor"  ref='$currentTime' min="0" max="${duration}" value="${currentTime}" step="0.001" onchange="changeCurrentTime" />
+            <object refClass="NumberRangeEditor"  ref='$currentTime' min="0" max="${duration}" value="${currentTime}" step="0.001" onchange="changeCurrentTime" />
           </div>
         </div>    
         <div class='property-item animation-property-item has-label'>        
@@ -108,7 +108,7 @@ export default class VideoProperty extends BaseProperty {
             ${this.$i18n('video.property.playbackRate')}
           </div>
           <div>
-            <span refClass="NumberRangeEditor"  ref='$playbackRate' min="0.1" max="10" clamp="true" value="${this.state.playbackRate}" step="0.001" onchange="changePlaybackRate" />
+            <object refClass="NumberRangeEditor"  ref='$playbackRate' min="0.1" max="10" clamp="true" value="${this.state.playbackRate}" step="0.001" onchange="changePlaybackRate" />
           </div>
         </div>        
         <div class='property-item animation-property-item full'>
@@ -116,7 +116,7 @@ export default class VideoProperty extends BaseProperty {
             <span class='add-timeline-property' data-property='playTime'></span>
             ${this.$i18n('video.property.playTime')}
           </div>
-          <span refClass="MediaProgressEditor" ref='$progress'  key='playTime' value="${current.playTime}" onchange="changeSelect" />
+          <object refClass="MediaProgressEditor" ref='$progress'  key='playTime' value="${current.playTime}" onchange="changeSelect" />
         </div>
       `;
   }

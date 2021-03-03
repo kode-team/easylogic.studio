@@ -120,7 +120,7 @@ export default class FilterEditor extends UIElement {
         </div>
 
         <div class="filter-ui drop-shadow-color">
-          <span refClass="ColorViewEditor" 
+          <object refClass="ColorViewEditor" 
             label="${this.$i18n(`filter.property.drop-shadow.color`)}" 
             ref='$dropShadowColorView${index}' 
             params="${index}" 
@@ -131,7 +131,7 @@ export default class FilterEditor extends UIElement {
         ${["offsetX", "offsetY", "blurRadius"].map(key => {
           return /*html*/`        
             <div class="filter-ui drop-shadow">
-                <span refClass="RangeEditor"  
+                <object refClass="RangeEditor"  
                   ref='$${key}${index}' 
                   label="${this.$i18n(`filter.property.drop-shadow.${key}`)}"
                   key="${index}" 
@@ -177,7 +177,7 @@ export default class FilterEditor extends UIElement {
       }
 
       return /*html*/`
-      <span refClass="SelectEditor"  
+      <object refClass="SelectEditor"  
         ref='$select${index}' 
         key="${index}" 
         label="SVG Filter"
@@ -187,7 +187,7 @@ export default class FilterEditor extends UIElement {
     }
 
     return /*html*/`
-      <span refClass="RangeEditor"  
+      <object refClass="RangeEditor"  
         ref='$range${index}_${filter.type}' 
         key="${index}" 
         min='${spec.min}'

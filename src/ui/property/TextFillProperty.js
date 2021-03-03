@@ -32,20 +32,20 @@ export default class TextFillProperty extends BaseProperty {
         <div class='group'>
           <span class='add-timeline-property' data-property='text-fill-color'></span>
         </div>
-        <span refClass="ColorViewEditor" ref='$fillColor' label='${this.$i18n('text.fill.property.fill')}' key='text-fill-color' onchange="changeColor" />
+        <object refClass="ColorViewEditor" ref='$fillColor' label='${this.$i18n('text.fill.property.fill')}' key='text-fill-color' onchange="changeColor" />
       </div>           
       <div class='property-item animation-property-item'>
         <div class='group'>
           <span class='add-timeline-property' data-property='text-stroke-color'></span>
         </div>
-        <span refClass="ColorViewEditor" ref='$strokeColor' label='${this.$i18n('text.fill.property.stroke')}' key='text-stroke-color' onchange="changeColor" />
+        <object refClass="ColorViewEditor" ref='$strokeColor' label='${this.$i18n('text.fill.property.stroke')}' key='text-stroke-color' onchange="changeColor" />
       </div>                 
 
       <div class='property-item animation-property-item'>
         <div class='group'>
           <span class='add-timeline-property' data-property='text-stroke-width'></span>
         </div>
-        <span refClass="RangeEditor"  
+        <object refClass="RangeEditor"  
           ref='$width' 
           label='${this.$i18n('text.fill.property.strokeWidth')}' 
           key="text-stroke-width" 

@@ -35,7 +35,7 @@ export default class TextShadowProperty extends BaseProperty {
   [LOAD("$shadowList")]() {
     var current = this.$selection.current || {};
     return /*html*/`
-      <span refClass="TextShadowEditor" ref='$textshadow' value="${current['text-shadow'] || ''}" hide-label="true" onChange="changeTextShadow" />
+      <object refClass="TextShadowEditor" ref='$textshadow' value="${current['text-shadow'] || ''}" hide-label="true" onChange="changeTextShadow" />
     `
   }
 

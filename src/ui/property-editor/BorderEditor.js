@@ -65,7 +65,7 @@ export default class BorderEditor extends UIElement {
       label = this.$i18n('border.editor.' + label);
       return /*html*/`
       <div>
-        <span refClass='BorderValueEditor' ref='$${type}' label='${label}' key="${type}" value="${this.state.borders[type]}" onchange="changeKeyValue" />
+        <object refClass='BorderValueEditor' ref='$${type}' label='${label}' key="${type}" value="${this.state.borders[type]}" onchange="changeKeyValue" />
       </div>
       `
     })

@@ -43,7 +43,7 @@ export default class CircleEditor extends UIElement {
     template() {
         return /*html*/`
         <div class='clip-path-editor circle-editor'>
-            <span refClass="RangeEditor"  
+            <object refClass="RangeEditor"  
                 ref='$range' 
                 label='Radius' 
                 key='radius' 

@@ -62,10 +62,10 @@ export default class PathManager extends UIElement {
         </div>        
         <div class='tools'>      
           <div>
-            <span refClass="FillSingleEditor" ref="$fill" simple="true" label="${this.$i18n('svg.item.property.fill')}" key="fill" onchange="changeValue" />
+            <object refClass="FillSingleEditor" ref="$fill" simple="true" label="${this.$i18n('svg.item.property.fill')}" key="fill" onchange="changeValue" />
           </div>
           <div>
-            <span refClass="FillSingleEditor" ref="$stroke" simple="true" label="${this.$i18n('svg.item.property.stroke')}" key="stroke" onchange="changeValue" />
+            <object refClass="FillSingleEditor" ref="$stroke" simple="true" label="${this.$i18n('svg.item.property.stroke')}" key="stroke" onchange="changeValue" />
           </div>      
           <div >
             <span 

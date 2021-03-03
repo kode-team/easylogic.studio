@@ -45,13 +45,13 @@ export default class PositionProperty extends BaseProperty {
             <div class='group'>
               <span class='add-timeline-property' data-property='x'></span>
             </div>
-            <span refClass='InputRangeEditor' ref='$x' compact="true" label="X" key='x' min="-1000" max='1000' onchange='changRangeEditor' />
+            <object refClass='InputRangeEditor' ref='$x' compact="true" label="X" key='x' min="-1000" max='1000' onchange='changRangeEditor' />
           </div>
           <div class='property-item animation-property-item' style='padding: 0px;'>
             <div class='group'>
               <span class='add-timeline-property' data-property='y'></span>
             </div>
-            <span refClass='InputRangeEditor' ref='$y' compact="true"  label="Y" key='y' min="-1000" max='1000' onchange='changRangeEditor' />
+            <object refClass='InputRangeEditor' ref='$y' compact="true"  label="Y" key='y' min="-1000" max='1000' onchange='changRangeEditor' />
           </div>
         </div>
         <div style='display: grid;grid-template-columns: repeat(2, 1fr); grid-column-gap: 10px; padding-top: 10px;'>
@@ -59,13 +59,13 @@ export default class PositionProperty extends BaseProperty {
             <div class='group'>
               <span class='add-timeline-property' data-property='width'></span>
             </div>
-            <span refClass='InputRangeEditor' ref='$width' compact="true"  label="${this.$i18n('position.property.width')}" key='width' min="0" max='3000' onchange='changRangeEditor' />
+            <object refClass='InputRangeEditor' ref='$width' compact="true"  label="${this.$i18n('position.property.width')}" key='width' min="0" max='3000' onchange='changRangeEditor' />
           </div>
           <div class='property-item animation-property-item' style='padding:0px'>
             <div class='group'>
               <span class='add-timeline-property' data-property='height'></span>      
             </div>
-            <span refClass='InputRangeEditor' ref='$height' compact="true"  label="${this.$i18n('position.property.height')}" key='height' min="0" max='3000' onchange='changRangeEditor' />
+            <object refClass='InputRangeEditor' ref='$height' compact="true"  label="${this.$i18n('position.property.height')}" key='height' min="0" max='3000' onchange='changRangeEditor' />
           </div>      
         </div> 
         <div style='display: grid;grid-template-columns: repeat(2, 1fr); grid-column-gap: 10px; padding-top: 10px;'>
@@ -73,7 +73,7 @@ export default class PositionProperty extends BaseProperty {
             <div class='group'>
               <span class='add-timeline-property' data-property='rotate'></span>
             </div>
-            <span refClass='InputRangeEditor' 
+            <object refClass='InputRangeEditor' 
               ref='$rotate' 
               key='rotateZ' 
               compact="true" 
@@ -89,7 +89,7 @@ export default class PositionProperty extends BaseProperty {
             <div class='group'>
               <span class='add-timeline-property' data-property='opacity'></span>
             </div>
-            <span refClass="NumberInputEditor"
+            <object refClass="NumberInputEditor"
               ref='$opacity' 
               key='opacity' 
               compact="true" 

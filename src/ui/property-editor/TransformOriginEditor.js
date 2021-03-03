@@ -114,7 +114,7 @@ export default class TransformOriginEditor extends UIElement {
           ${typeList.map(it => {
             return /*html*/`
               <div>
-                  <span refClass="RangeEditor"  ref='$${it.key}' compact="true" label='${it.title}' key='${it.key}' value="${this.state[it.key]}" onchange='changeTransformOrigin' />
+                  <object refClass="RangeEditor"  ref='$${it.key}' compact="true" label='${it.title}' key='${it.key}' value="${this.state[it.key]}" onchange='changeTransformOrigin' />
               </div>  
             `;
           }).join('')}

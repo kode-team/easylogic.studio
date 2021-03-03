@@ -44,10 +44,10 @@ export default class FillPickerPopup extends BasePopup {
         </div>
         <div class='box'>
           <div class='colorpicker'>
-            <span refClass="EmbedColorPicker" ref='$color' onchange='changeColor' />                    
+            <object refClass="EmbedColorPicker" ref='$color' onchange='changeColor' />                    
           </div>
           <div class='assetpicker'>
-            <span refClass="ImageAssetPicker" ref='$asset' onchange='changeImageUrl' />
+            <object refClass="ImageAssetPicker" ref='$asset' onchange='changeImageUrl' />
           </div>
         </div>
       </div>
@@ -74,7 +74,7 @@ export default class FillPickerPopup extends BasePopup {
   }
 
   [LOAD('$gradientEditor')] () {
-    return /*html*/`<span refClass="FillEditor" 
+    return /*html*/`<object refClass="FillEditor" 
       ref="$g" 
       value="${this.state.image}" 
       selectedIndex="${this.state.selectColorStepIndex}" 

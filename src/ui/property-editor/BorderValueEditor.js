@@ -69,13 +69,13 @@ export default class BorderValueEditor extends UIElement {
     return /*html*/`
       <div class="border-value-editor">
         <div class='editor-area'>
-          <span refClass="RangeEditor"  ref='$width' min="0" max="100" step="1" key='width' value="${width}" onchange='changeKeyValue' />
+          <object refClass="RangeEditor"  ref='$width' min="0" max="100" step="1" key='width' value="${width}" onchange='changeKeyValue' />
         </div>
         <div class='editor-area'>
-          <span refClass="SelectEditor"  ref='$style' key='style' options='${borderStyleList}' value="${style || 'solid'}" onchange="changeKeyValue" />
+          <object refClass="SelectEditor"  ref='$style' key='style' options='${borderStyleList}' value="${style || 'solid'}" onchange="changeKeyValue" />
         </div>
         <div class='editor-area'>
-          <span refClass="ColorSingleEditor" ref='$color' key='color' value="${color|| 'rgba(0, 0, 0, 1)'}"  onchange="changeKeyValue" />
+          <object refClass="ColorSingleEditor" ref='$color' key='color' value="${color|| 'rgba(0, 0, 0, 1)'}"  onchange="changeKeyValue" />
         </div>
 
       </div>

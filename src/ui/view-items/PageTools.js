@@ -19,7 +19,7 @@ export default class PageTools extends UIElement {
       <div class='page-tools'>
         <button type='button' ref='$minus'>${icon.remove2}</button>
         <div class='select'>
-          <span refClass="NumberInputEditor"  ref='$scale' min='10' max='240' step="1" key="scale" value="${this.$viewport.scale*100}" onchange="changeRangeEditor" />
+          <object refClass="NumberInputEditor"  ref='$scale' min='10' max='240' step="1" key="scale" value="${this.$viewport.scale*100}" onchange="changeRangeEditor" />
         </div>
         <label>%</label>
         <button type='button' ref='$plus'>${icon.add}</button>        

@@ -77,14 +77,14 @@ export default class SVGItemProperty extends BaseProperty {
           <div class='group'>        
             <span class='add-timeline-property' data-property='fill'></span>
           </div>
-          <span refClass="FillSingleEditor" ref='$fill' label='${this.$i18n('svg.item.property.fill')}' key='fill' onchange="changeValue" />
+          <object refClass="FillSingleEditor" ref='$fill' label='${this.$i18n('svg.item.property.fill')}' key='fill' onchange="changeValue" />
         </div>
 
         <div class='property-item animation-property-item'>
           <div class='group'>        
             <span class='add-timeline-property' data-property='fill-opacity'></span>
           </div>            
-          <span refClass="NumberRangeEditor"  
+          <object refClass="NumberRangeEditor"  
             ref='$fillOpacity' 
             label='${this.$i18n('svg.item.property.fillOpacity')}' 
             key='fill-opacity' 
@@ -101,7 +101,7 @@ export default class SVGItemProperty extends BaseProperty {
           <div class='group'>        
             <span class='add-timeline-property' data-property='fill-rule'></span>
           </div>
-          <span refClass="SelectIconEditor" 
+          <object refClass="SelectIconEditor" 
             ref='$fillRule' 
             label='${this.$i18n('svg.item.property.fillRule')}' 
             key="fill-rule" 
@@ -113,14 +113,14 @@ export default class SVGItemProperty extends BaseProperty {
           <div class='group'>        
             <span class='add-timeline-property' data-property='stroke'></span>
           </div>
-          <span refClass="FillSingleEditor" ref='$stroke' label='${this.$i18n('svg.item.property.stroke')}' key='stroke' onchange="changeValue" />
+          <object refClass="FillSingleEditor" ref='$stroke' label='${this.$i18n('svg.item.property.stroke')}' key='stroke' onchange="changeValue" />
         </div>      
 
         <div class='property-item animation-property-item'>
           <div class='group'>        
             <span class='add-timeline-property' data-property='stroke-width'></span>
           </div>
-          <span refClass="RangeEditor"  
+          <object refClass="RangeEditor"  
             ref='$strokeWidth' 
             label='${this.$i18n('svg.item.property.strokeWidth')}' 
             key="stroke-width" 
@@ -135,14 +135,14 @@ export default class SVGItemProperty extends BaseProperty {
           <label>${this.$i18n('svg.item.property.dashArray')}</label>
         </div>
         <div class='property-item'>
-          <span refClass="StrokeDashArrayEditor" ref='$strokeDashArray' key='stroke-dasharray' onchange="changeValue" />
+          <object refClass="StrokeDashArrayEditor" ref='$strokeDashArray' key='stroke-dasharray' onchange="changeValue" />
         </div>
 
         <div class='property-item animation-property-item'>
           <div class='group'>        
             <span class='add-timeline-property' data-property='stroke-dashoffset'></span>      
           </div>          
-          <span refClass="NumberRangeEditor"  
+          <object refClass="NumberRangeEditor"  
             ref='$strokeDashOffset' 
             key='stroke-dashoffset' 
             label='${this.$i18n('svg.item.property.dashOffset')}'
@@ -158,7 +158,7 @@ export default class SVGItemProperty extends BaseProperty {
           <div class='group'>        
             <span class='add-timeline-property' data-property='stroke-linecap'></span>      
           </div>          
-          <span refClass="SelectIconEditor" 
+          <object refClass="SelectIconEditor" 
             ref='$strokeLineCap' 
             label='${this.$i18n('svg.item.property.lineCap')}' 
             key="stroke-linecap" 
@@ -170,7 +170,7 @@ export default class SVGItemProperty extends BaseProperty {
           <div class='group'>        
             <span class='add-timeline-property' data-property='stroke-linejoin'></span>      
           </div>          
-          <span refClass="SelectIconEditor" 
+          <object refClass="SelectIconEditor" 
             ref='$strokeLineJoin' 
             label='${this.$i18n('svg.item.property.lineJoin')}'             
             key="stroke-linejoin" 
@@ -182,7 +182,7 @@ export default class SVGItemProperty extends BaseProperty {
           <div class='group'>
             <span class='add-timeline-property' data-property='mix-blend-mode'></span>
           </div>
-          <span refClass="BlendSelectEditor" 
+          <object refClass="BlendSelectEditor" 
             label='${this.$i18n('background.color.property.blend')}'
             ref='$mixBlend' 
             removable='true'
@@ -195,7 +195,7 @@ export default class SVGItemProperty extends BaseProperty {
           <div class='group'>        
             <span class='add-timeline-property' data-property='svgfilter'></span>      
           </div>
-          <span refClass="SVGFilterSelectEditor" 
+          <object refClass="SVGFilterSelectEditor" 
             ref='$svgFilter' 
             label='${this.$i18n('svg.item.property.filter')}' 
             key="svgfilter" 

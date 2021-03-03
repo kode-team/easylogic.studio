@@ -36,7 +36,7 @@ export default class ImageProperty extends BaseProperty {
         <button type="button" ref='$resize'>${icon.size}</button>
       </div>
       <div>
-        <span refClass="SelectEditor"  ref='$select' label="${this.$i18n('image.property.size')}" key='size' value='' options='${image_size.join(',')}' onchange='changeImageSize' />
+        <object refClass="SelectEditor"  ref='$select' label="${this.$i18n('image.property.size')}" key='size' value='' options='${image_size.join(',')}' onchange='changeImageSize' />
       </div>
     `
   }
@@ -76,7 +76,7 @@ export default class ImageProperty extends BaseProperty {
     var current = this.$selection.current || {};
 
     var src = current.src || ''
-    return /*html*/`<span refClass="ImageSelectEditor" 
+    return /*html*/`<object refClass="ImageSelectEditor" 
               ref='$1' 
               key='src' 
               value="${src}" 

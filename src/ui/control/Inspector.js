@@ -37,57 +37,57 @@ export default class Inspector extends UIElement {
             <div class="tab-body" ref="$body">
 
               <div class="tab-content selected scrollbar" data-value="1">
-                <span refClass="AlignmentProperty" />
+                <object refClass="AlignmentProperty" />
 
                 <!-- Default Property --> 
-                <span refClass="PositionProperty" />
+                <object refClass="PositionProperty" />
                 <!--SizeProperty / --> 
-                <span refClass="AppearanceProperty" />
+                <object refClass="AppearanceProperty" />
                 
                 <!-- SVG Item --> 
-                <span refClass="SVGItemProperty" />              
+                <object refClass="SVGItemProperty" />              
 
                 <!-- Image --> 
-                <span refClass="ImageProperty" />
+                <object refClass="ImageProperty" />
 
                 <!-- Video --> 
-                <span refClass="VideoProperty" />
+                <object refClass="VideoProperty" />
 
                 <!-- Component -->
-                <span refClass="ComponentProperty" />                
+                <object refClass="ComponentProperty" />                
                 
                 <!-- Appearance --> 
 
-                <span refClass="BackgroundImageProperty" />                
-                <span refClass="PatternProperty" />
-                <span refClass="BorderNewProperty" />
-                <span refClass="BorderRadiusProperty" />
+                <object refClass="BackgroundImageProperty" />                
+                <object refClass="PatternProperty" />
+                <object refClass="BorderNewProperty" />
+                <object refClass="BorderRadiusProperty" />
 
-                <span refClass="BoxModelProperty" />                
-                <span refClass="LayoutProperty" />
-                <span refClass="FlexLayoutItemProperty" />
-                <span refClass="GridLayoutItemProperty" />      
+                <object refClass="BoxModelProperty" />                
+                <object refClass="LayoutProperty" />
+                <object refClass="FlexLayoutItemProperty" />
+                <object refClass="GridLayoutItemProperty" />      
 
                 <!-- effect -->
-                <span refClass="BoxShadowProperty" />
-                <span refClass="FilterProperty" />
-                <span refClass="BackdropFilterProperty" />
-                <span refClass="ClipPathProperty" />       
+                <object refClass="BoxShadowProperty" />
+                <object refClass="FilterProperty" />
+                <object refClass="BackdropFilterProperty" />
+                <object refClass="ClipPathProperty" />       
 
                 <!-- transform --> 
-                <span refClass="TransformOriginProperty" />                 
-                <span refClass="TransformProperty" />                  
+                <object refClass="TransformOriginProperty" />                 
+                <object refClass="TransformProperty" />                  
                 <!-- <PerspectiveProperty /> -->
                 <!-- <PerspectiveOriginProperty /> --> 
 
                 <!-- ArtBoard --> 
-                <span refClass="ArtBoardSizeProperty" />    
+                <object refClass="ArtBoardSizeProperty" />    
                 
                 <!-- SVG -->
                 <!-- <PathDataProperty /> -->
 
                 <!-- tool -->                
-                <span refClass="ExportProperty" />
+                <object refClass="ExportProperty" />
 
 
                 <div class='empty'></div>
@@ -95,30 +95,30 @@ export default class Inspector extends UIElement {
               <div class="tab-content scrollbar" data-value="2">
 
                 <!-- <ContentProperty /> -->    
-                <span refClass="SVGTextProperty" />                        
-                <span refClass="FontProperty" />
-                <span refClass="TextProperty" />
-                <span refClass="TextShadowProperty" />
-                <span refClass="TextFillProperty" />
-                <span refClass="FontSpacingProperty" />
-                <span refClass="TextClipProperty" />  
+                <object refClass="SVGTextProperty" />                        
+                <object refClass="FontProperty" />
+                <object refClass="TextProperty" />
+                <object refClass="TextShadowProperty" />
+                <object refClass="TextFillProperty" />
+                <object refClass="FontSpacingProperty" />
+                <object refClass="TextClipProperty" />  
                 <div class='empty'></div>
               </div>                   
               <div class='tab-content scrollbar' data-value='3'>
-                <span refClass="MotionProperty" />
+                <object refClass="MotionProperty" />
                 <!-- SelectorProperty" /> --> 
-                <span refClass="TransitionProperty" />                            
-                <span refClass="AnimationProperty" />
-                <span refClass="KeyframeProperty" />                          
+                <object refClass="TransitionProperty" />                            
+                <object refClass="AnimationProperty" />
+                <object refClass="KeyframeProperty" />                          
                 <div class='empty'></div>                
               </div>                        
               <div class="tab-content" data-value="5">
-                <span refClass="CodeViewProperty" />
+                <object refClass="CodeViewProperty" />
                 <div class='empty'></div>                           
               </div>       
               
               <div class="tab-content" data-value="6">
-                <span refClass="HistoryProperty" />
+                <object refClass="HistoryProperty" />
                 <div class='empty'></div>                           
               </div>                     
             </div>

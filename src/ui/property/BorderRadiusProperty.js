@@ -27,7 +27,7 @@ export default class BorderRadiusProperty extends BaseProperty {
     var value = current['border-radius'] || ''
 
     return /*html*/`
-      <span refClass="BorderRadiusEditor" ref='$1' value='${value}' onchange='changeBorderRadius' />
+      <object refClass="BorderRadiusEditor" ref='$1' value='${value}' onchange='changeBorderRadius' />
     `
   }
 
