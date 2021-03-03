@@ -250,7 +250,8 @@ export default class LayerAppendView extends UIElement {
         // viewport 좌표를 world 좌표로 변환 
         const rectVerties = this.$viewport.applyVertiesInverse(areaVerties);
 
-        const parentArtBoard = this.$selection.getArtboardByPoint(rectVerties[0]);
+        // artboard 가 아닐 때만 parentArtBoard 가 존재 
+        const parentArtBoard = this.state.type === 'artboard' ? null : this.$selection.getArtboardByPoint(rectVerties[0]);
 
         const {x, y, width, height } = vertiesToRectangle(rectVerties);
 

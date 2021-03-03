@@ -3,7 +3,7 @@ import icon from "@icon/icon";
 
 export default class Save extends MenuItem {
   getIconString() {
-    return icon.storage;
+    return 'storage';
   }
   getTitle() {
     return this.$i18n('menu.item.save.title');

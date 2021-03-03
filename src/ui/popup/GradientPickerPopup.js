@@ -40,10 +40,10 @@ export default class GradientPickerPopup extends BasePopup {
         </div>
         <div class='box'>
           <div class='colorpicker'>
-            <EmbedColorPicker ref='$color' onchange='changeColor' />                    
+            <span refClass="EmbedColorPicker" ref='$color' onchange='changeColor' />                    
           </div>
           <div class='assetpicker'>
-            <ImageAssetPicker ref='$asset' onchange='changeImageUrl' />
+            <span refClass="ImageAssetPicker" ref='$asset' onchange='changeImageUrl' />
           </div>
         </div>
       </div>
@@ -70,7 +70,7 @@ export default class GradientPickerPopup extends BasePopup {
   }
 
   [LOAD('$gradientEditor')] () {
-    return /*html*/`<GradientEditor 
+    return /*html*/`<span refClass="GradientEditor" 
       ref="$g" 
       value="${this.state.image}" 
       selectedIndex="${this.state.selectColorStepIndex}" 

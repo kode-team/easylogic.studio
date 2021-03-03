@@ -1,9 +1,8 @@
 import MenuItem from "./MenuItem";
-import icon from "@icon/icon";
    
 export default class BottomAlign extends MenuItem {
   getIconString() {
-    return icon.align_vertical_bottom;
+    return 'align_vertical_bottom';
   }
   getTitle() {
     return "Bottom";

@@ -12,10 +12,15 @@ export default class SVGTextPathRender extends SVGItemRender {
    */
   update (item, currentElement) {
 
-    var $path = currentElement.$('path');
+    var $path = currentElement.$('path.svg-path-item');
 
     if ($path) {
       $path.attr('d', item.d);
+    }
+
+    var $guidePath = currentElement.$('path.guide');
+    if ($guidePath) {
+      $guidePath.attr('d', item.d);
     }
 
     var $textPath = currentElement.$('textPath'); 
@@ -68,8 +73,9 @@ export default class SVGTextPathRender extends SVGItemRender {
             lengthAdjust="${lengthAdjust}"
             startOffset="${startOffset}"
           >${item.text}</textPath>
-          <use href="${pathId}" />
+          <use href="${pathId}" stroke-width="1" stroke="black" />
         </text>
+        <path class="guide" d="${item.d}" fill="none"/>
       </svg>
     `
   }

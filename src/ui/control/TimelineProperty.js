@@ -36,7 +36,7 @@ export default class TimelineProperty extends BaseProperty {
 
   getTools() {
     return /*html*/`
-      <TimelinePlayControl />
+      <span refClass="TimelinePlayControl" />
       
     `; 
   }
@@ -48,29 +48,29 @@ export default class TimelineProperty extends BaseProperty {
   getBody() {
     return /*html*/`
       <div class='timeline-animation-area'>
-        <TimelineAnimationProperty />
+        <span refClass="TimelineAnimationProperty" />
       </div>
       <div class='timeline-area'>
         <div class='timeline-header'>
           <div class='timeline-object-toolbar'>
-            <TimelineTopToolbar />
+            <span refClass="TimelineTopToolbar" />
           </div>
           <div class='timeline-keyframe-toolbar' ref='$keyframeToolBar'>
-            <KeyframeTimeView ref='$keyframeTimeView' /> 
+            <span refClass="KeyframeTimeView" ref='$keyframeTimeView' /> 
           </div>
         </div>
         <div class='timeline-body'>
           <div class='timeline-object-area' ref='$area'>
-            <TimelineObjectList />
+            <span refClass="TimelineObjectList" />
           </div>
           <div class='timeline-keyframe-area' ref='$keyframeArea'>
-            <TimelineKeyframeList ref='$keyframeList' />          
+            <span refClass="TimelineKeyframeList" ref='$keyframeList' />          
           </div>
-          <KeyframeTimeGridView ref='$keyframeTimeGridView' />            
+          <span refClass="KeyframeTimeGridView" ref='$keyframeTimeGridView' />            
         </div>
       </div>
       <div class='timeline-value-area'>
-        <TimelineValueEditor ref='$valueEditor' onchange='changeKeyframeValue' />
+        <span refClass="TimelineValueEditor" ref='$valueEditor' onchange='changeKeyframeValue' />
       </div>
     `;
   }

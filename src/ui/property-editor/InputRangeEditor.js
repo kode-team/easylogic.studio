@@ -16,9 +16,15 @@ export default class InputRangeEditor extends UIElement {
     initState() {
         var units = this.props.units || 'px,em,%';
         var value = Length.parse(this.props.value || Length.z());
+        let label = this.props.label || ''; 
+
+        if (icon[label]) {
+            label = icon[label];
+        }
+
         return {
             removable: this.props.removable === 'true',
-            label: this.props.label || '',
+            label,
             compact: this.props.compact === 'true',
             min: +this.props.min || 0,
             max: +this.props.max || 100,
@@ -65,7 +71,7 @@ export default class InputRangeEditor extends UIElement {
                 <div class='area'>
                     <input type='number' ref='$propertyNumber' value="${realValue}" min="${min}" max="${max}" step="${step}" tabIndex="1" />
                     
-                    <SelectEditor ref='$unit' key='unit' value="${this.state.selectedUnit || this.state.value.unit}" options="${this.state.units}" onchange='changeUnit' />
+                    <span refClass="SelectEditor"  ref='$unit' key='unit' value="${this.state.selectedUnit || this.state.value.unit}" options="${this.state.units}" onchange='changeUnit' />
                     
                 </div>
             </div>

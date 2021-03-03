@@ -28,22 +28,22 @@ export default class LayoutProperty extends BaseProperty {
     var current = this.$selection.current || { layout : 'default' }
     return /*html*/`
       <div class='layout-select'>
-        <SelectIconEditor 
-        ref='$layout' 
-        key='layout' 
-        icon="true" 
-        value="${current.layout}"
-        options="${this.getLayoutOptions()}"  
-        colors=",green,red"
-        onchange="changeLayoutType" />
+        <span refClass="SelectIconEditor" 
+          ref='$layout' 
+          key='layout' 
+          icon="true" 
+          value="${current.layout}"
+          options="${this.getLayoutOptions()}"  
+          colors=",green,red"
+          onchange="changeLayoutType" />
       </div>
       <div class='layout-list' ref='$layoutList'>
         <div data-value='default' class='${current.layout === 'default' ? 'selected': ''}'></div>
         <div data-value='flex' class='${current.layout === 'flex' ? 'selected': ''}'>
-          <FlexLayoutEditor ref='$flex' key='flex-layout' value="${current['flex-layout'] || ''}" onchange='changeLayoutInfo' />
+          <span refClass="FlexLayoutEditor" ref='$flex' key='flex-layout' value="${current['flex-layout'] || ''}" onchange='changeLayoutInfo' />
         </div>
         <div data-value='grid' class='${current.layout === 'grid' ? 'selected': ''}'>
-          <GridLayoutEditor ref='$grid' key='grid-layout' value="${current['grid-layout'] || ''}" onchange='changeLayoutInfo' />
+          <span refClass="GridLayoutEditor" ref='$grid' key='grid-layout' value="${current['grid-layout'] || ''}" onchange='changeLayoutInfo' />
         </div>
       </div>
     `

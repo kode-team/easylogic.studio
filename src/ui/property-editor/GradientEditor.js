@@ -129,7 +129,7 @@ export default class GradientEditor extends UIElement  {
             </div>
             <div class='tools' data-editor='tools'>
               <label>Offset</label>
-              <InputRangeEditor ref='$range' calc="false" key='length' onchange='changeColorStepOffset' />
+              <span refClass='InputRangeEditor' ref='$range' calc="false" key='length' onchange='changeColorStepOffset' />
             </div>
             <div class='tools' data-editor='tools'>
               <label for='gradientConnected${this.id}'>connected </label>
@@ -137,16 +137,16 @@ export default class GradientEditor extends UIElement  {
             </div>
             <div class='sub-editor' ref='$subEditor'> 
               <div data-editor='angle'>
-                <RangeEditor label='Angle' ref='$angle' calc="false" units="deg" min="-720" max="720" key='angle' onchange='changeKeyValue' />
+                <span refClass="RangeEditor" label='Angle' ref='$angle' calc="false" units="deg" min="-720" max="720" key='angle' onchange='changeKeyValue' />
               </div>
               <div data-editor='centerX'>
-                <RangeEditor label='Center X' ref='$radialPositionX' calc="false" value="50%"  key='radialPositionX' onchange='changeKeyValue' />
+                <span refClass="RangeEditor" label='Center X' ref='$radialPositionX' calc="false" value="50%"  key='radialPositionX' onchange='changeKeyValue' />
               </div>                
               <div data-editor='centerY'>                      
-                <RangeEditor label='Center Y' ref='$radialPositionY' calc="false" value="50%" key='radialPositionY' onchange='changeKeyValue' />
+                <span ref="RangeEditor" label='Center Y' ref='$radialPositionY' calc="false" value="50%" key='radialPositionY' onchange='changeKeyValue' />
               </div>                
               <div data-editor='radialType'>              
-                <SelectEditor label='Radial Type' ref='$radialType' value="" options="${radialTypeList.join(',')}" key='radialType' onchange='changeKeyValue' />
+                <span refClass="SelectEditor" label='Radial Type' ref='$radialType' value="" options="${radialTypeList.join(',')}" key='radialType' onchange='changeKeyValue' />
               </div>
 
             </div>            

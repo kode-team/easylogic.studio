@@ -375,7 +375,7 @@ export default class SVGFilterEditor extends UIElement {
     if (s.inputType === 'color-matrix') {
       return /*html*/`
         <div>
-          <ColorMatrixEditor 
+          <span refClass="ColorMatrixEditor" 
             ref='$colorMatrix${objectId}' 
             label="${s.title}"
             key="${key}"       
@@ -388,7 +388,7 @@ export default class SVGFilterEditor extends UIElement {
     } else if (s.inputType === 'input-array') {
       return /*html*/`
         <div>
-          <InputArrayEditor 
+          <span refClass="InputArrayEditor" 
             ref='$inputArray${objectId}' 
             label="${s.title}"
             key="${key}"       
@@ -405,7 +405,7 @@ export default class SVGFilterEditor extends UIElement {
 
       return /*html*/`
         <div>
-          <BlendSelectEditor 
+          <span refClass="BlendSelectEditor" 
             ref='$blend${objectId}' 
             label="${s.title}"
             key="${key}"
@@ -425,7 +425,7 @@ export default class SVGFilterEditor extends UIElement {
   
         return /*html*/`
           <div>
-            <SelectEditor 
+            <span refClass="SelectEditor"  
               ref='$select${objectId}' 
               label="${s.title}"
               options='${options}' 
@@ -438,7 +438,7 @@ export default class SVGFilterEditor extends UIElement {
     } else if (s.inputType === 'text') {
       return /*html*/`
         <div>
-          <TextEditor 
+          <span refClass="TextEditor" 
             ref='$text${objectId}' 
             label="${s.title}"
             key="${key}"
@@ -450,7 +450,7 @@ export default class SVGFilterEditor extends UIElement {
     } else if (s.inputType === 'number-range') {  
       return /*html*/` 
         <div>
-          <NumberRangeEditor 
+          <span refClass="NumberRangeEditor"  
             ref='$numberrange${objectId}' 
             label="${s.title}" 
             layout='block'             
@@ -466,7 +466,7 @@ export default class SVGFilterEditor extends UIElement {
     } else if (s.inputType === 'color') {
       return /*html*/`
         <div>
-          <ColorViewEditor 
+          <span refClass="ColorViewEditor" 
             ref='$colorview${objectId}' 
             label="${s.title}" 
             key="${key}"
@@ -478,7 +478,7 @@ export default class SVGFilterEditor extends UIElement {
     } else if (s.inputType === 'FuncFilter') {
       return /*html*/`
         <div>
-          <FuncFilterEditor 
+          <span refClass="FuncFilterEditor" 
             ref='$funcFilter${objectId}' 
             label="${s.title}" 
             key="${key}"
@@ -490,7 +490,7 @@ export default class SVGFilterEditor extends UIElement {
     } else if (s.inputType === 'ImageSelectEditor') {
       return /*html*/`
         <div>
-          <ImageSelectEditor 
+          <span refClass="ImageSelectEditor" 
             ref='$imageSelect${objectId}' 
             label="${s.title}" 
             key="${key}"
@@ -503,7 +503,7 @@ export default class SVGFilterEditor extends UIElement {
 
     return /*html*/`
       <div>
-        <RangeEditor 
+        <span refClass="RangeEditor"  
           ref='$range${objectId}' 
           layout='block' 
           calc='false' 

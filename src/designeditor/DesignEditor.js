@@ -25,9 +25,7 @@ import HorizontalRuler from "@ui/view/HorizontalRuler";
 import VerticalRuler from "@ui/view/VerticalRuler";
  
 
-
 const formElements = ['TEXTAREA', 'INPUT', 'SELECT']
-
 export default class DesignEditor extends UIElement {
   
   initialize () {
@@ -62,58 +60,58 @@ export default class DesignEditor extends UIElement {
         <div class='layout-top' ref='$top'>
           <div class='logo-item'>
             <label class='logo' title='EasyLogic Studio'></label>
-          </div>                       
-          <ToolMenu />    
-          <PageSubEditor />    
+          </div>      
+          <span refclass="ToolMenu" />
+          <span refClass='PageSubEditor' />    
         </div>
         <div class="layout-middle" ref='$middle'>
           <div class="layout-header" ref='$headerPanel'>
   
           </div>        
           <div class="layout-body" ref='$bodyPanel'>
-            <HorizontalRuler />
-            <VerticalRuler />
-            <CanvasView />        
+            <span refClass='HorizontalRuler' />
+            <span refClass='VerticalRuler' />
+            <span refClass='CanvasView' />        
           </div>                           
           <div class='layout-left' ref='$leftPanel'>
-            <ObjectList />
+            <span refClass='ObjectList' />
           </div>
           <div class="layout-right" ref='$rightPanel'>
-            <Inspector />
+            <span refClass='Inspector' />
           </div>
 
           <div class='layout-footer' ref='$footerPanel'>
             <div class='footer-splitter' ref='$footerSplitter' title="${this.$i18n('timeline.property.resize')}"></div>
-            <TimelineProperty />
+            <span refClass='TimelineProperty' />
           </div>   
           <div class='splitter' ref='$splitter'></div>
           <button type="button" class='toggleLeft' ref='$toggleLeftButton'></button>
           <button type="button" class='toggleRight' ref='$toggleRightButton'></button>
         </div>
         
-        <StatusBar />
-        <Test />
-        <ColorPickerPopup  />
-        <BoxShadowPropertyPopup />
-        <BackgroundImagePositionPopup />
-        <TextShadowPropertyPopup />
-        <AnimationPropertyPopup />
-        <TransitionPropertyPopup />
-        <KeyframePopup />
-        <ClipPathPopup />
-        <SVGPropertyPopup />
-        <SelectorPopup />
-        <ImageSelectPopup />
-        <GradientPickerPopup />
-        <FillPickerPopup />
-        <PatternInfoPopup />
-        <SVGFilterPopup />
-        <ExportWindow />
-        <ShortcutWindow />
+        <span refClass='StatusBar' />
+        <span refClass='Test' />
+        <span refClass='ColorPickerPopup' />
+        <span refClass='BoxShadowPropertyPopup' />
+        <span refClass='BackgroundImagePositionPopup' />
+        <span refClass='TextShadowPropertyPopup' />
+        <span refClass='AnimationPropertyPopup' />
+        <span refClass='TransitionPropertyPopup' />
+        <span refClass='KeyframePopup' />
+        <span refClass='ClipPathPopup' />
+        <span refClass='SVGPropertyPopup' />
+        <span refClass='SelectorPopup' />
+        <span refClass='ImageSelectPopup' />
+        <span refClass='GradientPickerPopup' />
+        <span refClass='FillPickerPopup' />
+        <span refClass='PatternInfoPopup' />
+        <span refClass='SVGFilterPopup' />
+        <span refClass='ExportWindow' />
+        <span refClass='ShortcutWindow' />
         <!-- LoginWindow / -->
         <!-- SignWindow / -->
         <!-- ImageFileView / -->
-        <NotificationView />
+        <span refClass='NotificationView' />
       </div>
     `;
   }

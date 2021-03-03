@@ -7,7 +7,6 @@ import { Transform } from "@property-parser/Transform";
 import { TransformOrigin } from "@property-parser/TransformOrigin";
 import { calculateAngle360, calculateAngleForVec3, calculateMatrix, calculateMatrixInverse, round } from "@core/functions/math";
 import { getRotatePointer } from "@core/functions/collision";
-import Dom from "@core/Dom";
 
 var directionType = {
     1: 'to top left',
@@ -31,12 +30,10 @@ const SelectionToolEvent = class  extends UIElement {
         if (current && current.isSVG() && current.d) {
             this.toggleEditingPath(true);
 
-            const box = current.is('svg-textpath') ? 'box' : 'canvas';
-
             // box 모드 
             // box - x, y, width, height 고정된 상태로  path 정보만 변경 
             this.emit('showPathEditor', 'modify', {
-                box,
+                box: 'canvas',
                 current,
                 d: current.accumulatedPath().d,
             }) 
@@ -693,7 +690,11 @@ export default class SelectionToolView extends SelectionToolEvent {
         const current = this.$selection.current; 
         const isArtBoard = current && current.is('artboard');
 
-        const diff = vec3.subtract([], vec3.lerp([], pointers[0], pointers[1], 0.5), pointers[4]);
+        const diff = vec3.subtract(
+            [], 
+            vec3.lerp([], pointers[0], pointers[1], 0.5), 
+            vec3.lerp([], pointers[0], pointers[2], 0.5), 
+        );
         const rotate = Length.deg(calculateAngle360(diff[0], diff[1]) + 90).round(1000);
 
         const rotatePointer = getRotatePointer(pointers, 34)
@@ -713,6 +714,7 @@ export default class SelectionToolView extends SelectionToolEvent {
                 this.createPointer (pointers[1], 2, rotate),
                 this.createPointer (pointers[2], 3, rotate),
                 this.createPointer (pointers[3], 4, rotate),
+                this.createPointer (pointers[4], 5, rotate),
 
                 dist < 20 ? undefined : this.createPointer (vec3.lerp([], pointers[0], pointers[1], 0.5), 11, rotate),
                 dist < 20 ? undefined : this.createPointer (vec3.lerp([], pointers[1], pointers[2], 0.5), 12, rotate),

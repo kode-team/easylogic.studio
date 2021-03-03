@@ -1,7 +1,6 @@
 import BaseProperty from "./BaseProperty";
 import { EVENT } from "@core/UIElement";
 import { Transform } from "@property-parser/Transform";
-import icon from "@icon/icon";
 
 export default class PositionProperty extends BaseProperty {
   getTitle() {
@@ -46,13 +45,13 @@ export default class PositionProperty extends BaseProperty {
             <div class='group'>
               <span class='add-timeline-property' data-property='x'></span>
             </div>
-            <InputRangeEditor ref='$x' compact="true" label="X" key='x' min="-1000" max='1000' onchange='changRangeEditor' />
+            <span refClass='InputRangeEditor' ref='$x' compact="true" label="X" key='x' min="-1000" max='1000' onchange='changRangeEditor' />
           </div>
           <div class='property-item animation-property-item' style='padding: 0px;'>
             <div class='group'>
               <span class='add-timeline-property' data-property='y'></span>
             </div>
-            <InputRangeEditor ref='$y' compact="true"  label="Y" key='y' min="-1000" max='1000' onchange='changRangeEditor' />
+            <span refClass='InputRangeEditor' ref='$y' compact="true"  label="Y" key='y' min="-1000" max='1000' onchange='changRangeEditor' />
           </div>
         </div>
         <div style='display: grid;grid-template-columns: repeat(2, 1fr); grid-column-gap: 10px; padding-top: 10px;'>
@@ -60,13 +59,13 @@ export default class PositionProperty extends BaseProperty {
             <div class='group'>
               <span class='add-timeline-property' data-property='width'></span>
             </div>
-            <InputRangeEditor ref='$width' compact="true"  label="${this.$i18n('position.property.width')}" key='width' min="0" max='3000' onchange='changRangeEditor' />
+            <span refClass='InputRangeEditor' ref='$width' compact="true"  label="${this.$i18n('position.property.width')}" key='width' min="0" max='3000' onchange='changRangeEditor' />
           </div>
           <div class='property-item animation-property-item' style='padding:0px'>
             <div class='group'>
               <span class='add-timeline-property' data-property='height'></span>      
             </div>
-            <InputRangeEditor ref='$height' compact="true"  label="${this.$i18n('position.property.height')}" key='height' min="0" max='3000' onchange='changRangeEditor' />
+            <span refClass='InputRangeEditor' ref='$height' compact="true"  label="${this.$i18n('position.property.height')}" key='height' min="0" max='3000' onchange='changRangeEditor' />
           </div>      
         </div> 
         <div style='display: grid;grid-template-columns: repeat(2, 1fr); grid-column-gap: 10px; padding-top: 10px;'>
@@ -74,11 +73,11 @@ export default class PositionProperty extends BaseProperty {
             <div class='group'>
               <span class='add-timeline-property' data-property='rotate'></span>
             </div>
-            <InputRangeEditor 
+            <span refClass='InputRangeEditor' 
               ref='$rotate' 
               key='rotateZ' 
               compact="true" 
-              label='${icon.rotate_left}'
+              label='rotate_left'
               min="0"
               max="360"
               step="0.01"
@@ -90,11 +89,11 @@ export default class PositionProperty extends BaseProperty {
             <div class='group'>
               <span class='add-timeline-property' data-property='opacity'></span>
             </div>
-            <NumberInputEditor 
+            <span refClass="NumberInputEditor"
               ref='$opacity' 
               key='opacity' 
               compact="true" 
-              label='${icon.opacity}'
+              label='opacity'
               min="0"
               max="1"
               step="0.01"
@@ -105,7 +104,7 @@ export default class PositionProperty extends BaseProperty {
     `;
   }
 
-  async refresh () {
+  refresh () {
     const current = this.$selection.current;
     if (current) {
       this.children.$x.setValue(current.x);

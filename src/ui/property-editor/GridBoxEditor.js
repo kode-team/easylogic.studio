@@ -82,7 +82,7 @@ export default class GridBoxEditor extends UIElement {
         return /*html*/`
             <div class='item' data-repeat-type='${it.type}' data-index='${index}' >
                 <div class='repeat'>
-                    <SelectEditor 
+                    <span refClass="SelectEditor" 
                         ref='$${index}-type' 
                         options="${this.getLayoutItemOptions()}" 
                         key="type" 
@@ -91,7 +91,7 @@ export default class GridBoxEditor extends UIElement {
                         onchange="changeKeyValue" />
                 </div>
                 <div class='count'>
-                    <NumberInputEditor 
+                    <span refClass="NumberInputEditor" 
                         ref='$${index}-count' 
                         key="count" 
                         value="${it.count}" 
@@ -100,7 +100,7 @@ export default class GridBoxEditor extends UIElement {
                         onchange="changeKeyValue" />
                 </div>                
                 <div class='value'>
-                    <InputRangeEditor 
+                    <span refClass="InputRangeEditor" 
                         ref='$${index}-value' 
                         key="value" 
                         value="${it.value}" 

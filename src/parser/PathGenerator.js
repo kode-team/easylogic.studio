@@ -1221,23 +1221,9 @@ export default class PathGenerator {
         return snapLines.join('');
     }
 
-    makeSelectedSVGZone () {
-
-        var { screenX, screenY, screenWidth, screenHeight} = this.state 
-        var scale = this.pathEditor.scale; 
-
-        var x = screenX.value * scale; 
-        var y = screenY.value * scale; 
-        var width = screenWidth.value * scale; 
-        var height = screenHeight.value * scale; 
-
-        return /*html*/`<rect class='svg-canvas' ${OBJECT_TO_PROPERTY({x, y, width, height})} />`
-    }
-
     toSVGString () {
         return /*html*/`
         <svg width="100%" height="100%" class='svg-editor-canvas'>
-            ${this.makeSelectedSVGZone()}
             ${this.guideLineManager.toString('guide', this.state.isPolygon)}
             ${this.pathStringManager.toString('object', this.state.isPolygon)}
             ${this.splitLines.join('')}

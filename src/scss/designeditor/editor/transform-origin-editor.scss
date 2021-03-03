@@ -1,21 +1,28 @@
 
 .transform-origin-editor {
 
-    .transform-origin-item {
-      display: grid; 
-      grid-template-columns: 62px 1fr;
+  display: grid; 
+  grid-template-columns: 80px 1fr;  
 
-      &.full {
-        grid-template-columns: 1fr;
-      }
+  .transform-origin-item {
+    display: grid; 
+    grid-template-columns: 62px 1fr;
+
+    &.full {
+      grid-template-columns: 1fr;
     }
+  }
 
     .direction {
       position: relative;
       margin: 0 auto;
-      margin-bottom: 10px;      
+      margin-top: 14px;      
+      margin-left: 0px;
       display: grid;
-      grid-template-columns: repeat(9, 1fr);
+      grid-template-columns: repeat(3, 20px);
+      grid-template-rows: repeat(3, 20px);
+      grid-column-gap: 0px;
+      grid-row-gap: 0px;
 
       > div {
         width: 20px;

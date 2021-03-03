@@ -38,12 +38,12 @@ export default class CanvasView extends UIElement {
       <div class='page-container' tabIndex="-1" ref='$container'>
         <div class='page-view'>
           <div class='page-lock scrollbar' ref='$lock'>
-            <HTMLRenderView ref='$elementView' />
+            <span refClass='HTMLRenderView' ref='$elementView' />
             <div ref='$viewport'></div>
           </div>
         </div>
         <!--<PageSubEditor /> -->
-        <PageTools />
+        <span refClass='PageTools' />
       </div>
     `;
   }

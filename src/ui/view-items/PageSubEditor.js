@@ -16,9 +16,9 @@ export default class PageSubEditor extends UIElement {
   template() {
     return/*html*/`
       <div class='page-subeditor'>
-        <PathManager />
-        <DrawManager />
-        <SelectionManager />
+        <span refClass='PathManager' />
+        <span refClass='DrawManager' />
+        <span refClass='SelectionManager' />
       </div>
     `;
   }

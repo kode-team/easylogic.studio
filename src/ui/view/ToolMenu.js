@@ -13,24 +13,24 @@ export default class ToolMenu extends UIElement {
         <div class='items'>
           <div class='draw-items' ref='$items' data-selected-value="${this.$editor.layout}">
 
-            <SelectTool />
-            <AddArtBoard />
+            <span refClass='SelectTool' />
+            <span refClass='AddArtBoard' />
             <span data-item='css'>
-              <AddRect />
-              <AddCircle />         
-              <AddText />
-              <AddImage />
-              <AddVideo />
+              <span refClass='AddRect' />
+              <span refClass='AddCircle' />         
+              <span refClass='AddText' />
+              <span refClass='AddImage' />
+              <span refClass='AddVideo' />
             </span>            
             <span data-item='svg'>
               <div class='divider'></div>
-              <AddDrawPath />
-              <AddPath />
-              <AddSVGRect />
-              <AddSVGCircle />            
+              <span refClass='AddDrawPath' />
+              <span refClass='AddPath' />
+              <span refClass='AddSVGRect' />
+              <span refClass='AddSVGCircle' />            
               <!-- <AddSVGText /> -->
-              <AddSVGTextPath />
-              <AddPolygon />
+              <span refClass='AddSVGTextPath' />
+              <span refClass='AddPolygon' />
             </span>
           </div>
         </div>

@@ -64,7 +64,7 @@ export default class PatternEditor extends UIElement {
 
             return /*html*/`
             <div class='pattern-item ${selectedClass}' data-index='${index}' ref="fillIndex${index}"  draggable='true'>
-                <PatternSizeEditor 
+                <span refClass="PatternSizeEditor" 
                     key="pattern-size"
                     ref="$bp${index}"
                     type="${it.type}"

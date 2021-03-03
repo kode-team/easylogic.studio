@@ -64,7 +64,7 @@ export default class DirectionEditor extends UIElement {
           </button>
         </div>
         <div class="radius-value">
-          <RangeEditor ref='$all' key='all' value="${direction}" onchange='changeBorderRadius' />
+          <span refClass="RangeEditor"  ref='$all' key='all' value="${direction}" onchange='changeBorderRadius' />
         </div>
       </div>
       <div
@@ -77,7 +77,7 @@ export default class DirectionEditor extends UIElement {
             var value = this.state[it.key]
             return /*html*/`
               <div>
-                  <RangeEditor ref='$${it.key}' label='${it.title}' key='${it.key}' value="${value}" onchange='changeBorderRadius' />
+                  <span refClass="RangeEditor"  ref='$${it.key}' label='${it.title}' key='${it.key}' value="${value}" onchange='changeBorderRadius' />
               </div>  
             `;
           }).join('')}

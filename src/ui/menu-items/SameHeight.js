@@ -1,9 +1,8 @@
 import MenuItem from "./MenuItem";
-import icon from "@icon/icon";
    
 export default class SameHeight extends MenuItem {
   getIconString() {
-    return icon.vertical_distribute;
+    return 'vertical_distribute';
   }
 
   getTitle() {

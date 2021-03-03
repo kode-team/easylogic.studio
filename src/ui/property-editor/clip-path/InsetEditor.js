@@ -108,7 +108,7 @@ export default class InsetEditor extends UIElement {
 
         var value = [topRadius, rightRadius, bottomRadius, leftRadius].join(' ')
 
-        return /*html*/`<DirectionEditor ref='$borderRadius' value='${value}' onchange='changeBorderRadius' />`
+        return /*html*/`<span refClass="DirectionEditor" ref='$borderRadius' value='${value}' onchange='changeBorderRadius' />`
     }
 
     [EVENT('changeBorderRadius')] ([_count, topRadius, rightRadius, bottomRadius, leftRadius]) {

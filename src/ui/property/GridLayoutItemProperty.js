@@ -43,7 +43,7 @@ export default class GridLayoutItemProperty extends BaseProperty {
 
     return /*html*/`
       <div class='layout-select'>
-        <SelectIconEditor 
+        <div refClass="SelectIconEditor" 
         ref='$layout' 
         key='layout' 
         icon="true" 
@@ -62,19 +62,19 @@ export default class GridLayoutItemProperty extends BaseProperty {
           <div class='value-item'>
             <label>${this.$i18n('grid.layout.item.property.column')}</label>
             <div>
-              <NumberInputEditor ref='$columnStart' key="grid-column-start" value="${obj['grid-column-start'] || '0'}" min='0' onchange='changeGridItem' />
+              <span refClass="NumberInputEditor"  ref='$columnStart' key="grid-column-start" value="${obj['grid-column-start'] || '0'}" min='0' onchange='changeGridItem' />
             </div>
             <div>
-              <NumberInputEditor ref='$columnEnd' key="grid-column-end" value="${obj['grid-column-end'] || '0'}" min='0' onchange='changeGridItem' />
+              <span refClass="NumberInputEditor"  ref='$columnEnd' key="grid-column-end" value="${obj['grid-column-end'] || '0'}" min='0' onchange='changeGridItem' />
             </div>            
           </div>
           <div class='value-item'>
             <label>${this.$i18n('grid.layout.item.property.row')}</label>
             <div>
-              <NumberInputEditor ref='$rowStart' key="grid-row-start" value="${obj['grid-row-start'] || '0'}" min='0' onchange='changeGridItem' />
+              <span refClass="NumberInputEditor"  ref='$rowStart' key="grid-row-start" value="${obj['grid-row-start'] || '0'}" min='0' onchange='changeGridItem' />
             </div>
             <div>
-              <NumberInputEditor ref='$rowEnd' key="grid-row-end" value="${obj['grid-row-end'] || '0'}" min='0' onchange='changeGridItem' />
+              <span refClass="NumberInputEditor"  ref='$rowEnd' key="grid-row-end" value="${obj['grid-row-end'] || '0'}" min='0' onchange='changeGridItem' />
             </div>            
           </div>          
         </div>

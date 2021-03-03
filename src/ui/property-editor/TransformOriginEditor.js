@@ -8,6 +8,7 @@ import RangeEditor from "./RangeEditor";
 const typeList = [
   { key: "transform-origin-x", title: "X" },
   { key: "transform-origin-y", title: "Y" },
+  { key: "transform-origin-z", title: "Z" },  
 ];
 
 const keyList = typeList.map(it => it.key);
@@ -63,15 +64,15 @@ export default class TransformOriginEditor extends UIElement {
     return /*html*/`
       <div class='transform-origin-editor'>
         <div class='direction' ref='$direction'>
+          <div class='pos' data-value='top left'></div>        
           <div class='pos' data-value='top'></div>
-          <div class='pos' data-value='top left'></div>
           <div class='pos' data-value='top right'></div>
-          <div class='pos' data-value='bottom'></div>
-          <div class='pos' data-value='bottom left'></div>
-          <div class='pos' data-value='bottom right'></div>
           <div class='pos' data-value='left'></div>
-          <div class='pos' data-value='right'></div>
           <div class='pos' data-value='center'></div>
+          <div class='pos' data-value='right'></div>
+          <div class='pos' data-value='bottom left'></div>                   
+          <div class='pos' data-value='bottom'></div>
+          <div class='pos' data-value='bottom right'></div>
         </div>
         <div ref='$body'></div>
       </div>
@@ -107,34 +108,16 @@ export default class TransformOriginEditor extends UIElement {
 
   [LOAD('$body')] () {
 
-    var selectedValue = this.state.isAll ? 'all' : 'partitial'
-    var transformOrigin = this.state['transform-origin'];
-
     return /*html*/`
-      <div class="transform-origin-item">
-        <div class="radius-selector" data-selected-value="${selectedValue}" ref="$selector">
-          <button type="button" data-value="all">${icon.border_all}</button>
-          <button type="button" data-value="partitial">
-            ${icon.border_inner}
-          </button>
-        </div>
-        <div class="radius-value">
-          <RangeEditor ref='$all' key='transform-origin' value="${transformOrigin}" onchange='changeTransformOrigin' />
-        </div>
-      </div>
       <div class="full transform-origin-item" ref="$partitialSetting" >
         <div class="radius-setting-box" ref="$radiusSettingBox">
           ${typeList.map(it => {
-            return `
+            return /*html*/`
               <div>
-                  <RangeEditor ref='$${it.key}' label='${it.title}' key='${it.key}' value="${this.state[it.key]}" onchange='changeTransformOrigin' />
+                  <span refClass="RangeEditor"  ref='$${it.key}' compact="true" label='${it.title}' key='${it.key}' value="${this.state[it.key]}" onchange='changeTransformOrigin' />
               </div>  
             `;
           }).join('')}
-
-          <div>
-            <RangeEditor ref='$transform-origin-z' label='Z' key='transform-origin-z' value="${(this.state['transform-origin-z'] || "")}" onchange='changeTransformOrigin' />
-          </div>  
         </div>
       </div>
     `;
@@ -157,19 +140,10 @@ export default class TransformOriginEditor extends UIElement {
   }
 
   modifyTransformOrigin () {
-    var value = '';
 
-    if (this.state.isAll) {
-      value = `${this.state['transform-origin']}`
-    } else {
-      value = `${this.state['transform-origin-x']} ${this.state['transform-origin-y']}`
+    var value = `${this.state['transform-origin-x']} ${this.state['transform-origin-y']} ${this.state['transform-origin-z'] || '0px'}`
 
-      if (this.state['transform-origin-z']) {
-        value = `${value} ${this.state['transform-origin-z']}`
-      }
-    }
-
-    this.parent.trigger(this.props.onchange, value);
+    this.parent.trigger(this.props.onchange, this.props.key, value);
   }
 
   [CLICK("$selector button")](e) {

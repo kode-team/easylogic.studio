@@ -40,7 +40,7 @@ export default class Border {
     }
 
     static joinValue (obj) {
-        return `${obj.width} ${obj.style} ${obj.color}`
+        return `${obj.width} ${obj.style || 'solid'} ${obj.color}`
     }
 
     static join (obj) {

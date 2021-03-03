@@ -49,7 +49,7 @@ export default class ColorPickerPopup extends BasePopup {
     return /*html*/`
       <div class="color-picker-popup">
         <div class='box'>
-          <EmbedColorPicker ref='$color' value='${this.state.color}' onchange='changeColor' onchangeend="changeEndColor" />
+          <span refClass="EmbedColorPicker" ref='$color' value='${this.state.color}' onchange='changeColor' onchangeend="changeEndColor" />
         </div>
       </div>
     `;

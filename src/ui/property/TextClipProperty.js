@@ -26,7 +26,7 @@ export default class TextClipProperty extends BaseProperty {
 
     var clip = current['text-clip'] || ''
     return /*html*/`
-      <SelectEditor ref='$1' key='text-clip' icon="true" value="${clip}" options=",text" onchange="changeSelect" />
+      <span refClass="SelectEditor"  ref='$1' key='text-clip' icon="true" value="${clip}" options=",text" onchange="changeSelect" />
     `;
   }
 

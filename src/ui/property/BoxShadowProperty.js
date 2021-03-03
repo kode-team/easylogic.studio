@@ -28,7 +28,7 @@ export default class BoxShadowProperty extends BaseProperty {
   [LOAD("$shadowList")]() {
     var current = this.$selection.current || {};
     return /*html*/`
-      <BoxShadowEditor ref='$boxshadow' value="${current['box-shadow'] || ''}" hide-label="true" onChange="changeBoxShadow" />
+      <span refClass="BoxShadowEditor" ref='$boxshadow' value="${current['box-shadow'] || ''}" hide-label="true" onChange="changeBoxShadow" />
     `
   }
 

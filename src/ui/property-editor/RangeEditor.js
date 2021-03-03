@@ -20,6 +20,7 @@ export default class RangeEditor extends UIElement {
         return {
             removable: this.props.removable === 'true',
             calc:  this.props.calc === 'true'  ? true : false,
+            compact:  this.props.compact === 'true'  ? true : false,            
             label: this.props.label || '',
             min: +this.props.min || 0,
             max: +this.props.max || 100,
@@ -42,7 +43,7 @@ export default class RangeEditor extends UIElement {
 
     [LOAD('$body')] () {
 
-        var { min, max, step, label, removable, layout } = this.state
+        var { min, max, step, label, removable, layout, compact } = this.state
 
         var value = +this.state.value.value.toString()
 
@@ -68,6 +69,7 @@ export default class RangeEditor extends UIElement {
             class="${OBJECT_TO_CLASS({
                 'range-editor': true,
                 'has-label': !!label,
+                'compact': !!compact,
                 'is-removable': removable,
                 [layoutClass] : true 
             })}"
@@ -77,7 +79,7 @@ export default class RangeEditor extends UIElement {
                 <input type='range' ref='$property' value="${realValue}" min="${min}" max="${max}" step="${step}" /> 
                 <div class='area' ref='$rangeArea'>
                     <input type='number' ref='$propertyNumber' value="${realValue}" min="${min}" max="${max}" step="${step}" tabIndex="1" />
-                    <SelectEditor ref='$unit' key='unit' value="${this.state.selectedUnit || this.state.value.unit}" options="${units}" onchange='changeUnit' />
+                    <span refClass="SelectEditor"  ref='$unit' key='unit' value="${this.state.selectedUnit || this.state.value.unit}" options="${units}" onchange='changeUnit' />
                 </div>
             </div>
             <button type='button' class='remove thin' ref='$remove' title='Remove'>${icon.remove}</button>

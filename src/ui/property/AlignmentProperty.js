@@ -21,16 +21,16 @@ export default class AlignmentProperty extends BaseProperty {
   getBody() {
     return /*html*/`
       <div class="alignment-item">
-        <LeftAlign />
-        <CenterAlign />
-        <RightAlign />
+        <span refClass="LeftAlign" />
+        <span refClass="CenterAlign" />
+        <span refClass="RightAlign" />
 
-        <TopAlign />
-        <MiddleAlign />
-        <BottomAlign />  
+        <span refClass="TopAlign" />
+        <span refClass="MiddleAlign" />
+        <span refClass="BottomAlign" />  
 
-        <SameWidth />
-        <SameHeight />
+        <span refClass="SameWidth" />
+        <span refClass="SameHeight" />
       </div>
     `;
   }

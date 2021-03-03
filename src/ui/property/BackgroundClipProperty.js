@@ -20,7 +20,7 @@ export default class BackgroundClipProperty extends BaseProperty {
     var current = this.$selection.current || {};
 
     var clip = current['background-clip'] || ''
-    return /*html*/`<SelectEditor ref='$1' key='background-clip' icon="true" value="${clip}" options=",paddinb-box,border-box,content-box,text" onchange="changeSelect" />`;
+    return /*html*/`<span refClass="SelectEditor"  ref='$1' key='background-clip' icon="true" value="${clip}" options=",paddinb-box,border-box,content-box,text" onchange="changeSelect" />`;
   }
 
   [EVENT('changeSelect')] (key, value) {

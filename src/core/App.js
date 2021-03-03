@@ -11,6 +11,7 @@ import {
 import UIElement, { EVENT } from "./UIElement";
 import { debounce } from "./functions/func";
 import { Editor } from "../manager/Editor";
+import { getDist } from "./functions/math";
 
 const EMPTY_POS = { x: 0, y: 0 };
 const DEFAULT_POS = { x: Number.MAX_SAFE_INTEGER, y: Number.MAX_SAFE_INTEGER };
@@ -66,11 +67,18 @@ export const start = opt => {
 
       if (isNotEqualLastPos && this.moves.size) {      
         this.moves.forEach(v => {
-          var dx = Math.floor(pos.x - v.xy.x);
-          var dy = Math.floor(pos.y - v.xy.y);
-          if (dx != 0 || dy != 0) {
+
+          const dist = getDist(pos.x, pos.y, v.xy.x, v.xy.y);
+
+          if (Math.abs(dist) > 0.5) {
+
+            var dx = Math.floor(pos.x - v.xy.x);
+            var dy = Math.floor(pos.y - v.xy.y);
+  
             v.func.call(v.context, dx, dy, 'move', e.pressure);
+
           }
+
         });
 
         this.$config.set('lastPos', pos);

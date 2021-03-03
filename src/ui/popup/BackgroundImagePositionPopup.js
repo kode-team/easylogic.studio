@@ -48,7 +48,7 @@ export default class BackgroundImagePositionPopup extends BasePopup {
   templateForSize() {
     return /*html*/`
       <div class='popup-item'>
-        <SelectEditor label="${this.$i18n('background.image.position.popup.size')}" ref='$size' key='size' value="${this.state.size}" options="contain,cover,auto" onchange="changeRangeEditor" />      
+        <span refClass="SelectEditor"  label="${this.$i18n('background.image.position.popup.size')}" ref='$size' key='size' value="${this.state.size}" options="contain,cover,auto" onchange="changeRangeEditor" />      
       </div>
     `;
   }
@@ -60,7 +60,7 @@ export default class BackgroundImagePositionPopup extends BasePopup {
   templateForX() {
     return /*html*/`
       <div class='popup-item'>
-        <RangeEditor 
+        <span refClass="RangeEditor"  
             label="X"
             calc="false"            
             ref="$x" 
@@ -76,7 +76,7 @@ export default class BackgroundImagePositionPopup extends BasePopup {
   templateForY() {
     return /*html*/`
       <div class='popup-item'>
-        <RangeEditor 
+        <span refClass="RangeEditor"  
             label="Y" 
             calc="false"       
             ref="$y" 
@@ -92,7 +92,7 @@ export default class BackgroundImagePositionPopup extends BasePopup {
   templateForWidth() {
     return /*html*/`
     <div class='popup-item'>
-      <RangeEditor 
+      <span refClass="RangeEditor"  
           label="${this.$i18n('background.image.position.popup.width')}"   
           calc="false"             
           ref="$width" 
@@ -108,7 +108,7 @@ export default class BackgroundImagePositionPopup extends BasePopup {
   templateForHeight() {
     return /*html*/`
     <div class='popup-item'>
-      <RangeEditor 
+      <span refClass="RangeEditor"  
           label="${this.$i18n('background.image.position.popup.height')}"
           calc="false"          
           ref="$height" 
@@ -144,7 +144,7 @@ export default class BackgroundImagePositionPopup extends BasePopup {
   templateForBlendMode() {
     return /*html*/`
     <div class='popup-item'>
-      <SelectEditor label="${this.$i18n('background.image.position.popup.blend')}" ref='$blend' key='blendMode' value="${this.state.blendMode}" options="${blend_list}" onchange="changeRangeEditor" />
+      <span refClass="SelectEditor"  label="${this.$i18n('background.image.position.popup.blend')}" ref='$blend' key='blendMode' value="${this.state.blendMode}" options="${blend_list}" onchange="changeRangeEditor" />
     </div>
     `;
   }

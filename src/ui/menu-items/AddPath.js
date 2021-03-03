@@ -1,10 +1,9 @@
 import MenuItem from "./MenuItem";
-import icon from "@icon/icon";
 import { EVENT } from "@core/UIElement";
  
 export default class AddPath extends MenuItem {
   getIconString() {
-    return icon.pentool;
+    return 'pentool';
   }
   getTitle() {
     return this.props.title || "Path";

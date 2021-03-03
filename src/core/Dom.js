@@ -202,6 +202,21 @@ export default class Dom {
     return null;
   }
 
+  path() {
+
+    if (!this.el) return [];
+
+    const $parentNode = this.parent(); 
+
+    if ($parentNode) {
+      return [...$parentNode.path(), this]
+    } else {
+      return [this]
+    }
+
+
+  }
+
   parent() {
     return Dom.create(this.el.parentNode);
   }

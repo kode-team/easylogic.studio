@@ -1,12 +1,12 @@
-import { uuid } from "./functions/math";
 import EventMachine from "./EventMachine";
-import { splitMethodByKeyword } from "./functions/func";
+import { OBJECT_TO_PROPERTY, splitMethodByKeyword } from "./functions/func";
 import { SelectionManager } from "@manager/SelectionManager";
 import { SnapManager } from "@manager/SnapManager";
 import { KeyBoardManager } from "@manager/KeyboardManager";
 import { ShortCutManager } from "@manager/ShortCutManager";
 import { ViewportManager } from "@manager/ViewportManager";
 import { StorageManager } from "@manager/StorageManager";
+import { createRef } from "./Event";
 
 const REG_STORE_MULTI_PATTERN = /^ME@/;
 

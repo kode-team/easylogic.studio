@@ -169,14 +169,14 @@ checkKey (e) {
 
   templateForProperty() {
     return /*html*/`
-      <CSSPropertyEditor ref='$propertyEditor' hide-title='true' onchange='changePropertyEditor' />
+      <span refClass="CSSPropertyEditor" ref='$propertyEditor' hide-title='true' onchange='changePropertyEditor' />
     `
   }    
 
   templateForTimingFunction () {
     return /*html*/`
     <div class='timing-function'>
-      <CubicBezierEditor ref='$cubicBezierEditor' key="timing" value="${this.state.timingFunction || 'linear'}" onChange='changeCubicBezier' />
+      <span refClass="CubicBezierEditor" ref='$cubicBezierEditor' key="timing" value="${this.state.timingFunction || 'linear'}" onChange='changeCubicBezier' />
     </div>
     `
   }

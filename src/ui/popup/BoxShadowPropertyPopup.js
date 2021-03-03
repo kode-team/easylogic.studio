@@ -51,19 +51,19 @@ export default class BoxShadowPropertyPopup extends BasePopup {
           ></div>
         </div>        
         <div class="popup-item offset-x">
-          <RangeEditor ref='$offsetX' label='X' key='offsetX' value="${this.state.offsetX}" onchange='changeRangeEditor' />
+          <span refClass="RangeEditor"  ref='$offsetX' label='X' key='offsetX' value="${this.state.offsetX}" onchange='changeRangeEditor' />
         </div>
         <div class="popup-item offset-y">
-          <RangeEditor ref='$offsetY' label='Y' key='offsetY' value="${this.state.offsetY}" onchange='changeRangeEditor' />        
+          <span refClass="RangeEditor"  ref='$offsetY' label='Y' key='offsetY' value="${this.state.offsetY}" onchange='changeRangeEditor' />        
         </div>
         <div class="popup-item blur-radius">
-          <RangeEditor ref='$blurRadius' label='Blur' key='blurRadius' value="${this.state.blurRadius}" onchange='changeRangeEditor' />        
+          <span refClass="RangeEditor"  ref='$blurRadius' label='Blur' key='blurRadius' value="${this.state.blurRadius}" onchange='changeRangeEditor' />        
         </div>
         <div class="popup-item spread-radius">
-          <RangeEditor ref='$spreadRadius' label='Spread' key='spreadRadius' value="${this.state.spreadRadius}" onchange='changeRangeEditor' />        
+          <span refClass="RangeEditor"  ref='$spreadRadius' label='Spread' key='spreadRadius' value="${this.state.spreadRadius}" onchange='changeRangeEditor' />        
         </div>
         <div class='popup-item'>
-          <ColorViewEditor 
+          <span refClass="ColorViewEditor" 
               ref='$foreColor' 
               label="color" 
               key='color' 

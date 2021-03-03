@@ -10,10 +10,10 @@ export default class ExternalToolMenu extends UIElement {
     return /*html*/`
       <div class='external-tool-menu  right'>
         <div class='items'>
-          <Download />
-          <Save />
-          <Github />
-          <Manual />
+          <span refClass="Download" />
+          <span refClass="Save" />
+          <span refClass="Github" />
+          <span refClass="Manual" />
           <!-- LoginButton /-->
           <!-- SignButton /-->
         </div>                

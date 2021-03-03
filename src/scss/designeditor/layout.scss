@@ -181,35 +181,3 @@
     }
   }
 }
-
-
-@import './range-ui.scss';
-@import "./tab-ui.scss";
-@import "./colorpicker-ui.scss";
-@import "./tool-menu.scss";
-@import "./view.scss";
-@import './selection-view.scss';
-@import './hover-view.scss';
-
-// property 
-@import './property/index.scss'; 
-
-// editor 
-@import './editor/index.scss';
-
-// popup 
-@import "./popup/popup.scss";
-@import './window/window.scss';
-
-@import './path-editor-view.scss';
-@import './path-draw-view.scss';
-@import './brush-draw-view.scss';
-@import './layer-add-view.scss';
-
-// timeline 
-@import './timeline.scss';
-
-@import './logo.scss';
-@import './status-bar.scss';
-@import './feature-control.scss';
-@import './notification-view.scss';

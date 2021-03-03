@@ -60,7 +60,7 @@ export default class AnimationPropertyPopup extends BasePopup {
     return /*html*/`
     <div class='timing-function'>
       <label>${this.$i18n('animation.property.popup.timing.function')}</label>
-      <CubicBezierEditor ref='$cubicBezierEditor' key="timingFunction" value="${this.state.data.timingFunction || 'linear'}" onChange='changeCubicBezier' />
+      <span refClass="CubicBezierEditor" ref='$cubicBezierEditor' key="timingFunction" value="${this.state.data.timingFunction || 'linear'}" onChange='changeCubicBezier' />
     </div>
     `
   }
@@ -107,7 +107,7 @@ export default class AnimationPropertyPopup extends BasePopup {
 
     return /*html*/`
       <div class='direction'>
-        <SelectEditor 
+        <span refClass="SelectEditor"  
             label='${this.$i18n('animation.property.popup.direction')}'
             ref='$direction' 
             key='direction' 
@@ -126,7 +126,7 @@ export default class AnimationPropertyPopup extends BasePopup {
   templateForPlayState() {
     return /*html*/`
     <div class='play-state'>
-      <SelectEditor 
+      <span refClass="SelectEditor"  
           label='${this.$i18n('animation.property.popup.play.state')}'
           ref='$playState' 
           key='playState' 
@@ -146,7 +146,7 @@ export default class AnimationPropertyPopup extends BasePopup {
 
     return /*html*/`
     <div class='fill-mode'>
-      <SelectEditor 
+      <span refClass="SelectEditor"  
           label='${this.$i18n('animation.property.popup.fill.mode')}'
           ref='$fillMode' 
           key='fillMode' 
@@ -161,7 +161,7 @@ export default class AnimationPropertyPopup extends BasePopup {
   templateForDelay () {
     return /*html*/`
     <div class='delay'>
-      <RangeEditor 
+      <span refClass="RangeEditor"  
         ref='$delay' 
         label='${this.$i18n('animation.property.popup.delay')}' 
         calc='false' 
@@ -176,7 +176,7 @@ export default class AnimationPropertyPopup extends BasePopup {
   templateForDuration () {
     return /*html*/`
     <div class='duration'>
-      <RangeEditor 
+      <span refClass="RangeEditor"  
         ref='$duration' 
         label='${this.$i18n('animation.property.popup.duration')}'  
         key='duration' 
@@ -190,7 +190,7 @@ export default class AnimationPropertyPopup extends BasePopup {
   templateForIterationCount () {
     return /*html*/`
       <div class='iteration-count'>
-        <IterationCountEditor 
+        <span refClass="IterationCountEditor"
           ref='$iterationCount' 
           label='${this.$i18n('animation.property.popup.iteration')}' 
           key='iterationCount' 

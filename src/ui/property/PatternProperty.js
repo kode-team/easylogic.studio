@@ -67,7 +67,7 @@ export default class PatternProperty extends BaseProperty {
     var current = this.$selection.current || {} 
     var value = current.pattern;
 
-    return /*html*/`<PatternEditor ref='$patternEditor' value='${value}' hide-label='true' onchange='changePatternEditor' />`
+    return /*html*/`<span refClass="PatternEditor" ref='$patternEditor' value='${value}' hide-label='true' onchange='changePatternEditor' />`
   }
 
   [EVENT('changePatternEditor')] (key, pattern) {

@@ -38,13 +38,13 @@ export default class FontProperty extends BaseProperty {
         <div class='group'>
           <span class='add-timeline-property' data-property='color'></span>
         </div>
-        <ColorViewEditor ref='$color' label='${this.$i18n('font.property.color')}' key='color' onchange="changeColor" />
+        <span refClass="ColorViewEditor" ref='$color' label='${this.$i18n('font.property.color')}' key='color' onchange="changeColor" />
       </div>      
       <div class='property-item animation-property-item'>
         <div class='group'>
           <span class='add-timeline-property' data-property='font-size'></span>
         </div>
-        <RangeEditor 
+        <span refClass="RangeEditor"  
           ref='$size' 
           label='${this.$i18n('font.property.size')}' 
           key="font-size" 
@@ -55,7 +55,7 @@ export default class FontProperty extends BaseProperty {
         <div class='group'>
           <span class='add-timeline-property' data-property='font-stretch'></span>
         </div>
-        <RangeEditor 
+        <span refClass="RangeEditor"  
           ref='$stretch' 
           label='${this.$i18n('font.property.stretch')}' 
           key="font-stretch" 
@@ -68,7 +68,7 @@ export default class FontProperty extends BaseProperty {
         <div class='group'>
           <span class='add-timeline-property' data-property='font-weight'></span>
         </div>
-        <NumberRangeEditor 
+        <span refClass="NumberRangeEditor"  
           ref='$weightRange' 
           label='${this.$i18n('font.property.weight')}' 
           key='font-weight' 
@@ -83,7 +83,7 @@ export default class FontProperty extends BaseProperty {
           />
       </div>              
       <div class='property-item'>
-        <SelectIconEditor 
+        <span refClass="SelectIconEditor" 
           ref='$style' 
           label='${this.$i18n('font.property.style')}' 
           key="font-style"
@@ -94,7 +94,7 @@ export default class FontProperty extends BaseProperty {
       </div>      
 
       <div class='property-item'>
-        <SelectEditor 
+        <span refClass="SelectEditor"  
           ref='$family' 
           icon="true"
           label='${this.$i18n('font.property.family')}' 

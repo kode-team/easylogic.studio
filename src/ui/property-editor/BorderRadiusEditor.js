@@ -53,7 +53,7 @@ export default class BorderRadiusEditor extends UIElement {
           </button>
         </div>
         <div class="radius-value">
-          <RangeEditor ref='$all' key='border-radius' value="${borderRadius}" onchange='changeBorderRadius' />
+          <span refClass="RangeEditor"  ref='$all' key='border-radius' value="${borderRadius}" onchange='changeBorderRadius' />
         </div>
       </div>
       <div
@@ -67,7 +67,7 @@ export default class BorderRadiusEditor extends UIElement {
             var label = this.$i18n('border.radius.editor.' + it.title);
             return /*html*/`
               <div>
-                  <RangeEditor ref='$${it.key}' label='${label}' key='${it.key}' value='${value}' onchange='changeBorderRadius' />
+                  <span refClass="RangeEditor"  ref='$${it.key}' label='${label}' key='${it.key}' value='${value}' onchange='changeBorderRadius' />
               </div>  
             `;
           }).join('')}

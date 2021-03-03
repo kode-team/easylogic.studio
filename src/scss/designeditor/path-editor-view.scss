@@ -282,7 +282,7 @@
             &[data-segment-point="endPoint"],
             &[data-segment-point="reversePoint"] {
                 &:not([data-selected='true']) {
-                    r: 3;
+                    r: 4;
                 }
             }
             
@@ -297,7 +297,7 @@
             fill: transparent;
             stroke: var(--selected-border-color);
             stroke-width: 1;
-            display: none;
+            // display: none;
             pointer-events: none;
         }
 

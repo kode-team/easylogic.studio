@@ -17,9 +17,9 @@ export default class StatusBar extends UIElement {
             <div class='status-bar'>
                 <div class='message-view' ref='$msg'></div>
                 <div class='tool-view' ref='$tool'>
-                    <LayoutSelector />
-                    <ThemeSwitcher />
-                    <LanguageSelector />
+                    <span refClass="LayoutSelector" />
+                    <span refClass="ThemeSwitcher" />
+                    <span refClass="LanguageSelector" />
                 </div>
             </div>
         `

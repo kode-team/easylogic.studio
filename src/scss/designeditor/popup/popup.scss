@@ -191,18 +191,17 @@
       }
     }
   }
-
-  @import './box-shadow-property-popup.scss';
-  @import './animation-property-popup.scss';
-  @import './transition-property-popup.scss';
-  @import './text-shadow-property-popup.scss';
-  @import './keyframe-popup.scss';
-  @import './selector-popup.scss';
-  @import './clippath-popup.scss';
-  @import './svg-property-editor-popup.scss';
-  @import './color-picker-popup.scss';
-  @import './image-select-popup.scss';
-  @import './gradient-picker.scss';
-  @import './background-image-position-popup.scss';
-
 }
+
+@import './box-shadow-property-popup.scss';
+@import './animation-property-popup.scss';
+@import './transition-property-popup.scss';
+@import './text-shadow-property-popup.scss';
+@import './keyframe-popup.scss';
+@import './selector-popup.scss';
+@import './clippath-popup.scss';
+@import './svg-property-editor-popup.scss';
+@import './color-picker-popup.scss';
+@import './image-select-popup.scss';
+@import './gradient-picker.scss';
+@import './background-image-position-popup.scss';

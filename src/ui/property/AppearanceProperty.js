@@ -27,13 +27,13 @@ export default class AppearanceProperty extends BaseProperty {
         <div class='group'>
           <span class='add-timeline-property' data-property='background-color'></span>
         </div>
-        <ColorViewEditor ref='$color' label="${this.$i18n('background.color.property.color')}" key='background-color' onchange="changeColor" />
+        <span refClass="ColorViewEditor" ref='$color' label="${this.$i18n('background.color.property.color')}" key='background-color' onchange="changeColor" />
       </div>   
         <div class='property-item animation-property-item' style='display:none;'>
           <div class='group'>
             <span class='add-timeline-property' data-property='z-index'></span>
           </div>
-          <NumberRangeEditor 
+          <span refClass="NumberRangeEditor"  
             ref='$zIndex' 
             key='z-index' 
             label='${this.$i18n('background.color.property.zindex')}'
@@ -47,7 +47,7 @@ export default class AppearanceProperty extends BaseProperty {
           <div class='group'>
             <span class='add-timeline-property' data-property='mix-blend-mode'></span>
           </div>
-          <BlendSelectEditor 
+          <span refClass="BlendSelectEditor" 
             label='${this.$i18n('background.color.property.blend')}'
             ref='$mixBlend' 
             removable='true'
@@ -61,7 +61,7 @@ export default class AppearanceProperty extends BaseProperty {
           <div class='group'>
             <span class='add-timeline-property' data-property='overflow'></span>
           </div>
-          <SelectEditor 
+          <span refClass="SelectEditor"  
             label='${this.$i18n('background.color.property.overflow')}'
             ref='$overflow' 
             removable='true'

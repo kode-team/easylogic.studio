@@ -59,7 +59,7 @@ export default class BorderValueEditor extends UIElement {
   refresh () {
 
     this.children.$width.setValue(this.state.value.width || Length.z())
-    this.children.$style.setValue(this.state.value.style || 'none')
+    this.children.$style.setValue(this.state.value.style || 'solid')
     this.children.$color.setValue(this.state.value.color || 'rgba(0, 0, 0, 1)')
   }
   
@@ -68,15 +68,14 @@ export default class BorderValueEditor extends UIElement {
     var {width, style, color} = this.state.value; 
     return /*html*/`
       <div class="border-value-editor">
-        <label>${this.props.label}</label>
         <div class='editor-area'>
-          <InputRangeEditor ref='$width' min="0" max="100" step="1" key='width' value="${width}" onchange='changeKeyValue' />
+          <span refClass="RangeEditor"  ref='$width' min="0" max="100" step="1" key='width' value="${width}" onchange='changeKeyValue' />
         </div>
         <div class='editor-area'>
-          <SelectEditor ref='$style' key='style' options='${borderStyleList}' value="${style}" onchange="changeKeyValue" />
+          <span refClass="SelectEditor"  ref='$style' key='style' options='${borderStyleList}' value="${style || 'solid'}" onchange="changeKeyValue" />
         </div>
         <div class='editor-area'>
-          <ColorSingleEditor ref='$color' key='color' value="${color|| 'rgba(0, 0, 0, 1)'}"  onchange="changeKeyValue" />
+          <span refClass="ColorSingleEditor" ref='$color' key='color' value="${color|| 'rgba(0, 0, 0, 1)'}"  onchange="changeKeyValue" />
         </div>
 
       </div>

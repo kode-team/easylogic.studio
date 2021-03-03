@@ -1,9 +1,8 @@
 import MenuItem from "./MenuItem";
-import icon from "@icon/icon";
  
 export default class AddDrawPath extends MenuItem {
   getIconString() {
-    return icon.edit;
+    return 'edit';
   }
   getTitle() {
     return this.props.title || "Draw";

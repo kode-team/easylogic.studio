@@ -156,7 +156,7 @@ export default class CSSPropertyEditor extends UIElement {
     var key = property.key.split('-').join('');
     return /*html*/`
       <div class='property-editor'>
-        <ColorViewEditor ref='$${key}${index}' value="${property.value}" key="${property.key}" onChange="changeColorProperty" />
+        <span refClass="ColorViewEditor" ref='$${key}${index}' value="${property.value}" key="${property.key}" onChange="changeColorProperty" />
       </div>
     `
   }
@@ -179,61 +179,61 @@ export default class CSSPropertyEditor extends UIElement {
     if (property.key === 'background-image') {
       return /*html*/`
         <div class='property-editor'>
-          <BackgroundImageEditor ref='$backgroundImage${index}' key="${property.key}" hide-title="${this.state.hideTitle}" value="${property.value}" onChange="changeBackgroundImageProperty" />
+          <span refClass="BackgroundImageEditor" ref='$backgroundImage${index}' key="${property.key}" hide-title="${this.state.hideTitle}" value="${property.value}" onChange="changeBackgroundImageProperty" />
         </div>
       `
     } else if (property.key === 'filter') {
       return /*html*/`
         <div class='property-editor'>
-          <FilterEditor ref='$filter${index}' value="${property.value}" onChange="changeFilterProperty" />
+          <span refClass="FilterEditor" ref='$filter${index}' value="${property.value}" onChange="changeFilterProperty" />
         </div>
       `
     } else if (property.key === 'backdrop-filter') {
       return /*html*/`
         <div class='property-editor'>
-          <FilterEditor ref='$backdropFilter${index}' value="${property.value}" onChange="changeBackdropFilterProperty" />
+          <span refClass="FilterEditor" ref='$backdropFilter${index}' value="${property.value}" onChange="changeBackdropFilterProperty" />
         </div>
       `      
     } else if (property.key === 'box-shadow') {
       return /*html*/`
         <div class='property-editor'>
-          <BoxShadowEditor ref='$boxshadow${index}' value="${property.value}" hide-label="false" onChange="changeBoxShadowProperty" />
+          <span refClass="BoxShadowEditor" ref='$boxshadow${index}' value="${property.value}" hide-label="false" onChange="changeBoxShadowProperty" />
         </div>
       `      
     } else if (property.key === 'text-shadow') {
       return /*html*/`
         <div class='property-editor'>
-          <TextShadowEditor ref='$textshadow${index}' value="${property.value}" hide-label="false" onChange="changeTextShadowProperty" />
+          <span refClass="TextShadowEditor" ref='$textshadow${index}' value="${property.value}" hide-label="false" onChange="changeTextShadowProperty" />
         </div>
       `            
     } else if (property.key === 'var') {
       return /*html*/`
         <div class='property-editor'>
-          <VarEditor ref='$var${index}' value="${property.value}" onChange="changeVar" />
+          <span refClass="VarEditor" ref='$var${index}' value="${property.value}" onChange="changeVar" />
         </div>
       `       
     } else if (property.key === 'transform') {
       return /*html*/`
         <div class='property-editor'>
-          <TransformEditor ref='$transform${index}' value="${property.value}" onChange="changeTransform" />
+          <span refClass="TransformEditor" ref='$transform${index}' value="${property.value}" onChange="changeTransform" />
         </div>
       `                  
     } else if (property.key === 'transform-origin') {
       return /*html*/`
         <div class='property-editor'>
-          <TransformOriginEditor ref='$transformOrigin${index}' value="${property.value}" onChange="changeTransformOrigin" />
+          <span refClass="TransformOriginEditor" ref='$transformOrigin${index}' value="${property.value}" onChange="changeTransformOrigin" />
         </div>
       `                  
     } else if (property.key === 'perspective-origin') {
       return /*html*/`
         <div class='property-editor'>
-          <PerspectiveOriginEditor ref='$perspectiveOrigin${index}' value="${property.value}" onChange="changePerspectiveOrigin" />
+          <span refClass="PerspectiveOriginEditor" ref='$perspectiveOrigin${index}' value="${property.value}" onChange="changePerspectiveOrigin" />
         </div>
       `               
     } else if (property.key === 'fill-rule') {
       return /*html*/`
         <div class='property-editor'>
-          <SelectEditor 
+          <span refClass="SelectEditor"  
           ref='$fillRule${index}' 
           key='fill-rule' 
           icon="true" 
@@ -245,7 +245,7 @@ export default class CSSPropertyEditor extends UIElement {
     } else if (property.key === 'stroke-linecap') {
       return /*html*/`
         <div class='property-editor'>
-          <SelectEditor 
+          <span refClass="SelectEditor"  
           ref='$strokeLinecap${index}' 
           key='stroke-linecap' 
           icon="true" 
@@ -258,7 +258,7 @@ export default class CSSPropertyEditor extends UIElement {
     } else if (property.key === 'stroke-linejoin') {
       return /*html*/`
         <div class='property-editor'>
-          <SelectEditor 
+          <span refClass="SelectEditor"  
           ref='$strokeLinejoin${index}' 
           key='stroke-linejoin' 
           icon="true" 
@@ -270,7 +270,7 @@ export default class CSSPropertyEditor extends UIElement {
     } else if (property.key === 'mix-blend-mode') {
       return /*html*/`
         <div class='property-editor'>
-          <BlendSelectEditor 
+          <span refClass="BlendSelectEditor" 
           ref='$mixBlendMode${index}' 
           key='mix-blend-mode' 
           icon="true" 
@@ -280,7 +280,7 @@ export default class CSSPropertyEditor extends UIElement {
       `   
     } else if (property.key === 'stroke-dasharray') {
       return /*html*/`
-        <StrokeDashArrayEditor 
+        <span refClass="StrokeDashArrayEditor" 
           ref='$strokeDashArray${index}' 
           key='stroke-dasharray'
           value='${property.value}' 
@@ -289,7 +289,7 @@ export default class CSSPropertyEditor extends UIElement {
       `      
     } else if (property.key === 'border-radius') {
       return /*html*/`
-        <BorderRadiusEditor 
+        <span refClass="BorderRadiusEditor"
           ref='$borderRadius${index}' 
           key='border-radius'
           value='${property.value}' 
@@ -298,7 +298,7 @@ export default class CSSPropertyEditor extends UIElement {
       `
     } else if (property.key === 'border') {
       return /*html*/`
-        <BorderEditor 
+        <span refClass="BorderEditor"
           ref='$border${index}' 
           key='border'
           value='${property.value}' 
@@ -307,7 +307,7 @@ export default class CSSPropertyEditor extends UIElement {
       `      
     } else if (property.key === 'clip-path') {
       return /*html*/`
-        <ClipPathEditor 
+        <span refClass="ClipPathEditor"
           ref='$clipPath${index}' 
           key='clip-path'
           value='${property.value}' 
@@ -316,19 +316,19 @@ export default class CSSPropertyEditor extends UIElement {
       `      
     } else if (property.key === 'd') {
       return /*html*/`
-        <PathDataEditor ref='$pathData${index}' key='d' value='${property.value}' onchange='changeSelect' />
+        <span refClass="PathDataEditor" ref='$pathData${index}' key='d' value='${property.value}' onchange='changeSelect' />
       `            
     } else if (property.key === 'points') {
       return /*html*/`
-        <PolygonDataEditor ref='$polygonData${index}' key='points' value='${property.value}' onchange='changeSelect' />
+        <span refClass="PolygonDataEditor" ref='$polygonData${index}' key='points' value='${property.value}' onchange='changeSelect' />
       `    
     } else if (property.key === 'offset-path') {
       return /*html*/`
-        <OffsetPathListEditor ref='$offsetPathList${index}' key='offset-path' value='${property.value}' onchange='changeSelect' />
+        <span refClass="OffsetPathListEditor" ref='$offsetPathList${index}' key='offset-path' value='${property.value}' onchange='changeSelect' />
       `         
     } else if (property.key === 'playTime') {
       return /*html*/`
-        <MediaProgressEditor ref='$playTime${index}'  key='playTime' value="${property.value}" onchange="changeSelect" />      
+        <span refClass="MediaProgressEditor" ref='$playTime${index}'  key='playTime' value="${property.value}" onchange="changeSelect" />      
       `                   
     }
 
@@ -447,7 +447,7 @@ export default class CSSPropertyEditor extends UIElement {
 
         return /*html*/`
           <div class='property-editor'>
-            <NumberRangeEditor 
+            <span refClass="NumberRangeEditor"  
               ref='$opacity${index}' 
               key='${property.key}' 
               min="${min}"
@@ -462,7 +462,7 @@ export default class CSSPropertyEditor extends UIElement {
       case 'rotate':
         return /*html*/`
           <div class='property-editor'>
-            <RangeEditor 
+            <span refClass="RangeEditor"  
               ref='rangeEditor${index}' 
               key='${property.key}' 
               value='${property.value}'  
@@ -492,7 +492,7 @@ export default class CSSPropertyEditor extends UIElement {
       default: 
         return /*html*/`
           <div class='property-editor'>
-            <RangeEditor ref='rangeEditor${index}' key='${property.key}' value='${property.value}' max="1000" onChange="changeRangeEditor" />
+            <span refClass="RangeEditor"  ref='rangeEditor${index}' key='${property.key}' value='${property.value}' max="1000" onChange="changeRangeEditor" />
           </div>
         `
     }

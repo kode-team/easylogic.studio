@@ -1,4 +1,4 @@
-import UIElement, { EVENT } from "@core/UIElement";
+import UIElement, { cssElement, EVENT } from "@core/UIElement";
 import { CLICK, BIND } from "@core/Event";
 import icon from "@icon/icon";
 import propertyEditor from "../property-editor";
@@ -61,34 +61,36 @@ export default class PathManager extends UIElement {
             <button type="button" data-value='reverse' title='${this.$i18n('path.manager.mode.transform')}' >${icon.swap_horiz}</button>
         </div>        
         <div class='tools'>      
-          <div >
-            <FillSingleEditor ref='$fill' simple="true" label='${this.$i18n('svg.item.property.fill')}' key='fill' onchange="changeValue" />
+          <div>
+            <span refClass="FillSingleEditor" ref="$fill" simple="true" label="${this.$i18n('svg.item.property.fill')}" key="fill" onchange="changeValue" />
           </div>
-          <div >
-            <FillSingleEditor ref='$stroke' simple="true"  label='${this.$i18n('svg.item.property.stroke')}' key='stroke' onchange="changeValue" />
+          <div>
+            <span refClass="FillSingleEditor" ref="$stroke" simple="true" label="${this.$i18n('svg.item.property.stroke')}" key="stroke" onchange="changeValue" />
           </div>      
-
           <div >
-            <NumberInputEditor 
-              ref='$fillOpacity' 
-              label='${this.$i18n('svg.item.property.fillOpacity')}' 
-              key='fill-opacity' 
-              value="1" 
+            <span 
+              refClass="NumberInputEditor" 
+              ref="$fillOpacity" 
+              label="${this.$i18n('svg.item.property.fillOpacity')}" 
+              key="fill-opacity" 
+              value="1"
               min="0"
               max="1"
               step="0.01"
               calc="false"
-              unit="number" 
-              onchange="changeValue" 
-              />
+              unit="number"
+              onchange="changeValue"
+            />
           </div>   
 
-          <div >
-            <NumberInputEditor 
-              ref='$strokeWidth' 
-              label='${this.$i18n('svg.item.property.strokeWidth')}' 
+          <div>
+            <span 
+              refClass="NumberInputEditor" 
+              ref="$strokeWidth" 
+              label="${this.$i18n('svg.item.property.strokeWidth')}" 
               key="stroke-width" 
-              onchange="changeValue" />
+              onchange="changeValue"
+            />
           </div>
         </div>
       </div>    

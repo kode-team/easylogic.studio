@@ -51,35 +51,35 @@ export default class LayerTab extends UIElement {
             </div>
 
             <div class='tab-item extra-item' >
-              <PreviewToolMenu />
+              <span refClass="PreviewToolMenu" />
             </div>               
           </div>
           <div class="tab-body" ref="$body">
             <div class="tab-content project-content" data-value="1">
-              <ProjectProperty />
-              <ProjectInformationProperty />
+              <span refClass="ProjectProperty" />
+              <span refClass="ProjectInformationProperty" />
             </div>
             <div class="tab-content selected" data-value="2">
-              <ObjectItems />
+              <span refClass="ObjectItems" />
             </div>
             <div class='tab-content' data-value='3'>
-              <LibraryItems />
+              <span refClass="LibraryItems" />
             </div>            
             <div class='tab-content' data-value='4'>
-              <ComponentItems />
+              <span refClass="ComponentItems" />
             </div>    
             <div class='tab-content' data-value='5'>
               <div class='assets'>
-                <ColorAssetsProperty />
-                <GradientAssetsProperty />    
-                <PatternAssetsProperty />    
-                <ImageAssetsProperty />      
-                <VideoAssetsProperty />       
-                <SVGFilterAssetsProperty />                
+                <span refClass="ColorAssetsProperty" />
+                <span refClass="GradientAssetsProperty" />    
+                <span refClass="PatternAssetsProperty" />    
+                <span refClass="ImageAssetsProperty" />      
+                <span refClass="VideoAssetsProperty" />       
+                <span refClass="SVGFilterAssetsProperty" />                
               </div>
             </div>
             <div class='tab-content' data-value='6'>
-              <ArtboardItems />
+              <span refClass="ArtboardItems" />
             </div>
           </div>
         </div>

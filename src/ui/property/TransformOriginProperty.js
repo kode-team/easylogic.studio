@@ -2,19 +2,10 @@ import BaseProperty from "./BaseProperty";
 import { LOAD, CLICK, DEBOUNCE } from "@core/Event";
 import { EVENT } from "@core/UIElement";
 
-import icon from "@icon/icon";
-
-
 export default class TransformOriginProperty extends BaseProperty {
 
   getTitle() {
     return this.$i18n('transform.origin.property.title');  
-  }
-
-  getTools() {
-    return /*html*/`
-        <button type="button" class="remove" ref='$remove'>${icon.remove}</button>
-    `
   }
 
   hasKeyframe () {
@@ -39,7 +30,7 @@ export default class TransformOriginProperty extends BaseProperty {
     var current = this.$selection.current || {}; 
     var value = current['transform-origin'] || ''
 
-    return /*html*/`<TransformOriginEditor ref='$1' value='${value}' onchange='changeTransformOrigin' />`
+    return /*html*/`<span refClass="TransformOriginEditor" ref='$1' value='${value}' onchange='changeTransformOrigin' />`
   }
 
 
@@ -47,7 +38,7 @@ export default class TransformOriginProperty extends BaseProperty {
     this.refreshShowIsNot(['project', 'artboard']);
   }
 
-  [EVENT('changeTransformOrigin')] (value) {
+  [EVENT('changeTransformOrigin')] (key, value) {
 
     this.command('setAttribute', 'change transform-origin', { 
       'transform-origin': value 

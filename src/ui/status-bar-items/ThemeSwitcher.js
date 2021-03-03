@@ -21,7 +21,7 @@ export default class ThemeSwitcher extends UIElement {
             <div class='status-selector'>
                 <label>${this.$i18n('app.label.theme')}</label>
                 <div class='item'>
-                    <SelectEditor 
+                    <span refClass="SelectEditor"  
                         ref='$locale' 
                         options="${themes.join(',')}" 
                         value="${this.$editor.theme}" 

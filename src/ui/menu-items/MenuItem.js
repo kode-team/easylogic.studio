@@ -1,5 +1,6 @@
 import UIElement from "@core/UIElement";
 import { CLICK } from "@core/Event";
+import icon from "@icon/icon";
 
 
 const DEFAULT_TITLE = '';
@@ -17,7 +18,7 @@ export default class MenuItem extends UIElement {
             checked="${this.getChecked() ? 'checked' : ''}"
             ${this.isDisabled() ? 'disabled' : ''}
         >
-            <div class="icon ${this.getIcon()}">${this.getIconString()}</div>
+            <div class="icon ${this.getIcon()}">${icon[this.getIconString()]}</div>
             <div class="title">${this.getTitle()}</div>
         </button>
         `

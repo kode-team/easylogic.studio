@@ -63,6 +63,7 @@ $editor-ruler-size: 20px;
   pointer-events: all;
   outline: none;
   background-color: white; 
+  touch-action: pinch-zoom;
 }
 
 

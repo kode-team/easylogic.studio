@@ -56,7 +56,7 @@ export default class PatternInfoPopup extends BasePopup {
 
     return /*html*/`
       <div class='popup-item'>
-        <RangeEditor 
+        <span refClass="RangeEditor"  
             label="${label}"
             calc="false"            
             ref="$x" 
@@ -74,7 +74,7 @@ export default class PatternInfoPopup extends BasePopup {
     if (this.hasNotY()) return '';            
     return /*html*/`
       <div class='popup-item'>
-        <RangeEditor 
+        <span refClass="RangeEditor"  
             label="Y" 
             calc="false"       
             ref="$y" 
@@ -91,7 +91,7 @@ export default class PatternInfoPopup extends BasePopup {
 
     return /*html*/`
     <div class='popup-item'>
-      <RangeEditor 
+      <span refClass="RangeEditor"  
           label="${this.$i18n('pattern.info.popup.width')}"   
           calc="false"             
           ref="$width" 
@@ -107,7 +107,7 @@ export default class PatternInfoPopup extends BasePopup {
   templateForHeight() {
     return /*html*/`
     <div class='popup-item'>
-      <RangeEditor 
+      <span refClass="RangeEditor"  
           label="${this.$i18n('pattern.info.popup.height')}"
           calc="false"          
           ref="$height" 
@@ -141,7 +141,7 @@ export default class PatternInfoPopup extends BasePopup {
 
     return /*html*/`
     <div class='popup-item'>
-      <RangeEditor 
+      <span refClass="RangeEditor"  
           label="${this.$i18n('pattern.info.popup.lineWidth')}"   
           calc="false"             
           ref="$lineWidth" 
@@ -158,7 +158,7 @@ export default class PatternInfoPopup extends BasePopup {
     if (this.hasNotLineHeight()) return '';        
     return /*html*/`
     <div class='popup-item'>
-      <RangeEditor 
+      <span refClass="RangeEditor"  
           label="${this.$i18n('pattern.info.popup.lineHeight')}"
           calc="false"          
           ref="$lineHeight" 
@@ -173,7 +173,7 @@ export default class PatternInfoPopup extends BasePopup {
   templateForForeColor() {
     return /*html*/`
       <div class='popup-item'>
-        <ColorViewEditor 
+        <span refClass="ColorViewEditor" 
             ref='$foreColor' 
             label="${this.$i18n('pattern.info.popup.foreColor')}" 
             key='foreColor' 
@@ -186,7 +186,7 @@ export default class PatternInfoPopup extends BasePopup {
   templateForBackColor() {
     return /*html*/`
       <div class='popup-item'>
-        <ColorViewEditor 
+        <span refClass="ColorViewEditor" 
             ref='$backColor' 
             label="${this.$i18n('pattern.info.popup.backColor')}" 
             key='backColor' 
@@ -201,7 +201,7 @@ export default class PatternInfoPopup extends BasePopup {
 
     return /*html*/`
     <div class='popup-item'>
-      <BlendSelectEditor 
+      <span refClass="BlendSelectEditor" 
             ref='$blend' 
             key='blendMode' 
             label="${this.$i18n('pattern.info.popup.blend')}"

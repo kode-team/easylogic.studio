@@ -62,15 +62,15 @@ export default class ClipPathPopup extends BasePopup {
   [LOAD('$clippath')] () {
     switch(this.state.type) {
     case 'circle':
-      return /*html*/`<CircleEditor ref='$circle' key='circle' value='${this.state.value}' onchange='changeClipPath' />`
+      return /*html*/`<span refClass="CircleEditor" ref='$circle' key='circle' value='${this.state.value}' onchange='changeClipPath' />`
     case 'ellipse':
-      return /*html*/`<EllipseEditor ref='$ellipse' key='ellipse' value='${this.state.value}' onchange='changeClipPath' />`
+      return /*html*/`<span refClass="EllipseEditor" ref='$ellipse' key='ellipse' value='${this.state.value}' onchange='changeClipPath' />`
     case 'inset':
-      return /*html*/`<InsetEditor ref='$inset' key='inset' value='${this.state.value}' onchange='changeClipPath' />`      
+      return /*html*/`<span refClass="InsetEditor" ref='$inset' key='inset' value='${this.state.value}' onchange='changeClipPath' />`      
     case 'polygon':
-      return /*html*/`<PolygonEditor ref='$polygon' key='polygon' value='${this.state.value}' onchange='changeClipPath' />`            
+      return /*html*/`<span refClass="PolygonEditor" ref='$polygon' key='polygon' value='${this.state.value}' onchange='changeClipPath' />`            
     case 'path':
-      return /*html*/`<PathEditor ref='$path' key='path' value='${this.state.value}' onchange='changeClipPath' />`
+      return /*html*/`<span refClass="PathEditor" ref='$path' key='path' value='${this.state.value}' onchange='changeClipPath' />`
     case 'svg':
 
         var current = this.$selection.currentProject || {svg: []} 
@@ -81,7 +81,7 @@ export default class ClipPathPopup extends BasePopup {
           options = ',' + options
         }
 
-        return /*html*/`<SelectEditor ref='$svg' key='svg' value='${this.state.value}' options='${options}' onchange='changeClipPath' />`
+        return /*html*/`<span refClass="SelectEditor"  ref='$svg' key='svg' value='${this.state.value}' options='${options}' onchange='changeClipPath' />`
     default: 
       return /*html*/`<div class='type none'></div>`
     }

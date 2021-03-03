@@ -3,6 +3,7 @@ import {
   CHECK_LOAD_PATTERN,
   LOAD_SAPARATOR,
   DOMDIFF,
+  getRef,
 } from "./Event";
 import Dom from "./Dom";
 import {
@@ -106,18 +107,13 @@ export default class EventMachine {
   }
 
   initComponents() {
-    const parentComponents = isFunction(this.parent.components) ? this.parent.components() : this.parent.components;
+    // const parentComponents = isFunction(this.parent.components) ? this.parent.components() : this.parent.components;
 
     this.childComponents = {
-      ...parentComponents, 
+      // ...parentComponents, 
       ...this.components() 
     };
-    this.childComponentKeys = Object.keys(this.childComponents)
-    this.childComponentSet = new Map();
-    this.childComponentKeys.forEach(key => {
-      this.childComponentSet.set(key.toLowerCase(), key);
-    })
-    this.childComponentKeysString = [...this.childComponentSet.keys()].join(',');
+
   }
 
   initializeHandler () {
@@ -309,6 +305,13 @@ export default class EventMachine {
       props[t.nodeName] = t.nodeValue;
     }
 
+    if (props['props']) {
+      props = {
+        ...props,
+        ...getRef(props['props'])
+      }
+    }
+
     $dom.$$('property').forEach($p => {
       const [name, value, type] = $p.attrs('name', 'value', 'type')
 
@@ -333,39 +336,45 @@ export default class EventMachine {
     return [obj.sourceName]
   }
 
+  getEventMachineComponent (refClassName) {
+    var EventMachineComponent = this.childComponents[refClassName];
+
+    return EventMachineComponent;
+  }
+
   parseComponent() {
     const $el = this.$el;
 
-    let targets = [] 
-    if (this.childComponentKeysString) {
-      targets = $el.$$(this.childComponentKeysString);
-    }
+    let targets = $el.$$(`[refclass]`);
 
     targets.forEach($dom => {
-      var tagName = $dom.el.tagName.toLowerCase();
-      var ComponentName = this.childComponentSet.get(tagName);
-      var EventMachineComponent = this.childComponents[ComponentName];
-      let props = this.parseProperty($dom);
 
-      // create component 
-      let refName = $dom.attr(REFERENCE_PROPERTY);
-      var instance = null; 
+      const EventMachineComponent = this.getEventMachineComponent($dom.attr('refclass'))
 
-      // 동일한 refName 의 EventMachine 이 존재하면  해당 컴포넌트는 다시 그려진다. 
-      // 루트 element 는 변경되지 않는다. 
-      if (this.children[refName]) {
-        instance = this.children[refName] 
-        instance._reload(props);
-      } else {
-        // 기존의 refName 이 존재하지 않으면 Component 를 생성해서 element 를 교체한다. 
-        instance = new EventMachineComponent(this, props);
-
-        this.children[refName || instance.id] = instance;
-
-        instance.render();
+      if (EventMachineComponent) {
+        let props = this.parseProperty($dom);
+  
+        // create component 
+        let refName = $dom.attr(REFERENCE_PROPERTY);
+        var instance = null; 
+  
+        // 동일한 refName 의 EventMachine 이 존재하면  해당 컴포넌트는 다시 그려진다. 
+        // 루트 element 는 변경되지 않는다. 
+        if (this.children[refName]) {
+          instance = this.children[refName] 
+          instance._reload(props);
+        } else {
+          // 기존의 refName 이 존재하지 않으면 Component 를 생성해서 element 를 교체한다. 
+          instance = new EventMachineComponent(this, props);
+  
+          this.children[refName || instance.id] = instance;
+  
+          instance.render();
+        }
+        
+        $dom.replace(instance.$el);     
       }
-      
-      $dom.replace(instance.$el);      
+ 
   
     })
 
@@ -425,7 +434,7 @@ export default class EventMachine {
 
         checker = checker.map(it => it.trim())
         
-        const isVdom = Boolean(checker.filter(it => DOMDIFF.includes(it)).length);
+        const isDomDiff = Boolean(checker.filter(it => DOMDIFF.includes(it)).length);
 
         if (this.refs[elName]) {        
           var newTemplate = await this[callbackName].call(this, ...args);
@@ -436,7 +445,7 @@ export default class EventMachine {
 
           // create fragment 
           const fragment = this.parseTemplate(html`${newTemplate}`, true);
-          if (isVdom) {
+          if (isDomDiff) {
             this.refs[elName].htmlDiff(fragment);
           } else {
             this.refs[elName].html(fragment);

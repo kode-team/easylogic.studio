@@ -134,20 +134,20 @@ export default class FillEditor extends UIElement  {
                 </div>
             </div>
             <div class='tools' data-editor='tools'>
-              <RangeEditor label='${this.$i18n('fill.editor.offset')}' ref='$range' key='length' onchange='changeColorStepOffset' />
+              <span refClass="RangeEditor"  label='${this.$i18n('fill.editor.offset')}' ref='$range' key='length' onchange='changeColorStepOffset' />
             </div>
             <div class='sub-editor' ref='$subEditor'> 
                 <div data-editor='spreadMethod'>
-                  <SelectIconEditor label='${this.$i18n('fill.editor.spread')}' ref='$spreadMethod' value="pad" options='pad,reflect,repeat' key='spreadMethod' onchange='changeKeyValue' />
+                  <span refClass="SelectIconEditor" label='${this.$i18n('fill.editor.spread')}' ref='$spreadMethod' value="pad" options='pad,reflect,repeat' key='spreadMethod' onchange='changeKeyValue' />
                 </div>  
                 <div data-editor='patternUnits'>
-                  <SelectEditor label='Pattern' ref='$patternUnits' options='userSpaceOnUse' key='patternUnits' onchange='changeKeyValue' />
+                  <span refClass="SelectEditor"  label='Pattern' ref='$patternUnits' options='userSpaceOnUse' key='patternUnits' onchange='changeKeyValue' />
                 </div>                  
                 ${rangeEditorList.map(field => {
                   const label = this.$i18n('fill.editor.' + field)
                   return /*html*/`
                     <div data-editor='${field}'>
-                      <RangeEditor label='${label}' ref='$${field}' value="${this.getImageFieldValue(image, field)}" key='${field}' onchange='changeKeyValue' />
+                      <span refClass="RangeEditor"  label='${label}' ref='$${field}' value="${this.getImageFieldValue(image, field)}" key='${field}' onchange='changeKeyValue' />
                     </div>
                   `
                 }).join('')}

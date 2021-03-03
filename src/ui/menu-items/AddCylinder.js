@@ -1,9 +1,8 @@
 import MenuItem from "./MenuItem";
-import icon from "@icon/icon";
  
 export default class AddCylinder extends MenuItem {
   getIconString() {
-    return icon.cylinder;
+    return 'cylinder';
   }
   getTitle() {
     return this.props.title || "Cylinder";

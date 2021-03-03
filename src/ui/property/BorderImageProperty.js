@@ -147,7 +147,7 @@ export default class BorderImageProperty extends BaseProperty {
           </button>
         </div>
         <div class="slice-value">
-          <RangeEditor ref='$allSlice' key='border-image-slice' onchange='changeBorderImage' />
+          <span refClass="RangeEditor"  ref='$allSlice' key='border-image-slice' onchange='changeBorderImage' />
         </div>
       </div>
       <div
@@ -162,10 +162,10 @@ export default class BorderImageProperty extends BaseProperty {
                 <label class='title'>${it.title}</label>
               </div>
               <div>
-                <RangeEditor ref='$${it.key}Slice' label='Slice' key='border-image-slice-${it.key}' onchange='changeBorderImage' /> 
+                <span refClass="RangeEditor"  ref='$${it.key}Slice' label='Slice' key='border-image-slice-${it.key}' onchange='changeBorderImage' /> 
               </div>  
               <div>
-                <RangeEditor ref='$${it.key}Width' label='Width' key='border-image-width-${it.key}' onchange='changeBorderImage' /> 
+                <span refClass="RangeEditor"  ref='$${it.key}Width' label='Width' key='border-image-width-${it.key}' onchange='changeBorderImage' /> 
               </div>                
             `;
           }).join('')}

@@ -8,6 +8,11 @@ $border-radius: 3px;
     &.has-label {
         grid-template-columns: 70px 1fr;
         grid-column-gap: 2px;
+
+        &.compact {
+            grid-template-columns: 30px 1fr;
+        }
+
         &.is-removable {
             grid-template-columns: 70px 1fr 12px;
         }

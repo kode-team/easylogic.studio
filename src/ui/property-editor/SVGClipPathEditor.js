@@ -21,7 +21,7 @@ export default class SVGClipPathEditor extends UIElement {
 
     var checked = this.state.fit ? 'checked="checked"' : ''
 
-    return `
+    return /*html*/`
       <div class='svg-clip-path-editor clippath-list'>
           <div class='label' >
               <label>${this.props.title || ''}</label>
@@ -32,7 +32,7 @@ export default class SVGClipPathEditor extends UIElement {
             <label>Fit to size <input type='checkbox' ref='$fit' ${checked}  /> </label>
           </div>
           <div>
-            <IconListViewEditor ref='$svg' key='svg' value="${this.state.icon}" column="6" onchange='changeClipPath' />
+            <span refClass="IconListViewEditor" ref='$svg' key='svg' value="${this.state.icon}" column="6" onchange='changeClipPath' />
           </div>
       </div>`;
   }

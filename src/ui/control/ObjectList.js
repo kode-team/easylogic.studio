@@ -10,7 +10,7 @@ export default class ObjectList extends UIElement {
   template() {
     return /*html*/`
       <div class="feature-control object-list">
-        <LayerTab />
+        <span refClass="LayerTab" />
       </div>
     `;
   }

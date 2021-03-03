@@ -45,7 +45,7 @@ export default class PathDataProperty extends BaseProperty {
 
     return /*html*/`
       <div>
-        <PathDataEditor ref='$pathData' key='d' value='${current.d}' onchange='changeValue' />
+        <span refClass="PathDataEditor" ref='$pathData' key='d' value='${current.d}' onchange='changeValue' />
       </div>
     `;
   }

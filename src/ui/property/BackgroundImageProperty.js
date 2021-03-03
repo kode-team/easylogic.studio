@@ -48,7 +48,7 @@ export default class BackgroundImageProperty extends BaseProperty {
     var current = this.$selection.current || {}; 
     var value = current['background-image'] || ''
 
-    return /*html*/`<BackgroundImageEditor 
+    return /*html*/`<span refClass="BackgroundImageEditor" 
               ref='$backgroundImageEditor' 
               key='background-image'
               value='${value}' 

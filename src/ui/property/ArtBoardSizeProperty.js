@@ -30,7 +30,7 @@ export default class ArtBoardSizeProperty extends BaseProperty {
      })
 
     return /*html*/`
-      <SelectEditor ref='$select' value="${categories[0].category}" options="${categories.map(it => it.category).join(',')}" onchange='changeSizeIndex'/>
+      <span refClass="SelectEditor"  ref='$select' value="${categories[0].category}" options="${categories.map(it => it.category).join(',')}" onchange='changeSizeIndex'/>
     `
   }
 

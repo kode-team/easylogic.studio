@@ -3,7 +3,13 @@ import UIElement, { EVENT } from "@core/UIElement";
 import BorderValueEditor from "./BorderValueEditor";
 import Border from "@property-parser/Border";
 
-const borderTypeList = ["border", "border-top", "border-right", "border-bottom", "border-left"]
+const borderTypeList = [
+  "border", 
+  // "border-top", 
+  // "border-right", 
+  // "border-bottom", 
+  // "border-left"
+]
 const borderTypeTitle = {
   "border":  'all', 
   "border-top": 'top', 
@@ -59,7 +65,7 @@ export default class BorderEditor extends UIElement {
       label = this.$i18n('border.editor.' + label);
       return /*html*/`
       <div>
-        <BorderValueEditor ref='$${type}' label='${label}' key="${type}" value="${this.state.borders[type]}" onchange="changeKeyValue" />
+        <span refClass='BorderValueEditor' ref='$${type}' label='${label}' key="${type}" value="${this.state.borders[type]}" onchange="changeKeyValue" />
       </div>
       `
     })

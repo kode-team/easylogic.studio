@@ -12,7 +12,7 @@ export default class ObjectItems extends UIElement {
     return /*html*/`
       <div class='object-items'>
         <div>
-          <LayerTreeProperty />
+          <span refClass="LayerTreeProperty" />
         </div>
       </div>
     `;

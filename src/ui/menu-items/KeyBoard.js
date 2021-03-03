@@ -1,9 +1,8 @@
 import MenuItem from "./MenuItem";
-import icon from "@icon/icon";
 
 export default class KeyBoard extends MenuItem {
   getIconString() {
-    return icon.keyboard;
+    return 'keyboard';
   }
 
   getTitle() {

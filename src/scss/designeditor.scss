@@ -15,11 +15,11 @@ $show-timeline-animation: all 0.05s linear;
 $footer-height: 30px; 
 $status-bar-height: 30px;
 // base 
-$range-thumb-width: 12px;
-$range-thumb-height: 12px;
-$range-track-height: 1px;
-$range-thumb-top: -5px; 
-$range-thumb-border-radius: 6px; 
+$range-thumb-width: 16px;
+$range-thumb-height: 16px;
+$range-track-height: 4px;
+$range-thumb-top: -6px; 
+$range-thumb-border-radius: 20px; 
 
 html,body {
     font-size: 13px;
@@ -34,7 +34,7 @@ html,body {
 *:before,
 *:after {
     box-sizing: border-box;
-    touch-action: pinch-zoom;       
+    -webkit-overflow-scrolling: touch;
 }
 
 body {
@@ -238,7 +238,38 @@ body {
     }    
    
     @import './designeditor/component.scss';
-    @import './designeditor/layout.scss';          
+    @import './designeditor/layout.scss';      
+
+    @import './designeditor/range-ui.scss';
+    @import "./designeditor/tab-ui.scss";
+    @import "./designeditor/colorpicker-ui.scss";
+    @import "./designeditor/tool-menu.scss";
+    @import "./designeditor/view.scss";
+    @import './designeditor/selection-view.scss';
+    @import './designeditor/hover-view.scss';
+    
+    // property 
+    @import './designeditor/property/index.scss'; 
+    
+    // editor 
+    @import './designeditor/editor/index.scss';
+    
+    // popup 
+    @import "./designeditor/popup/popup.scss";
+    @import './designeditor/window/window.scss';
+    
+    @import './designeditor/path-editor-view.scss';
+    @import './designeditor/path-draw-view.scss';
+    @import './designeditor/brush-draw-view.scss';
+    @import './designeditor/layer-add-view.scss';
+    
+    // timeline 
+    @import './designeditor/timeline.scss';
+    
+    @import './designeditor/logo.scss';
+    @import './designeditor/status-bar.scss';
+    @import './designeditor/feature-control.scss';
+    @import './designeditor/notification-view.scss';        
     
 }
  

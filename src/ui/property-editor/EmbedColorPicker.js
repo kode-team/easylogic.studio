@@ -19,7 +19,7 @@ export default class EmbedColorPicker extends UIElement {
     template () {
       return /*html*/`
         <div class='embed-color-picker'>
-          <ColorPickerEditor 
+          <span refClass="ColorPickerEditor" 
             ref='$colorpicker' 
             key="colorpicker" 
             value="${this.state.value}" 

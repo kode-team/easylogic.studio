@@ -77,7 +77,7 @@ export default class BackgroundImageEditor extends UIElement {
     templateForBlendMode(index, blendMode) {
         return /*html*/`
         <div class='popup-item'>
-          <BlendSelectEditor 
+          <span refClass="BlendSelectEditor" 
                 ref='$blend_${index}' 
                 key='blendMode' 
                 value="${blendMode}" 
@@ -108,7 +108,7 @@ export default class BackgroundImageEditor extends UIElement {
       
             return /*html*/`
             <div class='fill-item ${selectedClass}' data-index='${index}' ref="fillIndex${index}"  draggable='true' data-fill-type="${backgroundType}" >
-                <BackgroundPositionEditor 
+                <span refClass="BackgroundPositionEditor" 
                     key="background-position"
                     index="${index}"
                     ref="$bp${index}"
@@ -120,13 +120,13 @@ export default class BackgroundImageEditor extends UIElement {
                     size="${it.size}"
                     blendMode="${it.blendMode}"     
                     onchange='changePattern' />
-                <GradientSingleEditor 
+                <span refClass="GradientSingleEditor" 
                     index="${index}"
                     ref="$gse${index}"
                     image="${it.image}"
                     color="${current.color}"
                     key="background-image"
-                onchange='changePattern'
+                    onchange='changePattern'
 
                 />
                 <div class='fill-info'>

@@ -38,7 +38,7 @@ export default class GridLayoutEditor extends UIElement {
     [LOAD('$body')] () {
         return /*html*/`
             <div class='grid-layout-item'>
-                <GridBoxEditor 
+                <span refClass="GridBoxEditor" 
                     label='${this.$i18n('grid.layout.editor.template.columns')}'
                     ref='$columnBox'
                     key='grid-template-columns'
@@ -47,7 +47,7 @@ export default class GridLayoutEditor extends UIElement {
                 />
             </div>
             <div class='grid-layout-item'>
-                <GridGapEditor 
+                <span refClass="GridGapEditor" 
                     label='${this.$i18n('grid.layout.editor.column.gap')}'
                     key='grid-column-gap'
                     value="${this.state['grid-column-gap'] || ''}"
@@ -55,7 +55,7 @@ export default class GridLayoutEditor extends UIElement {
                 />
             </div>            
             <div class='grid-layout-item'>
-                <GridBoxEditor 
+                <span refClass="GridBoxEditor" 
                     label='${this.$i18n('grid.layout.editor.template.rows')}'
                     ref='$rowBox'
                     key='grid-template-rows'
@@ -64,7 +64,7 @@ export default class GridLayoutEditor extends UIElement {
                 />
             </div>            
             <div class='grid-layout-item'>
-                <GridGapEditor 
+                <span refClass="GridGapEditor" 
                     label='${this.$i18n('grid.layout.editor.row.gap')}'                
                     key='grid-row-gap'
                     value="${this.state['grid-row-gap'] || ''}"

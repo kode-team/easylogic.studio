@@ -14,37 +14,37 @@ export default class ComponentItems extends UIElement {
         <div class='group'>
           <label>${this.$i18n('component.items.canvas')}</label>
           <div class='list'>
-            <SelectTool title='Select' />
-            <AddArtboard title='Artboard' />            
+            <span refclass="SelectTool" title='Select' />
+            <span refclass="AddArtboard" title='Artboard' />            
           </div>
         </div>              
         <div class='group'>
         <label>${this.$i18n('component.items.layer')}</label>
           <div class='list'>
-            <AddRect title='Rect' />
-            <AddCircle title='Circle' />         
-            <AddText title='Text' />
-            <AddImage title='Image' />
-            <AddVideo title='Video' />
+            <span refclass="AddRect" title='Rect' />
+            <span refclass="AddCircle" title='Circle' />         
+            <span refclass="AddText" title='Text' />
+            <span refclass="AddImage" title='Image' />
+            <span refclass="AddVideo" title='Video' />
           </div>
         </div>
         <div class='group'>
          <label>${this.$i18n('component.items.drawing')}</label>
           <div class='list'>            
             <!--<AddDrawBrush title='Brush' />-->
-            <AddDrawPath title='Draw' />
-            <AddPath title='Path' />
-            <AddSVGRect title='Rect' />
-            <AddSVGCircle title='Circle' />
+            <span refclass="AddDrawPath" title='Draw' />
+            <span refclass="AddPath" title='Path' />
+            <span refclass="AddSVGRect" title='Rect' />
+            <span refclass="AddSVGCircle" title='Circle' />
             <!-- <AddSVGText title='Text' /> -->
-            <AddSVGTextPath title='Text Path' />
+            <span refclass="AddSVGTextPath" title='Text Path' />
           </div>          
         </div>
         <div class='group'>
          <label>${this.$i18n('component.items.custom')}</label>
           <div class='list'>            
-            <AddCube title='Cube' />
-            <AddCylinder title='Cylinder' />          
+            <span refClass="AddCube" title='Cube' />
+            <span refClass="AddCylinder" title='Cylinder' />          
           </div>          
         </div>          
       </div>

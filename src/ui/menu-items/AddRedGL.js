@@ -1,11 +1,10 @@
 import MenuItem from "./MenuItem";
-import icon from "@icon/icon";
 import { Length } from "@unit/Length";
 import { RedGLLayer } from "@items/layers/canvas/RedGLLayer";
  
 export default class AddRedGL extends MenuItem {
   getIconString() {
-    return icon.outline_image;
+    return 'outline_image';
   }
   getTitle() {
     return "RedGL";

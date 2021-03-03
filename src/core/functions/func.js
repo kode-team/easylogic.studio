@@ -216,7 +216,7 @@ export const html = (strings, ...args) => {
         if (HTML_TAG[p1.toLowerCase()]) {
             return match;
         } else {
-            return match.replace('/>', `></${p1}>`)
+            return match.replace('/>', ` refclass="${p1}"></${p1}>`)
         }
     })
 

@@ -1,6 +1,7 @@
 import UIElement from "@core/UIElement";
 import { Length } from "@unit/Length";
 import { LOAD, INPUT } from "@core/Event";
+import icon from "@icon/icon";
 
 export default class NumberInputEditor extends UIElement {
 
@@ -8,8 +9,13 @@ export default class NumberInputEditor extends UIElement {
         var value = Length.parse(this.props.value || Length.number(0));
 
         value = value.toUnit('number');
+        let label = this.props.label || ''; 
+
+        if (icon[label]) {
+            label = icon[label];
+        }        
         return {
-            label: this.props.label || '',
+            label,
             compact: this.props.compact === 'true',            
             min: +this.props.min || 0,
             max: +this.props.max || 100,

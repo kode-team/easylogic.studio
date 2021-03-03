@@ -53,7 +53,7 @@ export default class DrawManager extends UIElement {
         <div class='tools'>   
           <div >        
             <label>${this.$i18n('draw.manager.tolerance')}</label>            
-            <NumberInputEditor 
+            <span refClass="NumberInputEditor"  
               ref='$tolerance' 
               key='tolerance' 
               value="1" 
@@ -66,12 +66,12 @@ export default class DrawManager extends UIElement {
           </div>              
           <div >
             <label>${this.$i18n('svg.item.property.stroke')}</label>          
-            <FillSingleEditor ref='$stroke' simple="true" value="${this.state.stroke}" key='stroke' onchange="changeValue" />
-          </div>                
+            <span refClass="FillSingleEditor" ref='$stroke' simple="true" value="${this.state.stroke}" key='stroke' onchange="changeValue" />
+          </div>
 
           <div >
             <label>${this.$i18n('svg.item.property.strokeWidth')}</label>          
-            <NumberInputEditor 
+            <span refClass="NumberInputEditor"  
               ref='$strokeWidth' 
               key="stroke-width" 
               value="${this.state['stroke-width']}"              
@@ -81,7 +81,7 @@ export default class DrawManager extends UIElement {
 
           <div>
             <label>${this.$i18n('svg.item.property.lineCap')}</label>          
-            <SelectEditor
+            <span refClass="SelectEditor" 
               ref='$strokeLineCap' 
               key="stroke-linecap" 
               value="${this.state['stroke-linecap']}"                   
@@ -91,7 +91,7 @@ export default class DrawManager extends UIElement {
           </div> 
           <div>
             <label>${this.$i18n('svg.item.property.lineJoin')}</label>          
-            <SelectEditor 
+            <span refClass="SelectEditor"  
               ref='$strokeLineJoin' 
               key="stroke-linejoin" 
               value="${this.state['stroke-linejoin']}"                                 

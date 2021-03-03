@@ -33,7 +33,7 @@ export default class FlexLayoutItemEditor extends UIElement {
         return /*html*/`
             <div class='flex-layout-item'>
                 <div class='label'><label>${this.$i18n('flex.layout.item.editor.direction')}</label></div>
-                <SelectIconEditor 
+                <span refClass="SelectIconEditor" 
                     key='flex-direction'
                     value="${this.state['flex-direction'] || 'row'}"
                     options="${getDirectionOptions()}"
@@ -42,7 +42,7 @@ export default class FlexLayoutItemEditor extends UIElement {
             </div>
             <div class='flex-layout-item'>
                 <div class='label'><label>${this.$i18n('flex.layout.item.editor.wrap')}</label></div>
-                <SelectIconEditor 
+                <span refClass="SelectIconEditor" 
                     key='flex-wrap'
                     value="${this.state['flex-wrap'] || 'wrap'}"
                     options="${getWrapOptions()}"
@@ -51,7 +51,7 @@ export default class FlexLayoutItemEditor extends UIElement {
             </div>
             <div class='flex-layout-item'>
                 <div class='label'><label>${this.$i18n('flex.layout.item.editor.justify-content')}</label></div>
-                <SelectIconEditor 
+                <span refClass="SelectIconEditor" 
                     key='justify-content'
                     value="${this.state['justify-content']}"
                     options="${getJustifyContentOptions()}"
@@ -60,7 +60,7 @@ export default class FlexLayoutItemEditor extends UIElement {
             </div>
             <div class='flex-layout-item'>
                 <div class='label'><label>${this.$i18n('flex.layout.item.editor.align-items')}</label></div>
-                <SelectIconEditor 
+                <span refClass="SelectIconEditor" 
                     key='align-items'
                     value="${this.state['align-items']}"
                     options="${getAlignItemsOptions()}"
@@ -69,7 +69,7 @@ export default class FlexLayoutItemEditor extends UIElement {
             </div>
             <div class='flex-layout-item'>
                 <div class='label'><label>${this.$i18n('flex.layout.item.editor.align-content')}</label></div>
-                <SelectIconEditor 
+                <span refClass="SelectIconEditor" 
                     key='align-content'
                     value="${this.state['align-content']}"
                     options="${getAlignContentOptions()}"

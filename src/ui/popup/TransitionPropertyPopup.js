@@ -134,7 +134,7 @@ export default class TransitionPropertyPopup extends BasePopup {
     return /*html*/`
     <div class='timing-function'>
       <label>Timing function</label>
-      <CubicBezierEditor ref='$cubicBezierEditor' key="timingFunction" value="${this.state.data.timingFunction || 'linear'}" onChange='changeCubicBezier' />
+      <span refClass="CubicBezierEditor" ref='$cubicBezierEditor' key="timingFunction" value="${this.state.data.timingFunction || 'linear'}" onChange='changeCubicBezier' />
     </div>
     `
   }
@@ -149,7 +149,7 @@ export default class TransitionPropertyPopup extends BasePopup {
    
     return /*html*/`
       <div class='name'>
-        <SelectEditor ref='$property' icon="true" label="Property" key='name' value="${this.state.data.name}" options="${property_list.join(',')}" onChange='changeTransition' /> 
+        <span refClass="SelectEditor"  ref='$property' icon="true" label="Property" key='name' value="${this.state.data.name}" options="${property_list.join(',')}" onChange='changeTransition' /> 
       </div>
     `
   }
@@ -158,7 +158,7 @@ export default class TransitionPropertyPopup extends BasePopup {
   templateForDelay () {
     return /*html*/`
     <div class='delay'>
-      <RangeEditor ref='$delay' label='Delay' calc='false' key='delay' value='${this.state.data.delay}' units='s,ms' onChange="changeRangeEditor" />
+      <span refClass="RangeEditor"  ref='$delay' label='Delay' calc='false' key='delay' value='${this.state.data.delay}' units='s,ms' onChange="changeRangeEditor" />
     </div>
     `
   }
@@ -166,7 +166,7 @@ export default class TransitionPropertyPopup extends BasePopup {
   templateForDuration () {
     return /*html*/`
     <div class='duration'>
-      <RangeEditor ref='$duration' label='Duration'  calc='false' key='duration' value='${this.state.data.duration}' units='s,ms' onChange="changeRangeEditor" />
+      <span refClass="RangeEditor"  ref='$duration' label='Duration'  calc='false' key='duration' value='${this.state.data.duration}' units='s,ms' onChange="changeRangeEditor" />
     </div>
     `
   }

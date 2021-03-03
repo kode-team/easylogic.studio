@@ -43,7 +43,7 @@ export default class PerspectiveProperty extends BaseProperty {
 
     var perspective = current['perspective'] || ''
     return /*html*/`
-        <RangeEditor ref='$1' key='perspective' value="${perspective}" max="2000px" onchange="changePerspective" />
+        <span refClass="RangeEditor"  ref='$1' key='perspective' value="${perspective}" max="2000px" onchange="changePerspective" />
     `;
   }
 

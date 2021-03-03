@@ -56,7 +56,7 @@ export default class EllipseEditor extends UIElement {
         return `
         <div class='clip-path-editor circle-editor'>
             <div>
-                <RangeEditor 
+                <span refClass="RangeEditor"  
                     ref='$rangeX' 
                     label='Radius X' 
                     key='radiusX' 
@@ -69,7 +69,7 @@ export default class EllipseEditor extends UIElement {
                 />
             </div>
             <div>
-                <RangeEditor 
+                <span refClass="RangeEditor"  
                     ref='$rangeY' 
                     label='Radius Y' 
                     key='radiusY' 

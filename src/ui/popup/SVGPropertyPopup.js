@@ -46,15 +46,15 @@ export default class SVGPropertyPopup extends BasePopup {
     switch(this.state.type) {
       case 'filter':
         return /*html*/`
-          <SVGFilterEditor ref='$filter' title="SVG Filter" key="filter" onchange='changeFilterEditor'>
+          <div refClass="SVGFilterEditor" ref='$filter' title="SVG Filter" key="filter" onchange='changeFilterEditor'>
             <property name="value" type="json">${JSON.stringify(this.state.value)}</property>
-          </SVGFilterEditor>
+          </div>
         `
       case 'clip-path':
         return /*html*/`
-          <SVGClipPathEditor ref='$clippath' title="SVG Clip Path" key="clip-path" onchange='changeClipPathEditor'>
+          <div refClass="SVGClipPathEditor" ref='$clippath' title="SVG Clip Path" key="clip-path" onchange='changeClipPathEditor'>
             <property name="value" type='json'>${JSON.stringify(this.state.value)}</property>
-          </SVGClipPathEditor>
+          </div>
         `
     }
 
