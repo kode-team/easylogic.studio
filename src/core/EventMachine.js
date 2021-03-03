@@ -347,8 +347,6 @@ export default class EventMachine {
 
     let targets = $el.$$(`[refclass]`);
 
-    console.log(targets);
-
     targets.forEach($dom => {
 
       const EventMachineComponent = this.getEventMachineComponent($dom.attr('refclass'))

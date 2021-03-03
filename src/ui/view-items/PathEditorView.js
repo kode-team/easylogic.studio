@@ -9,6 +9,7 @@ import { Length } from "@unit/Length";
 import { getBezierPoints, recoverBezier, recoverBezierQuard, getBezierPointsQuard, recoverBezierLine, getBezierPointsLine } from "@core/functions/bezier";
 import { isFunction } from "@core/functions/func";
 import { vec3 } from "gl-matrix";
+import { getDist } from "@core/functions/math";
 
 
 /**
@@ -674,7 +675,6 @@ export default class PathEditorView extends PathTransformEditor {
     }
 
     move (dx, dy) {
-
         if (this.state.isOnCanvas) {
             // 드래그 상자 만들기 
             this.renderSelectBox(this.state.dragXY, dx, dy);
@@ -688,9 +688,13 @@ export default class PathEditorView extends PathTransformEditor {
             this.updatePathLayer();
 
         } else if (this.isMode('path')) {
-            var e = this.$config.get('bodyEvent');
+            const dist = getDist(dx, dy, 0, 0);
 
-            this.state.dragPoints = e.altKey ? false : true; 
+            if (dist >= 2) {
+                var e = this.$config.get('bodyEvent');
+
+                this.state.dragPoints = e.altKey ? false : true; 
+            }
         }
     }
 
