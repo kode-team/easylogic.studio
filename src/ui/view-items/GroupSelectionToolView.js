@@ -55,10 +55,22 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
     template() {
         return /*html*/`
-    <div class='selection-view group-selection-view' ref='$selectionView'  style='display:none' >
-        <div class='pointer-rect' ref='$pointerRect'></div>        
-    </div>`
+            <div class='selection-view group-selection-view' ref='$selectionView'  style='display:none' >
+                <div class='pointer-rect' ref='$pointerRect'></div>        
+            </div>
+        `
     }
+
+
+    [EVENT('keymap.keydown')] (e) {
+        if (e.shiftKey) {
+            this.$el.attr('data-has-shift', 'true')
+        }
+    }
+
+    [EVENT('keymap.keyup')] (e) {
+        this.$el.attr('data-has-shift', '')
+    }        
 
     toggleEditingPath (isEditingPath) {
         this.refs.$selectionView.toggleClass('editing-path', isEditingPath);
@@ -332,7 +344,11 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
         const groupItem = this.cachedGroupItem;
 
-        const [realDx, realDy] = this.calculateRealDist(groupItem, 2, distVector);
+        let [realDx, realDy] = this.calculateRealDist(groupItem, 2, distVector);
+
+        if (this.$config.get('bodyEvent').shiftKey) {
+            realDy = realDx * groupItem.height/groupItem.width;
+        }                
 
         // 변형되는 넓이 높이 구하기 
         const newWidth = groupItem.width + realDx;
@@ -345,7 +361,11 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     moveTopRightVertext (distVector) {
         const groupItem = this.cachedGroupItem;
 
-        const [realDx, realDy] = this.calculateRealDist(groupItem, 1, distVector);
+        let [realDx, realDy] = this.calculateRealDist(groupItem, 1, distVector);
+
+        if (this.$config.get('bodyEvent').shiftKey) {
+            realDy = -(realDx * groupItem.height/groupItem.width);
+        }                
 
         // 변형되는 넓이 높이 구하기 
         const newWidth = groupItem.width + realDx;
@@ -410,7 +430,11 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
         const groupItem = this.cachedGroupItem;
 
-        const [realDx, realDy] = this.calculateRealDist(groupItem, 0, distVector);
+        let [realDx, realDy] = this.calculateRealDist(groupItem, 0, distVector);
+
+        if (this.$config.get('bodyEvent').shiftKey) {
+            realDy = realDx * groupItem.height/groupItem.width;
+        }
 
         // 변형되는 넓이 높이 구하기 
         const newWidth = groupItem.width - realDx;
@@ -453,7 +477,11 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
         const groupItem = this.cachedGroupItem;
 
-        const [realDx, realDy] = this.calculateRealDist(groupItem, 3, distVector);
+        let [realDx, realDy] = this.calculateRealDist(groupItem, 3, distVector);
+
+        if (this.$config.get('bodyEvent').shiftKey) {
+            realDy = -(realDx * groupItem.height/groupItem.width);
+        }          
 
         // 변형되는 넓이 높이 구하기 
         const newWidth = groupItem.width - realDx;

@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "@core/UIElement";
-import { POINTERSTART, POINTEROVER, POINTEROUT, MOVE, END, IF, PREVENT } from "@core/Event";
+import { POINTERSTART, POINTEROVER, POINTEROUT, MOVE, END, IF, PREVENT, KEYDOWN } from "@core/Event";
 import { Length } from "@unit/Length";
 import { clone} from "@core/functions/func";
 import { mat4, vec3 } from "gl-matrix";
@@ -63,10 +63,21 @@ export default class SelectionToolView extends SelectionToolEvent {
 
     template() {
         return /*html*/`
-    <div class='selection-view one-selection-view' ref='$selectionView' style='display:none' >
-        <div class='pointer-rect' ref='$pointerRect'></div>
-    </div>`
+            <div class='selection-view one-selection-view' ref='$selectionView' style='display:none' >
+                <div class='pointer-rect' ref='$pointerRect'></div>
+            </div>
+        `
     }
+
+    [EVENT('keymap.keydown')] (e) {
+        if (e.shiftKey) {
+            this.$el.attr('data-has-shift', 'true')
+        }
+    }
+
+    [EVENT('keymap.keyup')] (e) {
+        this.$el.attr('data-has-shift', '')
+    }    
 
     toggleEditingPath (isEditingPath) {
         this.$el.toggleClass('editing-path', isEditingPath);
@@ -286,7 +297,7 @@ export default class SelectionToolView extends SelectionToolEvent {
                 let [realDx, realDy] = this.calculateRealDist(item, 2, distVector)
 
                 if (this.$config.get('bodyEvent').shiftKey) {
-                    realDy = realDx;
+                    realDy = realDx * item.height/item.width;
                 }                
     
                 // 변형되는 넓이 높이 구하기 
@@ -308,7 +319,7 @@ export default class SelectionToolView extends SelectionToolEvent {
             let [realDx, realDy] = this.calculateRealDist(item, 1, distVector)
 
             if (this.$config.get('bodyEvent').shiftKey) {
-                realDy = -realDx;
+                realDy = -(realDx * item.height/item.width);
             }
 
             // 변형되는 넓이 높이 구하기 
@@ -326,7 +337,7 @@ export default class SelectionToolView extends SelectionToolEvent {
             let [realDx, realDy] = this.calculateRealDist(item, 0, distVector)
 
             if (this.$config.get('bodyEvent').shiftKey) {
-                realDy = realDx;
+                realDy = realDx * item.height/item.width;
             }
 
             // 변형되는 넓이 높이 구하기 
@@ -405,7 +416,7 @@ export default class SelectionToolView extends SelectionToolEvent {
             let [realDx, realDy] = this.calculateRealDist(item, 3, distVector)
 
             if (this.$config.get('bodyEvent').shiftKey) {
-                realDy = -realDx;
+                realDy = -(realDx * item.height/item.width);
             }            
 
             // 변형되는 넓이 높이 구하기 

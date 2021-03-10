@@ -20,6 +20,77 @@
         display: none;
       }
     }
+
+    &[data-has-shift="true"] {
+
+      .pointer-rect {
+
+        .pointer {
+          background-color: transparent; 
+        }          
+
+        .pointer[data-number="11"], 
+        .pointer[data-number="12"], 
+        .pointer[data-number="13"], 
+        .pointer[data-number="14"] {
+          display: none;
+        }
+      }
+    }    
+
+    &.one-selection-view {
+      &[data-has-shift="true"] {
+
+        .pointer-rect {
+
+          .pointer[data-number="1"] {
+            border-top-width: 0px;
+            border-left-width: 0px;
+          }
+  
+          .pointer[data-number="2"] {
+            border-right-width: 0px;
+            border-top-width: 0px;
+          } 
+          .pointer[data-number="3"] {
+            border-right-width: 0px;
+            border-bottom-width: 0px;          
+          }
+          .pointer[data-number="4"] {
+            border-left-width: 0px;
+            border-bottom-width: 0px;
+          }
+
+        }
+      }
+    }
+  
+    &.group-selection-view {
+      &[data-has-shift="true"] {
+
+        .pointer-rect {
+  
+          .pointer[data-number="1"] {
+            border-bottom-width: 0px;
+            border-right-width: 0px;
+          }
+  
+          .pointer[data-number="2"] {
+            border-left-width: 0px;
+            border-bottom-width: 0px;
+          } 
+          .pointer[data-number="3"] {
+            border-left-width: 0px;
+            border-top-width: 0px;          
+          }
+          .pointer[data-number="4"] {
+            border-right-width: 0px;
+            border-top-width: 0px;
+          }
+        }
+      }
+    }
+
   }
 
   .pointer-rect {
@@ -42,13 +113,7 @@
       background-color: white; 
       box-sizing: border-box;
       border: 0.5px solid var(--selection-tool-border-color);
-      // border-radius: 100%;
-      // cursor: pointer;
       pointer-events: all;
-      // &[data-number="1"] { background-color: rgb(255, 185, 185); }
-      // &[data-number="2"] { background-color: rgb(255, 0, 0); }
-      // &[data-number="3"] { background-color: rgb(115, 255, 0); }
-      // &[data-number="4"] { background-color: rgb(75, 62, 255); }
       &[data-number="5"] { 
         border-radius: 100%; 
         background-color: var(--selected-color);
@@ -57,18 +122,6 @@
         height: 5px;
         z-index: 1000;
       }
-
-      // &:before {
-      //   content: '';
-      //   position: absolute;
-      //   left: 50%;
-      //   top: 50%;
-      //   width: 5px;
-      //   height: 5px;
-      //   transform: translate(-50%, -50%);
-      //   border-radius: 50%;
-      //   background-color: var(--selection-tool-border-color);
-      // }
     }
 
     .size-pointer {
