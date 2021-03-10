@@ -695,6 +695,8 @@ export default class SelectionToolView extends SelectionToolEvent {
             vec3.lerp([], pointers[0], pointers[1], 0.5), 
             vec3.lerp([], pointers[0], pointers[2], 0.5), 
         );
+
+        //TODO: 여기서는 법선벡터를 구하게 되면 식이 훨씬 간단해진다. 
         const rotate = Length.deg(calculateAngle360(diff[0], diff[1]) + 90).round(1000);
 
         const rotatePointer = getRotatePointer(pointers, 34)

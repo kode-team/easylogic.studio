@@ -1,4 +1,5 @@
 import { EDIT_MODE_SELECTION } from "@manager/Editor";
+import { Length } from "@unit/Length";
 import loadOriginalImage from "@util/loadOriginalImage";
 
 export default {
@@ -14,7 +15,19 @@ export default {
 
             // convert data or blob to local url 
             loadOriginalImage(imageObject, (info) => {
-                editor.emit('addImage', {src: imageObject.id, ...info, ...rect }, containerItem);
+
+                // width 랑 같은 비율로 맞추기 
+                const rate = rect.width.value/info.width.value;
+                const width = rect.width;
+                const height = Length.px(info.height.value * rate); 
+
+                editor.emit('addImage', {
+                    src: imageObject.id, 
+                    ...info, 
+                    ...rect, 
+                    width, 
+                    height 
+                }, containerItem);
                 editor.changeMode(EDIT_MODE_SELECTION);
                 editor.emit('afterChangeMode');                
             });
