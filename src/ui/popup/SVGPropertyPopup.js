@@ -3,6 +3,7 @@ import { INPUT, LOAD } from "@core/Event";
 import SVGFilterEditor from "../property-editor/SVGFilterEditor";
 import SVGClipPathEditor from "../property-editor/SVGClipPathEditor";
 import BasePopup from "./BasePopup";
+import { registElement } from "@core/registerElement";
 
 export default class SVGPropertyPopup extends BasePopup {
 
@@ -111,3 +112,5 @@ export default class SVGPropertyPopup extends BasePopup {
     this.$el.hide();
   }
 }
+
+registElement({ SVGPropertyPopup })

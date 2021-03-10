@@ -1,4 +1,5 @@
 import { DOMDIFF, LOAD } from "@core/Event";
+import { registElement } from "@core/registerElement";
 import UIElement, { EVENT } from "@core/UIElement";
 
 let pathString = []
@@ -194,3 +195,5 @@ export default class HorizontalRuler extends UIElement {
         this.refreshCanvasSize();
     }    
 }
+
+registElement({ HorizontalRuler })

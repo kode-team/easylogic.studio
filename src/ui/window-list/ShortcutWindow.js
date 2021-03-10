@@ -2,6 +2,7 @@ import BaseWindow from "./BaseWindow";
 import shortcuts from "../../shortcuts";
 import { os } from "@core/functions/detect";
 import { EVENT } from "@core/UIElement";
+import { registElement } from "@core/registerElement";
 
 const categories = new Set();
 
@@ -104,3 +105,5 @@ export default class ShortcutWindow extends BaseWindow {
     }
 
 }
+
+registElement({ ShortcutWindow })

@@ -6,11 +6,9 @@ import { DRAGOVER, DROP, PREVENT, TRANSITIONEND, KEYDOWN, KEYUP, IF, POINTERSTAR
 import icon from "@icon/icon";
 import { Length } from "@unit/Length";
 
-import TimelineProperty from "@ui/control/TimelineProperty";
-import Inspector from "@ui/control/Inspector";
-import ObjectList from "@ui/control/ObjectList";
-
-import popup from "@ui/popup";  
+import "@ui/popup";  
+import "@ui/window-list";
+import "@ui/control";
 
 import CanvasView from "@ui/view/CanvasView";
 import ToolMenu from "@ui/view/ToolMenu";
@@ -20,12 +18,14 @@ import StatusBar from "@ui/view/StatusBar";
 import PreviewToolMenu from "@ui/view/PreviewToolMenu";
 import NotificationView from "@ui/view/NotificationView";
 import PageSubEditor from "@ui/view-items/PageSubEditor";
-import windowList from "@ui/window-list";
+
 import HorizontalRuler from "@ui/view/HorizontalRuler";
 import VerticalRuler from "@ui/view/VerticalRuler";
+import { registElement } from "@core/registerElement";
  
 
 const formElements = ['TEXTAREA', 'INPUT', 'SELECT']
+
 export default class DesignEditor extends UIElement {
   
   initialize () {
@@ -229,17 +229,12 @@ export default class DesignEditor extends UIElement {
 
   components() {
     return {
-      ...windowList,
-      ...popup,
-      ObjectList,
-      Inspector,
       ToolMenu,
       PageSubEditor,
       CanvasView,
       LogoView,
       ExternalToolMenu,
       StatusBar,
-      TimelineProperty,
       PreviewToolMenu,
       NotificationView,
       HorizontalRuler,
@@ -365,3 +360,5 @@ export default class DesignEditor extends UIElement {
     this.emit('keymap.keyup', e);
   }
 }
+
+registElement({ DesignEditor })

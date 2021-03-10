@@ -1,6 +1,7 @@
 import UIElement, { EVENT } from "@core/UIElement";
 import { CLICK, DRAGSTART, LOAD } from "@core/Event";
 import icon from "@icon/icon";
+import { registElement } from "@core/registerElement";
 
 export default class ArtboardItems extends UIElement {
   template() {
@@ -62,3 +63,5 @@ export default class ArtboardItems extends UIElement {
     this.emit('savePNG', 'afterSaveArtboard')
   }
 }
+
+registElement({ ArtboardItems })

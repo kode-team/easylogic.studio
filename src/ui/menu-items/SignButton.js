@@ -1,3 +1,4 @@
+import { registElement } from "@core/registerElement";
 import MenuItem from "./MenuItem";
 
 export default class SignButton extends MenuItem {
@@ -12,3 +13,5 @@ export default class SignButton extends MenuItem {
     this.emit('showSignWindow')
   }
 }
+
+registElement({ SignButton })

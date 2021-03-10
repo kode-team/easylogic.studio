@@ -7,6 +7,7 @@ import CSSPropertyEditor from "@ui/property-editor/CSSPropertyEditor";
 import { second, timecode } from "@core/functions/time";
 import { isUndefined } from "@core/functions/func";
 import icon from "@icon/icon";
+import { registElement } from "@core/registerElement";
 
 export default class TimelineValueEditor extends UIElement {
   components() { 
@@ -216,3 +217,5 @@ checkKey (e) {
   }
 
 }
+
+registElement({ TimelineValueEditor })

@@ -1,3 +1,4 @@
+import { registElement } from "@core/registerElement";
 import UIElement from "@core/UIElement";
 import LayerTreeProperty from "../property/LayerTreeProperty";
 
@@ -19,3 +20,5 @@ export default class ObjectItems extends UIElement {
   }
 
 }
+
+registElement({ ObjectItems })

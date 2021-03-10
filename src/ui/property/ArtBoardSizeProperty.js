@@ -2,6 +2,7 @@ import BaseProperty from "./BaseProperty";
 import { LOAD, DOMDIFF, CLICK } from "@core/Event";
 import { EVENT } from "@core/UIElement";
 import artboardSize from "@preset/artboards/artboard.size";
+import { registElement } from "@core/registerElement";
 
 export default class ArtBoardSizeProperty extends BaseProperty {
 
@@ -118,3 +119,5 @@ export default class ArtBoardSizeProperty extends BaseProperty {
   //   }
   // }
 }
+
+registElement({ ArtBoardSizeProperty })

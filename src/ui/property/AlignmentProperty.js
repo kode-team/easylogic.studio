@@ -1,5 +1,6 @@
 import BaseProperty from "./BaseProperty";
 import menuItems from "../menu-items";
+import { registElement } from "@core/registerElement";
 
 export default class AlignmentProperty extends BaseProperty {
   components() {
@@ -35,3 +36,5 @@ export default class AlignmentProperty extends BaseProperty {
     `;
   }
 }
+
+registElement({ AlignmentProperty })

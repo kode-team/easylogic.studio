@@ -1,3 +1,4 @@
+import { registElement } from "@core/registerElement";
 import MenuItem from "./MenuItem";
  
 export default class AddDrawPath extends MenuItem {
@@ -13,3 +14,5 @@ export default class AddDrawPath extends MenuItem {
   }
 
 }
+
+registElement({ AddDrawPath })

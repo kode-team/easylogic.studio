@@ -1,5 +1,6 @@
 import MenuItem from "./MenuItem";
 import { EVENT } from "@core/UIElement";
+import { registElement } from "@core/registerElement";
  
 export default class AddText extends MenuItem {
   getIconString() {
@@ -22,3 +23,5 @@ export default class AddText extends MenuItem {
   }    
 
 }
+
+registElement({ AddText })

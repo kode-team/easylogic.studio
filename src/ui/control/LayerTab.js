@@ -8,6 +8,7 @@ import PreviewToolMenu from "../view/PreviewToolMenu";
 import ShortCutItems from "./ShortCutItems";
 import property from "../property";
 import ArtboardItems from "./ArtboardItems";
+import { registElement } from "@core/registerElement";
 
 
 export default class LayerTab extends UIElement {
@@ -99,3 +100,5 @@ export default class LayerTab extends UIElement {
     this.setState({ selectedIndex }, false);
   }
 }
+
+registElement({ LayerTab })

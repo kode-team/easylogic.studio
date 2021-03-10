@@ -1,5 +1,6 @@
 import MenuItem from "./MenuItem";
 import { EVENT } from "@core/UIElement";
+import { registElement } from "@core/registerElement";
  
 export default class AddArtboard extends MenuItem {
   getIconString() {
@@ -17,3 +18,5 @@ export default class AddArtboard extends MenuItem {
     this.setSelected(type === 'artboard');
   }  
 }
+
+registElement({ AddArtboard })

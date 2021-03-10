@@ -2,6 +2,7 @@ import UIElement from "@core/UIElement";
 import { LOAD } from "@core/Event";
 import shortcuts from "../../shortcuts";
 import { os } from "@core/functions/detect";
+import { registElement } from "@core/registerElement";
 
 const keyUnitCode = {
   'option': '⌥',
@@ -50,3 +51,5 @@ export default class ShortCutItems extends UIElement {
   }
 
 }
+
+registElement({ ShortCutItems })

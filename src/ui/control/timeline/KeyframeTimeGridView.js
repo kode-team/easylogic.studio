@@ -1,5 +1,6 @@
 import UIElement, { EVENT } from "@core/UIElement";
 import { RESIZE, DEBOUNCE, THROTTLE } from "@core/Event";
+import { registElement } from "@core/registerElement";
 
 export default class KeyframeTimeGridView extends UIElement {
     template () {
@@ -64,3 +65,5 @@ export default class KeyframeTimeGridView extends UIElement {
         this.refresh();
     }
 }
+
+registElement({ KeyframeTimeGridView })

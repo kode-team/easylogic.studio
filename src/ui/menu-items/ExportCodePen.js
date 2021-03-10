@@ -1,4 +1,5 @@
 import { SUBMIT } from "@core/Event";
+import { registElement } from "@core/registerElement";
 import UIElement from "@core/UIElement";
 import ExportManager from "@manager/ExportManager";
 
@@ -29,3 +30,5 @@ export default class ExportCodePen extends UIElement {
   }
 
 }
+
+registElement({ ExportCodePen })

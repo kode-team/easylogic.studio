@@ -18,6 +18,7 @@ import HoverView from "@ui/view-items/HoverView";
 import { isFunction } from "@core/functions/func";
 import { KEY_CODE } from "@types/key";
 import { vec3 } from "gl-matrix";
+import { registElement } from "@core/registerElement";
 
 
 export default class HTMLRenderView extends UIElement {
@@ -730,3 +731,5 @@ export default class HTMLRenderView extends UIElement {
     }
 
 }
+
+registElement({ HTMLRenderView })

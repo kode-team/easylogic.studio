@@ -2,6 +2,7 @@ import { EVENT } from "@core/UIElement";
 import { INPUT } from "@core/Event";
 import CSSPropertyEditor from "../property-editor/CSSPropertyEditor";
 import BasePopup from "./BasePopup";
+import { registElement } from "@core/registerElement";
 
 export default class SelectorPopup extends BasePopup {
 
@@ -84,3 +85,5 @@ export default class SelectorPopup extends BasePopup {
     this.show(250)
   }
 }
+
+registElement({ SelectorPopup })

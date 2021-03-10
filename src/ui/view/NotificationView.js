@@ -2,6 +2,7 @@ import UIElement, { EVENT } from "@core/UIElement";
 import icon from "@icon/icon";
 import Dom from "@core/Dom";
 import { TRANSITIONEND, CLICK } from "@core/Event";
+import { registElement } from "@core/registerElement";
 
 export default class NotificationView extends UIElement {
 
@@ -41,3 +42,5 @@ export default class NotificationView extends UIElement {
 
     }
 }
+
+registElement({ NotificationView })

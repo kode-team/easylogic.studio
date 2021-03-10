@@ -1,6 +1,7 @@
 import UIElement, { EVENT } from "@core/UIElement";
 import { CLICK, INPUT, BIND } from "@core/Event";
 import icon from "@icon/icon";
+import { registElement } from "@core/registerElement";
 
 export default class TimelinePlayControl extends UIElement {
     
@@ -201,3 +202,5 @@ export default class TimelinePlayControl extends UIElement {
     } 
 
 }
+
+registElement({ TimelinePlayControl })

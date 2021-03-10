@@ -6,13 +6,9 @@ import items from '@items';
 import parse from '@parser';
 import { Length } from "@unit/Length";
 
-
 export default {
   createDesignEditor(opts = { type: "white" }) {
     return App.start({
-      components: { 
-        DesignEditor 
-      },
       className: 'designeditor',
       container: document.getElementById('app'),
       template: /*html*/`

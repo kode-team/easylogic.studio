@@ -1,3 +1,4 @@
+import { registElement } from "@core/registerElement";
 import UIElement from "@core/UIElement";
 import KeyframeTimeControl from "./KeyframeTimeControl";
 
@@ -15,3 +16,5 @@ export default class TimelineTopToolbar extends UIElement {
         `
     }
 }
+
+registElement({ TimelineTopToolbar })

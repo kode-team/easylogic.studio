@@ -2,6 +2,7 @@ import UIElement, { EVENT } from "@core/UIElement";
 import { RESIZE, DEBOUNCE, POINTERSTART, MOVE, THROTTLE, IF, END } from "@core/Event";
 import { Length } from "@unit/Length";
 import { second, framesToTimecode } from "@core/functions/time";
+import { registElement } from "@core/registerElement";
 
 const PADDING = 20 
 
@@ -266,3 +267,5 @@ export default class KeyframeTimeView extends UIElement {
         this.refresh();
     }
 }
+
+registElement({ KeyframeTimeView })

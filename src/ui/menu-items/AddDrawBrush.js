@@ -1,5 +1,6 @@
 import MenuItem from "./MenuItem";
 import { EVENT } from "@core/UIElement";
+import { registElement } from "@core/registerElement";
  
 export default class AddDrawBrush extends MenuItem {
   getIconString() {
@@ -21,3 +22,5 @@ export default class AddDrawBrush extends MenuItem {
     this.setSelected(type === 'brush');
   }    
 }
+
+registElement({ AddDrawBrush })

@@ -6,7 +6,9 @@ import EasyLogic from "./designeditor/index";
 function startEditor() {
 
   // 시작 지점을 고쳐보자. 
-  var app = new EasyLogic.createDesignEditor();
+  var app = new EasyLogic.createDesignEditor({
+    version: '@@VERSION@@'
+  });
   // app.commands.registerCommand('sample.ok', () => {
   //   alert('샘플 ok');
   // })

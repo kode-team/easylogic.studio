@@ -10,6 +10,7 @@ import TimelineValueEditor from "./timeline/TimelineValueEditor";
 import { EVENT } from "@core/UIElement";
 import TimelinePlayControl from "./timeline/TimelinePlayControl";
 import TimelineAnimationProperty from "../property/TimelineAnimationProperty";
+import { registElement } from "@core/registerElement";
 
 export default class TimelineProperty extends BaseProperty {
 
@@ -107,3 +108,5 @@ export default class TimelineProperty extends BaseProperty {
   }
 
 }
+
+registElement({ TimelineProperty })

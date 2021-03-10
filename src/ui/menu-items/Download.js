@@ -1,3 +1,4 @@
+import { registElement } from "@core/registerElement";
 import MenuItem from "./MenuItem";
 
 export default class Download extends MenuItem {
@@ -12,3 +13,5 @@ export default class Download extends MenuItem {
     this.emit('downloadJSON')
   }
 }
+
+registElement({ Download })

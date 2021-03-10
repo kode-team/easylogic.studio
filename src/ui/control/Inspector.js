@@ -3,6 +3,7 @@ import UIElement from "@core/UIElement";
 import { CLICK } from "@core/Event";
 import property from "../property/index";
 import icon from "@icon/icon";
+import { registElement } from "@core/registerElement";
 
 export default class Inspector extends UIElement {
 
@@ -145,3 +146,5 @@ export default class Inspector extends UIElement {
 
   }
 }
+
+registElement({ Inspector })

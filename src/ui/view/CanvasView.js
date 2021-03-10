@@ -8,6 +8,7 @@ import { vec3 } from "gl-matrix";
 import { KEY_CODE } from "@types/key";
 import Resource from "@util/Resource";
 import Dom from "@core/Dom";
+import { registElement } from "@core/registerElement";
 
 export default class CanvasView extends UIElement {
 
@@ -219,3 +220,5 @@ export default class CanvasView extends UIElement {
   }
 
 }
+
+registElement({ CanvasView })

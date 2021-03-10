@@ -1,6 +1,7 @@
 import BaseProperty from "./BaseProperty";
 import { DEBOUNCE } from "@core/Event";
 import { EVENT } from "@core/UIElement";
+import { registElement } from "@core/registerElement";
 
 const overflow_list = [
   'visible',
@@ -104,3 +105,5 @@ export default class AppearanceProperty extends BaseProperty {
     this.refreshShow(['project', 'artboard', 'rect', 'circle', 'image', 'video', 'text']);
   }
 }
+
+registElement({ AppearanceProperty })

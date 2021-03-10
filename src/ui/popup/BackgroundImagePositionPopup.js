@@ -8,6 +8,7 @@ import SelectEditor from "../property-editor/SelectEditor";
 import BasePopup from "./BasePopup";
 import EmbedColorPicker from "../property-editor/EmbedColorPicker";
 import { blend_list } from "@util/Resource";
+import { registElement } from "@core/registerElement";
 
 
 export default class BackgroundImagePositionPopup extends BasePopup {
@@ -185,3 +186,5 @@ export default class BackgroundImagePositionPopup extends BasePopup {
 
 
 }
+
+registElement({ BackgroundImagePositionPopup })

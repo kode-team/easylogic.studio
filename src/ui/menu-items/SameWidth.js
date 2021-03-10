@@ -1,3 +1,4 @@
+import { registElement } from "@core/registerElement";
 import MenuItem from "./MenuItem";
    
 export default class SameWidth extends MenuItem {
@@ -20,3 +21,5 @@ export default class SameWidth extends MenuItem {
     this.emit('same.width');
   }
 }
+
+registElement({ SameWidth })

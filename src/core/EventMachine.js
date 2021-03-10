@@ -21,6 +21,7 @@ import {
 import { uuid } from "./functions/math";
 import DomEventHandler from "./handler/DomEventHandler";
 import BindHandler from "./handler/BindHandler";
+import { retriveElement } from "./registerElement";
 
 const REFERENCE_PROPERTY = "ref";
 const TEMP_DIV = Dom.create("div");
@@ -337,7 +338,7 @@ export default class EventMachine {
   }
 
   getEventMachineComponent (refClassName) {
-    var EventMachineComponent = this.childComponents[refClassName];
+    var EventMachineComponent = retriveElement(refClassName) || this.childComponents[refClassName];
 
     return EventMachineComponent;
   }

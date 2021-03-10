@@ -2,6 +2,7 @@ import { EVENT } from "@core/UIElement";
 import { Length } from "@unit/Length";
 import { LOAD, CLICK, POINTERSTART, MOVE } from "@core/Event";
 import BasePopup from "./BasePopup";
+import { registElement } from "@core/registerElement";
 
 export default class BoxShadowPropertyPopup extends BasePopup {
 
@@ -166,3 +167,5 @@ export default class BoxShadowPropertyPopup extends BasePopup {
     this.hide();
   }
 }
+
+registElement({ BoxShadowPropertyPopup })

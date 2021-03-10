@@ -1,3 +1,4 @@
+import { registElement } from "@core/registerElement";
 import MenuItem from "./MenuItem";
  
 export default class AddCylinder extends MenuItem {
@@ -22,3 +23,5 @@ export default class AddCylinder extends MenuItem {
   }
 
 }
+
+registElement({ AddCylinder })

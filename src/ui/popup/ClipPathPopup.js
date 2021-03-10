@@ -8,6 +8,7 @@ import InsetEditor from "../property-editor/clip-path/InsetEditor";
 import PolygonEditor from "../property-editor/clip-path/PolygonEditor";
 import BasePopup from "./BasePopup";
 import EllipseEditor from "../property-editor/clip-path/EllipseEditor";
+import { registElement } from "@core/registerElement";
 
 
 
@@ -108,3 +109,5 @@ export default class ClipPathPopup extends BasePopup {
     this.hide();
   }
 }
+
+registElement({ ClipPathPopup })

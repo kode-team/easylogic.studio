@@ -1,3 +1,4 @@
+import { registElement } from "@core/registerElement";
 import MenuItem from "./MenuItem";
  
 export default class AddSVGRect extends MenuItem {
@@ -14,3 +15,5 @@ export default class AddSVGRect extends MenuItem {
   }
 
 }
+
+registElement({ AddSVGRect })

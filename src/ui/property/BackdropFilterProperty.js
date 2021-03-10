@@ -1,10 +1,11 @@
 import BaseProperty from "./BaseProperty";
 import {
-  LOAD, DEBOUNCE, CLICK,
+  LOAD, CLICK,
 } from "@core/Event";
 import { EVENT } from "@core/UIElement";
 import icon from "@icon/icon";
 import { filter_list } from "@util/Resource";
+import { registElement } from "@core/registerElement";
 
 export default class BackdropFilterProperty extends BaseProperty {
 
@@ -114,3 +115,5 @@ export default class BackdropFilterProperty extends BaseProperty {
     this.refreshShowIsNot(['project', 'artboard'])
   }  
 }
+
+registElement({ BackdropFilterProperty })

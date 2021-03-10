@@ -1,5 +1,6 @@
 import MenuItem from "./MenuItem";
 import icon from "@icon/icon";
+import { registElement } from "@core/registerElement";
    
 export default class TopAlign extends MenuItem {
   getIconString() {
@@ -17,3 +18,5 @@ export default class TopAlign extends MenuItem {
     this.emit('sort.top');
   }
 }
+
+registElement({ TopAlign })

@@ -9,6 +9,7 @@ import { EVENT } from "@core/UIElement";
 import icon from "@icon/icon";
 import { Animation } from "@property-parser/Animation";
 import { curveToPath } from "@core/functions/func";
+import { registElement } from "@core/registerElement";
 
 export default class AnimationProperty extends BaseProperty {
   getTitle() {
@@ -188,3 +189,5 @@ export default class AnimationProperty extends BaseProperty {
     }
   }
 }
+
+registElement({ AnimationProperty })

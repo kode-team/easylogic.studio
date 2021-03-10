@@ -1,6 +1,7 @@
 import UIElement, { EVENT } from "@core/UIElement";
 import menuItems from "../menu-items/index";
 import { CLICK } from "@core/Event";
+import { registElement } from "@core/registerElement";
 
 export default class ToolMenu extends UIElement {
   components() {
@@ -54,3 +55,5 @@ export default class ToolMenu extends UIElement {
     e.$dt.onlyOneClass('selected');
   }
 }
+
+registElement({ ToolMenu })

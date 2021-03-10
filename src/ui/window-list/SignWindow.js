@@ -1,6 +1,7 @@
 import BaseWindow from "./BaseWindow";
 import { EVENT } from "@core/UIElement";
 import { CLICK } from "@core/Event";
+import { registElement } from "@core/registerElement";
 
 export default class SignWindow extends BaseWindow {
 
@@ -45,3 +46,5 @@ export default class SignWindow extends BaseWindow {
     }
 
 }
+
+registElement({ SignWindow })

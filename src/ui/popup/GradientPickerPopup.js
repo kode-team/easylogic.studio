@@ -5,6 +5,7 @@ import { Gradient } from "@property-parser/image-resource/Gradient";
 import BasePopup from "./BasePopup";
 import EmbedColorPicker from "../property-editor/EmbedColorPicker";
 import ImageAssetPicker from "../property/ImageAssetPicker";
+import { registElement } from "@core/registerElement";
 
 export default class GradientPickerPopup extends BasePopup {
 
@@ -122,3 +123,5 @@ export default class GradientPickerPopup extends BasePopup {
   }
 
 }
+
+registElement({ GradientPickerPopup })

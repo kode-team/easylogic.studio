@@ -1,6 +1,7 @@
 import MenuItem from "./MenuItem";
 import { Length } from "@unit/Length";
 import { RedGLLayer } from "@items/layers/canvas/RedGLLayer";
+import { registElement } from "@core/registerElement";
  
 export default class AddRedGL extends MenuItem {
   getIconString() {
@@ -26,3 +27,5 @@ export default class AddRedGL extends MenuItem {
     }
   }
 }
+
+registElement({ AddRedGL })

@@ -1,5 +1,6 @@
 import MenuItem from "./MenuItem";
 import icon from "@icon/icon";
+import { registElement } from "@core/registerElement";
 
 export default class Save extends MenuItem {
   getIconString() {
@@ -13,3 +14,5 @@ export default class Save extends MenuItem {
     this.emit('saveJSON')
   }
 }
+
+registElement({ Save })

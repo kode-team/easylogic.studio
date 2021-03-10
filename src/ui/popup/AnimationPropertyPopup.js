@@ -6,6 +6,7 @@ import RangeEditor from "../property-editor/RangeEditor";
 import IterationCountEditor from "../property-editor/IterationCountEditor";
 import SelectEditor from "../property-editor/SelectEditor";
 import BasePopup from "./BasePopup";
+import { registElement } from "@core/registerElement";
 
 export default class AnimationPropertyPopup extends BasePopup {
 
@@ -230,3 +231,5 @@ export default class AnimationPropertyPopup extends BasePopup {
     this.$el.hide();
   }
 }
+
+registElement({ AnimationPropertyPopup })

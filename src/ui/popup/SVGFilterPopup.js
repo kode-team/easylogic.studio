@@ -4,6 +4,7 @@ import SVGFilterEditor from "../property-editor/SVGFilterEditor";
 import BasePopup from "./BasePopup";
 import { SVGFilter } from "@property-parser/SVGFilter";
 import { isNotUndefined } from "@core/functions/func";
+import { registElement } from "@core/registerElement";
 
 export default class SVGFilterPopup extends BasePopup {
 
@@ -81,3 +82,5 @@ export default class SVGFilterPopup extends BasePopup {
     this.$el.hide();
   }
 }
+
+registElement({ SVGFilterPopup })

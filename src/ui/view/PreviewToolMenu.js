@@ -1,3 +1,4 @@
+import { registElement } from "@core/registerElement";
 import UIElement from "@core/UIElement";
 import menuItems from "../menu-items/index";
 
@@ -24,4 +25,6 @@ export default class PreviewToolMenu extends UIElement {
     `;
   }
 }
+
+registElement({ PreviewToolMenu })
  

@@ -2,6 +2,7 @@ import { EVENT } from "@core/UIElement";
 import BasePopup from "./BasePopup";
 import { LOAD, CLICK, DOMDIFF } from "@core/Event";
 import { Length } from "@unit/Length";
+import { registElement } from "@core/registerElement";
 
 export default class ImageSelectPopup extends BasePopup {
 
@@ -83,3 +84,5 @@ export default class ImageSelectPopup extends BasePopup {
 
 
 }
+
+registElement({ ImageSelectPopup })

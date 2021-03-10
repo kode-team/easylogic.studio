@@ -5,6 +5,7 @@ import CubicBezierEditor from "../property-editor/CubicBezierEditor";
 import RangeEditor from "../property-editor/RangeEditor";
 import SelectEditor from "../property-editor/SelectEditor";
 import BasePopup from "./BasePopup";
+import { registElement } from "@core/registerElement";
 
 const property_list = [
   'none',
@@ -191,3 +192,5 @@ export default class TransitionPropertyPopup extends BasePopup {
     this.$el.hide();
   }
 }
+
+registElement({ TransitionPropertyPopup })

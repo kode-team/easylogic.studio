@@ -1,3 +1,4 @@
+import { registElement } from "@core/registerElement";
 import MenuItem from "./MenuItem";
  
 export default class AddSVGCircle extends MenuItem {
@@ -14,3 +15,6 @@ export default class AddSVGCircle extends MenuItem {
   }
 
 }
+
+
+registElement({ AddSVGCircle })

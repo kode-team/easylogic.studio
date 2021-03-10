@@ -1,3 +1,4 @@
+import { registElement } from "@core/registerElement";
 import MenuItem from "./MenuItem";
    
 export default class LeftAlign extends MenuItem {
@@ -16,3 +17,5 @@ export default class LeftAlign extends MenuItem {
     this.emit('sort.left');
   }
 }
+
+registElement({ LeftAlign })

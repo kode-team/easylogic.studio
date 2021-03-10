@@ -1,3 +1,4 @@
+import { registElement } from "@core/registerElement";
 import UIElement from "@core/UIElement";
 
 export default class LogoView extends UIElement {
@@ -12,3 +13,5 @@ export default class LogoView extends UIElement {
     `;
   }
 }
+
+registElement({ LogoView })

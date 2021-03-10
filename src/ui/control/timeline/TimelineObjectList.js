@@ -1,6 +1,7 @@
 import UIElement, { EVENT } from "@core/UIElement";
 import { CLICK, LOAD, DEBOUNCE, DOMDIFF } from "@core/Event";
 import icon from "@icon/icon";
+import { registElement } from "@core/registerElement";
 
 const PROPERTY_TITLE = {
   'stroke-dasharray': 'Stroke Dash Array',
@@ -168,3 +169,5 @@ export default class TimelineObjectList extends UIElement {
         this.refresh();
     }
 }
+
+registElement({ TimelineObjectList })

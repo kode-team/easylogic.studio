@@ -1,3 +1,4 @@
+import { registElement } from "@core/registerElement";
 import MenuItem from "./MenuItem";
 
 export default class Manual extends MenuItem {
@@ -12,3 +13,5 @@ export default class Manual extends MenuItem {
     window.open("https://www.easylogic.studio/docs/getting-started.html", "learn-window");
   }
 }
+
+registElement({ Manual })

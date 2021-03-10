@@ -1,3 +1,4 @@
+import { registElement } from "@core/registerElement";
 import MenuItem from "./MenuItem";
 
 export default class ExportView extends MenuItem {
@@ -11,4 +12,7 @@ export default class ExportView extends MenuItem {
   clickButton(e) {
     this.emit('showExportView')
   }
+
 }
+
+registElement({ ExportView })

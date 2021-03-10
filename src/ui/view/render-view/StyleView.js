@@ -5,6 +5,7 @@ import Dom from "@core/Dom";
 import { isArray, isString } from "@core/functions/func";
 import { Project } from "@items/Project";
 import HTMLRenderer from "@renderer/HTMLRenderer";
+import { registElement } from "@core/registerElement";
 
 const TEMP_DIV = Dom.create('div')     
 
@@ -154,3 +155,5 @@ export default class StyleView extends UIElement {
     this.refreshStyleHead();
   }
 }
+
+registElement({ StyleView })

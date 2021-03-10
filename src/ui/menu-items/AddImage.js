@@ -1,3 +1,4 @@
+import { registElement } from "@core/registerElement";
 import MenuItem from "./MenuItem";
  
 export default class AddImage extends MenuItem {
@@ -15,3 +16,5 @@ export default class AddImage extends MenuItem {
   }
 
 }
+
+registElement({ AddImage })

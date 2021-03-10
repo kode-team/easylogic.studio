@@ -5,6 +5,7 @@ import { CLICK } from "@core/Event";
 import Dom from "@core/Dom";
 import HTMLRenderer from "@renderer/HTMLRenderer";
 import SVGRenderer from "@renderer/SVGRenderer";
+import { registElement } from "@core/registerElement";
 
 export default class ExportWindow extends BaseWindow {
 
@@ -113,3 +114,5 @@ ${HTMLRenderer.render(project)}
         this.setState({ selectedIndex }, false);
     } 
 }
+
+registElement({ ExportWindow })

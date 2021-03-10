@@ -6,6 +6,7 @@ import { timecode, second } from "@core/functions/time";
 import Dom from "@core/Dom";
 import makeInterpolateOffset from "@interpolate/interpolate-functions/offset-path/makeInterpolateOffset";
 import PathParser from "@parser/PathParser";
+import { registElement } from "@core/registerElement";
 
 const PADDING = 20 
 
@@ -482,3 +483,5 @@ export default class TimelineKeyframeList extends UIElement {
         this.refresh();
     }
 }
+
+registElement({ TimelineKeyframeList })

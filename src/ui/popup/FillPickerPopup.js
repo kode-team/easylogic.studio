@@ -7,6 +7,7 @@ import EmbedColorPicker from "../property-editor/EmbedColorPicker";
 import ImageAssetPicker from "../property/ImageAssetPicker";
 import FillEditor from "../property-editor/FillEditor";
 import { SVGStaticGradient } from "@property-parser/image-resource/SVGStaticGradient";
+import { registElement } from "@core/registerElement";
 
 
 export default class FillPickerPopup extends BasePopup {
@@ -127,3 +128,5 @@ export default class FillPickerPopup extends BasePopup {
   }
 
 }
+
+registElement({ FillPickerPopup })

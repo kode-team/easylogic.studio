@@ -2,6 +2,7 @@ import { EVENT } from "@core/UIElement";
 import OffsetEditor from "../property-editor/OffsetEditor";
 import { INPUT } from "@core/Event";
 import BasePopup from "./BasePopup";
+import { registElement } from "@core/registerElement";
 
 export default class KeyframePopup extends BasePopup {
 
@@ -94,3 +95,5 @@ export default class KeyframePopup extends BasePopup {
     this.$el.hide();
   }
 }
+
+registElement({ KeyframePopup })

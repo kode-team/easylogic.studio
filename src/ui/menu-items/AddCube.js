@@ -1,3 +1,4 @@
+import { registElement } from "@core/registerElement";
 import MenuItem from "./MenuItem";
 
 export default class AddCube extends MenuItem {
@@ -18,3 +19,5 @@ export default class AddCube extends MenuItem {
   }
 
 }
+
+registElement({ AddCube })

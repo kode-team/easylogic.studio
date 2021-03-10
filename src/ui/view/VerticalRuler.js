@@ -1,4 +1,5 @@
 import { LOAD, DOMDIFF } from "@core/Event";
+import { registElement } from "@core/registerElement";
 import UIElement, { EVENT } from "@core/UIElement";
 
 let pathString = []
@@ -193,3 +194,5 @@ export default class VerticalRuler extends UIElement {
         this.refreshCanvasSize();
     }        
 }
+
+registElement({ VerticalRuler })

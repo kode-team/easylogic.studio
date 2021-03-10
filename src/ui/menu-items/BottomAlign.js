@@ -1,3 +1,4 @@
+import { registElement } from "@core/registerElement";
 import MenuItem from "./MenuItem";
    
 export default class BottomAlign extends MenuItem {
@@ -16,3 +17,5 @@ export default class BottomAlign extends MenuItem {
     this.emit('sort.bottom');
   }
 }
+
+registElement({ BottomAlign })

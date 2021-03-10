@@ -1,6 +1,7 @@
 import UIElement, { EVENT } from "@core/UIElement";
 import { THROTTLE, IF, PREVENT, KEYDOWN, KEYUP, ENTER, CLICK } from "@core/Event";
 import icon from "@icon/icon";
+import { registElement } from "@core/registerElement";
 
 export default class KeyframeTimeControl extends UIElement {
     template () {
@@ -161,3 +162,5 @@ export default class KeyframeTimeControl extends UIElement {
         this.emit('moveTimeline');
     }
 }
+
+registElement({ KeyframeTimeControl })

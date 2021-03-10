@@ -4,6 +4,7 @@ import { CLICK, LOAD } from "@core/Event";
 import { Length } from "@unit/Length";
 import BasePopup from "./BasePopup";
 import propertyEditor from "../property-editor";
+import { registElement } from "@core/registerElement";
 
 
 export default class PatternInfoPopup extends BasePopup {
@@ -251,3 +252,5 @@ export default class PatternInfoPopup extends BasePopup {
 
 
 }
+
+registElement({ PatternInfoPopup })

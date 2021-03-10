@@ -1,3 +1,4 @@
+import { registElement } from "@core/registerElement";
 import UIElement from "@core/UIElement";
 import menuItems from "../menu-items/index";
 
@@ -21,3 +22,6 @@ export default class ExternalToolMenu extends UIElement {
     `;
   }
 }
+
+
+registElement({ ExternalToolMenu })

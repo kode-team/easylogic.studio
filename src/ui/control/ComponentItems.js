@@ -1,6 +1,7 @@
 import UIElement from "@core/UIElement";
 import menuItems from "../menu-items";
 import { CLICK } from "@core/Event";
+import { registElement } from "@core/registerElement";
 
 export default class ComponentItems extends UIElement {
 
@@ -61,3 +62,5 @@ export default class ComponentItems extends UIElement {
   }  
 
 }
+
+registElement({ ComponentItems })

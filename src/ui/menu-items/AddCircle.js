@@ -1,5 +1,6 @@
 import MenuItem from "./MenuItem";
 import { EVENT } from "@core/UIElement";
+import { registElement } from "@core/registerElement";
    
 export default class AddCircle extends MenuItem {
   getIconString() {
@@ -18,3 +19,5 @@ export default class AddCircle extends MenuItem {
   }  
 
 }
+
+registElement({ AddCircle })

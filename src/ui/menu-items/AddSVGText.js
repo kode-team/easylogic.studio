@@ -1,3 +1,4 @@
+import { registElement } from "@core/registerElement";
 import MenuItem from "./MenuItem";
  
 export default class AddSVGText extends MenuItem {
@@ -13,3 +14,6 @@ export default class AddSVGText extends MenuItem {
   }
 
 }
+
+
+registElement({ AddSVGText })

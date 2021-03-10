@@ -1,3 +1,4 @@
+import { registElement } from "@core/registerElement";
 import MenuItem from "./MenuItem";
 
 export default class Github extends MenuItem {
@@ -12,3 +13,5 @@ export default class Github extends MenuItem {
     window.open("https://github.com/easylogic/editor", "github-window");
   }
 }
+
+registElement({ Github })
