@@ -1,6 +1,7 @@
 import BaseProperty from "./BaseProperty";
 import { EVENT } from "@core/UIElement";
 import { Length } from "@unit/Length";
+import { registElement } from "@core/registerElement";
 
 export default class FontSpacingProperty extends BaseProperty {
 
@@ -80,3 +81,5 @@ export default class FontSpacingProperty extends BaseProperty {
   }
 
 }
+
+registElement({ FontSpacingProperty })

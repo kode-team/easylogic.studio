@@ -4,6 +4,7 @@ import { EVENT } from "@core/UIElement";
 import icon from "@icon/icon";
 import { Gradient } from "@property-parser/image-resource/Gradient";
 import gradients from "@preset/gradients";
+import { registElement } from "@core/registerElement";
 
 export default class GradientAssetsProperty extends BaseProperty {
 
@@ -126,3 +127,5 @@ export default class GradientAssetsProperty extends BaseProperty {
 
   }
 }
+
+registElement({ GradientAssetsProperty })

@@ -1,8 +1,8 @@
 import { CLICK, LOAD } from "@core/Event";
 import { Length } from "@unit/Length";
-import icon from "@icon/icon";
 import UIElement, { EVENT } from "@core/UIElement";
 import RangeEditor from "./RangeEditor";
+import { registElement } from "@core/registerElement";
 
 
 const typeList = [
@@ -161,3 +161,5 @@ export default class TransformOriginEditor extends UIElement {
 
 
 }
+
+registElement({ TransformOriginEditor })

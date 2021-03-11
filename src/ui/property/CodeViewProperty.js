@@ -3,6 +3,7 @@ import { LOAD, DEBOUNCE, DOMDIFF } from "@core/Event";
 import { EVENT } from "@core/UIElement";
 import HTMLRenderer from "@renderer/HTMLRenderer";
 import SVGRenderer from "@renderer/SVGRenderer";
+import { registElement } from "@core/registerElement";
 
 
 export default class CodeViewProperty extends BaseProperty {
@@ -32,3 +33,5 @@ export default class CodeViewProperty extends BaseProperty {
     ]
   }
 }
+
+registElement({CodeViewProperty })

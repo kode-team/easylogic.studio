@@ -4,6 +4,7 @@ import { isUndefined } from "@core/functions/func";
 import { Length } from "@unit/Length";
 import { POINTERSTART, MOVE, END, BIND } from "@core/Event";
 import RangeEditor from "../RangeEditor";
+import { registElement } from "@core/registerElement";
 
 export default class CircleEditor extends UIElement {
 
@@ -150,3 +151,5 @@ export default class CircleEditor extends UIElement {
         }
     }
 }
+
+registElement({ CircleEditor })

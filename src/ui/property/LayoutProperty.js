@@ -1,6 +1,7 @@
 import BaseProperty from "./BaseProperty";
 import { DEBOUNCE, LOAD} from "@core/Event";
 import { EVENT } from "@core/UIElement";
+import { registElement } from "@core/registerElement";
 
 export default class LayoutProperty extends BaseProperty {
 
@@ -83,3 +84,5 @@ export default class LayoutProperty extends BaseProperty {
     this.refreshShow(['rect', 'circle', 'artboard'], true);
   }
 }
+
+registElement({ LayoutProperty })

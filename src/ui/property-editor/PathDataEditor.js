@@ -1,6 +1,7 @@
 import UIElement from "@core/UIElement";
 import { LOAD, INPUT, DEBOUNCE, CLICK } from "@core/Event";
 import PathParser from "@parser/PathParser";
+import { registElement } from "@core/registerElement";
 
 
 export default class PathDataEditor extends UIElement {
@@ -138,3 +139,5 @@ export default class PathDataEditor extends UIElement {
         }
     }
 }
+
+registElement({ PathDataEditor })

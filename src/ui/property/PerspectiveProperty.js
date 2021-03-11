@@ -2,6 +2,7 @@ import BaseProperty from "./BaseProperty";
 import { LOAD, CLICK, DEBOUNCE } from "@core/Event";
 import { EVENT } from "@core/UIElement";
 import icon from "@icon/icon";
+import { registElement } from "@core/registerElement";
 
 export default class PerspectiveProperty extends BaseProperty {
 
@@ -58,3 +59,5 @@ export default class PerspectiveProperty extends BaseProperty {
     this.refreshShowIsNot(['project']);
   }
 }
+
+registElement({ PerspectiveProperty })

@@ -1,4 +1,5 @@
 import { LOAD, DOMDIFF, CLICK } from "@core/Event";
+import { registElement } from "@core/registerElement";
 import UIElement, { EVENT } from "@core/UIElement";
 
 
@@ -49,3 +50,5 @@ export default class ImageAssetPicker extends UIElement {
     this.refresh();
   }
 }
+
+registElement({ ImageAssetPicker })

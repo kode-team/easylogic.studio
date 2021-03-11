@@ -7,6 +7,7 @@ import { EVENT } from "@core/UIElement";
 import icon from "@icon/icon";
 import { Transform } from "@property-parser/Transform";
 import RotateEditorView from "../view-items/RotateEditorView";
+import { registElement } from "@core/registerElement";
 
 var transformList = [
 
@@ -110,3 +111,5 @@ export default class TransformProperty extends BaseProperty {
   }
 
 }
+
+registElement({ TransformProperty })

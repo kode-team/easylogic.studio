@@ -4,12 +4,11 @@ import {
   LOAD,
   CLICK,
   PREVENT,
-  DEBOUNCE
 } from "@core/Event";
 
 import { EVENT } from "@core/UIElement";
+import { registElement } from "@core/registerElement";
 import { ClipPath } from "@property-parser/ClipPath";
-
 
 var clipPathList = [
   'circle',
@@ -186,3 +185,5 @@ export default class ClipPathProperty extends BaseProperty {
   }
 
 }
+
+registElement({ ClipPathProperty })

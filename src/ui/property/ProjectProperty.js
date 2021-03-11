@@ -3,6 +3,7 @@ import { LOAD, CLICK, PREVENT, STOP, FOCUSOUT, DOUBLECLICK, DOMDIFF, KEYDOWN, EN
 import icon from "@icon/icon";
 
 import { EVENT } from "@core/UIElement";
+import { registElement } from "@core/registerElement";
 
 
 export default class ProjectProperty extends BaseProperty {
@@ -114,3 +115,5 @@ export default class ProjectProperty extends BaseProperty {
   }
 
 }
+
+registElement({ ProjectProperty })

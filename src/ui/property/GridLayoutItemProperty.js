@@ -2,6 +2,7 @@ import BaseProperty from "./BaseProperty";
 import { DEBOUNCE, LOAD } from "@core/Event";
 import { EVENT } from "@core/UIElement";
 import { CSS_TO_STRING, STRING_TO_CSS } from "@core/functions/func";
+import { registElement } from "@core/registerElement";
 
 
 export default class GridLayoutItemProperty extends BaseProperty {
@@ -137,3 +138,5 @@ export default class GridLayoutItemProperty extends BaseProperty {
     });
   }
 }
+
+registElement({ GridLayoutItemProperty })

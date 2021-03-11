@@ -3,6 +3,7 @@ import { LOAD, CLICK, INPUT, DEBOUNCE } from "@core/Event";
 import { EVENT } from "@core/UIElement";
 import icon from "@icon/icon";
 import { uuidShort } from "@core/functions/math";
+import { registElement } from "@core/registerElement";
 
 
 export default class SVGImageAssetsProperty extends BaseProperty {
@@ -140,3 +141,5 @@ export default class SVGImageAssetsProperty extends BaseProperty {
   }
 
 }
+
+registElement({ SVGImageAssetsProperty })

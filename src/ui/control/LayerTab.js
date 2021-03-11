@@ -1,28 +1,17 @@
 import UIElement from "@core/UIElement";
-import ObjectItems from "./ObjectItems";
+import "./ObjectItems";
 import { CLICK } from "@core/Event";
-import LibraryItems from "./LibraryItems";
-import ComponentItems from "./ComponentItems";
+import "./LibraryItems";
+import "./ComponentItems";
 import icon from "@icon/icon";
-import PreviewToolMenu from "../view/PreviewToolMenu";
-import ShortCutItems from "./ShortCutItems";
-import property from "../property";
-import ArtboardItems from "./ArtboardItems";
+import "../view/PreviewToolMenu";
+import "./ShortCutItems";
+import "../property";
+import "./ArtboardItems";
 import { registElement } from "@core/registerElement";
 
 
 export default class LayerTab extends UIElement {
-  components() {
-    return {
-      ShortCutItems,
-      ...property,
-      ObjectItems, 
-      ComponentItems,
-      LibraryItems,
-      PreviewToolMenu,
-      ArtboardItems
-    }
-  }
 
   initState() {
     return {

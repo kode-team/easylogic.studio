@@ -4,6 +4,7 @@ import {
 } from "@core/Event";
 import { EVENT } from "@core/UIElement";
 import icon from "@icon/icon";
+import { registElement } from "@core/registerElement";
 
 
 export default class BackgroundImageProperty extends BaseProperty {
@@ -73,3 +74,5 @@ export default class BackgroundImageProperty extends BaseProperty {
   }
 
 }
+
+registElement({ BackgroundImageProperty })

@@ -1,6 +1,7 @@
 import BaseProperty from "./BaseProperty";
 import { EVENT } from "@core/UIElement";
 import { CHANGEINPUT } from "@core/Event";
+import { registElement } from "@core/registerElement";
 
 export default class ProjectInformationProperty extends BaseProperty {
   getTitle() {
@@ -59,3 +60,5 @@ export default class ProjectInformationProperty extends BaseProperty {
   }
 
 }
+
+registElement({ ProjectInformationProperty })

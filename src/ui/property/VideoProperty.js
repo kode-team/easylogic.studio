@@ -2,6 +2,7 @@ import BaseProperty from "./BaseProperty";
 import { LOAD, CLICK, BIND, DEBOUNCE, CHANGEINPUT } from "@core/Event";
 import { EVENT } from "@core/UIElement";
 import icon from "@icon/icon";
+import { registElement } from "@core/registerElement";
 // import { Length } from "@unit/Length";
 
 const video_dom_property = [
@@ -224,3 +225,5 @@ export default class VideoProperty extends BaseProperty {
 
   }
 }
+
+registElement({ VideoProperty })

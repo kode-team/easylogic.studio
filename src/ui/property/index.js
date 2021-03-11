@@ -52,8 +52,10 @@ import PatternProperty from "./PatternProperty";
 import VideoProperty from "./VideoProperty";
 import PatternAssetsProperty from "./PatternAssetsProperty";
 import HistoryProperty from "./HistoryProperty";
+import IFrameProperty from "./IFrameProperty";
 
 export default {  
+  IFrameProperty,
   HistoryProperty,
   PatternAssetsProperty,
   VideoProperty,

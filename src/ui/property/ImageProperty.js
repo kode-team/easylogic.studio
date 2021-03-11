@@ -3,6 +3,7 @@ import { LOAD, CLICK, BIND, DEBOUNCE } from "@core/Event";
 import { EVENT } from "@core/UIElement";
 import icon from "@icon/icon";
 import { Length } from "@unit/Length";
+import { registElement } from "@core/registerElement";
 
 const image_size = [
   '',
@@ -107,3 +108,5 @@ export default class ImageProperty extends BaseProperty {
 
   }
 }
+
+registElement({ ImageProperty })

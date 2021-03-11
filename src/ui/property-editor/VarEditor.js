@@ -1,6 +1,7 @@
 import UIElement, { EVENT } from "@core/UIElement";
 import { INPUT, LOAD, CLICK } from "@core/Event";
 import icon from "@icon/icon";
+import { registElement } from "@core/registerElement";
 
 export default class VarEditor extends UIElement {
 
@@ -95,3 +96,5 @@ export default class VarEditor extends UIElement {
     }
 
 }
+
+registElement({ VarEditor })

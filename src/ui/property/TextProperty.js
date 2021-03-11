@@ -1,5 +1,6 @@
 import BaseProperty from "./BaseProperty";
 import { EVENT } from "@core/UIElement";
+import { registElement } from "@core/registerElement";
 
 export default class TextProperty extends BaseProperty {
 
@@ -67,3 +68,5 @@ export default class TextProperty extends BaseProperty {
   }
 
 }
+
+registElement({ TextProperty })

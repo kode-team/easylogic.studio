@@ -3,6 +3,7 @@ import { LOAD, CLICK, DOMDIFF, DRAGSTART, CHANGE } from "@core/Event";
 import { EVENT } from "@core/UIElement";
 import icon from "@icon/icon";
 import revokeObjectUrl from "@util/revokeObjectUrl";
+import { registElement } from "@core/registerElement";
 
 
 export default class ImageAssetsProperty extends BaseProperty {
@@ -127,3 +128,5 @@ export default class ImageAssetsProperty extends BaseProperty {
   }
 
 }
+
+registElement({ ImageAssetsProperty })

@@ -2,6 +2,7 @@ import BaseProperty from "./BaseProperty";
 import { EVENT } from "@core/UIElement";
 import { Length } from "@unit/Length";
 import { BIND, CLICK, THROTTLE } from "@core/Event";
+import { registElement } from "@core/registerElement";
 
 export default class SVGItemProperty extends BaseProperty {
 
@@ -219,3 +220,5 @@ export default class SVGItemProperty extends BaseProperty {
     })
   }
 }
+
+registElement({ SVGItemProperty })

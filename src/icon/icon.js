@@ -152,6 +152,8 @@ import horizontal_distribute from "./horizontal_distribute";
 import delete_forever from "./delete_forever";
 import horizontal_rule from "./horizontal_rule";
 import navigation from "./navigation";
+import web from "./web";
+
 
 
 const alias = {
@@ -161,6 +163,7 @@ const alias = {
 
 export default {
   ...alias,
+  web,
   navigation,
   delete_forever,
   horizontal_rule,

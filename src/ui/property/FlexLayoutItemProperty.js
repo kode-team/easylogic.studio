@@ -2,6 +2,7 @@ import BaseProperty from "./BaseProperty";
 import { DEBOUNCE, LOAD } from "@core/Event";
 import { EVENT } from "@core/UIElement";
 import { CSS_TO_STRING } from "@core/functions/func";
+import { registElement } from "@core/registerElement";
 
 
 export default class FlexLayoutItemProperty extends BaseProperty {
@@ -127,3 +128,5 @@ export default class FlexLayoutItemProperty extends BaseProperty {
     });
   }
 }
+
+registElement({ FlexLayoutItemProperty })

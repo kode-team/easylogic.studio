@@ -136,6 +136,8 @@ export default {
     'export.property.title': 'Export',    
     'export.property.download': 'Download',    
 
+    'iframe.property.title': 'IFrame',
+
     'image.property.title': 'Image',
     'image.property.origin': 'Origin',    
     'image.property.size': 'Size',    

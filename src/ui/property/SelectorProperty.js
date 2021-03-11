@@ -13,6 +13,7 @@ import {
 import { EVENT } from "@core/UIElement";
 
 import { Selector } from "@property-parser/Selector";
+import { registElement } from "@core/registerElement";
 
 const selectorList = [
   '',   // custom 
@@ -216,3 +217,5 @@ export default class SelectorProperty extends BaseProperty {
   }
 
 }
+
+registElement({ SelectorProperty })

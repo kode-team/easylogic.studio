@@ -5,6 +5,7 @@ import { EVENT } from "@core/UIElement";
 
 import Color from "@core/Color";
 import { Length } from "@unit/Length";
+import { registElement } from "@core/registerElement";
 
 const DRAG_START_CLASS = 'drag-start'
 
@@ -451,3 +452,6 @@ export default class LayerTreeProperty extends BaseProperty {
 
 
 }
+
+
+registElement({ LayerTreeProperty })

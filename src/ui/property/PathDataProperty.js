@@ -1,7 +1,8 @@
 import BaseProperty from "./BaseProperty";
 import { EVENT } from "@core/UIElement";
-import PathDataEditor from "../property-editor/PathDataEditor";
+import "../property-editor/PathDataEditor";
 import { DEBOUNCE } from "@core/Event";
+import { registElement } from "@core/registerElement";
 
 
 export default class PathDataProperty extends BaseProperty {
@@ -17,13 +18,6 @@ export default class PathDataProperty extends BaseProperty {
   isSVGItem  (current) {
     return current.is('svg-path', 'svg-brush', 'svg-textpath')
   }
-
-  components () {
-    return {
-      PathDataEditor
-    }
-  }
-
 
   [EVENT('refreshStyleView', 'refreshRect') + DEBOUNCE(100)]() {
     this.refresh();
@@ -58,3 +52,5 @@ export default class PathDataProperty extends BaseProperty {
     
   }
 }
+
+registElement({ PathDataProperty })

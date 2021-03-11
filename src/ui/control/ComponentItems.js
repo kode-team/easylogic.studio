@@ -1,13 +1,9 @@
 import UIElement from "@core/UIElement";
-import menuItems from "../menu-items";
+import "../menu-items";
 import { CLICK } from "@core/Event";
 import { registElement } from "@core/registerElement";
 
 export default class ComponentItems extends UIElement {
-
-  components() {
-    return menuItems
-  }
 
   template() {
     return /*html*/`
@@ -27,6 +23,7 @@ export default class ComponentItems extends UIElement {
             <object refClass="AddText" title='Text' />
             <object refClass="AddImage" title='Image' />
             <object refClass="AddVideo" title='Video' />
+            <object refClass="AddIFrame" title='IFrame' />            
           </div>
         </div>
         <div class='group'>

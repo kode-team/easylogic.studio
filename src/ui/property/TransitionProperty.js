@@ -10,6 +10,7 @@ import { EVENT } from "@core/UIElement";
 import icon from "@icon/icon";
 import { Transition } from "@property-parser/Transition";
 import { curveToPath } from "@core/functions/func";
+import { registElement } from "@core/registerElement";
 
 export default class TransitionProperty extends BaseProperty {
   getTitle() {
@@ -166,3 +167,5 @@ export default class TransitionProperty extends BaseProperty {
     }
   }
 }
+
+registElement({ TransitionProperty })

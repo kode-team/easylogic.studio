@@ -2,6 +2,7 @@ import BaseProperty from "./BaseProperty";
 import { DEBOUNCE, CLICK } from "@core/Event";
 import { EVENT } from "@core/UIElement";
 import icon from "@icon/icon";
+import { registElement } from "@core/registerElement";
 
 export default class ExportProperty extends BaseProperty {
 
@@ -41,3 +42,5 @@ export default class ExportProperty extends BaseProperty {
     this.emit('downloadPNG');
   }  
 }
+
+registElement({ ExportProperty })

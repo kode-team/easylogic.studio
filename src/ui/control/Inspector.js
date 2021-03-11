@@ -1,7 +1,7 @@
 import UIElement from "@core/UIElement";
 
 import { CLICK } from "@core/Event";
-import property from "../property/index";
+import "../property/index";
 import icon from "@icon/icon";
 import { registElement } from "@core/registerElement";
 
@@ -53,6 +53,9 @@ export default class Inspector extends UIElement {
 
                 <!-- Video --> 
                 <object refClass="VideoProperty" />
+
+                <!-- IFrame --> 
+                <object refClass="IFrameProperty" />                
 
                 <!-- Component -->
                 <object refClass="ComponentProperty" />                
@@ -127,10 +130,6 @@ export default class Inspector extends UIElement {
         </div>
       </div>
     `;
-  }
-
-  components() {
-    return property;
   }
 
   [CLICK("$header .tab-item:not(.empty-item)")](e) {

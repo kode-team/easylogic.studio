@@ -102,7 +102,7 @@ export default class AppearanceProperty extends BaseProperty {
   }
 
   [EVENT('refreshSelection')]() {
-    this.refreshShow(['project', 'artboard', 'rect', 'circle', 'image', 'video', 'text']);
+    this.refreshShow(['project', 'artboard', 'rect', 'circle', 'image', 'video', 'iframe', 'text']);
   }
 }
 

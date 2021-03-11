@@ -2,6 +2,7 @@ import BaseProperty from "./BaseProperty";
 import { LOAD, DEBOUNCE, CLICK } from "@core/Event";
 import { EVENT } from "@core/UIElement";
 import icon from "@icon/icon";
+import { registElement } from "@core/registerElement";
 
 
 export default class BoxShadowProperty extends BaseProperty {
@@ -55,3 +56,5 @@ export default class BoxShadowProperty extends BaseProperty {
 
   }
 }
+
+registElement({ BoxShadowProperty })

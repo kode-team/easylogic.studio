@@ -1,6 +1,7 @@
 import BaseProperty from "./BaseProperty";
 import { LOAD, CLICK, DEBOUNCE } from "@core/Event";
 import { EVENT } from "@core/UIElement";
+import { registElement } from "@core/registerElement";
 
 export default class TransformOriginProperty extends BaseProperty {
 
@@ -46,3 +47,5 @@ export default class TransformOriginProperty extends BaseProperty {
   }
 
 }
+
+registElement({ TransformOriginProperty })

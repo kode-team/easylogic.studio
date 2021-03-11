@@ -32,9 +32,11 @@ import AddDrawPath from "./AddDrawPath";
 import AddDrawBrush from "./AddDrawBrush";
 import AddVideo from "./AddVideo";
 import KeyBoard from "./KeyBoard";
+import AddIFrame from "./AddIFrame";
 
 
 export default {
+  AddIFrame,
   KeyBoard,
   AddVideo,
   AddDrawBrush,  

@@ -51,21 +51,12 @@ export default function newComponent (editor, itemType, obj, isSelected = true, 
             content: 'Insert a text',
             'font-size': Length.px(30)
         }        
-    } else if (itemType === 'rect') {
-        obj = {
-            ...obj,
-        }        
-    } else if (itemType === 'circle') {
-        obj = {
-            ...obj,
-        }                
     } else if (itemType === 'artboard') {
         obj = {
             ...obj,
             'background-color': 'white'
         }        
-    }
-
+    } 
 
     editor.command('addLayer', `add layer - ${itemType}`, editor.createItem({
         itemType, 

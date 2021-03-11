@@ -4,6 +4,7 @@ import { Item } from '@items/Item';
 import ArtBoardRender from './ArtBoardRender';
 import CircleRender from './CircleRender';
 import CubeRender from './CubeRender';
+import IFrameRender from './IFrameRender';
 import ImageRender from './ImageRender';
 import ProjectRender from './ProjectRender';
 import RectRender from './RectRender';
@@ -40,6 +41,7 @@ const renderers = {
     'svg-text': new SVGTextRender(),
     'svg-textpath': new SVGTextPathRender(),
     'cube': new CubeRender(),
+    'iframe': new IFrameRender(),
 }
 
 export default {

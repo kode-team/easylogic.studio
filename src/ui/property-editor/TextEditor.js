@@ -1,5 +1,6 @@
 import UIElement from "@core/UIElement";
 import { BIND, INPUT } from "@core/Event";
+import { registElement } from "@core/registerElement";
 
 export default class TextEditor extends UIElement {
 
@@ -46,3 +47,5 @@ export default class TextEditor extends UIElement {
         this.parent.trigger(this.props.onchange, this.props.key, this.state.value, this.props.params)
     }
 }
+
+registElement({ TextEditor })

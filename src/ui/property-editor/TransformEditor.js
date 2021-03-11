@@ -13,6 +13,7 @@ import UIElement, { EVENT } from "@core/UIElement";
 import RangeEditor from "./RangeEditor";
 import { Length } from "@unit/Length";
 import NumberInputEditor from "./NumberInputEditor";
+import { registElement } from "@core/registerElement";
 
 var transformList = [
   'perspective',  
@@ -409,3 +410,5 @@ export default class TransformEditor extends UIElement {
     this.modifyTransform();
   }
 }
+
+registElement({ TransformEditor })

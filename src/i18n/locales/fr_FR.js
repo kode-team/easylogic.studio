@@ -133,6 +133,8 @@ export default {
     'export.property.title': 'Exporter',    
     'export.property.download': 'Télécharger',    
 
+    'iframe.property.title': 'IFrame',
+
     'image.property.title': 'Image',
     'image.property.origin': 'Origine',    
     'image.property.size': 'Taille',    

@@ -2,6 +2,7 @@ import BaseProperty from "./BaseProperty";
 import { EVENT } from "@core/UIElement";
 import { LOAD, DOMDIFF } from "@core/Event";
 import icon from "@icon/icon";
+import { registElement } from "@core/registerElement";
 
 export default class HistoryProperty extends BaseProperty {
 
@@ -37,3 +38,5 @@ export default class HistoryProperty extends BaseProperty {
     this.refresh();
   }
 }
+
+registElement({ HistoryProperty })

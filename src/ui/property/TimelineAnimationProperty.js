@@ -2,6 +2,7 @@ import BaseProperty from "./BaseProperty";
 import { LOAD, CLICK, DOUBLECLICK, FOCUSOUT, KEY, PREVENT, STOP, DOMDIFF, KEYDOWN, DEBOUNCE, ENTER } from "@core/Event";
 import icon from "@icon/icon";
 import { EVENT } from "@core/UIElement";
+import { registElement } from "@core/registerElement";
 
 export default class TimelineAnimationProperty extends BaseProperty {
   getTitle() {
@@ -107,3 +108,5 @@ export default class TimelineAnimationProperty extends BaseProperty {
     this.refresh();
   }
 }
+
+registElement({ TimelineAnimationProperty })

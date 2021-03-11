@@ -4,6 +4,7 @@ import { EVENT } from "@core/UIElement";
 
 import RangeEditor from "../property-editor/RangeEditor";
 import SelectEditor from "../property-editor/SelectEditor";
+import { registElement } from "@core/registerElement";
 
 export default class DisplayProperty extends BaseProperty {
   components() {
@@ -60,3 +61,5 @@ export default class DisplayProperty extends BaseProperty {
     })
   }
 }
+
+registElement({ DisplayProperty })

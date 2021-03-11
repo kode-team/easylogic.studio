@@ -1,5 +1,6 @@
 import BaseProperty from "./BaseProperty";
 import { EVENT } from "@core/UIElement";
+import { registElement } from "@core/registerElement";
 
 export default class SVGTextProperty extends BaseProperty {
 
@@ -104,3 +105,5 @@ export default class SVGTextProperty extends BaseProperty {
   }
 
 }
+
+registElement({ SVGTextProperty })

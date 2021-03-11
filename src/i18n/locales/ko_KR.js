@@ -136,6 +136,8 @@ export default {
     'export.property.title': '내보내기',
     'export.property.download': '다운로드',
 
+    'iframe.property.title': '아이프레임',
+
     'image.property.title': '이미지',    
     'image.property.origin': '원본',    
     'image.property.size': '크기',    

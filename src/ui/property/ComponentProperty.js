@@ -2,6 +2,7 @@ import BaseProperty from "./BaseProperty";
 import { EVENT } from "@core/UIElement";
 import { DEBOUNCE, LOAD } from "@core/Event";
 import { isString, OBJECT_TO_PROPERTY } from "@core/functions/func";
+import { registElement } from "@core/registerElement";
 
 
 export default class ComponentProperty extends BaseProperty {
@@ -145,3 +146,5 @@ export default class ComponentProperty extends BaseProperty {
     }, null, true)
   }
 }
+
+registElement({ ComponentProperty })

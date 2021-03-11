@@ -1,4 +1,5 @@
 import { CLICK, LOAD } from "@core/Event";
+import { registElement } from "@core/registerElement";
 import UIElement, { EVENT } from "@core/UIElement";
 import icon from "@icon/icon";
 import { TextShadow } from "@property-parser/TextShadow";
@@ -141,3 +142,5 @@ export default class TextShadowEditor extends UIElement {
 
   }
 }
+
+registElement({ TextShadowEditor })

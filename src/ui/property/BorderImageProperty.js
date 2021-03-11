@@ -4,6 +4,7 @@ import { Position } from "@unit/Length";
 import icon from "@icon/icon";
 
 import { EVENT } from "@core/UIElement";
+import { registElement } from "@core/registerElement";
 
 const typeList = [
   { key: "top", title: "Top" },
@@ -134,10 +135,7 @@ export default class BorderImageProperty extends BaseProperty {
 
   getBody() {
 
-    var current  = this.$selection.current || {borderImage: { image: {}}} ;
-  
-
-    return `
+    return /*html*/`
       <div class="property-item border-image-item" ref='$borderImageView'></div>    
       <div class="property-item border-slice-item">
         <div class="slice-selector" data-selected-value="all" ref="$selector">
@@ -371,3 +369,5 @@ export default class BorderImageProperty extends BaseProperty {
   }
 
 }
+
+registElement({ BorderImageProperty })

@@ -10,6 +10,7 @@ import {
 import { EVENT } from "@core/UIElement";
 
 import { Keyframe } from "@property-parser/Keyframe";
+import { registElement } from "@core/registerElement";
 
 export default class KeyFrameProperty extends BaseProperty {
   getTitle() {
@@ -233,3 +234,5 @@ export default class KeyFrameProperty extends BaseProperty {
   }
 
 }
+
+registElement({ KeyFrameProperty })

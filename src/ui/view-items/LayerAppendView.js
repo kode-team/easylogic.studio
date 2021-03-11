@@ -90,7 +90,8 @@ export default class LayerAppendView extends UIElement {
             return /*html*/`<div class='draw-item' style='background-color: ${color}; border-radius: 100%;'></div>`
         case 'video':
         case 'audio':
-        case 'image':            
+        case 'image':  
+        case 'iframe':          
         case 'cube':
         case 'cylinder':
             return /*html*/`<div class='draw-item' style='outline: 1px solid blue;'></div>`        

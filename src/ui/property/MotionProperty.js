@@ -3,6 +3,7 @@ import { DEBOUNCE } from "@core/Event";
 import { EVENT } from "@core/UIElement";
 
 import OffsetPathListEditor from "../property-editor/OffsetPathListEditor";
+import { registElement } from "@core/registerElement";
 
 
 export default class MotionProperty extends BaseProperty {
@@ -47,3 +48,5 @@ export default class MotionProperty extends BaseProperty {
 
   }
 }
+
+registElement({ MotionProperty })

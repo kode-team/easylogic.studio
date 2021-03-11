@@ -3,6 +3,7 @@ import { LOAD, CLICK, DEBOUNCE } from "@core/Event";
 import { EVENT } from "@core/UIElement";
 
 import icon from "@icon/icon";
+import { registElement } from "@core/registerElement";
 
 export default class PerspectiveOriginProperty extends BaseProperty {
 
@@ -62,3 +63,5 @@ export default class PerspectiveOriginProperty extends BaseProperty {
   }
 
 }
+
+registElement({ PerspectiveOriginProperty })

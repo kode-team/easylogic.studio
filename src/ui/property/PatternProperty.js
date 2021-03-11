@@ -6,6 +6,7 @@ import {
 import { EVENT } from "@core/UIElement";
 import icon from "@icon/icon";
 import { pattern_list } from "@util/Resource";
+import { registElement } from "@core/registerElement";
 
 
 export default class PatternProperty extends BaseProperty {
@@ -85,3 +86,5 @@ export default class PatternProperty extends BaseProperty {
     this.load('$patternSelect');
   }
 }
+
+registElement({ PatternProperty })

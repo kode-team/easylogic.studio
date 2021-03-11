@@ -4,6 +4,7 @@ import { EVENT } from "@core/UIElement";
 import icon from "@icon/icon";
 import Color from "@core/Color";
 import colors from "@preset/colors";
+import { registElement } from "@core/registerElement";
 
 export default class ColorAssetsProperty extends BaseProperty {
 
@@ -151,3 +152,5 @@ export default class ColorAssetsProperty extends BaseProperty {
       }, false)
   }
 }
+
+registElement({ ColorAssetsProperty })

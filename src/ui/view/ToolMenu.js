@@ -1,13 +1,9 @@
 import UIElement, { EVENT } from "@core/UIElement";
-import menuItems from "../menu-items/index";
+import "../menu-items/index";
 import { CLICK } from "@core/Event";
 import { registElement } from "@core/registerElement";
 
 export default class ToolMenu extends UIElement {
-  components() {
-    return menuItems;
-  }
-
   template() {
     return /*html*/`
       <div class='tool-menu center'>
@@ -22,6 +18,7 @@ export default class ToolMenu extends UIElement {
               <object refClass='AddText' />
               <object refClass='AddImage' />
               <object refClass='AddVideo' />
+              <object refClass='AddIFrame' />
             </span>            
             <span data-item='svg'>
               <div class='divider'></div>

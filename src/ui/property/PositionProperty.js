@@ -1,6 +1,7 @@
 import BaseProperty from "./BaseProperty";
 import { EVENT } from "@core/UIElement";
 import { Transform } from "@property-parser/Transform";
+import { registElement } from "@core/registerElement";
 
 export default class PositionProperty extends BaseProperty {
   getTitle() {
@@ -140,3 +141,5 @@ export default class PositionProperty extends BaseProperty {
 
 
 }
+
+registElement({ PositionProperty })

@@ -1,6 +1,7 @@
 import BaseProperty from "./BaseProperty";
 import { LOAD, DEBOUNCE } from "@core/Event";
 import { EVENT } from "@core/UIElement";
+import { registElement } from "@core/registerElement";
 
 export default class BackgroundClipProperty extends BaseProperty {
   
@@ -33,3 +34,5 @@ export default class BackgroundClipProperty extends BaseProperty {
     this.refreshShow(['rect', 'circle', 'text']);
   }  
 }
+
+registElement({ BackgroundClipProperty })

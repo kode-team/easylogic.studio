@@ -1,6 +1,7 @@
 import UIElement, { EVENT } from "@core/UIElement";
 import { LOAD, CHANGE, BIND, DEBOUNCE, CLICK } from "@core/Event";
 import icon from "@icon/icon";
+import { registElement } from "@core/registerElement";
 
 export default class SVGFilterSelectEditor extends UIElement {
 
@@ -183,3 +184,5 @@ export default class SVGFilterSelectEditor extends UIElement {
         }
     }    
 }
+
+registElement({ SVGFilterSelectEditor })

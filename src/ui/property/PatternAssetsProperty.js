@@ -4,6 +4,7 @@ import { EVENT } from "@core/UIElement";
 import patterns from "@preset/patterns";
 import { Pattern } from "@property-parser/Pattern";
 import { CSS_TO_STRING } from "@core/functions/func";
+import { registElement } from "@core/registerElement";
 
 export default class PatternAssetsProperty extends BaseProperty {
 
@@ -95,3 +96,5 @@ export default class PatternAssetsProperty extends BaseProperty {
   }  
 
 }
+
+registElement({ PatternAssetsProperty })

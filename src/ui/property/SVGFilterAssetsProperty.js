@@ -4,6 +4,7 @@ import { EVENT } from "@core/UIElement";
 import icon from "@icon/icon";
 import { SVGFilter } from "@property-parser/SVGFilter";
 import { uuidShort } from "@core/functions/math";
+import { registElement } from "@core/registerElement";
 
 
 export default class SVGFilterAssetsProperty extends BaseProperty {
@@ -177,3 +178,5 @@ export default class SVGFilterAssetsProperty extends BaseProperty {
     this.refresh()
   }
 }
+
+registElement({ SVGFilterAssetsProperty })

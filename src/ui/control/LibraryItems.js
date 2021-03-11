@@ -4,11 +4,7 @@ import clipArt from "../clip-art";
 import { registElement } from "@core/registerElement";
 
 export default class LibraryItems extends UIElement {
-  components() {
-    return {
 
-    }
-  }
   template() {
     return /*html*/`
       <div class='library-items'>

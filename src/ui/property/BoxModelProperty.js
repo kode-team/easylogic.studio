@@ -2,6 +2,7 @@ import BaseProperty from "./BaseProperty";
 import { INPUT, LOAD, DEBOUNCE } from "@core/Event";
 import { Length } from "@unit/Length";
 import { EVENT } from "@core/UIElement";
+import { registElement } from "@core/registerElement";
 
 const fields = ["margin", "padding"];
 let styleKeys = [];
@@ -86,3 +87,5 @@ export default class BoxModelProperty extends BaseProperty {
     this.command("setAttribute", 'change padding or margin', data)    
   }
 }
+
+registElement({ BoxModelProperty })

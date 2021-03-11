@@ -2,6 +2,7 @@ import BaseProperty from "./BaseProperty";
 import { INPUT, BIND, DEBOUNCE } from "@core/Event";
 
 import { EVENT } from "@core/UIElement";
+import { registElement } from "@core/registerElement";
 
 export default class ContentProperty extends BaseProperty {
   getTitle() {
@@ -48,3 +49,6 @@ export default class ContentProperty extends BaseProperty {
     }
   }
 }
+
+
+registElement({ ContentProperty })
