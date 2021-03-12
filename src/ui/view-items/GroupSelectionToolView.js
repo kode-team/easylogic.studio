@@ -8,7 +8,6 @@ import { TransformOrigin } from "@property-parser/TransformOrigin";
 import { calculateAngle, calculateAngle360, calculateAngleForVec3, calculateMatrix, calculateMatrixInverse, calculateRotationOriginMat4, round, vertiesMap } from "@core/functions/math";
 import { ArtBoard } from "@items/ArtBoard";
 import { getRotatePointer, rectToVerties } from "@core/functions/collision";
-import Dom from "@core/Dom";
 
 
 var directionType = {
@@ -106,6 +105,10 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
             this.verties[4], 
             distVector
         ));
+
+        if (this.$config.get('bodyEvent').shiftKey) {
+            distAngle = distAngle - distAngle % this.$config.get('fixedAngle');
+        }
 
         // 실제 움직인 angle 
         this.localAngle = this.angle + distAngle;
@@ -655,15 +658,13 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     }
 
 
-    createPointer (pointer, number) {
+    createPointer (pointer, number, rotate) {
         return /*html*/`
         <div    
             class='pointer' 
             data-number="${number}" 
             data-pointer="${pointer}" 
-            style="
-                transform: translate3d( calc(${pointer[0]}px - 50%), calc(${pointer[1]}px - 50%), 0px)
-            " 
+            style="transform: translate3d( calc(${pointer[0]}px - 50%), calc(${pointer[1]}px - 50%), 0px) rotateZ(${rotate || '0deg'})" 
         ></div>
         `
     }
@@ -757,6 +758,16 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     }    
 
     createRenderPointers(pointers, selectionPointers) {
+
+        const diff = vec3.subtract(
+            [], 
+            vec3.lerp([], pointers[0], pointers[1], 0.5), 
+            vec3.lerp([], pointers[0], pointers[2], 0.5), 
+        );
+
+        //TODO: 여기서는 법선벡터를 구하게 되면 식이 훨씬 간단해진다. 
+        const rotate = Length.deg(calculateAngle360(diff[0], diff[1]) - 90).round(1000);
+
         const rotatePointer = getRotatePointer(pointers, 30)
         const dist = vec3.dist(pointers[0], pointers[2]);        
 
@@ -770,10 +781,10 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
                 // this.createRotatePointer (selectionPointers[2], 2, 'top left'),
                 // this.createRotatePointer (selectionPointers[3], 3, 'top right'),
                 this.createRotatePointer (rotatePointer, 4, 'center center'),                
-                this.createPointer (pointers[0], 1),
-                this.createPointer (pointers[1], 2),
-                this.createPointer (pointers[2], 3),
-                this.createPointer (pointers[3], 4),
+                this.createPointer (pointers[0], 1, rotate),
+                this.createPointer (pointers[1], 2, rotate),
+                this.createPointer (pointers[2], 3, rotate),
+                this.createPointer (pointers[3], 4, rotate),
                 dist < 20 ? undefined : this.createPointer (vec3.lerp([], pointers[0], pointers[1], 0.5), 11),
                 dist < 20 ? undefined : this.createPointer (vec3.lerp([], pointers[1], pointers[2], 0.5), 12),
                 dist < 20 ? undefined : this.createPointer (vec3.lerp([], pointers[2], pointers[3], 0.5), 13),

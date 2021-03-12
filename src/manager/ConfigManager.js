@@ -12,6 +12,7 @@ export class ConfigManager {
         this.set('body.move.ms', 30);
         this.set('grid.preview.position', []);
         this.set('debug', false);
+        this.set('fixedAngle', 15);
     }
 
     /**

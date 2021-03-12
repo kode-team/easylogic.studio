@@ -119,8 +119,22 @@ export default class SelectionToolView extends SelectionToolEvent {
             const instance = this.$selection.get(item.id)
 
             if (instance) {
+
+                let newTransform = Transform.addTransform(item.transform, `rotateZ(${Length.deg(distAngle).round(1000)})`)
+
+                if (this.$config.get('bodyEvent').shiftKey) {
+                    const newRotateX = Transform.get(newTransform, 'rotateZ');
+
+                    if (newRotateX[0]) {
+                        const angle = newRotateX[0].value - newRotateX[0].value % this.$config.get('fixedAngle');
+
+                        newTransform = Transform.rotateZ(newTransform, Length.deg(angle));
+                    }
+
+                }
+
                 instance.reset({
-                    transform: Transform.addTransform(item.transform, `rotateZ(${Length.deg(distAngle).round(1000)})`) 
+                    transform: newTransform 
                 })
             }
 

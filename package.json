@@ -1,6 +1,6 @@
 {
   "name": "@easylogic/editor",
-  "version": "0.10.6",
+  "version": "0.10.7",
   "description": "Fantastic Web Design Tool ",
   "main": "./dist/editor.js",
   "directories": {
