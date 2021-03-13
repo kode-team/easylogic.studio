@@ -2,6 +2,7 @@ import UIElement from "@core/UIElement";
 import { CLICK } from "@core/Event";
 import clipArt from "../clip-art";
 import { registElement } from "@core/registerElement";
+import { Length } from "@unit/Length";
 
 export default class LibraryItems extends UIElement {
 
@@ -12,7 +13,7 @@ export default class LibraryItems extends UIElement {
           <div class='title'><label>ClipArt</label></div>
           <div class='list'>
             ${Object.keys(clipArt).map( key => {
-              return /*html*/`<div class='path-item'>${clipArt[key]}</div>`
+              return /*html*/`<div class='library-item' data-key="${key}">${clipArt[key]}</div>`
             }).join('')}
           </div>
         </div>
@@ -20,17 +21,20 @@ export default class LibraryItems extends UIElement {
     `;
   }
 
-  [CLICK('$el .path-item')] (e) {
+  [CLICK('$el .library-item')] (e) {
     var $el = e.$dt;
-    var $svg = $el.$('svg');
-    var $path = $svg.$('path');
+    var key = e.$dt.data('key');
 
-    var [x, y, width, height] = $svg.attr('viewBox').split(' '); 
+    const center = this.$viewport.center;
 
-    var pathString = $path.attr('d');
-    var rect = {x: +x, y: +y, width: +width, height: +height} 
+    this.emit('newComponent', 'template', {
+      x: Length.px(center[0] - 100),
+      y: Length.px(center[1] - 100),
+      width: Length.px(200),
+      height: Length.px(200),
+      template: clipArt[key]
+    });
 
-    this.emit('convertPath', pathString, rect);
   }
 }
 

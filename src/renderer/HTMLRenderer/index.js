@@ -11,6 +11,7 @@ import RectRender from './RectRender';
 import SVGPathRender from './SVGPathRender';
 import SVGTextPathRender from './SVGTextPathRender';
 import SVGTextRender from './SVGTextRender';
+import TemplateRender from './TemplateRender';
 import TextRender from './TextRender';
 import VideoRender from './VideoRender';
 
@@ -42,6 +43,7 @@ const renderers = {
     'svg-textpath': new SVGTextPathRender(),
     'cube': new CubeRender(),
     'iframe': new IFrameRender(),
+    'template': new TemplateRender(),
 }
 
 export default {

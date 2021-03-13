@@ -11,6 +11,8 @@ import { TextLayer } from "./layers/TextLayer";
 import { RectLayer } from "./layers/RectLayer";
 import { CircleLayer } from "./layers/CircleLayer";
 import { VideoLayer } from "./layers/VideoLayer";
+import { IFrameLayer } from "./layers/IFrameLayer";
+import { TemplateLayer } from "./layers/TemplateLayer";
 
 
 export default {
@@ -26,5 +28,7 @@ export default {
     SVGTextPathItem,    
     Component,    
     CubeLayer,
-    CylinderLayer,    
+    CylinderLayer,  
+    IFrameLayer,
+    TemplateLayer,
 }

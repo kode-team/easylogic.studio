@@ -153,6 +153,7 @@ import delete_forever from "./delete_forever";
 import horizontal_rule from "./horizontal_rule";
 import navigation from "./navigation";
 import web from "./web";
+import auto_awesome from "./auto_awesome";
 
 
 
@@ -163,6 +164,7 @@ const alias = {
 
 export default {
   ...alias,
+  auto_awesome,
   web,
   navigation,
   delete_forever,
