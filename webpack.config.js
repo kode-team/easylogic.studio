@@ -54,6 +54,9 @@ module.exports = {
   resolve: { alias },  
   mode: 'production',
   // devtool: 'source-map',
+  devServer: {
+    compress: true
+  },
   module: {
     rules: [
       {

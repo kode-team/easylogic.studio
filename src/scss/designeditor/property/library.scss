@@ -1,34 +1,15 @@
 .library-items {
     padding: 10px;
-    .group {
 
+    .property {
+        margin-top: 10px !important;
+        margin-bottom: 10px !important;
+    }
 
-        .title {
-            padding: 10px 0px !important;
-        }
-
-
-        .list {
-            display: grid ;
-            grid-template-columns: repeat(5, 50px);
-            grid-column-gap: 2px;
-            grid-row-gap: 2px;            
-        }
-
-        .library-item {
-            background-color: rgba(255, 255, 255, 0.2);
-            width: 50px;
-            height: 50px;
-            cursor: pointer;
-            color: var(--font-color); 
-            border-radius: 4px;
-            margin-bottom: 2px;
-            margin-right: 2px;
-
-            &:hover {
-                background-color: var(--list-item-selected-color);
-            }
-        }        
+    .property-title {
+        background-color: var(--selected-color) !important;
+        margin-bottom: 10px;
+        border-radius: 4px;
     }
 
 }

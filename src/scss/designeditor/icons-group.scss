@@ -1,0 +1,54 @@
+
+.icons-group {
+  // padding: 10px;
+  display: grid ;
+  grid-template-columns: repeat(6, 40px);
+  grid-column-gap: 2px;
+  grid-row-gap: 2px;        
+  max-height: 200px;    
+  overflow: auto;
+
+
+  .icon-item {
+    display: inline-block;
+    width: 40px;
+    margin-bottom: 2px;
+    margin-right: 2px;
+
+    .title {
+
+      display: block;
+      color: var(--list-item-font-color);
+      font-size: 9px;
+      margin-top: 5px;
+      line-height: 1;
+      text-align: left;
+      word-break: break-all;
+      word-wrap: break-word;
+    }  
+  
+    .icon-svg {
+      background-color: rgba(255, 255, 255, 0.2);
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      color: var(--font-color); 
+      border-radius: 4px;
+      display: inline-block;
+      box-sizing: border-box;
+      padding: 8px;
+  
+      > svg {
+        width: 100%;
+        height: 100%;
+      }
+  
+      &:hover {
+          background-color: var(--list-item-selected-color);
+      }
+    }  
+
+
+  }
+      
+}

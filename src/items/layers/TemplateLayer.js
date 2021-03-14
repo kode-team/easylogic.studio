@@ -17,7 +17,9 @@ export class TemplateLayer extends Layer {
     return super.getDefaultObject({
       itemType: 'template',
       name: "New Template",
+      engine: 'dom',
       template: DEFAULT_TEMPLATE,
+      params: [],
       ...obj
     });
   }

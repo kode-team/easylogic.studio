@@ -253,6 +253,7 @@ export default class Dom {
 
   toggleClass(cls, isForce) {
     this.el.classList.toggle(cls, isForce);
+    return this; 
   }
 
   html(html) {

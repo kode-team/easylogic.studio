@@ -182,6 +182,12 @@ class UIElement extends EventMachine {
     this.$store.trigger(messageName, ...args);
   }
 
+  broadcast(messageName, ...args) {
+    Object.keys(this.children).forEach(key => {
+      this.children[key].trigger(messageName, ...args);
+    })
+  }
+
   on (message, callback) {
     this.$store.on(message, callback);
   }

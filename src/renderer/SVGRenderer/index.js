@@ -2,14 +2,17 @@ import Dom from '@core/Dom';
 import { Item } from '@items/Item';
 import ArtBoardRender from './ArtBoardRender';
 import CircleRender from './CircleRender';
+import IFrameRender from './IFrameRender';
 import ImageRender from './ImageRender';
 import ProjectRender from './ProjectRender';
 import RectRender from './RectRender';
 import SVGPathRender from './SVGPathRender';
 import SVGTextPathRender from './SVGTextPathRender';
 import SVGTextRender from './SVGTextRender';
+import TemplateRender from './TemplateRender';
 import TextRender from './TextRender';
 import VideoRender from './VideoRender';
+
 
 const renderers = {
     'project': new ProjectRender(),
@@ -17,6 +20,8 @@ const renderers = {
     'rect': new RectRender(),
     'circle': new CircleRender(),
     'image': new ImageRender(),
+    'template': new TemplateRender(),
+    'iframe': new IFrameRender(),
     'video': new VideoRender(),
     'text': new TextRender(),
     'svg-path': new SVGPathRender(),
