@@ -1,8 +1,8 @@
 import UIElement, { EVENT } from "@core/UIElement";
 import { CLICK, KEYDOWN, KEYUP, IF, PREVENT, ENTER } from "@core/Event";
 
-import CubicBezierEditor from "@ui/property-editor/CubicBezierEditor";
-import CSSPropertyEditor from "@ui/property-editor/CSSPropertyEditor";
+import "@ui/property-editor/CubicBezierEditor";
+import "@ui/property-editor/CSSPropertyEditor";
 
 import { second, timecode } from "@core/functions/time";
 import { isUndefined } from "@core/functions/func";
@@ -10,12 +10,6 @@ import icon from "@icon/icon";
 import { registElement } from "@core/registerElement";
 
 export default class TimelineValueEditor extends UIElement {
-  components() { 
-    return {
-      CSSPropertyEditor,
-      CubicBezierEditor
-    }
-  }
 
   initState() {
     return {

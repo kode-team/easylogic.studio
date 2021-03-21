@@ -1,10 +1,10 @@
 import { EVENT } from "@core/UIElement";
 import { Length } from "@unit/Length";
 import { LOAD, CHANGE } from "@core/Event";
-import CubicBezierEditor from "../property-editor/CubicBezierEditor";
-import RangeEditor from "../property-editor/RangeEditor";
-import IterationCountEditor from "../property-editor/IterationCountEditor";
-import SelectEditor from "../property-editor/SelectEditor";
+import "../property-editor/CubicBezierEditor";
+import "../property-editor/RangeEditor";
+import "../property-editor/IterationCountEditor";
+import "../property-editor/SelectEditor";
 import BasePopup from "./BasePopup";
 import { registElement } from "@core/registerElement";
 
@@ -12,15 +12,6 @@ export default class AnimationPropertyPopup extends BasePopup {
 
   getTitle() {
     return this.$i18n('animation.property.popup.title')
-  }
-
-  components() {
-    return {
-      SelectEditor,
-      CubicBezierEditor,
-      RangeEditor,
-      IterationCountEditor
-    }
   }
 
   initState() {

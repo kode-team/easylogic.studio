@@ -2,15 +2,11 @@ import UIElement, { EVENT } from "@core/UIElement";
 import { POINTERSTART, MOVE, BIND } from "@core/Event";
 import { Length } from "@unit/Length";
 
-import NumberRangeEditor from './NumberRangeEditor';
+import './NumberRangeEditor';
+import { registElement } from "@core/registerElement";
 
 export default class MediaProgressEditor extends UIElement {
 
-    components() {
-        return {
-            NumberRangeEditor
-        }
-    }
 
     initState() {
         const [start, end, duration] = (this.props.value || "").split(":");
@@ -158,3 +154,5 @@ export default class MediaProgressEditor extends UIElement {
         this.parent.trigger(this.props.onchange, this.props.key, this.getValue(), this.props.params)
     }
 }
+
+registElement({ MediaProgressEditor })

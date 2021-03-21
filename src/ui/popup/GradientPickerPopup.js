@@ -1,30 +1,20 @@
 import { EVENT } from "@core/UIElement";
 import { LOAD } from "@core/Event";
-import GradientEditor from "../property-editor/GradientEditor";
+import { registElement } from "@core/registerElement";
+
 import { Gradient } from "@property-parser/image-resource/Gradient";
 import BasePopup from "./BasePopup";
-import EmbedColorPicker from "../property-editor/EmbedColorPicker";
-import ImageAssetPicker from "../property/ImageAssetPicker";
-import { registElement } from "@core/registerElement";
+
+
+import "../property-editor/EmbedColorPicker";
+import "../property/ImageAssetPicker";
+import "../property-editor/GradientEditor";
+
 
 export default class GradientPickerPopup extends BasePopup {
 
   getTitle() {
     return this.$i18n('gradient.picker.popup.title')
-  }
-
-  components() {
-    return {
-      ImageAssetPicker,
-      EmbedColorPicker,
-      GradientEditor
-    }
-  }
-
-  initState() {
-
-    return {
-    }
   }
 
   initialize() {

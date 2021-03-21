@@ -1,15 +1,11 @@
 import UIElement, { EVENT } from "@core/UIElement";
 import { LOAD } from "@core/Event";
 import { CSS_TO_STRING, STRING_TO_CSS } from "@core/functions/func";
-import SelectIconEditor from "./SelectIconEditor";
+import "./SelectIconEditor";
+import { registElement } from "@core/registerElement";
 
 export default class FlexLayoutItemEditor extends UIElement {
 
-    components() {
-        return {
-            SelectIconEditor,
-        }
-    }
 
     initState() {
         return {
@@ -95,3 +91,5 @@ export default class FlexLayoutItemEditor extends UIElement {
         this.modifyData();
     }
 }
+
+registElement({ FlexLayoutItemEditor })

@@ -2,6 +2,7 @@ import UIElement, { EVENT } from "@core/UIElement";
 import { CLICK, BIND } from "@core/Event";
 import { Pattern } from "@property-parser/Pattern";
 import { Length } from "@unit/Length";
+import { registElement } from "@core/registerElement";
 
 export default class PatternSizeEditor extends UIElement {
 
@@ -92,3 +93,5 @@ export default class PatternSizeEditor extends UIElement {
         this.updateData({ ...pattern })
     }    
 }
+
+registElement({ PatternSizeEditor })

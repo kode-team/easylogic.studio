@@ -1,16 +1,11 @@
 import UIElement, { EVENT } from "@core/UIElement";
 import { LOAD } from "@core/Event";
 import { Length } from "@unit/Length";
-import RangeEditor from "./RangeEditor";
+import "./RangeEditor";
+import { registElement } from "@core/registerElement";
 
 
 export default class GridGapEditor extends UIElement {
-
-    components() {
-        return {
-            RangeEditor
-        }
-    }
 
     initState() {
         return {
@@ -75,3 +70,5 @@ export default class GridGapEditor extends UIElement {
         this.modifyData();
     }
 }
+
+registElement({ GridGapEditor })

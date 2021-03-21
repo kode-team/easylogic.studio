@@ -1,16 +1,12 @@
 import BaseProperty from "./BaseProperty";
 import { LOAD, DEBOUNCE } from "@core/Event";
 import { EVENT } from "@core/UIElement";
-import BorderEditor from "../property-editor/BorderEditor";
+import "../property-editor/BorderEditor";
 import { registElement } from "@core/registerElement";
 
 
 export default class BorderNewProperty extends BaseProperty {
-  components() {
-    return {
-      BorderEditor
-    }
-  }
+
   getTitle() {
     return this.$i18n('border.property.title');  
   }

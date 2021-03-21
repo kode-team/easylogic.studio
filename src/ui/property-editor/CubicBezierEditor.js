@@ -5,6 +5,7 @@ import { Length } from "@unit/Length";
 import { formatCubicBezier, createBezierForPattern, bezierList, getPredefinedCubicBezier } from "@core/functions/bezier";
 import { div } from "@core/functions/math";
 import { curveToPath, curveToPointLine } from "@core/functions/func";
+import { registElement } from "@core/registerElement";
 
 
 export default class CubicBezierEditor extends UIElement {
@@ -341,3 +342,5 @@ export default class CubicBezierEditor extends UIElement {
         this.refresh();
     }
 }
+
+registElement({ CubicBezierEditor })

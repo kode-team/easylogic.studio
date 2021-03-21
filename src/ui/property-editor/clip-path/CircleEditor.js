@@ -3,16 +3,10 @@ import UIElement, { EVENT } from "@core/UIElement";
 import { isUndefined } from "@core/functions/func";
 import { Length } from "@unit/Length";
 import { POINTERSTART, MOVE, END, BIND } from "@core/Event";
-import RangeEditor from "../RangeEditor";
+import "../RangeEditor";
 import { registElement } from "@core/registerElement";
 
 export default class CircleEditor extends UIElement {
-
-    components () {
-        return {
-            RangeEditor
-        }
-    }
 
     parseValue (str = '50%') {
         var radius = new Length('', 'closest-side'), position = ''; 

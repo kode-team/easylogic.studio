@@ -1,7 +1,8 @@
 import { LOAD } from "@core/Event";
 import UIElement, { EVENT } from "@core/UIElement";
-import BorderValueEditor from "./BorderValueEditor";
+import "./BorderValueEditor";
 import Border from "@property-parser/Border";
+import { registElement } from "@core/registerElement";
 
 const borderTypeList = [
   "border", 
@@ -20,12 +21,6 @@ const borderTypeTitle = {
 
 
 export default class BorderEditor extends UIElement {
- 
-  components() {
-    return {
-      BorderValueEditor
-    }
-  }
 
   initState() {
 
@@ -96,3 +91,5 @@ export default class BorderEditor extends UIElement {
   }
 
 }
+
+registElement({ BorderEditor })

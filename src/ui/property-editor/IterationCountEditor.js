@@ -1,4 +1,5 @@
 
+import { registElement } from "@core/registerElement";
 import { Length } from "@unit/Length";
 import RangeEditor from "./RangeEditor";
 
@@ -26,3 +27,5 @@ export default class IterationCountEditor extends RangeEditor {
     }
 
 }
+
+registElement({ IterationCountEditor })

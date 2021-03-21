@@ -1,5 +1,6 @@
 import UIElement from "@core/UIElement";
 import { LOAD, INPUT, BIND } from "@core/Event";
+import { registElement } from "@core/registerElement";
 
 
 export default class InputArrayEditor extends UIElement {
@@ -59,3 +60,5 @@ export default class InputArrayEditor extends UIElement {
 
     }
 }
+
+registElement({ InputArrayEditor })

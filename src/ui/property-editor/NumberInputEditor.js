@@ -2,6 +2,7 @@ import UIElement from "@core/UIElement";
 import { Length } from "@unit/Length";
 import { LOAD, INPUT } from "@core/Event";
 import icon from "@icon/icon";
+import { registElement } from "@core/registerElement";
 
 export default class NumberInputEditor extends UIElement {
 
@@ -84,3 +85,5 @@ export default class NumberInputEditor extends UIElement {
 
     }
 }
+
+registElement({ NumberInputEditor })

@@ -4,20 +4,13 @@ import { LOAD, POINTERSTART, MOVE, END, CLICK, IF, PREVENT } from "@core/Event";
 import { Offset } from "@property-parser/Offset";
 import Dom from "@core/Dom";
 import { isUndefined } from "@core/functions/func";
-import CSSPropertyEditor from "./CSSPropertyEditor";
-import RangeEditor from "./RangeEditor";
-import InputRangeEditor from "./InputRangeEditor";
+import "./CSSPropertyEditor";
+import "./RangeEditor";
+import "./InputRangeEditor";
+import { registElement } from "@core/registerElement";
 
 
 export default class OffsetEditor extends UIElement {
-
-  components() {
-    return {
-      InputRangeEditor,
-      RangeEditor,
-      CSSPropertyEditor
-    }
-  }
 
   initState() {
     return {
@@ -255,3 +248,5 @@ export default class OffsetEditor extends UIElement {
     this.modifyOffset()
   }
 }
+
+registElement({ OffsetEditor })

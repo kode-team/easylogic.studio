@@ -2,11 +2,12 @@ import { EVENT } from "@core/UIElement";
 import { CLICK, LOAD } from "@core/Event";
 
 import { Length } from "@unit/Length";
-import GradientEditor from "../property-editor/GradientEditor";
-import RangeEditor from "../property-editor/RangeEditor";
-import SelectEditor from "../property-editor/SelectEditor";
 import BasePopup from "./BasePopup";
-import EmbedColorPicker from "../property-editor/EmbedColorPicker";
+import "../property-editor/GradientEditor";
+import "../property-editor/RangeEditor";
+import "../property-editor/SelectEditor";
+
+import "../property-editor/EmbedColorPicker";
 import { blend_list } from "@util/Resource";
 import { registElement } from "@core/registerElement";
 
@@ -15,15 +16,6 @@ export default class BackgroundImagePositionPopup extends BasePopup {
 
   getTitle() {
     return this.$i18n('background.image.position.popup.title')
-  }
-
-  components() {
-    return {
-      EmbedColorPicker,
-      RangeEditor,
-      SelectEditor,
-      GradientEditor
-    }
   }
 
   initState() {

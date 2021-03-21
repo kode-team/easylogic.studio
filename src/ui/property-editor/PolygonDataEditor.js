@@ -1,6 +1,7 @@
 import UIElement from "@core/UIElement";
 import { LOAD, INPUT, DEBOUNCE } from "@core/Event";
 import PolygonParser from "@parser/PolygonParser";
+import { registElement } from "@core/registerElement";
 
 export default class PolygonDataEditor extends UIElement {
 
@@ -68,3 +69,5 @@ export default class PolygonDataEditor extends UIElement {
         this.updateData();
     }
 }
+
+registElement({ PolygonDataEditor })

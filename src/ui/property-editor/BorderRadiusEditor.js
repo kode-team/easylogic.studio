@@ -1,8 +1,9 @@
 import { CLICK, INPUT, CHANGE, LOAD } from "@core/Event";
 import icon from "@icon/icon";
 import UIElement, { EVENT } from "@core/UIElement";
-import RangeEditor from "./RangeEditor";
+import "./RangeEditor";
 import BorderRadius from "@property-parser/BorderRadius";
+import { registElement } from "@core/registerElement";
 
 const typeList = [
   { key: "border-top-left-radius", title: "topLeft" },
@@ -14,11 +15,7 @@ const typeList = [
 const keyList = typeList.map(it => it.key);
 
 export default class BorderRadiusEditor extends UIElement {
-  components() {
-    return {
-      RangeEditor
-    }
-  }
+
   initState() {
 
     return BorderRadius.parseStyle(this.props.value)
@@ -128,3 +125,5 @@ export default class BorderRadiusEditor extends UIElement {
 
 
 }
+
+registElement({ BorderRadiusEditor })

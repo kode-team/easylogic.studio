@@ -1,18 +1,12 @@
 import { Length } from "@unit/Length";
 import { POINTERSTART, MOVE, LOAD, CLICK, BIND, PREVENT, ALT } from "@core/Event";
-import RangeEditor from "../RangeEditor";
+import "../RangeEditor";
 import Dom from "@core/Dom";
 import icon from "@icon/icon";
 import UIElement from "@core/UIElement";
 
 
 export default class PolygonEditor extends UIElement {
-
-    components () {
-        return {
-            RangeEditor
-        }
-    }
 
     parseValue (str = '') {
 

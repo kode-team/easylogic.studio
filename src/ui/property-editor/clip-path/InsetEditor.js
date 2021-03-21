@@ -2,18 +2,12 @@ import UIElement, { EVENT } from "@core/UIElement";
 
 import { Length } from "@unit/Length";
 import { POINTERSTART, MOVE, LOAD, CLICK, BIND } from "@core/Event";
-import RangeEditor from "../RangeEditor";
+import "../RangeEditor";
+import "../DirectionEditor";
 import { DirectionLength } from "@unit/DirectionLength";
-import DirectionEditor from "../DirectionEditor";
+
 
 export default class InsetEditor extends UIElement {
-
-    components () {
-        return {
-            DirectionEditor,
-            RangeEditor
-        }
-    }
 
     parseValue (str = '') {
         var [inset, round] = str.split('round')

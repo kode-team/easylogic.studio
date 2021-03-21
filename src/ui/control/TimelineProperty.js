@@ -1,31 +1,18 @@
 
 import BaseProperty from "../property/BaseProperty";
-import TimelineObjectList from "./timeline/TimelineObjectList";
-import TimelineKeyframeList from "./timeline/TimelineKeyframeList";
+import "./timeline/TimelineObjectList";
+import "./timeline/TimelineKeyframeList";
 import { DRAGOVER, DROP, PREVENT, DEBOUNCE, SCROLL } from "@core/Event";
-import TimelineTopToolbar from "./timeline/TimelineTopToolbar";
-import KeyframeTimeView from "./timeline/KeyframeTimeView";
-import KeyframeTimeGridView from "./timeline/KeyframeTimeGridView";
-import TimelineValueEditor from "./timeline/TimelineValueEditor";
+import "./timeline/TimelineTopToolbar";
+import "./timeline/KeyframeTimeView";
+import "./timeline/KeyframeTimeGridView";
+import "./timeline/TimelineValueEditor";
 import { EVENT } from "@core/UIElement";
-import TimelinePlayControl from "./timeline/TimelinePlayControl";
-import TimelineAnimationProperty from "../property/TimelineAnimationProperty";
+import "./timeline/TimelinePlayControl";
+import "../property/TimelineAnimationProperty";
 import { registElement } from "@core/registerElement";
 
 export default class TimelineProperty extends BaseProperty {
-
-  components() {
-    return {
-      TimelineAnimationProperty,
-      TimelinePlayControl,
-      TimelineValueEditor,
-      KeyframeTimeView,
-      TimelineKeyframeList,
-      TimelineObjectList,
-      TimelineTopToolbar,
-      KeyframeTimeGridView
-    }
-  }
 
   isFirstShow() {
     return false;

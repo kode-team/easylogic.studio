@@ -1,15 +1,11 @@
 import UIElement, { EVENT } from "@core/UIElement";
 import { LOAD } from "@core/Event";
 import { CSS_TO_STRING, STRING_TO_CSS } from "@core/functions/func";
-import SelectIconEditor from "./SelectIconEditor";
+import "./SelectIconEditor";
+import { registElement } from "@core/registerElement";
 
 export default class FlexLayoutEditor extends UIElement {
 
-    components() {
-        return {
-            SelectIconEditor,
-        }
-    }
 
     getDirectionOptions () {
         return this.makeOptionsFunction('row,column,row-reverse,column-reverse')
@@ -123,3 +119,5 @@ export default class FlexLayoutEditor extends UIElement {
         this.modifyData();
     }
 }
+
+registElement({ FlexLayoutEditor })

@@ -12,22 +12,23 @@ import {
   DRAGSTART
 } from "@core/Event";
 import UIElement, { EVENT } from "@core/UIElement";
-import RangeEditor from "./RangeEditor";
-import ColorViewEditor from "./ColorViewEditor";
+import "./RangeEditor";
+import "./ColorViewEditor";
 
-import SelectEditor from "./SelectEditor";
-import TextEditor from "./TextEditor";
-import NumberRangeEditor from "./NumberRangeEditor";
-import InputArrayEditor from "./InputArrayEditor";
+import "./SelectEditor";
+import "./TextEditor";
+import "./NumberRangeEditor";
+import "./InputArrayEditor";
 import { SVGFilter, SVGFilterSpecList } from "@property-parser/SVGFilter";
-import FuncFilterEditor from "./FuncFilterEditor";
+import "./FuncFilterEditor";
 import { Length } from "@unit/Length";
 import Dom from "@core/Dom";
 import PathStringManager from "@parser/PathStringManager";
-import ColorMatrixEditor from "./ColorMatrixEditor";
+import "./ColorMatrixEditor";
 import svgFilterPreset from "./svg-filter-preset";
-import ImageSelectEditor from "./ImageSelectEditor";
-import BlendSelectEditor from "./BlendSelectEditor";
+import "./ImageSelectEditor";
+import "./BlendSelectEditor";
+import { registElement } from "@core/registerElement";
 
 const filterTypes = [
   {label: 'GRAPHIC REFERENCES', items : [
@@ -193,23 +194,6 @@ Object.keys(inYAxis).forEach(len => {
 
 
 export default class SVGFilterEditor extends UIElement {
-
-
-
-  components() {
-    return {
-      BlendSelectEditor,
-      ColorMatrixEditor,
-      InputArrayEditor,
-      NumberRangeEditor,
-      RangeEditor,
-      ColorViewEditor,
-      SelectEditor,
-      TextEditor,
-      FuncFilterEditor,
-      ImageSelectEditor
-    }
-  }
 
   makeFilterSelect () {
     return /*html*/`
@@ -984,3 +968,5 @@ export default class SVGFilterEditor extends UIElement {
     this.removeFilter(f.id);
   }
 }
+
+registElement({ SVGFilterEditor })

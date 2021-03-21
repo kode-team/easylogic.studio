@@ -2,54 +2,30 @@ import UIElement, { EVENT } from "@core/UIElement";
 import { Length } from "@unit/Length";
 import { LOAD, CLICK } from "@core/Event";
 import icon from "@icon/icon";
-import ColorViewEditor from "./ColorViewEditor";
-import RangeEditor from "./RangeEditor";
-import BackgroundImageEditor from "./BackgroundImageEditor";
-import FilterEditor from "./FilterEditor";
-import BoxShadowEditor from "./BoxShadowEditor";
-import VarEditor from "./VarEditor";
-import TransformEditor from "./TransformEditor";
-import TransformOriginEditor from "./TransformOriginEditor";
-import PerspectiveOriginEditor from "./PerspectiveOriginEditor";
+import "./ColorViewEditor";
+import "./RangeEditor";
+import "./BackgroundImageEditor";
+import "./FilterEditor";
+import "./BoxShadowEditor";
+import "./VarEditor";
+import "./TransformEditor";
+import "./TransformOriginEditor";
+import "./PerspectiveOriginEditor";
 import { OBJECT_TO_CLASS } from "@core/functions/func";
-import SelectEditor from "./SelectEditor";
-import NumberRangeEditor from "./NumberRangeEditor";
-import BorderRadiusEditor from "./BorderRadiusEditor";
-import ClipPathEditor from "./ClipPathEditor";
-import TextShadowEditor from "./TextShadowEditor";
-import StrokeDashArrayEditor from "./StrokeDashArrayEditor";
-import PathDataEditor from "./PathDataEditor";
-import PolygonDataEditor from "./PolygonDataEditor";
-import OffsetPathListEditor from "./OffsetPathListEditor";
-import BorderEditor from "./BorderEditor";
-import MediaProgressEditor from './MediaProgressEditor';
+import "./SelectEditor";
+import "./NumberRangeEditor";
+import "./BorderRadiusEditor";
+import "./ClipPathEditor";
+import "./TextShadowEditor";
+import "./StrokeDashArrayEditor";
+import "./PathDataEditor";
+import "./PolygonDataEditor";
+import "./OffsetPathListEditor";
+import "./BorderEditor";
+import './MediaProgressEditor';
+import { registElement } from "@core/registerElement";
 
 export default class CSSPropertyEditor extends UIElement {
-
-  components() {
-    return {
-      BorderEditor,
-      NumberRangeEditor,
-      SelectEditor,
-      TextShadowEditor,      
-      BoxShadowEditor,
-      FilterEditor,
-      ColorViewEditor,
-      RangeEditor,
-      StrokeDashArrayEditor,
-      BackgroundImageEditor,
-      TransformEditor,
-      TransformOriginEditor,
-      PerspectiveOriginEditor,
-      VarEditor,
-      BorderRadiusEditor,
-      ClipPathEditor,
-      PathDataEditor,
-      PolygonDataEditor,
-      OffsetPathListEditor,
-      MediaProgressEditor
-    }
-  }
 
   initState() {
     return {
@@ -609,3 +585,5 @@ export default class CSSPropertyEditor extends UIElement {
     this.parent.trigger('refreshPropertyValue');
   }  
 }
+
+registElement({ CSSPropertyEditor })

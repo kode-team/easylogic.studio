@@ -1,5 +1,6 @@
 import UIElement, { EVENT } from "@core/UIElement";
 import Dom from "@core/Dom";
+import { registElement } from "@core/registerElement";
 
 export default class HoverView extends UIElement {
 
@@ -67,3 +68,5 @@ export default class HoverView extends UIElement {
     }    
 
 } 
+
+registElement({ HoverView })

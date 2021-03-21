@@ -3,7 +3,6 @@ import { LOAD, CLICK, DEBOUNCE, DRAGSTART } from "@core/Event";
 import { EVENT } from "@core/UIElement";
 import icon from "@icon/icon";
 import Color from "@core/Color";
-import colors from "@preset/colors";
 import { registElement } from "@core/registerElement";
 
 export default class ColorAssetsProperty extends BaseProperty {
@@ -15,13 +14,31 @@ export default class ColorAssetsProperty extends BaseProperty {
   initState() {
     return {
       mode: 'grid',
-      preset: 'random'
+      preset: 'random',
+      isLoaded : false, 
+      colors: []
     }
   }
 
-  getTools() {
 
-    const options = colors.map(it => `${it.key}:${it.title}`)
+  async afterRender() {
+    if (this.state.isLoaded === false) {
+      const colors = await import(/* webpackChunkName: "color-assets" */ '@preset/colors')
+
+      this.setState({
+        isLoaded: true,
+        colors: colors.default
+      });
+    }
+
+  }
+
+  getTools() {
+    return /*html*/`<div ref="$tools"></div>`
+  }
+
+  [LOAD('$tools')] () {
+    const options = this.state.colors.map(it => `${it.key}:${it.title}`)
 
     return /*html*/`
       <object refClass="SelectEditor"  key="preset" value="${this.state.preset}" options="${options}" onchange="changePreset"  />
@@ -59,7 +76,7 @@ export default class ColorAssetsProperty extends BaseProperty {
   }  
 
   [LOAD("$colorList")]() {
-    var preset = colors.find(it => it.key === this.state.preset);
+    var preset = this.state.colors.find(it => it.key === this.state.preset);
 
     if (!preset) {
       return '';
@@ -141,15 +158,6 @@ export default class ColorAssetsProperty extends BaseProperty {
     } else {
       this.emit('setColorAsset', { color })
     }
-  }
-
-
-  [EVENT('changeColorAssets')] (color, params) {
-      this.executeColor(project => {
-        project.setColorValue(params.index, {color});      
-        this.state.$el.css('background-color', color);
-        this.state.$color.val(color);
-      }, false)
   }
 }
 

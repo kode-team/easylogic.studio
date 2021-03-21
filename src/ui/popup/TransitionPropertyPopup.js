@@ -1,9 +1,9 @@
 import { EVENT } from "@core/UIElement";
 import { Length } from "@unit/Length";
 import { LOAD} from "@core/Event";
-import CubicBezierEditor from "../property-editor/CubicBezierEditor";
-import RangeEditor from "../property-editor/RangeEditor";
-import SelectEditor from "../property-editor/SelectEditor";
+import "../property-editor/CubicBezierEditor";
+import "../property-editor/RangeEditor";
+import "../property-editor/SelectEditor";
 import BasePopup from "./BasePopup";
 import { registElement } from "@core/registerElement";
 
@@ -85,14 +85,6 @@ export default class TransitionPropertyPopup extends BasePopup {
 
   getTitle() {
     return 'Transition'
-  }
-
-  components() {
-    return {
-      SelectEditor,
-      CubicBezierEditor,
-      RangeEditor
-    }
   }
 
   initState() {

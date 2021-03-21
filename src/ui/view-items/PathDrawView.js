@@ -9,6 +9,7 @@ import PathGenerator from "@parser/PathGenerator";
 import Point from "@parser/Point";
 import { SVGFill } from "@property-parser/SVGFill";
 import { vec3 } from "gl-matrix";
+import { registElement } from "@core/registerElement";
 
 const FIELDS = ['fill', 'fill-opacity', 'stroke', 'stroke-width', 'stroke-linecap', 'stroke-linejoin']
 
@@ -319,3 +320,5 @@ export default class PathDrawView extends UIElement {
     }   
 
 } 
+
+registElement({ PathDrawView })

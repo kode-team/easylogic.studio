@@ -1,8 +1,9 @@
-import UIElement, { cssElement, EVENT } from "@core/UIElement";
+import UIElement, { EVENT } from "@core/UIElement";
 import { CLICK, BIND } from "@core/Event";
 import icon from "@icon/icon";
-import propertyEditor from "../property-editor";
+import "../property-editor";
 import { Length } from "@unit/Length";
+import { registElement } from "@core/registerElement";
 
 const MODES = {
   'segment-move': 'modify',
@@ -23,10 +24,6 @@ export default class PathManager extends UIElement {
           'stroke-width': null,
           msg: this.$i18n('path.manager.msg')
       }
-  }
-
-  components() {
-    return propertyEditor
   }
 
 
@@ -179,3 +176,5 @@ export default class PathManager extends UIElement {
   }
 
 }
+
+registElement({ PathManager })

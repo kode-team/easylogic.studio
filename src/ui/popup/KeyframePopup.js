@@ -1,5 +1,5 @@
 import { EVENT } from "@core/UIElement";
-import OffsetEditor from "../property-editor/OffsetEditor";
+import "../property-editor/OffsetEditor";
 import { INPUT } from "@core/Event";
 import BasePopup from "./BasePopup";
 import { registElement } from "@core/registerElement";
@@ -8,12 +8,6 @@ export default class KeyframePopup extends BasePopup {
 
   getTitle () {
     return this.$i18n('keyframe.popup.title')
-  }
-
-  components() {
-    return {
-      OffsetEditor
-    }
   }
 
   initState() {

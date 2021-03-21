@@ -3,16 +3,11 @@ import UIElement, { EVENT } from "@core/UIElement";
 import { CLICK, PREVENT, STOP, DEBOUNCE } from "@core/Event";
 
 import icon from "@icon/icon";
-import NumberInputEditor from "../property-editor/NumberInputEditor";
-import { itemsToRectVerties } from "@core/functions/collision";
+import "@ui/property-editor/NumberInputEditor";
+import { registElement } from "@core/registerElement";
+
 
 export default class PageTools extends UIElement {
-
-  components() {
-    return {
-      NumberInputEditor
-    }
-  }
 
   template() {
     return /*html*/`     
@@ -61,3 +56,5 @@ export default class PageTools extends UIElement {
   }
 
 }
+
+registElement({ PageTools })

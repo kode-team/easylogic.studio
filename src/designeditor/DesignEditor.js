@@ -10,17 +10,17 @@ import "@ui/popup";
 import "@ui/window-list";
 import "@ui/control";
 
-import CanvasView from "@ui/view/CanvasView";
-import ToolMenu from "@ui/view/ToolMenu";
-import LogoView from "@ui/view/LogoView";
-import ExternalToolMenu from "@ui/view/ExternalToolMenu";
-import StatusBar from "@ui/view/StatusBar";
-import PreviewToolMenu from "@ui/view/PreviewToolMenu";
-import NotificationView from "@ui/view/NotificationView";
-import PageSubEditor from "@ui/view-items/PageSubEditor";
+import "@ui/view/CanvasView";
+import "@ui/view/ToolMenu";
+import "@ui/view/LogoView";
+import "@ui/view/ExternalToolMenu";
+import "@ui/view/StatusBar";
+import "@ui/view/PreviewToolMenu";
+import "@ui/view/NotificationView";
+import "@ui/view-items/PageSubEditor";
 
-import HorizontalRuler from "@ui/view/HorizontalRuler";
-import VerticalRuler from "@ui/view/VerticalRuler";
+import "@ui/view/HorizontalRuler";
+import "@ui/view/VerticalRuler";
 import { registElement } from "@core/registerElement";
  
 
@@ -226,21 +226,6 @@ export default class DesignEditor extends UIElement {
       style: { height }
     }
   }    
-
-  components() {
-    return {
-      ToolMenu,
-      PageSubEditor,
-      CanvasView,
-      LogoView,
-      ExternalToolMenu,
-      StatusBar,
-      PreviewToolMenu,
-      NotificationView,
-      HorizontalRuler,
-      VerticalRuler
-    };
-  }
 
   [POINTERSTART('$splitter') + MOVE('moveSplitter')] () {
 

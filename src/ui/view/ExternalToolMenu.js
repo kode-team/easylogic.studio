@@ -1,11 +1,8 @@
 import { registElement } from "@core/registerElement";
 import UIElement from "@core/UIElement";
-import menuItems from "../menu-items/index";
+import "@ui/menu-items";
 
 export default class ExternalToolMenu extends UIElement {
-  components() {
-    return menuItems;
-  }
 
   template() {
     return /*html*/`

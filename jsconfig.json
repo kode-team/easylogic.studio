@@ -10,7 +10,7 @@
         "@i18n/*": ["./src/i18n/*"],
         "@icon/*": ["./src/icon/*"],
         "@image-resource/*": ["src/property-parser/image-resource/*"],
-        "@interpolate/*": ["./src/interpolate/*"],
+        "@interpolate/*": ["src/core/interpolate/*"],
         "@items/*": ["./src/items/*"],
         "@renderer/*": ["./src/renderer/*"],
         "@manager/*": ["./src/manager/*"],

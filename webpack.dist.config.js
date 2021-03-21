@@ -38,13 +38,14 @@ const LICENSE = `
 module.exports = {
   // Entry files for our popup and background pages
   entry: {
-    main: "./src/index.js"
+    editor: "./src/index.js",
+    player: "./src/index-player.js"    
   },
   output: {
     library: "EasylogicStudio",
     libraryTarget: "umd",
     path: __dirname + "/dist",
-    filename: 'editor.js'
+    filename: '[name].js'
   },
   resolve: { alias },  
   mode: 'production',
@@ -137,10 +138,16 @@ module.exports = {
   plugins: [
     new HtmlWebPackPlugin({
       inject: true,
-      chunks: ["main"],
       template: "./src/index.html",
-      filename: "./index.html"
+      filename: "./index.html",
+      excludeChunks: ['player']
     }),
+    new HtmlWebPackPlugin({
+      inject: true,
+      template: "./src/index.html",
+      filename: "./player.html",
+      excludeChunks: ['editor']
+    }),           
     new MiniCssExtractPlugin({
       filename: "[name].css"
     }),

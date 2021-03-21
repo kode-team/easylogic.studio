@@ -289,10 +289,10 @@ export class Transform extends Property {
                 var values = it.value.map(it => it.value);
                 mat4.multiply(view, view, values);
                 break;
-            // case 'perspective': 
-            //     var values = it.value;
-            //     mat4.perspective(view, Math.PI * 0.5, width/height, 1, values[0].value);
-            //     break;
+            case 'perspective': 
+                var values = it.value;
+                mat4.perspective(view, Math.PI * 0.5, width/height, 1, values[0].value);
+                break;
         }
     }   
 

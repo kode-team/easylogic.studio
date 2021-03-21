@@ -1,11 +1,8 @@
 import BaseProperty from "./BaseProperty";
-import menuItems from "../menu-items";
+import "../menu-items";
 import { registElement } from "@core/registerElement";
 
 export default class AlignmentProperty extends BaseProperty {
-  components() {
-    return menuItems
-  }
 
   afterRender() {
     this.show();

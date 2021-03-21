@@ -1,13 +1,13 @@
 import { EVENT } from "@core/UIElement";
 import { LOAD } from "@core/Event";
 import { ClipPath } from "@property-parser/ClipPath";
-import CircleEditor from "../property-editor/clip-path/CircleEditor";
-import SelectEditor from "../property-editor/SelectEditor";
-
-import InsetEditor from "../property-editor/clip-path/InsetEditor";
-import PolygonEditor from "../property-editor/clip-path/PolygonEditor";
 import BasePopup from "./BasePopup";
-import EllipseEditor from "../property-editor/clip-path/EllipseEditor";
+import "../property-editor/clip-path/CircleEditor";
+import "../property-editor/SelectEditor";
+
+import "../property-editor/clip-path/InsetEditor";
+import "../property-editor/clip-path/PolygonEditor";
+import "../property-editor/clip-path/EllipseEditor";
 import { registElement } from "@core/registerElement";
 
 
@@ -16,16 +16,6 @@ export default class ClipPathPopup extends BasePopup {
 
   getTitle() {
     return 'ClipPath'
-  }
-
-  components() {
-    return {
-      EllipseEditor,
-      PolygonEditor,
-      InsetEditor,
-      SelectEditor,
-      CircleEditor
-    }
   }
 
   initState() {

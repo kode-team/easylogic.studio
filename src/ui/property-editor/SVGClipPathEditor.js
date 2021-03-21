@@ -1,14 +1,9 @@
 import UIElement, { EVENT } from "@core/UIElement";
 import { CLICK } from "@core/Event";
-import IconListViewEditor from "./IconListViewEditor";
+import "./IconListViewEditor";
+import { registElement } from "@core/registerElement";
 
 export default class SVGClipPathEditor extends UIElement {
-
-  components() {
-    return {
-      IconListViewEditor
-    }
-  }
 
   initState() {
     return {
@@ -60,3 +55,5 @@ export default class SVGClipPathEditor extends UIElement {
   }
 
 }
+
+registElement({ SVGClipPathEditor })

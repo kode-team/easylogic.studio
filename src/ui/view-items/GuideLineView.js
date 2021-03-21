@@ -1,6 +1,6 @@
 import UIElement, { EVENT } from "@core/UIElement";
 import { BIND } from "@core/Event";
-import { vec3 } from "gl-matrix";
+import { registElement } from "@core/registerElement";
 
 const line = (source, target, className = 'base-line') => {
     return /*html*/`<line x1="${source[0]}" y1="${source[1]}" x2="${target[0]}" y2="${target[1]}" class='${className}' />`
@@ -107,3 +107,5 @@ export default class GuideLineView extends UIElement {
         this.refresh();
     }
 } 
+
+registElement({ GuideLineView })

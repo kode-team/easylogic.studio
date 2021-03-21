@@ -1,17 +1,10 @@
 import UIElement from "@core/UIElement";
 
-import PathManager from "./PathManager";
-import DrawManager from "./DrawManager";
-
+import "./PathManager";
+import "./DrawManager";
+import { registElement } from "@core/registerElement";
 
 export default class PageSubEditor extends UIElement {
-
-  components() {
-    return {
-      PathManager,
-      DrawManager
-    }
-  }
 
   template() {
     return/*html*/`
@@ -23,3 +16,5 @@ export default class PageSubEditor extends UIElement {
     `;
   }
 }
+
+registElement({ PageSubEditor })

@@ -18,7 +18,7 @@ export default class MenuItem extends UIElement {
             checked="${this.getChecked() ? 'checked' : ''}"
             ${this.isDisabled() ? 'disabled' : ''}
         >
-            <div class="icon ${this.getIcon()}">${icon[this.getIconString()]}</div>
+            <div class="icon ${this.getIcon()}">${icon[this.getIconString()] || ''}</div>
             <div class="title">${this.getTitle()}</div>
         </button>
         `

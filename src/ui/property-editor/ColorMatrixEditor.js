@@ -2,6 +2,7 @@ import UIElement from "@core/UIElement";
 import { LOAD, INPUT, BIND, CLICK } from "@core/Event";
 import colormatrix from "./colormatrix";
 import { normalize } from "@core/functions/math";
+import { registElement } from "@core/registerElement";
 
 const COLUMN = 6; 
 
@@ -107,3 +108,5 @@ export default class ColorMatrixEditor extends UIElement {
 
     }
 }
+
+registElement({ ColorMatrixEditor })

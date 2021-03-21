@@ -1,19 +1,12 @@
 import UIElement, { EVENT } from "@core/UIElement";
 import { LOAD } from "@core/Event";
 import { CSS_TO_STRING, STRING_TO_CSS } from "@core/functions/func";
-import SelectIconEditor from "./SelectIconEditor";
-import GridBoxEditor from "./GridBoxEditor";
-import GridGapEditor from "./GridGapEditor";
+import "./SelectIconEditor";
+import "./GridBoxEditor";
+import "./GridGapEditor";
+import { registElement } from "@core/registerElement";
 
 export default class GridLayoutEditor extends UIElement {
-
-    components() {
-        return {
-            SelectIconEditor,
-            GridBoxEditor,
-            GridGapEditor,
-        }
-    }
 
     initState() {
         return {
@@ -90,3 +83,5 @@ export default class GridLayoutEditor extends UIElement {
         this.modifyData();
     }
 }
+
+registElement({ GridLayoutEditor })

@@ -21,16 +21,6 @@ export default class ComponentProperty extends BaseProperty {
     return false; 
   }
 
-  initState() {
-    return {
-      components: {} 
-    }
-  }
-
-  components () {
-    return {...super.components(), ...this.state.components}
-  }
-
   [EVENT('refreshSelection') + DEBOUNCE(100)]() {
 
     this.refreshShow((type) => {
@@ -62,32 +52,10 @@ export default class ComponentProperty extends BaseProperty {
     `;
   }
 
-  initComponents() {
-
-    var current = this.$selection.current;
-    var components = {} 
-
-    if (current && current.is('component')) {
-      current.getProps().forEach(it => {
-
-        if (isString(it.editor)) {
-          
-        } else {
-          components = { ...components, ...it.editor}
-        }
-
-      })  
-    }
-
-    this.setState({components}, false)
-
-    super.initComponents();
-  }
-
   getPropertyEditor (key, value, selfEditor, selfEditorOptions) {
 
     if (isString(selfEditor)) {
-      return `<${selfEditor} ${OBJECT_TO_PROPERTY({
+      return `<object refClass="${selfEditor}" ${OBJECT_TO_PROPERTY({
         ...selfEditorOptions,
         onchange: 'changeComponentProperty',
         ref: key,
@@ -96,7 +64,7 @@ export default class ComponentProperty extends BaseProperty {
       })} />`
     } else {
       return Object.keys(selfEditor).map(selfEditorKey => {
-        return `<${selfEditorKey} ${OBJECT_TO_PROPERTY({
+        return `<object refClass="${selfEditorKey}" ${OBJECT_TO_PROPERTY({
           ...selfEditorOptions,
           onchange: 'changeComponentProperty',
           ref: key,

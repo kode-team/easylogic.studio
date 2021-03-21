@@ -1,41 +1,25 @@
+import { vec3 } from "gl-matrix";
 import UIElement, { EVENT } from "@core/UIElement";
 import { BIND, POINTERSTART, MOVE, END, IF, KEYUP, DOUBLECLICK, FOCUSOUT } from "@core/Event";
 import { Length } from "@unit/Length";
-
 import Dom from "@core/Dom";
-import StyleView from "./StyleView";
-
 import HTMLRenderer from '@renderer/HTMLRenderer';
-import SelectionToolView from "@ui/view-items/SelectionToolView";
-import GroupSelectionToolView from "@ui/view-items/GroupSelectionToolView";
-import GuideLineView from "@ui/view-items/GuideLineView";
-import PathEditorView from "@ui/view-items/PathEditorView";
-import PathDrawView from "@ui/view-items/PathDrawView";
-import LayerAppendView from "@ui/view-items/LayerAppendView";
-import GridLayoutLineView from "@ui/view-items/GridLayoutLineView";
-import HoverView from "@ui/view-items/HoverView";
+import "@ui/view-items/SelectionToolView";
+import "@ui/view-items/GroupSelectionToolView";
+import "@ui/view-items/GuideLineView";
+import "@ui/view-items/PathEditorView";
+import "@ui/view-items/PathDrawView";
+import "@ui/view-items/LayerAppendView";
+import "@ui/view-items/GridLayoutLineView";
+import "@ui/view-items/HoverView";
 
 import { isFunction } from "@core/functions/func";
 import { KEY_CODE } from "@types/key";
-import { vec3 } from "gl-matrix";
+
 import { registElement } from "@core/registerElement";
 
-
+import "./StyleView";
 export default class HTMLRenderView extends UIElement {
-
-    components() {
-        return {
-            StyleView,
-            HoverView,
-            SelectionToolView,
-            GroupSelectionToolView,
-            GuideLineView,
-            PathEditorView,
-            PathDrawView,
-            LayerAppendView,
-            GridLayoutLineView,
-        }
-    }
 
     initState() {
         return {

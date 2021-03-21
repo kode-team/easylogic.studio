@@ -1,6 +1,6 @@
 import { EVENT } from "@core/UIElement";
 import { INPUT } from "@core/Event";
-import CSSPropertyEditor from "../property-editor/CSSPropertyEditor";
+import "../property-editor/CSSPropertyEditor";
 import BasePopup from "./BasePopup";
 import { registElement } from "@core/registerElement";
 
@@ -8,12 +8,6 @@ export default class SelectorPopup extends BasePopup {
 
   getTitle() {
     return this.$i18n('selector.popup.title')
-  }
-
-  components() {
-    return {
-      CSSPropertyEditor
-    }
   }
 
   initState() {

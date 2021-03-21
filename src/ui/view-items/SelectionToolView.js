@@ -7,6 +7,7 @@ import { Transform } from "@property-parser/Transform";
 import { TransformOrigin } from "@property-parser/TransformOrigin";
 import { calculateAngle360, calculateAngleForVec3, calculateMatrix, calculateMatrixInverse, round } from "@core/functions/math";
 import { getRotatePointer } from "@core/functions/collision";
+import { registElement } from "@core/registerElement";
 
 var directionType = {
     1: 'to top left',
@@ -760,3 +761,5 @@ export default class SelectionToolView extends SelectionToolEvent {
     }
 
 } 
+
+registElement({ SelectionToolView })

@@ -2,6 +2,7 @@ import UIElement from "@core/UIElement";
 import { LOAD, CLICK, DOMDIFF } from "@core/Event";
 import icon from "@icon/icon";
 import { CSS_TO_STRING } from "@core/functions/func";
+import { registElement } from "@core/registerElement";
 
 export default class SelectIconEditor extends UIElement {
 
@@ -112,3 +113,5 @@ export default class SelectIconEditor extends UIElement {
         this.parent.trigger(this.props.onchange, this.props.key, this.getValue(), this.props.params)
     }
 }
+
+registElement({ SelectIconEditor })

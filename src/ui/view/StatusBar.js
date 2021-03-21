@@ -1,20 +1,13 @@
 import UIElement, { EVENT } from "@core/UIElement";
 import { BIND } from "@core/Event";
-import LanguageSelector from "../status-bar-items/LanguageSelector";
-import ThemeSwitcher from "../status-bar-items/ThemeSwitcher";
-import LayoutSelector from "../status-bar-items/LayoutSelector";
-import VersionView from "../status-bar-items/VersionView";
+import "../status-bar-items/LanguageSelector";
+import "../status-bar-items/ThemeSwitcher";
+import "../status-bar-items/LayoutSelector";
+import "../status-bar-items/VersionView";
 import { registElement } from "@core/registerElement";
-export default class StatusBar extends UIElement {
-    components() {
-        return {
-            LayoutSelector,
-            LanguageSelector,
-            ThemeSwitcher,
-            VersionView,
-        }
 
-    }
+
+export default class StatusBar extends UIElement {
     template () {
         return /*html*/`
             <div class='status-bar'>

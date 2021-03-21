@@ -1,17 +1,13 @@
 import { CLICK, PREVENT, STOP } from "@core/Event";
 import UIElement from "@core/UIElement";
 
-import propertyEditor from "../property-editor";
+import "../property-editor";
 import Dom from "@core/Dom";
 import { isFunction } from "@core/functions/func";
 import icon from "@icon/icon";
 
 
 export default class BaseProperty extends UIElement {
-
-  components() {
-    return propertyEditor
-  }
 
   onToggleShow() {}
 

@@ -1,8 +1,6 @@
 import UIElement, { EVENT } from "@core/UIElement";
 
-import HTMLRenderView from "./render-view/HTMLRenderView";
-import PageTools from "../view-items/PageTools";
-import PageSubEditor from "../view-items/PageSubEditor";
+
 import { BIND, DRAGOVER, DROP, IF, MOVE, normalizeWheelEvent, POINTERSTART, PREVENT, WHEEL } from "@core/Event";
 import { vec3 } from "gl-matrix";
 import { KEY_CODE } from "@types/key";
@@ -10,15 +8,10 @@ import Resource from "@util/Resource";
 import Dom from "@core/Dom";
 import { registElement } from "@core/registerElement";
 
+import "./render-view/HTMLRenderView";
+import "../view-items/PageTools";
+import "../view-items/PageSubEditor";
 export default class CanvasView extends UIElement {
-
-  components() {
-    return {
-      PageTools,
-      HTMLRenderView,
-      PageSubEditor,
-    }
-  }
 
   initState () {
     return {

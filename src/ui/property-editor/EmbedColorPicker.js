@@ -1,14 +1,9 @@
+import { registElement } from "@core/registerElement";
 import UIElement, { EVENT } from "@core/UIElement";
-import ColorPickerEditor from "./ColorPickerEditor";
+import "./ColorPickerEditor";
 
 
 export default class EmbedColorPicker extends UIElement {
-
-    components () {
-      return {
-        ColorPickerEditor
-      }
-    }
 
     initState() {
       return {
@@ -48,3 +43,5 @@ export default class EmbedColorPicker extends UIElement {
     }
 
 }
+
+registElement({ EmbedColorPicker })

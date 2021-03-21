@@ -1,16 +1,17 @@
 import UIElement, { EVENT } from "@core/UIElement";
 import { LOAD, CLICK, POINTERSTART, MOVE, BIND, CHANGE } from "@core/Event";
 import { Length } from "@unit/Length";
-import RangeEditor from "./RangeEditor";
+import "./RangeEditor";
 
-import SelectEditor from "./SelectEditor";
-import InputRangeEditor from "./InputRangeEditor";
+import "./SelectEditor";
+import "./InputRangeEditor";
 import { Gradient } from "@property-parser/image-resource/Gradient";
 import icon from "@icon/icon";
 import { SVGFill } from "@property-parser/SVGFill";
 import { SVGStaticGradient } from "@property-parser/image-resource/SVGStaticGradient";
 import { isUndefined } from "@core/functions/func";
-import SelectIconEditor from "./SelectIconEditor";
+import "./SelectIconEditor";
+import { registElement } from "@core/registerElement";
 
 const imageTypeList = [
   'static-gradient',
@@ -53,15 +54,6 @@ const rangeEditorList = [
 ]
 
 export default class FillEditor extends UIElement  {
-
-  components() {
-    return {
-      InputRangeEditor,
-      RangeEditor,
-      SelectIconEditor,
-      SelectEditor
-    }
-  }
 
   initState() {
     return {
@@ -604,3 +596,5 @@ export default class FillEditor extends UIElement  {
   }
 
 }
+
+registElement({ FillEditor })

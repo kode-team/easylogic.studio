@@ -2,7 +2,8 @@ import { CLICK, LOAD } from "@core/Event";
 import { Length } from "@unit/Length";
 import icon from "@icon/icon";
 import UIElement, { EVENT } from "@core/UIElement";
-import RangeEditor from "./RangeEditor";
+import "./RangeEditor";
+import { registElement } from "@core/registerElement";
 
 const typeList = [
   { key: "perspective-origin-x", title: "X" },
@@ -23,11 +24,7 @@ const origin = {
   'bottom right': '100% 100%'
 }
 export default class PerspectiveOriginEditor extends UIElement {
-  components() {
-    return { 
-      RangeEditor
-    }
-  }
+
   initState() {
 
     var arr = this.props.value.split(' ');
@@ -180,3 +177,6 @@ export default class PerspectiveOriginEditor extends UIElement {
 
 
 }
+
+
+registElement({ PerspectiveOriginEditor })

@@ -1,5 +1,6 @@
 import UIElement, { EVENT } from "@core/UIElement";
 import { CLICK, INPUT, BIND, FOCUS, BLUR } from "@core/Event";
+import { registElement } from "@core/registerElement";
 
 export default class ColorViewEditor extends UIElement {
 
@@ -120,3 +121,5 @@ export default class ColorViewEditor extends UIElement {
     }    
 
 }
+
+registElement({ ColorViewEditor })

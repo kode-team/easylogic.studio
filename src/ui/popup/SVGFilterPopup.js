@@ -1,6 +1,6 @@
 import { EVENT } from "@core/UIElement";
 import { LOAD } from "@core/Event";
-import SVGFilterEditor from "../property-editor/SVGFilterEditor";
+import "../property-editor/SVGFilterEditor";
 import BasePopup from "./BasePopup";
 import { SVGFilter } from "@property-parser/SVGFilter";
 import { isNotUndefined } from "@core/functions/func";
@@ -12,11 +12,6 @@ export default class SVGFilterPopup extends BasePopup {
     return this.$i18n('svgfilter.popup.title');
   }
 
-  components() {
-    return {
-      SVGFilterEditor
-    }
-  }
 
   getClassName() {
     return 'transparent'

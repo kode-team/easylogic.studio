@@ -1,16 +1,12 @@
+import { registElement } from "@core/registerElement";
 import UIElement, { EVENT } from "@core/UIElement";
+import "@ui/property-editor";
 import locales from "../../i18n/locales";
-import SelectEditor from "../property-editor/SelectEditor";
 
 var langs = Object.keys(locales)
 
 
 export default class LanguageSelector extends UIElement {
-    components() {
-        return {
-            SelectEditor
-        }
-    }
     template () {
 
         var languages = langs.map(lang => {
@@ -38,3 +34,5 @@ export default class LanguageSelector extends UIElement {
         this.emit('setLocale', locale);
     }
 }
+
+registElement({ LanguageSelector })

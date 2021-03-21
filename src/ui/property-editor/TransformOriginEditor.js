@@ -1,7 +1,7 @@
 import { CLICK, LOAD } from "@core/Event";
 import { Length } from "@unit/Length";
 import UIElement, { EVENT } from "@core/UIElement";
-import RangeEditor from "./RangeEditor";
+import "./RangeEditor";
 import { registElement } from "@core/registerElement";
 
 
@@ -26,11 +26,6 @@ const origin = {
 }
 
 export default class TransformOriginEditor extends UIElement {
-  components() {
-    return { 
-      RangeEditor
-    }
-  }
   initState() {
 
     var arr = this.props.value.split(' ');

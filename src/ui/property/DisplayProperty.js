@@ -2,17 +2,11 @@ import BaseProperty from "./BaseProperty";
 import { LOAD, DEBOUNCE } from "@core/Event";
 import { EVENT } from "@core/UIElement";
 
-import RangeEditor from "../property-editor/RangeEditor";
-import SelectEditor from "../property-editor/SelectEditor";
+import "../property-editor/RangeEditor";
+import "../property-editor/SelectEditor";
 import { registElement } from "@core/registerElement";
 
 export default class DisplayProperty extends BaseProperty {
-  components() {
-    return {
-      RangeEditor,
-      SelectEditor
-    }
-  }
 
   getTitle() {
     return "Position";

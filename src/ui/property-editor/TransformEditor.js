@@ -10,9 +10,9 @@ import {
 
 import { Transform } from "@property-parser/Transform";
 import UIElement, { EVENT } from "@core/UIElement";
-import RangeEditor from "./RangeEditor";
+import "./RangeEditor";
 import { Length } from "@unit/Length";
-import NumberInputEditor from "./NumberInputEditor";
+import "./NumberInputEditor";
 import { registElement } from "@core/registerElement";
 
 var transformList = [
@@ -52,13 +52,6 @@ const labels = {
 }
 
 export default class TransformEditor extends UIElement {
-
-  components() {
-    return {
-      NumberInputEditor,
-      RangeEditor
-    }
-  }
 
   initState() {
     return {

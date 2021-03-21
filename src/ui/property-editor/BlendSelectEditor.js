@@ -1,5 +1,6 @@
 import SelectEditor from "./SelectEditor";
 import { blend_list } from "@util/Resource";
+import { registElement } from "@core/registerElement";
 
 
 export default class BlendSelectEditor extends SelectEditor {
@@ -18,3 +19,5 @@ export default class BlendSelectEditor extends SelectEditor {
         }
     }
 }
+
+registElement({ BlendSelectEditor })

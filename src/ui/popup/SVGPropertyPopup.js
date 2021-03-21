@@ -1,7 +1,7 @@
 import { EVENT } from "@core/UIElement";
 import { INPUT, LOAD } from "@core/Event";
-import SVGFilterEditor from "../property-editor/SVGFilterEditor";
-import SVGClipPathEditor from "../property-editor/SVGClipPathEditor";
+import "../property-editor/SVGFilterEditor";
+import "../property-editor/SVGClipPathEditor";
 import BasePopup from "./BasePopup";
 import { registElement } from "@core/registerElement";
 
@@ -11,12 +11,6 @@ export default class SVGPropertyPopup extends BasePopup {
     return 'SVG Property';
   }
 
-  components() {
-    return {
-      SVGFilterEditor,
-      SVGClipPathEditor
-    }
-  }
 
   initState() {
     return {

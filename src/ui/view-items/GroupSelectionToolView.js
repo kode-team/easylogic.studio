@@ -8,6 +8,7 @@ import { TransformOrigin } from "@property-parser/TransformOrigin";
 import { calculateAngle, calculateAngle360, calculateAngleForVec3, calculateMatrix, calculateMatrixInverse, calculateRotationOriginMat4, round, vertiesMap } from "@core/functions/math";
 import { ArtBoard } from "@items/ArtBoard";
 import { getRotatePointer, rectToVerties } from "@core/functions/collision";
+import { registElement } from "@core/registerElement";
 
 
 var directionType = {
@@ -801,3 +802,5 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
     }
 } 
+
+registElement({ GroupSelectionToolView })

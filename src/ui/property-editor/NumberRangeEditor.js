@@ -2,6 +2,7 @@ import UIElement, { EVENT } from "@core/UIElement";
 import { Length } from "@unit/Length";
 import { LOAD, INPUT, CLICK, FOCUS, BLUR, POINTERSTART, MOVE, END, THROTTLE } from "@core/Event";
 import icon from "@icon/icon";
+import { registElement } from "@core/registerElement";
 
 export default class NumberRangeEditor extends UIElement {
 
@@ -135,3 +136,5 @@ export default class NumberRangeEditor extends UIElement {
         });
     }    
 }
+
+registElement({ NumberRangeEditor })

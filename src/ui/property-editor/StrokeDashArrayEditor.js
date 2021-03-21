@@ -1,15 +1,12 @@
 import { LOAD, CLICK } from "@core/Event";
 import UIElement, { EVENT } from "@core/UIElement";
-import NumberRangeEditor from "./NumberRangeEditor";
+import "./NumberRangeEditor";
 import { isArray } from "@core/functions/func";
 import icon from "@icon/icon";
+import { registElement } from "@core/registerElement";
 
 export default class StrokeDashArrayEditor extends UIElement {
-  components() {
-    return { 
-      NumberRangeEditor
-    }
-  }
+
   initState() {
 
     var value = this.generateValue(this.props.value || '')
@@ -107,3 +104,5 @@ export default class StrokeDashArrayEditor extends UIElement {
 
 
 }
+
+registElement({ StrokeDashArrayEditor })

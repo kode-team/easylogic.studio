@@ -1,21 +1,15 @@
 import UIElement, { EVENT } from "@core/UIElement";
 import { LOAD, CLICK, DRAGSTART, DRAGOVER, DROP, PREVENT, DEBOUNCE } from "@core/Event";
 import icon from "@icon/icon";
-import PatternSizeEditor from "./PatternSizeEditor";
-import SelectEditor from "./SelectEditor";
 import { Pattern } from "@property-parser/Pattern";
-import ColorSingleEditor from "./ColorSingleEditor";
 import patterns from "@preset/patterns";
+import { registElement } from "@core/registerElement";
+
+import "./PatternSizeEditor";
+import "./SelectEditor";
+
 
 export default class PatternEditor extends UIElement {
-
-    components() {
-        return {
-            SelectEditor,
-            ColorSingleEditor,
-            PatternSizeEditor
-        }
-    }
 
     initState() {
         return {
@@ -185,3 +179,5 @@ export default class PatternEditor extends UIElement {
         this.refresh();
     }
 }
+
+registElement({ PatternEditor })

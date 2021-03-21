@@ -3,7 +3,6 @@ import { LOAD, CLICK, DEBOUNCE, DRAGSTART } from "@core/Event";
 import { EVENT } from "@core/UIElement";
 import icon from "@icon/icon";
 import { Gradient } from "@property-parser/image-resource/Gradient";
-import gradients from "@preset/gradients";
 import { registElement } from "@core/registerElement";
 
 export default class GradientAssetsProperty extends BaseProperty {
@@ -15,13 +14,30 @@ export default class GradientAssetsProperty extends BaseProperty {
   initState() {
     return {
       mode: 'grid',
-      preset: 'linear'
+      preset: 'linear',
+      isLoaded : false, 
+      gradients: []      
     }
   }
 
-  getTools() {
+  async afterRender() {
+    if (this.state.isLoaded === false) {
+      const gradients = await import(/* webpackChunkName: "gradient-assets" */ '@preset/gradients')
 
-    const options = gradients.map(it => `${it.key}:${it.title}`)
+      this.setState({
+        isLoaded: true,
+        gradients: gradients.default
+      });
+    }
+
+  }
+
+  getTools() {
+    return /*html*/`<div ref="$tools"></div>`
+  }
+
+  [LOAD('$tools')]() {
+    const options = this.state.gradients.map(it => `${it.key}:${it.title}`)
 
     return /*html*/`
       <object refClass="SelectEditor"  key="preset" value="${this.state.preset}" options="${options}" onchange="changePreset"  />
@@ -59,7 +75,7 @@ export default class GradientAssetsProperty extends BaseProperty {
   }
 
   [LOAD("$gradientList")]() {
-    var preset = gradients.find(it => it.key === this.state.preset);
+    var preset = this.state.gradients.find(it => it.key === this.state.preset);
 
     if (!preset) {
       return '';
@@ -114,17 +130,6 @@ export default class GradientAssetsProperty extends BaseProperty {
     var gradient = $item.attr('data-gradient')
 
     this.emit('drop.asset', { gradient })    
-  }
-
-
-  [EVENT('changeGradientAssets')] (image, params) {
-
-    this.executeGradient(project => {
-      project.setGradientValue(params.index, {image});
-      this.state.$el.css('background-image', image);
-      this.state.$item.attr('data-gradient', image);
-    }, false)              
-
   }
 }
 

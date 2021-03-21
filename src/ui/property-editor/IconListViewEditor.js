@@ -1,6 +1,7 @@
 import UIElement from "@core/UIElement";
 import { LOAD, BIND, CLICK } from "@core/Event";
 import icon from "@icon/icon";
+import { registElement } from "@core/registerElement";
 
 export default class IconListViewEditor extends UIElement {
 
@@ -54,3 +55,5 @@ export default class IconListViewEditor extends UIElement {
         this.parent.trigger(this.props.onchange, this.props.key, this.state.value, this.props.params)
     }
 }
+
+registElement({ IconListViewEditor })

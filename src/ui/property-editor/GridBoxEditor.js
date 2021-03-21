@@ -1,22 +1,16 @@
 import UIElement, { EVENT } from "@core/UIElement";
 import { LOAD, CLICK } from "@core/Event";
 import icon from "@icon/icon";
-import SelectEditor from "./SelectEditor";
-import NumberInputEditor from "./NumberInputEditor";
-import InputRangeEditor from "./InputRangeEditor";
+import "./SelectEditor";
+import "./NumberInputEditor";
+import "./InputRangeEditor";
+import { registElement } from "@core/registerElement";
 
 const REG_CSS_UNIT = /(auto)|(repeat\([^\)]*\))|(([\d.]+)(px|pt|fr|r?em|deg|vh|vw|%))/gi;
 
 
 export default class GridBoxEditor extends UIElement {
 
-    components() {
-        return {
-            SelectEditor,
-            NumberInputEditor,
-            InputRangeEditor
-        }
-    }
 
     getLayoutItemOptions () {
         return 'none,auto,repeat,length'.split(',').map(it => {
@@ -189,3 +183,5 @@ export default class GridBoxEditor extends UIElement {
         this.modifyData();
     }
 }
+
+registElement({ GridBoxEditor })

@@ -38,7 +38,8 @@ const LICENSE = `
 module.exports = {
   // Entry files for our popup and background pages
   entry: {
-    main: "./src/pwa.js"
+    editor: "./src/index.js",
+    player: "./src/index-player.js"    
   },
   output: {
     library: "EasylogicStudio",
@@ -46,17 +47,8 @@ module.exports = {
     path: __dirname + "/docs",
     filename: '[name].js?[contenthash]'
   },
-  optimization: {
-    splitChunks: {
-      chunks: 'all',
-    },
-  },
   resolve: { alias },  
   mode: 'production',
-  // devtool: 'source-map',
-  devServer: {
-    compress: true
-  },
   module: {
     rules: [
       {
@@ -146,8 +138,15 @@ module.exports = {
     new HtmlWebPackPlugin({
       inject: true,
       template: "./src/index.html",
-      filename: "./index.html"
+      filename: "./index.html",
+      excludeChunks: ['player']
     }),
+    new HtmlWebPackPlugin({
+      inject: true,
+      template: "./src/index.html",
+      filename: "./player.html",
+      excludeChunks: ['editor']
+    }),        
     new MiniCssExtractPlugin({
       filename: "[name].css?[contenthash]"
     }),

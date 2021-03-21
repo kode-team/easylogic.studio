@@ -4,6 +4,7 @@ import { Length } from "@unit/Length";
 import { Transform } from "@property-parser/Transform";
 import { calculateAnglePointDistance } from "@core/functions/math";
 import icon from "@icon/icon";
+import { registElement } from "@core/registerElement";
 
 const directions = [
     'top-left',
@@ -218,3 +219,6 @@ export default class RotateEditorView extends UIElement {
         this.refresh();
     }
 }
+
+
+registElement({ RotateEditorView })

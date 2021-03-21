@@ -54,6 +54,13 @@ $editor-ruler-size: 20px;
   }
 }
 
+.player {
+  .page-container {
+    top: 0px;  
+    left: 0px;    
+  }
+}
+
 .page-container {
   position: absolute;
   top: $editor-ruler-size;  

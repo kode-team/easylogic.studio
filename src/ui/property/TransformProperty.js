@@ -6,8 +6,8 @@ import {
 import { EVENT } from "@core/UIElement";
 import icon from "@icon/icon";
 import { Transform } from "@property-parser/Transform";
-import RotateEditorView from "../view-items/RotateEditorView";
 import { registElement } from "@core/registerElement";
+import "@ui/view-items/RotateEditorView";
 
 var transformList = [
 
@@ -35,13 +35,6 @@ var transformList = [
 
 
 export default class TransformProperty extends BaseProperty {
-
-  components() {
-    return {
-      ...super.components(),
-      RotateEditorView
-    }
-  }
 
   afterRender () {
     this.show();

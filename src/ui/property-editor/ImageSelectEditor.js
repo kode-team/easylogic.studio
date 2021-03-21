@@ -1,5 +1,6 @@
 import UIElement, { EVENT } from "@core/UIElement";
 import { LOAD, CLICK, CHANGE } from "@core/Event";
+import { registElement } from "@core/registerElement";
 
 export default class ImageSelectEditor extends UIElement {
 
@@ -73,3 +74,5 @@ export default class ImageSelectEditor extends UIElement {
         this.parent.trigger(this.props.onchange, this.props.key, this.state.value, this.props.params)
     }
 }
+
+registElement({ ImageSelectEditor })

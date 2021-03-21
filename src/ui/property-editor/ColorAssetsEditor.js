@@ -1,26 +1,39 @@
 import { LOAD, CLICK } from "@core/Event";
+import { registElement } from "@core/registerElement";
 import UIElement, { EVENT } from "@core/UIElement";
-import colors from "@preset/colors";
-import SelectEditor from "./SelectEditor";
+import "./SelectEditor";
 
 export default class ColorAssetsEditor extends UIElement {
-
-  components() {
-    return {
-      SelectEditor
-    }
-  }
 
   initState() {
     return {
       mode: 'grid',
-      preset: 'random'
+      preset: 'random',
+      isLoaded : false, 
+      colors: []      
     }
   }
 
-  getTools() {
 
-    const options = colors.map(it => `${it.key}:${it.title}`)
+  async afterRender() {
+    if (this.state.isLoaded === false) {
+      const colors = await import(/* webpackChunkName: "color-assets" */ '@preset/colors')
+
+      this.setState({
+        isLoaded: true,
+        colors: colors.default
+      });
+    }
+
+  }
+
+
+  getTools() {
+    return /*html*/`<div ref="$tools"></div>`
+  }
+
+  [LOAD('$tools')] () {
+    const options = this.state.colors.map(it => `${it.key}:${it.title}`)
 
     return /*html*/`
       <object refClass="SelectEditor"  key="preset" value="${this.state.preset}" options="${options}" onchange="changePreset"  />
@@ -46,7 +59,7 @@ export default class ColorAssetsEditor extends UIElement {
   }
 
   [LOAD("$colorList")]() {
-    var preset = colors.find(it => it.key === this.state.preset);
+    var preset = this.state.colors.find(it => it.key === this.state.preset);
 
     if (!preset) {
       return '';
@@ -91,3 +104,5 @@ export default class ColorAssetsEditor extends UIElement {
     this.parent.trigger(this.props.onchange, this.props.key, color, this.props.params);
   }
 }
+
+registElement({ ColorAssetsEditor })

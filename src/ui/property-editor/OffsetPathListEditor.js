@@ -1,16 +1,10 @@
 import UIElement, { EVENT } from "@core/UIElement";
 import { LOAD, BIND } from "@core/Event";
-import SelectEditor from "./SelectEditor";
-import RangeEditor from "./RangeEditor";
+import "./SelectEditor";
+import "./RangeEditor";
+import { registElement } from "@core/registerElement";
 
 export default class OffsetPathListEditor extends UIElement {
-
-    components() {
-        return {
-            RangeEditor,
-            SelectEditor
-        }
-    }
 
     initState() {
 
@@ -121,3 +115,5 @@ export default class OffsetPathListEditor extends UIElement {
 
 
 }
+
+registElement({ OffsetPathListEditor })

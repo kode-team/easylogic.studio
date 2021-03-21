@@ -3,9 +3,9 @@ import { LOAD } from "@core/Event";
 
 import { Gradient } from "@property-parser/image-resource/Gradient";
 import BasePopup from "./BasePopup";
-import EmbedColorPicker from "../property-editor/EmbedColorPicker";
-import ImageAssetPicker from "../property/ImageAssetPicker";
-import FillEditor from "../property-editor/FillEditor";
+import "../property-editor/EmbedColorPicker";
+import "../property/ImageAssetPicker";
+import "../property-editor/FillEditor";
 import { SVGStaticGradient } from "@property-parser/image-resource/SVGStaticGradient";
 import { registElement } from "@core/registerElement";
 
@@ -14,14 +14,6 @@ export default class FillPickerPopup extends BasePopup {
 
   getTitle() {
     return this.$i18n('fill.picker.popup.title')
-  }
-
-  components() {
-    return {
-      ImageAssetPicker,
-      EmbedColorPicker,
-      FillEditor
-    }
   }
 
   initState() {

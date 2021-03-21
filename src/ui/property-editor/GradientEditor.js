@@ -1,14 +1,15 @@
 import UIElement, { EVENT } from "@core/UIElement";
 import { LOAD, CLICK, POINTERSTART, MOVE, END, BIND, PREVENT, DOUBLECLICK, CHANGE } from "@core/Event";
 import { Length } from "@unit/Length";
-import RangeEditor from "./RangeEditor";
+import "./RangeEditor";
 
-import SelectEditor from "./SelectEditor";
-import InputRangeEditor from "./InputRangeEditor";
+import "./SelectEditor";
+import "./InputRangeEditor";
 import { BackgroundImage } from "@property-parser/BackgroundImage";
 import { Gradient } from "@property-parser/image-resource/Gradient";
 import icon from "@icon/icon";
 import { clone } from "@core/functions/func";
+import { registElement } from "@core/registerElement";
 
 var radialTypeList = [
   'circle',
@@ -57,14 +58,6 @@ var presetPosition = {
 }
 
 export default class GradientEditor extends UIElement  {
-
-  components() {
-    return {
-      InputRangeEditor,
-      RangeEditor,
-      SelectEditor
-    }
-  }
 
   initState() {
 
@@ -492,3 +485,5 @@ export default class GradientEditor extends UIElement  {
   }
 
 }
+
+registElement({ GradientEditor })

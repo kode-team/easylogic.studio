@@ -1,14 +1,11 @@
+import { registElement } from "@core/registerElement";
 import UIElement, { EVENT } from "@core/UIElement";
-import SelectEditor from "../property-editor/SelectEditor";
+import "@ui/property-editor";
 
 const theme_list = ['dark', 'light', 'toon', /*, 'gray' */]
 
 export default class ThemeSwitcher extends UIElement {
-    components() {
-        return {
-            SelectEditor
-        }
-    }
+
     template () {
 
 
@@ -36,3 +33,5 @@ export default class ThemeSwitcher extends UIElement {
         this.emit('switchTheme', theme);
     }
 }
+
+registElement({ ThemeSwitcher })

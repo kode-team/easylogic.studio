@@ -6,8 +6,7 @@ import ColorInformation from "./colorpicker/ui/ColorInformation";
 import Palette from "./colorpicker/ui/ColorPalette";
 import ColorManagerV2 from "@core/ColorManagerV2";
 import ColorAssetsEditor from "./ColorAssetsEditor";
-
-
+import { registElement } from "@core/registerElement";
 
 
 export default class ColorPickerEditor extends UIElement {
@@ -151,3 +150,5 @@ export default class ColorPickerEditor extends UIElement {
     }
 
 }
+
+registElement({ ColorPickerEditor })

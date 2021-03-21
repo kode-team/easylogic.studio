@@ -1,6 +1,7 @@
 import UIElement, { EVENT } from "@core/UIElement";
 import { CSS_TO_STRING } from "@core/functions/func";
 import { LOAD } from "@core/Event";
+import { registElement } from "@core/registerElement";
 
 /**
  * 객체와의 거리의 가이드 라인을 그려주는 컴포넌트
@@ -49,3 +50,5 @@ export default class GridLayoutLineView extends UIElement {
         this.refresh();
     }
 } 
+
+registElement({ GridLayoutLineView })

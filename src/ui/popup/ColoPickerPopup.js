@@ -1,6 +1,6 @@
 import UIElement, { EVENT } from "@core/UIElement";
 import BasePopup from "./BasePopup";
-import EmbedColorPicker from "../property-editor/EmbedColorPicker";
+import "../property-editor/EmbedColorPicker";
 import { LOAD, CLICK } from "@core/Event";
 import { registElement } from "@core/registerElement";
 
@@ -12,12 +12,6 @@ export default class ColorPickerPopup extends BasePopup {
 
   getClassName() {
     return 'compact'
-  }
-
-  components() {
-    return {
-      EmbedColorPicker
-    }
   }
 
   initState() {

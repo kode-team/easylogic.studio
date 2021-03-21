@@ -1,4 +1,5 @@
 import { CLICK, LOAD } from "@core/Event";
+import { registElement } from "@core/registerElement";
 import UIElement, { EVENT } from "@core/UIElement";
 import icon from "@icon/icon";
 import { BoxShadow } from "@property-parser/BoxShadow";
@@ -154,3 +155,5 @@ export default class BoxShadowEditor extends UIElement {
     }
   }
 }
+
+registElement({ BoxShadowEditor })

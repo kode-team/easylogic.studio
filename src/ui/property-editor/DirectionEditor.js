@@ -1,8 +1,9 @@
 import { CLICK, LOAD } from "@core/Event";
 import icon from "@icon/icon";
 import UIElement, { EVENT } from "@core/UIElement";
-import RangeEditor from "./RangeEditor";
+import "./RangeEditor";
 import { DirectionLength } from "@unit/DirectionLength";
+import { registElement } from "@core/registerElement";
 
 const typeList = [
   { key: "top", title: "Top" },
@@ -12,11 +13,7 @@ const typeList = [
 ];
 
 export default class DirectionEditor extends UIElement {
-  components() {
-    return {
-      RangeEditor
-    }
-  }
+
   initState() {
 
     var [count, top, right, bottom, left] = DirectionLength.parse(this.props.value)
@@ -117,3 +114,6 @@ export default class DirectionEditor extends UIElement {
 
 
 }
+
+
+registElement({ DirectionEditor })

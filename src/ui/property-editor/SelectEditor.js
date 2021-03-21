@@ -1,5 +1,6 @@
 import UIElement from "@core/UIElement";
 import { LOAD, CHANGE, BIND } from "@core/Event";
+import { registElement } from "@core/registerElement";
 
 export default class SelectEditor extends UIElement {
 
@@ -96,3 +97,5 @@ export default class SelectEditor extends UIElement {
         this.parent.trigger(this.props.onchange, this.props.key, this.state.value, this.props.params)
     }
 }
+
+registElement({ SelectEditor })

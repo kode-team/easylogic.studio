@@ -2,16 +2,11 @@ import UIElement, { EVENT } from "@core/UIElement";
 import { Length } from "@unit/Length";
 import { LOAD, INPUT, CLICK, FOCUS, BLUR } from "@core/Event";
 import icon from "@icon/icon";
-import SelectEditor from "./SelectEditor";
+import "./SelectEditor";
 import { OBJECT_TO_CLASS } from "@core/functions/func";
+import { registElement } from "@core/registerElement";
 
 export default class InputRangeEditor extends UIElement {
-
-    components() {
-        return {
-            SelectEditor
-        }
-    }
 
     initState() {
         var units = this.props.units || 'px,em,%';
@@ -145,3 +140,5 @@ export default class InputRangeEditor extends UIElement {
         })
     }
 }
+
+registElement({ InputRangeEditor })

@@ -1,18 +1,11 @@
 import UIElement, { EVENT } from "@core/UIElement";
 import { LOAD } from "@core/Event";
-import SelectEditor from "./SelectEditor";
-import TextEditor from "./TextEditor";
-import NumberRangeEditor from "./NumberRangeEditor";
+import "./SelectEditor";
+import "./TextEditor";
+import "./NumberRangeEditor";
+import { registElement } from "@core/registerElement";
 
 export default class FuncFilterEditor extends UIElement {
-
-    components() {
-        return {
-            TextEditor,
-            NumberRangeEditor,     
-            SelectEditor
-        }
-    }
 
     initState() {
        
@@ -132,3 +125,5 @@ export default class FuncFilterEditor extends UIElement {
         this.parent.trigger(this.props.onchange, this.props.key, this.getValue(), this.props.params)
     }
 }
+
+registElement({ FuncFilterEditor })

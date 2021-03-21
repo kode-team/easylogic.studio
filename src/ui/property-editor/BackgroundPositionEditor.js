@@ -1,5 +1,6 @@
 import UIElement, { EVENT } from "@core/UIElement";
 import { CLICK, BIND } from "@core/Event";
+import { registElement } from "@core/registerElement";
 
 export default class BackgroundPositionEditor extends UIElement {
 
@@ -77,3 +78,5 @@ export default class BackgroundPositionEditor extends UIElement {
         }
     }    
 }
+
+registElement({ BackgroundPositionEditor })

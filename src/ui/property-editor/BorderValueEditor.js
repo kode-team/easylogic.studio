@@ -1,11 +1,12 @@
 import { Length } from "@unit/Length";
 import UIElement, { EVENT } from "@core/UIElement";
 import Border from "@property-parser/Border";
-import RangeEditor from "./RangeEditor";
-import SelectEditor from "./SelectEditor";
-import ColorViewEditor from "./ColorViewEditor";
-import InputRangeEditor from "./InputRangeEditor";
-import ColorSingleEditor from "./ColorSingleEditor";
+import "./RangeEditor";
+import "./SelectEditor";
+import "./ColorViewEditor";
+import "./InputRangeEditor";
+import "./ColorSingleEditor";
+import { registElement } from "@core/registerElement";
 
 
 const borderStyleList = [
@@ -24,16 +25,6 @@ const borderStyleList = [
 
 
 export default class BorderValueEditor extends UIElement {
- 
-  components() {
-    return {
-      InputRangeEditor,
-      RangeEditor,
-      SelectEditor,
-      ColorViewEditor,
-      ColorSingleEditor
-    }
-  }
 
   initState() {
 
@@ -91,3 +82,5 @@ export default class BorderValueEditor extends UIElement {
   }
 
 }
+
+registElement({ BorderValueEditor })

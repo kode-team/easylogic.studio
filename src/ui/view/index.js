@@ -1,4 +1,4 @@
-import CanvasView from "./CanvasView"
+import CanvasView from "../../player/CanvasView"
 import ExternalToolMenu from "./ExternalToolMenu"
 import HorizontalRuler from "./HorizontalRuler"
 import LogoView from "./LogoView"

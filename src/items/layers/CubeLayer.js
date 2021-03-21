@@ -67,7 +67,6 @@ export class CubeLayer extends Component {
       'transform-style':'preserve-3d',
       'backface-visibility': 'visible',      
       rate: Length.number(1),      
-      transform: 'rotateX(10deg) rotateY(30deg)',
       border: 'border:1px solid black',
       ...obj
     }); 

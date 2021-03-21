@@ -24,10 +24,11 @@ import {
   URLSvgFilter
 } from "@property-parser/Filter";
 import UIElement, { EVENT } from "@core/UIElement";
-import RangeEditor from "./RangeEditor";
-import ColorViewEditor from "./ColorViewEditor";
-import SelectEditor from "./SelectEditor";
+import "./RangeEditor";
+import "./ColorViewEditor";
+import "./SelectEditor";
 import { filter_list } from "@util/Resource";
+import { registElement } from "@core/registerElement";
 
 var specList = {
   blur: BlurFilter.spec,
@@ -45,13 +46,6 @@ var specList = {
 
 export default class FilterEditor extends UIElement {
 
-  components() {
-    return {
-      SelectEditor,
-      RangeEditor,
-      ColorViewEditor
-    }
-  }
 
   initState() {
     return {
@@ -410,3 +404,5 @@ export default class FilterEditor extends UIElement {
     this.load('$filterList');
   }
 }
+
+registElement({ FilterEditor })

@@ -1,6 +1,7 @@
 import UIElement, { EVENT } from "@core/UIElement";
 import { CLICK, BIND, LOAD } from "@core/Event";
 import { SVGFill } from "@property-parser/SVGFill";
+import { registElement } from "@core/registerElement";
 
 export default class FillSingleEditor extends UIElement {
 
@@ -117,3 +118,5 @@ export default class FillSingleEditor extends UIElement {
         this.refresh();
       }
 }
+
+registElement({ FillSingleEditor })

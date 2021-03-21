@@ -7,18 +7,14 @@ const alias = require('./alias');
 module.exports = {
   // Entry files for our popup and background pages
   entry: {
-    main: "./src/index.js"
+    editor: "./src/index.js",
+    player: "./src/index-player.js"    
   },
   output: {
     library: "EasylogicStudio",
     libraryTarget: "umd",
     path: __dirname + "/docs",
   },
-  optimization: {
-    splitChunks: {
-      chunks: 'all',
-    },
-  },  
   resolve: { alias },
   module: {
     rules: [
@@ -109,8 +105,15 @@ module.exports = {
     new HtmlWebPackPlugin({
       inject: true,
       template: "./src/dev-index.html",
-      filename: "./index.html"
+      filename: "./index.html",
+      excludeChunks: ['player']
     }),
+    new HtmlWebPackPlugin({
+      inject: true,
+      template: "./src/dev-index.html",
+      filename: "./player.html",
+      excludeChunks: ['editor']
+    }),    
     new MiniCssExtractPlugin({
       filename: "bundle.css"
     })

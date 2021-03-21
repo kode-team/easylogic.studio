@@ -78,12 +78,6 @@ export default class Inspector extends UIElement {
                 <object refClass="BackdropFilterProperty" />
                 <object refClass="ClipPathProperty" />       
 
-                <!-- transform --> 
-                <object refClass="TransformOriginProperty" />                 
-                <object refClass="TransformProperty" />                  
-                <!-- <PerspectiveProperty /> -->
-                <!-- <PerspectiveOriginProperty /> --> 
-
                 <!-- ArtBoard --> 
                 <object refClass="ArtBoardSizeProperty" />    
                 
@@ -92,6 +86,12 @@ export default class Inspector extends UIElement {
 
                 <!-- tool -->                
                 <object refClass="ExportProperty" />
+
+                <!-- transform --> 
+                <object refClass="TransformOriginProperty" />
+                <object refClass="TransformProperty" />
+                <!-- <PerspectiveProperty /> -->
+                <!-- <PerspectiveOriginProperty /> -->                 
 
 
                 <div class='empty'></div>

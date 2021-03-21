@@ -7,6 +7,7 @@ import PathGenerator from "@parser/PathGenerator";
 import Point from "@parser/Point";
 import { SVGFill } from "@property-parser/SVGFill";
 import { SVGBrushItem } from "@items/layers/SVGBrushItem";
+import { registElement } from "@core/registerElement";
 
 const FIELDS = ['fill', 'stroke-width']
 
@@ -295,3 +296,5 @@ export default class BrushDrawView extends UIElement {
     }   
 
 } 
+
+registElement({ BrushDrawView })

@@ -1,12 +1,10 @@
+import { registElement } from "@core/registerElement";
 import UIElement, { EVENT } from "@core/UIElement";
-import SelectEditor from "../property-editor/SelectEditor";
+import "@ui/property-editor";
+
 
 export default class LayoutSelector extends UIElement {
-    components() {
-        return {
-            SelectEditor
-        }
-    }
+
     template () {
 
         var layouts = ['all', 'css', 'svg'].map(layout => {
@@ -35,3 +33,5 @@ export default class LayoutSelector extends UIElement {
         this.emit('setEditorLayout', layout);
     }
 }
+
+registElement({ LayoutSelector })

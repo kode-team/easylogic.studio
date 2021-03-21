@@ -4,8 +4,6 @@ import UIElement, { EVENT } from "@core/UIElement";
 import icon from "@icon/icon";
 import { TextShadow } from "@property-parser/TextShadow";
 
-
-
 export default class TextShadowEditor extends UIElement {
 
   initState() {

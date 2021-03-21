@@ -1,5 +1,6 @@
 import UIElement, { EVENT } from "@core/UIElement";
 import { CLICK, BIND } from "@core/Event";
+import { registElement } from "@core/registerElement";
 
 export default class ColorSingleEditor extends UIElement {
 
@@ -67,3 +68,5 @@ export default class ColorSingleEditor extends UIElement {
         this.updateData({ color })
     }    
 }
+
+registElement({ ColorSingleEditor })

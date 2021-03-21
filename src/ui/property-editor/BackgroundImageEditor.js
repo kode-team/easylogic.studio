@@ -5,7 +5,8 @@ import icon from "@icon/icon";
 import { CSS_TO_STRING, STRING_TO_CSS } from "@core/functions/func";
 import { LinearGradient } from "@property-parser/image-resource/LinearGradient";
 import { ColorStep } from "@property-parser/image-resource/ColorStep";
-import propertyEditor from ".";
+import ".";
+import { registElement } from "@core/registerElement";
 
 const names = {
     'image-resource': "Image",
@@ -35,10 +36,6 @@ const names = {
   };
 
 export default class BackgroundImageEditor extends UIElement {
-
-    components() {
-        return propertyEditor
-    }
 
     initState() {
         return {
@@ -260,3 +257,5 @@ export default class BackgroundImageEditor extends UIElement {
         this.refresh();
     }
 }
+
+registElement({ BackgroundImageEditor })

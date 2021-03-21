@@ -5,6 +5,7 @@ import { Length } from "@unit/Length";
 import PathStringManager from "@parser/PathStringManager";
 import { rectToVerties, vertiesToRectangle } from "@core/functions/collision";
 import { vec3 } from "gl-matrix";
+import { registElement } from "@core/registerElement";
 
 export default class LayerAppendView extends UIElement {
 
@@ -352,3 +353,5 @@ export default class LayerAppendView extends UIElement {
         this.refs.$video.click();
     }        
 } 
+
+registElement({ LayerAppendView })

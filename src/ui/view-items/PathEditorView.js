@@ -10,6 +10,7 @@ import { getBezierPoints, recoverBezier, recoverBezierQuard, getBezierPointsQuar
 import { isFunction } from "@core/functions/func";
 import { vec3 } from "gl-matrix";
 import { getDist } from "@core/functions/math";
+import { registElement } from "@core/registerElement";
 
 
 /**
@@ -793,3 +794,6 @@ export default class PathEditorView extends PathTransformEditor {
     }   
 
 } 
+
+
+registElement({ PathEditorView })

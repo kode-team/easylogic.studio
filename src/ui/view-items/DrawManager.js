@@ -1,6 +1,7 @@
 import UIElement, { EVENT } from "@core/UIElement";
-import propertyEditor from "../property-editor";
+import "../property-editor";
 import { Length } from "@unit/Length";
+import { registElement } from "@core/registerElement";
 
 
 export default class DrawManager extends UIElement {
@@ -14,12 +15,6 @@ export default class DrawManager extends UIElement {
           'stroke-linejoin': 'round',
           msg: this.$i18n('path.manager.msg')
       }
-  }
-
-  components() {
-    return {
-      ...propertyEditor
-    }
   }
 
 
@@ -134,3 +129,5 @@ export default class DrawManager extends UIElement {
   }
 
 }
+
+registElement({ DrawManager })

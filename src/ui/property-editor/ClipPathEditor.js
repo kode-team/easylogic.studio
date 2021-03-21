@@ -1,5 +1,6 @@
 import UIElement, { EVENT } from "@core/UIElement";
 import { CLICK, LOAD } from "@core/Event";
+import { registElement } from "@core/registerElement";
 
 export default class ClipPathEditor extends UIElement {
 
@@ -59,7 +60,6 @@ export default class ClipPathEditor extends UIElement {
             clippath: data['clip-path']
         })
     }
-
-
-
 }
+
+registElement({ ClipPathEditor })
