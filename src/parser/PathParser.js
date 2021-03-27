@@ -1,7 +1,7 @@
 
-import { getBezierPointOneQuard, getCurveBBox } from "@core/functions/bezier";
-import { isNotUndefined, clone } from "@core/functions/func";
-import { degreeToRadian, round } from "@core/functions/math";
+import { getBezierPointOneQuard, getCurveBBox } from "@sapa/functions/bezier";
+import { isNotUndefined, clone } from "@sapa/functions/func";
+import { degreeToRadian, round } from "@sapa/functions/math";
 import { mat4, vec3 } from "gl-matrix";
 import Point from "./Point";
 

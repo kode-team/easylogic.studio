@@ -1,12 +1,12 @@
-import UIElement, { EVENT } from "@core/UIElement";
+import UIElement, { EVENT } from "@sapa/UIElement";
 import { BackgroundImage } from "@property-parser/BackgroundImage";
-import { LOAD, CLICK, DRAGSTART, DRAGOVER, DROP, PREVENT, DEBOUNCE } from "@core/Event";
+import { LOAD, CLICK, DRAGSTART, DRAGOVER, DROP, PREVENT, DEBOUNCE } from "@sapa/Event";
 import icon from "@icon/icon";
-import { CSS_TO_STRING, STRING_TO_CSS } from "@core/functions/func";
+import { CSS_TO_STRING, STRING_TO_CSS } from "@sapa/functions/func";
 import { LinearGradient } from "@property-parser/image-resource/LinearGradient";
 import { ColorStep } from "@property-parser/image-resource/ColorStep";
 import ".";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 const names = {
     'image-resource': "Image",

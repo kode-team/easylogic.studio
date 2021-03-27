@@ -1,5 +1,5 @@
-import Dom from "@core/Dom";
-import { CSS_TO_STRING } from "@core/functions/func";
+import Dom from "@sapa/Dom";
+import { CSS_TO_STRING } from "@sapa/functions/func";
 import SVGLayerRender from "./SVGLayerRender";
 
 export default class ImageRender extends SVGLayerRender {

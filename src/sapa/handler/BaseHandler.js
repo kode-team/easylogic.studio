@@ -1,4 +1,4 @@
-import EventMachine from "@core/EventMachine";
+import EventMachine from "@sapa/EventMachine";
 
 
 export default class BaseHandler {

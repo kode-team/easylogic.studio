@@ -1,9 +1,9 @@
-import { EVENT } from "@core/UIElement";
-import { INPUT, LOAD } from "@core/Event";
+import { EVENT } from "@sapa/UIElement";
+import { INPUT, LOAD } from "@sapa/Event";
 import "../property-editor/SVGFilterEditor";
 import "../property-editor/SVGClipPathEditor";
 import BasePopup from "./BasePopup";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 export default class SVGPropertyPopup extends BasePopup {
 

@@ -1,10 +1,10 @@
-import UIElement, { EVENT } from "@core/UIElement";
-import { POINTERSTART, MOVE, END, DOUBLECLICK, BIND, CLICK } from "@core/Event";
+import UIElement, { EVENT } from "@sapa/UIElement";
+import { POINTERSTART, MOVE, END, DOUBLECLICK, BIND, CLICK } from "@sapa/Event";
 import { Length } from "@unit/Length";
 import { Transform } from "@property-parser/Transform";
-import { calculateAnglePointDistance } from "@core/functions/math";
+import { calculateAnglePointDistance } from "@sapa/functions/math";
 import icon from "@icon/icon";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 const directions = [
     'top-left',

@@ -1,8 +1,8 @@
 import { vec3 } from "gl-matrix";
-import UIElement, { EVENT } from "@core/UIElement";
-import { BIND, POINTERSTART, MOVE, END, IF, KEYUP, DOUBLECLICK, FOCUSOUT } from "@core/Event";
+import UIElement, { EVENT } from "@sapa/UIElement";
+import { BIND, POINTERSTART, MOVE, END, IF, KEYUP, DOUBLECLICK, FOCUSOUT } from "@sapa/Event";
 import { Length } from "@unit/Length";
-import Dom from "@core/Dom";
+import Dom from "@sapa/Dom";
 import HTMLRenderer from '@renderer/HTMLRenderer';
 import "@ui/view-items/SelectionToolView";
 import "@ui/view-items/GroupSelectionToolView";
@@ -13,10 +13,10 @@ import "@ui/view-items/LayerAppendView";
 import "@ui/view-items/GridLayoutLineView";
 import "@ui/view-items/HoverView";
 
-import { isFunction } from "@core/functions/func";
+import { isFunction } from "@sapa/functions/func";
 import { KEY_CODE } from "@types/key";
 
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 import "./StyleView";
 export default class HTMLRenderView extends UIElement {
@@ -508,7 +508,6 @@ export default class HTMLRenderView extends UIElement {
         }
 
         this.nextTick(() => {
-
             this.emit('refreshSelectionStyleView');
             this.emit('refreshSelectionTool', false);       
             this.emit('refreshRect'); 
@@ -588,12 +587,6 @@ export default class HTMLRenderView extends UIElement {
 
     selectCurrent (...args) {
         this.state.cachedCurrentElement = {}
-        var $selectedElement = this.$el.$$('.selected');
-
-        if ($selectedElement.length) {
-            $selectedElement.forEach(it => it.removeClass('selected'))
-        }
-
 
         if(args.length) {
 
@@ -604,7 +597,6 @@ export default class HTMLRenderView extends UIElement {
             if (list.length) {
                 list.forEach(it => {
                     this.state.cachedCurrentElement[it.attr('data-id')] = it; 
-                    it.addClass('selected')
                 })
             }
 
@@ -667,6 +659,16 @@ export default class HTMLRenderView extends UIElement {
         this.refs.$view.updateDiff(html)
 
         this.bindData('$view');
+
+        // 최초 전체 객체를 돌면서 update 함수를 실행해줄 트리거가 필요하다. 
+        this.trigger('updateAllCanvas', project);
+    }
+
+    [EVENT('updateAllCanvas')] (parentLayer) {
+        parentLayer.layers.forEach(item => {
+            this.updateElement(item, this.getElement(item.id));
+            this.trigger('updateAllCanvas', item);
+        })
     }
 
     [EVENT('refreshAllElementBoundSize')] () {

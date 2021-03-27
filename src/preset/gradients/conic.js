@@ -1,6 +1,6 @@
-import Color from "@core/Color";
-import { repeat } from "@core/functions/func";
-import { randomNumber } from "@core/functions/create";
+import Color from "@sapa/Color";
+import { repeat } from "@sapa/functions/func";
+import { randomNumber } from "@sapa/functions/create";
 import { ColorStep } from "@property-parser/image-resource/ColorStep";
 
 export default { 

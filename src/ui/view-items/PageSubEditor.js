@@ -1,8 +1,8 @@
-import UIElement from "@core/UIElement";
+import UIElement from "@sapa/UIElement";
 
 import "./PathManager";
 import "./DrawManager";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 export default class PageSubEditor extends UIElement {
 

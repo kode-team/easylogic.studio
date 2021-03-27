@@ -1,5 +1,5 @@
 import { Property } from "@items/Property"
-import { convertMatches, reverseMatches } from "@core/functions/parser";
+import { convertMatches, reverseMatches } from "@sapa/functions/parser";
 import { SVGLinearGradient } from "./image-resource/SVGLinearGradient";
 import { SVGRadialGradient } from "./image-resource/SVGRadialGradient";
 import { SVGStaticGradient } from "./image-resource/SVGStaticGradient";

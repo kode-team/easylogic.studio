@@ -7,7 +7,7 @@ import {
   DROP,
   PREVENT,
   DEBOUNCE
-} from "@core/Event";
+} from "@sapa/Event";
 
 import {
   BlurFilter,
@@ -23,12 +23,12 @@ import {
   Filter,
   URLSvgFilter
 } from "@property-parser/Filter";
-import UIElement, { EVENT } from "@core/UIElement";
+import UIElement, { EVENT } from "@sapa/UIElement";
 import "./RangeEditor";
 import "./ColorViewEditor";
 import "./SelectEditor";
 import { filter_list } from "@util/Resource";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 var specList = {
   blur: BlurFilter.spec,

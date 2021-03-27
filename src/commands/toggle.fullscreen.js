@@ -1,4 +1,4 @@
-import Dom from "@core/Dom"
+import Dom from "@sapa/Dom"
 
 export default {
     command: 'toggle.fullscreen',

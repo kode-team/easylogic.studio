@@ -1,7 +1,7 @@
 import BaseWindow from "./BaseWindow";
-import { EVENT } from "@core/UIElement";
-import { CLICK } from "@core/Event";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement"
+import { CLICK } from "@sapa/Event";
+import { EVENT } from "@sapa/UIElement";
 
 export default class LoginWindow extends BaseWindow {
 

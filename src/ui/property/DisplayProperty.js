@@ -1,10 +1,10 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, DEBOUNCE } from "@core/Event";
-import { EVENT } from "@core/UIElement";
+import { LOAD, DEBOUNCE } from "@sapa/Event";
+import { EVENT } from "@sapa/UIElement";
 
 import "../property-editor/RangeEditor";
 import "../property-editor/SelectEditor";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 export default class DisplayProperty extends BaseProperty {
 

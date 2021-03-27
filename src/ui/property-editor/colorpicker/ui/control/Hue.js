@@ -1,5 +1,5 @@
-import { BIND, END, MOVE, POINTERSTART } from '@core/Event';
-import UIElement from '@core/UIElement';
+import { BIND, END, MOVE, POINTERSTART } from '@sapa/Event';
+import UIElement from '@sapa/UIElement';
 import { Length } from '@unit/Length';
 
 export default class Hue extends UIElement {

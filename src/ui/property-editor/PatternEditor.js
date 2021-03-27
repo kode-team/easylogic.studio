@@ -1,9 +1,9 @@
-import UIElement, { EVENT } from "@core/UIElement";
-import { LOAD, CLICK, DRAGSTART, DRAGOVER, DROP, PREVENT, DEBOUNCE } from "@core/Event";
+import UIElement, { EVENT } from "@sapa/UIElement";
+import { LOAD, CLICK, DRAGSTART, DRAGOVER, DROP, PREVENT, DEBOUNCE } from "@sapa/Event";
 import icon from "@icon/icon";
 import { Pattern } from "@property-parser/Pattern";
 import patterns from "@preset/patterns";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 import "./PatternSizeEditor";
 import "./SelectEditor";

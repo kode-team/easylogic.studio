@@ -1,6 +1,6 @@
-import UIElement, { EVENT } from "@core/UIElement";
-import { RESIZE, DEBOUNCE, THROTTLE } from "@core/Event";
-import { registElement } from "@core/registerElement";
+import UIElement, { EVENT } from "@sapa/UIElement";
+import { RESIZE, DEBOUNCE, THROTTLE } from "@sapa/Event";
+import { registElement } from "@sapa/registerElement";
 
 export default class KeyframeTimeGridView extends UIElement {
     template () {

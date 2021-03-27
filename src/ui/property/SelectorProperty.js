@@ -9,11 +9,11 @@ import {
   PREVENT,
   DEBOUNCE,
   STOP
-} from "@core/Event";
-import { EVENT } from "@core/UIElement";
+} from "@sapa/Event";
+import { EVENT } from "@sapa/UIElement";
 
 import { Selector } from "@property-parser/Selector";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 const selectorList = [
   '',   // custom 

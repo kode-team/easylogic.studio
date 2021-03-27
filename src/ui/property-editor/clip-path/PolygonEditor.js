@@ -1,9 +1,9 @@
 import { Length } from "@unit/Length";
-import { POINTERSTART, MOVE, LOAD, CLICK, BIND, PREVENT, ALT } from "@core/Event";
+import { POINTERSTART, MOVE, LOAD, CLICK, BIND, PREVENT, ALT } from "@sapa/Event";
 import "../RangeEditor";
-import Dom from "@core/Dom";
+import Dom from "@sapa/Dom";
 import icon from "@icon/icon";
-import UIElement from "@core/UIElement";
+import UIElement from "@sapa/UIElement";
 
 
 export default class PolygonEditor extends UIElement {

@@ -1,5 +1,5 @@
 import {BaseSVGFilter } from "./BaseSVGFilter";
-import { OBJECT_TO_PROPERTY } from "@core/functions/func";
+import { OBJECT_TO_PROPERTY } from "@sapa/functions/func";
 
 export class ComponentTransferSVGFilter extends BaseSVGFilter {
   getDefaultObject() {

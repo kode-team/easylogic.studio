@@ -1,5 +1,5 @@
-import { isArray } from "@core/functions/func";
-import { os } from "@core/functions/detect";
+import { isArray } from "@sapa/functions/func";
+import { os } from "@sapa/functions/detect";
 import shortcuts from "../shortcuts";
 import { KEY_CODE } from "@types/key";
 

@@ -1,8 +1,8 @@
-import UIElement, { EVENT } from "@core/UIElement";
+import UIElement, { EVENT } from "@sapa/UIElement";
 
-import { isUndefined } from "@core/functions/func";
+import { isUndefined } from "@sapa/functions/func";
 import { Length } from "@unit/Length";
-import { POINTERSTART, MOVE, END, BIND } from "@core/Event";
+import { POINTERSTART, MOVE, END, BIND } from "@sapa/Event";
 import "../RangeEditor";
 
 export default class EllipseEditor extends UIElement {

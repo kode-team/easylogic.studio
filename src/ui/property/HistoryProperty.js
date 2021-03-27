@@ -1,8 +1,8 @@
 import BaseProperty from "./BaseProperty";
-import { EVENT } from "@core/UIElement";
-import { LOAD, DOMDIFF } from "@core/Event";
+import { EVENT } from "@sapa/UIElement";
+import { LOAD, DOMDIFF } from "@sapa/Event";
 import icon from "@icon/icon";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 export default class HistoryProperty extends BaseProperty {
 

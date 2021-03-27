@@ -1,11 +1,11 @@
-import UIElement, { EVENT } from "@core/UIElement";
+import UIElement, { EVENT } from "@sapa/UIElement";
 import icon from "@icon/icon";
-import { CLICK, POINTERSTART, MOVE, END, BIND } from "@core/Event";
+import { CLICK, POINTERSTART, MOVE, END, BIND } from "@sapa/Event";
 import { Length } from "@unit/Length";
-import { formatCubicBezier, createBezierForPattern, bezierList, getPredefinedCubicBezier } from "@core/functions/bezier";
-import { div } from "@core/functions/math";
-import { curveToPath, curveToPointLine } from "@core/functions/func";
-import { registElement } from "@core/registerElement";
+import { formatCubicBezier, createBezierForPattern, bezierList, getPredefinedCubicBezier } from "@sapa/functions/bezier";
+import { div } from "@sapa/functions/math";
+import { curveToPath, curveToPointLine } from "@sapa/functions/func";
+import { registElement } from "@sapa/registerElement";
 
 
 export default class CubicBezierEditor extends UIElement {

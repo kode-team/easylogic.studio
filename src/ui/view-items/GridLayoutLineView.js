@@ -1,7 +1,7 @@
-import UIElement, { EVENT } from "@core/UIElement";
-import { CSS_TO_STRING } from "@core/functions/func";
-import { LOAD } from "@core/Event";
-import { registElement } from "@core/registerElement";
+import UIElement, { EVENT } from "@sapa/UIElement";
+import { CSS_TO_STRING } from "@sapa/functions/func";
+import { LOAD } from "@sapa/Event";
+import { registElement } from "@sapa/registerElement";
 
 /**
  * 객체와의 거리의 가이드 라인을 그려주는 컴포넌트

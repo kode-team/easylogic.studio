@@ -1,5 +1,5 @@
-import Color from "@core/Color";
-import HueColor from "@core/HueColor";
+import Color from "@sapa/Color";
+import HueColor from "@sapa/HueColor";
 
 export default { 
     title: 'random', 

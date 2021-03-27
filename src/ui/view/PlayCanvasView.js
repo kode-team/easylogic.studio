@@ -1,11 +1,11 @@
-import UIElement, { EVENT } from "@core/UIElement";
+import UIElement, { EVENT } from "@sapa/UIElement";
 
-import { DRAGOVER, DROP, IF, MOVE, normalizeWheelEvent, POINTERSTART, PREVENT, WHEEL } from "@core/Event";
+import { DRAGOVER, DROP, IF, MOVE, normalizeWheelEvent, POINTERSTART, PREVENT, WHEEL } from "@sapa/Event";
 import { vec3 } from "gl-matrix";
 import { KEY_CODE } from "@types/key";
 import Resource from "@util/Resource";
-import Dom from "@core/Dom";
-import { registElement } from "@core/registerElement";
+import Dom from "@sapa/Dom";
+import { registElement } from "@sapa/registerElement";
 import "./render-view/PlayerHTMLRenderView";
 
 

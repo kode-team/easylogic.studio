@@ -1,9 +1,9 @@
-import { uuidShort } from "@core/functions/math";
+import { uuidShort } from "@sapa/functions/math";
 import {
   clone,
   isFunction,
   isUndefined
-} from "@core/functions/func";
+} from "@sapa/functions/func";
 
 function _traverse(obj) {
   var results = [] 

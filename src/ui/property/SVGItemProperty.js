@@ -1,8 +1,8 @@
 import BaseProperty from "./BaseProperty";
-import { EVENT } from "@core/UIElement";
+import { EVENT } from "@sapa/UIElement";
 import { Length } from "@unit/Length";
-import { BIND, CLICK, THROTTLE } from "@core/Event";
-import { registElement } from "@core/registerElement";
+import { BIND, CLICK, THROTTLE } from "@sapa/Event";
+import { registElement } from "@sapa/registerElement";
 
 export default class SVGItemProperty extends BaseProperty {
 

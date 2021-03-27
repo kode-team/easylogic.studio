@@ -1,16 +1,16 @@
-import UIElement, { EVENT } from "@core/UIElement";
-import { BIND, POINTERSTART, MOVE, END, IF, KEYUP, DOUBLECLICK, FOCUSOUT } from "@core/Event";
+import UIElement, { EVENT } from "@sapa/UIElement";
+import { BIND, POINTERSTART, MOVE, END, IF, KEYUP, DOUBLECLICK, FOCUSOUT } from "@sapa/Event";
 import { Length } from "@unit/Length";
 
-import Dom from "@core/Dom";
+import Dom from "@sapa/Dom";
 import "./StyleView";
 
 import HTMLRenderer from '@renderer/HTMLRenderer';
 
-import { isFunction } from "@core/functions/func";
+import { isFunction } from "@sapa/functions/func";
 import { KEY_CODE } from "@types/key";
 import { vec3 } from "gl-matrix";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 
 export default class PlayerHTMLRenderView extends UIElement {

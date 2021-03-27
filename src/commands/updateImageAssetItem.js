@@ -1,5 +1,5 @@
-import { uuidShort } from "@core/functions/math";
-import { isFunction } from "@core/functions/func";
+import { uuidShort } from "@sapa/functions/math";
+import { isFunction } from "@sapa/functions/func";
 
 export default {
     command: 'updateImageAssetItem',

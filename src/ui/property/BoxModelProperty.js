@@ -1,8 +1,8 @@
 import BaseProperty from "./BaseProperty";
-import { INPUT, LOAD, DEBOUNCE } from "@core/Event";
+import { INPUT, LOAD, DEBOUNCE } from "@sapa/Event";
 import { Length } from "@unit/Length";
-import { EVENT } from "@core/UIElement";
-import { registElement } from "@core/registerElement";
+import { EVENT } from "@sapa/UIElement";
+import { registElement } from "@sapa/registerElement";
 
 const fields = ["margin", "padding"];
 let styleKeys = [];

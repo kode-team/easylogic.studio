@@ -1,8 +1,8 @@
-import UIElement, { EVENT } from "@core/UIElement";
-import { LOAD, BIND } from "@core/Event";
+import UIElement, { EVENT } from "@sapa/UIElement";
+import { LOAD, BIND } from "@sapa/Event";
 import "./SelectEditor";
 import "./RangeEditor";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 export default class OffsetPathListEditor extends UIElement {
 

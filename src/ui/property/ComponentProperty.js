@@ -1,8 +1,8 @@
 import BaseProperty from "./BaseProperty";
-import { EVENT } from "@core/UIElement";
-import { DEBOUNCE, LOAD } from "@core/Event";
-import { isString, OBJECT_TO_PROPERTY } from "@core/functions/func";
-import { registElement } from "@core/registerElement";
+import { EVENT } from "@sapa/UIElement";
+import { DEBOUNCE, LOAD } from "@sapa/Event";
+import { isString, OBJECT_TO_PROPERTY } from "@sapa/functions/func";
+import { registElement } from "@sapa/registerElement";
 
 
 export default class ComponentProperty extends BaseProperty {

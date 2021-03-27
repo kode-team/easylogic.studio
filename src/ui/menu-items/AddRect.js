@@ -1,6 +1,6 @@
 import MenuItem from "./MenuItem";
-import { EVENT } from "@core/UIElement";
-import { registElement } from "@core/registerElement";
+import { EVENT } from "@sapa/UIElement";
+import { registElement } from "@sapa/registerElement";
  
 export default class AddRect extends MenuItem {
   getIconString() {

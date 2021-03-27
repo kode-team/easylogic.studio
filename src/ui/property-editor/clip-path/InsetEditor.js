@@ -1,7 +1,7 @@
-import UIElement, { EVENT } from "@core/UIElement";
+import UIElement, { EVENT } from "@sapa/UIElement";
 
 import { Length } from "@unit/Length";
-import { POINTERSTART, MOVE, LOAD, CLICK, BIND } from "@core/Event";
+import { POINTERSTART, MOVE, LOAD, CLICK, BIND } from "@sapa/Event";
 import "../RangeEditor";
 import "../DirectionEditor";
 import { DirectionLength } from "@unit/DirectionLength";

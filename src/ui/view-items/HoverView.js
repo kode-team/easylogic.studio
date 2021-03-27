@@ -1,6 +1,6 @@
-import UIElement, { EVENT } from "@core/UIElement";
-import Dom from "@core/Dom";
-import { registElement } from "@core/registerElement";
+import UIElement, { EVENT } from "@sapa/UIElement";
+import Dom from "@sapa/Dom";
+import { registElement } from "@sapa/registerElement";
 
 export default class HoverView extends UIElement {
 

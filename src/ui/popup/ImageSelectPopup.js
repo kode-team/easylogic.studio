@@ -1,8 +1,8 @@
-import { EVENT } from "@core/UIElement";
+import { EVENT } from "@sapa/UIElement";
 import BasePopup from "./BasePopup";
-import { LOAD, CLICK, DOMDIFF } from "@core/Event";
+import { LOAD, CLICK, DOMDIFF } from "@sapa/Event";
 import { Length } from "@unit/Length";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 export default class ImageSelectPopup extends BasePopup {
 

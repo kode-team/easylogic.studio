@@ -1,6 +1,6 @@
-import UIElement, { EVENT } from "@core/UIElement";
-import { CLICK, INPUT, BIND, FOCUS, BLUR } from "@core/Event";
-import { registElement } from "@core/registerElement";
+import UIElement, { EVENT } from "@sapa/UIElement";
+import { CLICK, INPUT, BIND, FOCUS, BLUR } from "@sapa/Event";
+import { registElement } from "@sapa/registerElement";
 
 export default class ColorViewEditor extends UIElement {
 

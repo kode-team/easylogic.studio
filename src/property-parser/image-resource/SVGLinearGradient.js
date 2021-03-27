@@ -1,4 +1,4 @@
-import { convertMatches, reverseMatches } from "@core/functions/parser";
+import { convertMatches, reverseMatches } from "@sapa/functions/parser";
 import { ColorStep } from "./ColorStep";
 import { SVGGradient } from "./SVGGradient";
 import { Length } from "@unit/Length";

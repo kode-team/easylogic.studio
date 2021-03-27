@@ -1,7 +1,7 @@
 
-import Dom from "@core/Dom";
-import UIElement, { EVENT } from "@core/UIElement";
-import { DRAGOVER, DROP, PREVENT, TRANSITIONEND, KEYDOWN, KEYUP, IF, POINTERSTART, MOVE, BIND, CLICK, THROTTLE } from "@core/Event";
+import Dom from "@sapa/Dom";
+import UIElement, { EVENT } from "@sapa/UIElement";
+import { DRAGOVER, DROP, PREVENT, TRANSITIONEND, KEYDOWN, KEYUP, IF, POINTERSTART, MOVE, BIND, CLICK, THROTTLE } from "@sapa/Event";
 
 import icon from "@icon/icon";
 import { Length } from "@unit/Length";
@@ -21,7 +21,7 @@ import "@ui/view-items/PageSubEditor";
 
 import "@ui/view/HorizontalRuler";
 import "@ui/view/VerticalRuler";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
  
 
 const formElements = ['TEXTAREA', 'INPUT', 'SELECT']

@@ -1,7 +1,7 @@
 import BaseProperty from "./BaseProperty";
-import { DEBOUNCE } from "@core/Event";
-import { EVENT } from "@core/UIElement";
-import { registElement } from "@core/registerElement";
+import { DEBOUNCE } from "@sapa/Event";
+import { EVENT } from "@sapa/UIElement";
+import { registElement } from "@sapa/registerElement";
 
 const overflow_list = [
   'visible',
@@ -102,7 +102,7 @@ export default class AppearanceProperty extends BaseProperty {
   }
 
   [EVENT('refreshSelection')]() {
-    this.refreshShow(['project', 'artboard', 'rect', 'circle', 'image', 'video', 'iframe', 'text', 'template']);
+    this.refreshShowIsNot(['project']);
   }
 }
 

@@ -1,5 +1,5 @@
-import { EVENT } from "@core/UIElement";
-import { LOAD } from "@core/Event";
+import { EVENT } from "@sapa/UIElement";
+import { LOAD } from "@sapa/Event";
 import { ClipPath } from "@property-parser/ClipPath";
 import BasePopup from "./BasePopup";
 import "../property-editor/clip-path/CircleEditor";
@@ -8,7 +8,7 @@ import "../property-editor/SelectEditor";
 import "../property-editor/clip-path/InsetEditor";
 import "../property-editor/clip-path/PolygonEditor";
 import "../property-editor/clip-path/EllipseEditor";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 
 

@@ -1,6 +1,6 @@
-import UIElement, { EVENT } from "@core/UIElement";
+import UIElement, { EVENT } from "@sapa/UIElement";
 import { Length } from "@unit/Length";
-import { LOAD, CLICK } from "@core/Event";
+import { LOAD, CLICK } from "@sapa/Event";
 import icon from "@icon/icon";
 import "./ColorViewEditor";
 import "./RangeEditor";
@@ -11,7 +11,7 @@ import "./VarEditor";
 import "./TransformEditor";
 import "./TransformOriginEditor";
 import "./PerspectiveOriginEditor";
-import { OBJECT_TO_CLASS } from "@core/functions/func";
+import { OBJECT_TO_CLASS } from "@sapa/functions/func";
 import "./SelectEditor";
 import "./NumberRangeEditor";
 import "./BorderRadiusEditor";
@@ -23,7 +23,7 @@ import "./PolygonDataEditor";
 import "./OffsetPathListEditor";
 import "./BorderEditor";
 import './MediaProgressEditor';
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 export default class CSSPropertyEditor extends UIElement {
 

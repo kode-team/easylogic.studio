@@ -3,10 +3,10 @@ import { Length } from "@unit/Length";
 import { Transform } from "../property-parser/Transform";
 import { TransformOrigin } from "@property-parser/TransformOrigin";
 import { mat4, quat, vec3 } from "gl-matrix";
-import { calculateMatrix, calculateMatrixInverse, radianToDegree, round, vertiesMap } from "@core/functions/math";
-import { isFunction } from "@core/functions/func";
+import { calculateMatrix, calculateMatrixInverse, radianToDegree, round, vertiesMap } from "@sapa/functions/math";
+import { isFunction } from "@sapa/functions/func";
 import PathParser from "@parser/PathParser";
-import { polyPoint, polyPoly, rectToVerties } from "@core/functions/collision";
+import { polyPoint, polyPoly, rectToVerties } from "@sapa/functions/collision";
 
 const ZERO = Length.z()
 export class MovableItem extends Item {
@@ -454,7 +454,7 @@ export class MovableItem extends Item {
              * 회전되는 vertext 를 제외한 모든 vertext 
              * 회전 방식이 바뀌면 삭제 될 수 있음. 
              */            
-            rectVerties: verties.filter((it, index) => index != 4),
+            rectVerties: verties,
             xList,
             yList,
             directionMatrix,

@@ -1,8 +1,8 @@
-import { EVENT } from "@core/UIElement";
-import { INPUT } from "@core/Event";
+import { EVENT } from "@sapa/UIElement";
+import { INPUT } from "@sapa/Event";
 import "../property-editor/CSSPropertyEditor";
 import BasePopup from "./BasePopup";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 export default class SelectorPopup extends BasePopup {
 

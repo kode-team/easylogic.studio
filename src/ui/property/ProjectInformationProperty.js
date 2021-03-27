@@ -1,7 +1,7 @@
 import BaseProperty from "./BaseProperty";
-import { EVENT } from "@core/UIElement";
-import { CHANGEINPUT } from "@core/Event";
-import { registElement } from "@core/registerElement";
+import { EVENT } from "@sapa/UIElement";
+import { CHANGEINPUT } from "@sapa/Event";
+import { registElement } from "@sapa/registerElement";
 
 export default class ProjectInformationProperty extends BaseProperty {
   getTitle() {

@@ -1,10 +1,10 @@
 import BaseProperty from "./BaseProperty";
 import {
   LOAD, DEBOUNCE, CLICK
-} from "@core/Event";
-import { EVENT } from "@core/UIElement";
+} from "@sapa/Event";
+import { EVENT } from "@sapa/UIElement";
 import icon from "@icon/icon";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 
 export default class BackgroundImageProperty extends BaseProperty {

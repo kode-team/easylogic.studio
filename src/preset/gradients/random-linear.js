@@ -1,4 +1,4 @@
-import { repeat, randomItem } from "@core/functions/func";
+import { repeat, randomItem } from "@sapa/functions/func";
 import { ColorStep } from "@property-parser/image-resource/ColorStep";
 const angle_list = ['0deg', '45deg', '90deg']
 export default { 

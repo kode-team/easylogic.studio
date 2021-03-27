@@ -1,5 +1,5 @@
-import Dom from "@core/Dom";
-import { CSS_TO_STRING, isNotUndefined, keyEach, OBJECT_TO_CLASS, OBJECT_TO_PROPERTY, STRING_TO_CSS } from "@core/functions/func";
+import Dom from "@sapa/Dom";
+import { CSS_TO_STRING, isNotUndefined, keyEach, OBJECT_TO_CLASS, OBJECT_TO_PROPERTY, STRING_TO_CSS } from "@sapa/functions/func";
 import { Item } from "@items/Item";
 import { BackgroundImage } from "@property-parser/BackgroundImage";
 import { ClipPath } from "@property-parser/ClipPath";
@@ -565,6 +565,8 @@ export default class DomRender extends ItemRender {
    * @override
    */
   update (item, currentElement) {
+
+    if (!currentElement) return; 
 
     let $svg = currentElement.el.$svg;
 

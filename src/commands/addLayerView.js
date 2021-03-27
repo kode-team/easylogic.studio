@@ -6,7 +6,7 @@
  * @param {*} editor 
  * @param {*} type 
  */
-export default function addLayerView (editor, type) {
+export default function addLayerView (editor, type, data = {}) {
     // editor.emit('hideSubEditor');
     editor.selection.empty();
     editor.emit('refreshSelectionTool');        
@@ -20,7 +20,7 @@ export default function addLayerView (editor, type) {
     } else if (type === 'path') {
         editor.emit('showPathEditor', 'path' );
     } else  {
-        editor.emit('showLayerAppendView', type );
+        editor.emit('showLayerAppendView', type, data );
     }
 
 }

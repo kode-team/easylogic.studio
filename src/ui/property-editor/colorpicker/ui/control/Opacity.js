@@ -1,8 +1,8 @@
 
-import Color from '@core/Color'
-import { BIND, END, MOVE, POINTERSTART } from '@core/Event';
-import { clone } from '@core/functions/func';
-import UIElement from '@core/UIElement';
+import Color from '@sapa/Color'
+import { BIND, END, MOVE, POINTERSTART } from '@sapa/Event';
+import { clone } from '@sapa/functions/func';
+import UIElement from '@sapa/UIElement';
 import { Length } from '@unit/Length';
 
 export default class Opacity extends UIElement {

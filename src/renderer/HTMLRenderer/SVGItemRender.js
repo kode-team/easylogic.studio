@@ -1,5 +1,5 @@
-import Color from "@core/Color";
-import Dom from "@core/Dom";
+import Color from "@sapa/Color";
+import Dom from "@sapa/Dom";
 import { Item } from "@items/Item";
 import { SVGFill } from "@property-parser/SVGFill";
 import LayerRender from "./LayerRender";

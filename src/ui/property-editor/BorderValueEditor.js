@@ -1,12 +1,12 @@
 import { Length } from "@unit/Length";
-import UIElement, { EVENT } from "@core/UIElement";
+import UIElement, { EVENT } from "@sapa/UIElement";
 import Border from "@property-parser/Border";
 import "./RangeEditor";
 import "./SelectEditor";
 import "./ColorViewEditor";
 import "./InputRangeEditor";
 import "./ColorSingleEditor";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 
 const borderStyleList = [

@@ -1,4 +1,4 @@
-import { isObject, isFunction } from "@core/functions/func";
+import { isObject, isFunction } from "@sapa/functions/func";
 import commands from "@commands";
 
 export class CommandManager {

@@ -1,5 +1,5 @@
-import { EVENT } from "@core/UIElement";
-import { LOAD } from "@core/Event";
+import { EVENT } from "@sapa/UIElement";
+import { LOAD } from "@sapa/Event";
 
 import { Gradient } from "@property-parser/image-resource/Gradient";
 import BasePopup from "./BasePopup";
@@ -7,7 +7,7 @@ import "../property-editor/EmbedColorPicker";
 import "../property/ImageAssetPicker";
 import "../property-editor/FillEditor";
 import { SVGStaticGradient } from "@property-parser/image-resource/SVGStaticGradient";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 
 export default class FillPickerPopup extends BasePopup {

@@ -1,4 +1,4 @@
-import { isFunction, clone, OBJECT_TO_CLASS, mapjoin, keyMapJoin, repeat } from "@core/functions/func";
+import { isFunction, clone, OBJECT_TO_CLASS, mapjoin, keyMapJoin, repeat } from "@sapa/functions/func";
 import icon from "@icon/icon";
 import {
   LOAD,
@@ -10,8 +10,8 @@ import {
   PREVENT,
   DROP,
   DRAGSTART
-} from "@core/Event";
-import UIElement, { EVENT } from "@core/UIElement";
+} from "@sapa/Event";
+import UIElement, { EVENT } from "@sapa/UIElement";
 import "./RangeEditor";
 import "./ColorViewEditor";
 
@@ -22,13 +22,13 @@ import "./InputArrayEditor";
 import { SVGFilter, SVGFilterSpecList } from "@property-parser/SVGFilter";
 import "./FuncFilterEditor";
 import { Length } from "@unit/Length";
-import Dom from "@core/Dom";
+import Dom from "@sapa/Dom";
 import PathStringManager from "@parser/PathStringManager";
 import "./ColorMatrixEditor";
 import svgFilterPreset from "./svg-filter-preset";
 import "./ImageSelectEditor";
 import "./BlendSelectEditor";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 const filterTypes = [
   {label: 'GRAPHIC REFERENCES', items : [

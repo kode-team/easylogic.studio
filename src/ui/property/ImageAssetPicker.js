@@ -1,6 +1,6 @@
-import { LOAD, DOMDIFF, CLICK } from "@core/Event";
-import { registElement } from "@core/registerElement";
-import UIElement, { EVENT } from "@core/UIElement";
+import { LOAD, DOMDIFF, CLICK } from "@sapa/Event";
+import { registElement } from "@sapa/registerElement";
+import UIElement, { EVENT } from "@sapa/UIElement";
 
 
 export default class ImageAssetPicker extends UIElement {

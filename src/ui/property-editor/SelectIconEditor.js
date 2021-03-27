@@ -1,8 +1,8 @@
-import UIElement from "@core/UIElement";
-import { LOAD, CLICK, DOMDIFF } from "@core/Event";
+import UIElement from "@sapa/UIElement";
+import { LOAD, CLICK, DOMDIFF } from "@sapa/Event";
 import icon from "@icon/icon";
-import { CSS_TO_STRING } from "@core/functions/func";
-import { registElement } from "@core/registerElement";
+import { CSS_TO_STRING } from "@sapa/functions/func";
+import { registElement } from "@sapa/registerElement";
 
 export default class SelectIconEditor extends UIElement {
 

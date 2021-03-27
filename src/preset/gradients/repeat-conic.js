@@ -1,4 +1,4 @@
-import { repeat } from "@core/functions/func";
+import { repeat } from "@sapa/functions/func";
 import { ColorStep } from "@property-parser/image-resource/ColorStep";
 
 export default { 

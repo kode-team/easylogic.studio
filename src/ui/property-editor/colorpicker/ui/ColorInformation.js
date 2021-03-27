@@ -1,5 +1,5 @@
-import Event, { CLICK, KEYUP, INPUT, KEYDOWN } from '@core/Event'
-import UIElement, { EVENT } from '@core/UIElement';
+import Event, { CLICK, KEYUP, INPUT, KEYDOWN } from '@sapa/Event'
+import UIElement, { EVENT } from '@sapa/UIElement';
 
 export default class ColorInformation extends UIElement {
 

@@ -1,8 +1,8 @@
-import UIElement, { EVENT } from "@core/UIElement";
+import UIElement, { EVENT } from "@sapa/UIElement";
 import BasePopup from "./BasePopup";
 import "../property-editor/EmbedColorPicker";
-import { LOAD, CLICK } from "@core/Event";
-import { registElement } from "@core/registerElement";
+import { LOAD, CLICK } from "@sapa/Event";
+import { registElement } from "@sapa/registerElement";
 
 export default class ColorPickerPopup extends BasePopup {
 

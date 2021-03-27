@@ -1,6 +1,6 @@
-import { DOMDIFF, LOAD } from "@core/Event";
-import { registElement } from "@core/registerElement";
-import UIElement, { EVENT } from "@core/UIElement";
+import { DOMDIFF, LOAD } from "@sapa/Event";
+import { registElement } from "@sapa/registerElement";
+import UIElement, { EVENT } from "@sapa/UIElement";
 
 let pathString = []
 

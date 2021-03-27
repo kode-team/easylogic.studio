@@ -1,8 +1,8 @@
 import BaseWindow from "./BaseWindow";
 import shortcuts from "../../shortcuts";
-import { os } from "@core/functions/detect";
-import { EVENT } from "@core/UIElement";
-import { registElement } from "@core/registerElement";
+import { os } from "@sapa/functions/detect";
+import { EVENT } from "@sapa/UIElement";
+import { registElement } from "@sapa/registerElement";
 
 const categories = new Set();
 

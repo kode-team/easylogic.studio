@@ -5,10 +5,10 @@ import {
   isString,
   isUndefined,
   clone
-} from "@core/functions/func";
+} from "@sapa/functions/func";
 import { ColorStep } from "./ColorStep";
 import { Length, Position } from "@unit/Length";
-import { convertMatches, reverseMatches } from "@core/functions/parser";
+import { convertMatches, reverseMatches } from "@sapa/functions/parser";
 
 const DEFINED_POSITIONS = {
   ["center"]: true,

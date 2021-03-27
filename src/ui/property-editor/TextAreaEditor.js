@@ -1,7 +1,7 @@
-import UIElement from "@core/UIElement";
-import { BIND, INPUT } from "@core/Event";
+import UIElement from "@sapa/UIElement";
+import { BIND, INPUT } from "@sapa/Event";
 import { Length } from "@unit/Length";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 export default class TextAreaEditor extends UIElement {
 

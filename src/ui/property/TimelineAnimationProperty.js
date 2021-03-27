@@ -1,8 +1,8 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, CLICK, DOUBLECLICK, FOCUSOUT, KEY, PREVENT, STOP, DOMDIFF, KEYDOWN, DEBOUNCE, ENTER } from "@core/Event";
+import { LOAD, CLICK, DOUBLECLICK, FOCUSOUT, KEY, PREVENT, STOP, DOMDIFF, KEYDOWN, DEBOUNCE, ENTER } from "@sapa/Event";
 import icon from "@icon/icon";
-import { EVENT } from "@core/UIElement";
-import { registElement } from "@core/registerElement";
+import { EVENT } from "@sapa/UIElement";
+import { registElement } from "@sapa/registerElement";
 
 export default class TimelineAnimationProperty extends BaseProperty {
   getTitle() {

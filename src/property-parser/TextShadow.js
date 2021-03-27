@@ -1,6 +1,6 @@
 import { Length } from "@unit/Length";
 import { Property } from "@items/Property";
-import { convertMatches } from "@core/functions/parser";
+import { convertMatches } from "@sapa/functions/parser";
 
 export class TextShadow extends Property {
   static parse(obj) {

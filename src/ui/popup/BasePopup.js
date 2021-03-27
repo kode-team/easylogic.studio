@@ -1,7 +1,7 @@
 
-import { POINTERSTART, MOVE, END, CLICK } from "@core/Event";
+import { POINTERSTART, MOVE, END, CLICK } from "@sapa/Event";
 import { Length } from "@unit/Length";
-import UIElement, { EVENT } from "@core/UIElement";
+import UIElement, { EVENT } from "@sapa/UIElement";
 import icon from "@icon/icon";
 import "../property-editor";
 

@@ -1,3 +1,9 @@
+import { uuid } from "@sapa/functions/math";
+
+import { Item } from "@items/Item";
+import BaseStore from "@sapa/BaseStore";
+import { registElement } from "@sapa/registerElement";
+import { isArray, isString } from "@sapa/functions/func";
 
 
 import i18n from "../i18n";
@@ -9,18 +15,15 @@ import { ComponentManager } from "./ComponentManager";
 import { CommandManager } from "./CommandManager";
 import { ShortCutManager } from "./ShortCutManager";
 import { ConfigManager } from "./ConfigManager";
-
-import { isArray, isString } from "@core/functions/func";
 import { HistoryManager } from "./HistoryManager";
-import { uuid } from "@core/functions/math";
-import { Item } from "@items/Item";
-import BaseStore from "@core/BaseStore";
 import { SnapManager } from "./SnapManager";
 import { KeyBoardManager } from "./KeyboardManager";
 import { ViewportManager } from "./ViewportManager";
 import { StorageManager } from "./StorageManager";
 import { CursorManager } from "./CursorManager";
 import { AssetManager } from "./AssetManager";
+import { PluginManager } from "./PluginManager";
+import { RendererManager } from "./RendererManager";
 
 
 export const EDITOR_ID = "";
@@ -32,6 +35,15 @@ const DEFAULT_THEME = 'dark'
 
 
 export class Editor {
+
+  /**
+   * 
+   * @param {Function} createPluginFunction  
+   */
+  static registerPlugin (createPluginFunction) {
+    PluginManager.registerPlugin(createPluginFunction);
+  } 
+
 
   /**
    * 
@@ -78,9 +90,12 @@ export class Editor {
     this.cursorManager = new CursorManager(this);
     this.assetManager = new AssetManager(this);
     this.components = ComponentManager;
+    this.plugins = PluginManager;
+    this.renderers = RendererManager
 
 
     this.initTheme();    
+    this.initPlugins();
   }
 
   i18n (key, params = {}, locale) {
@@ -129,6 +144,10 @@ export class Editor {
 
     this.theme =  theme || DEFAULT_THEME
     window.localStorage.setItem('easylogic.studio.theme', this.theme);
+  }
+
+  initPlugins() {
+    this.plugins.initializePlugin(this);
   }
 
   themeValue (key, defaultValue = '') {
@@ -458,6 +477,18 @@ export class Editor {
   loadItem (key) {
     return JSON.parse(window.localStorage.getItem(`easylogic.studio.${key}`) || JSON.stringify(""))
   }  
+
+  registerElement (obj) {
+    registElement(obj);
+  }
+
+  registerComponent (name, component) {
+    this.components.registerComponent(name, component)
+  }
+
+  registerRenderer (rendererType, name, rendererInstance) {
+    this.renderers.registerRenderer(rendererType, name, rendererInstance)
+  }
 
   
 }

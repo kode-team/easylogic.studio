@@ -1,10 +1,10 @@
 import { Item } from "@items/Item";
 import { Length } from "@unit/Length";
 
-import { convertMatches } from "@core/functions/parser";
-import { repeat } from "@core/functions/func";
-import { randomNumber } from "@core/functions/create";
-import Color from "@core/Color";
+import { convertMatches } from "@sapa/functions/parser";
+import { repeat } from "@sapa/functions/func";
+import { randomNumber } from "@sapa/functions/create";
+import Color from "@sapa/Color";
 
 let colorStepIds = 10000000000; 
 

@@ -1,12 +1,12 @@
-import UIElement, { EVENT } from "@core/UIElement";
+import UIElement, { EVENT } from "@sapa/UIElement";
 import Hue from "./colorpicker/ui/control/Hue";
 import Opacity from "./colorpicker/ui/control/Opacity";
 import ColorView from "./colorpicker/ui/control/ColorView";
 import ColorInformation from "./colorpicker/ui/ColorInformation";
 import Palette from "./colorpicker/ui/ColorPalette";
-import ColorManagerV2 from "@core/ColorManagerV2";
+import ColorManagerV2 from "@sapa/ColorManagerV2";
 import ColorAssetsEditor from "./ColorAssetsEditor";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 
 export default class ColorPickerEditor extends UIElement {

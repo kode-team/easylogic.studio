@@ -1,5 +1,5 @@
-import UIElement from "@core/UIElement";
-import { POINTERSTART, BIND, MOVE, END } from "@core/Event";
+import UIElement from "@sapa/UIElement";
+import { POINTERSTART, BIND, MOVE, END } from "@sapa/Event";
 import { Length } from "@unit/Length";
 
 export default class ColorPalette extends UIElement {

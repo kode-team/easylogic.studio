@@ -1,7 +1,3 @@
-//////// Do not remove /////////////////
-import BaseStore from "./BaseStore";
-//////// Do not remove /////////////////
-
 import Dom from "./Dom";
 import { POINTERMOVE, POINTEREND, DEBOUNCE, RESIZE } from "./Event";
 import {

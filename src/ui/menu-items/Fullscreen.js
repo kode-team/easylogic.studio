@@ -1,4 +1,4 @@
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 import MenuItem from "./MenuItem";
 
 export default class Fullscreen extends MenuItem {

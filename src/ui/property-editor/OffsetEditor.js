@@ -1,13 +1,13 @@
-import UIElement, { EVENT } from "@core/UIElement";
+import UIElement, { EVENT } from "@sapa/UIElement";
 import { Length } from "@unit/Length";
-import { LOAD, POINTERSTART, MOVE, END, CLICK, IF, PREVENT } from "@core/Event";
+import { LOAD, POINTERSTART, MOVE, END, CLICK, IF, PREVENT } from "@sapa/Event";
 import { Offset } from "@property-parser/Offset";
-import Dom from "@core/Dom";
-import { isUndefined } from "@core/functions/func";
+import Dom from "@sapa/Dom";
+import { isUndefined } from "@sapa/functions/func";
 import "./CSSPropertyEditor";
 import "./RangeEditor";
 import "./InputRangeEditor";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 
 export default class OffsetEditor extends UIElement {

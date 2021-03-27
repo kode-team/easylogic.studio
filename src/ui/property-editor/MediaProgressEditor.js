@@ -1,9 +1,9 @@
-import UIElement, { EVENT } from "@core/UIElement";
-import { POINTERSTART, MOVE, BIND } from "@core/Event";
+import UIElement, { EVENT } from "@sapa/UIElement";
+import { POINTERSTART, MOVE, BIND } from "@sapa/Event";
 import { Length } from "@unit/Length";
 
 import './NumberRangeEditor';
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 export default class MediaProgressEditor extends UIElement {
 

@@ -1,8 +1,8 @@
 import { Gradient } from "./Gradient";
 
 import { Length, Position } from "@unit/Length";
-import { isString, clone } from "@core/functions/func";
-import { convertMatches, reverseMatches } from "@core/functions/parser";
+import { isString, clone } from "@sapa/functions/func";
+import { convertMatches, reverseMatches } from "@sapa/functions/parser";
 import { ColorStep } from "./ColorStep";
 
 const DEFINED_POSITIONS = {

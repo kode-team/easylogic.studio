@@ -1,6 +1,6 @@
-import { SUBMIT } from "@core/Event";
-import { registElement } from "@core/registerElement";
-import UIElement from "@core/UIElement";
+import { SUBMIT } from "@sapa/Event";
+import { registElement } from "@sapa/registerElement";
+import UIElement from "@sapa/UIElement";
 import ExportManager from "@manager/ExportManager";
 
  

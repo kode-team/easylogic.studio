@@ -70,6 +70,12 @@ function changed(node1, node2) {
     ) 
 }
 
+function hasPassed(node1) {
+    return (
+        (node1.nodeType !== Node.TEXT_NODE && node1.getAttribute('data-domdiff-pass') === 'true') 
+    ) 
+}
+
 function getProps (attributes) {
     var results = {}
     const len = attributes.length;
@@ -83,17 +89,29 @@ function getProps (attributes) {
 }
 
 function updateElement (parentElement, oldEl, newEl, i) {
+
+    // console.log(oldEl, newEl);
+
     if (!oldEl) {
+        // console.log('replace');        
         parentElement.appendChild(newEl.cloneNode(true));
     } else if (!newEl) {
+        // console.log('replace');        
         parentElement.removeChild(oldEl);
+    } else if (hasPassed(oldEl)) {
+        // NOOP
+        // data-domdiff-pass="true" 일 때는 아무것도 비교하지 않고 끝낸다. 
+        // console.log('passed');
     } else if (changed(newEl, oldEl)) {
+        // console.log('replace');
         parentElement.replaceChild(newEl.cloneNode(true), oldEl);
     } else if (
         newEl.nodeType !== Node.TEXT_NODE 
+
         && newEl.nodeType !== Node.COMMENT_NODE
         && newEl.toString() !== "[object HTMLUnknownElement]"
     ) {
+        // console.log(newEl);
         updateProps(oldEl, getProps(newEl.attributes), getProps(oldEl.attributes)); // added        
         var oldChildren = children(oldEl);
         var newChildren = children(newEl);

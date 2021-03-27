@@ -1,4 +1,4 @@
-import { getVertiesMinY } from "@core/functions/math";
+import { getVertiesMinY } from "@sapa/functions/math";
 
 export default {
     command : 'sort.top',

@@ -1,8 +1,8 @@
-import { EVENT } from "@core/UIElement";
+import { EVENT } from "@sapa/UIElement";
 import { Length } from "@unit/Length";
-import { LOAD, POINTERSTART, MOVE } from "@core/Event";
+import { LOAD, POINTERSTART, MOVE } from "@sapa/Event";
 import BasePopup from "./BasePopup";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 export default class TextShadowPropertyPopup extends BasePopup {
 

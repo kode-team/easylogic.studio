@@ -1,6 +1,6 @@
-import UIElement, { EVENT } from "@core/UIElement";
-import { BIND } from "@core/Event";
-import { registElement } from "@core/registerElement";
+import UIElement, { EVENT } from "@sapa/UIElement";
+import { BIND } from "@sapa/Event";
+import { registElement } from "@sapa/registerElement";
 
 const line = (source, target, className = 'base-line') => {
     return /*html*/`<line x1="${source[0]}" y1="${source[1]}" x2="${target[0]}" y2="${target[1]}" class='${className}' />`

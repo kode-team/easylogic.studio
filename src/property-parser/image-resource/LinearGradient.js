@@ -1,6 +1,6 @@
 import { Gradient } from "./Gradient";
-import { isNumber, isUndefined } from "@core/functions/func";
-import { convertMatches, reverseMatches } from "@core/functions/parser";
+import { isNumber, isUndefined } from "@sapa/functions/func";
+import { convertMatches, reverseMatches } from "@sapa/functions/parser";
 import { Length } from "@unit/Length";
 import { ColorStep } from "./ColorStep";
 

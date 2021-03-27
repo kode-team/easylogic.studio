@@ -1,8 +1,8 @@
-import UIElement from "@core/UIElement";
-import { LOAD, INPUT, BIND, CLICK } from "@core/Event";
+import UIElement from "@sapa/UIElement";
+import { LOAD, INPUT, BIND, CLICK } from "@sapa/Event";
 import colormatrix from "./colormatrix";
-import { normalize } from "@core/functions/math";
-import { registElement } from "@core/registerElement";
+import { normalize } from "@sapa/functions/math";
+import { registElement } from "@sapa/registerElement";
 
 const COLUMN = 6; 
 

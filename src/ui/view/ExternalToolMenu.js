@@ -1,5 +1,5 @@
-import { registElement } from "@core/registerElement";
-import UIElement from "@core/UIElement";
+import { registElement } from "@sapa/registerElement";
+import UIElement from "@sapa/UIElement";
 import "@ui/menu-items";
 
 export default class ExternalToolMenu extends UIElement {

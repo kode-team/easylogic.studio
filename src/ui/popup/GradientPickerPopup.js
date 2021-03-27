@@ -1,6 +1,6 @@
-import { EVENT } from "@core/UIElement";
-import { LOAD } from "@core/Event";
-import { registElement } from "@core/registerElement";
+import { EVENT } from "@sapa/UIElement";
+import { LOAD } from "@sapa/Event";
+import { registElement } from "@sapa/registerElement";
 
 import { Gradient } from "@property-parser/image-resource/Gradient";
 import BasePopup from "./BasePopup";

@@ -1,8 +1,8 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, DOMDIFF, CLICK } from "@core/Event";
-import { EVENT } from "@core/UIElement";
+import { LOAD, DOMDIFF, CLICK } from "@sapa/Event";
+import { EVENT } from "@sapa/UIElement";
 import artboardSize from "@preset/artboards/artboard.size";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 export default class ArtBoardSizeProperty extends BaseProperty {
 

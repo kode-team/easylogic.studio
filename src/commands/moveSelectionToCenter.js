@@ -1,4 +1,4 @@
-import { itemsToRectVerties } from "@core/functions/collision";
+import { itemsToRectVerties } from "@sapa/functions/collision";
 import { Editor } from "@manager/Editor";
 
 export default {

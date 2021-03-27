@@ -1,6 +1,6 @@
-import UIElement from "@core/UIElement";
-import { LOAD, INPUT, BIND } from "@core/Event";
-import { registElement } from "@core/registerElement";
+import UIElement from "@sapa/UIElement";
+import { LOAD, INPUT, BIND } from "@sapa/Event";
+import { registElement } from "@sapa/registerElement";
 
 
 export default class InputArrayEditor extends UIElement {

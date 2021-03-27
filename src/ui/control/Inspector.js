@@ -1,9 +1,9 @@
-import UIElement from "@core/UIElement";
+import UIElement from "@sapa/UIElement";
 
-import { CLICK } from "@core/Event";
+import { CLICK } from "@sapa/Event";
 import "../property/index";
 import icon from "@icon/icon";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 export default class Inspector extends UIElement {
 

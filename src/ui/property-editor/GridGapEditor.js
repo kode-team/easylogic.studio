@@ -1,8 +1,8 @@
-import UIElement, { EVENT } from "@core/UIElement";
-import { LOAD } from "@core/Event";
+import UIElement, { EVENT } from "@sapa/UIElement";
+import { LOAD } from "@sapa/Event";
 import { Length } from "@unit/Length";
 import "./RangeEditor";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 
 export default class GridGapEditor extends UIElement {

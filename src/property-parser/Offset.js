@@ -1,5 +1,5 @@
 import { Property } from "@items/Property";
-import { html, CSS_TO_STRING, clone } from "@core/functions/func";
+import { html, CSS_TO_STRING, clone } from "@sapa/functions/func";
 import { Length } from "@unit/Length";
 
 export class Offset extends Property {

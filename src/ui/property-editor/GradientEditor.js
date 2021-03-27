@@ -1,5 +1,5 @@
-import UIElement, { EVENT } from "@core/UIElement";
-import { LOAD, CLICK, POINTERSTART, MOVE, END, BIND, PREVENT, DOUBLECLICK, CHANGE } from "@core/Event";
+import UIElement, { EVENT } from "@sapa/UIElement";
+import { LOAD, CLICK, POINTERSTART, MOVE, END, BIND, PREVENT, DOUBLECLICK, CHANGE } from "@sapa/Event";
 import { Length } from "@unit/Length";
 import "./RangeEditor";
 
@@ -8,8 +8,8 @@ import "./InputRangeEditor";
 import { BackgroundImage } from "@property-parser/BackgroundImage";
 import { Gradient } from "@property-parser/image-resource/Gradient";
 import icon from "@icon/icon";
-import { clone } from "@core/functions/func";
-import { registElement } from "@core/registerElement";
+import { clone } from "@sapa/functions/func";
+import { registElement } from "@sapa/registerElement";
 
 var radialTypeList = [
   'circle',

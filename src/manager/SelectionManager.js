@@ -1,5 +1,5 @@
-import { itemsToRectVerties, polyPoint, polyPoly, rectToVerties} from "@core/functions/collision";
-import { isFunction, isUndefined, isArray, isObject, isString, clone } from "@core/functions/func";
+import { itemsToRectVerties, polyPoint, polyPoly, rectToVerties} from "@sapa/functions/collision";
+import { isFunction, isUndefined, isArray, isObject, isString, clone } from "@sapa/functions/func";
 import { Item } from "@items/Item";
 import { MovableItem } from "@items/MovableItem";
 import { Project } from "@items/Project";
@@ -407,10 +407,6 @@ export class SelectionManager {
   }
 
   setRectCache () {
-    
-    // this.cachedItems = this.items.map(it => {
-    //   return it.toCloneObject()
-    // })
 
     this.cachedVerties = this.verties;
 
@@ -422,8 +418,6 @@ export class SelectionManager {
     this.cachedArtBoardVerties = this.currentProject.artboards.map(item => {
       return { item, matrix: item.matrix};
     })
-
-    // this.setAllRectCache();
   }
 
   get verties () {

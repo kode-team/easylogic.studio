@@ -1,6 +1,6 @@
 import BaseProperty from "./BaseProperty";
-import { EVENT } from "@core/UIElement";
-import { registElement } from "@core/registerElement";
+import { EVENT } from "@sapa/UIElement";
+import { registElement } from "@sapa/registerElement";
 
 export default class TextProperty extends BaseProperty {
 

@@ -1,4 +1,4 @@
-import { isFunction } from "@core/functions/func";
+import { isFunction } from "@sapa/functions/func";
 
 export default {
     command : 'setAttribute',

@@ -1,8 +1,8 @@
 import BaseProperty from "./BaseProperty";
-import { registElement } from "@core/registerElement";
-import { CLICK, LOAD } from "@core/Event";
+import { registElement } from "@sapa/registerElement";
+import { CLICK, LOAD } from "@sapa/Event";
 import { Length } from "@unit/Length";
-import { EVENT } from "@core/UIElement";
+import { EVENT } from "@sapa/UIElement";
 
 export default class PrimerOctIconsProperty extends BaseProperty {
 

@@ -1,9 +1,9 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, CLICK, INPUT, DEBOUNCE } from "@core/Event";
-import { EVENT } from "@core/UIElement";
+import { LOAD, CLICK, INPUT, DEBOUNCE } from "@sapa/Event";
+import { EVENT } from "@sapa/UIElement";
 import icon from "@icon/icon";
-import { uuidShort } from "@core/functions/math";
-import { registElement } from "@core/registerElement";
+import { uuidShort } from "@sapa/functions/math";
+import { registElement } from "@sapa/registerElement";
 
 
 export default class SVGImageAssetsProperty extends BaseProperty {

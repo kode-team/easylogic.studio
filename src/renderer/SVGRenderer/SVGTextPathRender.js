@@ -1,5 +1,5 @@
-import Dom from "@core/Dom";
-import { CSS_TO_STRING, OBJECT_TO_PROPERTY } from "@core/functions/func";
+import Dom from "@sapa/Dom";
+import { CSS_TO_STRING, OBJECT_TO_PROPERTY } from "@sapa/functions/func";
 import { Item } from "@items/Item";
 import SVGItemRender from "./SVGItemRender";
 

@@ -1,4 +1,4 @@
-import Dom from "@core/Dom";
+import Dom from "@sapa/Dom";
 import { TemplateEngine } from "@renderer/template-engine/TemplateEngine";
 import SVGLayerRender from "./SVGLayerRender";
 

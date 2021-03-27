@@ -1,7 +1,7 @@
 import { Property } from "@items/Property";
 import { Offset } from "./Offset";
 
-import { reverseMatches, convertMatches } from "@core/functions/parser";
+import { reverseMatches, convertMatches } from "@sapa/functions/parser";
 import { Length } from "@unit/Length";
 
 export class Keyframe extends Property {

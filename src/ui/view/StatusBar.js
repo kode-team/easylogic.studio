@@ -1,10 +1,10 @@
-import UIElement, { EVENT } from "@core/UIElement";
-import { BIND } from "@core/Event";
+import UIElement, { EVENT } from "@sapa/UIElement";
+import { BIND } from "@sapa/Event";
 import "../status-bar-items/LanguageSelector";
 import "../status-bar-items/ThemeSwitcher";
 import "../status-bar-items/LayoutSelector";
 import "../status-bar-items/VersionView";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 
 export default class StatusBar extends UIElement {

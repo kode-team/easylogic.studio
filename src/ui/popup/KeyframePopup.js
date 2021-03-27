@@ -1,8 +1,8 @@
-import { EVENT } from "@core/UIElement";
+import { EVENT } from "@sapa/UIElement";
 import "../property-editor/OffsetEditor";
-import { INPUT } from "@core/Event";
+import { INPUT } from "@sapa/Event";
 import BasePopup from "./BasePopup";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 export default class KeyframePopup extends BasePopup {
 

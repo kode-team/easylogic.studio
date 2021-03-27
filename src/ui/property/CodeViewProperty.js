@@ -1,9 +1,9 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, DEBOUNCE, DOMDIFF } from "@core/Event";
-import { EVENT } from "@core/UIElement";
+import { LOAD, DEBOUNCE, DOMDIFF } from "@sapa/Event";
+import { EVENT } from "@sapa/UIElement";
 import HTMLRenderer from "@renderer/HTMLRenderer";
 import SVGRenderer from "@renderer/SVGRenderer";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 
 export default class CodeViewProperty extends BaseProperty {

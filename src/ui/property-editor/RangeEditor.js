@@ -1,10 +1,10 @@
-import UIElement, { EVENT } from "@core/UIElement";
+import UIElement, { EVENT } from "@sapa/UIElement";
 import { Length } from "@unit/Length";
-import { LOAD, INPUT, CLICK, FOCUS, BLUR, POINTERSTART, MOVE, END, THROTTLE } from "@core/Event";
+import { LOAD, INPUT, CLICK, FOCUS, BLUR, POINTERSTART, MOVE, END, THROTTLE } from "@sapa/Event";
 import icon from "@icon/icon";
 import "./SelectEditor";
-import { OBJECT_TO_CLASS } from "@core/functions/func";
-import { registElement } from "@core/registerElement";
+import { OBJECT_TO_CLASS } from "@sapa/functions/func";
+import { registElement } from "@sapa/registerElement";
 
 export default class RangeEditor extends UIElement {
 

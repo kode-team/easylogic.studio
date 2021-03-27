@@ -1,9 +1,9 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, CLICK, BIND, DEBOUNCE } from "@core/Event";
-import { EVENT } from "@core/UIElement";
+import { LOAD, CLICK, BIND, DEBOUNCE } from "@sapa/Event";
+import { EVENT } from "@sapa/UIElement";
 import icon from "@icon/icon";
 import { Length } from "@unit/Length";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 const image_size = [
   '',

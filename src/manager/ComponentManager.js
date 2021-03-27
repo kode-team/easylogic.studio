@@ -6,6 +6,8 @@ export const ComponentManager = new class {
   }
 
   registerComponent (name, Component) {
+
+    if (this.components[name]) throw new Error("It has duplicated item name. " + name);
     this.components[name] = Component;
   }
 

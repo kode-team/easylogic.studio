@@ -1,6 +1,6 @@
-import UIElement, { EVENT } from "@core/UIElement";
-import { CLICK, LOAD } from "@core/Event";
-import { registElement } from "@core/registerElement";
+import UIElement, { EVENT } from "@sapa/UIElement";
+import { CLICK, LOAD } from "@sapa/Event";
+import { registElement } from "@sapa/registerElement";
 
 export default class ClipPathEditor extends UIElement {
 

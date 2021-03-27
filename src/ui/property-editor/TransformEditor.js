@@ -6,14 +6,14 @@ import {
   DRAGOVER,
   DROP,
   PREVENT
-} from "@core/Event";
+} from "@sapa/Event";
 
 import { Transform } from "@property-parser/Transform";
-import UIElement, { EVENT } from "@core/UIElement";
+import UIElement, { EVENT } from "@sapa/UIElement";
 import "./RangeEditor";
 import { Length } from "@unit/Length";
 import "./NumberInputEditor";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 var transformList = [
   'perspective',  

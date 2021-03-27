@@ -1,4 +1,4 @@
-import { isNotZero } from "@core/functions/func";
+import { isNotZero } from "@sapa/functions/func";
 import { vec3 } from "gl-matrix";
 import { Editor } from "./Editor";
 

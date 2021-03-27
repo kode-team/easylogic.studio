@@ -1,9 +1,9 @@
-import UIElement, { EVENT } from "@core/UIElement";
-import { CLICK, BIND } from "@core/Event";
+import UIElement, { EVENT } from "@sapa/UIElement";
+import { CLICK, BIND } from "@sapa/Event";
 import icon from "@icon/icon";
 import "../property-editor";
 import { Length } from "@unit/Length";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 const MODES = {
   'segment-move': 'modify',

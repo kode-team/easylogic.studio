@@ -1,9 +1,9 @@
 import BaseProperty from "./BaseProperty";
-import { DEBOUNCE } from "@core/Event";
-import { EVENT } from "@core/UIElement";
+import { DEBOUNCE } from "@sapa/Event";
+import { EVENT } from "@sapa/UIElement";
 
 import "../property-editor/OffsetPathListEditor";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 
 export default class MotionProperty extends BaseProperty {

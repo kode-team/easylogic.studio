@@ -1,8 +1,8 @@
-import { CLICK, LOAD } from "@core/Event";
+import { CLICK, LOAD } from "@sapa/Event";
 import { Length } from "@unit/Length";
-import UIElement, { EVENT } from "@core/UIElement";
+import UIElement, { EVENT } from "@sapa/UIElement";
 import "./RangeEditor";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 
 const typeList = [

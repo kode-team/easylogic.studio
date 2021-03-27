@@ -1,10 +1,10 @@
-import UIElement, { EVENT } from "@core/UIElement";
-import { LOAD, CLICK } from "@core/Event";
+import UIElement, { EVENT } from "@sapa/UIElement";
+import { LOAD, CLICK } from "@sapa/Event";
 import icon from "@icon/icon";
 import "./SelectEditor";
 import "./NumberInputEditor";
 import "./InputRangeEditor";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 const REG_CSS_UNIT = /(auto)|(repeat\([^\)]*\))|(([\d.]+)(px|pt|fr|r?em|deg|vh|vw|%))/gi;
 

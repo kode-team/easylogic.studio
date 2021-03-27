@@ -1,4 +1,4 @@
-import { getBezierPointOneQuard } from "@core/functions/bezier"
+import { getBezierPointOneQuard } from "@sapa/functions/bezier"
 
 export default function makeInterpolateQuard (sx, sy, cx1, cy1, ex, ey) {
 

@@ -1,8 +1,8 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, DEBOUNCE } from "@core/Event";
-import { EVENT } from "@core/UIElement";
+import { LOAD, DEBOUNCE } from "@sapa/Event";
+import { EVENT } from "@sapa/UIElement";
 import "../property-editor/BorderEditor";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 
 export default class BorderNewProperty extends BaseProperty {

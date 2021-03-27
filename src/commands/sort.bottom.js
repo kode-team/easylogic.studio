@@ -1,4 +1,4 @@
-import { getVertiesMaxY } from "@core/functions/math";
+import { getVertiesMaxY } from "@sapa/functions/math";
 import Sort from "@manager/Sort";
 
 export default {

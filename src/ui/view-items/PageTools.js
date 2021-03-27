@@ -1,10 +1,10 @@
-import UIElement, { EVENT } from "@core/UIElement";
+import UIElement, { EVENT } from "@sapa/UIElement";
 
-import { CLICK, PREVENT, STOP, DEBOUNCE } from "@core/Event";
+import { CLICK, PREVENT, STOP, DEBOUNCE } from "@sapa/Event";
 
 import icon from "@icon/icon";
 import "@ui/property-editor/NumberInputEditor";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 
 export default class PageTools extends UIElement {

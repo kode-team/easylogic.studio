@@ -1,12 +1,12 @@
-import { EVENT } from "@core/UIElement";
+import { EVENT } from "@sapa/UIElement";
 import { Length } from "@unit/Length";
-import { LOAD, CHANGE } from "@core/Event";
+import { LOAD, CHANGE } from "@sapa/Event";
 import "../property-editor/CubicBezierEditor";
 import "../property-editor/RangeEditor";
 import "../property-editor/IterationCountEditor";
 import "../property-editor/SelectEditor";
 import BasePopup from "./BasePopup";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 export default class AnimationPropertyPopup extends BasePopup {
 

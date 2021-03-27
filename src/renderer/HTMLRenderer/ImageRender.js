@@ -1,4 +1,4 @@
-import Dom from "@core/Dom";
+import Dom from "@sapa/Dom";
 import LayerRender from "./LayerRender";
 
 export default class ImageRender extends LayerRender {

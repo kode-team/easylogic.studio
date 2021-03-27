@@ -1,5 +1,5 @@
 import _currentProject from "./_currentProject";
-import { timecode } from "@core/functions/time";
+import { timecode } from "@sapa/functions/time";
 
 export default {
     command: 'firstTimelineItem',

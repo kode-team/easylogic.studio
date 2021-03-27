@@ -1,8 +1,8 @@
-import UIElement, { EVENT } from "@core/UIElement";
-import { CLICK, BIND } from "@core/Event";
+import UIElement, { EVENT } from "@sapa/UIElement";
+import { CLICK, BIND } from "@sapa/Event";
 import { Pattern } from "@property-parser/Pattern";
 import { Length } from "@unit/Length";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 export default class PatternSizeEditor extends UIElement {
 

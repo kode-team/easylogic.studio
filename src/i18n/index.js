@@ -1,7 +1,7 @@
 
 
 
-import { isFunction, keyEach } from '@core/functions/func';
+import { isFunction, keyEach } from '@sapa/functions/func';
 import locales from './locales';
 
 export const FALLBACK_LANG = 'en_US';

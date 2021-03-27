@@ -1,8 +1,8 @@
 import BaseProperty from "./BaseProperty";
-import { DEBOUNCE, LOAD } from "@core/Event";
-import { EVENT } from "@core/UIElement";
-import { CSS_TO_STRING } from "@core/functions/func";
-import { registElement } from "@core/registerElement";
+import { DEBOUNCE, LOAD } from "@sapa/Event";
+import { EVENT } from "@sapa/UIElement";
+import { CSS_TO_STRING } from "@sapa/functions/func";
+import { registElement } from "@sapa/registerElement";
 
 
 export default class FlexLayoutItemProperty extends BaseProperty {

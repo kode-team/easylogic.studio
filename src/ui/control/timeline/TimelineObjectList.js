@@ -1,7 +1,7 @@
-import UIElement, { EVENT } from "@core/UIElement";
-import { CLICK, LOAD, DEBOUNCE, DOMDIFF } from "@core/Event";
+import UIElement, { EVENT } from "@sapa/UIElement";
+import { CLICK, LOAD, DEBOUNCE, DOMDIFF } from "@sapa/Event";
 import icon from "@icon/icon";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 const PROPERTY_TITLE = {
   'stroke-dasharray': 'Stroke Dash Array',

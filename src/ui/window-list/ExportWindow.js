@@ -1,11 +1,11 @@
 import BaseWindow from "./BaseWindow";
-import { EVENT } from "@core/UIElement";
-import { CLICK } from "@core/Event";
+import { EVENT } from "@sapa/UIElement";
+import { CLICK } from "@sapa/Event";
 
-import Dom from "@core/Dom";
+import Dom from "@sapa/Dom";
 import HTMLRenderer from "@renderer/HTMLRenderer";
 import SVGRenderer from "@renderer/SVGRenderer";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 export default class ExportWindow extends BaseWindow {
 

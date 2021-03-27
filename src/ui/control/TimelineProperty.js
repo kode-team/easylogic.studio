@@ -2,15 +2,15 @@
 import BaseProperty from "../property/BaseProperty";
 import "./timeline/TimelineObjectList";
 import "./timeline/TimelineKeyframeList";
-import { DRAGOVER, DROP, PREVENT, DEBOUNCE, SCROLL } from "@core/Event";
+import { DRAGOVER, DROP, PREVENT, DEBOUNCE, SCROLL } from "@sapa/Event";
 import "./timeline/TimelineTopToolbar";
 import "./timeline/KeyframeTimeView";
 import "./timeline/KeyframeTimeGridView";
 import "./timeline/TimelineValueEditor";
-import { EVENT } from "@core/UIElement";
+import { EVENT } from "@sapa/UIElement";
 import "./timeline/TimelinePlayControl";
 import "../property/TimelineAnimationProperty";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 export default class TimelineProperty extends BaseProperty {
 

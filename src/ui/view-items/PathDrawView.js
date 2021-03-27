@@ -1,5 +1,5 @@
-import UIElement, { EVENT } from "@core/UIElement";
-import { POINTERSTART, MOVE, END, BIND, KEYUP, IF, ESCAPE, ENTER, PREVENT, STOP} from "@core/Event";
+import UIElement, { EVENT } from "@sapa/UIElement";
+import { POINTERSTART, MOVE, END, BIND, KEYUP, IF, ESCAPE, ENTER, PREVENT, STOP} from "@sapa/Event";
 import PathParser from "@parser/PathParser";
 
 import { SVGPathItem } from "@items/layers/SVGPathItem";
@@ -9,7 +9,7 @@ import PathGenerator from "@parser/PathGenerator";
 import Point from "@parser/Point";
 import { SVGFill } from "@property-parser/SVGFill";
 import { vec3 } from "gl-matrix";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 const FIELDS = ['fill', 'fill-opacity', 'stroke', 'stroke-width', 'stroke-linecap', 'stroke-linejoin']
 

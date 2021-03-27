@@ -1,8 +1,8 @@
 import { Length } from "@unit/Length";
 import { Property } from "@items/Property";
-import { isString, isFunction } from "@core/functions/func";
+import { isString, isFunction } from "@sapa/functions/func";
 import { mat4, vec3 } from "gl-matrix";
-import { degreeToRadian } from "@core/functions/math";
+import { degreeToRadian } from "@sapa/functions/math";
 import { TransformCache } from "./TransformCache";
 
 const TRANSFORM_REG = /((matrix|translate(X|Y|Z|3d)?|scale(X|Y|Z|3d)?|rotate(X|Y|Z|3d)?|skew(X|Y)|matrix(3d)?|perspective)\(([^\)]*)\))/gi;

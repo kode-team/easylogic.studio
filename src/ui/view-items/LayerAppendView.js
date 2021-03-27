@@ -1,11 +1,11 @@
-import UIElement, { EVENT } from "@core/UIElement";
-import { POINTERSTART, BIND, MOVE, END, KEYUP, IF, ESCAPE, ENTER, PREVENT, STOP, POINTERMOVE, CHANGE } from "@core/Event";
-import Color from "@core/Color";
+import UIElement, { EVENT } from "@sapa/UIElement";
+import { POINTERSTART, BIND, MOVE, END, KEYUP, IF, ESCAPE, ENTER, PREVENT, STOP, POINTERMOVE, CHANGE } from "@sapa/Event";
+import Color from "@sapa/Color";
 import { Length } from "@unit/Length";
 import PathStringManager from "@parser/PathStringManager";
-import { rectToVerties, vertiesToRectangle } from "@core/functions/collision";
+import { rectToVerties, vertiesToRectangle } from "@sapa/functions/collision";
 import { vec3 } from "gl-matrix";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 export default class LayerAppendView extends UIElement {
 
@@ -33,6 +33,7 @@ export default class LayerAppendView extends UIElement {
             content: 'Insert a text',
             pathManager: new PathStringManager(),
             rect: {},
+            options: {},
             containerItem: undefined
         }
     }
@@ -89,13 +90,6 @@ export default class LayerAppendView extends UIElement {
             return /*html*/`<div class='draw-item' style='background-color: ${color};'></div>`
         case 'circle':
             return /*html*/`<div class='draw-item' style='background-color: ${color}; border-radius: 100%;'></div>`
-        case 'video':
-        case 'audio':
-        case 'image':  
-        case 'iframe':          
-        case 'cube':
-        case 'cylinder':
-            return /*html*/`<div class='draw-item' style='outline: 1px solid blue;'></div>`        
         case 'text':
         case 'svg-text':
             return /*html*/`<div class='draw-item' style='font-size: 30px;outline: 1px solid blue;'>${text}</div>`
@@ -132,7 +126,9 @@ export default class LayerAppendView extends UIElement {
                     </text>
                 </svg>
             </div>
-            `            
+            `      
+        default:
+            return /*html*/`<div class='draw-item' style='outline: 1px solid blue;'></div>`        
         }
     }
 
@@ -262,6 +258,7 @@ export default class LayerAppendView extends UIElement {
             'background-color': color,
             'content': text,
             'font-size': fontSize,
+            ...this.state.options
         }
 
         switch(this.state.type) {
@@ -293,9 +290,9 @@ export default class LayerAppendView extends UIElement {
         this.bindData('$areaRect');         
     }    
 
-    [EVENT('showLayerAppendView')] (type) {
+    [EVENT('showLayerAppendView')] (type, options = {}) {
         this.state.type = type; 
-
+        this.state.options = options; 
         this.state.isShow = true; 
         this.refs.$area.empty()
         this.$el.show();

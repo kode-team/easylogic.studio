@@ -1,5 +1,5 @@
-import Dom from "@core/Dom";
-import { OBJECT_TO_CLASS } from "@core/functions/func";
+import Dom from "@sapa/Dom";
+import { OBJECT_TO_CLASS } from "@sapa/functions/func";
 import { Item } from "@items/Item";
 import SVGItemRender from "./SVGItemRender";
 

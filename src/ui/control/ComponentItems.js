@@ -1,14 +1,16 @@
-import UIElement from "@core/UIElement";
+
+import UIElement from "@sapa/UIElement";
 import "../menu-items";
-import { CLICK } from "@core/Event";
-import { registElement } from "@core/registerElement";
+import { CLICK } from "@sapa/Event";
+import { registElement } from "@sapa/registerElement";
+import { PluginManager } from "@manager/PluginManager";
 
 export default class ComponentItems extends UIElement {
 
   template() {
     return /*html*/`
       <div class='component-items'>
-        <div class='group'>
+        <!--<div class='group'>
           <label>${this.$i18n('component.items.canvas')}</label>
           <div class='list'>
             <object refClass="SelectTool" title='Select' />
@@ -29,15 +31,13 @@ export default class ComponentItems extends UIElement {
         <div class='group'>
          <label>${this.$i18n('component.items.drawing')}</label>
           <div class='list'>            
-            <!--<AddDrawBrush title='Brush' />-->
             <object refClass="AddDrawPath" title='Draw' />
             <object refClass="AddPath" title='Path' />
             <object refClass="AddSVGRect" title='Rect' />
             <object refClass="AddSVGCircle" title='Circle' />
-            <!-- <AddSVGText title='Text' /> -->
             <object refClass="AddSVGTextPath" title='Text Path' />
           </div>          
-        </div>
+        </div> -->
         <div class='group'>
          <label>${this.$i18n('component.items.custom')}</label>
           <div class='list'>            
@@ -45,6 +45,20 @@ export default class ComponentItems extends UIElement {
             <object refClass="AddCylinder" title='Cylinder' />          
           </div>          
         </div>          
+        <div class='group'>
+         <label>${this.$i18n('component.items.chart')}</label>
+          <div class='list'>            
+            <object refClass="AddAreaChart" title='AreaChart' />          
+            <object refClass="AddLineChart" title='LineChart' />                        
+          </div>          
+        </div>
+        <div class='group'>
+         <label>${this.$i18n('component.items.plugin')}</label>
+          <div class='list'>
+            <object refClass="AddBarChart" title="BarChart" />
+            <object refClass="AddSimplePlugin" title="Simple" />
+          </div>          
+        </div>                  
       </div>
     `;
   }

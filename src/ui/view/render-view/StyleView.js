@@ -1,11 +1,11 @@
-import UIElement, { EVENT } from "@core/UIElement";
+import UIElement, { EVENT } from "@sapa/UIElement";
 
-import { LOAD, DOMDIFF } from "@core/Event";
-import Dom from "@core/Dom";
-import { isArray, isString } from "@core/functions/func";
+import { LOAD, DOMDIFF } from "@sapa/Event";
+import Dom from "@sapa/Dom";
+import { isArray, isString } from "@sapa/functions/func";
 import { Project } from "@items/Project";
 import HTMLRenderer from "@renderer/HTMLRenderer";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 const TEMP_DIV = Dom.create('div')     
 

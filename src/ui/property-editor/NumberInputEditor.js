@@ -1,8 +1,8 @@
-import UIElement from "@core/UIElement";
+import UIElement from "@sapa/UIElement";
 import { Length } from "@unit/Length";
-import { LOAD, INPUT } from "@core/Event";
+import { LOAD, INPUT } from "@sapa/Event";
 import icon from "@icon/icon";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 export default class NumberInputEditor extends UIElement {
 

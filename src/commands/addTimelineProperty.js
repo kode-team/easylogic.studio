@@ -1,5 +1,5 @@
 import _currentProject from "./_currentProject"
-import { isArray } from "@core/functions/func"
+import { isArray } from "@sapa/functions/func"
 
 export default {
     command: 'addTimelineProperty',

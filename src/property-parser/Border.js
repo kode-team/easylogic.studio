@@ -1,5 +1,5 @@
-import { STRING_TO_CSS } from "@core/functions/func";
-import Color from "@core/Color";
+import { STRING_TO_CSS } from "@sapa/functions/func";
+import Color from "@sapa/Color";
 
 var BorderStyles = {
     "none": true,

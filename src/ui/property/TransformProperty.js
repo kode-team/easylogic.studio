@@ -1,12 +1,12 @@
 import BaseProperty from "./BaseProperty";
 import {
   LOAD, DEBOUNCE, CLICK,
-} from "@core/Event";
+} from "@sapa/Event";
 
-import { EVENT } from "@core/UIElement";
+import { EVENT } from "@sapa/UIElement";
 import icon from "@icon/icon";
 import { Transform } from "@property-parser/Transform";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 import "@ui/view-items/RotateEditorView";
 
 var transformList = [

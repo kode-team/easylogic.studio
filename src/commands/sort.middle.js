@@ -1,4 +1,4 @@
-import { getVertiesCenterY } from "@core/functions/math";
+import { getVertiesCenterY } from "@sapa/functions/math";
 import Sort from "@manager/Sort";
 
 export default {

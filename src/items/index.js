@@ -13,13 +13,15 @@ import { CircleLayer } from "./layers/CircleLayer";
 import { VideoLayer } from "./layers/VideoLayer";
 import { IFrameLayer } from "./layers/IFrameLayer";
 import { TemplateLayer } from "./layers/TemplateLayer";
+import { ChartLayer } from "./layers/ChartLayer";
 
 
 export default {
     Project,
     ArtBoard, 
     RectLayer,
-    CircleLayer,        
+    CircleLayer,      
+    ChartLayer,   
     ImageLayer,
     TextLayer,
     VideoLayer,

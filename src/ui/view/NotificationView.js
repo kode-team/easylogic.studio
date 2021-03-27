@@ -1,8 +1,8 @@
-import UIElement, { EVENT } from "@core/UIElement";
+import UIElement, { EVENT } from "@sapa/UIElement";
 import icon from "@icon/icon";
-import Dom from "@core/Dom";
-import { TRANSITIONEND, CLICK } from "@core/Event";
-import { registElement } from "@core/registerElement";
+import Dom from "@sapa/Dom";
+import { TRANSITIONEND, CLICK } from "@sapa/Event";
+import { registElement } from "@sapa/registerElement";
 
 export default class NotificationView extends UIElement {
 
@@ -21,7 +21,7 @@ export default class NotificationView extends UIElement {
         e.$dt.parent().remove();
     }
 
-    getMessageTemplate (type, title, description, duration = 2000) {
+    getMessageTemplate (type, title, description, duration = 1000) {
         return /*html*/`
         <div class='item ${type}' style='transition-duration: ${duration}ms;'>
             <div class='title'>${title}</div> 
@@ -31,7 +31,7 @@ export default class NotificationView extends UIElement {
     `
     }
 
-    [EVENT('notify')] (type, title, description, duration = 2000) {
+    [EVENT('notify')] (type, title, description, duration = 1000) {
         const $dom = Dom.createByHTML(this.getMessageTemplate(type, title, description, duration))
     
         this.$el.prepend($dom)

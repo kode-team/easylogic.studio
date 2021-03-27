@@ -3,10 +3,11 @@ var path = require('path');
 module.exports = {
     '@assets': path.resolve(__dirname, "./src/assets"),
     '@commands': path.resolve(__dirname, "./src/commands"),
-    '@core': path.resolve(__dirname, "./src/core"),
+    '@sapa': path.resolve(__dirname, "./src/sapa"),
     '@designeditor': path.resolve(__dirname, "./src/designeditor"),
     '@exporter': path.resolve(__dirname, "./src/exporter"),
     '@i18n': path.resolve(__dirname, "./src/i18n"),
+    '@plugins': path.resolve(__dirname, "./src/plugins"),
     '@icon': path.resolve(__dirname, "./src/icon"),
     '@image-resource': path.resolve(__dirname, "./src/image-resource"),
     '@interpolate': path.resolve(__dirname, "./src/interpolate"),

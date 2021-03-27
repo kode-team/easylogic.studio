@@ -1,7 +1,7 @@
-import UIElement, { EVENT } from "@core/UIElement";
+import UIElement, { EVENT } from "@sapa/UIElement";
 import "../menu-items/index";
-import { CLICK } from "@core/Event";
-import { registElement } from "@core/registerElement";
+import { CLICK } from "@sapa/Event";
+import { registElement } from "@sapa/registerElement";
 
 export default class ToolMenu extends UIElement {
   template() {

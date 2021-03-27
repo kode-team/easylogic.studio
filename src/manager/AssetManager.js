@@ -1,4 +1,4 @@
-import { isArray, isObject, isString } from "@core/functions/func";
+import { isArray, isObject, isString } from "@sapa/functions/func";
 import AssetParser from "@parser/AssetParser";
 
 export class AssetManager {

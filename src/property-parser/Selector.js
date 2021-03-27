@@ -1,5 +1,5 @@
 import { Property } from "@items/Property";
-import { clone } from "@core/functions/func";
+import { clone } from "@sapa/functions/func";
 
 export class Selector extends Property {
   static parse(obj) {

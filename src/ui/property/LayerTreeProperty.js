@@ -1,11 +1,11 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, CLICK, DOUBLECLICK, PREVENT, STOP, FOCUSOUT, DOMDIFF, DRAGSTART, KEYDOWN, DRAGOVER, DROP, BIND, DRAGEND, ENTER } from "@core/Event";
+import { LOAD, CLICK, DOUBLECLICK, PREVENT, STOP, FOCUSOUT, DOMDIFF, DRAGSTART, KEYDOWN, DRAGOVER, DROP, BIND, DRAGEND, ENTER } from "@sapa/Event";
 import icon from "@icon/icon";
-import { EVENT } from "@core/UIElement";
+import { EVENT } from "@sapa/UIElement";
 
-import Color from "@core/Color";
+import Color from "@sapa/Color";
 import { Length } from "@unit/Length";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 const DRAG_START_CLASS = 'drag-start'
 

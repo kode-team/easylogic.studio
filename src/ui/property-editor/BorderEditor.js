@@ -1,8 +1,8 @@
-import { LOAD } from "@core/Event";
-import UIElement, { EVENT } from "@core/UIElement";
+import { LOAD } from "@sapa/Event";
+import UIElement, { EVENT } from "@sapa/UIElement";
 import "./BorderValueEditor";
 import Border from "@property-parser/Border";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 const borderTypeList = [
   "border", 

@@ -1,5 +1,5 @@
-import Color from "@core/Color";
-import { interpolateRGB } from "@core/functions/mixin";
+import Color from "@sapa/Color";
+import { interpolateRGB } from "@sapa/functions/mixin";
 
 export function makeInterpolateColor (layer, property, startColor, endColor) {
     var s = Color.parse(startColor || 'rgba(0, 0, 0, 1)');

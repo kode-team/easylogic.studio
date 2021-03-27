@@ -1,9 +1,9 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, CLICK, DEBOUNCE, DRAGSTART } from "@core/Event";
-import { EVENT } from "@core/UIElement";
+import { LOAD, CLICK, DEBOUNCE, DRAGSTART } from "@sapa/Event";
+import { EVENT } from "@sapa/UIElement";
 import icon from "@icon/icon";
-import Color from "@core/Color";
-import { registElement } from "@core/registerElement";
+import Color from "@sapa/Color";
+import { registElement } from "@sapa/registerElement";
 
 export default class ColorAssetsProperty extends BaseProperty {
 

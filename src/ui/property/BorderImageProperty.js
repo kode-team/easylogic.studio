@@ -1,10 +1,10 @@
 import BaseProperty from "./BaseProperty";
-import { CLICK, CHANGE, LOAD } from "@core/Event";
+import { CLICK, CHANGE, LOAD } from "@sapa/Event";
 import { Position } from "@unit/Length";
 import icon from "@icon/icon";
 
-import { EVENT } from "@core/UIElement";
-import { registElement } from "@core/registerElement";
+import { EVENT } from "@sapa/UIElement";
+import { registElement } from "@sapa/registerElement";
 
 const typeList = [
   { key: "top", title: "Top" },

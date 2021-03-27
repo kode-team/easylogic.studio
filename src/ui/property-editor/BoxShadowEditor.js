@@ -1,6 +1,6 @@
-import { CLICK, LOAD } from "@core/Event";
-import { registElement } from "@core/registerElement";
-import UIElement, { EVENT } from "@core/UIElement";
+import { CLICK, LOAD } from "@sapa/Event";
+import { registElement } from "@sapa/registerElement";
+import UIElement, { EVENT } from "@sapa/UIElement";
 import icon from "@icon/icon";
 import { BoxShadow } from "@property-parser/BoxShadow";
 import { Length } from "@unit/Length";

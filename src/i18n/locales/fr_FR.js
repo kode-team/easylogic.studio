@@ -444,7 +444,9 @@ export default {
     'component.items.layer': 'Objet',
     'component.items.3dlayer': 'Objet 3D',
     'component.items.drawing': 'Dessin',
-    'component.items.custom': 'Composant personnalisé',    
+    'component.items.custom': 'Composant personnalisé', 
+    'component.items.chart': 'Chart',      
+    'component.items.plugin': 'Plugin',                              
 
     'svg.text.property.title': "Style SVG Texte",
     'svg.text.property.textarea': "Zone Texte",

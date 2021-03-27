@@ -1,9 +1,9 @@
-import UIElement, { EVENT } from "@core/UIElement";
-import { LOAD } from "@core/Event";
+import UIElement, { EVENT } from "@sapa/UIElement";
+import { LOAD } from "@sapa/Event";
 import "./SelectEditor";
 import "./TextEditor";
 import "./NumberRangeEditor";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 export default class FuncFilterEditor extends UIElement {
 

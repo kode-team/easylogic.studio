@@ -1,11 +1,11 @@
 import BaseProperty from "./BaseProperty";
 import {
   LOAD, CLICK,
-} from "@core/Event";
-import { EVENT } from "@core/UIElement";
+} from "@sapa/Event";
+import { EVENT } from "@sapa/UIElement";
 import icon from "@icon/icon";
 import { filter_list } from "@util/Resource";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 export default class BackdropFilterProperty extends BaseProperty {
 

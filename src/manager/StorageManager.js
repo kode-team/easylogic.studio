@@ -1,4 +1,4 @@
-import { uuid } from "@core/functions/math";
+import { uuid } from "@sapa/functions/math";
 import JSONRenderer from "@renderer/JSONRenderer";
 
 /**

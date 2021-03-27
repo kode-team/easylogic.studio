@@ -1,8 +1,8 @@
-import { EVENT } from "@core/UIElement";
+import { EVENT } from "@sapa/UIElement";
 import { Length } from "@unit/Length";
-import { LOAD, CLICK, POINTERSTART, MOVE } from "@core/Event";
+import { LOAD, CLICK, POINTERSTART, MOVE } from "@sapa/Event";
 import BasePopup from "./BasePopup";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 export default class BoxShadowPropertyPopup extends BasePopup {
 
@@ -52,20 +52,28 @@ export default class BoxShadowPropertyPopup extends BasePopup {
           ></div>
         </div>        
         <div class="popup-item offset-x">
-          <object refClass="RangeEditor"  ref='$offsetX' label='X' key='offsetX' value="${this.state.offsetX}" onchange='changeRangeEditor' />
+          <object refClass="RangeEditor" compact="true" ref='$offsetX' label='X' key='offsetX' value="${this.state.offsetX}" onchange='changeRangeEditor' />
         </div>
         <div class="popup-item offset-y">
-          <object refClass="RangeEditor"  ref='$offsetY' label='Y' key='offsetY' value="${this.state.offsetY}" onchange='changeRangeEditor' />        
+          <object refClass="RangeEditor" compact="true"  ref='$offsetY' label='Y' key='offsetY' value="${this.state.offsetY}" onchange='changeRangeEditor' />        
         </div>
         <div class="popup-item blur-radius">
-          <object refClass="RangeEditor"  ref='$blurRadius' label='Blur' key='blurRadius' value="${this.state.blurRadius}" onchange='changeRangeEditor' />        
+          <object refClass="RangeEditor" compact="true"  ref='$blurRadius' label='Blur' key='blurRadius' value="${this.state.blurRadius}" onchange='changeRangeEditor' />        
         </div>
         <div class="popup-item spread-radius">
-          <object refClass="RangeEditor"  ref='$spreadRadius' label='Spread' key='spreadRadius' value="${this.state.spreadRadius}" onchange='changeRangeEditor' />        
+          <object refClass="RangeEditor" 
+              compact="true"  
+              ref='$spreadRadius' 
+              label='Spread' 
+              key='spreadRadius' 
+              value="${this.state.spreadRadius}" 
+              onchange='changeRangeEditor' 
+            />        
         </div>
         <div class='popup-item'>
           <object refClass="ColorViewEditor" 
               ref='$foreColor' 
+              compact="true"
               label="color" 
               key='color' 
               value="${this.state.color}"

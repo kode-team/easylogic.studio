@@ -1,12 +1,12 @@
 import BaseProperty from "./BaseProperty";
 import {
   LOAD, CLICK, DEBOUNCE,
-} from "@core/Event";
+} from "@sapa/Event";
 
-import { EVENT } from "@core/UIElement";
+import { EVENT } from "@sapa/UIElement";
 import icon from "@icon/icon";
 import { pattern_list } from "@util/Resource";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 
 export default class PatternProperty extends BaseProperty {

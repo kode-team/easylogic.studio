@@ -1,8 +1,8 @@
 import BaseProperty from "./BaseProperty";
-import { EVENT } from "@core/UIElement";
+import { EVENT } from "@sapa/UIElement";
 import "../property-editor/PathDataEditor";
-import { DEBOUNCE } from "@core/Event";
-import { registElement } from "@core/registerElement";
+import { DEBOUNCE } from "@sapa/Event";
+import { registElement } from "@sapa/registerElement";
 
 
 export default class PathDataProperty extends BaseProperty {

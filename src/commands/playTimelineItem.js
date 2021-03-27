@@ -1,5 +1,5 @@
 import _currentProject from "./_currentProject";
-import { makeTimer, timecode } from "@core/functions/time";
+import { makeTimer, timecode } from "@sapa/functions/time";
 
 
 export default {

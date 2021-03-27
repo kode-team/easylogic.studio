@@ -1,4 +1,4 @@
-import { clone } from "@core/functions/func";
+import { clone } from "@sapa/functions/func";
 
 export class HistoryManager {
     constructor (editor) {

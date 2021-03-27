@@ -1,9 +1,9 @@
 import BaseProperty from "./BaseProperty";
-import { registElement } from "@core/registerElement";
-import { CLICK, DOMDIFF, LOAD } from "@core/Event";
+import { registElement } from "@sapa/registerElement";
+import { CLICK, DOMDIFF, LOAD } from "@sapa/Event";
 import { Length } from "@unit/Length";
-import { EVENT } from "@core/UIElement";
-import Color from "@core/Color";
+import { EVENT } from "@sapa/UIElement";
+import Color from "@sapa/Color";
 
 export default class FeatherIconsProperty extends BaseProperty {
 

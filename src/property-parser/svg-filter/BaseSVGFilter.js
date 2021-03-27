@@ -1,7 +1,7 @@
 import { Property } from "@items/Property";
-import { uuidShort } from "@core/functions/math";
+import { uuidShort } from "@sapa/functions/math";
 import { SVGFilterClassName } from "../SVGFilter";
-import { clone, isString } from "@core/functions/func";
+import { clone, isString } from "@sapa/functions/func";
 
 const  Primitive = 'SourceGraphic,SourceAlpha,BackgroundImage,BackgroundAlpha,FillPaint,StrokePaint'.split(',')
 

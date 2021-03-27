@@ -1,6 +1,6 @@
 import PathParser from "./PathParser";
 import PathStringManager from "./PathStringManager";
-import { isArray } from "@core/functions/func";
+import { isArray } from "@sapa/functions/func";
 
 
 const splitReg = /[\b\t \,]/g;

@@ -1,9 +1,9 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, CLICK, PREVENT, STOP, FOCUSOUT, DOUBLECLICK, DOMDIFF, KEYDOWN, ENTER } from "@core/Event";
+import { LOAD, CLICK, PREVENT, STOP, FOCUSOUT, DOUBLECLICK, DOMDIFF, KEYDOWN, ENTER } from "@sapa/Event";
 import icon from "@icon/icon";
 
-import { EVENT } from "@core/UIElement";
-import { registElement } from "@core/registerElement";
+import { EVENT } from "@sapa/UIElement";
+import { registElement } from "@sapa/registerElement";
 
 
 export default class ProjectProperty extends BaseProperty {

@@ -1,8 +1,8 @@
-import UIElement, { EVENT } from "@core/UIElement";
-import { registElement } from "@core/registerElement";
+import UIElement, { EVENT } from "@sapa/UIElement";
+import { registElement } from "@sapa/registerElement";
 import "@ui/property";
 import "@ui/property-editor";
-import { DEBOUNCE } from "@core/Event";
+import { DEBOUNCE } from "@sapa/Event";
 
 
 export default class LibraryItems extends UIElement {

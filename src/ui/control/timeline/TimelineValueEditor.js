@@ -1,13 +1,13 @@
-import UIElement, { EVENT } from "@core/UIElement";
-import { CLICK, KEYDOWN, KEYUP, IF, PREVENT, ENTER } from "@core/Event";
+import UIElement, { EVENT } from "@sapa/UIElement";
+import { CLICK, KEYDOWN, KEYUP, IF, PREVENT, ENTER } from "@sapa/Event";
 
 import "@ui/property-editor/CubicBezierEditor";
 import "@ui/property-editor/CSSPropertyEditor";
 
-import { second, timecode } from "@core/functions/time";
-import { isUndefined } from "@core/functions/func";
+import { second, timecode } from "@sapa/functions/time";
+import { isUndefined } from "@sapa/functions/func";
 import icon from "@icon/icon";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 export default class TimelineValueEditor extends UIElement {
 

@@ -1,6 +1,6 @@
 import BaseProperty from "./BaseProperty";
 import "../menu-items";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 export default class AlignmentProperty extends BaseProperty {
 

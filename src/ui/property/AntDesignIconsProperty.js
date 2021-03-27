@@ -1,9 +1,9 @@
 import BaseProperty from "./BaseProperty";
-import { registElement } from "@core/registerElement";
-import { CLICK, DOMDIFF, LOAD } from "@core/Event";
+import { registElement } from "@sapa/registerElement";
+import { CLICK, DOMDIFF, LOAD } from "@sapa/Event";
 import { Length } from "@unit/Length";
 import { renderIconDefinitionToSVGElement } from '@ant-design/icons-svg/es/helpers';
-import { EVENT } from "@core/UIElement";
+import { EVENT } from "@sapa/UIElement";
 
 function toSVG (icon, extraSVGAttrs = {}) {
   return renderIconDefinitionToSVGElement(icon, { extraSVGAttrs })

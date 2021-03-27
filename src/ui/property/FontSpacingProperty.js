@@ -1,7 +1,7 @@
 import BaseProperty from "./BaseProperty";
-import { EVENT } from "@core/UIElement";
+import { EVENT } from "@sapa/UIElement";
 import { Length } from "@unit/Length";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 export default class FontSpacingProperty extends BaseProperty {
 

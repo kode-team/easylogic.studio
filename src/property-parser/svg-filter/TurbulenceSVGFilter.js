@@ -1,6 +1,6 @@
 import { BaseSVGFilter } from "./BaseSVGFilter";
 import { Length } from "@unit/Length";
-import { OBJECT_TO_PROPERTY } from "@core/functions/func";
+import { OBJECT_TO_PROPERTY } from "@sapa/functions/func";
 
 export class TurbulenceSVGFilter extends BaseSVGFilter {
   getDefaultObject() {

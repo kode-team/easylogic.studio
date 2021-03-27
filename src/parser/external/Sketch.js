@@ -1,4 +1,4 @@
-import { rgb } from "@core/functions/formatter";
+import { rgb } from "@sapa/functions/formatter";
 import { LinearGradient } from "../../property-parser/image-resource/LinearGradient";
 import { ColorStep } from "../../property-parser/image-resource/ColorStep";
 import { RadialGradient } from "../../property-parser/image-resource/RadialGradient";
@@ -9,8 +9,8 @@ import { ArtBoard } from "@items/ArtBoard";
 import { Layer } from "@items/Layer";
 import { BackgroundImage } from "../../property-parser/BackgroundImage";
 import { FileImageResource } from "../../property-parser/image-resource/URLImageResource";
-import { CSS_TO_STRING, keyEach, combineKeyArray, isString } from "@core/functions/func";
-import { calculateAngle } from "@core/functions/math";
+import { CSS_TO_STRING, keyEach, combineKeyArray, isString } from "@sapa/functions/func";
+import { calculateAngle } from "@sapa/functions/math";
 import { SVGPathItem } from "@items/layers/SVGPathItem";
 import { SVGRectLayer } from "@items/layers/SVGRectLayer";
 import { SVGEllipseLayer } from "@items/layers/SVGEllipseLayer";

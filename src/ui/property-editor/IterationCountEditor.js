@@ -1,5 +1,5 @@
 
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 import { Length } from "@unit/Length";
 import RangeEditor from "./RangeEditor";
 

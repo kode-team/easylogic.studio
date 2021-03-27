@@ -1,5 +1,5 @@
 import { BackgroundImage } from "@property-parser/BackgroundImage";
-import { STRING_TO_CSS, CSS_TO_STRING } from "@core/functions/func";
+import { STRING_TO_CSS, CSS_TO_STRING } from "@sapa/functions/func";
 import { URLImageResource } from "@property-parser/image-resource/URLImageResource";
 
 export default {

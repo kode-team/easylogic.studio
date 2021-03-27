@@ -1,10 +1,10 @@
-import { EVENT } from "@core/UIElement";
-import { CLICK, LOAD } from "@core/Event";
+import { EVENT } from "@sapa/UIElement";
+import { CLICK, LOAD } from "@sapa/Event";
 
 import { Length } from "@unit/Length";
 import BasePopup from "./BasePopup";
 import propertyEditor from "../property-editor";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 
 export default class PatternInfoPopup extends BasePopup {

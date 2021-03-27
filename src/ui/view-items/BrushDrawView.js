@@ -1,5 +1,5 @@
-import UIElement, { EVENT } from "@core/UIElement";
-import { POINTERSTART, MOVE, END, BIND, KEYUP, IF, ESCAPE, ENTER, PREVENT, STOP} from "@core/Event";
+import UIElement, { EVENT } from "@sapa/UIElement";
+import { POINTERSTART, MOVE, END, BIND, KEYUP, IF, ESCAPE, ENTER, PREVENT, STOP} from "@sapa/Event";
 import PathParser from "@parser/PathParser";
 import { Length } from "@unit/Length";
 import PathStringManager from "@parser/PathStringManager";
@@ -7,7 +7,7 @@ import PathGenerator from "@parser/PathGenerator";
 import Point from "@parser/Point";
 import { SVGFill } from "@property-parser/SVGFill";
 import { SVGBrushItem } from "@items/layers/SVGBrushItem";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 const FIELDS = ['fill', 'stroke-width']
 

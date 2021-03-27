@@ -1,6 +1,6 @@
 
-import { CLICK } from "@core/Event";
-import UIElement, { EVENT } from "@core/UIElement";
+import { CLICK } from "@sapa/Event";
+import UIElement, { EVENT } from "@sapa/UIElement";
 import icon from "@icon/icon";
 
 export default class BaseWindow extends UIElement {

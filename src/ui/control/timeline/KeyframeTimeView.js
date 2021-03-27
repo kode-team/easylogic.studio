@@ -1,8 +1,8 @@
-import UIElement, { EVENT } from "@core/UIElement";
-import { RESIZE, DEBOUNCE, POINTERSTART, MOVE, THROTTLE, IF, END } from "@core/Event";
+import UIElement, { EVENT } from "@sapa/UIElement";
+import { RESIZE, DEBOUNCE, POINTERSTART, MOVE, THROTTLE, IF, END } from "@sapa/Event";
 import { Length } from "@unit/Length";
-import { second, framesToTimecode } from "@core/functions/time";
-import { registElement } from "@core/registerElement";
+import { second, framesToTimecode } from "@sapa/functions/time";
+import { registElement } from "@sapa/registerElement";
 
 const PADDING = 20 
 

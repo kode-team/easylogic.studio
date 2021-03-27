@@ -1,6 +1,6 @@
-import UIElement from "@core/UIElement";
+import UIElement from "@sapa/UIElement";
 import "./ObjectItems";
-import { CLICK } from "@core/Event";
+import { CLICK } from "@sapa/Event";
 import "./LibraryItems";
 import "./ComponentItems";
 import icon from "@icon/icon";
@@ -8,7 +8,7 @@ import "../view/PreviewToolMenu";
 import "./ShortCutItems";
 import "../property";
 import "./ArtboardItems";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 
 export default class LayerTab extends UIElement {

@@ -1,7 +1,7 @@
-import UIElement from "@core/UIElement";
-import { LOAD, INPUT, DEBOUNCE } from "@core/Event";
+import UIElement from "@sapa/UIElement";
+import { LOAD, INPUT, DEBOUNCE } from "@sapa/Event";
 import PolygonParser from "@parser/PolygonParser";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 export default class PolygonDataEditor extends UIElement {
 

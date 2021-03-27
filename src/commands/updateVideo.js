@@ -1,4 +1,4 @@
-import { uuidShort } from "@core/functions/math";
+import { uuidShort } from "@sapa/functions/math";
 
 export default {
     command: 'updateVideo',

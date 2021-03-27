@@ -1,5 +1,5 @@
-import { registElement } from "@core/registerElement";
-import UIElement, { EVENT } from "@core/UIElement";
+import { registElement } from "@sapa/registerElement";
+import UIElement, { EVENT } from "@sapa/UIElement";
 import "@ui/property-editor";
 
 

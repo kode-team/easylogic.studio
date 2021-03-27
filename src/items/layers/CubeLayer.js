@@ -1,7 +1,7 @@
 import { Component } from "../Component";
 import { Length } from "@unit/Length";
 import icon from "@icon/icon";
-import { CSS_TO_STRING, OBJECT_TO_PROPERTY } from "@core/functions/func";
+import { CSS_TO_STRING, OBJECT_TO_PROPERTY } from "@sapa/functions/func";
 import { ComponentManager } from "@manager/ComponentManager";
 
 const faceKeys = [

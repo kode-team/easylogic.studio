@@ -1,7 +1,7 @@
-import UIElement, { EVENT } from "@core/UIElement";
-import { CLICK, BIND, LOAD } from "@core/Event";
+import UIElement, { EVENT } from "@sapa/UIElement";
+import { CLICK, BIND, LOAD } from "@sapa/Event";
 import { SVGFill } from "@property-parser/SVGFill";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 export default class FillSingleEditor extends UIElement {
 

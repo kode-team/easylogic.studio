@@ -1,7 +1,7 @@
 
 import { Length } from "@unit/Length";
 import { Property } from "@items/Property";
-import { convertMatches, reverseMatches } from "@core/functions/parser";
+import { convertMatches, reverseMatches } from "@sapa/functions/parser";
 
 export class BoxShadow extends Property {
   static parse(obj) {

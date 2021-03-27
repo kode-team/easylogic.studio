@@ -1,4 +1,4 @@
-import { createBezierForPattern } from "@core/functions/bezier";
+import { createBezierForPattern } from "@sapa/functions/bezier";
 import { makeInterpolateLength } from "./interpolate-functions/makeInterpolateLength";
 import { makeInterpolateBorderRadius } from "./interpolate-functions/makeInterpolateBorderRadius";
 import { makeInterpolateBoxShadow } from "./interpolate-functions/makeInterpolateBoxShadow";

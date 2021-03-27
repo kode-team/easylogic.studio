@@ -1,10 +1,10 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, DEBOUNCE, DRAGSTART, CLICK } from "@core/Event";
-import { EVENT } from "@core/UIElement";
+import { LOAD, DEBOUNCE, DRAGSTART, CLICK } from "@sapa/Event";
+import { EVENT } from "@sapa/UIElement";
 import patterns from "@preset/patterns";
 import { Pattern } from "@property-parser/Pattern";
-import { CSS_TO_STRING } from "@core/functions/func";
-import { registElement } from "@core/registerElement";
+import { CSS_TO_STRING } from "@sapa/functions/func";
+import { registElement } from "@sapa/registerElement";
 
 export default class PatternAssetsProperty extends BaseProperty {
 

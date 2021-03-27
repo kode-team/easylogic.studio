@@ -1,10 +1,12 @@
 import DesignEditor from "./DesignEditor";
-import * as App from '@core/App'
+import * as App from '@sapa/App'
 import cssProperty from "../property-parser";
 import imageResource from "../property-parser/image-resource";
 import items from '@items';
 import parse from '@parser';
 import { Length } from "@unit/Length";
+
+import '@plugins';
 
 export default {
   createDesignEditor(opts = { type: "white" }) {

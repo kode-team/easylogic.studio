@@ -5,12 +5,12 @@ import {
   CLICK,
   PREVENT,
   DEBOUNCE
-} from "@core/Event";
+} from "@sapa/Event";
 
-import { EVENT } from "@core/UIElement";
+import { EVENT } from "@sapa/UIElement";
 
 import { Keyframe } from "@property-parser/Keyframe";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 export default class KeyFrameProperty extends BaseProperty {
   getTitle() {

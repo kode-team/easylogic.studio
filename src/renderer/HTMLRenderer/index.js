@@ -1,7 +1,9 @@
-import Dom from '@core/Dom';
-import { CSS_TO_STRING, TAG_TO_STRING } from '@core/functions/func';
+import Dom from '@sapa/Dom';
+import { CSS_TO_STRING, TAG_TO_STRING, isFunction } from '@sapa/functions/func';
+import { RendererManager } from '@manager/RendererManager';
 import { Item } from '@items/Item';
 import ArtBoardRender from './ArtBoardRender';
+import ChartRender from './ChartRender';
 import CircleRender from './CircleRender';
 import CubeRender from './CubeRender';
 import IFrameRender from './IFrameRender';
@@ -14,6 +16,7 @@ import SVGTextRender from './SVGTextRender';
 import TemplateRender from './TemplateRender';
 import TextRender from './TextRender';
 import VideoRender from './VideoRender';
+
 
 
 
@@ -44,16 +47,26 @@ const renderers = {
     'cube': new CubeRender(),
     'iframe': new IFrameRender(),
     'template': new TemplateRender(),
+    'chart': new ChartRender()
 }
 
 export default {
+    getDefaultRendererInstance () {
+        return renderers['rect'];
+    },
+
+    getRendererInstance (item) {
+        return renderers[item.itemType] || RendererManager.getRendererInstance('html', item.itemType) || this.getDefaultRendererInstance() || item;
+    },
+
+
     /**
      * 
      * @param {Item} item 
      */
     render (item, renderer) {
         if (!item) return;
-        const currentRenderer = renderers[item.itemType];
+        const currentRenderer = this.getRendererInstance(item);
 
         if (currentRenderer) {
             return currentRenderer.render(item, renderer || this);
@@ -61,12 +74,13 @@ export default {
     },
 
     renderSVG (item, renderer) {
+        const currentRenderer = this.getRendererInstance(item);
 
-        const currentRenderer = renderers[item.itemType];
-
-        if (currentRenderer) {
+        if (isFunction(currentRenderer.renderSVG)) {
             return currentRenderer.renderSVG(item, renderer || this);
-        }
+        } 
+
+        return this.getDefaultRendererInstance().renderSVG(item, renderer || this);
     },
 
     /**
@@ -74,11 +88,13 @@ export default {
      * @param {Item} item 
      */
     toCSS (item) {
-        const currentRenderer = renderers[item.itemType];
+        const currentRenderer = this.getRendererInstance(item);
 
-        if (currentRenderer) {
+        if (isFunction(currentRenderer.toCSS)) {
             return currentRenderer.toCSS(item);
         }
+
+        return this.getDefaultRendererInstance().toCSS(item);     
     },
 
     /**
@@ -86,13 +102,13 @@ export default {
      * @param {Item} item 
      */
     toNestedCSS (item) {
-        const currentRenderer = renderers[item.itemType];
+        const currentRenderer = this.getRendererInstance(item);
 
-        if (currentRenderer) {
+        if (isFunction(currentRenderer.toNestedCSS)) {
             return currentRenderer.toNestedCSS(item);
         }
 
-        return [];
+        return this.getDefaultRendererInstance().toNestedCSS(item);
     },    
 
     /**
@@ -100,13 +116,13 @@ export default {
      * @param {Item} item 
      */
     toTransformCSS (item) {
-        const currentRenderer = renderers[item.itemType];
+        const currentRenderer = this.getRendererInstance(item);
 
-        if (currentRenderer) {
+        if (isFunction(currentRenderer.toTransformCSS)) {
             return currentRenderer.toTransformCSS(item);
         }
 
-        return {}
+        return this.getDefaultRendererInstance().toTransformCSS(item);
     },    
 
     /**
@@ -116,11 +132,13 @@ export default {
      * @param {Item} item 
      */
     toStyle (item, renderer) {
-        const currentRenderer = renderers[item.itemType];
+        const currentRenderer = this.getRendererInstance(item);
 
-        if (currentRenderer) {
+        if (isFunction(currentRenderer.toStyle)) {
             return currentRenderer.toStyle(item, renderer || this);
         }
+
+        return this.getDefaultRendererInstance().toStyle(item, renderer || this);        
     },
 
     /**
@@ -129,11 +147,13 @@ export default {
      * @param {Dom} currentElement
      */
     update (item, currentElement) {
-        const currentRenderer = renderers[item.itemType];
+        const currentRenderer = this.getRendererInstance(item);
 
-        if (currentRenderer) {
+        if (isFunction(currentRenderer.update)) {
             return currentRenderer.update(item, currentElement);
         }
+
+        return this.getDefaultRendererInstance().update(item, currentElement);
     }, 
 
     /**

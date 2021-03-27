@@ -1,6 +1,6 @@
 import { Length } from "@unit/Length";
 import { Property } from "@items/Property";
-import { customParseConvertMatches, customParseReverseMatches } from "@core/functions/customParser";
+import { customParseConvertMatches, customParseReverseMatches } from "@sapa/functions/customParser";
 
 const ANIMATION_TIMING_REG = /((cubic-bezier|steps)\(([^\)]*)\))/gi;
 

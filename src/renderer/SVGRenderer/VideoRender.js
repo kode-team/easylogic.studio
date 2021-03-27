@@ -1,4 +1,4 @@
-import { CSS_TO_STRING } from "@core/functions/func";
+import { CSS_TO_STRING } from "@sapa/functions/func";
 import SVGLayerRender from "./SVGLayerRender";
 
 export default class VideoRender extends SVGLayerRender {

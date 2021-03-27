@@ -1,5 +1,5 @@
 import _currentProject from "./_currentProject";
-import { isArrayEquals } from "@core/functions/func";
+import { isArrayEquals } from "@sapa/functions/func";
 
 export default {
     command: 'history.refreshSelection',

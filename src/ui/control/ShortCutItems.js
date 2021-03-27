@@ -1,8 +1,8 @@
-import UIElement from "@core/UIElement";
-import { LOAD } from "@core/Event";
+import UIElement from "@sapa/UIElement";
+import { LOAD } from "@sapa/Event";
 import shortcuts from "../../shortcuts";
-import { os } from "@core/functions/detect";
-import { registElement } from "@core/registerElement";
+import { os } from "@sapa/functions/detect";
+import { registElement } from "@sapa/registerElement";
 
 const keyUnitCode = {
   'option': '⌥',

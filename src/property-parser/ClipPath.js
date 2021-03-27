@@ -1,6 +1,6 @@
 
 import { Length } from "@unit/Length";
-import { isUndefined } from "@core/functions/func";
+import { isUndefined } from "@sapa/functions/func";
 import { DirectionLength } from "@unit/DirectionLength";
 import { Property } from "@items/Property";
 const CLIPPATH_REG = /(content\-box|padding\-box|border\-box|margin\-box|view\-box|stroke\-box|fill\-box|none|(inset|circle|ellipse|polygon|path|svg|url)(\(([^\)]*)\))?)/gi;

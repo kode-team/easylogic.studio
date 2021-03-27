@@ -1,6 +1,6 @@
 import MenuItem from "./MenuItem";
 import icon from "@icon/icon";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
    
 export default class TopAlign extends MenuItem {
   getIconString() {

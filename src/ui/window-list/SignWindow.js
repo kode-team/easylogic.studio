@@ -1,7 +1,7 @@
 import BaseWindow from "./BaseWindow";
-import { EVENT } from "@core/UIElement";
-import { CLICK } from "@core/Event";
-import { registElement } from "@core/registerElement";
+import { EVENT } from "@sapa/UIElement";
+import { CLICK } from "@sapa/Event";
+import { registElement } from "@sapa/registerElement";
 
 export default class SignWindow extends BaseWindow {
 

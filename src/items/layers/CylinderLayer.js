@@ -1,6 +1,6 @@
-import { CSS_TO_STRING, OBJECT_TO_PROPERTY, repeat } from "@core/functions/func";
+import { CSS_TO_STRING, OBJECT_TO_PROPERTY, repeat } from "@sapa/functions/func";
 import { Component } from "../Component";
-import { getXYInCircle, getDist } from "@core/functions/math";
+import { getXYInCircle, getDist } from "@sapa/functions/math";
 import { Length } from "@unit/Length";
 import icon from "@icon/icon";
 import { ComponentManager } from "@manager/ComponentManager";

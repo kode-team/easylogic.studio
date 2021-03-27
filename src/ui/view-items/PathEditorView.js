@@ -1,16 +1,16 @@
-import UIElement, { EVENT } from "@core/UIElement";
-import { POINTERSTART, MOVE, END, BIND, POINTERMOVE, PREVENT, KEYUP, IF, STOP, CLICK, DOUBLECLICK, ENTER, ESCAPE, DOUBLETAB, DELAY } from "@core/Event";
+import UIElement, { EVENT } from "@sapa/UIElement";
+import { POINTERSTART, MOVE, END, BIND, POINTERMOVE, PREVENT, KEYUP, IF, STOP, CLICK, DOUBLECLICK, ENTER, ESCAPE, DOUBLETAB, DELAY } from "@sapa/Event";
 import PathGenerator from "@parser/PathGenerator";
-import Dom from "@core/Dom";
+import Dom from "@sapa/Dom";
 import PathParser from "@parser/PathParser";
 
 import { SVGPathItem } from "@items/layers/SVGPathItem";
 import { Length } from "@unit/Length";
-import { getBezierPoints, recoverBezier, recoverBezierQuard, getBezierPointsQuard, recoverBezierLine, getBezierPointsLine } from "@core/functions/bezier";
-import { isFunction } from "@core/functions/func";
+import { getBezierPoints, recoverBezier, recoverBezierQuard, getBezierPointsQuard, recoverBezierLine, getBezierPointsLine } from "@sapa/functions/bezier";
+import { isFunction } from "@sapa/functions/func";
 import { vec3 } from "gl-matrix";
-import { getDist } from "@core/functions/math";
-import { registElement } from "@core/registerElement";
+import { getDist } from "@sapa/functions/math";
+import { registElement } from "@sapa/registerElement";
 
 
 /**

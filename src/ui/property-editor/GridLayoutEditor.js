@@ -1,10 +1,10 @@
-import UIElement, { EVENT } from "@core/UIElement";
-import { LOAD } from "@core/Event";
-import { CSS_TO_STRING, STRING_TO_CSS } from "@core/functions/func";
+import UIElement, { EVENT } from "@sapa/UIElement";
+import { LOAD } from "@sapa/Event";
+import { CSS_TO_STRING, STRING_TO_CSS } from "@sapa/functions/func";
 import "./SelectIconEditor";
 import "./GridBoxEditor";
 import "./GridGapEditor";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 export default class GridLayoutEditor extends UIElement {
 

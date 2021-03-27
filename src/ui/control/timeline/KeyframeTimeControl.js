@@ -1,7 +1,7 @@
-import UIElement, { EVENT } from "@core/UIElement";
-import { THROTTLE, IF, PREVENT, KEYDOWN, KEYUP, ENTER, CLICK } from "@core/Event";
+import UIElement, { EVENT } from "@sapa/UIElement";
+import { THROTTLE, IF, PREVENT, KEYDOWN, KEYUP, ENTER, CLICK } from "@sapa/Event";
 import icon from "@icon/icon";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 export default class KeyframeTimeControl extends UIElement {
     template () {

@@ -1,13 +1,13 @@
-import UIElement, { EVENT } from "@core/UIElement";
-import { POINTERSTART, POINTEROVER, POINTEROUT, MOVE, END, IF, PREVENT, KEYDOWN } from "@core/Event";
+import UIElement, { EVENT } from "@sapa/UIElement";
+import { POINTERSTART, POINTEROVER, POINTEROUT, MOVE, END, IF, PREVENT, KEYDOWN } from "@sapa/Event";
 import { Length } from "@unit/Length";
-import { clone} from "@core/functions/func";
+import { clone} from "@sapa/functions/func";
 import { mat4, vec3 } from "gl-matrix";
 import { Transform } from "@property-parser/Transform";
 import { TransformOrigin } from "@property-parser/TransformOrigin";
-import { calculateAngle360, calculateAngleForVec3, calculateMatrix, calculateMatrixInverse, round } from "@core/functions/math";
-import { getRotatePointer } from "@core/functions/collision";
-import { registElement } from "@core/registerElement";
+import { calculateAngle360, calculateAngleForVec3, calculateMatrix, calculateMatrixInverse, round } from "@sapa/functions/math";
+import { getRotatePointer } from "@sapa/functions/collision";
+import { registElement } from "@sapa/registerElement";
 
 var directionType = {
     1: 'to top left',
@@ -143,7 +143,6 @@ export default class SelectionToolView extends SelectionToolEvent {
 
         this.state.dragging = true;
         this.renderPointers();
-        this.emit('refreshCanvasForPartial', null, true)   
         this.emit('refreshSelectionStyleView');   
         this.emit('refreshRect');                  
     }
@@ -275,10 +274,10 @@ export default class SelectionToolView extends SelectionToolEvent {
 
         if (instance) {
             instance.reset({
-                x: Length.px(lastStartVertext[0] + (newWidth < 0 ? newWidth : 0)).round(1000),
-                y: Length.px(lastStartVertext[1] + (newHeight < 0 ? newHeight : 0)).round(1000),
-                width: Length.px(Math.abs(newWidth)).round(1000),
-                height: Length.px(Math.abs(newHeight)).round(1000),
+                x: Length.px(lastStartVertext[0] + (newWidth < 0 ? newWidth : 0)),
+                y: Length.px(lastStartVertext[1] + (newHeight < 0 ? newHeight : 0)),
+                width: Length.px(Math.abs(newWidth)),
+                height: Length.px(Math.abs(newHeight)),
             })    
             instance.recover();     
         }
@@ -494,14 +493,15 @@ export default class SelectionToolView extends SelectionToolEvent {
         this.$selection.cachedItemVerties.forEach(it => {
 
             // 절대 좌표를 snap 기준으로 움직이고 
-            const snap = this.$snapManager.check(it.rectVerties.map(v => {
+            const snap = this.$snapManager.check(it.verties.map(v => {
                 return vec3.add([], v, distVector)
             }));
 
             // snap 거리만큼 조정해서 실제로 움직인 좌표로 만들고 
             const localDist = vec3.add([], distVector, snap);
+
             // newVerties 에 실제 움직인 좌표로 넣고 
-            const newVerties = it.rectVerties.map(v => {
+            const newVerties = it.verties.map(v => {
                 return vec3.add([], v, localDist)
             })
 
@@ -512,7 +512,7 @@ export default class SelectionToolView extends SelectionToolEvent {
             const newDist = vec3.subtract(
                 [], 
                 vec3.transformMat4([], newVerties[0], it.parentMatrixInverse), 
-                vec3.transformMat4([], it.rectVerties[0], it.parentMatrixInverse)
+                vec3.transformMat4([], it.verties[0], it.parentMatrixInverse)
             )
             const instance = this.$selection.get(it.id)
             

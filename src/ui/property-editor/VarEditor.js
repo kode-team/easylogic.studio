@@ -1,7 +1,7 @@
-import UIElement, { EVENT } from "@core/UIElement";
-import { INPUT, LOAD, CLICK } from "@core/Event";
+import UIElement, { EVENT } from "@sapa/UIElement";
+import { INPUT, LOAD, CLICK } from "@sapa/Event";
 import icon from "@icon/icon";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 export default class VarEditor extends UIElement {
 

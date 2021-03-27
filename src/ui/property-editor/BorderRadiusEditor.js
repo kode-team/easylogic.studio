@@ -1,9 +1,9 @@
-import { CLICK, INPUT, CHANGE, LOAD } from "@core/Event";
+import { CLICK, INPUT, CHANGE, LOAD } from "@sapa/Event";
 import icon from "@icon/icon";
-import UIElement, { EVENT } from "@core/UIElement";
+import UIElement, { EVENT } from "@sapa/UIElement";
 import "./RangeEditor";
 import BorderRadius from "@property-parser/BorderRadius";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 const typeList = [
   { key: "border-top-left-radius", title: "topLeft" },

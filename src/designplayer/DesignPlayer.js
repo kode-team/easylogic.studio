@@ -1,11 +1,11 @@
 
-import Dom from "@core/Dom";
-import UIElement, { EVENT } from "@core/UIElement";
+import Dom from "@sapa/Dom";
+import UIElement, { EVENT } from "@sapa/UIElement";
 
 import "@ui/view/PlayCanvasView";
 
-import { registElement } from "@core/registerElement";
-import { KEYDOWN, KEYUP } from "@core/Event";
+import { registElement } from "@sapa/registerElement";
+import { KEYDOWN, KEYUP } from "@sapa/Event";
 
 export default class DesignPlayer extends UIElement {
   

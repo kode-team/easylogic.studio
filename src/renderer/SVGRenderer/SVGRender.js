@@ -1,4 +1,4 @@
-import { CSS_TO_STRING, isFunction } from "@core/functions/func";
+import { CSS_TO_STRING, isFunction } from "@sapa/functions/func";
 import { Item } from "@items/Item";
 import DomRender from "@renderer/HTMLRenderer/DomRender";
 

@@ -1,5 +1,5 @@
-import UIElement from '@core/UIElement';
-import { BIND } from '@core/Event';
+import UIElement from '@sapa/UIElement';
+import { BIND } from '@sapa/Event';
 
 export default class ColorView extends UIElement {
 

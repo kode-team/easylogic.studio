@@ -1,8 +1,8 @@
 import { Length } from "@unit/Length";
 import { Property } from "@items/Property";
-import { convertMatches, reverseMatches } from "@core/functions/parser";
+import { convertMatches, reverseMatches } from "@sapa/functions/parser";
 import { BackgroundImage } from "./BackgroundImage";
-import { STRING_TO_CSS } from "@core/functions/func";
+import { STRING_TO_CSS } from "@sapa/functions/func";
 import { PatternCache } from "./PatternCache";
 const PATTERN_REG = /((check|grid|dot|cross\-dot|diagonal\-line|vertical\-line|horizontal\-line|)\(([^\)]*)\))/gi;
 

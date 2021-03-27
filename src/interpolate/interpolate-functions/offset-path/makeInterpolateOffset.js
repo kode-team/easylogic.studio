@@ -1,7 +1,7 @@
-import { getDist } from "@core/functions/math";
+import { getDist } from "@sapa/functions/math";
 import Point from "@parser/Point";
 import makeInterpolateLine from "./makeInterpolateLine";
-import { getCurveDist, getQuardDist } from "@core/functions/bezier";
+import { getCurveDist, getQuardDist } from "@sapa/functions/bezier";
 import makeInterpolateQuard from "./makeInterpolateQuard";
 import makeInterpolateCubic from "./makeInterpolateCubic";
 

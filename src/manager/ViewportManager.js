@@ -1,5 +1,5 @@
-import { rectToVerties, rectToVertiesForArea } from "@core/functions/collision";
-import { calculateMatrix, calculateMatrixInverse, vertiesMap } from "@core/functions/math";
+import { rectToVerties, rectToVertiesForArea } from "@sapa/functions/collision";
+import { calculateMatrix, calculateMatrixInverse, vertiesMap } from "@sapa/functions/math";
 import { mat4, vec3 } from "gl-matrix";
 
 /**

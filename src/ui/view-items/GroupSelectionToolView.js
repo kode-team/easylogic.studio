@@ -1,14 +1,14 @@
-import UIElement, { EVENT } from "@core/UIElement";
-import { POINTERSTART, POINTEROUT, POINTEROVER, MOVE, END, IF, PREVENT } from "@core/Event";
+import UIElement, { EVENT } from "@sapa/UIElement";
+import { POINTERSTART, POINTEROUT, POINTEROVER, MOVE, END, IF, PREVENT } from "@sapa/Event";
 import { Length } from "@unit/Length";
-import { clone } from "@core/functions/func";
+import { clone } from "@sapa/functions/func";
 import { mat4, vec3 } from "gl-matrix";
 import { Transform } from "@property-parser/Transform";
 import { TransformOrigin } from "@property-parser/TransformOrigin";
-import { calculateAngle, calculateAngle360, calculateAngleForVec3, calculateMatrix, calculateMatrixInverse, calculateRotationOriginMat4, round, vertiesMap } from "@core/functions/math";
+import { calculateAngle, calculateAngle360, calculateAngleForVec3, calculateMatrix, calculateMatrixInverse, calculateRotationOriginMat4, round, vertiesMap } from "@sapa/functions/math";
 import { ArtBoard } from "@items/ArtBoard";
-import { getRotatePointer, rectToVerties } from "@core/functions/collision";
-import { registElement } from "@core/registerElement";
+import { getRotatePointer, rectToVerties } from "@sapa/functions/collision";
+import { registElement } from "@sapa/registerElement";
 
 
 var directionType = {
@@ -160,7 +160,6 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
         this.state.dragging = true;        
         this.renderPointers();
-        this.emit('refreshCanvasForPartial', null, true)  
         this.emit('refreshSelectionStyleView');     
         this.emit('refreshRect');                 
     }

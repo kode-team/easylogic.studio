@@ -3,14 +3,14 @@ import {
   LOAD,
   CLICK,
   DOMDIFF,
-} from "@core/Event";
-import { EVENT } from "@core/UIElement";
+} from "@sapa/Event";
+import { EVENT } from "@sapa/UIElement";
 
 
 import icon from "@icon/icon";
 import { Transition } from "@property-parser/Transition";
-import { curveToPath } from "@core/functions/func";
-import { registElement } from "@core/registerElement";
+import { curveToPath } from "@sapa/functions/func";
+import { registElement } from "@sapa/registerElement";
 
 export default class TransitionProperty extends BaseProperty {
   getTitle() {

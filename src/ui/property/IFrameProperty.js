@@ -1,7 +1,7 @@
 import BaseProperty from "./BaseProperty";
-import { DEBOUNCE } from "@core/Event";
-import { EVENT } from "@core/UIElement";
-import { registElement } from "@core/registerElement";
+import { DEBOUNCE } from "@sapa/Event";
+import { EVENT } from "@sapa/UIElement";
+import { registElement } from "@sapa/registerElement";
 
 export default class IFrameProperty extends BaseProperty {
 

@@ -1,5 +1,5 @@
-import UIElement, { EVENT } from "@core/UIElement";
-import { LOAD, CLICK, POINTERSTART, MOVE, BIND, CHANGE } from "@core/Event";
+import UIElement, { EVENT } from "@sapa/UIElement";
+import { LOAD, CLICK, POINTERSTART, MOVE, BIND, CHANGE } from "@sapa/Event";
 import { Length } from "@unit/Length";
 import "./RangeEditor";
 
@@ -9,9 +9,9 @@ import { Gradient } from "@property-parser/image-resource/Gradient";
 import icon from "@icon/icon";
 import { SVGFill } from "@property-parser/SVGFill";
 import { SVGStaticGradient } from "@property-parser/image-resource/SVGStaticGradient";
-import { isUndefined } from "@core/functions/func";
+import { isUndefined } from "@sapa/functions/func";
 import "./SelectIconEditor";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 const imageTypeList = [
   'static-gradient',

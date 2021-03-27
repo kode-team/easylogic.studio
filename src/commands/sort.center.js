@@ -1,4 +1,4 @@
-import { getVertiesCenterX } from "@core/functions/math";
+import { getVertiesCenterX } from "@sapa/functions/math";
 
 export default {
     command : 'sort.center',

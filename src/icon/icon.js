@@ -154,6 +154,9 @@ import horizontal_rule from "./horizontal_rule";
 import navigation from "./navigation";
 import web from "./web";
 import auto_awesome from "./auto_awesome";
+import chart from "./chart";
+import line_chart from "./line_chart";
+import bar_chart from "./bar_chart";
 
 
 
@@ -164,6 +167,9 @@ const alias = {
 
 export default {
   ...alias,
+  bar_chart,
+  chart,
+  line_chart,
   auto_awesome,
   web,
   navigation,

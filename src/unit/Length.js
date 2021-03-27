@@ -1,5 +1,5 @@
-import { isNotUndefined, isString, isNumber, isUndefined } from "@core/functions/func";
-import { round } from "@core/functions/math";
+import { isNotUndefined, isString, isNumber, isUndefined } from "@sapa/functions/func";
+import { round } from "@sapa/functions/math";
 
 const stringToPercent = {
   center: 50,

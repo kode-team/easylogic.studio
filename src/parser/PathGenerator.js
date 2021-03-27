@@ -1,6 +1,6 @@
 import SegmentManager from "./SegmentManager";
-import { clone, OBJECT_TO_PROPERTY } from "@core/functions/func";
-import { getDist, getXYInCircle, calculateAngle360 } from "@core/functions/math";
+import { clone, OBJECT_TO_PROPERTY } from "@sapa/functions/func";
+import { getDist, getXYInCircle, calculateAngle360 } from "@sapa/functions/math";
 import Point from "./Point";
 import PathStringManager from "./PathStringManager";
 import { mat4, vec3 } from "gl-matrix";

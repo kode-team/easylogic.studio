@@ -10,6 +10,7 @@
     "@ant-design/icons-svg": "^4.1.0",
     "@babel/runtime": "^7.12.5",
     "@primer/octicons": "^12.1.0",
+    "@toast-ui/chart": "^4.2.0",
     "array-organizer": "^1.2.0",
     "feather-icons": "^4.28.0",
     "gl-matrix": "^3.3.0"

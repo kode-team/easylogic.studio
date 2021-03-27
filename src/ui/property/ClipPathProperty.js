@@ -4,10 +4,10 @@ import {
   LOAD,
   CLICK,
   PREVENT,
-} from "@core/Event";
+} from "@sapa/Event";
 
-import { EVENT } from "@core/UIElement";
-import { registElement } from "@core/registerElement";
+import { EVENT } from "@sapa/UIElement";
+import { registElement } from "@sapa/registerElement";
 import { ClipPath } from "@property-parser/ClipPath";
 
 var clipPathList = [

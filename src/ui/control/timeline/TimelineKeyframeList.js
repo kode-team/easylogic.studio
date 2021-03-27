@@ -1,12 +1,12 @@
-import UIElement, { EVENT } from "@core/UIElement";
-import { CLICK, LOAD, DOMDIFF, DEBOUNCE, POINTERSTART, MOVE, IF, END, DOUBLECLICK, KEYUP, KEY, } from "@core/Event";
+import UIElement, { EVENT } from "@sapa/UIElement";
+import { CLICK, LOAD, DOMDIFF, DEBOUNCE, POINTERSTART, MOVE, IF, END, DOUBLECLICK, KEYUP, KEY, } from "@sapa/Event";
 import { Length } from "@unit/Length";
-import { OBJECT_TO_CLASS, isUndefined } from "@core/functions/func";
-import { timecode, second } from "@core/functions/time";
-import Dom from "@core/Dom";
+import { OBJECT_TO_CLASS, isUndefined } from "@sapa/functions/func";
+import { timecode, second } from "@sapa/functions/time";
+import Dom from "@sapa/Dom";
 import makeInterpolateOffset from "@interpolate/interpolate-functions/offset-path/makeInterpolateOffset";
 import PathParser from "@parser/PathParser";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 const PADDING = 20 
 

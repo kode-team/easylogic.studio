@@ -1,10 +1,10 @@
-import { EVENT } from "@core/UIElement";
-import { LOAD } from "@core/Event";
+import { EVENT } from "@sapa/UIElement";
+import { LOAD } from "@sapa/Event";
 import "../property-editor/SVGFilterEditor";
 import BasePopup from "./BasePopup";
 import { SVGFilter } from "@property-parser/SVGFilter";
-import { isNotUndefined } from "@core/functions/func";
-import { registElement } from "@core/registerElement";
+import { isNotUndefined } from "@sapa/functions/func";
+import { registElement } from "@sapa/registerElement";
 
 export default class SVGFilterPopup extends BasePopup {
 

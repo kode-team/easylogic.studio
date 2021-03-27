@@ -1,7 +1,7 @@
-import UIElement from "@core/UIElement";
-import { LOAD, INPUT, DEBOUNCE, CLICK } from "@core/Event";
+import UIElement from "@sapa/UIElement";
+import { LOAD, INPUT, DEBOUNCE, CLICK } from "@sapa/Event";
 import PathParser from "@parser/PathParser";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 
 export default class PathDataEditor extends UIElement {

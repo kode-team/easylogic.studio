@@ -1,9 +1,9 @@
-import { CLICK, PREVENT, STOP } from "@core/Event";
-import UIElement from "@core/UIElement";
+import { CLICK, PREVENT, STOP } from "@sapa/Event";
+import UIElement from "@sapa/UIElement";
 
 import "../property-editor";
-import Dom from "@core/Dom";
-import { isFunction } from "@core/functions/func";
+import Dom from "@sapa/Dom";
+import { isFunction } from "@sapa/functions/func";
 import icon from "@icon/icon";
 
 

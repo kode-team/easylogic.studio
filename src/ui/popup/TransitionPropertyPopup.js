@@ -1,11 +1,11 @@
-import { EVENT } from "@core/UIElement";
+import { EVENT } from "@sapa/UIElement";
 import { Length } from "@unit/Length";
-import { LOAD} from "@core/Event";
+import { LOAD} from "@sapa/Event";
 import "../property-editor/CubicBezierEditor";
 import "../property-editor/RangeEditor";
 import "../property-editor/SelectEditor";
 import BasePopup from "./BasePopup";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 const property_list = [
   'none',

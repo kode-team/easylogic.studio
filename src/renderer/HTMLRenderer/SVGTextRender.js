@@ -1,4 +1,4 @@
-import Dom from "@core/Dom";
+import Dom from "@sapa/Dom";
 import { Item } from "@items/Item";
 import SVGItemRender from "./SVGItemRender";
 

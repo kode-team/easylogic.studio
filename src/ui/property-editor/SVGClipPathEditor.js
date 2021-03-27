@@ -1,7 +1,7 @@
-import UIElement, { EVENT } from "@core/UIElement";
-import { CLICK } from "@core/Event";
+import UIElement, { EVENT } from "@sapa/UIElement";
+import { CLICK } from "@sapa/Event";
 import "./IconListViewEditor";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 export default class SVGClipPathEditor extends UIElement {
 

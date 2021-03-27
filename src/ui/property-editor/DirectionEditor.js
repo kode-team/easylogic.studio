@@ -1,9 +1,9 @@
-import { CLICK, LOAD } from "@core/Event";
+import { CLICK, LOAD } from "@sapa/Event";
 import icon from "@icon/icon";
-import UIElement, { EVENT } from "@core/UIElement";
+import UIElement, { EVENT } from "@sapa/UIElement";
 import "./RangeEditor";
 import { DirectionLength } from "@unit/DirectionLength";
-import { registElement } from "@core/registerElement";
+import { registElement } from "@sapa/registerElement";
 
 const typeList = [
   { key: "top", title: "Top" },
