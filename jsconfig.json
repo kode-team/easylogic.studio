@@ -3,26 +3,9 @@
       "baseUrl": ".",
       "paths": {
         "@assets/*": ["./src/assets/*"],
-        "@commands/*": ["./src/commands/*"],
-        "@sapa/*": ["@sapa/*"],
-        "@designeditor/*": ["src/designeditor/*"],
-        "@exporter/*": ["./src/exporter/*"],
-        "@i18n/*": ["./src/i18n/*"],
-        "@plugins/*": ["./src/plugins/*"],
-        "@icon/*": ["./src/icon/*"],
-        "@image-resource/*": ["src/property-parser/image-resource/*"],
-        "@interpolate/*": ["@sapa/interpolate/*"],
-        "@items/*": ["./src/items/*"],
-        "@renderer/*": ["./src/renderer/*"],
-        "@manager/*": ["./src/manager/*"],
-        "@parser/*": ["./src/parser/*"],
-        "@preset/*": ["./src/preset/*"],
-        "@property-parser/*": ["./src/property-parser/*"],
-        "@shortcuts/*": ["./src/shortcuts/*"],
-        "@types/*": ["./src/types/*"],
-        "@ui/*": ["./src/ui/*"],
-        "@unit/*": ["./src/unit/*"],
-        "@util/*": ["./src/util/*"]
+        "el/*": ["./src/el/*"],
+        "designeditor/*": ["src/designeditor/*"],
+        "designplayer/*": ["src/designplayer/*"],
       }
     }
 }

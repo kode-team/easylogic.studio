@@ -1,6 +1,6 @@
 import "./scss/index.scss";
 
-import Util from "@sapa/index";
+import Util from "el/base/index";
 import EasyLogic from "./designeditor/index";
 
 const CSS = {

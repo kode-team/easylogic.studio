@@ -1,36 +1,40 @@
+import Dom from "el/base/Dom";
 
-import Dom from "@sapa/Dom";
-import UIElement, { EVENT } from "@sapa/UIElement";
-import { DRAGOVER, DROP, PREVENT, TRANSITIONEND, KEYDOWN, KEYUP, IF, POINTERSTART, MOVE, BIND, CLICK, THROTTLE } from "@sapa/Event";
+import { DRAGOVER, DROP, PREVENT, TRANSITIONEND, KEYDOWN, KEYUP, IF, POINTERSTART, MOVE, BIND, CLICK, THROTTLE, SUBSCRIBE } from "el/base/Event";
 
-import icon from "@icon/icon";
-import { Length } from "@unit/Length";
+import icon from "el/editor/icon/icon";
+import { Length } from "el/editor/unit/Length";
 
-import "@ui/popup";  
-import "@ui/window-list";
-import "@ui/control";
+import "el/editor/items";
+import "el/editor/ui/popup";  
 
-import "@ui/view/CanvasView";
-import "@ui/view/ToolMenu";
-import "@ui/view/LogoView";
-import "@ui/view/ExternalToolMenu";
-import "@ui/view/StatusBar";
-import "@ui/view/PreviewToolMenu";
-import "@ui/view/NotificationView";
-import "@ui/view-items/PageSubEditor";
+import "el/editor/ui/window-list";
+import "el/editor/ui/control";
 
-import "@ui/view/HorizontalRuler";
-import "@ui/view/VerticalRuler";
-import { registElement } from "@sapa/registerElement";
- 
+import "el/editor/ui/view/CanvasView";
+import "el/editor/ui/view/ToolMenu";
+import "el/editor/ui/view/LogoView";
+import "el/editor/ui/view/ExternalToolMenu";
+import "el/editor/ui/view/StatusBar";
+import "el/editor/ui/view/PreviewToolMenu";
+import "el/editor/ui/view/NotificationView";
+import "el/editor/ui/view-items/PageSubEditor";
+
+import "el/editor/ui/view/HorizontalRuler";
+import "el/editor/ui/view/VerticalRuler";
+import { registElement } from "el/base/registerElement";
+import { EditorElement } from "el/editor/ui/common/EditorElement";
+
+import 'el/plugins';
 
 const formElements = ['TEXTAREA', 'INPUT', 'SELECT']
 
-export default class DesignEditor extends UIElement {
+export default class DesignEditor extends EditorElement {
   
   initialize () {
     super.initialize()
 
+    this.$editor.initPlugins();
 
     var $body = Dom.body();
     
@@ -50,7 +54,7 @@ export default class DesignEditor extends UIElement {
   }
 
   
-  [EVENT('changed.locale')] () {
+  [SUBSCRIBE('changed.locale')] () {
     this.rerender()
   }
 
@@ -258,7 +262,7 @@ export default class DesignEditor extends UIElement {
     this.trigger('changeTimelineHeight');
   }  
 
-  [EVENT('changeTimelineHeight') + THROTTLE(100)] () {
+  [SUBSCRIBE('changeTimelineHeight') + THROTTLE(100)] () {
     this.emit('refreshTimeline')
   }
 
@@ -290,12 +294,12 @@ export default class DesignEditor extends UIElement {
     }, 100)
   }  
 
-  [EVENT('changeTheme')] () {
+  [SUBSCRIBE('changeTheme')] () {
     Dom.body().attr('data-theme', this.$editor.theme);
   }
 
 
-  [EVENT('toggleFooter')] (isShow) {
+  [SUBSCRIBE('toggleFooter')] (isShow) {
     this.$el.toggleClass('show-footer', isShow);
 
     if (this.$el.hasClass('show-footer')) {
@@ -314,12 +318,12 @@ export default class DesignEditor extends UIElement {
     this.emit('toggleFooterEnd');
   }
 
-  [EVENT('refreshAll')] () {
+  [SUBSCRIBE('refreshAll')] () {
     this.emit('refreshProjectList');
     this.trigger('refreshAllSelectProject');
   }
 
-  [EVENT('refreshAllSelectProject')] () {      
+  [SUBSCRIBE('refreshAllSelectProject')] () {      
     this.emit('refreshArtboard')
   }
 

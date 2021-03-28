@@ -6,7 +6,7 @@ const alias = require('./alias');
 module.exports = {
   // Entry files for our popup and background pages
   entry: {
-    main: "./src/electron.js"
+    main: "./electron.js"
   },
   output: {
     library: "EasylogicStudio",
@@ -110,7 +110,7 @@ module.exports = {
     new HtmlWebPackPlugin({
       inject: true,
       chunks: ["main"],
-      template: "./src/electron.html",
+      template: "./electron.html",
       filename: "./index.html"
     }),
     new MiniCssExtractPlugin({

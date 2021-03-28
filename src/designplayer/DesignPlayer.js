@@ -1,17 +1,21 @@
 
-import Dom from "@sapa/Dom";
-import UIElement, { EVENT } from "@sapa/UIElement";
+import Dom from "el/base/Dom";
 
-import "@ui/view/PlayCanvasView";
 
-import { registElement } from "@sapa/registerElement";
-import { KEYDOWN, KEYUP } from "@sapa/Event";
+import "el/editor/items";
+import "el/editor/ui/view/PlayCanvasView";
 
-export default class DesignPlayer extends UIElement {
+import { registElement } from "el/base/registerElement";
+import { KEYDOWN, KEYUP, SUBSCRIBE } from "el/base/Event";
+import { EditorElement } from "el/editor/ui/common/EditorElement";
+
+import 'el/plugins';
+export default class DesignPlayer extends EditorElement {
   
   initialize () {
     super.initialize()
 
+    this.$editor.initPlugins();
 
     var $body = Dom.body();
     
@@ -19,7 +23,7 @@ export default class DesignPlayer extends UIElement {
     $body.addClass(navigator.userAgent.includes('Windows') ? 'ua-window': 'ua-default')
   }
   
-  [EVENT('changed.locale')] () {
+  [SUBSCRIBE('changed.locale')] () {
     this.rerender()
   }
 
@@ -31,16 +35,16 @@ export default class DesignPlayer extends UIElement {
     `;
   }
 
-  [EVENT('changeTheme')] () {
+  [SUBSCRIBE('changeTheme')] () {
     Dom.body().attr('data-theme', this.$editor.theme);
   }
 
-  [EVENT('refreshAll')] () {
+  [SUBSCRIBE('refreshAll')] () {
     this.emit('refreshProjectList');
     this.trigger('refreshAllSelectProject');
   }
 
-  [EVENT('refreshAllSelectProject')] () {      
+  [SUBSCRIBE('refreshAllSelectProject')] () {      
     this.emit('refreshArtboard')
   }
 

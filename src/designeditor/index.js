@@ -1,16 +1,12 @@
 import DesignEditor from "./DesignEditor";
-import * as App from '@sapa/App'
-import cssProperty from "../property-parser";
-import imageResource from "../property-parser/image-resource";
-import items from '@items';
-import parse from '@parser';
-import { Length } from "@unit/Length";
+import * as App from 'el/base/App'
 
-import '@plugins';
+import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 export default {
   createDesignEditor(opts = { type: "white" }) {
-    return App.start({
+
+    return App.start(EditorElement, {
       className: 'designeditor',
       container: document.getElementById('app'),
       template: /*html*/`
@@ -22,9 +18,4 @@ export default {
     });
   },
   DesignEditor,
-  ...cssProperty,
-  ...imageResource,
-  ...items,
-  ...parse,
-  Length
 };
