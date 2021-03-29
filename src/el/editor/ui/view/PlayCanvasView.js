@@ -90,7 +90,7 @@ export default class PlayCanvasView extends EditorElement {
      */
   [WHEEL('$lock') + PREVENT] (e) {
 
-      const [dx, dy] = normalizeWheelSUBSCRIBE(e);
+      const [dx, dy] = normalizeWheelEvent(e);
 
       if (!this.state.gesture) {
 

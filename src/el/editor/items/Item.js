@@ -341,8 +341,6 @@ export class Item {
    * @param {object} obj
    */
   reset(obj) {
-
-
     this.json = this.convert(Object.assign(this.json, obj));
     this.lastChangedField = obj; 
     this.changed();

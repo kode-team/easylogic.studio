@@ -31,6 +31,12 @@ export default class BarChartHTMLRender extends LayerRender {
         ChartLayerMemory[item.id] = chart;
         $chartArea.el.chart = chart;
       } else {
+
+        // 크기 변경에 대응하지 않는다. 
+        if (item.lastChangedField['width'] || item.lastChangedField['height']) {
+          return;
+        }
+
         const ChartInstance = ChartLayerMemory[item.id];
 
         if (ChartInstance) {

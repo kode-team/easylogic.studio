@@ -568,6 +568,12 @@ export default class DomRender extends ItemRender {
 
     if (!currentElement) return; 
 
+    // clip-path 가 있을 때만 변경 
+    if (item.lastChangedField && !item.lastChangedField['clip-path']) {
+      return;
+    }
+
+
     let $svg = currentElement.el.$svg;
 
     if (!$svg) { 
