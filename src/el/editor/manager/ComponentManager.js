@@ -1,8 +1,10 @@
+import { isFunction } from "el/base/functions/func";
 import { Item } from "el/editor/items/Item";
 
 export const ComponentManager = new class {
   constructor(opt = {}) {
     this.components = {} 
+    this.inspectors = {}
   }
 
   registerComponent (name, Component) {
@@ -11,9 +13,19 @@ export const ComponentManager = new class {
     this.components[name] = Component;
   }
 
+  registerInspector (name, inspectorCallback) {
+
+    if (this.inspectors[name]) throw new Error("It has duplicated item name. " + name);
+    this.inspectors[name] = inspectorCallback;
+  }  
+
   getComponentClass(name) {
     return this.components[name] || this.components['rect']
   }
+
+  getInspector(name) {
+    return this.inspectors[name];
+  }  
 
   /**
    * ItemType 에 해당되는 Item 객체를 생성한다. 
@@ -29,6 +41,27 @@ export const ComponentManager = new class {
       throw new Error(`${itemType} type is not valid.`)
     }
     return new ComponentClass(obj);
+  }
+
+  /**
+   * Inspector 를 생성하는 배열을 리턴해준다. 
+   * 
+   * @param {string} itemType 
+   * @param {Item} item 
+   * @returns 
+   */
+  createInspector (item) {
+    const inspector = this.getInspector(item.itemType);
+
+    if (isFunction(inspector)) {
+      return inspector(item) || [];
+    }
+
+    if (isFunction(item.getProps)) {
+      return item.getProps() || [];
+    }
+
+    return [];
   }
 
 }();

@@ -24,8 +24,8 @@ export default class ComponentProperty extends BaseProperty {
 
     this.refreshShow((type) => {
       const current = this.$selection.current;
-
-      return current && current.is('component');
+      const inspector = this.$editor.components.createInspector(current);
+      return inspector.length > 0;
     })
 
   }
@@ -34,14 +34,9 @@ export default class ComponentProperty extends BaseProperty {
     
     var current = this.$selection.current;
 
-    if (current && current.is('component')) {
+    if (current) {
       this.setTitle(current.getDefaultTitle() || current.itemType || current.name);
       this.load();
-      current.getProps().forEach(it => {
-        if (this.children[it.key]) {
-          this.children[it.key].setValue(current[it.key] || it.defaultValue)  
-        }
-      })
     }    
   }
 
@@ -91,7 +86,9 @@ export default class ComponentProperty extends BaseProperty {
       return ''; 
     }
 
-    var self = current.getProps().map((it, index)=> {
+    const inspector = this.$editor.components.createInspector(current);
+
+    var self = inspector.map((it, index)=> {
       if (isString(it)) {
         return /*html*/`
           <div class='property-item'> 

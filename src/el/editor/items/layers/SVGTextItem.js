@@ -2,7 +2,8 @@ import { SVGItem } from "./SVGItem";
 import { hasSVGProperty, hasCSSProperty} from "el/editor/util/Resource";
 import { Length } from "el/editor/unit/Length";
 import icon from "el/editor/icon/icon";
-import { ComponentManager } from "el/editor/manager/ComponentManager";
+import { Editor } from "el/editor/manager/Editor";
+
 
 export class SVGTextItem extends SVGItem {
 
@@ -73,5 +74,5 @@ export class SVGTextItem extends SVGItem {
   }  
 }
 
-ComponentManager.registerComponent('svgtext', SVGTextItem);
+Editor.registerComponent('svgtext', SVGTextItem);
  

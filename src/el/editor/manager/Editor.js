@@ -486,6 +486,14 @@ export const Editor = new class {
     this.components.registerComponent(name, component)
   }
 
+  registerItem (name, item) {
+    this.registerComponent(name, item);
+  }
+
+  registerInspector (name, inspectorCallback) {
+    this.components.registerInspector(name, inspectorCallback);
+  }  
+
   registerRenderer (rendererType, name, rendererInstance) {
     this.renderers.registerRenderer(rendererType, name, rendererInstance)
   }

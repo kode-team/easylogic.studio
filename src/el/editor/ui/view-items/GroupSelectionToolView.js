@@ -521,8 +521,8 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         this.state.dragging = true; 
         this.renderPointers();
         this.refreshSmartGuides();        
-        this.emit('refreshCanvasForPartial', null, true)  
-        this.emit('refreshSelectionStyleView');                         
+        this.emit('refreshSelectionStyleView');  
+        this.emit('refreshRect');                               
     }
 
     moveEndVertext (dx, dy) {        

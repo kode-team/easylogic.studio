@@ -1,3 +1,5 @@
+import { SIMPLE_TYPE } from "./constants";
+
 export default class SimpleHTMLRender {
 
 
@@ -19,7 +21,7 @@ export default class SimpleHTMLRender {
     var {id, options, value} = item;
 
     return /*html*/`
-      <div class='element-item simple' data-id="${id}">
+      <div class='element-item ${SIMPLE_TYPE}' data-id="${id}">
         <div class='simple-area' style="width:100%;height:100%;overflow:auto;padding:10px;pointer-events:none;">
           <div class='value-value' data-value='${value}'>${value}</div>
           ${options.map(it => `<div>option ${it}</div>`)}

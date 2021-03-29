@@ -468,8 +468,7 @@ export default class SelectionToolView extends SelectionToolEvent {
 
         this.state.dragging = true; 
         this.renderPointers();
-        this.refreshSmartGuides();        
-        this.emit('refreshCanvasForPartial', null, true)       
+        this.refreshSmartGuides();              
         this.emit('refreshSelectionStyleView');
         this.emit('refreshRect');
     }

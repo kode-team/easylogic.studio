@@ -2,20 +2,28 @@ import { Editor } from "el/editor/manager/Editor";
 import AddBarChart from "./AddBarChart";
 import BarChartHTMLRender from "./BarChartHTMLRender";
 import { BarChartLayer } from "./BarChartLayer";
+import { BarChartLayerInspector } from "./BarChartLayerInspector";
+import { BAR_CHART_TYPE } from "./constants";
 
 /**
+ * 
+ * initialize BarChart Plugin 
  * 
  * @param {Editor} editor 
  */
 export default function (editor) {
 
-    console.log(editor);
+    // register item layer 
+    editor.registerItem(BAR_CHART_TYPE, BarChartLayer )    
 
+    // register inspector editor 
+    editor.registerInspector(BAR_CHART_TYPE, BarChartLayerInspector)
+
+    // register html renderer 
+    editor.registerRenderer('html', BAR_CHART_TYPE, new BarChartHTMLRender() )    
+
+    // register control ui 
     editor.registerElement({ 
         AddBarChart
     })
-    editor.registerComponent('bar-chart', BarChartLayer )
-    editor.registerRenderer('html', 'bar-chart', new BarChartHTMLRender() )
-
 }
-

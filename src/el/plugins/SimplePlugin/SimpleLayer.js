@@ -1,4 +1,5 @@
 import { Component } from "el/editor/items/Component";
+import { SIMPLE_TYPE } from "./constants";
 import icon from "./icon";
 
 export default class SimpleLayer extends Component {
@@ -8,6 +9,7 @@ export default class SimpleLayer extends Component {
   }  
 
   convert(json) {
+    json = super.convert(json);
 
     if (typeof json.value !== 'number') {
       json.value = Math.floor(json.value);
@@ -16,41 +18,14 @@ export default class SimpleLayer extends Component {
     return json; 
   }
 
-  getDefaultObject(obj = {}) {
+  getDefaultObject() {
     return super.getDefaultObject({
-      itemType: 'simple',
+      itemType: SIMPLE_TYPE,
       name: "New Simple",
       options: [1, 2, 3, 4, 5],
       value: 1,
-      ...obj
     }); 
   }
-
-  getProps() {
-    return [
-      'Simple Value Editor Group',
-      {
-        key: `value`, 
-        editor: 'SelectEditor', 
-        editorOptions: {
-          label: 'Option Value',
-          options: this.json.options
-        }, 
-        refresh: true, 
-        defaultValue: this.json['value'] 
-      },
-      {
-        key: `value`, 
-        editor: 'SimpleEditor', 
-        editorOptions: {
-          label: 'Simple Value',
-        }, 
-        refresh: true, 
-        defaultValue: this.json['value'] 
-      }
-    ]
-  }
-
 
   toCloneObject() {
 

@@ -1,5 +1,6 @@
 
 import MenuItem from "el/editor/ui/menu-items/MenuItem";
+import { BAR_CHART_TYPE } from "./constants";
 
 export default class AddBarChart extends MenuItem {
   getIconString() {
@@ -15,11 +16,10 @@ export default class AddBarChart extends MenuItem {
   }  
 
   clickButton(e) {
-    this.emit('addLayerView', 'bar-chart', { 
-      chartType: 'BarChart', 
+    this.emit('addLayerView', BAR_CHART_TYPE, { 
+      title: 'Monthly Revenue', 
       chartOption: {
         chart: { 
-          title: 'Monthly Revenue', 
           width: 'auto', 
           height: 'auto' 
         },

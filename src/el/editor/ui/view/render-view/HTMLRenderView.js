@@ -606,10 +606,7 @@ export default class HTMLRenderView extends EditorElement {
     }
 
     // 객체를 부분 업데이트 하기 위한 메소드 
-    [SUBSCRIBE(
-        'refreshCanvasForPartial', 
-        'refreshSelectionStyleView', 
-    )] (obj) {
+    [SUBSCRIBE('refreshSelectionStyleView')] (obj) {
         var items = obj ? [obj] : this.$selection.items;
 
         items.forEach(current => {

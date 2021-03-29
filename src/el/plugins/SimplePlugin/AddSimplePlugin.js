@@ -1,4 +1,5 @@
 import MenuItem from "el/editor/ui/menu-items/MenuItem";
+import { SIMPLE_TYPE } from "./constants";
 import icon from "./icon";
 
 export default class AddSimplePlugin extends MenuItem {
@@ -15,7 +16,7 @@ export default class AddSimplePlugin extends MenuItem {
   }  
 
   clickButton(e) {
-    this.emit('addLayerView', 'simple', { 
+    this.emit('addLayerView', SIMPLE_TYPE, { 
       option: [1, 2, 3]
     });
   }

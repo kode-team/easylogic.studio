@@ -1,6 +1,6 @@
 import { Layer } from "../Layer";
 import icon from "el/editor/icon/icon";
-import { ComponentManager } from "el/editor/manager/ComponentManager";
+import { Editor } from "el/editor/manager/Editor";
 
 export class VideoLayer extends Layer {
 
@@ -67,4 +67,4 @@ export class VideoLayer extends Layer {
 
 }
  
-ComponentManager.registerComponent('video', VideoLayer);
+Editor.registerComponent('video', VideoLayer);

@@ -1,5 +1,6 @@
 import { Component } from "el/editor/items/Component";
 import icon from "el/editor/icon/icon";
+import { BAR_CHART_TYPE } from "./constants";
 
 export class BarChartLayer extends Component {
 
@@ -9,58 +10,22 @@ export class BarChartLayer extends Component {
 
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
-      itemType: 'bar-chart',
+      itemType: BAR_CHART_TYPE,
       name: "New Chart",
-      chartEngine: 'tui-chart',
       chartType: 'BarChart',
+      chartTitle: 'Sample Bar Chart',
       chartOption: {},
       chartData: {},
       ...obj
     }); 
   }
 
-  getProps() {
-    return [
-      {
-        key: `chartEngine`, 
-        editor: 'SelectIconEditor', 
-        editorOptions: {
-          label: 'Chart Engine',
-          options: 'tui-chart'
-        }, 
-        refresh: true, 
-        defaultValue: this.json['chartEngine'] 
-      },                  
-      {
-        key: `chartOption`, 
-        editor: 'SelectIconEditor', 
-        editorOptions: {
-          label: 'Chart Engine',
-          options: 'tui-chart'
-        }, 
-        refresh: true, 
-        defaultValue: this.json['chartOption'] 
-      },                  
-      {
-        key: `chartData`, 
-        editor: 'SelectIconEditor', 
-        editorOptions: {
-          label: 'Chart Engine',
-          options: 'tui-chart'
-        }, 
-        refresh: true, 
-        defaultValue: this.json['chartData'] 
-      },                        
-    ]
-  }
-
-
   toCloneObject() {
 
     return {
       ...super.toCloneObject(),
       ...this.attrs(
-        'chartEngine',
+        'chartTitle',
         'chartType',
         'chartData',
         'chartOption',
