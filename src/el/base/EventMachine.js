@@ -318,7 +318,7 @@ export default class EventMachine {
 
       let realValue = value || $p.text();
 
-      if (type === 'json') {            
+      if (type === 'json') {          
         realValue = JSON.parse(realValue);
       }
     

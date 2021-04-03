@@ -1,14 +1,14 @@
 
 import MenuItem from "el/editor/ui/menu-items/MenuItem";
-import { BAR_CHART_TYPE } from "./constants";
+import { AREA_CHART_TYPE } from "./constants";
 
-export default class AddBarChart extends MenuItem {
+export default class AddAreaChart extends MenuItem {
   getIconString() {
-    return 'bar_chart';
+    return 'chart';
   }
 
   getTitle() {
-    return this.props.title || "Bar Chart";
+    return this.props.title || "Area Chart";
   }
 
   isHideTitle() {
@@ -16,7 +16,7 @@ export default class AddBarChart extends MenuItem {
   }  
 
   clickButton(e) {
-    this.emit('addLayerView', BAR_CHART_TYPE, { 
+    this.emit('addLayerView', AREA_CHART_TYPE, { 
       chartOption: {
         chart: { 
           title: 'Monthly Revenue', 

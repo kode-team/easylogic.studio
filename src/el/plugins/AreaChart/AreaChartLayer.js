@@ -1,8 +1,8 @@
 import { Component } from "el/editor/items/Component";
 import icon from "el/editor/icon/icon";
-import { BAR_CHART_TYPE } from "./constants";
+import { AREA_CHART_TYPE } from "./constants";
 
-export class BarChartLayer extends Component {
+export class AreaChartLayer extends Component {
 
   getIcon () {
     return icon.chart;
@@ -10,9 +10,9 @@ export class BarChartLayer extends Component {
 
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
-      itemType: BAR_CHART_TYPE,
+      itemType: AREA_CHART_TYPE,
       name: "New Chart",
-      chartType: 'BarChart',
+      chartType: 'AreaChart',
       chartOption: {},
       chartData: {},
       ...obj
@@ -36,7 +36,7 @@ export class BarChartLayer extends Component {
   }
 
   getDefaultTitle() {
-    return "Bar Chart";
+    return "Area Chart";
   }
 
 }

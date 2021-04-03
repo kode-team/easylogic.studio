@@ -67,6 +67,7 @@ export class Item {
     }
 
     this.json = this.convert(Object.assign(this.getDefaultObject(), json));
+    this.lastChangedField = {};
 
     return this.ref; 
   }
@@ -346,8 +347,12 @@ export class Item {
     this.changed();
   }
 
+  hasChangedField (...args) {
+    return args.some(it => this.lastChangedField[it]);
+  }
+
   /**
-   * define defaut object for item
+   * define default object for item
    *
    * @param {object} obj
    */

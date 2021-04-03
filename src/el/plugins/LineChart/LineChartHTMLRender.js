@@ -1,9 +1,9 @@
 import LayerRender from 'el/editor/renderer/HTMLRenderer/LayerRender';
-import { BAR_CHART_TYPE } from './constants';
+import { LINE_CHART_TYPE } from './constants';
 
 const ChartLayerMemory = {}
   
-export default class BarChartHTMLRender extends LayerRender {
+export default class LineChartHTMLRender extends LayerRender {
 
   async loadLibrary () {
     return await import(/* webpackChunkName: "toast-ui-chart" */ '@toast-ui/chart');
@@ -30,7 +30,7 @@ export default class BarChartHTMLRender extends LayerRender {
       } else {
 
         // 크기 변경에 대응하지 않는다. 
-        if (item.hasChangedField('width', 'height', 'x', 'y')) {
+        if (item.lastChangedField['width'] || item.lastChangedField['height']) {
           return;
         }
 
@@ -57,7 +57,7 @@ export default class BarChartHTMLRender extends LayerRender {
     var {id} = item;
 
     return /*html*/`
-      <div class='element-item ${BAR_CHART_TYPE}' data-id="${id}">
+      <div class='element-item ${LINE_CHART_TYPE}' data-id="${id}">
         ${this.toDefString(item)}
         <div class='chart-area' data-domdiff-pass="true" style="width:100%;height:100%;"></div>
       </div>`

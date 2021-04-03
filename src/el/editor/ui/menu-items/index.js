@@ -33,13 +33,8 @@ import AddDrawBrush from "./AddDrawBrush";
 import AddVideo from "./AddVideo";
 import KeyBoard from "./KeyBoard";
 import AddIFrame from "./AddIFrame";
-import AddAreaChart from "./AddAreaChart";
-import AddLineChart from "./AddLineChart";
-
 
 export default {
-  AddLineChart,
-  AddAreaChart,
   AddIFrame,
   KeyBoard,
   AddVideo,

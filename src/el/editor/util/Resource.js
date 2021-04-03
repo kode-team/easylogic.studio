@@ -69,6 +69,31 @@ export const blend_list = [
   "luminosity"
 ].join(',');
 
+export const font_list = [
+    '',
+    'Arial',
+    'Arial Black',
+    'Times New Roman',
+    'Times',
+    'Courier New',
+    'Courier',
+    'Verdana',
+    'Georgia',
+    'Palatino',
+    'Garamond',
+    'Bookman',
+    'Tahoma',
+    'Trebuchet MS',
+    'Impact',
+    'Comic Sans MS',
+    'serif',
+    'sans-serif',
+    'monospace',
+    'cursive',
+    'fantasy',
+    'system-ui'
+].join(',')
+
 const SVG_PROPERTY_LIST = {
     'text': true, 
     'points': true,

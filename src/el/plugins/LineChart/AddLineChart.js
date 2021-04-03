@@ -1,14 +1,14 @@
 
 import MenuItem from "el/editor/ui/menu-items/MenuItem";
-import { BAR_CHART_TYPE } from "./constants";
+import { LINE_CHART_TYPE } from "./constants";
 
-export default class AddBarChart extends MenuItem {
+export default class AddLineChart extends MenuItem {
   getIconString() {
-    return 'bar_chart';
+    return 'line_chart';
   }
 
   getTitle() {
-    return this.props.title || "Bar Chart";
+    return this.props.title || "Line Chart";
   }
 
   isHideTitle() {
@@ -16,7 +16,7 @@ export default class AddBarChart extends MenuItem {
   }  
 
   clickButton(e) {
-    this.emit('addLayerView', BAR_CHART_TYPE, { 
+    this.emit('addLayerView', LINE_CHART_TYPE, { 
       chartOption: {
         chart: { 
           title: 'Monthly Revenue', 

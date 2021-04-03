@@ -568,8 +568,8 @@ export default class DomRender extends ItemRender {
 
     if (!currentElement) return; 
 
-    // clip-path 가 있을 때만 변경 
-    if (item.lastChangedField && !item.lastChangedField['clip-path']) {
+    // x, y 만 움직이면 변경하지 않음. 
+    if (item.hasChangedField('x', 'y')) {
       return;
     }
 

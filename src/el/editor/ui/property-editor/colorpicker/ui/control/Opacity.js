@@ -76,7 +76,7 @@ export default class Opacity extends EditorElement {
         const rate = (currentX - minX) / (maxX - minX);
 
         this.parent.changeColor({
-            a: rate,
+            a: (rate).toFixed(2),
         })
 
     }

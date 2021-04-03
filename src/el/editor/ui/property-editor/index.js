@@ -53,9 +53,13 @@ import PatternEditor from "./PatternEditor";
 import PatternSizeEditor from "./PatternSizeEditor";
 import BlendSelectEditor from "./BlendSelectEditor";
 import MediaProgressEditor from "./MediaProgressEditor";
+import CheckBoxEditor from "./CheckBoxEditor";
+import FontSelectEditor from "./FontSelectEditor";
 
 
 export default {
+    FontSelectEditor,
+    CheckBoxEditor,
     MediaProgressEditor,
     BlendSelectEditor,
     PatternEditor,

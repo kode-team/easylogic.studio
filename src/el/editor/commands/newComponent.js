@@ -1,11 +1,10 @@
 import { EDIT_MODE_SELECTION } from "el/editor/manager/Editor";
-// import Color from "@core/Color";
 import { Length } from "el/editor/unit/Length";
 import PathStringManager from "el/editor/parser/PathStringManager";
 
 /**
  * 
- * @param {*} editor 
+ * @param {Editor} editor 
  * @param {*} itemType 
  * @param {*} obj 
  * @param {*} isSelected 

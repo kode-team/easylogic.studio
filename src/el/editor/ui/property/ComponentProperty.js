@@ -1,6 +1,6 @@
 import BaseProperty from "./BaseProperty";
 import { DEBOUNCE, LOAD, SUBSCRIBE } from "el/base/Event";
-import { isString, OBJECT_TO_PROPERTY } from "el/base/functions/func";
+import { isFunction, isString, OBJECT_TO_PROPERTY } from "el/base/functions/func";
 import { registElement } from "el/base/registerElement";
 
 
@@ -47,9 +47,7 @@ export default class ComponentProperty extends BaseProperty {
   }
 
   getPropertyEditor (index, key, value, selfEditor, selfEditorOptions) {
-
     if (isString(selfEditor)) {
-
       return /*html*/`
         <div>  
           <object refClass="${selfEditor}" ${OBJECT_TO_PROPERTY({
@@ -57,8 +55,9 @@ export default class ComponentProperty extends BaseProperty {
             onchange: 'changeComponentProperty',
             ref: `${key}${index}`,
             key,
-            value
-          })} />
+          })}>
+            <property name="value" type="json">${JSON.stringify(value || {})}</property>
+          </object>
         </div>`
     } else {
       return Object.keys(selfEditor).map(selfEditorKey => {
@@ -69,8 +68,9 @@ export default class ComponentProperty extends BaseProperty {
               onchange: 'changeComponentProperty',
               ref: `${key}${index}${selfEditorKey}`,
               key,
-              value
-            })} />
+            })}>
+              <property name="value" type="json">${JSON.stringify(value || {})}</property>
+            </object>
           </div>`
       }).join('');
     }
@@ -89,18 +89,16 @@ export default class ComponentProperty extends BaseProperty {
     const inspector = this.$editor.components.createInspector(current);
 
     var self = inspector.map((it, index)=> {
+
       if (isString(it)) {
         return /*html*/`
-          <div class='property-item'> 
-            <label class='label'>${it}</label>
+          <div class='property-item is-label'> 
+            <label class='label string-label'>${it}</label>
           </div>`
       } else {
         return /*html*/`
-          <div class='property-item animation-property-item'> 
-            <div class='group'>
-              <span class='add-timeline-property' data-property='${it.key}' data-type="${current.itemType}" data-editor="${it.editor}"></span>
-            </div>
-            ${this.getPropertyEditor(index, it.key, current[it.key] || it.defaultVallue, it.editor, it.editorOptions)}
+          <div class='property-item'> 
+            ${this.getPropertyEditor(index, it.key, current[it.key] || it.defaultValue, it.editor, it.editorOptions)}
           </div>
         `
       }
@@ -112,9 +110,12 @@ export default class ComponentProperty extends BaseProperty {
 
   [SUBSCRIBE('changeComponentProperty')] (key, value) {
 
-    this.command("setAttribute", 'change component', {
-      [key]: value
-    }, null, true)
+    const current = this.$selection.current;
+    const inspector = this.$editor.components.createInspector(current);    
+    const convert = inspector.find(it => it.key === key)?.convert;
+    const realValueObject = convert ? convert(current, key, value) : { [key] : value }
+
+    this.command("setAttribute", 'change component', realValueObject, null, true)
   }
 }
 

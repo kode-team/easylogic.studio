@@ -96,12 +96,11 @@ export default class FontProperty extends BaseProperty {
       </div>      
 
       <div class='property-item'>
-        <object refClass="SelectEditor"  
+        <object refClass="FontSelectEditor"  
           ref='$family' 
           icon="true"
           label='${this.$i18n('font.property.family')}' 
           key="font-family" 
-          options=",serif,sans-serif,monospace,cursive,fantasy,system-ui" 
           onchange="changeRangeEditor" 
         />
       </div> 

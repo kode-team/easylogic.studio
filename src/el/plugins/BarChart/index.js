@@ -1,9 +1,15 @@
 import { Editor } from "el/editor/manager/Editor";
+import { AxisThemeEditor } from "../common/AxisThemeEditor";
+import { ChartThemeEditor } from "../common/ChartThemeEditor";
+import { FontThemeEditor } from "../common/FontThemeEditor";
+import { LegendOptionsEditor } from "../common/LegendOptionsEditor";
 import AddBarChart from "./AddBarChart";
 import BarChartHTMLRender from "./BarChartHTMLRender";
 import { BarChartLayer } from "./BarChartLayer";
 import { BarChartLayerInspector } from "./BarChartLayerInspector";
 import { BAR_CHART_TYPE } from "./constants";
+
+
 
 /**
  * 
@@ -24,6 +30,10 @@ export default function (editor) {
 
     // register control ui 
     editor.registerElement({ 
-        AddBarChart
+        AddBarChart,
+        FontThemeEditor,
+        AxisThemeEditor,
+        LegendOptionsEditor,
+        ChartThemeEditor,
     })
 }

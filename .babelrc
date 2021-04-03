@@ -3,19 +3,22 @@
     "test": {
       "presets": ["@babel/preset-env"],
       "plugins": [
-        ["@babel/transform-runtime"]
+        "@babel/transform-runtime",
+        "@babel/plugin-proposal-optional-chaining"
       ]
     },
     "development": {
       "presets": ["@babel/preset-env"],
       "plugins": [
-        ["@babel/transform-runtime"]
+        "@babel/transform-runtime",
+        "@babel/plugin-proposal-optional-chaining"
       ]
     },
     "production": {
       "presets": ["@babel/preset-env"],
       "plugins": [
-        ["@babel/transform-runtime"]
+        "@babel/transform-runtime",
+        "@babel/plugin-proposal-optional-chaining"
       ]
     }
   }

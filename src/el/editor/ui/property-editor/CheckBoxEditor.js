@@ -1,11 +1,11 @@
-import { BIND, INPUT } from "el/base/Event";
+import { BIND, CLICK, INPUT } from "el/base/Event";
 import { registElement } from "el/base/registerElement";
 import { EditorElement } from "../common/EditorElement";
 
-export default class TextEditor extends EditorElement {
+export default class CheckBoxEditor extends EditorElement {
 
     initState() {
-        var value = this.props.value;
+        var value = `${this.props.value}` === 'true';
         return {
             label: this.props.label || '',
             value
@@ -18,24 +18,19 @@ export default class TextEditor extends EditorElement {
         return /*html*/`
             <div class='text-editor ${hasLabel}'>
                 ${label ? `<label>${label}</label>` : '' }
-                <input type='text' ref='$text' value="${value}" />
+                <input type='checkbox' ref='$checkbox' ${value ? 'checked': ''} />
             </div>
         `
     }
 
     getValue () {
-        return this.refs.$text.value; 
+        return this.state.value; 
     }
 
-    [BIND('$text')] () {
-        return {
-            'value': this.state.value
-        }
-    }
+    [CLICK('$checkbox')] () {
 
-    [INPUT('$text')] () {
         this.updateData({
-            value: this.refs.$text.value
+            value: this.refs.$checkbox.checked()
         })
     }
 
@@ -47,4 +42,4 @@ export default class TextEditor extends EditorElement {
     }
 }
 
-registElement({ TextEditor })
+registElement({ CheckBoxEditor })
