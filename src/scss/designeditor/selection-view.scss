@@ -185,6 +185,10 @@
       stroke: var(--selection-tool-border-color);
       fill: transparent;
       // stroke-width: 0.5;
+      
+      path {
+        transform: translate(0.5px, 0.5px);
+      }
     }
   }
   

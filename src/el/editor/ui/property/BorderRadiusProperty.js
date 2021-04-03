@@ -35,7 +35,7 @@ export default class BorderRadiusProperty extends BaseProperty {
 
 
   [SUBSCRIBE('refreshSelection') + DEBOUNCE(100)]() {
-    this.refreshShow(['rect', 'circle', 'text', 'cube', 'cylinder']);
+    this.refreshShowIsNot(['project']);
   }  
 
   [SUBSCRIBE('changeBorderRadius')] (value) {

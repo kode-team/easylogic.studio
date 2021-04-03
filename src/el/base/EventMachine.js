@@ -26,6 +26,8 @@ import { retriveElement } from "./registerElement";
 const REFERENCE_PROPERTY = "ref";
 const TEMP_DIV = Dom.create("div");
 const QUERY_PROPERTY = `[${REFERENCE_PROPERTY}]`;
+const REF_CLASS = 'refclass';
+const REF_CLASS_PROPERTY = `[${REF_CLASS}]`
 
 
 // collectProps 에서 제외될 메소드 목록 
@@ -53,8 +55,6 @@ const expectMethod = {
   "components": true,
   "getRef": true,
   "parseTemplate": true,
-  "childrenIds": true,
-  "exists": true,
   "parseProperty": true,
   "parseSourceName": true,
   "parseComponent": true,
@@ -239,12 +239,14 @@ export default class EventMachine {
    */
   parseTemplate(html, isLoad) {
 
+    //FIXME: html string, element 형태 모두 array 로 받을 수 있도록 해보자. 
     if (isArray(html)) {
       html = html.join('');
     }
 
     html = html.trim();
     const list = TEMP_DIV.html(html).children();
+    /////////////////////////////////
 
     list.forEach($el => {
       var ref = $el.attr(REFERENCE_PROPERTY)
@@ -276,28 +278,6 @@ export default class EventMachine {
     return TEMP_DIV.createChildrenFragment();
   }
 
-  childrenIds() {
-    return  keyMap(this.children, (key, obj) => {
-      return obj.id;
-    })
-  }
-
-  /**
-   * 실제 나의 instance 가 해당 부모의 자식으로 있는지 체크한다. 
-   * 
-   * @returns {Boolean}
-   */
-  exists () {
-
-    if (this.parent) {
-      if (isFunction(this.parent.childrenIds)) {
-        return this.parent.childrenIds().indexOf(this.id) > -1 
-      }
-    }
-
-    return true  
-  }
-
   parseProperty ($dom) {
     let props = {};
 
@@ -314,11 +294,11 @@ export default class EventMachine {
     }
 
     $dom.$$('property').forEach($p => {
-      const [name, value, type] = $p.attrs('name', 'value', 'type')
+      const [name, value, valueType] = $p.attrs('name', 'value', 'valueType')
 
       let realValue = value || $p.text();
 
-      if (type === 'json') {          
+      if (valueType === 'json') {          
         realValue = JSON.parse(realValue);
       }
     
@@ -346,11 +326,11 @@ export default class EventMachine {
   parseComponent() {
     const $el = this.$el;
 
-    let targets = $el.$$(`[refclass]`);
+    let targets = $el.$$(REF_CLASS_PROPERTY);
 
     targets.forEach($dom => {
 
-      const EventMachineComponent = this.getEventMachineComponent($dom.attr('refclass'))
+      const EventMachineComponent = this.getEventMachineComponent($dom.attr(REF_CLASS))
 
       if (EventMachineComponent) {
         let props = this.parseProperty($dom);
@@ -424,38 +404,41 @@ export default class EventMachine {
     }
 
     // loop 가 비동기라 await 로 대기를 시켜줘야 나머지 html 업데이트에 대한 순서를 맞출 수 있다. 
-    await this._loadMethods.filter(callbackName => {
+    const localLoadMethods = this._loadMethods.filter(callbackName => {
         const elName = callbackName.split(LOAD_SAPARATOR)[1]
                                   .split(CHECK_SAPARATOR)
                                   .map(it => it.trim())[0];
         if (!args.length) return true; 
         return args.indexOf(elName) > -1
       })
-      .forEach(async (callbackName) => {
-        let methodName = callbackName.split(LOAD_SAPARATOR)[1];
-        var [elName, ...checker] = methodName.split(CHECK_SAPARATOR).map(it => it.trim())
 
-        checker = checker.map(it => it.trim())
-        
-        const isDomDiff = Boolean(checker.filter(it => DOMDIFF.includes(it)).length);
 
-        if (this.refs[elName]) {        
-          var newTemplate = await this[callbackName].call(this, ...args);
 
-          if (isArray(newTemplate)) {
-            newTemplate = newTemplate.join('');
-          }
+    await localLoadMethods.forEach(async (callbackName) => {
+      let methodName = callbackName.split(LOAD_SAPARATOR)[1];
+      var [elName, ...checker] = methodName.split(CHECK_SAPARATOR).map(it => it.trim())
 
-          // create fragment 
-          const fragment = this.parseTemplate(html`${newTemplate}`, true);
-          if (isDomDiff) {
-            this.refs[elName].htmlDiff(fragment);
-          } else {
-            this.refs[elName].html(fragment);
-          }
+      checker = checker.map(it => it.trim())
+      
+      const isDomDiff = Boolean(checker.filter(it => DOMDIFF.includes(it)).length);
 
+      if (this.refs[elName]) {        
+        var newTemplate = await this[callbackName].call(this, ...args);
+
+        if (isArray(newTemplate)) {
+          newTemplate = newTemplate.join('');
         }
-      });
+
+        // create fragment 
+        const fragment = this.parseTemplate(html`${newTemplate}`, true);
+        if (isDomDiff) {
+          this.refs[elName].htmlDiff(fragment);
+        } else {
+          this.refs[elName].html(fragment);
+        }
+
+      }
+    });
 
     this._afterLoad();
 

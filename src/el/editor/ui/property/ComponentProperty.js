@@ -56,7 +56,7 @@ export default class ComponentProperty extends BaseProperty {
             ref: `${key}${index}`,
             key,
           })}>
-            <property name="value" type="json">${JSON.stringify(value || {})}</property>
+            <property name="value" valueType="json">${JSON.stringify(value || {})}</property>
           </object>
         </div>`
     } else {
@@ -69,7 +69,7 @@ export default class ComponentProperty extends BaseProperty {
               ref: `${key}${index}${selfEditorKey}`,
               key,
             })}>
-              <property name="value" type="json">${JSON.stringify(value || {})}</property>
+              <property name="value" valueType="json">${JSON.stringify(value || {})}</property>
             </object>
           </div>`
       }).join('');

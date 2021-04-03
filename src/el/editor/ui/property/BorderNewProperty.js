@@ -34,7 +34,7 @@ export default class BorderNewProperty extends BaseProperty {
   }
 
   [SUBSCRIBE('refreshSelection') + DEBOUNCE(100)]() {
-    this.refreshShow(['rect', 'circle', 'text', 'cube', 'cylinder']);
+    this.refreshShowIsNot(['project']);
   }  
 
   [SUBSCRIBE('changeKeyValue')] (key, value) {

@@ -33,12 +33,12 @@ export class AxisThemeEditor extends EditorElement {
                 <div>
                     <div>
                         <object refClass="FontThemeEditor" ref="$title" key="title" label="title" onchange="changeValue">
-                            <property key="value" type="json">${JSON.stringify(title)}</property>
+                            <property name="value" valueType="json">${JSON.stringify(title)}</property>
                         </object>
                     </div>      
                     <div>
                         <object refClass="FontThemeEditor" ref="$label" key="label" label="label" onchange="changeValue" >
-                            <property key="label" type="json">${JSON.stringify(labelAttr)}</property>
+                            <property name="value" valueType="json">${JSON.stringify(labelAttr)}</property>
                         </object>
                     </div>
                     <div>

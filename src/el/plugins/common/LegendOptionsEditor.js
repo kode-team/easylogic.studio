@@ -38,6 +38,7 @@ export class LegendOptionsEditor extends EditorElement {
                             onchange="changeValue" 
                             options="top,bottom,right,left",
                             value="${align}"
+                            compact="true"
                         />
                     </div>      
                     <div>

@@ -7,7 +7,7 @@ $editor-ruler-size: 20px;
 .horizontal-ruler {
   position: absolute;
   top: 0px;
-  left: 30px;
+  left: $editor-ruler-size;
   right: 0px;
   height: $editor-ruler-size;
   background-color: var(--background-color);
@@ -32,7 +32,7 @@ $editor-ruler-size: 20px;
   position: absolute;
   left: 0px;
   width: $editor-ruler-size;
-  top: 30px;
+  top: $editor-ruler-size;
   bottom: 0px;
   background-color: var(--background-color);
   box-sizing: border-box;

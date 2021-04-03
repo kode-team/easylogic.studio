@@ -47,7 +47,7 @@ export default class DesignEditor extends EditorElement {
       hideLeftPanel: false,
       hideRightPanel: false,
       leftSize: 340,
-      rightSize: 300,
+      rightSize: 260,
       bottomSize: 30,
       lastBottomSize: 150
     }
