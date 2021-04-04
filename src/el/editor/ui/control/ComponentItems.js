@@ -25,6 +25,7 @@ export default class ComponentItems extends EditorElement {
             <object refClass="AddAreaChart" title='AreaChart' />            
             <object refClass="AddLineChart" title='LineChart' />                                    
             <object refClass="AddSimplePlugin" title="Simple" />
+            <object refClass="AddReactComponent" title="React Component" />
           </div>          
         </div>                  
       </div>

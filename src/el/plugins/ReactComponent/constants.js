@@ -1,0 +1,1 @@
+export const REACT_COMPONENT_TYPE = 'react-component';

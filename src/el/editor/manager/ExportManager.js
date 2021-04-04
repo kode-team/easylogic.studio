@@ -42,6 +42,7 @@ export default {
   generate (editor) {
     var project = editor.selection.currentProject;
     var current = editor.selection.current;
+    var artboard = current.artboard;
 
     var css = `${this.makeStyle(project)}`
     var html = `
