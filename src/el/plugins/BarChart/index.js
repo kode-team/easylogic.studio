@@ -1,5 +1,6 @@
 import { Editor } from "el/editor/manager/Editor";
 import { AxisThemeEditor } from "../common/AxisThemeEditor";
+import { ChartSeriesEditor } from "../common/ChartSeriesEditor";
 import { ChartThemeEditor } from "../common/ChartThemeEditor";
 import { FontThemeEditor } from "../common/FontThemeEditor";
 import { LegendOptionsEditor } from "../common/LegendOptionsEditor";
@@ -35,5 +36,6 @@ export default function (editor) {
         AxisThemeEditor,
         LegendOptionsEditor,
         ChartThemeEditor,
+        ChartSeriesEditor,
     })
 }

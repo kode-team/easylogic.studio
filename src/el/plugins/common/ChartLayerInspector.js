@@ -22,6 +22,24 @@ export function ChartLayerInspector (item) {
         },
         defaultValue: item['chartOption']?.chart?.title 
       },   
+      'Option: series',
+      {
+        key: 'chartOption.series',
+        editor: 'ChartSeriesEditor',
+        convert: (currentItem, key, value) => {
+
+          return {
+            chartOption: {
+              ...(currentItem.chartOption || {}),
+              series: {
+                ...(currentItem.chartOption?.series || {}),
+                ...value
+              }
+            }
+          }
+        },
+        defaultValue: item['chartOption']?.series || {}
+      },      
       'Option: legend', 
       {
         key: 'chartOption.legend',
