@@ -54,7 +54,7 @@ export default class ColorViewEditor extends EditorElement {
         return /*html*/`
             <div class='color-view-editor ${hasLabel}'>
                 ${label ? `<label>${label}</label>` : '' }            
-                <div class='color-code'>
+                <div class='color-code' ref="$container">
                     <div class='preview' ref='$preview'>
                         <div class='mini-view'>
                             <div class='color-view' style="background-color: ${this.state.value}" ref='$miniView'></div>
@@ -81,11 +81,11 @@ export default class ColorViewEditor extends EditorElement {
     }
 
     [FOCUS('$colorCode')] (e) {
-        this.refs.$colorCode.addClass('focused');
+        this.refs.$container.addClass('focused');
     }
 
     [BLUR('$colorCode')] (e) {
-        this.refs.$colorCode.removeClass('focused');
+        this.refs.$container.removeClass('focused');
     }
 
     [CLICK("$preview")](e) {

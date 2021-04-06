@@ -33,7 +33,7 @@ export default class BaseProperty extends EditorElement {
                 <span class="tools">${this.getTools()}</span>
             </div>`
             }
-            <div class='property-body'>${this.getBody()}</div>
+            <div class='property-body ${this.getBodyClassName()}'>${this.getBody()}</div>
             ${ this.getFooter() ? `<div class='property-footer'>${this.getFooter()}</div>` : ''}
         </div>
         `;
@@ -60,6 +60,10 @@ export default class BaseProperty extends EditorElement {
   }
 
   getTitleClassName() {
+    return '';
+  }
+
+  getBodyClassName() {
     return '';
   }
 

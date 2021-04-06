@@ -33,6 +33,10 @@ export default class FilterProperty extends BaseProperty {
     return 'filter'
   }
 
+  getBodyClassName() {
+    return 'no-padding';
+  }
+
   getBody() {
     return `<div class='full filter-property' ref='$body'></div>`;
   }
@@ -104,13 +108,16 @@ export default class FilterProperty extends BaseProperty {
     var current = this.$selection.current || {} 
     var value = current.filter;
 
-    return /*html*/`<object refClass="FilterEditor" ref='$filterEditor' value='${value}' hide-label='true' onchange='changeFilterEditor' />`
+    return /*html*/`
+      <div>
+        <object refClass="FilterEditor" ref='$filterEditor' key="filter" value='${value}' hide-label='true' onchange='changeFilterEditor' />
+      </div>`
   }
 
-  [SUBSCRIBE('changeFilterEditor')] (filter) {
+  [SUBSCRIBE('changeFilterEditor')] (key, filter) {
 
     this.command('setAttribute', 'change filter', { 
-      filter 
+      [key]: filter 
     })
   }
 

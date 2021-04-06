@@ -1,7 +1,7 @@
 import { Gradient } from "./Gradient";
 import { ColorStep } from "./ColorStep";
 import { Length, Position } from "el/editor/unit/Length";
-import { clone } from "el/base/functions/func";
+import { clone, isNotUndefined, isString, isUndefined } from "el/base/functions/func";
 import { convertMatches, reverseMatches } from "el/base/functions/parser";
 
 

@@ -248,7 +248,7 @@ export default class BackgroundImageEditor extends EditorElement {
         this.trigger('changePattern', key, {[key]: value}, params);
     }
 
-    [SUBSCRIBE('changePattern') + DEBOUNCE(10)] (key, value, params) {
+    [SUBSCRIBE('changePattern')] (key, value, params) {
         var index = +params;
         var image = this.state.images[index];
 

@@ -89,13 +89,14 @@
     > .splitter {
       position: absolute;
       left: $left-size;
-      width: 8px;
+      width: 4px;
       top: 0px;
       bottom: 0px;
       cursor: ew-resize;
 
-      &:hover {
-        background-color: rgba(0, 0, 0, 0.2);
+      &:hover,
+      &.selected {
+        background-color: var(--selected-color);
       }
 
     }

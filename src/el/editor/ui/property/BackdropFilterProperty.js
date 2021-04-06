@@ -99,13 +99,17 @@ export default class BackdropFilterProperty extends BaseProperty {
     var current = this.$selection.current || {} 
     var value = current['backdrop-filter'];
 
-    return /*html*/`<object refClass="FilterEditor" ref='$filterEditor' value='${value}' hide-label="true" onchange='changeFilterEditor' />`
+    return /*html*/`
+      <div>
+        <object refClass="FilterEditor" ref='$filterEditor' key="backdrop-filter" value='${value}' hide-label="true" onchange='changeFilterEditor' />
+      </div>
+    `
   }
 
-  [SUBSCRIBE('changeFilterEditor')] (filter) {
+  [SUBSCRIBE('changeFilterEditor')] (key, filter) {
 
     this.command("setAttribute", "change backdrop filter", {
-      'backdrop-filter': filter
+      [key]: filter
     })
 
   }

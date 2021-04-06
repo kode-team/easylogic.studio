@@ -1,5 +1,4 @@
-import UIElement, { EVENT } from "el/base/UIElement";
-import { CLICK, BIND, LOAD, SUBSCRIBE } from "el/base/Event";
+import { CLICK, BIND, SUBSCRIBE } from "el/base/Event";
 import { SVGFill } from "el/editor/property-parser/SVGFill";
 import { registElement } from "el/base/registerElement";
 import { EditorElement } from "../common/EditorElement";

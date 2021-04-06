@@ -39,9 +39,13 @@ export default class PositionProperty extends BaseProperty {
     return true; 
   }
 
+  getBodyClassName() {
+    return 'no-padding';
+  }
+
   getBody() {
     return /*html*/`
-      <div class="position-item" ref="$positionItem" style='padding: 5px 0px;'>
+      <div class="position-item" ref="$positionItem" style='padding: 5px 10px;'>
         <div style='display: grid;grid-template-columns: repeat(2, 1fr); grid-column-gap: 10px;'>
           <div class='property-item animation-property-item' style='padding: 0px;'>
             <div class='group'>

@@ -30,6 +30,10 @@ export default class BackgroundImageProperty extends BaseProperty {
     return 'background-image'
   }
 
+  getBodyClassName() {
+    return 'no-padding';
+  }
+
   getBody() {
     return /*html*/`
       <div class='full' ref='$property'></div>               
@@ -59,14 +63,14 @@ export default class BackgroundImageProperty extends BaseProperty {
   }
 
   [SUBSCRIBE('refreshSelection')]() {
-    this.refreshShow(['artboard', 'rect', 'circle', 'text', 'image', 'video']);
+    this.refreshShowIsNot(['project']);
   }
 
   refresh() {
     this.load();
   }
 
-  [SUBSCRIBE('changeBackgroundImage') + DEBOUNCE(10)] (key, value) {
+  [SUBSCRIBE('changeBackgroundImage')] (key, value) {
 
     this.command('setAttribute', 'change background image', { 
       [key]: value

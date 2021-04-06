@@ -24,7 +24,6 @@ import {
   Filter,
   URLSvgFilter
 } from "el/editor/property-parser/Filter";
-import UIElement, { EVENT } from "el/base/UIElement";
 import "./RangeEditor";
 import "./ColorViewEditor";
 import "./SelectEditor";
@@ -281,7 +280,7 @@ export default class FilterEditor extends EditorElement {
   modifyFilter () {
     var value = this.state.filters.join(' ');
 
-    this.parent.trigger(this.props.onchange, value)
+    this.parent.trigger(this.props.onchange, this.props.key, value, this.props.params);
   }
 
   makeFilter(type, opt = {}) {

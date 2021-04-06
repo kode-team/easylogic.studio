@@ -1,6 +1,6 @@
 import Dom from "el/base/Dom";
 
-import { DRAGOVER, DROP, PREVENT, TRANSITIONEND, KEYDOWN, KEYUP, IF, POINTERSTART, MOVE, BIND, CLICK, THROTTLE, SUBSCRIBE } from "el/base/Event";
+import { DRAGOVER, DROP, PREVENT, TRANSITIONEND, KEYDOWN, KEYUP, IF, POINTERSTART, MOVE, BIND, CLICK, THROTTLE, SUBSCRIBE, END } from "el/base/Event";
 
 import icon from "el/editor/icon/icon";
 import { Length } from "el/editor/unit/Length";
@@ -231,11 +231,12 @@ export default class DesignEditor extends EditorElement {
     }
   }    
 
-  [POINTERSTART('$splitter') + MOVE('moveSplitter')] () {
+  [POINTERSTART('$splitter') + MOVE('moveSplitter') + END('moveEndSplitter')] () {
 
     this.minSize = this.$theme('left_size');
     this.maxSize = this.$theme('left_max_size');
     this.leftSize = Length.parse(this.refs.$splitter.css('left')).value;
+    this.refs.$splitter.addClass('selected');
   }
 
   moveSplitter (dx) {
@@ -243,6 +244,12 @@ export default class DesignEditor extends EditorElement {
       leftSize: Math.max(Math.min(this.leftSize + dx, this.maxSize), this.minSize)
     })
 
+  }
+
+
+
+  moveEndSplitter () {
+    this.refs.$splitter.removeClass('selected');
   }
 
   [POINTERSTART('$footerSplitter') + MOVE('moveFooterSplitter')] () {

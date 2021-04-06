@@ -1,4 +1,3 @@
-import UIElement, { EVENT } from "el/base/UIElement";
 import { Length } from "el/editor/unit/Length";
 import { LOAD, CLICK, SUBSCRIBE } from "el/base/Event";
 import icon from "el/editor/icon/icon";
@@ -156,19 +155,19 @@ export default class CSSPropertyEditor extends EditorElement {
     if (property.key === 'background-image') {
       return /*html*/`
         <div class='property-editor'>
-          <object refClass="BackgroundImageEditor" ref='$backgroundImage${index}' key="${property.key}" hide-title="${this.state.hideTitle}" value="${property.value}" onChange="changeBackgroundImageProperty" />
+          <object refClass="BackgroundImageEditor" ref='$backgroundImage${index}' key="${property.key}" hide-title="${this.state.hideTitle}" value="${property.value}" onChange="changeKeyValue" />
         </div>
       `
     } else if (property.key === 'filter') {
       return /*html*/`
         <div class='property-editor'>
-          <object refClass="FilterEditor" ref='$filter${index}' value="${property.value}" onChange="changeFilterProperty" />
+          <object refClass="FilterEditor" ref='$filter${index}' key="${property.key}" value="${property.value}" onChange="changeKeyValue" />
         </div>
       `
     } else if (property.key === 'backdrop-filter') {
       return /*html*/`
         <div class='property-editor'>
-          <object refClass="FilterEditor" ref='$backdropFilter${index}' value="${property.value}" onChange="changeBackdropFilterProperty" />
+          <object refClass="FilterEditor" ref='$backdropFilter${index}' key="${property.key}" value="${property.value}" onChange="changeKeyValue" />
         </div>
       `      
     } else if (property.key === 'box-shadow') {

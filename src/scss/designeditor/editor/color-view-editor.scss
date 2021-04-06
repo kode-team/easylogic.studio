@@ -19,8 +19,17 @@
     .color-code {
         vertical-align: middle;
         display: grid;
-        grid-template-columns: 40px 1fr;
+        grid-template-columns: 26px 1fr;
         grid-column-gap: 5px;
+        border-radius: 4px;
+        overflow: hidden;
+        border: 1px solid var(--border-color);
+        box-sizing: border-box;      
+        background-color: var(--input-background-color);  
+
+        &.focused {
+            border: 1px solid var(--selected-color);
+        }        
 
         .preview {
             display: inline-block;
@@ -28,9 +37,10 @@
             vertical-align: middle;
             cursor: pointer;
             text-align: right;
-            padding: 3px;
+            padding: 3px 4px;
+            
             border-radius: 2px;
-            background-color: var(--color-view-background-color);
+            background-color: transparent;
     
             .mini-view {
                 width: 100%;
@@ -39,9 +49,11 @@
                 position: relative; 
                 
                 vertical-align: middle;
-                border-radius: 2px;           
+                border-radius: 4px;           
                 overflow: hidden; 
                 @include transparent-background();  
+                box-sizing: border-box;
+                border: 1px solid var(--border-color);
                 // box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
     
                 .color-view {
@@ -61,12 +73,10 @@
             height: 24px;
             padding: 0px 3px;
             border-radius: 3px;
-
+            font-size: 12px;
             // font-family: monospace;
 
-            &.focused {
-                box-shadow: 0 0 0 1px var(--selected-color);
-            }
+
 
         }
     }
