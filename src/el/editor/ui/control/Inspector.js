@@ -45,6 +45,9 @@ export default class Inspector extends EditorElement {
                 <object refClass="PositionProperty" />
                 <!--SizeProperty / --> 
                 <object refClass="AppearanceProperty" />
+
+                <!-- ArtBoard --> 
+                <object refClass="ArtBoardSizeProperty" />                    
                 
                 <!-- SVG Item --> 
                 <object refClass="SVGItemProperty" />              
@@ -78,15 +81,9 @@ export default class Inspector extends EditorElement {
                 <object refClass="FilterProperty" />
                 <object refClass="BackdropFilterProperty" />
                 <object refClass="ClipPathProperty" />       
-
-                <!-- ArtBoard --> 
-                <object refClass="ArtBoardSizeProperty" />    
                 
                 <!-- SVG -->
                 <!-- <PathDataProperty /> -->
-
-                <!-- tool -->                
-                <object refClass="ExportProperty" />
 
                 <!-- transform --> 
                 <object refClass="TransformOriginProperty" />
@@ -94,6 +91,8 @@ export default class Inspector extends EditorElement {
                 <!-- <PerspectiveProperty /> -->
                 <!-- <PerspectiveOriginProperty /> -->                 
 
+                <!-- tool -->                
+                <object refClass="ExportProperty" />
 
                 <div class='empty'></div>
               </div>     

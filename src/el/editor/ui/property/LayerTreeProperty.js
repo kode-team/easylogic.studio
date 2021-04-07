@@ -6,6 +6,7 @@ import icon from "el/editor/icon/icon";
 import Color from "el/base/Color";
 import { Length } from "el/editor/unit/Length";
 import { registElement } from "el/base/registerElement";
+import { KEY_CODE } from "el/editor/types/key";
 
 const DRAG_START_CLASS = 'drag-start'
 
@@ -256,34 +257,29 @@ export default class LayerTreeProperty extends BaseProperty {
 
 
 
-  modifyDoneInputEditing (input) {
-    this.endInputEditing(input, (index, text) => {
+  modifyDoneInputEditing (input, event) {
+    if (KEY_CODE.enter === event.keyCode) {
+      this.endInputEditing(input, () => {
+        var id = input.closest('layer-item').attr('data-layer-id');      
+        var text = input.text();
+  
+        this.emit('refreshItemName', id, text)
+      });    
+    } else {
+      var id = input.closest('layer-item').attr('data-layer-id');      
+      var text = input.text();
 
+      this.emit('refreshItemName', id, text)
+    }
 
-      var id = input.closest('layer-item').attr('data-layer-id');
-
-      var project = this.$selection.currentProject;
-      var item = project.searchById(id)
-      if (item) {
-        item.reset({
-          name: text
-        })
-
-        if (item.is('artboard')) {
-          this.emit('refreshArtBoardName', item.id, item.name)
-        }
-        
-      }
-
-    });    
   }
 
-  [KEYDOWN('$layerList .layer-item .name') + ENTER + PREVENT + STOP] (e) {
-    this.modifyDoneInputEditing(e.$dt);
+  [KEYDOWN('$layerList .layer-item .name') + STOP] (e) {
+    this.modifyDoneInputEditing(e.$dt, e);
   }
 
   [FOCUSOUT('$layerList .layer-item .name') + PREVENT  + STOP ] (e) {
-    this.modifyDoneInputEditing(e.$dt);
+    this.modifyDoneInputEditing(e.$dt, {keyCode: KEY_CODE.enter});
   }
 
   selectLayer(layer) {

@@ -498,5 +498,9 @@ export const Editor = new class {
     this.renderers.registerRenderer(rendererType, name, rendererInstance)
   }
 
+  registerCommand (commandObject) {
+    this.commands.registerCommand(commandObject);
+  }
+
   
 }();

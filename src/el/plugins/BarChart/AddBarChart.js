@@ -16,6 +16,9 @@ export default class AddBarChart extends MenuItem {
   }  
 
   clickButton(e) {
+
+    this.emit('BarChartTestCommand')
+
     this.emit('addLayerView', BAR_CHART_TYPE, { 
       chartOption: {
         chart: { 

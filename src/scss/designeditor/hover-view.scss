@@ -1,29 +1,30 @@
 
+
 .hover-view {
-    pointer-events:none;
-    position:absolute;
-    left:0px;
-    top:0px;
-    right:0px;
-    bottom:0px;
+  pointer-events:none;
+  position:absolute;
+  left:0px;
+  top:0px;
+  right:0px;
+  bottom:0px;
 }
 
 .hover-rect {
-  pointer-events: none;
+pointer-events: none;
+position: absolute;
+left: 0px;
+right: 0px;
+top: 0px;
+bottom: 0px;
+box-sizing: border-box;
+
+.line {
   position: absolute;
   left: 0px;
-  right: 0px;
   top: 0px;
-  bottom: 0px;
-  box-sizing: border-box;
 
-  .line {
-    position: absolute;
-    left: 0px;
-    top: 0px;
-
-    stroke: var(--selection-tool-border-color);
-    fill: transparent;
-    stroke-width: 0.5;
-  }
+  stroke: var(--selection-tool-border-color);
+  fill: transparent;
+  stroke-width: 0.5;
+}
 }

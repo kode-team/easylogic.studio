@@ -1,4 +1,3 @@
-
 import Dom from "el/base/Dom";
 import { registElement } from "el/base/registerElement";
 import { EditorElement } from "../common/EditorElement";
@@ -72,3 +71,4 @@ export default class HoverView extends EditorElement {
 } 
 
 registElement({ HoverView })
+

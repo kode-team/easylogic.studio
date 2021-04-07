@@ -295,8 +295,9 @@ export class SelectionManager {
   }
 
   /**
+   * id 로 아이템 선택하기 
    * 
-   * @param {Item|Item[]} id 
+   * @param {string} id 
    */
   selectById(id) {
     if (id) {

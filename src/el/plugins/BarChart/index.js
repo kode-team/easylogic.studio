@@ -38,4 +38,12 @@ export default function (editor) {
         ChartThemeEditor,
         ChartSeriesEditor,
     })
+
+    editor.registerCommand({
+        command: 'BarChartTestCommand',
+        execute: (editor) => {
+            console.log('BarChartTestCommand', editor);
+        }
+    })
 }
+

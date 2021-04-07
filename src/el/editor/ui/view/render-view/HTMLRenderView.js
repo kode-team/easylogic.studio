@@ -12,6 +12,7 @@ import "el/editor/ui/view-items/PathDrawView";
 import "el/editor/ui/view-items/LayerAppendView";
 import "el/editor/ui/view-items/GridLayoutLineView";
 import "el/editor/ui/view-items/HoverView";
+import "el/editor/ui/view-items/SelectionInfoView";
 
 import { isFunction } from "el/base/functions/func";
 import { KEY_CODE } from "el/editor/types/key";
@@ -43,6 +44,7 @@ export default class HTMLRenderView extends EditorElement {
                 <object refClass='StyleView' ref='$styleView' />
                 <object refClass='GuideLineView' ref='$guideLineView' />
                 <object refClass='HoverView' ref='$hoverView' />                
+                <object refClass='SelectionInfoView' ref='$selectionInfoView' />                                
                 <object refClass='GridLayoutLineView' ref='$gridLayoutLineView' />
                 <object refClass='SelectionToolView' ref='$selectionTool' />
                 <object refClass='GroupSelectionToolView' ref='$groupSelectionTool' />
@@ -124,9 +126,11 @@ export default class HTMLRenderView extends EditorElement {
             return false;
         }            
 
+        if ($el.hasClass('is-not-drag-area')) {
+            return false; 
+        }
 
         return $el.hasClass('element-item') === false
-            && $el.hasClass('artboard-title') === false 
             && $el.hasClass('selection-tool-item') === false 
             && $el.hasClass('pointer') === false
             && $el.hasClass('rotate-pointer') === false            
@@ -170,13 +174,6 @@ export default class HTMLRenderView extends EditorElement {
             this.refs.$dragAreaRect.css(obj) 
 
             this.state.cachedCurrentElement = {}       
-            // this.$el.$$('.selected').forEach(it => it.removeClass('selected'))
-
-
-            // 클릭하는 시점에  item 인스턴스와 , verties() 를 초기화 한다. 
-            // 그 이후에 조회 하는 객체에 대해서 verties() 를 맞춘다. 
-            // 드래그가 끝날 때까지 쓴다. 
-            // this.$selection.currentProject.initCacheVerties();
 
         }
 
@@ -378,7 +375,7 @@ export default class HTMLRenderView extends EditorElement {
                 if ($element.hasClass('artboard')) {
                     const artboard = this.$selection.currentProject.searchById(id);
         
-                    if (artboard && artboard.hasChildren() && $target.hasClass('artboard-title') === false) {
+                    if (artboard && artboard.hasChildren()) {
                         return false; 
                     }
                 }        
@@ -418,18 +415,12 @@ export default class HTMLRenderView extends EditorElement {
         // alt(option) + pointerstart 시점에 Layer 카피하기         
         if (e.altKey) {
 
-
             if (isInSelectedArea) {
                 // 이미 selection 영역안에 있으면 그대로 드래그 할 수 있도록 맞춘다. 
             } else {
-                // artboard-title 을 선택하고 드래그 할 때 artboard 전체를 copy 한다. 
-                if ($target.hasClass('artboard-title')) {      
+                if (this.$selection.check({ id }) === false) { 
+                    // 선택된게 없으면 id 로 선택 
                     this.$selection.selectById(id);
-                } else {
-                    if (this.$selection.check({ id }) === false) { 
-                        // 선택된게 없으면 id 로 선택 
-                        this.$selection.selectById(id);
-                    }
                 }
             }
             
@@ -449,28 +440,23 @@ export default class HTMLRenderView extends EditorElement {
             if (isInSelectedArea) {
                 // 이미 selection 영역안에 있으면 그대로 드래그 할 수 있도록 맞춘다. 
             } else {
-
-                // artboard title 인 경우는 artboard 를 선택한다.         
-                if ($target.hasClass('artboard-title')) {      
-                    this.$selection.selectById(id);
+                // shift key 는 selection 을 토글한다. 
+                if (e.shiftKey) {
+                    this.$selection.toggleById(id);
                 } else {
-                    // shift key 는 selection 을 토글한다. 
-                    if (e.shiftKey) {
-                        this.$selection.toggleById(id);
-                    } else {
-                        // 선택이 안되어 있으면 선택 
-                        if (this.$selection.check({ id }) === false) { 
+                    // 선택이 안되어 있으면 선택 
+                    if (this.$selection.check({ id }) === false) { 
 
-                            const current = this.$selection.currentProject.searchById(id);
-                            if (current && current.is('artboard') && current.hasChildren()) {
-                                // NOOP
-                            } else {
-                                this.$selection.selectById(id);
-                            }
-
+                        const current = this.$selection.currentProject.searchById(id);
+                        if (current && current.is('artboard') && current.hasChildren()) {
+                            // NOOP
+                        } else {
+                            this.$selection.selectById(id);
                         }
+
                     }
                 }
+
             }
 
 
@@ -517,13 +503,8 @@ export default class HTMLRenderView extends EditorElement {
 
     }
 
-    /**
-     * ArtBoard title 변경하기 
-     * @param {string} id 
-     * @param {string} title 
-     */
-    [SUBSCRIBE('refreshArtBoardName')] (id, title) {
-        this.$el.$(`[data-id='${id}'] > .artboard-title`).html(title);
+    [SUBSCRIBE('selectionToolView.moveTo')] (newDist) {
+        this.selectionToolView.moveTo(newDist);
     }
 
     calculateEndedElement (dx, dy) {

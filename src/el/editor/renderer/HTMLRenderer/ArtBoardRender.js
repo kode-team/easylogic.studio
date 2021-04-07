@@ -16,7 +16,6 @@ export default class ArtBoardRender extends DomRender {
   
     return /*html*/`    
       <${tagName} class="element-item artboard" data-id="${id}">
-        <div class='artboard-title'>${name}</div>
         ${this.toDefString(item)}
         ${item.layers.map(it => {
           return renderer.render(it, renderer)
