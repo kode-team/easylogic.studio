@@ -6,12 +6,16 @@ export default class AddSVGRect extends MenuItem {
     return 'outline_rect';
   }
   getTitle() {
-    return this.props.title || "Rect";
+    return this.props.title || "RectPath";
   }
  
 
   clickButton(e) {
     this.emit('addLayerView', 'svg-rect');
+  }
+
+  isHideTitle() {
+    return true;
   }
 
 }

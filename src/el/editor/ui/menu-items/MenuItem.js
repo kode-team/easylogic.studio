@@ -15,7 +15,7 @@ export default class MenuItem extends EditorElement {
             type="button" 
             class='menu-item ${this.getClassName()}' 
             data-no-title="${this.isHideTitle()}" 
-            ${this.isHideTitle() ? `title="${this.getTitle()}"` : '' } 
+            ${this.isHideTitle() ? `data-tooltip="${this.getTitle()}"` : '' } 
             checked="${this.getChecked() ? 'checked' : ''}"
             ${this.isDisabled() ? 'disabled' : ''}
         >

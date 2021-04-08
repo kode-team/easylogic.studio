@@ -23,6 +23,10 @@ export default class AddText extends MenuItem {
     this.setSelected(type === 'text');
   }    
 
+  isHideTitle() {
+    return true; 
+  }
+
 }
 
 registElement({ AddText })

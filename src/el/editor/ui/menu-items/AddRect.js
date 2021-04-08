@@ -18,6 +18,10 @@ export default class AddRect extends MenuItem {
   [SUBSCRIBE('addLayerView')] (type) {
     this.setSelected(type === 'rect');
   }
+
+  isHideTitle() {
+    return true;
+  }
 }
 
 registElement({ AddRect })

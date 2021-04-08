@@ -37,7 +37,8 @@ export default {
     'menu.item.fullscreen.title': '전체화면',
     'menu.item.shortcuts.title': '단축키',    
     'menu.item.github.title': 'Github',
-    'menu.item.learn.title': '배우기',     
+    'menu.item.learn.title': '배우기',    
+    'menu.item.projects.title': '프로젝트',     
 
     'project.property.title' : '프로젝트',    
     'project.information.property.title': '프로젝트 정보',

@@ -13,6 +13,10 @@ export default class AddSVGTextPath extends MenuItem {
     this.emit('addLayerView', 'svg-textpath');
   }
 
+  isHideTitle() {
+    return true;
+  }
+
 }
 
 registElement({ AddSVGTextPath })

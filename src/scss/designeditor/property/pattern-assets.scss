@@ -31,6 +31,8 @@ $asset-item-size: 60px;
                 position: relative;
                 margin-bottom: 3px;
                 margin-right: 3px;
+                box-sizing: border-box;
+                border: 1px solid var(--border-color);
                 
                 &:hover {
                     &[data-custom="true"] {

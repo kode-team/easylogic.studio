@@ -18,6 +18,10 @@ export default class AddPath extends MenuItem {
   [SUBSCRIBE('addLayerView')] (type) {
     this.setSelected(type === 'path');
   }    
+
+  isHideTitle() {
+    return true;
+  }
 }
 
 registElement({ AddPath })

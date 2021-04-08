@@ -18,6 +18,10 @@ export default class AddIFrame extends MenuItem {
   [SUBSCRIBE('addLayerView')] (type) {
     this.setSelected(type === 'iframe');
   }
+
+  isHideTitle() {
+    return true;
+  }
 }
 
 registElement({ AddIFrame })

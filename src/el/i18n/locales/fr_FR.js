@@ -37,7 +37,8 @@ export default {
     'menu.item.fullscreen.title': 'Ecran',
     'menu.item.shortcuts.title': 'ShortCuts',    
     'menu.item.github.title': 'Github',
-    'menu.item.learn.title': 'Docs',       
+    'menu.item.learn.title': 'Docs',     
+    'menu.item.projects.title': 'Projects',  
 
     'project.property.title' : 'Projet',
     'project.information.property.title': 'Information',   

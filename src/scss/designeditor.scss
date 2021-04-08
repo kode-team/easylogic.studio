@@ -112,6 +112,8 @@ body {
         --border-radius-selected-color: #{$border-radius-selected-color};    
         --transform-item-background-color: #{$transform-item-background-color};
         --transform-item-border-color: #{$transform-item-border-color};
+        --tooltip-background-color: #{$tooltip-background-color};
+        --tooltip-font-color: #{$tooltip-font-color};        
     }   
 
     &[data-theme='light'] {
@@ -169,7 +171,9 @@ body {
         --transform-origin-selected-color: #{$transform-origin-selected-color};
         --border-radius-selected-color: #{$border-radius-selected-color};    
         --transform-item-background-color: #{$transform-item-background-color};
-        --transform-item-border-color: #{$transform-item-border-color};                     
+        --transform-item-border-color: #{$transform-item-border-color};      
+        --tooltip-background-color: #{$tooltip-background-color};
+        --tooltip-font-color: #{$tooltip-font-color};                               
     }    
 
     &[data-theme='toon'] {
@@ -227,7 +231,9 @@ body {
         --transform-origin-selected-color: #{$transform-origin-selected-color};
         --border-radius-selected-color: #{$border-radius-selected-color};   
         --transform-item-background-color: #{$transform-item-background-color};
-        --transform-item-border-color: #{$transform-item-border-color};            
+        --transform-item-border-color: #{$transform-item-border-color};    
+        --tooltip-background-color: #{$tooltip-background-color};
+        --tooltip-font-color: #{$tooltip-font-color};                        
     }   
 }
 
@@ -244,7 +250,8 @@ body {
     }    
    
     @import './designeditor/component.scss';
-    @import './designeditor/layout.scss';      
+    @import './designeditor/layout.scss';     
+    @import './designeditor/tool-bar.scss'; 
 
     @import './designeditor/range-ui.scss';
     @import "./designeditor/tab-ui.scss";
@@ -255,6 +262,7 @@ body {
     @import './designeditor/hover-view.scss';
     @import './designeditor/selection-info-view.scss';    
     @import './designeditor/icons-group.scss';
+    @import './designeditor/tooltip.scss';
     
     // property 
     @import './designeditor/property/index.scss'; 

@@ -40,8 +40,7 @@ export default {
     'menu.item.shortcuts.title': 'ShortCuts',
     'menu.item.github.title': 'Github',
     'menu.item.learn.title': 'Learn',       
-
-
+    'menu.item.projects.title': 'Projects',
 
     'project.property.title' : 'Project',
     'project.information.property.title': 'Project information',   

@@ -6,11 +6,15 @@ export default class AddSVGText extends MenuItem {
     return 'title';
   }
   getTitle() {
-    return this.props.title || "Text";
+    return this.props.title || "SVGText";
   }
  
   clickButton(e) {
     this.emit('addLayerView', 'svg-text');
+  }
+
+  isHideTitle() {
+    return true;
   }
 
 }

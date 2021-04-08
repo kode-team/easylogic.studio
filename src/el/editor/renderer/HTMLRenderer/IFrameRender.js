@@ -7,8 +7,15 @@ export default class IFrameRender extends LayerRender {
 
         let $iframe = currentElement.$("iframe");
     
-        if ($iframe) {
+        if (item.hasChangedField('url')) {
           $iframe.attr('src', item.url || 'about:blank');    
+        }
+
+        if (item.hasChangedField('width', 'height')) {
+          $iframe.setAttr({
+            width: item.width, 
+            height: item.height
+          })
         }
     
         super.update(item, currentElement);
@@ -19,16 +26,17 @@ export default class IFrameRender extends LayerRender {
    * @param {Item} item 
    */
    render (item) {
-    var {id, url =  'about:blank'} = item;
+    var {id, url =  'about:blank', width, height} = item;
 
     return /*html*/`
       <div class='element-item iframe' data-id="${id}">
         ${this.toDefString(item)}
         <iframe 
-            width="100%" 
-            height="100%" 
-            style="border:0px;width:100%;height:100%;pointer-events:none;" 
+            width="${width}" 
+            height="${height}" 
+            style="border:0px;pointer-events:none;" 
             src="${url}"
+            allowfullscreen="true"
         ></iframe>
       </div>`
   }

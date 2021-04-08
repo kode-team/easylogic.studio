@@ -101,8 +101,11 @@ import moveSelectionToCenter from "./moveSelectionToCenter";
 import savePNG from "./savePNG";
 import refreshCursor from "./refreshCursor";
 import recoverCursor from "./recoverCursor";
+import convertPasteText from "./convertPasteText";
+
 
 export default {
+    convertPasteText,
     refreshCursor,
     recoverCursor,
 

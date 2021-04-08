@@ -1,0 +1,65 @@
+.tool-bar {
+    display: grid;
+    grid-template-columns: 60px 260px 1fr 240px;
+
+    > div {
+        text-align: center;
+        padding: 0px 10px;
+        position: relative;
+        height: 100%;
+
+        > div {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            transform: translateY(-50%);
+
+        }
+    }
+
+    > .logo-item {
+        padding: 9px 14px;
+        box-sizing: border-box;
+        text-align: left;
+    }
+
+    > .left {
+        text-align: left;
+        padding-left: 0px;
+        padding-right: 0px;
+
+        .menu-item {
+            width: 30px !important;
+        }
+    }
+
+    > .center {
+        > div {
+            position: absolute;
+            top: 50%;
+            left: 50%;            
+            width: 100%;
+            transform: translateX(-50%) translateY(-50%);
+
+            .menu-item {
+                width: 34px !important;
+            }
+        }
+    }
+
+    > .right {
+        text-align: right;
+        padding-left: 0px;
+        padding-right: 20px;       
+        
+        > div {
+            right: 10px;
+        }
+
+        .menu-item {
+            width: 30px !important;
+        }
+    }
+
+
+}

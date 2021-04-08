@@ -30,45 +30,38 @@ $tab-horizontal-header-right-width: 60px;
     &.side-tab {
       &.side-tab-left {
         .tab-header {
+          position: absolute;
+          display: block;
           left: 0px;
           width: $tab-horizontal-header-width;
           top: 0px;
           bottom: 0px;
-          right: auto; 
           height: auto;
-          display: flex;
-          flex-direction: column;
           border-right: 1px solid var(--border-color);
+          padding: 10px;
+          box-sizing: border-box;
+          overflow: visible;
 
           .tab-item {
             display: block;
             width: 100%;
-            flex: none;
             height: auto;
             margin-bottom: 10px;
             position: relative;
+            border-radius: 2px;
+
+            &:before {
+              display: none;
+            }
 
             &.selected {
-              background-color: transparent;
-              &:before {
-                content: '';
-                background-color: var(--selected-color);
-                width: 2px;
-                height: auto;
-                position: absolute;
-                left:1px;
-                top:0px;
-                bottom:0px;
-              }
-
-
-              &:after {
-                color: var(--selected-color);
-              }              
+              background-color: var(--selected-color);
+              color: var(--selected-font-color);              
 
               label {
-                padding: 4px 13px;
                 height: auto;
+                color: var(--selected-font-color);              
+
               }
             }
 
@@ -78,9 +71,8 @@ $tab-horizontal-header-right-width: 60px;
             }
 
             label {
-              padding: 4px 13px;
               height: auto;
-
+              padding: 6px 0px;
               svg {
                 width: 24px;
                 height: 24px;
@@ -91,16 +83,9 @@ $tab-horizontal-header-right-width: 60px;
               padding-bottom: 5px;
               font-size: 10px;
               color: var(--font-color);
+              display: none; 
             }
 
-            &:after {
-              content: attr(title);
-              display: block;
-              text-align: center;
-              color: var(--font-color);
-              font-size: 10px;
-              font-weight: 400;
-            }
           }
         }
 

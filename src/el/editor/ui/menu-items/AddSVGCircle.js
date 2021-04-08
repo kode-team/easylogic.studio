@@ -6,12 +6,16 @@ export default class AddSVGCircle extends MenuItem {
     return 'outline_circle';
   }
   getTitle() {
-    return this.props.title || "Circle";
+    return this.props.title || "CirclePath";
   }
  
 
   clickButton(e) {
     this.emit('addLayerView', 'svg-circle');
+  }
+
+  isHideTitle() {
+    return true;
   }
 
 }

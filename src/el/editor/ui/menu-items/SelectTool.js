@@ -19,6 +19,10 @@ export default class SelectTool extends MenuItem {
   [SUBSCRIBE('addLayerView')] (type) {
     this.setSelected(type === 'select');
   }      
+
+  isHideTitle() {
+    return true;
+  }
 }
 
 registElement({ SelectTool })

@@ -500,6 +500,12 @@ export const Editor = new class {
 
   registerCommand (commandObject) {
     this.commands.registerCommand(commandObject);
+
+  }
+
+  registerShortCut (shortcut) {
+    
+    this.shortcuts.registerShortCut(shortcut);
   }
 
   

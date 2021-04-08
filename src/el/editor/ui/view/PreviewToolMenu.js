@@ -8,14 +8,8 @@ export default class PreviewToolMenu extends EditorElement {
     return /*html*/`
       <div class='preview-tool-menu'>
         <div class='items'>
-          <object refClass="KeyBoard" />      
-          <object refClass="Fullscreen" />      
-          <object refClass="ExportView" />
-          <object refClass="ExportCodePen" />
-          <div class='divdier'></div>
           <object refClass="Download" />
           <object refClass="Save" />
-          <object refClass="Github" />
           <object refClass="Manual" />          
         </div>                
       </div>

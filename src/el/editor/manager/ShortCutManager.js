@@ -47,6 +47,8 @@ export class ShortCutManager {
             whenFunction: this.makeWhenFunction(shortcut.command, shortcut.when || "true") 
         });
 
+        this.sort();
+
     }
 
     makeWhenFunction(command, when) {
@@ -66,6 +68,7 @@ export class ShortCutManager {
     }
 
     sort() {
+        this.commands = {}
         this.list.forEach(it => {
             if (isArray(this.commands[it.checkKeyString]) === false) {
                 this.commands[it.checkKeyString] = []
@@ -152,7 +155,7 @@ export class ShortCutManager {
                 e.preventDefault();
             }
             filteredCommands.forEach(it => {
-                this.$editor.emit(it.command, ...it.args);
+                this.$editor.emit(it.command, ...it.args, e);
             })
         }
     }

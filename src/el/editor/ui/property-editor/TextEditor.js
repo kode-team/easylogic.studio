@@ -27,6 +27,13 @@ export default class TextEditor extends EditorElement {
         return this.refs.$text.value; 
     }
 
+    setValue (value) {
+        this.refs.$text.val(value);
+        this.setState({
+            value
+        }, false);
+    }
+
     [BIND('$text')] () {
         return {
             'value': this.state.value

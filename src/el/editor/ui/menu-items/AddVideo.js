@@ -15,6 +15,10 @@ export default class AddVideo extends MenuItem {
     this.emit('addLayerView', 'video');
   }
 
+  isHideTitle() {
+    return true;
+  }
+
 }
 
 registElement({ AddVideo })

@@ -28,7 +28,7 @@
     }  
   
     .icon-svg {
-      background-color: rgba(255, 255, 255, 0.2);
+      background-color: var(--input-background-color);
       width: 40px;
       height: 40px;
       cursor: pointer;
@@ -45,6 +45,7 @@
   
       &:hover {
           background-color: var(--list-item-selected-color);
+          color: var(--selected-font-color);
       }
     }  
 

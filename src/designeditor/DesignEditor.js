@@ -19,13 +19,15 @@ import "el/editor/ui/view/StatusBar";
 import "el/editor/ui/view/PreviewToolMenu";
 import "el/editor/ui/view/NotificationView";
 import "el/editor/ui/view-items/PageSubEditor";
-
+import "el/editor/ui/view/ToolBar";
 import "el/editor/ui/view/HorizontalRuler";
 import "el/editor/ui/view/VerticalRuler";
+
 import { registElement } from "el/base/registerElement";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import 'el/plugins';
+
 
 const formElements = ['TEXTAREA', 'INPUT', 'SELECT']
 
@@ -62,11 +64,7 @@ export default class DesignEditor extends EditorElement {
     return /*html*/`
       <div class="layout-main">
         <div class='layout-top' ref='$top'>
-          <div class='logo-item'>
-            <label class='logo' title='EasyLogic Studio'></label>
-          </div>      
-          <object refClass="ToolMenu" />
-          <object refClass='PageSubEditor' />    
+          <object refClass="ToolBar" />
         </div>
         <div class="layout-middle" ref='$middle'>
           <div class="layout-header" ref='$headerPanel'>

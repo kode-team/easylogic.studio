@@ -13,6 +13,10 @@ export default class KeyBoard extends MenuItem {
   clickButton(e) {
     this.emit('showShortcutWindow')
   }
+
+  isHideTitle() {
+    return true; 
+  }
 }
 
 registElement({ KeyBoard })

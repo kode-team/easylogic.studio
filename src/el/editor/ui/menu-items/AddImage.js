@@ -15,6 +15,10 @@ export default class AddImage extends MenuItem {
     this.emit('addLayerView', 'image');
   }
 
+  isHideTitle() {
+    return true;
+  }
+
 }
 
 registElement({ AddImage })

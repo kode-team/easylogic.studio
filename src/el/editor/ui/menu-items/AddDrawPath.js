@@ -13,6 +13,10 @@ export default class AddDrawPath extends MenuItem {
     this.emit('addLayerView', 'brush')
   }
 
+  isHideTitle() {
+     return true;
+  }
+
 }
 
 registElement({ AddDrawPath })

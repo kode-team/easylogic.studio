@@ -12,6 +12,10 @@ export default class Download extends MenuItem {
   clickButton(e) {
     this.emit('downloadJSON')
   }
+
+  isHideTitle() {
+    return true;
+  }
 }
 
 registElement({ Download })

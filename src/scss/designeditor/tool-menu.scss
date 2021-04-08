@@ -117,6 +117,7 @@
         border:0px;
         box-shadow: none;
         display: inline-block;
+        position: relative;
   
         &.selected {
           .icon {      
@@ -176,7 +177,8 @@
     }
 
     .menu-item {
-      &[data-no-title='true'] {
+      &[data-no-title='true'],
+      &[data-tooltip] {
         .title {
           display: none;
 

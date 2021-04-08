@@ -7,9 +7,15 @@
     }
 
     .property-title {
-        background-color: var(--selected-color) !important;
+        background-color: var(--selected-color-2) !important;
         margin-bottom: 10px;
         border-radius: 4px;
+        color: var(--selected-font-color);
+        
+        label {
+            line-height: 1.5;
+        }
+        
     }
 
 }

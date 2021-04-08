@@ -21,6 +21,14 @@ export default class IFrameProperty extends BaseProperty {
     `;
   }  
 
+  refresh() {
+    const current = this.$selection.current; 
+
+    if (current) {
+      this.children.$input.setValue(current.url);
+    }
+  }
+
   [SUBSCRIBE('changeText') + DEBOUNCE(100)] (key, value) {
     var current = this.$selection.current;
 

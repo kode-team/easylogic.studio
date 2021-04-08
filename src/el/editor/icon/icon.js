@@ -157,6 +157,7 @@ import auto_awesome from "./auto_awesome";
 import chart from "./chart";
 import line_chart from "./line_chart";
 import bar_chart from "./bar_chart";
+import plugin from "./plugin";
 
 
 
@@ -168,6 +169,7 @@ const alias = {
 export default {
   ...alias,
   bar_chart,
+  plugin,
   chart,
   line_chart,
   auto_awesome,

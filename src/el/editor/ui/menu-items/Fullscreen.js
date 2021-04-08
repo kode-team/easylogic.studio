@@ -12,6 +12,10 @@ export default class Fullscreen extends MenuItem {
   clickButton(e) {
     this.emit('toggle.fullscreen')
   }
+
+  isHideTitle() {
+    return true;
+  }
 }
 
 registElement({ Fullscreen })

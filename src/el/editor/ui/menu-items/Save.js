@@ -13,6 +13,10 @@ export default class Save extends MenuItem {
   clickButton(e) {
     this.emit('saveJSON')
   }
+
+  isHideTitle() {
+    return true;
+  }
 }
 
 registElement({ Save })

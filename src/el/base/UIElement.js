@@ -19,7 +19,7 @@ class UIElement extends EventMachine {
 
     this.initialize();
 
-    this.initializeStoreSUBSCRIBE();
+    this.initializeStoreEvent();
 
   }
 
@@ -52,7 +52,7 @@ class UIElement extends EventMachine {
    * Store Event 를 초기화 한다. 
    *
    */
-  initializeStoreSUBSCRIBE() {
+  initializeStoreEvent() {
 
     this.filterProps(CHECK_SUBSCRIBE_PATTERN).forEach(key => {
       const events = this.getRealEventName(key, SUBSCRIBE_SAPARATOR);
@@ -102,7 +102,7 @@ class UIElement extends EventMachine {
 
     this.initialize();
 
-    this.initializeStoreSUBSCRIBE();
+    this.initializeStoreEvent();
   }
 
 

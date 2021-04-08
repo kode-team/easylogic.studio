@@ -13,6 +13,10 @@ export default class ExportView extends MenuItem {
     this.emit('showExportView')
   }
 
+  isHideTitle() {
+    return true;
+  }
+
 }
 
 registElement({ ExportView })

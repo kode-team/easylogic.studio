@@ -19,6 +19,10 @@ export default class AddCircle extends MenuItem {
     this.setSelected(type === 'circle');
   }  
 
+  isHideTitle() {
+    return true;
+  }
+
 }
 
 registElement({ AddCircle })
